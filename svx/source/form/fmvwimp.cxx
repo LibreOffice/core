@@ -490,6 +490,16 @@ void FmXFormView::notifyViewDying( )
 FmXFormView::~FmXFormView()
 {
     DBG_ASSERT( m_aPageWindowAdapters.empty(), "FmXFormView::~FmXFormView: Window list not empty!" );
+    if ( !m_aPageWindowAdapters.empty() )
+    {
+        for (   PageWindowAdapterList::const_iterator loop = m_aPageWindowAdapters.begin();
+                loop != m_aPageWindowAdapters.end();
+                ++loop
+            )
+        {
+            (*loop)->dispose();
+        }
+    }
 
     cancelEvents();
 
