@@ -68,7 +68,10 @@ void CmdBaseStream::GenReturn (comm_USHORT nRet, rtl::OString *pUId, comm_ULONG 
 {
     Write(comm_USHORT(SIReturn));
     Write(nRet);
-    Write(pUId);
+    if ( pUId->equals( rtl::OString( "UID_ACTIVE" ) ) )
+        Write(comm_ULONG(0));
+    else
+        Write(pUId);
     Write(comm_USHORT(PARAM_ULONG_1));          // Typ der folgenden Parameter
     Write(nNr);
 }
@@ -77,7 +80,10 @@ void CmdBaseStream::GenReturn (comm_USHORT nRet, rtl::OString *pUId, comm_String
 {
     Write(comm_USHORT(SIReturn));
     Write(nRet);
-    Write(pUId);
+    if ( pUId->equals( rtl::OString( "UID_ACTIVE" ) ) )
+        Write(comm_ULONG(0));
+    else
+        Write(pUId);
     Write(comm_USHORT(PARAM_STR_1));                // Typ der folgenden Parameter
     Write(pString);
 }
@@ -86,7 +92,10 @@ void CmdBaseStream::GenReturn (comm_USHORT nRet, rtl::OString *pUId, comm_BOOL b
 {
     Write(comm_USHORT(SIReturn));
     Write(nRet);
-    Write(pUId);
+    if ( pUId->equals( rtl::OString( "UID_ACTIVE" ) ) )
+        Write(comm_ULONG(0));
+    else
+        Write(pUId);
     Write(comm_USHORT(PARAM_BOOL_1));           // Typ der folgenden Parameter
     Write(bBool);
 }
@@ -95,7 +104,10 @@ void CmdBaseStream::GenReturn (comm_USHORT nRet, rtl::OString *pUId, comm_ULONG 
 {
     Write(comm_USHORT(SIReturn));
     Write(nRet);
-    Write(pUId);
+    if ( pUId->equals( rtl::OString( "UID_ACTIVE" ) ) )
+        Write(comm_ULONG(0));
+    else
+        Write(pUId);
     Write(comm_USHORT(PARAM_ULONG_1|PARAM_STR_1|PARAM_BOOL_1));     // Typ der folgenden Parameter
     Write(nNr);
     Write(pString);
@@ -106,7 +118,7 @@ void CmdBaseStream::GenReturn (comm_USHORT nRet, comm_USHORT nMethod, comm_ULONG
 {
     Write(comm_USHORT(SIReturn));
     Write(nRet);
-    Write(nMethod);
+    Write((comm_ULONG)nMethod); //HELPID BACKWARD (no ULONG needed)
     Write(comm_USHORT(PARAM_ULONG_1));          // Typ der folgenden Parameter
     Write(nNr);
 }
@@ -115,7 +127,7 @@ void CmdBaseStream::GenReturn (comm_USHORT nRet, comm_USHORT nMethod, comm_Strin
 {
     Write(comm_USHORT(SIReturn));
     Write(nRet);
-    Write(nMethod);
+    Write((comm_ULONG)nMethod); //HELPID BACKWARD (no ULONG needed)
     Write(comm_USHORT(PARAM_STR_1));                // Typ der folgenden Parameter
     Write(pString);
 }
@@ -124,7 +136,7 @@ void CmdBaseStream::GenReturn (comm_USHORT nRet, comm_USHORT nMethod, comm_BOOL 
 {
     Write(comm_USHORT(SIReturn));
     Write(nRet);
-    Write(nMethod);
+    Write((comm_ULONG)nMethod); //HELPID BACKWARD (no ULONG needed)
     Write(comm_USHORT(PARAM_BOOL_1));           // Typ der folgenden Parameter
     Write(bBool);
 }
@@ -133,7 +145,7 @@ void CmdBaseStream::GenReturn (comm_USHORT nRet, comm_USHORT nMethod, comm_USHOR
 {
     Write(comm_USHORT(SIReturn));
     Write(nRet);
-    Write(nMethod);
+    Write((comm_ULONG)nMethod); //HELPID BACKWARD (no ULONG needed)
     Write(comm_USHORT(PARAM_USHORT_1));         // Typ der folgenden Parameter
     Write(nNr);
 }

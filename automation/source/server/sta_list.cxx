@@ -1083,7 +1083,7 @@ void StatementList::ReportError(String aMessage, ULONG nWhatever)
 void StatementList::DirectLog( ULONG nType, String aMessage )
 {
     if ( pRet )
-        pRet->GenReturn( RET_DirectLoging, nType, aMessage );
+        pRet->GenReturn( RET_DirectLoging, (USHORT) nType, aMessage );
 }
 
 
