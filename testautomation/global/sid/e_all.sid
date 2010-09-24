@@ -12,7 +12,7 @@
 ' ****
 ' **** All applications
 FileNewFromTemplate sym:.uno:NewDoc
-FileOpen sym:.uno:Open
+FileOpen OpenFileSlot
 FileAutopilotLetter service:com.sun.star.wizards.letter.CallWizard?start
 FileAutopilotFax service:com.sun.star.wizards.fax.CallWizard?start
 FileAutopilotAgenda service:com.sun.star.wizards.agenda.CallWizard?start
