@@ -201,11 +201,12 @@ LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceM
         ,   m_pToolbarManager( 0 )
 {
     // Initialize statusbar member
+    const sal_Bool bRefreshVisibility = sal_False;
     m_aStatusBarElement.m_aType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "statusbar" ));
     m_aStatusBarElement.m_aName = m_aStatusBarAlias;
 
     m_pMiscOptions    = new SvtMiscOptions();
-    m_pToolbarManager = new ToolbarLayoutManager( xServiceManager, m_xUIElementFactoryManager );
+    m_pToolbarManager = new ToolbarLayoutManager( xServiceManager, m_xUIElementFactoryManager, this );
     m_xToolbarManager = uno::Reference< awt::XDockableWindowListener >( static_cast< OWeakObject* >( m_pToolbarManager ), uno::UNO_QUERY );
 
     m_pMiscOptions->AddListenerLink( LINK( this, LayoutManager, OptionsChanged ) );
@@ -220,7 +221,6 @@ LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceM
     registerProperty( LAYOUTMANAGER_PROPNAME_HIDECURRENTUI, LAYOUTMANAGER_PROPHANDLE_HIDECURRENTUI, css::beans::PropertyAttribute::TRANSIENT, &m_bHideCurrentUI, ::getCppuType( &m_bHideCurrentUI ) );
     registerProperty( LAYOUTMANAGER_PROPNAME_LOCKCOUNT, LAYOUTMANAGER_PROPHANDLE_LOCKCOUNT, css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY, &m_nLockCount, getCppuType( &m_nLockCount )  );
     registerProperty( LAYOUTMANAGER_PROPNAME_MENUBARCLOSER, LAYOUTMANAGER_PROPHANDLE_MENUBARCLOSER, css::beans::PropertyAttribute::TRANSIENT, &m_bMenuBarCloser, ::getCppuType( &m_bMenuBarCloser ) );
-    const sal_Bool bRefreshVisibility = sal_False;
     registerPropertyNoMember( LAYOUTMANAGER_PROPNAME_REFRESHVISIBILITY, LAYOUTMANAGER_PROPHANDLE_REFRESHVISIBILITY, css::beans::PropertyAttribute::TRANSIENT, ::getCppuType( &bRefreshVisibility ), &bRefreshVisibility );
     registerProperty( LAYOUTMANAGER_PROPNAME_PRESERVE_CONTENT_SIZE, LAYOUTMANAGER_PROPHANDLE_PRESERVE_CONTENT_SIZE, css::beans::PropertyAttribute::TRANSIENT, &m_bPreserveContentSize, ::getCppuType( &m_bPreserveContentSize ) );
 }
@@ -2085,16 +2085,16 @@ throw (RuntimeException)
                 bMustBeLayouted = m_pToolbarManager->isLayoutDirty();
             }
         }
-        else if ( aElementType.equalsIgnoreAsciiCaseAscii( "menubar" ))
+        else if ( aElementType.equalsIgnoreAsciiCaseAscii( "menubar" ) &&
+                  aElementName.equalsIgnoreAsciiCaseAscii( "menubar" ))
         {
-            if ( aElementName.equalsIgnoreAsciiCaseAscii( "menubar" ) && !bInPlaceMenu )
+            // PB 2004-12-15 #i38743# don't create a menubar if frame isn't top
+            if ( !bInPlaceMenu && !m_xMenuBar.is() && implts_isFrameOrWindowTop( xFrame ))
             {
                 vos::OGuard aGuard( Application::GetSolarMutex() );
-                // PB 2004-12-15 #i38743# don't create a menubar if frame isn't top
-                if ( !m_xMenuBar.is() && implts_isFrameOrWindowTop(xFrame) )
-                    m_xMenuBar = implts_createElement( aName );
 
-                if ( m_xMenuBar.is() && implts_isFrameOrWindowTop(xFrame) )
+                m_xMenuBar = implts_createElement( aName );
+                if ( m_xMenuBar.is() )
                 {
                     Window* pWindow = VCLUnoHelper::GetWindow( m_xContainerWindow );
                     while ( pWindow && !pWindow->IsSystemWindow() )
@@ -2131,9 +2131,7 @@ throw (RuntimeException)
                                     pSysWindow->SetMenuBar( pMenuBar );
                                     pMenuBar->SetDisplayable( m_bMenuVisible );
                                     if ( m_bMenuVisible )
-                                    {
                                         bNotify = sal_True;
-                                    }
                                     implts_updateMenuBarClose();
                                 }
                             }
@@ -2191,7 +2189,7 @@ throw (RuntimeException)
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     WriteGuard aWriteLock( m_aLock );
 
-    sal_Bool    bMustLayouted( sal_False );
+    sal_Bool    bMustBeLayouted( sal_False );
     sal_Bool    bMustBeDestroyed( sal_False );
     sal_Bool    bMustBeSorted( sal_False );
     sal_Bool    bNotify( sal_False );
@@ -2217,7 +2215,7 @@ throw (RuntimeException)
         {
             aWriteLock.unlock();
             implts_destroyStatusBar();
-            bMustLayouted = sal_True;
+            bMustBeLayouted = sal_True;
             bNotify = sal_True;
         }
         else if ( aElementType.equalsIgnoreAsciiCaseAscii( "progressbar" ) &&
@@ -2225,67 +2223,15 @@ throw (RuntimeException)
         {
             aWriteLock.unlock();
             implts_createProgressBar();
-            bMustLayouted = sal_True;
+            bMustBeLayouted = sal_True;
             bNotify = sal_True;
         }
-        else if ( aElementType.equalsIgnoreAsciiCaseAscii( "toolbar" ))
+        else if ( aElementType.equalsIgnoreAsciiCaseAscii( "toolbar" ) &&
+                  m_pToolbarManager != NULL )
         {
-            UIElementVector::iterator pIter;
-
-            for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
-            {
-                if ( pIter->m_aName == aName )
-                {
-                    xComponent.set( pIter->m_xUIElement, UNO_QUERY );
-                    Reference< XUIElement > xUIElement( pIter->m_xUIElement );
-                    if ( xUIElement.is() )
-                    {
-                        Reference< css::awt::XWindow > xWindow( xUIElement->getRealInterface(), UNO_QUERY );
-                        Reference< css::awt::XDockableWindow > xDockWindow( xWindow, UNO_QUERY );
-
-                        rtl::OUString aAddonTbResourceName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/addon_" ));
-                        if ( aName.indexOf( aAddonTbResourceName ) != 0 )
-                        {
-                            try
-                            {
-                                if ( xWindow.is() )
-                                    xWindow->removeWindowListener( Reference< css::awt::XWindowListener >(
-                                        static_cast< OWeakObject * >( this ), UNO_QUERY ));
-                            }
-                            catch( Exception& )
-                            {
-                            }
-
-                            try
-                            {
-                                if ( xDockWindow.is() )
-                                    xDockWindow->removeDockableWindowListener( Reference< css::awt::XDockableWindowListener >(
-                                        static_cast< OWeakObject * >( this ), UNO_QUERY ));
-                            }
-                            catch ( Exception& )
-                            {
-                            }
-
-                            bMustBeDestroyed = sal_True;
-                        }
-                        else
-                        {
-                            pIter->m_bVisible = sal_False;
-                            xWindow->setVisible( sal_False );
-                            bNotify = sal_True;
-                        }
-
-                        if ( !xDockWindow->isFloating() )
-                            bMustLayouted = sal_True;
-                        if ( bMustBeDestroyed )
-                            pIter->m_xUIElement.clear();
-
-                        bMustBeSorted = sal_True;
-                    }
-
-                    break;
-                }
-            }
+            aWriteLock.unlock();
+            bNotify         = m_pToolbarManager->destroyToolbar( aName );
+            bMustBeLayouted = m_pToolbarManager->isLayoutDirty();
         }
         else if ( aElementType.equalsIgnoreAsciiCaseAscii( "dockingwindow" ))
         {
@@ -2294,8 +2240,8 @@ throw (RuntimeException)
             aWriteLock.unlock();
 
             impl_setDockingWindowVisibility( xSMGR, xFrame, aElementName, false );
-            bMustLayouted = sal_False;
-            bNotify = sal_False;
+            bMustBeLayouted = sal_False;
+            bNotify         = sal_False;
         }
     }
     aWriteLock.unlock();
@@ -2311,7 +2257,7 @@ throw (RuntimeException)
     if ( bMustBeSorted )
     {
         implts_sortUIElements();
-        if ( bMustLayouted )
+        if ( bMustBeLayouted )
             doLayout();
     }
 
@@ -3301,6 +3247,15 @@ throw (RuntimeException)
     implts_doLayout_notify( sal_True );
 }
 
+//---------------------------------------------------------------------------------------------------------
+//  ILayoutNotifications
+//---------------------------------------------------------------------------------------------------------
+void LayoutManager::requestLayout( Hint eHint )
+{
+    if ( eHint == HINT_TOOLBARSPACE_HAS_CHANGED )
+        doLayout();
+}
+
 void LayoutManager::implts_doLayout_notify( sal_Bool bOuterResize )
 {
     sal_Bool bLayouted = implts_doLayout( sal_False, bOuterResize );
@@ -3352,11 +3307,14 @@ sal_Bool LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace, sal_
         aWriteGuard.unlock();
         /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
-        css::awt::Rectangle     aBorderSpace = implts_calcDockingAreaSizes();
+        css::awt::Rectangle     aDockSpace( implts_calcDockingAreaSizes() );
+        css::awt::Rectangle     aBorderSpace( aDockSpace );
         sal_Bool                bGotRequestedBorderSpace( sal_True );
-        sal_Bool                bEqual = implts_compareRectangles( aBorderSpace, aCurrBorderSpace );
 
-        if ( !bEqual || bForceRequestBorderSpace || bMustDoLayout )
+        // We have to add the height of a possible status bar
+        aBorderSpace.Height += implts_getStatusBarSize().Height();
+
+        if ( !equalRectangles( aBorderSpace, aCurrBorderSpace ) || bForceRequestBorderSpace || bMustDoLayout )
         {
             // we always resize the content window (instead of the complete container window) if we're not set up
             // to (attempt to) preserve the content window's size
@@ -3407,15 +3365,14 @@ sal_Bool LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace, sal_
 
         if ( bGotRequestedBorderSpace )
         {
-            ::Size                      aContainerSize;
-            ::Size                      aStatusBarSize;
+            ::Size aContainerSize;
+            ::Size aStatusBarSize;
 
-            aStatusBarSize = implts_getStatusBarSize();
-            aBorderSpace.Height -= aStatusBarSize.Height();
-            m_pToolbarManager->setDockingArea( aBorderSpace );
+            m_pToolbarManager->setDockingArea( aDockSpace );
 
             // Subtract status bar size from our container output size. Docking area windows
             // don't contain the status bar!
+            aStatusBarSize = implts_getStatusBarSize();
             aContainerSize = implts_getContainerWindowOutputSize();
             aContainerSize.Height() -= aStatusBarSize.Height();
 
@@ -3437,15 +3394,6 @@ sal_Bool LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace, sal_
     }
 
     return bLayouted;
-}
-
-sal_Bool LayoutManager::implts_compareRectangles( const css::awt::Rectangle& rRect1,
-                                                  const css::awt::Rectangle& rRect2 )
-{
-    return (( rRect1.X == rRect2.X ) &&
-            ( rRect1.Y == rRect2.Y ) &&
-            ( rRect1.Width == rRect2.Width ) &&
-            ( rRect1.Height == rRect2.Height ));
 }
 
 sal_Bool LayoutManager::implts_resizeContainerWindow( const awt::Size& rContainerSize,
@@ -3557,9 +3505,6 @@ css::awt::Rectangle LayoutManager::implts_calcDockingAreaSizes()
     css::awt::Rectangle aBorderSpace;
     if ( xDockingAreaAcceptor.is() && xContainerWindow.is() )
         aBorderSpace = m_pToolbarManager->getDockingArea();
-
-    // We have to add the height of a possible status bar
-    aBorderSpace.Height += implts_getStatusBarSize().Height();
 
     return aBorderSpace;
 }

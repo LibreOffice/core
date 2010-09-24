@@ -69,6 +69,14 @@ using namespace com::sun::star;
 namespace framework
 {
 
+void setZeroRectangle( ::Rectangle& rRect )
+{
+    rRect.setX(0);
+    rRect.setY(0);
+    rRect.setWidth(0);
+    rRect.setHeight(0);
+}
+
 // ATTENTION!
 // This value is directly copied from the sfx2 project.
 // You have to change BOTH values, see sfx2/inc/sfx2/sfxsids.hrc (SID_DOCKWIN_START)
@@ -152,7 +160,29 @@ bool impl_parseResourceURL( const rtl::OUString aResourceURL, rtl::OUString& aEl
     return false;
 }
 
-css::awt::Rectangle impl_convertRectangleToAWT( const ::Rectangle& rRect )
+::com::sun::star::awt::Rectangle putRectangleValueToAWT( const ::Rectangle& rRect )
+{
+    css::awt::Rectangle aRect;
+    aRect.X = rRect.Left();
+    aRect.Y = rRect.Top();
+    aRect.Width = rRect.Right();
+    aRect.Height = rRect.Bottom();
+
+    return aRect;
+}
+
+::Rectangle putAWTToRectangle( const ::com::sun::star::awt::Rectangle& rRect )
+{
+    ::Rectangle aRect;
+    aRect.Left() = rRect.X;
+    aRect.Top() = rRect.Y;
+    aRect.Right() = rRect.Width;
+    aRect.Bottom() = rRect.Height;
+
+    return aRect;
+}
+
+css::awt::Rectangle convertRectangleToAWT( const ::Rectangle& rRect )
 {
     css::awt::Rectangle aRect;
     aRect.X = rRect.Left();
@@ -162,7 +192,7 @@ css::awt::Rectangle impl_convertRectangleToAWT( const ::Rectangle& rRect )
     return aRect;
 }
 
-::Rectangle impl_convertAWTToRectangle( const ::com::sun::star::awt::Rectangle& rRect )
+::Rectangle convertAWTToRectangle( const ::com::sun::star::awt::Rectangle& rRect )
 {
     ::Rectangle aRect;
     aRect.Left()   = rRect.X;
@@ -171,6 +201,15 @@ css::awt::Rectangle impl_convertRectangleToAWT( const ::Rectangle& rRect )
     aRect.Bottom() = rRect.Y + rRect.Height;
 
     return aRect;
+}
+
+bool equalRectangles( const css::awt::Rectangle& rRect1,
+                      const css::awt::Rectangle& rRect2 )
+{
+    return (( rRect1.X == rRect2.X ) &&
+            ( rRect1.Y == rRect2.Y ) &&
+            ( rRect1.Width == rRect2.Width ) &&
+            ( rRect1.Height == rRect2.Height ));
 }
 
 uno::Reference< frame::XModel > impl_getModelFromFrame( const uno::Reference< frame::XFrame >& rFrame )

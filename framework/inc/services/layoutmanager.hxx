@@ -55,6 +55,7 @@
 #include <classes/addonsoptions.hxx>
 #include <uielement/panelwindow.hxx>
 #include <uielement/uielement.hxx>
+#include <helper/ilayoutnotifications.hxx>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -111,6 +112,7 @@ namespace framework
                           // Order is neccessary for right initialization!
                           private ThreadHelpBase                        ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
                           public  ::cppu::OBroadcastHelper              ,
+                          public  ILayoutNotifications                  ,
                           public  LayoutManager_PBase
     {
         public:
@@ -218,6 +220,11 @@ namespace framework
             DECL_LINK( MenuBarClose, MenuBar * );
             DECL_LINK( WindowEventListener, VclSimpleEvent* );
 
+            //---------------------------------------------------------------------------------------------------------
+            //  ILayoutNotifications
+            //---------------------------------------------------------------------------------------------------------
+            virtual void requestLayout( Hint eHint );
+
             struct DockedData
             {
                 DockedData() : m_aPos( LONG_MAX, LONG_MAX ),
@@ -282,7 +289,6 @@ namespace framework
             ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > implts_createElement( const rtl::OUString& aName );
 
             // layouting methods
-            sal_Bool implts_compareRectangles( const ::com::sun::star::awt::Rectangle& rRect1, const ::com::sun::star::awt::Rectangle& rRect2 );
             sal_Bool implts_resizeContainerWindow( const ::com::sun::star::awt::Size& rContainerSize, const ::com::sun::star::awt::Point& rComponentPos );
             ::Size  implts_getTopBottomDockingAreaSizes();
             ::Size  implts_getContainerWindowOutputSize();

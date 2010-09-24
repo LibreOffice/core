@@ -54,7 +54,7 @@
 #include <uiconfiguration/windowstateconfiguration.hxx>
 #include <classes/addonsoptions.hxx>
 #include <uielement/uielement.hxx>
-#include <uielement/menubarmanager.hxx>
+#include <helper/ilayoutnotifications.hxx>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -75,8 +75,6 @@
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/awt/XDockableWindow.hpp>
 #include <com/sun/star/awt/XDockableWindowListener.hpp>
-#include <com/sun/star/frame/XMenuBarMergingAcceptor.hpp>
-#include <com/sun/star/frame/XLayoutManagerEventBroadcaster.hpp>
 
 //_________________________________________________________________________________________________________________
 //  other includes
@@ -96,7 +94,8 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper2< ::com::sun::star::a
         enum { DOCKINGAREAS_COUNT = 4 };
 
         ToolbarLayoutManager( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xSMGR,
-                              const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElementFactory >& xUIElementFactory );
+                              const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElementFactory >& xUIElementFactory,
+                              ILayoutNotifications* pParentLayouter );
         virtual ~ToolbarLayoutManager();
 
         void reset();
@@ -290,6 +289,7 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper2< ::com::sun::star::a
         css::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager >        m_xDocCfgMgr;
         css::uno::Reference< ::com::sun::star::awt::XToolkit >                      m_xToolkit;
         css::uno::Reference< ::com::sun::star::container::XNameAccess >             m_xPersistentWindowState;
+        ILayoutNotifications*                                                       m_pParentLayouter;
 
         UIElementVector                                                             m_aUIElements;
         UIElement                                                                   m_aDockUIElement;

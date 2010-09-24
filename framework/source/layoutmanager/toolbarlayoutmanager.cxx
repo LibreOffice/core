@@ -68,8 +68,10 @@ namespace framework
 
 ToolbarLayoutManager::ToolbarLayoutManager(
     const uno::Reference< lang::XMultiServiceFactory >& xSMGR,
-    const uno::Reference< ui::XUIElementFactory >& xUIElementFactory )
+    const uno::Reference< ui::XUIElementFactory >& xUIElementFactory,
+    ILayoutNotifications* pParentLayouter )
     : ThreadHelpBase( &Application::GetSolarMutex() ),
+    m_pParentLayouter( pParentLayouter ),
     m_xSMGR( xSMGR ),
     m_xUIElementFactoryManager( xUIElementFactory ),
     m_eDockOperation( DOCKOP_ON_COLROW ),
@@ -85,6 +87,11 @@ ToolbarLayoutManager::ToolbarLayoutManager(
     m_aCustomTbxPrefix( RTL_CONSTASCII_USTRINGPARAM( "custom_" )),
     m_aCustomizeCmd( RTL_CONSTASCII_USTRINGPARAM( "ConfigureDialog" ))
 {
+    // initialize rectangles to zero values
+    setZeroRectangle( m_aDockingAreaOffsets );
+    setZeroRectangle( m_aDockingArea );
+
+    // create toolkit object
     m_xToolkit = uno::Reference< css::awt::XToolkit >( m_xSMGR->createInstance( SERVICENAME_VCLTOOLKIT ), uno::UNO_QUERY );
 }
 
@@ -145,14 +152,14 @@ void SAL_CALL ToolbarLayoutManager::disposing( const lang::EventObject& aEvent )
     aWriteLock.unlock();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
-    return impl_convertRectangleToAWT( aNewDockingArea );
+    return putRectangleValueToAWT(aNewDockingArea);
 }
 
 void ToolbarLayoutManager::setDockingArea( const awt::Rectangle& rDockingArea )
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     WriteGuard aWriteLock( m_aLock );
-    m_aDockingArea = impl_convertAWTToRectangle( rDockingArea );
+    m_aDockingArea = putAWTToRectangle( rDockingArea );
     m_bLayoutDirty = true;
     aWriteLock.unlock();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
@@ -259,6 +266,11 @@ void ToolbarLayoutManager::doLayout(const ::Size& aContainerSize)
             nOffset += aRowColumnsWindowData[j].nStaticSize;
         }
     }
+
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    WriteGuard aWriteLock( m_aLock );
+    m_bLayoutDirty = false;
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 }
 
 bool ToolbarLayoutManager::implts_isParentWindowVisible() const
@@ -289,6 +301,10 @@ Rectangle ToolbarLayoutManager::implts_calcDockingArea()
     sal_Int32                nCurrDockingArea( ui::DockingArea_DOCKINGAREA_TOP );
     std::vector< sal_Int32 > aRowColumnSizes[DOCKINGAREAS_COUNT];
     UIElementVector::const_iterator pConstIter;
+
+    // initialize rectangle with zero values!
+    aBorderSpace.setWidth(0);
+    aBorderSpace.setHeight(0);
 
     aRowColumnSizes[nCurrDockingArea].clear();
     aRowColumnSizes[nCurrDockingArea].push_back( 0 );
@@ -1016,7 +1032,7 @@ void ToolbarLayoutManager::implts_createElement( const ::rtl::OUString& aName, b
             /* SAFE AREA ----------------------------------------------------------------------------------------------- */
             WriteGuard aWriteLock( m_aLock );
 
-            UIElement rElement = impl_findElement( aName );
+            UIElement& rElement = impl_findElement( aName );
             if ( rElement.m_aName.getLength() > 0 )
             {
                 // Reuse a local entry so we are able to use the latest
@@ -3119,7 +3135,7 @@ void SAL_CALL ToolbarLayoutManager::startDocking(
     const awt::DockingEvent& e )
 throw (uno::RuntimeException)
 {
-    sal_Bool    bWinFound( sal_False );
+    bool bWinFound( false );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     ReadGuard aReadGuard( m_aLock );
@@ -3142,6 +3158,8 @@ throw (uno::RuntimeException)
     if ( aUIElement.m_xUIElement.is() && xWindow.is() )
     {
         awt::Rectangle aRect;
+
+        bWinFound = true;
         uno::Reference< css::awt::XDockableWindow > xDockWindow( xWindow, uno::UNO_QUERY );
         if ( xDockWindow->isFloating() )
         {
@@ -3189,7 +3207,6 @@ throw (uno::RuntimeException)
     UIElement                              aUIDockingElement;
     DockingOperation                       eDockingOperation( DOCKOP_ON_COLROW );
 
-    aDockingData.TrackingRectangle = e.TrackingRectangle;
     sal_Bool bDockingInProgress;
 
     {
@@ -3204,6 +3221,8 @@ throw (uno::RuntimeException)
             xRightDockingWindow  = m_xDockAreaWindows[ui::DockingArea_DOCKINGAREA_RIGHT];
             xBottomDockingWindow = m_xDockAreaWindows[ui::DockingArea_DOCKINGAREA_BOTTOM];
             aUIDockingElement    = m_aDockUIElement;
+
+            aDockingData.TrackingRectangle = e.TrackingRectangle;
         }
         /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     }
@@ -3464,8 +3483,12 @@ throw (uno::RuntimeException)
     aWriteLock.lock();
     m_bDockingInProgress = sal_False;
     m_bLayoutDirty       = !bStartDockFloated || !bFloating;
+    bool bNotify         = m_bLayoutDirty;
     aWriteLock.unlock();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+
+    if ( bNotify )
+        m_pParentLayouter->requestLayout( ILayoutNotifications::HINT_TOOLBARSPACE_HAS_CHANGED );
 }
 
 sal_Bool SAL_CALL ToolbarLayoutManager::prepareToggleFloatingMode(
