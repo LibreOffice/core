@@ -69,16 +69,6 @@ PDFWriter::PDFVersion PDFWriter::GetVersion() const
     return ((PDFWriterImpl*)pImplementation)->getVersion();
 }
 
-void PDFWriter::SetDocInfo( const PDFDocInfo& rInfo )
-{
-    ((PDFWriterImpl*)pImplementation)->setDocInfo( rInfo );
-}
-
-const PDFDocInfo& PDFWriter::GetDocInfo() const
-{
-    return ((PDFWriterImpl*)pImplementation)->getDocInfo();
-}
-
 void PDFWriter::SetDocumentLocale( const com::sun::star::lang::Locale& rLoc )
 {
     ((PDFWriterImpl*)pImplementation)->setDocumentLocale( rLoc );
@@ -569,3 +559,13 @@ std::set< PDFWriter::ErrorCode > PDFWriter::GetErrors()
 {
     return ((PDFWriterImpl*)pImplementation)->getErrors();
 }
+
+bool PDFWriter::InitEncryption( PDFWriter::PDFEncryptionProperties& io_rProperties,
+                                const rtl::OUString& i_rOwnerPassword,
+                                const rtl::OUString& i_rUserPassword,
+                                const PDFWriter::PDFDocInfo& i_rDocInfo
+                                )
+{
+    return PDFWriterImpl::initEncryption( io_rProperties, i_rOwnerPassword, i_rUserPassword, i_rDocInfo );
+}
+
