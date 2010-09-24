@@ -98,9 +98,7 @@ private:
     sal_Bool                mbFirstPageLeft;
 
     sal_Bool                mbEncrypt;
-    rtl::OUString           msOpenPassword;
     sal_Bool                mbRestrictPermissions;
-    rtl::OUString           msPermissionPassword;
     sal_Int32               mnPrintAllowed;
     sal_Int32               mnChangesAllowed;
     sal_Bool                mbCanCopyOrExtract;

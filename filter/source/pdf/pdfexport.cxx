@@ -126,9 +126,7 @@ PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc, Reference< task::
     mbFirstPageLeft             ( sal_False ),
 
     mbEncrypt                   ( sal_False ),
-    msOpenPassword              (),
     mbRestrictPermissions       ( sal_False ),
-    msPermissionPassword        (),
     mnPrintAllowed              ( 2 ),
     mnChangesAllowed            ( 4 ),
     mbCanCopyOrExtract          ( sal_True ),
@@ -386,6 +384,9 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
             VCLXDevice*                 pXDevice = new VCLXDevice;
             OUString                    aPageRange;
             Any                         aSelection;
+            PDFWriter::PDFWriterContext aContext;
+            rtl::OUString aOpenPassword, aPermissionPassword;
+
 
             // getting the string for the creator
             String aCreator;
@@ -404,7 +405,34 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     aCreator.AppendAscii( "Math" );
             }
 
-            PDFWriter::PDFWriterContext aContext;
+            Reference< document::XDocumentPropertiesSupplier > xDocumentPropsSupplier( mxSrcDoc, UNO_QUERY );
+            if ( xDocumentPropsSupplier.is() )
+            {
+                Reference< document::XDocumentProperties > xDocumentProps( xDocumentPropsSupplier->getDocumentProperties() );
+                if ( xDocumentProps.is() )
+                {
+                    aContext.DocumentInfo.Title = xDocumentProps->getTitle();
+                    aContext.DocumentInfo.Author = xDocumentProps->getAuthor();
+                    aContext.DocumentInfo.Subject = xDocumentProps->getSubject();
+                    aContext.DocumentInfo.Keywords = ::comphelper::string::convertCommaSeparated(xDocumentProps->getKeywords());
+                }
+            }
+            // getting the string for the producer
+            String aProducer;
+            ::utl::ConfigManager* pMgr = ::utl::ConfigManager::GetConfigManager();
+            if ( pMgr )
+            {
+                Any aProductName = pMgr->GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
+                ::rtl::OUString sProductName;
+                aProductName >>= sProductName;
+                aProducer = sProductName;
+                aProductName = pMgr->GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTVERSION );
+                aProductName >>= sProductName;
+                aProducer.AppendAscii(" ");
+                aProducer += String( sProductName );
+            }
+            aContext.DocumentInfo.Producer = aProducer;
+            aContext.DocumentInfo.Creator = aCreator;
 
             for( sal_Int32 nData = 0, nDataCount = rFilterData.getLength(); nData < nDataCount; ++nData )
             {
@@ -478,11 +506,11 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "EncryptFile" ) ) )
                     rFilterData[ nData ].Value >>= mbEncrypt;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "DocumentOpenPassword" ) ) )
-                    rFilterData[ nData ].Value >>= msOpenPassword;
+                    rFilterData[ nData ].Value >>= aOpenPassword;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "RestrictPermissions" ) ) )
                     rFilterData[ nData ].Value >>= mbRestrictPermissions;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "PermissionPassword" ) ) )
-                    rFilterData[ nData ].Value >>= msPermissionPassword;
+                    rFilterData[ nData ].Value >>= aPermissionPassword;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "Printing" ) ) )
                     rFilterData[ nData ].Value >>= mnPrintAllowed;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "Changes" ) ) )
@@ -600,23 +628,17 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
             if( aContext.Version != PDFWriter::PDF_A_1 )
             {
 //set values needed in encryption
-                aContext.Encrypt =  mbEncrypt;
 //set encryption level, fixed, but here it can set by the UI if needed.
 // true is 128 bit, false 40
 //note that in 40 bit mode the UI needs reworking, since the current UI is meaningfull only for
 //128bit security mode
-                aContext.Security128bit = sal_True;
-
-//set the open password
-                if( aContext.Encrypt &&  msOpenPassword.getLength() > 0 )
-                    aContext.UserPassword = msOpenPassword;
+                aContext.Encryption.Security128bit = sal_True;
 
 //set check for permission change password
 // if not enabled and no permission password, force permissions to default as if PDF where without encryption
-                if( mbRestrictPermissions && msPermissionPassword.getLength() > 0 )
+                if( mbRestrictPermissions && aPermissionPassword.getLength() > 0 )
                 {
-                    aContext.OwnerPassword = msPermissionPassword;
-                    aContext.Encrypt = sal_True;
+                    mbEncrypt = sal_True;
 //permission set as desired, done after
                 }
                 else
@@ -634,9 +656,9 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     break;
                 default:
                 case 2:
-                    aContext.AccessPermissions.CanPrintFull         = sal_True;
+                    aContext.Encryption.CanPrintFull            = sal_True;
                 case 1:
-                    aContext.AccessPermissions.CanPrintTheDocument  = sal_True;
+                    aContext.Encryption.CanPrintTheDocument     = sal_True;
                     break;
                 }
 
@@ -645,25 +667,27 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 case 0: //already in struct PDFSecPermissions CTOR
                     break;
                 case 1:
-                    aContext.AccessPermissions.CanAssemble              = sal_True;
+                    aContext.Encryption.CanAssemble             = sal_True;
                     break;
                 case 2:
-                    aContext.AccessPermissions.CanFillInteractive       = sal_True;
+                    aContext.Encryption.CanFillInteractive      = sal_True;
                     break;
                 case 3:
-                    aContext.AccessPermissions.CanAddOrModify           = sal_True;
+                    aContext.Encryption.CanAddOrModify          = sal_True;
                     break;
                 default:
                 case 4:
-                    aContext.AccessPermissions.CanModifyTheContent      =
-                        aContext.AccessPermissions.CanCopyOrExtract     =
-                        aContext.AccessPermissions.CanAddOrModify       =
-                        aContext.AccessPermissions.CanFillInteractive   = sal_True;
+                    aContext.Encryption.CanModifyTheContent     =
+                        aContext.Encryption.CanCopyOrExtract    =
+                        aContext.Encryption.CanAddOrModify      =
+                        aContext.Encryption.CanFillInteractive  = sal_True;
                     break;
                 }
 
-                aContext.AccessPermissions.CanCopyOrExtract             = mbCanCopyOrExtract;
-                aContext.AccessPermissions.CanExtractForAccessibility   = mbCanExtractForAccessibility;
+                aContext.Encryption.CanCopyOrExtract                = mbCanCopyOrExtract;
+                aContext.Encryption.CanExtractForAccessibility  = mbCanExtractForAccessibility;
+                if( mbEncrypt )
+                    PDFWriter::InitEncryption( aContext.Encryption, aPermissionPassword, aOpenPassword, aContext.DocumentInfo );
             }
             /*
             * FIXME: the entries are only implicitly defined by the resource file. Should there
@@ -740,41 +764,10 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 // get mimetype
                 OUString aSrcMimetype = getMimetypeForDocument( mxMSF, mxSrcDoc );
                 pPDFWriter->AddStream( aSrcMimetype,
-                                       new PDFExportStreamDoc( mxSrcDoc, msPermissionPassword ),
+                                       new PDFExportStreamDoc( mxSrcDoc, aPermissionPassword ),
                                        false
                                        );
             }
-            PDFDocInfo aDocInfo;
-            Reference< document::XDocumentPropertiesSupplier > xDocumentPropsSupplier( mxSrcDoc, UNO_QUERY );
-            if ( xDocumentPropsSupplier.is() )
-            {
-                Reference< document::XDocumentProperties > xDocumentProps( xDocumentPropsSupplier->getDocumentProperties() );
-                if ( xDocumentProps.is() )
-                {
-                    aDocInfo.Title = xDocumentProps->getTitle();
-                    aDocInfo.Author = xDocumentProps->getAuthor();
-                    aDocInfo.Subject = xDocumentProps->getSubject();
-                    aDocInfo.Keywords = ::comphelper::string::convertCommaSeparated(xDocumentProps->getKeywords());
-                }
-            }
-            // getting the string for the producer
-            String aProducer;
-            ::utl::ConfigManager* pMgr = ::utl::ConfigManager::GetConfigManager();
-            if ( pMgr )
-            {
-                Any aProductName = pMgr->GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
-                ::rtl::OUString sProductName;
-                aProductName >>= sProductName;
-                aProducer = sProductName;
-                aProductName = pMgr->GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTVERSION );
-                aProductName >>= sProductName;
-                aProducer.AppendAscii(" ");
-                aProducer += String( sProductName );
-            }
-            aDocInfo.Producer = aProducer;
-            aDocInfo.Creator = aCreator;
-
-            pPDFWriter->SetDocInfo( aDocInfo );
 
             if ( pOut )
             {
