@@ -7366,7 +7366,7 @@ SfxVoidItem UpdateConfiguration SID_UPDATE_CONFIG
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem HelpSupport SID_HELP_SUPPORTPAGE
+SfxVoidItem ShowLicense SID_SHOW_LICENSE
 ()
 [
     /* flags: */

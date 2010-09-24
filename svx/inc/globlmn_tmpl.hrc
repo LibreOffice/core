@@ -1049,11 +1049,11 @@
     HelpID = SID_HELPBALLOONS ; \
     Text [ en-US ] = "~Extended Tips" ; \
 
-#define ITEM_HELP_SUPPORTPAGE \
-    Identifier = SID_HELP_SUPPORTPAGE ; \
-    Command = ".uno:HelpSupport" ; \
-    HelpID = SID_HELP_SUPPORTPAGE ; \
-    Text [ en-US ] = "~Support" ;   \
+#define ITEM_SHOW_LICENSE \
+    Identifier = SID_SHOW_LICENSE ; \
+    Command = ".uno:ShowLicense" ; \
+    HelpID = SID_SHOW_LICENSE ; \
+    Text [ en-US ] = "License information..." ; \
 
 #define ITEM_HELP_ONLINE_REGISTRATION \
     Identifier = SID_ONLINE_REGISTRATION ; \
@@ -1106,7 +1106,7 @@
                 };\
                 MenuItem\
                 {\
-                    ITEM_HELP_SUPPORTPAGE\
+                    ITEM_SHOW_MENU\
                 };\
                 MenuItem\
                 {\

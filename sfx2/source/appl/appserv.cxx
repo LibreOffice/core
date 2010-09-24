@@ -51,6 +51,8 @@
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/system/SystemShellExecuteException.hpp>
 
+#include <com/sun/star/frame/XComponentLoader.hpp>
+
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include "comphelper/configurationhelper.hxx"
@@ -74,6 +76,7 @@
 #include <vcl/help.hxx>
 #include <vcl/stdtext.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <osl/file.hxx>
 
 #include <unotools/pathoptions.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -156,6 +159,23 @@ long QuitAgain_Impl( void* pObj, void* pArg )
     delete pTimer;
     pApp->GetDispatcher_Impl()->Execute( SID_QUITAPP, SFX_CALLMODE_ASYNCHRON );
     return 0;
+}
+
+namespace {
+  sal_Bool checkURL( const char *pName, rtl::OUString &rURL )
+    {
+        using namespace osl;
+        DirectoryItem aDirItem;
+
+        rURL = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/") );
+        rURL += rtl::OUString::createFromAscii( pName );
+        rtl::Bootstrap::expandMacros( rURL );
+
+        if (rURL.getLength() != 0)
+            return DirectoryItem::get( rURL, aDirItem ) == DirectoryItem::E_None;
+        else
+            return sal_False;
+    }
 }
 
 void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
@@ -340,26 +360,35 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             break;
         }
 
+        case SID_SHOW_LICENSE:
+        {
+            try {
+              Reference < XComponentLoader > xLoader( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ), UNO_QUERY );
+              Sequence < com::sun::star::beans::PropertyValue > args(2);
+              args[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ViewOnly"));
+              args[0].Value <<= sal_True;
+              args[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly"));
+              args[1].Value <<= sal_True;
+
+              rtl::OUString aURL;
+              if ( checkURL ( "LICENSE.odt", aURL ) ||
+                   checkURL ( "LICENSE.html", aURL ) ||
+                   checkURL ( "LICENSE", aURL ) ) {
+                  xLoader->loadComponentFromURL( aURL, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_blank")), 0, args );
+              }
+            } catch (const ::com::sun::star::uno::Exception &) {
+            }
+            break;
+        }
+
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         case SID_HELPINDEX:
-        case SID_HELP_SUPPORTPAGE:
         {
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
             {
-                ULONG nHelpId = ( rReq.GetSlot() == SID_HELP_SUPPORTPAGE ) ? 66056 : 0;
-                if ( 66056 == nHelpId )
-                {
-                    // show Support page with new URL
-                    String sHelpURL = SfxHelp::CreateHelpURL( nHelpId, String() );
-                    String sParams = sHelpURL.Copy( sHelpURL.Search( '?' ) );
-                    sHelpURL = String::CreateFromAscii("vnd.sun.star.help://shared/text/shared/05/00000001.xhp");
-                    sHelpURL += sParams;
-                    sHelpURL += String::CreateFromAscii("&UseDB=no");
-                    pHelp->Start( sHelpURL, NULL );
-                }
-                else
-                    pHelp->Start( nHelpId, NULL ); // show start page
+                ULONG nHelpId =  0;
+                pHelp->Start( nHelpId, NULL ); // show start page
                 bDone = TRUE;
             }
             break;

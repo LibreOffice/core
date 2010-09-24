@@ -46,3 +46,7 @@ $(SYSLICDEST)$/LICENSE_en-US : source$/license$/license_en-US.txt
 $(SYSLICDEST)$/LICENSE_en-US.html : source$/license$/license_en-US.html
     @-$(MKDIRHIER) $(SYSLICDEST)
     $(COPY) $< $@
+
+$(SYSLICDEST)$/LICENSE.odt : source$/license$/license.odt
+    @-$(MKDIRHIER) $(SYSLICDEST)
+    $(COPY) $< $@

@@ -167,7 +167,7 @@ interface Application
         ExecMethod = MiscExec_Impl ;
         StateMethod = MiscState_Impl ;
     ]
-    SID_HELP_SUPPORTPAGE
+    SID_SHOW_LICENSE
     [
         ExecMethod = MiscExec_Impl ;
     ]

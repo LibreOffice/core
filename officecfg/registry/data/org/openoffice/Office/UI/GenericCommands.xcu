@@ -4140,9 +4140,9 @@
                     <value xml:lang="en-US">Optio~n Bar</value>
                 </prop>
             </node>
-            <node oor:name=".uno:HelpSupport" oor:op="replace">
+            <node oor:name=".uno:ShowLicense" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Support</value>
+                    <value xml:lang="en-US">License Information...</value>
                 </prop>
             </node>
             <node oor:name=".uno:StatusBarVisible" oor:op="replace">
