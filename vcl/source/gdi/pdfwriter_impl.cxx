@@ -8499,6 +8499,7 @@ void PDFWriterImpl::beginRedirect( SvStream* pStream, const Rectangle& rTargetRe
 {
     push( PUSH_ALL );
 
+    // force reemitting clip region
     clearClipRegion();
     updateGraphicsState();
 
@@ -8542,7 +8543,10 @@ SvStream* PDFWriterImpl::endRedirect()
     }
 
     pop();
-    // force reemitting colors
+    // force reemitting colors and clip region
+    clearClipRegion();
+    m_aCurrentPDFState.m_bClipRegion = m_aGraphicsStack.front().m_bClipRegion;
+    m_aCurrentPDFState.m_aClipRegion = m_aGraphicsStack.front().m_aClipRegion;
     m_aCurrentPDFState.m_aLineColor = Color( COL_TRANSPARENT );
     m_aCurrentPDFState.m_aFillColor = Color( COL_TRANSPARENT );
 
