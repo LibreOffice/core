@@ -658,8 +658,8 @@ BOOL SvxAutoCorrect::FnAddNonBrkSpace(
             chars = OUString::createFromAscii( ":" );
 
         sal_Unicode cChar = rTxt.GetChar( nEndPos );
-        bool bHasSpace = chars.indexOf( sal_Unicode( cChar ) ) != -1;
-        bool bIsSpecial = allChars.indexOf( sal_Unicode( cChar ) ) != -1;
+        bool bHasSpace = chars.indexOf( cChar ) != -1;
+        bool bIsSpecial = allChars.indexOf( cChar ) != -1;
         if ( bIsSpecial )
         {
             // Get the last word delimiter position
@@ -673,7 +673,7 @@ BOOL SvxAutoCorrect::FnAddNonBrkSpace(
             {
                 // Check the previous char
                 sal_Unicode cPrevChar = rTxt.GetChar( nEndPos - 1 );
-                if ( ( chars.indexOf( sal_Unicode( cPrevChar ) ) == -1 ) && cPrevChar != '\t' )
+                if ( ( chars.indexOf( cPrevChar ) == -1 ) && cPrevChar != '\t' )
                 {
                     // Remove any previous normal space
                     xub_StrLen nPos = nEndPos - 1;
@@ -684,20 +684,17 @@ BOOL SvxAutoCorrect::FnAddNonBrkSpace(
                         cPrevChar = rTxt.GetChar( nPos );
                     }
 
-                    if ( nPos != 0 )
-                    {
-                        nPos++;
-                        if ( nEndPos - nPos > 0 )
-                            rDoc.Delete( nPos, nEndPos );
+                    nPos++;
+                    if ( nEndPos - nPos > 0 )
+                        rDoc.Delete( nPos, nEndPos );
 
-                        // Add the non-breaking space at the end pos
-                        if ( bHasSpace )
-                            rDoc.Insert( nPos, CHAR_HARDBLANK );
-                        bRunNext = true;
-                        bRet = true;
-                    }
+                    // Add the non-breaking space at the end pos
+                    if ( bHasSpace )
+                        rDoc.Insert( nPos, CHAR_HARDBLANK );
+                    bRunNext = true;
+                    bRet = true;
                 }
-                else if ( chars.indexOf( sal_Unicode( cPrevChar ) ) != -1 )
+                else if ( chars.indexOf( cPrevChar ) != -1 )
                     bRunNext = true;
             }
         }
