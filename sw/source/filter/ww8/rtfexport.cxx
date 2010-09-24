@@ -1201,9 +1201,6 @@ void RtfExport::WriteHeaderFooter(const SfxPoolItem& rItem, bool bHeader)
 
     OSL_TRACE("%s start", OSL_THIS_FUNC);
 
-    Strm() << (bHeader ? OOO_STRING_SVTOOLS_RTF_HEADERY : OOO_STRING_SVTOOLS_RTF_FOOTERY);
-    OutLong( pAktPageDesc->GetMaster().
-            GetULSpace().GetUpper() );
     const sal_Char* pStr = (bHeader ? OOO_STRING_SVTOOLS_RTF_HEADER : OOO_STRING_SVTOOLS_RTF_FOOTER);
     /* is this a title page? */
     if( pAktPageDesc->GetFollow() && pAktPageDesc->GetFollow() != pAktPageDesc )

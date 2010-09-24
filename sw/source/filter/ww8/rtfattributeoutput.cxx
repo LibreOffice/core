@@ -2599,15 +2599,33 @@ void RtfAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
     {
         if( m_rExport.bOutPageDescs )
         {
-            if( rULSpace.GetUpper() )
+
+            ASSERT( m_rExport.GetCurItemSet(), "Impossible" );
+            if ( !m_rExport.GetCurItemSet() )
+                return;
+
+            HdFtDistanceGlue aDistances( *m_rExport.GetCurItemSet() );
+
+            if ( aDistances.HasHeader() )
             {
-                m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_MARGTSXN);
-                m_aSectionBreaks.append((sal_Int32)rULSpace.GetUpper());
+                if( aDistances.dyaTop )
+                {
+                    m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_MARGTSXN);
+                    m_aSectionBreaks.append((sal_Int32)aDistances.dyaTop);
+                }
+                m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_HEADERY);
+                m_aSectionBreaks.append((sal_Int32)aDistances.dyaHdrTop);
             }
-            if( rULSpace.GetLower() )
+
+            if( aDistances.HasFooter() )
             {
-                m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_MARGBSXN);
-                m_aSectionBreaks.append((sal_Int32)rULSpace.GetLower());
+                if( aDistances.dyaBottom )
+                {
+                    m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_MARGBSXN);
+                    m_aSectionBreaks.append((sal_Int32)aDistances.dyaBottom);
+                }
+                m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_FOOTERY);
+                m_aSectionBreaks.append((sal_Int32)aDistances.dyaHdrBottom);
             }
             if (!m_bBufferSectionBreaks)
                 m_rExport.Strm() << m_aSectionBreaks.makeStringAndClear();
