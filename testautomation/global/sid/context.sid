@@ -5,14 +5,14 @@
 ' Minimieren SID_WIN_MINIMIZED
 
 ' ** Kontextmenue Calc
-ZeilenLoeschen sym:.uno:DeleteRows
-SpaltenLoeschen sym:.uno:DeleteColumns
-' AnhaengenTabelle sym:.uno:Add       ' ist zur 541 rausgenommen worden
-NotizAnzeigen sym:.uno:NoteVisible
+ZeilenLoeschen .uno:DeleteRows
+SpaltenLoeschen .uno:DeleteColumns
+' AnhaengenTabelle .uno:Add       ' ist zur 541 rausgenommen worden
+NotizAnzeigen .uno:NoteVisible
 
 ' Kontextmenue: Tabelle Calc
-AlleTabellenAuswaehlen sym:.uno:TableSelectAll
-SetTabColor sym:.uno:SetTabBgColor
+AlleTabellenAuswaehlen .uno:TableSelectAll
+SetTabColor .uno:SetTabBgColor
 
 ' ** Kontextmenue im Gestalter/Stylist
 Stylist_Neu sym:SFX2_HID_STYLIST_NEW
@@ -22,10 +22,10 @@ Stylist_Loeschen sym:SFX2_HID_STYLIST_DELETE
 'Open
 
 ' ** Kontextmenue Objekte
-Obj_Originalgroesse sym:.uno:OriginalSize
+Obj_Originalgroesse .uno:OriginalSize
 
 ' ** Kontextmenue SeitenUmbruchvorschau Calc
-Skalierungaufheben sym:.uno:ResetPrintZoom
+Skalierungaufheben .uno:ResetPrintZoom
 
 ' ** Kontextmenue automatische Rechtschreibung pruefen
 ARP_Ersetzung sym:SW_HID_LINGU_REPLACE
@@ -36,5 +36,5 @@ ARP_Autokorrektur sym:SW_HID_LINGU_AUTOCORR
 
 
 ' ** Kontextmenue IMPRESS/DRAW
-VorlageBearbeiten sym:.uno:EditStyle
-ContextOriginalSize sym:.uno:OriginalSize
+VorlageBearbeiten .uno:EditStyle
+ContextOriginalSize .uno:OriginalSize
