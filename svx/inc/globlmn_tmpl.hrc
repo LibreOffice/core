@@ -1106,7 +1106,7 @@
                 };\
                 MenuItem\
                 {\
-                    ITEM_SHOW_MENU\
+                    ITEM_SHOW_LICENSE\
                 };\
                 MenuItem\
                 {\
