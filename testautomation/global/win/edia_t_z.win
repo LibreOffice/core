@@ -137,23 +137,23 @@ Alternatives sym:CUI_HID_CT_THES_ALTERNATIVES
 ReplaceWith sym:cui.Edit.10031.22
 Language sym:cui.MenuButton.10031.12
 
-*TextImport SC:MODALDIALOG:RID_SCDLG_ASCII
-CharacterSet SC:LISTBOX:RID_SCDLG_ASCII:LB_CHARSET
+*TextImport sym:sc.ModalDialog.25695
+CharacterSet sym:sc.ListBox.25695.6
 Language sym:sc.ListBox.25695.8
-FromRow SC:NUMERICFIELD:RID_SCDLG_ASCII:NF_AT_ROW
-FixedWidth SC:RADIOBUTTON:RID_SCDLG_ASCII:RB_FIXED
-Separated SC:RADIOBUTTON:RID_SCDLG_ASCII:RB_SEPARATED
-Tab SC:CHECKBOX:RID_SCDLG_ASCII:CKB_TAB
-Semicolon SC:CHECKBOX:RID_SCDLG_ASCII:CKB_SEMICOLON
-Comma SC:CHECKBOX:RID_SCDLG_ASCII:CKB_COMMA
-SpaceCB SC:CHECKBOX:RID_SCDLG_ASCII:CKB_SPACE
-Other SC:CHECKBOX:RID_SCDLG_ASCII:CKB_OTHER
-OtherText SC:EDIT:RID_SCDLG_ASCII:ED_OTHER
-MergeDelimiter SC:CHECKBOX:RID_SCDLG_ASCII:CB_ASONCE
-TextDelimiter SC:COMBOBOX:RID_SCDLG_ASCII:CB_TEXTSEP
+FromRow sym:sc.NumericField.25695.10
+FixedWidth sym:sc.RadioButton.25695.12
+Separated sym:sc.RadioButton.25695.13
+Tab sym:sc.CheckBox.25695.14
+Semicolon sym:sc.CheckBox.25695.18
+Comma sym:sc.CheckBox.25695.15
+SpaceCB sym:sc.CheckBox.25695.19
+Other sym:sc.CheckBox.25695.16
+OtherText sym:sc.Edit.25695.17
+MergeDelimiter sym:sc.CheckBox.25695.20
+TextDelimiter sym:sc.ComboBox.25695.21
 QuotedAsText   sym:sc.CheckBox.25695.24
 DetectSpecialNumbers   sym:sc.CheckBox.25695.25
-Type SC:LISTBOX:RID_SCDLG_ASCII:LB_TYPE1
+Type sym:sc.ListBox.25695.28
 Preview sym:SC_HID_SC_ASCII_TABCTR
 
 *UnsatisfiedDependencies sym:desktop.ModalDialog.2001

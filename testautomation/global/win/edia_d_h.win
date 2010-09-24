@@ -258,7 +258,7 @@ Search sym:CUI_HID_SEARCH_BTN_SEARCH
 CloseBtn sym:CUI_HID_SEARCH_BTN_CLOSE
 RecordCount sym:CUI_UID_SEARCH_RECORDSTATUS
 
-*DataSourceSelection dbaccess:Modaldialog:DLG_DATASOURCE_SELECTION
+*DataSourceSelection sym:dbaccess.ModalDialog.19204
 SourceList sym:dbaccess.ListBox.19204.1
 Organize sym:dbaccess.PushButton.19204.5
 Create sym:dbaccess.PushButton.19204.9

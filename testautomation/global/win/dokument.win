@@ -18,8 +18,8 @@
 *KommandosMath sym:STARMATH_HID_SMA_COMMAND_WIN
 Kommandos sym:STARMATH_HID_SMA_COMMAND_WIN_EDIT
 
-*DokSeitenansichtWriter HID_PagePreview
-*DokSeitenansichtCalc HID_SC_Win_Preview
+*DokSeitenansichtWriter sym:SW_HID_PAGEPREVIEW
+*DokSeitenansichtCalc sym:SC_HID_SC_WIN_PREVIEW
 
 
 ' english Part
@@ -53,8 +53,8 @@ Info .HelpId:StartCenter:Info
 *CommandsMath sym:STARMATH_HID_SMA_COMMAND_WIN
 Commands sym:STARMATH_HID_SMA_COMMAND_WIN_EDIT
 
-*DocPageViewWriter HID_PagePreview
-*DocPageViewCalc HID_SC_Win_Preview
+*DocPageViewWriter sym:SW_HID_PAGEPREVIEW
+*DocPageViewCalc sym:SC_HID_SC_WIN_PREVIEW
 
 ' to access the buttons in the lower left corner
 *DocumentDrawImpress sym:SD_HID_SDGRAPHICVIEWSHELL

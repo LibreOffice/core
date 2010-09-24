@@ -168,7 +168,7 @@ Super sym:cui.RadioButton.10241.301
  
 *TabFormat3dViewAppearance sym:chart2.TabPage.916
  Scheme                    sym:chart2.ListBox.916.2
- RoundedEdges              chart2:CheckBox:TP_3D_SCENEAPPEARANCE:CB_ROUNDEDEDGE
+ RoundedEdges              sym:chart2.Checkbox.916.3 
  Shading                   sym:chart2.CheckBox.916.2
  ObjectBorders             sym:chart2.CheckBox.916.1
  

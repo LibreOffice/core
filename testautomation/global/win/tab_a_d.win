@@ -1,20 +1,20 @@
 *Active
 
 *TabAenderungenWriter sym:SW_HID_REDLINE_OPT
-EinfuegenAttribute SW:LISTBOX:TP_REDLINE_OPT:LB_INS_ATTR
-EinfuegenFarbe SW:LISTBOX:TP_REDLINE_OPT:LB_INS_COL
-LoeschenAttribute SW:LISTBOX:TP_REDLINE_OPT:LB_DEL_ATTR
-LoeschenFarbe SW:LISTBOX:TP_REDLINE_OPT:LB_DEL_COL
-AendernAttribute SW:LISTBOX:TP_REDLINE_OPT:LB_CHG_ATTR
-AendernFarbe SW:LISTBOX:TP_REDLINE_OPT:LB_CHG_COL
-ZeilenMarkierung SW:LISTBOX:TP_REDLINE_OPT:LB_MARKPOS
-ZeilenFarbe SW:LISTBOX:TP_REDLINE_OPT:LB_LC_COL
+EinfuegenAttribute sym:sw.ListBox.20874.2
+EinfuegenFarbe sym:sw.ListBox.20874.4
+LoeschenAttribute sym:sw.ListBox.20874.7
+LoeschenFarbe sym:sw.ListBox.20874.9
+AendernAttribute sym:sw.ListBox.20874.12
+AendernFarbe sym:sw.ListBox.20874.14
+ZeilenMarkierung sym:sw.ListBox.20874.18
+ZeilenFarbe sym:sw.ListBox.20874.20
 
-*TabAenderungenCalc sym:SC_HID_SCPAGE_OPREDLINE SC:TABPAGE:RID_SCPAGE_OPREDLINE
-Aenderungen SC:LISTBOX:RID_SCPAGE_OPREDLINE:CLB_CONTENT
-Loeschungen SC:LISTBOX:RID_SCPAGE_OPREDLINE:CLB_REMOVE
-Einfuegungen SC:LISTBOX:RID_SCPAGE_OPREDLINE:CLB_INSERT
-Verschiebungen SC:LISTBOX:RID_SCPAGE_OPREDLINE:CLB_MOVE
+*TabAenderungenCalc sym:SC_HID_SCPAGE_OPREDLINE sc:TabPage:RID_SCPAGE_OPREDLINE
+Aenderungen sym:sc.ListBox.25728.1
+Loeschungen sym:sc.ListBox.25728.2
+Einfuegungen sym:sc.ListBox.25728.3
+Verschiebungen sym:sc.ListBox.25728.4
 
 *TabAllgemein sym:CUI_HID_OPTIONS_GENERAL
 Firma sym:cui.Edit.12001.11
@@ -36,7 +36,7 @@ Position sym:cui.Edit.12001.32
 City sym:cui.Edit.12001.25
 Zip sym:cui.Edit.12001.27
 Street sym:cui.Edit.12001.20
-State cui:EDIT:RID_SFXPAGE_GENERAL:ED_US_STATE
+State sym:cui.Edit.12001.26
 Zurueck sym:SFX2_HID_TABDLG_RESET_BTN
 
 +TabAllgemeines TabAllgemein
@@ -78,10 +78,10 @@ WelcheSprache sym:CUI_HID_AUTOCORR_LANGUAGE
 *TabAusrichtung sym:CUI_HID_ALIGNMENT
 ListeHAusrichtung sym:cui.ListBox.10090.12
 ListeVAusrichtung sym:cui.ListBox.10090.16
-Einzug cui:METRICFIELD:RID_SVXPAGE_ALIGNMENT:ED_INDENT
+Einzug sym:cui.MetricField.10090.14
 Zeilenumbruch sym:cui.TriStateBox.10090.41
 Silbentrennung sym:cui.TriStateBox.10090.42
-Grad cui:NUMERICFIELD:RID_SVXPAGE_ALIGNMENT:NF_DEGREES
+Grad sym:cui.NumericField.10090.24
 Bezugskante sym:CUI_HID_ALIGNMENT_CTR_BORDER_LOCK
 VertikaleAusrichtung sym:cui.TriStateBox.10090.27
 Gestapelt sym:cui.TriStateBox.10090.21
@@ -90,12 +90,12 @@ SetAlignmentOptions sym:cui.ListBox.10090.44
 AlignmentDial sym:CUI_HID_ALIGNMENT_CTR_DIAL
 
 *TabAusrichtungAbsatz sym:CUI_HID_FORMAT_PARAGRAPH_ALIGN
-Links cui:RADIOBUTTON:RID_SVXPAGE_ALIGN_PARAGRAPH:BTN_LEFTALIGN
-Rechts cui:RADIOBUTTON:RID_SVXPAGE_ALIGN_PARAGRAPH:BTN_RIGHTALIGN
-Zentriert cui:RADIOBUTTON:RID_SVXPAGE_ALIGN_PARAGRAPH:BTN_CENTERALIGN
-Blocksatz cui:RADIOBUTTON:RID_SVXPAGE_ALIGN_PARAGRAPH:BTN_JUSTIFYALIGN
-LetzteZeile cui:LISTBOX:RID_SVXPAGE_ALIGN_PARAGRAPH:LB_LASTLINE
-EinzelnesWortAustreiben cui:CHECKBOX:RID_SVXPAGE_ALIGN_PARAGRAPH:CB_EXPAND
+Links sym:cui.RadioButton.10187.30
+Rechts sym:cui.RadioButton.10187.31
+Zentriert sym:cui.RadioButton.10187.32
+Blocksatz sym:cui.RadioButton.10187.33
+LetzteZeile sym:cui.ListBox.10187.50
+EinzelnesWortAustreiben sym:cui.CheckBox.10187.51
 VertikaleTextausrichtung sym:cui.ListBox.10187.36
 TextrasterFangen sym:cui.CheckBox.10187.38
 TextDirection sym:cui.ListBox.10187.92
@@ -204,31 +204,31 @@ HinzufuegenAlle sym:cui.PushButton.10364.1
 Vorschau sym:cui.CheckBox.10364.3
 
 *TabDatenbank sym:SW_HID_FLD_DB
-Feldtyp SW:LISTBOX:TP_FLD_DB:LB_DBTYPE
+Feldtyp sym:sw.ListBox.20864.2
 Datenbankauswahl sym:SW_HID_DB_SELECTION_TLB
-Bedingung SW:EDIT:TP_FLD_DB:ED_DBCONDITION
-Satznummer SW:EDIT:TP_FLD_DB:ED_DBSETNUMBER
-AusDatenbank SW:RADIOBUTTON:TP_FLD_DB:RB_DBOWNFORMAT
-Selbstdefiniert SW:RADIOBUTTON:TP_FLD_DB:RB_DBFORMAT
-Formatliste SW:LISTBOX:TP_FLD_DB:LB_DBFORMAT
-Zahlenformat SW:LISTBOX:TP_FLD_DB:LB_DBNUMFORMAT
+Bedingung sym:sw.Edit.20864.8
+Satznummer sym:sw.Edit.20864.9
+AusDatenbank sym:sw.RadioButton.20864.13
+Selbstdefiniert sym:sw.RadioButton.20864.12
+Formatliste sym:sw.ListBox.20864.10
+Zahlenformat sym:sw.ListBox.20864.11
 Einfuegen sym:SW_HID_FIELD_INSERT
 Schliessen sym:SW_HID_FIELD_CLOSE
 
 *TabDirektCursor sym:SW_HID_OPTSHDWCRSR
-DirektCursor SW:CHECKBOX:TP_OPTSHDWCRSR:CB_SHDWCRSONOFF
-Absatzausrichtung SW:RADIOBUTTON:TP_OPTSHDWCRSR:RB_SHDWCRSFILLMARGIN
-LinkerAbsatzrand SW:RADIOBUTTON:TP_OPTSHDWCRSR:RB_SHDWCRSFILLINDENT
-Tabulator SW:RADIOBUTTON:TP_OPTSHDWCRSR:RB_SHDWCRSFILLTAB
-TabulatorUndLeerzeichen SW:RADIOBUTTON:TP_OPTSHDWCRSR:RB_SHDWCRSFILLSPACE
-Zonen_Cursor SW:CHECKBOX:TP_OPTSHDWCRSR:CB_ALLOW_IN_PROT
+DirektCursor sym:sw.CheckBox.20870.2
+Absatzausrichtung sym:sw.RadioButton.20870.5
+LinkerAbsatzrand sym:sw.RadioButton.20870.6
+Tabulator sym:sw.RadioButton.20870.7
+TabulatorUndLeerzeichen sym:sw.RadioButton.20870.8
+Zonen_Cursor sym:sw.CheckBox.20870.12
 
-Absatzenden SW:CHECKBOX:TP_OPTSHDWCRSR:CB_PARA
-Tabulatoren SW:CHECKBOX:TP_OPTSHDWCRSR:CB_TAB
-Leerzeichen SW:CHECKBOX:TP_OPTSHDWCRSR:CB_SPACE
-GeschLeerzeichen SW:CHECKBOX:TP_OPTSHDWCRSR:CB_HSPACE
-WeicheTrenner SW:CHECKBOX:TP_OPTSHDWCRSR:CB_SHYPH
-Umbrueche SW:CHECKBOX:TP_OPTSHDWCRSR:CB_BREAK
+Absatzenden sym:sw.CheckBox.20870.5
+Tabulatoren sym:sw.CheckBox.20870.6
+Leerzeichen sym:sw.CheckBox.20870.7
+GeschLeerzeichen sym:sw.CheckBox.20870.8
+WeicheTrenner sym:sw.CheckBox.20870.9
+Umbrueche sym:sw.CheckBox.20870.11
 VersteckteAbsatze sym:sw.CheckBox.20870.36
 FeldVersteckterText sym:sw.CheckBox.20870.10
 VersteckterText sym:sw.CheckBox.20870.61
@@ -252,12 +252,12 @@ FileRevisionInfo sym:sfx2.Edit.264.38
 FileTemplateinfo sym:sfx2.Edit.264.33
 
 *TabDokumentFeldbefehle sym:SW_HID_FLD_DOK
-Feldtyp SW:LISTBOX:TP_FLD_DOK:LB_DOKTYPE
-Auswahl SW:LISTBOX:TP_FLD_DOK:LB_DOKSELECTION
-Formatliste SW:LISTBOX:TP_FLD_DOK:LB_DOKFORMAT
-Zahlenformat SW:LISTBOX:TP_FLD_DOK:LB_DOKNUMFORMAT
-Editfeld SW:EDIT:TP_FLD_DOK:ED_DOKVALUE
-InhaltFix SW:CHECKBOX:TP_FLD_DOK:CB_DOKFIXEDCONTENT
+Feldtyp sym:sw.ListBox.20867.48
+Auswahl sym:sw.ListBox.20867.50
+Formatliste sym:sw.ListBox.20867.52
+Zahlenformat sym:sw.ListBox.20867.51
+Editfeld sym:sw.Edit.20867.55
+InhaltFix sym:sw.CheckBox.20867.58
 Einfuegen sym:SW_HID_FIELD_INSERT
 Schliessen sym:SW_HID_FIELD_CLOSE
 
@@ -269,9 +269,9 @@ Titel sym:sfx2.Edit.263.10
 
 *TabDokumentInfoFeldbefehle sym:SW_HID_FLD_DOKINF
 Feldtyp sym:SW_HID_FIELD_DINF_TYPE
-Auswahl SW:LISTBOX:TP_FLD_DOKINF:LB_DOKINFSELECTION
-Zahlenformat SW:LISTBOX:TP_FLD_DOKINF:LB_DOKINFFORMAT
-InhaltFix SW:CHECKBOX:TP_FLD_DOKINF:CB_DOKINFFIXEDCONTENT
+Auswahl sym:sw.ListBox.20865.18
+Zahlenformat sym:sw.ListBox.20865.20
+InhaltFix sym:sw.CheckBox.20865.21
 Einfuegen sym:SW_HID_FIELD_INSERT
 Schliessen sym:SW_HID_FIELD_CLOSE
 
@@ -298,23 +298,23 @@ Prospekt sym:sd.RadioButton.549.4
 Vorderseite sym:sd.CheckBox.549.12
 Rueckseite sym:sd.CheckBox.549.13
 AusDruckereinstellung sym:sd.CheckBox.549.10
-StandardAusgabe SD:RADIOBUTTON:TP_PRINT_OPTIONS:RBT_COLOR
-Graustufen SD:RADIOBUTTON:TP_PRINT_OPTIONS:RBT_GRAYSCALE
-SchwarzWeiss SD:RADIOBUTTON:TP_PRINT_OPTIONS:RBT_BLACKWHITE
+StandardAusgabe sym:sd.RadioButton.549.5
+Graustufen sym:sd.RadioButton.549.6
+SchwarzWeiss sym:sd.RadioButton.549.7
 
 *TabDruckenHTML sym:SW_HID_OPTPRINT_PAGE
-Grafiken SW:CHECKBOX:TP_OPTPRINT_PAGE:CB_PGRF
-Kontrollfelder SW:CHECKBOX:TP_OPTPRINT_PAGE:CB_CTRLFLD
-Hintergrund SW:CHECKBOX:TP_OPTPRINT_PAGE:CB_BACKGROUND
-SchwarzDrucken SW:CHECKBOX:TP_OPTPRINT_PAGE:CB_BLACK_FONT
-Prospekt SW:CHECKBOX:TP_OPTPRINT_PAGE:CB_PROSPECT
-Keine SW:RADIOBUTTON:TP_OPTPRINT_PAGE:RB_NO
-NurNotizen SW:RADIOBUTTON:TP_OPTPRINT_PAGE:RB_ONLY
-Dokumentende SW:RADIOBUTTON:TP_OPTPRINT_PAGE:RB_END
-Seitenende SW:RADIOBUTTON:TP_OPTPRINT_PAGE:RB_PAGEEND
-AusDruckereinstellung SW:CHECKBOX:TP_OPTPRINT_PAGE:CB_PAPERFROMSETUP
+Grafiken sym:sw.CheckBox.20826.61
+Kontrollfelder sym:sw.CheckBox.20826.69
+Hintergrund sym:sw.CheckBox.20826.79
+SchwarzDrucken sym:sw.CheckBox.20826.87
+Prospekt sym:sw.CheckBox.20826.67
+Keine sym:sw.RadioButton.20826.80
+NurNotizen sym:sw.RadioButton.20826.81
+Dokumentende sym:sw.RadioButton.20826.82
+Seitenende sym:sw.RadioButton.20826.83
+AusDruckereinstellung sym:sw.CheckBox.20826.70
 LeereSeitenDrucken sym:sw.CheckBox.20826.92
-Fax SW:LISTBOX:TP_OPTPRINT_PAGE:LB_FAX
+Fax sym:sw.ListBox.20826.86
 
 *TabDruckenWriter sym:SW_HID_OPTPRINT_PAGE
 Grafiken sym:sw.CheckBox.20826.61
@@ -323,7 +323,7 @@ Hintergrund sym:sw.CheckBox.20826.79
 HiddenText sym:sw.CheckBox.20826.93
 TextPlaceholder sym:sw.CheckBox.20826.94
 RightToLeft sym:sw.CheckBox.20826.140
-SchwarzDrucken SW:CHECKBOX:TP_OPTPRINT_PAGE:CB_BLACK_FONT
+SchwarzDrucken sym:sw.CheckBox.20826.87
 LinkeSeiten sym:sw.CheckBox.20826.64
 RechteSeiten sym:sw.CheckBox.20826.65
 Prospekt sym:sw.CheckBox.20826.67
@@ -352,7 +352,7 @@ EinzelnesEtikett sym:sw.RadioButton.22757.2
 Spalte sym:sw.NumericField.22757.5
 Zeile sym:sw.NumericField.22757.7
 Einrichten sym:sw.PushButton.22757.8
-InhaltSynchronisieren SW:CHECKBOX:TP_LAB_PRT:CB_SYNCHRON
+InhaltSynchronisieren sym:sw.CheckBox.22757.11
 NeuesDok sym:SW_HID_LABEL_INSERT
 Zurueck sym:SFX2_HID_TABDLG_RESET_BTN
 

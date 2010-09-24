@@ -1,28 +1,28 @@
 *TabPfade sym:CUI_HID_OPTIONS_PATH
 Standard sym:cui.PushButton.12006.14
-Bearbeiten cui:PUSHBUTTON:RID_SFXPAGE_PATH:BTN_PATH
+Bearbeiten sym:cui.PushButton.12006.13
 Typ sym:CUI_HID_OPTPATH_CTL_PATH
 
 *TabPositionNumerierung sym:CUI_HID_SVXPAGE_NUM_POSITION
-Level cui:MULTILISTBOX:RID_SVXPAGE_NUM_POSITION:LB_LEVEL
+Level sym:cui.MultiListBox.10220.152
 Alignment sym:cui.ListBox.10220.255
 NumberFollowedBy sym:cui.ListBox.10220.251
 NumberFollowedByAt sym:cui.MetricField.10220.253
 AlignedAt sym:cui.MetricField.10220.257
 IndentAt sym:cui.MetricField.10220.259
-Ausrichtung cui:LISTBOX:RID_SVXPAGE_NUM_POSITION:LB_ALIGN
-AbstandTextNumerierung cui:METRICFIELD:RID_SVXPAGE_NUM_POSITION:MF_NUMDIST
-Relativ cui:CHECKBOX:RID_SVXPAGE_NUM_POSITION:CB_RELATIVE
-Standard cui:PUSHBUTTON:RID_SVXPAGE_NUM_POSITION:PB_STANDARD
+Ausrichtung sym:cui.ListBox.10220.51
+AbstandTextNumerierung sym:cui.MetricField.10220.164
+Relativ sym:cui.CheckBox.10220.185
+Standard sym:cui.PushButton.10220.187
 
 *TabPositionKapitelnumerierung sym:SW_HID_NUM_POSITION
-Level sw:MULTILISTBOX:TP_NUM_POSITION:LB_LEVEL
-NumberAlignment sw:LISTBOX:TP_NUM_POSITION:LB_ALIGN
-AlignedAt sw:METRICFIELD:TP_NUM_POSITION:MF_BORDERDIST
-AbstandTextNumerierung sw:METRICFIELD:TP_NUM_POSITION:MF_NUMDIST
-IndentAt sw:METRICFIELD:TP_NUM_POSITION:MF_INDENT
-Relativ sw:CHECKBOX:TP_NUM_POSITION:CB_RELATIVE
-Standard sw:PUSHBUTTON:TP_NUM_POSITION:PB_STANDARD
+Level sym:sw.MultiListBox.20872.2
+NumberAlignment sym:sw.ListBox.20872.12
+AlignedAt sym:sw.MetricField.20872.5
+AbstandTextNumerierung sym:sw.MetricField.20872.10
+IndentAt sym:sw.MetricField.20872.8
+Relativ sym:sw.CheckBox.20872.6
+Standard sym:sw.PushButton.20872.13
 LabelFollowedBy sym:sw.ListBox.20872.18
 AbstandTextNumerierung2 sym:sw.MetricField.20872.20
 NumberingAlignment sym:sw.ListBox.20872.22
@@ -66,11 +66,11 @@ Punktreduktion sym:svx.MetricField.10152.37
 Winkel sym:svx.MetricField.10152.35
 
 *TabReferenzen sym:SW_HID_FLD_REF
-Feldtyp SW:LISTBOX:TP_FLD_REF:LB_REFTYPE
-Auswahl SW:LISTBOX:TP_FLD_REF:LB_REFSELECTION
-Formatliste SW:LISTBOX:TP_FLD_REF:LB_REFFORMAT
-Namefeld SW:EDIT:TP_FLD_REF:ED_REFNAME
-Wert SW:EDIT:TP_FLD_REF:ED_REFVALUE
+Feldtyp sym:sw.ListBox.20869.81
+Auswahl sym:sw.ListBox.20869.83
+Formatliste sym:sw.ListBox.20869.85
+Namefeld sym:sw.Edit.20869.88
+Wert sym:sw.Edit.20869.90
 Einfuegen sym:SW_HID_FIELD_INSERT
 Schliessen sym:SW_HID_FIELD_CLOSE
 
@@ -124,8 +124,8 @@ Horizontal sym:cui.CheckBox.10025.70
 Vertikal sym:cui.CheckBox.10025.71
 Hoch sym:cui.RadioButton.10025.51
 Quer sym:cui.RadioButton.10025.52
-Einschalten cui:CHECKBOX:RID_SVXPAGE_PAGE:CB_REGISTER
-AbsatzVorlage cui:LISTBOX:RID_SVXPAGE_PAGE:LB_REGISTER
+Einschalten sym:cui.CheckBox.10025.60
+AbsatzVorlage sym:cui.ListBox.10025.62
 Textfluss sym:cui.ListBox.10025.36
 FitObject sym:cui.CheckBox.10025.72
 
@@ -140,15 +140,15 @@ DruckenStatus sym:cui.CheckBox.17100.61
 StyleSheet sym:cui.ListBox.17100.16
 
 *TabSonstigesDraw sym:SD_HID_SD_OPTIONS_MISC
-Schnellbearbeitung SD:CHECKBOX:TP_OPTIONS_MISC:CBX_QUICKEDIT
-TextbereichSelektierbar SD:CHECKBOX:TP_OPTIONS_MISC:CBX_PICKTHROUGH
-SeitenlayoutdialogZeigen SD:CHECKBOX:TP_OPTIONS_MISC:CBX_START_WITH_TEMPLATE
-CacheFuerHintergrund SD:CHECKBOX:TP_OPTIONS_MISC:CBX_MASTERPAGE_CACHE
-KopieBeimVerschieben SD:CHECKBOX:TP_OPTIONS_MISC:CBX_COPY
-ObjekteImmerVerschiebbar SD:CHECKBOX:TP_OPTIONS_MISC:CBX_MARKED_HIT_MOVES_ALWAYS
-SetzenAufKreis SD:CHECKBOX:TP_OPTIONS_MISC:CBX_CROOK_NO_CONTORTION
-MitAktuellerSeite SD:CHECKBOX:TP_OPTIONS_MISC:CBX_START_WITH_ACTUAL_PAGE
-Praesentationsdialoge SD:CHECKBOX:TP_OPTIONS_MISC:CBX_START_WITH_TEMPLATE
+Schnellbearbeitung sym:sd.CheckBox.599.24
+TextbereichSelektierbar sym:sd.CheckBox.599.9
+SeitenlayoutdialogZeigen sym:sd.CheckBox.599.6
+CacheFuerHintergrund sym:sd.CheckBox.599.25
+KopieBeimVerschieben sym:sd.CheckBox.599.13
+ObjekteImmerVerschiebbar sym:sd.CheckBox.599.19
+SetzenAufKreis sym:sd.CheckBox.599.21
+MitAktuellerSeite sym:sd.CheckBox.599.26
+Praesentationsdialoge sym:sd.CheckBox.599.6
 MitAutopilotStarten sym:sd.CheckBox.599.6
 Masseinheit sym:sd.ListBox.599.1
 Tabulatorabstand sym:sd.MetricField.599.4
@@ -189,7 +189,7 @@ SortierergebnisseAusgebenNach sym:sc.CheckBox.25611.11
 AusgabebereichName sym:sc.ListBox.25611.3
 AusgabebereichZellen sym:sc.Edit.25611.4
 BenutzerdefinierteSortierreihenfolge sym:sc.CheckBox.25611.7
-SortierreihenfolgeListe SC:LISTBOX:RID_SCPAGE_SORT_OPTIONS:LB_SORT_USER
+SortierreihenfolgeListe sym:sc.ListBox.25611.2
 VonObenNachUnten sym:sc.RadioButton.25611.12
 VonLinksNachRechts sym:sc.RadioButton.25611.13
 Sprache sym:sc.ListBox.25611.17
@@ -241,13 +241,13 @@ Zuruecksetzen sym:SFX2_HID_TABDLG_RESET_BTN
 
 *TabSpeichern sym:CUI_HID_OPTIONS_SAVE
 BenutzerspezifischeEinstellungen sym:cui.CheckBox.12000.11
-DokumenteigenschaftenBearbeiten cui:CHECKBOX:RID_SFXPAGE_SAVE:BTN_DOCINFO
+DokumenteigenschaftenBearbeiten sym:cui.CheckBox.12000.14
 Sicherungskopie sym:cui.CheckBox.12000.15
 AutomatischSpeichern sym:cui.CheckBox.12000.16
-Minuten cui:NUMERICFIELD:RID_SFXPAGE_SAVE:ED_AUTOSAVE
+Minuten sym:cui.NumericField.12000.17
 NoPrettyPrinting sym:cui.CheckBox.12000.20
-URLimDateisystem cui:CHECKBOX:RID_SFXPAGE_SAVE:BTN_RELATIVE_FSYS
-URLimInternet cui:CHECKBOX:RID_SFXPAGE_SAVE:BTN_RELATIVE_INET
+URLimDateisystem sym:cui.CheckBox.12000.41
+URLimInternet sym:cui.CheckBox.12000.42
 Dokumenttyp sym:cui.ListBox.12000.45
 Filter sym:cui.ListBox.12000.47
 WarnWhenSavingAlienFormat sym:cui.CheckBox.12000.22

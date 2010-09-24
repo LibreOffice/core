@@ -31,20 +31,20 @@ Name sym:cui.Edit.10102.3
 Description sym:cui.MultiLineEdit.10102.4
 
 *IndividuellePraesentation sym:.uno:CustomShowDialog
-Neu SD:PUSHBUTTON:DLG_CUSTOMSHOW:BTN_NEW
-Bearbeiten SD:PUSHBUTTON:DLG_CUSTOMSHOW:BTN_EDIT
-Loeschen SD:PUSHBUTTON:DLG_CUSTOMSHOW:BTN_REMOVE
-Kopieren SD:PUSHBUTTON:DLG_CUSTOMSHOW:BTN_COPY
-Starten SD:PUSHBUTTON:DLG_CUSTOMSHOW:BTN_STARTSHOW
-IndividuellePraesentationBenutzen SD:CHECKBOX:DLG_CUSTOMSHOW:CBX_USE_CUSTOMSHOW
+Neu sym:sd.PushButton.843.1
+Bearbeiten sym:sd.PushButton.843.2
+Loeschen sym:sd.PushButton.843.3
+Kopieren sym:sd.PushButton.843.4
+Starten sym:sd.PushButton.843.5
+IndividuellePraesentationBenutzen sym:sd.CheckBox.843.1
 CustomSlideShowList sym:sd.ListBox.843.1
 
 *IndividuellePraesentationDefinieren sym:SD_HID_DLG_DEFINE_CUSTOMSHOW
-PraesentationName SD:EDIT:DLG_DEFINE_CUSTOMSHOW:EDT_NAME
-SeitenPraesentation SD:MULTILISTBOX:DLG_DEFINE_CUSTOMSHOW:LB_PAGES
+PraesentationName sym:sd.Edit.890.1
+SeitenPraesentation sym:sd.MultiListBox.890.1
 SelectedSlides sym:SD_HID_DLG_DEFINE_CUSTOMSHOW_CTL
-Hinzufuegen SD:PUSHBUTTON:DLG_DEFINE_CUSTOMSHOW:BTN_ADD
-Entfernen SD:PUSHBUTTON:DLG_DEFINE_CUSTOMSHOW:BTN_REMOVE
+Hinzufuegen sym:sd.PushButton.890.1
+Entfernen sym:sd.PushButton.890.3
 
 *InfofelderBearbeiten sym:SFX2_HID_DOCINFO_EDT
 Name0 sym:sfx2.Edit.266.5
@@ -59,9 +59,9 @@ Namen3 sym:sfx2.Edit.266.9
 Namen4 sym:sfx2.Edit.266.11
 
 *InhaltEinfuegen sym:CUI_HID_PASTE_DLG
-AlsSymbol cui:CHECKBOX:MD_PASTE_OBJECT:CB_DISPLAY_AS_ICON
-AndersSymbol cui:PUSHBUTTON:MD_PASTE_OBJECT:PB_CHANGE_ICON
-VerknuepfungMit cui:RADIOBUTTON:MD_PASTE_OBJECT:RB_PASTE_LINK
+AlsSymbol sym:cui.CheckBox.32001.12
+AndersSymbol sym:cui.PushButton.32001.14
+VerknuepfungMit sym:cui.RadioButton.32001.21
 Auswahl sym:cui.ListBox.32001.7
 EinfuegenAls sym:cui.RadioButton.32001.20
 
@@ -82,9 +82,9 @@ Addieren sym:sc.RadioButton.25618.28
 Subtrahieren sym:sc.RadioButton.25618.29
 Multiplizieren sym:sc.RadioButton.25618.30
 Dividieren sym:sc.RadioButton.25618.31
-NichtVerschieben SC:RADIOBUTTON:RID_SCDLG_INSCONT:BTN_MV_NONE
-NachUnten SC:RADIOBUTTON:RID_SCDLG_INSCONT:BTN_MV_DOWN
-NachRechts SC:RADIOBUTTON:RID_SCDLG_INSCONT:BTN_MV_RIGHT
+NichtVerschieben sym:sc.RadioButton.25618.37
+NachUnten sym:sc.RadioButton.25618.38
+NachRechts sym:sc.RadioButton.25618.39
 
 *InhalteLoeschen sym:.uno:Delete
 Alles sym:sc.CheckBox.25617.10
@@ -116,20 +116,20 @@ Zurueck sym:CUI_HID_REDLINING_PREV
 Vor sym:CUI_HID_REDLINING_NEXT
 
 *Konsolidieren sym:.uno:DataConsolidate
-Berechnungsvorschrift SC:LISTBOX:RID_SCDLG_CONSOLIDATE:LB_FUNC
-Konsolidierungsbereiche SC:MULTILISTBOX:RID_SCDLG_CONSOLIDATE:LB_CONSAREAS
-Quelldatenbereich SC:LISTBOX:RID_SCDLG_CONSOLIDATE:LB_DATA_AREA
-Quelldaten SC:EDIT:RID_SCDLG_CONSOLIDATE:ED_DATA_AREA
-ButtonQuelldaten SC:IMAGEBUTTON:RID_SCDLG_CONSOLIDATE:RB_DATA_AREA
-AusgebenBereich SC:LISTBOX:RID_SCDLG_CONSOLIDATE:LB_DEST_AREA
-Ausgeben SC:EDIT:RID_SCDLG_CONSOLIDATE:ED_DEST_AREA
-ButtonAusgeben SC:IMAGEBUTTON:RID_SCDLG_CONSOLIDATE:RB_DEST_AREA
-Zeilenbeschriftung SC:CHECKBOX:RID_SCDLG_CONSOLIDATE:BTN_BYROW
-Spaltenkoepfen SC:CHECKBOX:RID_SCDLG_CONSOLIDATE:BTN_BYCOL
-MitQuelldatenVerbinden SC:CHECKBOX:RID_SCDLG_CONSOLIDATE:BTN_REFS
-Loeschen SC:PUSHBUTTON:RID_SCDLG_CONSOLIDATE:BTN_REMOVE
-Hinzufuegen SC:PUSHBUTTON:RID_SCDLG_CONSOLIDATE:BTN_ADD
-Zusaetze SC:MOREBUTTON:RID_SCDLG_CONSOLIDATE:BTN_MORE
+Berechnungsvorschrift sym:sc.ListBox.25639.12
+Konsolidierungsbereiche sym:sc.MultiListBox.25639.22
+Quelldatenbereich sym:sc.ListBox.25639.32
+Quelldaten sym:sc.Edit.25639.33
+ButtonQuelldaten sym:sc.ImageButton.25639.34
+AusgebenBereich sym:sc.ListBox.25639.42
+Ausgeben sym:sc.Edit.25639.43
+ButtonAusgeben sym:sc.ImageButton.25639.44
+Zeilenbeschriftung sym:sc.CheckBox.25639.51
+Spaltenkoepfen sym:sc.CheckBox.25639.52
+MitQuelldatenVerbinden sym:sc.CheckBox.25639.61
+Loeschen sym:sc.PushButton.25639.6
+Hinzufuegen sym:sc.PushButton.25639.5
+Zusaetze sym:sc.MoreButton.25639.4
 
 *KonturEditor sym:svx.FloatingWindow.10461
 Zuweisen sym:SVX_HID_CONTDLG_APPLY
@@ -259,11 +259,11 @@ Vorgaben1 sym:sc.ImageButton.25662.1
 Vorgaben2 sym:sc.ImageButton.25662.2
 Vorgaben3 sym:sc.ImageButton.25662.3
 
-*MetOptionen FILTER:MODALDIALOG:DLG_EXPORT_EMET
-Original FILTER:RADIOBUTTON:DLG_EXPORT_EMET:RB_ORIGINAL
-Groesse FILTER:RADIOBUTTON:DLG_EXPORT_EMET:RB_SIZE
-Breite FILTER:METRICFIELD:DLG_EXPORT_EMET:MTF_SIZEX
-Hoehe FILTER:METRICFIELD:DLG_EXPORT_EMET:MTF_SIZEY
+*MetOptionen sym:filter.ModalDialog.17402
+Original sym:filter.RadioButton.17402.1
+Groesse sym:filter.RadioButton.17402.2
+Breite sym:filter.MetricField.17402.1
+Hoehe sym:filter.MetricField.17402.2
 
 *ModuleBearbeiten sym:CUI_HID_EDIT_MODULES
 Sprache sym:cui.ListBox.10831.319
@@ -410,9 +410,9 @@ Bibliotheksname sym:basctl.Edit.14892.41
 Dialogname sym:basctl.Edit.14892.41
 
 *NeuesFangobjekt sym:.uno:CapturePoint
-Horizontal  SD:IMAGERADIOBUTTON:DLG_SNAPLINE:RB_HORIZONTAL
-Vertikal SD:IMAGERADIOBUTTON:DLG_SNAPLINE:RB_VERTICAL
-Punkt SD:IMAGERADIOBUTTON:DLG_SNAPLINE:RB_POINT
+Horizontal  sym:sd.ImageRadioButton.312.11
+Vertikal sym:sd.ImageRadioButton.312.12
+Punkt sym:sd.ImageRadioButton.312.13
 X sym:sd.MetricField.312.7
 Y sym:sd.MetricField.312.9
 
@@ -422,8 +422,8 @@ Modulname sym:basctl.Edit.14892.41
 *NotizBearbeiten sym:CUI_HID_POSTIT_DIALOG
 Texteingabe sym:cui.MultiLineEdit.10008.13 sw:MultiLineEdit:DLG_POSTIT:ED_EDIT
 Autor sym:cui.PushButton.10008.17 sw:PushButton:DLG_POSTIT:BTN_AUTHOR
-Vor cui:IMAGEBUTTON:RID_SVXDLG_POSTIT:BTN_NEXT
-Zurueck cui:IMAGEBUTTON:RID_SVXDLG_POSTIT:BTN_PREV
+Vor sym:cui.ImageButton.10008.16
+Zurueck sym:cui.ImageButton.10008.15
 
 *NummernkreisOptionen sym:SW_HID_DLG_SEQUENCE_OPTION
 Ebene sym:sw.ListBox.21012.17
@@ -445,11 +445,11 @@ ObjektListe sym:BASCTL_HID_BASICIDE_OBJECTCAT
 Objektname sym:sw.Edit.20888.2
 
 *OLEObjektEinfuegen sym:.uno:InsertObject
-NeuErstellen cui:RADIOBUTTON:MD_INSERT_OLEOBJECT:RB_NEW_OBJECT
-AusDateiErstellen cui:RADIOBUTTON:MD_INSERT_OLEOBJECT:RB_OBJECT_FROMFILE
-Objekttyp cui:LISTBOX:MD_INSERT_OLEOBJECT:LB_OBJECTTYPE
-OleDatei cui:EDIT:MD_INSERT_OLEOBJECT:ED_FILEPATH
-Verknuepfen cui:CHECKBOX:MD_INSERT_OLEOBJECT:CB_FILELINK
-Durchsuchen cui:PUSHBUTTON:MD_INSERT_OLEOBJECT:BTN_FILEPATH
+NeuErstellen sym:cui.RadioButton.32010.10
+AusDateiErstellen sym:cui.RadioButton.32010.11
+Objekttyp sym:cui.ListBox.32010.12
+OleDatei sym:cui.Edit.32010.10
+Verknuepfen sym:cui.CheckBox.32010.12
+Durchsuchen sym:cui.PushButton.32010.11
 
 +OptionenDlg ExtrasOptionenDlg

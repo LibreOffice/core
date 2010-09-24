@@ -85,11 +85,11 @@ AnchorAsCharacter sym:sw.RadioButton.20831.4
 AnchorAtFrame sym:sw.RadioButton.20831.5
 Horizontal sym:sw.ListBox.20831.34
 HorizontalBy sym:sw.MetricField.20831.36
-HorizontalTo SW:LISTBOX:TP_FRM_STD:LB_HORI_RELATION
-MirrorOnEvenPages SW:CHECKBOX:TP_FRM_STD:CB_MIRROR
+HorizontalTo sym:sw.ListBox.20831.2
+MirrorOnEvenPages sym:sw.CheckBox.20831.37
 Vertical sym:sw.ListBox.20831.39
 VerticalBy sym:sw.MetricField.20831.41
-VerticalTo SW:LISTBOX:TP_FRM_STD:LB_VERT_RELATION
+VerticalTo sym:sw.ListBox.20831.4
 OriginalSize sym:sw.PushButton.20831.44
 FollowTextflow sym:sw.CheckBox.20831.129
 

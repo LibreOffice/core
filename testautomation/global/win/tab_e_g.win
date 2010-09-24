@@ -12,10 +12,10 @@ Hoehe sym:cui.NumericField.32011.8
 BreiteStandard sym:cui.CheckBox.32011.22
 HoeheStandard sym:cui.CheckBox.32011.22
 
-*TabEingabehilfe SC:TABPAGE:TP_VALIDATION_INPUTHELP
-EingabehilfenbeiSelektion SC:TRISTATEBOX:TP_VALIDATION_INPUTHELP:TSB_HELP
-Titel SC:EDIT:TP_VALIDATION_INPUTHELP:EDT_TITLE
-EingabeHilfe SC:MULTILINEEDIT:TP_VALIDATION_INPUTHELP:EDT_INPUTHELP
+*TabEingabehilfe sym:sc.TabPage.697
+EingabehilfenbeiSelektion sym:sc.TriStateBox.697.11
+Titel sym:sc.Edit.697.13
+EingabeHilfe sym:sc.MultiLineEdit.697.15
 
 *TabEinzuegeUndAbstaende sym:CUI_HID_FORMAT_PARAGRAPH_STD
 Automatisch sym:cui.CheckBox.10006.48
@@ -26,7 +26,7 @@ Oben sym:cui.MetricField.10006.21
 Unten sym:cui.MetricField.10006.23
 Zeilenabstand sym:cui.ListBox.10006.40
 Um sym:cui.MetricField.10006.42
-Von cui:METRICFIELD:RID_SVXPAGE_STD_PARAGRAPH:ED_LINEDISTMETRIC
+Von sym:cui.MetricField.10006.43
 Registerhaltigkeit sym:cui.CheckBox.10006.84
 
 *TabEndnoten sym:SW_HID_ENDNOTE_OPTIONS
@@ -108,12 +108,12 @@ Loeschen sym:cui.PushButton.10059.4
 Oeffnen sym:cui.ImageButton.10059.5
 Speichern sym:cui.ImageButton.10059.6
 
-*TabFehlermeldung SC:TABPAGE:TP_VALIDATION_ERROR
-FehlermeldungbeiEingabe SC:TRISTATEBOX:TP_VALIDATION_ERROR:TSB_SHOW
-Aktion SC:LISTBOX:TP_VALIDATION_ERROR:LB_ACTION
-Titel SC:EDIT:TP_VALIDATION_ERROR:EDT_TITLE
-Fehlermeldung SC:MULTILINEEDIT:TP_VALIDATION_ERROR:EDT_ERROR
-Durchsuchen SC:PUSHBUTTON:TP_VALIDATION_ERROR:BTN_SEARCH
+*TabFehlermeldung sym:sc.TabPage.698
+FehlermeldungbeiEingabe sym:sc.TriStateBox.698.21
+Aktion sym:sc.ListBox.698.24
+Titel sym:sc.Edit.698.13
+Fehlermeldung sym:sc.MultiLineEdit.698.25
+Durchsuchen sym:sc.PushButton.698.26
 
 *TabFussEndnoten sym:SW_HID_SECTION_FTNENDNOTES_PAGE
 FussnotenAmTextendeSammeln sym:sw.CheckBox.20897.6
@@ -145,19 +145,19 @@ Zurueck sym:SFX2_HID_TABDLG_RESET_BTN
 FormatSpeichern sym:sw.PushButton.22756.19
 
 *TabFunktionen sym:SW_HID_FLD_FUNC
-Feldtyp SW:LISTBOX:TP_FLD_FUNC:LB_FUNCTYPE
-Formatliste SW:LISTBOX:TP_FLD_FUNC:LB_FUNCFORMAT
-Auswahl SW:LISTBOX:TP_FLD_FUNC:LB_FUNCSELECTION
-Bedingung SW:EDIT:TP_FLD_FUNC:ED_FUNCNAME
-Dann SW:EDIT:TP_FLD_FUNC:ED_FUNCCOND1
-Sonst SW:EDIT:TP_FLD_FUNC:ED_FUNCCOND2
-MakroButton SW:PUSHBUTTON:TP_FLD_FUNC:BT_FUNCMACRO
-Namefeld SW:EDIT:TP_FLD_FUNC:ED_FUNCNAME
-Hinweis SW:EDIT:TP_FLD_FUNC:ED_FUNCVALUE
-Makroname SW:EDIT:TP_FLD_FUNC:ED_FUNCNAME
-Platzhalter SW:EDIT:TP_FLD_FUNC:ED_FUNCNAME
-Texteinfuegen SW:EDIT:TP_FLD_FUNC:ED_FUNCVALUE
-Wert SW:EDIT:TP_FLD_FUNC:ED_FUNCVALUE
+Feldtyp sym:sw.ListBox.20868.65
+Formatliste sym:sw.ListBox.20868.69
+Auswahl sym:sw.ListBox.20868.66
+Bedingung sym:sw.Edit.20868.71
+Dann sym:sw.Edit.20868.75
+Sonst sym:sw.Edit.20868.77
+MakroButton sym:sw.PushButton.20868.78
+Namefeld sym:sw.Edit.20868.71
+Hinweis sym:sw.Edit.20868.73
+Makroname sym:sw.Edit.20868.71
+Platzhalter sym:sw.Edit.20868.71
+Texteinfuegen sym:sw.Edit.20868.73
+Wert sym:sw.Edit.20868.73
 Einfuegen sym:SW_HID_FIELD_INSERT
 Schliessen sym:SW_HID_FIELD_CLOSE
 AddListEntry sym:sw.PushButton.20868.82
@@ -181,17 +181,17 @@ Breite sym:sw.MetricField.20818.25
 Abstand sym:sw.MetricField.20818.27
 
 *TabFussnoten sym:SW_HID_FOOTNOTE_OPTIONS
-Numerierung SW:LISTBOX:TP_FOOTNOTEOPTION:LB_NUMVIEW
-Pro SW:LISTBOX:TP_FOOTNOTEOPTION:LB_NUMCOUNT
-BeginnBei SW:NUMERICFIELD:TP_FOOTNOTEOPTION:FLD_OFFSET
-Absatz SW:LISTBOX:TP_FOOTNOTEOPTION:LB_PARA_TEMPL
-Seite SW:LISTBOX:TP_FOOTNOTEOPTION:LB_PAGE_TEMPL
-Folgeseite SW:EDIT:TP_FOOTNOTEOPTION:ED_CONT
-Beginn SW:EDIT:TP_FOOTNOTEOPTION:ED_CONT_FROM
-Seitenende SW:RADIOBUTTON:TP_FOOTNOTEOPTION:RB_POS_PAGE
-Dokumentende SW:RADIOBUTTON:TP_FOOTNOTEOPTION:RB_POS_CHAPTER
-Davor SW:EDIT:TP_FOOTNOTEOPTION:ED_PREFIX
-Dahinter SW:EDIT:TP_FOOTNOTEOPTION:ED_SUFFIX
+Numerierung sym:sw.ListBox.21012.10
+Pro sym:sw.ListBox.21012.11
+BeginnBei sym:sw.NumericField.21012.12
+Absatz sym:sw.ListBox.21012.30
+Seite sym:sw.ListBox.21012.31
+Folgeseite sym:sw.Edit.21012.41
+Beginn sym:sw.Edit.21012.43
+Seitenende sym:sw.RadioButton.21012.1
+Dokumentende sym:sw.RadioButton.21012.2
+Davor sym:sw.Edit.21012.46
+Dahinter sym:sw.Edit.21012.48
 ZeichenvorlageTextbereich sym:sw.ListBox.21012.53
 ZeichenvorlageFussnotenbereich sym:sw.ListBox.21012.50
 
@@ -199,7 +199,7 @@ ZeichenvorlageFussnotenbereich sym:sw.ListBox.21012.50
 FusszeileMitAbstand sym:svx.CheckBox.10026.10 svx:CheckBox:RID_SVXPAGE_FOOTER:CB_FOOTER
 Abstand sym:svx.MetricField.10026.12
 Hoehe sym:svx.MetricField.10026.14
-Hoehedynamisch SVX:CHECKBOX:RID_SVXPAGE_FOOTER:CB_HEIGHT_DYN
+Hoehedynamisch sym:svx.CheckBox.10026.15
 RechterRandFusszeile sym:svx.MetricField.10026.19
 LinkerRandFusszeile sym:svx.MetricField.10026.17
 InhaltLinksRechtsGleich sym:svx.CheckBox.10026.20

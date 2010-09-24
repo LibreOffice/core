@@ -36,13 +36,13 @@ ScalePageWidth sym:sc.NumericField.25647.35
 ScalePageHeight sym:sc.NumericField.25647.36
 
 *TabTabelleOptionen sym:SW_HID_OPTTABLE_PAGE
-VerschiebenZeile SW:METRICFIELD:TP_OPTTABLE_PAGE:MF_ROWMOVE
-VerschiebenSpalte SW:METRICFIELD:TP_OPTTABLE_PAGE:MF_COLMOVE
-EinfuegenZeile SW:METRICFIELD:TP_OPTTABLE_PAGE:MF_ROWINSERT
-EinfuegenSpalte SW:METRICFIELD:TP_OPTTABLE_PAGE:MF_COLINSERT
-VerhaltenFix SW:RADIOBUTTON:TP_OPTTABLE_PAGE:RB_FIX
-FixProportional SW:RADIOBUTTON:TP_OPTTABLE_PAGE:RB_FIXPROP
-Variabel SW:RADIOBUTTON:TP_OPTTABLE_PAGE:RB_VAR
+VerschiebenZeile sym:sw.MetricField.20856.112
+VerschiebenSpalte sym:sw.MetricField.20856.114
+EinfuegenZeile sym:sw.MetricField.20856.117
+EinfuegenSpalte sym:sw.MetricField.20856.119
+VerhaltenFix sym:sw.RadioButton.20856.121
+FixProportional sym:sw.RadioButton.20856.122
+Variabel sym:sw.RadioButton.20856.123
 
 Ueberschrift sym:sw.CheckBox.20856.101
 Wiederholen sym:sw.CheckBox.20856.102
@@ -138,20 +138,20 @@ Schusterjungenregelung sym:cui.TriStateBox.10007.68
 SchusterZeilen sym:cui.NumericField.10007.69
 Hurenkinderregelung sym:cui.TriStateBox.10007.71
 HurenkinderZeilen sym:cui.NumericField.10007.72
-Seitenzahl cui:NUMERICFIELD:RID_SVXPAGE_EXT_PARAGRAPH:ED_PAGENUM
+Seitenzahl sym:cui.NumericField.10007.76
 
 *TabTextflussTabelle sym:SW_HID_TABLE_TEXTFLOW
-Umbruch SW:CHECKBOX:TP_TABLE_TEXTFLOW:CB_PAGEBREAK
-MitSeitenvorlage SW:CHECKBOX:TP_TABLE_TEXTFLOW:CB_PAGECOLL
-UeberschriftWiederholen SW:CHECKBOX:TP_TABLE_TEXTFLOW:CB_HEADLINE
-TabelleNichtTrennen SW:CHECKBOX:TP_TABLE_TEXTFLOW:CB_SPLIT
-MitFolgendemAbsatzZusammenhalten  SW:CHECKBOX:TP_TABLE_TEXTFLOW:CB_KEEP
-Seite SW:RADIOBUTTON:TP_TABLE_TEXTFLOW:RB_BREAKPAGE
-Spalte SW:RADIOBUTTON:TP_TABLE_TEXTFLOW:RB_BREAKCOLUMN
-Davor SW:RADIOBUTTON:TP_TABLE_TEXTFLOW:RB_PAGEBREAKBEFORE
-Danach SW:RADIOBUTTON:TP_TABLE_TEXTFLOW:RB_PAGEBREAKAFTER
-Seitenvorlage SW:LISTBOX:TP_TABLE_TEXTFLOW:LB_PAGECOLL
-Seitennummer SW:NUMERICFIELD:TP_TABLE_TEXTFLOW:NF_PAGENUM
+Umbruch sym:sw.CheckBox.20852.131
+MitSeitenvorlage sym:sw.CheckBox.20852.136
+UeberschriftWiederholen sym:sw.CheckBox.20852.40
+TabelleNichtTrennen sym:sw.CheckBox.20852.145
+MitFolgendemAbsatzZusammenhalten  sym:sw.CheckBox.20852.144
+Seite sym:sw.RadioButton.20852.132
+Spalte sym:sw.RadioButton.20852.133
+Davor sym:sw.RadioButton.20852.134
+Danach sym:sw.RadioButton.20852.135
+Seitenvorlage sym:sw.ListBox.20852.137
+Seitennummer sym:sw.NumericField.20852.139
 ZeileTrennen sym:sw.TriStateBox.20852.146
 TextDirection sym:sw.ListBox.20852.44
 VerticalAlignment sym:sw.ListBox.20852.151
@@ -177,9 +177,9 @@ Parallel sym:sw.ImageRadioButton.20849.5
 Durchlauf sym:sw.ImageRadioButton.20849.6
 Dynamisch sym:sw.ImageRadioButton.20849.7
 AbstaendeLinks sym:sw.MetricField.20849.14
-AbstaendeRechts SW:METRICFIELD:TP_FRM_WRAP:ED_RIGHT_MARGIN sw:MetricField:TP_FRM_EXT:ED_RIGHT_MARGIN
-AbstaendeOben SW:METRICFIELD:TP_FRM_WRAP:ED_TOP_MARGIN sw:MetricField:TP_FRM_EXT:ED_TOP_MARGIN
-AbstaendeUnten SW:METRICFIELD:TP_FRM_WRAP:ED_BOTTOM_MARGIN sw:MetricField:TP_FRM_EXT:ED_BOTTOM_MARGIN
+AbstaendeRechts sym:sw.MetricField.20849.16 sw:MetricField:TP_FRM_EXT:ED_RIGHT_MARGIN
+AbstaendeOben sym:sw.MetricField.20849.18 sw:MetricField:TP_FRM_EXT:ED_TOP_MARGIN
+AbstaendeUnten sym:sw.MetricField.20849.19 sw:MetricField:TP_FRM_EXT:ED_BOTTOM_MARGIN
 ErsterAbsatz sym:sw.CheckBox.20849.8
 ImHintergrund sym:sw.CheckBox.20849.22
 Kontur sym:sw.CheckBox.20849.23
@@ -203,16 +203,16 @@ Synchronisieren sym:cui.CheckBox.10005.59
 +TabUmrandungChart TabLinie
 
 *TabVariablen sym:SW_HID_FLD_VAR
-Feldtyp SW:LISTBOX:TP_FLD_VAR:LB_VARTYPE
-Auswahl SW:LISTBOX:TP_FLD_VAR:LB_VARSELECTION
-Formatliste SW:LISTBOX:TP_FLD_VAR:LB_VARFORMAT
-Zahlenformat SW:LISTBOX:TP_FLD_VAR:LB_VARNUMFORMAT
-NameText SW:EDIT:TP_FLD_VAR:ED_VARNAME
-Wert SW:EDIT:TP_FLD_VAR:ED_VARVALUE
-Hinweis SW:EDIT:TP_FLD_VAR:ED_VARVALUE
-Korrektur SW:EDIT:TP_FLD_VAR:ED_VARVALUE
-Formel SW:EDIT:TP_FLD_VAR:ED_VARVALUE
-Unsichtbar SW:CHECKBOX:TP_FLD_VAR:CB_VARINVISIBLE
+Feldtyp sym:sw.ListBox.20866.27
+Auswahl sym:sw.ListBox.20866.29
+Formatliste sym:sw.ListBox.20866.36
+Zahlenformat sym:sw.ListBox.20866.35
+NameText sym:sw.Edit.20866.31
+Wert sym:sw.Edit.20866.33
+Hinweis sym:sw.Edit.20866.33
+Korrektur sym:sw.Edit.20866.33
+Formel sym:sw.Edit.20866.33
+Unsichtbar sym:sw.CheckBox.20866.40
 Uebernehmen sym:SW_HID_FLDVAR_APPLY
 Loeschen sym:SW_HID_FLDVAR_DELETE
 Einfuegen sym:SW_HID_FIELD_INSERT
@@ -309,12 +309,12 @@ Bearbeiten sym:sw.PushButton.20892.40
 Inhalt sym:SW_HID_BUSINESS_CARD_CONTENT
 WelcherAutotext sym:sw.ListBox.20893.5
 
-*TabWerte SC:TABPAGE:TP_VALIDATION_VALUES
-Zulassen SC:LISTBOX:TP_VALIDATION_VALUES:LB_ALLOW
+*TabWerte sym:sc.TabPage.696
+Zulassen sym:sc.ListBox.696.2
 LeerzellenZulassen sym:sc.CheckBox.696.3
-Daten SC:LISTBOX:TP_VALIDATION_VALUES:LB_VALUE
-Wert SC:EDIT:TP_VALIDATION_VALUES:EDT_MIN
-Minimum SC:EDIT:TP_VALIDATION_VALUES:EDT_MIN
+Daten sym:sc.ListBox.696.5
+Wert sym:sc.Edit.696.7
+Minimum sym:sc.Edit.696.7
 Maximum sym:sc.Edit.696.9
 ShowSelectionList sym:sc.CheckBox.696.27
 ListSortEntries sym:sc.CheckBox.696.28
@@ -347,23 +347,23 @@ Tausenderpunkt sym:cui.CheckBox.10041.26
 PBHinzufuegen sym:CUI_HID_NUMBERFORMAT_TBI_ADD
 PBEntfernen sym:CUI_HID_NUMBERFORMAT_TBI_REMOVE
 PBInfo sym:CUI_HID_NUMBERFORMAT_TBI_INFO
-Kommentar cui:EDIT:RID_SVXPAGE_NUMBERFORMAT:ED_COMMENT
+Kommentar sym:cui.Edit.10041.28
 Zurueck sym:SFX2_HID_TABDLG_RESET_BTN
 FormatSprache sym:cui.ListBox.10041.33
 Standard sym:SFX2_HID_TABDLG_STANDARD_BTN
 Standardformat sym:cui.CheckBox.10041.34
 
 *TabZeilennumerierung sym:SW_HID_LINENUMBERING
-Einschalten SW:CHECKBOX:TP_LINENUMBERING:CB_NUMBERING_ON
-Vorlage SW:LISTBOX:TP_LINENUMBERING:LB_CHAR_STYLE
-Format SW:LISTBOX:TP_LINENUMBERING:LB_FORMAT
-Position SW:LISTBOX:TP_LINENUMBERING:LB_POS
-Abstand SW:METRICFIELD:TP_LINENUMBERING:MF_OFFSET
-Intervall SW:NUMERICFIELD:TP_LINENUMBERING:NF_NUM_INVERVAL
-TeilerText SW:EDIT:TP_LINENUMBERING:ED_DIVISOR
-Alle SW:NUMERICFIELD:TP_LINENUMBERING:NF_DIV_INTERVAL
-Leerzeilen SW:CHECKBOX:TP_LINENUMBERING:CB_COUNT_EMPTYLINES
-ZeilenInTextrahmen SW:CHECKBOX:TP_LINENUMBERING:CB_COUNT_FRAMELINES
+Einschalten sym:sw.CheckBox.20875.1
+Vorlage sym:sw.ListBox.20875.3
+Format sym:sw.ListBox.20875.5
+Position sym:sw.ListBox.20875.7
+Abstand sym:sw.MetricField.20875.9
+Intervall sym:sw.NumericField.20875.11
+TeilerText sym:sw.Edit.20875.15
+Alle sym:sw.NumericField.20875.17
+Leerzeilen sym:sw.CheckBox.20875.20
+ZeilenInTextrahmen sym:sw.CheckBox.20875.21
 
 *TabZellschutz sym:SC_HID_SCPAGE_PROTECTION
 Gesperrt sym:sc.TriStateBox.25607.1
@@ -393,7 +393,7 @@ InhaltSchuetzen sym:sw.CheckBox.20851.119
 PositionSchuetzen sym:sw.CheckBox.20851.120
 GroesseSchuetzen sym:sw.CheckBox.20851.121
 Drucken sym:sw.CheckBox.20851.124
-Editierbar SW:CHECKBOX:TP_FRM_ADD:CB_EDIT_IN_READONLY
+Editierbar sym:sw.CheckBox.20851.123
 PreviousLink sym:sw.ListBox.20851.115
 NextLink sym:sw.ListBox.20851.117
 TextDirection sym:sw.ListBox.20851.128

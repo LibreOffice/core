@@ -289,12 +289,12 @@ Duplex sym:WIZARDS_HID_DLGNEWSLTR_OPTDOUBLESIDED
 OKButton sym:WIZARDS_HID_DLGNEWSLTR_CMDGOON
 
 *OLEObjektInsert sym:.uno:InsertObject
-NeuErstellen cui:RADIOBUTTON:MD_INSERT_OLEOBJECT:RB_NEW_OBJECT
-AusDateiErstellen cui:RADIOBUTTON:MD_INSERT_OLEOBJECT:RB_OBJECT_FROMFILE
-Objekttyp cui:LISTBOX:MD_INSERT_OLEOBJECT:LB_OBJECTTYPE
-OleDatei cui:EDIT:MD_INSERT_OLEOBJECT:ED_FILEPATH
-Verknuepfen cui:CHECKBOX:MD_INSERT_OLEOBJECT:CB_FILELINK
-Durchsuchen cui:PUSHBUTTON:MD_INSERT_OLEOBJECT:BTN_FILEPATH
+NeuErstellen sym:cui.RadioButton.32010.10
+AusDateiErstellen sym:cui.RadioButton.32010.11
+Objekttyp sym:cui.ListBox.32010.12
+OleDatei sym:cui.Edit.32010.10
+Verknuepfen sym:cui.CheckBox.32010.12
+Durchsuchen sym:cui.PushButton.32010.11
 
 *InsertTableImpress sym:cui.ModalDialog.10044
 NumberOfColumns sym:cui.NumericField.10044.2

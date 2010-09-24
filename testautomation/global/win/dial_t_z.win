@@ -1,15 +1,15 @@
 *TabelleAuftrennen sym:.uno:SplitTable
-UeberschriftKopieren SW:RADIOBUTTON:DLG_SPLIT_TABLE:RB_CNTNT
-EigeneMitVorlage SW:RADIOBUTTON:DLG_SPLIT_TABLE:RB_BOX_PARA
-Eigene SW:RADIOBUTTON:DLG_SPLIT_TABLE:RB_BOX_NOPARA
-Keine SW:RADIOBUTTON:DLG_SPLIT_TABLE:RB_BORDER
+UeberschriftKopieren sym:sw.RadioButton.21464.5
+EigeneMitVorlage sym:sw.RadioButton.21464.7
+Eigene sym:sw.RadioButton.21464.6
+Keine sym:sw.RadioButton.21464.8
 
 *TabelleAusblenden sym:.uno:Hide
 
 *TabellenFormat sym:SW_HID_FORMAT_TABLE
 
 *TabelleEinblenden sym:.uno:Show
-AusgeblendeteTabelle SC:MULTILISTBOX:RID_SCDLG_SHOW_TAB:LB_ENTRYLIST sym:SC_HID_SC_SELENTRY_LIST
+AusgeblendeteTabelle sym:sc.MultiListBox.25713.11 sym:SC_HID_SC_SELENTRY_LIST
 
 *TabelleEinfuegenCalc sym:sc.ModalDialog.25646
 Vor sym:sc.RadioButton.25646.11
@@ -30,7 +30,7 @@ Zeilen sym:sw.NumericField.21450.5
 UeberschriftWiederholen sym:sw.CheckBox.21450.14
 TabelleNichtTrennen sym:sw.CheckBox.21450.15
 Umrandung sym:sw.CheckBox.21450.16
-Autoformat SW:PUSHBUTTON:DLG_INSERT_TABLE:BT_AUTOFORMAT
+Autoformat sym:sw.PushButton.21450.23
 Ueberschrift sym:sw.CheckBox.21450.13
 
 *TabellenFuellen sym:.uno:InsertContents
@@ -50,9 +50,9 @@ RechenopperationenDividieren sym:sc.RadioButton.25618.31
 LeerzeilenUeberspringen sym:sc.CheckBox.25618.33
 Verknuepfen sym:sc.CheckBox.25618.35
 Transponieren sym:sc.CheckBox.25618.34
-NichtVerschieben SC:RADIOBUTTON:RID_SCDLG_INSCONT:BTN_MV_NONE
-NachUnten SC:RADIOBUTTON:RID_SCDLG_INSCONT:BTN_MV_DOWN
-NachRechts SC:RADIOBUTTON:RID_SCDLG_INSCONT:BTN_MV_RIGHT
+NichtVerschieben sym:sc.RadioButton.25618.37
+NachUnten sym:sc.RadioButton.25618.38
+NachRechts sym:sc.RadioButton.25618.39
 
 *TabelleSchuetzen sym:.uno:Protect
 Passwort sym:SC_HID_PASSWD_TABLE
@@ -103,19 +103,19 @@ Eigenschaften sym:SVX_HID_IMAPDLG_PROPERTY
 *TB_Umrandungsstil sym:SVX_HID_POPUP_LINE
 
 *TextbausteineUmbenennen sym:SW_HID_RENAME_GLOSSARY
-Name SW:EDIT:DLG_RENAME_GLOS:ED_ON
-Neu SW:EDIT:DLG_RENAME_GLOS:ED_NN
-KuerzelAlt SW:EDIT:DLG_RENAME_GLOS:ED_OS
-KuerzelNeu SW:EDIT:DLG_RENAME_GLOS:ED_NS
+Name sym:sw.Edit.21675.5
+Neu sym:sw.Edit.21675.7
+KuerzelAlt sym:sw.Edit.21675.6
+KuerzelNeu sym:sw.Edit.21675.8
 
 *TextInTabelleUmwandeln sym:.uno:ConvertTableText sw:ModalDialog:DLG_CONV_TEXT_TABLE
 Tabulator sym:sw.RadioButton.21452.1
 Semikolon sym:sw.RadioButton.21452.3
 Absatz sym:sw.RadioButton.21452.4
-Andere SW:RADIOBUTTON:DLG_CONV_TEXT_TABLE:RB_OTHER
-AndereText SW:EDIT:DLG_CONV_TEXT_TABLE:ED_OTHER
-GleicheBreite SW:CHECKBOX:DLG_CONV_TEXT_TABLE:CB_KEEPCOLUMN
-Autoformat SW:PUSHBUTTON:DLG_CONV_TEXT_TABLE:BT_AUTOFORMAT
+Andere sym:sw.RadioButton.21452.6
+AndereText sym:sw.Edit.21452.7
+GleicheBreite sym:sw.CheckBox.21452.8
+Autoformat sym:sw.PushButton.21452.102
 Ueberschrift   sym:sw.CheckBox.21452.13
 Wiederholen   sym:sw.CheckBox.21452.14
 NichtTrennen   sym:sw.CheckBox.21452.15
@@ -143,12 +143,12 @@ Schritte sym:sd.MetricField.653.1
 *UeberStarWriter sym:.uno:About
 
 *UmbruchEinfuegen sym:.uno:InsertBreak
-Zeilenumbruch SW:RADIOBUTTON:DLG_BREAK:RB_LINE
-Spaltenumbruch SW:RADIOBUTTON:DLG_BREAK:RB_COL
-Seitenumbruch SW:RADIOBUTTON:DLG_BREAK:RB_PAGE
-Vorlage SW:LISTBOX:DLG_BREAK:LB_COLL
-SeitennummerAendern SW:CHECKBOX:DLG_BREAK:CB_PAGENUM
-Seitennummer SW:NUMERICFIELD:DLG_BREAK:ED_PAGENUM
+Zeilenumbruch sym:sw.RadioButton.20705.2
+Spaltenumbruch sym:sw.RadioButton.20705.3
+Seitenumbruch sym:sw.RadioButton.20705.1
+Vorlage sym:sw.ListBox.20705.5
+SeitennummerAendern sym:sw.CheckBox.20705.7
+Seitennummer sym:sw.NumericField.20705.8
 
 *UmwandelnInPolygon sym:SD_HID_VECTORIZE_DLG
 Farbanzahl sym:sd.NumericField.654.1
@@ -163,14 +163,14 @@ Vorschau sym:sd.PushButton.654.1
 UndoRedoList sym:svx.ListBox.10845.11
 
 *Verbinder sym:CUI_HID_PAGE_CONNECTION SVX:TABPAGE:RID_SVXPAGE_CONNECTION
-Linie1 cui:METRICFIELD:RID_SVXPAGE_CONNECTION:MTR_FLD_LINE_1
-Linie2 cui:METRICFIELD:RID_SVXPAGE_CONNECTION:MTR_FLD_LINE_2
-Linie3 cui:METRICFIELD:RID_SVXPAGE_CONNECTION:MTR_FLD_LINE_3
-Typ cui:LISTBOX:RID_SVXPAGE_CONNECTION:LB_TYPE
-AnfangHorizontal cui:METRICFIELD:RID_SVXPAGE_CONNECTION:MTR_FLD_HORZ_1
-AnfangVertikal cui:METRICFIELD:RID_SVXPAGE_CONNECTION:MTR_FLD_VERT_1
-EndeHorizontal cui:METRICFIELD:RID_SVXPAGE_CONNECTION:MTR_FLD_HORZ_2
-EndeVertikal cui:METRICFIELD:RID_SVXPAGE_CONNECTION:MTR_FLD_VERT_2
+Linie1 sym:cui.MetricField.10191.1
+Linie2 sym:cui.MetricField.10191.2
+Linie3 sym:cui.MetricField.10191.3
+Typ sym:cui.ListBox.10191.1
+AnfangHorizontal sym:cui.MetricField.10191.4
+AnfangVertikal sym:cui.MetricField.10191.6
+EndeHorizontal sym:cui.MetricField.10191.5
+EndeVertikal sym:cui.MetricField.10191.7
 Vorschau sym:CUI_HID_PAGE_CONNECTION_CTL_PREVIEW
 
 *VerknuepfungenBearbeiten sym:cui.ModalDialog.32002
@@ -184,17 +184,17 @@ Loesen sym:cui.PushButton.32002.38
 
 *VersendenMonitor sym:SW_HID_MERGE_PRINTMONITOR
 
-*Versionen SFX2:MODALDIALOG:DLG_VERSIONS
-Speichern SFX2:PUSHBUTTON:DLG_VERSIONS:PB_SAVE
-ImmerVersionSpeichern SFX2:CHECKBOX:DLG_VERSIONS:CB_SAVEONCLOSE
-Anzeigen SFX2:PUSHBUTTON:DLG_VERSIONS:PB_VIEW
-Loeschen SFX2:PUSHBUTTON:DLG_VERSIONS:PB_DELETE
-Oeffnen SFX2:PUSHBUTTON:DLG_VERSIONS:PB_OPEN
+*Versionen sym:sfx2.ModalDialog.2377
+Speichern sym:sfx2.PushButton.2377.2
+ImmerVersionSpeichern sym:sfx2.CheckBox.2377.3
+Anzeigen sym:sfx2.PushButton.2377.13
+Loeschen sym:sfx2.PushButton.2377.5
+Oeffnen sym:sfx2.PushButton.2377.6
 Vergleichen sym:sfx2.PushButton.2377.17
 
-*VersionskommentarEingeben SFX2:MODALDIALOG:DLG_COMMENTS
-Kommentar SFX2:MULTILINEEDIT:DLG_COMMENTS:ME_VERSIONS
-Schliessen SFX2:PUSHBUTTON:DLG_COMMENTS:PB_CLOSE
+*VersionskommentarEingeben sym:sfx2.ModalDialog.2378
+Kommentar sym:sfx2.MultiLineEdit.2378.14
+Schliessen sym:sfx2.PushButton.2378.8
 
 *VerteilenDlg sym:CUI_HID_PAGE_DISTRIBUTE
 KeineHorizontal sym:cui.RadioButton.10236.2
@@ -254,8 +254,8 @@ ZuweisenLinks sym:sw.ImageButton.20894.110
 ZuweisenRechts sym:sw.ImageButton.20894.111
 
 *WBereicheBearbeiten sym:SW_HID_BIB_BASE
-Bereichname SW:EDIT:DLG_BIB_BASE:ED_NAME
-Bereich SW:LISTBOX:DLG_BIB_BASE:LB_PATH
+Bereichname sym:sw.Edit.21666.10
+Bereich sym:sw.ListBox.21666.8
 Liste sym:SW_HID_GLOS_GROUP_TREE
 Neu sym:sw.PushButton.21666.3
 Loeschen sym:sw.PushButton.21666.4
@@ -329,4 +329,4 @@ VariableZelle sym:sc.Edit.25630.3
 Vorgaben2 sym:sc.ImageButton.25630.2
 
 *Zusammenfassen sym:.uno:AutoFormat
-Mindestgroesse cui:METRICFIELD:RID_OFADLG_PRCNT_SET:ED_RIGHT_MARGIN
+Mindestgroesse sym:cui.MetricField.17011.100

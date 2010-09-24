@@ -7,17 +7,17 @@ ZeichenEntfernen sym:cui.NumericField.10023.19
 *Aenderungenanzeigen sym:.uno:AcceptChanges
 TabControl sym:SVX_HID_REDLINING_TABCONTROL
 TabFilter sym:SVX_HID_REDLINING_FILTER_PAGE SVX:TABPAGE:SID_REDLIN_FILTER_PAGE
-Datum sym:SVX_HID_REDLINING_FILTER_CB_DATE SVX:CHECKBOX:SID_REDLIN_FILTER_PAGE:CB_DATE
-DatumListe sym:SVX_HID_REDLINING_FILTER_LB_DATE SVX:LISTBOX:SID_REDLIN_FILTER_PAGE:LB_DATE
+Datum sym:SVX_HID_REDLINING_FILTER_CB_DATE svx:CheckBox:SID_REDLIN_FILTER_PAGE:CB_DATE
+DatumListe sym:SVX_HID_REDLINING_FILTER_LB_DATE svx:ListBox:SID_REDLIN_FILTER_PAGE:LB_DATE
 Datum1 sym:SVX_HID_REDLINING_FILTER_DF_DATE SVX:DATEFIELD:SID_REDLIN_FILTER_PAGE:DF_DATE
 Zeit1 sym:SVX_HID_REDLINING_FILTER_TF_DATE SVX:TIMEFIELD:SID_REDLIN_FILTER_PAGE:TF_DATE
-Aktuell1 sym:SVX_HID_REDLINING_FILTER_IB_CLOCK SVX:IMAGEBUTTON:SID_REDLIN_FILTER_PAGE:IB_CLOCK
+Aktuell1 sym:SVX_HID_REDLINING_FILTER_IB_CLOCK svx:ImageButton:SID_REDLIN_FILTER_PAGE:IB_CLOCK
 Datum2 sym:SVX_HID_REDLINING_FILTER_DF_DATE2 SVX:DATEFIELD:SID_REDLIN_FILTER_PAGE:DF_DATE2
 Zeit2 sym:SVX_HID_REDLINING_FILTER_TF_DATE2 SVX:TIMEFIELD:SID_REDLIN_FILTER_PAGE:TF_DATE2
-Aktuell2 sym:SVX_HID_REDLINING_FILTER_IB_CLOCK2 SVX:IMAGEBUTTON:SID_REDLIN_FILTER_PAGE:IB_CLOCK2
-Autor sym:SVX_HID_REDLINING_FILTER_CB_AUTOR SVX:CHECKBOX:SID_REDLIN_FILTER_PAGE:CB_AUTOR
-AutoListe sym:SVX_HID_REDLINING_FILTER_LB_AUTOR SVX:LISTBOX:SID_REDLIN_FILTER_PAGE:LB_AUTOR
-Bereich sym:SVX_HID_REDLINING_FILTER_CB_RANGE SVX:CHECKBOX:SID_REDLIN_FILTER_PAGE:CB_RANGE
+Aktuell2 sym:SVX_HID_REDLINING_FILTER_IB_CLOCK2 svx:ImageButton:SID_REDLIN_FILTER_PAGE:IB_CLOCK2
+Autor sym:SVX_HID_REDLINING_FILTER_CB_AUTOR svx:CheckBox:SID_REDLIN_FILTER_PAGE:CB_AUTOR
+AutoListe sym:SVX_HID_REDLINING_FILTER_LB_AUTOR svx:ListBox:SID_REDLIN_FILTER_PAGE:LB_AUTOR
+Bereich sym:SVX_HID_REDLINING_FILTER_CB_RANGE svx:CheckBox:SID_REDLIN_FILTER_PAGE:CB_RANGE
 BereichText sym:SVX_HID_REDLINING_FILTER_ED_RANGE SVX:EDIT:SID_REDLIN_FILTER_PAGE:ED_RANGE
 Button sym:SVX_HID_REDLINING_FILTER_BTN_REF SVX:PUSHBUTTON:SID_REDLIN_FILTER_PAGE:BTN_REF
 Aktion sym:SVX_HID_REDLINING_FILTER_CB_RANGE
@@ -88,7 +88,7 @@ ImDateisystem sym:sw.CheckBox.21661.68
 ImInternet sym:sw.CheckBox.21661.69
 Menue sym:sw.MenuButton.21661.52
 Bereiche sym:sw.PushButton.21661.54
-Pfade SW:PUSHBUTTON:DLG_GLOSSARY:PB_PATH
+Pfade sym:sw.PushButton.21661.56
 Vorschau_anzeigen sym:sw.CheckBox.21661.73
 
 *AutoFormatCalc sym:.uno:AutoFormat
@@ -119,36 +119,36 @@ Ausrichtung sym:sw.CheckBox.21459.25
 Umrandung sym:sw.CheckBox.21459.21
 Schriftart sym:sw.CheckBox.21459.23
 Muster sym:sw.CheckBox.21459.24
-Zahlenformat SW:CHECKBOX:DLG_AUTOFMT_TABLE:BTN_NUMFORMAT
-Umbenennen SW:PUSHBUTTON:DLG_AUTOFMT_TABLE:BTN_RENAME
+Zahlenformat sym:sw.CheckBox.21459.20
+Umbenennen sym:sw.PushButton.21459.107
 
 *BedingteFormatierung sym:SC_HID_SCDLG_CONDFORMAT sc:ModelessDialog:RID_SCDLG_CONDFORMAT
 Bedingung1 sym:sc.CheckBox.25700.1
 PopupList1 sym:sc.ListBox.25700.2
 Vergleich1 sym:sc.ListBox.25700.3
 TextField1 sym:sc.Edit.25700.4
-TextField12 SC:EDIT:RID_SCDLG_CONDFORMAT:EDT_COND1_2
+TextField12 sym:sc.Edit.25700.7
 Zellvorlage1 sym:sc.ListBox.25700.10
 Minimieren1 sym:sc.ImageButton.25700.5
-Minimieren12 SC:IMAGEBUTTON:RID_SCDLG_CONDFORMAT:RB_COND1_2
+Minimieren12 sym:sc.ImageButton.25700.8
 NewStyle1 sym:sc.PushButton.25700.34
 Bedingung2 sym:sc.CheckBox.25700.11
 PopupList2 sym:sc.ListBox.25700.12
 Vergleich2 sym:sc.ListBox.25700.13
 TextField2 sym:sc.Edit.25700.14
-TextField22 SC:EDIT:RID_SCDLG_CONDFORMAT:EDT_COND2_2
+TextField22 sym:sc.Edit.25700.17
 Zellvorlage2 sym:sc.ListBox.25700.20
 Minimieren2 sym:sc.ImageButton.25700.15
-Minimieren22 SC:IMAGEBUTTON:RID_SCDLG_CONDFORMAT:RB_COND2_2
+Minimieren22 sym:sc.ImageButton.25700.18
 NewStyle2 sym:sc.PushButton.25700.35
 Bedingung3 sym:sc.CheckBox.25700.21
 PopupList3 sym:sc.ListBox.25700.22
 Vergleich3 sym:sc.ListBox.25700.23
 TextField3 sym:sc.Edit.25700.24
-TextField32 SC:EDIT:RID_SCDLG_CONDFORMAT:EDT_COND3_2
+TextField32 sym:sc.Edit.25700.27
 Zellvorlage3 sym:sc.ListBox.25700.30
 Minimieren3 sym:sc.ImageButton.25700.25
-Minimieren32 SC:IMAGEBUTTON:RID_SCDLG_CONDFORMAT:RB_COND3_2
+Minimieren32 sym:sc.ImageButton.25700.28
 NewStyle3 sym:sc.PushButton.25700.36
 
 *Bemassung sym:CUI_HID_PAGE_MEASURE
@@ -189,7 +189,7 @@ NameBenutzerverzeichnis sym:sw.Edit.21967.39
 
 *BereicheBearbeiten sym:.uno:EditRegion
 Bereich sym:SW_HID_REGION_TREE
-BereichsName SW:EDIT:MD_EDIT_REGION:ED_RANAME
+BereichsName sym:sw.Edit.20269.19
 Geschuetzt sym:sw.TriStateBox.20269.10
 Ausblenden sym:sw.TriStateBox.20269.8
 Bedingung sym:sw.Edit.20269.13
@@ -197,7 +197,7 @@ Verknuepfung sym:sw.TriStateBox.20269.5
 DDE sym:sw.CheckBox.20269.1
 Dateiname sym:sw.Edit.20269.16
 OptionenBereich sym:sw.ComboBox.20269.38
-Aufheben SW:PUSHBUTTON:MD_EDIT_REGION:CB_DISMISS
+Aufheben sym:sw.PushButton.20269.2
 ' Spalten sw:PushButton:MD_INS_REGION:PB_COLUMNS
 Durchsuchen sym:sw.PushButton.20269.40
 Passwort sym:sw.CheckBox.20269.9
@@ -205,22 +205,22 @@ Optionen sym:sw.PushButton.20269.43
 EnterPasswort sym:sw.PushButton.20269.51
 
 *BereicheBearbeitenAutoText sym:SW_HID_BIB_BASE
-Bereich SW:EDIT:DLG_BIB_BASE:ED_NAME
-Pfad SW:LISTBOX:DLG_BIB_BASE:LB_PATH
+Bereich sym:sw.Edit.21666.10
+Pfad sym:sw.ListBox.21666.8
 Liste sym:SW_HID_GLOS_GROUP_TREE
-Neu SW:PUSHBUTTON:DLG_BIB_BASE:PB_NEW
-Loeschen SW:PUSHBUTTON:DLG_BIB_BASE:PB_DELETE
-Umbenennen SW:PUSHBUTTON:DLG_BIB_BASE:PB_RENAME
+Neu sym:sw.PushButton.21666.3
+Loeschen sym:sw.PushButton.21666.4
+Umbenennen sym:sw.PushButton.21666.11
 
 *BereicheSchuetzen sym:SW_HID_DLG_PASSWD_SECTION
 PasswortName sym:sfx2.Edit.2316.14
 PasswortBestaetigen sym:sfx2.Edit.2316.16
 
 *Beschriftung sym:SW_HID_DLG_CAPTION sym:.uno:InsertCaptionDialog
-Kategorie SW:COMBOBOX:DLG_CAPTION:BOX_CATEGORY
-Numerierung SW:LISTBOX:DLG_CAPTION:BOX_FORMAT
-BeschriftungsText SW:EDIT:DLG_CAPTION:EDT_TEXT
-Position SW:LISTBOX:DLG_CAPTION:BOX_POS
+Kategorie sym:sw.ComboBox.21011.5
+Numerierung sym:sw.ListBox.21011.7
+BeschriftungsText sym:sw.Edit.21011.9
+Position sym:sw.ListBox.21011.11
 WeitereOptionen sym:sw.PushButton.21011.14
 Separator sym:sw.Edit.21011.25
 
@@ -232,12 +232,12 @@ Spaltenkoepfe sym:sc.RadioButton.25716.15
 Zeilenkoepfe sym:sc.RadioButton.25716.16
 Hinzufuegen sym:sc.PushButton.25716.3
 Loeschen sym:sc.PushButton.25716.4
-Datenbereich SC:EDIT:RID_SCDLG_COLROWNAMERANGES:ED_DATA
-ButtonDatenbereich SC:IMAGEBUTTON:RID_SCDLG_COLROWNAMERANGES:RB_DATA
+Datenbereich sym:sc.Edit.25716.17
+ButtonDatenbereich sym:sc.ImageButton.25716.18
 
 *Bildschirmpraesentation sym:.uno:Presentation
 AlleDias sym:sd.RadioButton.20003.1
-AbDia SD:RADIOBUTTON:DLG_START_PRESENTATION:RBT_AT_DIA
+AbDia sym:sd.RadioButton.20003.2
 AbDiaName sym:sd.ListBox.20003.1
 RangeCustomSlideShow sym:sd.RadioButton.20003.3
 'IndividuellePraesentation sym:sd.RadioButton.20003.3
@@ -247,12 +247,12 @@ Fenster sym:sd.RadioButton.20003.5
 Auto sym:sd.RadioButton.20003.6
 Zeit sym:sd.TimeField.20003.1
 LogoAnzeigen sym:sd.CheckBox.20003.1
-DiawechselManuel SD:CHECKBOX:DLG_START_PRESENTATION:CBX_MANUEL
+DiawechselManuel sym:sd.CheckBox.20003.2
 MauszeigerSichtbar sym:sd.CheckBox.20003.3
-MauszeigerAlsStift SD:CHECKBOX:DLG_START_PRESENTATION:CBX_PEN
+MauszeigerAlsStift sym:sd.CheckBox.20003.4
 NavigatorSichtbar sym:sd.CheckBox.20003.5
 AnimationenZulassen sym:sd.CheckBox.20003.6
-DiawechselAufHintergrund SD:CHECKBOX:DLG_START_PRESENTATION:CBX_CHANGE_PAGE
+DiawechselAufHintergrund sym:sd.CheckBox.20003.7
 PraesentationImmerImVordergrund sym:sd.CheckBox.20003.8
 
 *BMPOptionen sym:svtools.ModalDialog.16371
