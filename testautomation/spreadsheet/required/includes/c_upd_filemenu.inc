@@ -239,6 +239,7 @@ testcase tFileOpenCSV
     Kontext "TextImport"
     TextImport.ok
     Printlog " - CSV import dialog is in function"
+    sleep (1)
     Kontext "DocumentCalc"
     printlog " Close document"
     Call hCloseDocument

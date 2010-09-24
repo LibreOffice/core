@@ -572,6 +572,7 @@ sub LoadGraphic ( sFile as String, bOK as Boolean ) as boolean
     Dim iHMax
     if app.FileLen(sFile) = "0" then warnlog "   the file (" + (sFile) + ") seems to be zero bytes large."
     call hGrafikEinfuegen ( sFile )
+    sleep (1)
     FormatGraphics
     Kontext
     Active.SetPage TabType

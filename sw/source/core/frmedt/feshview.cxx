@@ -603,7 +603,7 @@ bool SwFEShell::IsSelContainsControl() const
         // if we have one marked object, get the SdrObject and check
         // whether it contains a control
         const SdrObject* pSdrObject = pMarkList->GetMark( 0 )->GetMarkedSdrObj();
-        bRet = CheckControlLayer( pSdrObject );
+        bRet = ::CheckControlLayer( pSdrObject );
     }
     return bRet;
 }
@@ -998,8 +998,14 @@ void SwFEShell::ChangeOpaque( SdrLayerID nLayerId )
             SdrObject* pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
             // OD 21.08.2003 #i18447# - no change of layer for controls
             // or group objects containing controls.
-            const bool bControlObj = ::CheckControlLayer( pObj );
-            //if ( pObj->GetLayer() != nLayerId && pObj->GetLayer() != nControls )
+            // --> OD 2010-09-14 #i113730#
+            // consider that a member of a drawing group has been selected.
+            const SwContact* pContact = ::GetUserCall( pObj );
+            ASSERT( pContact && pContact->GetMaster(), "<SwFEShell::ChangeOpaque(..)> - missing contact or missing master object at contact!" );
+            const bool bControlObj = ( pContact && pContact->GetMaster() )
+                                     ? ::CheckControlLayer( pContact->GetMaster() )
+                                     : ::CheckControlLayer( pObj );
+            // <--
             if ( !bControlObj && pObj->GetLayer() != nLayerId )
             {
                 pObj->SetLayer( nLayerId );

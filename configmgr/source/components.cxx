@@ -334,12 +334,14 @@ void Components::insertModificationXcuFile(
     Modifications * modifications)
 {
     OSL_ASSERT(modifications != 0);
+    Partial part(includedPaths, excludedPaths);
     try {
-        Partial part(includedPaths, excludedPaths);
-        parseXcuFile(fileUri, Data::NO_LAYER, data_, &part, modifications, 0);
-    } catch (css::uno::Exception & e) { //TODO: more specific exception catching
+        parseFileLeniently(
+            &parseXcuFile, fileUri, Data::NO_LAYER, data_, &part, modifications,
+            0);
+    } catch (css::container::NoSuchElementException & e) {
         OSL_TRACE(
-            "configmgr error inserting %s: %s",
+            "configmgr error inserting non-existing %s: %s",
             rtl::OUStringToOString(fileUri, RTL_TEXTENCODING_UTF8).getStr(),
             rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
     }
@@ -492,19 +494,31 @@ Components::Components(
                     "com.sun.star.comp.deployment.configuration."
                     "PackageRegistryBackend/configmgr.ini"))),
         true);
-    try {
-        parseModificationLayer();
-    } catch (css::uno::Exception & e) { //TODO: more specific exception catching
-        // Silently ignore unreadable parts of a corrupted user modification
-        // layer, instead of completely preventing OOo from starting:
-        OSL_TRACE(
-            "configmgr error reading user modification layer: %s",
-            rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
-    }
+    parseModificationLayer();
     RTL_LOGFILE_TRACE_AUTHOR("configmgr", "sb", "end parsing");
 }
 
 Components::~Components() {}
+
+void Components::parseFileLeniently(
+    FileParser * parseFile, rtl::OUString const & url, int layer, Data & data,
+    Partial const * partial, Modifications * modifications,
+    Additions * additions)
+{
+    OSL_ASSERT(parseFile != 0);
+    try {
+        (*parseFile)(url, layer, data, partial, modifications, additions);
+    } catch (css::container::NoSuchElementException &) {
+        throw;
+    } catch (css::uno::Exception & e) { //TODO: more specific exception catching
+        // Silently ignore invalid XML files, instead of completely preventing
+        // OOo from starting:
+        OSL_TRACE(
+            "configmgr error reading %s: %s",
+            rtl::OUStringToOString(url, RTL_TEXTENCODING_UTF8).getStr(),
+            rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+    }
+}
 
 void Components::parseFiles(
     int layer, rtl::OUString const & extension, FileParser * parseFile,
@@ -557,7 +571,8 @@ void Components::parseFiles(
                 file.match(extension, file.getLength() - extension.getLength()))
             {
                 try {
-                    (*parseFile)(stat.getFileURL(), layer, data_, 0, 0, 0);
+                    parseFileLeniently(
+                        parseFile, stat.getFileURL(), layer, data_, 0, 0, 0);
                 } catch (css::container::NoSuchElementException & e) {
                     throw css::uno::RuntimeException(
                         (rtl::OUString(
@@ -584,7 +599,7 @@ void Components::parseFileList(
                 adds = data_.addExtensionXcuAdditions(url, layer);
             }
             try {
-                (*parseFile)(url, layer, data_, 0, 0, adds);
+                parseFileLeniently(parseFile, url, layer, data_, 0, 0, adds);
             } catch (css::container::NoSuchElementException & e) {
                 OSL_TRACE(
                     "configmgr file does not exist: %s",
@@ -746,7 +761,9 @@ rtl::OUString Components::getModificationFileUrl() const {
 
 void Components::parseModificationLayer() {
     try {
-        parseXcuFile(getModificationFileUrl(), Data::NO_LAYER, data_, 0, 0, 0);
+        parseFileLeniently(
+            &parseXcuFile, getModificationFileUrl(), Data::NO_LAYER, data_, 0,
+            0, 0);
     } catch (css::container::NoSuchElementException &) {
         OSL_TRACE(
             "configmgr user registrymodifications.xcu does not (yet) exist");

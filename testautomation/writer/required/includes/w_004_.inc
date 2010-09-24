@@ -463,6 +463,7 @@ testcase tInsertComment
 
     printlog " Insert / Comment"
     InsertNoteWriter
+    wait 500
     Kontext "DocumentWriter"
     sNoteText = "Comment inserted by testtool !"
     Call wTypeKeys (sNoteText)
