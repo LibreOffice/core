@@ -101,6 +101,7 @@ testcase tiToolsSpellcheckCorrect
     case 39   : hTextrahmenErstellen ("La ringraziamo per l'interesse mostrato a collaborare con la firma.<Return>",10,10,70,20)
     case 46   : hTextrahmenErstellen ("Det varierar vad som behandlas och ur vilket perspektiv.<Return>",10,10,50,20)
     case 49   : hTextrahmenErstellen ("Dies ist ein Text ohne Fehler.<Return>",10,10,50,20)
+    case 50   : hTextrahmenErstellen ("To je besedilo brez napake.<Return>",10,10,50,20)
     case 55   : hTextrahmenErstellen ("Esta poderia ser a resposta para suas preces?<Return>",10,10,50,20)
     case else :
         if bAsianLan then
@@ -160,6 +161,7 @@ testcase tiToolsSpellcheckError
     case 39 : FehlerText$ = "Ringrarziamo per l'interessa mostrato a collaborare con la firma." : Fehler$ = "Ringrarziamo" : Sprachenname$ = "Italienisch"
     case 46 : FehlerText$ = "Detd varierar vad som behandlas och ur vilket perspektiv."         : Fehler$ = "Detd"         : Sprachenname$ = "Schwedisch"
     case 49 : FehlerText$ = "Diees ist ein Fehler."                         : Fehler$ = "Diees" : Sprachenname$ = "Deutsch"
+    case 50 : FehlerText$ = "Toje napaka, ker manjka presledek."            : Fehler$ = "Toje" : Sprachenname$ = "Slovenščina"
     case 55 : FehlerText$ = "Eesta poderia ser a resposta para suas preces?": Fehler$ = "Eesta" : Sprachenname$ = "Portugiesisch"
     case else :
         if bAsianLan then
@@ -410,6 +412,7 @@ testcase tiToolsSpellcheckCheck
     case 39 : sWord(1) = "Millano"       : sWord(2) = "tarrget"
     case 46 : sWord(1) = "desa"          : sWord(2) = "occh"
     case 49 : sWord(1) = "Texxt"         : sWord(2) = "reichtt"
+    case 50 : sWord(1) = "Bsedilo"       : sWord(2) = "zadosča"
     case 55 : sWord(1) = "esktava"         : sWord(2) = "noitee"
     case else :
         if bAsianLan then
