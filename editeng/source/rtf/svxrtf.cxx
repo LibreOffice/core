@@ -816,7 +816,7 @@ void SvxRTFParser::ReadInfo( const sal_Char* pChkForVerNo )
 
 void SvxRTFParser::ClearColorTbl()
 {
-    for( size_t n = 0; n < aColorTbl.size(); n++ )
+    while ( !aColorTbl.empty() )
     {
         delete aColorTbl.back();
         aColorTbl.pop_back();
