@@ -1483,7 +1483,11 @@ End
 
 File gid_License_Odt
     BIN_FILE_BODY;
+#if defined MACOSX
+    Dir = gid_Brand_Dir_BasisLink;
+#else
     Dir = gid_Dir_Brand_Root;
+#endif
     Name = "LICENSE.odt";
     Styles = (PACKED);
 End
