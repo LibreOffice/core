@@ -80,7 +80,7 @@ ULONG Mediator::SendMessage( ULONG nBytes, const char* pBytes, ULONG nMessageID 
     if( ! m_pListener )
         return 0;
 
-    NAMESPACE_VOS(OGuard) aGuard( m_aSendMutex );
+    vos::OGuard aGuard( m_aSendMutex );
     if( ! nMessageID )
         nMessageID = m_nCurrentID;
 
@@ -132,7 +132,7 @@ MediatorMessage* Mediator::WaitForAnswer( ULONG nMessageID )
     while( m_pListener )
     {
         {
-            NAMESPACE_VOS(OGuard) aGuard( m_aQueueMutex );
+            vos::OGuard aGuard( m_aQueueMutex );
             for( size_t i = 0; i < m_aMessageQueue.size(); i++ )
             {
                 MediatorMessage* pMessage = m_aMessageQueue[ i ];
@@ -157,7 +157,7 @@ MediatorMessage* Mediator::GetNextMessage( BOOL bWait )
         {
             // guard must be after WaitForMessage, else the listener
             // cannot insert a new one -> deadlock
-            NAMESPACE_VOS(OGuard) aGuard( m_aQueueMutex );
+            vos::OGuard aGuard( m_aQueueMutex );
             for( size_t i = 0; i < m_aMessageQueue.size(); i++ )
             {
                 MediatorMessage* pMessage = m_aMessageQueue[ i ];
@@ -207,7 +207,7 @@ void MediatorListener::run()
             {
                 ::vos::OGuard aMyGuard( m_aMutex );
                 {
-                    NAMESPACE_VOS(OGuard)
+                    vos::OGuard
                         aGuard( m_pMediator->m_aQueueMutex );
                     MediatorMessage* pMessage =
                         new MediatorMessage( nHeader[ 0 ], nHeader[ 1 ], pBuffer );

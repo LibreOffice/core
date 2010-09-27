@@ -319,202 +319,56 @@ extern "C" UINT __stdcall RegisterExtensions(MSIHANDLE handle)
 {
     std::_tstring sInstDir = GetMsiProperty( handle, TEXT("INSTALLLOCATION") );
     std::_tstring sUnoPkgFile = sInstDir + TEXT("program\\unopkg.exe");
-    std::_tstring sShareInstallDir = sInstDir + TEXT("share\\extension\\install\\");
-    std::_tstring sPattern = sShareInstallDir + TEXT("*.oxt");
     std::_tstring mystr;
 
     WIN32_FIND_DATA aFindFileData;
 
     mystr = "unopkg file: " + sUnoPkgFile;
-    // MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
-
-    mystr = "oxt file directory: " + sShareInstallDir;
-    // MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
+    //MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
 
     // Find unopkg.exe
-
     HANDLE hFindUnopkg = FindFirstFile( sUnoPkgFile.c_str(), &aFindFileData );
 
     if ( hFindUnopkg != INVALID_HANDLE_VALUE )
     {
         // unopkg.exe exists in program directory
 
-        // Finding all oxt files in sShareInstallDir
+        const std::_tstring sTempFolder(createTempFolder());
+        std::_tstring sCommandPart1 = sUnoPkgFile + " sync";
+        std::_tstring sCommand = sCommandPart1
+            + TEXT(" -env:BUNDLED_EXTENSIONS_USER=$BRAND_BASE_DIR/share/prereg/bundled")
+            + TEXT(" -env:UNO_JAVA_JFW_INSTALL_DATA=$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml")
+            + TEXT(" -env:UserInstallation=") + sTempFolder;
+        mystr = "Command: " + sCommand;
+        //MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
 
-        HANDLE hFindOxt = FindFirstFile( sPattern.c_str(), &aFindFileData );
+        DWORD exitCode = 0;
+        bool fSuccess = ExecuteCommand( sCommand.c_str(), & exitCode);
 
-        if ( hFindOxt != INVALID_HANDLE_VALUE )
-        {
-            bool fNextFile = false;
+        deleteTempFolder(sTempFolder);
 
-            do
-            {
-                const std::_tstring sTempFolder(createTempFolder());
-                std::_tstring sOxtFile = sShareInstallDir + aFindFileData.cFileName;
-                std::_tstring sCommandPart1 = sUnoPkgFile + " add --shared --suppress-license --bundled " + "\"" + sOxtFile + "\"";
-                std::_tstring sCommand = sCommandPart1
-                    + TEXT(" -env:UNO_JAVA_JFW_INSTALL_DATA=$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml")
-                    + TEXT(" -env:UserInstallation=") + sTempFolder;
-                mystr = "Command: " + sCommand;
-                // MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
+//         if ( fSuccess )
+//         {
+//             mystr = "Executed successfully!";
+//             MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
+//         }
+//         else
+//         {
+//             mystr = "An error occured during execution!";
+//             MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
+//         }
 
-                DWORD exitCode = 0;
-                bool fSuccess = ExecuteCommand( sCommand.c_str(), & exitCode);
-                // unopkg in OOo 2.2.1 and early had a bug that it failed when receiving
-                // a bootstrap parameter (-env:...) then it exited with a value != 0.
-                if (fSuccess && exitCode != 0)
-                {
-                    std::_tstring sCommand = sCommandPart1;
-                    mystr = "Command: " + sCommand;
-                    // MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
-                    fSuccess = ExecuteCommand( sCommand.c_str(), & exitCode);
-                }
-                deleteTempFolder(sTempFolder);
-
-                // if ( fSuccess )
-                // {
-                //     mystr = "Executed successfully!";
-                //     MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
-                // }
-                // else
-                // {
-                //     mystr = "An error occured during execution!";
-                //     MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
-                // }
-
-                fNextFile = FindNextFile( hFindOxt, &aFindFileData );
-
-            } while ( fNextFile );
-
-            FindClose( hFindOxt );
-        }
+        FindClose( hFindUnopkg );
     }
-    // else
-    // {
-    //     mystr = "Error: Did not find " + sUnoPkgFile;
-    //     MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
-    // }
+//     else
+//     {
+//         mystr = "Error: Did not find " + sUnoPkgFile;
+//         MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
+//     }
 
     return ERROR_SUCCESS;
 }
 
-extern "C" UINT __stdcall DeregisterExtensions(MSIHANDLE handle)
-{
-    std::_tstring mystr;
-
-    // Finding the product with the help of the propery FINDPRODUCT,
-    // that contains a Windows Registry key, that points to the install location.
-
-    TCHAR szValue[8192];
-    DWORD nValueSize = sizeof(szValue);
-    HKEY  hKey;
-    std::_tstring sInstDir;
-
-    std::_tstring sProductKey = GetMsiProperty( handle, TEXT("FINDPRODUCT") );
-    // MessageBox( NULL, sProductKey.c_str(), "Titel", MB_OK );
-
-    if ( ERROR_SUCCESS == RegOpenKey( HKEY_CURRENT_USER,  sProductKey.c_str(), &hKey ) )
-    {
-        if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("INSTALLLOCATION"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
-        {
-            sInstDir = szValue;
-        }
-        RegCloseKey( hKey );
-    }
-    else if ( ERROR_SUCCESS == RegOpenKey( HKEY_LOCAL_MACHINE,  sProductKey.c_str(), &hKey ) )
-    {
-        if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("INSTALLLOCATION"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
-        {
-            sInstDir = szValue;
-        }
-        RegCloseKey( hKey );
-    }
-    else
-    {
-        return ERROR_SUCCESS;
-    }
-
-    // MessageBox( NULL, sInstDir.c_str(), "install location", MB_OK );
-
-    // Searching for the unopkg.exe
-
-    std::_tstring sUnoPkgFile = sInstDir + TEXT("program\\unopkg.exe");
-    std::_tstring sShareInstallDir = sInstDir + TEXT("share\\extension\\install\\");
-    std::_tstring sPattern = sShareInstallDir + TEXT("*.oxt");
-
-    WIN32_FIND_DATA aFindFileData;
-
-    // Find unopkg.exe
-
-    HANDLE hFindUnopkg = FindFirstFile( sUnoPkgFile.c_str(), &aFindFileData );
-
-    if ( hFindUnopkg != INVALID_HANDLE_VALUE )
-    {
-        // unopkg.exe exists in program directory
-
-        // Finding all oxt files in sShareInstallDir
-
-        HANDLE hFindOxt = FindFirstFile( sPattern.c_str(), &aFindFileData );
-
-        if ( hFindOxt != INVALID_HANDLE_VALUE )
-        {
-            bool fNextFile = false;
-
-            do
-            {
-                const std::_tstring sTempFolder(createTempFolder());
-                // When removing extensions, only the oxt file name is required, without path
-                // Therefore no quoting is required
-                // std::_tstring sOxtFile = sShareInstallDir + aFindFileData.cFileName;
-                std::_tstring sOxtFile = aFindFileData.cFileName;
-                std::_tstring sCommandPart1 = sUnoPkgFile + " remove --shared --bundled " + "\""
-                    + sOxtFile + "\"";
-                std::_tstring sCommand = sCommandPart1
-                    + TEXT(" -env:UNO_JAVA_JFW_INSTALL_DATA=$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml")
-                    + TEXT(" -env:UserInstallation=") + sTempFolder;
-
-                mystr = "Command: " + sCommand;
-                //MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
-                DWORD exitCode = 0;
-                bool fSuccess = ExecuteCommand( sCommand.c_str(), & exitCode);
-                // unopkg in OOo 2.2.1 and early had a bug that it failed when receiving
-                // a bootstrap parameter (-env:...) then it exited with a value != 0.
-                if (fSuccess && exitCode != 0)
-                {
-                    std::_tstring sCommand = sCommandPart1;
-                    mystr = "Command: " + sCommand;
-                    //MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
-                    fSuccess = ExecuteCommand( sCommand.c_str(), & exitCode);
-                }
-
-                deleteTempFolder(sTempFolder);
-
-                if ( fSuccess )
-                {
-                    mystr = "Executed successfully!";
-                    // MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
-                }
-                else
-                {
-                    mystr = "An error occured during execution!";
-                    // MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
-                }
-
-                fNextFile = FindNextFile( hFindOxt, &aFindFileData );
-
-            } while ( fNextFile );
-
-            FindClose( hFindOxt );
-        }
-    }
-    // else
-    // {
-    //     mystr = "Not found: " + sUnoPkgFile;
-    //     MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
-    // }
-
-    return ERROR_SUCCESS;
-}
 
 extern "C" UINT __stdcall RemoveExtensions(MSIHANDLE handle)
 {
@@ -529,7 +383,7 @@ extern "C" UINT __stdcall RemoveExtensions(MSIHANDLE handle)
     std::_tstring sInstDir;
 
     std::_tstring sProductKey = GetMsiProperty( handle, TEXT("FINDPRODUCT") );
-    // MessageBox( NULL, sProductKey.c_str(), "Titel", MB_OK );
+    //MessageBox( NULL, sProductKey.c_str(), "Titel", MB_OK );
 
     if ( ERROR_SUCCESS == RegOpenKey( HKEY_CURRENT_USER,  sProductKey.c_str(), &hKey ) )
     {
@@ -552,22 +406,22 @@ extern "C" UINT __stdcall RemoveExtensions(MSIHANDLE handle)
         return ERROR_SUCCESS;
     }
 
-    // Removing complete directory "share\uno_packages\cache"
+    // Removing complete directory "Basis\presets\bundled"
 
-    std::_tstring sCacheDir = sInstDir + TEXT("share\\uno_packages\\cache");
+    std::_tstring sCacheDir = sInstDir + TEXT("share\\prereg\\bundled");
 
     bool fSuccess = RemoveCompleteDirectory( sCacheDir );
 
-    if ( fSuccess )
-    {
-        mystr = "Executed successfully!";
-        // MessageBox(NULL, mystr.c_str(), "Main methode", MB_OK);
-    }
-    else
-    {
-        mystr = "An error occured during execution!";
-        // MessageBox(NULL, mystr.c_str(), "Main methode", MB_OK);
-    }
+//     if ( fSuccess )
+//     {
+//         mystr = "Executed successfully!";
+//          MessageBox(NULL, mystr.c_str(), "Main methode", MB_OK);
+//     }
+//     else
+//     {
+//         mystr = "An error occured during execution!";
+//         MessageBox(NULL, mystr.c_str(), "Main methode", MB_OK);
+//     }
 
     return ERROR_SUCCESS;
 }

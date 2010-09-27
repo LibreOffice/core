@@ -78,37 +78,6 @@ using rtl::OUString;
 #define WININDEX_AUTOSAVE           ((USHORT)6)
 #define WININDEX_SAVEURL_RELFSYS    ((USHORT)9)
 
-// -------------------- --------------------------------------------------
-class FilterWarningDialog_Impl : public ModalDialog
-{
-    OKButton        aOk;
-    CancelButton    aCancel;
-    FixedImage      aImage;
-    FixedInfo       aFilterWarningFT;
-
-    public:
-    FilterWarningDialog_Impl(Window* pParent);
-
-    void            SetFilterName(const String& rFilterUIName);
-};
-// ----------------------------------------------------------------------
-FilterWarningDialog_Impl::FilterWarningDialog_Impl(Window* pParent) :
-    ModalDialog(pParent, CUI_RES( RID_SVXDLG_FILTER_WARNING ) ),
-    aOk(                this, CUI_RES(PB_OK               )),
-    aCancel(            this, CUI_RES(PB_CANCEL           )),
-    aImage(             this, CUI_RES(IMG_WARNING         )),
-    aFilterWarningFT(   this, CUI_RES(FT_FILTER_WARNING   ))
-{
-    FreeResource();
-    aImage.SetImage(WarningBox::GetStandardImage());
-}
-// ----------------------------------------------------------------------
-void    FilterWarningDialog_Impl::SetFilterName(const String& rFilterUIName)
-{
-    String sTmp(aFilterWarningFT.GetText());
-    sTmp.SearchAndReplaceAscii("%1", rFilterUIName);
-    aFilterWarningFT.SetText(sTmp);
-}
 // ----------------------------------------------------------------------
 #ifdef FILTER_WARNING_ENABLED
 class SvxAlienFilterWarningConfig_Impl : public utl::ConfigItem
@@ -324,23 +293,6 @@ SfxTabPage* SfxSaveTabPage::Create( Window* pParent,
     return ( new SfxSaveTabPage( pParent, rAttrSet ) );
 }
 
-/* -----------------------------05.04.01 13:10--------------------------------
-
- ---------------------------------------------------------------------------*/
-OUString lcl_ExtractUIName(const Sequence<PropertyValue> rProperties)
-{
-    OUString sRet;
-    const PropertyValue* pProperties = rProperties.getConstArray();
-    for(int nProp = 0; nProp < rProperties.getLength(); nProp++)
-    {
-        if(!pProperties[nProp].Name.compareToAscii("UIName"))
-        {
-            pProperties[nProp].Value >>= sRet;
-            break;
-        }
-    }
-    return sRet;
-}
 // -----------------------------------------------------------------------
 bool SfxSaveTabPage::AcceptFilter( USHORT nPos )
 {

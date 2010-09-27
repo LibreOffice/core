@@ -144,6 +144,8 @@ namespace container = com::sun::star::container;
 namespace beans = com::sun::star::beans;
 namespace graphic = com::sun::star::graphic;
 
+#if OSL_DEBUG_LEVEL > 1
+
 void printPropertySet(
     const OUString& prefix,
     const uno::Reference< beans::XPropertySet >& xPropSet )
@@ -207,6 +209,8 @@ void printEntries(SvxEntries* entries)
         OSL_TRACE("printEntries: %s", PRTSTR(entry->GetName()));
     }
 }
+
+#endif
 
 OUString
 stripHotKey( const OUString& str )
@@ -918,11 +922,6 @@ void SvxConfigDialog::PageCreated( USHORT nId, SfxTabPage& rPage )
     }
 }
 
-void SvxConfigDialog::ActivateTabPage( USHORT nSlotId )
-{
-    (void)nSlotId;
-}
-
 /******************************************************************************
  *
  * The SaveInData class is used to hold data for entries in the Save In
@@ -1177,7 +1176,11 @@ bool MenuSaveInData::LoadSubMenus(
     const OUString& rBaseTitle,
     SvxConfigEntry* pParentData )
 {
-    SvxEntries*     pEntries            = pParentData->GetEntries();
+    SvxEntries* pEntries = pParentData->GetEntries();
+
+    // Don't access non existing menu configuration!
+    if ( !xMenuSettings.is() )
+        return true;
 
     for ( sal_Int32 nIndex = 0; nIndex < xMenuSettings->getCount(); nIndex++ )
     {
@@ -2594,17 +2597,20 @@ IMPL_LINK( SvxMenuConfigPage, SelectMenu, ListBox *, pBox )
     SvxConfigEntry* pMenuData = GetTopLevelSelection();
 
     PopupMenu* pPopup = aModifyTopLevelButton.GetPopupMenu();
-    pPopup->EnableItem( ID_DELETE, pMenuData->IsDeletable() );
-    pPopup->EnableItem( ID_RENAME, pMenuData->IsRenamable() );
-    pPopup->EnableItem( ID_MOVE, pMenuData->IsMovable() );
-
-    SvxEntries* pEntries = pMenuData->GetEntries();
-    SvxEntries::const_iterator iter = pEntries->begin();
-
-    for ( ; iter != pEntries->end(); iter++ )
+    if ( pMenuData )
     {
-        SvxConfigEntry* pEntry = *iter;
-        InsertEntryIntoUI( pEntry );
+        pPopup->EnableItem( ID_DELETE, pMenuData->IsDeletable() );
+        pPopup->EnableItem( ID_RENAME, pMenuData->IsRenamable() );
+        pPopup->EnableItem( ID_MOVE, pMenuData->IsMovable() );
+
+        SvxEntries* pEntries = pMenuData->GetEntries();
+        SvxEntries::const_iterator iter = pEntries->begin();
+
+        for ( ; iter != pEntries->end(); iter++ )
+        {
+            SvxConfigEntry* pEntry = *iter;
+            InsertEntryIntoUI( pEntry );
+        }
     }
 
     UpdateButtonStates();
@@ -3055,75 +3061,6 @@ SvxConfigEntry* SvxMainMenuOrganizerDialog::GetSelectedEntry()
     return (SvxConfigEntry*)aMenuListBox.FirstSelected()->GetUserData();
 }
 
-SvxConfigEntry::SvxConfigEntry(
-    const uno::Sequence< beans::PropertyValue >& rProperties,
-    const uno::Reference< container::XNameAccess >& rCommandToLabelMap )
-    :
-        nId( 1 ),
-        bPopUp( FALSE ),
-        bStrEdited( FALSE ),
-        bIsUserDefined( FALSE ),
-        bIsMain( FALSE ),
-        bIsParentData( FALSE ),
-        bIsVisible( TRUE ),
-        nStyle( 0 ),
-        pEntries( 0 )
-{
-    sal_uInt16 nType( css::ui::ItemType::DEFAULT );
-    OUString aHelpURL_;
-
-    for ( sal_Int32 i = 0; i < rProperties.getLength(); i++ )
-    {
-        if ( rProperties[i].Name.equalsAscii( ITEM_DESCRIPTOR_COMMANDURL ))
-        {
-            rProperties[i].Value >>= aCommand;
-        }
-        else if ( rProperties[i].Name.equalsAscii( ITEM_DESCRIPTOR_HELPURL ))
-        {
-            rProperties[i].Value >>= aHelpURL_;
-        }
-        else if ( rProperties[i].Name.equalsAscii( ITEM_DESCRIPTOR_LABEL ))
-        {
-            rProperties[i].Value >>= aLabel;
-        }
-        else if ( rProperties[i].Name.equalsAscii( ITEM_DESCRIPTOR_TYPE ))
-        {
-            rProperties[i].Value >>= nType;
-        }
-    }
-
-    if ( nType == css::ui::ItemType::DEFAULT )
-    {
-        uno::Any a;
-        try
-        {
-            a = rCommandToLabelMap->getByName( aCommand );
-            bIsUserDefined = FALSE;
-        }
-        catch ( container::NoSuchElementException& )
-        {
-            bIsUserDefined = TRUE;
-        }
-
-        // If custom label not set retrieve it from the command to info service
-        if ( aLabel.equals( OUString() ) )
-        {
-            uno::Sequence< beans::PropertyValue > aPropSeq;
-            if ( a >>= aPropSeq )
-            {
-                for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
-                {
-                    if ( aPropSeq[i].Name.equalsAscii( ITEM_DESCRIPTOR_LABEL ) )
-                    {
-                        aPropSeq[i].Value >>= aLabel;
-                        break;
-                    }
-                }
-            }
-        }
-    }
-}
-
 const OUString&
 SvxConfigEntry::GetHelpText()
 {
@@ -3149,133 +3086,6 @@ SvxConfigEntry::GetHelpText()
 
     return aHelpText;
 }
-
-uno::Sequence< beans::PropertyValue >
-SvxConfigEntry::GetProperties(
-    const uno::Reference< container::XNameAccess >& rCommandToLabelMap )
-{
-    if ( IsSeparator() )
-    {
-        uno::Sequence< beans::PropertyValue > aPropSeq( 1 );
-
-        aPropSeq[0].Name  = OUString(
-            RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_TYPE ) );
-        aPropSeq[0].Value <<= css::ui::ItemType::SEPARATOR_LINE;
-
-        return aPropSeq;
-    }
-
-    static const OUString aDescriptorCommandURL (
-        RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_COMMANDURL ) );
-
-    static const OUString aDescriptorType(
-            RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_TYPE ) );
-
-    static const OUString aDescriptorLabel(
-            RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_LABEL ) );
-
-    static const OUString aDescriptorHelpURL(
-            RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_HELPURL ) );
-
-    uno::Sequence< beans::PropertyValue > aPropSeq( 4 );
-
-    aPropSeq[0].Name = aDescriptorCommandURL;
-    aPropSeq[0].Value <<= rtl::OUString( GetCommand() );
-
-    aPropSeq[1].Name = aDescriptorType;
-    aPropSeq[1].Value <<= css::ui::ItemType::DEFAULT;
-
-    // If the name has not been changed and the name is the same as
-    // in the default command to label map then the label can be stored
-    // as an empty string.
-    // It will be initialised again later using the command to label map.
-    aPropSeq[2].Name = aDescriptorLabel;
-    if ( HasChangedName() == FALSE && GetCommand().getLength() )
-    {
-        BOOL isDefaultName = FALSE;
-        try
-        {
-            uno::Any a( rCommandToLabelMap->getByName( GetCommand() ) );
-            uno::Sequence< beans::PropertyValue > tmpPropSeq;
-            if ( a >>= tmpPropSeq )
-            {
-                for ( sal_Int32 i = 0; i < tmpPropSeq.getLength(); i++ )
-                {
-                    if ( tmpPropSeq[i].Name.equals( aDescriptorLabel ) )
-                    {
-                        OUString tmpLabel;
-                        tmpPropSeq[i].Value >>= tmpLabel;
-
-                        if ( tmpLabel.equals( GetName() ) )
-                        {
-                            isDefaultName = TRUE;
-                        }
-
-                        break;
-                    }
-                }
-            }
-        }
-        catch ( container::NoSuchElementException& )
-        {
-            // isDefaultName is left as FALSE
-        }
-
-        if ( isDefaultName )
-        {
-            aPropSeq[2].Value <<= rtl::OUString();
-        }
-        else
-        {
-            aPropSeq[2].Value <<= rtl::OUString( GetName() );
-        }
-    }
-    else
-    {
-        aPropSeq[2].Value <<= rtl::OUString( GetName() );
-    }
-
-    aPropSeq[3].Name = aDescriptorHelpURL;
-    aPropSeq[3].Value <<= rtl::OUString( GetHelpURL() );
-
-    return aPropSeq;
-}
-
-/*
-SvxMenuConfigEntry::SvxMenuConfigEntry(
-    const uno::Sequence< beans::PropertyValue >& rProperties,
-    const uno::Reference< container::XNameAccess >& rCommandToLabelMap )
-    :
-        SvxConfigEntry( rProperties, rCommandToLabelMap )
-{
-    uno::Reference< container::XIndexAccess > aChildren;
-
-    for ( sal_Int32 i = 0; i < rProperties.getLength(); i++ )
-    {
-        if ( rProperties[i].Name.equalsAscii( ITEM_DESCRIPTOR_CONTAINER ))
-        {
-            rProperties[i].Value >>= aChildren;
-        }
-    }
-
-    if ( aChildren.is() )
-    {
-        SetPopup( TRUE );
-        SetEntries( new SvxEntries() );
-
-           uno::Sequence< beans::PropertyValue > aProps;
-        for ( sal_Int32 i = 0; i < aChildren->getCount(); i++ )
-        {
-               if ( aChildren->getByIndex( i ) >>= aProps )
-            {
-                SvxConfigEntry* pEntry =
-                    new SvxMenuConfigEntry( aProps, rCommandToLabelMap );
-                GetEntries()->push_back( pEntry );
-            }
-        }
-    }
-}
-*/
 
 SvxConfigEntry::SvxConfigEntry( const OUString& rDisplayName,
                                 const OUString& rCommandURL, bool bPopup, bool bParentData )
@@ -4692,51 +4502,6 @@ void ToolbarSaveInData::RestoreToolbar( SvxConfigEntry* pToolbar )
     {
         // cannot find the resource URL after removing it
         // so no entry will appear in the toolbar list
-    }
-}
-
-void ToolbarSaveInData::ReloadToolbar( const OUString& rResourceURL )
-{
-    SvxEntries::const_iterator iter = GetEntries()->begin();
-    SvxConfigEntry* pToolbar = NULL;
-
-    for ( ; iter != GetEntries()->end(); iter++ )
-    {
-        SvxConfigEntry* pEntry = *iter;
-
-        if ( pEntry->GetCommand().equals( rResourceURL ) )
-        {
-            pToolbar = pEntry;
-            break;
-        }
-    }
-
-    if ( pToolbar != NULL )
-    {
-        delete pToolbar->GetEntries();
-
-        try
-        {
-            uno::Reference< container::XIndexAccess > xToolbarSettings;
-
-            if ( pToolbar->IsParentData() )
-            {
-                xToolbarSettings = GetParentConfigManager()->getSettings(
-                    pToolbar->GetCommand(), sal_False);
-            }
-            else
-            {
-                xToolbarSettings = GetConfigManager()->getSettings(
-                    pToolbar->GetCommand(), sal_False);
-            }
-
-            LoadToolbar( xToolbarSettings, pToolbar );
-        }
-        catch ( container::NoSuchElementException& )
-        {
-            // toolbar not found for some reason
-            // it will not appear in the toolbar list
-        }
     }
 }
 
