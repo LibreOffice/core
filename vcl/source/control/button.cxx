@@ -83,6 +83,7 @@ class ImplCommonButtonData
 {
 public:
     Rectangle       maFocusRect;
+    Rectangle       maSymbolRect;
     USHORT          mnButtonState;
     BOOL            mbSmallSymbol;
 
@@ -330,6 +331,18 @@ void Button::SetFocusRect( const Rectangle& rFocusRect )
 const Rectangle& Button::GetFocusRect() const
 {
     return ImplGetFocusRect();
+}
+
+// -----------------------------------------------------------------------
+
+const Rectangle& Button::ImplGetSymbolRect() const
+{
+    return mpButtonData->maSymbolRect;
+}
+
+void Button::ImplSetSymbolRect( const Rectangle& i_rRect )
+{
+    mpButtonData->maSymbolRect = i_rRect;
 }
 
 // -----------------------------------------------------------------------
@@ -883,7 +896,8 @@ void PushButton::ImplInitSettings( BOOL bFont,
         // #i38498#: do not check for GetParent()->IsChildTransparentModeEnabled()
         // otherwise the formcontrol button will be overdrawn due to PARENTCLIPMODE_NOCLIP
         // for radio and checkbox this is ok as they shoud appear transparent in documents
-        if ( IsNativeControlSupported( CTRL_PUSHBUTTON, PART_ENTIRE_CONTROL ) )
+        if ( IsNativeControlSupported( CTRL_PUSHBUTTON, PART_ENTIRE_CONTROL ) ||
+             (GetStyle() & WB_FLATBUTTON) != 0 )
         {
             EnableChildTransparentMode( TRUE );
             SetParentClipMode( PARENTCLIPMODE_NOCLIP );
@@ -1142,7 +1156,9 @@ static void ImplDrawBtnDropDownArrow( OutputDevice* pDev,
 
 void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags,
                                             const Rectangle& rRect,
-                                            bool bLayout )
+                                            bool bLayout,
+                                            bool bMenuBtnSep
+                                            )
 {
     const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
     Rectangle               aInRect = rRect;
@@ -1176,6 +1192,9 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags
     Size aSize = rRect.GetSize();
     Point aPos = rRect.TopLeft();
 
+    ULONG nImageSep = 1 + (pDev->GetTextHeight()-10)/2;
+    if( nImageSep < 1 )
+        nImageSep = 1;
     if ( mnDDStyle == PUSHBUTTON_DROPDOWN_MENUBUTTON )
     {
         if ( aText.Len() && ! (ImplGetButtonState() & BUTTON_DRAW_NOTEXT) )
@@ -1186,33 +1205,41 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags
             aInRect.Left()      = aInRect.Right() - nSymbolSize;
             aSize.Width()      -= ( 5 + nSymbolSize );
 
-            ImplDrawAlignedImage( pDev, aPos, aSize, bLayout,
-                                  1, nDrawFlags, nTextStyle, NULL, (GetStyle() & WB_FLATBUTTON) != 0 );
+            ImplDrawAlignedImage( pDev, aPos, aSize, bLayout, nImageSep,
+                                  nDrawFlags, nTextStyle, NULL, true );
         }
         else
             ImplCalcSymbolRect( aInRect );
 
         if( ! bLayout )
         {
+            long nDistance = (aInRect.GetHeight() > 10) ? 2 : 1;
             DecorationView aDecoView( pDev );
+            if( bMenuBtnSep )
+            {
+                long nX = aInRect.Left() - 2*nDistance;;
+                Point aStartPt( nX, aInRect.Top()+nDistance );
+                Point aEndPt( nX, aInRect.Bottom()-nDistance );
+                aDecoView.DrawSeparator( aStartPt, aEndPt );
+            }
             aDecoView.DrawSymbol( aInRect, SYMBOL_SPIN_DOWN, aColor, nStyle );
+            aInRect.Left() -= 2*nDistance;
+            ImplSetSymbolRect( aInRect );
         }
     }
     else
     {
         Rectangle aSymbolRect;
-        ULONG nImageSep = 1 + (pDev->GetTextHeight()-10)/2;
-        if( nImageSep < 1 )
-            nImageSep = 1;
         // FIXME: (GetStyle() & WB_FLATBUTTON) != 0 is preliminary
         // in the next major this should be replaced by "true"
         ImplDrawAlignedImage( pDev, aPos, aSize, bLayout, nImageSep, nDrawFlags,
-                              nTextStyle, IsSymbol() ? &aSymbolRect : NULL, (GetStyle() & WB_FLATBUTTON) != 0 );
+                              nTextStyle, IsSymbol() ? &aSymbolRect : NULL, true );
 
         if ( IsSymbol() && ! bLayout )
         {
             DecorationView aDecoView( pDev );
             aDecoView.DrawSymbol( aSymbolRect, meSymbol, aColor, nStyle );
+            ImplSetSymbolRect( aSymbolRect );
         }
 
         if ( mnDDStyle == PUSHBUTTON_DROPDOWN_TOOLBOX && !bLayout )
@@ -1314,7 +1341,6 @@ void PushButton::ImplDrawPushButton( bool bLayout )
                 // for CTRL_LISTBOX/PART_BUTTON_DOWN and CTRL_COMBOBOX/PART_BUTTON_DOWN
 
                 ImplControlValue    aControlValue;
-                Region              aCtrlRegion( aInRect );
                 ControlState        nState = 0;
 
                 if ( mbPressed )                        nState |= CTRL_STATE_PRESSED;
@@ -1326,7 +1352,7 @@ void PushButton::ImplDrawPushButton( bool bLayout )
                 if ( IsMouseOver() && aInRect.IsInside( GetPointerPosPixel() ) )
                     nState |= CTRL_STATE_ROLLOVER;
 
-                bNativeOK = DrawNativeControl( aCtrlType, PART_BUTTON_DOWN, aCtrlRegion, nState,
+                bNativeOK = DrawNativeControl( aCtrlType, PART_BUTTON_DOWN, aInRect, nState,
                                                 aControlValue, rtl::OUString() );
             }
         }
@@ -1336,12 +1362,16 @@ void PushButton::ImplDrawPushButton( bool bLayout )
         return;
 
     bool bRollOver = (IsMouseOver() && aInRect.IsInside( GetPointerPosPixel() ));
+    bool bDrawMenuSep = true;
+    if( (GetStyle() & WB_FLATBUTTON) )
+    {
+        if( ! bRollOver && ! HasFocus() )
+            bDrawMenuSep = false;
+    }
     if ( (bNativeOK=IsNativeControlSupported(CTRL_PUSHBUTTON, PART_ENTIRE_CONTROL)) == TRUE )
     {
-        PushButtonValue aPBVal;
-        ImplControlValue aControlValue;
-        aControlValue.setOptionalVal( &aPBVal );
-        Region           aCtrlRegion( aInRect );
+        PushButtonValue aControlValue;
+        Rectangle        aCtrlRegion( aInRect );
         ControlState     nState = 0;
 
         if ( mbPressed || IsChecked() )                   nState |= CTRL_STATE_PRESSED;
@@ -1354,7 +1384,7 @@ void PushButton::ImplDrawPushButton( bool bLayout )
             nState |= CTRL_STATE_ROLLOVER;
 
         if( GetStyle() & WB_BEVELBUTTON )
-            aPBVal.mbBevelButton = true;
+            aControlValue.mbBevelButton = true;
 
         // draw frame into invisible window to have aInRect modified correctly
         // but do not shift the inner rect for pressed buttons (ie remove BUTTON_DRAW_PRESSED)
@@ -1373,7 +1403,7 @@ void PushButton::ImplDrawPushButton( bool bLayout )
         Size aFontSize( Application::GetSettings().GetStyleSettings().GetPushButtonFont().GetSize() );
         aFontSize = LogicToPixel( aFontSize, MapMode( MAP_POINT ) );
         Size aInRectSize( LogicToPixel( Size( aInRect.GetWidth(), aInRect.GetHeight() ) ) );
-        aPBVal.mbSingleLine = (aInRectSize.Height() < 2 * aFontSize.Height() );
+        aControlValue.mbSingleLine = (aInRectSize.Height() < 2 * aFontSize.Height() );
 
         if( ((nState & CTRL_STATE_ROLLOVER)) || ! (GetStyle() & WB_FLATBUTTON) )
         {
@@ -1388,7 +1418,7 @@ void PushButton::ImplDrawPushButton( bool bLayout )
         // draw content using the same aInRect as non-native VCL would do
         ImplDrawPushButtonContent( this,
                                    (nState&CTRL_STATE_ROLLOVER) ? WINDOW_DRAW_ROLLOVER : 0,
-                                   aInRect, bLayout );
+                                   aInRect, bLayout, bDrawMenuSep );
 
         if ( HasFocus() )
             ShowFocus( ImplGetFocusRect() );
@@ -1414,7 +1444,7 @@ void PushButton::ImplDrawPushButton( bool bLayout )
         }
 
         // draw content
-        ImplDrawPushButtonContent( this, 0, aInRect, bLayout );
+        ImplDrawPushButtonContent( this, 0, aInRect, bLayout, bDrawMenuSep );
 
         if( ! bLayout && HasFocus() )
         {
@@ -1434,22 +1464,19 @@ void PushButton::ImplSetDefButton( BOOL bSet )
 
     if ( (IsNativeControlSupported(CTRL_PUSHBUTTON, PART_ENTIRE_CONTROL)) == TRUE )
     {
-        Region aBoundingRgn, aContentRgn;
+        Rectangle aBound, aCont;
         Rectangle aCtrlRect( 0, 0, 80, 20 ); // use a constant size to avoid accumulating
                                              // will not work if the theme has dynamic adornment sizes
         ImplControlValue aControlValue;
-        Region           aCtrlRegion( aCtrlRect );
+        Rectangle        aCtrlRegion( aCtrlRect );
         ControlState     nState = CTRL_STATE_DEFAULT|CTRL_STATE_ENABLED;
 
         // get native size of a 'default' button
         // and adjust the VCL button if more space for adornment is required
         if( GetNativeControlRegion( CTRL_PUSHBUTTON, PART_ENTIRE_CONTROL, aCtrlRegion,
                                 nState, aControlValue, rtl::OUString(),
-                                aBoundingRgn, aContentRgn ) )
+                                aBound, aCont ) )
         {
-            Rectangle aCont(aContentRgn.GetBoundRect());
-            Rectangle aBound(aBoundingRgn.GetBoundRect());
-
             dLeft = aCont.Left() - aBound.Left();
             dTop = aCont.Top() - aBound.Top();
             dRight = aBound.Right() - aCont.Right();
@@ -1738,7 +1765,7 @@ void PushButton::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
         nButtonStyle |= BUTTON_DRAW_CHECKED;
     aRect = aDecoView.DrawButton( aRect, nButtonStyle );
 
-    ImplDrawPushButtonContent( pDev, nFlags, aRect, false );
+    ImplDrawPushButtonContent( pDev, nFlags, aRect, false, true );
     pDev->Pop();
 }
 
@@ -2004,6 +2031,8 @@ Size PushButton::CalcMinimumSize( long nMaxWidth ) const
             aSize = Size( 16, 12 );
         else
             aSize = Size( 26, 24 );
+        if( mnDDStyle == PUSHBUTTON_DROPDOWN_MENUBUTTON )
+            aSize.Width() += 4;
     }
     else if ( IsImage() && ! (ImplGetButtonState() & BUTTON_DRAW_NOIMAGE) )
         aSize = GetModeImage().GetSizePixel();
@@ -2334,9 +2363,8 @@ void RadioButton::ImplDrawRadioButtonState()
     // no native drawing for image radio buttons
     if ( !maImage && (bNativeOK=IsNativeControlSupported(CTRL_RADIOBUTTON, PART_ENTIRE_CONTROL)) == TRUE )
     {
-        ImplControlValue            aControlValue( mbChecked ? BUTTONVALUE_ON : BUTTONVALUE_OFF, rtl::OUString(), 0 );
+        ImplControlValue            aControlValue( mbChecked ? BUTTONVALUE_ON : BUTTONVALUE_OFF );
         Rectangle                   aCtrlRect( maStateRect.TopLeft(), maStateRect.GetSize() );
-        Region                      aCtrlRegion( aCtrlRect );
         ControlState                nState = 0;
 
         if ( ImplGetButtonState() & BUTTON_DRAW_PRESSED )   nState |= CTRL_STATE_PRESSED;
@@ -2347,7 +2375,7 @@ void RadioButton::ImplDrawRadioButtonState()
         if ( IsMouseOver() && maMouseRect.IsInside( GetPointerPosPixel() ) )
             nState |= CTRL_STATE_ROLLOVER;
 
-        bNativeOK = DrawNativeControl( CTRL_RADIOBUTTON, PART_ENTIRE_CONTROL, aCtrlRegion, nState,
+        bNativeOK = DrawNativeControl( CTRL_RADIOBUTTON, PART_ENTIRE_CONTROL, aCtrlRect, nState,
                     aControlValue,rtl::OUString() );
 
     }
@@ -3198,17 +3226,16 @@ Size RadioButton::ImplGetRadioImageSize() const
     {
         ImplControlValue aControlValue;
         // #i45896# workaround gcc3.3 temporary problem
-        Region           aCtrlRegion = Region( Rectangle( Point( 0, 0 ), GetSizePixel() ) );
+        Rectangle        aCtrlRegion( Point( 0, 0 ), GetSizePixel() );
         ControlState     nState = CTRL_STATE_DEFAULT|CTRL_STATE_ENABLED;
-        Region aBoundingRgn, aContentRgn;
+        Rectangle aBoundingRgn, aContentRgn;
 
         // get native size of a radio button
         if( pThis->GetNativeControlRegion( CTRL_RADIOBUTTON, PART_ENTIRE_CONTROL, aCtrlRegion,
                                            nState, aControlValue, rtl::OUString(),
                                            aBoundingRgn, aContentRgn ) )
         {
-            Rectangle aCont(aContentRgn.GetBoundRect());
-            aSize = aCont.GetSize();
+            aSize = aContentRgn.GetSize();
             bDefaultSize = false;
         }
     }
@@ -3323,16 +3350,15 @@ void RadioButton::ImplSetMinimumNWFSize()
 
     ImplControlValue aControlValue;
     Size aCurSize( GetSizePixel() );
-    Region aCtrlRegion = Region( Rectangle( Point( 0, 0 ), aCurSize ) );
-    Region aBoundingRgn, aContentRgn;
+    Rectangle aCtrlRegion( Point( 0, 0 ), aCurSize );
+    Rectangle aBoundingRgn, aContentRgn;
 
     // get native size of a radiobutton
     if( GetNativeControlRegion( CTRL_RADIOBUTTON, PART_ENTIRE_CONTROL, aCtrlRegion,
                                 CTRL_STATE_DEFAULT|CTRL_STATE_ENABLED, aControlValue, rtl::OUString(),
                                 aBoundingRgn, aContentRgn ) )
     {
-        Rectangle aCont(aContentRgn.GetBoundRect());
-        Size aSize = aCont.GetSize();
+        Size aSize = aContentRgn.GetSize();
 
         if( aSize.Height() > aCurSize.Height() )
         {
@@ -3509,8 +3535,8 @@ void CheckBox::ImplDrawCheckBoxState()
 
     if ( (bNativeOK=IsNativeControlSupported(CTRL_CHECKBOX, PART_ENTIRE_CONTROL)) == TRUE )
     {
-        ImplControlValue    aControlValue( meState == STATE_CHECK ? BUTTONVALUE_ON : BUTTONVALUE_OFF, rtl::OUString(), 0 );
-        Region              aCtrlRegion( maStateRect );
+        ImplControlValue    aControlValue( meState == STATE_CHECK ? BUTTONVALUE_ON : BUTTONVALUE_OFF );
+        Rectangle           aCtrlRegion( maStateRect );
         ControlState        nState = 0;
 
         if ( HasFocus() )                       nState |= CTRL_STATE_FOCUSED;
@@ -4144,17 +4170,16 @@ Size CheckBox::ImplGetCheckImageSize() const
     {
         ImplControlValue aControlValue;
         // #i45896# workaround gcc3.3 temporary problem
-        Region           aCtrlRegion = Region( Rectangle( Point( 0, 0 ), GetSizePixel() ) );
+        Rectangle        aCtrlRegion( Point( 0, 0 ), GetSizePixel() );
         ControlState     nState = CTRL_STATE_DEFAULT|CTRL_STATE_ENABLED;
-        Region aBoundingRgn, aContentRgn;
+        Rectangle aBoundingRgn, aContentRgn;
 
         // get native size of a check box
         if( pThis->GetNativeControlRegion( CTRL_CHECKBOX, PART_ENTIRE_CONTROL, aCtrlRegion,
                                            nState, aControlValue, rtl::OUString(),
                                            aBoundingRgn, aContentRgn ) )
         {
-            Rectangle aCont(aContentRgn.GetBoundRect());
-            aSize = aCont.GetSize();
+            aSize = aContentRgn.GetSize();
             bDefaultSize = false;
         }
     }
@@ -4234,16 +4259,15 @@ void CheckBox::ImplSetMinimumNWFSize()
 
     ImplControlValue aControlValue;
     Size aCurSize( GetSizePixel() );
-    Region aCtrlRegion = Region( Rectangle( Point( 0, 0 ), aCurSize ) );
-    Region aBoundingRgn, aContentRgn;
+    Rectangle aCtrlRegion( Point( 0, 0 ), aCurSize );
+    Rectangle aBoundingRgn, aContentRgn;
 
     // get native size of a radiobutton
     if( GetNativeControlRegion( CTRL_CHECKBOX, PART_ENTIRE_CONTROL, aCtrlRegion,
                                 CTRL_STATE_DEFAULT|CTRL_STATE_ENABLED, aControlValue, rtl::OUString(),
                                 aBoundingRgn, aContentRgn ) )
     {
-        Rectangle aCont(aContentRgn.GetBoundRect());
-        Size aSize = aCont.GetSize();
+        Size aSize = aContentRgn.GetSize();
 
         if( aSize.Height() > aCurSize.Height() )
         {
@@ -4444,8 +4468,8 @@ void DisclosureButton::ImplDrawCheckBoxState()
 
     Rectangle aStateRect( GetStateRect() );
 
-    ImplControlValue    aControlValue( GetState() == STATE_CHECK ? BUTTONVALUE_ON : BUTTONVALUE_OFF, rtl::OUString(), 0 );
-    Region              aCtrlRegion( aStateRect );
+    ImplControlValue    aControlValue( GetState() == STATE_CHECK ? BUTTONVALUE_ON : BUTTONVALUE_OFF );
+    Rectangle           aCtrlRegion( aStateRect );
     ControlState        nState = 0;
 
     if ( HasFocus() )                       nState |= CTRL_STATE_FOCUSED;

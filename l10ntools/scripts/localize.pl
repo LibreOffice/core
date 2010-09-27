@@ -461,6 +461,7 @@ sub collectfiles{
     ### Search sdf particles
     #print STDOUT "### Searching sdf particles\n";
     my $working_path = getcwd();
+    chdir $ENV{SOURCE_ROOT_DIR}, if defined $ENV{SOURCE_ROOT_DIR};
     #chdir $srcpath;
     #find ( { wanted => \&wanted , follow => 1 }, getcwd() );
     #chdir $working_path;
@@ -491,7 +492,7 @@ sub collectfiles{
         # -e
         # if ( -x $command ){
         if( $command ){
-            if( !$bVerbose  ){ $args .= " -QQ "; }
+            if( !$bVerbose  ){ $args .= " "; }
             $args .= " -e -f $localizeSDF -l ";
             my $bFlag="";
             if( $bAll ) {$args .= " en-US";}
@@ -701,6 +702,7 @@ sub collectfiles{
     close DESTFILE;
     close LOCALIZEPARTICLE;
     close ALLPARTICLES_MERGED;
+    chdir $working_path;
 
     #print STDOUT "DBG: \$localizeSDF $localizeSDF \$particleSDF_merged $particleSDF_merged\n";
     unlink $localizeSDF , $particleSDF_merged ,  $my_localize_log;

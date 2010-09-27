@@ -80,31 +80,17 @@ using ::com::sun::star::graphic::XGraphic;
 using ::com::sun::star::uno::Reference;
 using namespace ::toolkit;
 
+#define IMPL_SERVICEINFO_DERIVED( ImplName, BaseClass, ServiceName ) \
+    ::rtl::OUString SAL_CALL ImplName::getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException) { return ::rtl::OUString::createFromAscii( "stardiv.Toolkit." #ImplName ); } \
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL ImplName::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException) \
+                            { \
+                                ::com::sun::star::uno::Sequence< ::rtl::OUString > aNames = BaseClass::getSupportedServiceNames( ); \
+                                aNames.realloc( aNames.getLength() + 1 ); \
+                                aNames[ aNames.getLength() - 1 ] = ::rtl::OUString::createFromAscii( ServiceName ); \
+                                return aNames; \
+                            } \
 
-//  ----------------------------------------------------
-//  helper
-//  ----------------------------------------------------
 
-static void lcl_knitImageComponents( const uno::Reference< awt::XControlModel >& _rxModel,
-                                const uno::Reference< awt::XWindowPeer >& _rxPeer,
-                                bool _bAdd )
-{
-    uno::Reference< awt::XImageProducer > xProducer( _rxModel, uno::UNO_QUERY );
-    if ( xProducer.is() )
-    {
-        uno::Reference< awt::XImageConsumer > xConsumer( _rxPeer, uno::UNO_QUERY );
-        if ( xConsumer.is() )
-        {
-            if ( _bAdd )
-            {
-                xProducer->addConsumer( xConsumer );
-                xProducer->startProduction();
-            }
-            else
-                xProducer->removeConsumer( xConsumer );
-        }
-    }
-}
 
 //  ----------------------------------------------------
 //  class UnoControlEditModel
@@ -543,37 +529,16 @@ UnoFileControl::UnoFileControl()
 }
 
 //  ----------------------------------------------------
-//  class ImageProducerControlModel
+//  class GraphicControlModel
 //  ----------------------------------------------------
-uno::Any SAL_CALL ImageProducerControlModel::queryInterface( const uno::Type & rType ) throw(uno::RuntimeException)
-{
-    return UnoControlModel::queryInterface( rType );
-}
-
-uno::Any SAL_CALL ImageProducerControlModel::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
-{
-    uno::Any aRet = ::cppu::queryInterface( rType, SAL_STATIC_CAST( awt::XImageProducer*, this ) );
-    return (aRet.hasValue() ? aRet : UnoControlModel::queryAggregation( rType ));
-}
-
-void SAL_CALL ImageProducerControlModel::acquire() throw()
-{
-    UnoControlModel::acquire();
-}
-
-void SAL_CALL ImageProducerControlModel::release() throw()
-{
-    UnoControlModel::release();
-}
-
-uno::Any ImageProducerControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
+uno::Any GraphicControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_GRAPHIC )
         return uno::makeAny( uno::Reference< graphic::XGraphic >() );
 
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
-    uno::Reference< graphic::XGraphic > ImageProducerControlModel::getGraphicFromURL_nothrow( const ::rtl::OUString& _rURL )
+    uno::Reference< graphic::XGraphic > GraphicControlModel::getGraphicFromURL_nothrow( const ::rtl::OUString& _rURL )
     {
         uno::Reference< graphic::XGraphic > xGraphic;
 
@@ -611,7 +576,7 @@ uno::Any ImageProducerControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) co
         return xGraphic;
     }
 
-void SAL_CALL ImageProducerControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::uno::Exception)
+void SAL_CALL GraphicControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::uno::Exception)
 {
     UnoControlModel::setFastPropertyValue_NoBroadcast( nHandle, rValue );
 
@@ -665,88 +630,9 @@ void SAL_CALL ImageProducerControlModel::setFastPropertyValue_NoBroadcast( sal_I
     }
     catch( const ::com::sun::star::uno::Exception& )
     {
-        OSL_ENSURE( sal_False, "ImageProducerControlModel::setFastPropertyValue_NoBroadcast: caught an exception while aligning the ImagePosition/ImageAlign properties!" );
+        OSL_ENSURE( sal_False, "GraphicControlModel::setFastPropertyValue_NoBroadcast: caught an exception while aligning the ImagePosition/ImageAlign properties!" );
         mbAdjustingImagePosition = sal_False;
     }
-}
-
-void ImageProducerControlModel::addConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& xConsumer ) throw (::com::sun::star::uno::RuntimeException)
-{
-    maListeners.push_back( xConsumer );
-}
-
-void ImageProducerControlModel::removeConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& xConsumer ) throw (::com::sun::star::uno::RuntimeException)
-{
-    maListeners.remove( xConsumer );
-}
-
-void ImageProducerControlModel::startProduction(  ) throw (::com::sun::star::uno::RuntimeException)
-{
-    uno::Sequence<uno::Any> aArgs(1);
-    aArgs.getArray()[0] = getPropertyValue( GetPropertyName( BASEPROPERTY_IMAGEURL ) );
-    uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-    uno::Reference< awt::XImageProducer > xImageProducer( xMSF->createInstanceWithArguments( ::rtl::OUString::createFromAscii( "com.sun.star.awt.ImageProducer" ), aArgs ), uno::UNO_QUERY );
-    if ( xImageProducer.is() )
-    {
-        std::list< uno::Reference< awt::XImageConsumer > >::iterator aIter( maListeners.begin() );
-        while ( aIter != maListeners.end() )
-        {
-            xImageProducer->addConsumer( *aIter );
-            aIter++;
-        }
-        xImageProducer->startProduction();
-    }
-}
-
-//  ----------------------------------------------------
-//  class ImageConsumerControl
-//  ----------------------------------------------------
-
-sal_Bool SAL_CALL ImageConsumerControl::setModel(const uno::Reference< awt::XControlModel >& _rModel) throw ( uno::RuntimeException )
-{
-    // remove the peer as image consumer from the model
-    lcl_knitImageComponents( getModel(), getPeer(), false );
-
-    sal_Bool bReturn = UnoControlBase::setModel( _rModel );
-
-    // add the peer as image consumer to the model
-    lcl_knitImageComponents( getModel(), getPeer(), true );
-
-    return bReturn;
-}
-
-void SAL_CALL ImageConsumerControl::createPeer( const uno::Reference< awt::XToolkit >& rxToolkit, const uno::Reference< awt::XWindowPeer >& rParentPeer ) throw(uno::RuntimeException)
-{
-    // remove the peer as image consumer from the model
-    lcl_knitImageComponents( getModel(), getPeer(), false );
-
-    UnoControlBase::createPeer( rxToolkit, rParentPeer );
-
-    // add the peer as image consumer to the model
-    lcl_knitImageComponents( getModel(), getPeer(), true );
-}
-
-void SAL_CALL ImageConsumerControl::dispose(  ) throw(::com::sun::star::uno::RuntimeException)
-{
-    // remove the peer as image consumer from the model
-    lcl_knitImageComponents( getModel(), getPeer(), false );
-
-    UnoControlBase::dispose();
-}
-
-void ImageConsumerControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, const uno::Any& rVal )
-{
-    sal_uInt16 nType = GetPropertyId( rPropName );
-    if ( nType == BASEPROPERTY_IMAGEURL )
-    {
-        uno::Reference < awt::XImageProducer > xImgProd( getModel(), uno::UNO_QUERY );
-        uno::Reference < awt::XImageConsumer > xImgCons( getPeer(), uno::UNO_QUERY );
-
-        if ( xImgProd.is() && xImgCons.is() )
-            xImgProd->startProduction();
-    }
-    else
-        UnoControlBase::ImplSetPeerProperty( rPropName, rVal );
 }
 
 //  ----------------------------------------------------
@@ -784,7 +670,7 @@ uno::Any UnoControlButtonModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
         return uno::makeAny( (sal_Bool)sal_True );
     }
 
-    return ImageProducerControlModel::ImplGetDefaultValue( nPropId );
+    return GraphicControlModel::ImplGetDefaultValue( nPropId );
 }
 
 ::cppu::IPropertyArrayHelper& UnoControlButtonModel::getInfoHelper()
@@ -847,12 +733,12 @@ void UnoButtonControl::dispose() throw(uno::RuntimeException)
     aEvt.Source = (::cppu::OWeakObject*)this;
     maActionListeners.disposeAndClear( aEvt );
     maItemListeners.disposeAndClear( aEvt );
-    ImageConsumerControl::dispose();
+    UnoControlBase::dispose();
 }
 
 void UnoButtonControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolkit, const uno::Reference< awt::XWindowPeer >  & rParentPeer ) throw(uno::RuntimeException)
 {
-    ImageConsumerControl::createPeer( rxToolkit, rParentPeer );
+    UnoControlBase::createPeer( rxToolkit, rParentPeer );
 
     uno::Reference < awt::XButton > xButton( getPeer(), uno::UNO_QUERY );
     xButton->setActionCommand( maActionCommand );
@@ -896,7 +782,7 @@ void UnoButtonControl::removeItemListener(const uno::Reference< awt::XItemListen
 
 void SAL_CALL UnoButtonControl::disposing( const lang::EventObject& Source ) throw (uno::RuntimeException)
 {
-    ImageConsumerControl::disposing( Source );
+    UnoControlBase::disposing( Source );
 }
 
 void SAL_CALL UnoButtonControl::itemStateChanged( const awt::ItemEvent& rEvent ) throw (uno::RuntimeException)
@@ -966,7 +852,7 @@ uno::Any UnoControlImageControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) 
     if ( nPropId == BASEPROPERTY_IMAGE_SCALE_MODE )
         return makeAny( awt::ImageScaleMode::Anisotropic );
 
-    return ImageProducerControlModel::ImplGetDefaultValue( nPropId );
+    return GraphicControlModel::ImplGetDefaultValue( nPropId );
 }
 
 ::cppu::IPropertyArrayHelper& UnoControlImageControlModel::getInfoHelper()
@@ -989,7 +875,7 @@ uno::Reference< beans::XPropertySetInfo > UnoControlImageControlModel::getProper
 
 void SAL_CALL UnoControlImageControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue ) throw (::com::sun::star::uno::Exception)
 {
-    ImageProducerControlModel::setFastPropertyValue_NoBroadcast( _nHandle, _rValue );
+    GraphicControlModel::setFastPropertyValue_NoBroadcast( _nHandle, _rValue );
 
     // ScaleImage is an older (and less powerful) version of ScaleMode, but keep both in sync as far as possible
     try
@@ -1093,7 +979,7 @@ uno::Any UnoControlRadioButtonModel::ImplGetDefaultValue( sal_uInt16 nPropId ) c
         return uno::makeAny( (sal_Int16)awt::VisualEffect::LOOK3D );
     }
 
-    return ImageProducerControlModel::ImplGetDefaultValue( nPropId );
+    return GraphicControlModel::ImplGetDefaultValue( nPropId );
 }
 
 ::cppu::IPropertyArrayHelper& UnoControlRadioButtonModel::getInfoHelper()
@@ -1136,7 +1022,7 @@ void UnoRadioButtonControl::dispose() throw(uno::RuntimeException)
     lang::EventObject aEvt;
     aEvt.Source = (::cppu::OWeakObject*)this;
     maItemListeners.disposeAndClear( aEvt );
-    ImageConsumerControl::dispose();
+    UnoControlBase::dispose();
 }
 
 
@@ -1147,7 +1033,7 @@ sal_Bool UnoRadioButtonControl::isTransparent() throw(uno::RuntimeException)
 
 void UnoRadioButtonControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolkit, const uno::Reference< awt::XWindowPeer >  & rParentPeer ) throw(uno::RuntimeException)
 {
-    ImageConsumerControl::createPeer( rxToolkit, rParentPeer );
+    UnoControlBase::createPeer( rxToolkit, rParentPeer );
 
     uno::Reference < awt::XRadioButton >  xRadioButton( getPeer(), uno::UNO_QUERY );
     xRadioButton->addItemListener( this );
@@ -1300,7 +1186,7 @@ uno::Any UnoControlCheckBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) cons
         return uno::makeAny( (sal_Int16)awt::VisualEffect::LOOK3D );
     }
 
-    return ImageProducerControlModel::ImplGetDefaultValue( nPropId );
+    return GraphicControlModel::ImplGetDefaultValue( nPropId );
 }
 
 ::cppu::IPropertyArrayHelper& UnoControlCheckBoxModel::getInfoHelper()
@@ -1343,7 +1229,7 @@ void UnoCheckBoxControl::dispose() throw(uno::RuntimeException)
     lang::EventObject aEvt;
     aEvt.Source = (::cppu::OWeakObject*)this;
     maItemListeners.disposeAndClear( aEvt );
-    ImageConsumerControl::dispose();
+    UnoControlBase::dispose();
 }
 
 sal_Bool UnoCheckBoxControl::isTransparent() throw(uno::RuntimeException)
@@ -1353,7 +1239,7 @@ sal_Bool UnoCheckBoxControl::isTransparent() throw(uno::RuntimeException)
 
 void UnoCheckBoxControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolkit, const uno::Reference< awt::XWindowPeer >  & rParentPeer ) throw(uno::RuntimeException)
 {
-    ImageConsumerControl::createPeer( rxToolkit, rParentPeer );
+    UnoControlBase::createPeer( rxToolkit, rParentPeer );
 
     uno::Reference < awt::XCheckBox >  xCheckBox( getPeer(), uno::UNO_QUERY );
     xCheckBox->addItemListener( this );
@@ -1952,6 +1838,13 @@ UnoControlListBoxModel::UnoControlListBoxModel()
 {
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXListBox );
 }
+// ---------------------------------------------------------------------------------------------------------------------
+UnoControlListBoxModel::UnoControlListBoxModel(bool)
+    :UnoControlListBoxModel_Base()
+    ,m_pData( new UnoControlListBoxModel_Data( *this ) )
+    ,m_aItemListListeners( GetMutex() )
+{
+}
 
 // ---------------------------------------------------------------------------------------------------------------------
 UnoControlListBoxModel::UnoControlListBoxModel( const UnoControlListBoxModel& i_rSource )
@@ -1960,13 +1853,15 @@ UnoControlListBoxModel::UnoControlListBoxModel( const UnoControlListBoxModel& i_
     ,m_aItemListListeners( GetMutex() )
 {
 }
-
+UnoControlListBoxModel::~UnoControlListBoxModel()
+{
+}
+IMPL_SERVICEINFO_DERIVED( UnoControlListBoxModel, UnoControlModel, szServiceName2_UnoControlListBoxModel )
 // ---------------------------------------------------------------------------------------------------------------------
 ::rtl::OUString UnoControlListBoxModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
 {
     return ::rtl::OUString::createFromAscii( szServiceName_UnoControlListBoxModel );
 }
-
 // ---------------------------------------------------------------------------------------------------------------------
 uno::Any UnoControlListBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
@@ -2394,6 +2289,7 @@ UnoListBoxControl::UnoListBoxControl()
 {
     return ::rtl::OUString::createFromAscii( "listbox" );
 }
+IMPL_SERVICEINFO_DERIVED( UnoListBoxControl, UnoControlBase, szServiceName2_UnoControlListBox )
 
 void UnoListBoxControl::dispose() throw(uno::RuntimeException)
 {
@@ -2800,18 +2696,76 @@ void SAL_CALL UnoListBoxControl::itemListChanged( const lang::EventObject& i_rEv
     if ( xPeerListener.is() )
         xPeerListener->itemListChanged( i_rEvent );
 }
-
+ActionListenerMultiplexer&  UnoListBoxControl::getActionListeners()
+{
+    return maActionListeners;
+}
+ItemListenerMultiplexer&    UnoListBoxControl::getItemListeners()
+{
+    return maItemListeners;
+}
 //  ----------------------------------------------------
 //  class UnoControlComboBoxModel
 //  ----------------------------------------------------
-UnoControlComboBoxModel::UnoControlComboBoxModel()
+UnoControlComboBoxModel::UnoControlComboBoxModel() : UnoControlListBoxModel(true)
 {
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXComboBox );
 }
 
+IMPL_SERVICEINFO_DERIVED( UnoControlComboBoxModel, UnoControlModel, szServiceName2_UnoControlComboBoxModel )
+
+uno::Reference< beans::XPropertySetInfo > UnoControlComboBoxModel::getPropertySetInfo(  ) throw(uno::RuntimeException)
+{
+    static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
+    return xInfo;
+}
+// ---------------------------------------------------------------------------------------------------------------------
+::cppu::IPropertyArrayHelper& UnoControlComboBoxModel::getInfoHelper()
+{
+    static UnoPropertyArrayHelper* pHelper = NULL;
+    if ( !pHelper )
+    {
+        uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
+        pHelper = new UnoPropertyArrayHelper( aIDs );
+    }
+    return *pHelper;
+}
+
+
 ::rtl::OUString UnoControlComboBoxModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
 {
     return ::rtl::OUString::createFromAscii( szServiceName_UnoControlComboBoxModel );
+}
+void SAL_CALL UnoControlComboBoxModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const uno::Any& rValue ) throw (uno::Exception)
+{
+    UnoControlModel::setFastPropertyValue_NoBroadcast( nHandle, rValue );
+
+    if ( nHandle == BASEPROPERTY_STRINGITEMLIST && !m_pData->m_bSettingLegacyProperty)
+    {
+        // synchronize the legacy StringItemList property with our list items
+        Sequence< ::rtl::OUString > aStringItemList;
+        Any aPropValue;
+        getFastPropertyValue( aPropValue, BASEPROPERTY_STRINGITEMLIST );
+        OSL_VERIFY( aPropValue >>= aStringItemList );
+
+        ::std::vector< ListItem > aItems( aStringItemList.getLength() );
+        ::std::transform(
+            aStringItemList.getConstArray(),
+            aStringItemList.getConstArray() + aStringItemList.getLength(),
+            aItems.begin(),
+            CreateListItem()
+        );
+        m_pData->setAllItems( aItems );
+
+        // since an XItemListListener does not have a "all items modified" or some such method,
+        // we simulate this by notifying removal of all items, followed by insertion of all new
+        // items
+        lang::EventObject aEvent;
+        aEvent.Source = *this;
+        m_aItemListListeners.notifyEach( &XItemListListener::itemListChanged, aEvent );
+        // TODO: OPropertySetHelper calls into this method with the mutex locked ...
+        // which is wrong for the above notifications ...
+    }
 }
 
 uno::Any UnoControlComboBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -2825,27 +2779,6 @@ uno::Any UnoControlComboBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) cons
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
 
-
-::cppu::IPropertyArrayHelper& UnoControlComboBoxModel::getInfoHelper()
-{
-    static UnoPropertyArrayHelper* pHelper = NULL;
-    if ( !pHelper )
-    {
-        uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
-        pHelper = new UnoPropertyArrayHelper( aIDs );
-    }
-    return *pHelper;
-}
-
-// beans::XMultiPropertySet
-uno::Reference< beans::XPropertySetInfo > UnoControlComboBoxModel::getPropertySetInfo(  ) throw(uno::RuntimeException)
-{
-    static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
-    return xInfo;
-}
-
-
-
 //  ----------------------------------------------------
 //  class UnoComboBoxControl
 //  ----------------------------------------------------
@@ -2856,25 +2789,12 @@ UnoComboBoxControl::UnoComboBoxControl()
     maComponentInfos.nWidth = 100;
     maComponentInfos.nHeight = 12;
 }
+IMPL_SERVICEINFO_DERIVED( UnoComboBoxControl, UnoEditControl, szServiceName2_UnoControlComboBox )
 
 ::rtl::OUString UnoComboBoxControl::GetComponentServiceName()
 {
     return ::rtl::OUString::createFromAscii( "combobox" );
 }
-
-// uno::XInterface
-uno::Any UnoComboBoxControl::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
-{
-    uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( awt::XComboBox*, this ) );
-    return (aRet.hasValue() ? aRet : UnoEditControl::queryAggregation( rType ));
-}
-
-// lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( UnoComboBoxControl )
-    getCppuType( ( uno::Reference< awt::XComboBox>* ) NULL ),
-    UnoEditControl::getTypes()
-IMPL_XTYPEPROVIDER_END
 
 void UnoComboBoxControl::dispose() throw(uno::RuntimeException)
 {
@@ -2884,7 +2804,50 @@ void UnoComboBoxControl::dispose() throw(uno::RuntimeException)
     maItemListeners.disposeAndClear( aEvt );
     UnoControl::dispose();
 }
+uno::Any UnoComboBoxControl::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
+{
+    uno::Any aRet = ::cppu::queryInterface( rType,
+                                        SAL_STATIC_CAST( awt::XComboBox*, this ) );
+    if ( !aRet.hasValue() )
+    {
+        aRet = ::cppu::queryInterface( rType,
+                                        SAL_STATIC_CAST( awt::XItemListener*, this ) );
+        if ( !aRet.hasValue() )
+        {
+            aRet = ::cppu::queryInterface( rType,
+                                            SAL_STATIC_CAST( awt::XItemListListener*, this ) );
+        }
+    }
+    return (aRet.hasValue() ? aRet : UnoEditControl::queryAggregation( rType ));
+}
+// lang::XTypeProvider
+IMPL_XTYPEPROVIDER_START( UnoComboBoxControl )
+    getCppuType( ( uno::Reference< awt::XComboBox>* ) NULL ),
+    getCppuType( ( uno::Reference< awt::XItemListener>* ) NULL ),
+    getCppuType( ( uno::Reference< awt::XItemListListener>* ) NULL ),
+    UnoEditControl::getTypes()
+IMPL_XTYPEPROVIDER_END
 
+void UnoComboBoxControl::updateFromModel()
+{
+    UnoEditControl::updateFromModel();
+
+    Reference< XItemListListener > xItemListListener( getPeer(), UNO_QUERY );
+    ENSURE_OR_RETURN_VOID( xItemListListener.is(), "UnoComboBoxControl::updateFromModel: a peer which is no ItemListListener?!" );
+
+    EventObject aEvent( getModel() );
+    xItemListListener->itemListChanged( aEvent );
+}
+void UnoComboBoxControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, const uno::Any& rVal )
+{
+    if ( rPropName == GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) )
+        // do not forward this to our peer. We are a XItemListListener at our model, and changes in the string item
+        // list (which is a legacy property) will, later, arrive as changes in the ItemList. Those latter changes
+        // will be forwarded to the peer, which will update itself accordingly.
+        return;
+
+    UnoEditControl::ImplSetPeerProperty( rPropName, rVal );
+}
 void UnoComboBoxControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolkit, const uno::Reference< awt::XWindowPeer >  & rParentPeer ) throw(uno::RuntimeException)
 {
     UnoEditControl::createPeer( rxToolkit, rParentPeer );
@@ -2934,6 +2897,93 @@ void UnoComboBoxControl::removeItemListener(const uno::Reference < awt::XItemLis
         xComboBox->removeItemListener( &maItemListeners );
     }
     maItemListeners.removeInterface( l );
+}
+void UnoComboBoxControl::itemStateChanged( const awt::ItemEvent& rEvent ) throw(uno::RuntimeException)
+{
+    if ( maItemListeners.getLength() )
+    {
+        try
+        {
+            maItemListeners.itemStateChanged( rEvent );
+        }
+        catch( const Exception& e )
+        {
+#if OSL_DEBUG_LEVEL == 0
+            (void) e; // suppress warning
+#else
+            ::rtl::OString sMessage( "UnoComboBoxControl::itemStateChanged: caught an exception:\n" );
+            sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US );
+            OSL_ENSURE( sal_False, sMessage.getStr() );
+#endif
+        }
+    }
+}
+sal_Bool SAL_CALL UnoComboBoxControl::setModel( const uno::Reference< awt::XControlModel >& i_rModel ) throw ( uno::RuntimeException )
+{
+    ::osl::MutexGuard aGuard( GetMutex() );
+
+    const Reference< XItemList > xOldItems( getModel(), UNO_QUERY );
+    OSL_ENSURE( xOldItems.is() || !getModel().is(), "UnoComboBoxControl::setModel: illegal old model!" );
+    const Reference< XItemList > xNewItems( i_rModel, UNO_QUERY );
+    OSL_ENSURE( xNewItems.is() || !i_rModel.is(), "UnoComboBoxControl::setModel: illegal new model!" );
+
+    if ( !UnoEditControl::setModel( i_rModel ) )
+        return sal_False;
+
+    if ( xOldItems.is() )
+        xOldItems->removeItemListListener( this );
+    if ( xNewItems.is() )
+        xNewItems->addItemListListener( this );
+
+    return sal_True;
+}
+
+void SAL_CALL UnoComboBoxControl::listItemInserted( const awt::ItemListEvent& i_rEvent ) throw (uno::RuntimeException)
+{
+    const Reference< XItemListListener > xPeerListener( getPeer(), UNO_QUERY );
+    OSL_ENSURE( xPeerListener.is() || !getPeer().is(), "UnoComboBoxControl::listItemInserted: invalid peer!" );
+    if ( xPeerListener.is() )
+        xPeerListener->listItemInserted( i_rEvent );
+}
+
+void SAL_CALL UnoComboBoxControl::listItemRemoved( const awt::ItemListEvent& i_rEvent ) throw (uno::RuntimeException)
+{
+    const Reference< XItemListListener > xPeerListener( getPeer(), UNO_QUERY );
+    OSL_ENSURE( xPeerListener.is() || !getPeer().is(), "UnoComboBoxControl::listItemRemoved: invalid peer!" );
+    if ( xPeerListener.is() )
+        xPeerListener->listItemRemoved( i_rEvent );
+}
+
+void SAL_CALL UnoComboBoxControl::listItemModified( const awt::ItemListEvent& i_rEvent ) throw (uno::RuntimeException)
+{
+    const Reference< XItemListListener > xPeerListener( getPeer(), UNO_QUERY );
+    OSL_ENSURE( xPeerListener.is() || !getPeer().is(), "UnoComboBoxControl::listItemModified: invalid peer!" );
+    if ( xPeerListener.is() )
+        xPeerListener->listItemModified( i_rEvent );
+}
+
+void SAL_CALL UnoComboBoxControl::allItemsRemoved( const lang::EventObject& i_rEvent ) throw (uno::RuntimeException)
+{
+    const Reference< XItemListListener > xPeerListener( getPeer(), UNO_QUERY );
+    OSL_ENSURE( xPeerListener.is() || !getPeer().is(), "UnoComboBoxControl::allItemsRemoved: invalid peer!" );
+    if ( xPeerListener.is() )
+        xPeerListener->allItemsRemoved( i_rEvent );
+}
+
+void SAL_CALL UnoComboBoxControl::itemListChanged( const lang::EventObject& i_rEvent ) throw (uno::RuntimeException)
+{
+    const Reference< XItemListListener > xPeerListener( getPeer(), UNO_QUERY );
+    OSL_ENSURE( xPeerListener.is() || !getPeer().is(), "UnoComboBoxControl::itemListChanged: invalid peer!" );
+    if ( xPeerListener.is() )
+        xPeerListener->itemListChanged( i_rEvent );
+}
+ActionListenerMultiplexer&  UnoComboBoxControl::getActionListeners()
+{
+    return maActionListeners;
+}
+ItemListenerMultiplexer&    UnoComboBoxControl::getItemListeners()
+{
+    return maItemListeners;
 }
 
 void UnoComboBoxControl::addItem( const ::rtl::OUString& aItem, sal_Int16 nPos ) throw(uno::RuntimeException)
