@@ -261,7 +261,8 @@ SdPageObjsTLB::SdPageObjsTLB( Window* pParentWin, const SdResId& rSdResId )
     SetStyle( GetStyle() | WB_TABSTOP | WB_BORDER | WB_HASLINES |
                            WB_HASBUTTONS | // WB_HASLINESATROOT |
                            WB_HSCROLL | // #31562#
-                           WB_HASBUTTONSATROOT );
+                           WB_HASBUTTONSATROOT |
+                           WB_QUICK_SEARCH /* i31275 */ );
     SetNodeBitmaps( Bitmap( SdResId( BMP_EXPAND ) ),
                     Bitmap( SdResId( BMP_COLLAPSE ) ) );
 
