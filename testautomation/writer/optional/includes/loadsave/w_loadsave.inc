@@ -44,8 +44,9 @@ testcase tExportAllReadableFormatsIntoODF
     Dim WorkDirectory as String
     Dim ImportDir as String
     Dim SavedCorrectly as Boolean
-    Dim sExportFilter as string
-    Dim sExportFile as string
+	Dim sExportFilter as string
+	Dim sExportFile as string
+    Dim sExceptionFile as string
     Dim i as Integer
 
     WorkDirectory = ( ConvertPath ( gOfficePath + "user\work\" + gPlatgroup + "\export\"))
@@ -71,103 +72,109 @@ testcase tExportAllReadableFormatsIntoODF
     hFileListCopyLocal( ImportFileList() )
 
     printlog "- Start loading files in list"
-    For i = 1 to listCount(ImportFileList())
-        printlog "- " & i & ". load: " & ImportFileList(i)
-        sExportFile = ImportFileList(i)
-        if GetExtention ( sExportFile ) = "psw" then
+	For i = 1 to listCount(ImportFileList())
+		printlog "- " & i & ". load: " & ImportFileList(i)
+		sExportFile = ImportFileList(i)
+        sExceptionFile  = DateiExtract ( sExportFile )
+        printlog sExceptionFile
+		if GetExtention ( sExportFile ) = "psw" then
             QAErrorlog "#i102221#Pocket Word filter puts General I/O Error"
-        else
-            hFileOpenLocally(  ImportFileList(i) )
-            printlog "-  done"
-
-            Kontext "TextImport"
-            if TextImport.Exists then
-                TextImport.Ok
-                printlog "-  Text import dialog passed"
-            end if
-
-            Kontext "Filterauswahl"
-            if Filterauswahl.Exists then
-                Filterauswahl.Cancel
-                printlog "-  Filterdialog passed"
-            end if
-
-            Kontext "AsciiFilterOptionen"
-            if AsciiFilterOptionen.Exists then
-                AsciiFilterOptionen.Ok
-                printlog "-  ASCII-Filter dialog passed"
-            end if
-
-            Kontext "SecurityWarning"
-            if SecurityWarning.Exists(3) then
-                SecurityWarning.Ok
-                printlog "-  Security warning passed"
-            end if
-
-            Kontext "DocumentWriter"
-            if DocumentWriter.Exists(3) then
-                Do until DocumentWriter.StatusIsProgress = false
-                    wait 500
-                Loop
-            else
-                Kontext "DocumentCalc"
-                if DocumentCalc.Exists(3) then
-                    Do until DocumentCalc.StatusIsProgress = false
-                        wait 500
-                    Loop
-                else
-                    Warnlog "Neither DocumentWriter or DocumentCalc existed? Some other dialogue in focus?"
-                end if
-            end if
-
-            ' Check for macro alert
-            Kontext "SecurityWarning"
-            if SecurityWarning.Exists then
-                if inStr(ImportFileList(i),"sw40") = false then
-                    QAErrorlog "Macro-Security Warning is up though document should have no macro! Macro disabled"
-                end if
-                SecurityWarning.Cancel
-            end if
-            Sleep 1
-
-            Kontext "AlienWarning"
-            if AlienWarning.Exists then
-                AlienWarning.Ok
-                printlog "-  Alien warning passed"
-            end if
-
-            ' HTML-File can't be exported as odf this way
-            if GetExtention(ImportFileList(i)) <> "html" then
-
-                sExportFile = WorkDirectory & "ExportedFile" & i & ".odf"
-                Printlog "-  Save as : " & ConvertPath ( sExportFile )
-                if hFileSaveAsWithFilterKill (sExportFile, "writer8") = true then
-                    printlog "-  done"
-                    printlog "-  close file"
-                    Call hCloseDocument
-
-                    Printlog "-  Open previous saved file"
-                    Call hFileOpenWithFilter (sExportFile, "writer8")
-                    printlog "-  done"
-                    ' Check for macro alert
-                    Kontext "SecurityWarning"
-                    if SecurityWarning.Exists then
-                        if inStr(ImportFileList(i),"sw40")  = false then
-                            QAErrorlog "Macro-Security Warning is up though document should have no macro! Macro disabled"
-                        end if
-                        SecurityWarning.Cancel
-                    end if
-                    Sleep 1
-                else
-                    Warnlog "Unable to save file: " & sExportFile
-                end if
-            else
-                printlog "-  HTML-file is not exported this way"
-            end if
-
-            printlog "-  Close all open files."
-            hFileCloseAll()
-        endif
+        elseif LCase( sExceptionFile ) = "swdos.txt" then
+            QAErrorlog "#i114062#General I/O error loading StarWriter DOS file"
+		else
+			Call hFileOpenLocally( ImportFileList(i) )
+			printlog "-  done"
+	
+			Kontext "TextImport"
+			if TextImport.Exists then
+				TextImport.Ok
+				printlog "-  Text import dialog passed"
+			end if
+	
+			Kontext "Filterauswahl"
+			if Filterauswahl.Exists then
+				Filterauswahl.Cancel
+				printlog "-  Filterdialog passed"
+			end if
+	
+			Kontext "AsciiFilterOptionen"
+			if AsciiFilterOptionen.Exists then
+				AsciiFilterOptionen.Ok
+				printlog "-  ASCII-Filter dialog passed"
+			end if
+	
+			Kontext "SecurityWarning"
+			if SecurityWarning.Exists(3) then
+				SecurityWarning.Ok
+				printlog "-  Security warning passed"
+			end if
+	
+			Kontext "DocumentWriter"
+			if DocumentWriter.Exists(3) then
+				Do until DocumentWriter.StatusIsProgress = false
+					wait 500
+				Loop
+			else
+				Kontext "DocumentCalc"
+				if DocumentCalc.Exists(3) then
+					Do until DocumentCalc.StatusIsProgress = false
+						wait 500
+					Loop
+				else
+					Warnlog "Neither DocumentWriter or DocumentCalc existed? Some other dialogue in focus?"
+				end if
+			end if
+	
+			' Check for macro alert
+			Kontext "SecurityWarning"
+			if SecurityWarning.Exists then
+				if inStr(ImportFileList(i),"sw40") = false then
+					QAErrorlog "Macro-Security Warning is up though document should have no macro! Macro disabled"
+				end if
+				SecurityWarning.Cancel
+			end if
+			Sleep 1
+	
+			Kontext "AlienWarning"
+			if AlienWarning.Exists then
+				AlienWarning.Ok
+				printlog "-  Alien warning passed"
+			end if
+	
+			' HTML-File can't be exported as odf this way
+			if GetExtention(ImportFileList(i)) <> "html" then		
+			
+				sExportFile = WorkDirectory & "ExportedFile" & i & ".odf"
+				Printlog "-  Save as : " & ConvertPath ( sExportFile )
+				if hFileSaveAsWithFilterKill (sExportFile, "writer8") = true then
+					printlog "-  done"
+					printlog "-  close file"
+					Call hCloseDocument
+		
+					Printlog "-  Open previous saved file"
+					Call hFileOpenWithFilter (sExportFile, "writer8")
+					printlog "-  done"
+					' Check for macro alert
+					Kontext "SecurityWarning"
+					if SecurityWarning.Exists then
+						if inStr(ImportFileList(i),"sw40")  = false then
+							QAErrorlog "Macro-Security Warning is up though document should have no macro! Macro disabled"
+						end if
+						SecurityWarning.Cancel
+					end if
+					Sleep 1
+				else
+					Warnlog "Unable to save file: " & sExportFile
+				end if
+			else
+				printlog "-  HTML-file is not exported this way"
+			end if
+	
+			printlog "-  Close all open files."
+			Do Until GetDocumentCount = 0
+				Call hCloseDocument
+			Loop		
+		endif
     next i 'File
 
 endcase
