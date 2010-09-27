@@ -893,7 +893,7 @@ void OfaTreeOptionsDialog::InitTreeAndHandler()
     aTreeLB.SetHelpId( HID_OFADLG_TREELISTBOX );
     aTreeLB.SetStyle( aTreeLB.GetStyle()|WB_HASBUTTONS | WB_HASBUTTONSATROOT |
                            WB_HASLINES | WB_HASLINESATROOT |
-                           WB_CLIPCHILDREN | WB_HSCROLL | WB_FORCE_MAKEVISIBLE );
+                           WB_CLIPCHILDREN | WB_HSCROLL | WB_FORCE_MAKEVISIBLE | WB_QUICK_SEARCH );
     aTreeLB.SetSpaceBetweenEntries( 0 );
     aTreeLB.SetSelectionMode( SINGLE_SELECTION );
     aTreeLB.SetSublistOpenWithLeftRight( TRUE );
