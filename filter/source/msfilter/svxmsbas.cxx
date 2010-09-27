@@ -52,8 +52,8 @@ using namespace com::sun::star::awt;
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/ModuleInfo.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
-#include <com/sun/star/script/XVBAModuleInfo.hpp>
-#include <com/sun/star/script/XVBACompat.hpp>
+#include <com/sun/star/script/vba/XVBACompatibility.hpp>
+#include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
 
 using namespace com::sun::star::container;
 using namespace com::sun::star::script;
@@ -250,12 +250,20 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
     {
         SFX_APP()->EnterBasicCall();
         Reference<XLibraryContainer> xLibContainer = rDocSh.GetBasicContainer();
-        Reference<XVBACompat> xVBACompat( xLibContainer, UNO_QUERY );
-
-        if ( xVBACompat.is() && !bAsComment )
-            xVBACompat->setVBACompatModeOn( sal_True );
-
         DBG_ASSERT( xLibContainer.is(), "No BasicContainer!" );
+
+        if( !bAsComment ) try
+        {
+            Reference< vba::XVBACompatibility > xVBACompat( xLibContainer, UNO_QUERY_THROW );
+            xVBACompat->setVBACompatibilityMode( sal_True );
+            /*  Force creation of the VBAGlobals object, each application will
+                create the right one and store it at the Basic manager. */
+            Reference< XMultiServiceFactory > xFactory( rDocSh.GetModel(), UNO_QUERY_THROW );
+            xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAGlobals" ) ) );
+        }
+        catch( Exception& )
+        {
+        }
 
         UINT16 nStreamCount = aVBA.GetNoStreams();
         Reference<XNameContainer> xLib;
@@ -270,7 +278,7 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
         }
         if( xLib.is() )
         {
-            Reference< script::XVBAModuleInfo > xVBAModuleInfo( xLib, UNO_QUERY );
+            Reference< script::vba::XVBAModuleInfo > xVBAModuleInfo( xLib, UNO_QUERY );
             Reference< container::XNameAccess > xVBACodeNamedObjectAccess;
             if ( !bAsComment )
             {

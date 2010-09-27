@@ -31,6 +31,7 @@
 #ifndef INCLUDED_DMAPPER_LOGGERS_HXX
 #define INCLUDED_DMAPPER_LOGGERS_HXX
 
+#ifdef DEBUG
 #include <resourcemodel/TagLogger.hxx>
 
 namespace writerfilter {
@@ -38,4 +39,5 @@ namespace writerfilter {
         extern TagLogger::Pointer_t dmapper_logger;
     }
 }
+#endif // DEBUG
 #endif // INCLUDED_DMAPPER_LOGGERS_HXX

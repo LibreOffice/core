@@ -24,20 +24,41 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "filter.hrc"
+#ifndef INCLUDED_FORM_CONTROL_HELPER_HXX
+#define INCLUDED_FORM_CONTROL_HELPER_HXX
 
-#define BTN_OK 1
-#define BTN_CANCEL 1
-#define BTN_HELP 1
-#define GRP_PREVIEW 1
-#define GRP_VERSION 2
-#define GRP_COLOR 3
-#define GRP_COMPRESSION 4
-#define CB_PREVIEW_TIFF 1
-#define CB_PREVIEW_EPSI 2
-#define RB_LEVEL1 1
-#define RB_LEVEL2 2
-#define RB_COLOR  3
-#define RB_GRAYSCALE 4
-#define RB_COMPRESSION_LZW 5
-#define RB_COMPRESSION_NONE 6
+#include <FFDataHandler.hxx>
+#include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include "FieldTypes.hxx"
+
+namespace writerfilter {
+namespace dmapper {
+
+using namespace ::com::sun::star;
+
+class FormControlHelper
+{
+public:
+    typedef boost::shared_ptr<FormControlHelper> Pointer_t;
+    FormControlHelper(FieldId eFieldId,
+                      uno::Reference<text::XTextDocument> rTextDocument,
+                      FFDataHandler::Pointer_t pFFData);
+    ~FormControlHelper();
+
+    bool insertControl(uno::Reference<text::XTextRange> xTextRange);
+
+private:
+    FFDataHandler::Pointer_t m_pFFData;
+    struct FormControlHelper_Impl;
+    typedef boost::shared_ptr<FormControlHelper_Impl> ImplPointer_t;
+    ImplPointer_t m_pImpl;
+
+    bool createCheckbox(uno::Reference<text::XTextRange> xTextRange,
+                        const ::rtl::OUString & rControlName);
+};
+
+}
+}
+
+#endif // INCLUDED_FORM_CONTROL_HELPER_HXX
