@@ -46,6 +46,7 @@ SLOFILES= \
         $(SLO)$/chartprimitive2d.obj				\
         $(SLO)$/controlprimitive2d.obj				\
         $(SLO)$/discretebitmapprimitive2d.obj		\
+        $(SLO)$/discreteshadowprimitive2d.obj		\
         $(SLO)$/embedded3dprimitive2d.obj			\
         $(SLO)$/epsprimitive2d.obj					\
         $(SLO)$/fillbitmapprimitive2d.obj			\

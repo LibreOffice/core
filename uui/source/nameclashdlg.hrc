@@ -25,19 +25,17 @@
  *
  ************************************************************************/
 
-#ifndef UUI_PASSCRTDLG_HRC
-#define UUI_PASSCRTDLG_HRC
+#ifndef UUI_NAMECLASHDLG_HRC
+#define UUI_NAMECLASHDLG_HRC
 
-// local identifiers
-#define BTN_PASSCRT_CANCEL 1
-#define ED_PASSWORD_CRT     2
-#define FT_PASSWORD_REPEAT          3
-#define FT_PASSWORD_WARNING          4
-#define ED_PASSWORD_REPEAT     5
-#define FL_FIXED_LINE_1     6
-#define BTN_PASSCRT_OK 7
-#define BTN_PASSCRT_HELP 8
-#define FT_PASSWORD_CRT          9
-#define FT_MSPASSWORD_WARNING 10
+//============================================================================
 
-#endif // UUI_PASSCRTDLG_HRC
+#define FT_FILE_EXISTS_WARNING  20
+#define EDIT_NEW_NAME           21
+#define BTN_OVERWRITE           22
+#define BTN_RENAME              23
+#define BTN_CANCEL              24
+#define BTN_HELP                25
+
+#endif // UUI_NAMECLASHDLG_HRC
+

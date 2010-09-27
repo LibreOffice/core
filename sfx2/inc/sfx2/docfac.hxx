@@ -94,7 +94,7 @@ public:
     USHORT          GetViewFactoryCount() const;
     SfxViewFactory& GetViewFactory(USHORT i = 0) const;
 
-    /// returns the view factory whose GetViewName delivers the requested logical name
+    /// returns the view factory whose GetAPIViewName or GetLegacyViewName delivers the requested logical name
     SfxViewFactory* GetViewFactoryByViewName( const String& i_rViewName ) const;
 
     // Filter

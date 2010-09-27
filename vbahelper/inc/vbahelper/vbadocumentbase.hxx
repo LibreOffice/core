@@ -52,9 +52,7 @@ public:
     virtual ::rtl::OUString SAL_CALL getFullName() throw (css::uno::RuntimeException);
     virtual sal_Bool SAL_CALL getSaved() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setSaved( sal_Bool bSave ) throw (css::uno::RuntimeException);
-
-    virtual css::uno::Any SAL_CALL getVBProject() throw (css::uno::RuntimeException); // Michhael E. Bohn
-
+    virtual css::uno::Any SAL_CALL getVBProject() throw (css::uno::RuntimeException);
 
     // Methods
     virtual void SAL_CALL Close( const css::uno::Any &bSaveChanges,

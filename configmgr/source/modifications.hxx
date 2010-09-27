@@ -54,6 +54,8 @@ public:
 
     void add(Path const & path);
 
+    void remove(Path const & path);
+
     Node const & getRoot() const;
 
 private:

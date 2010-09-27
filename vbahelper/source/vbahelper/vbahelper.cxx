@@ -625,6 +625,30 @@ void PrintOutHelper( SfxViewShell* pViewShell, const uno::Any& From, const uno::
     dispatchExecute( pViewShell, SID_VIEWSHELL1 );
 }
 
+bool extractBoolFromAny( bool& rbValue, const uno::Any& rAny )
+{
+    if( rAny >>= rbValue ) return true;
+
+    sal_Int64 nSigned = 0;
+    if( rAny >>= nSigned ) { rbValue = nSigned != 0; return true; }
+
+    sal_uInt64 nUnsigned = 0;
+    if( rAny >>= nUnsigned ) { rbValue = nUnsigned > 0; return true; }
+
+    double fDouble = 0.0;
+    if( rAny >>= fDouble ) { rbValue = fDouble != 0.0; return true; }
+
+    return false;
+}
+
+bool extractBoolFromAny( const uno::Any& rAny ) throw (uno::RuntimeException)
+{
+    bool bValue = false;
+    if( extractBoolFromAny( bValue, rAny ) )
+        return bValue;
+    throw uno::RuntimeException();
+}
+
 rtl::OUString getAnyAsString( const uno::Any& pvargItem ) throw ( uno::RuntimeException )
 {
     uno::Type aType = pvargItem.getValueType();
@@ -1403,6 +1427,26 @@ void UserFormGeometryHelper::setHeight( double nHeight )
         double points = double( static_cast<double>(_hmm) / factor);
         return points;
     }
+
+        uno::Reference< uno::XInterface > getUnoDocModule( const String& aModName, SfxObjectShell* pShell )
+        {
+            uno::Reference<  uno::XInterface > xIf;
+            if ( pShell )
+            {
+                rtl::OUString sProj( RTL_CONSTASCII_USTRINGPARAM("Standard") );
+                BasicManager* pBasMgr = pShell->GetBasicManager();
+                if ( pBasMgr && pBasMgr->GetName().Len() )
+                    sProj = pShell->GetBasicManager()->GetName();
+                StarBASIC* pBasic = pShell->GetBasicManager()->GetLib( sProj );
+                if ( pBasic )
+                {
+                    SbModule* pMod = pBasic->FindModule( aModName );
+                    if ( pMod )
+                        xIf = pMod->GetUnoModule();
+                }
+            }
+            return xIf;
+        }
 
         SfxObjectShell* getSfxObjShell( const uno::Reference< frame::XModel >& xModel ) throw (uno::RuntimeException)
         {

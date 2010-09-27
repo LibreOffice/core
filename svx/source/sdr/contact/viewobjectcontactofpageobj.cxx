@@ -273,8 +273,15 @@ namespace sdr
                     // init extractor, guarantee existance, set page there
                     mpExtractor->SetStartPage(pPage);
 
+                    // #i105548# also need to copy the VOCRedirector for sub-content creation
+                    mpExtractor->SetViewObjectContactRedirector(GetObjectContact().GetViewObjectContactRedirector());
+
                     // create page content
                     xPageContent = mpExtractor->createPrimitive2DSequenceForPage(rDisplayInfo);
+
+                    // #i105548# reset VOCRedirector to not accidentially have a pointer to a
+                    // temporary class, so calls to it are avoided safely
+                    mpExtractor->SetViewObjectContactRedirector(0);
 
                     // reset recursion flag
                     bInCreatePrimitive2D = false;

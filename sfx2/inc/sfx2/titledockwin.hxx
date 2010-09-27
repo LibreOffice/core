@@ -100,6 +100,11 @@ namespace sfx2
         ToolBox&        GetToolBox()        { return m_aToolbox; }
         const ToolBox&  GetToolBox() const  { return m_aToolbox; }
 
+        /** Return the border that is painted around the inner window as
+            decoration.
+        */
+        SvBorder        GetDecorationBorder (void) const  { return m_aBorder; }
+
     protected:
         // Window overridables
         virtual void Paint( const Rectangle& i_rArea );
@@ -153,6 +158,11 @@ namespace sfx2
             since the last Paint().
         */
         bool                m_bLayoutPending;
+
+        /** Height of the title bar.  Calculated in impl_layout().
+        */
+        int                 m_nTitleBarHeight;
+
     };
 
 //......................................................................................................................
