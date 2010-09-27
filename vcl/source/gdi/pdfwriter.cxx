@@ -38,9 +38,9 @@ PDFWriter::AnyWidget::~AnyWidget()
 {
 }
 
-PDFWriter::PDFWriter( const PDFWriter::PDFWriterContext& rContext )
+PDFWriter::PDFWriter( const PDFWriter::PDFWriterContext& rContext, const com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder >& xEnc )
         :
-        pImplementation( new PDFWriterImpl( rContext ) )
+        pImplementation( new PDFWriterImpl( rContext, xEnc ) )
 {
 }
 
@@ -560,12 +560,12 @@ std::set< PDFWriter::ErrorCode > PDFWriter::GetErrors()
     return ((PDFWriterImpl*)pImplementation)->getErrors();
 }
 
-bool PDFWriter::InitEncryption( PDFWriter::PDFEncryptionProperties& io_rProperties,
-                                const rtl::OUString& i_rOwnerPassword,
-                                const rtl::OUString& i_rUserPassword,
-                                const PDFWriter::PDFDocInfo& i_rDocInfo
-                                )
+com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder >
+PDFWriter::InitEncryption( const rtl::OUString& i_rOwnerPassword,
+                           const rtl::OUString& i_rUserPassword,
+                           bool b128Bit
+                          )
 {
-    return PDFWriterImpl::initEncryption( io_rProperties, i_rOwnerPassword, i_rUserPassword, i_rDocInfo );
+    return PDFWriterImpl::initEncryption( i_rOwnerPassword, i_rUserPassword, b128Bit );
 }
 

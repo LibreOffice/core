@@ -58,6 +58,7 @@ class ImplFontSelectData;
 class ImplFontMetricData;
 class FontSubsetInfo;
 class ZCodec;
+class EncHashTransporter;
 
 // the maximum password length
 #define ENCRYPTED_PWD_SIZE     32
@@ -1023,17 +1024,17 @@ i12626
     pad a password according  algorithm 3.2, step 1 */
     static void padPassword( const rtl::OUString& i_rPassword, sal_uInt8* o_pPaddedPW );
     /* algorithm 3.2: compute an encryption key */
-    static bool computeEncryptionKey( const sal_uInt8* i_pOPW, const sal_uInt8* i_pUPW,
+    static bool computeEncryptionKey( EncHashTransporter*,
                                       vcl::PDFWriter::PDFEncryptionProperties& io_rProperties,
                                       sal_Int32 i_nAccessPermissions
                                      );
     /* algorithm 3.3: computing the encryption dictionary'ss owner password value ( /O ) */
     static bool computeODictionaryValue( const sal_uInt8* i_pPaddedOwnerPassword, const sal_uInt8* i_pPaddedUserPassword,
-                                         vcl::PDFWriter::PDFEncryptionProperties& io_rProperties,
+                                         std::vector< sal_uInt8 >& io_rOValue,
                                          sal_Int32 i_nKeyLength, sal_Int32 i_nRC4KeyLength
                                         );
     /* algorithm 3.4 or 3.5: computing the encryption dictionary's user password value ( /U ) revision 2 or 3 of the standard security handler */
-    static bool computeUDictionaryValue( const sal_uInt8* i_pPaddedOwnerPassword, const sal_uInt8* i_pPaddedUserPassword,
+    static bool computeUDictionaryValue( EncHashTransporter* i_pTransporter,
                                          vcl::PDFWriter::PDFEncryptionProperties& io_rProperties,
                                          sal_Int32 i_nKeyLength, sal_Int32 i_nRC4KeyLength,
                                          sal_Int32 i_nAccessPermissions
@@ -1047,15 +1048,15 @@ i12626
     static sal_Int32 computeAccessPermissions( const vcl::PDFWriter::PDFEncryptionProperties& i_rProperties,
                                                sal_Int32& o_rKeyLength, sal_Int32& o_rRC4KeyLength );
     void setupDocInfo();
+    bool prepareEncryption( const com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder >& );
 public:
-    PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext );
+    PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext, const com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder >& );
     ~PDFWriterImpl();
 
-    static bool initEncryption( vcl::PDFWriter::PDFEncryptionProperties& io_rProperties,
-                                const rtl::OUString& i_rOwnerPassword,
-                                const rtl::OUString& i_rUserPassword,
-                                const vcl::PDFWriter::PDFDocInfo& i_rDocInfo
-                                );
+    static com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder >
+           initEncryption( const rtl::OUString& i_rOwnerPassword,
+                           const rtl::OUString& i_rUserPassword,
+                           bool b128Bit );
 
     /*  for OutputDevice so the reference device can have a list
      *  that contains only suitable fonts (subsettable or builtin)

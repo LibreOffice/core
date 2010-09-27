@@ -38,7 +38,8 @@
 #include <vcl/font.hxx>
 #include <vcl/graphictools.hxx>
 
-#include <com/sun/star/io/XOutputStream.hpp>
+#include "com/sun/star/io/XOutputStream.hpp"
+#include "com/sun/star/beans/XMaterialHolder.hpp"
 
 #include <list>
 #include <vector>
@@ -498,7 +499,7 @@ The following structure describes the permissions used in PDF security
         // EncryptionKey is actually a construct out of OValue, UValue and DocumentIdentifier
         // if these do not match, behavior is undefined, most likely an invalid PDF will be produced
         // OValue, UValue, EncryptionKey and DocumentIdentifier can be computed from
-        // PDFDocInfo, Owner password and User password usend the InitEncryption method which
+        // PDFDocInfo, Owner password and User password used the InitEncryption method which
         // implements the algorithms described in the PDF reference chapter 3.5: Encryption
         std::vector<sal_uInt8> OValue;
         std::vector<sal_uInt8> UValue;
@@ -623,7 +624,7 @@ The following structure describes the permissions used in PDF security
         {}
     };
 
-    PDFWriter( const PDFWriterContext& rContext );
+    PDFWriter( const PDFWriterContext& rContext, const com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder >& );
     ~PDFWriter();
 
     /** Returns an OutputDevice for formatting
@@ -666,11 +667,11 @@ The following structure describes the permissions used in PDF security
 
     PDFVersion GetVersion() const;
 
-    static bool InitEncryption( PDFWriter::PDFEncryptionProperties& io_rProperties,
-                                const rtl::OUString& i_rOwnerPassword,
-                                const rtl::OUString& i_rUserPassword,
-                                const PDFWriter::PDFDocInfo& i_rDocInfo
-                                );
+    static com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder >
+           InitEncryption( const rtl::OUString& i_rOwnerPassword,
+                           const rtl::OUString& i_rUserPassword,
+                           bool b128Bit
+                         );
 
     /* functions for graphics state */
     /* flag values: see vcl/outdev.hxx */
