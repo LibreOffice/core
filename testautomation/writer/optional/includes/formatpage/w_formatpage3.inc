@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description : Test the functionality of Page Formatting / Page Styles - 3
 '*
@@ -641,6 +641,7 @@ testcase tFormatPage_37
         case 39   : sHeader = "Riga d'intestazione"
         case 46   : sHeader = "Sidhuvud"
         case 49   : sHeader = "Kopfzeile"
+        case 50   : sHeader = "Glava"
         case 55   : sHeader = "Cabeçalho"
         case 81   : sHeader = "ヘッダ"
         case 82   : sHeader = "머리글"
@@ -689,6 +690,7 @@ testcase tFormatPage_38
         case 39   : sFooter = "Piè di pagina"
         case 46   : sFooter = "Sidfot"
         case 49   : sFooter = "Fußzeile"
+        case 50   : sFooter = "Noga"
         case 55   : sFooter = "Rodapé"
         case 81   : sFooter = "フッタ"
         case 82   : sFooter = "바닥글"
@@ -866,23 +868,23 @@ testcase tFormatPage_41
     Dim sWidthColumn1 as String
     Dim sWidthColumn2 as String
     Dim sWidthColumn3 as String
-    
+
     sTestFile     = Convertpath (gTesttoolpath + "writer\optional\input\formatpage\testColumnInPage2.sxw")
     sColumn       = "3"
     sWidthColumn1 = "2" + gSeperator + "00"
     sWidthColumn2 = "4" + gSeperator + "00"
-    
+
     PrintLog "- create columns with different width "
     '/// create columns with different width
-    
+
     Call hNewDocument
-    
+
     '/// Open test file testColumnInPage2.sxw
     '/// + (The test file includes 2 pages , some text is
     '/// + in 1st page and another is in 2nd page)
     Call hFileOpen(sTestFile)
     Call sMakeReadOnlyDocumentEditable
-    
+
     '/// Create 3 with different columns . formatPage ,
     '/// + tabpage columns , set 3 columns
     Call fFormatPageWriter("TabSpalten")
@@ -899,14 +901,14 @@ testcase tFormatPage_41
     sWidthColumn3 = Spaltenbreite3.GetText
     wait 500
     TabSpalten.OK
-    
+
     '/// Check if columns' width is right
     fFormatPageWriter("TabSpalten")
     if Left$(Spaltenbreite1.GetText,4) <> sWidthColumn1 then Warnlog "the column1's width isn't set correctly !"
     if Left$(Spaltenbreite2.GetText,4) <> sWidthColumn2 then Warnlog "the column2's width isn't set correctly !"
     if Spaltenbreite3.GetText <> sWidthColumn3 then Warnlog "the column3's width isn't set correctly !"
     TabSpalten.Cancel
-    
+
     'detailed check for column1
     Kontext
     EditSearchAndReplace
@@ -916,12 +918,12 @@ testcase tFormatPage_41
     SearchAll.Click
     Sleep 1
     FindAndReplace.Close
-    
+
     Call wTypeKeys "<Home>"
     Call wTypeKeys "<Shift End>"
     EditCopy
     if Len(GetClipboardText) > 8 then Warnlog "Something wrong in the column1"
-    
+
     'detailed check for column2
     Kontext
     EditSearchAndReplace
@@ -931,12 +933,12 @@ testcase tFormatPage_41
     SearchAll.Click
     Sleep 1
     FindAndReplace.Close
-    
+
     Call wTypeKeys "<Home>"
     Call wTypeKeys "<Shift End>"
     EditCopy
     if Len(GetClipboardText) > 14 then Warnlog "Something wrong in the column2"
-    
+
     printlog "  Close active document "
     Do Until GetDocumentCount = 0
         Call hCloseDocument

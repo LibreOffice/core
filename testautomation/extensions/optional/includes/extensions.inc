@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : thorsten.bosbach@sun.com
+'* owner : thorsten.bosbach@oracle.com
 '*
 '* short description : Function test of extension manager
 '*
@@ -620,16 +620,24 @@ testcase tExtensionsFunction
     ' uninstall all components, that were installed
     a = listCount(aRemovePackages())
     ToolsPackageManager
+
     kontext "PackageManager"
     If PackageManager.exists(10) then
+
         BrowsePackages.typeKeys("<home>")
+        waitslot()
+
         ii = 1
         while (ii < BrowsePackages.getItemCount +1)
+        
+            wait( 2000 ) ' Required, Extension Manager needs time to populate
             kontext "PackageManager"
             'BrowsePackages.typeKeys("+")
             'BrowsePackages.typeKeys("<down>")
             sTemp2 = sTemp
             BrowsePackages.select ii
+            waitslot()
+            
             sTemp = BrowsePackages.getItemText (ii,1)
             if right(sTemp,3) = "oxt" then
                 for x = 1 to a
@@ -665,7 +673,7 @@ testcase tExtensionsFunction
             ii = ii+1
         wend
         kontext "PackageManager"
-        PackageManager.close
+        hCloseDialog( PackageManager, "close" )
     else
         qaErrorLog "disabling installed extensions failed;"
     endif

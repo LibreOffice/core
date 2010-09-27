@@ -1,0 +1,14 @@
+My Macros
+Oracle Open Office Macros
+Capitalise
+capitalise.bsh
+HelloWorld
+helloworld.bsh
+Highlight
+ButtonPressHandler.bsh
+ShowDialog.bsh
+MemoryUsage
+memusage.bsh
+WordCount
+wordcount.bsh
+Untitled 1

@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description : Ressource-Test Writer Document
 '*
@@ -86,6 +86,7 @@ sub LoadIncludeFiles
     use "global\required\includes\g_001.inc"
     use "global\required\includes\g_option.inc"                	' global subroutines for Tools / Options
     use "global\required\includes\g_printing.inc"
+    use "global\required\includes\g_findbar.inc"
     use "global\tools\includes\optional\t_xml_filter1.inc"       ' global routines for XML-functionality
     use "global\tools\includes\optional\t_docfuncs.inc"
     use "global\tools\includes\optional\t_control_objects.inc"

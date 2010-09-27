@@ -25,7 +25,7 @@
 '
 '/**************************************************************************
 '*
-'* Owner : wolfram.garten@sun.com
+'* Owner : wolfram.garten@oracle.com
 '*
 '* short description : Impress User-Scenario: Beginner makes presentation.
 '*
@@ -145,6 +145,7 @@ testcase i_us2_pres1
     DocumentImpress.UseMenu
     hMenuSelectNr (4)
     hMenuSelectNr (1)
+    call sSelectEmptyLayout
     sleep (1)
 
     kontext "Slides"

@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* Owner : wolfram.garten@sun.com
+'* Owner : wolfram.garten@oracle.com
 '*
 '* short description :
 '*
@@ -258,6 +258,7 @@ testcase tEditObjectEdit
   else
 
       Call hNewDocument
+      call sSelectEmptyLayout
       sleep 1               '/// new document ///'
       InsertObjectOLEObject             '/// insert writer ole object ///'
       Kontext "OLEObjektEinfuegen"

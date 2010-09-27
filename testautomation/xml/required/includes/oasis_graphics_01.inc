@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : wolfram.garten@sun.com
+'* owner : wolfram.garten@oracle.com
 '*
 '* short description : Library 01 for OASIS OpenDocument File Format (Presentation and Drawing) test
 '*
