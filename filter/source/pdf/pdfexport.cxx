@@ -386,6 +386,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
             Any                         aSelection;
             PDFWriter::PDFWriterContext aContext;
             rtl::OUString aOpenPassword, aPermissionPassword;
+            Reference< beans::XMaterialHolder > xEnc;
 
 
             // getting the string for the creator
@@ -511,6 +512,8 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     rFilterData[ nData ].Value >>= mbRestrictPermissions;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "PermissionPassword" ) ) )
                     rFilterData[ nData ].Value >>= aPermissionPassword;
+                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "PreparedPasswords" ) ) )
+                    rFilterData[ nData ].Value >>= xEnc;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "Printing" ) ) )
                     rFilterData[ nData ].Value >>= mnPrintAllowed;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "Changes" ) ) )
@@ -545,14 +548,17 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 break;
             case 1:
                 aContext.Version    = PDFWriter::PDF_A_1;
-//force the tagged PDF as well
+                //force the tagged PDF as well
                 mbUseTaggedPDF = sal_True;
-//force embedding of standard fonts
+                //force embedding of standard fonts
                 mbEmbedStandardFonts = sal_True;
-//force disabling of form conversion
+                //force disabling of form conversion
                 mbExportFormFields = sal_False;
-// PDF/A does not allow transparencies
+                // PDF/A does not allow transparencies
                 mbRemoveTransparencies = sal_True;
+                // no encryption
+                mbEncrypt = sal_False;
+                xEnc.clear();
                 break;
             }
 
@@ -636,7 +642,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
 
 //set check for permission change password
 // if not enabled and no permission password, force permissions to default as if PDF where without encryption
-                if( mbRestrictPermissions && aPermissionPassword.getLength() > 0 )
+                if( mbRestrictPermissions && (xEnc.is() || aPermissionPassword.getLength() > 0) )
                 {
                     mbEncrypt = sal_True;
 //permission set as desired, done after
@@ -686,8 +692,8 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
 
                 aContext.Encryption.CanCopyOrExtract                = mbCanCopyOrExtract;
                 aContext.Encryption.CanExtractForAccessibility  = mbCanExtractForAccessibility;
-                if( mbEncrypt )
-                    PDFWriter::InitEncryption( aContext.Encryption, aPermissionPassword, aOpenPassword, aContext.DocumentInfo );
+                if( mbEncrypt && ! xEnc.is() )
+                    xEnc = PDFWriter::InitEncryption( aPermissionPassword, aOpenPassword, aContext.Encryption.Security128bit );
             }
             /*
             * FIXME: the entries are only implicitly defined by the resource file. Should there
@@ -751,7 +757,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
 //<---
             }
 // all context data set, time to create the printing device
-            PDFWriter*          pPDFWriter = new PDFWriter( aContext );
+            PDFWriter*          pPDFWriter = new PDFWriter( aContext, xEnc );
             OutputDevice*       pOut = pPDFWriter->GetReferenceDevice();
             vcl::PDFExtOutDevData* pPDFExtOutDevData = NULL;
 

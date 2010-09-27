@@ -126,14 +126,14 @@ protected:
     sal_Bool                    mbFirstPageLeft;
 
     sal_Bool                    mbEncrypt;
-    String                      msUserPassword;
 
     sal_Bool                    mbRestrictPermissions;
-    String                      msOwnerPassword;
+    rtl::OUString               msOwnerPassword;
     sal_Int32                   mnPrint;
     sal_Int32                   mnChangesAllowed;
     sal_Bool                    mbCanCopyOrExtract;
     sal_Bool                    mbCanExtractForAccessibility;
+    com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder > mxPreparedPasswords;
 
     sal_Bool                    mbIsRangeChecked;
     String                      msPageRange;
@@ -340,11 +340,14 @@ class ImpPDFTabSecurityPage : public SfxTabPage
     CheckBox                    maCbEnableCopy;
     CheckBox                    maCbEnableAccessibility;
 
-    String                      msUserPassword;
     String                      msUserPwdTitle;
 
-    String                      msOwnerPassword;
+    bool                        mbHaveOwnerPassword;
+    bool                        mbHaveUserPassword;
+    rtl::OUString               msOwnerPassword;
     String                      msOwnerPwdTitle;
+
+    com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder > mxPreparedPasswords;
 
     long nWidth;
 

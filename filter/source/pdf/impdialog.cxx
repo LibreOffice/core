@@ -382,8 +382,8 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
     nElementAdded--;
 
 // add the open password
-    aRet[ aRet.getLength() - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "DocumentOpenPassword" ) );
-    aRet[ aRet.getLength() - nElementAdded ].Value <<= OUString( msUserPassword );
+    aRet[ aRet.getLength() - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PreparedPasswords" ) );
+    aRet[ aRet.getLength() - nElementAdded ].Value <<= mxPreparedPasswords;
     nElementAdded--;
 
 //the restrict permission flag (needed to have the scripting consistent with the dialog)
@@ -1043,6 +1043,8 @@ ImpPDFTabSecurityPage::ImpPDFTabSecurityPage( Window* i_pParent,
     maCbEnableAccessibility( this, PDFFilterResId( CB_ENAB_ACCESS ) ),
 
     msUserPwdTitle( PDFFilterResId( STR_PDF_EXPORT_UDPWD ) ),
+    mbHaveOwnerPassword( false ),
+    mbHaveUserPassword( false ),
 
     msOwnerPwdTitle( PDFFilterResId( STR_PDF_EXPORT_ODPWD ) )
 {
@@ -1102,13 +1104,11 @@ void ImpPDFTabSecurityPage::GetFilterConfigItem( ImpPDFTabDialog* paParent  )
 {
 // please note that in PDF/A-1a mode even if this are copied back,
 // the security settings are forced disabled in PDFExport::Export
-    paParent->mbEncrypt = (msUserPassword.Len() > 0);
-    if( paParent->mbEncrypt )
-        paParent->msUserPassword = msUserPassword;
+    paParent->mbEncrypt = mbHaveUserPassword;
+    paParent->mxPreparedPasswords = mxPreparedPasswords;
 
-    paParent->mbRestrictPermissions = (msOwnerPassword.Len() > 0);
-    if( msOwnerPassword.Len() > 0 )
-        paParent->msOwnerPassword = msOwnerPassword;
+    paParent->mbRestrictPermissions = mbHaveOwnerPassword;
+    paParent->msOwnerPassword = msOwnerPassword;
 
 //verify print status
     paParent->mnPrint = 0;
@@ -1192,8 +1192,26 @@ IMPL_LINK( ImpPDFTabSecurityPage, ClickmaPbSetPwdHdl, void*, EMPTYARG )
     aPwdDialog.AllowAsciiOnly();
     if( aPwdDialog.Execute() == RET_OK )  //OK issued get password and set it
     {
-        msUserPassword = aPwdDialog.GetPassword();
-        msOwnerPassword = aPwdDialog.GetPassword2();
+        rtl::OUString aUserPW( aPwdDialog.GetPassword() );
+        rtl::OUString aOwnerPW( aPwdDialog.GetPassword2() );
+
+        mbHaveUserPassword = (aUserPW.getLength() != 0);
+        mbHaveOwnerPassword = (aOwnerPW.getLength() != 0);
+
+        mxPreparedPasswords = vcl::PDFWriter::InitEncryption( aOwnerPW, aUserPW, true );
+
+        // FIXME: used as parameter for hybrid PDF
+        if( mbHaveOwnerPassword )
+        {
+            // force deep copy, not ref count
+            msOwnerPassword = rtl::OUString( aOwnerPW.getStr(), aOwnerPW.getLength() );
+        }
+        else
+            msOwnerPassword = rtl::OUString();
+
+        // trash clear text passwords string memory
+        rtl_zeroMemory( (void*)aUserPW.getStr(), aUserPW.getLength() );
+        rtl_zeroMemory( (void*)aOwnerPW.getStr(), aOwnerPW.getLength() );
     }
     enablePermissionControls();
     return 0;
@@ -1201,10 +1219,9 @@ IMPL_LINK( ImpPDFTabSecurityPage, ClickmaPbSetPwdHdl, void*, EMPTYARG )
 
 void ImpPDFTabSecurityPage::enablePermissionControls()
 {
-    maFtUserPwd.SetText( (msUserPassword.Len() > 0 && IsEnabled()) ? maUserPwdSet : maUserPwdUnset );
+    maFtUserPwd.SetText( (mbHaveUserPassword && IsEnabled()) ? maUserPwdSet : maUserPwdUnset );
 
-    sal_Bool bLocalEnable = (msOwnerPassword.Len() > 0) && IsEnabled();
-
+    sal_Bool bLocalEnable = mbHaveOwnerPassword && IsEnabled();
     maFtOwnerPwd.SetText( bLocalEnable ? maOwnerPwdSet : maOwnerPwdUnset );
 
     maFlPrintPermissions.Enable( bLocalEnable );
