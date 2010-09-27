@@ -103,7 +103,26 @@ void OSQLAnalyzer::start(OSQLParseNode* pSQLParseNode)
                     m_pConnection->throwGenericSQLException(STR_QUERY_COMPLEX_COUNT,NULL);
                 }
                 else
-                    m_aSelectionEvaluations.push_back( TPredicates() );
+                {
+                    if  (   SQL_ISPUNCTUATION( pColumnRef, "*" )
+                        ||  (   SQL_ISRULE( pColumnRef, column_ref )
+                            &&  ( pColumnRef->count() == 3 )
+                            &&  ( pColumnRef->getChild(0)->getNodeType() == SQL_NODE_NAME )
+                            &&  SQL_ISPUNCTUATION( pColumnRef->getChild(1), "." )
+                            &&  SQL_ISRULE( pColumnRef->getChild(2), column_val )
+                            &&  SQL_ISPUNCTUATION( pColumnRef->getChild(2)->getChild(0), "*" )
+                            )
+                        )
+                    {
+                        // push one element for each column of our table
+                        const Reference< XNameAccess > xColumnNames( m_aCompiler->getOrigColumns() );
+                        const Sequence< ::rtl::OUString > aColumnNames( xColumnNames->getElementNames() );
+                        for ( sal_Int32 i=0; i<aColumnNames.getLength(); ++i )
+                            m_aSelectionEvaluations.push_back( TPredicates() );
+                    }
+                    else
+                        m_aSelectionEvaluations.push_back( TPredicates() );
+                }
             }
         }
     }
