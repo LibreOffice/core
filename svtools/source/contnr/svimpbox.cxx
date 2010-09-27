@@ -684,6 +684,8 @@ void SvImpLBox::SetCursor( SvLBoxEntry* pEntry, BOOL bForceNoSelect )
         }
     }
     nFlags &= (~F_DESEL_ALL);
+
+    pView->OnCurrentEntryChanged();
 }
 
 void SvImpLBox::ShowCursor( BOOL bShow )
@@ -2484,13 +2486,17 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
                 else if ( !bShift /*&& !bMod1*/ )
                 {
                     if ( aSelEng.IsAddMode() )
+                    {
                         // toggle selection
                         pView->Select( pCursor, !pView->IsSelected( pCursor ) );
-                    else
+                    }
+                    else if ( !pView->IsSelected( pCursor ) )
                     {
                         SelAllDestrAnch( FALSE );
                         pView->Select( pCursor, TRUE );
                     }
+                    else
+                        bKeyUsed = FALSE;
                 }
                 else
                     bKeyUsed = FALSE;
@@ -2571,8 +2577,8 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
         case KEY_A:
             if( bMod1 )
                 SelAllDestrAnch( TRUE );
-//          else
-//              bKeyUsed = FALSE;   #105907# assume user wants to use quicksearch with key "a", so key is handled!
+            else
+                bKeyUsed = FALSE;
             break;
 
         case KEY_SUBTRACT:
@@ -2683,10 +2689,15 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
             break;
 
         default:
-            if( bMod1 || rKeyCode.GetGroup() == KEYGROUP_FKEYS )
-                // #105907# CTRL or Function key is pressed, assume user don't want to use quicksearch...
-                // if there are groups of keys which should not be handled, they can be added here
-                bKeyUsed = FALSE;
+            // is there any reason why we should eat the events here? The only place where this is called
+            // is from SvTreeListBox::KeyInput. If we set bKeyUsed to TRUE here, then the key input
+            // is just silenced. However, we want SvLBox::KeyInput to get a chance, to do the QuickSelection
+            // handling.
+            // (The old code here which intentionally set bKeyUsed to TRUE said this was because of "quick search"
+            // handling, but actually there was no quick search handling anymore. We just re-implemented it.)
+            // #i31275# / 2009-06-16 / frank.schoenheit@sun.com
+            bKeyUsed = FALSE;
+            break;
     }
     return bKeyUsed;
 }

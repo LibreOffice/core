@@ -467,6 +467,7 @@ void SvIconView::SelectAll( BOOL bSelect, BOOL )
 void SvIconView::SetCurEntry( SvLBoxEntry* _pEntry )
 {
     pImp->SetCursor( _pEntry );
+    OnCurrentEntryChanged();
 }
 
 SvLBoxEntry* SvIconView::GetCurEntry() const
