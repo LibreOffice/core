@@ -117,7 +117,7 @@ void OSQLAnalyzer::start(OSQLParseNode* pSQLParseNode)
                         // push one element for each column of our table
                         const Reference< XNameAccess > xColumnNames( m_aCompiler->getOrigColumns() );
                         const Sequence< ::rtl::OUString > aColumnNames( xColumnNames->getElementNames() );
-                        for ( sal_Int32 i=0; i<aColumnNames.getLength(); ++i )
+                        for ( sal_Int32 j=0; j<aColumnNames.getLength(); ++j )
                             m_aSelectionEvaluations.push_back( TPredicates() );
                     }
                     else
