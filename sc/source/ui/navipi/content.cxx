@@ -145,6 +145,8 @@ ScContentTree::ScContentTree( Window* pParent, const ResId& rResId ) :
     SetNodeDefaultImages();
 
     SetDoubleClickHdl( LINK( this, ScContentTree, ContentDoubleClickHdl ) );
+
+    SetStyle( GetStyle() | WB_QUICK_SEARCH );
 }
 
 ScContentTree::~ScContentTree()
