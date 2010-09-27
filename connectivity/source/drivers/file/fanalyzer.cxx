@@ -292,9 +292,9 @@ void OSQLAnalyzer::setSelectionEvaluationResult(OValueRefRow& _pRow,const ::std:
         if ( aIter->second.isValid() )
         {
             // the first column (index 0) is for convenience only. The first real select column is no 1.
-            sal_Int32   map = nPos + 1;
+            sal_Int32   map = nPos;
             if ( nPos < static_cast< sal_Int32 >( _rColumnMapping.size() ) )
-                map = _rColumnMapping[nPos] + 1;
+                map = _rColumnMapping[nPos];
             if ( map > 0 )
                 aIter->second->startSelection( (_pRow->get())[map] );
         }
