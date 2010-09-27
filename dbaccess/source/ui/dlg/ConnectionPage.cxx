@@ -220,6 +220,8 @@ namespace dbaui
         m_aTestJavaDriver.SetClickHdl(LINK(this,OConnectionTabPage,OnTestJavaClickHdl));
 
         FreeResource();
+
+        LayoutHelper::fitSizeRightAligned( m_aTestConnection );
     }
 
     // -----------------------------------------------------------------------
