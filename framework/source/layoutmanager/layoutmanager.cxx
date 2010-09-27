@@ -67,7 +67,6 @@
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/awt/XSystemDependentWindowPeer.hpp>
-#include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
@@ -327,10 +326,6 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
     ReadGuard aReadLock( m_aLock );
     Reference< XFrame > xFrame = m_xFrame;
     Reference< css::awt::XWindow > xContainerWindow( m_xContainerWindow );
-    Reference< css::awt::XWindow > xTopDockingWindow    = m_xDockAreaWindows[DockingArea_DOCKINGAREA_TOP];
-    Reference< css::awt::XWindow > xLeftDockingWindow   = m_xDockAreaWindows[DockingArea_DOCKINGAREA_LEFT];
-    Reference< css::awt::XWindow > xRightDockingWindow  = m_xDockAreaWindows[DockingArea_DOCKINGAREA_RIGHT];
-    Reference< css::awt::XWindow > xBottomDockingWindow = m_xDockAreaWindows[DockingArea_DOCKINGAREA_BOTTOM];
     Reference< XUIConfiguration > xModuleCfgMgr( m_xModuleCfgMgr, UNO_QUERY );
     Reference< XUIConfiguration > xDocCfgMgr( m_xDocCfgMgr, UNO_QUERY );
     Reference< XNameAccess > xPersistentWindowState( m_xPersistentWindowState );
@@ -1119,55 +1114,12 @@ void LayoutManager::implts_updateUIElementsVisibleState( sal_Bool bSetVisible )
 
     {
         WriteGuard aWriteLock( m_aLock );
+        bOld        = m_bDoLayout;
         m_bDoLayout = sal_True;
-        bOld = m_bDoLayout;
-    }
-
-    ReadGuard aReadLock( m_aLock );
-    aWinVector.reserve(m_aUIElements.size());
-    UIElementVector::iterator pIter;
-    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
-    {
-        if ( pIter->m_xUIElement.is() )
-        {
-            Reference< css::awt::XWindow > xWindow( pIter->m_xUIElement->getRealInterface(), UNO_QUERY );
-            if ( xWindow.is() )
-            {
-                if ( bSetVisible )
-                {
-                    if ( pIter->m_bVisible && !pIter->m_bMasterHide )
-                        aWinVector.push_back( xWindow );
-                }
-                else
-                    aWinVector.push_back( xWindow );
-            }
-        }
-    }
-
-    aReadLock.unlock();
-
-    try
-    {
-        vos::OGuard aGuard( Application::GetSolarMutex() );
-        const sal_uInt32 nCount = aWinVector.size();
-        for ( sal_uInt32 i = 0; i < nCount; i++ )
-        {
-            Reference< css::awt::XWindow > xWindow( aWinVector[i] );
-            if ( xWindow.is() )
-            {
-                // we need VCL here to pass special flags to Show()
-                Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
-                if( pWindow )
-                    pWindow->Show( bSetVisible, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
-            }
-        }
-    }
-    catch ( DisposedException& )
-    {
     }
 
     // Hide/show menubar according to bSetVisible
-    aReadLock.lock();
+    ReadGuard aReadLock( m_aLock );
     Reference< XUIElement > xMenuBar( m_xMenuBar, UNO_QUERY );
     Reference< css::awt::XWindow > xContainerWindow( m_xContainerWindow );
     Reference< XComponent > xInplaceMenuBar( m_xInplaceMenuBar );
@@ -1215,38 +1167,17 @@ void LayoutManager::implts_updateUIElementsVisibleState( sal_Bool bSetVisible )
 
     if ( bSetVisible )
     {
-        m_pToolbarManager->implts_createNonContextSensitiveToolBars();
+        uno::Reference< uno::XInterface > xThis( m_xToolbarManager, uno::UNO_QUERY );
+        if ( xThis.is() )
+            m_pToolbarManager->setVisible(bSetVisible);
         implts_doLayout_notify( sal_False );
     }
     else
     {
-        // Set docking area window size to zero
-        ReadGuard aReadLock2( m_aLock );
-        Reference< css::awt::XWindow > xTopDockingWindow    = m_xDockAreaWindows[DockingArea_DOCKINGAREA_TOP];
-        Reference< css::awt::XWindow > xLeftDockingWindow   = m_xDockAreaWindows[DockingArea_DOCKINGAREA_LEFT];
-        Reference< css::awt::XWindow > xRightDockingWindow  = m_xDockAreaWindows[DockingArea_DOCKINGAREA_RIGHT];
-        Reference< css::awt::XWindow > xBottomDockingWindow = m_xDockAreaWindows[DockingArea_DOCKINGAREA_BOTTOM];
-        aReadLock2.unlock();
-
-        try
-        {
-            if ( xTopDockingWindow.is() )
-                xTopDockingWindow->setPosSize( 0, 0, 0, 0, css::awt::PosSize::POSSIZE );
-            if ( xLeftDockingWindow.is() )
-                xLeftDockingWindow->setPosSize( 0, 0, 0, 0, css::awt::PosSize::POSSIZE );
-            if ( xRightDockingWindow.is() )
-                xRightDockingWindow->setPosSize( 0, 0, 0, 0, css::awt::PosSize::POSSIZE );
-            if ( xBottomDockingWindow.is() )
-                xBottomDockingWindow->setPosSize( 0, 0, 0, 0, css::awt::PosSize::POSSIZE );
-
-            WriteGuard aWriteLock( m_aLock );
-            m_aDockingArea = css::awt::Rectangle();
-            m_bMustDoLayout = sal_True;
-            aWriteLock.unlock();
-        }
-        catch ( Exception& )
-        {
-        }
+        WriteGuard aWriteLock( m_aLock );
+        m_aDockingArea = css::awt::Rectangle();
+        m_bMustDoLayout = sal_True;
+        aWriteLock.unlock();
     }
 }
 
@@ -1491,6 +1422,7 @@ sal_Bool LayoutManager::implts_showProgressBar()
     {
         if ( !pWindow->IsVisible() )
         {
+            implts_setOffset( pWindow->GetSizePixel().Height() );
             pWindow->Show();
             implts_doLayout_notify( sal_False );
         }
@@ -1532,6 +1464,7 @@ sal_Bool LayoutManager::implts_hideProgressBar()
     if ( pWindow && pWindow->IsVisible() &&
          ( bHideStatusBar || bInternalStatusBar ))
     {
+        implts_setOffset( 0 );
         pWindow->Hide();
         implts_doLayout_notify( sal_False );
         return sal_True;
@@ -1558,7 +1491,9 @@ sal_Bool LayoutManager::implts_showStatusBar( sal_Bool bStoreState )
         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pWindow && !pWindow->IsVisible() )
         {
+            implts_setOffset( pWindow->GetSizePixel().Height() );
             pWindow->Show();
+            implts_doLayout_notify( sal_False );
             return sal_True;
         }
     }
@@ -1584,12 +1519,26 @@ sal_Bool LayoutManager::implts_hideStatusBar( sal_Bool bStoreState )
         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pWindow && pWindow->IsVisible() )
         {
+            implts_setOffset( 0 );
             pWindow->Hide();
+            implts_doLayout_notify( sal_False );
             return sal_True;
         }
     }
 
     return sal_False;
+}
+
+void LayoutManager::implts_setOffset( const sal_Int32 nBottomOffset )
+{
+    ::Rectangle aOffsetRect;
+    setZeroRectangle( aOffsetRect );
+    aOffsetRect.setHeight( nBottomOffset );
+
+    // make sure that the toolbar manager refernence/pointer is valid
+    uno::Reference< uno::XInterface > xThis( m_xToolbarManager, uno::UNO_QUERY );
+    if ( xThis.is() )
+        m_pToolbarManager->setDockingAreaOffsets( aOffsetRect );
 }
 
 void LayoutManager::implts_setInplaceMenuBar( const Reference< XIndexAccess >& xMergedMenuBar )
@@ -1684,8 +1633,6 @@ throw (::com::sun::star::uno::RuntimeException)
     m_xFrame = xFrame;
     aWriteLock.unlock();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    // if ( xFrame.is() )
-    //    xFrame->getContainerWindow()->addWindowListener( Reference< css::awt::XWindowListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
 }
 
 void SAL_CALL LayoutManager::reset()
@@ -3937,31 +3884,6 @@ throw( css::uno::RuntimeException )
             xComponentWindow->setPosSize( 0, 0, aSize.Width, aSize.Height, css::awt::PosSize::POSSIZE );
         }
     }
-    else
-    {
-        // resize event for one of the UIElements
-        sal_Bool bLocked( m_bDockingInProgress );
-        sal_Bool bDoLayout( m_bDoLayout );
-        aWriteLock.unlock();
-        /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-
-        if ( !bLocked && !bDoLayout )
-        {
-            // Do not do anything if we are in the middle of a docking process. This would interfere all other
-            // operations. We will store the new position and size in the docking handlers.
-            // Do not do anything if we are in the middle of our layouting process. We will adapt the position
-            // and size of the user interface elements.
-            UIElement aUIElement;
-            if ( implts_findElement( aEvent.Source, aUIElement ))
-            {
-                if ( aUIElement.m_bFloating )
-                    implts_writeNewStateData( aUIElement.m_aName,
-                                            Reference< css::awt::XWindow >( aEvent.Source, UNO_QUERY ));
-                else
-                    doLayout();
-            }
-        }
-    }
 }
 
 void SAL_CALL LayoutManager::windowMoved( const css::awt::WindowEvent& ) throw( css::uno::RuntimeException )
@@ -3992,10 +3914,7 @@ void SAL_CALL LayoutManager::windowShown( const css::lang::EventObject& aEvent )
         /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
         if ( bSetVisible )
-        {
             implts_updateUIElementsVisibleState( sal_True );
-            //implts_doLayout( sal_False );
-        }
     }
 }
 

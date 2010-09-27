@@ -80,14 +80,15 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase3.hxx>
 
 
 namespace framework
 {
 
-class ToolbarLayoutManager : public ::cppu::WeakImplHelper2< ::com::sun::star::awt::XDockableWindowListener,
-                                                             ::com::sun::star::ui::XUIConfigurationListener >,
+class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::awt::XDockableWindowListener,
+                                                             ::com::sun::star::ui::XUIConfigurationListener,
+                                                             ::com::sun::star::awt::XWindowListener >,
                              private ThreadHelpBase // Struct for right initalization of mutex member! Must be first of baseclasses.
 {
     public:
@@ -117,6 +118,8 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper2< ::com::sun::star::a
 
         void createToolbars();
         void destroyToolbars();
+        void setVisible(bool bVisible);
+        bool isVisible() { return m_bVisible; }
 
         bool createToolbar( const ::rtl::OUString& rResourceURL );
         bool destroyToolbar( const ::rtl::OUString& rResourceURL );
@@ -136,6 +139,14 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper2< ::com::sun::star::a
         //  XEventListener
         //---------------------------------------------------------------------------------------------------------
         virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException );
+
+        //---------------------------------------------------------------------------------------------------------
+        //  XWindowListener
+        //---------------------------------------------------------------------------------------------------------
+        virtual void SAL_CALL windowResized( const css::awt::WindowEvent& aEvent ) throw( css::uno::RuntimeException );
+        virtual void SAL_CALL windowMoved( const css::awt::WindowEvent& aEvent ) throw( css::uno::RuntimeException );
+        virtual void SAL_CALL windowShown( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException );
+        virtual void SAL_CALL windowHidden( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //  XDockableWindowListener
@@ -275,7 +286,7 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper2< ::com::sun::star::a
         // persistence methods
         //---------------------------------------------------------------------------------------------------------
         sal_Bool         implts_readWindowStateData( const rtl::OUString& aName, UIElement& rElementData );
-        void             implts_writeWindowStateData( const rtl::OUString& aName, const UIElement& rElementData );
+        void             implts_writeWindowStateData( const UIElement& rElementData );
 
         //---------------------------------------------------------------------------------------------------------
         // members
@@ -307,6 +318,8 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper2< ::com::sun::star::a
         bool                                                                        m_bStoreWindowState;
         bool                                                                        m_bGlobalSettings;
         bool                                                                        m_bDockingInProgress;
+        bool                                                                        m_bVisible;
+        bool                                                                        m_bLayoutInProgress;
 
         ::rtl::OUString                                                             m_aFullAddonTbxPrefix;
         ::rtl::OUString                                                             m_aCustomTbxPrefix;

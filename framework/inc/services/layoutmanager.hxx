@@ -311,6 +311,7 @@ namespace framework
             sal_Bool    implts_showProgressBar();
             sal_Bool    implts_hideProgressBar();
             void        implts_backupProgressBarWrapper();
+            void        implts_setOffset( const sal_Int32 nBottomOffset );
 
             void    implts_setInplaceMenuBar(
                         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& xMergedMenuBar )
