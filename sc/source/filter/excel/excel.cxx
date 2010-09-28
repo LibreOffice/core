@@ -92,7 +92,7 @@ FltError ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument
         aArgs[ 0 ] <<= getProcessServiceFactory();
         aArgs[ 1 ] <<= aArgSeq;
         uno::Reference< document::XImporter > xImporter( ScfApiHelper::CreateInstanceWithArgs(
-            CREATE_OUSTRING( "com.sun.star.comp.oox.ExcelBiffFilter" ), aArgs ), uno::UNO_QUERY_THROW );
+            CREATE_OUSTRING( "com.sun.star.comp.oox.xls.ExcelBiffFilter" ), aArgs ), uno::UNO_QUERY_THROW );
         xImporter->setTargetDocument( xComponent );
 
         MediaDescriptor aMediaDesc;
