@@ -550,7 +550,6 @@ namespace xmloff
             return group;
         }
 
-        OSL_ENSURE( false, "OElementImport::impl_matchPropertyGroup: no group matched!" );
         return i_propertyGroups.end();
     }
 
