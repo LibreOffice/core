@@ -1907,6 +1907,10 @@ void ScViewFunc::DeleteMulti( BOOL bRows, BOOL bRecord )
 
 void ScViewFunc::DeleteContents( USHORT nFlags, BOOL bRecord )
 {
+    ScViewData* pViewData = GetViewData();
+    pViewData->SetPasteMode( SC_PASTE_NONE );
+    pViewData->GetViewShell()->UpdateCopySourceOverlay();
+
     // nur wegen Matrix nicht editierbar? Attribute trotzdem ok
     BOOL bOnlyNotBecauseOfMatrix;
     BOOL bEditable = SelectionEditable( &bOnlyNotBecauseOfMatrix );

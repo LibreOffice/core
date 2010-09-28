@@ -319,6 +319,7 @@ ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh )
         eRefType    ( SC_REFTYPE_NONE ),
         nTabNo      ( 0 ),
         nRefTabNo   ( 0 ),
+        nPasteFlags ( SC_PASTE_NONE ),
         eEditActivePart( SC_SPLIT_BOTTOMLEFT ),
         bActive     ( TRUE ),                   //! wie initialisieren?
         bIsRefMode  ( FALSE ),

@@ -121,6 +121,9 @@
 #include "tabprotection.hxx"
 #include "postit.hxx"
 #include "dpcontrol.hxx"
+#include "clipparam.hxx"
+#include "cellsh.hxx"
+#include "overlayobject.hxx"
 #include "cellsuno.hxx"
 
 #include "drawview.hxx"
@@ -405,6 +408,7 @@ ScGridWindow::ScGridWindow( Window* pParent, ScViewData* pData, ScSplitPos eWhic
             DragSourceHelper( this ),
             mpOOCursors( NULL ),
             mpOOSelection( NULL ),
+            mpOOSelectionBorder( NULL ),
             mpOOAutoFill( NULL ),
             mpOODragRect( NULL ),
             mpOOHeader( NULL ),
@@ -3062,12 +3066,30 @@ void ScGridWindow::SelectForContextMenu( const Point& rPosPixel, SCsCOL nCellX, 
     }
 }
 
+static void ClearSingleSelection( ScViewData* pViewData )
+{
+    SCCOL nX;
+    SCROW nY;
+    ScTransferObj* pTransObj = ScTransferObj::GetOwnClipboard(
+        pViewData->GetActiveWin() );
+    if (!pTransObj)
+        return;
+
+    ScDocument* pClipDoc = pTransObj->GetDocument();
+    pClipDoc->GetClipArea( nX, nY, TRUE );
+    if (nX == 0 && nY == 0)
+    {
+        ScTabView* pView = pViewData->GetView();
+        pView->Unmark();
+    }
+}
+
 void __EXPORT ScGridWindow::KeyInput(const KeyEvent& rKEvt)
 {
     // #96965# Cursor control for ref input dialog
+    const KeyCode& rKeyCode = rKEvt.GetKeyCode();
     if( SC_MOD()->IsRefDialogOpen() )
     {
-        const KeyCode& rKeyCode = rKEvt.GetKeyCode();
         if( !rKeyCode.GetModifier() && (rKeyCode.GetCode() == KEY_F2) )
         {
             SC_MOD()->EndReference();
@@ -3082,9 +3104,35 @@ void __EXPORT ScGridWindow::KeyInput(const KeyEvent& rKEvt)
             return;
         }
     }
+    else if( rKeyCode.GetCode() == KEY_RETURN && pViewData->IsPasteMode() )
+    {
+        ScTabViewShell* pTabViewShell = pViewData->GetViewShell();
+
+        ScCellShell::PasteFromClipboard( pViewData, pTabViewShell, FALSE );
+        ClearSingleSelection( pViewData );
+
+        uno::Reference<datatransfer::clipboard::XClipboard> xSystemClipboard =
+            TransferableHelper::GetSystemClipboard();
+        if (xSystemClipboard.is())
+        {
+            xSystemClipboard->setContents(
+                    uno::Reference<datatransfer::XTransferable>(),
+                    uno::Reference<datatransfer::clipboard::XClipboardOwner>());
+        }
+
+        // hide the border around the copy source
+        pViewData->SetPasteMode( SC_PASTE_NONE );
+        UpdateCopySourceOverlay();
+        return;
+    }
     // wenn semi-Modeless-SfxChildWindow-Dialog oben, keine KeyInputs:
     else if( !pViewData->IsAnyFillMode() )
     {
+        if (rKeyCode.GetCode() == KEY_ESCAPE)
+        {
+            pViewData->SetPasteMode( SC_PASTE_NONE );
+            UpdateCopySourceOverlay();
+        }
         //  query for existing note marker before calling ViewShell's keyboard handling
         //  which may remove the marker
         BOOL bHadKeyMarker = ( pNoteMarker && pNoteMarker->IsByKeyboard() );
@@ -5162,6 +5210,7 @@ void ScGridWindow::CursorChanged()
 void ScGridWindow::ImpCreateOverlayObjects()
 {
     UpdateCursorOverlay();
+    UpdateCopySourceOverlay();
     UpdateSelectionOverlay();
     UpdateAutoFillOverlay();
     UpdateDragRectOverlay();
@@ -5173,6 +5222,7 @@ void ScGridWindow::ImpCreateOverlayObjects()
 void ScGridWindow::ImpDestroyOverlayObjects()
 {
     DeleteCursorOverlay();
+    DeleteCopySourceOverlay();
     DeleteSelectionOverlay();
     DeleteAutoFillOverlay();
     DeleteDragRectOverlay();
@@ -5191,6 +5241,68 @@ void ScGridWindow::UpdateAllOverlays()
 void ScGridWindow::DeleteCursorOverlay()
 {
     DELETEZ( mpOOCursors );
+}
+
+void ScGridWindow::DeleteCopySourceOverlay()
+{
+    DELETEZ( mpOOSelectionBorder );
+}
+
+void ScGridWindow::UpdateCopySourceOverlay()
+{
+    MapMode aDrawMode = GetDrawMapMode();
+    MapMode aOldMode = GetMapMode();
+    if ( aOldMode != aDrawMode )
+        SetMapMode( aDrawMode );
+
+    DeleteCopySourceOverlay();
+
+    if (!pViewData->ShowPasteSource())
+        return;
+    ::sdr::overlay::OverlayManager* pOverlayManager = getOverlayManager();
+    if (!pOverlayManager)
+        return;
+    ScTransferObj* pTransObj = ScTransferObj::GetOwnClipboard( pViewData->GetActiveWin() );
+    if (!pTransObj)
+        return;
+    ScDocument* pClipDoc = pTransObj->GetDocument();
+    if (!pClipDoc)
+        return;
+
+    SCTAB nCurTab = pViewData->GetCurPos().Tab();
+
+    ScClipParam& rClipParam = pClipDoc->GetClipParam();
+    mpOOSelectionBorder = new ::sdr::overlay::OverlayObjectList;
+    for (ScRange* p = rClipParam.maRanges.First(); p; p = rClipParam.maRanges.Next())
+    {
+        if (p->aStart.Tab() != nCurTab)
+            continue;
+
+        SCCOL nClipStartX = p->aStart.Col();
+        SCROW nClipStartY = p->aStart.Row();
+        SCCOL nClipEndX   = p->aEnd.Col();
+        SCROW nClipEndY   = p->aEnd.Row();
+
+        Point aClipStartScrPos = pViewData->GetScrPos( nClipStartX, nClipStartY, eWhich );
+        Point aClipEndScrPos   = pViewData->GetScrPos( nClipEndX + 1, nClipEndY + 1, eWhich );
+        aClipStartScrPos -= Point(1, 1);
+        long nSizeXPix = aClipEndScrPos.X() - aClipStartScrPos.X();
+        long nSizeYPix = aClipEndScrPos.Y() - aClipStartScrPos.Y();
+
+        Rectangle aRect( aClipStartScrPos, Size(nSizeXPix, nSizeYPix) );
+
+
+        Color aHighlight = GetSettings().GetStyleSettings().GetHighlightColor();
+
+        Rectangle aLogic = PixelToLogic(aRect, aDrawMode);
+        ::basegfx::B2DRange aRange(aLogic.Left(), aLogic.Top(), aLogic.Right(), aLogic.Bottom());
+        ScOverlayDashedBorder* pDashedBorder = new ScOverlayDashedBorder(aRange, aHighlight, this);
+        pOverlayManager->add(*pDashedBorder);
+        mpOOSelectionBorder->append(*pDashedBorder);
+    }
+
+    if ( aOldMode != aDrawMode )
+        SetMapMode( aOldMode );
 }
 
 void ScGridWindow::UpdateCursorOverlay()

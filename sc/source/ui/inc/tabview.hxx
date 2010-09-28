@@ -435,6 +435,7 @@ public:
 
     void            CreateAnchorHandles(SdrHdlList& rHdl, const ScAddress& rAddress);
 
+    void            UpdateCopySourceOverlay();
     void            UpdateSelectionOverlay();
     void            UpdateShrinkOverlay();
     void            UpdateAllOverlays();

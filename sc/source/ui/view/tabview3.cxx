@@ -1770,6 +1770,7 @@ void ScTabView::MakeEditView( ScEditEngineDefaulter* pEngine, SCCOL nCol, SCROW 
 
                     pGridWin[i]->DeleteCursorOverlay();
                     pGridWin[i]->DeleteAutoFillOverlay();
+                    pGridWin[i]->DeleteCopySourceOverlay();
 
                     // flush OverlayManager before changing MapMode to text edit
                     pGridWin[i]->flushOverlayManager();

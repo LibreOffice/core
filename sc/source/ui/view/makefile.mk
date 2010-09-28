@@ -94,6 +94,7 @@ SLOFILES =  \
         $(SLO)$/output.obj \
         $(SLO)$/output2.obj \
         $(SLO)$/output3.obj \
+        $(SLO)$/overlayobject.obj \
         $(SLO)$/gridmerg.obj \
         $(SLO)$/invmerge.obj \
         $(SLO)$/cellmergeoption.obj \
@@ -148,6 +149,7 @@ EXCEPTIONSFILES= \
     $(SLO)$/gridwin.obj \
     $(SLO)$/invmerge.obj \
     $(SLO)$/output2.obj \
+    $(SLO)$/overlayobject.obj \
     $(SLO)$/pfuncache.obj \
     $(SLO)$/spelldialog.obj \
     $(SLO)$/cellsh1.obj \

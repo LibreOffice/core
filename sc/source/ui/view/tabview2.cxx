@@ -704,6 +704,13 @@ void ScTabView::ExpandBlockArea(SCsCOL nMovX, SCsROW nMovY)
     ExpandBlock(nAreaX, nAreaY, eMode);
 }
 
+void ScTabView::UpdateCopySourceOverlay()
+{
+    for (sal_uInt8 i = 0; i < 4; ++i)
+        if (pGridWin[i] && pGridWin[i]->IsVisible())
+            pGridWin[i]->UpdateCopySourceOverlay();
+}
+
 void ScTabView::UpdateSelectionOverlay()
 {
     for (USHORT i=0; i<4; i++)

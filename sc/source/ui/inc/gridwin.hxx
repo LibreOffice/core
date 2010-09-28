@@ -108,6 +108,7 @@ private:
     // #114409#
     ::sdr::overlay::OverlayObjectList*              mpOOCursors;
     ::sdr::overlay::OverlayObjectList*              mpOOSelection;
+    ::sdr::overlay::OverlayObjectList*              mpOOSelectionBorder;
     ::sdr::overlay::OverlayObjectList*              mpOOAutoFill;
     ::sdr::overlay::OverlayObjectList*              mpOODragRect;
     ::sdr::overlay::OverlayObjectList*              mpOOHeader;
@@ -399,6 +400,8 @@ public:
     void CursorChanged();
     void DrawLayerCreated();
 
+    void            DeleteCopySourceOverlay();
+    void            UpdateCopySourceOverlay();
     void            DeleteCursorOverlay();
     void            UpdateCursorOverlay();
     void            DeleteSelectionOverlay();

@@ -86,6 +86,13 @@ enum ScMarkType
 #endif
 };
 
+enum ScPasteFlags
+{
+    SC_PASTE_NONE   = 0,    // No flags specified
+    SC_PASTE_MODE   = 1,    // Enable paste-mode
+    SC_PASTE_BORDER = 2,    // Show a border around the source cells
+};
+
 class ScDocShell;
 class ScDocument;
 class ScDBFunc;
@@ -209,6 +216,8 @@ private:
     SCCOL               nTabStartCol;               // fuer Enter nach Tab
     ScRange             aDelRange;                  // fuer AutoFill-Loeschen
 
+    ScPasteFlags        nPasteFlags;
+
     ScSplitPos          eEditActivePart;            // the part that was active when edit mode was started
     BOOL                bEditActive[4];             // aktiv?
     BOOL                bActive;                    // aktives Fenster ?
@@ -295,6 +304,8 @@ public:
     SCCOL           GetFixPosX() const                      { return pThisTab->nFixPosX; }
     SCROW           GetFixPosY() const                      { return pThisTab->nFixPosY; }
     BOOL            IsPagebreakMode() const                 { return bPagebreak; }
+    bool            IsPasteMode() const                     { return nPasteFlags & SC_PASTE_MODE; }
+    bool            ShowPasteSource() const                 { return nPasteFlags & SC_PASTE_BORDER; }
 
     void            SetPosX( ScHSplitPos eWhich, SCCOL nNewPosX );
     void            SetPosY( ScVSplitPos eWhich, SCROW nNewPosY );
@@ -309,6 +320,7 @@ public:
     void            SetFixPosX( SCCOL nPos )                        { pThisTab->nFixPosX = nPos; }
     void            SetFixPosY( SCROW nPos )                        { pThisTab->nFixPosY = nPos; }
     void            SetPagebreakMode( BOOL bSet );
+    void            SetPasteMode ( ScPasteFlags nFlags )            { nPasteFlags = nFlags; }
 
     void            SetZoomType( SvxZoomType eNew, BOOL bAll );
     void            SetZoomType( SvxZoomType eNew, std::vector< SCTAB >& tabs );

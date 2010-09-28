@@ -2084,6 +2084,7 @@ IMPL_LINK( ScInputHandler, ModifyHdl, void *, EMPTYARG )
 
 BOOL ScInputHandler::DataChanging( sal_Unicode cTyped, BOOL bFromCommand )      // return TRUE = new view created
 {
+    pActiveViewSh->GetViewData()->SetPasteMode( SC_PASTE_NONE );
     bInOwnChange = TRUE;                // disable ModifyHdl (reset in DataChanged)
 
     if ( eMode == SC_INPUT_NONE )
@@ -2303,6 +2304,10 @@ void ScInputHandler::SetMode( ScInputMode eNewMode )
             pActiveViewSh->GetActiveWin()->GrabFocus();
         return;
     }
+
+    if (eNewMode != SC_INPUT_NONE)
+        // Disable paste mode when edit mode starts.
+        pActiveViewSh->GetViewData()->SetPasteMode( SC_PASTE_NONE );
 
     bInOwnChange = TRUE;                // disable ModifyHdl (reset below)
 
