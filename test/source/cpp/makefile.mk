@@ -45,7 +45,8 @@ CFLAGSCXX+=-DADAPT_EXT_STL
 SLOFILES = \
     $(SLO)/getargument.obj \
     $(SLO)/officeconnection.obj \
-    $(SLO)/toabsolutefileurl.obj
+    $(SLO)/toabsolutefileurl.obj \
+    $(SLO)/uniquepipename.obj
 
 SHL1IMPLIB = i$(SHL1TARGET)
 SHL1OBJS = $(SLOFILES)
