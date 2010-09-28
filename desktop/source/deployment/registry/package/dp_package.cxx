@@ -190,6 +190,9 @@ class BackendImpl : public ImplBaseT
         virtual OUString SAL_CALL getDescription()
             throw (deployment::ExtensionRemovedException, RuntimeException);
 
+        virtual OUString SAL_CALL getLicenseText()
+            throw (deployment::ExtensionRemovedException, RuntimeException);
+
         virtual void SAL_CALL exportTo(
             OUString const & destFolderURL, OUString const & newTitle,
             sal_Int32 nameClashAction,
@@ -996,6 +999,31 @@ OUString BackendImpl::PackageImpl::getDescription()
         return m_oldDescription;
     else
         return OUString();
+}
+
+//______________________________________________________________________________
+OUString BackendImpl::PackageImpl::getLicenseText()
+    throw (deployment::ExtensionRemovedException, RuntimeException)
+{
+    if (m_bRemoved)
+        throw deployment::ExtensionRemovedException();
+
+    OUString sLicense;
+    DescriptionInfoset aInfo = getDescriptionInfoset();
+
+    ::boost::optional< SimpleLicenseAttributes > aSimplLicAttr = aInfo.getSimpleLicenseAttributes();
+    if ( aSimplLicAttr )
+    {
+        OUString aLicenseURL = aInfo.getLocalizedLicenseURL();
+
+        if ( aLicenseURL.getLength() )
+        {
+            OUString aFullURL = m_url_expanded + OUSTR("/") + aLicenseURL;
+               sLicense = getTextFromURL( Reference< ucb::XCommandEnvironment >(), aFullURL);
+           }
+    }
+
+     return sLicense;
 }
 
 //______________________________________________________________________________

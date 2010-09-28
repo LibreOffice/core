@@ -237,6 +237,9 @@ public:
     virtual ::rtl::OUString SAL_CALL getDescription()
         throw (css::deployment::ExtensionRemovedException,
                css::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getLicenseText()
+        throw (css::deployment::ExtensionRemovedException,
+               css::uno::RuntimeException);
     virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL
     getUpdateInformationURLs()
         throw (css::deployment::ExtensionRemovedException,

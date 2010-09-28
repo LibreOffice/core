@@ -39,8 +39,10 @@
 #include "dp_gui_theextmgr.hxx"
 #include "dp_gui_extensioncmdqueue.hxx"
 #include "dp_misc.h"
+#include "dp_ucb.h"
 #include "dp_update.hxx"
 #include "dp_identifier.hxx"
+#include "dp_descriptioninfoset.hxx"
 
 #include "vcl/ctrl.hxx"
 #include "vcl/menu.hxx"
@@ -118,7 +120,8 @@ enum MENU_COMMAND
     CMD_REMOVE  = 1,
     CMD_ENABLE,
     CMD_DISABLE,
-    CMD_UPDATE
+    CMD_UPDATE,
+    CMD_SHOW_LICENSE
 };
 
 class ExtBoxWithBtns_Impl : public ExtensionBox_Impl
@@ -382,6 +385,9 @@ MENU_COMMAND ExtBoxWithBtns_Impl::ShowPopupMenu( const Point & rPos, const long 
         aPopup.InsertItem( CMD_REMOVE, DialogHelper::getResourceString( RID_CTX_ITEM_REMOVE ) );
     }
 
+    if ( GetEntryData( nPos )->m_sLicenseText.Len() )
+        aPopup.InsertItem( CMD_SHOW_LICENSE, DialogHelper::getResourceString( RID_STR_SHOW_LICENSE_CMD ) );
+
     return (MENU_COMMAND) aPopup.Execute( this, rPos );
 }
 
@@ -407,6 +413,12 @@ void ExtBoxWithBtns_Impl::MouseButtonDown( const MouseEvent& rMEvt )
                                 break;
             case CMD_REMOVE:    m_pParent->removePackage( GetEntryData( nPos )->m_xPackage );
                                 break;
+            case CMD_SHOW_LICENSE:
+                {
+                    ShowLicenseDialog aLicenseDlg( m_pParent, GetEntryData( nPos )->m_xPackage );
+                    aLicenseDlg.Execute();
+                    break;
+                }
         }
     }
     else if ( rMEvt.IsLeft() )
@@ -1738,6 +1750,42 @@ void UpdateRequiredDialog::disableAllEntries()
 
     if ( ! hasActiveEntries() )
         m_aCloseBtn.SetText( m_sCloseText );
+}
+
+//------------------------------------------------------------------------------
+//                             ShowLicenseDialog
+//------------------------------------------------------------------------------
+ShowLicenseDialog::ShowLicenseDialog( Window * pParent,
+                                      const uno::Reference< deployment::XPackage > &xPackage ) :
+    ModalDialog( pParent, DialogHelper::getResId( RID_DLG_SHOW_LICENSE ) ),
+    m_aLicenseText( this, DialogHelper::getResId( ML_LICENSE ) ),
+    m_aCloseBtn( this,    DialogHelper::getResId( RID_EM_BTN_CLOSE ) )
+{
+    FreeResource();
+
+    OUString aText = xPackage->getLicenseText();
+    m_aLicenseText.SetText( aText );
+}
+
+//------------------------------------------------------------------------------
+ShowLicenseDialog::~ShowLicenseDialog()
+{}
+
+//------------------------------------------------------------------------------
+void ShowLicenseDialog::Resize()
+{
+    Size aTotalSize( GetOutputSizePixel() );
+    Size aTextSize( aTotalSize.Width() - RSC_SP_DLG_INNERBORDER_LEFT - RSC_SP_DLG_INNERBORDER_RIGHT,
+                    aTotalSize.Height() - RSC_SP_DLG_INNERBORDER_TOP - 2*RSC_SP_DLG_INNERBORDER_BOTTOM
+                                        - m_aCloseBtn.GetSizePixel().Height() );
+
+    m_aLicenseText.SetPosSizePixel( Point( RSC_SP_DLG_INNERBORDER_LEFT, RSC_SP_DLG_INNERBORDER_TOP ),
+                                    aTextSize );
+
+    Point aBtnPos( (aTotalSize.Width() - m_aCloseBtn.GetSizePixel().Width())/2,
+                    aTotalSize.Height() - RSC_SP_DLG_INNERBORDER_BOTTOM
+                                        - m_aCloseBtn.GetSizePixel().Height() );
+    m_aCloseBtn.SetPosPixel( aBtnPos );
 }
 
 //=================================================================================
