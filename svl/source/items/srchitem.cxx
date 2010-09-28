@@ -51,7 +51,7 @@ using namespace com::sun::star::util;
 
 #define CFG_ROOT_NODE       "Office.Common/SearchOptions"
 
-#define SRCH_PARAMS         11
+#define SRCH_PARAMS         12
 #define SRCH_PARA_OPTIONS   "Options"
 #define SRCH_PARA_FAMILY    "Family"
 #define SRCH_PARA_COMMAND   "Command"
@@ -59,6 +59,7 @@ using namespace com::sun::star::util;
 #define SRCH_PARA_APPFLAG   "AppFlag"
 #define SRCH_PARA_ROWDIR    "RowDirection"
 #define SRCH_PARA_ALLTABLES "AllTables"
+#define SRCH_PARA_SEARCHFILTERED "SearchFiltered"
 #define SRCH_PARA_BACKWARD  "Backward"
 #define SRCH_PARA_PATTERN   "Pattern"
 #define SRCH_PARA_CONTENT   "Content"
@@ -124,6 +125,7 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
     nAppFlag        ( SVX_SEARCHAPP_WRITER ),
     bRowDirection   ( sal_True ),
     bAllTables      ( sal_False ),
+    bSearchFiltered   ( sal_False ),
     bNotes          ( sal_False),
     bBackward       ( sal_False ),
     bPattern        ( sal_False ),
@@ -205,6 +207,7 @@ SvxSearchItem::SvxSearchItem( const SvxSearchItem& rItem ) :
     nAppFlag        ( rItem.nAppFlag ),
     bRowDirection   ( rItem.bRowDirection ),
     bAllTables      ( rItem.bAllTables ),
+    bSearchFiltered   ( rItem.bSearchFiltered ),
     bNotes          ( rItem.bNotes),
     bBackward       ( rItem.bBackward ),
     bPattern        ( rItem.bPattern ),
@@ -254,6 +257,7 @@ int SvxSearchItem::operator==( const SfxPoolItem& rItem ) const
            ( eFamily        == rSItem.eFamily )         &&
            ( bRowDirection  == rSItem.bRowDirection )   &&
            ( bAllTables     == rSItem.bAllTables )      &&
+           ( bSearchFiltered  == rSItem.bSearchFiltered )   &&
            ( nCellType      == rSItem.nCellType )       &&
            ( nAppFlag       == rSItem.nAppFlag )        &&
            ( bAsianOptions  == rSItem.bAsianOptions )   &&
@@ -447,6 +451,8 @@ sal_Bool SvxSearchItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMember
             aSeq[5].Value <<= bRowDirection;
             aSeq[6].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SRCH_PARA_ALLTABLES ));
             aSeq[6].Value <<= bAllTables;
+            aSeq[6].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SRCH_PARA_SEARCHFILTERED ));
+            aSeq[6].Value <<= bSearchFiltered;
             aSeq[7].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SRCH_PARA_BACKWARD ));
             aSeq[7].Value <<= bBackward;
             aSeq[8].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SRCH_PARA_PATTERN ));
@@ -468,6 +474,8 @@ sal_Bool SvxSearchItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMember
             rVal <<= (sal_Bool) bRowDirection; break;
         case MID_SEARCH_ALLTABLES:
             rVal <<= (sal_Bool) bAllTables; break;
+        case MID_SEARCH_SEARCHFILTERED:
+            rVal <<= (sal_Bool) bSearchFiltered; break;
         case MID_SEARCH_BACKWARD:
             rVal <<= (sal_Bool) bBackward; break;
         case MID_SEARCH_PATTERN:
@@ -567,6 +575,11 @@ sal_Bool SvxSearchItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMe
                         if ( ( aSeq[i].Value >>= bAllTables ) == sal_True )
                             ++nConvertedCount;
                     }
+                    else if ( aSeq[i].Name.equalsAscii( SRCH_PARA_SEARCHFILTERED ) )
+                    {
+                        if ( ( aSeq[i].Value >>= bSearchFiltered ) == sal_True )
+                            ++nConvertedCount;
+                    }
                     else if ( aSeq[i].Name.equalsAscii( SRCH_PARA_BACKWARD ) )
                     {
                         if ( ( aSeq[i].Value >>= bBackward ) == sal_True )
@@ -603,6 +616,8 @@ sal_Bool SvxSearchItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMe
             bRet = (rVal >>= bRowDirection); break;
         case MID_SEARCH_ALLTABLES:
             bRet = (rVal >>= bAllTables); break;
+        case MID_SEARCH_SEARCHFILTERED:
+            bRet = (rVal >>= bSearchFiltered); break;
         case MID_SEARCH_BACKWARD:
             bRet = (rVal >>= bBackward); break;
         case MID_SEARCH_PATTERN:

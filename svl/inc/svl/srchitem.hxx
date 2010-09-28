@@ -73,6 +73,7 @@ class SVL_DLLPUBLIC SvxSearchItem :
     sal_uInt16      nAppFlag;           // Fuer welche Applikation ist der Dialog ueberhaupt
     sal_Bool        bRowDirection;      // Suchrichtung Zeilenweise/Spaltenweise
     sal_Bool        bAllTables;         // in alle Tabellen suchen
+    sal_Bool        bSearchFiltered;      // search filtered cells.
 
     // Writer-spezifisch
     sal_Bool        bNotes;
@@ -141,6 +142,9 @@ public:
 
             sal_Bool        IsAllTables() const { return bAllTables; }
             void            SetAllTables(sal_Bool bNew) { bAllTables = bNew; }
+
+            sal_Bool        IsSearchFiltered() const { return bSearchFiltered; }
+            void            SetSearchFiltered(sal_Bool b) { bSearchFiltered = b; }
 
             sal_uInt16      GetCellType() const { return nCellType; }
             void            SetCellType(sal_uInt16 nNewCellType) { nCellType = nNewCellType; }
