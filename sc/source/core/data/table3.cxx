@@ -1642,6 +1642,7 @@ SCSIZE ScTable::Query(ScQueryParam& rParamOrg, BOOL bKeepSub)
                             aParam.nDestCol, aParam.nDestRow, aParam.nDestTab );
     }
 
+    InitializeNoteCaptions();
     for (SCROW j=aParam.nRow1 + nHeader; j<=nEndRow; j++)
     {
         BOOL bResult;                                   // Filterergebnis
@@ -1719,7 +1720,7 @@ SCSIZE ScTable::Query(ScQueryParam& rParamOrg, BOOL bKeepSub)
         DBShowRows(nOldStart,nOldEnd, bOldResult);
 
     delete[] pSpecial;
-
+    SetDrawPageSize();
     return nCount;
 }
 

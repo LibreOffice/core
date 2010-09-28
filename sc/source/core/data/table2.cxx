@@ -2635,8 +2635,6 @@ void ScTable::DBShowRow(SCROW nRow, bool bShow)
 void ScTable::DBShowRows(SCROW nRow1, SCROW nRow2, bool bShow)
 {
     SCROW nStartRow = nRow1;
-    IncRecalcLevel();
-    InitializeNoteCaptions();
     while (nStartRow <= nRow2)
     {
         SCROW nEndRow = -1;
@@ -2676,8 +2674,6 @@ void ScTable::DBShowRows(SCROW nRow1, SCROW nRow2, bool bShow)
     //  to be done here.
     if (pOutlineTable)
         UpdateOutlineRow( nRow1, nRow2, bShow );
-
-    DecRecalcLevel();
 }
 
 
