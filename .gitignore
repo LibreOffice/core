@@ -1,9 +1,26 @@
-# backup and temporary files
-*~
-.*.sw[op]
-
-# the build directories
-/*/unxlng??
-/*/unxlng??.pro
-/*/wntmsci??
-/*/wntmsci??.pro
+/applied_patches
+/Linux*Env.Set*
+/bootstrap
+/makefile.mk
+unxlng*.pro
+unxlngi6
+unxlngi4
+/solver
+*.orig
+*.rej
+*.~*~
+*.vpj
+*.vpw
+*.bak
+/autom4te.cache
+/config.log
+/config.parms
+/config.status
+/configure
+/set_soenv
+warn
+.svn
+CVS
+.hg
+.gitignore
+.hgignore
