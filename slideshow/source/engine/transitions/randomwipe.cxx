@@ -68,7 +68,7 @@ RandomWipe::RandomWipe( sal_Int32 nElements, bool randomBars )
     m_rect.transform( aTransform );
 
     // mix up:
-    for ( sal_Int32 pos1 = nElements ; i-- ; )
+    for ( sal_Int32 pos1 = nElements ; pos1-- ; )
     {
         const sal_Int32 pos2 = getRandomOrdinal(pos1+1);
         const ::basegfx::B2DPoint point( m_positions[ pos1 ] );
