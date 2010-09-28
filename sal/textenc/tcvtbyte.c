@@ -640,6 +640,51 @@ sal_Size ImplCharToUnicode( const ImplTextConverterData* pData,
 
 /* ----------------------------------------------------------------------- */
 
+sal_Size ImplUpperCharToUnicode( const ImplTextConverterData* pData,
+                            void* pContext,
+                            const sal_Char* pSrcBuf, sal_Size nSrcBytes,
+                            sal_Unicode* pDestBuf, sal_Size nDestChars,
+                            sal_uInt32 nFlags, sal_uInt32* pInfo,
+                            sal_Size* pSrcCvtBytes )
+{
+    sal_uChar                   c;
+    sal_Unicode                 cConv;
+    const ImplByteConvertData*  pConvertData = (const ImplByteConvertData*)pData;
+    sal_Unicode*                pEndDestBuf;
+    const sal_Char*             pEndSrcBuf;
+
+    (void) pContext; /* unused */
+    (void) nFlags;   /* unused */
+
+    *pInfo = 0;
+    pEndDestBuf = pDestBuf+nDestChars;
+    pEndSrcBuf  = pSrcBuf+nSrcBytes;
+    if ( pDestBuf == pEndDestBuf )
+    {
+        *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR | RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL;
+        *pSrcCvtBytes = 0;
+        return 0;
+    }
+    while ( pSrcBuf < pEndSrcBuf )
+    {
+        c = (sal_uChar)*pSrcBuf;
+        if (c < 0x80)
+            cConv = c;
+        else
+            // c <= 0xFF is implied.
+            cConv = pConvertData->mpToUniTab1[c - 0x80];
+
+        *pDestBuf = cConv;
+        pDestBuf++;
+        pSrcBuf++;
+    }
+
+    *pSrcCvtBytes = nSrcBytes - (pEndSrcBuf-pSrcBuf);
+    return (nDestChars - (pEndDestBuf-pDestBuf));
+}
+
+/* ----------------------------------------------------------------------- */
+
 // Writes 0--2 characters to dest:
 static int ImplConvertUnicodeCharToChar(
     const ImplByteConvertData* pConvertData, sal_Unicode c, sal_Char * dest )

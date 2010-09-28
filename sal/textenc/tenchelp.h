@@ -230,6 +230,11 @@ sal_Size ImplCharToUnicode( const ImplTextConverterData* pData, void* pContext,
                             const sal_Char* pSrcBuf, sal_Size nSrcBytes,
                             sal_Unicode* pDestBuf, sal_Size nDestChars,
                             sal_uInt32 nFlags, sal_uInt32* pInfo, sal_Size* pSrcCvtBytes );
+/** For those encodings only with unicode range of 0x80 to 0xFF. */
+sal_Size ImplUpperCharToUnicode( const ImplTextConverterData* pData, void* pContext,
+                            const sal_Char* pSrcBuf, sal_Size nSrcBytes,
+                            sal_Unicode* pDestBuf, sal_Size nDestChars,
+                            sal_uInt32 nFlags, sal_uInt32* pInfo, sal_Size* pSrcCvtBytes );
 sal_Size ImplUnicodeToChar( const ImplTextConverterData* pData, void* pContext,
                             const sal_Unicode* pSrcBuf, sal_Size nSrcChars,
                             sal_Char* pDestBuf, sal_Size nDestBytes,

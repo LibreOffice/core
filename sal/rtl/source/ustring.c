@@ -800,6 +800,29 @@ void SAL_CALL rtl_uString_intern( rtl_uString ** newStr,
     }
 }
 
+static int rtl_canGuessUOutputLength( int len, rtl_TextEncoding eTextEncoding )
+{
+    // FIXME: Maybe we should use a bit flag in the higher bits of the
+    // eTextEncoding value itself to determine the encoding type.  But if we
+    // do, be sure to mask the value in certain places that expect the values
+    // to be numbered serially from 0 and up.  One such place is
+    // Impl_getTextEncodingData().
+
+    switch ( eTextEncoding )
+    {
+        // 1 to 1 (with no zero elements)
+        case RTL_TEXTENCODING_IBM_437:
+        case RTL_TEXTENCODING_IBM_850:
+        case RTL_TEXTENCODING_IBM_860:
+        case RTL_TEXTENCODING_IBM_861:
+        case RTL_TEXTENCODING_IBM_863:
+        case RTL_TEXTENCODING_IBM_865:
+            return len;
+        break;
+    }
+    return 0;
+}
+
 void SAL_CALL rtl_uString_internConvert( rtl_uString   ** newStr,
                                          const sal_Char * str,
                                          sal_Int32        len,
@@ -817,6 +840,7 @@ void SAL_CALL rtl_uString_internConvert( rtl_uString   ** newStr,
 
     if ( len < 256 )
     { // try various optimisations
+        sal_Int32 ulen;
         if ( len < 0 )
             len = strlen( str );
         if ( eTextEncoding == RTL_TEXTENCODING_ASCII_US )
@@ -836,6 +860,28 @@ void SAL_CALL rtl_uString_internConvert( rtl_uString   ** newStr,
             rtl_ustring_intern_internal( newStr, pScratch, CANNOT_RETURN );
             return;
         }
+        else if ( (ulen = rtl_canGuessUOutputLength(len, eTextEncoding)) != 0 )
+        {
+            rtl_uString *pScratch;
+            rtl_TextToUnicodeConverter hConverter;
+            sal_Size nDestChars, nSrcBytes;
+            sal_uInt32 nInfo;
+
+            pScratch = alloca( sizeof(rtl_uString) + ulen * sizeof (IMPL_RTL_STRCODE) );
+
+            hConverter = rtl_createTextToUnicodeConverter( eTextEncoding );
+            nDestChars = rtl_convertTextToUnicode(
+                hConverter, 0, str, len, pScratch->buffer, ulen, convertFlags, &nInfo, &nSrcBytes );
+            rtl_destroyTextToUnicodeConverter( hConverter );
+
+            if (pInfo)
+                *pInfo = nInfo;
+
+            pScratch->length = ulen;
+            rtl_ustring_intern_internal( newStr, pScratch, CANNOT_RETURN );
+            return;
+        }
+
         /* FIXME: we want a nice UTF-8 / alloca shortcut here */
     }
 

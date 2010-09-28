@@ -188,7 +188,7 @@ static ImplByteConvertData const aImplIBM437ByteCvtData =
 
 static ImplTextEncodingData const aImplIBM437TextEncodingData
     = { { &aImplIBM437ByteCvtData,
-          ImplCharToUnicode,
+          ImplUpperCharToUnicode,
           ImplUnicodeToChar,
           NULL,
           NULL,
@@ -322,7 +322,7 @@ static ImplByteConvertData const aImplIBM850ByteCvtData =
 
 static ImplTextEncodingData const aImplIBM850TextEncodingData
     = { { &aImplIBM850ByteCvtData,
-          ImplCharToUnicode,
+          ImplUpperCharToUnicode,
           ImplUnicodeToChar,
           NULL,
           NULL,
@@ -495,7 +495,7 @@ static ImplByteConvertData const aImplIBM860ByteCvtData =
 
 static ImplTextEncodingData const aImplIBM860TextEncodingData
     = { { &aImplIBM860ByteCvtData,
-          ImplCharToUnicode,
+          ImplUpperCharToUnicode,
           ImplUnicodeToChar,
           NULL,
           NULL,
@@ -670,7 +670,7 @@ static ImplByteConvertData const aImplIBM861ByteCvtData =
 
 static ImplTextEncodingData const aImplIBM861TextEncodingData
     = { { &aImplIBM861ByteCvtData,
-          ImplCharToUnicode,
+          ImplUpperCharToUnicode,
           ImplUnicodeToChar,
           NULL,
           NULL,
@@ -845,7 +845,7 @@ static ImplByteConvertData const aImplIBM863ByteCvtData =
 
 static ImplTextEncodingData const aImplIBM863TextEncodingData
     = { { &aImplIBM863ByteCvtData,
-          ImplCharToUnicode,
+          ImplUpperCharToUnicode,
           ImplUnicodeToChar,
           NULL,
           NULL,
@@ -1020,7 +1020,7 @@ static ImplByteConvertData const aImplIBM865ByteCvtData =
 
 static ImplTextEncodingData const aImplIBM865TextEncodingData
     = { { &aImplIBM865ByteCvtData,
-          ImplCharToUnicode,
+          ImplUpperCharToUnicode,
           ImplUnicodeToChar,
           NULL,
           NULL,
@@ -1560,7 +1560,7 @@ static ImplByteConvertData const aImplAPPLEICELANDByteCvtData =
 
 static ImplTextEncodingData const aImplAPPLEICELANDTextEncodingData
     = { { &aImplAPPLEICELANDByteCvtData,
-          ImplCharToUnicode,
+          ImplUpperCharToUnicode,
           ImplUnicodeToChar,
           NULL,
           NULL,
@@ -1707,7 +1707,7 @@ static ImplByteConvertData const aImplAPPLEROMANByteCvtData =
 
 static ImplTextEncodingData const aImplAPPLEROMANTextEncodingData
     = { { &aImplAPPLEROMANByteCvtData,
-          ImplCharToUnicode,
+          ImplUpperCharToUnicode,
           ImplUnicodeToChar,
           NULL,
           NULL,
