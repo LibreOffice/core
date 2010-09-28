@@ -606,22 +606,10 @@ namespace pcr
     void ControlCharacterDialog::PageCreated( sal_uInt16 _nId, SfxTabPage& _rPage )
     {
         SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-        switch ( _nId )
-        {
-            case TABPAGE_CHARACTERS:
-//CHINA001              static_cast<SvxCharNamePage&>(_rPage).SetFontList(
-//CHINA001              static_cast<const SvxFontListItem&>(GetInputSetImpl()->Get(CFID_FONTLIST))
-//CHINA001              );
-//CHINA001              static_cast<SvxCharNamePage&>(_rPage).DisableControls( DISABLE_HIDE_LANGUAGE );
-
-//CHINA001              SvxFontListItem aFontListItem( static_cast<const SvxFontListItem&>(GetInputSetImpl()->Get(CFID_FONTLIST) ));
-//CHINA001              aSet.Put ( SvxFontListItem( aFontListItem.GetFontList(), SID_ATTR_CHAR_FONTLIST));
-
-//              aSet.Put (SfxUInt16Item(SID_CFID_FONTLIST,CFID_FONTLIST));
-                aSet.Put (SvxFontListItem(static_cast<const SvxFontListItem&>(GetInputSetImpl()->Get(CFID_FONTLIST))));
-                aSet.Put (SfxUInt16Item(SID_DISABLE_CTL,DISABLE_HIDE_LANGUAGE));
-                _rPage.PageCreated(aSet);
-                break;
+        if ( _nId == TABPAGE_CHARACTERS ) {
+            aSet.Put (SvxFontListItem(static_cast<const SvxFontListItem&>(GetInputSetImpl()->Get(CFID_FONTLIST))));
+            aSet.Put (SfxUInt16Item(SID_DISABLE_CTL,DISABLE_HIDE_LANGUAGE));
+            _rPage.PageCreated(aSet);
         }
     }
 
