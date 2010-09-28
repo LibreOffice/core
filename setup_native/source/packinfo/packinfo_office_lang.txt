@@ -177,22 +177,6 @@ pkg_list_entry = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-base"
 End
 
 Start
-module = "gid_Module_Langpack_Base"
-solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING-base"
-solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING"
-packagename = "%BASISPACKAGEPREFIX%OOOBASEVERSION-%LANGUAGESTRING-base"
-provides = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING-base"
-requires = "%BASISPACKAGEPREFIX%OOOBASEVERSION-%LANGUAGESTRING"
-copyright = "1999-2009 by OpenOffice.org"
-solariscopyright = "solariscopyrightfile"
-vendor = "The Document Foundation"
-description = "Base language module for LibreOffice %OOOBASEVERSION, language %LANGUAGESTRING"
-destpath = "/opt"
-packageversion = "%OOOPACKAGEVERSION"
-pkg_list_entry = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-base"
-End
-
-Start
 module = "gid_Module_Langpack_Binfilter"
 solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING-binfilter"
 solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING"
