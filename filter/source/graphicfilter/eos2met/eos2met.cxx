@@ -45,8 +45,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/solar.hrc>
-#include "strings.hrc"
-#include "dlgeos2.hxx"
 
 // -----------------------------Feld-Typen-------------------------------
 
@@ -2592,31 +2590,5 @@ extern "C" BOOL __LOADONCALLAPI GraphicExport( SvStream & rStream, Graphic & rGr
         aMTF.SetPrefSize(aBmp.GetSizePixel());
         return aMETWriter.WriteMET( aMTF, rStream, pFilterConfigItem );
     }
-}
-
-//================== GraphicDialog - die exportierte Funktion ================
-
-extern "C" BOOL SAL_CALL DoExportDialog( FltCallDialogParameter& rPara )
-{
-    BOOL    bRet = FALSE;
-
-    if ( rPara.pWindow )
-    {
-        ByteString aResMgrName( "eme" );
-        ResMgr* pResMgr;
-
-        pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
-
-        if( pResMgr )
-        {
-            rPara.pResMgr = pResMgr;
-            bRet = ( DlgExportEMET( rPara ).Execute() == RET_OK );
-            delete pResMgr;
-        }
-        else
-            bRet = TRUE;
-    }
-
-    return bRet;
 }
 
