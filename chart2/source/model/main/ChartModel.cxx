@@ -1043,6 +1043,7 @@ void SAL_CALL ChartModel::setVisualAreaSize( ::sal_Int64 nAspect, const awt::Siz
 {
     if( nAspect == embed::Aspects::MSOLE_CONTENT )
     {
+        ControllerLockGuard aLockGuard( this );
         bool bChanged =
             (m_aVisualAreaSize.Width != aSize.Width ||
              m_aVisualAreaSize.Height != aSize.Height);
