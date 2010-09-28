@@ -183,14 +183,11 @@ uno::Reference< beans::XMaterialHolder > PDFWriterImpl::initEncryption( const rt
         sal_uInt8 aPadUPW[ENCRYPTED_PWD_SIZE], aPadOPW[ENCRYPTED_PWD_SIZE];
         padPassword( i_rOwnerPassword.getLength() ? i_rOwnerPassword : i_rUserPassword, aPadOPW );
         padPassword( i_rUserPassword, aPadUPW );
-        sal_Int32 nKeyLength = SECUR_40BIT_KEY, nRC4KeyLength = SECUR_40BIT_KEY+5;
+        sal_Int32 nKeyLength = SECUR_40BIT_KEY;
         if( b128Bit )
-        {
             nKeyLength = SECUR_128BIT_KEY;
-            nRC4KeyLength = 16;
-        }
 
-        if( computeODictionaryValue( aPadOPW, aPadUPW, pTransporter->getOValue(), nKeyLength, nRC4KeyLength ) )
+        if( computeODictionaryValue( aPadOPW, aPadUPW, pTransporter->getOValue(), nKeyLength ) )
         {
             rtlDigest aDig = pTransporter->getUDigest();
             if( rtl_digest_updateMD5( aDig, aPadUPW, ENCRYPTED_PWD_SIZE ) != rtl_Digest_E_None )
@@ -216,7 +213,7 @@ bool PDFWriterImpl::prepareEncryption( const uno::Reference< beans::XMaterialHol
         sal_Int32 nKeyLength = 0, nRC4KeyLength = 0;
         sal_Int32 nAccessPermissions = computeAccessPermissions( m_aContext.Encryption, nKeyLength, nRC4KeyLength );
         m_aContext.Encryption.OValue = pTransporter->getOValue();
-        bSuccess = computeUDictionaryValue( pTransporter, m_aContext.Encryption, nKeyLength, nRC4KeyLength, nAccessPermissions );
+        bSuccess = computeUDictionaryValue( pTransporter, m_aContext.Encryption, nKeyLength, nAccessPermissions );
     }
     if( ! bSuccess )
     {
@@ -371,8 +368,7 @@ the step numbers down here correspond to the ones in PDF v.1.4 specfication
 bool PDFWriterImpl::computeODictionaryValue( const sal_uInt8* i_pPaddedOwnerPassword,
                                              const sal_uInt8* i_pPaddedUserPassword,
                                              std::vector< sal_uInt8 >& io_rOValue,
-                                             sal_Int32 i_nKeyLength,
-                                             sal_Int32 i_nRC4KeyLength
+                                             sal_Int32 i_nKeyLength
                                              )
 {
     bool bSuccess = true;
@@ -456,7 +452,6 @@ Algorithms 3.4 and 3.5  Compute the encryption dictionary /U value, save into th
 bool PDFWriterImpl::computeUDictionaryValue( EncHashTransporter* i_pTransporter,
                                              vcl::PDFWriter::PDFEncryptionProperties& io_rProperties,
                                              sal_Int32 i_nKeyLength,
-                                             sal_Int32 i_nRC4KeyLength,
                                              sal_Int32 i_nAccessPermissions
                                              )
 {

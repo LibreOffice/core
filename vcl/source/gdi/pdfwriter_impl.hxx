@@ -1031,12 +1031,12 @@ i12626
     /* algorithm 3.3: computing the encryption dictionary'ss owner password value ( /O ) */
     static bool computeODictionaryValue( const sal_uInt8* i_pPaddedOwnerPassword, const sal_uInt8* i_pPaddedUserPassword,
                                          std::vector< sal_uInt8 >& io_rOValue,
-                                         sal_Int32 i_nKeyLength, sal_Int32 i_nRC4KeyLength
+                                         sal_Int32 i_nKeyLength
                                         );
     /* algorithm 3.4 or 3.5: computing the encryption dictionary's user password value ( /U ) revision 2 or 3 of the standard security handler */
     static bool computeUDictionaryValue( EncHashTransporter* i_pTransporter,
                                          vcl::PDFWriter::PDFEncryptionProperties& io_rProperties,
-                                         sal_Int32 i_nKeyLength, sal_Int32 i_nRC4KeyLength,
+                                         sal_Int32 i_nKeyLength,
                                          sal_Int32 i_nAccessPermissions
                                         );
 
