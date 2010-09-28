@@ -405,51 +405,53 @@ void PPDParser::scanPPDDir( const String& rDir )
     const int nSuffixes = sizeof(pSuffixes)/sizeof(pSuffixes[0]);
 
     osl::Directory aDir( rDir );
-    aDir.open();
-    osl::DirectoryItem aItem;
-
-    INetURLObject aPPDDir(rDir);
-    while( aDir.getNextItem( aItem ) == osl::FileBase::E_None )
+    if ( aDir.open() == osl::FileBase::E_None )
     {
-        osl::FileStatus aStatus( FileStatusMask_FileName );
-        if( aItem.getFileStatus( aStatus ) == osl::FileBase::E_None )
+        osl::DirectoryItem aItem;
+
+        INetURLObject aPPDDir(rDir);
+        while( aDir.getNextItem( aItem ) == osl::FileBase::E_None )
         {
-            rtl::OUStringBuffer aURLBuf( rDir.Len() + 64 );
-            aURLBuf.append( rDir );
-            aURLBuf.append( sal_Unicode( '/' ) );
-            aURLBuf.append( aStatus.getFileName() );
-
-            rtl::OUString aFileURL, aFileName;
-            osl::FileStatus::Type eType = osl::FileStatus::Unknown;
-
-            if( resolveLink( aURLBuf.makeStringAndClear(), aFileURL, aFileName, eType ) == osl::FileBase::E_None )
+            osl::FileStatus aStatus( FileStatusMask_FileName );
+            if( aItem.getFileStatus( aStatus ) == osl::FileBase::E_None )
             {
-                if( eType == osl::FileStatus::Regular )
-                {
-                    INetURLObject aPPDFile = aPPDDir;
-                    aPPDFile.Append( aFileName );
+                rtl::OUStringBuffer aURLBuf( rDir.Len() + 64 );
+                aURLBuf.append( rDir );
+                aURLBuf.append( sal_Unicode( '/' ) );
+                aURLBuf.append( aStatus.getFileName() );
 
-                    // match extension
-                    for( int nSuffix = 0; nSuffix < nSuffixes; nSuffix++ )
+                rtl::OUString aFileURL, aFileName;
+                osl::FileStatus::Type eType = osl::FileStatus::Unknown;
+
+                if( resolveLink( aURLBuf.makeStringAndClear(), aFileURL, aFileName, eType ) == osl::FileBase::E_None )
+                {
+                    if( eType == osl::FileStatus::Regular )
                     {
-                        if( aFileName.getLength() > pSuffixes[nSuffix].nSuffixLen )
+                        INetURLObject aPPDFile = aPPDDir;
+                        aPPDFile.Append( aFileName );
+
+                        // match extension
+                        for( int nSuffix = 0; nSuffix < nSuffixes; nSuffix++ )
                         {
-                            if( aFileName.endsWithIgnoreAsciiCaseAsciiL( pSuffixes[nSuffix].pSuffix, pSuffixes[nSuffix].nSuffixLen ) )
+                            if( aFileName.getLength() > pSuffixes[nSuffix].nSuffixLen )
                             {
-                                (*pAllPPDFiles)[ aFileName.copy( 0, aFileName.getLength() - pSuffixes[nSuffix].nSuffixLen ) ] = aPPDFile.PathToFileName();
-                                break;
+                                if( aFileName.endsWithIgnoreAsciiCaseAsciiL( pSuffixes[nSuffix].pSuffix, pSuffixes[nSuffix].nSuffixLen ) )
+                                {
+                                    (*pAllPPDFiles)[ aFileName.copy( 0, aFileName.getLength() - pSuffixes[nSuffix].nSuffixLen ) ] = aPPDFile.PathToFileName();
+                                    break;
+                                }
                             }
                         }
                     }
-                }
-                else if( eType == osl::FileStatus::Directory )
-                {
-                    scanPPDDir( aFileURL );
+                    else if( eType == osl::FileStatus::Directory )
+                    {
+                        scanPPDDir( aFileURL );
+                    }
                 }
             }
         }
+        aDir.close();
     }
-    aDir.close();
 }
 
 void PPDParser::initPPDFiles()
