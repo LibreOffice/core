@@ -3000,10 +3000,19 @@ BOOL ScInputHandler::KeyInput( const KeyEvent& rKEvt, BOOL bStartEdit /* = FALSE
     USHORT nCode  = aCode.GetCode();
     sal_Unicode nChar = rKEvt.GetCharCode();
 
-    //  Alt-Return is accepted, everything else with ALT, or CTRL-TAB are not:
-    if (( bAlt && !bControl && nCode != KEY_RETURN ) ||
-            ( bControl && aCode.GetCode() == KEY_TAB ))
-        return FALSE;
+    if (bAlt && !bControl && nCode != KEY_RETURN)
+        // Alt-Return and Alt-Ctrl-* are accepted. Everything else with ALT are not.
+        return false;
+
+    if (!bControl && nCode == KEY_TAB)
+    {
+        // Normal TAB moves the cursor right.
+        EnterHandler();
+
+        if (pActiveViewSh)
+            pActiveViewSh->FindNextUnprot( bShift );
+        return true;
+    }
 
     BOOL bInputLine = ( eMode==SC_INPUT_TOP );
 
@@ -3042,30 +3051,22 @@ BOOL ScInputHandler::KeyInput( const KeyEvent& rKEvt, BOOL bStartEdit /* = FALSE
             }
             break;
         case KEY_TAB:
-            if (!bControl && !bAlt)
+            if (bControl && !bAlt)
             {
                 if ( pFormulaData && nTipVisible && nAutoPos != SCPOS_INVALID )
                 {
                     //  blaettern
 
                     NextFormulaEntry( bShift );
+                    bUsed = true;
                 }
                 else if ( pColumnData && bUseTab && nAutoPos != SCPOS_INVALID )
                 {
                     //  in den Eintraegen der AutoEingabe blaettern
 
                     NextAutoEntry( bShift );
+                    bUsed = true;
                 }
-                else
-                {
-                    EnterHandler();
-
-                    //  TabKeyInput gibt auf manchen Rechnern unter W95 Stackueberlaeufe,
-                    //  darum direkter Aufruf:
-                    if (pActiveViewSh)
-                        pActiveViewSh->FindNextUnprot( bShift );
-                }
-                bUsed = TRUE;
             }
             break;
         case KEY_ESCAPE:
