@@ -97,14 +97,22 @@ namespace basprov
             if ( pMethods )
             {
                 sal_Int32 nCount = pMethods->Count();
-                aChildNodes.realloc( nCount );
-                Reference< browse::XBrowseNode >* pChildNodes = aChildNodes.getArray();
-
+                sal_Int32 nRealCount = 0;
                 for ( sal_Int32 i = 0; i < nCount; ++i )
                 {
                     SbMethod* pMethod = static_cast< SbMethod* >( pMethods->Get( static_cast< USHORT >( i ) ) );
-                    if ( pMethod )
-                        pChildNodes[i] = static_cast< browse::XBrowseNode* >( new BasicMethodNodeImpl( m_xContext, m_sScriptingContext, pMethod, m_bIsAppScript ) );
+                    if ( pMethod && !pMethod->IsHidden() )
+                        ++nRealCount;
+                }
+                aChildNodes.realloc( nRealCount );
+                Reference< browse::XBrowseNode >* pChildNodes = aChildNodes.getArray();
+
+                sal_Int32 iTarget = 0;
+                for ( sal_Int32 i = 0; i < nCount; ++i )
+                {
+                    SbMethod* pMethod = static_cast< SbMethod* >( pMethods->Get( static_cast< USHORT >( i ) ) );
+                    if ( pMethod && !pMethod->IsHidden() )
+                        pChildNodes[iTarget++] = static_cast< browse::XBrowseNode* >( new BasicMethodNodeImpl( m_xContext, m_sScriptingContext, pMethod, m_bIsAppScript ) );
                 }
             }
         }
