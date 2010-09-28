@@ -134,6 +134,9 @@ class Desktop : public Application
         static sal_Bool         IsFirstStartWizardNeeded();
         static sal_Bool         CheckExtensionDependencies();
 
+        static void             DoRestartActionsIfNecessary( sal_Bool bQuickStart );
+        static void             SetRestartState();
+
         void                    SynchronizeExtensionRepositories();
         void                    SetSplashScreenText( const ::rtl::OUString& rText );
         void                    SetSplashScreenProgress( sal_Int32 );
