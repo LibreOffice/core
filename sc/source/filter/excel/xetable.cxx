@@ -1832,13 +1832,10 @@ XclExpRow::XclExpRow( const XclExpRoot& rRoot, sal_uInt16 nXclRow,
 
     // *** Row height *** -----------------------------------------------------
 
-    if (bUserHeight)
-        mnHeight = GetDoc().GetRowHeight(nScRow, nScTab, false);
-    else
-        mnHeight = EXC_ROW_DEFAULTHEIGHT;
+    // Always get the actual row height even if the manual size flag is not set,
+    // to correctly export the heights of rows with wrapped texts.
 
-    // #76250# not usable in Applix
-//    ::set_flag( mnHeight, EXC_ROW_FLAGDEFHEIGHT, !bUserHeight );
+    mnHeight = GetDoc().GetRowHeight(nScRow, nScTab, false);
 
     // *** Outline data *** ---------------------------------------------------
 
