@@ -375,6 +375,9 @@ public:
     // PrePaint call forwarded from app windows
     void PrePaint();
 
+    // PostPaint call forwarded from app windows
+    void PostPaint();
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // used internally for Draw/Impress/sch/chart2
     virtual void CompleteRedraw(OutputDevice* pOut, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0);

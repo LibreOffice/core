@@ -48,6 +48,7 @@ LIB1FILES=	\
     $(SLB)$/draw.lib \
     $(SLB)$/chart.lib \
     $(SLB)$/forms.lib \
+    $(SLB)$/form_handlers.lib \
     $(SLB)$/xforms.lib \
     $(SLB)$/table.lib
 
