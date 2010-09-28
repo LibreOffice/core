@@ -292,12 +292,21 @@ BOOL ScTable::SetOptimalHeight( SCROW nStartRow, SCROW nEndRow, USHORT nExtra,
     BOOL    bChanged = FALSE;
     SCSIZE  nCount = static_cast<SCSIZE>(nEndRow-nStartRow+1);
 
+    ULONG nTotalCount = GetWeightedCount();
     ScProgress* pProgress = NULL;
-    if ( pOuterProgress )
-        pProgress = pOuterProgress;
-    else if ( nCount > 1 )
-        pProgress = new ScProgress( pDocument->GetDocumentShell(),
-                            ScGlobal::GetRscString(STR_PROGRESS_HEIGHTING), GetWeightedCount() );
+    if (nTotalCount >= 1000)
+    {
+        // if the total number of rows is less than 1000, don't even bother
+        // with the progress bar because drawing progress bar can be very
+        // expensive especially in GTK.
+
+        if ( pOuterProgress )
+            pProgress = pOuterProgress;
+        else if ( nCount > 1 )
+            pProgress = new ScProgress(
+                pDocument->GetDocumentShell(),
+                ScGlobal::GetRscString(STR_PROGRESS_HEIGHTING), nTotalCount );
+    }
 
     USHORT* pHeight = new USHORT[nCount];                   // Twips !
     memset( pHeight, 0, sizeof(USHORT) * nCount );
