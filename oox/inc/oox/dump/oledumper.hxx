@@ -141,15 +141,19 @@ private:
     void                dumpCodePageProperty( sal_uInt32 nStartPos );
     void                dumpDictionaryProperty( sal_uInt32 nStartPos );
 
-    void                dumpPropertyContents( sal_Int32 nPropId );
-    void                dumpPropertyValue( sal_Int32 nPropId, sal_Int32 nBaseType );
+    sal_uInt16          dumpPropertyContents( sal_Int32 nPropId );
+    void                dumpPropertyValue( sal_Int32 nPropId, sal_uInt16 nBaseType );
+    void                dumpPropertyVector( sal_Int32 nPropId, sal_uInt16 nBaseType );
+    void                dumpPropertyArray( sal_Int32 nPropId, sal_uInt16 nBaseType );
 
-    sal_Int32           dumpPropertyType();
-    void                dumpBlob( const String& rName );
+    sal_uInt16          dumpPropertyType();
+    void                dumpBlob( sal_Int32 nPropId, const String& rName );
     ::rtl::OUString     dumpString8( const String& rName );
     ::rtl::OUString     dumpCharArray8( const String& rName, sal_Int32 nLen );
     ::rtl::OUString     dumpString16( const String& rName );
     ::rtl::OUString     dumpCharArray16( const String& rName, sal_Int32 nLen );
+    bool                dumpTypedProperty( const String& rName, sal_uInt16 nExpectedType );
+    void                dumpHlinks( sal_Int32 nSize );
 
     bool                startElement( sal_uInt32 nStartPos );
     void                writeSectionHeader( const ::rtl::OUString& rGuid, sal_uInt32 nStartPos );

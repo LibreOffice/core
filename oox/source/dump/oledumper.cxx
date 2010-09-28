@@ -305,28 +305,32 @@ namespace {
 const sal_Int32 OLEPROP_ID_DICTIONARY   = 0;
 const sal_Int32 OLEPROP_ID_CODEPAGE     = 1;
 
-const sal_Int32 OLEPROP_TYPE_INT16      = 2;
-const sal_Int32 OLEPROP_TYPE_INT32      = 3;
-const sal_Int32 OLEPROP_TYPE_FLOAT      = 4;
-const sal_Int32 OLEPROP_TYPE_DOUBLE     = 5;
-const sal_Int32 OLEPROP_TYPE_DATE       = 7;
-const sal_Int32 OLEPROP_TYPE_STRING     = 8;
-const sal_Int32 OLEPROP_TYPE_STATUS     = 10;
-const sal_Int32 OLEPROP_TYPE_BOOL       = 11;
-const sal_Int32 OLEPROP_TYPE_VARIANT    = 12;
-const sal_Int32 OLEPROP_TYPE_INT8       = 16;
-const sal_Int32 OLEPROP_TYPE_UINT8      = 17;
-const sal_Int32 OLEPROP_TYPE_UINT16     = 18;
-const sal_Int32 OLEPROP_TYPE_UINT32     = 19;
-const sal_Int32 OLEPROP_TYPE_INT64      = 20;
-const sal_Int32 OLEPROP_TYPE_UINT64     = 21;
-const sal_Int32 OLEPROP_TYPE_STRING8    = 30;
-const sal_Int32 OLEPROP_TYPE_STRING16   = 31;
-const sal_Int32 OLEPROP_TYPE_FILETIME   = 64;
-const sal_Int32 OLEPROP_TYPE_BLOB       = 65;
-const sal_Int32 OLEPROP_TYPE_STREAM     = 66;
-const sal_Int32 OLEPROP_TYPE_STORAGE    = 67;
-const sal_Int32 OLEPROP_TYPE_CLIPFMT    = 71;
+const sal_uInt16 OLEPROP_TYPE_INT16     = 2;
+const sal_uInt16 OLEPROP_TYPE_INT32     = 3;
+const sal_uInt16 OLEPROP_TYPE_FLOAT     = 4;
+const sal_uInt16 OLEPROP_TYPE_DOUBLE    = 5;
+const sal_uInt16 OLEPROP_TYPE_DATE      = 7;
+const sal_uInt16 OLEPROP_TYPE_STRING    = 8;
+const sal_uInt16 OLEPROP_TYPE_STATUS    = 10;
+const sal_uInt16 OLEPROP_TYPE_BOOL      = 11;
+const sal_uInt16 OLEPROP_TYPE_VARIANT   = 12;
+const sal_uInt16 OLEPROP_TYPE_INT8      = 16;
+const sal_uInt16 OLEPROP_TYPE_UINT8     = 17;
+const sal_uInt16 OLEPROP_TYPE_UINT16    = 18;
+const sal_uInt16 OLEPROP_TYPE_UINT32    = 19;
+const sal_uInt16 OLEPROP_TYPE_INT64     = 20;
+const sal_uInt16 OLEPROP_TYPE_UINT64    = 21;
+const sal_uInt16 OLEPROP_TYPE_STRING8   = 30;
+const sal_uInt16 OLEPROP_TYPE_STRING16  = 31;
+const sal_uInt16 OLEPROP_TYPE_FILETIME  = 64;
+const sal_uInt16 OLEPROP_TYPE_BLOB      = 65;
+const sal_uInt16 OLEPROP_TYPE_STREAM    = 66;
+const sal_uInt16 OLEPROP_TYPE_STORAGE   = 67;
+const sal_uInt16 OLEPROP_TYPE_CLIPFMT   = 71;
+
+const sal_uInt16 OLEPROP_TYPE_SIMPLE    = 0x0000;
+const sal_uInt16 OLEPROP_TYPE_VECTOR    = 0x1000;
+const sal_uInt16 OLEPROP_TYPE_ARRAY     = 0x2000;
 
 const sal_uInt16 CODEPAGE_UNICODE       = 1200;
 
@@ -461,7 +465,7 @@ void OlePropertyStreamObject::dumpCodePageProperty( sal_uInt32 nStartPos )
     IndentGuard aIndGuard( mxOut );
     if( startElement( nStartPos ) )
     {
-        sal_Int32 nType = dumpPropertyType();
+        sal_uInt16 nType = dumpPropertyType();
         if( nType == OLEPROP_TYPE_INT16 )
         {
             sal_uInt16 nCodePage = dumpDec< sal_uInt16 >( "codepage", "CODEPAGES" );
@@ -496,28 +500,21 @@ void OlePropertyStreamObject::dumpDictionaryProperty( sal_uInt32 nStartPos )
     mxOut->emptyLine();
 }
 
-void OlePropertyStreamObject::dumpPropertyContents( sal_Int32 nPropId )
+sal_uInt16 OlePropertyStreamObject::dumpPropertyContents( sal_Int32 nPropId )
 {
-    sal_Int32 nType = dumpPropertyType();
-    if( getFlag< sal_Int32 >( nType, 0x1000 ) ) // vector
+    sal_uInt16 nType = dumpPropertyType();
+    sal_uInt16 nBaseType = static_cast< sal_uInt16 >( nType & 0x0FFF );
+    sal_uInt16 nArrayType = static_cast< sal_uInt16 >( nType & 0xF000 );
+    switch( nArrayType )
     {
-        sal_Int32 nBaseType = nType & 0x0FFF;
-        sal_Int32 nElemCount = dumpDec< sal_Int32 >( "element-count" );
-        for( sal_Int32 nElemIdx = 0; !mxStrm->isEof() && (nElemIdx < nElemCount); ++nElemIdx )
-        {
-            mxOut->resetItemIndex( nElemIdx );
-            writeEmptyItem( "#element" );
-            IndentGuard aIndGuard( mxOut );
-            dumpPropertyValue( nPropId, nBaseType );
-        }
+        case OLEPROP_TYPE_SIMPLE:   dumpPropertyValue( nPropId, nBaseType );    break;
+        case OLEPROP_TYPE_VECTOR:   dumpPropertyVector( nPropId, nBaseType );   break;
+        case OLEPROP_TYPE_ARRAY:    dumpPropertyArray( nPropId, nBaseType );    break;
     }
-    else if( !getFlag< sal_Int32 >( nType, 0x7000 ) )
-    {
-        dumpPropertyValue( nPropId, nType );
-    }
+    return nType;
 }
 
-void OlePropertyStreamObject::dumpPropertyValue( sal_Int32 nPropId, sal_Int32 nBaseType )
+void OlePropertyStreamObject::dumpPropertyValue( sal_Int32 nPropId, sal_uInt16 nBaseType )
 {
     switch( nBaseType )
     {
@@ -539,23 +536,46 @@ void OlePropertyStreamObject::dumpPropertyValue( sal_Int32 nPropId, sal_Int32 nB
         case OLEPROP_TYPE_STRING8:      dumpString8( "value" );                 break;
         case OLEPROP_TYPE_STRING16:     dumpString16( "value" );                break;
         case OLEPROP_TYPE_FILETIME:     dumpFileTime( "file-time" );            break;
-        case OLEPROP_TYPE_BLOB:         dumpBlob( "data" );                     break;
+        case OLEPROP_TYPE_BLOB:         dumpBlob( nPropId, "data" );            break;
         case OLEPROP_TYPE_STREAM:       dumpString8( "stream-name" );           break;
         case OLEPROP_TYPE_STORAGE:      dumpString8( "storage-name" );          break;
-        case OLEPROP_TYPE_CLIPFMT:      dumpBlob( "clip-data" );                break;
+        case OLEPROP_TYPE_CLIPFMT:      dumpBlob( nPropId, "clip-data" );       break;
     }
 }
 
-sal_Int32 OlePropertyStreamObject::dumpPropertyType()
+void OlePropertyStreamObject::dumpPropertyVector( sal_Int32 nPropId, sal_uInt16 nBaseType )
 {
-    return dumpHex< sal_Int32 >( "type", "OLEPROP-TYPE" );
+    sal_Int32 nElemCount = dumpDec< sal_Int32 >( "element-count" );
+    for( sal_Int32 nElemIdx = 0; !mxStrm->isEof() && (nElemIdx < nElemCount); ++nElemIdx )
+    {
+        mxOut->resetItemIndex( nElemIdx );
+        writeEmptyItem( "#element" );
+        IndentGuard aIndGuard( mxOut );
+        dumpPropertyValue( nPropId, nBaseType );
+    }
 }
 
-void OlePropertyStreamObject::dumpBlob( const String& rName )
+void OlePropertyStreamObject::dumpPropertyArray( sal_Int32 /*nPropId*/, sal_uInt16 /*nBaseType*/ )
+{
+    // TODO
+}
+
+sal_uInt16 OlePropertyStreamObject::dumpPropertyType()
+{
+    return static_cast< sal_uInt16 >( dumpHex< sal_Int32 >( "type", "OLEPROP-TYPE" ) & 0xFFFF );
+}
+
+void OlePropertyStreamObject::dumpBlob( sal_Int32 nPropId, const String& rName )
 {
     sal_Int32 nSize = dumpDec< sal_Int32 >( "data-size" );
     if( nSize > 0 )
-        dumpBinary( rName, nSize );
+    {
+        OUString aPropName = mxPropIds->getName( cfg(), nPropId );
+        if( aPropName == CREATE_OUSTRING( "'_PID_HLINKS'" ) )
+            dumpHlinks( nSize );
+        else
+            dumpBinary( rName, nSize );
+    }
 }
 
 OUString OlePropertyStreamObject::dumpString8( const String& rName )
@@ -597,6 +617,33 @@ OUString OlePropertyStreamObject::dumpCharArray16( const String& rName, sal_Int3
     writeStringItem( rName, aData );
     if( nNewLen & 1 ) dumpUnused( 2 ); // always padding to 32bit
     return aData;
+}
+
+bool OlePropertyStreamObject::dumpTypedProperty( const String& rName, sal_uInt16 nExpectedType )
+{
+    writeEmptyItem( rName );
+    IndentGuard aIndGuard( mxOut );
+    return (dumpPropertyContents( -1 ) == nExpectedType) && !mxStrm->isEof();
+}
+
+void OlePropertyStreamObject::dumpHlinks( sal_Int32 nSize )
+{
+    sal_Int64 nEndPos = mxStrm->tell() + nSize;
+    sal_Int32 nCount = dumpDec< sal_Int32 >( "property-count" );
+    bool bValid = true;
+    for( sal_Int32 nHlinkIndex = 0, nHlinkCount = nCount / 6; bValid && !mxStrm->isEof() && (nHlinkIndex < nHlinkCount); ++nHlinkIndex )
+    {
+        writeEmptyItem( "HYPERLINK" );
+        IndentGuard aIndGuard( mxOut );
+        bValid =
+            dumpTypedProperty( "hash", OLEPROP_TYPE_INT32 ) &&
+            dumpTypedProperty( "app", OLEPROP_TYPE_INT32 ) &&
+            dumpTypedProperty( "shape-id", OLEPROP_TYPE_INT32 ) &&
+            dumpTypedProperty( "info", OLEPROP_TYPE_INT32 ) &&
+            dumpTypedProperty( "target", OLEPROP_TYPE_STRING16 ) &&
+            dumpTypedProperty( "location", OLEPROP_TYPE_STRING16 );
+    }
+    dumpRemainingTo( nEndPos );
 }
 
 bool OlePropertyStreamObject::startElement( sal_uInt32 nStartPos )
