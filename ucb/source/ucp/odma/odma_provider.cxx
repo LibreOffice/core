@@ -79,11 +79,26 @@ ContentProvider::~ContentProvider()
     }
 }
 // -----------------------------------------------------------------------------
+inline bool is_current_process_window(HWND hwnd)
+{
+    DWORD pid;
+    GetWindowThreadProcessId(hwnd, &pid);
+    return (pid == GetCurrentProcessId());
+}
+
+HWND choose_parent_window()
+{
+    HWND hwnd_parent = GetForegroundWindow();
+    if (!is_current_process_window(hwnd_parent))
+       hwnd_parent = GetDesktopWindow();
+    return hwnd_parent;
+}
+
 ODMHANDLE ContentProvider::getHandle()
 {
     if(!m_aOdmHandle)
     {
-        ODMSTATUS odm = NODMRegisterApp(&m_aOdmHandle,ODM_API_VERSION,ODMA_ODMA_REGNAME,NULL,NULL);
+        ODMSTATUS odm = NODMRegisterApp(&m_aOdmHandle,ODM_API_VERSION,ODMA_ODMA_REGNAME,(DWORD) choose_parent_window( ),NULL);
         switch(odm)
         {
         case ODM_SUCCESS:

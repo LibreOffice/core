@@ -96,6 +96,21 @@ void SAL_CALL ODMAFilePicker::setTitle( const ::rtl::OUString& aTitle )
     xExecutableDialog->setTitle( aTitle);
 }
 
+inline bool is_current_process_window(HWND hwnd)
+{
+    DWORD pid;
+    GetWindowThreadProcessId(hwnd, &pid);
+    return (pid == GetCurrentProcessId());
+}
+
+HWND choose_parent_window()
+{
+    HWND hwnd_parent = GetForegroundWindow();
+    if (!is_current_process_window(hwnd_parent))
+       hwnd_parent = GetDesktopWindow();
+    return hwnd_parent;
+}
+
 sal_Int16 SAL_CALL ODMAFilePicker::execute( )
     throw (RuntimeException)
 {
@@ -104,7 +119,7 @@ sal_Int16 SAL_CALL ODMAFilePicker::execute( )
     WORD count = 0;
     DWORD flags;
 
-    status = NODMRegisterApp( &handle, ODM_API_VERSION, "sodma", (DWORD) GetActiveWindow( ), NULL );
+    status = NODMRegisterApp( &handle, ODM_API_VERSION, "sodma", (DWORD) choose_parent_window( ), NULL );
     if (status == ODM_SUCCESS)
     {
         if (m_nDialogKind == OPEN)
