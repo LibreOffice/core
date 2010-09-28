@@ -448,12 +448,11 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 aDlgAttr.Put( aEditAttr );
                 aDlgAttr.Put( SvxKerningItem(0, RES_CHRATR_KERNING) );
 
-                //CHINA001 SwCharDlg* pDlg = new SwCharDlg(pView->GetWindow(), *pView, aDlgAttr, 0, sal_True);
-                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
 
                 SfxAbstractTabDialog* pDlg = pFact->CreateSwCharDlg( rView.GetWindow(), rView, aDlgAttr, DLG_CHAR,0, sal_True );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                DBG_ASSERT(pDlg, "Dialogdiet fail!");
                 USHORT nRet = pDlg->Execute();
                 if(RET_OK == nRet )
                 {
@@ -496,13 +495,12 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 aDlgAttr.Put( SvxWidowsItem( 0, RES_PARATR_WIDOWS ) );
                 aDlgAttr.Put( SvxOrphansItem( 0, RES_PARATR_ORPHANS ) );
 
-                //CHINA001 SwParaDlg* pDlg = new SwParaDlg(GetView().GetWindow(), GetView(), aDlgAttr, DLG_STD, 0, sal_True);
 
-                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
 
                 SfxAbstractTabDialog* pDlg = pFact->CreateSwParaDlg( rView.GetWindow(), rView, aDlgAttr,DLG_STD, DLG_PARA, 0, sal_True );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                DBG_ASSERT(pDlg, "Dialogdiet fail!");
                 USHORT nRet = pDlg->Execute();
                 if(RET_OK == nRet)
                 {

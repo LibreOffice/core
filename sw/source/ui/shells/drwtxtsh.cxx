@@ -93,7 +93,7 @@
 
 #include <cppuhelper/bootstrap.hxx>
 
-#include "swabstdlg.hxx" //CHINA001
+#include "swabstdlg.hxx"
 #include "misc.hrc"
 
 using namespace ::com::sun::star;

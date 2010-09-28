@@ -47,10 +47,6 @@ public:
     SFX_DECL_INTERFACE(SW_TEXTSHELL)
     TYPEINFO();
 
-//CHINA001  DECL_LINK( PostItNextHdl, Button * );
-//CHINA001  DECL_LINK( PostItPrevHdl, Button * );
-//CHINA001  DECL_LINK( RedlineNextHdl, Button * );
-//CHINA001  DECL_LINK( RedlinePrevHdl, Button * );
     DECL_LINK( RedlineNextHdl, AbstractSvxPostItDialog * );
     DECL_LINK( RedlinePrevHdl, AbstractSvxPostItDialog * );
 

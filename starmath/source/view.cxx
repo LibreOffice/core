@@ -1612,19 +1612,17 @@ void SmViewShell::Execute(SfxRequest& rReq)
         {
             if ( !GetViewFrame()->GetFrame().IsInPlace() )
             {
-                //CHINA001 SvxZoomDialog *pDlg = 0;
                 AbstractSvxZoomDialog *pDlg = 0;
                 const SfxItemSet *pSet = rReq.GetArgs();
                 if ( !pSet )
                 {
                     SfxItemSet aSet( GetDoc()->GetPool(), SID_ATTR_ZOOM, SID_ATTR_ZOOM);
                     aSet.Put( SvxZoomItem( SVX_ZOOM_PERCENT, aGraphic.GetZoom()));
-                    //CHINA001 pDlg = new SvxZoomDialog( &GetViewFrame()->GetWindow(), aSet);
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
                     {
                         pDlg = pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aSet);
-                        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                        DBG_ASSERT(pDlg, "Dialogdiet fail!");
                     }
                     pDlg->SetLimits( MINZOOM, MAXZOOM );
                     if( pDlg->Execute() != RET_CANCEL )

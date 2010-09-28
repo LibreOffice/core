@@ -68,7 +68,7 @@
 #define SwDrawShell
 #include <sfx2/msg.hxx>
 #include "swslots.hxx"
-#include "swabstdlg.hxx" //CHINA001
+#include "swabstdlg.hxx"
 #include "misc.hrc"
 
 using namespace ::com::sun::star;
