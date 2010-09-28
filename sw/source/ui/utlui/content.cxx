@@ -952,6 +952,7 @@ SwContentTree::SwContentTree(Window* pParent, const ResId& rResId) :
     aUpdTimer.SetTimeout(1000);
     Clear();
     EnableContextMenuHandling();
+    SetStyle( GetStyle() | WB_QUICK_SEARCH );
 }
 
 /***************************************************************************

@@ -152,7 +152,7 @@ SwCompatibilityOptPage::SwCompatibilityOptPage( Window* pParent, const SfxItemSe
             pEntry->SetUserData( (void*)(ULONG)nResId );
         }
     }
-    m_aOptionsLB.SetWindowBits( m_aOptionsLB.GetStyle() | WB_HSCROLL | WB_HIDESELECTION );
+    m_aOptionsLB.SetStyle( m_aOptionsLB.GetStyle() | WB_HSCROLL | WB_HIDESELECTION );
     m_aOptionsLB.SetHighlightRange();
 
     FreeResource();
