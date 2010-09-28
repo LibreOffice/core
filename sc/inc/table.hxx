@@ -884,6 +884,8 @@ private:
     void        InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* pAdrTo,
                                      BOOL bNumFormatChanged, BOOL bBroadcast );
 
+    void        SkipFilteredRows(SCROW& rRow, SCROW& rLastNonFilteredRow, bool bForward);
+
     /**
      * In case the cell text goes beyond the column width, move the max column
      * position to the right.  This is called from ExtendPrintArea.
