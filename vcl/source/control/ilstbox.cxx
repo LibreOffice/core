@@ -1707,7 +1707,7 @@ namespace
 {
     static ::vcl::StringEntryIdentifier lcl_getEntry( const ImplEntryList& _rList, USHORT _nPos, String& _out_entryText )
     {
-        OSL_PRECOND( ( _nPos != LISTBOX_ENTRY_NOTFOUND ) && ( _nPos >= 0 ), "lcl_getEntry: invalid position!" );
+        OSL_PRECOND( ( _nPos != LISTBOX_ENTRY_NOTFOUND ), "lcl_getEntry: invalid position!" );
         USHORT nEntryCount( _rList.GetEntryCount() );
         if ( _nPos >= nEntryCount )
             _nPos = 0;

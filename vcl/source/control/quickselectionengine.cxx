@@ -88,8 +88,6 @@ namespace vcl
     //--------------------------------------------------------------------
     static StringEntryIdentifier findMatchingEntry( const String& _searchString, QuickSelectionEngine_Data& _engineData )
     {
-        StringEntryIdentifier foundEntry( NULL );
-
         const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetLocaleI18nHelper();
             // TODO: do we really need the Window's settings here? The original code used it ...
 
