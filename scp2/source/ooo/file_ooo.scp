@@ -391,12 +391,6 @@ STD_FILTER_FILE( gid_File_Filter_Iti, iti)
 
 STD_RES_FILE( gid_File_Res_Eps, eps )
 
-STD_RES_FILE( gid_File_Res_Egi, egi )
-
-STD_RES_FILE( gid_File_Res_Ept, ept )
-
-STD_RES_FILE( gid_File_Res_Eme, eme )
-
 File gid_File_Help_Common_Zip
     Dir = gid_Dir_Help_Isolanguage;
     ARCHIVE_TXT_FILE_BODY;
