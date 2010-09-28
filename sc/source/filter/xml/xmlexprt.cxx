@@ -1520,12 +1520,36 @@ void ScXMLExport::SetBodyAttributes()
         AddAttribute(XML_NAMESPACE_TABLE, XML_STRUCTURE_PROTECTED, XML_TRUE);
         rtl::OUStringBuffer aBuffer;
         uno::Sequence<sal_Int8> aPassHash;
+        ScPasswordHash eHashUsed = PASSHASH_UNSPECIFIED;
         const ScDocProtection* p = pDoc->GetDocProtection();
         if (p)
-            aPassHash = p->getPasswordHash(PASSHASH_OOO);
+        {
+            if (p->hasPasswordHash(PASSHASH_SHA1))
+            {
+                aPassHash = p->getPasswordHash(PASSHASH_SHA1);
+                eHashUsed = PASSHASH_SHA1;
+            }
+            else if (p->hasPasswordHash(PASSHASH_XL, PASSHASH_SHA1))
+            {
+                aPassHash = p->getPasswordHash(PASSHASH_XL, PASSHASH_SHA1);
+                eHashUsed = PASSHASH_XL;
+            }
+        }
         SvXMLUnitConverter::encodeBase64(aBuffer, aPassHash);
         if (aBuffer.getLength())
+        {
             AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTION_KEY, aBuffer.makeStringAndClear());
+            if (eHashUsed == PASSHASH_XL)
+            {
+                AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTION_KEY_DIGEST_ALGORITHM,
+                             ScPassHashHelper::getHashURI(PASSHASH_XL));
+                AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTION_KEY_DIGEST_ALGORITHM_2,
+                             ScPassHashHelper::getHashURI(PASSHASH_SHA1));
+            }
+            else if (eHashUsed == PASSHASH_SHA1)
+                AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTION_KEY_DIGEST_ALGORITHM,
+                             ScPassHashHelper::getHashURI(PASSHASH_SHA1));
+        }
     }
 }
 
@@ -1725,18 +1749,46 @@ void ScXMLExport::_ExportContent()
                         AddAttribute(sAttrStyleName, aTableStyles[nTable]);
 
                         uno::Reference<util::XProtectable> xProtectable (xTable, uno::UNO_QUERY);
+                    ScTableProtection* pProtect = NULL;
                         if (xProtectable.is() && xProtectable->isProtected())
                         {
                             AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTED, XML_TRUE);
-                            rtl::OUStringBuffer aBuffer;
                             if (pDoc)
                             {
-                                ScTableProtection* pProtect = pDoc->GetTabProtection(static_cast<SCTAB>(nTable));
+                            pProtect = pDoc->GetTabProtection(static_cast<SCTAB>(nTable));
                                 if (pProtect)
-                                    SvXMLUnitConverter::encodeBase64(aBuffer, pProtect->getPasswordHash(PASSHASH_OOO));
+                            {
+                                rtl::OUStringBuffer aBuffer;
+                                ScPasswordHash eHashUsed = PASSHASH_UNSPECIFIED;
+                                if (pProtect->hasPasswordHash(PASSHASH_SHA1))
+                                {
+                                    SvXMLUnitConverter::encodeBase64(aBuffer, pProtect->getPasswordHash(PASSHASH_SHA1));
+                                    eHashUsed = PASSHASH_SHA1;
+                                }
+                                else if (pProtect->hasPasswordHash(PASSHASH_XL, PASSHASH_SHA1))
+                                {
+                                    // Double-hash this by SHA1 on top of the legacy xls hash.
+                                    uno::Sequence<sal_Int8> aHash = pProtect->getPasswordHash(PASSHASH_XL, PASSHASH_SHA1);
+                                    SvXMLUnitConverter::encodeBase64(aBuffer, aHash);
+                                    eHashUsed = PASSHASH_XL;
+                                }
+                                if (aBuffer.getLength())
+                                {
+                                    AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTION_KEY, aBuffer.makeStringAndClear());
+                                    if (eHashUsed == PASSHASH_XL)
+                                    {
+                                        AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTION_KEY_DIGEST_ALGORITHM,
+                                                     ScPassHashHelper::getHashURI(PASSHASH_XL));
+                                        AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTION_KEY_DIGEST_ALGORITHM_2,
+                                                     ScPassHashHelper::getHashURI(PASSHASH_SHA1));
+                                    }
+                                    else if (eHashUsed == PASSHASH_SHA1)
+                                        AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTION_KEY_DIGEST_ALGORITHM,
+                                                     ScPassHashHelper::getHashURI(PASSHASH_SHA1));
+
+                                }
                             }
-                            if (aBuffer.getLength())
-                                AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTION_KEY, aBuffer.makeStringAndClear());
+                            }
                         }
                         rtl::OUString sPrintRanges;
                         table::CellRangeAddress aColumnHeaderRange;
@@ -1747,6 +1799,20 @@ void ScXMLExport::_ExportContent()
                         else if (!pDoc->IsPrintEntireSheet(static_cast<SCTAB>(nTable)))
                             AddAttribute( XML_NAMESPACE_TABLE, XML_PRINT, XML_FALSE);
                         SvXMLElementExport aElemT(*this, sElemTab, sal_True, sal_True);
+
+                    if (pProtect && pProtect->isProtected())
+                    {
+                        if (pProtect->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS))
+                            AddAttribute(XML_NAMESPACE_TABLE, XML_SELECT_PROTECTED_CELLS, XML_TRUE);
+                        if (pProtect->isOptionEnabled(ScTableProtection::SELECT_UNLOCKED_CELLS))
+                            AddAttribute(XML_NAMESPACE_TABLE, XML_SELECT_UNPROTECTED_CELLS, XML_TRUE);
+
+                        rtl::OUString aElemName = GetNamespaceMap().GetQNameByKey(
+                            XML_NAMESPACE_TABLE, GetXMLToken(XML_TABLE_PROTECTION));
+
+                        SvXMLElementExport aElemProtected(*this, aElemName, true, true);
+                    }
+
                         CheckAttrList();
 
                         if ( pDoc && pDoc->GetSheetEvents( static_cast<SCTAB>(nTable) ) &&

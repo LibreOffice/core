@@ -63,6 +63,9 @@
 
 using namespace com::sun::star;
 using namespace xmloff::token;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::xml::sax::XAttributeList;
+using ::rtl::OUString;
 
 /**
  * Determine whether this table is an external reference cache from its
@@ -161,10 +164,9 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
 
     if (!bTempIsSubTable)
     {
-        sal_Bool bProtection(sal_False);
+        ScXMLTabProtectionData aProtectData;
         rtl::OUString sName;
         rtl::OUString sStyleName;
-        rtl::OUString sPassword;
         sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
         const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetTableAttrTokenMap();
         for( sal_Int16 i=0; i < nAttrCount; ++i )
@@ -183,15 +185,21 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
                 case XML_TOK_TABLE_STYLE_NAME:
                         sStyleName = sValue;
                     break;
-                case XML_TOK_TABLE_PROTECTION:
-                        bProtection = IsXMLToken(sValue, XML_TRUE);
-                    break;
+                case XML_TOK_TABLE_PROTECTED:
+                    aProtectData.mbProtected = IsXMLToken(sValue, XML_TRUE);
+                break;
                 case XML_TOK_TABLE_PRINT_RANGES:
                         sPrintRanges = sValue;
                     break;
                 case XML_TOK_TABLE_PASSWORD:
-                        sPassword = sValue;
-                    break;
+                    aProtectData.maPassword = sValue;
+                break;
+                case XML_TOK_TABLE_PASSHASH:
+                    aProtectData.meHash1 = ScPassHashHelper::getHashTypeFromURI(sValue);
+                break;
+                case XML_TOK_TABLE_PASSHASH_2:
+                    aProtectData.meHash2 = ScPassHashHelper::getHashTypeFromURI(sValue);
+                break;
                 case XML_TOK_TABLE_PRINT:
                     {
                         if (IsXMLToken(sValue, XML_FALSE))
@@ -219,7 +227,7 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
         else
         {
             // This is a regular table.
-            GetScImport().GetTables().NewSheet(sName, sStyleName, bProtection, sPassword);
+            GetScImport().GetTables().NewSheet(sName, sStyleName, aProtectData);
         }
     }
     else
@@ -286,6 +294,9 @@ SvXMLImportContext *ScXMLTableContext::CreateChildContext( USHORT nPrefix,
     case XML_TOK_TABLE_COL:
             pContext = new ScXMLTableColContext( GetScImport(), nPrefix,
                                                       rLName, xAttrList );
+        break;
+    case XML_TOK_TABLE_PROTECTION:
+        pContext = new ScXMLTableProtectionContext( GetScImport(), nPrefix, rLName, xAttrList );
         break;
     case XML_TOK_TABLE_ROW_GROUP:
         pContext = new ScXMLTableRowsContext( GetScImport(), nPrefix,
@@ -420,3 +431,61 @@ void ScXMLTableContext::EndElement()
     GetScImport().UnlockSolarMutex();
 }
 
+// ============================================================================
+
+ScXMLImport& ScXMLTableProtectionContext::GetScImport()
+{
+    return static_cast<ScXMLImport&>(GetImport());
+}
+
+ScXMLTableProtectionContext::ScXMLTableProtectionContext(
+    ScXMLImport& rImport, USHORT nPrefix, const OUString& rLName,
+    const Reference<XAttributeList>& xAttrList ) :
+    SvXMLImportContext( rImport, nPrefix, rLName )
+{
+    const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetTableProtectionAttrTokenMap();
+    bool bSelectProtectedCells = false;
+    bool bSelectUnprotectedCells = false;
+
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+
+    for (sal_Int16 i = 0; i < nAttrCount; ++i)
+    {
+        const OUString& aAttrName = xAttrList->getNameByIndex(i);
+        const OUString aValue = xAttrList->getValueByIndex(i);
+
+        OUString aLocalName;
+        USHORT nLocalPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
+            aAttrName, &aLocalName);
+
+        switch (rAttrTokenMap.Get(nLocalPrefix, aLocalName))
+        {
+            case XML_TOK_TABLE_SELECT_PROTECTED_CELLS:
+                bSelectProtectedCells = IsXMLToken(aValue, XML_TRUE);
+            break;
+            case XML_TOK_TABLE_SELECT_UNPROTECTED_CELLS:
+                bSelectUnprotectedCells = IsXMLToken(aValue, XML_TRUE);
+            break;
+            default:
+                ;
+        }
+    }
+
+    ScXMLTabProtectionData& rProtectData = GetScImport().GetTables().GetCurrentProtectionData();
+    rProtectData.mbSelectProtectedCells   = bSelectProtectedCells;
+    rProtectData.mbSelectUnprotectedCells = bSelectUnprotectedCells;
+}
+
+ScXMLTableProtectionContext::~ScXMLTableProtectionContext()
+{
+}
+
+SvXMLImportContext* ScXMLTableProtectionContext::CreateChildContext(
+    USHORT /*nPrefix*/, const OUString& /*rLocalName*/, const Reference<XAttributeList>& /*xAttrList*/ )
+{
+    return NULL;
+}
+
+void ScXMLTableProtectionContext::EndElement()
+{
+}

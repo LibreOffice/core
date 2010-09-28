@@ -77,7 +77,7 @@ ScRetypePassDlg::ScRetypePassDlg(Window* pParent) :
 
     mpDocItem(static_cast<ScDocProtection*>(NULL)),
     mnCurScrollPos(0),
-    meDesiredHash(PASSHASH_OOO)
+    meDesiredHash(PASSHASH_SHA1)
 {
     Init();
 }

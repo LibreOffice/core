@@ -31,12 +31,16 @@
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
 
+#include "tabprotection.hxx"
+
 class ScXMLImport;
 class ScXMLChangeTrackingImportHelper;
 
 class ScXMLBodyContext : public SvXMLImportContext
 {
     rtl::OUString   sPassword;
+    ScPasswordHash  meHash1;
+    ScPasswordHash  meHash2;
     sal_Bool        bProtected;
     sal_Bool        bHadCalculationSettings;
 

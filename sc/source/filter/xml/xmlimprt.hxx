@@ -169,6 +169,7 @@ enum ScXMLTableTokens
     XML_TOK_TABLE_COL,
     XML_TOK_TABLE_ROW_GROUP,
     XML_TOK_TABLE_HEADER_ROWS,
+    XML_TOK_TABLE_PROTECTION,
     XML_TOK_TABLE_ROWS,
     XML_TOK_TABLE_ROW,
     XML_TOK_TABLE_SOURCE,
@@ -177,6 +178,12 @@ enum ScXMLTableTokens
     XML_TOK_TABLE_FORMS,
     XML_TOK_TABLE_EVENT_LISTENERS,
     XML_TOK_TABLE_EVENT_LISTENERS_EXT
+};
+
+enum ScXMLTokenProtectionTokens
+{
+    XML_TOK_TABLE_SELECT_PROTECTED_CELLS,
+    XML_TOK_TABLE_SELECT_UNPROTECTED_CELLS
 };
 
 enum ScXMLTableRowsTokens
@@ -199,9 +206,11 @@ enum ScXMLTableAttrTokens
 {
     XML_TOK_TABLE_NAME,
     XML_TOK_TABLE_STYLE_NAME,
-    XML_TOK_TABLE_PROTECTION,
+    XML_TOK_TABLE_PROTECTED,
     XML_TOK_TABLE_PRINT_RANGES,
     XML_TOK_TABLE_PASSWORD,
+    XML_TOK_TABLE_PASSHASH,
+    XML_TOK_TABLE_PASSHASH_2,
     XML_TOK_TABLE_PRINT
 };
 
@@ -699,6 +708,7 @@ class ScXMLImport: public SvXMLImport
     SvXMLTokenMap           *pLabelRangesElemTokenMap;
     SvXMLTokenMap           *pLabelRangeAttrTokenMap;
     SvXMLTokenMap           *pTableElemTokenMap;
+    SvXMLTokenMap           *pTableProtectionElemTokenMap;
     SvXMLTokenMap           *pTableRowsElemTokenMap;
     SvXMLTokenMap           *pTableColsElemTokenMap;
     SvXMLTokenMap           *pTableScenarioAttrTokenMap;
@@ -863,6 +873,7 @@ public:
     const SvXMLTokenMap& GetLabelRangesElemTokenMap();
     const SvXMLTokenMap& GetLabelRangeAttrTokenMap();
     const SvXMLTokenMap& GetTableElemTokenMap();
+    const SvXMLTokenMap& GetTableProtectionAttrTokenMap();
     const SvXMLTokenMap& GetTableRowsElemTokenMap();
     const SvXMLTokenMap& GetTableColsElemTokenMap();
     const SvXMLTokenMap& GetTableAttrTokenMap();

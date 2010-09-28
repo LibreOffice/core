@@ -148,6 +148,15 @@ void ScMyTableData::SetChangedCols(const sal_Int32 nValue)
 
 /*******************************************************************************************************************************/
 
+ScXMLTabProtectionData::ScXMLTabProtectionData() :
+    meHash1(PASSHASH_SHA1),
+    meHash2(PASSHASH_UNSPECIFIED),
+    mbProtected(false),
+    mbSelectProtectedCells(true),
+    mbSelectUnprotectedCells(true)
+{
+}
+
 ScMyTables::ScMyTables(ScXMLImport& rTempImport)
     : rImport(rTempImport),
     aResizeShapes(rTempImport),
@@ -173,7 +182,7 @@ ScMyTables::~ScMyTables()
 }
 
 void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& sStyleName,
-                        const sal_Bool bTempProtection, const rtl::OUString& sTempPassword)
+                          const ScXMLTabProtectionData& rProtectData)
 {
     if (rImport.GetModel().is())
     {
@@ -189,8 +198,7 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
         }
         ++nCurrentSheet;
 
-        bProtection = bTempProtection;
-        sPassword = sTempPassword;
+        maProtectionData = rProtectData;
         uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( rImport.GetModel(), uno::UNO_QUERY );
         if ( xSpreadDoc.is() )
         {
@@ -654,13 +662,16 @@ void ScMyTables::DeleteTable()
         aMatrixRangeList.clear();
     }
 
-    if (rImport.GetDocument() && bProtection)
+    if (rImport.GetDocument() && maProtectionData.mbProtected)
     {
-        uno::Sequence<sal_Int8> aPass;
-        SvXMLUnitConverter::decodeBase64(aPass, sPassword);
+        uno::Sequence<sal_Int8> aHash;
+        SvXMLUnitConverter::decodeBase64(aHash, maProtectionData.maPassword);
+
         auto_ptr<ScTableProtection> pProtect(new ScTableProtection);
-        pProtect->setProtected(bProtection);
-        pProtect->setPasswordHash(aPass, PASSHASH_OOO);
+        pProtect->setProtected(maProtectionData.mbProtected);
+        pProtect->setPasswordHash(aHash, maProtectionData.meHash1, maProtectionData.meHash2);
+        pProtect->setOption(ScTableProtection::SELECT_LOCKED_CELLS,   maProtectionData.mbSelectProtectedCells);
+        pProtect->setOption(ScTableProtection::SELECT_UNLOCKED_CELLS, maProtectionData.mbSelectUnprotectedCells);
         rImport.GetDocument()->SetTabProtection(static_cast<SCTAB>(nCurrentSheet), pProtect.get());
     }
 

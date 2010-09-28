@@ -75,4 +75,26 @@ public:
     virtual void EndElement();
 };
 
+// ============================================================================
+
+class ScXMLTableProtectionContext : public SvXMLImportContext
+{
+    ScXMLImport& GetScImport();
+
+public:
+    ScXMLTableProtectionContext( ScXMLImport& rImport, USHORT nPrefix,
+                        const ::rtl::OUString& rLName,
+                        const ::com::sun::star::uno::Reference<
+                                 ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+
+    virtual ~ScXMLTableProtectionContext();
+
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+                                     const ::rtl::OUString& rLocalName,
+                                     const ::com::sun::star::uno::Reference<
+                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+
+    virtual void EndElement();
+};
+
 #endif

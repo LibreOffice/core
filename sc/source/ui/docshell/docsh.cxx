@@ -1549,9 +1549,14 @@ BOOL __EXPORT ScDocShell::SaveAs( SfxMedium& rMedium )
 
 #if ENABLE_SHEET_PROTECTION
     ScTabViewShell* pViewShell = GetBestViewShell();
-    if (pViewShell && ScPassHashHelper::needsPassHashRegen(aDocument, PASSHASH_OOO))
+    bool bNeedsRehash = ScPassHashHelper::needsPassHashRegen(aDocument, PASSHASH_SHA1);
+    if (bNeedsRehash)
+        // legacy xls hash double-hashed by SHA1 is also supported.
+        bNeedsRehash = ScPassHashHelper::needsPassHashRegen(aDocument, PASSHASH_XL, PASSHASH_SHA1);
+
+    if (pViewShell && bNeedsRehash)
     {
-        if (!pViewShell->ExecuteRetypePassDlg(PASSHASH_OOO))
+        if (!pViewShell->ExecuteRetypePassDlg(PASSHASH_SHA1))
             // password re-type cancelled.  Don't save the document.
             return false;
     }

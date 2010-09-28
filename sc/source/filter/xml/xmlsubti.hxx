@@ -40,6 +40,7 @@
 #include <list>
 #include "XMLTableShapeResizer.hxx"
 #include "formula/grammar.hxx"
+#include "tabprotection.hxx"
 
 class ScXMLImport;
 
@@ -106,6 +107,18 @@ struct ScMatrixRange
     }
 };
 
+struct ScXMLTabProtectionData
+{
+    ::rtl::OUString maPassword;
+    ScPasswordHash  meHash1;
+    ScPasswordHash  meHash2;
+    bool            mbProtected;
+    bool            mbSelectProtectedCells;
+    bool            mbSelectUnprotectedCells;
+
+    ScXMLTabProtectionData();
+};
+
 class ScMyTables
 {
 private:
@@ -120,8 +133,8 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > xDrawPage;
     ::com::sun::star::uno::Reference < ::com::sun::star::drawing::XShapes > xShapes;
     rtl::OUString                       sCurrentSheetName;
-    rtl::OUString                       sPassword;
     std::vector<ScMyTableData*>         aTableVec;
+    ScXMLTabProtectionData              maProtectionData;
     ScMyMatrixRangeList                 aMatrixRangeList;
     com::sun::star::table::CellAddress  aRealCellPos;
     sal_Int32                           nCurrentColStylePos;
@@ -129,7 +142,6 @@ private:
     sal_Int16                           nCurrentXShapes;
     sal_Int32                           nTableCount;
     sal_Int32                           nCurrentSheet;
-    sal_Bool                            bProtection;
 
     sal_Bool                            IsMerged (const com::sun::star::uno::Reference <com::sun::star::table::XCellRange>& xCellRange,
                                                 const sal_Int32 nCol, const sal_Int32 nRow,
@@ -144,7 +156,7 @@ public:
                                         ScMyTables(ScXMLImport& rImport);
                                         ~ScMyTables();
     void                                NewSheet(const rtl::OUString& sTableName, const rtl::OUString& sStyleName,
-                                                const sal_Bool bProtection, const rtl::OUString& sPassword);
+                                                 const ScXMLTabProtectionData& rProtectData);
     void                                AddRow();
     void                                SetRowStyle(const rtl::OUString& rCellStyleName);
     void                                AddColumn(sal_Bool bIsCovered);
@@ -155,6 +167,7 @@ public:
     com::sun::star::table::CellAddress  GetRealCellPos();
     void                                AddColCount(sal_Int32 nTempColCount);
     void                                AddColStyle(const sal_Int32 nRepeat, const rtl::OUString& rCellStyleName);
+    ScXMLTabProtectionData&             GetCurrentProtectionData() { return maProtectionData; }
     rtl::OUString                       GetCurrentSheetName() const { return sCurrentSheetName; }
     sal_Int32                           GetCurrentSheet() const { return nCurrentSheet; }
     sal_Int32                           GetCurrentColumn() const { return aTableVec[nTableCount - 1]->GetColCount(); }

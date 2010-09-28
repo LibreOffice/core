@@ -77,6 +77,8 @@ ScXMLBodyContext::ScXMLBodyContext( ScXMLImport& rImport,
                                               const uno::Reference<xml::sax::XAttributeList>& xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     sPassword(),
+    meHash1(PASSHASH_SHA1),
+    meHash2(PASSHASH_UNSPECIFIED),
     bProtected(sal_False),
     bHadCalculationSettings(sal_False),
     pChangeTrackingImportHelper(NULL)
@@ -122,6 +124,10 @@ ScXMLBodyContext::ScXMLBodyContext( ScXMLImport& rImport,
                 bProtected = IsXMLToken(sValue, XML_TRUE);
             else if (IsXMLToken(aLocalName, XML_PROTECTION_KEY))
                 sPassword = sValue;
+            else if (IsXMLToken(aLocalName, XML_PROTECTION_KEY_DIGEST_ALGORITHM))
+                meHash1 = ScPassHashHelper::getHashTypeFromURI(sValue);
+            else if (IsXMLToken(aLocalName, XML_PROTECTION_KEY_DIGEST_ALGORITHM_2))
+                meHash2 = ScPassHashHelper::getHashTypeFromURI(sValue);
         }
     }
 }
@@ -327,7 +333,7 @@ void ScXMLBodyContext::EndElement()
             if (sPassword.getLength())
             {
                 SvXMLUnitConverter::decodeBase64(aPass, sPassword);
-                pProtection->setPasswordHash(aPass, PASSHASH_OOO);
+                pProtection->setPasswordHash(aPass, meHash1, meHash2);
             }
 
             pDoc->SetDocProtection(pProtection.get());

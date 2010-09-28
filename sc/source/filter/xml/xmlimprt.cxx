@@ -637,6 +637,7 @@ const SvXMLTokenMap& ScXMLImport::GetTableElemTokenMap()
             { XML_NAMESPACE_TABLE,  XML_TABLE_HEADER_COLUMNS,       XML_TOK_TABLE_HEADER_COLS   },
             { XML_NAMESPACE_TABLE,  XML_TABLE_COLUMNS,              XML_TOK_TABLE_COLS          },
             { XML_NAMESPACE_TABLE,  XML_TABLE_COLUMN,               XML_TOK_TABLE_COL           },
+            { XML_NAMESPACE_TABLE,  XML_TABLE_PROTECTION,           XML_TOK_TABLE_PROTECTION    },
             { XML_NAMESPACE_TABLE,  XML_TABLE_ROW_GROUP,            XML_TOK_TABLE_ROW_GROUP     },
             { XML_NAMESPACE_TABLE,  XML_TABLE_HEADER_ROWS,          XML_TOK_TABLE_HEADER_ROWS   },
             { XML_NAMESPACE_TABLE,  XML_TABLE_ROWS,                 XML_TOK_TABLE_ROWS          },
@@ -654,6 +655,22 @@ const SvXMLTokenMap& ScXMLImport::GetTableElemTokenMap()
     } // if( !pTableElemTokenMap )
 
     return *pTableElemTokenMap;
+}
+
+const SvXMLTokenMap& ScXMLImport::GetTableProtectionAttrTokenMap()
+{
+    if (!pTableProtectionElemTokenMap)
+    {
+        static __FAR_DATA SvXMLTokenMapEntry aTableProtectionTokenMap[] =
+        {
+            { XML_NAMESPACE_TABLE, XML_SELECT_PROTECTED_CELLS,      XML_TOK_TABLE_SELECT_PROTECTED_CELLS    },
+            { XML_NAMESPACE_TABLE, XML_SELECT_UNPROTECTED_CELLS,    XML_TOK_TABLE_SELECT_UNPROTECTED_CELLS  },
+            XML_TOKEN_MAP_END
+        };
+        pTableProtectionElemTokenMap = new SvXMLTokenMap(aTableProtectionTokenMap);
+    }
+
+    return *pTableProtectionElemTokenMap;
 }
 
 const SvXMLTokenMap& ScXMLImport::GetTableRowsElemTokenMap()
@@ -702,9 +719,11 @@ const SvXMLTokenMap& ScXMLImport::GetTableAttrTokenMap()
         {
             { XML_NAMESPACE_TABLE,     XML_NAME,           XML_TOK_TABLE_NAME          },
             { XML_NAMESPACE_TABLE,     XML_STYLE_NAME,     XML_TOK_TABLE_STYLE_NAME    },
-            { XML_NAMESPACE_TABLE,     XML_PROTECTED,      XML_TOK_TABLE_PROTECTION    },
+            { XML_NAMESPACE_TABLE, XML_PROTECTED,                   XML_TOK_TABLE_PROTECTED         },
             { XML_NAMESPACE_TABLE,     XML_PRINT_RANGES,   XML_TOK_TABLE_PRINT_RANGES  },
             { XML_NAMESPACE_TABLE,     XML_PROTECTION_KEY, XML_TOK_TABLE_PASSWORD      },
+            { XML_NAMESPACE_TABLE, XML_PROTECTION_KEY_DIGEST_ALGORITHM, XML_TOK_TABLE_PASSHASH      },
+            { XML_NAMESPACE_TABLE, XML_PROTECTION_KEY_DIGEST_ALGORITHM_2, XML_TOK_TABLE_PASSHASH_2  },
             { XML_NAMESPACE_TABLE,     XML_PRINT,          XML_TOK_TABLE_PRINT         },
             XML_TOKEN_MAP_END
         };
@@ -1664,6 +1683,7 @@ ScXMLImport::ScXMLImport(
     pLabelRangesElemTokenMap( 0 ),
     pLabelRangeAttrTokenMap( 0 ),
     pTableElemTokenMap( 0 ),
+    pTableProtectionElemTokenMap(NULL),
     pTableRowsElemTokenMap( 0 ),
     pTableColsElemTokenMap( 0 ),
     pTableScenarioAttrTokenMap( 0 ),
@@ -1788,6 +1808,7 @@ ScXMLImport::~ScXMLImport() throw()
     delete pLabelRangesElemTokenMap;
     delete pLabelRangeAttrTokenMap;
     delete pTableElemTokenMap;
+    delete pTableProtectionElemTokenMap;
     delete pTableRowsElemTokenMap;
     delete pTableColsElemTokenMap;
     delete pTableAttrTokenMap;
