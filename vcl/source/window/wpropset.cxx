@@ -73,6 +73,7 @@ public:
     {
     }
 
+    using cppu::WeakComponentImplHelperBase::disposing;
     virtual void SAL_CALL disposing( const lang::EventObject& ) throw()
     {
     }
