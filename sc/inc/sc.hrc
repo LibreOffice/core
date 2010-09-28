@@ -1662,15 +1662,12 @@
 
 #define SC_OOO_BUILD_START          (SC_DIALOGS_END)
 
-// Autoformat for DataPilot
-#define SID_PIVOT_AFMT              (SC_OOO_BUILD_START + 1)
-
 // Toggle sheet grid
-#define FID_TAB_TOGGLE_GRID         (SC_OOO_BUILD_START + 2)
+#define FID_TAB_TOGGLE_GRID         (SC_OOO_BUILD_START + 1)
 
 // Formula options page
-#define RID_SCPAGE_FORMULA          (SC_OOO_BUILD_START + 3)
-#define HID_SCPAGE_FORMULA          (SC_OOO_BUILD_START + 4)
+#define RID_SCPAGE_FORMULA          (SC_OOO_BUILD_START + 2)
+#define HID_SCPAGE_FORMULA          (SC_OOO_BUILD_START + 3)
 
 #endif
 

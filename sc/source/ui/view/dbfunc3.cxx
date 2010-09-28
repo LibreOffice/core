@@ -2369,29 +2369,3 @@ void ScDBFunc::RepeatDB( BOOL bRecord )
     else        // "Keine Operationen auszufuehren"
         ErrorMessage(STR_MSSG_REPEATDB_0);
 }
-
-void ScDBFunc::AutoFormatPivotTable(USHORT nIndex)
-{
-    ScDocument* pDoc    = GetViewData()->GetDocument();
-
-    //  old pivot not used any more
-
-    ScDPObject* pDPObj  = pDoc->GetDPAtCursor(
-        GetViewData()->GetCurX(), GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
-
-    if ( pDPObj )
-    {
-        pDPObj->SetAutoFormatIndex(nIndex);
-    }
-    else
-        ErrorMessage(STR_PIVOT_NOTFOUND);
-
-}
-
-void ScDBFunc::AutoFormatPivotTable(ScDPObject* pDPObj, USHORT nIndex)
-{
-    pDPObj->SetAutoFormatIndex(nIndex);
-}
-
-
-

@@ -1872,30 +1872,6 @@ SfxVoidItem DeletePivotTable SID_PIVOT_KILL
     GroupId = GID_DATA;
 ]
 
-SfxVoidItem AutoFormatPivotTable SID_PIVOT_AFMT
-()
-[
-        /* flags: */
-        AutoUpdate = FALSE,
-        Cachable = Cachable,
-        FastCall = FALSE,
-        HasCoreId = FALSE,
-        HasDialog = FALSE,
-        ReadOnlyDoc = TRUE,
-        Toggle = FALSE,
-        Container = FALSE,
-        RecordAbsolute = FALSE,
-        RecordPerSet;
-        Synchron;
-
-        /* config: */
-        AccelConfig = FALSE,
-        MenuConfig = TRUE,
-        StatusBarConfig = FALSE,
-        ToolBoxConfig = FALSE,
-        GroupId = GID_DATA;
-]
-
 //--------------------------------------------------------------------------
 SfxVoidItem DeletePrintArea SID_DELETE_PRINTAREA
 ()

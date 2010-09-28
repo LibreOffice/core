@@ -1413,36 +1413,6 @@ BOOL ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
     delete pNewUndoDoc;
     delete pUndoDPObj;
 
-    if (pNewObj && pNewObj->GetAutoFormatIndex() != 65535)
-    {
-        ScViewData* pViewData = rDocShell.GetViewData();
-        ScTabViewShell* pViewShell = pViewData->GetViewShell();
-        pViewShell->GetDBData( TRUE, SC_DB_OLD );
-        const ScMarkData& rMark1 = pViewData->GetMarkData();
-        SCCOL nStartCol;
-        SCROW nStartRow;
-        SCTAB nStartTab;
-        SCCOL nEndCol;
-        SCROW nEndRow;
-        SCTAB nEndTab;
-
-        rDocShell.GetViewData()->GetSimpleArea( nStartCol,nStartRow,nStartTab,nEndCol,nEndRow,nEndTab );
-        ScRange Outrange = pNewObj->GetOutRange();
-        if (( (Outrange.aStart.Col() <= nStartCol) && (nStartCol <= Outrange.aEnd.Col() )&& (nStartTab == Outrange.aStart.Tab()))
-            && ( (Outrange.aStart.Row() <= nStartRow) && (nStartRow <= Outrange.aEnd.Row() )) )
-        {
-
-            if ( !rMark1.IsMarked() && !rMark1.IsMultiMarked() )
-                pViewShell->MarkDataArea( TRUE );
-            //FIXME: Autoformat even when clicked from a non-dp cell.
-            pViewData->MoveNextRow();
-            sal_uInt16 nAutoFmtIndex = pNewObj->GetAutoFormatIndex();
-            pViewShell->AutoFormat(nAutoFmtIndex);
-            pViewShell->AutoFormatPivotTable(const_cast<ScDPObject*>(pNewObj), nAutoFmtIndex);
-            pViewData->MovePrevRow();
-        }
-    }
-
     if (bDone)
     {
         // notify API objects
