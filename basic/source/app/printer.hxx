@@ -36,13 +36,13 @@ class BasicPrinter
     boost::shared_ptr<Printer>                      mpPrinter;
     boost::shared_ptr<vcl::OldStylePrintAdaptor>    mpListener;
 
-    short nLine;                        // aktuelle Zeile
-    short nPage;                        // aktuelle Seite
-    short nLines;                       // Zeilen pro Seite
-    short nYoff;                        // Zeilenabstand in Points
-    String aFile;                       // Dateiname
+    short nLine;                        // current row
+    short nPage;                        // current page
+    short nLines;                       // lines per page
+    short nYoff;                        // line spacing in points
+    String aFile;                       // file name
 
-    void Header();                      // Seitenkopf drucken
+    void Header();                      // print page header
     void StartPage();
 public:
     BasicPrinter();

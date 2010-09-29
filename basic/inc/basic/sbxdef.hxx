@@ -86,9 +86,9 @@ enum SbxDataType {
     SbxUSERDEF    = 29, //   user defined
     SbxLPSTR      = 30, // * null terminated string
     SbxLPWSTR     = 31, //   wide null terminated string
-    SbxCoreSTRING = 32, //   from 1997/4/10 for GetCoreString(), only for converting
-    SbxWSTRING    = 33, //   from 2000/10/4 Reimplemented for backwards compatibility (#78919)
-    SbxWCHAR      = 34, //   from 2000/10/4 Reimplemented for backwards compatibility (#78919)
+    SbxCoreSTRING = 32, //   from 1997-4-10 for GetCoreString(), only for converting
+    SbxWSTRING    = 33, //   from 2000-10-4 Reimplemented for backwards compatibility (#78919)
+    SbxWCHAR      = 34, //   from 2000-10-4 Reimplemented for backwards compatibility (#78919)
     SbxSALINT64   = 35, //   for UNO hyper
     SbxSALUINT64  = 36, //   for UNO unsigned hyper
     SbxDECIMAL    = 37, //   for UNO/automation Decimal

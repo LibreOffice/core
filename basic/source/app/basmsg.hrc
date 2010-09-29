@@ -27,17 +27,17 @@
 #include "basic/ttglobal.hrc"
 
 
-// Hier sind die Messages aus dem Verzeichnis /basic/source/app enhalten
+// Here are included the messages of the folder /basic/source/app
 
 
 ///////////////////////////////
-// Fehlermeldungen, die in das Resultfile gelangen.
+// Error messages which go to the result file.
 // *********************
-// ***  !!ACHTUNG!!  ***
+// ***  !!ATTENTION!!    ***
 // *********************
-// Die Nummern dürfen sich NIE! ändern,
-// da sie in den Resultfiles gespeichert sind, und bei erneutem Anzeigen
-// statdessen die entsprechenden neuen oder garkeine Strings angzeigt werden.
+// The numbers must NEVER(!) change,
+// because they are saved in the result files and a renewed display
+// would display new strings or no strings.
 ///////////////////////////////
 
 #define S_PROG_START                    ( BAS_START +   0 )

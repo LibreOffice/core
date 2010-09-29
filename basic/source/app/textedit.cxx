@@ -199,10 +199,10 @@ void TextEditImp::ImpDoHighlight( const String& rSource, ULONG nLineOff )
         return;
 
     SbTextPortion& rLast = aPortionList[nCount-1];
-    if ( rLast.nStart > rLast.nEnd )    // Nur bis Bug von MD behoben
+    if ( rLast.nStart > rLast.nEnd )    // Only up to the bug of MD repaired
     {
 #if OSL_DEBUG_LEVEL > 1
-        DBG_ERROR( "MD-Bug nicht beseitigt!" );
+        DBG_ERROR( "MD-Bug is not repaired!" );
 #endif
         nCount--;
         aPortionList.Remove( nCount);
@@ -278,7 +278,7 @@ void TextEditImp::ImpDoHighlight( const String& rSource, ULONG nLineOff )
     {
         SbTextPortion& r = aPortionList[i];
 //      DBG_ASSERT( r.nStart <= r.nEnd, "Highlight: Start > End?" );
-        if ( r.nStart > r.nEnd )    // Nur bis Bug von MD behoben
+        if ( r.nStart > r.nEnd )    // Only up to the bug of MD repaired
             continue;
 
         SbTextType eCol = r.eType;
@@ -338,11 +338,11 @@ void TextEditImp::ImpDoHighlight( const String& rSource, ULONG nLineOff )
 
 void TextEditImp::DoSyntaxHighlight( ULONG nPara )
 {
-    // Due to delayed syntax highlight it can happend that the
-        // paragraph does no longer exist
+    // Due to delayed syntax highlight it can happen that the
+   // paragraph does no longer exist
     if ( nPara < pTextEngine->GetParagraphCount() )
     {
-        // leider weis ich nicht, ob genau diese Zeile Modified() ...
+        // unfortunatly I don't know if exact this line Modified() ...
 //      if ( pProgress )
 //          pProgress->StepProgress();
         pTextEngine->RemoveAttribs( nPara );
@@ -384,7 +384,7 @@ IMPL_LINK( TextEditImp, SyntaxTimerHdl, Timer *, EMPTYARG )
         aSyntaxLineTable.Remove( nLine );
 /*      if ( Application::AnyInput() )
         {
-            aSyntaxIdleTimer.Start();       // Starten, falls wir in einem Dialog landen
+            aSyntaxIdleTimer.Start();       // Launch if we are landing in a dialog
             pTextView->ShowCursor( TRUE, TRUE );
             pTextEngine->SetUpdateMode( TRUE );
             bHighlightning = FALSE;
@@ -419,7 +419,7 @@ IMPL_LINK( TextEditImp, SyntaxTimerHdl, Timer *, EMPTYARG )
         aImplSyntaxIdleTimer.Start();
 
 //  while ( Application::AnyInput() )
-//      Application::Reschedule();  // Reschedule, da der UserEvent keine Paints etc. durchlässt
+//      Application::Reschedule();  // Reschedule, because the UserEvent let pass no paints etc.
 
     return 0;
 }
