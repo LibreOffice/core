@@ -951,31 +951,6 @@ Sequence< OUString > Hyphenator::getSupportedServiceNames_Static()
     return aSNS;
 }
 
-
-sal_Bool SAL_CALL Hyphenator_writeInfo(
-            void * /*pServiceManager*/, registry::XRegistryKey * pRegistryKey )
-{
-    try
-    {
-        String aImpl( '/' );
-        aImpl += Hyphenator::getImplementationName_Static().getStr();
-        aImpl.AppendAscii( "/UNO/SERVICES" );
-        Reference< registry::XRegistryKey > xNewKey =
-                pRegistryKey->createKey( aImpl );
-        Sequence< OUString > aServices =
-                Hyphenator::getSupportedServiceNames_Static();
-        for( INT32 i = 0; i < aServices.getLength(); i++ )
-            xNewKey->createKey( aServices.getConstArray()[i] );
-
-        return sal_True;
-    }
-    catch(Exception &)
-    {
-        return sal_False;
-    }
-}
-
-
 void * SAL_CALL Hyphenator_getFactory( const sal_Char * pImplName,
             XMultiServiceFactory * pServiceManager, void *  )
 {
