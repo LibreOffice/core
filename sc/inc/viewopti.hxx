@@ -135,7 +135,6 @@ class SC_DLLPUBLIC ScTpViewItem : public SfxPoolItem
 {
 public:
                 TYPEINFO();
-//UNUSED2008-05  ScTpViewItem( USHORT nWhich );
                 ScTpViewItem( USHORT nWhich, const ScViewOptions& rOpt );
                 ScTpViewItem( const ScTpViewItem&  rItem );
                 ~ScTpViewItem();
