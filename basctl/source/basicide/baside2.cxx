@@ -348,8 +348,8 @@ BOOL ModulWindow::BasicExecute()
             AddStatus( BASWIN_RUNNINGBASIC );
             USHORT nStart, nEnd, nCurMethodStart = 0;
             TextSelection aSel = GetEditView()->GetSelection();
-            if ( aDocument.isInVBAMode() )
-                nCurMethodStart = ( aSel.GetStart().GetPara() + 1 );
+            // Init cursor to top
+            nCurMethodStart = ( aSel.GetStart().GetPara() + 1 );
             SbMethod* pMethod = 0;
             // erstes Macro, sonst blind "Main" (ExtSearch?)
             for ( USHORT nMacro = 0; nMacro < xModule->GetMethods()->Count(); nMacro++ )
@@ -357,26 +357,17 @@ BOOL ModulWindow::BasicExecute()
                 SbMethod* pM = (SbMethod*)xModule->GetMethods()->Get( nMacro );
                 DBG_ASSERT( pM, "Method?" );
                 pM->GetLineRange( nStart, nEnd );
-                if ( aDocument.isInVBAMode() )
+                if (  nCurMethodStart >= nStart && nCurMethodStart <= nEnd )
                 {
-                    if (  nCurMethodStart >= nStart && nCurMethodStart <= nEnd )
-                    {
-                        pMethod = pM;
-                        break;
-                    }
-                }
-                else if  ( !pMethod || ( nStart < nCurMethodStart && !pM->IsHidden() ) )
-                {
+                    // matched a method to the cursor position
                     pMethod = pM;
-                    nCurMethodStart = nStart;
+                    break;
                 }
             }
             if ( !pMethod )
             {
-                if ( aDocument.isInVBAMode() )
-                    return ( BasicIDE::ChooseMacro( uno::Reference< frame::XModel >(), FALSE, rtl::OUString() ).getLength() > 0 ) ? TRUE : FALSE;
-                else
-                    pMethod = (SbMethod*)xModule->Find( String( RTL_CONSTASCII_USTRINGPARAM( "Main" ) ), SbxCLASS_METHOD );
+                // If not in a method then prompt the user
+                return ( BasicIDE::ChooseMacro( uno::Reference< frame::XModel >(), FALSE, rtl::OUString() ).getLength() > 0 ) ? TRUE : FALSE;
             }
             if ( pMethod )
             {
