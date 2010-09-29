@@ -1249,6 +1249,14 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Uno_Bundled_Extensions_User
     Value = "${${OOO_BASE_DIR}/program/" PROFILENAME(fundamentalbasis) ":BUNDLED_EXTENSIONS_USER}";
 End
 
+ProfileItem gid_Brand_Profileitem_Fundamental_Uno_Bundled_Extensions_Prereg
+    ModuleID = gid_Module_Root_Brand;
+    ProfileID = gid_Brand_Profile_Fundamental_Ini;
+    Section = "Bootstrap";
+    Key = "BUNDLED_EXTENSIONS_PREREG";
+    Value = "${${OOO_BASE_DIR}/program/" PROFILENAME(fundamentalbasis) ":BUNDLED_EXTENSIONS_PREREG}";
+End
+
 ProfileItem gid_Brand_Profileitem_Fundamental_Uno_Shared_Packages_Cache
     ModuleID = gid_Module_Root_Brand;
     ProfileID = gid_Brand_Profile_Fundamental_Ini;
