@@ -92,7 +92,11 @@ namespace vcl
             // TODO: do we really need the Window's settings here? The original code used it ...
 
         String sEntryText;
+        // get the "current + 1" entry
         StringEntryIdentifier pSearchEntry = _engineData.rEntryList.CurrentEntry( sEntryText );
+        if ( pSearchEntry )
+            pSearchEntry = _engineData.rEntryList.NextEntry( pSearchEntry, sEntryText );
+        // loop 'til we find another matching entry
         StringEntryIdentifier pStartedWith = pSearchEntry;
         while ( pSearchEntry )
         {
