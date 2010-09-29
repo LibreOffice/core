@@ -155,9 +155,6 @@ public:
                   nValue(nVal),
                   nStrType(nType) {}
 
-//UNUSED2008-05  TypedStrData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
-//UNUSED2008-05                  BOOL bAllStrings );
-
             TypedStrData( const TypedStrData& rCpy )
                 : ScDataObject(),
                   aStrValue(rCpy.aStrValue),

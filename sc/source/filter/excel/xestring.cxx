@@ -125,20 +125,6 @@ XclExpString::XclExpString( const OUString& rString, XclStrFlags nFlags, sal_uIn
     Assign( rString, nFlags, nMaxLen );
 }
 
-//UNUSED2008-05  XclExpString::XclExpString(
-//UNUSED2008-05      const String& rString, const XclFormatRunVec& rFormats,
-//UNUSED2008-05      XclStrFlags nFlags, sal_uInt16 nMaxLen )
-//UNUSED2008-05  {
-//UNUSED2008-05      Assign( rString, rFormats, nFlags, nMaxLen );
-//UNUSED2008-05  }
-//UNUSED2008-05
-//UNUSED2008-05  XclExpString::XclExpString(
-//UNUSED2008-05          const OUString& rString, const XclFormatRunVec& rFormats,
-//UNUSED2008-05          XclStrFlags nFlags, sal_uInt16 nMaxLen )
-//UNUSED2008-05  {
-//UNUSED2008-05      Assign( rString, rFormats, nFlags, nMaxLen );
-//UNUSED2008-05  }
-
 // assign ---------------------------------------------------------------------
 
 void XclExpString::Assign( const String& rString, XclStrFlags nFlags, sal_uInt16 nMaxLen )
@@ -179,36 +165,12 @@ void XclExpString::AssignByte(
     Build( aByteStr.GetBuffer(), aByteStr.Len(), nFlags, nMaxLen );
 }
 
-//UNUSED2008-05  void XclExpString::AssignByte( sal_Unicode cChar, rtl_TextEncoding eTextEnc, XclStrFlags nFlags, sal_uInt16 nMaxLen )
-//UNUSED2008-05  {
-//UNUSED2008-05      if( !cChar )
-//UNUSED2008-05      {
-//UNUSED2008-05          sal_Char cByteChar = 0;
-//UNUSED2008-05          Build( &cByteChar, 1, nFlags, nMaxLen );
-//UNUSED2008-05      }
-//UNUSED2008-05      else
-//UNUSED2008-05      {
-//UNUSED2008-05          ByteString aByteStr( &cChar, 1, eTextEnc );     // length may be >1
-//UNUSED2008-05          Build( aByteStr.GetBuffer(), aByteStr.Len(), nFlags, nMaxLen );
-//UNUSED2008-05      }
-//UNUSED2008-05  }
-
 // append ---------------------------------------------------------------------
 
 void XclExpString::Append( const String& rString )
 {
     BuildAppend( rString.GetBuffer(), rString.Len() );
 }
-
-//UNUSED2008-05  void XclExpString::Append( const ::rtl::OUString& rString )
-//UNUSED2008-05  {
-//UNUSED2008-05      BuildAppend( rString.getStr(), rString.getLength() );
-//UNUSED2008-05  }
-//UNUSED2008-05
-//UNUSED2008-05  void XclExpString::Append( sal_Unicode cChar )
-//UNUSED2008-05  {
-//UNUSED2008-05      BuildAppend( &cChar, 1 );
-//UNUSED2008-05  }
 
 void XclExpString::AppendByte( const String& rString, rtl_TextEncoding eTextEnc )
 {

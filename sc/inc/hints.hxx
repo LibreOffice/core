@@ -93,7 +93,6 @@ class ScPointerChangedHint : public SfxHint
 public:
                     TYPEINFO();
 
-//UNUSED2008-05     ScPointerChangedHint( USHORT nF );
                     ~ScPointerChangedHint();
 
     USHORT          GetFlags() const            { return nFlags; }

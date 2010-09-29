@@ -108,7 +108,6 @@ public:
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                             MakeInstance( sal_uInt16 nType, ScDocShell* pDocShell );
     static ::com::sun::star::uno::Sequence<rtl::OUString> GetAllServiceNames();
-//UNUSED2008-05  static String           GetProviderName(sal_uInt16 nObjectType);
     static sal_uInt16       GetProviderType(const String& rServiceName);
 };
 

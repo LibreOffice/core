@@ -377,8 +377,6 @@ struct XclFontData
     void                SetApiHeight( float fPoint );
     /** Sets the API font family. */
     void                SetApiFamily( sal_Int16 nApiFamily );
-//UNUSED2009-05 /** Sets the API font text encoding. */
-//UNUSED2009-05 void                SetApiFontEncoding( sal_Int16 nApiFontEnc );
     /** Sets the API font posture. */
     void                SetApiPosture( ::com::sun::star::awt::FontSlant eApiPosture );
     /** Sets the API font weight. */
@@ -474,9 +472,6 @@ protected:
 
     /** Returns the current number format map. */
     inline const XclNumFmtMap& GetFormatMap() const { return maFmtMap; }
-
-//UNUSED2008-05  /** Returns the number format with the specified Excel format index. */
-//UNUSED2008-05  const XclNumFmt*    GetFormat( sal_uInt16 nXclNumFmt ) const;
 
     /** Inserts a new number format for the specified Excel format index. */
     void                InsertFormat( sal_uInt16 nXclNumFmt, const String& rFormat );

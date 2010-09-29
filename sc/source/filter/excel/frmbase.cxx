@@ -269,20 +269,6 @@ LotusConverterBase::~LotusConverterBase()
 {
 }
 
-//UNUSED2008-05  void LotusConverterBase::Reset( INT32 nLen, const ScAddress& rEingPos )
-//UNUSED2008-05  {
-//UNUSED2008-05      ConverterBase::Reset();
-//UNUSED2008-05      nBytesLeft = nLen;
-//UNUSED2008-05      aEingPos = rEingPos;
-//UNUSED2008-05  }
-//UNUSED2008-05
-//UNUSED2008-05  void LotusConverterBase::Reset( INT32 nLen )
-//UNUSED2008-05  {
-//UNUSED2008-05      ConverterBase::Reset();
-//UNUSED2008-05      nBytesLeft = nLen;
-//UNUSED2008-05      aEingPos.Set( 0, 0, 0 );
-//UNUSED2008-05  }
-
 void LotusConverterBase::Reset( const ScAddress& rEingPos )
 {
     ConverterBase::Reset();

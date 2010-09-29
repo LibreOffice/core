@@ -353,13 +353,6 @@ void ScXMLConverter::ConvertDateTimeToString(const DateTime& aDateTime, rtl::OUS
     SvXMLUnitConverter::convertDateTime(sDate, aAPIDateTime);
 }
 
-//UNUSED2008-05  void ScXMLConverter::ConvertStringToDateTime(const rtl::OUString& sDate, DateTime& aDateTime, SvXMLUnitConverter* /* pUnitConverter */)
-//UNUSED2008-05  {
-//UNUSED2008-05      com::sun::star::util::DateTime aAPIDateTime;
-//UNUSED2008-05      SvXMLUnitConverter::convertDateTime(aAPIDateTime, sDate);
-//UNUSED2008-05      ConvertAPIToCoreDateTime(aAPIDateTime, aDateTime);
-//UNUSED2008-05  }
-
 void ScXMLConverter::ConvertCoreToAPIDateTime(const DateTime& aDateTime, util::DateTime& rDateTime)
 {
     rDateTime.Year = aDateTime.GetYear();

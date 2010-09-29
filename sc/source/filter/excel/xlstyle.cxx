@@ -468,12 +468,6 @@ void XclFontData::SetApiFamily( sal_Int16 nApiFamily )
     }
 }
 
-//UNUSED2009-05 void XclFontData::SetApiFontEncoding( sal_Int16 nApiFontEnc )
-//UNUSED2009-05 {
-//UNUSED2009-05     // API constants are equal to rtl_TextEncoding constants
-//UNUSED2009-05     SetFontEncoding( static_cast< rtl_TextEncoding >( nApiFontEnc ) );
-//UNUSED2009-05 }
-
 void XclFontData::SetApiPosture( Awt::FontSlant eApiPosture )
 {
     mbItalic =
@@ -1491,12 +1485,6 @@ void XclNumFmtBuffer::InitializeImport()
 {
     maFmtMap.clear();
 }
-
-//UNUSED2008-05  const XclNumFmt* XclNumFmtBuffer::GetFormat( sal_uInt16 nXclNumFmt ) const
-//UNUSED2008-05  {
-//UNUSED2008-05      XclNumFmtMap::const_iterator aIt = maFmtMap.find( nXclNumFmt );
-//UNUSED2008-05      return (aIt != maFmtMap.end()) ? &aIt->second : 0;
-//UNUSED2008-05  }
 
 void XclNumFmtBuffer::InsertFormat( sal_uInt16 nXclNumFmt, const String& rFormat )
 {

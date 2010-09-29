@@ -139,23 +139,7 @@ public:
         @return  true = Cell range returned in rXclRange is valid (original or cropped). */
     bool                ConvertRange( XclRange& rXclRange, const ScRange& rScRange, bool bWarn );
 
-//UNUSED2008-05  /** Returns a valid cell range by moving it into allowed dimensions.
-//UNUSED2008-05      @descr  The start and/or end position of the range may be modified.
-//UNUSED2008-05      @param rScRange  The Calc cell range to convert.
-//UNUSED2008-05      @param bWarn  true = Sets the internal flag that produces a warning box
-//UNUSED2008-05          after loading/saving the file, if the cell range contains invalid cells.
-//UNUSED2008-05      @return  The converted Excel cell range. */
-//UNUSED2008-05  XclRange            CreateValidRange( const ScRange& rScRange, bool bWarn );
-
     // cell range list --------------------------------------------------------
-
-//UNUSED2008-05  /** Checks if the passed cell range list is valid.
-//UNUSED2008-05      @param rScRanges  The Calc cell range list to check.
-//UNUSED2008-05      @param bWarn  true = Sets the internal flag that produces a warning box
-//UNUSED2008-05          after loading/saving the file, if the cell range list contains at
-//UNUSED2008-05          least one invalid range.
-//UNUSED2008-05      @return  true = Cell range list in rScRanges is completly valid. */
-//UNUSED2008-05  bool                CheckRangeList( const ScRangeList& rScRanges, bool bWarn );
 
     /** Checks and eventually crops the cell ranges to valid dimensions.
         @descr  The start position of the ranges will not be modified. Cell

@@ -124,12 +124,6 @@ Reference< XInterface > ScfApiHelper::CreateInstanceWithArgs(
     return xInt;
 }
 
-//UNUSED2008-05  Reference< XInterface > ScfApiHelper::CreateInstanceWithArgs(
-//UNUSED2008-05          SfxObjectShell* pShell, const OUString& rServiceName, const Sequence< Any >& rArgs )
-//UNUSED2008-05  {
-//UNUSED2008-05      return CreateInstanceWithArgs( GetServiceFactory( pShell ), rServiceName, rArgs );
-//UNUSED2008-05  }
-
 Reference< XInterface > ScfApiHelper::CreateInstanceWithArgs(
         const OUString& rServiceName, const Sequence< Any >& rArgs )
 {

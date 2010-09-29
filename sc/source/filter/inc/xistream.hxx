@@ -304,8 +304,6 @@ public:
     /** Seeks to last position from user position stack.
         @descr  This position will be removed from the stack. */
     void                PopPosition();
-//UNUSED2008-05  /** Removes last position from user position stack, but does not seek to it. */
-//UNUSED2008-05  void                RejectPosition();
 
     /** Stores current position. This position keeps valid in all records. */
     void                StoreGlobalPosition();

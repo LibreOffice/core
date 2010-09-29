@@ -2975,11 +2975,6 @@ void XclImpPictureObj::ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nLinkSize )
 
 // DFF stream conversion ======================================================
 
-//UNUSED2009-05 void XclImpSolverContainer::ReadSolverContainer( SvStream& rDffStrm )
-//UNUSED2009-05 {
-//UNUSED2009-05     rDffStrm >> *this;
-//UNUSED2009-05 }
-
 void XclImpSolverContainer::InsertSdrObjectInfo( SdrObject& rSdrObj, sal_uInt32 nDffShapeId, sal_uInt32 nDffFlags )
 {
     if( nDffShapeId > 0 )

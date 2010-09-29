@@ -507,8 +507,6 @@ public:
                                         BOOL bStartOnly = FALSE) const;
     ScDBData*       GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
 
-//UNUSED2008-05  ScRangeData*   GetRangeAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab,
-//UNUSED2008-05                                      BOOL bStartOnly = FALSE) const;
     SC_DLLPUBLIC ScRangeData*   GetRangeAtBlock( const ScRange& rBlock, String* pName=NULL ) const;
 
     SC_DLLPUBLIC ScDPCollection*        GetDPCollection();
@@ -765,8 +763,6 @@ public:
     BOOL            HasSubTotalCells( const ScRange& rRange );
 
     SC_DLLPUBLIC void           PutCell( const ScAddress&, ScBaseCell* pCell, BOOL bForceTab = FALSE );
-//UNUSED2009-05 SC_DLLPUBLIC void           PutCell( const ScAddress&, ScBaseCell* pCell,
-//UNUSED2009-05                         ULONG nFormatIndex, BOOL bForceTab = FALSE);
     SC_DLLPUBLIC void           PutCell( SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseCell* pCell,
                             BOOL bForceTab = FALSE );
     SC_DLLPUBLIC void           PutCell(SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseCell* pCell,
@@ -809,8 +805,6 @@ public:
     SC_DLLPUBLIC CellType       GetCellType( const ScAddress& rPos ) const;
     SC_DLLPUBLIC void           GetCell( SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseCell*& rpCell ) const;
     SC_DLLPUBLIC ScBaseCell*        GetCell( const ScAddress& rPos ) const;
-
-//UNUSED2008-05  void           RefreshNoteFlags();
 
     SC_DLLPUBLIC BOOL           HasData( SCCOL nCol, SCROW nRow, SCTAB nTab );
     SC_DLLPUBLIC BOOL           HasStringData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
@@ -1439,8 +1433,6 @@ public:
     SC_DLLPUBLIC void            ClearPrintRanges( SCTAB nTab );
     /** Adds a new print ranges. */
     SC_DLLPUBLIC void            AddPrintRange( SCTAB nTab, const ScRange& rNew );
-//UNUSED2009-05 /** Removes all old print ranges and sets the passed print ranges. */
-//UNUSED2009-05 void            SetPrintRange( SCTAB nTab, const ScRange& rNew );
     /** Marks the specified sheet to be printed completely. Deletes old print ranges on the sheet! */
     SC_DLLPUBLIC void            SetPrintEntireSheet( SCTAB nTab );
     SC_DLLPUBLIC void           SetRepeatColRange( SCTAB nTab, const ScRange* pNew );
@@ -1779,7 +1771,6 @@ public:
     SC_DLLPUBLIC SfxItemPool*       GetEnginePool() const;
     SC_DLLPUBLIC ScFieldEditEngine& GetEditEngine();
     SC_DLLPUBLIC ScNoteEditEngine&  GetNoteEngine();
-//UNUSED2009-05 SfxItemPool&            GetNoteItemPool();
 
     ScRefreshTimerControl*  GetRefreshTimerControl() const
         { return pRefreshTimerControl; }

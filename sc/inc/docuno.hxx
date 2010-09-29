@@ -680,7 +680,6 @@ private:
     ScDocShell*             pDocShell;
 
 public:
-//UNUSED2008-05             ScSpreadsheetSettingsObj(ScDocShell* pDocSh);
     virtual                 ~ScSpreadsheetSettingsObj();
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );

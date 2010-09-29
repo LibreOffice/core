@@ -296,28 +296,6 @@ sal_Size XclExpStream::CopyFromStream( SvStream& rInStrm, sal_Size nBytes )
     return nRet;
 }
 
-//UNUSED2008-05  void XclExpStream::WriteUnicodeBuffer( const sal_uInt16* pBuffer, sal_Size nChars, sal_uInt8 nFlags )
-//UNUSED2008-05  {
-//UNUSED2008-05      SetSliceSize( 0 );
-//UNUSED2008-05      if( pBuffer && (nChars > 0) )
-//UNUSED2008-05      {
-//UNUSED2008-05          sal_uInt16 nCharLen = (nFlags & EXC_STRF_16BIT) ? 2 : 1;
-//UNUSED2008-05          for( sal_Size nIndex = 0; nIndex < nChars; ++nIndex )
-//UNUSED2008-05          {
-//UNUSED2008-05              if( mbInRec && (mnCurrSize + nCharLen > mnCurrMaxSize) )
-//UNUSED2008-05              {
-//UNUSED2008-05                  StartContinue();
-//UNUSED2008-05                  // repeat only 16bit flag
-//UNUSED2008-05                  operator<<( static_cast< sal_uInt8 >( nFlags & EXC_STRF_16BIT ) );
-//UNUSED2008-05              }
-//UNUSED2008-05              if( nCharLen == 2 )
-//UNUSED2008-05                  operator<<( pBuffer[ nIndex ] );
-//UNUSED2008-05              else
-//UNUSED2008-05                  operator<<( static_cast< sal_uInt8 >( pBuffer[ nIndex ] ) );
-//UNUSED2008-05          }
-//UNUSED2008-05      }
-//UNUSED2008-05  }
-
 void XclExpStream::WriteUnicodeBuffer( const ScfUInt16Vec& rBuffer, sal_uInt8 nFlags )
 {
     SetSliceSize( 0 );
@@ -338,12 +316,6 @@ void XclExpStream::WriteUnicodeBuffer( const ScfUInt16Vec& rBuffer, sal_uInt8 nF
             operator<<( static_cast< sal_uInt8 >( *aIter ) );
     }
 }
-
-//UNUSED2008-05  void XclExpStream::WriteByteStringBuffer( const ByteString& rString, sal_uInt16 nMaxLen )
-//UNUSED2008-05  {
-//UNUSED2008-05      SetSliceSize( 0 );
-//UNUSED2008-05      Write( rString.GetBuffer(), ::std::min< sal_Size >( rString.Len(), nMaxLen ) );
-//UNUSED2008-05  }
 
 // ER: #71367# Xcl has an obscure sense of whether starting a new record or not,
 // and crashes if it encounters the string header at the very end of a record.

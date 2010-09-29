@@ -176,7 +176,6 @@ class TokenPool
 
         void                        GrowString( void );
         void                        GrowDouble( void );
-//UNUSED2009-05 void                        GrowError( void );
         void                        GrowTripel( void );
         void                        GrowId( void );
         void                        GrowElement( void );
@@ -195,7 +194,6 @@ class TokenPool
         inline void                 operator >>( TokenStack& rStack );
         inline const TokenId        Store( void );
         const TokenId               Store( const double& rDouble );
-//UNUSED2008-05  const TokenId               StoreError( USHORT nError );
 
                                     // nur fuer Range-Names
         const TokenId               Store( const UINT16 nIndex );
@@ -218,7 +216,6 @@ class TokenPool
         inline E_TYPE               GetType( const TokenId& nId ) const;
         BOOL                        IsSingleOp( const TokenId& nId, const DefTokenId eId ) const;
         const String*               GetExternal( const TokenId& nId ) const;
-//UNUSED2008-05  const String*               GetString( const TokenId& nId ) const;
         ScMatrix*                   GetMatrix( unsigned int n ) const;
 };
 

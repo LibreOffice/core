@@ -141,8 +141,6 @@ public:
     void        SwapRow( SCROW nRow1, SCROW nRow2 );
     void        SwapCell( SCROW nRow, ScColumn& rCol);
 
-//UNUSED2009-05 BOOL        HasLines( SCROW nRow1, SCROW nRow2, Rectangle& rSizes,
-//UNUSED2009-05             BOOL bLeft, BOOL bRight ) const;
     bool        HasAttrib( SCROW nRow1, SCROW nRow2, USHORT nMask ) const;
     BOOL        HasAttribSelection( const ScMarkData& rMark, USHORT nMask ) const;
     BOOL        ExtendMerge( SCCOL nThisCol, SCROW nStartRow, SCROW nEndRow,
@@ -254,7 +252,6 @@ public:
 
     BOOL        HasStringData( SCROW nRow ) const;
     BOOL        HasValueData( SCROW nRow ) const;
-//UNUSED2009-05 USHORT      GetErrorData( SCROW nRow) const;
     BOOL        HasStringCells( SCROW nStartRow, SCROW nEndRow ) const;
 
     /** Returns the pointer to a cell note object at the passed row. */
@@ -377,8 +374,6 @@ public:
     void        GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedScStrCollection& rStrings, bool& rHasDates);
     BOOL        GetDataEntries(SCROW nRow, TypedScStrCollection& rStrings, BOOL bLimit);
 
-//UNUSED2008-05  SCROW      NoteCount( SCROW nMaxRow = MAXROW ) const;
-
     void        UpdateInsertTabAbs(SCTAB nNewPos);
     BOOL        TestTabRefAbs(SCTAB nTable);
     BOOL        GetNextSpellingCell(SCROW& nRow, BOOL bInSel, const ScMarkData& rData) const;
@@ -403,7 +398,6 @@ public:
 
 private:
     ScBaseCell* CloneCell(SCSIZE nIndex, USHORT nFlags, ScDocument& rDestDoc, const ScAddress& rDestPos);
-//UNUSED2008-05  void       CorrectSymbolCells( CharSet eStreamCharSet );
 };
 
 

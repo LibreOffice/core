@@ -237,8 +237,6 @@ protected:
     virtual             ~LotusConverterBase();
 
 public:
-//UNUSED2008-05  void                Reset( INT32 nLen );
-//UNUSED2008-05  void                Reset( INT32 nLen, const ScAddress& rEingPos );
     void                Reset( const ScAddress& rEingPos );
 
     virtual ConvErr     Convert( const ScTokenArray*& rpErg, INT32& nRest,

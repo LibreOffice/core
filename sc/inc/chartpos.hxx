@@ -97,8 +97,6 @@ public:
                                             return ppRowHeader[ nChartRow ];
                                         return NULL;
                                     }
-//UNUSED2009-05 ScRangeListRef      GetColRanges( SCCOL nChartCol ) const;
-//UNUSED2009-05 ScRangeListRef      GetRowRanges( SCROW nChartRow ) const;
 };
 
 

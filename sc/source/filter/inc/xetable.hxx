@@ -404,28 +404,6 @@ private:
     bool                mbValue;        /// The cell value.
 };
 
-// ----------------------------------------------------------------------------
-
-//UNUSED2009-05 /** Represents a BOOLERR record that describes a cell with an error code. */
-//UNUSED2009-05 class XclExpErrorCell : public XclExpSingleCellBase
-//UNUSED2009-05 {
-//UNUSED2009-05     DECL_FIXEDMEMPOOL_NEWDEL( XclExpErrorCell )
-//UNUSED2009-05
-//UNUSED2009-05 public:
-//UNUSED2009-05     explicit            XclExpErrorCell( const XclExpRoot rRoot, const XclAddress& rXclPos,
-//UNUSED2009-05                             const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId,
-//UNUSED2009-05                             sal_uInt8 nErrCode );
-//UNUSED2009-05
-//UNUSED2009-05     virtual void        SaveXml( XclExpXmlStream& rStrm );
-//UNUSED2009-05 private:
-//UNUSED2009-05     virtual void        WriteContents( XclExpStream& rStrm );
-//UNUSED2009-05
-//UNUSED2009-05 private:
-//UNUSED2009-05     sal_uInt8           mnErrCode;      /// The error code.
-//UNUSED2009-05 };
-
-// ----------------------------------------------------------------------------
-
 class ScStringCell;
 class ScEditCell;
 class XclExpHyperlinkHelper;

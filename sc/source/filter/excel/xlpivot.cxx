@@ -293,11 +293,6 @@ bool XclPCField::IsStandardField() const
     return meFieldType == EXC_PCFIELD_STANDARD;
 }
 
-//UNUSED2008-05  bool XclPCField::IsCalculatedField() const
-//UNUSED2008-05  {
-//UNUSED2008-05      return meFieldType == EXC_PCFIELD_CALCED;
-//UNUSED2008-05  }
-
 bool XclPCField::IsStdGroupField() const
 {
     return meFieldType == EXC_PCFIELD_STDGROUP;

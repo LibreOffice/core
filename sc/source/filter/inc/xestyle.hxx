@@ -569,23 +569,6 @@ class XclExpDefaultXF : public XclExpXF
 public:
     explicit            XclExpDefaultXF( const XclExpRoot& rRoot, bool bCellXF );
 
-//UNUSED2008-05  /** Sets the parent XF ID. Only allowed for cell XFs. */
-//UNUSED2008-05  void                SetParent( sal_uInt32 nParentXFId );
-//UNUSED2008-05
-//UNUSED2008-05  /** Sets all "attribute used" flags explicitely.
-//UNUSED2008-05      @descr  The following Set***() functions set the appropriate flag too. */
-//UNUSED2008-05  void                SetUsedFlags(
-//UNUSED2008-05                          bool bProtUsed, bool bFontUsed, bool bFmtUsed,
-//UNUSED2008-05                          bool bAlignUsed, bool bBorderUsed, bool bAreaUsed );
-//UNUSED2008-05  /** Sets the cell protection flags. */
-//UNUSED2008-05  void                SetProtection( const XclExpCellProt& rProtection );
-//UNUSED2008-05  /** Sets cell alignment attributes. */
-//UNUSED2008-05  void                SetAlignment( const XclExpCellAlign& rAlignment );
-//UNUSED2008-05  /** Sets a cell border style. */
-//UNUSED2008-05  void                SetBorder( const XclExpCellBorder& rBorder );
-//UNUSED2008-05  /** Sets a cell area style. */
-//UNUSED2008-05  void                SetArea( const XclExpCellArea& rArea );
-
     /** Sets the Excel font index. */
     void                SetFont( sal_uInt16 nXclFont );
     /** Sets the Excel number format index. */

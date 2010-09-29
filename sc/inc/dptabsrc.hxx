@@ -207,8 +207,6 @@ public:
 
     ScDPDimensions*         GetDimensionsObject();
 
-//UNUSED2009-05 void                    DumpState( ScDocument* pDoc, const ScAddress& rPos );
-
                             // XDimensionsSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
                             SAL_CALL getDimensions(  )
@@ -456,7 +454,6 @@ public:
 
     const ::com::sun::star::sheet::DataPilotFieldReference& GetReferenceValue() const;
 
-//UNUSED2009-05 BOOL                        IsValidPage( const ScDPItemData& rData );
 // Wang Xu Ming -- 2009-8-17
 // DataPilot Migration - Cache&&Performance
     BOOL                      IsVisible( const ScDPItemData& rData );

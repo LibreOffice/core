@@ -55,8 +55,6 @@ class ScXMLImportWrapper
     SfxMedium*      pMedium;
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > xStorage;
 
-//UNUSED2008-05  com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator> GetStatusIndicator(
-//UNUSED2008-05      com::sun::star::uno::Reference< com::sun::star::frame::XModel >& rModel);
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator> GetStatusIndicator();
 
     sal_uInt32 ImportFromComponent(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& xServiceFactory,

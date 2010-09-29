@@ -171,9 +171,6 @@ public:
 
     BOOL    IsEmpty() const;
 
-//UNUSED2008-05  SCROW  GetFirstEntryPos() const;
-//UNUSED2008-05  SCROW  GetLastEntryPos( BOOL bIncludeBottom ) const;
-
     BOOL    GetFirstVisibleAttr( SCROW& rFirstRow ) const;
     BOOL    GetLastVisibleAttr( SCROW& rLastRow, SCROW nLastData ) const;
     BOOL    HasVisibleAttrIn( SCROW nStartRow, SCROW nEndRow ) const;
@@ -192,8 +189,6 @@ public:
                         INT16 nStripFlags = 0 );
 
     void    DeleteHardAttr( SCROW nStartRow, SCROW nEndRow );
-
-//UNUSED2008-05  void    ConvertFontsAfterLoad();     // old binary file format
 };
 
 

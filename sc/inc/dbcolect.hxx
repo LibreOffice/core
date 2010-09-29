@@ -157,8 +157,6 @@ public:
             BOOL        IsStripData() const             { return bStripData; }
             void        SetStripData(BOOL bSet)         { bStripData = bSet; }
 
-//UNUSED2008-05  BOOL       IsBeyond(SCROW nMaxRow) const;
-
             String      GetSourceString() const;
             String      GetOperations() const;
 

@@ -167,23 +167,6 @@ void OP_Label( SvStream& r, UINT16 n )
     delete [] pText;
 }
 
-
-//UNUSED2009-05 void OP_Text( SvStream& r, UINT16 n )        // WK3
-//UNUSED2009-05 {
-//UNUSED2009-05     UINT16          nRow;
-//UNUSED2009-05     BYTE            nCol, nTab;
-//UNUSED2009-05     sal_Char        pText[ 256 ];
-//UNUSED2009-05
-//UNUSED2009-05     r >> nRow >> nTab >> nCol;
-//UNUSED2009-05     n -= 4;
-//UNUSED2009-05
-//UNUSED2009-05     r.Read( pText, n );
-//UNUSED2009-05     pText[ n ] = 0;   // zur Sicherheit Nullterminator anhaengen
-//UNUSED2009-05
-//UNUSED2009-05     PutFormString( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), static_cast<SCTAB> (nTab), pText );
-//UNUSED2009-05 }
-
-
 void OP_Formula( SvStream& r, UINT16 /*n*/ )
 {
     BYTE                nFormat;

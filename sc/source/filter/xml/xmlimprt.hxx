@@ -859,9 +859,6 @@ public:
 //  SvXMLImportContextRef           GetStyles() const { return xStyles; }
 
     const SvXMLTokenMap& GetDocElemTokenMap();
-//UNUSED2008-05  const SvXMLTokenMap& GetStylesElemTokenMap();
-//UNUSED2008-05  const SvXMLTokenMap& GetStylesAttrTokenMap();
-//UNUSED2008-05  const SvXMLTokenMap& GetStyleElemTokenMap();
     const SvXMLTokenMap& GetBodyElemTokenMap();
     const SvXMLTokenMap& GetContentValidationsElemTokenMap();
     const SvXMLTokenMap& GetContentValidationElemTokenMap();

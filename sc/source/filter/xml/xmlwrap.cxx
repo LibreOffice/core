@@ -97,35 +97,6 @@ ScXMLImportWrapper::ScXMLImportWrapper(ScDocument& rD, SfxMedium* pM, const uno:
     DBG_ASSERT( pMedium || xStorage.is(), "ScXMLImportWrapper: Medium or Storage must be set" );
 }
 
-//UNUSED2008-05  uno::Reference <task::XStatusIndicator> ScXMLImportWrapper::GetStatusIndicator(
-//UNUSED2008-05          uno::Reference < frame::XModel> & rModel)
-//UNUSED2008-05  {
-//UNUSED2008-05      DBG_ERROR( "The status indicator from medium must be used!" );
-//UNUSED2008-05
-//UNUSED2008-05      uno::Reference<task::XStatusIndicator> xStatusIndicator;
-//UNUSED2008-05
-//UNUSED2008-05      if (rModel.is())
-//UNUSED2008-05      {
-//UNUSED2008-05          uno::Reference<frame::XController> xController( rModel->getCurrentController());
-//UNUSED2008-05          if ( xController.is())
-//UNUSED2008-05          {
-//UNUSED2008-05              uno::Reference<task::XStatusIndicatorFactory> xFactory( xController->getFrame(), uno::UNO_QUERY );
-//UNUSED2008-05              if ( xFactory.is())
-//UNUSED2008-05              {
-//UNUSED2008-05                  try
-//UNUSED2008-05                  {
-//UNUSED2008-05                      xStatusIndicator.set(xFactory->createStatusIndicator());
-//UNUSED2008-05                  }
-//UNUSED2008-05                  catch ( lang::DisposedException e )
-//UNUSED2008-05                  {
-//UNUSED2008-05                      DBG_ERROR("Exception while trying to get a Status Indicator");
-//UNUSED2008-05                  }
-//UNUSED2008-05              }
-//UNUSED2008-05          }
-//UNUSED2008-05      }
-//UNUSED2008-05      return xStatusIndicator;
-//UNUSED2008-05  }
-
 uno::Reference <task::XStatusIndicator> ScXMLImportWrapper::GetStatusIndicator()
 {
     uno::Reference<task::XStatusIndicator> xStatusIndicator;

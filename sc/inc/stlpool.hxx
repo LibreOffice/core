@@ -53,14 +53,12 @@ public:
 
     void                CreateStandardStyles();
     void                CopyStdStylesFrom( ScStyleSheetPool* pSrcPool );
-//UNUSED2008-05  void               UpdateStdNames();
 
     void                CopyStyleFrom( ScStyleSheetPool* pSrcPool,
                                         const String& rName, SfxStyleFamily eFamily );
 
     ScStyleSheet*       FindCaseIns( const String& rName, SfxStyleFamily eFam );
 
-//UNUSED2009-05 void                SetForceStdName( const String* pSet );
     const String*       GetForceStdName() const { return pForceStdName; }
 
     virtual SfxStyleSheetBase& Make( const String&, SfxStyleFamily eFam,

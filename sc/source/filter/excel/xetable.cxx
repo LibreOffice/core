@@ -648,41 +648,6 @@ void XclExpBooleanCell::WriteContents( XclExpStream& rStrm )
     rStrm << sal_uInt16( mbValue ? 1 : 0 ) << EXC_BOOLERR_BOOL;
 }
 
-// ----------------------------------------------------------------------------
-
-//UNUSED2009-05 IMPL_FIXEDMEMPOOL_NEWDEL( XclExpErrorCell, 256, 256 )
-//UNUSED2009-05
-//UNUSED2009-05 XclExpErrorCell::XclExpErrorCell(
-//UNUSED2009-05         const XclExpRoot rRoot, const XclAddress& rXclPos,
-//UNUSED2009-05         const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId, sal_uInt8 nErrCode ) :
-//UNUSED2009-05     // #i41210# always use latin script for error cells
-//UNUSED2009-05     XclExpSingleCellBase( rRoot, EXC_ID3_BOOLERR, 2, rXclPos, pPattern, ApiScriptType::LATIN, nForcedXFId ),
-//UNUSED2009-05     mnErrCode( nErrCode )
-//UNUSED2009-05 {
-//UNUSED2009-05 }
-//UNUSED2009-05
-//UNUSED2009-05 void XclExpErrorCell::SaveXml( XclExpXmlStream& rStrm )
-//UNUSED2009-05 {
-//UNUSED2009-05     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
-//UNUSED2009-05     rWorksheet->startElement( XML_c,
-//UNUSED2009-05             XML_r,      XclXmlUtils::ToOString( GetXclPos() ).getStr(),
-//UNUSED2009-05             XML_s,      lcl_GetStyleId( rStrm, *this ).getStr(),
-//UNUSED2009-05             XML_t,      "e",
-//UNUSED2009-05             // OOXTODO: XML_cm, XML_vm, XML_ph
-//UNUSED2009-05             FSEND );
-//UNUSED2009-05     rWorksheet->startElement( XML_v, FSEND );
-//UNUSED2009-05     rWorksheet->write( (sal_Int32) mnErrCode );
-//UNUSED2009-05     rWorksheet->endElement( XML_v );
-//UNUSED2009-05     rWorksheet->endElement( XML_c );
-//UNUSED2009-05 }
-//UNUSED2009-05
-//UNUSED2009-05 void XclExpErrorCell::WriteContents( XclExpStream& rStrm )
-//UNUSED2009-05 {
-//UNUSED2009-05     rStrm << mnErrCode << EXC_BOOLERR_ERROR;
-//UNUSED2009-05 }
-
-// ----------------------------------------------------------------------------
-
 IMPL_FIXEDMEMPOOL_NEWDEL( XclExpLabelCell, 256, 256 )
 
 XclExpLabelCell::XclExpLabelCell(

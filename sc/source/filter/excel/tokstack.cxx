@@ -204,23 +204,6 @@ void TokenPool::GrowDouble( void )
     pP_Dbl = pP_DblNew;
 }
 
-
-//UNUSED2009-05 void TokenPool::GrowError( void )
-//UNUSED2009-05 {
-//UNUSED2009-05     UINT16      nP_ErrNew = nP_Err * 2;
-//UNUSED2009-05
-//UNUSED2009-05     USHORT*     pP_ErrNew = new USHORT[ nP_ErrNew ];
-//UNUSED2009-05
-//UNUSED2009-05     for( UINT16 nL = 0 ; nL < nP_Err ; nL++ )
-//UNUSED2009-05         pP_ErrNew[ nL ] = pP_Err[ nL ];
-//UNUSED2009-05
-//UNUSED2009-05     nP_Err = nP_ErrNew;
-//UNUSED2009-05
-//UNUSED2009-05     delete[] pP_Err;
-//UNUSED2009-05     pP_Err = pP_ErrNew;
-//UNUSED2009-05 }
-
-
 void TokenPool::GrowTripel( void )
 {
     UINT16          nP_RefTrNew = nP_RefTr * 2;
@@ -847,7 +830,6 @@ BOOL TokenPool::IsSingleOp( const TokenId& rId, const DefTokenId eId ) const
     return FALSE;
 }
 
-
 const String* TokenPool::GetExternal( const TokenId& rId ) const
 {
     const String*   p = NULL;
@@ -861,21 +843,6 @@ const String* TokenPool::GetExternal( const TokenId& rId ) const
 
     return p;
 }
-
-
-//UNUSED2008-05  const String* TokenPool::GetString( const TokenId& r ) const
-//UNUSED2008-05  {
-//UNUSED2008-05      const String*   p = NULL;
-//UNUSED2008-05      UINT16 n = (UINT16) r;
-//UNUSED2008-05      if( n && n <= nElementAkt )
-//UNUSED2008-05      {
-//UNUSED2008-05          n--;
-//UNUSED2008-05          if( pType[ n ] == T_Str )
-//UNUSED2008-05              p = ppP_Str[ pElement[ n ] ];
-//UNUSED2008-05      }
-//UNUSED2008-05
-//UNUSED2008-05      return p;
-//UNUSED2008-05  }
 
 ScMatrix* TokenPool::GetMatrix( unsigned int n ) const
 {

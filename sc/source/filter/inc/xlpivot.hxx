@@ -527,9 +527,6 @@ public:
     /** Returns true, if this is a standard field build directly from source data. */
     bool                IsStandardField() const;
 
-//UNUSED2008-05  /** Returns true, if the items of the field are calculated from a formula. */
-//UNUSED2008-05  bool                IsCalculatedField() const;
-
     /** Returns true, if this field is a grouping field. */
     bool                IsStdGroupField() const;
     /** Returns true, if this field is a numeric grouping field. */

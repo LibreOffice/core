@@ -296,7 +296,6 @@ public:
     BOOL        IsBlockEmpty( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool bIgnoreNotes = false ) const;
 
     void        PutCell( const ScAddress&, ScBaseCell* pCell );
-//UNUSED2009-05 void        PutCell( const ScAddress&, ULONG nFormatIndex, ScBaseCell* pCell);
     void        PutCell( SCCOL nCol, SCROW nRow, ScBaseCell* pCell );
     void        PutCell(SCCOL nCol, SCROW nRow, ULONG nFormatIndex, ScBaseCell* pCell);
                 //  TRUE = Zahlformat gesetzt
@@ -432,7 +431,6 @@ public:
     BOOL        HasData( SCCOL nCol, SCROW nRow );
     BOOL        HasStringData( SCCOL nCol, SCROW nRow );
     BOOL        HasValueData( SCCOL nCol, SCROW nRow );
-//UNUSED2008-05  USHORT     GetErrorData(SCCOL nCol, SCROW nRow) const;
     BOOL        HasStringCells( SCCOL nStartCol, SCROW nStartRow,
                                 SCCOL nEndCol, SCROW nEndRow ) const;
 
@@ -442,7 +440,6 @@ public:
                             aCol[rPos.Col()].GetErrCode( rPos.Row() ) :
                             0;
                     }
-//UNUSED2008-05  USHORT     GetErrCode( SCCOL nCol, SCROW nRow ) const;
 
     void        ResetChanged( const ScRange& rRange );
 
@@ -471,7 +468,6 @@ public:
     void        UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY );
 
     void        UpdateInsertTab(SCTAB nTable);
-//UNUSED2008-05  void        UpdateInsertTabOnlyCells(SCTAB nTable);
     void        UpdateDeleteTab( SCTAB nTable, BOOL bIsMove, ScTable* pRefUndo = NULL );
     void        UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo, ScProgress& );
     void        UpdateCompile( BOOL bForceIfNameInUse = FALSE );
@@ -505,7 +501,6 @@ public:
                                 const SvxBorderLine** ppLeft, const SvxBorderLine** ppTop,
                                 const SvxBorderLine** ppRight, const SvxBorderLine** ppBottom ) const;
 
-//UNUSED2009-05 BOOL        HasLines( const ScRange& rRange, Rectangle& rSizes ) const;
     bool        HasAttrib( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, USHORT nMask ) const;
     BOOL        HasAttribSelection( const ScMarkData& rMark, USHORT nMask ) const;
     BOOL        ExtendMerge( SCCOL nStartCol, SCROW nStartRow,
@@ -590,8 +585,6 @@ public:
     void            ClearPrintRanges();
     /** Adds a new print ranges. */
     void            AddPrintRange( const ScRange& rNew );
-//UNUSED2009-05 /** Removes all old print ranges and sets the passed print ranges. */
-//UNUSED2009-05 void            SetPrintRange( const ScRange& rNew );
     /** Marks the specified sheet to be printed completely. Deletes old print ranges! */
     void            SetPrintEntireSheet();
 

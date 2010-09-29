@@ -474,13 +474,6 @@ void XclImpStream::PopPosition()
     }
 }
 
-//UNUSED2008-05  void XclImpStream::RejectPosition()
-//UNUSED2008-05  {
-//UNUSED2008-05      DBG_ASSERT( !maPosStack.empty(), "XclImpStream::RejectPosition - stack empty" );
-//UNUSED2008-05      if( !maPosStack.empty() )
-//UNUSED2008-05          maPosStack.pop_back();
-//UNUSED2008-05  }
-
 void XclImpStream::StoreGlobalPosition()
 {
     StorePosition( maGlobPos );

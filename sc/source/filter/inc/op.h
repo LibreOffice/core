@@ -39,7 +39,6 @@ void OP_EOF( SvStream &aStream, USHORT nLaenge );
 void OP_Integer( SvStream &aStream, USHORT nLaenge );
 void OP_Number( SvStream &aStream, USHORT nLaenge );
 void OP_Label( SvStream &aStream, USHORT nLaenge );
-//UNUSED2009-05 void OP_Text( SvStream &aStream, USHORT nLaenge );      // WK3
 void OP_Integer3( SvStream &aStream, USHORT nLaenge );  // WK3
 void OP_Number3( SvStream &aStream, USHORT nLaenge );   // WK3
 void OP_Formula( SvStream &aStream, USHORT nLaenge );

@@ -226,14 +226,6 @@ void ScfSimpleProgressBar::Init( sal_Size nSize )
         maProgress.ActivateSegment( nSegment );
 }
 
-// ============================================================================
-
-//UNUSED2008-05  ScfStreamProgressBar::ScfStreamProgressBar( SvStream& rStrm, SfxObjectShell* pDocShell, const String& rText ) :
-//UNUSED2008-05      mrStrm( rStrm )
-//UNUSED2008-05  {
-//UNUSED2008-05      Init( pDocShell, rText );
-//UNUSED2008-05  }
-
 ScfStreamProgressBar::ScfStreamProgressBar( SvStream& rStrm, SfxObjectShell* pDocShell, USHORT nResId ) :
     mrStrm( rStrm )
 {

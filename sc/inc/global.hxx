@@ -481,7 +481,6 @@ struct ScImportParam
 
     ScImportParam&  operator=   ( const ScImportParam& r );
     BOOL            operator==  ( const ScImportParam& r ) const;
-//UNUSED2009-05 void            Clear       ();
 };
 
 struct ScStringHashCode

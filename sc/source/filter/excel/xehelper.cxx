@@ -255,23 +255,7 @@ bool XclExpAddressConverter::ConvertRange( XclRange& rXclRange,
     return bValidStart;
 }
 
-//UNUSED2008-05  XclRange XclExpAddressConverter::CreateValidRange( const ScRange& rScRange, bool bWarn )
-//UNUSED2008-05  {
-//UNUSED2008-05      return XclRange(
-//UNUSED2008-05          CreateValidAddress( rScRange.aStart, bWarn ),
-//UNUSED2008-05          CreateValidAddress( rScRange.aEnd, bWarn ) );
-//UNUSED2008-05  }
-
 // cell range list ------------------------------------------------------------
-
-//UNUSED2008-05  bool XclExpAddressConverter::CheckRangeList( const ScRangeList& rScRanges, bool bWarn )
-//UNUSED2008-05  {
-//UNUSED2008-05      for( ULONG nIdx = 0, nSize = rScRanges.Count(); nIdx < nSize; ++nIdx )
-//UNUSED2008-05          if( const ScRange* pScRange = rScRanges.GetObject( nIdx ) )
-//UNUSED2008-05              if( !CheckRange( *pScRange, bWarn ) )
-//UNUSED2008-05                  return false;
-//UNUSED2008-05      return true;
-//UNUSED2008-05  }
 
 void XclExpAddressConverter::ValidateRangeList( ScRangeList& rScRanges, bool bWarn )
 {

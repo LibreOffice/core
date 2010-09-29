@@ -114,7 +114,6 @@ struct ScPivotParam
 
     ScPivotParam&   operator=       ( const ScPivotParam& r );
     BOOL            operator==      ( const ScPivotParam& r ) const;
-//UNUSED2009-05 void            Clear           ();
     void            ClearPivotArrays();
     void            SetLabelData    (const ::std::vector<ScDPLabelDataRef>& r);
     void            SetPivotArrays  ( const PivotField* pPageArr,

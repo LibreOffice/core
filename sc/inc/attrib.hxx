@@ -231,7 +231,6 @@ public:
 
     inline  ScTableListItem( const USHORT nWhich );
             ScTableListItem( const ScTableListItem& rCpy );
-//UNUSED2008-05  ScTableListItem( const USHORT nWhich, const List& rList );
             ~ScTableListItem();
 
     ScTableListItem& operator=( const ScTableListItem &rCpy );
@@ -244,9 +243,6 @@ public:
                                                  String &rText,
                                                  const IntlWrapper* pIntl = 0 ) const;
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const;
-
-//UNUSED2009-05 BOOL    GetTableList( List& aList ) const;
-//UNUSED2009-05 void    SetTableList( const List& aList );
 
 public:
     USHORT  nCount;

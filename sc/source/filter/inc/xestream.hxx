@@ -133,19 +133,11 @@ public:
     // *** unicode string export is realized with helper class XclExpString ***
     // (slice length setting has no effect here -> disabled automatically)
 
-//UNUSED2008-05  /** Writes Unicode buffer as 8/16 bit, repeats nFlags at start of a CONTINUE record. */
-//UNUSED2008-05  void                WriteUnicodeBuffer( const sal_uInt16* pBuffer, sal_Size nChars, sal_uInt8 nFlags );
-
     /** Writes Unicode buffer as 8/16 bit, repeats nFlags at start of a CONTINUE record. */
     void                WriteUnicodeBuffer( const ScfUInt16Vec& rBuffer, sal_uInt8 nFlags );
 
     // *** write 8-bit-strings ***
     // (slice length setting has no effect here -> disabled automatically)
-
-//UNUSED2008-05  /** Writes ByteString buffer (without string length field). */
-//UNUSED2008-05  void                WriteByteStringBuffer(
-//UNUSED2008-05                          const ByteString& rString,
-//UNUSED2008-05                          sal_uInt16 nMaxLen = 0x00FF );
 
     /** Writes string length field and ByteString buffer. */
     void                WriteByteString(

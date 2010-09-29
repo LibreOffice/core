@@ -2113,49 +2113,6 @@ XclExpDefaultXF::XclExpDefaultXF( const XclExpRoot& rRoot, bool bCellXF ) :
 {
 }
 
-//UNUSED2008-05  void XclExpDefaultXF::SetParent( sal_uInt32 nParentXFId )
-//UNUSED2008-05  {
-//UNUSED2008-05      DBG_ASSERT( IsCellXF(), "XclExpDefaultXF::SetParent - not allowed in style XFs" );
-//UNUSED2008-05      if( IsCellXF() )
-//UNUSED2008-05          mnParentXFId = nParentXFId;
-//UNUSED2008-05  }
-//UNUSED2008-05
-//UNUSED2008-05  void XclExpDefaultXF::SetUsedFlags(
-//UNUSED2008-05          bool bProtUsed, bool bFontUsed, bool bFmtUsed,
-//UNUSED2008-05          bool bAlignUsed, bool bBorderUsed, bool bAreaUsed )
-//UNUSED2008-05  {
-//UNUSED2008-05      mbProtUsed    = bProtUsed;
-//UNUSED2008-05      mbFontUsed    = bFontUsed;
-//UNUSED2008-05      mbFmtUsed     = bFmtUsed;
-//UNUSED2008-05      mbAlignUsed   = bAlignUsed;
-//UNUSED2008-05      mbBorderUsed  = bBorderUsed;
-//UNUSED2008-05      mbAreaUsed    = bAreaUsed;
-//UNUSED2008-05  }
-//UNUSED2008-05
-//UNUSED2008-05  void XclExpDefaultXF::SetProtection( const XclExpCellProt& rProtection )
-//UNUSED2008-05  {
-//UNUSED2008-05      maProtection = rProtection;
-//UNUSED2008-05      mbProtUsed = true;
-//UNUSED2008-05  }
-//UNUSED2008-05
-//UNUSED2008-05  void XclExpDefaultXF::SetAlignment( const XclExpCellAlign& rAlignment )
-//UNUSED2008-05  {
-//UNUSED2008-05      maAlignment = rAlignment;
-//UNUSED2008-05      mbAlignUsed = true;
-//UNUSED2008-05  }
-//UNUSED2008-05
-//UNUSED2008-05  void XclExpDefaultXF::SetBorder( const XclExpCellBorder& rBorder )
-//UNUSED2008-05  {
-//UNUSED2008-05      maBorder = rBorder;
-//UNUSED2008-05      mbBorderUsed = true;
-//UNUSED2008-05  }
-//UNUSED2008-05
-//UNUSED2008-05  void XclExpDefaultXF::SetArea( const XclExpCellArea& rArea )
-//UNUSED2008-05  {
-//UNUSED2008-05      maArea = rArea;
-//UNUSED2008-05      mbAreaUsed = true;
-//UNUSED2008-05  }
-
 void XclExpDefaultXF::SetFont( sal_uInt16 nXclFont )
 {
     mnXclFont = nXclFont;

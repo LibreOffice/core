@@ -186,12 +186,8 @@ public:
     void SetSingleReference( const ScSingleRefData& rRef );
     void SetDoubleReference( const ScComplexRefData& rRef );
     void SetDouble( double fVal );
-//UNUSED2008-05  void SetInt( int nVal );
-//UNUSED2008-05  void SetMatrix( ScMatrix* p );
 
     // These methods are ok to use, reference count not cleared.
-//UNUSED2008-05  ScComplexRefData& GetReference();
-//UNUSED2008-05  void SetReference( ScComplexRefData& rRef );
     void SetName( USHORT n );
     void SetExternalSingleRef( sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef );
     void SetExternalDoubleRef( sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef );

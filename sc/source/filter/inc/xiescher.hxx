@@ -922,8 +922,6 @@ private:
 class XclImpSolverContainer : public SvxMSDffSolverContainer
 {
 public:
-//UNUSED2009-05 /** Reads the entire solver container. Stream must point to begin of container header. */
-//UNUSED2009-05 void                ReadSolverContainer( SvStream& rDffStrm );
 
     /** Inserts information about a new SdrObject. */
     void                InsertSdrObjectInfo( SdrObject& rSdrObj, sal_uInt32 nDffShapeId, sal_uInt32 nDffFlags );

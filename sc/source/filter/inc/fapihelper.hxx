@@ -95,12 +95,6 @@ public:
                             const ::rtl::OUString& rServiceName,
                             const UnoAnySequence& rArgs );
 
-//UNUSED2008-05  /** Creates an instance from the passed service name, using the service factory of the passed object. */
-//UNUSED2008-05  static XInterfaceRef CreateInstanceWithArgs(
-//UNUSED2008-05                          SfxObjectShell* pShell,
-//UNUSED2008-05                          const ::rtl::OUString& rServiceName,
-//UNUSED2008-05                          const UnoAnySequence& rArgs );
-
     /** Creates an instance from the passed service name, using the process service factory. */
     static XInterfaceRef CreateInstanceWithArgs(
                             const ::rtl::OUString& rServiceName,
