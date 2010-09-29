@@ -1354,6 +1354,19 @@ XERCES_JAR*=$(SOLARBINDIR)/xercesImpl.jar
 CPPUNIT_CFLAGS =
 .END
 
+COMPONENTPREFIX_URE_NATIVE = vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/
+COMPONENTPREFIX_URE_JAVA = vnd.sun.star.expand:$$URE_INTERNAL_JAVA_DIR/
+.IF "$(OS)" == "WNT"
+COMPONENTPREFIX_BASIS_NATIVE = vnd.sun.star.expand:$$BRAND_BASE_DIR/program/
+.ELSE
+COMPONENTPREFIX_BASIS_NATIVE = vnd.sun.star.expand:$$OOO_BASE_DIR/program/
+.END
+COMPONENTPREFIX_BASIS_JAVA = vnd.sun.star.expand:$$OOO_BASE_DIR/program/classes/
+COMPONENTPREFIX_BASIS_PYTHON = vnd.openoffice.pymodule:
+COMPONENTPREFIX_INBUILD_NATIVE = \
+    vnd.sun.star.expand:$$OOO_INBUILD_SHAREDLIB_DIR/
+COMPONENTPREFIX_INBUILD_JAVA = vnd.sun.star.expand:$$OOO_INBUILD_JAR_DIR/
+
 # workaround for strange dmake bug:
 # if the previous block was a rule or a target, "\#" isn't recognized
 # as an escaped "#". if it was an assignment, escaping works...
