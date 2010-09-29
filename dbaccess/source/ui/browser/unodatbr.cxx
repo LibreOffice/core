@@ -420,6 +420,24 @@ sal_Bool SbaTableQueryBrowser::Construct(Window* pParent)
     return sal_True;
 }
 // -------------------------------------------------------------------------
+namespace
+{
+    struct SelectValueByName : public ::std::unary_function< ::rtl::OUString, Any >
+    {
+        const Any& operator()( ::rtl::OUString const& i_name ) const
+        {
+            return m_rCollection.get( i_name );
+        }
+
+        SelectValueByName( ::comphelper::NamedValueCollection const& i_collection )
+            :m_rCollection( i_collection )
+        {
+        }
+
+        ::comphelper::NamedValueCollection const&   m_rCollection;
+    };
+}
+
 sal_Bool SbaTableQueryBrowser::InitializeForm(const Reference< ::com::sun::star::sdbc::XRowSet > & _rxForm)
 {
     if(!m_pCurrentlyDisplayed)
@@ -428,46 +446,41 @@ sal_Bool SbaTableQueryBrowser::InitializeForm(const Reference< ::com::sun::star:
     // this method set all format settings from the orignal table or query
     try
     {
-        // we send all properties at once, maybe the implementation is clever enough to handle one big PropertiesChanged
-        // more effective than many small PropertyChanged ;)
-        Sequence< ::rtl::OUString> aProperties(3);
-        Sequence< Any> aValues(3);
-
         DBTreeListUserData* pData = static_cast<DBTreeListUserData*>(m_pCurrentlyDisplayed->GetUserData());
-        OSL_ENSURE( pData, "SbaTableQueryBrowser::InitializeForm: No user data set at the currently displayed entry!" );
-        OSL_ENSURE( pData->xObjectProperties.is(), "SbaTableQueryBrowser::InitializeForm: No table available!" );
+        ENSURE_OR_RETURN_FALSE( pData, "SbaTableQueryBrowser::InitializeForm: No user data set at the currently displayed entry!" );
+        ENSURE_OR_RETURN_FALSE( pData->xObjectProperties.is(), "SbaTableQueryBrowser::InitializeForm: No table available!" );
 
-        if ( pData->xObjectProperties.is() )
+        Reference< XPropertySetInfo > xPSI( pData->xObjectProperties->getPropertySetInfo(), UNO_SET_THROW );
+
+        ::comphelper::NamedValueCollection aPropertyValues;
+
+        const ::rtl::OUString aTransferProperties[] =
         {
-            sal_Int32 nPos = 0;
-            // is the filter intially applied ?
-            aProperties.getArray()[nPos]    = PROPERTY_APPLYFILTER;
-            aValues.getArray()[nPos++]      = pData->xObjectProperties->getPropertyValue(PROPERTY_APPLYFILTER);
-
-            // the initial filter
-            aProperties.getArray()[nPos]    = PROPERTY_FILTER;
-            aValues.getArray()[nPos++]      = pData->xObjectProperties->getPropertyValue(PROPERTY_FILTER);
-
-            if ( pData->xObjectProperties->getPropertySetInfo()->hasPropertyByName(PROPERTY_HAVING_CLAUSE) )
-            {
-                aProperties.realloc(aProperties.getLength()+1);
-                aValues.realloc(aValues.getLength()+1);
-                // the initial having clause
-                aProperties.getArray()[nPos]    = PROPERTY_HAVING_CLAUSE;
-                aValues.getArray()[nPos++]      = pData->xObjectProperties->getPropertyValue(PROPERTY_HAVING_CLAUSE);
-            }
-
-            // the initial ordering
-            aProperties.getArray()[nPos]    = PROPERTY_ORDER;
-            aValues.getArray()[nPos++]      = pData->xObjectProperties->getPropertyValue(PROPERTY_ORDER);
-
-            Reference< XMultiPropertySet >  xFormMultiSet(_rxForm, UNO_QUERY);
-            xFormMultiSet->setPropertyValues(aProperties, aValues);
+            PROPERTY_APPLYFILTER,
+            PROPERTY_FILTER,
+            PROPERTY_HAVING_CLAUSE,
+            PROPERTY_ORDER
+        };
+        for ( size_t i=0; i < sizeof( aTransferProperties ) / sizeof( aTransferProperties[0] ); ++i )
+        {
+            if ( !xPSI->hasPropertyByName( aTransferProperties[i] ) )
+                continue;
+            aPropertyValues.put( aTransferProperties[i], pData->xObjectProperties->getPropertyValue( aTransferProperties[i] ) );
         }
+
+        const ::std::vector< ::rtl::OUString > aNames( aPropertyValues.getNames() );
+        Sequence< ::rtl::OUString > aPropNames( aNames.size() );
+        ::std::copy( aNames.begin(), aNames.end(), aPropNames.getArray() );
+
+        Sequence< Any > aPropValues( aNames.size() );
+        ::std::transform( aNames.begin(), aNames.end(), aPropValues.getArray(), SelectValueByName( aPropertyValues ) );
+
+        Reference< XMultiPropertySet > xFormMultiSet( _rxForm, UNO_QUERY );
+        xFormMultiSet->setPropertyValues( aPropNames, aPropValues );
     }
     catch(Exception&)
     {
-        DBG_ERROR("SbaTableQueryBrowser::InitializeForm : something went wrong !");
+        DBG_UNHANDLED_EXCEPTION();
         return sal_False;
     }
 

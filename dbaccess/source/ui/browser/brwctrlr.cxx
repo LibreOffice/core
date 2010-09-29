@@ -1205,34 +1205,16 @@ void SbaXDataBrowserController::propertyChange(const PropertyChangeEvent& evt) t
     }
 
 
-    // the filter or the sort criterias have changed ? -> update our parser
-    if (evt.PropertyName.equals(PROPERTY_ACTIVECOMMAND))
+    if (evt.PropertyName.equals(PROPERTY_FILTER))
     {
-      //  if (m_xParser.is())
-            //DO_SAFE( m_xParser->setElementaryQuery(::comphelper::getString(evt.NewValue)), "SbaXDataBrowserController::propertyChange : could not forward the new query to my parser !" );
-    }
-    else if (evt.PropertyName.equals(PROPERTY_FILTER))
-    {
-  //      if ( m_xParser.is() && m_xParser->getFilter() != ::comphelper::getString(evt.NewValue))
-        //{
-        //  DO_SAFE( m_xParser->setFilter(::comphelper::getString(evt.NewValue)), "SbaXDataBrowserController::propertyChange : could not forward the new filter to my parser !" );
-        //}
         InvalidateFeature(ID_BROWSER_REMOVEFILTER);
     }
     else if (evt.PropertyName.equals(PROPERTY_HAVING_CLAUSE))
     {
-        //if ( m_xParser.is() && m_xParser->getHavingClause() != ::comphelper::getString(evt.NewValue))
-        //{
-        //  DO_SAFE( m_xParser->setHavingClause(::comphelper::getString(evt.NewValue)), "SbaXDataBrowserController::propertyChange : could not forward the new filter to my parser !" );
-        //}
         InvalidateFeature(ID_BROWSER_REMOVEFILTER);
     }
     else if (evt.PropertyName.equals(PROPERTY_ORDER))
     {
-        //if ( m_xParser.is() && m_xParser->getOrder() != ::comphelper::getString(evt.NewValue))
-        //{
-        //  DO_SAFE( m_xParser->setOrder(::comphelper::getString(evt.NewValue)), "SbaXDataBrowserController::propertyChange : could not forward the new order to my parser !" );
-        //}
         InvalidateFeature(ID_BROWSER_REMOVEFILTER);
     }
 
@@ -1911,12 +1893,8 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
         {
             DlgFilterCrit aDlg( getBrowserView(), getORB(), xCon, xParser, xSup->getColumns() );
             String aFilter;
-            if(!aDlg.Execute())
-            {
-                //m_xParser->setFilter(sOldVal);
-                //m_xParser->setHavingClause(sOldHaving);
-                return; // if so we don't need to actualize the grid
-            }
+            if ( !aDlg.Execute() )
+                return; // if so we don't need to update the grid
             aDlg.BuildWherePart();
         }
         else
@@ -1925,7 +1903,6 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
             String aOrder;
             if(!aDlg.Execute())
             {
-                //m_xParser->setOrder(sOldVal);
                 return; // if so we don't need to actualize the grid
             }
             aDlg.BuildOrderPart();
@@ -2707,22 +2684,7 @@ void SbaXDataBrowserController::initializeParser() const
             {   // (only if the statement isn't native)
                 // (it is allowed to use the PROPERTY_ISPASSTHROUGH : _after_ loading a form it is valid)
                 xFormSet->getPropertyValue(PROPERTY_SINGLESELECTQUERYCOMPOSER) >>= m_xParser;
-/*
-                const Reference<XMultiServiceFactory> xFactory(::dbtools::getConnection(getRowSet()),UNO_QUERY);
-                if ( xFactory.is() )
-                    m_xParser.set(xFactory->createInstance(SERVICE_NAME_SINGLESELECTQUERYCOMPOSER),UNO_QUERY);
-*/
             }
-/*
-            // initialize the parser with the current sql-statement of the form
-            if ( m_xParser.is() )
-            {
-                m_xParser->setElementaryQuery(::comphelper::getString(xFormSet->getPropertyValue(PROPERTY_ACTIVECOMMAND)));
-                m_xParser->setFilter(::comphelper::getString(xFormSet->getPropertyValue(PROPERTY_FILTER)));
-                m_xParser->setHavingClause(::comphelper::getString(xFormSet->getPropertyValue(PROPERTY_HAVING_CLAUSE)));
-                m_xParser->setOrder(::comphelper::getString(xFormSet->getPropertyValue(PROPERTY_ORDER)));
-            }
-*/
         }
         catch(Exception&)
         {
@@ -2758,16 +2720,6 @@ void SbaXDataBrowserController::unloaded(const EventObject& /*aEvent*/) throw( R
         // change as a reaction on that event. as we have no chance to be notified of this change (which is
         // the one we're interested in) we give them time to do what they want to before invalidating our
         // bound-field-dependent slots ....
-    /*
-    try
-    {
-        ::comphelper::disposeComponent(m_xParser);
-    }
-    catch(Exception&)
-    {
-        OSL_ENSURE(0,"Exception thrown by dispose");
-    }
-    */
 }
 
 //------------------------------------------------------------------------------
