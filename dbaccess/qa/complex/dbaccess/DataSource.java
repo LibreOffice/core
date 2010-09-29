@@ -26,6 +26,7 @@
  ************************************************************************/
 package complex.dbaccess;
 
+import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
@@ -99,6 +100,9 @@ public class DataSource extends ComplexTestCase
             dataSourceName = "someDataSource";
             final XNamingService dataSourceRegistrations = (XNamingService) UnoRuntime.queryInterface(
                     XNamingService.class, getFactory().createInstance("com.sun.star.sdb.DatabaseContext"));
+            final XNameAccess existenceCheck = UnoRuntime.queryInterface( XNameAccess.class, dataSourceRegistrations );
+            if ( existenceCheck.hasByName( "someDataSource" ) )
+                dataSourceRegistrations.revokeObject( "someDataSource" );
             dataSourceRegistrations.registerObject("someDataSource", m_dataSource.getXDataSource());
             assureEquals("registration name of a newly registered data source is wrong", dataSourceName, m_dataSource.getName());
         }
