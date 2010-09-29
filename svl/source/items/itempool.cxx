@@ -38,8 +38,6 @@
 #include <svl/brdcst.hxx>
 #include <svl/smplhint.hxx>
 #include "poolio.hxx"
-#include <algorithm>
-#include <vector>
 
 //========================================================================
 
