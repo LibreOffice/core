@@ -841,6 +841,49 @@ void GDIMetaFile::Move( long nX, long nY )
     }
 }
 
+void GDIMetaFile::Move( long nX, long nY, long nDPIX, long nDPIY )
+{
+    const Size      aBaseOffset( nX, nY );
+    Size            aOffset( aBaseOffset );
+    VirtualDevice   aMapVDev;
+
+    aMapVDev.EnableOutput( FALSE );
+    aMapVDev.SetReferenceDevice( nDPIX, nDPIY );
+    aMapVDev.SetMapMode( GetPrefMapMode() );
+
+    for( MetaAction* pAct = (MetaAction*) First(); pAct; pAct = (MetaAction*) Next() )
+    {
+        const long  nType = pAct->GetType();
+        MetaAction* pModAct;
+
+        if( pAct->GetRefCount() > 1 )
+        {
+            Replace( pModAct = pAct->Clone(), GetCurPos() );
+            pAct->Delete();
+        }
+        else
+            pModAct = pAct;
+
+        if( ( META_MAPMODE_ACTION == nType ) ||
+            ( META_PUSH_ACTION == nType ) ||
+            ( META_POP_ACTION == nType ) )
+        {
+            pModAct->Execute( &aMapVDev );
+            if( aMapVDev.GetMapMode().GetMapUnit() == MAP_PIXEL )
+            {
+                aOffset = aMapVDev.LogicToPixel( aBaseOffset, GetPrefMapMode() );
+                MapMode aMap( aMapVDev.GetMapMode() );
+                aOffset.Width() = static_cast<long>(aOffset.Width() * (double)aMap.GetScaleX());
+                aOffset.Height() = static_cast<long>(aOffset.Height() * (double)aMap.GetScaleY());
+            }
+            else
+                aOffset = aMapVDev.LogicToLogic( aBaseOffset, GetPrefMapMode(), aMapVDev.GetMapMode() );
+        }
+
+        pModAct->Move( aOffset.Width(), aOffset.Height() );
+    }
+}
+
 // ------------------------------------------------------------------------
 
 void GDIMetaFile::Scale( double fScaleX, double fScaleY )

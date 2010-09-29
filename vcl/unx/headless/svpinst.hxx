@@ -46,11 +46,11 @@
 // SalYieldMutex
 // -------------------------------------------------------------------------
 
-class SvpSalYieldMutex : public NAMESPACE_VOS(OMutex)
+class SvpSalYieldMutex : public vos::OMutex
 {
 protected:
     ULONG                                       mnCount;
-    NAMESPACE_VOS(OThread)::TThreadIdentifier   mnThreadId;
+    vos::OThread::TThreadIdentifier mnThreadId;
 
 public:
                                                 SvpSalYieldMutex();
@@ -60,7 +60,7 @@ public:
     virtual sal_Bool                            tryToAcquire();
 
     ULONG                                       GetAcquireCount() const { return mnCount; }
-    NAMESPACE_VOS(OThread)::TThreadIdentifier   GetThreadId() const { return mnThreadId; }
+    vos::OThread::TThreadIdentifier GetThreadId() const { return mnThreadId; }
 };
 
 // ---------------

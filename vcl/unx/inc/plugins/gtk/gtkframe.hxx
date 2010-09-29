@@ -38,6 +38,8 @@
 #include <vcl/salframe.hxx>
 #include <vcl/sysdata.hxx>
 
+#include "tools/link.hxx"
+
 #include <list>
 #include <vector>
 
@@ -265,6 +267,8 @@ class GtkSalFrame : public SalFrame
     void setMinMaxSize();
     void createNewWindow( XLIB_Window aParent, bool bXEmbed, int nScreen );
     void askForXEmbedFocus( sal_Int32 nTimecode );
+
+    DECL_LINK( ImplDelayedFullScreenHdl, void* );
 public:
     GtkSalFrame( SalFrame* pParent, ULONG nStyle );
     GtkSalFrame( SystemParentData* pSysData );

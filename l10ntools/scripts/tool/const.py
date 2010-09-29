@@ -25,39 +25,15 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
+# Pseudo const
+class _const:
+    class ConstError(TypeError): pass
+    def __setattr__(self, name, value):
+        if self.__dict__.has_key(name):
+            raise self.ConstError, "Can't rebind const(%s)"%name
+        self.__dict__[name] = value
 
-PRJNAME=tools
-TARGET=mksvconf
-TARGETTYPE=CUI
+import sys
+sys.modules[__name__] = _const()
 
-LIBSALCPPRT=$(0)
-
-# --- Settings -----------------------------------------------------
-
-.INCLUDE :  settings.mk
-.INCLUDE :      $(PRJ)$/util$/makefile.pmk
-
-# --- Files --------------------------------------------------------
-
-CFILES=		solar.c
-
-OBJFILES=   $(OBJ)$/solar.obj
-
-APP1TARGET=	$(TARGET)
-APP1OBJS=	$(OBJFILES)
-APP1STDLIBS=
-APP1DEPN=
-APP1DEF=
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
-
-.IF "$(L10N-framework)"==""
-ALLTAR : $(INCCOM)$/svconf.h
-.ENDIF			# "$(L10N-framework)"==""
-
-$(INCCOM)$/svconf.h : $(BIN)$/$(TARGET)
-    $(BIN)$/$(TARGET) $@
 
