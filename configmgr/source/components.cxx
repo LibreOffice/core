@@ -769,7 +769,7 @@ void Components::parseModificationLayer() {
             "configmgr user registrymodifications.xcu does not (yet) exist");
         // Migrate old user layer data (can be removed once migration is no
         // longer relevant, probably OOo 4; also see hack for xsi namespace in
-        // XmlReader constructor):
+        // xmlreader::XmlReader::registerNamespaceIri):
         parseFiles(
             Data::NO_LAYER, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".xcu")),
             &parseXcuFile,
