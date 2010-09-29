@@ -344,7 +344,7 @@ void SwEditShell::AutoCorrect( SvxAutoCorrect& rACorr, sal_Bool bInsert,
     SwAutoCorrDoc aSwAutoCorrDoc( *this, *pCrsr, cChar );
     rACorr.AutoCorrect( aSwAutoCorrDoc,
                     pTNd->GetTxt(), pCrsr->GetPoint()->nContent.GetIndex(),
-                    cChar, bInsert );
+                    cChar, bInsert, GetWin() );
     if( cChar )
         SaveTblBoxCntnt( pCrsr->GetPoint() );
     EndAllAction();
