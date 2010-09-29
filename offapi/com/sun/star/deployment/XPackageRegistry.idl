@@ -115,6 +115,13 @@ interface XPackageRegistry
                 supported <type>XPackageTypeInfo</type>s.
     */
     sequence<XPackageTypeInfo> getSupportedPackageTypes();
+
+    void packageRemoved(
+        [in] string url,
+        [in] string mediaType)
+        raises (DeploymentException,
+                com::sun::star::lang::IllegalArgumentException);
+
 };
 
 }; }; }; };
