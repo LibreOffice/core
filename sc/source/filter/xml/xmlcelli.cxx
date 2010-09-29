@@ -487,21 +487,31 @@ void ScXMLTableRowCellContext::DoMerge(const com::sun::star::table::CellAddress&
         uno::Reference<table::XCellRange> xCellRange(rXMLImport.GetTables().GetCurrentXCellRange());
         if ( xCellRange.is() )
         {
-            table::CellRangeAddress aCellAddress;
-            if (IsMerged(xCellRange, aCellPos.Column, aCellPos.Row, aCellAddress))
+            // Stored merge range may actually be of a larger extend than what
+            // we support, in which case getCellRangeByPosition() throws
+            // IndexOutOfBoundsException. Do nothing then.
+            try
             {
-                //unmerge
-                uno::Reference <util::XMergeable> xMergeable (xCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
-                                                        aCellAddress.EndColumn, aCellAddress.EndRow), uno::UNO_QUERY);
-                if (xMergeable.is())
-                    xMergeable->merge(sal_False);
-            }
+                table::CellRangeAddress aCellAddress;
+                if (IsMerged(xCellRange, aCellPos.Column, aCellPos.Row, aCellAddress))
+                {
+                    //unmerge
+                    uno::Reference <util::XMergeable> xMergeable (xCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
+                                aCellAddress.EndColumn, aCellAddress.EndRow), uno::UNO_QUERY);
+                    if (xMergeable.is())
+                        xMergeable->merge(sal_False);
+                }
 
-            //merge
-            uno::Reference <util::XMergeable> xMergeable (xCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
-                                                    aCellAddress.EndColumn + nCols, aCellAddress.EndRow + nRows), uno::UNO_QUERY);
-            if (xMergeable.is())
-                xMergeable->merge(sal_True);
+                //merge
+                uno::Reference <util::XMergeable> xMergeable (xCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
+                            aCellAddress.EndColumn + nCols, aCellAddress.EndRow + nRows), uno::UNO_QUERY);
+                if (xMergeable.is())
+                    xMergeable->merge(sal_True);
+            }
+            catch ( lang::IndexOutOfBoundsException & )
+            {
+                DBG_ERRORFILE("ScXMLTableRowCellContext::DoMerge: range to be merged larger than what we support");
+            }
         }
     }
 }

@@ -48,7 +48,7 @@ class NamesEnumeration : public EnumerationHelperImpl
     uno::WeakReference< XHelperInterface > m_xParent;
     uno::Reference< sheet::XNamedRanges > m_xNames;
 public:
-    NamesEnumeration( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration,  const uno::Reference< frame::XModel >& xModel , const uno::Reference< sheet::XNamedRanges >& xNames ) throw ( uno::RuntimeException ) : EnumerationHelperImpl( xContext, xEnumeration ), m_xModel( xModel ), m_xParent( xParent ), m_xNames( xNames ) {}
+    NamesEnumeration( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration,  const uno::Reference< frame::XModel >& xModel , const uno::Reference< sheet::XNamedRanges >& xNames ) throw ( uno::RuntimeException ) : EnumerationHelperImpl( xParent, xContext, xEnumeration ), m_xModel( xModel ), m_xParent( xParent ), m_xNames( xNames ) {}
 
     virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
     {
@@ -173,11 +173,6 @@ ScVbaNames::getElementType() throw( css::uno::RuntimeException )
 uno::Reference< container::XEnumeration >
 ScVbaNames::createEnumeration() throw (uno::RuntimeException)
 {
-    if ( mxNames.is() )
-    {
-        uno::Reference< container::XEnumerationAccess > xAccess( m_xIndexAccess, uno::UNO_QUERY_THROW );
-        return xAccess->createEnumeration();
-    }
     uno::Reference< container::XEnumerationAccess > xEnumAccess( mxNames, uno::UNO_QUERY_THROW );
     return new NamesEnumeration( this, mxContext, xEnumAccess->createEnumeration(), mxModel , mxNames );
 }
