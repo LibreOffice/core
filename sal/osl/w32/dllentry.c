@@ -193,8 +193,10 @@ static BOOL WINAPI _RawDllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvR
                     osl_isSingleCPU = 1;
                 }
 #endif
+#if OSL_DEBUG_LEVEL < 2
                 /* Suppress file error messages from system like "Floppy A: not inserted" */
                 SetErrorMode( SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS );
+#endif
 
                 /* initialize global mutex */
                 g_Mutex = osl_createMutex();

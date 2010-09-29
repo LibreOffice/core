@@ -48,7 +48,9 @@
 oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 nRtldMode )
 {
     HINSTANCE hInstance;
+#if OSL_DEBUG_LEVEL < 2
     UINT errorMode = SetErrorMode(SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS);
+#endif
     rtl_uString* Module = NULL;
     oslModule ret = 0;
     oslFileError    nError;
@@ -74,7 +76,9 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 nRtldMod
 
     ret = (oslModule) hInstance;
     rtl_uString_release(Module);
+#if OSL_DEBUG_LEVEL < 2
     SetErrorMode(errorMode);
+#endif
 
     RTL_LOGFILE_TRACE1( "} osl_loadModule end: %S", (LPTSTR)&strModuleName->buffer );
 
