@@ -2257,6 +2257,18 @@ SalFrame::SalPointerState GtkSalFrame::GetPointerState()
     return aState;
 }
 
+SalFrame::SalIndicatorState GtkSalFrame::GetIndicatorState()
+{
+    SalIndicatorState aState;
+    aState.mnState = GetX11SalData()->GetDisplay()->GetIndicatorState();
+    return aState;
+}
+
+void GtkSalFrame::SimulateKeyPress( USHORT nKeyCode )
+{
+    GetX11SalData()->GetDisplay()->SimulateKeyPress(nKeyCode);
+}
+
 void GtkSalFrame::SetInputContext( SalInputContext* pContext )
 {
     if( ! pContext )

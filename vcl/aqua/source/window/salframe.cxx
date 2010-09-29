@@ -1436,6 +1436,17 @@ SalPointerState AquaSalFrame::GetPointerState()
     return state;
 }
 
+SalFrame::SalIndicatorState AquaSalFrame::GetIndicatorState()
+{
+    SalIndicatorState aState;
+    aState.mnState = 0;
+    return aState;
+}
+
+void AquaSalFrame::SimulateKeyPress( USHORT /*nKeyCode*/ )
+{
+}
+
 bool AquaSalFrame::SetPluginParent( SystemParentData* pNewParent )
 {
     // plugin parent may be killed unexpectedly by

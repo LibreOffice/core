@@ -2849,6 +2849,18 @@ SalFrame::SalPointerState X11SalFrame::GetPointerState()
     return aState;
 }
 
+SalFrame::SalIndicatorState X11SalFrame::GetIndicatorState()
+{
+    SalIndicatorState aState;
+    aState.mnState = GetX11SalData()->GetDisplay()->GetIndicatorState();
+    return aState;
+}
+
+void X11SalFrame::SimulateKeyPress( USHORT nKeyCode )
+{
+    GetX11SalData()->GetDisplay()->SimulateKeyPress(nKeyCode);
+}
+
 long X11SalFrame::HandleMouseEvent( XEvent *pEvent )
 {
     SalMouseEvent       aMouseEvt;

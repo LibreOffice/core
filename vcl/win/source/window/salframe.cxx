@@ -3227,6 +3227,41 @@ SalFrame::SalPointerState WinSalFrame::GetPointerState()
 
 // -----------------------------------------------------------------------
 
+SalFrame::SalIndicatorState WinSalFrame::GetIndicatorState()
+{
+    SalIndicatorState aState;
+    aState.mnState = 0;
+    if (::GetKeyState(VK_CAPITAL))
+        aState.mnState |= INDICATOR_CAPSLOCK;
+
+    if (::GetKeyState(VK_NUMLOCK))
+        aState.mnState |= INDICATOR_NUMLOCK;
+
+    if (::GetKeyState(VK_SCROLL))
+        aState.mnState |= INDICATOR_SCROLLLOCK;
+
+    return aState;
+}
+
+void WinSalFrame::SimulateKeyPress( USHORT nKeyCode )
+{
+    BYTE nVKey = 0;
+    switch (nKeyCode)
+    {
+        case KEY_CAPSLOCK:
+            nVKey = VK_CAPITAL;
+        break;
+    }
+
+    if (nVKey > 0 && nVKey < 255)
+    {
+        ::keybd_event(nVKey, 0x45, KEYEVENTF_EXTENDEDKEY, 0);
+        ::keybd_event(nVKey, 0x45, KEYEVENTF_EXTENDEDKEY|KEYEVENTF_KEYUP, 0);
+    }
+}
+
+// -----------------------------------------------------------------------
+
 void WinSalFrame::SetBackgroundBitmap( SalBitmap* )
 {
 }

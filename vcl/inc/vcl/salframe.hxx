@@ -250,6 +250,15 @@ public:
 
     virtual SalPointerState     GetPointerState() = 0;
 
+    struct SalIndicatorState
+    {
+        USHORT  mnState;
+    };
+
+    virtual SalIndicatorState   GetIndicatorState() = 0;
+
+    virtual void                SimulateKeyPress( USHORT nKeyCode ) = 0;
+
     // set new parent window
     virtual void                SetParent( SalFrame* pNewParent ) = 0;
     // reparent window to act as a plugin; implementation

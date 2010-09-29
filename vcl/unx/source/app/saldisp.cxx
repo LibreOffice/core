@@ -54,7 +54,7 @@
 #define XK_KOREAN
 #endif
 #include <X11/keysym.h>
-
+#include <X11/XKBlib.h>
 #include <X11/Xatom.h>
 
 #ifdef USE_XINERAMA
@@ -1037,6 +1037,77 @@ void SalDisplay::Beep() const
 
 // Keyboard
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+namespace {
+
+bool InitXkb(Display* dpy)
+{
+    int nOpcode, nEvent, nError;
+    int nXkbMajor = XkbMajorVersion;
+    int nXkbMinor = XkbMinorVersion;
+
+    if (!XkbLibraryVersion(&nXkbMajor, &nXkbMinor))
+        return false;
+
+    return XkbQueryExtension(
+        dpy, &nOpcode, &nEvent, &nError, &nXkbMajor, &nXkbMinor);
+}
+
+unsigned int GetKeySymMask(Display* dpy, KeySym nKeySym)
+{
+    int nMask = 0;
+    XModifierKeymap* pXmkMap = XGetModifierMapping(dpy);
+    KeyCode nKeyCode = XKeysymToKeycode(dpy, nKeySym);
+    if (nKeyCode == NoSymbol)
+        return 0;
+
+    for (int i = 0; i < 8; ++i)
+    {
+        KeyCode nThisKeyCode = pXmkMap->modifiermap[pXmkMap->max_keypermod*i];
+        if (nThisKeyCode == nKeyCode)
+            nMask = 1 << i;
+    }
+    XFreeModifiermap(pXmkMap);
+    return nMask;
+}
+
+}
+
+void SalDisplay::SimulateKeyPress( USHORT nKeyCode )
+{
+    if (nKeyCode == KEY_CAPSLOCK)
+    {
+        Display* dpy = GetDisplay();
+        if (!InitXkb(dpy))
+            return;
+
+        unsigned int nMask = GetKeySymMask(dpy, XK_Caps_Lock);
+        XkbStateRec xkbState;
+        XkbGetState(dpy, XkbUseCoreKbd, &xkbState);
+        unsigned int nCapsLockState = xkbState.locked_mods & nMask;
+        if (nCapsLockState)
+            XkbLockModifiers (dpy, XkbUseCoreKbd, nMask, 0);
+        else
+            XkbLockModifiers (dpy, XkbUseCoreKbd, nMask, nMask);
+    }
+}
+
+USHORT SalDisplay::GetIndicatorState() const
+{
+    unsigned int _state = 0;
+    USHORT nState = 0;
+    XkbGetIndicatorState(pDisp_, XkbUseCoreKbd, &_state);
+
+    if ((_state & 0x00000001))
+        nState |= INDICATOR_CAPSLOCK;
+    if ((_state & 0x00000002))
+        nState |= INDICATOR_NUMLOCK;
+    if ((_state & 0x00000004))
+        nState |= INDICATOR_SCROLLLOCK;
+
+    return nState;
+}
+
 String SalDisplay::GetKeyNameFromKeySym( KeySym nKeySym ) const
 {
     String aRet;

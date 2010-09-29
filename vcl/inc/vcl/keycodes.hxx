@@ -158,6 +158,10 @@
 #define KEY_BRACKETLEFT ((USHORT)::com::sun::star::awt::Key::BRACKETLEFT)
 #define KEY_BRACKETRIGHT ((USHORT)::com::sun::star::awt::Key::BRACKETRIGHT)
 
+#define KEY_CAPSLOCK    ((USHORT)::com::sun::star::awt::Key::CAPSLOCK)
+#define KEY_NUMLOCK     ((USHORT)::com::sun::star::awt::Key::NUMLOCK)
+#define KEY_SCROLLLOCK  ((USHORT)::com::sun::star::awt::Key::SCROLLLOCK)
+
 #define KEY_CODE        ((USHORT)0x0FFF)
 
 // Modifier-Tasten
@@ -189,5 +193,13 @@
 #define MOUSE_LEFT      ((USHORT)0x0001)
 #define MOUSE_MIDDLE    ((USHORT)0x0002)
 #define MOUSE_RIGHT     ((USHORT)0x0004)
+
+// -------------------
+// - Indicator-Types -
+// -------------------
+
+#define INDICATOR_CAPSLOCK      0x0001
+#define INDICATOR_NUMLOCK       0x0002
+#define INDICATOR_SCROLLLOCK    0x0004
 
 #endif // _SV_KEYCODES_HXX

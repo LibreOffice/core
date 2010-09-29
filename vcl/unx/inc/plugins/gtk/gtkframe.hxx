@@ -371,6 +371,10 @@ public:
     // get current modifier and button mask
     virtual SalPointerState     GetPointerState();
 
+    virtual SalIndicatorState   GetIndicatorState();
+
+    virtual void                SimulateKeyPress( USHORT nKeyCode );
+
     // set new parent window
     virtual void                SetParent( SalFrame* pNewParent );
     // reparent window to act as a plugin; implementation
