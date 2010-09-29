@@ -821,7 +821,7 @@ ESelection EditEngine::SelectSentence( const ESelection& rCurSel ) const
     return pE->pImpEditEngine->CreateESel( aSentenceSel );
 }
 
-sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView )
+sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, Window* pFrameWin )
 {
     DBG_CHKTHIS( EditEngine, 0 );
     DBG_CHKOBJ( pEditView, EditView, 0 );
@@ -1081,7 +1081,7 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
                         if ( bSel )
                             pImpEditEngine->UndoActionStart( EDITUNDO_INSERT );
                         if ( pImpEditEngine->GetStatus().DoAutoCorrect() )
-                            aCurSel = pImpEditEngine->AutoCorrect( aCurSel, 0, !pEditView->IsInsertMode() );
+                            aCurSel = pImpEditEngine->AutoCorrect( aCurSel, 0, !pEditView->IsInsertMode(), pFrameWin );
                         aCurSel = pImpEditEngine->InsertTab( aCurSel );
                         if ( bSel )
                             pImpEditEngine->UndoActionEnd( EDITUNDO_INSERT );
@@ -1102,7 +1102,7 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
                         pImpEditEngine->UndoActionStart( EDITUNDO_INSERT );
                         if ( rKeyEvent.GetKeyCode().IsShift() )
                         {
-                            aCurSel = pImpEditEngine->AutoCorrect( aCurSel, 0, !pEditView->IsInsertMode() );
+                            aCurSel = pImpEditEngine->AutoCorrect( aCurSel, 0, !pEditView->IsInsertMode(), pFrameWin );
                             aCurSel = pImpEditEngine->InsertLineBreak( aCurSel );
                         }
                         else
@@ -1110,7 +1110,7 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
                             if ( !aAutoText.Len() )
                             {
                                 if ( pImpEditEngine->GetStatus().DoAutoCorrect() )
-                                    aCurSel = pImpEditEngine->AutoCorrect( aCurSel, 0, !pEditView->IsInsertMode() );
+                                    aCurSel = pImpEditEngine->AutoCorrect( aCurSel, 0, !pEditView->IsInsertMode(), pFrameWin );
                                 aCurSel = pImpEditEngine->InsertParaBreak( aCurSel );
                             }
                             else
@@ -1158,7 +1158,8 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
                         ( SvxAutoCorrect::IsAutoCorrectChar( nCharCode ) ||
                           pAutoCorrect->HasRunNext() ) )
                     {
-                        aCurSel = pImpEditEngine->AutoCorrect( aCurSel, nCharCode, !pEditView->IsInsertMode() );
+                        aCurSel = pImpEditEngine->AutoCorrect(
+                            aCurSel, nCharCode, !pEditView->IsInsertMode(), pFrameWin );
                     }
                     else
                     {

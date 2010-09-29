@@ -53,6 +53,7 @@ class Rectangle;
 class SvStream;
 class Link;
 class OutputDevice;
+class Window;
 class SvUShorts;
 class SfxPoolItem;
 class SvxNumBulletItem;
@@ -124,7 +125,7 @@ private:
     EDITENG_DLLPRIVATE EditEngine&      operator=( const EditEngine& );
 
 //#if 0 // _SOLAR__PRIVATE
-    EDITENG_DLLPRIVATE BOOL             PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pView );
+    EDITENG_DLLPRIVATE BOOL             PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pView, Window* pFrameWin = NULL );
 //#endif
 
 protected:

@@ -118,9 +118,10 @@ Sequence<OUString>  SvxBaseAutoCorrCfg::GetPropertyNames()
         "SingleQuoteAtEnd",                     // 13
         "ReplaceDoubleQuote",                   // 14
         "DoubleQuoteAtStart",                   // 15
-        "DoubleQuoteAtEnd"                      // 16
+        "DoubleQuoteAtEnd",                     // 16
+        "CorrectAccidentalCapsLock"             // 17
     };
-    const int nCount = 17;
+    const int nCount = 18;
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
@@ -220,6 +221,10 @@ void SvxBaseAutoCorrCfg::Load(sal_Bool bInit)
                         rParent.pAutoCorrect->SetEndDoubleQuote(
                             sal::static_int_cast< sal_Unicode >( nTemp ) );
                     break;//"DoubleQuoteAtEnd"
+                    case 17:
+                        if(*(sal_Bool*)pValues[nProp].getValue())
+                            nFlags |= CorrectCapsLock;
+                    break;//"CorrectAccidentalCapsLock"
                 }
             }
         }
@@ -324,6 +329,10 @@ void SvxBaseAutoCorrCfg::Commit()
             case 16:
                 pValues[nProp] <<= (sal_Int32) rParent.pAutoCorrect->GetEndDoubleQuote();
             break;//"DoubleQuoteAtEnd"
+            case 17:
+                bVal = 0 != (nFlags & CorrectCapsLock);
+                pValues[nProp].setValue(&bVal, rType);
+            break;//"CorrectAccidentalCapsLock"
         }
     }
     PutProperties(aNames, aValues);

@@ -60,6 +60,7 @@
 #include <helpid.hrc>
 #include <i18npool/lang.h>
 #include <vcl/menu.hxx>
+#include <vcl/window.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <editeng/unolingu.hxx>
 #include <editeng/fontitem.hxx>
@@ -419,11 +420,11 @@ void EditView::InsertText( const XubString& rStr, sal_Bool bSelect )
     pImpEE->FormatAndUpdate( this );
 }
 
-sal_Bool EditView::PostKeyEvent( const KeyEvent& rKeyEvent )
+sal_Bool EditView::PostKeyEvent( const KeyEvent& rKeyEvent, Window* pFrameWin )
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
-    return pImpEditView->PostKeyEvent( rKeyEvent );
+    return pImpEditView->PostKeyEvent( rKeyEvent, pFrameWin );
 }
 
 sal_Bool EditView::MouseButtonUp( const MouseEvent& rMouseEvent )
@@ -920,7 +921,7 @@ sal_Bool EditView::MatchGroup()
     return sal_False;
 }
 
-void EditView::CompleteAutoCorrect()
+void EditView::CompleteAutoCorrect( Window* pFrameWin )
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
@@ -930,7 +931,7 @@ void EditView::CompleteAutoCorrect()
         EditSelection aSel = pImpEditView->GetEditSelection();
         aSel = PIMPEE->EndOfWord( aSel.Max() );
         // MT 06/00: Why pass EditSelection to AutoCorrect, not EditPaM?!
-        aSel = PIMPEE->AutoCorrect( aSel, 0, !IsInsertMode() );
+        aSel = PIMPEE->AutoCorrect( aSel, 0, !IsInsertMode(), pFrameWin );
         pImpEditView->SetEditSelection( aSel );
         if ( PIMPEE->IsModified() )
             PIMPEE->FormatAndUpdate( this );

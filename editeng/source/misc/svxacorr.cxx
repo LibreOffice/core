@@ -60,6 +60,7 @@
 #include <editeng/escpitem.hxx>
 #include <editeng/svxacorr.hxx>
 #include <editeng/unolingu.hxx>
+#include "vcl/window.hxx"
 #include <helpid.hrc>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/xml/sax/InputSource.hpp>
@@ -336,7 +337,8 @@ long SvxAutoCorrect::GetDefaultFlags()
                     | SetINetAttr
                     | ChgQuotes
                     | SaveWordCplSttLst
-                    | SaveWordWrdSttLst;
+                    | SaveWordWrdSttLst
+                    | CorrectCapsLock;
     LanguageType eLang = GetAppLang();
     switch( eLang )
     {
@@ -1073,6 +1075,49 @@ BOOL SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
 
     return bRet;
 }
+
+bool SvxAutoCorrect::FnCorrectCapsLock( SvxAutoCorrDoc& rDoc, const String& rTxt,
+                                        xub_StrLen nSttPos, xub_StrLen nEndPos,
+                                        LanguageType eLang )
+{
+    if (nEndPos - nSttPos < 2)
+        // string must be at least 2-character long.
+        return false;
+
+    CharClass& rCC = GetCharClass( eLang );
+
+    // Check the first 2 letters.
+    if ( !IsLowerLetter(rCC.getCharacterType(rTxt, nSttPos)) )
+        return false;
+
+    if ( !IsUpperLetter(rCC.getCharacterType(rTxt, nSttPos+1)) )
+        return false;
+
+    String aConverted;
+    aConverted.Append( rCC.upper(rTxt.GetChar(nSttPos)) );
+    aConverted.Append( rCC.lower(rTxt.GetChar(nSttPos+1)) );
+
+    for (xub_StrLen i = nSttPos+2; i < nEndPos; ++i)
+    {
+        if ( IsLowerLetter(rCC.getCharacterType(rTxt, i)) )
+            // A lowercase letter disqualifies the whole text.
+            return false;
+
+        if ( IsUpperLetter(rCC.getCharacterType(rTxt, i)) )
+            // Another uppercase letter.  Convert it.
+            aConverted.Append( rCC.lower(rTxt.GetChar(i)) );
+        else
+            // This is not an alphabetic letter.  Leave it as-is.
+            aConverted.Append(rTxt.GetChar(i));
+    }
+
+    // Replace the word.
+    rDoc.Delete(nSttPos, nEndPos);
+    rDoc.Insert(nSttPos, aConverted);
+
+    return true;
+}
+
 //The method below is renamed from _GetQuote to GetQuote by BerryJia for Bug95846 Time:2002-8-13 15:50
 sal_Unicode SvxAutoCorrect::GetQuote( sal_Unicode cInsChar, BOOL bSttQuote,
                                         LanguageType eLang ) const
@@ -1186,7 +1231,7 @@ String SvxAutoCorrect::GetQuote( SvxAutoCorrDoc& rDoc, xub_StrLen nInsPos,
 
 ULONG SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
                                     xub_StrLen nInsPos, sal_Unicode cChar,
-                                    BOOL bInsert )
+                                    BOOL bInsert, Window* pFrameWin )
 {
     ULONG nRet = 0;
     bool bIsNextRun = bRunNext;
@@ -1364,7 +1409,19 @@ ULONG SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
             ;
         else
         {
+            bool bLockKeyOn = pFrameWin && (pFrameWin->GetIndicatorState() & INDICATOR_CAPSLOCK);
+
             nRet = 0;
+            if ( bLockKeyOn && IsAutoCorrFlag( CorrectCapsLock ) &&
+                 FnCorrectCapsLock( rDoc, rTxt, nCapLttrPos, nInsPos, eLang ) )
+            {
+                // Correct accidental use of cAPS LOCK key (do this only when
+                // the caps or shift lock key is pressed).  Turn off the caps
+                // lock afterwords.
+                nRet |= CorrectCapsLock;
+                pFrameWin->SimulateKeyPress( KEY_CAPSLOCK );
+            }
+
             // Grossbuchstabe am Satz-Anfang ??
             if( IsAutoCorrFlag( CptlSttSntnc ) &&
                 FnCptlSttSntnc( rDoc, rTxt, TRUE, nCapLttrPos, nInsPos, eLang ) )

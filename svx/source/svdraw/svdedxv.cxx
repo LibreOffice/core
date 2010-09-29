@@ -1160,7 +1160,7 @@ BOOL SdrObjEditView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
                 ShowItemBrowser();
         }
 #endif
-        if (pTextEditOutlinerView->PostKeyEvent(rKEvt))
+        if (pTextEditOutlinerView->PostKeyEvent(rKEvt, pWin))
         {
             if( pMod /* && !pMod->IsChanged() */ )
             {

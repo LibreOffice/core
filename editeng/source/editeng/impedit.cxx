@@ -993,7 +993,7 @@ Pair ImpEditView::Scroll( long ndX, long ndY, BYTE nRangeCheck )
     return Pair( nRealDiffX, nRealDiffY );
 }
 
-sal_Bool ImpEditView::PostKeyEvent( const KeyEvent& rKeyEvent )
+sal_Bool ImpEditView::PostKeyEvent( const KeyEvent& rKeyEvent, Window* pFrameWin )
 {
     BOOL bDone = FALSE;
 
@@ -1037,7 +1037,7 @@ sal_Bool ImpEditView::PostKeyEvent( const KeyEvent& rKeyEvent )
     }
 
     if( !bDone )
-        bDone = pEditEngine->PostKeyEvent( rKeyEvent, GetEditViewPtr() );
+        bDone = pEditEngine->PostKeyEvent( rKeyEvent, GetEditViewPtr(), pFrameWin );
 
     return bDone;
 }

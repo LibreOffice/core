@@ -92,6 +92,8 @@ class TextRanger;
 class SvKeyValueIterator;
 class SvxForbiddenCharactersTable;
 class SvtCTLOptions;
+class Window;
+
 #include <editeng/SpellPortions.hxx>
 
 #include <editeng/eedata.hxx>
@@ -289,7 +291,7 @@ public:
 
     BOOL            IsVertical() const;
 
-    BOOL            PostKeyEvent( const KeyEvent& rKeyEvent );
+    BOOL            PostKeyEvent( const KeyEvent& rKeyEvent, Window* pFrameWin = NULL );
 
     BOOL            MouseButtonUp( const MouseEvent& rMouseEvent );
     BOOL            MouseButtonDown( const MouseEvent& rMouseEvent );
@@ -781,7 +783,7 @@ public:
     EditPaM         DeleteSelected( EditSelection aEditSelection);
     EditPaM         InsertText( const EditSelection& rCurEditSelection, sal_Unicode c, sal_Bool bOverwrite, sal_Bool bIsUserInput = sal_False );
     EditPaM         InsertText( EditSelection aCurEditSelection, const String& rStr );
-    EditPaM         AutoCorrect( const EditSelection& rCurEditSelection, sal_Unicode c, sal_Bool bOverwrite );
+    EditPaM         AutoCorrect( const EditSelection& rCurEditSelection, sal_Unicode c, bool bOverwrite, Window* pFrameWin = NULL );
     EditPaM         DeleteLeftOrRight( const EditSelection& rEditSelection, BYTE nMode, BYTE nDelMode = DELMODE_SIMPLE );
     EditPaM         InsertParaBreak( EditSelection aEditSelection );
     EditPaM         InsertLineBreak( EditSelection aEditSelection );

@@ -103,7 +103,7 @@ void OutlinerView::Paint( const Rectangle& rRect )
     pEditView->Paint( rRect );
 }
 
-BOOL OutlinerView::PostKeyEvent( const KeyEvent& rKEvt )
+BOOL OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, Window* pFrameWin )
 {
     DBG_CHKTHIS( OutlinerView, 0 );
 
@@ -268,7 +268,7 @@ BOOL OutlinerView::PostKeyEvent( const KeyEvent& rKEvt )
         }
     }
 
-    return bKeyProcessed ? TRUE : pEditView->PostKeyEvent( rKEvt );
+    return bKeyProcessed ? TRUE : pEditView->PostKeyEvent( rKEvt, pFrameWin );
 }
 
 

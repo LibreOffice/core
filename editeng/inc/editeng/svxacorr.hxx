@@ -47,6 +47,7 @@ class SvxAutoCorrLanguageTable_Impl;
 class SvxAutoCorrLastFileAskTable_Impl;
 class SotStorageRef;
 class SotStorage;
+class Window;
 
 // Flags fuer die AutoKorrekt-Flags
 const long CptlSttSntnc     = 0x00000001;   // Gross-Buchstaben am SatzAnfang
@@ -62,6 +63,7 @@ const long SaveWordCplSttLst= 0x00000200;   // GrB. am SatzAnf. auto. aufnehmen
 const long SaveWordWrdSttLst= 0x00000400;   // 2 GrB. am WortAnf. auto. aufnehmen
 const long IgnoreDoubleSpace= 0x00000800;   // 2 Spaces ignorieren
 const long ChgSglQuotes     = 0x00001000;   // einfache Quotes ersetzen
+const long CorrectCapsLock  = 0x00002000;   // Correct accidental use of cAPS LOCK key
 
 const long ChgWordLstLoad   = 0x20000000;   // Ersetzungsliste geladen
 const long CplSttLstLoad    = 0x40000000;   // Exceptionlist fuer CplStart geladen
@@ -250,7 +252,7 @@ public:
     // fuehre eine AutoKorrektur aus.
     // returnt was ausgefuehrt wurde; entsprechend den obigen Flags
     ULONG AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
-                        xub_StrLen nPos, sal_Unicode cInsChar, BOOL bInsert );
+                        xub_StrLen nPos, sal_Unicode cInsChar, BOOL bInsert, Window* pFrameWin = NULL );
 
     // return fuer die Autotext Expandierung das vorherige Wort, was dem
     // AutoCorrect - Algorythmus entspricht.
@@ -375,6 +377,9 @@ public:
     BOOL FnCptlSttSntnc( SvxAutoCorrDoc&, const String&, BOOL bNormalPos,
                                 xub_StrLen nSttPos, xub_StrLen nEndPos,
                                 LanguageType eLang  = LANGUAGE_SYSTEM);
+    bool FnCorrectCapsLock( SvxAutoCorrDoc&, const String&,
+                            xub_StrLen nSttPos, xub_StrLen nEndPos,
+                            LanguageType eLang  = LANGUAGE_SYSTEM );
 
     bool                HasRunNext() { return bRunNext; }
 

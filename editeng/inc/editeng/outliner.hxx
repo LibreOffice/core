@@ -259,7 +259,7 @@ public:
     void        Scroll( long nHorzScroll, long nVertScroll );
 
     void        Paint( const Rectangle& rRect );
-    BOOL        PostKeyEvent( const KeyEvent& rKEvt );
+    BOOL        PostKeyEvent( const KeyEvent& rKEvt, Window* pFrameWin = NULL );
     BOOL        MouseButtonDown( const MouseEvent& );
     BOOL        MouseButtonUp( const MouseEvent& );
     BOOL        MouseMove( const MouseEvent& );

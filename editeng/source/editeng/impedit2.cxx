@@ -2576,7 +2576,8 @@ void ImpEditEngine::ImpRemoveParagraph( USHORT nPara )
     }
 }
 
-EditPaM ImpEditEngine::AutoCorrect( const EditSelection& rCurSel, xub_Unicode c, BOOL bOverwrite )
+EditPaM ImpEditEngine::AutoCorrect( const EditSelection& rCurSel, xub_Unicode c,
+                                    bool bOverwrite, Window* pFrameWin )
 {
     EditSelection aSel( rCurSel );
 #ifndef SVX_LIGHT
@@ -2626,7 +2627,7 @@ EditPaM ImpEditEngine::AutoCorrect( const EditSelection& rCurSel, xub_Unicode c,
         ContentNode* pNode = aSel.Max().GetNode();
         USHORT nIndex = aSel.Max().GetIndex();
         EdtAutoCorrDoc aAuto( this, pNode, nIndex, c );
-        pAutoCorrect->AutoCorrect( aAuto, *pNode, nIndex, c, !bOverwrite );
+        pAutoCorrect->AutoCorrect( aAuto, *pNode, nIndex, c, !bOverwrite, pFrameWin );
         aSel.Max().SetIndex( aAuto.GetCursor() );
 
         // #i78661 since the SvxAutoCorrect object used here is

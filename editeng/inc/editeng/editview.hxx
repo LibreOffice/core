@@ -145,7 +145,7 @@ public:
 
     void            InsertText( const String& rNew, BOOL bSelect = FALSE );
 
-    BOOL            PostKeyEvent( const KeyEvent& rKeyEvent );
+    BOOL            PostKeyEvent( const KeyEvent& rKeyEvent, Window* pFrameWin = NULL );
 
     BOOL            MouseButtonUp( const MouseEvent& rMouseEvent );
     BOOL            MouseButtonDown( const MouseEvent& rMouseEvent );
@@ -208,7 +208,7 @@ public:
 
     BOOL            MatchGroup();
 
-    void            CompleteAutoCorrect();
+    void            CompleteAutoCorrect( Window* pFrameWin = NULL );
 
     EESpellState    StartSpeller( BOOL bMultipleDoc = FALSE );
     EESpellState    StartThesaurus();
