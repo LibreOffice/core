@@ -24,48 +24,17 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+#ifndef INCLUDED_RESOURCE_MODEL_HELPER_HXX
+#define INCLUDED_RESOURCE_MODEL_HELPER_HXX
 
+#include <resourcemodel/WW8ResourceModel.hxx>
 
-#ifndef _DLGEGIF_HXX_
-#define _DLGEGIF_HXX_
+namespace writerfilter {
+namespace resourcemodel {
 
-#include <svtools/fltcall.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
+void WRITERFILTER_DLLPUBLIC resolveSprmProps(Properties & rHandler, Sprm & rSprm);
+void  WRITERFILTER_DLLPUBLIC resolveAttributeProperties(Properties & rHandler, Value & rValue);
 
-/*************************************************************************
-|*
-|* Dialog zum Einstellen von Filteroptionen
-|*
-\************************************************************************/
+}}
 
-class FilterConfigItem;
-class ResMgr;
-
-class DlgExportEGIF : public ModalDialog
-{
-private:
-
-    FltCallDialogParameter& rFltCallPara;
-
-    CheckBox            aCbxInterlaced;
-    CheckBox            aCbxTranslucent;
-    FixedLine           aGrpMode;
-    FixedLine           aGrpDraw;
-    OKButton            aBtnOK;
-    CancelButton        aBtnCancel;
-    HelpButton          aBtnHelp;
-
-    FilterConfigItem*   pConfigItem;
-    ResMgr*             pMgr;
-
-    DECL_LINK( OK, void * );
-
-public:
-            DlgExportEGIF( FltCallDialogParameter& rPara );
-            ~DlgExportEGIF();
-};
-
-#endif // _DLGEGIF_HXX_
-
+#endif // INCLUDED_RESOURCE_MODEL_HELPER_HXX

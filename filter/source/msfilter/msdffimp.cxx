@@ -128,9 +128,7 @@
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/contentbroker.hxx>
 #include <vos/xception.hxx>
-#ifndef _VOS_NO_NAMESPACE
 using namespace vos;
-#endif
 #include "svx/EnhancedCustomShapeTypeNames.hxx"
 #include "svx/EnhancedCustomShapeGeometry.hxx"
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
@@ -5373,8 +5371,8 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         aSet.Put( SdrEdgeNode2VertDistItem( n2VertDist ) );
 
                         ((SdrEdgeObj*)pRet)->SetEdgeTrackPath( aPoly );
+                        pRet->SetMergedItemSet( aSet );
                     }
-                    pRet->SetMergedItemSet( aSet );
                 }
             }
 
