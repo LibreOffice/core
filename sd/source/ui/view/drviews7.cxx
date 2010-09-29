@@ -301,7 +301,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         {
             SdPage* pPage = dynamic_cast< SdPage* >( pPageView->GetPage() );
 
-            if( pPage )
+            if( pPage && !pPage->IsMasterPage() )
             {
                 rSet.Put( SfxUInt32Item( SID_ASSIGN_LAYOUT, static_cast< sal_uInt32 >(pPage->GetAutoLayout()) ) );
                 bDisable = false;
@@ -1565,7 +1565,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     if ( bDisableEditHyperlink )
         rSet.DisableItem( SID_OPEN_HYPERLINK );
 
-#if defined WIN || defined WNT || defined UNX
+#if defined WNT || defined UNX
     if( !mxScannerManager.is() )
     {
         rSet.DisableItem( SID_TWAIN_SELECT );

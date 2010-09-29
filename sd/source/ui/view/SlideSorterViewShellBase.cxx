@@ -64,7 +64,7 @@ SfxViewShell* __EXPORT SlideSorterViewShellBase::CreateInstance (
 void SlideSorterViewShellBase::RegisterFactory( USHORT nPrio )
 {
     pFactory = new SfxViewFactory(
-        &CreateInstance,&InitFactory,nPrio,SdResId(STR_DEFAULTVIEW));
+        &CreateInstance,&InitFactory,nPrio,"SlideSorter");
     InitFactory();
 }
 
