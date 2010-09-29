@@ -66,6 +66,7 @@
 #include <svx/hyperdlg.hxx>
 #include <svx/extrusioncolorcontrol.hxx>
 #include <svx/fontworkgallery.hxx>
+#include <svx/modctrl.hxx>
 #include <com/sun/star/scanner/XScannerManager.hpp>
 #include <com/sun/star/container/XSet.hpp>
 #include <comphelper/processfactory.hxx>
@@ -422,6 +423,7 @@ void SwDLL::RegisterControls()
     SwBookmarkControl::RegisterControl(FN_STAT_PAGE, pMod );
     SwTemplateControl::RegisterControl(FN_STAT_TEMPLATE, pMod );
     SwViewLayoutControl::RegisterControl( SID_ATTR_VIEWLAYOUT, pMod );
+    SvxModifyControl::RegisterControl( SID_DOC_MODIFIED, pMod );
     SvxZoomSliderControl::RegisterControl( SID_ATTR_ZOOMSLIDER, pMod );
 
     SwTableOptimizeCtrl::RegisterControl(FN_OPTIMIZE_TABLE, pMod);
