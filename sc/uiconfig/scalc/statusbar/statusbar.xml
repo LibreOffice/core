@@ -5,7 +5,7 @@
  <statusbar:statusbaritem xlink:href=".uno:StatusPageStyle" statusbar:align="left" statusbar:autosize="true" statusbar:width="83" statusbar:helpid="helpid:26115"/>
  <statusbar:statusbaritem xlink:href=".uno:InsertMode" statusbar:align="center" statusbar:width="41" statusbar:helpid="helpid:10221"/>
  <statusbar:statusbaritem xlink:href=".uno:StatusSelectionMode" statusbar:align="center" statusbar:width="34" statusbar:helpid="helpid:26116"/>
- <statusbar:statusbaritem xlink:href=".uno:ModifiedStatus" statusbar:align="center" statusbar:width="18" statusbar:helpid="helpid:5584"/>
+ <statusbar:statusbaritem xlink:href=".uno:ModifiedStatus" statusbar:align="center" statusbar:ownerdraw="true" statusbar:width="18" statusbar:helpid="helpid:5584"/>
  <statusbar:statusbaritem xlink:href=".uno:Signature" statusbar:align="center" statusbar:ownerdraw="true" statusbar:width="16" statusbar:helpid="helpid:5699"/>
  <statusbar:statusbaritem xlink:href=".uno:Size" statusbar:align="center" statusbar:autosize="true" statusbar:ownerdraw="true" statusbar:width="212" statusbar:helpid="helpid:10224"/>
  <statusbar:statusbaritem xlink:href=".uno:ZoomSlider" statusbar:align="center" statusbar:ownerdraw="true" statusbar:width="140" statusbar:helpid="helpid:11065"/>
