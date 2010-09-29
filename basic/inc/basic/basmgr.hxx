@@ -166,7 +166,7 @@ protected:
     BasicLibInfo*   FindLibInfo( StarBASIC* pBasic ) const;
     void            CheckModules( StarBASIC* pBasic, BOOL bReference ) const;
     void            SetFlagToAllLibs( short nFlag, BOOL bSet ) const;
-                    BasicManager(); // Nur zum anpassen von Pfaden bei 'Speichern unter'.
+                    BasicManager(); // This is used only to customize the paths of 'Save as'.
                     ~BasicManager();
 
 public:
@@ -211,7 +211,7 @@ public:
     BOOL            LoadLib( USHORT nLib );
     BOOL            RemoveLib( USHORT nLib, BOOL bDelBasicFromStorage );
 
-    // Modify-Flag wird nur beim Speichern zurueckgesetzt.
+    // Modify-Flag will be reset only during save.
     BOOL            IsModified() const;
     BOOL            IsBasicModified() const;
 

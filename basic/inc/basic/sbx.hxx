@@ -158,9 +158,9 @@ public:
 #ifndef __SBX_SBXARRAY
 #define __SBX_SBXARRAY
 
-// SbxArray ist ein eindimensionales, dynamisches Array
-// von SbxVariablen. Put()/Insert() konvertieren die Variablen in den
-// angegebenen Datentyp, falls er nicht SbxVARIANT ist.
+// SbxArray is an unidimensional, dynamic Array
+// The variables convert from SbxVariablen. Put()/Insert() into the
+// declared datatype, if they are not SbxVARIANT.
 
 class SbxVarRefs;
 class SbxVariableRef;

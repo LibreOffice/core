@@ -71,7 +71,7 @@ public:
     void      SetDebugFlags( USHORT n )  { nDebugFlags = n;    }
     void      GetLineRange( USHORT&, USHORT& );
 
-    // Schnittstelle zum Ausfuehren einer Methode aus den Applikationen
+    // Interface to execute a method from the applications
     virtual ErrCode Call( SbxValue* pRet = NULL );
     virtual void Broadcast( ULONG nHintId );
 };

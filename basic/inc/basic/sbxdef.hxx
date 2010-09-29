@@ -67,7 +67,7 @@ enum SbxDataType {
     SbxOBJECT     =  9, // * SbxBase object pointer
     SbxERROR      = 10, // * Error (UINT16)
     SbxBOOL       = 11, // * Boolean (0 or -1)
-    SbxVARIANT    = 12, // * Anzeige fuer varianten Datentyp
+    SbxVARIANT    = 12, // * Display for variant datatype
     SbxDATAOBJECT = 13, // * Common data object w/o ref count
 
     SbxCHAR       = 16, // * signed char
@@ -86,9 +86,9 @@ enum SbxDataType {
     SbxUSERDEF    = 29, //   user defined
     SbxLPSTR      = 30, // * null terminated string
     SbxLPWSTR     = 31, //   wide null terminated string
-    SbxCoreSTRING = 32, //   AB 10.4.97, fuer GetCoreString(), nur zum Konvertieren
-    SbxWSTRING    = 33, //   AB 4.10.2000 Reimplemented for backwards compatibility (#78919)
-    SbxWCHAR      = 34, //   AB 4.10.2000 Reimplemented for backwards compatibility (#78919)
+    SbxCoreSTRING = 32, //   from 1997/4/10 for GetCoreString(), only for converting
+    SbxWSTRING    = 33, //   from 2000/10/4 Reimplemented for backwards compatibility (#78919)
+    SbxWCHAR      = 34, //   from 2000/10/4 Reimplemented for backwards compatibility (#78919)
     SbxSALINT64   = 35, //   for UNO hyper
     SbxSALUINT64  = 36, //   for UNO unsigned hyper
     SbxDECIMAL    = 37, //   for UNO/automation Decimal
@@ -155,7 +155,7 @@ enum SbxNameType {              // Type of the questioned name of a variable
 
 #endif
 
-// AB: 20.3.96: New error messages
+// from 1996/3/20: New error messages
 typedef ULONG SbxError;         // Preserve old type
 
 #endif
@@ -189,7 +189,7 @@ typedef ULONG SbxError;         // Preserve old type
 #define ERRCODE_SBX_BAD_INDEX                   (12UL | ERRCODE_AREA_SBX | \
                                                 ERRCODE_CLASS_SBX)              // Invalid object index
 #define ERRCODE_SBX_NO_ACTIVE_OBJECT            (13UL | ERRCODE_AREA_SBX | \
-                                                ERRCODE_CLASS_ACCESS)           // Object ist not activated
+                                                ERRCODE_CLASS_ACCESS)           // Object is not activated
 #define ERRCODE_SBX_BAD_PROP_VALUE              (14UL | ERRCODE_AREA_SBX | \
                                                 ERRCODE_CLASS_RUNTIME)          // Bad property value
 #define ERRCODE_SBX_PROP_READONLY               (15UL | ERRCODE_AREA_SBX | \
@@ -270,7 +270,7 @@ enum SbxError {                 // Ergebnis einer Rechenoperation/Konversion
     SbxERR_BOUNDS = 9,          // Array-Index ungueltig
     SbxERR_ZERODIV = 11,        // Division durch Null
     SbxERR_CONVERSION = 13,     // falscher Datentyp
-    SbxERR_BAD_PARAMETER = 14,  // ungÅltiger Parameter
+    SbxERR_BAD_PARAMETER = 14,  // ungÔøΩltiger Parameter
     SbxERR_PROC_UNDEFINED = 35, // BASIC-Sub oder Function undefiniert
     SbxERR_ERROR = 51,          // andere Fehler
                                 // Objektbezogene Fehler
@@ -285,15 +285,15 @@ enum SbxError {                 // Ergebnis einer Rechenoperation/Konversion
     SbxERR_NO_METHOD = 423,     // Property oder Methode unbekannt
     SbxERR_INVALID_USAGE_OBJECT=425,// Falsche Verwendung eines Objekts
     SbxERR_NO_OLE = 430,        // Kein OLE-Objekt
-    SbxERR_BAD_METHOD = 438,    // Methode nicht unterstÅtzt
+    SbxERR_BAD_METHOD = 438,    // Methode nicht unterstÔøΩtzt
     SbxERR_OLE_ERROR = 440,     // OLE Automation-Fehler
-    SbxERR_BAD_ACTION = 445,    // Aktion nicht unterstÅtzt
+    SbxERR_BAD_ACTION = 445,    // Aktion nicht unterstÔøΩtzt
     SbxERR_NO_NAMED_ARGS = 446, // Keine benannten Argumente
-    SbxERR_BAD_LOCALE = 447,    // Laenderspezifische Einstellungen nicht unterstÅtzt
+    SbxERR_BAD_LOCALE = 447,    // Laenderspezifische Einstellungen nicht unterstÔøΩtzt
     SbxERR_NAMED_NOT_FOUND = 448,// Unbekanntes benanntes Argument
     SbxERR_NOT_OPTIONAL = 449,  // Argument nicht optional
     SbxERR_WRONG_ARGS = 450,    // Falsche Zahl von Argumenten
-    SbxERR_NOT_A_COLL = 451     // Objekt enthÑlt keine Elemente
+    SbxERR_NOT_A_COLL = 451     // Objekt enthÔøΩlt keine Elemente
 };
 */
 
