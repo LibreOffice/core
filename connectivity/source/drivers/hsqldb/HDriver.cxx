@@ -278,15 +278,15 @@ namespace connectivity
                                 {
                                     if ( sLine.Len() == 0 )
                                         continue;
-                                    const ByteString sKey = sLine.GetToken( 0, '=' );
+                                    const ByteString sIniKey = sLine.GetToken( 0, '=' );
                                     const ByteString sValue = sLine.GetToken( 1, '=' );
-                                    if ( sKey.Equals( "hsqldb.compatible_version" ) )
+                                    if ( sIniKey.Equals( "hsqldb.compatible_version" ) )
                                     {
                                         sVersionString = sValue;
                                     }
                                     else
                                     {
-                                        if  (   sKey.Equals( "version" )
+                                        if  (   sIniKey.Equals( "version" )
                                             &&  ( sVersionString.Len() == 0 )
                                             )
                                         {
