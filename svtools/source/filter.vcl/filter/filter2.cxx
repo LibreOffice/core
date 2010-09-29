@@ -1115,6 +1115,8 @@ BOOL GraphicDescriptor::ImpDetectPCT( SvStream& rStm, BOOL )
         nFormat = GFF_PCT;
     else
     {
+        sal_Int32 nStmPos = rStm.Tell();
+
         BYTE sBuf[4];
 
         rStm.SeekRel( 522 );
