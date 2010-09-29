@@ -32,6 +32,8 @@
 #include <sfx2/stbitem.hxx>
 #include "svx/svxdllapi.h"
 
+#include <boost/shared_ptr.hpp>
+
 // class SvxModifyControl ------------------------------------------------
 
 class SVX_DLLPUBLIC SvxModifyControl : public SfxStatusBarControl
@@ -39,7 +41,8 @@ class SVX_DLLPUBLIC SvxModifyControl : public SfxStatusBarControl
 public:
     virtual void    StateChanged( USHORT nSID, SfxItemState eState,
                                   const SfxPoolItem* pState );
-    virtual void    Paint( const UserDrawEvent& rEvt );
+    virtual void    Paint( const UserDrawEvent& rUsrEvt );
+    virtual void    DoubleClick();
 
     SFX_DECL_STATUSBAR_CONTROL();
 
@@ -48,11 +51,8 @@ public:
     static  ULONG   GetDefItemWidth(const StatusBar& rStb);
 
 private:
-    BOOL    bState;
-
-#ifdef _SVX_MODCTRL_CXX
-    SVX_DLLPRIVATE void DrawItemText_Impl();
-#endif
+    struct ImplData;
+    ::boost::shared_ptr<ImplData> mpImpl;
 };
 
 

@@ -55,6 +55,7 @@ SLOFILES=	\
                 $(SLO)$/zoomsliderctrl.obj
 
 EXCEPTIONSFILES= \
+    $(SLO)$/modctrl.obj \
     $(SLO)$/zoomsliderctrl.obj
 
 HXX1TARGET=stbctrls
