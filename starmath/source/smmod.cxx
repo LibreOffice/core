@@ -55,6 +55,7 @@
 #include "edit.hxx"
 #include "view.hxx"
 #include "starmath.hrc"
+#include "svx/modctrl.hxx"
 
 TYPEINIT1( SmModule, SfxModule );
 
@@ -242,6 +243,8 @@ SmModule::SmModule(SfxObjectFactory* pObjFact) :
     pVirtualDev( 0 )
 {
     SetName( C2S("StarMath" ));
+
+    SvxModifyControl::RegisterControl(SID_DOC_MODIFIED, this);
 }
 
 
