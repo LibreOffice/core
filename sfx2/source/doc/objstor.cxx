@@ -796,6 +796,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
             }
         }
 
+#if 0
         if ( pMedium->HasStorage_Impl() )
         {
             uno::Reference< XInteractionHandler > xHandler( pMedium->GetInteractionHandler() );
@@ -849,6 +850,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                 }
             }
         }
+#endif
     }
     else
         GetpApp()->HideStatusText();
