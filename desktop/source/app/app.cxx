@@ -201,6 +201,7 @@ static const ::rtl::OUString CFG_PATH_REG              ( RTL_CONSTASCII_USTRINGP
 static const ::rtl::OUString CFG_ENTRY_REGURL          ( RTL_CONSTASCII_USTRINGPARAM( "URL"                              ));
 static const ::rtl::OUString CFG_ENTRY_TEMPLATEREGURL  ( RTL_CONSTASCII_USTRINGPARAM( "TemplateURL"                      ));
 
+static ::rtl::OUString getBrandSharePreregBundledPathURL();
 // ----------------------------------------------------------------------------
 
 ResMgr* Desktop::GetDesktopResManager()
@@ -579,6 +580,44 @@ static ::rtl::OUString getLastSyncFileURLFromUserInstallation()
 
     return aTmp.makeStringAndClear();
 }
+//Checks if the argument src is the folder of the help or configuration
+//backend in the prereg folder
+static bool excludeTmpFilesAndFolders(const rtl::OUString & src)
+{
+    const char helpBackend[] = "com.sun.star.comp.deployment.help.PackageRegistryBackend";
+    const char configBackend[] = "com.sun.star.comp.deployment.configuration.PackageRegistryBackend";
+    if (src.endsWithAsciiL(helpBackend, sizeof(helpBackend) - 1 )
+        || src.endsWithAsciiL(configBackend, sizeof(configBackend) - 1))
+    {
+        return true;
+    }
+    return false;
+}
+
+//If we are about to copy the contents of some special folder as determined
+//by excludeTmpFilesAndFolders, then we omit those files or folders with a name
+//derived from temporary folders.
+static bool isExcludedFileOrFolder( const rtl::OUString & name)
+{
+    char const * allowed[] = {
+        "backenddb.xml",
+        "configmgr.ini",
+        "registered_packages.db"
+    };
+
+    const unsigned int size = sizeof(allowed) / sizeof (char const *);
+    bool bExclude = true;
+    for (unsigned int i= 0; i < size; i ++)
+    {
+        ::rtl::OUString allowedName = ::rtl::OUString::createFromAscii(allowed[i]);
+        if (allowedName.equals(name))
+        {
+            bExclude = false;
+            break;
+        }
+    }
+    return bExclude;
+}
 
 static osl::FileBase::RC copy_bundled_recursive(
     const rtl::OUString& srcUnqPath,
@@ -606,6 +645,7 @@ throw()
             sal_Int32 n_Mask = FileStatusMask_FileURL | FileStatusMask_FileName | FileStatusMask_Type;
 
             osl::DirectoryItem aDirItem;
+            bool bExcludeFiles = excludeTmpFilesAndFolders(srcUnqPath);
 
             while( err == osl::FileBase::E_None && ( next = aDir.getNextItem( aDirItem ) ) == osl::FileBase::E_None )
             {
@@ -635,7 +675,12 @@ throw()
 
                     // Special treatment for "lastsychronized" file. Must not be
                     // copied from the bundled folder!
-                    if ( IsDoc && aFileName.equalsAscii( pLastSyncFileName ))
+                    //Also do not copy *.tmp files and *.tmp_ folders. This affects the files/folders
+                    //from the help and configuration backend
+                    if ( IsDoc && (aFileName.equalsAscii( pLastSyncFileName )
+                                   || bExcludeFiles && isExcludedFileOrFolder(aFileName)))
+                        bFilter = true;
+                    else if (!IsDoc && bExcludeFiles && isExcludedFileOrFolder(aFileName))
                         bFilter = true;
                 }
 

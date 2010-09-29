@@ -247,7 +247,7 @@ class BackendImpl : public ImplBaseT
 
     void addDataToDb(OUString const & url, ExtensionBackendDb::Data const & data);
     ExtensionBackendDb::Data readDataFromDb(OUString const & url);
-    void deleteDataFromDb(OUString const & url);
+    void revokeEntryFromDb(OUString const & url);
 
     // PackageRegistryBackend
     virtual Reference<deployment::XPackage> bindPackage_(
@@ -273,6 +273,9 @@ public:
     // XPackageRegistry
     virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
     getSupportedPackageTypes() throw (RuntimeException);
+    virtual void SAL_CALL packageRemoved(OUString const & url, OUString const & mediaType)
+        throw (deployment::DeploymentException,
+               uno::RuntimeException);
 
     using ImplBaseT::disposing;
 };
@@ -357,6 +360,21 @@ BackendImpl::getSupportedPackageTypes() throw (RuntimeException)
     return m_typeInfos;
 }
 
+void BackendImpl::packageRemoved(OUString const & url, OUString const & /*mediaType*/)
+        throw (deployment::DeploymentException,
+               uno::RuntimeException)
+{
+    //Notify the backend responsible for processing the different media
+    //types that this extension was removed.
+    ExtensionBackendDb::Data data = readDataFromDb(url);
+    for (ExtensionBackendDb::Data::ITC_ITEMS i = data.items.begin(); i != data.items.end(); i++)
+    {
+        m_xRootRegistry->packageRemoved(i->first, i->second);
+    }
+
+    if (m_backendDb.get())
+        m_backendDb->removeEntry(url);
+}
 
 
 // PackageRegistryBackend
@@ -457,10 +475,10 @@ ExtensionBackendDb::Data BackendImpl::readDataFromDb(
     return data;
 }
 
-void BackendImpl::deleteDataFromDb(OUString const & url)
+void BackendImpl::revokeEntryFromDb(OUString const & url)
 {
     if (m_backendDb.get())
-        m_backendDb->removeEntry(url);
+        m_backendDb->revokeEntry(url);
 }
 
 
@@ -970,7 +988,7 @@ void BackendImpl::PackageImpl::processPackage_(
                 // selected
             }
         }
-        getMyBackend()->deleteDataFromDb(getURL());
+        getMyBackend()->revokeEntryFromDb(getURL());
     }
 }
 

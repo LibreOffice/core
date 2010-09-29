@@ -147,6 +147,18 @@ public:
     virtual ~BackendDb() {};
 
     void removeEntry(::rtl::OUString const & url);
+
+    /* This is called to write the "revoked" attribute to the entry.
+       This is done when XPackage::revokePackage is called.
+    */
+    void revokeEntry(::rtl::OUString const & url);
+
+    /* returns false if the entry does not exist yet.
+     */
+    bool activateEntry(::rtl::OUString const & url);
+
+    bool hasActiveEntry(::rtl::OUString const & url);
+
 };
 
 class RegisteredDb: public BackendDb

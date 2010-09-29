@@ -39,6 +39,7 @@
 #include "ucbhelper/content.hxx"
 #include "com/sun/star/lang/WrappedTargetRuntimeException.hpp"
 #include "com/sun/star/deployment/InvalidRemovedParameterException.hpp"
+#include "com/sun/star/deployment/thePackageManagerFactory.hpp"
 #include "com/sun/star/ucb/InteractiveAugmentedIOException.hpp"
 #include "com/sun/star/ucb/IOErrorCode.hpp"
 #include "com/sun/star/beans/StringPair.hpp"
@@ -99,6 +100,8 @@ PackageRegistryBackend::PackageRegistryBackend(
         m_eContext = CONTEXT_BUNDLED;
     else if (m_context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("tmp") ))
         m_eContext = CONTEXT_TMP;
+    else if (m_context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bundled_prereg") ))
+        m_eContext = CONTEXT_BUNDLED_PREREG;
     else if (m_context.matchIgnoreAsciiCaseAsciiL(
                  RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.tdoc:/") ))
         m_eContext = CONTEXT_DOCUMENT;
@@ -307,6 +310,13 @@ void PackageRegistryBackend::deleteUnusedFolders(
     }
 
 }
+
+// void PackageRegistryBackend::packageRemoved(
+//     ::rtl::OUString const & /*url*/, ::rtl::OUString const & /*mediaType*/)
+//     throw (css::deployment::DeploymentException,
+//            css::uno::RuntimeException)
+// {
+// }
 
 //##############################################################################
 

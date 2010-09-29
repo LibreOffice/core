@@ -83,11 +83,14 @@ OUString HelpBackendDb::getKeyElementName()
 void HelpBackendDb::addEntry(::rtl::OUString const & url, Data const & data)
 {
     try{
-        Reference<css::xml::dom::XNode> helpNode
-            = writeKeyElement(url);
+        if (!activateEntry(url))
+        {
+            Reference<css::xml::dom::XNode> helpNode
+                = writeKeyElement(url);
 
-        writeSimpleElement(OUSTR("data-url"), data.dataUrl, helpNode);
-        save();
+            writeSimpleElement(OUSTR("data-url"), data.dataUrl, helpNode);
+            save();
+        }
     }
     catch (css::deployment::DeploymentException& )
     {

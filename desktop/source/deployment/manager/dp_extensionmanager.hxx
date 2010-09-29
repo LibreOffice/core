@@ -205,6 +205,12 @@ public:
                css::lang::IllegalArgumentException,
                css::uno::RuntimeException);
 
+    virtual void SAL_CALL synchronizeBundledPrereg(
+        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
+        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
+        throw (css::deployment::DeploymentException,
+               css::uno::RuntimeException);
+
     virtual css::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > SAL_CALL
     getExtensionsWithUnacceptedLicenses(
         ::rtl::OUString const & repository,
@@ -229,17 +235,18 @@ private:
     };
 
     css::uno::Reference< css::uno::XComponentContext> m_xContext;
-
-    css::uno::Reference<css::deployment::XPackageManager> m_userRepository;
-    css::uno::Reference<css::deployment::XPackageManager> m_sharedRepository;
-    css::uno::Reference<css::deployment::XPackageManager> m_bundledRepository;
-    css::uno::Reference<css::deployment::XPackageManager> m_tmpRepository;
+    css::uno::Reference<css::deployment::XPackageManagerFactory> m_xPackageManagerFactory;
 
     /* contains the names of all repositories (except tmp) in order of there
        priority. That is, the first element is "user" follod by "shared" and
        then "bundled"
      */
     ::std::list< ::rtl::OUString > m_repositoryNames;
+
+    css::uno::Reference<css::deployment::XPackageManager> getUserRepository();
+    css::uno::Reference<css::deployment::XPackageManager> getSharedRepository();
+    css::uno::Reference<css::deployment::XPackageManager> getBundledRepository();
+    css::uno::Reference<css::deployment::XPackageManager> getTmpRepository();
 
     bool isUserDisabled(::rtl::OUString const & identifier,
                         ::rtl::OUString const & filename);

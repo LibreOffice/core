@@ -296,7 +296,7 @@ protected:
     // currently only for library containers:
     enum context {
         CONTEXT_UNKNOWN,
-        CONTEXT_USER, CONTEXT_SHARED,CONTEXT_BUNDLED, CONTEXT_TMP,
+        CONTEXT_USER, CONTEXT_SHARED,CONTEXT_BUNDLED, CONTEXT_TMP, CONTEXT_BUNDLED_PREREG,
         CONTEXT_DOCUMENT
     } m_eContext;
     bool m_readOnly;
@@ -342,6 +342,18 @@ protected:
     static void deleteTempFolder(
         ::rtl::OUString const & folderUrl);
 
+    ::rtl::OUString getSharedRegistrationDataURL(
+        css::uno::Reference<css::deployment::XPackage> const & extension,
+        css::uno::Reference<css::deployment::XPackage> const & item);
+
+    /* The backends must implement this function, which is called
+       from XPackageRegistry::packageRemoved (also implemented here).
+       This ensure that the backends clean up their registration data
+       when an extension was removed.
+    */
+//    virtual void deleteDbEntry( ::rtl::OUString const & url) = 0;
+
+
 
 public:
     struct StrRegisteringPackage : public ::dp_misc::StaticResourceString<
@@ -370,6 +382,12 @@ public:
                css::deployment::InvalidRemovedParameterException,
                css::ucb::CommandFailedException,
                css::lang::IllegalArgumentException, css::uno::RuntimeException);
+
+//     virtual void SAL_CALL packageRemoved(
+//         ::rtl::OUString const & url, ::rtl::OUString const & mediaType)
+//         throw (css::deployment::DeploymentException,
+//                css::uno::RuntimeException);
+
 };
 
 }
