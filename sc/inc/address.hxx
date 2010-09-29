@@ -278,7 +278,6 @@ public:
             {}
         /* Use the formula::FormulaGrammar::AddressConvention associated with rAddr::Tab() */
         Details( const ScDocument* pDoc, const ScAddress & rAddr );
-//UNUSED2009-05 void SetPos( const ScDocument* pDoc, const ScAddress & rAddr );
     };
     SC_DLLPUBLIC static const Details detailsOOOa1;
 
