@@ -97,7 +97,7 @@ namespace com {
 namespace sun {
 namespace star {
 namespace beans {
-    class PropertyValue;
+    struct PropertyValue;
 }}}}
 
 namespace com {
