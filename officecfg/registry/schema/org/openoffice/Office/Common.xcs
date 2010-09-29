@@ -1359,6 +1359,15 @@
 				</info>
 				<value>false</value>
 			</prop>
+            <prop oor:name="CorrectAccidentalCapsLock" oor:type="xs:boolean">
+                <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Correct accidental use of cAPS LOCK key -->
+                <info>
+                    <author>Kohei Yoshida</author>
+                    <desc>Specifies whether or not to correct accidental use of CAPS lock key.</desc>
+                    <label>Correct accidental use of cAPS LOCK key</label>
+                </info>
+                <value>true</value>
+            </prop>
 			<prop oor:name="ReplaceSingleQuote" oor:type="xs:boolean">
 				<!-- OldPath: AutoCorrect/Options/All -->
 				<!-- OldLocation: Soffice.cfg -->
