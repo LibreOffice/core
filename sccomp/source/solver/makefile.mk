@@ -75,3 +75,11 @@ RESLIB1SRSFILES=$(RESLIB1LIST)
 .INCLUDE : target.mk
 
 
+
+ALLTAR : $(MISC)/solver.component
+
+$(MISC)/solver.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        solver.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt solver.component
