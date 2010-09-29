@@ -72,9 +72,6 @@ class List
 
     unsigned            size() const            { return len; }
     unsigned            space() const           { return allocated; }
-    bool                is_valid_index(
-                            unsigned            n) const
-                                                { return n < len; }
     // ACCESS
     XX &                front()                 { return elem(0); }
     XX &                back()                  { return elem(len-1); }
@@ -238,7 +235,7 @@ template <class XY>
 void
 DynamicList<XY>::remove( unsigned           pos )
 {
-    if (!this->is_valid_index(pos) )
+    if (pos >= this->len)
         return;
     this->len--;
     delete this->inhalt[pos];
