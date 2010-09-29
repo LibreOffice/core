@@ -2425,10 +2425,12 @@ void ScInputHandler::EnterHandler( BYTE nBlockMode )
             lcl_SelectionToEnd(pTableView);
         }
 
+        Window* pFrameWin = pActiveViewSh ? pActiveViewSh->GetFrameWin() : NULL;
+
         if (pTopView)
             pTopView->CompleteAutoCorrect();    // #59759# CompleteAutoCorrect fuer beide Views
         if (pTableView)
-            pTableView->CompleteAutoCorrect();
+            pTableView->CompleteAutoCorrect(pFrameWin);
         aString = GetEditText(pEngine);
     }
     lcl_RemoveTabs(aString);
@@ -3174,8 +3176,11 @@ BOOL ScInputHandler::KeyInput( const KeyEvent& rKEvt, BOOL bStartEdit /* = FALSE
                 else
                 {
                     if (pTableView)
-                        if ( pTableView->PostKeyEvent( rKEvt ) )
+                    {
+                        Window* pFrameWin = pActiveViewSh ? pActiveViewSh->GetFrameWin() : NULL;
+                        if ( pTableView->PostKeyEvent( rKEvt, pFrameWin ) )
                             bUsed = TRUE;
+                    }
                     if (pTopView)
                         if ( pTopView->PostKeyEvent( rKEvt ) )
                             bUsed = TRUE;
