@@ -117,7 +117,7 @@
 #include <svx/zoomitem.hxx>
 #include <svx/zoomslideritem.hxx>
 #include <editeng/brshitem.hxx>
-#include <svx/flagsdef.hxx> //CHINA001
+#include <svx/flagsdef.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/zoom_def.hxx>
@@ -137,7 +137,7 @@
 
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
-#include <svl/aeitem.hxx> //CHINA001
+#include <svl/aeitem.hxx>
 #include <svtools/cliplistener.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/viewoptions.hxx>
