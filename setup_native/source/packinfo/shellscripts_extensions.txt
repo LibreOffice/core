@@ -2,26 +2,6 @@
 
 %postinstall << END
 
-if [ -n "$$TMPDIR" ]; then
-  UNOPKGTMP="$$TMPDIR"
-elif [ -n "$$TMP" ]; then
-  UNOPKGTMP="$$TMP"
-elif [ -d "/tmp" ]; then
-  UNOPKGTMP="/tmp"
-else
-  echo "No tmp directory found!"
-  exit 1
-fi
-
-#Create the command which creates a temporary directory
-if [ -x "/usr/bin/mktemp" ]
-then
-  INSTDIR=`/usr/bin/mktemp -d "$${UNOPKGTMP}/userinstall.XXXXXX"`
-else
-  INSTDIR="$${UNOPKGTMP}/userinstall.$$$$"
-  mkdir "$$INSTDIR"
-fi
-
 #
 # Need to check diskless service install and make sure use the correct unpkg 
 #
@@ -38,7 +18,7 @@ fi
 if [ -x $$POSTRUN ]; then
 ( echo "test -x \"$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg\" || exit 0"
   echo "umask 022"
-  echo "\"$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg\" sync \"-env:BUNDLED_EXTENSIONS_USER=file:////$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/share/prereg/bundled\" \"-env:UserInstallation=file:////$$INSTDIR\" '-env:UNO_JAVA_JFW_INSTALL_DATA=\$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'"
+  echo "\"$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg\" sync"
   echo  "find \"$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/share/prereg/bundled\" -type f -exec chmod 644 {} \\;"
 ) | $$POSTRUN -b -c UNOPKG
   if [ "$$?" != "0" ]; then
@@ -48,7 +28,7 @@ if [ -x $$POSTRUN ]; then
   fi
 else
   # No postrun available, try running unopkg directly
-  "$$UNOPKG" sync "-env:BUNDLED_EXTENSIONS_USER=file:////////$$BASEDIR/PRODUCTDIRECTORYNAME/share/prereg/bundled" "-env:UserInstallation=file:////////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'
+  "$$UNOPKG" sync
  find "$$BASEDIR/PRODUCTDIRECTORYNAME/share/prereg/bundled" -type f -exec chmod 644 {} \;
   if [ "$$?" != "0" ]; then
     echo "\nERROR: Installation of UNO extensions failed."
@@ -58,48 +38,23 @@ else
   fi
 fi
 
-if [ -n "$$INSTDIR" ]; then
-  rm -rf "$$INSTDIR"
-fi
-
 exit 0
 END
 
 %postremove << END
-
-if [ -n "$$TMPDIR" ]; then
-  UNOPKGTMP="$$TMPDIR"
-elif [ -n "$$TMP" ]; then
-  UNOPKGTMP="$$TMP"
-elif [ -d "/tmp" ]; then
-  UNOPKGTMP="/tmp"
-else
-  echo "No tmp directory found!"
-  exit 1
-fi
-
-#Create the command which creates a temporary directory
-if [ -x "/usr/bin/mktemp" ]
-then
-  INSTDIR=`/usr/bin/mktemp -d "$${UNOPKGTMP}/userinstall.XXXXXX"`
-else
-  INSTDIR="$${UNOPKGTMP}/userinstall.$$$$"
-  mkdir "$$INSTDIR"
-fi
 
 # Use postrun command on Solaris where available (OpenSolaris)
 if [ -x $$PKG_INSTALL_ROOT/usr/lib/postrun ]; then
 ( echo "test -x \"$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg\" || exit 0"
   echo "cd \"$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/program\""
   echo "umask 022"
-  echo "\"$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg\" sync \"-env:BUNDLED_EXTENSIONS_USER=file:////$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/share/prereg/bundled\" \"-env:UserInstallation=file:////$$INSTDIR\" '-env:UNO_JAVA_JFW_INSTALL_DATA=\$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'"
+  echo "\"$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg\" sync"
   echo  "find \"$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/share/prereg/bundled\" -type f -exec chmod 644 {} \\;"
-  echo "rm -rf \"$$INSTDIR\""
 ) | $$PKG_INSTALL_ROOT/usr/lib/postrun -c UNOPKG
 else
   # No postrun available, try running unopkg directly
   test -x $$BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg || exit 0  
-  "$$BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg" sync "-env:BUNDLED_EXTENSIONS_USER=file:////////$$BASEDIR/PRODUCTDIRECTORYNAME/share/prereg/bundled" "-env:UserInstallation=file:////////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'
+  "$$BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg" sync
   echo  "find \"$$BASEDIR/PRODUCTDIRECTORYNAME/share/prereg/bundled\" -type f -exec chmod 644 {} \\;"
   if [ "$$?" != "0" ]; then
     echo "\nERROR: Removal of UNO extension failed."
@@ -109,9 +64,6 @@ else
   fi
 fi
 
-if [ -n "$$INSTDIR" ]; then
-  rm -rf "$$INSTDIR"
-fi
 
 exit 0  
 END
@@ -121,34 +73,10 @@ END
 %format rpm
 
 %postinstall << END
-#Find the temp dir
-if [ -n "$$TMPDIR" ]; then
-  UNOPKGTMP="$$TMPDIR"
-elif [ -n "$$TMP" ]; then
-  UNOPKGTMP="$$TMP"
-elif [ -d "/tmp" ]; then
-  UNOPKGTMP="/tmp"
-else
-  echo "No tmp directory found!"
-  exit 1
-fi
-
-#Create the command which creates a temporary directory
-if [ -x "/bin/mktemp" ]
-then
-  INSTDIR=`/bin/mktemp -d "$${UNOPKGTMP}/userinstall.XXXXXX"`
-else
-  INSTDIR="$${UNOPKGTMP}/userinstall.$$$$"
-  mkdir "$$INSTDIR"
-fi
 
 if [ -x "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/program/unopkg" ]; then
-  "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/program/unopkg" sync "-env:BUNDLED_EXTENSIONS_USER=file:////$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/share/prereg/bundled" "-env:UserInstallation=file:////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'
+  "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/program/unopkg" sync 
   find "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/share/prereg/bundled" -type f -exec chmod 644 {} \;
-fi
-
-if [ -n "$$INSTDIR" ]; then
-  rm -rf "$$INSTDIR"
 fi
 
 exit 0
@@ -156,34 +84,10 @@ exit 0
 END
 
 %postremove << END
-#Find the temp dir
-if [ -n "$$TMPDIR" ]; then
-  UNOPKGTMP="$$TMPDIR"
-elif [ -n "$$TMP" ]; then
-  UNOPKGTMP="$$TMP"
-elif [ -d "/tmp" ]; then
-  UNOPKGTMP="/tmp"
-else
-  echo "No tmp directory found!"
-  exit 1
-fi
-
-#Create the command which creates a temporary directory
-if [ -x "/bin/mktemp" ]
-then
-  INSTDIR=`/bin/mktemp -d "$${UNOPKGTMP}/userinstall.XXXXXX"`
-else
-  INSTDIR="$${UNOPKGTMP}/userinstall.$$$$"
-  mkdir "$$INSTDIR"
-fi
 
 if [ -x "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/program/unopkg" ]; then
-  "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/program/unopkg" sync "-env:BUNDLED_EXTENSIONS_USER=file:////$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/share/prereg/bundled" "-env:UserInstallation=file:////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'
+  "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/program/unopkg" sync 
   find "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/share/prereg/bundled" -type f -exec chmod 644 {} \;
-fi
-
-if [ -n "$$INSTDIR" ]; then
-  rm -rf "$$INSTDIR"
 fi
 
 exit 0
@@ -192,38 +96,10 @@ END
 %format deb
 
 %postinstall << END
-#Find the temp dir
-if [ -n "$$TMPDIR" ]
-then
-  UNOPKGTMP="$$TMPDIR"
-elif [ -n "$$TMP" ]
-then
-  UNOPKGTMP="$$TMP"
-elif [ -d "/tmp" ]
-then
-  UNOPKGTMP="/tmp"
-else
-  echo "No tmp directory found!"
-  exit 1
-fi
-
-#Create the command which creates a temporary directory
-if [ -x "/bin/mktemp" ]
-then
-  INSTDIR=`/bin/mktemp -d "$${UNOPKGTMP}/userinstall.XXXXXX"`
-else
-  INSTDIR="$${UNOPKGTMP}/userinstall.$$$$"
-  mkdir "$$INSTDIR"
-fi
 
 if [ -x "PRODUCTDIRECTORYNAME/program/unopkg" ]; then
-  "PRODUCTDIRECTORYNAME/program/unopkg" sync "-env:BUNDLED_EXTENSIONS_USER=file://////PRODUCTDIRECTORYNAME/share/prereg/bundled" "-env:UserInstallation=file://////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'
+  "PRODUCTDIRECTORYNAME/program/unopkg" sync 
   find "PRODUCTDIRECTORYNAME/share/prereg/bundled" -type f -exec chmod 644 {} \;
-fi
-
-if [ -n "$$INSTDIR" ]
-then
-  rm -rf "$$INSTDIR"
 fi
 
 exit 0
@@ -231,39 +107,11 @@ exit 0
 END
 
 %postremove << END
-# Find the temp dir
-if [ -n "$$TMPDIR" ]
-then
-  UNOPKGTMP="$$TMPDIR"
-elif [ -n "$$TMP" ]
-then
-  UNOPKGTMP="$$TMP"
-elif [ -d "/tmp" ]
-then
-  UNOPKGTMP="/tmp"
-else
-  echo "No tmp directory found!"
-  exit 1
-fi
-
-#Create the command which creates a temporary directory
-if [ -x "/bin/mktemp" ]
-then
-  INSTDIR=`/bin/mktemp -d "$${UNOPKGTMP}/userinstall.XXXXXX"`
-else
-  INSTDIR="$${UNOPKGTMP}/userinstall.$$$$"
-  mkdir "$$INSTDIR"
-fi
 
 if [ -x "PRODUCTDIRECTORYNAME/program/unopkg" ]
 then
-  "PRODUCTDIRECTORYNAME/program/unopkg" sync "-env:BUNDLED_EXTENSIONS_USER=file://////PRODUCTDIRECTORYNAME/share/prereg/bundled" "-env:UserInstallation=file://////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'
+  "PRODUCTDIRECTORYNAME/program/unopkg" sync 
  find "PRODUCTDIRECTORYNAME/share/prereg/bundled" -type f -exec chmod 644 {} \;
-fi
-
-if [ -n "$$INSTDIR" ]
-then
-  rm -rf "$$INSTDIR"
 fi
 
 exit 0
