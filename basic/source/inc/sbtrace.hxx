@@ -25,45 +25,18 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sfx2.hxx"
+#ifndef _SBTRACE_HXX
+#define _SBTRACE_HXX
 
-#ifdef WIN
-#include <svwin.h>
+// #define DBG_TRACE_BASIC
+
+#ifdef DBG_TRACE_BASIC
+void dbg_InitTrace( void );
+void dbg_traceStep( SbModule* pModule, UINT32 nPC, INT32 nCallLvl );
+void dbg_traceNotifyCall( SbModule* pModule, SbMethod* pMethod, INT32 nCallLvl, bool bLeave = false );
+void dbg_traceNotifyError( SbError nTraceErr, const String& aTraceErrMsg, bool bTraceErrHandled, INT32 nCallLvl );
+void dbg_RegisterTraceTextForPC( SbModule* pModule, UINT32 nPC,
+    const String& aTraceStr_STMNT, const String& aTraceStr_PCode );
 #endif
 
-#ifndef GCC
 #endif
-
-#ifdef WIN
-
-// Statische DLL-Verwaltungs-Variablen
-static HINSTANCE hDLLInst = 0;
-
-//==========================================================================
-
-extern "C" int CALLBACK LibMain( HINSTANCE hDLL, WORD, WORD nHeap, LPSTR )
-{
-#ifndef WNT
-    if ( nHeap )
-        UnlockData( 0 );
-#endif
-
-    hDLLInst = hDLL;
-
-    return TRUE;
-}
-
-
-//--------------------------------------------------------------------------
-
-extern "C" int CALLBACK WEP( int )
-{
-    return 1;
-}
-
-
-//==========================================================================
-
-#endif
-

@@ -52,7 +52,6 @@
 #include "logindlg.hxx"
 #include "masterpasscrtdlg.hxx"
 #include "masterpassworddlg.hxx"
-#include "passcrtdlg.hxx"
 #include "passworddlg.hxx"
 
 #include "iahndl.hxx"
@@ -270,7 +269,7 @@ handleAuthenticationRequest_(
     aInfo.SetCanRememberPassword(
         ePreferredRememberMode != eAlternateRememberMode);
     aInfo.SetIsRememberPassword(
-        eDefaultRememberMode != ucb::RememberAuthentication_NO);
+        ePreferredRememberMode == eDefaultRememberMode);
     aInfo.SetIsRememberPersistent(
         ePreferredRememberMode == ucb::RememberAuthentication_PERSISTENT);
 

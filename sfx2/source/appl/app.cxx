@@ -129,7 +129,7 @@
 #include <sfx2/mnuitem.hxx>
 #endif
 
-#if defined( WIN ) || defined( WNT ) || defined( OS2 )
+#if defined( WNT ) || defined( OS2 )
 #define DDE_AVAILABLE
 #endif
 

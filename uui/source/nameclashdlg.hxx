@@ -25,55 +25,39 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_idl.hxx"
+#ifndef UUI_NAMECLASHDLG_HXX
+#define UUI_NAMECLASHDLG_HXX
 
-#ifdef WIN
-#include <svwin.h>
+#include "vcl/button.hxx"
+#include "vcl/dialog.hxx"
+#include "vcl/fixed.hxx"
+#include "vcl/edit.hxx"
 
-#ifndef _SYSDEP_HXX
-#include <sysdep.hxx>
-#endif
+//============================================================================
 
-// Statische DLL-Verwaltungs-Variablen
-static HINSTANCE hDLLInst = 0;      // HANDLE der DLL
+enum NameClashResolveDialogResult { ABORT, RENAME, OVERWRITE };
 
-
-/***************************************************************************
-|*
-|*    LibMain()
-|*
-|*    Beschreibung       Initialisierungsfunktion der DLL
-|*    Ersterstellung     TH 05.05.93
-|*    Letzte Aenderung   TH 05.05.93
-|*
-***************************************************************************/
-
-extern "C" int CALLBACK LibMain( HINSTANCE hDLL, WORD, WORD nHeap, LPSTR )
+class NameClashDialog : public ModalDialog
 {
-#ifndef WNT
-    if ( nHeap )
-        UnlockData( 0 );
-#endif
+    FixedText     maFTMessage;
+    Edit          maEDNewName;
+    PushButton    maBtnOverwrite;
+    PushButton    maBtnRename;
+    CancelButton  maBtnCancel;
+    HelpButton    maBtnHelp;
+    rtl::OUString maSameName;
+    rtl::OUString maNewName;
 
-    hDLLInst = hDLL;
+    DECL_LINK( ButtonHdl_Impl, PushButton * );
 
-    return TRUE;
-}
+public:
+    NameClashDialog( Window* pParent, ResMgr* pResMgr,
+                     rtl::OUString const & rTargetFolderURL,
+                     rtl::OUString const & rClashingName,
+                     rtl::OUString const & rProposedNewName,
+                     bool bAllowOverwrite );
+    rtl::OUString getNewName() const { return maNewName; }
+};
 
-/***************************************************************************
-|*
-|*    WEP()
-|*
-|*    Beschreibung      DLL-Deinitialisierung
-|*    Ersterstellung     TH 05.05.93
-|*    Letzte Aenderung   TH 05.05.93
-|*
-***************************************************************************/
+#endif // UUI_COOKIEDG_HXX
 
-extern "C" int CALLBACK WEP( int )
-{
-    return 1;
-}
-
-#endif

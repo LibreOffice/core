@@ -86,6 +86,6 @@ const char* GetSbxRes( USHORT nId )
 }
 
 SbxRes::SbxRes( USHORT nId )
-    : XubString( String::CreateFromAscii( GetSbxRes( nId ) ) )
+    : ::rtl::OUString( ::rtl::OUString::createFromAscii( GetSbxRes( nId ) ) )
 {}
 
