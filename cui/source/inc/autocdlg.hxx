@@ -116,6 +116,7 @@ private:
     String      sDash;
     String      sNonBrkSpace;
     String      sFirst;
+    String      sAccidentalCaps;
 
 public:
                         OfaAutocorrOptionsPage( Window* pParent, const SfxItemSet& rSet );
@@ -153,6 +154,7 @@ class OfaSwAutoFmtOptionsPage : public SfxTabPage
     String          sByInputBullet;
     String          sBoldUnder;
     String          sNoDblSpaces;
+    String          sCorrectCapsLock;
     String          sDetectURL;
     String          sDash;
     String          sNonBrkSpace;

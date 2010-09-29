@@ -224,7 +224,8 @@ OfaAutocorrOptionsPage::OfaAutocorrOptionsPage( Window* pParent,
     sBoldUnderline      (CUI_RES(ST_BOLD_UNDER        )),
     sURL                (CUI_RES(ST_DETECT_URL        )),
     sNoDblSpaces        (CUI_RES(STR_NO_DBL_SPACES    )),
-    sDash               (CUI_RES(ST_DASH                ))
+    sDash               (CUI_RES(ST_DASH              )),
+    sAccidentalCaps     (CUI_RES(ST_CORRECT_ACCIDENTAL_CAPS_LOCK))
 {
     FreeResource();
 
@@ -268,6 +269,7 @@ BOOL OfaAutocorrOptionsPage::FillItemSet( SfxItemSet& )
     pAutoCorrect->SetAutoCorrFlag(SetINetAttr,          aCheckLB.IsChecked(nPos++));
     pAutoCorrect->SetAutoCorrFlag(ChgToEnEmDash,        aCheckLB.IsChecked(nPos++));
     pAutoCorrect->SetAutoCorrFlag(IgnoreDoubleSpace,    aCheckLB.IsChecked(nPos++));
+    pAutoCorrect->SetAutoCorrFlag(CorrectCapsLock,      aCheckLB.IsChecked(nPos++));
 
     BOOL bReturn = nFlags != pAutoCorrect->GetFlags();
     if(bReturn )
@@ -307,6 +309,7 @@ void OfaAutocorrOptionsPage::Reset( const SfxItemSet& )
     aCheckLB.InsertEntry(sURL);
     aCheckLB.InsertEntry(sDash);
     aCheckLB.InsertEntry(sNoDblSpaces);
+    aCheckLB.InsertEntry(sAccidentalCaps);
 
     USHORT nPos = 0;
     aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & Autocorrect) );
@@ -316,6 +319,7 @@ void OfaAutocorrOptionsPage::Reset( const SfxItemSet& )
     aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & SetINetAttr) );
     aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & ChgToEnEmDash) );
     aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & IgnoreDoubleSpace) );
+    aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & CorrectCapsLock) );
 
     aCheckLB.SetUpdateMode(TRUE);
 }
@@ -446,6 +450,7 @@ enum OfaAutoFmtOptions
     DEL_SPACES_AT_STT_END,
     DEL_SPACES_BETWEEN_LINES,
     IGNORE_DBLSPACE,
+    CORRECT_CAPS_LOCK,
     APPLY_NUMBERING,
     INSERT_BORDER,
     CREATE_TABLE,
@@ -473,6 +478,7 @@ OfaSwAutoFmtOptionsPage::OfaSwAutoFmtOptionsPage( Window* pParent,
     sBullet             (CUI_RES(   ST_BULLET       )),
     sBoldUnder          (CUI_RES(   ST_BOLD_UNDER   )),
     sNoDblSpaces        (CUI_RES(   STR_NO_DBL_SPACES)),
+    sCorrectCapsLock    (CUI_RES(   ST_CORRECT_ACCIDENTAL_CAPS_LOCK)),
     sDetectURL          (CUI_RES(   ST_DETECT_URL   )),
     sDash               (CUI_RES(   ST_DASH         )),
     sRightMargin        (CUI_RES(   ST_RIGHT_MARGIN )),
@@ -606,6 +612,9 @@ BOOL OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet&  )
     pAutoCorrect->SetAutoCorrFlag(IgnoreDoubleSpace,
                         aCheckLB.IsChecked(IGNORE_DBLSPACE, CBCOL_SECOND));
 
+    pAutoCorrect->SetAutoCorrFlag(CorrectCapsLock,
+                        aCheckLB.IsChecked(CORRECT_CAPS_LOCK, CBCOL_SECOND));
+
     bCheck = aCheckLB.IsChecked(DETECT_URL, CBCOL_FIRST);
     bModified |= pOpt->bSetINetAttr != bCheck;
     pOpt->bSetINetAttr = bCheck;
@@ -719,6 +728,7 @@ void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet& )
     aCheckLB.GetModel()->Insert(CreateEntry(sDelSpaceBetweenLines, CBCOL_BOTH  ));
 
     aCheckLB.GetModel()->Insert(CreateEntry(sNoDblSpaces,       CBCOL_SECOND));
+    aCheckLB.GetModel()->Insert(CreateEntry(sCorrectCapsLock,   CBCOL_SECOND));
     aCheckLB.GetModel()->Insert(CreateEntry(sNum,               CBCOL_SECOND));
     aCheckLB.GetModel()->Insert(CreateEntry(sBorder,            CBCOL_SECOND));
     aCheckLB.GetModel()->Insert(CreateEntry(sTable,             CBCOL_SECOND));
@@ -737,6 +747,7 @@ void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet& )
     aCheckLB.CheckEntryPos( BOLD_UNDERLINE,     CBCOL_FIRST,    pOpt->bChgWeightUnderl );
     aCheckLB.CheckEntryPos( BOLD_UNDERLINE,     CBCOL_SECOND,   0 != (nFlags & ChgWeightUnderl) );
     aCheckLB.CheckEntryPos( IGNORE_DBLSPACE,    CBCOL_SECOND,   0 != (nFlags & IgnoreDoubleSpace) );
+    aCheckLB.CheckEntryPos( CORRECT_CAPS_LOCK,  CBCOL_SECOND,   0 != (nFlags & CorrectCapsLock) );
     aCheckLB.CheckEntryPos( DETECT_URL,         CBCOL_FIRST,    pOpt->bSetINetAttr );
     aCheckLB.CheckEntryPos( DETECT_URL,         CBCOL_SECOND,   0 != (nFlags & SetINetAttr) );
     aCheckLB.CheckEntryPos( REPLACE_DASHES,     CBCOL_FIRST,    pOpt->bChgToEnEmDash );

@@ -129,6 +129,10 @@ TabDialog RID_OFA_AUTOCORR_DLG
     String ST_DASH \
     { \
         Text [ en-US ] = "Replace dashes" ; \
+    }; \
+    String ST_CORRECT_ACCIDENTAL_CAPS_LOCK \
+    { \
+        Text [ en-US ] = "Correct accidental use of cAPS LOCK key" ; \
     };
 
 /**************************************************************************/
