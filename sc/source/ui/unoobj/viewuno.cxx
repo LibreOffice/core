@@ -464,17 +464,6 @@ void SAL_CALL ScViewPaneObj::release() throw()
 
 //  Default-ctor wird fuer SMART_REFLECTION_IMPLEMENTATION gebraucht
 
-//UNUSED2008-05  ScTabViewObj::ScTabViewObj() :
-//UNUSED2008-05  ScViewPaneBase( NULL, SC_VIEWPANE_ACTIVE ),
-//UNUSED2008-05  SfxBaseController( NULL ),
-//UNUSED2008-05  aPropSet( lcl_GetViewOptPropertyMap() ),
-//UNUSED2008-05  aMouseClickHandlers( 0 ),
-//UNUSED2008-05  aActivationListeners( 0 ),
-//UNUSED2008-05  bDrawSelModeSet(sal_False),
-//UNUSED2008-05  bFilteredRangeSelection(sal_True)
-//UNUSED2008-05  {
-//UNUSED2008-05  }
-
 ScTabViewObj::ScTabViewObj( ScTabViewShell* pViewSh ) :
     ScViewPaneBase( pViewSh, SC_VIEWPANE_ACTIVE ),
     SfxBaseController( pViewSh ),

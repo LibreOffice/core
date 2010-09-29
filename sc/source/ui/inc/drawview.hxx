@@ -111,7 +111,6 @@ public:
     void            SetMarkedOriginalSize();
 
     BOOL            SelectObject( const String& rName );
-//UNUSED2008-05  String         GetSelectedChartName() const;
     bool            HasMarkedControl() const;
     bool            HasMarkedInternal() const;
 
@@ -140,7 +139,6 @@ public:
     inline void     UnlockInternalLayer() { LockInternalLayer( false ); }
 
     SdrEndTextEditKind  ScEndTextEdit();    // ruft SetDrawTextUndo(0)
-//UNUSED2009-05 void                    CaptionTextDirection(USHORT nSlot);
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > CopyToTransferable();
 };
 

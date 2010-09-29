@@ -110,7 +110,6 @@ class ScContentTree : public SvTreeListBox
     ULONG   GetChildIndex( SvLBoxEntry* pEntry ) const;
 
     void    DoDrag();
-//UNUSED2008-05  void   AdjustTitle();
 
     ScDocument* GetSourceDocument();
 

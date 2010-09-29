@@ -520,11 +520,6 @@ ScTableConditionalFormat* ScTableConditionalFormat::getImplementation(
 
 //------------------------------------------------------------------------
 
-//UNUSED2008-05  ScTableConditionalEntry::ScTableConditionalEntry() :
-//UNUSED2008-05  pParent( NULL )
-//UNUSED2008-05  {
-//UNUSED2008-05  }
-
 ScTableConditionalEntry::ScTableConditionalEntry(ScTableConditionalFormat* pPar,
                                                  const ScCondFormatEntryItem& aItem) :
     pParent( pPar ),

@@ -78,7 +78,6 @@ TYPEINIT1(ScUndoPrintRange,     SfxUndoAction);
 TYPEINIT1(ScUndoScenarioFlags,  SfxUndoAction);
 TYPEINIT1(ScUndoRenameObject,   SfxUndoAction);
 TYPEINIT1(ScUndoLayoutRTL,      SfxUndoAction);
-//UNUSED2009-05 TYPEINIT1(ScUndoSetGrammar,     SfxUndoAction);
 TYPEINIT1(ScUndoTabColor,  SfxUndoAction);
 
 
@@ -1664,62 +1663,4 @@ String ScUndoLayoutRTL::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_TAB_RTL );
 }
-
-
-
-// -----------------------------------------------------------------------
-//
-//      Set the grammar used for the sheet
-//
-
-//UNUSED2009-05 ScUndoSetGrammar::ScUndoSetGrammar( ScDocShell* pShell,
-//UNUSED2009-05                                     formula::FormulaGrammar::Grammar eGrammar ) :
-//UNUSED2009-05     ScSimpleUndo( pShell ),
-//UNUSED2009-05     meNewGrammar( eGrammar )
-//UNUSED2009-05 {
-//UNUSED2009-05     meOldGrammar = pDocShell->GetDocument()->GetGrammar();
-//UNUSED2009-05 }
-//UNUSED2009-05
-//UNUSED2009-05 __EXPORT ScUndoSetGrammar::~ScUndoSetGrammar()
-//UNUSED2009-05 {
-//UNUSED2009-05 }
-//UNUSED2009-05
-//UNUSED2009-05 void ScUndoSetGrammar::DoChange( formula::FormulaGrammar::Grammar eGrammar )
-//UNUSED2009-05 {
-//UNUSED2009-05     pDocShell->SetInUndo( TRUE );
-//UNUSED2009-05     ScDocument* pDoc = pDocShell->GetDocument();
-//UNUSED2009-05     pDoc->SetGrammar( eGrammar );
-//UNUSED2009-05     pDocShell->SetDocumentModified();
-//UNUSED2009-05     pDocShell->SetInUndo( FALSE );
-//UNUSED2009-05 }
-//UNUSED2009-05
-//UNUSED2009-05 void __EXPORT ScUndoSetGrammar::Undo()
-//UNUSED2009-05 {
-//UNUSED2009-05     DoChange( meOldGrammar );
-//UNUSED2009-05 }
-//UNUSED2009-05
-//UNUSED2009-05 void __EXPORT ScUndoSetGrammar::Redo()
-//UNUSED2009-05 {
-//UNUSED2009-05     DoChange( meNewGrammar );
-//UNUSED2009-05 }
-//UNUSED2009-05
-//UNUSED2009-05 void __EXPORT ScUndoSetGrammar::Repeat(SfxRepeatTarget& /* rTarget */)
-//UNUSED2009-05 {
-//UNUSED2009-05 #if 0
-//UNUSED2009-05 // erAck: 2006-09-07T23:00+0200  commented out in CWS scr1c1
-//UNUSED2009-05     if (rTarget.ISA(ScTabViewTarget))
-//UNUSED2009-05         ((ScTabViewTarget&)rTarget).GetViewShell()->GetViewData()->GetDispatcher().
-//UNUSED2009-05             Execute( FID_TAB_USE_R1C1, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
-//UNUSED2009-05 #endif
-//UNUSED2009-05 }
-//UNUSED2009-05
-//UNUSED2009-05 BOOL __EXPORT ScUndoSetGrammar::CanRepeat(SfxRepeatTarget& rTarget) const
-//UNUSED2009-05 {
-//UNUSED2009-05     return (rTarget.ISA(ScTabViewTarget));
-//UNUSED2009-05 }
-//UNUSED2009-05
-//UNUSED2009-05 String __EXPORT ScUndoSetGrammar::GetComment() const
-//UNUSED2009-05 {
-//UNUSED2009-05     return ScGlobal::GetRscString( STR_UNDO_TAB_R1C1 );
-//UNUSED2009-05 }
 

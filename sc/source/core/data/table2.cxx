@@ -1005,15 +1005,6 @@ void ScTable::PutCell( const ScAddress& rPos, ScBaseCell* pCell )
 }
 
 
-//UNUSED2009-05 void ScTable::PutCell( const ScAddress& rPos, ULONG nFormatIndex, ScBaseCell* pCell )
-//UNUSED2009-05 {
-//UNUSED2009-05     if (pCell)
-//UNUSED2009-05         aCol[rPos.Col()].Insert( rPos.Row(), nFormatIndex, pCell );
-//UNUSED2009-05     else
-//UNUSED2009-05         aCol[rPos.Col()].Delete( rPos.Row() );
-//UNUSED2009-05 }
-
-
 BOOL ScTable::SetString( SCCOL nCol, SCROW nRow, SCTAB nTabP, const String& rString,
                          ScSetStringParam* pParam )
 {
@@ -1195,14 +1186,6 @@ BOOL ScTable::HasStringCells( SCCOL nStartCol, SCROW nStartRow,
 }
 
 
-//UNUSED2008-05  USHORT ScTable::GetErrCode( SCCOL nCol, SCROW nRow ) const
-//UNUSED2008-05  {
-//UNUSED2008-05      if (ValidColRow( nCol, nRow ))
-//UNUSED2008-05          return aCol[nCol].GetErrCode( nRow );
-//UNUSED2008-05      return 0;
-//UNUSED2008-05  }
-
-
 void ScTable::SetDirtyVar()
 {
     for (SCCOL i=0; i<=MAXCOL; i++)
@@ -1366,24 +1349,6 @@ bool ScTable::HasAttrib( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, USH
         bFound |= aCol[i].HasAttrib( nRow1, nRow2, nMask );
     return bFound;
 }
-
-
-//UNUSED2009-05 BOOL ScTable::HasLines( const ScRange& rRange, Rectangle& rSizes ) const
-//UNUSED2009-05 {
-//UNUSED2009-05     SCCOL nCol1 = rRange.aStart.Col();
-//UNUSED2009-05     SCROW nRow1 = rRange.aStart.Row();
-//UNUSED2009-05     SCCOL nCol2 = rRange.aEnd.Col();
-//UNUSED2009-05     SCROW nRow2 = rRange.aEnd.Row();
-//UNUSED2009-05     PutInOrder( nCol1, nCol2 );
-//UNUSED2009-05     PutInOrder( nRow1, nRow2 );
-//UNUSED2009-05
-//UNUSED2009-05     BOOL bFound = FALSE;
-//UNUSED2009-05     for (SCCOL i=nCol1; i<=nCol2; i++)
-//UNUSED2009-05         if (aCol[i].HasLines( nRow1, nRow2, rSizes, (i==nCol1), (i==nCol2) ))
-//UNUSED2009-05             bFound = TRUE;
-//UNUSED2009-05
-//UNUSED2009-05     return bFound;
-//UNUSED2009-05 }
 
 
 BOOL ScTable::HasAttribSelection( const ScMarkData& rMark, USHORT nMask ) const

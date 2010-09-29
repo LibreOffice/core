@@ -834,40 +834,6 @@ void ScViewFunc::EnterBlock( const String& rString, const EditTextObject* pData 
 
 
 //----------------------------------------------------------------------------
-
-//UNUSED2008-05  void ScViewFunc::PaintWidthHeight( BOOL bColumns, SCCOLROW nStart, SCCOLROW nEnd )
-//UNUSED2008-05  {
-//UNUSED2008-05      SCTAB nTab = GetViewData()->GetTabNo();
-//UNUSED2008-05      ScDocument* pDoc = GetViewData()->GetDocument();
-//UNUSED2008-05
-//UNUSED2008-05      USHORT nParts = PAINT_GRID;
-//UNUSED2008-05      SCCOL nStartCol = 0;
-//UNUSED2008-05      SCROW nStartRow = 0;
-//UNUSED2008-05      SCCOL nEndCol = MAXCOL;         // fuer Test auf Merge
-//UNUSED2008-05      SCROW nEndRow = MAXROW;
-//UNUSED2008-05      if ( bColumns )
-//UNUSED2008-05      {
-//UNUSED2008-05          nParts |= PAINT_TOP;
-//UNUSED2008-05          nStartCol = static_cast<SCCOL>(nStart);
-//UNUSED2008-05          nEndCol = static_cast<SCCOL>(nEnd);
-//UNUSED2008-05      }
-//UNUSED2008-05      else
-//UNUSED2008-05      {
-//UNUSED2008-05          nParts |= PAINT_LEFT;
-//UNUSED2008-05          nStartRow = nStart;
-//UNUSED2008-05          nEndRow = nEnd;
-//UNUSED2008-05      }
-//UNUSED2008-05      if (pDoc->HasAttrib( nStartCol,nStartRow,nTab, nEndCol,nEndRow,nTab,
-//UNUSED2008-05                           HASATTR_MERGED | HASATTR_OVERLAPPED ))
-//UNUSED2008-05      {
-//UNUSED2008-05          nStartCol = 0;
-//UNUSED2008-05          nStartRow = 0;
-//UNUSED2008-05      }
-//UNUSED2008-05      GetViewData()->GetDocShell()->PostPaint( nStartCol,nStartRow,nTab, MAXCOL,MAXROW,nTab, nParts );
-//UNUSED2008-05  }
-
-
-//----------------------------------------------------------------------------
 //  manueller Seitenumbruch
 
 void ScViewFunc::InsertPageBreak( BOOL bColumn, BOOL bRecord, const ScAddress* pPos,

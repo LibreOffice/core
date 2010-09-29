@@ -280,35 +280,7 @@ void ScRawToken::SetExternalName( sal_uInt16 nFileId, const String& rName )
     extname.cName[n] = 0;
 }
 
-//UNUSED2008-05  void ScRawToken::SetInt(int rVal)
-//UNUSED2008-05  {
-//UNUSED2008-05      eOp   = ocPush;
-//UNUSED2008-05      eType = svDouble;
-//UNUSED2008-05      nValue = (double)rVal;
-//UNUSED2008-05      nRefCnt = 0;
-//UNUSED2008-05
-//UNUSED2008-05  }
-//UNUSED2008-05  void ScRawToken::SetMatrix( ScMatrix* p )
-//UNUSED2008-05  {
-//UNUSED2008-05      eOp   = ocPush;
-//UNUSED2008-05      eType = svMatrix;
-//UNUSED2008-05      pMat  = p;
-//UNUSED2008-05      nRefCnt = 0;
-//UNUSED2008-05  }
-//UNUSED2008-05
-//UNUSED2008-05  ScComplexRefData& ScRawToken::GetReference()
-//UNUSED2008-05  {
-//UNUSED2008-05      DBG_ASSERT( lcl_IsReference( eOp, GetType() ), "GetReference: no Ref" );
-//UNUSED2008-05      return aRef;
-//UNUSED2008-05  }
-//UNUSED2008-05
-//UNUSED2008-05  void ScRawToken::SetReference( ScComplexRefData& rRef )
-//UNUSED2008-05  {
-//UNUSED2008-05      DBG_ASSERT( lcl_IsReference( eOp, GetType() ), "SetReference: no Ref" );
-//UNUSED2008-05      aRef = rRef;
-//UNUSED2008-05      if( GetType() == svSingleRef )
-//UNUSED2008-05          aRef.Ref2 = aRef.Ref1;
-//UNUSED2008-05  }
+
 
 void ScRawToken::SetExternal( const sal_Unicode* pStr )
 {

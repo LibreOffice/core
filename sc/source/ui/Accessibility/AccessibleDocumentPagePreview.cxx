@@ -735,7 +735,6 @@ private:
     ::accessibility::AccessibleShape* GetAccShape(const ScShapeChild& rShape) const;
     ::accessibility::AccessibleShape* GetAccShape(const ScShapeChildVec& rShapes, sal_Int32 nIndex) const;
     void FillShapes(const Rectangle& aPixelPaintRect, const MapMode& aMapMode, sal_uInt8 nRangeId);
-//UNUSED2008-05  sal_Bool FindShape(ScShapeChildVec& rShapes, const uno::Reference <drawing::XShape>& xShape, ScShapeChildVec::iterator& rItr) const;
 
 //    void AddShape(const uno::Reference<drawing::XShape>& xShape, SdrLayerID aLayerID);
 //    void RemoveShape(const uno::Reference<drawing::XShape>& xShape, SdrLayerID aLayerID);
@@ -1201,21 +1200,6 @@ void ScShapeChilds::FillShapes(const Rectangle& aPixelPaintRect, const MapMode& 
     }
 }
 
-//UNUSED2008-05  sal_Bool ScShapeChilds::FindShape(ScShapeChildVec& rShapes, const uno::Reference <drawing::XShape>& xShape, ScShapeChildVec::iterator& rItr) const
-//UNUSED2008-05  {
-//UNUSED2008-05      sal_Bool bResult(sal_False);
-//UNUSED2008-05      ScShapeChild aShape;
-//UNUSED2008-05      aShape.mxShape = xShape;
-//UNUSED2008-05      rItr = std::lower_bound(rShapes.begin(), rShapes.end(), aShape, ScShapeChildLess());
-//UNUSED2008-05      if (rItr->mxShape.get() == xShape.get())
-//UNUSED2008-05          bResult = sal_True; // if the shape is found
-//UNUSED2008-05
-//UNUSED2008-05  /*#ifdef DBG_UTIL // test whether it finds truly the correct shape (perhaps it is not really sorted)
-//UNUSED2008-05      ScShapeChildVec::iterator aDebugItr = std::find(rShapes.begin(), rShapes.end(), aShape);
-//UNUSED2008-05      DBG_ASSERT(rItr == aDebugItr, "wrong Shape found");
-//UNUSED2008-05  #endif*/
-//UNUSED2008-05      return bResult;
-//UNUSED2008-05  }
 
 /*void ScShapeChilds::AddShape(const uno::Reference<drawing::XShape>& xShape, SdrLayerID aLayerID)
 {
@@ -1902,41 +1886,3 @@ ScShapeChilds* ScAccessibleDocumentPagePreview::GetShapeChilds()
 
     return mpShapeChilds;
 }
-
-//UNUSED2009-05 uno::Reference < XAccessible > ScAccessibleDocumentPagePreview::GetCurrentAccessibleTable()
-//UNUSED2009-05 {
-//UNUSED2009-05     if (!mpTable)
-//UNUSED2009-05     {
-//UNUSED2009-05         if ( mpViewShell )
-//UNUSED2009-05         {
-//UNUSED2009-05             const ScPreviewLocationData& rData = mpViewShell->GetLocationData();
-//UNUSED2009-05             ScPagePreviewCountData aCount( rData, mpViewShell->GetWindow(), GetNotesChilds(), GetShapeChilds() );
-//UNUSED2009-05             //! order is background shapes, header, table or notes, footer, foreground shapes, controls
-//UNUSED2009-05             sal_Int32 nIndex (aCount.nBackShapes + aCount.nHeaders);
-//UNUSED2009-05
-//UNUSED2009-05             mpTable = new ScAccessiblePreviewTable( this, mpViewShell, nIndex );
-//UNUSED2009-05             mpTable->acquire();
-//UNUSED2009-05             mpTable->Init();
-//UNUSED2009-05         }
-//UNUSED2009-05     }
-//UNUSED2009-05     return mpTable;
-//UNUSED2009-05 }
-
-//UNUSED2009-05 void ScAccessibleDocumentPagePreview::ChildCountChanged()
-//UNUSED2009-05 {
-//UNUSED2009-05     if (mpViewShell)
-//UNUSED2009-05     {
-//UNUSED2009-05         const ScPreviewLocationData& rData = mpViewShell->GetLocationData();
-//UNUSED2009-05         ScPagePreviewCountData aCount( rData, mpViewShell->GetWindow(), GetNotesChilds(), GetShapeChilds() );
-//UNUSED2009-05         //! order is background shapes, header, table or notes, footer, foreground shapes, controls
-//UNUSED2009-05         if(mpHeader)
-//UNUSED2009-05             mpHeader->SetCurrentIndexInParent(aCount.nBackShapes);
-//UNUSED2009-05         if (mpTable)
-//UNUSED2009-05             mpTable->SetCurrentIndexInParent(aCount.nBackShapes + aCount.nHeaders);
-//UNUSED2009-05         if (mpFooter)
-//UNUSED2009-05             mpFooter->SetCurrentIndexInParent(aCount.nBackShapes + aCount.nHeaders + aCount.nTables + aCount.nNoteParagraphs);
-//UNUSED2009-05
-//UNUSED2009-05         if (mpNotesChilds)
-//UNUSED2009-05             mpNotesChilds->SetOffset(aCount.nBackShapes + aCount.nHeaders);
-//UNUSED2009-05     }
-//UNUSED2009-05 }

@@ -54,13 +54,6 @@ class ScInputStatusItem : public SfxPoolItem
 
 public:
                             TYPEINFO();
-//UNUSED2008-05             ScInputStatusItem( USHORT nWhich,
-//UNUSED2008-05                                SCTAB nTab,
-//UNUSED2008-05                                SCCOL nCol, SCROW nRow,
-//UNUSED2008-05                                SCCOL nStartCol, SCROW nStartRow,
-//UNUSED2008-05                                SCCOL nEndCol,   SCROW nSEndRow,
-//UNUSED2008-05                                const String& rString,
-//UNUSED2008-05                                const EditTextObject* pData );
 
                             ScInputStatusItem( USHORT nWhich,
                                                const ScAddress& rCurPos,

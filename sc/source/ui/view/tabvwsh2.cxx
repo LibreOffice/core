@@ -318,7 +318,6 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
             break;
 
         case SID_DRAW_CHART:
-//UNUSED2008-05  bChartDlgIsEdit = FALSE;
             pTabView->SetDrawFuncPtr(new FuMarkRect(this, pWin, pView, pDoc, aNewReq));
             break;
 

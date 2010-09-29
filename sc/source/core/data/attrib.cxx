@@ -519,15 +519,6 @@ ScTableListItem::ScTableListItem( const ScTableListItem& rCpy )
 
 // -----------------------------------------------------------------------
 
-//UNUSED2008-05  ScTableListItem::ScTableListItem( const USHORT nWhichP, const List& rList )
-//UNUSED2008-05      :   SfxPoolItem ( nWhichP ),
-//UNUSED2008-05          nCount      ( 0 ),
-//UNUSED2008-05          pTabArr     ( NULL )
-//UNUSED2008-05  {
-//UNUSED2008-05      SetTableList( rList );
-//UNUSED2008-05  }
-
-// -----------------------------------------------------------------------
 
 ScTableListItem::~ScTableListItem()
 {
@@ -630,35 +621,6 @@ SfxItemPresentation ScTableListItem::GetPresentation
 
     return SFX_ITEM_PRESENTATION_NONE;
 }
-
-// -----------------------------------------------------------------------
-
-//UNUSED2009-05 BOOL ScTableListItem::GetTableList( List& aList ) const
-//UNUSED2009-05 {
-//UNUSED2009-05     for ( USHORT i=0; i<nCount; i++ )
-//UNUSED2009-05         aList.Insert( new SCTAB( pTabArr[i] ) );
-//UNUSED2009-05
-//UNUSED2009-05     return ( nCount > 0 );
-//UNUSED2009-05 }
-
-// -----------------------------------------------------------------------
-
-//UNUSED2009-05 void ScTableListItem::SetTableList( const List& rList )
-//UNUSED2009-05 {
-//UNUSED2009-05     nCount = (USHORT)rList.Count();
-//UNUSED2009-05
-//UNUSED2009-05     delete [] pTabArr;
-//UNUSED2009-05
-//UNUSED2009-05     if ( nCount > 0 )
-//UNUSED2009-05     {
-//UNUSED2009-05         pTabArr = new SCTAB [nCount];
-//UNUSED2009-05
-//UNUSED2009-05         for ( USHORT i=0; i<nCount; i++ )
-//UNUSED2009-05             pTabArr[i] = *( (SCTAB*)rList.GetObject( i ) );
-//UNUSED2009-05     }
-//UNUSED2009-05     else
-//UNUSED2009-05         pTabArr = NULL;
-//UNUSED2009-05 }
 
 
 // -----------------------------------------------------------------------
@@ -931,63 +893,6 @@ SfxPoolItem* ScPageHFItem::Create( SvStream& rStream, USHORT nVer ) const
 
 //------------------------------------------------------------------------
 
-//UNUSED2009-05 class ScFieldChangerEditEngine : public ScEditEngineDefaulter
-//UNUSED2009-05 {
-//UNUSED2009-05     TypeId      aExtFileId;
-//UNUSED2009-05     USHORT      nConvPara;
-//UNUSED2009-05     xub_StrLen  nConvPos;
-//UNUSED2009-05     BOOL        bConvert;
-//UNUSED2009-05
-//UNUSED2009-05 public:
-//UNUSED2009-05     ScFieldChangerEditEngine( SfxItemPool* pEnginePool, BOOL bDeleteEnginePool );
-//UNUSED2009-05     virtual     ~ScFieldChangerEditEngine() {}
-//UNUSED2009-05
-//UNUSED2009-05     virtual String  CalcFieldValue( const SvxFieldItem& rField, USHORT nPara,
-//UNUSED2009-05                                     USHORT nPos, Color*& rTxtColor,
-//UNUSED2009-05                                     Color*& rFldColor );
-//UNUSED2009-05
-//UNUSED2009-05     BOOL            ConvertFields();
-//UNUSED2009-05 };
-//UNUSED2009-05
-//UNUSED2009-05 ScFieldChangerEditEngine::ScFieldChangerEditEngine( SfxItemPool* pEnginePoolP,
-//UNUSED2009-05             BOOL bDeleteEnginePoolP ) :
-//UNUSED2009-05         ScEditEngineDefaulter( pEnginePoolP, bDeleteEnginePoolP ),
-//UNUSED2009-05         aExtFileId( TYPE( SvxExtFileField ) ),
-//UNUSED2009-05         nConvPara( 0 ),
-//UNUSED2009-05         nConvPos( 0 ),
-//UNUSED2009-05         bConvert( FALSE )
-//UNUSED2009-05 {
-//UNUSED2009-05 }
-//UNUSED2009-05
-//UNUSED2009-05 String ScFieldChangerEditEngine::CalcFieldValue( const SvxFieldItem& rField,
-//UNUSED2009-05             USHORT nPara, USHORT nPos, Color*& /* rTxtColor */, Color*& /* rFldColor */ )
-//UNUSED2009-05 {
-//UNUSED2009-05     const SvxFieldData* pFieldData = rField.GetField();
-//UNUSED2009-05     if ( pFieldData && pFieldData->Type() == aExtFileId )
-//UNUSED2009-05     {
-//UNUSED2009-05         bConvert = TRUE;
-//UNUSED2009-05         nConvPara = nPara;
-//UNUSED2009-05         nConvPos = nPos;
-//UNUSED2009-05     }
-//UNUSED2009-05     return EMPTY_STRING;
-//UNUSED2009-05 }
-//UNUSED2009-05
-//UNUSED2009-05 BOOL ScFieldChangerEditEngine::ConvertFields()
-//UNUSED2009-05 {
-//UNUSED2009-05     BOOL bConverted = FALSE;
-//UNUSED2009-05     do
-//UNUSED2009-05     {
-//UNUSED2009-05         bConvert = FALSE;
-//UNUSED2009-05         UpdateFields();
-//UNUSED2009-05         if ( bConvert )
-//UNUSED2009-05         {
-//UNUSED2009-05             ESelection aSel( nConvPara, nConvPos, nConvPara, nConvPos+1 );
-//UNUSED2009-05             QuickInsertField( SvxFieldItem( SvxFileField(), EE_FEATURE_FIELD), aSel );
-//UNUSED2009-05             bConverted = TRUE;
-//UNUSED2009-05         }
-//UNUSED2009-05     } while ( bConvert );
-//UNUSED2009-05     return bConverted;
-//UNUSED2009-05 }
 
 void ScPageHFItem::SetLeftArea( const EditTextObject& rNew )
 {

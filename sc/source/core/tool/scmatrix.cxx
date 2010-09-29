@@ -621,49 +621,6 @@ void ScMatrix::MatTrans(ScMatrix& mRes) const
     }
 }
 
-//UNUSED2009-05 void ScMatrix::MatCopyUpperLeft(ScMatrix& mRes) const
-//UNUSED2009-05 {
-//UNUSED2009-05     if (nColCount < mRes.nColCount || nRowCount < mRes.nRowCount)
-//UNUSED2009-05     {
-//UNUSED2009-05         DBG_ERRORFILE("ScMatrix::MatCopyUpperLeft: dimension error");
-//UNUSED2009-05     }
-//UNUSED2009-05     else
-//UNUSED2009-05     {
-//UNUSED2009-05         if (mnValType)
-//UNUSED2009-05         {
-//UNUSED2009-05             ScMatValType nType;
-//UNUSED2009-05             mRes.ResetIsString();
-//UNUSED2009-05             for ( SCSIZE i = 0; i < mRes.nColCount; i++ )
-//UNUSED2009-05             {
-//UNUSED2009-05                 SCSIZE nStart = i * nRowCount;
-//UNUSED2009-05                 for ( SCSIZE j = 0; j < mRes.nRowCount; j++ )
-//UNUSED2009-05                 {
-//UNUSED2009-05                     if ( IsNonValueType( (nType = mnValType[nStart+j]) ))
-//UNUSED2009-05                         mRes.PutStringEntry( pMat[nStart+j].pS, nType,
-//UNUSED2009-05                             i*mRes.nRowCount+j );
-//UNUSED2009-05                     else
-//UNUSED2009-05                     {
-//UNUSED2009-05                         mRes.pMat[i*mRes.nRowCount+j].fVal = pMat[nStart+j].fVal;
-//UNUSED2009-05                         mRes.mnValType[i*mRes.nRowCount+j] = nType;
-//UNUSED2009-05                     }
-//UNUSED2009-05                 }
-//UNUSED2009-05             }
-//UNUSED2009-05         }
-//UNUSED2009-05         else
-//UNUSED2009-05         {
-//UNUSED2009-05             mRes.DeleteIsString();
-//UNUSED2009-05             for ( SCSIZE i = 0; i < mRes.nColCount; i++ )
-//UNUSED2009-05             {
-//UNUSED2009-05                 SCSIZE nStart = i * nRowCount;
-//UNUSED2009-05                 for ( SCSIZE j = 0; j < mRes.nRowCount; j++ )
-//UNUSED2009-05                 {
-//UNUSED2009-05                     mRes.pMat[i*mRes.nRowCount+j].fVal = pMat[nStart+j].fVal;
-//UNUSED2009-05                 }
-//UNUSED2009-05             }
-//UNUSED2009-05         }
-//UNUSED2009-05     }
-//UNUSED2009-05 }
-
 void ScMatrix::FillDouble( double fVal, SCSIZE nC1, SCSIZE nR1, SCSIZE nC2, SCSIZE nR2 )
 {
     if (ValidColRow( nC1, nR1) && ValidColRow( nC2, nR2))

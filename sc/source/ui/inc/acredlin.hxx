@@ -173,7 +173,6 @@ private:
 
     void            Init();
     void            InitFilter();
-//UNUSED2008-05  void           SetMyStaticData();
 
     DECL_LINK( FilterHandle, SvxTPFilter* );
     DECL_LINK( RefHandle, SvxTPFilter* );

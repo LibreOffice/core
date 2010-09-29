@@ -251,11 +251,6 @@ void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, BOOL bMarked )
 //  InfoBox(0, String(nCount) + String(" Eintraege") ).Execute();
 }
 
-//UNUSED2009-05 void ScMarkArray::DeleteArea(SCROW nStartRow, SCROW nEndRow)
-//UNUSED2009-05 {
-//UNUSED2009-05     SetMarkArea(nStartRow, nEndRow, FALSE);
-//UNUSED2009-05 }
-
 BOOL ScMarkArray::IsAllMarked( SCROW nStartRow, SCROW nEndRow ) const
 {
     SCSIZE nStartIndex;

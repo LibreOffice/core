@@ -695,22 +695,6 @@ BOOL ScDrawView::SelectObject( const String& rName )
     return ( pFound != NULL );
 }
 
-//UNUSED2008-05  String ScDrawView::GetSelectedChartName() const
-//UNUSED2008-05  {
-//UNUSED2008-05      //  used for modifying a chart's data area - PersistName must always be used
-//UNUSED2008-05      //  (as in ScDocument::FindChartData and UpdateChartArea)
-//UNUSED2008-05
-//UNUSED2008-05      const SdrMarkList& rMarkList = GetMarkedObjectList();
-//UNUSED2008-05      if (rMarkList.GetMarkCount() == 1)
-//UNUSED2008-05      {
-//UNUSED2008-05          SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-//UNUSED2008-05          if (pObj->GetObjIdentifier() == OBJ_OLE2)
-//UNUSED2008-05              if ( pDoc->IsChart(pObj) )
-//UNUSED2008-05                  return static_cast<SdrOle2Obj*>(pObj)->GetPersistName();
-//UNUSED2008-05      }
-//UNUSED2008-05
-//UNUSED2008-05      return EMPTY_STRING;        // nichts gefunden
-//UNUSED2008-05  }
 
 FASTBOOL ScDrawView::InsertObjectSafe(SdrObject* pObj, SdrPageView& rPV, ULONG nOptions)
 {
@@ -821,29 +805,3 @@ void ScDrawView::MarkDropObj( SdrObject* pObj )
         }
     }
 }
-
-//UNUSED2009-05 void ScDrawView::CaptionTextDirection( USHORT nSlot )
-//UNUSED2009-05 {
-//UNUSED2009-05     if(nSlot != SID_TEXTDIRECTION_LEFT_TO_RIGHT && nSlot != SID_TEXTDIRECTION_TOP_TO_BOTTOM)
-//UNUSED2009-05         return;
-//UNUSED2009-05
-//UNUSED2009-05     SdrObject* pObject  = GetTextEditObject();
-//UNUSED2009-05     if ( ScDrawLayer::IsNoteCaption( pObject ) )
-//UNUSED2009-05     {
-//UNUSED2009-05         if( SdrCaptionObj* pCaption = dynamic_cast< SdrCaptionObj* >( pObject ) )
-//UNUSED2009-05         {
-//UNUSED2009-05             SfxItemSet aAttr(pCaption->GetMergedItemSet());
-//UNUSED2009-05             aAttr.Put( SvxWritingModeItem(
-//UNUSED2009-05                 nSlot == SID_TEXTDIRECTION_LEFT_TO_RIGHT ?
-//UNUSED2009-05                     com::sun::star::text::WritingMode_LR_TB : com::sun::star::text::WritingMode_TB_RL,
-//UNUSED2009-05                     SDRATTR_TEXTDIRECTION ) );
-//UNUSED2009-05             pCaption->SetMergedItemSet(aAttr);
-//UNUSED2009-05             FuPoor* pPoor = pViewData->GetView()->GetDrawFuncPtr();
-//UNUSED2009-05             if ( pPoor )
-//UNUSED2009-05             {
-//UNUSED2009-05                 FuText* pText = static_cast<FuText*>(pPoor);
-//UNUSED2009-05                 pText->StopEditMode(TRUE);
-//UNUSED2009-05             }
-//UNUSED2009-05         }
-//UNUSED2009-05     }
-//UNUSED2009-05 }

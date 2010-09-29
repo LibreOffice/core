@@ -406,14 +406,6 @@ BOOL ScTabView::IsDrawTextEdit() const
         return FALSE;
 }
 
-//UNUSED2008-05  String ScTabView::GetSelectedChartName() const
-//UNUSED2008-05  {
-//UNUSED2008-05      if (pDrawView)
-//UNUSED2008-05          return pDrawView->GetSelectedChartName();
-//UNUSED2008-05      else
-//UNUSED2008-05          return EMPTY_STRING;
-//UNUSED2008-05  }
-
 SvxZoomType ScTabView::GetZoomType() const
 {
     return aViewData.GetZoomType();

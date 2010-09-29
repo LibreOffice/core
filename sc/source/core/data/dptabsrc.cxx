@@ -1010,16 +1010,6 @@ void ScDPSource::CreateRes_Impl()
     }
 }
 
-//UNUSED2009-05 void ScDPSource::DumpState( ScDocument* pDoc, const ScAddress& rPos )
-//UNUSED2009-05 {
-//UNUSED2009-05     CreateRes_Impl();
-//UNUSED2009-05
-//UNUSED2009-05     ScAddress aDocPos( rPos );
-//UNUSED2009-05
-//UNUSED2009-05     if (pColResRoot->GetChildDimension())
-//UNUSED2009-05         pColResRoot->GetChildDimension()->DumpState( NULL, pDoc, aDocPos );
-//UNUSED2009-05     pRowResRoot->DumpState( pColResRoot, pDoc, aDocPos );
-//UNUSED2009-05 }
 
 void ScDPSource::FillLevelList( USHORT nOrientation, List& rList )
 {
@@ -1544,14 +1534,6 @@ const ScDPItemData& ScDPDimension::GetSelectedData()
 
     return *pSelectedData;
 }
-
-//UNUSED2009-05 BOOL ScDPDimension::IsValidPage( const ScDPItemData& rData )
-//UNUSED2009-05 {
-//UNUSED2009-05     if ( bHasSelectedPage )
-//UNUSED2009-05         return rData.IsCaseInsEqual( GetSelectedData() );
-//UNUSED2009-05
-//UNUSED2009-05     return TRUE;        // no selection -> all data
-//UNUSED2009-05 }
 
 BOOL ScDPDimension::IsVisible( const ScDPItemData& rData )
 {

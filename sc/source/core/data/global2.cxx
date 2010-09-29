@@ -97,17 +97,6 @@ ScImportParam::~ScImportParam()
 {
 }
 
-//UNUSED2009-05 void ScImportParam::Clear()
-//UNUSED2009-05 {
-//UNUSED2009-05     nCol1 = nCol2 = 0;
-//UNUSED2009-05     nRow1 = nRow2 = 0;
-//UNUSED2009-05     bImport = FALSE;
-//UNUSED2009-05     bNative = FALSE;
-//UNUSED2009-05     bSql = TRUE;
-//UNUSED2009-05     nType = ScDbTable;
-//UNUSED2009-05     aDBName.Erase();
-//UNUSED2009-05     aStatement.Erase();
-//UNUSED2009-05 }
 
 ScImportParam& ScImportParam::operator=( const ScImportParam& r )
 {
@@ -621,16 +610,6 @@ __EXPORT ScPivotParam::~ScPivotParam()
 
 //------------------------------------------------------------------------
 
-//UNUSED2009-05 void __EXPORT ScPivotParam::Clear()
-//UNUSED2009-05 {
-//UNUSED2009-05     nCol = 0;
-//UNUSED2009-05     nRow = 0;
-//UNUSED2009-05     nTab = 0;
-//UNUSED2009-05     bIgnoreEmptyRows = bDetectCategories = FALSE;
-//UNUSED2009-05     bMakeTotalCol = bMakeTotalRow = TRUE;
-//UNUSED2009-05     ClearLabelData();
-//UNUSED2009-05     ClearPivotArrays();
-//UNUSED2009-05 }
 
 void __EXPORT ScPivotParam::ClearPivotArrays()
 {

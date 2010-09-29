@@ -57,11 +57,6 @@ ScDBFunc::ScDBFunc( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewSh
 {
 }
 
-//UNUSED2008-05  ScDBFunc::ScDBFunc( Window* pParent, const ScDBFunc& rDBFunc, ScTabViewShell* pViewShell ) :
-//UNUSED2008-05      ScViewFunc( pParent, rDBFunc, pViewShell )
-//UNUSED2008-05  {
-//UNUSED2008-05  }
-
 ScDBFunc::~ScDBFunc()
 {
 }

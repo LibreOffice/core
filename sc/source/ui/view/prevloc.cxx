@@ -294,44 +294,6 @@ ScPreviewLocationEntry* lcl_GetEntryByAddress( const List& rEntries, const ScAdd
     return NULL;
 }
 
-//UNUSED2008-05  ScAddress ScPreviewLocationData::GetCellFromRange( const Size& rOffsetPixel, const ScRange& rRange ) const
-//UNUSED2008-05  {
-//UNUSED2008-05      const double nScaleX = HMM_PER_TWIPS;
-//UNUSED2008-05      const double nScaleY = HMM_PER_TWIPS;
-//UNUSED2008-05
-//UNUSED2008-05      Size aOffsetLogic = pWindow->PixelToLogic( rOffsetPixel, aCellMapMode );
-//UNUSED2008-05      SCTAB nTab = rRange.aStart.Tab();
-//UNUSED2008-05
-//UNUSED2008-05      long nPosX = 0;
-//UNUSED2008-05      SCCOL nCol = rRange.aStart.Col();
-//UNUSED2008-05      SCCOL nEndCol = rRange.aEnd.Col();
-//UNUSED2008-05      while ( nCol <= nEndCol && nPosX < aOffsetLogic.Width() )
-//UNUSED2008-05      {
-//UNUSED2008-05          USHORT nDocW = pDoc->GetColWidth( nCol, nTab );
-//UNUSED2008-05          if (nDocW)
-//UNUSED2008-05              nPosX += (long) (nDocW * nScaleX);
-//UNUSED2008-05          ++nCol;
-//UNUSED2008-05      }
-//UNUSED2008-05      if ( nCol > rRange.aStart.Col() )
-//UNUSED2008-05          --nCol;
-//UNUSED2008-05
-//UNUSED2008-05      long nPosY = 0;
-//UNUSED2008-05      ScCoupledCompressedArrayIterator< SCROW, BYTE, USHORT> aIter(
-//UNUSED2008-05              pDoc->GetRowFlagsArray( nTab), rRange.aStart.Row(),
-//UNUSED2008-05              rRange.aEnd.Row(), CR_HIDDEN, 0, pDoc->GetRowHeightArray( nTab));
-//UNUSED2008-05      while ( aIter && nPosY < aOffsetLogic.Height() )
-//UNUSED2008-05      {
-//UNUSED2008-05          USHORT nDocH = *aIter;
-//UNUSED2008-05          if (nDocH)
-//UNUSED2008-05              nPosY += (long) (nDocH * nScaleY);
-//UNUSED2008-05          ++aIter;
-//UNUSED2008-05      }
-//UNUSED2008-05      SCROW nRow = aIter.GetPos();
-//UNUSED2008-05      if ( nRow > rRange.aStart.Row() )
-//UNUSED2008-05          --nRow;
-//UNUSED2008-05
-//UNUSED2008-05      return ScAddress( nCol, nRow, nTab );
-//UNUSED2008-05  }
 
 Rectangle ScPreviewLocationData::GetOffsetPixel( const ScAddress& rCellPos, const ScRange& rRange ) const
 {

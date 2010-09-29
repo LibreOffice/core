@@ -397,22 +397,6 @@ ScTabView::ScTabView( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pView
     Init();
 }
 
-//UNUSED2009-05 ScTabView::ScTabView( Window* pParent, const ScTabView& rScTabView, ScTabViewShell* pViewShell ) :
-//UNUSED2009-05             pFrameWin( pParent ),
-//UNUSED2009-05             aViewData( rScTabView.aViewData ),
-//UNUSED2009-05             TABVIEW_INIT
-//UNUSED2009-05 {
-//UNUSED2009-05     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScTabView::ScTabView" );
-//UNUSED2009-05
-//UNUSED2009-05     aViewData.SetViewShell( pViewShell );
-//UNUSED2009-05     Init();
-//UNUSED2009-05
-//UNUSED2009-05     UpdateShow();
-//UNUSED2009-05     if ( aViewData.GetActivePart() != SC_SPLIT_BOTTOMLEFT )
-//UNUSED2009-05         pGridWin[SC_SPLIT_BOTTOMLEFT]->Show();
-//UNUSED2009-05
-//UNUSED2009-05     InvalidateSplit();
-//UNUSED2009-05 }
 
 void ScTabView::InitScrollBar( ScrollBar& rScrollBar, long nMaxVal )
 {
@@ -1085,10 +1069,6 @@ void ScTabView::SetActivePointer( const Pointer& rPointer )
 */
 }
 
-//UNUSED2008-05  void ScTabView::SetActivePointer( const ResId& )
-//UNUSED2008-05  {
-//UNUSED2008-05      DBG_ERRORFILE( "keine Pointer mit ResId!" );
-//UNUSED2008-05  }
 
 void ScTabView::ActiveGrabFocus()
 {
@@ -1097,28 +1077,6 @@ void ScTabView::ActiveGrabFocus()
         pGridWin[ePos]->GrabFocus();
 }
 
-//UNUSED2008-05  void ScTabView::ActiveCaptureMouse()
-//UNUSED2008-05  {
-//UNUSED2008-05      ScSplitPos ePos = aViewData.GetActivePart();
-//UNUSED2008-05      if (pGridWin[ePos])
-//UNUSED2008-05          pGridWin[ePos]->CaptureMouse();
-//UNUSED2008-05  }
-//UNUSED2008-05
-//UNUSED2008-05  void ScTabView::ActiveReleaseMouse()
-//UNUSED2008-05  {
-//UNUSED2008-05      ScSplitPos ePos = aViewData.GetActivePart();
-//UNUSED2008-05      if (pGridWin[ePos])
-//UNUSED2008-05          pGridWin[ePos]->ReleaseMouse();
-//UNUSED2008-05  }
-//UNUSED2008-05
-//UNUSED2008-05  Point ScTabView::ActivePixelToLogic( const Point& rDevicePoint )
-//UNUSED2008-05  {
-//UNUSED2008-05      ScSplitPos ePos = aViewData.GetActivePart();
-//UNUSED2008-05      if (pGridWin[ePos])
-//UNUSED2008-05          return pGridWin[ePos]->PixelToLogic(rDevicePoint);
-//UNUSED2008-05      else
-//UNUSED2008-05          return Point();
-//UNUSED2008-05  }
 
 ScSplitPos ScTabView::FindWindow( Window* pWindow ) const
 {

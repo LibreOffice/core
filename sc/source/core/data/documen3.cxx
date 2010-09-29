@@ -105,14 +105,6 @@ void ScDocument::SetRangeName( ScRangeName* pNewRangeName )
     pRangeName = pNewRangeName;
 }
 
-//UNUSED2008-05  ScRangeData* ScDocument::GetRangeAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab,
-//UNUSED2008-05                                              BOOL bStartOnly) const
-//UNUSED2008-05  {
-//UNUSED2008-05      if ( pRangeName )
-//UNUSED2008-05          return pRangeName->GetRangeAtCursor( ScAddress( nCol, nRow, nTab ), bStartOnly );
-//UNUSED2008-05      else
-//UNUSED2008-05          return NULL;
-//UNUSED2008-05  }
 
 ScRangeData* ScDocument::GetRangeAtBlock( const ScRange& rBlock, String* pName ) const
 {

@@ -113,11 +113,6 @@ public:
 
     ///=====  internal  ========================================================
 
-//UNUSED2009-05 com::sun::star::uno::Reference < com::sun::star::accessibility::XAccessible >
-//UNUSED2009-05     GetCurrentAccessibleTable();
-
-//UNUSED2009-05 void ChildCountChanged();
-
 protected:
     /// Return this object's description.
     virtual ::rtl::OUString SAL_CALL

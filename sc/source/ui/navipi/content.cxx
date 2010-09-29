@@ -1282,17 +1282,6 @@ IMPL_STATIC_LINK(ScContentTree, ExecDragHdl, void*, EMPTYARG)
     return 0;
 }
 
-//UNUSED2008-05  void ScContentTree::AdjustTitle()
-//UNUSED2008-05  {
-//UNUSED2008-05      String aTitle = pParentWindow->aTitleBase;
-//UNUSED2008-05      if (bHiddenDoc)
-//UNUSED2008-05      {
-//UNUSED2008-05          aTitle.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " - " ));
-//UNUSED2008-05          aTitle += aHiddenTitle;
-//UNUSED2008-05      }
-//UNUSED2008-05      pParentWindow->SetText(aTitle);
-//UNUSED2008-05  }
-
 BOOL ScContentTree::LoadFile( const String& rUrl )
 {
     String aDocName = rUrl;

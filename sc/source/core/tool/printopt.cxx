@@ -87,9 +87,6 @@ int ScPrintOptions::operator!=( const ScPrintOptions& rOpt ) const
 
 // -----------------------------------------------------------------------
 
-//UNUSED2008-05  ScTpPrintItem::ScTpPrintItem( USHORT nWhichP ) : SfxPoolItem( nWhichP )
-//UNUSED2008-05  {
-//UNUSED2008-05  }
 
 ScTpPrintItem::ScTpPrintItem( USHORT nWhichP, const ScPrintOptions& rOpt ) :
     SfxPoolItem ( nWhichP ),

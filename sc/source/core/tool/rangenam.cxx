@@ -359,19 +359,6 @@ BOOL ScRangeData::operator== (const ScRangeData& rData) const       // fuer Undo
     return TRUE;
 }
 
-//UNUSED2009-05 BOOL ScRangeData::IsRangeAtCursor( const ScAddress& rPos, BOOL bStartOnly ) const
-//UNUSED2009-05 {
-//UNUSED2009-05     BOOL bRet = FALSE;
-//UNUSED2009-05     ScRange aRange;
-//UNUSED2009-05     if ( IsReference(aRange) )
-//UNUSED2009-05     {
-//UNUSED2009-05         if ( bStartOnly )
-//UNUSED2009-05             bRet = ( rPos == aRange.aStart );
-//UNUSED2009-05         else
-//UNUSED2009-05             bRet = ( aRange.In( rPos ) );
-//UNUSED2009-05     }
-//UNUSED2009-05     return bRet;
-//UNUSED2009-05 }
 
 BOOL ScRangeData::IsRangeAtBlock( const ScRange& rBlock ) const
 {
@@ -791,16 +778,6 @@ ScRangeData* ScRangeName::FindIndex( USHORT nIndex )
         return NULL;
 }
 
-//UNUSED2009-05 ScRangeData* ScRangeName::GetRangeAtCursor( const ScAddress& rPos, BOOL bStartOnly ) const
-//UNUSED2009-05 {
-//UNUSED2009-05     if ( pItems )
-//UNUSED2009-05     {
-//UNUSED2009-05         for ( USHORT i = 0; i < nCount; i++ )
-//UNUSED2009-05             if ( ((ScRangeData*)pItems[i])->IsRangeAtCursor( rPos, bStartOnly ) )
-//UNUSED2009-05                 return (ScRangeData*)pItems[i];
-//UNUSED2009-05     }
-//UNUSED2009-05     return NULL;
-//UNUSED2009-05 }
 
 ScRangeData* ScRangeName::GetRangeAtBlock( const ScRange& rBlock ) const
 {

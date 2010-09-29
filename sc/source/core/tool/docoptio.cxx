@@ -202,10 +202,6 @@ const LocaleDataWrapper& ScDocOptions::GetLocaleDataWrapper() const
 //      ScTpCalcItem - Daten fuer die CalcOptions-TabPage
 //========================================================================
 
-//UNUSED2008-05  ScTpCalcItem::ScTpCalcItem( USHORT nWhichP ) : SfxPoolItem( nWhichP )
-//UNUSED2008-05  {
-//UNUSED2008-05  }
-
 //------------------------------------------------------------------------
 
 ScTpCalcItem::ScTpCalcItem( USHORT nWhichP, const ScDocOptions& rOpt )

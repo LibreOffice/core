@@ -242,10 +242,6 @@ SvxGridItem* ScViewOptions::CreateGridItem( USHORT nId /* = SID_ATTR_GRID_OPTION
 //      ScTpViewItem - Daten fuer die ViewOptions-TabPage
 //========================================================================
 
-//UNUSED2008-05  ScTpViewItem::ScTpViewItem( USHORT nWhichP ) : SfxPoolItem( nWhichP )
-//UNUSED2008-05  {
-//UNUSED2008-05  }
-
 //------------------------------------------------------------------------
 
 ScTpViewItem::ScTpViewItem( USHORT nWhichP, const ScViewOptions& rOpt )

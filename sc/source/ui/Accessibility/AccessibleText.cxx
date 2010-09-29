@@ -1407,19 +1407,6 @@ SvxViewForwarder* ScAccessiblePreviewCellTextData::GetViewForwarder()
     return mpViewForwarder;
 }
 
-//UNUSED2008-05  IMPL_LINK(ScAccessiblePreviewCellTextData, NotifyHdl, EENotify*, aNotify)
-//UNUSED2008-05  {
-//UNUSED2008-05      if( aNotify )
-//UNUSED2008-05      {
-//UNUSED2008-05          ::std::auto_ptr< SfxHint > aHint = SvxEditSourceHelper::EENotification2Hint( aNotify);
-//UNUSED2008-05
-//UNUSED2008-05          if( aHint.get() )
-//UNUSED2008-05              GetBroadcaster().Broadcast( *aHint.get() );
-//UNUSED2008-05      }
-//UNUSED2008-05
-//UNUSED2008-05      return 0;
-//UNUSED2008-05  }
-
 ScDocShell* ScAccessiblePreviewCellTextData::GetDocShell(ScPreviewShell* pViewShell)
 {
     ScDocShell* pDocSh = NULL;
@@ -1534,19 +1521,6 @@ SvxViewForwarder* ScAccessiblePreviewHeaderCellTextData::GetViewForwarder()
         mpViewForwarder = new ScPreviewHeaderCellViewForwarder(mpViewShell, aCellPos, mbColHeader, mbRowHeader);
     return mpViewForwarder;
 }
-
-//UNUSED2008-05  IMPL_LINK(ScAccessiblePreviewHeaderCellTextData, NotifyHdl, EENotify*, aNotify)
-//UNUSED2008-05  {
-//UNUSED2008-05      if( aNotify )
-//UNUSED2008-05      {
-//UNUSED2008-05          ::std::auto_ptr< SfxHint > aHint = SvxEditSourceHelper::EENotification2Hint( aNotify);
-//UNUSED2008-05
-//UNUSED2008-05          if( aHint.get() )
-//UNUSED2008-05              GetBroadcaster().Broadcast( *aHint.get() );
-//UNUSED2008-05      }
-//UNUSED2008-05
-//UNUSED2008-05      return 0;
-//UNUSED2008-05  }
 
 ScDocShell* ScAccessiblePreviewHeaderCellTextData::GetDocShell(ScPreviewShell* pViewShell)
 {

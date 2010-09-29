@@ -366,8 +366,6 @@ public:
     void            InvertSimple( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
                                     BOOL bTestMerge = FALSE, BOOL bRepeat = FALSE );
 
-//UNUSED2008-05  void           DrawDragRect( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2 );
-
     void            CreateAnchorHandle(SdrHdlList& rHdl, const ScAddress& rAddress);
 
     void            HideCursor();

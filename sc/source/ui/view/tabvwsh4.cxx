@@ -646,24 +646,6 @@ void ScTabViewShell::DoReadUserData( const String& rData )
 
 //------------------------------------------------------------------
 
-//UNUSED2008-05  void ScTabViewShell::ExecuteShowNIY( SfxRequest& /* rReq */ )
-//UNUSED2008-05  {
-//UNUSED2008-05      ErrorMessage(STR_BOX_YNI);
-//UNUSED2008-05  }
-//UNUSED2008-05
-//UNUSED2008-05  //------------------------------------------------------------------
-//UNUSED2008-05
-//UNUSED2008-05  void ScTabViewShell::StateDisabled( SfxItemSet& rSet )
-//UNUSED2008-05  {
-//UNUSED2008-05      SfxWhichIter aIter( rSet );
-//UNUSED2008-05      USHORT       nWhich = aIter.FirstWhich();
-//UNUSED2008-05
-//UNUSED2008-05      while ( nWhich )
-//UNUSED2008-05      {
-//UNUSED2008-05          rSet.DisableItem( nWhich );
-//UNUSED2008-05          nWhich = aIter.NextWhich();
-//UNUSED2008-05      }
-//UNUSED2008-05  }
 
 void ScTabViewShell::SetDrawShellOrSub()
 {
@@ -1102,17 +1084,6 @@ SfxShell* ScTabViewShell::GetMySubShell() const
     return NULL;        // keine von meinen dabei
 }
 
-//UNUSED2008-05  void ScTabViewShell::SetMySubShell( SfxShell* pShell )
-//UNUSED2008-05  {
-//UNUSED2008-05      SfxShell* pOld = GetMySubShell();
-//UNUSED2008-05      if ( pOld != pShell )
-//UNUSED2008-05      {
-//UNUSED2008-05          if (pOld)
-//UNUSED2008-05              RemoveSubShell(pOld);   // alte SubShell entfernen
-//UNUSED2008-05          if (pShell)
-//UNUSED2008-05              AddSubShell(*pShell);   // neue setzen
-//UNUSED2008-05      }
-//UNUSED2008-05  }
 
 BOOL ScTabViewShell::IsDrawTextShell() const
 {
@@ -1883,29 +1854,6 @@ void ScTabViewShell::Construct( BYTE nForceDesignMode )
 
 //------------------------------------------------------------------
 
-//UNUSED2008-05  ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
-//UNUSED2008-05                                  const ScTabViewShell& rWin ) :
-//UNUSED2008-05  SfxViewShell( pViewFrame, SFX_VIEW_MAXIMIZE_FIRST | SFX_VIEW_CAN_PRINT | SFX_VIEW_HAS_PRINTOPTIONS ),
-//UNUSED2008-05  ScDBFunc( &pViewFrame->GetWindow(), rWin, this ),
-//UNUSED2008-05  __INIT_ScTabViewShell
-//UNUSED2008-05  {
-//UNUSED2008-05      RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScTabViewShell::ScTabViewShell" );
-//UNUSED2008-05
-//UNUSED2008-05      Construct();
-//UNUSED2008-05
-//UNUSED2008-05      UpdatePageBreakData();
-//UNUSED2008-05
-//UNUSED2008-05      /*uno::Reference<frame::XFrame> xFrame = pViewFrame->GetFrame().GetFrameInterface();
-//UNUSED2008-05      if (xFrame.is())
-//UNUSED2008-05          xFrame->setComponent( uno::Reference<awt::XWindow>(), new ScTabViewObj( this ) );*/
-//UNUSED2008-05      // make Controller known to SFX
-//UNUSED2008-05      new ScTabViewObj( this );
-//UNUSED2008-05
-//UNUSED2008-05      SetCurSubShell(OST_Cell);
-//UNUSED2008-05      SvBorder aBorder;
-//UNUSED2008-05      GetBorderSize( aBorder, Size() );
-//UNUSED2008-05      SetBorderPixel( aBorder );
-//UNUSED2008-05  }
 
 //------------------------------------------------------------------
 
@@ -2048,11 +1996,6 @@ void ScTabViewShell::SetChartArea( const ScRangeListRef& rSource, const Rectangl
     nChartDestTab   = GetViewData()->GetTabNo();
 }
 
-//UNUSED2008-05  void ScTabViewShell::ResetChartArea()
-//UNUSED2008-05  {
-//UNUSED2008-05      bChartAreaValid = FALSE;
-//UNUSED2008-05  }
-
 BOOL ScTabViewShell::GetChartArea( ScRangeListRef& rSource, Rectangle& rDest, SCTAB& rTab ) const
 {
     rSource = aChartSource;
@@ -2060,16 +2003,6 @@ BOOL ScTabViewShell::GetChartArea( ScRangeListRef& rSource, Rectangle& rDest, SC
     rTab    = nChartDestTab;
     return bChartAreaValid;
 }
-
-//UNUSED2008-05  BOOL ScTabViewShell::IsChartDlgEdit() const
-//UNUSED2008-05  {
-//UNUSED2008-05      return bChartDlgIsEdit;
-//UNUSED2008-05  }
-//UNUSED2008-05
-//UNUSED2008-05  const String& ScTabViewShell::GetEditChartName() const
-//UNUSED2008-05  {
-//UNUSED2008-05      return aEditChartName;
-//UNUSED2008-05  }
 
 ScNavigatorSettings* ScTabViewShell::GetNavigatorSettings()
 {

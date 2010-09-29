@@ -52,7 +52,6 @@ private:
 
 public:
                     ScDBFunc( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell );
-//UNUSED2008-05     ScDBFunc( Window* pParent, const ScDBFunc& rDBFunc, ScTabViewShell* pViewShell );
     virtual         ~ScDBFunc();
 
                     //  nur UISort wiederholt bei Bedarf die Teilergebnisse

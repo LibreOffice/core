@@ -2037,10 +2037,6 @@ void ScAcceptChgDlg::InitFilter()
     }
 }
 
-//UNUSED2008-05  void ScAcceptChgDlg::SetMyStaticData()
-//UNUSED2008-05  {
-//UNUSED2008-05  }
-
 IMPL_LINK( ScAcceptChgDlg, FilterModified, SvxTPFilter*, EMPTYARG )
 {
     return 0;

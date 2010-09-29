@@ -3354,12 +3354,6 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScTableRowsObj )
 
 //------------------------------------------------------------------------
 
-//UNUSED2008-05  ScSpreadsheetSettingsObj::ScSpreadsheetSettingsObj(ScDocShell* pDocSh) :
-//UNUSED2008-05  pDocShell( pDocSh )
-//UNUSED2008-05  {
-//UNUSED2008-05      pDocShell->GetDocument()->AddUnoObject(*this);
-//UNUSED2008-05  }
-
 ScSpreadsheetSettingsObj::~ScSpreadsheetSettingsObj()
 {
     if (pDocShell)

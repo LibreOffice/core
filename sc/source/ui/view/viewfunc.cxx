@@ -98,12 +98,6 @@ ScViewFunc::ScViewFunc( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pVi
 {
 }
 
-//UNUSED2008-05  ScViewFunc::ScViewFunc( Window* pParent, const ScViewFunc& rViewFunc, ScTabViewShell* pViewShell ) :
-//UNUSED2008-05      ScTabView( pParent, rViewFunc, pViewShell ),
-//UNUSED2008-05      bFormatValid( FALSE )
-//UNUSED2008-05  {
-//UNUSED2008-05  }
-
 ScViewFunc::~ScViewFunc()
 {
 }

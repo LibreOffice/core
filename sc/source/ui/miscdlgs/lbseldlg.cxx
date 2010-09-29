@@ -84,13 +84,6 @@ String ScSelEntryDlg::GetSelectEntry() const
 
 //------------------------------------------------------------------------
 
-//UNUSED2008-05  USHORT ScSelEntryDlg::GetSelectEntryPos() const
-//UNUSED2008-05  {
-//UNUSED2008-05      return aLb.GetSelectEntryPos();
-//UNUSED2008-05  }
-
-//------------------------------------------------------------------------
-
 IMPL_LINK_INLINE_START( ScSelEntryDlg, DblClkHdl, void *, EMPTYARG )
 {
     EndDialog( RET_OK );

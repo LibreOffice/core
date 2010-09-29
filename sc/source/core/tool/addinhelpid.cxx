@@ -159,11 +159,6 @@ const ScUnoAddInHelpId pDateFuncHelpIds[] =
 
 // ============================================================================
 
-//UNUSED2008-05  ScUnoAddInHelpIdGenerator::ScUnoAddInHelpIdGenerator() :
-//UNUSED2008-05  pCurrHelpIds( NULL ),
-//UNUSED2008-05  nArrayCount( 0 )
-//UNUSED2008-05  {
-//UNUSED2008-05  }
 
 ScUnoAddInHelpIdGenerator::ScUnoAddInHelpIdGenerator( const ::rtl::OUString& rServiceName )
 {

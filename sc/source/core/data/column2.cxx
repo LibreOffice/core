@@ -93,96 +93,6 @@ inline BOOL IsAmbiguousScript( BYTE nScript )
 
 // -----------------------------------------------------------------------------------------
 
-//UNUSED2008-05  SCROW ScColumn::NoteCount( SCROW nMaxRow ) const
-//UNUSED2008-05  {
-//UNUSED2008-05      SCROW nNoteCount = 0;
-//UNUSED2008-05      SCSIZE i;
-//UNUSED2008-05
-//UNUSED2008-05      for (i=0; i<nCount; i++)
-//UNUSED2008-05          if ( pItems[i].pCell->GetNotePtr() && pItems[i].nRow<=nMaxRow )
-//UNUSED2008-05              ++nNoteCount;
-//UNUSED2008-05
-//UNUSED2008-05      return nNoteCount;
-//UNUSED2008-05  }
-
-// -----------------------------------------------------------------------------------------
-
-//UNUSED2008-05  void ScColumn::CorrectSymbolCells( CharSet eStreamCharSet )
-//UNUSED2008-05  {
-//UNUSED2008-05      //  #99139# find and correct string cells that are formatted with a symbol font,
-//UNUSED2008-05      //  but are not in the LoadedSymbolStringCellsList
-//UNUSED2008-05      //  (because CELLTYPE_SYMBOLS wasn't written in the file)
-//UNUSED2008-05
-//UNUSED2008-05      ScFontToSubsFontConverter_AutoPtr xFontConverter;
-//UNUSED2008-05      const ULONG nFontConverterFlags = FONTTOSUBSFONT_EXPORT | FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS;
-//UNUSED2008-05
-//UNUSED2008-05      BOOL bListInitialized = FALSE;
-//UNUSED2008-05      ScSymbolStringCellEntry* pCurrentEntry = NULL;
-//UNUSED2008-05
-//UNUSED2008-05      ScAttrIterator aAttrIter( pAttrArray, 0, MAXROW );
-//UNUSED2008-05      SCROW nStt, nEnd;
-//UNUSED2008-05      const ScPatternAttr* pAttr = aAttrIter.Next( nStt, nEnd );
-//UNUSED2008-05      while ( pAttr )
-//UNUSED2008-05      {
-//UNUSED2008-05          if ( (xFontConverter = pAttr->GetSubsFontConverter( nFontConverterFlags )) ||
-//UNUSED2008-05                  pAttr->IsSymbolFont() )
-//UNUSED2008-05          {
-//UNUSED2008-05              ScColumnIterator aCellIter( this, nStt, nEnd );
-//UNUSED2008-05              SCROW nRow;
-//UNUSED2008-05              ScBaseCell* pCell;
-//UNUSED2008-05              while ( aCellIter.Next( nRow, pCell ) )
-//UNUSED2008-05              {
-//UNUSED2008-05                  if ( pCell->GetCellType() == CELLTYPE_STRING )
-//UNUSED2008-05                  {
-//UNUSED2008-05                      List& rList = pDocument->GetLoadedSymbolStringCellsList();
-//UNUSED2008-05                      if (!bListInitialized)
-//UNUSED2008-05                      {
-//UNUSED2008-05                          pCurrentEntry = (ScSymbolStringCellEntry*)rList.First();
-//UNUSED2008-05                          bListInitialized = TRUE;
-//UNUSED2008-05                      }
-//UNUSED2008-05
-//UNUSED2008-05                      while ( pCurrentEntry && pCurrentEntry->nRow < nRow )
-//UNUSED2008-05                          pCurrentEntry = (ScSymbolStringCellEntry*)rList.Next();
-//UNUSED2008-05
-//UNUSED2008-05                      if ( pCurrentEntry && pCurrentEntry->nRow == nRow )
-//UNUSED2008-05                      {
-//UNUSED2008-05                          //  found
-//UNUSED2008-05                      }
-//UNUSED2008-05                      else
-//UNUSED2008-05                      {
-//UNUSED2008-05                          //  not in list -> convert and put into list
-//UNUSED2008-05
-//UNUSED2008-05                          ScStringCell* pStrCell = (ScStringCell*)pCell;
-//UNUSED2008-05                          String aOldStr;
-//UNUSED2008-05                          pStrCell->GetString( aOldStr );
-//UNUSED2008-05
-//UNUSED2008-05                          //  convert back to stream character set (get original data)
-//UNUSED2008-05                          ByteString aByteStr( aOldStr, eStreamCharSet );
-//UNUSED2008-05
-//UNUSED2008-05                          //  convert using symbol encoding, as for CELLTYPE_SYMBOLS cells
-//UNUSED2008-05                          String aNewStr( aByteStr, RTL_TEXTENCODING_SYMBOL );
-//UNUSED2008-05                          pStrCell->SetString( aNewStr );
-//UNUSED2008-05
-//UNUSED2008-05                          ScSymbolStringCellEntry * pEntry = new ScSymbolStringCellEntry;
-//UNUSED2008-05                          pEntry->pCell = pStrCell;
-//UNUSED2008-05                          pEntry->nRow = nRow;
-//UNUSED2008-05
-//UNUSED2008-05                          if ( pCurrentEntry )
-//UNUSED2008-05                              rList.Insert( pEntry );     // before current entry - pCurrentEntry stays valid
-//UNUSED2008-05                          else
-//UNUSED2008-05                              rList.Insert( pEntry, LIST_APPEND );    // append if already behind last entry
-//UNUSED2008-05                      }
-//UNUSED2008-05                  }
-//UNUSED2008-05              }
-//UNUSED2008-05          }
-//UNUSED2008-05
-//UNUSED2008-05          pAttr = aAttrIter.Next( nStt, nEnd );
-//UNUSED2008-05      }
-//UNUSED2008-05  }
-
-// -----------------------------------------------------------------------------------------
-
-                                    //  GetNeededSize: optimale Hoehe / Breite in Pixeln
 
 long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
                               double nPPTX, double nPPTY,
@@ -1193,23 +1103,6 @@ BOOL ScMarkedDataIter::Next( SCSIZE& rIndex )
     return TRUE;
 }
 
-//UNUSED2009-05 USHORT ScColumn::GetErrorData( SCROW nRow ) const
-//UNUSED2009-05 {
-//UNUSED2009-05     SCSIZE  nIndex;
-//UNUSED2009-05     if (Search(nRow, nIndex))
-//UNUSED2009-05     {
-//UNUSED2009-05         ScBaseCell* pCell = pItems[nIndex].pCell;
-//UNUSED2009-05         switch (pCell->GetCellType())
-//UNUSED2009-05         {
-//UNUSED2009-05             case CELLTYPE_FORMULA :
-//UNUSED2009-05                 return ((ScFormulaCell*)pCell)->GetErrCode();
-//UNUSED2009-05 //            break;
-//UNUSED2009-05             default:
-//UNUSED2009-05             return 0;
-//UNUSED2009-05         }
-//UNUSED2009-05     }
-//UNUSED2009-05     return 0;
-//UNUSED2009-05 }
 
 //------------
 

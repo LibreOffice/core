@@ -458,12 +458,6 @@ void ScViewFunc::DoThesaurus( BOOL bRecord )
     pDocSh->PostPaintGridAll();
 }
 
-//UNUSED2008-05  // Spelling Checker - Undo ok
-//UNUSED2008-05  void ScViewFunc::DoSpellingChecker( BOOL bRecord )
-//UNUSED2008-05  {
-//UNUSED2008-05      DoSheetConversion( ScConversionParam( SC_CONVERSION_SPELLCHECK ), bRecord );
-//UNUSED2008-05  }
-
 void ScViewFunc::DoHangulHanjaConversion( BOOL bRecord )
 {
     ScConversionParam aConvParam( SC_CONVERSION_HANGULHANJA, LANGUAGE_KOREAN, 0, true );
@@ -607,18 +601,6 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, BOOL bR
     rViewData.GetViewShell()->UpdateInputHandler();
     pDoc->DisableIdle(bOldDis);
 }
-
-
-//UNUSED2008-05  IMPL_LINK_INLINE_START( ScViewFunc, SpellError, void *, nLang )
-//UNUSED2008-05  {
-//UNUSED2008-05      SvtLanguageTable aLangTab;
-//UNUSED2008-05      String aErr = aLangTab.GetString((LanguageType) (ULONG) nLang);
-//UNUSED2008-05      ErrorHandler::HandleError(*new StringErrorInfo(
-//UNUSED2008-05                                  ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS, aErr) );
-//UNUSED2008-05
-//UNUSED2008-05      return 0;
-//UNUSED2008-05  }
-//UNUSED2008-05  IMPL_LINK_INLINE_END( ScViewFunc, SpellError, void *, nLang )
 
 // Pasten von FORMAT_FILE-Items
 //  wird nicht direkt aus Drop aufgerufen, sondern asynchron -> Dialoge sind erlaubt

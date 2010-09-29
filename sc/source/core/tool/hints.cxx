@@ -79,10 +79,6 @@ ScUpdateRefHint::~ScUpdateRefHint()
 //      ScPointerChangedHint - Pointer ist ungueltig geworden
 // -----------------------------------------------------------------------
 
-//UNUSED2008-05  ScPointerChangedHint::ScPointerChangedHint( USHORT nF ) :
-//UNUSED2008-05      nFlags( nF )
-//UNUSED2008-05  {
-//UNUSED2008-05  }
 
 ScPointerChangedHint::~ScPointerChangedHint()
 {

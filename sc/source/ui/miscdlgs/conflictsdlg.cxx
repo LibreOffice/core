@@ -76,20 +76,6 @@ bool ScConflictsListEntry::HasOwnAction( ULONG nOwnAction ) const
 // class ScConflictsListHelper
 //=============================================================================
 
-//UNUSED2008-05  bool ScConflictsListHelper::HasSharedAction( ScConflictsList& rConflictsList, ULONG nSharedAction )
-//UNUSED2008-05  {
-//UNUSED2008-05      ScConflictsList::const_iterator aEnd = rConflictsList.end();
-//UNUSED2008-05      for ( ScConflictsList::const_iterator aItr = rConflictsList.begin(); aItr != aEnd; ++aItr )
-//UNUSED2008-05      {
-//UNUSED2008-05          if ( aItr->HasSharedAction( nSharedAction ) )
-//UNUSED2008-05          {
-//UNUSED2008-05              return true;
-//UNUSED2008-05          }
-//UNUSED2008-05      }
-//UNUSED2008-05
-//UNUSED2008-05      return false;
-//UNUSED2008-05  }
-
 bool ScConflictsListHelper::HasOwnAction( ScConflictsList& rConflictsList, ULONG nOwnAction )
 {
     ScConflictsList::const_iterator aEnd = rConflictsList.end();
@@ -430,11 +416,6 @@ void ScConflictsResolver::HandleAction( ScChangeAction* pAction, bool bIsSharedA
 // class ScConflictsListBox
 //=============================================================================
 
-//UNUSED2008-05  ScConflictsListBox::ScConflictsListBox( Window* pParent, WinBits nBits )
-//UNUSED2008-05      :SvxRedlinTable( pParent, nBits )
-//UNUSED2008-05  {
-//UNUSED2008-05  }
-
 ScConflictsListBox::ScConflictsListBox( Window* pParent, const ResId& rResId )
     :SvxRedlinTable( pParent, rResId )
 {
@@ -443,23 +424,6 @@ ScConflictsListBox::ScConflictsListBox( Window* pParent, const ResId& rResId )
 ScConflictsListBox::~ScConflictsListBox()
 {
 }
-
-//UNUSED2008-05  ULONG ScConflictsListBox::GetRootEntryPos( const SvLBoxEntry* pRootEntry ) const
-//UNUSED2008-05  {
-//UNUSED2008-05      ULONG nPos = 0;
-//UNUSED2008-05      SvLBoxEntry* pEntry = GetRootLevelParent( First() );
-//UNUSED2008-05      while ( pEntry )
-//UNUSED2008-05      {
-//UNUSED2008-05          if ( pEntry == pRootEntry )
-//UNUSED2008-05          {
-//UNUSED2008-05              return nPos;
-//UNUSED2008-05          }
-//UNUSED2008-05          pEntry = NextSibling( pEntry );
-//UNUSED2008-05          ++nPos;
-//UNUSED2008-05      }
-//UNUSED2008-05      return 0xffffffff;
-//UNUSED2008-05  }
-
 
 //=============================================================================
 // class ScConflictsDlg

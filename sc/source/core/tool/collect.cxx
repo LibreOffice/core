@@ -334,24 +334,6 @@ ScDataObject*   ScStrCollection::Clone() const
 // TypedScStrCollection
 //------------------------------------------------------------------------
 
-//UNUSED2008-05  TypedStrData::TypedStrData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
-//UNUSED2008-05                                  BOOL bAllStrings )
-//UNUSED2008-05  {
-//UNUSED2008-05      if ( pDoc->HasValueData( nCol, nRow, nTab ) )
-//UNUSED2008-05      {
-//UNUSED2008-05          pDoc->GetValue( nCol, nRow, nTab, nValue );
-//UNUSED2008-05          if (bAllStrings)
-//UNUSED2008-05              pDoc->GetString( nCol, nRow, nTab, aStrValue );
-//UNUSED2008-05          nStrType = 0;
-//UNUSED2008-05      }
-//UNUSED2008-05      else
-//UNUSED2008-05      {
-//UNUSED2008-05          pDoc->GetString( nCol, nRow, nTab, aStrValue );
-//UNUSED2008-05          nValue = 0.0;
-//UNUSED2008-05          nStrType = 1;       //! Typ uebergeben ?
-//UNUSED2008-05      }
-//UNUSED2008-05  }
-
 
 ScDataObject*   TypedStrData::Clone() const
 {

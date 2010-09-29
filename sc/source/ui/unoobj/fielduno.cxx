@@ -432,14 +432,6 @@ void SAL_CALL ScCellFieldsObj::removeRefreshListener( const uno::Reference<util:
 //  Default-ctor wird fuer SMART_REFLECTION_IMPLEMENTATION gebraucht
 
 
-//UNUSED2008-05  ScCellFieldObj::ScCellFieldObj() :
-//UNUSED2008-05      OComponentHelper( getMutex() ),
-//UNUSED2008-05      aPropSet( lcl_GetURLPropertyMap() ),
-//UNUSED2008-05      pDocShell( NULL )
-//UNUSED2008-05  {
-//UNUSED2008-05      pEditSource = NULL;
-//UNUSED2008-05  }
-
 ScCellFieldObj::ScCellFieldObj(ScDocShell* pDocSh, const ScAddress& rPos,
                                             const ESelection& rSel) :
     OComponentHelper( getMutex() ),
@@ -1111,19 +1103,6 @@ sal_Int16 lcl_SvxToUnoFileFormat( SvxFileFormat nSvxValue )
             return text::FilenameDisplayFormat::NAME;
     }
 }
-
-
-//  Default-ctor wird fuer SMART_REFLECTION_IMPLEMENTATION gebraucht
-//UNUSED2008-05  ScHeaderFieldObj::ScHeaderFieldObj() :
-//UNUSED2008-05      OComponentHelper( getMutex() ),
-//UNUSED2008-05      aPropSet( lcl_GetHeaderFieldPropertyMap() ),
-//UNUSED2008-05      pContentObj( NULL ),
-//UNUSED2008-05      nPart( 0 ),
-//UNUSED2008-05      nType( 0 ),
-//UNUSED2008-05      nFileFormat( SVXFILEFORMAT_NAME_EXT )
-//UNUSED2008-05  {
-//UNUSED2008-05      pEditSource = NULL;
-//UNUSED2008-05  }
 
 ScHeaderFieldObj::ScHeaderFieldObj(ScHeaderFooterContentObj* pContent, USHORT nP,
                                             USHORT nT, const ESelection& rSel) :

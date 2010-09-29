@@ -57,22 +57,6 @@ TYPEINIT1(ScIndexHint,          SfxHint);
 //      ScInputStatusItem - Status-Update fuer Eingabezeile
 // -----------------------------------------------------------------------
 
-//UNUSED2008-05  ScInputStatusItem::ScInputStatusItem( USHORT nWhichP,
-//UNUSED2008-05                                        SCTAB nTab,
-//UNUSED2008-05                                        SCCOL nCol, SCROW nRow,
-//UNUSED2008-05                                        SCCOL nStartCol, SCROW nStartRow,
-//UNUSED2008-05                                        SCCOL nEndCol,   SCROW nEndRow,
-//UNUSED2008-05                                        const String& rString, const EditTextObject* pData )
-//UNUSED2008-05
-//UNUSED2008-05      :   SfxPoolItem ( nWhichP ),
-//UNUSED2008-05          aCursorPos  ( nCol, nRow, nTab ),
-//UNUSED2008-05          aStartPos   ( nStartCol, nStartRow, nTab ),
-//UNUSED2008-05          aEndPos     ( nEndCol,   nEndRow,   nTab ),
-//UNUSED2008-05          aString     ( rString ),
-//UNUSED2008-05          pEditData   ( pData ? pData->Clone() : NULL )
-//UNUSED2008-05  {
-//UNUSED2008-05  }
-
 ScInputStatusItem::ScInputStatusItem( USHORT nWhichP,
                                       const ScAddress& rCurPos,
                                       const ScAddress& rStartPos,

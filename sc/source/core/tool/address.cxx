@@ -56,13 +56,6 @@ ScAddress::Details::Details ( const ScDocument* pDoc,
 {
 }
 
-//UNUSED2009-05 void ScAddress::Details::SetPos ( const ScDocument* pDoc,
-//UNUSED2009-05                                   const ScAddress & rAddr )
-//UNUSED2009-05 {
-//UNUSED2009-05     nRow  = rAddr.Row();
-//UNUSED2009-05     nCol  = rAddr.Col();
-//UNUSED2009-05     eConv = pDoc->GetAddressConvention();
-//UNUSED2009-05 }
 
 ////////////////////////////////////////////////////////////////////////////
 

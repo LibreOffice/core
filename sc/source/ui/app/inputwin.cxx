@@ -610,21 +610,6 @@ String __EXPORT ScInputWindow::GetText() const
     return ToolBox::GetText();
 }
 
-
-//UNUSED2008-05  EditView* ScInputWindow::ActivateEdit( const String&     rText,
-//UNUSED2008-05                                         const ESelection& rSel )
-//UNUSED2008-05  {
-//UNUSED2008-05      if ( !aTextWindow.IsInputActive() )
-//UNUSED2008-05      {
-//UNUSED2008-05          aTextWindow.StartEditEngine();
-//UNUSED2008-05          aTextWindow.GrabFocus();
-//UNUSED2008-05          aTextWindow.SetTextString( rText );
-//UNUSED2008-05          aTextWindow.GetEditView()->SetSelection( rSel );
-//UNUSED2008-05      }
-//UNUSED2008-05
-//UNUSED2008-05      return aTextWindow.GetEditView();
-//UNUSED2008-05  }
-
 BOOL ScInputWindow::IsInputActive()
 {
     return aTextWindow.IsInputActive();

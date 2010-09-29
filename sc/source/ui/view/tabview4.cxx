@@ -333,14 +333,6 @@ void ScTabView::InitRefMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ, ScRefType eT
     }
 }
 
-//UNUSED2008-05  void ScTabView::EndSelection()
-//UNUSED2008-05  {
-//UNUSED2008-05      ScModule* pScMod = SC_MOD();
-//UNUSED2008-05      BOOL bRefMode = pScMod->IsFormulaMode();
-//UNUSED2008-05      if ( bRefMode )
-//UNUSED2008-05          pScMod->EndReference();
-//UNUSED2008-05  }
-
 // static
 void ScTabView::SetScrollBar( ScrollBar& rScroll, long nRangeMax, long nVisible, long nPos, BOOL bLayoutRTL )
 {

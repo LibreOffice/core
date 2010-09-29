@@ -553,12 +553,6 @@ ScNoteEditEngine& ScDocument::GetNoteEngine()
     return *pNoteEngine;
 }
 
-//UNUSED2009-05 SfxItemPool& ScDocument::GetNoteItemPool()
-//UNUSED2009-05 {
-//UNUSED2009-05     if ( !pNoteItemPool )
-//UNUSED2009-05         pNoteItemPool = new SfxItemPool(SdrObject::GetGlobalDrawObjectItemPool());
-//UNUSED2009-05     return *pNoteItemPool;
-//UNUSED2009-05 }
 
 void ScDocument::ResetClip( ScDocument* pSourceDoc, const ScMarkData* pMarks )
 {
@@ -628,22 +622,6 @@ void ScDocument::PutCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
     }
 }
 
-//UNUSED2009-05 void ScDocument::PutCell( const ScAddress& rPos, ScBaseCell* pCell,
-//UNUSED2009-05                             ULONG nFormatIndex, BOOL bForceTab )
-//UNUSED2009-05 {
-//UNUSED2009-05     SCTAB nTab = rPos.Tab();
-//UNUSED2009-05     if ( bForceTab && !pTab[nTab] )
-//UNUSED2009-05     {
-//UNUSED2009-05         BOOL bExtras = !bIsUndo;        // Spaltenbreiten, Zeilenhoehen, Flags
-//UNUSED2009-05
-//UNUSED2009-05         pTab[nTab] = new ScTable(this, nTab,
-//UNUSED2009-05                             String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("temp")),
-//UNUSED2009-05                             bExtras, bExtras);
-//UNUSED2009-05     }
-//UNUSED2009-05
-//UNUSED2009-05     if (pTab[nTab])
-//UNUSED2009-05         pTab[nTab]->PutCell( rPos, nFormatIndex, pCell );
-//UNUSED2009-05 }
 
 BOOL ScDocument::GetPrintArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow,
                                 BOOL bNotes ) const

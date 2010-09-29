@@ -169,7 +169,6 @@ private:
 
     SbxObject*              pScSbxObject;
 
-//UNUSED2008-05  BOOL                    bChartDlgIsEdit;            // Datenbereich aendern
     BOOL                    bChartAreaValid;            // wenn Chart aufgezogen wird
     String                  aEditChartName;
     ScRangeListRef          aChartSource;
@@ -185,7 +184,6 @@ private:
 private:
     void    Construct( BYTE nForceDesignMode = SC_FORCEMODE_NONE );
 
-//UNUSED2008-05  void          SetMySubShell( SfxShell* pShell );
     SfxShell*       GetMySubShell() const;
 
     void            DoReadUserData( const String& rData );
@@ -241,9 +239,6 @@ public:
 
                     // -> Clone-Methode fuer Factory
 
-//UNUSED2008-05  ScTabViewShell( SfxViewFrame*           pViewFrame,
-//UNUSED2008-05                  const ScTabViewShell&   rWin );
-
                     // aus einer allgemeinen Shell konstruieren und
                     // soviel wie moeglich uebernehmen (SliderPos etc.):
 
@@ -267,9 +262,6 @@ public:
 
     SvxBorderLine*  GetDefaultFrameLine() const { return pCurFrameLine; }
     void            SetDefaultFrameLine(const SvxBorderLine* pLine );
-
-//UNUSED2008-05  void            ExecuteShowNIY( SfxRequest& rReq );
-//UNUSED2008-05  void           StateDisabled( SfxItemSet& rSet );
 
     SC_DLLPUBLIC void           Execute( SfxRequest& rReq );
     SC_DLLPUBLIC void           GetState( SfxItemSet& rSet );
@@ -351,15 +343,10 @@ public:
 
     void            FillFieldData( ScHeaderFieldData& rData );
 
-//UNUSED2008-05  void            ResetChartArea();
     void            SetChartArea( const ScRangeListRef& rSource, const Rectangle& rDest );
     BOOL            GetChartArea( ScRangeListRef& rSource, Rectangle& rDest, SCTAB& rTab ) const;
 
-//UNUSED2008-05  BOOL            IsChartDlgEdit() const;
-//UNUSED2008-05  void            SetChartDlgEdit(BOOL bFlag){bChartDlgIsEdit=bFlag;}
-
     void            SetEditChartName(const String& aStr){aEditChartName=aStr;}
-//UNUSED2008-05  const String&   GetEditChartName() const;
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 

@@ -1087,13 +1087,6 @@ void SAL_CALL ScStyleFamilyObj::removeVetoableChangeListener( const ::rtl::OUStr
 
 //  Default-ctor wird fuer die Reflection gebraucht
 
-//UNUSED2008-05  ScStyleObj::ScStyleObj() :
-//UNUSED2008-05  aPropSet( lcl_GetCellStyleMap() ),
-//UNUSED2008-05  pDocShell( NULL ),
-//UNUSED2008-05  eFamily( SFX_STYLE_FAMILY_PARA )
-//UNUSED2008-05  {
-//UNUSED2008-05  }
-
 ScStyleObj::ScStyleObj(ScDocShell* pDocSh, SfxStyleFamily eFam, const String& rName) :
     pPropSet( (eFam == SFX_STYLE_FAMILY_PARA) ? lcl_GetCellStyleSet() : lcl_GetPageStyleSet() ),
     pDocShell( pDocSh ),

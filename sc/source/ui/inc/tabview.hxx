@@ -224,7 +224,6 @@ protected:
 
 public:
                     ScTabView( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell );
-//UNUSED2009-05     ScTabView( Window* pParent, const ScTabView& rScTabView, ScTabViewShell* pViewShell );
                     ~ScTabView();
 
     void            MakeDrawLayer();
@@ -268,7 +267,6 @@ public:
     void            DrawDeselectAll();
     void            DrawMarkListHasChanged();
     void            UpdateAnchorHandles();
-//UNUSED2008-05  String          GetSelectedChartName() const;
 
     ScPageBreakData* GetPageBreakData()     { return pPageBreakData; }
     ScHighlightRanges* GetHighlightRanges() { return pHighlightRanges; }
@@ -308,7 +306,6 @@ public:
     void            UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ );
     void            StopRefMode();
 
-//UNUSED2008-05  void            EndSelection();
     void            StopMarking();
     void            FakeButtonUp( ScSplitPos eWhich );
 
@@ -318,12 +315,8 @@ public:
     ScSplitPos      FindWindow( Window* pWindow ) const;
 
     void            SetActivePointer( const Pointer& rPointer );
-//UNUSED2008-05  void            SetActivePointer( const ResId& rId );
 
     void            ActiveGrabFocus();
-//UNUSED2008-05  void            ActiveCaptureMouse();
-//UNUSED2008-05  void           ActiveReleaseMouse();
-//UNUSED2008-05  Point           ActivePixelToLogic( const Point& rDevicePoint );
 
     void            ClickCursor( SCCOL nPosX, SCROW nPosY, BOOL bControl );
 
@@ -411,12 +404,6 @@ public:
 
     void            InvertBlockMark(SCCOL nBlockStartX, SCROW nBlockStartY,
                                 SCCOL nBlockEndX, SCROW nBlockEndY);
-
-//UNUSED2008-05  void            DrawDragRect( SCCOL nStartX, SCROW nStartY, SCCOL nEndX, SCROW nEndY,
-//UNUSED2008-05                                ScSplitPos ePos );
-//UNUSED2008-05  void           PaintCell( SCCOL nCol, SCROW nRow, SCTAB nTab );
-//UNUSED2008-05  void           PaintLeftRow( SCROW nRow );
-//UNUSED2008-05  void           PaintTopCol( SCCOL nCol );
 
     void            PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                                         ScUpdateMode eMode = SC_UPDATE_ALL );

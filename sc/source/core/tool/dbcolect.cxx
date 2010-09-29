@@ -333,12 +333,6 @@ ScDBData::~ScDBData()
     }
 }
 
-//UNUSED2008-05  BOOL ScDBData::IsBeyond(SCROW nMaxRow) const
-//UNUSED2008-05  {
-//UNUSED2008-05      return ( nStartRow > nMaxRow ||
-//UNUSED2008-05               nEndRow > nMaxRow ||
-//UNUSED2008-05               nQueryDestRow > nMaxRow );
-//UNUSED2008-05  }
 
 String ScDBData::GetSourceString() const
 {

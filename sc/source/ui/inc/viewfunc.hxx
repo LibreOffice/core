@@ -83,7 +83,6 @@ private:
 
 public:
                     ScViewFunc( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell );
-//UNUSED2008-05     ScViewFunc( Window* pParent, const ScViewFunc& rViewFunc, ScTabViewShell* pViewShell );
                     ~ScViewFunc();
 
     const ScPatternAttr*    GetSelectionPattern ();
@@ -307,10 +306,8 @@ public:
     void            ReplaceNote( const ScAddress& rPos, const String& rNoteText, const String* pAuthor, const String* pDate );
     void            DoRefConversion( BOOL bRecord = TRUE );
 
-//UNUSED2008-05  void            DoSpellingChecker( BOOL bRecord = TRUE );
     void            DoHangulHanjaConversion( BOOL bRecord = TRUE );
     void            DoThesaurus( BOOL bRecord = TRUE );
-//UNUSED2008-05  DECL_LINK( SpellError, void * );
 
     /** Generic implementation of sheet conversion functions. */
     void            DoSheetConversion( const ScConversionParam& rParam, BOOL bRecord = TRUE );
@@ -344,8 +341,6 @@ protected:
                                      const SvxBorderLine* pDestLine,
                                      const SvxBorderLine* pSrcLine,
                                      BOOL                 bColor );
-
-//UNUSED2008-05  void            PaintWidthHeight( BOOL bColumns, SCCOLROW nStart, SCCOLROW nEnd );
 
 
 private:

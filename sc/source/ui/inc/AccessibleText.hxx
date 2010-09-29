@@ -203,7 +203,6 @@ public:
     virtual SvxViewForwarder* GetViewForwarder();
     virtual SvxEditViewForwarder* GetEditViewForwarder( sal_Bool /* bCreate */ ) { return NULL; }
 
-//UNUSED2008-05  DECL_LINK( NotifyHdl, EENotify* );
 private:
     ScPreviewViewForwarder* mpViewForwarder;
     ScPreviewShell* mpViewShell;
@@ -233,7 +232,6 @@ public:
     virtual SvxViewForwarder* GetViewForwarder();
     virtual SvxEditViewForwarder* GetEditViewForwarder( sal_Bool /* bCreate */ ) { return NULL; }
 
-//UNUSED2008-05  DECL_LINK( NotifyHdl, EENotify* );
 private:
     ScPreviewViewForwarder* mpViewForwarder;
     ScPreviewShell* mpViewShell;

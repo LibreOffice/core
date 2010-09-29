@@ -1833,72 +1833,7 @@ void ScGridWindow::GetSelectionRects( ::std::vector< Rectangle >& rPixelRects )
 
 // -------------------------------------------------------------------------
 
-//UNUSED2008-05  void ScGridWindow::DrawDragRect( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2 )
-//UNUSED2008-05  {
-//UNUSED2008-05      if ( nX2 < pViewData->GetPosX(eHWhich) || nY2 < pViewData->GetPosY(eVWhich) )
-//UNUSED2008-05          return;
-//UNUSED2008-05
-//UNUSED2008-05      Update();           // wegen XOR
-//UNUSED2008-05
-//UNUSED2008-05      MapMode aOld = GetMapMode(); SetMapMode(MAP_PIXEL);
-//UNUSED2008-05
-//UNUSED2008-05      SCTAB nTab = pViewData->GetTabNo();
-//UNUSED2008-05
-//UNUSED2008-05      SCCOL nPosX = pViewData->GetPosX(WhichH(eWhich));
-//UNUSED2008-05      SCROW nPosY = pViewData->GetPosY(WhichV(eWhich));
-//UNUSED2008-05      if (nX1 < nPosX) nX1 = nPosX;
-//UNUSED2008-05      if (nX2 < nPosX) nX2 = nPosX;
-//UNUSED2008-05      if (nY1 < nPosY) nY1 = nPosY;
-//UNUSED2008-05      if (nY2 < nPosY) nY2 = nPosY;
-//UNUSED2008-05
-//UNUSED2008-05      Point aScrPos( pViewData->GetScrPos( nX1, nY1, eWhich ) );
-//UNUSED2008-05
-//UNUSED2008-05      long nSizeXPix=0;
-//UNUSED2008-05      long nSizeYPix=0;
-//UNUSED2008-05      ScDocument* pDoc = pViewData->GetDocument();
-//UNUSED2008-05      double nPPTX = pViewData->GetPPTX();
-//UNUSED2008-05      double nPPTY = pViewData->GetPPTY();
-//UNUSED2008-05      SCCOLROW i;
-//UNUSED2008-05
-//UNUSED2008-05      BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
-//UNUSED2008-05      long nLayoutSign = bLayoutRTL ? -1 : 1;
-//UNUSED2008-05
-//UNUSED2008-05      if (ValidCol(nX2) && nX2>=nX1)
-//UNUSED2008-05          for (i=nX1; i<=nX2; i++)
-//UNUSED2008-05              nSizeXPix += ScViewData::ToPixel( pDoc->GetColWidth( static_cast<SCCOL>(i), nTab ), nPPTX );
-//UNUSED2008-05      else
-//UNUSED2008-05      {
-//UNUSED2008-05          aScrPos.X() -= nLayoutSign;
-//UNUSED2008-05          nSizeXPix   += 2;
-//UNUSED2008-05      }
-//UNUSED2008-05
-//UNUSED2008-05      if (ValidRow(nY2) && nY2>=nY1)
-//UNUSED2008-05          for (i=nY1; i<=nY2; i++)
-//UNUSED2008-05              nSizeYPix += ScViewData::ToPixel( pDoc->GetRowHeight( i, nTab ), nPPTY );
-//UNUSED2008-05      else
-//UNUSED2008-05      {
-//UNUSED2008-05          aScrPos.Y() -= 1;
-//UNUSED2008-05          nSizeYPix   += 2;
-//UNUSED2008-05      }
-//UNUSED2008-05
-//UNUSED2008-05      aScrPos.X() -= 2 * nLayoutSign;
-//UNUSED2008-05      aScrPos.Y() -= 2;
-//UNUSED2008-05  // Rectangle aRect( aScrPos, Size( nSizeXPix + 3, nSizeYPix + 3 ) );
-//UNUSED2008-05      Rectangle aRect( aScrPos.X(), aScrPos.Y(),
-//UNUSED2008-05                       aScrPos.X() + ( nSizeXPix + 2 ) * nLayoutSign, aScrPos.Y() + nSizeYPix + 2 );
-//UNUSED2008-05      if ( bLayoutRTL )
-//UNUSED2008-05      {
-//UNUSED2008-05          aRect.Left() = aRect.Right();   // end position is left
-//UNUSED2008-05          aRect.Right() = aScrPos.X();
-//UNUSED2008-05      }
-//UNUSED2008-05
-//UNUSED2008-05      Invert(Rectangle( aRect.Left(), aRect.Top(), aRect.Left()+2, aRect.Bottom() ));
-//UNUSED2008-05      Invert(Rectangle( aRect.Right()-2, aRect.Top(), aRect.Right(), aRect.Bottom() ));
-//UNUSED2008-05      Invert(Rectangle( aRect.Left()+3, aRect.Top(), aRect.Right()-3, aRect.Top()+2 ));
-//UNUSED2008-05      Invert(Rectangle( aRect.Left()+3, aRect.Bottom()-2, aRect.Right()-3, aRect.Bottom() ));
-//UNUSED2008-05
-//UNUSED2008-05      SetMapMode(aOld);
-//UNUSED2008-05  }
+
 
 // -------------------------------------------------------------------------
 

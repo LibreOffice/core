@@ -5195,13 +5195,6 @@ void ScDocument::AddPrintRange( SCTAB nTab, const ScRange& rNew )
 }
 
 
-//UNUSED2009-05 void ScDocument::SetPrintRange( SCTAB nTab, const ScRange& rNew )
-//UNUSED2009-05 {
-//UNUSED2009-05     if (ValidTab(nTab) && pTab[nTab])
-//UNUSED2009-05         pTab[nTab]->SetPrintRange( rNew );
-//UNUSED2009-05 }
-
-
 void ScDocument::SetPrintEntireSheet( SCTAB nTab )
 {
     if (ValidTab(nTab) && pTab[nTab])

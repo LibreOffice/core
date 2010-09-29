@@ -517,27 +517,5 @@ private:
     void DoChange( BOOL bNew );
 };
 
-
-//UNUSED2009-05 class ScUndoSetGrammar : public ScSimpleUndo
-//UNUSED2009-05 {
-//UNUSED2009-05 public:
-//UNUSED2009-05                     TYPEINFO();
-//UNUSED2009-05                     ScUndoSetGrammar( ScDocShell* pShell,
-//UNUSED2009-05                                       formula::FormulaGrammar::Grammar eGrammar );
-//UNUSED2009-05     virtual         ~ScUndoSetGrammar();
-//UNUSED2009-05
-//UNUSED2009-05     virtual void    Undo();
-//UNUSED2009-05     virtual void    Redo();
-//UNUSED2009-05     virtual void    Repeat(SfxRepeatTarget& rTarget);
-//UNUSED2009-05     virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
-//UNUSED2009-05
-//UNUSED2009-05     virtual String  GetComment() const;
-//UNUSED2009-05
-//UNUSED2009-05 private:
-//UNUSED2009-05     formula::FormulaGrammar::Grammar meNewGrammar, meOldGrammar;
-//UNUSED2009-05
-//UNUSED2009-05     void DoChange( formula::FormulaGrammar::Grammar eGrammar );
-//UNUSED2009-05 };
-
 #endif
 

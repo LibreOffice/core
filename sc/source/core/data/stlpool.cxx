@@ -92,13 +92,6 @@ void ScStyleSheetPool::SetDocument( ScDocument* pDocument )
 
 //------------------------------------------------------------------------
 
-//UNUSED2009-05 void ScStyleSheetPool::SetForceStdName( const String* pSet )
-//UNUSED2009-05 {
-//UNUSED2009-05     pForceStdName = pSet;
-//UNUSED2009-05 }
-
-//------------------------------------------------------------------------
-
 SfxStyleSheetBase& ScStyleSheetPool::Make( const String& rName,
                             SfxStyleFamily eFam, USHORT mask, USHORT nPos )
 {
@@ -509,114 +502,6 @@ void ScStyleSheetPool::CreateStandardStyles()
 
 //------------------------------------------------------------------------
 
-//UNUSED2008-05  void ScStyleSheetPool::UpdateStdNames()
-//UNUSED2008-05  {
-//UNUSED2008-05      //  Standard-Styles den richtigen Namen in der Programm-Sprache geben
-//UNUSED2008-05
-//UNUSED2008-05      String aHelpFile;
-//UNUSED2008-05      sal_uInt32 nCount = aStyles.size();
-//UNUSED2008-05      for (sal_uInt32 n=0; n<nCount; n++)
-//UNUSED2008-05      {
-//UNUSED2008-05          SfxStyleSheetBase* pStyle = aStyles[n].get();
-//UNUSED2008-05          if (!pStyle->IsUserDefined())
-//UNUSED2008-05          {
-//UNUSED2008-05              String aOldName     = pStyle->GetName();
-//UNUSED2008-05              ULONG nHelpId       = pStyle->GetHelpId( aHelpFile );
-//UNUSED2008-05              SfxStyleFamily eFam = pStyle->GetFamily();
-//UNUSED2008-05
-//UNUSED2008-05              BOOL bHelpKnown = TRUE;
-//UNUSED2008-05              String aNewName;
-//UNUSED2008-05              USHORT nNameId = 0;
-//UNUSED2008-05              switch( nHelpId )
-//UNUSED2008-05              {
-//UNUSED2008-05                  case HID_SC_SHEET_CELL_STD:
-//UNUSED2008-05                  case HID_SC_SHEET_PAGE_STD:  nNameId = STR_STYLENAME_STANDARD;  break;
-//UNUSED2008-05                  case HID_SC_SHEET_CELL_ERG:  nNameId = STR_STYLENAME_RESULT;    break;
-//UNUSED2008-05                  case HID_SC_SHEET_CELL_ERG1: nNameId = STR_STYLENAME_RESULT1;   break;
-//UNUSED2008-05                  case HID_SC_SHEET_CELL_UEB:  nNameId = STR_STYLENAME_HEADLINE;  break;
-//UNUSED2008-05                  case HID_SC_SHEET_CELL_UEB1: nNameId = STR_STYLENAME_HEADLINE1; break;
-//UNUSED2008-05                  case HID_SC_SHEET_PAGE_REP:  nNameId = STR_STYLENAME_REPORT;    break;
-//UNUSED2008-05                  default:
-//UNUSED2008-05                      // 0 oder falsche (alte) HelpId
-//UNUSED2008-05                      bHelpKnown = FALSE;
-//UNUSED2008-05              }
-//UNUSED2008-05              if (bHelpKnown)
-//UNUSED2008-05              {
-//UNUSED2008-05                  if ( nNameId )
-//UNUSED2008-05                      aNewName = SCSTR( nNameId );
-//UNUSED2008-05
-//UNUSED2008-05                  if ( aNewName.Len() && aNewName != aOldName && !Find( aNewName, eFam ) )
-//UNUSED2008-05                  {
-//UNUSED2008-05                      DBG_TRACE( "Renaming style..." );
-//UNUSED2008-05
-//UNUSED2008-05                      pStyle->SetName( aNewName );    // setzt auch Parents um
-//UNUSED2008-05
-//UNUSED2008-05                      //  Styles in Patterns sind schon auf Pointer umgesetzt
-//UNUSED2008-05                      if (eFam == SFX_STYLE_FAMILY_PAGE)
-//UNUSED2008-05                      {
-//UNUSED2008-05                          //  Page-Styles umsetzen
-//UNUSED2008-05                          //  TableCount am Doc ist noch nicht initialisiert
-//UNUSED2008-05                          for (SCTAB nTab=0; nTab<=MAXTAB && pDoc->HasTable(nTab); nTab++)
-//UNUSED2008-05                              if (pDoc->GetPageStyle(nTab) == aOldName)
-//UNUSED2008-05                                  pDoc->SetPageStyle(nTab, aNewName);
-//UNUSED2008-05                      }
-//UNUSED2008-05                  }
-//UNUSED2008-05              }
-//UNUSED2008-05              else
-//UNUSED2008-05              {
-//UNUSED2008-05                  //  wrong or no HelpId -> set new HelpId
-//UNUSED2008-05
-//UNUSED2008-05                  //  no assertion for wrong HelpIds because this happens
-//UNUSED2008-05                  //  with old files (#67218#) or with old files that were
-//UNUSED2008-05                  //  saved again with a new version in a different language
-//UNUSED2008-05                  //  (so SrcVersion doesn't help)
-//UNUSED2008-05
-//UNUSED2008-05                  USHORT nNewId = 0;
-//UNUSED2008-05                  if ( eFam == SFX_STYLE_FAMILY_PARA )
-//UNUSED2008-05                  {
-//UNUSED2008-05                      if ( aOldName == SCSTR( STR_STYLENAME_STANDARD ) )
-//UNUSED2008-05                          nNewId = HID_SC_SHEET_CELL_STD;
-//UNUSED2008-05                      else if ( aOldName == SCSTR( STR_STYLENAME_RESULT ) )
-//UNUSED2008-05                          nNewId = HID_SC_SHEET_CELL_ERG;
-//UNUSED2008-05                      else if ( aOldName == SCSTR( STR_STYLENAME_RESULT1 ) )
-//UNUSED2008-05                          nNewId = HID_SC_SHEET_CELL_ERG1;
-//UNUSED2008-05                      else if ( aOldName == SCSTR( STR_STYLENAME_HEADLINE ) )
-//UNUSED2008-05                          nNewId = HID_SC_SHEET_CELL_UEB;
-//UNUSED2008-05                      else if ( aOldName == SCSTR( STR_STYLENAME_HEADLINE1 ) )
-//UNUSED2008-05                          nNewId = HID_SC_SHEET_CELL_UEB1;
-//UNUSED2008-05                  }
-//UNUSED2008-05                  else        // PAGE
-//UNUSED2008-05                  {
-//UNUSED2008-05                      if ( aOldName == SCSTR( STR_STYLENAME_STANDARD ) )
-//UNUSED2008-05                          nNewId = HID_SC_SHEET_PAGE_STD;
-//UNUSED2008-05                      else if ( aOldName == SCSTR( STR_STYLENAME_REPORT ) )
-//UNUSED2008-05                          nNewId = HID_SC_SHEET_PAGE_REP;
-//UNUSED2008-05                  }
-//UNUSED2008-05
-//UNUSED2008-05                  if ( nNewId )               // new ID found from name -> set ID
-//UNUSED2008-05                  {
-//UNUSED2008-05                      pStyle->SetHelpId( aHelpFile, nNewId );
-//UNUSED2008-05                  }
-//UNUSED2008-05                  else if ( nHelpId == 0 )    // no old and no new ID
-//UNUSED2008-05                  {
-//UNUSED2008-05                      //  #71471# probably user defined style without SFXSTYLEBIT_USERDEF set
-//UNUSED2008-05                      //  (from StarCalc 1.0 import), fixed in src563 and above
-//UNUSED2008-05                      //! may also be default style from a different language
-//UNUSED2008-05                      //! test if name was generated from StarCalc 1.0 import?
-//UNUSED2008-05                      DBG_ASSERT(pDoc->GetSrcVersion() <= SC_SUBTOTAL_BUGFIX,
-//UNUSED2008-05                                  "user defined style without SFXSTYLEBIT_USERDEF");
-//UNUSED2008-05                      pStyle->SetMask( pStyle->GetMask() | SFXSTYLEBIT_USERDEF );
-//UNUSED2008-05                  }
-//UNUSED2008-05                  // else: wrong old ID and no new ID found:
-//UNUSED2008-05                  //  probably default style from a different language
-//UNUSED2008-05                  //  -> leave unchanged (HelpId will be set if loaded with matching
-//UNUSED2008-05                  //  language version later)
-//UNUSED2008-05              }
-//UNUSED2008-05          }
-//UNUSED2008-05      }
-//UNUSED2008-05  }
-
-//------------------------------------------------------------------------
 
 ScStyleSheet* ScStyleSheetPool::FindCaseIns( const String& rName, SfxStyleFamily eFam )
 {

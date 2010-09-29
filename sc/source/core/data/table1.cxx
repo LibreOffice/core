@@ -1305,11 +1305,6 @@ void ScTable::UpdateInsertTab(SCTAB nTable)
         SetStreamValid(FALSE);
 }
 
-//UNUSED2008-05  void ScTable::UpdateInsertTabOnlyCells(SCTAB nTable)
-//UNUSED2008-05  {
-//UNUSED2008-05      for (SCCOL i=0; i <= MAXCOL; i++) aCol[i].UpdateInsertTabOnlyCells(nTable);
-//UNUSED2008-05  }
-
 void ScTable::UpdateDeleteTab( SCTAB nTable, BOOL bIsMove, ScTable* pRefUndo )
 {
     if (nTab > nTable) nTab--;
@@ -1579,11 +1574,6 @@ void ScTable::AddPrintRange( const ScRange& rNew )
         SetStreamValid(FALSE);
 }
 
-//UNUSED2009-05 void ScTable::SetPrintRange( const ScRange& rNew )
-//UNUSED2009-05 {
-//UNUSED2009-05     ClearPrintRanges();
-//UNUSED2009-05     AddPrintRange( rNew );
-//UNUSED2009-05 }
 
 void ScTable::SetPrintEntireSheet()
 {

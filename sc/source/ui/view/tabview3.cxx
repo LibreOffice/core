@@ -2162,46 +2162,6 @@ void ScTabView::DoChartSelection(
     }
 }
 
-//  DrawDragRect - Drag&Drop-Rechteck zeichnen (XOR)
-
-//UNUSED2008-05  void ScTabView::DrawDragRect( SCCOL nStartX, SCROW nStartY, SCCOL nEndX, SCROW nEndY,
-//UNUSED2008-05                                ScSplitPos ePos )
-//UNUSED2008-05  {
-//UNUSED2008-05      if ( aViewData.GetHSplitMode() == SC_SPLIT_FIX || aViewData.GetVSplitMode() == SC_SPLIT_FIX )
-//UNUSED2008-05      {
-//UNUSED2008-05          for (USHORT  i=0; i<4; i++)
-//UNUSED2008-05              if (pGridWin[i])
-//UNUSED2008-05                  if (pGridWin[i]->IsVisible())
-//UNUSED2008-05                      pGridWin[i]->DrawDragRect( nStartX, nStartY, nEndX, nEndY );
-//UNUSED2008-05      }
-//UNUSED2008-05      else
-//UNUSED2008-05          pGridWin[ePos]->DrawDragRect( nStartX, nStartY, nEndX, nEndY );
-//UNUSED2008-05  }
-//UNUSED2008-05
-//UNUSED2008-05  // PaintCell - einzelne Zelle neu zeichnen
-//UNUSED2008-05
-//UNUSED2008-05  void ScTabView::PaintCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
-//UNUSED2008-05  {
-//UNUSED2008-05      if ( aViewData.GetTabNo() == nTab )
-//UNUSED2008-05      {
-//UNUSED2008-05          USHORT i;
-//UNUSED2008-05          for (i=0; i<4; i++)
-//UNUSED2008-05              if (pGridWin[i])
-//UNUSED2008-05                  if (pGridWin[i]->IsVisible())
-//UNUSED2008-05                      pGridWin[i]->Draw( nCol, nRow, nCol, nRow );
-//UNUSED2008-05      }
-//UNUSED2008-05  }
-//UNUSED2008-05
-//UNUSED2008-05  void ScTabView::PaintLeftRow( SCROW nRow )
-//UNUSED2008-05  {
-//UNUSED2008-05      PaintLeftArea( nRow, nRow );
-//UNUSED2008-05  }
-//UNUSED2008-05
-//UNUSED2008-05  void ScTabView::PaintTopCol( SCCOL nCol )
-//UNUSED2008-05  {
-//UNUSED2008-05      PaintTopArea( nCol, nCol );
-//UNUSED2008-05  }
-
 //  PaintGrid - Datenbereiche neu zeichnen
 
 void ScTabView::PaintGrid()

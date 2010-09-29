@@ -61,7 +61,6 @@ public:
             ~ScSelEntryDlg();
 
     String GetSelectEntry() const;
-//UNUSED2008-05  USHORT GetSelectEntryPos() const;
 };
 
 

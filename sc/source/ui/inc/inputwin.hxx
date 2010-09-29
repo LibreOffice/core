@@ -170,8 +170,6 @@ public:
 
     BOOL            IsInputActive();
     EditView*       GetEditView();
-//UNUSED2008-05  EditView*      ActivateEdit( const String&     rText,
-//UNUSED2008-05                                const ESelection& rSel );
 
     void            TextGrabFocus();
     void            TextInvalidate();

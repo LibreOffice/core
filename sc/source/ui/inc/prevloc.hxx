@@ -101,7 +101,6 @@ class ScPreviewLocationData
     SCTAB       nPrintTab;
     List        aEntries;
 
-//UNUSED2008-05  ScAddress  GetCellFromRange( const Size& rOffsetPixel, const ScRange& rRange ) const;
     Rectangle   GetOffsetPixel( const ScAddress& rCellPos, const ScRange& rRange ) const;
 
 public:
