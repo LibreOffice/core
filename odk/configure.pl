@@ -35,7 +35,7 @@ if ( $main::operatingSystem =~ m/darwin/ )
 {
 #   $main::OO_SDK_URE_HOME = `cd $main::sdkpath/../ure-link && pwd`;
 } else {
-    $main::OO_SDK_URE_HOME = `cd $main::sdkpath/../../ure && pwd`;
+    $main::OO_SDK_URE_HOME = `cd $main::sdkpath/../ure-link && pwd`;
 }
 chomp($main::OO_SDK_URE_HOME);
 
