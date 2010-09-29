@@ -3884,7 +3884,7 @@ SfxBoolItem Modified SID_MODIFIED
 ]
 
 //--------------------------------------------------------------------------
-SfxStringItem ModifiedStatus SID_DOC_MODIFIED
+SfxBoolItem ModifiedStatus SID_DOC_MODIFIED
 
 [
     /* flags: */

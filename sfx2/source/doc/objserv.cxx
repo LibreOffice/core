@@ -1029,7 +1029,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
 
             case SID_DOC_MODIFIED:
             {
-                rSet.Put( SfxStringItem( SID_DOC_MODIFIED, IsModified() ? '*' : ' ' ) );
+                rSet.Put( SfxBoolItem( SID_DOC_MODIFIED, IsModified() ) );
                 break;
             }
 
