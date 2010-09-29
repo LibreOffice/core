@@ -166,7 +166,7 @@ protected:
     BasicLibInfo*   FindLibInfo( StarBASIC* pBasic ) const;
     void            CheckModules( StarBASIC* pBasic, BOOL bReference ) const;
     void            SetFlagToAllLibs( short nFlag, BOOL bSet ) const;
-                    BasicManager(); // This is used only to customize the paths of 'Save as'.
+                    BasicManager(); // This is used only to customize the paths for 'Save as'.
                     ~BasicManager();
 
 public:
