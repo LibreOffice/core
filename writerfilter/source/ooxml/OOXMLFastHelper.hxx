@@ -84,8 +84,6 @@ OOXMLFastHelper<T>::createAndSetParent
     debug_logger->attribute("context", pHandler->getType());
     debug_logger->attribute("token", fastTokenToId(pTmp->getToken()));
     debug_logger->attribute("id", (*QNameToString::Instance())(nId));
-    if (pTmp->isFallback())
-        debug_logger->attribute("fallback", "yes");
 
     debug_logger->startElement("created");
     debug_logger->addTag(pTmp->toTag());
@@ -119,8 +117,6 @@ OOXMLFastHelper<T>::createAndSetParentAndDefine
     snprintf(buffer, sizeof(buffer), "0x%08" SAL_PRIxUINT32, nId);
 
     debug_logger->attribute("idnum", buffer);
-    if (pTmp->isFallback())
-        debug_logger->attribute("fallback", "yes");
 
     debug_logger->startElement("created");
     debug_logger->addTag(pTmp->toTag());
@@ -157,9 +153,6 @@ OOXMLFastHelper<T>::createAndSetParentRef
     debug_logger->startElement("createAndSetParentRef");
     debug_logger->attribute("context", pHandler->getType());
     debug_logger->attribute("type", fastTokenToId(nToken));
-
-    if (pTmp->isFallback())
-        debug_logger->attribute("fallback", "yes");
 
     debug_logger->startElement("created");
     debug_logger->chars(pTmp->getType());

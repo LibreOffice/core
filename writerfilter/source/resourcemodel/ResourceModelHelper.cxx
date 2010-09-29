@@ -24,18 +24,25 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include <filter.hrc>
 
-#define BTN_OK 1
-#define BTN_CANCEL 1
-#define BTN_HELP 1
-#define CBX_SIZE 2
-#define MTF_SIZEX 1
-#define MTF_SIZEY 2
-#define FT_SIZEX 1
-#define FT_SIZEY 2
-#define GRP_SIZE 1
-#define GRP_MODE 2
-#define RB_ORIGINAL 1
-#define RB_SIZE 2
+#include "resourcemodel/ResourceModelHelper.hxx"
 
+namespace writerfilter {
+namespace resourcemodel {
+
+void resolveSprmProps(Properties & rHandler, Sprm & rSprm)
+{
+    writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+    if( pProperties.get())
+        pProperties->resolve(rHandler);
+}
+
+void resolveAttributeProperties(Properties & rHandler, Value & val)
+{
+    writerfilter::Reference<Properties>::Pointer_t pProperties = val.getProperties();
+    if( pProperties.get())
+        pProperties->resolve(rHandler);
+}
+
+
+}}
