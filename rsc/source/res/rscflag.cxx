@@ -445,9 +445,9 @@ void RscClient::WriteSrc( const RSCINST & rInst, FILE * fOutput,
                           RscTypCont *, sal_uInt32, const char * )
 {
     if( pRefClass->IsSet( rInst, nConstId ) )
-        fprintf( fOutput, "sal_True" );
+        fprintf( fOutput, "TRUE" );
     else
-        fprintf( fOutput, "sal_False" );
+        fprintf( fOutput, "FALSE" );
 }
 
 /*************************************************************************

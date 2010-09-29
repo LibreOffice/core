@@ -410,7 +410,7 @@ static const sal_Char* pDbgHelpText[] =
 "    //...\n",
 "}\n",
 "\n",
-"char& String::operator [] ( USHORT nIndex )\n",
+"char& String::operator [] ( sal_uInt16 nIndex )\n",
 "{\n",
 "    DBG_CHKTHIS( String, DbgCheckString );\n",
 "    DBG_ASSERT( nIndex <= pData->nLen, \"String::[] : nIndex > Len\" );\n",
@@ -418,7 +418,7 @@ static const sal_Char* pDbgHelpText[] =
 "    //...\n",
 "}\n",
 "\n",
-"USHORT String::Search( const String& rStr, USHORT nIndex ) const\n",
+"sal_uInt16 String::Search( const String& rStr, sal_uInt16 nIndex ) const\n",
 "{\n",
 "    DBG_CHKTHIS( String, DbgCheckString );\n",
 "    DBG_CHKOBJ( &rStr, String, DbgCheckString );\n",
@@ -450,19 +450,19 @@ namespace
               ++channel
             )
         {
-            USHORT nEntryPos = rList.InsertEntry( channel->first );
+            sal_uInt16 nEntryPos = rList.InsertEntry( channel->first );
             rList.SetEntryData( nEntryPos, reinterpret_cast< void* >( channel->second ) );
         }
     }
 
     // -------------------------------------------------------------------
-    void ImplSelectChannel( ListBox& rList, ULONG nChannelToSelect, USHORT nPositionOffset )
+    void ImplSelectChannel( ListBox& rList, sal_uIntPtr nChannelToSelect, sal_uInt16 nPositionOffset )
     {
         if ( nChannelToSelect < DBG_OUT_USER_CHANNEL_0 )
-            rList.SelectEntryPos( (USHORT)( nChannelToSelect - nPositionOffset ) );
+            rList.SelectEntryPos( (sal_uInt16)( nChannelToSelect - nPositionOffset ) );
         else
         {
-            for ( USHORT pos = 0; pos < rList.GetEntryCount(); ++pos )
+            for ( sal_uInt16 pos = 0; pos < rList.GetEntryCount(); ++pos )
             {
                 DbgChannelId nChannelId = static_cast< DbgChannelId >( reinterpret_cast<sal_IntPtr>(rList.GetEntryData( pos )) );
                 if ( nChannelId == nChannelToSelect )
@@ -474,9 +474,9 @@ namespace
         }
     }
     // -------------------------------------------------------------------
-    DbgChannelId ImplGetChannelId( const ListBox& rList, USHORT nPositionOffset )
+    DbgChannelId ImplGetChannelId( const ListBox& rList, sal_uInt16 nPositionOffset )
     {
-        USHORT nSelectedChannelPos = rList.GetSelectEntryPos();
+        sal_uInt16 nSelectedChannelPos = rList.GetSelectEntryPos();
         DbgChannelId nSelectedChannel = static_cast< DbgChannelId >( reinterpret_cast<sal_IntPtr>(rList.GetEntryData( nSelectedChannelPos )) );
         if ( nSelectedChannel == 0)
             return (DbgChannelId)( nSelectedChannelPos + nPositionOffset );
@@ -500,14 +500,14 @@ private:
 public:
                     DbgWindow();
 
-    virtual BOOL    Close();
+    virtual sal_Bool    Close();
     virtual void    Resize();
     virtual long    PreNotify( NotifyEvent& rNEvt );
     void            InsertLine( const XubString& rLine );
     void            Update() { WorkWindow::Update(); maLstBox.Update(); }
 
 private:
-    void            GetAssertionEntryRange( USHORT nInbetweenEntry, USHORT& nFirst, USHORT& nLast );
+    void            GetAssertionEntryRange( sal_uInt16 nInbetweenEntry, sal_uInt16& nFirst, sal_uInt16& nLast );
 };
 
 // -----------------
@@ -519,10 +519,10 @@ class DbgInfoDialog : public ModalDialog
 private:
     ListBox         maListBox;
     OKButton        maOKButton;
-    BOOL            mbHelpText;
+    sal_Bool            mbHelpText;
 
 public:
-                    DbgInfoDialog( Window* pParent, BOOL bHelpText = FALSE );
+                    DbgInfoDialog( Window* pParent, sal_Bool bHelpText = sal_False );
 
     void            SetInfoText( const XubString& rStr );
 };
@@ -581,7 +581,7 @@ private:
     CancelButton    maCancelButton;
     PushButton      maInfoButton;
     HelpButton      maHelpButton;
-    USHORT          mnErrorOff;
+    sal_uInt16          mnErrorOff;
 
 public:
                     DbgDialog();
@@ -620,7 +620,7 @@ DbgWindow::DbgWindow() :
 
 // -----------------------------------------------------------------------
 
-BOOL DbgWindow::Close()
+sal_Bool DbgWindow::Close()
 {
     // remember window position
     ByteString aState( GetWindowState() );
@@ -635,7 +635,7 @@ BOOL DbgWindow::Close()
 
     delete this;
     ImplGetSVData()->maWinData.mpDbgWin = NULL;
-    return TRUE;
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -647,7 +647,7 @@ void DbgWindow::Resize()
 
 // -----------------------------------------------------------------------
 
-void DbgWindow::GetAssertionEntryRange( USHORT nInbetweenEntry, USHORT& nFirst, USHORT& nLast )
+void DbgWindow::GetAssertionEntryRange( sal_uInt16 nInbetweenEntry, sal_uInt16& nFirst, sal_uInt16& nLast )
 {
     nFirst = nInbetweenEntry;
     while ( nFirst > 0 )
@@ -656,7 +656,7 @@ void DbgWindow::GetAssertionEntryRange( USHORT nInbetweenEntry, USHORT& nFirst, 
             break;
         --nFirst;
     }
-    USHORT nEntryCount = maLstBox.GetEntryCount();
+    sal_uInt16 nEntryCount = maLstBox.GetEntryCount();
     nLast = nInbetweenEntry + 1;
     while ( nLast < nEntryCount )
     {
@@ -688,12 +688,12 @@ long DbgWindow::PreNotify( NotifyEvent& rNEvt )
                     Rectangle aEntryRect( maLstBox.GetBoundingRectangle( maLstBox.GetSelectEntryPos() ) );
                     aPos = aEntryRect.Center();
                 }
-                USHORT nSelected = aMenu.Execute( rNEvt.GetWindow(), aPos );
+                sal_uInt16 nSelected = aMenu.Execute( rNEvt.GetWindow(), aPos );
                 if ( nSelected == 1 )
                 {
                     // search all entries which belong to this assertion
-                    USHORT nAssertionFirst = 0;
-                    USHORT nAssertionLast = 0;
+                    sal_uInt16 nAssertionFirst = 0;
+                    sal_uInt16 nAssertionLast = 0;
                     GetAssertionEntryRange( maLstBox.GetSelectEntryPos(), nAssertionFirst, nAssertionLast );
 
                     // build the string to copy to the clipboard
@@ -722,23 +722,23 @@ void DbgWindow::InsertLine( const XubString& rLine )
     XubString aStr = rLine;
     aStr.ConvertLineEnd( LINEEND_LF );
     xub_StrLen  nPos = aStr.Search( _LF );
-    BOOL bFirstEntry = TRUE;
+    sal_Bool bFirstEntry = sal_True;
     while ( nPos != STRING_NOTFOUND )
     {
         if ( maLstBox.GetEntryCount() >= DBGWIN_MAXLINES )
             maLstBox.RemoveEntry( 0 );
 
-        USHORT nInsertionPos = maLstBox.InsertEntry( aStr.Copy( 0, nPos ) );
+        sal_uInt16 nInsertionPos = maLstBox.InsertEntry( aStr.Copy( 0, nPos ) );
         if ( bFirstEntry )
             maLstBox.SetEntryData( nInsertionPos, reinterpret_cast< void* >( 0x00000001 ) );
-        bFirstEntry = FALSE;
+        bFirstEntry = sal_False;
 
         aStr.Erase( 0, nPos+1 );
         nPos = aStr.Search( _LF );
     }
     if ( maLstBox.GetEntryCount() >= DBGWIN_MAXLINES )
         maLstBox.RemoveEntry( 0 );
-    USHORT nInsertionPos = maLstBox.InsertEntry( aStr );
+    sal_uInt16 nInsertionPos = maLstBox.InsertEntry( aStr );
     if ( bFirstEntry )
         maLstBox.SetEntryData( nInsertionPos, reinterpret_cast< void* >( 0x00000001 ) );
     maLstBox.SetTopEntry( DBGWIN_MAXLINES-1 );
@@ -801,7 +801,7 @@ DbgDialog::DbgDialog() :
     maXtorThis.Show();
     maXtorThis.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "T~his" ) ) );
     if ( pData->nTestFlags & DBG_TEST_XTOR_THIS )
-        maXtorThis.Check( TRUE );
+        maXtorThis.Check( sal_True );
     maXtorThis.SetPosSizePixel( LogicToPixel( Point( 10, 15 ), aAppMap ),
                                 aButtonSize );
     }
@@ -810,7 +810,7 @@ DbgDialog::DbgDialog() :
     maXtorFunc.Show();
     maXtorFunc.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "~Function" ) ) );
     if ( pData->nTestFlags & DBG_TEST_XTOR_FUNC )
-        maXtorFunc.Check( TRUE );
+        maXtorFunc.Check( sal_True );
     maXtorFunc.SetPosSizePixel( LogicToPixel( Point( 75, 15 ), aAppMap ),
                                 aButtonSize );
     }
@@ -819,7 +819,7 @@ DbgDialog::DbgDialog() :
     maXtorExit.Show();
     maXtorExit.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "E~xit" ) ) );
     if ( pData->nTestFlags & DBG_TEST_XTOR_EXIT )
-        maXtorExit.Check( TRUE );
+        maXtorExit.Check( sal_True );
     maXtorExit.SetPosSizePixel( LogicToPixel( Point( 140, 15 ), aAppMap ),
                                 aButtonSize );
     }
@@ -828,7 +828,7 @@ DbgDialog::DbgDialog() :
     maXtorReport.Show();
     maXtorReport.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "~Report" ) ) );
     if ( pData->nTestFlags & DBG_TEST_XTOR_REPORT )
-        maXtorReport.Check( TRUE );
+        maXtorReport.Check( sal_True );
     maXtorReport.SetPosSizePixel( LogicToPixel( Point( 205, 15 ), aAppMap ),
                                   aButtonSize );
     }
@@ -837,7 +837,7 @@ DbgDialog::DbgDialog() :
     maXtorTrace.Show();
     maXtorTrace.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "~Trace" ) ) );
     if ( pData->nTestFlags & DBG_TEST_XTOR_TRACE )
-        maXtorTrace.Check( TRUE );
+        maXtorTrace.Check( sal_True );
     maXtorTrace.SetPosSizePixel( LogicToPixel( Point( 270, 15 ), aAppMap ),
                                  aButtonSize );
     }
@@ -853,7 +853,7 @@ DbgDialog::DbgDialog() :
     maMemInit.Show();
     maMemInit.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "~Initialize" ) ) );
     if ( pData->nTestFlags & DBG_TEST_MEM_INIT )
-        maMemInit.Check( TRUE );
+        maMemInit.Check( sal_True );
     maMemInit.SetPosSizePixel( LogicToPixel( Point( 10, 50 ), aAppMap ),
                                aButtonSize );
     }
@@ -862,7 +862,7 @@ DbgDialog::DbgDialog() :
     maMemOverwrite.Show();
     maMemOverwrite.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "~Overwrite" )) );
     if ( pData->nTestFlags & DBG_TEST_MEM_OVERWRITE )
-        maMemOverwrite.Check( TRUE );
+        maMemOverwrite.Check( sal_True );
     maMemOverwrite.SetPosSizePixel( LogicToPixel( Point( 75, 50 ), aAppMap ),
                                     aButtonSize );
     }
@@ -871,7 +871,7 @@ DbgDialog::DbgDialog() :
     maMemOverwriteFree.Show();
     maMemOverwriteFree.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "~Free" ) ) );
     if ( pData->nTestFlags & DBG_TEST_MEM_OVERWRITEFREE )
-        maMemOverwriteFree.Check( TRUE );
+        maMemOverwriteFree.Check( sal_True );
     maMemOverwriteFree.SetPosSizePixel( LogicToPixel( Point( 140, 50 ), aAppMap ),
                                         aButtonSize );
     }
@@ -880,7 +880,7 @@ DbgDialog::DbgDialog() :
     maMemPtr.Show();
     maMemPtr.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "~Pointer" ) ) );
     if ( pData->nTestFlags & DBG_TEST_MEM_POINTER )
-        maMemPtr.Check( TRUE );
+        maMemPtr.Check( sal_True );
     maMemPtr.SetPosSizePixel( LogicToPixel( Point( 205, 50 ), aAppMap ),
                               aButtonSize );
     }
@@ -889,7 +889,7 @@ DbgDialog::DbgDialog() :
     maMemReport.Show();
     maMemReport.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "~Report" ) ) );
     if ( pData->nTestFlags & DBG_TEST_MEM_REPORT )
-        maMemReport.Check( TRUE );
+        maMemReport.Check( sal_True );
     maMemReport.SetPosSizePixel( LogicToPixel( Point( 270, 50 ), aAppMap ),
                                  aButtonSize );
     }
@@ -898,7 +898,7 @@ DbgDialog::DbgDialog() :
     maMemTrace.Show();
     maMemTrace.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "~Trace" ) ) );
     if ( pData->nTestFlags & DBG_TEST_MEM_TRACE )
-        maMemTrace.Check( TRUE );
+        maMemTrace.Check( sal_True );
     maMemTrace.SetPosSizePixel( LogicToPixel( Point( 10, 65 ), aAppMap ),
                                 aButtonSize );
     }
@@ -907,7 +907,7 @@ DbgDialog::DbgDialog() :
     maMemLeakReport.Show();
     maMemLeakReport.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "~Leak-Report" ) ) );
     if ( pData->nTestFlags & DBG_TEST_MEM_LEAKREPORT )
-        maMemLeakReport.Check( TRUE );
+        maMemLeakReport.Check( sal_True );
     maMemLeakReport.SetPosSizePixel( LogicToPixel( Point( 75, 65 ), aAppMap ),
                                      aButtonSize );
     }
@@ -916,7 +916,7 @@ DbgDialog::DbgDialog() :
     maMemNewDel.Show();
     maMemNewDel.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "~New/Delete" ) ) );
     if ( pData->nTestFlags & DBG_TEST_MEM_NEWDEL )
-        maMemNewDel.Check( TRUE );
+        maMemNewDel.Check( sal_True );
     maMemNewDel.SetPosSizePixel( LogicToPixel( Point( 140, 65 ), aAppMap ),
                                  aButtonSize );
     }
@@ -925,7 +925,7 @@ DbgDialog::DbgDialog() :
     maMemXtor.Show();
     maMemXtor.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "Ob~ject Test" ) ) );
     if ( pData->nTestFlags & DBG_TEST_MEM_XTOR )
-        maMemXtor.Check( TRUE );
+        maMemXtor.Check( sal_True );
     maMemXtor.SetPosSizePixel( LogicToPixel( Point( 205, 65 ), aAppMap ),
                                aButtonSize );
     }
@@ -941,7 +941,7 @@ DbgDialog::DbgDialog() :
     maProf.Show();
     maProf.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "~Profiling" ) ) );
     if ( pData->nTestFlags & DBG_TEST_PROFILING )
-        maProf.Check( TRUE );
+        maProf.Check( sal_True );
     maProf.SetPosSizePixel( LogicToPixel( Point( 10, 95 ), aAppMap ),
                             aButtonSize );
     }
@@ -950,7 +950,7 @@ DbgDialog::DbgDialog() :
     maRes.Show();
     maRes.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "~Resourcen" ) ) );
     if ( pData->nTestFlags & DBG_TEST_RESOURCE )
-        maRes.Check( TRUE );
+        maRes.Check( sal_True );
     maRes.SetPosSizePixel( LogicToPixel( Point( 75, 95 ), aAppMap ),
                            aButtonSize );
     }
@@ -959,7 +959,7 @@ DbgDialog::DbgDialog() :
     maDialog.Show();
     maDialog.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "~Dialog" ) ) );
     if ( pData->nTestFlags & DBG_TEST_DIALOG )
-        maDialog.Check( TRUE );
+        maDialog.Check( sal_True );
     maDialog.SetPosSizePixel( LogicToPixel( Point( 140, 95 ), aAppMap ),
                               aButtonSize );
     }
@@ -968,7 +968,7 @@ DbgDialog::DbgDialog() :
     maBoldAppFont.Show();
     maBoldAppFont.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "~Bold AppFont" ) ) );
     if ( pData->nTestFlags & DBG_TEST_BOLDAPPFONT )
-        maBoldAppFont.Check( TRUE );
+        maBoldAppFont.Check( sal_True );
     maBoldAppFont.SetPosSizePixel( LogicToPixel( Point( 205, 95 ), aAppMap ),
                                    aButtonSize );
     maBoldAppFont.SaveValue();
@@ -993,7 +993,7 @@ DbgDialog::DbgDialog() :
     maOverwrite.Show();
     maOverwrite.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "Overwrite ~File" ) ) );
     if ( pData->bOverwrite )
-        maOverwrite.Check( TRUE );
+        maOverwrite.Check( sal_True );
     maOverwrite.SetPosSizePixel( LogicToPixel( Point( 205, 130 ), aAppMap ),
                                  aButtonSize );
     }
@@ -1002,7 +1002,7 @@ DbgDialog::DbgDialog() :
     maHookOSLBox.Show();
     maHookOSLBox.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "Reroute osl debug ~messages" ) ) );
     if ( pData->bHookOSLAssert )
-        maHookOSLBox.Check( TRUE );
+        maHookOSLBox.Check( sal_True );
     maHookOSLBox.SetPosSizePixel( LogicToPixel( Point( 10, 240 ), aAppMap ),
                                   LogicToPixel( Size( 100, 12 ), aAppMap ) );
     }
@@ -1205,8 +1205,8 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
         aData.aInclFilter[sizeof( aData.aInclFilter )-1] = '\0';
         aData.aExclFilter[sizeof( aData.aExclFilter )-1] = '\0';
 
-        aData.bOverwrite = maOverwrite.IsChecked() ? TRUE : FALSE;
-        aData.bHookOSLAssert = maHookOSLBox.IsChecked() ? TRUE : FALSE;
+        aData.bOverwrite = maOverwrite.IsChecked() ? sal_True : sal_False;
+        aData.bHookOSLAssert = maHookOSLBox.IsChecked() ? sal_True : sal_False;
 
         if ( maXtorThis.IsChecked() )
             aData.nTestFlags |= DBG_TEST_XTOR_THIS;
@@ -1300,7 +1300,7 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
                 ) ) );
             aBox.Execute();
         }
-        EndDialog( TRUE );
+        EndDialog( sal_True );
     }
     else if ( pButton == &maInfoButton )
     {
@@ -1323,7 +1323,7 @@ void DbgDialog::RequestHelp( const HelpEvent& rHEvt )
 {
     if ( rHEvt.GetMode() & HELPMODE_CONTEXT )
     {
-        DbgInfoDialog aInfoDialog( this, TRUE );
+        DbgInfoDialog aInfoDialog( this, sal_True );
         XubString aHelpText;
         const sal_Char** pHelpStrs = pDbgHelpText;
         while ( *pHelpStrs )
@@ -1339,7 +1339,7 @@ void DbgDialog::RequestHelp( const HelpEvent& rHEvt )
 
 // =======================================================================
 
-DbgInfoDialog::DbgInfoDialog( Window* pParent, BOOL bHelpText ) :
+DbgInfoDialog::DbgInfoDialog( Window* pParent, sal_Bool bHelpText ) :
     ModalDialog( pParent, WB_STDMODAL ),
     maListBox( this, WB_BORDER | WB_AUTOHSCROLL ),
     maOKButton( this, WB_DEFBUTTON )
@@ -1366,12 +1366,12 @@ DbgInfoDialog::DbgInfoDialog( Window* pParent, BOOL bHelpText ) :
 
 void DbgInfoDialog::SetInfoText( const XubString& rStr )
 {
-    maListBox.SetUpdateMode( FALSE );
+    maListBox.SetUpdateMode( sal_False );
     maListBox.Clear();
     XubString aStr = rStr;
     aStr.ConvertLineEnd( LINEEND_LF );
-    USHORT nStrIndex = 0;
-    USHORT nFoundIndex;
+    sal_uInt16 nStrIndex = 0;
+    sal_uInt16 nFoundIndex;
     do
     {
         nFoundIndex = aStr.Search( _LF, nStrIndex );
@@ -1379,8 +1379,8 @@ void DbgInfoDialog::SetInfoText( const XubString& rStr )
         if ( mbHelpText )
         {
             long    nMaxWidth = maListBox.GetOutputSizePixel().Width()-30;
-            USHORT  nLastIndex = 0;
-            USHORT  nIndex = aTextParagraph.Search( ' ' );
+            sal_uInt16  nLastIndex = 0;
+            sal_uInt16  nIndex = aTextParagraph.Search( ' ' );
             while ( nIndex != STRING_NOTFOUND )
             {
                 if ( maListBox.GetTextWidth( aTextParagraph, 0, nIndex ) > nMaxWidth )
@@ -1410,15 +1410,15 @@ void DbgInfoDialog::SetInfoText( const XubString& rStr )
         nStrIndex = nFoundIndex+1;
     }
     while ( nFoundIndex != STRING_NOTFOUND );
-    maListBox.SetUpdateMode( TRUE );
+    maListBox.SetUpdateMode( sal_True );
 }
 
 // =======================================================================
 
 void DbgDialogTest( Window* pWindow )
 {
-    BOOL        aAccelBuf[65536];
-    USHORT      nChildCount = pWindow->GetChildCount();
+    sal_Bool        aAccelBuf[65536];
+    sal_uInt16      nChildCount = pWindow->GetChildCount();
     Window*     pGetChild = pWindow->GetWindow( WINDOW_FIRSTCHILD );
     Window*     pChild;
     Point       aTabPos;
@@ -1432,9 +1432,9 @@ void DbgDialogTest( Window* pWindow )
 
     if ( pWindow->IsDialog() )
     {
-        BOOL    bOKCancelButton = FALSE;
-        BOOL    bDefPushButton = FALSE;
-        BOOL    bButton = FALSE;
+        sal_Bool    bOKCancelButton = sal_False;
+        sal_Bool    bDefPushButton = sal_False;
+        sal_Bool    bButton = sal_False;
         pGetChild = pWindow->GetWindow( WINDOW_FIRSTCHILD );
         while ( pGetChild )
         {
@@ -1442,11 +1442,11 @@ void DbgDialogTest( Window* pWindow )
 
             if ( pChild->ImplIsPushButton() )
             {
-                bButton = TRUE;
+                bButton = sal_True;
                 if ( (pChild->GetType() == WINDOW_OKBUTTON) || (pChild->GetType() == WINDOW_CANCELBUTTON) )
-                    bOKCancelButton = TRUE;
+                    bOKCancelButton = sal_True;
                 if ( pChild->GetStyle() & WB_DEFBUTTON )
-                    bDefPushButton = TRUE;
+                    bDefPushButton = sal_True;
             }
 
             pGetChild = pGetChild->GetWindow( WINDOW_NEXT );
@@ -1461,7 +1461,7 @@ void DbgDialogTest( Window* pWindow )
         }
     }
 
-    USHORT i = 0;
+    sal_uInt16 i = 0;
     pGetChild = pWindow->GetWindow( WINDOW_FIRSTCHILD );
     while ( pGetChild )
     {
@@ -1473,7 +1473,7 @@ void DbgDialogTest( Window* pWindow )
         {
             XubString       aText = pChild->GetText();
             XubString       aErrorText = aText;
-            USHORT          nAccelPos = STRING_NOTFOUND;
+            sal_uInt16          nAccelPos = STRING_NOTFOUND;
             xub_Unicode     cAccel = 0;
             if ( aErrorText.Len() > 128 )
             {
@@ -1494,7 +1494,7 @@ void DbgDialogTest( Window* pWindow )
                         if ( aAccelBuf[cAccel] )
                             DbgOutTypef( DBG_OUT_ERROR, "Double mnemonic char: %c", cAccel );
                         else
-                            aAccelBuf[cAccel] = TRUE;
+                            aAccelBuf[cAccel] = sal_True;
                     }
                 }
             }
@@ -1647,66 +1647,66 @@ void DbgDialogTest( Window* pWindow )
 
             if ( pChild->IsVisible() )
             {
-                BOOL bMaxWarning = FALSE;
+                sal_Bool bMaxWarning = sal_False;
                 if ( pChild->GetType() == WINDOW_NUMERICFIELD )
                 {
                     NumericField* pField = (NumericField*)pChild;
                     if ( pField->GetMax() == LONG_MAX )
-                        bMaxWarning = TRUE;
+                        bMaxWarning = sal_True;
                 }
                 else if ( pChild->GetType() == WINDOW_METRICFIELD )
                 {
                     MetricField* pField = (MetricField*)pChild;
                     if ( pField->GetMax() == LONG_MAX )
-                        bMaxWarning = TRUE;
+                        bMaxWarning = sal_True;
                 }
                 else if ( pChild->GetType() == WINDOW_CURRENCYFIELD )
                 {
                     CurrencyField* pField = (CurrencyField*)pChild;
                     if ( pField->GetMax() == LONG_MAX )
-                        bMaxWarning = TRUE;
+                        bMaxWarning = sal_True;
                 }
                 else if ( pChild->GetType() == WINDOW_TIMEFIELD )
                 {
                     TimeField* pField = (TimeField*)pChild;
                     if ( pField->GetMax() == Time( 23, 59, 59, 99 ) )
-                        bMaxWarning = TRUE;
+                        bMaxWarning = sal_True;
                 }
                 else if ( pChild->GetType() == WINDOW_DATEFIELD )
                 {
                     DateField* pField = (DateField*)pChild;
                     if ( pField->GetMax() == Date( 31, 12, 9999 ) )
-                        bMaxWarning = TRUE;
+                        bMaxWarning = sal_True;
                 }
                 else if ( pChild->GetType() == WINDOW_NUMERICBOX )
                 {
                     NumericBox* pBox = (NumericBox*)pChild;
                     if ( pBox->GetMax() == LONG_MAX )
-                        bMaxWarning = TRUE;
+                        bMaxWarning = sal_True;
                 }
                 else if ( pChild->GetType() == WINDOW_METRICBOX )
                 {
                     MetricBox* pBox = (MetricBox*)pChild;
                     if ( pBox->GetMax() == LONG_MAX )
-                        bMaxWarning = TRUE;
+                        bMaxWarning = sal_True;
                 }
                 else if ( pChild->GetType() == WINDOW_CURRENCYBOX )
                 {
                     CurrencyBox* pBox = (CurrencyBox*)pChild;
                     if ( pBox->GetMax() == LONG_MAX )
-                        bMaxWarning = TRUE;
+                        bMaxWarning = sal_True;
                 }
                 else if ( pChild->GetType() == WINDOW_TIMEBOX )
                 {
                     TimeBox* pBox = (TimeBox*)pChild;
                     if ( pBox->GetMax() == Time( 23, 59, 59, 99 ) )
-                        bMaxWarning = TRUE;
+                        bMaxWarning = sal_True;
                 }
                 else if ( pChild->GetType() == WINDOW_DATEBOX )
                 {
                     DateBox* pBox = (DateBox*)pChild;
                     if ( pBox->GetMax() == Date( 31, 12, 9999 ) )
-                        bMaxWarning = TRUE;
+                        bMaxWarning = sal_True;
                 }
                 if ( bMaxWarning )
                 {
@@ -1760,7 +1760,7 @@ void DbgDialogTest( Window* pWindow )
                         aTabPos = aNewPos;
                     }
 
-                    for ( USHORT j = 0; j < i; j++ )
+                    for ( sal_uInt16 j = 0; j < i; j++ )
                     {
                         if ( ((pRectAry[j].Right() != 0) || (pRectAry[j].Bottom() != 0)) &&
                              aChildRect.IsOver( pRectAry[j] ) )
@@ -1838,8 +1838,8 @@ long SolarMessageBoxExecutor::doIt()
 
 #if ! defined USE_VCL_MSGBOX
 #ifdef WNT
-    BOOL bOldCallTimer = pSVData->mbNoCallTimer;
-    pSVData->mbNoCallTimer = TRUE;
+    sal_Bool bOldCallTimer = pSVData->mbNoCallTimer;
+    pSVData->mbNoCallTimer = sal_True;
     MessageBeep( MB_ICONHAND );
     nResult = MessageBoxW( 0, (LPWSTR)m_sDebugMessage.GetBuffer(), L"Debug Output",
                                      MB_TASKMODAL | MB_YESNOCANCEL | MB_DEFBUTTON2 | MB_ICONSTOP );
@@ -1858,7 +1858,7 @@ long SolarMessageBoxExecutor::doIt()
     }
 #endif // WNT
 #else
-    USHORT nOldMode = Application::GetSystemWindowMode();
+    sal_uInt16 nOldMode = Application::GetSystemWindowMode();
     Application::SetSystemWindowMode( nOldMode & ~SYSTEMWINDOW_MODE_NOAUTOMODE );
     DbgMessageBox aBox( m_sDebugMessage );
     Application::SetSystemWindowMode( nOldMode );
@@ -1944,12 +1944,12 @@ long SolarWindowPrinter::doIt()
 
 void DbgPrintWindow( const char* pLine )
 {
-    static BOOL bIn = FALSE;
+    static sal_Bool bIn = sal_False;
 
     // keine rekursiven Traces
     if ( bIn )
         return;
-    bIn = TRUE;
+    bIn = sal_True;
 
     SolarWindowPrinter aPrinter( String( pLine, RTL_TEXTENCODING_UTF8 ) );
     TimeValue aTimeout; aTimeout.Seconds = 2; aTimeout.Nanosec = 0;
@@ -1958,7 +1958,7 @@ void DbgPrintWindow( const char* pLine )
     if ( aPrinter.didTimeout() )
         DbgPrintShell( pLine );
 
-    bIn = FALSE;
+    bIn = sal_False;
 }
 
 // =======================================================================
@@ -2003,7 +2003,7 @@ void DbgGUIStart()
     {
         DbgDialog* pDialog = new DbgDialog;
         // Fuer den Debug-Dialog schalten wir Dialogtests aus
-        ULONG nOldFlags = pData->nTestFlags;
+        sal_uIntPtr nOldFlags = pData->nTestFlags;
         pData->nTestFlags &= ~DBG_TEST_DIALOG;
         if ( !pDialog->Execute() )
             pData->nTestFlags |= (nOldFlags & DBG_TEST_DIALOG);
@@ -2018,7 +2018,7 @@ void DbgGUIStart()
 
 // -----------------------------------------------------------------------
 
-USHORT DbgRegisterNamedUserChannel( const XubString& _rChannelUIName, DbgPrintLine pProc )
+sal_uInt16 DbgRegisterNamedUserChannel( const XubString& _rChannelUIName, DbgPrintLine pProc )
 {
     DbgChannelId nChannelId = DbgRegisterUserChannel( pProc );
     UserDefinedChannels& rChannels = ImplDbgGetUserDefinedChannels();

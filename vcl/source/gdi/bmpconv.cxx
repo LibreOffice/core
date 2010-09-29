@@ -153,7 +153,7 @@ Any SAL_CALL BmpConverter::invoke(
 
         SvMemoryStream aStream( aDIB.getArray(), aDIB.getLength(), STREAM_READ | STREAM_WRITE );
         Bitmap aBM;
-        aBM.Read( aStream, TRUE );
+        aBM.Read( aStream, sal_True );
         if( nTargetDepth < 4 )
             nTargetDepth = 1;
         else if( nTargetDepth < 8 )
@@ -188,7 +188,7 @@ BmpTransporter::BmpTransporter( const Bitmap& rBM )
     m_aSize.Width = rBM.GetSizePixel().Width();
     m_aSize.Height = rBM.GetSizePixel().Height();
     SvMemoryStream aStream;
-    rBM.Write( aStream, FALSE, TRUE );
+    rBM.Write( aStream, sal_False, sal_True );
     m_aBM = Sequence<sal_Int8>(static_cast<const sal_Int8*>(aStream.GetData()),
                 aStream.GetEndOfData());
 }

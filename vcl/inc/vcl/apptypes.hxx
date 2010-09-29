@@ -36,14 +36,14 @@
 // - Application-Types -
 // ---------------------
 
-#define EXC_RSCNOTLOADED            ((USHORT)0x0100)
-#define EXC_SYSOBJNOTCREATED        ((USHORT)0x0200)
-#define EXC_SYSTEM                  ((USHORT)0x0300)
-#define EXC_DISPLAY                 ((USHORT)0x0400)
-#define EXC_REMOTE                  ((USHORT)0x0500)
-#define EXC_USER                    ((USHORT)0x1000)
-#define EXC_MAJORTYPE               ((USHORT)0xFF00)
-#define EXC_MINORTYPE               ((USHORT)0x00FF)
+#define EXC_RSCNOTLOADED            ((sal_uInt16)0x0100)
+#define EXC_SYSOBJNOTCREATED        ((sal_uInt16)0x0200)
+#define EXC_SYSTEM                  ((sal_uInt16)0x0300)
+#define EXC_DISPLAY                 ((sal_uInt16)0x0400)
+#define EXC_REMOTE                  ((sal_uInt16)0x0500)
+#define EXC_USER                    ((sal_uInt16)0x1000)
+#define EXC_MAJORTYPE               ((sal_uInt16)0xFF00)
+#define EXC_MINORTYPE               ((sal_uInt16)0x00FF)
 
 #define UNIQUEID_SV_BEGIN           64000
 
@@ -71,9 +71,9 @@ public:
 // - UserActive -
 // --------------
 
-#define USERACTIVE_MOUSEDRAG            ((USHORT)0x0001)
-#define USERACTIVE_INPUT                ((USHORT)0x0002)
-#define USERACTIVE_MODALDIALOG          ((USHORT)0x0004)
-#define USERACTIVE_ALL                  ((USHORT)0xFFFF)
+#define USERACTIVE_MOUSEDRAG            ((sal_uInt16)0x0001)
+#define USERACTIVE_INPUT                ((sal_uInt16)0x0002)
+#define USERACTIVE_MODALDIALOG          ((sal_uInt16)0x0004)
+#define USERACTIVE_ALL                  ((sal_uInt16)0xFFFF)
 
 #endif // _VCL_APPTYPES_HXX

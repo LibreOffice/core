@@ -88,7 +88,7 @@ namespace
 
 void ImageControl::UserDraw( const UserDrawEvent& rUDEvt )
 {
-    USHORT nStyle = 0;
+    sal_uInt16 nStyle = 0;
     BitmapEx* pBitmap = &maBmp;
     if( !!maBmpHC )
     {
@@ -103,7 +103,7 @@ void ImageControl::UserDraw( const UserDrawEvent& rUDEvt )
             return;
 
         WinBits nWinStyle = GetStyle();
-        USHORT nTextStyle = FixedText::ImplGetTextStyle( nWinStyle );
+        sal_uInt16 nTextStyle = FixedText::ImplGetTextStyle( nWinStyle );
         if ( !IsEnabled() )
             nTextStyle |= TEXT_DRAW_DISABLE;
 
@@ -200,7 +200,7 @@ void ImageControl::SetBitmap( const BitmapEx& rBmp )
 
 // -----------------------------------------------------------------------
 
-BOOL ImageControl::SetModeBitmap( const BitmapEx& rBitmap, BmpColorMode eMode )
+sal_Bool ImageControl::SetModeBitmap( const BitmapEx& rBitmap, BmpColorMode eMode )
 {
     if( eMode == BMP_COLOR_NORMAL )
         SetBitmap( rBitmap );
@@ -210,8 +210,8 @@ BOOL ImageControl::SetModeBitmap( const BitmapEx& rBitmap, BmpColorMode eMode )
         StateChanged( STATE_CHANGE_DATA );
     }
     else
-        return FALSE;
-    return TRUE;
+        return sal_False;
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -233,7 +233,7 @@ void    ImageControl::Paint( const Rectangle& rRect )
     {
         Window *pWin = GetWindow( WINDOW_BORDER );
 
-        BOOL bFlat = (GetBorderStyle() == 2);
+        sal_Bool bFlat = (GetBorderStyle() == 2);
         Rectangle aRect( Point(0,0), pWin->GetOutputSizePixel() );
         Color oldLineCol = pWin->GetLineColor();
         Color oldFillCol = pWin->GetFillColor();

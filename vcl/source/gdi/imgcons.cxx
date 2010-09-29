@@ -41,35 +41,35 @@
 class ImplColorMapper
 {
     Color               maCol;
-    ULONG               mnR;
-    ULONG               mnG;
-    ULONG               mnB;
-    ULONG               mnT;
-    ULONG               mnRShift;
-    ULONG               mnGShift;
-    ULONG               mnBShift;
-    ULONG               mnTShift;
+    sal_uIntPtr             mnR;
+    sal_uIntPtr             mnG;
+    sal_uIntPtr             mnB;
+    sal_uIntPtr             mnT;
+    sal_uIntPtr             mnRShift;
+    sal_uIntPtr             mnGShift;
+    sal_uIntPtr             mnBShift;
+    sal_uIntPtr             mnTShift;
 
-    ULONG               ImplCalcMaskShift( ULONG nVal );
+    sal_uIntPtr             ImplCalcMaskShift( sal_uIntPtr nVal );
 
 public:
 
-                        ImplColorMapper( ULONG nRMask, ULONG nGMask, ULONG nBMask, ULONG nTMask );
+                        ImplColorMapper( sal_uIntPtr nRMask, sal_uIntPtr nGMask, sal_uIntPtr nBMask, sal_uIntPtr nTMask );
                         ~ImplColorMapper();
 
-    const Color&        ImplGetColor( ULONG nColor )
+    const Color&        ImplGetColor( sal_uIntPtr nColor )
                         {
-                            maCol.SetRed( (UINT8) ( ( nColor & mnR ) >> mnRShift ) );
-                            maCol.SetGreen( (UINT8) ( ( nColor & mnG ) >> mnGShift ) );
-                            maCol.SetBlue( (UINT8) ( ( nColor & mnB ) >> mnBShift ) );
-                            maCol.SetTransparency( (UINT8) ( ( nColor & mnT ) >> mnTShift ) );
+                            maCol.SetRed( (sal_uInt8) ( ( nColor & mnR ) >> mnRShift ) );
+                            maCol.SetGreen( (sal_uInt8) ( ( nColor & mnG ) >> mnGShift ) );
+                            maCol.SetBlue( (sal_uInt8) ( ( nColor & mnB ) >> mnBShift ) );
+                            maCol.SetTransparency( (sal_uInt8) ( ( nColor & mnT ) >> mnTShift ) );
                             return maCol;
                         }
 };
 
 // -----------------------------------------------------------------------------
 
-ImplColorMapper::ImplColorMapper( ULONG nRMask, ULONG nGMask, ULONG nBMask, ULONG nTMask ) :
+ImplColorMapper::ImplColorMapper( sal_uIntPtr nRMask, sal_uIntPtr nGMask, sal_uIntPtr nBMask, sal_uIntPtr nTMask ) :
         mnR( nRMask ),
         mnG( nGMask ),
         mnB( nBMask ),
@@ -89,13 +89,13 @@ ImplColorMapper::~ImplColorMapper()
 
 // -----------------------------------------------------------------------------
 
-ULONG ImplColorMapper::ImplCalcMaskShift( ULONG nVal )
+sal_uIntPtr ImplColorMapper::ImplCalcMaskShift( sal_uIntPtr nVal )
 {
     DBG_ASSERT( nVal > 0, "Mask has no value!" );
 
-    ULONG nRet = 0UL;
+    sal_uIntPtr nRet = 0UL;
 
-    for( ULONG i = 0UL; i < 32; i++ )
+    for( sal_uIntPtr i = 0UL; i < 32; i++ )
     {
         if( nVal & ( 1UL << i ) )
         {
@@ -115,7 +115,7 @@ ImageConsumer::ImageConsumer() :
     mpMapper( NULL ),
     mpPal   ( NULL ),
     mnStatus( 0UL ),
-    mbTrans ( FALSE )
+    mbTrans ( sal_False )
 {
 }
 
@@ -134,18 +134,18 @@ void ImageConsumer::Init( sal_uInt32 nWidth, sal_uInt32 nHeight )
     maSize = Size( nWidth, nHeight );
     maBitmap = maMask = Bitmap();
     mnStatus = 0UL;
-    mbTrans = FALSE;
+    mbTrans = sal_False;
 }
 
 // -----------------------------------------------------------------------------
 
-void ImageConsumer::SetColorModel( USHORT nBitCount,
+void ImageConsumer::SetColorModel( sal_uInt16 nBitCount,
                                    sal_uInt32 nPalEntries, const sal_uInt32* pRGBAPal,
                                    sal_uInt32 nRMask, sal_uInt32 nGMask, sal_uInt32 nBMask, sal_uInt32 nAMask )
 {
     DBG_ASSERT( maSize.Width() && maSize.Height(), "Missing call to ImageConsumer::Init(...)!" );
 
-    BitmapPalette aPal( Min( (USHORT) nPalEntries, (USHORT) 256 ) );
+    BitmapPalette aPal( Min( (sal_uInt16) nPalEntries, (sal_uInt16) 256 ) );
 
     if( nPalEntries )
     {
@@ -158,30 +158,30 @@ void ImageConsumer::SetColorModel( USHORT nBitCount,
         delete[] mpPal;
         mpPal = new Color[ nPalEntries ];
 
-        for( ULONG i = 0; i < nPalEntries; i++, pTmp++ )
+        for( sal_uIntPtr i = 0; i < nPalEntries; i++, pTmp++ )
         {
             Color&  rCol = mpPal[ i ];
-            BYTE    cVal;
+            sal_uInt8   cVal;
 
-            cVal = (BYTE) ( ( *pTmp & 0xff000000UL ) >> 24L );
+            cVal = (sal_uInt8) ( ( *pTmp & 0xff000000UL ) >> 24L );
             rCol.SetRed( cVal );
 
-            if( i < (ULONG) aPal.GetEntryCount() )
-                aPal[ (USHORT) i ].SetRed( cVal );
+            if( i < (sal_uIntPtr) aPal.GetEntryCount() )
+                aPal[ (sal_uInt16) i ].SetRed( cVal );
 
-            cVal = (BYTE) ( ( *pTmp & 0x00ff0000UL ) >> 16L );
+            cVal = (sal_uInt8) ( ( *pTmp & 0x00ff0000UL ) >> 16L );
             rCol.SetGreen( cVal );
 
-            if( i < (ULONG) aPal.GetEntryCount() )
-                aPal[ (USHORT) i ].SetGreen( cVal );
+            if( i < (sal_uIntPtr) aPal.GetEntryCount() )
+                aPal[ (sal_uInt16) i ].SetGreen( cVal );
 
-            cVal = (BYTE) ( ( *pTmp & 0x0000ff00UL ) >> 8L );
+            cVal = (sal_uInt8) ( ( *pTmp & 0x0000ff00UL ) >> 8L );
             rCol.SetBlue( cVal );
 
-            if( i < (ULONG) aPal.GetEntryCount() )
-                aPal[ (USHORT) i ].SetBlue( cVal );
+            if( i < (sal_uIntPtr) aPal.GetEntryCount() )
+                aPal[ (sal_uInt16) i ].SetBlue( cVal );
 
-            rCol.SetTransparency( (BYTE) ( ( *pTmp & 0x000000ffL ) ) );
+            rCol.SetTransparency( (sal_uInt8) ( ( *pTmp & 0x000000ffL ) ) );
         }
 
         if( nBitCount <= 1 )
@@ -210,7 +210,7 @@ void ImageConsumer::SetColorModel( USHORT nBitCount,
         maBitmap = Bitmap( maSize, nBitCount, &aPal );
         maMask = Bitmap( maSize, 1 );
         maMask.Erase( COL_BLACK );
-        mbTrans = FALSE;
+        mbTrans = sal_False;
     }
 }
 
@@ -218,7 +218,7 @@ void ImageConsumer::SetColorModel( USHORT nBitCount,
 
 void ImageConsumer::SetPixelsByBytes( sal_uInt32 nConsX, sal_uInt32 nConsY,
                                       sal_uInt32 nConsWidth, sal_uInt32 nConsHeight,
-                                      const BYTE* pData, sal_uInt32 nOffset, sal_uInt32 nScanSize )
+                                      const sal_uInt8* pData, sal_uInt32 nOffset, sal_uInt32 nScanSize )
 {
     DBG_ASSERT( !!maBitmap && !!maMask, "Missing call to ImageConsumer::SetColorModel(...)!" );
 
@@ -248,7 +248,7 @@ void ImageConsumer::SetPixelsByBytes( sal_uInt32 nConsX, sal_uInt32 nConsY,
 
                 for( long nY = nStartY; nY <= nEndY; nY++ )
                 {
-                    const BYTE* pTmp = pData + ( nY - nStartY ) * nScanSize + nOffset;
+                    const sal_uInt8* pTmp = pData + ( nY - nStartY ) * nScanSize + nOffset;
 
                     for( long nX = nStartX; nX <= nEndX; nX++ )
                     {
@@ -258,7 +258,7 @@ void ImageConsumer::SetPixelsByBytes( sal_uInt32 nConsX, sal_uInt32 nConsY,
                         if( !rCol.GetTransparency() )
                         {
                             pMskAcc->SetPixel( nY, nX, aMskWhite );
-                            mbTrans = TRUE;
+                            mbTrans = sal_True;
                         }
                         else
                         {
@@ -274,23 +274,23 @@ void ImageConsumer::SetPixelsByBytes( sal_uInt32 nConsX, sal_uInt32 nConsY,
             }
             else if( mpPal && ( pBmpAcc->GetBitCount() <= 8 ) )
             {
-                BitmapColor aIndex( (BYTE) 0 );
+                BitmapColor aIndex( (sal_uInt8) 0 );
                 BitmapColor aMskWhite( pMskAcc->GetBestMatchingColor( Color( COL_WHITE ) ) );
 
                 for( long nY = nStartY; nY <= nEndY; nY++ )
                 {
-                    const BYTE* pTmp = pData + ( nY - nStartY ) * nScanSize + nOffset;
+                    const sal_uInt8* pTmp = pData + ( nY - nStartY ) * nScanSize + nOffset;
 
                     for( long nX = nStartX; nX <= nEndX; nX++ )
                     {
-                        const BYTE      cIndex = *pTmp++;
+                        const sal_uInt8     cIndex = *pTmp++;
                         const Color&    rCol = mpPal[ cIndex ];
 
                         // 0: Transparent; >0: Non-Transparent
                         if( !rCol.GetTransparency() )
                         {
                             pMskAcc->SetPixel( nY, nX, aMskWhite );
-                            mbTrans = TRUE;
+                            mbTrans = sal_True;
                         }
                         else
                         {
@@ -309,18 +309,18 @@ void ImageConsumer::SetPixelsByBytes( sal_uInt32 nConsX, sal_uInt32 nConsY,
 
                 for( long nY = nStartY; nY <= nEndY; nY++ )
                 {
-                    const BYTE* pTmp = pData + ( nY - nStartY ) * nScanSize + nOffset;
+                    const sal_uInt8* pTmp = pData + ( nY - nStartY ) * nScanSize + nOffset;
 
                     for( long nX = nStartX; nX <= nEndX; nX++ )
                     {
-                        const BYTE      cIndex = *pTmp++;
+                        const sal_uInt8     cIndex = *pTmp++;
                         const Color&    rCol = mpPal[ cIndex ];
 
                         // 0: Transparent; >0: Non-Transparent
                         if( !rCol.GetTransparency() )
                         {
                             pMskAcc->SetPixel( nY, nX, aMskWhite );
-                            mbTrans = TRUE;
+                            mbTrans = sal_True;
                         }
                         else
                         {
@@ -395,7 +395,7 @@ void ImageConsumer::SetPixelsByLongs( sal_uInt32 nConsX, sal_uInt32 nConsY,
                         if( !rCol.GetTransparency() )
                         {
                             pMskAcc->SetPixel( nY, nX, aMskWhite );
-                            mbTrans = TRUE;
+                            mbTrans = sal_True;
                         }
                         else
                         {
@@ -411,7 +411,7 @@ void ImageConsumer::SetPixelsByLongs( sal_uInt32 nConsX, sal_uInt32 nConsY,
             }
             else if( mpPal && ( pBmpAcc->GetBitCount() <= 8 ) )
             {
-                BitmapColor aIndex( (BYTE) 0 );
+                BitmapColor aIndex( (sal_uInt8) 0 );
                 BitmapColor aMskWhite( pMskAcc->GetBestMatchingColor( Color( COL_WHITE ) ) );
 
                 for( long nY = nStartY; nY <= nEndY; nY++ )
@@ -427,11 +427,11 @@ void ImageConsumer::SetPixelsByLongs( sal_uInt32 nConsX, sal_uInt32 nConsY,
                         if( !rCol.GetTransparency() )
                         {
                             pMskAcc->SetPixel( nY, nX, aMskWhite );
-                            mbTrans = TRUE;
+                            mbTrans = sal_True;
                         }
                         else
                         {
-                            aIndex.SetIndex( (BYTE) nIndex );
+                            aIndex.SetIndex( (sal_uInt8) nIndex );
                             pBmpAcc->SetPixel( nY, nX, aIndex );
                         }
                     }
@@ -457,7 +457,7 @@ void ImageConsumer::SetPixelsByLongs( sal_uInt32 nConsX, sal_uInt32 nConsY,
                         if( !rCol.GetTransparency() )
                         {
                             pMskAcc->SetPixel( nY, nX, aMskWhite );
-                            mbTrans = TRUE;
+                            mbTrans = sal_True;
                         }
                         else
                         {
@@ -541,9 +541,9 @@ sal_uInt32 ImageConsumer::GetStatus() const
 
 // -----------------------------------------------------------------------------
 
-BOOL ImageConsumer::GetData( BitmapEx& rBmpEx ) const
+sal_Bool ImageConsumer::GetData( BitmapEx& rBmpEx ) const
 {
-    const BOOL bRet = ( SINGLEFRAMEDONE == mnStatus || STATICIMAGEDONE == mnStatus );
+    const sal_Bool bRet = ( SINGLEFRAMEDONE == mnStatus || STATICIMAGEDONE == mnStatus );
 
     if( bRet )
     {
@@ -558,9 +558,9 @@ BOOL ImageConsumer::GetData( BitmapEx& rBmpEx ) const
 
 // -----------------------------------------------------------------------------
 
-BOOL ImageConsumer::GetData( Image& rImage ) const
+sal_Bool ImageConsumer::GetData( Image& rImage ) const
 {
-    const BOOL bRet = ( SINGLEFRAMEDONE == mnStatus || STATICIMAGEDONE == mnStatus );
+    const sal_Bool bRet = ( SINGLEFRAMEDONE == mnStatus || STATICIMAGEDONE == mnStatus );
 
     if( bRet )
     {

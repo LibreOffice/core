@@ -53,8 +53,8 @@ struct QueuePage
 {
     GDIMetaFile*    mpMtf;
     JobSetup*       mpSetup;
-    USHORT          mnPage;
-    BOOL            mbEndJob;
+    sal_uInt16          mnPage;
+    sal_Bool            mbEndJob;
 
                     QueuePage() { mpMtf = NULL; mpSetup = NULL; }
                     ~QueuePage() { delete mpMtf; if ( mpSetup ) delete mpSetup; }
@@ -73,7 +73,7 @@ ImplQPrinter::ImplQPrinter( Printer* pParent ) :
     mnMaxBmpDPIY( mnDPIY ),
     mnCurCopyCount( 0 )
 {
-    SetSelfAsQueuePrinter( TRUE );
+    SetSelfAsQueuePrinter( sal_True );
     SetPrinterProps( pParent );
     SetPageQueueSize( 0 );
     mnCopyCount     = pParent->mnCopyCount;
@@ -96,7 +96,7 @@ void ImplQPrinter::Destroy()
     if( mbDestroyAllowed )
         delete this;
     else
-        mbDestroyed = TRUE;
+        mbDestroyed = sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -105,7 +105,7 @@ void ImplQPrinter::ImplPrintMtf( GDIMetaFile& rPrtMtf, long nMaxBmpDPIX, long nM
 {
     for( MetaAction* pAct = rPrtMtf.FirstAction(); pAct && !mbAborted; pAct = rPrtMtf.NextAction() )
     {
-        const ULONG     nType = pAct->GetType();
+        const sal_uIntPtr       nType = pAct->GetType();
         sal_Bool        bExecuted = sal_False;
 
         if( nType == META_COMMENT_ACTION )
@@ -225,7 +225,7 @@ void ImplQPrinter::ImplPrintMtf( GDIMetaFile& rPrtMtf, long nMaxBmpDPIX, long nM
         else if( nType == META_TRANSPARENT_ACTION )
         {
             MetaTransparentAction*  pTransAct = static_cast<MetaTransparentAction*>(pAct);
-            USHORT                  nTransparency( pTransAct->GetTransparence() );
+            sal_uInt16                  nTransparency( pTransAct->GetTransparence() );
 
             // #i10613# Respect transparency for draw color
             if( nTransparency )
@@ -234,15 +234,15 @@ void ImplQPrinter::ImplPrintMtf( GDIMetaFile& rPrtMtf, long nMaxBmpDPIX, long nM
 
                 // assume white background for alpha blending
                 Color aLineColor( GetLineColor() );
-                aLineColor.SetRed( static_cast<UINT8>( (255L*nTransparency + (100L - nTransparency)*aLineColor.GetRed()) / 100L ) );
-                aLineColor.SetGreen( static_cast<UINT8>( (255L*nTransparency + (100L - nTransparency)*aLineColor.GetGreen()) / 100L ) );
-                aLineColor.SetBlue( static_cast<UINT8>( (255L*nTransparency + (100L - nTransparency)*aLineColor.GetBlue()) / 100L ) );
+                aLineColor.SetRed( static_cast<sal_uInt8>( (255L*nTransparency + (100L - nTransparency)*aLineColor.GetRed()) / 100L ) );
+                aLineColor.SetGreen( static_cast<sal_uInt8>( (255L*nTransparency + (100L - nTransparency)*aLineColor.GetGreen()) / 100L ) );
+                aLineColor.SetBlue( static_cast<sal_uInt8>( (255L*nTransparency + (100L - nTransparency)*aLineColor.GetBlue()) / 100L ) );
                 SetLineColor( aLineColor );
 
                 Color aFillColor( GetFillColor() );
-                aFillColor.SetRed( static_cast<UINT8>( (255L*nTransparency + (100L - nTransparency)*aFillColor.GetRed()) / 100L ) );
-                aFillColor.SetGreen( static_cast<UINT8>( (255L*nTransparency + (100L - nTransparency)*aFillColor.GetGreen()) / 100L ) );
-                aFillColor.SetBlue( static_cast<UINT8>( (255L*nTransparency + (100L - nTransparency)*aFillColor.GetBlue()) / 100L ) );
+                aFillColor.SetRed( static_cast<sal_uInt8>( (255L*nTransparency + (100L - nTransparency)*aFillColor.GetRed()) / 100L ) );
+                aFillColor.SetGreen( static_cast<sal_uInt8>( (255L*nTransparency + (100L - nTransparency)*aFillColor.GetGreen()) / 100L ) );
+                aFillColor.SetBlue( static_cast<sal_uInt8>( (255L*nTransparency + (100L - nTransparency)*aFillColor.GetBlue()) / 100L ) );
                 SetFillColor( aFillColor );
             }
 
@@ -381,9 +381,9 @@ ImplJobSetup* ImplQPrinter::GetPageSetup( unsigned int nPage ) const
 }
 
 // -----------------------------------------------------------------------
-ULONG ImplQPrinter::GetPrintPageCount() const
+sal_uIntPtr ImplQPrinter::GetPrintPageCount() const
 {
-    ULONG nPageCount = maQueue.size() * ((mbUserCopy && !mbCollateCopy) ? mnCopyCount : 1);
+    sal_uIntPtr nPageCount = maQueue.size() * ((mbUserCopy && !mbCollateCopy) ? mnCopyCount : 1);
     return nPageCount;
 }
 
@@ -392,7 +392,7 @@ ULONG ImplQPrinter::GetPrintPageCount() const
 IMPL_LINK( ImplQPrinter, ImplPrintHdl, Timer*, EMPTYARG )
 {
     // Ist Drucken abgebrochen wurden?
-    if( !IsPrinting() || ( mpParent->IsJobActive() && ( maQueue.size() < (ULONG)mpParent->GetPageQueueSize() ) ) )
+    if( !IsPrinting() || ( mpParent->IsJobActive() && ( maQueue.size() < (sal_uIntPtr)mpParent->GetPageQueueSize() ) ) )
         return 0;
 
     // Druck-Job zuende?
@@ -412,15 +412,15 @@ IMPL_LINK( ImplQPrinter, ImplPrintHdl, Timer*, EMPTYARG )
     }
     else
     {
-        mbDestroyAllowed = FALSE;
+        mbDestroyAllowed = sal_False;
 
         PrePrintPage( pActPage );
 
-        USHORT nCopyCount = 1;
+        sal_uInt16 nCopyCount = 1;
         if( mbUserCopy && !mbCollateCopy )
             nCopyCount = mnCopyCount;
 
-        for ( USHORT i = 0; i < nCopyCount; i++ )
+        for ( sal_uInt16 i = 0; i < nCopyCount; i++ )
         {
             if ( pActPage->mpSetup )
             {
@@ -445,7 +445,7 @@ IMPL_LINK( ImplQPrinter, ImplPrintHdl, Timer*, EMPTYARG )
         PostPrintPage();
 
         delete pActPage;
-        mbDestroyAllowed = TRUE;
+        mbDestroyAllowed = sal_True;
 
         if( mbDestroyed )
             Destroy();
@@ -488,14 +488,14 @@ void ImplQPrinter::EndQueuePrint()
     else
     {
         QueuePage* pQueuePage   = new QueuePage;
-        pQueuePage->mbEndJob    = TRUE;
+        pQueuePage->mbEndJob    = sal_True;
         maQueue.push_back( pQueuePage );
     }
 }
 
 // -----------------------------------------------------------------------
 
-bool ImplQPrinter::GetPaperRanges( std::vector< ULONG >& o_rRanges, bool i_bIncludeOrientationChanges ) const
+bool ImplQPrinter::GetPaperRanges( std::vector< sal_uIntPtr >& o_rRanges, bool i_bIncludeOrientationChanges ) const
 {
     bool bRet = false;
 
@@ -506,7 +506,7 @@ bool ImplQPrinter::GetPaperRanges( std::vector< ULONG >& o_rRanges, bool i_bIncl
 
         if( ! maQueue.empty() )
         {
-            ULONG nCurPage = 0;
+            sal_uIntPtr nCurPage = 0;
 
             // get first job data
             const ImplJobSetup* pLastFormat = NULL;
@@ -562,18 +562,18 @@ bool ImplQPrinter::GetPaperRanges( std::vector< ULONG >& o_rRanges, bool i_bIncl
 void ImplQPrinter::AbortQueuePrint()
 {
     maTimer.Stop();
-    mbAborted = TRUE;
+    mbAborted = sal_True;
     AbortJob();
 }
 
 // -----------------------------------------------------------------------
 
-void ImplQPrinter::AddQueuePage( GDIMetaFile* pPage, USHORT nPage, BOOL bNewJobSetup )
+void ImplQPrinter::AddQueuePage( GDIMetaFile* pPage, sal_uInt16 nPage, sal_Bool bNewJobSetup )
 {
     QueuePage* pQueuePage   = new QueuePage;
     pQueuePage->mpMtf       = pPage;
     pQueuePage->mnPage      = nPage;
-    pQueuePage->mbEndJob    = FALSE;
+    pQueuePage->mbEndJob    = sal_False;
     // ensure that the first page has a valid setup, this is needed
     // in GetPaperRanges (used in pullmodel)
     // caution: this depends on mnCurPage in Printer being

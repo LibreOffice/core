@@ -49,8 +49,8 @@ private:
     Timer               maShowTimer;
     Timer               maHideTimer;
 
-    USHORT              mnHelpWinStyle;
-    USHORT              mnStyle;
+    sal_uInt16              mnHelpWinStyle;
+    sal_uInt16              mnStyle;
 
 protected:
                         DECL_LINK( TimerHdl, Timer* );
@@ -60,33 +60,33 @@ protected:
     void                ImplShow();
 
 public:
-                        HelpTextWindow( Window* pParent, const String& rText, USHORT nHelpWinStyle, USHORT nStyle );
+                        HelpTextWindow( Window* pParent, const String& rText, sal_uInt16 nHelpWinStyle, sal_uInt16 nStyle );
                         ~HelpTextWindow();
 
     const String&       GetHelpText() const { return maHelpText; }
     void                SetHelpText( const String& rHelpText );
-    USHORT              GetWinStyle() const { return mnHelpWinStyle; }
+    sal_uInt16              GetWinStyle() const { return mnHelpWinStyle; }
 
     // Nur merken:
     void                SetStatusText( const String& rStatusText ) { maStatusText = rStatusText; }
     void                SetHelpArea( const Rectangle& rRect ) { maHelpArea = rRect; }
 
-    void                ShowHelp( USHORT nDelayMode );
+    void                ShowHelp( sal_uInt16 nDelayMode );
 
     Size                CalcOutSize() const;
     const Rectangle&    GetHelpArea() const { return maHelpArea; }
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
-    BOOL                RegisterAccessibleParent();
+    sal_Bool                RegisterAccessibleParent();
     void                RevokeAccessibleParent();
 };
 
-void ImplShowHelpWindow( Window* pParent, USHORT nHelpWinStyle, USHORT nStyle,
+void ImplShowHelpWindow( Window* pParent, sal_uInt16 nHelpWinStyle, sal_uInt16 nStyle,
         const String& rHelpText, const String& rStatusText,
         const Point& rScreenPos, const Rectangle* pHelpArea = NULL );
 void ImplDestroyHelpWindow( bool bUpdateHideTime );
-void ImplSetHelpWindowPos( Window* pHelpWindow, USHORT nHelpWinStyle, USHORT nStyle,
+void ImplSetHelpWindowPos( Window* pHelpWindow, sal_uInt16 nHelpWinStyle, sal_uInt16 nStyle,
                             const Point& rPos, const Rectangle* pHelpArea );
 
 #endif // _SV_HELPWIN_HXX

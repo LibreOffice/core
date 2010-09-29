@@ -60,7 +60,7 @@ public:
     void            SetBitmap( const BitmapEx& rBmp );
     using OutputDevice::GetBitmap;
     const BitmapEx& GetBitmap() const { return maBmp; }
-    BOOL            SetModeBitmap( const BitmapEx& rBitmap, BmpColorMode eMode = BMP_COLOR_NORMAL );
+    sal_Bool            SetModeBitmap( const BitmapEx& rBitmap, BmpColorMode eMode = BMP_COLOR_NORMAL );
     const BitmapEx& GetModeBitmap( BmpColorMode eMode = BMP_COLOR_NORMAL ) const;
 };
 

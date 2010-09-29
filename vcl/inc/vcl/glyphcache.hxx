@@ -90,7 +90,7 @@ private:
     void                        GrowNotify();
 
 private:
-    ULONG                       CalcByteCount() const;
+    sal_uIntPtr                       CalcByteCount() const;
     void                        GarbageCollect();
 
     // the GlyphCache's FontList matches a font request to a serverfont instance
@@ -99,8 +99,8 @@ private:
     struct IFSD_Hash{ size_t operator()( const ImplFontSelectData& ) const; };
     typedef ::std::hash_map<ImplFontSelectData,ServerFont*,IFSD_Hash,IFSD_Equal > FontList;
     FontList                    maFontList;
-    ULONG                       mnMaxSize;      // max overall cache size in bytes
-    mutable ULONG               mnBytesUsed;
+    sal_uIntPtr                       mnMaxSize;      // max overall cache size in bytes
+    mutable sal_uIntPtr               mnBytesUsed;
     mutable long                mnLruIndex;
     mutable int                 mnGlyphCount;
     ServerFont*                 mpCurrentGCFont;
@@ -188,7 +188,7 @@ public:
     const ImplFontSelectData&   GetFontSelData() const      { return maFontSelData; }
 
     virtual void                FetchFontMetric( ImplFontMetricData&, long& rFactor ) const = 0;
-    virtual ULONG               GetKernPairs( ImplKernPairData** ) const      { return 0; }
+    virtual sal_uIntPtr               GetKernPairs( ImplKernPairData** ) const      { return 0; }
     virtual int                 GetGlyphKernValue( int, int ) const           { return 0; }
     virtual bool                GetFontCodeRanges( CmapResult& ) const        { return false; }
     Point                       TransformPoint( const Point& ) const;
@@ -217,7 +217,7 @@ protected:
     void                        AddRef() const      { ++mnRefCount; }
     long                        GetRefCount() const { return mnRefCount; }
     long                        Release() const;
-    ULONG                       GetByteCount() const { return mnBytesUsed; }
+    sal_uIntPtr                       GetByteCount() const { return mnBytesUsed; }
 
     virtual void                InitGlyphData( int nGlyphIndex, GlyphData& ) const = 0;
     virtual void                GarbageCollect( long );
@@ -237,7 +237,7 @@ private:
 
     // used by GlyphCache for cache LRU algorithm
     mutable long                mnRefCount;
-    mutable ULONG               mnBytesUsed;
+    mutable sal_uIntPtr               mnBytesUsed;
 
     ServerFont*                 mpPrevGCFont;
     ServerFont*                 mpNextGCFont;
@@ -326,13 +326,13 @@ public:
 
 public:
     unsigned char*  mpBits;
-    ULONG           mnAllocated;
+    sal_uIntPtr           mnAllocated;
 
-    ULONG           mnWidth;
-    ULONG           mnHeight;
+    sal_uIntPtr           mnWidth;
+    sal_uIntPtr           mnHeight;
 
-    ULONG           mnScanlineSize;
-    ULONG           mnBitCount;
+    sal_uIntPtr           mnScanlineSize;
+    sal_uIntPtr           mnBitCount;
 
     int             mnXOffset;
     int             mnYOffset;

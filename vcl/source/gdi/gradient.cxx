@@ -174,7 +174,7 @@ void Gradient::SetEndColor( const Color& rColor )
 
 // -----------------------------------------------------------------------
 
-void Gradient::SetAngle( USHORT nAngle )
+void Gradient::SetAngle( sal_uInt16 nAngle )
 {
     DBG_CHKTHIS( Gradient, NULL );
 
@@ -184,7 +184,7 @@ void Gradient::SetAngle( USHORT nAngle )
 
 // -----------------------------------------------------------------------
 
-void Gradient::SetBorder( USHORT nBorder )
+void Gradient::SetBorder( sal_uInt16 nBorder )
 {
     DBG_CHKTHIS( Gradient, NULL );
 
@@ -194,7 +194,7 @@ void Gradient::SetBorder( USHORT nBorder )
 
 // -----------------------------------------------------------------------
 
-void Gradient::SetOfsX( USHORT nOfsX )
+void Gradient::SetOfsX( sal_uInt16 nOfsX )
 {
     DBG_CHKTHIS( Gradient, NULL );
 
@@ -204,7 +204,7 @@ void Gradient::SetOfsX( USHORT nOfsX )
 
 // -----------------------------------------------------------------------
 
-void Gradient::SetOfsY( USHORT nOfsY )
+void Gradient::SetOfsY( sal_uInt16 nOfsY )
 {
     DBG_CHKTHIS( Gradient, NULL );
 
@@ -214,7 +214,7 @@ void Gradient::SetOfsY( USHORT nOfsY )
 
 // -----------------------------------------------------------------------
 
-void Gradient::SetStartIntensity( USHORT nIntens )
+void Gradient::SetStartIntensity( sal_uInt16 nIntens )
 {
     DBG_CHKTHIS( Gradient, NULL );
 
@@ -224,7 +224,7 @@ void Gradient::SetStartIntensity( USHORT nIntens )
 
 // -----------------------------------------------------------------------
 
-void Gradient::SetEndIntensity( USHORT nIntens )
+void Gradient::SetEndIntensity( sal_uInt16 nIntens )
 {
     DBG_CHKTHIS( Gradient, NULL );
 
@@ -234,7 +234,7 @@ void Gradient::SetEndIntensity( USHORT nIntens )
 
 // -----------------------------------------------------------------------
 
-void Gradient::SetSteps( USHORT nSteps )
+void Gradient::SetSteps( sal_uInt16 nSteps )
 {
     DBG_CHKTHIS( Gradient, NULL );
 
@@ -265,13 +265,13 @@ Gradient& Gradient::operator=( const Gradient& rGradient )
 
 // -----------------------------------------------------------------------
 
-BOOL Gradient::operator==( const Gradient& rGradient ) const
+sal_Bool Gradient::operator==( const Gradient& rGradient ) const
 {
     DBG_CHKTHIS( Gradient, NULL );
     DBG_CHKOBJ( &rGradient, Gradient, NULL );
 
     if ( mpImplGradient == rGradient.mpImplGradient )
-        return TRUE;
+        return sal_True;
 
     if ( (mpImplGradient->meStyle           == rGradient.mpImplGradient->meStyle)           ||
          (mpImplGradient->mnAngle           == rGradient.mpImplGradient->mnAngle)           ||
@@ -283,15 +283,15 @@ BOOL Gradient::operator==( const Gradient& rGradient ) const
          (mpImplGradient->mnIntensityEnd    == rGradient.mpImplGradient->mnIntensityEnd)    ||
          (mpImplGradient->maStartColor      == rGradient.mpImplGradient->maStartColor)      ||
          (mpImplGradient->maEndColor        == rGradient.mpImplGradient->maEndColor) )
-         return TRUE;
+         return sal_True;
     else
-        return FALSE;
+        return sal_False;
 }
 
 SvStream& operator>>( SvStream& rIStm, Impl_Gradient& rImpl_Gradient )
 {
     VersionCompat   aCompat( rIStm, STREAM_READ );
-    UINT16          nTmp16;
+    sal_uInt16          nTmp16;
 
     rIStm >> nTmp16; rImpl_Gradient.meStyle = (GradientStyle) nTmp16;
 
@@ -314,7 +314,7 @@ SvStream& operator<<( SvStream& rOStm, const Impl_Gradient& rImpl_Gradient )
 {
     VersionCompat aCompat( rOStm, STREAM_WRITE, 1 );
 
-    rOStm << (UINT16) rImpl_Gradient.meStyle <<
+    rOStm << (sal_uInt16) rImpl_Gradient.meStyle <<
              rImpl_Gradient.maStartColor <<
              rImpl_Gradient.maEndColor <<
              rImpl_Gradient.mnAngle <<

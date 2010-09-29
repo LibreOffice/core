@@ -37,13 +37,13 @@ class Window;
 // - Prototypes -
 // --------------
 
-long ImplWindowFrameProc( Window* pInst, SalFrame* pFrame, USHORT nEvent, const void* pEvent );
+long ImplWindowFrameProc( Window* pInst, SalFrame* pFrame, sal_uInt16 nEvent, const void* pEvent );
 
 // -----------
 // - HitTest -
 // -----------
 
-#define WINDOW_HITTEST_INSIDE           ((USHORT)0x0001)
-#define WINDOW_HITTEST_TRANSPARENT      ((USHORT)0x0002)
+#define WINDOW_HITTEST_INSIDE           ((sal_uInt16)0x0001)
+#define WINDOW_HITTEST_TRANSPARENT      ((sal_uInt16)0x0002)
 
 #endif  // _SV_WINDATA_HXX

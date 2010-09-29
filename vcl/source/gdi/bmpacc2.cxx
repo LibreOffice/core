@@ -43,7 +43,7 @@ IMPL_FORMAT_GETPIXEL_NOMASK( _1BIT_MSB_PAL )
 
 IMPL_FORMAT_SETPIXEL_NOMASK( _1BIT_MSB_PAL )
 {
-    BYTE& rByte = pScanline[ nX >> 3 ];
+    sal_uInt8& rByte = pScanline[ nX >> 3 ];
 
     ( rBitmapColor.GetIndex() & 1 ) ? ( rByte |= 1 << ( 7 - ( nX & 7 ) ) ) :
                                       ( rByte &= ~( 1 << ( 7 - ( nX & 7 ) ) ) );
@@ -60,7 +60,7 @@ IMPL_FORMAT_GETPIXEL_NOMASK( _1BIT_LSB_PAL )
 
 IMPL_FORMAT_SETPIXEL_NOMASK( _1BIT_LSB_PAL )
 {
-    BYTE& rByte = pScanline[ nX >> 3 ];
+    sal_uInt8& rByte = pScanline[ nX >> 3 ];
 
     ( rBitmapColor.GetIndex() & 1 ) ? ( rByte |= 1 << ( nX & 7 ) ) :
                                       ( rByte &= ~( 1 << ( nX & 7 ) ) );
@@ -77,7 +77,7 @@ IMPL_FORMAT_GETPIXEL_NOMASK( _4BIT_MSN_PAL )
 
 IMPL_FORMAT_SETPIXEL_NOMASK( _4BIT_MSN_PAL )
 {
-    BYTE& rByte = pScanline[ nX >> 1 ];
+    sal_uInt8& rByte = pScanline[ nX >> 1 ];
 
     ( nX & 1 ) ? ( rByte &= 0xf0, rByte |= ( rBitmapColor.GetIndex() & 0x0f ) ) :
                  ( rByte &= 0x0f, rByte |= ( rBitmapColor.GetIndex() << 4 ) );
@@ -94,7 +94,7 @@ IMPL_FORMAT_GETPIXEL_NOMASK( _4BIT_LSN_PAL )
 
 IMPL_FORMAT_SETPIXEL_NOMASK( _4BIT_LSN_PAL )
 {
-    BYTE& rByte = pScanline[ nX >> 1 ];
+    sal_uInt8& rByte = pScanline[ nX >> 1 ];
 
     ( nX & 1 ) ? ( rByte &= 0x0f, rByte |= ( rBitmapColor.GetIndex() << 4 ) ) :
                  ( rByte &= 0xf0, rByte |= ( rBitmapColor.GetIndex() & 0x0f ) );

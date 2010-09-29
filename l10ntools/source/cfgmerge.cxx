@@ -488,7 +488,7 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
                     ByteString sTemp( sToken );
                     sTemp.ToUpperAscii();
                     bLocalize = (( sTemp.Search( "CFG:TYPE=\"STRING\"" ) != STRING_NOTFOUND ) &&
-                        ( sTemp.Search( "CFG:LOCALIZED=\"sal_True\"" ) != STRING_NOTFOUND ));
+                        ( sTemp.Search( "CFG:LOCALIZED=\"TRUE\"" ) != STRING_NOTFOUND ));
                 }
             }
             else if ( sTokenName == "label" ) {

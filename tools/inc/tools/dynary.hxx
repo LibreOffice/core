@@ -55,15 +55,15 @@ public:
     ULONG       GetIndex( const void* p ) const
                     { return Container::GetPos( p ); }
     ULONG       GetIndex( const void* p, ULONG nStartIndex,
-                          BOOL bForward = TRUE ) const
+                          sal_Bool bForward = TRUE ) const
                     { return Container::GetPos( p, nStartIndex, bForward ); }
 
     DynArray&   operator =( const DynArray& rAry )
                     { Container::operator =( rAry ); return *this; }
 
-    BOOL        operator ==( const DynArray& rAry ) const
+    sal_Bool        operator ==( const DynArray& rAry ) const
                     { return Container::operator ==( rAry ); }
-    BOOL        operator !=( const DynArray& rAry ) const
+    sal_Bool        operator !=( const DynArray& rAry ) const
                     { return Container::operator !=( rAry ); }
 };
 
@@ -92,7 +92,7 @@ public:                                                                 \
     ULONG       GetIndex( const Type p ) const                          \
                     { return DynArray::GetIndex( (const void*)p ); }    \
     ULONG       GetIndex( const Type p, ULONG nStartIndex,              \
-                          BOOL bForward = TRUE ) const                  \
+                          sal_Bool bForward = TRUE ) const                  \
                     { return DynArray::GetIndex( (const void*)p,        \
                                                  nStartIndex,           \
                                                  bForward ); }          \
@@ -101,9 +101,9 @@ public:                                                                 \
                     { DynArray::operator =( rClassName );               \
                       return *this; }                                   \
                                                                         \
-    BOOL        operator ==( const ClassName& rAry ) const              \
+    sal_Bool        operator ==( const ClassName& rAry ) const              \
                     { return DynArray::operator ==( rAry ); }           \
-    BOOL        operator !=( const ClassName& rAry ) const              \
+    sal_Bool        operator !=( const ClassName& rAry ) const              \
                     { return DynArray::operator !=( rAry ); }           \
 };
 

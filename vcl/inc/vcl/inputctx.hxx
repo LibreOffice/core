@@ -36,10 +36,10 @@
 // - InputContext-Flags -
 // ----------------------
 
-#define INPUTCONTEXT_TEXT               ((ULONG)0x00000001)
-#define INPUTCONTEXT_EXTTEXTINPUT       ((ULONG)0x00000002)
-#define INPUTCONTEXT_EXTTEXTINPUT_ON    ((ULONG)0x00000004)
-#define INPUTCONTEXT_EXTTEXTINPUT_OFF   ((ULONG)0x00000008)
+#define INPUTCONTEXT_TEXT               ((sal_uIntPtr)0x00000001)
+#define INPUTCONTEXT_EXTTEXTINPUT       ((sal_uIntPtr)0x00000002)
+#define INPUTCONTEXT_EXTTEXTINPUT_ON    ((sal_uIntPtr)0x00000004)
+#define INPUTCONTEXT_EXTTEXTINPUT_OFF   ((sal_uIntPtr)0x00000008)
 
 // ----------------
 // - InputContext -
@@ -49,26 +49,26 @@ class VCL_DLLPUBLIC InputContext
 {
 private:
     Font            maFont;
-    ULONG           mnOptions;
+    sal_uIntPtr         mnOptions;
 
 public:
                     InputContext() { mnOptions = 0; }
                     InputContext( const InputContext& rInputContext ) :
                         maFont( rInputContext.maFont )
                     { mnOptions = rInputContext.mnOptions; }
-                    InputContext( const Font& rFont, ULONG nOptions = 0 ) :
+                    InputContext( const Font& rFont, sal_uIntPtr nOptions = 0 ) :
                         maFont( rFont )
                     { mnOptions = nOptions; }
 
     void            SetFont( const Font& rFont ) { maFont = rFont; }
     const Font&     GetFont() const { return maFont; }
 
-    void            SetOptions( ULONG nOptions ) { mnOptions = nOptions; }
-    ULONG           GetOptions() const { return mnOptions; }
+    void            SetOptions( sal_uIntPtr nOptions ) { mnOptions = nOptions; }
+    sal_uIntPtr         GetOptions() const { return mnOptions; }
 
     InputContext&   operator=( const InputContext& rInputContext );
-    BOOL            operator==( const InputContext& rInputContext ) const;
-    BOOL            operator!=( const InputContext& rInputContext ) const
+    sal_Bool            operator==( const InputContext& rInputContext ) const;
+    sal_Bool            operator!=( const InputContext& rInputContext ) const
                         { return !(InputContext::operator==( rInputContext )); }
 };
 
@@ -79,7 +79,7 @@ inline InputContext& InputContext::operator=( const InputContext& rInputContext 
     return *this;
 }
 
-inline BOOL InputContext::operator==( const InputContext& rInputContext ) const
+inline sal_Bool InputContext::operator==( const InputContext& rInputContext ) const
 {
     return ((mnOptions  == rInputContext.mnOptions) &&
             (maFont     == rInputContext.maFont));

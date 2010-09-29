@@ -328,12 +328,12 @@ class VCL_DLLPUBLIC TabitemValue
                 };
         inline ~TabitemValue() {};
 
-        BOOL isLeftAligned()  { return (mnAlignment & TABITEM_LEFTALIGNED) != 0; }
-        BOOL isRightAligned() { return (mnAlignment & TABITEM_RIGHTALIGNED) != 0; }
-        BOOL isBothAligned()  { return isLeftAligned() && isRightAligned(); }
-        BOOL isNotAligned()   { return (mnAlignment & (TABITEM_LEFTALIGNED | TABITEM_RIGHTALIGNED)) == 0; }
-        BOOL isFirst()        { return (mnAlignment & TABITEM_FIRST_IN_GROUP) != 0; }
-        BOOL isLast()         { return (mnAlignment & TABITEM_LAST_IN_GROUP) != 0; }
+        sal_Bool isLeftAligned()  { return (mnAlignment & TABITEM_LEFTALIGNED) != 0; }
+        sal_Bool isRightAligned() { return (mnAlignment & TABITEM_RIGHTALIGNED) != 0; }
+        sal_Bool isBothAligned()  { return isLeftAligned() && isRightAligned(); }
+        sal_Bool isNotAligned()   { return (mnAlignment & (TABITEM_LEFTALIGNED | TABITEM_RIGHTALIGNED)) == 0; }
+        sal_Bool isFirst()        { return (mnAlignment & TABITEM_FIRST_IN_GROUP) != 0; }
+        sal_Bool isLast()         { return (mnAlignment & TABITEM_LAST_IN_GROUP) != 0; }
 };
 
 /* SpinbuttonValue:
@@ -366,9 +366,9 @@ class VCL_DLLPUBLIC SpinbuttonValue
 class ToolbarValue
 {
 public:
-    ToolbarValue()  { mbIsTopDockingArea = FALSE; }
+    ToolbarValue()  { mbIsTopDockingArea = sal_False; }
     Rectangle           maGripRect;
-    BOOL                mbIsTopDockingArea; // indicates that this is the top aligned dockingarea
+    sal_Bool                mbIsTopDockingArea; // indicates that this is the top aligned dockingarea
                                             // adjacent to the menubar
 };
 

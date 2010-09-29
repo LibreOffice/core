@@ -32,9 +32,9 @@
 struct ImplSmartIdData
 {
     String aUId;
-    ULONG nUId;
-    BOOL bHasStringId;
-    BOOL bHasNumericId;
+    sal_uIntPtr nUId;
+    sal_Bool bHasStringId;
+    sal_Bool bHasNumericId;
 };
 
 
@@ -45,8 +45,8 @@ ImplSmartIdData* SmartId::GetSmartIdData()
         mpData = new ImplSmartIdData;
 //        mpData->aUId = "";
         mpData->nUId = 0;
-        mpData->bHasStringId = FALSE;
-        mpData->bHasNumericId = FALSE;
+        mpData->bHasStringId = sal_False;
+        mpData->bHasNumericId = sal_False;
     }
     return mpData;
 }
@@ -56,23 +56,23 @@ SmartId::SmartId( const String& rId )
 : mpData( NULL )
 {
     GetSmartIdData()->aUId = rId;
-    GetSmartIdData()->bHasStringId = TRUE;
+    GetSmartIdData()->bHasStringId = sal_True;
 }
 
-SmartId::SmartId( ULONG nId )
+SmartId::SmartId( sal_uIntPtr nId )
 : mpData( NULL )
 {
     GetSmartIdData()->nUId = nId;
-    GetSmartIdData()->bHasNumericId = TRUE;
+    GetSmartIdData()->bHasNumericId = sal_True;
 }
 
-SmartId::SmartId( const String& rId, ULONG nId )
+SmartId::SmartId( const String& rId, sal_uIntPtr nId )
 : mpData( NULL )
 {
     GetSmartIdData()->aUId = rId;
-    GetSmartIdData()->bHasStringId = TRUE;
+    GetSmartIdData()->bHasStringId = sal_True;
     GetSmartIdData()->nUId = nId;
-    GetSmartIdData()->bHasNumericId = TRUE;
+    GetSmartIdData()->bHasNumericId = sal_True;
 }
 
 SmartId::SmartId()
@@ -146,28 +146,28 @@ void SmartId::UpdateId( const SmartId& rId, SmartIdUpdateMode aMode )
     }
 }
 
-BOOL SmartId::HasNumeric() const
+sal_Bool SmartId::HasNumeric() const
 {
     if ( !mpData )
-        return FALSE;
+        return sal_False;
     else
         return mpData->bHasNumericId;
 }
 
-BOOL SmartId::HasString() const
+sal_Bool SmartId::HasString() const
 {
     if ( !mpData )
-        return FALSE;
+        return sal_False;
     else
         return mpData->bHasStringId;
 }
 
-BOOL SmartId::HasAny() const
+sal_Bool SmartId::HasAny() const
 {
     return mpData != NULL;
 }
 
-ULONG SmartId::GetNum() const
+sal_uIntPtr SmartId::GetNum() const
 {
     if ( !mpData )
         return 0;
@@ -198,20 +198,20 @@ String SmartId::GetText() const   // return String for UI usage
     return aRes;
 }
 
-BOOL SmartId::Matches( const String &rId )const
+sal_Bool SmartId::Matches( const String &rId )const
 {
     if ( HasString() )
         return GetStr().EqualsIgnoreCaseAscii( rId );
     else
-        return FALSE;
+        return sal_False;
 }
 
-BOOL SmartId::Matches( const ULONG nId ) const
+sal_Bool SmartId::Matches( const sal_uIntPtr nId ) const
 {
     if ( HasNumeric() )
         return GetNum() == nId;
     else
-        return FALSE;
+        return sal_False;
 }
 
 /******************************************************************************
@@ -220,17 +220,17 @@ If both Ids have Strings the result of Matching these is returned.
 Numbers are then Ignored.
 Else Matching Numbers is attempted.
 ******************************************************************************/
-BOOL SmartId::Matches( const SmartId &rId ) const
+sal_Bool SmartId::Matches( const SmartId &rId ) const
 {
     if ( !mpData || !rId.mpData )
-        return FALSE;
+        return sal_False;
     else if ( HasString() && rId.HasString() )
         return Matches( rId.GetStr() );
     else
         return rId.HasNumeric() && Matches( rId.GetNum() );
 }
 
-BOOL SmartId::Equals( const SmartId &rId ) const
+sal_Bool SmartId::Equals( const SmartId &rId ) const
 {
     if ( mpData && rId.mpData )
         return mpData->aUId.EqualsIgnoreCaseAscii( rId.mpData->aUId )
@@ -238,17 +238,17 @@ BOOL SmartId::Equals( const SmartId &rId ) const
             && mpData->nUId == rId.mpData->nUId
             && mpData->bHasNumericId == rId.mpData->bHasNumericId;
     else if ( !mpData && !rId.mpData )
-        return TRUE;
+        return sal_True;
     else
-        return FALSE;
+        return sal_False;
 }
 
-BOOL SmartId::operator == ( const SmartId& rRight ) const
+sal_Bool SmartId::operator == ( const SmartId& rRight ) const
 {
     return Equals( rRight );
 }
 
-BOOL SmartId::operator <  ( const SmartId& rRight ) const
+sal_Bool SmartId::operator <  ( const SmartId& rRight ) const
 {
     if ( HasString() && rRight.HasString() && GetStr() != rRight.GetStr() )
         return GetStr() < rRight.GetStr();

@@ -53,8 +53,8 @@ private:
 
 public:
    explicit SmartId( const String& rId );
-   explicit SmartId( ULONG nId );
-            SmartId( const String& rId, ULONG nId );
+   explicit SmartId( sal_uIntPtr nId );
+            SmartId( const String& rId, sal_uIntPtr nId );
 
             SmartId();
 
@@ -65,23 +65,23 @@ public:
 
    void UpdateId( const SmartId& rId, SmartIdUpdateMode aMode = SMART_SET_SMART );
 
-   BOOL HasNumeric() const;
-   BOOL HasString() const;
-   BOOL HasAny() const;
-   ULONG GetNum() const;
+   sal_Bool HasNumeric() const;
+   sal_Bool HasString() const;
+   sal_Bool HasAny() const;
+   sal_uIntPtr GetNum() const;
    String GetStr() const;
 
    String GetText() const;   /// return String for UI usage
 
-   BOOL Matches( const String &rId )const;
-   BOOL Matches( const ULONG nId ) const;
+   sal_Bool Matches( const String &rId )const;
+   sal_Bool Matches( const sal_uIntPtr nId ) const;
 /// In case both Ids have both values set only the StringId is used for Matching
-   BOOL Matches( const SmartId &rId ) const;
+   sal_Bool Matches( const SmartId &rId ) const;
 
-   BOOL Equals( const SmartId &rId ) const;
+   sal_Bool Equals( const SmartId &rId ) const;
 
-   BOOL operator == ( const SmartId& rRight ) const;
-   BOOL operator <  ( const SmartId& rRight ) const;
+   sal_Bool operator == ( const SmartId& rRight ) const;
+   sal_Bool operator <  ( const SmartId& rRight ) const;
 };
 
 #endif

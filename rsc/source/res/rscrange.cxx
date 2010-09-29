@@ -774,9 +774,9 @@ void RscBool::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 
     GetNumber( rInst, &l );
     if( l )
-        fprintf( fOutput, "sal_True" );
+        fprintf( fOutput, "TRUE" );
     else
-        fprintf( fOutput, "sal_False" );
+        fprintf( fOutput, "FALSE" );
 }
 
 //=======================================================================

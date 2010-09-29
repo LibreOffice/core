@@ -41,7 +41,7 @@ protected:
     friend class ChannelList;
 
     AgentItem*          pChannelAgent;
-    virtual BOOL        StartAgent() = 0;
+    virtual sal_Bool        StartAgent() = 0;
 
     AgentApi(AgentItem* pAgent) { pChannelAgent = pAgent; }
 
@@ -51,7 +51,7 @@ public:
     virtual void    InitAgent() = 0;
     virtual void    ShutDownAgent() = 0;
 
-    virtual BOOL    NewDataPermission(const String& rChannelName) = 0;
+    virtual sal_Bool    NewDataPermission(const String& rChannelName) = 0;
     virtual void    NewData(const String& rChannelName,
                         const INetURLObject& rURL) = 0;
     virtual void    NotifyChannelObjFile(const INetURLObject& rURL,

@@ -48,7 +48,7 @@ using namespace ::com::sun::star::uno;
 // =======================================================================
 
 void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
-                                    long nDX, long nDY, USHORT nBitCount, const SystemGraphicsData *pData )
+                                    long nDX, long nDY, sal_uInt16 nBitCount, const SystemGraphicsData *pData )
 {
     DBG_ASSERT( nBitCount <= 1,
                 "VirtualDevice::VirtualDevice(): Only 0 or 1 is for BitCount allowed" );
@@ -86,7 +86,7 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
     mnBitCount      = ( nBitCount ? nBitCount : pOutDev->GetBitCount() );
     mnOutWidth      = nDX;
     mnOutHeight     = nDY;
-    mbScreenComp    = TRUE;
+    mbScreenComp    = sal_True;
     mnAlphaDepth    = -1;
 
     // #i59315# init vdev size from system object, when passed a
@@ -99,12 +99,12 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
         SetAntialiasing( ANTIALIASING_DISABLE_TEXT );
 
     if ( pOutDev->GetOutDevType() == OUTDEV_PRINTER )
-        mbScreenComp = FALSE;
+        mbScreenComp = sal_False;
     else if ( pOutDev->GetOutDevType() == OUTDEV_VIRDEV )
         mbScreenComp = ((VirtualDevice*)pOutDev)->mbScreenComp;
 
     meOutDevType    = OUTDEV_VIRDEV;
-    mbDevOutput     = TRUE;
+    mbDevOutput     = sal_True;
     mpFontList      = pSVData->maGDIData.mpScreenFontList;
     mpFontCache     = pSVData->maGDIData.mpScreenFontCache;
     mnDPIX          = pOutDev->mnDPIX;
@@ -136,7 +136,7 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
 
 // -----------------------------------------------------------------------
 
-VirtualDevice::VirtualDevice( USHORT nBitCount )
+VirtualDevice::VirtualDevice( sal_uInt16 nBitCount )
 :   mpVirDev( NULL ),
     meRefDevMode( REFDEV_NONE )
 {
@@ -147,7 +147,7 @@ VirtualDevice::VirtualDevice( USHORT nBitCount )
 
 // -----------------------------------------------------------------------
 
-VirtualDevice::VirtualDevice( const OutputDevice& rCompDev, USHORT nBitCount )
+VirtualDevice::VirtualDevice( const OutputDevice& rCompDev, sal_uInt16 nBitCount )
     : mpVirDev( NULL ),
     meRefDevMode( REFDEV_NONE )
 {
@@ -158,7 +158,7 @@ VirtualDevice::VirtualDevice( const OutputDevice& rCompDev, USHORT nBitCount )
 
 // -----------------------------------------------------------------------
 
-VirtualDevice::VirtualDevice( const OutputDevice& rCompDev, USHORT nBitCount, USHORT nAlphaBitCount )
+VirtualDevice::VirtualDevice( const OutputDevice& rCompDev, sal_uInt16 nBitCount, sal_uInt16 nAlphaBitCount )
     : mpVirDev( NULL ),
     meRefDevMode( REFDEV_NONE )
 {
@@ -172,7 +172,7 @@ VirtualDevice::VirtualDevice( const OutputDevice& rCompDev, USHORT nBitCount, US
 
 // -----------------------------------------------------------------------
 
-VirtualDevice::VirtualDevice( const SystemGraphicsData *pData, USHORT nBitCount )
+VirtualDevice::VirtualDevice( const SystemGraphicsData *pData, sal_uInt16 nBitCount )
 :   mpVirDev( NULL ),
     meRefDevMode( REFDEV_NONE )
 {
@@ -208,20 +208,20 @@ VirtualDevice::~VirtualDevice()
 
 // -----------------------------------------------------------------------
 
-BOOL VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, BOOL bErase )
+sal_Bool VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, sal_Bool bErase )
 {
     DBG_TRACE3( "VirtualDevice::ImplSetOutputSizePixel( %ld, %ld, %d )", rNewSize.Width(), rNewSize.Height(), (int)bErase );
 
     if ( !mpVirDev )
-        return FALSE;
+        return sal_False;
     else if ( rNewSize == GetOutputSizePixel() )
     {
         if ( bErase )
             Erase();
-        return TRUE;
+        return sal_True;
     }
 
-    BOOL bRet;
+    sal_Bool bRet;
     long nNewWidth = rNewSize.Width(), nNewHeight = rNewSize.Height();
 
     if ( nNewWidth < 1 )
@@ -250,7 +250,7 @@ BOOL VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, BOOL bErase )
         if ( !mpGraphics )
         {
             if ( !ImplGetGraphics() )
-                return FALSE;
+                return sal_False;
         }
 
         pNewVirDev = pSVData->mpDefInst->CreateVirtualDevice( mpGraphics, nNewWidth, nNewHeight, mnBitCount );
@@ -286,16 +286,16 @@ BOOL VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, BOOL bErase )
                 mpVirDev = pNewVirDev;
                 mnOutWidth  = rNewSize.Width();
                 mnOutHeight = rNewSize.Height();
-                bRet = TRUE;
+                bRet = sal_True;
             }
             else
             {
-                bRet = FALSE;
+                bRet = sal_False;
                 pSVData->mpDefInst->DestroyVirtualDevice( pNewVirDev );
             }
         }
         else
-            bRet = FALSE;
+            bRet = sal_False;
     }
 
     return bRet;
@@ -319,7 +319,7 @@ void VirtualDevice::ImplFillOpaqueRectangle( const Rectangle& rRect )
 
 // -----------------------------------------------------------------------
 
-BOOL VirtualDevice::SetOutputSizePixel( const Size& rNewSize, BOOL bErase )
+sal_Bool VirtualDevice::SetOutputSizePixel( const Size& rNewSize, sal_Bool bErase )
 {
     if( ImplSetOutputSizePixel(rNewSize, bErase) )
     {
@@ -348,10 +348,10 @@ BOOL VirtualDevice::SetOutputSizePixel( const Size& rNewSize, BOOL bErase )
             mpAlphaVDev->SetMapMode( GetMapMode() );
         }
 
-        return TRUE;
+        return sal_True;
     }
 
-    return FALSE;
+    return sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -363,7 +363,7 @@ void VirtualDevice::SetReferenceDevice( RefDevMode i_eRefDevMode )
     {
     case REFDEV_NONE:
     default:
-        DBG_ASSERT( FALSE, "VDev::SetRefDev illegal argument!" );
+        DBG_ASSERT( sal_False, "VDev::SetRefDev illegal argument!" );
         break;
     case REFDEV_MODE06:
         nDPIX = nDPIY = 600;
@@ -391,17 +391,17 @@ void VirtualDevice::ImplSetReferenceDevice( RefDevMode i_eRefDevMode, sal_Int32 
     mnDPIX = i_nDPIX;
     mnDPIY = i_nDPIY;
 
-    EnableOutput( FALSE );  // prevent output on reference device
-    mbScreenComp = FALSE;
+    EnableOutput( sal_False );  // prevent output on reference device
+    mbScreenComp = sal_False;
 
     // invalidate currently selected fonts
-    mbInitFont = TRUE;
-    mbNewFont = TRUE;
+    mbInitFont = sal_True;
+    mbNewFont = sal_True;
 
     // avoid adjusting font lists when already in refdev mode
-    BYTE nOldRefDevMode = meRefDevMode;
-    BYTE nOldCompatFlag = (BYTE)meRefDevMode & REFDEV_FORCE_ZERO_EXTLEAD;
-    meRefDevMode = (BYTE)(i_eRefDevMode | nOldCompatFlag);
+    sal_uInt8 nOldRefDevMode = meRefDevMode;
+    sal_uInt8 nOldCompatFlag = (sal_uInt8)meRefDevMode & REFDEV_FORCE_ZERO_EXTLEAD;
+    meRefDevMode = (sal_uInt8)(i_eRefDevMode | nOldCompatFlag);
     if( (nOldRefDevMode ^ nOldCompatFlag) != REFDEV_NONE )
         return;
 
@@ -442,7 +442,7 @@ void VirtualDevice::ImplSetReferenceDevice( RefDevMode i_eRefDevMode, sal_Int32 
 
 void VirtualDevice::Compat_ZeroExtleadBug()
 {
-    meRefDevMode = (BYTE)meRefDevMode | REFDEV_FORCE_ZERO_EXTLEAD;
+    meRefDevMode = (sal_uInt8)meRefDevMode | REFDEV_FORCE_ZERO_EXTLEAD;
 }
 
 // -----------------------------------------------------------------------

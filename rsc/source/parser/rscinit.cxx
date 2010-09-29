@@ -207,8 +207,8 @@ void RscTypCont::Init()
     aNmTb.Put( "writeifset",         WRITEIFSET,     (long)0  );
 
 /* Werte fuer Aufzaehlungstypen */
-    aNmTb.Put( "sal_True",               BOOLEAN,        (long)sal_True  );
-    aNmTb.Put( "sal_False",              BOOLEAN,        (long)sal_False );
+    aNmTb.Put( "TRUE",               BOOLEAN,        (long)sal_True  );
+    aNmTb.Put( "FALSE",              BOOLEAN,        (long)sal_False );
 
 /* Vordefinierte HilfeId's */
     aNmTb.Put( "HELP_INDEX",         NUMBER,     OOO_HELP_INDEX      );

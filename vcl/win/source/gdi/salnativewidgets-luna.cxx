@@ -78,7 +78,7 @@ private:
 public:
     VisualStylesAPI();
     ~VisualStylesAPI();
-    BOOL IsAvailable()  { return (mhModule != NULL); }
+    sal_Bool IsAvailable()  { return (mhModule != NULL); }
 
     HTHEME OpenThemeData( HWND hwnd, LPCWSTR pszClassList );
     HRESULT CloseThemeData( HTHEME hTheme );
@@ -215,7 +215,7 @@ static HTHEME getThemeHandle( HWND hWnd, LPCWSTR name )
  *  Returns TRUE if the platform supports native
  *  drawing of the control defined by nPart
  */
-BOOL WinSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nPart )
+sal_Bool WinSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nPart )
 {
     HTHEME hTheme = NULL;
 
@@ -315,16 +315,16 @@ BOOL WinSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
  *  aPos was or was not inside the native widget specified by the
  *  nType/nPart combination.
  */
-BOOL WinSalGraphics::hitTestNativeControl( ControlType,
+sal_Bool WinSalGraphics::hitTestNativeControl( ControlType,
                               ControlPart,
                               const Region&,
                               const Point&,
-                              BOOL& )
+                              sal_Bool& )
 {
     return FALSE;
 }
 
-BOOL ImplDrawTheme( HTHEME hTheme, HDC hDC, int iPart, int iState, RECT rc, const OUString& aStr)
+sal_Bool ImplDrawTheme( HTHEME hTheme, HDC hDC, int iPart, int iState, RECT rc, const OUString& aStr)
 {
     HRESULT hr = vsAPI.DrawThemeBackground( hTheme, hDC, iPart, iState, &rc, 0);
 
@@ -419,7 +419,7 @@ void ImplConvertSpinbuttonValues( int nControlPart, const ControlState& rState, 
 
 // ----
 
-BOOL ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
+sal_Bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                             ControlType nType,
                             ControlPart nPart,
                             ControlState nState,
@@ -556,7 +556,7 @@ BOOL ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         SpinbuttonValue *pValue = (SpinbuttonValue*) aValue.getOptionalVal();
         if( pValue )
         {
-            BOOL bOk = FALSE;
+            sal_Bool bOk = FALSE;
 
             RECT rect;
             ImplConvertSpinbuttonValues( pValue->mnUpperPart, pValue->mnUpperState, pValue->maUpperRect, &iPart, &iState, &rect );
@@ -581,7 +581,7 @@ BOOL ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             SpinbuttonValue *pValue = (SpinbuttonValue*) aValue.getOptionalVal();
             if( pValue )
             {
-                BOOL bOk = FALSE;
+                sal_Bool bOk = FALSE;
 
                 RECT rect;
                 ImplConvertSpinbuttonValues( pValue->mnUpperPart, pValue->mnUpperState, pValue->maUpperRect, &iPart, &iState, &rect );
@@ -686,7 +686,7 @@ BOOL ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
     if( nType == CTRL_RADIOBUTTON )
     {
         iPart = BP_RADIOBUTTON;
-        BOOL bChecked = ( aValue.getTristateVal() == BUTTONVALUE_ON );
+        sal_Bool bChecked = ( aValue.getTristateVal() == BUTTONVALUE_ON );
 
         if( nState & CTRL_STATE_PRESSED )
             iState = bChecked ? RBS_CHECKEDPRESSED : RBS_UNCHECKEDPRESSED;
@@ -833,7 +833,7 @@ BOOL ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         if( nPart == PART_BUTTON )
         {
             iPart = TP_BUTTON;
-            BOOL bChecked = ( aValue.getTristateVal() == BUTTONVALUE_ON );
+            sal_Bool bChecked = ( aValue.getTristateVal() == BUTTONVALUE_ON );
             if( !(nState & CTRL_STATE_ENABLED) )
                 //iState = TS_DISABLED;
                 // disabled buttons are typically not painted at all but we need visual
@@ -961,14 +961,14 @@ BOOL ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
  *  aValue:         An optional value (tristate/numerical/string)
  *  aCaption:   A caption or title string (like button text etc)
  */
-BOOL WinSalGraphics::drawNativeControl( ControlType nType,
+sal_Bool WinSalGraphics::drawNativeControl( ControlType nType,
                             ControlPart nPart,
                             const Region& rControlRegion,
                             ControlState nState,
                             const ImplControlValue& aValue,
                             const OUString& aCaption )
 {
-    BOOL bOk = false;
+    sal_Bool bOk = false;
     HTHEME hTheme = NULL;
 
     switch( nType )
@@ -1078,7 +1078,7 @@ BOOL WinSalGraphics::drawNativeControl( ControlType nType,
  *  aValue:         An optional value (tristate/numerical/string)
  *  aCaption:   A caption or title string (like button text etc)
  */
-BOOL WinSalGraphics::drawNativeControlText( ControlType,
+sal_Bool WinSalGraphics::drawNativeControlText( ControlType,
                                 ControlPart,
                                 const Region&,
                                 ControlState,
@@ -1102,7 +1102,7 @@ BOOL WinSalGraphics::drawNativeControlText( ControlType,
  *  aValue:     An optional value (tristate/numerical/string)
  *  aCaption:       A caption or title string (like button text etc)
  */
-BOOL WinSalGraphics::getNativeControlRegion(  ControlType nType,
+sal_Bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
                                 ControlPart nPart,
                                 const Region& rControlRegion,
                                 ControlState nState,
@@ -1111,7 +1111,7 @@ BOOL WinSalGraphics::getNativeControlRegion(  ControlType nType,
                                 Region &rNativeBoundingRegion,
                                 Region &rNativeContentRegion )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = FALSE;
 
     HDC hDC = GetDC( mhWnd );
     if( nType == CTRL_TOOLBAR )

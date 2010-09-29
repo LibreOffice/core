@@ -489,18 +489,18 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
     mnError = PRINTER_OK;
 
     if ( IsDisplayPrinter() )
-        return FALSE;
+        return sal_False;
 
     if ( IsJobActive() || IsPrinting() )
-        return FALSE;
+        return sal_False;
 
-    ULONG   nCopies = mnCopyCount;
+    sal_uIntPtr   nCopies = mnCopyCount;
     bool    bCollateCopy = mbCollateCopy;
-    bool    bUserCopy = FALSE;
+    bool    bUserCopy = sal_False;
 
     if ( nCopies > 1 )
     {
-        ULONG nDevCopy;
+        sal_uIntPtr nDevCopy;
 
         if ( bCollateCopy )
             nDevCopy = GetCapabilities( PRINTER_CAPABILITIES_COLLATECOPIES );
@@ -510,20 +510,20 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
         // need to do copies by hand ?
         if ( nCopies > nDevCopy )
         {
-            bUserCopy = TRUE;
+            bUserCopy = sal_True;
             nCopies = 1;
-            bCollateCopy = FALSE;
+            bCollateCopy = sal_False;
         }
     }
     else
-        bCollateCopy = FALSE;
+        bCollateCopy = sal_False;
 
 
     ImplSVData* pSVData = ImplGetSVData();
     mpPrinter = pSVData->mpDefInst->CreatePrinter( mpInfoPrinter );
 
     if ( !mpPrinter )
-        return FALSE;
+        return sal_False;
 
     sal_Bool bSinglePrintJobs = sal_False;
     beans::PropertyValue* pSingleValue = i_pController->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintCollateAsSingleJobs" ) ) );
@@ -543,7 +543,7 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
         pFileValue->Value >>= aFile;
         if( aFile.getLength() )
         {
-            mbPrintFile = TRUE;
+            mbPrintFile = sal_True;
             maPrintFile = aFile;
             bSinglePrintJobs = sal_False;
         }
@@ -556,10 +556,10 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
     maJobName               = i_rJobName;
     mnCurPage               = 1;
     mnCurPrintPage          = 1;
-    mbPrinting              = TRUE;
+    mbPrinting              = sal_True;
     if( ImplGetSVData()->maGDIData.mbPrinterPullModel )
     {
-        mbJobActive             = TRUE;
+        mbJobActive             = sal_True;
         // sallayer does all necessary page printing
         // and also handles showing a dialog
         // that also means it must call jobStarted when the dialog is finished
@@ -580,7 +580,7 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
             pSVData->mpDefInst->DestroyPrinter( mpPrinter );
             mnCurPage           = 0;
             mnCurPrintPage      = 0;
-            mbPrinting          = FALSE;
+            mbPrinting          = sal_False;
             mpPrinter = NULL;
 
             return false;
@@ -613,7 +613,7 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
                                      i_pController->isDirectPrint(),
                                      maJobSetup.ImplGetConstData() ) )
             {
-                mbJobActive             = TRUE;
+                mbJobActive             = sal_True;
                 i_pController->createProgressDialog();
                 int nPages = i_pController->getFilteredPageCount();
                 for( int nIteration = 0; nIteration < nRepeatCount; nIteration++ )
@@ -637,7 +637,7 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
                         maJobName               = i_rJobName;
                         mnCurPage               = 1;
                         mnCurPrintPage          = 1;
-                        mbPrinting              = TRUE;
+                        mbPrinting              = sal_True;
                     }
                     else
                         bError = true;
@@ -658,7 +658,7 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
                     pSVData->mpDefInst->DestroyPrinter( mpPrinter );
                 mnCurPage           = 0;
                 mnCurPrintPage      = 0;
-                mbPrinting          = FALSE;
+                mbPrinting          = sal_False;
                 mpPrinter = NULL;
 
                 return false;
@@ -854,7 +854,7 @@ PrinterController::PageSize PrinterController::getPageFile( int i_nUnfilteredPag
     o_rMtf.SetPrefSize( aPageSize.aSize );
     o_rMtf.SetPrefMapMode( aMapMode );
 
-    mpImplData->mpPrinter->EnableOutput( FALSE );
+    mpImplData->mpPrinter->EnableOutput( sal_False );
 
     o_rMtf.Record( mpImplData->mpPrinter.get() );
 
@@ -883,7 +883,7 @@ static void appendSubPage( GDIMetaFile& o_rMtf, const Rectangle& i_rClipRect, GD
     o_rMtf.AddAction( new MetaPushAction( PUSH_ALL ) );
 
     // clip to page rect
-    o_rMtf.AddAction( new MetaClipRegionAction( Region( i_rClipRect ), TRUE ) );
+    o_rMtf.AddAction( new MetaClipRegionAction( Region( i_rClipRect ), sal_True ) );
 
     // append the subpage
     io_rSubPage.WindStart();
@@ -900,8 +900,8 @@ static void appendSubPage( GDIMetaFile& o_rMtf, const Rectangle& i_rClipRect, GD
         o_rMtf.AddAction( new MetaMapModeAction( MapMode( MAP_100TH_MM ) ) );
 
         Rectangle aBorderRect( i_rClipRect );
-        o_rMtf.AddAction( new MetaLineColorAction( Color( COL_BLACK ), TRUE ) );
-        o_rMtf.AddAction( new MetaFillColorAction( Color( COL_TRANSPARENT ), FALSE ) );
+        o_rMtf.AddAction( new MetaLineColorAction( Color( COL_BLACK ), sal_True ) );
+        o_rMtf.AddAction( new MetaFillColorAction( Color( COL_TRANSPARENT ), sal_False ) );
         o_rMtf.AddAction( new MetaRectAction( aBorderRect ) );
 
         // restore gstate
@@ -1044,9 +1044,9 @@ int PrinterController::getFilteredPageCount()
     return (getPageCountProtected() * mpImplData->maMultiPage.nRepeat + (nDiv-1)) / nDiv;
 }
 
-ULONG PrinterController::removeTransparencies( GDIMetaFile& i_rIn, GDIMetaFile& o_rOut )
+sal_uIntPtr PrinterController::removeTransparencies( GDIMetaFile& i_rIn, GDIMetaFile& o_rOut )
 {
-    ULONG nRestoreDrawMode = mpImplData->mpPrinter->GetDrawMode();
+    sal_uIntPtr nRestoreDrawMode = mpImplData->mpPrinter->GetDrawMode();
     sal_Int32 nMaxBmpDPIX = mpImplData->mpPrinter->ImplGetDPIX();
     sal_Int32 nMaxBmpDPIY = mpImplData->mpPrinter->ImplGetDPIY();
 
@@ -1139,9 +1139,9 @@ void PrinterController::printFilteredPage( int i_nPage )
     }
 
     GDIMetaFile aCleanedFile;
-    ULONG nRestoreDrawMode = removeTransparencies( aPageFile, aCleanedFile );
+    sal_uIntPtr nRestoreDrawMode = removeTransparencies( aPageFile, aCleanedFile );
 
-    mpImplData->mpPrinter->EnableOutput( TRUE );
+    mpImplData->mpPrinter->EnableOutput( sal_True );
 
     // actually print the page
     mpImplData->mpPrinter->ImplStartPage();
@@ -1520,7 +1520,7 @@ void PrinterController::pushPropertiesToPrinter()
     pVal = getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Collate" ) ) );
     if( pVal )
         pVal->Value >>= bCollate;
-    mpImplData->mpPrinter->SetCopyCount( static_cast<USHORT>(nCopyCount), bCollate );
+    mpImplData->mpPrinter->SetCopyCount( static_cast<sal_uInt16>(nCopyCount), bCollate );
 
     // duplex mode
     pVal = getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DuplexMode" ) ) );

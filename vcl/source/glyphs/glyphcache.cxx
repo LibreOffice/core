@@ -288,9 +288,9 @@ void GlyphCache::UncacheFont( ServerFont& rServerFont )
 
 // -----------------------------------------------------------------------
 
-ULONG GlyphCache::CalcByteCount() const
+sal_uIntPtr GlyphCache::CalcByteCount() const
 {
-    ULONG nCacheSize = sizeof(*this);
+    sal_uIntPtr nCacheSize = sizeof(*this);
     for( FontList::const_iterator it = maFontList.begin(); it != maFontList.end(); ++it )
     {
         const ServerFont* pSF = it->second;

@@ -91,7 +91,7 @@ static char opdope[OP_MAX] = {
 typedef struct optab {
     char    op;         /* Operator         */
     char    prec;           /* Its precedence       */
-    char    skip;           /* Short-circuit: sal_True to skip  */
+    char    skip;           /* Short-circuit: TRUE to skip  */
 } OPTAB;
 static int  evalue;         /* Current value from evallex() */
 
@@ -222,7 +222,7 @@ eval()
  * evaleval Evaluate the current operator, given the values on
  *      the value stack.  Returns a pointer to the (new)
  *      value stack.
- * For compatiblity with older cpp's, this return returns 1 (sal_True)
+ * For compatiblity with older cpp's, this return returns 1 (TRUE)
  * if a syntax error is detected.
  */
 {
@@ -609,7 +609,7 @@ nogood: unget();
 FILE_LOCAL int
 bittest(int value)
 /*
- * sal_True if value is zero or exactly one bit is set in value.
+ * TRUE if value is zero or exactly one bit is set in value.
  */
 {
 #if (4096 & ~(-4096)) == 0
@@ -674,7 +674,7 @@ evalchar(int skip)
     register int    value;
     register int    count;
 
-    instring = sal_True;
+    instring = TRUE;
     if ((c = cget()) == '\\') {
         switch ((c = cget())) {
         case 'a':               /* New in Standard  */
@@ -766,7 +766,7 @@ evalchar(int skip)
         value += c;
 #endif
     }
-    instring = sal_False;
+    instring = FALSE;
     return (value);
 }
 

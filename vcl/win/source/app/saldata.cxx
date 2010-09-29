@@ -54,7 +54,7 @@ rtl_TextEncoding ImplSalGetSystemEncoding()
 
 // -----------------------------------------------------------------------
 
-ByteString ImplSalGetWinAnsiString( const UniString& rStr, BOOL bFileName )
+ByteString ImplSalGetWinAnsiString( const UniString& rStr, sal_Bool bFileName )
 {
     rtl_TextEncoding eEncoding = ImplSalGetSystemEncoding();
     if ( bFileName )
@@ -137,7 +137,7 @@ LONG ImplGetWindowLong( HWND hWnd, int nIndex )
 
 // -----------------------------------------------------------------------
 
-WIN_BOOL ImplPostMessage( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
+BOOL ImplPostMessage( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 {
     if ( aSalShlData.mbWNT )
         return PostMessageW( hWnd, nMsg, wParam, lParam );
@@ -147,9 +147,9 @@ WIN_BOOL ImplPostMessage( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 
 // -----------------------------------------------------------------------
 
-WIN_BOOL ImplSendMessage( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
+BOOL ImplSendMessage( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 {
-    WIN_BOOL bRet;
+    BOOL bRet;
     if ( aSalShlData.mbWNT )
         bRet = SendMessageW( hWnd, nMsg, wParam, lParam );
     else
@@ -160,7 +160,7 @@ WIN_BOOL ImplSendMessage( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 
 // -----------------------------------------------------------------------
 
-WIN_BOOL ImplGetMessage( LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax )
+BOOL ImplGetMessage( LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax )
 {
     if ( aSalShlData.mbWNT )
         return GetMessageW( lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax );
@@ -170,7 +170,7 @@ WIN_BOOL ImplGetMessage( LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFi
 
 // -----------------------------------------------------------------------
 
-WIN_BOOL ImplPeekMessage( LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax, UINT wRemoveMsg )
+BOOL ImplPeekMessage( LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax, UINT wRemoveMsg )
 {
     if ( aSalShlData.mbWNT )
         return PeekMessageW( lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax, wRemoveMsg );

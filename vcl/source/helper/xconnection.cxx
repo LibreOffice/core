@@ -38,7 +38,7 @@ namespace vcl
 {
     class SolarMutexReleaser
     {
-        ULONG mnReleased;
+        sal_uIntPtr mnReleased;
     public:
         SolarMutexReleaser()
         {

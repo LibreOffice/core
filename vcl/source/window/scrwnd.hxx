@@ -57,12 +57,12 @@ private:
     Point               maLastMousePos;
     Point               maCenter;
     Timer*              mpTimer;
-    ULONG               mnRepaintTime;
-    ULONG               mnTimeout;
-    ULONG               mnWheelMode;
-    ULONG               mnMaxWidth;
-    ULONG               mnActWidth;
-    ULONG               mnActDist;
+    sal_uIntPtr             mnRepaintTime;
+    sal_uIntPtr             mnTimeout;
+    sal_uIntPtr             mnWheelMode;
+    sal_uIntPtr             mnMaxWidth;
+    sal_uIntPtr             mnActWidth;
+    sal_uIntPtr             mnActDist;
     long                mnActDeltaX;
     long                mnActDeltaY;
 
@@ -87,6 +87,6 @@ public:
                         ~ImplWheelWindow();
 
     void                ImplStop();
-    void                ImplSetWheelMode( ULONG nWheelMode );
-    ULONG               ImplGetWheelMode() const { return mnWheelMode; }
+    void                ImplSetWheelMode( sal_uIntPtr nWheelMode );
+    sal_uIntPtr             ImplGetWheelMode() const { return mnWheelMode; }
 };

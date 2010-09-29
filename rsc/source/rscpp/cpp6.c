@@ -44,8 +44,8 @@
  *              never expanded.
  * macroid()    reads the next token (C identifier) into token[].
  *              If it is a #defined macro, it is expanded, and
- *              macroid() returns sal_True, otherwise, sal_False.
- * catenate()   Does the dirty work of token concatenation, sal_True if it did.
+ *              macroid() returns TRUE, otherwise, FALSE.
+ * catenate()   Does the dirty work of token concatenation, TRUE if it did.
  * scanstring() Reads a string from the input stream, calling
  *              a user-supplied function for each character.
  *              This function may be output() to write the
@@ -273,9 +273,9 @@ catenate()
 /*
  * A token was just read (via macroid).
  * If the next character is TOK_SEP, concatenate the next token
- * return sal_True -- which should recall macroid after refreshing
+ * return TRUE -- which should recall macroid after refreshing
  * macroid's argument.  If it is not TOK_SEP, unget() the character
- * and return sal_False.
+ * and return FALSE.
  */
 {
         register int            c;
@@ -284,7 +284,7 @@ catenate()
 #if OK_CONCAT
         if (get() != TOK_SEP) {                 /* Token concatenation  */
             unget();
-            return (sal_False);
+            return (FALSE);
         }
         else {
             token1 = savestring(token);         /* Save first token     */
@@ -327,10 +327,10 @@ catenate()
              */
             free(token1);                       /* Free up memory       */
             ungetstring(work);                  /* Unget the new thing, */
-            return (sal_True);
+            return (TRUE);
         }
 #else
-        return (sal_False);                         /* Not supported        */
+        return (FALSE);                         /* Not supported        */
 #endif
 }
 
@@ -345,12 +345,12 @@ void         (*outfun)() /* BP */
 /*
  * Scan off a string.  Warning if terminated by newline or EOF.
  * outfun() outputs the character -- to a buffer if in a macro.
- * sal_True if ok, sal_False if error.
+ * TRUE if ok, FALSE if error.
  */
 {
         register int            c;
 
-        instring = sal_True;                /* Don't strip comments         */
+        instring = TRUE;                /* Don't strip comments         */
         (*outfun)(delim);
         while ((c = get()) != delim
              && c != '\n'
@@ -361,15 +361,15 @@ void         (*outfun)() /* BP */
             if (c == '\\')
                 (*outfun)(get());
         }
-        instring = sal_False;
+        instring = FALSE;
         if (c == delim) {
             (*outfun)(c);
-            return (sal_True);
+            return (TRUE);
         }
         else {
             cerror("Unterminated string", NULLST);
             unget();
-            return (sal_False);
+            return (FALSE);
         }
 }
 
@@ -389,13 +389,13 @@ register void    (*outfun)() /* BP */
         int             expseen;                /* 'e' seen in floater  */
         int             signseen;               /* '+' or '-' seen      */
         int             octal89;                /* For bad octal test   */
-        int             dotflag;                /* sal_True if '.' was seen */
+        int             dotflag;                /* TRUE if '.' was seen */
 
-        expseen = sal_False;                        /* No exponent seen yet */
-        signseen = sal_True;                        /* No +/- allowed yet   */
-        octal89 = sal_False;                        /* No bad octal yet     */
+        expseen = FALSE;                        /* No exponent seen yet */
+        signseen = TRUE;                        /* No +/- allowed yet   */
+        octal89 = FALSE;                        /* No bad octal yet     */
         radix = 10;                             /* Assume decimal       */
-        if ((dotflag = (c == '.')) != sal_False) {  /* . something?         */
+        if ((dotflag = (c == '.')) != FALSE) {  /* . something?         */
             (*outfun)('.');                     /* Always out the dot   */
             if (type[(c = get())] != DIG) {     /* If not a float numb, */
                 unget();                        /* Rescan strange char  */
@@ -420,25 +420,25 @@ register void    (*outfun)() /* BP */
             if (radix != 16 && (c == 'e' || c == 'E')) {
                 if (expseen)                    /* Already saw 'E'?     */
                     break;                      /* Exit loop, bad nbr.  */
-                expseen = sal_True;                 /* Set exponent seen    */
-                signseen = sal_False;               /* We can read '+' now  */
+                expseen = TRUE;                 /* Set exponent seen    */
+                signseen = FALSE;               /* We can read '+' now  */
                 radix = 10;                     /* Decimal exponent     */
             }
             else if (radix != 16 && c == '.') {
                 if (dotflag)                    /* Saw dot already?     */
                     break;                      /* Exit loop, two dots  */
-                dotflag = sal_True;                 /* Remember the dot     */
+                dotflag = TRUE;                 /* Remember the dot     */
                 radix = 10;                     /* Decimal fraction     */
             }
             else if (c == '+' || c == '-') {    /* 1.0e+10              */
                 if (signseen)                   /* Sign in wrong place? */
                     break;                      /* Exit loop, not nbr.  */
-                /* signseen = sal_True; */          /* Remember we saw it   */
+                /* signseen = TRUE; */          /* Remember we saw it   */
             }
             else {                              /* Check the digit      */
                 switch (c) {
                 case '8': case '9':             /* Sometimes wrong      */
-                    octal89 = sal_True;             /* Do check later       */
+                    octal89 = TRUE;             /* Do check later       */
                 case '0': case '1': case '2': case '3':
                 case '4': case '5': case '6': case '7':
                     break;                      /* Always ok            */
@@ -452,7 +452,7 @@ register void    (*outfun)() /* BP */
                 }                               /* End of switch        */
             }                                   /* End general case     */
             (*outfun)(c);                       /* Accept the character */
-            signseen = sal_True;                    /* Don't read sign now  */
+            signseen = TRUE;                    /* Don't read sign now  */
             c = get();                          /* Read another char    */
         }                                       /* End of scan loop     */
         /*
@@ -481,14 +481,14 @@ done:   if (dotflag || expseen) {               /* Floating point?      */
                 case 'L':
                     if (dotflag)
                         goto nomore;
-                    dotflag = sal_True;
+                    dotflag = TRUE;
                     break;
 
                 case 'u':
                 case 'U':
                     if (expseen)
                         goto nomore;
-                    expseen = sal_True;
+                    expseen = TRUE;
                     break;
 
                 default:
@@ -607,10 +607,10 @@ lookid(int c)
 DEFBUF *
 defendel(char* name, int delete)
 /*
- * Enter this name in the lookup table (delete = sal_False)
- * or delete this name (delete = sal_True).
- * Returns a pointer to the define block (delete = sal_False)
- * Returns NULL if the symbol wasn't defined (delete = sal_True).
+ * Enter this name in the lookup table (delete = FALSE)
+ * or delete this name (delete = TRUE).
+ * Returns a pointer to the define block (delete = FALSE)
+ * Returns NULL if the symbol wasn't defined (delete = TRUE).
  */
 {
         register DEFBUF         *dp;
@@ -839,7 +839,7 @@ newline:
                          * is skipping over blank lines and will do a
                          * #line at its convenience.
                          */
-                        wrongline = sal_True;       /* Need a #line now     */
+                        wrongline = TRUE;       /* Need a #line now     */
                     }
                 }
             }
@@ -880,11 +880,11 @@ newline:
         if (instring)                           /* Strings just return  */
             return (c);                         /* the character.       */
         else if (c == '/') {                    /* Comment?             */
-            instring = sal_True;                    /* So get() won't loop  */
+            instring = TRUE;                    /* So get() won't loop  */
 /*MM c++ comments  */
 /*MM*/      c = get();
 /*MM*/      if ((c != '*') && (c != '/')) {     /* Next byte '*'?       */
-                instring = sal_False;               /* Nope, no comment     */
+                instring = FALSE;               /* Nope, no comment     */
                 unget();                        /* Push the char. back  */
                 return ('/');                   /* Return the slash     */
             }
@@ -917,7 +917,7 @@ newline:
                     case '*':
                         if ((c = get()) != '/')     /* If comment doesn't   */
                             goto test;              /* end, look at next    */
-                        instring = sal_False;           /* End of comment,      */
+                        instring = FALSE;           /* End of comment,      */
                         if (keepcomments) {         /* Put out the comment  */
                             cput(c);                /* terminator, too      */
                         }
@@ -950,7 +950,7 @@ newline:
 
                     case '\n':                      /* we'll need a #line   */
                         if (!keepcomments)
-                            wrongline = sal_True;       /* later...             */
+                            wrongline = TRUE;       /* later...             */
                     default:                        /* Anything else is     */
                         break;                      /* Just a character     */
                     }                               /* End switch           */
@@ -965,7 +965,7 @@ newline:
                     if( EOF_CHAR == c )
                         return (EOF_CHAR);
                     else if( '\n' == c ){
-                        instring = sal_False;           /* End of comment,      */
+                        instring = FALSE;           /* End of comment,      */
                         return( c );
                     }
                 }
@@ -973,7 +973,7 @@ newline:
         }                                       /* End if in comment    */
         else if (!inmacro && c == '\\') {       /* If backslash, peek   */
             if ((c = get()) == '\n') {          /* for a <nl>.  If so,  */
-                wrongline = sal_True;
+                wrongline = TRUE;
                 goto newline;
             }
             else {                              /* Backslash anything   */

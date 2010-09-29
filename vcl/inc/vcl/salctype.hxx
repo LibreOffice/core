@@ -62,9 +62,9 @@ public:
 
     Graphic             maGraphic;
     SvStream&           mrStm;
-    ULONG               mnFormat;
+    sal_uIntPtr             mnFormat;
 
-                        ConvertData( const Graphic& rGraphic, SvStream& rStm, ULONG nFormat ) :
+                        ConvertData( const Graphic& rGraphic, SvStream& rStm, sal_uIntPtr nFormat ) :
                             maGraphic( rGraphic ), mrStm( rStm ), mnFormat( nFormat ) {}
                         ~ConvertData() {}
 };
@@ -73,8 +73,8 @@ public:
 // - Callback -
 // ------------
 
-typedef ULONG (*SALGRFCVTPROC)( void* pInst,
-                                ULONG nInFormat, void* pInBuffer, ULONG nInBufSize,
-                                ULONG nOutFormat, void** ppOutBuffer );
+typedef sal_uIntPtr (*SALGRFCVTPROC)( void* pInst,
+                                sal_uIntPtr nInFormat, void* pInBuffer, sal_uIntPtr nInBufSize,
+                                sal_uIntPtr nOutFormat, void** ppOutBuffer );
 
 #endif // _SV_SALCTYPE_HXX

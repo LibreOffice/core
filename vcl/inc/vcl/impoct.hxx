@@ -120,9 +120,9 @@ inline void ImpErrorQuad::ImplAddColorError7( const ImpErrorQuad& rErrQuad )
 
 inline BitmapColor ImpErrorQuad::ImplGetColor()
 {
-    return BitmapColor( (BYTE) ( ( nRed < 0L ? 0L : nRed > 8160L ? 8160L : nRed ) >> 5L ),
-                        (BYTE) ( ( nGreen < 0L ? 0L : nGreen > 8160L ? 8160L : nGreen ) >> 5L ),
-                        (BYTE) ( ( nBlue < 0L ? 0L : nBlue > 8160L ? 8160L : nBlue ) >> 5L ) );
+    return BitmapColor( (sal_uInt8) ( ( nRed < 0L ? 0L : nRed > 8160L ? 8160L : nRed ) >> 5L ),
+                        (sal_uInt8) ( ( nGreen < 0L ? 0L : nGreen > 8160L ? 8160L : nGreen ) >> 5L ),
+                        (sal_uInt8) ( ( nBlue < 0L ? 0L : nBlue > 8160L ? 8160L : nBlue ) >> 5L ) );
 }
 
 // -------------
@@ -132,14 +132,14 @@ inline BitmapColor ImpErrorQuad::ImplGetColor()
 class ImpNodeCache
 {
     OctreeNode*         pActNode;
-    ULONG               nNew;
-    ULONG               nDelete;
-    ULONG               nGet;
-    ULONG               nRelease;
+    sal_uIntPtr             nNew;
+    sal_uIntPtr             nDelete;
+    sal_uIntPtr             nGet;
+    sal_uIntPtr             nRelease;
 
 public:
 
-                        ImpNodeCache( const ULONG nInitSize );
+                        ImpNodeCache( const sal_uIntPtr nInitSize );
                         ~ImpNodeCache();
 
     inline OctreeNode*  ImplGetFreeNode();

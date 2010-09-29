@@ -40,7 +40,7 @@ public:
     static EA_Copier*   Get();
 
     virtual             ~EA_Copier();
-    virtual BOOL        Copy( const SvFileStream& rFrom, const SvFileStream& rTo ) const = 0;
+    virtual sal_Bool        Copy( const SvFileStream& rFrom, const SvFileStream& rTo ) const = 0;
 };
 
 #endif

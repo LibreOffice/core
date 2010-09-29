@@ -43,8 +43,8 @@ public:
     virtual AgentApi*               GetApi() const = 0;
     virtual ChApi*                  GetChApi() const = 0;
 
-    virtual void                    SetIsActive(BOOL bNew) = 0;
-    virtual BOOL                    IsActive() const = 0;
+    virtual void                    SetIsActive(sal_Bool bNew) = 0;
+    virtual sal_Bool                    IsActive() const = 0;
 };
 
 #endif //_AGITEM_HXX

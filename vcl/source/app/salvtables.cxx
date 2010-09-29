@@ -94,10 +94,10 @@ SalPrinter::~SalPrinter()
 {
 }
 
-BOOL SalPrinter::StartJob( const String*, const String&, const String&,
+sal_Bool SalPrinter::StartJob( const String*, const String&, const String&,
                            ImplJobSetup*, vcl::PrinterController& )
 {
-    return FALSE;
+    return sal_False;
 }
 
 SalInfoPrinter::~SalInfoPrinter()
@@ -116,7 +116,7 @@ SalMenu::~SalMenu()
 {
 }
 
-bool SalMenu::ShowNativePopupMenu(FloatingWindow *, const Rectangle&, ULONG )
+bool SalMenu::ShowNativePopupMenu(FloatingWindow *, const Rectangle&, sal_uIntPtr )
 {
     return false;
 }
@@ -126,11 +126,11 @@ bool SalMenu::AddMenuBarButton( const SalMenuButtonItem& )
     return false;
 }
 
-void SalMenu::RemoveMenuBarButton( USHORT )
+void SalMenu::RemoveMenuBarButton( sal_uInt16 )
 {
 }
 
-Rectangle SalMenu::GetMenuBarButtonRectPixel( USHORT, SalFrame* )
+Rectangle SalMenu::GetMenuBarButtonRectPixel( sal_uInt16, SalFrame* )
 {
     return Rectangle();
 }

@@ -49,7 +49,7 @@ public:                     // public for Sal Implementation
     virtual void                    ReleaseGraphics( SalGraphics* pGraphics ) = 0;
 
                             // Set new size, without saving the old contents
-    virtual BOOL                    SetSize( long nNewDX, long nNewDY ) = 0;
+    virtual sal_Bool                    SetSize( long nNewDX, long nNewDY ) = 0;
 
     /// Get actual VDev size in pixel
     virtual void                    GetSize( long& rWidth, long& rHeight ) = 0;

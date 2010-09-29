@@ -66,10 +66,10 @@ char            token[IDMAX + 1];       /* Current input token          */
 int             errors;                 /* cpp error counter            */
 FILEINFO        *infile = NULL;         /* Current input file           */
 #if OSL_DEBUG_LEVEL > 1
-int             debug;                  /* sal_True if debugging now        */
-int             bDumpDefs;              /* sal_True if #define's dump req.  */
+int             debug;                  /* TRUE if debugging now        */
+int             bDumpDefs;              /* TRUE if #define's dump req.  */
 #ifdef EVALDEFS
-int             bIsInEval;              /* sal_True if #define eval now     */
+int             bIsInEval;              /* TRUE if #define eval now     */
 char            EvalBuf[NEVALBUF + 1];  /* evaluation buffer            */
 int             nEvalOff = 0;           /* offset to free buffer pos    */
 #endif
@@ -85,10 +85,10 @@ int             nEvalOff = 0;           /* offset to free buffer pos    */
  * currently: it is a hook for an eventual invocation flag.)
  */
 int             recursion;              /* Infinite recursion counter   */
-int             rec_recover = sal_True;     /* Unwind recursive macros      */
+int             rec_recover = TRUE;     /* Unwind recursive macros      */
 
 /*
- * instring is set sal_True when a string is scanned.  It modifies the
+ * instring is set TRUE when a string is scanned.  It modifies the
  * behavior of the "get next character" routine, causing all characters
  * to be passed to the caller (except <DEF_MAGIC>).  Note especially that
  * comments and \<newline> are not removed from the source.  (This
@@ -103,8 +103,8 @@ int             rec_recover = sal_True;     /* Unwind recursive macros      */
  * instring and inmarcor are parameters to the get() routine which
  * were made global for speed.
  */
-int             instring = sal_False;       /* sal_True if scanning string      */
-int             inmacro = sal_False;        /* sal_True if #defining a macro    */
+int             instring = FALSE;       /* TRUE if scanning string      */
+int             inmacro = FALSE;        /* TRUE if #defining a macro    */
 
 /*
  * work[] and workp are used to store one piece of text in a temporay
@@ -119,7 +119,7 @@ char            work[NWORK + 1];        /* Work buffer                  */
 char            *workp;                 /* Work buffer pointer          */
 
 /*
- * keepcomments is set sal_True by the -C option.  If sal_True, comments
+ * keepcomments is set TRUE by the -C option.  If TRUE, comments
  * are written directly to the output stream.  This is needed if
  * the output from cpp is to be passed to lint (which uses commands
  * embedded in comments).  cflag contains the permanent state of the
@@ -133,21 +133,21 @@ char            *workp;                 /* Work buffer pointer          */
  * __FILE__, and __DATE__.  If nflag > 1, absolutely no symbols
  * are predefined.
  */
-int             keepcomments = sal_False;   /* Write out comments flag      */
-int             cflag = sal_False;          /* -C option (keep comments)    */
-int             eflag = sal_False;          /* -E option (never fail)       */
+int             keepcomments = FALSE;   /* Write out comments flag      */
+int             cflag = FALSE;          /* -C option (keep comments)    */
+int             eflag = FALSE;          /* -E option (never fail)       */
 int             nflag = 0;              /* -N option (no predefines)    */
 
 /*
  * ifstack[] holds information about nested #if's.  It is always
  * accessed via *ifptr.  The information is as follows:
  *      WAS_COMPILING   state of compiling flag at outer level.
- *      ELSE_SEEN       set sal_True when #else seen to prevent 2nd #else.
- *      TRUE_SEEN       set sal_True when #if or #elif succeeds
- * ifstack[0] holds the compiling flag.  It is sal_True if compilation
- * is currently enabled.  Note that this must be initialized sal_True.
+ *      ELSE_SEEN       set TRUE when #else seen to prevent 2nd #else.
+ *      TRUE_SEEN       set TRUE when #if or #elif succeeds
+ * ifstack[0] holds the compiling flag.  It is TRUE if compilation
+ * is currently enabled.  Note that this must be initialized TRUE.
  */
-char            ifstack[BLK_NEST] = { sal_True };   /* #if information      */
+char            ifstack[BLK_NEST] = { TRUE };   /* #if information      */
 char            *ifptr = ifstack;               /* -> current ifstack[] */
 
 /*
@@ -211,7 +211,7 @@ void InitCpp1()
 
     workp = NULL;
     for( i = 0; i < BLK_NEST; i++ )
-        ifstack[ i ] = sal_True;
+        ifstack[ i ] = TRUE;
     ifptr = ifstack;
 
     pCppOut = stdout;
@@ -227,9 +227,9 @@ void InitCpp1()
     nEvalOff = 0;
 #endif
 #endif
-    rec_recover = sal_True;
+    rec_recover = TRUE;
     infile = NULL;
-    instring = inmacro = keepcomments = cflag = eflag = sal_False;
+    instring = inmacro = keepcomments = cflag = eflag = FALSE;
     nflag = 0;
     incend = incdir;
     sharpfilename = NULL;
@@ -426,7 +426,7 @@ void cppmain()
         }
         /*
          * This loop is started "from the top" at the beginning of each line
-         * wrongline is set sal_True in many places if it is necessary to write
+         * wrongline is set TRUE in many places if it is necessary to write
          * a #line record.  (But we don't write them when expanding macros.)
          *
          * The counter variable has two different uses:  at
@@ -446,7 +446,7 @@ void cppmain()
                 if (c == '\n')                  /* If line's all blank, */
                     ++counter;                  /* Do nothing now       */
                 else if (c == '#') {            /* Is 1st non-space '#' */
-                    keepcomments = sal_False;       /* Don't pass comments  */
+                    keepcomments = FALSE;       /* Don't pass comments  */
                     counter = control(counter); /* Yes, do a #command   */
                     keepcomments = (cflag && compiling);
                 }
@@ -542,7 +542,7 @@ void cppmain()
 end_line:   if (c == '\n') {                    /* Compiling at EOL?    */
                 PUTCHAR('\n');                  /* Output newline, if   */
                 if (infile->fp == NULL)         /* Expanding a macro,   */
-                    wrongline = sal_True;           /* Output # line later  */
+                    wrongline = TRUE;           /* Output # line later  */
             }
         }                                       /* Continue until EOF   */
 #ifdef EVALDEFS
@@ -612,5 +612,5 @@ void sharp()
              }
         }
         PUTCHAR('\n');
-        wrongline = sal_False;
+        wrongline = FALSE;
 }

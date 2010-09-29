@@ -1067,7 +1067,7 @@ void RscClass::WriteRcCtor( FILE * fOutput, RscTypCont * pTC )
         fprintf( fOutput, "\tsal_uInt32\tnObjMask;\n" );
         fprintf( fOutput, "\tsal_uInt32\tnOffset = 0;\n" );
         fprintf( fOutput, "\tBYTE *\tpResData;\n\n" );
-        fprintf( fOutput, "\tpResData = (sal_uInt8 *)GetClassRes();\n\n" );
+        fprintf( fOutput, "\tpResData = (tBYTE *)GetClassRes();\n\n" );
         fprintf( fOutput, "\tnObjMask = *(sal_uInt32*)pResData;\n" );
         fprintf( fOutput, "\tnOffset += 4;\n\n" );
 

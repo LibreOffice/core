@@ -453,7 +453,7 @@ ERRTYPE RscMgr::WriteHxxHeader( const RSCINST & rInst, FILE * fOutput,
         if( aError.IsOk() )
         {
             fprintf( fOutput, "public:\n    " );
-            fprintf( fOutput, "%s%s bFreeRes = sal_True )",
+            fprintf( fOutput, "%s%s bFreeRes = TRUE )",
                      MakeName( pTC, rInst.pClass,
                                rId.GetName() ).GetBuffer(),
                      (rInst.pClass->aCallParType).GetBuffer() );

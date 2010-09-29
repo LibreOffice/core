@@ -45,7 +45,7 @@
 // =======================================================================
 
 void ImplDrawOS2Symbol( OutputDevice* pDev, const Rectangle& rRect,
-                        USHORT nStyle, BOOL bClose )
+                        sal_uInt16 nStyle, sal_Bool bClose )
 {
     DecorationView          aView( pDev );
     const StyleSettings&    rStyleSettings = pDev->GetSettings().GetStyleSettings();
@@ -508,7 +508,7 @@ static void ImplDrawSymbol( OutputDevice* pDev, const Rectangle& rRect,
         case SYMBOL_CHECKMARK:
             {
                 // #106953# never mirror checkmarks
-                BOOL bRTL = pDev->ImplHasMirroredGraphics() && pDev->IsRTLEnabled();
+                sal_Bool bRTL = pDev->ImplHasMirroredGraphics() && pDev->IsRTLEnabled();
                 Point aPos1( bRTL ? rRect.Right() : rRect.Left(),
                     rRect.Bottom() - rRect.GetHeight() / 3 );
                 Point aPos2( bRTL ? rRect.Right() - rRect.GetWidth()/3 : rRect.Left() + rRect.GetWidth()/3,
@@ -635,7 +635,7 @@ static void ImplDrawSymbol( OutputDevice* pDev, const Rectangle& rRect,
             {
             Rectangle aRect( nCenterX-n2, nCenterY-n2,
                              nCenterX+n2, nCenterY+n2 );
-            ImplDrawOS2Symbol( pDev, aRect, 0, TRUE );
+            ImplDrawOS2Symbol( pDev, aRect, 0, sal_True );
             }
             break;
 
@@ -643,7 +643,7 @@ static void ImplDrawSymbol( OutputDevice* pDev, const Rectangle& rRect,
             {
             Rectangle aRect( nCenterX-n2+4, nCenterY-n2+4,
                              nCenterX+n2-4, nCenterY+n2-3 );
-            ImplDrawOS2Symbol( pDev, aRect, 0, FALSE );
+            ImplDrawOS2Symbol( pDev, aRect, 0, sal_False );
             DecorationView aDecoView( pDev );
             Rectangle aRect2( nCenterX-n2, nCenterY-n2,
                               nCenterX-n2+2, nCenterY+n2 );
@@ -662,7 +662,7 @@ static void ImplDrawSymbol( OutputDevice* pDev, const Rectangle& rRect,
             {
             Rectangle aRect( nCenterX-n2+3, nCenterY-n2+3,
                              nCenterX+n2-3, nCenterY+n2-3 );
-            ImplDrawOS2Symbol( pDev, aRect, 0, FALSE );
+            ImplDrawOS2Symbol( pDev, aRect, 0, sal_False );
             }
             break;
     }
@@ -671,16 +671,16 @@ static void ImplDrawSymbol( OutputDevice* pDev, const Rectangle& rRect,
 // -----------------------------------------------------------------------
 
 void DecorationView::DrawSymbol( const Rectangle& rRect, SymbolType eType,
-                                 const Color& rColor, USHORT nStyle )
+                                 const Color& rColor, sal_uInt16 nStyle )
 {
     const StyleSettings&    rStyleSettings  = mpOutDev->GetSettings().GetStyleSettings();
     Rectangle               aRect           = mpOutDev->LogicToPixel( rRect );
     Color                   aOldLineColor   = mpOutDev->GetLineColor();
     Color                   aOldFillColor   = mpOutDev->GetFillColor();
-    BOOL                    bOldMapMode     = mpOutDev->IsMapModeEnabled();
+    sal_Bool                    bOldMapMode     = mpOutDev->IsMapModeEnabled();
     mpOutDev->SetLineColor();
     mpOutDev->SetFillColor( rColor );
-    mpOutDev->EnableMapMode( FALSE );
+    mpOutDev->EnableMapMode( sal_False );
 
     if ( (rStyleSettings.GetOptions() & STYLE_OPTION_MONO) ||
          (mpOutDev->GetOutDevType() == OUTDEV_PRINTER) )
@@ -724,8 +724,8 @@ void DecorationView::DrawFrame( const Rectangle& rRect,
     Rectangle   aRect           = mpOutDev->LogicToPixel( rRect );
     Color       aOldLineColor   = mpOutDev->GetLineColor();
     Color       aOldFillColor   = mpOutDev->GetFillColor();
-    BOOL        bOldMapMode     = mpOutDev->IsMapModeEnabled();
-    mpOutDev->EnableMapMode( FALSE );
+    sal_Bool        bOldMapMode     = mpOutDev->IsMapModeEnabled();
+    mpOutDev->EnableMapMode( sal_False );
     mpOutDev->SetLineColor();
     mpOutDev->ImplDraw2ColorFrame( aRect, rLeftTopColor, rRightBottomColor );
     mpOutDev->SetLineColor( aOldLineColor );
@@ -736,7 +736,7 @@ void DecorationView::DrawFrame( const Rectangle& rRect,
 // =======================================================================
 
 void DecorationView::DrawHighlightFrame( const Rectangle& rRect,
-                                         USHORT nStyle )
+                                         sal_uInt16 nStyle )
 {
     const StyleSettings& rStyleSettings = mpOutDev->GetSettings().GetStyleSettings();
     Color aLightColor = rStyleSettings.GetLightColor();
@@ -786,7 +786,7 @@ void DecorationView::DrawHighlightFrame( const Rectangle& rRect,
 // =======================================================================
 
 static void ImplDrawDPILineRect( OutputDevice* pDev, Rectangle& rRect,
-                                 const Color* pColor, BOOL bRound = FALSE )
+                                 const Color* pColor, sal_Bool bRound = sal_False )
 {
     long nLineWidth = pDev->ImplGetDPIX()/300;
     long nLineHeight = pDev->ImplGetDPIY()/300;
@@ -835,10 +835,10 @@ static void ImplDrawDPILineRect( OutputDevice* pDev, Rectangle& rRect,
 // =======================================================================
 
 static void ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect,
-                           const StyleSettings& rStyleSettings, USHORT nStyle )
+                           const StyleSettings& rStyleSettings, sal_uInt16 nStyle )
 {
     // mask menu style
-    BOOL bMenuStyle = (nStyle & FRAME_DRAW_MENU) ? TRUE : FALSE;
+    sal_Bool bMenuStyle = (nStyle & FRAME_DRAW_MENU) ? sal_True : sal_False;
     nStyle &= ~FRAME_DRAW_MENU;
 
     Window *pWin = NULL;
@@ -849,7 +849,7 @@ static void ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect,
     // menus may use different border colors (eg on XP)
     // normal frames will be drawn using the shadow color
     // whereas window frame borders will use black
-    BOOL bFlatBorders = ( !bMenuStyle && rStyleSettings.GetUseFlatBorders() );
+    sal_Bool bFlatBorders = ( !bMenuStyle && rStyleSettings.GetUseFlatBorders() );
 
     // no flat borders for standard VCL controls (ie formcontrols that keep their classic look)
     // will not affect frame windows (like dropdowns)
@@ -858,13 +858,13 @@ static void ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect,
         // check for formcontrol, i.e., a control without NWF enabled
         Control *pControl = dynamic_cast< Control* >( pWin->GetWindow( WINDOW_CLIENT ) );
         if( pControl && pControl->IsNativeWidgetEnabled() )
-            bFlatBorders = TRUE;
+            bFlatBorders = sal_True;
         else
-            bFlatBorders = FALSE;
+            bFlatBorders = sal_False;
     }
 
     // no round corners for window frame borders
-    BOOL bRound = (bFlatBorders && !(nStyle & FRAME_DRAW_WINDOWBORDER));
+    sal_Bool bRound = (bFlatBorders && !(nStyle & FRAME_DRAW_WINDOWBORDER));
 
     if ( (rStyleSettings.GetOptions() & STYLE_OPTION_MONO) ||
          (pDev->GetOutDevType() == OUTDEV_PRINTER) ||
@@ -873,7 +873,7 @@ static void ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect,
 
     if ( nStyle & FRAME_DRAW_NODRAW )
     {
-        USHORT nValueStyle = bMenuStyle ? nStyle | FRAME_DRAW_MENU : nStyle;
+        sal_uInt16 nValueStyle = bMenuStyle ? nStyle | FRAME_DRAW_MENU : nStyle;
         if( pWin->GetType() == WINDOW_BORDERWINDOW )
             nValueStyle |= FRAME_DRAW_BORDERWINDOWBORDER;
         ImplControlValue aControlValue( nValueStyle );
@@ -888,7 +888,7 @@ static void ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect,
             ImplDrawDPILineRect( pDev, rRect, NULL, bRound );
         else
         {
-            USHORT nFrameStyle = nStyle & FRAME_DRAW_STYLE;
+            sal_uInt16 nFrameStyle = nStyle & FRAME_DRAW_STYLE;
 
             if ( nFrameStyle == FRAME_DRAW_GROUP )
             {
@@ -918,7 +918,7 @@ static void ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect,
     {
         if( pWin && pWin->IsNativeControlSupported(CTRL_FRAME, PART_BORDER) )
         {
-            USHORT nValueStyle = bMenuStyle ? nStyle | FRAME_DRAW_MENU : nStyle;
+            sal_uInt16 nValueStyle = bMenuStyle ? nStyle | FRAME_DRAW_MENU : nStyle;
             if( pWin->GetType() == WINDOW_BORDERWINDOW )
                 nValueStyle |= FRAME_DRAW_BORDERWINDOWBORDER;
             ImplControlValue aControlValue( nValueStyle );
@@ -955,7 +955,7 @@ static void ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect,
         }
         else
         {
-            USHORT nFrameStyle = nStyle & FRAME_DRAW_STYLE;
+            sal_uInt16 nFrameStyle = nStyle & FRAME_DRAW_STYLE;
             if ( nFrameStyle == FRAME_DRAW_GROUP )
             {
                 pDev->SetFillColor();
@@ -1030,7 +1030,7 @@ static void ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect,
                     rRect.Right()--;
                     rRect.Bottom()--;
 
-                    BOOL bDrawn = TRUE;
+                    sal_Bool bDrawn = sal_True;
                     if ( nFrameStyle == FRAME_DRAW_DOUBLEIN )
                     {
                         if( bFlatBorders ) // no 3d effect
@@ -1050,7 +1050,7 @@ static void ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect,
                                                     rStyleSettings.GetLightColor(),
                                                     rStyleSettings.GetShadowColor() );
                         else
-                            bDrawn = FALSE;
+                            bDrawn = sal_False;
                     }
                     if( bDrawn )
                     {
@@ -1067,14 +1067,14 @@ static void ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect,
 
 // -----------------------------------------------------------------------
 
-Rectangle DecorationView::DrawFrame( const Rectangle& rRect, USHORT nStyle )
+Rectangle DecorationView::DrawFrame( const Rectangle& rRect, sal_uInt16 nStyle )
 {
     Rectangle   aRect = rRect;
-    BOOL        bOldMap = mpOutDev->IsMapModeEnabled();
+    sal_Bool        bOldMap = mpOutDev->IsMapModeEnabled();
     if ( bOldMap )
     {
         aRect = mpOutDev->LogicToPixel( aRect );
-        mpOutDev->EnableMapMode( FALSE );
+        mpOutDev->EnableMapMode( sal_False );
     }
 
     if ( !rRect.IsEmpty() )
@@ -1103,7 +1103,7 @@ Rectangle DecorationView::DrawFrame( const Rectangle& rRect, USHORT nStyle )
 // =======================================================================
 
 static void ImplDrawButton( OutputDevice* pDev, Rectangle& rRect,
-                            const StyleSettings& rStyleSettings, USHORT nStyle )
+                            const StyleSettings& rStyleSettings, sal_uInt16 nStyle )
 {
     Rectangle aFillRect = rRect;
 
@@ -1316,14 +1316,14 @@ static void ImplDrawButton( OutputDevice* pDev, Rectangle& rRect,
 
 // -----------------------------------------------------------------------
 
-Rectangle DecorationView::DrawButton( const Rectangle& rRect, USHORT nStyle )
+Rectangle DecorationView::DrawButton( const Rectangle& rRect, sal_uInt16 nStyle )
 {
     Rectangle   aRect = rRect;
-    BOOL        bOldMap = mpOutDev->IsMapModeEnabled();
+    sal_Bool        bOldMap = mpOutDev->IsMapModeEnabled();
     if ( bOldMap )
     {
         aRect = mpOutDev->LogicToPixel( aRect );
-        mpOutDev->EnableMapMode( FALSE );
+        mpOutDev->EnableMapMode( sal_False );
     }
 
     if ( !rRect.IsEmpty() )

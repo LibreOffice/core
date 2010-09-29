@@ -26,9 +26,9 @@
  ************************************************************************/
 
 
-#ifndef sal_True
-#define sal_True            1
-#define sal_False           0
+#ifndef TRUE
+#define TRUE            1
+#define FALSE           0
 #endif
 
 /* in cpp1.c: file-pointer auf stdout oder file */
@@ -150,9 +150,9 @@ extern FILE *pDefOut;                                   /* ER */
 /*
  * These bits are set in ifstack[]
  */
-#define WAS_COMPILING   1               /* sal_True if compile set at entry */
-#define ELSE_SEEN       2               /* sal_True when #else processed    */
-#define TRUE_SEEN       4               /* sal_True when #if sal_True processed */
+#define WAS_COMPILING   1               /* TRUE if compile set at entry */
+#define ELSE_SEEN       2               /* TRUE when #else processed    */
+#define TRUE_SEEN       4               /* TRUE when #if TRUE processed */
 
 /*
  * Define bits for the basic types and their adjectives
@@ -256,8 +256,8 @@ extern int      line;                   /* Current line number          */
 extern int      wrongline;              /* Force #line to cc pass 1     */
 extern char     type[];                 /* Character classifier         */
 extern char     token[IDMAX + 1];       /* Current input token          */
-extern int      instring;               /* sal_True if scanning string      */
-extern int      inmacro;                /* sal_True if scanning #define     */
+extern int      instring;               /* TRUE if scanning string      */
+extern int      inmacro;                /* TRUE if scanning #define     */
 extern int      errors;                 /* Error counter                */
 extern int      recursion;              /* Macro depth counter          */
 extern char     ifstack[BLK_NEST];      /* #if information              */
@@ -277,8 +277,8 @@ extern char     *workp;                 /* Free space in work           */
 #if OSL_DEBUG_LEVEL > 1
 extern int      debug;                  /* Debug level                  */
 /* ER dump & evaluate #define's */
-extern int      bDumpDefs;              /* sal_True if #define's dump req.  */
-extern int      bIsInEval;              /* sal_True if #define dumping now  */
+extern int      bDumpDefs;              /* TRUE if #define's dump req.  */
+extern int      bIsInEval;              /* TRUE if #define dumping now  */
 #ifdef EVALDEFS
 extern char     EvalBuf[NEVALBUF + 1];  /* evaluation buffer            */
 extern int      nEvalOff;               /* offset to free buffer pos    */

@@ -40,7 +40,7 @@ private:
     Gradient*       mpGradient;
     Rectangle*      mpRect;
     WallpaperStyle  meStyle;
-    ULONG           mnRefCount;
+    sal_uIntPtr         mnRefCount;
     BitmapEx*       mpCache;
 
     friend SvStream& operator>>( SvStream& rIStm, ImplWallpaper& rImplWallpaper );

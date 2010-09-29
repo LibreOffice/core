@@ -199,9 +199,9 @@ typedef USHORT DbgChannelId;
 */
 TOOLS_DLLPUBLIC DbgChannelId DbgRegisterUserChannel( DbgPrintLine pProc );
 
-inline BOOL DbgFilterMessage( const char* pMsg )
+inline sal_Bool DbgFilterMessage( const char* pMsg )
 {
-    return (BOOL)(long) DbgFunc( DBG_FUNC_FILTERMESSAGE, (void*)pMsg );
+    return (sal_Bool)(long) DbgFunc( DBG_FUNC_FILTERMESSAGE, (void*)pMsg );
 }
 
 inline int DbgIsAllErrorOut()

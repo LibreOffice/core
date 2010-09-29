@@ -239,7 +239,7 @@ enum FontStrikeout { STRIKEOUT_NONE, STRIKEOUT_SINGLE, STRIKEOUT_DOUBLE,
 #ifndef ENUM_FONTEMPHASISMARK_DECLARED
 #define ENUM_FONTEMPHASISMARK_DECLARED
 
-typedef USHORT FontEmphasisMark;
+typedef sal_uInt16 FontEmphasisMark;
 #define EMPHASISMARK_NONE           ((FontEmphasisMark)0x0000)
 #define EMPHASISMARK_DOT            ((FontEmphasisMark)0x0001)
 #define EMPHASISMARK_CIRCLE         ((FontEmphasisMark)0x0002)

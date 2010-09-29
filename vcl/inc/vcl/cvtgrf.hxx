@@ -48,8 +48,8 @@ private:
 
 //#if 0 // _SOLAR__PRIVATE
 public:
-    SAL_DLLPRIVATE ULONG    ImplConvert( ULONG nInFormat, void* pInBuffer, ULONG nInBufSize,
-                                     void** ppOutBuffer, ULONG nOutFormat );
+    SAL_DLLPRIVATE sal_uIntPtr    ImplConvert( sal_uIntPtr nInFormat, void* pInBuffer, sal_uIntPtr nInBufSize,
+                                     void** ppOutBuffer, sal_uIntPtr nOutFormat );
 //#endif // __PRIVATE
 
 public:
@@ -57,8 +57,8 @@ public:
                         GraphicConverter();
                         ~GraphicConverter();
 
-    static ULONG        Import( SvStream& rIStm, Graphic& rGraphic, ULONG nFormat = CVT_UNKNOWN );
-    static ULONG        Export( SvStream& rOStm, const Graphic& rGraphic, ULONG nFormat );
+    static sal_uIntPtr      Import( SvStream& rIStm, Graphic& rGraphic, sal_uIntPtr nFormat = CVT_UNKNOWN );
+    static sal_uIntPtr      Export( SvStream& rOStm, const Graphic& rGraphic, sal_uIntPtr nFormat );
 
     ConvertData*        GetConvertData() { return mpConvertData; }
 

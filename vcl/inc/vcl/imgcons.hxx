@@ -60,7 +60,7 @@ private:
     Link                maDoneLink;
     sal_uInt32          mnFormat;
     sal_uInt32          mnStatus;
-    BOOL                mbTrans;
+    sal_Bool                mbTrans;
 
 protected:
 
@@ -71,8 +71,8 @@ public:
                         ImageConsumer();
     virtual             ~ImageConsumer();
 
-    BOOL                GetData( BitmapEx& rBmpEx ) const;
-    BOOL                GetData( Image& rImage ) const;
+    sal_Bool                GetData( BitmapEx& rBmpEx ) const;
+    sal_Bool                GetData( Image& rImage ) const;
     const Rectangle&    GetChangedRect() const { return maChangedRect; }
     sal_uInt32          GetStatus() const;
 
@@ -86,13 +86,13 @@ public:
 
     virtual void        Init( sal_uInt32 nWidth, sal_uInt32 nHeight );
 
-    virtual void        SetColorModel( USHORT nBitCount,
+    virtual void        SetColorModel( sal_uInt16 nBitCount,
                                        sal_uInt32 nPalEntries, const sal_uInt32* pRGBAPal,
                                        sal_uInt32 nRMask, sal_uInt32 nGMask, sal_uInt32 nBMask, sal_uInt32 nAMask  );
 
     virtual void        SetPixelsByBytes( sal_uInt32 nConsX, sal_uInt32 nConsY,
                                           sal_uInt32 nConsWidth, sal_uInt32 nConsHeight,
-                                          const BYTE* pProducerData, sal_uInt32 nOffset, sal_uInt32 nScanSize );
+                                          const sal_uInt8* pProducerData, sal_uInt32 nOffset, sal_uInt32 nScanSize );
 
     virtual void        SetPixelsByLongs( sal_uInt32 nConsX, sal_uInt32 nConsY,
                                           sal_uInt32 nConsWidth, sal_uInt32 nConsHeight,

@@ -88,12 +88,12 @@ public:
 
     // Frame
     // DisplayName for Unix ???
-    virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, ULONG nStyle ) = 0;
-    virtual SalFrame*       CreateFrame( SalFrame* pParent, ULONG nStyle ) = 0;
+    virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, sal_uIntPtr nStyle ) = 0;
+    virtual SalFrame*       CreateFrame( SalFrame* pParent, sal_uIntPtr nStyle ) = 0;
     virtual void                DestroyFrame( SalFrame* pFrame ) = 0;
 
     // Object (System Child Window)
-    virtual SalObject*          CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, BOOL bShow = TRUE ) = 0;
+    virtual SalObject*          CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, sal_Bool bShow = sal_True ) = 0;
     virtual void                DestroyObject( SalObject* pObject ) = 0;
 
     // VirtualDevice
@@ -102,7 +102,7 @@ public:
     // pData allows for using a system dependent graphics or device context
     virtual SalVirtualDevice*   CreateVirtualDevice( SalGraphics* pGraphics,
                                                      long nDX, long nDY,
-                                                     USHORT nBitCount, const SystemGraphicsData *pData = NULL ) = 0;
+                                                     sal_uInt16 nBitCount, const SystemGraphicsData *pData = NULL ) = 0;
     virtual void                DestroyVirtualDevice( SalVirtualDevice* pDevice ) = 0;
 
     // Printer
@@ -131,17 +131,17 @@ public:
 
     // YieldMutex
     virtual vos::IMutex*        GetYieldMutex() = 0;
-    virtual ULONG               ReleaseYieldMutex() = 0;
-    virtual void                AcquireYieldMutex( ULONG nCount ) = 0;
+    virtual sal_uIntPtr             ReleaseYieldMutex() = 0;
+    virtual void                AcquireYieldMutex( sal_uIntPtr nCount ) = 0;
 
     // wait next event and dispatch
     // must returned by UserEvent (SalFrame::PostEvent)
     // and timer
     virtual void                Yield( bool bWait, bool bHandleAllCurrentEvents ) = 0;
-    virtual bool                AnyInput( USHORT nType ) = 0;
+    virtual bool                AnyInput( sal_uInt16 nType ) = 0;
 
                             // Menues
-    virtual SalMenu*        CreateMenu( BOOL bMenuBar ) = 0;
+    virtual SalMenu*        CreateMenu( sal_Bool bMenuBar ) = 0;
     virtual void            DestroyMenu( SalMenu* pMenu) = 0;
     virtual SalMenuItem*    CreateMenuItem( const SalItemParams* pItemData ) = 0;
     virtual void            DestroyMenuItem( SalMenuItem* pItem ) = 0;
@@ -211,6 +211,6 @@ void DeInitSalMain();
 // ----------
 
 // Callbacks (indepen in \sv\source\app\svmain.cxx)
-VCL_DLLPUBLIC BOOL SVMain();
+VCL_DLLPUBLIC sal_Bool SVMain();
 
 #endif // _SV_SALINST_HXX
