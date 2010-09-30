@@ -174,14 +174,6 @@ public:
     virtual void    Notify( const com::sun::star::uno::Sequence< rtl::OUString > &rPropertyNames );
     virtual void    Commit();
 
-    // make some protected functions of utl::ConfigItem public
-    //using utl::ConfigItem::GetNodeNames;
-    //using utl::ConfigItem::GetProperties;
-    //using utl::ConfigItem::PutProperties;
-    //using utl::ConfigItem::SetSetProperties;
-    //using utl::ConfigItem::ReplaceSetProperties;
-    //using utl::ConfigItem::GetReadOnlyStates;
-
     SmSymbolManager &   GetSymbolManager();
     void                GetSymbols( std::vector< SmSym > &rSymbols ) const;
     void                SetSymbols( const std::vector< SmSym > &rNewSymbols );

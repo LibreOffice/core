@@ -39,126 +39,6 @@
 
 #define APPEND(str,ascii) str.AppendAscii(RTL_CONSTASCII_STRINGPARAM(ascii))
 
-#if 0
-String aEmbelList[21] =
-{
-    " ",
-    " ",
-    "single dot",
-    "double dot",
-    "triple dot",
-    "single prime",
-    "double prime",
-    "backwards prime (left of character)",
-    "tilde",
-    "hat (circumflex)",
-    "diagonal slash through character",
-    "right arrow",
-    "left arrow",
-    "double-headed arrow",
-    "right single-barbed arrow",
-    "left single-barbed arrow",
-    "mid-height horizontal bar",
-    "over-bar",
-    "triple prime",
-    "over-arc, concave downward",
-    "over-arc, concave upward"
-};
-
-String aSelectorList[49] =
-{
-    "angle brackets",
-    "parentheses",
-    "braces (curly brackets)",
-    "square brackets",
-    "vertical bars",
-    "double vertical bars",
-    "floor brackets",
-    "ceiling brackets",
-    "left brace, left brace",
-    "right brace, right brace",
-    "right brace, left brace",
-    "left brace, right parenthesis",
-    "left parenthesis, right brace",
-    "radical",
-    "fractions",
-    "subscript/superscript",
-    "underbar",
-    "overbar",
-    "left-pointing arrow",
-    "right-pointing arrow",
-    "left- and right-pointing arrow",
-    "single integral",
-    "double integral",
-    "triple integral",
-    "single summation-style integral",
-    "double summation-style integral",
-    "triple summation-style integral",
-    "upper horizontal brace",
-    "lower horizontal brace",
-    "summation",
-    "summation (integral-style limits)",
-    "product",
-    "product (integral-style limits)",
-    "coproduct",
-    "coproduct (integral-style limits)",
-    "union",
-    "union (integral-style limits)",
-    "intersection",
-    "intersection (integral-style limits)",
-    "limit",
-    "long division",
-    "slash fractions",
-    "big integral-style operators",
-    "big summation-style operators",
-    "leading sub- and superscripts",
-    "Dirac delta",
-    "under arrow",
-    "over arrow",
-    "over arc"
-};
-
-String aIntegralOpt[2] =
-{
-    "fixed-size integral",
-    "integral expands vertically to fit its contents"
-};
-
-String aFenceOpt[3] =
-{
-    "center fence on math axis",
-    "center fence on contents, place math axis of contents on math axis of containing line",
-    "center fence on contents, center contents on math axis of containing line"
-};
-
-String aTypeFaces[12] =
-{
-    "",
-    "fnTEXT",
-    "fnFUNCTION",
-    "fnVARIABLE",
-    "fnLCGREEK",
-    "fnUCGREEK",
-    "fnSYMBOL",
-    "fnVECTOR",
-    "fnNUMBER",
-    "fnUSER1",
-    "fnUSER2",
-    "fnMTEXTRA"
-};
-
-String aSizes[7] =
-{
-    "full",
-    "subscript",
-    "sub-subscript",
-    "symbol",
-    "sub-symbol",
-    "user 1",
-    "user 2"
-};
-#endif
-
 static sal_Unicode Convert(sal_Unicode nIn)
 {
     //Find the best match in accepted unicode for our private area symbols
@@ -862,8 +742,6 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                 {
                     if (xfLMOVE(nTag))
                         HandleNudge();
-                    //if (xfLSPACE(nTag))
-                    //if (xfRULER(nTag))
 
                     if (newline>0)
                         APPEND(rRet,"\nnewline\n");
@@ -1972,12 +1850,6 @@ void MathType::HandleAlign(sal_uInt8 nHorAlign, sal_uInt8 /*nVAlign*/, int &rSet
         APPEND(rRet,"alignr {");
         break;
     }
-#if 0
-    switch(nVAlign)
-    {
-    }
-    rSetAlign+=2;
-#endif
     rSetAlign++;
 }
 
@@ -2017,7 +1889,6 @@ sal_Bool MathType::HandleSize(sal_Int16 nLstSize,sal_Int16 nDefSize, int &rSetSi
          itself anyway in which case the size setting could be ignored*/
         nLstSize = aSizeTable[nLstSize];
         nLstSize = nLstSize + nDefSize;
-        //if (nLstSize != nDefaultSize)
         if (nLstSize != nCurSize)
         {
             if (rSetSize)
@@ -2297,7 +2168,6 @@ void MathType::HandleTable(SmNode *pNode,int nLevel)
 
 void MathType::HandleRoot(SmNode *pNode,int nLevel)
 {
-    //USHORT  nSize = pNode->GetNumSubNodes();
     SmNode *pTemp;
     *pS << sal_uInt8(TMPL); //Template
     *pS << sal_uInt8(0x0D); //selector
@@ -2307,10 +2177,6 @@ void MathType::HandleRoot(SmNode *pNode,int nLevel)
         *pS << sal_uInt8(0x00); //variation
     *pS << sal_uInt8(0x00); //options
 
-    /*
-    if (pTemp = pNode->GetSubNode(1))
-            HandleNodes(pTemp,nLevel+1);
-    */
     if (NULL != (pTemp = pNode->GetSubNode(2)))
     {
         *pS << sal_uInt8(LINE); //line
@@ -2397,7 +2263,6 @@ sal_uInt8 MathType::HandleCScript(SmNode *pNode,SmNode *pContent,int nLevel,
  */
 void MathType::HandleSubSupScript(SmNode *pNode,int nLevel)
 {
-    //USHORT  nSize = pNode->GetNumSubNodes();
     SmNode *pTemp;
 
     sal_uInt8 nVariation=0xff;
@@ -2443,10 +2308,7 @@ void MathType::HandleSubSupScript(SmNode *pNode,int nLevel)
 
     if (NULL != (pTemp = pNode->GetSubNode(0)))
     {
-//      *pS << sal_uInt8(0x0A);
-//      *pS << sal_uInt8(LINE);
         HandleNodes(pTemp,nLevel+1);
-//      *pS << sal_uInt8(END);
     }
 
     if (nVariation2 != 0xff)
@@ -2496,7 +2358,6 @@ void MathType::HandleSubSupScript(SmNode *pNode,int nLevel)
 
 void MathType::HandleFractions(SmNode *pNode,int nLevel)
 {
-    //USHORT  nSize = pNode->GetNumSubNodes();
     SmNode *pTemp;
     *pS << sal_uInt8(TMPL); //Template
     *pS << sal_uInt8(0x0E); //selector
@@ -2521,7 +2382,6 @@ void MathType::HandleFractions(SmNode *pNode,int nLevel)
 
 void MathType::HandleBrace(SmNode *pNode,int nLevel)
 {
-    //USHORT  nSize = pNode->GetNumSubNodes();
     SmNode *pTemp;
     SmNode *pLeft=pNode->GetSubNode(0);
     SmNode *pRight=pNode->GetSubNode(2);
@@ -2632,8 +2492,6 @@ void MathType::HandleVerticalBrace(SmNode *pNode,int nLevel)
 
 void MathType::HandleOperator(SmNode *pNode,int nLevel)
 {
-    //USHORT  nSize = pNode->GetNumSubNodes();
-
     if (HandleLim(pNode,nLevel))
         return;
 
@@ -3092,7 +2950,6 @@ int MathType::HandleChar(xub_StrLen &rTextStart,int &rSetSize,int nLevel,
     if (!bSilent)
     {
         xub_StrLen nOldLen = rRet.Len();
-        //nLastSize = nCurSize;
         if (
             HandleSize(nLSize,nDSize,rSetSize) ||
             (nOldTypeFace != nTypeFace)
@@ -3344,12 +3201,8 @@ void MathType::HandleMath(SmNode *pNode, int /*nLevel*/)
 void MathType::HandleAttributes(SmNode *pNode,int nLevel)
 {
     int nOldPending = 0;
-    //USHORT  nSize = pNode->GetNumSubNodes();
     SmNode *pTemp       = 0;
     SmTextNode *pIsText = 0;
-
-    //SmTextNode *pTemp=(SmTextNode *)pNode;
-    //for(int i=0;i<pTemp->GetText().Len();i++)
 
     if (NULL != (pTemp = pNode->GetSubNode(0)))
     {
@@ -3481,22 +3334,13 @@ void MathType::HandleText(SmNode *pNode, int /*nLevel*/)
         }
         else
             *pS << sal_uInt8(CHAR);
-            //*pS << sal_uInt8(CHAR|0x10); //char with formula recognition
 
-#if 1
         sal_uInt8 nFace = 0x1;
         if (pNode->GetFont().GetItalic() == ITALIC_NORMAL)
             nFace = 0x3;
         else if (pNode->GetFont().GetWeight() == WEIGHT_BOLD)
             nFace = 0x7;
         *pS << sal_uInt8(nFace+128); //typeface
-#else
-        if ((pTemp->GetText().GetChar(i) >= '0') &&
-            (pTemp->GetText().GetChar(i) <= '9'))
-            *pS << sal_uInt8(0x8+128); //typeface
-        else
-            *pS << sal_uInt8(0x3+128); //typeface
-#endif
         sal_uInt16 nChar = pTemp->GetText().GetChar(i);
         *pS << Convert(nChar);
 

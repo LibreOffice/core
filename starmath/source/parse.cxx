@@ -97,27 +97,6 @@ struct SmTokenTableEntry
 
 static const SmTokenTableEntry aTokenTable[] =
 {
-//  { "#", TPOUND, '\0', 0, 0 },
-//  { "##", TDPOUND, '\0', 0, 0 },
-//  { "&", TAND, MS_AND, TGPRODUCT, 0 },
-//  { "(", TLPARENT, MS_LPARENT, TGLBRACES, 5 },    //! 5 to continue expression
-//  { ")", TRPARENT, MS_RPARENT, TGRBRACES, 0 },    //! 0 to terminate expression
-//  { "*", TMULTIPLY, MS_MULTIPLY, TGPRODUCT, 0 },
-//  { "+", TPLUS, MS_PLUS, TGUNOPER | TGSUM, 5 },
-//  { "+-", TPLUSMINUS, MS_PLUSMINUS, TGUNOPER | TGSUM, 5 },
-//  { "-", TMINUS, MS_MINUS, TGUNOPER | TGSUM, 5 },
-//  { "-+", TMINUSPLUS, MS_MINUSPLUS, TGUNOPER | TGSUM, 5 },
-//  { ".", TPOINT, '\0', 0, 0 },
-//  { "/", TDIVIDEBY, MS_SLASH, TGPRODUCT, 0 },
-//  { "<", TLT, MS_LT, TGRELATION, 0 },
-//  { "<<", TLL, MS_LL, TGRELATION, 0 },
-//  { "<=", TLE, MS_LE, TGRELATION, 0 },
-//  { "<>", TNEQ, MS_NEQ, TGRELATION, 0},
-//  { "<?>", TPLACE, MS_PLACE, 0, 5 },
-//  { "=", TASSIGN, MS_ASSIGN, TGRELATION, 0},
-//  { ">", TGT, MS_GT, TGRELATION, 0 },
-//  { ">=", TGE, MS_GE, TGRELATION, 0 },
-//  { ">>", TGG, MS_GG, TGRELATION, 0 },
     { "Im" , TIM, MS_IM, TGSTANDALONE, 5 },
     { "MZ23", TDEBUG, '\0', TGATTRIBUT, 0 },
     { "Re" , TRE, MS_RE, TGSTANDALONE, 5 },
@@ -325,16 +304,6 @@ static const SmTokenTableEntry aTokenTable[] =
     { "widevec", TWIDEVEC, MS_VEC, TGATTRIBUT, 5},
     { "wp" , TWP, MS_WP, TGSTANDALONE, 5},
     { "yellow", TYELLOW, '\0', TGCOLOR, 0},
-//  { "[", TLBRACKET, MS_LBRACKET, TGLBRACES, 5},   //! 5 to continue expression
-//  { "\\", TESCAPE, '\0', 0, 5},
-//  { "]", TRBRACKET, MS_RBRACKET, TGRBRACES, 0},   //! 0 to terminate expression
-//  { "^", TRSUP, '\0', TGPOWER, 0},
-//  { "_", TRSUB, '\0', TGPOWER, 0},
-//  { "`", TSBLANK, '\0', TGBLANK, 5},
-//  { "{", TLGROUP, MS_LBRACE, 0, 5},       //! 5 to continue expression
-//  { "|", TOR, MS_OR, TGSUM, 0},
-//  { "}", TRGROUP, MS_RBRACE, 0, 0},       //! 0 to terminate expression
-//  { "~", TBLANK, '\0', TGBLANK, 5},
     { "", TEND, '\0', 0, 0}
 };
 
@@ -450,15 +419,6 @@ void SmParser::NextToken()
         sal_Int32 nStartFlags = coStartFlags;
         sal_Int32 nContFlags  = coContFlags;
         sal_Unicode cFirstChar = BufferString.GetChar( BufferIndex );
-/*
-        removed because of #i11752#
-        bNumStart = cFirstChar == '.' || ('0' <= cFirstChar && cFirstChar <= '9');
-        if (bNumStart)
-        {
-            nStartFlags = coNumStartFlags;
-            nContFlags  = coNumContFlags;
-        }
-*/
         aRes = aCC.parseAnyToken( BufferString, BufferIndex,
                                             nStartFlags, aEmptyStr,
                                             nContFlags, aEmptyStr );

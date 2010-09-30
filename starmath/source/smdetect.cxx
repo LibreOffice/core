@@ -176,7 +176,6 @@ SmFilterDetect::~SmFilterDetect()
 
     // can't check the type for external filters, so set the "dont" flag accordingly
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    //SfxFilterFlags nMust = SFX_FILTER_IMPORT, nDont = SFX_FILTER_NOTINSTALLED;
 
     SfxApplication* pApp = SFX_APP();
     SfxAllItemSet *pSet = new SfxAllItemSet( pApp->GetPool() );

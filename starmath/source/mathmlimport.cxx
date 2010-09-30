@@ -120,19 +120,16 @@ ULONG SmXMLImportWrapper::Import(SfxMedium &rMedium)
             static_cast<SmDocShell*>(pModel->GetObjectShell()) : 0;
     if (pDocShell)
     {
-//        if (pDocShell->GetMedium())
-        {
-            DBG_ASSERT( pDocShell->GetMedium() == &rMedium,
-                    "different SfxMedium found" );
+        DBG_ASSERT( pDocShell->GetMedium() == &rMedium,
+                "different SfxMedium found" );
 
-            SfxItemSet* pSet = rMedium.GetItemSet();
-            if (pSet)
-            {
-                const SfxUnoAnyItem* pItem = static_cast<const SfxUnoAnyItem*>(
-                    pSet->GetItem(SID_PROGRESS_STATUSBAR_CONTROL) );
-                if (pItem)
-                    pItem->GetValue() >>= xStatusIndicator;
-            }
+        SfxItemSet* pSet = rMedium.GetItemSet();
+        if (pSet)
+        {
+            const SfxUnoAnyItem* pItem = static_cast<const SfxUnoAnyItem*>(
+                pSet->GetItem(SID_PROGRESS_STATUSBAR_CONTROL) );
+            if (pItem)
+                pItem->GetValue() >>= xStatusIndicator;
         }
 
         if ( SFX_CREATE_MODE_EMBEDDED == pDocShell->GetCreateMode() )
@@ -472,7 +469,6 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLImport_createInstance(
     throw( uno::Exception )
 {
     // #110680#
-    // return (cppu::OWeakObject*)new SmXMLImport(IMPORT_ALL);
     return (cppu::OWeakObject*)new SmXMLImport(rSMgr, IMPORT_ALL);
 }
 
@@ -496,7 +492,6 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLImportMeta_createInstance(
 throw( uno::Exception )
 {
     // #110680#
-    // return (cppu::OWeakObject*)new SmXMLImport( IMPORT_META );
     return (cppu::OWeakObject*)new SmXMLImport( rSMgr, IMPORT_META );
 }
 
@@ -520,7 +515,6 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLImportSettings_createInstance(
     throw( uno::Exception )
 {
     // #110680#
-    // return (cppu::OWeakObject*)new SmXMLImport( IMPORT_SETTINGS );
     return (cppu::OWeakObject*)new SmXMLImport( rSMgr, IMPORT_SETTINGS );
 }
 
@@ -926,62 +920,7 @@ public:
 void SmXMLStyleContext_Impl::StartElement(const uno::Reference<
     xml::sax::XAttributeList > & xAttrList )
 {
-#if 1
     aStyleHelper.RetrieveAttrs(xAttrList);
-#else
-    sal_Int8 nOldIsBold=nIsBold;
-    sal_Int8 nOldIsItalic=nIsItalic;
-    double nOldFontSize=nFontSize;
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    OUString sOldFontFamily = sFontFamily;
-    for (sal_Int16 i=0;i<nAttrCount;i++)
-    {
-        OUString sAttrName = xAttrList->getNameByIndex(i);
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName(sAttrName,&aLocalName);
-        OUString sValue = xAttrList->getValueByIndex(i);
-        const SvXMLTokenMap &rAttrTokenMap =
-            GetSmImport().GetPresLayoutAttrTokenMap();
-        switch(rAttrTokenMap.Get(nPrefix,aLocalName))
-        {
-            case XML_TOK_FONTWEIGHT:
-                nIsBold = sValue.equals(GetXMLToken(XML_BOLD));
-                break;
-            case XML_TOK_FONTSTYLE:
-                nIsItalic = sValue.equals(GetXMLToken(XML_ITALIC));
-                break;
-            case XML_TOK_FONTSIZE:
-                SvXMLUnitConverter::convertDouble(nFontSize,sValue);
-                GetSmImport().GetMM100UnitConverter().
-                    setXMLMeasureUnit(MAP_POINT);
-                if (-1 == sValue.indexOf(GetXMLToken(XML_UNIT_PT)))
-                    if (-1 == sValue.indexOf('%'))
-                        nFontSize=0.0;
-                    else
-                    {
-                        GetSmImport().GetMM100UnitConverter().
-                            setXMLMeasureUnit(MAP_RELATIVE);
-                    }
-                break;
-            case XML_TOK_FONTFAMILY:
-                sFontFamily = sValue;
-                break;
-            case XML_TOK_COLOR:
-                sColor = sValue;
-                break;
-            default:
-                break;
-        }
-    }
-
-    if ((nOldIsBold!=nIsBold) || (nOldIsItalic!=nIsItalic) ||
-        (nOldFontSize!=nFontSize) || (sOldFontFamily!=sFontFamily)
-        || sColor.getLength())
-        bFontNodeNeeded=sal_True;
-    else
-        bFontNodeNeeded=sal_False;
-#endif
 }
 
 
@@ -995,96 +934,7 @@ void SmXMLStyleContext_Impl::EndElement()
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
     if (rNodeStack.Count() - nElementCount > 1)
         SmXMLRowContext_Impl::EndElement();
-#if 1
     aStyleHelper.ApplyAttrs();
-#else
-    if (bFontNodeNeeded)
-    {
-        SmToken aToken;
-        aToken.cMathChar = '\0';
-        aToken.nGroup = 0;
-        aToken.nLevel = 5;
-
-        if (nIsBold != -1)
-        {
-            if (nIsBold)
-                aToken.eType = TBOLD;
-            else
-                aToken.eType = TNBOLD;
-            SmStructureNode *pFontNode = static_cast<SmStructureNode *>
-                (new SmFontNode(aToken));
-            pFontNode->SetSubNodes(0,rNodeStack.Pop());
-            rNodeStack.Push(pFontNode);
-        }
-        if (nIsItalic != -1)
-        {
-            if (nIsItalic)
-                aToken.eType = TITALIC;
-            else
-                aToken.eType = TNITALIC;
-            SmStructureNode *pFontNode = static_cast<SmStructureNode *>
-                (new SmFontNode(aToken));
-            pFontNode->SetSubNodes(0,rNodeStack.Pop());
-            rNodeStack.Push(pFontNode);
-        }
-        if (nFontSize != 0.0)
-        {
-            aToken.eType = TSIZE;
-            SmFontNode *pFontNode = new SmFontNode(aToken);
-
-            if (MAP_RELATIVE == GetSmImport().GetMM100UnitConverter().
-                getXMLMeasureUnit())
-            {
-                if (nFontSize < 100.00)
-                    pFontNode->SetSizeParameter(Fraction(100.00/nFontSize),
-                        FNTSIZ_DIVIDE);
-                else
-                    pFontNode->SetSizeParameter(Fraction(nFontSize/100.00),
-                        FNTSIZ_MULTIPLY);
-            }
-            else
-                pFontNode->SetSizeParameter(Fraction(nFontSize),FNTSIZ_ABSOLUT);
-
-            pFontNode->SetSubNodes(0,rNodeStack.Pop());
-            rNodeStack.Push(pFontNode);
-        }
-        if (sFontFamily.getLength())
-        {
-            if (sFontFamily.equalsIgnoreCase(GetXMLToken(XML_FIXED)))
-                aToken.eType = TFIXED;
-            else if (sFontFamily.equalsIgnoreCase(OUString(
-                RTL_CONSTASCII_USTRINGPARAM("sans"))))
-                aToken.eType = TSANS;
-            else if (sFontFamily.equalsIgnoreCase(OUString(
-                RTL_CONSTASCII_USTRINGPARAM("serif"))))
-                aToken.eType = TSERIF;
-            else //Just give up, we need to extend our font mechanism to be
-                //more general
-                return;
-
-            aToken.aText = sFontFamily;
-            SmFontNode *pFontNode = new SmFontNode(aToken);
-            pFontNode->SetSubNodes(0,rNodeStack.Pop());
-            rNodeStack.Push(pFontNode);
-        }
-        if (sColor.getLength())
-        {
-            //Again we can only handle a small set of colours in
-            //StarMath for now.
-            const SvXMLTokenMap& rTokenMap =
-                GetSmImport().GetColorTokenMap();
-            aToken.eType = static_cast<SmTokenType>(rTokenMap.Get(
-                XML_NAMESPACE_MATH, sColor));
-            if (aToken.eType != -1)
-            {
-                SmFontNode *pFontNode = new SmFontNode(aToken);
-                pFontNode->SetSubNodes(0,rNodeStack.Pop());
-                rNodeStack.Push(pFontNode);
-            }
-        }
-
-    }
-#endif
 }
 
 ////////////////////////////////////////////////////////////
@@ -1759,12 +1609,6 @@ void SmXMLUnderContext_Impl::EndElement()
         GenericEndElement(TCSUB,CSUB);
     else
         HandleAccent();
-#if 0
-    //UnderBrace trick
-    SmStructureNode *pNode = rNodeStack.Pop();
-    if (pNode->GetSubNode(1)->GetToken().cMathChar == (0x0332|0xf000))
-    if (pNode->GetSubNode(0)->GetToken().cMathChar == (0x0332|0xf000))
-#endif
 }
 
 ////////////////////////////////////////////////////////////
@@ -2229,8 +2073,6 @@ SvXMLImportContext *SmXMLDocContext_Impl::CreateChildContext(
 
     const SvXMLTokenMap& rTokenMap = GetSmImport().GetPresLayoutElemTokenMap();
 
-    //UINT32 nTest = rTokenMap.Get(nPrefix, rLocalName);
-
     switch(rTokenMap.Get(nPrefix, rLocalName))
     {
         //Consider semantics a dummy except for any starmath annotations
@@ -2644,7 +2486,6 @@ void SmXMLMultiScriptsContext_Impl::MiddleElement()
             /*On each loop the base and its sub sup pair becomes the
              base for the next loop to which the next sub sup pair is
              attached, i.e. wheels within wheels*/
-            //if (nCount == 0)
             aSubNodes[0] = aReverseStack.Pop();
 
             SmNode *pScriptNode = aReverseStack.Pop();
@@ -2798,7 +2639,6 @@ void SmXMLMultiScriptsContext_Impl::EndElement()
             /*On each loop the base and its sub sup pair becomes the
              base for the next loop to which the next sub sup pair is
              attached, i.e. wheels within wheels*/
-            //if (nCount == 0)
             aSubNodes[0] = aReverseStack.Pop();
 
             SmNode *pScriptNode = aReverseStack.Pop();
@@ -3109,7 +2949,6 @@ void SmXMLImport::SetViewSettings(const Sequence<PropertyValue>& aViewProps)
     const PropertyValue *pValue = aViewProps.getConstArray();
 
     long nTmp = 0;
-    //sal_Bool bShowDeletes = sal_False, bShowInserts = sal_False, bShowFooter = sal_False, bShowHeader = sal_False;
 
     for (sal_Int32 i = 0; i < nCount ; i++)
     {

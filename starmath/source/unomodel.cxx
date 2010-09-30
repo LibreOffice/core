@@ -155,15 +155,6 @@ SmPrintUIOptions::SmPrintUIOptions()
     aHintNoLayoutPage[0].Value = makeAny( sal_True );
     m_aUIProperties[8].Value <<= aHintNoLayoutPage;
 
-// IsIgnoreSpacesRight is a parser option! Thus we don't add it to the printer UI.
-//
-//    // create subgroup for misc options
-//    m_aUIProperties[8].Value = getSubgroupControlOpt( aLocalizedStrings.GetString( 9 ) );
-//
-//    // create a bool option for ignore spacing (matches to SID_NO_RIGHT_SPACES)
-//    m_aUIProperties[9].Value = getBoolControlOpt( aLocalizedStrings.GetString( 10 ),
-//                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( PRTUIOPT_NO_RIGHT_SPACE ) ),
-//                                                  pConfig->IsIgnoreSpacesRight() );
 }
 
 
@@ -315,7 +306,7 @@ PropertySetInfo * lcl_createModelPropertyInfo ()
     PropertySetInfo *pInfo = new PropertySetInfo ( aModelPropertyInfoMap );
     return pInfo;
 }
-//-----------------------------------------------------------------------
+
 SmModel::SmModel( SfxObjectShell *pObjSh )
 : SfxBaseModel(pObjSh)
 , PropertySetHelper ( lcl_createModelPropertyInfo () )
@@ -323,14 +314,12 @@ SmModel::SmModel( SfxObjectShell *pObjSh )
 
 {
 }
-//-----------------------------------------------------------------------
+
 SmModel::~SmModel() throw ()
 {
     delete m_pPrintUIOptions;
 }
-/*-- 28.03.00 14:18:17---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Any SAL_CALL SmModel::queryInterface( const uno::Type& rType ) throw(uno::RuntimeException)
 {
     uno::Any aRet =  ::cppu::queryInterface ( rType,
@@ -348,23 +337,17 @@ uno::Any SAL_CALL SmModel::queryInterface( const uno::Type& rType ) throw(uno::R
         aRet = SfxBaseModel::queryInterface ( rType );
     return aRet;
 }
-/*-- 28.03.00 14:18:18---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SAL_CALL SmModel::acquire() throw()
 {
     OWeakObject::acquire();
 }
-/*-- 28.03.00 14:18:18---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SAL_CALL SmModel::release() throw()
 {
     OWeakObject::release();
 }
-/*-- 28.03.00 14:18:19---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Sequence< uno::Type > SAL_CALL SmModel::getTypes(  ) throw(uno::RuntimeException)
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
@@ -377,15 +360,9 @@ uno::Sequence< uno::Type > SAL_CALL SmModel::getTypes(  ) throw(uno::RuntimeExce
     pTypes[nLen++] = ::getCppuType((Reference<XMultiPropertySet>*)0);
     pTypes[nLen++] = ::getCppuType((Reference<XRenderable>*)0);
 
-    // XPropertyState not supported?? (respective virtual functions from
-    // PropertySetHelper not overloaded)
-    //pTypes[nLen++] = ::getCppuType((Reference<XPropertyState>*)0);
-
     return aTypes;
 }
-/* -----------------------------28.03.00 14:23--------------------------------
 
- ---------------------------------------------------------------------------*/
 const uno::Sequence< sal_Int8 > & SmModel::getUnoTunnelId()
 {
     static osl::Mutex aCreateMutex;
@@ -398,9 +375,8 @@ const uno::Sequence< sal_Int8 > & SmModel::getUnoTunnelId()
         rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
     }
     return aSeq;
-} /* -----------------------------28.03.00 14:23--------------------------------
+}
 
- ---------------------------------------------------------------------------*/
 sal_Int64 SAL_CALL SmModel::getSomething( const uno::Sequence< sal_Int8 >& rId )
     throw(uno::RuntimeException)
 {
@@ -413,12 +389,7 @@ sal_Int64 SAL_CALL SmModel::getSomething( const uno::Sequence< sal_Int8 >& rId )
 
     return SfxBaseModel::getSomething( rId );
 }
-/*-- 07.01.00 16:32:59---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
-/*-- 07.01.00 16:33:00---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 sal_Int16 lcl_AnyToINT16(const uno::Any& rAny)
 {
     uno::TypeClass eType = rAny.getValueType().getTypeClass();
@@ -432,7 +403,6 @@ sal_Int16 lcl_AnyToINT16(const uno::Any& rAny)
         rAny >>= nRet;
     return nRet;
 }
-//-----------------------------------------------------------------------------
 
 OUString SmModel::getImplementationName(void) throw( uno::RuntimeException )
 {
@@ -445,9 +415,6 @@ OUString SmModel::getImplementationName(void) throw( uno::RuntimeException )
     return rtl::OUString::createFromAscii("com.sun.star.comp.math.FormulaDocument");
 }
 
-/*-- 20.01.04 11:21:00---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 sal_Bool SmModel::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
     return (
@@ -455,9 +422,7 @@ sal_Bool SmModel::supportsService(const OUString& rServiceName) throw( uno::Runt
             rServiceName == A2OU("com.sun.star.formula.FormulaProperties")
            );
 }
-/*-- 20.01.04 11:21:00---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Sequence< OUString > SmModel::getSupportedServiceNames(void) throw( uno::RuntimeException )
 {
     return getSupportedServiceNames_Static();
@@ -1010,7 +975,6 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SmModel::getRenderer(
 
     SmPrinterAccess aPrinterAccess( *pDocSh );
     Printer *pPrinter = aPrinterAccess.GetPrinter();
-    //Point   aPrtPageOffset( pPrinter->GetPageOffset() );
     Size    aPrtPaperSize ( pPrinter->GetPaperSize() );
 
     // if paper size is 0 (usually if no 'real' printer is found),

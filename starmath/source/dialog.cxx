@@ -91,7 +91,6 @@ SmFontStyles::SmFontStyles() :
     aBold   ( ResId( RID_FONTBOLD,    *SM_MOD()->GetResMgr() ) ),
     aItalic ( ResId( RID_FONTITALIC,  *SM_MOD()->GetResMgr() ) )
 {
-//    SM_MOD()->GetResMgr().FreeResource();
 
     aBoldItalic = aBold;
     aBoldItalic.AppendAscii( ", " );
@@ -1745,7 +1744,6 @@ void SmSymDefineDialog::FillStyles(BOOL bDeleteText)
     XubString aText (aFonts.GetSelectEntry());
     if (aText.Len() != 0)
     {
-        //aStyles.Fill(aText, &aFontList);
         // eigene StyleName's verwenden
         const SmFontStyles &rStyles = GetFontStyles();
         for (USHORT i = 0;  i < rStyles.GetCount();  i++)
@@ -1938,7 +1936,6 @@ IMPL_LINK( SmSymDefineDialog, ChangeClickHdl, Button *, EMPTYARG pButton )
             aSymbolSets.GetText() );
 
     // remove old symbol if the name was changed then add new one
-//    const bool bSetNameChanged    = aOldSymbolSets.GetText() != aSymbolSets.GetText();
     const bool bNameChanged       = aOldSymbols.GetText() != aSymbols.GetText();
     if (bNameChanged)
         aSymbolMgrCopy.RemoveSymbol( aOldSymbols.GetText() );
@@ -2021,12 +2018,6 @@ void SmSymDefineDialog::UpdateButtons()
 
         // loeschen nur wenn alle Einstellungen gleich sind
         bDelete = pOrigSymbol != NULL;
-
-        // aendern wenn bei gleichem Namen mindestens eine Einstellung anders ist
-        // oder wenn es noch kein Symbol des neuen Namens gibt (wuerde implizites
-        // loeschen des bereits vorhandenen Symbols erfordern)
-//        BOOL  bEqualName = pOrigSymbol && aTmpSymbolName == pOrigSymbol->GetName();
-//      bChange = pOrigSymbol && ( (bEqualName && !bEqual) || (!bEqualName && bAdd) );
 
         // aendern nur falls altes Symbol vorhanden und am neuen etwas anders ist
         bChange = pOrigSymbol && !bEqual;

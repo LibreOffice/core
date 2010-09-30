@@ -264,7 +264,6 @@ void SmNode::SetFontSize(const Fraction &rSize, USHORT nType)
     {
         Fraction  aVal (SmPtsTo100th_mm(rSize.GetNumerator()),
                         rSize.GetDenominator());
-        //long    nHeight = ::rtl::math::round(aVal);
         long      nHeight = (long)aVal;
 
         aFntSize = GetFont().GetSize();
@@ -364,7 +363,6 @@ void SmNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
     }
 
     GetFont() = rFormat.GetFont(FNT_MATH);
-    //GetFont().SetCharSet(RTL_TEXTENCODING_SYMBOL);
     DBG_ASSERT( GetFont().GetCharSet() == RTL_TEXTENCODING_UNICODE,
             "unexpected CharSet" );
     GetFont().SetWeight(WEIGHT_NORMAL);
@@ -667,8 +665,6 @@ void SmStructureNode::GetAccessibleText( String &rText ) const
             if (pNode->IsVisible())
                 ((SmStructureNode *) pNode)->nAccIndex = rText.Len();
             pNode->GetAccessibleText( rText );
-//            if (rText.Len()  &&  ' ' != rText.GetChar( rText.Len() - 1 ))
-//                rText += String::CreateFromAscii( " " );
         }
     }
 }
@@ -763,7 +759,6 @@ void SmTableNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     {   if (NULL != (pNode = GetSubNode(i)))
         {   const SmRect &rNodeRect = pNode->GetRect();
             const SmNode *pCoNode   = pNode->GetLeftMost();
-            //SmTokenType   eType    = pCoNode->GetToken().eType;
             RectHorAlign  eHorAlign = pCoNode->GetRectHorAlign();
 
             aPos = rNodeRect.AlignTo(*this, RP_BOTTOM,
@@ -1103,7 +1098,6 @@ void SmBinVerNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 void SmBinVerNode::CreateTextFromNode(String &rText)
 {
     SmNode *pNum   = GetSubNode(0),
-    //      *pLine  = GetSubNode(1),
            *pDenom = GetSubNode(2);
     pNum->CreateTextFromNode(rText);
     APPEND(rText,"over ");
@@ -2254,7 +2248,6 @@ void SmRootSymbolNode::Draw(OutputDevice &rDev, const Point &rPosition) const
     //  This is done by shifting it's output-position to a point that
     //  corresponds exactly to a pixel on the output device.
     Point  aDrawPos( rDev.PixelToLogic(rDev.LogicToPixel(aBar.TopLeft())) );
-    //aDrawPos.X() = aBar.Left();     //! don't change X position
     aBar.SetPos( aDrawPos );
 
     rDev.DrawRect( aBar );
@@ -2300,7 +2293,6 @@ void SmRectangleNode::Arrange(const OutputDevice &rDev, const SmFormat &/*rForma
 
     // add some borderspace
     ULONG  nTmpBorderWidth = GetFont().GetBorderWidth();
-    //nWidth  += nTmpBorderWidth;
     nHeight += 2 * nTmpBorderWidth;
 
     //! use this method in order to have 'SmRect::HasAlignInfo() == TRUE'

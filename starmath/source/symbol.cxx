@@ -88,17 +88,6 @@ SmSym::SmSym(const String& rName, const Font& rFont, sal_Unicode cChar,
     m_aFace.SetAlign(ALIGN_BASELINE);
 
     m_cChar   = cChar;
-//! according to HDU this should not be used anymore now
-//! since this was necessary in the early days but should
-//! not be done now since this is handled now at a more
-//! bottom layer by HDU.
-//! He can still imagine scenarios where this will be wrong
-//! now though, for example when importing *some* old documents.
-//! But overall it should be a large improvement, and
-//! likely everything will still work... #_- (eyes shut and "go"!)
-//
-//    if (RTL_TEXTENCODING_SYMBOL == rFont.GetCharSet())
-//        Character |= 0xF000;
     m_aSetName      = rSet;
     m_bPredefined   = bIsPredefined;
     m_bDocSymbol    = FALSE;
@@ -320,23 +309,6 @@ void SmSymbolManager::Save()
     {
         SmMathConfig &rCfg = *SM_MOD()->GetConfig();
 
-#if 0
-        USHORT nSymbolCount     = GetSymbolCount();
-        USHORT nSaveSymbolCnt   = 0;
-        const SmSym **pSymbols  = new const SmSym* [ nSymbolCount ];
-        const SmSym **pSym      = pSymbols;
-        for (USHORT j = 0;  j < nSymbolCount;  ++j)
-        {
-            const SmSym &rSym = *pSymSet->GetSymbol( j );
-            if (!rSym.IsDocSymbol())
-            {
-                *pSym++ = &rSym;
-                ++nSaveSymbolCnt;
-            }
-        }
-        DBG_ASSERT(pSym - pSymbols == nSaveSymbolCnt, "wrong number of symbols" );
-#endif
-
         // prepare to skip symbols from iGreek on saving
         SmLocalizedSymbolData   aLocalizedData;
         String aSymbolSetName( (sal_Unicode) 'i' );
@@ -352,9 +324,6 @@ void SmSymbolManager::Save()
                 aSymbols.push_back( *aTmp[i] );
         }
         rCfg.SetSymbols( aSymbols );
-#if 0
-        delete [] pSymbols;
-#endif
 
         m_bModified = false;
     }

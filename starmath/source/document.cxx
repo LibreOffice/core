@@ -173,7 +173,6 @@ void SmDocShell::SetText(const String& rBuffer)
         SetFormulaArranged( FALSE );
 
         Parse();
-        //Repaint();
 
         SmViewShell *pViewSh = SmGetActiveView();
         if( pViewSh )
@@ -264,7 +263,6 @@ void SmDocShell::ArrangeFormula()
     //! Nur f�r die Dauer der Existenz dieses Objekts sind am Drucker die
     //! richtigen Einstellungen garantiert.
     SmPrinterAccess  aPrtAcc(*this);
-//  OutputDevice    *pOutDev = aPrtAcc.GetPrinter();
     OutputDevice* pOutDev = aPrtAcc.GetRefDev();
 
     if (!pOutDev)
@@ -420,9 +418,6 @@ EditEngine& SmDocShell::GetEditEngine()
 
         pEditEngine->ClearModifyFlag();
 
-        // forces new settings to be used if the itempool was modified
-        // after cthe creation of the EditEngine
-        //pEditEngine->Clear(); //#77957 incorrect font size
     }
     return *pEditEngine;
 }
@@ -770,16 +765,11 @@ BOOL SmDocShell::ConvertFrom(SfxMedium &rMedium)
                         Parse();
                 }
             }
-            else
-            {
-                //bSuccess = ImportSM20File( pStream );
-            }
         }
     }
 
     if ( GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
     {
-        //???OnDocumentPrinterChanged(0);
         SetFormulaArranged( FALSE );
         Repaint();
     }
@@ -834,7 +824,6 @@ BOOL SmDocShell::Load( SfxMedium& rMedium )
 
     if ( GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
     {
-        //???OnDocumentPrinterChanged(0);
         SetFormulaArranged( FALSE );
         Repaint();
     }

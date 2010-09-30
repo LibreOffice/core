@@ -74,7 +74,6 @@ static Sequence< OUString > lcl_GetFontPropertyNames()
     {
         pNames[i] = A2OU( *ppPropName );
     }
-    //aNames.realloc( i );
     return aNames;
 }
 
@@ -100,7 +99,6 @@ static Sequence< OUString > lcl_GetSymbolPropertyNames()
     {
         pNames[i] = A2OU( *ppPropName );
     }
-    //aNames.realloc( i );
     return aNames;
 }
 
@@ -113,7 +111,6 @@ static const char * aMathPropNames[] =
     "Print/Frame",
     "Print/Size",
     "Print/ZoomFactor",
-    //"Misc/NoSymbolsWarning",
     "Misc/IgnoreSpacesRight",
     "View/ToolboxVisible",
     "View/AutoRedraw",
@@ -181,7 +178,6 @@ static Sequence< OUString > lcl_GetPropertyNames(
     {
         pNames[i] = A2OU( *ppPropName );
     }
-    //aNames.realloc( i );
     return aNames;
 }
 
@@ -212,7 +208,6 @@ struct SmCfgOther
     BOOL            bToolboxVisible;
     BOOL            bAutoRedraw;
     BOOL            bFormulaCursor;
-    //BOOL            bNoSymbolsWarning;
 
     SmCfgOther();
 };
@@ -225,7 +220,7 @@ SmCfgOther::SmCfgOther()
     bPrintTitle         = bPrintFormulaText   =
     bPrintFrame         = bIgnoreSpacesRight  =
     bToolboxVisible     = bAutoRedraw         =
-    bFormulaCursor      = /*bNoSymbolsWarning   =*/ TRUE;
+    bFormulaCursor      = TRUE;
 }
 
 /////////////////////////////////////////////////////////////////
@@ -613,7 +608,6 @@ void SmMathConfig::SetSymbols( const std::vector< SmSym > &rNewSymbols )
     while (aIt != aEnd)
     {
         const SmSym &rSymbol = *aIt++;
-        //const Font  &rFont = rSymbol.GetFace();
         OUString  aNodeNameDelim( A2OU( SYMBOL_LIST ) );
         aNodeNameDelim += aDelim;
         aNodeNameDelim += rSymbol.GetExportName();
@@ -902,11 +896,6 @@ void SmMathConfig::LoadOther()
         // Print/ZoomFactor
         if (pVal->hasValue()  &&  (*pVal >>= nTmp16))
             pOther->nPrintZoomFactor = nTmp16;
-/*        ++pVal;
-        // Misc/NoSymbolsWarning
-        if (pVal->hasValue()  &&  (*pVal >>= bTmp))
-            pOther->bNoSymbolsWarning = bTmp;
-*/
         ++pVal;
         // Misc/IgnoreSpacesRight
         if (pVal->hasValue()  &&  (*pVal >>= bTmp))
@@ -953,9 +942,6 @@ void SmMathConfig::SaveOther()
     *pValue++ <<= (INT16) pOther->ePrintSize;
     // Print/ZoomFactor
     *pValue++ <<= (INT16) pOther->nPrintZoomFactor;
-/*    // Misc/NoSymbolsWarning
-    *pValue++ <<= (BOOL) pOther->bNoSymbolsWarning;
-*/
     // Misc/IgnoreSpacesRight
     *pValue++ <<= (BOOL) pOther->bIgnoreSpacesRight;
     // View/ToolboxVisible

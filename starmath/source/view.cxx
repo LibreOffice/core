@@ -214,16 +214,6 @@ void SmGraphicWindow::MouseButtonDown(const MouseEvent& rMEvt)
 
 void SmGraphicWindow::GetFocus()
 {
-/*
-    if (xAccessible.is())
-    {
-        uno::Any aOldValue, aNewValue;
-        // aOldValue remains empty
-        aNewValue <<= AccessibleStateType::FOCUSED;
-        pAccessible->LaunchEvent( AccessibleEventId::STATE_CHANGED,
-                aOldValue, aNewValue );
-    }
-*/
 }
 
 void SmGraphicWindow::LoseFocus()
@@ -368,7 +358,6 @@ void SmGraphicWindow::Command(const CommandEvent& rCEvt)
                 // added for replaceability of context menus #96085, #93782
                 pViewShell->GetViewFrame()->GetBindings().GetDispatcher()
                         ->ExecutePopup( aResId, this, &aPos );
-                //pPopupMenu->Execute( this, aPos );
 
                 delete pPopupMenu;
                 bCallBase = FALSE;
@@ -637,12 +626,6 @@ void SmCmdBoxWindow::StateChanged( StateChangedType nStateChange )
         if (TRUE == IsFloatingMode())
             AdjustPosition();   //! don't change pos in docking-mode !
 
-//        // make sure the formula can be edited right away
-//        aEdit.GrabFocus();
-
-        // grab focus as above does not work...
-        // Thus we implement a timer based solution to get the inital
-        // focus in the Edit window.
         aInitialFocusTimer.Start();
     }
 
@@ -739,9 +722,6 @@ SFX_IMPL_INTERFACE(SmViewShell, SfxViewShell, SmResId(0))
                                 SFX_VISIBILITY_FULLSCREEN | SFX_VISIBILITY_SERVER,
                                 SmResId(RID_MATH_TOOLBOX ));
     //Dummy-Objectbar, damit es bei aktivieren nicht staendig zuppelt.
-// Wegen #58705# entfernt (RID wurde nirgends verwendet)
-//  SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OBJECT | SFX_VISIBILITY_SERVER,
-//                              SmResId(RID_DRAW_OBJECTBAR) );
 
     SFX_CHILDWINDOW_REGISTRATION(SID_TASKPANE);
     SFX_CHILDWINDOW_REGISTRATION(SmToolBoxWrapper::GetChildWindowId());
@@ -1018,8 +998,6 @@ void SmViewShell::Impl_Print(
     const bool bIsPrintFormulaText = rPrintUIOptions.getBoolValue( PRTUIOPT_FORMULA_TEXT, sal_True );
     SmPrintSize ePrintSize( static_cast< SmPrintSize >( rPrintUIOptions.getIntValue( PRTUIOPT_PRINT_FORMAT, PRINT_SIZE_NORMAL ) ));
     const USHORT nZoomFactor = static_cast< USHORT >(rPrintUIOptions.getIntValue( PRTUIOPT_PRINT_SCALE, 100 ));
-// IsIgnoreSpacesRight is a parser option! Thus it does not get evaluated here anymore (too late).
-//    const bool bNoRightSpaces = rPrintUIOptions.getBoolValue( PRTUIOPT_NO_RIGHT_SPACE, sal_True );
 
     rOutDev.Push();
     rOutDev.SetLineColor( Color(COL_BLACK) );
@@ -1337,10 +1315,6 @@ BOOL SmViewShell::InsertFrom(SfxMedium &rMedium)
             Reference<com::sun::star::frame::XModel> xModel( pDoc->GetModel() );
             SmXMLImportWrapper aEquation(xModel);    //!! modifies the result of pDoc->GetText() !!
             bSuccess = 0 == aEquation.Import(rMedium);
-        }
-        else
-        {
-            //bSuccess = ImportSM20File( pStream );
         }
     }
 
@@ -1786,8 +1760,6 @@ SmViewShell::SmViewShell(SfxViewFrame *pFrame_, SfxViewShell *):
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::SmViewShell" );
 
-//    pViewFrame = &pFrame_->GetWindow();
-
     SetStatusText(String());
     SetWindow(&aGraphic);
     SfxShell::SetName(C2S("SmView"));
@@ -1842,8 +1814,6 @@ void SmViewShell::Activate( BOOL bIsMDIActivate )
     }
 }
 
-//------------------------------------------------------------------
-
 IMPL_LINK( SmViewShell, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
 {
     DBG_ASSERT( _pFileDlg, "SmViewShell::DialogClosedHdl(): no file dialog" );
@@ -1851,7 +1821,6 @@ IMPL_LINK( SmViewShell, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
 
     if ( ERRCODE_NONE == _pFileDlg->GetError() )
     {
-        //USHORT nSlot = pImpl->pRequest->GetSlot();
         SfxMedium* pMedium = pImpl->pDocInserter->CreateMedium();
 
         if ( pMedium != NULL )

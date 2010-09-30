@@ -349,9 +349,6 @@ void SmModule::FillStatusBar(StatusBar &rBar)
 
 }
 
-/* -----------------15.02.99 12:45-------------------
- *
- * --------------------------------------------------*/
 SfxItemSet*  SmModule::CreateItemSet( USHORT nId )
 {
     SfxItemSet*  pRet = 0;
@@ -371,9 +368,6 @@ SfxItemSet*  SmModule::CreateItemSet( USHORT nId )
     }
     return pRet;
 }
-/* -----------------15.02.99 12:45-------------------
- *
- * --------------------------------------------------*/
 void SmModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
 {
     if(nId == SID_SM_EDITOPTIONS)
@@ -381,9 +375,6 @@ void SmModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
         GetConfig()->ItemSetToConfig(rSet);
     }
 }
-/* -----------------15.02.99 12:45-------------------
- *
- * --------------------------------------------------*/
 SfxTabPage*  SmModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItemSet& rSet )
 {
     SfxTabPage*  pRet = 0;
