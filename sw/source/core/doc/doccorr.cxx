@@ -126,29 +126,6 @@ namespace
     }
 }
 
-void PaMCorrAbs( const SwNodeIndex &rOldNode,
-                const SwPosition &rNewPos,
-                const xub_StrLen nOffset)
-{
-    SwCntntNode *const pCntntNode( rOldNode.GetNode().GetCntntNode() );
-    SwPaM const aPam(rOldNode, 0,
-                     rOldNode, (pCntntNode) ? pCntntNode->Len() : 0);
-    SwPosition aNewPos(rNewPos);
-    aNewPos.nContent += nOffset;
-    return ::PaMCorrAbs(aPam, aNewPos);
-}
-
-
-void PaMCorrAbs( const SwNodeIndex &rStartNode,
-                 const SwNodeIndex &rEndNode,
-                 const SwPosition &rNewPos )
-{
-    SwCntntNode *const pCntntNode( rEndNode.GetNode().GetCntntNode() );
-    SwPaM const aPam(rStartNode, 0,
-                     rEndNode, (pCntntNode) ? pCntntNode->Len() : 0);
-    return ::PaMCorrAbs(aPam, rNewPos);
-}
-
 
 void PaMCorrAbs( const SwPaM& rRange,
                 const SwPosition& rNewPos )
@@ -267,12 +244,15 @@ void SwDoc::CorrAbs(const SwNodeIndex& rStartNode,
      const SwPosition& rNewPos,
      BOOL bMoveCrsr)
 {
-    SwPosition aNewPos(rNewPos);
-
     _DelBookmarks(rStartNode, rEndNode);
 
     if(bMoveCrsr)
-        ::PaMCorrAbs(rStartNode, rEndNode, rNewPos);
+    {
+        SwCntntNode *const pCntntNode( rEndNode.GetNode().GetCntntNode() );
+        SwPaM const aPam(rStartNode, 0,
+                         rEndNode, (pCntntNode) ? pCntntNode->Len() : 0);
+        ::PaMCorrAbs(aPam, rNewPos);
+    }
 }
 
 

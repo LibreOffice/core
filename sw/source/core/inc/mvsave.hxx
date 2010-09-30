@@ -24,14 +24,11 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _MVSAVE_HXX
-#define _MVSAVE_HXX
-
+#ifndef SW_MVSAVE_HXX
+#define SW_MVSAVE_HXX
 
 #include <tools/string.hxx>
-#ifndef _KEYCOD_HXX //autogen
 #include <vcl/keycod.hxx>
-#endif
 #include <svl/svarray.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <vector>
@@ -150,24 +147,9 @@ public:
 // Crsr verschieben kann
 // die Funktionen rufen nicht die SwDoc::Corr - Methoden!
 
-    // Setzt alle PaMs an OldPos auf NewPos + Offset
-void PaMCorrAbs( const SwPosition &rOldPos,
-                const SwPosition &rNewPos,
-                const xub_StrLen nOffset = 0 );
-
-    // Setzt alle PaMs in OldNode auf NewPos + Offset
-void PaMCorrAbs( const SwNodeIndex &rOldNode,
-                const SwPosition &rNewPos,
-                const xub_StrLen nOffset = 0 );
-
     // Setzt alle PaMs im Bereich vom Range nach NewPos
 void PaMCorrAbs( const SwPaM& rRange,
                  const SwPosition& rNewPos );
-
-    // Setzt alle PaMs im Bereich von [StartNode, EndNode] nach NewPos
-void PaMCorrAbs( const SwNodeIndex &rStartNode,
-                 const SwNodeIndex &rEndNode,
-                 const SwPosition &rNewPos );
 
     // Setzt alle PaMs in OldNode auf relative Pos
 void PaMCorrRel( const SwNodeIndex &rOldNode,
@@ -227,5 +209,5 @@ public:
 };
 
 
-#endif  // _MVSAVE_HXX
+#endif  // SW_MVSAVE_HXX
 
