@@ -1912,8 +1912,7 @@ SfxObjectShellRef & SwView::GetOrCreateTmpSelectionDoc()
     if (!rxTmpDoc.Is())
     {
         SwXTextView *pImpl = GetViewImpl()->GetUNOObject_Impl();
-        rxTmpDoc = pImpl->BuildTmpSelectionDoc(
-                    GetViewImpl()->GetEmbeddedObjRef() );
+        rxTmpDoc = pImpl->BuildTmpSelectionDoc();
     }
     return rxTmpDoc;
 }
