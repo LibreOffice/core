@@ -512,19 +512,24 @@ namespace
         for (std::vector<lang_and_family>::const_iterator aIter = families.begin(); aIter != aEnd; ++aIter)
         {
             const char *pLang = (const char*)aIter->first;
-            //perfect
             if( rtl_str_compare(pLang,sFullMatch.getStr() ) == 0)
             {
+                //perfect match
                 candidate = aIter->second;
                 break;
             }
             else if( (rtl_str_compare(pLang,sLangMatch.getStr()) == 0) && (!alreadyclosematch))
             {
+                //fairly close
                 candidate = aIter->second;
                 alreadyclosematch = true;
             }
+            else if( (rtl_str_compare(pLang,"en") == 0) && (!alreadyclosematch) )
+            {
+                //english name
+                candidate = aIter->second;
+            }
         }
-
         return candidate;
     }
 }
