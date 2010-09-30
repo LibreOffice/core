@@ -66,7 +66,6 @@ private:
     DAVRequestEnvironment m_aEnv;
 
     static bool          m_bGlobalsInited;
-    static osl::Mutex m_aGlobalMutex;
     static NeonLockStore m_aNeonLockStore;
 
 protected:

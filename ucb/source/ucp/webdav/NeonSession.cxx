@@ -618,7 +618,12 @@ extern "C" void NeonSession_PreSendRequest( ne_request * req,
 // -------------------------------------------------------------------
 // static members!
 bool NeonSession::m_bGlobalsInited = false;
-osl::Mutex NeonSession::m_aGlobalMutex;
+//See https://bugzilla.redhat.com/show_bug.cgi?id=544619#c4
+//neon is threadsafe, but uses gnutls which is only thread-safe
+//if initialized to be thread-safe. cups, unfortunately, generally
+//initializes it first, and as non-thread-safe, leaving the entire
+//stack unsafe
+osl::Mutex aGlobalNeonMutex;
 NeonLockStore NeonSession::m_aNeonLockStore;
 
 // -------------------------------------------------------------------
@@ -647,7 +652,10 @@ NeonSession::~NeonSession( )
 {
     if ( m_pHttpSession )
     {
-        ne_session_destroy( m_pHttpSession );
+        {
+            osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
+            ne_session_destroy( m_pHttpSession );
+        }
         m_pHttpSession = 0;
     }
     delete static_cast< RequestDataMap * >( m_pRequestData );
@@ -673,11 +681,7 @@ void NeonSession::Init()
     if ( m_pHttpSession == 0 )
     {
         // Ensure that Neon sockets are initialized
-
-        // --> tkr #151111# crashed if copy and pasted pictures from the internet
-        // ne_sock_init() was executed by two threads at the same time.
-        osl::Guard< osl::Mutex > theGlobalGuard( m_aGlobalMutex );
-        // <--
+        osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
         if ( !m_bGlobalsInited )
         {
             if ( ne_sock_init() != 0 )
@@ -726,7 +730,10 @@ void NeonSession::Init()
             m_nProxyPort = rProxyCfg.nPort;
 
             // new session needed, destroy old first
-            ne_session_destroy( m_pHttpSession );
+            {
+                osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
+                ne_session_destroy( m_pHttpSession );
+            }
             m_pHttpSession = 0;
             bCreateNewSession = true;
         }
@@ -739,14 +746,15 @@ void NeonSession::Init()
         //     currently (0.22.0) neon does not allow to pass the user info
         //     to the session
 
-        m_pHttpSession = ne_session_create(
-            rtl::OUStringToOString( m_aScheme,
-                RTL_TEXTENCODING_UTF8 ).getStr(),
-            /* theUri.GetUserInfo(),
-               @@@ for FTP via HTTP proxy, but not supported by Neon */
-            rtl::OUStringToOString( m_aHostName,
-                                    RTL_TEXTENCODING_UTF8 ).getStr(),
-            m_nPort );
+        {
+            osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
+            m_pHttpSession = ne_session_create(
+                rtl::OUStringToOString( m_aScheme, RTL_TEXTENCODING_UTF8 ).getStr(),
+                /* theUri.GetUserInfo(),
+                   @@@ for FTP via HTTP proxy, but not supported by Neon */
+                rtl::OUStringToOString( m_aHostName, RTL_TEXTENCODING_UTF8 ).getStr(),
+                m_nPort );
+        }
 
         if ( m_pHttpSession == 0 )
             throw DAVException( DAVException::DAV_SESSION_CREATE,
@@ -1638,12 +1646,11 @@ bool NeonSession::UNLOCK( NeonLock * pLock )
 void NeonSession::abort()
     throw ( DAVException )
 {
-    // 11.11.09 (tkr): The following code lines causing crashes if
-    // closing a ongoing connection. It turned out that this existing
-    // solution doesn't work in multi-threading environments.
-    // So I disabled them in 3.2. . Issue #73893# should fix it in OOo 3.3.
-    //if ( m_pHttpSession )
-    //    ne_close_connection( m_pHttpSession );
+    if ( m_pHttpSession )
+    {
+        osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
+        ne_close_connection( m_pHttpSession );
+    }
 }
 
 // -------------------------------------------------------------------
@@ -1934,7 +1941,10 @@ int NeonSession::GET( ne_session * sess,
     ne_decompress * dc
         = ne_decompress_reader( req, ne_accept_2xx, reader, userdata );
 
-    ret = ne_request_dispatch( req );
+    {
+        osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
+        ret = ne_request_dispatch( req );
+    }
 
 #if NEON_VERSION >= 0x0250
     if ( getheaders )
@@ -1974,7 +1984,10 @@ int NeonSession::PUT( ne_session * sess,
 
     ne_set_request_body_buffer( req, buffer, size );
 
-    ret = ne_request_dispatch( req );
+    {
+        osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
+        ret = ne_request_dispatch( req );
+    }
 
     if ( ret == NE_OK && ne_get_status( req )->klass != 2 )
         ret = NE_ERROR;
@@ -2019,7 +2032,10 @@ int NeonSession::POST( ne_session * sess,
 
     ne_set_request_body_buffer( req, buffer, strlen( buffer ) );
 
-    ret = ne_request_dispatch( req );
+    {
+        osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
+        ret = ne_request_dispatch( req );
+    }
 
     //if ( ctx.error )
     //    ret = NE_ERROR;

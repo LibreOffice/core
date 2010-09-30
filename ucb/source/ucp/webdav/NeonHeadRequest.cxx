@@ -156,6 +156,8 @@ extern "C" void NHR_ResponseHeaderCatcher( void * userdata,
 // Constructor
 // -------------------------------------------------------------------
 
+extern osl::Mutex aGlobalNeonMutex;
+
 NeonHeadRequest::NeonHeadRequest( HttpSession* inSession,
                                   const rtl::OUString & inPath,
                                   const std::vector< ::rtl::OUString > &
@@ -179,7 +181,10 @@ NeonHeadRequest::NeonHeadRequest( HttpSession* inSession,
     ne_add_response_header_catcher( req, NHR_ResponseHeaderCatcher, &aCtx );
 #endif
 
-    nError = ne_request_dispatch( req );
+    {
+        osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
+        nError = ne_request_dispatch( req );
+    }
 
 #if NEON_VERSION >= 0x0250
     process_headers(req, ioResource, inHeaderNames);
