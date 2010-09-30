@@ -60,7 +60,7 @@ const SwFrm* lcl_GetBoxFrm( const SwTableBox& rBox );
 long lcl_GetLongBoxNum( String& rStr );
 const SwTableBox* lcl_RelToBox( const SwTable&, const SwTableBox*, const String& );
 String lcl_BoxNmToRel( const SwTable&, const SwTableNode&,
-                        const String& , const String& , BOOL );
+                        const String& , const String& , bool );
 
 
 /*************************************************************************
@@ -266,7 +266,7 @@ SwTblCalcPara::~SwTblCalcPara()
     delete pBoxStk;
 }
 
-BOOL SwTblCalcPara::CalcWithStackOverflow()
+bool SwTblCalcPara::CalcWithStackOverflow()
 {
     // falls ein StackUeberlauf erkannt wurde, sollte mit
     // der letzten Box noch mal aufgesetzt werden. Irgend
@@ -311,7 +311,7 @@ SwTableFormula::SwTableFormula( const String& rFormel )
     : sFormel( rFormel )
 {
     eNmType = EXTRNL_NAME;
-    bValidValue = FALSE;
+    bValidValue = false;
 }
 
 SwTableFormula::~SwTableFormula()
@@ -850,7 +850,7 @@ const SwTableBox* lcl_RelToBox( const SwTable& rTbl,
 
 String lcl_BoxNmToRel( const SwTable& rTbl, const SwTableNode& rTblNd,
                             const String& rRefBoxNm, const String& rGetStr,
-                            BOOL bExtrnlNm )
+                            bool bExtrnlNm )
 {
     String sCpy( rRefBoxNm );
     String sTmp( rGetStr );
@@ -997,7 +997,7 @@ void SwTableFormula::GetBoxes( const SwTableBox& rSttBox,
 void SwTableFormula::_HasValidBoxes( const SwTable& rTbl, String& ,
                     String& rFirstBox, String* pLastBox, void* pPara ) const
 {
-    BOOL* pBValid = (BOOL*)pPara;
+    bool* pBValid = (bool*)pPara;
     if( *pBValid )      // einmal falsch, immer falsch
     {
         SwTableBox* pSttBox = 0, *pEndBox = 0;
@@ -1038,13 +1038,13 @@ void SwTableFormula::_HasValidBoxes( const SwTable& rTbl, String& ,
         if( ( pLastBox &&
               ( !pEndBox || !rTbl.GetTabSortBoxes().Seek_Entry( pEndBox ) ) ) ||
             ( !pSttBox || !rTbl.GetTabSortBoxes().Seek_Entry( pSttBox ) ) )
-                *pBValid = FALSE;
+                *pBValid = false;
     }
 }
 
-BOOL SwTableFormula::HasValidBoxes() const
+bool SwTableFormula::HasValidBoxes() const
 {
-    BOOL bRet = TRUE;
+    bool bRet = true;
     const SwNode* pNd = GetNodeOfFormula();
     if( pNd && 0 != ( pNd = pNd->FindTableNode() ) )
         ScanString( &SwTableFormula::_HasValidBoxes,
@@ -1152,7 +1152,7 @@ void SwTableFormula::_SplitMergeBoxNm( const SwTable& rTbl, String& rNewStr,
     if( TBL_SPLITTBL == rTblUpd.eFlags )
     {
         // wo liegen die Boxen, in der "alten" oder in der neuen Tabelle?
-        BOOL bInNewTbl = FALSE;
+        bool bInNewTbl = false;
         if( pLastBox )
         {
             // das ist die "erste" Box in der Selektion. Die bestimmt ob die

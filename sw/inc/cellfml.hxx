@@ -53,9 +53,9 @@ public:
     SwTblCalcPara( SwCalc& rCalculator, const SwTable& rTable );
     ~SwTblCalcPara();
 
-    BOOL CalcWithStackOverflow();
-    BOOL IsStackOverFlow() const        { return nMaxSize == nStackCnt; }
-    BOOL IncStackCnt()                  { return nMaxSize == ++nStackCnt; }
+    bool CalcWithStackOverflow();
+    bool IsStackOverFlow() const               { return nMaxSize == nStackCnt; }
+    bool IncStackCnt()                                         { return nMaxSize == ++nStackCnt; }
     void DecStackCnt()                  { if( nStackCnt ) --nStackCnt; }
     void SetLastTblBox( const SwTableBox* pBox )    { pLastTblBox = pBox; }
 };
@@ -98,7 +98,7 @@ protected:
 
     String      sFormel;            // akt. Formel
     NameType    eNmType;            // akt. Darstellungs Art
-    BOOL        bValidValue;        // TRUE: Formel neu berechnen
+    bool               bValidValue;            // TRUE: Formel neu berechnen
 
     // suche den Node, in dem die Formel steht:
     //  TextFeld    -> TextNode,
@@ -138,25 +138,25 @@ public:
     void ToSplitMergeBoxNm( SwTableFmlUpdate& rTblUpd );
 
     // ist gerade eine intern Darstellung aktiv
-    BOOL IsIntrnlName() const           { return eNmType == INTRNL_NAME; }
+    bool IsIntrnlName() const                  { return eNmType == INTRNL_NAME; }
     // erfrage die akt. Darstellung der Formel
     NameType GetNameType() const        { return eNmType; }
 
     // erfrage/setze das Flag, ob der akt. Wert gueltig ist
-    BOOL        IsValid() const             { return bValidValue; }
-    inline void ChgValid( BOOL bNew )       { bValidValue = bNew; }
+    bool               IsValid() const                         { return bValidValue; }
+    inline void        ChgValid( bool bNew )           { bValidValue = bNew; }
 
     const String& GetFormula() const        { return sFormel; }
     void SetFormula( const String& rNew )
         {
             sFormel = rNew;
-            bValidValue = FALSE;
+            bValidValue = false;
             eNmType = EXTRNL_NAME;
         }
 
     USHORT GetBoxesOfFormula( const SwTable& rTbl, SwSelBoxes& rBoxes );
     // sind alle Boxen gueltig, auf die sich die Formel bezieht?
-    BOOL HasValidBoxes() const;
+    bool HasValidBoxes() const;
 };
 
 
