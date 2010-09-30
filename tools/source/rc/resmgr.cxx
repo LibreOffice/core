@@ -1850,12 +1850,12 @@ rtl::OString ResMgr::GetAutoHelpId()
                     case RSC_TABCONTROL:        aHID.append( "TabControl" );       break;
                     case RSC_RADIOBUTTON:       aHID.append( "RadioButton" );      break;
                     case RSC_CHECKBOX:          aHID.append( "CheckBox" );         break;
-                    case RSC_TRISTATEBOX:       aHID.append( "TristateBox" );      break;
+                    case RSC_TRISTATEBOX:       aHID.append( "TriStateBox" );      break;
                     case RSC_EDIT:              aHID.append( "Edit" );             break;
                     case RSC_MULTILINEEDIT:     aHID.append( "MultilineEdit" );    break;
                     case RSC_MULTILISTBOX:      aHID.append( "MultiListBox" );     break;
                     case RSC_LISTBOX:           aHID.append( "ListBox" );          break;
-                    case RSC_COMBOBOX:          aHID.append( "Combobox" );         break;
+                    case RSC_COMBOBOX:          aHID.append( "ComboBox" );         break;
                     case RSC_PUSHBUTTON:        aHID.append( "PushButton" );       break;
                     case RSC_SPINFIELD:         aHID.append( "SpinField" );        break;
                     case RSC_PATTERNFIELD:      aHID.append( "PatternField" );     break;
