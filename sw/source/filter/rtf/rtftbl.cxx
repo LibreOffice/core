@@ -166,9 +166,6 @@ void SwRTFParser::ReadTable( int nToken )
     enum Limits {eMAXCELLS=64000};
 
     SvBools aMergeBackup(aMergeBoxes);
-    //size_t nCount = aMergeBoxes.size();
-    //for (size_t i = 0; i < nCount; ++i)
-    //    aMergeBackup.push_back( aMergeBoxes[i] );
 
     // kein TROWD aber ein TabellenToken -> zwischen TROWD und Tab.Token
     // waren andere Zeichen (siehe Bug 27445.rtf)
@@ -527,10 +524,6 @@ void SwRTFParser::ReadTable( int nToken )
     // It has been recognized as not single box
     if( nAktBox == nBoxCnt || ( bReadNewCell && !pTableNode ))
     {
-        //size_t nC = aMergeBackup.size();
-        //aMergeBoxes.clear();
-        //for (size_t i = 0; i < nC; ++i)
-        //    aMergeBoxes.push_back( aMergeBackup[i] );
         aMergeBoxes = aMergeBackup;
         SkipToken( -1 );            // go back to the last valid
         return;
