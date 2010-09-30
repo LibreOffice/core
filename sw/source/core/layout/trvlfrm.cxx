@@ -2061,9 +2061,11 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
     if ( pStartFrm->IsInFly() )
     {
         const SwAnchoredObject* pObj = pStartFrm->FindFlyFrm();
-        aSortObjs.Insert( *(const_cast<SwAnchoredObject*>(pObj)) );
+        ASSERT( pObj, "No Start Object." );
+        if (pObj) aSortObjs.Insert( *(const_cast<SwAnchoredObject*>(pObj)) );
         const SwAnchoredObject* pObj2 = pEndFrm->FindFlyFrm();
-        aSortObjs.Insert( *(const_cast<SwAnchoredObject*>(pObj2)) );
+        ASSERT( pObj2, "No Start Object." );
+        if (pObj2) aSortObjs.Insert( *(const_cast<SwAnchoredObject*>(pObj2)) );
     }
 
     //Fall 4: Tabellenselection
