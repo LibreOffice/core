@@ -42,13 +42,9 @@
 
 #include "svl/svldllapi.h"
 #include <svl/svarray.hxx>
+#include <vector>
 
-//#ifdef _SVSTDARR_BOOLS
-#ifndef _SVSTDARR_BOOLS_DECL
-SV_DECL_VARARR_VISIBILITY( SvBools, BOOL, 1, 1, SVL_DLLPUBLIC )
-#define _SVSTDARR_BOOLS_DECL
-#endif
-//#endif
+typedef std::vector< BOOL > SvBools;
 
 //#ifdef _SVSTDARR_BYTES
 #ifndef _SVSTDARR_BYTES_DECL

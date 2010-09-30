@@ -75,8 +75,6 @@ USHORT SvPtrarrPlain::GetPos( const VoidPtr aElement ) const
     return ( n >= nA ? USHRT_MAX : n );
 }
 
-
-SV_IMPL_VARARR( SvBools, BOOL )
 SV_IMPL_VARARR( SvBytes, BYTE )
 SV_IMPL_VARARR( SvULongs, ULONG )
 SV_IMPL_VARARR( SvUShorts, USHORT )
