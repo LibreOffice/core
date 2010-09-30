@@ -1,0 +1,14 @@
+    <node oor:name="calc_ODS_FlatXML" oor:op="replace">
+        <prop oor:name="DetectService"><value>com.sun.star.comp.filters.XMLFilterDetect</value></prop>
+        <prop oor:name="URLPattern"/>
+        <prop oor:name="Extensions"><value>fods ods xml</value></prop>
+        <prop oor:name="MediaType"/>
+        <prop oor:name="Preferred"><value>false</value></prop>
+        <prop oor:name="PreferredFilter"><value>OpenDocument Spreadsheet Flat XML</value></prop>
+        <prop oor:name="UIName">
+            <value>OpenDocument Spreadsheet (Flat XML)</value>
+        </prop>
+        <prop oor:name="ClipboardFormat">
+            <value>doctype:office:mimetype="application/vnd.oasis.opendocument.spreadsheet"</value>
+        </prop>
+    </node>
