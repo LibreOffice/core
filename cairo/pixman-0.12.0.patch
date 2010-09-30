@@ -23,3 +23,14 @@
  { echo "$as_me:$LINENO: checking whether byte ordering is bigendian" >&5
  echo $ECHO_N "checking whether byte ordering is bigendian... $ECHO_C" >&6; }
  if test "${ac_cv_c_bigendian+set}" = set; then
+--- misc/pixman-0.12.0/Makefile.in	2008-09-17 19:14:38.000000000 +0200
++++ misc/build/pixman-0.12.0/Makefile.in	2010-09-28 14:27:47.000000000 +0200
+@@ -203,7 +203,7 @@
+ target_alias = @target_alias@
+ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+-SUBDIRS = pixman test
++SUBDIRS = pixman
+ pkgconfigdir = $(libdir)/pkgconfig
+ pkgconfig_DATA = pixman-1.pc
+ GPGKEY = 6FF7C1A8
