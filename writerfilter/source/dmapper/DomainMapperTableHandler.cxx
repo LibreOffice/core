@@ -496,13 +496,6 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         if( aRepeatIter == m_aTableProperties->end() )
             m_aTableProperties->Insert( PROP_HEADER_ROW_COUNT, false, uno::makeAny( (sal_Int32)0 ));
 
-        // Remove the PROP_HEADER_ROW_COUNT from the table default to avoid
-        // propagating it to the cells
-        PropertyMap::iterator aDefaultRepeatIt =
-        rInfo.pTableDefaults->find( PropertyDefinition( PROP_HEADER_ROW_COUNT, false ) );
-        if ( aDefaultRepeatIt != rInfo.pTableDefaults->end( ) )
-            rInfo.pTableDefaults->erase( aDefaultRepeatIt );
-
         rInfo.aTableProperties = m_aTableProperties->GetPropertyValues();
 
 #ifdef DEBUG_DOMAINMAPPER
@@ -592,6 +585,13 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                     PropertyMapPtr pStyleProps = rInfo.pTableStyle->GetProperties( nCellStyleMask + nRowStyleMask );
                     pAllCellProps->insert( pStyleProps );
                 }
+
+                // Remove properties from style/row that aren't allowed in cells
+                const PropertyMap::iterator aDefaultRepeatIt =
+                    pAllCellProps->find(
+                        PropertyDefinition( PROP_HEADER_ROW_COUNT, false ) );
+                if ( aDefaultRepeatIt != pAllCellProps->end( ) )
+                    pAllCellProps->erase( aDefaultRepeatIt );
 
                 // Then add the cell properties
                 pAllCellProps->insert( *aCellIterator );
