@@ -399,6 +399,10 @@ void UpdateDialog::Thread::execute()
                 css::uno::Reference<css::ucb::XCommandEnvironment>());
         } catch (css::lang::IllegalArgumentException& ) {
             OSL_ASSERT(0);
+            continue;
+        } catch (css::ucb::CommandFailedException& ) {
+            OSL_ASSERT(0);
+            continue;
         }
         OSL_ASSERT(extensions.getLength() == 3);
         if (extensions[0].is() )
