@@ -65,6 +65,7 @@ PackageRegistryBackend::~PackageRegistryBackend()
 void PackageRegistryBackend::disposing( lang::EventObject const & event )
     throw (RuntimeException)
 {
+    check();
     Reference<deployment::XPackage> xPackage(
         event.Source, UNO_QUERY_THROW );
     OUString url( xPackage->getURL() );
@@ -124,6 +125,9 @@ void PackageRegistryBackend::check()
 void PackageRegistryBackend::disposing()
 {
     try {
+        for ( t_string2ref::const_iterator i = m_bound.begin(); i != m_bound.end(); i++)
+            i->second->removeEventListener(this);
+        m_bound.clear();
         m_xComponentContext.clear();
         WeakComponentImplHelperBase::disposing();
     }
