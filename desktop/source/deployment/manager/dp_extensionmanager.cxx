@@ -1099,7 +1099,7 @@ void ExtensionManager::reinstallDeployedExtensions(
                 const OUString id =  dp_misc::getIdentifier(extensions[ pos ]);
                 const OUString fileName = extensions[ pos ]->getName();
                 OSL_ASSERT(id.getLength());
-                activateExtension(id, fileName, false, false, xAbortChannel, xCmdEnv );
+                activateExtension(id, fileName, false, true, xAbortChannel, xCmdEnv );
             }
             catch (lang::DisposedException &)
             {
