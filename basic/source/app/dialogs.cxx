@@ -61,7 +61,7 @@
 #endif
 #include <svtools/ctrltool.hxx>
 
-// Ohne Includeschutz
+
 #include <svtools/svtdata.hxx>
 #include <svl/solar.hrc>
 
@@ -1199,8 +1199,6 @@ void DisplayHidDlg::AddData( WinInfoRec* pWinInfo )
 
         if ( pWinInfo->nRType & DH_MODE_DATA_VALID )    // no old office
             nDisplayMode = pWinInfo->nRType; // Is used for mode transmission while reset
-//        if ( pWinInfo->aUId.GetULONG() & DH_MODE_DATA_VALID ) // kein altes Office
-//          nDisplayMode = pWinInfo->aUId.GetULONG();   // Wird im Reset zur �bermittlung des Modus verwendet
 
         return;
     }

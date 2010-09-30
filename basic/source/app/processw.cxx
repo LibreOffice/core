@@ -204,8 +204,7 @@ void ProcessWrapper::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCT,
 SbxInfo* ProcessWrapper::GetInfo( short nIdx )
 {
     Methods* p = &pMethods[ nIdx ];
-    // Wenn mal eine Hilfedatei zur Verfuegung steht:
-    // SbxInfo* pResultInfo = new SbxInfo( Hilfedateiname, p->nHelpId );
+    // In case there is a help file available:
     SbxInfo* pResultInfo = new SbxInfo;
     short nPar = p->nArgs & _ARGSMASK;
     for( short i = 0; i < nPar; i++ )

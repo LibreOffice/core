@@ -35,7 +35,7 @@
 class BasicFrame;
 class AppError;
 
-#define SelectChildren SelectChilds     // Sonst wird mir schlecht
+#define SelectChildren SelectChilds
 
 typedef USHORT TTFeatures;          // Bitfield for features of the entries
 #define HasNothing  TTFeatures(0x00)

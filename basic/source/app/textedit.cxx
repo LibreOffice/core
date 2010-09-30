@@ -217,7 +217,7 @@ void TextEditImp::ImpDoHighlight( const String& rSource, ULONG nLineOff )
     {
         SbTextPortion& r = aPortionList[i];
 //      DBG_ASSERT( r.nStart <= r.nEnd, "Highlight: Start > End?" );
-        if ( r.nStart > r.nEnd )    // Nur bis Bug von MD behoben
+        if ( r.nStart > r.nEnd )    // Only up to the bug of MD repaired
             continue;
 
         SbTextType eType = r.eType;
@@ -247,7 +247,7 @@ void TextEditImp::ImpDoHighlight( const String& rSource, ULONG nLineOff )
         }
     }
 
-        // Es muessen nur die Blanks und Tabs mit attributiert werden.
+        // Only the blanks and tabs had to be attributed.
         // If there are two equal attributes one after another,
         // they are optimized by the EditEngine.
         xub_StrLen nLastEnd = 0;
@@ -264,8 +264,8 @@ void TextEditImp::ImpDoHighlight( const String& rSource, ULONG nLineOff )
 
             if ( r.nStart > nLastEnd )
             {
-                // Kann ich mich drauf verlassen, dass alle ausser
-                // Blank und Tab gehighlightet wird ?!
+                // can I trust that all of them except
+                // blank und tab will be highlighted?!
                 r.nStart = nLastEnd;
             }
             nLastEnd = r.nEnd+1;

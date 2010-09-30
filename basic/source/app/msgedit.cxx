@@ -846,7 +846,7 @@ void TTTreeListBox::SelectHdl()
 
     SelectChildren( pHdlEntry, TRUE );
     Select( pHdlEntry, TRUE );
-//  InitMenu(pApp->GetAppMenu()->GetPopupMenu( RID_APPEDIT ));  // So daß Delete richtig ist
+//  InitMenu(pApp->GetAppMenu()->GetPopupMenu( RID_APPEDIT ));  // so that delete works correct
 }
 
 void TTTreeListBox::DeselectHdl()
@@ -953,7 +953,7 @@ void TTLBoxString::Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags,
         if ( ( aFeatures & HasError ) == HasError )
             aCol = Color( 255, 130, 130 );  // Red
         else if ( ( aFeatures & HasWarning ) == HasWarning )
-            aCol = Color( 255, 200, 120 );  // Ocker oder so
+            aCol = Color( 255, 200, 120 );  // Ochre or so
         else if ( ( aFeatures & HasAssertion ) == HasAssertion )
             aCol = Color( 0xd0, 0xd0, 0xff );   // blueish
         else
