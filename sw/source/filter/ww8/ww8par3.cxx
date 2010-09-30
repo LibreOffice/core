@@ -321,7 +321,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, String& rStr)
     }
 }
 
-eF_ResT SwWW8ImplReader::Read_F_HTMLControl( WW8FieldDesc* pF, String& rStr)
+eF_ResT SwWW8ImplReader::Read_F_HTMLControl(WW8FieldDesc*, String&)
 {
     if( bObj && nPicLocFc )
         nObjLocFc = nPicLocFc;
