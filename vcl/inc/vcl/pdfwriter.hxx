@@ -581,6 +581,8 @@ The following structure describes the permissions used in PDF security
         rtl::OUString                   UserPassword; // user password for PDF, in clear text
 
         com::sun::star::lang::Locale    DocumentLocale; // defines the document default language
+        sal_uInt32                      DPIx, DPIy;     // how to handle MapMode( MAP_PIXEL )
+                                                        // 0 here specifies a default handling
 
         PDFWriterContext() :
                 RelFsys( false ), //i56629, i49415?, i64585?
@@ -609,7 +611,9 @@ The following structure describes the permissions used in PDF security
                 OpenBookmarkLevels( -1 ),
                 AccessPermissions( ),
                 Encrypt( false ),
-                Security128bit( true )
+                Security128bit( true ),
+                DPIx( 0 ),
+                DPIy( 0 )
         {}
     };
 

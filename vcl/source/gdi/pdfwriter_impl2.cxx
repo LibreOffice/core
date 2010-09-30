@@ -245,7 +245,6 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
         pDummyVDev->EnableOutput( sal_False );
         pDummyVDev->SetMapMode( i_rMtf.GetPrefMapMode() );
     }
-
     GDIMetaFile aMtf( i_rMtf );
 
     for( sal_uInt32 i = 0, nCount = aMtf.GetActionCount(); i < nCount; )

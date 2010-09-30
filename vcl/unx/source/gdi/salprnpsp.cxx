@@ -1207,6 +1207,9 @@ BOOL PspSalPrinter::StartJob( const String* i_pFileName, const String& i_rJobNam
     i_rController.createProgressDialog();
     bool bAborted = false;
     PDFNewJobParameters aLastParm;
+
+    aContext.DPIx = pPrinter->ImplGetDPIX();
+    aContext.DPIy = pPrinter->ImplGetDPIY();
     for( int nPage = 0; nPage < nAllPages && ! bAborted; nPage++ )
     {
         if( nPage == nAllPages-1 )
