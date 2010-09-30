@@ -1295,12 +1295,24 @@ static USHORT __READONLY_DATA SvxUnoColorNameResId[] =
 
 bool SvxUnoConvertResourceString( USHORT* pSourceResIds, USHORT* pDestResIds, int nCount, String& rString ) throw()
 {
-    int i = 0;
+    //We replace e.g. "Gray 10%" with the translation of Gray, but we shouldn't
+    //replace "Red Hat 1" with the translation of Red :-)
+    rtl::OUString sStr(rString);
+    const sal_Unicode *pStr = sStr.getStr();
+    sal_Int32 nLength = sStr.getLength();
+    while( nLength > 0 )
+    {
+        const sal_Unicode nChar = pStr[nLength-1];
+        if (nChar != '%' && (nChar < '0' || nChar > '9'))
+            break;
+        nLength--;
+    }
+    sStr = rtl::OUString(pStr, nLength).trim();
 
-    for( i = 0; i < nCount; i++ )
+    for(int i = 0; i < nCount; ++i )
     {
         String aStrDefName = SVX_RESSTR( pSourceResIds[i] );
-        if( rString.Search( aStrDefName ) == 0 )
+        if( sStr.equals( aStrDefName ) )
         {
             String aReplace = SVX_RESSTR( pDestResIds[i] );
             rString.Replace( 0, aStrDefName.Len(), aReplace );
