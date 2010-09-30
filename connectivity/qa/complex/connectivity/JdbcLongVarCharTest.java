@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-package complex.jdbc;
+package complex.connectivity;
 
 import com.sun.star.beans.PropertyState;
 import com.sun.star.beans.PropertyValue;
@@ -40,7 +40,7 @@ import com.sun.star.sdbc.XRow;
 import com.sun.star.uno.UnoRuntime;
 import complexlib.ComplexTestCase;
 
-public class LongVarCharTest extends ComplexTestCase
+public class JdbcLongVarCharTest extends ComplexTestCase
 {
 
     public String[] getTestMethodNames()

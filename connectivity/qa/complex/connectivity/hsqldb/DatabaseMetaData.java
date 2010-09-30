@@ -8,7 +8,8 @@
  *
  * @author  oj93728
  */
-package complex.hsqldb;
+package complex.connectivity.hsqldb;
+import complex.connectivity.HsqlDriverTest;
 import java.sql.*;
 import java.lang.reflect.Method;
 
@@ -16,10 +17,10 @@ import java.lang.reflect.Method;
 public class DatabaseMetaData {
 
     private java.sql.DatabaseMetaData m_xMD;
-    private DriverTest m_TestCase;
+    private HsqlDriverTest m_TestCase;
 
     /** Creates a new instance of DatabaseMetaData */
-    public DatabaseMetaData(DriverTest _testCase,java.sql.DatabaseMetaData _xmd) {
+    public DatabaseMetaData(HsqlDriverTest _testCase,java.sql.DatabaseMetaData _xmd) {
         m_TestCase = _testCase;
         m_xMD = _xmd;
     }

@@ -24,8 +24,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-package complex.hsqldb;
+package complex.connectivity;
 
+import complex.connectivity.hsqldb.TestCacheSize;
 import com.sun.star.frame.XModel;
 import com.sun.star.frame.XStorable;
 
@@ -43,7 +44,7 @@ import com.sun.star.sdbc.XDataSource;
 import com.sun.star.sdbc.XDriver;
 import connectivity.tools.HsqlDatabase;
 
-public class DriverTest extends ComplexTestCase {
+public class HsqlDriverTest extends ComplexTestCase {
 
 
     public String[] getTestMethodNames() {

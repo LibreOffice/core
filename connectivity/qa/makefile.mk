@@ -72,4 +72,4 @@ run: $(CLASSDIR)$/$(JARTARGET)
     +$(AUGMENT_LIBRARY_PATH) java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -sce scenarios.sce
 
 run_%: $(CLASSDIR)$/$(JARTARGET)
-    +$(AUGMENT_LIBRARY_PATH) java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -o complex.$(@:s/run_//:s/_/\./)
+    +$(AUGMENT_LIBRARY_PATH) java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -o complex.$(PRJNAME).$(@:s/run_//)

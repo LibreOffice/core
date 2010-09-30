@@ -29,7 +29,7 @@
  */
 
 
-package complex.hsqldb;
+package complex.connectivity.hsqldb;
 
 
 
@@ -115,17 +115,17 @@ public class TestCacheSize {
     XDriver drv;
     com.sun.star.beans.PropertyValue[] info;
 
-    TestCacheSize(XMultiServiceFactory _xmulti,com.sun.star.beans.PropertyValue[] _info,XDriver _drv){
+    public TestCacheSize(XMultiServiceFactory _xmulti,com.sun.star.beans.PropertyValue[] _info,XDriver _drv){
         servicefactory = _xmulti;
         drv = _drv;
         info = _info;
     }
 
-    void setURL(String _url){
+    public void setURL(String _url){
         url = _url;
     }
 
-    protected void setUp() {
+    public void setUp() {
 
         user     = "sa";
         password = "";
@@ -398,9 +398,9 @@ public class TestCacheSize {
                            + (i * 1000 / (sw.elapsedTime() + 1)));
     }
 
-    protected void tearDown() {}
+    public void tearDown() {}
 
-    protected void checkResults() {
+    public void checkResults() {
 
         try {
             StopWatch sw = new StopWatch();

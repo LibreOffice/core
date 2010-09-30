@@ -24,14 +24,17 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-package complex.dbase;
+package complex.connectivity;
 
+import complex.connectivity.dbase.DBaseDateFunctions;
+import complex.connectivity.dbase.DBaseStringFunctions;
+import complex.connectivity.dbase.DBaseSqlTests;
+import complex.connectivity.dbase.DBaseNumericFunctions;
 import com.sun.star.lang.XMultiServiceFactory;
 import complexlib.ComplexTestCase;
 import share.LogWriter;
-//import complex.connectivity.DBaseStringFunctions;
 
-public class DBaseDriverTest extends ComplexTestCase
+public class DBaseDriverTest extends ComplexTestCase implements TestCase
 {
     public String[] getTestMethodNames()
     {
@@ -47,9 +50,10 @@ public class DBaseDriverTest extends ComplexTestCase
         return "DBaseDriverTest";
     }
 
-    public void assure2(String s, boolean b)
+    @Override
+    public void assure( final String i_message, final boolean i_condition )
     {
-        assure(s, b);
+        super.assure( i_message, i_condition );
     }
 
     public LogWriter getLog()
