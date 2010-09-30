@@ -474,7 +474,6 @@ uno::Sequence< rtl::OUString > DataSequenceToStringSequence(
     const uno::Reference< data::XDataSequence >& xDataSequence )
 {
     uno::Sequence< rtl::OUString > aResult;
-    OSL_ASSERT( xDataSequence.is());
     if(!xDataSequence.is())
         return aResult;
 
