@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-package complex.connectivity;
+package complex.jdbc;
 
 import com.sun.star.beans.PropertyState;
 import com.sun.star.beans.PropertyValue;
@@ -51,6 +51,7 @@ public class LongVarCharTest extends ComplexTestCase
                 };
     }
 
+    @Override
     public String getTestObjectName()
     {
         return "LongVarCharTest";

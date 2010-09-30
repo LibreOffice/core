@@ -24,36 +24,15 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-package qa.drivers.dbase;
+package complex.dbase;
 
-import com.sun.star.sdbc.*;
 import com.sun.star.lang.XMultiServiceFactory;
 import complexlib.ComplexTestCase;
-import java.util.*;
-import java.io.*;
 import share.LogWriter;
 //import complex.connectivity.DBaseStringFunctions;
 
 public class DBaseDriverTest extends ComplexTestCase
 {
-
-    private static Properties props = new Properties();
-    private XDriver m_xDiver;
-    private String where = "FROM \"biblio\" \"biblio\" where \"Identifier\" = 'BOR00'";
-
-    static
-    {
-        try
-        {
-            String propsFile = "test.properties";
-            props.load(new FileInputStream(propsFile));
-        }
-        catch (Exception ex)
-        {
-            throw new RuntimeException(ex);
-        }
-    }
-
     public String[] getTestMethodNames()
     {
         return new String[]
@@ -62,6 +41,7 @@ public class DBaseDriverTest extends ComplexTestCase
                 };
     }
 
+    @Override
     public String getTestObjectName()
     {
         return "DBaseDriverTest";

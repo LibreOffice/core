@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-package qa.drivers.dbase;
+package complex.dbase;
 
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.sdbc.*;

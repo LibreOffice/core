@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-package qa.drivers.hsqldb;
+package complex.hsqldb;
 
 import com.sun.star.frame.XModel;
 import com.sun.star.frame.XStorable;
@@ -35,12 +35,13 @@ import complexlib.ComplexTestCase;
 
 
 import org.hsqldb.lib.StopWatch;
-import com.sun.star.sdbc.*;
-import com.sun.star.container.XNameAccess;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.beans.PropertyState;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.embed.XStorage;
+import com.sun.star.sdbc.XDataSource;
+import com.sun.star.sdbc.XDriver;
+import connectivity.tools.HsqlDatabase;
 
 public class DriverTest extends ComplexTestCase {
 
@@ -62,10 +63,10 @@ public class DriverTest extends ComplexTestCase {
         XDataSource ds = null;
         System.gc();
         try {
-            XNameAccess xNameAccess = (XNameAccess)UnoRuntime.queryInterface(XNameAccess.class,((XMultiServiceFactory)param.getMSF()).createInstance("com.sun.star.sdb.DatabaseContext"));
-            ds = (XDataSource)UnoRuntime.queryInterface(XDataSource.class,xNameAccess.getByName("file:///g:/test.odb"));
+            HsqlDatabase database = new HsqlDatabase( (XMultiServiceFactory)param.getMSF() );
+            ds = database.getDataSource().getXDataSource();
         } catch(Exception ex) {
-                throw new RuntimeException("factory: unable to construct data source" );
+            throw new RuntimeException("factory: unable to construct data source" );
         }
 
         try{
@@ -133,7 +134,7 @@ public class DriverTest extends ComplexTestCase {
         try{
             info = new com.sun.star.beans.PropertyValue[]{
                 new com.sun.star.beans.PropertyValue("JavaDriverClass",0,"org.hsqldb.jdbcDriver",PropertyState.DIRECT_VALUE)
-                ,new com.sun.star.beans.PropertyValue("ParameterNameSubstitution",0,new Boolean(false),PropertyState.DIRECT_VALUE)
+                ,new com.sun.star.beans.PropertyValue("ParameterNameSubstitution",0, false,PropertyState.DIRECT_VALUE)
             };
             drv = (XDriver)UnoRuntime.queryInterface(XDriver.class,((XMultiServiceFactory)param.getMSF()).createInstance("com.sun.star.comp.sdbc.JDBCDriver"));
             TestCacheSize test = new TestCacheSize(((XMultiServiceFactory)param.getMSF()),info,drv);

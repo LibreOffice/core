@@ -29,24 +29,16 @@
  */
 
 
-package qa.drivers.hsqldb;
+package complex.hsqldb;
 
-import java.io.*;
 
 
 import org.hsqldb.lib.StopWatch;
-import org.hsqldb.lib.FileAccess;
 
 import java.util.Random;
 import com.sun.star.lang.*;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.beans.PropertyState;
-import com.sun.star.container.XNameAccess;
 import com.sun.star.sdbc.*;
-import com.sun.star.document.XDocumentSubStorageSupplier;
-import com.sun.star.embed.XStorage;
-import com.sun.star.frame.XStorable;
 
 /**
  * Test large cached tables by setting up a cached table of 100000 records
