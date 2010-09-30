@@ -2834,7 +2834,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
         MapWrapIntoFlyFmt(pRecord, pRetFrmFmt);
 
     // Set frame name with object name
-    if( aObjName.Len() )
+    if( pRetFrmFmt /*#i52825# */ && aObjName.Len() )
         pRetFrmFmt->SetName( aObjName );
     return AddAutoAnchor(pRetFrmFmt);
 }
