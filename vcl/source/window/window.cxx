@@ -1206,18 +1206,20 @@ void Window::ImplLoadRes( const ResId& rResId )
 {
     ULONG nObjMask = ReadLongRes();
 
+    // we need to calculate auto helpids before the resource gets closed
+    // if the resource  only contains flags, it will be closed before we try to read a help id
+    // so we always create an auto help id that might be overwritten later
+    // HelpId
+    rtl::OString aHelpId = ImplAutoHelpID( rResId.GetResMgr() );
+
     // ResourceStyle
     ULONG nRSStyle = ReadLongRes();
     // WinBits
     ReadLongRes();
 
-
-    // HelpId
-    rtl::OString aHelpId;
     if( nObjMask & WINDOW_HELPID )
         aHelpId = ReadByteStringRes();
-    if( ! aHelpId.getLength() )
-        aHelpId = ImplAutoHelpID( rResId.GetResMgr() );
+
     SetHelpId( aHelpId );
 
     BOOL  bPos  = FALSE;
