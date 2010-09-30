@@ -11,7 +11,7 @@ Public Source as String
 Public SubstFile as String
 Public SubstDir as String
 Public NoArgs()
-Public FilterList(9) as String
+Public TypeList(14) as String
 Public GoOn as Boolean
 Public DoUnprotect as Integer
 Public Password as String
@@ -55,20 +55,25 @@ Dim bDisposable as Boolean
 		Else
 			SourceDir = Source
 			TargetStemDir = TargetDir
-			FilterList(0) = &quot;application/x-starcalc&quot;
-			FilterList(1) = &quot;application/vnd.stardivision.calc&quot;
-			FilterList(2) = &quot;application/vnd.sun.xml.calc&quot;
-			FilterList(3) = &quot;application/vnd.oasis.opendocument.spreadsheet&quot;
+			TypeList(0) = &quot;calc8&quot;
+			TypeList(1) = &quot;calc_StarOffice_XML_Calc&quot;
+			TypeList(2) = &quot;calc_StarCalc_30&quot;
+			TypeList(3) = &quot;calc_StarCalc_40&quot;
+			TypeList(4) = &quot;calc_StarCalc_50&quot;
 			If DialogModel.chkTextDocuments.State = 1 Then
-				ReDim Preserve FilterList(8) as String
-				
-				FilterList(4) = &quot;application/x-starwriter&quot;
-				FilterList(5) = &quot;application/vnd.stardivision.writer&quot;
-				FilterList(6) = &quot;application/vnd.stardivision.writer/web&quot;
-				FilterList(7) = &quot;application/vnd.sun.xml.writer&quot;
-				FilterList(8) = &quot;application/vnd.oasis.opendocument.text&quot;
+				ReDim Preserve TypeList(13) as String
+
+				TypeList(5) = &quot;writer8&quot;
+				TypeList(6) = &quot;writerglobal8&quot;
+				TypeList(7) = &quot;writer_StarOffice_XML_Writer&quot;
+				TypeList(8) = &quot;writer_globaldocument_StarOffice_XML_Writer_GlobalDocument&quot;
+				TypeList(9) = &quot;writer_StarWriter_30&quot;
+				TypeList(10) = &quot;writer_StarWriter_40&quot;
+				TypeList(11) = &quot;writer_globaldocument_StarWriter_40GlobalDocument&quot;
+				TypeList(12) = &quot;writer_StarWriter_50&quot;
+				TypeList(13) = &quot;writer_globaldocument_StarWriter_50GlobalDocument&quot;
 			End If
-			FilesList() = ReadDirectories(SourceDir, bRecursive, True, False, FilterList())
+			FilesList() = ReadDirectories(SourceDir, bRecursive, True, False, TypeList())
 			TotDocCount = Ubound(FilesList(),1) + 1
 		End If
 		InitializeProgressPage(DialogModel)
