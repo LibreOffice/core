@@ -209,7 +209,6 @@ SvxBoundArgs::SvxBoundArgs( TextRanger* pRanger, SvLongs *pLong,
     bInner( pRanger->IsInner() ), bMultiple( bInner || !pRanger->IsSimple() ),
     bConcat( FALSE ), bRotate( pRanger->IsVertical() )
 {
-    aBoolArr.reserve( 4 );
     if( bRotate )
     {
         nStart = pRanger->GetUpper();
