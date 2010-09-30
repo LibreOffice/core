@@ -550,15 +550,12 @@ void SchAttribTabDlg::PageCreated(USHORT nId, SfxTabPage &rPage)
 
         case RID_SVXPAGE_CHAR_NAME:
 
-            //CHINA001 ((SvxCharNamePage&)rPage).
-            //CHINA001     SetFontList(SvxFontListItem(m_pViewElementListProvider->getFontList()));
-            aSet.Put (SvxFontListItem(m_pViewElementListProvider->getFontList(), SID_ATTR_CHAR_FONTLIST)); //CHINA001
-            rPage.PageCreated(aSet); //CHINA001
+            aSet.Put (SvxFontListItem(m_pViewElementListProvider->getFontList(), SID_ATTR_CHAR_FONTLIST));
+            rPage.PageCreated(aSet);
             break;
 
         case RID_SVXPAGE_CHAR_EFFECTS:
-            //CHINA001 ((SvxCharEffectsPage&) rPage).DisableControls( DISABLE_CASEMAP );
-            aSet.Put (SfxUInt16Item(SID_DISABLE_CTL,DISABLE_CASEMAP)); //CHINA001
+            aSet.Put (SfxUInt16Item(SID_DISABLE_CTL,DISABLE_CASEMAP));
             rPage.PageCreated(aSet);
             break;
 

@@ -49,13 +49,13 @@
 #include "validate.hrc"
 #include "validate.hxx"
 #include "compiler.hxx"
-#include "formula/opcode.hxx" //CHINA001
-//<!--Added by PengYunQuan for Validity Cell Range Picker
+#include "formula/opcode.hxx"
+
+// cell range picker
 #include "tabvwsh.hxx"
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/childwin.hxx>
 #include "reffact.hxx"
-//-->Added by PengYunQuan for Validity Cell Range Picker
 
 // ============================================================================
 
@@ -69,9 +69,6 @@ static USHORT pValueRanges[] =
 
 // ============================================================================
 
-//<!--Modified by PengYunQuan for Validity Cell Range Picker
-//ScValidationDlg::ScValidationDlg( Window* pParent, const SfxItemSet* pArgSet ) :
-//    SfxTabDialog( pParent, ScResId( TAB_DLG_VALIDATION ), pArgSet )
 ScValidationDlg::ScValidationDlg( Window*           pParent,
                                  const SfxItemSet* pArgSet,
                                  ScTabViewShell *pTabViewSh,
@@ -81,7 +78,6 @@ ScValidationDlg::ScValidationDlg( Window*           pParent,
             m_bOwnRefHdlr( false ),
             m_pTabVwSh( pTabViewSh ),
             m_bRefInputting( false )
-//-->Modified by PengYunQuan for Validity Cell Range Picker
 {
     AddTabPage( TP_VALIDATION_VALUES,    ScTPValidationValue::Create, 0 );
     AddTabPage( TP_VALIDATION_INPUTHELP, ScTPValidationHelp::Create,  0 );
@@ -89,20 +85,18 @@ ScValidationDlg::ScValidationDlg( Window*           pParent,
     FreeResource();
 }
 
-//<!--Added by PengYunQuan for Validity Cell Range Picker
 void ScTPValidationValue::SetReferenceHdl( const ScRange&rRange , ScDocument* pDoc )
 {
     if ( rRange.aStart != rRange.aEnd )
         if ( ScValidationDlg *pValidationDlg = GetValidationDlg() )
             if( m_pRefEdit )
-                pValidationDlg/*->GetRefHandler()*/->RefInputStart( m_pRefEdit );
+                pValidationDlg->RefInputStart( m_pRefEdit );
 
     if ( m_pRefEdit )
     {
         String  aStr;
         rRange.Format( aStr, SCR_ABS_3D, pDoc );
         m_pRefEdit->SetRefString( aStr );
-        //m_pRefEdit->SetRefString( rRange.aStart != rRange.aEnd ? aStr : String::CreateFromAscii("=").Append( aStr ) );
     }
 }
 
@@ -113,7 +107,7 @@ void ScTPValidationValue:: SetActiveHdl()
     if ( ScValidationDlg *pValidationDlg = GetValidationDlg() )
         if( m_pRefEdit )
         {
-            pValidationDlg/*->GetRefHandler()*/->RefInputDone();
+            pValidationDlg->RefInputDone();
         }
 }
 
@@ -150,11 +144,9 @@ void            ScTPValidationValue::RefInputDonePreHdl()
         m_pRefEdit->SetParent( this );
 
         m_btnRef.SetParent( m_pRefEdit ); //if Edit SetParent but button not, the tab order will be incorrect, need button to setparent to anthor window and restore parent later in order to restore the tab order
-//      aExample1.SetParent( m_pRefEdit ); // the aExample1's child order will affect acc key
     }
 
     if( m_btnRef.GetParent()!=this ) m_btnRef.SetParent( this );
-//  if( aExample1.GetParent()!=this ) aExample1.SetParent( this );
 }
 
 void            ScTPValidationValue::RefInputDonePostHdl()
@@ -175,14 +167,11 @@ BOOL ScValidationDlg::Close()
 
     return ScValidationDlgBase::Close();
 }
-//-->Added by PengYunQuan for Validity Cell Range Picker
 
 ScValidationDlg::~ScValidationDlg()
 {
-    //<!--Added by PengYunQuan for Validity Cell Range Picker
     if( m_bOwnRefHdlr )
         RemoveRefDlg( FALSE );
-    //-->Added by PengYunQuan for Validity Cell Range Picker
 }
 
 
@@ -343,21 +332,16 @@ ScTPValidationValue::ScTPValidationValue( Window* pParent, const SfxItemSet& rAr
     maStrValue( ScResId( SCSTR_VALID_VALUE ) ),
     maStrRange( ScResId( SCSTR_VALID_RANGE ) ),
     maStrList ( ScResId( SCSTR_VALID_LIST ) ),
-//<!--Added by PengYunQuan for Validity Cell Range Picker
-        m_btnRef( this, ScResId( RB_VALIDITY_REF ) )
-//-->Added by PengYunQuan for Validity Cell Range Picker
+    m_btnRef( this, ScResId( RB_VALIDITY_REF ) )
 {
     Init();
     FreeResource();
 
     // list separator in formulas
-    //CHINA001 const String& rListSep = ScCompiler::pSymbolTableNative[ ocSep ];
-    String aListSep = ::GetScCompilerNativeSymbol( ocSep ); //CHINA001
+    String aListSep = ::GetScCompilerNativeSymbol( ocSep );
     DBG_ASSERT( aListSep.Len() == 1, "ScTPValidationValue::ScTPValidationValue - list separator error" );
     mcFmlaSep = aListSep.Len() ? aListSep.GetChar( 0 ) : ';';
-    //<!--Added by PengYunQuan for Validity Cell Range Picker
-    m_btnRef.Hide();
-    //-->Added by PengYunQuan for Validity Cell Range Picker
+    m_btnRef.Hide(); // cell range picker
 }
 
 ScTPValidationValue::~ScTPValidationValue()
@@ -369,13 +353,13 @@ void ScTPValidationValue::Init()
     maLbAllow.SetSelectHdl( LINK( this, ScTPValidationValue, SelectHdl ) );
     maLbValue.SetSelectHdl( LINK( this, ScTPValidationValue, SelectHdl ) );
     maCbShow.SetClickHdl( LINK( this, ScTPValidationValue, CheckHdl ) );
-    //<!--Added by PengYunQuan for Validity Cell Range Picker
+
+    // cell range picker
     maEdMin.SetGetFocusHdl( LINK( this, ScTPValidationValue, EditSetFocusHdl ) );
     maEdMin.SetLoseFocusHdl( LINK( this, ScTPValidationValue, KillFocusHdl ) );
     maEdMax.SetGetFocusHdl( LINK( this, ScTPValidationValue, EditSetFocusHdl ) );
     m_btnRef.SetLoseFocusHdl( LINK( this, ScTPValidationValue, KillFocusHdl ) );
     maEdMax.SetLoseFocusHdl( LINK( this, ScTPValidationValue, KillFocusHdl ) );
-    //-->Added by PengYunQuan for Validity Cell Range Picker
 
     maLbAllow.SelectEntryPos( SC_VALIDDLG_ALLOW_ANY );
     maLbValue.SelectEntryPos( SC_VALIDDLG_DATA_EQUAL );
@@ -493,7 +477,6 @@ void ScTPValidationValue::SetSecondFormula( const String& rFmlaStr )
     maEdMax.SetText( rFmlaStr );
 }
 
-//<!--Added by PengYunQuan for Validity Cell Range Picker
 ScValidationDlg * ScTPValidationValue::GetValidationDlg()
 {
     if( Window *pParent = GetParent() )
@@ -503,6 +486,7 @@ ScValidationDlg * ScTPValidationValue::GetValidationDlg()
         }while ( NULL != ( pParent = pParent->GetParent() ) );
     return NULL;
 }
+
 void ScTPValidationValue::SetupRefDlg()
 {
     if( ScValidationDlg *pValidationDlg = GetValidationDlg() )
@@ -595,7 +579,7 @@ void ScTPValidationValue::TidyListBoxes()
     }
 }
 
-IMPL_LINK( ScTPValidationValue, EditSetFocusHdl, Edit *, /*pEdit*/ )
+IMPL_LINK( ScTPValidationValue, EditSetFocusHdl, Edit * )
 {
     USHORT  nPos=maLbAllow.GetSelectEntryPos();
 
@@ -619,7 +603,6 @@ IMPL_LINK( ScTPValidationValue, KillFocusHdl, Window *, pWnd )
 
     return 0;
 }
-//-->Added by PengYunQuan for Validity Cell Range Picker
 
 // ----------------------------------------------------------------------------
 
@@ -630,7 +613,7 @@ IMPL_LINK( ScTPValidationValue, SelectHdl, ListBox*, EMPTYARG )
     bool bRange = (nLbPos == SC_VALIDDLG_ALLOW_RANGE);
     bool bList = (nLbPos == SC_VALIDDLG_ALLOW_LIST);
 
-    maCbAllow.Enable( bEnable );   // Leerzellen
+    maCbAllow.Enable( bEnable );   // Empty cell
     maFtValue.Enable( bEnable );
     maLbValue.Enable( bEnable );
     maFtMin.Enable( bEnable );
@@ -673,9 +656,7 @@ IMPL_LINK( ScTPValidationValue, SelectHdl, ListBox*, EMPTYARG )
     maFtMax.Show( bShowMax );
     maEdMax.Show( bShowMax );
     maFtHint.Show( bRange );
-    //<!--Added by PengYunQuan for Validity Cell Range Picker
-    m_btnRef.Show( bRange );
-    //-->Added by PengYunQuan for Validity Cell Range Picker
+    m_btnRef.Show( bRange );  // cell range picker
     return 0;
 }
 
@@ -719,8 +700,6 @@ __EXPORT ScTPValidationHelp::~ScTPValidationHelp()
 
 void ScTPValidationHelp::Init()
 {
-    //aLb.SetSelectHdl( LINK( this, ScTPValidationHelp, SelectHdl ) );
-
     aTsbHelp.EnableTriState( FALSE );
 }
 
@@ -908,7 +887,6 @@ IMPL_LINK( ScTPValidationError, ClickSearchHdl, PushButton*, EMPTYARG )
     return( 0L );
 }
 
-//<!--Added by PengYunQuan for Validity Cell Range Picker
 bool ScValidationDlg::EnterRefStatus()
 {
     ScTabViewShell *pTabViewShell = GetTabViewShell();
@@ -934,7 +912,6 @@ bool ScValidationDlg::LeaveRefStatus()
 
     USHORT nId  = SLOTID;
     SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
-    //SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
     if ( pViewFrm->GetChildWindow( nId ) )
     {
         DoClose( nId );
@@ -948,7 +925,7 @@ bool ScValidationDlg::SetupRefDlg()
     if( EnterRefMode() )
     {
         SetModal( FALSE );
-        return  /*SetChkShell( GetDocShell() ),*/ m_bOwnRefHdlr = true && EnterRefStatus();
+        return  m_bOwnRefHdlr = true && EnterRefStatus();
     }
 
     return false;
@@ -987,8 +964,6 @@ bool ScValidationDlg::RemoveRefDlg( BOOL bRestoreModal /* = TRUE */ )
     return true;
 }
 
-//TYPEINIT1( ScTPValidationValue, SfxTabPage )
-
 void ScTPValidationValue::ScRefButtonEx::Click()
 {
     if( ScTPValidationValue *pParent = dynamic_cast< ScTPValidationValue*>( GetParent() ) )
@@ -1018,4 +993,3 @@ bool    ScValidationDlg::IsAlive()
 {
     return SC_MOD()->IsAliveRefDlg( SLOTID, this );
 }
-//-->Added by PengYunQuan for Validity Cell Range Picker

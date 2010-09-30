@@ -49,7 +49,6 @@
 #include "reffact.hxx"
 #include "scresid.hxx"
 #include "pvglob.hxx"
-//CHINA001 #include "pvfundlg.hxx"
 #include "globstr.hrc"
 #include "pivot.hrc"
 #include "dpobject.hxx"
@@ -57,8 +56,8 @@
 #include "dpshttab.hxx"
 #include "scmod.hxx"
 
-#include "sc.hrc" //CHINA001
-#include "scabstdlg.hxx" //CHINA001
+#include "sc.hrc"
+#include "scabstdlg.hxx"
 using namespace com::sun::star;
 using ::rtl::OUString;
 using ::std::vector;
@@ -1008,7 +1007,7 @@ void ScDPLayoutDlg::NotifyDoubleClick( ScDPFieldType eType, size_t nFieldIndex )
         if( ScDPLabelData* pData = GetLabelData( (*pArr)[nFieldIndex]->mnCol, &nArrPos ) )
         {
             ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+            DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
 
             switch ( eType )
             {

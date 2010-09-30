@@ -1914,7 +1914,7 @@ sal_uInt32 ScFunctionCategory::getNumber() const
 
 //------------------------------------------------------------------------
 
-utl::TransliterationWrapper* ScGlobal::GetpTransliteration() //add by CHINA001
+utl::TransliterationWrapper* ScGlobal::GetpTransliteration()
 {
     if ( !pTransliteration )
     {
