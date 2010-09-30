@@ -122,7 +122,6 @@ SmGraphicAccessible::SmGraphicAccessible( SmGraphicWindow *pGraphicWin ) :
     pWin                (pGraphicWin)
 {
     DBG_ASSERT( pWin, "SmGraphicAccessible: window missing" );
-    //++aRefCount;
 }
 
 
@@ -131,21 +130,13 @@ SmGraphicAccessible::SmGraphicAccessible( const SmGraphicAccessible &rSmAcc ) :
     aAccName            ( String(SmResId(RID_DOCUMENTSTR)) ),
     nClientId           (0)
 {
-    //vos::OGuard aGuard(Application::GetSolarMutex());
     pWin = rSmAcc.pWin;
     DBG_ASSERT( pWin, "SmGraphicAccessible: window missing" );
-    //++aRefCount;
 }
 
 
 SmGraphicAccessible::~SmGraphicAccessible()
 {
-/*
-    vos::OGuard aGuard(Application::GetSolarMutex());
-    if (--aRefCount == 0)
-    {
-    }
-*/
 }
 
 
@@ -325,7 +316,6 @@ Reference< XAccessible > SAL_CALL SmGraphicAccessible::getAccessibleChild(
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     throw IndexOutOfBoundsException();  // there is no child...
-    /*return 0;*/
 }
 
 Reference< XAccessible > SAL_CALL SmGraphicAccessible::getAccessibleParent()
@@ -399,9 +389,6 @@ Reference< XAccessibleStateSet > SAL_CALL SmGraphicAccessible::getAccessibleStat
         pStateSet->AddState( AccessibleStateType::DEFUNC );
     else
     {
-        //pStateSet->AddState( AccessibleStateType::EDITABLE );
-        //pStateSet->AddState( AccessibleStateType::HORIZONTAL );
-        //pStateSet->AddState( AccessibleStateType::TRANSIENT );
         pStateSet->AddState( AccessibleStateType::ENABLED );
         pStateSet->AddState( AccessibleStateType::FOCUSABLE );
         if (pWin->HasFocus())
@@ -549,8 +536,6 @@ awt::Rectangle SAL_CALL SmGraphicAccessible::getCharacterBounds( sal_Int32 nInde
                 // get appropriate rectangle
                 Point aOffset(pNode->GetTopLeft() - pTree->GetTopLeft());
                 Point aTLPos (pWin->GetFormulaDrawPos() + aOffset);
-//                aTLPos.X() -= pNode->GetItalicLeftSpace();
-//                Size  aSize (pNode->GetItalicSize());
                 aTLPos.X() -= 0;
                 Size  aSize (pNode->GetSize());
 
@@ -617,9 +602,7 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getIndexAtPoint( const awt::Point& aPoin
         {
             // get appropriate rectangle
             Point   aOffset( pNode->GetTopLeft() - pTree->GetTopLeft() );
-            Point   aTLPos ( /*pWin->GetFormulaDrawPos() +*/ aOffset );
-//            aTLPos.X() -= pNode->GetItalicLeftSpace();
-//            Size  aSize( pNode->GetItalicSize() );
+            Point   aTLPos ( aOffset );
             aTLPos.X() -= 0;
             Size  aSize( pNode->GetSize() );
 #if OSL_DEBUG_LEVEL > 1
@@ -820,7 +803,6 @@ sal_Bool SAL_CALL SmGraphicAccessible::copyText(
 OUString SAL_CALL SmGraphicAccessible::getImplementationName()
     throw (RuntimeException)
 {
-    //vos::OGuard aGuard(Application::GetSolarMutex());
     return A2OU("SmGraphicAccessible");
 }
 
@@ -828,7 +810,6 @@ sal_Bool SAL_CALL SmGraphicAccessible::supportsService(
         const OUString& rServiceName )
     throw (RuntimeException)
 {
-    //vos::OGuard aGuard(Application::GetSolarMutex());
     return  rServiceName == A2OU( "com::sun::star::accessibility::Accessible" ) ||
             rServiceName == A2OU( "com::sun::star::accessibility::AccessibleComponent" ) ||
             rServiceName == A2OU( "com::sun::star::accessibility::AccessibleContext" ) ||
@@ -838,7 +819,6 @@ sal_Bool SAL_CALL SmGraphicAccessible::supportsService(
 Sequence< OUString > SAL_CALL SmGraphicAccessible::getSupportedServiceNames()
     throw (RuntimeException)
 {
-    //vos::OGuard aGuard(Application::GetSolarMutex());
     Sequence< OUString > aNames(4);
     OUString *pNames = aNames.getArray();
     pNames[0] = A2OU( "com::sun::star::accessibility::Accessible" );
@@ -867,7 +847,6 @@ SmEditSource::SmEditSource( const SmEditSource &rSrc ) :
     aEditViewFwd(rSrc.rEditAcc),
     rEditAcc    (rSrc.rEditAcc)
 {
-    //aBroadCaster;     can be completely new
 }
 
 SmEditSource::~SmEditSource()
@@ -1232,45 +1211,6 @@ USHORT GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection& rSe
 
         if( !bEmpty && !bGaps && nLastEnd < ( nEndPos - 1 ) )
             bGaps = TRUE;
-/*
-        // since we have no portion with our item or if there were gaps
-        if( bEmpty || bGaps )
-        {
-            // we need to check the paragraph item
-            const SfxItemSet& rParaSet = rEditEngine.GetParaAttribs( nPara );
-            if( rParaSet.GetItemState( nWhich ) == SFX_ITEM_SET )
-            {
-                eState = SFX_ITEM_SET;
-                // get item from the paragraph
-                const SfxPoolItem* pTempItem = rParaSet.GetItem( nWhich );
-                if( pParaItem )
-                {
-                    if( *pParaItem != *pTempItem )
-                        return SFX_ITEM_DONTCARE;
-                }
-                else
-                {
-                    pParaItem = pTempItem;
-                }
-
-                // set if theres no last item or if its the same
-                eParaState = SFX_ITEM_SET;
-            }
-            else if( bEmpty )
-            {
-                eParaState = SFX_ITEM_DEFAULT;
-            }
-            else if( bGaps )
-            {
-                // gaps and item not set in paragraph, thats a dont care
-                return SFX_ITEM_DONTCARE;
-            }
-        }
-        else
-        {
-            eParaState = SFX_ITEM_SET;
-        }
-*/
         if( bEmpty )
             eParaState = SFX_ITEM_DEFAULT;
         else if( bGaps )
@@ -1709,7 +1649,6 @@ SmEditAccessible::SmEditAccessible( SmEditWindow *pEditWin ) :
     pWin                (pEditWin)
 {
     DBG_ASSERT( pWin, "SmEditAccessible: window missing" );
-    //++aRefCount;
 }
 
 
@@ -1717,21 +1656,13 @@ SmEditAccessible::SmEditAccessible( const SmEditAccessible &rSmAcc ) :
     SmEditAccessibleBaseClass(),
     aAccName            ( String(SmResId(STR_CMDBOXWINDOW)) )
 {
-    //vos::OGuard aGuard(Application::GetSolarMutex());
     pWin = rSmAcc.pWin;
     DBG_ASSERT( pWin, "SmEditAccessible: window missing" );
-    //++aRefCount;
 }
 
 SmEditAccessible::~SmEditAccessible()
 {
     delete pTextHelper;
-/*
-    vos::OGuard aGuard(Application::GetSolarMutex());
-    if (--aRefCount == 0)
-    {
-    }
-*/
 }
 
 void SmEditAccessible::Init()
@@ -1988,10 +1919,7 @@ uno::Reference< XAccessibleStateSet > SAL_CALL SmEditAccessible::getAccessibleSt
         pStateSet->AddState( AccessibleStateType::DEFUNC );
     else
     {
-        //pStateSet->AddState( AccessibleStateType::EDITABLE );
         pStateSet->AddState( AccessibleStateType::MULTI_LINE );
-        //pStateSet->AddState( AccessibleStateType::HORIZONTAL );
-        //pStateSet->AddState( AccessibleStateType::TRANSIENT );
         pStateSet->AddState( AccessibleStateType::ENABLED );
         pStateSet->AddState( AccessibleStateType::FOCUSABLE );
         if (pWin->HasFocus())
@@ -2030,7 +1958,6 @@ void SAL_CALL SmEditAccessible::addEventListener( const uno::Reference< XAccessi
 void SAL_CALL SmEditAccessible::removeEventListener( const uno::Reference< XAccessibleEventListener >& xListener )
     throw (RuntimeException)
 {
-    //vos::OGuard aGuard(Application::GetSolarMutex());
    if (pTextHelper)   // not disposing (about to destroy view shell)
         pTextHelper->RemoveEventListener( xListener );
 }
@@ -2038,7 +1965,6 @@ void SAL_CALL SmEditAccessible::removeEventListener( const uno::Reference< XAcce
 OUString SAL_CALL SmEditAccessible::getImplementationName()
     throw (RuntimeException)
 {
-    //vos::OGuard aGuard(Application::GetSolarMutex());
     return A2OU("SmEditAccessible");
 }
 
@@ -2046,7 +1972,6 @@ sal_Bool SAL_CALL SmEditAccessible::supportsService(
         const OUString& rServiceName )
     throw (RuntimeException)
 {
-    //vos::OGuard aGuard(Application::GetSolarMutex());
     return  rServiceName == A2OU( "com::sun::star::accessibility::Accessible" ) ||
             rServiceName == A2OU( "com::sun::star::accessibility::AccessibleComponent" ) ||
             rServiceName == A2OU( "com::sun::star::accessibility::AccessibleContext" );
@@ -2055,7 +1980,6 @@ sal_Bool SAL_CALL SmEditAccessible::supportsService(
 Sequence< OUString > SAL_CALL SmEditAccessible::getSupportedServiceNames()
     throw (RuntimeException)
 {
-    //vos::OGuard aGuard(Application::GetSolarMutex());
     Sequence< OUString > aNames(3);
     OUString *pNames = aNames.getArray();
     pNames[0] = A2OU( "com::sun::star::accessibility::Accessible" );

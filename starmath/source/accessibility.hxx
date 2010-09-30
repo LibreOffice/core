@@ -32,9 +32,6 @@
 #ifndef _ACCESSIBILITY_HXX_
 #define _ACCESSIBILITY_HXX_
 
-//#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
-//#include <com/sun/star/lang/XComponent.hpp>
-//#endif
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
@@ -85,7 +82,6 @@ SmGraphicAccessibleBaseClass;
 class SmGraphicAccessible :
     public SmGraphicAccessibleBaseClass
 {
-    //vos::ORefCount    aRefCount;  // number of references to object
     osl::Mutex                          aListenerMutex;
     String                              aAccName;
     /// client id in the AccessibleEventNotifier queue
