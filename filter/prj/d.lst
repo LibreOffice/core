@@ -24,6 +24,7 @@ mkdir: %_DEST%\bin%_EXT%\xslt\import\common
 mkdir: %_DEST%\bin%_EXT%\xslt\import\spreadsheetml
 mkdir: %_DEST%\bin%_EXT%\xslt\import\uof
 mkdir: %_DEST%\bin%_EXT%\xslt\import\wordml
+mkdir: %_DEST%\bin%_EXT%\xslt\odfflatxml
 mkdir: %_DEST%\xml%_EXT%\registry
 mkdir: %_DEST%\xml%_EXT%\registry\spool
 mkdir: %_DEST%\bin%_EXT%\pdfimport
@@ -43,6 +44,7 @@ mkdir: %_DEST%\bin%_EXT%\pdfimport
 ..\source\xslt\import\spreadsheetml\*.xsl %_DEST%\bin%_EXT%\xslt\import\spreadsheetml\*.xsl
 ..\source\xslt\import\wordml\*.xsl %_DEST%\bin%_EXT%\xslt\import\wordml\*.xsl
 ..\source\xslt\import\uof\*.xsl %_DEST%\bin%_EXT%\xslt\import\uof\*.xsl
+..\source\odfflatxml\*.xsl %_DEST%\bin%_EXT%\xslt\odfflatxml\*.xsl
 ..\%__SRC%\bin\*.xsl %_DEST%\bin%_EXT%\*.xsl
 ..\%__SRC%\bin\*.stw %_DEST%\bin%_EXT%\*.stw
 ..\%__SRC%\bin\pdf2xml.* %_DEST%\bin%_EXT%\pdf2xml.*

@@ -3,7 +3,11 @@ all_fragments+=xslt
 # -----------------------------------------------
 # count = 5
 T4_XSLT = \
+    calc_ODS_FlatXML \
+    draw_ODG_FlatXML \
+    impress_ODP_FlatXML \
     writer_DocBook_File \
+    writer_ODT_FlatXML \
     XHTML_File \
     Unified_Office_Format_text \
     Unified_Office_Format_spreadsheet \
@@ -13,6 +17,10 @@ T4_XSLT = \
 # count = 8
 F4_XSLT = \
     DocBook_File \
+    ODG_FlatXML \
+    ODP_FlatXML \
+    ODS_FlatXML \
+    ODT_FlatXML \
     XHTML_Calc_File \
     XHTML_Draw_File \
     XHTML_Impress_File \
