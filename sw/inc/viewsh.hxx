@@ -24,8 +24,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _VIEWSH_HXX
-#define _VIEWSH_HXX
+#ifndef SW_VIEWSH_HXX
+#define SW_VIEWSH_HXX
+
 #include <com/sun/star/embed/XClassifiedObject.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <tools/rtti.hxx>
@@ -368,8 +369,7 @@ public:
     static void PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintData& rOptions,
                          OutputDevice* pOleOut, const Rectangle& rRect );
 
-    // creates temporary doc with selected text for PDF export
-    SwDoc * CreatePrtDoc( SfxObjectShellRef& );
+    /// fill temporary doc with selected text for Print or PDF export
     SwDoc * FillPrtDoc( SwDoc* pPrtDoc, const SfxPrinter* pPrt );
 
     //Wird intern fuer die Shell gerufen die Druckt. Formatiert die Seiten.
@@ -633,4 +633,4 @@ inline const SfxItemPool& ViewShell::GetAttrPool() const
 
 
 
-#endif //_VIEWSH_HXX
+#endif // SW_VIEWSH_HXX
