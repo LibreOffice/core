@@ -1593,8 +1593,8 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStartPos )
         }
         else
         {
-            bBuild = ( GetInfo().GetTxtFly()->IsOn() && ChkFlyUnderflow( GetInfo() )
-                     || GetInfo().CheckFtnPortion( pCurr ) );
+            bBuild = ( GetInfo().GetTxtFly()->IsOn() && ChkFlyUnderflow(GetInfo()) )
+                     || GetInfo().CheckFtnPortion(pCurr);
             if( bBuild )
             {
                 GetInfo().SetNumDone( bOldNumDone );
