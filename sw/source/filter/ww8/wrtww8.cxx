@@ -1284,7 +1284,7 @@ void WW8_WrtBookmarks::Append( WW8_CP nStartCp, const String& rNm,  const ::sw::
 
         aSttCps.Insert(nStartCp, nPos);
         aEndCps.Insert(nStartCp, nPos);
-        aFieldMarks.Insert(BOOL(false), nPos);
+        aFieldMarks.insert(aFieldMarks.begin() + nPos, BOOL(false));
         maSwBkmkNms.insert(aIter, rNm);
     }
     else
