@@ -836,7 +836,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 // execute PrinterSetupDialog
                 PrinterSetupDialog* pPrintSetupDlg = new PrinterSetupDialog( GetWindow() );
 
-                if ( pImp->bHasPrintOptions )
+                if (pImp->m_bHasPrintOptions)
                 {
                     // additional controls for dialog
                     pExecutor = new SfxDialogExecutor_Impl( this, pPrintSetupDlg );
@@ -985,7 +985,7 @@ ErrCode SfxViewShell::DoPrint( SfxPrinter* /*pPrinter*/,
 
 BOOL SfxViewShell::IsPrinterLocked() const
 {
-    return pImp->nPrinterLocks > 0;
+    return pImp->m_nPrinterLocks > 0;
 }
 
 //--------------------------------------------------------------------
@@ -994,9 +994,13 @@ void SfxViewShell::LockPrinter( BOOL bLock)
 {
     BOOL bChanged = FALSE;
     if ( bLock )
-        bChanged = 1 == ++pImp->nPrinterLocks;
+    {
+        bChanged = 1 == ++pImp->m_nPrinterLocks;
+    }
     else
-        bChanged = 0 == --pImp->nPrinterLocks;
+    {
+        bChanged = 0 == --pImp->m_nPrinterLocks;
+    }
 
     if ( bChanged )
     {
