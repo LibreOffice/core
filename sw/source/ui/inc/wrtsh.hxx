@@ -320,9 +320,6 @@ typedef BOOL (SwWrtShell:: *FNSimpleMove)();
     void    InsertTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet = 0);
     BOOL    UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet = 0);
 
-        //  new fields
-    BOOL    UpdateField( sw::mark::IFieldmark &fieldBM);
-
     // Numerierung und Bullets
     /**
        Turns on numbering or bullets.
