@@ -42,7 +42,7 @@
 
 #include "svl/svldllapi.h"
 #include <svl/svarray.hxx>
-#include <vector>
+#include <deque>
 
 typedef std::deque< BOOL > SvBools;
 
