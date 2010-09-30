@@ -579,7 +579,7 @@ void ScTPValidationValue::TidyListBoxes()
     }
 }
 
-IMPL_LINK( ScTPValidationValue, EditSetFocusHdl, Edit * )
+IMPL_LINK( ScTPValidationValue, EditSetFocusHdl, Edit *, EMPTYARG)
 {
     USHORT  nPos=maLbAllow.GetSelectEntryPos();
 
