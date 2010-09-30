@@ -77,6 +77,8 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> & rxParent,
         ::Window* pParentWindow);
 
+    void Init();
+
     virtual ~AccessibleSlideSorterView (void);
 
     /** This method acts like a dispose call.  It sends a disposing to all

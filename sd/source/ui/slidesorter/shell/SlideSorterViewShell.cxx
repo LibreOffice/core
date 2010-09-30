@@ -273,16 +273,22 @@ Reference<drawing::XDrawSubController> SlideSorterViewShell::CreateSubController
     SlideSorterViewShell::CreateAccessibleDocumentView (::sd::Window* pWindow)
 {
     OSL_ASSERT(mpSlideSorter.get()!=NULL);
-
     // When the view is not set then the initialization is not yet complete
     // and we can not yet provide an accessibility object.
-    if (mpView == NULL)
+    if (mpView == NULL || mpSlideSorter.get() == NULL)
         return NULL;
 
-    return new ::accessibility::AccessibleSlideSorterView (
+    ::accessibility::AccessibleSlideSorterView *pAccessibleView =
+    new ::accessibility::AccessibleSlideSorterView(
         *mpSlideSorter.get(),
         pWindow->GetAccessibleParentWindow()->GetAccessible(),
         pWindow);
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> xRet(pAccessibleView);
+
+    pAccessibleView->Init();
+
+    return xRet;
 }
 
 

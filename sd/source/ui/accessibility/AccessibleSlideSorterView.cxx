@@ -109,7 +109,6 @@ AccessibleSlideSorterView::AccessibleSlideSorterView(
     const Reference<XAccessible>& rxParent,
     ::Window* pContentWindow)
     : AccessibleSlideSorterViewBase(MutexOwner::maMutex),
-      mpImpl(new Implementation(*this,rSlideSorter,pContentWindow)),
       mrSlideSorter(rSlideSorter),
       mxParent(rxParent),
       mnClientId(0),
@@ -117,6 +116,16 @@ AccessibleSlideSorterView::AccessibleSlideSorterView(
 {
     OSL_TRACE("creating AccessibleSlideSorterView");
 }
+
+
+
+
+
+void AccessibleSlideSorterView::Init()
+{
+    mpImpl.reset(new Implementation(*this,mrSlideSorter,mpContentWindow));
+}
+
 
 
 
