@@ -1792,7 +1792,8 @@ void EditEngine::SetControlWord( sal_uInt32 nWord )
                     ContentNode* pNode = pImpEditEngine->GetEditDoc().GetObject( n );
                     pNode->CreateWrongList();
                 }
-                pImpEditEngine->StartOnlineSpellTimer();
+                if (pImpEditEngine->IsFormatted())
+                    pImpEditEngine->StartOnlineSpellTimer();
             }
             else
             {
