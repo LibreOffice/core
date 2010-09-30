@@ -249,6 +249,9 @@ class ColorConfigWindow_Impl : public Window
     virtual void    Command( const CommandEvent& rCEvt );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
+    // calculate position behind last chapter
+    sal_Int32 impl_getPosBehindLastChapter() const;
+
 public:
     ColorConfigWindow_Impl(Window* pParent, const ResId& rResId);
     ~ColorConfigWindow_Impl();
@@ -386,7 +389,7 @@ sal_Int16 lcl_getGroup( sal_Int32 _nFeature )
 
 /* -----------------------------25.03.2002 17:05------------------------------
 
- ---------------------------------------------------------------------------*/
+---------------------------------------------------------------------------*/
 ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rResId) :
         Window(pParent, rResId),
         aGeneralBackWN(this),
@@ -697,14 +700,14 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
     aChapters[GROUP_CALC    ]->SetGroupHeight( aChapters[GROUP_DRAW]->GetPosPixel().Y() -  aChapters[GROUP_CALC]->GetPosPixel().Y() );
     aChapters[GROUP_DRAW    ]->SetGroupHeight( aChapters[GROUP_BASIC]->GetPosPixel().Y() - aChapters[GROUP_DRAW]->GetPosPixel().Y() );
     aChapters[GROUP_BASIC   ]->SetGroupHeight( aChapters[GROUP_SQL]->GetPosPixel().Y() - aChapters[GROUP_BASIC]->GetPosPixel().Y() );
+    aChapters[GROUP_SQL]->SetGroupHeight(impl_getPosBehindLastChapter()
+            - aChapters[GROUP_SQL]->GetPosPixel().Y());
 
     ExtendedColorConfig aExtConfig;
     sal_Int32 nExtCount = aExtConfig.GetComponentCount();
     if ( nExtCount )
     {
-        // calculate position behind last chapter
-        sal_Int32 nLastY = aSQLCommentWN.GetPosPixel().Y() + aSQLCommentWN.GetSizePixel().Height();
-        nLastY = nLastY + LogicToPixel( Size( 0, 3 ), MAP_APPFONT ).Height();
+        const sal_Int32 nLastY(impl_getPosBehindLastChapter());
         // to calculate the number of lines
         sal_Int32 nHeight = LogicToPixel( Size( 0, _LINE_HEIGHT ), MAP_APPFONT ).Height();
         sal_Int32 nLineNum = nLastY / nHeight;
@@ -886,6 +889,15 @@ ColorConfigWindow_Impl::~ColorConfigWindow_Impl()
     aChapterWins.clear();
     ::std::vector< Window*>().swap(aChapterWins);
 }
+
+sal_Int32
+ColorConfigWindow_Impl::impl_getPosBehindLastChapter() const
+{
+    sal_Int32 nLastY = aSQLCommentWN.GetPosPixel().Y() + aSQLCommentWN.GetSizePixel().Height();
+    nLastY = nLastY + LogicToPixel( Size( 0, 3 ), MAP_APPFONT ).Height();
+    return nLastY;
+}
+
 /* -----------------------------2002/06/20 12:48------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -1163,9 +1175,9 @@ void ColorConfigCtrl_Impl::Update()
 /* -----------------------------26.03.2002 12:55------------------------------
 
  ---------------------------------------------------------------------------*/
-sal_Bool lcl_MoveAndShow(Window* pWindow, long nOffset, long nMaxVisible, bool _bShow)
+sal_Bool lcl_MoveAndShow(Window* pWindow, long nOffset, long nMaxVisible, sal_Bool _bShow)
 {
-    BOOL bHide = TRUE;
+    sal_Bool bHide = TRUE;
     if(pWindow)
     {
         Point aPos = pWindow->GetPosPixel();
@@ -1194,12 +1206,14 @@ IMPL_LINK(ColorConfigCtrl_Impl, ScrollHdl, ScrollBar*, pScrollBar)
             continue;
         Point aPos;
         //controls outside of the view need to be hidden to speed up accessibility tools
-        bool bShowCtrl = ( lcl_isGroupVisible(
+        sal_Bool bShowCtrl = ( lcl_isGroupVisible(
             lcl_getGroup(i), aScrollWindow.GetModuleOptions() ) != sal_False );
-        lcl_MoveAndShow(aScrollWindow.aCheckBoxes[i], nOffset, nWindowHeight, bShowCtrl);
-        lcl_MoveAndShow(aScrollWindow.aFixedTexts[i], nOffset, nWindowHeight, bShowCtrl);
-        lcl_MoveAndShow(aScrollWindow.aWindows[i]   , nOffset, nWindowHeight, bShowCtrl);
-        BOOL bShow = lcl_MoveAndShow(aScrollWindow.aColorBoxes[i], nOffset, nWindowHeight, bShowCtrl);
+        // if any of the items on the current line is visible, the
+        // whole line should be visible
+        sal_Bool bShow(lcl_MoveAndShow(aScrollWindow.aCheckBoxes[i], nOffset, nWindowHeight, bShowCtrl));
+        bShow = lcl_MoveAndShow(aScrollWindow.aFixedTexts[i], nOffset, nWindowHeight, bShowCtrl) || bShow;
+        bShow = lcl_MoveAndShow(aScrollWindow.aWindows[i]   , nOffset, nWindowHeight, bShowCtrl) || bShow;
+        bShow = lcl_MoveAndShow(aScrollWindow.aColorBoxes[i], nOffset, nWindowHeight, bShowCtrl) || bShow;
         if(bShow)
         {
             if(nFirstVisible == -1)
@@ -1211,7 +1225,7 @@ IMPL_LINK(ColorConfigCtrl_Impl, ScrollHdl, ScrollBar*, pScrollBar)
     //show the one prior to the first visible and the first after the last visble control
     //to enable KEY_TAB travelling
 
-    if(nFirstVisible)
+    if(nFirstVisible > 0)
     {
         //skip gaps where no controls exist for the related ColorConfigEntry
         do
