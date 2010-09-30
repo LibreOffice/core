@@ -669,7 +669,14 @@ wwFont::wwFont(const String &rFamilyName, FontPitch ePitch, FontFamily eFamily,
 
     ShortToSVBT16( 400, &maWW8_FFN[2] );        // weiss ich nicht besser
                                                 // 400 == FW_NORMAL (windows.h)
-    maWW8_FFN[4] = sw::ms::rtl_TextEncodingToWinCharset(eChrSet);
+                                                //
+    //#i61927# For unicode fonts like Arial Unicode, Word 97+ sets the chs
+    //to SHIFTJIS presumably to capture that it's a multi-byte encoding font
+    //but Word95 doesn't do this, and sets it to 0 (ANSI), so we should do the
+    //same
+    maWW8_FFN[4] = bWrtWW8 ?
+        sw::ms::rtl_TextEncodingToWinCharset(eChrSet) :
+        rtl_getBestWindowsCharsetFromTextEncoding(eChrSet);
 
     if (mbAlt)
         maWW8_FFN[5] = static_cast< BYTE >(msFamilyNm.Len() + 1);
