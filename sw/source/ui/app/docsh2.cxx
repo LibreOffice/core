@@ -639,10 +639,10 @@ void SwDocShell::Execute(SfxRequest& rReq)
             SvxSwAutoFmtFlags* pAFlags = &SvxAutoCorrCfg::Get()->GetAutoCorrect()->GetSwFlags();
             SwAutoCompleteWord& rACW = SwDoc::GetAutoCompleteWords();
 
-            BOOL bOldLocked = rACW.IsLockWordLstLocked(),
+            bool bOldLocked = rACW.IsLockWordLstLocked(),
                  bOldAutoCmpltCollectWords = pAFlags->bAutoCmpltCollectWords;
 
-            rACW.SetLockWordLstLocked( TRUE );
+            rACW.SetLockWordLstLocked( true );
 
             SvStringsISortDtor aTmpLst;
             aTmpLst.Insert( &rACW.GetWordList() );

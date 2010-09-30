@@ -44,7 +44,7 @@ class SwAutoCompleteWord
 
     SwAutoCompleteWord_Impl* pImpl;
     USHORT nMaxCount, nMinWrdLen;
-    BOOL bLockWordLst;
+    bool bLockWordLst;
 
     void DocumentDying(const SwDoc& rDoc);
 public:
@@ -57,8 +57,8 @@ public:
 
     const String& operator[]( USHORT n ) const { return *aWordLst[ n ]; }
 
-    BOOL IsLockWordLstLocked() const        { return bLockWordLst; }
-    void SetLockWordLstLocked( BOOL bFlag ) { bLockWordLst = bFlag; }
+    bool IsLockWordLstLocked() const           { return bLockWordLst; }
+    void SetLockWordLstLocked( bool bFlag ) { bLockWordLst = bFlag; }
 
     void SetMaxCount( USHORT n );
 
