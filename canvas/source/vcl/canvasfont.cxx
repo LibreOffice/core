@@ -35,6 +35,8 @@
 #include <i18npool/mslangid.hxx>
 #include <vcl/metric.hxx>
 
+#include <com/sun/star/rendering/PanoseProportion.hpp>
+
 #include "canvasfont.hxx"
 #include "textlayout.hxx"
 
@@ -63,6 +65,9 @@ namespace vclcanvas
         // TODO(F2): improve panose->vclenum conversion
         maFont->SetWeight( static_cast<FontWeight>(rFontRequest.FontDescription.FontDescription.Weight) );
         maFont->SetItalic( (rFontRequest.FontDescription.FontDescription.Letterform<=8) ? ITALIC_NONE : ITALIC_NORMAL );
+        maFont->SetPitch(
+                rFontRequest.FontDescription.FontDescription.Proportion == rendering::PanoseProportion::MONO_SPACED
+                    ? PITCH_FIXED : PITCH_VARIABLE);
 
         maFont->SetLanguage(MsLangId::convertLocaleToLanguage(rFontRequest.Locale));
 
