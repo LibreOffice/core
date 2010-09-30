@@ -83,3 +83,17 @@ File gid_File_Xsl_Export_Xhtml_Table
     Name = "/xslt/export/xhtml/table.xsl";
 End
 
+
+File gid_File_Xsl_Export_Odfflatxml
+    TXT_FILE_BODY;
+    Styles = (PACKED, PATCH);
+    Dir = gid_Dir_Share_Xslt_Odfflatxml;
+    Name = "/xslt/odfflatxml/odfflatxmlexport.xsl";
+End
+
+File gid_File_Xsl_Import_Odfflatxml
+    TXT_FILE_BODY;
+    Styles = (PACKED, PATCH);
+    Dir = gid_Dir_Share_Xslt_Odfflatxml;
+    Name = "/xslt/odfflatxml/odfflatxmlimport.xsl";
+End
