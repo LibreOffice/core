@@ -457,8 +457,12 @@ void SbaTableQueryBrowser::impl_sanitizeRowSetClauses_nothrow()
             return;
 
         // the tables participating in the statement
-        Reference< XTablesSupplier > xSuppTables( xComposer, UNO_QUERY_THROW );
-        Reference< XNameAccess > xTableNames( xSuppTables->getTables(), UNO_QUERY_THROW );
+        const Reference< XTablesSupplier > xSuppTables( xComposer, UNO_QUERY_THROW );
+        const Reference< XNameAccess > xTableNames( xSuppTables->getTables(), UNO_QUERY_THROW );
+
+        // the columns participating in the statement
+        const Reference< XColumnsSupplier > xSuppColumns( xComposer, UNO_QUERY_THROW );
+        const Reference< XNameAccess > xColumnNames( xSuppColumns->getColumns(), UNO_QUERY_THROW );
 
         // .............................................................................................................
         // check if the order columns apply to tables which really exist in the statement
@@ -469,10 +473,34 @@ void SbaTableQueryBrowser::impl_sanitizeRowSetClauses_nothrow()
         {
             const Reference< XPropertySet > xOrderColumn( xOrderColumns->getByIndex(c), UNO_QUERY_THROW );
             ::rtl::OUString sTableName;
-            OSL_VERIFY( xOrderColumn->getPropertyValue( PROPERTY_TABLENAME ) >>= sTableName);
+            OSL_VERIFY( xOrderColumn->getPropertyValue( PROPERTY_TABLENAME ) >>= sTableName );
+            ::rtl::OUString sColumnName;
+            OSL_VERIFY( xOrderColumn->getPropertyValue( PROPERTY_NAME ) >>= sColumnName );
 
-            if ( !xTableNames->hasByName( sTableName ) )
-                invalidColumn = true;
+            if ( sTableName.getLength() == 0 )
+            {
+                if ( !xColumnNames->hasByName( sColumnName ) )
+                {
+                    invalidColumn = true;
+                    break;
+                }
+            }
+            else
+            {
+                if ( !xTableNames->hasByName( sTableName ) )
+                {
+                    invalidColumn = true;
+                    break;
+                }
+
+                const Reference< XColumnsSupplier > xSuppTableColumns( xTableNames->getByName( sTableName ), UNO_QUERY_THROW );
+                const Reference< XNameAccess > xTableColumnNames( xSuppTableColumns->getColumns(), UNO_QUERY_THROW );
+                if ( !xTableColumnNames->hasByName( sColumnName ) )
+                {
+                    invalidColumn = true;
+                    break;
+                }
+            }
         }
 
         if ( invalidColumn )
