@@ -68,8 +68,8 @@ ALL: 	ALLDEP
 show_targets:
     +@$(AUGMENT_LIBRARY_PATH) java $(RUNNER_CLASSPATH) complexlib.ShowTargets $(foreach,i,$(JAVAFILES) $(i:s/.\$///:s/.java//))
 
-run:
-    +$(AUGMENT_LIBRARY_PATH) java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -sce connectivity_all.sce
+run: $(CLASSDIR)$/$(JARTARGET)
+    +$(AUGMENT_LIBRARY_PATH) java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -sce scenarios.sce
 
-run_%:
+run_%: $(CLASSDIR)$/$(JARTARGET)
     +$(AUGMENT_LIBRARY_PATH) java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -o complex.$(@:s/run_//:s/_/\./)
