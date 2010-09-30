@@ -289,8 +289,6 @@
 #define HID_MAILWIN_PRIO_BOX                                  "SFX2_HID_MAILWIN_PRIO_BOX"
 #define HID_TABDLG_APPLY_BTN                                  "SFX2_HID_TABDLG_APPLY_BTN"
 #define HID_TP_COMMONPRINTOPTIONS                             "SFX2_HID_TP_COMMONPRINTOPTIONS"
-#define HID_FILEDLG_LINK_CB                                   "SFX2_HID_FILEDLG_LINK_CB"
-#define HID_FILEDLG_PREVIEW_CB                                "SFX2_HID_FILEDLG_PREVIEW_CB"
 #define HID_HELP_WINDOW                                       "SFX2_HID_HELP_WINDOW"
 #define HID_HELP_LISTBOX                                      "SFX2_HID_HELP_LISTBOX"
 #define HID_HELP_TABCONTROL                                   "SFX2_HID_HELP_TABCONTROL"

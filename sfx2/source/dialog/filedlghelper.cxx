@@ -97,7 +97,7 @@
 #include "filtergrouping.hxx"
 #include <sfx2/request.hxx>
 #include "filedlgimpl.hxx"
-
+#include <helpid.hrc>
 #include <sfxlocal.hrc>
 
 //-----------------------------------------------------------------------------
