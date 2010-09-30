@@ -71,9 +71,9 @@ ExplicitCategoriesProvider::ExplicitCategoriesProvider( const Reference< chart2:
             {
                 uno::Reference< data::XDataProvider > xDataProvider( xChartDoc->getDataProvider() );
 
-                if( xDataProvider.is() )
+                OUString aCatgoriesRange( DataSourceHelper::getRangeFromValues( m_xOriginalCategories ) );
+                if( xDataProvider.is() && aCatgoriesRange.getLength() )
                 {
-                    OUString aCatgoriesRange( DataSourceHelper::getRangeFromValues( m_xOriginalCategories ) );
                     const bool bFirstCellAsLabel = false;
                     const bool bHasCategories = false;
                     const uno::Sequence< sal_Int32 > aSequenceMapping;
