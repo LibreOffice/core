@@ -2314,7 +2314,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                                 if( sStyle.Len() )
                                 {
                                     SwTxtFmtColl* pColl = GetExport().pDoc->FindTxtFmtCollByName(sStyle);
-                                    if (!pColl->IsAssignedToListLevelOfOutlineStyle() || pColl->GetAssignedOutlineStyleLevel() < nTOXLvl)
+                                    if (!pColl || !pColl->IsAssignedToListLevelOfOutlineStyle() || pColl->GetAssignedOutlineStyleLevel() < nTOXLvl)
                                     {
                                         if( sTOption.Len() )
                                             sTOption += ',';
