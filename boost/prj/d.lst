@@ -160,6 +160,7 @@ mkdir: %_DEST%\inc%_EXT%\boost\tuple
 mkdir: %_DEST%\inc%_EXT%\boost\tuple\detail
 mkdir: %_DEST%\inc%_EXT%\boost\type_traits
 mkdir: %_DEST%\inc%_EXT%\boost\type_traits\detail
+mkdir: %_DEST%\inc%_EXT%\boost\unordered
 mkdir: %_DEST%\inc%_EXT%\boost\utility
 mkdir: %_DEST%\inc%_EXT%\boost\utility\detail
 mkdir: %_DEST%\inc%_EXT%\boost\variant
@@ -326,6 +327,7 @@ mkdir: %_DEST%\inc%_EXT%\boost\variant\detail
 ..\%__SRC%\inc\boost\tuple\detail\* %_DEST%\inc%_EXT%\boost\tuple\detail
 ..\%__SRC%\inc\boost\type_traits\* %_DEST%\inc%_EXT%\boost\type_traits
 ..\%__SRC%\inc\boost\type_traits\detail\* %_DEST%\inc%_EXT%\boost\type_traits\detail
+..\%__SRC%\inc\boost\unordered\* %_DEST%\inc%_EXT%\boost\unordered
 ..\%__SRC%\inc\boost\utility\* %_DEST%\inc%_EXT%\boost\utility
 ..\%__SRC%\inc\boost\utility\detail\* %_DEST%\inc%_EXT%\boost\utility\detail
 ..\%__SRC%\inc\boost\variant\* %_DEST%\inc%_EXT%\boost\variant
