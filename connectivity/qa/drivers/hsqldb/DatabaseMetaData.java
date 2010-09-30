@@ -10,10 +10,7 @@
  */
 package qa.drivers.hsqldb;
 import java.sql.*;
-import com.sun.star.uno.UnoRuntime;
-import complexlib.ComplexTestCase;
 import java.lang.reflect.Method;
-import qa.drivers.hsqldb.DriverTest;
 
 
 public class DatabaseMetaData {

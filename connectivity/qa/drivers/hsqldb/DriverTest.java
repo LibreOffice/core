@@ -26,33 +26,18 @@
  ************************************************************************/
 package qa.drivers.hsqldb;
 
-import com.sun.star.awt.XWindow;
 import com.sun.star.frame.XModel;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.util.XCloseable;
-import com.sun.star.sdbc.*;
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.container.XNameAccess;
-import com.sun.star.sdbc.XDataSource;
 import com.sun.star.frame.XStorable;
 
 import com.sun.star.lang.*;
 import com.sun.star.document.XDocumentSubStorageSupplier;
 import complexlib.ComplexTestCase;
 
-import java.io.PrintWriter;
 
-import util.utils;
-import java.util.*;
-import java.io.*;
-import org.hsqldb.jdbcDriver;
-import qa.drivers.hsqldb.DatabaseMetaData;
 import org.hsqldb.lib.StopWatch;
 import com.sun.star.sdbc.*;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.PropertyState;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.embed.XStorage;
@@ -64,16 +49,16 @@ public class DriverTest extends ComplexTestCase {
         return new String[] { "test" };
     }
 
+    @Override
     public String getTestObjectName() {
         return "DriverTest";
     }
 
     public void assurePublic(String sMessage,boolean check){
-        addResult(sMessage,check);
+        super.assure(sMessage,check);
     }
 
     public void test(){
-        mThreadTimeOut = 10000000;
         XDataSource ds = null;
         System.gc();
         try {
@@ -141,7 +126,6 @@ public class DriverTest extends ComplexTestCase {
         }catch(Exception e){}
     }
     public void test2(){
-        mThreadTimeOut = 10000000;
         System.gc();
 
         com.sun.star.beans.PropertyValue[] info = null;
