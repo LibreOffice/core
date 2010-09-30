@@ -464,7 +464,7 @@ sal_Bool SAL_CALL SmGraphicAccessible::setCaretPosition( sal_Int32 nIndex )
 {
     xub_StrLen nIdx = (xub_StrLen) nIndex;
     String aTxt( GetAccessibleText_Impl() );
-    if (!(/*0 <= nIdx  &&*/  nIdx < aTxt.Len()))
+    if (!(nIdx < aTxt.Len()))
         throw IndexOutOfBoundsException();
     return sal_False;
 }
@@ -476,7 +476,7 @@ sal_Unicode SAL_CALL SmGraphicAccessible::getCharacter( sal_Int32 nIndex )
 
     xub_StrLen nIdx = (xub_StrLen) nIndex;
     String aTxt( GetAccessibleText_Impl() );
-    if (!(/*0 <= nIdx  &&*/  nIdx < aTxt.Len()))
+    if (!(nIdx < aTxt.Len()))
         throw IndexOutOfBoundsException();
     return aTxt.GetChar( nIdx );
 }
@@ -694,8 +694,8 @@ OUString SAL_CALL SmGraphicAccessible::getTextRange(
     String aTxt( GetAccessibleText_Impl() );
     xub_StrLen nStart = (xub_StrLen) Min(nStartIndex, nEndIndex);
     xub_StrLen nEnd   = (xub_StrLen) Max(nStartIndex, nEndIndex);
-    if (!(/*0 <= nStart  &&*/  nStart <= aTxt.Len()) ||
-        !(/*0 <= nEnd    &&*/  nEnd   <= aTxt.Len()))
+    if (!(nStart <= aTxt.Len()) ||
+        !(nEnd   <= aTxt.Len()))
         throw IndexOutOfBoundsException();
     return aTxt.Copy( nStart, nEnd - nStart );
 }
@@ -706,7 +706,7 @@ OUString SAL_CALL SmGraphicAccessible::getTextRange(
     String aTxt( GetAccessibleText_Impl() );
     xub_StrLen nIdx = (xub_StrLen) nIndex;
     //!! nIndex is allowed to be the string length
-    if (!(/*0 <= nIdx  &&*/  nIdx <= aTxt.Len()))
+    if (!(nIdx <= aTxt.Len()))
         throw IndexOutOfBoundsException();
 
     ::com::sun::star::accessibility::TextSegment aResult;
@@ -727,7 +727,7 @@ OUString SAL_CALL SmGraphicAccessible::getTextRange(
     String aTxt( GetAccessibleText_Impl() );
     xub_StrLen nIdx = (xub_StrLen) nIndex;
     //!! nIndex is allowed to be the string length
-    if (!(/*0 <= nIdx  &&*/  nIdx <= aTxt.Len()))
+    if (!(nIdx <= aTxt.Len()))
         throw IndexOutOfBoundsException();
 
     ::com::sun::star::accessibility::TextSegment aResult;
@@ -749,7 +749,7 @@ OUString SAL_CALL SmGraphicAccessible::getTextRange(
     String aTxt( GetAccessibleText_Impl() );
     xub_StrLen nIdx = (xub_StrLen) nIndex;
     //!! nIndex is allowed to be the string length
-    if (!(/*0 <= nIdx  &&*/  nIdx <= aTxt.Len()))
+    if (!(nIdx <= aTxt.Len()))
         throw IndexOutOfBoundsException();
 
     ::com::sun::star::accessibility::TextSegment aResult;
