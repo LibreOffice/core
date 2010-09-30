@@ -445,6 +445,8 @@ public:
     void            Beep() const;
 
     void            ModifierMapping();
+    void            SimulateKeyPress( USHORT nKeyCode );
+    USHORT          GetIndicatorState() const;
     String          GetKeyNameFromKeySym( KeySym keysym ) const;
     XubString       GetKeyName( USHORT nKeyCode ) const;
     USHORT          GetKeyCode( KeySym keysym, char*pcPrintable ) const;

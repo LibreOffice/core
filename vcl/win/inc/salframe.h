@@ -135,6 +135,8 @@ public:
     virtual void                Beep( SoundType eSoundType );
     virtual const SystemEnvData*    GetSystemData() const;
     virtual SalPointerState     GetPointerState();
+    virtual SalIndicatorState   GetIndicatorState();
+    virtual void                SimulateKeyPress( USHORT nKeyCode );
     virtual void                SetParent( SalFrame* pNewParent );
     virtual bool                SetPluginParent( SystemParentData* pNewParent );
     virtual void                SetBackgroundBitmap( SalBitmap* );

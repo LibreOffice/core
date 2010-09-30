@@ -2354,6 +2354,19 @@ SalFrame::SalPointerState Os2SalFrame::GetPointerState()
 
 // -----------------------------------------------------------------------
 
+SalFrame::SalIndicatorState Os2SalFrame::GetIndicatorState()
+{
+    SalIndicatorState aState;
+    aState.mnState = 0;
+    return aState;
+}
+
+void Os2SalFrame::SimulateKeyPress( USHORT /*nKeyCode*/ )
+{
+}
+
+// -----------------------------------------------------------------------
+
 void Os2SalFrame::SetBackgroundBitmap( SalBitmap* )
 {
 }

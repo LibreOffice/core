@@ -6058,6 +6058,10 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
     rtl::OUString aMissingCodes = aMissingCodeBuf.makeStringAndClear();
 
     ImplFontSelectData aFontSelData = mpFontEntry->maFontSelData;
+
+    ImplFontMetricData aOrigMetric(aFontSelData);
+    mpGraphics->GetFontMetric(&aOrigMetric);
+
     // when device specific font substitution may have been performed for
     // the originally selected font then make sure that a fallback to that
     // font is performed first
@@ -6102,7 +6106,22 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
         }
 #endif
 
+        ImplFontMetricData aSubstituteMetric(aFontSelData);
         pFallbackFont->mnSetFontFlags = mpGraphics->SetFont( &aFontSelData, nFallbackLevel );
+        mpGraphics->GetFontMetric(&aSubstituteMetric, nFallbackLevel);
+
+        long nOriginalHeight = aOrigMetric.mnAscent + aOrigMetric.mnDescent;
+        long nSubstituteHeight = aSubstituteMetric.mnAscent + aSubstituteMetric.mnDescent;
+        //Too tall, shrink it a bit. Need a better calculation to include extra
+        //factors and any extra wriggle room we might have available ?
+        if (nSubstituteHeight > nOriginalHeight)
+        {
+            float fScale = nOriginalHeight/(float)nSubstituteHeight;
+            long nOrigHeight = aFontSelData.mnHeight;
+            aFontSelData.mnHeight *= fScale;
+            pFallbackFont->mnSetFontFlags = mpGraphics->SetFont( &aFontSelData, nFallbackLevel );
+            aFontSelData.mnHeight = nOrigHeight;
+        }
 
         // create and add glyph fallback layout to multilayout
         rLayoutArgs.ResetPos();

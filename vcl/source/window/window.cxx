@@ -4791,6 +4791,16 @@ void Window::doLazyDelete()
     vcl::LazyDeletor<Window>::Delete( this );
 }
 
+USHORT Window::GetIndicatorState() const
+{
+    return mpWindowImpl->mpFrame->GetIndicatorState().mnState;
+}
+
+void Window::SimulateKeyPress( USHORT nKeyCode ) const
+{
+    mpWindowImpl->mpFrame->SimulateKeyPress(nKeyCode);
+}
+
 // -----------------------------------------------------------------------
 
 void Window::MouseMove( const MouseEvent& rMEvt )

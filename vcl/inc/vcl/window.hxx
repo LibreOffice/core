@@ -1101,6 +1101,22 @@ public:
     */
     void doLazyDelete();
 
+    //-------------------------------------
+    //  Keyboard access functions
+    //-------------------------------------
+
+    /** Query the states of keyboard indicators - Caps Lock, Num Lock and
+        Scroll Lock.  Use the following mask to retrieve the state of each
+        indicator:
+
+            INDICATOR_CAPS_LOCK
+            INDICATOR_NUM_LOCK
+            INDICATOR_SCROLL_LOCK
+      */
+    USHORT GetIndicatorState() const;
+
+    void SimulateKeyPress( USHORT nKeyCode ) const;
+
     virtual XubString GetSurroundingText() const;
     virtual Selection GetSurroundingTextSelection() const;
 };

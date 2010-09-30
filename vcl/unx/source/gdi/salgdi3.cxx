@@ -1763,16 +1763,19 @@ bool GetFCFontOptions( const ImplFontAttributes& rFontAttributes, int nSize,
 // ----------------------------------------------------------------------------
 
 void
-X11SalGraphics::GetFontMetric( ImplFontMetricData *pMetric )
+X11SalGraphics::GetFontMetric( ImplFontMetricData *pMetric, int nFallbackLevel )
 {
-    if( mpServerFont[0] != NULL )
+    if( nFallbackLevel >= MAX_FALLBACK )
+        return;
+
+    if( mpServerFont[nFallbackLevel] != NULL )
     {
         long rDummyFactor;
-        mpServerFont[0]->FetchFontMetric( *pMetric, rDummyFactor );
+        mpServerFont[nFallbackLevel]->FetchFontMetric( *pMetric, rDummyFactor );
     }
-    else if( mXFont[0] != NULL )
+    else if( mXFont[nFallbackLevel] != NULL )
     {
-        mXFont[0]->ToImplFontMetricData( pMetric );
+        mXFont[nFallbackLevel]->ToImplFontMetricData( pMetric );
         if ( bFontVertical_ )
             pMetric->mnOrientation = 0;
     }
@@ -1993,6 +1996,11 @@ class FcPreMatchSubstititution
 {
 public:
     bool FindFontSubstitute( ImplFontSelectData& ) const;
+
+private:
+    typedef ::std::hash_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash >
+        CachedFontMapType;
+    mutable CachedFontMapType maCachedFontMap;
 };
 
 class FcGlyphFallbackSubstititution
@@ -2188,12 +2196,20 @@ bool FcPreMatchSubstititution::FindFontSubstitute( ImplFontSelectData &rFontSelD
     ||  0 == rFontSelData.maSearchName.CompareIgnoreCaseToAscii( "opensymbol", 10) )
         return false;
 
+    CachedFontMapType::const_iterator itr = maCachedFontMap.find(rFontSelData.maTargetName);
+    if (itr != maCachedFontMap.end())
+    {
+        // Cached substitution pair
+        rFontSelData.maSearchName = itr->second;
+        return true;
+    }
+
     rtl::OUString aDummy;
     const ImplFontSelectData aOut = GetFcSubstitute( rFontSelData, aDummy );
-    // TODO: cache the font substitution suggestion
-    // FC doing it would be preferable because it knows the invariables
-    // e.g. FC knows the FC rule that all Arial gets replaced by LiberationSans
-    // whereas we would have to check for every size or attribute
+
+    maCachedFontMap.insert(
+        CachedFontMapType::value_type(rFontSelData.maTargetName, aOut.maSearchName));
+
     if( !aOut.maSearchName.Len() )
         return false;
 

@@ -415,6 +415,17 @@ SalFrame::SalPointerState SvpSalFrame::GetPointerState()
     return aState;
 }
 
+SalFrame::SalIndicatorState SvpSalFrame::GetIndicatorState()
+{
+    SalIndicatorState aState;
+    aState.mnState = 0;
+    return aState;
+}
+
+void SvpSalFrame::SimulateKeyPress( USHORT /*nKeyCode*/ )
+{
+}
+
 void SvpSalFrame::SetParent( SalFrame* pNewParent )
 {
     if( m_pParent )
