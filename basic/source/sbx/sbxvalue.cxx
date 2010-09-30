@@ -36,11 +36,6 @@
 #include "sbxconv.hxx"
 #include <math.h>
 #include "runtime.hxx"
-// AB 29.10.99 Unicode
-#ifndef _USE_NO_NAMESPACE
-using namespace rtl;
-#endif
-
 
 TYPEINIT1(SbxValue,SbxBase)
 

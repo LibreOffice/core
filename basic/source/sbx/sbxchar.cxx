@@ -31,11 +31,6 @@
 #include <basic/sbx.hxx>
 #include "sbxconv.hxx"
 
-// AB 29.10.99 Unicode
-#ifndef _USE_NO_NAMESPACE
-using namespace rtl;
-#endif
-
 xub_Unicode ImpGetChar( const SbxValues* p )
 {
     SbxValues aTmp;

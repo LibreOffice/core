@@ -35,11 +35,6 @@
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
-// AB 29.10.99 Unicode
-#ifndef _USE_NO_NAMESPACE
-using namespace rtl;
-#endif
-
 
 // Die Konversion eines Items auf String wird ueber die Put-Methoden
 // der einzelnen Datentypen abgewickelt, um doppelten Code zu vermeiden.
@@ -293,7 +288,7 @@ SbxArray* StringToByteArray(const ::rtl::OUString& rStr)
 ::rtl::OUString ByteArrayToString(SbxArray* pArr)
 {
     USHORT nCount = pArr->Count();
-    OUStringBuffer aStrBuf;
+    ::rtl::OUStringBuffer aStrBuf;
     sal_Unicode aChar = 0;
     for( USHORT i = 0 ; i < nCount ; i++ )
     {
