@@ -2023,7 +2023,7 @@ Locale SAL_CALL SmEditAccessible::getLocale(  )
 void SAL_CALL SmEditAccessible::addEventListener( const uno::Reference< XAccessibleEventListener >& xListener )
     throw (RuntimeException)
 {
-    //vos::OGuard aGuard(Application::GetSolarMutex());   if (pTextHelper)   // not disposing (about to destroy view shell)
+    if (pTextHelper)   // not disposing (about to destroy view shell)
         pTextHelper->AddEventListener( xListener );
 }
 
