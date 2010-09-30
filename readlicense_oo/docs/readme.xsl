@@ -34,6 +34,13 @@
 		</xsl:if>
 	</xsl:param>
 	
+	<xsl:param name="lf">
+		<xsl:choose>
+			<xsl:when test="$platform='WIN'"><xsl:text>&#xD;&#xA;</xsl:text></xsl:when>
+			<xsl:otherwise><xsl:text>&#xA;</xsl:text></xsl:otherwise>
+		</xsl:choose>
+	</xsl:param>
+	
 	<xsl:template match="/">
 		<xsl:choose>
 			<xsl:when test="$type='html'">
@@ -115,59 +122,50 @@
 				<xsl:apply-templates/>
 			</xsl:when>
 			<xsl:when test="name(.)='li'">
-				<xsl:text>
-</xsl:text>* <xsl:apply-templates/>
+				<xsl:value-of select="$lf"/>* <xsl:apply-templates/>
 			</xsl:when>
 			<xsl:when test="name(.)='ul'">
-				<xsl:text>
-</xsl:text>
+				<xsl:value-of select="$lf"/>
 				<xsl:apply-templates/>
 			</xsl:when>
 			<xsl:when test="name(.)='ol'">
-				<xsl:text>
-</xsl:text>
+				<xsl:value-of select="$lf"/>
 				<xsl:apply-templates/>
 			</xsl:when>
 			<xsl:when test="name(.)='p'">
 				<xsl:if test="(not(name(..)='li') and (count(a) = 0))">
-					<xsl:text>
-
-</xsl:text>
+					<xsl:value-of select="$lf"/>
+					<xsl:value-of select="$lf"/>
 				</xsl:if>
 				<xsl:apply-templates/>
 			</xsl:when>
 			<xsl:when test="name(.)='h1'">
-				<xsl:text>
-			
-======================================================================
-</xsl:text>
+				<xsl:value-of select="$lf"/>
+				<xsl:text>======================================================================</xsl:text>
+				<xsl:value-of select="$lf"/>
 				<xsl:apply-templates/>
-				<xsl:text>
-======================================================================</xsl:text>
+				<xsl:value-of select="$lf"/>
+				<xsl:text>======================================================================</xsl:text>
+				<xsl:value-of select="$lf"/>
 			</xsl:when>
 			<xsl:when test="name(.)='h2'">
-				<xsl:text>
-			
-----------------------------------------------------------------------
-</xsl:text>
+				<xsl:value-of select="$lf"/>
+				<xsl:value-of select="$lf"/>
+				<xsl:text>----------------------------------------------------------------------</xsl:text>
+				<xsl:value-of select="$lf"/>
 				<xsl:apply-templates/>
-				<xsl:text>
-----------------------------------------------------------------------</xsl:text>
-			
+				<xsl:value-of select="$lf"/>
+				<xsl:text>----------------------------------------------------------------------</xsl:text>
 			</xsl:when>
 			<xsl:when test="name(.)='h3'">
-				<xsl:text>
-			
-</xsl:text>
+				<xsl:value-of select="$lf"/>
+				<xsl:value-of select="$lf"/>
 				<xsl:apply-templates/>
-				<xsl:text>
-----------------------------------------------------------------------</xsl:text>
-			
+				<xsl:value-of select="$lf"/>
+				<xsl:text>----------------------------------------------------------------------</xsl:text>
 			</xsl:when>
 		</xsl:choose>
 	</xsl:if>
 	</xsl:template>
-			
-	
 
 </xsl:stylesheet>
