@@ -633,14 +633,29 @@ void EditHTMLParser::ImpSetStyleSheet( USHORT nHLevel )
             SfxItemSet aItems( aCurSel.Max().GetNode()->GetContentAttribs().GetItems() );
 
             aItems.ClearItem( EE_PARA_ULSPACE );
+
             aItems.ClearItem( EE_CHAR_FONTHEIGHT );
             aItems.ClearItem( EE_CHAR_FONTINFO );
             aItems.ClearItem( EE_CHAR_WEIGHT );
+
+            aItems.ClearItem( EE_CHAR_FONTHEIGHT_CJK );
+            aItems.ClearItem( EE_CHAR_FONTINFO_CJK );
+            aItems.ClearItem( EE_CHAR_WEIGHT_CJK );
+
+            aItems.ClearItem( EE_CHAR_FONTHEIGHT_CTL );
+            aItems.ClearItem( EE_CHAR_FONTINFO_CTL );
+            aItems.ClearItem( EE_CHAR_WEIGHT_CTL );
 
             // Fett in den ersten 3 Headings
             if ( ( nHLevel >= 1 ) && ( nHLevel <= 3 ) )
             {
                 SvxWeightItem aWeightItem( WEIGHT_BOLD, EE_CHAR_WEIGHT );
+                aItems.Put( aWeightItem );
+
+                SvxWeightItem aWeightItemCJK( WEIGHT_BOLD, EE_CHAR_WEIGHT_CJK );
+                aItems.Put( aWeightItem );
+
+                SvxWeightItem aWeightItemCTL( WEIGHT_BOLD, EE_CHAR_WEIGHT_CTL );
                 aItems.Put( aWeightItem );
             }
 
@@ -660,8 +675,15 @@ void EditHTMLParser::ImpSetStyleSheet( USHORT nHLevel )
                     nPoints = 11;
 
                 nPoints = OutputDevice::LogicToLogic( nPoints, MAP_POINT, eUnit );
+
                 SvxFontHeightItem aHeightItem( nPoints, 100, EE_CHAR_FONTHEIGHT );
                 aItems.Put( aHeightItem );
+
+                SvxFontHeightItem aHeightItemCJK( nPoints, 100, EE_CHAR_FONTHEIGHT_CJK );
+                aItems.Put( aHeightItemCJK );
+
+                SvxFontHeightItem aHeightItemCTL( nPoints, 100, EE_CHAR_FONTHEIGHT_CTL );
+                aItems.Put( aHeightItemCTL );
 
                 // Absatzabstaende, wenn Heading:
                 if ( !nHLevel || ((nHLevel >= 1) && (nHLevel <= 6)) )
@@ -679,6 +701,12 @@ void EditHTMLParser::ImpSetStyleSheet( USHORT nHLevel )
                 Font aFont = OutputDevice::GetDefaultFont( DEFAULTFONT_FIXED, LANGUAGE_SYSTEM, 0 );
                 SvxFontItem aFontItem( aFont.GetFamily(), aFont.GetName(), XubString(), aFont.GetPitch(), aFont.GetCharSet(), EE_CHAR_FONTINFO );
                 aItems.Put( aFontItem );
+
+                SvxFontItem aFontItemCJK( aFont.GetFamily(), aFont.GetName(), XubString(), aFont.GetPitch(), aFont.GetCharSet(), EE_CHAR_FONTINFO_CJK );
+                aItems.Put( aFontItemCJK );
+
+                SvxFontItem aFontItemCTL( aFont.GetFamily(), aFont.GetName(), XubString(), aFont.GetPitch(), aFont.GetCharSet(), EE_CHAR_FONTINFO_CTL );
+                aItems.Put( aFontItemCTL );
             }
 
             pImpEditEngine->SetParaAttribs( nNode, aItems );
