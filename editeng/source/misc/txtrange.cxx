@@ -341,7 +341,7 @@ void SvxBoundArgs::NoteRange( BOOL bToggle )
             USHORT nStop = nMaxIdx + nDiff;
             for( USHORT i = nMaxIdx; i < nStop; ++i )
                 bToggle ^= aBoolArr[ i ];
-            aBoolArr.erase( aBoolArr.begin() + nMaxIdx, aBoolArr.begin() + nDiff );
+            aBoolArr.erase( aBoolArr.begin() + nMaxIdx, aBoolArr.begin() + nMaxIdx + nDiff );
         }
         DBG_ASSERT( nMaxIdx < aBoolArr.size(), "NoteRange: Too much deleted" );
         aBoolArr[ nMaxIdx ] ^= bToggle;
@@ -491,7 +491,7 @@ void SvxBoundArgs::Add()
     size_t nCount = aBoolArr.size();
     if( nCount && ( !bInner || !pTextRanger->IsSimple() ) )
     {
-        BOOL bDelete = aBoolArr[ 0 ];
+        BOOL bDelete = aBoolArr.front();
         if( bInner )
             bDelete = !bDelete;
         for( USHORT nBoolIdx = 1; nBoolIdx < nCount; ++nBoolIdx )
@@ -506,7 +506,7 @@ void SvxBoundArgs::Add()
                 next /= 2;
                 nBoolIdx = nBoolIdx - next;
                 nCount = nCount - next;
-                aBoolArr.erase( aBoolArr.begin() + nBoolIdx, aBoolArr.begin() + next );
+                aBoolArr.erase( aBoolArr.begin() + nBoolIdx, aBoolArr.begin() + nBoolIdx + next );
                 if( nBoolIdx )
                     aBoolArr[ nBoolIdx - 1 ] = FALSE;
 #if OSL_DEBUG_LEVEL > 1
