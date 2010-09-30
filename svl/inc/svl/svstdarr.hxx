@@ -44,7 +44,7 @@
 #include <svl/svarray.hxx>
 #include <vector>
 
-typedef std::vector< BOOL > SvBools;
+typedef std::deque< BOOL > SvBools;
 
 //#ifdef _SVSTDARR_BYTES
 #ifndef _SVSTDARR_BYTES_DECL
