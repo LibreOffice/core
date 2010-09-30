@@ -1763,16 +1763,19 @@ bool GetFCFontOptions( const ImplFontAttributes& rFontAttributes, int nSize,
 // ----------------------------------------------------------------------------
 
 void
-X11SalGraphics::GetFontMetric( ImplFontMetricData *pMetric )
+X11SalGraphics::GetFontMetric( ImplFontMetricData *pMetric, int nFallbackLevel )
 {
-    if( mpServerFont[0] != NULL )
+    if( nFallbackLevel >= MAX_FALLBACK )
+        return;
+
+    if( mpServerFont[nFallbackLevel] != NULL )
     {
         long rDummyFactor;
-        mpServerFont[0]->FetchFontMetric( *pMetric, rDummyFactor );
+        mpServerFont[nFallbackLevel]->FetchFontMetric( *pMetric, rDummyFactor );
     }
-    else if( mXFont[0] != NULL )
+    else if( mXFont[nFallbackLevel] != NULL )
     {
-        mXFont[0]->ToImplFontMetricData( pMetric );
+        mXFont[nFallbackLevel]->ToImplFontMetricData( pMetric );
         if ( bFontVertical_ )
             pMetric->mnOrientation = 0;
     }
