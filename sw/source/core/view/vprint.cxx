@@ -71,7 +71,7 @@
 #include <docufld.hxx>      // PostItFld /-Type
 #include <shellres.hxx>
 #include <viewopt.hxx>
-#include <swprtopt.hxx>     // SwPrtOptions
+#include <printdata.hxx>    // SwPrintData
 #include <pagedesc.hxx>
 #include <poolfmt.hxx>      // fuer RES_POOLPAGE_JAKET
 #include <mdiexp.hxx>       // Ansteuern der Statusleiste
@@ -481,7 +481,7 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
 
 sal_Bool ViewShell::PrintOrPDFExport(
     OutputDevice *pOutDev,
-    const SwPrtOptions &rPrintData,
+    SwPrintData const& rPrintData,
     sal_Int32 nRenderer     /* the index in the vector of pages to be printed */ )
 {
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -564,6 +564,8 @@ sal_Bool ViewShell::PrintOrPDFExport(
                 rPrintData.GetRenderData().m_pPostItShell : pShell;
         ::SetSwVisArea( pViewSh2, pStPage->Frm() );
 
+// FIXME disabled because rPrintData.aOffset is always (0,0)
+#if 0
         //  wenn wir einen Umschlag drucken wird ein Offset beachtet
         if( pStPage->GetFmt()->GetPoolFmtId() == RES_POOLPAGE_JAKET )
         {
@@ -573,6 +575,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
             aTmp.SetOrigin( aNewOrigin );
             pOutDev->SetMapMode( aTmp );
         }
+#endif
 
         pShell->InitPrt( pOutDev );
 

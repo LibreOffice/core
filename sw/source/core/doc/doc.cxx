@@ -100,7 +100,6 @@
 #include <fldupde.hxx>
 #include <swbaslnk.hxx>
 #include <printdata.hxx>
-#include <swprtopt.hxx>
 #include <cmdid.h>              // fuer den dflt - Printer in SetJob
 #include <statstr.hrc>          // StatLine-String
 #include <comcore.hrc>

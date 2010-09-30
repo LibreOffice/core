@@ -73,7 +73,6 @@ struct SwDBFormatData
 
 class SwView;
 class SwWrtShell;
-class SwPrtOptions;
 class SfxProgress;
 class ListBox;
 class Button;

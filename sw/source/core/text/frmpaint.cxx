@@ -38,12 +38,8 @@
 #include <tgrditem.hxx>
 #include <paratr.hxx>
 
-#ifndef _FMTLINE_HXX
 #include <fmtline.hxx>
-#endif
-#ifndef _LINEINFO_HXX
 #include <lineinfo.hxx>
-#endif
 #include <charfmt.hxx>
 #include <pagefrm.hxx>
 #include <viewsh.hxx>   // ViewShell
@@ -596,7 +592,7 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
  *                      SwTxtFrm::Paint()
  *************************************************************************/
 
-void SwTxtFrm::Paint( const SwRect &rRect, const SwPrtOptions * /*pPrintData*/ ) const
+void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 {
     ResetRepaint();
 

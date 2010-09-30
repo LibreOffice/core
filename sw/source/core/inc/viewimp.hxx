@@ -24,8 +24,10 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _VIEWIMP_HXX
-#define _VIEWIMP_HXX
+#ifndef SW_VIEWIMP_HXX
+#define SW_VIEWIMP_HXX
+
+#include <vector>
 
 #include <vcl/timer.hxx>
 #include <tools/color.hxx>
@@ -53,10 +55,9 @@ struct SdrPaintProcRec;
 class SwAccessibleMap;
 class SdrObject;
 class Fraction;
-class SwPrtOptions;
+class SwPrintData;
 class SwPagePreviewLayout;
 struct PrevwPage;
-#include <vector>
 class SwTxtFrm;
 
 class SwViewImp
@@ -215,7 +216,7 @@ public:
     // and <heaven>.
     // OD 25.06.2003 #108784# - correct type of 1st parameter
     void   PaintLayer( const SdrLayerID _nLayerID,
-                       const SwPrtOptions *pPrintData,
+                       SwPrintData const*const pPrintData,
                        const SwRect& _rRect,
                        const Color* _pPageBackgrdColor = 0,
                        const bool _bIsPageRightToLeft = false ) const;
@@ -360,5 +361,5 @@ inline void SwViewImp::AddAccessibleObj( const SdrObject *pObj )
     SwRect aEmptyRect;
     MoveAccessible( 0, pObj, aEmptyRect );
 }
-#endif //_VIEWIMP_HXX
+#endif // SW_VIEWIMP_HXX
 

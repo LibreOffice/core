@@ -70,7 +70,6 @@
 #include <docsh.hxx>
 #include <viewopt.hxx>
 #include <prtopt.hxx>
-#include <swprtopt.hxx>
 #include <fontcfg.hxx>
 #include <cfgitems.hxx>
 #include <dbmgr.hxx>

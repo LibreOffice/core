@@ -41,19 +41,15 @@
 #include <rootfrm.hxx>
 #include <viewimp.hxx>
 #include <viewopt.hxx>
-#include <swprtopt.hxx> // SwPrtOptions
+#include <printdata.hxx>
 #include <fldbas.hxx>
 #include <ptqueue.hxx>
 #include <swregion.hxx>
 #include <hints.hxx>
 #include <fntcache.hxx>
 
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>  // Text fuer SfxProgress
-#endif
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
@@ -77,7 +73,7 @@ void ViewShell::ShowPreViewSelection( sal_uInt16 nSelPage )
 
     OD 09.01.2003 #i6467#
 */
-void ViewShell::AdjustOptionsForPagePreview( const SwPrtOptions &_rPrintOptions )
+void ViewShell::AdjustOptionsForPagePreview(SwPrintData const& rPrintOptions)
 {
     if ( !IsPreView() )
     {
@@ -85,7 +81,7 @@ void ViewShell::AdjustOptionsForPagePreview( const SwPrtOptions &_rPrintOptions 
         return;
     }
 
-    PrepareForPrint( _rPrintOptions );
+    PrepareForPrint( rPrintOptions );
 
     return;
 }

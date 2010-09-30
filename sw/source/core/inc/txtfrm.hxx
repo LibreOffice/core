@@ -24,8 +24,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _TXTFRM_HXX
-#define _TXTFRM_HXX
+#ifndef SW_TXTFRM_HXX
+#define SW_TXTFRM_HXX
+
 #include <tools/mempool.hxx>
 #include <tools/string.hxx>
 #include "cntfrm.hxx"
@@ -292,7 +293,8 @@ public:
 
     void   PaintExtraData( const SwRect & rRect ) const; //Seitennummer usw.
     SwRect Paint();
-    virtual void Paint( const SwRect &, const SwPrtOptions *pPrintData = NULL ) const;
+    virtual void Paint( SwRect const&,
+                        SwPrintData const*const pPrintData = NULL ) const;
     virtual void Modify( SfxPoolItem*, SfxPoolItem* );
     virtual sal_Bool GetInfo( SfxPoolItem & ) const;
 

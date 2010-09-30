@@ -68,7 +68,6 @@ class SfxItemPool;
 class SfxViewShell;
 class SwViewOption;
 class SwViewImp;
-class SwPrtOptions;
 class SwPrintData;
 class SwPagePreViewPrtData;
 class Window;
@@ -358,7 +357,8 @@ public:
 
     // printing of one page.
     // bIsPDFExport == true is: do PDF Export (no printing!)
-    sal_Bool PrintOrPDFExport( OutputDevice *pOutDev, const SwPrtOptions &rPrintData,
+    sal_Bool PrintOrPDFExport( OutputDevice *pOutDev,
+            SwPrintData const& rPrintData,
             sal_Int32 nRenderer /* offset in vector of pages to print */ );
 
     // printing of one brochure page
@@ -467,7 +467,7 @@ public:
         input parameter - constant reference to print options, to which the
         view option will be adjusted.
     */
-    void AdjustOptionsForPagePreview( const SwPrtOptions &_rPrintOptions );
+    void AdjustOptionsForPagePreview( SwPrintData const& rPrintOptions );
 
     sal_Bool IsViewLocked() const { return bViewLocked; }
     void LockView( sal_Bool b )   { bViewLocked = b;    }
