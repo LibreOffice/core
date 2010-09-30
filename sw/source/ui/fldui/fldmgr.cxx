@@ -562,7 +562,7 @@ BOOL SwFldMgr::GetSubTypes(USHORT nTypeId, SvStringsDtor& rToFill)
                        ((nTypeId == TYP_INPUTFLD || nTypeId == TYP_FORMELFLD) &&
                          (nWhich == RES_USERFLD ||
                           (nWhich == RES_SETEXPFLD &&
-                          !(((SwSetExpFieldType*)pFldType)->GetType() & nsSwGetSetExpType::GSE_SEQ))) ) )
+                           !(((SwSetExpFieldType*)pFldType)->GetType() & nsSwGetSetExpType::GSE_SEQ)) )) )
                     {
                         String* pNew = new String(pFldType->GetName());
                         rToFill.Insert(pNew, rToFill.Count());
