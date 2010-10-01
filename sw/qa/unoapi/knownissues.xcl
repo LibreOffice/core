@@ -184,3 +184,6 @@ sw.SwAccessibleParagraphView::com::sun::star::accessibility::XAccessibleEditable
 
 ### i114205 ###
 sw.SwAccessibleParagraphView::com::sun::star::accessibility::XAccessibleText
+
+### i114889 ###
+sw.SwXTextViewCursor::com::sun::star::view::XScreenCursor
