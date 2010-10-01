@@ -354,6 +354,7 @@ LPSOLVELIB=-llpsolve55
 SOFFICELIB=-lsofficeapp
 UNOPKGAPPLIB=-lunopkgapp
 TESTLIB=-ltest
+XMLREADERLIB=-lxmlreader
 
 .ELSE				# ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
 
@@ -535,5 +536,6 @@ LPSOLVELIB=lpsolve55.lib
 SOFFICELIB=isofficeapp.lib
 UNOPKGAPPLIB=iunopkgapp.lib
 TESTLIB=itest.lib
+XMLREADERLIB=ixmlreader.lib
 
 .ENDIF              # ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"

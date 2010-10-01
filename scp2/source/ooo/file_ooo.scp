@@ -417,14 +417,13 @@ File gid_File_Help_Schart_Zip
     EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG(schart);
 End
 
-#if defined INCLUDE_JAVA_ACCESSBRIDGE && defined WNT
+#if defined WNT
 
 File gid_File_Jar_Accessbridge
     TXT_FILE_BODY;
     Name = "java_uno_accessbridge.jar";
-    RegistryID = gid_Starregistry_Services_Rdb;
     Dir = gid_Dir_Classes;
-    Styles = (PACKED,DONT_OVERWRITE,UNO_COMPONENT);
+    Styles = (PACKED,DONT_OVERWRITE);
 End
 
 #endif
@@ -443,7 +442,7 @@ STD_JAR_FILE( gid_File_Jar_Lucene_Analyzers, lucene-analyzers-2.3 )
 #endif
 
 #ifdef SOLAR_JAVA
-UNO_JAR_FILE( gid_File_Jar_Lucenehelpwrapper, LuceneHelpWrapper )
+STD_JAR_FILE( gid_File_Jar_Lucenehelpwrapper, LuceneHelpWrapper )
 #endif
 
 #ifdef SOLAR_JAVA
@@ -467,14 +466,14 @@ End
 
 
 #ifdef SOLAR_JAVA
-UNO_JAR_FILE( gid_File_Jar_Report, report )
-UNO_JAR_FILE( gid_File_Jar_Table, table )
-UNO_JAR_FILE( gid_File_Jar_Letter, letter )
-UNO_JAR_FILE( gid_File_Jar_Form, form )
-UNO_JAR_FILE( gid_File_Jar_Fax, fax )
-UNO_JAR_FILE( gid_File_Jar_Agenda, agenda )
-UNO_JAR_FILE( gid_File_Jar_Query, query )
-UNO_JAR_FILE( gid_File_Jar_Web, web )
+STD_JAR_FILE( gid_File_Jar_Report, report )
+STD_JAR_FILE( gid_File_Jar_Table, table )
+STD_JAR_FILE( gid_File_Jar_Letter, letter )
+STD_JAR_FILE( gid_File_Jar_Form, form )
+STD_JAR_FILE( gid_File_Jar_Fax, fax )
+STD_JAR_FILE( gid_File_Jar_Agenda, agenda )
+STD_JAR_FILE( gid_File_Jar_Query, query )
+STD_JAR_FILE( gid_File_Jar_Web, web )
 #endif
 
 #ifdef SOLAR_JAVA
@@ -494,10 +493,10 @@ End
 #endif
 
 #ifdef SOLAR_JAVA
-UNO_JAR_FILE( gid_File_Jar_Scriptframework, ScriptFramework )
-UNO_JAR_FILE( gid_File_Jar_Scriptproviderforbeanshell, ScriptProviderForBeanShell )
-UNO_JAR_FILE( gid_File_Jar_Scriptproviderforjava, ScriptProviderForJava )
-UNO_JAR_FILE( gid_File_Jar_Scriptproviderforjavascript, ScriptProviderForJavaScript )
+STD_JAR_FILE( gid_File_Jar_Scriptframework, ScriptFramework )
+STD_JAR_FILE( gid_File_Jar_Scriptproviderforbeanshell, ScriptProviderForBeanShell )
+STD_JAR_FILE( gid_File_Jar_Scriptproviderforjava, ScriptProviderForJava )
+STD_JAR_FILE( gid_File_Jar_Scriptproviderforjavascript, ScriptProviderForJavaScript )
 #endif
 
 #ifdef SOLAR_JAVA
@@ -1680,13 +1679,7 @@ File gid_Starregistry_Services_Rdb
     TXT_FILE_BODY;
     Name = "services.rdb";
     Dir = gid_Dir_Program;
-    Styles = (PACKED, STARREGISTRY);
-#if defined WNT
-    NativeServicesURLPrefix = "vnd.sun.star.expand:$BRAND_BASE_DIR/program/";
-#else
-    NativeServicesURLPrefix = "vnd.sun.star.expand:$OOO_BASE_DIR/program/";
-#endif
-    JavaServicesURLPrefix = "vnd.sun.star.expand:$OOO_BASE_DIR/program/classes/";
+    Styles = (PACKED);
 End
 
 #ifdef LINUX
@@ -1799,9 +1792,8 @@ End
 File gid_File_Jar_Productregistration
     TXT_FILE_BODY;
     Name = "productregistration.jar";
-    RegistryID = gid_Starregistry_Services_Rdb;
     Dir = gid_Dir_Classes;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED);
 End
 #endif
 
