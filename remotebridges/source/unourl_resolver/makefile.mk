@@ -62,3 +62,11 @@ DEF1NAME=	$(SHL1TARGET)
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
+
+ALLTAR : $(MISC)/uuresolver.component
+
+$(MISC)/uuresolver.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        uuresolver.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_URE_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt uuresolver.component
