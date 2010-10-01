@@ -1357,7 +1357,8 @@ void GtkSalFrame::Show( BOOL bVisible, BOOL bNoActivate )
             // awesome.
             bool bHack =
                 getDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("Metacity") ||
-                getDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("compiz")
+                getDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("compiz") ||
+                getDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("Mutter")
                 ;
             if( nUserTime == 0 && bHack )
             {
