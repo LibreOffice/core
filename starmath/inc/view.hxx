@@ -51,7 +51,6 @@ class SmPrintUIOptions;
 class SmGraphicWindow : public ScrollableWindow
 {
     Point           aFormulaDrawPos;
-    Rectangle       aCursorRect;
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible >  xAccessible;
@@ -60,14 +59,9 @@ class SmGraphicWindow : public ScrollableWindow
     SmViewShell    *pViewShell;
     USHORT          nZoom;
     short           nModifyCount;
-    BOOL            bIsCursorVisible;
 
 protected:
     void        SetFormulaDrawPos(const Point &rPos) { aFormulaDrawPos = rPos; }
-    void        SetIsCursorVisible(BOOL bVis) { bIsCursorVisible = bVis; }
-    using   Window::SetCursor;
-    void        SetCursor(const SmNode *pNode);
-    void        SetCursor(const Rectangle &rRect);
 
     virtual void DataChanged( const DataChangedEvent& );
     virtual void Paint(const Rectangle&);
@@ -97,10 +91,6 @@ public:
     void ZoomToFitInWindow();
     using   ScrollableWindow::SetTotalSize;
     void SetTotalSize();
-
-    BOOL IsCursorVisible() const { return bIsCursorVisible; }
-    void ShowCursor(BOOL bShow);
-    const SmNode * SetCursorPos(USHORT nRow, USHORT nCol);
 
     void ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg );
 
@@ -229,6 +219,11 @@ class SmViewShell: public SfxViewShell
     DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper* );
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
+    /** Used to determine whether insertions using SID_INSERTSYMBOL and SID_INSERTCOMMAND
+     * should be inserted into SmEditWindow or directly into the SmDocShell as done if the
+     * visual editor was last to have focus.
+     */
+    BOOL bInsertIntoEditWindow;
 protected:
 
     Size GetTextLineSize(OutputDevice& rDevice,
@@ -292,6 +287,16 @@ public:
 
     void Impl_Print( OutputDevice &rOutDev, const SmPrintUIOptions &rPrintUIOptions,
             Rectangle aOutRect, Point aZeroPoint );
+
+    /** Set bInsertIntoEditWindow so we know where to insert
+     *
+     * This method is called whenever SmGraphicWindow or SmEditWindow gets focus,
+     * so that when text is inserted from catalog or elsewhere we know whether to
+     * insert for the visual editor, or the text editor.
+     */
+    void SetInsertIntoEditWindow(BOOL bEditWindowHadFocusLast = TRUE){
+        bInsertIntoEditWindow = bEditWindowHadFocusLast;
+    }
 };
 
 #endif

@@ -84,16 +84,21 @@ SmToken::SmToken() :
     nGroup = nCol = nRow = nLevel = 0;
 }
 
+SmToken::SmToken(SmTokenType eTokenType,
+                 sal_Unicode cMath,
+                 const sal_Char* pText,
+                 ULONG nTokenGroup,
+                 USHORT nTokenLevel) {
+    eType = eTokenType;
+    cMathChar = cMath;
+    aText.AssignAscii(pText);
+    nGroup = nTokenGroup;
+    nLevel = nTokenLevel;
+    nCol = nRow = 0;
+}
+
 ///////////////////////////////////////////////////////////////////////////
 
-struct SmTokenTableEntry
-{
-    const sal_Char* pIdent;
-    SmTokenType     eType;
-    sal_Unicode     cMathChar;
-    ULONG           nGroup;
-    USHORT          nLevel;
-};
 
 static const SmTokenTableEntry aTokenTable[] =
 {
@@ -307,8 +312,7 @@ static const SmTokenTableEntry aTokenTable[] =
     { "", TEND, '\0', 0, 0}
 };
 
-
-static const SmTokenTableEntry * GetTokenTableEntry( const String &rName )
+const SmTokenTableEntry * SmParser::GetTokenTableEntry( const String &rName )
 {
     const SmTokenTableEntry * pRes = 0;
     if (rName.Len())
@@ -1085,6 +1089,13 @@ void SmParser::Line()
         ExpressionArray[n - 1] = NodeStack.Pop();
     }
 
+    //If there's no expression, add an empty one.
+    //this is to avoid a formula tree without any caret
+    //positions, in visual formula editor.
+    if(ExpressionArray.size() == 0)
+        ExpressionArray.push_back(new SmExpressionNode(SmToken()));
+
+
     SmStructureNode *pSNode = new SmLineNode(CurToken);
     pSNode->SetSubNodes(ExpressionArray);
     NodeStack.Push(pSNode);
@@ -1186,6 +1197,10 @@ void SmParser::Product()
                 pSNode = new SmBinHorNode(CurToken);
 
                 NextToken();
+
+                //Let the glyph node know it's a binary operation
+                CurToken.eType = TBOPER;
+                CurToken.nGroup = TGPRODUCT;
 
                 GlyphSpecial();
                 pOper = NodeStack.Pop();
@@ -1697,6 +1712,9 @@ void SmParser::UnOper()
 
         case TUOPER :
             NextToken();
+            //Let the glyph know what it is...
+            CurToken.eType = TUOPER;
+            CurToken.nGroup = TGUNOPER;
             GlyphSpecial();
             pOper = NodeStack.Pop();
             break;
@@ -2196,7 +2214,11 @@ void SmParser::Stack()
 
         NextToken();
 
-        SmStructureNode *pSNode = new SmTableNode(CurToken);
+        //We need to let the table node know it context
+        //it's used in SmNodeToTextVisitor
+        SmToken aTok = CurToken;
+        aTok.eType = TSTACK;
+        SmStructureNode *pSNode = new SmTableNode(aTok);
         pSNode->SetSubNodes(ExpressionArray);
         NodeStack.Push(pSNode);
     }
@@ -2375,7 +2397,7 @@ SmNode *SmParser::Parse(const String &rBuffer)
 {
     BufferString = rBuffer;
     BufferString.ConvertLineEnd( LINEEND_LF );
-    BufferIndex  =
+    BufferIndex  = 0;
     nTokenIndex  = 0;
     Row          = 1;
     ColOff       = 0;
@@ -2391,6 +2413,30 @@ SmNode *SmParser::Parse(const String &rBuffer)
     SetLanguage( Application::GetSettings().GetUILanguage() );
     NextToken();
     Table();
+
+    return NodeStack.Pop();
+}
+
+SmNode *SmParser::ParseExpression(const String &rBuffer)
+{
+    BufferString = rBuffer;
+    BufferString.ConvertLineEnd( LINEEND_LF );
+    BufferIndex  = 0;
+    nTokenIndex  = 0;
+    Row          = 1;
+    ColOff       = 0;
+    CurError     = -1;
+
+    for (USHORT i = 0;  i < ErrDescList.Count();  i++)
+        delete ErrDescList.Remove(i);
+
+    ErrDescList.Clear();
+
+    NodeStack.Clear();
+
+    SetLanguage( Application::GetSettings().GetUILanguage() );
+    NextToken();
+    Expression();
 
     return NodeStack.Pop();
 }

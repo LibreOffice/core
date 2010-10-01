@@ -31,6 +31,26 @@
 
 
 #include <vector>
+#include <fstream>
+#include <iostream>
+#include <stdio.h>
+
+//My special assert macro
+//TODO: replace this with DBG_ASSERT when this patch moves to production, can be done using search/replace
+#define j_assert(cond, msg)     do{                                                             \
+                                    if(!(cond))                                                 \
+                                    {                                                           \
+                                        std::cerr<<"Failed assertion: "<<msg<<", at line ";     \
+                                        char* f = (char*)__FILE__;                              \
+                                        f += strlen(f);                                         \
+                                        do f--; while(*f != '/');                               \
+                                        do f--; while(*f != '/');                               \
+                                        do f--; while(*f != '/');                               \
+                                        fprintf(stderr, "%d in %s\n", __LINE__, f + 1);         \
+                                    }                                                           \
+                                } while(false)
+//TODO: Comment out below to disable dumpasdot
+#define DEBUG_ENABLE_DUMPASDOT
 
 #include "parse.hxx"
 #include "types.hxx"
@@ -40,6 +60,7 @@
 
 #define ATTR_BOLD       0x0001
 #define ATTR_ITALIC     0x0002
+
 
 #define FNTSIZ_ABSOLUT  1
 #define FNTSIZ_PLUS     2
@@ -59,6 +80,7 @@
 
 extern SmFormat *pActiveFormat;
 
+class SmVisitor;
 class SmDocShell;
 class SmNode;
 class SmStructureNode;
@@ -97,6 +119,8 @@ class SmNode : public SmRect
                     nAttributes;
     BOOL            bIsPhantom,
                     bIsDebug;
+
+    BOOL            bIsSelected;
 protected:
     SmNode(SmNodeType eNodeType, const SmToken &rNodeToken);
 
@@ -160,7 +184,6 @@ public:
 #ifdef SM_RECT_DEBUG
     using   SmRect::Draw;
 #endif
-    virtual void Draw(OutputDevice &rDev, const Point &rPosition) const;
 
     virtual void    GetAccessibleText( String &rText ) const;
     sal_Int32       GetAccessibleIndex() const { return nAccIndex; }
@@ -180,12 +203,128 @@ public:
 
     const SmNode *  FindTokenAt(USHORT nRow, USHORT nCol) const;
     const SmNode *  FindRectClosestTo(const Point &rPoint) const;
-};
 
+    /** Accept a visitor
+     * Calls the method for this class on the visitor
+     */
+    virtual void Accept(SmVisitor* pVisitor);
+
+    /** True if this node is selected */
+    BOOL IsSelected() const {return bIsSelected;}
+    void SetSelected(BOOL Selected = true) {bIsSelected = Selected;}
+
+#ifdef DEBUG_ENABLE_DUMPASDOT
+    /** The tree as dot graph for graphviz, usable for debugging
+     * Convert the output to a image using $ dot graph.gv -Tpng > graph.png
+     */
+    inline void DumpAsDot(std::ostream &out, String* label = NULL) const{
+        int id = 0;
+        DumpAsDot(out, label, -1, id, -1);
+    }
+#endif /* DEBUG_ENABLE_DUMPASDOT */
+
+    /** Get the parent node of this node */
+    SmStructureNode* GetParent(){ return aParentNode; }
+    /** Set the parent node */
+    void SetParent(SmStructureNode* parent){
+        aParentNode = parent;
+    }
+
+    /** Get the index of a child node
+     *
+     * Returns -1, if pSubNode isn't a subnode of this.
+     */
+    int IndexOfSubNode(SmNode* pSubNode){
+        USHORT nSize = GetNumSubNodes();
+        for(USHORT i = 0; i < nSize; i++)
+            if(pSubNode == GetSubNode(i))
+                return i;
+        return -1;
+    }
+    /** Set the token for this node */
+    void SetToken(SmToken& token){
+        aNodeToken = token;
+    }
+protected:
+    /** Sets parent on children of this node */
+    void ClaimPaternity(){
+        SmNode* pNode;
+        USHORT  nSize = GetNumSubNodes();
+        for (USHORT i = 0;  i < nSize;  i++)
+            if (NULL != (pNode = GetSubNode(i)))
+                pNode->SetParent((SmStructureNode*)this); //Cast is valid if we have children
+    }
+private:
+    SmStructureNode* aParentNode;
+    void DumpAsDot(std::ostream &out, String* label, int number, int& id, int parent) const;
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 
+/** A simple auxiliary iterator class for SmNode
+ *
+ * Example of iteration over children of pMyNode:
+ * \code
+ *  //Node to iterate over:
+ *  SmNode* pMyNode = 0;// A pointer from somewhere
+ *  //The iterator:
+ *  SmNodeIterator it(pMyNode);
+ *  //The iteration:
+ *  while(it.Next()) {
+ *      it->SetSelected(true);
+ *  }
+ * \endcode
+ */
+class SmNodeIterator{
+public:
+    SmNodeIterator(SmNode* node, bool bReverse = false){
+        pNode = node;
+        nSize = pNode->GetNumSubNodes();
+        nIndex = 0;
+        pChildNode = NULL;
+        bIsReverse = bReverse;
+    }
+    /** Get the subnode or NULL if none */
+    SmNode* Next(){
+        while(!bIsReverse && nIndex < nSize){
+            if(NULL != (pChildNode = pNode->GetSubNode(nIndex++)))
+                return pChildNode;
+        }
+        while(bIsReverse && nSize > 0){
+            if(NULL != (pChildNode = pNode->GetSubNode((nSize--)-1)))
+                return pChildNode;
+        }
+        pChildNode = NULL;
+        return NULL;
+    }
+    /** Get the current child node, NULL if none */
+    SmNode* Current(){
+        return pChildNode;
+    }
+    /** Get the current child node, NULL if none */
+    SmNode* operator->(){
+        return pChildNode;
+    }
+private:
+    /** Current child */
+    SmNode* pChildNode;
+    /** Node whos children we're iterating over */
+    SmNode* pNode;
+    /** Size of the node */
+    USHORT nSize;
+    /** Current index in the node */
+    USHORT nIndex;
+    /** Move reverse */
+    bool bIsReverse;
+};
 
+////////////////////////////////////////////////////////////////////////////////
+
+/** Abstract baseclass for all composite node
+ *
+ * Subclasses of this class can have subnodes. Nodes that doesn't derivate from
+ * this class does not have subnodes.
+ */
 class SmStructureNode : public SmNode
 {
     SmNodeArray  aSubNodes;
@@ -212,12 +351,29 @@ public:
     virtual SmStructureNode & operator = ( const SmStructureNode &rNode );
 
     virtual void  GetAccessibleText( String &rText ) const;
+
+    void SetSubNode(USHORT nIndex, SmNode* pNode){
+        int size = aSubNodes.size();
+        if(size <= nIndex){
+            //Resize subnodes array
+            aSubNodes.resize(nIndex + 1);
+            //Set new slots to NULL
+            for(int i = size; i < nIndex+1; i++)
+                aSubNodes[i] = NULL;
+        }
+        aSubNodes[nIndex] = pNode;
+        ClaimPaternity();
+    }
 };
 
 
 ////////////////////////////////////////////////////////////////////////////////
 
-
+/** Abstract base class for all visible node
+ *
+ * Nodes that doesn't derivate from this class doesn't draw anything, but their
+ * children.
+ */
 class SmVisibleNode : public SmNode
 {
 protected:
@@ -252,7 +408,10 @@ public:
 
 ////////////////////////////////////////////////////////////////////////////////
 
-
+/** Draws a rectangle
+ *
+ * Used for drawing the line in the OVER and OVERSTRIKE commands.
+ */
 class SmRectangleNode : public SmGraphicNode
 {
     Size  aToSize;
@@ -270,15 +429,19 @@ public:
 #ifdef SM_RECT_DEBUG
     using   SmRect::Draw;
 #endif
-    virtual void Draw(OutputDevice &rDev, const Point &rPosition) const;
+
 
     void CreateTextFromNode(String &rText);
+    void Accept(SmVisitor* pVisitor);
 };
 
 
 ////////////////////////////////////////////////////////////////////////////////
 
-
+/** Polygon line node
+ *
+ * Used to draw the slash of the WIDESLASH command by SmBinDiagonalNode.
+ */
 class SmPolyLineNode : public SmGraphicNode
 {
     Polygon     aPoly;
@@ -289,6 +452,8 @@ public:
     SmPolyLineNode(const SmToken &rNodeToken);
 
     long         GetWidth() const { return nWidth; }
+    Size         GetToSize() const { return aToSize; }
+    Polygon     &GetPolygon() { return aPoly; }
 
     virtual void AdaptToX(const OutputDevice &rDev, ULONG nWidth);
     virtual void AdaptToY(const OutputDevice &rDev, ULONG nHeight);
@@ -298,17 +463,29 @@ public:
 #ifdef SM_RECT_DEBUG
     using   SmRect::Draw;
 #endif
-    virtual void Draw(OutputDevice &rDev, const Point &rPosition) const;
+
+    void Accept(SmVisitor* pVisitor);
 };
 
 
 ////////////////////////////////////////////////////////////////////////////////
 
-
+/** Text node
+ *
+ * @remarks This class also serves as baseclass for all nodes that contains text.
+ */
 class SmTextNode : public SmVisibleNode
 {
     XubString   aText;
     USHORT      nFontDesc;
+    /** Index within text where the selection starts
+     * @remarks Only valid if SmNode::IsSelected() is true
+     */
+    xub_StrLen  nSelectionStart;
+    /** Index within text where the selection ends
+     * @remarks Only valid if SmNode::IsSelected() is true
+     */
+    xub_StrLen  nSelectionEnd;
 
 protected:
     SmTextNode(SmNodeType eNodeType, const SmToken &rNodeToken, USHORT nFontDescP );
@@ -319,6 +496,28 @@ public:
     USHORT              GetFontDesc() const { return nFontDesc; }
     void                SetText(const XubString &rText) { aText = rText; }
     const XubString &   GetText() const { return aText; }
+    /** Change the text of this node, including the underlying token */
+    void                ChangeText(const XubString &rText) {
+        aText = rText;
+        SmToken token = GetToken();
+        token.aText = rText;
+        SetToken(token); //TODO: Merge this with AdjustFontDesc for better performance
+        AdjustFontDesc();
+    }
+    /** Try to guess the correct FontDesc, used during visual editing */
+    void                AdjustFontDesc();
+    /** Index within GetText() where the selection starts
+     * @remarks Only valid of SmNode::IsSelected() is true
+     */
+    xub_StrLen          GetSelectionStart() const {return nSelectionStart;}
+    /** Index within GetText() where the selection end
+     * @remarks Only valid of SmNode::IsSelected() is true
+     */
+    xub_StrLen          GetSelectionEnd() const {return nSelectionEnd;}
+    /** Set the index within GetText() where the selection starts */
+    void                SetSelectionStart(xub_StrLen index) {nSelectionStart = index;}
+    /** Set the index within GetText() where the selection end */
+    void                SetSelectionEnd(xub_StrLen index) {nSelectionEnd = index;}
 
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
@@ -327,15 +526,22 @@ public:
 #ifdef SM_RECT_DEBUG
     using   SmRect::Draw;
 #endif
-    virtual void Draw(OutputDevice &rDev, const Point &rPosition) const;
+
 
     virtual void  GetAccessibleText( String &rText ) const;
+    void Accept(SmVisitor* pVisitor);
 };
 
 
 ////////////////////////////////////////////////////////////////////////////////
 
-
+/** Special node for user defined characters
+ *
+ * Node used for pre- and user-defined characters from:
+ * officecfg/registry/data/org/openoffice/Office/Math.xcu
+ *
+ * This is just single characters, I think.
+ */
 class SmSpecialNode : public SmTextNode
 {
     bool    bIsFromGreekSymbolSet;
@@ -352,13 +558,22 @@ public:
 #ifdef SM_RECT_DEBUG
     using   SmRect::Draw;
 #endif
-    virtual void Draw(OutputDevice &rDev, const Point &rPosition) const;
+
+    void Accept(SmVisitor* pVisitor);
 };
 
 
 ////////////////////////////////////////////////////////////////////////////////
 
-
+/** Glyph node for custom operators
+ *
+ * This node is used with commands: oper, uoper and boper.
+ * E.g. in "A boper op B", "op" will be an instance of SmGlyphSpecialNode.
+ * "boper" simply inteprets "op", the following token, as an binary operator.
+ * The command "uoper" interprets the following token as unary operator.
+ * For these commands an instance of SmGlyphSpecialNode is used for the
+ * operator token, following the command.
+ */
 class SmGlyphSpecialNode : public SmSpecialNode
 {
 public:
@@ -367,12 +582,16 @@ public:
     {}
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
+    void Accept(SmVisitor* pVisitor);
 };
 
 
 ////////////////////////////////////////////////////////////////////////////////
 
-
+/** Math symbol node
+ *
+ * Use for math symbols such as plus, minus and integrale in the INT command.
+ */
 class SmMathSymbolNode : public SmSpecialNode
 {
 protected:
@@ -393,12 +612,18 @@ public:
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     void CreateTextFromNode(String &rText);
+    void Accept(SmVisitor* pVisitor);
 };
 
 
 ////////////////////////////////////////////////////////////////////////////////
 
-
+/** Root symbol node
+ *
+ * Root symbol node used by SmRootNode to create the root symbol, infront of
+ * the line with the line above. I don't think this node should be used for
+ * anything else.
+ */
 class SmRootSymbolNode : public SmMathSymbolNode
 {
     ULONG  nBodyWidth;  // width of body (argument) of root sign
@@ -408,19 +633,26 @@ public:
     :   SmMathSymbolNode(NROOTSYMBOL, rNodeToken)
     {}
 
+    ULONG GetBodyWidth() const {return nBodyWidth;};
     virtual void AdaptToX(const OutputDevice &rDev, ULONG nWidth);
     virtual void AdaptToY(const OutputDevice &rDev, ULONG nHeight);
 
 #ifdef SM_RECT_DEBUG
     using   SmRect::Draw;
 #endif
-    virtual void Draw(OutputDevice &rDev, const Point &rPosition) const;
+
+    void Accept(SmVisitor* pVisitor);
 };
 
 
 ////////////////////////////////////////////////////////////////////////////////
 
-
+/** Place node
+ *
+ * Used to create the <?> command, that denotes place where something can be
+ * written.
+ * It is drawn as a square with a shadow.
+ */
 class SmPlaceNode : public SmMathSymbolNode
 {
 public:
@@ -428,15 +660,21 @@ public:
     :   SmMathSymbolNode(NPLACE, rNodeToken)
     {
     }
+    SmPlaceNode() : SmMathSymbolNode(NPLACE, SmToken(TPLACE, MS_PLACE, "<?>")) {};
 
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
+    void Accept(SmVisitor* pVisitor);
 };
 
 
 ////////////////////////////////////////////////////////////////////////////////
 
-
+/** Error node, for parsing errors
+ *
+ * This node is used for parsing errors and draws an questionmark turned upside
+ * down (inverted question mark).
+ */
 class SmErrorNode : public SmMathSymbolNode
 {
 public:
@@ -448,12 +686,19 @@ public:
 
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
+    void Accept(SmVisitor* pVisitor);
 };
 
 
 ////////////////////////////////////////////////////////////////////////////////
 
-
+/** Table node
+ *
+ * This is the root node for the formula tree. This node is also used for the
+ * STACK and BINOM commands. When used for root node, its
+ * children are instances of SmLineNode, and in some obscure cases the a child
+ * can be an instance of SmExpressionNode, mainly when errors occur.
+ */
 class SmTableNode : public SmStructureNode
 {
 public:
@@ -465,12 +710,17 @@ public:
     virtual SmNode * GetLeftMost();
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
+    void Accept(SmVisitor* pVisitor);
 };
 
 
 ////////////////////////////////////////////////////////////////////////////////
 
-
+/** A line
+ *
+ * Used as child of SmTableNode when the SmTableNode is the root node of the
+ * formula tree.
+ */
 class SmLineNode : public SmStructureNode
 {
     BOOL  bUseExtraSpaces;
@@ -494,12 +744,18 @@ public:
 
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
+    void Accept(SmVisitor* pVisitor);
 };
 
 
 ////////////////////////////////////////////////////////////////////////////////
 
-
+/** Expression node
+ *
+ * Used whenever you have an expression such as "A OVER {B + C}", here there is
+ * an expression node that allows "B + C" to be the denominator of the
+ * SmBinVerNode, that the OVER command creates.
+ */
 class SmExpressionNode : public SmLineNode
 {
 public:
@@ -509,12 +765,16 @@ public:
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     void CreateTextFromNode(String &rText);
+    void Accept(SmVisitor* pVisitor);
 };
 
 
 ////////////////////////////////////////////////////////////////////////////////
 
-
+/** Unary horizontical node
+ *
+ * The same as SmBinHorNode except this is for unary operators.
+ */
 class SmUnHorNode : public SmStructureNode
 {
 public:
@@ -525,12 +785,23 @@ public:
     }
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
+    void Accept(SmVisitor* pVisitor);
 };
 
 
 ////////////////////////////////////////////////////////////////////////////////
 
-
+/** Root node
+ *
+ * Used for create square roots and other roots, example:
+ * \f$ \sqrt[\mbox{[Argument]}]{\mbox{[Body]}} \f$.
+ *
+ * Children:<BR>
+ * 0: Argument (optional)<BR>
+ * 1: Symbol (instance of SmRootSymbolNode)<BR>
+ * 2: Body<BR>
+ * Where argument is optinal and may be NULL.
+ */
 class SmRootNode : public SmStructureNode
 {
 protected:
@@ -547,12 +818,23 @@ public:
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     void CreateTextFromNode(String &rText);
+    void Accept(SmVisitor* pVisitor);
 };
 
 
 ////////////////////////////////////////////////////////////////////////////////
 
-
+/** Binary horizontial node
+ *
+ * This node is used for binary operators. In a formula such as "A + B".
+ *
+ * Children:<BR>
+ * 0: Left operand<BR>
+ * 1: Binary operator<BR>
+ * 2: Right operand<BR>
+ *
+ * None of the children may be NULL.
+ */
 class SmBinHorNode : public SmStructureNode
 {
 public:
@@ -563,12 +845,24 @@ public:
     }
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
+    void Accept(SmVisitor* pVisitor);
 };
 
 
 ////////////////////////////////////////////////////////////////////////////////
 
-
+/** Binary horizontical node
+ *
+ * This node is used for creating the OVER command, consider the formula:
+ * "numerator OVER denominator", which looks like
+ * \f$ \frac{\mbox{numerator}}{\mbox{denominator}} \f$
+ *
+ * Children:<BR>
+ * 0: Numerator<BR>
+ * 1: Line (instance of SmRectangleNode)<BR>
+ * 2: Denominator<BR>
+ * None of the children may be NULL.
+ */
 class SmBinVerNode : public SmStructureNode
 {
 public:
@@ -583,12 +877,22 @@ public:
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     void CreateTextFromNode(String &rText);
+    void Accept(SmVisitor* pVisitor);
 };
 
 
 ////////////////////////////////////////////////////////////////////////////////
 
-
+/** Binary diagonal node
+ *
+ * Used for implementing the WIDESLASH command, example: "A WIDESLASH B".
+ *
+ * Children:<BR>
+ * 0: Left operand<BR>
+ * 1: right operand<BR>
+ * 2: Line (instance of SmPolyLineNode).<BR>
+ * None of the children may be NULL.
+ */
 class SmBinDiagonalNode : public SmStructureNode
 {
     BOOL    bAscending;
@@ -603,35 +907,53 @@ public:
     void    SetAscending(BOOL bVal)  { bAscending = bVal; }
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
+    void Accept(SmVisitor* pVisitor);
 };
 
 
 ////////////////////////////////////////////////////////////////////////////////
 
 
-// enums used to index sub-/supscripts in the 'aSubNodes' array
-// in 'SmSubSupNode'
-// See graphic for positions at char:
-//
-//      CSUP
-//
-// LSUP H  H RSUP
-//      H  H
-//      HHHH
-//      H  H
-// LSUB H  H RSUB
-//
-//      CSUB
-//
+/** Enum used to index sub-/supscripts in the 'aSubNodes' array
+ * in 'SmSubSupNode'
+ *
+ * See graphic for positions at char:
+ *
+ * \code
+ *      CSUP
+ *
+ * LSUP H  H RSUP
+ *      H  H
+ *      HHHH
+ *      H  H
+ * LSUB H  H RSUB
+ *
+ *      CSUB
+ * \endcode
+ */
 enum SmSubSup
 {   CSUB, CSUP, RSUB, RSUP, LSUB, LSUP
 };
 
-// numbers of entries in the above enum (that is: the number of possible
-// sub-/supscripts)
+/** numbers of entries in the above enum (that is: the number of possible
+ * sub-/supscripts)
+ */
 #define SUBSUP_NUM_ENTRIES 6
 
-
+/** Super- and subscript node
+ *
+ * Used for creating super- and subscripts for commands such as:
+ * "^", "_", "lsup", "lsub", "csup" and "csub".
+ * Example: "A^2" which looks like: \f$ A^2 \f$
+ *
+ * This node is also used for creating limits on SmOperNode, when
+ * "FROM" and "TO" commands are used with "INT", "SUM" or similar.
+ *
+ * Children of this node can be enumerated using the SmSubSup enum.
+ * Please note that children may be NULL, except for the body.
+ * It is recommended that you access children using GetBody() and
+ * GetSubSup().
+ */
 class SmSubSupNode : public SmStructureNode
 {
     BOOL  bUseLimits;
@@ -644,7 +966,9 @@ public:
         bUseLimits = FALSE;
     }
 
+    /** Get body (Not NULL) */
     SmNode *       GetBody()    { return GetSubNode(0); }
+    /** Get body (Not NULL) */
     const SmNode * GetBody() const
     {
         return ((SmSubSupNode *) this)->GetBody();
@@ -653,17 +977,39 @@ public:
     void  SetUseLimits(BOOL bVal) { bUseLimits = bVal; }
     BOOL  IsUseLimits() const { return bUseLimits; };
 
+    /** Get super- or subscript
+     * @remarks this method may return NULL.
+     */
     SmNode * GetSubSup(SmSubSup eSubSup) { return GetSubNode( sal::static_int_cast< USHORT >(1 + eSubSup) ); };
+
+    /** Set the body */
+    void SetBody(SmNode* pBody) { SetSubNode(0, pBody); }
+    void SetSubSup(SmSubSup eSubSup, SmNode* pScript) { SetSubNode( 1 + eSubSup, pScript); }
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     void CreateTextFromNode(String &rText);
+    void Accept(SmVisitor* pVisitor);
 
 };
 
 
 ////////////////////////////////////////////////////////////////////////////////
 
-
+/** Node for brace construction
+ *
+ * Used for "lbrace [body] rbrace" and similar constructions.
+ * Should look like \f$ \{\mbox{[body]}\} \f$
+ *
+ * Children:<BR>
+ * 0: Opening brace<BR>
+ * 1: Body (usually SmBracebodyNode)<BR>
+ * 2: Closing brace<BR>
+ * None of the children can be NULL.
+ *
+ * Note that child 1 (Body) is usually SmBracebodyNode, I don't know if it can
+ * be an SmExpressionNode, haven't seen the case. But didn't quite read parser.cxx
+ * enought to exclude this possibility.
+ */
 class SmBraceNode : public SmStructureNode
 {
 public:
@@ -675,12 +1021,21 @@ public:
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     void CreateTextFromNode(String &rText);
+    void Accept(SmVisitor* pVisitor);
 };
 
 
 ////////////////////////////////////////////////////////////////////////////////
 
-
+/** Body of an SmBraceNode
+ *
+ * This usually only has one child an SmExpressionNode, however, it can also
+ * have other children.
+ * Consider the formula "lbrace [body1] mline [body2] rbrace", looks like:
+ * \f$ \{\mbox{[body1] | [body2]}\} \f$.
+ * In this case SmBracebodyNode will have three children, "[body1]", "|" and
+ * [body2].
+ */
 class SmBracebodyNode : public SmStructureNode
 {
     long  nBodyHeight;
@@ -690,6 +1045,7 @@ public:
 
     virtual void    Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     long            GetBodyHeight() const { return nBodyHeight; }
+    void Accept(SmVisitor* pVisitor);
 };
 
 
@@ -702,13 +1058,25 @@ inline SmBracebodyNode::SmBracebodyNode(const SmToken &rNodeToken) :
 
 ////////////////////////////////////////////////////////////////////////////////
 
-
+/** Node for vertical brace construction
+ *
+ * Used to implement commands "[body] underbrace [script]" and
+ * "[body] overbrace [script]".
+ * Underbrace should look like this \f$ \underbrace{\mbox{body}}_{\mbox{script}}\f$.
+ *
+ * Children:<BR>
+ * 0: body<BR>
+ * 1: brace<BR>
+ * 2: script<BR>
+ * (None of these children are optional, e.g. they must all be not NULL).
+ */
 class SmVerticalBraceNode : public SmStructureNode
 {
 public:
     inline SmVerticalBraceNode(const SmToken &rNodeToken);
 
     virtual void    Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
+    void Accept(SmVisitor* pVisitor);
 };
 
 
@@ -722,6 +1090,18 @@ inline SmVerticalBraceNode::SmVerticalBraceNode(const SmToken &rNodeToken) :
 ////////////////////////////////////////////////////////////////////////////////
 
 
+/** Operation Node
+ *
+ * Used for commands like SUM, INT and similar.
+ *
+ * Children:<BR>
+ * 0: Operation (instance of SmMathSymbolNode)<BR>
+ * 1: Body<BR>
+ * None of the children may be NULL.
+ *
+ * If there are boundaries on the operation the body will an instance of
+ * SmSubSupNode.
+ */
 class SmOperNode : public SmStructureNode
 {
 public:
@@ -740,12 +1120,14 @@ public:
     long CalcSymbolHeight(const SmNode &rSymbol, const SmFormat &rFormat) const;
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
+    void Accept(SmVisitor* pVisitor);
 };
 
 
 ////////////////////////////////////////////////////////////////////////////////
 
-
+/** Node used for alignment
+ */
 class SmAlignNode : public SmStructureNode
 {
 public:
@@ -754,12 +1136,22 @@ public:
     {}
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
+    void Accept(SmVisitor* pVisitor);
 };
 
 
 ////////////////////////////////////////////////////////////////////////////////
 
-
+/** Attribute node
+ *
+ * Used to give an attribute to another node. Used for commands such as:
+ * UNDERLINE, OVERLINE, OVERSTRIKE, WIDEVEC, WIDEHAT and WIDETILDE.
+ *
+ * Children:<BR>
+ * 0: Attribute<BR>
+ * 1: Body<BR>
+ * None of these may be NULL.
+ */
 class SmAttributNode : public SmStructureNode
 {
 public:
@@ -769,12 +1161,16 @@ public:
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     void CreateTextFromNode(String &rText);
+    void Accept(SmVisitor* pVisitor);
 };
 
 
 ////////////////////////////////////////////////////////////////////////////////
 
-
+/** Font node
+ *
+ * Used to change the font of it's children.
+ */
 class SmFontNode : public SmStructureNode
 {
     USHORT      nSizeType;
@@ -795,12 +1191,17 @@ public:
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     void CreateTextFromNode(String &rText);
+    void Accept(SmVisitor* pVisitor);
 };
 
 
 ////////////////////////////////////////////////////////////////////////////////
 
-
+/** Matrix node
+ *
+ * Used to implement the MATRIX command, example:
+ * "matrix{ 1 # 2 ## 3 # 4}".
+ */
 class SmMatrixNode : public SmStructureNode
 {
     USHORT  nNumRows,
@@ -822,12 +1223,16 @@ public:
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     void CreateTextFromNode(String &rText);
+    void Accept(SmVisitor* pVisitor);
 };
 
 
 ////////////////////////////////////////////////////////////////////////////////
 
-
+/** Node for whitespace
+ *
+ * Used to implement the "~" command. This node is just a blank space.
+ */
 class SmBlankNode : public SmGraphicNode
 {
     USHORT  nNum;
@@ -841,9 +1246,12 @@ public:
 
     void         IncreaseBy(const SmToken &rToken);
     void         Clear() { nNum = 0; }
+    USHORT       GetBlankNum() const { return nNum; }
+    void         SetBlankNum(USHORT nNumber) { nNum = nNumber; }
 
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
+    void Accept(SmVisitor* pVisitor);
 };
 
 

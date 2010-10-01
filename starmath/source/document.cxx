@@ -96,6 +96,7 @@
 #include "mathmlexport.hxx"
 #include <sfx2/sfxsids.hrc>
 #include <svx/svxids.hrc>
+#include "cursor.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -250,6 +251,7 @@ void SmDocShell::Parse()
     pTree = aInterpreter.Parse(aText);
     nModifyCount++;     //! see comment for SID_GAPHIC_SM in SmDocShell::GetState
     SetFormulaArranged( FALSE );
+    InvalidateCursor();
 }
 
 
@@ -432,9 +434,10 @@ SfxItemPool& SmDocShell::GetEditEngineItemPool()
     DBG_ASSERT( pEditEngineItemPool, "EditEngineItemPool missing" );
     return *pEditEngineItemPool;
 }
+//TODO: Move to the top of the file...
+#include "visitors.hxx"
 
-
-void SmDocShell::Draw(OutputDevice &rDev, Point &rPosition)
+void SmDocShell::DrawFormula(OutputDevice &rDev, Point &rPosition, BOOL bDrawSelection)
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::Draw" );
 
@@ -475,8 +478,16 @@ void SmDocShell::Draw(OutputDevice &rDev, Point &rPosition)
     rDev.SetLayoutMode( TEXT_LAYOUT_BIDI_LTR );
     INT16 nDigitLang = rDev.GetDigitLanguage();
     rDev.SetDigitLanguage( LANGUAGE_ENGLISH );
-    //
-    pTree->Draw(rDev, rPosition);
+
+    //Set selection if any
+    if(pCursor && bDrawSelection){
+        pCursor->AnnotateSelection();
+        SmSelectionDrawingVisitor(rDev, pTree, rPosition);
+    }
+
+    //Drawing using visitor
+    SmDrawingVisitor(rDev, rPosition, pTree);
+
     //
     rDev.SetLayoutMode( nLayoutMode );
     rDev.SetDigitLanguage( nDigitLang );
@@ -515,6 +526,18 @@ Size SmDocShell::GetSize()
     }
 
     return aRet;
+}
+
+void SmDocShell::InvalidateCursor(){
+    if(pCursor)
+        delete pCursor;
+    pCursor = NULL;
+}
+
+SmCursor& SmDocShell::GetCursor(){
+    if(!pCursor)
+        pCursor = new SmCursor(pTree, this);
+    return *pCursor;
 }
 
 ////////////////////////////////////////
@@ -689,6 +712,7 @@ SmDocShell::SmDocShell( const sal_uInt64 i_nSfxCreationFlags ) :
     nModifyCount        ( 0 ),
     bIsFormulaArranged  ( FALSE )
 {
+    pCursor = NULL;
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::SmDocShell" );
 
     SetPool(&SFX_APP()->GetPool());
@@ -712,6 +736,11 @@ SmDocShell::~SmDocShell()
 
     EndListening(aFormat);
     EndListening(*pp->GetConfig());
+
+
+    if(pCursor)
+        delete pCursor;
+    pCursor = NULL;
 
     delete pEditEngine;
     SfxItemPool::Free(pEditEngineItemPool);
@@ -744,6 +773,7 @@ BOOL SmDocShell::ConvertFrom(SfxMedium &rMedium)
         {
             delete pTree;
             pTree = 0;
+            InvalidateCursor();
         }
         Reference<com::sun::star::frame::XModel> xModel(GetModel());
         SmXMLImportWrapper aEquation(xModel);
@@ -1300,7 +1330,7 @@ void SmDocShell::Draw(OutputDevice *pDevice,
 
     pDevice->IntersectClipRegion(GetVisArea());
     Point atmppoint;
-    Draw(*pDevice, atmppoint);
+    DrawFormula(*pDevice, atmppoint);
 }
 
 SfxItemPool& SmDocShell::GetPool() const

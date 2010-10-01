@@ -270,17 +270,17 @@ interface FormulaView
         StateMethod = GetState ;
     ]
     //idlpp kein Menueeintrag , also keine Texte
-    SID_INSERTTEXT //idlpp ole : no , status : no
+    SID_INSERTSYMBOL //idlpp ole : no , status : no
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
-        SID_INSERT_FORMULA //idlpp ole : no , status : no
-        [
-                ExecMethod = Execute ;
-                StateMethod = GetState ;
-                Export = FALSE ;
-        ]
+    SID_INSERT_FORMULA //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        Export = FALSE ;
+    ]
     //idlpp kein Menueeintrag , also keine Texte
     SID_ATTR_ZOOM //idlpp ole : no , status : no
     [
