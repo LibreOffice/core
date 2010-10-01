@@ -1780,7 +1780,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
 
     for (i = 0; i < nColumnCount && nByteOffset <= m_nBufferSize ; ++i)
     {
-        // Laengen je nach Datentyp:
+        // Lengths for each data type:
         OSL_ENSURE(i < m_aPrecisions.size(),"Illegal index!");
         sal_Int32 nLen = 0;
         sal_Int32 nType = 0;
@@ -1817,7 +1817,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
                 break;
             case DataType::DECIMAL:
                 nLen = SvDbaseConverter::ConvertPrecisionToDbase(nLen,nScale);
-                break;  // das Vorzeichen und das Komma
+                break;  // The sign and the comma
             default:
                 break;
 
@@ -1846,10 +1846,10 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
 
 
         ++nPos; // the row values start at 1
-        // Ist die Variable ueberhaupt gebunden?
+        // If the variable is bound at all?
         if ( !rRow.get()[nPos]->isBound() )
         {
-            // Nein - naechstes Feld.
+            // No - the next field.
             nByteOffset += nLen;
             continue;
         }
@@ -1870,15 +1870,14 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
         if (rRow.get()[nPos]->getValue().isNull())
         {
             if ( bSetZero )
-                memset(pData,0,nLen);   // Zuruecksetzen auf NULL
+                memset(pData,0,nLen);   // Clear to NULL
             else
-                memset(pData,' ',nLen); // Zuruecksetzen auf NULL
+                memset(pData,' ',nLen); // Clear to NULL
             nByteOffset += nLen;
             OSL_ENSURE( nByteOffset <= m_nBufferSize ,"ByteOffset > m_nBufferSize!");
             continue;
         }
 
-        sal_Bool bHadError = sal_False;
         try
         {
             switch (nType)
@@ -1887,7 +1886,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
                     {
                         sal_Int32 nJulianDate = 0, nJulianTime = 0;
                         lcl_CalcJulDate(nJulianDate,nJulianTime,rRow.get()[nPos]->getValue());
-                        // Genau 8 Byte kopieren:
+                        // Exactly 8 bytes to copy:
                         memcpy(pData,&nJulianDate,4);
                         memcpy(pData+4,&nJulianTime,4);
                     }
@@ -1907,7 +1906,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
                         (int)aDate.Month,
                         (int)aDate.Day);
 
-                    // Genau 8 Byte kopieren:
+                    // Exactly 8 bytes to copy:
                     strncpy(pData,s,sizeof s - 1);
                 } break;
                 case DataType::INTEGER:
@@ -1936,18 +1935,18 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
                     break;
                 case DataType::DECIMAL:
                 {
-                    memset(pData,' ',nLen); // Zuruecksetzen auf NULL
+                    memset(pData,' ',nLen); // Clear to NULL
 
                     const double n = rRow.get()[nPos]->getValue();
 
-                    // ein const_cast, da GetFormatPrecision am SvNumberFormat nicht const ist, obwohl es das eigentlich
-                    // sein koennte und muesste
-
+                    // one, because const_cast GetFormatPrecision on SvNumberFormat is not constant,
+                    // even though it really could and should be
                     const ByteString aDefaultValue( ::rtl::math::doubleToString( n, rtl_math_StringFormat_F, nScale, '.', NULL, 0));
-                    BOOL bValidLength  = aDefaultValue.Len() <= nLen;
-                    if ( bValidLength )
+                    const sal_Int32 nValueLen = aDefaultValue.Len();
+                    if ( nValueLen <= nLen )
                     {
-                        strncpy(pData,aDefaultValue.GetBuffer(),nLen);
+                        // Write value right-justified, padded with blanks to the left.
+                        memcpy(pData+nLen-nValueLen,aDefaultValue.GetBuffer(),nValueLen);
                         // write the resulting double back
                         *rRow.get()[nPos] = toDouble(aDefaultValue);
                     }
@@ -1975,12 +1974,12 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
                 case DataType::LONGVARBINARY:
                 case DataType::LONGVARCHAR:
                 {
-                    char cNext = pData[nLen]; // merken und temporaer durch 0 ersetzen
-                    pData[nLen] = '\0';       // das geht, da der Puffer immer ein Zeichen groesser ist ...
+                    char cNext = pData[nLen]; // Mark's scratch and replaced by 0
+                    pData[nLen] = '\0';       // This is because the buffer is always a sign of greater ...
 
-                    ULONG nBlockNo = strtol((const char *)pData,NULL,10);   // Blocknummer lesen
+                    ULONG nBlockNo = strtol((const char *)pData,NULL,10);   // Block number read
 
-                    // Naechstes Anfangszeichen wieder restaurieren:
+                    // Next initial character restore again:
                     pData[nLen] = cNext;
                     if (!m_pMemoStream || !WriteMemo(rRow.get()[nPos]->get(), nBlockNo))
                         break;
@@ -1989,13 +1988,13 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
                     ByteString aBlock(ByteString::CreateFromInt32(nBlockNo));
                     aStr.Expand(static_cast<sal_uInt16>(nLen - aBlock.Len()), '0' );
                     aStr += aBlock;
-                    // Zeichen kopieren:
-                    memset(pData,' ',nLen); // Zuruecksetzen auf NULL
+                    // Copy characters:
+                    memset(pData,' ',nLen); // Clear to NULL
                     memcpy(pData, aStr.GetBuffer(), nLen);
                 }   break;
                 default:
                 {
-                    memset(pData,' ',nLen); // Zuruecksetzen auf NULL
+                    memset(pData,' ',nLen); // Clear to NULL
 
                     ::rtl::OUString sStringToWrite( rRow.get()[nPos]->getValue().getString() );
 
@@ -2013,9 +2012,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
         {
             throw;
         }
-        catch ( Exception& ) { bHadError = sal_True; }
-
-        if ( bHadError )
+        catch ( Exception& )
         {
             m_pColumns->getByIndex(i) >>= xCol;
             OSL_ENSURE( xCol.is(), "ODbaseTable::UpdateBuffer column is null!" );
@@ -2028,7 +2025,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
                  ) );
             ::dbtools::throwGenericSQLException( sError, *this );
         }
-        // Und weiter ...
+        // And more ...
         nByteOffset += nLen;
         OSL_ENSURE( nByteOffset <= m_nBufferSize ,"ByteOffset > m_nBufferSize!");
     }
