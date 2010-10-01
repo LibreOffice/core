@@ -94,13 +94,13 @@ OpenOffice
 			DOWNLOADBITMAP	ooobitmap.bmp
 			DOWNLOADSETUPICO	ooosetup.ico
 			RELATIVE_PATHES_IN_DDF 1
-            STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/OpenOffice.org/extensions.jsp?cid=920794
-            STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/homepage.jsp
-            STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/OpenOffice.org/templates.jsp?cid=926383
+            STARTCENTER_ADDFEATURE_URL http://extensions.services.openoffice.org
+            STARTCENTER_INFO_URL http://www.documentfoundation.org/
+            STARTCENTER_TEMPLREP_URL http://templates.services.openoffice.org/
             STARTCENTER_LAYOUT_STYLE 0
             REGISTRATION_PRODUCT LibreOffice
             REGISTRATION_CID 926117
-            DICT_REPO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/dictionaries.jsp
+            DICT_REPO_URL http://extensions.services.openoffice.org/dictionaries
 		}
 		active			1
 		compression		5
