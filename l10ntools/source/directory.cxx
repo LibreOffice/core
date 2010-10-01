@@ -187,29 +187,26 @@ void Directory::readDirectory( const rtl::OUString& sFullpath )
     struct stat     statbuf2;
     struct dirent   *dirp;
     DIR             *dir;
-    //int             ret;
-    //char            *ptr;
 
     if( sFullpath.getLength() < 1 ) return;
 
-    rtl::OString   sFullpathext = rtl::OUStringToOString( sFullpath , RTL_TEXTENCODING_UTF8 , sFullpath.getLength() ).getStr();
-    //printf("%s\n",sFullpathext.getStr());
+    rtl::OString   sFullpathext = rtl::OUStringToOString( sFullpath , RTL_TEXTENCODING_UTF8 );
     const char*    path         = sFullpathext.getStr();
 
     // stat
-    if( stat( path  , &statbuf ) < 0 ){   printf("warning: Can not stat %s" , path ); return; }// error }
+    if( stat( path  , &statbuf ) < 0 ){   printf("warning: Can not stat %s" , path ); return; }
 
-    if( S_ISDIR(statbuf.st_mode ) == 0 ) {  return; }// error }   return; // not dir
+    if( S_ISDIR(statbuf.st_mode ) == 0 ) {  return; }
 
-    if( (dir = opendir( path ) ) == NULL  ) {printf("readerror 2 in %s \n",path); return; } // error } return; // error
+    if( (dir = opendir( path ) ) == NULL  ) {printf("readerror 2 in %s \n",path); return; }
     dirholder aHolder(dir);
-
-    sFullpathext += rtl::OString( "/" );
 
     const rtl::OString sDot ( "." ) ;
     const rtl::OString sDDot( ".." );
 
-    if ( chdir( path ) == -1 ) { printf("chdir error in %s \n",path); return; } // error
+    if ( chdir( path ) == -1 ) { printf("chdir error in %s \n",path); return; }
+
+    sFullpathext += rtl::OString( "/" );
 
     while(  ( dirp = readdir( dir ) ) != NULL )
     {
@@ -225,7 +222,7 @@ void Directory::readDirectory( const rtl::OUString& sFullpath )
         // stat new entry
         if( lstat( sEntity.getStr() , &statbuf2 ) < 0 )
         {
-            printf("error on entry %s\n" , sEntity.getStr() ) ; // error
+            printf("error on entry %s\n" , sEntity.getStr() ) ;
             continue;
         }
 
@@ -261,8 +258,8 @@ void Directory::readDirectory( const rtl::OUString& sFullpath )
                          }
         }
     }
-    if ( chdir( ".." ) == -1 ) { printf("chdir error in .. \n"); return; } // error
-    if( aHolder.close() < 0 )   return ; // error
+    if ( chdir( ".." ) == -1 ) { printf("chdir error in .. \n"); return; }
+    if( aHolder.close() < 0 )   return ;
 
     std::sort( aFileVec.begin() , aFileVec.end() , File::lessFile );
     std::sort( aDirVec.begin()  , aDirVec.end()  , Directory::lessDir  );

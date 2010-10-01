@@ -488,7 +488,7 @@ sub collectfiles{
         }else{
             $command = $binpath."localize_sl";
         }
-        print $command;
+        print $command . "\n";
         # -e
         # if ( -x $command ){
         if( $command ){
