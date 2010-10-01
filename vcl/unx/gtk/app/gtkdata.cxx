@@ -489,6 +489,7 @@ class GtkXLib : public SalXLib
     GSource             *m_pUserEvent;
     oslMutex             m_aDispatchMutex;
     oslCondition         m_aDispatchCondition;
+    XIOErrorHandler      m_aOrigGTKXIOErrorHandler;
 
 public:
     static gboolean      timeoutFn(gpointer data);
@@ -522,6 +523,7 @@ GtkXLib::GtkXLib()
     m_pUserEvent = NULL;
     m_aDispatchCondition = osl_createCondition();
     m_aDispatchMutex = osl_createMutex();
+    m_aOrigGTKXIOErrorHandler = NULL;
 }
 
 GtkXLib::~GtkXLib()
@@ -535,6 +537,9 @@ GtkXLib::~GtkXLib()
     osl_setCondition( m_aDispatchCondition );
     osl_destroyCondition( m_aDispatchCondition );
     osl_destroyMutex( m_aDispatchMutex );
+
+    PopXErrorLevel();
+    XSetIOErrorHandler (m_aOrigGTKXIOErrorHandler);
 }
 
 void GtkXLib::Init()
@@ -595,6 +600,10 @@ void GtkXLib::Init()
 
     // init gtk/gdk
     gtk_init_check( &nParams, &pCmdLineAry );
+
+    //gtk_init_check sets XError/XIOError handlers, we want our own one
+    m_aOrigGTKXIOErrorHandler = XSetIOErrorHandler ( (XIOErrorHandler)X11SalData::XIOErrorHdl );
+    PushXErrorLevel( !!getenv( "SAL_IGNOREXERRORS" ) );
 
     for (i = 0; i < nParams; i++ )
         g_free( pCmdLineAry[i] );
