@@ -35,9 +35,7 @@ import com.sun.star.sdb.application.XDatabaseDocumentUI;
 import com.sun.star.wizards.common.NamedValueCollection;
 
 /** This class capsulates the class, that implements the minimal component, a
- * factory for creating the service (<CODE>__getServiceFactory</CODE>) and a
- * method, that writes the information into the given registry key
- * (<CODE>__writeRegistryServiceInfo</CODE>).
+ * factory for creating the service (<CODE>__getServiceFactory</CODE>).
  * @author Bertram Nolte
  */
 public class CallReportWizard
@@ -92,22 +90,6 @@ public class CallReportWizard
                     xregistrykey);
         }
         return xsingleservicefactory;
-    }
-
-    /** Writes the service information into the given registry key.
-     * This method is called by the <code>JavaLoader</code>.
-     * @return returns true if the operation succeeded
-     * @see com.sun.star.comp.loader.JavaLoader#
-     * @param xregistrykey Makes structural information (except regarding tree
-     * structures) of a single
-     * registry key accessible.
-     */
-    public static boolean __writeRegistryServiceInfo(com.sun.star.registry.XRegistryKey xregistrykey)
-    {
-        return com.sun.star.comp.loader.FactoryHelper.writeRegistryServiceInfo(
-                ReportWizardImplementation.class.getName(),
-                ReportWizardImplementation.__serviceName,
-                xregistrykey);
     }
 
     /** This class implements the component. At least the interfaces XServiceInfo,

@@ -66,7 +66,6 @@ sub usage
 {
     print <<Ende;
 ----------------------------------------------------------------------
-$prog V1.0 (c) Sun Microsystems 2009
 This program installs a Windows Installer installation set
 without using msiexec.exe. The installation is comparable
 with an administrative installation using the Windows Installer

@@ -72,3 +72,11 @@ DEF1NAME=$(SHL1TARGET)
 
 .INCLUDE : target.mk
 
+
+ALLTAR : $(MISC)/updchk.component
+
+$(MISC)/updchk.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        updchk.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt updchk.component
