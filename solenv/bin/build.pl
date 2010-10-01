@@ -680,11 +680,11 @@ sub build_all {
             exit 0;
         } elsif ($incompatible) {
             my @missing_modules = ();
-            foreach (keys %global_deps_hash) {
+            foreach (sort keys %global_deps_hash) {
                 push(@missing_modules, $_) if (!defined $active_modules{$_});
             };
             if (scalar @missing_modules) {
-                print_error("There are modules:\n@missing_modules\n\nthat should be built, but they are not activated. Please, verify your $source_config_file.\n");
+                push(@warnings, "The modules: \"@missing_modules\" should be have been built, but they are not activated and have been skipped. Be aware, that can cause compatibility problems. Maybe you should verify your $source_config_file.\n");
             };
         };
         foreach my $module (keys %dead_parents, keys %skip_modules) {
