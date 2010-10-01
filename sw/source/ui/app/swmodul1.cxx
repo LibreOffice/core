@@ -80,9 +80,6 @@ using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::lang;
 
 
-/*-----------------08/28/97 08:41pm-----------------
-
---------------------------------------------------*/
 void lcl_SetUIPrefs(const SwViewOption* pPref, SwView* pView, ViewShell* pSh )
 {
     // in FrameSets kann die tatsaechliche Sichtbarkeit von der Einstellung der ViewOptions abweichen
@@ -231,12 +228,9 @@ void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
     lcl_SetUIPrefs(pViewOpt, pCurrView, pSh);
 
     // zum Schluss wird das Idle-Flag wieder gesetzt
-    // #42510#
     pPref->SetIdle(sal_True);
 }
-/* -----------------------------28.09.00 12:36--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwModule::ApplyUserMetric( FieldUnit eMetric, BOOL bWeb )
 {
         SwMasterUsrPref* pPref;
@@ -272,9 +266,7 @@ void SwModule::ApplyUserMetric( FieldUnit eMetric, BOOL bWeb )
             pTmpView = SwModule::GetNextView(pTmpView);
         }
 }
-/*-- 12.11.2008 14:47:58---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwModule::ApplyRulerMetric( FieldUnit eMetric, BOOL bHorizontal, BOOL bWeb )
 {
     SwMasterUsrPref* pPref;
@@ -373,9 +365,6 @@ void SwModule::ApplyUserCharUnit(BOOL bApplyChar, BOOL bWeb)
     }
 }
 
-/*-----------------13.11.96 11.57-------------------
-
---------------------------------------------------*/
 
 SwNavigationConfig*  SwModule::GetNavigationConfig()
 {
@@ -386,9 +375,6 @@ SwNavigationConfig*  SwModule::GetNavigationConfig()
     return pNavigationConfig;
 }
 
-/*-----------------05.02.97 08.03-------------------
-
---------------------------------------------------*/
 
 SwPrintOptions*     SwModule::GetPrtOptions(sal_Bool bWeb)
 {
@@ -404,9 +390,6 @@ SwPrintOptions*     SwModule::GetPrtOptions(sal_Bool bWeb)
     return bWeb ? pWebPrtOpt : pPrtOpt;
 }
 
-/*-----------------26.06.97 07.52-------------------
-
---------------------------------------------------*/
 SwChapterNumRules*  SwModule::GetChapterNumRules()
 {
     if(!pChapterNumRules)
@@ -631,9 +614,6 @@ const Color &SwModule::GetRedlineMarkColor()
     return pModuleConfig->GetMarkAlignColor();
 }
 
-/*-----------------03.03.98 16:47-------------------
-
---------------------------------------------------*/
 const SwViewOption* SwModule::GetViewOption(sal_Bool bWeb)
 {
     return GetUsrPref( bWeb );
@@ -644,9 +624,7 @@ const String& SwModule::GetDocStatWordDelim() const
 {
     return pModuleConfig->GetWordDelimiter();
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 // Durchreichen der Metric von der ModuleConfig (fuer HTML-Export)
 sal_uInt16 SwModule::GetMetric( sal_Bool bWeb ) const
 {
@@ -665,9 +643,7 @@ sal_uInt16 SwModule::GetMetric( sal_Bool bWeb ) const
     }
     return static_cast< sal_uInt16 >(pPref->GetMetric());
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 // Update-Stati durchreichen
 sal_uInt16 SwModule::GetLinkUpdMode( sal_Bool ) const
 {
@@ -675,36 +651,28 @@ sal_uInt16 SwModule::GetLinkUpdMode( sal_Bool ) const
         GetUsrPref(sal_False);
     return (sal_uInt16)pUsrPref->GetUpdateLinkMode();
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwFldUpdateFlags SwModule::GetFldUpdateFlags( sal_Bool ) const
 {
     if(!pUsrPref)
         GetUsrPref(sal_False);
     return pUsrPref->GetFldUpdateFlags();
 }
-/* -----------------------------28.09.00 14:18--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwModule::ApplyFldUpdateFlags(SwFldUpdateFlags eFldFlags)
 {
     if(!pUsrPref)
         GetUsrPref(sal_False);
     pUsrPref->SetFldUpdateFlags(eFldFlags);
 }
-/* -----------------------------28.09.00 14:18--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwModule::ApplyLinkMode(sal_Int32 nNewLinkMode)
 {
     if(!pUsrPref)
         GetUsrPref(sal_False);
     pUsrPref->SetUpdateLinkMode(nNewLinkMode);
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwModule::CheckSpellChanges( sal_Bool bOnlineSpelling,
         sal_Bool bIsSpellWrongAgain, sal_Bool bIsSpellAllAgain, sal_Bool bSmartTags )
 {
@@ -727,8 +695,6 @@ void SwModule::CheckSpellChanges( sal_Bool bOnlineSpelling,
                     pViewShell->GetWin()->Invalidate();
             }
         }
-//      pSpell->SetSpellWrongAgain( sal_False );
-//      pSpell->SetSpellAllAgain( sal_False );
     }
 }
 

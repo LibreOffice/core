@@ -211,7 +211,6 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
     }
     if(rMedium.IsStorage())
     {
-        //SvStorageRef aStor( rMedium.GetStorage() );
         const SfxItemSet* pSet = rMedium.GetItemSet();
         const SfxPoolItem *pItem;
         if(pSet && SFX_ITEM_SET == pSet->GetItemState(SID_PASSWORD, TRUE, &pItem))
@@ -223,8 +222,6 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
         // eigene Filter ist.
         ASSERT( /*pRead != ReadSw3 || */pRead != ReadXML || pFlt->GetVersion(),
                 "Am Filter ist keine FF-Version gesetzt" );
-        //if( (pRead == ReadSw3 || pRead == ReadXML) && pFlt->GetVersion() )
-        //    aStor->SetVersion( (long)pFlt->GetVersion() );
     }
     // #i30171# set the UpdateDocMode at the SwDocShell
     SFX_ITEMSET_ARG( rMedium.GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
@@ -300,16 +297,10 @@ BOOL SwDocShell::ConvertFrom( SfxMedium& rMedium )
     SetError( nErr, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
     BOOL bOk = !IsError( nErr );
 
-    // --> OD 2006-11-07 #i59688#
-//    // StartFinishedLoading rufen. Nicht bei asynchronen Filtern!
-//    // Diese muessen das selbst rufen!
-//    if( bOk && !pDoc->IsInLoadAsynchron() )
-//        StartLoadFinishedTimer();
     if ( bOk && !pDoc->IsInLoadAsynchron() )
     {
         LoadingFinished();
     }
-    // <--
 
     pRead->setSotStorageRef(pStg); // #i45333# save sot storage ref in case of recursive calls
 
@@ -330,7 +321,7 @@ BOOL SwDocShell::Save()
     SwWait aWait( *this, TRUE );
 
     CalcLayoutForOLEObjects();  // format for OLE objets
-    // --> OD 2006-03-17 #i62875#
+    // #i62875#
     // reset compatibility flag <DoNotCaptureDrawObjsOnPage>, if possible
     if ( pWrtShell && pDoc &&
          pDoc->get(IDocumentSettingAccess::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE) &&
@@ -338,7 +329,6 @@ BOOL SwDocShell::Save()
     {
         pDoc->set(IDocumentSettingAccess::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE, false);
     }
-    // <--
 
     ULONG nErr = ERR_SWG_WRITE_ERROR, nVBWarning = ERRCODE_NONE;
     if( SfxObjectShell::Save() )
@@ -371,9 +361,6 @@ BOOL SwDocShell::Save()
             {
                 if( pDoc->ContainsMSVBasic() )
                 {
-                    //TODO/MBA: it looks as that this code can be removed!
-                    //SvxImportMSVBasic aTmp( *this, pIo->GetStorage() );
-                    //aTmp.SaveOrDelMSVBAStorage( FALSE, aEmptyStr );
                     if( SvtFilterOptions::Get()->IsLoadWordBasicStorage() )
                         nVBWarning = GetSaveWarningOfMSVBAStorage( (SfxObjectShell&) (*this) );
                     pDoc->SetContainsMSVBasic( FALSE );
@@ -461,7 +448,7 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
     }
 
     CalcLayoutForOLEObjects();  // format for OLE objets
-    // --> OD 2006-03-17 #i62875#
+    // #i62875#
     // reset compatibility flag <DoNotCaptureDrawObjsOnPage>, if possible
     if ( pWrtShell && pDoc &&
          pDoc->get(IDocumentSettingAccess::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE) &&
@@ -469,7 +456,6 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
     {
         pDoc->set(IDocumentSettingAccess::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE, false);
     }
-    // <--
 
     ULONG nErr = ERR_SWG_WRITE_ERROR, nVBWarning = ERRCODE_NONE;
     uno::Reference < embed::XStorage > xStor = rMedium.GetOutputStorage();
@@ -493,9 +479,6 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
 
         if( pDoc->ContainsMSVBasic() )
         {
-            //TODO/MBA: it looks as that this code can be removed!
-            //SvxImportMSVBasic aTmp( *this, pIo->GetStorage() );
-            //aTmp.SaveOrDelMSVBAStorage( FALSE, aEmptyStr );
             if( SvtFilterOptions::Get()->IsLoadWordBasicStorage() )
                 nVBWarning = GetSaveWarningOfMSVBAStorage( (SfxObjectShell&) *this );
             pDoc->SetContainsMSVBasic( FALSE );
@@ -641,7 +624,7 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
     pDoc->UpdateDocStat( aDocStat );
     // <--
     CalcLayoutForOLEObjects();  // format for OLE objets
-    // --> OD 2006-03-17 #i62875#
+    // #i62875#
     // reset compatibility flag <DoNotCaptureDrawObjsOnPage>, if possible
     if ( pWrtShell && pDoc &&
          pDoc->get(IDocumentSettingAccess::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE) &&
@@ -649,7 +632,6 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
     {
         pDoc->set(IDocumentSettingAccess::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE, false);
     }
-    // <--
 
     if( xWriter->IsStgWriter() &&
         ( /*xWriter->IsSw3Writer() ||*/
@@ -770,10 +752,9 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
     if ( pWrtShell )
     {
         SwWait aWait( *this, TRUE );
-        // --> OD 2009-12-31 #i106906#
+        // #i106906#
         const sal_Bool bFormerLockView = pWrtShell->IsViewLocked();
         pWrtShell->LockView( sal_True );
-        // <--
         pWrtShell->StartAllAction();
         pWrtShell->Push();
         SwWriter aWrt( rMedium, *pWrtShell, TRUE );
@@ -784,9 +765,8 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
         {
             pWrtShell->Pop(FALSE);
             pWrtShell->EndAllAction();
-            // --> OD 2009-12-31 #i106906#
+            // #i106906#
             pWrtShell->LockView( bFormerLockView );
-            // <--
         }
     }
     else
@@ -849,10 +829,6 @@ sal_Bool SwDocShell::SaveCompleted( const uno::Reference < embed::XStorage >& xS
             {
                 DBG_ERROR( "Copying of objects didn't work!" );
             }
-
-            //SvPersist* pPersist = this;
-            //SvInfoObjectRef aRef( pInfList->GetObject( --n ));
-            //pPersist->Move( &aRef, aRef->GetStorageName() );
         }
 
         DELETEZ( pOLEChildList );
@@ -944,32 +920,6 @@ Rectangle SwDocShell::GetVisArea( USHORT nAspect ) const
 
         const SwRect aPageRect = pNd->FindPageFrmRect( FALSE, 0, FALSE );
         return aPageRect.SVRect();
-
-        // Why does this have to be that complicated? I replaced this by the
-        // call of FindPageFrmRect():
-        /*
-        //PageDesc besorgen, vom ersten Absatz oder den default.
-        const SwFmtPageDesc &rDesc = pNd->GetSwAttrSet().GetPageDesc();
-        const SwPageDesc* pDesc = rDesc.GetPageDesc();
-        if( !pDesc )
-            pDesc = &const_cast<const SwDoc *>(pDoc)->GetPageDesc( 0 );
-
-        //Das Format wird evtl. von der virtuellen Seitennummer bestimmt.
-        const USHORT nPgNum = rDesc.GetNumOffset();
-        const BOOL bOdd = nPgNum % 2 ? TRUE : FALSE;
-        const SwFrmFmt *pFmt = bOdd ? pDesc->GetRightFmt() : pDesc->GetLeftFmt();
-        if ( !pFmt ) //#40568#
-            pFmt = bOdd ? pDesc->GetLeftFmt() : pDesc->GetRightFmt();
-
-        if ( pFmt->GetFrmSize().GetWidth() == LONG_MAX )
-            //Jetzt wird es aber Zeit fuer die Initialisierung
-            pDoc->getPrinter( true );
-
-        const SwFmtFrmSize& rFrmSz = pFmt->GetFrmSize();
-        const Size aSz( rFrmSz.GetWidth(), rFrmSz.GetHeight() );
-        const Point aPt( DOCUMENTBORDER, DOCUMENTBORDER );
-        const Rectangle aRect( aPt, aSz );
-        return aRect;*/
     }
     return SfxObjectShell::GetVisArea( nAspect );
 }
@@ -1048,16 +998,6 @@ void SwDocShell::GetState(SfxItemSet& rSet)
     {
         switch (nWhich)
         {
-        // MT: MakroChosser immer enablen, weil Neu moeglich
-        // case SID_BASICCHOOSER:
-        // {
-        //  StarBASIC* pBasic = GetBasic();
-        //  StarBASIC* pAppBasic = SFX_APP()->GetBasic();
-        //  if ( !(pBasic->GetModules()->Count() ||
-        //      pAppBasic->GetModules()->Count()) )
-        //          rSet.DisableItem(nWhich);
-        // }
-        // break;
         case SID_PRINTPREVIEW:
         {
             BOOL bDisable = IsInPlaceActive();
@@ -1210,23 +1150,8 @@ void SwDocShell::LoadingFinished()
     // Thus, manuell modify the document, if its modified and its links are updated
     // before <FinishedLoading(..)> is called.
     const bool bHasDocToStayModified( pDoc->IsModified() && pDoc->LinksUpdated() );
-//    // --> OD 2005-02-11 #i38810# - disable method <SetModified(..)>, if document
-//    // has stay in modified state, due to the update of its links during load.
-//    bool bResetEnableSetModified(false);
-//    if ( IsEnableSetModified() &&
-//         pDoc->IsModified() && pDoc->LinksUpdated() )
-//    {
-//        EnableSetModified( FALSE );
-//        bResetEnableSetModified = true;
-//    }
     // <--
     FinishedLoading( SFX_LOADED_ALL );
-//    // --> OD 2005-02-11 #i38810#
-//    if ( bResetEnableSetModified )
-//    {
-//        EnableSetModified( TRUE );
-//    }
-//    // <--
     SfxViewFrame* pVFrame = SfxViewFrame::GetFirst(this);
     if(pVFrame)
     {
@@ -1235,12 +1160,11 @@ void SwDocShell::LoadingFinished()
             ((SwSrcView*)pShell)->Load(this);
     }
 
-    // --> OD 2007-10-08 #i38810#
+    // #i38810#
     if ( bHasDocToStayModified && !pDoc->IsModified() )
     {
         pDoc->SetModified();
     }
-    // <--
 }
 
 // eine Uebertragung wird abgebrochen (wird aus dem SFX gerufen)
@@ -1326,9 +1250,6 @@ uno::Reference< frame::XController >
     return aRet;
 }
 
-/* -----------------------------12.02.01 12:08--------------------------------
-
- ---------------------------------------------------------------------------*/
 static const char* pEventNames[] =
 {
     "OnPageCountChange",

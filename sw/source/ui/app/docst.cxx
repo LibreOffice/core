@@ -79,9 +79,8 @@
 #include "app.hrc"
 #include <fmtui.hrc>
 #include "swabstdlg.hxx"
-// --> OD 2008-03-27 #refactorlists#
+
 #include <list.hxx>
-// <--
 
 #include <paratr.hxx>   //#outline level,add by zhaojianwei
 
@@ -635,18 +634,6 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
         xTmp->MergeIndentAttrsOfListStyle( rSet );
         // <--
     }
-/*  else if( SFX_STYLE_FAMILY_FRAME == nFamily )
-    {
-        // Auskommentiert wegen Bug #45776 (per default keine Breite&Groesse in Rahmenvorlagen)
-        SfxItemSet& rSet = aTmp.GetItemSet();
-        if( SFX_ITEM_SET != rSet.GetItemState( RES_FRM_SIZE ))
-        {
-            // dann sollten wir spaetesten hier eines anlegen
-            SwFrmValid aFrmDefValues;
-            rSet.Put( SwFmtFrmSize( ATT_VAR_SIZE, aFrmDefValues.nWidth,
-                                    aFrmDefValues.nHeight ));
-        }
-    }*/
     else if( SFX_STYLE_FAMILY_CHAR == nFamily )
     {
         SfxItemSet& rSet = xTmp->GetItemSet();
@@ -759,8 +746,6 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
         {
             if( bNew )
             {
-                // #116530#
-                //pBasePool->Erase( &aTmp );
                 GetWrtShell()->Undo(UNDO_EMPTY, 1);
                 pDoc->ClearRedo();
             }
@@ -1052,10 +1037,9 @@ USHORT SwDocShell::UpdateStyle(const String &rName, USHORT nFamily, SwWrtShell* 
                 0 != ( pCurRule = pCurrWrtShell->GetCurNumRule() ))
             {
                 SwNumRule aRule( *pCurRule );
-                // --> OD 2008-07-08 #i91400#
+                // #i91400#
                 aRule.SetName( pStyle->GetNumRule()->GetName(),
                                *(pCurrWrtShell->GetDoc()) );
-                // <--
                 pCurrWrtShell->ChgNumRuleFmts( aRule );
             }
         }
@@ -1144,20 +1128,6 @@ USHORT SwDocShell::MakeByExample( const String &rName, USHORT nFamily,
                 SwFrmFmt* pFFmt = pCurrWrtShell->GetCurFrmFmt();
                 pFrm->SetDerivedFrom( pFFmt );
 
-                // JP 10.06.98: nur automatische Orientierungen uebernehmen
-/*              #61359# jetzt auch wieder alle Orientierungen
-                const SfxPoolItem* pItem;
-                if( SFX_ITEM_SET == aSet.GetItemState( RES_VERT_ORIENT,
-                    FALSE, &pItem ) &&
-                    text::VertOrientation::NONE == ((SwFmtVertOrient*)pItem)->GetVertOrient())
-                    aSet.ClearItem( RES_VERT_ORIENT );
-
-                if( SFX_ITEM_SET == aSet.GetItemState( RES_HORI_ORIENT,
-                    FALSE, &pItem ) &&
-                    text::HoriOrientation::NONE == ((SwFmtHoriOrient*)pItem)->GetHoriOrient())
-                    aSet.ClearItem( RES_HORI_ORIENT );
- */
-
                 pFrm->SetFmtAttr( aSet );
                     // Vorlage auch anwenden, um harte Attributierung
                     // zu entfernen
@@ -1212,10 +1182,9 @@ USHORT SwDocShell::MakeByExample( const String &rName, USHORT nFamily,
 
             SwNumRule aRule( *pCurrWrtShell->GetCurNumRule() );
             String sOrigRule( aRule.GetName() );
-            // --> OD 2008-07-08 #i91400#
+            // #i91400#
             aRule.SetName( pStyle->GetNumRule()->GetName(),
                            *(pCurrWrtShell->GetDoc()) );
-            // <--
             pCurrWrtShell->ChgNumRuleFmts( aRule );
 
             pCurrWrtShell->ReplaceNumRule( sOrigRule, aRule.GetName() );

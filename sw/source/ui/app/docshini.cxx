@@ -105,9 +105,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
-/*-----------------21.09.96 15.29-------------------
-
---------------------------------------------------*/
 
 
 /*--------------------------------------------------------------------
@@ -133,13 +130,6 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
             GetDoc()->set(IDocumentSettingAccess::GLOBAL_DOCUMENT, true);       // Globaldokument
 
 
-/*
-        //JP 12.07.95: so einfach waere es fuer die neu Mimik
-        pDoc->SetDefault( SvxTabStopItem( 1,
-                    GetStar Writer App()->GetUsrPref()->GetDefTabDist(),
-                    SVX_TAB_ADJUST_DEFAULT,
-                    RES_PARATR_TABSTOP));
-*/
         if ( GetCreateMode() ==  SFX_CREATE_MODE_EMBEDDED )
             SwTransferable::InitOle( this, *pDoc );
 
@@ -458,9 +448,7 @@ SwDocShell::SwDocShell( SwDoc *pD, SfxObjectCreateMode eMode ):
 
     delete pOLEChildList;
 }
-/* -----------------------------10.09.2001 15:59------------------------------
 
- ---------------------------------------------------------------------------*/
 void  SwDocShell::Init_Impl()
 {
     SetPool(&SW_MOD()->GetPool());
@@ -591,9 +579,6 @@ sal_Bool  SwDocShell::Load( SfxMedium& rMedium )
         sal_uInt32 nErr = ERR_SWG_READ_ERROR;
         switch( GetCreateMode() )
         {
-//      case SFX_CREATE_MODE_INTERNAL:
-//          nErr = 0;
-//          break;
 
         case SFX_CREATE_MODE_ORGANIZER:
             {
@@ -662,17 +647,11 @@ sal_Bool  SwDocShell::Load( SfxMedium& rMedium )
         SetError( nErr, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
         bRet = !IsError( nErr );
 
-        // --> OD 2006-11-07 #i59688#
-//        // StartFinishedLoading rufen.
-//        if( bRet && !pDoc->IsInLoadAsynchron() &&
-//            GetCreateMode() == SFX_CREATE_MODE_STANDARD )
-//            StartLoadFinishedTimer();
         if ( bRet && !pDoc->IsInLoadAsynchron() &&
              GetCreateMode() == SFX_CREATE_MODE_STANDARD )
         {
             LoadingFinished();
         }
-        // <--
 
         // SfxProgress unterdruecken, wenn man Embedded ist
         SW_MOD()->SetEmbeddedLoadSave( sal_False );
@@ -697,7 +676,6 @@ sal_Bool  SwDocShell::LoadFrom( SfxMedium& rMedium )
 
     do {        // middle check loop
         sal_uInt32 nErr = ERR_SWG_READ_ERROR;
-        //const String& rNm = pStor->GetName();
         String aStreamName;
         aStreamName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("styles.xml"));
         uno::Reference < container::XNameAccess > xAccess( rMedium.GetStorage(), uno::UNO_QUERY );
@@ -720,24 +698,6 @@ sal_Bool  SwDocShell::LoadFrom( SfxMedium& rMedium )
         else
         {
             DBG_ERROR("Code removed!");
-        /*
-        //TODO/LATER: looks like some binary stuff?!
-            // sollte es sich um eine 2. Vrolage handeln ??
-            if( SvStorage::IsStorageFile( rNm ) )
-                break;
-
-            const SfxFilter* pFltr = SwIoSystem::GetFileFilter( rNm, aEmptyStr );
-            if( !pFltr || !pFltr->GetUserData().EqualsAscii( FILTER_SWG ))
-                break;
-
-            SfxMedium aMed( rNm, STREAM_STD_READ, FALSE );
-            if( 0 == ( nErr = aMed.GetInStream()->GetError() ) )
-            {
-                SwWait aWait( *this, sal_True );
-                SwReader aRead( aMed, rNm, pDoc );
-                nErr = aRead.Read( *ReadSwg );
-            }
-         */
         }
 
         SetError( nErr, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );

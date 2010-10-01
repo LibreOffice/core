@@ -100,10 +100,6 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
-/* -----------------12.02.99 12:28-------------------
- *
- * --------------------------------------------------*/
-
 SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
 {
     BOOL bTextDialog = (nId == SID_SW_EDITOPTIONS) ? TRUE : FALSE;
@@ -182,15 +178,6 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
     }
     else
     {
-/*      Der Drucker wird jetzt von der TabPage erzeugt und auch geloescht
- *      SfxItemSet* pSet = new SfxItemSet( SFX_APP()->GetPool(),
-                    SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
-                    SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
-                    0 );
-
-        pPrt = new SfxPrinter(pSet);
-        pRet->Put(SwPtrItem(FN_PARAM_PRINTER, pPrt));*/
-
         SvtLinguConfig aLinguCfg;
         Locale aLocale;
         LanguageType nLang;
@@ -244,10 +231,7 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
             pRet->Put(SfxUInt16Item( SID_ATTR_DEFTABSTOP, (UINT16)pPref->GetDefTab()));
     }
 
-    /*-----------------01.02.97 11.13-------------------
-    Optionen fuer GridTabPage
-    --------------------------------------------------*/
-
+    // Options for GridTabPage
     SvxGridItem aGridItem( SID_ATTR_GRID_OPTIONS);
 
     aGridItem.SetUseGridSnap( aViewOpt.IsSnap());
@@ -263,9 +247,7 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
 
     pRet->Put(aGridItem);
 
-    /*-----------------01.02.97 13.02-------------------
-        Optionen fuer PrintTabPage
-    --------------------------------------------------*/
+    // Options for PrintTabPage
     SwPrintData* pOpt = pAppView ?
                         pAppView->GetWrtShell().getIDocumentDeviceAccess()->getPrintData() :
                         0;
@@ -276,18 +258,14 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
     SwAddPrinterItem aAddPrinterItem (FN_PARAM_ADDPRINTER, *pOpt );
     pRet->Put(aAddPrinterItem);
 
-    /*-----------------01.02.97 13.12-------------------
-        Optionen fuer Web-Hintergrund
-    --------------------------------------------------*/
+    // Options for Web background
     if(!bTextDialog)
     {
         pRet->Put(SvxBrushItem(aViewOpt.GetRetoucheColor(), RES_BACKGROUND));
     }
 
 #ifdef DBG_UTIL
-    /*-----------------01.02.97 13.02-------------------
-        Test-Optionen
-    --------------------------------------------------*/
+        // Test options
         SwTestItem aTestItem(FN_PARAM_SWTEST);
         aTestItem.bTest1 = aViewOpt.IsTest1();
         aTestItem.bTest2 = aViewOpt.IsTest2();
@@ -301,17 +279,12 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
         aTestItem.bTest10 = aViewOpt.IsTest10();
         pRet->Put(aTestItem);
 #endif
-    /*-----------------01.02.97 13.04-------------------
 
-    --------------------------------------------------*/
     if(!bTextDialog)
         pRet->Put(SfxUInt16Item(SID_HTML_MODE, HTMLMODE_ON));
-//  delete pPrt;
     return pRet;
 }
-/* -----------------12.02.99 12:28-------------------
- *
- * --------------------------------------------------*/
+
 void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
 {
     BOOL bTextDialog = nId == SID_SW_EDITOPTIONS;
@@ -323,7 +296,7 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
         // the text dialog mustn't apply data to the web view and vice versa
         BOOL bWebView = 0 != PTR_CAST(SwWebView, pAppView);
         if( (bWebView == bTextDialog))
-            pAppView = 0; //
+            pAppView = 0;
     }
 
     SwViewOption aViewOpt = *GetUsrPref(!bTextDialog);
@@ -524,9 +497,7 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
     ApplyUsrPref( aViewOpt, pAppView,
                  bTextDialog? VIEWOPT_DEST_TEXT : VIEWOPT_DEST_WEB);
 }
-/* -----------------12.02.99 12:28-------------------
- *
- * --------------------------------------------------*/
+
 SfxTabPage* SwModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItemSet& rSet )
 {
     SfxTabPage* pRet = NULL;

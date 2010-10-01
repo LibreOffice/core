@@ -215,9 +215,6 @@ void SwModule::StateOther(SfxItemSet &rSet)
     }
 }
 
-/*-- 06.04.2004 15:21:43---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwView* lcl_LoadDoc(SwView* pView, const String& rURL)
 {
     SwView* pNewView = 0;
@@ -701,14 +698,6 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             SwWrtShell* pWrtSh = pDocSh ? pDocSh->GetWrtShell() : 0;
             switch( rEvHint.GetEventId() )
             {
-/*          MA 07. Mar. 96: UpdateInputFlds() nur noch bei Dokument neu.
-                                (Und bei Einfuegen Textbaust.)
-                case SFX_EVENT_OPENDOC:
-                // dann am aktuellen Dokument die Input-Fedler updaten
-                if( pWrtSh )
-                    pWrtSh->UpdateInputFlds();
-                break;
-*/
             case SFX_EVENT_CREATEDOC:
                 // alle FIX-Date/Time Felder auf akt. setzen
                 if( pWrtSh )
@@ -872,18 +861,13 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, sal
 
 }
 
-/* -----------------------------20.02.01 12:43--------------------------------
-
- ---------------------------------------------------------------------------*/
 SwDBConfig* SwModule::GetDBConfig()
 {
     if(!pDBConfig)
         pDBConfig = new SwDBConfig;
     return pDBConfig;
 }
-/* -----------------------------11.04.2002 15:27------------------------------
 
- ---------------------------------------------------------------------------*/
 svtools::ColorConfig& SwModule::GetColorConfig()
 {
     if(!pColorConfig)
@@ -894,9 +878,7 @@ svtools::ColorConfig& SwModule::GetColorConfig()
     }
     return *pColorConfig;
 }
-/* -----------------------------06.05.2002 09:42------------------------------
 
- ---------------------------------------------------------------------------*/
 SvtAccessibilityOptions& SwModule::GetAccessibilityOptions()
 {
     if(!pAccessibilityOptions)
@@ -906,9 +888,7 @@ SvtAccessibilityOptions& SwModule::GetAccessibilityOptions()
     }
     return *pAccessibilityOptions;
 }
-/* -----------------06.05.2003 14:52-----------------
 
- --------------------------------------------------*/
 SvtCTLOptions& SwModule::GetCTLOptions()
 {
     if(!pCTLOptions)
@@ -918,9 +898,7 @@ SvtCTLOptions& SwModule::GetCTLOptions()
     }
     return *pCTLOptions;
 }
-/* -----------------07.07.2003 09:31-----------------
 
- --------------------------------------------------*/
 SvtUserOptions& SwModule::GetUserOptions()
 {
     if(!pUserOptions)
@@ -930,9 +908,7 @@ SvtUserOptions& SwModule::GetUserOptions()
     }
     return *pUserOptions;
 }
-/* -----------------18.07.2003 13:31-----------------
 
- --------------------------------------------------*/
 SvtUndoOptions& SwModule::GetUndoOptions()
 {
     if(!pUndoOptions)
@@ -942,9 +918,7 @@ SvtUndoOptions& SwModule::GetUndoOptions()
     }
     return *pUndoOptions;
 }
-/*-----------------30.01.97 08.30-------------------
 
---------------------------------------------------*/
 const SwMasterUsrPref *SwModule::GetUsrPref(sal_Bool bWeb) const
 {
     SwModule* pNonConstModule = (SwModule*)this;

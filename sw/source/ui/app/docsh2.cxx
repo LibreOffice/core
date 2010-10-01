@@ -219,8 +219,6 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if( !pDoc )
     {
-//MA: Kommt bei der OLE-Registration vor!
-//      ASSERT( !this, "DocShell ist nicht richtig initialisiert!" );
         return ;
     }
 
@@ -274,16 +272,14 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 const bool bResetModified = IsEnableSetModified();
                 if ( bResetModified )
                     EnableSetModified( FALSE );
-                // --> OD 2005-02-01 #i41679#
+                // #i41679#
                 const bool bIsDocModified = pDoc->IsModified();
-                // <--
 
                 pDoc->DocInfoChgd( );
 
-                // --> OD 2005-02-01 #i41679#
+                // #i41679#
                 if ( !bIsDocModified )
                     pDoc->ResetModified();
-                // <--
                 if ( bResetModified )
                     EnableSetModified( TRUE );
             }
@@ -457,12 +453,6 @@ BOOL SwDocShell::Insert( SfxObjectShell &rSource,
             // Andere Vorlagen werden nicht angezeigt.
             rIdx1 = rIdx2 = INDEX_IGNORE;
         }
-
-/*        pMyPool->Count();       //interne Liste neu fuellen lassen!!!!!
-
-        // suchen, um die richige Insert-Position returnen zu koennen
-        pMyPool->Find( rOldName, SFX_STYLE_FAMILY_ALL, nMySrchMask );
-        rIdx2 = pMyPool->GetFindPos();*/
 
         // wer bekommt den Neuen als Parent? wer benutzt den Neuen als Follow?
         // (immer nur ueber die Instanziierten!!!)
@@ -655,8 +645,6 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
             // SMARTTAGS
             pAFlags->pSmartTagMgr = &SwSmartTagMgr::Get();
-
-            //pApp->ExecuteSlot(aAppReq);
 
             SfxItemSet aSet( pApp->GetPool(), SID_AUTO_CORRECT_DLG, SID_AUTO_CORRECT_DLG, SID_OPEN_SMARTTAGOPTIONS, SID_OPEN_SMARTTAGOPTIONS, 0 );
             aSet.Put( aSwOptions );
@@ -961,24 +949,6 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         nSlot = SID_VIEWSHELL0;
                     }
                 }
-/*   OS 10.04.97 14.20: Im Web-Writer gibt es keinen Unterschied zwischen
-                        Export in den SourceMode und dem Speichern des Docs
-                else if(IsModified())
-                {
-                    USHORT nRet = QueryBox( SFX_APPWINDOW ,SW_RES(MSG_SAVE_HTML_QUERY)).Execute();
-                    if(RET_YES == nRet)
-                    {
-                        S F X _DISPATCHER().Execute(SID_SAVEDOC,
-                                    SFX_CALLMODE_SYNCHRON);
-                        // der ReturnValue von SID_SAVEDOC ist etwas schwer verstaendlich
-                        if(IsModified())
-                            nSlot = 0;
-                    }
-                    else if( RET_CANCEL == nRet )
-                    {
-                        nSlot = 0;
-                    }
-                }*/
                 if(nSlot)
                     pViewFrm->GetDispatcher()->Execute(nSlot, SFX_CALLMODE_SYNCHRON);
                 if(bSetModified)
@@ -1260,7 +1230,6 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     nHelpIds[7] = 0;
 
                     aDlgHelper.SetControlHelpIds( nControlIds, nHelpIds );
-//                    aDlgHelper.SetDialogHelpId( bCreateHtml ? HID_SEND_HTML_DIALOG : HID_SEND_MASTER_DIALOG );
 
                     uno::Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
 
@@ -1302,44 +1271,6 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     {
                         uno::Reference<XFilePickerControlAccess> xCtrlAcc(xFP, UNO_QUERY);
 
-                //#removed by zhaojianwei
-
-        //             const USHORT nCount = pDoc->GetTxtFmtColls()->Count();
-        //                Sequence<OUString> aListBoxEntries(nCount);
-        //                OUString* pEntries = aListBoxEntries.getArray();
-        //                sal_Int32 nIdx = 0;
-        //                sal_Int16 nSelect = 0;
-        //                OUString sStartTemplate;
-        //                SwTxtFmtColl *pFnd = 0, *pAny = 0;
-        //                for(USHORT i = 0; i < nCount; ++i)
-        //                {
-        //                    SwTxtFmtColl &rTxtColl =
-        //                                    *pDoc->GetTxtFmtColls()->GetObject( i );
-        //                    if( !rTxtColl.IsDefault() && rTxtColl.IsAtDocNodeSet() )
-        //                    {
-        //                        //if( MAXLEVEL >= rTxtColl.GetOutlineLevel() && ( !pFnd ||            //#outline level,zhaojianwei
-                                //if(  rTxtColl.IsAssignedToListLevelOfOutlineStyle()  && ( !pFnd ||    //<-end,zhaojianwei
-        //                            pFnd->GetAssignedOutlineStyleLevel() > rTxtColl.GetAssignedOutlineStyleLevel() ))
-        //                        {
-        //                                nSelect = (sal_Int16)nIdx;
-        //                                pFnd = &rTxtColl;
-        //                                sStartTemplate = rTxtColl.GetName();
-        //                        }
-        //                        else if( !pAny )
-        //                            pAny = &rTxtColl;
-        //                        //pEntries[nIdx++] = rTxtColl.GetName();          //#outline level,remove by zhaojianwei
-        //                        pEntries[nIdx++] = sStyles + rTxtColl.GetName();  //#outline level,add by zhaojianwei
-        //                    }
-        //                }
-        //                if(!sStartTemplate.getLength() && pAny)
-        //                    sStartTemplate = pAny->GetName();
-        //                aListBoxEntries.realloc(nIdx);
-                //<-end,zhaojianwei
-
-
-                    //#outline level,add by zhaojianwei
-                    /////////////////////////////////////////////////////////////////////
-
                         bool    bOutline[MAXLEVEL] = {false};
                         const SwOutlineNodes& rOutlNds = pDoc->GetNodes().GetOutLineNds();
                         if( rOutlNds.Count() )
@@ -1378,8 +1309,6 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
                         aListBoxEntries.realloc(nIdx);
                         sal_Int16 nSelect = 0;
-                     /////////////////////////////////////////////////////////////////////
-                    //<-end,zhaojianwei
 
                         try
                         {
@@ -1409,8 +1338,6 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                 ListboxControlActions::GET_SELECTED_ITEM );
                             OUString sTmpl;
                             aTemplateValue >>= sTmpl;
-                            //aTemplateName = sTmpl;    //#outline level,removed by zhaojianwei
-                            //#outline level,add by zhaojianwei
 
                             sal_Int32 nColonPos = sTmpl.indexOf( sal_Unicode(':') );
                             OUString sPrefix = sTmpl.copy( 0L, nColonPos );
@@ -1423,7 +1350,6 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                 nTemplateOutlineLevel = ( sTmpl.copy( 15L )).toInt32(); //get string behind "Outline: Leve  ";
                                 bCreateByOutlineLevel = true;
                             }
-                            //<-end,zhaojianwei
 
                             if ( aFileName.Len() )
                             {
@@ -1435,22 +1361,15 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     }
                 }
 
-                //const SwTxtFmtColl* pSplitColl = 0;       //#outline level,removed by zhaojianwei
-    //            if ( aTemplateName.Len() )
-    //                pSplitColl = pDoc->FindTxtFmtCollByName(aTemplateName);
-                                                            //<-end,zhaojianwei
                 if( aFileName.Len() )
                 {
                     if( PrepareClose( FALSE ) )
                     {
                         SwWait aWait( *this, TRUE );
 
-                        //bDone = bCreateHtml           //#outline level,removed by zhaojianwei
-                        //  ? pDoc->GenerateHTMLDoc( aFileName, pSplitColl )
-                        //  : pDoc->GenerateGlobalDoc( aFileName, pSplitColl );
-                        if ( bCreateByOutlineLevel )    //add by zhaojianwei
+                        if ( bCreateByOutlineLevel )
                         {
-                            bDone = bCreateHtml         //#outline level,removed by zhaojianwei
+                            bDone = bCreateHtml
                                 ? pDoc->GenerateHTMLDoc( aFileName, nTemplateOutlineLevel )
                                 : pDoc->GenerateGlobalDoc( aFileName, nTemplateOutlineLevel );
                         }
@@ -1459,11 +1378,10 @@ void SwDocShell::Execute(SfxRequest& rReq)
                             const SwTxtFmtColl* pSplitColl = 0;
                             if ( aTemplateName.Len() )
                                 pSplitColl = pDoc->FindTxtFmtCollByName(aTemplateName);
-                            bDone = bCreateHtml         //#outline level,removed by zhaojianwei
+                            bDone = bCreateHtml
                                 ? pDoc->GenerateHTMLDoc( aFileName, pSplitColl )
                                 : pDoc->GenerateGlobalDoc( aFileName, pSplitColl );
                         }
-                        //<-end,zhaojianwei
                         if( bDone )
                         {
                             SfxStringItem aName( SID_FILE_NAME, aFileName );
@@ -1647,7 +1565,7 @@ void SwDocShell::UpdateChildWindows()
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
-// --> OD 2005-08-02 #i48748#
+// #i48748#
 class SwReloadFromHtmlReader : public SwReader
 {
     public:
@@ -1659,7 +1577,7 @@ class SwReloadFromHtmlReader : public SwReader
             SetBaseURL( _rFilename );
         }
 };
-// <--
+
 void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView )
 {
     BOOL bModified = IsModified();
@@ -1766,9 +1684,6 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
         pDoc->ResetModified();
 }
 
-/* -----------------------------14.12.99 16:52--------------------------------
-
- ---------------------------------------------------------------------------*/
 void    SwDocShell::ToggleBrowserMode(BOOL bSet, SwView* _pView )
 {
     GetDoc()->set(IDocumentSettingAccess::BROWSE_MODE, bSet );
@@ -1851,7 +1766,6 @@ ULONG SwDocShell::LoadStylesFromFile( const String& rURL,
     SwPaM* pPam = 0;
 
     // Filter bestimmen:
-//  const SfxFilter* pFlt = SwIoSystem::GetFileFilter( rURL, aEmptyStr );
     String sFactory(String::CreateFromAscii(SwDocShell::Factory().GetShortName()));
     SfxFilterMatcher aMatcher( sFactory );
 
@@ -1882,9 +1796,6 @@ ULONG SwDocShell::LoadStylesFromFile( const String& rURL,
     }
     else if( pFlt )
     {
-//      if( pFlt->GetUserData().EqualsAscii( FILTER_SWG ) ||
-//          pFlt->GetUserData().EqualsAscii( FILTER_SWGV ))
-//          pRead = ReadSwg;
         pReader = new SwReader( aMed, rURL, pDoc );
     }
 

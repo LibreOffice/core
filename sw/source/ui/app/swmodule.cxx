@@ -149,7 +149,6 @@
 #include <barcfg.hxx>
 #endif
 #include <svx/rubydialog.hxx>
-// OD 14.02.2003 #107424#
 #include <svtools/colorcfg.hxx>
 
 #include <editeng/acorrcfg.hxx>
@@ -394,7 +393,6 @@ void SwDLL::RegisterControls()
     SvxLineEndToolBoxControl::RegisterControl(SID_ATTR_LINEEND_STYLE, pMod );
 
     SvxFontNameToolBoxControl::RegisterControl(SID_ATTR_CHAR_FONT, pMod );
-//  SvxFontHeightToolBoxControl::RegisterControl(SID_ATTR_CHAR_FONTHEIGHT, pMod );
     SvxFontColorToolBoxControl::RegisterControl(SID_ATTR_CHAR_COLOR, pMod );
     SvxFontColorExtToolBoxControl::RegisterControl(SID_ATTR_CHAR_COLOR2, pMod );
     SvxFontColorExtToolBoxControl::RegisterControl(SID_ATTR_CHAR_COLOR_BACKGROUND, pMod );
@@ -441,7 +439,6 @@ void SwDLL::RegisterControls()
     SwRedlineAcceptChild::RegisterChildWindow( sal_False, pMod );
     SwSyncChildWin::RegisterChildWindow( sal_True, pMod );
     SwMailMergeChildWindow::RegisterChildWindow( sal_False, pMod );
-//    SwSendMailChildWindow::RegisterChildWindow( sal_False, pMod );
     SwInsertIdxMarkWrapper::RegisterChildWindow( sal_False, pMod );
     SwInsertAuthMarkWrapper::RegisterChildWindow( sal_False, pMod );
     SvxRubyChildWindow::RegisterChildWindow( sal_False, pMod);
@@ -481,18 +478,13 @@ void SwDLL::RegisterControls()
 |*
 \************************************************************************/
 
-/* -----------------20.04.99 10:46-------------------
- *
- * --------------------------------------------------*/
 void    SwModule::InitAttrPool()
 {
     DBG_ASSERT(!pAttrPool, "Pool ist schon da!");
     pAttrPool = new SwAttrPool(0);
     SetPool(pAttrPool);
 }
-/* -----------------20.04.99 10:46-------------------
- *
- * --------------------------------------------------*/
+
 void    SwModule::RemoveAttrPool()
 {
     SetPool(0);

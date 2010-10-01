@@ -37,9 +37,7 @@
 #include <unotools/syslocale.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/numitem.hxx>
-// --> OD 2008-02-13 #newlistlevelattrs#
 #include <editeng/lrspitem.hxx>
-// <--
 #include <fmtcol.hxx>
 #include <uitool.hxx>
 #include <swmodule.hxx>
@@ -66,10 +64,8 @@
 #include <numrule.hxx>
 #include <fmthdft.hxx>
 #include <svx/svxids.hrc>
-// --> OD 2008-02-12 #newlistlevelattrs#
 #include <SwRewriter.hxx>
 #include <undobj.hxx>
-// <--
 
 // MD 06.02.95: Die Formatnamen in der Liste aller Namen haben als
 // erstes Zeichen die Familie:
@@ -393,8 +389,6 @@ void SwPoolFmtList::Erase()
     DeleteAndDestroy( 0, Count() );
 }
 
-/*  */
-
 /*--------------------------------------------------------------------
     Beschreibung:  UI-seitige implementierung von StyleSheets
                    greift auf die Core-Engine zu
@@ -417,9 +411,7 @@ SwDocStyleSheet::SwDocStyleSheet(   SwDoc&          rDocument,
     aCoreSet(GetPool().GetPool(),
             RES_CHRATR_BEGIN,       RES_CHRATR_END - 1,
             RES_PARATR_BEGIN,       RES_PARATR_END - 1,
-            // --> OD 2008-02-25 #refactorlists#
             RES_PARATR_LIST_BEGIN,  RES_PARATR_LIST_END - 1,
-            // <--
             RES_FRMATR_BEGIN,       RES_FRMATR_END - 1,
             RES_UNKNOWNATR_BEGIN,   RES_UNKNOWNATR_END-1,
             SID_ATTR_PAGE,          SID_ATTR_PAGE_EXT1,
@@ -758,9 +750,6 @@ String  SwDocStyleSheet::GetDescription(SfxMapUnit eUnit)
     }
     else if( SFX_STYLE_FAMILY_PSEUDO == nFamily )
     {
-//      if( pNumRule )
-//          return pNumRule->GetName();
-        //os: was sollte man bei Numerierungen schon anzeigen?
         return aEmptyStr;
     }
 
@@ -839,7 +828,6 @@ BOOL  SwDocStyleSheet::SetName( const String& rStr)
                 //PageDesc setzen - mit vorherigem kopieren - ist fuer das
                 //setzen des Namens wohl nicht notwendig. Deshalb erlauben
                 //wir hier mal einen cast.
-                // -> #116530#
                 SwPageDesc aPageDesc(*((SwPageDesc*)pDesc));
                 String aOldName(aPageDesc.GetName());
 
@@ -849,7 +837,6 @@ BOOL  SwDocStyleSheet::SetName( const String& rStr)
                 rDoc.DoUndo(aOldName.Len() > 0);
                 rDoc.ChgPageDesc(aOldName, aPageDesc);
                 rDoc.DoUndo(bDoesUndo);
-                // <- #116530#
 
                 rDoc.SetModified();
                 bChg = TRUE;
@@ -858,7 +845,6 @@ BOOL  SwDocStyleSheet::SetName( const String& rStr)
         case SFX_STYLE_FAMILY_PSEUDO:
             ASSERT(pNumRule, "NumRule fehlt!");
 
-            // -> #106897#
             if (pNumRule)
             {
                 String aOldName = pNumRule->GetName();
@@ -876,15 +862,13 @@ BOOL  SwDocStyleSheet::SetName( const String& rStr)
                 }
                 else
                 {
-                    // --> OD 2008-07-08 #i91400#
+                    // #i91400#
                     ((SwNumRule*)pNumRule)->SetName( rStr, rDoc );
-                    // <--
                     rDoc.SetModified();
 
                     bChg = TRUE;
                 }
             }
-            // <- #106897#
 
             break;
 
@@ -1089,7 +1073,6 @@ SfxItemSet&   SwDocStyleSheet::GetItemSet()
     return aCoreSet;
 }
 
-// --> OD 2008-02-13 #newlistlevelattrs#
 void SwDocStyleSheet::MergeIndentAttrsOfListStyle( SfxItemSet& rSet )
 {
     if ( nFamily != SFX_STYLE_FAMILY_PARA )
@@ -1120,13 +1103,11 @@ void SwDocStyleSheet::MergeIndentAttrsOfListStyle( SfxItemSet& rSet )
         }
     }
 }
-// <--
 
 /*--------------------------------------------------------------------
     Beschreibung:   ItemSet setzen
  --------------------------------------------------------------------*/
 
-// --> OD 2008-02-12 #newlistlevelattrs#
 // handling of parameter <bResetIndentAttrsAtParagraphStyle>
 void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
                                   const bool bResetIndentAttrsAtParagraphStyle )
@@ -1139,14 +1120,12 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
 
     ASSERT( &rSet != &aCoreSet, "SetItemSet mit eigenem Set ist nicht erlaubt" );
 
-    // --> OD 2008-02-12 #newlistlevelattrs#
     if ( rDoc.DoesUndo() )
     {
         SwRewriter aRewriter;
         aRewriter.AddRule( UNDO_ARG1, GetName() );
         rDoc.StartUndo( UNDO_INSFMTATTR, &aRewriter );
     }
-    // <--
 
     SwFmt* pFmt = 0;
     SwPageDesc* pNewDsc = 0;
@@ -1205,11 +1184,10 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
                 if( pColl != &pColl->GetNextTxtFmtColl() )
                     pCColl->SetNextTxtFmtColl( pColl->GetNextTxtFmtColl() );
 
-                //pCColl->SetOutlineLevel( pColl->GetOutlineLevel() );//#outline level,zhaojianwei
                 if( pColl->IsAssignedToListLevelOfOutlineStyle())
                     pCColl->AssignToListLevelOfOutlineStyle(pColl->GetAssignedOutlineStyleLevel());
                 else
-                    pCColl->DeleteAssignmentToListLevelOfOutlineStyle();//<--end,zhaojianwei
+                    pCColl->DeleteAssignmentToListLevelOfOutlineStyle();
 
 
 
@@ -1229,7 +1207,6 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
                 rDoc.DelTxtFmtColl( pColl );
                 pColl = pCColl;
             }
-            // --> OD 2008-02-12 #newlistlevelattrs#
             if ( bResetIndentAttrsAtParagraphStyle &&
                  rSet.GetItemState( RES_PARATR_NUMRULE, FALSE, 0 ) == SFX_ITEM_SET &&
                  rSet.GetItemState( RES_LR_SPACE, FALSE, 0 ) != SFX_ITEM_SET &&
@@ -1237,7 +1214,6 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
             {
                 rDoc.ResetAttrAtFormat( RES_LR_SPACE, *pColl );
             }
-            // <--
 
             // #i56252: If a standard numbering style is assigned to a standard paragraph style
             // we have to create a physical instance of the numbering style. If we do not and
@@ -1335,7 +1311,6 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
                 {
                     SvxNumRule* pSetRule = ((SvxNumBulletItem*)pItem)->GetNumRule();
                     pSetRule->UnLinkGraphics();
-                    //SwNumRule aSetRule(rDoc.GetUniqueNumRuleName());
                     SwNumRule aSetRule(*pNumRule);
                     aSetRule.SetSvxRule(*pSetRule, &rDoc);
                     rDoc.ChgNumRuleFmts( aSetRule );
@@ -1345,12 +1320,9 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
                     // NumRule auf default Werte
                     // was sind die default Werte?
                     {
-                        // --> OD 2008-02-11 #newlistlevelattrs#
                         SwNumRule aRule( pNumRule->GetName(),
-                                         // --> OD 2008-06-06 #i89178#
+                                         // #i89178#
                                          numfunc::GetDefaultPositionAndSpaceMode() );
-                                         // <--
-                        // <--
                         rDoc.ChgNumRuleFmts( aRule );
                     }
                     break;
@@ -1370,10 +1342,8 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
         {
             if( IsInvalidItem( pItem ) )            // Clearen
             {
-                // --> OD 2008-02-12 #newlistlevelattrs#
                 // use method <SwDoc::ResetAttrAtFormat(..)> in order to
                 // create an Undo object for the attribute reset.
-//                pFmt->ResetAttr( rSet.GetWhichByPos(aIter.GetCurPos()));
                 rDoc.ResetAttrAtFormat( rSet.GetWhichByPos(aIter.GetCurPos()),
                                         *pFmt );
             }
@@ -1408,12 +1378,10 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
         }
     }
 
-    // --> OD 2008-02-12 #newlistlevelattrs#
     if ( rDoc.DoesUndo() )
     {
         rDoc.EndUndo( UNDO_INSFMTATTR, NULL );
     }
-    // <--
 }
 
 void lcl_SaveStyles( USHORT nFamily, SvPtrarr& rArr, SwDoc& rDoc )
@@ -1801,19 +1769,15 @@ void SwDocStyleSheet::Create()
                 if( !aName.Len() )
                     sTmpNm = rDoc.GetUniqueNumRuleName();
 
-                // --> OD 2008-02-11 #newlistlevelattrs#
                 SwNumRule* pRule = rDoc.GetNumRuleTbl()[
                     rDoc.MakeNumRule( sTmpNm, 0, FALSE,
-                                      // --> OD 2008-06-06 #i89178#
+                                      // #i89178#
                                       numfunc::GetDefaultPositionAndSpaceMode() ) ];
-                                      // <--
-                // <--
                 pRule->SetAutoRule( FALSE );
                 if( !aName.Len() )
                 {
-                    // --> OD 2008-07-08 #i91400#
+                    // #i91400#
                     pRule->SetName( aName, rDoc );
-                    // <--
                 }
                 pNumRule = pRule;
             }
@@ -2026,7 +1990,6 @@ static String sTemplateHelpFile = String::CreateFromAscii("swrhlppi.hlp");
         const String *pTemplate = rDoc.GetDocPattern( nFileId );
         if( pTemplate )
         {
-//          const String aHelpPath(MakeHelpPath(*pTemplate));
             rFile = *pTemplate;
         }
     }
@@ -2074,9 +2037,6 @@ void  SwDocStyleSheet::SetHelpId( const String& r, ULONG nId )
         pTmpFmt->SetPoolHlpFileId( nFileId );
     }
 }
-
-
-/*  */
 
 /*--------------------------------------------------------------------
     Beschreibung:   Methoden fuer den DocStyleSheetPool
@@ -2440,8 +2400,6 @@ SfxStyleSheetBase* SwDocStyleSheetPool::Find( const String& rName,
     }
     return bFnd ? mxStyleSheet.get() : 0;
 }
-
-/*  */
 
 SwStyleSheetIterator::SwStyleSheetIterator( SwDocStyleSheetPool* pBase,
                                 SfxStyleFamily eFam, USHORT n )

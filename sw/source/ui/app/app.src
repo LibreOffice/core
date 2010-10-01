@@ -470,10 +470,9 @@ String STR_FDLG_TEMPLATE_BUTTON
 
 String STR_FDLG_TEMPLATE_NAME
 {
-    //Text [ en-US ] = "Styles: " ;         //#outline level,removed by zhaojianwei
-    Text [ en-US ] = "separated by: " ; //<-end,add by zhaojianwei
+    Text [ en-US ] = "separated by: " ;
 };
-//#outline level,add by zhaojianwei
+
 String STR_FDLG_OUTLINE_LEVEL
 {
     Text [ en-US ] = "Outline: Level ";
@@ -483,8 +482,6 @@ String STR_FDLG_STYLE
 {
     Text [ en-US ] = "Style: ";
 };
-//<-end
-
 
 String STR_PAGEOFFSET
 {
@@ -513,14 +510,6 @@ WarningBox MSG_DISABLE_UNDO_QUESTION
     DEFBUTTON = WB_DEF_YES ;
     Message [ en-US ] = "This action deletes the list of actions that can be undone. Previous changes made to the document are still valid, but cannot be undone. Do you want to continue formatting?";
 };
-/*QueryBox MSG_INS_MERGE_FIELDS
-{
-    HelpId = HID_MAIL_MERGE_INSERT_FIELDS;
-    Buttons = WB_OK_CANCEL ;
-    DefButton = WB_DEF_YES ;
-    Message [ en-US ] = "Do you want to use names and addresses from a database?";
-};
-*/
 QueryBox MSG_PRINT_AS_MERGE
 {
     HelpId = HID_PRINT_AS_MERGE;
@@ -575,7 +564,6 @@ String  STR_DONT_ASK_AGAIN
 {
     Text [ en-US ] = "~Do not show warning again" ;
 };
-// --> OD 2008-04-14 #outlinelevel#
 String STR_OUTLINE_NUMBERING
 {
     Text [ en-US ] = "Outline Numbering";

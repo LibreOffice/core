@@ -119,7 +119,6 @@ String InsertLabEnvText( SwWrtShell& rSh, SwFldMgr& rFldMgr, const String& rText
             {
                 sTmpText = aLine.Copy( 0, nPos );
                 aLine.Erase( 0, nPos );
-//              sTmpText = aLine.Cut( 0, nPos );
             }
             else
             {
@@ -128,13 +127,11 @@ String InsertLabEnvText( SwWrtShell& rSh, SwFldMgr& rFldMgr, const String& rText
                 {
                     sTmpText = aLine;
                     aLine.Erase();
-//                  sTmpText = aLine.Cut();
                 }
                 else
                 {
                     sTmpText = aLine.Copy( 0, nPos + 1);
                     aLine.Erase( 0, nPos + 1);
-//                  sTmpText = aLine.Cut( 0, nPos + 1 );
 
                     // Datenbankfelder muesen mind. 3 Punkte beinhalten!
                     String sDBName( sTmpText.Copy( 1, sTmpText.Len() - 2));
