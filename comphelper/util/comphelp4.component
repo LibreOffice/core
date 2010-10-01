@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--**********************************************************************
+*
+* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+*
+* Copyright 2000, 2010 Oracle and/or its affiliates.
+*
+* OpenOffice.org - a multi-platform office productivity suite
+*
+* This file is part of OpenOffice.org.
+*
+* OpenOffice.org is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License version 3
+* only, as published by the Free Software Foundation.
+*
+* OpenOffice.org is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License version 3 for more details
+* (a copy is included in the LICENSE file that accompanied this code).
+*
+* You should have received a copy of the GNU Lesser General Public License
+* version 3 along with OpenOffice.org.  If not, see
+* <http://www.openoffice.org/license.html>
+* for a copy of the LGPLv3 License.
+*
+**********************************************************************-->
+
+<component loader="com.sun.star.loader.SharedLibrary"
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="AnyCompareFactory">
+    <service name="com.sun.star.ucb.AnyCompareFactory"/>
+  </implementation>
+  <implementation name="IndexedPropertyValuesContainer">
+    <service name="com.sun.star.document.IndexedPropertyValues"/>
+  </implementation>
+  <implementation name="NamedPropertyValuesContainer">
+    <service name="com.sun.star.document.NamedPropertyValues"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.MemoryStream">
+    <service name="com.sun.star.comp.MemoryStream"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.SequenceInputStreamService">
+    <service name="com.sun.star.io.SequenceInputStream"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.SequenceOutputStreamService">
+    <service name="com.sun.star.io.SequenceOutputStream"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.comphelper.OPropertyBag">
+    <service name="com.sun.star.beans.PropertyBag"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.embed.InstanceLocker">
+    <service name="com.sun.star.embed.InstanceLocker"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.logging.SimpleLogRing">
+    <service name="com.sun.star.logging.SimpleLogRing"/>
+    <singleton name="com.sun.star.logging.DocumentIOLogRing"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.task.OfficeRestartManager">
+    <service name="com.sun.star.comp.task.OfficeRestartManager"/>
+    <singleton name="com.sun.star.task.OfficeRestartManager"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.util.OfficeInstallationDirectories">
+    <service name="com.sun.star.util.OfficeInstallationDirectories"/>
+    <singleton name="com.sun.star.util.theOfficeInstallationDirectories"/>
+  </implementation>
+  <implementation name="org.openoffice.comp.comphelper.EnumerableMap">
+    <service name="com.sun.star.container.EnumerableMap"/>
+  </implementation>
+</component>
