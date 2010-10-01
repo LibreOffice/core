@@ -323,6 +323,9 @@ HTMLParser::HTMLParser( SvStream& rIn, int bReadNewDoc )
         bReadComment = FALSE;
     bIsInHeader = TRUE;
     pOptions = new HTMLOptions;
+
+    //#i76649, default to UTF-8 for HTML unless we know differently
+    SetSrcEncoding(RTL_TEXTENCODING_UTF8);
 }
 
 HTMLParser::~HTMLParser()
