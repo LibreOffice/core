@@ -921,54 +921,11 @@ UINT32 UHashMap::getId( const OUString& rCompareString )
         return it->second;
 }
 
-
-
-
-UHashMapEntry pSdrShapeIdentifierMap[] =
-{
-    { RTL_CONSTASCII_STRINGPARAM(""),   0 )
-};
-
-// ---------------------------------------------------------------------
-
-UHashMap aSdrShapeIdentifierMap( pSdrShapeIdentifierMap );
-
-UHashMap::UHashMap( UHashMapEntry* pMap )
-{
-    while( pMap->aIdentifier.getLength() )
-    {
-        OUString aStr( pMap->aIdentifier );
-        size_t nHash = aStr.hashCode() & (HASHARRAYSIZE-1);
-
-        m_aHashList[nHash].Insert(pMap);
-        pMap++;
-    }
-}
-
-// ---------------------------------------------------------------------
-
-UINT32 UHashMap::getId( const OUString& rCompareString )
-{
-    size_t nHash = rCompareString.hashCode() & (HASHARRAYSIZE-1);
-
-    UHashMapEntryList& rList = m_aHashList[nHash];
-
-    UHashMapEntry * pMap = rList.First();
-
-    while(pMap)
-    {
-        if( rCompareString == pMap->aIdentifier )
-            return pMap->nId;
-
-        pMap = rList.Next();
-    }
-
-    return UHASHMAP_NOTFOUND;
-}
-
 /***********************************************************************
 * class SvxUnoPropertyMapProvider                                      *
 ***********************************************************************/
+
+SvxUnoPropertyMapProvider aSvxMapProvider;
 
 EXTERN_C
 #if defined( PM2 ) && (!defined( CSET ) && !defined ( MTW ) && !defined( WTC ))

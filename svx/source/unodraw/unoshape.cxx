@@ -1385,7 +1385,7 @@ void SAL_CALL SvxShape::setName( const ::rtl::OUString& aName ) throw(::com::sun
 //----------------------------------------------------------------------
 OUString SAL_CALL SvxShape::getShapeType() throw(uno::RuntimeException)
 {
-    if( !aShapeType.getLength() )
+    if( !maShapeType.getLength() )
         return UHashMap::getNameFromId( mpImpl->mnObjId );
     else
         return maShapeType;
