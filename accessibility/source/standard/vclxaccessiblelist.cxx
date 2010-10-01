@@ -71,7 +71,7 @@ VCLXAccessibleList::VCLXAccessibleList (VCLXWindow* pVCLWindow, BoxType aBoxType
       m_bVisible                ( true ),
       m_xParent                 ( _xParent )
 {
-    // Because combo boxes and list boxes have the no common interface for
+    // Because combo boxes and list boxes don't have a common interface for
     // methods with identical signature we have to write down twice the
     // same code.
     switch (m_aBoxType)
@@ -125,10 +125,6 @@ void SAL_CALL VCLXAccessibleList::disposing (void)
 
 void VCLXAccessibleList::clearItems()
 {
-//  ListItems::iterator aEnd = m_aAccessibleChildren.end();
-//  for (ListItems::iterator aIter = m_aAccessibleChildren.begin(); aIter != aEnd; ++aIter)
-//      ::comphelper::disposeComponent(*aIter);
-
     // Clear the list itself and delete all the rest.
     ListItems().swap(m_aAccessibleChildren); // clear and minimize
 }
@@ -790,7 +786,6 @@ void SAL_CALL VCLXAccessibleList::deselectAccessibleChild( sal_Int32 nSelectedCh
         UpdateSelection_Impl();
 }
 // -----------------------------------------------------------------------------
-// accessibility::XAccessibleComponent
 awt::Rectangle VCLXAccessibleList::implGetBounds() throw (uno::RuntimeException)
 {
     awt::Rectangle aBounds ( 0, 0, 0, 0 );
