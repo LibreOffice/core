@@ -277,6 +277,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     serviceKey.closeKey();
     rootKey.closeKey();
     pReg->close();
+    delete pReg;
 
     return 0;
 }
