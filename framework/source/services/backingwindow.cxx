@@ -945,12 +945,6 @@ IMPL_LINK( BackingWindow, ToolboxHdl, void*, EMPTYARG )
                     // extend the URLs with Office locale argument
                     INetURLObject aURLObj( sURL );
 
-                    rtl::OUString sParam = aURLObj.GetParam();
-                    rtl::OUStringBuffer aURLBuf( sParam );
-                    if ( sParam.getLength() > 0 )
-                        aURLBuf.appendAscii( "&" );
-                    aURLBuf.appendAscii( "lang=" );
-
                     // read locale from configuration
                     ::rtl::OUString sLocale;
                     ::rtl::OUString sPackage = ::rtl::OUString::createFromAscii("org.openoffice.Setup");
@@ -968,13 +962,15 @@ IMPL_LINK( BackingWindow, ToolboxHdl, void*, EMPTYARG )
                     catch(const com::sun::star::uno::RuntimeException& exRun)
                         { throw exRun; }
                     catch(const com::sun::star::uno::Exception&)
-                    { sLocale = ::rtl::OUString::createFromAscii("en-US"); }
+                    { sLocale = ::rtl::OUString::createFromAscii("en"); }
 
-                    aURLBuf.append(sLocale);
+                    // Convert the URL to something that can be handled by the website
+                    if ( sLocale.equalsAscii( "pt-BR" ) )
+                        sLocale = ::rtl::OUString::createFromAscii( "pt-br" );
+                    else
+                        sLocale = sLocale.copy( 0, sLocale.indexOf( sal_Unicode( '-' ) ) );
 
-                    sParam = aURLBuf.makeStringAndClear();
-
-                    aURLObj.SetParam( sParam );
+                    aURLObj.insertName( sLocale );
                     sURL = aURLObj.GetMainURL( INetURLObject::NO_DECODE );
 
                     Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
