@@ -225,6 +225,7 @@ testcase tiEditFields
     printlog " open application "
     Call hNewDocument
     WaitSlot (2000)
+    call sSelectEmptyLayout()
     printlog " insert something to be able to use this function"
     printlog "+ Insert->Fields->Date (fixed)"
     printlog "+ deselect object, select, editmode "

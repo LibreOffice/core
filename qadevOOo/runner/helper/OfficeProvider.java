@@ -59,7 +59,7 @@ import util.utils;
 public class OfficeProvider implements AppProvider
 {
 
-    protected static boolean debug = false;
+    private static boolean debug = false;
 
     /**
      * copy the user layer to a safe place, usualy to $TMP/user_backup$USER
@@ -355,7 +355,7 @@ public class OfficeProvider implements AppProvider
 
         if (rInitialObject != null)
         {
-            debug = true;
+            // debug = true;
             dbg("resolved url");
 
             xMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, rInitialObject);
@@ -434,7 +434,7 @@ public class OfficeProvider implements AppProvider
     {
         XMultiServiceFactory msf = null;
         String exc = "";
-        debug = true;
+        // debug = true;
 
         dbg("trying to connect to " + cncstr);
 
