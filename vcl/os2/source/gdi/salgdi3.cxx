@@ -854,7 +854,7 @@ USHORT Os2SalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
 
 // -----------------------------------------------------------------------
 
-void Os2SalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
+void Os2SalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLevel )
 {
     FONTMETRICS aOS2Metric;
     Ft2QueryFontMetrics( mhPS, sizeof( aOS2Metric ), &aOS2Metric );
@@ -915,7 +915,7 @@ void Os2SalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
     // #107888# improved metric compatibility for Asian fonts...
     // TODO: assess workaround below for CWS >= extleading
     // TODO: evaluate use of aWinMetric.sTypo* members for CJK
-    if( mpOs2FontData[0] && mpOs2FontData[0]->SupportsCJK() )
+    if( mpOs2FontData[nFallbackLevel] && mpOs2FontData[nFallbackLevel]->SupportsCJK() )
     {
         pMetric->mnIntLeading += pMetric->mnExtLeading;
 
