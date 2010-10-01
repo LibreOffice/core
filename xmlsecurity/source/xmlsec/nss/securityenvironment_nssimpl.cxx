@@ -830,9 +830,14 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
         CERT_DisableOCSPDefaultResponder(certDb);
         CERTValOutParam cvout[5];
         CERTValInParam cvin[3];
+        int ncvinCount=0;
 
-        cvin[0].type = cert_pi_useAIACertFetch;
-        cvin[0].value.scalar.b = PR_TRUE;
+#if ( NSS_VMAJOR > 3 ) || ( NSS_VMAJOR == 3 && NSS_VMINOR > 12 ) || ( NSS_VMAJOR == 3 && NSS_VMINOR == 12 && NSS_VPATCH > 0 )
+        // cert_pi_useAIACertFetch was added in NSS 3.12.1
+        cvin[ncvinCount].type = cert_pi_useAIACertFetch;
+        cvin[ncvinCount].value.scalar.b = PR_TRUE;
+        ncvinCount++;
+#endif
 
         PRUint64 revFlagsLeaf[2];
         PRUint64 revFlagsChain[2];
@@ -879,12 +884,14 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
 //            | CERT_REV_MI_REQUIRE_SOME_FRESH_INFO_AVAILABLE;
 
 
-        cvin[1].type = cert_pi_revocationFlags;
-        cvin[1].value.pointer.revocation = &rev;
+        cvin[ncvinCount].type = cert_pi_revocationFlags;
+        cvin[ncvinCount].value.pointer.revocation = &rev;
+        ncvinCount++;
         // does not work, not implemented yet in 3.12.4
-//         cvin[2].type = cert_pi_keyusage;
-//         cvin[2].value.scalar.ui = KU_DIGITAL_SIGNATURE;
-        cvin[2].type = cert_pi_end;
+//         cvin[ncvinCount].type = cert_pi_keyusage;
+//         cvin[ncvinCount].value.scalar.ui = KU_DIGITAL_SIGNATURE;
+//         ncvinCount++;
+        cvin[ncvinCount].type = cert_pi_end;
 
         cvout[0].type = cert_po_trustAnchor;
         cvout[0].value.pointer.cert = NULL;

@@ -28,7 +28,6 @@
  *
  ************************************************************************/
 
-
 {SEC_ERROR_IO, "An I/O error occurred during security authorization."},
 
 {SEC_ERROR_LIBRARY_FAILURE, "security library failure."},
@@ -372,13 +371,24 @@ an existing cert, but that is not the same cert."},
 
 {SEC_ERROR_LIBPKIX_INTERNAL, "Libpkix internal error occured during cert validation."},
 
+#if ( NSS_VMAJOR > 3 ) || ( NSS_VMAJOR == 3 && NSS_VMINOR > 12 ) || ( NSS_VMAJOR == 3 && NSS_VMINOR == 12 && NSS_VPATCH > 2 )
+// following 3 errors got first used in NSS 3.12.3
+// they were in the header even in 3.12.2 but there was missing the mapping in pk11err.c
+// see also https://bugzilla.mozilla.org/show_bug.cgi?id=453364
+
 {SEC_ERROR_PKCS11_GENERAL_ERROR, "A PKCS #11 module returned CKR_GENERAL_ERROR, indicating that an unrecoverable error has occurred."},
 
 {SEC_ERROR_PKCS11_FUNCTION_FAILED, "A PKCS #11 module returned CKR_FUNCTION_FAILED, indicating that the requested function could not be performed.  Trying the same operation again might succeed."},
 
 {SEC_ERROR_PKCS11_DEVICE_ERROR, "A PKCS #11 module returned CKR_DEVICE_ERROR, indicating that a problem has occurred with the token or slot."},
 
+#endif
+
+#if ( NSS_VMAJOR > 3 ) || ( NSS_VMAJOR == 3 && NSS_VMINOR > 12 ) || ( NSS_VMAJOR == 3 && NSS_VMINOR == 12 && NSS_VPATCH > 3 )
+// following 2 errors got added in NSS 3.12.4
+
 {SEC_ERROR_BAD_INFO_ACCESS_METHOD, "Unknown information access method in certificate extension."},
 
 {SEC_ERROR_CRL_IMPORT_FAILED, "Error attempting to import a CRL."},
 
+#endif
