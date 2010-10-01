@@ -377,6 +377,9 @@ AC_ARG_WITH(system-db,
 AC_ARG_WITH(system-lucene,
 [  --with-system-lucene    Use lucene already on system
 ],,)
+AC_ARG_WITH(system-apache-commons,
+[  --with-system-apache-commons  Use apache commons libraries already on system
+],,)
 AC_ARG_WITH(lucene-core-jar,
 [  --with-lucene-core-jar=JARFILE   Specify path to jarfile manually ],
 [ LUCENE_CORE_JAR="$withval"
