@@ -36,17 +36,17 @@
 #include <ucbhelper/content.hxx>
 #include <unotools/localfilehelper.hxx>
 #include "hyperdlg.hrc"
-#include "cuihyperdlg.hxx"  //CHINA001
+#include "cuihyperdlg.hxx"
 #include "hltpbase.hxx"
 #include "macroass.hxx"
-#include <svx/svxdlg.hxx> //CHINA001
-#include <cuires.hrc> //CHINA001
+#include <svx/svxdlg.hxx>
+#include <cuires.hrc>
 
 using namespace ::ucbhelper;
 
 //########################################################################
 //#                                                                      #
-//# ComboBox-Control, wich is filled with all current framenames         #
+//# ComboBox-Control, which is filled with all current framenames        #
 //#                                                                      #
 //########################################################################
 
@@ -124,130 +124,6 @@ sal_Int8 SvxHyperURLBox::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
     return nRet;
 }
-
-/*
-Diese Methode parsed eine EMailadresse aus einem D&D-DataObjekt aus der Adre�datenbank heraus
-
-#ifndef _OFF_OFADBMGR_HXX
-#include <offmgr/ofadbmgr.hxx>
-#endif
-#ifndef _SFX_APP_HXX
-#include <offmgr/app.hxx>
-#endif
-#ifndef _SDB_SDBCURS_HXX
-#include <sdb/sdbcurs.hxx>
-#endif
-
-#define DB_DD_DELIM         ((char)11)
-
-String SvxHyperURLBox::GetAllEmailNamesFromDragItem( USHORT nItem )
-{
-#if !defined( ICC ) && !defined( SOLARIS )
-    String aAddress;
-
-    if (  DragServer::HasFormat( nItem, SOT_FORMATSTR_ID_SBA_DATAEXCHANGE ) )
-    {
-        ULONG nLen = DragServer::GetDataLen( nItem, SOT_FORMATSTR_ID_SBA_DATAEXCHANGE ) - 1;
-        USHORT i = 0;
-        String aTxt;
-        char *pTxt = aTxt.AllocStrBuf( (USHORT)nLen );
-        DragServer::PasteData( nItem, pTxt, nLen, SOT_FORMATSTR_ID_SBA_DATAEXCHANGE );
-        String aDBName = aTxt.GetToken( i++, DB_DD_DELIM );
-        String aTableName = aTxt.GetToken( i++, DB_DD_DELIM );
-        i++;    // Format"anderung
-        String aStatement = aTxt.GetToken( i++, DB_DD_DELIM );
-        if ( !aStatement )
-        {
-            aDBName += DB_DELIM;
-            aDBName += aTableName;
-        }
-        else
-        {
-            // use here another delimiter, because the OfaDBMgr uses two
-            // delimiters ( (char)11 and ; )
-            aDBName += ';';
-            aDBName += aStatement;
-        }
-        SbaSelectionListRef pSelectionList;
-        pSelectionList.Clear();
-        pSelectionList = new SbaSelectionList;
-        USHORT nTokCnt = aTxt.GetTokenCount( DB_DD_DELIM );
-
-        for ( ; i < nTokCnt; ++i )
-            pSelectionList->Insert(
-                (void*)(USHORT)aTxt.GetToken( i, DB_DD_DELIM ), LIST_APPEND );
-
-        OfaDBMgr* pDBMgr = SFX_APP()->GetOfaDBMgr();
-        BOOL bBasic = DBMGR_STD;
-
-        if ( !pDBMgr->OpenDB( bBasic, aDBName ) )
-            return aAddress;
-
-        OfaDBParam& rParam = pDBMgr->GetDBData( bBasic );
-        pDBMgr->ChangeStatement( bBasic, aStatement );
-        rParam.pSelectionList->Clear();
-
-        if ( pSelectionList.Is() &&
-                (long)pSelectionList->GetObject(0) != -1L )
-            *rParam.pSelectionList = *pSelectionList;
-
-        if ( !pDBMgr->ToFirstSelectedRecord( bBasic ) )
-        {
-            pDBMgr->CloseAll();
-            return aAddress;
-        }
-
-        if ( pDBMgr->IsSuccessful( bBasic ) )
-        {
-            //  Spaltenk"opfe
-            SbaDBDataDefRef aDBDef = pDBMgr->OpenColumnNames( bBasic );
-
-            if ( aDBDef.Is() )
-            {
-                SbaColumn* pCol = aDBDef->GetColumn("EMAIL");
-                ULONG nPos = 0;
-
-                if ( pCol )
-                    nPos = aDBDef->GetOriginalColumns().GetPos( pCol ) + 1;
-                for ( i = 0 ; nPos && i < pSelectionList->Count(); ++i )
-                {
-                    ULONG nIndex = (ULONG)pSelectionList->GetObject(i);
-
-                    // N"achsten zu lesenden Datensatz ansteuern
-
-                    BOOL bEnd = rParam.GetCursor()->IsOffRange();
-
-                    if ( !bEnd )
-                    {
-                        const ODbRowRef aRow =
-                            pDBMgr->GetSelectedRecord( bBasic, i );
-
-                        if ( aRow.Is() )
-                        {
-                            aAddress += pDBMgr->
-                                ImportDBField( (USHORT)nPos, &aDBDef, aRow.getBodyPtr() );
-                            aAddress += ',';
-                        }
-                        else
-                        {
-                            aAddress.Erase();
-                            break;
-                        }
-                    }
-                    else
-                        break;
-                }
-            }
-        }
-        pDBMgr->CloseAll();
-    }
-    aAddress.EraseTrailingChars( ',' );
-    return aAddress;
-#else
-    return String();
-#endif
-}
-*/
 
 void SvxHyperURLBox::Select()
 {

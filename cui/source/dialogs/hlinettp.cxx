@@ -34,7 +34,7 @@
 
 #include "hlinettp.hxx"
 #include "hyperdlg.hrc"
-#include "hlmarkwn_def.hxx" //ADD CHINA001
+#include "hlmarkwn_def.hxx"
 
 #define STD_DOC_SUBPATH     "internal"
 #define STD_DOC_NAME        "url_transfer.htm"

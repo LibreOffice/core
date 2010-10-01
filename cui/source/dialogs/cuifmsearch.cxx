@@ -411,23 +411,22 @@ IMPL_LINK(FmSearchDialog, OnClickedSpecialSettings, Button*, pButton )
     else if (&m_aSoundsLikeCJKSettings == pButton)
     {
         SfxItemSet aSet( SFX_APP()->GetPool() );
-        //CHINA001 SvxJSearchOptionsDialog aDlg( this, aSet, RID_SVXPAGE_JSEARCH_OPTIONS, m_pSearchEngine->GetTransliterationFlags() );
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {
             AbstractSvxJSearchOptionsDialog* aDlg = pFact->CreateSvxJSearchOptionsDialog( this, aSet, m_pSearchEngine->GetTransliterationFlags() );
-            DBG_ASSERT(aDlg, "Dialogdiet fail!");//CHINA001
-            aDlg->Execute(); //CHINA001 aDlg.Execute();
+            DBG_ASSERT(aDlg, "Dialogdiet fail!");
+            aDlg->Execute();
 
 
-            INT32 nFlags = aDlg->GetTransliterationFlags(); //CHINA001 INT32 nFlags = aDlg.GetTransliterationFlags();
+            INT32 nFlags = aDlg->GetTransliterationFlags();
             m_pSearchEngine->SetTransliterationFlags(nFlags);
 
             m_cbCase.Check(m_pSearchEngine->GetCaseSensitive());
             OnCheckBoxToggled( &m_cbCase );
             m_aHalfFullFormsCJK.Check( !m_pSearchEngine->GetIgnoreWidthCJK() );
             OnCheckBoxToggled( &m_aHalfFullFormsCJK );
-            delete aDlg; //add for CHINA001
+            delete aDlg;
         }
     }
 

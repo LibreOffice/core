@@ -37,7 +37,7 @@
 #include <cuires.hrc>
 
 #include "dlgname.hxx"
-#include "defdlgname.hxx" //CHINA001
+#include "defdlgname.hxx"
 #include "dlgname.hrc"
 #include <dialmgr.hxx>
 
@@ -80,9 +80,6 @@ SvxNameDialog::SvxNameDialog( Window* pWindow, const String& rName, const String
     }
 }
 
-/* -----------------------------27.02.2002 15:22------------------------------
-
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SvxNameDialog, ModifyHdl, Edit*, EMPTYARG)
 {
     if(aCheckNameHdl.IsSet())

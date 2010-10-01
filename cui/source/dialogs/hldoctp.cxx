@@ -35,7 +35,7 @@
 
 #include "hldoctp.hxx"
 #include "hyperdlg.hrc"
-#include "hlmarkwn_def.hxx" //ADD CHINA001
+#include "hlmarkwn_def.hxx"
 
 sal_Char __READONLY_DATA sHash[]                = "#";
 sal_Char __READONLY_DATA sFileScheme[]          = INET_FILE_SCHEME;

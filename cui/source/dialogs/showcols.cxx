@@ -81,7 +81,6 @@ IMPL_LINK( FmShowColsDialog, OnClickedOk, Button*, EMPTYARG )
             {
                 try
                 {
-                    //CHINA001 xCol->setPropertyValue(::svxform::FM_PROP_HIDDEN, ::cppu::bool2any(sal_False));
                     xCol->setPropertyValue(CUIFM_PROP_HIDDEN, ::cppu::bool2any(sal_False));
                 }
                 catch(...)
@@ -115,13 +114,10 @@ void FmShowColsDialog::SetColumns(const ::com::sun::star::uno::Reference< ::com:
         sal_Bool bIsHidden = sal_False;
         try
         {
-            //CHINA001 ::com::sun::star::uno::Any aHidden = xCurCol->getPropertyValue(::svxform::FM_PROP_HIDDEN);
             ::com::sun::star::uno::Any aHidden = xCurCol->getPropertyValue(CUIFM_PROP_HIDDEN);
             bIsHidden = ::comphelper::getBOOL(aHidden);
 
             ::rtl::OUString sName;
-            //CHINA001 xCurCol->getPropertyValue(::svxform::FM_PROP_LABEL) >>= sName;
-
             xCurCol->getPropertyValue(CUIFM_PROP_LABEL) >>= sName;
             sCurName = (const sal_Unicode*)sName;
         }
