@@ -46,21 +46,21 @@ cd "$sd_cwd"
 #collect all bootstrap variables specified on the command line
 #so that they can be passed as arguments to javaldx later on
 #Recognize the "sync" option. sync must be applied without any other
-#options except bootstrap variables.
+#options except bootstrap variables or the verbose option
 for arg in $@
 do
   case "$arg" in
        -env:*) BOOTSTRAPVARS=$BOOTSTRAPVARS" ""$arg";;
        sync) OPTSYNC=true;;
-       *) OPTOTHER=true;;
+       -v) VERBOSE=true;;
+       --verbose) VERBOSE=true;;
+       *) OPTOTHER=$arg;;
   esac
 done
 
-if [ -n $OPTSYNC ] && [ -z $OPTOTHER ]
+if [ "$OPTSYNC" = "true" ] && [ -z "$OPTOTHER" ]
 then
     JVMFWKPARAMS='-env:UNO_JAVA_JFW_INSTALL_DATA=$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml -env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'
-else
-    echo "unopkg script: Check usage of sync command".
 fi
 
 # extend the ld_library_path for java: javaldx checks the sofficerc for us
