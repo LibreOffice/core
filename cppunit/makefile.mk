@@ -59,8 +59,8 @@ CONFIGURE_ACTION = $(SED) -e s:@BACKPATH@:../$(BACK_PATH): \
     < ../$(BACK_PATH)$(PATH_IN_MODULE)/ooo-DllPlugInTester.mk \
     > src/DllPlugInTester/ooo-DllPlugInTester.mk
 
-BUILD_ACTION = cd src/cppunit && dmake -f ooo-cppunit_dll.mk && \
-    cd ../DllPlugInTester && dmake -f ooo-DllPlugInTester.mk
+BUILD_ACTION = cd src/cppunit && dmake -f ooo-cppunit_dll.mk debug=$(debug) verbose=$(verbose) && \
+    cd ../DllPlugInTester && dmake -f ooo-DllPlugInTester.mk debug=$(debug) verbose=$(verbose)
 
 OUTDIR2INC = include/cppunit
 
