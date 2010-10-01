@@ -4,3 +4,5 @@
 ..\%__SRC%\lib\slideshow.uno.so %_DEST%\lib%_EXT%\slideshow.uno.so
 ..\%__SRC%\lib\OGLTrans.uno.so %_DEST%\lib%_EXT%\OGLTrans.uno.so
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
+..\%__SRC%\misc\ogltrans.component %_DEST%\xml%_EXT%\ogltrans.component
+..\%__SRC%\misc\slideshow.component %_DEST%\xml%_EXT%\slideshow.component
