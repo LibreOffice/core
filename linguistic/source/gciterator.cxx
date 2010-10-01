@@ -1333,27 +1333,3 @@ void * SAL_CALL GrammarCheckingIterator_getFactory(
     }
     return pRet;
 }
-
-
-sal_Bool SAL_CALL GrammarCheckingIterator_writeInfo(
-    void * /*pServiceManager*/,
-    registry::XRegistryKey * pRegistryKey )
-{
-    try
-    {
-        OUString aImpl( '/' );
-        aImpl += GrammarCheckingIterator_getImplementationName().getStr();
-        aImpl += A2OU( "/UNO/SERVICES" );
-        uno::Reference< registry::XRegistryKey > xNewKey = pRegistryKey->createKey( aImpl );
-        uno::Sequence< OUString > aServices = GrammarCheckingIterator_getSupportedServiceNames();
-        for( sal_Int32 i = 0; i < aServices.getLength(); i++ )
-            xNewKey->createKey( aServices.getConstArray()[i] );
-
-        return sal_True;
-    }
-    catch (uno::Exception &)
-    {
-        return sal_False;
-    }
-}
-

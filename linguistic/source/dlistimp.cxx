@@ -796,31 +796,6 @@ uno::Sequence< rtl::OUString > DicList::getSupportedServiceNames_Static() throw(
     return aSNS;
 }
 
-
-sal_Bool SAL_CALL DicList_writeInfo(
-    void * /*pServiceManager*/, registry::XRegistryKey * pRegistryKey )
-{
-    try
-    {
-        String aImpl( '/' );
-        aImpl += DicList::getImplementationName_Static().getStr();
-        aImpl.AppendAscii( "/UNO/SERVICES" );
-        uno::Reference< registry::XRegistryKey > xNewKey =
-                pRegistryKey->createKey(aImpl );
-        uno::Sequence< rtl::OUString > aServices =
-                DicList::getSupportedServiceNames_Static();
-        for( INT32 i = 0; i < aServices.getLength(); i++ )
-            xNewKey->createKey( aServices.getConstArray()[i]);
-
-        return sal_True;
-    }
-    catch(Exception &)
-    {
-        return sal_False;
-    }
-}
-
-
 void * SAL_CALL DicList_getFactory( const sal_Char * pImplName,
         XMultiServiceFactory * pServiceManager, void *  )
 {
