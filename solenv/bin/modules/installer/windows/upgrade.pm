@@ -61,7 +61,8 @@ sub create_upgrade_table
     push(@upgradetable, $newline);
 
     # Setting all products, that must be removed.
-    $newline = $installer::globals::upgradecode . "\t" . $installer::globals::msimajorproductversion . "\t" . $installer::globals::msiproductversion . "\t" . "\t" . "257" . "\t" . "\t" . "OLDPRODUCTSSAMEMAJOR" . "\n";
+    # $newline = $installer::globals::upgradecode . "\t" . $installer::globals::msimajorproductversion . "\t" . $installer::globals::msiproductversion . "\t" . "\t" . "257" . "\t" . "\t" . "OLDPRODUCTSSAMEMAJOR" . "\n";
+    $newline = $installer::globals::upgradecode . "\t" . $installer::globals::msimajorproductversion . "\t" . $installer::globals::msiproductversion . "\t" . "\t" . "769" . "\t" . "\t" . "OLDPRODUCTSSAMEMAJOR" . "\n";
     push(@upgradetable, $newline);
 
     if ( ! $installer::globals::patch )
@@ -70,8 +71,8 @@ sub create_upgrade_table
         $newline = $installer::globals::upgradecode . "\t" . $installer::globals::msiproductversion . "\t" . $ooomaxnew . "\t" . "\t" . "2" . "\t" . "\t" . "NEWPRODUCTS" . "\n";
         push(@upgradetable, $newline);
 
-        $newline = $installer::globals::upgradecode . "\t" . $installer::globals::msiproductversion . "\t" . $ooomaxnew . "\t" . "\t" . "258" . "\t" . "\t" . "SAMEPRODUCTS" . "\n";
-        push(@upgradetable, $newline);
+        # $newline = $installer::globals::upgradecode . "\t" . $installer::globals::msiproductversion . "\t" . $ooomaxnew . "\t" . "\t" . "258" . "\t" . "\t" . "SAMEPRODUCTS" . "\n";
+        # push(@upgradetable, $newline);
 
         if ( $include_ooo_fix )
         {
