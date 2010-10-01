@@ -38,6 +38,7 @@
 #include <comphelper/seqstream.hxx>
 #include "tokens.hxx"
 #include "oox/helper/containerhelper.hxx"
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 using ::rtl::OUString;
 using ::com::sun::star::awt::DeviceInfo;
@@ -52,6 +53,7 @@ using ::com::sun::star::graphic::GraphicObject;
 using ::com::sun::star::graphic::XGraphic;
 using ::com::sun::star::graphic::XGraphicObject;
 using ::com::sun::star::graphic::XGraphicProvider;
+using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::io::XInputStream;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::uno::Exception;
@@ -350,6 +352,29 @@ OUString GraphicHelper::importEmbeddedGraphicObject( const OUString& rStreamName
 {
     Reference< XGraphic > xGraphic = importEmbeddedGraphic( rStreamName );
     return xGraphic.is() ? createGraphicObject( xGraphic ) : OUString();
+}
+
+Size GraphicHelper::getOriginalSize( const Reference< XGraphic >& xGraphic ) const
+{
+    Size aSize100thMM( 0, 0 );
+    Reference< XPropertySet > xGraphicPropertySet( xGraphic, UNO_QUERY_THROW );
+    if ( xGraphicPropertySet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Size100thMM" ) ) ) >>= aSize100thMM )
+    {
+        if ( !aSize100thMM.Width && !aSize100thMM.Height )
+        {   // MAPMODE_PIXEL USED :-(
+            Size aSourceSizePixel( 0, 0 );
+            if ( xGraphicPropertySet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SizePixel" ) ) ) >>= aSourceSizePixel )
+            {
+                const DeviceInfo& rDeviceInfo = getDeviceInfo();
+                if ( rDeviceInfo.PixelPerMeterX && rDeviceInfo.PixelPerMeterY )
+                {
+                    aSize100thMM.Width = static_cast< sal_Int32 >( ( aSourceSizePixel.Width * 100000.0 ) / rDeviceInfo.PixelPerMeterX );
+                    aSize100thMM.Height = static_cast< sal_Int32 >( ( aSourceSizePixel.Height * 100000.0 ) / rDeviceInfo.PixelPerMeterY );
+                }
+            }
+        }
+    }
+    return aSize100thMM;
 }
 
 // ============================================================================
