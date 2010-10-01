@@ -102,8 +102,8 @@ void SwRenderData::DeletePostItData()
 {
     if (HasPostItData())
     {
-        m_pPostItDoc->setPrinter( 0, false, false );  //damit am echten DOC der Drucker bleibt
-        delete m_pPostItShell;        //Nimmt das PostItDoc mit ins Grab.
+        m_pPostItDoc->setPrinter( 0, false, false ); // So that the printer remains at the real DOC
+        delete m_pPostItShell;
         delete m_pPostItFields;
         m_pPostItDoc    = 0;
         m_pPostItShell  = 0;
