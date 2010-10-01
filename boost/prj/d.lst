@@ -372,3 +372,4 @@ mkdir: %_DEST%\inc%_EXT%\boost\variant\detail
 ..\%__SRC%\inc\boost\utility\detail\* %_DEST%\inc%_EXT%\boost\utility\detail
 ..\%__SRC%\inc\boost\variant\* %_DEST%\inc%_EXT%\boost\variant
 ..\%__SRC%\inc\boost\variant\detail\* %_DEST%\inc%_EXT%\boost\variant\detail
+..\%__SRC%\slb\boostthread.lib %_DEST%\lib%_EXT%\boostthread.lib

@@ -55,15 +55,12 @@ PATCH_FILES=$(TARFILE_NAME).patch
 CONFIGURE_DIR=
 CONFIGURE_ACTION=
 
-BUILD_DIR=
-BUILD_ACTION=
-BUILD_FLAGS=
-
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : set_ext.mk
 .INCLUDE : target.mk
 .INCLUDE : tg_ext.mk
+
 
 # --- post-build ---------------------------------------------------
 
@@ -113,4 +110,10 @@ $(PACKAGE_DIR)$/$(NORMALIZE_FLAG_FILE) : $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
 normalize: $(PACKAGE_DIR)$/$(NORMALIZE_FLAG_FILE)
 
 $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) : normalize
+
+$(PACKAGE_DIR)/$(BUILD_FLAG_FILE) : boostthreadlib
+
+boostthreadlib :
+    cd $(PACKAGE_DIR)/$(TARFILE_ROOTDIR)/libs/thread/src/win32 && dmake $(MFLAGS) $(CALLMACROS)
+
 .ENDIF			# "$(SYSTEM_BOOST)" == "YES" && ("$(OS)"!="SOLARIS" || "$(COM)"=="GCC")
