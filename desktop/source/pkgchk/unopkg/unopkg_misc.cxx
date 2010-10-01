@@ -396,6 +396,7 @@ Reference<XComponentContext> bootstrapStandAlone(
     if (! ::ucbhelper::ContentBroker::initialize( xServiceManager, ucb_args ))
         throw RuntimeException( OUSTR("cannot initialize UCB!"), 0 );
 
+    disposeGuard.setDeinitUCB();
     return xContext;
 }
 
