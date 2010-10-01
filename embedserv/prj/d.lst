@@ -1,1 +1,2 @@
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
+..\%__SRC%\misc\emser.component %_DEST%\xml%_EXT%\emser.component

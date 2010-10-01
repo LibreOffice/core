@@ -31,7 +31,6 @@
 #include <osl/file.hxx>
 #include <osl/socket.h>
 #include <cppuhelper/factory.hxx>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
@@ -53,63 +52,10 @@ using namespace com::sun::star::ucb;
 using namespace com::sun::star::container;
 
 //=========================================================================
-static sal_Bool writeInfo( void * pRegistryKey,
-                           const rtl::OUString & rImplementationName,
-                              Sequence< rtl::OUString > const & rServiceNames )
-{
-    rtl::OUString aKeyName( rtl::OUString::createFromAscii( "/" ) );
-    aKeyName += rImplementationName;
-    aKeyName += rtl::OUString::createFromAscii( "/UNO/SERVICES" );
-
-    Reference< registry::XRegistryKey > xKey;
-    try
-    {
-        xKey = static_cast< registry::XRegistryKey * >(
-            pRegistryKey )->createKey( aKeyName );
-    }
-    catch ( registry::InvalidRegistryException const & )
-    {
-    }
-
-    if ( !xKey.is() )
-        return sal_False;
-
-    sal_Bool bSuccess = sal_True;
-
-    for ( sal_Int32 n = 0; n < rServiceNames.getLength(); ++n )
-    {
-        try
-        {
-            xKey->createKey( rServiceNames[ n ] );
-        }
-        catch ( registry::InvalidRegistryException const & )
-        {
-            bSuccess = sal_False;
-            break;
-        }
-    }
-    return bSuccess;
-}
-
-//=========================================================================
 extern "C" void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
-//=========================================================================
-extern "C" sal_Bool SAL_CALL component_writeInfo( void *, void * pRegistryKey )
-{
-    return pRegistryKey &&
-
-    //////////////////////////////////////////////////////////////////////
-    // File Content Provider.
-    //////////////////////////////////////////////////////////////////////
-
-    writeInfo( pRegistryKey,
-               fileaccess::shell::getImplementationName_static(),
-               fileaccess::shell::getSupportedServiceNames_static() );
 }
 
 //=========================================================================

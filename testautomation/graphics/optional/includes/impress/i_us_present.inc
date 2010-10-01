@@ -52,13 +52,12 @@ testcase i_us_presentation1
     printlog "New master"
     MenuSelect(MenuGetItemID(1))
     sleep (1)
-    printlog "   Inserted second Master-Slide"
-
+    printlog "Inserted second Master-Slide"
 
     printlog "set background to picture(Gallery)"
     Kontext "Gallery"
     if Gallery.Exists(2) then
-        warnlog "   The Gallery was already visible. Check earlier ran tests for inconsistency."
+        warnlog "The Gallery was already visible. Check earlier ran tests for inconsistency."
         sleep (2)
     else
         ToolsGallery
@@ -112,7 +111,7 @@ testcase i_us_presentation1
     sleep (2)
     Kontext "ExportierenDlg"
     if ExportierenDlg.IsVisible(5) then
-        printlog "   Gallery-object correctly copied into Slide."
+        printlog "Gallery-object correctly copied into Slide."
         ExportierenDlg.Close
         WaitSlot (2000)
     end if
@@ -134,15 +133,6 @@ testcase i_us_presentation1
     sleep (1)
     kontext "GraphicFilterBar"
     Mosaic.Click
-    WaitSlot (2000)
-    kontext "Mosaic"
-    Width.SetText "16"
-    Height.SetText "16"
-    Mosaic.OK
-    
-    kontext "GraphicFilterBar"
-    Mosaic.Click
-
     kontext "Mosaic"
     if ( Mosaic.exists( 2 ) ) then
         Width.SetText "16"
@@ -151,25 +141,21 @@ testcase i_us_presentation1
     else
         warnlog( "Dialog <Mosaic> did not open" )
     endif
-
     kontext "GraphicFilterBar"
     GraphicFilterBar.Close
-
     ToolsGallery
     WaitSlot (1000)
-
     kontext "DocumentImpress"
     gMouseClick 50,50
     sleep (1)
-
     FormatPositionAndSize
 
     kontext
     if ( Active.exists( 2 ) ) then
         active.setPage(TabPositionAndSize)
         kontext "TabPositionAndSize"
-        Width.SetText "800"
-        Height.SetText "600"
+        Width.SetText "15"
+        Height.SetText "11"
         SizePosition.TypeKeys "<RIGHT><DOWN>"
         TabPositionAndSize.OK
     else
@@ -199,13 +185,13 @@ testcase i_us_presentation2
     PresentationFile1 = ConvertPath( gOfficePath + "user\work\PowerPes1.odp" )
     PresentationFile2 = ConvertPath( gOfficePath + "user\work\PowerPes2.odp" )
 
-    if ( FileExists( PresentationFile1 ) ) then 'if file exists...
+     if ( FileExists( PresentationFile1 ) ) then 'if file exists...
         hFileOpen (PresentationFile1)
     else
         warnlog "   This test is supposed to run after the previous testcase has been run. Notify the Automatic-tester."
         goto endsub
     end if
-
+    sleep (2)
     printlog "New Slide"
     kontext "slides"
     SlidesControl.TypeKeys( "<PAGEDOWN>", 3 )
@@ -235,7 +221,6 @@ testcase i_us_presentation2
 
     printlog "   Did the 'mistake' to FadeIn/Out the Slidepane"
 
-
 InsertGraphicsFromFile
 Kontext "GrafikEinfuegenDlg"
 if GrafikEinfuegenDlg.exists(5) then
@@ -244,7 +229,6 @@ sleep (5)
 else
 warnlog "   The Insertgraphics-dialogue didn't show up."
 endif
-
 
     printlog "Graphics-Import-dialogue. Select i_us_large.jpg"
     Kontext "GrafikEinfuegenDlg"

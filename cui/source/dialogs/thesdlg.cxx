@@ -57,6 +57,7 @@
 #include <i18npool/mslangid.hxx>
 #include <comphelper/processfactory.hxx>
 #include <osl/file.hxx>
+#include <svl/lngmisc.hxx>
 
 
 #include <stack>
@@ -72,36 +73,6 @@ using ::rtl::OUString;
 
 #define A2S(x)          String::CreateFromAscii( x )
 
-
-
-// GetReplaceEditString -------------------------------
-
-static void GetReplaceEditString( String &rText )
-{
-    // The strings returned by the thesaurus saometimes have some
-    // explanation text put in between '(' and ')' or a trailing '*'.
-    // These parts should not be put in the ReplaceEdit Text that may get
-    // inserted into the document. Thus we strip them from the text.
-
-    xub_StrLen nPos = rText.Search( sal_Unicode('(') );
-    while (STRING_NOTFOUND != nPos)
-    {
-        xub_StrLen nEnd = rText.Search( sal_Unicode(')'), nPos );
-        if (STRING_NOTFOUND != nEnd)
-            rText.Erase( nPos, nEnd-nPos+1 );
-        else
-            break;
-        nPos = rText.Search( sal_Unicode('(') );
-    }
-
-    nPos = rText.Search( sal_Unicode('*') );
-    if (STRING_NOTFOUND != nPos)
-        rText.Erase( nPos );
-
-    // remove any possible remaining ' ' that may confuse the thesaurus
-    // when it gets called with the text
-    rText.EraseLeadingAndTrailingChars( sal_Unicode(' ') );
-}
 
 // class LookUpComboBox_Impl --------------------------------------------------
 
@@ -488,7 +459,7 @@ IMPL_LINK( SvxThesaurusDialog_Impl, WordSelectHdl_Impl, ComboBox *, pBox )
     {
         USHORT nPos = pBox->GetSelectEntryPos();
         String aStr( pBox->GetEntry( nPos ) );
-        GetReplaceEditString( aStr );
+        aStr = linguistic::GetThesaurusReplaceText( aStr );
         aWordCB.SetText( aStr );
         LookUp_Impl();
     }
@@ -507,7 +478,7 @@ IMPL_LINK( SvxThesaurusDialog_Impl, AlternativesSelectHdl_Impl, SvxCheckListBox 
         if (pData && !pData->IsHeader())
         {
             aStr = pData->GetText();
-            GetReplaceEditString( aStr );
+            aStr = linguistic::GetThesaurusReplaceText( aStr );
         }
         aReplaceEdit.SetText( aStr );
     }
@@ -525,7 +496,7 @@ IMPL_LINK( SvxThesaurusDialog_Impl, AlternativesDoubleClickHdl_Impl, SvxCheckLis
         if (pData && !pData->IsHeader())
         {
             aStr = pData->GetText();
-            GetReplaceEditString( aStr );
+            aStr = linguistic::GetThesaurusReplaceText( aStr );
         }
 
         aWordCB.SetText( aStr );

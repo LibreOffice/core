@@ -86,3 +86,11 @@ RESLIB1SRSFILES=\
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
+
+ALLTAR : $(MISC)/fps_office.component
+
+$(MISC)/fps_office.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        fps_office.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt fps_office.component

@@ -45,6 +45,8 @@
 #include "smdll.hxx"
 
 
+////////////////////////////////////////////////////////////
+
 // return pointer to active SmViewShell, if this is not possible
 // return 0 instead.
 //!! Since this method is based on the current focus it is somewhat

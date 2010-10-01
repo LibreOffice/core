@@ -73,3 +73,10 @@ DEF1NAME=	$(SHL1TARGET)
 
 .INCLUDE :	target.mk
 
+ALLTAR : $(MISC)/reflection.component
+
+$(MISC)/reflection.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        reflection.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_URE_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt reflection.component

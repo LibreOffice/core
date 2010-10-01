@@ -87,3 +87,11 @@ DO_PHONY=.PHONY
 $(INCCOM)$/introbmpnames.hxx $(DO_PHONY):
     echo const char INTRO_BITMAP_STRINGLIST[]=$(EMQ)"$(INTRO_BITMAPS:f:t",")$(EMQ)"$(EMQ); > $@
     echo LASTTIME_INTRO_BITMAPS=$(INTRO_BITMAPS:f) > $(MISC)$/intro_bmp_names.mk
+
+ALLTAR : $(MISC)/spl.component
+
+$(MISC)/spl.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        spl.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt spl.component

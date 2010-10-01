@@ -132,3 +132,11 @@ $(SPOOLDIR)$/$(PACKAGEDIR)$/Jobs$/Jobs-onlineupdate.xcu : $(XCU_SOURCEDIR)$/Jobs
     @$(COPY) $< $@
 #	@$(PERL) transform.pl < $< > $@
 
+
+ALLTAR : $(MISC)/updchk.uno.component
+
+$(MISC)/updchk.uno.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        updchk.uno.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt updchk.uno.component

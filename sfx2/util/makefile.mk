@@ -162,3 +162,11 @@ SHL3NOCHECK=TRUE
 
 
 .INCLUDE :  target.mk
+
+ALLTAR : $(MISC)/sfx.component
+
+$(MISC)/sfx.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        sfx.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt sfx.component

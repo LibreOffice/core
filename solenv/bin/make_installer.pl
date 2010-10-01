@@ -54,11 +54,9 @@ use installer::packagepool;
 use installer::parameter;
 use installer::pathanalyzer;
 use installer::profiles;
-use installer::regmerge;
 use installer::scppatchsoname;
 use installer::scpzipfiles;
 use installer::scriptitems;
-use installer::servicesfile;
 use installer::setupscript;
 use installer::simplepackage;
 use installer::sorter;
@@ -891,43 +889,6 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
     installer::worker::resolving_hidden_flag($filesinproductlanguageresolvedarrayref, $allvariableshashref, "File", $languagestringref);
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles13c.log", $filesinproductlanguageresolvedarrayref); }
-
-    #####################################
-    # Creating services.rdb
-    #####################################
-
-    if ( $allvariableshashref->{'SERVICESPROJEKT'} )
-    {
-        if (! $installer::globals::languagepack)
-        {
-            # ATTENTION: For creating the services.rdb it is necessary to execute the native file
-            # "regcomp" or "regcomp.exe". Therefore this function can only be executed on the
-            # corresponding platform.
-
-            if ( $installer::globals::servicesrdb_can_be_created )
-            {
-                installer::logger::print_message( "... creating preregistered services.rdb ...\n" );
-
-                installer::servicesfile::create_services_rdb($allvariableshashref, $filesinproductlanguageresolvedarrayref, $includepatharrayref, $languagestringref);
-                if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles14.log", $filesinproductlanguageresolvedarrayref); }
-            }
-        }
-    }
-
-    #####################################
-    # Calls of regmerge
-    #####################################
-
-    if (!($installer::globals::is_copy_only_project))
-    {
-        if (! $installer::globals::languagepack)
-        {
-            installer::logger::print_message( "... merging files into registry database ...\n" );
-
-            installer::regmerge::merge_registration_files($filesinproductlanguageresolvedarrayref, $includepatharrayref, $languagestringref, $allvariableshashref);
-            if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles14b.log", $filesinproductlanguageresolvedarrayref); }
-        }
-    }
 
     ############################################
     # Collecting directories for epm list file

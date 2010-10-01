@@ -926,9 +926,15 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
 
             if( MID_PAGEDESC_PAGENUMOFFSET==nMemberId )
             {
-
-                rUnitConverter.convertNumber(
-                    aOut, (sal_Int32)pPageDesc->GetNumOffset() );
+                sal_Int32 const number(pPageDesc->GetNumOffset());
+                if (0 >= number)
+                {
+                    aOut.append(GetXMLToken(XML_AUTO));
+                }
+                else // #i114163# positiveInteger only!
+                {
+                    rUnitConverter.convertNumber(aOut, number);
+                }
                 bOk = sal_True;
             }
         }

@@ -48,35 +48,6 @@ extern "C" void SAL_CALL component_getImplementationEnvironment( const sal_Char 
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-// -----------------------
-// - component_writeInfo -
-// -----------------------
-
-extern "C" sal_Bool SAL_CALL component_writeInfo( void* /* pServiceManager */, void* pRegistryKey )
-{
-    sal_Bool bRet = sal_False;
-
-    if( pRegistryKey )
-    {
-        try
-        {
-            uno::Reference< registry::XRegistryKey > xNewKey1(
-                static_cast< registry::XRegistryKey* >( pRegistryKey )->createKey(
-                ::rtl::OUString::createFromAscii(
-                    "/" AVMEDIA_GSTREAMER_MANAGER_IMPLEMENTATIONNAME "/UNO/SERVICES/"
-                    AVMEDIA_GSTREAMER_MANAGER_SERVICENAME ) ) );
-
-            bRet = sal_True;
-        }
-        catch( registry::InvalidRegistryException& )
-        {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-        }
-    }
-
-    return bRet;
-}
-
 // ------------------------
 // - component_getFactory -
 // ------------------------

@@ -32,8 +32,6 @@ File gid_File_Lib_Kdebe
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
     Name = STRING(CONCAT2(kdebe1.uno,UNXSUFFIX));
-    RegistryID = gid_Starregistry_Services_Rdb;
-    Regmergefile = "kdebe1-ucd.txt";
 End
 #endif
 
@@ -43,7 +41,5 @@ File gid_File_Lib_Kde4be
     Styles = (PACKED);
     Dir = gid_Dir_Program;
     Name = STRING(CONCAT2(kde4be1.uno,UNXSUFFIX));
-    RegistryID = gid_Starregistry_Services_Rdb;
-    Regmergefile = "kde4be1-ucd.txt";
 End
 #endif

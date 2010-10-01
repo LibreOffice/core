@@ -45,7 +45,7 @@ abstract public class EnhancedComplexTestCase extends ComplexTestCase implements
 private void callEntry(String _sEntry, ParameterHelper _aParam)
 {
     // log.println("- next file is: ------------------------------");
-    log.println("File: " + _sEntry);
+    log.println("      File: " + _sEntry);
     // TODO: check if 'sEntry' is a guilty document.
     File aFile = new File(_aParam.getInputPath());
     String sPath = _aParam.getInputPath();
@@ -254,8 +254,15 @@ private void callEntry(String _sEntry, ParameterHelper _aParam)
                 for (int i=0;i<aList.size();i++)
                 {
                     String sEntry = aList.get(i);
-                    callEntry(sEntry, _aParam);
-
+                    try
+                    {
+                        callEntry(sEntry, _aParam);
+                    }
+                    catch (AssureException e)
+                    {
+                        // we only need to catch the assure()
+                        // nOkStatus += 2;
+                    }
                     // we want to know the current status of the run through
                     // if the status is greater (more bad) then the current,
                     // we will remember this. Only the very bad status will
@@ -469,9 +476,13 @@ private void callEntry(String _sEntry, ParameterHelper _aParam)
                             {
                                 String sPSFile = aList.get(i);
 
-                                // TODO: this information has to come out of the ini files
-                                String sStatusRunThrough = "";
-                                String sStatusMessage = "";
+                                // Read information out of the ini files
+                                String sIndexFile2 = FileHelper.appendPath(sPath, sPSFile + ".ini");
+                                IniFile aIniFile2 = new IniFile(sIndexFile2);
+                                String sStatusRunThrough = aIniFile2.getValue("global", "state");
+                                String sStatusMessage = ""; // aIniFile2.getValue("global", "info");
+                                aIniFile2.close();
+
 
                                 String sHTMLFile = sPSFile + ".html";
                                 aOutputter.indexLine(sHTMLFile, sPSFile, sStatusRunThrough, sStatusMessage);

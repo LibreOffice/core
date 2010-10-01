@@ -1472,7 +1472,8 @@ if test \( "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes" \) -a "$GCC" = "yes"; th
    fi
    if test "$_os" = "Darwin" -a "$GCCVER" -ge "040100" ; then
       if test -z "$save_CC" -a -x "$GCC_HOME/bin/gcc-4.0" ; then
-         CC=$GCC_HOME/bin/gcc-4.0
+         export CC=$GCC_HOME/bin/gcc-4.0
+          dnl  export CC to have it available in set_soenv -> config.guess
          GCCVER2=`"$CC" -dumpversion | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
          if test "$GCCVER2" -ge "040000" -a "$GCCVER2" -lt "040100" ; then
             GCCVER=$GCCVER2

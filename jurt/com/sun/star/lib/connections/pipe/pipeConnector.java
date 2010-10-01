@@ -84,21 +84,6 @@ public final class pipeConnector implements XConnector {
     }
 
     /**
-     * Writes the service information into the given registry key.
-     *
-     * <p>This method is called by the <code>JavaLoader</code>.</p>
-     *
-     * @param regKey the registry key.
-     * @return <code>true</code> if the operation succeeded.
-     *
-     * @see com.sun.star.comp.loader.JavaLoader
-     */
-    public static boolean __writeRegistryServiceInfo(XRegistryKey regKey) {
-        return FactoryHelper.writeRegistryServiceInfo(
-            pipeConnector.class.getName(), __serviceName, regKey);
-    }
-
-    /**
      * Connects via the described pipe to a waiting server.
      *
      * <p>The connection description has the following format:

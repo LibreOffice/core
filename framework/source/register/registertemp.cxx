@@ -47,10 +47,6 @@
 
         COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
-        COMPONENTWRITEINFO  (   COMPONENTINFO( Service1 )
-                                 COMPONENTINFO( Service2 )
-                            )
-
         COMPONENTGETFACTORY (   IFFACTORIE( Service1 )
                                  else
                                 IFFACTORIE( Service2 )
@@ -81,31 +77,6 @@
 #include <uielement/popupmenucontroller.hxx>
 
 COMPONENTGETIMPLEMENTATIONENVIRONMENT
-
-COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::MediaTypeDetectionHelper    )
-                        COMPONENTINFO( ::framework::MailToDispatcher                        )
-                        COMPONENTINFO( ::framework::NewMenuController                       )
-                        COMPONENTINFO( ::framework::ToolbarsMenuController                  )
-                        COMPONENTINFO( ::framework::MacrosMenuController                    )
-                        COMPONENTINFO( ::framework::FontSizeMenuController                  )
-                        COMPONENTINFO( ::framework::HeaderMenuController                    )
-                        COMPONENTINFO( ::framework::FooterMenuController                    )
-                        COMPONENTINFO( ::framework::FontMenuController                      )
-                        COMPONENTINFO( ::framework::ServiceHandler                          )
-                        COMPONENTINFO( ::framework::LogoImageStatusbarController            )
-                        COMPONENTINFO( ::framework::LogoTextStatusbarController             )
-                        COMPONENTINFO( ::framework::SimpleTextStatusbarController           )
-                        COMPONENTINFO( ::framework::UriAbbreviation                         )
-                        COMPONENTINFO( ::framework::LanguageSelectionMenuController         )
-                        COMPONENTINFO( ::framework::PopupMenuDispatcher                     )
-                        COMPONENTINFO( ::framework::DispatchHelper                          )
-                        COMPONENTINFO( ::framework::TabWindowService                        )
-                        COMPONENTINFO( ::framework::DispatchRecorder                        )
-                        COMPONENTINFO( ::framework::DispatchRecorderSupplier                )
-                        COMPONENTINFO( ::framework::Oxt_Handler                             )
-                        COMPONENTINFO( ::framework::License                                 )
-                        COMPONENTINFO( ::framework::PopupMenuController                     )
-                    )
 
 COMPONENTGETFACTORY (   IFFACTORY( ::framework::MediaTypeDetectionHelper        )
                         IFFACTORY( ::framework::MailToDispatcher                        ) else

@@ -76,7 +76,6 @@ OpenOffice
 			PACKAGEVERSION 3.4.0
 			PACKAGEREVISION {milestone}
 			LICENSENAME LGPL
-			SERVICESPROJEKT 1
 			GLOBALFILEGID gid_File_Lib_Vcl
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
 			SPELLCHECKERFILE spellchecker_selection.txt
@@ -140,7 +139,6 @@ OpenOffice_wJRE
 			PACKAGEVERSION 3.4.0
 			PACKAGEREVISION {milestone}
 			LICENSENAME LGPL
-			SERVICESPROJEKT 1
 			WITHJREPRODUCT 1
 			GLOBALFILEGID gid_File_Lib_Vcl
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
@@ -211,7 +209,6 @@ OpenOffice_Dev
 			PACKAGEVERSION 3.4.0
 			PACKAGEREVISION {milestone}
 			LICENSENAME LGPL
-			SERVICESPROJEKT 1
 			GLOBALFILEGID gid_File_Lib_Vcl
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
 			SPELLCHECKERFILE spellchecker_selection.txt
@@ -264,7 +261,6 @@ URE
             LONG_PRODUCTEXTENSION
             SHORT_PRODUCTEXTENSION
             LICENSENAME LGPL
-            SERVICESPROJEKT 1
             SETSTATICPATH 1
             NOVERSIONINDIRNAME 1
             PCPFILENAME ure.pcp
@@ -274,7 +270,6 @@ URE
             DOWNLOADBITMAP urebitmap.bmp
             DOWNLOADSETUPICO ooosetup.ico
             DONTUSESTARTMENUFOLDER 1
-            SERVICESPROJEKT 1
             RELATIVE_PATHES_IN_DDF 1
             STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/OpenOffice.org/extensions.jsp?cid=920794
             STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/homepage.jsp
@@ -287,7 +282,7 @@ URE
         active 1
         compression 5
         script ure
-        include {solarenvpath}/{os}/loader2,{solarpath}/bin.{minor}/ure,{solarpath}/bin.{minor},{solarpath}/bin.{minor}/osl,{solarpath}/lib.{minor},{solarenvpath}/{os}/MS
+        include {solarenvpath}/{os}/loader2,{solarpath}/bin.{minor}/ure,{solarpath}/bin.{minor},{solarpath}/bin.{minor}/osl,{solarpath}/lib.{minor},{solarpath}/xml.{minor},{solarenvpath}/{os}/MS
     }
 }
 
@@ -421,7 +416,6 @@ BrOffice
 			PACKAGEVERSION 3.4.0
 			PACKAGEREVISION {milestone}
 			LICENSENAME LGPL
-			SERVICESPROJEKT 1
 			SETSTATICPATH 1
 			GLOBALFILEGID gid_File_Lib_Vcl
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
@@ -491,7 +485,6 @@ BrOffice_wJRE
 			PACKAGEVERSION 3.4.0
 			PACKAGEREVISION {milestone}
 			LICENSENAME LGPL
-			SERVICESPROJEKT 1
 			WITHJREPRODUCT 1
 			SETSTATICPATH 1
 			GLOBALFILEGID gid_File_Lib_Vcl
@@ -563,7 +556,6 @@ BrOffice_Dev
 			PACKAGEVERSION 3.4.0
 			PACKAGEREVISION {milestone}
 			LICENSENAME LGPL
-			SERVICESPROJEKT 1
 			SETSTATICPATH 1
 			GLOBALFILEGID gid_File_Lib_Vcl
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles

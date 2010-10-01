@@ -143,6 +143,8 @@ class LngSvcMgr :
     void    SetAvailableCfgServiceLists( LinguDispatcher &rDispatcher,
                     const SvcInfoArray &rAvailSvcs );
 
+    static void clearSvcInfoArray(SvcInfoArray *pInfo);
+
     // utl::ConfigItem (to allow for listening of changes of relevant properties)
     virtual void    Notify( const com::sun::star::uno::Sequence< rtl::OUString > &rPropertyNames );
     virtual void    Commit();

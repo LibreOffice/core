@@ -104,3 +104,11 @@ DEF1EXPORTFILE=	exports.dxp
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
+
+ALLTAR : $(MISC)/abp.component
+
+$(MISC)/abp.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        abp.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt abp.component

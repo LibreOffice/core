@@ -37,8 +37,6 @@ NO_BSYMBOLIC=TRUE
 .INCLUDE: settings.mk
 .IF "$(L10N_framework)"==""
 
-UNIXTEXT=$(MISC)/$(TARGET)-ucd.txt
-
 .IF "$(ENABLE_GIO)"!=""
 COMPILER_WARN_ALL=TRUE
 PKGCONFIG_MODULES=gio-2.0
@@ -79,3 +77,11 @@ SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 .ENDIF # L10N_framework
 
 .INCLUDE: target.mk
+
+ALLTAR : $(MISC)/ucpgio.component
+
+$(MISC)/ucpgio.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        ucpgio.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt ucpgio.component

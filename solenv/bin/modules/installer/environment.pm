@@ -117,9 +117,6 @@ sub set_global_environment_variables
     if ( $ENV{'LAST_MINOR'} ) { $installer::globals::lastminor = $ENV{'LAST_MINOR'}; }
 
     if ( $ENV{'PROEXT'} ) { $installer::globals::pro = 1; }
-    if ( $ENV{'SOLAR_JAVA'} ) { $installer::globals::solarjava = 1; }
-    if ( $ENV{'JDKLIB'} ) { $installer::globals::jdklib = $ENV{'JDKLIB'}; }
-    if ( $ENV{'JREPATH'} ) { $installer::globals::jrepath = $ENV{'JREPATH'}; }
 
     if ( $ENV{'VERBOSE'} && ( (lc $ENV{'VERBOSE'}) eq "false" ) ) { $installer::globals::quiet = 1; }
     if ( $ENV{'PREPARE_WINPATCH'} ) { $installer::globals::prepare_winpatch = 1; }

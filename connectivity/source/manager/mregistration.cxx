@@ -36,7 +36,6 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::registry;
 
 //==========================================================================
 //= registration
@@ -48,38 +47,6 @@ extern "C"
 SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(const sal_Char** _ppEnvTypeName, uno_Environment** /*_ppEnv*/)
 {
     *_ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
-//---------------------------------------------------------------------------------------
-SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(void* /*_pServiceManager*/, com::sun::star::registry::XRegistryKey* _pRegistryKey)
-{
-
-
-    sal_Bool bReturn = sal_False;
-
-    try
-    {
-        ::rtl::OUString sMainKeyName = ::rtl::OUString::createFromAscii("/");
-        sMainKeyName += ::drivermanager::OSDBCDriverManager::getImplementationName_static();
-        sMainKeyName += ::rtl::OUString::createFromAscii("/UNO/SERVICES");
-        Reference< XRegistryKey > xMainKey = _pRegistryKey->createKey(sMainKeyName);
-        if (xMainKey.is())
-        {
-            Sequence< ::rtl::OUString > sServices(::drivermanager::OSDBCDriverManager::getSupportedServiceNames_static());
-            const ::rtl::OUString* pBegin = sServices.getConstArray();
-            const ::rtl::OUString* pEnd = pBegin + sServices.getLength();
-            for (;pBegin != pEnd ; ++pBegin)
-                xMainKey->createKey(*pBegin);
-            bReturn = sal_True;
-        }
-    }
-    catch(InvalidRegistryException&)
-    {
-    }
-    catch(InvalidValueException&)
-    {
-    }
-    return bReturn;
 }
 
 //---------------------------------------------------------------------------------------

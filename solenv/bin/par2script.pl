@@ -86,8 +86,6 @@ print "Checking module definitions ...\n";
 par2script::check::check_module_existence();
 print "Checking module assignments ...\n";
 par2script::check::check_moduleid_at_items();
-print "Checking StarRegistry ...\n";
-par2script::check::check_registry_at_files();
 print "Checking Root Module ...";
 par2script::check::check_rootmodule();
 print "Checking Shortcut assignments ...\n";

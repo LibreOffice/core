@@ -552,3 +552,6 @@ mkdir: %_DEST%\inc%_EXT%\svx\sdr\table
 ..\inc\svx\helperhittest3d.hxx %_DEST%\inc%_EXT%\svx\helperhittest3d.hxx
 
 ..\%__SRC%\bin\*-layout.zip %_DEST%\pck%_EXT%\*.*
+..\%__SRC%\misc\svx.component %_DEST%\xml%_EXT%\svx.component
+..\%__SRC%\misc\svxcore.component %_DEST%\xml%_EXT%\svxcore.component
+..\%__SRC%\misc\textconversiondlgs.component %_DEST%\xml%_EXT%\textconversiondlgs.component

@@ -168,10 +168,8 @@ typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_getByTypeClass(
                     OUString sTypeName( RTL_CONSTASCII_USTRINGPARAM("type") );
                     ::typelib_typedescriptionreference_new(
                         &s_aTypes[typelib_TypeClass_TYPE], typelib_TypeClass_TYPE, sTypeName.pData );
-#ifndef CPPU_LEAK_STATIC_DATA
-                    // another static ref
+                    // another static ref:
                     ++s_aTypes[typelib_TypeClass_TYPE]->nStaticRefCount;
-#endif
                 }
                 // any
                 if (! s_aTypes[typelib_TypeClass_ANY])
@@ -179,10 +177,8 @@ typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_getByTypeClass(
                     OUString sTypeName( RTL_CONSTASCII_USTRINGPARAM("any") );
                     ::typelib_typedescriptionreference_new(
                         &s_aTypes[typelib_TypeClass_ANY], typelib_TypeClass_ANY, sTypeName.pData );
-#ifndef CPPU_LEAK_STATIC_DATA
-                    // another static ref
+                    // another static ref:
                     ++s_aTypes[typelib_TypeClass_ANY]->nStaticRefCount;
-#endif
                 }
                 // string
                 if (! s_aTypes[typelib_TypeClass_STRING])
@@ -190,10 +186,8 @@ typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_getByTypeClass(
                     OUString sTypeName( RTL_CONSTASCII_USTRINGPARAM("string") );
                     ::typelib_typedescriptionreference_new(
                         &s_aTypes[typelib_TypeClass_STRING], typelib_TypeClass_STRING, sTypeName.pData );
-#ifndef CPPU_LEAK_STATIC_DATA
-                    // another static ref
+                    // another static ref:
                     ++s_aTypes[typelib_TypeClass_STRING]->nStaticRefCount;
-#endif
                 }
                 // XInterface
                 if (! s_aTypes[typelib_TypeClass_INTERFACE])
@@ -220,10 +214,8 @@ typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_getByTypeClass(
                     ::typelib_typedescription_register( (typelib_TypeDescription **)&pTD );
                     ::typelib_typedescriptionreference_acquire(
                         s_aTypes[typelib_TypeClass_INTERFACE] = ((typelib_TypeDescription *)pTD)->pWeakRef );
-#ifndef CPPU_LEAK_STATIC_DATA
-                    // another static ref
+                    // another static ref:
                     ++s_aTypes[typelib_TypeClass_INTERFACE]->nStaticRefCount;
-#endif
                     ::typelib_typedescription_release( (typelib_TypeDescription*)pTD );
 
                     ::typelib_typedescriptionreference_release( pMembers[0] );
@@ -252,10 +244,8 @@ typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_getByTypeClass(
                     typelib_typedescription_register( &pTD1 );
                     typelib_typedescriptionreference_acquire(
                         s_aTypes[typelib_TypeClass_EXCEPTION] = pTD1->pWeakRef );
-#ifndef CPPU_LEAK_STATIC_DATA
-                    // another static ref
+                    // another static ref:
                     ++s_aTypes[typelib_TypeClass_EXCEPTION]->nStaticRefCount;
-#endif
                     // RuntimeException
                     OUString sTypeName2( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.RuntimeException") );
                     ::typelib_typedescription_new(
@@ -302,10 +292,8 @@ typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_getByTypeClass(
             {
                 OUString aTypeName( OUString::createFromAscii( s_aTypeNames[eTypeClass] ) );
                 ::typelib_typedescriptionreference_new( &s_aTypes[eTypeClass], eTypeClass, aTypeName.pData );
-#ifndef CPPU_LEAK_STATIC_DATA
-                // another static ref
+                // another static ref:
                 ++s_aTypes[eTypeClass]->nStaticRefCount;
-#endif
             }
             }
         }
@@ -327,10 +315,8 @@ void SAL_CALL typelib_static_type_init(
             OUString aTypeName( OUString::createFromAscii( pTypeName ) );
             ::typelib_typedescriptionreference_new( ppRef, eTypeClass, aTypeName.pData );
 
-#ifndef CPPU_LEAK_STATIC_DATA
-            // another static ref
+            // another static ref:
             ++((*ppRef)->nStaticRefCount);
-#endif
         }
     }
 }
@@ -364,10 +350,8 @@ void SAL_CALL typelib_static_sequence_type_init(
                 *ppRef = (typelib_TypeDescriptionReference *)pReg;
                 OSL_ASSERT( *ppRef == pReg->pWeakRef );
             }
-#ifndef CPPU_LEAK_STATIC_DATA
-            // another static ref
+            // another static ref:
             ++((*ppRef)->nStaticRefCount);
-#endif
         }
     }
 }
@@ -450,10 +434,8 @@ void init(
                 *ppRef = (typelib_TypeDescriptionReference *)pReg;
                 OSL_ASSERT( *ppRef == pReg->pWeakRef );
             }
-#ifndef CPPU_LEAK_STATIC_DATA
-            // another static ref
+            // another static ref:
             ++((*ppRef)->nStaticRefCount);
-#endif
         }
     }
 }
@@ -551,10 +533,8 @@ void SAL_CALL typelib_static_mi_interface_type_init(
                 *ppRef = (typelib_TypeDescriptionReference *)pReg;
                 OSL_ASSERT( *ppRef == pReg->pWeakRef );
             }
-#ifndef CPPU_LEAK_STATIC_DATA
-            // another static ref
+            // another static ref:
             ++((*ppRef)->nStaticRefCount);
-#endif
         }
     }
 }
@@ -593,10 +573,8 @@ void SAL_CALL typelib_static_enum_type_init(
                 *ppRef = (typelib_TypeDescriptionReference *)pReg;
                 OSL_ASSERT( *ppRef == pReg->pWeakRef );
             }
-#ifndef CPPU_LEAK_STATIC_DATA
-            // another static ref
+            // another static ref:
             ++(*(sal_Int32 *)&(*ppRef)->pReserved);
-#endif
         }
     }
 }
@@ -660,10 +638,8 @@ void SAL_CALL typelib_static_array_type_init(
                 OSL_ASSERT( *ppRef == pReg->pWeakRef );
             } else
                 delete [] pDimensions;
-#ifndef CPPU_LEAK_STATIC_DATA
-            // another static ref
+            // another static ref:
             ++((*ppRef)->nStaticRefCount);
-#endif
         }
     }
 }

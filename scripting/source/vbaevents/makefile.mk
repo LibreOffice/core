@@ -91,3 +91,11 @@ $(MISC)$/$(TARGET).don : $(SOLARBINDIR)$/oovbaapi.rdb
         +$(CPPUMAKER) -O$(INCCOM)$/$(TARGET) -BUCR $(SOLARBINDIR)$/oovbaapi.rdb -X$(SOLARBINDIR)$/types.rdb && echo > $@
         echo $@
  
+
+ALLTAR : $(MISC)/vbaevents.component
+
+$(MISC)/vbaevents.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        vbaevents.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt vbaevents.component

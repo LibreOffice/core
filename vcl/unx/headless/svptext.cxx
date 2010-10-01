@@ -272,15 +272,13 @@ ULONG SvpSalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs )
 
 // ---------------------------------------------------------------------------
 
-ImplFontCharMap* SvpSalGraphics::GetImplFontCharMap() const
+const ImplFontCharMap* SvpSalGraphics::GetImplFontCharMap() const
 {
     if( !m_pServerFont[0] )
         return NULL;
 
-    CmapResult aCmapResult;
-    if( !m_pServerFont[0]->GetFontCodeRanges( aCmapResult ) )
-        return NULL;
-    return new ImplFontCharMap( aCmapResult );
+    const ImplFontCharMap* pIFCMap = m_pServerFont[0]->GetImplFontCharMap();
+    return pIFCMap;
 }
 
 // ---------------------------------------------------------------------------

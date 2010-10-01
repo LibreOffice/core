@@ -42,6 +42,7 @@ namespace cppu_threadpool {
         m_cndWait( osl_createCondition() )
     {
         osl_resetCondition( m_cndWait );
+        m_DisposedCallerAdmin = DisposedCallerAdmin::getInstance();
     }
 
     JobQueue::~JobQueue()
@@ -68,7 +69,7 @@ namespace cppu_threadpool {
         {
             // synchronize with the dispose calls
             MutexGuard guard( m_mutex );
-            if( DisposedCallerAdmin::getInstance()->isDisposed( nDisposeId ) )
+            if( m_DisposedCallerAdmin->isDisposed( nDisposeId ) )
             {
                 return 0;
             }

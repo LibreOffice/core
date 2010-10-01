@@ -196,3 +196,17 @@ RESLIB1SRSFILES= $(SRSFILELIST)
 
 .INCLUDE :  target.mk
 
+
+ALLTAR : $(MISC)/svx.component $(MISC)/svxcore.component
+
+$(MISC)/svx.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        svx.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL2TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt svx.component
+
+$(MISC)/svxcore.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        svxcore.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt svxcore.component

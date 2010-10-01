@@ -28,7 +28,6 @@ package com.sun.star.comp;
 
 import com.sun.star.lib.uno.helper.Factory;
 import com.sun.star.lang.XSingleComponentFactory;
-import com.sun.star.registry.XRegistryKey;
 import com.sun.star.comp.juhtest.SmoketestCommandEnvironment;
 
 
@@ -62,20 +61,4 @@ public class JavaUNOHelperServices {
 
         return xFactory;
     }
-
-    /**
-     * Writes the service information into the given registry key.
-     * This method is called by the <code>JavaLoader</code>
-     * <p>
-     * @return  returns true if the operation succeeded
-     * @param   regKey the registryKey
-     * @see     com.sun.star.comp.loader.JavaLoader
-     */
-    public static boolean __writeRegistryServiceInfo(XRegistryKey regKey) {
-        return Factory.writeRegistryServiceInfo(SmoketestCommandEnvironment.class.getName(),
-                                                SmoketestCommandEnvironment.getServiceNames(),
-                                                regKey);
-    }
 }
-
-

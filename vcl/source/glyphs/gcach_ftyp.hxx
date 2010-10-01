@@ -94,6 +94,9 @@ public:
     int                   GetGlyphIndex( sal_UCS4 cChar ) const;
     void                  CacheGlyphIndex( sal_UCS4 cChar, int nGI ) const;
 
+    bool                  GetFontCodeRanges( CmapResult& ) const;
+    const ImplFontCharMap* GetImplFontCharMap( void );
+
     bool                  HasExtraKerning() const;
     int                   GetExtraKernPairs( ImplKernPairData** ) const;
     int                   GetExtraGlyphKernValue( int nLeftGlyph, int nRightGlyph ) const;
@@ -107,6 +110,8 @@ private:
 
     sal_IntPtr      mnFontId;
     ImplDevFontAttributes maDevFontAttributes;
+
+    const ImplFontCharMap* mpFontCharMap;
 
     // cache unicode->glyphid mapping because looking it up is expensive
     // TODO: change to hash_multimap when a use case requires a m:n mapping
@@ -181,6 +186,7 @@ public:
     virtual bool                NeedsArtificialItalic() const { return mbArtItalic; }
 
     virtual void                FetchFontMetric( ImplFontMetricData&, long& rFactor ) const;
+    virtual const ImplFontCharMap* GetImplFontCharMap( void ) const;
 
     virtual int                 GetGlyphIndex( sal_UCS4 ) const;
     int                         GetRawGlyphIndex( sal_UCS4 ) const;
@@ -203,7 +209,6 @@ protected:
 
     int                         ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_*, bool ) const;
     virtual void                InitGlyphData( int nGlyphIndex, GlyphData& ) const;
-    virtual bool                GetFontCodeRanges( CmapResult& ) const;
     bool                        ApplyGSUB( const ImplFontSelectData& );
     virtual ServerFontLayoutEngine* GetLayoutEngine();
 

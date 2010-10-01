@@ -60,44 +60,6 @@ component_getImplementationEnvironment(const sal_Char **ppEnvironmentTypeName, u
     *ppEnvironmentTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
 }
 
-sal_Bool SAL_CALL
-component_writeInfo(void * /*pServiceManager*/, void* pRegistryKey )
-{
-    Reference< XRegistryKey > xKey(reinterpret_cast< XRegistryKey* >(pRegistryKey));
-    Reference< XRegistryKey > xNewKey;
-    OUString aImpl;
-
-    // register DOM service
-    aImpl =  OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
-    aImpl += CDocumentBuilder::_getImplementationName();
-    aImpl += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
-    xNewKey = xKey->createKey(aImpl);
-    xNewKey->createKey(CDocumentBuilder::_getSupportedServiceNames()[0]);
-
-    // register DOM service
-    aImpl =  OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
-    aImpl += CSAXDocumentBuilder::_getImplementationName();
-    aImpl += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
-    xNewKey = xKey->createKey(aImpl);
-    xNewKey->createKey(CSAXDocumentBuilder::_getSupportedServiceNames()[0]);
-
-    // register XPath service
-    aImpl = OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
-    aImpl += CXPathAPI::_getImplementationName();
-    aImpl += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
-    xNewKey = xKey->createKey(aImpl);
-    xNewKey->createKey(CXPathAPI::_getSupportedServiceNames()[0]);
-
-    // register EventTest service
-    aImpl = OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
-    aImpl += CTestListener::_getImplementationName();
-    aImpl += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
-    xNewKey = xKey->createKey(aImpl);
-    xNewKey->createKey(CTestListener::_getSupportedServiceNames()[0]);
-
-    return sal_True;
-}
-
 void* SAL_CALL
 component_getFactory(const sal_Char *pImplementationName, void *pServiceManager, void * /*pRegistryKey*/)
 {

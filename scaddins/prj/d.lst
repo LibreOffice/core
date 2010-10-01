@@ -7,3 +7,5 @@ mkdir: %COMMON_DEST%\bin%_EXT%\hid
 ..\%__SRC%\lib\*.sl %_DEST%\lib%_EXT%\*.sl
 ..\%__SRC%\bin\*.bin %_DEST%\bin%_EXT%\*.bin
 ..\%__SRC%\bin\*.res %_DEST%\bin%_EXT%\*.res
+..\%__SRC%\misc\analysis.component %_DEST%\xml%_EXT%\analysis.component
+..\%__SRC%\misc\date.component %_DEST%\xml%_EXT%\date.component

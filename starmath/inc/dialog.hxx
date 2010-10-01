@@ -30,9 +30,7 @@
 #include <vcl/image.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
-#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <vcl/image.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <vcl/combobox.hxx>
@@ -403,8 +401,8 @@ public:
     {
     }
 
-    void    SetChar(xub_Unicode aChar);
-    void    SetFont(const Font &rFont);
+    void    SetSymbol( const SmSym *pSym );
+    void    SetSymbol( sal_UCS4 cChar, const Font &rFont );
 };
 
 ////////////////////////////////////////////////////////////////////////////////

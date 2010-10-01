@@ -76,6 +76,14 @@ fix_system_lucene:
     @echo "Fix Java Class-Path entry for Lucene libraries from system."
     @$(SED) -r -e "s#^(Class-Path:).*#\1 file://$(LUCENE_CORE_JAR) file://$(LUCENE_ANALYZERS_JAR)#" \
     -i ../../../../../$(INPATH)/class/HelpLinker/META-INF/MANIFEST.MF
+
+ALLTAR : $(MISC)/LuceneHelpWrapper.component
+
+$(MISC)/LuceneHelpWrapper.component .ERRREMOVE : \
+        $(SOLARENV)/bin/createcomponent.xslt LuceneHelpWrapper.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_JAVA)$(JARTARGET)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt LuceneHelpWrapper.component
 .ELSE
 all:
         @echo java disabled

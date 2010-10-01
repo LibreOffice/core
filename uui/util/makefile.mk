@@ -62,3 +62,11 @@ RESLIB1SRSFILES = \
     $(SRS)$/source.srs
 
 .INCLUDE: target.mk
+
+ALLTAR : $(MISC)/uui.component
+
+$(MISC)/uui.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        uui.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt uui.component

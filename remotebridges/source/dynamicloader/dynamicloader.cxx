@@ -381,34 +381,6 @@ extern "C" {
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
     }
 
-    sal_Bool SAL_CALL component_writeInfo(XMultiServiceFactory *, XRegistryKey * pRegistryKey) {
-        sal_Bool bRes = sal_False;
-
-        if (pRegistryKey) {
-            try {
-                OUString x = OUString::createFromAscii("/");
-                x += ::dynamic_loader::DynamicLoader::implname;
-                x += OUString::createFromAscii("/UNO/SERVICES");
-
-
-                Reference<XRegistryKey> xNewKey(pRegistryKey->createKey(x));
-
-                const Sequence<OUString> rSNL = ::dynamic_loader::DynamicLoader::getSupportedServiceNames_Static();
-                const OUString * pArray = rSNL.getConstArray();
-                for (sal_Int32 nPos = rSNL.getLength(); nPos--;)
-                    xNewKey->createKey(pArray[nPos]);
-
-
-                bRes = sal_True;
-            }
-            catch (InvalidRegistryException &) {
-                  OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-            }
-        }
-
-        return bRes;
-    }
-
     void * SAL_CALL component_getFactory(const sal_Char * pImplName, XMultiServiceFactory * pServiceManager, XRegistryKey *) {
         void * pRet = 0;
 

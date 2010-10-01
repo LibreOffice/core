@@ -93,9 +93,6 @@ public:
         throw( ::com::sun::star::uno::Exception,
                ::com::sun::star::uno::RuntimeException );
 
-    // New
-    void removeRegistry();
-
     const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >&
     getInitArgs() const;
 };
@@ -132,7 +129,8 @@ public:
     PropertySetRegistry(
         const com::sun::star::uno::Reference<
                 com::sun::star::lang::XMultiServiceFactory >& rXSMgr,
-        UcbStore& rCreator );
+        const ::com::sun::star::uno::Sequence<
+                                                ::com::sun::star::uno::Any >& rInitArgs);
     virtual ~PropertySetRegistry();
 
     // XInterface

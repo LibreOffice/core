@@ -63,3 +63,4 @@ mkdir: %_DEST%\inc%_EXT%\layout\vcl
 ..\source\layout\vcl\*.hxx  %_DEST%\inc%_EXT%\layout\vcl\*.hxx
 
 ..\%__SRC%\bin\*-layout.zip %_DEST%\pck%_EXT%\*.*
+..\%__SRC%\misc\tk.component %_DEST%\xml%_EXT%\tk.component

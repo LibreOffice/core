@@ -45,6 +45,8 @@
 #include <cppuhelper/extract.hxx>
 #include <rtl/logfile.hxx>
 
+#include <boost/checked_delete.hpp>
+
 #include "lngsvcmgr.hxx"
 #include "lngopt.hxx"
 #include "misc.hxx"
@@ -605,6 +607,14 @@ LngSvcMgr::LngSvcMgr() :
     EnableNotification( aNames );
 }
 
+void LngSvcMgr::clearSvcInfoArray(SvcInfoArray* pInfo)
+{
+    if (pInfo)
+    {
+        std::for_each(pInfo->begin(), pInfo->end(), boost::checked_deleter<SvcInfo>());
+        delete pInfo;
+    }
+}
 
 LngSvcMgr::~LngSvcMgr()
 {
@@ -612,10 +622,10 @@ LngSvcMgr::~LngSvcMgr()
     // will be freed in the destructor of the respective Reference's
     // xSpellDsp, xGrammarDsp, xHyphDsp, xThesDsp
 
-    delete pAvailSpellSvcs;
-    delete pAvailGrammarSvcs;
-    delete pAvailHyphSvcs;
-    delete pAvailThesSvcs;
+    clearSvcInfoArray(pAvailSpellSvcs);
+    clearSvcInfoArray(pAvailGrammarSvcs);
+    clearSvcInfoArray(pAvailHyphSvcs);
+    clearSvcInfoArray(pAvailThesSvcs);
 }
 
 
@@ -652,7 +662,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
         if (0 == rName.compareTo( aSpellCheckerList, aSpellCheckerList.getLength() ))
         {
             // delete old cached data, needs to be acquired new on demand
-            delete pAvailSpellSvcs;     pAvailSpellSvcs = 0;
+            clearSvcInfoArray(pAvailSpellSvcs);     pAvailSpellSvcs = 0;
 
             OUString aNode( aSpellCheckerList );
             if (lcl_SeqHasString( aSpellCheckerListEntries, aKeyText ))
@@ -677,7 +687,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
         else if (0 == rName.compareTo( aGrammarCheckerList, aGrammarCheckerList.getLength() ))
         {
             // delete old cached data, needs to be acquired new on demand
-            delete pAvailGrammarSvcs;      pAvailGrammarSvcs = 0;
+            clearSvcInfoArray(pAvailGrammarSvcs);      pAvailGrammarSvcs = 0;
 
             OUString aNode( aGrammarCheckerList );
             if (lcl_SeqHasString( aGrammarCheckerListEntries, aKeyText ))
@@ -705,7 +715,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
         else if (0 == rName.compareTo( aHyphenatorList, aHyphenatorList.getLength() ))
         {
             // delete old cached data, needs to be acquired new on demand
-            delete pAvailHyphSvcs;      pAvailHyphSvcs = 0;
+            clearSvcInfoArray(pAvailHyphSvcs);      pAvailHyphSvcs = 0;
 
             OUString aNode( aHyphenatorList );
             if (lcl_SeqHasString( aHyphenatorListEntries, aKeyText ))
@@ -730,7 +740,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
         else if (0 == rName.compareTo( aThesaurusList, aThesaurusList.getLength() ))
         {
             // delete old cached data, needs to be acquired new on demand
-            delete pAvailThesSvcs;      pAvailThesSvcs = 0;
+            clearSvcInfoArray(pAvailThesSvcs);      pAvailThesSvcs = 0;
 
             OUString aNode( aThesaurusList );
             if (lcl_SeqHasString( aThesaurusListEntries, aKeyText ))
@@ -1402,7 +1412,7 @@ uno::Sequence< OUString > SAL_CALL
     {
         // don't used cached data here (force re-evaluation in order to have downloaded dictionaries
         // already found without the need to restart the office
-        delete pAvailSpellSvcs;  pAvailSpellSvcs = 0;
+        clearSvcInfoArray(pAvailSpellSvcs);  pAvailSpellSvcs = 0;
         GetAvailableSpellSvcs_Impl();
         pInfoArray = pAvailSpellSvcs;
     }
@@ -1410,7 +1420,7 @@ uno::Sequence< OUString > SAL_CALL
     {
         // don't used cached data here (force re-evaluation in order to have downloaded dictionaries
         // already found without the need to restart the office
-        delete pAvailGrammarSvcs;  pAvailGrammarSvcs = 0;
+        clearSvcInfoArray(pAvailGrammarSvcs);  pAvailGrammarSvcs = 0;
         GetAvailableGrammarSvcs_Impl();
         pInfoArray = pAvailGrammarSvcs;
     }
@@ -1418,7 +1428,7 @@ uno::Sequence< OUString > SAL_CALL
     {
         // don't used cached data here (force re-evaluation in order to have downloaded dictionaries
         // already found without the need to restart the office
-        delete pAvailHyphSvcs;  pAvailHyphSvcs = 0;
+        clearSvcInfoArray(pAvailHyphSvcs);  pAvailHyphSvcs = 0;
         GetAvailableHyphSvcs_Impl();
         pInfoArray = pAvailHyphSvcs;
     }
@@ -1426,7 +1436,7 @@ uno::Sequence< OUString > SAL_CALL
     {
         // don't used cached data here (force re-evaluation in order to have downloaded dictionaries
         // already found without the need to restart the office
-        delete pAvailThesSvcs;  pAvailThesSvcs = 0;
+        clearSvcInfoArray(pAvailThesSvcs);  pAvailThesSvcs = 0;
         GetAvailableThesSvcs_Impl();
         pInfoArray = pAvailThesSvcs;
     }
@@ -1988,31 +1998,6 @@ uno::Reference< uno::XInterface > SAL_CALL LngSvcMgr_CreateInstance(
 {
     uno::Reference< uno::XInterface > xService = (cppu::OWeakObject*) new LngSvcMgr;
     return xService;
-}
-
-
-
-sal_Bool SAL_CALL LngSvcMgr_writeInfo(
-            void * /*pServiceManager*/,
-            registry::XRegistryKey * pRegistryKey )
-{
-    try
-    {
-        String aImpl( '/' );
-        aImpl += LngSvcMgr::getImplementationName_Static().getStr();
-        aImpl.AppendAscii( "/UNO/SERVICES" );
-        uno::Reference< registry::XRegistryKey > xNewKey =
-            pRegistryKey->createKey( aImpl );
-        uno::Sequence< OUString > aServices = LngSvcMgr::getSupportedServiceNames_Static();
-        for( INT32 i = 0; i < aServices.getLength(); i++ )
-            xNewKey->createKey( aServices.getConstArray()[i] );
-
-        return sal_True;
-    }
-    catch(uno::Exception &)
-    {
-        return sal_False;
-    }
 }
 
 void * SAL_CALL LngSvcMgr_getFactory(

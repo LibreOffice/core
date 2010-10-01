@@ -102,41 +102,6 @@ ONE_INSTANCE_SERVICE_FACTORY_IMPL( ContentProvider );
 
 }
 
-static sal_Bool writeInfo( void *pRegistryKey,
-    const rtl::OUString &rImplementationName, uno::Sequence< rtl::OUString > const &rServiceNames )
-{
-    rtl::OUString aKeyName( rtl::OUString::createFromAscii( "/" ) );
-    aKeyName += rImplementationName;
-    aKeyName += rtl::OUString::createFromAscii( "/UNO/SERVICES" );
-
-    uno::Reference< registry::XRegistryKey > xKey;
-    try
-    {
-        xKey = static_cast< registry::XRegistryKey * > (pRegistryKey )->createKey( aKeyName );
-    }
-    catch ( registry::InvalidRegistryException const & )
-    {}
-
-    if ( !xKey.is() )
-        return sal_False;
-
-    sal_Bool bSuccess = sal_True;
-
-    for ( sal_Int32 n = 0; n < rServiceNames.getLength(); ++n )
-    {
-        try
-        {
-            xKey->createKey( rServiceNames[ n ] );
-        }
-        catch ( registry::InvalidRegistryException const & )
-        {
-            bSuccess = sal_False;
-            break;
-        }
-    }
-   return bSuccess;
-}
-
 extern "C" void SAL_CALL component_getImplementationEnvironment(
     const sal_Char  **ppEnvTypeName, uno_Environment **)
 {

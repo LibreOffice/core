@@ -694,7 +694,7 @@ void PspServerFontLayout::InitFont() const
 static void DrawPrinterLayout( const SalLayout& rLayout, ::psp::PrinterGfx& rGfx, bool bIsPspServerFontLayout )
 {
     const int nMaxGlyphs = 200;
-    sal_GlyphId aGlyphAry[ nMaxGlyphs ];
+    sal_uInt32 aGlyphAry[ nMaxGlyphs ]; // TODO: use sal_GlyphId
     sal_Int32   aWidthAry[ nMaxGlyphs ];
     sal_Int32   aIdxAry  [ nMaxGlyphs ];
     sal_Unicode aUnicodes[ nMaxGlyphs ];
@@ -720,15 +720,20 @@ static void DrawPrinterLayout( const SalLayout& rLayout, ::psp::PrinterGfx& rGfx
 #ifdef ENABLE_GRAPHITE
         else if (pGrLayout)
         {
+        #if 0 // HACK: disabled for now due to #i114460#, see #desc12 there
+              // TODO: get rid of glyph->string mapping altogether for printing
+          // TODO: fix GraphiteServerFontLayout's returned aCharPosAry
+          // TODO: fix PrinterGfx's caching?
             pText = pGrLayout->getTextPtr();
             nMinCharPos = pGrLayout->getMinCharPos();
             nMaxCharPos = pGrLayout->getMaxCharPos();
+    #endif
         }
 #endif
     }
     for( int nStart = 0;; )
     {
-        int nGlyphCount = rLayout.GetNextGlyphs( nMaxGlyphs, aGlyphAry, aPos, nStart, aWidthAry, bIsPspServerFontLayout ? aCharPosAry : NULL );
+        int nGlyphCount = rLayout.GetNextGlyphs( nMaxGlyphs, aGlyphAry, aPos, nStart, aWidthAry, pText ? aCharPosAry : NULL );
         if( !nGlyphCount )
             break;
 
@@ -738,7 +743,7 @@ static void DrawPrinterLayout( const SalLayout& rLayout, ::psp::PrinterGfx& rGfx
             nXOffset += aWidthAry[ i ];
             aIdxAry[ i ] = nXOffset / nUnitsPerPixel;
             sal_Int32 nGlyphIdx = aGlyphAry[i] & (GF_IDXMASK | GF_ROTMASK);
-            if( bIsPspServerFontLayout )
+            if( pText )
                 aUnicodes[i] = (aCharPosAry[i] >= nMinCharPos && aCharPosAry[i] <= nMaxCharPos) ? pText[ aCharPosAry[i] ] : 0;
             else
                 aUnicodes[i] = (aGlyphAry[i] & GF_ISCHAR) ? nGlyphIdx : 0;
@@ -770,16 +775,13 @@ void PspGraphics::DrawServerFontLayout( const ServerFontLayout& rLayout )
     DrawPrinterLayout( rLayout, *m_pPrinterGfx, true );
 }
 
-ImplFontCharMap* PspGraphics::GetImplFontCharMap() const
+const ImplFontCharMap* PspGraphics::GetImplFontCharMap() const
 {
-    // TODO: get ImplFontCharMap directly from fonts
     if( !m_pServerFont[0] )
         return NULL;
 
-    CmapResult aCmapResult;
-    if( !m_pServerFont[0]->GetFontCodeRanges( aCmapResult ) )
-        return NULL;
-    return new ImplFontCharMap( aCmapResult );
+    const ImplFontCharMap* pIFCMap = m_pServerFont[0]->GetImplFontCharMap();
+    return pIFCMap;
 }
 
 USHORT PspGraphics::SetFont( ImplFontSelectData *pEntry, int nFallbackLevel )

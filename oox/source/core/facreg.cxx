@@ -77,45 +77,6 @@ OOX_DLLPUBLIC void SAL_CALL component_getImplementationEnvironment( const sal_Ch
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-void SAL_CALL writeInfo( registry::XRegistryKey * pRegistryKey, const OUString& rImplementationName, const uno::Sequence< OUString >& rServices )
-{
-    uno::Reference< registry::XRegistryKey > xNewKey(
-        pRegistryKey->createKey(
-            OUString( sal_Unicode( '/' ) ) + rImplementationName + OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") ) ) );
-
-    for( sal_Int32 i = 0; i < rServices.getLength(); i++ )
-        xNewKey->createKey( rServices.getConstArray()[i]);
-}
-
-#define WRITEINFO(className)\
-    writeInfo( pKey, className##_getImplementationName(), className##_getSupportedServiceNames() )
-
-OOX_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo( void * , void * pRegistryKey )
-{
-    if( pRegistryKey )
-    {
-        try
-        {
-            registry::XRegistryKey *pKey = reinterpret_cast< registry::XRegistryKey * >( pRegistryKey );
-
-            WRITEINFO( ::oox::core::FilterDetect );
-            WRITEINFO( ::oox::ppt::PowerPointImport );
-            WRITEINFO( ::oox::xls::BiffDetector );
-            WRITEINFO( ::oox::xls::ExcelFilter );
-            WRITEINFO( ::oox::xls::ExcelBiffFilter );
-            WRITEINFO( ::oox::shape::ShapeContextHandler );
-            WRITEINFO( ::oox::shape::FastTokenHandlerService );
-            WRITEINFO( ::oox::docprop::OOXMLDocPropImportImpl );
-            WRITEINFO( ::oox::xls::OOXMLFormulaParser );
-        }
-        catch (registry::InvalidRegistryException &)
-        {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-        }
-    }
-    return sal_True;
-}
-
 #define SINGLEFACTORY(classname)\
         if( classname##_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )\
         {\

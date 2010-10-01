@@ -191,9 +191,3 @@ void * SAL_CALL comp_AsyncCallback_component_getFactory(
     return ::cppu::component_getFactoryHelper(
         implName, serviceManager, registryKey, entries);
 }
-
-sal_Bool SAL_CALL comp_AsyncCallback_component_writeInfo(
-    void * serviceManager, void * registryKey)
-{
-    return ::cppu::component_writeInfoHelper(serviceManager, registryKey, entries);
-}

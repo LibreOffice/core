@@ -2,6 +2,7 @@
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
 ..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
+..\%__SRC%\misc\writerfilter.component %_DEST%\xml%_EXT%\writerfilter.component
 
 mkdir: %_DEST%\inc%_EXT%\writerfilter\doctok
 ..\%__SRC%\inc\doctok\sprmids.hxx %_DEST%\inc%_EXT%\writerfilter\doctok\sprmids.hxx

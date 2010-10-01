@@ -19,3 +19,6 @@ dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib;
 ..\uiconfig\dbreport\statusbar\*.xml         %_DEST%\xml%_EXT%\uiconfig\modules\dbreport\statusbar\*.xml
 ..\uiconfig\dbreport\toolbar\*.xml           %_DEST%\xml%_EXT%\uiconfig\modules\dbreport\toolbar\*.xml
 
+..\%__SRC%\misc\rpt.component %_DEST%\xml%_EXT%\rpt.component
+..\%__SRC%\misc\rptui.component %_DEST%\xml%_EXT%\rptui.component
+..\%__SRC%\misc\rptxml.component %_DEST%\xml%_EXT%\rptxml.component

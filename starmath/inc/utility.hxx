@@ -42,10 +42,6 @@ class String;
 
 #define C2S(cChar) String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(cChar))
 
-/////////////////////////////////////////////////////////////////
-
-const ByteString    ExportString( const String& rString );
-const String        ImportString( const ByteString& rByteString );
 
 /////////////////////////////////////////////////////////////////
 

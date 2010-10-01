@@ -77,7 +77,6 @@
 
 #define DLG_SPECIAL_FORCED              (RC_VIEW_BEGIN)
 #define DLG_PAGEPREVIEW_ZOOM            (RC_VIEW_BEGIN + 1)
-#define DLG_PAGEPREVIEW_PRINTOPTIONS    (RC_VIEW_BEGIN + 2)
 
 // Ueberlaufpruefung -----------------------------------------------------
 

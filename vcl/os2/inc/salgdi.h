@@ -74,7 +74,7 @@ public:
     bool                    AliasSymbolsHigh() const    { return mbAliasSymbolsHigh; }
     bool                    AliasSymbolsLow() const     { return mbAliasSymbolsLow; }
 
-    ImplFontCharMap*        GetImplFontCharMap() const;
+    const ImplFontCharMap*  GetImplFontCharMap() const;
 
 private:
     sal_IntPtr              mnId;
@@ -82,7 +82,7 @@ private:
     mutable bool                    mbHasKoreanRange;
     mutable bool                    mbHasCJKSupport;
 
-    mutable ImplFontCharMap*        mpUnicodeMap;
+    mutable const ImplFontCharMap*  mpUnicodeMap;
 
     // TODO: get rid of the members below needed to work with the Win9x non-unicode API
     BYTE*                   mpFontCharSets;     // all Charsets for the current font (used on W98 for kerning)

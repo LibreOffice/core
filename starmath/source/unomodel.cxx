@@ -81,8 +81,8 @@ using namespace ::com::sun::star::script;
 SmPrintUIOptions::SmPrintUIOptions()
 {
     ResStringArray      aLocalizedStrings( SmResId( RID_PRINTUIOPTIONS ) );
-    DBG_ASSERT( aLocalizedStrings.Count() >= 18, "resource incomplete" );
-    if( aLocalizedStrings.Count() < 18 ) // bad resource ?
+    DBG_ASSERT( aLocalizedStrings.Count() >= 15, "resource incomplete" );
+    if( aLocalizedStrings.Count() < 15 ) // bad resource ?
         return;
 
     SmModule *pp = SM_MOD();

@@ -36,3 +36,37 @@ TARGET=scriptruntimeforjava
 ALLTAR : ANTBUILD
 .ENDIF
 .ENDIF
+
+ALLTAR : \
+    $(MISC)/ScriptFramework.component \
+    $(MISC)/ScriptProviderForBeanShell.component \
+    $(MISC)/ScriptProviderForJava.component \
+    $(MISC)/ScriptProviderForJavaScript.component
+
+$(MISC)/ScriptFramework.component .ERRREMOVE : \
+        $(SOLARENV)/bin/createcomponent.xslt ScriptFramework.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_JAVA)ScriptFramework.jar' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt ScriptFramework.component
+
+$(MISC)/ScriptProviderForBeanShell.component .ERRREMOVE : \
+        $(SOLARENV)/bin/createcomponent.xslt \
+        ScriptProviderForBeanShell.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_JAVA)ScriptProviderForBeanShell.jar' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt \
+        ScriptProviderForBeanShell.component
+
+$(MISC)/ScriptProviderForJava.component .ERRREMOVE : \
+        $(SOLARENV)/bin/createcomponent.xslt ScriptProviderForJava.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_JAVA)ScriptProviderForJava.jar' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt ScriptProviderForJava.component
+
+$(MISC)/ScriptProviderForJavaScript.component .ERRREMOVE : \
+        $(SOLARENV)/bin/createcomponent.xslt \
+        ScriptProviderForJavaScript.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_JAVA)ScriptProviderForJavaScript.jar' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt \
+        ScriptProviderForJavaScript.component

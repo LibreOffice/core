@@ -95,7 +95,7 @@ public:
 class VCL_DLLPUBLIC FontCharMap
 {
 private:
-    ImplFontCharMap*    mpImpl;
+    const ImplFontCharMap* mpImpl;
 
 public:
                         FontCharMap();
@@ -118,7 +118,7 @@ public:
 
 private:
     friend class OutputDevice;
-    void                Reset( ImplFontCharMap* pNewMap = NULL );
+    void                Reset( const ImplFontCharMap* pNewMap = NULL );
 
     // prevent assignment and copy construction
                         FontCharMap( const FontCharMap& );
