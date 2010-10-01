@@ -169,11 +169,13 @@ MenuManager::MenuManager(
     {
         USHORT nItemId = FillItemCommand(aItemCommand,pMenu, i );
         bool bShowMenuImages( m_bShowMenuImages );
-        MenuItemBits nBits =  pMenu->GetItemBits( nItemId );
-        // overwrite the default?
-        if ( nBits )
-            bShowMenuImages = ( ( nBits & MIB_ICON ) == MIB_ICON );
 
+        // overwrite the show icons on menu option?
+        if (!bShowMenuImages)
+        {
+            MenuItemBits nBits = pMenu->GetItemBits( nItemId );
+            bShowMenuImages = ( ( nBits & MIB_ICON ) == MIB_ICON );
+        }
 
         PopupMenu* pPopupMenu = pMenu->GetPopupMenu( nItemId );
         if ( pPopupMenu )
@@ -1137,10 +1139,12 @@ void MenuManager::FillMenuImages(Reference< XFrame >& _xFrame,Menu* _pMenu,sal_B
         if ( _pMenu->GetItemType( nPos ) != MENUITEM_SEPARATOR )
         {
             bool bTmpShowMenuImages( bShowMenuImages );
-            MenuItemBits nBits =  _pMenu->GetItemBits( nId );
-            // overwrite the default?
-            if ( nBits )
+            // overwrite the show icons on menu option?
+            if (!bTmpShowMenuImages)
+            {
+                MenuItemBits nBits =  _pMenu->GetItemBits( nId );
                 bTmpShowMenuImages = ( ( nBits & MIB_ICON ) == MIB_ICON );
+            }
 
             if ( bTmpShowMenuImages )
             {

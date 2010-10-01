@@ -1331,10 +1331,12 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
         Reference< XStatusListener > xStatusListener;
         PopupMenu* pPopup = pMenu->GetPopupMenu( nItemId );
         bool bItemShowMenuImages = m_bShowMenuImages;
-        MenuItemBits nBits =  pMenu->GetItemBits( nItemId );
         // overwrite the show icons on menu option?
-        if ( nBits )
+        if (!bItemShowMenuImages)
+        {
+            MenuItemBits nBits =  pMenu->GetItemBits( nItemId );
             bItemShowMenuImages = ( ( nBits & MIB_ICON ) == MIB_ICON );
+        }
         if ( pPopup )
         {
             // Retrieve module identifier from Help Command entry
