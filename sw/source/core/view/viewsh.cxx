@@ -251,7 +251,7 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
 
                 Imp()->pRegion = NULL;
 
-                / First Invert then Compress, never the other way round!
+                // First Invert then Compress, never the other way round!
                 pRegion->Invert();
 
                 pRegion->Compress();
