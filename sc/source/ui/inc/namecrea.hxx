@@ -31,12 +31,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/imagebtn.hxx>
 #include <vcl/fixed.hxx>
-#include "scui_def.hxx" //CHINA001
-
-//CHINA001 #define NAME_TOP     1
-//CHINA001 #define NAME_LEFT        2
-//CHINA001 #define NAME_BOTTOM      4
-//CHINA001 #define NAME_RIGHT       8
+#include "scui_def.hxx"
 
 class ScNameCreateDlg : public ModalDialog
 {

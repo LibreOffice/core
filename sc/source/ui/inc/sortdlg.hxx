@@ -32,7 +32,7 @@
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
-#include "scui_def.hxx" //CHINA001
+#include "scui_def.hxx"
 
 #ifndef LAYOUT_SFX_TABDIALOG_BROKEN
 #define LAYOUT_SFX_TABDIALOG_BROKEN 1

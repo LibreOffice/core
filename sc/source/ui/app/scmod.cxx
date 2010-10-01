@@ -100,11 +100,7 @@
 #include "anyrefdg.hxx"
 #include "dwfunctr.hxx"
 #include "formdata.hxx"
-//CHINA001 #include "tpview.hxx"
-//CHINA001 #include "tpusrlst.hxx"
-//CHINA001 #include "tpcalc.hxx"
 #include "tpprint.hxx"
-//CHINA001 #include "opredlin.hxx"
 #include "transobj.hxx"
 #include "detfunc.hxx"
 #include "preview.hxx"
@@ -115,7 +111,7 @@
 #define ScModule
 #include "scslots.hxx"
 
-#include "scabstdlg.hxx" //CHINA001
+#include "scabstdlg.hxx"
 
 #define SC_IDLE_MIN     150
 #define SC_IDLE_MAX     3000
@@ -2074,12 +2070,11 @@ SfxTabPage*  ScModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItem
 {
     SfxTabPage* pRet = NULL;
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
     switch(nId)
     {
         case SID_SC_TP_LAYOUT:
                                 {
-                                    //CHINA001 pRet = ScTpLayoutOptions::Create(pParent, rSet);
                                     ::CreateTabPage ScTpLayoutOptionsCreate = pFact->GetTabPageCreatorFunc( RID_SCPAGE_LAYOUT );
                                     if ( ScTpLayoutOptionsCreate )
                                         pRet =  (*ScTpLayoutOptionsCreate) (pParent, rSet);
@@ -2087,7 +2082,6 @@ SfxTabPage*  ScModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItem
                                 break;
         case SID_SC_TP_CONTENT:
                                 {
-                                    //CHINA001 pRet = ScTpContentOptions::Create(pParent, rSet);
                                     ::CreateTabPage ScTpContentOptionsCreate = pFact->GetTabPageCreatorFunc(RID_SCPAGE_CONTENT);
                                     if ( ScTpContentOptionsCreate )
                                         pRet = (*ScTpContentOptionsCreate)(pParent, rSet);
@@ -2096,14 +2090,13 @@ SfxTabPage*  ScModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItem
         case SID_SC_TP_GRID:            pRet = SvxGridTabPage::Create(pParent, rSet); break;
         case SID_SC_TP_USERLISTS:
                                 {
-                                    //CHINA001 pRet = ScTpUserLists::Create(pParent, rSet);
                                     ::CreateTabPage ScTpUserListsCreate = pFact->GetTabPageCreatorFunc( RID_SCPAGE_USERLISTS );
                                     if ( ScTpUserListsCreate )
                                             pRet = (*ScTpUserListsCreate)( pParent, rSet);
                                 }
                                 break;
         case SID_SC_TP_CALC:
-                                {   //CHINA001 pRet = ScTpCalcOptions::Create(pParent, rSet);
+                                {
                                                     ::CreateTabPage ScTpCalcOptionsCreate = pFact->GetTabPageCreatorFunc( RID_SCPAGE_CALC );
                                                     if ( ScTpCalcOptionsCreate )
                                                         pRet = (*ScTpCalcOptionsCreate)(pParent, rSet);
@@ -2117,14 +2110,14 @@ SfxTabPage*  ScModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItem
         }
         break;
         case SID_SC_TP_CHANGES:
-                                {           //CHINA001 pRet = ScRedlineOptionsTabPage::Create(pParent, rSet);
+                                {
                                             ::CreateTabPage ScRedlineOptionsTabPageCreate = pFact->GetTabPageCreatorFunc( RID_SCPAGE_OPREDLINE );
                                             if ( ScRedlineOptionsTabPageCreate )
                                                     pRet =(*ScRedlineOptionsTabPageCreate)(pParent, rSet);
                                 }
                         break;
         case RID_SC_TP_PRINT:
-                                {//CHINA001 pRet = ScTpPrintOptions::Create(pParent, rSet);
+                                {
                                     ::CreateTabPage ScTpPrintOptionsCreate =    pFact->GetTabPageCreatorFunc( RID_SCPAGE_PRINT );
                                     if ( ScTpPrintOptionsCreate )
                                         pRet = (*ScTpPrintOptionsCreate)( pParent, rSet);

@@ -33,10 +33,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 
-#include "scui_def.hxx" //CHINA001
-//CHINA001 #define BTN_PASTE_NAME   100
-//CHINA001 #define BTN_PASTE_LIST   101
-//CHINA001
+#include "scui_def.hxx"
 class ScRangeName;
 
 class ScNamePasteDlg : public ModalDialog

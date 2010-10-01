@@ -28,18 +28,16 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-#include <svx/svxdlg.hxx> //CHINA001
-#include <svx/dialogs.hrc> //CHINA001
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
 
 #include "scitems.hxx"
 
 #include <editeng/eeitem.hxx>
 #include <svx/fontwork.hxx>
-//#include <svx/labdlg.hxx> CHINA001
 #include <svl/srchitem.hxx>
 #include <svx/tabarea.hxx>
 #include <svx/tabline.hxx>
-//CHINA001 #include <svx/transfrm.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/objsh.hxx>
@@ -57,7 +55,6 @@
 #include "drawview.hxx"
 #include "scresid.hxx"
 #include <svx/svdobj.hxx>
-//add header of cui CHINA001
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/drawitem.hxx>
@@ -259,7 +256,6 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                                 SfxItemSet aNewGeoAttr(pView->GetGeoAttrFromMarked());
 
                                 //SvxCaptionTabDialog* pDlg = new SvxCaptionTabDialog(pWin, pView);
-                                //change for cui CHINA001
                                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                                 if ( pFact )
                                 {
@@ -279,17 +275,16 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                                     }
 
                                     delete pDlg;
-                                }// change for cui
+                                }
                             }
                             else
                             {
                                 SfxItemSet aNewAttr(pView->GetGeoAttrFromMarked());
-                                //CHINA001 SvxTransformTabDialog* pDlg = new SvxTransformTabDialog(pWin, &aNewAttr, pView);
                                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                                 if(pFact)
                                 {
                                     SfxAbstractTabDialog* pDlg = pFact->CreateSvxTransformTabDialog( pWin, &aNewAttr,pView );
-                                    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                                    DBG_ASSERT(pDlg, "Dialog creation failed!");
                                     if (pDlg->Execute() == RET_OK)
                                     {
                                         rReq.Done(*(pDlg->GetOutputItemSet()));
@@ -384,20 +379,14 @@ void ScDrawShell::ExecuteLineDlg( SfxRequest& rReq, USHORT nTabPage )
     if( bHasMarked )
         pView->MergeAttrFromMarked( aNewAttr, FALSE );
 
-//CHINA001  SvxLineTabDialog* pDlg
-//CHINA001  = new SvxLineTabDialog( pViewData->GetDialogParent(),
-//CHINA001  &aNewAttr,
-//CHINA001  pViewData->GetDocument()->GetDrawLayer(),
-//CHINA001  pObj,
-//CHINA001  bHasMarked );
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialogdiet Factory fail!");//CHINA001
+        DBG_ASSERT(pFact, "Dialogdiet Factory fail!");
         SfxAbstractTabDialog * pDlg = pFact->CreateSvxLineTabDialog( pViewData->GetDialogParent(),
                     &aNewAttr,
                 pViewData->GetDocument()->GetDrawLayer(),
                 pObj,
                 bHasMarked);
-        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+        DBG_ASSERT(pDlg, "Dialogdiet fail!");
     if ( nTabPage != 0xffff )
         pDlg->SetCurPageId( nTabPage );
 
@@ -424,19 +413,14 @@ void ScDrawShell::ExecuteAreaDlg( SfxRequest& rReq, USHORT nTabPage )
     if( bHasMarked )
         pView->MergeAttrFromMarked( aNewAttr, FALSE );
 
-    //CHINA001 SvxAreaTabDialog* pDlg
-    //CHINA001  = new SvxAreaTabDialog( pViewData->GetDialogParent(),
-//CHINA001                              &aNewAttr,
-//CHINA001                              pViewData->GetDocument()->GetDrawLayer(),
-//CHINA001                              pView );
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialogdiet Factory fail!");//CHINA001
+    DBG_ASSERT(pFact, "Dialogdiet Factory fail!");
     AbstractSvxAreaTabDialog * pDlg = pFact->CreateSvxAreaTabDialog( pViewData->GetDialogParent(),
                                                                     &aNewAttr,
                                                             pViewData->GetDocument()->GetDrawLayer(),
                                                             pView);
-    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+    DBG_ASSERT(pDlg, "Dialogdiet fail!");
 
     // #i74099# by default, the dialog deletes the current color table if a different one is loaded
     // (see SwDrawShell::ExecDrawDlg)

@@ -36,7 +36,7 @@
 
 #include "scdlgfact.hxx"
 
-#include "sc.hrc" //CHINA001
+#include "sc.hrc"
 #include "scuiasciiopt.hxx" //add for ScImportAsciiDlg
 #include "scuiautofmt.hxx" //add for ScAutoFormatDlg
 #include "corodlg.hxx" //add for ScColRowLabelDlg
@@ -86,8 +86,8 @@
 #include <sfx2/layout.hxx>
 
 IMPL_ABSTDLG_BASE(VclAbstractDialog_Impl); //add for ScColOrRowDlg
-IMPL_ABSTDLG_BASE(AbstractScImportAsciiDlg_Impl);//CHINA001 add for ScImportAsciiDlg
-IMPL_ABSTDLG_BASE(AbstractScAutoFormatDlg_Impl); //CHINA001 add for ScAutoFormatDlg
+IMPL_ABSTDLG_BASE(AbstractScImportAsciiDlg_Impl);//add for ScImportAsciiDlg
+IMPL_ABSTDLG_BASE(AbstractScAutoFormatDlg_Impl); //add for ScAutoFormatDlg
 IMPL_ABSTDLG_BASE(AbstractScColRowLabelDlg_Impl); //add for ScColRowLabelDlg
 IMPL_ABSTDLG_BASE(AbstractScDataPilotDatabaseDlg_Impl); //add for ScDataPilotDatabaseDlg
 IMPL_ABSTDLG_BASE(AbstractScDataPilotSourceTypeDlg_Impl); //add for ScDataPilotSourceTypeDlg
@@ -129,12 +129,12 @@ const SfxItemSet* AbstractTabDialog_Impl::GetOutputItemSet() const
 {
     return pDlg->GetOutputItemSet();
 }
-//add by CHINA001
+
 const USHORT* AbstractTabDialog_Impl::GetInputRanges(const SfxItemPool& pItem )
 {
     return pDlg->GetInputRanges( pItem );
 }
-//add by CHINA001
+
 void AbstractTabDialog_Impl::SetInputSet( const SfxItemSet* pInSet )
 {
      pDlg->SetInputSet( pInSet );
@@ -164,12 +164,12 @@ const SfxItemSet* AbstractTabDialog_Impl::GetOutputItemSet() const
 {
     return pDlg->GetOutputItemSet();
 }
-//add by CHINA001
+
 const USHORT* AbstractTabDialog_Impl::GetInputRanges(const SfxItemPool& pItem )
 {
     return pDlg->GetInputRanges( pItem );
 }
-//add by CHINA001
+
 void AbstractTabDialog_Impl::SetInputSet( const SfxItemSet* pInSet )
 {
      pDlg->SetInputSet( pInSet );

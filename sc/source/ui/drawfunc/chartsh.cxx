@@ -33,11 +33,9 @@
 //------------------------------------------------------------------
 #include <editeng/eeitem.hxx>
 #include <svx/fontwork.hxx>
-//CHINA001 #include <svx/labdlg.hxx>
 #include <svl/srchitem.hxx>
 #include <svx/tabarea.hxx>
 #include <svx/tabline.hxx>
-//CHINA001 #include <svx/transfrm.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>

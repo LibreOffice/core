@@ -38,9 +38,8 @@
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>
 #include <tools/urlobj.hxx>
-//CHINA001 #include <svx/dlgname.hxx>
-#include <svx/svxdlg.hxx> //CHINA001
-#include <svx/dialogs.hrc> //CHINA001
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
 #include <svx/fmglob.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svx/fontwork.hxx>
@@ -66,7 +65,6 @@
 #include "viewdata.hxx"
 #include "tabvwsh.hxx"
 #include "docsh.hxx"
-//CHINA001 #include "strindlg.hxx"
 #include "scresid.hxx"
 #include "undotab.hxx"
 #include "drwlayer.hxx"

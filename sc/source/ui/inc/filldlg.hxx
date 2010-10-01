@@ -46,11 +46,7 @@ class ScDocument;
 
 //----------------------------------------------------------------------------
 
-//CHINA001 #define  FDS_OPT_NONE        0
-//CHINA001 #define  FDS_OPT_HORZ        1
-//CHINA001 #define  FDS_OPT_VERT        2
-//CHINA001
-#include "scui_def.hxx" //CHINA001
+#include "scui_def.hxx"
 //============================================================================
 
 class ScFillSeriesDlg : public ModalDialog

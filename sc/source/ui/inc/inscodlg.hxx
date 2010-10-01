@@ -34,12 +34,6 @@
 #include "global.hxx"
 
 //------------------------------------------------------------------------
-//CHINA001 #define INS_CONT_NOEMPTY     0x0100
-//CHINA001 #define INS_CONT_TRANS       0x0200
-//CHINA001 #define INS_CONT_LINK        0x0400
-//CHINA001
-//CHINA001 #define SC_CELL_SHIFT_DISABLE_DOWN   0x01
-//CHINA001 #define SC_CELL_SHIFT_DISABLE_RIGHT  0x02
 #include "scui_def.hxx"
 
 class ScInsertContentsDlg : public ModalDialog

@@ -28,7 +28,7 @@
 #define _SC_DLGFACT_HXX
 
 // include ---------------------------------------------------------------
-#include "scabstdlg.hxx" //CHINA001
+#include "scabstdlg.hxx"
 class Dialog;
 class ScImportAsciiDlg;
 class ScAutoFormatDlg;
@@ -72,7 +72,6 @@ public:                                             \
                      {}                             \
     virtual         ~Class();                       \
     virtual short   Execute() ;
-//  virtual void    Show( BOOL bVisible = TRUE, USHORT nFlags = 0 )
 
 #define DECL_ABSTDLG2_BASE(Class,DialogClass)        \
     DialogClass*        pDlg;                       \
@@ -362,11 +361,11 @@ class AbstractTabDialog_Impl : public SfxAbstractTabDialog
     DECL_ABSTDLG_BASE( AbstractTabDialog_Impl,SfxTabDialog )
     virtual void                SetCurPageId( USHORT nId );
     virtual const SfxItemSet*   GetOutputItemSet() const;
-    virtual const USHORT*       GetInputRanges( const SfxItemPool& pItem ); //add by CHINA001
-    virtual void                SetInputSet( const SfxItemSet* pInSet );   //add by CHINA001
+    virtual const USHORT*       GetInputRanges( const SfxItemPool& pItem );
+    virtual void                SetInputSet( const SfxItemSet* pInSet );
         //From class Window.
-    virtual void        SetText( const XubString& rStr ); //add by CHINA001
-    virtual String      GetText() const; //add by CHINA001
+    virtual void        SetText( const XubString& rStr );
+    virtual String      GetText() const;
 };
 #if ENABLE_LAYOUT
 namespace layout
@@ -377,11 +376,11 @@ class AbstractTabDialog_Impl : public SfxAbstractTabDialog
     DECL_ABSTDLG_BASE( AbstractTabDialog_Impl,SfxTabDialog )
     virtual void                SetCurPageId( USHORT nId );
     virtual const SfxItemSet*   GetOutputItemSet() const;
-    virtual const USHORT*       GetInputRanges( const SfxItemPool& pItem ); //add by CHINA001
-    virtual void                SetInputSet( const SfxItemSet* pInSet );   //add by CHINA001
+    virtual const USHORT*       GetInputRanges( const SfxItemPool& pItem );
+    virtual void                SetInputSet( const SfxItemSet* pInSet );
         //From class Window.
-    virtual void        SetText( const XubString& rStr ); //add by CHINA001
-    virtual String      GetText() const; //add by CHINA001
+    virtual void        SetText( const XubString& rStr );
+    virtual String      GetText() const;
 };
 } // end namespace layout
 #endif /* ENABLE_LAYOUT */
@@ -391,8 +390,6 @@ class ScAbstractDialogFactory_Impl : public ScAbstractDialogFactory
 {
 
 public:
-    //CHINA001 AbstractSwSaveLabelDlg*          CreateSwSaveLabelDlg(SwLabFmtPage* pParent, SwLabRec& rRec, int nId );
-
     virtual     AbstractScImportAsciiDlg * CreateScImportAsciiDlg( Window* pParent, String aDatName, //add for ScImportAsciiDlg
                                                                     SvStream* pInStream, int nId,
                                                                     sal_Unicode cSep = '\t');
@@ -569,10 +566,7 @@ public:
                                                             int nId );
 
     virtual SfxAbstractTabDialog * CreateScValidationDlg( Window* pParent, //add for ScValidationDlg
-    //<!--Modified by PengYunQuan for Validity Cell Range Picker
-    //                                                  const SfxItemSet* pArgSet,int nId  );
                                                         const SfxItemSet* pArgSet,int nId, ScTabViewShell *pTabVwSh  );
-    //-->Modified by PengYunQuan for Validity Cell Range Picker
 
     virtual SfxAbstractTabDialog * CreateScSortDlg( Window*          pParent, //add for ScSortDlg
                                                     const SfxItemSet* pArgSet,int nId );
@@ -582,11 +576,6 @@ public:
     virtual GetTabPageRanges            GetTabPageRangesFunc( USHORT nId );
 
 };
-
-//CHINA001 struct ScDialogsResMgr
-//CHINA001 {
-//CHINA001 static ResMgr*       GetResMgr();
-//CHINA001 };
 
 #endif
 

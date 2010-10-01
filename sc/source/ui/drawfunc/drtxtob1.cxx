@@ -50,25 +50,20 @@
 #include "drtxtob.hxx"
 #include "drawview.hxx"
 #include "viewdata.hxx"
-//CHINA001 #include "textdlgs.hxx"
 #include "scresid.hxx"
 
-#include "scabstdlg.hxx" //CHINA00
+#include "scabstdlg.hxx"
 //------------------------------------------------------------------------
 
 BOOL ScDrawTextObjectBar::ExecuteCharDlg( const SfxItemSet& rArgs,
                                                 SfxItemSet& rOutSet )
 {
-//CHINA001  ScCharDlg* pDlg = new ScCharDlg( pViewData->GetDialogParent(),
-//CHINA001  &rArgs,
-//CHINA001  pViewData->GetSfxDocShell() );
-//CHINA001
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
 
     SfxAbstractTabDialog* pDlg = pFact->CreateScCharDlg(  pViewData->GetDialogParent(), &rArgs,
                                                         pViewData->GetSfxDocShell(),RID_SCDLG_CHAR );
-    DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+    DBG_ASSERT(pDlg, "Dialog create fail!");
     BOOL bRet = ( pDlg->Execute() == RET_OK );
 
     if ( bRet )
@@ -106,14 +101,11 @@ BOOL ScDrawTextObjectBar::ExecuteParaDlg( const SfxItemSet& rArgs,
     aNewAttr.Put( SvxWidowsItem( 0, SID_ATTR_PARA_WIDOWS) );
     aNewAttr.Put( SvxOrphansItem( 0, SID_ATTR_PARA_ORPHANS) );
 
-//CHINA001  ScParagraphDlg* pDlg = new ScParagraphDlg( pViewData->GetDialogParent(),
-//CHINA001  &aNewAttr );
-//CHINA001
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
 
     SfxAbstractTabDialog* pDlg = pFact->CreateScParagraphDlg( pViewData->GetDialogParent(), &aNewAttr, RID_SCDLG_PARAGRAPH);
-    DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+    DBG_ASSERT(pDlg, "Dialog create fail!");
     BOOL bRet = ( pDlg->Execute() == RET_OK );
 
     if ( bRet )

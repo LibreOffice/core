@@ -74,7 +74,7 @@
 #include <basic/basmgr.hxx>
 #include <vbahelper/vbaaccesshelper.hxx>
 
-#include "scabstdlg.hxx" //CHINA001
+#include "scabstdlg.hxx"
 #include <sot/formats.hxx>
 #define SOT_FORMATSTR_ID_STARCALC_30 SOT_FORMATSTR_ID_STARCALC
 
@@ -2738,17 +2738,13 @@ SfxDocumentInfoDialog* __EXPORT ScDocShell::CreateDocumentInfoDialog(
     if( pDocSh == this )
     {
         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+        DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
         ::CreateTabPage ScDocStatPageCreate =   pFact->GetTabPageCreatorFunc( RID_SCPAGE_STAT );
-        DBG_ASSERT(ScDocStatPageCreate, "Tabpage create fail!");//CHINA001
+        DBG_ASSERT(ScDocStatPageCreate, "Tabpage create fail!");
         pDlg->AddTabPage( 42,
             ScGlobal::GetRscString( STR_DOC_STAT ),
             ScDocStatPageCreate,
             NULL);
-//CHINA001      pDlg->AddTabPage( 42,
-//CHINA001      ScGlobal::GetRscString( STR_DOC_STAT ),
-//CHINA001      ScDocStatPage::Create,
-//CHINA001      NULL );
     }
     return pDlg;
 }

@@ -32,10 +32,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/imagebtn.hxx>
 #include <vcl/fixed.hxx>
-#include "scui_def.hxx" //CHINA001
-
-//CHINA001 #define SCRET_COLS 0x42
-//CHINA001 #define SCRET_ROWS 0x43
+#include "scui_def.hxx"
 
 //------------------------------------------------------------------------
 

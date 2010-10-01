@@ -34,7 +34,7 @@
 #include <svx/svdmark.hxx>
 #include <tools/link.hxx>
 
-class AbstractSvxNameDialog; //CHINA001 class SvxNameDialog;
+class AbstractSvxNameDialog;
 class ScViewData;
 class ScDrawView;
 

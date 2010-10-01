@@ -52,14 +52,13 @@
 #include "markdata.hxx"
 #include "hints.hxx"
 #include "filter.hxx"
-//CHINA001 #include "linkarea.hxx"          // dialog
 
 #include "attrib.hxx"           // raus, wenn ResetAttrib am Dokument
 #include "patattr.hxx"          // raus, wenn ResetAttrib am Dokument
 #include "docpool.hxx"          // raus, wenn ResetAttrib am Dokument
 
-#include "sc.hrc" //CHINA001
-#include "scabstdlg.hxx" //CHINA001
+#include "sc.hrc"
+#include "scabstdlg.hxx"
 #include "clipparam.hxx"
 
 struct AreaLink_Impl
@@ -109,10 +108,10 @@ void __EXPORT ScAreaLink::Edit(Window* pParent, const Link& /* rEndEditHdl */ )
     //  ein Optionen-Dialog kommt...
 
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
 
     AbstractScLinkedAreaDlg* pDlg = pFact->CreateScLinkedAreaDlg( pParent, RID_SCDLG_LINKAREA);
-    DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+    DBG_ASSERT(pDlg, "Dialog create fail!");
     pDlg->InitFromOldLink( aFileName, aFilterName, aOptions, aSourceArea, GetRefreshDelay() );
     pImpl->m_pDialog = pDlg;
     pDlg->StartExecuteModal( LINK( this, ScAreaLink, AreaEndEditHdl ) );

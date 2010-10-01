@@ -73,7 +73,6 @@
 #include "drwlayer.hxx"
 #include "editutil.hxx"
 #include "globstr.hrc"
-//CHINA001 #include "namecrea.hxx"      // NAME_TOP etc.
 #include "olinetab.hxx"
 #include "patattr.hxx"
 #include "rangenam.hxx"
@@ -96,7 +95,7 @@
 #include "inputwin.hxx"
 #include "editable.hxx"
 #include "compiler.hxx"
-#include "scui_def.hxx" //CHINA001
+#include "scui_def.hxx"
 #include "tabprotection.hxx"
 #include "clipparam.hxx"
 #include "externalrefmgr.hxx"
