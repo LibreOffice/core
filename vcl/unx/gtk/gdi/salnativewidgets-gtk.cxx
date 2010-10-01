@@ -3605,7 +3605,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     gboolean showmenuicons = true;
     pSettings = gtk_widget_get_settings( gWidgetData[m_nScreen].gImageMenuItem );
     g_object_get( pSettings, "gtk-menu-images", &showmenuicons, (char *)NULL );
-    aStyleSet.SetUseImagesInMenus( showmenuicons );
+    aStyleSet.SetPreferredUseImagesInMenus( showmenuicons );
 
     // set scrollbar settings
     gint slider_width = 14;

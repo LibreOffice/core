@@ -431,6 +431,7 @@ private:
     USHORT                          mnUseSystemUIFonts;
     USHORT                          mnAutoMnemonic;
     USHORT                          mnUseImagesInMenus;
+    BOOL                            mbPreferredUseImagesInMenus;
     ULONG                           mnUseFlatBorders;
     long                            mnMinThumbSize;
     ULONG                           mnSymbolsStyle;
@@ -524,6 +525,10 @@ private:
 #define STYLE_SYMBOLS_OXYGEN        ((ULONG)6)
 #define STYLE_SYMBOLS_CLASSIC       ((ULONG)7)
 #define STYLE_SYMBOLS_THEMES_MAX    ((ULONG)8)
+
+#define STYLE_MENUIMAGES_OFF  ((USHORT)0)
+#define STYLE_MENUIMAGES_ON   ((USHORT)1)
+#define STYLE_MENUIMAGES_AUTO ((USHORT)2)
 
 #define STYLE_CURSOR_NOBLINKTIME    ((ULONG)0xFFFFFFFF)
 
@@ -748,8 +753,11 @@ public:
                                         { return (BOOL) mpData->mnUseFlatMenues; }
     void                            SetUseImagesInMenus( BOOL bUseImagesInMenus )
                                         { CopyData(); mpData->mnUseImagesInMenus = bUseImagesInMenus; }
-    BOOL                            GetUseImagesInMenus() const
-                                        { return (BOOL) mpData->mnUseImagesInMenus; }
+    BOOL                            GetUseImagesInMenus() const;
+    void                                                       SetPreferredUseImagesInMenus( BOOL bPreferredUseImagesInMenus )
+                                        { CopyData(); mpData->mbPreferredUseImagesInMenus = bPreferredUseImagesInMenus; }
+    BOOL                                                       GetPreferredUseImagesInMenus() const
+                                        { return mpData->mbPreferredUseImagesInMenus; }
     void                            SetSkipDisabledInMenus( BOOL bSkipDisabledInMenus )
                                         { CopyData(); mpData->mnSkipDisabledInMenus = bSkipDisabledInMenus; }
     BOOL                            GetSkipDisabledInMenus() const

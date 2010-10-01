@@ -1224,7 +1224,7 @@ void AquaSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetScrollBarSize( static_cast<long int>([NSScroller scrollerWidth]) );
 
     // images in menus false for MacOSX
-    aStyleSettings.SetUseImagesInMenus( false );
+    aStyleSettings.SetPreferredUseImagesInMenus( false );
 
     rSettings.SetStyleSettings( aStyleSettings );
 

@@ -190,9 +190,9 @@ class SvtMenuOptions_Impl : public ConfigItem
                         Commit();
                     }
 
-        void        SetMenuIconsState ( sal_Int16 bState    )
+        void        SetMenuIconsState ( sal_Int16 nState    )
                     {
-                        m_nMenuIcons = bState;
+                        m_nMenuIcons = nState;
                         SetModified();
                         for ( USHORT n=0; n<aList.Count(); n++ )
                             aList.GetObject(n)->Call( this );
@@ -245,8 +245,15 @@ SvtMenuOptions_Impl::SvtMenuOptions_Impl()
     // Follow assignment use order of values in relation to our list of key names!
     DBG_ASSERT( !(seqNames.getLength()!=seqValues.getLength()), "SvtMenuOptions_Impl::SvtMenuOptions_Impl()\nI miss some values of configuration keys!\n" );
 
-    sal_Bool bMenuIcons = true;
-    sal_Bool bSystemMenuIcons = true;
+    sal_Bool bMenuIcons = sal_True;
+    sal_Bool bSystemMenuIcons = sal_True;
+    if (m_nMenuIcons == 2)
+        bMenuIcons = (sal_Bool)(Application::GetSettings().GetStyleSettings().GetPreferredUseImagesInMenus());
+    else
+    {
+        bSystemMenuIcons = sal_False;
+        bMenuIcons = m_nMenuIcons ? sal_True : sal_False;
+    }
 
     // Copy values from list in right order to ouer internal member.
     sal_Int32 nPropertyCount    =   seqValues.getLength()   ;
@@ -335,12 +342,12 @@ void SvtMenuOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
         else if( seqPropertyNames[nProperty] == PROPERTYNAME_SHOWICONSINMENUES )
         {
             DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtMenuOptions_Impl::SvtMenuOptions_Impl()\nWho has changed the value type of \"Office.Common\\View\\Menu\\ShowIconsInMenues\"?" );
-            bMenuSettingsChanged = seqValues[nProperty] >>= bMenuIcons;
+            bMenuSettingsChanged |= seqValues[nProperty] >>= bMenuIcons;
         }
         else if( seqPropertyNames[nProperty] == PROPERTYNAME_SYSTEMICONSINMENUES )
         {
             DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtMenuOptions_Impl::SvtMenuOptions_Impl()\nWho has changed the value type of \"Office.Common\\View\\Menu\\IsSystemIconsInMenus\"?" );
-            bMenuSettingsChanged = seqValues[nProperty] >>= bSystemMenuIcons;
+            bMenuSettingsChanged |= seqValues[nProperty] >>= bSystemMenuIcons;
         }
 
         #if OSL_DEBUG_LEVEL > 1

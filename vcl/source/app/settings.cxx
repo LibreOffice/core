@@ -432,6 +432,7 @@ ImplStyleData::ImplStyleData()
     mnAutoMnemonic              = 1;
     mnToolbarIconSize           = STYLE_TOOLBAR_ICONSIZE_UNKNOWN;
     mnSymbolsStyle              = STYLE_SYMBOLS_AUTO;
+    mnUseImagesInMenus          = STYLE_MENUIMAGES_AUTO;
     mnPreferredSymbolsStyle         = STYLE_SYMBOLS_AUTO;
     mpFontOptions              = NULL;
 
@@ -536,6 +537,7 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     mnUseFlatMenues             = rData.mnUseFlatMenues;
     mnAutoMnemonic              = rData.mnAutoMnemonic;
     mnUseImagesInMenus          = rData.mnUseImagesInMenus;
+    mbPreferredUseImagesInMenus = rData.mbPreferredUseImagesInMenus;
     mnSkipDisabledInMenus       = rData.mnSkipDisabledInMenus;
     mnToolbarIconSize           = rData.mnToolbarIconSize;
     mnSymbolsStyle              = rData.mnSymbolsStyle;
@@ -629,7 +631,7 @@ void ImplStyleData::SetStandardStyles()
     mnUseSystemUIFonts          = 1;
     mnUseFlatBorders            = 0;
     mnUseFlatMenues             = 0;
-    mnUseImagesInMenus          = (USHORT)TRUE;
+    mbPreferredUseImagesInMenus = TRUE;
     mnSkipDisabledInMenus       = (USHORT)FALSE;
 
     Gradient aGrad( GRADIENT_LINEAR, DEFAULT_WORKSPACE_GRADIENT_START_COLOR, DEFAULT_WORKSPACE_GRADIENT_END_COLOR );
@@ -863,6 +865,19 @@ bool StyleSettings::CheckSymbolStyle( ULONG nStyle ) const
 
     static ImplImageTreeSingletonRef aImageTree;
     return aImageTree->checkStyle( ImplSymbolsStyleToName( nStyle ) );
+}
+
+// -----------------------------------------------------------------------
+
+BOOL StyleSettings::GetUseImagesInMenus() const
+{
+    // icon mode selected in Tools -> Options... -> OpenOffice.org -> View
+    USHORT nStyle = mpData->mnUseImagesInMenus;
+
+    if ( nStyle == STYLE_MENUIMAGES_AUTO )
+        return GetPreferredUseImagesInMenus();
+
+    return (BOOL)nStyle;
 }
 
 // -----------------------------------------------------------------------
@@ -1103,6 +1118,7 @@ BOOL StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mpData->maFieldFont               == rSet.mpData->maFieldFont)                &&
          (mpData->maIconFont                == rSet.mpData->maIconFont)                 &&
          (mpData->mnUseImagesInMenus        == rSet.mpData->mnUseImagesInMenus)         &&
+         (mpData->mbPreferredUseImagesInMenus == rSet.mpData->mbPreferredUseImagesInMenus) &&
          (mpData->mnSkipDisabledInMenus     == rSet.mpData->mnSkipDisabledInMenus)      &&
          (mpData->maFontColor               == rSet.mpData->maFontColor ))
         return TRUE;
