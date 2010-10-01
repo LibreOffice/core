@@ -2117,23 +2117,8 @@ void Desktop::SystemSettingsChanging( AllSettings& rSettings, Window* )
     hMouseSettings.SetFollow( aAppearanceCfg.IsMenuMouseFollow() ? (nFollow|MOUSE_FOLLOW_MENU) : (nFollow&~MOUSE_FOLLOW_MENU));
     rSettings.SetMouseSettings(hMouseSettings);
 
-    BOOL bUseImagesInMenus = hStyleSettings.GetUseImagesInMenus();
-
     SvtMenuOptions aMenuOpt;
-    nGet = aMenuOpt.GetMenuIconsState();
-    switch ( nGet )
-    {
-        case 0:
-            bUseImagesInMenus = FALSE;
-            break;
-        case 1:
-            bUseImagesInMenus = TRUE;
-            break;
-        case 2:
-        default:
-            break;
-    }
-    hStyleSettings.SetUseImagesInMenus(bUseImagesInMenus);
+    hStyleSettings.SetUseImagesInMenus(aMenuOpt.GetMenuIconsState());
 
     sal_uInt16 nTabStyle = hStyleSettings.GetTabControlStyle();
     nTabStyle &= ~STYLE_TABCONTROL_SINGLELINE;
