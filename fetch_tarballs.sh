@@ -94,7 +94,11 @@ for i in md5 md5sum /usr/local/bin/md5sum gmd5sum /usr/sfw/bin/md5sum /opt/sfw/b
 done
 
 if [ "$md5sum" = "md5" ]; then
-    md5special=-r
+    if md5 -r < /dev/null > /dev/null 2>/dev/null; then
+        md5special=-r
+    elif md5 -n < /dev/null > /dev/null 2>/dev/null; then
+        md5special=-n
+    fi
 fi
 
 if [ -z "$md5sum" ]; then
