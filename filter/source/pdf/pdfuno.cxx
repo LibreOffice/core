@@ -36,6 +36,7 @@
 
 #include <pdffilter.hxx>
 #include <pdfdialog.hxx>
+#include <pdfinteract.hxx>
 
 using namespace ::rtl;
 using namespace ::cppu;
@@ -76,6 +77,13 @@ extern "C"
                 for ( nPos = rSNL2.getLength(); nPos--; )
                     xNewKey->createKey( pArray2[nPos] );
 
+                xNewKey = reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( PDFInteractionHandler_getImplementationName() );
+                xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
+                const Sequence< OUString > & rSNL3 = PDFInteractionHandler_getSupportedServiceNames();
+                const OUString * pArray3 = rSNL3.getConstArray();
+                for ( nPos = rSNL3.getLength(); nPos--; )
+                    xNewKey->createKey( pArray3[nPos] );
+
                 return sal_True;
             }
             catch (InvalidRegistryException &)
@@ -109,6 +117,13 @@ extern "C"
                 xFactory = createSingleFactory( reinterpret_cast< XMultiServiceFactory* >( pServiceManager ),
                                                 OUString::createFromAscii( pImplName ),
                                                 PDFDialog_createInstance, PDFDialog_getSupportedServiceNames() );
+
+            }
+            else if( aImplName.equals( PDFInteractionHandler_getImplementationName() ) )
+            {
+                xFactory = createSingleFactory( reinterpret_cast< XMultiServiceFactory* >( pServiceManager ),
+                                                OUString::createFromAscii( pImplName ),
+                                                PDFInteractionHandler_createInstance, PDFInteractionHandler_getSupportedServiceNames() );
 
             }
 

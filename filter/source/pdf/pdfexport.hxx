@@ -56,6 +56,7 @@ private:
     Reference< XComponent > mxSrcDoc;
     Reference< lang::XMultiServiceFactory > mxMSF;
     Reference< task::XStatusIndicator > mxStatusIndicator;
+    Reference< task::XInteractionHandler > mxIH;
 
     sal_Bool                mbUseTaggedPDF;
     sal_Int32               mnPDFTypeSelection;
@@ -125,7 +126,10 @@ private:
     void                    ImplWriteWatermark( ::vcl::PDFWriter& rWriter, const Size& rPageSize );
 public:
 
-                            PDFExport( const Reference< XComponent >& rxSrcDoc, Reference< task::XStatusIndicator >& xStatusIndicator, const Reference< lang::XMultiServiceFactory >& xFact );
+                            PDFExport( const Reference< XComponent >& rxSrcDoc,
+                                       const Reference< task::XStatusIndicator >& xStatusIndicator,
+                                      const Reference< task::XInteractionHandler >& xIH,
+                                       const Reference< lang::XMultiServiceFactory >& xFact );
                             ~PDFExport();
 
     sal_Bool                ExportSelection( vcl::PDFWriter& rPDFWriter, Reference< com::sun::star::view::XRenderable >& rRenderable, Any& rSelection,

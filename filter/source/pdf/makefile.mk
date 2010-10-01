@@ -47,6 +47,7 @@ SLOFILES=	$(SLO)$/pdfuno.obj			\
             $(SLO)$/pdfdialog.obj		\
             $(SLO)$/impdialog.obj		\
             $(SLO)$/pdffilter.obj		\
+            $(SLO)$/pdfinteract.obj		\
             $(SLO)$/pdfexport.obj		
 
 # --- Library -----------------------------------

@@ -32,46 +32,53 @@
 #include "impdialog.hxx"
 
 #include "pdf.hrc"
-#include <tools/urlobj.hxx>
-#include <tools/fract.hxx>
-#include <tools/poly.hxx>
-#include <vcl/mapmod.hxx>
-#include <vcl/virdev.hxx>
-#include <vcl/metaact.hxx>
-#include <vcl/gdimtf.hxx>
-#include <vcl/jobset.hxx>
-#include <vcl/salbtype.hxx>
-#include <vcl/bmpacc.hxx>
+#include "tools/urlobj.hxx"
+#include "tools/fract.hxx"
+#include "tools/poly.hxx"
+#include "vcl/mapmod.hxx"
+#include "vcl/virdev.hxx"
+#include "vcl/metaact.hxx"
+#include "vcl/gdimtf.hxx"
+#include "vcl/jobset.hxx"
+#include "vcl/salbtype.hxx"
+#include "vcl/bmpacc.hxx"
 #include "vcl/svapp.hxx"
-#include <toolkit/awt/vclxdevice.hxx>
-#include <unotools/localfilehelper.hxx>
-#include <unotools/processfactory.hxx>
-#include <svtools/FilterConfigItem.hxx>
-#include <svtools/filter.hxx>
-#include <svl/solar.hrc>
-#include <comphelper/string.hxx>
+#include "toolkit/awt/vclxdevice.hxx"
+#include "unotools/localfilehelper.hxx"
+#include "unotools/processfactory.hxx"
+#include "svtools/FilterConfigItem.hxx"
+#include "svtools/filter.hxx"
+#include "svl/solar.hrc"
+#include "comphelper/string.hxx"
 #include "basegfx/polygon/b2dpolygon.hxx"
 #include "basegfx/polygon/b2dpolypolygon.hxx"
 #include "basegfx/polygon/b2dpolygontools.hxx"
 
-#include <unotools/saveopt.hxx> // only for testing of relative saving options in PDF
+#include "unotools/saveopt.hxx" // only for testing of relative saving options in PDF
 
-#include <vcl/graphictools.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/awt/Rectangle.hpp>
-#include <com/sun/star/awt/XDevice.hpp>
-#include <com/sun/star/util/MeasureUnit.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
-#include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/document/XDocumentProperties.hpp>
-#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/view/XViewSettingsSupplier.hpp>
-#include <unotools/configmgr.hxx>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/drawing/XShapes.hpp>
+#include "vcl/graphictools.hxx"
+#include "com/sun/star/beans/XPropertySet.hpp"
+#include "com/sun/star/awt/Rectangle.hpp"
+#include "com/sun/star/awt/XDevice.hpp"
+#include "com/sun/star/util/MeasureUnit.hpp"
+#include "com/sun/star/frame/XModel.hpp"
+#include "com/sun/star/frame/XModuleManager.hpp"
+#include "com/sun/star/frame/XStorable.hpp"
+#include "com/sun/star/frame/XController.hpp"
+#include "com/sun/star/document/XDocumentProperties.hpp"
+#include "com/sun/star/document/XDocumentPropertiesSupplier.hpp"
+#include "com/sun/star/container/XNameAccess.hpp"
+#include "com/sun/star/view/XViewSettingsSupplier.hpp"
+#include "com/sun/star/task/XInteractionRequest.hpp"
+#include "com/sun/star/task/PDFExportException.hpp"
+
+#include "unotools/configmgr.hxx"
+#include "cppuhelper/exc_hlp.hxx"
+#include "cppuhelper/compbase1.hxx"
+#include "cppuhelper/basemutex.hxx"
+
+#include "com/sun/star/lang/XServiceInfo.hpp"
+#include "com/sun/star/drawing/XShapes.hpp"
 
 using namespace ::rtl;
 using namespace ::vcl;
@@ -85,10 +92,14 @@ using namespace ::com::sun::star::view;
 // - PDFExport -
 // -------------
 
-PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc, Reference< task::XStatusIndicator >& rxStatusIndicator, const Reference< lang::XMultiServiceFactory >& xFactory ) :
+PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc,
+                      const Reference< task::XStatusIndicator >& rxStatusIndicator,
+                      const Reference< task::XInteractionHandler >& rxIH,
+                      const Reference< lang::XMultiServiceFactory >& xFactory ) :
     mxSrcDoc                    ( rxSrcDoc ),
     mxMSF                       ( xFactory ),
     mxStatusIndicator           ( rxStatusIndicator ),
+    mxIH                        ( rxIH ),
     mbUseTaggedPDF              ( sal_False ),
     mnPDFTypeSelection          ( 0 ),
     mbExportNotes               ( sal_True ),
@@ -917,12 +928,59 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
     return bRet;
 }
 
+namespace
+{
+
+typedef cppu::WeakComponentImplHelper1< task::XInteractionRequest > PDFErrorRequestBase;
+
+class PDFErrorRequest : private cppu::BaseMutex,
+                        public PDFErrorRequestBase
+{
+    task::PDFExportException maExc;
+public:
+    PDFErrorRequest( const task::PDFExportException& i_rExc );
+
+    // XInteractionRequest
+    virtual uno::Any SAL_CALL getRequest() throw (uno::RuntimeException);
+    virtual uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL getContinuations() throw (uno::RuntimeException);
+};
+
+PDFErrorRequest::PDFErrorRequest( const task::PDFExportException& i_rExc ) :
+    PDFErrorRequestBase( m_aMutex ),
+    maExc( i_rExc )
+{
+}
+
+uno::Any SAL_CALL PDFErrorRequest::getRequest() throw (uno::RuntimeException)
+{
+    osl::MutexGuard const guard( m_aMutex );
+
+    uno::Any aRet;
+    aRet <<= maExc;
+    return aRet;
+}
+
+uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL PDFErrorRequest::getContinuations() throw (uno::RuntimeException)
+{
+    return uno::Sequence< uno::Reference< task::XInteractionContinuation > >();
+}
+
+} // namespace
+
 void PDFExport::showErrors( const std::set< PDFWriter::ErrorCode >& rErrors )
 {
-    if( ! rErrors.empty() )
+    if( ! rErrors.empty() && mxIH.is() )
     {
-        ImplErrorDialog aDlg( rErrors );
-        aDlg.Execute();
+        task::PDFExportException aExc;
+        aExc.ErrorCodes.realloc( sal_Int32(rErrors.size()) );
+        sal_Int32 i = 0;
+        for( std::set< PDFWriter::ErrorCode >::const_iterator it = rErrors.begin();
+             it != rErrors.end(); ++it, i++ )
+        {
+            aExc.ErrorCodes.getArray()[i] = (sal_Int32)*it;
+        }
+        Reference< task::XInteractionRequest > xReq( new PDFErrorRequest( aExc ) );
+        mxIH->handle( xReq );
     }
 }
 
