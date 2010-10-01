@@ -40,6 +40,7 @@
 #include <boost/bind.hpp>
 #include <com/sun/star/rendering/FontRequest.hpp>
 #include <com/sun/star/rendering/XCanvasFont.hpp>
+#include <com/sun/star/rendering/PanoseProportion.hpp>
 #include <comphelper/sequence.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <tools/color.hxx>
