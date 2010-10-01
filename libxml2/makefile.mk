@@ -90,10 +90,6 @@ xml2_CFLAGS+=$(ARCH_FLAGS) $(C_RESTRICTIONFLAGS)
 xml2_LDFLAGS+=-L$(SYSBASE)$/usr$/lib
 .ENDIF			# "$(SYSBASE)"!=""
 
-.IF "$(OS)$(COM)"=="LINUXGCC"
-xml2_LDFLAGS+=-Wl,-z,noexecstack
-.ENDIF
-
 CONFIGURE_DIR=
 .IF "$(OS)"=="OS2"
 CONFIGURE_ACTION=sh .$/configure

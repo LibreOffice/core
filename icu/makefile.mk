@@ -78,11 +78,6 @@ CC:=gcc $(EXTRA_CFLAGS)
 .ENDIF # "$(EXTRA_CFLAGS)"!=""
 .ENDIF # "$(OS)"=="MACOSX"
 
-# Disable executable stack
-.IF "$(OS)$(COM)"=="LINUXGCC"
-icu_LDFLAGS+=-Wl,-z,noexecstack
-.ENDIF
-
 icu_CFLAGS+=-O $(ARCH_FLAGS) $(EXTRA_CDEFS)
 icu_LDFLAGS+=$(EXTRA_LINKFLAGS)
 icu_CXXFLAGS+=-O $(ARCH_FLAGS) $(EXTRA_CDEFS)
