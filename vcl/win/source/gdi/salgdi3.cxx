@@ -1763,7 +1763,7 @@ USHORT WinSalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
 void WinSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLevel )
 {
     // temporarily change the HDC to the font in the fallback level
-    HFONT hOldFont = SelectFont( mhDC, mhFonts[i] );
+    HFONT hOldFont = SelectFont( mhDC, mhFonts[nFallbackLevel] );
 
     if ( aSalShlData.mbWNT )
     {
@@ -1783,7 +1783,7 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLe
     const bool bOK = GetTextMetricsA( mhDC, &aWinMetric );
     // restore the HDC to the font in the base level
     SelectFont( mhDC, hOldFont );
-    if( !bOk )
+    if( !bOK )
         return;
 
     // device independent font attributes
