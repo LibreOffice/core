@@ -52,5 +52,17 @@
         <value>com.sun.star.comp.dbaccess.DatabaseInteractionHandler</value>
       </prop>
     </node>
+    <node oor:name="org.openoffice.Filter.PDFExport.Interactions" oor:op="replace">
+      <node oor:name="HandledRequestTypes">
+        <node oor:name="com.sun.star.task.PDFExportException" oor:op="replace">
+          <prop oor:name="Propagation" oor:type="xs:string">
+            <value>named-and-derived</value>
+          </prop>
+        </node>
+      </node>
+      <prop oor:name="ServiceName" oor:type="xs:string">
+        <value>com.sun.star.filter.pdfexport.PDFExportInteractionHandler</value>
+      </prop>
+    </node>
   </node>
 </oor:component-data>
