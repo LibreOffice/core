@@ -90,6 +90,10 @@ namespace cppu
         @derive
         Inherit from this class giving your interface(s) to be implemented as template argument(s).
         Your sub class defines method implementations for these interface(s).
+
+        These classes are used when you implement your UNO component.
+        WeakImplHelper1 till WeakImplHelper12 can be used when you want
+        to implement 1 till 12 interfaces in your component.
     */
     template< class Ifc1 >
     class SAL_NO_VTABLE WeakImplHelper1
