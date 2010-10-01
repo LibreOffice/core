@@ -24,28 +24,24 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-package qa.drivers.dbase;
+package complex.connectivity.dbase;
 
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.sdbc.*;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.lang.XMultiServiceFactory;
+import complex.connectivity.SubTestCase;
+import complex.connectivity.TestCase;
 
-public class DBaseStringFunctions
+public class DBaseStringFunctions extends SubTestCase
 {
     private String where = "FROM \"biblio\" \"biblio\" where \"Identifier\" = 'BOR00'";
     private final XMultiServiceFactory m_xORB;
-    private final DBaseDriverTest testcase;
 
-    public DBaseStringFunctions(final XMultiServiceFactory _xORB,final DBaseDriverTest _testcase)
+    public DBaseStringFunctions(final XMultiServiceFactory _xORB,final TestCase i_testCase)
     {
+        super( i_testCase );
         m_xORB = _xORB;
-        testcase = _testcase;
-    }
-
-    private void assure(final String s,final boolean b)
-    {
-        testcase.assure2(s, b);
     }
 
     public void testFunctions() throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
@@ -53,7 +49,7 @@ public class DBaseStringFunctions
         final XRowSet xRowRes = (XRowSet) UnoRuntime.queryInterface(XRowSet.class,
                 m_xORB.createInstance("com.sun.star.sdb.RowSet"));
 
-        testcase.getLog().println("starting String function test");
+        getLog().println("starting String function test");
         // set the properties needed to connect to a database
         final XPropertySet xProp = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xRowRes);
         xProp.setPropertyValue("DataSourceName", "Bibliography");
