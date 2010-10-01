@@ -235,6 +235,7 @@ namespace drawinglayer
                     getFontAttribute().getSymbol(),
                     getFontAttribute().getVertical(),
                     getFontAttribute().getItalic(),
+                    getFontAttribute().getMonospaced(),
                     false,             // no outline anymore, handled locally
                     getFontAttribute().getRTL(),
                     getFontAttribute().getBiDiStrong());
