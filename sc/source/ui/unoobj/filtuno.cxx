@@ -46,8 +46,8 @@
 #include "globstr.hrc"
 
 
-#include "sc.hrc" //CHINA001
-#include "scabstdlg.hxx" //CHINA001
+#include "sc.hrc"
+#include "scabstdlg.hxx"
 #include "i18npool/lang.h"
 
 #include <memory>
@@ -169,9 +169,8 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
         if ( xInputStream.is() )
             pInStream = utl::UcbStreamHelper::CreateStream( xInputStream );
 
-        //CHINA001 ScImportAsciiDlg* pDlg = new ScImportAsciiDlg( NULL, aPrivDatName, pInStream, cAsciiDel );
         AbstractScImportAsciiDlg* pDlg = pFact->CreateScImportAsciiDlg( NULL, aPrivDatName, pInStream, RID_SCDLG_ASCII, cAsciiDel);
-        DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+        DBG_ASSERT(pDlg, "Dialog create fail!");
         if ( pDlg->Execute() == RET_OK )
         {
             ScAsciiOptions aOptions;
@@ -273,15 +272,11 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
         }
 
         ScImportOptions aOptions( cAsciiDel, cStrDel, eEncoding);
-//CHINA001      ScImportOptionsDlg* pDlg = new ScImportOptionsDlg( NULL, bAscii,
-//CHINA001      &aOptions, &aTitle, bMultiByte, bDBEnc,
-//CHINA001      !bExport );
-//CHINA001
 
         AbstractScImportOptionsDlg* pDlg = pFact->CreateScImportOptionsDlg( NULL, RID_SCDLG_IMPORTOPT,
                                                                             bAscii, &aOptions, &aTitle, bMultiByte, bDBEnc,
                                                                             !bExport);
-        DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+        DBG_ASSERT(pDlg, "Dialog create fail!");
         if ( pDlg->Execute() == RET_OK )
         {
             pDlg->GetImportOptions( aOptions );

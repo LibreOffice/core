@@ -35,19 +35,18 @@
 #include "redcom.hxx"
 #include "docsh.hxx"
 #include "tabvwsh.hxx"
-#include <svx/svxdlg.hxx> //CHINA001
-#include <svx/dialogs.hrc> //CHINA001
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
 //------------------------------------------------------------------------
 
 ScRedComDialog::ScRedComDialog( Window* pParent, const SfxItemSet& rCoreSet,
                     ScDocShell *pShell,ScChangeAction *pAction,BOOL bPrevNext)
 {
-    //CHINA001 pDlg = new SvxPostItDialog(pParent,rCoreSet,bPrevNext,TRUE);
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
         pDlg = pFact->CreateSvxPostItDialog( pParent, rCoreSet, bPrevNext, TRUE );
-        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+        DBG_ASSERT(pDlg, "Dialog creation failed!");
         pDocShell=pShell;
         pDlg->DontChangeAuthor();
         pDlg->HideAuthor();

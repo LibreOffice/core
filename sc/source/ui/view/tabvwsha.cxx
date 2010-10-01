@@ -59,13 +59,12 @@
 #include "inputwin.hxx"
 #include "docsh.hxx"
 #include "viewdata.hxx"
-//CHINA001 #include "attrdlg.hxx"
 #include "appoptio.hxx"
 #include "sc.hrc"
 #include "stlpool.hxx"
 #include "tabvwsh.hxx"
 #include "dwfunctr.hxx"
-#include "scabstdlg.hxx" //CHINA001
+#include "scabstdlg.hxx"
 #include "compiler.hxx"
 
 
@@ -485,8 +484,7 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
 //------------------------------------------------------------------
 void ScTabViewShell::ExecuteCellFormatDlg( SfxRequest& rReq, USHORT nTabPage )
 {
-    //CHINA001 ScAttrDlg*               pDlg    = NULL;
-    SfxAbstractTabDialog * pDlg = NULL; //CHINA001
+    SfxAbstractTabDialog * pDlg = NULL;
     ScDocument*             pDoc    = GetViewData()->GetDocument();
 
     SvxBoxItem              aLineOuter( ATTR_BORDER );
@@ -513,12 +511,11 @@ void ScTabViewShell::ExecuteCellFormatDlg( SfxRequest& rReq, USHORT nTabPage )
     pOldSet->Put(*pNumberInfoItem );
 
     bInFormatDialog = TRUE;
-    //CHINA001 pDlg = new ScAttrDlg( GetViewFrame(), GetDialogParent(), pOldSet );
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
 
     pDlg = pFact->CreateScAttrDlg( GetViewFrame(), GetDialogParent(), pOldSet, RID_SCDLG_ATTR);
-    DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+    DBG_ASSERT(pDlg, "Dialog create fail!");
     if ( nTabPage != 0xffff )
         pDlg->SetCurPageId( nTabPage );
     short nResult = pDlg->Execute();

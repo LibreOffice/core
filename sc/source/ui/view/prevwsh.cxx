@@ -40,7 +40,6 @@
 #include <svl/srchitem.hxx>
 #include <svx/zoomslideritem.hxx>
 #include <svx/svdview.hxx>
-//CHINA001 #include <svx/zoom.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
@@ -75,15 +74,15 @@
 #include <xmloff/xmluconv.hxx>
 #include <rtl/ustrbuf.hxx>
 
-#include <svx/svxdlg.hxx> //CHINA001
-#include <svx/dialogs.hrc> //CHINA001
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
 
 #ifndef _SVX_ZOOM_HXX
 #include <svx/zoom_def.hxx>
 #endif
 
-#include "sc.hrc" //CHINA001
-#include "scabstdlg.hxx" //CHINA001
+#include "sc.hrc"
+#include "scabstdlg.hxx"
 //  fuer Rad-Maus
 #define SC_DELTA_ZOOM   10
 #define MINZOOM_SLIDER 10
@@ -522,8 +521,7 @@ PrintDialog* __EXPORT ScPreviewShell::CreatePrintDialog( Window* pParent )
 SfxTabPage* ScPreviewShell::CreatePrintOptionsPage( Window *pParent, const SfxItemSet &rOptions )
 {
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
-    //CHINA001 return ScTpPrintOptions::Create( pParent, rOptions );
+    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
     ::CreateTabPage ScTpPrintOptionsCreate =    pFact->GetTabPageCreatorFunc( RID_SCPAGE_PRINT );
     if ( ScTpPrintOptionsCreate )
         return  (*ScTpPrintOptionsCreate)( pParent, rOptions);
@@ -697,12 +695,11 @@ void __EXPORT ScPreviewShell::Execute( SfxRequest& rReq )
                     SvxZoomItem     aZoomItem( SVX_ZOOM_PERCENT, pPreview->GetZoom(), SID_ATTR_ZOOM );
 
                     aSet.Put( aZoomItem );
-                    //CHINA001 SvxZoomDialog* pDlg = pDlg = new SvxZoomDialog( NULL, aSet );
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
                     {
                         AbstractSvxZoomDialog* pDlg = pFact->CreateSvxZoomDialog(NULL, aSet);
-                        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                        DBG_ASSERT(pDlg, "Dialogdiet fail!");
                         pDlg->SetLimits( 20, 400 );
                         pDlg->HideButton( ZOOMBTN_OPTIMAL );
                         bCancel = ( RET_CANCEL == pDlg->Execute() );

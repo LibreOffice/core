@@ -49,11 +49,10 @@ using namespace ::com::sun::star;
 #include "docsh.hxx"
 #include "docfunc.hxx"
 #include "rangenam.hxx"
-//CHINA001 #include "namecrea.hxx"      // NAME_TOP etc.
 #include "unoguard.hxx"
 #include "unonames.hxx"
 
-#include "scui_def.hxx" //CHINA001
+#include "scui_def.hxx"
 
 //------------------------------------------------------------------------
 

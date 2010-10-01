@@ -41,7 +41,6 @@
 #include "docsh.hxx"
 #include "viewdata.hxx"
 #include "pivot.hxx"
-//CHINA001 #include "pfiltdlg.hxx"
 #include "uiitems.hxx"
 #include "scresid.hxx"
 #include "sc.hrc"
@@ -58,7 +57,7 @@
 #include "userlist.hxx"
 
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
-#include "scabstdlg.hxx" //CHINA001
+#include "scabstdlg.hxx"
 
 #include <vector>
 #include <hash_map>
@@ -217,16 +216,13 @@ void ScGridWindow::DoPushButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt
                                         SCITEM_QUERYDATA, SCITEM_QUERYDATA );
             aArgSet.Put( ScQueryItem( SCITEM_QUERYDATA, pViewData, &aQueryParam ) );
 
-//CHINA001          ScPivotFilterDlg* pDlg = new ScPivotFilterDlg(
-//CHINA001          pViewData->GetViewShell()->GetDialogParent(),
-//CHINA001          aArgSet, nSrcTab );
             ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+            DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
 
             AbstractScPivotFilterDlg* pDlg = pFact->CreateScPivotFilterDlg( pViewData->GetViewShell()->GetDialogParent(),
                                                                             aArgSet, nSrcTab,
                                                                             RID_SCDLG_PIVOTFILTER);
-            DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+            DBG_ASSERT(pDlg, "Dialog create fail!");
             if ( pDlg->Execute() == RET_OK )
             {
                 ScSheetSourceDesc aNewDesc;

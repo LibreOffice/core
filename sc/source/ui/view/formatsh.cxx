@@ -90,7 +90,6 @@
 #include "docsh.hxx"
 #include "patattr.hxx"
 #include "scmod.hxx"
-//CHINA001 #include "styledlg.hxx"
 #include "attrdlg.hrc"
 #include "stlpool.hxx"
 #include "stlsheet.hxx"
@@ -109,7 +108,7 @@
 #define Interior
 #include <svx/svxslots.hxx>
 
-#include "scabstdlg.hxx" //CHINA001
+#include "scabstdlg.hxx"
 
 namespace {
 
@@ -710,10 +709,7 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                 SvxNumberInfoItem* pNumberInfoItem = NULL;
 
                 SfxStyleFamily  eFam    = pStyleSheet->GetFamily();
-                // ScDocument*     pDoc    = GetViewData()->GetDocument();
-                // ScDocShell*     pDocSh  = GetViewData()->GetDocShell();
-                //CHINA001 ScStyleDlg*      pDlg    = NULL;
-                SfxAbstractTabDialog* pDlg    = NULL; //CHINA001
+                SfxAbstractTabDialog* pDlg    = NULL;
                 USHORT          nRsc    = 0;
 
                 //  #37034#/#37245# alte Items aus der Vorlage merken
@@ -794,12 +790,11 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
                 pTabViewShell->SetInFormatDialog(TRUE);
 
-                //CHINA001 pDlg = new ScStyleDlg( pParent, *pStyleSheet, nRsc );
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+                DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
 
                 pDlg = pFact->CreateScStyleDlg( pParent, *pStyleSheet, nRsc, nRsc );
-                DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+                DBG_ASSERT(pDlg, "Dialog create fail!");
                 short nResult = pDlg->Execute();
                 pTabViewShell->SetInFormatDialog(FALSE);
 

@@ -38,7 +38,6 @@
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 
-//CHINA001 #include <svx/chardlg.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/editstat.hxx>
 #include <editeng/editview.hxx>
@@ -51,7 +50,6 @@
 #define _SVSTDARR_USHORTS
 #include <svl/svstdarr.hxx>
 
-//CHINA001 #include "tphfedit.hxx"
 #include "editutil.hxx"
 #include "global.hxx"
 #include "attrib.hxx"
@@ -65,7 +63,7 @@
 #include "textdlgs.hxx"
 #include "AccessibleEditObject.hxx"
 
-#include "scuitphfedit.hxx" //CHINA001
+#include "scuitphfedit.hxx"
 #include <memory> // header file for auto_ptr
 
 // STATIC DATA -----------------------------------------------------------
@@ -866,7 +864,7 @@ IMPL_LINK( ScHFEditPage, ListHdl_Impl, ListBox*, pList )
 
 IMPL_LINK( ScHFEditPage, ClickHdl, ImageButton*, pBtn )
 {
-    pActiveEdWnd = ::GetScEditWindow(); //CHINA001
+    pActiveEdWnd = ::GetScEditWindow();
     if ( !pActiveEdWnd )
         return 0;
 
@@ -899,7 +897,7 @@ IMPL_LINK( ScHFEditPage, ClickHdl, ImageButton*, pBtn )
 
 IMPL_LINK( ScHFEditPage, MenuHdl, ScExtIButton*, pBtn )
 {
-    pActiveEdWnd = ::GetScEditWindow(); //CHINA001
+    pActiveEdWnd = ::GetScEditWindow();
     if ( !pActiveEdWnd )
         return 0;
 

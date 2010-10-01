@@ -94,8 +94,8 @@
 #include "drawview.hxx"
 #include "fupoor.hxx"
 #include "navsett.hxx"
-#include "sc.hrc" //CHINA001
-#include "scabstdlg.hxx" //CHINA001
+#include "sc.hrc"
+#include "scabstdlg.hxx"
 #include "externalrefmgr.hxx"
 
 void ActivateOlk( ScViewData* pViewData );
@@ -1196,8 +1196,7 @@ PrintDialog* __EXPORT ScTabViewShell::CreatePrintDialog( Window *pParent )
 SfxTabPage* ScTabViewShell::CreatePrintOptionsPage( Window *pParent, const SfxItemSet &rOptions )
 {
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
-    //CHINA001 return ScTpPrintOptions::Create( pParent, rOptions );
+    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
     ::CreateTabPage ScTpPrintOptionsCreate =    pFact->GetTabPageCreatorFunc( RID_SCPAGE_PRINT );
     if ( ScTpPrintOptionsCreate )
         return  (*ScTpPrintOptionsCreate)( pParent, rOptions);

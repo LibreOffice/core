@@ -36,7 +36,6 @@
 #include <editeng/eeitem.hxx>
 
 #include <sfx2/app.hxx>
-//CHINA001 #include <svx/zoom.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/passwd.hxx>
@@ -65,8 +64,6 @@
 #include "uiitems.hxx"
 #include "cell.hxx"
 #include "inputhdl.hxx"
-//CHINA001 #include "scendlg.hxx"
-//CHINA001 #include "mtrindlg.hxx"
 #include "autoform.hxx"
 #include "autofmt.hxx"
 #include "dwfunctr.hxx"
@@ -79,9 +76,9 @@
 #include <svl/svstdarr.hxx>
 
 #include <svx/zoomslideritem.hxx>
-#include <svx/svxdlg.hxx> //CHINA001
-#include <svx/dialogs.hrc> //CHINA001
-#include "scabstdlg.hxx" //CHINA001
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
+#include "scabstdlg.hxx"
 
 #include <memory>
 
@@ -675,7 +672,6 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 {
                     SfxItemSet      aSet     ( GetPool(), SID_ATTR_ZOOM, SID_ATTR_ZOOM );
                     SvxZoomItem     aZoomItem( eOldZoomType, nOldZoom, SID_ATTR_ZOOM );
-                    //CHINA001 SvxZoomDialog*   pDlg = NULL;
                     AbstractSvxZoomDialog* pDlg = NULL;
                     ScMarkData&     rMark = GetViewData()->GetMarkData();
                     USHORT          nBtnFlags =   SVX_ZOOM_ENABLE_50
@@ -691,12 +687,11 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
                     aZoomItem.SetValueSet( nBtnFlags );
                     aSet.Put( aZoomItem );
-                    //CHINA001 pDlg = new SvxZoomDialog( GetDialogParent(), aSet );
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
                     {
                         pDlg = pFact->CreateSvxZoomDialog(GetDialogParent(), aSet );
-                        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                        DBG_ASSERT(pDlg, "Dialogdiet fail!");
                     }
                     pDlg->SetLimits( MINZOOM, MAXZOOM );
 
@@ -816,12 +811,11 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 pItem->GetList( aIndexList );
             else
             {
-                //CHINA001 ScShowTabDlg* pDlg = new ScShowTabDlg( GetDialogParent() );
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+                DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
 
                 AbstractScShowTabDlg* pDlg = pFact->CreateScShowTabDlg( GetDialogParent(), RID_SCDLG_SHOW_TAB);
-                DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+                DBG_ASSERT(pDlg, "Dialog create fail!");
                 pDlg->SetDescription(
                     String( ScResId( STR_DLG_SELECTTABLES_TITLE ) ),
                     String( ScResId( STR_DLG_SELECTTABLES_LBNAME ) ),

@@ -61,8 +61,8 @@
 #include "chgviset.hxx"
 #include "markdata.hxx"
 
-#include <svx/svxdlg.hxx> //CHINA001
-#include <svx/dialogs.hrc> //CHINA001
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
 // STATIC DATA -----------------------------------------------------------
 
 //==================================================================

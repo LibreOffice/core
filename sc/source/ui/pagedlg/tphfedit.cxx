@@ -37,7 +37,6 @@
 #include <editeng/eeitem.hxx>
 
 
-//CHINA001 #include <svx/chardlg.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/editstat.hxx>
 #include <editeng/editview.hxx>
@@ -59,10 +58,9 @@
 #include "tabvwsh.hxx"
 #include "prevwsh.hxx"
 #include "hfedtdlg.hrc"
-//CHINA001 #include "textdlgs.hxx"
 #include "AccessibleEditObject.hxx"
 
-#include "scabstdlg.hxx" //CHINA001
+#include "scabstdlg.hxx"
 
 
 // STATIC DATA -----------------------------------------------------------
@@ -72,312 +70,6 @@ ScEditWindow* GetScEditWindow ()
 {
     return pActiveEdWnd;
 }
-
-//CHINA001
-//CHINA001 static USHORT pPageRightHeaderRanges[] = { SID_SCATTR_PAGE_HEADERRIGHT,
-//CHINA001 SID_SCATTR_PAGE_HEADERRIGHT,
-//CHINA001 0 };
-//CHINA001
-//CHINA001 static USHORT pPageRightFooterRanges[] = { SID_SCATTR_PAGE_FOOTERRIGHT,
-//CHINA001 SID_SCATTR_PAGE_FOOTERRIGHT,
-//CHINA001 0 };
-//CHINA001
-//CHINA001 static USHORT pPageLeftHeaderRanges[] =  { SID_SCATTR_PAGE_HEADERLEFT,
-//CHINA001 SID_SCATTR_PAGE_HEADERLEFT,
-//CHINA001 0 };
-//CHINA001
-//CHINA001 static USHORT pPageLeftFooterRanges[] =  { SID_SCATTR_PAGE_FOOTERLEFT,
-//CHINA001 SID_SCATTR_PAGE_FOOTERLEFT,
-//CHINA001 0 };
-//CHINA001
-//CHINA001 static ScEditWindow* pActiveEdWnd = NULL;
-//CHINA001
-//CHINA001
-//CHINA001
-//CHINA001 //========================================================================
-//CHINA001 // class ScHFEditPage
-//CHINA001 //
-//CHINA001
-//CHINA001 ScHFEditPage::ScHFEditPage( Window*          pParent,
-//CHINA001 USHORT               nResId,
-//CHINA001 const SfxItemSet&    rCoreAttrs,
-//CHINA001 USHORT               nWhichId )
-//CHINA001
-//CHINA001 :    SfxTabPage      ( pParent, ScResId( nResId ), rCoreAttrs ),
-//CHINA001
-//CHINA001 aWndLeft     ( this, ScResId( WND_LEFT ), Left ),
-//CHINA001 aWndCenter       ( this, ScResId( WND_CENTER ), Center ),
-//CHINA001 aWndRight        ( this, ScResId( WND_RIGHT ), Right ),
-//CHINA001 aFtLeft      ( this, ScResId( FT_LEFT ) ),
-//CHINA001 aFtCenter        ( this, ScResId( FT_CENTER ) ),
-//CHINA001 aFtRight     ( this, ScResId( FT_RIGHT ) ),
-//CHINA001 aFlInfo      ( this, ScResId( FL_INFO ) ),
-//CHINA001 aFtInfo      ( this, ScResId( FT_INFO ) ),
-//CHINA001 aBtnText     ( this, ScResId( BTN_TEXT ) ),
-//CHINA001 aBtnPage     ( this, ScResId( BTN_PAGE ) ),
-//CHINA001 aBtnLastPage ( this, ScResId( BTN_PAGES ) ),
-//CHINA001 aBtnDate     ( this, ScResId( BTN_DATE ) ),
-//CHINA001 aBtnTime     ( this, ScResId( BTN_TIME ) ),
-//CHINA001 aBtnFile     ( this, ScResId( BTN_FILE ) ),
-//CHINA001 aBtnTable        ( this, ScResId( BTN_TABLE ) ),
-//CHINA001 aPopUpFile       ( ScResId( RID_POPUP_FCOMMAND) ),
-//CHINA001 nWhich           ( nWhichId )
-//CHINA001 {
-//CHINA001 //!  use default style from current document?
-//CHINA001 //!  if font color is used, header/footer background color must be set
-//CHINA001
-//CHINA001 ScPatternAttr    aPatAttr( rCoreAttrs.GetPool() );
-//CHINA001
-//CHINA001 aBtnFile.SetPopupMenu(&aPopUpFile);
-//CHINA001
-//CHINA001 aBtnFile.SetMenuHdl( LINK( this, ScHFEditPage, MenuHdl ) );
-//CHINA001 aBtnText .SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
-//CHINA001 aBtnPage .SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
-//CHINA001 aBtnLastPage.SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
-//CHINA001 aBtnDate .SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
-//CHINA001 aBtnTime .SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
-//CHINA001 aBtnFile .SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
-//CHINA001 aBtnTable    .SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
-//CHINA001
-//CHINA001 aBtnText    .SetModeImage( Image( ScResId( IMG_TEXT_H  ) ), BMP_COLOR_HIGHCONTRAST );
-//CHINA001 aBtnFile    .SetModeImage( Image( ScResId( IMG_FILE_H  ) ), BMP_COLOR_HIGHCONTRAST );
-//CHINA001 aBtnTable   .SetModeImage( Image( ScResId( IMG_TABLE_H ) ), BMP_COLOR_HIGHCONTRAST );
-//CHINA001 aBtnPage    .SetModeImage( Image( ScResId( IMG_PAGE_H  ) ), BMP_COLOR_HIGHCONTRAST );
-//CHINA001 aBtnLastPage.SetModeImage( Image( ScResId( IMG_PAGES_H ) ), BMP_COLOR_HIGHCONTRAST );
-//CHINA001 aBtnDate    .SetModeImage( Image( ScResId( IMG_DATE_H  ) ), BMP_COLOR_HIGHCONTRAST );
-//CHINA001 aBtnTime    .SetModeImage( Image( ScResId( IMG_TIME_H  ) ), BMP_COLOR_HIGHCONTRAST );
-//CHINA001
-//CHINA001 aWndLeft.    SetFont( aPatAttr );
-//CHINA001 aWndCenter. SetFont( aPatAttr );
-//CHINA001 aWndRight.   SetFont( aPatAttr );
-//CHINA001
-//CHINA001 FillCmdArr();
-//CHINA001
-//CHINA001 aWndLeft.GrabFocus();
-//CHINA001
-//CHINA001 FreeResource();
-//CHINA001 }
-//CHINA001
-//CHINA001 // -----------------------------------------------------------------------
-//CHINA001
-//CHINA001 __EXPORT ScHFEditPage::~ScHFEditPage()
-//CHINA001 {
-//CHINA001 }
-//CHINA001
-//CHINA001 void ScHFEditPage::SetNumType(SvxNumType eNumType)
-//CHINA001 {
-//CHINA001 aWndLeft.SetNumType(eNumType);
-//CHINA001 aWndCenter.SetNumType(eNumType);
-//CHINA001 aWndRight.SetNumType(eNumType);
-//CHINA001 }
-//CHINA001
-//CHINA001 // -----------------------------------------------------------------------
-//CHINA001
-//CHINA001 #define IS_AVAILABLE(w)(rCoreSet.GetItemState( (w) ) >= SFX_ITEM_AVAILABLE)
-//CHINA001
-//CHINA001 void __EXPORT ScHFEditPage::Reset( const SfxItemSet& rCoreSet )
-//CHINA001 {
-//CHINA001 if ( IS_AVAILABLE( nWhich ) )
-//CHINA001  {
-//CHINA001 const ScPageHFItem& rItem = (const ScPageHFItem&)(rCoreSet.Get( nWhich ));
-//CHINA001
-//CHINA001 const EditTextObject* pLeft   = rItem.GetLeftArea();
-//CHINA001 const EditTextObject* pCenter = rItem.GetCenterArea();
-//CHINA001 const EditTextObject* pRight  = rItem.GetRightArea();
-//CHINA001
-//CHINA001 if ( pLeft && pCenter && pRight )
-//CHINA001      {
-//CHINA001 aWndLeft .SetText( *pLeft );
-//CHINA001 aWndCenter   .SetText( *pCenter );
-//CHINA001 aWndRight    .SetText( *pRight );
-//CHINA001      }
-//CHINA001  }
-//CHINA001 }
-//CHINA001
-//CHINA001 #undef IS_AVAILABLE
-//CHINA001
-//CHINA001 // -----------------------------------------------------------------------
-//CHINA001
-//CHINA001 BOOL __EXPORT ScHFEditPage::FillItemSet( SfxItemSet& rCoreSet )
-//CHINA001 {
-//CHINA001 ScPageHFItem aItem( nWhich );
-//CHINA001 EditTextObject* pLeft    = aWndLeft  .CreateTextObject();
-//CHINA001 EditTextObject* pCenter = aWndCenter.CreateTextObject();
-//CHINA001 EditTextObject* pRight   = aWndRight .CreateTextObject();
-//CHINA001
-//CHINA001 aItem.SetLeftArea  ( *pLeft );
-//CHINA001 aItem.SetCenterArea( *pCenter );
-//CHINA001 aItem.SetRightArea ( *pRight );
-//CHINA001 delete pLeft;
-//CHINA001 delete pCenter;
-//CHINA001 delete pRight;
-//CHINA001
-//CHINA001 rCoreSet.Put( aItem );
-//CHINA001
-//CHINA001 return TRUE;
-//CHINA001 }
-//CHINA001
-//CHINA001 // -----------------------------------------------------------------------
-//CHINA001
-//CHINA001 #define SET_CMD(i,id) x
-//CHINA001 aCmd  = aDel;                            x
-//CHINA001 aCmd += ScGlobal::GetRscString( id );    x
-//CHINA001 aCmd += aDel;                            x
-//CHINA001 aCmdArr[i] = aCmd;
-//CHINA001
-//CHINA001 // -----------------------------------------------------------------------
-//CHINA001
-//CHINA001 void ScHFEditPage::FillCmdArr()
-//CHINA001 {
-//CHINA001 String aDel( ScGlobal::GetRscString( STR_HFCMD_DELIMITER ) );
-//CHINA001 String aCmd;
-//CHINA001
-//CHINA001 SET_CMD( 0, STR_HFCMD_PAGE )
-//CHINA001 SET_CMD( 1, STR_HFCMD_PAGES )
-//CHINA001 SET_CMD( 2, STR_HFCMD_DATE )
-//CHINA001 SET_CMD( 3, STR_HFCMD_TIME )
-//CHINA001 SET_CMD( 4, STR_HFCMD_FILE )
-//CHINA001 SET_CMD( 5, STR_HFCMD_TABLE )
-//CHINA001 }
-//CHINA001
-//CHINA001 #undef SET_CMD
-//CHINA001
-//CHINA001 //-----------------------------------------------------------------------
-//CHINA001 // Handler:
-//CHINA001 //-----------------------------------------------------------------------
-//CHINA001
-//CHINA001 IMPL_LINK( ScHFEditPage, ClickHdl, ImageButton*, pBtn )
-//CHINA001 {
-//CHINA001 if ( !pActiveEdWnd )
-//CHINA001 return 0;
-//CHINA001
-//CHINA001 if ( pBtn == &aBtnText )
-//CHINA001  {
-//CHINA001 pActiveEdWnd->SetCharAttriutes();
-//CHINA001  }
-//CHINA001  else
-//CHINA001  {
-//CHINA001 if ( pBtn == &aBtnPage )
-//CHINA001 pActiveEdWnd->InsertField( SvxFieldItem(SvxPageField()) );
-//CHINA001      else if ( pBtn == &aBtnLastPage )
-//CHINA001 pActiveEdWnd->InsertField( SvxFieldItem(SvxPagesField()) );
-//CHINA001      else if ( pBtn == &aBtnDate )
-//CHINA001 pActiveEdWnd->InsertField( SvxFieldItem(SvxDateField(Date(),SVXDATETYPE_VAR)) );
-//CHINA001      else if ( pBtn == &aBtnTime )
-//CHINA001 pActiveEdWnd->InsertField( SvxFieldItem(SvxTimeField()) );
-//CHINA001      else if ( pBtn == &aBtnFile )
-//CHINA001      {
-//CHINA001 pActiveEdWnd->InsertField( SvxFieldItem( SvxFileField() ) );
-//CHINA001      }
-//CHINA001      else if ( pBtn == &aBtnTable )
-//CHINA001 pActiveEdWnd->InsertField( SvxFieldItem(SvxTableField()) );
-//CHINA001  }
-//CHINA001 pActiveEdWnd->GrabFocus();
-//CHINA001
-//CHINA001 return 0;
-//CHINA001 }
-//CHINA001
-//CHINA001 IMPL_LINK( ScHFEditPage, MenuHdl, ScExtIButton*, pBtn )
-//CHINA001 {
-//CHINA001 if ( !pActiveEdWnd )
-//CHINA001 return 0;
-//CHINA001
-//CHINA001 if(pBtn!=NULL)
-//CHINA001  {
-//CHINA001 switch(pBtn->GetSelected())
-//CHINA001      {
-//CHINA001          case FILE_COMMAND_TITEL:
-//CHINA001 pActiveEdWnd->InsertField( SvxFieldItem( SvxFileField() ) );
-//CHINA001 break;
-//CHINA001          case FILE_COMMAND_FILENAME:
-//CHINA001 pActiveEdWnd->InsertField( SvxFieldItem( SvxExtFileField(
-//CHINA001 EMPTY_STRING, SVXFILETYPE_VAR, SVXFILEFORMAT_NAME_EXT ) ) );
-//CHINA001 break;
-//CHINA001          case FILE_COMMAND_PATH:
-//CHINA001 pActiveEdWnd->InsertField( SvxFieldItem( SvxExtFileField(
-//CHINA001 EMPTY_STRING, SVXFILETYPE_VAR, SVXFILEFORMAT_FULLPATH ) ) );
-//CHINA001 break;
-//CHINA001      }
-//CHINA001  }
-//CHINA001 return 0;
-//CHINA001 }
-//CHINA001
-//CHINA001 //========================================================================
-//CHINA001 // class ScRightHeaderEditPage
-//CHINA001 //========================================================================
-//CHINA001
-//CHINA001 ScRightHeaderEditPage::ScRightHeaderEditPage( Window* pParent, const SfxItemSet& rCoreSet )
-//CHINA001 : ScHFEditPage( pParent, RID_SCPAGE_HFED_HR, rCoreSet,
-//CHINA001 rCoreSet.GetPool()->GetWhich(SID_SCATTR_PAGE_HEADERRIGHT) )
-//CHINA001  {}
-//CHINA001
-//CHINA001 // -----------------------------------------------------------------------
-//CHINA001
-//CHINA001 USHORT* __EXPORT ScRightHeaderEditPage::GetRanges()
-//CHINA001  { return pPageRightHeaderRanges; }
-//CHINA001
-//CHINA001 // -----------------------------------------------------------------------
-//CHINA001
-//CHINA001 SfxTabPage* __EXPORT ScRightHeaderEditPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
-//CHINA001  { return ( new ScRightHeaderEditPage( pParent, rCoreSet ) ); };
-//CHINA001
-//CHINA001
-//CHINA001 //========================================================================
-//CHINA001 // class ScLeftHeaderEditPage
-//CHINA001 //========================================================================
-//CHINA001
-//CHINA001 ScLeftHeaderEditPage::ScLeftHeaderEditPage( Window* pParent, const SfxItemSet& rCoreSet )
-//CHINA001 : ScHFEditPage( pParent, RID_SCPAGE_HFED_HL, rCoreSet,
-//CHINA001 rCoreSet.GetPool()->GetWhich(SID_SCATTR_PAGE_HEADERLEFT) )
-//CHINA001  {}
-//CHINA001
-//CHINA001 // -----------------------------------------------------------------------
-//CHINA001
-//CHINA001 USHORT* __EXPORT ScLeftHeaderEditPage::GetRanges()
-//CHINA001  { return pPageLeftHeaderRanges; }
-//CHINA001
-//CHINA001 // -----------------------------------------------------------------------
-//CHINA001
-//CHINA001 SfxTabPage* __EXPORT ScLeftHeaderEditPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
-//CHINA001  { return ( new ScLeftHeaderEditPage( pParent, rCoreSet ) ); };
-//CHINA001
-//CHINA001 //========================================================================
-//CHINA001 // class ScRightFooterEditPage
-//CHINA001 //========================================================================
-//CHINA001
-//CHINA001 ScRightFooterEditPage::ScRightFooterEditPage( Window* pParent, const SfxItemSet& rCoreSet )
-//CHINA001 : ScHFEditPage( pParent, RID_SCPAGE_HFED_FR, rCoreSet,
-//CHINA001 rCoreSet.GetPool()->GetWhich(SID_SCATTR_PAGE_FOOTERRIGHT) )
-//CHINA001  {}
-//CHINA001
-//CHINA001 // -----------------------------------------------------------------------
-//CHINA001
-//CHINA001 USHORT* __EXPORT ScRightFooterEditPage::GetRanges()
-//CHINA001  { return pPageRightFooterRanges; }
-//CHINA001
-//CHINA001 // -----------------------------------------------------------------------
-//CHINA001
-//CHINA001 SfxTabPage* __EXPORT ScRightFooterEditPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
-//CHINA001  { return ( new ScRightFooterEditPage( pParent, rCoreSet ) ); };
-//CHINA001
-//CHINA001 //========================================================================
-//CHINA001 // class ScLeftFooterEditPage
-//CHINA001 //========================================================================
-//CHINA001
-//CHINA001 ScLeftFooterEditPage::ScLeftFooterEditPage( Window* pParent, const SfxItemSet& rCoreSet )
-//CHINA001 : ScHFEditPage( pParent, RID_SCPAGE_HFED_FL, rCoreSet,
-//CHINA001 rCoreSet.GetPool()->GetWhich(SID_SCATTR_PAGE_FOOTERLEFT) )
-//CHINA001  {}
-//CHINA001
-//CHINA001 // -----------------------------------------------------------------------
-//CHINA001
-//CHINA001 USHORT* __EXPORT ScLeftFooterEditPage::GetRanges()
-//CHINA001  { return pPageLeftFooterRanges; }
-//CHINA001
-//CHINA001 // -----------------------------------------------------------------------
-//CHINA001
-//CHINA001 SfxTabPage* __EXPORT ScLeftFooterEditPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
-//CHINA001  { return ( new ScLeftFooterEditPage( pParent, rCoreSet ) ); };
 
 //========================================================================
 
@@ -523,13 +215,12 @@ void ScEditWindow::SetCharAttriutes()
 
         SfxItemSet aSet( pEdView->GetAttribs() );
 
-        //CHINA001 ScCharDlg* pDlg = new ScCharDlg( GetParent(), &aSet, pDocSh );
         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+        DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
 
         SfxAbstractTabDialog* pDlg = pFact->CreateScCharDlg(  GetParent(),  &aSet,
                                                             pDocSh,RID_SCDLG_CHAR );
-        DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+        DBG_ASSERT(pDlg, "Dialog create fail!");
         pDlg->SetText( ScGlobal::GetRscString( STR_TEXTATTRS ) );
         if ( pDlg->Execute() == RET_OK )
         {

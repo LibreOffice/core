@@ -40,10 +40,9 @@
 #include "hfedtdlg.hxx"
 #include "global.hxx"
 #include "globstr.hrc"
-//CHINA001 #include "tphfedit.hxx"
 #include "scresid.hxx"
 #include "hfedtdlg.hrc"
-#include "scuitphfedit.hxx" //CHINA001
+#include "scuitphfedit.hxx"
 //------------------------------------------------------------------
 
 //  macros from docsh4.cxx

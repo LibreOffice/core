@@ -47,11 +47,10 @@
 #include "tabvwsh.hxx"
 #include "viewdata.hxx"
 #include "document.hxx"
-//CHINA001 #include "tphfedit.hxx"
 #include "hfedtdlg.hxx"
 #include "styledlg.hxx"
 #include "scresid.hxx"
-#include "scuitphfedit.hxx" //CHINA001
+#include "scuitphfedit.hxx"
 #undef _TPHF_CXX
 
 

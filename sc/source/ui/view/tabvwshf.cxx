@@ -49,14 +49,11 @@
 #include "document.hxx"
 #include "shtabdlg.hxx"
 #include "scresid.hxx"
-//CHINA001 #include "instbdlg.hxx"
 #include "globstr.hrc"
-//CHINA001 #include "strindlg.hxx"
-//CHINA001 #include "mvtabdlg.hxx"
 #include "docfunc.hxx"
 #include "eventuno.hxx"
 
-#include "scabstdlg.hxx" //CHINA001
+#include "scabstdlg.hxx"
 
 #include "tabbgcolor.hxx"
 #include "tabbgcolordlg.hxx"
@@ -171,12 +168,11 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 }
                 else
                 {
-                    //CHINA001 ScShowTabDlg* pDlg = new ScShowTabDlg( GetDialogParent() );
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+                    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
 
                     AbstractScShowTabDlg* pDlg = pFact->CreateScShowTabDlg( GetDialogParent(), RID_SCDLG_SHOW_TAB);
-                    DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+                    DBG_ASSERT(pDlg, "Dialog create fail!");
 
                     String aTabName;
                     BOOL bFirst = TRUE;
@@ -240,16 +236,13 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 }
                 else                                // Dialog
                 {
-//CHINA001                  ScInsertTableDlg* pDlg = new ScInsertTableDlg(
-//CHINA001                  GetDialogParent(),
-//CHINA001                  *pViewData,nTabSelCount);
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+                    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
 
                     AbstractScInsertTableDlg* pDlg = pFact->CreateScInsertTableDlg( GetDialogParent(), *pViewData,
                                                                                     nTabSelCount, nSlot == FID_INS_TABLE_EXT,
                                                                                     RID_SCDLG_INSERT_TABLE);
-                    DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+                    DBG_ASSERT(pDlg, "Dialog create fail!");
                     if ( RET_OK == pDlg->Execute() )
                     {
                         if (pDlg->GetTablesFromFile())
@@ -434,21 +427,15 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                             break;
                     }
 
-//CHINA001                  ScStringInputDlg* pDlg =
-//CHINA001                  new ScStringInputDlg( GetDialogParent(),
-//CHINA001                  aDlgTitle,
-//CHINA001                  String(ScResId(SCSTR_NAME)),
-//CHINA001                  aName,
-//CHINA001                  nSlot );
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+                    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
 
                     AbstractScStringInputDlg* pDlg = pFact->CreateScStringInputDlg( GetDialogParent(),
                                                                                     aDlgTitle,
                                                                                     String(ScResId(SCSTR_NAME)),
                                                                                     aName,
                                                                                     nSlot,RID_SCDLG_STRINPUT);
-                    DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+                    DBG_ASSERT(pDlg, "Dialog create fail!");
 
                     while ( !bDone && nRet == RET_OK )
                     {
@@ -562,12 +549,11 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 }
                 else
                 {
-                    //CHINA001 ScMoveTableDlg* pDlg = new ScMoveTableDlg( GetDialogParent() );
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+                    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
 
                     AbstractScMoveTableDlg* pDlg = pFact->CreateScMoveTableDlg( GetDialogParent(), RID_SCDLG_MOVETAB );
-                    DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+                    DBG_ASSERT(pDlg, "Dialog create fail!");
 
                     SCTAB nTableCount = pDoc->GetTableCount();
                     ScMarkData& rMark       = GetViewData()->GetMarkData();

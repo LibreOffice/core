@@ -78,22 +78,13 @@
 #include "scmod.hxx"
 #include "scresid.hxx"
 #include "tabvwsh.hxx"
-//CHINA001 #include "inscldlg.hxx"
-//CHINA001 #include "inscodlg.hxx"
-//CHINA001 #include "delcldlg.hxx"
-//CHINA001 #include "delcodlg.hxx"
-//CHINA001 #include "filldlg.hxx"
-//CHINA001 #include "groupdlg.hxx"
 #include "impex.hxx"
 #include "reffind.hxx"
-//CHINA001 #include "namecrea.hxx"
 #include "uiitems.hxx"
 #include "reffact.hxx"
-//CHINA001 #include "namepast.hxx"
 #include "inputhdl.hxx"
 #include "transobj.hxx"
 #include "drwtrans.hxx"
-//CHINA001 #include "linkarea.hxx"
 #include "docfunc.hxx"
 #include "editable.hxx"
 #include "dpobject.hxx"
@@ -104,10 +95,10 @@
 #include "clipparam.hxx"
 
 #include "globstr.hrc"
-#include "scui_def.hxx" //CHINA001
-#include <svx/svxdlg.hxx> //CHINA001
-#include <svx/dialogs.hrc> //CHINA001
-#include "scabstdlg.hxx" //CHINA001
+#include "scui_def.hxx"
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
+#include "scabstdlg.hxx"
 #define IS_AVAILABLE(WhichId,ppItem) \
     (pReqArgs->GetItemState((WhichId), TRUE, ppItem ) == SFX_ITEM_SET)
 
@@ -223,13 +214,11 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         ScDocument* pDoc = GetViewData()->GetDocument();
                         BOOL bTheFlag=(pDoc->GetChangeTrack()!=NULL);
 
-//CHINA001                      ScInsertCellDlg* pDlg = new ScInsertCellDlg( pTabViewShell->GetDialogParent(),
-//CHINA001                      bTheFlag);
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                        DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+                        DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
 
                         AbstractScInsertCellDlg* pDlg = pFact->CreateScInsertCellDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_INSCELL, bTheFlag);
-                        DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+                        DBG_ASSERT(pDlg, "Dialog create fail!");
                         if (pDlg->Execute() == RET_OK)
                             eCmd = pDlg->GetInsCellCmd();
                         delete pDlg;
@@ -298,13 +287,11 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             (GetViewData()->GetSimpleArea(aRange) == SC_MARK_SIMPLE_FILTERED) ||
                             (pDoc->GetChangeTrack() != NULL);
 
-                        //CHINA001 ScDeleteCellDlg* pDlg = new ScDeleteCellDlg(
-                        //CHINA001      pTabViewShell->GetDialogParent(),bTheFlag);
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                        DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+                        DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
 
                         AbstractScDeleteCellDlg* pDlg = pFact->CreateScDeleteCellDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_DELCELL, bTheFlag );
-                        DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+                        DBG_ASSERT(pDlg, "Dialog create fail!");
 
                         if (pDlg->Execute() == RET_OK)
                             eCmd = pDlg->GetDelCellCmd();
@@ -385,12 +372,11 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     ScEditableTester aTester( pTabViewShell );
                     if (aTester.IsEditable())
                     {
-                        //CHINA001 ScDeleteContentsDlg* pDlg = new ScDeleteContentsDlg(     pTabViewShell->GetDialogParent() );
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                        DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+                        DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
 
                         AbstractScDeleteContentsDlg* pDlg = pFact->CreateScDeleteContentsDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_DELCONT );
-                        DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+                        DBG_ASSERT(pDlg, "Dialog create fail!");
                         ScDocument* pDoc = GetViewData()->GetDocument();
                         SCTAB nTab = GetViewData()->GetTabNo();
                         if ( pDoc->IsTabProtected(nTab) )
@@ -496,17 +482,13 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 }
                 else
                 {
-//CHINA001                  ScInsertContentsDlg* pDlg =
-//CHINA001                  new ScInsertContentsDlg(pTabViewShell->GetDialogParent(),
-//CHINA001                  0, /* nCheckDefaults */
-//CHINA001                  &ScGlobal::GetRscString(STR_FILL_TAB) );
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+                    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
 
                     AbstractScInsertContentsDlg* pDlg = pFact->CreateScInsertContentsDlg( pTabViewShell->GetDialogParent(),
                                                                                             RID_SCDLG_INSCONT, 0, /* nCheckDefaults */
                                                                                             &ScGlobal::GetRscString(STR_FILL_TAB));
-                    DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+                    DBG_ASSERT(pDlg, "Dialog create fail!");
                     pDlg->SetFillMode(TRUE);
 
                     if (pDlg->Execute() == RET_OK)
@@ -734,13 +716,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             }
                         }
                     }
-//CHINA001                  ScFillSeriesDlg* pDlg = new ScFillSeriesDlg(
-//CHINA001                  pTabViewShell->GetDialogParent(), *pDoc,
-//CHINA001                  eFillDir, eFillCmd, eFillDateCmd,
-//CHINA001                  aStartStr, fIncVal, fMaxVal,
-//CHINA001                  nPossDir);
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+                    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
 
                     AbstractScFillSeriesDlg* pDlg = pFact->CreateScFillSeriesDlg( pTabViewShell->GetDialogParent(),
                                                             *pDoc,
@@ -748,7 +725,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                                             aStartStr, fIncVal, fMaxVal,
                                                             nPossDir,
                                                             RID_SCDLG_FILLSERIES);
-                    DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+                    DBG_ASSERT(pDlg, "Dialog create fail!");
 
                     if ( nStartCol != nEndCol && nStartRow != nEndRow )
                     {
@@ -969,11 +946,11 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     if ( pTabViewShell->HasSelectionForDrillDown( nOrientation ) )
                     {
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                        DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+                        DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
 
                         AbstractScDPShowDetailDlg* pDlg = pFact->CreateScDPShowDetailDlg(
                             pTabViewShell->GetDialogParent(), RID_SCDLG_DPSHOWDETAIL, *pDPObj, nOrientation );
-                        DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+                        DBG_ASSERT(pDlg, "Dialog create fail!");
                         if ( pDlg->Execute() == RET_OK )
                         {
                             String aNewDimName( pDlg->GetDimensionName() );
@@ -1062,13 +1039,11 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         bColumns = FALSE;
                     else
                     {
-//CHINA001                      ScGroupDlg* pDlg = new ScGroupDlg(pTabViewShell->GetDialogParent(),
-//CHINA001                      RID_SCDLG_GRP_MAKE, FALSE );
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                        DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+                        DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
 
                         AbstractScGroupDlg* pDlg = pFact->CreateAbstractScGroupDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_GRP_MAKE, RID_SCDLG_GRP_MAKE,FALSE);
-                        DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+                        DBG_ASSERT(pDlg, "Dialog create fail!");
                         if ( pDlg->Execute() == RET_OK )
                             bColumns = pDlg->GetColsChecked();
                         else
@@ -1124,13 +1099,11 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     pTabViewShell->TestRemoveOutline( bColPoss, bRowPoss );
                     if ( bColPoss && bRowPoss )
                     {
-                        //CHINA001 ScGroupDlg* pDlg = new ScGroupDlg(   pTabViewShell->GetDialogParent(),
-                        //CHINA001                                  RID_SCDLG_GRP_KILL, TRUE );
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                        DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+                        DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
 
                         AbstractScGroupDlg* pDlg = pFact->CreateAbstractScGroupDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_GRP_KILL, RID_SCDLG_GRP_KILL,TRUE);
-                        DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+                        DBG_ASSERT(pDlg, "Dialog create fail!");
                         if ( pDlg->Execute() == RET_OK )
                             bColumns = pDlg->GetColsChecked();
                         else
@@ -1293,13 +1266,12 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         ScEditableTester aTester( pTabViewShell );
                         if (aTester.IsEditable())
                         {
-                            //CHINA001 ScInsertContentsDlg* pDlg = new ScInsertContentsDlg( pTabViewShell->GetDialogParent() );
                             ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                            DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+                            DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
 
                             AbstractScInsertContentsDlg* pDlg = pFact->CreateScInsertContentsDlg( pTabViewShell->GetDialogParent(),
                                                                                                     RID_SCDLG_INSCONT);
-                            DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+                            DBG_ASSERT(pDlg, "Dialog create fail!");
                             pDlg->SetOtherDoc( bOtherDoc );
                             // #53661# bei ChangeTrack MoveMode disablen
                             pDlg->SetChangeTrack( pDoc->GetChangeTrack() != NULL );
@@ -1666,12 +1638,11 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             {
                 USHORT nFlags = pTabViewShell->GetCreateNameFlags();
 
-                //CHINA001 ScNameCreateDlg* pDlg = new ScNameCreateDlg(     pTabViewShell->GetDialogParent(), nFlags );
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+                DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
 
                 AbstractScNameCreateDlg* pDlg = pFact->CreateScNameCreateDlg(pTabViewShell->GetDialogParent(), nFlags, RID_SCDLG_NAMES_CREATE );
-                DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+                DBG_ASSERT(pDlg, "Dialog create fail!");
 
                 if( pDlg->Execute() )
                 {
@@ -1822,12 +1793,11 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case FID_INSERT_NAME:
             {
                 ScDocument*     pDoc = GetViewData()->GetDocument();
-                //CHINA001 ScNamePasteDlg* pDlg = new ScNamePasteDlg(   pTabViewShell->GetDialogParent(), pDoc->GetRangeName() );
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+                DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
 
                 AbstractScNamePasteDlg* pDlg = pFact->CreateScNamePasteDlg( pTabViewShell->GetDialogParent(), pDoc->GetRangeName(), RID_SCDLG_NAMES_PASTE );
-                DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+                DBG_ASSERT(pDlg, "Dialog create fail!");
                 switch( pDlg->Execute() )
                 {
                     case BTN_PASTE_LIST:
@@ -1945,7 +1915,6 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             }
             else
             {
-                //CHINA001 SvxCharacterMap* pDlg = new SvxCharacterMap(     pTabViewShell->GetDialogParent(), FALSE );
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
 
                 // font color doesn't matter here
@@ -2071,15 +2040,14 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 }
                 else
                 {
-                    //CHINA001 ScLinkedAreaDlg* pDlg = new ScLinkedAreaDlg( pTabViewShell->GetDialogParent() );
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+                    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
 
                     delete pImpl->m_pLinkedDlg;
                     pImpl->m_pLinkedDlg =
                         pFact->CreateScLinkedAreaDlg( pTabViewShell->GetDialogParent(),
                                                       RID_SCDLG_LINKAREA);
-                    DBG_ASSERT(pImpl->m_pLinkedDlg, "Dialog create fail!");//CHINA001
+                    DBG_ASSERT(pImpl->m_pLinkedDlg, "Dialog create fail!");
                     delete pImpl->m_pRequest;
                     pImpl->m_pRequest = new SfxRequest( rReq );
                     pImpl->m_pLinkedDlg->StartExecuteModal( LINK( this, ScCellShell, DialogClosed ) );

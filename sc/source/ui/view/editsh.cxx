@@ -82,18 +82,16 @@
 #include "viewutil.hxx"
 #include "viewdata.hxx"
 #include "document.hxx"
-//CHINA001 #include "namepast.hxx"
 #include "reffind.hxx"
 #include "tabvwsh.hxx"
-//CHINA001 #include "textdlgs.hxx"
 #include "editutil.hxx"
 #include "globstr.hrc"
 
 #define ScEditShell
 #include "scslots.hxx"
 
-#include "scui_def.hxx" //CHINA001
-#include "scabstdlg.hxx" //CHINA001
+#include "scui_def.hxx"
+#include "scabstdlg.hxx"
 
 
 using namespace ::com::sun::star;
@@ -421,14 +419,11 @@ void ScEditShell::Execute( SfxRequest& rReq )
         case FID_INSERT_NAME:
             {
                 ScDocument*     pDoc = pViewData->GetDocument();
-                //CHINA001 ScNamePasteDlg* pDlg = new ScNamePasteDlg( pViewData->GetDialogParent(),
-                //CHINA001                              pDoc->GetRangeName(), FALSE );
-                                                // "Liste" disablen
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+                DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
 
                 AbstractScNamePasteDlg* pDlg = pFact->CreateScNamePasteDlg( pViewData->GetDialogParent(), pDoc->GetRangeName(), RID_SCDLG_NAMES_PASTE, FALSE );
-                DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+                DBG_ASSERT(pDlg, "Dialog create fail!");
                 short nRet = pDlg->Execute();
                 // pDlg is needed below
 
@@ -460,13 +455,12 @@ void ScEditShell::Execute( SfxRequest& rReq )
 
                 SfxObjectShell* pObjSh = pViewData->GetSfxDocShell();
 
-                //CHINA001 ScCharDlg* pDlg = new ScCharDlg( pViewData->GetDialogParent(), &aAttrs, pObjSh );
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+                DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
 
                 SfxAbstractTabDialog* pDlg = pFact->CreateScCharDlg( pViewData->GetDialogParent(), &aAttrs,
                                                                      pObjSh, RID_SCDLG_CHAR );
-                DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+                DBG_ASSERT(pDlg, "Dialog create fail!");
                 short nRet = pDlg->Execute();
                 // pDlg is needed below
 

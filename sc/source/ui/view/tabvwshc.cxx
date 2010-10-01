@@ -54,7 +54,6 @@
 #include "autoform.hxx"         // Core
 #include "autofmt.hxx"          // Dialog
 #include "consdlg.hxx"
-//CHINA001 #include "sortdlg.hxx"
 #include "filtdlg.hxx"
 #include "dbnamdlg.hxx"
 #include "pvlaydlg.hxx"

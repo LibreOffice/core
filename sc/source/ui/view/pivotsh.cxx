@@ -51,8 +51,7 @@
 #include "dpshttab.hxx"
 #include "dbdocfun.hxx"
 #include "uiitems.hxx"
-//CHINA001 #include "pfiltdlg.hxx"
-#include "scabstdlg.hxx" //CHINA001
+#include "scabstdlg.hxx"
 //------------------------------------------------------------------------
 
 #define ScPivotShell
@@ -124,16 +123,13 @@ void ScPivotShell::Execute( SfxRequest& rReq )
                     SCITEM_QUERYDATA, SCITEM_QUERYDATA );
                 aArgSet.Put( ScQueryItem( SCITEM_QUERYDATA, pViewData, &aQueryParam ) );
 
-                //CHINA001 ScPivotFilterDlg* pDlg = new ScPivotFilterDlg(
-                //CHINA001     pViewShell->GetDialogParent(), aArgSet, nSrcTab );
-
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+                DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
 
                 AbstractScPivotFilterDlg* pDlg = pFact->CreateScPivotFilterDlg( pViewShell->GetDialogParent(),
                                                                                 aArgSet, nSrcTab,
                                                                                 RID_SCDLG_PIVOTFILTER);
-                DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+                DBG_ASSERT(pDlg, "Dialog create fail!");
 
                 if( pDlg->Execute() == RET_OK )
                 {

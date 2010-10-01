@@ -74,7 +74,6 @@
 #include "global.hxx"
 #include "stlsheet.hxx"
 #include "editutil.hxx"
-//CHINA001 #include "namecrea.hxx"          // wegen Flags
 #include "cell.hxx"
 #include "scresid.hxx"
 #include "inputhdl.hxx"
@@ -86,7 +85,7 @@
 #include "dociter.hxx"
 #include "sizedev.hxx"
 #include "editable.hxx"
-#include "scui_def.hxx" //CHINA001
+#include "scui_def.hxx"
 #include "funcdesc.hxx"
 #include "docuno.hxx"
 #include "cellsuno.hxx"
