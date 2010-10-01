@@ -603,9 +603,11 @@ xcalloc(size_t nmemb, size_t size)
 void *
 xrealloc(void *ptr, size_t size)
 {
-    ptr = realloc(ptr, size);
+    void *newptr = realloc(ptr, size);
 
-    if ( !ptr )
+    if (newptr)
+        ptr = newptr;
+    else
         err_quit("out of memory");
 
     return ptr;
