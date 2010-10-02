@@ -5157,7 +5157,7 @@ dnl ===================================================================
 dnl Check for system Mesa
 dnl ===================================================================
 AC_MSG_CHECKING([which Mesa headers to use])
-if test "$with_system_mesa_headers" == "no"; then
+if test "$with_system_mesa_headers" = "no"; then
    AC_MSG_RESULT([internal])
    SYSTEM_MESA_HEADERS=NO
    BUILD_TYPE="$BUILD_TYPE MESA"
@@ -7217,7 +7217,7 @@ rm -f conftest* core core.* *.core
 OOO_JUNIT_JAR=
 if test "$SOLAR_JAVA" != "" && test "$with_junit" != "no"; then
     AC_MSG_CHECKING([for JUnit 4])
-    if test "$with_junit" == "yes"; then
+    if test "$with_junit" = "yes"; then
         if test -e /usr/share/java/junit4.jar; then
             OOO_JUNIT_JAR=/usr/share/java/junit4.jar
         else
