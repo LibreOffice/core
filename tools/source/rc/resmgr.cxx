@@ -1852,7 +1852,7 @@ rtl::OString ResMgr::GetAutoHelpId()
                     case RSC_CHECKBOX:          aHID.append( "CheckBox" );         break;
                     case RSC_TRISTATEBOX:       aHID.append( "TriStateBox" );      break;
                     case RSC_EDIT:              aHID.append( "Edit" );             break;
-                    case RSC_MULTILINEEDIT:     aHID.append( "MultilineEdit" );    break;
+                    case RSC_MULTILINEEDIT:     aHID.append( "MultiLineEdit" );    break;
                     case RSC_MULTILISTBOX:      aHID.append( "MultiListBox" );     break;
                     case RSC_LISTBOX:           aHID.append( "ListBox" );          break;
                     case RSC_COMBOBOX:          aHID.append( "ComboBox" );         break;
