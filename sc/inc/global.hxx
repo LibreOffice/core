@@ -400,7 +400,6 @@ enum ScVObjMode                     // Ausgabemodi von Objekten auf einer Seite
 {
     VOBJ_MODE_SHOW,
     VOBJ_MODE_HIDE
-    // #i80528# VOBJ_MODE_DUMMY removed, no longer supported
 };
 
 enum ScAnchorType                   // Verankerung eines Zeichenobjekts

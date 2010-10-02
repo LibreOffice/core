@@ -338,7 +338,6 @@
 #define STR_VOBJ_DRAWINGS           263
 #define STR_VOBJ_MODE_SHOW          264
 #define STR_VOBJ_MODE_HIDE          265
-//#i80528##define STR_VOBJ_MODE_DUMMY           266
 
 #define STR_SCATTR_PAGE_TOPDOWN     267
 #define STR_SCATTR_PAGE_LEFTRIGHT   268
