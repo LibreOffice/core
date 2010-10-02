@@ -83,6 +83,8 @@
 #include "patattr.hxx"
 #include "scitems.hxx"
 #include "docpool.hxx"
+#include "segmenttree.hxx"
+#include "docparam.hxx"
 
 #include <vector>
 
@@ -99,6 +101,7 @@ using ::std::vector;
 #define SC_DBPROP_ACTIVECONNECTION  "ActiveConnection"
 #define SC_DBPROP_COMMAND           "Command"
 #define SC_DBPROP_COMMANDTYPE       "CommandType"
+#define SC_DBPROP_PROPCHANGE_NOTIFY "PropertyChangeNotificationEnabled"
 
 #define SC_DBPROP_NAME              "Name"
 #define SC_DBPROP_TYPE              "Type"
@@ -302,8 +305,10 @@ static void lcl_setScalesToColumns(ScDocument& rDoc, const vector<long>& rScales
 }
 
 ULONG ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet,
-                                BOOL bSimpleColWidth[MAXCOLCOUNT] )
+                               ScColWidthParam aColWidthParam[MAXCOLCOUNT], ScFlatBoolRowSegments& rRowHeightsRecalc )
 {
+    ScColumn::DoubleAllocSwitch aAllocSwitch(true);
+
     ULONG nErr = eERR_OK;
     long i;
 
@@ -348,6 +353,10 @@ ULONG ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet,
         aAny <<= rtl::OUString( aTabName );
         xRowProp->setPropertyValue(
                     rtl::OUString::createFromAscii(SC_DBPROP_COMMAND), aAny );
+
+        aAny <<= sal_False;
+        xRowProp->setPropertyValue(
+                    rtl::OUString::createFromAscii(SC_DBPROP_PROPCHANGE_NOTIFY), aAny );
 
         xRowSet->execute();
 
@@ -426,16 +435,33 @@ ULONG ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet,
         BOOL bEnd = FALSE;
         while ( !bEnd && xRowSet->next() )
         {
+            bool bSimpleRow = true;
             if ( nRow <= MAXROW )
             {
                 SCCOL nCol = 0;
                 for (i=0; i<nColCount; i++)
                 {
+                    ScDatabaseDocUtil::StrData aStrData;
                     ScDatabaseDocUtil::PutData( &aDocument, nCol, nRow, 0,
                                                 xRow, i+1, pTypeArr[i], FALSE,
-                                                &bSimpleColWidth[nCol] );
+                                                &aStrData );
+
+                    if (aStrData.mnStrLength > aColWidthParam[nCol].mnMaxTextLen)
+                    {
+                        aColWidthParam[nCol].mnMaxTextLen = aStrData.mnStrLength;
+                        aColWidthParam[nCol].mnMaxTextRow = nRow;
+                    }
+
+                    if (!aStrData.mbSimpleText)
+                    {
+                        bSimpleRow = false;
+                        aColWidthParam[nCol].mbSimpleText = false;
+                    }
+
                     ++nCol;
                 }
+                if (!bSimpleRow)
+                    rRowHeightsRecalc.setTrue(nRow, nRow);
                 ++nRow;
             }
             else        // past the end of the spreadsheet

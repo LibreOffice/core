@@ -37,6 +37,8 @@
 #include <memory>
 
 #include <set>
+#include <vector>
+#include <boost/shared_ptr.hpp>
 
 class ScDocument;
 class ScBaseCell;
@@ -44,6 +46,7 @@ class ScPatternAttr;
 class ScAttrArray;
 class ScAttrIterator;
 class ScRange;
+class ScFlatBoolRowSegments;
 
 class ScDocumentIterator                // alle nichtleeren Zellen durchgehen
 {
@@ -525,6 +528,42 @@ private:
     ::std::set<SCROW>::const_iterator maItr;
     ::std::set<SCROW>::const_iterator maEnd;
 };
+
+// ============================================================================
+
+class ScDocRowHeightUpdater
+{
+public:
+    struct TabRanges
+    {
+        SCTAB mnTab;
+        ::boost::shared_ptr<ScFlatBoolRowSegments> mpRanges;
+
+        TabRanges();
+        TabRanges(SCTAB nTab);
+    };
+
+    /**
+     * Passing a NULL pointer to pTabRangesArray forces the heights of all
+     * rows in all tables to be updated.
+     */
+    explicit ScDocRowHeightUpdater(
+        ScDocument& rDoc, OutputDevice* pOutDev, double fPPTX, double fPPTY,
+        const ::std::vector<TabRanges>* pTabRangesArray = NULL);
+
+    void update();
+
+private:
+    void updateAll();
+
+private:
+    ScDocument& mrDoc;
+    OutputDevice* mpOutDev;
+    double mfPPTX;
+    double mfPPTY;
+    const ::std::vector<TabRanges>* mpTabRangesArray;
+};
+
 
 #endif
 

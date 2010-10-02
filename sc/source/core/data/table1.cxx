@@ -256,10 +256,10 @@ USHORT ScTable::GetOptimalColWidth( SCCOL nCol, OutputDevice* pDev,
                                     double nPPTX, double nPPTY,
                                     const Fraction& rZoomX, const Fraction& rZoomY,
                                     BOOL bFormula, const ScMarkData* pMarkData,
-                                    BOOL bSimpleTextImport )
+                                    const ScColWidthParam* pParam )
 {
     return aCol[nCol].GetOptimalColWidth( pDev, nPPTX, nPPTY, rZoomX, rZoomY,
-        bFormula, STD_COL_WIDTH - STD_EXTRA_WIDTH, pMarkData, bSimpleTextImport );
+        bFormula, STD_COL_WIDTH - STD_EXTRA_WIDTH, pMarkData, pParam );
 }
 
 long ScTable::GetNeededSize( SCCOL nCol, SCROW nRow,

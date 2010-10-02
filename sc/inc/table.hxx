@@ -86,6 +86,8 @@ class ScFlatUInt16RowSegments;
 class ScFlatBoolRowSegments;
 class ScFlatBoolColSegments;
 struct ScSetStringParam;
+struct ScColWidthParam;
+struct ScColWidthParam;
 
 class ScTable
 {
@@ -595,7 +597,7 @@ public:
                                     double nPPTX, double nPPTY,
                                     const Fraction& rZoomX, const Fraction& rZoomY,
                                     BOOL bFormula, const ScMarkData* pMarkData,
-                                    BOOL bSimpleTextImport );
+                                    const ScColWidthParam* pParam );
     BOOL        SetOptimalHeight( SCROW nStartRow, SCROW nEndRow, USHORT nExtra,
                                     OutputDevice* pDev,
                                     double nPPTX, double nPPTY,

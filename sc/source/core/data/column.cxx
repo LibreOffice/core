@@ -67,8 +67,20 @@ inline BOOL IsAmbiguousScriptNonZero( BYTE nScript )
              nScript != 0 );
 }
 
-// -----------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
+ScColumn::DoubleAllocSwitch::DoubleAllocSwitch(bool bNewVal) :
+    mbOldVal(ScColumn::bDoubleAlloc)
+{
+    ScColumn::bDoubleAlloc = bNewVal;
+}
+
+ScColumn::DoubleAllocSwitch::~DoubleAllocSwitch()
+{
+    ScColumn::bDoubleAlloc = mbOldVal;
+}
+
+// ----------------------------------------------------------------------------
 
 ScColumn::ScColumn() :
     nCol( 0 ),

@@ -65,7 +65,7 @@ extern const ScFormulaCell* pLastFormulaTreeTop;    // in cellform.cxx
 using namespace formula;
 // STATIC DATA -----------------------------------------------------------
 
-BOOL ScColumn::bDoubleAlloc = FALSE;    // fuer Import: Groesse beim Allozieren verdoppeln
+bool ScColumn::bDoubleAlloc = FALSE;    // fuer Import: Groesse beim Allozieren verdoppeln
 
 
 void ScColumn::Insert( SCROW nRow, ScBaseCell* pNewCell )

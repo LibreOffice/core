@@ -67,6 +67,7 @@
 #include "dbcolect.hxx"
 #include "fillinfo.hxx"
 #include "segmenttree.hxx"
+#include "docparam.hxx"
 
 #include <math.h>
 
@@ -548,10 +549,10 @@ long ScColumn::GetSimpleTextNeededSize( SCSIZE nIndex, OutputDevice* pDev,
 }
 
 USHORT ScColumn::GetOptimalColWidth( OutputDevice* pDev, double nPPTX, double nPPTY,
-                                        const Fraction& rZoomX, const Fraction& rZoomY,
-                                        BOOL bFormula, USHORT nOldWidth,
-                                        const ScMarkData* pMarkData,
-                                        BOOL bSimpleTextImport )
+                                     const Fraction& rZoomX, const Fraction& rZoomY,
+                                     BOOL bFormula, USHORT nOldWidth,
+                                     const ScMarkData* pMarkData,
+                                     const ScColWidthParam* pParam )
 {
     if (nCount == 0)
         return nOldWidth;
@@ -561,7 +562,7 @@ USHORT ScColumn::GetOptimalColWidth( OutputDevice* pDev, double nPPTX, double nP
 
     SCSIZE nIndex;
     ScMarkedDataIter aDataIter(this, pMarkData, TRUE);
-    if ( bSimpleTextImport )
+    if ( pParam && pParam->mbSimpleText )
     {   // alles eins bis auf NumberFormate
         const ScPatternAttr* pPattern = GetPattern( 0 );
         Font aFont;
@@ -572,18 +573,43 @@ USHORT ScColumn::GetOptimalColWidth( OutputDevice* pDev, double nPPTX, double nP
         long nMargin = (long) ( pMargin->GetLeftMargin() * nPPTX ) +
                         (long) ( pMargin->GetRightMargin() * nPPTX );
 
-        while (aDataIter.Next( nIndex ))
+        // Try to find the row that has the longest string, and measure the width of that string.
+        SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
+        ULONG nFormat = pPattern->GetNumberFormat( pFormatter );
+        String aLongStr;
+        Color* pColor;
+        if (pParam->mnMaxTextRow >= 0)
         {
-            USHORT nThis = (USHORT) (GetSimpleTextNeededSize( nIndex, pDev,
-                TRUE ) + nMargin);
-            if (nThis)
+            ScBaseCell* pCell = GetCell(pParam->mnMaxTextRow);
+            ScCellFormat::GetString(
+                pCell, nFormat, aLongStr, &pColor, *pFormatter, TRUE, FALSE, ftCheck );
+        }
+        else
+        {
+            xub_StrLen nLongLen = 0;
+            while (aDataIter.Next(nIndex))
             {
-                if (nThis>nWidth || !bFound)
+                if (nIndex >= nCount)
+                    // Out-of-bound reached.  No need to keep going.
+                    break;
+
+                ScBaseCell* pCell = pItems[nIndex].pCell;
+                String aValStr;
+                ScCellFormat::GetString(
+                    pCell, nFormat, aValStr, &pColor, *pFormatter, TRUE, FALSE, ftCheck );
+
+                if (aValStr.Len() > nLongLen)
                 {
-                    nWidth = nThis;
-                    bFound = TRUE;
+                    nLongLen = aValStr.Len();
+                    aLongStr = aValStr;
                 }
             }
+        }
+
+        if (aLongStr.Len())
+        {
+            nWidth = pDev->GetTextWidth(aLongStr) + static_cast<USHORT>(nMargin);
+            bFound = true;
         }
     }
     else

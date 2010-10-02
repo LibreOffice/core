@@ -46,12 +46,19 @@ using namespace ::com::sun::star;
 
 #define D_TIMEFACTOR              86400.0
 
-// -----------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+
+ScDatabaseDocUtil::StrData::StrData() :
+    mbSimpleText(true), mnStrLength(0)
+{
+}
+
+// ----------------------------------------------------------------------------
 
 // static
 void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
                                 const uno::Reference<sdbc::XRow>& xRow, long nRowPos,
-                                long nType, BOOL bCurrency, BOOL* pSimpleFlag )
+                                long nType, BOOL bCurrency, StrData* pStrData )
 {
     String aString;
     double nVal = 0.0;
@@ -185,8 +192,11 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
         if (aString.Len())
         {
             pCell = ScBaseCell::CreateTextCell( aString, pDoc );
-            if ( pSimpleFlag && pCell->GetCellType() == CELLTYPE_EDIT )
-                *pSimpleFlag = FALSE;
+            if (pStrData)
+            {
+                pStrData->mbSimpleText = pCell->GetCellType() != CELLTYPE_EDIT;
+                pStrData->mnStrLength = aString.Len();
+            }
         }
         else
             pCell = NULL;

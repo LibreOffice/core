@@ -268,7 +268,7 @@ BOOL ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
     // ImportDoc - also used for Redo
     ScDocument* pImportDoc = new ScDocument( SCDOCMODE_UNDO );
     pImportDoc->InitUndo( pDoc, nTab, nTab );
-    ScColumn::bDoubleAlloc = TRUE;
+    ScColumn::DoubleAllocSwitch aAllocSwitch(true);
 
     //
     //  get data from database into import document
@@ -460,7 +460,6 @@ BOOL ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
         DBG_ERROR("Unexpected exception in database");
     }
 
-    ScColumn::bDoubleAlloc = FALSE;
     pImportDoc->DoColResize( nTab, rParam.nCol1,nEndCol, 0 );
 
     //

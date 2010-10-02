@@ -42,10 +42,20 @@ namespace com { namespace sun { namespace star { namespace sdbc {
 class ScDatabaseDocUtil
 {
 public:
+    /**
+     * Detailed information on single string value.
+     */
+    struct StrData
+    {
+        bool        mbSimpleText;
+        sal_uInt32  mnStrLength;
+
+        StrData();
+    };
     static void PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
                         const ::com::sun::star::uno::Reference<
                             ::com::sun::star::sdbc::XRow>& xRow, long nRowPos,
-                        long nType, BOOL bCurrency, BOOL* pSimpleFlag = NULL );
+                        long nType, BOOL bCurrency, StrData* pStrData = NULL );
 };
 
 #endif

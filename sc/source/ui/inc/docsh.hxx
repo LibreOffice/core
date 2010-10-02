@@ -68,6 +68,8 @@ class ScImportOptions;
 class ScDocShellModificator;
 class ScOptSolverSave;
 class ScSheetSaveData;
+class ScFlatBoolRowSegments;
+struct ScColWidthParam;
 
 namespace sfx2 { class FileDialogHelper; }
 struct DocShell_Impl;
@@ -148,7 +150,7 @@ class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxListener
     SC_DLLPRIVATE SCTAB         GetSaveTab();
 
     SC_DLLPRIVATE ULONG         DBaseImport( const String& rFullFileName, CharSet eCharSet,
-                                 BOOL bSimpleColWidth[MAXCOLCOUNT] );
+                                             ScColWidthParam aColWidthParam[MAXCOLCOUNT], ScFlatBoolRowSegments& rRowHeightsRecalc );
     SC_DLLPRIVATE ULONG         DBaseExport( const String& rFullFileName, CharSet eCharSet,
                                  BOOL& bHasMemo );
 

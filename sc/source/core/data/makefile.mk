@@ -70,6 +70,7 @@ SLOFILES =  \
     $(SLO)$/documen8.obj \
     $(SLO)$/documen9.obj \
     $(SLO)$/document.obj \
+    $(SLO)$/docparam.obj \
         $(SLO)$/dpcachetable.obj \
         $(SLO)$/dpdimsave.obj \
     $(SLO)$/dpglobal.obj \
@@ -122,6 +123,7 @@ EXCEPTIONSFILES= \
     $(SLO)$/clipparam.obj \
     $(SLO)$/column.obj \
     $(SLO)$/column3.obj \
+    $(SLO)$/dociter.obj \
     $(SLO)$/documen2.obj \
     $(SLO)$/document.obj \
     $(SLO)$/dpdimsave.obj \

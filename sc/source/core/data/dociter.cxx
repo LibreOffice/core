@@ -43,6 +43,10 @@
 #include "patattr.hxx"
 #include "docoptio.hxx"
 #include "cellform.hxx"
+#include "segmenttree.hxx"
+#include "progress.hxx"
+#include "globstr.hrc"
+#include "tools/fract.hxx"
 
 #include <vector>
 
@@ -2022,6 +2026,100 @@ const ScPatternAttr* ScDocAttrIterator::GetNext( SCCOL& rCol, SCROW& rRow1, SCRO
             pColIter = NULL;
     }
     return NULL;        // is nix mehr
+}
+
+// ============================================================================
+
+ScDocRowHeightUpdater::TabRanges::TabRanges() :
+    mnTab(0), mpRanges(new ScFlatBoolRowSegments)
+{
+}
+
+ScDocRowHeightUpdater::TabRanges::TabRanges(SCTAB nTab) :
+    mnTab(nTab), mpRanges(new ScFlatBoolRowSegments)
+{
+}
+
+ScDocRowHeightUpdater::ScDocRowHeightUpdater(ScDocument& rDoc, OutputDevice* pOutDev, double fPPTX, double fPPTY, const vector<TabRanges>* pTabRangesArray) :
+    mrDoc(rDoc), mpOutDev(pOutDev), mfPPTX(fPPTX), mfPPTY(fPPTY), mpTabRangesArray(pTabRangesArray)
+{
+}
+
+void ScDocRowHeightUpdater::update()
+{
+    if (!mpTabRangesArray || mpTabRangesArray->empty())
+    {
+        // No ranges defined.  Update all rows in all tables.
+        updateAll();
+        return;
+    }
+
+    sal_uInt32 nCellCount = 0;
+    vector<TabRanges>::const_iterator itr = mpTabRangesArray->begin(), itrEnd = mpTabRangesArray->end();
+    for (; itr != itrEnd; ++itr)
+    {
+        ScFlatBoolRowSegments::RangeData aData;
+        ScFlatBoolRowSegments::RangeIterator aRangeItr(*itr->mpRanges);
+        for (bool bFound = aRangeItr.getFirst(aData); bFound; bFound = aRangeItr.getNext(aData))
+        {
+            if (!aData.mbValue)
+                continue;
+
+            nCellCount += aData.mnRow2 - aData.mnRow1 + 1;
+        }
+    }
+
+    ScProgress aProgress(mrDoc.GetDocumentShell(), ScGlobal::GetRscString(STR_PROGRESS_HEIGHTING), nCellCount);
+
+    Fraction aZoom(1, 1);
+    itr = mpTabRangesArray->begin();
+    sal_uInt32 nProgressStart = 0;
+    for (; itr != itrEnd; ++itr)
+    {
+        SCTAB nTab = itr->mnTab;
+        if (!ValidTab(nTab) || !mrDoc.pTab[nTab])
+            continue;
+
+        ScFlatBoolRowSegments::RangeData aData;
+        ScFlatBoolRowSegments::RangeIterator aRangeItr(*itr->mpRanges);
+        for (bool bFound = aRangeItr.getFirst(aData); bFound; bFound = aRangeItr.getNext(aData))
+        {
+            if (!aData.mbValue)
+                continue;
+
+            mrDoc.pTab[nTab]->SetOptimalHeight(
+                aData.mnRow1, aData.mnRow2, 0, mpOutDev, mfPPTX, mfPPTY, aZoom, aZoom, false, &aProgress, nProgressStart);
+
+            nProgressStart += aData.mnRow2 - aData.mnRow1 + 1;
+        }
+    }
+}
+
+void ScDocRowHeightUpdater::updateAll()
+{
+    sal_uInt32 nCellCount = 0;
+    for (SCTAB nTab = 0; nTab <= MAXTAB; ++nTab)
+    {
+        if (!ValidTab(nTab) || !mrDoc.pTab[nTab])
+            continue;
+
+        nCellCount += mrDoc.pTab[nTab]->GetWeightedCount();
+    }
+
+    ScProgress aProgress(mrDoc.GetDocumentShell(), ScGlobal::GetRscString(STR_PROGRESS_HEIGHTING), nCellCount);
+
+    Fraction aZoom(1, 1);
+    ULONG nProgressStart = 0;
+    for (SCTAB nTab = 0; nTab <= MAXTAB; ++nTab)
+    {
+        if (!ValidTab(nTab) || !mrDoc.pTab[nTab])
+            continue;
+
+        mrDoc.pTab[nTab]->SetOptimalHeight(
+            0, MAXROW, 0, mpOutDev, mfPPTX, mfPPTY, aZoom, aZoom, false, &aProgress, nProgressStart);
+
+        nProgressStart += mrDoc.pTab[nTab]->GetWeightedCount();
+    }
 }
 
 //-------------------------------------------------------------------------------

@@ -67,6 +67,7 @@ struct ScLineFlags;
 struct ScMergePatternState;
 class ScFlatBoolRowSegments;
 struct ScSetStringParam;
+struct ScColWidthParam;
 
 #define COLUMN_DELTA    4
 
@@ -121,8 +122,16 @@ friend class ScHorizontalCellIterator;
 friend class ScHorizontalAttrIterator;
 
 public:
-static BOOL bDoubleAlloc;           // fuer Import: Groesse beim Allozieren verdoppeln
+    static bool bDoubleAlloc;           // fuer Import: Groesse beim Allozieren verdoppeln
 
+    class DoubleAllocSwitch
+    {
+    public:
+        DoubleAllocSwitch(bool bNewVal = true);
+        ~DoubleAllocSwitch();
+    private:
+        bool mbOldVal;
+    };
 public:
                 ScColumn();
                 ~ScColumn();
@@ -357,7 +366,7 @@ public:
                                     const Fraction& rZoomX, const Fraction& rZoomY,
                                     BOOL bFormula, USHORT nOldWidth,
                                     const ScMarkData* pMarkData,
-                                    BOOL bSimpleTextImport );
+                                    const ScColWidthParam* pParam );
     void        GetOptimalHeight( SCROW nStartRow, SCROW nEndRow, USHORT* pHeight,
                                     OutputDevice* pDev,
                                     double nPPTX, double nPPTY,

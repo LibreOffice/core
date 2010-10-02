@@ -121,18 +121,26 @@
 #include "optsolver.hxx"
 #include "sheetdata.hxx"
 #include "tabprotection.hxx"
+#include "docparam.hxx"
 
 #include "docsh.hxx"
 #include "docshimp.hxx"
+#include "sizedev.hxx"
 #include <rtl/logfile.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include "uiitems.hxx"
 #include "cellsuno.hxx"
 
+
+#include <vector>
+#include <boost/shared_ptr.hpp>
+
 using namespace com::sun::star;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
+using ::boost::shared_ptr;
+using ::std::vector;
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -1022,11 +1030,12 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
     // ob nach dem Import optimale Spaltenbreiten gesetzt werden sollen
     BOOL bSetColWidths = FALSE;
     BOOL bSetSimpleTextColWidths = FALSE;
-    BOOL bSimpleColWidth[MAXCOLCOUNT];
-    memset( bSimpleColWidth, 1, (MAXCOLCOUNT) * sizeof(BOOL) );
+    ScColWidthParam aColWidthParam[MAXCOLCOUNT];
     ScRange aColWidthRange;
     // ob nach dem Import optimale Zeilenhoehen gesetzt werden sollen
     BOOL bSetRowHeights = FALSE;
+
+    vector<ScDocRowHeightUpdater::TabRanges> aRecalcRowRangesArray;
 
     aConvFilterName.Erase(); //@ #BugId 54198
 
@@ -1226,8 +1235,10 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 sItStr = ScGlobal::GetCharsetString( RTL_TEXTENCODING_IBM_850 );
             }
 
+            ScDocRowHeightUpdater::TabRanges aRecalcRanges(0);
             ULONG eError = DBaseImport( rMedium.GetPhysicalName(),
-                    ScGlobal::GetCharsetValue(sItStr), bSimpleColWidth );
+                    ScGlobal::GetCharsetValue(sItStr), aColWidthParam, *aRecalcRanges.mpRanges );
+            aRecalcRowRangesArray.push_back(aRecalcRanges);
 
             if (eError != eERR_OK)
             {
@@ -1241,12 +1252,6 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
             aColWidthRange.aStart.SetRow( 1 );  // Spaltenheader nicht
             bSetColWidths = TRUE;
             bSetSimpleTextColWidths = TRUE;
-            // Memo-Felder fuehren zu einem bSimpleColWidth[nCol]==FALSE
-            for ( SCCOL nCol=0; nCol <= MAXCOL && !bSetRowHeights; nCol++ )
-            {
-                if ( !bSimpleColWidth[nCol] )
-                    bSetRowHeights = TRUE;
-            }
         }
         else if (aFltName.EqualsAscii(pFilterDif))
         {
@@ -1460,9 +1465,12 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
             {
                 for ( SCCOL nCol=0; nCol <= nEndCol; nCol++ )
                 {
+                    if (!bSetSimpleTextColWidths)
+                        aColWidthParam[nCol].mbSimpleText = false;
+
                     USHORT nWidth = aDocument.GetOptimalColWidth(
                         nCol, nTab, &aVirtDev, nPPTX, nPPTY, aZoom, aZoom, FALSE, &aMark,
-                        (bSetSimpleTextColWidths && bSimpleColWidth[nCol]) );
+                        &aColWidthParam[nCol] );
                     aDocument.SetColWidth( nCol, nTab,
                         nWidth + (USHORT)ScGlobal::nLastColWidthExtra );
                 }
@@ -1474,10 +1482,24 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
 //                  nPPTX, nPPTY, aZoom, aZoom, FALSE );
 //          }
         }
-        if ( bSetRowHeights )
-            UpdateAllRowHeights();      // with vdev or printer, depending on configuration
+
+        if (bSetRowHeights)
+        {
+            // Update all rows in all tables.
+            ScSizeDeviceProvider aProv(this);
+            ScDocRowHeightUpdater aUpdater(aDocument, aProv.GetDevice(), aProv.GetPPTX(), aProv.GetPPTY(), NULL);
+            aUpdater.update();
+        }
+        else if (!aRecalcRowRangesArray.empty())
+        {
+            // Update only specified row ranges for better performance.
+            ScSizeDeviceProvider aProv(this);
+            ScDocRowHeightUpdater aUpdater(aDocument, aProv.GetDevice(), aProv.GetPPTX(), aProv.GetPPTY(), &aRecalcRowRangesArray);
+            aUpdater.update();
+        }
     }
     FinishedLoading( SFX_LOADED_MAINDOCUMENT | SFX_LOADED_IMAGES );
+
 
     // #73762# invalidate eventually temporary table areas
     if ( bRet )

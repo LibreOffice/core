@@ -3281,14 +3281,14 @@ ULONG ScDocument::GetRowOffset( SCROW nRow, SCTAB nTab ) const
 
 
 USHORT ScDocument::GetOptimalColWidth( SCCOL nCol, SCTAB nTab, OutputDevice* pDev,
-                                        double nPPTX, double nPPTY,
-                                        const Fraction& rZoomX, const Fraction& rZoomY,
-                                        BOOL bFormula, const ScMarkData* pMarkData,
-                                        BOOL bSimpleTextImport )
+                                       double nPPTX, double nPPTY,
+                                       const Fraction& rZoomX, const Fraction& rZoomY,
+                                       BOOL bFormula, const ScMarkData* pMarkData,
+                                       const ScColWidthParam* pParam )
 {
     if ( ValidTab(nTab) && pTab[nTab] )
         return pTab[nTab]->GetOptimalColWidth( nCol, pDev, nPPTX, nPPTY,
-            rZoomX, rZoomY, bFormula, pMarkData, bSimpleTextImport );
+            rZoomX, rZoomY, bFormula, pMarkData, pParam );
     DBG_ERROR("Falsche Tabellennummer");
     return 0;
 }

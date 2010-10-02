@@ -147,6 +147,8 @@ struct ScClipParam;
 struct ScClipRangeNameData;
 class ScRowBreakIterator;
 struct ScSetStringParam;
+class ScDocRowHeightUpdater;
+struct ScColWidthParam;
 
 namespace com { namespace sun { namespace star {
     namespace lang {
@@ -250,6 +252,7 @@ friend class ScHorizontalAttrIterator;
 friend class ScDocAttrIterator;
 friend class ScAttrRectIterator;
 friend class ScDocShell;
+friend class ScDocRowHeightUpdater;
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceManager;
@@ -1301,7 +1304,7 @@ public:
                                         const Fraction& rZoomX, const Fraction& rZoomY,
                                         BOOL bFormula,
                                         const ScMarkData* pMarkData = NULL,
-                                        BOOL bSimpleTextImport = FALSE );
+                                        const ScColWidthParam* pParam = NULL );
     SC_DLLPUBLIC BOOL           SetOptimalHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, USHORT nExtra,
                                         OutputDevice* pDev,
                                         double nPPTX, double nPPTY,

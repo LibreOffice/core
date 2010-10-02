@@ -1191,8 +1191,7 @@ BOOL ScImportExport::ExtText2Doc( SvStream& rStrm )
     if ( rStrm.GetStreamCharSet() == RTL_TEXTENCODING_UNICODE )
         rStrm.StartReadingUnicodeText();
 
-    BOOL bOld = ScColumn::bDoubleAlloc;
-    ScColumn::bDoubleAlloc = TRUE;
+    ScColumn::DoubleAllocSwitch aAllocSwitch(true);
 
     SCCOL nStartCol = aRange.aStart.Col();
     SCCOL nEndCol = aRange.aEnd.Col();
@@ -1393,7 +1392,6 @@ BOOL ScImportExport::ExtText2Doc( SvStream& rStrm )
         bDetermineRange = !bDetermineRange;     // toggle
     } while (!bDetermineRange);
 
-    ScColumn::bDoubleAlloc = bOld;
     pDoc->DoColResize( nTab, nStartCol, nEndCol, 0 );
 
     delete pEnglishTransliteration;
