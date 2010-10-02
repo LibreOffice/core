@@ -43,14 +43,21 @@
 
 //  incl. Doppelpunkt -> Doppelte Referenzen werden einzeln behandelt
 const sal_Unicode __FAR_DATA ScRefFinder::pDelimiters[] = {
-    '=','(',')',';','+','-','*','/','^','&',' ','{','}','<','>',':', 0
+    '=','(',')','+','-','*','/','^','&',' ','{','}','<','>',':', 0
 };
 
 // =======================================================================
 
 inline BOOL IsText( sal_Unicode c )
 {
-    return !ScGlobal::UnicodeStrChr( ScRefFinder::pDelimiters, c );
+    bool bFound = ScGlobal::UnicodeStrChr( ScRefFinder::pDelimiters, c );
+    if (bFound)
+        // This is one of delimiters, therefore not text.
+        return false;
+
+    // argument separator is configurable.
+    const sal_Unicode sep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
+    return c != sep;
 }
 
 inline BOOL IsText( BOOL& bQuote, sal_Unicode c )
