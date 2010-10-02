@@ -885,17 +885,23 @@ sal_Bool ODbaseTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols, s
 
         if (nType == DataType::CHAR || nType == DataType::VARCHAR)
         {
-            char cLast = pData[nLen];
-            pData[nLen] = 0;
-            String aStr(pData,(xub_StrLen)nLen,m_eEncoding);
-            aStr.EraseTrailingChars();
-
-            if ( aStr.Len() )
-                *(_rRow->get())[i] = ::rtl::OUString(aStr);
-            else// keine StringLaenge, dann NULL
+            sal_Int32 nLastPos = -1;
+            for (sal_Int32 k = 0; k < nLen; ++k)
+            {
+                if (pData[k] != ' ')
+                    // Record last non-empty position.
+                    nLastPos = k;
+            }
+            if (nLastPos < 0)
+            {
+                // Empty string.  Skip it.
                 (_rRow->get())[i]->setNull();
-
-            pData[nLen] = cLast;
+            }
+            else
+            {
+                // Commit the string.  Use intern() to ref-count it.
+                *(_rRow->get())[i] = ::rtl::OUString::intern(pData, static_cast<sal_Int32>(nLastPos+1), m_eEncoding);
+            }
         } // if (nType == DataType::CHAR || nType == DataType::VARCHAR)
         else if ( DataType::TIMESTAMP == nType )
         {
@@ -941,36 +947,46 @@ sal_Bool ODbaseTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols, s
         }
         else
         {
+            sal_Int32 nPos1 = -1, nPos2 = -1;
             // Falls Nul-Zeichen im String enthalten sind, in Blanks umwandeln!
             for (sal_Int32 k = 0; k < nLen; k++)
             {
                 if (pData[k] == '\0')
                     pData[k] = ' ';
+
+                if (pData[k] != ' ')
+                {
+                    if (nPos1 < 0)
+                        // first non-empty char position.
+                        nPos1 = k;
+
+                    // last non-empty char position.
+                    nPos2 = k;
+                }
             }
 
-            String aStr(pData, (xub_StrLen)nLen,m_eEncoding);       // Spaces am Anfang und am Ende entfernen:
-            aStr.EraseLeadingChars();
-            aStr.EraseTrailingChars();
-
-            if (!aStr.Len())
+            if (nPos1 < 0)
             {
+                // Empty string.  Skip it.
                 nByteOffset += nLen;
                 (_rRow->get())[i]->setNull();   // keine Werte -> fertig
                 continue;
             }
 
+            ::rtl::OUString aStr = ::rtl::OUString::intern(pData+nPos1, nPos2-nPos1+1, m_eEncoding);
+
             switch (nType)
             {
                 case DataType::DATE:
                 {
-                    if (aStr.Len() != nLen)
+                    if (aStr.getLength() != nLen)
                     {
                         (_rRow->get())[i]->setNull();
                         break;
                     }
-                    const sal_uInt16  nYear   = (sal_uInt16)aStr.Copy( 0, 4 ).ToInt32();
-                    const sal_uInt16  nMonth  = (sal_uInt16)aStr.Copy( 4, 2 ).ToInt32();
-                    const sal_uInt16  nDay    = (sal_uInt16)aStr.Copy( 6, 2 ).ToInt32();
+                    const sal_uInt16  nYear   = (sal_uInt16)aStr.copy( 0, 4 ).toInt32();
+                    const sal_uInt16  nMonth  = (sal_uInt16)aStr.copy( 4, 2 ).toInt32();
+                    const sal_uInt16  nDay    = (sal_uInt16)aStr.copy( 6, 2 ).toInt32();
 
                     const ::com::sun::star::util::Date aDate(nDay,nMonth,nYear);
                     *(_rRow->get())[i] = aDate;
@@ -998,7 +1014,7 @@ sal_Bool ODbaseTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols, s
                 case DataType::BINARY:
                 case DataType::LONGVARCHAR:
                 {
-                    const long nBlockNo = aStr.ToInt32();   // Blocknummer lesen
+                    const long nBlockNo = aStr.toInt32();   // Blocknummer lesen
                     if (nBlockNo > 0 && m_pMemoStream) // Daten aus Memo-Datei lesen, nur wenn
                     {
                         if ( !ReadMemo(nBlockNo, (_rRow->get())[i]->get()) )
