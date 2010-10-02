@@ -111,9 +111,13 @@ normalize: $(PACKAGE_DIR)$/$(NORMALIZE_FLAG_FILE)
 
 $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) : normalize
 
+.IF "$(GUI)"=="WNT"
+
 $(PACKAGE_DIR)/$(BUILD_FLAG_FILE) : boostthreadlib
 
 boostthreadlib :
     cd $(PACKAGE_DIR)/$(TARFILE_ROOTDIR)/libs/thread/src/win32 && dmake $(MFLAGS) $(CALLMACROS)
+
+.ENDIF
 
 .ENDIF			# "$(SYSTEM_BOOST)" == "YES" && ("$(OS)"!="SOLARIS" || "$(COM)"=="GCC")
