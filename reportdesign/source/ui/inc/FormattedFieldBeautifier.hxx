@@ -35,7 +35,6 @@
 #include <com/sun/star/report/XReportComponent.hpp>
 /** === end UNO includes === **/
 
-//#include <boost/noncopyable.hpp>
 #include <vector>
 #include <IReportControllerObserver.hxx>
 

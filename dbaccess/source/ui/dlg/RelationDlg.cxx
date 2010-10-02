@@ -27,9 +27,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-//#ifndef _SVX_TABWIN_HXX
-//#include "tabwin.hxx"
-//#endif
 #ifndef DBAUI_RELATIONDIALOG_HRC
 #include "RelationDlg.hrc"
 #endif

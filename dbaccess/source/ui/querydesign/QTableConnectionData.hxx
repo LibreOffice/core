@@ -39,9 +39,6 @@
 #ifndef _RTTI_HXX
 #include <tools/rtti.hxx>
 #endif
-//#ifndef DBAUI_QUERYCONTROLLER_HXX
-//#include "querycontroller.hxx"
-//#endif
 
 namespace dbaui
 {

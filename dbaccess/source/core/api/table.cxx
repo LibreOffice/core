@@ -41,7 +41,6 @@
 #include <comphelper/container.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
-//#include <comphelper/extract.hxx>
 #include <com/sun/star/util/XRefreshListener.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>

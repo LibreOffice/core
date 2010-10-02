@@ -30,9 +30,6 @@
 #ifndef _SVTOOLS_EDITBROWSEBOX_HXX_
 #include <svtools/editbrowsebox.hxx>
 #endif
-//#ifndef DBAUI_QUERYCONTROLLER_HXX
-//#include "querycontroller.hxx"
-//#endif
 #ifndef DBAUI_TABLEFIELDDESC_HXX
 #include "TableFieldDescription.hxx"
 #endif

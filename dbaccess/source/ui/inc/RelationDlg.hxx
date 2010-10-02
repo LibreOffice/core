@@ -37,9 +37,6 @@
 #ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
 #endif
-//#ifndef _EDIT_HXX //autogen
-//#include <vcl/edit.hxx>
-//#endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif

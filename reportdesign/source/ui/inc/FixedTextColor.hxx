@@ -38,8 +38,6 @@
 /** === end UNO includes === **/
 
 #include <IReportControllerObserver.hxx>
-
-//#include <boost/noncopyable.hpp>
 #include <vector>
 
 namespace rptui

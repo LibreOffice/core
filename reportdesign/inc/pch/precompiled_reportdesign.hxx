@@ -29,7 +29,6 @@
 
 #ifdef PRECOMPILED_HEADERS
 #include "com/sun/star/sdb/CommandType.hpp"
-//#include "com/sun/star/chart2/data/DatabaseDataProvider.hpp"
 #include "com/sun/star/chart2/data/XDataReceiver.hpp"
 #include "com/sun/star/reflection/XProxyFactory.hpp"
 #include "com/sun/star/sdb/CommandType.hpp"

@@ -36,7 +36,6 @@
 #include <dllapi.h>
 #include <vector>
 
-// #include <svl/lstner.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/link.hxx>
 

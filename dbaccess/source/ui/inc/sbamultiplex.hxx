@@ -28,10 +28,6 @@
 #ifndef _SBA_MULTIPLEX_HXX
 #define _SBA_MULTIPLEX_HXX
 
-//#ifndef _SDB_TOOLS_HXX
-//#include <sdb/tools.hxx>
-//#endif
-
 #ifndef _COM_SUN_STAR_BEANS_XVETOABLECHANGELISTENER_HPP_
 #include <com/sun/star/beans/XVetoableChangeListener.hpp>
 #endif

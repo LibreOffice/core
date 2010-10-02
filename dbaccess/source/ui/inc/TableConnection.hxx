@@ -27,12 +27,6 @@
 #ifndef DBAUI_TABLECONNECTION_HXX
 #define DBAUI_TABLECONNECTION_HXX
 
-//#ifndef _SV_GEN_HXX
-//#include <tools/gen.hxx>
-//#endif
-//#ifndef DBAUI_CONNECTIONLINE_HXX
-//#include "ConnectionLine.hxx"
-//#endif
 #include <vector>
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>

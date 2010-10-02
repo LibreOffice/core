@@ -45,9 +45,6 @@
 #ifndef DBAUI_TABLEWINDOW_HXX
 #include "TableWindow.hxx"
 #endif
-//#ifndef DBAUI_QUERY_TABLEWINDOWDATA_HXX
-//#include "QTableWindowData.hxx"
-//#endif
 #ifndef DBAUI_TABLEWINDOWLISTBOX_HXX
 #include "TableWindowListBox.hxx"
 #endif
