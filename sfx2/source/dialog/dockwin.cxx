@@ -931,7 +931,7 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
         const SfxSlot* pSlot = pSlotPool->GetSlot( pCW->GetType() );
         if ( pSlot )
         {
-            rtl::OString aCmd(".uno:");
+            rtl::OString aCmd("SFXDOCKINGWINDOW_");
             aCmd += pSlot->GetUnoName();
             SetUniqueId( aCmd );
         }
@@ -985,7 +985,7 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
         const SfxSlot* pSlot = pSlotPool->GetSlot( pCW->GetType() );
         if ( pSlot )
         {
-            rtl::OString aCmd(".uno:");
+            rtl::OString aCmd("SFXDOCKINGWINDOW_");
             aCmd += pSlot->GetUnoName();
             SetUniqueId( aCmd );
         }
