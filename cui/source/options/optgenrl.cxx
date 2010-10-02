@@ -186,6 +186,7 @@ SvxGeneralTabPage::SvxGeneralTabPage( Window* pParent, const SfxItemSet& rCoreSe
     }
     else if ( LANGUAGE_JAPANESE == eLang ||
           LANGUAGE_KOREAN == eLang ||
+          LANGUAGE_HUNGARIAN == eLang ||
           LANGUAGE_CHINESE_TRADITIONAL == eLang ||
           LANGUAGE_CHINESE_SIMPLIFIED == eLang)
     {
