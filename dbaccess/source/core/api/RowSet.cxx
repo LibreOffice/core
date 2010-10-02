@@ -40,6 +40,7 @@
 #include "core_resource.hrc"
 #include "core_resource.hxx"
 #include "tablecontainer.hxx"
+#include "dbastrings.hrc"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -170,6 +171,7 @@ ORowSet::ORowSet( const Reference< ::com::sun::star::lang::XMultiServiceFactory 
     ,m_bNew(sal_False)
     ,m_bCanUpdateInsertedRows(sal_True)
     ,m_bOwnConnection(sal_False)
+    ,m_bPropChangeNotifyEnabled(sal_True)
 {
     m_nResultSetType = ResultSetType::SCROLL_SENSITIVE;
     m_nResultSetConcurrency = ResultSetConcurrency::UPDATABLE;
@@ -222,6 +224,9 @@ ORowSet::ORowSet( const Reference< ::com::sun::star::lang::XMultiServiceFactory 
     registerProperty(PROPERTY_UPDATE_CATALOGNAME,   PROPERTY_ID_UPDATE_CATALOGNAME,     PropertyAttribute::BOUND,       &m_aUpdateCatalogName,  ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
     registerProperty(PROPERTY_UPDATE_SCHEMANAME,    PROPERTY_ID_UPDATE_SCHEMANAME,      PropertyAttribute::BOUND,       &m_aUpdateSchemaName,   ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
     registerProperty(PROPERTY_UPDATE_TABLENAME,     PROPERTY_ID_UPDATE_TABLENAME,       PropertyAttribute::BOUND,       &m_aUpdateTableName,    ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+
+    // ???
+    registerProperty(PROPERTY_CHANGE_NOTIFICATION_ENABLED, PROPERTY_ID_PROPCHANGE_NOTIFY, PropertyAttribute::BOUND,     &m_bPropChangeNotifyEnabled, ::getBooleanCppuType());
 }
 
 ORowSet::~ORowSet()
@@ -373,6 +378,9 @@ void SAL_CALL ORowSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const 
         case PROPERTY_ID_TYPEMAP:
             ::cppu::extractInterface(m_xTypeMap,m_aTypeMap);
             break;
+        case PROPERTY_ID_PROPCHANGE_NOTIFY:
+            m_bPropChangeNotifyEnabled = ::cppu::any2bool(rValue);
+            break;
         default:
             break;
     };
@@ -412,6 +420,9 @@ void SAL_CALL ORowSet::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
                 break;
             case PROPERTY_ID_TYPEMAP:
                 rValue <<= m_xTypeMap;
+                break;
+            case PROPERTY_ID_PROPCHANGE_NOTIFY:
+                rValue <<= m_bPropChangeNotifyEnabled;
                 break;
             default:
                 ORowSetBase::getFastPropertyValue(rValue,nHandle);
@@ -2730,6 +2741,12 @@ sal_Bool ORowSet::isModified( )
 sal_Bool ORowSet::isNew( )
 {
     return m_bNew;
+}
+
+// -----------------------------------------------------------------------------
+sal_Bool ORowSet::isPropertyChangeNotificationEnabled() const
+{
+    return m_bPropChangeNotifyEnabled;
 }
 
 // -----------------------------------------------------------------------------

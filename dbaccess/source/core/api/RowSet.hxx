@@ -145,6 +145,7 @@ namespace dbaccess
         sal_Bool                    m_bNew ;
         sal_Bool                    m_bCanUpdateInsertedRows;
         sal_Bool                    m_bOwnConnection;
+        sal_Bool                    m_bPropChangeNotifyEnabled;
 
     private:
         /** builds m_aActiveCommand from our settings
@@ -248,6 +249,7 @@ namespace dbaccess
         virtual sal_Bool    isModification( );
         virtual sal_Bool    isModified( );
         virtual sal_Bool    isNew( );
+        virtual sal_Bool    isPropertyChangeNotificationEnabled() const;
 
         virtual ~ORowSet();
 

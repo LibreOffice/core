@@ -1272,6 +1272,9 @@ void SAL_CALL ORowSetBase::clearWarnings(  ) throw(SQLException, RuntimeExceptio
 // -------------------------------------------------------------------------
 void ORowSetBase::firePropertyChange(const ORowSetRow& _rOldRow)
 {
+    if (!isPropertyChangeNotificationEnabled())
+        return;
+
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::firePropertyChange" );
     DBG_TRACE2("DBACCESS ORowSetBase::firePropertyChange() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
     OSL_ENSURE(m_pColumns,"Columns can not be NULL here!");
@@ -1323,6 +1326,12 @@ void ORowSetBase::notifyAllListenersCursorMoved(::osl::ResettableMutexGuard& /*_
 void ORowSetBase::notifyAllListeners(::osl::ResettableMutexGuard& /*_rGuard*/)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::notifyAllListeners" );
+}
+
+// -----------------------------------------------------------------------------
+sal_Bool ORowSetBase::isPropertyChangeNotificationEnabled() const
+{
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------------

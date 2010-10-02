@@ -190,6 +190,9 @@ namespace dbaccess
         virtual sal_Bool    isModified( ) = 0;
         // return <TRUE/> if and only if the current row is the insert row
         virtual sal_Bool    isNew( ) = 0;
+        // return <TRUE/> if the property change notification should be fired
+        // upon property change.
+        virtual sal_Bool    isPropertyChangeNotificationEnabled() const;
         // notify the change of a boolean property
         void fireProperty( sal_Int32 _nProperty, sal_Bool _bNew, sal_Bool _bOld );
 
