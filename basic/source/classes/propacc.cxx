@@ -392,7 +392,7 @@ void RTL_Impl_CreatePropertySet( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite 
     String aServiceName( RTL_CONSTASCII_USTRINGPARAM("stardiv.uno.beans.PropertySet") );
 
 #if 0
-    // Service suchen und instanzieren
+    // search service and instantiate
     Reference< XMultiServiceFactory > xServiceManager = getProcessServiceFactory();
     Reference< XInterface > xInterface;
     if( xProv.is() )

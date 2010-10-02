@@ -297,7 +297,7 @@ namespace basic
         BasicManager* pBasicManager = new BasicManager( new StarBASIC, &aAppBasicDir );
         setApplicationBasicManager( pBasicManager );
 
-        // Als Destination das erste Dir im Pfad:
+        // The first dir in the path as destination:
         String aFileName( aAppBasic.getName() );
         aAppBasic = INetURLObject( aAppBasicDir.GetToken(1) );
         DBG_ASSERT( aAppBasic.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
@@ -475,7 +475,7 @@ namespace basic
         // initialize the containers
         impl_initDocLibraryContainers_nothrow( xBasicLibs, xDialogLibs );
 
-        // damit auch Dialoge etc. 'qualifiziert' angesprochen werden k"onnen
+        // so that also dialogs etc. could be 'qualified' addressed
         pBasicManager->GetLib(0)->SetParent( pAppBasic );
 
         // global properties in the document's Basic

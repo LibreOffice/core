@@ -619,10 +619,10 @@ static char* SbiDisas_TypeOp_pTypes[13] = {
 #endif
 void SbiDisas::TypeOp( String& rText )
 {
-    // AB 19.1.96: Typ kann Flag für BYVAL enthalten (StepARGTYP)
+    // From 1996-01-19: type can contain flag for BYVAL (StepARGTYP)
     if( nOp1 & 0x8000 )
     {
-        nOp1 &= 0x7FFF;     // Flag wegfiltern
+        nOp1 &= 0x7FFF;     // filter away the flag
         rText.AppendAscii( "BYVAL " );
     }
     if( nOp1 < 13 )

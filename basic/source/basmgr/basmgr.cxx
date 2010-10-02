@@ -974,7 +974,7 @@ void BasicManager::LoadBasicManager( SotStorage& rStorage, const String& rBaseUR
 
     USHORT nLibs;
     *xManagerStream >> nLibs;
-    // Plausi!
+    // Plausibility!
     if( nLibs & 0xF000 )
     {
         DBG_ASSERT( !this, "BasicManager-Stream defect!" );
@@ -1059,7 +1059,7 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
 //      aErrorText.SearchAndReplace( "XX", aStorName );
         StringErrorInfo* pErrInf = new StringErrorInfo( ERRCODE_BASMGR_MGROPEN, aStorName, ERRCODE_BUTTON_OK );
         pErrorMgr->InsertError( BasicError( *pErrInf, BASERR_REASON_OPENMGRSTREAM, aStorName ) );
-        // und es geht weiter...
+        // and it proceeds ...
     }
     xManagerStream->Seek( nBasicEndOff+1 ); // +1: 0x00 as separator
     String aLibs;
@@ -1662,7 +1662,7 @@ StarBASIC* BasicManager::CreateLib
                 //if( !pLibInfo )
                     //pLibInfo = FindLibInfo( pLib );
                 //pLibInfo->SetStorageName( LinkTargetURL );
-                //pLibInfo->GetLib()->SetModified( FALSE ); // Dann nicht speichern
+                //pLibInfo->GetLib()->SetModified( FALSE ); // Then don't save
                 //pLibInfo->SetRelStorageName( String() );
                 //pLibInfo->IsReference() = TRUE;
             }

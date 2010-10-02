@@ -407,8 +407,6 @@ void SbiImage::MakeStrings( short nSize )
         bError = TRUE;
 }
 
-// Hinzufuegen eines Strings an den StringPool. Der String-Puffer
-// waechst dynamisch in 1K-Schritten
 // Add a string to StringPool. The String buffer is dynamically
 // growing in 1K-Steps
 void SbiImage::AddString( const String& r )

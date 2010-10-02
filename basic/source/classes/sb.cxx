@@ -1406,14 +1406,14 @@ SbLanguageMode StarBASIC::GetLanguageMode()
         return eLanguageMode;
 }
 
-// AB: 29.3.96
-// Das Mapping zwischen alten und neuen Fehlercodes erfolgt, indem die Tabelle
-// SFX_VB_ErrorTab[] durchsucht wird. Dies ist zwar nicht besonders performant,
-// verbraucht aber viel weniger Speicher als entsprechende switch-Bloecke.
-// Die Umrechnung von Fehlercodes muss nicht schnell sein, daher auch keine
-// binaere Suche bei VB-Error -> SFX-Error.
+// From 1996-03-29:
+// The mapping between the old and the new error codes take place by searching
+// through the table SFX_VB_ErrorTab[]. This is indeed not with good performance,
+// but it consumes much less memory than corresponding switch blocs.
+// Because the conversion of error codes has not to be fast. there is no
+// binaere search by VB-Error -> SFX-Error.
 
-// Neue Fehler-Codes auf alte, Sbx-Kompatible zurueckmappen
+// Map back new error codes to old, Sbx-compatible
 USHORT StarBASIC::GetVBErrorCode( SbError nError )
 {
     USHORT nRet = 0;
@@ -1439,7 +1439,7 @@ USHORT StarBASIC::GetVBErrorCode( SbError nError )
         }
     }
 
-    // Suchschleife
+    // search loop
     const SFX_VB_ErrorItem* pErrItem;
     USHORT nIndex = 0;
     do
@@ -1452,7 +1452,7 @@ USHORT StarBASIC::GetVBErrorCode( SbError nError )
         }
         nIndex++;
     }
-    while( pErrItem->nErrorVB != 0xFFFF );      // bis End-Marke
+    while( pErrItem->nErrorVB != 0xFFFF );      // up to end mark
     return nRet;
 }
 
@@ -1498,15 +1498,15 @@ SbError StarBASIC::GetSfxFromVBError( USHORT nError )
             break;
         }
         else if( pErrItem->nErrorVB > nError )
-            break;              // kann nicht mehr gefunden werden
+            break;              // couldn't found anymore
 
         nIndex++;
     }
-    while( pErrItem->nErrorVB != 0xFFFF );      // bis End-Marke
+    while( pErrItem->nErrorVB != 0xFFFF );      // up to end mark
     return nRet;
 }
 
-// Error- / Break-Daten setzen
+// set Error- / Break-data
 void StarBASIC::SetErrorData
 ( SbError nCode, USHORT nLine, USHORT nCol1, USHORT nCol2 )
 {
@@ -1518,8 +1518,8 @@ void StarBASIC::SetErrorData
 }
 
 //----------------------------------------------------------------
-// Hilfsklasse zum Zugriff auf String SubResourcen einer Resource.
-// Quelle: sfx2\source\doc\docfile.cxx (TLX)
+// help class for access to string SubResource of a Resource.
+// Source: sfx2\source\doc\docfile.cxx (TLX)
 struct BasicStringList_Impl : private Resource
 {
     ResId aResId;
@@ -1534,7 +1534,7 @@ struct BasicStringList_Impl : private Resource
 };
 //----------------------------------------------------------------
 
-// #60175 Flag, das bei Basic-Fehlern das Anziehen der SFX-Resourcen verhindert
+// Flag, that prevent the activation of the SFX-Resources at a Basic error
 static BOOL bStaticSuppressSfxResource = FALSE;
 
 void StarBASIC::StaticSuppressSfxResource( BOOL bSuppress )
@@ -1561,15 +1561,15 @@ void StarBASIC::MakeErrorText( SbError nId, const String& aMsg )
 
     USHORT nOldID = GetVBErrorCode( nId );
 
-    // Hilfsklasse instanzieren
+    // intantiate the help class
     BasResId aId( RID_BASIC_START );
     BasicStringList_Impl aMyStringList( aId, USHORT(nId & ERRCODE_RES_MASK) );
 
     if( aMyStringList.IsErrorTextAvailable() )
     {
-        // Merge Message mit Zusatztext
+        // merge message with additional text
         String aMsg1 = aMyStringList.GetString();
-        // Argument-Platzhalter durch %s ersetzen
+        // replace argument placeholder with %s
         String aSrgStr( RTL_CONSTASCII_USTRINGPARAM("$(ARG1)") );
         USHORT nResult = aMsg1.Search( aSrgStr );
 
@@ -1597,7 +1597,7 @@ BOOL StarBASIC::CError
 {
     vos::OGuard aSolarGuard( Application::GetSolarMutex() );
 
-    // Compiler-Fehler waehrend der Laufzeit -> Programm anhalten
+    // compiler error during runtime -> stop programm
     if( IsRunning() )
     {
         // #109018 Check if running Basic is affected
@@ -1608,13 +1608,13 @@ BOOL StarBASIC::CError
         Stop();
     }
 
-    // Flag setzen, damit GlobalRunInit den Fehler mitbekommt
+    // set flag, so that GlobalRunInit notice the error
     GetSbData()->bGlobalInitErr = TRUE;
 
-    // Fehlertext basteln
+    // tinker the error message
     MakeErrorText( code, rMsg );
 
-    // Umsetzung des Codes fuer String-Transport in SFX-Error
+    // Implementation of the code for the string transport to SFX-Error
     if( rMsg.Len() )
         code = (ULONG)*new StringErrorInfo( code, String(rMsg) );
 
@@ -1625,7 +1625,7 @@ BOOL StarBASIC::CError
         bRet = (BOOL) GetSbData()->aErrHdl.Call( this );
     else
         bRet = ErrorHdl();
-    GetSbData()->bCompiler = FALSE;     // nur TRUE fuer Error-Handler
+    GetSbData()->bCompiler = FALSE;     // only true for error handler
     return bRet;
 }
 
@@ -1644,7 +1644,7 @@ BOOL StarBASIC::RTError( SbError code, const String& rMsg, USHORT l, USHORT c1, 
         c = 0;
     MakeErrorText( c, rMsg );
 
-    // Umsetzung des Codes fuer String-Transport in SFX-Error
+    // Implementation of the code for the string transport to SFX-Error
     if( rMsg.Len() )
     {
         // very confusing, even though MakeErrorText sets up the error text
@@ -1701,7 +1701,7 @@ SbError StarBASIC::GetErrBasic()
         return 0;
 }
 
-// #66536 Zusatz-Message fuer RTL-Funktion Error zugreifbar machen
+// make the additional message for the RTL function error accessible
 String StarBASIC::GetErrorMsg()
 {
     if( pINST )
@@ -1794,7 +1794,7 @@ BOOL StarBASIC::LoadData( SvStream& r, USHORT nVer )
             return FALSE;
         else if( pMod->ISA(SbJScriptModule) )
         {
-            // Ref zuweisen, damit pMod deleted wird
+            // assign Ref, so that pMod will be deleted
             SbModuleRef xRef = pMod;
         }
         else
@@ -1803,15 +1803,15 @@ BOOL StarBASIC::LoadData( SvStream& r, USHORT nVer )
             pModules->Put( pMod, i );
         }
     }
-    // HACK fuer SFX-Mist!
+    // HACK for SFX-Bullshit!
     SbxVariable* p = Find( String( RTL_CONSTASCII_USTRINGPARAM("FALSE") ), SbxCLASS_PROPERTY );
     if( p )
         Remove( p );
     p = Find( String( RTL_CONSTASCII_USTRINGPARAM("TRUE") ), SbxCLASS_PROPERTY );
     if( p )
         Remove( p );
-    // Ende des Hacks!
-    // Suche ueber StarBASIC ist immer global
+    // End of the hacks!
+    // Search via StarBASIC is at all times global
     DBG_ASSERT( IsSet( SBX_GBLSEARCH ), "Basic ohne GBLSEARCH geladen" );
     SetFlag( SBX_GBLSEARCH );
     return TRUE;
