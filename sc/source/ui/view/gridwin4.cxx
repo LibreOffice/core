@@ -78,8 +78,6 @@
 // #i74769#
 #include <svx/sdrpaintwindow.hxx>
 
-//#include "tabvwsh.hxx"            //! Test !!!!
-
 //------------------------------------------------------------------------
 
 void lcl_LimitRect( Rectangle& rRect, const Rectangle& rVisible )
@@ -642,10 +640,6 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
         aDrawingRectLogic = PixelToLogic(aDrawingRectPixel, aDrawMode);
     }
 
-// not necessary with overlay
-//  if (bCurVis)
-//      HideCursor();
-
     OutputDevice* pContentDev = this;       // device for document content, used by overlay manager
     SdrPaintWindow* pTargetPaintWindow = 0; // #i74769# work with SdrPaintWindow directly
 
@@ -820,16 +814,6 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
         {
             pContentDev->SetClipRegion();
         }
-
-        //BOOL bDraw = TRUE;
-        //if (eMode == SC_UPDATE_CHANGED)
-        //  bDraw = NeedDrawMarks() && aOutputData.SetChangedClip();
-        //if (bDraw)
-        //{
-        //  DrawMarks();
-        //  if (eMode == SC_UPDATE_CHANGED)
-        //      pContentDev->SetClipRegion();
-        //}
     }
 
     pContentDev->SetMapMode(MAP_PIXEL);
@@ -964,8 +948,6 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
 
     if ( pNoteMarker )
         pNoteMarker->Draw();        // ueber den Cursor, im Drawing-MapMode
-
-    //DrawStartTimer();             // fuer bunte Handles ohne System-Clipping
 
     //
     //  Wenn waehrend des Paint etwas invertiert wurde (Selektion geaendert aus Basic-Macro),
@@ -1650,9 +1632,6 @@ void ScGridWindow::InvertSimple( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
 
 void ScGridWindow::GetSelectionRects( ::std::vector< Rectangle >& rPixelRects )
 {
-    // transformed from ScGridWindow::InvertSimple
-
-//  ScMarkData& rMark = pViewData->GetMarkData();
     ScMarkData aMultiMark( pViewData->GetMarkData() );
     aMultiMark.SetMarking( FALSE );
     aMultiMark.MarkToMulti();
@@ -1703,8 +1682,6 @@ void ScGridWindow::GetSelectionRects( ::std::vector< Rectangle >& rPixelRects )
         return;                                         // unsichtbar
     if (nX2 > nXRight) nX2 = nXRight;
     if (nY2 > nYBottom) nY2 = nYBottom;
-
-//  MapMode aOld = GetMapMode(); SetMapMode(MAP_PIXEL);     // erst nach den return's !!!
 
     double nPPTX = pViewData->GetPPTX();
     double nPPTY = pViewData->GetPPTY();

@@ -50,7 +50,6 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSheetCellRangeContainer.hpp>
 
-//#include <vbahelper/vbahelperinterface.hxx>
 #include "vbaformat.hxx"
 #include <formula/grammar.hxx>
 
@@ -62,7 +61,6 @@ class ScDocShell;
 class ScDocument;
 class ScRangeList;
 
-//typedef InheritedHelperInterfaceImpl1< ov::excel::XRange >  ScVbaRange_BASE;
 typedef ScVbaFormat< ov::excel::XRange > ScVbaRange_BASE;
 
 class ArrayVisitor

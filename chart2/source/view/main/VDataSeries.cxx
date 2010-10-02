@@ -40,7 +40,6 @@
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
 
-//#include "CommonConverters.hxx"
 #include <rtl/math.hxx>
 #include <tools/debug.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>

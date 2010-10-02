@@ -51,7 +51,6 @@
 #include "undodat.hxx"
 #include "undotab.hxx"
 #include "undoblk.hxx"
-//#include "pivot.hxx"
 #include "dpobject.hxx"
 #include "dpshttab.hxx"
 #include "dbdocfun.hxx"
@@ -74,7 +73,7 @@ void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, String& sModuleName, String
 // ---------------------------------------------------------------------------
 
 //
-//  ehemalige viewfunc/dbfunc Methoden
+//  former viewfunc/dbfunc methods
 //
 
 void ScDocShell::ErrorMessage( USHORT nGlobStrId )
@@ -350,9 +349,6 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
         }
         pData = pNoNameData;
     }
-
-//  if (bMark)
-//      MarkRange( ScRange( nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab ), FALSE );
 
     return pData;
 }

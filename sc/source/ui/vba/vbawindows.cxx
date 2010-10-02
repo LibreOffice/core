@@ -35,7 +35,6 @@
 #include <tools/urlobj.hxx>
 #include "vbawindow.hxx"
 #include "vbaglobals.hxx"
-//#include "vbaworkbook.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;

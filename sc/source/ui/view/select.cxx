@@ -41,7 +41,6 @@
 #include "tabvwsh.hxx"
 #include "scmod.hxx"
 #include "document.hxx"
-//#include "dataobj.hxx"
 #include "transobj.hxx"
 #include "docsh.hxx"
 #include "tabprotection.hxx"
@@ -106,15 +105,14 @@ void __EXPORT ScViewFunctionSet::BeginDrag()
     BOOL bRefMode = pScMod->IsFormulaMode();
     if (!bRefMode)
     {
-        pViewData->GetView()->FakeButtonUp( GetWhich() );   // ButtonUp wird verschluckt
+        pViewData->GetView()->FakeButtonUp( GetWhich() );   // ButtonUp is swallowed
 
         ScMarkData& rMark = pViewData->GetMarkData();
-//      rMark.SetMarking(FALSE);                        // es fehlt ein ButtonUp
         rMark.MarkToSimple();
         if ( rMark.IsMarked() && !rMark.IsMultiMarked() )
         {
             ScDocument* pClipDoc = new ScDocument( SCDOCMODE_CLIP );
-            // bApi = TRUE -> no error mesages
+            // bApi = TRUE -> no error messages
             BOOL bCopied = pViewData->GetView()->CopyToClip( pClipDoc, FALSE, TRUE );
             if ( bCopied )
             {
@@ -159,7 +157,7 @@ void __EXPORT ScViewFunctionSet::BeginDrag()
     Sound::Beep();          // can't drag
 }
 
-//      Selektion
+//      Selection
 
 void __EXPORT ScViewFunctionSet::CreateAnchor()
 {

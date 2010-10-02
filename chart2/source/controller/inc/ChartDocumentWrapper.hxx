@@ -28,7 +28,6 @@
 #define CHART_CHARTDOCUMENTWRAPPER_HXX
 
 #include "WrappedPropertySet.hxx"
-//#include "OPropertySet.hxx"
 #include "ServiceMacros.hxx"
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>

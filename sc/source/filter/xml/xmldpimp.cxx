@@ -59,8 +59,6 @@
 #include <com/sun/star/sheet/DataPilotFieldLayoutMode.hpp>
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 
-//#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
-
 using namespace com::sun::star;
 using namespace xmloff::token;
 using ::com::sun::star::uno::Reference;

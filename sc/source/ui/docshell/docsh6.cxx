@@ -42,8 +42,6 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-//#include <svxlink.hxx>
-
 #include "docsh.hxx"
 
 #include "stlsheet.hxx"
@@ -153,8 +151,6 @@ void ScDocShell::SetVisAreaOrSize( const Rectangle& rVisArea, BOOL bModifyStart 
             if (pViewSh->GetViewData()->GetDocShell() == this)
                 pViewSh->UpdateOleZoom();
         }
-        //else
-        //  DataChanged( SvDataType() );            // fuer Zuppeln wenn nicht IP-aktiv
     }
 
     if (aDocument.IsEmbedded())
@@ -220,9 +216,6 @@ void ScDocShell::UpdateOle( const ScViewData* pViewData, BOOL bSnapSize )
         SetVisAreaOrSize( aNewArea, TRUE ); // hier muss auch der Start angepasst werden
         bChange = TRUE;
     }
-
-//  if (bChange)
-//      DataChanged( SvDataType() );        //! passiert auch bei SetModified
 }
 
 //
@@ -445,11 +438,9 @@ BOOL ScDocShell::ReloadTabLinks()
         if (pBase->ISA(ScTableLink))
         {
             ScTableLink* pTabLink = (ScTableLink*)pBase;
-//          pTabLink->SetAddUndo(FALSE);        //! Undo's zusammenfassen
             pTabLink->SetPaint(FALSE);          //  Paint nur einmal am Ende
             pTabLink->Update();
             pTabLink->SetPaint(TRUE);
-//          pTabLink->SetAddUndo(TRUE);
             bAny = TRUE;
         }
     }

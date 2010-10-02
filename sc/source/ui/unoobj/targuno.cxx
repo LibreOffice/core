@@ -32,7 +32,6 @@
 
 #include <vcl/image.hxx>
 #include <vcl/virdev.hxx>
-//#include <toolkit/unoiface.hxx>
 #include <toolkit/unohlp.hxx>
 #include <svl/itemprop.hxx>
 #include <svl/smplhint.hxx>
@@ -120,7 +119,6 @@ uno::Any SAL_CALL ScLinkTargetTypesObj::getByName(const rtl::OUString& aName)
     }
 
     throw container::NoSuchElementException();
-//    return uno::Any();
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScLinkTargetTypesObj::getElementNames(void) throw( uno::RuntimeException )

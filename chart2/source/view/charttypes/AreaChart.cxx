@@ -32,7 +32,6 @@
 #include "AreaChart.hxx"
 #include "PlottingPositionHelper.hxx"
 #include "ShapeFactory.hxx"
-//#include "chartview/servicenames_charttypes.hxx"
 #include "CommonConverters.hxx"
 #include "macros.hxx"
 #include "ViewDefines.hxx"
@@ -169,32 +168,6 @@ uno::Any AreaChart::getExplicitSymbol( const VDataSeries& rSeries, sal_Int32 nPo
     return aRet;
 }
 
-//-----------------------------------------------------------------
-// lang::XServiceInfo
-//-----------------------------------------------------------------
-/*
-APPHELPER_XSERVICEINFO_IMPL(AreaChart,CHART2_VIEW_AREACHART_SERVICE_IMPLEMENTATION_NAME)
-
-    uno::Sequence< rtl::OUString > AreaChart
-::getSupportedServiceNames_Static()
-{
-    uno::Sequence< rtl::OUString > aSNS( 1 );
-    aSNS.getArray()[ 0 ] = CHART2_VIEW_AREACHART_SERVICE_NAME;
-    return aSNS;
-}
-*/
-/*
-//-----------------------------------------------------------------
-// chart2::XPlotter
-//-----------------------------------------------------------------
-
-    ::rtl::OUString SAL_CALL AreaChart
-::getCoordinateSystemTypeID()
-    throw (uno::RuntimeException)
-{
-    return CHART2_COOSYSTEM_CARTESIAN_SERVICE_NAME;
-}
-*/
 drawing::Direction3D AreaChart::getPreferredDiagramAspectRatio() const
 {
     if( m_nKeepAspectRatio == 1 )

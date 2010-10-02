@@ -30,8 +30,6 @@
 
 #include "CandleStickChart.hxx"
 #include "ShapeFactory.hxx"
-//#include "chartview/servicenames_charttypes.hxx"
-//#include "servicenames_coosystems.hxx"
 #include "CommonConverters.hxx"
 #include "ObjectIdentifier.hxx"
 #include "LabelPositionHelper.hxx"
@@ -105,33 +103,6 @@ LegendSymbolStyle CandleStickChart::getLegendSymbolStyle()
 {
     return chart2::LegendSymbolStyle_VERTICAL_LINE;
 }
-
-//-----------------------------------------------------------------
-// lang::XServiceInfo
-//-----------------------------------------------------------------
-/*
-APPHELPER_XSERVICEINFO_IMPL(CandleStickChart,CHART2_VIEW_CANDLESTICKCHART_SERVICE_IMPLEMENTATION_NAME)
-
-    uno::Sequence< rtl::OUString > CandleStickChart
-::getSupportedServiceNames_Static()
-{
-    uno::Sequence< rtl::OUString > aSNS( 1 );
-    aSNS.getArray()[ 0 ] = CHART2_VIEW_CANDLESTICKCHART_SERVICE_NAME;
-    return aSNS;
-}
-*/
-/*
-//-----------------------------------------------------------------
-// chart2::XPlotter
-//-----------------------------------------------------------------
-
-    ::rtl::OUString SAL_CALL CandleStickChart
-::getCoordinateSystemTypeID()
-    throw (uno::RuntimeException)
-{
-    return CHART2_COOSYSTEM_CARTESIAN_SERVICE_NAME;
-}
-*/
 
 drawing::Direction3D CandleStickChart::getPreferredDiagramAspectRatio() const
 {

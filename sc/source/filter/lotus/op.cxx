@@ -57,7 +57,6 @@
 #include "op.h"
 #include "optab.h"
 #include "tool.h"
-//#include "math.h"
 #include "decl.h"
 #include "lotform.hxx"
 #include "lotrange.hxx"

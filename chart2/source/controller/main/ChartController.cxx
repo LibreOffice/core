@@ -49,7 +49,6 @@
 #include "macros.hxx"
 #include "dlg_CreationWizard.hxx"
 #include "dlg_ChartType.hxx"
-//#include "svx/ActionDescriptionProvider.hxx"
 #include "AccessibleChartView.hxx"
 #include "DrawCommandDispatch.hxx"
 #include "ShapeController.hxx"
@@ -91,10 +90,6 @@
 // react on this by rebuilding the view
 #define TEST_ENABLE_MODIFY_LISTENER
 
-/*
-#include <vcl/svapp.hxx>
-*/
-
 //.............................................................................
 namespace chart
 {
@@ -133,7 +128,6 @@ ChartController::ChartController(uno::Reference<uno::XComponentContext> const & 
     , m_eDrawMode( CHARTDRAW_SELECT )
 {
     DBG_CTOR(ChartController,NULL);
-//     m_aDispatchContainer.setUndoManager( m_xUndoManager );
     m_aDoubleClickTimer.SetTimeoutHdl( LINK( this, ChartController, DoubleClickWaitingHdl ) );
 }
 
@@ -716,14 +710,6 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
         m_bSuspended = bSuspend;
     }
     return sal_True;
-
-
-    /*
-    if ( bSuspend )
-        getFrame()->removeFrameActionListener( pImp );
-    else
-        getFrame()->addFrameActionListener( pImp );
-        */
 }
 
 
@@ -783,7 +769,6 @@ void ChartController::impl_deleteDrawViewController()
             {
                 uno::Reference< frame::XController > xController( this );
                 uno::Reference< lang::XComponent > xComp( xController, uno::UNO_QUERY );
-                //lang::EventObject aEvent( static_cast< lang::XComponent* >( this ) );
                 lang::EventObject aEvent( xComp );
                 xSelectionChangeListener->disposing( aEvent );
             }
@@ -1201,8 +1186,6 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
     else if( lcl_isFormatObjectCommand(aCommand) )
         this->executeDispatch_FormatObject(rURL.Path);
     //more format
-//MENUCHANGE    else if(aCommand.equals("SelectSourceRanges"))
-//MENUCHANGE        this->executeDispatch_SourceData();
     else if( aCommand.equals("DiagramType"))
         this->executeDispatch_ChartType();
     else if( aCommand.equals("View3D"))
@@ -1262,11 +1245,6 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
             }
         }
     }
-
-    /*
-    case SID_TEXTEDIT:
-        this->executeDispatch_EditText();
-    */
 }
 
     void SAL_CALL ChartController
@@ -1557,7 +1535,6 @@ void ChartController::impl_initializeAccessible( const uno::Reference< lang::XIn
         ( C2U("DeleteYErrorBars") )
         ( C2U("DeleteDataLabels") )   ( C2U("DeleteDataLabel") )
         //format objects
-//MENUCHANGE            ( C2U("SelectSourceRanges") )
         ( C2U("FormatSelection") )     ( C2U("TransformDialog") )
         ( C2U("DiagramType") )        ( C2U("View3D") )
         ( C2U("Forward") )            ( C2U("Backward") )

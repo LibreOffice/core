@@ -36,7 +36,6 @@
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 
-//#include <dbitems.hxx>
 #include "uiitems.hxx"
 
 

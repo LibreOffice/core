@@ -86,7 +86,6 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
 
-//#include <com/sun/star/sheet/CellDeleteMode.hpp>
 #include <com/sun/star/sheet/XCellRangeMovement.hpp>
 #include <com/sun/star/sheet/XSubTotalCalculatable.hpp>
 #include <com/sun/star/sheet/XSubTotalDescriptor.hpp>
@@ -1110,7 +1109,6 @@ getCellRangesForAddress( USHORT& rResFlags, const rtl::OUString& sAddress, ScDoc
         pDoc = pDocSh->GetDocument();
         String aString(sAddress);
         USHORT nMask = SCA_VALID;
-        //USHORT nParse = rCellRanges.Parse( sAddress, pDoc, nMask, formula::FormulaGrammar::CONV_XL_A1 );
         rResFlags = rCellRanges.Parse( sAddress, pDoc, nMask, eConv, 0 );
         if ( rResFlags & SCA_VALID )
         {

@@ -43,8 +43,6 @@
 
 #include <com/sun/star/container/XChild.hpp>
 
-//#include "chartview/servicenames_charttypes.hxx"
-//#include "servicenames_coosystems.hxx"
 #include <tools/debug.hxx>
 #include <rtl/math.hxx>
 
@@ -187,21 +185,6 @@ bool PieChart::shouldSnapRectToUsedArea()
 {
     return true;
 }
-
-//-----------------------------------------------------------------
-// lang::XServiceInfo
-//-----------------------------------------------------------------
-/*
-APPHELPER_XSERVICEINFO_IMPL(PieChart,CHART2_VIEW_PIECHART_SERVICE_IMPLEMENTATION_NAME)
-
-    uno::Sequence< rtl::OUString > PieChart
-::getSupportedServiceNames_Static()
-{
-    uno::Sequence< rtl::OUString > aSNS( 1 );
-    aSNS.getArray()[ 0 ] = CHART2_VIEW_PIECHART_SERVICE_NAME;
-    return aSNS;
-}
-*/
 
 uno::Reference< drawing::XShape > PieChart::createDataPoint(
           const uno::Reference< drawing::XShapes >& xTarget

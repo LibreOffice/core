@@ -31,8 +31,6 @@
 
 #include "BarChart.hxx"
 #include "ShapeFactory.hxx"
-//#include "chartview/servicenames_charttypes.hxx"
-//#include "servicenames_coosystems.hxx"
 #include "CommonConverters.hxx"
 #include "ObjectIdentifier.hxx"
 #include "LabelPositionHelper.hxx"
@@ -166,33 +164,6 @@ double BarChart::getMaximumX()
     }
     return VSeriesPlotter::getMaximumX();
 }
-
-//-----------------------------------------------------------------
-// lang::XServiceInfo
-//-----------------------------------------------------------------
-/*
-APPHELPER_XSERVICEINFO_IMPL(BarChart,CHART2_VIEW_BARCHART_SERVICE_IMPLEMENTATION_NAME)
-
-    uno::Sequence< rtl::OUString > BarChart
-::getSupportedServiceNames_Static()
-{
-    uno::Sequence< rtl::OUString > aSNS( 1 );
-    aSNS.getArray()[ 0 ] = CHART2_VIEW_BARCHART_SERVICE_NAME;
-    return aSNS;
-}
-*/
-/*
-//-----------------------------------------------------------------
-// chart2::XPlotter
-//-----------------------------------------------------------------
-
-    ::rtl::OUString SAL_CALL BarChart
-::getCoordinateSystemTypeID()
-    throw (uno::RuntimeException)
-{
-    return CHART2_COOSYSTEM_CARTESIAN_SERVICE_NAME;
-}
-*/
 
 awt::Point BarChart::getLabelScreenPositionAndAlignment(
                      LabelAlignment& rAlignment, sal_Int32 nLabelPlacement
@@ -846,27 +817,6 @@ void BarChart::createShapes()
                             }
                             else //m_nDimension!=3
                             {
-                                //if( bCreateLineInsteadOfComplexGeometryDueToMissingSpace )
-                                //{
-                                //    drawing::PolyPolygonShape3D aPoly;
-                                //    drawing::Position3D aUpperPoint( fLogicX,fUpperYValue,fLogicZ );
-                                //    drawing::Position3D aLowerPoint( fLogicX,fLowerYValue,fLogicZ );
-
-                                //    AddPointToPoly( aPoly, aUpperPoint );
-                                //    AddPointToPoly( aPoly, aLowerPoint );
-
-                                //    VLineProperties aLineProperties;
-                                //    aLineProperties.initFromPropertySet( xDataPointProperties, true /*bUseSeriesPropertyNames*/ );
-                                //    if( !aLineProperties.isLineVisible() )
-                                //    {
-                                //        //todo
-                                //        //aLineProperties.Color =
-                                //    }
-
-                                //    xShape = m_pShapeFactory->createLine2D( xPointGroupShape_Shapes
-                                //                , PolyToPointSequence(aPoly), &aLineProperties );
-                                //}
-
                                 drawing::PolyPolygonShape3D aPoly;
                                 drawing::Position3D aLeftUpperPoint( fLogicX-fLogicBarWidth/2.0,fUpperYValue,fLogicZ );
                                 drawing::Position3D aRightUpperPoint( fLogicX+fLogicBarWidth/2.0,fUpperYValue,fLogicZ );
@@ -927,9 +877,6 @@ void BarChart::createShapes()
 
                     }//end iteration through partial points
 
-                    //remove PointGroupShape if empty
-    //                if(!xPointGroupShape_Shapes->getCount())
-    //                    xSeriesGroupShape_Shapes->remove(xPointGroupShape_Shape);
                 }//next series in x slot (next y slot)
             }//next x slot
         }//next z slot

@@ -34,7 +34,6 @@
 #include "rangelst.hxx"
 #include "chartlis.hxx"
 
-//#include <vcl/svapp.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
@@ -208,7 +207,6 @@ void ScChartHelper::GetChartRanges( const uno::Reference< chart2::XChartDocument
     uno::Reference< chart2::data::XDataSource > xDataSource( xChartDoc, uno::UNO_QUERY );
     if( !xDataSource.is() )
         return;
-    //uno::Reference< chart2::data::XDataProvider > xProvider = xChartDoc->getDataProvider();
 
     uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aLabeledDataSequences( xDataSource->getDataSequences() );
     rRanges.realloc(2*aLabeledDataSequences.getLength());
