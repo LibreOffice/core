@@ -102,7 +102,7 @@ ModalDialog DLG_COLOR
         Maximum = 100 ;
         Last = 100 ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " %" ;
+        CustomUnitText = "%" ;
     };
     MetricField NUM_MAGENTA
     {
@@ -115,7 +115,7 @@ ModalDialog DLG_COLOR
         Maximum = 100 ;
         Last = 100 ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " %" ;
+        CustomUnitText = "%" ;
     };
     MetricField NUM_YELLOW
     {
@@ -128,7 +128,7 @@ ModalDialog DLG_COLOR
         Maximum = 100 ;
         Last = 100 ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " %" ;
+        CustomUnitText = "%" ;
     };
     MetricField NUM_KEY
     {
@@ -141,7 +141,7 @@ ModalDialog DLG_COLOR
         Maximum = 100 ;
         Last = 100 ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " %" ;
+        CustomUnitText = "%" ;
     };
     FixedText FT_RED
     {
