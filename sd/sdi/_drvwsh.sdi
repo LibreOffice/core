@@ -1950,27 +1950,6 @@ interface DrawView
          //ExecMethod = FuTemporary ;
          //StateMethod = GetMenuState ;
     ]
-     // Neue Slots fuer Optionsleiste
-//#i80528#    SID_GRAPHIC_DRAFT // ole : ?, status : ?
-//#i80528#    [
-//#i80528#        ExecMethod = ExecOptionsBar ;
-//#i80528#        StateMethod = GetOptionsBarState ;
-//#i80528#    ]
-//#i80528#    SID_FILL_DRAFT // ole : ?, status : ?
-//#i80528#    [
-//#i80528#        ExecMethod = ExecOptionsBar ;
-//#i80528#        StateMethod = GetOptionsBarState ;
-//#i80528#    ]
-//#i80528#    SID_TEXT_DRAFT // ole : ?, status : ?
-//#i80528#    [
-//#i80528#        ExecMethod = ExecOptionsBar ;
-//#i80528#        StateMethod = GetOptionsBarState ;
-//#i80528#    ]
-//#i80528#    SID_LINE_DRAFT // ole : ?, status : ?
-//#i80528#    [
-//#i80528#        ExecMethod = ExecOptionsBar ;
-//#i80528#        StateMethod = GetOptionsBarState ;
-//#i80528#    ]
     SID_HANDLES_DRAFT // ole : ?, status : ?
     [
         ExecMethod = ExecOptionsBar ;
