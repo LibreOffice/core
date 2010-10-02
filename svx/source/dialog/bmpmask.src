@@ -102,7 +102,7 @@ DockingWindow RID_SVXDLG_BMPMASK
         Last = 99 ;
         SpinSize = 1 ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " %" ;
+        CustomUnitText = "%" ;
     };
     ListBox LB_1
     {
@@ -142,7 +142,7 @@ DockingWindow RID_SVXDLG_BMPMASK
         Last = 99 ;
         SpinSize = 1 ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " %" ;
+        CustomUnitText = "%" ;
     };
     ListBox LB_2
     {
@@ -182,7 +182,7 @@ DockingWindow RID_SVXDLG_BMPMASK
         Last = 99 ;
         SpinSize = 1 ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " %" ;
+        CustomUnitText = "%" ;
     };
     ListBox LB_3
     {
@@ -222,7 +222,7 @@ DockingWindow RID_SVXDLG_BMPMASK
         Last = 99 ;
         SpinSize = 1 ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " %" ;
+        CustomUnitText = "%" ;
     };
     ListBox LB_4
     {

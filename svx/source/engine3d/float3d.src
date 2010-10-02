@@ -242,7 +242,7 @@ DockingWindow RID_SVXFLOAT_3D
         Maximum = 100 ;
         Last = 100 ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " %" ;
+        CustomUnitText = "%" ;
     };
     FixedText FT_BACKSCALE
     {
@@ -262,7 +262,7 @@ DockingWindow RID_SVXFLOAT_3D
         SpinSize = 5 ;
         Maximum = 10000 ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText  = " %" ;
+        CustomUnitText  = "%" ;
         Last = 10000 ;
     };
     FixedText FT_END_ANGLE
@@ -1105,7 +1105,7 @@ DockingWindow RID_SVXFLOAT_3D
         Repeat = TRUE ;
         Spin = TRUE ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText  = " %" ;
+        CustomUnitText  = "%" ;
         Minimum = 1 ;
         First = 1 ;
         Maximum = 100 ;
