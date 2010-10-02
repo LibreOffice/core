@@ -76,7 +76,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Maximum = 999 ;
         StrictFormat = TRUE ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " Pixel" ;
+        CustomUnitText [ en-US ] = " Pixel" ;
         First = 1 ;
         Last = 999 ;
         SpinSize = 1 ;
@@ -101,7 +101,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Maximum = 999 ;
         StrictFormat = TRUE ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " Pixel" ;
+        CustomUnitText [ en-US ] = " Pixel" ;
         First = 1 ;
         Last = 999 ;
         SpinSize = 1 ;
