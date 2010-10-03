@@ -38,20 +38,19 @@ Project Status
 Easy
 ----
 1. Draw a non-blinking line under the the visual line that the caret is in, in `SmCaretDrawingVisitor`.
-2. `SmGraphicWindow::KeyInput` relies on comparison of `sal_Char`, a more generic way must be available for CTRL+c
+2. `SmGraphicWindow::KeyInput` relies on comparison of `sal_Char`, a better way must be available for CTRL+c
 3. Code style (missing spaces, linebreaks and a few renames)
 4. More documentation
 5. Replace `j_assert` with `DBG_ASSERT`
 
 Medium
 ------
-1. Caret can move into or out of binom, make this work again... (Probably a visitor issue).
-2. `SmCursor::InsertCol()` method for added columns to matrices should be implemented.
-3. `SmCursor` should support deletion of lines, rows, cols and sub-/superscripts.
-4. `SmCursor::InsertSubSup()` should wrap the body in a `SmBraceNode` if the body is an `SmOperNode`, `SmBinVerNode`, etc.
-5. Make caret in visual editor blink.
-6. Don't draw visual editor caret, when `SmGraphicWindow` doesn't have focus.
-7. When OpenOffice Math runs in standalone mode it centers the current formula, this is not nice for visual editing.
+1. `SmCursor::InsertCol()` method for added columns to matrices should be implemented.
+2. `SmCursor` should support deletion of lines, rows, cols and sub-/superscripts.
+3. `SmCursor::InsertSubSup()` should wrap the body in a `SmBraceNode` if the body is an `SmOperNode`, `SmBinVerNode`, etc.
+4. Make caret in visual editor blink.
+5. Don't draw visual editor caret, when `SmGraphicWindow` doesn't have focus.
+6. When OpenOffice Math runs in standalone mode it centers the current formula, this is not nice for visual editing.
 
 Complex
 -------

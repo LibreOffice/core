@@ -276,31 +276,30 @@ private:
 /////////////////////////////// SmCaretPosGraphBuildingVisitor ////////////////////////////////
 
 
-/** A visitor for building a SmCaretPosGraph */
+/** A visitor for building a SmCaretPosGraph
+ *
+ * Visit invariant:
+ * Each pNode, except SmExpressionNode, SmBinHorNode and a few others, constitues an entry
+ * in a line. Consider the line entry "H", this entry creates one carat position, here
+ * denoted by | in "H|".
+ *
+ * Parameter variables:
+ *  The following variables are used to transfer parameters in to calls and results out
+ *  of calls.
+ *      pRightMost : SmCaretPosGraphEntry*
+ *
+ * Prior to a Visit call:
+ *  pRightMost: A pointer to right most position infront of the current line entry.
+ *
+ * After a Visit call:
+ *  pRightMost: A pointer to the right most position in the called line entry, if no there's
+ *              no caret positions in called line entry don't change this variable.
+ */
 class SmCaretPosGraphBuildingVisitor : public SmVisitor
 {
 public:
-    SmCaretPosGraphBuildingVisitor( ){
-        pRightMost  = NULL;
-        pGraph = new SmCaretPosGraph( );
-    }
-    /* Visit invariant:
-     * Each pNode, except SmExpressionNode, SmBinHorNode and a few others, constitues an entry
-     * in a line. Consider the line entry "H", this entry creates one carat position, here
-     * denoted by | in "H|".
-     *
-     * Parameter variables:
-     *  The following variables are used to transfer parameters in to calls and results out
-     *  of calls.
-     *      pRightMost : SmCaretPosGraphEntry*
-     *
-     * Prior to a Visit call:
-     *  pRightMost: A pointer to right most position infront of the current line entry.
-     *
-     * After a Visit call:
-     *  pRightMost: A pointer to the right most position in the called line entry, if no there's
-     *              no caret positions in called line entry don't change this variable.
-     */
+    /** Builds a caret position graph for pRootNode */
+    SmCaretPosGraphBuildingVisitor( SmNode* pRootNode );
     void Visit( SmTableNode* pNode );
     void Visit( SmBraceNode* pNode );
     void Visit( SmBracebodyNode* pNode );

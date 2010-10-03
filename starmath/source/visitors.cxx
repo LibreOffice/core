@@ -949,28 +949,34 @@ void SmSetSelectionVisitor::Visit( SmFontNode* pNode )
 
 /////////////////////////////// SmCaretPosGraphBuildingVisitor ////////////////////////////////
 
-
-//Needs special care:
-void SmCaretPosGraphBuildingVisitor::Visit( SmTableNode* pNode )
-{
-    //Children are SmLineNodes
-    //Or so I thought... Aparently, the children can be instances of SmExpression
-    //especially if there's a error in the formula... So he we go, a simple work around.
-    SmNodeIterator it( pNode );
-    while( it.Next( ) ){
-        //There's a special invariant between this method and the Visit( SmLineNode* )
-        //Usually pRightMost may not be NULL, to avoid this pRightMost should here be
-        //set to a new SmCaretPos infront of it.Current( ), however, if it.Current( ) is
-        //an instance of SmLineNode we let SmLineNode create this position infront of
-        //the visual line.
-        //The argument for doing this is that we now don't have to worry about SmLineNode
-        //being a visual line composition node. Thus no need for yet another special case
-        //in SmCursor::IsLineCompositionNode and everywhere this method is used.
-        if( it->GetType( ) != NLINE )
-            pRightMost = pGraph->Add( SmCaretPos( it.Current( ), 0 ) );
-        it->Accept( this );
-    }
+SmCaretPosGraphBuildingVisitor::SmCaretPosGraphBuildingVisitor( SmNode* pRootNode ){
+    pRightMost  = NULL;
+    pGraph = new SmCaretPosGraph( );
+    //pRootNode should always be a table
+    j_assert( pRootNode->GetType( ) == NTABLE, "pRootNode must be a table node");
+    //Handle the special case where NTABLE is used a rootnode
+    if( pRootNode->GetType( ) == NTABLE ){
+        //Children are SmLineNodes
+        //Or so I thought... Aparently, the children can be instances of SmExpression
+        //especially if there's a error in the formula... So he we go, a simple work around.
+        SmNodeIterator it( pRootNode );
+        while( it.Next( ) ){
+            //There's a special invariant between this method and the Visit( SmLineNode* )
+            //Usually pRightMost may not be NULL, to avoid this pRightMost should here be
+            //set to a new SmCaretPos infront of it.Current( ), however, if it.Current( ) is
+            //an instance of SmLineNode we let SmLineNode create this position infront of
+            //the visual line.
+            //The argument for doing this is that we now don't have to worry about SmLineNode
+            //being a visual line composition node. Thus, no need for yet another special case
+            //in SmCursor::IsLineCompositionNode and everywhere this method is used.
+            if( it->GetType( ) != NLINE )
+                pRightMost = pGraph->Add( SmCaretPos( it.Current( ), 0 ) );
+            it->Accept( this );
+        }
+    }else
+        pRootNode->Accept(this);
 }
+
 void SmCaretPosGraphBuildingVisitor::Visit( SmLineNode* pNode ){
     pRightMost = NULL;
     SmNodeIterator it( pNode );
@@ -979,6 +985,29 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmLineNode* pNode ){
             pRightMost = pGraph->Add( SmCaretPos( it.Current( ), 0 ) );
         it->Accept( this );
     }
+}
+
+/** Build SmCaretPosGraph for SmTableNode
+ * This method covers cases where SmTableNode is used in a binom or stack,
+ * the special case where it is used as root node for the entire formula is
+ * handled in the constructor.
+ */
+void SmCaretPosGraphBuildingVisitor::Visit( SmTableNode* pNode ){
+    SmCaretPosGraphEntry *left  = pRightMost,
+                         *right = pGraph->Add( SmCaretPos( pNode, 1) );
+    BOOL bIsFirst = TRUE;
+    SmNodeIterator it( pNode );
+    while( it.Next() ){
+        pRightMost = pGraph->Add( SmCaretPos( it.Current(), 0 ), left);
+        if(bIsFirst)
+            left->SetRight(pRightMost);
+        it->Accept( this );
+        pRightMost->SetRight(right);
+        if(bIsFirst)
+            right->SetLeft(pRightMost);
+        bIsFirst = FALSE;
+    }
+    pRightMost = right;
 }
 
 /** Build SmCaretPosGraph for SmSubSupNode
@@ -1305,10 +1334,10 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmBinVerNode* pNode )
     SmNode  *pNum   = pNode->GetSubNode( 0 ),
             *pDenom = pNode->GetSubNode( 2 );
 
-    SmCaretPosGraphEntry  *left,
-                        *right,
-                        *numLeft,
-                        *denomLeft;
+    SmCaretPosGraphEntry *left,
+                         *right,
+                         *numLeft,
+                         *denomLeft;
 
     //Set left
     left = pRightMost;

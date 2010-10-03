@@ -113,9 +113,7 @@ void SmCursor::BuildGraph(){
     pGraph = NULL;
 
     //Build the new graph
-    SmCaretPosGraphBuildingVisitor builder;
-    pTree->Accept(&builder);
-    pGraph = builder.Graph();
+    pGraph = SmCaretPosGraphBuildingVisitor(pTree).Graph();
 
     //Restore anchor and position pointers
     if(_anchor.IsValid() || _position.IsValid()){
