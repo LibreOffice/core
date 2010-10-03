@@ -36,8 +36,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 
-// #include <deque>
-
 #include <vector>
 #include <algorithm>
 #include <iterator>

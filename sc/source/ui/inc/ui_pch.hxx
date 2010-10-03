@@ -184,7 +184,6 @@
 #include <scresid.hxx>
 #include <sfx2/ipfrm.hxx>
 #include <docsh.hxx>
-//REMOVE    #include <sfx2/interno.hxx>
 #include <vcl/wintypes.hxx>
 #include <sfx2/docfac.hxx>
 #include <scitems.hxx>

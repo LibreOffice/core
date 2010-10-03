@@ -48,9 +48,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
-// #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
-// #include <com/sun/star/lang/XUnoTunnel.hpp>
-// #endif
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase6.hxx>

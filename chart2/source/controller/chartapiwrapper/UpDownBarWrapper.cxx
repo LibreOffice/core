@@ -39,7 +39,6 @@
 
 #include "LineProperties.hxx"
 #include "FillProperties.hxx"
-// #include "NamedProperties.hxx"
 #include "UserDefinedProperties.hxx"
 
 using namespace ::com::sun::star;

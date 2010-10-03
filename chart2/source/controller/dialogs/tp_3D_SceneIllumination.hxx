@@ -30,9 +30,6 @@
 #include "ModifyListenerCallBack.hxx"
 #include "TimerTriggeredControllerLock.hxx"
 
-// #ifndef _COM_SUN_STAR_CHART2_SCENEDESCRIPTOR_HPP_
-// #include <com/sun/star/chart2/SceneDescriptor.hpp>
-// #endif
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 // header for class TabPage

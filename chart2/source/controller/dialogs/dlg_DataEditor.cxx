@@ -50,9 +50,6 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 
-// for storing/reading the position and size of the dialog
-// #include <svtools/viewoptions.hxx>
-
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::rtl::OUString;

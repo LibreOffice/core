@@ -45,23 +45,6 @@
 #include <vcl/svapp.hxx>
 #include <rtl/ustrbuf.hxx>
 
-// #ifndef _RTL_UUID_H_
-// #include <rtl/uuid.h>
-// #endif
-// #ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
-// #include <cppuhelper/queryinterface.hxx>
-// #endif
-// #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
-// #include <toolkit/helper/vclunohelper.hxx>
-// #endif
-// #ifndef _SV_WINDOW_HXX
-// #include <vcl/window.hxx>
-// #endif
-
-// #ifndef _SVX_ACCESSILE_TEXT_HELPER_HXX_
-// #include <svx/AccessibleTextHelper.hxx>
-// #endif
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 

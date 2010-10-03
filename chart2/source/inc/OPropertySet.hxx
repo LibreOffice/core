@@ -33,17 +33,11 @@
 #include <cppuhelper/weak.hxx>
 
 // interfaces and types
-// #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
-// #include <com/sun/star/lang/XServiceInfo.hpp>
-// #endif
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/style/XStyleSupplier.hpp>
-// #ifndef _COM_SUN_STAR_BEANS_XFASTPROPERTYSTATE_HPP_
-// #include <com/sun/star/beans/XFastPropertyState.hpp>
-// #endif
 #include <osl/mutex.hxx>
 #include "charttoolsdllapi.hxx"
 

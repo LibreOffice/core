@@ -33,13 +33,6 @@
 #include "macros.hxx"
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 
-// #ifndef _VOS_MUTEX_HXX_
-// #include <vos/mutex.hxx>
-// #endif
-// #ifndef _SV_SVAPP_HXX
-// #include <vcl/svapp.hxx>
-// #endif
-
 // for ressource strings STR_UNDO and STR_REDO
 #include <sfx2/sfx.hrc>
 
