@@ -1024,10 +1024,10 @@ case "$build_os" in
 	solaris*)
 		test_gtk=yes
 		test_cairo=yes
-        build_gstreamer=yes
+		build_gstreamer=yes
 		test_kde=yes
 		test_cups=yes
-        test_randr=yes
+		test_randr=yes
 		test_freetype=yes
 		_os=SunOS
 		AC_PATH_PROG( GNUTAR, gtar,,$PATH:/usr/sfw/bin)
@@ -1058,11 +1058,11 @@ case "$build_os" in
 	linux-gnu*|k*bsd*-gnu*)
 		test_gtk=yes
 		test_cairo=yes
-        build_gstreamer=yes
+		build_gstreamer=yes
 		test_kde=yes
 		test_kde4=yes
 		test_cups=yes
-        test_randr=yes
+		test_randr=yes
 		test_freetype=yes
 		_os=Linux
 		;;
@@ -1080,7 +1080,7 @@ case "$build_os" in
 		test_cups=yes
 		test_gtk=yes
 		test_cairo=yes
-        test_randr=no
+		test_randr=no
 		test_freetype=no
 		_os=Darwin
       if test "$enable_systray" = "yes" && test "$enable_gtk" != "no"; then
@@ -1092,7 +1092,7 @@ case "$build_os" in
 	os2*)
 		test_x=no
 		test_cups=no
-        test_randr=no
+		test_randr=no
 		test_gtk=no
 		test_freetype=no
 		_os=OS2
@@ -1100,11 +1100,11 @@ case "$build_os" in
 	freebsd*)
 		test_gtk=yes
 		test_cairo=yes
-        build_gstreamer=yes
+		build_gstreamer=yes
 		test_kde=yes
 		test_kde4=yes
 		test_cups=yes
-        test_randr=yes
+		test_randr=yes
 		test_freetype=yes
 		AC_MSG_CHECKING([the FreeBSD operating system release])
 		if test -n "$with_os_version"; then
@@ -1129,17 +1129,17 @@ case "$build_os" in
 		;;
 	osf)
 		test_cups=no
-        test_randr=no
+		test_randr=no
 		_os=OSF1
 		;;
-	netbsd)
+	*netbsd*)
 		test_gtk=yes
 		test_cairo=yes
-        build_gstreamer=yes
+		build_gstreamer=yes
 		test_kde=yes
 		test_kde4=yes
-		test_cups=no
-        test_randr=yes
+		test_cups=yes
+		test_randr=yes
 		test_freetype=yes
 		PTHREAD_CFLAGS="-pthread"
 		PTHREAD_LIBS="-pthread -lpthread"
@@ -1147,7 +1147,7 @@ case "$build_os" in
 		;;
 	aix*)
 		test_cups=no
-        test_randr=no
+		test_randr=no
 		test_freetype=yes
 	   PTHREAD_LIBS=-pthread
 		echo "AIX is an alpha port --- Use at own risk" >> warn
@@ -6749,7 +6749,7 @@ fi
 dnl ===================================================================
 dnl Test whether to integrate extensions into the product's installer
 dnl ===================================================================
-AC_MSG_CHECKING([for extensions intergration])
+AC_MSG_CHECKING([for extensions integration])
 if test "z$with_extension_integration" = "z" -o "z$with_extension_integration" = "zno" ; then
   WITH_EXTENSION_INTEGRATION=NO
   AC_MSG_RESULT([no integration])
@@ -6899,9 +6899,9 @@ else
 fi
 
 dnl ===================================================================
-dnl Test whether to include Sun Professinal Template Pack
+dnl Test whether to include Sun Professional Template Pack
 dnl ===================================================================
-AC_MSG_CHECKING([for Sun Professinal Template Pack integration (only supported languages displayed)])
+AC_MSG_CHECKING([for Sun Professional Template Pack integration (only supported languages displayed)])
 if test "z$with_sun_templates" = "z" -o "z$with_sun_templates" = "zno" ; then
     SUNTEMPLATES_LANG=""
     AC_MSG_RESULT([no integration])
@@ -7143,7 +7143,6 @@ if test "$ANT_HOME" != "NO_ANT_HOME"; then
    AC_MSG_RESULT([Ant lib directory found.])
 fi
 AC_SUBST(ANT_LIB)
-fi
 
 ant_minver=1.6.0
 # update for more extensions...
@@ -7213,6 +7212,7 @@ EOF
   fi
 fi
 rm -f conftest* core core.* *.core
+fi
 
 OOO_JUNIT_JAR=
 if test "$SOLAR_JAVA" != "" && test "$with_junit" != "no"; then
@@ -7404,7 +7404,7 @@ AC_MSG_CHECKING([for maximum of jobs per processor])
 BUILD_MAX_JOBS="1"
 if test "z$with_max_jobs" != "z"; then
     if test "$with_max_jobs" -gt "10"; then
-        AC_MSG_WARN([dmake is limited to 10 jobs, using --with-max-jobs=10 (instead of $with_num_jobs).])
+        AC_MSG_WARN([dmake is limited to 10 jobs, using --with-max-jobs=10 (instead of $with_max_jobs).])
         with_max_jobs="10"
     fi
     BUILD_MAX_JOBS="$with_max_jobs"
