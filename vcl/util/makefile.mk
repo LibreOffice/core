@@ -391,9 +391,6 @@ SHL4STDLIBS+= $(XRANDR_LIBS)
 .ENDIF
 .ENDIF
 
-.IF "$(OS)$(CPU)" == "LINUXX" && "$(LIBRARY_PATH)" != ""
-EXTRALIBPATHS+=-L$(LIBRARY_PATH)
-.ENDIF # "$(OS)$(CPU)" == "LINUXX"
 .ENDIF # "$(ENABLE_GTK)" != ""
 
 # KDE plugin

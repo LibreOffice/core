@@ -239,7 +239,7 @@ public:
     // return only PairCount if (pKernPairs == NULL)
     virtual ULONG           GetKernPairs( ULONG nMaxPairCount, ImplKernPairData* ) = 0;
     // get the repertoire of the current font
-    virtual ImplFontCharMap* GetImplFontCharMap() const = 0;
+    virtual const ImplFontCharMap* GetImplFontCharMap() const = 0;
     // graphics must fill supplied font list
     virtual void            GetDevFontList( ImplDevFontList* ) = 0;
     // graphics should call ImplAddDevFontSubstitute on supplied
