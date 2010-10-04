@@ -104,6 +104,7 @@ SLOFILES =  \
         $(SLO)$/reftokenhelper.obj \
         $(SLO)$/refupdat.obj \
         $(SLO)$/scmatrix.obj \
+        $(SLO)$/simplerangelist.obj \
         $(SLO)$/stringutil.obj \
         $(SLO)$/subtotal.obj \
         $(SLO)$/token.obj \
@@ -133,6 +134,7 @@ EXCEPTIONSFILES= \
         $(SLO)$/prnsave.obj \
         $(SLO)$/queryparam.obj \
         $(SLO)$/reftokenhelper.obj \
+        $(SLO)$/simplerangelist.obj \
         $(SLO)$/stringutil.obj \
         $(SLO)$/token.obj
 
