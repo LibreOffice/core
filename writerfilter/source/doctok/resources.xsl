@@ -301,14 +301,15 @@ class </xsl:text>
     */
     static sal_uInt32 getSize() { return </xsl:text>
     <xsl:value-of select='$size'/>
-    <xsl:text>; }
-
+    <xsl:text>; }</xsl:text>
+    <xsl:if test="not(.//UML:Stereotype[@xmi.ref='ww8nocalcsize'])">
+      <xsl:text>
     /**
         Calculate actual size.
     */  
-    sal_uInt32 calcSize();
-
-    </xsl:text>
+    sal_uInt32 calcSize(); 
+      </xsl:text>
+    </xsl:if>
     <xsl:if test='.//UML:Stereotype[@xmi.idref ="plcf"]'>
       <xsl:text>
     /**
@@ -319,13 +320,15 @@ class </xsl:text>
     sal_uInt32 getEntryOffset(sal_uInt32 nIndex)
     {
         return entryOffsets[nIndex];
-    }   
-
+    }</xsl:text>
+    <xsl:if test="not(.//UML:Stereotype[@xmi.idref='ww8nopayloadoffset'])">
+      <xsl:text>
     /**
         Calculate offset for payload.
     */
-    sal_uInt32 calcPayloadOffset();
-
+    sal_uInt32 calcPayloadOffset();</xsl:text>
+    </xsl:if>
+    <xsl:text>
     /**
     Set offset for payloads.
 

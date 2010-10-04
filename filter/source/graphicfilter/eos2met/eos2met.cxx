@@ -45,8 +45,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/solar.hrc>
-#include "strings.hrc"
-#include "dlgeos2.hxx"
 
 // -----------------------------Feld-Typen-------------------------------
 
@@ -2594,55 +2592,3 @@ extern "C" BOOL __LOADONCALLAPI GraphicExport( SvStream & rStream, Graphic & rGr
     }
 }
 
-//================== GraphicDialog - die exportierte Funktion ================
-
-extern "C" BOOL SAL_CALL DoExportDialog( FltCallDialogParameter& rPara )
-{
-    BOOL    bRet = FALSE;
-
-    if ( rPara.pWindow )
-    {
-        ByteString aResMgrName( "eme" );
-        ResMgr* pResMgr;
-
-        pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
-
-        if( pResMgr )
-        {
-            rPara.pResMgr = pResMgr;
-            bRet = ( DlgExportEMET( rPara ).Execute() == RET_OK );
-            delete pResMgr;
-        }
-        else
-            bRet = TRUE;
-    }
-
-    return bRet;
-}
-
-//================== ein bischen Muell fuer Windows ==========================
-#ifndef GCC
-#endif
-
-#ifdef WIN
-
-static HINSTANCE hDLLInst = 0;      // HANDLE der DLL
-
-extern "C" int CALLBACK LibMain( HINSTANCE hDLL, WORD, WORD nHeap, LPSTR )
-{
-#ifndef WNT
-    if ( nHeap )
-        UnlockData( 0 );
-#endif
-
-    hDLLInst = hDLL;
-
-    return TRUE;
-}
-
-extern "C" int CALLBACK WEP( int )
-{
-    return 1;
-}
-
-#endif
