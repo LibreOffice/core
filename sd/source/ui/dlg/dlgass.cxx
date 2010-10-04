@@ -74,12 +74,8 @@
 #include "dlgass.hrc"
 #include "dlgass.hxx"
 #include "dlgctrls.hxx"
-#ifndef _SD_CFGID_HXX
 #include "strings.hrc"
-#endif
-#ifndef _DATETIMEITEM_HXX
 #include "dlgassim.hxx"
-#endif
 #include "TemplateScanner.hxx"
 #include "WindowUpdater.hxx"
 

@@ -33,9 +33,7 @@
 #include <tools/urlobj.hxx>
 #include <sfx2/progress.hxx>
 #include <vcl/waitobj.hxx>
-#ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <editeng/flstitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <svl/aeitem.hxx>
@@ -43,16 +41,12 @@
 #include <sot/storage.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
-#ifndef _DISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
-#endif
 #include <svx/svdotext.hxx>
 #include <svl/style.hxx>
 #include <sfx2/printer.hxx>
 #include <svtools/ctrltool.hxx>
-#ifndef _SFX_ECODE_HXX //autogen
 #include <svtools/sfxecode.hxx>
-#endif
 #include <sot/clsids.hxx>
 #include <sot/formats.hxx>
 #include <sfx2/request.hxx>
@@ -72,9 +66,7 @@
 #include "glob.hrc"
 #include "strings.hrc"
 #include "strmname.h"
-#ifndef SD_FRAMW_VIEW_HXX
 #include "FrameView.hxx"
-#endif
 #include "optsitem.hxx"
 #include "Outliner.hxx"
 #include "sdattr.hxx"

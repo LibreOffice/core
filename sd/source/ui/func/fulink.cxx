@@ -37,9 +37,7 @@
 
 #include <svx/svxdlg.hxx>
 
-#ifndef SD_WINDOW_SHELL_HXX
 #include "Window.hxx"
-#endif
 #include "drawdoc.hxx"
 #include "ViewShell.hxx"
 #include "app.hrc"

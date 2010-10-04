@@ -30,18 +30,14 @@
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <comphelper/processfactory.hxx>
 #include <svx/svdlayer.hxx>
-#ifndef _SVXIDS_HXX
 #include <svx/svxids.hrc>
-#endif
 
 #include <svx/hyprlink.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/hlnkitem.hxx>
 #include <tools/urlobj.hxx>
 #include <editeng/eeitem.hxx>
-#ifndef _FLDITEM_HXX
 #include <editeng/flditem.hxx>
-#endif
 #include <vcl/msgbox.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>

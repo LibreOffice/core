@@ -46,9 +46,7 @@
 #include <rtl/uri.hxx>
 #include <tools/debug.hxx>
 
-#ifndef _SD_CUSTOMANIMATIONPRESET_HXX
 #include <TransitionPreset.hxx>
-#endif
 #include <unotools/ucbstreamhelper.hxx>
 
 #include <algorithm>

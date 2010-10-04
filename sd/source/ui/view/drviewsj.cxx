@@ -31,16 +31,10 @@
 #include "DrawViewShell.hxx"
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <svl/aeitem.hxx>
-#ifndef _SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
-#endif
-#ifndef _GLOBL3D_HXX //autogen
 #include <svx/globl3d.hxx>
-#endif
 #include <editeng/eeitem.hxx>
-#ifndef _FLDITEM_HXX
 #include <editeng/flditem.hxx>
-#endif
 #include <svx/svdogrp.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>

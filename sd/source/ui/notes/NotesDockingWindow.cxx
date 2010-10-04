@@ -38,9 +38,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include "DrawViewShell.hxx"
-#ifndef SD_DRAW_DOC_HXX
 #include "drawdoc.hxx"
-#endif
 #include "sdresid.hxx"
 #include "ViewShellBase.hxx"
 

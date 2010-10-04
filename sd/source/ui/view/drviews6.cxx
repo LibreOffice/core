@@ -35,21 +35,11 @@
 #include <vcl/msgbox.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/svdograf.hxx>
-#ifndef _SVXIDS_HXX
 #include <svx/svxids.hrc>
-#endif
-#ifndef _FONTWORK_HXX
 #include <svx/fontwork.hxx>
-#endif
-#ifndef _BMPMASK_HXX
 #include <svx/bmpmask.hxx>
-#endif
-#ifndef _SVX_GALBRWS_HXX
 #include <svx/galbrws.hxx>
-#endif
-#ifndef _IMAPDLG_HXX
 #include <svx/imapdlg.hxx>
-#endif
 #include <svx/xftsfit.hxx>
 #include <svx/colrctrl.hxx>
 #include <svx/f3dchild.hxx>
@@ -57,9 +47,7 @@
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
 #include <svx/tbxcustomshapes.hxx>
-#ifndef _AVMEDIA_MEDIAPLAYER_HXX
 #include <avmedia/mediaplayer.hxx>
-#endif
 
 #include "app.hrc"
 #include "strings.hrc"

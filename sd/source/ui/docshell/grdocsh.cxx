@@ -28,16 +28,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
-#ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <sfx2/app.hxx>
 #include <svl/srchitem.hxx>
 #include <tools/globname.hxx>
 
-#ifndef _SO_CLSIDS_HXX //autogen
 #include <sot/clsids.hxx>
-#endif
 
 #include <sfx2/objface.hxx>
 

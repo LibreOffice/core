@@ -40,9 +40,7 @@
 #include "View.hxx"
 #include "ViewShell.hxx"
 #include "DrawViewShell.hxx"
-#ifndef SD_WINDOW_SHELL_HXX
 #include "Window.hxx"
-#endif
 #include "sdenumdef.hxx"
 #include "sdresid.hxx"
 #include "sdabstdlg.hxx"

@@ -32,25 +32,17 @@
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
-#ifndef _GLOBL3D_HXX
 #include <svx/globl3d.hxx>
-#endif
 #include <svx/hlnkitem.hxx>
 #include <editeng/eeitem.hxx>
-#ifndef _FLDITEM_HXX
 #include <editeng/flditem.hxx>
-#endif
 #include <sfx2/viewfrm.hxx>
 #include <svl/whiter.hxx>
 #include <svl/eitem.hxx>
 #include <svl/itempool.hxx>
 #include <sfx2/tplpitem.hxx>
-#ifndef _BINDING_HXX //autogen
 #include <sfx2/bindings.hxx>
-#endif
 #include <sfx2/app.hxx>
 #include <sfx2/templdlg.hxx>
 #include <svx/xdef.hxx>

@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
-#ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_VIEW_FORWARDER_HXX
 #include "AccessibleViewForwarder.hxx"
-#endif
 #include <svx/svdpntv.hxx>
 #include <vcl/outdev.hxx>
 #include <svx/sdrpaintwindow.hxx>

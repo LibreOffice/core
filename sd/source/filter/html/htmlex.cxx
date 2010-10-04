@@ -39,9 +39,7 @@
 #include <tools/fsys.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svtools/FilterConfigItem.hxx>
-#ifndef _UNOTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
-#endif
 #include <unotools/localfilehelper.hxx>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <sfx2/progress.hxx>

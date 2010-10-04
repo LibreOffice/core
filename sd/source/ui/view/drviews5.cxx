@@ -31,9 +31,7 @@
 #include "DrawViewShell.hxx"
 #include "PresentationViewShell.hxx"
 #include <editeng/outliner.hxx>
-#ifndef _SVXIDS_HXX
 #include <svx/svxids.hrc>
-#endif
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svdpagv.hxx>

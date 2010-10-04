@@ -34,9 +34,7 @@
 #include "drawdoc.hxx"
 #include "View.hxx"
 
-#ifndef _SPLIT_HXX
 #include <vcl/split.hxx>
-#endif
 #include <sfx2/childwin.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/smplhint.hxx>

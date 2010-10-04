@@ -33,15 +33,11 @@
 #endif
 
 #include <svl/intitem.hxx>
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
 #include <svx/tabarea.hxx>
 #include <svx/drawitem.hxx>
 
-#ifndef _SD_SDRESID_HXX
 #include "sdresid.hxx"
-#endif
 #include "dlgpage.hxx"
 
 #include "DrawDocShell.hxx"

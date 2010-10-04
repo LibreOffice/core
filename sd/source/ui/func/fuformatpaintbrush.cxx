@@ -53,9 +53,7 @@
 #include "Outliner.hxx"
 #include "ViewShellBase.hxx"
 
-#ifndef SD_WINDOW_SHELL_HXX
 #include "Window.hxx"
-#endif
 
 namespace sd {
 

@@ -38,9 +38,7 @@
 #include <svx/srchdlg.hxx>
 #include <sfx2/bindings.hxx>
 #include "fupoor.hxx"
-#ifndef SD_WINDOW_SHELL_HXX
 #include "Window.hxx"
-#endif
 #include "drawdoc.hxx"
 #include "app.hrc"
 #include "app.hxx"

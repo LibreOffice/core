@@ -32,9 +32,7 @@
 #include <vcl/wrkwin.hxx>
 #include <sfx2/progress.hxx>
 #include <editeng/outliner.hxx>
-#ifndef _EDITENG_HXX
 #include <editeng/editeng.hxx>
-#endif
 #include <svl/stritem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/app.hxx>

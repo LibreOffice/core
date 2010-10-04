@@ -30,9 +30,7 @@
 #include <editeng/unoedhlp.hxx>
 #include <svx/svdoutl.hxx>
 
-#ifndef SD_ACCESSIBILITY_ACCESSIBLE_OUTLINE_EDIT_SOURCE_HXX
 #include <AccessibleOutlineEditSource.hxx>
-#endif
 #include "OutlineView.hxx"
 #include <svx/sdrpaintwindow.hxx>
 

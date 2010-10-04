@@ -36,9 +36,7 @@
 #include <svx/obj3d.hxx>
 #include <svx/fmview.hxx>
 #include <editeng/outliner.hxx>
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdundo.hxx>

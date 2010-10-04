@@ -29,9 +29,7 @@
 #include "precompiled_sd.hxx"
 #include <unotools/pathoptions.hxx>
 #include <svl/languageoptions.hxx>
-#ifndef _UNOTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
-#endif
 #include <tools/urlobj.hxx>
 #include <vcl/virdev.hxx>
 #include <sfx2/app.hxx>

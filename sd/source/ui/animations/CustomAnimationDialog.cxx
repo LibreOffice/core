@@ -42,13 +42,9 @@
 #include <com/sun/star/media/XManager.hpp>
 #include <com/sun/star/media/XPlayer.hpp>
 
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
-#endif
 
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 #include <unotools/pathoptions.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
@@ -65,9 +61,7 @@
 #include <svtools/ctrltool.hxx>
 #include <sfx2/objsh.hxx>
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <svx/dialmgr.hxx>
 #include <editeng/flstitem.hxx>
 #include <svx/drawitem.hxx>
@@ -75,19 +69,13 @@
 #include <svx/xtable.hxx>
 #include <svx/gallery.hxx>
 
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
 #include "sdresid.hxx"
 
 #include "glob.hrc"
 #include "CustomAnimationDialog.hxx"
-#ifndef _SD_CUSTOMANIMATIONDIALOG_HRC
 #include "CustomAnimationDialog.hrc"
-#endif
-#ifndef _SD_CUSTOMANIMATION_HRC
 #include "CustomAnimation.hrc"
-#endif
 #include "STLPropertySet.hxx"
 
 #include <avmedia/mediawindow.hxx>

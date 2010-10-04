@@ -35,9 +35,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/lstbox.hxx>
 #include <svtools/FilterConfigItem.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/fixed.hxx>
 #include <vcl/combobox.hxx>
 #include <svtools/svmedit.hxx>

@@ -36,9 +36,7 @@
 #include <com/sun/star/presentation/AnimationEffect.hpp>
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
-#ifndef _COM_SUN_STAR_EMBED_VERBDESCR_HPP_
 #include <com/sun/star/embed/VerbDescriptor.hpp>
-#endif
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>

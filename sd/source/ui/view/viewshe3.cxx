@@ -64,9 +64,7 @@
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustrbuf.hxx>
 #include "stlsheet.hxx"
-#ifndef SD_WINDOW_UPDATER_HXX
 #include "WindowUpdater.hxx"
-#endif
 #include "DrawViewShell.hxx"
 #include "OutlineViewShell.hxx"
 #include "drawview.hxx"
@@ -84,9 +82,7 @@
 #include "sdresid.hxx"
 
 // #96090#
-#ifndef _SVXIDS_HXX
 #include <svx/svxids.hrc>
-#endif
 #include <sfx2/request.hxx>
 #include <svl/aeitem.hxx>
 #include <basic/sbstar.hxx>

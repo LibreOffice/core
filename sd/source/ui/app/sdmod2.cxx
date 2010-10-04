@@ -62,9 +62,7 @@
 #include "strings.hrc"
 #include "res_bmp.hrc"
 #include "ViewShell.hxx"
-#ifndef SD_FRAMW_VIEW_HXX
 #include "FrameView.hxx"
-#endif
 #include "sdattr.hxx"
 #include "tpoption.hrc"
 #include "optsitem.hxx"

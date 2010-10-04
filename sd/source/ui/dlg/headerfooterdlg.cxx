@@ -32,9 +32,7 @@
 #undef SD_DLLIMPLEMENTATION
 #endif
 
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/langitem.hxx>
@@ -43,9 +41,7 @@
 #include <editeng/editeng.hxx>
 #include <sfx2/viewfrm.hxx>
 
-#ifndef _SD_SDRESID_HXX
 #include "sdresid.hxx"
-#endif
 
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
@@ -64,9 +60,7 @@
 // preview control for presentation layout
 ///////////////////////////////////////////////////////////////////////
 #include <vcl/ctrl.hxx>
-#ifndef _SV_COLOR_HXX
 #include <tools/color.hxx>
-#endif
 #include <i18npool/mslangid.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svx/xlndsit.hxx>

@@ -55,9 +55,7 @@
 #include <svx/linkwarn.hxx>
 #include <svx/svdetc.hxx>
 #include <avmedia/mediawindow.hxx>
-#ifndef _UNOTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
-#endif
 #include <sfx2/printer.hxx>
 #include <sot/clsids.hxx>
 #include <svtools/sfxecode.hxx>
@@ -67,15 +65,11 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdomedia.hxx>
-#ifndef _EDITENG_HXX //autogen
 #include <editeng/editeng.hxx>
-#endif
 #include <sot/storage.hxx>
 #include <sot/formats.hxx>
 #include <svx/svdpagv.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <sfx2/opengrf.hxx>
 
 #include <sfx2/viewfrm.hxx>

@@ -42,9 +42,7 @@
 #include <svx/svxids.hrc>
 #include "app.hrc"
 #include "OutlineView.hxx"
-#ifndef SD_WINDOW_SHELL_HXX
 #include "Window.hxx"
-#endif
 #include "DrawDocShell.hxx"
 #include "ViewShell.hxx"
 #include "OutlineViewShell.hxx"

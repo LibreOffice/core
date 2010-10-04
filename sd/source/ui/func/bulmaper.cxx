@@ -32,9 +32,7 @@
 #undef SD_DLLIMPLEMENTATION
 #endif
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 
 //-> Fonts & Items
 #include <vcl/font.hxx>

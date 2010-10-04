@@ -57,9 +57,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
-#ifndef _COM_SUN_STAR_TEXT_WORDTYPE_HPP_
 #include <com/sun/star/i18n/WordType.hpp>
-#endif
 #include <com/sun/star/presentation/TextAnimationType.hpp>
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>

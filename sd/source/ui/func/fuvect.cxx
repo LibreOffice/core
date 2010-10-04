@@ -31,16 +31,10 @@
 
 #include "fuvect.hxx"
 #include <tools/poly.hxx>
-#ifndef _SVDOPATH_HXX //autogen
 #include <svx/svdograf.hxx>
-#endif
 #include <vcl/msgbox.hxx>
-#ifndef _SVX_SVDOGRAF_HXX //autogen
 #include <svx/svdograf.hxx>
-#endif
-#ifndef _SVX_SVDEDTV_HXX //autogen
 #include <svx/svdedtv.hxx>
-#endif
 
 
 #include "View.hxx"

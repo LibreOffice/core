@@ -31,12 +31,8 @@
 #include "DrawViewShell.hxx"
 #include "ViewShellImplementation.hxx"
 
-#ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
-#ifndef _IMAPDLG_HXX
 #include <svx/imapdlg.hxx>
-#endif
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>

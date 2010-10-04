@@ -38,9 +38,7 @@
 #include "optsitem.hxx"
 #include "sddll.hxx"
 #include <sfx2/request.hxx>
-#ifndef _SFX_DISPATCH_HXX
 #include <sfx2/dispatch.hxx>
-#endif
 
 #include <sfx2/objface.hxx>
 

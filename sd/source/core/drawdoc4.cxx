@@ -72,9 +72,7 @@
 #include <editeng/crsditem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/cntritem.hxx>
-#ifndef _SVX_EMPHITEM_HXX
 #include <editeng/emphitem.hxx>
-#endif
 #include <editeng/fontitem.hxx>
 #include <editeng/shdditem.hxx>
 #include <svx/xbtmpit.hxx>

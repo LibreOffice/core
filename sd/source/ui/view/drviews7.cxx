@@ -34,12 +34,8 @@
 #include <svx/globl3d.hxx>
 #include <svx/svdouno.hxx>
 #include <editeng/eeitem.hxx>
-#ifndef _FLDITEM_HXX
 #include <editeng/flditem.hxx>
-#endif
-#ifndef _SVXIDS_HXX
 #include <svx/svxids.hrc>
-#endif
 #include <svx/svdpagv.hxx>
 #include <svx/clipfmtitem.hxx>
 #include <svx/fmshell.hxx>

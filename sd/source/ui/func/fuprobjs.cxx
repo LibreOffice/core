@@ -30,9 +30,7 @@
 
 #include "fuprobjs.hxx"
 
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <svl/style.hxx>
 #include <editeng/outliner.hxx>
 #include <svl/smplhint.hxx>

@@ -74,9 +74,7 @@
 #include "misc.hxx"
 #include "View.hxx"
 #ifndef SVX_LIGHT
-#ifndef SD_DRAW_DOC_SHELL_HXX
 #include "DrawDocShell.hxx"
-#endif
 #endif
 #include "ViewShell.hxx"
 #include "DrawViewShell.hxx"

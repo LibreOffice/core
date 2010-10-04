@@ -31,9 +31,7 @@
 #include "Ruler.hxx"
 #include <svl/ptitem.hxx>
 #include <svx/ruler.hxx>
-#ifndef _SVXIDS_HXX //autogen
 #include <svx/svxids.hrc>
-#endif
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/bindings.hxx>
 

@@ -43,9 +43,7 @@
 #include "sdresid.hxx"
 #include "drawdoc.hxx"
 #include "View.hxx"
-#ifndef SD_WINDOW_SHELL_HXX
 #include "Window.hxx"
-#endif
 
 namespace sd {
 

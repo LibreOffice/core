@@ -64,9 +64,7 @@
 #include "ViewShell.hxx"
 #include "FrameView.hxx"
 #include "View.hxx"
-#ifndef SD_WINDOW_SHELL_HXX
 #include "Window.hxx"
-#endif
 #include "drawdoc.hxx"
 #include "DrawDocShell.hxx"
 #include "Client.hxx"

@@ -30,9 +30,7 @@
 #include <sfx2/docfile.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/outliner.hxx>
-#ifndef _SVXLINK_HXX
 #include <sfx2/linkmgr.hxx>
-#endif
 #include <svx/svdotext.hxx>
 #include <tools/urlobj.hxx>
 #include <editeng/outlobj.hxx>

@@ -32,13 +32,9 @@
 
 #include "ViewShellHint.hxx"
 
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 #include <sfx2/dispatch.hxx>
-#ifndef _SVXIDS_HXX
 #include <svx/svxids.hrc>
-#endif
 #include <vcl/msgbox.hxx>
 #include <svx/svddef.hxx>
 #include <sfx2/bindings.hxx>
@@ -63,13 +59,9 @@
 #include "fuinsert.hxx"
 #include "fuprlout.hxx"
 #include "fupage.hxx"
-#ifndef SD_FU_OBJECT_ANIMATION_PARAMETERS_HXX
 #include "fuoaprms.hxx"
-#endif
 #include "fucopy.hxx"
-#ifndef SD_FU_LINE_END_HXX
 #include "fulinend.hxx"
-#endif
 #include "fusnapln.hxx"
 #include "fuolbull.hxx"
 #include "fuinsfil.hxx"

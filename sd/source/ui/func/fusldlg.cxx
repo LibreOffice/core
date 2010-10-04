@@ -31,9 +31,7 @@
 
 #include "fusldlg.hxx"
 #include <svl/itemset.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 
 #include "drawdoc.hxx"
 #include "sdpage.hxx"

@@ -39,9 +39,7 @@
 #include "cppuhelper/exc_hlp.hxx"
 #include "rtl/ref.hxx"
 
-#ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <svx/svdpagv.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
@@ -61,9 +59,7 @@
 #include "misc.hxx"
 
 #ifdef STARIMAGE_AVAILABLE
-#ifndef _SIMDLL_HXX
 #include <sim2/simdll.hxx>
-#endif
 #endif
 
 #include <svx/dialogs.hrc>
@@ -84,9 +80,7 @@
 #include "FrameView.hxx"
 #include "stlpool.hxx"
 #include "Window.hxx"
-#ifndef SD_DRAWVIEW_HXX
 #include "drawview.hxx"
-#endif
 #include "drawdoc.hxx"
 #include "DrawDocShell.hxx"
 #include "Ruler.hxx"

@@ -69,9 +69,7 @@
 #include <i18npool/mslangid.hxx>
 #include <unotools/charclass.hxx>
 #include <comphelper/processfactory.hxx>
-#ifndef _SVTOOLS_PATHOPTIONS_HXX_
 #include <unotools/pathoptions.hxx>
-#endif
 #include <unotools/lingucfg.hxx>
 #include <unotools/linguprops.hxx>
 

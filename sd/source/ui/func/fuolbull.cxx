@@ -42,9 +42,7 @@
 #include "OutlineView.hxx"
 #include "OutlineViewShell.hxx"
 #include "DrawViewShell.hxx"
-#ifndef SD_WINDOW_SHELL_HXX
 #include "Window.hxx"
-#endif
 #include "drawdoc.hxx"
 #include "sdabstdlg.hxx"
 

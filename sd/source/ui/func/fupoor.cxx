@@ -47,17 +47,13 @@
 #include <com/sun/star/drawing/XLayerManager.hpp>
 #include <com/sun/star/container/XChild.hpp>
 
-#ifndef SD_FRAMW_VIEW_HXX
 #include "FrameView.hxx"
-#endif
 #include "app.hrc"
 #include "fusel.hxx"
 #include "sdpage.hxx"
 #include "drawview.hxx"
 #include "DrawViewShell.hxx"
-#ifndef SD_WINDOW_SHELL_HXX
 #include "Window.hxx"
-#endif
 #include "drawdoc.hxx"
 #include "DrawDocShell.hxx"
 #include "zoomlist.hxx"

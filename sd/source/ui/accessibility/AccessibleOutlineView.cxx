@@ -35,17 +35,11 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#ifndef _COM_SUN_STAR_ACCESSIBLE_ACCESSIBLEEVENTID_HPP_
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#endif
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#ifndef _COM_SUN_STAR_LANG_XMULSTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
 #include <rtl/ustring.h>
-#ifndef _SFXFRAME_HXX
 #include<sfx2/viewfrm.hxx>
-#endif
 
 #include <svx/AccessibleShape.hxx>
 

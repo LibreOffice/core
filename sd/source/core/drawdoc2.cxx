@@ -34,9 +34,7 @@
 #include <vcl/wrkwin.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/app.hxx>
-#ifndef SD_OUTLINE_HXX
 #include "Outliner.hxx"
-#endif
 #include <editeng/paperinf.hxx>
 #include <svx/svdopage.hxx>
 #include <svx/svdoole2.hxx>

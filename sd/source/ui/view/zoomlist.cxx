@@ -30,14 +30,10 @@
 
 #include "zoomlist.hxx"
 
-#ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
-#ifndef _SFXVIEWSHELL_HXX
 #include <sfx2/viewsh.hxx>
-#endif
 
 
 #include "ViewShell.hxx"

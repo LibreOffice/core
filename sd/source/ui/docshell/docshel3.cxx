@@ -32,12 +32,8 @@
 
 #include "app.hrc"
 
-#ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
 
 #include <svx/ofaitem.hxx>
 #include <svx/svxerr.hxx>

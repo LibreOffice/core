@@ -32,9 +32,7 @@
 #include <svl/aeitem.hxx>
 #include <svl/itemset.hxx>
 #include <sfx2/request.hxx>
-#ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 
 
 #include <svx/fmshell.hxx>

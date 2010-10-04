@@ -32,17 +32,11 @@
 #include "ViewShellImplementation.hxx"
 #include <vcl/waitobj.hxx>
 #include <svx/svdograf.hxx>
-#ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <svx/svdpagv.hxx>
 #include <svx/svdundo.hxx>
-#ifndef _ZOOMITEM_HXX
 #include <svx/zoomitem.hxx>
-#endif
-#ifndef _EDITDATA_HXX
 #include <editeng/editdata.hxx>
-#endif
 #include <basic/sberrors.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/request.hxx>
@@ -56,9 +50,7 @@
 #include <svx/xlineit0.hxx>
 #include <svx/xfillit0.hxx>
 
-#ifndef _SDOUTL_HXX //autogen
 #include <svx/svdoutl.hxx>
-#endif
 #include <svx/xlnwtit.hxx>
 #include <svx/svdoattr.hxx>
 #include <svx/xlnstwit.hxx>

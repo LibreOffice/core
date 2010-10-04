@@ -42,9 +42,7 @@
 #include <svx/svdlayer.hxx>
 
 #ifndef SVX_LIGHT
-#ifndef SD_DRAW_DOC_SHELL_HXX
 #include "DrawDocShell.hxx"
-#endif
 #endif
 #include <drawdoc.hxx>
 #include <unomodel.hxx>

@@ -33,9 +33,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <vos/mutex.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#ifndef _UNTOOLS_TEMPFILE_HXX
 #include <unotools/tempfile.hxx>
-#endif
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
 #include <svx/svdpagv.hxx>

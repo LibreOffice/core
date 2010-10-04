@@ -49,9 +49,7 @@
 #include "sdpage.hxx"
 #include "sdresid.hxx"
 #include "navigatr.hxx"
-#ifndef _SD_CFGID_HXX
 #include "strings.hrc"
-#endif
 #include "res_bmp.hrc"
 
 #include <com/sun/star/embed/XEmbedPersist.hpp>

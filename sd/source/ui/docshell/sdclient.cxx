@@ -40,9 +40,7 @@
 #include "misc.hxx"
 
 #ifdef STARIMAGE_AVAILABLE
-#ifndef _SIMDLL_HXX
 #include <sim2/simdll.hxx>
-#endif
 #endif
 
 #include "strings.hrc"

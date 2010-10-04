@@ -54,9 +54,7 @@
 #include <sfx2/objface.hxx>
 #include "sdresid.hxx"
 #include "TemplateScanner.hxx"
-#ifndef _SD_DRAWVIEW_HXX
 #include "drawview.hxx"
-#endif
 #include <vcl/image.hxx>
 #include <svl/languageoptions.hxx>
 #include <sfx2/app.hxx>

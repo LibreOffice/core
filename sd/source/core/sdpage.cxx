@@ -54,9 +54,7 @@
 #include <svl/smplhint.hxx>
 #include <editeng/adjitem.hxx>
 #include <editeng/editobj.hxx>
-#ifndef _SVX_SRIPTTYPEITEM_HXX
 #include <editeng/scripttypeitem.hxx>
-#endif
 #include <svx/unopage.hxx>
 #include <editeng/flditem.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>

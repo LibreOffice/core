@@ -34,9 +34,7 @@
 #include <editeng/outliner.hxx>
 #include "OutlineView.hxx"
 #include "OutlineViewShell.hxx"
-#ifndef SD_WINDOW_SHELL_HXX
 #include "Window.hxx"
-#endif
 
 namespace sd {
 

@@ -66,9 +66,7 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustrbuf.hxx>
-#ifndef _RTL_MEMORY_H_
 #include <rtl/memory.hxx>
-#endif
 
 #include <vcl/vclenum.hxx>
 #include <svx/svdotext.hxx>

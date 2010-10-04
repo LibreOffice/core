@@ -35,9 +35,7 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
-#ifndef _COM_SUN_STAR_CONTAINER_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

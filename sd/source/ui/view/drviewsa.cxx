@@ -48,9 +48,7 @@
 #include <svx/zoomslideritem.hxx>
 #include <svl/eitem.hxx>
 
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
 #include <svx/clipfmtitem.hxx>

@@ -30,9 +30,7 @@
 #include <osl/endian.h>
 #include <eppt.hxx>
 #include "epptdef.hxx"
-#ifndef _PptEscherEx_HXX
 #include "escherex.hxx"
-#endif
 #include <tools/poly.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/gradient.hxx>
@@ -51,12 +49,8 @@
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/presentation/XPresentationPage.hpp>
 #include <com/sun/star/awt/XFont.hpp>
-#ifndef _COM_SUN_STAR_AWT_XFONTWEIGHT_HPP_
 #include <com/sun/star/awt/FontWeight.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XFONTUNDERLINE_HPP_
 #include <com/sun/star/awt/FontUnderline.hpp>
-#endif
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
@@ -78,21 +72,11 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <vcl/cvtgrf.hxx>
 #include <tools/urlobj.hxx>
-#ifndef _CPPUHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
-#endif
-#ifndef _CPPUHELPER_PROPTYPEHLP_HXX_
 #include <cppuhelper/proptypehlp.hxx>
-#endif
-#ifndef _UCBHELPER_CONTENT_HXX_
 #include <ucbhelper/content.hxx>
-#endif
-#ifndef _UCBHELPER_CONTENTBROKER_HXX_
 #include <ucbhelper/contentbroker.hxx>
-#endif
-#ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/unohlp.hxx>
-#endif
 #include <rtl/crc.h>
 #include <sot/clsids.hxx>
 #include <unotools/ucbstreamhelper.hxx>

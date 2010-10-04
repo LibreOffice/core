@@ -30,9 +30,7 @@
 
 #include "DrawViewShell.hxx"
 
-#ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <svl/aeitem.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/docfile.hxx>
@@ -52,9 +50,7 @@
 #include "slideshow.hxx"
 #include "pgjump.hxx"
 #include "NavigatorChildWindow.hxx"
-#ifndef SD_NAVIGATION_HXX
 #include "navigatr.hxx"
-#endif
 #include "drawview.hxx"
 #include "slideshow.hxx"
 

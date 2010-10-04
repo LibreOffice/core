@@ -37,20 +37,12 @@
 #include <svx/svdundo.hxx>
 #include <svx/fmglob.hxx>
 #include <editeng/eeitem.hxx>
-#ifndef _FLDITEM_HXX
 #include <editeng/flditem.hxx>
-#endif
-#ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <svx/ruler.hxx>
-#ifndef _GLOBL3D_HXX
 #include <svx/globl3d.hxx>
-#endif
 #include <editeng/outliner.hxx>
-#ifndef _SFX_CLIENTSH_HXX
 #include <sfx2/ipclient.hxx>
-#endif
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svdopath.hxx>

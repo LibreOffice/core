@@ -30,9 +30,7 @@
 
 #include "TemplateScanner.hxx"
 
-#ifndef _COMPHELPER_SERVICEFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 #include <comphelper/documentconstants.hxx>
 
 #include <tools/debug.hxx>

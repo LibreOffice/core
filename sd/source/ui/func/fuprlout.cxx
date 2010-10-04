@@ -45,9 +45,7 @@
 #include "sdpage.hxx"
 #include "pres.hxx"
 #include "DrawViewShell.hxx"
-#ifndef SD_FRAMW_VIEW_HXX
 #include "FrameView.hxx"
-#endif
 #include "stlpool.hxx"
 #include "View.hxx"
 #include "glob.hrc"

@@ -37,17 +37,13 @@
 #include <svx/svditer.hxx>
 #include <editeng/colritem.hxx>
 #include <sfx2/viewfrm.hxx>
-#ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <svx/svdundo.hxx>
 #include <svx/view3d.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/float3d.hxx>
 #include <svx/f3dchild.hxx>
-#ifndef _SVX_DIALOGS_HRC //autogen
 #include <svx/dialogs.hrc>
-#endif
 #include <vcl/msgbox.hxx>
 
 

@@ -29,22 +29,12 @@
 #include "precompiled_sd.hxx"
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include <com/sun/star/animations/Event.hpp>
-#ifndef _COM_SUN_STAR_ANIMATIONS_XAnimateColor_HPP_
 #include <com/sun/star/animations/XAnimateColor.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_XAnimateSet_HPP_
 #include <com/sun/star/animations/XAnimateSet.hpp>
-#endif
 #include <com/sun/star/animations/XCommand.hpp>
-#ifndef _COM_SUN_STAR_ANIMATIONS_XAnimateMotion_HPP_
 #include <com/sun/star/animations/XAnimateMotion.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_XAnimateTransform_HPP_
 #include <com/sun/star/animations/XAnimateTransform.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_XTransitionFilter_HPP_
 #include <com/sun/star/animations/XTransitionFilter.hpp>
-#endif
 #include <com/sun/star/animations/XIterateContainer.hpp>
 #include <com/sun/star/animations/XAudio.hpp>
 #include <com/sun/star/animations/AnimationNodeType.hpp>

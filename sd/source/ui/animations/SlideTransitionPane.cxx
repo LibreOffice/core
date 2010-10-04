@@ -44,9 +44,7 @@
 #include "DrawController.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#ifndef _SVT_CONTROLDIMS_HRC_
 #include <svtools/controldims.hrc>
-#endif
 #include <svx/gallery.hxx>
 #include <unotools/pathoptions.hxx>
 #include <vcl/msgbox.hxx>

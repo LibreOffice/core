@@ -35,18 +35,14 @@
 #include <sfx2/docfac.hxx>
 #include <sfx2/objface.hxx>
 
-#ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <svl/srchitem.hxx>
 #include <svx/srchdlg.hxx>
 #include <editeng/flstitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/printer.hxx>
-#ifndef _SFX_DOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
-#endif
 #include <svx/drawitem.hxx>
 #include <editeng/flstitem.hxx>
 #include <svx/drawitem.hxx>
@@ -56,9 +52,7 @@
 #include <svl/itempool.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/filter.hxx>
-#ifndef _SO_CLSIDS_HXX
 #include <sot/clsids.hxx>
-#endif
 #include <svl/cjkoptions.hxx>
 #include <svl/visitem.hxx>
 
@@ -80,13 +74,9 @@
 #include "fusearch.hxx"
 #include "ViewShell.hxx"
 #include "sdresid.hxx"
-#ifndef SD_FU_SLIDE_SHOW_DLG_HXX
 #include "slideshow.hxx"
-#endif
 #include "drawview.hxx"
-#ifndef SD_FRAMW_VIEW_HXX
 #include "FrameView.hxx"
-#endif
 #include "unomodel.hxx"
 #include "undo/undomanager.hxx"
 #include "undo/undofactory.hxx"

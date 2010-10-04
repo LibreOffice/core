@@ -67,13 +67,9 @@
 #include "fudraw.hxx"
 #include "ViewShell.hxx"
 #include "ViewShellBase.hxx"
-#ifndef SD_FRAMW_VIEW_HXX
 #include "FrameView.hxx"
-#endif
 #include "View.hxx"
-#ifndef SD_WINDOW_SHELL_HXX
 #include "Window.hxx"
-#endif
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
 #include "DrawViewShell.hxx"

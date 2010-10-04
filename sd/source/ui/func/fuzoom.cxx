@@ -37,14 +37,10 @@
 #include "app.hrc"
 #include <svx/svdpagv.hxx>
 
-#ifndef SD_FRAMW_VIEW_HXX
 #include "FrameView.hxx"
-#endif
 #include "ViewShell.hxx"
 #include "View.hxx"
-#ifndef SD_WINDOW_SHELL_HXX
 #include "Window.hxx"
-#endif
 #include "drawdoc.hxx"
 #include "zoomlist.hxx"
 

@@ -49,9 +49,7 @@
 #include <svl/smplhint.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/charreliefitem.hxx>
-#ifndef _SVX_EMPHITEM_HXX
 #include <editeng/emphitem.hxx>
-#endif
 #include <svx/sdr/table/tabledesign.hxx>
 #include <editeng/akrnitem.hxx>
 

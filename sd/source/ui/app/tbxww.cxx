@@ -34,9 +34,7 @@
 #include <svx/grafctrl.hxx>
 #include <svl/cjkoptions.hxx>
 #include <sfx2/viewsh.hxx>
-#ifndef _SFX_IMAGEMGR_HXX
 #include <sfx2/imagemgr.hxx>
-#endif
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 

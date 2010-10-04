@@ -55,9 +55,7 @@
 #include "res_bmp.hrc"
 #include "ViewShell.hxx"
 
-#ifndef _SV_SVAPP_HXX_
 #include <vcl/svapp.hxx>
-#endif
 
 #include <string>
 #include <algorithm>

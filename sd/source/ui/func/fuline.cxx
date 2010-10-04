@@ -43,9 +43,7 @@
 #include <sfx2/viewfrm.hxx>
 #include "ViewShell.hxx"
 #include "View.hxx"
-#ifndef SD_WINDOW_SHELL_HXX
 #include "Window.hxx"
-#endif
 #include "drawdoc.hxx"
 #include "app.hrc"
 #include <svx/svxdlg.hxx>

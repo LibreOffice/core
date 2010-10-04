@@ -28,20 +28,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
-#ifndef _COM_SUN_STAR_UTIL_XCOLLATOR_HPP_
 #include <com/sun/star/i18n/XCollator.hpp>
-#endif
 
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 #include <vcl/svapp.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
 
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
@@ -53,12 +47,8 @@
 #include <unotools/viewoptions.hxx>
 #include <com/sun/star/presentation/EffectNodeType.hpp>
 #include "CustomAnimationCreateDialog.hxx"
-#ifndef _SD_CUSTOMANIMATIONCREATEDIALOG_HRC
 #include "CustomAnimationCreateDialog.hrc"
-#endif
-#ifndef _SD_CUSTOMANIMATION_HRC
 #include "CustomAnimation.hrc"
-#endif
 #include "CustomAnimationPane.hxx"
 #include "optsitem.hxx"
 #include "sddll.hxx"

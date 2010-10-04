@@ -30,15 +30,9 @@
 #include <pptexsoundcollection.hxx>
 #include "epptdef.hxx"
 #include <tools/urlobj.hxx>
-#ifndef _UCBHELPER_CONTENT_HXX_
 #include <ucbhelper/content.hxx>
-#endif
-#ifndef _UCBHELPER_CONTENTBROKER_HXX_
 #include <ucbhelper/contentbroker.hxx>
-#endif
-#ifndef _CPPUHELPER_PROPTYPEHLP_HXX_
 #include <cppuhelper/proptypehlp.hxx>
-#endif
 #include <unotools/ucbstreamhelper.hxx>
 
 namespace ppt

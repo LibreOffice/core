@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
-#ifndef _SALHELPER_SIMPLEREFERENCECOMPONENT_HXX_
 #include "helper/simplereferencecomponent.hxx"
-#endif
 
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "osl/diagnose.h"

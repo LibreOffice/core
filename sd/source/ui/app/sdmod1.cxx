@@ -68,9 +68,7 @@
 #include "sdresid.hxx"
 #include "OutlineViewShell.hxx"
 #include "ViewShellBase.hxx"
-#ifndef SD_FRAMW_VIEW_HXX
 #include "FrameView.hxx"
-#endif
 #include "FactoryIds.hxx"
 #include "sdabstdlg.hxx"
 #include <memory>

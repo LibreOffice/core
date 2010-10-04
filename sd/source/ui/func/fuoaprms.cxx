@@ -40,9 +40,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <svl/aeitem.hxx>
 #include "svx/xtable.hxx"
 

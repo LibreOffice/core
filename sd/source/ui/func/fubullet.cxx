@@ -31,9 +31,7 @@
 
 #include "fubullet.hxx"
 
-#ifndef _BINDING_HXX //autogen
 #include <sfx2/bindings.hxx>
-#endif
 #include <editeng/eeitem.hxx>
 #include <svl/poolitem.hxx>
 #include <editeng/fontitem.hxx>

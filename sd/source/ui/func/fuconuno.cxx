@@ -47,9 +47,7 @@ class SbModule;
 #include "glob.hrc"
 #include "ViewShell.hxx"
 #include "View.hxx"
-#ifndef SD_WINDOW_SHELL_HXX
 #include "Window.hxx"
-#endif
 #include "ViewShellBase.hxx"
 #include "ToolBarManager.hxx"
 #include "drawdoc.hxx"

@@ -39,12 +39,8 @@
 #include "ViewShellImplementation.hxx"
 #include "FactoryIds.hxx"
 
-#ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
-#ifndef _SCRBAR_HXX //autogen
 #include <vcl/scrbar.hxx>
-#endif
 #include <svx/svdpagv.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/app.hxx>
@@ -57,9 +53,7 @@
 #include <sfx2/dispatch.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <unotools/moduleoptions.hxx>
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
 #include <sot/clsids.hxx>
 
 #include "misc.hxx"

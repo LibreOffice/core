@@ -37,13 +37,9 @@
 #include <editeng/protitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <svx/ruler.hxx>
-#ifndef _SVX_RULERITEM_HXX
 #include <svx/rulritem.hxx>
-#endif
 #include <svx/zoomitem.hxx>
-#ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <svx/svdpagv.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>

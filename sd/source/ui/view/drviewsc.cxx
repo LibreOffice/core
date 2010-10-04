@@ -32,22 +32,16 @@
 #include "ViewShellImplementation.hxx"
 #include <vcl/waitobj.hxx>
 
-#ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <svx/dialogs.hrc>
-#ifndef _IMAPDLG_HXX
 #include <svx/imapdlg.hxx>
-#endif
 #include <vcl/msgbox.hxx>
 #include <sfx2/request.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svxdlg.hxx>
-#ifndef _BINDING_HXX //autogen
 #include <sfx2/bindings.hxx>
-#endif
 #include <sfx2/dispatch.hxx>
 #include <svx/svdoole2.hxx>
 #include <svl/style.hxx>

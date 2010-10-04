@@ -30,9 +30,7 @@
 #include <svx/svdmodel.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/sfx.hrc>
-#ifndef _SV_SALBTYPE_HRC //autogen
 #include <vcl/salbtype.hxx>
-#endif
 #include <unotools/syslocale.hxx>
 
 #include "app.hxx"

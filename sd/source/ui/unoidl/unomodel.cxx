@@ -650,9 +650,7 @@ sal_Bool SAL_CALL SdXImpressDocument::hasControllersLocked(  )
     return mpDoc && mpDoc->isLocked();
 }
 
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 
 uno::Reference < container::XIndexAccess > SAL_CALL SdXImpressDocument::getViewData() throw( uno::RuntimeException )
 {

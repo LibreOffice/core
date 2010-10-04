@@ -72,9 +72,7 @@
 #include "unokywds.hxx"
 #include "unopage.hxx"
 #ifndef SVX_LIGHT
-#ifndef SD_DRAW_DOC_SHELL_HXX
 #include "DrawDocShell.hxx"
-#endif
 #endif
 #include "helpids.h"
 #include "glob.hxx"

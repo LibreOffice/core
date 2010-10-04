@@ -50,9 +50,7 @@
 #include <svx/dialogs.hrc>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 #include <tools/link.hxx>
 
 #include <map>

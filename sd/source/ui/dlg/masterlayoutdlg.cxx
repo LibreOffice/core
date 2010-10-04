@@ -32,13 +32,9 @@
 #undef SD_DLLIMPLEMENTATION
 #endif
 
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
 
-#ifndef _SD_SDRESID_HXX
 #include "sdresid.hxx"
-#endif
 
 #include "strings.hrc"
 #include "dialogs.hrc"

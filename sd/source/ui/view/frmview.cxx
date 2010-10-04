@@ -30,9 +30,7 @@
 
 #include "FrameView.hxx"
 
-#ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/drawing/framework/ResourceId.hpp>
 #include <rtl/ustrbuf.hxx>

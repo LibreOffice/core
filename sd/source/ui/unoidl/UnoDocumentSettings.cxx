@@ -45,25 +45,19 @@
 
 #include "drawdoc.hxx"
 #ifndef SVX_LIGHT
-#ifndef SD_DRAW_DOC_SHELL_HXX
 #include "DrawDocShell.hxx"
-#endif
 #endif
 #include "unomodel.hxx"
 
 #ifndef SVX_LIGHT
-#ifndef _SD_OPTSITEM_HXX
 #include "optsitem.hxx"
-#endif
 #include <sfx2/printer.hxx>
 #include "sdattr.hxx"
 #endif
 #include "../inc/ViewShell.hxx"
 #include "../inc/FrameView.hxx"
 #ifndef SVX_LIGHT
-#ifndef SD_OUTLINER_HXX
 #include "Outliner.hxx"
-#endif
 #else
 #include <svx/svdoutl.hxx>
 #endif

@@ -31,9 +31,7 @@
 #include "ViewShell.hxx"
 #include "ViewShellImplementation.hxx"
 
-#ifndef _COM_SUN_STAR_EMBED_EMBEDSTATE_HPP_
 #include <com/sun/star/embed/EmbedStates.hpp>
-#endif
 #include "ViewShellBase.hxx"
 #include "ShellFactory.hxx"
 #include "DrawController.hxx"
@@ -42,18 +40,12 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
-#ifndef _SCRBAR_HXX //autogen
 #include <vcl/scrbar.hxx>
-#endif
 #include <svl/eitem.hxx>
 #include <svx/ruler.hxx>
-#ifndef _SVXIDS_HXX
 #include <svx/svxids.hrc>
-#endif
 #include <svx/fmshell.hxx>
-#ifndef SD_WINDOW_UPDATER_HXX
 #include "WindowUpdater.hxx"
-#endif
 #include "GraphicViewShell.hxx"
 #include <sfx2/childwin.hxx>
 #include <sdxfer.hxx>

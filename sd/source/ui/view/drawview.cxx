@@ -28,19 +28,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 #include <sfx2/dispatch.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <svx/svdpagv.hxx>
 #include <sfx2/request.hxx>
 #include <svl/style.hxx>
 #include <editeng/outliner.hxx>
-#ifndef _VIEW3D_HXX //autogen
 #include <svx/view3d.hxx>
-#endif
-#ifndef _SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
-#endif
 #include <svx/svdotext.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdogrp.hxx>

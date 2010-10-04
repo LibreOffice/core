@@ -34,9 +34,7 @@
 
 #include "OutlineBulletDlg.hxx"
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <sfx2/objsh.hxx>
 #include <svx/drawitem.hxx>
 #include <editeng/bulitem.hxx>
@@ -52,9 +50,7 @@
 #include <svl/style.hxx>
 #include <drawdoc.hxx>
 
-#ifndef _SD_SDRESID_HXX
 #include "sdresid.hxx"
-#endif
 
 #include "glob.hrc"
 #include "dlgolbul.hrc"

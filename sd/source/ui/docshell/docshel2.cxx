@@ -37,16 +37,12 @@
 #include "helpids.h"
 #include "ViewShell.hxx"
 #include "drawview.hxx"
-#ifndef SD_FRAMW_VIEW_HXX
 #include "FrameView.hxx"
-#endif
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
 #include "View.hxx"
 #include "ClientView.hxx"
-#ifndef SD_WINDOW_SHELL_HXX
 #include "Window.hxx"
-#endif
 #include "strings.hrc"
 #include "res_bmp.hrc"
 #include "sdresid.hxx"

@@ -35,9 +35,7 @@
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <tools/ref.hxx>
 #include <tools/urlobj.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <svx/svdetc.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdograf.hxx>

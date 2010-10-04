@@ -60,9 +60,7 @@
 #include "stlpool.hxx"
 #include "app.hxx"
 #include "View.hxx"
-#ifndef SD_WINDOW_SHELL_HXX
 #include "Window.hxx"
-#endif
 #include "drawview.hxx"
 #include "drawdoc.hxx"
 #include "DrawDocShell.hxx"

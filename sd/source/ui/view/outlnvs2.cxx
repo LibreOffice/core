@@ -38,9 +38,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <svl/eitem.hxx>
-#ifndef _ZOOMITEM_HXX //autogen
 #include <svx/zoomitem.hxx>
-#endif
 #include <vcl/msgbox.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>

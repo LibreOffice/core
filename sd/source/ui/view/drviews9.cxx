@@ -41,16 +41,12 @@
 #include <svx/xlnwtit.hxx>
 #include <sfx2/bindings.hxx>
 
-#ifndef _SFX_DISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
-#endif
 #include <svl/intitem.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/request.hxx>
 #include <svl/stritem.hxx>
-#ifndef _SVXIDS_HXX
 #include <svx/svxids.hrc>
-#endif
 #include <svx/xtable.hxx>
 #include <svx/gallery.hxx>
 #include <vcl/graph.hxx>
