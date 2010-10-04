@@ -47,6 +47,7 @@
 #include <svl/zforlist.hxx>
 
 #include <sfx2/objsh.hxx>
+#include "tools/urlobj.hxx"
 #include "docuno.hxx"
 
 #include "cell.hxx"
@@ -1157,6 +1158,14 @@ void ImportExcel::NeueTabelle( void )
     SCTAB nTab = GetCurrScTab();
     if( nTab > 0 && !pD->HasTable( nTab ) )
         pD->MakeTable( nTab );
+
+    if (nTab == 0 && GetBiff() == EXC_BIFF2)
+    {
+        // For Excel 2.1 Worksheet file, we need to set the file name as the
+        // sheet name.
+        INetURLObject aURL(GetDocUrl());
+        pD->RenameTab(0, aURL.getBase(), false);
+    }
 
     pExcRoot->pShrfmlaBuff->Clear();
 
