@@ -801,7 +801,7 @@ protected:
     /// Find the nearest bookmark from the current position.
     ///
     /// Returns false when there is no bookmark.
-    bool NearestBookmark( xub_StrLen& rNearest );
+    bool NearestBookmark( xub_StrLen& rNearest, const xub_StrLen nAktPos, bool bNextPositionOnly );
 
     void GetSortedBookmarks( const SwTxtNode& rNd, xub_StrLen nAktPos,
                 xub_StrLen nLen );

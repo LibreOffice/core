@@ -1654,7 +1654,7 @@ xub_StrLen MSWordExportBase::GetNextPos( SwAttrIter* aAttrIter, const SwTxtNode&
     GetSortedBookmarks( rNode, nAktPos, nNextPos - nAktPos );
 
     xub_StrLen nNextBookmark = nNextPos;
-    NearestBookmark( nNextPos );
+    NearestBookmark( nNextPos, nAktPos, false );
 
     return std::min( nNextPos, nNextBookmark );
 }
@@ -1663,8 +1663,9 @@ void MSWordExportBase::UpdatePosition( SwAttrIter* aAttrIter, xub_StrLen nAktPos
 {
     xub_StrLen nNextPos;
 
-    // either no bookmark, or it is not at the current position
-    if ( !NearestBookmark( nNextPos ) || nNextPos > nAktPos )
+    // go to next attribute if no bookmark is found of if the bookmark is behind the next attribute position
+    bool bNextBookmark = NearestBookmark( nNextPos, nAktPos, true );
+    if( !bNextBookmark || nNextPos < aAttrIter->WhereNext() )
         aAttrIter->NextPos();
 }
 
@@ -1709,25 +1710,33 @@ public:
     }
 };
 
-bool MSWordExportBase::NearestBookmark( xub_StrLen& rNearest )
+bool MSWordExportBase::NearestBookmark( xub_StrLen& rNearest, const xub_StrLen nAktPos, bool bNextPositionOnly )
 {
     bool bHasBookmark = false;
 
     if ( m_rSortedMarksStart.size( ) > 0 )
     {
         IMark* pMarkStart = m_rSortedMarksStart.front();
-        rNearest = pMarkStart->GetMarkStart().nContent.GetIndex();
-        bHasBookmark = true;
+        xub_StrLen nNext = pMarkStart->GetMarkStart().nContent.GetIndex();
+        if( !bNextPositionOnly || (nNext > nAktPos ))
+        {
+            rNearest = nNext;
+            bHasBookmark = true;
+        }
     }
 
     if ( m_rSortedMarksEnd.size( ) > 0 )
     {
         IMark* pMarkEnd = m_rSortedMarksEnd[0];
-        if ( !bHasBookmark )
-            rNearest = pMarkEnd->GetMarkEnd().nContent.GetIndex();
-        else
-            rNearest = std::min( rNearest, pMarkEnd->GetMarkEnd().nContent.GetIndex() );
-        bHasBookmark = true;
+        xub_StrLen nNext = pMarkEnd->GetMarkEnd().nContent.GetIndex();
+        if( !bNextPositionOnly || nNext > nAktPos )
+        {
+            if ( !bHasBookmark )
+                rNearest = nNext;
+            else
+                rNearest = std::min( rNearest, nNext );
+            bHasBookmark = true;
+        }
     }
 
     return bHasBookmark;
@@ -1752,7 +1761,7 @@ void MSWordExportBase::GetSortedBookmarks( const SwTxtNode& rNode, xub_StrLen nA
             if ( nStart > nAktPos )
                 aSortedStart.push_back( pMark );
 
-            if ( nEnd > nAktPos )
+            if ( nEnd > nAktPos && nEnd <= ( nAktPos + nLen ) )
                 aSortedEnd.push_back( pMark );
         }
 
