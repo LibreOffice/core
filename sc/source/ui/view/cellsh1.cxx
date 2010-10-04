@@ -1526,6 +1526,14 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case SID_DETECTIVE_MARK_SUCC:
             pTabViewShell->DetectiveMarkSucc();
             break;
+        case SID_INSERT_CURRENT_DATE:
+            pTabViewShell->InsertCurrentTime(
+                NUMBERFORMAT_DATE, ScGlobal::GetRscString(STR_UNDO_INSERT_CURRENT_DATE));
+            break;
+        case SID_INSERT_CURRENT_TIME:
+            pTabViewShell->InsertCurrentTime(
+                NUMBERFORMAT_TIME, ScGlobal::GetRscString(STR_UNDO_INSERT_CURRENT_TIME));
+            break;
 
         case SID_SPELL_DIALOG:
 //           pTabViewShell->DoSpellingChecker();

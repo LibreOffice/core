@@ -1669,6 +1669,10 @@
 #define RID_SCPAGE_FORMULA          (SC_OOO_BUILD_START + 2)
 #define HID_SCPAGE_FORMULA          (SC_OOO_BUILD_START + 3)
 
+// Insert current date and time to cell via command
+#define SID_INSERT_CURRENT_DATE     (SC_OOO_BUILD_START + 4)
+#define SID_INSERT_CURRENT_TIME     (SC_OOO_BUILD_START + 5)
+
 #endif
 
 

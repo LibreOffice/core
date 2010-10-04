@@ -1738,5 +1738,13 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "DataPilot table needs at least two rows of data to create or refresh." ;
     };
+    String STR_UNDO_INSERT_CURRENT_DATE
+    {
+        Text [ en-US ] = "Insert Current Date";
+    };
+    String STR_UNDO_INSERT_CURRENT_TIME
+    {
+        Text [ en-US ] = "Insert Current Time";
+    };
 };
 

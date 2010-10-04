@@ -328,6 +328,8 @@ public:
     void            DetectiveMarkPred();
     void            DetectiveMarkSucc();
 
+    void            InsertCurrentTime(short nCellFmt, const ::rtl::OUString& rUndoStr);
+
     void            ShowNote( bool bShow = true );
     inline void     HideNote() { ShowNote( false ); }
     void            EditNote();

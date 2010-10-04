@@ -34,6 +34,7 @@
 #include <sfx2/dispatch.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/sound.hxx>
+#include "svl/zforlist.hxx"
 
 #include "viewfunc.hxx"
 #include "detfunc.hxx"
@@ -49,11 +50,15 @@
 #include "fusel.hxx"
 #include "reftokenhelper.hxx"
 #include "externalrefmgr.hxx"
+#include "cell.hxx"
 
 #include <vector>
 
+using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::std::vector;
+
+#define D_TIMEFACTOR              86400.0
 
 //==================================================================
 
@@ -272,6 +277,27 @@ void ScViewFunc::DetectiveMarkSucc()
     ScRangeList aDestRanges;
     ScRefTokenHelper::getRangeListFromTokens(aDestRanges, aRefTokens);
     MarkAndJumpToRanges(aDestRanges);
+}
+
+void ScViewFunc::InsertCurrentTime(short nCellFmt, const OUString& rUndoStr)
+{
+    ScViewData* pViewData = GetViewData();
+    ScAddress aCurPos = pViewData->GetCurPos();
+    ScDocShell* pDocSh = pViewData->GetDocShell();
+    ScDocument* pDoc = pDocSh->GetDocument();
+    SfxUndoManager* pUndoMgr = pDocSh->GetUndoManager();
+    SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+    Date aActDate;
+    double fDate = aActDate - *pFormatter->GetNullDate();
+    Time aActTime;
+    double fTime =
+        aActTime.Get100Sec() / 100.0 + aActTime.GetSec() +
+        (aActTime.GetMin() * 60.0) + (aActTime.GetHour() * 3600.0);
+    fTime /= D_TIMEFACTOR;
+    pUndoMgr->EnterListAction(rUndoStr, rUndoStr);
+    pDocSh->GetDocFunc().PutCell(aCurPos, new ScValueCell(fDate+fTime), false);
+    SetNumberFormat(nCellFmt);
+    pUndoMgr->LeaveListAction();
 }
 
 //---------------------------------------------------------------------------
