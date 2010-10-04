@@ -217,7 +217,7 @@ void MsgEdit::AddAnyMsg( TTLogMsg *LogMsg )
                 // restore Original Msg
                 LogMsg->aDebugData.aMsg = aOriginalMsg;
 
-                printf( ByteString( aPrintMsg, RTL_TEXTENCODING_UTF8 ).GetBuffer() );
+                printf( "%s", ByteString( aPrintMsg, RTL_TEXTENCODING_UTF8 ).GetBuffer() );
             }
         }
     }
