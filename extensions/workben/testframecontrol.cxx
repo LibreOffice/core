@@ -28,7 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 
-//#include <vos/mutex.hxx>
 #include <vos/dynload.hxx>
 
 #include <vcl/wrkwin.hxx>

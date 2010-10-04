@@ -65,10 +65,6 @@
 
 #include <vcl/sound.hxx>
 
-//#ifndef _TXTCMP_HXX //autogen
-//#include <svtools/txtcmp.hxx>
-//#endif
-
 #include <unotools/textsearch.hxx>
 #include <tools/diagnose_ex.h>
 

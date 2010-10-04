@@ -35,8 +35,6 @@
 #include <cppuhelper/implbase4.hxx>
 
 #include "saxhelper.hxx"
-//#include "libxml/parserInternals.h"
-//#include "libxslt/xslt.h"
 
 #define NODEPOSITION_NORMAL        1
 #define NODEPOSITION_STARTELEMENT  2

@@ -79,21 +79,13 @@
 
 #include <xmloff/attrlist.hxx>
 
-//#include <malloc.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-/*
- * Can not build under solaris.
- * Delete the memory.h including by AF
-#include <memory.h>
-*/
-
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <osl/time.h>
-
 
 
 #ifndef INCLUDED_VECTOR

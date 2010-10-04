@@ -28,7 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cui.hxx"
 
-// include ---------------------------------------------------------------
 #include <tools/shl.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
@@ -42,7 +41,6 @@
 
 #include <cuires.hrc>
 #include "tabline.hrc"
-//#include "dlgname.hrc"
 #include "helpid.hrc"
 
 #include "svx/xattr.hxx"
@@ -51,8 +49,8 @@
 
 #include "svx/drawitem.hxx"
 #include "cuitabline.hxx"
-#include "defdlgname.hxx" //CHINA001 #include "dlgname.hxx"
-#include <svx/svxdlg.hxx> //CHINA001
+#include "defdlgname.hxx"
+#include <svx/svxdlg.hxx>
 #include <dialmgr.hxx>
 #include "svx/dlgutil.hxx"
 #include <svx/dialmgr.hxx>

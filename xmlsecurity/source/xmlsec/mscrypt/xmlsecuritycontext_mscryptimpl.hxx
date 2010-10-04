@@ -47,7 +47,6 @@
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 #include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
 
-//#include "xmlsec/xmlsec.h"
 
 class XMLSecurityContext_MSCryptImpl : public ::cppu::WeakImplHelper3<
     ::com::sun::star::xml::crypto::XXMLSecurityContext ,

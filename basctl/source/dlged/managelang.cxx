@@ -47,9 +47,6 @@
 #include <com/sun/star/resource/XStringResourceManager.hpp>
 #include <comphelper/processfactory.hxx>
 #include <vcl/unohelp.hxx>
-#ifndef _VCL_I18NHELP_HXX
-//#include <vcl/i18nhelp.hxx>
-#endif
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 #include <unotools/localedatawrapper.hxx>

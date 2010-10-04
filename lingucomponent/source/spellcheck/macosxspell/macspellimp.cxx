@@ -37,11 +37,9 @@
 #include <unotools/processfactory.hxx>
 #include <osl/mutex.hxx>
 
-//#include <hunspell.hxx>
 #include <dictmgr.hxx>
 #include <macspellimp.hxx>
 
-//#include <linguistic/lngprops.hxx>
 #include <linguistic/spelldta.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/useroptions.hxx>

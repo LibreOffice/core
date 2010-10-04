@@ -30,7 +30,6 @@
 
 #include <atlbase.h>
 extern CComModule _Module;
-//#include <atlwin.h>
 #include <atlcom.h>
 #include <atlhost.h>
 

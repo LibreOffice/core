@@ -28,8 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cui.hxx"
 
-// include ---------------------------------------------------------------
-
 #include <tools/ref.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>

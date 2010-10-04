@@ -28,7 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmlsecurity.hxx"
 
-// include ---------------------------------------------------------------
 #include <tools/shl.hxx>
 #ifndef _STATUS_HXX //autogen
 #include <vcl/status.hxx>
@@ -37,9 +36,6 @@
 #include <vcl/menu.hxx>
 #endif
 #include <vcl/image.hxx>
-//#ifndef _SFXITEMPOOL_HXX
-//#include <svl/itempool.hxx>
-//#endif
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/dispatch.hxx>
@@ -51,21 +47,6 @@
 #include <xmlsecurity/stbcontrl.hxx>
 
 #define PAINT_OFFSET    5
-
-//#include "sizeitem.hxx"
-//#include "dialmgr.hxx"
-//#include "dlgutil.hxx"
-//#include "stbctrls.h"
-
-//#include "dialogs.hrc"
-
-/*#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
-#include <unotools/localedatawrapper.hxx>
-#endif
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
-#include <comphelper/processfactory.hxx>
-#endif*/
-
 
 
 SFX_IMPL_STATUSBAR_CONTROL( XmlSecStatusBarControl, SfxBoolItem );

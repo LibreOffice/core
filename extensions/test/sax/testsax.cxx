@@ -34,8 +34,6 @@
 
 #include <rtl/wstring.hxx>
 #include <osl/time.h>
-//#include <vos/dynload.hxx>
-//#include <vos/diagnose.hxx>
 #include <usr/weak.hxx>
 #include <tools/string.hxx>
 #include <vos/conditn.hxx>

@@ -41,12 +41,6 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/scrbar.hxx>
 
-//added for issue73355
-//#ifndef _SV_SVDATA_HXX
-//#include <vcl/svdata.hxx>
-//#endif
-//issue73355 ends
-
 #include <sfx2/app.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include <sfx2/viewfrm.hxx>

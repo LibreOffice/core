@@ -28,13 +28,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_automation.hxx"
 
-/*#include <com/sun/star/devtools/XIServerProxy.hpp>
-#include <com/sun/star/devtools/XInformationClient.hpp>
-using namespace com::sun::star::devtools;
-*/
 #ifdef OS2
 #define INCL_DOS
-//#include <vcl/sysdep.hxx>
 #ifndef _SVPM_H
 #include <svpm.h>
 #endif
@@ -90,7 +85,6 @@ using namespace rtl;
 
 #include <basic/sbuno.hxx>
 
-//#include <basic/basrid.hxx>
 #include <basic/basicrt.hxx>
 #ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>

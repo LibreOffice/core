@@ -43,7 +43,6 @@
 //    #undef IS_ERROR
 #endif
 
-//#include <tchar.h>
 #include "registry_win.hxx"
 #include <osl/thread.h>
 

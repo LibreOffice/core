@@ -28,10 +28,6 @@
 #ifndef _BASIDE3_HXX
 #define _BASIDE3_HXX
 
-#ifndef _SVHEADER_HXX
-//#include <svheader.hxx>
-#endif
-
 #include <bastypes.hxx>
 #include <svl/undo.hxx>
 #include <vcl/dialog.hxx>

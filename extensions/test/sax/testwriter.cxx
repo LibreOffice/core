@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 
-//#include <tools/presys.h>
 #include <vector>
-//#include <tools/postsys.h>
 #include <smart/com/sun/star/test/XSimpleTest.hxx>
 #include <smart/com/sun/star/lang/XMultiServiceFactory.hxx>  // for the multiservice-factories
 

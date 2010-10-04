@@ -34,24 +34,10 @@
 #endif
 #include <basic/testtool.hxx>
 #include "testbasi.hxx"
-//#include "app.hxx"
-//#include "basic.hrc"
-//#include "appbased.hxx"
 #define P_FEHLERLISTE TestToolObj::pFehlerListe
-
-//#include "status.hxx"
-//#include "basic.hrc"
-
-//#include "object.hxx"
 
 #include <testapp.hxx>
 #include <testtool.hxx>
-#ifndef _SB_INTERN_HXX
-//#include "sbintern.hxx"
-#endif
-
-//#include "comm_bas.hxx"
-//#include "processw.hxx"
 
 TYPEINIT1(TTBasic,MyBasic)
 

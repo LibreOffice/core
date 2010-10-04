@@ -34,9 +34,7 @@
 //#define UINT32 USE_WIN_UINT32
 //#define INT32 USE_WIN_INT32
 
-//#include <tools/presys.h>
 #include "embeddoc.hxx"
-//#include <tools/postsys.h>
 
 //#undef UINT64
 //#undef INT64

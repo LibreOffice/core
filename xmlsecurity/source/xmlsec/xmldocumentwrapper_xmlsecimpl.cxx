@@ -34,15 +34,9 @@
 #include <xmloff/attrlist.hxx>
 #include "xmlelementwrapper_xmlsecimpl.hxx"
 
-//#include <malloc.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-/*
- * Deleted by AF
-#include <memory.h>
- */
 
 #include <sys/types.h>
 #include <sys/stat.h>

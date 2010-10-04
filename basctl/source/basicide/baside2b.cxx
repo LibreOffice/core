@@ -56,9 +56,6 @@
 #include <vcl/taskpanelist.hxx>
 #include <vcl/help.hxx>
 
-//#ifndef _SFX_HELP_HXX //autogen
-//#include <sfx2/sfxhelp.hxx>
-//#endif
 #include <unotools/sourceviewconfig.hxx>
 
 #ifndef _COM_SUN_STAR_SCRIPT_XLIBRYARYCONTAINER2_HPP_

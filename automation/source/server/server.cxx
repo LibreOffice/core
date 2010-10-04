@@ -59,9 +59,6 @@
 #include <vcl/bitmap.hxx>
 // Hat keinen Includeschutz
 #include <svtools/svtdata.hxx>
-//#ifndef _DTRANS_HXX //autogen
-//#include <so2/dtrans.hxx>
-//#endif
 #endif // 1
 #include <rtl/textenc.h>
 #include <rtl/uri.h>

@@ -28,7 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cui.hxx"
 
-// include ---------------------------------------------------------------
 #include <tools/shl.hxx>
 #include <vcl/msgbox.hxx>
 #include <unotools/pathoptions.hxx>
@@ -39,7 +38,6 @@
 #define _SVX_TABLINE_CXX
 #include <cuires.hrc>
 #include "tabline.hrc"
-//#include "dlgname.hrc"
 
 #include "cuitabarea.hxx"
 #include "cuitabline.hxx"

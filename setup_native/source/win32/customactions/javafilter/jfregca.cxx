@@ -24,7 +24,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-//#include <stdio.h>
 
 #ifdef _MSC_VER
 #pragma warning(push, 1) /* disable warnings within system headers */

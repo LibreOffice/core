@@ -28,8 +28,6 @@
 #ifndef _ACCCFG_HXX
 #define _ACCCFG_HXX
 
-// #include *****************************************************************
-
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>

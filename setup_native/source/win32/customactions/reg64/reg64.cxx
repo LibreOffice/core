@@ -25,11 +25,6 @@
  *
 ************************************************************************/
 
-/*
-
-*/
-
-
 #define UNICODE
 
 #ifdef _MSC_VER
@@ -43,8 +38,6 @@
 #endif
 
 #include <malloc.h>
-//#include <string>
-//#include <map>
 #include <strsafe.h>
 
 // 10.11.2009 tkr: MinGW doesn't know anything about RegDeleteKeyExW if WINVER < 0x0502.

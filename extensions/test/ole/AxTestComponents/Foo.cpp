@@ -24,10 +24,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "stdafx.h"
-//#include "AxTestComponents.h"
-#include "Foo.h"
 
+#include "stdafx.h"
+#include "Foo.h"
 
 
 /////////////////////////////////////////////////////////////////////////////

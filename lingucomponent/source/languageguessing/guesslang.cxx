@@ -41,9 +41,6 @@
 #include <simpleguesser.hxx>
 #include <guess.hxx>
 
-//#include <cppuhelper/queryinterface.hxx> // helper for queryInterface() impl
-
-//#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/linguistic2/XLanguageGuessing.hpp>

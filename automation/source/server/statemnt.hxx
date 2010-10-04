@@ -44,9 +44,6 @@
 #include <tools/string.hxx>
 #include <tools/debug.hxx>
 #include <tools/time.hxx>
-#ifndef _SV_DRAG_HXX //autogen
-//#include <vcl/drag.hxx>
-#endif
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/fsys.hxx>

@@ -56,7 +56,6 @@
 #include <oletest/XSimple2.hpp>
 #include <oletest/XSimple3.hpp>
 #include <oletest/XTestInParameters.hpp>
-//#include <oletest/XTestOutParameters.hpp>
 #include <oletest/XIdentity.hpp>
 #include <com/sun/star/beans/Property.hpp>
 using namespace cppu;

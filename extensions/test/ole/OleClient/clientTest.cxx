@@ -46,7 +46,6 @@ CComModule _Module;
 #include <com/sun/star/bridge/oleautomation/PropertyPutArgument.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
-//#include <oletest/XCallback.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <cppuhelper/servicefactory.hxx>
 #include <rtl/string.h>

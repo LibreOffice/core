@@ -49,10 +49,6 @@
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 
-//MM : search for the default profile
-//#include <unotools/streamhelper.hxx>
-//MM : end
-
 /* SEInitializer component */
 #define SEINITIALIZER_COMPONENT "com.sun.star.xml.crypto.SEInitializer"
 

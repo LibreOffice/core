@@ -28,8 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cui.hxx"
 
-// include ---------------------------------------------------------------
-
 //svdraw.hxx
 #define _SVDRAW_HXX
 #define _SDR_NOITEMS
@@ -66,9 +64,8 @@
 #include "svx/drawitem.hxx"
 #include "cuitabarea.hxx"
 #include "tabarea.hrc"
-#include "defdlgname.hxx" //CHINA001 #include "dlgname.hxx"
-//#include "dlgname.hrc"
-#include <svx/svxdlg.hxx> //CHINA001
+#include "defdlgname.hxx"
+#include <svx/svxdlg.hxx>
 #include <dialmgr.hxx>
 #include "sfx2/opengrf.hxx"
 

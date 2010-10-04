@@ -39,7 +39,6 @@
 #include <stdio.h>
 #include <smart/com/sun/star/registry/XImplementationRegistration.hxx>
 #include <smart/com/sun/star/lang/XComponent.hxx>
-//#include <com/sun/star/registry/ stardiv/uno/repos/simplreg.hxx>
 
 #include <vos/dynload.hxx>
 #include <vos/diagnose.hxx>

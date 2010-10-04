@@ -42,8 +42,6 @@
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
 
-// #include <comphelper/processfactory.hxx>
-
 #include <rtl/ustrbuf.hxx>
 
 #include <rtl/bootstrap.hxx>

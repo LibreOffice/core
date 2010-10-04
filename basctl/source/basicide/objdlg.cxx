@@ -46,10 +46,6 @@
 #include <iderdll2.hxx>
 #include <sbxitem.hxx>
 
-//#ifndef _SFX_HELP_HXX //autogen
-//#include <sfx2/sfxhelp.hxx>
-//#endif
-
 
 ObjectTreeListBox::ObjectTreeListBox( Window* pParent, const ResId& rRes )
     : BasicTreeListBox( pParent, rRes )

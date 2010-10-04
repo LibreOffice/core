@@ -35,9 +35,6 @@
 #include "nthesdta.hxx"
 #include <linguistic/misc.hxx>
 
-// #include "lngsvcmgr.hxx"
-
-
 using namespace utl;
 using namespace osl;
 using namespace rtl;
