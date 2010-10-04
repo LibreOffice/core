@@ -538,6 +538,8 @@ public:
 
     /** Determines whether or not the result string contains more than one paragraph */
     bool            IsMultilineResult();
+
+    void            MaybeInterpret();
 };
 
 //          Iterator fuer Referenzen in einer Formelzelle

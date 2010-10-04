@@ -489,29 +489,25 @@ bool lcl_isReference(const FormulaToken& rToken)
 
 BOOL ScFormulaCell::IsEmpty()
 {
-    if (IsDirtyOrInTableOpDirty() && pDocument->GetAutoCalc())
-        Interpret();
+    MaybeInterpret();
     return aResult.GetCellResultType() == formula::svEmptyCell;
 }
 
 BOOL ScFormulaCell::IsEmptyDisplayedAsString()
 {
-    if (IsDirtyOrInTableOpDirty() && pDocument->GetAutoCalc())
-        Interpret();
+    MaybeInterpret();
     return aResult.IsEmptyDisplayedAsString();
 }
 
 BOOL ScFormulaCell::IsValue()
 {
-    if (IsDirtyOrInTableOpDirty() && pDocument->GetAutoCalc())
-        Interpret();
+    MaybeInterpret();
     return aResult.IsValue();
 }
 
 double ScFormulaCell::GetValue()
 {
-    if (IsDirtyOrInTableOpDirty() && pDocument->GetAutoCalc())
-        Interpret();
+    MaybeInterpret();
     if ((!pCode->GetCodeError() || pCode->GetCodeError() == errDoubleRef) &&
             !aResult.GetResultError())
         return aResult.GetDouble();
@@ -521,16 +517,13 @@ double ScFormulaCell::GetValue()
 double ScFormulaCell::GetValueAlways()
 {
     // for goal seek: return result value even if error code is set
-
-    if (IsDirtyOrInTableOpDirty() && pDocument->GetAutoCalc())
-        Interpret();
+    MaybeInterpret();
     return aResult.GetDouble();
 }
 
 void ScFormulaCell::GetString( String& rString )
 {
-    if (IsDirtyOrInTableOpDirty() && pDocument->GetAutoCalc())
-        Interpret();
+    MaybeInterpret();
     if ((!pCode->GetCodeError() || pCode->GetCodeError() == errDoubleRef) &&
             !aResult.GetResultError())
         rString = aResult.GetString();
@@ -722,8 +715,8 @@ USHORT ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos )
 
 USHORT ScFormulaCell::GetErrCode()
 {
-    if (IsDirtyOrInTableOpDirty() && pDocument->GetAutoCalc())
-        Interpret();
+    MaybeInterpret();
+
     /* FIXME: If ScTokenArray::SetCodeError() was really only for code errors
      * and not also abused for signaling other error conditions we could bail
      * out even before attempting to interpret broken code. */

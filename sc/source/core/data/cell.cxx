@@ -899,8 +899,7 @@ void ScFormulaCell::GetFormula( String& rFormula, const FormulaGrammar::Grammar 
 
 void ScFormulaCell::GetResultDimensions( SCSIZE& rCols, SCSIZE& rRows )
 {
-    if (IsDirtyOrInTableOpDirty() && pDocument->GetAutoCalc())
-        Interpret();
+    MaybeInterpret();
 
     const ScMatrix* pMat = NULL;
     if (!pCode->GetCodeError() && aResult.GetType() == svMatrixCell &&
@@ -1967,6 +1966,15 @@ bool ScFormulaCell::IsMultilineResult()
     if (!IsValue())
         return aResult.IsMultiline();
     return false;
+}
+
+void ScFormulaCell::MaybeInterpret()
+{
+    if (!IsDirtyOrInTableOpDirty())
+        return;
+
+    if (pDocument->GetAutoCalc() || (cMatrixFlag != MM_NONE))
+        Interpret();
 }
 
 EditTextObject* ScFormulaCell::CreateURLObject()
