@@ -85,7 +85,6 @@ SLOFILES=	$(EXCEPTIONSFILES)      \
             $(SLO)$/bitmap4.obj 	\
             $(SLO)$/alpha.obj		\
             $(SLO)$/bitmapex.obj	\
-            $(SLO)$/imgcons.obj 	\
             $(SLO)$/bmpacc.obj		\
             $(SLO)$/bmpacc2.obj 	\
             $(SLO)$/bmpacc3.obj 	\

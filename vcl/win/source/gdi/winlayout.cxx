@@ -2203,7 +2203,9 @@ void UniscribeLayout::Simplify( bool /*bIsBase*/ )
             const int k = mpGlyphs2Chars[ i ];
             mpGlyphs2Chars[ j ]   = k;
             const int nRelGlyphPos = (j++) - rVI.mnMinGlyphPos;
-            mpLogClusters[ k ]    = static_cast<WORD>(nRelGlyphPos);
+            if( k < 0) // extra glyphs are already mapped
+                continue;
+            mpLogClusters[ k ] = static_cast<WORD>(nRelGlyphPos);
         }
 
         rVI.mnEndGlyphPos = j;
@@ -2821,7 +2823,7 @@ sal_GlyphId GraphiteLayoutWinImpl::getKashidaGlyph(int & rWidth)
 class GraphiteWinLayout : public WinLayout
 {
 private:
-    mutable gr::WinFont   mpFont;
+    mutable GraphiteWinFont mpFont;
     grutils::GrFeatureParser * mpFeatures;
     mutable GraphiteLayoutWinImpl maImpl;
 public:
@@ -2894,6 +2896,11 @@ void GraphiteWinLayout::RestoreDC(gr::Segment & segment) const
 
 bool GraphiteWinLayout::LayoutText( ImplLayoutArgs & args)
 {
+    if (args.mnMinCharPos >= args.mnEndCharPos)
+    {
+        maImpl.clear();
+        return true;
+    }
     HFONT hUnRotatedFont;
     if (args.mnOrientation)
     {

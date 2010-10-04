@@ -32,6 +32,7 @@
 #include <math.h>
 #include <algorithm>
 
+#include <tools/urlobj.hxx>
 #include <pdfwriter_impl.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -66,6 +67,7 @@
 #include "cppuhelper/implbase1.hxx"
 #include <icc/sRGB-IEC61966-2.1.hxx>
 #include <vcl/lineinfo.hxx>
+#include "vcl/strhelper.hxx"
 
 using namespace vcl;
 using namespace rtl;
@@ -8498,6 +8500,7 @@ void PDFWriterImpl::beginRedirect( SvStream* pStream, const Rectangle& rTargetRe
 {
     push( PUSH_ALL );
 
+    // force reemitting clip region
     clearClipRegion();
     updateGraphicsState();
 
@@ -8541,7 +8544,10 @@ SvStream* PDFWriterImpl::endRedirect()
     }
 
     pop();
-    // force reemitting colors
+    // force reemitting colors and clip region
+    clearClipRegion();
+    m_aCurrentPDFState.m_bClipRegion = m_aGraphicsStack.front().m_bClipRegion;
+    m_aCurrentPDFState.m_aClipRegion = m_aGraphicsStack.front().m_aClipRegion;
     m_aCurrentPDFState.m_aLineColor = Color( COL_TRANSPARENT );
     m_aCurrentPDFState.m_aFillColor = Color( COL_TRANSPARENT );
 
@@ -10838,7 +10844,7 @@ sal_Int32 PDFWriterImpl::setOutlineItemText( sal_Int32 nItem, const OUString& rT
     if( nItem < 1 || nItem >= (sal_Int32)m_aOutline.size() )
         return -1;
 
-    m_aOutline[ nItem ].m_aTitle = rText;
+    m_aOutline[ nItem ].m_aTitle = psp::WhitespaceToSpace( rText );
     return 0;
 }
 

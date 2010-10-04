@@ -88,8 +88,8 @@
 
 #include "vcl/dialog.hxx"
 #include "vcl/unowrap.hxx"
-#include "dndlcon.hxx"
-#include "dndevdis.hxx"
+#include "vcl/dndlcon.hxx"
+#include "vcl/dndevdis.hxx"
 #include "vcl/impbmpconv.hxx"
 #include "unotools/confignode.hxx"
 #include "vcl/gdimtf.hxx"
