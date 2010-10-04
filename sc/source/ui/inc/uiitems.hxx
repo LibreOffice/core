@@ -158,7 +158,7 @@ public:
     virtual String          GetValueText() const;
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberUd ) const;
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberUd ) const;
 
     ScViewData*         GetViewData () const { return pViewData; }
     const ScSortParam&  GetSortData () const { return theSortData; }
@@ -218,7 +218,7 @@ public:
     virtual String          GetValueText() const;
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberUd ) const;
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberUd ) const;
 
     ScViewData*             GetViewData () const { return pViewData; }
     const ScSubTotalParam&  GetSubTotalData() const { return theSubTotalData; }

@@ -241,7 +241,7 @@ ScProtectionAttr::~ScProtectionAttr()
 
 //------------------------------------------------------------------------
 
-BOOL ScProtectionAttr::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+bool ScProtectionAttr::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId  )
@@ -266,15 +266,15 @@ BOOL ScProtectionAttr::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
             rVal <<= (sal_Bool ) bHidePrint; break;
         default:
             DBG_ERROR("Wrong MemberID!");
-            return FALSE;
+            return false;
     }
 
-    return TRUE;
+    return true;
 }
 
-BOOL ScProtectionAttr::PutValue( const uno::Any& rVal, BYTE nMemberId )
+bool ScProtectionAttr::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
-    BOOL bRet = FALSE;
+    bool bRet = false;
     sal_Bool bVal = sal_Bool();
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
@@ -288,7 +288,7 @@ BOOL ScProtectionAttr::PutValue( const uno::Any& rVal, BYTE nMemberId )
                 bHideFormula = aProtection.IsFormulaHidden;
                 bHideCell    = aProtection.IsHidden;
                 bHidePrint   = aProtection.IsPrintHidden;
-                bRet = TRUE;
+                bRet = true;
             }
             else
             {
@@ -662,18 +662,18 @@ ScPageHFItem::~ScPageHFItem()
 
 //------------------------------------------------------------------------
 
-BOOL ScPageHFItem::QueryValue( uno::Any& rVal, BYTE /* nMemberId */ ) const
+bool ScPageHFItem::QueryValue( uno::Any& rVal, BYTE /* nMemberId */ ) const
 {
     uno::Reference<sheet::XHeaderFooterContent> xContent =
         new ScHeaderFooterContentObj( pLeftArea, pCenterArea, pRightArea );
 
     rVal <<= xContent;
-    return TRUE;
+    return true;
 }
 
-BOOL ScPageHFItem::PutValue( const uno::Any& rVal, BYTE /* nMemberId */ )
+bool ScPageHFItem::PutValue( const uno::Any& rVal, BYTE /* nMemberId */ )
 {
-    BOOL bRet = FALSE;
+    bool bRet = false;
     uno::Reference<sheet::XHeaderFooterContent> xContent;
     if ( rVal >>= xContent )
     {
@@ -707,7 +707,7 @@ BOOL ScPageHFItem::PutValue( const uno::Any& rVal, BYTE /* nMemberId */ )
                         pRightArea = aEngine.CreateTextObject();
                 }
 
-                bRet = TRUE;
+                bRet = true;
             }
         }
     }
@@ -717,7 +717,7 @@ BOOL ScPageHFItem::PutValue( const uno::Any& rVal, BYTE /* nMemberId */ )
         DBG_ERROR("exception - wrong argument");
     }
 
-    return bRet;
+    return true;
 }
 
 //------------------------------------------------------------------------
@@ -1201,23 +1201,23 @@ SfxItemPresentation ScPageScaleToItem::GetPresentation(
     return ePres;
 }
 
-BOOL ScPageScaleToItem::QueryValue( uno::Any& rAny, BYTE nMemberId ) const
+bool ScPageScaleToItem::QueryValue( uno::Any& rAny, BYTE nMemberId ) const
 {
-    BOOL bRet = TRUE;
+    bool bRet = true;
     switch( nMemberId )
     {
         case SC_MID_PAGE_SCALETO_WIDTH:     rAny <<= mnWidth;   break;
         case SC_MID_PAGE_SCALETO_HEIGHT:    rAny <<= mnHeight;  break;
         default:
             DBG_ERRORFILE( "ScPageScaleToItem::QueryValue - unknown member ID" );
-            bRet = FALSE;
+            bRet = false;
     }
     return bRet;
 }
 
-BOOL ScPageScaleToItem::PutValue( const uno::Any& rAny, BYTE nMemberId )
+bool ScPageScaleToItem::PutValue( const uno::Any& rAny, BYTE nMemberId )
 {
-    BOOL bRet = FALSE;
+    BOOL bRet = false;
     switch( nMemberId )
     {
         case SC_MID_PAGE_SCALETO_WIDTH:     bRet = rAny >>= mnWidth;    break;

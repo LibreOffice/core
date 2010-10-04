@@ -221,11 +221,11 @@ SfxPoolItem* __EXPORT ScSortItem::Clone( SfxItemPool * ) const
 
 //------------------------------------------------------------------------
 
-sal_Bool ScSortItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /* nMemberUd */ ) const
+bool ScSortItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /* nMemberUd */ ) const
 {
     // Return empty value as there is no useful conversion
     rVal = com::sun::star::uno::Any();
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -379,11 +379,11 @@ SfxPoolItem* __EXPORT ScSubTotalItem::Clone( SfxItemPool * ) const
 
 //------------------------------------------------------------------------
 
-sal_Bool ScSubTotalItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /* nMemberUd */ ) const
+bool ScSubTotalItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /* nMemberUd */ ) const
 {
     // Return empty value as there is no useful conversion
     rVal = com::sun::star::uno::Any();
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
