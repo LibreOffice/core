@@ -223,8 +223,6 @@ public:
     struct Convention
     {
         const formula::FormulaGrammar::AddressConvention meConv;
-        const ULONG*                mpCharTable;
-
 
         Convention( formula::FormulaGrammar::AddressConvention eConvP );
         virtual ~Convention();
@@ -274,6 +272,11 @@ public:
             ABS_SHEET_PREFIX
         };
         virtual sal_Unicode getSpecialSymbol( SpecialSymbolType eSymType ) const = 0;
+
+        virtual ULONG getCharTableFlags( sal_Unicode c, sal_Unicode cLast ) const = 0;
+
+    protected:
+        const ULONG* mpCharTable;
     };
     friend struct Convention;
 
@@ -448,10 +451,11 @@ public:
                                        const formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO )
         {
             sal_Unicode c = rStr.GetChar( nPos );
+            sal_Unicode cLast = nPos > 0 ? rStr.GetChar(nPos-1) : 0;
             if (c < 128)
             {
                 return pConventions[eConv] ? static_cast<BOOL>(
-                        (pConventions[eConv]->mpCharTable[ UINT8(c) ] & SC_COMPILER_C_CHAR_WORD) == SC_COMPILER_C_CHAR_WORD) :
+                        (pConventions[eConv]->getCharTableFlags(c, cLast) & SC_COMPILER_C_CHAR_WORD) == SC_COMPILER_C_CHAR_WORD) :
                     FALSE;   // no convention => assume invalid
             }
             else
@@ -465,10 +469,11 @@ public:
                                    const formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO )
         {
             sal_Unicode c = rStr.GetChar( nPos );
+            sal_Unicode cLast = nPos > 0 ? rStr.GetChar(nPos-1) : 0;
             if (c < 128)
             {
                 return pConventions[eConv] ? static_cast<BOOL>(
-                        (pConventions[eConv]->mpCharTable[ UINT8(c) ] & SC_COMPILER_C_WORD) == SC_COMPILER_C_WORD) :
+                        (pConventions[eConv]->getCharTableFlags(c, cLast) & SC_COMPILER_C_WORD) == SC_COMPILER_C_WORD) :
                     FALSE;   // convention not known => assume invalid
             }
             else
@@ -485,13 +490,14 @@ public:
                                                  bool bTestLetterNumeric = true )
         {
             sal_Unicode c = rStr.GetChar( nPos );
+            sal_Unicode cLast = nPos > 0 ? rStr.GetChar( nPos-1 ) : 0;
             if (c < 128)
             {
                 for ( int nConv = formula::FormulaGrammar::CONV_UNSPECIFIED;
                         ++nConv < formula::FormulaGrammar::CONV_LAST; )
                 {
                     if (pConventions[nConv] &&
-                            ((pConventions[nConv]->mpCharTable[ UINT8(c) ] & nFlags) != nFlags))
+                            ((pConventions[nConv]->getCharTableFlags(c, cLast) & nFlags) != nFlags))
                         return false;
                     // convention not known => assume valid
                 }
@@ -526,8 +532,8 @@ private:
     virtual BOOL IsImportingXML() const;
 
     /// Access the CharTable flags
-    inline ULONG GetCharTableFlags( sal_Unicode c )
-        { return c < 128 ? pConv->mpCharTable[ UINT8(c) ] : 0; }
+    inline ULONG GetCharTableFlags( sal_Unicode c, sal_Unicode cLast )
+        { return c < 128 ? pConv->getCharTableFlags(c, cLast) : 0; }
 };
 
 SC_DLLPUBLIC String GetScCompilerNativeSymbol( OpCode eOp ); //CHINA001

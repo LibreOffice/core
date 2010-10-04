@@ -548,7 +548,6 @@ ScCompiler::Convention::Convention( FormulaGrammar::AddressConvention eConv )
 
         if( FormulaGrammar::CONV_XL_R1C1 == meConv )
         {
-/* - */     t[45] |= SC_COMPILER_C_IDENT;
 /* [ */     t[91] |= SC_COMPILER_C_IDENT;
 /* ] */     t[93] |= SC_COMPILER_C_IDENT;
         }
@@ -823,6 +822,11 @@ struct Convention_A1 : public ScCompiler::Convention
         static const String aAddAllowed(String::CreateFromAscii("?#"));
         return pCharClass->parseAnyToken( rFormula,
                 nSrcPos, nStartFlags, aAddAllowed, nContFlags, aAddAllowed );
+    }
+
+    virtual ULONG getCharTableFlags( sal_Unicode c, sal_Unicode /*cLast*/ ) const
+    {
+        return mpCharTable[static_cast<sal_uInt8>(c)];
     }
 };
 
@@ -1792,6 +1796,15 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
         r1c1_add_row(rBuffer, aRef.Ref2);
         r1c1_add_col(rBuffer, aRef.Ref2);
     }
+
+    virtual ULONG getCharTableFlags( sal_Unicode c, sal_Unicode cLast ) const
+    {
+        ULONG nFlags = mpCharTable[static_cast<sal_uInt8>(c)];
+        if (c == '-' && cLast == '[')
+            // '-' can occur within a reference string only after '[' e.g. R[-1]C.
+            nFlags |= SC_COMPILER_C_IDENT;
+        return nFlags;
+    }
 };
 
 static const ConventionXL_R1C1 ConvXL_R1C1;
@@ -1982,7 +1995,8 @@ xub_StrLen ScCompiler::NextSymbol(bool bInArray)
     while ((c != 0) && (eState != ssStop) )
     {
         pSrc++;
-        ULONG nMask = GetCharTableFlags( c );
+        ULONG nMask = GetCharTableFlags( c, cLast );
+
         // The parameter separator and the array column and row separators end
         // things unconditionally if not in string or reference.
         if (c == cSep || (bInArray && (c == cArrayColSep || c == cArrayRowSep)))
@@ -2012,7 +2026,7 @@ Label_MaskStateMachine:
                 if( nMask & SC_COMPILER_C_ODF_LABEL_OP )
                 {
                     // '!!' automatic intersection
-                    if (GetCharTableFlags( pSrc[0] ) & SC_COMPILER_C_ODF_LABEL_OP)
+                    if (GetCharTableFlags( pSrc[0], 0 ) & SC_COMPILER_C_ODF_LABEL_OP)
                     {
                         /* TODO: For now the UI "space operator" is used, this
                          * could be enhanced using a specialized OpCode to get
@@ -2043,7 +2057,7 @@ Label_MaskStateMachine:
                 else if( nMask & SC_COMPILER_C_ODF_NAME_MARKER )
                 {
                     // '$$' defined name marker
-                    if (GetCharTableFlags( pSrc[0] ) & SC_COMPILER_C_ODF_NAME_MARKER)
+                    if (GetCharTableFlags( pSrc[0], 0 ) & SC_COMPILER_C_ODF_NAME_MARKER)
                     {
                         // both eaten, not added to pSym
                         ++pSrc;
@@ -2177,7 +2191,7 @@ Label_MaskStateMachine:
                 }
                 else if (c == 'E' || c == 'e')
                 {
-                    if (GetCharTableFlags( pSrc[0] ) & SC_COMPILER_C_VALUE_EXP)
+                    if (GetCharTableFlags( pSrc[0], 0 ) & SC_COMPILER_C_VALUE_EXP)
                         *pSym++ = c;
                     else
                     {
@@ -2189,7 +2203,7 @@ Label_MaskStateMachine:
                 else if( nMask & SC_COMPILER_C_VALUE_SIGN )
                 {
                     if (((cLast == 'E') || (cLast == 'e')) &&
-                            (GetCharTableFlags( pSrc[0] ) & SC_COMPILER_C_VALUE_VALUE))
+                            (GetCharTableFlags( pSrc[0], 0 ) & SC_COMPILER_C_VALUE_VALUE))
                     {
                         *pSym++ = c;
                     }
@@ -2855,7 +2869,7 @@ BOOL ScCompiler::IsReference( const String& rName )
             if ( !(ch2 == '$' || CharClass::isAsciiAlpha( ch2 )) )
                 return FALSE;
             if ( cDecSep == '.' && (ch2 == 'E' || ch2 == 'e')   // E + - digit
-                    && (GetCharTableFlags( pTabSep[2] ) & SC_COMPILER_C_VALUE_EXP) )
+                    && (GetCharTableFlags( pTabSep[2], pTabSep[1] ) & SC_COMPILER_C_VALUE_EXP) )
             {   // #91053#
                 // If it is an 1.E2 expression check if "1" is an existent sheet
                 // name. If so, a desired value 1.E2 would have to be entered as
@@ -3348,12 +3362,13 @@ void ScCompiler::AutoCorrectParsedSymbol()
         const sal_Unicode cX = 'X';
         sal_Unicode c1 = aCorrectedSymbol.GetChar( 0 );
         sal_Unicode c2 = aCorrectedSymbol.GetChar( nPos );
+        sal_Unicode c2p = nPos > 0 ? aCorrectedSymbol.GetChar( nPos-1 ) : 0;
         if ( c1 == cQuote && c2 != cQuote  )
         {   // "...
             // What's not a word doesn't belong to it.
             // Don't be pedantic: c < 128 should be sufficient here.
             while ( nPos && ((aCorrectedSymbol.GetChar(nPos) < 128) &&
-                    ((GetCharTableFlags( aCorrectedSymbol.GetChar(nPos) ) &
+                    ((GetCharTableFlags(aCorrectedSymbol.GetChar(nPos), aCorrectedSymbol.GetChar(nPos-1)) &
                     (SC_COMPILER_C_WORD | SC_COMPILER_C_CHAR_DONTCARE)) == 0)) )
                 nPos--;
             if ( nPos == MAXSTRLEN - 2 )
@@ -3372,8 +3387,8 @@ void ScCompiler::AutoCorrectParsedSymbol()
             aCorrectedSymbol = mxSymbols->getSymbol(ocMul);
             bCorrected = TRUE;
         }
-        else if ( (GetCharTableFlags( c1 ) & SC_COMPILER_C_CHAR_VALUE)
-               && (GetCharTableFlags( c2 ) & SC_COMPILER_C_CHAR_VALUE) )
+        else if ( (GetCharTableFlags( c1, 0 ) & SC_COMPILER_C_CHAR_VALUE)
+               && (GetCharTableFlags( c2, c2p ) & SC_COMPILER_C_CHAR_VALUE) )
         {
             xub_StrLen nXcount;
             if ( (nXcount = aCorrectedSymbol.GetTokenCount( cx )) > 1 )
