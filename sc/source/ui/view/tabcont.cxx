@@ -54,7 +54,7 @@
 //==================================================================
 
 ScTabControl::ScTabControl( Window* pParent, ScViewData* pData ) :
-            TabBar( pParent, WinBits( WB_BORDER | WB_3DLOOK | WB_SCROLL |
+            TabBar( pParent, WinBits( WB_BORDER | WB_3DLOOK | WB_SCROLL | WB_INSERTTAB |
                                     WB_RANGESELECT | WB_MULTISELECT | WB_DRAG | WB_SIZEABLE ) ),
             DropTargetHelper( this ),
             DragSourceHelper( this ),
@@ -161,7 +161,7 @@ void ScTabControl::MouseButtonDown( const MouseEvent& rMEvt )
         Needing clean left click without modifiers (may be context menu).
         #106948# Remember clicks to all pages, to be able to move mouse pointer later. */
     if( rMEvt.IsLeft() && (rMEvt.GetModifier() == 0) )
-        nMouseClickPageId = GetPageId( rMEvt.GetPosPixel() );
+        nMouseClickPageId = GetPageId( rMEvt.GetPosPixel(), true );
     else
         nMouseClickPageId = TabBar::PAGE_NOT_FOUND;
 
@@ -173,13 +173,25 @@ void ScTabControl::MouseButtonUp( const MouseEvent& rMEvt )
     Point aPos = PixelToLogic( rMEvt.GetPosPixel() );
 
     // mouse button down and up on same page?
-    if( nMouseClickPageId != GetPageId( aPos ) )
+    if( nMouseClickPageId != GetPageId( aPos, true ) )
         nMouseClickPageId = TabBar::PAGE_NOT_FOUND;
+
+    if (nMouseClickPageId == TabBar::INSERT_TAB_POS)
+    {
+        // Insert a new sheet at the right end, with default name.
+        ScDocument* pDoc = pViewData->GetDocument();
+        String aName;
+        pDoc->CreateValidTabName(aName);
+        SCTAB nTabCount = pDoc->GetTableCount();
+        pViewData->GetViewShell()->InsertTable(aName, nTabCount);
+        return;
+    }
 
     if ( rMEvt.GetClicks() == 2 && rMEvt.IsLeft() && nMouseClickPageId != 0 && nMouseClickPageId != TAB_PAGE_NOTFOUND )
     {
         SfxDispatcher* pDispatcher = pViewData->GetViewShell()->GetViewFrame()->GetDispatcher();
         pDispatcher->Execute( FID_TAB_MENU_RENAME, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD );
+        return;
     }
 
     if( nMouseClickPageId == 0 )
