@@ -285,9 +285,10 @@ index 5d75be2..730cf0c 100644
                  ).second;
              }
  
---- /dev/null
+--- misc/build/boost_1_39_0/libs/thread/src/win32/makefile.mk
 +++ misc/build/boost_1_39_0/libs/thread/src/win32/makefile.mk
-@@ -0,0 +1,21 @@
+@@ -1,1 +1,21 @@
+-dummy
 +PRJ=..$/..$/..$/..$/..$/..$/..$/..
 +
 +PRJNAME=boostthread
