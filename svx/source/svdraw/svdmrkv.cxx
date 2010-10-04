@@ -1063,8 +1063,7 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
 /** handle mouse over effects for handles */
 BOOL SdrMarkView::MouseMove(const MouseEvent& rMEvt, Window* pWin)
 {
-    const ULONG nHdlCount = aHdl.GetHdlCount();
-    if( nHdlCount )
+    if(aHdl.GetHdlCount())
     {
         SdrHdl* pMouseOverHdl = 0;
         if( !rMEvt.IsLeaveWindow() && pWin )
@@ -1074,6 +1073,8 @@ BOOL SdrMarkView::MouseMove(const MouseEvent& rMEvt, Window* pWin)
         }
 
         // notify last mouse over handle that he lost the mouse
+        const ULONG nHdlCount = aHdl.GetHdlCount();
+
         for(ULONG nHdl = 0; nHdl < nHdlCount; nHdl++ )
         {
             SdrHdl* pCurrentHdl = GetHdl(nHdl);

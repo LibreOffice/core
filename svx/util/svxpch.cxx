@@ -29,7 +29,7 @@
 #include "precompiled_svx.hxx"
 #include <thread.hxx>
 #include <sysdep.hxx>
-#if defined(WNT) || defined (WIN)
+#if defined(WNT)
 #include <svwin.h>
 #endif
 #include <tlintl.hxx>
