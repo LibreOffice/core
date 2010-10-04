@@ -46,6 +46,16 @@ import connectivity.tools.DbaseDatabase;
 import java.io.IOException;
 import util.UITools;
 
+// ---------- junit imports -----------------
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openoffice.test.OfficeConnection;
+import static org.junit.Assert.*;
+// ------------------------------------------
+
 /** complex test case for Base's application UI
  */
 public class CopyTableWizard extends CRMBasedTestCase
@@ -60,42 +70,40 @@ public class CopyTableWizard extends CRMBasedTestCase
     }
 
     // --------------------------------------------------------------------------------------------------------
-    public String[] getTestMethodNames()
-    {
-        return new String[]
-                {
-                    "copyTable", "copyTableDbase"
-                };
-    }
+//    public String[] getTestMethodNames()
+//    {
+//        return new String[]
+//                {
+//                    "copyTable", "copyTableDbase"
+//                };
+//    }
 
     // --------------------------------------------------------------------------------------------------------
-    @Override
-    public String getTestObjectName()
-    {
-        return getClass().getName();
-    }
+//    @Override
+//    public String getTestObjectName()
+//    {
+//        return getClass().getName();
+//    }
 // --------------------------------------------------------------------------------------------------------
     // --------------------------------------------------------------------------------------------------------
 
-    @Override
-    public void after()
+    @After public void after()
     {
         dest.store();
         super.after();
     }
 
-    @Override
-    public void before()
+    @Before public void before()
     {
         try
         {
             createTestCase();
             source = new DatabaseApplication(this.m_database.getDatabase());
-            dest = new DatabaseApplication(new DbaseDatabase(getORB()));
+            dest = new DatabaseApplication(new DbaseDatabase(getMSF()));
         }
         catch (java.lang.Exception ex)
         {
-            assure(false);
+            fail("");
         }
     }
     // --------------------------------------------------------------------------------------------------------
@@ -123,7 +131,7 @@ public class CopyTableWizard extends CRMBasedTestCase
         Object toolKit = null;
         try
         {
-            toolKit = getORB().createInstance("com.sun.star.awt.Toolkit");
+            toolKit = getMSF().createInstance("com.sun.star.awt.Toolkit");
         }
         catch (com.sun.star.uno.Exception e)
         {
@@ -135,21 +143,21 @@ public class CopyTableWizard extends CRMBasedTestCase
         return (XWindow) UnoRuntime.queryInterface(XWindow.class, atw);
     }
 
-    public void copyTable() throws Exception, IOException, java.lang.Exception
+    @Test public void copyTable() throws Exception, IOException, java.lang.Exception
     {
         copyTable(source,source);
     }
 
-    public void copyTableDbase() throws Exception, IOException, java.lang.Exception
+    @Test public void copyTableDbase() throws Exception, IOException, java.lang.Exception
     {
         copyTable(source,dest);
     }
-    public void copyTable(final DatabaseApplication sourceDb,final DatabaseApplication destDb) throws Exception, IOException, java.lang.Exception
+    private void copyTable(final DatabaseApplication sourceDb,final DatabaseApplication destDb) throws Exception, IOException, java.lang.Exception
     {
         final XConnection destConnection = destDb.getDocumentUI().getActiveConnection();
 
         final XConnection sourceConnection = sourceDb.getDocumentUI().getActiveConnection();
-        final XTablesSupplier suppTables = (XTablesSupplier) UnoRuntime.queryInterface(XTablesSupplier.class, sourceConnection);
+        final XTablesSupplier suppTables = UnoRuntime.queryInterface(XTablesSupplier.class, sourceConnection);
         final XNameAccess tables = suppTables.getTables();
 
         final String[] names = tables.getElementNames();
@@ -161,7 +169,7 @@ public class CopyTableWizard extends CRMBasedTestCase
 
     public void assure(final String message)
     {
-        assure(message, false);
+        fail(message);
     }
 
     private void copyTable(final String tableName, final XConnection sourceConnection, final XConnection destConnection) throws Exception, IOException, java.lang.Exception
@@ -194,7 +202,7 @@ public class CopyTableWizard extends CRMBasedTestCase
         try
         {
             final XWindow dialog = getActiveWindow();
-            final UITools uiTools = new UITools(getORB(), dialog);
+            final UITools uiTools = new UITools(getMSF(), dialog);
             final XAccessible root = uiTools.getRoot();
             final XAccessibleContext accContext = root.getAccessibleContext();
             final int count = accContext.getAccessibleChildCount();
