@@ -65,7 +65,7 @@ CXX*=g++
 # name of C Compiler
 CC*=gcc
 .IF "$(SYSBASE)"!=""
-CFLAGS_SYSBASE:=-isystem $(SYSBASE)$/usr$/include
+CFLAGS_SYSBASE:=--sysroot=$(SYSBASE)
 CXX+:=$(CFLAGS_SYSBASE)
 CC+:=$(CFLAGS_SYSBASE)
 .ENDIF          # "$(SYSBASE)"!=""

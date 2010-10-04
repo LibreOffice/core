@@ -46,9 +46,7 @@ File gid_File_Lib_Pythonloader
   #else
     Name = "pythonloader.uno.dll";
   #endif
-    RegistryID = gid_Starregistry_Services_Rdb;
-    NativeServicesURLPrefix = "vnd.sun.star.expand:$OOO_BASE_DIR/program/";
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED);
 End
 
 File gid_File_Py_Unohelper
@@ -110,8 +108,7 @@ File gid_File_Py_Pythonscript
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
     Name = "pythonscript.py";
-    RegistryID = gid_Starregistry_Services_Rdb;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED);
 End
  
 //Scripting Framework Python example scripts
