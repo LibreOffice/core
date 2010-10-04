@@ -36,7 +36,7 @@ TARGET=ttf_linlibertineg
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=LinLibertineG-20101004.zip
+TARFILE_NAME=LinLibertineG-20101004
 TARFILE_MD5=f20f67d1715c7be81688a2ad58d8291d
 TARFILE_ROOTDIR=LinLibertineG
 
