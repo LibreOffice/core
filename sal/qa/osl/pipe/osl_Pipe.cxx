@@ -39,17 +39,11 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 
-#ifndef _OSL_THREAD_HXX
 #include <osl/thread.hxx>
-#endif
 
-#ifndef _OSL_MUTEX_HXX
 #include <osl/mutex.hxx>
-#endif
 
-#ifndef _OSL_MUTEX_HXX
 #include <osl/pipe.hxx>
-#endif
 #include <osl/time.h>
 
 #ifdef UNX

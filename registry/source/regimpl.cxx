@@ -41,13 +41,9 @@
 #include    <unistd.h>
 #endif
 
-#ifndef __REGISTRY_REFLREAD_HXX__
 #include    <registry/reflread.hxx>
-#endif
 
-#ifndef __REGISTRY_REFLWRIT_HXX__
 #include    <registry/reflwrit.hxx>
-#endif
 
 #include "registry/reader.hxx"
 #include "registry/refltype.hxx"

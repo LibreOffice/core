@@ -30,17 +30,13 @@
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <rtl/alloc.h>
-#ifndef _RTL_USTRBUF_H_
 #include <rtl/ustrbuf.hxx>
-#endif
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
-#ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
 #include <cppuhelper/implementationentry.hxx>
-#endif
 #include <registry/registry.hxx>
 
 #include <com/sun/star/registry/XSimpleRegistry.hpp>

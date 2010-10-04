@@ -34,16 +34,12 @@
 
 #include <rtl/logfile.h>
 #include <osl/process.h>
-#ifndef _OSL_FILE_H_
 #include <osl/time.h>
-#endif
 #include <osl/time.h>
 #include <osl/mutex.hxx>
 #include <rtl/bootstrap.h>
 #include <rtl/ustring.hxx>
-#ifndef _RTL_STRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
 #include <rtl/alloc.h>
 #include "osl/thread.h"
 

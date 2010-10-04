@@ -31,9 +31,7 @@
 
 
 #ifndef TEST
-#ifndef _SAL_TYPES_H_
 #include <sal/types.h>
-#endif
 #else
 typedef unsigned int sal_uInt32;
 #endif

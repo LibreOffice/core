@@ -28,25 +28,15 @@
 #include <ctype.h>
 #include "system.h"
 
-#ifndef _LIMITS_H
 #include <limits.h>
-#endif
 
-#ifndef _ERRNO_H
 #include <errno.h>
-#endif
 
-#ifndef _STDLIB_H_
 #include <stdlib.h>
-#endif
 
-#ifndef _STRINGS_H
 #include <strings.h>
-#endif
 
-#ifndef _UNISTD_H
 #include <unistd.h>
-#endif
 #include <osl/file.h>
 #include <osl/security.h>
 #include <rtl/uri.h>
@@ -54,22 +44,16 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.h>
 
-#ifndef _OSL_TREAD_H_
 #include <osl/thread.h>
-#endif
 #include <osl/file.hxx>
 #include <osl/mutex.h>
 #include <osl/process.h>
 #include "file_error_transl.h"
 
-#ifndef _FILE_URL_H_
 #include "file_url.h"
-#endif
 #include "file_path_helper.hxx"
 
-#ifndef _OSL_UUNXAPI_HXX_
 #include "uunxapi.hxx"
-#endif
 
 #include <wchar.h>
 #include <wctype.h>

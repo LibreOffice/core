@@ -33,9 +33,7 @@
 //------------------------------------------------------------------------
 #include <osl/diagnose.h>
 
-#ifndef _TWRAPPERDATAOBJECT_HXX_
 #include "XTDataObject.hxx"
-#endif
 
 #include <windows.h>
 #include <ole2.h>

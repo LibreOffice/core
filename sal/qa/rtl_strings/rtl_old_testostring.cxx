@@ -41,9 +41,7 @@
 // #include <osl/diagnose.h>
 // #endif
 
-#ifndef _RTL_STRING_HXX
 #include <rtl/string.hxx>
-#endif
 
 #include <testshl/simpleheader.hxx>
 

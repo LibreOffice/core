@@ -32,13 +32,9 @@
 //------------------------------------------------------------------------
 #include <sal/types.h>
 
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/string.hxx>
-#endif
 
-#ifndef _OSL_THREAD_HXX
 #include <osl/thread.hxx>
-#endif
 #include <osl/time.h>
 
 #include <rtl/instance.hxx>

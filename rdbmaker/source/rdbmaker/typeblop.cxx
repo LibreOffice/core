@@ -26,9 +26,7 @@
  ************************************************************************/
 
 #include <rtl/alloc.h>
-#ifndef __REGISTRY_REFLWRIT_HXX__
 #include <registry/reflwrit.hxx>
-#endif
 #include <cppuhelper/servicefactory.hxx>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/reflection/XInterfaceTypeDescription.hpp>

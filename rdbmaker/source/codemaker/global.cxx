@@ -25,9 +25,7 @@
  *
  ************************************************************************/
 #include <osl/process.h>
-#ifndef _RTL_OSTRINGBUFFER_HXX_
 #include <rtl/strbuf.hxx>
-#endif
 #include <rtl/ustring.hxx>
 #include    <osl/thread.h>
 #include    <osl/file.hxx>

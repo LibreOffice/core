@@ -48,13 +48,9 @@
 // #include <osl/diagnose.h>
 // #endif
 
-#ifndef _RTL_USTRING_HXX
 #include <rtl/ustring.hxx>
-#endif
 
-#ifndef _RTL_STRING_HXX
 #include <rtl/string.hxx>
-#endif
 
 #include <rtl/locale.hxx>
 

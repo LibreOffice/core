@@ -32,9 +32,7 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/component.hxx>
 #include <cppuhelper/factory.hxx>
-#ifndef _CPPUHELPER_IMPLBASE3_HXX
 #include <cppuhelper/implbase3.hxx>
-#endif
 #include <cppuhelper/typeprovider.hxx>
 #include <rtl/unload.h>
 

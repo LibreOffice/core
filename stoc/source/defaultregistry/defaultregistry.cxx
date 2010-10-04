@@ -28,18 +28,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_stoc.hxx"
 #include <osl/mutex.hxx>
-#ifndef _OSL_DIAGNOSE_HXX_
 #include <osl/diagnose.h>
-#endif
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase3.hxx>
-#ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
 #include <cppuhelper/implementationentry.hxx>
-#endif
 #include <registry/registry.hxx>
 
 #include <com/sun/star/registry/XSimpleRegistry.hpp>

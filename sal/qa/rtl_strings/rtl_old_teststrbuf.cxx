@@ -42,13 +42,9 @@
 // #include <osl/diagnose.h>
 // #endif
 
-#ifndef _RTL_STRBUF_HXX
 #include <rtl/strbuf.hxx>
-#endif
 
-#ifndef _RTL_WSTRBUF_HXX
 #include <rtl/ustrbuf.hxx>
-#endif
 
 #include <testshl/simpleheader.hxx>
 

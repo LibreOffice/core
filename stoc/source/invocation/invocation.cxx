@@ -29,13 +29,9 @@
 #include "precompiled_stoc.hxx"
 #include <osl/mutex.hxx>
 #include <cppuhelper/queryinterface.hxx>
-#ifndef _CPPUHELER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
-#endif
 #include <cppuhelper/factory.hxx>
-#ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX__
 #include <cppuhelper/implementationentry.hxx>
-#endif
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/implbase2.hxx>
 

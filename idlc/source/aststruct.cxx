@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_idlc.hxx"
 #include <idlc/aststruct.hxx>
-#ifndef _IDLC_ASTMember_HXX_
 #include <idlc/astmember.hxx>
-#endif
 
 #include "registry/version.h"
 #include "registry/writer.hxx"

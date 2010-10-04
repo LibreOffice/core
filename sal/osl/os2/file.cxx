@@ -54,24 +54,16 @@
 #include "file_error_transl.h"
 #include <osl/time.h>
 
-#ifndef _FILE_URL_H_
 #include "file_url.h"
-#endif
 
 #include "file_path_helper.hxx"
 #include "uunxapi.hxx"
 
-#ifndef _STRING_H_
 #include <string.h>
-#endif
 
-#ifndef _CTYPE_H_
 #include <ctype.h>
-#endif
 
-#ifndef _WCHAR_H_
 #include <wchar.h>
-#endif
 
 #if OSL_DEBUG_LEVEL > 1
     extern void debug_ustring(rtl_uString*);

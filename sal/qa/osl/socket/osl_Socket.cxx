@@ -59,9 +59,7 @@
 // include files
 //------------------------------------------------------------------------
 
-#ifndef _OSL_SOCKET_CONST_H_
 #include <osl_Socket_Const_orig.h>
-#endif
 
 #include <testshl/simpleheader.hxx>
 

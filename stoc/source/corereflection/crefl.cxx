@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_stoc.hxx"
 #include <cppuhelper/queryinterface.hxx>
-#ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
 #include <cppuhelper/implementationentry.hxx>
-#endif
 
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/lang/XComponent.hpp>

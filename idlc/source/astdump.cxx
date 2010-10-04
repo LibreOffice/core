@@ -33,9 +33,7 @@
 #include <idlc/astconstant.hxx>
 #include <idlc/astattribute.hxx>
 #include <idlc/astinterfacemember.hxx>
-#ifndef _IDLC_ASTSERVICEEMEMBER_HXX_
 #include <idlc/astservicemember.hxx>
-#endif
 #include <idlc/astobserves.hxx>
 #include <idlc/astneeds.hxx>
 #include <idlc/astsequence.hxx>

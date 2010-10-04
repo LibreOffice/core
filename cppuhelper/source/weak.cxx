@@ -28,12 +28,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cppuhelper.hxx"
 #include <osl/mutex.hxx>
-#ifndef _CPPU_WEAKAGG_HXX_
 #include <cppuhelper/weakagg.hxx>
-#endif
-#ifndef _CPPU_HELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
-#endif
 #include "cppuhelper/exc_hlp.hxx"
 
 using namespace osl;

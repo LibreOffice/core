@@ -57,13 +57,9 @@
 #include "osl/thread.h"
 #include "rtl/ustring.hxx"
 
-#ifndef _OSL_FILE_PATH_HELPER_H_
 #include "file_path_helper.h"
-#endif
 
-#ifndef _OSL_UUNXAPI_H_
 #include "uunxapi.h"
-#endif
 
 /***************************************
   osl_bootstrap_getExecutableFile_Impl().

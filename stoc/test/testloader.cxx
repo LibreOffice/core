@@ -31,9 +31,7 @@
 #include <stdio.h>
 
 #include <sal/main.h>
-#ifndef _OSL_MODULE_H_
 #include <osl/module.hxx>
-#endif
 #include <osl/diagnose.h>
 
 #include <com/sun/star/loader/XImplementationLoader.hpp>

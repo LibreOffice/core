@@ -38,9 +38,7 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/component.hxx>
 #include <cppuhelper/implbase2.hxx>
-#ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
 #include <cppuhelper/implementationentry.hxx>
-#endif
 
 #include <com/sun/star/uno/XNamingService.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

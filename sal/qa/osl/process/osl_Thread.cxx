@@ -32,21 +32,13 @@
 //------------------------------------------------------------------------
 #include <sal/types.h>
 
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/string.hxx>
-#endif
 
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/strbuf.hxx>
-#endif
 
-#ifndef _OSL_THREAD_HXX
 #include <osl/thread.hxx>
-#endif
 
-#ifndef _OSL_MUTEX_HXX
 #include <osl/mutex.hxx>
-#endif
 #include <osl/time.h>
 
 #include <testshl/simpleheader.hxx>

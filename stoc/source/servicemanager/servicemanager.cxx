@@ -40,13 +40,9 @@
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/component.hxx>
 #include <cppuhelper/factory.hxx>
-#ifndef _CPPUHELPER_IMPLBASE1_HXX
 #include <cppuhelper/implbase1.hxx>
-#endif
 #include <cppuhelper/typeprovider.hxx>
-#ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
 #include <cppuhelper/implementationentry.hxx>
-#endif
 #include <rtl/unload.h>
 #include <cppuhelper/component_context.hxx>
 #include <cppuhelper/bootstrap.hxx>

@@ -31,13 +31,9 @@
 #include <osl/mutex.hxx>
 #include "rtl/ustrbuf.hxx"
 #include <cppuhelper/factory.hxx>
-#ifndef _CPPUHELPER_IMPLBASE5_HXX_
 #include <cppuhelper/compbase5.hxx>
-#endif
 #include <cppuhelper/implbase1.hxx>
-#ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
 #include <cppuhelper/implementationentry.hxx>
-#endif
 #include "tdmgr_common.hxx"
 #include "tdmgr_tdenumeration.hxx"
 #include "lrucache.hxx"

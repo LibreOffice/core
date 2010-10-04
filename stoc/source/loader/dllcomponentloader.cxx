@@ -42,9 +42,7 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/shlib.hxx>
 #include <cppuhelper/implbase3.hxx>
-#ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX__
 #include <cppuhelper/implementationentry.hxx>
-#endif
 #include <cppuhelper/bootstrap.hxx>
 
 #include <com/sun/star/loader/XImplementationLoader.hpp>

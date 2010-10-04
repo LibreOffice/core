@@ -29,9 +29,7 @@
 #include "precompiled_idlc.hxx"
 #include <idlc/astscope.hxx>
 #include <idlc/astbasetype.hxx>
-#ifndef _IDLC_ASTINERFACE_HXX_
 #include <idlc/astinterface.hxx>
-#endif
 #include <idlc/errorhandler.hxx>
 
 

@@ -31,9 +31,7 @@
 #include <codemaker/typemanager.hxx>
 #include <codemaker/dependency.hxx>
 
-#ifndef _RTL_OSTRINGBUFFER_HXX_
 #include <rtl/strbuf.hxx>
-#endif
 
 #if defined(SAL_W32) || defined(SAL_OS2)
 #include <io.h>
