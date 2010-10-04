@@ -73,3 +73,11 @@ DEF1EXPORTFILE=$(SHL1TARGET).dxp
 
 .INCLUDE :  target.mk
 
+
+ALLTAR : $(MISC)/xstor.component
+
+$(MISC)/xstor.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        xstor.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt xstor.component
