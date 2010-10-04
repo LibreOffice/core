@@ -534,7 +534,7 @@ ExtrasIndividuellePraesentation SID_CUSTOMSHOW_DLG
 ' ExtrasSymbole SID_SYMBOLS
 ExtrasSymboleKatalog SID_SYMBOLS_CATALOGUE
 ' ExtrasSymboleLaden SID_SYMBOLS_LOAD
-ExtrasFormelImportieren SID_INSERT_FORMULA
+ExtrasFormelImportieren SID_IMPORT_FORMULA
 
 ' ***********************************
 ' *********** Praesentationmenue ************
