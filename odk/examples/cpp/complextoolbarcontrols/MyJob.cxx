@@ -26,9 +26,7 @@
  ************************************************************************/
 
 
-#ifndef _MyJob_HXX
 #include "MyJob.h"
-#endif
 #include <osl/diagnose.h>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
