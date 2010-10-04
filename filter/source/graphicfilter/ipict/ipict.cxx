@@ -36,12 +36,107 @@
 #include <svtools/fltcall.hxx>
 #include <math.h>
 
-// MT: NOOLDSV, someone should change the code...
-enum PenStyle { PEN_NULL, PEN_SOLID, PEN_DOT, PEN_DASH, PEN_DASHDOT };
-enum BrushStyle { BRUSH_NULL, BRUSH_SOLID, BRUSH_HORZ, BRUSH_VERT,
-                  BRUSH_CROSS, BRUSH_DIAGCROSS, BRUSH_UPDIAG, BRUSH_DOWNDIAG,
-                  BRUSH_25, BRUSH_50, BRUSH_75,
-                  BRUSH_BITMAP };
+namespace PictReaderInternal {
+  //! utilitary class to store a pattern, ...
+  class Pattern {
+  public:
+    //! constructor
+    Pattern() {
+      isColor = false; isRead = false;
+      penStyle=PEN_SOLID; brushStyle = BRUSH_SOLID;
+      nBitCount = 64;
+    }
+
+    //! reads black/white pattern from SvStream
+    ULONG read(SvStream &stream);
+    //! sets the color
+    void setColor(Color &col) { isColor = true; color = col; }
+    /** returns a color which can be "used" to replace the pattern,
+     *     created from ForeColor and BackColor, ...
+     *
+     * note: maybe, we must also use some mode PatCopy, ... to define the color
+     */
+    Color getColor(Color bkColor=COL_WHITE, Color fgColor = COL_BLACK) const {
+      if (isColor) return color;
+      // we create a gray pattern from nBitCount
+      double alpha = nBitCount / 64.0;
+      return Color(BYTE(alpha*fgColor.GetRed()+(1.0-alpha)*bkColor.GetRed()),
+           BYTE(alpha*fgColor.GetGreen()+(1.0-alpha)*bkColor.GetGreen()),
+           BYTE(alpha*fgColor.GetBlue()+(1.0-alpha)*bkColor.GetBlue()));
+    }
+
+    //! returns true if this is the default pattern
+    bool isDefault() const { return isRead == false; }
+
+    // MT: NOOLDSV, someone should change the code...
+    enum PenStyle { PEN_NULL, PEN_SOLID, PEN_DOT, PEN_DASH, PEN_DASHDOT };
+    enum BrushStyle { BRUSH_NULL, BRUSH_SOLID, BRUSH_HORZ, BRUSH_VERT,
+              BRUSH_CROSS, BRUSH_DIAGCROSS, BRUSH_UPDIAG, BRUSH_DOWNDIAG,
+              BRUSH_25, BRUSH_50, BRUSH_75,
+              BRUSH_BITMAP };
+    // Data
+    enum PenStyle penStyle;
+    enum BrushStyle brushStyle;
+    short nBitCount;
+
+    bool isColor; // true if it is a color pattern
+    Color color;
+
+  protected:
+    // flag to know if the pattern came from reading the picture, or if it is the default pattern
+    bool isRead;
+  };
+
+  ULONG Pattern::read(SvStream &stream) {
+    short nx,ny;
+    unsigned char nbyte[8];
+    ULONG nHiBytes, nLoBytes;
+    isColor = false;
+
+    // Anzahl der Bits im Pattern zaehlen, die auf 1 gesetzt sind:
+    nBitCount=0;
+    for (ny=0; ny<8; ny++) {
+      stream >> ((char&)nbyte[ny]);
+      for (nx=0; nx<8; nx++) {
+    if ( (nbyte[ny] & (1<<nx)) != 0 ) nBitCount++;
+      }
+    }
+
+    // Pattern in 2 Langworten unterbringen:
+    nHiBytes=(((((((ULONG)nbyte[0])<<8)|
+         (ULONG)nbyte[1])<<8)|
+           (ULONG)nbyte[2])<<8)|
+      (ULONG)nbyte[3];
+    nLoBytes=(((((((ULONG)nbyte[4])<<8)|
+         (ULONG)nbyte[5])<<8)|
+           (ULONG)nbyte[6])<<8)|
+      (ULONG)nbyte[7];
+
+    // Einen PenStyle machen:
+    if      (nBitCount<=0)  penStyle=PEN_NULL;
+    else if (nBitCount<=16) penStyle=PEN_DOT;
+    else if (nBitCount<=32) penStyle=PEN_DASHDOT;
+    else if (nBitCount<=48) penStyle=PEN_DASH;
+    else                    penStyle=PEN_SOLID;
+
+    // Einen BrushStyle machen:
+    if      (nHiBytes==0xffffffff && nLoBytes==0xffffffff) brushStyle=BRUSH_SOLID;
+    else if (nHiBytes==0xff000000 && nLoBytes==0x00000000) brushStyle=BRUSH_HORZ;
+    else if (nHiBytes==0x80808080 && nLoBytes==0x80808080) brushStyle=BRUSH_VERT;
+    else if (nHiBytes==0xff808080 && nLoBytes==0x80808080) brushStyle=BRUSH_CROSS;
+    else if (nHiBytes==0x01824428 && nLoBytes==0x10284482) brushStyle=BRUSH_DIAGCROSS;
+    else if (nHiBytes==0x80402010 && nLoBytes==0x08040201) brushStyle=BRUSH_UPDIAG;
+    else if (nHiBytes==0x01020408 && nLoBytes==0x10204080) brushStyle=BRUSH_DOWNDIAG;
+    else if (nBitCount<=24) brushStyle=BRUSH_25;
+    else if (nBitCount<=40) brushStyle=BRUSH_50;
+    else if (nBitCount<=56) brushStyle=BRUSH_75;
+    else                    brushStyle=BRUSH_SOLID;
+
+    isRead = true;
+
+    return 8;
+  }
+}
 
 //============================ PictReader ==================================
 
@@ -51,7 +146,7 @@ enum PictDrawingMethod {
 };
 
 class PictReader {
-
+  typedef class PictReaderInternal::Pattern Pattern;
 private:
 
     SvStream    * pPict;             // Die einzulesende Pict-Datei
@@ -67,11 +162,11 @@ private:
     Point         aTextPosition;
     Color         aActForeColor;
     Color         aActBackColor;
-    PenStyle      eActPenPenStyle;
-    BrushStyle    eActPenBrushStyle;
-    BrushStyle    eActFillStyle;
-    BrushStyle    eActBackStyle;
+    Pattern       eActPenPattern;
+    Pattern       eActFillPattern;
+    Pattern       eActBackPattern;
     USHORT        nActPenSize;
+ // Note: Postscript mode is stored by setting eActRop to ROP_1
     RasterOp      eActROP;
     PictDrawingMethod eActMethod;
     Size          aActOvalSize;
@@ -100,9 +195,7 @@ private:
 
     ULONG ReadPolygon(Polygon & rPoly);
 
-    ULONG ReadPattern(PenStyle * pPenStyle, BrushStyle * pBrushStyle);
-
-    ULONG ReadPixPattern(PenStyle * pPenStyle, BrushStyle * pBrushStyle);
+    ULONG ReadPixPattern(Pattern &pattern);
 
     Rectangle aLastRect;
     ULONG ReadAndDrawRect(PictDrawingMethod eMethod);
@@ -146,9 +239,11 @@ private:
     void SetLineColor( const Color& rColor );
     void SetFillColor( const Color& rColor );
 
+  // OSNOLA: returns the text encoding which must be used for system id
+  static rtl_TextEncoding GetTextEncoding (USHORT fId = 0xFFFF);
 public:
 
-    PictReader() {}
+  PictReader() { aActFont.SetCharSet(GetTextEncoding()); }
 
     void ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile );
         // Liesst aus dem Stream eine Pict-Datei und fuellt das GDIMetaFile
@@ -208,6 +303,42 @@ public:
 }
 
 //=================== Methoden von PictReader ==============================
+rtl_TextEncoding PictReader::GetTextEncoding (USHORT fId) {
+  static bool first = true;
+  static rtl_TextEncoding enc = RTL_TEXTENCODING_APPLE_ROMAN;
+  if (first) {
+    rtl_TextEncoding def = gsl_getSystemTextEncoding();
+    // we keep gsl_getSystemTextEncoding only if it is a mac encoding
+    switch(def) {
+    case RTL_TEXTENCODING_APPLE_ROMAN:
+    case RTL_TEXTENCODING_APPLE_ARABIC:
+    case RTL_TEXTENCODING_APPLE_CENTEURO:
+    case RTL_TEXTENCODING_APPLE_CROATIAN:
+    case RTL_TEXTENCODING_APPLE_CYRILLIC:
+    case RTL_TEXTENCODING_APPLE_DEVANAGARI:
+    case RTL_TEXTENCODING_APPLE_FARSI:
+    case RTL_TEXTENCODING_APPLE_GREEK:
+    case RTL_TEXTENCODING_APPLE_GUJARATI:
+    case RTL_TEXTENCODING_APPLE_GURMUKHI:
+    case RTL_TEXTENCODING_APPLE_HEBREW:
+    case RTL_TEXTENCODING_APPLE_ICELAND:
+    case RTL_TEXTENCODING_APPLE_ROMANIAN:
+    case RTL_TEXTENCODING_APPLE_THAI:
+    case RTL_TEXTENCODING_APPLE_TURKISH:
+    case RTL_TEXTENCODING_APPLE_UKRAINIAN:
+    case RTL_TEXTENCODING_APPLE_CHINSIMP:
+    case RTL_TEXTENCODING_APPLE_CHINTRAD:
+    case RTL_TEXTENCODING_APPLE_JAPANESE:
+    case RTL_TEXTENCODING_APPLE_KOREAN:
+      enc = def; break;
+    default: break;
+    }
+    first = false;
+  }
+  if (fId == 13) return RTL_TEXTENCODING_ADOBE_DINGBATS; // CHECKME
+  if (fId == 23) return RTL_TEXTENCODING_ADOBE_SYMBOL;
+  return enc;
+}
 
 void PictReader::SetLineColor( const Color& rColor )
 {
@@ -344,61 +475,7 @@ ULONG PictReader::ReadPolygon(Polygon & rPoly)
     return nDataSize;
 }
 
-ULONG PictReader::ReadPattern(PenStyle * pPenStyle, BrushStyle * pBrushStyle)
-{
-    short nx,ny,nBitCount;
-    unsigned char nbyte[8];
-    BrushStyle eBrStyle;
-    PenStyle ePnStyle;
-    ULONG nHiBytes, nLoBytes;
-
-    // Anzahl der Bits im Pattern zaehlen, die auf 1 gesetzt sind:
-    nBitCount=0;
-    for (ny=0; ny<8; ny++) {
-        *pPict >> ((char&)nbyte[ny]);
-        for (nx=0; nx<8; nx++) {
-            if ( (nbyte[ny] & (1<<nx)) != 0 ) nBitCount++;
-        }
-    }
-
-    // Pattern in 2 Langworten unterbringen:
-    nHiBytes=(((((((ULONG)nbyte[0])<<8)|
-                 (ULONG)nbyte[1])<<8)|
-               (ULONG)nbyte[2])<<8)|
-             (ULONG)nbyte[3];
-    nLoBytes=(((((((ULONG)nbyte[4])<<8)|
-                 (ULONG)nbyte[5])<<8)|
-               (ULONG)nbyte[6])<<8)|
-             (ULONG)nbyte[7];
-
-    // Einen PenStyle machen:
-    if      (nBitCount<=0)  ePnStyle=PEN_NULL;
-    else if (nBitCount<=16) ePnStyle=PEN_DOT;
-    else if (nBitCount<=32) ePnStyle=PEN_DASHDOT;
-    else if (nBitCount<=48) ePnStyle=PEN_DASH;
-    else                    ePnStyle=PEN_SOLID;
-
-    // Einen BrushStyle machen:
-    if      (nHiBytes==0xffffffff && nLoBytes==0xffffffff) eBrStyle=BRUSH_SOLID;
-    else if (nHiBytes==0xff000000 && nLoBytes==0x00000000) eBrStyle=BRUSH_HORZ;
-    else if (nHiBytes==0x80808080 && nLoBytes==0x80808080) eBrStyle=BRUSH_VERT;
-    else if (nHiBytes==0xff808080 && nLoBytes==0x80808080) eBrStyle=BRUSH_CROSS;
-    else if (nHiBytes==0x01824428 && nLoBytes==0x10284482) eBrStyle=BRUSH_DIAGCROSS;
-    else if (nHiBytes==0x80402010 && nLoBytes==0x08040201) eBrStyle=BRUSH_UPDIAG;
-    else if (nHiBytes==0x01020408 && nLoBytes==0x10204080) eBrStyle=BRUSH_DOWNDIAG;
-    else if (nBitCount<=24) eBrStyle=BRUSH_25;
-    else if (nBitCount<=40) eBrStyle=BRUSH_50;
-    else if (nBitCount<=56) eBrStyle=BRUSH_75;
-    else                    eBrStyle=BRUSH_SOLID;
-
-    if (pPenStyle!=0) *pPenStyle=ePnStyle;
-
-    if (pBrushStyle!=0) *pBrushStyle=eBrStyle;
-
-    return 8;
-}
-
-ULONG PictReader::ReadPixPattern(PenStyle * pPenStyle, BrushStyle * pBrushStyle)
+ULONG PictReader::ReadPixPattern(PictReader::Pattern &pattern)
 {
     // Keine Ahnung, ob dies richtig ist, weil kein Bild gefunden, das
     // PixPatterns enthaelt. Auch hier nur der Versuch, die Groesse der Daten zu
@@ -411,13 +488,18 @@ ULONG PictReader::ReadPixPattern(PenStyle * pPenStyle, BrushStyle * pBrushStyle)
 
     *pPict >> nPatType;
     if (nPatType==1) {
-        ReadPattern(pPenStyle,pBrushStyle);
+            pattern.read(*pPict);
         nDataSize=ReadPixMapEtc(aBMP,FALSE,TRUE,NULL,NULL,FALSE,FALSE);
+        // CHANGEME: use average pixmap colors to update the pattern, ...
         if (nDataSize!=0xffffffff) nDataSize+=10;
     }
     else if (nPatType==2) {
-        ReadPattern(pPenStyle,pBrushStyle);
-        pPict->SeekRel(6); // RGBColor
+            pattern.read(*pPict);
+        // RGBColor
+        USHORT nR, nG, nB;
+        *pPict >> nR >> nG >> nB;
+        Color col((BYTE) ( nR >> 8 ), (BYTE) ( nG >> 8 ), (BYTE) ( nB >> 8 ) );
+        pattern.setColor(col);
         nDataSize=16;
     }
     else nDataSize=0xffffffff;
@@ -444,14 +526,15 @@ ULONG PictReader::ReadAndDrawRoundRect(PictDrawingMethod eMethod)
 {
     ReadRectangle(aLastRoundRect);
     DrawingMethod(eMethod);
-    pVirDev->DrawRect(aLastRoundRect,aActOvalSize.Width(),aActOvalSize.Height());
+    // Osnola: the corner's size is equal to aActOvalSize/2, see Quickdraw Drawing Reference 3-63
+    pVirDev->DrawRect(aLastRoundRect,(aActOvalSize.Width()+1)/2,(aActOvalSize.Height()+1)/2);
     return 8;
 }
 
 ULONG PictReader::ReadAndDrawSameRoundRect(PictDrawingMethod eMethod)
 {
     DrawingMethod(eMethod);
-    pVirDev->DrawRect(aLastRoundRect,aActOvalSize.Width(),aActOvalSize.Height());
+    pVirDev->DrawRect(aLastRoundRect,(aActOvalSize.Width()+1)/2,(aActOvalSize.Height()+1)/2);
     return 0;
 }
 
@@ -561,6 +644,23 @@ ULONG PictReader::ReadAndDrawSameRgn(PictDrawingMethod eMethod)
 void PictReader::DrawingMethod(PictDrawingMethod eMethod)
 {
     if( eActMethod==eMethod ) return;
+    if (eActROP == ROP_1) {
+      // Osnola: ignore postscript command
+      if (eMethod == PDM_TEXT) {
+        Font invisibleFont;
+        invisibleFont.SetColor(Color(COL_TRANSPARENT));
+        invisibleFont.SetFillColor(Color(COL_TRANSPARENT));
+        invisibleFont.SetTransparent(TRUE);
+        pVirDev->SetFont(invisibleFont);
+      }
+      else {
+        SetLineColor( Color(COL_TRANSPARENT) );
+        SetFillColor( Color(COL_TRANSPARENT) );
+      }
+      pVirDev->SetRasterOp(ROP_OVERPAINT);
+      eActMethod=eMethod;
+      return;
+    }
     switch (eMethod) {
         case PDM_FRAME:
             SetLineColor( aActForeColor );
@@ -569,22 +669,31 @@ void PictReader::DrawingMethod(PictDrawingMethod eMethod)
             break;
         case PDM_PAINT:
             SetLineColor( Color(COL_TRANSPARENT) );
-            SetFillColor( aActForeColor );
+            if (eActPenPattern.isDefault())
+              SetFillColor( aActForeColor );
+            else
+              SetFillColor(eActPenPattern.getColor(aActBackColor, aActForeColor));
             pVirDev->SetRasterOp(eActROP);
             break;
         case PDM_ERASE:
             SetLineColor( Color(COL_TRANSPARENT) );
-            SetFillColor( aActForeColor );
+            if (eActBackPattern.isDefault())
+              SetFillColor( aActBackColor );// Osnola: previously aActForeColor
+            else // checkMe
+              SetFillColor(eActBackPattern.getColor(COL_BLACK, aActBackColor));
             pVirDev->SetRasterOp(ROP_OVERPAINT);
             break;
-        case PDM_INVERT:
+            case PDM_INVERT: // checkme
             SetLineColor( Color(COL_TRANSPARENT));
             SetFillColor( Color( COL_BLACK ) );
             pVirDev->SetRasterOp(ROP_INVERT);
             break;
         case PDM_FILL:
             SetLineColor( Color(COL_TRANSPARENT) );
-            SetFillColor( aActForeColor );
+            if (eActFillPattern.isDefault())
+              SetFillColor( aActForeColor );
+            else
+              SetFillColor(eActFillPattern.getColor(aActBackColor, aActForeColor));
             pVirDev->SetRasterOp(ROP_OVERPAINT);
             break;
         case PDM_TEXT:
@@ -615,7 +724,7 @@ ULONG PictReader::ReadAndDrawText()
     while ( nLen > 0 && ( (unsigned char)sText[ nLen - 1 ] ) < 32 )
             nLen--;
     sText[ nLen ] = 0;
-    String aString( (const sal_Char*)&sText, gsl_getSystemTextEncoding() );
+    String aString( (const sal_Char*)&sText, aActFont.GetCharSet());// OSNOLA: gsl_getSystemTextEncoding() );
     pVirDev->DrawText( Point( aTextPosition.X(), aTextPosition.Y() ), aString );
     return nDataLen;
 }
@@ -1116,9 +1225,9 @@ ULONG PictReader::ReadData(USHORT nOpcode)
         break;
     }
     case 0x0002:   // BkPat
-        nDataSize=ReadPattern(NULL,&eActBackStyle);
-        eActMethod=PDM_UNDEFINED;
-        break;
+      nDataSize=eActBackPattern.read(*pPict);
+      eActMethod=PDM_UNDEFINED;
+      break;
 
     case 0x0003:   // TxFont
         *pPict >> nUSHORT;
@@ -1129,8 +1238,7 @@ ULONG PictReader::ReadData(USHORT nOpcode)
         else if (nUSHORT ==   22) aActFont.SetFamily(FAMILY_MODERN);
         else if (nUSHORT <= 1023) aActFont.SetFamily(FAMILY_SWISS);
         else                      aActFont.SetFamily(FAMILY_ROMAN);
-        if      ( nUSHORT == 23 ) aActFont.SetCharSet( RTL_TEXTENCODING_SYMBOL );
-        else    aActFont.SetCharSet( gsl_getSystemTextEncoding() );
+        aActFont.SetCharSet(GetTextEncoding(nUSHORT));
         eActMethod=PDM_UNDEFINED;
         nDataSize=2;
         break;
@@ -1170,7 +1278,10 @@ ULONG PictReader::ReadData(USHORT nOpcode)
     }
     case 0x0008:   // PnMode
         *pPict >> nUSHORT;
-        switch (nUSHORT & 0x0007) {
+        // internal code for postscript command (Quickdraw Reference Drawing B-30,B-34)
+        if (nUSHORT==23) eActROP = ROP_1;
+        else {
+          switch (nUSHORT & 0x0007) {
             case 0: eActROP=ROP_OVERPAINT; break; // Copy
             case 1: eActROP=ROP_OVERPAINT; break; // Or
             case 2: eActROP=ROP_XOR;       break; // Xor
@@ -1179,18 +1290,19 @@ ULONG PictReader::ReadData(USHORT nOpcode)
             case 5: eActROP=ROP_OVERPAINT; break; // notOr
             case 6: eActROP=ROP_XOR;       break; // notXor
             case 7: eActROP=ROP_OVERPAINT; break; // notBic
+          }
         }
         eActMethod=PDM_UNDEFINED;
         nDataSize=2;
         break;
 
     case 0x0009:   // PnPat
-        nDataSize=ReadPattern(&eActPenPenStyle,&eActPenBrushStyle);
+      nDataSize=eActPenPattern.read(*pPict);
         eActMethod=PDM_UNDEFINED;
         break;
 
     case 0x000a:   // FillPat
-        nDataSize=ReadPattern(NULL,&eActFillStyle);
+      nDataSize=eActFillPattern.read(*pPict);
         eActMethod=PDM_UNDEFINED;
         break;
 
@@ -1232,17 +1344,17 @@ ULONG PictReader::ReadData(USHORT nOpcode)
         break;
 
     case 0x0012:   // BkPixPat
-        nDataSize=ReadPixPattern(NULL,&eActBackStyle);
+        nDataSize=ReadPixPattern(eActBackPattern);
         eActMethod=PDM_UNDEFINED;
         break;
 
     case 0x0013:   // PnPixPat
-        nDataSize=ReadPixPattern(&eActPenPenStyle,&eActPenBrushStyle);
+        nDataSize=ReadPixPattern(eActPenPattern);
         eActMethod=PDM_UNDEFINED;
         break;
 
     case 0x0014:   // FillPixPat
-        nDataSize=ReadPixPattern(NULL,&eActFillStyle);
+        nDataSize=ReadPixPattern(eActFillPattern);
         eActMethod=PDM_UNDEFINED;
         break;
 
@@ -1361,8 +1473,7 @@ ULONG PictReader::ReadData(USHORT nOpcode)
         else if (nUSHORT ==   22) aActFont.SetFamily(FAMILY_MODERN);
         else if (nUSHORT <= 1023) aActFont.SetFamily(FAMILY_SWISS);
         else                      aActFont.SetFamily(FAMILY_ROMAN);
-        if (nUSHORT==23) aActFont.SetCharSet( RTL_TEXTENCODING_SYMBOL);
-        else aActFont.SetCharSet( gsl_getSystemTextEncoding() );
+        aActFont.SetCharSet(GetTextEncoding(nUSHORT));
         *pPict >> nByteLen; nLen=((USHORT)nByteLen)&0x00ff;
         pPict->Read( &sFName, nLen );
         sFName[ nLen ] = 0;
@@ -1803,16 +1914,12 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
 
     aActForeColor       = Color(COL_BLACK);
     aActBackColor       = Color(COL_WHITE);
-    eActPenPenStyle     = PEN_SOLID;
-    eActPenBrushStyle   = BRUSH_SOLID;
-    eActFillStyle       = BRUSH_SOLID;
-    eActBackStyle       = BRUSH_SOLID;
     nActPenSize         = 1;
     eActROP             = ROP_OVERPAINT;
     eActMethod          = PDM_UNDEFINED;
     aActOvalSize        = Size(1,1);
 
-    aActFont.SetCharSet( gsl_getSystemTextEncoding() );
+    aActFont.SetCharSet( GetTextEncoding());
     aActFont.SetFamily(FAMILY_SWISS);
     aActFont.SetSize(Size(0,12));
     aActFont.SetAlign(ALIGN_BASELINE);
