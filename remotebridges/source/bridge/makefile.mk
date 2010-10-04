@@ -62,3 +62,11 @@ DEF1NAME=		$(SHL1TARGET)
 
 # --- Targets ------------------------------------------------------
 .INCLUDE :	target.mk
+
+ALLTAR : $(MISC)/remotebridge.component
+
+$(MISC)/remotebridge.component .ERRREMOVE : \
+        $(SOLARENV)/bin/createcomponent.xslt remotebridge.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_URE_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt remotebridge.component
