@@ -46,7 +46,7 @@ public:
     virtual ~PageMasterImportPropertyMapper();
 
     /** this method is called for every item that has the MID_FLAG_SPECIAL_ITEM_IMPORT flag set */
-    virtual sal_Bool handleSpecialItem(
+    virtual bool handleSpecialItem(
             XMLPropertyState& rProperty,
             ::std::vector< XMLPropertyState >& rProperties,
             const ::rtl::OUString& rValue,

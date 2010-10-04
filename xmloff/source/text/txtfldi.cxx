@@ -713,8 +713,8 @@ void XMLSenderFieldImportContext::ProcessAttribute(
     if (XML_TOK_TEXTFIELD_FIXED == nAttrToken) {
 
         // set bVal
-        sal_Bool bVal;
-        sal_Bool bRet = GetImport().GetMM100UnitConverter().
+        bool bVal;
+        bool bRet = GetImport().GetMM100UnitConverter().
             convertBool(bVal, sAttrValue);
 
         // set bFixed if successfull
@@ -1132,7 +1132,7 @@ void XMLTimeFieldImportContext::ProcessAttribute(
         }
         case XML_TOK_TEXTFIELD_FIXED:
         {
-            sal_Bool bTmp;
+            bool bTmp;
             if (SvXMLUnitConverter::convertBool(bTmp, sAttrValue))
             {
                 bFixed = bTmp;
@@ -1683,7 +1683,7 @@ void XMLSimpleDocInfoImportContext::ProcessAttribute(
 {
     if (XML_TOK_TEXTFIELD_FIXED == nAttrToken)
     {
-        sal_Bool bTmp;
+        bool bTmp;
         if (SvXMLUnitConverter::convertBool(bTmp, sAttrValue))
         {
             bFixed = bTmp;
@@ -2076,7 +2076,7 @@ void XMLHiddenParagraphImportContext::ProcessAttribute(
     }
     else if (XML_TOK_TEXTFIELD_IS_HIDDEN == nAttrToken)
     {
-        sal_Bool bTmp;
+        bool bTmp;
         if (SvXMLUnitConverter::convertBool(bTmp, sAttrValue))
         {
             bIsHidden = bTmp;
@@ -2150,7 +2150,7 @@ void XMLConditionalTextImportContext::ProcessAttribute(
             break;
         case XML_TOK_TEXTFIELD_CURRENT_VALUE:
         {
-            sal_Bool bTmp;
+            bool bTmp;
             if (SvXMLUnitConverter::convertBool(bTmp, sAttrValue))
             {
                 bCurrentValue = bTmp;
@@ -2231,7 +2231,7 @@ void XMLHiddenTextImportContext::ProcessAttribute(
             break;
         case XML_TOK_TEXTFIELD_IS_HIDDEN:
         {
-            sal_Bool bTmp;
+            bool bTmp;
             if (SvXMLUnitConverter::convertBool(bTmp, sAttrValue))
             {
                 bIsHidden = bTmp;
@@ -2298,7 +2298,7 @@ void XMLFileNameImportContext::ProcessAttribute(
     {
         case XML_TOK_TEXTFIELD_FIXED:
         {
-            sal_Bool bTmp;
+            bool bTmp;
             if (SvXMLUnitConverter::convertBool(bTmp, sAttrValue))
             {
                 bFixed = bTmp;
@@ -2680,7 +2680,7 @@ void XMLPageVarSetFieldImportContext::ProcessAttribute(
     {
         case XML_TOK_TEXTFIELD_ACTIVE:
         {
-            sal_Bool bTmp;
+            bool bTmp;
             if (SvXMLUnitConverter::convertBool(bTmp, sAttrValue))
             {
                 bActive = bTmp;
@@ -3113,7 +3113,7 @@ void XMLDdeFieldDeclImportContext::StartElement(
                 break;
             case XML_TOK_DDEFIELD_UPDATE:
             {
-                sal_Bool bTmp;
+                bool bTmp;
                 if ( SvXMLUnitConverter::convertBool(
                     bTmp, xAttrList->getValueByIndex(i)) )
                 {
@@ -3959,7 +3959,7 @@ bool lcl_ProcessLabel( const SvXMLImport& rImport,
             }
             else if( IsXMLToken( sLocalName, XML_CURRENT_SELECTED ) )
             {
-                sal_Bool bTmp;
+                bool bTmp;
                 if( SvXMLUnitConverter::convertBool( bTmp, sValue ) )
                     rIsSelected = bTmp;
             }

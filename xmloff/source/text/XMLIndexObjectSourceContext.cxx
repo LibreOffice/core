@@ -100,7 +100,7 @@ void XMLIndexObjectSourceContext::ProcessAttribute(
 {
     switch (eParam)
     {
-        sal_Bool bTmp;
+        bool bTmp;
 
         case XML_TOK_INDEXSOURCE_USE_OTHER_OBJECTS:
             if (SvXMLUnitConverter::convertBool(bTmp, rValue))

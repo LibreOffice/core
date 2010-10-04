@@ -131,7 +131,7 @@ void XMLIndexBibliographyConfigurationContext::ProcessAttribute(
         }
         else if( IsXMLToken(sLocalName, XML_SORT_BY_POSITION) )
         {
-            sal_Bool bTmp;
+            bool bTmp;
             if (SvXMLUnitConverter::convertBool(bTmp, sValue))
             {
                 bSortByPosition = bTmp;
@@ -184,7 +184,7 @@ SvXMLImportContext *XMLIndexBibliographyConfigurationContext::CreateChildContext
                 }
                 else if ( IsXMLToken( sLocalName, XML_SORT_ASCENDING ) )
                 {
-                    sal_Bool bTmp;
+                    bool bTmp;
                     if (SvXMLUnitConverter::convertBool(
                         bTmp, xAttrList->getValueByIndex(nAttr)))
                     {

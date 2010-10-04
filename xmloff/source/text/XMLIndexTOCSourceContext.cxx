@@ -115,7 +115,7 @@ void XMLIndexTOCSourceContext::ProcessAttribute(
 
         case XML_TOK_INDEXSOURCE_USE_OUTLINE_LEVEL:
         {
-            sal_Bool bTmp;
+            bool bTmp;
             if (SvXMLUnitConverter::convertBool(bTmp, rValue))
             {
                 bUseOutline = bTmp;
@@ -126,7 +126,7 @@ void XMLIndexTOCSourceContext::ProcessAttribute(
 
         case XML_TOK_INDEXSOURCE_USE_INDEX_MARKS:
         {
-            sal_Bool bTmp;
+            bool bTmp;
             if (SvXMLUnitConverter::convertBool(bTmp, rValue))
             {
                 bUseMarks = bTmp;
@@ -136,7 +136,7 @@ void XMLIndexTOCSourceContext::ProcessAttribute(
 
         case XML_TOK_INDEXSOURCE_USE_INDEX_SOURCE_STYLES:
         {
-            sal_Bool bTmp;
+            bool bTmp;
             if (SvXMLUnitConverter::convertBool(bTmp, rValue))
             {
                 bUseParagraphStyles = bTmp;

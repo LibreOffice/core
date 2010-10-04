@@ -950,7 +950,7 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
 {
     OUString sLanguage, sCountry;
     sal_Int32 nAttrVal;
-    sal_Bool bAttrBool;
+    bool bAttrBool;
     sal_uInt16 nAttrEnum;
     double fAttrDouble;
 
@@ -1399,7 +1399,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
 {
     OUString sLanguage, sCountry;
     ::com::sun::star::i18n::NativeNumberXmlAttributes aNatNumAttr;
-    sal_Bool bAttrBool;
+    bool bAttrBool;
     sal_uInt16 nAttrEnum;
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;

@@ -496,7 +496,7 @@ XMLChartImportPropertyMapper::~XMLChartImportPropertyMapper()
 {
 }
 
-sal_Bool XMLChartImportPropertyMapper::handleSpecialItem(
+bool XMLChartImportPropertyMapper::handleSpecialItem(
     XMLPropertyState& rProperty,
     ::std::vector< XMLPropertyState >& rProperties,
     const ::rtl::OUString& rValue,
@@ -510,7 +510,7 @@ sal_Bool XMLChartImportPropertyMapper::handleSpecialItem(
     if( nContextId )
     {
         sal_Int32 nValue = 0;
-        sal_Bool bValue = sal_False;
+        bool bValue = false;
 
         switch( nContextId )
         {

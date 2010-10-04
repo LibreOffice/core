@@ -83,7 +83,7 @@ namespace xmloff
 
         // get and convert the value
         ::rtl::OUString sAttributeValue = _rxAttributes->getValueByName(sCompleteAttributeName);
-        sal_Bool bValue = _bDefault;
+        bool bValue = _bDefault;
         GetImport().GetMM100UnitConverter().convertBool(bValue, sAttributeValue);
 
         // set the property

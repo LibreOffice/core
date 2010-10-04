@@ -62,7 +62,7 @@ PageMasterImportPropertyMapper::~PageMasterImportPropertyMapper()
 {
 }
 
-sal_Bool PageMasterImportPropertyMapper::handleSpecialItem(
+bool PageMasterImportPropertyMapper::handleSpecialItem(
         XMLPropertyState& rProperty,
         ::std::vector< XMLPropertyState >& rProperties,
         const ::rtl::OUString& rValue,

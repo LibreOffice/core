@@ -873,7 +873,7 @@ void AnimationNodeContext::init_node(  const ::com::sun::star::uno::Reference< :
             break;
             case ANA_AutoReverse:
             {
-                sal_Bool bTemp;
+                bool bTemp;
                 if( SvXMLUnitConverter::convertBool( bTemp, rValue ) )
                     mxNode->setAutoReverse( bTemp  );
             }
@@ -918,7 +918,7 @@ void AnimationNodeContext::init_node(  const ::com::sun::star::uno::Reference< :
             break;
             case ANA_After_Effect:
             {
-                sal_Bool bTemp;
+                bool bTemp;
                 if( SvXMLUnitConverter::convertBool( bTemp, rValue ) )
                     aUserData.push_back( NamedValue( GetXMLToken( XML_AFTER_EFFECT ), makeAny( bTemp ) ) );
             }

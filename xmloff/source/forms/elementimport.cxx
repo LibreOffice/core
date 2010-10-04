@@ -1693,13 +1693,13 @@ namespace xmloff
             GetPrefix(), ::rtl::OUString::createFromAscii(OAttributeMetaData::getCommonControlAttributeName(CCA_SELECTED)));
 
         // propagate the selected flag
-        sal_Bool bSelected;
+        bool bSelected;
         GetImport().GetMM100UnitConverter().convertBool(bSelected, _rxAttrList->getValueByName(sSelectedAttribute));
         if (bSelected)
             m_xListBoxImport->implSelectCurrentItem();
 
         // same for the default selected
-        sal_Bool bDefaultSelected;
+        bool bDefaultSelected;
         GetImport().GetMM100UnitConverter().convertBool(bDefaultSelected, _rxAttrList->getValueByName(sDefaultSelectedAttribute));
         if (bDefaultSelected)
             m_xListBoxImport->implDefaultSelectCurrentItem();

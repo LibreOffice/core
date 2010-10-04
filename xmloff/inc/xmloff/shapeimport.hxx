@@ -189,8 +189,8 @@ class SdXML3DLightContext: public SvXMLImportContext
     // local parameters which need to be read
     Color                       maDiffuseColor;
     ::basegfx::B3DVector        maDirection;
-    BOOL                        mbEnabled;
-    BOOL                        mbSpecular;
+    bool                        mbEnabled;
+    bool                        mbSpecular;
 
 public:
     SdXML3DLightContext(
@@ -228,7 +228,7 @@ protected:
     sal_Int32                   mnShadowSlant;
     com::sun::star::drawing::ShadeMode mxShadeMode;
     Color                       maAmbientColor;
-    BOOL                        mbLightingMode;
+    bool                        mbLightingMode;
 
     ::basegfx::B3DVector        maVRP;
     ::basegfx::B3DVector        maVPN;

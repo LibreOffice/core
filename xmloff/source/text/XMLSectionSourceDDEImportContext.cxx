@@ -128,7 +128,7 @@ void XMLSectionSourceDDEImportContext::StartElement(
                 break;
             case XML_TOK_SECTION_IS_AUTOMATIC_UPDATE:
             {
-                sal_Bool bTmp;
+                bool bTmp;
                 if (SvXMLUnitConverter::convertBool(
                     bTmp, xAttrList->getValueByIndex(nAttr)))
                 {

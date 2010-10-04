@@ -108,7 +108,7 @@ void XMLIndexAlphabeticalSourceContext::ProcessAttribute(
     enum IndexSourceParamEnum eParam,
     const OUString& rValue)
 {
-    sal_Bool bTmp;
+    bool bTmp;
 
     switch (eParam)
     {

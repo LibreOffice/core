@@ -1540,7 +1540,8 @@ void XMLAlphaIndexMarkImportContext_Impl::ProcessAttribute(
         }
         else if ( IsXMLToken( sLocalName, XML_MAIN_ENTRY ) )
         {
-            sal_Bool bMainEntry = sal_False, bTmp;
+            sal_Bool bMainEntry = sal_False;
+            bool bTmp;
 
             if (SvXMLUnitConverter::convertBool(bTmp, sValue))
                 bMainEntry = bTmp;
@@ -1977,7 +1978,7 @@ XMLParaContext::XMLParaContext(
             break;
         case XML_TOK_TEXT_P_IS_LIST_HEADER:
             {
-                sal_Bool bBool;
+                bool bBool;
                 if( SvXMLUnitConverter::convertBool( bBool, rValue ) )
                 {
                     bIsListHeader = bBool;
@@ -1986,7 +1987,7 @@ XMLParaContext::XMLParaContext(
             break;
         case XML_TOK_TEXT_P_RESTART_NUMBERING:
             {
-                sal_Bool bBool;
+                bool bBool;
                 if (SvXMLUnitConverter::convertBool(bBool, rValue))
                 {
                     bIsRestart = bBool;

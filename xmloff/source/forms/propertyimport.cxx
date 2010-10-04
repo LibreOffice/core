@@ -109,7 +109,7 @@ Any PropertyConversion::convertString( SvXMLImport& _rImporter, const ::com::sun
     {
         case TypeClass_BOOLEAN:     // sal_Bool
         {
-            sal_Bool bValue;
+            bool bValue;
         #if OSL_DEBUG_LEVEL > 0
             sal_Bool bSuccess =
         #endif

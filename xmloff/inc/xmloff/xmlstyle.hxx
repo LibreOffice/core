@@ -243,7 +243,7 @@ public:
     const SvXMLStyleContext *FindStyleChildContext(
                                       sal_uInt16 nFamily,
                                       const ::rtl::OUString& rName,
-                                      BOOL bCreateIndex=sal_False ) const;
+                                      sal_Bool bCreateIndex=sal_False ) const;
     virtual sal_uInt16 GetFamily( const ::rtl::OUString& rFamily ) const;
     virtual UniReference < SvXMLImportPropertyMapper > GetImportPropertyMapper(
                         sal_uInt16 nFamily ) const;

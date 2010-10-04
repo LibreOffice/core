@@ -77,7 +77,7 @@ void XMLTrackedChangesImportContext::StartElement(
         {
             if ( IsXMLToken( sLocalName, XML_TRACK_CHANGES ) )
             {
-                sal_Bool bTmp;
+                bool bTmp;
                 if( SvXMLUnitConverter::convertBool(
                     bTmp, xAttrList->getValueByIndex(i)) )
                 {

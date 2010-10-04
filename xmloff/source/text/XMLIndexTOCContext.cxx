@@ -165,7 +165,7 @@ void XMLIndexTOCContext::StartElement(
                 }
                 else if ( IsXMLToken( sLocalName, XML_PROTECTED ) )
                 {
-                    sal_Bool bTmp;
+                    bool bTmp;
                     if ( SvXMLUnitConverter::convertBool(
                          bTmp, xAttrList->getValueByIndex(nAttr) ) )
                     {

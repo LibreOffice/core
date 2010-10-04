@@ -40,7 +40,7 @@ XMLErrorIndicatorPropertyHdl::~XMLErrorIndicatorPropertyHdl()
 sal_Bool XMLErrorIndicatorPropertyHdl::importXML( const ::rtl::OUString& rStrImpValue,
                                                   uno::Any& rValue, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
-    sal_Bool bValue;
+    bool bValue;
     SvXMLUnitConverter::convertBool( bValue, rStrImpValue );
 
     // modify existing value

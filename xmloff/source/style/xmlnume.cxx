@@ -115,7 +115,7 @@ void SvxXMLNumRuleExport::exportLevelStyles( const uno::Reference< ::com::sun::s
 
 void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
                                     const uno::Sequence<beans::PropertyValue>& rProps,
-                                    BOOL bOutline )
+                                    sal_Bool bOutline )
 {
     sal_Int16 eType = NumberingType::CHAR_SPECIAL;
 

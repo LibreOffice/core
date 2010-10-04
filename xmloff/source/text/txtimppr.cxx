@@ -52,7 +52,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::text;
 
-sal_Bool XMLTextImportPropertyMapper::handleSpecialItem(
+bool XMLTextImportPropertyMapper::handleSpecialItem(
             XMLPropertyState& rProperty,
             ::std::vector< XMLPropertyState >& rProperties,
             const ::rtl::OUString& rValue,

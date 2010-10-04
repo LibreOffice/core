@@ -113,7 +113,7 @@ void XMLIndexTabStopEntryContext::StartElement(
             // #i21237#
             else if ( IsXMLToken( sLocalName, XML_WITH_TAB ) )
             {
-                sal_Bool bTmp;
+                bool bTmp;
                 if (SvXMLUnitConverter::convertBool(bTmp, sAttr))
                     bWithTab = bTmp;
             }

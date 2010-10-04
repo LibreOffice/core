@@ -138,7 +138,7 @@ void XMLLineNumberingImportContext::ProcessAttribute(
     enum LineNumberingToken eToken,
     OUString sValue)
 {
-    sal_Bool bTmp;
+    bool bTmp;
     sal_Int32 nTmp;
 
     switch (eToken)

@@ -312,7 +312,7 @@ void XMLSectionImportContext::ProcessAttributes(
                 break;
             case XML_TOK_SECTION_IS_HIDDEN:
                 {
-                    sal_Bool bTmp;
+                    bool bTmp;
                     if (SvXMLUnitConverter::convertBool(bTmp, sAttr))
                     {
                         bIsCurrentlyVisible = !bTmp;
@@ -326,7 +326,7 @@ void XMLSectionImportContext::ProcessAttributes(
                 break;
             case XML_TOK_SECTION_PROTECT:
             {
-                sal_Bool bTmp;
+                bool bTmp;
                 if (SvXMLUnitConverter::convertBool(bTmp, sAttr))
                 {
                     bProtect = bTmp;

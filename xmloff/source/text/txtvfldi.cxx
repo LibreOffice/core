@@ -1373,7 +1373,7 @@ void XMLValueImportHelper::ProcessAttribute(
 
         case XML_TOK_TEXTFIELD_BOOL_VALUE:
         {
-            sal_Bool bTmp;
+            bool bTmp;
             sal_Bool bRet = SvXMLUnitConverter::convertBool(bTmp,sAttrValue);
             if (bRet) {
                 bFloatValueOK = sal_True;

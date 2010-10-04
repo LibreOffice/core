@@ -94,7 +94,7 @@ void XMLChangedRegionImportContext::StartElement(
             }
             else if( IsXMLToken( sLocalName, XML_MERGE_LAST_PARAGRAPH ) )
             {
-                sal_Bool bTmp;
+                bool bTmp;
                 if( SvXMLUnitConverter::convertBool(bTmp, sValue) )
                 {
                     bMergeLastPara = bTmp;

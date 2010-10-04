@@ -112,7 +112,7 @@ public:
                                   const SvXMLImport& rImport );
     virtual ~XMLChartImportPropertyMapper();
 
-    virtual sal_Bool handleSpecialItem(
+    virtual bool handleSpecialItem(
         XMLPropertyState& rProperty,
         ::std::vector< XMLPropertyState >& rProperties,
         const ::rtl::OUString& rValue,

@@ -441,7 +441,7 @@ void SvXMLUnitConverter::convertMeasure( OUStringBuffer& rBuffer,
 }
 
 /** convert string to boolean */
-sal_Bool SvXMLUnitConverter::convertBool( sal_Bool& rBool,
+sal_Bool SvXMLUnitConverter::convertBool( bool& rBool,
                                       const OUString& rString )
 {
     rBool = IsXMLToken(rString, XML_TRUE);
@@ -2253,7 +2253,7 @@ sal_Bool SvXMLUnitConverter::convertAny(      com::sun::star::uno::Any& aValue,
 
     if (sType.equalsAscii("boolean"))
     {
-        sal_Bool bTempValue = sal_False;
+        bool bTempValue = false;
         SvXMLUnitConverter::convertBool(bTempValue, sValue);
         aValue <<= bTempValue;
         bConverted = sal_True;

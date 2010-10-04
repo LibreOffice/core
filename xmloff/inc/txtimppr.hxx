@@ -57,7 +57,7 @@ class XMLOFF_DLLPUBLIC XMLTextImportPropertyMapper : public SvXMLImportPropertyM
                 XMLPropertyState** ppNewFontCharSet ) const;
 
 protected:
-    virtual sal_Bool handleSpecialItem(
+    virtual bool handleSpecialItem(
             XMLPropertyState& rProperty,
             ::std::vector< XMLPropertyState >& rProperties,
             const ::rtl::OUString& rValue,

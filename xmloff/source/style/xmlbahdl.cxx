@@ -247,7 +247,7 @@ sal_Bool XMLBoolPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, c
 {
     sal_Bool bRet = sal_False;
 
-    sal_Bool bValue;
+    bool bValue;
     bRet = SvXMLUnitConverter::convertBool( bValue, rStrImpValue );
     rValue <<= sal_Bool(bValue);
 
@@ -285,7 +285,7 @@ sal_Bool XMLNBoolPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, 
 {
     sal_Bool bRet = sal_False;
 
-    sal_Bool bValue;
+    bool bValue;
     bRet = SvXMLUnitConverter::convertBool( bValue, rStrImpValue );
     rValue <<= sal_Bool(!bValue);
 
@@ -808,7 +808,7 @@ XMLIsAutoColorPropHdl::~XMLIsAutoColorPropHdl()
 
 sal_Bool XMLIsAutoColorPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_Bool bValue;
+    bool bValue;
 
     // An auto color overrides any other color set!
     sal_Bool bRet = SvXMLUnitConverter::convertBool( bValue, rStrImpValue );

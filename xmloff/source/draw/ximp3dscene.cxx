@@ -54,8 +54,8 @@ SdXML3DLightContext::SdXML3DLightContext(
 :   SvXMLImportContext( rImport, nPrfx, rLName),
     maDiffuseColor(0x00000000),
     maDirection(0.0, 0.0, 1.0),
-    mbEnabled(FALSE),
-    mbSpecular(FALSE)
+    mbEnabled(false),
+    mbSpecular(false)
 {
     // read attributes for the 3DScene
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -231,7 +231,7 @@ SdXML3DSceneAttributesHelper::SdXML3DSceneAttributesHelper( SvXMLImport& rImport
     mnShadowSlant(0),
     mxShadeMode(drawing::ShadeMode_SMOOTH),
     maAmbientColor(0x00666666),
-    mbLightingMode(FALSE),
+    mbLightingMode(false),
     maVRP(0.0, 0.0, 1.0),
     maVPN(0.0, 0.0, 1.0),
     maVUP(0.0, 1.0, 0.0),

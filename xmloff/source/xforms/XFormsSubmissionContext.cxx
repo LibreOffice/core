@@ -105,7 +105,7 @@ XFormsSubmissionContext::~XFormsSubmissionContext()
 Any toBool( const OUString& rValue )
 {
     Any aValue;
-    sal_Bool bValue;
+    bool bValue;
     if( SvXMLUnitConverter::convertBool( bValue, rValue ) )
     {
         aValue <<= ( bValue ? true : false );

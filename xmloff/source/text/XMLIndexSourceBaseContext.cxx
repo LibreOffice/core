@@ -215,7 +215,7 @@ void XMLIndexSourceBaseContext::ProcessAttribute(
 
         case XML_TOK_INDEXSOURCE_RELATIVE_TABS:
         {
-            sal_Bool bTmp;
+            bool bTmp;
             if (SvXMLUnitConverter::convertBool(bTmp, rValue))
             {
                 bRelativeTabs = bTmp;

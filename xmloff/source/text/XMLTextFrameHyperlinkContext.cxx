@@ -88,7 +88,7 @@ XMLTextFrameHyperlinkContext::XMLTextFrameHyperlinkContext(
             break;
         case XML_TOK_TEXT_HYPERLINK_SERVER_MAP:
             {
-                sal_Bool bTmp;
+                bool bTmp;
                 if( rImport.GetMM100UnitConverter().convertBool( bTmp,
                                                                   rValue ) )
                 {

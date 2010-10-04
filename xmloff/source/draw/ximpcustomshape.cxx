@@ -86,7 +86,7 @@ const SvXMLEnumMapEntry aXML_GluePointEnumMap[] =
 void GetBool( std::vector< com::sun::star::beans::PropertyValue >& rDest,
                         const rtl::OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
-    sal_Bool bAttrBool;
+    bool bAttrBool;
     if ( SvXMLUnitConverter::convertBool( bAttrBool, rValue ) )
     {
         beans::PropertyValue aProp;

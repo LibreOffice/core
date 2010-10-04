@@ -173,7 +173,7 @@ public:
                                 MapUnit eDstUnit );
 
     /** convert string to boolean */
-    static sal_Bool convertBool( sal_Bool& rBool,
+    static sal_Bool convertBool( bool& rBool,
                              const ::rtl::OUString& rString );
 
     /** convert boolean to string */

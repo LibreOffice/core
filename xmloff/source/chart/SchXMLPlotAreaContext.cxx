@@ -2053,8 +2053,8 @@ void SchXMLEquationContext::StartElement( const uno::Reference< xml::sax::XAttri
     const SvXMLTokenMap& rAttrTokenMap = mrImportHelper.GetRegEquationAttrTokenMap();
     OUString sAutoStyleName;
 
-    sal_Bool bShowEquation = sal_True;
-    sal_Bool bShowRSquare = sal_False;
+    bool bShowEquation = true;
+    bool bShowRSquare = false;
     awt::Point aPosition;
     bool bHasXPos = false;
     bool bHasYPos = false;
