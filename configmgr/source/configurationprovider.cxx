@@ -114,6 +114,8 @@ public:
 private:
     virtual ~Service() {}
 
+    virtual void SAL_CALL disposing() { flushModifications(); }
+
     virtual rtl::OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException)
     { return configuration_provider::getImplementationName(); }
@@ -165,6 +167,8 @@ private:
 
     virtual css::lang::Locale SAL_CALL getLocale()
         throw (css::uno::RuntimeException);
+
+    void flushModifications() const;
 
     css::uno::Reference< css::uno::XComponentContext > context_;
     rtl::OUString locale_;
@@ -326,7 +330,7 @@ void Service::removeRefreshListener(
 }
 
 void Service::flush() throw (css::uno::RuntimeException) {
-    //TODO
+    flushModifications();
     cppu::OInterfaceContainerHelper * cont = rBHelper.getContainer(
         cppu::UnoType< css::util::XFlushListener >::get());
     if (cont != 0) {
@@ -378,6 +382,16 @@ css::lang::Locale Service::getLocale() throw (css::uno::RuntimeException) {
         }
     }
     return loc;
+}
+
+void Service::flushModifications() const {
+    Components * components;
+    {
+        osl::MutexGuard guard(lock);
+        Components::initSingleton(context_);
+        components = &Components::getSingleton();
+    }
+    components->flushModifications();
 }
 
 class Factory:
