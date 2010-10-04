@@ -103,6 +103,20 @@ void RichStringPortion::convert( const Reference< XText >& rxText, sal_Int32 nXf
     }
 }
 
+void RichStringPortion::writeFontProperties( const Reference<XText>& rxText, sal_Int32 nXfId ) const
+{
+    PropertySet aPropSet(rxText);
+
+    if (mxFont.get())
+        mxFont->writeToPropertySet(aPropSet, FONT_PROPTYPE_TEXT);
+
+    if (const Font* pFont = getStyles().getFontFromCellXf(nXfId).get())
+    {
+        if (pFont->needsRichTextFormat())
+            pFont->writeToPropertySet(aPropSet, FONT_PROPTYPE_TEXT);
+    }
+}
+
 // ----------------------------------------------------------------------------
 
 void FontPortionModel::read( RecordInputStream& rStrm )
@@ -499,6 +513,16 @@ OUString RichString::getPlainText() const
 
 void RichString::convert( const Reference< XText >& rxText, sal_Int32 nXfId ) const
 {
+    if (maFontPortions.size() == 1)
+    {
+        // Set text directly to the cell when the string has only one portion.
+        // It's much faster this way.
+        RichStringPortion& rPtn = *maFontPortions.front();
+        rxText->setString(rPtn.getText());
+        rPtn.writeFontProperties(rxText, nXfId);
+        return;
+    }
+
     for( PortionVec::const_iterator aIt = maFontPortions.begin(), aEnd = maFontPortions.end(); aIt != aEnd; ++aIt )
     {
         (*aIt)->convert( rxText, nXfId );

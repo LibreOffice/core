@@ -44,12 +44,13 @@ namespace core {
 /** Information about a processed context element. */
 struct ContextInfo
 {
-    OUStringBuffer      maCurrChars;        /// Collected characters from context.
-    OUStringBuffer      maFinalChars;       /// Finalized (stipped) characters.
+    OUString            maCurrChars;        /// Collected characters from context.
+    OUString            maFinalChars;       /// Finalized (stipped) characters.
     sal_Int32           mnElement;          /// The element identifier.
     bool                mbTrimSpaces;       /// True = trims leading/trailing spaces from text data.
 
     explicit            ContextInfo();
+                        ContextInfo( sal_Int32 nElement ) : mnElement( nElement ) {}
 };
 
 ContextInfo::ContextInfo() :
@@ -115,7 +116,7 @@ void ContextHandler2Helper::implCharacters( const OUString& rChars )
 {
     // #i76091# collect characters until context ends
     if( !mxContextStack->empty() )
-        mxContextStack->back().maCurrChars.append( rChars );
+        mxContextStack->back().maCurrChars += rChars;
 }
 
 void ContextHandler2Helper::implEndCurrentContext( sal_Int32 nElement )
@@ -127,7 +128,7 @@ void ContextHandler2Helper::implEndCurrentContext( sal_Int32 nElement )
         // #i76091# process collected characters
         appendCollectedChars();
         // finalize the current context and pop context info from stack
-        onEndElement( mxContextStack->back().maFinalChars.makeStringAndClear() );
+        onEndElement( mxContextStack->back().maFinalChars );
         popContextInfo();
     }
 }
@@ -157,10 +158,9 @@ void ContextHandler2Helper::implEndRecord( sal_Int32 nRecId )
 
 ContextInfo& ContextHandler2Helper::pushContextInfo( sal_Int32 nElement )
 {
-    mxContextStack->resize( mxContextStack->size() + 1 );
-    ContextInfo& rInfo = mxContextStack->back();
-    rInfo.mnElement = nElement;
-    return rInfo;
+    ContextInfo aInfo( nElement );
+    mxContextStack->push_back( aInfo );
+    return mxContextStack->back();
 }
 
 void ContextHandler2Helper::popContextInfo()
@@ -176,8 +176,10 @@ void ContextHandler2Helper::appendCollectedChars()
     ContextInfo& rInfo = mxContextStack->back();
     if( rInfo.maCurrChars.getLength() > 0 )
     {
-        OUString aChars = rInfo.maCurrChars.makeStringAndClear();
-        rInfo.maFinalChars.append( (mbEnableTrimSpace && rInfo.mbTrimSpaces) ? aChars.trim() : aChars );
+        OUString aChars( rInfo.maCurrChars );
+
+        rInfo.maCurrChars = OUString();
+        rInfo.maFinalChars += ( (mbEnableTrimSpace && rInfo.mbTrimSpaces) ? aChars.trim() : aChars );
     }
 }
 

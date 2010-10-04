@@ -76,6 +76,10 @@ public:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >& rxText,
                             sal_Int32 nXfId );
 
+    void                writeFontProperties(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >& rxText,
+        sal_Int32 nXfId ) const;
+
 private:
     ::rtl::OUString     maText;         /// Portion text.
     FontRef             mxFont;         /// Embedded portion font, may be empty.
