@@ -123,6 +123,11 @@ private:
 
     ~Components();
 
+    void parseFileLeniently(
+        FileParser * parseFile, rtl::OUString const & url, int layer,
+        Data & data, Partial const * partial, Modifications * modifications,
+        Additions * additions);
+
     void parseFiles(
         int layer, rtl::OUString const & extension, FileParser * parseFile,
         rtl::OUString const & url, bool recursive);
