@@ -1855,6 +1855,14 @@ void ScTable::ApplyPatternArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol,
     }
 }
 
+bool ScTable::SetAttrEntries(SCCOL nCol, ScAttrEntry* pData, SCSIZE nSize)
+{
+    if (!ValidCol(nCol))
+        return false;
+
+    return aCol[nCol].SetAttrEntries(pData, nSize);
+}
+
 void ScTable::ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
         const ScPatternAttr& rPattern, short nNewType )
 {

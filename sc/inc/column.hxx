@@ -51,6 +51,7 @@ class SvxBoxItem;
 
 class ScAttrIterator;
 class ScAttrArray;
+struct ScAttrEntry;
 class ScBaseCell;
 class ScDocument;
 class ScEditDataArray;
@@ -321,6 +322,7 @@ public:
     void        ApplyPattern( SCROW nRow, const ScPatternAttr& rPatAttr );
     void        ApplyPatternArea( SCROW nStartRow, SCROW nEndRow, const ScPatternAttr& rPatAttr,
                                   ScEditDataArray* pDataArray = NULL );
+    bool        SetAttrEntries(ScAttrEntry* pData, SCSIZE nSize);
     void        SetPattern( SCROW nRow, const ScPatternAttr& rPatAttr, BOOL bPutToPool = FALSE );
     void        SetPatternArea( SCROW nStartRow, SCROW nEndRow,
                                 const ScPatternAttr& rPatAttr, BOOL bPutToPool = FALSE );

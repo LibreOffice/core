@@ -58,12 +58,18 @@
 #include "stlsheet.hxx"
 #include "cell.hxx"
 #include "globstr.hrc"
+#include "attarray.hxx"
 #include "xltracer.hxx"
 #include "xistream.hxx"
 #include "xicontent.hxx"
 
 #include "root.hxx"
 #include "colrowst.hxx"
+#include "svl/poolcach.hxx"
+
+#include <list>
+
+using ::std::list;
 
 // PALETTE record - color information =========================================
 
@@ -1181,26 +1187,60 @@ const ScPatternAttr& XclImpXF::CreatePattern( bool bSkipPoolDefs )
     return *mpPattern;
 }
 
-void XclImpXF::ApplyPattern(
-        SCCOL nScCol1, SCROW nScRow1, SCCOL nScCol2, SCROW nScRow2,
-        SCTAB nScTab, ULONG nForceScNumFmt )
+void XclImpXF::ApplyPatternToAttrList(
+    list<ScAttrEntry>& rAttrs, SCROW nRow1, SCROW nRow2, sal_uInt32 nForceScNumFmt)
 {
     // force creation of cell style and hard formatting, do it here to have mpStyleSheet
-    const ScPatternAttr& rPattern = CreatePattern();
+    const ScPatternAttr& rOrigPat = CreatePattern();
+    ScPatternAttr aNewPat = rOrigPat;
+    const ScPatternAttr* pPat = NULL;
 
     // insert into document
     ScDocument& rDoc = GetDoc();
-    if( IsCellXF() && mpStyleSheet )
-        rDoc.ApplyStyleAreaTab( nScCol1, nScRow1, nScCol2, nScRow2, nScTab, *mpStyleSheet );
-    if( HasUsedFlags() )
-        rDoc.ApplyPatternAreaTab( nScCol1, nScRow1, nScCol2, nScRow2, nScTab, rPattern );
 
-    // #108770# apply special number format
-    if( nForceScNumFmt != NUMBERFORMAT_ENTRY_NOT_FOUND )
+    if (IsCellXF() && mpStyleSheet)
     {
-        ScPatternAttr aPattern( GetDoc().GetPool() );
-        GetNumFmtBuffer().FillScFmtToItemSet( aPattern.GetItemSet(), nForceScNumFmt );
-        rDoc.ApplyPatternAreaTab( nScCol1, nScRow1, nScCol2, nScRow2, nScTab, aPattern );
+        // Style sheet exists.  Create a copy of the original pattern.
+        aNewPat.SetStyleSheet(mpStyleSheet);
+        pPat = &aNewPat;
+    }
+
+    if (HasUsedFlags())
+    {
+        if (!pPat)
+            pPat = &aNewPat;
+
+        SfxItemPoolCache aCache(rDoc.GetPool(), &rOrigPat.GetItemSet());
+        pPat = static_cast<const ScPatternAttr*>(&aCache.ApplyTo(*pPat, true));
+    }
+
+    if (nForceScNumFmt != NUMBERFORMAT_ENTRY_NOT_FOUND)
+    {
+        if (!pPat)
+            pPat = &aNewPat;
+
+        ScPatternAttr aNumPat(GetDoc().GetPool());
+        GetNumFmtBuffer().FillScFmtToItemSet(aNumPat.GetItemSet(), nForceScNumFmt);
+        SfxItemPoolCache aCache(rDoc.GetPool(), &aNumPat.GetItemSet());
+        pPat = static_cast<const ScPatternAttr*>(&aCache.ApplyTo(*pPat, true));
+    }
+
+
+    if (pPat)
+    {
+        if (!rAttrs.empty() && rAttrs.back().nRow + 1 < nRow1)
+        {
+            // Fill this gap with the default pattern.
+            ScAttrEntry aEntry;
+            aEntry.nRow = nRow1 - 1;
+            aEntry.pPattern = rDoc.GetDefPattern();
+            rAttrs.push_back(aEntry);
+        }
+
+        ScAttrEntry aEntry;
+        aEntry.nRow = nRow2;
+        aEntry.pPattern = static_cast<const ScPatternAttr*>(&rDoc.GetPool()->Put(*pPat));
+        rAttrs.push_back(aEntry);
     }
 }
 
@@ -1444,18 +1484,6 @@ ScStyleSheet* XclImpXFBuffer::CreateStyleSheet( sal_uInt16 nXFIndex )
 {
     XclImpStyleMap::iterator aIt = maStylesByXf.find( nXFIndex );
     return (aIt == maStylesByXf.end()) ? 0 : aIt->second->CreateStyleSheet();
-}
-
-void XclImpXFBuffer::ApplyPattern(
-        SCCOL nScCol1, SCROW nScRow1, SCCOL nScCol2, SCROW nScRow2,
-        SCTAB nScTab, const XclImpXFIndex& rXFIndex )
-{
-    if( XclImpXF* pXF = GetXF( rXFIndex.GetXFIndex() ) )
-    {
-        // #108770# set 'Standard' number format for all Boolean cells
-        ULONG nForceScNumFmt = rXFIndex.IsBoolCell() ? GetNumFmtBuffer().GetStdScNumFmt() : NUMBERFORMAT_ENTRY_NOT_FOUND;
-        pXF->ApplyPattern( nScCol1, nScRow1, nScCol2, nScRow2, nScTab, nForceScNumFmt );
-    }
 }
 
 // Buffer for XF indexes in cells =============================================
@@ -1781,8 +1809,35 @@ void XclImpXFRangeBuffer::Finalize()
         {
             XclImpXFRangeColumn& rColumn = **aVIt;
             SCCOL nScCol = static_cast< SCCOL >( aVIt - aVBeg );
+            list<ScAttrEntry> aAttrs;
             for( XclImpXFRange* pStyle = rColumn.First(); pStyle; pStyle = rColumn.Next() )
-                rXFBuffer.ApplyPattern( nScCol, pStyle->mnScRow1, nScCol, pStyle->mnScRow2, nScTab, pStyle->maXFIndex );
+            {
+                const XclImpXFIndex& rXFIndex = pStyle->maXFIndex;
+                XclImpXF* pXF = rXFBuffer.GetXF( rXFIndex.GetXFIndex() );
+                if (!pXF)
+                    continue;
+
+                sal_uInt32 nForceScNumFmt = rXFIndex.IsBoolCell() ?
+                    GetNumFmtBuffer().GetStdScNumFmt() : NUMBERFORMAT_ENTRY_NOT_FOUND;
+
+                pXF->ApplyPatternToAttrList(aAttrs, pStyle->mnScRow1, pStyle->mnScRow2, nForceScNumFmt);
+            }
+
+            if (aAttrs.empty() || aAttrs.back().nRow != MAXROW)
+            {
+                ScAttrEntry aEntry;
+                aEntry.nRow = MAXROW;
+                aEntry.pPattern = rDoc.GetDefPattern();
+                aAttrs.push_back(aEntry);
+            }
+
+            size_t nAttrSize = aAttrs.size();
+            ScAttrEntry* pData = new ScAttrEntry[nAttrSize];
+            list<ScAttrEntry>::const_iterator itr = aAttrs.begin(), itrEnd = aAttrs.end();
+            for (size_t i = 0; itr != itrEnd; ++itr, ++i)
+                pData[i] = *itr;
+
+            rDoc.SetAttrEntries(nScCol, nScTab, pData, static_cast<SCSIZE>(nAttrSize));
         }
     }
 

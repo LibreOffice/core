@@ -475,6 +475,10 @@ void ScColumn::ApplyPatternArea( SCROW nStartRow, SCROW nEndRow, const ScPattern
     pAttrArray->ApplyCacheArea( nStartRow, nEndRow, &aCache, pDataArray );
 }
 
+bool ScColumn::SetAttrEntries(ScAttrEntry* pData, SCSIZE nSize)
+{
+    return pAttrArray->SetAttrEntries(pData, nSize);
+}
 
 void ScColumn::ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
         const ScPatternAttr& rPattern, short nNewType )

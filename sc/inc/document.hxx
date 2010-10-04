@@ -83,6 +83,7 @@ class Window;
 class XColorTable;
 class List;
 
+struct ScAttrEntry;
 class ScAutoFormatData;
 class ScBaseCell;
 class ScStringCell;
@@ -1211,6 +1212,9 @@ public:
     SC_DLLPUBLIC void           ApplyPatternAreaTab( SCCOL nStartCol, SCROW nStartRow,
                                             SCCOL nEndCol, SCROW nEndRow, SCTAB nTab,
                                             const ScPatternAttr& rAttr );
+
+    SC_DLLPUBLIC bool SetAttrEntries(SCCOL nCol, SCTAB nTab, ScAttrEntry* pData, SCSIZE nSize);
+
     SC_DLLPUBLIC void           ApplyPatternIfNumberformatIncompatible(
                             const ScRange& rRange, const ScMarkData& rMark,
                             const ScPatternAttr& rPattern, short nNewType );

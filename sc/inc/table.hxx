@@ -537,6 +537,8 @@ public:
     void        ApplyPattern( SCCOL nCol, SCROW nRow, const ScPatternAttr& rAttr );
     void        ApplyPatternArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                                   const ScPatternAttr& rAttr, ScEditDataArray* pDataArray = NULL );
+    bool        SetAttrEntries(SCCOL nCol, ScAttrEntry* pData, SCSIZE nSize);
+
     void        SetPattern( const ScAddress& rPos, const ScPatternAttr& rAttr, BOOL bPutToPool = FALSE )
                     {
                         if (ValidColRow(rPos.Col(),rPos.Row()))

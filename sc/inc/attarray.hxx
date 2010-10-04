@@ -133,6 +133,7 @@ public:
     void    ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, ScStyleSheet* pStyle );
     void    ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCache* pCache,
                             ScEditDataArray* pDataArray = NULL );
+    bool    SetAttrEntries(ScAttrEntry* pNewData, SCSIZE nSize);
     void    ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
                                 const SvxBorderLine* pLine, BOOL bColorOnly );
 

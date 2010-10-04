@@ -37,6 +37,7 @@
 #include "xiroot.hxx"
 
 class ScDocumentPool;
+class ScAttrEntry;
 
 /* ============================================================================
 - Buffers for style records (PALETTE, FONT, FORMAT, XF)
@@ -406,14 +407,9 @@ public:
         @return  A read-only reference to the item set stored internally. */
     const ScPatternAttr& CreatePattern( bool bSkipPoolDefs = false );
 
-    /** Inserts all formatting attributes to the specified area in the Calc document.
-        @param nForcedNumFmt  If not set to NUMBERFORMAT_ENTRY_NOT_FOUND, it will overwrite
-        the number format of the XF. */
-    void                ApplyPattern(
-                            SCCOL nScCol1, SCROW nScRow1,
-                            SCCOL nScCol2, SCROW nScRow2,
-                            SCTAB nScTab,
-                            ULONG nForceScNumFmt = NUMBERFORMAT_ENTRY_NOT_FOUND );
+    void                ApplyPatternToAttrList(
+                            ::std::list<ScAttrEntry>& rAttrs, SCROW nRow1, SCROW nRow2,
+                            sal_uInt32 nForceScNumFmt = NUMBERFORMAT_ENTRY_NOT_FOUND);
 
 private:
     void                ReadXF2( XclImpStream& rStrm );
@@ -508,14 +504,6 @@ public:
     /** Creates a cell style sheet of the passed XF and inserts it into the Calc document.
         @return  The pointer to the cell style sheet, or 0, if there is no style sheet. */
     ScStyleSheet*       CreateStyleSheet( sal_uInt16 nXFIndex );
-
-    /** Inserts formatting attributes from an XF to the specified area in the Calc document.
-        @param nForcedNumFmt  If not set to NUMBERFORMAT_ENTRY_NOT_FOUND, it will overwrite
-        the number format of the XF. */
-    void                ApplyPattern(
-                            SCCOL nScCol1, SCROW nScRow1,
-                            SCCOL nScCol2, SCROW nScRow2,
-                            SCTAB nScTab, const XclImpXFIndex& rXFIndex );
 
 private:
     typedef ScfDelList< XclImpStyle >               XclImpStyleList;
