@@ -27,9 +27,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 
-#ifndef EXTENSIONS_PROPERTYCONTROLEXTENDER_HXX
 #include "propertycontrolextender.hxx"
-#endif
 
 /** === begin UNO includes === **/
 #include <com/sun/star/awt/KeyFunction.hpp>

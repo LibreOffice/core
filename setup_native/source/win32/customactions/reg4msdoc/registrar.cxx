@@ -4,9 +4,7 @@
 
 #include "registrar.hxx"
 
-#ifndef _REGISTRYVALUEIMPL_HXX_
 #include "RegistryValueImpl.hxx"
-#endif
 #include "windowsregistry.hxx"
 #include "registryexception.hxx"
 

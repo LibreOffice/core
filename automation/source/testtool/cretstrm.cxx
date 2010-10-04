@@ -27,9 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_automation.hxx"
-#ifndef _CRetStream_HXX
 #include "cretstrm.hxx"
-#endif
 #include <tools/debug.hxx>
 #include "rcontrol.hxx"
 #include "svcommstream.hxx"

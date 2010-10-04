@@ -40,9 +40,7 @@
 #include <iderid.hxx>
 #include <localizationmgr.hxx>
 
-#ifndef _BASCTL_DLGRESID_HRC
 #include <dlgresid.hrc>
-#endif
 #include <tools/resmgr.hxx>
 #include <tools/shl.hxx>
 #include <unotools/sharedunocomponent.hxx>

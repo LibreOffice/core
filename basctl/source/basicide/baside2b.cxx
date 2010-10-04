@@ -58,9 +58,7 @@
 
 #include <unotools/sourceviewconfig.hxx>
 
-#ifndef _COM_SUN_STAR_SCRIPT_XLIBRYARYCONTAINER2_HPP_
 #include <com/sun/star/script/XLibraryContainer2.hpp>
-#endif
 #include <comphelper/processfactory.hxx>
 
 

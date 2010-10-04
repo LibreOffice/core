@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_forms.hxx"
 #include "Columns.hxx"
-#ifndef _FRM_PROPERTY_HRC_
 #include "property.hrc"
-#endif
 #include "property.hxx"
 #include "componenttools.hxx"
 #include "ids.hxx"
@@ -47,9 +45,7 @@
 #include <comphelper/property.hxx>
 #include <comphelper/basicio.hxx>
 #include "services.hxx"
-#ifndef _FRM_RESOURCE_HRC_
 #include "frm_resource.hrc"
-#endif
 #include <tools/debug.hxx>
 #include <rtl/uuid.h>
 #include <rtl/memory.h>

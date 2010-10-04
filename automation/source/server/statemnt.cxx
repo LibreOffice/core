@@ -35,39 +35,19 @@
 #include <comphelper/uieventslogger.hxx>
 
 #include <vcl/wintypes.hxx>
-#ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#endif
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <vcl/menubtn.hxx>
 #include <svtools/svtreebx.hxx>
 #include <svtools/brwbox.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _DOCKWIN_HXX //autogen
 #include <vcl/dockwin.hxx>
-#endif
-#ifndef _FLOATWIN_HXX //autogen
 #include <vcl/floatwin.hxx>
-#endif
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
-#ifndef _COMBOBOX_HXX //autogen
 #include <vcl/combobox.hxx>
-#endif
-#ifndef _MOREBTN_HXX //autogen
 #include <vcl/morebtn.hxx>
-#endif
-#ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
-#ifndef _TOOLBOX_HXX //autogen
 #include <vcl/toolbox.hxx>
-#endif
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/menu.hxx>
@@ -93,9 +73,7 @@
 #include <tools/fsys.hxx>
 #include <svl/stritem.hxx>
 #include <svtools/ttprops.hxx>
-#ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>
-#endif
 #include <basic/dispdefs.hxx>
 #include <basic/sbuno.hxx>
 #include <vos/socket.hxx>
@@ -107,9 +85,7 @@
 #include "statemnt.hxx"
 #include "scmdstrm.hxx"
 
-#ifndef _RETSRTM_HXX
 #include "retstrm.hxx"
-#endif
 
 #if OSL_DEBUG_LEVEL > 1
 #include "editwin.hxx"

@@ -30,9 +30,7 @@
 #include <ManifestReader.hxx>
 #include <ManifestWriter.hxx>
 #include <cppuhelper/factory.hxx>
-#ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP
 #include <com/sun/star/registry/XRegistryKey.hpp>
-#endif
 #include <vos/diagnose.hxx>
 #include <ZipPackage.hxx>
 

@@ -49,13 +49,9 @@
 #include <sbxitem.hxx>
 #include <iderdll.hxx>
 
-#ifndef _PASSWD_HXX //autogen
 #include <sfx2/passwd.hxx>
-#endif
 
-#ifndef _COM_SUN_STAR_SCRIPT_XLIBRYARYCONTAINER2_HPP_
 #include <com/sun/star/script/XLibraryContainer2.hpp>
-#endif
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
 

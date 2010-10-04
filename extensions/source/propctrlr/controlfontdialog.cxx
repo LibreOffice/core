@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 
-#ifndef _EXTENSIONS_PROPCTRLR_FONTITEMIDS_HXX_
 #include "controlfontdialog.hxx"
-#endif
 #include <cppuhelper/typeprovider.hxx>
 #include "fontdialog.hxx"
 #include "formstrings.hxx"

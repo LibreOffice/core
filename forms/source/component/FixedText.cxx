@@ -31,9 +31,7 @@
 
 #include "FixedText.hxx"
 #include "services.hxx"
-#ifndef _FRM_PROPERTY_HRC_
 #include "property.hrc"
-#endif
 #include "property.hxx"
 #include <tools/debug.hxx>
 

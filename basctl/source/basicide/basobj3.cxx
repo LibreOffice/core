@@ -51,9 +51,7 @@
 #include "dlged.hxx"
 #include <dlgeddef.hxx>
 #include <comphelper/processfactory.hxx>
-#ifndef _COM_SUN_STAR_SCRIPT_XLIBRYARYCONTAINER_HPP_
 #include <com/sun/star/script/XLibraryContainer.hpp>
-#endif
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <xmlscript/xmldlg_imexp.hxx>

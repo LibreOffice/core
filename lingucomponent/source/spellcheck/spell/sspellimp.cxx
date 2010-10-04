@@ -40,9 +40,7 @@
 #include <hunspell.hxx>
 #include <dictmgr.hxx>
 
-#ifndef _SPELLIMP_HXX
 #include <sspellimp.hxx>
-#endif
 
 #include <linguistic/lngprops.hxx>
 #include <linguistic/spelldta.hxx>

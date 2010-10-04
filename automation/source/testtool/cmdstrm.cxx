@@ -27,9 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_automation.hxx"
-#ifndef _KEYCOD_HXX //autogen
 #include <vcl/keycod.hxx>
-#endif
 #include <basic/sbx.hxx>
 #include <tools/stream.hxx>
 

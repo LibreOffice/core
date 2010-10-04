@@ -60,9 +60,7 @@
 #include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#ifndef _COM_SUN_STAR_SCRIPT_XLIBRYARYCONTAINER2_HPP_
 #include <com/sun/star/script/XLibraryContainer2.hpp>
-#endif
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/script/XLibraryContainerExport.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>

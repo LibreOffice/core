@@ -29,17 +29,13 @@
 #include "precompiled_forms.hxx"
 #include "EditBase.hxx"
 #include "property.hxx"
-#ifndef _FRM_PROPERTY_HRC_
 #include "property.hrc"
-#endif
 #include "services.hxx"
 #include <tools/debug.hxx>
 #include <comphelper/basicio.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include "frm_resource.hxx"
-#ifndef _FRM_RESOURCE_HRC_
 #include "frm_resource.hrc"
-#endif
 
 //.........................................................................
 namespace frm

@@ -33,9 +33,7 @@
 #include <tools/string.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/svapp.hxx>
-#ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>
-#endif
 
 
 #include "profiler.hxx"

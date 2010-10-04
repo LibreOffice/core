@@ -39,9 +39,7 @@
 #include "dlgresid.hrc"
 #include "helpid.hrc"
 
-#ifndef _COM_SUN_STAR_TEXT_XBREAKITERATOR_HPP_
 #include <com/sun/star/i18n/XBreakIterator.hpp>
-#endif
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/resource/XStringResourceManager.hpp>

@@ -35,9 +35,7 @@
 #include <tools/debug.hxx>
 #include <vcl/timer.hxx>
 
-#ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>
-#endif
 
 #include "rcontrol.hxx"
 #include "tcommuni.hxx"

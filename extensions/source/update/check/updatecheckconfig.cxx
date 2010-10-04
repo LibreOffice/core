@@ -33,9 +33,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 
-#ifndef _COM_SUN_STAR_CONTAINER_CHANGESEVENT_HPP_
 #include <com/sun/star/beans/XPropertyState.hpp>
-#endif
 
 #include <osl/security.hxx>
 #include <osl/time.h>

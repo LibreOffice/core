@@ -43,19 +43,13 @@
 #include <com/sun/star/util/Time.hpp>
 #include <comphelper/sequence.hxx>
 #include <connectivity/dbconversion.hxx>
-#ifndef _EXTENSIONS_PROPCTRLR_MODULEPRC_HXX_
 #include "modulepcr.hxx"
-#endif
-#ifndef _EXTENSIONS_FORMCTRLR_PROPRESID_HRC_
 #include "formresid.hrc"
-#endif
 #include <tools/debug.hxx>
 #include <tools/string.hxx>
 #include <tools/StringListResource.hxx>
 #include <comphelper/types.hxx>
-#ifndef _EXTENSIONS_PROPCTRLR_MODULEPCR_HXX_
 #include "modulepcr.hxx"
-#endif
 
 #include <functional>
 #include <algorithm>

@@ -28,14 +28,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 #include "handlerhelper.hxx"
-#ifndef EXTENSIONS_PROPRESID_HRC
 #include "propresid.hrc"
-#endif
 #include "formresid.hrc"
 #include <comphelper/extract.hxx>
-#ifndef _EXTENSIONS_PROPCTRLR_MODULEPRC_HXX_
 #include "modulepcr.hxx"
-#endif
 #include "enumrepresentation.hxx"
 #include "formmetadata.hxx"
 #include "pcrcomponentcontext.hxx"

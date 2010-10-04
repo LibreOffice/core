@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_package.hxx"
 #include <com/sun/star/lang/DisposedException.hpp>
-#ifndef _COM_SUN_STAR_LANG_INVALIDARGUMENTEXCEPTION_HPP_
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#endif
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XStream.hpp>

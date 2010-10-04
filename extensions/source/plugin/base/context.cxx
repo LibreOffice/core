@@ -35,9 +35,7 @@
 
 #include <plugin/impl.hxx>
 
-#ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAGS_HPP_
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
-#endif
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <tools/fsys.hxx>
 #include <tools/urlobj.hxx>

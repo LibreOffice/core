@@ -32,9 +32,7 @@
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <sfx2/sfxuno.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>

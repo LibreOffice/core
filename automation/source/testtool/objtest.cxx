@@ -30,34 +30,23 @@
 
 #ifdef OS2
 #define INCL_DOS
-#ifndef _SVPM_H
 #include <svpm.h>
-#endif
-#endif
 
 #include "sysdir_win.hxx"
 #include "registry_win.hxx"
 #include "sttresid.hxx"
 #include <osl/file.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _SOUND_HXX //autogen
 #include <vcl/sound.hxx>
-#endif
 #include <tools/config.hxx>
-#ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
 #include <svtools/stringtransfer.hxx>
 #include <svl/brdcst.hxx>
 //#ifndef _SBXCLASS_HXX //autogen
 #include <basic/sbx.hxx>
 //#endif
 #include <com/sun/star/uno/Any.hxx>
-#ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HXX_
 #include <com/sun/star/frame/XDesktop.hpp>
-#endif
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/bridge/XBridgeFactory.hpp>
 #include <com/sun/star/connection/XConnector.hpp>
@@ -86,9 +75,7 @@ using namespace rtl;
 #include <basic/sbuno.hxx>
 
 #include <basic/basicrt.hxx>
-#ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>
-#endif
 #include "tcommuni.hxx"
 #include "comm_bas.hxx"
 #include <cretstrm.hxx>

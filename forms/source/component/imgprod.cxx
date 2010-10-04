@@ -37,9 +37,7 @@
 #include <svtools/filter.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 
-#ifndef SVTOOLS_SOURCE_MISC_IMAGERESOURCEACCESS_HXX
 #include "svtools/imageresourceaccess.hxx"
-#endif
 #include <comphelper/processfactory.hxx>
 
 // --------------------

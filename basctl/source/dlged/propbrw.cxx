@@ -35,18 +35,14 @@
 #include "basidesh.hxx"
 #include <iderid.hxx>
 
-#ifndef _BASCTL_DLGRESID_HRC
 #include <dlgresid.hrc>
-#endif
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <sfx2/bindings.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/objitem.hxx>
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <tools/shl.hxx>
 #include <vcl/stdtext.hxx>
 #include <svx/svdview.hxx>
@@ -55,9 +51,7 @@
 #include <svx/svditer.hxx>
 #include <sfx2/viewsh.hxx>
 
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 #include <comphelper/property.hxx>
 #include <comphelper/composedprops.hxx>
 #include <comphelper/stl_types.hxx>

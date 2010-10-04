@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 
-#ifndef _EXTENSIONS_DBP_WIZARDSERVICES_HXX_
 #include "wizardservices.hxx"
-#endif
 #include "unoautopilot.hxx"
 #include "groupboxwiz.hxx"
 #include "listcombowizard.hxx"

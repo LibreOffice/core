@@ -31,9 +31,7 @@
 #include <rtl/uuid.h>
 #include "securityenvironment_mscryptimpl.hxx"
 
-#ifndef _XMLSECURITYCONTEXT_MSCRYPTIMPL_HXX_
 #include "xmlsecuritycontext_mscryptimpl.hxx"
-#endif
 #include "xmlstreamio.hxx"
 
 #include "xmlsec/xmlsec.h"

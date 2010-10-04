@@ -31,12 +31,8 @@
 #include "formlinkdialog.hxx"
 #include "formlinkdialog.hrc"
 
-#ifndef _EXTENSIONS_PROPCTRLR_MODULEPRC_HXX_
 #include "modulepcr.hxx"
-#endif
-#ifndef _EXTENSIONS_FORMCTRLR_PROPRESID_HRC_
 #include "formresid.hrc"
-#endif
 #include "formstrings.hxx"
 #include <vcl/combobox.hxx>
 #include <vcl/msgbox.hxx>

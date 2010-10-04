@@ -36,9 +36,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/byteseq.h>
 
-#ifndef INCLUDED_RTL_INSTANCE_HXX_
 #include <rtl/instance.hxx>
-#endif
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/Optional.hpp>
 #include <osl/security.hxx>

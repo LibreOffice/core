@@ -44,9 +44,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 
-#ifndef _CRC32_HXX_
 #include <CRC32.hxx>
-#endif
 
 #include <string.h> // for memcpy
 #include <vector>

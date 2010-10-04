@@ -34,9 +34,7 @@
 #endif
 #include <vos/macros.hxx>
 
-#ifndef _USR_SMARTSERVICES_HXX_
 #include <usr/smartservices.hxx>
-#endif
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>

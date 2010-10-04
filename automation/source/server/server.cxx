@@ -41,9 +41,7 @@
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 
-#ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#endif
 #include <tools/stream.hxx>
 #include <tools/config.hxx>
 

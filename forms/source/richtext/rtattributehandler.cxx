@@ -29,9 +29,7 @@
 #include "precompiled_forms.hxx"
 #include "rtattributehandler.hxx"
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <editeng/eeitem.hxx>
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>

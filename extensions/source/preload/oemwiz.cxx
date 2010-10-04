@@ -35,12 +35,8 @@
 #include <svl/itempool.hxx>
 #include <vcl/msgbox.hxx>
 #include <unotools/pathoptions.hxx>
-#ifndef _EXTENSIONS_PRELOAD_PRELOAD_HRC_
 #include "preload.hrc"
-#endif
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <sfx2/app.hxx>
 #include <svtools/xtextedt.hxx>
 #include "osl/diagnose.h"

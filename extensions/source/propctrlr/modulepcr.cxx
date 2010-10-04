@@ -29,12 +29,8 @@
 #include "precompiled_extensions.hxx"
 #include "modulepcr.hxx"
 
-#ifndef INCLUDED_OSL_DOUBLECHECKEDLOCKING_H
 #include <rtl/instance.hxx>
-#endif
-#ifndef _OSL_MUTEX_HXX_
 #include <osl/getglobalmutex.hxx>
-#endif
 
 //........................................................................
 namespace pcr

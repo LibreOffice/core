@@ -29,9 +29,7 @@
 #include "precompiled_package.hxx"
 #include <ManifestImport.hxx>
 #include <ManifestDefines.hxx>
-#ifndef _BASE64_CODEC_HXX_
 #include <Base64Codec.hxx>
-#endif
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 

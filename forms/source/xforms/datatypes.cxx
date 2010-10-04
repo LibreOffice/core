@@ -29,9 +29,7 @@
 #include "precompiled_forms.hxx"
 #include "datatypes.hxx"
 #include "resourcehelper.hxx"
-#ifndef _FRM_PROPERTY_HRC_
 #include "property.hrc"
-#endif
 #include "convert.hxx"
 
 /** === begin UNO includes === **/

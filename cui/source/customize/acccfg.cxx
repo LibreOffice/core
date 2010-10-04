@@ -58,9 +58,7 @@
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 
-#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPLLIER_HPP_
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
-#endif
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>

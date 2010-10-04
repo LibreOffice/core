@@ -33,9 +33,7 @@
 #include "dlged.hxx"
 #include <dlgedpage.hxx>
 
-#ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <sfx2/viewfrm.hxx>
 
 #include <basidesh.hxx>

@@ -28,16 +28,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 #include "listselectiondlg.hxx"
-#ifndef EXTENSIONS_SOURCE_PROPCTRLR_LISTSELECTIONDLG_HRC
 #include "listselectiondlg.hrc"
-#endif
 
-#ifndef _EXTENSIONS_PROPCTRLR_MODULEPRC_HXX_
 #include "modulepcr.hxx"
-#endif
-#ifndef _EXTENSIONS_FORMCTRLR_PROPRESID_HRC_
 #include "formresid.hrc"
-#endif
 #include "formstrings.hxx"
 #include <vcl/msgbox.hxx>
 

@@ -29,9 +29,7 @@
 #include "precompiled_forms.hxx"
 #include "richtextcontrol.hxx"
 #include "frm_module.hxx"
-#ifndef _FRM_PROPERTY_HRC_
 #include "property.hrc"
-#endif
 #include "services.hxx"
 
 #include "richtextmodel.hxx"

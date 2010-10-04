@@ -29,9 +29,7 @@
 #include "precompiled_automation.hxx"
 #include <basic/sbx.hxx>
 
-#ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>
-#endif
 #include <basic/testtool.hxx>
 #include "testbasi.hxx"
 #define P_FEHLERLISTE TestToolObj::pFehlerListe

@@ -62,9 +62,7 @@
 #include <svtools/svtabbx.hxx>
 #include <svtools/headbar.hxx>
 #include <vcl/dialog.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/group.hxx>

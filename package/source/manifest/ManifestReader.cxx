@@ -30,21 +30,11 @@
 #include <ManifestReader.hxx>
 #include <ManifestImport.hxx>
 #include <cppuhelper/factory.hxx>
-#ifndef _COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_SAX_SAXPARSEEXCEPTION_HPP
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_SAX_XPARSER_HPP
 #include <com/sun/star/xml/sax/XParser.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#endif
 #include <vector>
 
 using namespace ::rtl;

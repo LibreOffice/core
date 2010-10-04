@@ -31,9 +31,7 @@
 #include <rtl/uuid.h>
 #include "securityenvironment_nssimpl.hxx"
 
-#ifndef _XMLSECURITYCONTEXT_NSSIMPL_HXX_
 #include "xmlsecuritycontext_nssimpl.hxx"
-#endif
 #include "xmlstreamio.hxx"
 
 #include <sal/types.h>

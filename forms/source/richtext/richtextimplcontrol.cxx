@@ -34,9 +34,7 @@
 #include <editeng/editview.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editstat.hxx>
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <editeng/scripttypeitem.hxx>
 
 #include <editeng/editobj.hxx>

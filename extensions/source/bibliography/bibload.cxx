@@ -36,9 +36,7 @@
 #include <svl/itemprop.hxx>
 #include <uno/environment.h>
 #include <svl/urihelper.hxx>
-#ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>   // helper for factories
 #include <com/sun/star/sdbc/ResultSetType.hpp>
@@ -65,9 +63,7 @@
 #include <svtools/svmedit.hxx>
 
 #include "bibresid.hxx"
-#ifndef BIB_HRC
 #include "bib.hrc"
-#endif
 #include "bibcont.hxx"
 #include "bibbeam.hxx"
 #include "bibmod.hxx"

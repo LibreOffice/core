@@ -43,9 +43,7 @@
 
 //==================================================================
 // ugly dependencies for the OColorControl
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <svx/drawitem.hxx>
 #include <xtable.hxx>
 //==================================================================
@@ -55,9 +53,7 @@
 #include <unotools/syslocale.hxx>
 #include <unotools/datetime.hxx>
 #include <i18npool/mslangid.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/svapp.hxx>
 //==================================================================
 

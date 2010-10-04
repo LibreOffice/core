@@ -43,9 +43,7 @@
 #include "toolbar.hrc"
 #include "bibresid.hxx"
 #include "datman.hxx"
-#ifndef BIBTOOLS_HXX
 #include "bibtools.hxx"
-#endif
 
 using namespace rtl;
 using namespace ::com::sun::star;

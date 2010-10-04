@@ -29,12 +29,8 @@
 #include "precompiled_xmlsecurity.hxx"
 
 #include <tools/shl.hxx>
-#ifndef _STATUS_HXX //autogen
 #include <vcl/status.hxx>
-#endif
-#ifndef _MENU_HXX //autogen
 #include <vcl/menu.hxx>
-#endif
 #include <vcl/image.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
@@ -47,7 +43,6 @@
 #include <xmlsecurity/stbcontrl.hxx>
 
 #define PAINT_OFFSET    5
-
 
 SFX_IMPL_STATUSBAR_CONTROL( XmlSecStatusBarControl, SfxBoolItem );
 

@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_accessibility.hxx"
 
-#ifndef _TOOLKIT_AWT_VCLXACCESSIBLECOMPONENT_HXX_
 #include <accessibility/extended/textwindowaccessibility.hxx>
-#endif
 #include "comphelper/accessibleeventnotifier.hxx"
 #include "unotools/accessiblerelationsethelper.hxx"
 #include <unotools/accessiblestatesethelper.hxx>

@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_forms.hxx"
 
-#ifndef FORMS_SOURCE_MISC_LISTENERCONTAINERS_HXX
 #include "listenercontainers.hxx"
-#endif
 
 /** === begin UNO includes === **/
 /** === end UNO includes === **/

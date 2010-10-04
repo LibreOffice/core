@@ -30,9 +30,7 @@
 #include "frm_strings.hxx"
 #include "property.hxx"
 
-#ifndef _FRM_PROPERTY_HRC_
 #include "property.hrc"
-#endif
 #include <cppuhelper/queryinterface.hxx>
 #include <tools/debug.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

@@ -29,20 +29,12 @@
 #include "precompiled_package.hxx"
 #include <ManifestExport.hxx>
 #include <ManifestDefines.hxx>
-#ifndef _COM_SUN_STAR_XML_SAX_XATTRIBUTELIST_HXX
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
-#endif
 #include <rtl/ustrbuf.hxx>
-#ifndef _BASE64_CODEC_HXX_
 #include <Base64Codec.hxx>
-#endif
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
-#ifndef _COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HXX
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_BEANS_PROPERTYVALUE_HPP
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
 
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/attributelist.hxx>

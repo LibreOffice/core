@@ -28,9 +28,7 @@
 #include "precompiled_extensions.hxx"
 #include "inspectorhelpwindow.hxx"
 #include "modulepcr.hxx"
-#ifndef EXTENSIONS_PROPRESID_HRC
 #include "propresid.hrc"
-#endif
 
 /** === begin UNO includes === **/
 /** === end UNO includes === **/

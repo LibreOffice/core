@@ -31,21 +31,13 @@
 #include <rtl/uuid.h>
 #include "xmlsignature_nssimpl.hxx"
 
-#ifndef _XMLDOCUMENTWRAPPER_XMLSECIMPL_HXX_
 #include "xmldocumentwrapper_xmlsecimpl.hxx"
-#endif
 
-#ifndef _XMLELEMENTWRAPPER_XMLSECIMPL_HXX_
 #include "xmlelementwrapper_xmlsecimpl.hxx"
-#endif
 
-#ifndef _SECURITYENVIRONMENT_NSSIMPL_HXX_
 #include "securityenvironment_nssimpl.hxx"
-#endif
 
-#ifndef _XMLSECURITYCONTEXT_NSSIMPL_HXX_
 #include "xmlsecuritycontext_nssimpl.hxx"
-#endif
 #include "xmlstreamio.hxx"
 #include "errorcallback.hxx"
 

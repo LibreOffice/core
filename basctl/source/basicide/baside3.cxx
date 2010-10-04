@@ -68,9 +68,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <xmlscript/xmldlg_imexp.hxx>
-#ifndef _COM_SUN_STAR_SCRIPT_XLIBRYARYCONTAINER2_HPP_
 #include <com/sun/star/script/XLibraryContainer2.hpp>
-#endif
 #include <svtools/ehdl.hxx>
 #include <svtools/langtab.hxx>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>

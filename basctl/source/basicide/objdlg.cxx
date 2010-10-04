@@ -32,9 +32,7 @@
 
 
 #include <basic/sbx.hxx>
-#ifndef _SV_CMDEVT_HXX
 #include <vcl/cmdevt.hxx>
-#endif
 #include <vcl/taskpanelist.hxx>
 #include <vcl/sound.hxx>
 #include <objdlg.hrc>

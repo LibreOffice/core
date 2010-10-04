@@ -28,13 +28,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 #include "formmetadata.hxx"
-#ifndef _EXTENSIONS_FORMCTRLR_FORMHELPID_HRC_
 #include "propctrlr.hrc"
-#endif
 #include "formstrings.hxx"
-#ifndef _EXTENSIONS_FORMCTRLR_PROPRESID_HRC_
 #include "formresid.hrc"
-#endif
 #include "propctrlr.hrc"
 #include <svtools/localresaccess.hxx>
 #include <tools/debug.hxx>

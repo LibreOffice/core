@@ -40,9 +40,7 @@
 #include <rtl/process.h>
 #include <tools/link.hxx>
 
-#ifndef _SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
 #include <vcl/window.hxx>
 #include <vcl/sysdata.hxx>
 #include <uno/current_context.hxx>
@@ -51,13 +49,9 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
-#ifndef _JVMACCESS_UNOVIRTUALMACHINE_HXX_
 #include "jvmaccess/unovirtualmachine.hxx"
-#endif
 
-#ifndef _JVMACCESS_VIRTUALMACHINE_HXX_
 #include "jvmaccess/virtualmachine.hxx"
-#endif
 
 #include <osl/diagnose.h>
 

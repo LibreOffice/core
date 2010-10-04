@@ -30,14 +30,10 @@
 #include <tools/time.hxx>
 #include <vcl/splitwin.hxx>
 #include <vcl/wrkwin.hxx>
-#ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>
-#endif
 #include "statemnt.hxx"
 
-#ifndef _RETSRTM_HXX
 #include "retstrm.hxx"
-#endif
 #include "rcontrol.hxx"
 
 #if OSL_DEBUG_LEVEL > 1

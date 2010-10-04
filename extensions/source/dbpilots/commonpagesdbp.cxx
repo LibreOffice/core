@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 #include "commonpagesdbp.hxx"
-#ifndef _EXTENSIONS_DBP_DBPRESID_HRC_
 #include "dbpresid.hrc"
-#endif
 #include "componentmodule.hxx"
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
@@ -49,9 +47,7 @@
 #include <sfx2/docfilt.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/filedlghelper.hxx>
-#ifndef SVTOOLS_FILENOTATION_HXX_
 #include <svl/filenotation.hxx>
-#endif
 //.........................................................................
 namespace dbp
 {

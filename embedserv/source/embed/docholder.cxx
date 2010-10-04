@@ -40,9 +40,7 @@
 #include <Windows.h>
 #include <com/sun/star/lang/SystemDependent.hpp>
 #include <com/sun/star/awt/XSystemChildFactory.hpp>
-#ifndef _COM_SUN_STAR_AWT_XSYSTEMDEPENDENTWINDOWPERR_HPP_
 #include <com/sun/star/awt/XSystemDependentWindowPeer.hpp>
-#endif
 #include <com/sun/star/awt/XSystemDependentMenuPeer.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
@@ -51,9 +49,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
 #include <com/sun/star/util/XCloseAble.hpp>
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>

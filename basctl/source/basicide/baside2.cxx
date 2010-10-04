@@ -42,9 +42,7 @@
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
-#ifndef _COM_SUN_STAR_SCRIPT_XLIBRYARYCONTAINER2_HPP_
 #include <com/sun/star/script/XLibraryContainer2.hpp>
-#endif
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
 #include <toolkit/helper/vclunohelper.hxx>

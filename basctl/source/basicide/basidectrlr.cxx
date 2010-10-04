@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basctl.hxx"
 
-#ifndef _BASCTL_BASIDECTRLR_HXX_
 #include <basidectrlr.hxx>
-#endif
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

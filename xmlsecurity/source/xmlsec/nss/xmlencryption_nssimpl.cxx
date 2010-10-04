@@ -31,17 +31,11 @@
 #include <rtl/uuid.h>
 #include "xmlencryption_nssimpl.hxx"
 
-#ifndef _XMLDOCUMENTWRAPPER_XMLSECIMPL_HXX_
 #include "xmldocumentwrapper_xmlsecimpl.hxx"
-#endif
 
-#ifndef _XMLELEMENTWRAPPER_XMLSECIMPL_HXX_
 #include "xmlelementwrapper_xmlsecimpl.hxx"
-#endif
 
-#ifndef _SECURITYENVIRONMENT_NSSIMPL_HXX_
 #include "securityenvironment_nssimpl.hxx"
-#endif
 #include "errorcallback.hxx"
 
 #include <sal/types.h>

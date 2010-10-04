@@ -46,9 +46,7 @@
 #include <svl/itempool.hxx>
 #include <sfx2/viewfrm.hxx>
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <svx/svdpagv.hxx>
 #include <xmlscript/xml_helper.hxx>
 #include <xmlscript/xmldlg_imexp.hxx>

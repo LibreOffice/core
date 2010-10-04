@@ -43,9 +43,7 @@
 
 #include <hyphen.h>
 
-#ifndef _HYPHENIMP_HXX
 #include <hyphenimp.hxx>
-#endif
 
 #include <linguistic/hyphdta.hxx>
 #include <rtl/ustring.hxx>

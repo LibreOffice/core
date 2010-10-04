@@ -28,16 +28,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 #include "taborder.hxx"
-#ifndef EXTENSIONS_SOURCE_PROPCTRLR_TABORDER_HRC
 #include "taborder.hrc"
-#endif
 
-#ifndef _EXTENSIONS_PROPCTRLR_MODULEPRC_HXX_
 #include "modulepcr.hxx"
-#endif
-#ifndef _EXTENSIONS_FORMCTRLR_PROPRESID_HRC_
 #include "formresid.hrc"
-#endif
 #include "formstrings.hxx"
 #include <comphelper/types.hxx>
 #include <comphelper/property.hxx>

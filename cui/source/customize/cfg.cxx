@@ -31,12 +31,8 @@
 #include <stdlib.h>
 #include <time.h>
 
-#ifndef _HELP_HXX //autogen
 #include <vcl/help.hxx>
-#endif
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <vcl/decoview.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/scrbar.hxx>
@@ -71,9 +67,7 @@
 
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/processfactory.hxx>
-#ifndef _UNOTOOLS_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
-#endif
 #include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/ui/ItemStyle.hpp>
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
@@ -86,9 +80,7 @@
 #include <com/sun/star/ui/XUIConfigurationStorage.hpp>
 #include <com/sun/star/ui/XModuleUIConfigurationManager.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
-#ifndef _COM_SUN_STAR_UI_UIElementType_HPP_
 #include <com/sun/star/ui/UIElementType.hpp>
-#endif
 #include <com/sun/star/ui/ImageType.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>

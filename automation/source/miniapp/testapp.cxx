@@ -29,9 +29,7 @@
 #include "precompiled_automation.hxx"
 #include <svtools/filedlg.hxx>
 #include <stdio.h>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <tools/debug.hxx>
 #include <svtools/testtool.hxx>
 #include <svtools/ttprops.hxx>

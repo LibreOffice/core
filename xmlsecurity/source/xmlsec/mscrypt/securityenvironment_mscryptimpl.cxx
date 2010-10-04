@@ -40,9 +40,7 @@
 #include <osl/thread.h>
 #include "securityenvironment_mscryptimpl.hxx"
 
-#ifndef _X509CERTIFICATE_NSSIMPL_HXX_
 #include "x509certificate_mscryptimpl.hxx"
-#endif
 #include <rtl/uuid.h>
 
 #include <xmlsec/xmlsec.h>

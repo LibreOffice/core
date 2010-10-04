@@ -28,12 +28,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 #include "pcrcommon.hxx"
-#ifndef _EXTENSIONS_PROPCTRLR_MODULEPRC_HXX_
 #include "modulepcr.hxx"
-#endif
-#ifndef EXTENSIONS_PROPRESID_HRC
 #include "propresid.hrc"
-#endif
 
 /** === begin UNO includes === **/
 #include <com/sun/star/util/MeasureUnit.hpp>

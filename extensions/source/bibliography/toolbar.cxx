@@ -36,9 +36,7 @@
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <datman.hxx>
 #include <tools/debug.hxx>
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <svtools/miscopt.hxx>
 #include <svtools/imgdef.hxx>
 #include <vcl/svapp.hxx>
@@ -47,9 +45,7 @@
 #include "toolbar.hrc"
 #include "bibresid.hxx"
 
-#ifndef BIBTOOLS_HXX
 #include "bibtools.hxx"
-#endif
 #include <vos/mutex.hxx>
 
 using namespace ::rtl;

@@ -44,12 +44,8 @@
 #include <sbxitem.hxx>
 #include <iderdll.hxx>
 
-#ifndef _COM_SUN_STAR_IO_XINPUTSTREAMPROVIDER_HXX_
 #include <com/sun/star/io/XInputStreamProvider.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_XLIBRYARYCONTAINER2_HPP_
 #include <com/sun/star/script/XLibraryContainer2.hpp>
-#endif
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/resource/XStringResourceManager.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

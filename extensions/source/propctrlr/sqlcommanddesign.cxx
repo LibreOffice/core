@@ -29,12 +29,8 @@
 #include "precompiled_extensions.hxx"
 #include "sqlcommanddesign.hxx"
 #include "formstrings.hxx"
-#ifndef _EXTENSIONS_FORMCTRLR_PROPRESID_HRC_
 #include "formresid.hrc"
-#endif
-#ifndef _EXTENSIONS_PROPCTRLR_MODULEPRC_HXX_
 #include "modulepcr.hxx"
-#endif
 #include "unourl.hxx"
 
 /** === begin UNO includes === **/

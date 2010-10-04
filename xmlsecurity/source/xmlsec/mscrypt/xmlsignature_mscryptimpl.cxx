@@ -33,17 +33,11 @@
 #include "com/sun/star/xml/crypto/SecurityOperationStatus.hdl"
 #include "xmlsignature_mscryptimpl.hxx"
 
-#ifndef _XMLDOCUMENTWRAPPER_XMLSECIMPL_HXX_
 #include "xmldocumentwrapper_xmlsecimpl.hxx"
-#endif
 
-#ifndef _XMLELEMENTWRAPPER_XMLSECIMPL_HXX_
 #include "xmlelementwrapper_xmlsecimpl.hxx"
-#endif
 
-#ifndef _SECURITYENVIRONMENT_MSCRYPTIMPL_HXX_
 #include "securityenvironment_mscryptimpl.hxx"
-#endif
 #include "xmlstreamio.hxx"
 #include "errorcallback.hxx"
 

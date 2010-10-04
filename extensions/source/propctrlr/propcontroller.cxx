@@ -31,16 +31,10 @@
 #include "pcrstrings.hxx"
 #include "standardcontrol.hxx"
 #include "linedescriptor.hxx"
-#ifndef EXTENSIONS_PROPRESID_HRC
 #include "propresid.hrc"
-#endif
-#ifndef _EXTENSIONS_FORMCTRLR_PROPRESID_HRC_
 #include "formresid.hrc"
-#endif
 #include "propertyeditor.hxx"
-#ifndef _EXTENSIONS_PROPCTRLR_MODULEPRC_HXX_
 #include "modulepcr.hxx"
-#endif
 #include "formstrings.hxx"
 #include "formmetadata.hxx"
 #include "formbrowsertools.hxx"
@@ -57,9 +51,7 @@
 #include <comphelper/types.hxx>
 #include <comphelper/extract.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 #include <comphelper/property.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>

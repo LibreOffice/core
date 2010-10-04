@@ -35,14 +35,10 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <tools/debug.hxx>
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 #include <vcl/stdtext.hxx>
 #include <com/sun/star/util/AliasProgrammaticPair.hpp>
-#ifndef EXTENSIONS_ABPRESID_HRC
 #include "abpresid.hrc"
-#endif
 #include "componentmodule.hxx"
 #include <unotools/confignode.hxx>
 

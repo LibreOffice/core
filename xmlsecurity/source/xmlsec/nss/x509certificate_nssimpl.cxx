@@ -47,9 +47,7 @@
 #include <rtl/uuid.h>
 #include "x509certificate_nssimpl.hxx"
 
-#ifndef _CERTIFICATEEXTENSION_NSSIMPL_HXX_
 #include "certificateextension_xmlsecimpl.hxx"
-#endif
 
 
 using namespace ::com::sun::star::uno ;

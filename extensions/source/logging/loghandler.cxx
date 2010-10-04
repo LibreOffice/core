@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 
-#ifndef EXTENSIONS_LOGHANDLER_HXX
 #include "loghandler.hxx"
-#endif
 
 /** === begin UNO includes === **/
 #include <com/sun/star/logging/LogLevel.hpp>

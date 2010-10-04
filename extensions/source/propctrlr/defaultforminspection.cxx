@@ -29,15 +29,9 @@
 #include "precompiled_extensions.hxx"
 #include "defaultforminspection.hxx"
 #include "pcrcommon.hxx"
-#ifndef EXTENSIONS_PROPRESID_HRC
 #include "propresid.hrc"
-#endif
-#ifndef _EXTENSIONS_FORMCTRLR_PROPRESID_HRC_
 #include "formresid.hrc"
-#endif
-#ifndef _EXTENSIONS_PROPCTRLR_MODULEPRC_HXX_
 #include "modulepcr.hxx"
-#endif
 #include "propctrlr.hrc"
 #include "formmetadata.hxx"
 

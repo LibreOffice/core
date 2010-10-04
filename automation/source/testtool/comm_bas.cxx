@@ -32,14 +32,10 @@
 #include <tools/errcode.hxx>
 #include <basic/sbxobj.hxx>
 #include <basic/sbx.hxx>
-#ifndef __SBX_SBXVARIABLE_HXX //autogen
 #include <basic/sbxvar.hxx>
-#endif
 #include <vcl/svapp.hxx>
 #include <automation/communi.hxx>
-#ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>
-#endif
 
 // Der CommunicationManager hat folgende Elemente:
 // 1) Properties:

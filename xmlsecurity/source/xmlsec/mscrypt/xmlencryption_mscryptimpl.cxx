@@ -32,17 +32,11 @@
 #include <rtl/uuid.h>
 #include "xmlencryption_mscryptimpl.hxx"
 
-#ifndef _XMLDOCUMENTWRAPPER_XMLSECIMPL_HXX_
 #include "xmldocumentwrapper_xmlsecimpl.hxx"
-#endif
 
-#ifndef _XMLELEMENTWRAPPER_XMLSECIMPL_HXX_
 #include "xmlelementwrapper_xmlsecimpl.hxx"
-#endif
 
-#ifndef _SECURITYENVIRONMENT_MSCRYPTIMPL_HXX_
 #include "securityenvironment_mscryptimpl.hxx"
-#endif
 #include "errorcallback.hxx"
 
 #include "xmlsec/xmlsec.h"

@@ -31,9 +31,7 @@
 #include "pcrcommon.hxx"
 #include "formstrings.hxx"
 #include "defaultforminspection.hxx"
-#ifndef _EXTENSIONS_FORMCTRLR_FORMHELPID_HRC_
 #include "propctrlr.hrc"
-#endif
 
 /** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyAttribute.hpp>

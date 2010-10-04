@@ -33,9 +33,7 @@
 #include "retstrm.hxx"
 #include <basic/svtmsg.hrc>
 
-#ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>
-#endif
 
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>

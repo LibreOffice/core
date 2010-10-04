@@ -29,19 +29,11 @@
 #include "precompiled_extensions.hxx"
 #include <sfx2/sfxsids.hrc>
 #include "fontdialog.hxx"
-#ifndef EXTENSIONS_PROPRESID_HRC
 #include "formresid.hrc"
-#endif
-#ifndef _EXTENSIONS_PROPCTRLR_MODULEPRC_HXX_
 #include "modulepcr.hxx"
-#endif
-#ifndef _EXTENSIONS_PROPCTRLR_FORMLOCALID_HRC_
 #include "formlocalid.hrc"
-#endif
 #include <vcl/svapp.hxx>
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 #include <comphelper/types.hxx>
 #include <comphelper/extract.hxx>
 #include <com/sun/star/awt/FontDescriptor.hpp>
@@ -52,9 +44,7 @@
 #include "formstrings.hxx"
 #include "fontitemids.hxx"
 #include <editeng/charreliefitem.hxx>
-#ifndef _SVX_EMPHITEM_HXX
 #include <editeng/emphitem.hxx>
-#endif
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/postitem.hxx>
@@ -72,9 +62,7 @@
 #include <svtools/ctrltool.hxx>
 #include <tools/diagnose_ex.h>
 #include <com/sun/star/beans/XPropertyState.hpp>
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/flagsdef.hxx>

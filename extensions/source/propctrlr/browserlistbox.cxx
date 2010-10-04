@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 #include "browserlistbox.hxx"
-#ifndef EXTENSIONS_PROPRESID_HRC
 #include "propresid.hrc"
-#endif
 #include "proplinelistener.hxx"
 #include "propcontrolobserver.hxx"
 #include "linedescriptor.hxx"

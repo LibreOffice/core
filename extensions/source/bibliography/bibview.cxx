@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 
-#ifndef BIB_HRC
 #include "bib.hrc"
-#endif
 #include "bibcont.hxx"
 #include "bibbeam.hxx"
 #include "bibmod.hxx"

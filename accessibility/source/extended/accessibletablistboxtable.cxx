@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_accessibility.hxx"
 
-#ifndef ACCESSIBILITY_EXT_ACCESSIBLETABLISTBOXTABLE_HXX_
 #include "accessibility/extended/accessibletablistboxtable.hxx"
-#endif
 #include "accessibility/extended/AccessibleBrowseBoxTableCell.hxx"
 #include "accessibility/extended/AccessibleBrowseBoxCheckBoxCell.hxx"
 #include <svtools/svtabbx.hxx>

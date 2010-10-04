@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_forms.hxx"
 #include "formcontrolfont.hxx"
-#ifndef _FRM_PROPERTY_HRC_
 #include "property.hrc"
-#endif
 #include "property.hxx"
 #include <tools/debug.hxx>
 #include <comphelper/property.hxx>

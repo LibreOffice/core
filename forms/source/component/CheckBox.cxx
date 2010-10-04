@@ -29,9 +29,7 @@
 #include "precompiled_forms.hxx"
 #include "CheckBox.hxx"
 #include "property.hxx"
-#ifndef _FRM_PROPERTY_HRC_
 #include "property.hrc"
-#endif
 #include "services.hxx"
 #include <tools/debug.hxx>
 #include <comphelper/basicio.hxx>

@@ -28,18 +28,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_forms.hxx"
 
-#ifndef FORMS_SOURCE_XFORMS_DATATYPEREPOSITORY_HXX
 #include "datatyperepository.hxx"
-#endif
 #include "datatypes.hxx"
-#ifndef _FRM_RESOURCE_HRC_
 #include "frm_resource.hrc"
-#endif
 #include "frm_resource.hxx"
 #include "frm_strings.hxx"
-#ifndef _FRM_PROPERTY_HRC_
 #include "property.hrc"
-#endif
 
 /** === begin UNO includes === **/
 /** === end UNO includes === **/

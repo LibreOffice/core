@@ -32,9 +32,7 @@
 #include "updateprotocol.hxx"
 #include "updatecheckconfig.hxx"
 
-#ifndef _COM_SUN_STAR_DEPLOYMENT_UPDATEINFORMATINENTRY_HPP_
 #include <com/sun/star/deployment/UpdateInformationEntry.hpp>
-#endif
 #include <com/sun/star/deployment/XPackageInformationProvider.hpp>
 
 

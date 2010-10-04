@@ -29,9 +29,7 @@
 #include "precompiled_accessibility.hxx"
 #include <accessibility/helper/accresmgr.hxx>
 
-#ifndef _TOOLS_SIMPLERESMGR_HXX
 #include <tools/simplerm.hxx>
-#endif
 #include <vcl/svapp.hxx>
 
 
