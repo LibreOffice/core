@@ -34,10 +34,6 @@
 #define _PRINTFUN_CXX
 #define _INPUTHDL_CXX
 
-//  ab hier automatisch per makepch generiert
-//  folgende duerfen nicht aufgenommen werden:
-//      scslots.hxx
-
 #include <tools/solar.h>
 #include <tools/string.hxx>
 #include <svl/solar.hrc>

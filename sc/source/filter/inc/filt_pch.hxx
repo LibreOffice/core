@@ -34,10 +34,6 @@
 
 #define SC_PROGRESS_CXX
 
-//  ab hier automatisch per makepch generiert
-//  folgende duerfen nicht aufgenommen werden:
-//      ...
-
 #include <tools/solar.h>
 #include <tools/string.hxx>
 #include <rtl/textenc.h>
