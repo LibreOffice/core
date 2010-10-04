@@ -38,7 +38,7 @@
 #include <svx/svdobj.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/editdata.hxx>
-#include <filter/msfilter/msdffimp.hxx>         //  Escher-Grafikimport
+#include <filter/msfilter/msdffimp.hxx>
 #include <filter/msfilter/msocximex.hxx>
 #include <filter/msfilter/msfiltertracer.hxx>
 #include <editeng/eeitem.hxx>
@@ -49,7 +49,6 @@
 #include <vcl/font.hxx>
 #include <vector>
 #include <boost/optional.hpp>
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class SdrModel;
 class SdPage;
@@ -565,7 +564,7 @@ protected:
     virtual SdrObject* ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pText, SdPage* pPage, SfxStyleSheet*, SfxStyleSheet** ) const;
     using SdrEscherImport::ReadObjText;
     virtual SdrObject* ReadObjText( PPTTextObj* pTextObj, SdrObject* pObj, SdPage* pPage ) const;
-    // --> OD 2004-12-14 #i32596# - new parameter <_nCalledByGroup>, which
+    // #i32596# - new parameter <_nCalledByGroup>, which
     // indicates, if the OLE object is imported inside a group object.
     virtual SdrObject* ImportOLE( long nOLEId,
                                   const Graphic& rGraf,
@@ -573,7 +572,6 @@ protected:
                                   const Rectangle& rVisArea,
                                   const int _nCalledByGroup,
                                   sal_Int64 nAspect ) const;
-    // <--
     SvMemoryStream* ImportExOleObjStg( UINT32 nPersistPtr, UINT32& nOleId ) const;
     SdrPage*   MakeBlancPage(sal_Bool bMaster) const;
     sal_Bool   ReadFontCollection();
@@ -607,8 +605,6 @@ public:
     virtual const PptSlideLayoutAtom*   GetSlideLayoutAtom() const;
     SdrObject*  CreateTable( SdrObject* pGroupObject, sal_uInt32* pTableArry, SvxMSDffSolverContainer* );
 };
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 struct PPTTextCharacterStyleAtomInterpreter
 {
@@ -663,8 +659,6 @@ struct  PPTTextSpecInfoAtomInterpreter
 
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 #define PPT_STYLESHEETENTRYS    9
 
 struct PPTExtParaLevel
@@ -712,8 +706,6 @@ class PPTExtParaProv
                                                 const DffRecordHeader* pMainMasterHd );
                             ~PPTExtParaProv();
 };
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 struct PPTCharLevel
 {
@@ -770,8 +762,6 @@ struct PPTParaSheet
                         sal_uInt32 nLevel, sal_Bool bFirst );
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class PPTParagraphObj;
 class PPTNumberFormatCreator
 {
@@ -804,8 +794,6 @@ class PPTNumberFormatCreator
                     PPTParagraphObj* pPara, UINT32 nInstanceInSheet, boost::optional< sal_Int16 >& rStartNumbering );
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class SvxNumBulletItem;
 struct PPTStyleSheet : public PPTNumberFormatCreator
 {
@@ -819,8 +807,6 @@ struct PPTStyleSheet : public PPTNumberFormatCreator
                                 const PPTTextCharacterStyleAtomInterpreter&, const PPTTextParagraphStyleAtomInterpreter&, const PPTTextSpecInfo& );
                 ~PPTStyleSheet();
 };
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 struct ImplPPTParaPropSet
 {
@@ -898,8 +884,6 @@ struct PPTCharPropSet
         void            ImplMakeUnique();
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 struct PPTTabEntry
 {
     sal_uInt16  nOffset;
@@ -939,8 +923,6 @@ struct PPTTextRulerInterpreter
 
         PPTTextRulerInterpreter& operator=( PPTTextRulerInterpreter& rRuler );
 };
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #define PPT_SPEC_NEWLINE            0x10000
 #define PPT_SPEC_SYMBOL             0x20000
@@ -998,8 +980,6 @@ struct PPTStyleTextPropReader
 
     ~PPTStyleTextPropReader();
 };
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class SvxFieldItem;
 class MSFILTER_DLLPUBLIC PPTPortionObj : public PPTCharPropSet
@@ -1141,8 +1121,6 @@ class PPTConvertOCXControls : public SvxMSConvertOCXControls
             com::sun::star::uno::Reference< com::sun::star::drawing::XShape > *pShape,
             BOOL bFloatingCtrl );
 };
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Powerpoint Recordtypen
 #define PPT_PST_Unknown                         0
@@ -1431,8 +1409,6 @@ class PPTConvertOCXControls : public SvxMSConvertOCXControls
 #define PPT_PLACEHOLDER_CLIPART                 22  // 23 Clip Art
 #define PPT_PLACEHOLDER_ORGANISZATIONCHART      23  // 24 Organization Chart
 #define PPT_PLACEHOLDER_MEDIACLIP               24  // 25 Media Clip
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #endif // SVX_LIGHT
 

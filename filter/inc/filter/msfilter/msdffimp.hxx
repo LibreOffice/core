@@ -30,7 +30,7 @@
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
-#include <tools/solar.h>        // UINTXX
+#include <tools/solar.h>
 #include <svl/svarray.hxx>
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
@@ -478,7 +478,7 @@ protected :
     void GetCtrlData( long nOffsDgg );
     void GetDrawingGroupContainerData( SvStream& rSt,
                                        ULONG nLenDgg );
-    // --> OD 2008-08-01 #156763#
+    // #156763#
     // Add internal drawing container id as parameter to the sub methods of
     // reading the control information about the drawing objects.
     // The drawing container id is used to distinguish the text ids of drawing
@@ -494,12 +494,11 @@ protected :
                                 ULONG nLenShapeCont,
                                 ULONG nPosGroup,
                                 const unsigned long nDrawingContainerId );
-    // <--
 
     FASTBOOL ReadGraphic( SvStream& rSt, ULONG nIndex, Graphic& rGraphic ) const;
     SdrObject* ImportFontWork( SvStream&, SfxItemSet&, Rectangle& rBoundRect ) const;
     SdrObject* ImportGraphic( SvStream&, SfxItemSet&, const DffObjData& ) const;
-    // --> OD 2004-12-14 #i32596# - pass <nCalledByGroup> to method
+    // #i32596# - pass <nCalledByGroup> to method
     // Needed in the Writer Microsoft Word import to avoid import of OLE objects
     // inside groups. Instead a graphic object is created.
     virtual SdrObject* ImportOLE( long nOLEId,
@@ -508,7 +507,6 @@ protected :
                                   const Rectangle& rVisArea,
                                   const int _nCalledByGroup,
                                   sal_Int64 nAspect ) const;
-    // <--
     SdrObject* GetAutoForm( MSO_SPT eTyp ) const;
     static const GDIMetaFile* lcl_GetMetaFileFromGrf_Impl( const Graphic& rGrf, GDIMetaFile& rMtf );
 #ifndef SVX_LIGHT
@@ -529,15 +527,12 @@ protected :
     virtual ULONG Calc_nBLIPPos( ULONG nOrgVal, ULONG nStreamPos ) const;
     virtual FASTBOOL GetColorFromPalette(USHORT nNum, Color& rColor) const;
 
-    // -----------------------------------------------------------------------
-
     FASTBOOL ReadDffString(SvStream& rSt, String& rTxt) const;
     FASTBOOL ReadObjText(SvStream& rSt, SdrObject* pObj) const;
 
     // SJ: New implementation of ReadObjText is used by Fontwork objects, because
     // the old one does not properly import multiple paragraphs
     void ReadObjText( const String& rText, SdrObject* pObj ) const;
-    // -----------------------------------------------------------------------
 
     /*
         folgende Methode ist von allen zu ueberschreiben, die OLE-Objecte
@@ -575,7 +570,6 @@ public:
     FASTBOOL SeekToRec( SvStream& rSt, USHORT nRecId, ULONG nMaxFilePos, DffRecordHeader* pRecHd = NULL, ULONG nSkipCount = 0 ) const;
     FASTBOOL SeekToRec2( USHORT nRecId1, USHORT nRecId2, ULONG nMaxFilePos, DffRecordHeader* pRecHd = NULL, ULONG nSkipCount = 0 ) const;
 
-    // -----------------------------------------------------------------------
     static void MSDFFReadZString( SvStream& rIn, String& rStr, ULONG nMaxLen, FASTBOOL bUniCode = FALSE );
 
     static BOOL ReadCommonRecordHeader( DffRecordHeader& rRec, SvStream& rIn );

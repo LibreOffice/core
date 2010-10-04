@@ -263,13 +263,11 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
         sal_Bool bPrettyPrint =
             (msUserData.getLength() > 6 && msUserData[6].equalsIgnoreAsciiCaseAscii("true"));
 
-        // --> OD 2008-11-25 #b6761284#
         // export of <text:number> element for <text:list-item> elements are
         // needed for certain filters.
         sal_Bool bExportTextNumberElementForListItems =
                             ( msUserData.getLength() > 7 &&
                               msUserData[7].equalsIgnoreAsciiCaseAscii("true") );
-        // <--
 
         // get the base URI, so we can use relative links
         OUString aBaseURI;
@@ -285,9 +283,7 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
          PropertyMapEntry aImportInfoMap[] =
          {
              { MAP_LEN( "UsePrettyPrinting" ), 0, &::getCppuType((const sal_Bool*)0), PropertyAttribute::MAYBEVOID, 0},
-            // --> OD 2008-11-25 #b6761284#
             { MAP_LEN( "ExportTextNumberElement" ), 0, &::getCppuType((const sal_Bool*)0), PropertyAttribute::MAYBEVOID, 0},
-            // <--
             { MAP_LEN( "BaseURI" ), 0, &::getCppuType((const OUString*)0), PropertyAttribute::MAYBEVOID, 0},
              { NULL, 0, 0, NULL, 0, 0 }
          };
@@ -296,11 +292,9 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
             GenericPropertySet_CreateInstance( new PropertySetInfo( aImportInfoMap ) ) );
          xInfoSet->setPropertyValue(
             OUString::createFromAscii( "UsePrettyPrinting" ), makeAny( bPrettyPrint ));
-        // --> OD 2008-11-25 #b6761284#
         xInfoSet->setPropertyValue(
                         OUString::createFromAscii( "ExportTextNumberElement" ),
                         makeAny( bExportTextNumberElementForListItems ));
-        // <--
          xInfoSet->setPropertyValue(
             OUString::createFromAscii( "BaseURI" ), makeAny( aBaseURI ));
         aAnys[1] <<= xInfoSet;

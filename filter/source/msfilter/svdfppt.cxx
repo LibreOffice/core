@@ -136,8 +136,6 @@
 #include <algorithm>
 #include <set>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 // PPT ColorScheme Slots
 #define PPT_COLSCHEME                       (0x08000000)
 #define PPT_COLSCHEME_HINTERGRUND           (0x08000000)
@@ -149,8 +147,6 @@
 #define PPT_COLSCHEME_A_UND_HYPERLINK       (0x08000006)
 #define PPT_COLSCHEME_A_H_GESICHERT         (0x08000007)
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 #define ANSI_CHARSET            0
 #define DEFAULT_CHARSET         1
 #define SYMBOL_CHARSET          2
@@ -159,8 +155,6 @@
 #define CHINESEBIG5_CHARSET     136
 #define OEM_CHARSET             255
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 /* Font Families */
 #define FF_DONTCARE             0x00
 #define FF_ROMAN                0x10
@@ -168,8 +162,6 @@
 #define FF_MODERN               0x30
 #define FF_SCRIPT               0x40
 #define FF_DECORATIVE           0x50
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #define DEFAULT_PITCH           0x00
 #define FIXED_PITCH             0x01
@@ -182,16 +174,12 @@ using namespace drawing             ;
 using namespace container           ;
 using namespace table               ;
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 PowerPointImportParam::PowerPointImportParam( SvStream& rDocStrm, sal_uInt32 nFlags, MSFilterTracer* pT ) :
     rDocStream      ( rDocStrm ),
     nImportFlags    ( nFlags ),
     pTracer         ( pT )
 {
 }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 SvStream& operator>>( SvStream& rIn, PptCurrentUserAtom& rAtom )
 {
@@ -228,7 +216,6 @@ SvStream& operator>>( SvStream& rIn, PptSlidePersistAtom& rAtom )
         >> rAtom.nFlags
         >> rAtom.nNumberTexts
         >> rAtom.nSlideId;
-//      >> rAtom.nReserved;
     aHd.SeekToEndOfRecord( rIn );
     return rIn;
 }
@@ -243,8 +230,6 @@ USHORT PptSlidePersistList::FindPage(UINT32 nId) const
     }
     return PPTSLIDEPERSIST_ENTRY_NOTFOUND;
 }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 SvStream& operator>>( SvStream& rIn, PptInteractiveInfoAtom& rAtom )
 {
@@ -275,38 +260,6 @@ SvStream& operator>>( SvStream& rIn, PptExOleObjAtom& rAtom )
 Size PptDocumentAtom::GetPageSize(const Size& rSiz) const
 {
     return rSiz;
-/*
-    Size aRet;
-    switch ( eSlidesPageFormat )
-    {
-        // Wenn man in Powerpoint als Seitenformat "Bildschirmgroesse"
-        // einstellt, dann zeigt dieser Dialog zwar 24x18cm an, die
-        // angezeigte Seite ist aber anders. Das sieht man, wenn man
-        // ein Rechteck seitenfuellend aufzieht und sich dessen Groesse
-        // ansieht. Die importierten Abmessungen sind auf jeden Fall
-        // die, die auch im Ppt-File stehen. Ich denke, das es sich
-        // hier eher um ein Bug in PowerPoint handelt, das im
-        // Seitenformat-Dialog bei "Bildschirmgroesse" falsche Masse
-        // angezeigt werden (vielleicht ja auch bildschirmabhaengig?).
-//      case PPTPF_SCREEN  : aRet.Width()=4082; aRet.Height()=5443; break;
-        case PPTPF_USLETTER: aRet.Width()=4896; aRet.Height()=6336; break;
-        case PPTPF_A4      : aRet.Width()=4762; aRet.Height()=6735; break;
-//      case PPTPF_35MMDIA : aRet.Width()=4082; aRet.Height()=6123; break;
-//      case PPTPF_OVERHEAD: aRet.Width()=4082; aRet.Height()=5443; break;
-    }
-    if ( aRet.Width() )
-    {
-        if ( rSiz.Width() > rSiz.Height() )
-        {   // Querformat
-            long nMerk = aRet.Width();
-            aRet.Width() = aRet.Height();
-            aRet.Height() = nMerk;
-        }
-    }
-    else    // CustomFormat oder Unbekannt oder Screen,Dia,Overhead
-        aRet = rSiz;
-    return aRet;
-*/
 }
 
 SvStream& operator>>(SvStream& rIn, PptDocumentAtom& rAtom)
@@ -354,8 +307,6 @@ SvStream& operator>>(SvStream& rIn, PptDocumentAtom& rAtom)
     return rIn;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 void PptSlideLayoutAtom::Clear()
 {
     eLayout = 0;
@@ -372,8 +323,6 @@ SvStream& operator>>( SvStream& rIn, PptSlideLayoutAtom& rAtom )
     rIn.Read( rAtom.aPlaceholderId, 8 );
     return rIn;
 }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 SvStream& operator>>( SvStream& rIn, PptSlideAtom& rAtom )
 {
@@ -393,8 +342,6 @@ void PptSlideAtom::Clear()
     nFlags = 0;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 SvStream& operator>>( SvStream& rIn, PptNotesAtom& rAtom )
 {
     DffRecordHeader aHd;
@@ -410,8 +357,6 @@ void PptNotesAtom::Clear()
     nSlideId = 0;
     nFlags = 0;
 }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void PptColorSchemeAtom::Clear()
 {
@@ -440,8 +385,6 @@ SvStream& operator>>( SvStream& rIn, PptColorSchemeAtom& rAtom )
     return rIn;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 SvStream& operator>>( SvStream& rIn, PptFontEntityAtom& rAtom )
 {
     DffRecordHeader aHd;
@@ -465,11 +408,6 @@ SvStream& operator>>( SvStream& rIn, PptFontEntityAtom& rAtom )
             rAtom.eCharSet = RTL_TEXTENCODING_MS_1252;
         break;
 
-//      case DEFAULT_CHARSET :
-//      case SHIFTJIS_CHARSET :
-//      case HANGEUL_CHARSET :
-//      case CHINESEBIG5_CHARSET :
-//      case OEM_CHARSET :
         default :
             rAtom.eCharSet = gsl_getSystemTextEncoding();
     }
@@ -535,8 +473,6 @@ SV_IMPL_PTRARR( PptFontEntityAtomList, PptFontEntityAtom* );
 class PptFontCollection: public PptFontEntityAtomList {
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 SvStream& operator>>( SvStream& rIn, PptUserEditAtom& rAtom )
 {
     rIn >> rAtom.aHd
@@ -551,8 +487,6 @@ SvStream& operator>>( SvStream& rIn, PptUserEditAtom& rAtom )
     return rIn;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 void PptOEPlaceholderAtom::Clear()
 {
     nPlacementId = 0;
@@ -566,8 +500,6 @@ SvStream& operator>>( SvStream& rIn, PptOEPlaceholderAtom& rAtom )
         >> rAtom.nPlaceholderSize;
     return rIn;
 }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 PptSlidePersistEntry::PptSlidePersistEntry() :
     pStyleSheet             ( NULL ),
@@ -595,10 +527,6 @@ PptSlidePersistEntry::~PptSlidePersistEntry()
     delete pSolverContainer;
     delete[] pPresentationObjects;
 };
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 SdrEscherImport::SdrEscherImport( PowerPointImportParam& rParam, const String& rBaseURL ) :
     SvxMSDffManager         ( rParam.rDocStream, rBaseURL, rParam.pTracer ),
@@ -924,15 +852,6 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 if ( ( nFontDirection == 1 ) || ( nFontDirection == 3 ) )       // #104546#
                 {
                     bVerticalText = !bVerticalText;
-/*
-                    sal_Int32 nHalfWidth = ( rTextRect.GetWidth() + 1 ) >> 1;
-                    sal_Int32 nHalfHeight = ( rTextRect.GetHeight() + 1 ) >> 1;
-                    Point aTopLeft( rTextRect.Left() + nHalfWidth - nHalfHeight,
-                                    rTextRect.Top() + nHalfHeight - nHalfWidth );
-                    Size aNewSize( rTextRect.GetHeight(), rTextRect.GetWidth() );
-                    Rectangle aNewRect( aTopLeft, aNewSize );
-                    rTextRect = aNewRect;
-*/
                 }
                 aTextObj.SetVertical( bVerticalText );
                 if ( pRet )
@@ -1893,14 +1812,13 @@ sal_Bool SdrPowerPointOLEDecompress( SvStream& rOutput, SvStream& rInput, sal_uI
     return bSuccess;
 }
 
-// --> OD 2004-12-14 #i32596# - add new parameter <_nCalledByGroup>
+// #i32596# - add new parameter <_nCalledByGroup>
 SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
                                            const Graphic& rGraf,
                                            const Rectangle& rBoundRect,
                                            const Rectangle& rVisArea,
                                            const int /*_nCalledByGroup*/,
                                            sal_Int64 /*nAspect*/ ) const
-// <--
 {
     SdrObject* pRet = NULL;
 

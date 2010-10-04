@@ -34,7 +34,7 @@
 #include <limits.h>
 #include <vector>
 #include <osl/endian.h>
-#include <tools/solar.h>               // UINTXX
+#include <tools/solar.h>
 #include <rtl/math.hxx>
 
 #include <sot/clsids.hxx>
@@ -4629,9 +4629,8 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
         {
             // TODO/LATER: in future probably the correct aspect should be provided here
             sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
-            // --> OD 2004-12-14 #i32596# - pass <nCalledByGroup> to method
+            // #i32596# - pass <nCalledByGroup> to method
             pRet = ImportOLE( GetPropertyValue( DFF_Prop_pictureId ), aGraf, rObjData.aBoundRect, aVisArea, rObjData.nCalledByGroup, nAspect );
-            // <--
         }
         if( !pRet )
         {
@@ -6343,23 +6342,18 @@ void SvxMSDffManager::CheckTxBxStoryChain()
         {
             pObj->bLastBoxInChain = FALSE;
             // Gruppenwechsel ?
-            // --> OD 2008-07-28 #156763#
+            // #156763#
             // the text id also contains an internal drawing container id
             // to distinguish between text id of drawing objects in different
             // drawing containers.
-//            if( nChain != (pObj->nTxBxComp & 0xFFFF0000) )
             if( nChain != pObj->nTxBxComp )
-            // <--
             {
                 // voriger war letzter seiner Gruppe
                 if( nObj )
                     pOld->GetObject( nObj-1 )->bLastBoxInChain = TRUE;
                 // Merker und Hilfs-Flag zuruecksetzen
                 nObjMark = nObj;
-                // --> OD 2008-07-28 #156763#
-//                nChain   = pObj->nTxBxComp & 0xFFFF0000;
                 nChain = pObj->nTxBxComp;
-                // <--
                 bSetReplaceFALSE = !pObj->bReplaceByFly;
             }
             else
@@ -6381,9 +6375,7 @@ void SvxMSDffManager::CheckTxBxStoryChain()
         // alle Shape-Info-Objekte in pShapeInfos umkopieren
         // (aber nach nShapeId sortieren)
         pObj->bSortByShapeId = TRUE;
-        // --> OD 2008-07-28 #156763#
         pObj->nTxBxComp = pObj->nTxBxComp & 0xFFFF0000;
-        // <--
         pShapeInfos->Insert( pObj );
     }
     // voriger war letzter seiner Gruppe
@@ -6430,9 +6422,7 @@ void SvxMSDffManager::GetCtrlData( long nOffsDgg_ )
         UINT32 nMaxStrPos = rStCtrl.Tell();
 
         nPos += nLength;
-        // --> OD 2008-07-28 #156763#
         unsigned long nDrawingContainerId = 1;
-        // <--
         do
         {
             rStCtrl.Seek( nPos );
@@ -6448,14 +6438,10 @@ void SvxMSDffManager::GetCtrlData( long nOffsDgg_ )
             }
             if( bOk )
             {
-                // --> OD 2008-07-28 #156763#
                 GetDrawingContainerData( rStCtrl, nLength, nDrawingContainerId );
-                // <--
             }
             nPos += DFF_COMMON_RECORD_HEADER_SIZE + nLength;
-            // --> OD 2008-07-28 #156763#
             ++nDrawingContainerId;
-            // <--
         }
         while( nPos < nMaxStrPos && bOk );
     }
@@ -6812,7 +6798,6 @@ BOOL SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
         else if( ( DFF_msofbtClientTextbox == nFbt ) && ( 4 == nLength ) )  // Text-Box-Story-Eintrag gefunden
         {
             rSt >> aInfo.nTxBxComp;
-            // --> OD 2008-07-28 #156763#
             // Add internal drawing container id to text id.
             // Note: The text id uses the first two bytes, while the internal
             // drawing container id used the second two bytes.
@@ -6820,7 +6805,6 @@ BOOL SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
                               nDrawingContainerId;
             DBG_ASSERT( (aInfo.nTxBxComp & 0x0000FFFF) == nDrawingContainerId,
                         "<SvxMSDffManager::GetShapeContainerData(..)> - internal drawing container Id could not be correctly merged into DFF_msofbtClientTextbox value." );
-            // <--
         }
         else
         {
@@ -7236,14 +7220,13 @@ BOOL SvxMSDffManager::ShapeHasText( ULONG /* nShapeId */, ULONG /* nFilePos */ )
     return TRUE;
 }
 
-// --> OD 2004-12-14 #i32596# - add new parameter <_nCalledByGroup>
+// #i32596# - add new parameter <_nCalledByGroup>
 SdrObject* SvxMSDffManager::ImportOLE( long nOLEId,
                                        const Graphic& rGrf,
                                        const Rectangle& rBoundRect,
                                        const Rectangle& rVisArea,
                                        const int /* _nCalledByGroup */,
                                        sal_Int64 nAspect ) const
-// <--
 {
     SdrObject* pRet = 0;
     String sStorageName;
@@ -7419,9 +7402,7 @@ static ClsIDs aClsIDs[] = {
     { 0x00030036, "Designer_40",        "MicroGrafx Designer 4.0"       },
 
     // STAR DIVISION
-//  { 0x000424CA, "StarMath",           "StarMath 1.0"                  },
     { 0x00043AD2, "FontWork",           "Star FontWork"                 },
-//  { 0x000456EE, "StarMath2",          "StarMath 2.0"                  },
 
     { 0, "", "" } };
 
@@ -7489,7 +7470,7 @@ BOOL SvxMSDffManager::ConvertToOle2( SvStream& rStm, UINT32 nReadLen,
                     if( COMPARE_EQUAL == aSvrName.CompareToAscii( pIds->pSvrName ) )
                         break;
                 }
-//              SvGlobalName* pClsId = NULL;
+
                 String aShort, aFull;
                 if( pIds->nId )
                 {
@@ -7511,7 +7492,6 @@ BOOL SvxMSDffManager::ConvertToOle2( SvStream& rStm, UINT32 nReadLen,
                 ULONG nPos = rStm.Tell();
                 UINT16 sz[4];
                 rStm.Read( sz, 8 );
-                //rStm.SeekRel( 8 );
                 Graphic aGraphic;
                 if( ERRCODE_NONE == GraphicConverter::Import( rStm, aGraphic ) && aGraphic.GetType() )
                 {
@@ -8040,7 +8020,6 @@ SvxMSDffImportRec::SvxMSDffImportRec()
       eLineStyle      = mso_lineSimple; // GPF-Bug #66227#
       bDrawHell       = FALSE;
       bHidden         = FALSE;
-//    bInGroup        = FALSE;
       bReplaceByFly   = FALSE;
       bLastBoxInChain = TRUE;
       bHasUDefProp    = FALSE; // was the DFF_msofbtUDefProp record set?
@@ -8077,7 +8056,6 @@ SvxMSDffImportRec::SvxMSDffImportRec(const SvxMSDffImportRec& rCopy)
     eLineStyle       = rCopy.eLineStyle; // GPF-Bug #66227#
     bDrawHell        = rCopy.bDrawHell;
     bHidden          = rCopy.bHidden;
-//          bInGroup         = rCopy.bInGroup;
     bReplaceByFly    = rCopy.bReplaceByFly;
     bAutoWidth       = rCopy.bAutoWidth;
     bLastBoxInChain  = rCopy.bLastBoxInChain;
@@ -8121,8 +8099,6 @@ SvxMSDffImportRec::~SvxMSDffImportRec()
     if (pWrapPolygon)
         delete pWrapPolygon;
 }
-
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
 
 void SvxMSDffManager::insertShapeId( sal_Int32 nShapeId, SdrObject* pShape )
 {
