@@ -1724,6 +1724,9 @@ if ( $platform =~ m/cygwin/ )
    chomp($tmpdir);
    ToFile( "TMPDIR",     $tmpdir,            "e" );
 }
+if ("@WITH_VC_REDIST@" eq "TRUE") {
+ToFile( "WITH_VC_REDIST", "TRUE",  "e" );
+}
 ToFile( "PERL",              $PERL,              "e" );
 ToFile( "RPM",               "@RPM@",            "e" );
 ToFile( "DPKG",              "@DPKG@",           "e" );

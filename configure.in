@@ -5808,6 +5808,30 @@ You may have to search Microsoft's website. Last time it was seen at:
 fi
 
 dnl ===================================================================
+dnl Windows builds need vcredist_x86.exe and vcredist_x64.exe in external/vcredist/
+dnl ===================================================================
+if test "$_os" = "WINNT"; then
+   AC_MSG_CHECKING([for vcredist_x86.exe])
+   if test -x ./external/vcredist/vcredist_x86.exe; then
+      AC_MSG_RESULT([found])
+   else
+      AC_MSG_ERROR([vcredist_x86.exe is missing in external/vcredist/.
+Get the version corresponding to your Visual Studio from the Microsoft site
+and put it into external/vcredist.])
+   fi
+   AC_MSG_CHECKING([for vcredist_x64.exe])
+   if test -x ./external/vcredist/vcredist_x64.exe; then
+      AC_MSG_RESULT([found])
+   else
+      AC_MSG_ERROR([vcredist_x64.exe is missing in external/vcredist/.
+Get the version corresponding to your Visual Studio from the Microsoft site
+and put it into external/vcredist.])
+   fi
+   WITH_VC_REDIST="TRUE"
+fi
+AC_SUBST(WITH_VC_REDIST)
+
+dnl ===================================================================
 dnl Windows builds - attempt to auto-copy required instmsiX.exe into external/
 dnl ===================================================================
 if test "$_os" = "WINNT"; then
