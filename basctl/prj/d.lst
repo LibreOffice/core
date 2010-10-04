@@ -21,3 +21,4 @@ mkdir: %_DEST%\inc%_EXT%\basctl
 ..\uiconfig\basicide\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\BasicIDE\menubar\*.xml
 ..\uiconfig\basicide\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\BasicIDE\toolbar\*.xml
 ..\uiconfig\basicide\statusbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\BasicIDE\statusbar\*.xml
+..\%__SRC%\misc\basctl.component %_DEST%\xml%_EXT%\basctl.component
