@@ -942,10 +942,9 @@ BOOL ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
         pDoc->UpdatePageBreaks( nTab );
     }
 
-    // #i23299# because of Subtotal functions, the whole rows must be set dirty
-    ScRange aDirtyRange( 0 , aLocalParam.nRow1, nDestTab,
-        MAXCOL, aLocalParam.nRow2, nDestTab );
-    pDoc->SetDirty( aDirtyRange );
+    // #i23299# Subtotal functions depend on cell's filtered states.
+    ScRange aDirtyRange(0 , aLocalParam.nRow1, nDestTab, MAXCOL, aLocalParam.nRow2, nDestTab);
+    pDoc->SetSubTotalCellsDirty(aDirtyRange);
 
     if ( bRecord )
     {

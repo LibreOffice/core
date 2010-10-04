@@ -444,6 +444,8 @@ private:
 
     sal_Int16           mnNamedRangesLockCount;
 
+    ::std::set<ScFormulaCell*> maSubTotalCells;
+
 public:
     SC_DLLPUBLIC ULONG          GetCellCount() const;       // alle Zellen
     SCSIZE          GetCellCount(SCTAB nTab, SCCOL nCol) const;
@@ -1812,6 +1814,10 @@ public:
     SfxUndoManager*     GetUndoManager();
     bool IsInVBAMode() const;
     ScRowBreakIterator* GetRowBreakIterator(SCTAB nTab) const;
+
+    void AddSubTotalCell(ScFormulaCell* pCell);
+    void RemoveSubTotalCell(ScFormulaCell* pCell);
+    void SetSubTotalCellsDirty(const ScRange& rDirtyRange);
 
 private: // CLOOK-Impl-Methoden
 

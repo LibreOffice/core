@@ -724,6 +724,9 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
         if ( pCode->GetNextOpCodeRPN( ocSubTotal ) )
             bSubTotal = TRUE;
     }
+
+    if (bSubTotal)
+        pDocument->AddSubTotalCell(this);
 }
 
 ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, const ScAddress& rPos, int nCloneFlags ) :
@@ -814,11 +817,15 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
 
     if( nCloneFlags & SC_CLONECELL_STARTLISTENING )
         StartListeningTo( &rDoc );
+
+    if (bSubTotal)
+        pDocument->AddSubTotalCell(this);
 }
 
 ScFormulaCell::~ScFormulaCell()
 {
     pDocument->RemoveFromFormulaTree( this );
+    pDocument->RemoveSubTotalCell(this);
 
     if (pDocument->HasExternalRefManager())
         pDocument->GetExternalRefManager()->removeRefCell(this);
@@ -984,6 +991,9 @@ void ScFormulaCell::CompileTokenArray( BOOL bNoListening )
         }
         if ( bWasInFormulaTree )
             pDocument->PutInFormulaTree( this );
+
+        if (bSubTotal)
+            pDocument->AddSubTotalCell(this);
     }
 }
 
@@ -1027,6 +1037,9 @@ void ScFormulaCell::CompileXML( ScProgress& rProgress )
             bCompile = FALSE;
             StartListeningTo( pDocument );
         }
+
+        if (bSubTotal)
+            pDocument->AddSubTotalCell(this);
     }
     else
     {
@@ -1066,6 +1079,9 @@ void ScFormulaCell::CalcAfterLoad()
         bDirty = TRUE;
         bCompile = FALSE;
         bNewCompiled = TRUE;
+
+        if (bSubTotal)
+            pDocument->AddSubTotalCell(this);
     }
     // irgendwie koennen unter os/2 mit rotter FPU-Exception /0 ohne Err503
     // gespeichert werden, woraufhin spaeter im NumberFormatter die BLC Lib

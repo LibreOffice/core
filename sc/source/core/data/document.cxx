@@ -5283,6 +5283,55 @@ ScRowBreakIterator* ScDocument::GetRowBreakIterator(SCTAB nTab) const
     return NULL;
 }
 
+void ScDocument::AddSubTotalCell(ScFormulaCell* pCell)
+{
+    maSubTotalCells.insert(pCell);
+}
+
+void ScDocument::RemoveSubTotalCell(ScFormulaCell* pCell)
+{
+    maSubTotalCells.erase(pCell);
+}
+
+namespace {
+
+bool lcl_hasDirtyRange(ScFormulaCell* pCell, const ScRange& rDirtyRange)
+{
+    ScDetectiveRefIter aRefIter(pCell);
+    ScRange aRange;
+    while (aRefIter.GetNextRef(aRange))
+    {
+        if (aRange.Intersects(rDirtyRange))
+            return true;
+    }
+    return false;
+}
+
+}
+
+void ScDocument::SetSubTotalCellsDirty(const ScRange& rDirtyRange)
+{
+    // to update the list by skipping cells that no longer contain subtotal function.
+    set<ScFormulaCell*> aNewSet;
+
+    bool bOldRecalc = GetAutoCalc();
+    SetAutoCalc(false);
+    set<ScFormulaCell*>::iterator itr = maSubTotalCells.begin(), itrEnd = maSubTotalCells.end();
+    for (; itr != itrEnd; ++itr)
+    {
+        ScFormulaCell* pCell = *itr;
+        if (pCell->IsSubTotal())
+        {
+            aNewSet.insert(pCell);
+            if (lcl_hasDirtyRange(pCell, rDirtyRange))
+                pCell->SetDirty();
+        }
+    }
+
+    SetAutoCalc(bOldRecalc);
+    maSubTotalCells.swap(aNewSet); // update the list.
+}
+
 void ScDocument::EnableUndo( bool bVal )
 {
     GetUndoManager()->EnableUndo(bVal);
