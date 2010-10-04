@@ -400,7 +400,7 @@ extern "C" int unopkg_main()
             //$BUNDLED_EXTENSIONS_USER
             if (hasNoFolder(OUSTR("$BRAND_BASE_DIR/share/extensions")))
             {
-                removeFolder(OUSTR("$BUNDLED_EXTENSIONS_USER"));
+                removeFolder(OUSTR("$BUNDLED_EXTENSIONS_PREREG"));
                 //return otherwise we create the registration data again
                 return 0;
             }
