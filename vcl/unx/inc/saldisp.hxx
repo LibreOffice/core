@@ -512,7 +512,7 @@ public:
     { mpInputMethod = pInputMethod; }
     void            SetKbdExtension(SalI18N_KeyboardExtension *pKbdExtension)
     { mpKbdExtension = pKbdExtension; }
-    const char* GetKeyboardName( BOOL bRefresh = FALSE );
+    const char* GetKeyboardName( bool bRefresh = false );
     ::vcl_sal::WMAdaptor* getWMAdaptor() const { return m_pWMAdaptor; }
     DtIntegrator* getDtIntegrator() const { return m_pDtIntegrator; }
     bool            IsXinerama() const { return m_bXinerama; }

@@ -369,7 +369,7 @@ protected:
         @param nRow
             nRow starts at 0
     */
-    virtual BOOL    SeekRow( long nRow ) = 0;
+    virtual sal_Bool SeekRow( long nRow ) = 0;
     virtual void    DrawCursor();
     virtual void    PaintRow( OutputDevice &rDev, const Rectangle &rRect );
     virtual void    PaintData( Window& rWin, const Rectangle& rRect );
@@ -470,7 +470,7 @@ public:
     virtual void    EndScroll();
     virtual void    Select();
     virtual void    DoubleClick( const BrowserMouseEvent& rEvt );
-    virtual BOOL    IsCursorMoveAllowed( long nNewRow, USHORT nNewColId ) const;
+    virtual sal_Bool IsCursorMoveAllowed( long nNewRow, USHORT nNewColId ) const;
     virtual void    CursorMoved();
     virtual void    ColumnMoved( USHORT nColId );
     virtual void    ColumnResized( USHORT nColId );

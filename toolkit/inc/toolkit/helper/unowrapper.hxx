@@ -60,7 +60,7 @@ public:
     virtual void                ReleaseAllGraphics( OutputDevice* pOutDev );
 
     // Window
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> GetWindowInterface( Window* pWindow, BOOL bCreate );
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> GetWindowInterface( Window* pWindow, sal_Bool bCreate );
     virtual void                SetWindowInterface( Window* pWindow, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> xIFace );
 
     void                WindowDestroyed( Window* pWindow );

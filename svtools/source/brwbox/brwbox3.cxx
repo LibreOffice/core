@@ -459,7 +459,7 @@ sal_Bool BrowseBox::IsCellFocusable() const
     return sal_True;
 }
 // -----------------------------------------------------------------------------
-sal_Bool BrowseBox::GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumn )
+BOOL BrowseBox::GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumn )
 {
     return GoToRowColumnId( _nRow, GetColumnId( _nColumn ) );
 }

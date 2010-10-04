@@ -3562,7 +3562,7 @@ void ImpIcnCursor::ExpandGrid()
     if( pGridMap )
     {
         long nNewGridRows = nGridRows + 20;
-        unsigned char* pTempMap = new unsigned char[ nNewGridRows * nGridCols ];
+        BOOL* pTempMap = new BOOL[ nNewGridRows * nGridCols ];
         memcpy( pTempMap, pGridMap, nGridRows * nGridCols );
         delete pGridMap;
         pGridMap = pTempMap;

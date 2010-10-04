@@ -114,7 +114,7 @@ GdkFilterReturn call_filterGdkEvent( GdkXEvent* sys_event,
 void signalKeysChanged( GdkKeymap*, gpointer data )
 {
     GtkSalDisplay* pDisp = (GtkSalDisplay*)data;
-    pDisp->GetKeyboardName(TRUE);
+    pDisp->GetKeyboardName(true);
 }
 
 void signalScreenSizeChanged( GdkScreen* pScreen, gpointer data )

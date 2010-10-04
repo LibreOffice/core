@@ -3636,7 +3636,7 @@ void SvxIconChoiceCtrl_Impl::DrawFocusRect ( OutputDevice* pOut )
     pOut->DrawPolyLine ( aPolygon, aLineInfo );
 }
 
-sal_Bool SvxIconChoiceCtrl_Impl::IsMnemonicChar( sal_Unicode cChar, ULONG& rPos ) const
+BOOL SvxIconChoiceCtrl_Impl::IsMnemonicChar( sal_Unicode cChar, ULONG& rPos ) const
 {
     sal_Bool bRet = sal_False;
     const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();

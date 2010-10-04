@@ -641,7 +641,7 @@ void Window::ImplInitWindowData( WindowType nType )
     mpWindowImpl->mbMenuFloatingWindow= FALSE;      // TRUE: MenuFloatingWindow is the base class
     mpWindowImpl->mbToolbarFloatingWindow= FALSE;       // TRUE: ImplPopupFloatWin is the base class, used for subtoolbars
     mpWindowImpl->mbSplitter            = FALSE;        // TRUE: Splitter is the base class
-    mpWindowImpl->mbVisible           = FALSE;        // TRUE: Show( TRUE ) called
+    mpWindowImpl->mbVisible           = FALSE;        // TRUE: Show( true ) called
     mpWindowImpl->mbOverlapVisible    = FALSE;        // TRUE: Hide called for visible window from ImplHideAllOverlapWindow()
     mpWindowImpl->mbDisabled          = FALSE;        // TRUE: Enable( FALSE ) called
     mpWindowImpl->mbInputDisabled     = FALSE;        // TRUE: EnableInput( FALSE ) called
@@ -1763,7 +1763,7 @@ BOOL Window::ImplSysObjClip( const Region* pOldRegion )
 
     if ( mpWindowImpl->mpSysObj )
     {
-        BOOL bVisibleState = mpWindowImpl->mbReallyVisible;
+        bool bVisibleState = mpWindowImpl->mbReallyVisible;
 
         if ( bVisibleState )
         {
@@ -3109,7 +3109,7 @@ void Window::ImplUpdateWindowPtr()
 void Window::ImplUpdateOverlapWindowPtr( BOOL bNewFrame )
 {
     BOOL bVisible = IsVisible();
-    Show( FALSE );
+    Show( false );
     ImplRemoveWindow( bNewFrame );
     Window* pRealParent = mpWindowImpl->mpRealParent;
     ImplInsertWindow( ImplGetParent() );
@@ -3130,7 +3130,7 @@ void Window::ImplUpdateOverlapWindowPtr( BOOL bNewFrame )
     }
 
     if ( bVisible )
-        Show( TRUE );
+        Show( true );
 }
 
 // -----------------------------------------------------------------------
@@ -3757,7 +3757,7 @@ void Window::ImplShowAllOverlaps()
     {
         if ( pOverlapWindow->mpWindowImpl->mbOverlapVisible )
         {
-            pOverlapWindow->Show( TRUE, SHOW_NOACTIVATE );
+            pOverlapWindow->Show( true, SHOW_NOACTIVATE );
             pOverlapWindow->mpWindowImpl->mbOverlapVisible = FALSE;
         }
 
@@ -3775,7 +3775,7 @@ void Window::ImplHideAllOverlaps()
         if ( pOverlapWindow->IsVisible() )
         {
             pOverlapWindow->mpWindowImpl->mbOverlapVisible = TRUE;
-            pOverlapWindow->Show( FALSE );
+            pOverlapWindow->Show( false );
         }
 
         pOverlapWindow = pOverlapWindow->mpWindowImpl->mpNext;
@@ -4785,7 +4785,7 @@ void Window::doLazyDelete()
     DockingWindow* pDockWin = dynamic_cast<DockingWindow*>(this);
     if( pSysWin || ( pDockWin && pDockWin->IsFloatingMode() ) )
     {
-        Show( FALSE );
+        Show( false );
         SetParent( ImplGetDefaultWindow() );
     }
     vcl::LazyDeletor<Window>::Delete( this );
@@ -6304,7 +6304,7 @@ void Window::SetParent( Window* pNewParent )
         mpWindowImpl->mpFrame->SetParent( pNewParent->mpWindowImpl->mpFrame );
 
     BOOL bVisible = IsVisible();
-    Show( FALSE, SHOW_NOFOCUSCHANGE );
+    Show( false, SHOW_NOFOCUSCHANGE );
 
     // Testen, ob sich das Overlap-Window aendert
     Window* pOldOverlapWindow;
@@ -6420,7 +6420,7 @@ void Window::SetParent( Window* pNewParent )
         ImplGetOwnerDrawList().push_back( this );
 
     if ( bVisible )
-        Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+        Show( true, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
 }
 
 // -----------------------------------------------------------------------
@@ -6445,10 +6445,10 @@ void Window::Show( BOOL bVisible, USHORT nFlags )
 
         if ( mpWindowImpl->mpBorderWindow )
         {
-            BOOL bOldUpdate = mpWindowImpl->mpBorderWindow->mpWindowImpl->mbNoParentUpdate;
+            bool bOldUpdate = mpWindowImpl->mpBorderWindow->mpWindowImpl->mbNoParentUpdate;
             if ( mpWindowImpl->mbNoParentUpdate )
                 mpWindowImpl->mpBorderWindow->mpWindowImpl->mbNoParentUpdate = TRUE;
-            mpWindowImpl->mpBorderWindow->Show( FALSE, nFlags );
+            mpWindowImpl->mpBorderWindow->Show( false, nFlags );
             mpWindowImpl->mpBorderWindow->mpWindowImpl->mbNoParentUpdate = bOldUpdate;
         }
         else if ( mpWindowImpl->mbFrame )
@@ -6586,7 +6586,7 @@ void Window::Show( BOOL bVisible, USHORT nFlags )
         }
 
         if ( mpWindowImpl->mpBorderWindow )
-            mpWindowImpl->mpBorderWindow->Show( TRUE, nFlags );
+            mpWindowImpl->mpBorderWindow->Show( true, nFlags );
         else if ( mpWindowImpl->mbFrame )
         {
             ImplSVData* pSVData = ImplGetSVData();

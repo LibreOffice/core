@@ -181,7 +181,7 @@ INT32 HTMLOption::GetSNumber() const
     return aTmp.ToInt32();
 }
 
-void HTMLOption::GetNumbers( SvULongs &rLongs, BOOL bSpaceDelim ) const
+void HTMLOption::GetNumbers( SvULongs &rLongs, sal_Bool bSpaceDelim ) const
 {
     if( rLongs.Count() )
         rLongs.Remove( 0, rLongs.Count() );

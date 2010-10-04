@@ -76,7 +76,7 @@ protected:
     void                ImpShowHideSelection( BOOL bShow, const TextSelection* pRange = NULL );
 
     TextSelection       ImpMoveCursor( const KeyEvent& rKeyEvent );
-    TextPaM             ImpDelete( BOOL bForward, BYTE nMode );
+    TextPaM             ImpDelete( BYTE nMode, BYTE nDelMode );
     void                ImpSetSelection( const TextSelection& rNewSel, BOOL bUI );
     BOOL                IsInSelection( const TextPaM& rPaM );
 

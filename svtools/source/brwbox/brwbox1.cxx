@@ -2594,7 +2594,7 @@ void BrowseBox::VisibleRowsChanged( long, USHORT )
 
 //-------------------------------------------------------------------
 
-BOOL BrowseBox::IsCursorMoveAllowed( long, USHORT ) const
+sal_Bool BrowseBox::IsCursorMoveAllowed( long, USHORT ) const
 
 /*  [Beschreibung]
 

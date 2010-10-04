@@ -70,7 +70,7 @@ protected:
 
     DECL_LINK(      MenuEventListener, VclSimpleEvent* );
 
-    void            ImplCreateMenu( BOOL bPopup );
+    void            ImplCreateMenu( sal_Bool bPopup );
 
 public:
                     VCLXMenu();

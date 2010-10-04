@@ -2419,7 +2419,7 @@ long SalX11Display::Dispatch( XEvent *pEvent )
                 if( MappingModifier == pEvent->xmapping.request )
                     ModifierMapping();
                 if( MappingKeyboard == pEvent->xmapping.request ) // refresh mapping
-                    GetKeyboardName( TRUE );
+                    GetKeyboardName( true );
             }
             break;
         case ButtonPress:

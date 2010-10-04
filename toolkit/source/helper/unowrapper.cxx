@@ -162,7 +162,7 @@ UnoWrapper::~UnoWrapper()
     return mxToolkit.get();
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> UnoWrapper::GetWindowInterface( Window* pWindow, BOOL bCreate )
+::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> UnoWrapper::GetWindowInterface( Window* pWindow, sal_Bool bCreate )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> xPeer = pWindow->GetWindowPeer();
     if ( !xPeer.is() && bCreate )
