@@ -36,9 +36,7 @@
 #include <com/sun/star/datatransfer/clipboard/XClipboardEx.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase2.hxx>
-#endif
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <osl/diagnose.h>

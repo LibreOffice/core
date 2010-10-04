@@ -43,15 +43,11 @@
 #include <i18n_im.hxx>
 #include <i18n_status.hxx>
 
-#ifndef _SV_SALFRAME_HXX
 #include <salframe.h>
-#endif
 #include <saldata.hxx>
 #include <saldisp.hxx>
 
-#ifndef _OSL_THREAD_H
 #include <osl/thread.h>
-#endif
 
 using namespace vcl;
 

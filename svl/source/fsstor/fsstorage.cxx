@@ -34,9 +34,7 @@
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 
-#ifndef _COM_SUN_STAR_UCB_INTERACTIVEIODEXCEPTION_HPP_
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
-#endif
 #include <com/sun/star/ucb/IOErrorCode.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -53,9 +51,7 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 
 
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 #include <comphelper/storagehelper.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/exc_hlp.hxx>

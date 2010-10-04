@@ -34,9 +34,7 @@
 #include <wchar.h>
 #endif
 #include <osl/mutex.hxx>
-#ifndef _VOS_DIAGNOSE_HXX_
 #include <vos/diagnose.hxx>
-#endif
 #include <vos/macros.hxx>
 #include <comphelper/eventattachermgr.hxx>
 #include <com/sun/star/beans/XIntrospection.hpp>

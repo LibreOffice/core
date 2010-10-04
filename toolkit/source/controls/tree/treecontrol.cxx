@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_toolkit.hxx"
 
-#ifndef _TOOLKIT_TREE_CONTROL_HXX
 #include <treecontrol.hxx>
-#endif
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/view/SelectionType.hpp>

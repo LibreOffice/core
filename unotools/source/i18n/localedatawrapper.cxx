@@ -39,9 +39,7 @@
 #include <tools/debug.hxx>
 #include <i18npool/mslangid.hxx>
 
-#ifndef _COMPHELPER_COMPONENTFACTORY_HXX_
 #include <comphelper/componentfactory.hxx>
-#endif
 #include <unotools/processfactory.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -50,9 +48,7 @@
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
 
-#ifndef _COM_SUN_STAR_I18N_NUMBERFORMATINDEX_HPP_
 #include <com/sun/star/i18n/NumberFormatIndex.hdl>
-#endif
 #include <rtl/instance.hxx>
 
 #define LOCALEDATA_LIBRARYNAME "i18npool"

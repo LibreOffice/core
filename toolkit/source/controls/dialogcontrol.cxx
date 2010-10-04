@@ -39,9 +39,7 @@
 #include <toolkit/controls/unocontrols.hxx>
 #include "toolkit/controls/formattedcontrol.hxx"
 #include "toolkit/controls/roadmapcontrol.hxx"
-#ifndef TOOLKIT_INC_TOOLKIT_CONTROLS_TKSCROLLBAR_HXX
 #include "toolkit/controls/tkscrollbar.hxx"
-#endif
 #include <toolkit/controls/stdtabcontroller.hxx>
 #include <toolkit/controls/tksimpleanimation.hxx>
 #include <toolkit/controls/tkthrobber.hxx>

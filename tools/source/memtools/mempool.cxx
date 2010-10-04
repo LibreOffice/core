@@ -31,9 +31,7 @@
 #include <tools/mempool.hxx>
 #include "rtl/alloc.h"
 
-#ifndef INCLUDED_STDIO_H
 #include <stdio.h>
-#endif
 
 /*************************************************************************
 |*

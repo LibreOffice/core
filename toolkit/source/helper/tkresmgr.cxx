@@ -29,9 +29,7 @@
 #include "precompiled_toolkit.hxx"
 #include <toolkit/helper/tkresmgr.hxx>
 #include <tools/simplerm.hxx>
-#ifndef  _TOOLS_RESMGR_HXX_
 #include <tools/resmgr.hxx>
-#endif
 
 
 #include <vcl/svapp.hxx>

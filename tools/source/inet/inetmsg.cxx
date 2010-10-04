@@ -29,9 +29,7 @@
 #include "precompiled_tools.hxx"
 #include <sal/types.h>
 #include <tools/datetime.hxx>
-#ifndef _TOOLS_INETMIME_HXX
 #include <tools/inetmime.hxx>
-#endif
 #include <tools/inetmsg.hxx>
 #include <tools/inetstrm.hxx>
 #include <rtl/instance.hxx>

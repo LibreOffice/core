@@ -27,17 +27,11 @@
 
 #include "documentfocuslistener.hxx"
 
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEEVENTBROADCASTER_HPP_
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#endif
 
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::lang;

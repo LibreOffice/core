@@ -28,12 +28,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#ifndef _BMPACC_HXX
 #include <vcl/bmpacc.hxx>
-#endif
-#ifndef _GRAPH_HXX
 #include <vcl/graph.hxx>
-#endif
 #include "rgbtable.hxx"
 #define _XPMPRIVATE
 #include "xpmread.hxx"

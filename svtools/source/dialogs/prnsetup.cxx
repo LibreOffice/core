@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 #include <tools/debug.hxx>
-#ifndef _VCL_PRINT_HXX
 #include <vcl/print.hxx>
-#endif
 
 #ifndef GCC
 #endif

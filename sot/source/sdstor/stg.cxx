@@ -33,12 +33,8 @@
 #include <tools/tempfile.hxx>
 #include <tools/ownlist.hxx>
 #include <tools/string.hxx>
-#ifndef _TOOLS_FSYS_HXX
 #include <tools/fsys.hxx>
-#endif
-#ifndef _TOOLS_STREAM_HXX
 #include <tools/stream.hxx>
-#endif
 #include <tools/pstm.hxx>
 #include <tools/debug.hxx>
 

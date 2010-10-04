@@ -42,9 +42,7 @@
 #include <tools/globname.hxx>
 #include <sot/clsids.hxx>
 #include <com/sun/star/util/XModifyListener.hpp>
-#ifndef _COM_SUN_STAR_UTIL_XMODIFYiBLE_HPP_
 #include <com/sun/star/util/XModifiable.hpp>
-#endif
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/XStateChangeListener.hpp>

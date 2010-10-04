@@ -28,12 +28,8 @@
 #include <XTempFile.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP
 #include <com/sun/star/registry/XRegistryKey.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
 #include <unotools/tempfile.hxx>
 #include <osl/file.hxx>
 #include <unotools/configmgr.hxx>

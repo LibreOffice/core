@@ -33,16 +33,10 @@
 #ifndef GCC
 #endif
 
-#ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
 
-#ifndef _HELP_HXX
 #include <vcl/help.hxx>
-#endif
-#ifndef _IMAGE_HXX
 #include <vcl/image.hxx>
-#endif
 
 #include <tools/debug.hxx>
 

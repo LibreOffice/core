@@ -28,16 +28,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 #include <tools/list.hxx>
-#ifndef _TABLE_HXX
 #include <tools/table.hxx>
-#endif
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/accel.h>
 #include <vcl/accel.hxx>
-#ifndef _RC_H
 #include <tools/rc.h>
-#endif
 
 
 

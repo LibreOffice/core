@@ -32,13 +32,9 @@
 
 #include <string.h>
 
-#ifndef TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
 #include <i18npool/mslangid.hxx>
-#ifndef _VCL_WINDOW_HXX
 #include <vcl/window.hxx>
-#endif
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 

@@ -30,9 +30,7 @@
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/debug.hxx>
-#ifndef _SV_HATCX_HXX
 #include <vcl/hatch.hxx>
-#endif
 
 DBG_NAME( Hatch )
 

@@ -37,9 +37,7 @@
 #include <com/sun/star/datatransfer/XMimeContentTypeFactory.hpp>
 #include <com/sun/star/datatransfer/XMimeContentType.hpp>
 
-#ifndef _DATAFORMATTRANSLATOR_HXX_
 #include "DataFmtTransl.hxx"
-#endif
 #include "..\misc\ImplHelper.hxx"
 #include "..\misc\WinClip.hxx"
 

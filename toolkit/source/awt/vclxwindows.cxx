@@ -49,9 +49,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
 
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/field.hxx>

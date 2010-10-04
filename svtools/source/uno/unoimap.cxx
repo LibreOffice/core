@@ -37,9 +37,7 @@
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/drawing/PointSequence.hpp>
 
-#ifndef _COMPHELPER_SERVICEHELPER_HXX_
 #include <comphelper/servicehelper.hxx>
-#endif
 #include <comphelper/propertysethelper.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <cppuhelper/weakagg.hxx>

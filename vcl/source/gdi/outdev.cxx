@@ -29,9 +29,7 @@
 #include "precompiled_vcl.hxx"
 
 #include <tools/ref.hxx>
-#ifndef _SV_SVSYS_HXX
 #include <svsys.h>
-#endif
 #include <vcl/salgdi.hxx>
 #include <vcl/sallayout.hxx>
 #include <vcl/salframe.hxx>
@@ -41,9 +39,7 @@
 #include <vcl/svdata.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/ctrl.hxx>
-#ifndef _POLY_HXX
 #include <tools/poly.hxx>
-#endif
 #include <vcl/region.hxx>
 #include <vcl/region.h>
 #include <vcl/virdev.hxx>

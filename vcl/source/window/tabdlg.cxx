@@ -30,9 +30,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabdlg.hxx>
-#ifndef _SV_RC_H
 #include <tools/rc.h>
-#endif
 
 
 

@@ -57,9 +57,7 @@
 #endif
 #include <tools/stream.hxx>
 
-#ifndef _VOS_MUTEX_HXX
 #include <vos/mutex.hxx>
-#endif
 
 #include <osl/file.hxx>
 #include <rtl/instance.hxx>

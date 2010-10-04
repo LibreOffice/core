@@ -57,9 +57,7 @@
 #include <ucbhelper/macros.hxx>
 #include <ucbhelper/configurationkeys.hxx>
 
-#ifndef _UCBEXPLORER_HRC
 #include "ucbexplorer.hrc"
-#endif
 
 using namespace com::sun::star;
 using namespace com::sun::star::beans;

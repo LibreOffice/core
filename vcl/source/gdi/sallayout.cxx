@@ -34,9 +34,7 @@
 #include <math.h>
 #include <sal/alloca.h>
 
-#ifndef _SV_SVSYS_HXX
 #include <svsys.h>
-#endif
 #include <vcl/salgdi.hxx>
 #include <vcl/sallayout.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -44,9 +42,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <i18npool/lang.h>
 
-#ifndef _TL_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
 
 #include <limits.h>
 

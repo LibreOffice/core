@@ -47,9 +47,7 @@
 #define _SVSTDARR_ULONGSSORT
 #include <svl/svstdarr.hxx>
 
-#ifndef _SVEDI_HXX
 #include <svtools/svmedit.hxx>
-#endif
 #include <svtools/svlbitm.hxx>
 
 using namespace ::com::sun::star::accessibility;

@@ -36,9 +36,7 @@
 #include <tools/debug.hxx>
 #include <tools/list.hxx>
 
-#ifndef _COMPED_HXX
 #include "comdep.hxx"
-#endif
 #include <tools/fsys.hxx>
 
 

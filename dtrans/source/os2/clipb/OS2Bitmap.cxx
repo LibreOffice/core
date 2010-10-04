@@ -8,9 +8,7 @@
 #define INCL_WIN
 #include <svpm.h>
 
-#ifndef _OS2CLIPBOARD_HXX_
 #include "Os2Clipboard.hxx"
-#endif
 
 // same typedefs from win32 sdk
 typedef unsigned short WORD;

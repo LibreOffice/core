@@ -37,9 +37,7 @@
 #include <excpt.h>
 #endif
 
-#ifndef _OSL_MODULE_H
 #include <osl/module.h>
-#endif
 #include <wincomp.hxx>
 #include <saldata.hxx>
 #include <salinst.h>

@@ -27,9 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_comphelper.hxx"
-#ifndef _COMPHELPER_CHAINABLEPROPERTYSETINFO_HXX_
 #include <comphelper/MasterPropertySetInfo.hxx>
-#endif
 #include <comphelper/TypeGeneration.hxx>
 
 using ::rtl::OUString;

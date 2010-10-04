@@ -28,17 +28,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#ifndef _SV_RC_H
 #include <tools/rc.h>
-#endif
 #include <vcl/svdata.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/event.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/virdev.hxx>
-#ifndef _SV_SVIDS_HRC
 #include <vcl/svids.hrc>
-#endif
 #include <vcl/menu.hxx>
 #include <vcl/cmdevt.h>
 #include <vcl/subedit.hxx>
@@ -59,9 +55,7 @@
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#ifndef _COM_SUN_STAR_DATATRANSFER_DND_DNDCONSTANS_HPP_
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
-#endif
 #include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 

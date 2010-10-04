@@ -39,17 +39,13 @@
 #include <vcl/i18nhelp.hxx>
 #include <vcl/controldata.hxx>
 #include <vcl/unohelp.hxx>
-#ifndef _COM_SUN_STAR_UTIL_XCOLLATOR_HPP_
 #include <com/sun/star/i18n/XCollator.hpp>
-#endif
 
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HDL_
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#endif
 
 #define MULTILINE_ENTRY_DRAW_FLAGS ( TEXT_DRAW_WORDBREAK | TEXT_DRAW_MULTILINE | TEXT_DRAW_VCENTER )
 

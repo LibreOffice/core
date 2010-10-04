@@ -57,9 +57,7 @@
 #include <unistd.h>
 #endif
 #include <vos/process.hxx>
-#ifndef _VOS_MUTEX_HXX
 #include <vos/mutex.hxx>
-#endif
 
 #include "Xproto.h"
 #include <saldisp.hxx>
@@ -70,9 +68,7 @@
 #include <osl/thread.h>
 #include <osl/process.h>
 #include <rtl/strbuf.hxx>
-#ifndef _RTL_BOOTSTRAP_HXX
 #include <rtl/bootstrap.hxx>
-#endif
 
 #include <tools/debug.hxx>
 #include <sm.hxx>

@@ -31,9 +31,7 @@
 #ifdef WIN
 #include <svwin.h>
 
-#ifndef _SYSDEP_HXX
 #include <sysdep.hxx>
-#endif
 
 // Statische DLL-Verwaltungs-Variablen
 static HINSTANCE hDLLInst = 0;      // HANDLE der DLL

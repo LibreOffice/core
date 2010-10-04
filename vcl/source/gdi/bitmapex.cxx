@@ -37,12 +37,8 @@
 #include <vcl/image.h>
 #include <vcl/bitmapex.hxx>
 #include <vcl/pngread.hxx>
-#ifndef _SV_IMPIMAGETREE_H
 #include <vcl/impimagetree.hxx>
-#endif
-#ifndef _SV_RC_H
 #include <tools/rc.h>
-#endif
 #include <vcl/svapp.hxx>
 #include <vcl/bmpacc.hxx>
 

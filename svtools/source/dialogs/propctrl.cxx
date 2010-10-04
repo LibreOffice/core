@@ -29,15 +29,9 @@
 #include "precompiled_svtools.hxx"
 
 
-#ifndef _USR_INTROSP_HXX
 #include <usr/inspect.hxx>
-#endif
-#ifndef _USR_SERINFO_HXX
 #include <usr/serinfo.hxx>
-#endif
-#ifndef _USR_INTROSP_HXX
 #include <usr/introsp.hxx>
-#endif
 
 #include <propctrl.hxx>
 #include <property.hxx>

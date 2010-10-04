@@ -36,9 +36,7 @@
 
 // Programmabhaengige Includes.
 #include <rscconst.hxx>
-#ifndef _RSCSARRAY_HXX
 #include <rscarray.hxx>
-#endif
 #include <rscdb.hxx>
 
 /****************** C O D E **********************************************/

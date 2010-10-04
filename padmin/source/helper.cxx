@@ -27,9 +27,7 @@
 
 #include <unistd.h>
 #include <helper.hxx>
-#ifndef _PAD_PADIALOG_HRC_
 #include <padialog.hrc>
-#endif
 #include <osl/file.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>

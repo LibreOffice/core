@@ -32,9 +32,7 @@
 #include <toolkit/helper/tkresmgr.hxx>
 #include <toolkit/helper/throbberimpl.hxx>
 
-#ifndef _TOOLKIT_AWT_XTHROBBER_HRC_
 #include "xthrobber.hrc"
-#endif
 #include <tools/debug.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/timer.hxx>

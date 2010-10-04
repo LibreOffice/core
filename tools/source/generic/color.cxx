@@ -36,9 +36,7 @@
 #include <tools/rc.hxx>
 #include <tools/rcid.h>
 #include <tools/resid.hxx>
-#ifndef _SV_RC_H
 #include <tools/rc.h>
-#endif
 
 // -----------
 // - Inlines -

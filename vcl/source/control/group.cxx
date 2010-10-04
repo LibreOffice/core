@@ -31,9 +31,7 @@
 #include <vcl/group.hxx>
 #include <vcl/controldata.hxx>
 
-#ifndef _SV_RC_H
 #include <tools/rc.h>
-#endif
 
 
 

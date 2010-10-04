@@ -29,9 +29,7 @@
 #include "precompiled_vcl.hxx"
 
 #include <tools/ref.hxx>
-#ifndef _SV_SVSYS_HXX
 #include <svsys.h>
-#endif
 #include <vcl/salgdi.hxx>
 #include <tools/debug.hxx>
 #include <vcl/svdata.hxx>

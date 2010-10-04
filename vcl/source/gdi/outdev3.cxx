@@ -30,9 +30,7 @@
 #include <cstring>
 #include <i18npool/mslangid.hxx>
 
-#ifndef _SV_SVSYS_HXX
 #include <svsys.h>
-#endif
 #include <vcl/salgdi.hxx>
 #include <vcl/sallayout.hxx>
 #include <rtl/tencinfo.h>
@@ -62,9 +60,7 @@
 #include <unotools/fontcfg.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/textlayout.hxx>
-#ifndef _OSL_FILE_H
 #include <osl/file.h>
-#endif
 #ifdef ENABLE_GRAPHITE
 #include <vcl/graphite_features.hxx>
 #endif

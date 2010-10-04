@@ -28,17 +28,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_tools.hxx"
 
-#ifndef _LIMITS_H
 #include <limits.h>
-#endif
 
-#ifndef _STRING_H
 #include <string.h>
-#endif
 
-#ifndef _STDIO_H
 #include <stdio.h>
-#endif
 #include <tools/solar.h>
 #include <impcont.hxx>
 #include <tools/contnr.hxx>

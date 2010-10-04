@@ -34,9 +34,7 @@
 #include <tools/debug.hxx>
 #include <tools/bigint.hxx>
 
-#ifndef _SV_RC_H
 #include <tools/rc.h>
-#endif
 
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>

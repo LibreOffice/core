@@ -29,9 +29,7 @@
 #include "precompiled_vcl.hxx"
 #include <tools/debug.hxx>
 
-#ifndef _SV_RC_H
 #include <tools/rc.h>
-#endif
 #include <vcl/svdata.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.h>

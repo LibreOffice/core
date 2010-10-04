@@ -41,9 +41,7 @@
 #include "comdep.hxx"
 
 #ifdef OS2
-#ifndef _VOS_MUTEX_HXX //autogen
 #include <vos/mutex.hxx>
-#endif
 #endif
 
 int Sys2SolarError_Impl( int nSysErr );

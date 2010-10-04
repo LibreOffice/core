@@ -32,9 +32,7 @@
 #include <svtools/svlbox.hxx>
 #include <svtools/svlbitm.hxx>
 #include <vcl/svapp.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/decoview.hxx>
 #include <vcl/sound.hxx>
 #include <vcl/salnativewidgets.hxx>

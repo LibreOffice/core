@@ -36,12 +36,8 @@
 #include <tools/vcompat.hxx>
 #include <poly.h>
 #include <tools/line.hxx>
-#ifndef _VECTOR2D_H
 #include <tools/vector2d.hxx>
-#endif
-#ifndef _POLY_HXX
 #include <tools/poly.hxx>
-#endif
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2dvector.hxx>

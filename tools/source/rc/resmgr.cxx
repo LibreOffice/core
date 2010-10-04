@@ -33,9 +33,7 @@
 #include <stdlib.h>
 #include <vos/signal.hxx>
 #include <tools/debug.hxx>
-#ifndef _TABLE_HXX
 #include <tools/table.hxx>
-#endif
 #include <tools/stream.hxx>
 #include <tools/resmgr.hxx>
 #include <tools/rc.hxx>

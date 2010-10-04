@@ -34,9 +34,7 @@
 
   *************************************************************************/
 
-#ifndef _UCBHELPER_PROVCONF_HXX_
 #include <provconf.hxx>
-#endif
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>

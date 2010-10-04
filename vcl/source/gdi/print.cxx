@@ -31,9 +31,7 @@
 #define ENABLE_BYTESTRING_STREAM_OPERATORS
 #include <list>
 
-#ifndef _SV_SVSYS_HXX
 #include <svsys.h>
-#endif
 #include <vcl/salinst.hxx>
 #include <vcl/salgdi.hxx>
 #include <vcl/salptype.hxx>

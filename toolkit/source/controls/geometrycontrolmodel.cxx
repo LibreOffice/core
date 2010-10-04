@@ -34,9 +34,7 @@
 #include <rtl/instance.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
-#ifndef _COM_SUN_STAR_XNAMECONTAINER_HPP_
 #include <toolkit/controls/eventcontainer.hxx>
-#endif
 #include <toolkit/helper/property.hxx>
 #include <tools/debug.hxx>
 #include <algorithm>

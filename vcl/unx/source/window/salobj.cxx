@@ -36,13 +36,9 @@
 #include <salunx.h>
 #include <salstd.hxx>
 #include <saldata.hxx>
-#ifndef _SV_SALINST_HXX
 #include <salinst.h>
-#endif
 #include <saldisp.hxx>
-#ifndef _SV_SALFRAME_HXX
 #include <salframe.h>
-#endif
 #include <salobj.h>
 #include <vcl/salwtype.hxx>
 #include <vcl/keycodes.hxx>

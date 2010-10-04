@@ -30,12 +30,8 @@
 
 #define _SV_PRGSBAR_CXX
 
-#ifndef _TOOLS_DEBUGS_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef _VCL_STATUS_HXX
 #include <vcl/status.hxx>
-#endif
 #include <prgsbar.hxx>
 
 // =======================================================================

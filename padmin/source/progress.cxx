@@ -34,9 +34,7 @@
 #include <vcl/svapp.hxx>
 #include <progress.hxx>
 #include <helper.hxx>
-#ifndef _PAD_PADIALOG_HRC_
 #include <padialog.hrc>
-#endif
 
 using namespace padmin;
 

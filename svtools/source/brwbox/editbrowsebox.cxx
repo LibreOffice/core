@@ -29,26 +29,18 @@
 #include "precompiled_svtools.hxx"
 #include <svtools/editbrowsebox.hxx>
 
-#ifndef _SVTOOLS_EDITBROWSEBOX_HRC_
 #include "editbrowsebox.hrc"
-#endif
 
-#ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
 #include <tools/debug.hxx>
 #include <vcl/window.hxx>
 
-#ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
-#endif
 #include <tools/resid.hxx>
 #include <vcl/spinfld.hxx>
 #include <svtools/svtdata.hxx>
 
-#ifndef _SVTOOLS_HRC
 #include <svtools/svtools.hrc>
-#endif
 
 #include <algorithm>
 #include <tools/multisel.hxx>

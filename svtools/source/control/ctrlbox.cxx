@@ -30,12 +30,8 @@
 
 #define _CTRLBOX_CXX
 #include <tools/debug.hxx>
-#ifndef _APP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _FIELD_HXX
 #include <vcl/field.hxx>
-#endif
 #include <comphelper/processfactory.hxx>
 #include <unotools/charclass.hxx>
 

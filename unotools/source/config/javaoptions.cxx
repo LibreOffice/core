@@ -30,9 +30,7 @@
 #ifndef GCC
 #endif
 
-#ifndef _unotools_JAVAPTIONS_HXX
 #include <unotools/javaoptions.hxx>
-#endif
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/logfile.hxx>

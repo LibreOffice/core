@@ -35,13 +35,9 @@
 #include <saldata.hxx>
 #include <saldisp.hxx>
 
-#ifndef _SV_SALGDI_HXX
 #include <salgdi.h>
-#endif
 
-#ifndef _SV_SALGDI_HXX
 #include <salframe.h>
-#endif
 #include <vcl/settings.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <plugins/kde/kdedata.hxx>

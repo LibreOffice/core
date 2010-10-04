@@ -32,9 +32,7 @@
 #include <svl/cenumitm.hxx>
 #include <whassert.hxx>
 
-#ifndef _CPPUHELPER_EXTRACT_HXX_
 #include <cppuhelper/extract.hxx>
-#endif
 
 //============================================================================
 //

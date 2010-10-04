@@ -36,9 +36,7 @@
 #include <vcl/outfont.hxx>
 #include <rtl/alloc.h>
 
-#ifndef _RTL_TENCINFO_H_
 #include <rtl/tencinfo.h>
-#endif
 
 #include <set>
 

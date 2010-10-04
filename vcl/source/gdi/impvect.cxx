@@ -36,9 +36,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/virdev.hxx>
-#ifndef _SV_VECTORIZ_HXX
 #include <impvect.hxx>
-#endif
 
 // -----------
 // - Defines -

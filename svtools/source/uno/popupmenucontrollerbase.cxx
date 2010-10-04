@@ -48,9 +48,7 @@
 //  includes of other projects
 //_________________________________________________________________________________________________________________
 
-#ifndef _VCL_MENU_HXX_
 #include <vcl/menu.hxx>
-#endif
 #include <vcl/svapp.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/logfile.hxx>

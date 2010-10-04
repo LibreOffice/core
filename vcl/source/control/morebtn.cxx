@@ -29,9 +29,7 @@
 #include "precompiled_vcl.hxx"
 #include <vcl/morebtn.hxx>
 
-#ifndef _SV_RD_H
 #include <tools/rc.h>
-#endif
 
 
 

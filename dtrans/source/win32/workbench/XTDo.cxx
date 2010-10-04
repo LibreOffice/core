@@ -35,9 +35,7 @@
 
 #include "..\DTransHelper.hxx"
 
-#ifndef _TWRAPPERDATAOBJECT_HXX_
 #include "XTDo.hxx"
-#endif
 
 #if defined _MSC_VER
 #pragma warning(push,1)

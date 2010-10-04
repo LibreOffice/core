@@ -30,9 +30,7 @@
 
 #define _TASKBAR_CXX
 
-#ifndef _TOOLS_LIST_HXX
 #include <tools/list.hxx>
-#endif
 #include <tools/debug.hxx>
 #include <tools/date.hxx>
 #include <vcl/image.hxx>

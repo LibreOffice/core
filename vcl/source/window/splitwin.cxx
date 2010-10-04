@@ -37,9 +37,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/symbol.hxx>
-#ifndef _SV_SVIDS_HRC
 #include <vcl/svids.hrc>
-#endif
 #include <vcl/image.hxx>
 #include <vcl/svdata.hxx>
 #include <vcl/help.hxx>

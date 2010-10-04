@@ -29,9 +29,7 @@
 #include "precompiled_vcl.hxx"
 #include <sal/types.h>
 
-#ifndef _TRANSFERABLE_HXX_
 #include "OSXTransferable.hxx"
-#endif
 
 #include "DataFlavorMapping.hxx"
 

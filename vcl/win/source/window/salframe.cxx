@@ -46,9 +46,7 @@
 
 #include <stdio.h>
 
-#ifndef _SVWIN_HXX
 #include <tools/svwin.h>
-#endif
 #ifdef __MINGW32__
 #include <excpt.h>
 #endif
@@ -63,9 +61,7 @@
 #pragma warning( disable: 4242 4244 )
 #endif
 #include <wincomp.hxx>
-#ifndef _SV_SALIDS_HRC
 #include <salids.hrc>
-#endif
 #include <vcl/sysdata.hxx>
 #include <saldata.hxx>
 #include <salinst.h>
@@ -80,17 +76,13 @@
 #include <vcl/timer.hxx>
 #include <saltimer.h>
 #include <vcl/settings.hxx>
-#ifndef _SV_KEYCOES_HXX
 #include <vcl/keycodes.hxx>
-#endif
 #include <vcl/window.h>
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/sallayout.hxx>
 #include <vcl/svapp.hxx>
-#ifndef _VCL_IMPDEL_HXX
 #include <impdel.hxx>
-#endif
 #define COMPILE_MULTIMON_STUBS
 #include <multimon.h>
 #include <vector>

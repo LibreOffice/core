@@ -29,18 +29,12 @@
 #include "precompiled_svtools.hxx"
 #include "helpagentwindow.hxx"
 #include <osl/diagnose.h>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/bitmap.hxx>
 #include <svtools/svtdata.hxx>
 
-#ifndef _SVTOOLS_HRC
 #include <svtools/svtools.hrc>
-#endif
-#ifndef _SVT_HELPID_HRC
 #include <svtools/helpid.hrc>
-#endif
 
 #define WB_AGENT_STYLE  0
 

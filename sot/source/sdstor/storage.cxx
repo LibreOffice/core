@@ -41,9 +41,7 @@
 #include <sot/formats.hxx>
 #include <sot/exchange.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#ifndef _TOOLS_FSYS_HXX
 #include <tools/fsys.hxx>
-#endif
 #include <tools/cachestr.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>

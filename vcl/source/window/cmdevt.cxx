@@ -28,13 +28,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#ifndef _STRING_H
 #include <string.h>
-#endif
 
-#ifndef _SV_CMDEVT_HXX
 #include <vcl/cmdevt.hxx>
-#endif
 
 // =======================================================================
 

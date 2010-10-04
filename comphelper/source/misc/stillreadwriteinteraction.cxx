@@ -29,17 +29,11 @@
 #include "precompiled_comphelper.hxx"
 #include <comphelper/stillreadwriteinteraction.hxx>
 
-#ifndef __COM_SUN_STAR_UCB_INTERACTIVEIOEXCEPTION_HPP__
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
-#endif
 
-#ifndef __COM_SUN_STAR_TASK_XINTERACTIONABORT_HPP__
 #include <com/sun/star/task/XInteractionAbort.hpp>
-#endif
 
-#ifndef __COM_SUN_STAR_UCB_UNSUPPORTEDDATASINKEXCEPTION_HPP__
 #include <com/sun/star/ucb/UnsupportedDataSinkException.hpp>
-#endif
 
 namespace comphelper{
 

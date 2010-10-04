@@ -42,9 +42,7 @@
 #include <com/sun/star/java/XJavaThreadRegister_11.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#ifndef _SV_SVSYS_HXX
 #include <svsys.h>
-#endif
 #include <vcl/salinst.hxx>
 #include <vcl/salframe.hxx>
 #include <vcl/window.hxx>

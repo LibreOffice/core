@@ -35,9 +35,7 @@
 // #include <math.h>
 #include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
 #include <sot/formats.hxx>
 
 #include "svl/urihelper.hxx"

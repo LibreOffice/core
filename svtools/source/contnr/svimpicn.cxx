@@ -29,9 +29,7 @@
 #include "precompiled_svtools.hxx"
 
 #include <limits.h>
-#ifndef _METRIC_HXX
 #include <vcl/metric.hxx>
-#endif
 #include <vcl/svapp.hxx>
 #ifdef DBG_UTIL
 #include <vcl/sound.hxx>
@@ -40,9 +38,7 @@
 #include <svtools/svlbox.hxx>
 #include <svtools/svicnvw.hxx>
 #include <svimpicn.hxx>
-#ifndef _SVLBITM_HXX
 #include <svtools/svlbitm.hxx>
-#endif
 #include <svl/svarray.hxx>
 
 

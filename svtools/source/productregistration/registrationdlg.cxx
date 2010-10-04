@@ -31,14 +31,10 @@
 
 #if 0 /* @@@ */
 #include <svtools/svtdata.hxx>
-#ifndef _SVTOOLS_HRC
 #include <svtools/svtools.hrc>
-#endif
 #endif /* @@@ */
 
-#ifndef SVTOOLS_REGISTRATIONDLG_HRC
 #include "registrationdlg.hrc"
-#endif
 #include <vcl/msgbox.hxx>
 #include <tools/debug.hxx>
 

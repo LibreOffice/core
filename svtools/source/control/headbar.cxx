@@ -31,19 +31,11 @@
 #define _SV_HEADBAR_CXX
 #include <svtools/headbar.hxx>
 #include <tools/debug.hxx>
-#ifndef _TOOLS_LIST_HXX
 #include <tools/list.hxx>
-#endif
 
-#ifndef _VCL_APP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _VCL_HELP_HXX
 #include <vcl/help.hxx>
-#endif
-#ifndef _VCL_IMAGE_HXX
 #include <vcl/image.hxx>
-#endif
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
 // =======================================================================

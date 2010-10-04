@@ -31,12 +31,8 @@
 #include <tools/debug.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/svapp.hxx>
-#ifndef _SCRBAR_HXX
 #include <vcl/scrbar.hxx>
-#endif
-#ifndef _HELP_HXX
 #include <vcl/help.hxx>
-#endif
 #include <com/sun/star/accessibility/AccessibleEventObject.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>

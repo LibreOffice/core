@@ -30,9 +30,7 @@
 
 #include <limits.h>
 
-#ifndef _SV_SVSYS_HXX
 #include <svsys.h>
-#endif
 #include <tools/bigint.hxx>
 #include <tools/debug.hxx>
 #include <vcl/virdev.hxx>

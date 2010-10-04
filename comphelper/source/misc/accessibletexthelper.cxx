@@ -32,9 +32,7 @@
 #include <comphelper/accessibletexthelper.hxx>
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
-#ifndef _COM_SUN_STAR_TEXT_WORDTYPE_HPP_
 #include <com/sun/star/i18n/WordType.hpp>
-#endif
 #include <com/sun/star/i18n/KCharacterType.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/accessibility/TextSegment.hpp>

@@ -35,14 +35,10 @@
 
 #define _SV_SALINST_CXX
 
-#ifndef _VOS_MUTEX_HXX
 #include <vos/mutex.hxx>
-#endif
 #include <tools/debug.hxx>
 
-#ifndef _SV_SALIDS_HRC
 #include <salids.hrc>
-#endif
 #include <vcl/salatype.hxx>
 #include <saldata.hxx>
 #include <salinst.h>

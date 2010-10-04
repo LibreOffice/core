@@ -30,14 +30,10 @@
 #include <svtools/svtabbx.hxx>
 #include <svtools/headbar.hxx>
 #include <svtools/svtdata.hxx>
-#ifndef _SVTOOLS_HRC
 #include <svtools/svtools.hrc>
-#endif
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#ifndef SVTOOLS_ACCESSIBLE_FACTORY_HXX
 #include "svtaccessiblefactory.hxx"
-#endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;

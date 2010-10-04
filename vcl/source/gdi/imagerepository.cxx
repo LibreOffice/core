@@ -30,9 +30,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/imagerepository.hxx>
 #include <vcl/svapp.hxx>
-#ifndef _SV_IMPIMAGETREE_H
 #include "vcl/impimagetree.hxx"
-#endif
 
 //........................................................................
 namespace vcl

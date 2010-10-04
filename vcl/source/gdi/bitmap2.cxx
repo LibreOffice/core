@@ -29,9 +29,7 @@
 #include "precompiled_vcl.hxx"
 
 #include <tools/zcodec.hxx>
-#ifndef _TOOLS_STREAM_HXX
 #include <tools/stream.hxx>
-#endif
 #include <vcl/salbtype.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/outdev.hxx>

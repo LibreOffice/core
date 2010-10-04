@@ -32,9 +32,7 @@
 #include <tools/debug.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#ifndef _UNTOOLS_TEMPFILE_HXX
 #include <unotools/tempfile.hxx>
-#endif
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 #include <tools/debug.hxx>

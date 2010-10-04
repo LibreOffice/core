@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_toolkit.hxx"
 
-#ifndef _TOOLKIT_ROADMAP_CONTROL_HXX
 #include <toolkit/controls/roadmapcontrol.hxx>
-#endif
 #include <toolkit/helper/unopropertyarrayhelper.hxx>
 #include <toolkit/helper/property.hxx>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>

@@ -29,9 +29,7 @@
 #include "precompiled_vcl.hxx"
 
 #include <limits.h>
-#ifndef _SV_SVSYS_HXX
 #include <svsys.h>
-#endif
 #include <vcl/salbmp.hxx>
 #include <vcl/salgdi.hxx>
 #include <vcl/salframe.hxx>
@@ -49,9 +47,7 @@
 #include <vcl/window.h>
 #include <vcl/window.hxx>
 #include <vcl/scrbar.hxx>
-#ifndef _SV_SCRWND_HXX
 #include <scrwnd.hxx>
-#endif
 #include <vcl/dockwin.hxx>
 
 

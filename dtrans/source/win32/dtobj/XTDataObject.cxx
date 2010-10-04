@@ -33,9 +33,7 @@
 //------------------------------------------------------------------------
 #include <osl/diagnose.h>
 
-#ifndef _TXDATAOBJECT_HXX_
 #include "XTDataObject.hxx"
-#endif
 #include <com/sun/star/datatransfer/dataflavor.hpp>
 #include "..\misc\ImplHelper.hxx"
 #include "DTransHelper.hxx"

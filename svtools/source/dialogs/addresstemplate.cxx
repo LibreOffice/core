@@ -32,15 +32,9 @@
 
 
 #include "addresstemplate.hxx"
-#ifndef _SVT_ADDRESSTEMPLATE_HRC_
 #include "addresstemplate.hrc"
-#endif
-#ifndef _SVTOOLS_HRC
 #include <svtools/svtools.hrc>
-#endif
-#ifndef _SVT_HELPID_HRC
 #include <svtools/helpid.hrc>
-#endif
 #include <svtools/svtdata.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>
@@ -49,9 +43,7 @@
 #include <vcl/waitobj.hxx>
 #include <vcl/msgbox.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#ifndef _CPPUHELPER_EXTRACT_HXX_
 #include <cppuhelper/extract.hxx>
-#endif
 #include <comphelper/interaction.hxx>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
@@ -66,9 +58,7 @@
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include "localresaccess.hxx"
-#ifndef SVTOOLS_FILENOTATION_HXX_
 #include "svl/filenotation.hxx"
-#endif
 #include <tools/urlobj.hxx>
 
 #include <algorithm>

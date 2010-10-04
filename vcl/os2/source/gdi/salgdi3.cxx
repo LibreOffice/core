@@ -37,15 +37,9 @@
 #define _SV_SALGDI3_CXX
 #include <tools/svwin.h>
 #include <rtl/tencinfo.h>
-#ifndef _OSL_FILE_HXX
 #include <osl/file.hxx>
-#endif
-#ifndef _OSL_THREAD_HXX
 #include <osl/thread.hxx>
-#endif
-#ifndef _OSL_PROCESS_HXX
 #include <osl/process.h>
-#endif
 #include <vcl/svapp.hxx>
 #include <saldata.hxx>
 #include <salgdi.h>
@@ -57,9 +51,7 @@
 #include <tools/debug.hxx>
 #include <saldata.hxx>
 #include <salgdi.h>
-#ifndef _SV_OUTFONT_HXX
 #include <vcl/outfont.hxx>
-#endif
 #include <sallayout.h>
 #include <tools/poly.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>

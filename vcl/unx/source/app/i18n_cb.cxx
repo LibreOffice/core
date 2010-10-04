@@ -42,9 +42,7 @@
 #include <i18n_status.hxx>
 #include "i18n_ic.hxx"
 #include "i18n_im.hxx"
-#ifndef _OSL_THREAD_H
 #include <osl/thread.h>
-#endif
 #include <vcl/salframe.hxx>
 
 // -------------------------------------------------------------------------

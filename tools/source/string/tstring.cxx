@@ -33,15 +33,9 @@
 #include "boost/static_assert.hpp"
 
 #include "osl/diagnose.h"
-#ifndef _OSL_INTERLCK_H
 #include <osl/interlck.h>
-#endif
-#ifndef _RTL_ALLOC_H
 #include <rtl/alloc.h>
-#endif
-#ifndef _RTL_MEMORY_H
 #include <rtl/memory.h>
-#endif
 #include <rtl/tencinfo.h>
 #include <rtl/instance.hxx>
 
@@ -49,9 +43,7 @@
 #include <impstrg.hxx>
 
 // For shared byte convert tables
-#ifndef _TOOLS_TOOLSIN_HXX
 #include <toolsin.hxx>
-#endif
 
 #include <tools/debug.hxx>
 

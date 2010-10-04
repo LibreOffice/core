@@ -36,9 +36,7 @@
 #include <rtl/tencinfo.h>
 #include <tools/tenccvt.hxx>
 #include <osl/endian.h>
-#ifndef INCLUDED_I18NUTIL_UNICODE_HXX
 #include <i18nutil/unicode.hxx> //unicode::getUnicodeScriptType
-#endif
 
 #include <vcl/metric.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>

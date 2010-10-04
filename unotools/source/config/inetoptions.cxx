@@ -30,9 +30,7 @@
 #include <unotools/inetoptions.hxx>
 #include "rtl/instance.hxx"
 #include <tools/urlobj.hxx>
-#ifndef _WILDCARD_HXX
 #include <tools/wldcrd.hxx>
-#endif
 
 #include <algorithm>
 #include <map>

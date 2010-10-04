@@ -35,9 +35,7 @@
 #include <wincomp.hxx>
 #include <salbmp.h>
 #include <saldata.hxx>
-#ifndef _SV_SALIDS_HRC
 #include <salids.hrc>
-#endif
 #include <salgdi.h>
 #include <salframe.h>
 

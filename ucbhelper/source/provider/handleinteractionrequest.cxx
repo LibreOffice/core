@@ -38,9 +38,7 @@
 #include "cppuhelper/exc_hlp.hxx"
 #include "osl/diagnose.h"
 #include "rtl/ustring.hxx"
-#ifndef _UCBHELPER_INTERACTIONREQUEST_HXX
 #include "ucbhelper/interactionrequest.hxx"
-#endif
 #include "ucbhelper/simpleauthenticationrequest.hxx"
 #include "ucbhelper/simpleinteractionrequest.hxx"
 #include "ucbhelper/simplecertificatevalidationrequest.hxx"

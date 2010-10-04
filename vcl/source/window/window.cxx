@@ -27,9 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-#ifndef _SV_SVSYS_HXX
 #include "svsys.h"
-#endif
 #include "vcl/salframe.hxx"
 #include "vcl/salobj.hxx"
 #include "vcl/salinst.hxx"
@@ -40,9 +38,7 @@
 #include "vcl/unohelp.hxx"
 #include "tools/time.hxx"
 #include "tools/debug.hxx"
-#ifndef _SV_RC_H
 #include "tools/rc.h"
-#endif
 #include "vcl/svdata.hxx"
 #include "vcl/windata.hxx"
 #include "vcl/dbggui.hxx"

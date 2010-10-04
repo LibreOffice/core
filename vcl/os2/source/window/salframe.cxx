@@ -36,27 +36,19 @@
 
 #define _SV_SALFRAME_CXX
 
-#ifndef DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
 
 #define private public
 
-#ifndef _SV_SALLANG_HXX
 #include <sallang.hxx>
-#endif
-#ifndef _SV_SALIDS_HRC
 #include <salids.hrc>
-#endif
 #include <saldata.hxx>
 #include <salinst.h>
 #include <salgdi.h>
 #include <salframe.h>
 #include <vcl/timer.hxx>
 #include <vcl/settings.hxx>
-#ifndef _SV_KEYCOES_HXX
 #include <vcl/keycodes.hxx>
-#endif
 #include <saltimer.h>
 
 #if OSL_DEBUG_LEVEL>10

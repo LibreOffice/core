@@ -30,9 +30,7 @@
 #include <svtools/svmedit.hxx>
 #include <txtcmp.hxx>
 
-#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <vcl/wrkwin.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/svapp.hxx>

@@ -30,9 +30,7 @@
 
 /* Test the SfxUShortRanges class */
 
-#ifndef _SFXITEMS_HXX
 #include <sfxitems.hxx>
-#endif
 
 USHORT nValues1[] = {340,472,482,4288,4374,4890,5026,5356,5724,6130,6186,6666,9222,9764,9908,
                         10110,11302,11748,11946,12298,12344,12642,12958,13076,13410,13496,14462,

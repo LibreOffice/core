@@ -34,9 +34,7 @@
 #include <vcl/button.hxx>
 #include <vcl/btndlg.hxx>
 
-#ifndef _SV_RC_H
 #include <tools/rc.h>
-#endif
 
 
 

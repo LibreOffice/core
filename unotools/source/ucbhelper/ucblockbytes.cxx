@@ -31,18 +31,14 @@
 #include <unotools/ucblockbytes.hxx>
 #include <comphelper/processfactory.hxx>
 #include <salhelper/condition.hxx>
-#ifndef _OSL_THREAD_HXX_
 #include <osl/thread.hxx>
-#endif
 #include <tools/urlobj.hxx>
 #include <ucbhelper/interactionrequest.hxx>
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/ucb/InteractiveNetworkConnectException.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <com/sun/star/ucb/UnsupportedDataSinkException.hpp>
-#ifndef _COM_SUN_STAR_UCB_INTERACTIVEIODEXCEPTION_HPP_
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
-#endif
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
 #include <com/sun/star/ucb/DocumentHeaderField.hpp>
 #include <com/sun/star/ucb/XCommandInfo.hpp>

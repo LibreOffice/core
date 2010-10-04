@@ -30,15 +30,9 @@
 
 #define _SVT_WIZDLG_CXX
 #include <tools/debug.hxx>
-#ifndef _VCL_FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _VCL_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
-#ifndef _VCL_TABPAGE_HXX
 #include <vcl/tabpage.hxx>
-#endif
 #include <svtools/wizdlg.hxx>
 
 // =======================================================================

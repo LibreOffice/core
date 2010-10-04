@@ -28,9 +28,7 @@
 #include <stdio.h>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
-#ifndef _PAD_RTSETUP_HRC_
 #include <rtsetup.hrc>
-#endif
 #include <cmddlg.hxx>
 #include <padialog.hxx>
 #include <helper.hxx>

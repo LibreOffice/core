@@ -32,9 +32,7 @@
 #include <com/sun/star/datatransfer/dnd/DropTargetDragEnterEvent.hpp>
 #include <rtl/unload.h>
 
-#ifndef COMPHELPER_MAKESEQUENCE_HXX_INCLUDED
 #include "comphelper/makesequence.hxx"
-#endif
 #include <cppuhelper/interfacecontainer.hxx>
 
 #include "aqua_clipboard.hxx"

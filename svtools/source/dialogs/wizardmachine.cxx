@@ -33,9 +33,7 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/msgbox.hxx>
 #include <svtools/svtdata.hxx>
-#ifndef _SVTOOLS_HRC
 #include <svtools/svtools.hrc>
-#endif
 
 //.........................................................................
 namespace svt

@@ -27,15 +27,11 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
-#ifndef SVTOOLS_ROADMAP_HXX
 #include <svtools/hyperlabel.hxx>
-#endif
 #include <vcl/bitmap.hxx>
 #include <tools/color.hxx>
 
-#ifndef _VCL_TABPAGE_HXX
 #include <vcl/tabpage.hxx>
-#endif
 
 
 //.........................................................................

@@ -30,9 +30,7 @@
 
 #include <string.h>
 
-#ifndef _APP_HXX
 #include <vcl/svapp.hxx>
-#endif
 
 #include <vcl/i18nhelp.hxx>
 

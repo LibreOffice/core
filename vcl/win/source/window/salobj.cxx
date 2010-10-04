@@ -30,9 +30,7 @@
 
 #include <string.h>
 
-#ifndef _SVWIN_HXX
 #include <tools/svwin.h>
-#endif
 #include <wincomp.hxx>
 #include <saldata.hxx>
 #include <salinst.h>

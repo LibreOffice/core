@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_comphelper.hxx"
 
-#ifndef _COMPHELPER_MASTERPROPERTYSET_HXX_
 #include <comphelper/MasterPropertySet.hxx>
-#endif
 #include <comphelper/MasterPropertySetInfo.hxx>
 #include <comphelper/ChainablePropertySet.hxx>
 #include <comphelper/ChainablePropertySetInfo.hxx>

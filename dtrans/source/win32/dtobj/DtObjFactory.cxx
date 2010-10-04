@@ -33,13 +33,9 @@
 //------------------------------------------------------------------------
 #include "..\..\inc\DtObjFactory.hxx"
 
-#ifndef _TWRAPPERDATAOBJECT_HXX_
 #include "XTDataObject.hxx"
-#endif
 
-#ifndef _DOWRAPPERTRANSFERABLE_HXX_
 #include "DOTransferable.hxx"
-#endif
 
 //------------------------------------------------------------------------
 // namespace directives

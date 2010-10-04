@@ -51,17 +51,11 @@
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/ucb/XSortedDynamicResultSetFactory.hpp>
 
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 
 #include <vcl/toolbox.hxx>
-#ifndef _VOS_THREAD_HXX //autogen
 #include <vos/thread.hxx>
-#endif
-#ifndef _VOS_MUTEX_HXX //autogen
 #include <vos/mutex.hxx>
-#endif
 #include <vcl/svapp.hxx>
 #include <unotools/historyoptions.hxx>
 #include <svl/eitem.hxx>

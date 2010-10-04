@@ -33,9 +33,7 @@
 //------------------------------------------------------------------------
 #include <osl/diagnose.h>
 
-#ifndef _DFLVCONT_HXX_
 #include "ftransl.hxx"
-#endif
 #include <com/sun/star/datatransfer/XMimeContentType.hpp>
 #include "..\misc\ImplHelper.hxx"
 

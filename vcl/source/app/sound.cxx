@@ -29,12 +29,8 @@
 #include "precompiled_vcl.hxx"
 #include <tools/urlobj.hxx>
 #include <unotools/localfilehelper.hxx>
-#ifndef _UNOTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
-#endif
-#ifndef _SV_SVSYS_HXX
 #include <svsys.h>
-#endif
 #include <vcl/salframe.hxx>
 #include <tools/debug.hxx>
 #include <vcl/svdata.hxx>

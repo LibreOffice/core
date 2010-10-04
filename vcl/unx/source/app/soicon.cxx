@@ -34,9 +34,7 @@
 #include <vcl/salbtype.hxx>
 #include <vcl/impbmp.hxx>
 #include <vcl/bitmap.hxx>
-#ifndef _SV_BITMAP_HXX
 #include <vcl/bitmapex.hxx>
-#endif
 #include <vcl/graph.hxx>
 #include <soicon.hxx>
 #include <vcl/svdata.hxx>

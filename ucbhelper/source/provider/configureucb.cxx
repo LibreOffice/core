@@ -37,9 +37,7 @@
 
 #include "osl/diagnose.h"
 
-#ifndef _UCBHELPER_PROVCONF_HXX_
 #include <provconf.hxx>
-#endif
 #include <registerucb.hxx>
 
 using namespace com::sun::star;

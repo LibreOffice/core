@@ -43,9 +43,7 @@
 using namespace osl;
 
 // class FileBase
-#ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
-#endif
 
 using namespace osl;
 

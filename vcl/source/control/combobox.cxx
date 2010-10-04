@@ -30,9 +30,7 @@
 #include <tools/table.hxx>
 #include <tools/debug.hxx>
 
-#ifndef _SV_RC_H
 #include <tools/rc.h>
-#endif
 #include <vcl/svdata.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/ilstbox.hxx>

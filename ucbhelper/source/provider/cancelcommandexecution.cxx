@@ -37,9 +37,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#ifndef _UCBHELPER_INTERACTIONREQUEST_HXX
 #include <ucbhelper/interactionrequest.hxx>
-#endif
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <ucbhelper/simpleioerrorrequest.hxx>
 

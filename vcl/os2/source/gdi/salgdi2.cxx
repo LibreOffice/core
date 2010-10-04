@@ -31,9 +31,7 @@
 #define _SV_SALGDI2_CXX
 #include <salbmp.h>
 #include <saldata.hxx>
-#ifndef _SV_SALIDS_HRC
 #include <salids.hrc>
-#endif
 #include <salgdi.h>
 #include <salvd.h>
 #include <vcl/salbtype.hxx>

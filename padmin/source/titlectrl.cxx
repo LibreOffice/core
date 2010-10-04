@@ -25,9 +25,7 @@
  *
  ************************************************************************/
 
-#ifndef _PAD_NEWPPDLG_HXX_
 #include <titlectrl.hxx>
-#endif
 
 using namespace padmin;
 

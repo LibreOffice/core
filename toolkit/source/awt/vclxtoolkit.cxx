@@ -29,9 +29,7 @@
 #include "precompiled_toolkit.hxx"
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
-#ifndef _SVWIN_HXX
 #include <tools/svwin.h>
-#endif
 #include <stdio.h>
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/awt/VclWindowPeerAttribute.hpp>
@@ -82,9 +80,7 @@
 #include <toolkit/helper/convert.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/btndlg.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/combobox.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/dialog.hxx>

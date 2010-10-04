@@ -29,15 +29,11 @@
 #include "precompiled_vcl.hxx"
 #include <string.h>
 
-#ifndef _SV_SVSYS_HXX
 #include <svsys.h>
-#endif
 #include <vcl/salinst.hxx>
 #include <vcl/salframe.hxx>
 
-#ifndef _VOS_MUTEX_HXX
 #include <vos/mutex.hxx>
-#endif
 
 #include <osl/process.h>
 #include <osl/file.hxx>

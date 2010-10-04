@@ -39,9 +39,7 @@
 #include <vcl/status.hxx>
 #include <imgdef.hxx>
 #include <svtools/miscopt.hxx>
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 
 using namespace ::cppu;
 using namespace ::com::sun::star::awt;

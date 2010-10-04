@@ -34,9 +34,7 @@
 #include <sal/types.h>
 #include <rtl/process.h>
 
-#ifndef _DOWRAPPERTRANSFERABLE_HXX_
 #include "DOTransferable.hxx"
-#endif
 #include "..\misc\ImplHelper.hxx"
 #include "..\misc\WinClip.hxx"
 #include "DTransHelper.hxx"

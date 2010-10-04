@@ -53,9 +53,7 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/regpathhelper.hxx>
-#endif
 #include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <comphelper/processfactory.hxx>

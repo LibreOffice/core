@@ -39,9 +39,7 @@
 #include <sot/storage.hxx>
 #include <sot/clsids.hxx>
 #include <unotools/ucbhelper.hxx>
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>

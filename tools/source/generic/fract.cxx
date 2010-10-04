@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_tools.hxx"
 
-#ifndef _LIMITS_H
 #include <limits.h>
-#endif
 #include <tools/debug.hxx>
 #include <tools/fract.hxx>
 #include <tools/stream.hxx>

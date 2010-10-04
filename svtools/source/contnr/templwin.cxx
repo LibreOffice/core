@@ -40,15 +40,9 @@
 #include "templatefoldercache.hxx"
 #include "imgdef.hxx"
 #include "txtattr.hxx"
-#ifndef _SVTOOLS_HRC
 #include <svtools/svtools.hrc>
-#endif
-#ifndef _SVTOOLS_TEMPLWIN_HRC
 #include "templwin.hrc"
-#endif
-#ifndef _SVT_HELPID_HRC
 #include <svtools/helpid.hrc>
-#endif
 #include <unotools/pathoptions.hxx>
 #include <unotools/viewoptions.hxx>
 #include <unotools/ucbhelper.hxx>

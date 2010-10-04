@@ -37,9 +37,7 @@
 #include <svtools/brwbox.hxx>
 #include <vcl/group.hxx>
 
-#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <vcl/dialog.hxx>
 
 #define MID_BROWSER             10

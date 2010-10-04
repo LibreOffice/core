@@ -67,9 +67,7 @@
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include <vcl/msgbox.hxx>
-#ifndef INCLUDED_RTL_MATH_H
 #include <rtl/math.hxx>
-#endif
 #include <tools/config.hxx>
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>

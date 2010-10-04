@@ -41,9 +41,7 @@
 #include <vcl/bitmap.hxx>
 #include <tools/color.hxx>
 
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/OUString.hxx>
-#endif
 #include <memory>
 
 #define ROADMAP_INDENT_X        4

@@ -87,9 +87,7 @@ Status XineramaGetInfo(Display*, int, XRectangle*, unsigned char*, int*);
 #include <vcl/keycodes.hxx>
 #include <vcl/salbtype.hxx>
 #include <salbmp.h>
-#ifndef _OSL_THREADMUTEX_H_
 #include <osl/mutex.h>
-#endif
 #include <salobj.h>
 #include <sm.hxx>
 #include <wmadaptor.hxx>

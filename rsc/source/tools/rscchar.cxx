@@ -32,9 +32,7 @@
 #include <string.h>
 #include <ctype.h>
 
-#ifndef _TABLE_HXX //autogen
 #include <tools/table.hxx>
-#endif
 
 // Solar Definitionen
 #include <tools/solar.h>

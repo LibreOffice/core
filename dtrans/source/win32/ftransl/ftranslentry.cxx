@@ -35,9 +35,7 @@
 #include <com/sun/star/container/XSet.hpp>
 #include <osl/diagnose.h>
 
-#ifndef _COM_SUN_STAR_DATATRANSFER_XDATAFLAVORCONTAINER_HPP_
 #include <com/sun/star/datatransfer/XDataFormatTranslator.hpp>
-#endif
 #include "ftransl.hxx"
 
 //-----------------------------------------------------------------

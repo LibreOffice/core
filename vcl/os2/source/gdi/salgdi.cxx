@@ -35,9 +35,7 @@
 #include <tools/debug.hxx>
 #include <salframe.h>
 #include <tools/poly.hxx>
-#ifndef _RTL_STRINGBUF_HXX
 #include <rtl/strbuf.hxx>
-#endif
 
 #ifndef __H_FT2LIB
 #include <wingdi.h>
