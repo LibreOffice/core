@@ -167,15 +167,6 @@ AccessibleBrowseBox::getAccessibleChild( sal_Int32 nChildIndex )
         throw lang::IndexOutOfBoundsException();
     return xRet;
 }
-// -----------------------------------------------------------------------------
-
-//sal_Int16 SAL_CALL AccessibleBrowseBox::getAccessibleRole()
-//    throw ( uno::RuntimeException )
-//{
-//    ensureIsAlive();
-//    return AccessibleRole::PANEL;
-//}
-// -----------------------------------------------------------------------------
 
 // XAccessibleComponent -------------------------------------------------------
 
@@ -379,8 +370,8 @@ Reference< XAccessibleContext > SAL_CALL AccessibleBrowseBoxAccess::getAccessibl
     DBG_ASSERT( ( m_pContext && m_xContext.is() ) || ( !m_pContext && !m_xContext.is() ),
         "accessibility/extended/AccessibleBrowseBoxAccess::getAccessibleContext: inconsistency!" );
 
-    // if the context died meanwhile (we're no listener, so it won't tell us explicitily when this happens),
-    // then reset an re-create.
+    // if the context died meanwhile (there is no listener, so it won't tell us explicitily when this happens),
+    // then reset and re-create.
     if ( m_pContext && !m_pContext->isAlive() )
         m_xContext = m_pContext = NULL;
 

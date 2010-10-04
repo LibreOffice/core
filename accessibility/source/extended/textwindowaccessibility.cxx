@@ -2101,7 +2101,7 @@ void Document::handleSelectionChangeNotification()
     }
     else if ( aOldTextStart == aOldTextEnd && aNewTextStart == aNewTextEnd )
     {
-        // old an new selection empty => no events
+        // old and new selection empty => no events
         nFirst1 = 0;
         nLast1 = 0;
         nFirst2 = 0;

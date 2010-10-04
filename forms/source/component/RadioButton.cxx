@@ -165,7 +165,7 @@ StringSequence SAL_CALL ORadioButtonModel::getSupportedServiceNames() throw(Runt
 //------------------------------------------------------------------------------
 void ORadioButtonModel::SetSiblingPropsTo(const ::rtl::OUString& rPropName, const Any& rValue)
 {
-    // mein Name
+    // my name
     ::rtl::OUString sMyName(m_aName);
 
     // meine Siblings durchiterieren

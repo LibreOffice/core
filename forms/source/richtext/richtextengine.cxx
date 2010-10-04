@@ -120,7 +120,6 @@ namespace frm
     //--------------------------------------------------------------------
     RichTextEngine::~RichTextEngine( )
     {
-        //delete m_pEnginePool; // must be done after the RichTextEngine was deleted
         DBG_DTOR(RichTextEngine,NULL);
     }
 
