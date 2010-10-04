@@ -164,7 +164,7 @@ SfxItemPresentation SvxPageItem::GetPresentation
 }
 
 //------------------------------------------------------------------------
-sal_Bool SvxPageItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+bool SvxPageItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -198,10 +198,10 @@ sal_Bool SvxPageItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         break;
     }
 
-    return sal_True;
+    return true;
 }
 //------------------------------------------------------------------------
-sal_Bool SvxPageItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+bool SvxPageItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
     switch( nMemberId )
     {
@@ -209,7 +209,7 @@ sal_Bool SvxPageItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         {
             sal_Int32 nValue = 0;
             if(!(rVal >>= nValue))
-                return sal_False;
+                return false;
 
             eNumType = (SvxNumType)nValue;
         }
@@ -239,7 +239,7 @@ sal_Bool SvxPageItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         }
         break;
     }
-    return sal_True;
+    return true;
 }
 
 //------------------------------------------------------------------------

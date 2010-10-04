@@ -592,7 +592,7 @@ SfxPoolItem* SfxFrameItem::Clone( SfxItemPool *) const
     return pNew;
 }
 
-sal_Bool SfxFrameItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE ) const
+bool SfxFrameItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE ) const
 {
     if ( wFrame )
     {
@@ -603,7 +603,7 @@ sal_Bool SfxFrameItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE ) const
     return FALSE;
 }
 
-sal_Bool SfxFrameItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE )
+bool SfxFrameItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE )
 {
     Reference < XFrame > xFrame;
     if ( (rVal >>= xFrame) && xFrame.is() )
@@ -643,13 +643,13 @@ SfxPoolItem* SfxUsrAnyItem::Clone( SfxItemPool *) const
     return new SfxUsrAnyItem( Which(), aValue );
 }
 
-sal_Bool SfxUsrAnyItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ ) const
+bool SfxUsrAnyItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ ) const
 {
     rVal = aValue;
     return sal_True;
 }
 
-sal_Bool SfxUsrAnyItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ )
+bool SfxUsrAnyItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ )
 {
     aValue = rVal;
     return sal_True;
@@ -677,13 +677,13 @@ SfxPoolItem* SfxUnoFrameItem::Clone( SfxItemPool* ) const
     return new SfxUnoFrameItem( Which(), m_xFrame );
 }
 
-sal_Bool SfxUnoFrameItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ ) const
+bool SfxUnoFrameItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ ) const
 {
     rVal <<= m_xFrame;
     return sal_True;
 }
 
-sal_Bool SfxUnoFrameItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ )
+bool SfxUnoFrameItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ )
 {
     return ( rVal >>= m_xFrame );
 }

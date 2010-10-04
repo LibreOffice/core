@@ -148,7 +148,7 @@ int SvxLineSpacingItem::operator==( const SfxPoolItem& rAttr ) const
         - ein sal_uInt32 fuer alle Werte (Abstand, Hoehe, rel. Angaben)
 
 --------------------------------------------------*/
-sal_Bool SvxLineSpacingItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+bool SvxLineSpacingItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -190,12 +190,12 @@ sal_Bool SvxLineSpacingItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         default: DBG_ERROR("Wrong MemberId!"); break;
     }
 
-    return sal_True;
+    return true;
 }
 /*-----------------18.03.98 16:32-------------------
 
 --------------------------------------------------*/
-sal_Bool SvxLineSpacingItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+bool SvxLineSpacingItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -390,7 +390,7 @@ int SvxAdjustItem::operator==( const SfxPoolItem& rAttr ) const
 /*-----------------18.03.98 16:15-------------------
 
 --------------------------------------------------*/
-sal_Bool SvxAdjustItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+bool SvxAdjustItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -406,13 +406,13 @@ sal_Bool SvxAdjustItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         }
         default: ;//prevent warning
     }
-    return sal_True;
+    return true;
 }
 /*-----------------18.03.98 16:15-------------------
 
 --------------------------------------------------*/
 
-sal_Bool SvxAdjustItem::PutValue( const uno::Any& rVal, BYTE nMemberId  )
+bool SvxAdjustItem::PutValue( const uno::Any& rVal, BYTE nMemberId  )
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -445,7 +445,7 @@ sal_Bool SvxAdjustItem::PutValue( const uno::Any& rVal, BYTE nMemberId  )
             bOneBlock = Any2Bool(rVal);
             break;
     }
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -709,7 +709,7 @@ SvxHyphenZoneItem::SvxHyphenZoneItem( const sal_Bool bHyph, const sal_uInt16 nId
 }
 
 // -----------------------------------------------------------------------
-sal_Bool    SvxHyphenZoneItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+bool    SvxHyphenZoneItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -728,10 +728,10 @@ sal_Bool    SvxHyphenZoneItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) cons
             rVal <<= (sal_Int16)nMaxHyphens;
         break;
     }
-    return sal_True;
+    return true;
 }
 // -----------------------------------------------------------------------
-sal_Bool SvxHyphenZoneItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+bool SvxHyphenZoneItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -739,7 +739,7 @@ sal_Bool SvxHyphenZoneItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 
     if( nMemberId != MID_IS_HYPHEN )
         if(!(rVal >>= nNewVal))
-            return sal_False;
+            return false;
 
     switch(nMemberId)
     {
@@ -756,7 +756,7 @@ sal_Bool SvxHyphenZoneItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             nMaxHyphens = (BYTE)nNewVal;
         break;
     }
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -1015,7 +1015,7 @@ typedef sequence ::com::sun::star::style::TabStop> TabSTopSequence;
 
 --------------------------------------------------*/
 
-sal_Bool SvxTabStopItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+bool SvxTabStopItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -1059,7 +1059,7 @@ sal_Bool SvxTabStopItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 
 --------------------------------------------------*/
 
-sal_Bool SvxTabStopItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+bool SvxTabStopItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -1380,7 +1380,7 @@ SfxPoolItem* SvxPageModelItem::Clone( SfxItemPool* ) const
 
 //------------------------------------------------------------------------
 
-sal_Bool SvxPageModelItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+bool SvxPageModelItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
 //  sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -1395,7 +1395,7 @@ sal_Bool SvxPageModelItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMem
     return sal_True;
 }
 
-sal_Bool SvxPageModelItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
+bool SvxPageModelItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
 //  sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -1675,14 +1675,14 @@ SfxItemPresentation SvxParaVertAlignItem::GetPresentation(
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-sal_Bool SvxParaVertAlignItem::QueryValue( com::sun::star::uno::Any& rVal,
+bool SvxParaVertAlignItem::QueryValue( com::sun::star::uno::Any& rVal,
                                            BYTE /*nMemberId*/ ) const
 {
     rVal <<= (sal_Int16)GetValue();
     return sal_True;
 }
 
-sal_Bool SvxParaVertAlignItem::PutValue( const com::sun::star::uno::Any& rVal,
+bool SvxParaVertAlignItem::PutValue( const com::sun::star::uno::Any& rVal,
                                          BYTE /*nMemberId*/ )
 {
     sal_Int16 nVal = sal_Int16();

@@ -133,7 +133,7 @@ SvStream& SvxB3DVectorItem::Store(SvStream &rStream, USHORT /*nItemVersion*/) co
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxB3DVectorItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
+bool SvxB3DVectorItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
 {
     drawing::Direction3D aDirection;
 
@@ -143,21 +143,21 @@ sal_Bool SvxB3DVectorItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) cons
     aDirection.DirectionZ = aVal.getZ();
 
     rVal <<= aDirection;
-    return( sal_True );
+    return true;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxB3DVectorItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
+bool SvxB3DVectorItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
 {
     drawing::Direction3D aDirection;
     if(!(rVal >>= aDirection))
-        return sal_False;
+        return false;
 
     aVal.setX(aDirection.DirectionX);
     aVal.setY(aDirection.DirectionY);
     aVal.setZ(aDirection.DirectionZ);
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------

@@ -274,8 +274,8 @@ public:
     virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const;
     virtual SfxPoolItem* Create(SvStream& rIn, USHORT nVer) const;
 
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool         QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual bool         PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     USHORT GetValueCount() const { return CHTXTORDER_COUNT; }
     SvxChartTextOrder GetValue() const
@@ -355,11 +355,8 @@ public:
     SvxDoubleItem(SvStream& rIn, USHORT nId );
     SvxDoubleItem(const SvxDoubleItem& rItem);
 
-
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
-
-
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     virtual String GetValueText() const;
     virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePres,

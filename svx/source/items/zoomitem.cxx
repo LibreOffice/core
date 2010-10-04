@@ -117,7 +117,7 @@ int SvxZoomItem::operator==( const SfxPoolItem& rAttr ) const
              eType      == rItem.GetType()          );
 }
 
-sal_Bool SvxZoomItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+bool SvxZoomItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
 //  sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -141,13 +141,13 @@ sal_Bool SvxZoomItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId
         case MID_TYPE: rVal <<= (sal_Int16) eType; break;
         default:
             DBG_ERROR("svx::SvxZoomItem::QueryValue(), Wrong MemberId!");
-            return sal_False;
+            return false;
     }
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvxZoomItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
+bool SvxZoomItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
 //  sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -187,11 +187,11 @@ sal_Bool SvxZoomItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemb
                     SetValue( (UINT16)nValueTmp );
                     nValueSet = nValueSetTmp;
                     eType = SvxZoomType( nTypeTmp );
-                    return sal_True;
+                    return true;
                 }
             }
 
-            return sal_False;
+            return false;
         }
 
         case MID_VALUE:
@@ -200,10 +200,10 @@ sal_Bool SvxZoomItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemb
             if ( rVal >>= nVal )
             {
                 SetValue( (UINT16)nVal );
-                return sal_True;
+                return true;
             }
             else
-                return sal_False;
+                return false;
         }
 
         case MID_VALUESET:
@@ -216,16 +216,16 @@ sal_Bool SvxZoomItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemb
                     nValueSet = (sal_Int16) nVal;
                 else if ( nMemberId == MID_TYPE )
                     eType = SvxZoomType( (sal_Int16) nVal );
-                return sal_True;
+                return true;
             }
             else
-                return sal_False;
+                return false;
         }
 
         default:
             DBG_ERROR("svx::SvxZoomItem::PutValue(), Wrong MemberId!");
-            return sal_False;
+            return false;
     }
 
-    return sal_True;
+    return true;
 }

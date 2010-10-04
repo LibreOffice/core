@@ -104,19 +104,19 @@ SfxPoolItem* SvxColorTableItem::Clone( SfxItemPool * ) const
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxColorTableItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ ) const
+bool SvxColorTableItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ ) const
 {
     // This is only a quick helper to have UI support for these list items. Don't use
     // this method to query for a valid UNO representation.
     // Please ask CD if you want to change this.
     sal_Int64 aValue = sal_Int64( (ULONG)pColorTable );
     rVal = uno::makeAny( aValue );
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxColorTableItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ )
+bool SvxColorTableItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ )
 {
     // This is only a quick helper to have UI support for these list items. Don't use
     // this method to query for a valid UNO representation.
@@ -125,10 +125,10 @@ sal_Bool SvxColorTableItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE
     if ( rVal >>= aValue )
     {
         pColorTable = (XColorTable *)(ULONG)aValue;
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 //==================================================================
@@ -188,19 +188,19 @@ SfxPoolItem* SvxGradientListItem::Clone( SfxItemPool * ) const
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxGradientListItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ ) const
+bool SvxGradientListItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ ) const
 {
     // This is only a quick helper to have UI support for these list items. Don't use
     // this method to query for a valid UNO representation.
     // Please ask CD if you want to change this.
     sal_Int64 aValue = sal_Int64( (ULONG)pGradientList );
     rVal = uno::makeAny( aValue );
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxGradientListItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ )
+bool SvxGradientListItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ )
 {
     // This is only a quick helper to have UI support for these list items. Don't use
     // this method to query for a valid UNO representation.
@@ -209,10 +209,10 @@ sal_Bool SvxGradientListItem::PutValue( const com::sun::star::uno::Any& rVal, BY
     if ( rVal >>= aValue )
     {
         pGradientList = (XGradientList *)(ULONG)aValue;
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 //==================================================================
@@ -272,19 +272,19 @@ SfxPoolItem* SvxHatchListItem::Clone( SfxItemPool * ) const
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxHatchListItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ ) const
+bool SvxHatchListItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ ) const
 {
     // This is only a quick helper to have UI support for these list items. Don't use
     // this method to query for a valid UNO representation.
     // Please ask CD if you want to change this.
     sal_Int64 aValue = sal_Int64( (ULONG)pHatchList );
     rVal = uno::makeAny( aValue );
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxHatchListItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ )
+bool SvxHatchListItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ )
 {
     // This is only a quick helper to have UI support for these list items. Don't use
     // this method to query for a valid UNO representation.
@@ -293,10 +293,10 @@ sal_Bool SvxHatchListItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE 
     if ( rVal >>= aValue )
     {
         pHatchList = (XHatchList *)(ULONG)aValue;
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 //==================================================================
@@ -356,19 +356,19 @@ SfxPoolItem* SvxBitmapListItem::Clone( SfxItemPool * ) const
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxBitmapListItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ ) const
+bool SvxBitmapListItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ ) const
 {
     // This is only a quick helper to have UI support for these list items. Don't use
     // this method to query for a valid UNO representation.
     // Please ask CD if you want to change this.
     sal_Int64 aValue = sal_Int64( (ULONG)pBitmapList );
     rVal = uno::makeAny( aValue );
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxBitmapListItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ )
+bool SvxBitmapListItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ )
 {
     // This is only a quick helper to have UI support for these list items. Don't use
     // this method to query for a valid UNO representation.
@@ -377,10 +377,10 @@ sal_Bool SvxBitmapListItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE
     if ( rVal >>= aValue )
     {
         pBitmapList = (XBitmapList *)(ULONG)aValue;
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 
@@ -442,18 +442,18 @@ SfxPoolItem* SvxDashListItem::Clone( SfxItemPool * ) const
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxDashListItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ ) const
+bool SvxDashListItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ ) const
 {
     // This is only a quick helper to have UI support for these list items. Don't use
     // this method to query for a valid UNO representation.
     sal_Int64 aValue = sal_Int64( (ULONG)pDashList );
     rVal = uno::makeAny( aValue );
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxDashListItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ )
+bool SvxDashListItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ )
 {
     // This is only a quick helper to have UI support for these list items. Don't use
     // this method to query for a valid UNO representation.
@@ -461,10 +461,10 @@ sal_Bool SvxDashListItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /
     if ( rVal >>= aValue )
     {
         pDashList = (XDashList *)(ULONG)aValue;
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 // -----------------------------------------------------------------------
@@ -531,18 +531,18 @@ SfxPoolItem* SvxLineEndListItem::Clone( SfxItemPool * ) const
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxLineEndListItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ ) const
+bool SvxLineEndListItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ ) const
 {
     // This is only a quick helper to have UI support for these list items. Don't use
     // this method to query for a valid UNO representation.
     sal_Int64 aValue = sal_Int64( (ULONG)pLineEndList );
     rVal = uno::makeAny( aValue );
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxLineEndListItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ )
+bool SvxLineEndListItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ )
 {
     // This is only a quick helper to have UI support for these list items. Don't use
     // this method to query for a valid UNO representation.
@@ -550,8 +550,8 @@ sal_Bool SvxLineEndListItem::PutValue( const com::sun::star::uno::Any& rVal, BYT
     if ( rVal >>= aValue )
     {
         pLineEndList = (XLineEndList *)(ULONG)aValue;
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }

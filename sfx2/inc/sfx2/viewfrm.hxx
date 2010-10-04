@@ -342,7 +342,7 @@ public:
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
 
-    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
     const com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor >& GetVerbList() const { return aVerbs; }
 };
 

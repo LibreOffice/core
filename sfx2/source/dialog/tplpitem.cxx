@@ -87,7 +87,7 @@ SfxPoolItem* SfxTemplateItem::Clone( SfxItemPool *) const
 }
 
 //-------------------------------------------------------------------------
-sal_Bool SfxTemplateItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ ) const
+bool SfxTemplateItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ ) const
 {
     ::com::sun::star::frame::status::Template aTemplate;
 
@@ -95,11 +95,11 @@ sal_Bool SfxTemplateItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMe
     aTemplate.StyleName = aStyle;
     rVal <<= aTemplate;
 
-    return sal_True;
+    return true;
 }
 
 //-------------------------------------------------------------------------
-sal_Bool SfxTemplateItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ )
+bool SfxTemplateItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ )
 {
     ::com::sun::star::frame::status::Template aTemplate;
 
@@ -107,10 +107,10 @@ sal_Bool SfxTemplateItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /
     {
         SetValue( sal::static_int_cast< USHORT >( aTemplate.Value ) );
         aStyle = aTemplate.StyleName;
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 //-------------------------------------------------------------------------

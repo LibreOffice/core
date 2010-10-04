@@ -72,14 +72,14 @@ SvxSmartTagItem::SvxSmartTagItem( const USHORT nId,
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxSmartTagItem::QueryValue( uno::Any& /* rVal */, BYTE /* nMemberId */ ) const
+bool SvxSmartTagItem::QueryValue( uno::Any& /* rVal */, BYTE /* nMemberId */ ) const
 {
-    return sal_False;
+    return false;
 }
 // -----------------------------------------------------------------------
-sal_Bool SvxSmartTagItem::PutValue( const uno::Any& /*rVal*/, BYTE /* nMemberId */)
+bool SvxSmartTagItem::PutValue( const uno::Any& /*rVal*/, BYTE /* nMemberId */)
 {
-    return sal_False;
+    return false;
 }
 
 // -----------------------------------------------------------------------

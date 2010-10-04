@@ -355,17 +355,17 @@ sal_uInt16 SdrCustomShapeGeometryItem::GetVersion( sal_uInt16 /*nFileFormatVersi
 {
     return 1;
 }
-sal_Bool SdrCustomShapeGeometryItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
+bool SdrCustomShapeGeometryItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
 {
     rVal <<= aPropSeq;
-    return sal_True;
+    return true;
 }
-sal_Bool SdrCustomShapeGeometryItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
+bool SdrCustomShapeGeometryItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
 {
     if ( ! ( rVal >>= aPropSeq ) )
-        return sal_False;
+        return false;
     else
-        return sal_True;
+        return true;
 }
 const uno::Sequence< beans::PropertyValue >& SdrCustomShapeGeometryItem::GetGeometry() const
 {

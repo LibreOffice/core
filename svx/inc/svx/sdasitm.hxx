@@ -99,8 +99,8 @@ private:
             virtual SfxPoolItem*        Clone( SfxItemPool* pPool = NULL ) const;
             virtual sal_uInt16          GetVersion( sal_uInt16 nFileFormatVersion ) const;
 
-            virtual sal_Bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-            virtual sal_Bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+            virtual bool                QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+            virtual bool                PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
             const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& GetGeometry() const;
 

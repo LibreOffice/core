@@ -136,7 +136,7 @@ USHORT __EXPORT SvxRotateModeItem::GetVersion( USHORT /*nFileVersion*/ ) const
 
 //  QueryValue/PutValue: Der ::com::sun::star::table::CellVertJustify enum wird mitbenutzt...
 
-sal_Bool SvxRotateModeItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
+bool SvxRotateModeItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
 {
     table::CellVertJustify eUno = table::CellVertJustify_STANDARD;
     switch ( (SvxRotateMode)GetValue() )
@@ -147,10 +147,10 @@ sal_Bool SvxRotateModeItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) con
         case SVX_ROTATE_MODE_BOTTOM:   eUno = table::CellVertJustify_BOTTOM;    break;
     }
     rVal <<= eUno;
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvxRotateModeItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
+bool SvxRotateModeItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
 {
     table::CellVertJustify eUno;
     if(!(rVal >>= eUno))
@@ -171,7 +171,7 @@ sal_Bool SvxRotateModeItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
         default: ;//prevent warning
     }
     SetValue( (USHORT)eSvx );
-    return sal_True;
+    return true;
 }
 
 

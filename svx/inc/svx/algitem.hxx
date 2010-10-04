@@ -57,8 +57,8 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     virtual USHORT          GetValueCount() const;
     virtual String          GetValueText( USHORT nVal ) const;
@@ -92,8 +92,8 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     virtual USHORT          GetValueCount() const;
     virtual String          GetValueText( USHORT nVal ) const;
@@ -128,8 +128,8 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     virtual USHORT          GetValueCount() const;
     virtual String          GetValueText( USHORT nVal ) const;
@@ -176,8 +176,8 @@ public:
     virtual SfxPoolItem*     Create( SvStream& rStream, USHORT nVer ) const;
     virtual SvStream&        Store( SvStream&, USHORT nItemVersion ) const;
 
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
             INT16           GetLeftMargin() const {return nLeftMargin; }
             BOOL            SetLeftMargin(INT16 nLeft);

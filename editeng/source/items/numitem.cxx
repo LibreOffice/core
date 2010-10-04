@@ -1090,13 +1090,13 @@ SvStream&   SvxNumBulletItem::Store(SvStream &rStream, USHORT /*nItemVersion*/ )
     return rStream;
 }
 
-sal_Bool SvxNumBulletItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ ) const
+bool SvxNumBulletItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ ) const
 {
     rVal <<= SvxCreateNumRule( pNumRule );
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvxNumBulletItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ )
+bool SvxNumBulletItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ )
 {
     uno::Reference< container::XIndexReplace > xRule;
     if( rVal >>= xRule )
@@ -1113,13 +1113,13 @@ sal_Bool SvxNumBulletItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE 
             }
             delete pNumRule;
             pNumRule = pNewRule;
-            return sal_True;
+            return true;
         }
         catch(lang::IllegalArgumentException&)
         {
         }
     }
-    return sal_False;
+    return false;
 }
 
 SvxNumRule* SvxConvertNumRule( const SvxNumRule* pRule, USHORT nLevels, SvxNumRuleType eType )

@@ -111,7 +111,7 @@ int SvxViewLayoutItem::operator==( const SfxPoolItem& rAttr ) const
              mbBookMode == rItem.IsBookMode() );
 }
 
-sal_Bool SvxViewLayoutItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+bool SvxViewLayoutItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
@@ -131,13 +131,13 @@ sal_Bool SvxViewLayoutItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMe
         case MID_VIEWLAYOUT_BOOKMODE: rVal <<= (sal_Bool) mbBookMode; break;
         default:
             DBG_ERROR("svx::SvxViewLayoutItem::QueryValue(), Wrong MemberId!");
-            return sal_False;
+            return false;
     }
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvxViewLayoutItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
+bool SvxViewLayoutItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
 //  sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -170,11 +170,11 @@ sal_Bool SvxViewLayoutItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE
                 {
                     SetValue( (UINT16)nColumns );
                     mbBookMode = bBookMode;
-                    return sal_True;
+                    return true;
                 }
             }
 
-            return sal_False;
+            return false;
         }
 
         case MID_VIEWLAYOUT_COLUMNS:
@@ -183,10 +183,10 @@ sal_Bool SvxViewLayoutItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE
             if ( rVal >>= nVal )
             {
                 SetValue( (UINT16)nVal );
-                return sal_True;
+                return true;
             }
             else
-                return sal_False;
+                return false;
         }
 
         case MID_VIEWLAYOUT_BOOKMODE:
@@ -194,18 +194,18 @@ sal_Bool SvxViewLayoutItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE
             sal_Bool bBookMode = sal_False;
             if ( rVal >>= bBookMode )
             {
-                 mbBookMode = bBookMode;
-                return sal_True;
+                mbBookMode = bBookMode;
+                return true;
             }
             else
-                return sal_False;
+                return false;
         }
 
         default:
             DBG_ERROR("svx::SvxViewLayoutItem::PutValue(), Wrong MemberId!");
-            return sal_False;
+            return false;
     }
 
-    return sal_True;
+    return true;
 }
 

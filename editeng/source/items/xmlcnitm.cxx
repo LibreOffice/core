@@ -90,15 +90,16 @@ USHORT SvXMLAttrContainerItem::GetVersion( USHORT /*nFileFormatVersion*/ ) const
     return USHRT_MAX;
 }
 
-BOOL  SvXMLAttrContainerItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ ) const
+bool  SvXMLAttrContainerItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ ) const
 {
     Reference<XNameContainer> xContainer =
         new SvUnoAttributeContainer( new SvXMLAttrContainerData( *pImpl ) );
 
     rVal.setValue( &xContainer, ::getCppuType((Reference<XNameContainer>*)0) );
-    return TRUE;
+    return true;
 }
-BOOL SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ )
+
+bool SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ )
 {
     Reference<XInterface> xRef;
     SvUnoAttributeContainer* pContainer = NULL;
@@ -174,16 +175,16 @@ BOOL SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal, BYT
             else
             {
                 delete pNewImpl;
-                return FALSE;
+                return false;
             }
         }
         catch(...)
         {
             delete pNewImpl;
-            return FALSE;
+            return false;
         }
     }
-    return TRUE;
+    return true;
 }
 
 

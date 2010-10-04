@@ -66,9 +66,9 @@ public:
     virtual SvStream&       Store(SvStream &, USHORT nItemVersion) const;
     virtual USHORT          GetVersion( USHORT nFileVersion ) const;
 
-    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal,
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal,
                                             BYTE nMemberId = 0 ) const;
-    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal,
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal,
                                             BYTE nMemberId = 0 );
 
     inline SvxEmphasisMarkItem& operator=(const SvxEmphasisMarkItem& rItem )

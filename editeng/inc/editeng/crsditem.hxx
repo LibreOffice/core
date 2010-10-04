@@ -65,8 +65,8 @@ public:
     virtual SvStream&       Store(SvStream &, USHORT nItemVersion) const;
     virtual String          GetValueTextByPos( USHORT nPos ) const;
     virtual USHORT          GetValueCount() const;
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     // MS VC4.0 kommt durcheinander
     void                    SetValue( USHORT nNewVal )

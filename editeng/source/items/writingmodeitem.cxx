@@ -104,10 +104,10 @@ SfxItemPresentation SvxWritingModeItem::GetPresentation( SfxItemPresentation ePr
     return eRet;
 }
 
-sal_Bool SvxWritingModeItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE )
+bool SvxWritingModeItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE )
 {
     sal_Int32 nVal = 0;
-    sal_Bool bRet = ( rVal >>= nVal );
+    bool bRet = ( rVal >>= nVal );
 
     if( !bRet )
     {
@@ -139,7 +139,7 @@ sal_Bool SvxWritingModeItem::PutValue( const com::sun::star::uno::Any& rVal, BYT
     return bRet;
 }
 
-sal_Bool SvxWritingModeItem::QueryValue( com::sun::star::uno::Any& rVal,
+bool SvxWritingModeItem::QueryValue( com::sun::star::uno::Any& rVal,
                                             BYTE ) const
 {
     rVal <<= (WritingMode)GetValue();

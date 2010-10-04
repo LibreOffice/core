@@ -46,8 +46,8 @@ public:
     SVX_DLLPRIVATE virtual SfxPoolItem*     Clone( SfxItemPool* pPool = NULL ) const;
     SVX_DLLPRIVATE virtual  sal_uInt16          GetVersion( sal_uInt16 nFileFormatVersion ) const;
 
-    SVX_DLLPRIVATE virtual  sal_Bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    SVX_DLLPRIVATE virtual  sal_Bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    SVX_DLLPRIVATE virtual  bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    SVX_DLLPRIVATE virtual  bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
 #ifdef SDR_ISPOOLABLE
     SVX_DLLPRIVATE virtual int IsPoolable() const;

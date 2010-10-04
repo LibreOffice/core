@@ -716,7 +716,7 @@ SfxItemPresentation XFillBitmapItem::GetPresentation
 
 //------------------------------------------------------------------------
 
-sal_Bool XFillBitmapItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+bool XFillBitmapItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -777,12 +777,12 @@ sal_Bool XFillBitmapItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMe
         rVal <<= aPropSeq;
     }
 
-    return sal_True;
+    return true;
 }
 
 //------------------------------------------------------------------------
 
-sal_Bool XFillBitmapItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
+bool XFillBitmapItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;

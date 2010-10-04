@@ -66,8 +66,8 @@ public:
     virtual String          GetValueTextByPos( USHORT nPos ) const;
     virtual USHORT          GetValueCount() const;
 
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     virtual int             HasBoolValue() const;
     virtual BOOL            GetBoolValue() const;

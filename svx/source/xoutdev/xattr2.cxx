@@ -238,7 +238,7 @@ SfxItemPresentation XLineJointItem::GetPresentation( SfxItemPresentation ePres, 
 
 // -----------------------------------------------------------------------------
 
-sal_Bool XLineJointItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/) const
+bool XLineJointItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     ::com::sun::star::drawing::LineJoint eJoint = ::com::sun::star::drawing::LineJoint_NONE;
 
@@ -263,12 +263,12 @@ sal_Bool XLineJointItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE /*nM
     }
 
     rVal <<= eJoint;
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------------
 
-BOOL XLineJointItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/)
+bool XLineJointItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/)
 {
     XLineJoint eJoint = XLINEJOINT_NONE;
     ::com::sun::star::drawing::LineJoint eUnoJoint;
@@ -278,7 +278,7 @@ BOOL XLineJointItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nM
         // also try an int (for Basic)
         sal_Int32 nLJ = 0;
         if(!(rVal >>= nLJ))
-            return sal_False;
+            return false;
         eUnoJoint = (::com::sun::star::drawing::LineJoint)nLJ;
     }
 
@@ -302,7 +302,7 @@ BOOL XLineJointItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nM
 
     SetValue( sal::static_int_cast< USHORT >( eJoint ) );
 
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------------

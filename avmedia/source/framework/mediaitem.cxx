@@ -122,7 +122,7 @@ SfxItemPresentation MediaItem::GetPresentation( SfxItemPresentation,
 
 //------------------------------------------------------------------------
 
-BOOL MediaItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE ) const
+bool MediaItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE ) const
 {
     uno::Sequence< uno::Any > aSeq( 9 );
 
@@ -143,10 +143,10 @@ BOOL MediaItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE ) const
 
 //------------------------------------------------------------------------
 
-BOOL MediaItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE )
+bool MediaItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE )
 {
     uno::Sequence< uno::Any >   aSeq;
-    BOOL                        bRet = false;
+    bool                        bRet = false;
 
     if( ( rVal >>= aSeq ) && ( aSeq.getLength() == 9 ) )
     {

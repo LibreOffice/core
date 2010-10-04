@@ -510,7 +510,7 @@ void SfxDocumentInfoItem::AddCustomProperty( const ::rtl::OUString& sName, const
     m_aCustomProperties.push_back( pProp );
 }
 
-sal_Bool SfxDocumentInfoItem::QueryValue( Any& rVal, BYTE nMemberId ) const
+bool SfxDocumentInfoItem::QueryValue( Any& rVal, BYTE nMemberId ) const
 {
     String aValue;
     sal_Int32 nValue = 0;
@@ -568,15 +568,15 @@ sal_Bool SfxDocumentInfoItem::QueryValue( Any& rVal, BYTE nMemberId ) const
         rVal <<= nValue;
     else
         rVal <<= bValue;
-    return sal_True;
+    return true;
 }
 
-sal_Bool SfxDocumentInfoItem::PutValue( const Any& rVal, BYTE nMemberId )
+bool SfxDocumentInfoItem::PutValue( const Any& rVal, BYTE nMemberId )
 {
     ::rtl::OUString aValue;
     sal_Int32 nValue=0;
     sal_Bool bValue = sal_False;
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {
@@ -633,7 +633,7 @@ sal_Bool SfxDocumentInfoItem::PutValue( const Any& rVal, BYTE nMemberId )
             break;
         default:
             DBG_ERROR("Wrong MemberId!");
-            return sal_False;
+            return false;
     }
 
     return bRet;

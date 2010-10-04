@@ -58,8 +58,8 @@ public:
 
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId );
 
     XColorTable*            GetColorTable() const { return pColorTable; }
     void                    SetColorTable( XColorTable* pTable ) {
@@ -92,8 +92,8 @@ public:
 
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId );
 
     XGradientList*          GetGradientList() const { return pGradientList; }
     void                    SetGradientList( XGradientList* pList ) {
@@ -127,8 +127,8 @@ public:
 
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId );
 
     XHatchList*             GetHatchList() const { return pHatchList; }
     void                    SetHatchList( XHatchList* pList ) {
@@ -162,8 +162,8 @@ public:
 
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId );
 
     XBitmapList*            GetBitmapList() const { return pBitmapList; }
     void                    SetBitmapList( XBitmapList* pList ) {
@@ -197,8 +197,8 @@ public:
 
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId );
 
     XDashList*              GetDashList() const { return pDashList; }
     void                    SetDashList( XDashList* pList );
@@ -231,8 +231,8 @@ public:
 
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId );
 
     XLineEndList*           GetLineEndList() const { return pLineEndList; }
     void                    SetLineEndList( XLineEndList* pList ) {

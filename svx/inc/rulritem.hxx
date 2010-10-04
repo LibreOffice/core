@@ -44,8 +44,8 @@ class SVX_DLLPUBLIC SvxLongLRSpaceItem : public SfxPoolItem
   protected:
 
     virtual int              operator==( const SfxPoolItem& ) const;
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     virtual String           GetValueText() const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -80,8 +80,8 @@ class SVX_DLLPUBLIC SvxLongULSpaceItem : public SfxPoolItem
   protected:
 
     virtual int              operator==( const SfxPoolItem& ) const;
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     virtual String           GetValueText() const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -115,8 +115,8 @@ class SVX_DLLPUBLIC SvxPagePosSizeItem : public SfxPoolItem
     long lHeight;
 protected:
     virtual int              operator==( const SfxPoolItem& ) const;
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     virtual String           GetValueText() const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -210,8 +210,8 @@ protected:
                                     String &rText, const IntlWrapper * = 0 ) const;
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 public:
     TYPEINFO();
     // rechter Rand des umgebenden Rahmens
@@ -274,8 +274,8 @@ protected:
                                     String &rText, const IntlWrapper * = 0 ) const;
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 private:
     SVX_DLLPRIVATE const SvxObjectItem &operator=(const SvxObjectItem &); // n.i.
 public:

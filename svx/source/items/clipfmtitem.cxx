@@ -78,7 +78,7 @@ SvxClipboardFmtItem::~SvxClipboardFmtItem()
     delete pImpl;
 }
 
-BOOL SvxClipboardFmtItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ ) const
+bool SvxClipboardFmtItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ ) const
 {
     USHORT nCount = Count();
 
@@ -93,10 +93,10 @@ BOOL SvxClipboardFmtItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMe
     }
 
     rVal <<= aClipFormats;
-    return TRUE;
+    return true;
 }
 
-sal_Bool SvxClipboardFmtItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ )
+bool SvxClipboardFmtItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ )
 {
     ::com::sun::star::frame::status::ClipboardFormats aClipFormats;
     if ( rVal >>= aClipFormats )
@@ -108,10 +108,10 @@ sal_Bool SvxClipboardFmtItem::PutValue( const ::com::sun::star::uno::Any& rVal, 
         for ( USHORT n=0; n < nCount; n++ )
             AddClipbrdFormat( ULONG( aClipFormats.Identifiers[n] ), aClipFormats.Names[n], n );
 
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 int SvxClipboardFmtItem::operator==( const SfxPoolItem& rComp ) const

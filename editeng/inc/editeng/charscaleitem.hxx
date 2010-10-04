@@ -61,9 +61,9 @@ public:
                                     String &rText,
                                     const IntlWrapper * = 0 ) const;
 
-    virtual sal_Bool PutValue( const com::sun::star::uno::Any& rVal,
+    virtual bool     PutValue( const com::sun::star::uno::Any& rVal,
                                     BYTE nMemberId );
-    virtual sal_Bool QueryValue( com::sun::star::uno::Any& rVal,
+    virtual bool     QueryValue( com::sun::star::uno::Any& rVal,
                                 BYTE nMemberId ) const;
 
     inline SvxCharScaleWidthItem& operator=(const SvxCharScaleWidthItem& rItem )

@@ -56,8 +56,8 @@ public:
     virtual int             operator==( const SfxPoolItem& rItem ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const;
     virtual USHORT          GetVersion( USHORT nFileFormatVersion ) const;
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres, SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric, String &rText, const IntlWrapper * pIntlWrapper = 0 ) const;

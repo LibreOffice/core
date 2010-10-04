@@ -108,7 +108,7 @@ int SvxZoomSliderItem::operator==( const SfxPoolItem& rAttr ) const
              mnMinZoom == rItem.mnMinZoom && mnMaxZoom == rItem.mnMaxZoom );
 }
 
-sal_Bool SvxZoomSliderItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+bool SvxZoomSliderItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
@@ -150,13 +150,13 @@ sal_Bool SvxZoomSliderItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMe
             break;
         default:
             DBG_ERROR("svx::SvxZoomSliderItem::QueryValue(), Wrong MemberId!");
-            return sal_False;
+            return false;
     }
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvxZoomSliderItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
+bool SvxZoomSliderItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
 //  sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -205,11 +205,11 @@ sal_Bool SvxZoomSliderItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE
                         mnMinZoom = sal::static_int_cast< USHORT >( nMinZoom );
                         mnMaxZoom = sal::static_int_cast< USHORT >( nMaxZoom );
 
-                        return sal_True;
+                        return true;
                     }
                 }
 
-                return sal_False;
+                return false;
             }
 
         case MID_ZOOMSLIDER_CURRENTZOOM:
@@ -218,10 +218,10 @@ sal_Bool SvxZoomSliderItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE
                 if ( rVal >>= nVal )
                 {
                     SetValue( (UINT16)nVal );
-                    return sal_True;
+                    return true;
                 }
                 else
-                    return sal_False;
+                    return false;
             }
 
         case MID_ZOOMSLIDER_SNAPPINGPOINTS:
@@ -230,10 +230,10 @@ sal_Bool SvxZoomSliderItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE
                 if ( rVal >>= aValues )
                 {
                     maValues = aValues;
-                    return sal_True;
+                    return true;
                 }
                 else
-                    return sal_False;
+                    return false;
             }
         case MID_ZOOMSLIDER_MINZOOM:
             {
@@ -241,10 +241,10 @@ sal_Bool SvxZoomSliderItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE
                 if( rVal >>= nVal )
                 {
                     mnMinZoom = (UINT16)nVal;
-                    return sal_True;
+                    return true;
                 }
                 else
-                    return sal_False;
+                    return false;
             }
         case MID_ZOOMSLIDER_MAXZOOM:
             {
@@ -252,17 +252,17 @@ sal_Bool SvxZoomSliderItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE
                 if( rVal >>= nVal )
                 {
                     mnMaxZoom = (UINT16)nVal;
-                    return sal_True;
+                    return true;
                 }
                 else
-                    return sal_False;
+                    return false;
             }
         default:
             DBG_ERROR("svx::SvxZoomSliderItem::PutValue(), Wrong MemberId!");
-            return sal_False;
+            return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 void SvxZoomSliderItem::AddSnappingPoint( sal_Int32 nNew )

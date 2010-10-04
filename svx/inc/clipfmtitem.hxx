@@ -50,8 +50,8 @@ public:
     SvxClipboardFmtItem( const SvxClipboardFmtItem& );
     virtual ~SvxClipboardFmtItem();
 
-    virtual BOOL QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const;
-    virtual sal_Bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId );
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId );
 
     void AddClipbrdFormat( ULONG nId, USHORT nPos = USHRT_MAX );
     void AddClipbrdFormat( ULONG nId, const String& rName,

@@ -54,8 +54,8 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create( SvStream& rStrm, USHORT nVersion ) const;                       // leer
     virtual SvStream&       Store( SvStream& rStrm , USHORT nItemVersion ) const;                   // leer
-    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const; // leer
-    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );   // leer
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const; // leer
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );   // leer
 };
 
 //------------------------------------------------------------------------

@@ -1131,29 +1131,29 @@ BOOL __EXPORT SdrTextFitToSizeTypeItem::GetBoolValue() const { return GetValue()
 
 void __EXPORT SdrTextFitToSizeTypeItem::SetBoolValue(BOOL bVal) { SetValue(sal::static_int_cast< USHORT >(bVal ? SDRTEXTFIT_PROPORTIONAL : SDRTEXTFIT_NONE)); }
 
-sal_Bool SdrTextFitToSizeTypeItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
+bool SdrTextFitToSizeTypeItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     drawing::TextFitToSizeType eFS = (drawing::TextFitToSizeType)GetValue();
     rVal <<= eFS;
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool SdrTextFitToSizeTypeItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
+bool SdrTextFitToSizeTypeItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
     drawing::TextFitToSizeType eFS;
     if(!(rVal >>= eFS))
     {
         sal_Int32 nEnum = 0;
         if(!(rVal >>= nEnum))
-            return sal_False;
+            return false;
 
         eFS = (drawing::TextFitToSizeType) nEnum;
     }
 
     SetValue( sal::static_int_cast< USHORT >( (SdrFitToSizeType)eFS ) );
 
-    return sal_True;
+    return true;
 }
 
 TYPEINIT1_AUTOFACTORY(SdrTextVertAdjustItem,SfxEnumItem);
@@ -1183,27 +1183,27 @@ SfxItemPresentation __EXPORT SdrTextVertAdjustItem::GetPresentation(SfxItemPrese
     return ePres;
 }
 
-sal_Bool SdrTextVertAdjustItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
+bool SdrTextVertAdjustItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     rVal <<= (drawing::TextVerticalAdjust)GetValue();
-    return sal_True;
+    return true;
 }
 
-sal_Bool SdrTextVertAdjustItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
+bool SdrTextVertAdjustItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
     drawing::TextVerticalAdjust eAdj;
     if(!(rVal >>= eAdj))
     {
         sal_Int32 nEnum = 0;
         if(!(rVal >>= nEnum))
-            return sal_False;
+            return false;
 
         eAdj = (drawing::TextVerticalAdjust)nEnum;
     }
 
     SetValue( sal::static_int_cast< USHORT >( (SdrTextVertAdjust)eAdj ) );
 
-    return sal_True;
+    return true;
 }
 
 TYPEINIT1_AUTOFACTORY(SdrTextHorzAdjustItem,SfxEnumItem);
@@ -1233,27 +1233,27 @@ SfxItemPresentation __EXPORT SdrTextHorzAdjustItem::GetPresentation(SfxItemPrese
     return ePres;
 }
 
-sal_Bool SdrTextHorzAdjustItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
+bool SdrTextHorzAdjustItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     rVal <<= (drawing::TextHorizontalAdjust)GetValue();
-    return sal_True;
+    return true;
 }
 
-sal_Bool SdrTextHorzAdjustItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
+bool SdrTextHorzAdjustItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
     drawing::TextHorizontalAdjust eAdj;
     if(!(rVal >>= eAdj))
     {
         sal_Int32 nEnum = 0;
         if(!(rVal >>= nEnum))
-            return sal_False;
+            return false;
 
         eAdj = (drawing::TextHorizontalAdjust)nEnum;
     }
 
     SetValue( sal::static_int_cast< USHORT >( (SdrTextHorzAdjust)eAdj ) );
 
-    return sal_True;
+    return true;
 }
 
 TYPEINIT1_AUTOFACTORY(SdrTextAniKindItem,SfxEnumItem);
@@ -1283,26 +1283,26 @@ SfxItemPresentation __EXPORT SdrTextAniKindItem::GetPresentation(SfxItemPresenta
     return ePres;
 }
 
-sal_Bool SdrTextAniKindItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
+bool SdrTextAniKindItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     rVal <<= (drawing::TextAnimationKind)GetValue();
-    return sal_True;
+    return true;
 }
 
-sal_Bool SdrTextAniKindItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
+bool SdrTextAniKindItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
     drawing::TextAnimationKind eKind;
     if(!(rVal >>= eKind))
     {
         sal_Int32 nEnum = 0;
         if(!(rVal >>= nEnum))
-            return sal_False;
+            return false;
         eKind = (drawing::TextAnimationKind)nEnum;
     }
 
     SetValue( sal::static_int_cast< USHORT >( (SdrTextAniKind)eKind ) );
 
-    return sal_True;
+    return true;
 }
 
 TYPEINIT1_AUTOFACTORY(SdrTextAniDirectionItem,SfxEnumItem);
@@ -1332,27 +1332,27 @@ SfxItemPresentation __EXPORT SdrTextAniDirectionItem::GetPresentation(SfxItemPre
     return ePres;
 }
 
-sal_Bool SdrTextAniDirectionItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
+bool SdrTextAniDirectionItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     rVal <<= (drawing::TextAnimationDirection)GetValue();
-    return sal_True;
+    return true;
 }
 
-sal_Bool SdrTextAniDirectionItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
+bool SdrTextAniDirectionItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
     drawing::TextAnimationDirection eDir;
     if(!(rVal >>= eDir))
     {
         sal_Int32 nEnum = 0;
         if(!(rVal >>= nEnum))
-            return sal_False;
+            return false;
 
         eDir = (drawing::TextAnimationDirection)nEnum;
     }
 
     SetValue( sal::static_int_cast< USHORT >( (SdrTextAniDirection)eDir ) );
 
-    return sal_True;
+    return true;
 }
 
 TYPEINIT1_AUTOFACTORY(SdrTextAniDelayItem,SfxUInt16Item);
@@ -1492,19 +1492,19 @@ sal_uInt16 SdrTextFixedCellHeightItem::GetVersion( sal_uInt16 /*nFileFormatVersi
 {
     return 1;
 }
-sal_Bool SdrTextFixedCellHeightItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
+bool SdrTextFixedCellHeightItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     sal_Bool bValue = (sal_Bool)GetValue();
     rVal <<= bValue;
-    return sal_True;
+    return true;
 }
-sal_Bool SdrTextFixedCellHeightItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
+bool SdrTextFixedCellHeightItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
     sal_Bool bValue = sal_Bool();
     if( !( rVal >>= bValue ) )
-        return sal_False;
+        return false;
     SetValue( bValue );
-    return sal_True;
+    return true;
 }
 #ifdef SDR_ISPOOLABLE
 int __EXPORT SdrTextFixedCellHeightItem::IsPoolable() const
@@ -1650,7 +1650,7 @@ sal_uInt16 SdrCustomShapeAdjustmentItem::GetVersion( sal_uInt16 /*nFileFormatVer
     return 1;
 }
 
-sal_Bool SdrCustomShapeAdjustmentItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
+bool SdrCustomShapeAdjustmentItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     sal_uInt32 i, nCount = GetCount();
     uno::Sequence< sal_Int32 > aSequence( nCount );
@@ -1661,14 +1661,14 @@ sal_Bool SdrCustomShapeAdjustmentItem::QueryValue( uno::Any& rVal, BYTE /*nMembe
             *pPtr++ = GetValue( i ).nValue;
     }
     rVal <<= aSequence;
-    return sal_True;
+    return true;
 }
 
-sal_Bool SdrCustomShapeAdjustmentItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
+bool SdrCustomShapeAdjustmentItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
     uno::Sequence< sal_Int32 > aSequence;
     if( !( rVal >>= aSequence ) )
-        return sal_False;
+        return false;
 
     void* pPtr;
     for ( pPtr = aAdjustmentValueList.First(); pPtr; pPtr = aAdjustmentValueList.Next() )
@@ -1685,7 +1685,7 @@ sal_Bool SdrCustomShapeAdjustmentItem::PutValue( const uno::Any& rVal, BYTE /*nM
             aAdjustmentValueList.Insert( pItem, LIST_APPEND );
         }
     }
-    return sal_True;
+    return true;
 }
 
 
@@ -1721,7 +1721,7 @@ SfxItemPresentation __EXPORT SdrEdgeKindItem::GetPresentation(SfxItemPresentatio
     return ePres;
 }
 
-sal_Bool SdrEdgeKindItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
+bool SdrEdgeKindItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     drawing::ConnectorType eCT = drawing::ConnectorType_STANDARD;
 
@@ -1738,17 +1738,17 @@ sal_Bool SdrEdgeKindItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
 
     rVal <<= eCT;
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool SdrEdgeKindItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
+bool SdrEdgeKindItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
     drawing::ConnectorType eCT;
     if(!(rVal >>= eCT))
     {
         sal_Int32 nEnum = 0;
         if(!(rVal >>= nEnum))
-            return sal_False;
+            return false;
 
         eCT = (drawing::ConnectorType)nEnum;
     }
@@ -1765,119 +1765,119 @@ sal_Bool SdrEdgeKindItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
     }
     SetValue( sal::static_int_cast< USHORT >( eEK ) );
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool SdrEdgeNode1HorzDistItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
+bool SdrEdgeNode1HorzDistItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     rVal <<= (sal_Int32)GetValue();
-    return sal_True;
+    return true;
 }
 
-sal_Bool SdrEdgeNode1HorzDistItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
+bool SdrEdgeNode1HorzDistItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
     sal_Int32 nValue = 0;
     if(!(rVal >>= nValue))
-        return sal_False;
+        return false;
 
     SetValue( nValue );
-    return sal_True;
+    return true;
 }
 
-BOOL SdrEdgeNode1VertDistItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
+bool SdrEdgeNode1VertDistItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     rVal <<= (sal_Int32)GetValue();
-    return sal_True;
+    return true;
 }
 
-BOOL SdrEdgeNode1VertDistItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
+bool SdrEdgeNode1VertDistItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
     sal_Int32 nValue = 0;
     if(!(rVal >>= nValue))
-        return sal_False;
+        return false;
 
     SetValue( nValue );
-    return sal_True;
+    return true;
 }
 
-BOOL SdrEdgeNode2HorzDistItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
+bool SdrEdgeNode2HorzDistItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     rVal <<= (sal_Int32)GetValue();
-    return sal_True;
+    return true;
 }
 
-BOOL SdrEdgeNode2HorzDistItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
+bool SdrEdgeNode2HorzDistItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
     sal_Int32 nValue = 0;
     if(!(rVal >>= nValue))
-        return sal_False;
+        return false;
 
     SetValue( nValue );
-    return sal_True;
+    return true;
 }
 
-BOOL SdrEdgeNode2VertDistItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
+bool SdrEdgeNode2VertDistItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     rVal <<= (sal_Int32)GetValue();
-    return sal_True;
+    return true;
 }
 
-BOOL SdrEdgeNode2VertDistItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
+bool SdrEdgeNode2VertDistItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
     sal_Int32 nValue = 0;
     if(!(rVal >>= nValue))
-        return sal_False;
+        return false;
 
     SetValue( nValue );
-    return sal_True;
+    return true;
 }
 
-BOOL SdrEdgeLine1DeltaItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
+bool SdrEdgeLine1DeltaItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     rVal <<= (sal_Int32)GetValue();
-    return sal_True;
+    return true;
 }
 
-BOOL SdrEdgeLine1DeltaItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
+bool SdrEdgeLine1DeltaItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
     sal_Int32 nValue = 0;
     if(!(rVal >>= nValue))
-        return sal_False;
+        return false;
 
     SetValue( nValue );
-    return sal_True;
+    return true;
 }
 
-BOOL SdrEdgeLine2DeltaItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
+bool SdrEdgeLine2DeltaItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     rVal <<= (sal_Int32)GetValue();
-    return sal_True;
+    return true;
 }
 
-BOOL SdrEdgeLine2DeltaItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
+bool SdrEdgeLine2DeltaItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
     sal_Int32 nValue = 0;
     if(!(rVal >>= nValue))
-        return sal_False;
+        return false;
 
     SetValue( nValue );
-    return sal_True;
+    return true;
 }
 
-BOOL SdrEdgeLine3DeltaItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
+bool SdrEdgeLine3DeltaItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     rVal <<= (sal_Int32)GetValue();
-    return sal_True;
+    return true;
 }
 
-BOOL SdrEdgeLine3DeltaItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
+bool SdrEdgeLine3DeltaItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
     sal_Int32 nValue = 0;
     if(!(rVal >>= nValue))
-        return sal_False;
+        return false;
 
     SetValue( nValue );
-    return sal_True;
+    return true;
 }
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1912,26 +1912,26 @@ SfxItemPresentation __EXPORT SdrMeasureKindItem::GetPresentation(SfxItemPresenta
     return ePres;
 }
 
-sal_Bool SdrMeasureKindItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
+bool SdrMeasureKindItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     rVal <<= (drawing::MeasureKind)GetValue();
-    return sal_True;
+    return true;
 }
 
-sal_Bool SdrMeasureKindItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
+bool SdrMeasureKindItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
     drawing::MeasureKind eKind;
     if(!(rVal >>= eKind))
     {
         sal_Int32 nEnum = 0;
         if(!(rVal >>= nEnum))
-            return sal_False;
+            return false;
 
         eKind = (drawing::MeasureKind)nEnum;
     }
 
     SetValue( sal::static_int_cast< USHORT >( (SdrMeasureKind)eKind ) );
-    return sal_True;
+    return true;
 }
 
 TYPEINIT1_AUTOFACTORY(SdrMeasureTextHPosItem,SfxEnumItem);
@@ -1961,26 +1961,26 @@ SfxItemPresentation __EXPORT SdrMeasureTextHPosItem::GetPresentation(SfxItemPres
     return ePres;
 }
 
-sal_Bool SdrMeasureTextHPosItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
+bool SdrMeasureTextHPosItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     rVal <<= (drawing::MeasureTextHorzPos)GetValue();
-    return sal_True;
+    return true;
 }
 
-sal_Bool SdrMeasureTextHPosItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
+bool SdrMeasureTextHPosItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
     drawing::MeasureTextHorzPos ePos;
     if(!(rVal >>= ePos))
     {
         sal_Int32 nEnum = 0;
         if(!(rVal >>= nEnum))
-            return sal_False;
+            return false;
 
         ePos = (drawing::MeasureTextHorzPos)nEnum;
     }
 
     SetValue( sal::static_int_cast< USHORT >( (SdrMeasureTextHPos)ePos ) );
-    return sal_True;
+    return true;
 }
 
 TYPEINIT1_AUTOFACTORY(SdrMeasureTextVPosItem,SfxEnumItem);
@@ -2010,26 +2010,26 @@ SfxItemPresentation __EXPORT SdrMeasureTextVPosItem::GetPresentation(SfxItemPres
     return ePres;
 }
 
-sal_Bool SdrMeasureTextVPosItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
+bool SdrMeasureTextVPosItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     rVal <<= (drawing::MeasureTextVertPos)GetValue();
-    return sal_True;
+    return true;
 }
 
-sal_Bool SdrMeasureTextVPosItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
+bool SdrMeasureTextVPosItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
     drawing::MeasureTextVertPos ePos;
     if(!(rVal >>= ePos))
     {
         sal_Int32 nEnum = 0;
         if(!(rVal >>= nEnum))
-            return sal_False;
+            return false;
 
         ePos = (drawing::MeasureTextVertPos)nEnum;
     }
 
     SetValue( sal::static_int_cast< USHORT >( (SdrMeasureTextHPos)ePos ) );
-    return sal_True;
+    return true;
 }
 
 TYPEINIT1_AUTOFACTORY(SdrMeasureUnitItem,SfxEnumItem);
@@ -2071,20 +2071,20 @@ SfxItemPresentation __EXPORT SdrMeasureUnitItem::GetPresentation(SfxItemPresenta
     return ePres;
 }
 
-sal_Bool SdrMeasureUnitItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
+bool SdrMeasureUnitItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     rVal <<= (sal_Int32)GetValue();
-    return sal_True;
+    return true;
 }
 
-sal_Bool SdrMeasureUnitItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
+bool SdrMeasureUnitItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
     sal_Int32 nMeasure = 0;
     if(!(rVal >>= nMeasure))
-        return sal_False;
+        return false;
 
     SetValue( sal::static_int_cast< USHORT >( (FieldUnit)nMeasure ) );
-    return sal_True;
+    return true;
 }
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -2119,26 +2119,26 @@ SfxItemPresentation __EXPORT SdrCircKindItem::GetPresentation(SfxItemPresentatio
     return ePres;
 }
 
-sal_Bool SdrCircKindItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
+bool SdrCircKindItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     rVal <<= (drawing::CircleKind)GetValue();
-    return sal_True;
+    return true;
 }
 
-sal_Bool SdrCircKindItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
+bool SdrCircKindItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
     drawing::CircleKind eKind;
     if(!(rVal >>= eKind))
     {
         sal_Int32 nEnum = 0;
         if(!(rVal >>= nEnum))
-            return sal_False;
+            return false;
 
         eKind = (drawing::CircleKind)nEnum;
     }
 
     SetValue( sal::static_int_cast< USHORT >( (SdrCircKind)eKind ) );
-    return sal_True;
+    return true;
 }
 
 //------------------------------------------------------------
@@ -2282,20 +2282,20 @@ SfxPoolItem* __EXPORT SdrGrafGamma100Item::Create( SvStream& rIn, USHORT /*nVer*
     return new SdrGrafGamma100Item( rIn );
 }
 
-sal_Bool SdrGrafGamma100Item::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
+bool SdrGrafGamma100Item::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     rVal <<= ((double)GetValue()) / 100.0;
-    return sal_True;
+    return true;
 }
 
-sal_Bool SdrGrafGamma100Item::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
+bool SdrGrafGamma100Item::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
     double nGamma = 0;
     if(!(rVal >>= nGamma))
-        return sal_False;
+        return false;
 
     SetValue( (UINT32)(nGamma * 100.0  ) );
-    return sal_True;
+    return true;
 }
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

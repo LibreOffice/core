@@ -80,8 +80,8 @@ public:
     void SetSizeProtect ( BOOL bNew ) { bSize  = bNew; }
     void SetPosProtect  ( BOOL bNew ) { bPos   = bNew; }
 
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 };
 
 inline SvxProtectItem::SvxProtectItem( const USHORT nId )

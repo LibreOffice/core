@@ -484,19 +484,19 @@ const Color& XColorItem::GetColorValue(const XColorTable* pTable) const
 
 }
 
-sal_Bool XColorItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/) const
+bool XColorItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     rVal <<= (sal_Int32)GetColorValue().GetRGBColor();
-    return sal_True;
+    return true;
 }
 
-sal_Bool XColorItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/)
+bool XColorItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/)
 {
     sal_Int32 nValue = 0;
     rVal >>= nValue;
     SetColorValue( nValue );
 
-    return sal_True;
+    return true;
 }
 
 
@@ -609,14 +609,14 @@ SfxItemPresentation XLineStyleItem::GetPresentation
     }
 }
 
-sal_Bool XLineStyleItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/) const
+bool XLineStyleItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     ::com::sun::star::drawing::LineStyle eLS = (::com::sun::star::drawing::LineStyle)GetValue();
     rVal <<= eLS;
-    return sal_True;
+    return true;
 }
 
-sal_Bool XLineStyleItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/)
+bool XLineStyleItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/)
 {
     ::com::sun::star::drawing::LineStyle eLS;
     if(!(rVal >>= eLS ))
@@ -624,12 +624,12 @@ sal_Bool XLineStyleItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE 
         // also try an int (for Basic)
         sal_Int32 nLS = 0;
         if(!(rVal >>= nLS))
-            return sal_False;
+            return false;
         eLS = (::com::sun::star::drawing::LineStyle)nLS;
     }
 
     SetValue( sal::static_int_cast< USHORT >( eLS ) );
-    return sal_True;
+    return true;
 }
 
 //------------------------------------------------------------------------
@@ -1104,7 +1104,7 @@ FASTBOOL XLineDashItem::ScaleMetrics(long nMul, long nDiv)
     return TRUE;
 }
 
-sal_Bool XLineDashItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+bool XLineDashItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -1202,13 +1202,13 @@ sal_Bool XLineDashItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemb
             break;
         }
 
-        default: DBG_ERROR("Wrong MemberId!"); return sal_False;
+        default: DBG_ERROR("Wrong MemberId!"); return false;
     }
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool XLineDashItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
+bool XLineDashItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -1231,7 +1231,7 @@ sal_Bool XLineDashItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE n
                     else if ( aPropSeq[n].Name.equalsAsciiL( "LineDash", 8 ))
                     {
                         if ( aPropSeq[n].Value >>= aLineDash )
-                            bLineDash = sal_True;
+                            bLineDash = true;
                     }
                 }
 
@@ -1253,17 +1253,17 @@ sal_Bool XLineDashItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE n
                     SetDashValue( aXDash );
                 }
 
-                return sal_True;
+                return true;
             }
 
-            return sal_False;
+            return false;
         }
 
         case MID_NAME:
         {
             rtl::OUString aName;
             if (!(rVal >>= aName))
-                return sal_False;
+                return false;
             SetName( aName );
             break;
         }
@@ -1272,7 +1272,7 @@ sal_Bool XLineDashItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE n
         {
             ::com::sun::star::drawing::LineDash aLineDash;
             if(!(rVal >>= aLineDash))
-                return sal_False;
+                return false;
 
             XDash aXDash;
 
@@ -1294,7 +1294,7 @@ sal_Bool XLineDashItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE n
         {
             sal_Int16 nVal = sal_Int16();
             if(!(rVal >>= nVal))
-                return sal_False;
+                return false;
 
             XDash aXDash = GetDashValue();
             aXDash.SetDashStyle((XDashStyle)((UINT16)(nVal)));
@@ -1312,7 +1312,7 @@ sal_Bool XLineDashItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE n
         {
             sal_Int16 nVal = sal_Int16();
             if(!(rVal >>= nVal))
-                return sal_False;
+                return false;
 
             XDash aXDash = GetDashValue();
             if ( nMemberId == MID_LINEDASH_DOTS )
@@ -1333,7 +1333,7 @@ sal_Bool XLineDashItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE n
         {
             sal_Int32 nVal = 0;
             if(!(rVal >>= nVal))
-                return sal_False;
+                return false;
 
             XDash aXDash = GetDashValue();
             if ( nMemberId == MID_LINEDASH_DOTLEN )
@@ -1351,7 +1351,7 @@ sal_Bool XLineDashItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE n
         }
     }
 
-    return sal_True;
+    return true;
 }
 
 BOOL XLineDashItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 )
@@ -1472,17 +1472,17 @@ SfxItemPresentation XLineWidthItem::GetPresentation
     }
 }
 
-sal_Bool XLineWidthItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+bool XLineWidthItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
     sal_Int32 nValue = GetValue();
     if( 0 != (nMemberId&CONVERT_TWIPS) )
         nValue = TWIP_TO_MM100(nValue);
 
     rVal <<= nValue;
-    return sal_True;
+    return true;
 }
 
-sal_Bool XLineWidthItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
+bool XLineWidthItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
     sal_Int32 nValue = 0;
     rVal >>= nValue;
@@ -1490,7 +1490,7 @@ sal_Bool XLineWidthItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE 
         nValue = MM100_TO_TWIP(nValue);
 
     SetValue( nValue );
-    return sal_True;
+    return true;
 }
 
 // -------------------
@@ -1597,20 +1597,20 @@ SfxItemPresentation XLineColorItem::GetPresentation
     }
 }
 
-sal_Bool XLineColorItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/) const
+bool XLineColorItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     rVal <<= (sal_Int32)GetColorValue().GetRGBColor();
-    return sal_True;
+    return true;
 }
 
-sal_Bool XLineColorItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/)
+bool XLineColorItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/)
 {
     sal_Int32 nValue = 0;
     if(!(rVal >>= nValue))
-        return sal_False;
+        return false;
 
     SetColorValue( nValue );
-    return sal_True;
+    return true;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1913,7 +1913,7 @@ SfxItemPresentation XLineStartItem::GetPresentation
     }
 }
 
-sal_Bool XLineStartItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+bool XLineStartItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -1930,16 +1930,16 @@ sal_Bool XLineStartItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMem
         rVal <<= aBezier;
     }
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool XLineStartItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
+bool XLineStartItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     if( nMemberId == MID_NAME )
     {
-        return sal_False;
+        return false;
     }
     else
     {
@@ -1948,7 +1948,7 @@ sal_Bool XLineStartItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE 
         if( rVal.hasValue() && rVal.getValue() )
         {
             if( rVal.getValueType() != ::getCppuType((const com::sun::star::drawing::PolyPolygonBezierCoords*)0) )
-                return sal_False;
+                return false;
 
             com::sun::star::drawing::PolyPolygonBezierCoords* pCoords = (com::sun::star::drawing::PolyPolygonBezierCoords*)rVal.getValue();
             if( pCoords->Coordinates.getLength() > 0 )
@@ -1960,7 +1960,7 @@ sal_Bool XLineStartItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE 
         }
     }
 
-    return sal_True;
+    return true;
 }
 
 /** this function searches in both the models pool and the styles pool for XLineStartItem
@@ -2607,7 +2607,7 @@ SfxItemPresentation XLineEndItem::GetPresentation
     }
 }
 
-sal_Bool XLineEndItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+bool XLineEndItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -2623,16 +2623,16 @@ sal_Bool XLineEndItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMembe
         SvxConvertB2DPolyPolygonToPolyPolygonBezier( maPolyPolygon, aBezier );
         rVal <<= aBezier;
     }
-    return sal_True;
+    return true;
 }
 
-sal_Bool XLineEndItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
+bool XLineEndItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     if( nMemberId == MID_NAME )
     {
-        return sal_False;
+        return false;
     }
     else
     {
@@ -2641,7 +2641,7 @@ sal_Bool XLineEndItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nM
         if( rVal.hasValue() && rVal.getValue() )
         {
             if( rVal.getValueType() != ::getCppuType((const com::sun::star::drawing::PolyPolygonBezierCoords*)0) )
-                return sal_False;
+                return false;
 
             com::sun::star::drawing::PolyPolygonBezierCoords* pCoords = (com::sun::star::drawing::PolyPolygonBezierCoords*)rVal.getValue();
             if( pCoords->Coordinates.getLength() > 0 )
@@ -2653,7 +2653,7 @@ sal_Bool XLineEndItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nM
         }
     }
 
-    return sal_True;
+    return true;
 }
 
 // ----------------------------
@@ -2748,18 +2748,18 @@ SfxItemPresentation XLineStartWidthItem::GetPresentation
     }
 }
 
-sal_Bool XLineStartWidthItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/) const
+bool XLineStartWidthItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     rVal <<= (sal_Int32)GetValue();
-    return sal_True;
+    return true;
 }
 
-sal_Bool XLineStartWidthItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/)
+bool XLineStartWidthItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/)
 {
     sal_Int32 nValue = 0;
     rVal >>= nValue;
     SetValue( nValue );
-    return sal_True;
+    return true;
 }
 
 
@@ -2855,18 +2855,18 @@ SfxItemPresentation XLineEndWidthItem::GetPresentation
     }
 }
 
-sal_Bool XLineEndWidthItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/) const
+bool XLineEndWidthItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     rVal <<= (sal_Int32)GetValue();
-    return sal_True;
+    return true;
 }
 
-sal_Bool XLineEndWidthItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/)
+bool XLineEndWidthItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/)
 {
     sal_Int32 nValue = 0;
     rVal >>= nValue;
     SetValue( nValue );
-    return sal_True;
+    return true;
 }
 
 
@@ -2961,20 +2961,20 @@ SfxItemPresentation XLineStartCenterItem::GetPresentation
     }
 }
 
-sal_Bool XLineStartCenterItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/) const
+bool XLineStartCenterItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     sal_Bool bValue = GetValue();
     rVal.setValue( &bValue, ::getCppuBooleanType()  );
-    return sal_True;
+    return true;
 }
 
-sal_Bool XLineStartCenterItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/)
+bool XLineStartCenterItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/)
 {
     if( !rVal.hasValue() || rVal.getValueType() != ::getCppuBooleanType() )
-        return sal_False;
+        return false;
 
     SetValue( *(sal_Bool*)rVal.getValue() );
-    return sal_True;
+    return true;
 }
 
 
@@ -3069,20 +3069,20 @@ SfxItemPresentation XLineEndCenterItem::GetPresentation
     }
 }
 
-sal_Bool XLineEndCenterItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/) const
+bool XLineEndCenterItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     sal_Bool bValue = GetValue();
     rVal.setValue( &bValue, ::getCppuBooleanType()  );
-    return sal_True;
+    return true;
 }
 
-BOOL XLineEndCenterItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/)
+bool XLineEndCenterItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/)
 {
     if( !rVal.hasValue() || rVal.getValueType() != ::getCppuBooleanType() )
-        return sal_False;
+        return false;
 
     SetValue( *(sal_Bool*)rVal.getValue() );
-    return sal_True;
+    return true;
 }
 
 
@@ -3213,17 +3213,17 @@ USHORT XFillStyleItem::GetValueCount() const
 }
 
 // -----------------------------------------------------------------------
-sal_Bool XFillStyleItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/) const
+bool XFillStyleItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     ::com::sun::star::drawing::FillStyle eFS = (::com::sun::star::drawing::FillStyle)GetValue();
 
     rVal <<= eFS;
 
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
-sal_Bool XFillStyleItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/)
+bool XFillStyleItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/)
 {
     ::com::sun::star::drawing::FillStyle eFS;
     if(!(rVal >>= eFS))
@@ -3231,13 +3231,13 @@ sal_Bool XFillStyleItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE 
         // also try an int (for Basic)
         sal_Int32 nFS = 0;
         if(!(rVal >>= nFS))
-            return sal_False;
+            return false;
         eFS = (::com::sun::star::drawing::FillStyle)nFS;
     }
 
     SetValue( sal::static_int_cast< USHORT >( eFS ) );
 
-    return sal_True;
+    return true;
 }
 
 
@@ -3347,23 +3347,23 @@ SfxItemPresentation XFillColorItem::GetPresentation
 
 // -----------------------------------------------------------------------
 
-sal_Bool XFillColorItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/) const
+bool XFillColorItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     rVal <<= (sal_Int32)GetColorValue().GetRGBColor();
 
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool XFillColorItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/)
+bool XFillColorItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/)
 {
     sal_Int32 nValue = 0;
     if(!(rVal >>= nValue ))
-        return sal_False;
+        return false;
 
     SetColorValue( nValue );
-    return sal_True;
+    return true;
 }
 
 // -----------------------------
@@ -3774,7 +3774,7 @@ SfxItemPresentation XFillGradientItem::GetPresentation
 }
 
 // -----------------------------------------------------------------------
-sal_Bool XFillGradientItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+bool XFillGradientItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
     //sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -3847,14 +3847,14 @@ sal_Bool XFillGradientItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE n
         case MID_GRADIENT_ENDINTENSITY: rVal <<= GetGradientValue().GetEndIntens(); break;
         case MID_GRADIENT_STEPCOUNT: rVal <<= GetGradientValue().GetSteps(); break;
 
-        default: DBG_ERROR("Wrong MemberId!"); return sal_False;
+        default: DBG_ERROR("Wrong MemberId!"); return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
-sal_Bool XFillGradientItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
+bool XFillGradientItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -3900,17 +3900,17 @@ sal_Bool XFillGradientItem::PutValue( const ::com::sun::star::uno::Any& rVal, BY
                     SetGradientValue( aXGradient );
                 }
 
-                return sal_True;
+                return true;
             }
 
-            return sal_False;
+            return false;
         }
 
         case MID_NAME:
         {
             rtl::OUString aName;
             if (!(rVal >>= aName ))
-                return sal_False;
+                return false;
             SetName( aName );
             break;
         }
@@ -3919,7 +3919,7 @@ sal_Bool XFillGradientItem::PutValue( const ::com::sun::star::uno::Any& rVal, BY
         {
             ::com::sun::star::awt::Gradient aGradient2;
             if(!(rVal >>= aGradient2))
-                return sal_False;
+                return false;
 
             XGradient aXGradient;
 
@@ -3943,7 +3943,7 @@ sal_Bool XFillGradientItem::PutValue( const ::com::sun::star::uno::Any& rVal, BY
         {
             sal_Int32 nVal = 0;
             if(!(rVal >>= nVal ))
-                return sal_False;
+                return false;
 
             XGradient aXGradient = GetGradientValue();
 
@@ -3966,7 +3966,7 @@ sal_Bool XFillGradientItem::PutValue( const ::com::sun::star::uno::Any& rVal, BY
         {
             sal_Int16 nVal = sal_Int16();
             if(!(rVal >>= nVal ))
-                return sal_False;
+                return false;
 
             XGradient aXGradient = GetGradientValue();
 
@@ -3995,7 +3995,7 @@ sal_Bool XFillGradientItem::PutValue( const ::com::sun::star::uno::Any& rVal, BY
         }
     }
 
-    return sal_True;
+    return true;
 }
 
 BOOL XFillGradientItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 )
@@ -4134,14 +4134,14 @@ USHORT XFillFloatTransparenceItem::GetVersion( USHORT nFileFormatVersion ) const
 
 //------------------------------------------------------------------------
 
-sal_Bool XFillFloatTransparenceItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+bool XFillFloatTransparenceItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
     return XFillGradientItem::QueryValue( rVal, nMemberId );
 }
 
 //------------------------------------------------------------------------
 
-sal_Bool XFillFloatTransparenceItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
+bool XFillFloatTransparenceItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
     return XFillGradientItem::PutValue( rVal, nMemberId );
 }
@@ -4479,7 +4479,7 @@ FASTBOOL XFillHatchItem::ScaleMetrics(long nMul, long nDiv)
 }
 
 // -----------------------------------------------------------------------
-sal_Bool XFillHatchItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+bool XFillHatchItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -4536,14 +4536,14 @@ sal_Bool XFillHatchItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMem
         case MID_HATCH_ANGLE:
             rVal <<= aHatch.GetAngle(); break;
 
-        default: DBG_ERROR("Wrong MemberId!"); return sal_False;
+        default: DBG_ERROR("Wrong MemberId!"); return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
-sal_Bool XFillHatchItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
+bool XFillHatchItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -4579,17 +4579,17 @@ sal_Bool XFillHatchItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE 
                     aHatch.SetAngle( aUnoHatch.Angle );
                 }
 
-                return sal_True;
+                return true;
             }
 
-            return sal_False;
+            return false;
         }
 
         case MID_FILLHATCH:
         {
             ::com::sun::star::drawing::Hatch aUnoHatch;
             if(!(rVal >>= aUnoHatch))
-                return sal_False;
+                return false;
 
             aHatch.SetHatchStyle( (XHatchStyle)aUnoHatch.Style );
             aHatch.SetColor( aUnoHatch.Color );
@@ -4602,7 +4602,7 @@ sal_Bool XFillHatchItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE 
         {
             rtl::OUString aName;
             if (!(rVal >>= aName ))
-                return sal_False;
+                return false;
             SetName( aName );
             break;
         }
@@ -4611,7 +4611,7 @@ sal_Bool XFillHatchItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE 
         {
             sal_Int16 nVal = sal_Int16();
             if (!(rVal >>= nVal ))
-                return sal_False;
+                return false;
             aHatch.SetHatchStyle( (XHatchStyle)nVal );
             break;
         }
@@ -4622,7 +4622,7 @@ sal_Bool XFillHatchItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE 
         {
             sal_Int32 nVal = 0;
             if (!(rVal >>= nVal ))
-                return sal_False;
+                return false;
 
             if ( nMemberId == MID_HATCH_COLOR )
                 aHatch.SetColor( nVal );
@@ -4633,10 +4633,10 @@ sal_Bool XFillHatchItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE 
             break;
         }
 
-        default: DBG_ERROR("Wrong MemberId!"); return sal_False;
+        default: DBG_ERROR("Wrong MemberId!"); return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 BOOL XFillHatchItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 )
@@ -4753,10 +4753,10 @@ USHORT XFormTextStyleItem::GetValueCount() const
 \*************************************************************************/
 
 // #FontWork#
-sal_Bool XFormTextStyleItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
+bool XFormTextStyleItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     rVal <<= (sal_Int32)GetValue();
-    return sal_True;
+    return true;
 }
 
 /*************************************************************************
@@ -4766,13 +4766,13 @@ sal_Bool XFormTextStyleItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) con
 \*************************************************************************/
 
 // #FontWork#
-sal_Bool XFormTextStyleItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
+bool XFormTextStyleItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
     sal_Int32 nValue = 0;
     rVal >>= nValue;
     SetValue(sal::static_int_cast< USHORT >(nValue));
 
-    return sal_True;
+    return true;
 }
 
 //-------------------------
@@ -4858,10 +4858,10 @@ USHORT XFormTextAdjustItem::GetValueCount() const
 \*************************************************************************/
 
 // #FontWork#
-sal_Bool XFormTextAdjustItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
+bool XFormTextAdjustItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     rVal <<= (sal_Int32)GetValue();
-    return sal_True;
+    return true;
 }
 
 /*************************************************************************
@@ -4871,13 +4871,13 @@ sal_Bool XFormTextAdjustItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) co
 \*************************************************************************/
 
 // #FontWork#
-sal_Bool XFormTextAdjustItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
+bool XFormTextAdjustItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
     sal_Int32 nValue = 0;
     rVal >>= nValue;
     SetValue(sal::static_int_cast< USHORT >(nValue));
 
-    return sal_True;
+    return true;
 }
 
 //----------------------------
@@ -5220,10 +5220,10 @@ USHORT XFormTextShadowItem::GetValueCount() const
 \*************************************************************************/
 
 // #FontWork#
-sal_Bool XFormTextShadowItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
+bool XFormTextShadowItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     rVal <<= (sal_Int32)GetValue();
-    return sal_True;
+    return true;
 }
 
 /*************************************************************************
@@ -5233,13 +5233,13 @@ sal_Bool XFormTextShadowItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) co
 \*************************************************************************/
 
 // #FontWork#
-sal_Bool XFormTextShadowItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
+bool XFormTextShadowItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
     sal_Int32 nValue = 0;
     rVal >>= nValue;
     SetValue(sal::static_int_cast< USHORT >(nValue));
 
-    return sal_True;
+    return true;
 }
 
 // -------------------------------
@@ -5539,10 +5539,10 @@ USHORT XFormTextStdFormItem::GetValueCount() const
 \*************************************************************************/
 
 // #FontWork#
-sal_Bool XFormTextStdFormItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
+bool XFormTextStdFormItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     rVal <<= (sal_Int32)GetValue();
-    return sal_True;
+    return true;
 }
 
 /*************************************************************************
@@ -5552,13 +5552,13 @@ sal_Bool XFormTextStdFormItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) c
 \*************************************************************************/
 
 // #FontWork#
-sal_Bool XFormTextStdFormItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
+bool XFormTextStdFormItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
     sal_Int32 nValue = 0;
     rVal >>= nValue;
     SetValue(sal::static_int_cast< USHORT >(nValue));
 
-    return sal_True;
+    return true;
 }
 
 // --------------------------

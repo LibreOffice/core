@@ -218,7 +218,7 @@ SvxSizeItem::SvxSizeItem( const sal_uInt16 nId, const Size& rSize ) :
 }
 
 // -----------------------------------------------------------------------
-sal_Bool SvxSizeItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+bool SvxSizeItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -235,13 +235,13 @@ sal_Bool SvxSizeItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         case MID_SIZE_SIZE:  rVal <<= aTmp; break;
         case MID_SIZE_WIDTH: rVal <<= aTmp.Width; break;
         case MID_SIZE_HEIGHT: rVal <<= aTmp.Height;  break;
-        default: DBG_ERROR("Wrong MemberId!"); return sal_False;
+        default: DBG_ERROR("Wrong MemberId!"); return false;
     }
 
-    return sal_True;
+    return true;
 }
 // -----------------------------------------------------------------------
-sal_Bool SvxSizeItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+bool SvxSizeItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -262,7 +262,7 @@ sal_Bool SvxSizeItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             }
             else
             {
-                return sal_False;
+                return false;
             }
         }
         break;
@@ -270,7 +270,7 @@ sal_Bool SvxSizeItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         {
             sal_Int32 nVal = 0;
             if(!(rVal >>= nVal ))
-                return sal_False;
+                return false;
 
             aSize.Width() = bConvert ? MM100_TO_TWIP(nVal) : nVal;
         }
@@ -279,15 +279,15 @@ sal_Bool SvxSizeItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         {
             sal_Int32 nVal = 0;
             if(!(rVal >>= nVal))
-                return sal_True;
+                return true;
 
             aSize.Height() = bConvert ? MM100_TO_TWIP(nVal) : nVal;
         }
         break;
         default: DBG_ERROR("Wrong MemberId!");
-            return sal_False;
+            return false;
     }
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -430,9 +430,9 @@ SvxLRSpaceItem::SvxLRSpaceItem( const long nLeft, const long nRight,
 }
 
 // -----------------------------------------------------------------------
-sal_Bool SvxLRSpaceItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+bool SvxLRSpaceItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
@@ -468,14 +468,14 @@ sal_Bool SvxLRSpaceItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
             break;
 
         default:
-            bRet = sal_False;
+            bRet = false;
             DBG_ERROR("unknown MemberId");
     }
     return bRet;
 }
 
 // -----------------------------------------------------------------------
-sal_Bool SvxLRSpaceItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+bool SvxLRSpaceItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -510,7 +510,7 @@ sal_Bool SvxLRSpaceItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
                     nPropRightMargin = (USHORT)nRel;
             }
             else
-                return FALSE;
+                return false;
         }
         break;
         case MID_FIRST_LINE_INDENT     :
@@ -527,9 +527,9 @@ sal_Bool SvxLRSpaceItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 
         default:
             DBG_ERROR("unknown MemberId");
-            return sal_False;
+            return false;
     }
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -824,9 +824,9 @@ SvxULSpaceItem::SvxULSpaceItem( const sal_uInt16 nUp, const sal_uInt16 nLow,
 }
 
 // -----------------------------------------------------------------------
-sal_Bool    SvxULSpaceItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+bool SvxULSpaceItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
-    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
     {
@@ -846,11 +846,11 @@ sal_Bool    SvxULSpaceItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         case MID_UP_REL_MARGIN: rVal <<= (sal_Int16) nPropUpper; break;
         case MID_LO_REL_MARGIN: rVal <<= (sal_Int16) nPropLower; break;
     }
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
-sal_Bool SvxULSpaceItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+bool SvxULSpaceItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -861,7 +861,7 @@ sal_Bool SvxULSpaceItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         {
             ::com::sun::star::frame::status::UpperLowerMarginScale aUpperLowerMarginScale;
             if ( !(rVal >>= aUpperLowerMarginScale ))
-                return sal_False;
+                return false;
             {
                 SetUpper((sal_uInt16)(bConvert ? MM100_TO_TWIP( aUpperLowerMarginScale.Upper ) : aUpperLowerMarginScale.Upper));
                 SetLower((sal_uInt16)(bConvert ? MM100_TO_TWIP( aUpperLowerMarginScale.Lower ) : aUpperLowerMarginScale.Lower));
@@ -874,12 +874,12 @@ sal_Bool SvxULSpaceItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 
         case MID_UP_MARGIN :
             if(!(rVal >>= nVal) || nVal < 0)
-                return sal_False;
+                return false;
             SetUpper((USHORT)(bConvert ? MM100_TO_TWIP(nVal) : nVal));
             break;
         case MID_LO_MARGIN :
             if(!(rVal >>= nVal) || nVal < 0)
-                return sal_False;
+                return false;
             SetLower((USHORT)(bConvert ? MM100_TO_TWIP(nVal) : nVal));
             break;
         case MID_UP_REL_MARGIN:
@@ -894,16 +894,16 @@ sal_Bool SvxULSpaceItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
                     nPropLower = (USHORT)nRel;
             }
             else
-                return FALSE;
+                return false;
         }
         break;
 
 
         default:
             DBG_ERROR("unknown MemberId");
-            return sal_False;
+            return false;
     }
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -1167,7 +1167,7 @@ int SvxProtectItem::operator==( const SfxPoolItem& rAttr ) const
 
 /*-----------------16.03.98 12:42-------------------
 --------------------------------------------------*/
-sal_Bool SvxProtectItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+bool SvxProtectItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
 //  sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -1179,16 +1179,16 @@ sal_Bool SvxProtectItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         case MID_PROTECT_POSITION:  bValue = bPos; break;
         default:
             DBG_ERROR("falsche MemberId");
-            return sal_False;
+            return false;
     }
 
     rVal = Bool2Any( bValue );
-    return sal_True;
+    return true;
 }
 /*-----------------16.03.98 12:42-------------------
 
 --------------------------------------------------*/
-sal_Bool    SvxProtectItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+bool    SvxProtectItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
 //  sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -1200,9 +1200,9 @@ sal_Bool    SvxProtectItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         case MID_PROTECT_POSITION:  bPos   = bVal;  break;
         default:
             DBG_ERROR("falsche MemberId");
-            return sal_False;
+            return false;
     }
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -1297,7 +1297,7 @@ SvxShadowItem::SvxShadowItem( const USHORT nId,
 }
 
 // -----------------------------------------------------------------------
-sal_Bool SvxShadowItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+bool SvxShadowItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -1324,20 +1324,20 @@ sal_Bool SvxShadowItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         case MID_TRANSPARENT: rVal <<= aShadow.IsTransparent; break;
         case MID_BG_COLOR: rVal <<= aShadow.Color; break;
         case 0: rVal <<= aShadow; break;
-        default: DBG_ERROR("Wrong MemberId!"); return sal_False;
+        default: DBG_ERROR("Wrong MemberId!"); return false;
     }
 
-    return sal_True;
+    return true;
 }
 // -----------------------------------------------------------------------
-sal_Bool SvxShadowItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+bool SvxShadowItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
 
     table::ShadowFormat aShadow;
     uno::Any aAny;
-    sal_Bool bRet = QueryValue( aAny, bConvert ? CONVERT_TWIPS : 0 ) && ( aAny >>= aShadow );
+    bool bRet = QueryValue( aAny, bConvert ? CONVERT_TWIPS : 0 ) && ( aAny >>= aShadow );
     switch ( nMemberId )
     {
         case MID_LOCATION:
@@ -1842,7 +1842,7 @@ table::BorderLine SvxBoxItem::SvxLineToLine(const SvxBorderLine* pLine, sal_Bool
     return aLine;
 }
 // -----------------------------------------------------------------------
-sal_Bool SvxBoxItem::QueryValue( uno::Any& rVal, BYTE nMemberId  ) const
+bool SvxBoxItem::QueryValue( uno::Any& rVal, BYTE nMemberId  ) const
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     table::BorderLine aRetLine;
@@ -1929,7 +1929,7 @@ sal_Bool SvxBoxItem::QueryValue( uno::Any& rVal, BYTE nMemberId  ) const
             rVal <<= aRetLine;
     }
 
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -1945,7 +1945,7 @@ sal_Bool SvxBoxItem::LineToSvxLine(const ::com::sun::star::table::BorderLine& rL
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxBoxItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+bool SvxBoxItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     sal_uInt16 nLine = BOX_LINE_TOP;
@@ -2779,7 +2779,7 @@ void SvxBoxInfoItem::ResetFlags()
     nValidFlags = 0x7F; // alles g"ultig au/ser Disable
 }
 
-sal_Bool SvxBoxInfoItem::QueryValue( uno::Any& rVal, BYTE nMemberId  ) const
+bool SvxBoxInfoItem::QueryValue( uno::Any& rVal, BYTE nMemberId  ) const
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     table::BorderLine aRetLine;
@@ -2836,7 +2836,7 @@ sal_Bool SvxBoxInfoItem::QueryValue( uno::Any& rVal, BYTE nMemberId  ) const
             bIntMember = sal_True;
             rVal <<= (sal_Int32)(bConvert ? TWIP_TO_MM100_UNSIGNED(GetDefDist()) : GetDefDist());
             break;
-        default: DBG_ERROR("Wrong MemberId!"); return sal_False;
+        default: DBG_ERROR("Wrong MemberId!"); return false;
     }
 
     if( !bIntMember )
@@ -2856,12 +2856,12 @@ sal_Bool SvxBoxInfoItem::QueryValue( uno::Any& rVal, BYTE nMemberId  ) const
             rVal <<= aRetLine;
     }
 
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
 //  sal_uInt16 nLine = BOX_LINE_TOP;
@@ -3064,7 +3064,7 @@ XubString SvxFmtBreakItem::GetValueTextByPos( sal_uInt16 nPos ) const
 }
 
 // -----------------------------------------------------------------------
-sal_Bool SvxFmtBreakItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
+bool SvxFmtBreakItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
 {
     style::BreakType eBreak = style::BreakType_NONE;
     switch ( (SvxBreak)GetValue() )
@@ -3078,10 +3078,10 @@ sal_Bool SvxFmtBreakItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
         default: ;//prevent warning
     }
     rVal <<= eBreak;
-    return sal_True;
+    return true;
 }
 // -----------------------------------------------------------------------
-sal_Bool SvxFmtBreakItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
+bool SvxFmtBreakItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
 {
     style::BreakType nBreak;
 
@@ -3107,7 +3107,7 @@ sal_Bool SvxFmtBreakItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
     }
     SetValue((sal_uInt16) eBreak);
 
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -3266,14 +3266,14 @@ SfxPoolItem* SvxLineItem::Clone( SfxItemPool* ) const
     return new SvxLineItem( *this );
 }
 
-sal_Bool SvxLineItem::QueryValue( uno::Any& rVal, BYTE nMemId ) const
+bool SvxLineItem::QueryValue( uno::Any& rVal, BYTE nMemId ) const
 {
     sal_Bool bConvert = 0!=(nMemId&CONVERT_TWIPS);
     nMemId &= ~CONVERT_TWIPS;
     if ( nMemId == 0 )
     {
         rVal <<= uno::makeAny( SvxBoxItem::SvxLineToLine(pLine, bConvert) );
-        return sal_True;
+        return true;
     }
     else if ( pLine )
     {
@@ -3285,16 +3285,16 @@ sal_Bool SvxLineItem::QueryValue( uno::Any& rVal, BYTE nMemId ) const
             case MID_DISTANCE:      rVal <<= sal_Int32(pLine->GetDistance());   break;
             default:
                 DBG_ERROR( "Wrong MemberId" );
-                return sal_False;
+                return false;
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxLineItem::PutValue( const uno::Any& rVal, BYTE nMemId )
+bool SvxLineItem::PutValue( const uno::Any& rVal, BYTE nMemId )
 {
     sal_Bool bConvert = 0!=(nMemId&CONVERT_TWIPS);
     nMemId &= ~CONVERT_TWIPS;
@@ -3308,9 +3308,9 @@ sal_Bool SvxLineItem::PutValue( const uno::Any& rVal, BYTE nMemId )
                 pLine = new SvxBorderLine;
             if( !SvxBoxItem::LineToSvxLine(aLine, *pLine, bConvert) )
                 DELETEZ( pLine );
-            return sal_True;
+            return true;
         }
-        return sal_False;
+        return false;
     }
     else if ( rVal >>= nVal )
     {
@@ -3328,10 +3328,10 @@ sal_Bool SvxLineItem::PutValue( const uno::Any& rVal, BYTE nMemId )
                 return sal_False;
         }
 
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 //------------------------------------------------------------------------
@@ -3701,7 +3701,7 @@ inline sal_Int8 lcl_TransparencyToPercent(sal_Int32 nTrans)
     return (sal_Int8)((nTrans * 100 + 127) / 254);
 }
 
-sal_Bool SvxBrushItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+bool SvxBrushItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -3758,12 +3758,12 @@ sal_Bool SvxBrushItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         break;
     }
 
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxBrushItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+bool SvxBrushItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -3874,7 +3874,7 @@ sal_Bool SvxBrushItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         break;
     }
 
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -4394,7 +4394,7 @@ SfxItemPresentation SvxFrameDirectionItem::GetPresentation(
     return eRet;
 }
 
-sal_Bool SvxFrameDirectionItem::PutValue( const com::sun::star::uno::Any& rVal,
+bool SvxFrameDirectionItem::PutValue( const com::sun::star::uno::Any& rVal,
                                              BYTE )
 {
     sal_Int16 nVal = sal_Int16();
@@ -4420,7 +4420,7 @@ sal_Bool SvxFrameDirectionItem::PutValue( const com::sun::star::uno::Any& rVal,
                 SetValue( FRMDIR_ENVIRONMENT );
                 break;
             default:
-                bRet = sal_False;
+                bRet = false;
                 break;
         }
     }
@@ -4428,12 +4428,12 @@ sal_Bool SvxFrameDirectionItem::PutValue( const com::sun::star::uno::Any& rVal,
     return bRet;
 }
 
-sal_Bool SvxFrameDirectionItem::QueryValue( com::sun::star::uno::Any& rVal,
+bool SvxFrameDirectionItem::QueryValue( com::sun::star::uno::Any& rVal,
                                             BYTE ) const
 {
     // translate SvxFrameDirection into WritingDirection2
     sal_Int16 nVal;
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     switch( GetValue() )
     {
         case FRMDIR_HORI_LEFT_TOP:
@@ -4453,7 +4453,7 @@ sal_Bool SvxFrameDirectionItem::QueryValue( com::sun::star::uno::Any& rVal,
             break;
         default:
             DBG_ERROR("Unknown SvxFrameDirection value!");
-            bRet = sal_False;
+            bRet = false;
             break;
     }
 

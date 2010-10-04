@@ -193,7 +193,7 @@ SfxPoolItem* SvxChartTextOrderItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxChartTextOrderItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ ) const
+bool SvxChartTextOrderItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ ) const
 {
     // the order of the two enums is not equal, so a mapping is required
     ::com::sun::star::chart::ChartAxisArrangeOrderType eAO;
@@ -213,12 +213,12 @@ sal_Bool SvxChartTextOrderItem::QueryValue( ::com::sun::star::uno::Any& rVal, BY
 
     rVal <<= eAO;
 
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxChartTextOrderItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ )
+bool SvxChartTextOrderItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ )
 {
     // the order of the two enums is not equal, so a mapping is required
     ::com::sun::star::chart::ChartAxisArrangeOrderType eAO;
@@ -229,7 +229,7 @@ sal_Bool SvxChartTextOrderItem::PutValue( const ::com::sun::star::uno::Any& rVal
         // also try an int (for Basic)
         sal_Int32 nAO = 0;
         if(!(rVal >>= nAO))
-            return sal_False;
+            return false;
         eAO = static_cast< ::com::sun::star::chart::ChartAxisArrangeOrderType >( nAO );
     }
 
@@ -244,12 +244,12 @@ sal_Bool SvxChartTextOrderItem::PutValue( const ::com::sun::star::uno::Any& rVal
         case ::com::sun::star::chart::ChartAxisArrangeOrderType_AUTO:
             eOrder = CHTXTORDER_AUTO; break;
         default:
-            return sal_False;
+            return false;
     }
 
     SetValue( (USHORT)eOrder );
 
-    return sal_True;
+    return true;
 }
 
 /*************************************************************************
@@ -395,14 +395,14 @@ SfxFieldUnit SvxDoubleItem::GetUnit() const
 
 
 // -----------------------------------------------------------------------
-sal_Bool SvxDoubleItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
+bool SvxDoubleItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
 {
     rVal <<= fVal;
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
-sal_Bool SvxDoubleItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
+bool SvxDoubleItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
 {
     return rVal >>= fVal;
 }

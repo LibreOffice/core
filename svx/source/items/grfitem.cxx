@@ -117,7 +117,7 @@ SvStream& SvxGrfCrop::Store( SvStream& rStrm, USHORT nVersion ) const
 
 
 
-BOOL SvxGrfCrop::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+bool SvxGrfCrop::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -137,17 +137,17 @@ BOOL SvxGrfCrop::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 
 
     rVal <<= aRet;
-    return   sal_True;
+    return true;
 }
 
-BOOL SvxGrfCrop::PutValue( const uno::Any& rVal, BYTE nMemberId )
+bool SvxGrfCrop::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     text::GraphicCrop aVal;
 
     if(!(rVal >>= aVal))
-        return sal_False;
+        return false;
     if( bConvert )
     {
        aVal.Right   = MM100_TO_TWIP(aVal.Right );
@@ -160,7 +160,7 @@ BOOL SvxGrfCrop::PutValue( const uno::Any& rVal, BYTE nMemberId )
     nRight  = aVal.Right ;
     nTop    = aVal.Top   ;
     nBottom = aVal.Bottom;
-    return  sal_True;
+    return  true;
 }
 
 SfxItemPresentation SvxGrfCrop::GetPresentation(
