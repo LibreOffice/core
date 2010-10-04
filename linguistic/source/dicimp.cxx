@@ -438,101 +438,48 @@ ULONG DictionaryNeo::saveEntries(const OUString &rURL)
         return static_cast< ULONG >(-1);
 
     SvStreamPtr pStream = SvStreamPtr( utl::UcbStreamHelper::CreateStream( xStream ) );
-
     ULONG nErr = sal::static_int_cast< ULONG >(-1);
 
-    rtl_TextEncoding eEnc = osl_getThreadTextEncoding();
-    if (nDicVersion >= DIC_VERSION_6)
-        eEnc = RTL_TEXTENCODING_UTF8;
-
-    if (nDicVersion == DIC_VERSION_7)
-    {
-        pStream->WriteLine(ByteString (pVerOOo7));
-        if (0 != (nErr = pStream->GetError()))
-            return nErr;
-
-        if (nLanguage == LANGUAGE_NONE)
-            pStream->WriteLine(ByteString("lang: <none>"));
-        else
-        {
-            ByteString aLine("lang: ");
-            aLine += ByteString( String( MsLangId::convertLanguageToIsoString( nLanguage ) ), eEnc);
-            pStream->WriteLine( aLine );
-        }
-        if (0 != (nErr = pStream->GetError()))
-            return nErr;
-
-        if (eDicType == DictionaryType_POSITIVE)
-            pStream->WriteLine(ByteString("type: positive"));
-        else
-            pStream->WriteLine(ByteString("type: negative"));
-        if (0 != (nErr = pStream->GetError()))
-            return nErr;
-
-        pStream->WriteLine(ByteString("---"));
-        if (0 != (nErr = pStream->GetError()))
-            return nErr;
-
-        const uno::Reference< XDictionaryEntry > *pEntry = aEntries.getConstArray();
-        for (INT32 i = 0;  i < nCount;  i++)
-        {
-            ByteString aOutStr = formatForSave(pEntry[i], eEnc);
-            pStream->WriteLine (aOutStr);
-            if (0 != (nErr = pStream->GetError()))
-                return nErr;
-        }
-    }
+    //
+    // Always write as the latest version, i.e. DIC_VERSION_7
+    //
+    rtl_TextEncoding eEnc = RTL_TEXTENCODING_UTF8;
+    pStream->WriteLine(ByteString (pVerOOo7));
+    if (0 != (nErr = pStream->GetError()))
+        return nErr;
+    if (nLanguage == LANGUAGE_NONE)
+        pStream->WriteLine(ByteString("lang: <none>"));
     else
     {
-        sal_Char aWordBuf[BUFSIZE];
-
-        // write version
-        const sal_Char *pVerStr = NULL;
-        if (DIC_VERSION_6 == nDicVersion)
-            pVerStr = pVerStr6;
-        else
-            pVerStr = eDicType == DictionaryType_POSITIVE ? pVerStr2 : pVerStr5;
-        strcpy( aWordBuf, pVerStr );    // #100211# - checked
-        USHORT nLen = sal::static_int_cast< USHORT >(strlen( aWordBuf ));
-        *pStream << nLen;
+        ByteString aLine("lang: ");
+        aLine += ByteString( String( MsLangId::convertLanguageToIsoString( nLanguage ) ), eEnc);
+        pStream->WriteLine( aLine );
+    }
+    if (0 != (nErr = pStream->GetError()))
+        return nErr;
+    if (eDicType == DictionaryType_POSITIVE)
+        pStream->WriteLine(ByteString("type: positive"));
+    else
+        pStream->WriteLine(ByteString("type: negative"));
+    if (0 != (nErr = pStream->GetError()))
+        return nErr;
+    pStream->WriteLine(ByteString("---"));
+    if (0 != (nErr = pStream->GetError()))
+        return nErr;
+    const uno::Reference< XDictionaryEntry > *pEntry = aEntries.getConstArray();
+    for (INT32 i = 0;  i < nCount;  i++)
+    {
+        ByteString aOutStr = formatForSave(pEntry[i], eEnc);
+        pStream->WriteLine (aOutStr);
         if (0 != (nErr = pStream->GetError()))
             return nErr;
-        pStream->Write(aWordBuf, nLen);
-        if (0 != (nErr = pStream->GetError()))
-            return nErr;
-
-        *pStream << nLanguage;
-        if (0 != (nErr = pStream->GetError()))
-            return nErr;
-        *pStream << (sal_Char) (eDicType == DictionaryType_NEGATIVE ? TRUE : FALSE);
-        if (0 != (nErr = pStream->GetError()))
-            return nErr;
-
-        const uno::Reference< XDictionaryEntry > *pEntry = aEntries.getConstArray();
-        for (INT32 i = 0;  i < nCount;  i++)
-        {
-            ByteString aOutStr = formatForSave(pEntry[i], eEnc);
-
-            // the old format would fail (mis-calculation of nLen) and write
-            // uninitialized junk for combined len >= BUFSIZE - we truncate
-            // silently here, but BUFSIZE is large anyway.
-            nLen = aOutStr.Len();
-            if (nLen >= BUFSIZE)
-                nLen = BUFSIZE - 1;
-
-            *pStream << nLen;
-            if (0 != (nErr = pStream->GetError()))
-                return nErr;
-            pStream->Write(aOutStr.GetBuffer(), nLen);
-            if (0 != (nErr = pStream->GetError()))
-                return nErr;
-        }
     }
 
-    //! get return value before Stream is destroyed
-    ULONG nError = pStream->GetError();
+    //If we are migrating from an older version, then on first successful
+    //write, we're now converted to the latest version, i.e. DIC_VERSION_7
+    nDicVersion = DIC_VERSION_7;
 
-    return nError;
+    return nErr;
 }
 
 void DictionaryNeo::launchEvent(INT16 nEvent,
