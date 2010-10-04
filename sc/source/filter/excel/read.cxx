@@ -803,6 +803,7 @@ FltError ImportExcel8::Read( void )
     XclImpObjectManager&    rObjMgr         = GetObjectManager();
     // call to GetCurrSheetDrawing() cannot be cached (changes in new sheets)
     XclImpCondFormatManager& rCondFmtMgr    = GetCondFormatManager();
+    XclImpValidationManager& rValidMgr      = GetValidationManager();
     XclImpPivotTableManager& rPTableMgr     = GetPivotTableManager();
     XclImpWebQueryBuffer&   rWQBfr          = GetWebQueryBuffer();
 
@@ -1176,8 +1177,8 @@ FltError ImportExcel8::Read( void )
                     case EXC_ID_CONDFMT:        rCondFmtMgr.ReadCondfmt( maStrm );      break;
                     case EXC_ID_CF:             rCondFmtMgr.ReadCF( maStrm );           break;
 
-                    case EXC_ID_DVAL:           XclImpValidation::ReadDval( maStrm );   break;
-                    case EXC_ID_DV:             XclImpValidation::ReadDV( maStrm );     break;
+                    case EXC_ID_DVAL:           rValidMgr.ReadDval( maStrm );           break;
+                    case EXC_ID_DV:             rValidMgr.ReadDV( maStrm );             break;
 
                     case EXC_ID_QSI:            rWQBfr.ReadQsi( maStrm );               break;
                     case EXC_ID_WQSTRING:       rWQBfr.ReadWqstring( maStrm );          break;

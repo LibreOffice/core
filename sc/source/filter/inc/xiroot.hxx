@@ -53,6 +53,7 @@ class XclImpLinkManager;
 class XclImpObjectManager;
 class XclImpSheetDrawing;
 class XclImpCondFormatManager;
+class XclImpValidationManager;
 class XclImpAutoFilterBuffer;
 class XclImpWebQueryBuffer;
 class XclImpPivotTableManager;
@@ -82,6 +83,7 @@ struct XclImpRootData : public XclRootData
     typedef ScfRef< XclImpLinkManager >         XclImpLinkMgrRef;
     typedef ScfRef< XclImpObjectManager >       XclImpObjectMgrRef;
     typedef ScfRef< XclImpCondFormatManager >   XclImpCondFmtMgrRef;
+    typedef ScfRef< XclImpValidationManager >   XclImpValidationMgrRef;
     typedef ScfRef< XclImpWebQueryBuffer >      XclImpWebQueryBfrRef;
     typedef ScfRef< XclImpPivotTableManager >   XclImpPTableMgrRef;
     typedef ScfRef< XclImpPageSettings >        XclImpPageSettRef;
@@ -106,6 +108,7 @@ struct XclImpRootData : public XclRootData
 
     XclImpObjectMgrRef  mxObjMgr;           /// All drawing objects.
     XclImpCondFmtMgrRef mxCondFmtMgr;       /// Conditional formattings.
+    XclImpValidationMgrRef mxValidMgr;      /// Data validation
     XclImpWebQueryBfrRef mxWebQueryBfr;     /// All web queries.
     XclImpPTableMgrRef  mxPTableMgr;        /// All pivot tables and pivot caches.
 
@@ -182,6 +185,8 @@ public:
     XclImpSheetDrawing& GetCurrSheetDrawing() const;
     /** Returns the conditional formattings manager. */
     XclImpCondFormatManager& GetCondFormatManager() const;
+
+    XclImpValidationManager& GetValidationManager() const;
     /** Returns the filter manager. */
     XclImpAutoFilterBuffer& GetFilterManager() const;
     /** Returns the web query buffer. */

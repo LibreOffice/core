@@ -250,8 +250,9 @@ void ImportExcel8::ReadBasic( void )
 
 void ImportExcel8::EndSheet( void )
 {
-    GetCondFormatManager().Apply();
     ImportExcel::EndSheet();
+    GetCondFormatManager().Apply();
+    GetValidationManager().Apply();
 }
 
 

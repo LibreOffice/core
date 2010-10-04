@@ -33,8 +33,10 @@
 #include "xlcontent.hxx"
 #include "xistring.hxx"
 #include "xiroot.hxx"
+#include "validat.hxx"
 
 #include <map>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 /* ============================================================================
 Classes to import the big Excel document contents (related to several cells or
@@ -162,14 +164,29 @@ private:
 
 // Data Validation ============================================================
 
-/** Provides importing validation data and inserting it into a document. */
-class XclImpValidation : ScfNoInstance
+/** Imports validation data. */
+class XclImpValidationManager : protected XclImpRoot
 {
 public:
+    explicit            XclImpValidationManager( const XclImpRoot& rRoot );
+
     /** Reads a DVAL record and sets marks the dropdown arrow control to be ignored. */
-    static void         ReadDval( XclImpStream& rStrm );
+    void                ReadDval( XclImpStream& rStrm );
     /** Reads a DV record and inserts validation data into the document. */
-    static void         ReadDV( XclImpStream& rStrm );
+    void                ReadDV( XclImpStream& rStrm );
+
+    void                Apply();
+private:
+    struct DVItem
+    {
+        ScRangeList         maRanges;
+        ScValidationData    maValidData;
+
+        explicit DVItem ( const ScRangeList& rRanges, const ScValidationData& rValidData );
+    };
+    typedef ::boost::ptr_vector<DVItem> DVItemList;
+
+    DVItemList maDVItems;
 };
 
 // Web queries ================================================================

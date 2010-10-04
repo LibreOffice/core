@@ -82,6 +82,7 @@ XclImpRoot::XclImpRoot( XclImpRootData& rImpRootData ) :
         mrImpData.mxLinkMgr.reset( new XclImpLinkManager( GetRoot() ) );
         mrImpData.mxSst.reset( new XclImpSst( GetRoot() ) );
         mrImpData.mxCondFmtMgr.reset( new XclImpCondFormatManager( GetRoot() ) );
+        mrImpData.mxValidMgr.reset( new XclImpValidationManager( GetRoot() ) );
         // TODO still in old RootData (deleted by RootData)
         GetOldRoot().pAutoFilterBuffer = new XclImpAutoFilterBuffer;
         mrImpData.mxWebQueryBfr.reset( new XclImpWebQueryBuffer( GetRoot() ) );
@@ -219,6 +220,12 @@ XclImpCondFormatManager& XclImpRoot::GetCondFormatManager() const
 {
     DBG_ASSERT( mrImpData.mxCondFmtMgr.is(), "XclImpRoot::GetCondFormatManager - invalid call, wrong BIFF" );
     return *mrImpData.mxCondFmtMgr;
+}
+
+XclImpValidationManager& XclImpRoot::GetValidationManager() const
+{
+    DBG_ASSERT( mrImpData.mxValidMgr.is(), "XclImpRoot::GetValidationManager - invalid call, wrong BIFF" );
+    return *mrImpData.mxValidMgr;
 }
 
 XclImpAutoFilterBuffer& XclImpRoot::GetFilterManager() const

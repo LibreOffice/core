@@ -699,7 +699,15 @@ void XclImpCondFormatManager::Apply()
 
 // Data Validation ============================================================
 
-void XclImpValidation::ReadDval( XclImpStream& rStrm )
+XclImpValidationManager::DVItem::DVItem( const ScRangeList& rRanges, const ScValidationData& rValidData ) :
+    maRanges(rRanges), maValidData(rValidData) {}
+
+XclImpValidationManager::XclImpValidationManager( const XclImpRoot& rRoot ) :
+    XclImpRoot( rRoot )
+{
+}
+
+void XclImpValidationManager::ReadDval( XclImpStream& rStrm )
 {
     const XclImpRoot& rRoot = rStrm.GetRoot();
     DBG_ASSERT_BIFF( rRoot.GetBiff() == EXC_BIFF8 );
@@ -714,7 +722,7 @@ void XclImpValidation::ReadDval( XclImpStream& rStrm )
     }
 }
 
-void XclImpValidation::ReadDV( XclImpStream& rStrm )
+void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
 {
     const XclImpRoot& rRoot = rStrm.GetRoot();
     DBG_ASSERT_BIFF( rRoot.GetBiff() == EXC_BIFF8 );
@@ -738,130 +746,145 @@ void XclImpValidation::ReadDV( XclImpStream& rStrm )
     rStrm.SetNulSubstChar();    // back to default
 
     // formula(s)
-    if( rStrm.GetRecLeft() > 8 )
+    if ( rStrm.GetRecLeft() <= 8 )
+        // Not enough bytes left in the record.  Bail out.
+        return;
+
+    sal_uInt16 nLen;
+
+    // first formula
+    // string list is single tStr token with NUL separators -> replace them with LF
+    rStrm.SetNulSubstChar( '\n' );
+    ::std::auto_ptr< ScTokenArray > xTokArr1;
+    rStrm >> nLen;
+    rStrm.Ignore( 2 );
+    if( nLen > 0 )
     {
-        sal_uInt16 nLen;
-
-        // first formula
-        // string list is single tStr token with NUL separators -> replace them with LF
-        rStrm.SetNulSubstChar( '\n' );
-        ::std::auto_ptr< ScTokenArray > xTokArr1;
-        rStrm >> nLen;
-        rStrm.Ignore( 2 );
-        if( nLen > 0 )
-        {
-            const ScTokenArray* pTokArr = 0;
-            rFmlaConv.Reset();
-            rFmlaConv.Convert( pTokArr, rStrm, nLen, false, FT_RangeName );
-            // formula converter owns pTokArr -> create a copy of the token array
-            if( pTokArr )
-                xTokArr1.reset( pTokArr->Clone() );
-        }
-        rStrm.SetNulSubstChar();    // back to default
-
-        // second formula
-        ::std::auto_ptr< ScTokenArray > xTokArr2;
-        rStrm >> nLen;
-        rStrm.Ignore( 2 );
-        if( nLen > 0 )
-        {
-            const ScTokenArray* pTokArr = 0;
-            rFmlaConv.Reset();
-            rFmlaConv.Convert( pTokArr, rStrm, nLen, false, FT_RangeName );
-            // formula converter owns pTokArr -> create a copy of the token array
-            if( pTokArr )
-                xTokArr2.reset( pTokArr->Clone() );
-        }
-
-        // read all cell ranges
-        XclRangeList aXclRanges;
-        rStrm >> aXclRanges;
-
-        // convert to Calc range list
-        ScRangeList aScRanges;
-        rRoot.GetAddressConverter().ConvertRangeList( aScRanges, aXclRanges, nScTab, true );
-
-        // only continue if there are valid ranges
-        if( aScRanges.Count() )
-        {
-            bool bIsValid = true;   // valid settings in flags field
-
-            ScValidationMode eValMode = SC_VALID_ANY;
-            switch( nFlags & EXC_DV_MODE_MASK )
-            {
-                case EXC_DV_MODE_ANY:       eValMode = SC_VALID_ANY;        break;
-                case EXC_DV_MODE_WHOLE:     eValMode = SC_VALID_WHOLE;      break;
-                case EXC_DV_MODE_DECIMAL:   eValMode = SC_VALID_DECIMAL;    break;
-                case EXC_DV_MODE_LIST:      eValMode = SC_VALID_LIST;       break;
-                case EXC_DV_MODE_DATE:      eValMode = SC_VALID_DATE;       break;
-                case EXC_DV_MODE_TIME:      eValMode = SC_VALID_TIME;       break;
-                case EXC_DV_MODE_TEXTLEN:   eValMode = SC_VALID_TEXTLEN;    break;
-                case EXC_DV_MODE_CUSTOM:    eValMode = SC_VALID_CUSTOM;     break;
-                default:                    bIsValid = false;
-            }
-            rRoot.GetTracer().TraceDVType(eValMode == SC_VALID_CUSTOM);
-
-            ScConditionMode eCondMode = SC_COND_BETWEEN;
-            switch( nFlags & EXC_DV_COND_MASK )
-            {
-                case EXC_DV_COND_BETWEEN:   eCondMode = SC_COND_BETWEEN;    break;
-                case EXC_DV_COND_NOTBETWEEN:eCondMode = SC_COND_NOTBETWEEN; break;
-                case EXC_DV_COND_EQUAL:     eCondMode = SC_COND_EQUAL;      break;
-                case EXC_DV_COND_NOTEQUAL:  eCondMode = SC_COND_NOTEQUAL;   break;
-                case EXC_DV_COND_GREATER:   eCondMode = SC_COND_GREATER;    break;
-                case EXC_DV_COND_LESS:      eCondMode = SC_COND_LESS;       break;
-                case EXC_DV_COND_EQGREATER: eCondMode = SC_COND_EQGREATER;  break;
-                case EXC_DV_COND_EQLESS:    eCondMode = SC_COND_EQLESS;     break;
-                default:                    bIsValid = false;
-            }
-
-            if( bIsValid )
-            {
-                // first range for base address for relative references
-                const ScRange& rScRange = *aScRanges.GetObject( 0 );    // aScRanges is not empty
-
-                // process string list of a list validity (convert to list of string tokens)
-                if( xTokArr1.get() && (eValMode == SC_VALID_LIST) && ::get_flag( nFlags, EXC_DV_STRINGLIST ) )
-                    XclTokenArrayHelper::ConvertStringToList( *xTokArr1, '\n', true );
-
-                ScValidationData aValidData( eValMode, eCondMode, xTokArr1.get(), xTokArr2.get(), &rDoc, rScRange.aStart );
-
-                aValidData.SetIgnoreBlank( ::get_flag( nFlags, EXC_DV_IGNOREBLANK ) );
-                aValidData.SetListType( ::get_flagvalue( nFlags, EXC_DV_SUPPRESSDROPDOWN, ValidListType::INVISIBLE, ValidListType::UNSORTED ) );
-
-                // *** prompt box ***
-                if( aPromptTitle.Len() || aPromptMessage.Len() )
-                {
-                    // set any text stored in the record
-                    aValidData.SetInput( aPromptTitle, aPromptMessage );
-                    if( !::get_flag( nFlags, EXC_DV_SHOWPROMPT ) )
-                        aValidData.ResetInput();
-                }
-
-                // *** error box ***
-                ScValidErrorStyle eErrStyle = SC_VALERR_STOP;
-                switch( nFlags & EXC_DV_ERROR_MASK )
-                {
-                    case EXC_DV_ERROR_WARNING:  eErrStyle = SC_VALERR_WARNING;  break;
-                    case EXC_DV_ERROR_INFO:     eErrStyle = SC_VALERR_INFO;     break;
-                }
-                // set texts and error style
-                aValidData.SetError( aErrorTitle, aErrorMessage, eErrStyle );
-                if( !::get_flag( nFlags, EXC_DV_SHOWERROR ) )
-                    aValidData.ResetError();
-
-                // set the handle ID
-                ULONG nHandle = rDoc.AddValidationEntry( aValidData );
-                ScPatternAttr aPattern( rDoc.GetPool() );
-                aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_VALIDDATA, nHandle ) );
-
-                // apply all ranges
-                for( const ScRange* pScRange = aScRanges.First(); pScRange; pScRange = aScRanges.Next() )
-                    rDoc.ApplyPatternAreaTab( pScRange->aStart.Col(), pScRange->aStart.Row(),
-                        pScRange->aEnd.Col(), pScRange->aEnd.Row(), nScTab, aPattern );
-            }
-        }
+        const ScTokenArray* pTokArr = 0;
+        rFmlaConv.Reset();
+        rFmlaConv.Convert( pTokArr, rStrm, nLen, false, FT_RangeName );
+        // formula converter owns pTokArr -> create a copy of the token array
+        if( pTokArr )
+            xTokArr1.reset( pTokArr->Clone() );
     }
+    rStrm.SetNulSubstChar();    // back to default
+
+    // second formula
+    ::std::auto_ptr< ScTokenArray > xTokArr2;
+    rStrm >> nLen;
+    rStrm.Ignore( 2 );
+    if( nLen > 0 )
+    {
+        const ScTokenArray* pTokArr = 0;
+        rFmlaConv.Reset();
+        rFmlaConv.Convert( pTokArr, rStrm, nLen, false, FT_RangeName );
+        // formula converter owns pTokArr -> create a copy of the token array
+        if( pTokArr )
+            xTokArr2.reset( pTokArr->Clone() );
+    }
+
+    // read all cell ranges
+    XclRangeList aXclRanges;
+    rStrm >> aXclRanges;
+
+    // convert to Calc range list
+    ScRangeList aScRanges;
+    rRoot.GetAddressConverter().ConvertRangeList( aScRanges, aXclRanges, nScTab, true );
+
+    // only continue if there are valid ranges
+    if ( !aScRanges.Count() )
+        return;
+
+    bool bIsValid = true;   // valid settings in flags field
+
+    ScValidationMode eValMode = SC_VALID_ANY;
+    switch( nFlags & EXC_DV_MODE_MASK )
+    {
+        case EXC_DV_MODE_ANY:       eValMode = SC_VALID_ANY;        break;
+        case EXC_DV_MODE_WHOLE:     eValMode = SC_VALID_WHOLE;      break;
+        case EXC_DV_MODE_DECIMAL:   eValMode = SC_VALID_DECIMAL;    break;
+        case EXC_DV_MODE_LIST:      eValMode = SC_VALID_LIST;       break;
+        case EXC_DV_MODE_DATE:      eValMode = SC_VALID_DATE;       break;
+        case EXC_DV_MODE_TIME:      eValMode = SC_VALID_TIME;       break;
+        case EXC_DV_MODE_TEXTLEN:   eValMode = SC_VALID_TEXTLEN;    break;
+        case EXC_DV_MODE_CUSTOM:    eValMode = SC_VALID_CUSTOM;     break;
+        default:                    bIsValid = false;
+    }
+    rRoot.GetTracer().TraceDVType(eValMode == SC_VALID_CUSTOM);
+
+    ScConditionMode eCondMode = SC_COND_BETWEEN;
+    switch( nFlags & EXC_DV_COND_MASK )
+    {
+        case EXC_DV_COND_BETWEEN:   eCondMode = SC_COND_BETWEEN;    break;
+        case EXC_DV_COND_NOTBETWEEN:eCondMode = SC_COND_NOTBETWEEN; break;
+        case EXC_DV_COND_EQUAL:     eCondMode = SC_COND_EQUAL;      break;
+        case EXC_DV_COND_NOTEQUAL:  eCondMode = SC_COND_NOTEQUAL;   break;
+        case EXC_DV_COND_GREATER:   eCondMode = SC_COND_GREATER;    break;
+        case EXC_DV_COND_LESS:      eCondMode = SC_COND_LESS;       break;
+        case EXC_DV_COND_EQGREATER: eCondMode = SC_COND_EQGREATER;  break;
+        case EXC_DV_COND_EQLESS:    eCondMode = SC_COND_EQLESS;     break;
+        default:                    bIsValid = false;
+    }
+
+    if ( !bIsValid )
+        // No valid validation found.  Bail out.
+        return;
+
+
+    // first range for base address for relative references
+    const ScRange& rScRange = *aScRanges.GetObject( 0 );    // aScRanges is not empty
+
+    // process string list of a list validity (convert to list of string tokens)
+    if( xTokArr1.get() && (eValMode == SC_VALID_LIST) && ::get_flag( nFlags, EXC_DV_STRINGLIST ) )
+        XclTokenArrayHelper::ConvertStringToList( *xTokArr1, '\n', true );
+
+    maDVItems.push_back(
+        new DVItem(aScRanges, ScValidationData(eValMode, eCondMode, xTokArr1.get(), xTokArr2.get(), &rDoc, rScRange.aStart)));
+    DVItem& rItem = maDVItems.back();
+
+    rItem.maValidData.SetIgnoreBlank( ::get_flag( nFlags, EXC_DV_IGNOREBLANK ) );
+    rItem.maValidData.SetListType( ::get_flagvalue( nFlags, EXC_DV_SUPPRESSDROPDOWN, ValidListType::INVISIBLE, ValidListType::UNSORTED ) );
+
+    // *** prompt box ***
+    if( aPromptTitle.Len() || aPromptMessage.Len() )
+    {
+        // set any text stored in the record
+        rItem.maValidData.SetInput( aPromptTitle, aPromptMessage );
+        if( !::get_flag( nFlags, EXC_DV_SHOWPROMPT ) )
+            rItem.maValidData.ResetInput();
+    }
+
+    // *** error box ***
+    ScValidErrorStyle eErrStyle = SC_VALERR_STOP;
+    switch( nFlags & EXC_DV_ERROR_MASK )
+    {
+        case EXC_DV_ERROR_WARNING:  eErrStyle = SC_VALERR_WARNING;  break;
+        case EXC_DV_ERROR_INFO:     eErrStyle = SC_VALERR_INFO;     break;
+    }
+    // set texts and error style
+    rItem.maValidData.SetError( aErrorTitle, aErrorMessage, eErrStyle );
+    if( !::get_flag( nFlags, EXC_DV_SHOWERROR ) )
+        rItem.maValidData.ResetError();
+}
+
+void XclImpValidationManager::Apply()
+{
+    ScDocument& rDoc = GetRoot().GetDoc();
+    DVItemList::iterator itr = maDVItems.begin(), itrEnd = maDVItems.end();
+    for (; itr != itrEnd; ++itr)
+    {
+        DVItem& rItem = *itr;
+        // set the handle ID
+        ULONG nHandle = rDoc.AddValidationEntry( rItem.maValidData );
+        ScPatternAttr aPattern( rDoc.GetPool() );
+        aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_VALIDDATA, nHandle ) );
+
+        // apply all ranges
+        for( const ScRange* pScRange = rItem.maRanges.First(); pScRange; pScRange = rItem.maRanges.Next() )
+            rDoc.ApplyPatternAreaTab( pScRange->aStart.Col(), pScRange->aStart.Row(),
+                pScRange->aEnd.Col(), pScRange->aEnd.Row(), pScRange->aStart.Tab(), aPattern );
+    }
+    maDVItems.clear();
 }
 
 // Web queries ================================================================
