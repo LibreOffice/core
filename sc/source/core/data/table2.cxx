@@ -2528,8 +2528,6 @@ void ScTable::ShowRow(SCROW nRow, bool bShow)
         bool bWasVis = !RowHidden(nRow);
         if (bWasVis != bShow)
         {
-            IncRecalcLevel();
-            InitializeNoteCaptions();
             ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
             if (pDrawLayer)
             {
@@ -2544,8 +2542,6 @@ void ScTable::ShowRow(SCROW nRow, bool bShow)
             SetRowHidden(nRow, nRow, !bShow);
             if (bShow)
                 SetRowFiltered(nRow, nRow, false);
-        DecRecalcLevel();
-
             ScChartListenerCollection* pCharts = pDocument->GetChartListenerCollection();
             if ( pCharts )
                 pCharts->SetRangeDirty(ScRange( 0, nRow, nTab, MAXCOL, nRow, nTab ));

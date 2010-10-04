@@ -392,6 +392,7 @@ BOOL ScOutlineDocFunc::SelectLevel( SCTAB nTab, BOOL bColumns, USHORT nLevel,
                                     bColumns, nLevel ) );
     }
 
+    pDoc->InitializeNoteCaptions(nTab);
     ScSubOutlineIterator aIter( pArray );                   // alle Eintraege
     ScOutlineEntry* pEntry;
     while ((pEntry=aIter.GetNext()) != NULL)
@@ -425,6 +426,7 @@ BOOL ScOutlineDocFunc::SelectLevel( SCTAB nTab, BOOL bColumns, USHORT nLevel,
         }
     }
 
+    pDoc->SetDrawPageSize(nTab);
     pDoc->UpdatePageBreaks( nTab );
 
     if (bPaint)
@@ -505,6 +507,7 @@ BOOL ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, BOOL bRecord, 
         nMax=0;
         pArray = pTable->GetRowArray();
         ScSubOutlineIterator aRowIter( pArray );
+        pDoc->InitializeNoteCaptions(nTab);
         while ((pEntry=aRowIter.GetNext()) != NULL)
         {
             nStart = pEntry->GetStart();
@@ -521,10 +524,10 @@ BOOL ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, BOOL bRecord, 
             if ( !pDoc->RowFiltered( i,nTab ) )             // weggefilterte nicht einblenden
                 pDoc->ShowRow( i, nTab, TRUE );
 
+        pDoc->SetDrawPageSize(nTab);
         pDoc->UpdatePageBreaks( nTab );
 
         rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PAINT_GRID | PAINT_LEFT | PAINT_TOP );
-
         rDocShell.SetDocumentModified();
         bDone = TRUE;
 
@@ -671,6 +674,7 @@ BOOL ScOutlineDocFunc::ShowOutline( SCTAB nTab, BOOL bColumns, USHORT nLevel, US
 
 //! HideCursor();
 
+    pDoc->InitializeNoteCaptions(nTab);
     pEntry->SetHidden(FALSE);
     SCCOLROW i;
     for ( i = nStart; i <= nEnd; i++ )
@@ -701,6 +705,7 @@ BOOL ScOutlineDocFunc::ShowOutline( SCTAB nTab, BOOL bColumns, USHORT nLevel, US
 
     pArray->SetVisibleBelow( nLevel, nEntry, TRUE, TRUE );
 
+    pDoc->SetDrawPageSize(nTab);
     pDoc->InvalidatePageBreaks(nTab);
     pDoc->UpdatePageBreaks( nTab );
 
@@ -755,6 +760,7 @@ BOOL ScOutlineDocFunc::HideOutline( SCTAB nTab, BOOL bColumns, USHORT nLevel, US
 
 //! HideCursor();
 
+    pDoc->InitializeNoteCaptions(nTab);
     pEntry->SetHidden(TRUE);
     SCCOLROW i;
     for ( i = nStart; i <= nEnd; i++ )
@@ -767,6 +773,7 @@ BOOL ScOutlineDocFunc::HideOutline( SCTAB nTab, BOOL bColumns, USHORT nLevel, US
 
     pArray->SetVisibleBelow( nLevel, nEntry, FALSE );
 
+    pDoc->SetDrawPageSize(nTab);
     pDoc->InvalidatePageBreaks(nTab);
     pDoc->UpdatePageBreaks( nTab );
 

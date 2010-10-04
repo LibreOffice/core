@@ -226,6 +226,14 @@ void ScDocument::UpdateDrawPrinter()
     }
 }
 
+void ScDocument::SetDrawPageSize(SCTAB nTab)
+{
+    if (!ValidTab(nTab) || !pTab[nTab])
+        return;
+
+    pTab[nTab]->SetDrawPageSize();
+}
+
 sal_Bool ScDocument::IsChart( const SdrObject* pObject )
 {
     // #109985#

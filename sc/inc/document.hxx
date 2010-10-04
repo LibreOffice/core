@@ -835,6 +835,8 @@ public:
         @param bForced  True = always create all captions, false = skip when Undo is disabled. */
     void            InitializeAllNoteCaptions( bool bForced = false );
 
+    void            SetDrawPageSize(SCTAB nTab);
+
     BOOL            ExtendMergeSel( SCCOL nStartCol, SCROW nStartRow,
                                 SCCOL& rEndCol, SCROW& rEndRow, const ScMarkData& rMark,
                                 BOOL bRefresh = FALSE, BOOL bAttrs = FALSE );

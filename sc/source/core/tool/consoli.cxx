@@ -820,8 +820,10 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
                 SCROW nOutEnd = nRow+nArrY+nNeeded-1;
                 BOOL bSize = FALSE;
                 pOutArr->Insert( nOutStart, nOutEnd, bSize );
+                pDestDoc->InitializeNoteCaptions(nTab);
                 for (SCROW nOutRow=nOutStart; nOutRow<=nOutEnd; nOutRow++)
                     pDestDoc->ShowRow( nOutRow, nTab, FALSE );
+                pDestDoc->SetDrawPageSize(nTab);
                 pDestDoc->UpdateOutlineRow( nOutStart, nOutEnd, nTab, FALSE );
 
                 //  Zwischentitel
