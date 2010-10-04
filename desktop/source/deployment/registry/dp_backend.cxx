@@ -65,7 +65,6 @@ PackageRegistryBackend::~PackageRegistryBackend()
 void PackageRegistryBackend::disposing( lang::EventObject const & event )
     throw (RuntimeException)
 {
-    check();
     Reference<deployment::XPackage> xPackage(
         event.Source, UNO_QUERY_THROW );
     OUString url( xPackage->getURL() );
@@ -314,13 +313,6 @@ void PackageRegistryBackend::deleteUnusedFolders(
     }
 
 }
-
-// void PackageRegistryBackend::packageRemoved(
-//     ::rtl::OUString const & /*url*/, ::rtl::OUString const & /*mediaType*/)
-//     throw (css::deployment::DeploymentException,
-//            css::uno::RuntimeException)
-// {
-// }
 
 //##############################################################################
 
