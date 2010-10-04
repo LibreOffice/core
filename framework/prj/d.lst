@@ -50,3 +50,6 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\StartModule\statusbar
 
 ..\source\unotypes\fw?.xml %_DEST%\xml%_EXT%\*.xml
 
+..\%__SRC%\misc\fwk.component %_DEST%\xml%_EXT%\fwk.component
+..\%__SRC%\misc\fwl.component %_DEST%\xml%_EXT%\fwl.component
+..\%__SRC%\misc\fwm.component %_DEST%\xml%_EXT%\fwm.component

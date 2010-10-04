@@ -537,27 +537,6 @@ extern "C"
         *ppEnvironmentTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
     }
 
-    sal_Bool SAL_CALL component_writeInfo( void * pServiceManager ,
-                                           void * pRegistryKey )
-    {
-        (void)pServiceManager;
-
-        Reference< css::registry::XRegistryKey > xKey(
-            reinterpret_cast< css::registry::XRegistryKey* >( pRegistryKey ) ) ;
-
-        ::rtl::OUString aStr = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
-        aStr +=
-            ::scripting_protocolhandler::ScriptProtocolHandler::impl_getStaticImplementationName();
-
-        aStr += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES" ) );
-        Reference< css::registry::XRegistryKey > xNewKey = xKey->createKey( aStr );
-        xNewKey->createKey(
-            ::rtl::OUString::createFromAscii( ::scripting_protocolhandler::MYSERVICENAME )
-            );
-
-        return sal_True;
-    }
-
     void* SAL_CALL component_getFactory( const sal_Char * pImplementationName ,
                                          void * pServiceManager ,
                                          void * pRegistryKey )
