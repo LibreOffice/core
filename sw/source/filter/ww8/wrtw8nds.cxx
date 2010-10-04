@@ -178,7 +178,7 @@ public:
     }
 };
 
-void SwAttrIter::IterToCurrent()
+void SwWW8AttrIter::IterToCurrent()
 {
     ASSERT(maCharRuns.begin() != maCharRuns.end(), "Impossible");
     mnScript = maCharRunIter->mnScript;
@@ -186,7 +186,7 @@ void SwAttrIter::IterToCurrent()
     mbCharIsRTL = maCharRunIter->mbRTL;
 }
 
-SwAttrIter::SwAttrIter(MSWordExportBase& rWr, const SwTxtNode& rTxtNd) :
+SwWW8AttrIter::SwWW8AttrIter(MSWordExportBase& rWr, const SwTxtNode& rTxtNd) :
     MSWordAttrIter(rWr),
     rNd(rTxtNd),
     maCharRuns(GetPseudoCharRuns(rTxtNd, 0, !rWr.HackIsWW8OrHigher())),
@@ -253,7 +253,7 @@ xub_StrLen lcl_getMinPos( xub_StrLen pos1, xub_StrLen pos2 )
     return min;
 }
 
-xub_StrLen SwAttrIter::SearchNext( xub_StrLen nStartPos )
+xub_StrLen SwWW8AttrIter::SearchNext( xub_StrLen nStartPos )
 {
     xub_StrLen nPos;
     xub_StrLen nMinPos = STRING_MAXLEN;
@@ -393,7 +393,7 @@ bool lcl_isFontsizeItem( const SfxPoolItem& rItem )
             rItem.Which( ) == RES_CHRATR_CTL_FONTSIZE );
 }
 
-void SwAttrIter::OutAttr( xub_StrLen nSwPos, bool bRuby )
+void SwWW8AttrIter::OutAttr( xub_StrLen nSwPos, bool bRuby )
 {
     m_rExport.AttrOutput().RTLAndCJKState( IsCharRTL(), GetScript() );
 
@@ -522,7 +522,7 @@ void SwAttrIter::OutAttr( xub_StrLen nSwPos, bool bRuby )
     }
 }
 
-void SwAttrIter::OutFlys(xub_StrLen nSwPos)
+void SwWW8AttrIter::OutFlys(xub_StrLen nSwPos)
 {
     /*
      #i2916#
@@ -544,7 +544,7 @@ void SwAttrIter::OutFlys(xub_StrLen nSwPos)
     }
 }
 
-bool SwAttrIter::IsTxtAttr( xub_StrLen nSwPos )
+bool SwWW8AttrIter::IsTxtAttr( xub_StrLen nSwPos )
 {
     // search for attrs with CH_TXTATR
     if (const SwpHints* pTxtAttrs = rNd.GetpSwpHints())
@@ -560,7 +560,7 @@ bool SwAttrIter::IsTxtAttr( xub_StrLen nSwPos )
     return false;
 }
 
-bool SwAttrIter::IsDropCap( int nSwPos )
+bool SwWW8AttrIter::IsDropCap( int nSwPos )
 {
     // see if the current position falls on a DropCap
     int nDropChars = mrSwFmtDrop.GetChars();
@@ -579,7 +579,7 @@ bool SwAttrIter::IsDropCap( int nSwPos )
     return false;
 }
 
-bool SwAttrIter::RequiresImplicitBookmark()
+bool SwWW8AttrIter::RequiresImplicitBookmark()
 {
     SwImplBookmarksIter bkmkIterEnd = m_rExport.maImplicitBookmarks.end();
     for ( SwImplBookmarksIter aIter = m_rExport.maImplicitBookmarks.begin(); aIter != bkmkIterEnd; ++aIter )
@@ -598,7 +598,7 @@ bool SwAttrIter::RequiresImplicitBookmark()
 // Attribut-Anfangposition fragen kann.
 // Es koennen nur Attribute mit Ende abgefragt werden.
 // Es wird mit bDeep gesucht
-const SfxPoolItem* SwAttrIter::HasTextItem( USHORT nWhich ) const
+const SfxPoolItem* SwWW8AttrIter::HasTextItem( USHORT nWhich ) const
 {
     const SfxPoolItem* pRet = 0;
     const SwpHints* pTxtAttrs = rNd.GetpSwpHints();
@@ -631,7 +631,7 @@ void WW8Export::GetCurrentItems(WW8Bytes& rItems) const
         rItems.Insert((*pO)[nI], rItems.Count());
 }
 
-const SfxPoolItem& SwAttrIter::GetItem(USHORT nWhich) const
+const SfxPoolItem& SwWW8AttrIter::GetItem(USHORT nWhich) const
 {
     const SfxPoolItem* pRet = HasTextItem(nWhich);
     return pRet ? *pRet : rNd.SwCntntNode::GetAttr(nWhich);
@@ -1019,7 +1019,7 @@ String BookmarkToWriter(const String &rBookmark)
         INetURLObject::DECODE_UNAMBIGUOUS, RTL_TEXTENCODING_ASCII_US);
 }
 
-void SwAttrIter::OutSwFmtRefMark(const SwFmtRefMark& rAttr, bool)
+void SwWW8AttrIter::OutSwFmtRefMark(const SwFmtRefMark& rAttr, bool)
 {
     if ( m_rExport.HasRefToObject( REF_SETREFATTR, &rAttr.GetRefName(), 0 ) )
         m_rExport.AppendBookmark( m_rExport.GetBookmarkName( REF_SETREFATTR,
@@ -1119,7 +1119,7 @@ void AttributeOutputBase::TOXMark( const SwTxtNode& rNode, const SwTOXMark& rAtt
         FieldVanish( sTxt, eType );
 }
 
-int SwAttrIter::OutAttrWithRange(xub_StrLen nPos)
+int SwWW8AttrIter::OutAttrWithRange(xub_StrLen nPos)
 {
     int nRet = 0;
     if ( const SwpHints* pTxtAttrs = rNd.GetpSwpHints() )
@@ -1180,7 +1180,7 @@ int SwAttrIter::OutAttrWithRange(xub_StrLen nPos)
     return nRet;
 }
 
-bool SwAttrIter::IsRedlineAtEnd( xub_StrLen nEnd ) const
+bool SwWW8AttrIter::IsRedlineAtEnd( xub_StrLen nEnd ) const
 {
     bool bRet = false;
     // search next Redline
@@ -1202,7 +1202,7 @@ bool SwAttrIter::IsRedlineAtEnd( xub_StrLen nEnd ) const
     return bRet;
 }
 
-const SwRedlineData* SwAttrIter::GetRedline( xub_StrLen nPos )
+const SwRedlineData* SwWW8AttrIter::GetRedline( xub_StrLen nPos )
 {
     if( pCurRedline )
     {
@@ -1397,7 +1397,7 @@ Convert characters that need to be converted, the basic replacements and the
 ridicously complicated title case attribute mapping to hardcoded upper case
 because word doesn't have the feature
 */
-String SwAttrIter::GetSnippet(const String &rStr, xub_StrLen nAktPos,
+String SwWW8AttrIter::GetSnippet(const String &rStr, xub_StrLen nAktPos,
     xub_StrLen nLen) const
 {
     String aSnippet(rStr, nAktPos, nLen);
@@ -1593,7 +1593,7 @@ void WW8AttributeOutput::FormatDrop( const SwTxtNode& rNode, const SwFmtDrop &rS
     m_rWW8Export.pO->Remove( 0, m_rWW8Export.pO->Count() );
 }
 
-xub_StrLen MSWordExportBase::GetNextPos( SwAttrIter* aAttrIter, const SwTxtNode& rNode, xub_StrLen nAktPos  )
+xub_StrLen MSWordExportBase::GetNextPos( SwWW8AttrIter* aAttrIter, const SwTxtNode& rNode, xub_StrLen nAktPos  )
 {
     // Get the bookmarks for the normal run
     xub_StrLen nNextPos = aAttrIter->WhereNext();
@@ -1606,7 +1606,7 @@ xub_StrLen MSWordExportBase::GetNextPos( SwAttrIter* aAttrIter, const SwTxtNode&
     return std::min( nNextPos, nNextBookmark );
 }
 
-void MSWordExportBase::UpdatePosition( SwAttrIter* aAttrIter, xub_StrLen nAktPos, xub_StrLen /*nEnd*/ )
+void MSWordExportBase::UpdatePosition( SwWW8AttrIter* aAttrIter, xub_StrLen nAktPos, xub_StrLen /*nEnd*/ )
 {
     xub_StrLen nNextPos;
 
@@ -1735,7 +1735,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
     // have to remember it in nStyle
     USHORT nStyle = nStyleBeforeFly;
 
-    SwAttrIter aAttrIter( *this, rNode );
+    SwWW8AttrIter aAttrIter( *this, rNode );
     rtl_TextEncoding eChrSet = aAttrIter.GetCharSet();
 
     if ( bStartTOX )

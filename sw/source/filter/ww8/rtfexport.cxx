@@ -817,7 +817,7 @@ OString RtfExport::OutChar(sal_Unicode c, int *pUCMode, rtl_TextEncoding eDestEn
 {
     OStringBuffer aBuf;
     const sal_Char* pStr = 0;
-    // 0x0b instead of \n, etc because of the replacements in SwAttrIter::GetSnippet()
+    // 0x0b instead of \n, etc because of the replacements in SwWW8AttrIter::GetSnippet()
     switch (c)
     {
         case 0x0b:

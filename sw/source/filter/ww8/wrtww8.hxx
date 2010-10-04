@@ -53,7 +53,7 @@
 #include <expfld.hxx>
 
 // einige Forward Deklarationen
-class SwAttrIter;
+class SwWW8AttrIter;
 class AttributeOutputBase;
 class DocxAttributeOutput;
 class RtfAttributeOutput;
@@ -740,10 +740,10 @@ protected:
     virtual void ExportDocument_Impl() = 0;
 
     /// Get the next position in the text node to output
-    virtual xub_StrLen GetNextPos( SwAttrIter* pAttrIter, const SwTxtNode& rNode, xub_StrLen nAktPos );
+    virtual xub_StrLen GetNextPos( SwWW8AttrIter* pAttrIter, const SwTxtNode& rNode, xub_StrLen nAktPos );
 
     /// Update the information for GetNextPos().
-    virtual void UpdatePosition( SwAttrIter* pAttrIter, xub_StrLen nAktPos, xub_StrLen nEnd );
+    virtual void UpdatePosition( SwWW8AttrIter* pAttrIter, xub_StrLen nAktPos, xub_StrLen nEnd );
 
     /// Output SwTxtNode
     void OutputTextNode( const SwTxtNode& );
@@ -1411,7 +1411,7 @@ public:
     rtl_TextEncoding GetNodeCharSet() const     { return eNdChrSet; }
 };
 
-// Die Klasse SwAttrIter ist eine Hilfe zum Aufbauen der Fkp.chpx.
+// Die Klasse SwWW8AttrIter ist eine Hilfe zum Aufbauen der Fkp.chpx.
 // Dabei werden nur Zeichen-Attribute beachtet; Absatz-Attribute brauchen
 // diese Behandlung nicht.
 // Die Absatz- und Textattribute des Writers kommen rein, und es wird
@@ -1420,7 +1420,7 @@ public:
 // ein Attribut ohne Ende und mit \xff im Text befindet.
 // Mit OutAttr() werden die Attribute an der angegebenen SwPos
 // ausgegeben.
-class SwAttrIter : public MSWordAttrIter
+class SwWW8AttrIter : public MSWordAttrIter
 {
 private:
     const SwTxtNode& rNd;
@@ -1451,10 +1451,10 @@ private:
     void IterToCurrent();
 
     //No copying
-    SwAttrIter(const SwAttrIter&);
-    SwAttrIter& operator=(const SwAttrIter&);
+    SwWW8AttrIter(const SwWW8AttrIter&);
+    SwWW8AttrIter& operator=(const SwWW8AttrIter&);
 public:
-    SwAttrIter( MSWordExportBase& rWr, const SwTxtNode& rNd );
+    SwWW8AttrIter( MSWordExportBase& rWr, const SwTxtNode& rNd );
 
     bool IsTxtAttr( xub_StrLen nSwPos );
     bool IsRedlineAtEnd( xub_StrLen nPos ) const;

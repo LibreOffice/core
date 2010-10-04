@@ -826,7 +826,7 @@ void DocxAttributeOutput::StartRuby( const SwTxtNode& rNode, xub_StrLen nPos, co
     m_pSerializer->startElementNS( XML_w, XML_rt, FSEND );
     StartRun( NULL );
     StartRunProperties( );
-    SwAttrIter aAttrIt( m_rExport, rNode );
+    SwWW8AttrIter aAttrIt( m_rExport, rNode );
     aAttrIt.OutAttr( nPos, true );
     USHORT nStyle = m_rExport.GetId( *rRuby.GetTxtRuby()->GetCharFmt() );
     OString aStyleId( "style" );
