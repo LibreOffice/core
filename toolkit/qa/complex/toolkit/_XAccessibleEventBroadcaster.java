@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 
-package complex.toolkit.interface_tests;
+package complex.toolkit;
 
 import com.sun.star.lang.EventObject;
 import com.sun.star.awt.Rectangle;
@@ -33,13 +33,13 @@ import com.sun.star.awt.PosSize;
 import com.sun.star.awt.XWindow;
 import com.sun.star.accessibility.AccessibleEventObject;
 import com.sun.star.accessibility.XAccessible;
-import com.sun.star.accessibility.XAccessibleComponent;
+// import com.sun.star.accessibility.XAccessibleComponent;
 import com.sun.star.accessibility.XAccessibleEventBroadcaster;
 import com.sun.star.accessibility.XAccessibleEventListener;
 import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.uno.XInterface;
 import com.sun.star.uno.UnoRuntime;
-import share.LogWriter;
+// import share.LogWriter;
 
 /**
  * Testing <code>
@@ -62,7 +62,7 @@ import share.LogWriter;
  */
 public class _XAccessibleEventBroadcaster {
 
-    private LogWriter log;
+    // private LogWriter log;
     private static final String className =
             "com.sun.star.accessibility.XAccessibleEventBroadcaster" ;
 
@@ -97,7 +97,7 @@ public class _XAccessibleEventBroadcaster {
     private class EvListener implements XAccessibleEventListener {
         public AccessibleEventObject notifiedEvent = null ;
         public void notifyEvent(AccessibleEventObject ev) {
-            log.println("Listener, Event : " + ev.EventId);
+            System.out.println("Listener, Event : " + ev.EventId);
             System.out.println("EventID: " + ev.EventId);
             Object old=ev.OldValue;
             if (old instanceof com.sun.star.accessibility.XAccessible) {
@@ -116,11 +116,13 @@ public class _XAccessibleEventBroadcaster {
 
     /**
      * c'tor
+     * @param object
+     * @param eventMessage
+     * @param window
      */
-    public _XAccessibleEventBroadcaster(XInterface object, LogWriter log, String eventMessage, XWindow window) {
-        oObj = (XAccessibleEventBroadcaster)UnoRuntime.queryInterface(
-                                    XAccessibleEventBroadcaster.class, object);
-        this.log = log;
+    public _XAccessibleEventBroadcaster(XInterface object, String eventMessage, XWindow window) {
+        oObj = UnoRuntime.queryInterface(XAccessibleEventBroadcaster.class, object);
+        // this.log = log;
         prod = new EventProducer(window);
         EventMsg = eventMessage;
     }
@@ -128,12 +130,13 @@ public class _XAccessibleEventBroadcaster {
     /**
      * Adds two listeners and fires event by mean of object relation. <p>
      * Has <b> OK </b> status if both listeners were called
+     * @return
      */
     public boolean _addEventListener() {
-        log.println("adding two listeners");
+        System.out.println("adding two listeners");
         oObj.addEventListener(list);
         boolean isTransient = chkTransient(oObj);
-        log.println("fire event");
+        System.out.println("fire event");
         prod.fireEvent() ;
 
         try {
@@ -146,15 +149,15 @@ public class _XAccessibleEventBroadcaster {
 
         if (list.notifiedEvent == null) {
             if (!isTransient) {
-                log.println("listener wasn't called");
+                System.out.println("listener wasn't called");
                 works = false;
             } else {
-                log.println("Object is Transient, listener isn't expected to be called");
+                System.out.println("Object is Transient, listener isn't expected to be called");
             }
             oObj.removeEventListener(list);
         }
 
-//        log.println(EventMsg);
+//        System.out.println(EventMsg);
         return works;
     }
 
@@ -168,15 +171,16 @@ public class _XAccessibleEventBroadcaster {
      * <ul>
      *  <li> <code>addEventListener()</code> : to have added listeners </li>
      * </ul>
+     * @return
      */
     public boolean _removeEventListener() {
 
         list.notifiedEvent = null;
 
-        log.println("remove first listener");
+        System.out.println("remove first listener");
         oObj.removeEventListener(list);
 
-        log.println("fire event");
+        System.out.println("fire event");
         prod.fireEvent() ;
 
         try {
@@ -186,7 +190,7 @@ public class _XAccessibleEventBroadcaster {
         }
 
         if (list.notifiedEvent == null) {
-            log.println("listener wasn't called -- OK");
+            System.out.println("listener wasn't called -- OK");
         }
 
         return list.notifiedEvent == null;
@@ -194,8 +198,7 @@ public class _XAccessibleEventBroadcaster {
     }
 
     protected static boolean chkTransient(Object Testcase) {
-        XAccessibleContext accCon = (XAccessibleContext)
-                    UnoRuntime.queryInterface(XAccessibleContext.class,Testcase);
+        XAccessibleContext accCon = UnoRuntime.queryInterface(XAccessibleContext.class, Testcase);
         if (accCon.getAccessibleStateSet().contains(
             com.sun.star.accessibility.AccessibleStateType.TRANSIENT)){
             if (!accCon.getAccessibleParent().getAccessibleContext().getAccessibleStateSet().contains(
