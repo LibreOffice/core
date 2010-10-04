@@ -175,6 +175,8 @@ private:
 
     virtual void SAL_CALL run();
 
+    virtual void SAL_CALL onTerminated() { release(); }
+
     rtl::Reference< WriteThread > * reference_;
     Components & components_;
     rtl::OUString url_;
@@ -188,6 +190,7 @@ Components::WriteThread::WriteThread(
     reference_(reference), components_(components), url_(url), data_(data)
 {
     OSL_ASSERT(reference != 0);
+    acquire();
 }
 
 void Components::WriteThread::run() {
