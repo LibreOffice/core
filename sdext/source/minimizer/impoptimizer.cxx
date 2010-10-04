@@ -47,9 +47,7 @@
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
-#ifndef _COM_SUN_STAR_FRAME_FrameSearchFlag_HPP_
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
-#endif
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <unotools/configmgr.hxx>
@@ -65,9 +63,7 @@
 #include <com/sun/star/presentation/XPresentationPage.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XExporter.hpp>
-#ifndef _COM_SUN_STAR_UNO_RUNTIME_EXCEPTION_HPP_
 #include <com/sun/star/uno/RuntimeException.hpp>
-#endif
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>

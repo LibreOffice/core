@@ -40,9 +40,7 @@
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
-#ifndef _COM_SUN_STAR_AWT_XFONTWEIGHT_HPP_
 #include <com/sun/star/awt/FontWeight.hpp>
-#endif
 #include <rtl/ustrbuf.hxx>
 
 using namespace ::rtl;

@@ -33,9 +33,7 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#ifndef _COM_SUN_STAR_UTIL_XCloseBroadcaster_HPP_
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
-#endif
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <osl/time.h>

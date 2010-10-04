@@ -27,9 +27,7 @@
 * for a copy of the LGPLv3 License.
 ************************************************************************/
 
-#ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
-#endif
 #include "mysqlc_propertyids.hxx"
 
 using ::rtl::OUString;
