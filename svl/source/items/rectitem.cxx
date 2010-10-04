@@ -139,7 +139,7 @@ SvStream& SfxRectangleItem::Store(SvStream &rStream, USHORT ) const
 
 
 // -----------------------------------------------------------------------
-BOOL SfxRectangleItem::QueryValue( com::sun::star::uno::Any& rVal,
+bool SfxRectangleItem::QueryValue( com::sun::star::uno::Any& rVal,
                                    BYTE nMemberId) const
 {
     nMemberId &= ~CONVERT_TWIPS;
@@ -157,17 +157,17 @@ BOOL SfxRectangleItem::QueryValue( com::sun::star::uno::Any& rVal,
         case MID_RECT_RIGHT: rVal <<= aVal.getY(); break;
         case MID_WIDTH: rVal <<= aVal.getWidth(); break;
         case MID_HEIGHT: rVal <<= aVal.getHeight(); break;
-        default: DBG_ERROR("Wrong MemberID!"); return FALSE;
+        default: DBG_ERROR("Wrong MemberID!"); return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 // -----------------------------------------------------------------------
-BOOL SfxRectangleItem::PutValue( const com::sun::star::uno::Any& rVal,
+bool SfxRectangleItem::PutValue( const com::sun::star::uno::Any& rVal,
                                  BYTE nMemberId  )
 {
-    BOOL bRet = FALSE;
+    bool bRet = false;
     nMemberId &= ~CONVERT_TWIPS;
     com::sun::star::awt::Rectangle aValue;
     sal_Int32 nVal = 0;
@@ -190,7 +190,7 @@ BOOL SfxRectangleItem::PutValue( const com::sun::star::uno::Any& rVal,
             case MID_RECT_RIGHT: aVal.setY( nVal ); break;
             case MID_WIDTH: aVal.setWidth( nVal ); break;
             case MID_HEIGHT: aVal.setHeight( nVal ); break;
-            default: DBG_ERROR("Wrong MemberID!"); return FALSE;
+            default: DBG_ERROR("Wrong MemberID!"); return false;
         }
     }
 

@@ -68,10 +68,10 @@ public:
                                                 const IntlWrapper * = 0)
         const;
 
-    virtual BOOL QueryValue(com::sun::star::uno::Any& rVal,
+    virtual bool QueryValue(com::sun::star::uno::Any& rVal,
                             BYTE nMemberId = 0) const;
 
-    virtual BOOL PutValue(const com::sun::star::uno::Any& rVal,
+    virtual bool PutValue(const com::sun::star::uno::Any& rVal,
                           BYTE nMemberId = 0);
 
     virtual SfxPoolItem * Clone(SfxItemPool * = 0) const;

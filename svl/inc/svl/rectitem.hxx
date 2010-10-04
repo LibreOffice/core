@@ -67,9 +67,9 @@ public:
                                  DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );
                                  aVal = rNewVal;
                              }
-    virtual BOOL             QueryValue( com::sun::star::uno::Any& rVal,
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal,
                                           BYTE nMemberId = 0 ) const;
-    virtual BOOL             PutValue( const com::sun::star::uno::Any& rVal,
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal,
                                           BYTE nMemberId = 0 );
 };
 

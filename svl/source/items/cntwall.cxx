@@ -150,18 +150,18 @@ SfxPoolItem* CntWallpaperItem::Clone( SfxItemPool* ) const
 
 //----------------------------------------------------------------------------
 // virtual
-BOOL CntWallpaperItem::QueryValue( com::sun::star::uno::Any&,BYTE ) const
+bool CntWallpaperItem::QueryValue( com::sun::star::uno::Any&,BYTE ) const
 {
     DBG_ERROR("Not implemented!");
-    return FALSE;
+    return false;
 }
 
 //----------------------------------------------------------------------------
 // virtual
-BOOL CntWallpaperItem::PutValue( const com::sun::star::uno::Any&,BYTE )
+bool CntWallpaperItem::PutValue( const com::sun::star::uno::Any&,BYTE )
 {
     DBG_ERROR("Not implemented!");
-    return FALSE;
+    return false;
 }
 
 

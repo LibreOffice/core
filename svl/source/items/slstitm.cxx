@@ -393,22 +393,22 @@ void SfxStringListItem::GetStringList( com::sun::star::uno::Sequence< rtl::OUStr
 
 //----------------------------------------------------------------------------
 // virtual
-BOOL SfxStringListItem::PutValue( const com::sun::star::uno::Any& rVal,BYTE )
+bool SfxStringListItem::PutValue( const com::sun::star::uno::Any& rVal,BYTE )
 {
     com::sun::star::uno::Sequence< rtl::OUString > aValue;
     if ( rVal >>= aValue )
     {
         SetStringList( aValue );
-        return TRUE;
+        return true;
     }
 
     DBG_ERROR( "SfxStringListItem::PutValue - Wrong type!" );
-    return FALSE;
+    return false;
 }
 
 //----------------------------------------------------------------------------
 // virtual
-BOOL SfxStringListItem::QueryValue( com::sun::star::uno::Any& rVal,BYTE ) const
+bool SfxStringListItem::QueryValue( com::sun::star::uno::Any& rVal,BYTE ) const
 {
     // GetString() is not const!!!
     SfxStringListItem* pThis = const_cast< SfxStringListItem * >( this );
@@ -416,7 +416,7 @@ BOOL SfxStringListItem::QueryValue( com::sun::star::uno::Any& rVal,BYTE ) const
     com::sun::star::uno::Sequence< rtl::OUString > aStringList;
     pThis->GetStringList( aStringList );
     rVal = ::com::sun::star::uno::makeAny( aStringList );
-    return TRUE;
+    return true;
 }
 
 

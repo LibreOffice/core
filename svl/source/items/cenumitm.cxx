@@ -70,7 +70,7 @@ SfxEnumItemInterface::GetPresentation(SfxItemPresentation, SfxMapUnit,
 
 //============================================================================
 // virtual
-BOOL SfxEnumItemInterface::QueryValue(com::sun::star::uno::Any& rVal, BYTE)
+bool SfxEnumItemInterface::QueryValue(com::sun::star::uno::Any& rVal, BYTE)
     const
 {
     rVal <<= sal_Int32(GetEnumValue());
@@ -79,7 +79,7 @@ BOOL SfxEnumItemInterface::QueryValue(com::sun::star::uno::Any& rVal, BYTE)
 
 //============================================================================
 // virtual
-BOOL SfxEnumItemInterface::PutValue(const com::sun::star::uno::Any& rVal,
+bool SfxEnumItemInterface::PutValue(const com::sun::star::uno::Any& rVal,
                                     BYTE)
 {
     sal_Int32 nTheValue = 0;
@@ -233,7 +233,7 @@ SfxItemPresentation CntBoolItem::GetPresentation(SfxItemPresentation,
 
 //============================================================================
 // virtual
-BOOL CntBoolItem::QueryValue(com::sun::star::uno::Any& rVal, BYTE) const
+bool CntBoolItem::QueryValue(com::sun::star::uno::Any& rVal, BYTE) const
 {
     rVal <<= sal_Bool(m_bValue);
     return true;
@@ -241,7 +241,7 @@ BOOL CntBoolItem::QueryValue(com::sun::star::uno::Any& rVal, BYTE) const
 
 //============================================================================
 // virtual
-BOOL CntBoolItem::PutValue(const com::sun::star::uno::Any& rVal, BYTE)
+bool CntBoolItem::PutValue(const com::sun::star::uno::Any& rVal, BYTE)
 {
     sal_Bool bTheValue = sal_Bool();
     if (rVal >>= bTheValue)

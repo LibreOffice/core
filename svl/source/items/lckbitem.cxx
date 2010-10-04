@@ -137,7 +137,7 @@ SvStream& SfxLockBytesItem::Store(SvStream &rStream, USHORT ) const
 
 //----------------------------------------------------------------------------
 // virtual
-BOOL SfxLockBytesItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE )
+bool SfxLockBytesItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE )
 {
     com::sun::star::uno::Sequence< sal_Int8 > aSeq;
     if ( rVal >>= aSeq )
@@ -153,16 +153,16 @@ BOOL SfxLockBytesItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE )
         else
             _xVal = NULL;
 
-        return TRUE;
+        return true;
     }
 
     DBG_ERROR( "SfxLockBytesItem::PutValue - Wrong type!" );
-    return FALSE;
+    return true;
 }
 
 //----------------------------------------------------------------------------
 // virtual
-BOOL SfxLockBytesItem::QueryValue( com::sun::star::uno::Any& rVal,BYTE ) const
+bool SfxLockBytesItem::QueryValue( com::sun::star::uno::Any& rVal,BYTE ) const
 {
     if ( _xVal.Is() )
     {
@@ -172,7 +172,7 @@ BOOL SfxLockBytesItem::QueryValue( com::sun::star::uno::Any& rVal,BYTE ) const
         if ( _xVal->Stat( &aStat, SVSTATFLAG_DEFAULT ) == ERRCODE_NONE )
             nLen = aStat.nSize;
         else
-            return FALSE;
+            return false;
 
         ULONG nRead = 0;
         com::sun::star::uno::Sequence< sal_Int8 > aSeq( nLen );
@@ -186,6 +186,6 @@ BOOL SfxLockBytesItem::QueryValue( com::sun::star::uno::Any& rVal,BYTE ) const
         rVal <<= aSeq;
     }
 
-    return TRUE;
+    return true;
 }
 

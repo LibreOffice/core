@@ -429,7 +429,7 @@ void SvxSearchItem::SetTransliterationFlags( sal_Int32 nFlags )
     aSearchOpt.transliterateFlags = nFlags;
 }
 
-sal_Bool SvxSearchItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+bool SvxSearchItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
@@ -513,18 +513,18 @@ sal_Bool SvxSearchItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMember
 
         default:
             DBG_ERRORFILE( "SvxSearchItem::QueryValue(): Unknown MemberId" );
-            return sal_False;
+            return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxSearchItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
+bool SvxSearchItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     sal_Int32 nInt = 0;
     switch ( nMemberId )
     {

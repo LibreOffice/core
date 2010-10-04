@@ -87,26 +87,26 @@ SfxItemPresentation CntByteItem::GetPresentation(SfxItemPresentation,
 
 //============================================================================
 // virtual
-BOOL CntByteItem::QueryValue(com::sun::star::uno::Any& rVal,BYTE) const
+bool CntByteItem::QueryValue(com::sun::star::uno::Any& rVal,BYTE) const
 {
     sal_Int8 nValue = m_nValue;
     rVal <<= nValue;
-    return TRUE;
+    return true;
 }
 
 //============================================================================
 // virtual
-BOOL CntByteItem::PutValue(const com::sun::star::uno::Any& rVal,BYTE)
+bool CntByteItem::PutValue(const com::sun::star::uno::Any& rVal,BYTE)
 {
     sal_Int8 nValue = sal_Int8();
     if (rVal >>= nValue)
     {
         m_nValue = nValue;
-        return TRUE;
+        return true;
     }
 
     DBG_ERROR( "CntByteItem::PutValue - Wrong type!" );
-    return FALSE;
+    return false;
 }
 
 //============================================================================
@@ -222,27 +222,27 @@ SfxItemPresentation CntUInt16Item::GetPresentation(SfxItemPresentation,
 
 //============================================================================
 // virtual
-BOOL CntUInt16Item::QueryValue(com::sun::star::uno::Any& rVal,BYTE) const
+bool CntUInt16Item::QueryValue(com::sun::star::uno::Any& rVal,BYTE) const
 {
     sal_Int32 nValue = m_nValue;
     rVal <<= nValue;
-    return TRUE;
+    return true;
 }
 
 //============================================================================
 // virtual
-BOOL CntUInt16Item::PutValue(const com::sun::star::uno::Any& rVal,BYTE)
+bool CntUInt16Item::PutValue(const com::sun::star::uno::Any& rVal,BYTE)
 {
     sal_Int32 nValue = 0;
     if (rVal >>= nValue)
     {
         DBG_ASSERT( nValue <= USHRT_MAX, "Overflow in UInt16 value!");
         m_nValue = (sal_uInt16)nValue;
-        return TRUE;
+        return true;
     }
 
     DBG_ERROR( "CntUInt16Item::PutValue - Wrong type!" );
-    return FALSE;
+    return false;
 }
 
 //============================================================================
@@ -354,26 +354,26 @@ SfxItemPresentation CntInt32Item::GetPresentation(SfxItemPresentation,
 
 //============================================================================
 // virtual
-BOOL CntInt32Item::QueryValue(com::sun::star::uno::Any& rVal,BYTE) const
+bool CntInt32Item::QueryValue(com::sun::star::uno::Any& rVal,BYTE) const
 {
     sal_Int32 nValue = m_nValue;
     rVal <<= nValue;
-    return TRUE;
+    return true;
 }
 
 //============================================================================
 // virtual
-BOOL CntInt32Item::PutValue(const com::sun::star::uno::Any& rVal,BYTE)
+bool CntInt32Item::PutValue(const com::sun::star::uno::Any& rVal,BYTE)
 {
     sal_Int32 nValue = 0;
     if (rVal >>= nValue)
     {
         m_nValue = nValue;
-        return TRUE;
+        return true;
     }
 
     DBG_ERROR( "CntInt32Item::PutValue - Wrong type!" );
-    return FALSE;
+    return false;
 }
 
 //============================================================================
@@ -487,28 +487,28 @@ SfxItemPresentation CntUInt32Item::GetPresentation(SfxItemPresentation,
 
 //============================================================================
 // virtual
-BOOL CntUInt32Item::QueryValue(com::sun::star::uno::Any& rVal,BYTE) const
+bool CntUInt32Item::QueryValue(com::sun::star::uno::Any& rVal,BYTE) const
 {
     sal_Int32 nValue = m_nValue;
     DBG_ASSERT( nValue>=0, "Overflow in UInt32 value!");
     rVal <<= nValue;
-    return TRUE;
+    return true;
 }
 
 //============================================================================
 // virtual
-BOOL CntUInt32Item::PutValue(const com::sun::star::uno::Any& rVal,BYTE)
+bool CntUInt32Item::PutValue(const com::sun::star::uno::Any& rVal,BYTE)
 {
     sal_Int32 nValue = 0;
     if (rVal >>= nValue)
     {
         DBG_ASSERT( nValue>=0, "Overflow in UInt32 value!");
         m_nValue = nValue;
-        return TRUE;
+        return true;
     }
 
     DBG_ERROR( "CntUInt32Item::PutValue - Wrong type!" );
-    return FALSE;
+    return false;
 }
 
 //============================================================================

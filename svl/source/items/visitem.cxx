@@ -85,21 +85,21 @@ SfxItemPresentation SfxVisibilityItem::GetPresentation(SfxItemPresentation,
 
 //============================================================================
 // virtual
-BOOL SfxVisibilityItem::QueryValue(com::sun::star::uno::Any& rVal,BYTE) const
+bool SfxVisibilityItem::QueryValue(com::sun::star::uno::Any& rVal,BYTE) const
 {
     rVal <<= m_nValue;
-    return TRUE;
+    return true;
 }
 
 //============================================================================
 // virtual
-BOOL SfxVisibilityItem::PutValue(const com::sun::star::uno::Any& rVal,BYTE)
+bool SfxVisibilityItem::PutValue(const com::sun::star::uno::Any& rVal,BYTE)
 {
     if (rVal >>= m_nValue)
-        return TRUE;
+        return true;
 
     DBG_ERROR( "SfxInt16Item::PutValue - Wrong type!" );
-    return FALSE;
+    return false;
 }
 
 //============================================================================

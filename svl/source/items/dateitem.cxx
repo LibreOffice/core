@@ -174,7 +174,7 @@ SfxItemPresentation SfxDateTimeItem::GetPresentation
 
 //----------------------------------------------------------------------------
 // virtual
-BOOL SfxDateTimeItem::PutValue( const com::sun::star::uno::Any& rVal,
+bool SfxDateTimeItem::PutValue( const com::sun::star::uno::Any& rVal,
                                    BYTE nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
@@ -188,16 +188,16 @@ BOOL SfxDateTimeItem::PutValue( const com::sun::star::uno::Any& rVal,
                                       aValue.Minutes,
                                       aValue.Seconds,
                                       aValue.HundredthSeconds ) );
-        return TRUE;
+        return true;
     }
 
     DBG_ERROR( "SfxDateTimeItem::PutValue - Wrong type!" );
-    return FALSE;
+    return false;
 }
 
 //----------------------------------------------------------------------------
 // virtual
-BOOL SfxDateTimeItem::QueryValue( com::sun::star::uno::Any& rVal,
+bool SfxDateTimeItem::QueryValue( com::sun::star::uno::Any& rVal,
                                    BYTE nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
@@ -209,7 +209,7 @@ BOOL SfxDateTimeItem::QueryValue( com::sun::star::uno::Any& rVal,
                                            aDateTime.GetMonth(),
                                            aDateTime.GetYear() );
     rVal <<= aValue;
-    return TRUE;
+    return true;
 }
 
 // -----------------------------------------------------------------------

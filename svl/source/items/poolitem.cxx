@@ -504,18 +504,18 @@ void SfxPoolItem::Store(SvStream &rStream) const
 
 // -----------------------------------------------------------------------
 
-BOOL SfxPoolItem::QueryValue( com::sun::star::uno::Any&, BYTE ) const
+bool SfxPoolItem::QueryValue( com::sun::star::uno::Any&, BYTE ) const
 {
     DBG_ERROR("There is no implementation for QueryValue for this item!");
-    return FALSE;
+    return false;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL SfxPoolItem::PutValue( const com::sun::star::uno::Any&, BYTE )
+bool SfxPoolItem::PutValue( const com::sun::star::uno::Any&, BYTE )
 {
     DBG_ERROR("There is no implementation for PutValue for this item!");
-    return FALSE;
+    return false;
 }
 
 SfxVoidItem::~SfxVoidItem()

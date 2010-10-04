@@ -135,7 +135,7 @@ SvStream& SfxSizeItem::Store(SvStream &rStream, USHORT ) const
 }
 
 // -----------------------------------------------------------------------
-BOOL  SfxSizeItem::QueryValue( com::sun::star::uno::Any& rVal,
+bool  SfxSizeItem::QueryValue( com::sun::star::uno::Any& rVal,
                                BYTE nMemberId ) const
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
@@ -159,20 +159,20 @@ BOOL  SfxSizeItem::QueryValue( com::sun::star::uno::Any& rVal,
             rVal <<= aTmp.getWidth(); break;
         case MID_HEIGHT:
             rVal <<= aTmp.getHeight(); break;
-        default: DBG_ERROR("Wrong MemberId!"); return FALSE;
+    default: DBG_ERROR("Wrong MemberId!"); return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 // -----------------------------------------------------------------------
-BOOL SfxSizeItem::PutValue( const com::sun::star::uno::Any& rVal,
+bool SfxSizeItem::PutValue( const com::sun::star::uno::Any& rVal,
                             BYTE nMemberId )
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
 
-    BOOL bRet = FALSE;
+    bool bRet = false;
     com::sun::star::awt::Size aValue;
     sal_Int32 nVal = 0;
     if ( !nMemberId )

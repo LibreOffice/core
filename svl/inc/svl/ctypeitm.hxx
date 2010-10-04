@@ -68,9 +68,9 @@ public:
                                                  XubString &rText,
                                                  const IntlWrapper* pIntlWrapper = 0 ) const;
 
-    virtual BOOL QueryValue( com::sun::star::uno::Any& rVal,
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal,
                              BYTE nMemberId = 0 ) const;
-    virtual BOOL PutValue  ( const com::sun::star::uno::Any& rVal,
+    virtual bool PutValue  ( const com::sun::star::uno::Any& rVal,
                              BYTE nMemberId = 0);
 
     INetContentType GetEnumValue() const;

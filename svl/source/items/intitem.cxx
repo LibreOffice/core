@@ -111,26 +111,26 @@ SfxItemPresentation SfxInt16Item::GetPresentation(SfxItemPresentation,
 
 //============================================================================
 // virtual
-BOOL SfxInt16Item::QueryValue(com::sun::star::uno::Any& rVal, BYTE) const
+bool SfxInt16Item::QueryValue(com::sun::star::uno::Any& rVal, BYTE) const
 {
     sal_Int16 nValue = m_nValue;
     rVal <<= nValue;
-    return TRUE;
+    return true;
 }
 
 //============================================================================
 // virtual
-BOOL SfxInt16Item::PutValue(const com::sun::star::uno::Any& rVal, BYTE )
+bool SfxInt16Item::PutValue(const com::sun::star::uno::Any& rVal, BYTE )
 {
     sal_Int16 nValue = sal_Int16();
     if (rVal >>= nValue)
     {
         m_nValue = nValue;
-        return TRUE;
+        return true;
     }
 
     DBG_ERROR( "SfxInt16Item::PutValue - Wrong type!" );
-    return FALSE;
+    return false;
 }
 
 //============================================================================
