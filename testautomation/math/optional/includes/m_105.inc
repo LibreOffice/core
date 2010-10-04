@@ -448,7 +448,7 @@ testcase tToolsCatalog
                 '///+ insert the copied text into the document ///'
                 DocumentWriter.typeKeys "<Mod1 End> - " + sTemp + ": " + j + "<Tab>"
                 sAllSymbols = sAllSymbols + sTemp
-                listAppend(lAllSymbols(), sTemp)
+                listAppend(lAllSymbols(), rtrim(sTemp))
             next j
         next i
 
