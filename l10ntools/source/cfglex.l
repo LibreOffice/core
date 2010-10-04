@@ -30,6 +30,9 @@
 #pragma warning(push, 1)
 #endif
 
+int yycolumn = 1;
+#define YY_USER_ACTION yycolumn += yyleng;
+
 /* external functions (C++ code, declared as extren "C" */
 extern int WorkOnTokenSet( int, char* );
 extern int InitCfgExport( char * , char *);
@@ -116,6 +119,7 @@ int bText=0;
 }
 
 .|\n {
+    yycolumn = 1;
 	if ( bText == 1 )
 		WorkOnTokenSet( CFG_TEXTCHAR, yytext );
 	else
@@ -138,7 +142,7 @@ void YYWarning( char *s )
 {
 	/* write warning to stderr */
 	fprintf( stderr,
-		"Warning: \"%s\" in line %d: \"%s\"\n", s, yylineno, yytext  );
+		"Warning: \"%s\" in line %d, column %d: \"%s\"\n", s, yylineno, yycolumn, yytext  );
 }
 
 /*****************************************************************************/
@@ -151,7 +155,7 @@ void yyerror ( char *s )
 {
 	/* write error to stderr */
 	fprintf( stderr,
-		"Error: \"%s\" in line %d: \"%s\"\n", s, yylineno, yytext  );
+		"Error: \"%s\" in line %d, column %d: \"%s\"\n", s, yylineno, yycolumn, yytext  );
 	SetError();
 }
 

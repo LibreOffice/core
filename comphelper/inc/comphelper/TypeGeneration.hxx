@@ -109,9 +109,8 @@ namespace comphelper
 
         CPPUTYPE_OUSTRINGS,         //getCppuType( (Sequence<OUString>*)0 )
         CPPUTYPE_REFCOMPONENT,      //getCppuType( (Reference< lang::XComponent >*)0 )
-        // --> OD 2004-08-09 #i28749#
+        // #i28749#
         CPPUTYPE_TRANSFORMATIONINHORIL2R, //getCppuType( (drawing::HomogenMatrix3)* )
-        // <--
         CPPUTYPE_SEQNAMEDVALUE,     //getCppuType( (Sequence<beans::NamedValue>*)0 )
         CPPUTYPE_REFXGRAPHIC,       //getCppuType( Reference< graphic::XGraphic >*)0)
         CPPUTYPE_TABLEBORDERDISTANCES, //getCppuType( (table::TableBorderDistances*)0 )

@@ -129,9 +129,8 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-// --> OD 2004-08-09 #i28749#
+// #i28749#
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
-// <--
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 
 using ::rtl::OUString;
@@ -220,13 +219,12 @@ namespace comphelper
             case CPPUTYPE_REFCONNECTION:    pType = &::getCppuType( (Reference< sdbc::XConnection >*)0);    break;
             case CPPUTYPE_REFMODEL:         pType = &::getCppuType( (Reference< frame::XModel >*)0);    break;
             case CPPUTYPE_REFCOMPONENT:     pType = &::getCppuType( (Reference< lang::XComponent >*)0 ); break;
-            // --> OD 2004-08-09 #i28749#
+            // #i28749#
             case CPPUTYPE_TRANSFORMATIONINHORIL2R:
             {
                 pType = &::getCppuType( (drawing::HomogenMatrix3*)0 );
             }
             break;
-            // <--
             case CPPUTYPE_SEQNAMEDVALUE:    pType = &::getCppuType( (Sequence<beans::NamedValue>*)0 ); break;
             case CPPUTYPE_REFXGRAPHIC:      pType = &::getCppuType( (Reference< graphic::XGraphic >*)0); break;
             case CPPUTYPE_TABLEBORDERDISTANCES:     pType = &::getCppuType( (table::TableBorderDistances*)0 ); break;

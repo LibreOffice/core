@@ -35,8 +35,6 @@
 
 class TabBar;
 
-// #102891# -----------------------
-
 #include <svtools/svlbox.hxx>
 #include <svtools/svlbitm.hxx>
 #include <svtools/svtreebx.hxx>
@@ -487,7 +485,6 @@ void SvTreeListBox::SetExpandedEntryBmp( SvLBoxEntry* pEntry, const Image& aBmp,
     GetModel()->InvalidateEntry( pEntry );
     SetEntryHeight( pEntry );
     Size aSize = aBmp.GetSizePixel();
-    // #97680# ---------------
     short nWidth = pImp->UpdateContextBmpWidthVector( pEntry, (short)aSize.Width() );
     if( nWidth > nContextBmpWidthMax )
     {
@@ -507,7 +504,6 @@ void SvTreeListBox::SetCollapsedEntryBmp(SvLBoxEntry* pEntry,const Image& aBmp, 
     GetModel()->InvalidateEntry( pEntry );
     SetEntryHeight( pEntry );
     Size aSize = aBmp.GetSizePixel();
-    // #97680# -----------
     short nWidth = pImp->UpdateContextBmpWidthVector( pEntry, (short)aSize.Width() );
     if( nWidth > nContextBmpWidthMax )
     {
@@ -599,9 +595,6 @@ void SvTreeListBox::CheckButtonHdl()
         pImp->CallEventListeners( VCLEVENT_CHECKBOX_TOGGLE, (void*)pCheckButtonData->GetActEntry() );
 }
 
-// *********************************************************************
-// *********************************************************************
-
 //
 //  TODO: Momentan werden die Daten so geklont, dass sie dem
 //  Standard-TreeView-Format entsprechen. Hier sollte eigentlich
@@ -648,10 +641,6 @@ SvLBoxEntry* SvTreeListBox::CloneEntry( SvLBoxEntry* pSource )
 
     return pClone;
 }
-
-// *********************************************************************
-// *********************************************************************
-
 
 void SvTreeListBox::ShowExpandBitmapOnCursor( BOOL bYes )
 {
@@ -845,8 +834,6 @@ void SvTreeListBox::ModelHasCleared()
     AdjustEntryHeight( GetDefaultCollapsedEntryBmp() );
 
     SvLBox::ModelHasCleared();
-//  if( IsUpdateMode() )
-//      Invalidate();
 }
 
 void SvTreeListBox::ShowTargetEmphasis( SvLBoxEntry* pEntry, BOOL /* bShow  */ )
@@ -1017,12 +1004,11 @@ BOOL SvTreeListBox::Expand( SvLBoxEntry* pParent )
         GetModel()->InvalidateEntry( pParent ); // neu zeichnen
     }
 
-    // --> OD 2009-04-01 #i92103#
+    // #i92103#
     if ( bExpanded )
     {
         pImp->CallEventListeners( VCLEVENT_ITEM_EXPANDED, pParent );
     }
-    // <--
 
     return bExpanded;
 }
@@ -1044,12 +1030,11 @@ BOOL SvTreeListBox::Collapse( SvLBoxEntry* pParent )
         ExpandedHdl();
     }
 
-    // --> OD 2009-04-01 #i92103#
+    // #i92103#
     if ( bCollapsed )
     {
         pImp->CallEventListeners( VCLEVENT_ITEM_COLLAPSED, pParent );
     }
-    // <--
 
     return bCollapsed;
 }
@@ -1413,13 +1398,10 @@ void SvTreeListBox::EditedText( const XubString& rStr )
             ((SvLBoxString*)pEdItem)->SetText( pEdEntry, rStr );
             pModel->InvalidateEntry( pEdEntry );
         }
-        //if( GetSelectionMode() == SINGLE_SELECTION )
-        //{
         if( GetSelectionCount() == 0 )
             Select( pEdEntry );
         if( GetSelectionMode() == MULTIPLE_SELECTION && !GetCurEntry() )
             SetCurEntry( pEdEntry );
-        //}
     }
 }
 
@@ -1552,7 +1534,6 @@ long SvTreeListBox::PaintEntry1(SvLBoxEntry* pEntry,long nLine,USHORT nTabFlags,
     BOOL bHorSBar = pImp->HasHorScrollBar();
     PreparePaint( pEntry );
 
-    // #97680# ------------------
     pImp->UpdateContextBmpWidthMax( pEntry );
 
     if( nTreeFlags & TREEFLAG_RECALCTABS )
@@ -2312,7 +2293,6 @@ IMPL_LINK( SvTreeListBox, DefaultCompare, SvSortData*, pData )
     SvLBoxEntry* pRight = (SvLBoxEntry*)(pData->pRight );
     String aLeft( ((SvLBoxString*)(pLeft->GetFirstItem(SV_ITEM_ID_LBOXSTRING)))->GetText());
     String aRight( ((SvLBoxString*)(pRight->GetFirstItem(SV_ITEM_ID_LBOXSTRING)))->GetText());
-    // #102891# ----------------
     pImp->UpdateIntlWrapper();
     return pImp->pIntlWrapper->getCaseCollator()->compareString( aLeft, aRight );
 }

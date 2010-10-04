@@ -44,26 +44,12 @@
 #include <unotools/cacheoptions.hxx>
 #include <svtools/grfmgr.hxx>
 
-// --> OD 2010-01-04 #i105243#
 #include <vcl/pdfextoutdevdata.hxx>
-// <--
-
-// -----------
-// - Defines -
-// -----------
 
 #define WATERMARK_LUM_OFFSET                50
 #define WATERMARK_CON_OFFSET                -70
 
-// -----------
-// - statics -
-// -----------
-
 GraphicManager* GraphicObject::mpGlobalMgr = NULL;
-
-// ---------------------
-// - GrfDirectCacheObj -
-// ---------------------
 
 struct GrfSimpleCacheObj
 {
@@ -74,13 +60,7 @@ struct GrfSimpleCacheObj
                     maGraphic( rGraphic ), maAttr( rAttr ) {}
 };
 
-// -----------------
-// - GraphicObject -
-// -----------------
-
 TYPEINIT1_AUTOFACTORY( GraphicObject, SvDataCopyStream );
-
-// -----------------------------------------------------------------------------
 
 GraphicObject::GraphicObject( const GraphicManager* pMgr ) :
     mpLink      ( NULL ),
@@ -90,8 +70,6 @@ GraphicObject::GraphicObject( const GraphicManager* pMgr ) :
     ImplAssignGraphicData();
     ImplSetGraphicManager( pMgr );
 }
-
-// -----------------------------------------------------------------------------
 
 GraphicObject::GraphicObject( const Graphic& rGraphic, const GraphicManager* pMgr ) :
     maGraphic   ( rGraphic ),
@@ -103,8 +81,6 @@ GraphicObject::GraphicObject( const Graphic& rGraphic, const GraphicManager* pMg
     ImplSetGraphicManager( pMgr );
 }
 
-// -----------------------------------------------------------------------------
-
 GraphicObject::GraphicObject( const Graphic& rGraphic, const String& rLink, const GraphicManager* pMgr ) :
     maGraphic   ( rGraphic ),
     mpLink      ( rLink.Len() ? ( new String( rLink ) ) : NULL ),
@@ -114,8 +90,6 @@ GraphicObject::GraphicObject( const Graphic& rGraphic, const String& rLink, cons
     ImplAssignGraphicData();
     ImplSetGraphicManager( pMgr );
 }
-
-// -----------------------------------------------------------------------------
 
 GraphicObject::GraphicObject( const GraphicObject& rGraphicObj, const GraphicManager* pMgr ) :
     SvDataCopyStream(),
@@ -128,8 +102,6 @@ GraphicObject::GraphicObject( const GraphicObject& rGraphicObj, const GraphicMan
     ImplAssignGraphicData();
     ImplSetGraphicManager( pMgr, NULL, &rGraphicObj );
 }
-
-// -----------------------------------------------------------------------------
 
 GraphicObject::GraphicObject( const ByteString& rUniqueID, const GraphicManager* pMgr ) :
     mpLink      ( NULL ),
@@ -145,8 +117,6 @@ GraphicObject::GraphicObject( const ByteString& rUniqueID, const GraphicManager*
     // update properties
     ImplAssignGraphicData();
 }
-
-// -----------------------------------------------------------------------------
 
 GraphicObject::~GraphicObject()
 {
@@ -165,8 +135,6 @@ GraphicObject::~GraphicObject()
     delete mpSimpleCache;
 }
 
-// -----------------------------------------------------------------------------
-
 void GraphicObject::ImplConstruct()
 {
     mpMgr = NULL;
@@ -178,8 +146,6 @@ void GraphicObject::ImplConstruct()
     mbIsInSwapIn = FALSE;
     mbIsInSwapOut = FALSE;
 }
-
-// -----------------------------------------------------------------------------
 
 void GraphicObject::ImplAssignGraphicData()
 {
@@ -200,8 +166,6 @@ void GraphicObject::ImplAssignGraphicData()
     else
         mbEPS = FALSE;
 }
-
-// -----------------------------------------------------------------------------
 
 void GraphicObject::ImplSetGraphicManager( const GraphicManager* pMgr, const ByteString* pID, const GraphicObject* pCopyObj )
 {
@@ -239,8 +203,6 @@ void GraphicObject::ImplSetGraphicManager( const GraphicManager* pMgr, const Byt
         }
     }
 }
-
-// -----------------------------------------------------------------------------
 
 void GraphicObject::ImplAutoSwapIn()
 {
@@ -304,7 +266,6 @@ void GraphicObject::ImplAutoSwapIn()
     }
 }
 
-// -----------------------------------------------------------------------------
 BOOL GraphicObject::ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size& rSz, const GraphicAttr* pAttr,
                                        PolyPolygon& rClipPolyPoly, BOOL& bRectClipRegion ) const
 {
@@ -315,9 +276,6 @@ BOOL GraphicObject::ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size& rSz
         Polygon         aClipPoly( Rectangle( rPt, rSz ) );
         const USHORT    nRot10 = pAttr->GetRotation() % 3600;
         const Point     aOldOrigin( rPt );
-        // --> OD 2005-09-30 #i54875# - It's not needed to get the graphic again.
-//        const Graphic&  rGraphic = GetGraphic();
-        // <--
         const MapMode   aMap100( MAP_100TH_MM );
         Size            aSize100;
         long            nTotalWidth, nTotalHeight;
@@ -334,12 +292,6 @@ BOOL GraphicObject::ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size& rSz
 
         rClipPolyPoly = aClipPoly;
 
-        // --> OD 2005-09-30 #i54875# - directly access member <maGraphic> to
-        // get <PrefSize> and <PrefMapMode>.
-//        if( rGraphic.GetPrefMapMode() == MAP_PIXEL )
-//            aSize100 = Application::GetDefaultDevice()->PixelToLogic( rGraphic.GetPrefSize(), aMap100 );
-//        else
-//            aSize100 = pOut->LogicToLogic( rGraphic.GetPrefSize(), rGraphic.GetPrefMapMode(), aMap100 );
         if( maGraphic.GetPrefMapMode() == MAP_PIXEL )
             aSize100 = Application::GetDefaultDevice()->PixelToLogic( maGraphic.GetPrefSize(), aMap100 );
         else
@@ -386,8 +338,6 @@ BOOL GraphicObject::ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size& rSz
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
-
 GraphicObject& GraphicObject::operator=( const GraphicObject& rGraphicObj )
 {
     if( &rGraphicObj != this )
@@ -413,8 +363,6 @@ GraphicObject& GraphicObject::operator=( const GraphicObject& rGraphicObj )
     return *this;
 }
 
-// -----------------------------------------------------------------------------
-
 BOOL GraphicObject::operator==( const GraphicObject& rGraphicObj ) const
 {
     return( ( rGraphicObj.maGraphic == maGraphic ) &&
@@ -422,28 +370,20 @@ BOOL GraphicObject::operator==( const GraphicObject& rGraphicObj ) const
             ( rGraphicObj.GetLink() == GetLink() ) );
 }
 
-// ------------------------------------------------------------------------
-
 void GraphicObject::Load( SvStream& rIStm )
 {
     rIStm >> *this;
 }
-
-// ------------------------------------------------------------------------
 
 void GraphicObject::Save( SvStream& rOStm )
 {
     rOStm << *this;
 }
 
-// ------------------------------------------------------------------------
-
 void GraphicObject::Assign( const SvDataCopyStream& rCopyStream )
 {
     *this = (const GraphicObject& ) rCopyStream;
 }
-
-// -----------------------------------------------------------------------------
 
 ByteString GraphicObject::GetUniqueID() const
 {
@@ -458,29 +398,21 @@ ByteString GraphicObject::GetUniqueID() const
     return aRet;
 }
 
-// -----------------------------------------------------------------------------
-
 ULONG GraphicObject::GetChecksum() const
 {
     return( ( maGraphic.IsSupportedGraphic() && !maGraphic.IsSwapOut() ) ? maGraphic.GetChecksum() : 0 );
 }
-
-// -----------------------------------------------------------------------------
 
 SvStream* GraphicObject::GetSwapStream() const
 {
     return( HasSwapStreamHdl() ? (SvStream*) mpSwapStreamHdl->Call( (void*) this ) : GRFMGR_AUTOSWAPSTREAM_NONE );
 }
 
-// -----------------------------------------------------------------------------
-
 // !!! to be removed
 ULONG GraphicObject::GetReleaseFromCache() const
 {
     return 0;
 }
-
-// -----------------------------------------------------------------------------
 
 void GraphicObject::SetAttr( const GraphicAttr& rAttr )
 {
@@ -490,22 +422,16 @@ void GraphicObject::SetAttr( const GraphicAttr& rAttr )
         delete mpSimpleCache, mpSimpleCache = NULL;
 }
 
-// -----------------------------------------------------------------------------
-
 void GraphicObject::SetLink()
 {
     if( mpLink )
         delete mpLink, mpLink = NULL;
 }
 
-// -----------------------------------------------------------------------------
-
 void GraphicObject::SetLink( const String& rLink )
 {
     delete mpLink, mpLink = new String( rLink );
 }
-
-// -----------------------------------------------------------------------------
 
 String GraphicObject::GetLink() const
 {
@@ -515,22 +441,16 @@ String GraphicObject::GetLink() const
         return String();
 }
 
-// -----------------------------------------------------------------------------
-
 void GraphicObject::SetUserData()
 {
     if( mpUserData )
         delete mpUserData, mpUserData = NULL;
 }
 
-// -----------------------------------------------------------------------------
-
 void GraphicObject::SetUserData( const String& rUserData )
 {
     delete mpUserData, mpUserData = new String( rUserData );
 }
-
-// -----------------------------------------------------------------------------
 
 String GraphicObject::GetUserData() const
 {
@@ -540,8 +460,6 @@ String GraphicObject::GetUserData() const
         return String();
 }
 
-// -----------------------------------------------------------------------------
-
 void GraphicObject::SetSwapStreamHdl()
 {
     if( mpSwapStreamHdl )
@@ -550,8 +468,6 @@ void GraphicObject::SetSwapStreamHdl()
         delete mpSwapStreamHdl, mpSwapStreamHdl = NULL;
     }
 }
-
-// -----------------------------------------------------------------------------
 
 void GraphicObject::SetSwapStreamHdl( const Link& rHdl, const ULONG nSwapOutTimeout )
 {
@@ -572,8 +488,6 @@ void GraphicObject::SetSwapStreamHdl( const Link& rHdl, const ULONG nSwapOutTime
         delete mpSwapOutTimer, mpSwapOutTimer = NULL;
 }
 
-// -----------------------------------------------------------------------------
-
 Link GraphicObject::GetSwapStreamHdl() const
 {
     if( mpSwapStreamHdl )
@@ -582,21 +496,15 @@ Link GraphicObject::GetSwapStreamHdl() const
         return Link();
 }
 
-// -----------------------------------------------------------------------------
-
 void GraphicObject::FireSwapInRequest()
 {
     ImplAutoSwapIn();
 }
 
-// -----------------------------------------------------------------------------
-
 void GraphicObject::FireSwapOutRequest()
 {
     ImplAutoSwapOutHdl( NULL );
 }
-
-// -----------------------------------------------------------------------------
 
 void GraphicObject::GraphicManagerDestroyed()
 {
@@ -605,14 +513,10 @@ void GraphicObject::GraphicManagerDestroyed()
     ImplSetGraphicManager( NULL );
 }
 
-// -----------------------------------------------------------------------------
-
 void GraphicObject::SetGraphicManager( const GraphicManager& rMgr )
 {
     ImplSetGraphicManager( &rMgr );
 }
-
-// -----------------------------------------------------------------------------
 
 BOOL GraphicObject::IsCached( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                               const GraphicAttr* pAttr, ULONG nFlags ) const
@@ -621,10 +525,6 @@ BOOL GraphicObject::IsCached( OutputDevice* pOut, const Point& rPt, const Size& 
 
     if( nFlags & GRFMGR_DRAW_CACHED )
     {
-        // --> OD 2005-10-11 #i54875# - Consider cropped graphics.
-        // Note: The graphic manager caches a cropped graphic with its
-        //       uncropped position and size.
-//        bRet = mpMgr->IsInCache( pOut, rPt, rSz, *this, ( pAttr ? *pAttr : GetAttr() ) );
         Point aPt( rPt );
         Size aSz( rSz );
         if ( pAttr->IsCropped() )
@@ -641,29 +541,21 @@ BOOL GraphicObject::IsCached( OutputDevice* pOut, const Point& rPt, const Size& 
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
-
 void GraphicObject::ReleaseFromCache()
 {
 
     mpMgr->ReleaseFromCache( *this );
 }
 
-// -----------------------------------------------------------------------------
-
 void GraphicObject::SetAnimationNotifyHdl( const Link& rLink )
 {
     maGraphic.SetAnimationNotifyHdl( rLink );
 }
 
-// -----------------------------------------------------------------------------
-
 List* GraphicObject::GetAnimationInfoList() const
 {
     return maGraphic.GetAnimationInfoList();
 }
-
-// -----------------------------------------------------------------------------
 
 BOOL GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                           const GraphicAttr* pAttr, ULONG nFlags )
@@ -742,7 +634,7 @@ BOOL GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
     return bRet;
 }
 
-// --> OD 2010-01-04 #i105243#
+// #i105243#
 BOOL GraphicObject::DrawWithPDFHandling( OutputDevice& rOutDev,
                                          const Point& rPt, const Size& rSz,
                                          const GraphicAttr* pGrfAttr,
@@ -802,9 +694,6 @@ BOOL GraphicObject::DrawWithPDFHandling( OutputDevice& rOutDev,
 
     return bRet;
 }
-// <--
-
-// -----------------------------------------------------------------------------
 
 BOOL GraphicObject::DrawTiled( OutputDevice* pOut, const Rectangle& rArea, const Size& rSize,
                                const Size& rOffset, const GraphicAttr* pAttr, ULONG nFlags, int nTileCacheSize1D )
@@ -827,8 +716,6 @@ BOOL GraphicObject::DrawTiled( OutputDevice* pOut, const Rectangle& rArea, const
 
     return ImplDrawTiled( pOut, rArea, aOutTileSize, rOffset, pAttr, nFlags, nTileCacheSize1D );
 }
-
-// -----------------------------------------------------------------------------
 
 BOOL GraphicObject::StartAnimation( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                                     long nExtraData, const GraphicAttr* pAttr, ULONG /*nFlags*/,
@@ -888,15 +775,11 @@ BOOL GraphicObject::StartAnimation( OutputDevice* pOut, const Point& rPt, const 
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
-
 void GraphicObject::StopAnimation( OutputDevice* pOut, long nExtraData )
 {
     if( mpSimpleCache )
         mpSimpleCache->maGraphic.StopAnimation( pOut, nExtraData );
 }
-
-// -----------------------------------------------------------------------------
 
 const Graphic& GraphicObject::GetGraphic() const
 {
@@ -905,8 +788,6 @@ const Graphic& GraphicObject::GetGraphic() const
 
     return maGraphic;
 }
-
-// -----------------------------------------------------------------------------
 
 void GraphicObject::SetGraphic( const Graphic& rGraphic, const GraphicObject* pCopyObj )
 {
@@ -927,15 +808,11 @@ void GraphicObject::SetGraphic( const Graphic& rGraphic, const GraphicObject* pC
         mpSwapOutTimer->Start();
 }
 
-// -----------------------------------------------------------------------------
-
 void GraphicObject::SetGraphic( const Graphic& rGraphic, const String& rLink )
 {
     SetGraphic( rGraphic );
     mpLink = new String( rLink );
 }
-
-// -----------------------------------------------------------------------------
 
 Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMode& rDestMap, const GraphicAttr& rAttr ) const
 {
@@ -1121,8 +998,6 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
     return aTransGraphic;
 }
 
-// -----------------------------------------------------------------------------
-
 Graphic GraphicObject::GetTransformedGraphic( const GraphicAttr* pAttr ) const // TODO: Change to Impl
 {
     GetGraphic();
@@ -1173,8 +1048,6 @@ Graphic GraphicObject::GetTransformedGraphic( const GraphicAttr* pAttr ) const /
     return aGraphic;
 }
 
-// -----------------------------------------------------------------------------
-
 void GraphicObject::ResetAnimationLoopCount()
 {
     if( IsAnimated() && !IsSwappedOut() )
@@ -1186,8 +1059,6 @@ void GraphicObject::ResetAnimationLoopCount()
     }
 }
 
-// -----------------------------------------------------------------------------
-
 BOOL GraphicObject::SwapOut()
 {
     BOOL bRet = ( !mbAutoSwapped ? maGraphic.SwapOut() : FALSE );
@@ -1198,8 +1069,6 @@ BOOL GraphicObject::SwapOut()
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
-
 BOOL GraphicObject::SwapOut( SvStream* pOStm )
 {
     BOOL bRet = ( !mbAutoSwapped ? maGraphic.SwapOut( pOStm ) : FALSE );
@@ -1209,8 +1078,6 @@ BOOL GraphicObject::SwapOut( SvStream* pOStm )
 
     return bRet;
 }
-
-// -----------------------------------------------------------------------------
 
 BOOL GraphicObject::SwapIn()
 {
@@ -1237,8 +1104,6 @@ BOOL GraphicObject::SwapIn()
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
-
 BOOL GraphicObject::SwapIn( SvStream* pIStm )
 {
     BOOL bRet;
@@ -1264,8 +1129,6 @@ BOOL GraphicObject::SwapIn( SvStream* pIStm )
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
-
 void GraphicObject::SetSwapState()
 {
     if( !IsSwappedOut() )
@@ -1276,8 +1139,6 @@ void GraphicObject::SetSwapState()
             mpMgr->ImplGraphicObjectWasSwappedOut( *this );
     }
 }
-
-// -----------------------------------------------------------------------------
 
 IMPL_LINK( GraphicObject, ImplAutoSwapOutHdl, void*, EMPTYARG )
 {
@@ -1312,8 +1173,6 @@ IMPL_LINK( GraphicObject, ImplAutoSwapOutHdl, void*, EMPTYARG )
     return 0L;
 }
 
-// ------------------------------------------------------------------------
-
 SvStream& operator>>( SvStream& rIStm, GraphicObject& rGraphicObj )
 {
     VersionCompat   aCompat( rIStm, STREAM_READ );
@@ -1339,8 +1198,6 @@ SvStream& operator>>( SvStream& rIStm, GraphicObject& rGraphicObj )
 
     return rIStm;
 }
-
-// ------------------------------------------------------------------------
 
 SvStream& operator<<( SvStream& rOStm, const GraphicObject& rGraphicObj )
 {

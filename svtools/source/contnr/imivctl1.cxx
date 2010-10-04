@@ -70,8 +70,6 @@ struct SvxIconChoiceCtrlEntry_Impl
 
 static BOOL bEndScrollInvalidate = TRUE;
 
-// ----------------------------------------------------------------------------------------------
-
 class IcnViewEdit_Impl : public MultiLineEdit
 {
     Link            aCallBackHdl;
@@ -103,10 +101,6 @@ public:
     void            StopEditing( BOOL bCancel = FALSE );
     BOOL            IsGrabFocus() const { return bGrabFocus; }
 };
-
-// ----------------------------------------------------------------------------------------------
-
-// ----------------------------------------------------------------------------------------------
 
 SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl( SvtIconChoiceCtrl* pCurView,
     WinBits nWinStyle ) :
@@ -535,15 +529,13 @@ void SvxIconChoiceCtrl_Impl::EntrySelected( SvxIconChoiceCtrlEntry* pEntry, BOOL
         }
         if( pEntry == pCursor )
             ShowCursor( TRUE );
-    } // if( bUpdateMode )
+    }
 
-    // --> OD 2009-05-27 #i101012#
-    // emit vcl event LISTBOX_SELECT only in case that the given entry is selected.
+    // #i101012# emit vcl event LISTBOX_SELECT only in case that the given entry is selected.
     if ( bSelect )
     {
         CallEventListeners( VCLEVENT_LISTBOX_SELECT, pEntry );
     }
-    // <--
 }
 
 void SvxIconChoiceCtrl_Impl::ResetVirtSize()
@@ -4670,8 +4662,6 @@ BOOL SvxIconChoiceCtrl_Impl::HandleShortCutKey( const KeyEvent& rKEvt )
 
     return bRet;
 }
-
-// -----------------------------------------------------------------------
 
 void SvxIconChoiceCtrl_Impl::CallEventListeners( ULONG nEvent, void* pData )
 {

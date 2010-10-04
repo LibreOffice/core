@@ -444,9 +444,7 @@ int HTMLParser::FilterToken( int nToken )
 #define HTML_ISALNUM( c ) ( HTML_ISALPHA(c) || HTML_ISDIGIT(c) )
 #define HTML_ISSPACE( c ) ( ' ' == c || (c >= 0x09 && c <= 0x0d) )
 #define HTML_ISPRINTABLE( c ) ( c >= 32 && c != 127)
-// --> OD 2006-07-26 #138464#
 #define HTML_ISHEXDIGIT( c ) ( HTML_ISDIGIT(c) || (c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f') )
-// <--
 
 int HTMLParser::ScanText( const sal_Unicode cBreak )
 {
@@ -473,8 +471,6 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                 if( '#' == (nNextCh = GetNextChar()) )
                 {
                     nNextCh = GetNextChar();
-                    // --> OD 2006-07-26 #138464#
-                    // consider hexadecimal digits
                     const sal_Bool bIsHex( 'x' == nNextCh );
                     const sal_Bool bIsDecOrHex( bIsHex || HTML_ISDIGIT(nNextCh) );
                     if ( bIsDecOrHex )
@@ -520,7 +516,6 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                             }
                         }
                     }
-                    // <--
                     else
                         nNextCh = 0U;
                 }
