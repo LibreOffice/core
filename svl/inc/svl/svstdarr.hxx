@@ -46,12 +46,7 @@
 
 typedef std::deque< BOOL > SvBools;
 
-//#ifdef _SVSTDARR_BYTES
-#ifndef _SVSTDARR_BYTES_DECL
-SV_DECL_VARARR_VISIBILITY( SvBytes, BYTE, 1, 1, SVL_DLLPUBLIC )
-#define _SVSTDARR_BYTES_DECL
-#endif
-//#endif
+typedef std::deque< BYTE > SvBytes;
 
 //#ifdef _SVSTDARR_ULONGS
 #ifndef _SVSTDARR_ULONGS_DECL
