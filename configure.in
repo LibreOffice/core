@@ -1508,12 +1508,14 @@ dnl ===================================================================
 dnl  Checks for c compiler,
 dnl  The check for the c++ compiler is later on.
 dnl ===================================================================
+GCC_HOME_SET="true"
 AC_MSG_CHECKING([gcc home])
 if test -z "$with_gcc_home"; then
    if test -n "$enable_icecream" && test "$enable_icecream" != "no" ; then
       GCC_HOME="/opt/icecream"
    else
       GCC_HOME=`which gcc | $SED -e s,/bin/gcc,,`
+      GCC_HOME_SET="false"
    fi
 else	
 	GCC_HOME="$with_gcc_home"
@@ -1524,9 +1526,12 @@ AC_SUBST(GCC_HOME)
 save_CC=$CC
 save_CXX=$CXX
 
-if test -n "$with_gcc_home"; then
+if test "$GCC_HOME_SET" = "true" ; then
    if test -z "$CC"; then
-      CC="$with_gcc_home/bin/gcc"
+      CC="$GCC_HOME/bin/gcc"
+   fi
+   if test -z "$CXX"; then
+      CXX="$GCC_HOME/bin/g++"
    fi
 fi
 
@@ -2160,12 +2165,6 @@ AC_SUBST(CRYPT_LINK)
 dnl ===================================================================
 dnl Testing for c++ compiler and version...
 dnl ===================================================================
-if test -n "$with_gcc_home"; then
-   if test -z "$CXX"; then
-      CXX="$with_gcc_home/bin/g++"
-   fi
-fi
-
 if test "$_os" = "WINNT" -a "$WITH_MINGWIN" != "yes"; then
    if test -e "$CC"; then
       CXX="$CC"
