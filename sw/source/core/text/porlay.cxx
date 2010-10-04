@@ -917,7 +917,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
     // remove invalid entries from script information arrays
     const USHORT nScriptRemove = aScriptChg.Count() - nCnt;
     aScriptChg.Remove( nCnt, nScriptRemove );
-    aScriptType.Remove( nCnt, nScriptRemove );
+    aScriptType.erase( aScriptType.begin() + nCnt, aScriptType.end() );
 
     // get the start of the last compression group
     USHORT nLastCompression = nChg;
@@ -936,7 +936,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
     const USHORT nCompRemove = aCompChg.Count() - nCntComp;
     aCompChg.Remove( nCntComp, nCompRemove );
     aCompLen.Remove( nCntComp, nCompRemove );
-    aCompType.Remove( nCntComp, nCompRemove );
+    aCompType.erase( aCompType.begin() + nCntComp, aCompType.end() );
 
     // get the start of the last kashida group
     USHORT nLastKashida = nChg;
@@ -982,7 +982,8 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
         if ( nScript != nNextScript )
         {
             aScriptChg.Insert( nEnd, nCnt );
-            aScriptType.Insert( nScript, nCnt++ );
+            aScriptType.insert( aScriptType.begin() + nCnt, nScript );
+            nCnt++;
             nScript = nNextScript;
         }
     }
@@ -1043,7 +1044,8 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
         {
             aScriptChg.Insert( nChg, nCnt );
         }
-        aScriptType.Insert( nScript, nCnt++ );
+        aScriptType.insert( aScriptType.begin() + nCnt, nScript );
+        nCnt++;
 
         // if current script is asian, we search for compressable characters
         // in this range
@@ -1089,7 +1091,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                         {
                             aCompChg.Insert( nPrevChg, nCntComp );
                             BYTE nTmpType = ePrevState;
-                            aCompType.Insert( nTmpType, nCntComp );
+                            aCompType.insert( aCompType.begin() + nCntComp, nTmpType );
                             aCompLen.Insert( nLastCompression - nPrevChg, nCntComp++ );
                         }
                     }
@@ -1110,7 +1112,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                 {
                     aCompChg.Insert( nPrevChg, nCntComp );
                     BYTE nTmpType = ePrevState;
-                    aCompType.Insert( nTmpType, nCntComp );
+                    aCompType.insert( aCompType.begin() + nCntComp, nTmpType );
                     aCompLen.Insert( nLastCompression - nPrevChg, nCntComp++ );
                 }
             }
@@ -1308,7 +1310,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
     // remove invalid entries from direction information arrays
     const USHORT nDirRemove = aDirChg.Count();
     aDirChg.Remove( 0, nDirRemove );
-    aDirType.Remove( 0, nDirRemove );
+    aDirType.clear();
 
     // Perform Unicode Bidi Algorithm for text direction information
     bool bPerformUBA = UBIDI_LTR != nDefaultDir;
@@ -1361,7 +1363,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                 if ( nStart > 0 && nStartPosOfGroup < nStart )
                 {
                     aScriptChg.Insert( nStart, nScriptIdx );
-                    aScriptType.Insert( nScriptTypeOfGroup, nScriptIdx );
+                    aScriptType.insert( aScriptType.begin() + nScriptIdx, nScriptTypeOfGroup );
                     ++nScriptIdx;
                 }
 
@@ -1369,12 +1371,12 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                 while ( nScriptIdx < aScriptChg.Count() && GetScriptChg( nScriptIdx ) <= nEnd )
                 {
                     aScriptChg.Remove( nScriptIdx, 1 );
-                    aScriptType.Remove( nScriptIdx, 1 );
+                    aScriptType.erase( aScriptType.begin() + nScriptIdx );
                 }
 
                 // Insert a new entry in ScriptArray for the end of the RTL run:
                 aScriptChg.Insert( nEnd, nScriptIdx );
-                aScriptType.Insert( i18n::ScriptType::COMPLEX, nScriptIdx );
+                aScriptType.insert( aScriptType.begin() + nScriptIdx, i18n::ScriptType::COMPLEX );
 
 #if OSL_DEBUG_LEVEL > 1
                 BYTE nScriptType;
@@ -1403,7 +1405,7 @@ void SwScriptInfo::UpdateBidiInfo( const String& rTxt )
     // remove invalid entries from direction information arrays
     const USHORT nDirRemove = aDirChg.Count();
     aDirChg.Remove( 0, nDirRemove );
-    aDirType.Remove( 0, nDirRemove );
+    aDirType.clear();
 
     //
     // Bidi functions from icu 2.0
@@ -1426,7 +1428,8 @@ void SwScriptInfo::UpdateBidiInfo( const String& rTxt )
     {
         ubidi_getLogicalRun( pBidi, nStart, &nEnd, &nCurrDir );
         aDirChg.Insert( (USHORT)nEnd, nCntDir );
-        aDirType.Insert( (BYTE)nCurrDir, nCntDir++ );
+        aDirType.push_back( (BYTE)nCurrDir );
+        nCntDir++;
         nStart = nEnd;
     }
 
