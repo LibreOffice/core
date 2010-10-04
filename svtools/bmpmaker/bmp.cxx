@@ -161,7 +161,7 @@ void BmpApp::Message( const String& rText, BYTE cExit )
 
     ByteString aText( rText, RTL_TEXTENCODING_UTF8 );
     aText.Append( "\r\n" );
-    fprintf( stderr, aText.GetBuffer() );
+    fprintf( stderr, "%s", aText.GetBuffer() );
 }
 
 // -----------------------------------------------------------------------------

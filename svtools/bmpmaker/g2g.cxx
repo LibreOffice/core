@@ -125,7 +125,7 @@ void G2GApp::Message( const String& rText, BYTE nExitCode )
 
     ByteString aText( rText, RTL_TEXTENCODING_UTF8 );
     aText.Append( "\r\n" );
-    fprintf( stderr, aText.GetBuffer() );
+    fprintf( stderr, "%s", aText.GetBuffer() );
 }
 
 // -----------------------------------------------------------------------------
