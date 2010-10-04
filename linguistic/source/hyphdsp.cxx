@@ -245,7 +245,7 @@ Sequence< Locale > SAL_CALL HyphenatorDispatcher::getLocales()
 }
 
 
-BOOL SAL_CALL HyphenatorDispatcher::hasLocale(const Locale& rLocale)
+sal_Bool SAL_CALL HyphenatorDispatcher::hasLocale(const Locale& rLocale)
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
