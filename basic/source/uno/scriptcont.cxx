@@ -43,9 +43,7 @@
 #include <com/sun/star/task/ErrorCodeIOException.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
 #include <comphelper/processfactory.hxx>
-#ifndef _COMPHELPER_STORAGEHELPER_HXX_
 #include <comphelper/storagehelper.hxx>
-#endif
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <osl/mutex.hxx>

@@ -44,9 +44,7 @@
 #include <com/sun/star/system/XSimpleMailClientSupplier.hpp>
 #include <com/sun/star/system/SimpleMailClientFlags.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
-#ifndef _RTL_TEXTENC_H
 #include <rtl/textench.h>
-#endif
 #include <vos/mutex.hxx>
 #include <rtl/uri.h>
 #include <rtl/uri.hxx>

@@ -33,9 +33,7 @@
 #include <rtl/ustrbuf.hxx>
 #include "xmlehelp.hxx"
 
-#ifndef _XMLOFF_XMTOKEN_HXX
 #include <xmloff/xmltoken.hxx>
-#endif
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;

@@ -35,9 +35,7 @@
 #include <com/sun/star/sdbcx/KeyType.hpp>
 #include <connectivity/sdbcx/VTable.hxx>
 #include "NCatalog.hxx"
-#ifndef _CONNECTIVITY_EVOAB_BCONNECTION_HXX_
 #include "NConnection.hxx"
-#endif
 #include <comphelper/extract.hxx>
 #include "connectivity/dbtools.hxx"
 #include "connectivity/dbexception.hxx"

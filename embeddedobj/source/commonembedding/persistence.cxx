@@ -48,9 +48,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCEESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

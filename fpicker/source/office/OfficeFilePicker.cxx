@@ -59,9 +59,7 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include "vos/mutex.hxx"
-#ifndef _SV_APP_HXX
 #include "vcl/svapp.hxx"
-#endif
 
 // define ----------------------------------------------------------------
 

@@ -28,12 +28,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
 
-#ifndef CONNECTIVITY_MOZAB_MCONFIGACCESS_HXX
 #include "MConfigAccess.hxx"
-#endif
-#ifndef CONNECTIVITY_MOZAB_MEXTCONFIGACCESS_HXX
 #include "MExtConfigAccess.hxx"
-#endif
 #include "MConnection.hxx"
 
 using namespace ::com::sun::star::uno;

@@ -35,9 +35,7 @@
 #include <xmloff/xmltoken.hxx>
 #include "xmlnmspe.hxx"
 
-#ifndef _XMLOFF_TRANSFOERMERBASE_HXX
 #include "TransformerBase.hxx"
-#endif
 #include "TransformerActions.hxx"
 #include "AttrTransformerAction.hxx"
 #include "ActionMapTypesOASIS.hxx"
@@ -45,9 +43,7 @@
 #include "RenameElemTContext.hxx"
 #include "FlatTContext.hxx"
 
-#ifndef _XMLOFF_NOTESCONTEXT_HXX
 #include "NotesTContext.hxx"
-#endif
 
 using ::rtl::OUString;
 using namespace ::xmloff::token;

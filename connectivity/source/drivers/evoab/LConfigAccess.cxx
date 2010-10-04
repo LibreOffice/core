@@ -29,9 +29,7 @@
 #include "precompiled_connectivity.hxx"
 #include "LConfigAccess.hxx"
 #include "LDriver.hxx"
-#ifndef CONNECTIVITY_EVOAB_DEBUG_HELPER_HXX
 #include "LDebug.hxx"
-#endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

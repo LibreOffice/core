@@ -43,9 +43,7 @@
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/awt/XWindow.hpp>
 
-#ifndef _COM_SUN_STAR_LANG_XSERVICXEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/frame/FrameAction.hpp>
@@ -54,9 +52,7 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 #include <vcl/window.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/svapp.hxx>

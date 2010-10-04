@@ -39,12 +39,8 @@
 #include <xmloff/families.hxx>
 #include <xmloff/xmlexp.hxx>
 #include "PageMasterPropHdlFactory.hxx"
-#ifndef _XMLOFF_PAGEMASTERSTYLEMAP_HXX
 #include <xmloff/PageMasterStyleMap.hxx>
-#endif
-#ifndef _XMLOFF_PAGEMASTERPROPMAPPER_HXX
 #include "PageMasterPropMapper.hxx"
-#endif
 #include "PageMasterExportPropMapper.hxx"
 #include "PageMasterExportPropMapper.hxx"
 

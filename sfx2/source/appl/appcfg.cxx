@@ -30,15 +30,11 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
-#ifndef _COM_SUN_STAR_BEANS_PropertyValue_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
 
-#ifndef _STDLIB_H
 #include <stdlib.h>
-#endif
 #include <tools/config.hxx>
 #include <vcl/sound.hxx>
 #include <vcl/msgbox.hxx>

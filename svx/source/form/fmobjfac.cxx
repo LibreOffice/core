@@ -32,32 +32,20 @@
 #include "svx/fmtools.hxx"
 #include "fmservs.hxx"
 
-#ifndef _FM_FMOBJFAC_HXX
 #include "fmobjfac.hxx"
-#endif
 
-#ifndef _FM_FMGLOB_HXX
 #include <svx/fmglob.hxx>
-#endif
 
-#ifndef _FM_FMOBJ_HXX
 #include "fmobj.hxx"
-#endif
 #include "fmshimp.hxx"
 
-#ifndef _FM_FMSHELL_HXX
 #include <svx/fmshell.hxx>
-#endif
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include "tbxform.hxx"
 #include <tools/resid.hxx>
 
-#ifndef _SVX_FMRESIDS_HRC
 #include "fmresids.hrc"
-#endif
 #include <tools/shl.hxx>
 #include <svx/dialmgr.hxx>
 #include "fmservs.hxx"
@@ -65,9 +53,7 @@
 #include "fmexpl.hxx"
 #include "filtnav.hxx"
 
-#ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
-#endif
 #include "fmPropBrw.hxx"
 #include "datanavi.hxx"
 

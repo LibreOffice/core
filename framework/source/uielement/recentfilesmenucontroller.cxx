@@ -35,9 +35,7 @@
 #include <threadhelp/resetableguard.hxx>
 #include "services.h"
 
-#ifndef __FRAMEWORK_CLASSES_RESOURCE_HRC_
 #include <classes/resource.hrc>
-#endif
 #include <classes/fwkresid.hxx>
 
 //_________________________________________________________________________________________________________________
@@ -51,9 +49,7 @@
 //  includes of other projects
 //_________________________________________________________________________________________________________________
 
-#ifndef _VCL_MENU_HXX_
 #include <vcl/menu.hxx>
-#endif
 #include <vcl/svapp.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <tools/urlobj.hxx>

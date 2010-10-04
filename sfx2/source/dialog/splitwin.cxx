@@ -35,9 +35,7 @@
 
 #include <string> // HACK: prevent conflict between STLPORT and Workshop headers
 
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
 #include <unotools/viewoptions.hxx>
 #ifndef GCC
 #endif

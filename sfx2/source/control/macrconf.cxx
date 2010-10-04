@@ -29,15 +29,11 @@
 #include "precompiled_sfx2.hxx"
 #include <basic/sbstar.hxx>
 #include <basic/basmgr.hxx>
-#ifndef _SBX_HXX //autogen
 #include <basic/sbx.hxx>
-#endif
 #include <svl/intitem.hxx>
 #include <basic/sbmeth.hxx>
 #include <basic/sbmod.hxx>
-#ifndef _BASIC_SBUNO_HXX
 #include <basic/sbuno.hxx>
-#endif
 
 #include <osl/mutex.hxx>
 
@@ -47,9 +43,7 @@
 #ifndef GCC
 #endif
 
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 #include <unotools/intlwrapper.hxx>
 
 #include <sfx2/msgpool.hxx>

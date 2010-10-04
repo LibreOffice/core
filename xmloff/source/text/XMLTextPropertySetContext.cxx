@@ -33,13 +33,9 @@
 #include "XMLBackgroundImageContext.hxx"
 #include "XMLSectionFootnoteConfigImport.hxx"
 
-#ifndef _XMLOFF_TXTPRMAP_HXX
 #include <xmloff/txtprmap.hxx>
-#endif
 #include "xmltabi.hxx"
-#ifndef _XMLOFF_TXTDROPI_HXX
 #include "txtdropi.hxx"
-#endif
 
 using ::rtl::OUString;
 

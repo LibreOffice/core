@@ -33,9 +33,7 @@
 #include <svtools/texteng.hxx>
 #include <svl/undo.hxx>
 
-#ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>
-#endif
 
 #include "basic.hrc"
 #include "appedit.hxx"

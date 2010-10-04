@@ -30,9 +30,7 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <cppuhelper/weakref.hxx>
 
-#ifndef _XMLOFF_SINGLEPROPERTYSETINFOCACHE_HXX
 #include <xmloff/SinglePropertySetInfoCache.hxx>
-#endif
 
 using namespace ::com::sun::star::uno;
 using ::com::sun::star::lang::XTypeProvider;

@@ -36,9 +36,7 @@
 #include "prov.hxx"
 #include <com/sun/star/uno/Reference.h>
 
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
 #include <com/sun/star/ucb/ListActionType.hpp>
 #include <com/sun/star/ucb/XSourceInitialization.hpp>
 #include <com/sun/star/ucb/XCachedDynamicResultSetStubFactory.hpp>

@@ -37,9 +37,7 @@
 #include <tools/time.hxx>
 #include <vcl/svapp.hxx>
 #ifdef UNX
-#ifndef _SV_SYSDATA_HXX
 #include <vcl/sysdata.hxx>
-#endif
 #endif
 
 #ifndef _COM_SUN_STAR_AWT_SYSTEMPOINTER_HDL_

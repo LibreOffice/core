@@ -35,9 +35,7 @@
 #include "SysShExec.hxx"
 #include <osl/file.hxx>
 
-#ifndef _COM_SUN_STAR_SYS_SHELL_SYSTEMSHELLEXECUTEFLAGS_HPP_
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
-#endif
 
 #define WIN32_LEAN_AND_MEAN
 #if defined _MSC_VER

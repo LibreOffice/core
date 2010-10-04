@@ -42,19 +42,13 @@
 
 #include <vcl/sound.hxx>
 #include <svx/dialmgr.hxx>
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
 #include "tbxctl.hxx"
 #include "tbxdraw.hxx"
 #include "tbxform.hxx"
-#ifndef _SVX_FMRESIDS_HRC
 #include "fmresids.hrc"
-#endif
 #include "fmitems.hxx"
-#ifndef _SVX_FMHELP_HRC
 #include "fmhelp.hrc"
-#endif
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/imagemgr.hxx>

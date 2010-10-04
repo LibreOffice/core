@@ -32,9 +32,7 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_UICONFIGURATION_UICATEGORYDESCRPTION_HXX_
 #include "uiconfiguration/uicategorydescription.hxx"
-#endif
 #include <threadhelp/resetableguard.hxx>
 #include "services.h"
 
@@ -57,9 +55,7 @@
 #include <unotools/configmgr.hxx>
 #include <tools/string.hxx>
 
-#ifndef _VCL_MNEMONIC_HXX_
 #include <vcl/mnemonic.hxx>
-#endif
 #include <comphelper/sequence.hxx>
 #include <rtl/logfile.hxx>
 

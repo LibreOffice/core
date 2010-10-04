@@ -37,29 +37,21 @@
 #include <svx/fmmodel.hxx>
 
 #ifndef SVX_LIGHT
-#ifndef _SVX_FMOBJ_HXX
 #include "fmobj.hxx"
-#endif
 #endif
 
 #ifndef SVX_LIGHT
-#ifndef _SVX_FMRESIDS_HRC
 #include "fmresids.hrc"
-#endif
 #endif
 #include <tools/shl.hxx>
 #include <svx/dialmgr.hxx>
 
 #ifndef SVX_LIGHT
-#ifndef _SVX_FMPGEIMP_HXX
 #include "fmpgeimp.hxx"
-#endif
 #endif
 
 #ifndef SVX_LIGHT
-#ifndef _SFX_OBJSH_HXX //autogen
 #include <sfx2/objsh.hxx>
-#endif
 #endif
 #include "svditer.hxx"
 #include <svx/svdview.hxx>
@@ -68,12 +60,8 @@
 
 
 #ifndef SVX_LIGHT
-#ifndef _SVX_FMGLOB_HXX
 #include <svx/fmglob.hxx>
-#endif
-#ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
-#endif
 #include "fmundo.hxx"
 #include "svx/fmtools.hxx"
 using namespace ::svxform;

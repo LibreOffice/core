@@ -30,12 +30,8 @@
 #include <tools/errcode.hxx>
 #include <basic/sbxobj.hxx>
 #include <basic/sbx.hxx>
-#ifndef __SBX_SBXVARIABLE_HXX //autogen
 #include <basic/sbxvar.hxx>
-#endif
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 
 #include "object.hxx"
 #include "collelem.hxx"

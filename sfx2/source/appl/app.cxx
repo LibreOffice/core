@@ -43,14 +43,10 @@
 #include <basic/basrdll.hxx>
 #include <svtools/asynclink.hxx>
 #include <svl/stritem.hxx>
-#ifndef _SOUND_HXX //autogen
 #include <vcl/sound.hxx>
-#endif
 #include <svl/eitem.hxx>
 #include <svl/urlbmk.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 
@@ -78,9 +74,7 @@
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 

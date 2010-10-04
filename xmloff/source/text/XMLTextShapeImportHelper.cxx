@@ -28,13 +28,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 #include <com/sun/star/text/XTextContent.hpp>
-#ifndef _COM_SUN_STAR_TEXT_TEXTCONTENTANCHORTYPE_HPP
 #include <com/sun/star/text/TextContentAnchorType.hpp>
-#endif
 
-#ifndef _XMLOFF_XMLTIMP_HXX_
 #include <xmloff/xmlimp.hxx>
-#endif
 #include <xmloff/txtimp.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/nmspmap.hxx>

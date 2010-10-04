@@ -33,9 +33,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <rtl/uri.hxx>
 #include <tools/debug.hxx>
-#ifndef _SOLAR_HRC
 #include <svl/solar.hrc>
-#endif
 
 #define EXPAND_PROTOCOL     "vnd.sun.star.expand:"
 #define ENTER_MOD_METHOD()  \

@@ -30,12 +30,8 @@
 #include <tools/debug.hxx>
 #include "xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
-#ifndef _XMLOFF_TXTPRHDL_HXX
 #include "txtprhdl.hxx"
-#endif
-#ifndef _XMLOFF_TXTPRMAP_HXX
 #include <xmloff/txtprmap.hxx>
-#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

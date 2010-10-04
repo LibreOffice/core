@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
 
-#ifndef _CONNECTIVITY_FLAT_EPREPAREDSTATEMENT_HXX_
 #include "flat/EPreparedStatement.hxx"
-#endif
 #include "flat/EResultSet.hxx"
 
 using namespace connectivity::flat;

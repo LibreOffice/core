@@ -54,9 +54,7 @@
 #include "connectivity/dbconversion.hxx"
 #include <comphelper/types.hxx>
 #include <unotools/syslocale.hxx>
-#ifndef CONNECTIVITY_EVOAB_DEBUG_HELPER_HXX
 #include "LDebug.hxx"
-#endif
 #include <map>
 
 using namespace ::comphelper;

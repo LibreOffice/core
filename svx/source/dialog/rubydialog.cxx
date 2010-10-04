@@ -47,9 +47,7 @@
 #include <com/sun/star/text/RubyAdjust.hpp>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#ifndef _CPPUHELPER_IMPLBASE3_HXX_
 #include <cppuhelper/implbase1.hxx>
-#endif
 #include <svtools/colorcfg.hxx>
 
 using namespace com::sun::star::uno;

@@ -28,14 +28,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 
-#ifndef _XMLOFF_PAGEMASTERPROPMAPPER_HXX
 #include "PageMasterPropMapper.hxx"
-#endif
 
 
-#ifndef _XMLOFF_PAGEMASTERSTYLEMAP_HXX
 #include <xmloff/PageMasterStyleMap.hxx>
-#endif
 #include "PageMasterPropHdlFactory.hxx"
 
 using namespace ::com::sun::star;

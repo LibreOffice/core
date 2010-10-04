@@ -34,13 +34,9 @@
 #include <tools/vcompat.hxx>
 #include <svx/xflasit.hxx>
 #include <svx/xfillit0.hxx>
-#ifndef _SFXIPOOL_HXX
 #include <svl/itempool.hxx>
-#endif
 #include <svl/whiter.hxx>
-#ifndef _SFXIPOOL_HXX
 #include <svl/itempool.hxx>
-#endif
 #include <svl/itemset.hxx>
 #include <svx/xdef.hxx>
 #include "xexch.hxx"

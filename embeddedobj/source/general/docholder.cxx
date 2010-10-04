@@ -36,9 +36,7 @@
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -66,9 +64,7 @@
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/ui/XDockingAreaAcceptor.hpp>
 #include <com/sun/star/ui/XUIElementSettings.hpp>
-#ifndef _COM_SUN_STAR_UI_XCONFIGURATIONMANAGER_HPP_
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
-#endif
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

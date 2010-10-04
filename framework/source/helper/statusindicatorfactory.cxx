@@ -44,9 +44,7 @@
 // interface includes
 #include <com/sun/star/awt/Rectangle.hpp>
 
-#ifndef _COM_SUN_STAR_AWT_XCONTROLS_HPP_
 #include <com/sun/star/awt/XControl.hpp>
-#endif
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
 #include <com/sun/star/awt/DeviceInfo.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
@@ -56,9 +54,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 
 //-----------------------------------------------
 // includes of other projects

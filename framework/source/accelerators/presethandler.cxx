@@ -41,41 +41,25 @@
 //_______________________________________________
 // interface includes
 
-#ifndef __COM_SUN_STAR_CONFIGURATION_CORRUPTEDUICONFIGURATIONEXCEPTION_HPP_
 #include <com/sun/star/configuration/CorruptedUIConfigurationException.hpp>
-#endif
 
-#ifndef __COM_SUN_STAR_CONTAINER_NOSUCHELEMENTEXCEPTION_HPP_
 #include <com/sun/star/container/NoSuchElementException.hpp>
-#endif
 
-#ifndef __COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
 
-#ifndef __COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
 
-#ifndef __COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
 #include <com/sun/star/embed/ElementModes.hpp>
-#endif
 
-#ifndef __COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
 #include <com/sun/star/embed/XTransactedObject.hpp>
-#endif
 
-#ifndef __COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#endif
 
 //_______________________________________________
 // other includes
 #include <vcl/svapp.hxx>
 
-#ifndef _RTL_USTRBUF_HXX
 #include <rtl/ustrbuf.hxx>
-#endif
 
 //_______________________________________________
 // const

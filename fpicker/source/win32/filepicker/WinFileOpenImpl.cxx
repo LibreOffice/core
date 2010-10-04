@@ -44,9 +44,7 @@
 #include <com/sun/star/ui/dialogs/ListBoxControlActions.hpp>
 #include "..\misc\WinImplHelper.hxx"
 
-#ifndef _FILEPICKER_HXX_
 #include "filepicker.hxx"
-#endif
 #include "controlaccess.hxx"
 #include <rtl/ustrbuf.hxx>
 #include <rtl/string.hxx>

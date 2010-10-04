@@ -37,9 +37,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase3.hxx>
-#endif
 
 class SvXMLAttrContainerItem_Impl;
 

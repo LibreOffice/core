@@ -45,14 +45,10 @@
 #include <com/sun/star/ucb/UnsupportedDataSinkException.hpp>
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
 #include <com/sun/star/ucb/XPersistentPropertySet.hpp>
-#ifndef _VOS_DIAGNOSE_HXX_
 #include <vos/diagnose.hxx>
-#endif
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
-#ifndef _UCBHELPER_CANCELCOMMANDEXECUTION_HXX
 #include <ucbhelper/cancelcommandexecution.hxx>
-#endif
 #include "content.hxx"
 #include "provider.hxx"
 #include "resultset.hxx"

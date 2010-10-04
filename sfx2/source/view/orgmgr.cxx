@@ -31,16 +31,12 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <tools/urlobj.hxx>
 #ifndef GCC
 #endif
 
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 #include <unotools/intlwrapper.hxx>
 
 #include <comphelper/storagehelper.hxx>

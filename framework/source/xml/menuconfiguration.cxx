@@ -33,17 +33,13 @@
 //_________________________________________________________________________________________________________________
 #include <xml/menuconfiguration.hxx>
 
-#ifndef __FRAMEWORK_CLASSES_BMKMENU_HXX_
 #include <classes/bmkmenu.hxx>
-#endif
 #include <classes/addonmenu.hxx>
 #include <xml/menudocumenthandler.hxx>
 #include <xml/saxnamespacefilter.hxx>
 #include <services.h>
 
-#ifndef _FRAMEWORK_UIELEMENT_ROOTITEMCONTAINER_HXX_
 #include <uielement/rootitemcontainer.hxx>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  interface includes

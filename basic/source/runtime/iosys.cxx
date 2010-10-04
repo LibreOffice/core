@@ -29,9 +29,7 @@
 #include "precompiled_basic.hxx"
 #include <vcl/dialog.hxx>
 #include <vcl/edit.hxx>
-#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/security.h>

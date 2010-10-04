@@ -37,9 +37,7 @@
 #include <xmloff/xmlexppr.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/families.hxx>
-#ifndef _XMLOFF_PAGEMASTERSTYLEMAP_HXX
 #include <xmloff/PageMasterStyleMap.hxx>
-#endif
 
 using namespace ::std;
 using ::rtl::OUString;

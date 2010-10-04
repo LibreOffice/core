@@ -29,9 +29,7 @@
 #include "precompiled_xmloff.hxx"
 #include "ProcAddAttrTContext.hxx"
 #include "MutableAttrList.hxx"
-#ifndef _XMLOFF_TRANSFORMERBASE_HXX
 #include "TransformerBase.hxx"
-#endif
 #include <xmloff/nmspmap.hxx>
 
 using ::rtl::OUString;

@@ -37,9 +37,7 @@
 #include <xml/toolboxconfiguration.hxx>
 #include <uiconfiguration/imagemanager.hxx>
 
-#ifndef __FRAMEWORK_XML_STATUSBARCONFIGURATION_HXX_
 #include <xml/statusbarconfiguration.hxx>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  interface includes

@@ -34,9 +34,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
-#ifndef _COM_SUN_STAR_UNO_EXCEPTION_HPP
 #include <com/sun/star/uno/Exception.hpp>
-#endif
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 // #110680#

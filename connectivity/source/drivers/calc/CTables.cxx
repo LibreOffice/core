@@ -30,9 +30,7 @@
 #include "calc/CTables.hxx"
 #include "calc/CTable.hxx"
 #include "file/FCatalog.hxx"
-#ifndef _CONNECTIVITY_FILE_BCONNECTION_HXX_
 #include "file/FConnection.hxx"
-#endif
 #include "calc/CCatalog.hxx"
 #include <comphelper/types.hxx>
 #include <rtl/logfile.hxx>

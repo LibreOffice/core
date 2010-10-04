@@ -37,9 +37,7 @@
 #include <tools/config.hxx>
 #include <vcl/gradient.hxx>
 
-#ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>
-#endif
 
 #include "brkpnts.hxx"
 #include "basic.hrc"

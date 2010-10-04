@@ -34,9 +34,7 @@
 #include <jobs/job.hxx>
 #include <jobs/joburl.hxx>
 
-#ifndef __FRAMEWORK_CLASS_CONVERTER_HXX_
 #include <classes/converter.hxx>
-#endif
 #include <threadhelp/transactionguard.hxx>
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>

@@ -30,9 +30,7 @@
 
 #include "internal/global.hxx"
 
-#ifndef INFOTIPS_HXX_INCLUDED
 #include "internal/thumbviewer.hxx"
-#endif
 #include "internal/shlxthdl.hxx"
 #include "internal/registry.hxx"
 #include "internal/fileextensions.hxx"

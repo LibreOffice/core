@@ -30,9 +30,7 @@
 
 // include ---------------------------------------------------------------
 #include <tools/shl.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 
 #define _SVX_PASSWD_CXX
 

@@ -44,9 +44,7 @@
 
 #include <com/sun/star/table/XColumnRowRange.hpp>
 
-#ifndef _XMLOFF_SHAPEEXPORT_HXX
 #include <xmloff/shapeexport.hxx>
-#endif
 #include "sdpropls.hxx"
 #include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -58,9 +56,7 @@
 #include <com/sun/star/container/XIdentifierContainer.hpp>
 #include <com/sun/star/drawing/ShadeMode.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
-#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETERPARI_HPP_
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
-#endif
 #include <com/sun/star/drawing/EnhancedCustomShapeGluePointType.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>

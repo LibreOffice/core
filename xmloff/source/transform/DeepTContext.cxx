@@ -28,16 +28,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 #include "DeepTContext.hxx"
-#ifndef _XMLOFF_FLATTTCONTEXT_HXX
 #include "FlatTContext.hxx"
-#endif
 #include "EventOOoTContext.hxx"
 #include "TransformerActions.hxx"
 #include "ElemTransformerAction.hxx"
 #include "PersMixedContentTContext.hxx"
-#ifndef _XMLOFF_TRANSFORMERBASE_HXX
 #include "TransformerBase.hxx"
-#endif
 
 using ::rtl::OUString;
 using namespace ::com::sun::star::uno;

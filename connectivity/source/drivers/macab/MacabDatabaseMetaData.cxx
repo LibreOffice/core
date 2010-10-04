@@ -34,9 +34,7 @@
 #include "MacabGroup.hxx"
 #include "macabutilities.hxx"
 
-#ifndef CONNECTIVITY_MACAB_DRIVER_HXX_
 #include "MacabDriver.hxx"
-#endif
 #include "FDatabaseMetaDataResultSet.hxx"
 #include "OTypeInfo.hxx"
 #include <com/sun/star/sdbc/ColumnValue.hpp>

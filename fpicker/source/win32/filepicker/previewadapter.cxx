@@ -31,9 +31,7 @@
 #include <tchar.h>
 #include "previewadapter.hxx"
 
-#ifndef _COM_SUN_STAR_UI_DIALOG_FILEPREVIEWIMAGEFORMATS_HPP_
 #include <com/sun/star/ui/dialogs/FilePreviewImageFormats.hpp>
-#endif
 #include "dibpreview.hxx"
 #include "../misc/WinImplHelper.hxx"
 

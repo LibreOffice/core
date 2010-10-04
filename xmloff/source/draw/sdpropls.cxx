@@ -39,9 +39,7 @@
 #include <com/sun/star/drawing/RectanglePoint.hpp>
 #include <com/sun/star/drawing/CircleKind.hpp>
 
-#ifndef _COM_SUN_STAR_DRAWING_BitmapMode_HPP_
 #include <com/sun/star/drawing/BitmapMode.hpp>
-#endif
 #include <com/sun/star/text/WritingMode.hpp>
 #include <xmloff/EnumPropertyHdl.hxx>
 #include <xmloff/NamedBoolPropertyHdl.hxx>

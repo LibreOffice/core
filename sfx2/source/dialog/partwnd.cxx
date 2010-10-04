@@ -43,9 +43,7 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 
 #include <toolkit/helper/vclunohelper.hxx>
 

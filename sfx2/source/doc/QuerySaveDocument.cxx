@@ -33,9 +33,7 @@
 #include "sfxresid.hxx"
 #include <sfx2/sfxuno.hxx>
 #include "doc.hrc"
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 // -----------------------------------------------------------------------------
 short ExecuteQuerySaveDocument(Window* _pParent,const String& _rTitle)
 {

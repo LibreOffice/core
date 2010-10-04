@@ -33,13 +33,9 @@
 #include <classes/menuconfiguration.hxx>
 #include <classes/addonmenu.hxx>
 
-#ifndef __FRAMEWORK_SERVICES_ATTRIBUTELIST_HXX_
 #include <services/attributelist.hxx>
-#endif
 
-#ifndef __COM_SUN_STAR_XML_SAX_XEXTENDEDDOCUMENTHANDLER_HPP_
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
-#endif
 
 
 using namespace ::rtl;

@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#ifndef _SVX_FMRESIDS_HRC
 #include "fmresids.hrc"
-#endif
 #include "svx/fmtools.hxx"
 #include "fmsrccfg.hxx"
 #include <tools/debug.hxx>
@@ -50,18 +48,14 @@
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 
-#ifndef _COM_SUN_STAR_SDDB_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#endif
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XNumberFormats.hpp>
 #include <comphelper/processfactory.hxx>
 
-#ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
-#endif
 #include "fmservs.hxx"
 #include "fmsrcimp.hxx"
 #include <svx/fmsearch.hxx>

@@ -48,21 +48,13 @@
 //  includes of other projects
 //_________________________________________________________________________________________________________________
 
-#ifndef _VCL_MENU_HXX_
 #include <vcl/menu.hxx>
-#endif
 #include <vcl/mapunit.hxx>
-#ifndef _VCL_SVAPP_HXX_
 #include <vcl/svapp.hxx>
-#endif
 #include <vcl/i18nhelp.hxx>
-#ifndef _VCL_OUTPUTDEVICE_HXX_
 #include <vcl/outdev.hxx>
-#endif
 #include <vcl/print.hxx>
-#ifndef _SVTOOLS_CTRLTOOL_HXX_
 #include <svtools/ctrltool.hxx>
-#endif
 #include <dispatch/uieventloghelper.hxx>
 #include <vos/mutex.hxx>
 

@@ -29,13 +29,9 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_DISPATCH_SOUNDHANDLER_HXX_
 #include "soundhandler.hxx"
-#endif
 
-#ifndef __COMPHELPER_MEDIADESCRIPTOR_HXX_
 #include <comphelper/mediadescriptor.hxx>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  interface includes

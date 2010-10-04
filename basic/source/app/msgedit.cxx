@@ -37,18 +37,12 @@ Version 3           Changed Charset from CHARSET_IBMPC to RTL_TEXTENCODING_UTF8
 #include <cstdio>
 #include <tools/time.hxx>
 #include <tools/stream.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _SOUND_HXX //autogen
 #include <vcl/sound.hxx>
-#endif
 #include <tools/fsys.hxx>
 #include <svtools/stringtransfer.hxx>
 #include <unotools/syslocale.hxx>
-#ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>
-#endif
 #include "basic.hrc"
 #include "msgedit.hxx"
 #include "app.hxx"

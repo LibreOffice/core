@@ -48,16 +48,12 @@
 //  includes of other projects
 //_________________________________________________________________________________________________________________
 
-#ifndef _VCL_MENU_HXX_
 #include <vcl/menu.hxx>
-#endif
 #include <vcl/svapp.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
-#ifndef _VCL_MNEMONIC_HXX_
 #include <vcl/mnemonic.hxx>
-#endif
 #include <dispatch/uieventloghelper.hxx>
 #include <vos/mutex.hxx>
 

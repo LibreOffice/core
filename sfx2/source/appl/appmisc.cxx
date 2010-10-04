@@ -29,9 +29,7 @@
 #include "precompiled_sfx2.hxx"
 #include <vcl/status.hxx>
 #include <vcl/msgbox.hxx>
-#ifndef _VOS_PROCESS_HXX //autogen
 #include <vos/process.hxx>
-#endif
 #include <vos/xception.hxx>
 #include <svl/whiter.hxx>
 #include <svl/stritem.hxx>
@@ -41,9 +39,7 @@
 #include <unotools/internaloptions.hxx>
 #include <unotools/pathoptions.hxx>
 #include <com/sun/star/registry/InvalidRegistryException.hpp>
-#ifndef _COM_SUN_STAR_BEANS_PropertyValue_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>

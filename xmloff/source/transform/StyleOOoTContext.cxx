@@ -42,13 +42,9 @@
 #include "MutableAttrList.hxx"
 #include "TransformerActions.hxx"
 #include "PropertyActionsOOo.hxx"
-#ifndef _XMLOFF_TRANSFORMERBASE_HXX
 #include "TransformerBase.hxx"
-#endif
 
-#ifndef _XMLOFF_STYLEOASISTCONTEXT_HXX
 #include "StyleOOoTContext.hxx"
-#endif
 #include <xmloff/xmluconv.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>

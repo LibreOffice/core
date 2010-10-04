@@ -32,9 +32,7 @@
 #include <ctype.h>
 #include <string.h>
 
-#ifndef _TABLE_HXX //autogen
 #include <tools/table.hxx>
-#endif
 
 #include <char.hxx>
 

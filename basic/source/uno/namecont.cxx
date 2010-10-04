@@ -42,9 +42,7 @@
 #include <rtl/uri.hxx>
 #include <rtl/strbuf.hxx>
 #include <comphelper/processfactory.hxx>
-#ifndef INCLUDED_COMPHELPER_ANYTOSTRING_HXX
 #include <comphelper/anytostring.hxx>
-#endif
 
 #include "namecont.hxx"
 #include <basic/basicmanagerrepository.hxx>
@@ -67,9 +65,7 @@
 #include <com/sun/star/script/LibraryNotLoadedException.hpp>
 #include "com/sun/star/deployment/ExtensionManager.hpp"
 #include <comphelper/storagehelper.hxx>
-#ifndef _RTL_USTRING_HXX_
 #include <comphelper/anytostring.hxx>
-#endif
 #include <cppuhelper/exc_hlp.hxx>
 #include <basic/sbmod.hxx>
 

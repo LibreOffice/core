@@ -32,9 +32,7 @@
 #include <xmloff/nmspmap.hxx>
 #include "xmlnmspe.hxx"
 #include "XMLTextHeaderFooterContext.hxx"
-#ifndef _XMLOFF_TEXTTABLECONTEXT_HXX_
 #include <xmloff/XMLTextTableContext.hxx>
-#endif
 #include <xmloff/xmlimp.hxx>
 
 

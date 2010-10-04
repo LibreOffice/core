@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmlhelp.hxx"
 #include "db.hxx"
-#ifndef _VOS_DIAGNOSE_HXX_
 #include <vos/diagnose.hxx>
-#endif
 #include <osl/thread.h>
 #include <rtl/uri.hxx>
 #include <osl/file.hxx>

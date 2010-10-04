@@ -1621,9 +1621,7 @@ uno::Sequence< OUString > SAL_CALL SvxShapePolyPolygonBezier::getSupportedServic
 #include <vcl/cvtgrf.hxx>
 #include <svx/svdograf.hxx>
 #ifndef SVX_LIGHT
-#ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
-#endif
 #include <sfx2/app.hxx>
 #include <sfx2/fcontnr.hxx>
 #endif

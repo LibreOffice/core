@@ -43,17 +43,13 @@
 #include <com/sun/star/awt/MenuItemStyle.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 
-#ifndef _COM_SUN_STAR_EMBED_VERBDATTRIBUTES_HPP_
 #include <com/sun/star/embed/VerbAttributes.hpp>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  includes of other projects
 //_________________________________________________________________________________________________________________
 
-#ifndef _VCL_MENU_HXX_
 #include <vcl/menu.hxx>
-#endif
 #include <vcl/svapp.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <tools/urlobj.hxx>

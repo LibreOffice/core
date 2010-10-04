@@ -30,9 +30,7 @@
 //#include <stl_queue.h>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
-#ifndef _TOOLERR_HXX //autogen
 #include <tools/errcode.hxx>
-#endif
 #include <svl/hint.hxx>
 
 #include <cppuhelper/implbase1.hxx>

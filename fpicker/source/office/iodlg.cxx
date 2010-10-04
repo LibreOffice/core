@@ -56,24 +56,16 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/localfilehelper.hxx>
 
-#ifndef _SVTOOLS_HRC
 #include "svtools/svtools.hrc"
-#endif
-#ifndef _SVT_HELPID_HRC
 #include "svtools/helpid.hrc"
-#endif
-#ifndef _SVTOOLS_IODLGIMPL_HRC
 #include "iodlg.hrc"
-#endif
 #include "rtl/instance.hxx"
 #include "asyncfilepicker.hxx"
 #include "iodlgimp.hxx"
 #include "svtools/inettbc.hxx"
 #include "unotools/syslocale.hxx"
 #include "svtools/QueryFolderName.hxx"
-#ifndef  _RTL_USTRING_HXX
 #include <rtl/ustring.hxx>
-#endif
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ucb/XContentProviderManager.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
@@ -89,9 +81,7 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 #include <osl/file.h>
 #include <vcl/waitobj.hxx>
 

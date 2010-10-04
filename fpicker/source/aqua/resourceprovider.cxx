@@ -37,13 +37,9 @@
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 
-#ifndef _SVTOOLS_SVTOOLS_HRC_
 #include <svtools/svtools.hrc>
-#endif
 
-#ifndef _SVTOOLS_FILEDLG2_HRC_
 #include <svtools/filedlg2.hrc>
-#endif
 #include "NSString_OOoAdditions.hxx"
 
 #include "resourceprovider.hxx"

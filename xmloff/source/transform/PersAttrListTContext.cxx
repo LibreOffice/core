@@ -29,9 +29,7 @@
 #include "precompiled_xmloff.hxx"
 #include <com/sun/star/util/XCloneable.hpp>
 #include "IgnoreTContext.hxx"
-#ifndef _XMLOFF_TRANSFORMERBASE_HXX
 #include "TransformerBase.hxx"
-#endif
 #include "MutableAttrList.hxx"
 #include <xmloff/nmspmap.hxx>
 #include "PersAttrListTContext.hxx"

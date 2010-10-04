@@ -35,9 +35,7 @@
 #include <svx/svdocirc.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdopath.hxx>
-#ifndef _SVDOCAPT_HXX
 #include <svx/svdocapt.hxx>
-#endif
 #include <svx/svdpage.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/sdasaitm.hxx>
@@ -59,12 +57,8 @@
 #include <svx/xhatch.hxx>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
-#ifndef __COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPESEGMENTCOMMAND_HPP__
 #include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
-#endif
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
-#endif
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/color/bcolortools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>

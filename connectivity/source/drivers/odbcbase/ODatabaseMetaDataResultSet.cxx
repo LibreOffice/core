@@ -29,9 +29,7 @@
 #include "precompiled_connectivity.hxx"
 #include "TConnection.hxx"
 
-#ifndef _CONNECTIVITY_ADO_ADATABASEMETADATARESULTSET_HXX_
 #include "odbc/ODatabaseMetaDataResultSet.hxx"
-#endif
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/KeyRule.hpp>
 #include <com/sun/star/sdbc/ProcedureResult.hpp>

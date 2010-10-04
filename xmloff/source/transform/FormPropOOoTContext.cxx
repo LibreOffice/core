@@ -31,14 +31,10 @@
 #include "xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 #include "IgnoreTContext.hxx"
-#ifndef _XMLOFF_ACTIONMAPTYPESOOo_HXX
 #include "ActionMapTypesOOo.hxx"
-#endif
 #include "AttrTransformerAction.hxx"
 #include "TransformerActions.hxx"
-#ifndef _XMLOFF_TRANSFORMERBASE_HXX
 #include "TransformerBase.hxx"
-#endif
 #include "FormPropOOoTContext.hxx"
 
 using ::rtl::OUString;

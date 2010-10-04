@@ -30,14 +30,10 @@
 #include "ChartOOoTContext.hxx"
 #include "MutableAttrList.hxx"
 #include "xmlnmspe.hxx"
-#ifndef _XMLOFF_ACTIONMAPTYPESOOo_HXX
 #include "ActionMapTypesOOo.hxx"
-#endif
 #include "AttrTransformerAction.hxx"
 #include "TransformerActions.hxx"
-#ifndef _XMLOFF_TRANSFORMERBASE_HXX
 #include "TransformerBase.hxx"
-#endif
 
 using ::rtl::OUString;
 

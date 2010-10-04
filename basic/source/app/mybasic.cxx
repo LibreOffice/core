@@ -28,26 +28,20 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basic.hxx"
 
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <basic/sbx.hxx>
 
 // AB-Uno-Test
 //#define unotest
 #ifdef unotest
-#ifndef _USR_UNO_HXX
 #include <usr/uno.hxx>
-#endif
 #include <basic/sbuno.hxx>
 #include <sbunoobj.hxx>
 #endif
 
 #include "sbintern.hxx"
 
-#ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>
-#endif
 #include <basic/mybasic.hxx>
 #include "basic.hrc"
 #include "appbased.hxx"

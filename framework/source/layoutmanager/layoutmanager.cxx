@@ -34,9 +34,7 @@
 
 // #include <math.h>
 
-#ifndef _FRAMEWORK_SERVICES_LAYOUTMANAGER_HXX_
 #include <services/layoutmanager.hxx>
-#endif
 #include <threadhelp/resetableguard.hxx>
 #include <services.h>
 
@@ -46,9 +44,7 @@
 #include <uiconfiguration/windowstateconfiguration.hxx>
 #include <classes/fwkresid.hxx>
 
-#ifndef __FRAMEWORK_CLASSES_RESOURCE_HRC_
 #include <classes/resource.hrc>
-#endif
 #include <toolkit/helper/convert.hxx>
 #include <uielement/progressbarwrapper.hxx>
 #include <uiconfiguration/globalsettings.hxx>

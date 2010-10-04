@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
 
-#ifndef __FRAMEWORK_CONSTANT_FRAMELOADER_HXX_
 #include <constant/frameloader.hxx>
-#endif
 
 namespace framework{
     namespace constant{

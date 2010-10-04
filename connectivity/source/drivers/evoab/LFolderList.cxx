@@ -53,9 +53,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <tools/debug.hxx>
 #include "connectivity/dbexception.hxx"
-#ifndef CONNECTIVITY_EVOAB_DEBUG_HELPER_HXX
 #include "LDebug.hxx"
-#endif
 #include <unotools/syslocale.hxx>
 
 using namespace ::comphelper;

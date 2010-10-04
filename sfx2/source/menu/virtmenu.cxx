@@ -36,9 +36,7 @@
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <comphelper/processfactory.hxx>
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 #include <tools/urlobj.hxx>
 
 #ifndef GCC
@@ -67,9 +65,7 @@
 #include <sfx2/objsh.hxx>
 #include <framework/addonsoptions.hxx>
 
-#ifndef __FRAMEWORK_CLASSES_ADDONMENUS_HXX_
 #include <framework/addonmenu.hxx>
-#endif
 #include <framework/menuconfiguration.hxx>
 
 using namespace ::com::sun::star::container;

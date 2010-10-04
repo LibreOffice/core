@@ -28,18 +28,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#ifndef _SVX_FMHELP_HRC
 #include "fmhelp.hrc"
-#endif
 #include <svx/gridctrl.hxx>
 #include "gridcell.hxx"
 #include "svx/dbtoolsclient.hxx"
 #include "svx/fmtools.hxx"
 #include <svtools/stringtransfer.hxx>
 
-#ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
-#endif
 #include <svtools/stringtransfer.hxx>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -60,13 +56,9 @@
 #include <vcl/sound.hxx>
 #include <vcl/menu.hxx>
 
-#ifndef _SVX_FMRESIDS_HRC
 #include "fmresids.hrc"
-#endif
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <tools/shl.hxx>
 #include <svx/dialmgr.hxx>
 #include "fmservs.hxx"

@@ -33,19 +33,13 @@
 //_________________________________________________________________________________________________________________
 #include <loadenv/loadenv.hxx>
 
-#ifndef __FRAMEWORK_LOADENV_TARGETHELPER_HXX_
 #include <loadenv/targethelper.hxx>
-#endif
 
-#ifndef __FRAMEWORK_DESKTOP_HXX_
 #include <services/desktop.hxx>
-#endif
 #include <helper/ocomponentaccess.hxx>
 #include <dispatch/dispatchprovider.hxx>
 
-#ifndef __FRAMEWORK_DISPATCH_INTERCEPTIONHELPER_HXX_
 #include <dispatch/interceptionhelper.hxx>
-#endif
 #include <classes/taskcreator.hxx>
 #include <threadhelp/transactionguard.hxx>
 #include <threadhelp/writeguard.hxx>

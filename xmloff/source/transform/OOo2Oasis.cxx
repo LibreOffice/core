@@ -47,9 +47,7 @@
 #include "PropertyActionsOOo.hxx"
 #include "TransformerActions.hxx"
 #include <xmloff/xmluconv.hxx>
-#ifndef _XMLOFF_OOO2OOO_HXX
 #include "OOo2Oasis.hxx"
-#endif
 
 using ::rtl::OUString;
 using namespace ::xmloff::token;

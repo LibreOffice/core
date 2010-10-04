@@ -39,13 +39,9 @@
 
 #include <stdlib.h>
 #include <tools/shl.hxx>
-#ifndef _EINF_HXX
 #include <tools/errinf.hxx>
-#endif
 #include <tools/urlobj.hxx>
-#ifndef _UNOTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
-#endif
 #include <vcl/msgbox.hxx>
 #include <vcl/group.hxx>
 #include <vcl/lstbox.hxx>
@@ -63,9 +59,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
 #include <unotools/localedatawrapper.hxx>
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 
 #define _IMAPDLG_PRIVATE
 #include "imapdlg.hxx"

@@ -31,13 +31,9 @@
 //--------------------------------------------------------------------------------------------------------
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-#ifndef  _COM_SUN_STAR_UTL_URL_HPP_
 #include <com/sun/star/util/URL.hpp>
-#endif
 
-#ifndef  _COM_SUN_STAR_UTL_XURLTRANSFORMER_HPP_
 #include <com/sun/star/util/XURLTransformer.hpp>
-#endif
 #include <tools/urlobj.hxx>
 #include <svl/macitem.hxx>
 #include <sfx2/appuno.hxx>

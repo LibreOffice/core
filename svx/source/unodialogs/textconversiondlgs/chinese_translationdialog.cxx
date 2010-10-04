@@ -38,9 +38,7 @@
 // header for class SvtLinguConfigItem
 #include <unotools/lingucfg.hxx>
 #include <unotools/linguprops.hxx>
-#ifndef _SVX_HELPID_HRC
 #include "helpid.hrc"
-#endif
 
 //disable compiler warning C4355: 'this' : used in base member initializer list
 #ifdef _MSC_VER

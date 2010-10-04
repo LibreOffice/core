@@ -47,20 +47,14 @@
 #include <sal/types.h>
 #include <osl/diagnose.h>
 
-#ifndef _COM_SUN_STAR_UI_XFOLDERPICKER_HPP_
 #include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_UI_FILEDIALOGRESULTS_HPP_
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#endif
 #include <cppuhelper/implbase1.hxx>
 
 #include <stdio.h>
 
-#ifndef _FPSERVICEINFO_HXX_
 #include "..\FOPServiceInfo.hxx"
-#endif
 
 #include <osl/file.hxx>
 

@@ -58,41 +58,23 @@
 // other includes
 #include <vcl/svapp.hxx>
 
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
 #include <com/sun/star/container/XNamed.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
-#endif
 
-#ifndef __COM_SUN_STAR_AWT_KEYEVENT_HPP_
 #include <com/sun/star/awt/KeyEvent.hpp>
-#endif
 
-#ifndef __COM_SUN_STAR_AWT_KEYMODIFIER_HPP_
 #include <com/sun/star/awt/KeyModifier.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_UTIL_XCHANGESNOTIFIER_HPP_
 #include <com/sun/star/util/XChangesNotifier.hpp>
-#endif
 
-#ifndef _COMPHELPER_CONFIGURATIONHELPER_HXX_
 #include <comphelper/configurationhelper.hxx>
-#endif
 
-#ifndef UNOTOOLS_CONFIGPATHES_HXX_INCLUDED
 #include <unotools/configpathes.hxx>
-#endif
 
-#ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
-#endif
 
 #include <svtools/acceleratorexecute.hxx>
 

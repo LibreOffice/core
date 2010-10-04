@@ -30,15 +30,11 @@
 
 #include <tools/string.hxx>
 
-#ifndef _XMLOFF_XMLMETAI_HXX
 #include <xmloff/xmlscripti.hxx>
-#endif
 #include "sdxmlimp_impl.hxx"
 #include "ximpbody.hxx"
 
-#ifndef _SFX_XMLMETAI_HXX
 #include <xmloff/xmlmetai.hxx>
-#endif
 #include "ximpstyl.hxx"
 #include "xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>

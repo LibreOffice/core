@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
 
-#ifndef __FRAMEWORK_UIELEMENT_PROGRESSBARWRAPPER_HXX_
 #include <uielement/progressbarwrapper.hxx>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  my own includes

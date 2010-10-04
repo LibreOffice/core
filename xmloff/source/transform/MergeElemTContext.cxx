@@ -29,9 +29,7 @@
 #include "precompiled_xmloff.hxx"
 #include "MergeElemTContext.hxx"
 #include "MutableAttrList.hxx"
-#ifndef _XMLOFF_TRANSFORMERBASE_HXX
 #include "TransformerBase.hxx"
-#endif
 #include "TransformerActions.hxx"
 #include "AttrTransformerAction.hxx"
 #include "ElemTransformerAction.hxx"

@@ -36,9 +36,7 @@
 #include "tbxdraw.hxx"
 #include "tbxdraw.hrc"
 #include <tools/shl.hxx>
-#ifndef _SFX_IMAGEMGR_HXX
 #include <sfx2/imagemgr.hxx>
-#endif
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
 

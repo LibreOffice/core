@@ -34,9 +34,7 @@
 #define _TL_LANG_SPECIAL
 #endif
 #include <svl/svdde.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <svl/eitem.hxx>
 
 #include <unotools/saveopt.hxx>

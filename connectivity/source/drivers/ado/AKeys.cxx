@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
 #include "ado/AKeys.hxx"
-#ifndef _CONNECTIVITY_ADO_INDEX_HXX_
 #include "ado/AKey.hxx"
-#endif
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbcx/KeyType.hpp>

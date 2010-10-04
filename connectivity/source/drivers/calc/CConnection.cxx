@@ -30,12 +30,8 @@
 #include "calc/CConnection.hxx"
 #include "calc/CDatabaseMetaData.hxx"
 #include "calc/CCatalog.hxx"
-#ifndef _CONNECTIVITY_CALC_ODRIVER_HXX_
 #include "calc/CDriver.hxx"
-#endif
-#ifndef CONNECTIVITY_RESOURCE_CALC_HRC
 #include "resource/calc_res.hrc"
-#endif
 #include "resource/sharedresources.hxx"
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>

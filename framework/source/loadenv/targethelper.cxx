@@ -31,9 +31,7 @@
 //_______________________________________________
 // own includes
 
-#ifndef __FRAMEWORK_LOADENV_TARGETHELPER_HXX_
 #include <loadenv/targethelper.hxx>
-#endif
 
 //_______________________________________________
 // namespace

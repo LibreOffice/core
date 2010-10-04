@@ -48,16 +48,12 @@
 //  includes of other projects
 //_________________________________________________________________________________________________________________
 
-#ifndef _VCL_MENU_HXX_
 #include <vcl/menu.hxx>
-#endif
 #include <vcl/svapp.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
-#ifndef _VCL_MNEMONIC_HXX_
 #include <vcl/mnemonic.hxx>
-#endif
 #include <com/sun/star/awt/XMenuExtended.hpp>
 #include <comphelper/processfactory.hxx>
 
@@ -71,9 +67,7 @@
 #include <svtools/langtab.hxx>
 #include <classes/fwlresid.hxx>
 
-#ifndef __FRAMEWORK_CLASSES_RESOURCE_HRC_
 #include <classes/resource.hrc>
-#endif
 #include <dispatch/uieventloghelper.hxx>
 
 #include "helper/mischelper.hxx"

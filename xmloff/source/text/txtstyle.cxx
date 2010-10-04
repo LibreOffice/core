@@ -43,28 +43,18 @@
 #ifndef _XMLOFF_PROPERTYSETMAPPER_HXX
 //#include <xmloff/xmlprmap.hxx>
 #endif
-#ifndef _XMLOFF_XMLSMSPE_HXX
 #include "xmlnmspe.hxx"
-#endif
-#ifndef _XMLOFF_FAMILIES_HXX
 #include <xmloff/families.hxx>
-#endif
 #ifndef _XMLOFF_TXTPRMAP_HXX
 //#include <xmloff/txtprmap.hxx>
 #endif
-#ifndef _XMLOFF_TXTPARAE_HXX
 #include <xmloff/txtparae.hxx>
-#endif
 #include <xmloff/xmlnume.hxx>
 #include <xmloff/xmlexp.hxx>
-#ifndef _XMLOFF_XMLSECTIONEXPORT_HXX
 #include "XMLSectionExport.hxx"
-#endif
 #include "XMLLineNumberingExport.hxx"
 #include "txtexppr.hxx"
-#ifndef _XMLOFF_TXTPRMAP_HXX
 #include <xmloff/txtprmap.hxx>
-#endif
 
 #ifndef _XMLOFF_STYLEEXP_HXX
 //#include <xmloff/styleexp.hxx>

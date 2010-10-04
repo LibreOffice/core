@@ -38,9 +38,7 @@
 #include "xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 
-#ifndef _XMLOFF_FAMILIES_HXX
 #include <xmloff/families.hxx>
-#endif
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnumi.hxx>

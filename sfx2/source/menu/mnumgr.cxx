@@ -40,9 +40,7 @@
 #include <string>   // HACK: prevent conflict between STLPORT and Workshop headers
 #include <cstdarg>  // std::va_list
 
-#ifndef _POINTR_HXX //autogen
 #include <vcl/pointr.hxx>
-#endif
 #ifndef GCC
 #endif
 

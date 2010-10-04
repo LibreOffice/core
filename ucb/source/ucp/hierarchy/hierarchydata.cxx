@@ -46,9 +46,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
-#ifndef _COM_SUN_STAR_UTIL_XOFFICEINSTALLTIONDIRECTORIES_HPP_
 #include <com/sun/star/util/XOfficeInstallationDirectories.hpp>
-#endif
 #include "hierarchyprovider.hxx"
 #include "hierarchyuri.hxx"
 

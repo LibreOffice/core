@@ -55,9 +55,7 @@
 #include <svtools/colorcfg.hxx>
 #include <vcl/svapp.hxx>
 
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 #include <vcl/window.hxx>
 
 //_______________________________________________

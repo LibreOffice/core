@@ -68,9 +68,7 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include "xexptran.hxx"
 
-#ifndef _CPPUHELPER_IMPLBASE1_HXX
 #include <cppuhelper/implbase1.hxx>
-#endif
 #include <comphelper/extract.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include "PropertySetMerger.hxx"

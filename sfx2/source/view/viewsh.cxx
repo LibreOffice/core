@@ -91,9 +91,7 @@
 #include <sfx2/docfilt.hxx>
 
 // #110897#
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

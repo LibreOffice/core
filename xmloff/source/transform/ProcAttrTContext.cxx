@@ -29,9 +29,7 @@
 #include "precompiled_xmloff.hxx"
 #include "ProcAttrTContext.hxx"
 #include "MutableAttrList.hxx"
-#ifndef _XMLOFF_TRANSFORMERBASE_HXX
 #include "TransformerBase.hxx"
-#endif
 #include "TransformerActions.hxx"
 #include <xmloff/nmspmap.hxx>
 

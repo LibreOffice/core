@@ -30,15 +30,11 @@
 #include "flat/EConnection.hxx"
 #include "flat/EDatabaseMetaData.hxx"
 #include "flat/ECatalog.hxx"
-#ifndef _CONNECTIVITY_FLAT_ODRIVER_HXX_
 #include "flat/EDriver.hxx"
-#endif
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <tools/urlobj.hxx>
 #include "flat/EPreparedStatement.hxx"
-#ifndef _CONNECTIVITY_FLAT_DSTATEMENT_HXX_
 #include "flat/EStatement.hxx"
-#endif
 #include <comphelper/extract.hxx>
 #include <connectivity/dbexception.hxx>
 

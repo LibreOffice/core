@@ -36,13 +36,9 @@
 #include "dibpreview.hxx"
 #include <osl/diagnose.h>
 
-#ifndef _COM_SUN_STAR_UI_DIALOG_FILEPREVIEWIMAGEFORMATS_HPP_
 #include <com/sun/star/ui/dialogs/FilePreviewImageFormats.hpp>
-#endif
 
-#ifndef _USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
 
 #include <stdexcept>
 #include <string>

@@ -32,33 +32,19 @@
 #include <algorithm>
 #include <tools/rc.hxx>
 #include <vcl/metric.hxx>
-#ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#endif
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
-#endif
 #include <tools/config.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <tools/debug.hxx>
-#ifndef _SV_FILEDLG_HXX //autogen
 #include <svtools/filedlg.hxx>
-#endif
 #include <tools/stream.hxx>
 #include <tools/fsys.hxx>
 #include <svtools/stringtransfer.hxx>
 #include <vcl/splitwin.hxx>
-#ifndef _ZFORLIST_HXX //autogen
 #include <svl/zformat.hxx>
-#endif
 #include <svtools/ctrltool.hxx>
 
 

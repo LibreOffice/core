@@ -27,15 +27,9 @@
 
 #include <vcl/msgbox.hxx>
 
-#ifndef UUI_IDS_HRC
 #include <ids.hrc>
-#endif
-#ifndef UUI_UNKNOWNAUTHDLG_HRC
 #include <unknownauthdlg.hrc>
-#endif
-#ifndef UUI_UNKNOWNAUTHDLG_HXX
 #include <unknownauthdlg.hxx>
-#endif
 
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 

@@ -28,113 +28,65 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
 
-#ifndef __FRAMEWORK_HELPER_TITLEBARUPDATE_HXX_
 #include <helper/titlebarupdate.hxx>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_PATTERN_WINDOW_HXX_
 #include <pattern/window.hxx>
-#endif
 
-#ifndef __FRAMEWORK_THREADHELP_WRITEGUARD_HXX_
 #include <threadhelp/writeguard.hxx>
-#endif
 
-#ifndef __FRAMEWORK_THREADHELP_READGUARD_HXX_
 #include <threadhelp/readguard.hxx>
-#endif
 
-#ifndef __FRAMEWORK_MACROS_GENERIC_HXX_
 #include <macros/generic.hxx>
-#endif
 
-#ifndef __FRAMEWORK_SERVICES_H_
 #include <services.h>
-#endif
 
-#ifndef __FRAMEWORK_PROPETIES_H_
 #include <properties.h>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
 
-#ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
 #include <com/sun/star/awt/XWindow.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_LANG_XSERVICXEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
 #include <com/sun/star/frame/XModuleManager.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_BEANS_XMATERIALHOLDER_HPP_
 #include <com/sun/star/beans/XMaterialHolder.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_FRAME_XTITLECHANGEBROADCASTER_HPP_
 #include <com/sun/star/frame/XTitleChangeBroadcaster.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
 #include <com/sun/star/beans/NamedValue.hpp>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
 
-#ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX
 #include <comphelper/sequenceashashmap.hxx>
-#endif
 
-#ifndef _UTL_CONFIGMGR_HXX
 #include <unotools/configmgr.hxx>
-#endif
 
-#ifndef _UTL_BOOTSTRAP_HXX
 #include <unotools/bootstrap.hxx>
-#endif
 
-#ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
-#endif
 
-#ifndef _SV_SYSWIN_HXX
 #include <vcl/syswin.hxx>
-#endif
 
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
 
-#ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  namespace

@@ -33,9 +33,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 /** === end UNO includes === **/
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 
 //........................................................................
 namespace svxform

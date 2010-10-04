@@ -34,9 +34,7 @@
 
  *************************************************************************/
 #include "ftpinpstr.hxx"
-#ifndef _RTL_ALLOC_H
 #include <rtl/alloc.h>
-#endif
 #ifndef STD_ALGORITHM
 #include <algorithm>
 #define STD_ALGORITHM

@@ -71,9 +71,7 @@
 #include <framework/menuconfiguration.hxx>
 #include <framework/sfxhelperfunctions.hxx>
 #include <vcl/taskpanelist.hxx>
-#ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
 #include <svtools/menuoptions.hxx>
 #include <svtools/miscopt.hxx>
 

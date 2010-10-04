@@ -31,9 +31,7 @@
 #include <xml/eventsdocumenthandler.hxx>
 #include <services.h>
 
-#ifndef __FRAMEWORK_XML_SAXNAMESPACEFILTER_HXX_
 #include <xml/saxnamespacefilter.hxx>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -47,9 +45,7 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 #include <unotools/streamwrap.hxx>
 #include <tools/debug.hxx>
 

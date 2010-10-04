@@ -37,9 +37,7 @@
 #include <unotools/processfactory.hxx>
 #include <osl/mutex.hxx>
 
-#ifndef _SPELLIMP_HXX
 #include <sspellimp.hxx>
-#endif
 
 #include "lngprops.hxx"
 #include "spelldta.hxx"

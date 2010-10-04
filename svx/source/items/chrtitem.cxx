@@ -30,9 +30,7 @@
 
 // include ---------------------------------------------------------------
 #include <tools/stream.hxx>
-#ifndef __SBX_SBXVARIABLE_HXX
 #include <basic/sbxvar.hxx>
-#endif
 #if defined UNX && !defined LINUX
 #include <wchar.h>
 #endif

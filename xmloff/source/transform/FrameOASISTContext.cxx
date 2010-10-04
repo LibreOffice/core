@@ -34,9 +34,7 @@
 #include "ActionMapTypesOASIS.hxx"
 #include "ElemTransformerAction.hxx"
 #include "TransformerActions.hxx"
-#ifndef _XMLOFF_TRANSFORMERBASE_HXX
 #include "TransformerBase.hxx"
-#endif
 
 using ::rtl::OUString;
 

@@ -38,9 +38,7 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/XAutoStylesSupplier.hpp>
 #include <com/sun/star/style/XAutoStyleFamily.hpp>
-#ifndef _XMLOFF_PAGEMASTERPROPMAPPER_HXX
 #include "PageMasterPropMapper.hxx"
-#endif
 #include <tools/debug.hxx>
 #include <tools/list.hxx>
 #include <svl/cntnrsrt.hxx>
@@ -49,19 +47,13 @@
 #include "xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 
-#ifndef _XMLOFF_FAMILIES_HXX
 #include <xmloff/families.hxx>
-#endif
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnumi.hxx>
 #include <xmloff/xmlimppr.hxx>
 #include <xmloff/xmlstyle.hxx>
-#ifndef _XMLOFF_TXTSTYLI_HXX
 #include <xmloff/txtstyli.hxx>
-#endif
-#ifndef _XMLOFF_TXTPRMAP_HXX
 #include <xmloff/txtprmap.hxx>
-#endif
 #include <xmloff/xmlnumfi.hxx>
 #include "XMLChartStyleContext.hxx"
 #include "XMLChartPropertySetMapper.hxx"

@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
 #include "ado/ACatalog.hxx"
-#ifndef _CONNECTIVITY_ADO_BCONNECTION_HXX_
 #include "ado/AConnection.hxx"
-#endif
 #include "ado/AGroups.hxx"
 #include "ado/AUsers.hxx"
 #include "ado/ATables.hxx"

@@ -49,9 +49,7 @@
 #include <com/sun/star/document/FilterOptionsRequest.hpp>
 #include <com/sun/star/task/ErrorCodeRequest.hpp>
 
-#ifndef _COM_SUN_STAR_DOCUMENT_LOCKEDDOCUMENTREQUEST_HPP_
 #include <com/sun/star/document/LockedDocumentRequest.hpp>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  other includes

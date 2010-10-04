@@ -31,9 +31,7 @@
 #include <string.h>
 #include <ne_xml.h>
 
-#ifndef _LINKSEQUENCE_HXX_
 #include "LinkSequence.hxx"
-#endif
 
 using namespace webdav_ucp;
 using namespace com::sun::star;

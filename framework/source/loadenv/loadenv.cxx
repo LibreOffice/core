@@ -31,24 +31,16 @@
 // includes of own project
 #include <loadenv/loadenv.hxx>
 
-#ifndef __FRAMEWORK_LOADENV_TARGETHELPER_HXX_
 #include <loadenv/targethelper.hxx>
-#endif
 #include <classes/framelistanalyzer.hxx>
 
 #include <dispatch/interaction.hxx>
 
-#ifndef __FRAMEWORK_CONSTANT_FRAMELOADER_HXX_
 #include <constant/frameloader.hxx>
-#endif
 
-#ifndef __FRAMEWORK_CONSTANT_CONTENTHANDLER_HXX_
 #include <constant/contenthandler.hxx>
-#endif
 
-#ifndef __FRAMEWORK_CONSTANT_CONTAINERQUERY_HXX_
 #include <constant/containerquery.hxx>
-#endif
 #include <interaction/quietinteraction.hxx>
 #include <threadhelp/writeguard.hxx>
 #include <threadhelp/readguard.hxx>
@@ -97,9 +89,7 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/syswin.hxx>
 
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 #include <unotools/moduleoptions.hxx>
 #include <svtools/sfxecode.hxx>
 #include <unotools/processfactory.hxx>

@@ -32,9 +32,7 @@
 #include "cachemapobject3.hxx"
 #include "cachemapobjectcontainer2.hxx"
 
-#ifndef _SOL_TIME_H_
 #include "osl/time.h"
-#endif
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
 

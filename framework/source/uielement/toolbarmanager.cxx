@@ -34,12 +34,8 @@
 //_________________________________________________________________________________________________________________
 
 
-#ifndef __FRAMEWORK_UIELEMENT_TOOLBAR_HXX
 #include <uielement/toolbar.hxx>
-#endif
-#ifndef __FRAMEWORK_UIELEMENT_GENERICTOOLBARCONTROLLER_HXX
 #include <uielement/generictoolbarcontroller.hxx>
-#endif
 #include <threadhelp/resetableguard.hxx>
 #include "services.h"
 #include "general.h"
@@ -47,9 +43,7 @@
 #include <helper/imageproducer.hxx>
 #include <classes/sfxhelperfunctions.hxx>
 #include <classes/fwkresid.hxx>
-#ifndef __FRAMEWORK_CLASES_RESOURCE_HRC_
 #include <classes/resource.hrc>
-#endif
 #include <classes/addonsoptions.hxx>
 #include <uielement/toolbarmerger.hxx>
 #include <helper/acceleratorinfo.hxx>
@@ -62,9 +56,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/XDockableWindow.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
-#ifndef _COM_SUN_STAR_UI_XDOCKINGAREA_HPP_
 #include <com/sun/star/ui/DockingArea.hpp>
-#endif
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
@@ -84,9 +76,7 @@
 #include <svtools/imgdef.hxx>
 #include <svtools/toolboxcontroller.hxx>
 #include <unotools/cmdoptions.hxx>
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 #include <comphelper/mediadescriptor.hxx>
 #include <svtools/miscopt.hxx>
 #include <svl/imageitm.hxx>

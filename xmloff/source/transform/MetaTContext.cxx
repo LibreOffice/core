@@ -35,9 +35,7 @@
 #include <xmloff/xmltoken.hxx>
 #include "xmlnmspe.hxx"
 
-#ifndef _XMLOFF_TRANSFOERMERBASE_HXX
 #include "TransformerBase.hxx"
-#endif
 #include "MutableAttrList.hxx"
 #include "MetaTContext.hxx"
 

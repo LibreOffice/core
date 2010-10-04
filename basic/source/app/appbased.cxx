@@ -28,18 +28,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basic.hxx"
 
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <basic/sbx.hxx>
 #include <svtools/texteng.hxx>
 #include <svtools/textview.hxx>
 #include <basic/sbmeth.hxx>
 #include <svtools/stringtransfer.hxx>
 
-#ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>
-#endif
 
 #include "basic.hrc"
 #include "status.hxx"

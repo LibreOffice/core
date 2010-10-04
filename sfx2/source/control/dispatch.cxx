@@ -34,13 +34,9 @@
 #include <svl/itemiter.hxx>
 #include <svl/whiter.hxx>
 #include <svl/intitem.hxx>
-#ifndef _SFXEITEM_HXX //autogen
 #include <svl/eitem.hxx>
-#endif
 #include <svl/undo.hxx>
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
 #include <svtools/ttprops.hxx>
 #include <stdio.h>
 #include <stdarg.h>

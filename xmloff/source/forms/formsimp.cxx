@@ -32,9 +32,7 @@
 #include "xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 
-#ifndef _XMLOFF_ANIMIMP_HXX
 #include <xmloff/formsimp.hxx>
-#endif
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;

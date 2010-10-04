@@ -29,9 +29,7 @@
 #include "precompiled_fpicker.hxx"
 #include "previewbase.hxx"
 
-#ifndef _COM_SUN_STAR_UI_DIALOG_FILEPREVIEWIMAGEFORMATS_HPP_
 #include <com/sun/star/ui/dialogs/FilePreviewImageFormats.hpp>
-#endif
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;

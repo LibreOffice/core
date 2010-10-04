@@ -39,9 +39,7 @@
 #include <xmloff/xmlexp.hxx>
 #include "XMLTextListAutoStylePool.hxx"
 
-#ifndef _XMLOFF_PAGEMASTERSTYLEMAP_HXX
 #include <xmloff/PageMasterStyleMap.hxx>
-#endif
 #include "PageMasterExportPropMapper.hxx"
 #include "XMLBackgroundImageExport.hxx"
 

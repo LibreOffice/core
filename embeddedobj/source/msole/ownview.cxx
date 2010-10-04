@@ -41,9 +41,7 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTBRODCASTER_HPP_
 #include <com/sun/star/document/XEventBroadcaster.hpp>
-#endif
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>

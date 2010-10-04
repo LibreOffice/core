@@ -33,13 +33,9 @@
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <xmloff/nmspmap.hxx>
 
-#ifndef _XMLOFF_TRANSFOERMERBASE_HXX
 #include "TransformerBase.hxx"
-#endif
 
-#ifndef _XMLOFF_TRANSFOERMERCONTEXT_HXX
 #include "TransformerContext.hxx"
-#endif
 
 using ::rtl::OUString;
 

@@ -48,13 +48,9 @@
 #include "XMLAnchorTypePropHdl.hxx"
 #include <xmloff/XMLConstantsPropertyHandler.hxx>
 #include "XMLClipPropertyHandler.hxx"
-#ifndef _XMLOFF_XMLTEXTCOLUMNSPPROPERTYHANDLER_HXX
 #include "XMLTextColumnsPropertyHandler.hxx"
-#endif
 #include <xmloff/NamedBoolPropertyHdl.hxx>
-#ifndef _XMLOFF_TXTPRHDL_HXX
 #include "txtprhdl.hxx"
-#endif
 // OD 2004-05-05 #i28701#
 #include <com/sun/star/text/WrapInfluenceOnPosition.hpp>
 

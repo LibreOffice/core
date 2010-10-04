@@ -39,9 +39,7 @@
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
 
-#ifndef CONNECTIVITY_MOZAB_MCONFIGACCESS_HXX
 #include "MConfigAccess.hxx"
-#endif
 #include "MNSDeclares.hxx"
 #include <osl/thread.hxx>
 #include <MNSTerminateListener.hxx>

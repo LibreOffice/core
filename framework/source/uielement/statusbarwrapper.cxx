@@ -55,9 +55,7 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 #include <comphelper/processfactory.hxx>
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 
 #include <tools/solar.h>
 #include <vcl/svapp.hxx>

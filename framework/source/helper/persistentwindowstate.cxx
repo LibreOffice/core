@@ -43,9 +43,7 @@
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/awt/XWindow.hpp>
 
-#ifndef _COM_SUN_STAR_LANG_XSERVICXEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 
@@ -56,9 +54,7 @@
 #include <vcl/window.hxx>
 #include <vcl/syswin.hxx>
 
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 

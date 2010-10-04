@@ -30,9 +30,7 @@
 #include "sal/types.h"
 #include "rtl/ustring.hxx"
 
-#ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
 #include "cppuhelper/implementationentry.hxx"
-#endif
 #include "com/sun/star/lang/XMultiComponentFactory.hpp"
 
 #ifdef WNT
@@ -44,9 +42,7 @@
 #include "svtools/miscopt.hxx"
 #include "svl/pickerhistoryaccess.hxx"
 
-#ifndef _SV_APP_HXX
 #include "vcl/svapp.hxx"
-#endif
 
 namespace css = com::sun::star;
 

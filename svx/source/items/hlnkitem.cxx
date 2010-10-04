@@ -31,18 +31,12 @@
 // include ---------------------------------------------------------------
 #define _SVX_HLNKITEM_CXX
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <tools/stream.hxx>
 
-#ifndef _MEMBERID_HRC
 #include <svx/memberid.hrc>
-#endif
 
-#ifndef __SBX_SBXVARIABLE_HXX
 #include <basic/sbxvar.hxx>
-#endif
 
 #include "hlnkitem.hxx"
 

@@ -38,9 +38,7 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/timer.hxx>
 #include <basic/sbxvar.hxx>
-#ifndef _SBX_HXX
 #include <basic/sbx.hxx>
-#endif
 #include <svl/zforlist.hxx>
 #include <tools/fsys.hxx>
 #include <tools/urlobj.hxx>

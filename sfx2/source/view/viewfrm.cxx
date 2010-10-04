@@ -36,12 +36,8 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
-#ifndef _SPLITWIN_HXX //autogen
 #include <vcl/splitwin.hxx>
-#endif
 #include <unotools/moduleoptions.hxx>
 #include <svl/intitem.hxx>
 #include <svl/visitem.hxx>
@@ -50,9 +46,7 @@
 #include <svl/slstitm.hxx>
 #include <svl/whiter.hxx>
 #include <svl/undo.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 #include <tools/diagnose_ex.h>

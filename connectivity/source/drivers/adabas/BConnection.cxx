@@ -33,9 +33,7 @@
 #include "adabas/BCatalog.hxx"
 #include "odbc/OFunctions.hxx"
 #include "odbc/OTools.hxx"
-#ifndef _CONNECTIVITY_ODBC_ODATABASEMETADATA_HXX_
 #include "adabas/BDatabaseMetaData.hxx"
-#endif
 #include "adabas/BStatement.hxx"
 #include "adabas/BPreparedStatement.hxx"
 #include <com/sun/star/lang/DisposedException.hpp>

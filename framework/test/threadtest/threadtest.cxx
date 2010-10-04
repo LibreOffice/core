@@ -33,9 +33,7 @@
 //_________________________________________________________________________________________________________________
 #include <threadhelp/threadhelpbase.hxx>
 
-#ifndef __FRAMEWORK_THREADHELP_TRANSACTIONBASE_HXX_
 #include <threadhelp/transactionbase.hxx>
-#endif
 #include <threadhelp/resetableguard.hxx>
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
@@ -57,9 +55,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/time.h>
 
-#ifndef _OSL_INTERLOCK_H_
 #include <osl/interlock.h>
-#endif
 
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>

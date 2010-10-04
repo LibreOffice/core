@@ -52,9 +52,7 @@
 #include <basic/sbxobj.hxx>
 #include <basic/sberrors.hxx>
 #include <basic/basmgr.hxx>
-#ifndef _BASIC_SBUNO_HXX
 #include <basic/sbuno.hxx>
-#endif
 
 #include <basic/sbxcore.hxx>
 #include <svl/ownlist.hxx>

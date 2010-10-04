@@ -32,15 +32,11 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_HELPER_OINSTANCEPROVIDER_HXX_
 #include <helper/oinstanceprovider.hxx>
-#endif
 #include <classes/servicemanager.hxx>
 #include <macros/debug.hxx>
 
-#ifndef __FRAMEWORK_DEFINES_HXX_
 #include <defines.hxx>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -56,13 +52,9 @@
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XFrames.hpp>
 
-#ifndef _COM_SUN_STAR_CONNECTION_XConnection_HPP_
 #include <com/sun/star/connection/XConnection.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_BRIDGE_XBridgeFactory_HPP_
 #include <com/sun/star/bridge/XBridgeFactory.hpp>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  other includes

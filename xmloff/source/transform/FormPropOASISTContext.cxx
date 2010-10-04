@@ -33,9 +33,7 @@
 #include "ActionMapTypesOASIS.hxx"
 #include "AttrTransformerAction.hxx"
 #include "TransformerActions.hxx"
-#ifndef _XMLOFF_TRANSFORMERBASE_HXX
 #include "TransformerBase.hxx"
-#endif
 #include "FormPropOASISTContext.hxx"
 
 using ::rtl::OUString;

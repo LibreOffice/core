@@ -37,22 +37,14 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/container/XChild.hpp>
 
-#ifndef _MENU_HXX //autogen
 #include <vcl/menu.hxx>
-#endif
 #include <svl/intitem.hxx>
-#ifndef _SPLITWIN_HXX //autogen
 #include <vcl/splitwin.hxx>
-#endif
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
-#ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
 #include <com/sun/star/awt/PosSize.hpp>
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 #include <vcl/msgbox.hxx>
 
 #ifndef GCC

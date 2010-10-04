@@ -29,9 +29,7 @@
 #include "precompiled_sfx2.hxx"
 #include <tools/cachestr.hxx>
 #include <tools/config.hxx>
-#ifndef _INETSTRM_HXX //autogen
 #include <svl/inetstrm.hxx>
-#endif
 #include <svl/stritem.hxx>
 
 #define _SVSTDARR_STRINGS

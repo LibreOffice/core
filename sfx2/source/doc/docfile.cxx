@@ -71,9 +71,7 @@
 #include <com/sun/star/logging/XSimpleLogRing.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#ifndef _COM_SUN_STAR_SECURITY_DOCUMENTSIGNATURESINFORMATION_HPP_
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
-#endif
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <tools/zcodec.hxx>
 #include <tools/cachestr.hxx>
@@ -84,9 +82,7 @@
 #include <framework/interaction.hxx>
 #include <unotools/streamhelper.hxx>
 #include <unotools/localedatawrapper.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/lckbitem.hxx>

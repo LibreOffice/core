@@ -29,9 +29,7 @@
 #include "precompiled_connectivity.hxx"
 #include "odbc/ODatabaseMetaData.hxx"
 #include "odbc/OTools.hxx"
-#ifndef _CONNECTIVITY_ODBC_ORESULTSET_HXX_
 #include "odbc/ODatabaseMetaDataResultSet.hxx"
-#endif
 #include "FDatabaseMetaDataResultSet.hxx"
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>

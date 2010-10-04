@@ -37,9 +37,7 @@
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #include <svx/dialmgr.hxx>
 #include <svx/svdoashp.hxx>
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
 #include <svx/svdview.hxx>
 #include <svx/sdasitm.hxx>
 #include <svx/svdoashp.hxx>

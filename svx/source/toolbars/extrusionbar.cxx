@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETERPARIR_HPP_
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
-#endif
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
 #include <com/sun/star/drawing/ShadeMode.hpp>
 #include <com/sun/star/drawing/Position3D.hpp>
@@ -45,9 +43,7 @@
 #include <svx/xsflclit.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/svdoashp.hxx>
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
 #include <svx/svdview.hxx>
 #include <editeng/colritem.hxx>
 #include "chrtitem.hxx"

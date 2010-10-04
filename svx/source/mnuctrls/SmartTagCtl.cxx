@@ -30,15 +30,11 @@
 
 #include <svx/SmartTagCtl.hxx>
 #include <com/sun/star/smarttags/XSmartTagAction.hpp>
-#ifndef _COM_SUN_STAR_SMARTTAGS_XSTRINGKEYMAP_HPP_
 #include <com/sun/star/container/XStringKeyMap.hpp>
-#endif
 #include <svtools/stdmenu.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/dispatch.hxx>
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 
 #include <svx/SmartTagItem.hxx>
 

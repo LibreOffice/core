@@ -34,9 +34,7 @@
 
  *************************************************************************/
 
-#ifndef _TEST_ACTIVEDATASINK_HXX_
 #include "test_activedatasink.hxx"
-#endif
 
 
 using namespace test_ftp;

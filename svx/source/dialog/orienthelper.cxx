@@ -32,9 +32,7 @@
 #include <vector>
 #include <utility>
 
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include "dialcontrol.hxx"
 
 namespace svx {

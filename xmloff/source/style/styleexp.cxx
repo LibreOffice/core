@@ -49,14 +49,10 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
-#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTSSUPPLIER_HPP
 #include <com/sun/star/document/XEventsSupplier.hpp>
-#endif
 #include <com/sun/star/text/XChapterNumberingSupplier.hpp>
 #include <xmloff/xmlaustp.hxx>
-#ifndef _XMLOFF_STYLEEXP_HXX
 #include <xmloff/styleexp.hxx>
-#endif
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/XMLEventExport.hxx>
 

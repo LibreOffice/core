@@ -31,9 +31,7 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/morebtn.hxx>
-#ifndef _SVMEDIT_HXX
 #include <svtools/svmedit.hxx>
-#endif
 #include <svl/itemset.hxx>
 #include <svl/eitem.hxx>
 #include <svtools/sfxecode.hxx>
@@ -42,9 +40,7 @@
 #include <unotools/localfilehelper.hxx>
 
 #include "new.hrc"
-#ifndef _SFX_DOC_HRC
 #include "doc.hrc"
-#endif
 #include <sfx2/sfx.hrc>
 #include "helpid.hrc"
 #include "sfxtypes.hxx"

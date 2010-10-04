@@ -41,15 +41,9 @@
 #include <com/sun/star/frame/XTitle.hpp>
 #include <vos/mutex.hxx>
 
-#ifndef _SV_RESARY_HXX
 #include <tools/resary.hxx>
-#endif
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
 #include <vcl/svapp.hxx>
 #include <svl/eitem.hxx>
 #include <tools/rtti.hxx>
@@ -64,15 +58,11 @@
 #include <sfx2/signaturestate.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 
-#ifndef _BASIC_SBUNO_HXX
 #include <basic/sbuno.hxx>
-#endif
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 #include <unotools/printwarningoptions.hxx>
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/script/DocumentDialogLibraryContainer.hpp>

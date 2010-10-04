@@ -31,9 +31,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 
-#ifndef _XMLTOKEN_HXX
 #include <xmloff/xmltoken.hxx>
-#endif
 #include <xmloff/nmspmap.hxx>
 
 #include "xmlnmspe.hxx"

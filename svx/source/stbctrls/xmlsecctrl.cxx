@@ -30,12 +30,8 @@
 
 // include ---------------------------------------------------------------
 #include <tools/shl.hxx>
-#ifndef _STATUS_HXX //autogen
 #include <vcl/status.hxx>
-#endif
-#ifndef _MENU_HXX //autogen
 #include <vcl/menu.hxx>
-#endif
 #include <vcl/image.hxx>
 //#ifndef _SFXITEMPOOL_HXX
 //#include <svl/itempool.hxx>
@@ -65,12 +61,8 @@
 
 //#include <svx/dialogs.hrc>
 
-/*#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
-#include <unotools/localedatawrapper.hxx>
-#endif
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
+/*#include <unotools/localedatawrapper.hxx>
 #include <comphelper/processfactory.hxx>
-#endif*/
 
 
 

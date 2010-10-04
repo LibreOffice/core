@@ -33,9 +33,7 @@
 
 #include "osl/diagnose.h"
 #include <com/sun/star/ucb/OpenMode.hpp>
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
@@ -51,9 +49,7 @@
 #include "filrow.hxx"
 #include "bc.hxx"
 #include "prov.hxx"
-#ifndef _FILERROR_HXX_
 #include "filerror.hxx"
-#endif
 #include "filinsreq.hxx"
 
 

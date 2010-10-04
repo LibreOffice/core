@@ -33,24 +33,16 @@
 #ifndef GCC
 #endif
 #include <com/sun/star/uno/Any.h>
-#ifndef _COM_SUN_STAR_FRAME_XFRAMESSUPLLIER_HPP_
 #include <com/sun/star/frame/XFramesSupplier.hpp>
-#endif
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/historyoptions.hxx>
 #include <svl/folderrestriction.hxx>
 #include <vcl/toolbox.hxx>
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
-#ifndef _VOS_THREAD_HXX //autogen
 #include <vos/thread.hxx>
-#endif
-#ifndef _VOS_MUTEX_HXX //autogen
 #include <vos/mutex.hxx>
-#endif
 #include <rtl/ustring.hxx>
 
 #include <svl/itemset.hxx>

@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmlscript.hxx"
 
-#ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
 #include <cppuhelper/implementationentry.hxx>
-#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;

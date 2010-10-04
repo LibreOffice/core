@@ -30,12 +30,8 @@
 
 #include <string> // HACK: prevent conflict between STLPORT and Workshop headers
 
-#ifndef _TOOLBOX_HXX //autogen
 #include <vcl/toolbox.hxx>
-#endif
-#ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
 #include <vcl/fixed.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/intitem.hxx>

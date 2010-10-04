@@ -35,9 +35,7 @@
 #include <com/sun/star/script/provider/ScriptFrameworkErrorType.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 
-#ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
 #include <cppuhelper/implementationentry.hxx>
-#endif
 #include <rtl/uri.hxx>
 #include <osl/process.h>
 #include <osl/file.hxx>

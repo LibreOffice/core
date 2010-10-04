@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 #include <com/sun/star/uno/Reference.hxx>
-#ifndef _COM_SUN_STAR_LANG_XMultiServiceFactory_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/frame/DispatchResultEvent.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
@@ -40,9 +38,7 @@
 #include <com/sun/star/frame/XDispatchHelper.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
-#ifndef _COM_SUN_STAR_UTIL_CloseVetoException_HPP_
 #include <com/sun/star/util/CloseVetoException.hpp>
-#endif
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/embed/XStorage.hpp>

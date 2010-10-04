@@ -31,13 +31,9 @@
 
 #include "fltdlg.hxx"
 
-#ifndef UUI_IDS_HRC
 #include "ids.hrc"
-#endif
 
-#ifndef UUI_FLTDLG_HRC
 #include "fltdlg.hrc"
-#endif
 
 //_________________________________________________________________________________________________________________
 //  includes of other projects
@@ -48,9 +44,7 @@
 #include <tools/list.hxx>
 #include <tools/urlobj.hxx>
 
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 

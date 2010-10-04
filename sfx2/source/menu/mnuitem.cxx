@@ -40,13 +40,9 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 #include <com/sun/star/util/XURLTransformer.hpp>
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 #include <tools/urlobj.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>

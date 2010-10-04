@@ -34,9 +34,7 @@
 #include "xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 
-#ifndef _XMLOFF_FAMILIES_HXX
 #include <xmloff/families.hxx>
-#endif
 #include "XMLShapePropertySetContext.hxx"
 #include <xmloff/XMLGraphicsDefaultStyle.hxx>
 

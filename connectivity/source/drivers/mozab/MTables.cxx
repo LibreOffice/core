@@ -35,9 +35,7 @@
 #include <com/sun/star/sdbc/KeyRule.hpp>
 #include <com/sun/star/sdbcx/KeyType.hpp>
 #include "MCatalog.hxx"
-#ifndef _CONNECTIVITY_MOZAB_BCONNECTION_HXX_
 #include "MConnection.hxx"
-#endif
 #include <comphelper/extract.hxx>
 #include "connectivity/dbtools.hxx"
 #include "connectivity/dbexception.hxx"

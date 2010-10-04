@@ -43,9 +43,7 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/maptype.hxx>
 
-#ifndef _XMLOFF_PAGEMASTERSTYLEMAP_HXX
 #include <xmloff/PageMasterStyleMap.hxx>
-#endif
 #include <tools/debug.hxx>
 #include <tools/color.hxx>
 

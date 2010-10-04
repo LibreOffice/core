@@ -33,9 +33,7 @@
 #include <algorithm>
 #include <boost/shared_ptr.hpp>
 #include <sot/storage.hxx>
-#ifndef _SVTOOLS_HRC
 #include <svtools/svtools.hrc>
-#endif
 
 #include <sal/main.h>
 #include <vcl/event.hxx>

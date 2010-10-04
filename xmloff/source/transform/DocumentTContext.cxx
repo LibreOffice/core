@@ -36,14 +36,10 @@
 #include <xmloff/xmltoken.hxx>
 #include "xmlnmspe.hxx"
 
-#ifndef _XMLOFF_TRANSFOERMERBASE_HXX
 #include "TransformerBase.hxx"
-#endif
 #include "MutableAttrList.hxx"
 
-#ifndef _XMLOFF_METATCONTEXT_HXX
 #include "DocumentTContext.hxx"
-#endif
 
 using ::rtl::OUString;
 

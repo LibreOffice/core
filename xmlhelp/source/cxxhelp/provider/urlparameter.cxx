@@ -35,9 +35,7 @@
 #endif
 
 #include <string.h>
-#ifndef _VOS_DIAGNOSE_HXX_
 #include <vos/diagnose.hxx>
-#endif
 #include <osl/thread.h>
 #include <rtl/memory.h>
 #include <osl/file.hxx>

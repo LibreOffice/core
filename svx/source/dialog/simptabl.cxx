@@ -33,9 +33,7 @@
 #include <svx/simptabl.hxx>
 #include <vcl/svapp.hxx>
 
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 #include <unotools/intlwrapper.hxx>
 
 // SvxSimpTblContainer  ------------------------------------------------------

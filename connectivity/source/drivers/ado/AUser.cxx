@@ -34,9 +34,7 @@
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
-#ifndef _CONNECTIVITY_ADO_BCONNECTION_HXX_
 #include "ado/AConnection.hxx"
-#endif
 #include "ado/Awrapado.hxx"
 
 using namespace connectivity::ado;

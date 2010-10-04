@@ -31,9 +31,7 @@
 #include <wininetbackend.hxx>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 
-#ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
 #include <cppuhelper/implementationentry.hxx>
-#endif
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 namespace css = com::sun::star ;

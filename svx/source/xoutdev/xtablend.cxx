@@ -43,9 +43,7 @@
 #include <tools/urlobj.hxx>
 #include <vcl/virdev.hxx>
 
-#ifndef _SV_APP_HXX
 #include <vcl/svapp.hxx>
-#endif
 #include <svl/itemset.hxx>
 #include <sfx2/docfile.hxx>
 

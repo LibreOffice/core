@@ -28,16 +28,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #include <svx/dialmgr.hxx>
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
 #include <tools/shl.hxx>
 #include <i18npool/mslangid.hxx>
 #include <svtools/valueset.hxx>
 #include <svl/languageoptions.hxx>
-#ifndef _SVX_HELPID_HRC
 #include <helpid.hrc>
-#endif
 #include <editeng/numitem.hxx>
 #include <svl/eitem.hxx>
 #include <vcl/svapp.hxx>

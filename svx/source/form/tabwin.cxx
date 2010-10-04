@@ -44,25 +44,17 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/stl_types.hxx>
 
-#ifndef _SVX_FMHELP_HRC
 #include "fmhelp.hrc"
-#endif
 #include <svx/fmshell.hxx>
 #include "fmshimp.hxx"
 #include "svx/dbtoolsclient.hxx"
 #include <svx/fmpage.hxx>
 
-#ifndef _SVX_FMPGEIMP_HXX
 #include "fmpgeimp.hxx"
-#endif
 
-#ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
-#endif
 
-#ifndef _SVX_FMRESIDS_HRC
 #include "fmresids.hrc"
-#endif
 #include <svx/dialmgr.hxx>
 #include <tools/shl.hxx>
 #include <svx/svdpagv.hxx>

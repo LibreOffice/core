@@ -28,14 +28,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
 
-#ifndef _CONNECTIVITY_DBASE_OCONNECTION_HXX_
 #include "dbase/DConnection.hxx"
-#endif
 #include "dbase/DDatabaseMetaData.hxx"
 #include "dbase/DCatalog.hxx"
-#ifndef _CONNECTIVITY_DBASE_ODRIVER_HXX_
 #include "dbase/DDriver.hxx"
-#endif
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <tools/urlobj.hxx>
 #include "dbase/DPreparedStatement.hxx"

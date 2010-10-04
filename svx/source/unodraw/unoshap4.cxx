@@ -39,9 +39,7 @@
 #include <svx/svdomedia.hxx>
 #include <svx/svdpool.hxx>
 #ifndef SVX_LIGHT
-#ifndef _SOT_CLSIDS_HXX
 #include <sot/clsids.hxx>
-#endif
 #include <sfx2/frmdescr.hxx>
 #endif
 #include <vcl/svapp.hxx>

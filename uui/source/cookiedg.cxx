@@ -29,13 +29,9 @@
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
 
-#ifndef UUI_COOKIEDG_HRC
 #include <cookiedg.hrc>
-#endif
 #include <cookiedg.hxx>
-#ifndef UUI_IDS_HRC
 #include <ids.hrc>
-#endif
 
 // CookiesDialog ---------------------------------------------------------
 

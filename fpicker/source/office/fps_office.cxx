@@ -30,9 +30,7 @@
 #include "precompiled_fpicker.hxx"
 #include "sal/types.h"
 
-#ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
 #include "cppuhelper/implementationentry.hxx"
-#endif
 
 #include "OfficeFilePicker.hxx"
 #include "OfficeFolderPicker.hxx"

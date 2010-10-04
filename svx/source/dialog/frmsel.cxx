@@ -35,12 +35,8 @@
 #include "AccessibleFrameSelector.hxx"
 #include <svx/dialmgr.hxx>
 
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
-#ifndef SVX_FRMSEL_HRC
 #include "frmsel.hrc"
-#endif
 
 #include <tools/rcid.h>
 

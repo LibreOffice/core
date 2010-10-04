@@ -47,9 +47,7 @@
 #include <svl/stritem.hxx>
 #include <svx/dialmgr.hxx>
 #include <lboxctrl.hxx>
-#ifndef _VCL_MNEMONIC_HXX_
 #include <vcl/mnemonic.hxx>
-#endif
 #include <tools/urlobj.hxx>
 
 #include <svx/svxids.hrc>

@@ -34,9 +34,7 @@
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
 
-#ifndef __FRAMEWORK_ACCELERATORCONST_H_
 #include <acceleratorconst.h>
-#endif
 #include <services.h>
 
 //_______________________________________________
@@ -48,26 +46,16 @@
 //_______________________________________________
 // other includes
 
-#ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX
 #include <comphelper/sequenceashashmap.hxx>
-#endif
 #include <vcl/svapp.hxx>
 
-#ifndef _COMPHELPER_CONFIGURATIONHELPER_HXX_
 #include <comphelper/configurationhelper.hxx>
-#endif
 
-#ifndef _COM_SUN_STAR_UTIL_XCHANGESNOTIFIER_HPP_
 #include <com/sun/star/util/XChangesNotifier.hpp>
-#endif
 
-#ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
-#endif
 
-#ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.h>
-#endif
 
 //_______________________________________________
 // const

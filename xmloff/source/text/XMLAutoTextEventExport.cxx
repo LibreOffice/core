@@ -37,9 +37,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
-#ifndef _COM_SUN_STAR_UNO_EXCEPTION_HPP
 #include <com/sun/star/uno/Exception.hpp>
-#endif
 
 // #110680#
 //#ifndef _COMPHELPER_PROCESSFACTORY_HXX_

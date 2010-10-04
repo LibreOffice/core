@@ -29,9 +29,7 @@
 #include "precompiled_connectivity.hxx"
 
 
-#ifndef _CONNECTIVITY_DBASE_ODbaseDatabaseMetaData_HXX_
 #include "dbase/DDatabaseMetaData.hxx"
-#endif
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>

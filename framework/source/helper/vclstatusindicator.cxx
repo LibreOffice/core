@@ -40,9 +40,7 @@
 //-----------------------------------------------
 // includes of external modules
 
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 #include <vcl/svapp.hxx>
 
 //-----------------------------------------------

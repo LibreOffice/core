@@ -43,14 +43,10 @@
 #include <vos/ref.hxx>
 #include <vos/process.hxx>
 
-#ifndef _TOOLS_RESMGR_HXX_
 #include <tools/resmgr.hxx>
-#endif
 #include <unotools/bootstrap.hxx>
 #include <svl/languageoptions.hxx>
-#ifndef _SVTOOLS_SYSLOCALEOPTIONSOPTIONS_HXX
 #include <unotools/syslocaleoptions.hxx>
-#endif
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

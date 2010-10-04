@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
 
-#ifndef CONNECTIVITY_EVOAB_DEBUG_HELPER_HXX
 #include "LDebug.hxx"
-#endif
 #include <osl/diagnose.h>
 
 void evo_traceStringMessage( const sal_Char* _pFormat, const ::rtl::OUString& _rAsciiString )

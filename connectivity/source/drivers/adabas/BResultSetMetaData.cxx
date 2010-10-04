@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
 
-#ifndef _CONNECTIVITY_ADABAS_BRESULTSETMETADATA_HXX_
 #include "adabas/BResultSetMetaData.hxx"
-#endif
 #include "adabas/BCatalog.hxx"
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>

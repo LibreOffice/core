@@ -50,12 +50,8 @@
 #include <svx/dialmgr.hxx>
 #include "editeng/unolingu.hxx"
 
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
-#ifndef SVX_FRMSEL_HRC
 #include "frmsel.hrc"
-#endif
 
 #ifndef MNEMONIC_CHAR
 #define MNEMONIC_CHAR ((sal_Unicode)'~')

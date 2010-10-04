@@ -28,17 +28,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#ifndef _SVX_FMRESIDS_HRC
 #include "fmresids.hrc"
-#endif
-#ifndef _SVX_FMEXPL_HRC
 #include "fmexpl.hrc"
-#endif
 #include "fmexpl.hxx"
 
-#ifndef _SVX_FMHELP_HRC
 #include "fmhelp.hrc"
-#endif
 #include <svx/fmglob.hxx>
 #include "fmservs.hxx"
 #include <svx/fmmodel.hxx>
@@ -46,13 +40,9 @@
 #include "fmundo.hxx"
 #include "fmpgeimp.hxx"
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 
-#ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
-#endif
 #include <svx/dialmgr.hxx>
 #include "svditer.hxx"
 #include <svx/svdouno.hxx>
@@ -71,9 +61,7 @@
 #include <sfx2/request.hxx>
 #include <tools/shl.hxx>
 
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
 #include <vcl/sound.hxx>
 #include <svx/fmshell.hxx>
 #include "fmshimp.hxx"

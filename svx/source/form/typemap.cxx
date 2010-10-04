@@ -37,9 +37,7 @@
 #include <editeng/cntritem.hxx>
 #include <editeng/shdditem.hxx>
 #include <editeng/postitem.hxx>
-#ifndef _SVX_CLIPBOARDCTL_HXX_
 #include "clipfmtitem.hxx"
-#endif
 #include <editeng/fhgtitem.hxx>
 #include "editeng/fontitem.hxx"
 #include <editeng/charreliefitem.hxx>
@@ -55,9 +53,7 @@
 #include <editeng/kernitem.hxx>
 #include <editeng/tstpitem.hxx>
 #include <editeng/adjitem.hxx>
-#ifndef _SVX_EMPHITEM_HXX
 #include <editeng/emphitem.hxx>
-#endif
 
 #include <editeng/memberids.hrc>
 #define SFX_TYPEMAP

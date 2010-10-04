@@ -32,23 +32,17 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_FRAMECONTAINER_HXX_
 #include <classes/framecontainer.hxx>
-#endif
 #include <threadhelp/writeguard.hxx>
 #include <threadhelp/readguard.hxx>
 
-#ifndef __FRAMEWORK_COMMANDS_HXX_
 #include <commands.h>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
 
-#ifndef _COM_SUN_STAR_FRAME_FRAMESEARCH_FLAG_HPP_
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  includes of other projects

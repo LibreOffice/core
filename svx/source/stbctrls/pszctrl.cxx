@@ -57,9 +57,7 @@
 
 #include <svx/dialogs.hrc>
 #include <unotools/localedatawrapper.hxx>
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 
 // -----------------------------------------------------------------------
 

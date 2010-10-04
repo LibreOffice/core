@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
 
-#ifndef _CONNECTIVITY_ADABAS_KEYCOLUMN_HXX_
 #include "adabas/BKeyColumn.hxx"
-#endif
 
 using namespace connectivity::adabas;
 namespace starbeans     = ::com::sun::star::beans;

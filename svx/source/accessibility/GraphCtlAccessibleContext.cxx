@@ -52,12 +52,8 @@
 #include <svx/AccessibleShapeInfo.hxx>
 #include "GraphCtlAccessibleContext.hxx"
 #include <svx/graphctl.hxx>
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
-#ifndef _SVX_ACCESSIBILITY_HRC
 #include "accessibility.hrc"
-#endif
 #include <svx/svdpage.hxx>
 #include <svx/unomod.hxx>
 #include <svx/dialmgr.hxx>

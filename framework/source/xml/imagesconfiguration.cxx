@@ -30,9 +30,7 @@
 #include <xml/imagesconfiguration.hxx>
 #include <services.h>
 
-#ifndef __FRAMEWORK_CLASSES_IMAGESDOCUMENTHANDLER_HXX_
 #include <xml/imagesdocumenthandler.hxx>
-#endif
 #include <xml/saxnamespacefilter.hxx>
 
 //_________________________________________________________________________________________________________________
@@ -47,9 +45,7 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 #include <unotools/streamwrap.hxx>
 #include <tools/debug.hxx>
 

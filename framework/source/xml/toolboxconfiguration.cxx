@@ -45,9 +45,7 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 #include <unotools/streamwrap.hxx>
 #include <tools/debug.hxx>
 

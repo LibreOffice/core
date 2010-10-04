@@ -31,33 +31,19 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_DISPATCH_OXT_HANDLER_HXX_
 #include <dispatch/oxt_handler.hxx>
-#endif
 
-#ifndef __FRAMEWORK_THREADHELP_TRANSACTIONGUARD_HXX_
 #include <threadhelp/transactionguard.hxx>
-#endif
 
-#ifndef __FRAMEWORK_THREADHELP_WRITEGUARD_HXX_
 #include <threadhelp/writeguard.hxx>
-#endif
 
-#ifndef __FRAMEWORK_THREADHELP_READGUARD_HXX_
 #include <threadhelp/readguard.hxx>
-#endif
 
-#ifndef __FRAMEWORK_MACROS_DEBUG_HXX_
 #include <macros/debug.hxx>
-#endif
 
-#ifndef __FRAMEWORK_SERVICES_H_
 #include <services.h>
-#endif
 
-#ifndef __COMPHELPER_MEDIADESCRIPTOR_HXX_
 #include <comphelper/mediadescriptor.hxx>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -71,13 +57,9 @@
 //  includes of other projects
 //_________________________________________________________________________________________________________________
 
-#ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX_
 #include <comphelper/sequenceashashmap.hxx>
-#endif
 
-#ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  namespace

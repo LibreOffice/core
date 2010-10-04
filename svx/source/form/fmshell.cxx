@@ -31,18 +31,14 @@
 #include <svx/fmshell.hxx>
 #include "svx/fmtools.hxx"
 #include "fmservs.hxx"
-#ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
-#endif
 #include "fmpgeimp.hxx"
 #include "fmitems.hxx"
 #include "fmundo.hxx"
 #include <vcl/waitobj.hxx>
 #include <com/sun/star/form/XLoadable.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-#ifndef _COM_SUN_STAR_SDDB_PRIVILEGE_HPP_
 #include <com/sun/star/sdbcx/Privilege.hpp>
-#endif
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
@@ -67,13 +63,9 @@
 #include "svditer.hxx"
 #include "fmobj.hxx"
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 
-#ifndef _SVX_FMRESIDS_HRC
 #include "fmresids.hrc"
-#endif
 #include "fmexch.hxx"
 #include <svx/fmglob.hxx>
 #include <svl/eitem.hxx>
@@ -125,9 +117,7 @@
 #define FmFormShell
 #include "svxslots.hxx"
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include "tbxform.hxx"
 #include <comphelper/property.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>

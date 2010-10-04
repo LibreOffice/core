@@ -31,9 +31,7 @@
 #include <vcl/msgbox.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
-#ifndef _SFXOBJSH_HXX
 #include <sfx2/objsh.hxx>
-#endif
 #include <sfx2/request.hxx>
 
 #include <svx/dialmgr.hxx>

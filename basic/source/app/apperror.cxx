@@ -29,9 +29,7 @@
 #include "precompiled_basic.hxx"
 #include <tools/config.hxx>
 #include <svtools/ctrltool.hxx>
-#ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>
-#endif
 #include "basic.hrc"
 #include "apperror.hxx"
 

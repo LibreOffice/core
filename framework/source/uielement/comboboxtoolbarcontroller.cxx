@@ -28,17 +28,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
 
-#ifndef __FRAMEWORK_UIELEMENT_COMBOBOXTOOLBARCONTROLLER_HXX
 #include "uielement/comboboxtoolbarcontroller.hxx"
-#endif
 
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_TOOLBAR_HXX_
 #include "uielement/toolbar.hxx"
-#endif
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -58,9 +54,7 @@
 #include <svtools/toolboxcontroller.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
-#ifndef _VCL_MNEMONIC_HXX_
 #include <vcl/mnemonic.hxx>
-#endif
 #include <vcl/toolbox.hxx>
 #include <vcl/combobox.hxx>
 #include <tools/urlobj.hxx>

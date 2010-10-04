@@ -28,13 +28,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#ifndef SVX_SOURCE_FORM_FMCONTROLBORDERMANAGER_HXX
 #include "fmcontrolbordermanager.hxx"
-#endif
 
-#ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
-#endif
 
 /** === begin UNO includes === **/
 #include <com/sun/star/form/validation/XValidatableFormComponent.hpp>

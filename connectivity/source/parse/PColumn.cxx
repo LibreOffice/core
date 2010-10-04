@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
 
-#ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
 #include "connectivity/PColumn.hxx"
-#endif
 #include "connectivity/dbtools.hxx"
 #include "TConnection.hxx"
 #include <comphelper/types.hxx>

@@ -43,14 +43,10 @@
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 
-#ifndef _TOOLS_URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
 #include "resourceprovider.hxx"
 
-#ifndef _SV_RC_H
 #include <tools/rc.hxx>
-#endif
 #include <osl/file.hxx>
 #include "CFStringUtilities.hxx"
 #include "NSString_OOoAdditions.hxx"

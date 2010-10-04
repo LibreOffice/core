@@ -30,9 +30,7 @@
 
 // include ---------------------------------------------------------------
 
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <vcl/field.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
@@ -53,9 +51,7 @@
 #include "dialog.hrc"
 #include "mgetempl.hrc"
 
-#ifndef _SFX_STYLE_HRC
 #include <svl/style.hrc>
-#endif
 
 // SfxManageStyleSheetPage -----------------------------------------------
 

@@ -49,9 +49,7 @@
 #ifndef GCC
 #endif
 
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 
 const sal_uInt32 IMAGELIST_COUNT = 4; // small, small-hi, large, large-hi
 

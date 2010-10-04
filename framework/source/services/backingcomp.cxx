@@ -42,9 +42,7 @@
 #include <properties.h>
 #include <services.h>
 
-#ifndef _FRAMEWORK_HELPID_HRC
 #include <helpid.hrc>
-#endif
 
 //_______________________________________________
 // interface includes
@@ -70,16 +68,12 @@
 #include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
 
-#ifndef _SOLAR_HRC
 #include <svl/solar.hrc>
-#endif
 #include <svl/urihelper.hxx>
 #include <osl/file.hxx>
 #include <unotools/configmgr.hxx>
 
-#ifndef _UTL_BOOTSTRAP_HXX_
 #include <unotools/bootstrap.hxx>
-#endif
 
 namespace framework
 {

@@ -49,9 +49,7 @@
 
 #include "resourceprovider.hxx"
 
-#ifndef _SV_RC_H
 #include <tools/rc.hxx>
-#endif
 
 #include <osl/file.hxx>
 #include "CFStringUtilities.hxx"

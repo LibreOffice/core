@@ -37,9 +37,7 @@
 #include <com/sun/star/drawing/DoubleSequence.hpp>
 #include <tools/gen.hxx>
 
-#ifndef _XMLOFF_SHAPEEXPORT_HXX
 #include <xmloff/shapeexport.hxx>
-#endif
 #include "sdpropls.hxx"
 #include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>

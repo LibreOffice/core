@@ -31,12 +31,8 @@
 #include <com/sun/star/embed/VerbAttributes.hpp>
 
 #include <tools/list.hxx>
-#ifndef _MENU_HXX //autogen
 #include <vcl/menu.hxx>
-#endif
-#ifndef _SXSTRITEM_HXX //autogen
 #include <svl/stritem.hxx>
-#endif
 #ifndef GCC
 #endif
 

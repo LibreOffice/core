@@ -31,9 +31,7 @@
 #include "NTable.hxx"
 #include "NTables.hxx"
 #include "NColumns.hxx"
-#ifndef _CONNECTIVITY_EVOAB_CATALOG_HXX__
 #include "NCatalog.hxx"
-#endif
 
 using namespace connectivity;
 using namespace ::comphelper;

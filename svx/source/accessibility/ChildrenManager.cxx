@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #include <svx/ChildrenManager.hxx>
-#ifndef _SVX_ACCESSIBILITY_CHILDREN_MANAGER_IMPL_HXX
 #include "ChildrenManagerImpl.hxx"
-#endif
 #include <svx/AccessibleShape.hxx>
 
 using namespace ::com::sun::star;

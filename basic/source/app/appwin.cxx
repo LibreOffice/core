@@ -29,9 +29,7 @@
 #include "precompiled_basic.hxx"
 
 #include <stdio.h>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <tools/fsys.hxx>
 #include <svtools/stringtransfer.hxx>
 

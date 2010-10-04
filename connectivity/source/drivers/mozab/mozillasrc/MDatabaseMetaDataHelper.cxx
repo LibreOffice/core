@@ -33,12 +33,8 @@
 
 #include "resource/mozab_res.hrc"
 #include "MDatabaseMetaDataHelper.hxx"
-#ifndef _CONNECTIVITY_MAB_CONVERSIONS_HXX_
 #include "MTypeConverter.hxx"
-#endif
-#ifndef CONNECTIVITY_MOZAB_MCONFIGACCESS_HXX
 #include "MConfigAccess.hxx"
-#endif
 #include <connectivity/dbexception.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/sequence.hxx>

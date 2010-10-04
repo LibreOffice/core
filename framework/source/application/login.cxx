@@ -32,9 +32,7 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_SERVICES_LOGINDIALOG_HXX_
 #include <services/logindialog.hxx>
-#endif
 #include <classes/servicemanager.hxx>
 #include <macros/generic.hxx>
 #include <macros/debug.hxx>

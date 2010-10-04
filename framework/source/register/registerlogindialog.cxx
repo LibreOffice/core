@@ -58,9 +58,7 @@
                              )
 =================================================================================================================*/
 
-#ifndef __FRAMEWORK_SERVICES_LOGINDIALOG_HXX_
 #include <services/logindialog.hxx>
-#endif
 
 COMPONENTGETIMPLEMENTATIONENVIRONMENT
 

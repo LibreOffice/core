@@ -32,14 +32,10 @@
 #include <xmloff/xmltoken.hxx>
 #include "xmlbahdl.hxx"
 #include <xmloff/NamedBoolPropertyHdl.hxx>
-#ifndef _XMLOFF_XMLTEXTCOLUMNSPPROPERTYHANDLER_HXX
 #include "XMLTextColumnsPropertyHandler.hxx"
-#endif
 #include <xmloff/XMLConstantsPropertyHandler.hxx>
 #include "PageMasterPropHdl.hxx"
-#ifndef _XMLOFF_PAGEMASTERSTYLEMAP_HXX
 #include <xmloff/PageMasterStyleMap.hxx>
-#endif
 #include <com/sun/star/text/TextGridMode.hpp>
 
 

@@ -37,17 +37,13 @@
 #include <FPServiceInfo.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
-#ifndef _SALAQUAPICKER_HXX_
 #include "SalAquaPicker.hxx"
-#endif
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>
 #include "CFStringUtilities.hxx"
 #include "NSString_OOoAdditions.hxx"
 
-#ifndef _NSURL_OOOADDITIONS_HXX_
 #include "NSURL_OOoAdditions.hxx"
-#endif
 
 #include "SalAquaFilePicker.hxx"
 

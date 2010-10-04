@@ -30,9 +30,7 @@
 #include <tools/errcode.hxx>
 #include <svl/svdde.hxx>
 #include "ddectrl.hxx"
-#ifndef _SBERRORS_HXX
 #include <basic/sberrors.hxx>
-#endif
 
 #define DDE_FREECHANNEL ((DdeConnection*)0xffffffff)
 

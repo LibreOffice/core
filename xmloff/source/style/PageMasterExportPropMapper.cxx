@@ -31,9 +31,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <comphelper/types.hxx>
 #include <com/sun/star/table/BorderLine.hpp>
-#ifndef _XMLOFF_PAGEMASTERSTYLEMAP_HXX
 #include <xmloff/PageMasterStyleMap.hxx>
-#endif
 #include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/extract.hxx>

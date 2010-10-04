@@ -59,9 +59,7 @@
 #include <svl/itemiter.hxx>
 #include <svl/whiter.hxx>
 #include <svl/intitem.hxx>
-#ifndef _SFXEITEM_HXX //autogen
 #include <svl/eitem.hxx>
-#endif
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XLayoutManagerEventBroadcaster.hpp>

@@ -33,9 +33,7 @@
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
 #include <vcl/lstbox.hxx>
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HPP_
 #include <com/sun/star/uno/Sequence.hxx>
-#endif
 
 #include <algorithm>
 #include <functional>

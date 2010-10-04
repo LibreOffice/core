@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 #include <vcl/msgbox.hxx>
-#ifndef _SV_RESARY_HXX
 #include <tools/resary.hxx>
-#endif
 #include <svl/lstner.hxx>
 #include <basic/basmgr.hxx>
 #include <basic/sbmod.hxx>

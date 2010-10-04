@@ -48,9 +48,7 @@
 #include <unotools/localfilehelper.hxx>
 #include <unotools/configmgr.hxx>
 
-#ifndef _UTL_BOOTSTRAP_HXX_
 #include <unotools/bootstrap.hxx>
-#endif
 #include <osl/mutex.hxx>
 #include <osl/file.hxx>
 #include <osl/security.hxx>

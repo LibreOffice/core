@@ -34,9 +34,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#ifndef _CPPUHELPER_IMPLBASE3_HXX_
 #include <cppuhelper/implbase2.hxx>
-#endif
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <comphelper/stl_types.hxx>

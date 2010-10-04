@@ -33,9 +33,7 @@
 #include <com/sun/star/style/NumberingType.hpp>
 #include <xmloff/maptype.hxx>
 
-#ifndef _XMLOFF_TXTPRMAP_HXX
 #include <xmloff/txtprmap.hxx>
-#endif
 #include <xmloff/nmspmap.hxx>
 #include "xmlnmspe.hxx"
 #include <xmloff/xmluconv.hxx>

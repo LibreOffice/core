@@ -33,9 +33,7 @@
 #include <osl/file.hxx>
 #include <rtl/ustrbuf.hxx>
 
-#ifndef _RTL_URI_H_
 #include <rtl/uri.hxx>
-#endif
 #include "shellexec.hxx"
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 

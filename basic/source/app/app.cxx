@@ -28,20 +28,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basic.hxx"
 
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <tools/fsys.hxx>
-#ifndef _SV_FILEDLG_HXX //autogen
 #include <svtools/filedlg.hxx>
-#endif
 #include <tools/config.hxx>
 
 #include <vcl/font.hxx>
 
-#ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>
-#endif
 #include <basic/sbx.hxx>
 #include <svtools/filedlg.hxx>
 
@@ -60,9 +54,7 @@
 #include <basic/basrdll.hxx>
 #include "basrid.hxx"
 
-#ifndef _RUNTIME_HXX
 #include "runtime.hxx"
-#endif
 #include "sbintern.hxx"
 
 #ifdef _USE_UNO

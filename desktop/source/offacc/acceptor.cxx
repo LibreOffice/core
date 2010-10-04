@@ -35,9 +35,7 @@
 #include <tools/stream.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#ifndef _COM_SUN_STAR_UNO_XNAMEINGSERVICE_HPP_
 #include <com/sun/star/uno/XNamingService.hpp>
-#endif
 
 #include <cppuhelper/factory.hxx>
 

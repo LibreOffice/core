@@ -31,12 +31,8 @@
 // include ---------------------------------------------------------------
 #include <aboutbmpnames.hxx>
 
-#ifndef _SV_APP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #ifndef GCC
 #endif
 

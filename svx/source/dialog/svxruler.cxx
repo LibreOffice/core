@@ -52,9 +52,7 @@
 #include <editeng/tstpitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include "editeng/protitem.hxx"
-#ifndef _APP_HXX
 #include <vcl/svapp.hxx>
-#endif
 #ifndef RULER_TAB_RTL
 #define RULER_TAB_RTL           ((USHORT)0x0010)
 #endif

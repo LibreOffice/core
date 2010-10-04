@@ -28,12 +28,8 @@
 #include <svtools/filedlg.hxx>
 #include <vcl/msgbox.hxx>
 
-#ifndef UUI_IDS_HRC
 #include <ids.hrc>
-#endif
-#ifndef UUI_MASTERPASSWORDDLG_HRC
 #include <masterpassworddlg.hrc>
-#endif
 #include <masterpassworddlg.hxx>
 
 // MasterPasswordDialog---------------------------------------------------

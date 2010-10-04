@@ -52,9 +52,7 @@
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/fcontnr.hxx>
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 #include <cppuhelper/compbase1.hxx>
 #include <sfx2/dispatch.hxx>
 #include <comphelper/extract.hxx>

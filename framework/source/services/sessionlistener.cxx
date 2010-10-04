@@ -30,9 +30,7 @@
 //_______________________________________________
 // my own includes
 
-#ifndef __FRAMEWORK_SERVICES_TYPEDETECTION_HXX_
 #include <services/sessionlistener.hxx>
-#endif
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/resetableguard.hxx>
 #include <protocols.h>

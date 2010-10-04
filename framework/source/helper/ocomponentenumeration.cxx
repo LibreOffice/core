@@ -33,9 +33,7 @@
 //_________________________________________________________________________________________________________________
 #include <helper/ocomponentenumeration.hxx>
 
-#ifndef _FRAMEWORK_THREADHELP_RESETABLEGUARD_HXX_
 #include <threadhelp/resetableguard.hxx>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  interface includes

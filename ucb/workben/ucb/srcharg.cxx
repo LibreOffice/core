@@ -36,9 +36,7 @@
 #include <tools/inetmime.hxx>
 #include <tools/string.hxx>
 
-#ifndef CHAOS_UCBDEMO_SRCHARG_HXX
 #include <srcharg.hxx>
-#endif
 
 namespace unnamed_chaos_ucbdemo_srcharg {}
 using namespace unnamed_chaos_ucbdemo_srcharg;

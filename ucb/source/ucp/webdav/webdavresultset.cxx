@@ -37,9 +37,7 @@
 
  *************************************************************************/
 #include "webdavresultset.hxx"
-#ifndef _WEBDAV_SESSION_HXX
 #include "DAVSession.hxx"
-#endif
 
 using namespace com::sun::star;
 using namespace webdav_ucp;

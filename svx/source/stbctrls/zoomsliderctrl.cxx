@@ -30,12 +30,8 @@
 
 // include ---------------------------------------------------------------
 #include <svx/zoomsliderctrl.hxx>
-#ifndef _STATUS_HXX //autogen
 #include <vcl/status.hxx>
-#endif
-#ifndef _MENU_HXX //autogen
 #include <vcl/menu.hxx>
-#endif
 #include <vcl/image.hxx>
 #include <svx/zoomslideritem.hxx>
 #include <svx/dialmgr.hxx>

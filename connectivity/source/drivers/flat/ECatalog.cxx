@@ -31,9 +31,7 @@
 
 #include "flat/ECatalog.hxx"
 
-#ifndef _CONNECTIVITY_FLAT_DCONNECTION_HXX_
 #include "flat/EConnection.hxx"
-#endif
 #include "flat/ETables.hxx"
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>

@@ -30,9 +30,7 @@
 
 // include ---------------------------------------------------------------
 
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 
 #include <svx/stddlg.hxx>
 

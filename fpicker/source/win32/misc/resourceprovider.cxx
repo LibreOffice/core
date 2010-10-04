@@ -37,9 +37,7 @@
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 
-#ifndef _TOOLS_SIMPLERESMGR_HXX
 #include <tools/simplerm.hxx>
-#endif
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 

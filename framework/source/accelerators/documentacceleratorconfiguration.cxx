@@ -29,61 +29,39 @@
 #include "precompiled_framework.hxx"
 #include <accelerators/documentacceleratorconfiguration.hxx>
 
-#ifndef __FRAMEWORK_XML_ACCELERATORCONFIGURATIONREADER_HXX_
 #include <xml/acceleratorconfigurationreader.hxx>
-#endif
 
-#ifndef __FRAMEWORK_XML_ACCELERATORCONFIGURATIONWRITER_HXX_
 #include <xml/acceleratorconfigurationwriter.hxx>
-#endif
 
-#ifndef __FRAMEWORK_XML_SAXNAMESPACEFILTER_HXX_
 #include <xml/saxnamespacefilter.hxx>
-#endif
 
 //_______________________________________________
 // own includes
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
 
-#ifndef __FRAMEWORK_ACCELERATORCONST_H_
 #include <acceleratorconst.h>
-#endif
 #include <services.h>
 
 //_______________________________________________
 // interface includes
 
-#ifndef _COM_SUN_STAR_IO_XACTIVEDATASOURCE_HPP_
 #include <com/sun/star/io/XActiveDataSource.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
 #include <com/sun/star/io/XSeekable.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_IO_XTRUNCATE_HPP_
 #include <com/sun/star/io/XTruncate.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
 #include <com/sun/star/embed/ElementModes.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_XML_SAX_INPUTSOURCE_HPP_
 #include <com/sun/star/xml/sax/InputSource.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_XML_SAX_XPARSER_HPP_
 #include <com/sun/star/xml/sax/XParser.hpp>
-#endif
 
 //_______________________________________________
 // other includes
 
-#ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX
 #include <comphelper/sequenceashashmap.hxx>
-#endif
 
 //_______________________________________________
 // const

@@ -36,14 +36,10 @@
 
 #include <stdio.h>
 #include <osl/file.hxx>
-#ifndef _VOS_DIAGNOSE_HXX_
 #include <vos/diagnose.hxx>
-#endif
 #include <ucbhelper/contentidentifier.hxx>
 #include <com/sun/star/frame/XConfigManager.hpp>
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>

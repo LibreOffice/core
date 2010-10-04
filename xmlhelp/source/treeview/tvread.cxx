@@ -31,9 +31,7 @@
 
 #include <string.h>
 #include <rtl/ustrbuf.hxx>
-#ifndef _VOS_DIAGNOSE_HXX_
 #include <vos/diagnose.hxx>
-#endif
 #include "tvread.hxx"
 #include <expat.h>
 #include <osl/file.hxx>

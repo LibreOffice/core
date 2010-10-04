@@ -31,9 +31,7 @@
 //_______________________________________________
 //  my own includes
 
-#ifndef __FRAMEWORK_DISPATCH_INTERCEPTIONHELPER_HXX_
 #include <dispatch/interceptionhelper.hxx>
-#endif
 
 //_______________________________________________
 //  interface includes

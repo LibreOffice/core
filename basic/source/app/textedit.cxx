@@ -32,9 +32,7 @@
 #include <svtools/textview.hxx>
 #include <svtools/txtattr.hxx>
 #include <basic/sbxmeth.hxx>
-#ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>
-#endif
 
 #include "basic.hrc"
 #include "textedit.hxx"

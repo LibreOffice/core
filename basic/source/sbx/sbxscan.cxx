@@ -37,9 +37,7 @@
 #include <stdlib.h>
 #endif
 
-#ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
 #include <math.h>
 #include <string.h>
 #include <ctype.h>

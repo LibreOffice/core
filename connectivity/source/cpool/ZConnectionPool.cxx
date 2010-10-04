@@ -37,13 +37,9 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include "ZPooledConnection.hxx"
 #include "ZPoolCollection.hxx"
-#ifndef _CONNECTIVITY_CONNECTIONWRAPPER_HXX_
 #include "connectivity/ConnectionWrapper.hxx"
-#endif
 #include <com/sun/star/beans/XPropertySet.hpp>
-#ifndef _CONNECTIVITY_CONNECTIONWRAPPER_HXX_
 #include "connectivity/ConnectionWrapper.hxx"
-#endif
 
 
 using namespace ::com::sun::star::uno;

@@ -32,22 +32,16 @@
 //_______________________________________________
 // own includes
 
-#ifndef __FRAMEWORK_XML_ACCELERATORCONFIGURATIONREADER_HXX_
 #include <xml/acceleratorconfigurationreader.hxx>
-#endif
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
 
 //_______________________________________________
 // interface includes
 
-#ifndef __COM_SUN_STAR_CONTAINER_ELEMENTEXISTEXCEPTION_HPP_
 #include <com/sun/star/container/ElementExistException.hpp>
-#endif
 
-#ifndef __COM_SUN_STAR_CONTAINER_NOSUCHELEMENTEXCEPTION_HPP_
 #include <com/sun/star/container/NoSuchElementException.hpp>
-#endif
 
 //_______________________________________________
 // other includes

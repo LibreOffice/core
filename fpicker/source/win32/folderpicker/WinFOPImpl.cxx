@@ -32,15 +32,11 @@
 // includes
 //------------------------------------------------------------------------
 
-#ifndef _WINDIRBROWSEIMPL_HXX_
 #include "WinFOPImpl.hxx"
-#endif
 #include <osl/diagnose.h>
 #include <com/sun/star/lang/EventObject.hpp>
 
-#ifndef _COM_SUN_STAR_UI_FILEDIALOGRESULTS_HPP_
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#endif
 #include "FopEvtDisp.hxx"
 #include <osl/file.hxx>
 #include "FolderPicker.hxx"

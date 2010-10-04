@@ -32,9 +32,7 @@
 //_______________________________________________
 // own includes
 
-#ifndef __FRAMEWORK_ACCELERATORCONST_H_
 #include <acceleratorconst.h>
-#endif
 
 //_______________________________________________
 // interface includes

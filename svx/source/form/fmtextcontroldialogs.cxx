@@ -29,9 +29,7 @@
 #include "precompiled_svx.hxx"
 #include "fmtextcontroldialogs.hxx"
 #include <svx/dialmgr.hxx>
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
 
 #ifndef _SVX_CHARDLG_HXX
 //#include "chardlg.hxx"

@@ -30,9 +30,7 @@
 
 // include ---------------------------------------------------------------
 #include <tools/shl.hxx>
-#ifndef _STATUS_HXX //autogen
 #include <vcl/status.hxx>
-#endif
 #include <svl/eitem.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>

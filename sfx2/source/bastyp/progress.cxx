@@ -32,9 +32,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 
-#ifndef _SBX_HXX //autogen
 #include <basic/sbx.hxx>
-#endif
 
 #include <svl/eitem.hxx>
 #include <tools/time.hxx>

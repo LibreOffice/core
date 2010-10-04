@@ -32,9 +32,7 @@
 
 #include <svx/SmartTagItem.hxx>
 
-#ifndef _COM_SUN_STAR_SMARTTAGS_XSMARTTAGPROPERTIES_HPP_
 #include <com/sun/star/container/XStringKeyMap.hpp>
-#endif
 
 
 //#include <svl/memberid.hrc>

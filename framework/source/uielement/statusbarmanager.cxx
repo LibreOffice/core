@@ -62,9 +62,7 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 #include <svtools/statusbarcontroller.hxx>
 
 #include <vcl/status.hxx>

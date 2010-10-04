@@ -39,9 +39,7 @@
 #include <uielement/rootitemcontainer.hxx>
 #include <uielement/toolbarmanager.hxx>
 
-#ifndef __FRAMEWORK_UIELEMENT_TOOLBARW_HXX_
 #include <uielement/toolbar.hxx>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -59,9 +57,7 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 #include <toolkit/awt/vclxwindow.hxx>
 #include <comphelper/processfactory.hxx>
 

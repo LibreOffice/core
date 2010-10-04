@@ -31,9 +31,7 @@
 
 #include <tools/date.hxx>
 #include <basic/sbxvar.hxx>
-#ifndef _VOS_PROCESS_HXX
 #include <vos/process.hxx>
-#endif
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/sound.hxx>
@@ -55,9 +53,7 @@
 #include <tools/prewin.h>
 #include "winbase.h"
 #include <tools/postwin.h>
-#ifndef _FSYS_HXX //autogen
 #include <tools/fsys.hxx>
-#endif
 #else
 #include <osl/file.hxx>
 #endif

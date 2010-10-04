@@ -36,16 +36,12 @@
 #include "DeepTContext.hxx"
 #include "MetaTContext.hxx"
 #include "DocumentTContext.hxx"
-#ifndef _XMLOFF_NOTESCONTEXT_HXX
 #include "NotesTContext.hxx"
-#endif
 #include "StyleOASISTContext.hxx"
 #include "FrameOASISTContext.hxx"
 #include "EventOASISTContext.hxx"
 #include "DlgOASISTContext.hxx"
-#ifndef _XMLOFF_CONTROLOASISTCONTEXT_HXX
 #include "ControlOASISTContext.hxx"
-#endif
 #include "FormPropOASISTContext.hxx"
 #include "ChartOASISTContext.hxx"
 #include "ChartPlotAreaOASISTContext.hxx"

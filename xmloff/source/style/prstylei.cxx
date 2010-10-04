@@ -45,9 +45,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <xmloff/xmlimp.hxx>
 
-#ifndef _XMLOFF_PRSTYLEI_HXX
 #include <xmloff/prstylei.hxx>
-#endif
 #include <xmloff/attrlist.hxx>
 #include "xmlerror.hxx"
 

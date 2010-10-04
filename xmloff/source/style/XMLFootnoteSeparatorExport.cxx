@@ -35,9 +35,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlprmap.hxx>
 
-#ifndef _XMLOFF_PAGEMASTERSTYLEMAP_HXX
 #include <xmloff/PageMasterStyleMap.hxx>
-#endif
 #include <com/sun/star/text/HorizontalAdjust.hpp>
 #include <rtl/ustrbuf.hxx>
 

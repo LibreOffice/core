@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #include <com/sun/star/embed/XTransactedObject.hpp>
-#ifndef _COM_SUN_STAR_EMBED_ElementModes_HPP_
 #include <com/sun/star/embed/ElementModes.hpp>
-#endif
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

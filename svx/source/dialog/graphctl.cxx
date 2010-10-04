@@ -33,9 +33,7 @@
 #include <unotools/syslocale.hxx>
 #include <rtl/math.hxx>
 #include <unotools/localedatawrapper.hxx>
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 

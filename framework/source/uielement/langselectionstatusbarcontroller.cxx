@@ -36,9 +36,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/status.hxx>
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 #include <toolkit/helper/convert.hxx>
 
 #include <com/sun/star/frame/XPopupMenuController.hpp>
@@ -55,9 +53,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 
 #include <classes/fwkresid.hxx>
-#ifndef __FRAMEWORK_CLASSES_RESOURCE_HRC_
 #include <classes/resource.hrc>
-#endif
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>

@@ -31,9 +31,7 @@
 #include "PagePropertySetContext.hxx"
 #include "XMLBackgroundImageContext.hxx"
 #include "XMLTextColumnsContext.hxx"
-#ifndef _XMLOFF_PAGEMASTERSTYLEMAP_HXX
 #include <xmloff/PageMasterStyleMap.hxx>
-#endif
 #include "XMLFootnoteSeparatorImport.hxx"
 
 using ::rtl::OUString;

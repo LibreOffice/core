@@ -29,9 +29,7 @@
 #include "precompiled_xmloff.hxx"
 #include "XMLScriptExportHandler.hxx"
 
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
 #include <tools/debug.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmltoken.hxx>

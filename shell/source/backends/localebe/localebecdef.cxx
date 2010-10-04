@@ -30,9 +30,7 @@
 
 #include <localebackend.hxx>
 
-#ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
 #include <cppuhelper/implementationentry.hxx>
-#endif
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 namespace css = com::sun::star ;

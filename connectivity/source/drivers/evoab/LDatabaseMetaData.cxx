@@ -37,9 +37,7 @@
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbcx/XIndexesSupplier.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
-#ifndef _COM_SUN_STAR_SQLC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
-#endif
 #include <tools/urlobj.hxx>
 #include "FDatabaseMetaDataResultSet.hxx"
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -53,9 +51,7 @@
 #include <map>
 #include <vector>
 
-#ifndef CONNECTIVITY_EVOAB_DEBUG_HELPER_HXX
 #include "LDebug.hxx"
-#endif
 #include "diagnose_ex.h"
 
 using namespace ::comphelper;

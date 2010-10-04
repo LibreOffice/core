@@ -33,9 +33,7 @@
 #include <vos/mutex.hxx>
 #include <vos/thread.hxx>
 
-#ifndef _SV_RESARY_HXX
 #include <tools/resary.hxx>
-#endif
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <unotools/localedatawrapper.hxx>

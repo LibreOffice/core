@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #include <tools/stream.hxx>
-#ifndef __SBX_SBXVARIABLE_HXX
 #include <basic/sbxvar.hxx>
-#endif
 
 #include <svx/zoomitem.hxx>
 #include <com/sun/star/uno/Sequence.hxx>

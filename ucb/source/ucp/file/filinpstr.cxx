@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_ucb.hxx"
 #include "filinpstr.hxx"
-#ifndef _FILERROR_HXX_
 #include "filerror.hxx"
-#endif
 #include "shell.hxx"
 #include "prov.hxx"
 

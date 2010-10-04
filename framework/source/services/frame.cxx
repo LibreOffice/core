@@ -34,9 +34,7 @@
 #include <services/frame.hxx>
 #include <dispatch/dispatchprovider.hxx>
 
-#ifndef __FRAMEWORK_DISPATCH_INTERCEPTIONHELPER_HXX_
 #include <dispatch/interceptionhelper.hxx>
-#endif
 #include <dispatch/closedispatcher.hxx>
 #include <dispatch/windowcommanddispatch.hxx>
 #include <loadenv/loadenv.hxx>
@@ -80,9 +78,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 
-#ifndef _COM_SUN_STAR_FRAME_XTITLECHANGEBROADCASTER_HPP_
 #include <com/sun/star/frame/XTitleChangeBroadcaster.hpp>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  includes of other projects
@@ -97,9 +93,7 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/svapp.hxx>
 
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 #include <toolkit/awt/vclxwindow.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/moduleoptions.hxx>

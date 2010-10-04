@@ -42,9 +42,7 @@
 #include <com/sun/star/linguistic2/XConversionDictionary.hpp>
 #include <com/sun/star/linguistic2/ConversionDictionaryType.hpp>
 #include <com/sun/star/lang/Locale.hpp>
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_HPP_
 #include <com/sun/star/uno/Reference.h>
-#endif
 #include <com/sun/star/registry/XRegistryKey.hpp>
 
 #include "hhconvdic.hxx"

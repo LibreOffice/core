@@ -48,14 +48,10 @@
 #include <unotools/linguprops.hxx>
 // header for class IntlWrapper
 #include <unotools/intlwrapper.hxx>
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 // header for class Application
 #include <vcl/svapp.hxx>
-#ifndef _SVX_HELPID_HRC
 #include "helpid.hrc"
-#endif
 
 //disable compiler warning C4355: 'this' : used in base member initializer list
 #ifdef _MSC_VER

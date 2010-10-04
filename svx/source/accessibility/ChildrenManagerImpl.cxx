@@ -31,9 +31,7 @@
 #include "ChildrenManagerImpl.hxx"
 #include <svx/ShapeTypeHandler.hxx>
 #include <svx/AccessibleShapeInfo.hxx>
-#ifndef _COM_SUN_STAR_ACCESSIBLE_ACCESSIBLESTATETYPE_HPP_
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#endif
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <comphelper/uno3.hxx>

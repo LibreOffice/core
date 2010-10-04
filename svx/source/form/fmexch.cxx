@@ -32,9 +32,7 @@
 #include <sot/storage.hxx>
 #include <svl/itempool.hxx>
 
-#ifndef _SVX_DBEXCH_HRC
 #include <dbexch.hrc>
-#endif
 #include <sot/formats.hxx>
 #include <svtools/svtreebx.hxx>
 #include <tools/diagnose_ex.h>

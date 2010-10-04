@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
 
-#ifndef _CONNECTIVITY_ADABAS_BDATABASEMETADATA_HXX_
 #include "adabas/BDatabaseMetaData.hxx"
-#endif
 #include "FDatabaseMetaDataResultSet.hxx"
 
 using namespace connectivity::adabas;

@@ -30,12 +30,8 @@
 
 
 #include "PageMasterImportPropMapper.hxx"
-#ifndef _XMLOFF_PAGEMASTERPROPMAPPER_HXX
 #include "PageMasterPropMapper.hxx"
-#endif
-#ifndef _XMLOFF_PAGEMASTERSTYLEMAP_HXX
 #include <xmloff/PageMasterStyleMap.hxx>
-#endif
 #include <xmloff/maptype.hxx>
 #include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>

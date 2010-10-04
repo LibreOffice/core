@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#ifndef SVX_SOURCE_FORM_FMDOCUMENTCLASSIFICATION_HXX
 #include "fmdocumentclassification.hxx"
-#endif
 #include "svx/dbtoolsclient.hxx"
 
 /** === begin UNO includes === **/

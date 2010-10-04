@@ -29,9 +29,7 @@
 #include "precompiled_connectivity.hxx"
 #include "ZPooledConnection.hxx"
 #include "ZConnectionWrapper.hxx"
-#ifndef _CONNECTIVITY_CONNECTIONWRAPPER_HXX_
 #include "connectivity/ConnectionWrapper.hxx"
-#endif
 #include <com/sun/star/sdbc/XCloseable.hpp>
 #include <comphelper/types.hxx>
 #include <comphelper/uno3.hxx>

@@ -35,9 +35,7 @@
 #include <com/sun/star/embed/XEmbedObjectFactory.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
-#ifndef _COM_SUN_STAR_EMBED_XEMBED_PERSIST_HPP_
 #include <com/sun/star/embed/XEmbedPersist.hpp>
-#endif
 #include <com/sun/star/embed/EntryInitModes.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
@@ -52,9 +50,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
 
-#ifndef _SO_CLSIDS_HXX
 #include <sot/clsids.hxx>
-#endif
 #include <map>
 #include "xmleohlp.hxx"
 

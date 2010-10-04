@@ -40,9 +40,7 @@
 
 #include <comphelper/sequenceashashmap.hxx>
 
-#ifndef _EXCHANGE_HXX //autogen
 #include <sot/exchange.hxx>
-#endif
 #include <tools/config.hxx>
 #include <basic/sbmeth.hxx>
 #include <basic/basmgr.hxx>
@@ -50,12 +48,8 @@
 #include <basic/sbxobj.hxx>
 #include <basic/sbxmeth.hxx>
 #include <basic/sbxcore.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _RTL_USTRING_HXX //autogen
 #include <rtl/ustring.hxx>
-#endif
 #include <rtl/ustrbuf.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
@@ -84,9 +78,7 @@
 #include <com/sun/star/frame/XFilterDetect.hpp>
 #include <com/sun/star/loader/XImplementationLoader.hpp>
 #include <com/sun/star/loader/CannotActivateFactoryException.hpp>
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <sal/types.h>

@@ -34,9 +34,7 @@
 #include <tools/urlobj.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
-#ifndef _SV_RESARY_HXX
 #include <tools/resary.hxx>
-#endif
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <comphelper/sequenceashashmap.hxx>

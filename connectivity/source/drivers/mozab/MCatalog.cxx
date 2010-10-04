@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
 #include "MCatalog.hxx"
-#ifndef _CONNECTIVITY_MOZAB_BCONNECTION_HXX_
 #include "MConnection.hxx"
-#endif
 #include "MTables.hxx"
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>

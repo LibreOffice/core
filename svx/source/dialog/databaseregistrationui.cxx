@@ -36,9 +36,7 @@
 
 // === includes (project) ================================================
 #include <svx/svxdlg.hxx>
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
 //#include "connpooloptions.hxx"
 // === /includes (project) ===============================================
 

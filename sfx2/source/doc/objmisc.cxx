@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 
-#ifndef _INETMSG_HXX //autogen
 #include <svl/inetmsg.hxx>
-#endif
 #include <tools/diagnose_ex.h>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
@@ -48,9 +46,7 @@
 #include <com/sun/star/script/InterruptReason.hpp>
 #include <com/sun/star/script/XEngineListener.hpp>
 #include <com/sun/star/script/XDebugging.hpp>
-#ifndef _COM_SUN_STAR_SCRIPT_XINVOKATION_HPP_
 #include <com/sun/star/script/XInvocation.hpp>
-#endif
 #include <com/sun/star/script/ContextInformation.hpp>
 #include <com/sun/star/script/FinishReason.hpp>
 #include <com/sun/star/script/XEngine.hpp>
@@ -69,9 +65,7 @@
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
 
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Any.h>
@@ -98,12 +92,8 @@ using namespace ::com::sun::star::script::provider;
 using namespace ::com::sun::star::container;
 #include <basic/sbuno.hxx>
 #include <basic/sbstar.hxx>
-#ifndef _SB_BASMGR_HXX
 #include <basic/basmgr.hxx>
-#endif
-#ifndef _VCL_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
 #include <basic/sbx.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>

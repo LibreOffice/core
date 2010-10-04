@@ -50,9 +50,7 @@
 
 #include <iostream>
 #include "resourceprovider.hxx"
-#ifndef _SV_RC_H
 #include <tools/rc.hxx>
-#endif
 
 //------------------------------------------------------------------------
 // namespace directives

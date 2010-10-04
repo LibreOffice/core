@@ -30,9 +30,7 @@
 
 #include <string> // HACK: prevent conflict between STLPORT and Workshop headers
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <tools/shl.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/dispatch.hxx>

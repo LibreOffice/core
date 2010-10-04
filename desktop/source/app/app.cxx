@@ -88,9 +88,7 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
 #include <com/sun/star/task/XRestartManager.hpp>
-#ifndef _COM_SUN_STAR_TASK_XJOBEXECUTOR_HPP_
 #include <com/sun/star/task/XJob.hpp>
-#endif
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/task/XJob.hpp>
@@ -101,17 +99,13 @@
 #include <com/sun/star/java/XJavaVM.hpp>
 #include <tools/testtoolloader.hxx>
 #include <tools/solar.h>
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 #include <vos/security.hxx>
 #include <vos/ref.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/configurationhelper.hxx>
-#ifndef _UTL__HXX_
 #include <unotools/configmgr.hxx>
-#endif
 #include <unotools/configitem.hxx>
 #include <unotools/confignode.hxx>
 #include <unotools/ucbhelper.hxx>

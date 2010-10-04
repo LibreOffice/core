@@ -44,9 +44,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <vcl/scrbar.hxx>
 
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 
 //#include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>

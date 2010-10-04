@@ -30,9 +30,7 @@
 #include "internal/config.hxx"
 #include "internal/global.hxx"
 
-#ifndef PROPSEETS_HXX_INCLUDED
 #include "internal/propsheets.hxx"
-#endif
 #include "internal/utilities.hxx"
 #include "internal/resource.h"
 #include "listviewbuilder.hxx"

@@ -37,9 +37,7 @@
 #include <cppuhelper/interfacecontainer.h>
 #include <osl/diagnose.h>
 
-#ifndef _FILEPICKER_HXX_
 #include "filepicker.hxx"
-#endif
 #include "WinFileOpenImpl.hxx"
 
 #include "FPServiceInfo.hxx"

@@ -38,9 +38,7 @@
 #include "PropType.hxx"
 #include "DeepTContext.hxx"
 #include "ProcAttrTContext.hxx"
-#ifndef _XMLOFF_TRANSFOERMERBASE_HXX
 #include "TransformerBase.hxx"
-#endif
 #include "TransformerActions.hxx"
 #include "ActionMapTypesOASIS.hxx"
 #include "MutableAttrList.hxx"

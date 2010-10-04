@@ -40,9 +40,7 @@
 #include <tools/string.hxx>
 #include <osl/file.hxx>
 
-#ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>
-#endif
 
 //#ifndef _BYTE_STRING_LIST
 //DECLARE_LIST( ByteStringList, ByteString * );

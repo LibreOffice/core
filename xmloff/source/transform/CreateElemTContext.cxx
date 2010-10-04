@@ -29,9 +29,7 @@
 #include "precompiled_xmloff.hxx"
 #include "CreateElemTContext.hxx"
 #include "MutableAttrList.hxx"
-#ifndef _XMLOFF_TRANSFORMERBASE_HXX
 #include "TransformerBase.hxx"
-#endif
 #include "TransformerActions.hxx"
 #include "TContextVector.hxx"
 #include "FlatTContext.hxx"

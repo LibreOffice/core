@@ -30,9 +30,7 @@
 
 // include ---------------------------------------------------------------
 #include <tools/shl.hxx>
-#ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
 
 #include <svx/xtable.hxx>
 #include <svx/xpool.hxx>

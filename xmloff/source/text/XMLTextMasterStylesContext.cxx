@@ -35,12 +35,8 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/nmspmap.hxx>
 
-#ifndef _XMLTEXTMASTERPAGECONTEXT_HXX
 #include <xmloff/XMLTextMasterPageContext.hxx>
-#endif
-#ifndef _XMLTEXTMASTERSTYLESCONTEXT_HXX
 #include <xmloff/XMLTextMasterStylesContext.hxx>
-#endif
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;

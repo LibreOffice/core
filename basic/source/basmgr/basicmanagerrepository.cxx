@@ -52,9 +52,7 @@
 #include <comphelper/documentinfo.hxx>
 #include <unotools/eventlisteneradapter.hxx>
 
-#ifndef INCLUDED_OSL_DOUBLECHECKEDLOCKING_H
 #include <rtl/instance.hxx>
-#endif
 
 #include <map>
 

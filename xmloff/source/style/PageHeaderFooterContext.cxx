@@ -33,9 +33,7 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#ifndef _XMLOFF_PAGEPHEADERFOOTERCONTEXT_HXX
 #include "PageHeaderFooterContext.hxx"
-#endif
 #include "xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include "PagePropertySetContext.hxx"

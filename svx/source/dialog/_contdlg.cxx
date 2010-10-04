@@ -37,9 +37,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <svtools/miscopt.hxx>
 #include <unotools/localedatawrapper.hxx>
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 
 #define _SDR_NOITEMS
 #define _SDR_NOTOUCH

@@ -35,9 +35,7 @@
 #include <com/sun/star/sdbc/KeyRule.hpp>
 #include <com/sun/star/sdbcx/KeyType.hpp>
 #include "file/FCatalog.hxx"
-#ifndef _CONNECTIVITY_FILE_BCONNECTION_HXX_
 #include "file/FConnection.hxx"
-#endif
 //#ifndef _CONNECTIVITY_FILE_OEMPTYCOLLECTION_HXX_
 //#include "file/FEmptyCollection.hxx"
 //#endif

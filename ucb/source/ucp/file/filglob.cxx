@@ -29,9 +29,7 @@
 #include "precompiled_ucb.hxx"
 #include <stdio.h>
 #include "filglob.hxx"
-#ifndef _FILERROR_HXX_
 #include "filerror.hxx"
-#endif
 #include "shell.hxx"
 #include "bc.hxx"
 #include <osl/file.hxx>

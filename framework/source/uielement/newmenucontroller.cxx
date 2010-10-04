@@ -34,9 +34,7 @@
 //_________________________________________________________________________________________________________________
 #include <threadhelp/resetableguard.hxx>
 #include "services.h"
-#ifndef __FRAMEWORK_CLASSES_RESOURCE_HRC_
 #include <classes/resource.hrc>
-#endif
 #include <classes/fwkresid.hxx>
 #include <classes/bmkmenu.hxx>
 #include <helper/imageproducer.hxx>

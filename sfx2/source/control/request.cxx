@@ -38,9 +38,7 @@
 #include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
 #include <svl/itemiter.hxx>
 
-#ifndef _ARGS_HXX //autogen
 #include <svl/itempool.hxx>
-#endif
 #include <svtools/itemdel.hxx>
 
 #include <comphelper/processfactory.hxx>

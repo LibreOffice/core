@@ -29,12 +29,8 @@
 #include <vcl/msgbox.hxx>
 #include "logindlg.hxx"
 
-#ifndef UUI_LOGINDLG_HRC
 #include "logindlg.hrc"
-#endif
-#ifndef UUI_IDS_HRC
 #include "ids.hrc"
-#endif
 #include <tools/resid.hxx>
 
 #ifdef UNX

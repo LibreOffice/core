@@ -32,9 +32,7 @@
 #include "sbxconv.hxx"
 #include "sbxres.hxx"
 #include "runtime.hxx"
-#ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
 
 // Die Konversion eines Items auf String wird ueber die Put-Methoden
 // der einzelnen Datentypen abgewickelt, um doppelten Code zu vermeiden.

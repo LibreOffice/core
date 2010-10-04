@@ -40,9 +40,7 @@
 #include <com/sun/star/media/ZoomLevel.hpp>
 #include "anim.hxx"
 
-#ifndef _XMLOFF_SHAPEEXPORT_HXX
 #include <xmloff/shapeexport.hxx>
-#endif
 #include "sdpropls.hxx"
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>

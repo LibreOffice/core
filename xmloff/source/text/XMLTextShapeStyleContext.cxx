@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 #include <tools/debug.hxx>
-#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTSSUPPLIER_HPP
 #include <com/sun/star/document/XEventsSupplier.hpp>
-#endif
 #include "xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include "XMLTextPropertySetContext.hxx"
@@ -39,13 +37,9 @@
 #include "XMLShapePropertySetContext.hxx"
 #include "XMLTextColumnsContext.hxx"
 #include "XMLBackgroundImageContext.hxx"
-#ifndef _XMLOFF_TXTPRMAP_HXX
 #include <xmloff/txtprmap.hxx>
-#endif
 
-#ifndef _XMLOFF_XMLTEXTSHAPESTYLECONTEXT_HXX
 #include <xmloff/XMLTextShapeStyleContext.hxx>
-#endif
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;

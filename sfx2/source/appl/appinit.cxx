@@ -39,20 +39,14 @@
 #include <unotools/saveopt.hxx>
 #include <unotools/localisationoptions.hxx>
 #include <tools/config.hxx>
-#ifndef _SV_RESARY_HXX
 #include <tools/resary.hxx>
-#endif
 #include <tools/urlobj.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <svtools/ehdl.hxx>
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 #include <unotools/configmgr.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vos/security.hxx>

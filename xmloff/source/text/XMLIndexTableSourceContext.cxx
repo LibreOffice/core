@@ -33,9 +33,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 
-#ifndef _COM_SUN_STAR_TEXT_REFERENCEFIELD_PART_HPP
 #include <com/sun/star/text/ReferenceFieldPart.hpp>
-#endif
 #include "XMLIndexTemplateContext.hxx"
 #include "XMLIndexTitleTemplateContext.hxx"
 #include "XMLIndexTOCStylesContext.hxx"

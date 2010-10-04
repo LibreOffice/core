@@ -34,9 +34,7 @@
 
 #include <stdio.h>
 
-#ifndef _SV_PRNSETUP_HXX //autogen
 #include <svtools/prnsetup.hxx>
-#endif
 #include <vcl/cmdevt.hxx>
 #include <vcl/menubtn.hxx>
 #include <vcl/msgbox.hxx>
@@ -73,9 +71,7 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <svtools/localresaccess.hxx>
-#ifndef _SVT_DOC_ADDRESSTEMPLATE_HXX_
 #include <svtools/addresstemplate.hxx>
-#endif
 #include <comphelper/processfactory.hxx>
 #define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>

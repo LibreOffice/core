@@ -29,9 +29,7 @@
 #include "precompiled_shell.hxx"
 #include "internal/basereader.hxx"
 
-#ifndef XML_PARSER_HXX_INCLUDED
 #include "internal/xml_parser.hxx"
-#endif
 
 #include "assert.h"
 #include <memory>

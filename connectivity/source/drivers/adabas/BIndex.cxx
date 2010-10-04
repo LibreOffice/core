@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
 #include "adabas/BIndex.hxx"
-#ifndef _CONNECTIVITY_ADABAS_INDEXCOLUMNS_HXX_
 #include "adabas/BIndexColumns.hxx"
-#endif
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include "adabas/BTable.hxx"

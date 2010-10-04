@@ -37,9 +37,7 @@
 
 #include <list>
 
-#ifndef _XMLOFF_SHAPEIMPORT_HXX
 #include <xmloff/shapeimport.hxx>
-#endif
 #include <xmloff/xmltkmap.hxx>
 #include "xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>

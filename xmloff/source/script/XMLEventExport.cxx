@@ -29,17 +29,11 @@
 #include "precompiled_xmloff.hxx"
 #include <xmloff/XMLEventExport.hxx>
 
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTSSUPPLIER_HPP
 #include <com/sun/star/document/XEventsSupplier.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEREPLACE_HPP
 #include <com/sun/star/container/XNameReplace.hpp>
-#endif
 #include <tools/debug.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmltoken.hxx>

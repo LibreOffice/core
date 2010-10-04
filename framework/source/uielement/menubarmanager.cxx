@@ -62,9 +62,7 @@
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <com/sun/star/frame/XUIControllerRegistration.hpp>
-#ifndef _COM_SUN_STAR_LANG_XSYSTEMDEPENDENT_HPP_
 #include <com/sun/star/lang/SystemDependent.hpp>
-#endif
 #include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/ui/ImageType.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -84,9 +82,7 @@
 #include <unotools/pathoptions.hxx>
 #include <unotools/cmdoptions.hxx>
 #include <unotools/localfilehelper.hxx>
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>

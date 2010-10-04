@@ -38,9 +38,7 @@
 #include <svx/fmmodel.hxx>
 #include <rtl/uuid.h>
 #include <vos/mutex.hxx>
-#ifndef _SV_SVAPP_HXX_
 #include <vcl/svapp.hxx>
-#endif
 #include <unotools/pathoptions.hxx>
 
 using namespace ::com::sun::star;

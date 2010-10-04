@@ -44,14 +44,10 @@
 #include "TransformerActions.hxx"
 #include "ElemTransformerAction.hxx"
 #include "PropertyActionsOOo.hxx"
-#ifndef _XMLOFF_TRANSFORMERTOKENMAP_HXX
 #include "TransformerTokenMap.hxx"
-#endif
 #include <xmloff/xmluconv.hxx>
 
-#ifndef _XMLOFF_TRANSFORMERBASE_HXX
 #include "TransformerBase.hxx"
-#endif
 #include "TContextVector.hxx"
 
 using ::rtl::OUString;

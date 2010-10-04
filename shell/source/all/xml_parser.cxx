@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_shell.hxx"
 
-#ifndef XML_PARSER_HXX_INCLUDED
 #include "internal/xml_parser.hxx"
-#endif
 #include "internal/i_xml_parser_event_handler.hxx"
 
 #include <assert.h>

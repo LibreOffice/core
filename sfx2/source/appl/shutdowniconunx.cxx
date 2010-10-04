@@ -12,9 +12,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/bmpacc.hxx>
 #include <sfx2/app.hxx>
-#ifndef _SFX_APP_HRC
 #include "app.hrc"
-#endif
 #ifndef __SHUTDOWNICON_HXX__
 #define USE_APP_SHORTCUTS
 #include "shutdownicon.hxx"

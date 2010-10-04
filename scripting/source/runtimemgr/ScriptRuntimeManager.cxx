@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_scripting.hxx"
 
-#ifndef _VCL_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
 
 #include "ScriptExecDialog.hrc"
 

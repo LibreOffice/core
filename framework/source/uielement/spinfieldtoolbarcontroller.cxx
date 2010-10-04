@@ -31,17 +31,13 @@
 #include <stdio.h>
 #include <wchar.h>
 
-#ifndef __FRAMEWORK_UIELEMENT_SPINFIELDTOOLBARCONTROLLER_HXX
 #include "uielement/spinfieldtoolbarcontroller.hxx"
-#endif
 
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_TOOLBAR_HXX_
 #include "uielement/toolbar.hxx"
-#endif
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -60,9 +56,7 @@
 #include <svtools/toolboxcontroller.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
-#ifndef _VCL_MNEMONIC_HXX_
 #include <vcl/mnemonic.hxx>
-#endif
 #include <tools/urlobj.hxx>
 #ifdef WINNT
 #include <systools/win32/snprintf.h>

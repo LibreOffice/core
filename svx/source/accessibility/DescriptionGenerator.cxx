@@ -49,9 +49,7 @@
 #include <com/sun/star/uno/Exception.hpp>
 
 // Includes for string resources.
-#ifndef _SVX_ACCESSIBILITY_HRC
 #include "accessibility.hrc"
-#endif
 #include "svdstr.hrc"
 #include <svx/dialmgr.hxx>
 #include <tools/string.hxx>

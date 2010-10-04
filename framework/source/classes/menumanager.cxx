@@ -67,9 +67,7 @@
 #include <unotools/pathoptions.hxx>
 #include <unotools/localfilehelper.hxx>
 
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 #include <tools/urlobj.hxx>
 
 #include <vcl/svapp.hxx>

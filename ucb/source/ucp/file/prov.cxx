@@ -32,9 +32,7 @@
 #include <osl/socket.h>
 #include <cppuhelper/factory.hxx>
 #include <com/sun/star/registry/XRegistryKey.hpp>
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
 #include <com/sun/star/ucb/FileSystemNotation.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include "filglob.hxx"
