@@ -288,7 +288,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
 
                 case MID_FIRST_AUTO:
                 {
-                    sal_Bool bAutoFirst;
+                    bool bAutoFirst;
                     bOk = rUnitConverter.convertBool( bAutoFirst, rValue );
                     if( bOk )
                         pLRSpace->SetAutoFirst( bAutoFirst );

@@ -535,7 +535,7 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
             break;
         case XML_TOK_TABLE_BOOLEAN_VALUE:
             {
-                sal_Bool bTmp;
+                bool bTmp;
                 if (SvXMLUnitConverter::convertBool(bTmp, rValue))
                 {
                     fValue = (bTmp ? 1.0 : 0.0);
@@ -545,7 +545,7 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
             break;
         case XML_TOK_TABLE_PROTECTED:
             {
-                sal_Bool bTmp;
+                bool bTmp;
                 if (SvXMLUnitConverter::convertBool(bTmp, rValue))
                 {
                     bProtect = bTmp;
@@ -1132,7 +1132,7 @@ void SwXMLDDETableContext_Impl::StartElement(
             }
             else if ( IsXMLToken( aLocalName, XML_AUTOMATIC_UPDATE ) )
             {
-                sal_Bool bTmp;
+                bool bTmp;
                 if (SvXMLUnitConverter::convertBool(bTmp, rValue))
                 {
                     bIsAutomaticUpdate = bTmp;
