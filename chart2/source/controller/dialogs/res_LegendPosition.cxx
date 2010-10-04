@@ -37,9 +37,7 @@
 #include "macros.hxx"
 #include "LegendHelper.hxx"
 
-#ifndef _SVT_CONTROLDIMS_HRC_
 #include <svtools/controldims.hrc>
-#endif
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/chart2/LegendExpansion.hpp>
 

@@ -31,9 +31,7 @@
 
 #include "AccessibleDocumentBase.hxx"
 
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEROLE_HPP_
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;

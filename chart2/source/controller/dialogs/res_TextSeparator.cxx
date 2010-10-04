@@ -34,9 +34,7 @@
 #include "ResId.hxx"
 #include "macros.hxx"
 
-#ifndef _SVT_CONTROLDIMS_HRC_
 #include <svtools/controldims.hrc>
-#endif
 
 //.............................................................................
 namespace chart

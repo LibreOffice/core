@@ -33,16 +33,12 @@
 #include "unoguard.hxx"
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESTATETYPE_HPP_
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#endif
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <rtl/uuid.h>
 #include <tools/debug.hxx>
 #include <tools/gen.hxx>
-#ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX
 #include <unotools/accessiblestatesethelper.hxx>
-#endif
 #include <toolkit/helper/convert.hxx>
 #include <svl/smplhint.hxx>
 #include <comphelper/sequence.hxx>

@@ -82,9 +82,7 @@
 #include "attrib.hxx"
 #include "charthelper.hxx"
 
-#ifndef _SV_FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
 
 #define DET_ARROW_OFFSET    1000
 

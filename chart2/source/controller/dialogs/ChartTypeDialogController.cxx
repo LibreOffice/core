@@ -44,9 +44,7 @@
 #include <com/sun/star/chart2/PieChartOffsetMode.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 
-#ifndef _SVT_CONTROLDIMS_HRC_
 #include <svtools/controldims.hrc>
-#endif
 // header for class Image
 #include <vcl/image.hxx>
 // header for class Bitmap

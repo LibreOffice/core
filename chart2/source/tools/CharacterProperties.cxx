@@ -54,15 +54,9 @@
 
 
 // header for struct SvtLinguConfig
-#ifndef _SVTOOLS_LINGUCFG_HXX_
 #include <unotools/lingucfg.hxx>
-#endif
-#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
 #include <i18npool/mslangid.hxx>
-#endif
-#ifndef _SV_OUTDEV_HXX
 #include <vcl/outdev.hxx>
-#endif
 
 using namespace ::com::sun::star;
 

@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_chart2.hxx"
 #include <cppuhelper/implementationentry.hxx>
-#ifndef _CHARTMODEL_HXX
 #include "ChartModel.hxx"
-#endif
 
 #include "Diagram.hxx"
 #include "Legend.hxx"

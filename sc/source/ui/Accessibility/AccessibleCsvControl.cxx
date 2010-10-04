@@ -31,12 +31,8 @@
 // ============================================================================
 #include "AccessibleCsvControl.hxx"
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLERELATIONTYPE_HPP_
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESTATETYPE_HPP_
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#endif
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>
@@ -45,9 +41,7 @@
 #include <rtl/uuid.h>
 #include <toolkit/helper/convert.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
-#ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX
 #include <unotools/accessiblestatesethelper.hxx>
-#endif
 #include <comphelper/sequence.hxx>
 #include "scitems.hxx"
 #include <editeng/fontitem.hxx>

@@ -33,9 +33,7 @@
 #include "Strings.hrc"
 #include "ResId.hxx"
 
-#ifndef _SVT_CONTROLDIMS_HRC_
 #include <svtools/controldims.hrc>
-#endif
 
 //.............................................................................
 namespace chart

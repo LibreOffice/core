@@ -45,9 +45,7 @@
 // header for class SdrOutliner
 #include <svx/svdoutl.hxx>
 #include <svx/svxdlg.hxx>
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>

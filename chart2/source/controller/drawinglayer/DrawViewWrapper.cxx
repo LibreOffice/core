@@ -48,9 +48,7 @@
 // header for class SvxForbiddenCharactersTable
 #include <editeng/forbiddencharacterstable.hxx>
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 
 // header for class SvxShape
 #include <svx/unoshape.hxx>

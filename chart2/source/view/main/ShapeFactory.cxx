@@ -59,9 +59,7 @@
 #include <svx/svdocirc.hxx>
 #include <svx/svdopath.hxx>
 
-#ifndef _BGFX_VECTOR_B2DPOINT_HXX
 #include <basegfx/point/b2dpoint.hxx>
-#endif
 #include <basegfx/matrix/b3dhommatrix.hxx>
 
 #include <algorithm>

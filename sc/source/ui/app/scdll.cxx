@@ -33,9 +33,7 @@
 #include <editeng/eeitem.hxx>
 
 
-#ifndef _FM_FMOBJFAC_HXX
 #include <svx/fmobjfac.hxx>
-#endif
 #include <svx/objfac3d.hxx>
 #include <svx/tbxcolor.hxx>
 

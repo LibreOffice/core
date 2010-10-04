@@ -32,9 +32,7 @@
 //------------------------------------------------------------------
 
 #include "datefunc.hxx"
-#ifndef _SCA_DATEFUNC_HRC
 #include "datefunc.hrc"
-#endif
 #include <cppuhelper/factory.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>

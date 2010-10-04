@@ -37,9 +37,7 @@
 #include "CommonConverters.hxx"
 #include "NoWarningThisInCTOR.hxx"
 
-#ifndef _SVX_DIALOGS_HRC
 #include "svx/dialogs.hrc"
-#endif
 // header for define SVX_RES
 #include <svx/dialmgr.hxx>
 #include <rtl/math.hxx>

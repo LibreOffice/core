@@ -58,9 +58,7 @@
 #include "attrib.hxx"
 #include "jumpmatrix.hxx"
 
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
 
 #include <stdlib.h>
 #include <string.h>

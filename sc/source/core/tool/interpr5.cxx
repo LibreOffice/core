@@ -30,9 +30,7 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
-#endif
 #include <rtl/logfile.hxx>
 #include <string.h>
 #include <math.h>

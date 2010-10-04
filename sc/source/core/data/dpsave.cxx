@@ -59,12 +59,8 @@
 #include "dptabsrc.hxx"
 #include "dpglobal.hxx"
 using namespace ScDPGlobal;
-#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDREFERENCETYPE_HPP_
 #include <com/sun/star/sheet/DataPilotFieldReferenceType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDREFERENCEITEMTYPE_HPP_
 #include <com/sun/star/sheet/DataPilotFieldReferenceItemType.hpp>
-#endif
 using namespace com::sun::star::sheet;
 // End Comments
 

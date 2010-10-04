@@ -34,14 +34,10 @@
 
 
 #include "dpgroupdlg.hxx"
-#ifndef SC_DPGROUPDLG_HRC
 #include "dpgroupdlg.hrc"
-#endif
 #include <tools/resary.hxx>
 #include "scresid.hxx"
-#ifndef SC_SC_HRC
 #include "sc.hrc"
-#endif
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 
 // ============================================================================

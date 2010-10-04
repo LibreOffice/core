@@ -52,9 +52,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/printer.hxx>
 
-#ifndef _SVX_ZOOMSLIDERITEM_HXX
 #include <svx/zoomslideritem.hxx>
-#endif
 #include "prevwsh.hxx"
 #include "preview.hxx"
 #include "printfun.hxx"
@@ -77,9 +75,7 @@
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 
-#ifndef _SVX_ZOOM_HXX
 #include <svx/zoom_def.hxx>
-#endif
 
 #include "sc.hrc"
 #include "scabstdlg.hxx"

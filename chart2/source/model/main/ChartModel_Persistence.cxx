@@ -53,9 +53,7 @@
 #include <com/sun/star/io/XSeekable.hpp>
 
 #include <ucbhelper/content.hxx>
-#ifndef _UNOTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
-#endif
 #include <vcl/cvtgrf.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <vcl/svapp.hxx>

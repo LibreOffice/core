@@ -25,21 +25,11 @@
  *
 ************************************************************************/
 #include "precompiled_sc.hxx"
-#ifndef _SC_ZOOMSLIDERTBCONTRL_HXX
 #include "tbzoomsliderctrl.hxx"
-#endif
-#ifndef _SV_IMAGE_HXX
 #include <vcl/image.hxx>
-#endif
-#ifndef _SV_TOOLBOX_HXX
 #include <vcl/toolbox.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _SV_GRADIENT_HXX
 #include <vcl/gradient.hxx>
-#endif
 #include <svl/itemset.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>

@@ -36,9 +36,7 @@
 #include "NoWarningThisInCTOR.hxx"
 #include "AxisHelper.hxx"
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <rtl/math.hxx>
 // header for class SvxDoubleItem
 #include <svx/chrtitem.hxx>

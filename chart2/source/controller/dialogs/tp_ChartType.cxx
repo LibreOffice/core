@@ -39,9 +39,7 @@
 #include "ControllerLockGuard.hxx"
 #include "macros.hxx"
 
-#ifndef _SVT_CONTROLDIMS_HRC_
 #include <svtools/controldims.hrc>
-#endif
 
 // header for define RET_OK
 #include <vcl/msgbox.hxx>
