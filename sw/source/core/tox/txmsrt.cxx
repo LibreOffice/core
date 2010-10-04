@@ -51,9 +51,7 @@
 #include <authfld.hxx>
 #include <toxwrap.hxx>
 
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 #include <numrule.hxx>
 
 extern BOOL IsFrameBehind( const SwTxtNode& rMyNd, xub_StrLen nMySttPos,
@@ -403,7 +401,7 @@ BOOL SwTOXIndex::operator<( const SwTOXSortTabBase& rCmpBase )
 
 //
 
-void SwTOXIndex::_GetText( String& rTxt, String& rTxtReading )
+void SwTOXIndex::GetText_Impl( String& rTxt, String& rTxtReading ) const
 {
     ASSERT(pTxtMark, "pTxtMark == 0, Kein Stichwort");
     const SwTOXMark& rTOXMark = pTxtMark->GetTOXMark();
@@ -530,7 +528,7 @@ USHORT SwTOXCustom::GetLevel() const
 }
 
 
-void SwTOXCustom::_GetText( String& rTxt, String &rTxtReading )
+void SwTOXCustom::GetText_Impl( String& rTxt, String &rTxtReading ) const
 {
     rTxt = aKey;
     rTxtReading = sReading;
@@ -553,7 +551,7 @@ SwTOXContent::SwTOXContent( const SwTxtNode& rNd, const SwTxtTOXMark* pMark,
 //  Der Text des Inhalts
 //
 
-void SwTOXContent::_GetText( String& rTxt, String& rTxtReading )
+void SwTOXContent::GetText_Impl( String& rTxt, String& rTxtReading ) const
 {
     const xub_StrLen* pEnd = pTxtMark->GetEnd();
     if( pEnd && !pTxtMark->GetTOXMark().IsAlternativeText() )
@@ -612,7 +610,7 @@ SwTOXPara::SwTOXPara( const SwCntntNode& rNd, SwTOXElement eT, USHORT nLevel )
 }
 
 
-void SwTOXPara::_GetText( String& rTxt, String& )
+void SwTOXPara::GetText_Impl( String& rTxt, String& ) const
 {
     const SwCntntNode* pNd = aTOXSources[0].pNd;
     switch( eType )
@@ -801,7 +799,7 @@ SwTOXTable::SwTOXTable( const SwCntntNode& rNd )
 }
 
 
-void SwTOXTable::_GetText( String& rTxt, String& )
+void SwTOXTable::GetText_Impl( String& rTxt, String& ) const
 {
     const SwNode* pNd = aTOXSources[0].pNd;
     if( pNd && 0 != ( pNd = pNd->FindTableNode() ) )
@@ -868,11 +866,16 @@ USHORT SwTOXAuthority::GetLevel() const
 /*-- 15.09.99 14:28:08---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwTOXAuthority::_GetText( String& rTxt, String& )
+static String lcl_GetText(SwFmtFld const& rField)
 {
     bool const isClipBoard(
-        m_rField.GetTxtFld()->GetTxtNode().GetDoc()->IsClipBoard());
-    rTxt = m_rField.GetFld()->ExpandField(isClipBoard);
+        rField.GetTxtFld()->GetTxtNode().GetDoc()->IsClipBoard());
+    return rField.GetFld()->ExpandField(isClipBoard);
+}
+
+void SwTOXAuthority::GetText_Impl( String& rTxt, String& ) const
+{
+    rTxt = lcl_GetText(m_rField);
 }
 
 /* -----------------21.09.99 12:50-------------------
@@ -885,7 +888,7 @@ void    SwTOXAuthority::FillText( SwTxtNode& rNd,
     String sText;
     if(AUTH_FIELD_IDENTIFIER == nAuthField)
     {
-        sText = pField->Expand();
+        sText = lcl_GetText(m_rField);
         const SwAuthorityFieldType* pType = (const SwAuthorityFieldType*)pField->GetTyp();
         sal_Unicode cChar = pType->GetPrefix();
         if(cChar && cChar != ' ')

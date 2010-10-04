@@ -37,9 +37,8 @@
 #include <txtfld.hxx>
 #include <expfld.hxx>
 #include <docfld.hxx>   // fuer _SetGetExpFld
-#ifndef _UNOFLDMID_H
 #include <unofldmid.h>
-#endif
+
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
@@ -91,22 +90,12 @@ SwField* SwTblField::Copy() const
 }
 
 
-String SwTblField::GetCntnt(BOOL bName) const
+String SwTblField::GetFieldName() const
 {
-    if( bName )
-    {
-        String aStr(GetTyp()->GetName());
-        aStr += ' ';
-
-        USHORT nOldSubType = nSubType;
-        SwTblField* pThis = (SwTblField*)this;
-        pThis->nSubType |= nsSwExtendedSubType::SUB_CMD;
-        aStr += Expand();
-        pThis->nSubType = nOldSubType;
-
-        return aStr;
-    }
-    return Expand();
+    String aStr(GetTyp()->GetName());
+    aStr += ' ';
+    aStr += const_cast<SwTblField *>(this)->GetCommand();
+    return aStr;
 }
 
 // suche den TextNode, in dem das Feld steht
@@ -127,21 +116,28 @@ const SwNode* SwTblField::GetNodeOfFormula() const
     return 0;
 }
 
+String SwTblField::GetCommand()
+{
+    if (EXTRNL_NAME != GetNameType())
+    {
+        SwNode const*const pNd = GetNodeOfFormula();
+        SwTableNode const*const pTblNd = (pNd) ? pNd->FindTableNode() : 0;
+        if (pTblNd)
+        {
+            PtrToBoxNm( &pTblNd->GetTable() );
+        }
+    }
+    return (EXTRNL_NAME == GetNameType())
+        ? SwTableFormula::GetFormula()
+        : String();
+}
 
 String SwTblField::Expand() const
 {
     String aStr;
     if (nSubType & nsSwExtendedSubType::SUB_CMD)
     {
-        if( EXTRNL_NAME != GetNameType() )
-        {
-            const SwNode* pNd = GetNodeOfFormula();
-            const SwTableNode* pTblNd = pNd ? pNd->FindTableNode() : 0;
-            if( pTblNd )
-                ((SwTblField*)this)->PtrToBoxNm( &pTblNd->GetTable() );
-        }
-        if( EXTRNL_NAME == GetNameType() )
-            aStr = SwTableFormula::GetFormula();
+        aStr = const_cast<SwTblField *>(this)->GetCommand();
     }
     else
     {

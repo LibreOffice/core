@@ -28,20 +28,19 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <hintids.hxx>
 #include <doc.hxx>
 #include <docufld.hxx>
-#ifndef _UNOFLDMID_H
 #include <unofldmid.h>
-#endif
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 #include <comphelper/processfactory.hxx>
 
+
 using namespace ::com::sun::star;
 using ::rtl::OUString;
+
 /*--------------------------------------------------------------------
     Beschreibung: MacroFeldtypen
  --------------------------------------------------------------------*/
@@ -79,16 +78,12 @@ SwField* SwMacroField::Copy() const
     return new SwMacroField((SwMacroFieldType*)GetTyp(), aMacro, aText);
 }
 
-String SwMacroField::GetCntnt(BOOL bName) const
+String SwMacroField::GetFieldName() const
 {
-    if(bName)
-    {
-        String aStr(GetTyp()->GetName());
-        aStr += ' ';
-        aStr += aMacro;
-        return aStr;
-    }
-    return Expand();
+    String aStr(GetTyp()->GetName());
+    aStr += ' ';
+    aStr += aMacro;
+    return aStr;
 }
 
 String SwMacroField::GetLibName() const

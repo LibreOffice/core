@@ -32,21 +32,14 @@
 #undef SW_DLLIMPLEMENTATION
 #endif
 
-
 #include <wrtsh.hxx>
 #include <fldbas.hxx>
 #include <fldmgr.hxx>
-#ifndef _MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
 #include <DropDownFieldDialog.hxx>
 #include <flddropdown.hxx>
-#ifndef _FLDUI_HRC
 #include <fldui.hrc>
-#endif
-#ifndef _SW_DROPDOWNFIELDDIALOG_HRC
 #include <DropDownFieldDialog.hrc>
-#endif
 
 using namespace ::com::sun::star;
 
@@ -124,12 +117,11 @@ void sw::DropDownFieldDialog::Apply()
         {
             rSh.StartAllAction();
 
-            SwDropDownField * pCopy = (SwDropDownField *) pDropField->Copy();
+            ::std::auto_ptr<SwDropDownField> const pCopy(
+                static_cast<SwDropDownField *>( pDropField->CopyField() ) );
 
             pCopy->SetPar1(sSelect);
             rSh.SwEditShell::UpdateFlds(*pCopy);
-
-            delete pCopy;
 
             rSh.SetUndoNoResetModified();
             rSh.EndAllAction();

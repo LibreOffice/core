@@ -1267,13 +1267,16 @@ uno::Reference< beans::XPropertySet >  SwXTextField::getTextFieldMaster(void) th
 OUString SwXTextField::getPresentation(sal_Bool bShowCommand) throw( uno::RuntimeException )
 {
     vos::OGuard  aGuard(Application::GetSolarMutex());
-    OUString sRet;
-    const SwField* pField = GetField();
-    if(pField)
-        sRet = pField->GetCntnt(bShowCommand);
-    else
+
+    SwField const*const pField = GetField();
+    if (!pField)
+    {
         throw uno::RuntimeException();
-    return sRet;
+    }
+    ::rtl::OUString const ret( (bShowCommand)
+            ? pField->GetFieldName()
+            : pField->ExpandField( GetDoc()->IsClipBoard() ) );
+    return ret;
 }
 /* -----------------18.02.99 13:39-------------------
  *

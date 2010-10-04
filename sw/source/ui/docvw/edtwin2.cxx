@@ -340,7 +340,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                             break;
 
                         case RES_DBFLD:
-                            sTxt = ((SwDBField*)pFld)->GetCntnt(TRUE);
+                            sTxt = pFld->GetFieldName();
                             break;
 
                         case RES_USERFLD:

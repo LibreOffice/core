@@ -24,10 +24,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _FLDBAS_HXX
-#define _FLDBAS_HXX
-
-#ifndef FIELDIDS_ONLY       // SWG-Testreader!!
+#ifndef SW_FLDBAS_HXX
+#define SW_FLDBAS_HXX
 
 #include <i18npool/lang.h>
 #include <tools/debug.hxx>
@@ -40,7 +38,6 @@ class SwDoc;
 class SvStringsDtor;
 class SvNumberFormatter;
 
-#endif      // FIELDIDS_ONLY
 
 /*--------------------------------------------------------------------
     Beschreibung:   die ID's fuer die Feldtypen
@@ -236,8 +233,6 @@ enum SwDateTimeSubType
     TIMEFLD  = 4
 };
 
-#ifndef FIELDIDS_ONLY       // SWG-Testreader!!
-
 
 extern USHORT __FAR_DATA aTypeTab[];
 
@@ -336,8 +331,7 @@ public:
       */
     String              ExpandField(bool const bInClipboard) const;
 
-    // liefert den Namen oder den Inhalt
-    virtual String      GetCntnt(BOOL bName = FALSE) const;
+    virtual String      GetFieldName() const;
 
     SwField *           CopyField() const;
 
@@ -461,5 +455,4 @@ public:
     String                  GetExpandedFormula() const;
 };
 
-#endif  // FIELDIDS_ONLY
-#endif // _FLDBAS_HXX
+#endif // SW_FLDBAS_HXX
