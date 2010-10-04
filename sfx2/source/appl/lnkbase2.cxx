@@ -347,7 +347,7 @@ void SvBaseLink::SetUpdateMode( USHORT nMode )
     }
 }
 
-// --> OD 2008-06-19 #i88291#
+// #i88291#
 void SvBaseLink::clearStreamToLoadFrom()
 {
     m_xInputStreamToLoadFrom.clear();
@@ -356,7 +356,6 @@ void SvBaseLink::clearStreamToLoadFrom()
         xObj->clearStreamToLoadFrom();
     }
 }
-// <--
 
 BOOL SvBaseLink::Update()
 {

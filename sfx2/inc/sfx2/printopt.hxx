@@ -104,9 +104,8 @@ private:
     SAL_DLLPRIVATE void ImplUpdateControls( const PrinterOptions* pCurrentOptions );
     SAL_DLLPRIVATE void ImplSaveControls( PrinterOptions* pCurrentOptions );
 
-    // --> OD 2008-06-25 #i63982#
+    // #i63982#
     SAL_DLLPRIVATE void ImplSetAccessibleNames();
-    // <--
 
 protected:
 
@@ -125,10 +124,6 @@ public:
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
 };
-
-// -------------------------------
-// - TransparencyPrintWarningBox -
-// -------------------------------
 
 class TransparencyPrintWarningBox : public ModalDialog
 {

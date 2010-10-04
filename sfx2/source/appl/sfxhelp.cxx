@@ -87,8 +87,6 @@ using namespace ::com::sun::star::lang;
 #define ERROR_TAG   String( DEFINE_CONST_UNICODE("Error: ") )
 #define PATH_TAG    String( DEFINE_CONST_UNICODE("\nPath: ") )
 
-// class NoHelpErrorBox --------------------------------------------------
-
 class NoHelpErrorBox : public ErrorBox
 {
 public:
@@ -108,8 +106,6 @@ void NoHelpErrorBox::RequestHelp( const HelpEvent& )
 {
     // do nothing, because no help available
 }
-
-// -----------------------------------------------------------------------
 
 #define STARTERLIST 0
 
@@ -177,17 +173,11 @@ void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark )
 
 }
 
-// -----------------------------------------------------------------------
-
 sal_Bool GetHelpAnchor_Impl( const String& _rURL, String& _rAnchor )
 {
     sal_Bool bRet = sal_False;
     ::rtl::OUString sAnchor;
 
-    // --> OD 2009-07-01 #159496#
-    // do not release solar mutex due to crash regarding accessibility
-//    ULONG nSolarCount = Application::ReleaseSolarMutex();
-    // <--
     try
     {
         ::ucbhelper::Content aCnt( INetURLObject( _rURL ).GetMainURL( INetURLObject::NO_DECODE ),
@@ -209,14 +199,9 @@ sal_Bool GetHelpAnchor_Impl( const String& _rURL, String& _rAnchor )
     catch( ::com::sun::star::uno::Exception& )
     {
     }
-    // --> OD 2009-07-01 #159496#
-//    Application::AcquireSolarMutex( nSolarCount );
-    // <--
 
     return bRet;
 }
-
-// -----------------------------------------------------------------------
 
 class SfxHelpOptions_Impl : public utl::ConfigItem
 {
@@ -249,8 +234,6 @@ static Sequence< ::rtl::OUString > GetPropertyNames()
 
     return aNames;
 }
-
-// -----------------------------------------------------------------------
 
 SfxHelpOptions_Impl::SfxHelpOptions_Impl()
     : ConfigItem( ::rtl::OUString::createFromAscii("Office.SFX/Help") )
@@ -310,8 +293,6 @@ void SfxHelpOptions_Impl::Notify( const com::sun::star::uno::Sequence< rtl::OUSt
 void SfxHelpOptions_Impl::Commit()
 {
 }
-
-// class SfxHelp_Impl ----------------------------------------------------
 
 class SfxHelp_Impl
 {
@@ -411,8 +392,6 @@ sal_Bool SfxHelp_Impl::IsHelpInstalled()
         Load();
     return ( m_aModulesList.begin() != m_aModulesList.end() );
 }
-
-// class SfxHelp ---------------------------------------------------------
 
 SfxHelp::SfxHelp() :
 
@@ -966,9 +945,6 @@ void SfxHelp::OpenHelpAgent( ULONG nHelpId )
 {
     if ( SvtHelpOptions().IsHelpAgentAutoStartMode() )
     {
-//      SfxHelp* pHelp = SAL_STATIC_CAST( SfxHelp*, Application::GetHelp() );
-//      if ( pHelp )
-//      {
             SfxHelpOptions_Impl *pOpt = pImp->GetOptions();
             if ( !pOpt->HasId( nHelpId ) )
                 return;
@@ -1002,7 +978,6 @@ void SfxHelp::OpenHelpAgent( ULONG nHelpId )
             {
                 DBG_ERRORFILE( "OpenHelpAgent: caught an exception while executing the dispatch!" );
             }
-//      }
     }
 }
 

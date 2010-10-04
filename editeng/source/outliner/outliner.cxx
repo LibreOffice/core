@@ -335,11 +335,10 @@ void Outliner::SetNumberingStartValue( sal_uInt16 nPara, sal_Int16 nNumberingSta
                 pPara->IsParaIsNumberingRestart(), pPara->IsParaIsNumberingRestart() ) );
 
         pPara->SetNumberingStartValue( nNumberingStartValue );
-        // --> OD 2009-03-10 #i100014#
+        // #i100014#
         // It is not a good idea to substract 1 from a count and cast the result
         // to USHORT without check, if the count is 0.
         ImplCheckParagraphs( nPara, (USHORT) (pParaList->GetParagraphCount()) );
-        // <--
         pEditEngine->SetModified();
     }
 }
@@ -363,11 +362,10 @@ void Outliner::SetParaIsNumberingRestart( sal_uInt16 nPara, sal_Bool bParaIsNumb
                 pPara->IsParaIsNumberingRestart(), bParaIsNumberingRestart ) );
 
         pPara->SetParaIsNumberingRestart( bParaIsNumberingRestart );
-        // --> OD 2009-03-10 #i100014#
+        // #i100014#
         // It is not a good idea to substract 1 from a count and cast the result
         // to USHORT without check, if the count is 0.
         ImplCheckParagraphs( nPara, (USHORT) (pParaList->GetParagraphCount()) );
-        // <--
         pEditEngine->SetModified();
     }
 }
@@ -607,11 +605,10 @@ void Outliner::SetText( const OutlinerParaObject& rPObj )
         ImplCheckNumBulletItem( nCurPara );
     }
 
-    // --> OD 2009-03-10 #i100014#
+    // #i100014#
     // It is not a good idea to substract 1 from a count and cast the result
     // to USHORT without check, if the count is 0.
     ImplCheckParagraphs( 0, (USHORT) (pParaList->GetParagraphCount()) );
-    // <--
 
     EnableUndo( bUndo );
     ImplBlockInsertionCallbacks( FALSE );
@@ -654,11 +651,10 @@ void Outliner::AddText( const OutlinerParaObject& rPObj )
     }
     DBG_ASSERT( pEditEngine->GetParagraphCount()==pParaList->GetParagraphCount(), "SetText: OutOfSync" );
 
-    // --> OD 2009-03-10 #i100014#
+    // #i100014#
     // It is not a good idea to substract 1 from a count and cast the result
     // to USHORT without check, if the count is 0.
     ImplCheckParagraphs( (USHORT)nPara, (USHORT) (pParaList->GetParagraphCount()) );
-    // <--
 
     ImplBlockInsertionCallbacks( FALSE );
     pEditEngine->SetUpdateMode( bUpdate );
@@ -1529,10 +1525,9 @@ void Outliner::ImplCheckParagraphs( USHORT nStart, USHORT nEnd )
 {
     DBG_CHKTHIS( Outliner, 0 );
 
-    // --> OD 2009-03-10 #i100014#
+    // i100014#
     // assure that the following for-loop does not loop forever
     for ( USHORT n = nStart; n < nEnd; n++ )
-    // <--
     {
         Paragraph* pPara = pParaList->GetParagraph( n );
         if (pPara)

@@ -157,7 +157,6 @@ XubString OutlinerEditEng::GetUndoComment( USHORT nUndoId ) const
     }
 }
 
-// #101498#
 void OutlinerEditEng::DrawingText( const Point& rStartPos, const XubString& rText, USHORT nTextStart, USHORT nTextLen,
     const sal_Int32* pDXArray, const SvxFont& rFont, USHORT nPara, USHORT nIndex, BYTE nRightToLeft,
     const EEngineData::WrongSpellVector* pWrongSpellVector,
@@ -169,37 +168,6 @@ void OutlinerEditEng::DrawingText( const Point& rStartPos, const XubString& rTex
     const Color& rOverlineColor,
     const Color& rTextLineColor)
 {
-    // why do bullet here at all? Just use GetEditEnginePtr()->PaintingFirstLine
-    // inside of ImpEditEngine::Paint which calls pOwner->PaintBullet with the correct
-    // values for hor and ver. No change for not-layouting (painting).
-    // changed, bullet rendering now using PaintBullet via
-/*  if ( nIndex == 0 )
-    {
-        // Dann das Bullet 'malen', dort wird bStrippingPortions ausgewertet
-        // und Outliner::DrawingText gerufen
-
-        // DrawingText liefert die BaseLine, DrawBullet braucht Top().
-
-        if(true)
-        {
-            // ##
-            // another error: This call happens when only stripping, but the position
-            // is already aligned to text output. For bullet rendering, it needs to be reset
-            // to the correct value in x and y. PaintBullet takes care of X-start offset itself
-            const Point aDocPosTopLeft(GetDocPosTopLeft( nPara ));
-            const Point aCorrectedPos(rStartPos.X() - aDocPosTopLeft.X(), aDocPosTopLeft.Y() + GetFirstLineOffset( nPara ));
-            pOwner->PaintBullet( nPara, aCorrectedPos, Point(), 0, GetRefDevice() );
-        }
-        else
-        {
-            Point aCorrectedPos( rStartPos );
-            aCorrectedPos.Y() = GetDocPosTopLeft( nPara ).Y();
-            aCorrectedPos.Y() += GetFirstLineOffset( nPara );
-            pOwner->PaintBullet( nPara, aCorrectedPos, Point(), 0, GetRefDevice() );
-        }
-    } */
-
-    // #101498#
     pOwner->DrawingText(rStartPos,rText,nTextStart,nTextLen,pDXArray,rFont,nPara,nIndex,nRightToLeft,
         pWrongSpellVector, pFieldData, bEndOfLine, bEndOfParagraph, bEndOfBullet, pLocale, rOverlineColor, rTextLineColor);
 }
@@ -240,11 +208,10 @@ void OutlinerEditEng::SetParaAttribs( USHORT nPara, const SfxItemSet& rSet )
         EditEngine::SetParaAttribs( (USHORT)nPara, rSet );
 
         pOwner->ImplCheckNumBulletItem( (USHORT)nPara );
-        // --> OD 2009-03-10 #i100014#
+        // #i100014#
         // It is not a good idea to substract 1 from a count and cast the result
         // to USHORT without check, if the count is 0.
         pOwner->ImplCheckParagraphs( (USHORT)nPara, (USHORT) (pOwner->pParaList->GetParagraphCount()) );
-        // <--
 
         if ( !IsInUndo() && IsUndoEnabled() )
             pOwner->UndoActionEnd( OLUNDO_ATTR );

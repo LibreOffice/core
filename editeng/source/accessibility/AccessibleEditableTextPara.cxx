@@ -114,7 +114,7 @@ namespace accessibility
 
     DBG_NAME( AccessibleEditableTextPara )
 
-    // --> OD 2006-01-11 #i27138# - add parameter <_pParaManager>
+    // #i27138# - add parameter <_pParaManager>
     AccessibleEditableTextPara::AccessibleEditableTextPara(
                                 const uno::Reference< XAccessible >& rParent,
                                 const AccessibleParaManager* _pParaManager )
@@ -130,9 +130,8 @@ namespace accessibility
           // exceptions, thus no chance for exceptions once the Id is
           // fetched. Nevertheless, normally should employ RAII here...
           mnNotifierClientId(::comphelper::AccessibleEventNotifier::registerClient()),
-          // --> OD 2006-01-11 #i27138#
+          // #i27138#
           mpParaManager( _pParaManager )
-          // <--
     {
 #ifdef DBG_UTIL
         DBG_CTOR( AccessibleEditableTextPara, NULL );
@@ -939,7 +938,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
-        // --> OD 2006-01-11 #i27138# - provide relations CONTENT_FLOWS_FROM
+        // #i27138# - provide relations CONTENT_FLOWS_FROM
         // and CONTENT_FLOWS_TO
         if ( mpParaManager )
         {
@@ -977,7 +976,6 @@ namespace accessibility
             // no relations, therefore empty
             return uno::Reference< XAccessibleRelationSet >();
         }
-        // <--
     }
 
     uno::Reference< XAccessibleStateSet > SAL_CALL AccessibleEditableTextPara::getAccessibleStateSet() throw (uno::RuntimeException)
@@ -1129,7 +1127,7 @@ namespace accessibility
 
                 return aPoint;
             }
-            // --> OD 2009-12-16 #i88070#
+            // #i88070#
             // fallback to parent's <XAccessibleContext> instance
             else
             {
@@ -1148,7 +1146,6 @@ namespace accessibility
                     }
                 }
             }
-            // <--
         }
 
         throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Cannot access parent")),

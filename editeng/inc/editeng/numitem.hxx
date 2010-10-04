@@ -103,7 +103,6 @@ public:
 class EDITENG_DLLPUBLIC SvxNumberFormat : public SvxNumberType
 {
 public:
-    // --> OD 2008-01-08 #newlistlevelattrs#
     enum SvxNumPositionAndSpaceMode
     {
         LABEL_WIDTH_AND_POSITION,
@@ -115,7 +114,6 @@ public:
         SPACE,
         NOTHING
     };
-    // <--
 
 private:
     String              sPrefix;
@@ -130,7 +128,6 @@ private:
     USHORT              nBulletRelSize;     //proz. Groesse des Bullets
     Color               nBulletColor;       //Bullet color
 
-    // --> OD 2008-01-08 #newlistlevelattrs#
     // mode indicating, if the position and spacing of the list label is
     // determined by the former attributes (nFirstLineOffset, nAbsLSpace,
     // nLSpace and nCharTextDistance) called position and spacing via label
@@ -141,14 +138,12 @@ private:
     // Note 2: The values of the former attributes are treated as 0, if mode
     //         LABEL_ALIGNMENT is active.
     SvxNumPositionAndSpaceMode mePositionAndSpaceMode;
-    // <--
 
     short               nFirstLineOffset;   //Erstzeileneinzug
     short               nAbsLSpace;         //Abstand Rand<->Nummer
     short               nLSpace;            //relative Einrueckung zum Vorgaenger
     short               nCharTextDistance;  //Abstand Nummer<->Text
 
-    // --> OD 2008-01-08 #newlistlevelattrs#
     // specifies what follows the list label before the text of the first line
     // of the list item starts
     SvxNumLabelFollowedBy       meLabelFollowedBy;
@@ -158,7 +153,6 @@ private:
     long                        mnFirstLineIndent;
     // specifies the indent before the text, e.g. in L2R-layout the left margin
     long                        mnIndentAt;
-    // <--
 
     SvxBrushItem*       pGraphicBrush;          //
     sal_Int16           eVertOrient;        // vert. Ausrichtung einer Bitmap
@@ -173,10 +167,8 @@ private:
     DECL_STATIC_LINK( SvxNumberFormat, GraphicArrived, void * );
     virtual void NotifyGraphicArrived();
 public:
-    // --> OD 2008-01-09 #newlistlevelattrs#
     SvxNumberFormat( sal_Int16 nNumberingType,
                      SvxNumPositionAndSpaceMode ePositionAndSpaceMode = LABEL_WIDTH_AND_POSITION );
-    // <--
     SvxNumberFormat(const SvxNumberFormat& rFormat);
     SvxNumberFormat(SvStream &rStream);
 
@@ -220,29 +212,18 @@ public:
     void            SetGraphicSize(const Size& rSet) {aGraphicSize = rSet;}
     const Size&     GetGraphicSize() const {return aGraphicSize;}
 
-    // --> OD 2008-01-09 #newlistlevelattrs#
     SvxNumPositionAndSpaceMode GetPositionAndSpaceMode() const;
     void SetPositionAndSpaceMode( SvxNumPositionAndSpaceMode ePositionAndSpaceMode );
-    // <--
 
     void            SetLSpace(short nSet) {nLSpace = nSet;}
-    // --> OD 2008-01-09 #newlistlevelattrs#
     short           GetLSpace() const;
-    // <--
     void            SetAbsLSpace(short nSet) {nAbsLSpace = nSet;}
-    // --> OD 2008-01-09 #newlistlevelattrs#
     short           GetAbsLSpace() const;
-    // <--
     void            SetFirstLineOffset(short nSet) { nFirstLineOffset = nSet;}
-    // --> OD 2008-01-09 #newlistlevelattrs#
     short           GetFirstLineOffset() const;
-    // <--
     void            SetCharTextDistance(short nSet) { nCharTextDistance = nSet; }
-    // --> OD 2008-01-09 #newlistlevelattrs#
     short           GetCharTextDistance() const;
-    // <--
 
-    // --> OD 2008-01-09 #newlistlevelattrs#
     void SetLabelFollowedBy( const SvxNumLabelFollowedBy eLabelFollowedBy );
     SvxNumLabelFollowedBy GetLabelFollowedBy() const;
     void SetListtabPos( const long nListtabPos );
@@ -251,7 +232,6 @@ public:
     long GetFirstLineIndent() const;
     void SetIndentAt( const long nIndentAt );
     long GetIndentAt() const;
-    // <--
 
     static Size     GetGraphicSizeMM100(const Graphic* pGraphic);
     static String   CreateRomanString( ULONG nNo, BOOL bUpper );
@@ -278,7 +258,6 @@ class EDITENG_DLLPUBLIC SvxNumRule
     static sal_Int32    nRefCount;
     com::sun::star::lang::Locale aLocale;
 public:
-    // --> OD 2008-02-11 #newlistlevelattrs#
     SvxNumRule( ULONG nFeatures,
                 USHORT nLevels,
                 BOOL bCont,
@@ -286,7 +265,6 @@ public:
                 SvxNumberFormat::SvxNumPositionAndSpaceMode
                         eDefaultNumberFormatPositionAndSpaceMode
                                 = SvxNumberFormat::LABEL_WIDTH_AND_POSITION );
-    // <--
     SvxNumRule(const SvxNumRule& rCopy);
     SvxNumRule(SvStream &rStream);
     virtual ~SvxNumRule();

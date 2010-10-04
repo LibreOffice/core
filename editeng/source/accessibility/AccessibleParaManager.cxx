@@ -195,9 +195,8 @@ namespace accessibility
             if( !IsReferencable( nParagraphIndex ) )
             {
                 // there is no hard reference available, create object then
-                // --> OD 2006-01-11 #i27138#
+                // #i27138#
                 AccessibleEditableTextPara* pChild = new AccessibleEditableTextPara( xFrontEnd, this );
-                // <--
                 uno::Reference< XAccessible > xChild( static_cast< ::cppu::OWeakObject* > (pChild), uno::UNO_QUERY );
 
                 if( !xChild.is() )

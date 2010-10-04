@@ -41,7 +41,6 @@
 namespace com { namespace sun { namespace star { namespace uno
 {
     class Any;
-    //class Type;
 }}}}
 
 namespace sfx2
@@ -170,9 +169,8 @@ public:
                         sal_Bool bIsReadOnly )
                             { m_xInputStreamToLoadFrom = xInputStream;
                               m_bIsReadOnly = bIsReadOnly; }
-    // --> OD 2008-06-18 #i88291#
+    // #i88291#
     void            clearStreamToLoadFrom();
-    // <--
 
     inline BOOL         WasLastEditOK() const       { return bWasLastEditOK; }
     FileDialogHelper*   GetFileDialog( sal_uInt32 nFlags, const String& rFactory ) const;

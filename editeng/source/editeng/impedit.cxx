@@ -72,7 +72,7 @@ inline void lcl_AllignToPixel( Point& rPoint, OutputDevice* pOutDev, short nDiff
     rPoint = pOutDev->PixelToLogic( rPoint );
 }
 
-// ----------------------------------------------------------------------
+//  ----------------------------------------------------------------------
 //  class ImpEditView
 //  ----------------------------------------------------------------------
 ImpEditView::ImpEditView( EditView* pView, EditEngine* pEng, Window* pWindow ) :
@@ -183,7 +183,6 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion )
     ContentNode* pEndNode = aTmpSel.Max().GetNode();
     sal_uInt16 nStartPara = pEditEngine->pImpEditEngine->GetEditDoc().GetPos( pStartNode );
     sal_uInt16 nEndPara = pEditEngine->pImpEditEngine->GetEditDoc().GetPos( pEndNode );
-    // ueber die Absaetze iterieren....
     for ( sal_uInt16 nPara = nStartPara; nPara <= nEndPara; nPara++ )
     {
         ParaPortion* pTmpPortion = pEditEngine->pImpEditEngine->GetParaPortions().SaveGetObject( nPara );
@@ -206,7 +205,6 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion )
         if ( nPara == nEndPara )
             nEndLine = pTmpPortion->GetLines().FindLine( aTmpSel.Max().GetIndex(), sal_True );
 
-        // ueber die Zeilen iterieren....
         for ( sal_uInt16 nLine = nStartLine; nLine <= nEndLine; nLine++ )
         {
             EditLine* pLine = pTmpPortion->GetLines().GetObject( nLine );
@@ -846,10 +844,8 @@ void ImpEditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, US
             GetCursor()->SetOrientation( 2700 );
         }
         else
-            // --> FME 2004-10-18 #i32593#
-            // Reset correct orientation in horizontal layout
+            // #i32593# Reset correct orientation in horizontal layout
             GetCursor()->SetOrientation( 0 );
-            // <--
 
         GetCursor()->SetSize( aCursorSz );
 
@@ -1448,7 +1444,7 @@ BOOL ImpEditView::SetCursorAtPoint( const Point& rPointPixel )
     // aTmpNewSel: Diff zwischen alt und neu, nicht die neue Selektion
     EditSelection aTmpNewSel( GetEditSelection().Max(), aPaM );
 
-    // --> OD 2005-12-16 #i27299#
+    // #i27299#
     // work on copy of current selection and set new selection, if it has changed.
     EditSelection aNewEditSelection( GetEditSelection() );
 
@@ -1469,7 +1465,6 @@ BOOL ImpEditView::SetCursorAtPoint( const Point& rPointPixel )
     {
         SetEditSelection( aNewEditSelection );
     }
-    // <--
 
     BOOL bForceCursor = ( pDragAndDropInfo ? FALSE : TRUE ) && !pEditEngine->pImpEditEngine->IsInSelectionMode();
     ShowCursor( bGotoCursor, bForceCursor );

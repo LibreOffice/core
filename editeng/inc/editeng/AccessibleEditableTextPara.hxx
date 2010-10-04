@@ -79,13 +79,12 @@ namespace accessibility
 
     public:
         /// Create accessible object for given parent
-        // --> OD 2006-01-11 #i27138#
+        // #i27138#
         // - add parameter <_pParaManager> (default value NULL)
         //   This has to be the the instance of <AccessibleParaManager>, which
         //   created and manages this accessible paragraph.
         AccessibleEditableTextPara ( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rParent,
                                      const AccessibleParaManager* _pParaManager = NULL );
-        // <--
 
         virtual ~AccessibleEditableTextPara ();
 

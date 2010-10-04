@@ -46,7 +46,6 @@ namespace sfx2
 
 TYPEINIT0( SvLinkSource )
 
-/************** class SvLinkSourceTimer *********************************/
 class SvLinkSourceTimer : public Timer
 {
     SvLinkSource *  pOwner;
@@ -209,12 +208,11 @@ void SvLinkSource::setStreamToLoadFrom(const com::sun::star::uno::Reference<com:
     pImpl->m_bIsReadOnly = bIsReadOnly;
 }
 
-// --> OD 2008-06-18 #i88291#
+// #i88291#
 void SvLinkSource::clearStreamToLoadFrom()
 {
     pImpl->m_xInputStreamToLoadFrom.clear();
 }
-// <--
 
 void  SvLinkSource::Closed()
 {

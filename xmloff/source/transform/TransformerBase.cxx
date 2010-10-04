@@ -43,9 +43,7 @@
 #include "MutableAttrList.hxx"
 #include "TransformerActions.hxx"
 #include "ElemTransformerAction.hxx"
-// --> OD 2005-06-29 #i50322#
 #include "PropertyActionsOOo.hxx"
-// <--
 #ifndef _XMLOFF_TRANSFORMERTOKENMAP_HXX
 #include "TransformerTokenMap.hxx"
 #endif
@@ -66,8 +64,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::xml::sax;
 
-// -----------------------------------------------------------------------------
-
 namespace
 {
 bool lcl_ConvertAttr( OUString & rOutAttribute, sal_Int32 nParam )
@@ -86,8 +82,6 @@ bool lcl_ConvertAttr( OUString & rOutAttribute, sal_Int32 nParam )
     return bResult;
 }
 } // anonymous namespace
-
-// -----------------------------------------------------------------------------
 
 XMLTransformerContext *XMLTransformerBase::CreateContext( USHORT nPrefix,
     const OUString& rLocalName, const OUString& rQName )
@@ -613,12 +607,10 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                             if( SvXMLUnitConverter::convertMeasure(nMeasure, aAttrValue, MAP_100TH_MM ) )
                             {
 
-                                // --> OD 2004-10-29 #i13778#,#i36248#
-                                // apply correct twip-to-1/100mm
+                                // #i13778#,#i36248# apply correct twip-to-1/100mm
                                 nMeasure = (sal_Int32)( nMeasure >= 0
                                                         ? ((nMeasure*127L+36L)/72L)
                                                         : ((nMeasure*127L-36L)/72L) );
-                                // <--
 
                                 rtl::OUStringBuffer aBuffer;
                                 SvXMLUnitConverter::convertMeasure( aBuffer, nMeasure, MAP_100TH_MM, nDestUnit );
@@ -775,12 +767,10 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                             if( SvXMLUnitConverter::convertMeasure(nMeasure, aAttrValue, MAP_100TH_MM ) )
                             {
 
-                                // --> OD 2004-10-29 #i13778#,#i36248#
-                                // apply correct 1/100mm-to-twip conversion
+                                // #i13778#,#i36248#/ apply correct 1/100mm-to-twip conversion
                                 nMeasure = (sal_Int32)( nMeasure >= 0
                                                         ? ((nMeasure*72L+63L)/127L)
                                                         : ((nMeasure*72L-63L)/127L) );
-                                // <--
 
                                 OUStringBuffer aBuffer;
                                 SvXMLUnitConverter::convertMeasure( aBuffer, nMeasure, MAP_100TH_MM, nDestUnit );
@@ -861,7 +851,7 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                         pMutableAttrList->SetValueByIndex( i, aBuffer.makeStringAndClear() );
                     }
                     break;
-                // --> OD 2005-06-10 #i50322# - special handling for the
+                // #i50322# - special handling for the
                 // transparency of writer background graphics.
                 case XML_ATACTION_WRITER_BACK_GRAPHIC_TRANSPARENCY:
                     {
@@ -887,7 +877,6 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                         bRename = sal_True;
                     }
                     break;
-                // <--
                 default:
                     OSL_ENSURE( !this, "unknown action" );
                     break;
