@@ -123,7 +123,7 @@ void XMLIndexBibliographyConfigurationContext::ProcessAttribute(
         }
         else if( IsXMLToken(sLocalName, XML_NUMBERED_ENTRIES) )
         {
-            sal_Bool bTmp;
+            bool bTmp;
             if( SvXMLUnitConverter::convertBool(bTmp, sValue) )
             {
                 bNumberedEntries = bTmp;
