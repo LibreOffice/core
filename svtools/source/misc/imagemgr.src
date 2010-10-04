@@ -162,6 +162,15 @@ Bitmap BMP_PLUGIN
     File = "plugin.png" ;
 };
 
+Image BMP_LIST_ADD
+{
+    ImageBitmap = Bitmap
+    {
+        File = "list_add.png" ;
+    };
+    MaskColor = Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; };
+};
+
 // description strings
 
 String STR_DESCRIPTION_SOURCEFILE
