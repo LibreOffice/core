@@ -1091,13 +1091,11 @@ BOOL SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
 
             nUpper = CalcUpperSpace( &rAttrs, NULL );
 
-            // OD 2004-03-02 #106629# - use new method <CalcLowerSpace(..)>
             SwTwips nLower = CalcLowerSpace( &rAttrs );
-        if (IsCollapse()) {
-        ViewShell *pSh = GetShell();
-        nUpper=0;
-        nLower=0;
-        }
+            if (IsCollapse()) {
+                nUpper=0;
+                nLower=0;
+            }
 //            // in balanced columned section frames we do not want the
 //            // common border
 //            sal_Bool bCommonBorder = sal_True;
