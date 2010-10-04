@@ -91,10 +91,10 @@ BOOL lcl_IsHoriOnOddPages(int nEnum)
                    nEnum == RES_MIRROR_GRAPH_BOTH;
             return bEnum;
 }
-BOOL SwMirrorGrf::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+bool SwMirrorGrf::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
-    sal_Bool bRet = sal_True,
-         bVal;
+    bool bRet = true;
+    sal_Bool bVal;
     // Vertikal und Horizontal sind mal getauscht worden!
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
@@ -111,15 +111,15 @@ BOOL SwMirrorGrf::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
             break;
         default:
             ASSERT( !this, "unknown MemberId" );
-            bRet = sal_False;
+            bRet = false;
     }
     rVal.setValue( &bVal, ::getBooleanCppuType() );
     return bRet;
 }
 
-BOOL SwMirrorGrf::PutValue( const uno::Any& rVal, BYTE nMemberId )
+bool SwMirrorGrf::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     sal_Bool bVal = *(sal_Bool*)rVal.getValue();
     // Vertikal und Horizontal sind mal getauscht worden!
     nMemberId &= ~CONVERT_TWIPS;
@@ -160,7 +160,7 @@ BOOL SwMirrorGrf::PutValue( const uno::Any& rVal, BYTE nMemberId )
             break;
         default:
             ASSERT( !this, "unknown MemberId" );
-            bRet = sal_False;
+            bRet = false;
     }
     return bRet;
 }
@@ -198,15 +198,15 @@ int SwRotationGrf::operator==( const SfxPoolItem& rCmp ) const
 }
 
 
-BOOL SwRotationGrf::QueryValue( uno::Any& rVal, BYTE ) const
+bool SwRotationGrf::QueryValue( uno::Any& rVal, BYTE ) const
 {
     // SfxUInt16Item::QueryValue returns sal_Int32 in Any now... (srx642w)
     // where we still want this to be a sal_Int16
     rVal <<= (sal_Int16)GetValue();
-    return TRUE;
+    return true;
 }
 
-BOOL SwRotationGrf::PutValue( const uno::Any& rVal, BYTE )
+bool SwRotationGrf::PutValue( const uno::Any& rVal, BYTE )
 {
     // SfxUInt16Item::QueryValue returns sal_Int32 in Any now... (srx642w)
     // where we still want this to be a sal_Int16
@@ -215,11 +215,11 @@ BOOL SwRotationGrf::PutValue( const uno::Any& rVal, BYTE )
     {
         // UINT16 argument needed
         SetValue( (UINT16) nValue );
-        return TRUE;
+        return true;
     }
 
     DBG_ERROR( "SwRotationGrf::PutValue - Wrong type!" );
-    return FALSE;
+    return false;
 }
 
 // ------------------------------------------------------------------
@@ -270,13 +270,13 @@ int SwGammaGrf::operator==( const SfxPoolItem& rCmp ) const
         nValue == ((SwGammaGrf&)rCmp).GetValue();
 }
 
-BOOL SwGammaGrf::QueryValue( uno::Any& rVal, BYTE ) const
+bool SwGammaGrf::QueryValue( uno::Any& rVal, BYTE ) const
 {
     rVal <<= nValue;
-    return sal_True;
+    return true;
 }
 
-BOOL SwGammaGrf::PutValue( const uno::Any& rVal, BYTE )
+bool SwGammaGrf::PutValue( const uno::Any& rVal, BYTE )
 {
     return rVal >>= nValue;
 }
@@ -295,24 +295,24 @@ SfxPoolItem* SwTransparencyGrf::Clone( SfxItemPool * ) const
     return new SwTransparencyGrf( *this );
 }
 // ------------------------------------------------------------------
-BOOL SwTransparencyGrf::QueryValue( uno::Any& rVal,
+bool SwTransparencyGrf::QueryValue( uno::Any& rVal,
                                         BYTE ) const
 {
     DBG_ASSERT(ISA(SfxByteItem),"Put/QueryValue should be removed!");
     sal_Int16 nRet = GetValue();
     DBG_ASSERT( 0 <= nRet && nRet <= 100, "value out of range" );
     rVal <<= nRet;
-    return TRUE;
+    return true;
 }
 // ------------------------------------------------------------------
-BOOL SwTransparencyGrf::PutValue( const uno::Any& rVal,
+bool SwTransparencyGrf::PutValue( const uno::Any& rVal,
                                         BYTE )
 {
     //temporary conversion until this is a SfxInt16Item!
     DBG_ASSERT(ISA(SfxByteItem),"Put/QueryValue should be removed!");
     sal_Int16 nVal = 0;
     if(!(rVal >>= nVal) || nVal < -100 || nVal > 100)
-        return FALSE;
+        return false;
     if(nVal < 0)
     {
         // for compatibility with old documents
@@ -323,7 +323,7 @@ BOOL SwTransparencyGrf::PutValue( const uno::Any& rVal,
     }
     DBG_ASSERT( 0 <= nVal && nVal <= 100, "value out of range" );
     SetValue(static_cast<BYTE>(nVal));
-    return TRUE;
+    return true;
 }
 
 // ------------------------------------------------------------------
@@ -342,24 +342,24 @@ USHORT SwDrawModeGrf::GetValueCount() const
     return GRAPHICDRAWMODE_WATERMARK + 1;
 }
 
-BOOL SwDrawModeGrf::QueryValue( uno::Any& rVal,
+bool SwDrawModeGrf::QueryValue( uno::Any& rVal,
                                 BYTE ) const
 {
     drawing::ColorMode eRet = (drawing::ColorMode)GetEnumValue();
     rVal <<= eRet;
-    return TRUE;
+    return true;
 }
 
-BOOL SwDrawModeGrf::PutValue( const uno::Any& rVal,
+bool SwDrawModeGrf::PutValue( const uno::Any& rVal,
                                 BYTE )
 {
     sal_Int32 eVal = SWUnoHelper::GetEnumAsInt32( rVal );
     if(eVal >= 0 && eVal <= GRAPHICDRAWMODE_WATERMARK)
     {
         SetEnumValue((USHORT)eVal);
-        return TRUE;
+        return true;
     }
-    return FALSE;
+    return false;
 }
 
 

@@ -127,18 +127,18 @@ BOOL SwFmtCharFmt::GetInfo( SfxPoolItem& rInfo ) const
 {
     return pTxtAttr ? pTxtAttr->GetInfo( rInfo ) : FALSE;
 }
-BOOL SwFmtCharFmt::QueryValue( uno::Any& rVal, BYTE ) const
+bool SwFmtCharFmt::QueryValue( uno::Any& rVal, BYTE ) const
 {
     String sCharFmtName;
     if(GetCharFmt())
         SwStyleNameMapper::FillProgName(GetCharFmt()->GetName(), sCharFmtName,  nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, sal_True );
     rVal <<= OUString( sCharFmtName );
-    return TRUE;
+    return true;
 }
-BOOL SwFmtCharFmt::PutValue( const uno::Any& , BYTE   )
+bool SwFmtCharFmt::PutValue( const uno::Any& , BYTE   )
 {
     DBG_ERROR("Zeichenvorlage kann mit PutValue nicht gesetzt werden!");
-    return FALSE;
+    return false;
 }
 
 /*************************************************************************
@@ -175,17 +175,17 @@ SfxPoolItem* SwFmtAutoFmt::Clone( SfxItemPool* ) const
     return new SwFmtAutoFmt( *this );
 }
 
-BOOL SwFmtAutoFmt::QueryValue( uno::Any& rVal, BYTE ) const
+bool SwFmtAutoFmt::QueryValue( uno::Any& rVal, BYTE ) const
 {
     String sCharFmtName = StylePool::nameOf( mpHandle );
     rVal <<= OUString( sCharFmtName );
-    return TRUE;
+    return true;
 }
 
-BOOL SwFmtAutoFmt::PutValue( const uno::Any& , BYTE )
+bool SwFmtAutoFmt::PutValue( const uno::Any& , BYTE )
 {
     //the format is not renameable via API
-    return FALSE;
+    return false;
 }
 
 /*************************************************************************
@@ -331,9 +331,9 @@ const SvxMacro* SwFmtINetFmt::GetMacro( USHORT nEvent ) const
 
 
 
-BOOL SwFmtINetFmt::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+bool SwFmtINetFmt::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
-    BOOL bRet = TRUE;
+    bool bRet = true;
     XubString sVal;
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
@@ -379,9 +379,9 @@ BOOL SwFmtINetFmt::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     rVal <<= OUString(sVal);
     return bRet;
 }
-BOOL SwFmtINetFmt::PutValue( const uno::Any& rVal, BYTE nMemberId  )
+bool SwFmtINetFmt::PutValue( const uno::Any& rVal, BYTE nMemberId  )
 {
-    BOOL bRet = TRUE;
+    bool bRet = true;
     nMemberId &= ~CONVERT_TWIPS;
 
     // all properties except HyperlinkEvents are of type string, hence
@@ -403,14 +403,14 @@ BOOL SwFmtINetFmt::PutValue( const uno::Any& rVal, BYTE nMemberId  )
         else
         {
             // wrong type!
-            bRet = FALSE;
+            bRet = false;
         }
     }
     else
     {
         // all string properties:
         if(rVal.getValueType() != ::getCppuType((rtl::OUString*)0))
-            return FALSE;
+            return false;
         XubString sVal = *(rtl::OUString*)rVal.getValue();
         switch(nMemberId)
         {
@@ -441,7 +441,7 @@ BOOL SwFmtINetFmt::PutValue( const uno::Any& rVal, BYTE nMemberId  )
             }
             break;
             default:
-                bRet = FALSE;
+                bRet = false;
         }
     }
     return bRet;
@@ -503,10 +503,10 @@ SfxPoolItem* SwFmtRuby::Clone( SfxItemPool* ) const
     return new SwFmtRuby( *this );
 }
 
-BOOL SwFmtRuby::QueryValue( uno::Any& rVal,
+bool SwFmtRuby::QueryValue( uno::Any& rVal,
                             BYTE nMemberId ) const
 {
-    BOOL bRet = TRUE;
+    bool bRet = true;
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
     {
@@ -526,14 +526,14 @@ BOOL SwFmtRuby::QueryValue( uno::Any& rVal,
         }
         break;
         default:
-            bRet = FALSE;
+            bRet = false;
     }
     return bRet;
 }
-BOOL SwFmtRuby::PutValue( const uno::Any& rVal,
+bool SwFmtRuby::PutValue( const uno::Any& rVal,
                             BYTE nMemberId  )
 {
-    BOOL bRet = TRUE;
+    bool bRet = true;
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
     {
@@ -551,7 +551,7 @@ BOOL SwFmtRuby::PutValue( const uno::Any& rVal,
             if(nSet >= 0 && nSet <= text::RubyAdjust_INDENT_BLOCK)
                 nAdjustment = nSet;
             else
-                bRet = sal_False;
+                bRet = false;
         }
         break;
         case MID_RUBY_ABOVE:
@@ -573,7 +573,7 @@ BOOL SwFmtRuby::PutValue( const uno::Any& rVal,
         }
         break;
         default:
-            bRet = FALSE;
+            bRet = false;
     }
     return bRet;
 }

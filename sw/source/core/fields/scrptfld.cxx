@@ -111,7 +111,7 @@ String SwScriptField::GetPar2() const
 /*-----------------05.03.98 15:00-------------------
 
 --------------------------------------------------*/
-BOOL SwScriptField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwScriptField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -127,12 +127,12 @@ BOOL SwScriptField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     default:
         DBG_ERROR("illegal property");
     }
-    return TRUE;
+    return true;
 }
 /*-----------------05.03.98 15:00-------------------
 
 --------------------------------------------------*/
-BOOL SwScriptField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwScriptField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     switch( nWhichId )
     {
@@ -148,6 +148,6 @@ BOOL SwScriptField::PutValue( const uno::Any& rAny, USHORT nWhichId )
     default:
         DBG_ERROR("illegal property");
     }
-    return TRUE;
+    return true;
 }
 

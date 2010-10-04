@@ -60,8 +60,8 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
-    virtual BOOL             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual BOOL             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     sal_Int16 GetVertOrient() const { return eOrient; }
     sal_Int16 GetRelationOrient() const { return eRelation; }
@@ -98,8 +98,8 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
-    virtual BOOL             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual BOOL             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     sal_Int16 GetHoriOrient() const { return eOrient; }
     sal_Int16 GetRelationOrient() const { return eRelation; }

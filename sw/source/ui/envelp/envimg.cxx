@@ -322,9 +322,9 @@ Sequence<rtl::OUString> SwEnvCfgItem::GetPropertyNames()
     return aNames;
 }
 
-BOOL SwEnvItem::QueryValue( Any& rVal, BYTE nMemberId ) const
+bool SwEnvItem::QueryValue( Any& rVal, BYTE nMemberId ) const
 {
-    sal_Bool bRet = sal_True;
+    sal_Bool bRet = true;
     switch(nMemberId & ~CONVERT_TWIPS)
     {
         case MID_ENV_ADDR_TEXT : rVal <<= aAddrText; break;
@@ -342,16 +342,16 @@ BOOL SwEnvItem::QueryValue( Any& rVal, BYTE nMemberId ) const
         case MID_ENV_SHIFT_DOWN       : rVal <<= lShiftDown; break;
         default:
             DBG_ERROR("Wrong memberId");
-            bRet = sal_False;
+            bRet = false;
     }
     return bRet;
 }
 /* -----------------------------26.04.01 12:26--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwEnvItem::PutValue(const Any& rVal, BYTE nMemberId)
+bool SwEnvItem::PutValue(const Any& rVal, BYTE nMemberId)
 {
-    BOOL bRet = FALSE;
+    bool bRet = false;
     switch(nMemberId  & ~CONVERT_TWIPS)
     {
         case MID_ENV_ADDR_TEXT : bRet = (rVal >>= aAddrText); break;

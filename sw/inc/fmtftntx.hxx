@@ -65,8 +65,8 @@ public:
 
     virtual int             operator==( const SfxPoolItem& ) const;
 
-    virtual BOOL             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual BOOL             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
 // will be used at time??
 //  void                    FillVariable( SbxVariable &rVar,

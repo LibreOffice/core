@@ -229,7 +229,7 @@ void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, sal_Bool bSrchNum)
 /*-----------------05.03.98 16:19-------------------
 
 --------------------------------------------------*/
-BOOL SwChapterField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwChapterField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -260,12 +260,12 @@ BOOL SwChapterField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     default:
         DBG_ERROR("illegal property");
     }
-    return sal_True;
+    return true;
 }
 /*-----------------05.03.98 16:19-------------------
 
 --------------------------------------------------*/
-BOOL SwChapterField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwChapterField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     BOOL bRet = TRUE;
     switch( nWhichId )
@@ -277,7 +277,7 @@ BOOL SwChapterField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         if(nTmp >= 0 && nTmp < MAXLEVEL)
             nLevel = nTmp;
         else
-            bRet = FALSE;
+            bRet = false;
         break;
     }
 
@@ -303,7 +303,7 @@ BOOL SwChapterField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 
     default:
         DBG_ERROR("illegal property");
-        bRet = FALSE;
+        bRet = false;
     }
     return bRet;
 }

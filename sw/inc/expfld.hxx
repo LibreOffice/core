@@ -127,8 +127,8 @@ public:
 
     virtual USHORT              GetSubType() const;
     virtual void                SetSubType(USHORT nType);
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
 
     static USHORT       GetReferenceTextPos( const SwFmtFld& rFmt, SwDoc& rDoc);
     // #i82544#
@@ -204,8 +204,8 @@ public:
     const SwNode* GetOutlineChgNd() const   { return pOutlChgNd; }
     void SetOutlineChgNd( const SwNode* p ) { pOutlChgNd = p; }
 
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
 };
 
 inline void SwSetExpFieldType::SetType( USHORT nTyp )
@@ -268,8 +268,8 @@ public:
     // Die Formel
     virtual String              GetPar2()   const;
     virtual void                SetPar2(const String& rStr);
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
 };
 
 inline const String& SwSetExpField::GetExpStr() const
@@ -347,8 +347,8 @@ public:
 
     virtual USHORT          GetSubType() const;
     virtual void            SetSubType(USHORT nSub);
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
 };
 
 /*--------------------------------------------------------------------
@@ -428,8 +428,8 @@ public:
     // Die Formel
     virtual String      GetPar2()   const;
     virtual void        SetPar2(const String& rStr);
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
 };
 
 

@@ -184,8 +184,8 @@ public:
 
     virtual USHORT      GetSubType() const;
     // virtual void        SetSubType(USHORT nSub); // OM: entfernt, da unbenoetigt und gefaehrlich
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
 
     const String& GetUserString() const         { return sUserStr; }
     void SetUserString( const String& rS )      { sUserStr = rS; }
@@ -221,8 +221,8 @@ public:
     inline void         SetExpansion(const String& rStr) { aContent = rStr; }
     inline const String& GetContent() const { return aContent; }
 
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
 };
 
 /*--------------------------------------------------------------------
@@ -256,8 +256,8 @@ public:
     inline void         SetExpansion(const String& rStr) { aContent = rStr; }
     inline const String& GetContent() const { return aContent; }
 
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
 };
 
 /*--------------------------------------------------------------------
@@ -285,8 +285,8 @@ public:
 
     virtual String      Expand() const;
     virtual SwField*    Copy() const;
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
 };
 
 
@@ -326,8 +326,8 @@ public:
 
     virtual USHORT      GetSubType() const;
     virtual void        SetSubType(USHORT nSub);
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
 };
 
 /*--------------------------------------------------------------------
@@ -398,8 +398,8 @@ public:
 
     virtual USHORT      GetSubType() const;
     // virtual void        SetSubType(USHORT nSub); // OM: entfernt, da unbenoetigt und gefaehrlich
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
 };
 
 /*--------------------------------------------------------------------
@@ -435,8 +435,8 @@ public:
     // Bedingung erfragen/setzen
     virtual const String& GetPar1() const;
     virtual void        SetPar1(const String& rStr);
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
 };
 
 /*--------------------------------------------------------------------
@@ -484,8 +484,8 @@ public:
     // Macrotext
     virtual String  GetPar2() const;
     virtual void    SetPar2(const String& rStr);
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
 
     static void CreateMacroString( String& rMacro,
                                    const String& rMacroName,
@@ -547,8 +547,8 @@ public:
 
     sal_uInt32 GetNumberOfParagraphs() const;
 
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
     virtual String      GetDescription() const;
 };
 
@@ -584,8 +584,8 @@ public:
     String                  GetName() const { return aName; }
     void                    SetName( const String& rName ) { aName = rName; }
     inline void             SetExpansion(const String& rStr) { aContent = rStr; }
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
 };
 
 /*--------------------------------------------------------------------
@@ -621,8 +621,8 @@ public:
 
     inline void         SetExpansion(const String& rStr) { aContent = rStr; }
 
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
 };
 
 
@@ -663,8 +663,8 @@ public:
 
     short GetOffset() const         { return nOffset; }
     void SetOffset( short nOff )    { nOffset = nOff; }
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
 };
 
 /*--------------------------------------------------------------------
@@ -705,8 +705,8 @@ public:
     void SetText( const String& rTxt )      { sTxt = rTxt; }
 
     void ChangeExpansion( const SwFrm* pFrm, const SwTxtFld* pFld );
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
 };
 
 /*--------------------------------------------------------------------
@@ -745,8 +745,8 @@ public:
 
     SwCharFmt* GetCharFmt() const
         { return ((SwJumpEditFieldType*)GetTyp())->GetCharFmt(); }
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
 };
 
 /*--------------------------------------------------------------------
@@ -792,8 +792,8 @@ public:
 
     BOOL                    IsCodeURL() const { return bCodeURL; }
     void                    SetCodeURL( BOOL bURL ) { bCodeURL = bURL; }
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
 };
 
 /*--------------------------------------------------------------------
@@ -828,8 +828,8 @@ public:
     virtual const String&   GetPar1() const;
     virtual void            SetPar1(const String& rStr);
 
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
 };
 
 

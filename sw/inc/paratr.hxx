@@ -79,8 +79,8 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0) const;
-    virtual BOOL             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual BOOL             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     inline BYTE GetLines() const { return nLines; }
     inline BYTE &GetLines() { return nLines; }
@@ -165,8 +165,8 @@ public:
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
 
-    virtual BOOL             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const;
-    virtual BOOL             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId );
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId );
 };
 
 class SwParaConnectBorderItem : public SfxBoolItem

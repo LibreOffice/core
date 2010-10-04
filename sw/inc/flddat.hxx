@@ -141,8 +141,8 @@ public:
         virtual String          Expand() const;
         virtual SwField*        Copy() const;
 
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nMId ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nMId );
+        virtual bool            QueryValue( com::sun::star::uno::Any& rVal, USHORT nMId ) const;
+        virtual bool            PutValue( const com::sun::star::uno::Any& rVal, USHORT nMId );
 };
 
 #endif // _FLDDAT_HXX

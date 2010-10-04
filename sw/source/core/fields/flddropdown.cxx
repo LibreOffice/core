@@ -200,7 +200,7 @@ void SwDropDownField::SetToolTip(const String & rToolTip)
     aToolTip = rToolTip;
 }
 
-BOOL SwDropDownField::QueryValue(::uno::Any &rVal, USHORT nWhich) const
+bool SwDropDownField::QueryValue(::uno::Any &rVal, USHORT nWhich) const
 {
     nWhich &= ~CONVERT_TWIPS;
     switch( nWhich )
@@ -225,10 +225,10 @@ BOOL SwDropDownField::QueryValue(::uno::Any &rVal, USHORT nWhich) const
     default:
         DBG_ERROR("illegal property");
     }
-    return sal_True;
+    return true;
 }
 
-BOOL SwDropDownField::PutValue(const uno::Any &rVal,
+bool SwDropDownField::PutValue(const uno::Any &rVal,
                                USHORT nWhich)
 {
     switch( nWhich )
@@ -280,5 +280,5 @@ BOOL SwDropDownField::PutValue(const uno::Any &rVal,
     default:
         DBG_ERROR("illegal property");
     }
-    return sal_True;
+    return true;
 }

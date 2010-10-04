@@ -589,7 +589,7 @@ String SwGetRefField::GetPar2() const
 /*-----------------06.03.98 13:34-------------------
 
 --------------------------------------------------*/
-BOOL SwGetRefField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwGetRefField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -658,12 +658,12 @@ BOOL SwGetRefField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     default:
         DBG_ERROR("illegal property");
     }
-    return TRUE;
+    return true;
 }
 /*-----------------06.03.98 13:34-------------------
 
 --------------------------------------------------*/
-BOOL SwGetRefField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwGetRefField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     String sTmp;
     switch( nWhichId )
@@ -687,7 +687,7 @@ BOOL SwGetRefField::PutValue( const uno::Any& rAny, USHORT nWhichId )
             case ReferenceFieldPart::NUMBER_NO_CONTEXT:   nPart = REF_NUMBER_NO_CONTEXT;   break;
             case ReferenceFieldPart::NUMBER_FULL_CONTEXT: nPart = REF_NUMBER_FULL_CONTEXT; break;
             // <--
-            default: return FALSE;
+            default: return false;
             }
             SetFormat(nPart);
         }
@@ -735,7 +735,7 @@ BOOL SwGetRefField::PutValue( const uno::Any& rAny, USHORT nWhichId )
     default:
         DBG_ERROR("illegal property");
     }
-    return TRUE;
+    return true;
 }
 /* -----------------------------11.01.2002 12:50------------------------------
 

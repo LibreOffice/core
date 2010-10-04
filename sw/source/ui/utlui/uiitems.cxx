@@ -125,9 +125,9 @@ SfxItemPresentation  SwPageFtnInfoItem::GetPresentation
 /* -----------------------------26.04.01 12:25--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwPageFtnInfoItem::QueryValue( Any& rVal, BYTE nMemberId ) const
+bool SwPageFtnInfoItem::QueryValue( Any& rVal, BYTE nMemberId ) const
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     switch(nMemberId & ~CONVERT_TWIPS)
     {
         case MID_FTN_HEIGHT        :     rVal <<= (sal_Int32)TWIP_TO_MM100(aFtnInfo.GetHeight());break;
@@ -144,17 +144,17 @@ BOOL SwPageFtnInfoItem::QueryValue( Any& rVal, BYTE nMemberId ) const
         case MID_LINE_TEXT_DIST    :     rVal <<= (sal_Int32)TWIP_TO_MM100(aFtnInfo.GetTopDist());break;
         case MID_LINE_FOOTNOTE_DIST:     rVal <<= (sal_Int32)TWIP_TO_MM100(aFtnInfo.GetBottomDist());break;
         default:
-            bRet = sal_False;
+            bRet = false;
     }
     return bRet;
 }
 /* -----------------------------26.04.01 12:26--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwPageFtnInfoItem::PutValue(const Any& rVal, BYTE nMemberId)
+bool SwPageFtnInfoItem::PutValue(const Any& rVal, BYTE nMemberId)
 {
     sal_Int32 nSet32 = 0;
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     switch(nMemberId  & ~CONVERT_TWIPS)
     {
         case MID_LINE_COLOR        :
@@ -166,7 +166,7 @@ BOOL SwPageFtnInfoItem::PutValue(const Any& rVal, BYTE nMemberId)
         case MID_LINE_FOOTNOTE_DIST:
                 rVal >>= nSet32;
                 if(nSet32 < 0)
-                    bRet = sal_False;
+                    bRet = false;
                 else
                 {
                     nSet32 = MM100_TO_TWIP(nSet32);
@@ -185,7 +185,7 @@ BOOL SwPageFtnInfoItem::PutValue(const Any& rVal, BYTE nMemberId)
             if(nSet >= 0)
                 aFtnInfo.SetLineWidth(MM100_TO_TWIP(nSet));
             else
-                bRet = sal_False;
+                bRet = false;
         }
         break;
         case MID_LINE_RELWIDTH     :
@@ -193,7 +193,7 @@ BOOL SwPageFtnInfoItem::PutValue(const Any& rVal, BYTE nMemberId)
             sal_Int8 nSet = 0;
             rVal >>= nSet;
             if(nSet < 0)
-                bRet = sal_False;
+                bRet = false;
             else
                 aFtnInfo.SetWidth(Fraction(nSet, 100));
         }
@@ -205,11 +205,11 @@ BOOL SwPageFtnInfoItem::PutValue(const Any& rVal, BYTE nMemberId)
             if(nSet >= 0 && nSet < 3) //text::HorizontalAdjust
                 aFtnInfo.SetAdj((SwFtnAdj)nSet);
             else
-                bRet = sal_False;
+                bRet = false;
         }
         break;
         default:
-            bRet = sal_False;
+            bRet = false;
     }
     return bRet;
 }
@@ -284,13 +284,13 @@ int  SwUINumRuleItem::operator==( const SfxPoolItem& rAttr ) const
     return *pRule == *((SwUINumRuleItem&)rAttr).pRule;
 }
 
-BOOL SwUINumRuleItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
+bool SwUINumRuleItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
 {
     uno::Reference< container::XIndexReplace >xRules = new SwXNumberingRules(*pRule);
     rVal.setValue(&xRules, ::getCppuType((uno::Reference< container::XIndexReplace>*)0));
-    return TRUE;
+    return true;
 }
-BOOL SwUINumRuleItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
+bool SwUINumRuleItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
 {
     uno::Reference< container::XIndexReplace> xRulesRef;
     if(rVal >>= xRulesRef)
@@ -303,7 +303,7 @@ BOOL SwUINumRuleItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
             *pRule = *pSwXRules->GetNumRule();
         }
     }
-    return TRUE;
+    return true;
 }
 /* -----------------17.06.98 17:43-------------------
  *

@@ -252,7 +252,7 @@ sal_uInt16 SwPageNumberField::GetSubType() const
 /*-----------------05.03.98 10:25-------------------
 
 --------------------------------------------------*/
-BOOL SwPageNumberField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwPageNumberField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -280,14 +280,14 @@ BOOL SwPageNumberField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     default:
         DBG_ERROR("illegal property");
     }
-    return sal_True;
+    return true;
 }
 /*-----------------05.03.98 10:25-------------------
 
 --------------------------------------------------*/
-BOOL SwPageNumberField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwPageNumberField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
-    BOOL bRet = TRUE;
+    bool bRet = true;
     sal_Int16 nSet = 0;
     switch( nWhichId )
     {
@@ -319,7 +319,7 @@ BOOL SwPageNumberField::PutValue( const uno::Any& rAny, USHORT nWhichId )
                 nSubType = PG_NEXT;
             break;
             default:
-                bRet = FALSE;
+                bRet = false;
         }
         break;
     case FIELD_PROP_PAR1:
@@ -386,9 +386,9 @@ SwField* SwAuthorField::Copy() const
 /*-----------------05.03.98 11:15-------------------
 
 --------------------------------------------------*/
-BOOL SwAuthorField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwAuthorField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
-    sal_Bool bVal;
+    bool bVal;
     switch( nWhichId )
     {
     case FIELD_PROP_BOOL1:
@@ -408,12 +408,12 @@ BOOL SwAuthorField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     default:
         DBG_ERROR("illegal property");
     }
-    return sal_True;
+    return true;
 }
 /*-----------------05.03.98 11:15-------------------
 
 --------------------------------------------------*/
-BOOL SwAuthorField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwAuthorField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     switch( nWhichId )
     {
@@ -435,7 +435,7 @@ BOOL SwAuthorField::PutValue( const uno::Any& rAny, USHORT nWhichId )
     default:
         DBG_ERROR("illegal property");
     }
-    return sal_True;
+    return true;
 }
 
 /*--------------------------------------------------------------------
@@ -532,7 +532,7 @@ SwField* SwFileNameField::Copy() const
 /*-----------------05.03.98 08:59-------------------
 
 --------------------------------------------------*/
-BOOL SwFileNameField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwFileNameField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -569,12 +569,12 @@ BOOL SwFileNameField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     default:
         DBG_ERROR("illegal property");
     }
-    return sal_True;
+    return true;
 }
 /*-----------------05.03.98 09:01-------------------
 
 --------------------------------------------------*/
-BOOL SwFileNameField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwFileNameField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     switch( nWhichId )
     {
@@ -619,7 +619,7 @@ BOOL SwFileNameField::PutValue( const uno::Any& rAny, USHORT nWhichId )
     default:
         DBG_ERROR("illegal property");
     }
-    return sal_True;
+    return true;
 }
 /*--------------------------------------------------------------------
     Beschreibung: SwTemplNameFieldType
@@ -708,7 +708,7 @@ SwField* SwTemplNameField::Copy() const
 /*-----------------05.03.98 08:59-------------------
 
 --------------------------------------------------*/
-BOOL SwTemplNameField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwTemplNameField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch ( nWhichId )
     {
@@ -731,12 +731,12 @@ BOOL SwTemplNameField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     default:
         DBG_ERROR("illegal property");
     }
-    return sal_True;
+    return true;
 }
 /*-----------------05.03.98 09:01-------------------
 
 --------------------------------------------------*/
-BOOL SwTemplNameField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwTemplNameField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     switch ( nWhichId )
     {
@@ -771,7 +771,7 @@ BOOL SwTemplNameField::PutValue( const uno::Any& rAny, USHORT nWhichId )
     default:
         DBG_ERROR("illegal property");
     }
-    return sal_True;
+    return true;
 }
 /*--------------------------------------------------------------------
     Beschreibung: SwDocStatFieldType
@@ -863,7 +863,7 @@ void SwDocStatField::ChangeExpansion( const SwFrm* pFrm )
 /*-----------------05.03.98 11:38-------------------
 
 --------------------------------------------------*/
-BOOL SwDocStatField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwDocStatField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch ( nWhichId )
     {
@@ -873,14 +873,14 @@ BOOL SwDocStatField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     default:
         DBG_ERROR("illegal property");
     }
-    return sal_True;
+    return true;
 }
 /*-----------------05.03.98 11:38-------------------
 
 --------------------------------------------------*/
-BOOL SwDocStatField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwDocStatField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
-    BOOL bRet = FALSE;
+    bool bRet = false;
     switch ( nWhichId )
     {
     case FIELD_PROP_USHORT2:
@@ -892,7 +892,7 @@ BOOL SwDocStatField::PutValue( const uno::Any& rAny, USHORT nWhichId )
                     nSet != SVX_NUM_BITMAP)
             {
                 SetFormat(nSet);
-                bRet = TRUE;
+                bRet = true;
             }
         }
         break;
@@ -1261,7 +1261,7 @@ void SwDocInfoField::SetLanguage(sal_uInt16 nLng)
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwDocInfoField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwDocInfoField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -1306,12 +1306,12 @@ BOOL SwDocInfoField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     default:
         return SwField::QueryValue(rAny, nWhichId);
     }
-    return sal_True;
+    return true;
 }
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwDocInfoField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwDocInfoField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     sal_Int32 nValue = 0;
     switch( nWhichId )
@@ -1356,7 +1356,7 @@ BOOL SwDocInfoField::PutValue( const uno::Any& rAny, USHORT nWhichId )
     default:
         return SwField::PutValue(rAny, nWhichId);
     }
-    return sal_True;
+    return true;
 }
 
 /*--------------------------------------------------------------------
@@ -1611,7 +1611,7 @@ sal_uInt16 SwHiddenTxtField::GetSubType() const
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwHiddenTxtField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwHiddenTxtField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     const String* pOut = 0;
     switch( nWhichId )
@@ -1639,12 +1639,12 @@ BOOL SwHiddenTxtField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     }
     if( pOut )
         rAny <<= OUString( *pOut );
-    return sal_True;
+    return true;
 }
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwHiddenTxtField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwHiddenTxtField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     switch( nWhichId )
     {
@@ -1670,7 +1670,7 @@ BOOL SwHiddenTxtField::PutValue( const uno::Any& rAny, USHORT nWhichId )
     default:
         DBG_ERROR("illegal property");
     }
-    return sal_True;
+    return true;
 }
 
 //------------------------------------------------------------------------------
@@ -1751,7 +1751,7 @@ SwField* SwHiddenParaField::Copy() const
 /*-----------------05.03.98 13:25-------------------
 
 --------------------------------------------------*/
-BOOL SwHiddenParaField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwHiddenParaField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch ( nWhichId )
     {
@@ -1768,12 +1768,12 @@ BOOL SwHiddenParaField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     default:
         DBG_ERROR("illegal property");
     }
-    return sal_True;
+    return true;
 }
 /*-----------------05.03.98 13:25-------------------
 
 --------------------------------------------------*/
-BOOL SwHiddenParaField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwHiddenParaField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     switch ( nWhichId )
     {
@@ -1787,7 +1787,7 @@ BOOL SwHiddenParaField::PutValue( const uno::Any& rAny, USHORT nWhichId )
     default:
         DBG_ERROR("illegal property");
     }
-    return sal_True;
+    return true;
 }
 
 /*--------------------------------------------------------------------
@@ -1916,7 +1916,7 @@ sal_uInt32 SwPostItField::GetNumberOfParagraphs() const
 /*-----------------05.03.98 13:42-------------------
 
 --------------------------------------------------*/
-BOOL SwPostItField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwPostItField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -1973,14 +1973,14 @@ BOOL SwPostItField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     default:
         DBG_ERROR("illegal property");
     }
-    return sal_True;
+    return true;
 }
 
 
 /*-----------------05.03.98 13:42-------------------
 
 --------------------------------------------------*/
-BOOL SwPostItField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwPostItField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     switch( nWhichId )
     {
@@ -2024,7 +2024,7 @@ BOOL SwPostItField::PutValue( const uno::Any& rAny, USHORT nWhichId )
     default:
         DBG_ERROR("illegal property");
     }
-    return sal_True;
+    return true;
 }
 /*--------------------------------------------------------------------
     Beschreibung: DokumentinfoFields
@@ -2124,7 +2124,7 @@ void SwExtUserField::SetSubType(sal_uInt16 nSub)
 /*-----------------05.03.98 14:14-------------------
 
 --------------------------------------------------*/
-BOOL SwExtUserField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwExtUserField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -2147,12 +2147,12 @@ BOOL SwExtUserField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     default:
         DBG_ERROR("illegal property");
     }
-    return sal_True;
+    return true;
 }
 /*-----------------05.03.98 14:14-------------------
 
 --------------------------------------------------*/
-BOOL SwExtUserField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwExtUserField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     switch( nWhichId )
     {
@@ -2176,7 +2176,7 @@ BOOL SwExtUserField::PutValue( const uno::Any& rAny, USHORT nWhichId )
     default:
         DBG_ERROR("illegal property");
     }
-    return sal_True;
+    return true;
 }
 //-------------------------------------------------------------------------
 
@@ -2244,7 +2244,7 @@ void SwRefPageSetField::SetPar2(const String& rStr)
 /*-----------------05.03.98 14:52-------------------
 
 --------------------------------------------------*/
-BOOL SwRefPageSetField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwRefPageSetField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -2257,12 +2257,12 @@ BOOL SwRefPageSetField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     default:
         DBG_ERROR("illegal property");
     }
-    return sal_True;
+    return true;
 }
 /*-----------------05.03.98 14:52-------------------
 
 --------------------------------------------------*/
-BOOL SwRefPageSetField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwRefPageSetField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     switch( nWhichId )
     {
@@ -2275,7 +2275,7 @@ BOOL SwRefPageSetField::PutValue( const uno::Any& rAny, USHORT nWhichId )
     default:
         DBG_ERROR("illegal property");
     }
-    return sal_True;
+    return true;
 }
 /*--------------------------------------------------------------------
     Beschreibung: relatives Seitennummern - Abfrage Feld
@@ -2515,7 +2515,7 @@ void SwRefPageGetField::ChangeExpansion( const SwFrm* pFrm,
 /*-----------------05.03.98 14:52-------------------
 
 --------------------------------------------------*/
-BOOL SwRefPageGetField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwRefPageGetField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -2528,12 +2528,12 @@ BOOL SwRefPageGetField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
         default:
             DBG_ERROR("illegal property");
     }
-    return sal_True;
+    return true;
 }
 /*-----------------05.03.98 14:52-------------------
 
 --------------------------------------------------*/
-BOOL SwRefPageGetField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwRefPageGetField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     switch( nWhichId )
     {
@@ -2559,7 +2559,7 @@ BOOL SwRefPageGetField::PutValue( const uno::Any& rAny, USHORT nWhichId )
     default:
         DBG_ERROR("illegal property");
     }
-    return sal_True;
+    return true;
 }
 
 /*--------------------------------------------------------------------
@@ -2651,7 +2651,7 @@ void SwJumpEditField::SetPar2(const String& rStr)
 /*-----------------05.03.98 15:00-------------------
 
 --------------------------------------------------*/
-BOOL SwJumpEditField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwJumpEditField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -2680,12 +2680,12 @@ BOOL SwJumpEditField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     default:
         DBG_ERROR("illegal property");
     }
-    return sal_True;
+    return true;
 }
 /*-----------------05.03.98 15:00-------------------
 
 --------------------------------------------------*/
-BOOL SwJumpEditField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwJumpEditField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     switch( nWhichId )
     {
@@ -2715,7 +2715,7 @@ BOOL SwJumpEditField::PutValue( const uno::Any& rAny, USHORT nWhichId )
     default:
         DBG_ERROR("illegal property");
     }
-    return sal_True;
+    return true;
 }
 
 
@@ -2763,7 +2763,7 @@ void SwCombinedCharField::SetPar1(const String& rStr)
     sCharacters = rStr.Copy( 0, MAX_COMBINED_CHARACTERS );
 }
 
-BOOL SwCombinedCharField::QueryValue( uno::Any& rAny,
+bool SwCombinedCharField::QueryValue( uno::Any& rAny,
                                         USHORT nWhichId ) const
 {
     switch( nWhichId )
@@ -2774,10 +2774,10 @@ BOOL SwCombinedCharField::QueryValue( uno::Any& rAny,
     default:
         DBG_ERROR("illegal property");
     }
-    return sal_True;
+    return true;
 }
 
-BOOL SwCombinedCharField::PutValue( const uno::Any& rAny,
+bool SwCombinedCharField::PutValue( const uno::Any& rAny,
                                         USHORT nWhichId )
 {
     switch( nWhichId )
@@ -2788,6 +2788,6 @@ BOOL SwCombinedCharField::PutValue( const uno::Any& rAny,
     default:
         DBG_ERROR("illegal property");
     }
-    return sal_True;
+    return true;
 }
 

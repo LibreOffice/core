@@ -131,7 +131,7 @@ void SwDBFieldType::ReleaseRef()
 /* -----------------24.02.99 14:51-------------------
  *
  * --------------------------------------------------*/
-BOOL SwDBFieldType::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwDBFieldType::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -150,12 +150,12 @@ BOOL SwDBFieldType::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     default:
         DBG_ERROR("illegal property");
     }
-    return TRUE;
+    return true;
 }
 /* -----------------24.02.99 14:51-------------------
  *
  * --------------------------------------------------*/
-BOOL SwDBFieldType::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwDBFieldType::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     switch( nWhichId )
     {
@@ -195,7 +195,7 @@ BOOL SwDBFieldType::PutValue( const uno::Any& rAny, USHORT nWhichId )
     default:
         DBG_ERROR("illegal property");
     }
-    return TRUE;
+    return true;
 }
 /*--------------------------------------------------------------------
     Beschreibung: SwDBField
@@ -423,7 +423,7 @@ void SwDBField::SetSubType(USHORT nType)
 /*-----------------06.03.98 16:15-------------------
 
 --------------------------------------------------*/
-BOOL SwDBField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwDBField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -451,13 +451,13 @@ BOOL SwDBField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     default:
         DBG_ERROR("illegal property");
     }
-    return TRUE;
+    return true;
 
 }
 /*-----------------06.03.98 16:15-------------------
 
 --------------------------------------------------*/
-BOOL SwDBField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwDBField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     switch( nWhichId )
     {
@@ -513,7 +513,7 @@ BOOL SwDBField::PutValue( const uno::Any& rAny, USHORT nWhichId )
     default:
         DBG_ERROR("illegal property");
     }
-    return TRUE;
+    return true;
 }
 
 /*--------------------------------------------------------------------
@@ -567,7 +567,7 @@ String SwDBNameInfField::GetCntnt(BOOL bName) const
 /*-----------------06.03.98 16:55-------------------
 
 --------------------------------------------------*/
-BOOL SwDBNameInfField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwDBNameInfField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -589,12 +589,12 @@ BOOL SwDBNameInfField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     default:
         DBG_ERROR("illegal property");
     }
-    return TRUE;
+    return true;
 }
 /*-----------------06.03.98 16:55-------------------
 
 --------------------------------------------------*/
-BOOL SwDBNameInfField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwDBNameInfField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     switch( nWhichId )
     {
@@ -612,7 +612,7 @@ BOOL SwDBNameInfField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         USHORT nSubTyp = GetSubType();
         sal_Bool bVisible = sal_False;
         if(!(rAny >>= bVisible))
-            return FALSE;
+            return false;
         if(bVisible)
             nSubTyp &= ~nsSwExtendedSubType::SUB_INVISIBLE;
         else
@@ -623,7 +623,7 @@ BOOL SwDBNameInfField::PutValue( const uno::Any& rAny, USHORT nWhichId )
     default:
         DBG_ERROR("illegal property");
     }
-    return TRUE;
+    return true;
 }
 /* -----------------4/10/2003 15:03------------------
 
@@ -712,9 +712,9 @@ void SwDBNextSetField::SetPar1(const String& rStr)
 /*-----------------06.03.98 16:16-------------------
 
 --------------------------------------------------*/
-BOOL SwDBNextSetField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwDBNextSetField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
-    BOOL bRet = TRUE;
+    bool bRet = true;
     switch( nWhichId )
     {
     case FIELD_PROP_PAR3:
@@ -728,9 +728,9 @@ BOOL SwDBNextSetField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 /*-----------------06.03.98 16:16-------------------
 
 --------------------------------------------------*/
-BOOL SwDBNextSetField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwDBNextSetField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
-    BOOL bRet = TRUE;
+    bool bRet = true;
     switch( nWhichId )
     {
     case FIELD_PROP_PAR3:
@@ -848,9 +848,9 @@ void SwDBNumSetField::SetPar2(const String& rStr)
 /*-----------------06.03.98 16:16-------------------
 
 --------------------------------------------------*/
-BOOL SwDBNumSetField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwDBNumSetField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
-    BOOL bRet = TRUE;
+    bool bRet = true;
     switch( nWhichId )
     {
     case FIELD_PROP_PAR3:
@@ -867,9 +867,9 @@ BOOL SwDBNumSetField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 /*-----------------06.03.98 16:16-------------------
 
 --------------------------------------------------*/
-BOOL    SwDBNumSetField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool    SwDBNumSetField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
-    BOOL bRet = TRUE;
+    bool bRet = true;
     switch( nWhichId )
     {
     case FIELD_PROP_PAR3:
@@ -949,14 +949,14 @@ SwField* SwDBNameField::Copy() const
 /*-----------------06.03.98 16:16-------------------
 
 --------------------------------------------------*/
-BOOL SwDBNameField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwDBNameField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     return SwDBNameInfField::QueryValue(rAny, nWhichId );
 }
 /*-----------------06.03.98 16:16-------------------
 
 --------------------------------------------------*/
-BOOL SwDBNameField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwDBNameField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     return SwDBNameInfField::PutValue(rAny, nWhichId );
 }
@@ -1028,9 +1028,9 @@ SwField* SwDBSetNumberField::Copy() const
 /*-----------------06.03.98 16:15-------------------
 
 --------------------------------------------------*/
-BOOL SwDBSetNumberField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwDBSetNumberField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
-    BOOL bRet = TRUE;
+    bool bRet = true;
     switch( nWhichId )
     {
     case FIELD_PROP_USHORT1:
@@ -1047,9 +1047,9 @@ BOOL SwDBSetNumberField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 /*-----------------06.03.98 16:15-------------------
 
 --------------------------------------------------*/
-BOOL SwDBSetNumberField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwDBSetNumberField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
-    BOOL bRet = TRUE;
+    bool bRet = true;
     switch( nWhichId )
     {
     case FIELD_PROP_USHORT1:

@@ -283,8 +283,8 @@ public:
     // nur in abgeleiteten Klassen
     virtual const String&   GetName() const;
     virtual SwFieldType*    Copy()    const = 0;
-    virtual BOOL QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
-    virtual BOOL PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
 
             USHORT          Which() const { return nWhich; }
 
@@ -369,8 +369,8 @@ public:
     virtual void        SetPar1(const String& rStr);
     virtual void        SetPar2(const String& rStr);
 
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhichId ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhichId );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhichId ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhichId );
     // hat das Feld eine Action auf dem ClickHandler ? (z.B. INetFelder,..)
     BOOL            HasClickHdl() const;
     // ist es ein Fix-Feld?

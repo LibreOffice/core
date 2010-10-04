@@ -180,7 +180,7 @@ String SwMacroField::GetPar2() const
 /*-----------------05.03.98 13:38-------------------
 
 --------------------------------------------------*/
-BOOL SwMacroField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwMacroField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -199,12 +199,12 @@ BOOL SwMacroField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     default:
         DBG_ERROR("illegal property");
     }
-    return TRUE;
+    return true;
 }
 /*-----------------05.03.98 13:38-------------------
 
 --------------------------------------------------*/
-BOOL SwMacroField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwMacroField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     String sTmp;
     switch( nWhichId )
@@ -226,7 +226,7 @@ BOOL SwMacroField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         DBG_ERROR("illegal property");
     }
 
-    return TRUE;
+    return true;
 }
 
 // create an internally used macro name from the library and macro name parts

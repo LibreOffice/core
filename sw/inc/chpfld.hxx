@@ -90,8 +90,8 @@ public:
 
     inline const String& GetNumber() const;
     inline const String& GetTitle() const;
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
+    virtual bool         QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
+    virtual bool         PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
 };
 
 inline BYTE SwChapterField::GetLevel() const    { return nLevel; }

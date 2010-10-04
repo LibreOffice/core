@@ -158,7 +158,7 @@ SfxPoolItem* SwFmtDrop::Clone( SfxItemPool* ) const
     return new SwFmtDrop( *this );
 }
 
-sal_Bool SwFmtDrop::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SwFmtDrop::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     switch(nMemberId&~CONVERT_TWIPS)
     {
@@ -187,10 +187,10 @@ sal_Bool SwFmtDrop::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         }
         break;
     }
-    return sal_True;
+    return true;
 }
 
-sal_Bool SwFmtDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SwFmtDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     switch(nMemberId&~CONVERT_TWIPS)
     {
@@ -216,7 +216,7 @@ sal_Bool SwFmtDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if ( rVal >>= nVal )
                 nDistance = (sal_Int16) MM100_TO_TWIP((sal_Int32)nVal);
             else
-                return sal_False;
+                return false;
             break;
         }
         case MID_DROPCAP_FORMAT:
@@ -241,7 +241,7 @@ sal_Bool SwFmtDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             DBG_ERROR("char format cannot be set in PutValue()!");
         break;
     }
-    return sal_True;
+    return true;
 }
 
 // class SwRegisterItem -------------------------------------------------
@@ -267,21 +267,21 @@ int SwNumRuleItem::operator==( const SfxPoolItem& rAttr ) const
 /* -----------------------------27.06.00 11:05--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL    SwNumRuleItem::QueryValue( uno::Any& rVal, BYTE ) const
+bool    SwNumRuleItem::QueryValue( uno::Any& rVal, BYTE ) const
 {
     rtl::OUString sRet = SwStyleNameMapper::GetProgName(GetValue(), nsSwGetPoolIdFromName::GET_POOLID_NUMRULE );
     rVal <<= sRet;
-    return TRUE;
+    return true;
 }
 /* -----------------------------27.06.00 11:05--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL    SwNumRuleItem::PutValue( const uno::Any& rVal, BYTE )
+bool    SwNumRuleItem::PutValue( const uno::Any& rVal, BYTE )
 {
     rtl::OUString uName;
     rVal >>= uName;
     SetValue(SwStyleNameMapper::GetUIName(uName, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE));
-    return TRUE;
+    return true;
 }
 /* -----------------19.05.2003 10:44-----------------
 

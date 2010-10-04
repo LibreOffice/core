@@ -194,9 +194,9 @@ void SwTblField::SetPar2(const String& rStr)
 /*-----------------04.03.98 10:33-------------------
 
 --------------------------------------------------*/
-BOOL SwTblField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwTblField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
-    BOOL bRet = TRUE;
+    bool bRet = true;
     switch ( nWhichId )
     {
     case FIELD_PROP_PAR2:
@@ -221,16 +221,16 @@ BOOL SwTblField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
         rAny <<= (sal_Int32)GetFormat();
         break;
     default:
-        bRet = sal_False;
+        bRet = false;
     }
     return bRet;
 }
 /*-----------------04.03.98 10:33-------------------
 
 --------------------------------------------------*/
-BOOL SwTblField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwTblField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
-    BOOL bRet = TRUE;
+    bool bRet = true;
     String sTmp;
     switch ( nWhichId )
     {
@@ -254,11 +254,8 @@ BOOL SwTblField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         }
         break;
     default:
-        bRet = sal_False;
+        bRet = false;
     }
     return bRet;
 }
-
-
-
 

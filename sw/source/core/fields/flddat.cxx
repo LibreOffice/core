@@ -229,7 +229,7 @@ Time SwDateTimeField::GetTime(BOOL bUseOffset) const
 /*-----------------04.03.98 11:05-------------------
 
 --------------------------------------------------*/
-BOOL SwDateTimeField::QueryValue( uno::Any& rVal, USHORT nWhichId ) const
+bool SwDateTimeField::QueryValue( uno::Any& rVal, USHORT nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -269,12 +269,12 @@ BOOL SwDateTimeField::QueryValue( uno::Any& rVal, USHORT nWhichId ) const
     default:
         return SwField::QueryValue(rVal, nWhichId);
     }
-    return TRUE;
+    return true;
 }
 /*-----------------04.03.98 11:05-------------------
 
 --------------------------------------------------*/
-BOOL SwDateTimeField::PutValue( const uno::Any& rVal, USHORT nWhichId )
+bool SwDateTimeField::PutValue( const uno::Any& rVal, USHORT nWhichId )
 {
     sal_Int32 nTmp = 0;
     switch( nWhichId )
@@ -316,6 +316,6 @@ BOOL SwDateTimeField::PutValue( const uno::Any& rVal, USHORT nWhichId )
         default:
             return SwField::PutValue(rVal, nWhichId);
     }
-    return TRUE;
+    return true;
 }
 

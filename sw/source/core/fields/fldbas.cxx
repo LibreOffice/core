@@ -178,13 +178,13 @@ const String& SwFieldType::GetName() const
     return aEmptyStr;
 }
 
-BOOL SwFieldType::QueryValue( uno::Any&, USHORT ) const
+bool SwFieldType::QueryValue( uno::Any&, USHORT ) const
 {
-    return FALSE;
+    return false;
 }
-BOOL SwFieldType::PutValue( const uno::Any& , USHORT )
+bool SwFieldType::PutValue( const uno::Any& , USHORT )
 {
-    return FALSE;
+    return false;
 }
 
 /*--------------------------------------------------------------------
@@ -326,7 +326,7 @@ void SwField::SetSubType(USHORT )
 //  ASSERT(0, "Sorry Not implemented");
 }
 
-BOOL  SwField::QueryValue( uno::Any& rVal, USHORT nWhichId ) const
+bool  SwField::QueryValue( uno::Any& rVal, USHORT nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -339,9 +339,9 @@ BOOL  SwField::QueryValue( uno::Any& rVal, USHORT nWhichId ) const
         default:
             DBG_ERROR("illegal property");
     }
-    return TRUE;
+    return true;
 }
-BOOL SwField::PutValue( const uno::Any& rVal, USHORT nWhichId )
+bool SwField::PutValue( const uno::Any& rVal, USHORT nWhichId )
 {
     switch( nWhichId )
     {
@@ -355,7 +355,7 @@ BOOL SwField::PutValue( const uno::Any& rVal, USHORT nWhichId )
         default:
             DBG_ERROR("illegal property");
     }
-    return TRUE;
+    return true;
 }
 
 

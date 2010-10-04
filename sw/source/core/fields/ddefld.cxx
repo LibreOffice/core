@@ -331,7 +331,7 @@ void SwDDEFieldType::_RefCntChgd()
 /* -----------------------------28.08.00 16:23--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwDDEFieldType::QueryValue( uno::Any& rVal, USHORT nWhichId ) const
+bool SwDDEFieldType::QueryValue( uno::Any& rVal, USHORT nWhichId ) const
 {
     BYTE nPart = 0;
     switch( nWhichId )
@@ -353,12 +353,12 @@ BOOL SwDDEFieldType::QueryValue( uno::Any& rVal, USHORT nWhichId ) const
     }
     if( nPart )
         rVal <<= OUString(GetCmd().GetToken(nPart-1, sfx2::cTokenSeperator));
-    return TRUE;
+    return true;
 }
 /* -----------------------------28.08.00 16:23--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwDDEFieldType::PutValue( const uno::Any& rVal, USHORT nWhichId )
+bool SwDDEFieldType::PutValue( const uno::Any& rVal, USHORT nWhichId )
 {
     BYTE nPart = 0;
     switch( nWhichId )
@@ -389,7 +389,7 @@ BOOL SwDDEFieldType::PutValue( const uno::Any& rVal, USHORT nWhichId )
         sCmd.SetToken( nPart-1, sfx2::cTokenSeperator, ::GetString( rVal, sTmp ) );
         SetCmd( sCmd );
     }
-    return TRUE;
+    return true;
 }
 /* ---------------------------------------------------------------------------
 

@@ -261,7 +261,7 @@ public:
           - FIELD_PROP_PAR3 Get the help text of the field.
           - FIELD_PROP_PAR4 Get the tool tip of the field.
     */
-    virtual BOOL QueryValue(com::sun::star::uno::Any &rVal, USHORT nWhichId) const;
+    virtual bool QueryValue(com::sun::star::uno::Any &rVal, USHORT nWhichId) const;
 
     /**
        API: Sets a property value on the dropdown field.
@@ -273,7 +273,7 @@ public:
           - FIELD_PROP_PAR3  Set the help text of the field.
           - FIELD_PROP_PAR4  Set the tool tip of the field.
     */
-        virtual BOOL PutValue(const com::sun::star::uno::Any &rVal, USHORT nWhichId);
+    virtual bool PutValue(const com::sun::star::uno::Any &rVal, USHORT nWhichId);
 };
 
 #endif

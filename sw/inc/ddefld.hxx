@@ -63,8 +63,8 @@ public:
     virtual SwFieldType* Copy() const;
     virtual const String& GetName() const;
 
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
 
     String GetCmd() const;
     void SetCmd( const String& rStr );

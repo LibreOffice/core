@@ -77,10 +77,10 @@ SfxPoolItem* SwFmtWrapInfluenceOnObjPos::Clone( SfxItemPool * ) const
     return new SwFmtWrapInfluenceOnObjPos(*this);
 }
 
-BOOL SwFmtWrapInfluenceOnObjPos::QueryValue( Any& rVal, BYTE nMemberId ) const
+bool SwFmtWrapInfluenceOnObjPos::QueryValue( Any& rVal, BYTE nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     switch ( nMemberId )
     {
         case MID_WRAP_INFLUENCE:
@@ -90,16 +90,16 @@ BOOL SwFmtWrapInfluenceOnObjPos::QueryValue( Any& rVal, BYTE nMemberId ) const
         break;
         default:
             ASSERT( false, "<SwFmtWrapInfluenceOnObjPos::QueryValue()> - unknown MemberId" );
-            bRet = sal_False;
+            bRet = false;
     }
 
     return bRet;
 }
 
-BOOL SwFmtWrapInfluenceOnObjPos::PutValue( const Any& rVal, BYTE nMemberId )
+bool SwFmtWrapInfluenceOnObjPos::PutValue( const Any& rVal, BYTE nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
 
     switch ( nMemberId )
     {
@@ -119,13 +119,13 @@ BOOL SwFmtWrapInfluenceOnObjPos::PutValue( const Any& rVal, BYTE nMemberId )
             else
             {
                 ASSERT( false, "<SwFmtWrapInfluenceOnObjPos::PutValue(..)> - invalid attribute value" );
-                bRet = sal_False;
+                bRet = false;
             }
         }
         break;
         default:
             ASSERT( false, "<SwFmtWrapInfluenceOnObjPos::QueryValue()> - unknown MemberId" );
-            bRet = sal_False;
+            bRet = false;
     }
 
     return bRet;

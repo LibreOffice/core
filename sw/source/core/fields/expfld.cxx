@@ -423,7 +423,7 @@ void SwGetExpField::SetLanguage(USHORT nLng)
 /*-----------------07.03.98 16:08-------------------
 
 --------------------------------------------------*/
-BOOL SwGetExpField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwGetExpField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -457,12 +457,12 @@ BOOL SwGetExpField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     default:
         return SwField::QueryValue(rAny, nWhichId);
     }
-    return TRUE;
+    return true;
 }
 /*-----------------07.03.98 16:08-------------------
 
 --------------------------------------------------*/
-BOOL SwGetExpField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwGetExpField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     sal_Int32 nTmp = 0;
     String sTmp;
@@ -499,7 +499,7 @@ BOOL SwGetExpField::PutValue( const uno::Any& rAny, USHORT nWhichId )
     default:
         return SwField::PutValue(rAny, nWhichId);
     }
-    return TRUE;
+    return true;
 }
 
 /*-----------------JP: 17.06.93 -------------------
@@ -655,7 +655,7 @@ void SwSetExpFieldType::SetChapter( SwSetExpField& rFld, const SwNode& rNd )
 /* -----------------24.03.99 09:44-------------------
  *
  * --------------------------------------------------*/
-BOOL SwSetExpFieldType::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwSetExpFieldType::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -677,10 +677,10 @@ BOOL SwSetExpFieldType::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     default:
         DBG_ERROR("illegal property");
     }
-    return TRUE;
+    return true;
 }
 
-BOOL SwSetExpFieldType::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwSetExpFieldType::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     switch( nWhichId )
     {
@@ -714,7 +714,7 @@ BOOL SwSetExpFieldType::PutValue( const uno::Any& rAny, USHORT nWhichId )
     default:
         DBG_ERROR("illegal property");
     }
-    return TRUE;
+    return true;
 }
 
 BOOL SwSeqFldList::InsertSort( _SeqFldLstElem* pNew )
@@ -1069,7 +1069,7 @@ String SwInputField::Expand() const
 /*-----------------06.03.98 11:12-------------------
 
 --------------------------------------------------*/
-BOOL SwInputField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwInputField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -1088,12 +1088,12 @@ BOOL SwInputField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     default:
         DBG_ERROR("illegal property");
     }
-    return TRUE;
+    return true;
 }
 /*-----------------06.03.98 11:12-------------------
 
 --------------------------------------------------*/
-BOOL SwInputField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwInputField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     switch( nWhichId )
     {
@@ -1112,7 +1112,7 @@ BOOL SwInputField::PutValue( const uno::Any& rAny, USHORT nWhichId )
     default:
         DBG_ERROR("illegal property");
     }
-    return TRUE;
+    return true;
 }
 /*--------------------------------------------------------------------
     Beschreibung: Bedingung setzen
@@ -1179,7 +1179,7 @@ void SwInputField::SetSubType(USHORT nSub)
 /*-----------------05.03.98 17:22-------------------
 
 --------------------------------------------------*/
-BOOL SwSetExpField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwSetExpField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -1241,12 +1241,12 @@ BOOL SwSetExpField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     default:
         return SwField::QueryValue(rAny, nWhichId);
     }
-    return TRUE;
+    return true;
 }
 /*-----------------05.03.98 17:22-------------------
 
 --------------------------------------------------*/
-BOOL SwSetExpField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwSetExpField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     sal_Int32 nTmp32 = 0;
     sal_Int16 nTmp16 = 0;
@@ -1323,7 +1323,7 @@ BOOL SwSetExpField::PutValue( const uno::Any& rAny, USHORT nWhichId )
     default:
         return SwField::PutValue(rAny, nWhichId);
     }
-    return TRUE;
+    return true;
 }
 
 

@@ -97,8 +97,8 @@ public:
     virtual SwFieldType* Copy()    const;
     virtual void        Modify( SfxPoolItem *pOld, SfxPoolItem *pNew );
 
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhichId ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhichId );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhichId ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhichId );
 
     inline void     SetDoc(SwDoc* pNewDoc)              { m_pDoc = pNewDoc; }
     SwDoc*          GetDoc(){ return m_pDoc; }
@@ -178,8 +178,8 @@ public:
     virtual void        SetPar1(const String& rStr);
     virtual SwFieldType* ChgTyp( SwFieldType* );
 
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhichId ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhichId );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhichId ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhichId );
 
     long                GetHandle() const       { return m_nHandle; }
 

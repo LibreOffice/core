@@ -442,7 +442,7 @@ USHORT  SwAuthorityFieldType::GetSequencePos(long nHandle)
 /* -----------------------------15.11.00 17:33--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL    SwAuthorityFieldType::QueryValue( Any& rVal, USHORT nWhichId ) const
+bool    SwAuthorityFieldType::QueryValue( Any& rVal, USHORT nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -494,14 +494,14 @@ BOOL    SwAuthorityFieldType::QueryValue( Any& rVal, USHORT nWhichId ) const
     default:
         DBG_ERROR("illegal property");
     }
-    return TRUE;
+    return true;
 }
 /* -----------------------------15.11.00 17:33--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL    SwAuthorityFieldType::PutValue( const Any& rAny, USHORT nWhichId )
+bool    SwAuthorityFieldType::PutValue( const Any& rAny, USHORT nWhichId )
 {
-    sal_Bool bRet = TRUE;
+    bool bRet = true;
     String sTmp;
     switch( nWhichId )
     {
@@ -554,7 +554,7 @@ BOOL    SwAuthorityFieldType::PutValue( const Any& rAny, USHORT nWhichId )
                             if(nVal >= 0 && nVal < AUTH_FIELD_END)
                                 pSortKey->eField = (ToxAuthorityField) nVal;
                             else
-                                bRet = FALSE;
+                                bRet = false;
                         }
                         else if(pValue[j].Name.equalsAsciiL(SW_PROP_NAME(UNO_NAME_IS_SORT_ASCENDING)))
                         {
@@ -742,13 +742,13 @@ const char* aFieldNames[] =
 /* -----------------------------16.11.00 12:27--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL    SwAuthorityField::QueryValue( Any& rAny, USHORT /*nWhichId*/ ) const
+bool    SwAuthorityField::QueryValue( Any& rAny, USHORT /*nWhichId*/ ) const
 {
     if(!GetTyp())
-        return FALSE;
+        return false;
     const SwAuthEntry* pAuthEntry = ((SwAuthorityFieldType*)GetTyp())->GetEntryByHandle(m_nHandle);
     if(!pAuthEntry)
-        return FALSE;
+        return false;
     Sequence <PropertyValue> aRet(AUTH_FIELD_END);
     PropertyValue* pValues = aRet.getArray();
     for(sal_Int16 i = 0; i < AUTH_FIELD_END; i++)
@@ -761,7 +761,8 @@ BOOL    SwAuthorityField::QueryValue( Any& rAny, USHORT /*nWhichId*/ ) const
             pValues[i].Value <<= OUString(rField);
     }
     rAny <<= aRet;
-    return FALSE;
+    /* FIXME: it is weird that we always return false here */
+    return false;
 }
 /* -----------------------------15.11.00 17:33--------------------------------
 
@@ -774,14 +775,14 @@ sal_Int16 lcl_Find(const OUString& rFieldName)
     return -1;
 }
 //----------------------------------------------------------------------------
-BOOL    SwAuthorityField::PutValue( const Any& rAny, USHORT /*nWhichId*/ )
+bool    SwAuthorityField::PutValue( const Any& rAny, USHORT /*nWhichId*/ )
 {
     if(!GetTyp() || !((SwAuthorityFieldType*)GetTyp())->GetEntryByHandle(m_nHandle))
-        return FALSE;
+        return false;
 
     Sequence <PropertyValue> aParam;
     if(!(rAny >>= aParam))
-        return FALSE;
+        return false;
 
     String sToSet;
     sToSet.Fill(AUTH_FIELD_ISBN, TOX_STYLE_DELIMITER);
@@ -807,7 +808,8 @@ BOOL    SwAuthorityField::PutValue( const Any& rAny, USHORT /*nWhichId*/ )
     ((SwAuthorityFieldType*)GetTyp())->RemoveField(m_nHandle);
     m_nHandle = ((SwAuthorityFieldType*)GetTyp())->AddField(sToSet);
 
-    return FALSE;
+    /* FIXME: it is weird that we always return false here */
+    return false;
 }
 /* -----------------11.10.99 09:43-------------------
 

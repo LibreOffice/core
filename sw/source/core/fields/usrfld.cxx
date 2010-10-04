@@ -132,7 +132,7 @@ void SwUserField::SetSubType(sal_uInt16 nSub)
 /*-----------------09.03.98 08:04-------------------
 
 --------------------------------------------------*/
-BOOL SwUserField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwUserField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -154,12 +154,12 @@ BOOL SwUserField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     default:
         return SwField::QueryValue(rAny, nWhichId);
     }
-    return sal_True;
+    return true;
 }
 /*-----------------09.03.98 08:04-------------------
 
 --------------------------------------------------*/
-sal_Bool SwUserField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwUserField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     switch( nWhichId )
     {
@@ -185,7 +185,7 @@ sal_Bool SwUserField::PutValue( const uno::Any& rAny, USHORT nWhichId )
     default:
         return SwField::PutValue(rAny, nWhichId);
     }
-    return sal_True;
+    return true;
 }
 
 /*--------------------------------------------------------------------
@@ -312,7 +312,7 @@ void SwUserFieldType::SetContent( const String& rStr, sal_uInt32 nFmt )
 /*-----------------04.03.98 17:05-------------------
 
 --------------------------------------------------*/
-BOOL SwUserFieldType::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwUserFieldType::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -331,12 +331,12 @@ BOOL SwUserFieldType::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     default:
         DBG_ERROR("illegal property");
     }
-    return sal_True;
+    return true;
 }
 /*-----------------04.03.98 17:05-------------------
 
 --------------------------------------------------*/
-BOOL SwUserFieldType::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwUserFieldType::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     switch( nWhichId )
     {
@@ -371,7 +371,7 @@ BOOL SwUserFieldType::PutValue( const uno::Any& rAny, USHORT nWhichId )
     default:
         DBG_ERROR("illegal property");
     }
-    return sal_True;
+    return true;
 }
 
 

@@ -73,8 +73,8 @@ public:
     BOOL                    IsDeleted() const       { return bDeleted; }
     void                    SetDeleted( BOOL b )    { bDeleted = b; }
 
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nMId ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nMId );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nMId ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nMId );
 };
 
 inline BOOL SwUserFieldType::IsValid() const
@@ -125,8 +125,8 @@ public:
     // Inhalt
     virtual String          GetPar2() const;
     virtual void            SetPar2(const String& rStr);
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhichId ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhichId );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhichId ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhichId );
 };
 
 #endif // _USRFLD_HXX
