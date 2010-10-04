@@ -73,10 +73,10 @@
 #include <tools/diagnose_ex.h>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #ifndef _SVX_SVXIDS_HRC
-#include <svx/svxids.hrc> //CHINA001
+#include <svx/svxids.hrc>
 #endif
-#include <svx/svxdlg.hxx> //CHINA001
-#include <svx/dialogs.hrc> //CHINA001
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
 #include <svx/flagsdef.hxx>
 //............................................................................
 namespace pcr

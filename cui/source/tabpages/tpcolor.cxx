@@ -49,9 +49,8 @@
 #include "svx/drawitem.hxx"
 #include "cuitabarea.hxx"
 #include "tabarea.hrc"
-#include "defdlgname.hxx" //CHINA001 #include "dlgname.hxx"
-//#include "dlgname.hrc"
-#include <svx/svxdlg.hxx> //CHINA001
+#include "defdlgname.hxx"
+#include <svx/svxdlg.hxx>
 #include <dialmgr.hxx>
 #include <cuitabline.hxx>
 #include <svx/dialmgr.hxx>
@@ -303,18 +302,18 @@ long SvxColorTabPage::CheckChanges_Impl()
             ResMgr& rMgr = CUI_MGR();
             Image aWarningBoxImage = WarningBox::GetStandardImage();
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+            DBG_ASSERT(pFact, "Dialogdiet fail!");
             AbstractSvxMessDialog* aMessDlg = pFact->CreateSvxMessDialog( DLGWIN, RID_SVXDLG_MESSBOX,
                                                         SVX_RESSTR( RID_SVXSTR_COLOR ),
                                                         String( ResId( RID_SVXSTR_ASK_CHANGE_COLOR, rMgr ) ),
                                                         &aWarningBoxImage );
-            DBG_ASSERT(aMessDlg, "Dialogdiet fail!");//CHINA001
-            aMessDlg->SetButtonText( MESS_BTN_1, //CHINA001 aMessDlg.SetButtonText( MESS_BTN_1,
+            DBG_ASSERT(aMessDlg, "Dialogdiet fail!");
+            aMessDlg->SetButtonText( MESS_BTN_1,
                                     String( ResId( RID_SVXSTR_CHANGE, rMgr ) ) );
-            aMessDlg->SetButtonText( MESS_BTN_2, //CHINA001 aMessDlg.SetButtonText( MESS_BTN_2,
+            aMessDlg->SetButtonText( MESS_BTN_2,
                                     String( ResId( RID_SVXSTR_ADD, rMgr ) ) );
 
-            short nRet = aMessDlg->Execute(); //CHINA001 short nRet = aMessDlg.Execute();
+            short nRet = aMessDlg->Execute();
 
             switch( nRet )
             {
@@ -334,11 +333,9 @@ long SvxColorTabPage::CheckChanges_Impl()
                 break;
 
                 case RET_CANCEL:
-                    // return( -1L ); <-- wuerde die Seite nicht verlassen
                 break;
-                // return( TRUE ); // Abbruch
             }
-            delete aMessDlg; //add by CHINA001
+            delete aMessDlg;
         }
     }
     if( *pDlgType == 0 ) // Flaechen-Dialog
@@ -361,8 +358,6 @@ BOOL SvxColorTabPage::FillItemSet( SfxItemSet& rSet )
     {
         String aString;
         Color  aColor;
-
-        // CheckChanges_Impl(); <-- doppelte Abfrage ?
 
         USHORT nPos = aLbColor.GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -492,9 +487,9 @@ IMPL_LINK( SvxColorTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
         aWarningBox.Execute();
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+        DBG_ASSERT(pFact, "Dialogdiet fail!");
         AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc );
-        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+        DBG_ASSERT(pDlg, "Dialogdiet fail!");
         BOOL bLoop = TRUE;
 
         while ( !bDifferent && bLoop && pDlg->Execute() == RET_OK )
@@ -578,9 +573,9 @@ IMPL_LINK( SvxColorTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
             aWarningBox.Execute();
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+            DBG_ASSERT(pFact, "Dialogdiet fail!");
             AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");
             BOOL bLoop = TRUE;
 
             while ( !bDifferent && bLoop && pDlg->Execute() == RET_OK )
@@ -838,7 +833,6 @@ IMPL_LINK( SvxColorTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
             }
             else
             {
-                //aIStream.Close();
                 ErrorBox aErrorBox( DLGWIN, WinBits( WB_OK ),
                     String( ResId( RID_SVXSTR_READ_DATA_ERROR, rMgr ) ) );
                 aErrorBox.Execute();

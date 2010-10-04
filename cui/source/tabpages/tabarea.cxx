@@ -50,7 +50,6 @@
 #include "cuitabarea.hxx"
 #include "tabarea.hrc"
 #include "dlgname.hxx"
-//#include "dlgname.hrc"
 #include <dialmgr.hxx>
 
 #define DLGWIN this->GetParent()->GetParent()
@@ -72,7 +71,6 @@ SvxAreaTabDialog::SvxAreaTabDialog
     SfxTabDialog( pParent, CUI_RES( RID_SVXDLG_AREA ), pAttr ),
 
     mpDrawModel          ( pModel ),
-//    mpView               ( pSdrView ),
     mpColorTab           ( pModel->GetColorTable() ),
     mpNewColorTab        ( pModel->GetColorTable() ),
     mpGradientList       ( pModel->GetGradientList() ),
@@ -121,13 +119,6 @@ SvxAreaTabDialog::~SvxAreaTabDialog()
 void SvxAreaTabDialog::SavePalettes()
 {
     SfxObjectShell* pShell = SfxObjectShell::Current();
-    /*uno::Reference< frame::XDispatchProvider > xDispatchProvider;
-    if ( !pShell )
-    {
-        uno::Reference< frame::XModel> xModel = mpDrawModel->getUnoModel();
-        if ( xModel.is() )
-            xDispatchProvider.set(xModel->getCurrentController(),uno::UNO_QUERY);
-    }*/
     if( mpNewColorTab != mpDrawModel->GetColorTable() )
     {
         if(mbDeleteColorTable)
@@ -280,12 +271,9 @@ void SvxAreaTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
             ( (SvxAreaTabPage&) rPage ).SetGradientList( mpGradientList );
             ( (SvxAreaTabPage&) rPage ).SetHatchingList( mpHatchingList );
             ( (SvxAreaTabPage&) rPage ).SetBitmapList( mpBitmapList );
-            //CHINA001 ( (SvxAreaTabPage&) rPage ).SetPageType( &mnPageType );
-            ( (SvxAreaTabPage&) rPage ).SetPageType( mnPageType ); //add CHINA001
-            //CHINA001 ( (SvxAreaTabPage&) rPage ).SetDlgType( &mnDlgType );
-            ( (SvxAreaTabPage&) rPage ).SetDlgType( mnDlgType );//add CHINA001
-            //CHINA001 ( (SvxAreaTabPage&) rPage ).SetPos( &nPos );
-            ( (SvxAreaTabPage&) rPage ).SetPos( mnPos );//add CHINA001
+            ( (SvxAreaTabPage&) rPage ).SetPageType( mnPageType );
+            ( (SvxAreaTabPage&) rPage ).SetDlgType( mnDlgType );
+            ( (SvxAreaTabPage&) rPage ).SetPos( mnPos );
             ( (SvxAreaTabPage&) rPage ).SetAreaTP( &mbAreaTP );
             ( (SvxAreaTabPage&) rPage ).SetGrdChgd( &mnGradientListState );
             ( (SvxAreaTabPage&) rPage ).SetHtchChgd( &mnHatchingListState );
@@ -300,9 +288,8 @@ void SvxAreaTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
         case RID_SVXPAGE_SHADOW:
         {
             ( (SvxShadowTabPage&) rPage ).SetColorTable( mpColorTab );
-            ( (SvxShadowTabPage&) rPage ).SetPageType( mnPageType );//CHINA001 ( (SvxShadowTabPage&) rPage ).SetPageType( &mnPageType );
-            ( (SvxShadowTabPage&) rPage ).SetDlgType( mnDlgType );//CHINA001 ( (SvxShadowTabPage&) rPage ).SetDlgType( &mnDlgType );
-            //( (SvxShadowTabPage&) rPage ).SetPos( &nPos );
+            ( (SvxShadowTabPage&) rPage ).SetPageType( mnPageType );
+            ( (SvxShadowTabPage&) rPage ).SetDlgType( mnDlgType );
             ( (SvxShadowTabPage&) rPage ).SetAreaTP( &mbAreaTP );
             ( (SvxShadowTabPage&) rPage ).SetColorChgd( &mnColorTableState );
             ( (SvxShadowTabPage&) rPage ).Construct();
@@ -357,12 +344,10 @@ void SvxAreaTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
         break;
 
         case RID_SVXPAGE_TRANSPARENCE:
-            ( (SvxTransparenceTabPage&) rPage ).SetPageType( mnPageType );//CHINA001 ( (SvxTransparenceTabPage&) rPage ).SetPageType( &mnPageType );
-            ( (SvxTransparenceTabPage&) rPage ).SetDlgType( mnDlgType );//CHINA001 ( (SvxTransparenceTabPage&) rPage ).SetDlgType( &mnDlgType );
+            ( (SvxTransparenceTabPage&) rPage ).SetPageType( mnPageType );
+            ( (SvxTransparenceTabPage&) rPage ).SetDlgType( mnDlgType );
             ( (SvxTransparenceTabPage&) rPage ).Construct();
         break;
 
     }
 }
-
-
