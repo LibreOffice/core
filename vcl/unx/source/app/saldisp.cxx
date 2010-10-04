@@ -1336,6 +1336,9 @@ XubString SalDisplay::GetKeyName( USHORT nKeyCode ) const
         case KEY_BRACKETRIGHT:
             nKeySym = XK_bracketright;
             break;
+        case KEY_SEMICOLON:
+            nKeySym = XK_semicolon;
+            break;
 
         default:
             nKeySym = 0;
@@ -1674,6 +1677,10 @@ USHORT SalDisplay::GetKeyCode( KeySym keysym, char*pcPrintable ) const
              nKey = KEY_BRACKETRIGHT;
              *pcPrintable = ']';
              break;
+        case XK_semicolon:
+            nKey = KEY_SEMICOLON;
+            *pcPrintable = ';';
+            break;
 //      case XK_Linefeed:
 //          *pcPrintable = '\n';
 //          break;

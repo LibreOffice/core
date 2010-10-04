@@ -157,6 +157,7 @@
 #define KEY_QUOTELEFT   ((USHORT)::com::sun::star::awt::Key::QUOTELEFT)
 #define KEY_BRACKETLEFT ((USHORT)::com::sun::star::awt::Key::BRACKETLEFT)
 #define KEY_BRACKETRIGHT ((USHORT)::com::sun::star::awt::Key::BRACKETRIGHT)
+#define KEY_SEMICOLON   ((USHORT)::com::sun::star::awt::Key::SEMICOLON)
 
 #define KEY_CAPSLOCK    ((USHORT)::com::sun::star::awt::Key::CAPSLOCK)
 #define KEY_NUMLOCK     ((USHORT)::com::sun::star::awt::Key::NUMLOCK)

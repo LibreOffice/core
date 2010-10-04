@@ -378,6 +378,7 @@ void SalData::initKeyCodeMap()
     initKey( '`', KEY_QUOTELEFT );
     initKey( '[', KEY_BRACKETLEFT );
     initKey( ']', KEY_BRACKETRIGHT );
+    initKey( ';', KEY_SEMICOLON );
 }
 
 // =======================================================================

@@ -213,6 +213,7 @@ static USHORT GetKeyCode( guint keyval )
             case GDK_quoteleft: nCode = KEY_QUOTELEFT;      break;
             case GDK_bracketleft:  nCode = KEY_BRACKETLEFT;  break;
             case GDK_bracketright: nCode = KEY_BRACKETRIGHT; break;
+            case GDK_semicolon:    nCode = KEY_SEMICOLON;   break;
             // some special cases, also see saldisp.cxx
             // - - - - - - - - - - - - -  Apollo - - - - - - - - - - - - - 0x1000
             case 0x1000FF02: // apXK_Copy
