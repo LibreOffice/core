@@ -321,14 +321,9 @@ void __EXPORT SwView::ExecutePrint(SfxRequest& rReq)
 SfxTabPage* CreatePrintOptionsPage( Window *pParent,
                                 const SfxItemSet &rOptions, BOOL bPreview )
 {
-    SfxTabPage* pPage = NULL;
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    if ( pFact )
-    {
-        ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( TP_OPTPRINT_PAGE );
-        if ( fnCreatePage )
-            pPage = (*fnCreatePage)( pParent, rOptions );
-    }
+    ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( TP_OPTPRINT_PAGE );
+    SfxTabPage* pPage = (*fnCreatePage)( pParent, rOptions );
     SfxAllItemSet aSet(*(rOptions.GetPool()));
     aSet.Put (SfxBoolItem(SID_PREVIEWFLAG_TYPE, bPreview));
     aSet.Put (SfxBoolItem(SID_FAX_LIST, sal_True));
