@@ -24,67 +24,71 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-package complex;
+package complex.bean;
 
 
-import complexlib.ComplexTestCase;
+// import com.sun.star.comp.beans.LocalOfficeConnection;
+import com.sun.star.uno.XComponentContext;
 import java.awt.Rectangle;
 import java.awt.Insets;
 import java.awt.BorderLayout;
-import java.awt.event.*;
-import java.awt.Frame;
-import java.awt.Dimension;
 import com.sun.star.comp.beans.OOoBean;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.text.XTextDocument;
+
 
 
 class WriterFrame extends java.awt.Frame
 {
     com.sun.star.comp.beans.OOoBean m_bean;
-    String m_sDocURL = "private:factory/swriter";
+    final static String m_sDocURL = "private:factory/swriter";
 
     /**
       @param loadBeforeVisible
           the OOoBean is added to the frame before it is displayable. Then the Java Frame does
           not have a native window peer yet.
      */
-    public WriterFrame(int x, int y, int width, int height, boolean loadBeforeVisible) throws Exception
+    public WriterFrame(int x, int y, int width, int height, boolean loadBeforeVisible, XComponentContext _xConn) throws Exception
     {
 
-        if (loadBeforeVisible == false)
+        try
         {
-            m_bean = new com.sun.star.comp.beans.OOoBean();
-            add(m_bean, BorderLayout.CENTER);
-            pack();
-            setBounds(x, y, width, height);
-            setVisible(true);
-            m_bean.loadFromURL(m_sDocURL, null);
-            validate();
+            if (loadBeforeVisible == false)
+            {
+                m_bean = new com.sun.star.comp.beans.OOoBean(new PrivateLocalOfficeConnection(_xConn));
+                add(m_bean, BorderLayout.CENTER);
+                pack();
+                setBounds(x, y, width, height);
+                setVisible(true);
+                m_bean.loadFromURL(m_sDocURL, null);
+                validate();
+            }
+            else
+            {
+                m_bean = new com.sun.star.comp.beans.OOoBean(new PrivateLocalOfficeConnection(_xConn));
+                m_bean.loadFromURL(m_sDocURL, null);
+                add(m_bean, BorderLayout.CENTER);
+                pack();
+                setBounds(x, y, width, height);
+                setVisible(true);
+                m_bean.aquireSystemWindow();
+            }
         }
-        else
+        catch (Exception e)
         {
-            m_bean = new com.sun.star.comp.beans.OOoBean();
-            m_bean.loadFromURL(m_sDocURL, null);
-            add(m_bean, BorderLayout.CENTER);
-            pack();
-            setBounds(x, y, width, height);
-            setVisible(true);
-            m_bean.aquireSystemWindow();
+            System.out.println("Exception caught: " + e.getMessage());
         }
     }
 
     public WriterFrame() throws Exception
     {
-        this(0, 0, 800, 400, false);
+        this(0, 0, 800, 400, false, null);
     }
 
     public void setText(String s) throws Exception
     {
         com.sun.star.frame.XModel model = (com.sun.star.frame.XModel)m_bean.getDocument();
         com.sun.star.text.XTextDocument myDoc =
-            (XTextDocument) UnoRuntime.queryInterface(com.sun.star.text.XTextDocument.class,
-                                                      model);
+            UnoRuntime.queryInterface(com.sun.star.text.XTextDocument.class, model);
         com.sun.star.text.XText xText = myDoc.getText();
         com.sun.star.text.XTextCursor xTCursor = xText.createTextCursor();
         //inserting some Text
@@ -95,12 +99,12 @@ class WriterFrame extends java.awt.Frame
     {
         com.sun.star.frame.XModel model = (com.sun.star.frame.XModel)m_bean.getDocument();
         com.sun.star.text.XTextDocument myDoc =
-            (XTextDocument) UnoRuntime.queryInterface(com.sun.star.text.XTextDocument.class,
-                                                      model);
+            UnoRuntime.queryInterface(com.sun.star.text.XTextDocument.class, model);
         com.sun.star.text.XText xText = myDoc.getText();
         return xText.getString();
     }
 
+    @Override
     public void dispose() {
         m_bean.stopOOoConnection();
         setVisible(false);
@@ -121,8 +125,7 @@ class WriterFrame extends java.awt.Frame
         com.sun.star.frame.XController xController = xModel.getCurrentController();
 
         com.sun.star.text.XTextViewCursorSupplier xVCSupplier =
-            (com.sun.star.text.XTextViewCursorSupplier) UnoRuntime.queryInterface (
-               com.sun.star.text.XTextViewCursorSupplier.class, xController );
+            UnoRuntime.queryInterface(com.sun.star.text.XTextViewCursorSupplier.class, xController);
 
         com.sun.star.text.XTextViewCursor xTViewCursor = xVCSupplier.getViewCursor ( );
         xTViewCursor.gotoStart(false);
@@ -135,12 +138,10 @@ class WriterFrame extends java.awt.Frame
         com.sun.star.frame.XController xController = xModel.getCurrentController();
 
         com.sun.star.text.XTextViewCursorSupplier xVCSupplier =
-            (com.sun.star.text.XTextViewCursorSupplier) UnoRuntime.queryInterface (
-               com.sun.star.text.XTextViewCursorSupplier.class, xController );
+            UnoRuntime.queryInterface(com.sun.star.text.XTextViewCursorSupplier.class, xController);
         com.sun.star.text.XTextViewCursor xTViewCursor = xVCSupplier.getViewCursor ( );
         com.sun.star.view.XScreenCursor xScreenCursor =
-            (com.sun.star.view.XScreenCursor) UnoRuntime.queryInterface (
-               com.sun.star.view.XScreenCursor.class, xTViewCursor );
+            UnoRuntime.queryInterface(com.sun.star.view.XScreenCursor.class, xTViewCursor);
         xScreenCursor.screenDown();
     }
 
