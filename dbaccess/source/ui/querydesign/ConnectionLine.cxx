@@ -27,30 +27,16 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-#ifndef DBAUI_CONNECTIONLINE_HXX
 #include "ConnectionLine.hxx"
-#endif
-#ifndef DBAUI_CONNECTIONLINEDATA_HXX
 #include "ConnectionLineData.hxx"
-#endif
-#ifndef DBAUI_TABLEWINDOW_HXX
 #include "TableWindow.hxx"
-#endif
-#ifndef DBAUI_TABLEWINDOWLISTBOX_HXX
 #include "TableWindowListBox.hxx"
-#endif
-#ifndef DBAUI_TABLECONNECTION_HXX
 #include "TableConnection.hxx"
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
 #ifndef _INC_MATH
 #include <math.h>
 #endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
 #include <vcl/lineinfo.hxx>
 
 

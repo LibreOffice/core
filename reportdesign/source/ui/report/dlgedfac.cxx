@@ -26,9 +26,7 @@
  ************************************************************************/
 #include "precompiled_reportdesign.hxx"
 #include "dlgedfac.hxx"
-#ifndef REPORTDESIGN_SHARED_UISTRINGS_HRC
 #include "uistrings.hrc"
-#endif
 #include "RptObject.hxx"
 #include <RptDef.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>

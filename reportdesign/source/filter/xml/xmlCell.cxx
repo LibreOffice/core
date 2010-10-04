@@ -37,15 +37,11 @@
 #include "xmlStyleImport.hxx"
 #include <comphelper/namecontainer.hxx>
 #include <comphelper/genericpropertyset.hxx>
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HXX_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
 #include <com/sun/star/report/XShape.hpp>
 #include <com/sun/star/report/XFixedLine.hpp>
 #include <com/sun/star/table/BorderLine.hpp>
-#ifndef RPT_SHARED_XMLSTRINGS_HRC
 #include "xmlstrings.hrc"
-#endif
 #include "xmlTable.hxx"
 #include "xmlFormattedField.hxx"
 #include "xmlImage.hxx"

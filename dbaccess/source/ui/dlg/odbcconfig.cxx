@@ -28,31 +28,15 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef _DBAUI_ODBC_CONFIG_HXX_
 #include "odbcconfig.hxx"
-#endif
 #include <rtl/bootstrap.hxx>
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
-#ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
-#ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
-#endif
-#ifndef _OSL_PROCESS_H_
 #include <osl/process.h>
-#endif
-#ifndef _THREAD_HXX_
 #include <osl/thread.hxx>
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
 
 #ifdef HAVE_ODBC_SUPPORT
 
@@ -98,9 +82,7 @@
 #ifdef SYSTEM_ODBC_HEADERS
 #include <sqlext.h>
 #else
-#ifndef __SQLEXT_H
 #include <odbc/sqlext.h>
-#endif
 #endif
 
 #if defined(WIN) || defined(WNT)

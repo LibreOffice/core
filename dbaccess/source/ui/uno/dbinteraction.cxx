@@ -28,66 +28,26 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef _DBAUI_INTERACTION_HXX_
 #include "dbinteraction.hxx"
-#endif
-#ifndef _DBU_REGHELPER_HXX_
 #include "dbu_reghelper.hxx"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
-#endif
-#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
-#endif
-#ifndef _DBAUI_SQLMESSAGE_HXX_
 #include "sqlmessage.hxx"
-#endif
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONAPPROVE_HPP_
 #include <com/sun/star/task/XInteractionApprove.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONDISAPPROVE_HPP_
 #include <com/sun/star/task/XInteractionDisapprove.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONRETRY_HPP_
 #include <com/sun/star/task/XInteractionRetry.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONABORT_HPP_
 #include <com/sun/star/task/XInteractionAbort.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XINTERACTIONSUPPLYPARAMETERS_HPP_
 #include <com/sun/star/sdb/XInteractionSupplyParameters.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XINTERACTIONDOCUMENTSAVE_HPP_
 #include <com/sun/star/sdb/XInteractionDocumentSave.hpp>
-#endif
-#ifndef SFX_QUERYSAVEDOCUMENT_HXX
 #include <sfx2/QuerySaveDocument.hxx>
-#endif
-#ifndef _DBU_UNO_HRC_
 #include "dbu_uno.hrc"
-#endif
-#ifndef _DBAUI_PARAMDIALOG_HXX_
 #include "paramdialog.hxx"
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
-#endif
-#ifndef DBAUI_COLLECTIONVIEW_HXX
 #include "CollectionView.hxx"
-#endif
-#ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
-#endif
 
 
 //==========================================================================

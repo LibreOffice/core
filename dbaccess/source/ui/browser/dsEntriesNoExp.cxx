@@ -28,33 +28,15 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef _SBA_UNODATBR_HXX_
 #include "unodatbr.hxx"
-#endif
-#ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
-#endif
-#ifndef _DBAUI_LISTVIEWITEMS_HXX_
 #include "listviewitems.hxx"
-#endif
-#ifndef DBACCESS_IMAGEPROVIDER_HXX
 #include "imageprovider.hxx"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef DBACCESS_UI_DBTREEVIEW_HXX
 #include "dbtreeview.hxx"
-#endif
-#ifndef DBAUI_DBTREELISTBOX_HXX
 #include "dbtreelistbox.hxx"
-#endif
-#ifndef _DBU_BRW_HRC_
 #include "dbu_brw.hrc"
-#endif
-#ifndef DBAUI_DBTREEMODEL_HXX
 #include "dbtreemodel.hxx"
-#endif
 
 using namespace ::com::sun::star::frame;
 using namespace ::dbtools;

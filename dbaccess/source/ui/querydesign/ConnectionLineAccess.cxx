@@ -27,39 +27,17 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-#ifndef DBACCESS_CONNECTIONLINEACCESS_HXX
 #include "ConnectionLineAccess.hxx"
-#endif
-#ifndef DBAUI_JOINTABLEVIEW_HXX
 #include "JoinTableView.hxx"
-#endif
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLERELATIONTYPE_HPP_
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
-#endif
-#ifndef _TOOLKIT_AWT_VCLXWINDOW_HXX_
 #include <toolkit/awt/vclxwindow.hxx>
-#endif
-#ifndef DBAUI_TABLECONNECTION_HXX
 #include "TableConnection.hxx"
-#endif
-#ifndef DBAUI_TABLEWINDOW_HXX
 #include "TableWindow.hxx"
-#endif
-#ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
-#endif
-#ifndef DBAUI_JOINDESIGNVIEW_HXX
 #include "JoinDesignView.hxx"
-#endif
-#ifndef DBAUI_JOINCONTROLLER_HXX
 #include "JoinController.hxx"
-#endif
-#ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
-#endif
 
 namespace dbaui
 {

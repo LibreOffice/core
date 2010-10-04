@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef _SBA_MULTIPLEX_HXX
 #include "sbamultiplex.hxx"
-#endif
 using namespace dbaui;
 
 //==================================================================

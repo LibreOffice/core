@@ -42,46 +42,20 @@
 #include "dbu_dlg.hrc"
 #include "dbadmin.hrc"
 
-#ifndef _SFXITEMSET_HXX
 #include <svl/itemset.hxx>
-#endif
-#ifndef _SFXSTRITEM_HXX
 #include <svl/stritem.hxx>
-#endif
-#ifndef _SFXENUMITEM_HXX
 #include <svl/eitem.hxx>
-#endif
-#ifndef _SFXINTITEM_HXX
 #include <svl/intitem.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _SV_MNEMONIC_HXX
 #include <vcl/mnemonic.hxx>
-#endif
-#ifndef _SVTOOLS_CJKOPTIONS_HXX
 #include <svl/cjkoptions.hxx>
-#endif
 #include <jvmaccess/virtualmachine.hxx>
-#ifndef DBAUI_ADABASPAGE_HRC
 #include "AdabasPage.hrc"
-#endif
-#ifndef _DBAUI_ADASTAT_HXX_
 #include "AdabasStat.hxx"
-#endif
-#ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include <connectivity/CommonTools.hxx>
-#endif
-#ifndef DBAUI_DRIVERSETTINGS_HXX
 #include "DriverSettings.hxx"
-#endif
-#ifndef _DBAUI_DBADMIN_HXX_
 #include "dbadmin.hxx"
-#endif
-#ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
-#endif
 #include "AutoControls.hrc"
 
 //.........................................................................

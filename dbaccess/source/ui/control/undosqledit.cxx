@@ -28,12 +28,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef DBAUI_GENERALUNDO_HXX
 #include "undosqledit.hxx"
-#endif
-#ifndef DBAUI_SQLEDIT_HXX
 #include "sqledit.hxx"
-#endif
 
 namespace dbaui
 {

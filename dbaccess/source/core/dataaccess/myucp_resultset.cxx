@@ -37,12 +37,8 @@
 
  *************************************************************************/
 
-#ifndef DBA_DATASUPPLIER_HXX
 #include "myucp_datasupplier.hxx"
-#endif
-#ifndef DBA_UCPRESULTSET_HXX
 #include "myucp_resultset.hxx"
-#endif
 
 
 using namespace ::com::sun::star::uno;

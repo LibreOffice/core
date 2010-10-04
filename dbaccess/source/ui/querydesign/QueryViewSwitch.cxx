@@ -27,36 +27,16 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-#ifndef DBAUI_QUERYVIEWSWITCH_HXX
 #include "QueryViewSwitch.hxx"
-#endif
-#ifndef DBAUI_QUERYDESIGNVIEW_HXX
 #include "QueryDesignView.hxx"
-#endif
-#ifndef DBAUI_QUERYVIEW_TEXT_HXX
 #include "QueryTextView.hxx"
-#endif
-#ifndef DBAUI_QUERYCONTAINERWINDOW_HXX
 #include "querycontainerwindow.hxx"
-#endif
-#ifndef _DBU_QRY_HRC_
 #include "dbu_qry.hrc"
-#endif
-#ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
-#endif
-#ifndef DBAUI_QYDLGTAB_HXX
 #include "adtabdlg.hxx"
-#endif
-#ifndef DBAUI_QUERYCONTROLLER_HXX
 #include "querycontroller.hxx"
-#endif
-#ifndef DBAUI_SQLEDIT_HXX
 #include "sqledit.hxx"
-#endif
-#ifndef DBAUI_QUERYCONTAINERWINDOW_HXX
 #include "querycontainerwindow.hxx"
-#endif
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;

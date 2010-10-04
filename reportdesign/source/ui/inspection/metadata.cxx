@@ -30,15 +30,9 @@
 #include "com/sun/star/inspection/XPropertyHandler.hpp"
 #include <tools/debug.hxx>
 #include <cppuhelper/extract.hxx>
-#ifndef RTPUI_REPORTDESIGN_HELPID_HRC
 #include "helpids.hrc"
-#endif
-#ifndef _RPTUI_DLGRESID_HRC
 #include "RptResId.hrc"
-#endif
-#ifndef REPORTDESIGN_SHARED_UISTRINGS_HRC
 #include "uistrings.hrc"
-#endif
 
 #include <functional>
 #include <algorithm>

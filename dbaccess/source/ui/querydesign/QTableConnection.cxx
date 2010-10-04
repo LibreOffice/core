@@ -27,18 +27,10 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-#ifndef DBAUI_QUERYTABLECONNECTION_HXX
 #include "QTableConnection.hxx"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef DBAUI_QUERYTABLEVIEW_HXX
 #include "QueryTableView.hxx"
-#endif
-#ifndef DBAUI_CONNECTIONLINE_HXX
 #include "ConnectionLine.hxx"
-#endif
 using namespace dbaui;
 //========================================================================
 // class OQueryTableConnection

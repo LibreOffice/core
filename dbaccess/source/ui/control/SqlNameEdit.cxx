@@ -27,9 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-#ifndef DBAUI_SQLNAMEEDIT_HXX
 #include "SqlNameEdit.hxx"
-#endif
 namespace dbaui
 {
     //------------------------------------------------------------------

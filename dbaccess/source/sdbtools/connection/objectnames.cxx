@@ -28,16 +28,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef DBACCESS_SOURCE_SDBTOOLS_CONNECTION_OBJECTNAMES_HXX
 #include "objectnames.hxx"
-#endif
 
-#ifndef DBACCESS_MODULE_SDBT_HXX
 #include "module_sdbt.hxx"
-#endif
-#ifndef DBACCESS_SDBT_RESOURCE_HRC
 #include "sdbt_resource.hrc"
-#endif
 
 /** === begin UNO includes === **/
 #include <com/sun/star/lang/NullPointerException.hpp>

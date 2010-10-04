@@ -29,28 +29,20 @@
 #include "RptObject.hxx"
 #include "ReportController.hxx"
 #include <cppuhelper/component_context.hxx>
-#ifndef _REPORT_DLGRESID_HRC
 #include <RptResId.hrc>
-#endif
-#ifndef _RPTUI_SLOTID_HRC_
 #include "rptui_slotid.hrc"
-#endif
 #include <tools/debug.hxx>
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
 #include <com/sun/star/inspection/ObjectInspector.hpp>
 #include <com/sun/star/inspection/DefaultHelpProvider.hpp>
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <vcl/stdtext.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svditer.hxx>
 
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 #include <comphelper/property.hxx>
 #include <comphelper/namecontainer.hxx>
 #include <comphelper/composedprops.hxx>
@@ -64,9 +56,7 @@
 #include <comphelper/processfactory.hxx>
 #include "SectionView.hxx"
 #include "ReportSection.hxx"
-#ifndef REPORTDESIGN_SHARED_UISTRINGS_HRC
 #include "uistrings.hrc"
-#endif
 #include "DesignView.hxx"
 #include "ViewsWindow.hxx"
 #include "UITools.hxx"

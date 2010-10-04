@@ -28,56 +28,26 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef DBAUI_DBTREELISTBOX_HXX
 #include "dbtreelistbox.hxx"
-#endif
-#ifndef _DBU_RESOURCE_HRC_
 #include "dbu_resource.hrc"
-#endif
-#ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
-#endif
-#ifndef _DBAUI_LISTVIEWITEMS_HXX_
 #include "listviewitems.hxx"
-#endif
-#ifndef _DBACCESS_UI_CALLBACKS_HXX_
 #include "callbacks.hxx"
-#endif
 
 #ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDRAGGESTURELISTENER_HDL_
 #include <com/sun/star/datatransfer/dnd/XDragGestureListener.hdl>
 #endif
-#ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDRAGGESTURERECOGNIZER_HPP_
 #include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_XCONTEXTMENUINTERCEPTOR_HPP_
 #include <com/sun/star/ui/XContextMenuInterceptor.hpp>
-#endif
 #include <com/sun/star/frame/XFrame.hpp>
-#ifndef _COM_SUN_STAR_UTIL_URL_HPP_
 #include <com/sun/star/util/URL.hpp>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
-#endif
-#ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
-#endif
-#ifndef _SV_HELP_HXX
 #include <vcl/help.hxx>
-#endif
-#ifndef _DBAUI_TABLETREE_HRC_
 #include "tabletree.hrc"
-#endif
-#ifndef DBAUI_ICONTROLLER_HXX
 #include "IController.hxx"
-#endif
-#ifndef __FRAMEWORK_HELPER_ACTIONTRIGGERHELPER_HXX_
 #include <framework/actiontriggerhelper.hxx>
-#endif
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
 #include <framework/imageproducer.hxx>
 #include <vcl/svapp.hxx>
 #include <memory>

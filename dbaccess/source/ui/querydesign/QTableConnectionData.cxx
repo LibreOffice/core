@@ -27,18 +27,10 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-#ifndef DBAUI_QTABLECONNECTIONDATA_HXX
 #include "QTableConnectionData.hxx"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef DBAUI_QTABLECONNECTIONDATA_HXX
 #include "QTableConnectionData.hxx"
-#endif
-#ifndef DBAUI_QUERY_TABLEWINDOWDATA_HXX
 #include "QTableWindow.hxx"
-#endif
 
 using namespace dbaui;
 

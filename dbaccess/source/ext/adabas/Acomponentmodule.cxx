@@ -26,22 +26,12 @@
  ************************************************************************/
 
 
-#ifndef _EXTENSIONS_COMPONENT_MODULE_HXX_
 #include "Acomponentmodule.hxx"
-#endif
 
-#ifndef _TOOLS_RESMGR_HXX
 #include <tools/resmgr.hxx>
-#endif
-#ifndef _SOLAR_HRC
 #include <svl/solar.hrc>
-#endif
-#ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
 
 #define ENTER_MOD_METHOD()  \
     ::osl::MutexGuard aGuard(s_aMutex); \

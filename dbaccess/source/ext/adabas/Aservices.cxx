@@ -25,15 +25,9 @@
  *
  ************************************************************************/
 
-#ifndef _CPPUHELPER_FACTORY_HXX_
 #include <cppuhelper/factory.hxx>
-#endif
-#ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
-#endif
-#ifndef _EXTENSIONS_COMPONENT_MODULE_HXX_
 #include "Acomponentmodule.hxx"
-#endif
 
 
 /********************************************************************************************/

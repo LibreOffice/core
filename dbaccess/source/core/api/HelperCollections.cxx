@@ -27,13 +27,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-#ifndef DBA_HELPERCOLLECTIONS_HXX
 #include "HelperCollections.hxx"
-#endif
 
-#ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
-#endif
 
 namespace dbaccess
 {

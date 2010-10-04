@@ -26,9 +26,7 @@
  ************************************************************************/
 #include "precompiled_reportdesign.hxx"
 
-#ifndef RPT_XMLCOLUMN_HXX
 #include "xmlColumn.hxx"
-#endif
 #include <xmloff/xmluconv.hxx>
 #include "xmlfilter.hxx"
 #include <xmloff/xmltoken.hxx>
@@ -41,12 +39,8 @@
 #include "xmlTable.hxx"
 #include <comphelper/namecontainer.hxx>
 #include <comphelper/genericpropertyset.hxx>
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HXX_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef RPT_SHARED_XMLSTRINGS_HRC
 #include "xmlstrings.hrc"
-#endif
 
 #define PROPERTY_ID_WIDTH    1
 #define PROPERTY_ID_HEIGHT   2

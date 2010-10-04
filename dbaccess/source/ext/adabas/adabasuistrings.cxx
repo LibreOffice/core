@@ -25,9 +25,7 @@
  *
  ************************************************************************/
 
-#ifndef ADABASUI_SHARED_DBUSTRINGS_HRC
 #include "adabasuistrings.hrc"
-#endif
 
 namespace adabasui
 {

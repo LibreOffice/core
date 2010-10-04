@@ -33,14 +33,10 @@
 #include <tools/resmgr.hxx>
 
 // ---- needed as long as we have no contexts for components ---
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
 //---------------------------------------------------
 
-#ifndef _SOLAR_HRC
 #include <svl/solar.hrc>
-#endif
 
 //.........................................................................
 namespace dbaccess

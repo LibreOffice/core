@@ -27,36 +27,16 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-#ifndef DBAUI_TABLEWINDOW_HXX
 #include "TableWindow.hxx"
-#endif
-#ifndef DBAUI_TABLEWINDOWLISTBOX_HXX
 #include "TableWindowListBox.hxx"
-#endif
-#ifndef DBAUI_QUERYTABLEVIEW_HXX
 #include "QueryTableView.hxx"
-#endif
-#ifndef DBAUI_QUERYDESIGNVIEW_HXX
 #include "QueryDesignView.hxx"
-#endif
-#ifndef DBAUI_TABLEWINDOWDATA_HXX
 #include "TableWindowData.hxx"
-#endif
-#ifndef DBACCESS_IMAGEPROVIDER_HXX
 #include "imageprovider.hxx"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _SV_WALL_HXX
 #include <vcl/wall.hxx>
-#endif
 
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>

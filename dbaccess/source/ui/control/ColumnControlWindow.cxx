@@ -27,24 +27,12 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-#ifndef DBAUI_COLUMNCONTROLWINDOW_HXX
 #include "ColumnControlWindow.hxx"
-#endif
-#ifndef DBAUI_FIELDCONTROLS_HXX
 #include "FieldControls.hxx"
-#endif
-#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
 #include <unotools/syslocale.hxx>
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
-#endif
-#ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
-#endif
-#ifndef _DBU_RESOURCE_HRC_
 #include "dbu_resource.hrc"
-#endif
 
 
 using namespace ::dbaui;

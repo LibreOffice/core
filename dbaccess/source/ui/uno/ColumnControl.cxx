@@ -27,24 +27,12 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-#ifndef DBAUI_COLUMNCONTROL_HXX
 #include "ColumnControl.hxx"
-#endif
-#ifndef DBAUI_COLUMNPEER_HXX
 #include "ColumnPeer.hxx"
-#endif
-#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
-#endif
-#ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
-#endif
-#ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
 #include <com/sun/star/awt/PosSize.hpp>
-#endif
-#ifndef _DBU_REGHELPER_HXX_
 #include "dbu_reghelper.hxx"
-#endif
 
 extern "C" void SAL_CALL createRegistryInfo_OColumnControl()
 {

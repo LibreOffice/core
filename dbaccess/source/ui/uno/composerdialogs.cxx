@@ -28,36 +28,18 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef DBACCESS_SOURCE_UI_UNO_COMPOSERDIALOGS_HXX
 #include "composerdialogs.hxx"
-#endif
 
 /** === begin UNO includes === **/
-#ifndef _DBU_REGHELPER_HXX_
 #include "dbu_reghelper.hxx"
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#endif
 /** === end UNO includes === **/
-#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
-#endif
-#ifndef DBAUI_QUERYFILTER_HXX
 #include "queryfilter.hxx"
-#endif
-#ifndef DBAUI_QUERYORDER_HXX
 #include "queryorder.hxx"
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
-#endif
 
 extern "C" void SAL_CALL createRegistryInfo_ComposerDialogs()
 {

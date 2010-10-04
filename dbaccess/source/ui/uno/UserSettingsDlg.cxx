@@ -28,15 +28,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef _DBU_REGHELPER_HXX_
 #include "dbu_reghelper.hxx"
-#endif
-#ifndef _DBAUI_USERSETTINGSDLG_HXX
 #include "UserSettingsDlg.hxx"
-#endif
-#ifndef DBAUI_USERADMINDLG_HXX
 #include "UserAdminDlg.hxx"
-#endif
 
 
 using namespace dbaui;

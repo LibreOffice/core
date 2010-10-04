@@ -27,27 +27,13 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-#ifndef DBAUI_QUERYTABCONNUNDOACTION_HXX
 #include "QueryTabConnUndoAction.hxx"
-#endif
-#ifndef DBAUI_QUERYTABLECONNECTION_HXX
 #include "QTableConnection.hxx"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef DBAUI_QUERYTABLEVIEW_HXX
 #include "QueryTableView.hxx"
-#endif
-#ifndef DBAUI_QUERYADDTABCONNUNDOACTION_HXX
 #include "QueryAddTabConnUndoAction.hxx"
-#endif
-#ifndef DBAUI_QUERYTABWINSHOWUNDOACT_HXX
 #include "QueryTabWinShowUndoAct.hxx"
-#endif
-#ifndef _DBU_QRY_HRC_
 #include "dbu_qry.hrc"
-#endif
 
 using namespace dbaui;
 

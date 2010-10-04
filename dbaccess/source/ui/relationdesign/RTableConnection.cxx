@@ -27,21 +27,11 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-#ifndef DBAUI_RTABLECONNECTION_HXX
 #include "RTableConnection.hxx"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef DBAUI_RELATION_TABLEVIEW_HXX
 #include "RelationTableView.hxx"
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef DBAUI_CONNECTIONLINE_HXX
 #include "ConnectionLine.hxx"
-#endif
 
 using namespace dbaui;
 //========================================================================

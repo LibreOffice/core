@@ -27,21 +27,11 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-#ifndef DBA_XMLAUTOSTYLE_HXX
 #include "xmlAutoStyle.hxx"
-#endif
-#ifndef DBA_XMLHELPER_HXX
 #include "xmlHelper.hxx"
-#endif
-#ifndef DBA_XMLEXPORT_HXX
 #include "xmlExport.hxx"
-#endif
-#ifndef _XMLOFF_FAMILIES_HXX_
 #include <xmloff/families.hxx>
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
 namespace dbaxml
 {
     using namespace ::com::sun::star::uno;

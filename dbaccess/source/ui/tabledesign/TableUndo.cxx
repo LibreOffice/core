@@ -27,33 +27,15 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-#ifndef DBAUI_TABLEUNDO_HXX
 #include "TableUndo.hxx"
-#endif
-#ifndef _DBU_TBL_HRC_
 #include "dbu_tbl.hrc"
-#endif
-#ifndef DBAUI_TABLEEDITORCONTROL_HXX
 #include "TEditControl.hxx"
-#endif
-#ifndef DBAUI_TABLEROW_HXX
 #include "TableRow.hxx"
-#endif
-#ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
-#endif
-#ifndef DBUI_TABLECONTROLLER_HXX
 #include "TableController.hxx"
-#endif
-#ifndef DBAUI_TABLEDESIGNVIEW_HXX
 #include "TableDesignView.hxx"
-#endif
-#ifndef DBAUI_FIELDDESCRIPTIONS_HXX
 #include "FieldDescriptions.hxx"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
 
 using namespace dbaui;
 using namespace ::svt;

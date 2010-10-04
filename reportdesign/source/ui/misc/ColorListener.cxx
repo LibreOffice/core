@@ -27,9 +27,7 @@
 #include "precompiled_reportdesign.hxx"
 #include "ColorListener.hxx"
 #include <svl/smplhint.hxx>
-#ifndef REPORTDESIGN_SHARED_UISTRINGS_HRC
 #include "uistrings.hrc"
-#endif
 
 #define BORDERCOLORCHANGE 191
 //=====================================================================

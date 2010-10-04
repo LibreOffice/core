@@ -27,30 +27,14 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-#ifndef DBAUI_OQueryTabWinUndoAct_HXX
 #include "QueryTabWinUndoAct.hxx"
-#endif
-#ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
-#endif
-#ifndef DBAUI_QUERY_TABLEWINDOW_HXX
 #include "QTableWindow.hxx"
-#endif
-#ifndef DBAUI_QUERY_TABLEWINDOWDATA_HXX
 #include "QTableWindowData.hxx"
-#endif
-#ifndef DBAUI_TABLECONNECTION_HXX
 #include "TableConnection.hxx"
-#endif
-#ifndef DBAUI_TABLECONNECTIONDATA_HXX
 #include "TableConnectionData.hxx"
-#endif
-#ifndef DBAUI_QUERYDESIGNFIELDUNDOACT_HXX
 #include "QueryDesignFieldUndoAct.hxx"
-#endif
-#ifndef DBAUI_QUERYTABLEVIEW_HXX
 #include "QueryTableView.hxx"
-#endif
 
 
 using namespace dbaui;

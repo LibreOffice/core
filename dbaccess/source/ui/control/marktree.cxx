@@ -28,15 +28,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef _DBAUI_MARKTREE_HXX_
 #include "marktree.hxx"
-#endif
-#ifndef _DBU_CONTROL_HRC_
 #include "dbu_control.hrc"
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
 
 //.........................................................................
 namespace dbaui

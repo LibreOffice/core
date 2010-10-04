@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef DBA_CONTAINERLISTENER_HXX
 #include "ContainerListener.hxx"
-#endif
 
 //........................................................................
 namespace dbaccess

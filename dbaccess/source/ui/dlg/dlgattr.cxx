@@ -29,43 +29,23 @@
 #include "precompiled_dbaccess.hxx"
 
 
-#ifndef DBAUI_SBATTRDLG_HXX
 #include "dlgattr.hxx"
-#endif
 
-#ifndef _SFXTABDLG_HXX //autogen
 #include <sfx2/tabdlg.hxx>
-#endif
 
-#ifndef _SVX_NUMINF_HXX //autogen
 #include <svx/numinf.hxx>
-#endif
 
-#ifndef _SVX_NUMINF_HXX
 #include <svx/numinf.hxx>
-#endif
 
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
-#ifndef _DBU_DLG_HRC_
 #include "dbu_dlg.hrc"
-#endif
-#ifndef _SFXITEMSET_HXX
 #include <svl/itemset.hxx>
-#endif
 #define _ZFORLIST_DECLARE_TABLE
-#ifndef _ZFORLIST_HXX
 #include <svl/zforlist.hxx>
-#endif
 #include <svx/svxids.hrc>
 #include <svx/flagsdef.hxx>
-#ifndef _SFXINTITEM_HXX
 #include <svl/intitem.hxx>
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
-#endif
 using namespace dbaui;
 
 DBG_NAME(SbaSbAttrDlg)

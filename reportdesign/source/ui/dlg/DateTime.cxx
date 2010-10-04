@@ -26,39 +26,21 @@
  ************************************************************************/
 #include "precompiled_reportdesign.hxx"
 #include "DateTime.hxx"
-#ifndef RPTUI_DATETIME_HRC
 #include "DateTime.hrc"
-#endif
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <tools/debug.hxx>
-#ifndef _RPTUI_DLGRESID_HRC
 #include "RptResId.hrc"
-#endif
-#ifndef _RPTUI_SLOTID_HRC_
 #include "rptui_slotid.hrc"
-#endif
-#ifndef _RPTUI_MODULE_HELPER_DBU_HXX_
 #include "ModuleHelper.hxx"
-#endif
-#ifndef RTPUI_REPORTDESIGN_HELPID_HRC
 #include "helpids.hrc"
-#endif
 #include <vcl/msgbox.hxx>
-#ifndef _GLOBLMN_HRC
 #include <svx/globlmn.hrc>
-#endif
-#ifndef _SBASLTID_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <connectivity/dbconversion.hxx>
 #include <unotools/syslocale.hxx>
-#ifndef RPTUI_TOOLS_HXX
 #include "UITools.hxx"
-#endif
 #include "RptDef.hxx"
-#ifndef REPORTDESIGN_SHARED_UISTRINGS_HRC
 #include "uistrings.hrc"
-#endif
 #include "ReportController.hxx"
 #include <com/sun/star/report/XFormattedField.hpp>
 #include <com/sun/star/util/Time.hpp>

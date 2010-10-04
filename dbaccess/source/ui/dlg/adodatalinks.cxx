@@ -44,9 +44,7 @@
 #include <adoid.h>     // needed for CLSID_CADOConnection
 #include <adoint.h>    // needed for ADOConnection
 
-#ifndef _DBAUI_ADO_DATALINK_HXX_
 #include "adodatalinks.hxx"
-#endif
 
 BSTR PromptEdit(long hWnd,BSTR connstr);
 BSTR PromptNew(long hWnd);

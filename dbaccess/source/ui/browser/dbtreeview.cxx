@@ -28,18 +28,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef DBACCESS_UI_DBTREEVIEW_HXX
 #include "dbtreeview.hxx"
-#endif
-#ifndef _SVTREEBOX_HXX
 #include <svtools/svtreebx.hxx>
-#endif
-#ifndef DBAUI_DBTREELISTBOX_HXX
 #include "dbtreelistbox.hxx"
-#endif
-#ifndef DBAUI_DBTREEMODEL_HXX
 #include "dbtreemodel.hxx"
-#endif
 #include "dbaccess_helpid.hrc"
 
 // .........................................................................

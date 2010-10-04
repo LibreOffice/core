@@ -28,9 +28,7 @@
 #include "ReportComponentHandler.hxx"
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <comphelper/sequence.hxx>
-#ifndef REPORTDESIGN_SHARED_UISTRINGS_HRC
 #include "uistrings.hrc"
-#endif
 #include <comphelper/types.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/syslocale.hxx>

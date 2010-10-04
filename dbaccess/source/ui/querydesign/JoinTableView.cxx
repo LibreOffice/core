@@ -27,73 +27,29 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-#ifndef DBAUI_QUERYTABLEVIEW_HXX
 #include "JoinTableView.hxx"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef DBAUI_QUERYCONTROLLER_HXX
 #include "querycontroller.hxx"
-#endif
-#ifndef DBAUI_JOINDESIGNVIEW_HXX
 #include "JoinDesignView.hxx"
-#endif
-#ifndef _DBU_QRY_HRC_
 #include "dbu_qry.hrc"
-#endif
-#ifndef DBAUI_TABLEWINDOW_HXX
 #include "TableWindow.hxx"
-#endif
-#ifndef DBAUI_TABLEWINDOWLISTBOX_HXX
 #include "TableWindowListBox.hxx"
-#endif
-#ifndef DBAUI_TABLECONNECTION_HXX
 #include "TableConnection.hxx"
-#endif
-#ifndef DBAUI_TABLECONNECTIONDATA_HXX
 #include "TableConnectionData.hxx"
-#endif
-#ifndef DBAUI_CONNECTIONLINE_HXX
 #include "ConnectionLine.hxx"
-#endif
-#ifndef DBAUI_CONNECTIONLINEDATA_HXX
 #include "ConnectionLineData.hxx"
-#endif
-#ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
-#endif
-#ifndef _URLBMK_HXX
 #include <svl/urlbmk.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#endif
-#ifndef DBAUI_OQUERYMOVETABWINUNDOACT_HXX
 #include "QueryMoveTabWinUndoAct.hxx"
-#endif
-#ifndef DBAUI_QUERYSIZETABWINUNDOACT_HXX
 #include "QuerySizeTabWinUndoAct.hxx"
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef DBAUI_TABLEWINDOWDATA_HXX
 #include "TableWindowData.hxx"
-#endif
-#ifndef DBACCESS_JACCESS_HXX
 #include "JAccess.hxx"
-#endif
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#endif
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
-#endif
 #include <cppuhelper/exc_hlp.hxx>
 #include <tools/diagnose_ex.h>
 #include <boost/bind.hpp>

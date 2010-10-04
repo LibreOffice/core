@@ -28,19 +28,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef DBACCESS_DATASOURCEMETADATA_HXX
 #include "datasourcemetadata.hxx"
-#endif
 
 /** === begin UNO includes === **/
-#ifndef _COM_SUN_STAR_LANG_NULLPOINTEREXCEPTION_HPP_
 #include <com/sun/star/lang/NullPointerException.hpp>
-#endif
 /** === end UNO includes === **/
 
-#ifndef CONNECTIVITY_INC_CONNECTIVITY_DBMETADATA_HXX
 #include <connectivity/dbmetadata.hxx>
-#endif
 
 //........................................................................
 namespace sdbtools

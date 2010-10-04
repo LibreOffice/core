@@ -28,19 +28,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef _DBA_COREDATAACCESS_COMMANDCONTAINER_HXX_
 #include "commandcontainer.hxx"
-#endif
-#ifndef _DBA_COREDATAACESS_COMMANDDEFINITION_HXX_
 #include "commanddefinition.hxx"
-#endif
 
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
-#endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

@@ -34,18 +34,14 @@
 #include "RptDef.hxx"
 #include "xmlHelper.hxx"
 #include "xmlEnums.hxx"
-#ifndef RPT_XMLCOLUMN_HXX
 #include "xmlColumn.hxx"
-#endif
 #include <com/sun/star/report/ForceNewPage.hpp>
 #include "xmlCondPrtExpr.hxx"
 #include "xmlStyleImport.hxx"
 #include "xmlstrings.hrc"
 #include <connectivity/dbtools.hxx>
 #include <tools/debug.hxx>
-#ifndef REPORTDESIGN_SHARED_XMLSTRINGS_HRC
 #include "xmlstrings.hrc"
-#endif
 #include <com/sun/star/report/XShape.hpp>
 #include <com/sun/star/report/XFixedLine.hpp>
 

@@ -27,15 +27,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-#ifndef DBA_XMLTABLEFILTERPATTERN_HXX
 #include "xmlTableFilterPattern.hxx"
-#endif
-#ifndef DBA_XMLTABLEFILTERLIST_HXX
 #include "xmlTableFilterList.hxx"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
 
 namespace dbaxml
 {

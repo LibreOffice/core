@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef _DBAUI_PROPERTYSETITEM_HXX_
 #include "propertysetitem.hxx"
-#endif
 
 //.........................................................................
 namespace dbaui

@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef DBACCESS_VETO_HXX
 #include "veto.hxx"
-#endif
 
 /** === begin UNO includes === **/
 /** === end UNO includes === **/

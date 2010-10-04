@@ -27,37 +27,19 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-#ifndef DBA_XMLCONNECTIONDATA_HXX_INCLUDED
 #include "xmlConnectionData.hxx"
-#endif
-#ifndef DBA_XMLLOGIN_HXX
 #include "xmlLogin.hxx"
-#endif
-#ifndef DBA_XMLTABLEFILTERLIST_HXX
 #include "xmlTableFilterList.hxx"
-#endif
-#ifndef DBA_XMLFILTER_HXX
 #include "xmlfilter.hxx"
-#endif
-#ifndef _XMLOFF_XMLTOKEN_HXX
 #include <xmloff/xmltoken.hxx>
-#endif
-#ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmloff/xmlnmspe.hxx>
-#endif
-#ifndef _XMLOFF_NMSPMAP_HXX
 #include <xmloff/nmspmap.hxx>
-#endif
 #include "xmlEnums.hxx"
 #include "xmlDatabaseDescription.hxx"
 #include "xmlConnectionResource.hxx"
 #include "xmlstrings.hrc"
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
-#endif
 
 namespace dbaxml
 {

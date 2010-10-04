@@ -29,12 +29,8 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/report/GroupOn.hpp>
 #include <com/sun/star/report/KeepTogether.hpp>
-#ifndef REPORTDESIGN_SHARED_CORESTRINGS_HRC
 #include "corestrings.hrc"
-#endif
-#ifndef REPORTDESIGN_CORE_RESOURCE_HRC_
 #include "core_resource.hrc"
-#endif
 #include "core_resource.hxx"
 #include "Tools.hxx"
 #include <tools/debug.hxx>

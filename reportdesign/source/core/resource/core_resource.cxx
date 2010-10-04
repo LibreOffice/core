@@ -38,9 +38,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <rtl/uri.hxx>
 
-#ifndef _SOLAR_HRC
 #include <svl/solar.hrc>
-#endif
 #include "ModuleHelper.hxx"
 //.........................................................................
 namespace reportdesign

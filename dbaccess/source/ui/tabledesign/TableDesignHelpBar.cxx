@@ -27,18 +27,10 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-#ifndef DBAUI_TABLEDESIGNHELPBAR_HXX
 #include "TableDesignHelpBar.hxx"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef _SVEDIT_HXX
 #include <svtools/svmedit.hxx>
-#endif
-#ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
-#endif
 #include <memory>
 using namespace dbaui;
 #define STANDARD_MARGIN                 6

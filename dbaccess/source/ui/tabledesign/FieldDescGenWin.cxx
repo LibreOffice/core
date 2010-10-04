@@ -27,27 +27,13 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-#ifndef DBAUI_TABLEFIELDDESCGENPAGE_HXX
 #include "FieldDescGenWin.hxx"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
-#endif
-#ifndef DBAUI_TABLEDESIGNHELPBAR_HXX
 #include "TableDesignHelpBar.hxx"
-#endif
-#ifndef DBAUI_TABLEFIELDCONTROL_HXX
 #include "TableFieldControl.hxx"
-#endif
-#ifndef DBAUI_TABLEDESIGNVIEW_HXX
 #include "TableDesignView.hxx"
-#endif
-#ifndef DBAUI_TABLEEDITORCONTROL_HXX
 #include "TEditControl.hxx"
-#endif
 using namespace dbaui;
 
 //==================================================================

@@ -29,13 +29,9 @@
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#ifndef _REPORT_DLGRESID_HRC
 #include <RptResId.hrc>
-#endif
 #include "ModuleHelper.hxx"
-#ifndef RTPUI_REPORTDESIGN_HELPID_HRC
 #include "helpids.hrc"
-#endif
 #include <cppuhelper/implbase1.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>

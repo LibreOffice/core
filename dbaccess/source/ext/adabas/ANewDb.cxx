@@ -25,24 +25,12 @@
  *
  ************************************************************************/
 
-#ifndef ADABASUI_NEWDB_HXX
 #include "ANewDb.hxx"
-#endif
-#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
-#endif
-#ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
-#endif
-#ifndef adabasui_ADABAS_CREATEDB_HXX
 #include "AdabasNewDb.hxx"
-#endif
-#ifndef adabasui_SHARED_DBUSTRINGS_HRC
 #include "adabasuistrings.hrc"
-#endif
-#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
 
 using namespace adabasui;
 using namespace dbtools;

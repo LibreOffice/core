@@ -27,15 +27,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-#ifndef DBACCESS_ROWSETCACHEITERATOR_HXX
 #include "RowSetCacheIterator.hxx"
-#endif
-#ifndef DBACCESS_CORE_API_ROWSETCACHE_HXX
 #include "RowSetCache.hxx"
-#endif
-#ifndef DBACCESS_CORE_API_ROWSETBASE_HXX
 #include "RowSetBase.hxx"
-#endif
 #include <rtl/logfile.hxx>
 
 using namespace dbaccess;

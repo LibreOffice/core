@@ -60,12 +60,8 @@
 #include "objectnameapproval.hxx"
 #include <tools/string.hxx>
 #include <rtl/logfile.hxx>
-#ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
-#endif
 
 using namespace dbaccess;
 using namespace dbtools;

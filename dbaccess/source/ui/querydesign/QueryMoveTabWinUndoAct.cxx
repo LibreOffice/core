@@ -28,15 +28,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef DBAUI_OQUERYMOVETABWINUNDOACT_HXX
 #include "QueryMoveTabWinUndoAct.hxx"
-#endif
-#ifndef DBAUI_JOINTABLEVIEW_HXX
 #include "JoinTableView.hxx"
-#endif
-#ifndef DBAUI_QUERY_TABLEWINDOW_HXX
 #include "QTableWindow.hxx"
-#endif
 using namespace dbaui;
 //------------------------------------------------------------------------------
 void OJoinMoveTabWinUndoAct::TogglePosition()

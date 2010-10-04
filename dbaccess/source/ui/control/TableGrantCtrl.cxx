@@ -27,33 +27,15 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-#ifndef DBAUI_TABLEGRANTCONTROL_HXX
 #include "TableGrantCtrl.hxx"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_PRIVILEGE_HPP_
 #include <com/sun/star/sdbcx/Privilege.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_PRIVILEGEOBJECT_HPP_
 #include <com/sun/star/sdbcx/PrivilegeObject.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XUSERSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XUsersSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XAUTHORIZABLE_HPP_
 #include <com/sun/star/sdbcx/XAuthorizable.hpp>
-#endif
-#ifndef _DBU_CONTROL_HRC_
 #include "dbu_control.hrc"
-#endif
-#ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
-#endif
 
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::container;

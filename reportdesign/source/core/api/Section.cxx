@@ -31,13 +31,9 @@
 #include <com/sun/star/report/ForceNewPage.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#ifndef REPORTDESIGN_SHARED_CORESTRINGS_HRC
 #include "corestrings.hrc"
-#endif
 #include "core_resource.hxx"
-#ifndef REPORTDESIGN_CORE_RESOURCE_HRC_
 #include "core_resource.hrc"
-#endif
 #include <tools/debug.hxx>
 #include "Tools.hxx"
 #include "RptModel.hxx"

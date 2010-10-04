@@ -28,26 +28,16 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef DBACCESS_CONNECTIONTOOLS_HXX
 #include "connectiontools.hxx"
-#endif
 
-#ifndef DBACCESS_SOURCE_SDBTOOLS_CONNECTION_TABLENAME_HXX
 #include "tablename.hxx"
-#endif
-#ifndef DBACCESS_SOURCE_SDBTOOLS_CONNECTION_OBJECTNAMES_HXX
 #include "objectnames.hxx"
-#endif
-#ifndef DBACCESS_DATASOURCEMETADATA_HXX
 #include "datasourcemetadata.hxx"
-#endif
 
 /** === begin UNO includes === **/
 /** === end UNO includes === **/
 
-#ifndef COMPHELPER_NAMEDVALUECOLLECTION_HXX
 #include <comphelper/namedvaluecollection.hxx>
-#endif
 
 #include <connectivity/dbtools.hxx>
 #include <connectivity/statementcomposer.hxx>

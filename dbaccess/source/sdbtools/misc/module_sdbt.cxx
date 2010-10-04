@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef DBACCESS_MODULE_SDBT_HXX
 #include "module_sdbt.hxx"
-#endif
 
 //........................................................................
 namespace sdbtools

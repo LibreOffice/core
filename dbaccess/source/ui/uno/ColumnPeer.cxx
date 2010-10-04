@@ -27,21 +27,11 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-#ifndef DBAUI_COLUMNPEER_HXX
 #include "ColumnPeer.hxx"
-#endif
-#ifndef DBAUI_COLUMNCONTROLWINDOW_HXX
 #include "ColumnControlWindow.hxx"
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
-#endif
-#ifndef DBAUI_FIELDDESCRIPTIONS_HXX
 #include "FieldDescriptions.hxx"
-#endif
 
 //.........................................................................
 namespace dbaui

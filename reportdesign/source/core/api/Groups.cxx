@@ -28,9 +28,7 @@
 #include "Group.hxx"
 #include <tools/debug.hxx>
 #include "core_resource.hxx"
-#ifndef REPORTDESIGN_CORE_RESOURCE_HRC_
 #include "core_resource.hrc"
-#endif
 #include <boost/bind.hpp>
 #include <algorithm>
 // =============================================================================

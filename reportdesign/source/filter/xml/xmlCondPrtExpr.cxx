@@ -33,9 +33,7 @@
 #include "xmlEnums.hxx"
 #include "xmlControlProperty.hxx"
 #include "xmlComponent.hxx"
-#ifndef REPORTDESIGN_SHARED_XMLSTRINGS_HRC
 #include "xmlstrings.hrc"
-#endif
 #include <tools/debug.hxx>
 
 namespace rptxml

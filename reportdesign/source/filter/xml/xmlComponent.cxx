@@ -33,9 +33,7 @@
 #include <xmloff/nmspmap.hxx>
 #include "xmlEnums.hxx"
 #include "xmlHelper.hxx"
-#ifndef RPT_SHARED_XMLSTRINGS_HRC
 #include "xmlstrings.hrc"
-#endif
 #include "xmlStyleImport.hxx"
 #include <ucbhelper/content.hxx>
 #include <tools/debug.hxx>
@@ -43,9 +41,7 @@
 #include <comphelper/genericpropertyset.hxx>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/report/XReportControlModel.hpp>
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HXX_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
 #include <tools/debug.hxx>
 
 namespace rptxml

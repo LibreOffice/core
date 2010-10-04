@@ -27,18 +27,10 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-#ifndef DBAUI_DLGSIZE_HRC
 #include "dlgsize.hrc"
-#endif
-#ifndef _DBAUI_DLGSIZE_HXX
 #include "dlgsize.hxx"
-#endif
-#ifndef _DBU_DLG_HRC_
 #include "dbu_dlg.hrc"
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
-#endif
 
 //.........................................................................
 namespace dbaui
