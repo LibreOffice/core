@@ -1,90 +1,89 @@
 package complex.checkColor;
 
-import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.Size;
-import com.sun.star.awt.WindowDescriptor;
-import com.sun.star.awt.XControlModel;
-import com.sun.star.awt.XToolkit;
-import com.sun.star.awt.XWindow;
-import com.sun.star.awt.XWindowPeer;
-import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNameContainer;
-import com.sun.star.drawing.XControlShape;
-import com.sun.star.drawing.XShape;
-import com.sun.star.frame.XComponentLoader;
-import com.sun.star.frame.XController;
-import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.style.XStyleFamiliesSupplier;
 import com.sun.star.text.XTextDocument;
+import com.sun.star.uno.Any;
+import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.view.XControlAccess;
-import complexlib.ComplexTestCase;
-import java.io.PrintWriter;
-import util.FormTools;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openoffice.test.OfficeConnection;
+import util.DesktopTools;
 import util.SOfficeFactory;
-import util.WriterTools;
+import static org.junit.Assert.*;
 
 /**
  * Created because of complaint on dev@openoffice.org: check the changing of
  * BackColor and IsLandscape properties on the PageStyle service.
  */
-public class CheckChangeColor extends ComplexTestCase {
-
-    private XToolkit xToolkit = null;
-    private XWindowPeer xWinPeer = null;
-
-    /**
-     * Get all test method names.
-     * @return The test methods.
-     */
-    public String[] getTestMethodNames() {
-        return new String[] {"checkChangeColor"};
-    }
-
-
+public class CheckChangeColor {
     /**
      * Check BackColor and IsLandscape properties, wait for an exception: test
      * is ok if no exception happened.
      */
-    public void checkChangeColor() {
-        try {
-            XMultiServiceFactory m_xMSF_ =  (XMultiServiceFactory)param.getMSF();
-            XComponentLoader aLoader = (XComponentLoader)UnoRuntime.queryInterface(XComponentLoader.class,m_xMSF_.createInstance( "com.sun.star.frame.Desktop" ));
-            XComponent xDocument = (XComponent)UnoRuntime.queryInterface(XComponent.class, aLoader.loadComponentFromURL( "private:factory/swriter", "_blank", 0, new PropertyValue[ 0 ] ) );
-    //        xDocument.addEventListener( this );
+    @Test public void checkChangeColor() throws Exception {
+        // create a supplier to get the Style family collection
+        XStyleFamiliesSupplier xSupplier = ( XStyleFamiliesSupplier ) UnoRuntime.queryInterface(XStyleFamiliesSupplier.class, document);
 
-            XTextDocument oDoc = (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, xDocument);
-            XMultiServiceFactory oDocMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, oDoc );
+        // get the NameAccess interface from the Style family collection
+        XNameAccess xNameAccess = xSupplier.getStyleFamilies();
 
-            // XInterface xInterface = (XInterface) oDocMSF.createInstance( "com.sun.star.style.PageStyle" );
+        XNameContainer xPageStyleCollection = (XNameContainer) UnoRuntime.queryInterface(XNameContainer.class, xNameAccess.getByName( "PageStyles" ));
 
-            // create a supplier to get the Style family collection
-            XStyleFamiliesSupplier xSupplier = ( XStyleFamiliesSupplier ) UnoRuntime.queryInterface(XStyleFamiliesSupplier.class, oDoc );
+        // create a PropertySet to set the properties for the new Pagestyle
+        XPropertySet xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xPageStyleCollection.getByName("Standard") );
 
-            // get the NameAccess interface from the Style family collection
-            XNameAccess xNameAccess = xSupplier.getStyleFamilies();
+        assertEquals(
+            "BackColor", new Any(Type.LONG, 0xFFFFFFFF),
+            Any.complete(xPropertySet.getPropertyValue("BackColor")));
+        assertEquals(
+            "IsLandscape", new Any(Type.BOOLEAN, false),
+            Any.complete(xPropertySet.getPropertyValue("IsLandscape")));
+        assertEquals(
+            "Size", new Type(Size.class),
+            Any.complete(xPropertySet.getPropertyValue("Size")).getType());
 
-            XNameContainer xPageStyleCollection = (XNameContainer) UnoRuntime.queryInterface(XNameContainer.class, xNameAccess.getByName( "PageStyles" ));
-
-            // create a PropertySet to set the properties for the new Pagestyle
-            XPropertySet xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xPageStyleCollection.getByName("Standard") );
-
-            log.println("BackColor @ "+xPropertySet.getPropertyValue("BackColor").toString());
-            log.println("IsLandscape @ "+xPropertySet.getPropertyValue("IsLandscape").toString());
-            log.println("Size @ H:"+((Size)xPropertySet.getPropertyValue("Size")).Height+" W:"+((Size)xPropertySet.getPropertyValue("Size")).Width);
-
-            log.println("Set Landscape");
-            xPropertySet.setPropertyValue("IsLandscape",new Boolean(true) );
-            log.println("Set BackColor");
-            xPropertySet.setPropertyValue("BackColor",new Integer((int)255000000) );
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-            failed("Exception.");
-        }
+        xPropertySet.setPropertyValue("BackColor", 0xFF000000);
+        xPropertySet.setPropertyValue("IsLandscape", true);
+        assertEquals(
+            "BackColor", new Any(Type.LONG, 0xFF000000),
+            Any.complete(xPropertySet.getPropertyValue("BackColor")));
+        assertEquals(
+            "IsLandscape", new Any(Type.BOOLEAN, true),
+            Any.complete(xPropertySet.getPropertyValue("IsLandscape")));
     }
+
+    @Before public void setUpDocument() throws com.sun.star.uno.Exception {
+        document = SOfficeFactory.getFactory(
+            UnoRuntime.queryInterface(
+                XMultiServiceFactory.class,
+                connection.getComponentContext().getServiceManager())).
+            createTextDoc(null);
+    }
+
+    @After public void tearDownDocument() {
+        DesktopTools.closeDoc(document);
+    }
+
+    private XTextDocument document = null;
+
+    @BeforeClass public static void setUpConnection() throws Exception {
+        connection.setUp();
+    }
+
+    @AfterClass public static void tearDownConnection()
+        throws InterruptedException, com.sun.star.uno.Exception
+    {
+        connection.tearDown();
+    }
+
+    private static final OfficeConnection connection = new OfficeConnection();
 }
