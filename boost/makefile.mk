@@ -55,6 +55,10 @@ PATCH_FILES=$(TARFILE_NAME).patch
 CONFIGURE_DIR=
 CONFIGURE_ACTION=
 
+BUILD_DIR=
+BUILD_ACTION=
+BUILD_FLAGS=
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : set_ext.mk
