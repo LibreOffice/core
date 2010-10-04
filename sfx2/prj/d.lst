@@ -44,3 +44,4 @@ mkdir: %_DEST%\inc%_EXT%\sfx2
 ..\inc\mailmodelapi.hxx %_DEST%\inc%_EXT%\sfx2\mailmodelapi.hxx
 ..\inc\docinsert.hxx %_DEST%\inc%_EXT%\sfx2\docinsert.hxx
 
+..\%__SRC%\misc\sfx.component %_DEST%\xml%_EXT%\sfx.component
