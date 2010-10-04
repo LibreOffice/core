@@ -48,10 +48,15 @@
 #include <math.h>
 #include <float.h>
 
+
+#define APPEND(str,ascii) str.AppendAscii(RTL_CONSTASCII_STRINGPARAM(ascii))
+
 // define this to draw rectangles for debugging
 //#define SM_RECT_DEBUG
 
-#define APPEND(str,ascii) str.AppendAscii(RTL_CONSTASCII_STRINGPARAM(ascii))
+
+using ::rtl::OUString;
+
 
 ////////////////////////////////////////
 // SmTmpDevice
@@ -2471,6 +2476,12 @@ void SmTextNode::Draw(OutputDevice &rDev, const Point& rPosition) const
     // auf Pixelkoordinaten runden
     aPos = rDev.PixelToLogic( rDev.LogicToPixel(aPos) );
 
+#if OSL_DEBUG_LEVEL > 1
+    sal_Int32 nPos = 0;
+    sal_UCS4 cChar = OUString( aText ).iterateCodePoints( &nPos );
+    (void) cChar;
+#endif
+
     rDev.DrawStretchText(aPos, GetWidth(), aText);
 
 #ifdef SM_RECT_DEBUG
@@ -2851,7 +2862,9 @@ void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell
     String aName( GetToken().aText.Copy(1) );
     if (NULL != (pSym = pp->GetSymbolManager().GetSymbolByName( aName )))
     {
-        SetText( pSym->GetCharacter() );
+        sal_UCS4 cChar = pSym->GetCharacter();
+        String aTmp( OUString( &cChar, 1 ) );
+        SetText( aTmp );
         GetFont() = pSym->GetFace();
     }
     else
