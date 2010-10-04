@@ -154,6 +154,9 @@ KeyMapping::KeyIdentifierInfo KeyMapping::KeyIdentifierMap[] =
     {css::awt::Key::DECIMAL       , "KEY_DECIMAL"    },
     {css::awt::Key::TILDE         , "KEY_TILDE"      },
     {css::awt::Key::QUOTELEFT     , "KEY_QUOTELEFT"  },
+    {css::awt::Key::BRACKETLEFT   , "KEY_BRACKETLEFT" },
+    {css::awt::Key::BRACKETRIGHT  , "KEY_BRACKETRIGHT" },
+    {css::awt::Key::SEMICOLON     , "KEY_SEMICOLON" },
     {0                            , ""               } // mark the end of this array!
 };
 
