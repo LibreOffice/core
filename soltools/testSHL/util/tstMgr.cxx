@@ -31,13 +31,9 @@
 #include <osl/module.hxx>
 #include <rtl/tres.hxx>
 
-#ifndef _SOLTOOLS_TESTSHL_TLOG_HXX_
 #include "tlog.hxx"
-#endif
 
-#ifndef _SOLTOOLS_TESTSHL_TUTIL_HXX_
 #include "tutil.hxx"
-#endif
 
 using namespace rtl;
 
