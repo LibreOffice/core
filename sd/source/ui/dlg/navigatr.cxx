@@ -47,7 +47,6 @@
 
 #include "pres.hxx"
 #include "navigatr.hxx"
-//#include "navichld.hxx"
 #include "navigatr.hrc"
 #include "pgjump.hxx"
 #include "app.hrc"

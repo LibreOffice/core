@@ -33,9 +33,6 @@
 #include <svtools/transfer.hxx>
 #include <svx/fmview.hxx>
 #include <svx/svdmark.hxx>
-//#ifndef _SVDVMARK_HXX //autogen
-//#include <svx/svdvmark.hxx>
-//#endif
 #include <svx/svdpage.hxx>
 #include "fupoor.hxx"
 

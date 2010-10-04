@@ -54,7 +54,6 @@
 #include "prltempl.hxx"
 #include "prltempl.hrc"
 #include "enumdlg.hrc"
-//#include "enumdlg.hxx"
 #include "bulmaper.hxx"
 #include <svl/intitem.hxx>
 #include <svx/svxgrahicitem.hxx>

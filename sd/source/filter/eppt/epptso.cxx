@@ -44,9 +44,6 @@
 #include <vcl/gradient.hxx>
 #include <sfx2/app.hxx>
 #include <svl/languageoptions.hxx>
-//#ifndef _SVX_XIT_HXX
-//#include <svx/xit.hxx>
-//#endif
 #include <editeng/svxenum.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdoashp.hxx>
@@ -101,18 +98,11 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <com/sun/star/text/FontRelief.hpp>
 #include <editeng/frmdiritem.hxx>
-/*
-#include <editeng/outliner.hxx>
-#include <editeng/outlobj.hxx>
-#include <svx/svdmodel.hxx>
-*/
 #include <svtools/fltcall.hxx>
 #include <com/sun/star/table/XTable.hpp>
 #include <com/sun/star/table/XMergeableCell.hpp>
 #include <com/sun/star/table/BorderLine.hpp>
 #include <set>
-
-//#include <svx/xbtmpit.hxx>
 
 #include "i18npool/mslangid.hxx"
 

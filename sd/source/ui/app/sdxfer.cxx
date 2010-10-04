@@ -55,9 +55,6 @@
 #include <svl/urlbmk.hxx>
 #include <editeng/outliner.hxx>
 
-//#ifndef _SVDETC_HXX //autogen
-//#include <svx/svdetc.hxx>
-//#endif
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <unotools/streamwrap.hxx>

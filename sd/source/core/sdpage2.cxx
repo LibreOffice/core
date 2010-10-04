@@ -47,9 +47,7 @@
 #include "glob.hrc"
 #include "drawdoc.hxx"
 #include "stlpool.hxx"
-//#include "sdiocmpt.hxx"
 #include "pglink.hxx"
-//#include "strmname.h"
 #include "anminfo.hxx"
 
 #include "../ui/inc/strings.hrc"

@@ -117,8 +117,6 @@ private:
 *                                                                      *
 ***********************************************************************/
 
-//#include <cppuhelper/implbase4.hxx>
-
 class SdLayerManager : public ::cppu::WeakImplHelper5< ::com::sun::star::drawing::XLayerManager,
                                                        ::com::sun::star::container::XNameAccess,
                                                        ::com::sun::star::lang::XServiceInfo,

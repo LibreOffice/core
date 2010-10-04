@@ -30,7 +30,6 @@
 
 #include "sddll.hxx"
 
-//#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel.hpp>
