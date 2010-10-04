@@ -224,7 +224,7 @@ namespace dbaccess
         }
         else if ( ::xmloff::token::IsXMLToken( rItemType, ::xmloff::token::XML_BOOLEAN ) )
         {
-            sal_Bool nValue( sal_False );
+            bool nValue( sal_False );
             if ( SvXMLUnitConverter::convertBool( nValue, sValue ) )
                 o_rValue <<= nValue;
             else
