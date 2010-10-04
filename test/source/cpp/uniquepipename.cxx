@@ -1,4 +1,5 @@
 /*************************************************************************
+*
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 *
 * Copyright 2000, 2010 Oracle and/or its affiliates.
@@ -21,27 +22,27 @@
 * version 3 along with OpenOffice.org.  If not, see
 * <http://www.openoffice.org/license.html>
 * for a copy of the LGPLv3 License.
+*
 ************************************************************************/
 
 #include "sal/config.h"
 
-#include "osl/diagnose.h"
-#include "rtl/bootstrap.hxx"
+#include "cppunit/TestAssert.h"
+#include "osl/process.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
-
-#include "getargument.hxx"
+#include "sal/types.h"
+#include "test/uniquepipename.hxx"
 
 namespace test {
 
-namespace detail {
-
-bool getArgument(rtl::OUString const & name, rtl::OUString * value) {
-    OSL_ASSERT(value != 0);
-    return rtl::Bootstrap::get(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("arg-")) + name, *value);
-}
-
+rtl::OUString uniquePipeName(rtl::OUString const & name) {
+    oslProcessInfo info;
+    info.Size = sizeof info;
+    CPPUNIT_ASSERT_EQUAL(
+        osl_Process_E_None,
+        osl_getProcessInfo(0, osl_Process_IDENTIFIER, &info));
+    return name + rtl::OUString::valueOf(static_cast< sal_Int64 >(info.Ident));
 }
 
 }

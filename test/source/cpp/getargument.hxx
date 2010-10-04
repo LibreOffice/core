@@ -23,25 +23,22 @@
 * for a copy of the LGPLv3 License.
 ************************************************************************/
 
+#ifndef INCLUDED_TEST_SOURCE_CPP_GETARGUMENT_HXX
+#define INCLUDED_TEST_SOURCE_CPP_GETARGUMENT_HXX
+
 #include "sal/config.h"
-
-#include "osl/diagnose.h"
-#include "rtl/bootstrap.hxx"
-#include "rtl/ustring.h"
-#include "rtl/ustring.hxx"
-
-#include "getargument.hxx"
 
 namespace test {
 
 namespace detail {
 
-bool getArgument(rtl::OUString const & name, rtl::OUString * value) {
-    OSL_ASSERT(value != 0);
-    return rtl::Bootstrap::get(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("arg-")) + name, *value);
-}
+// Obtain the value of an argument tunneled in via an "arg-<name>" bootstrap
+// variable:
+bool getArgument(
+    rtl::OUString const & name, rtl::OUString * value);
 
 }
 
 }
+
+#endif

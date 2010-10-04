@@ -1,4 +1,5 @@
 /*************************************************************************
+*
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 *
 * Copyright 2000, 2010 Oracle and/or its affiliates.
@@ -21,27 +22,25 @@
 * version 3 along with OpenOffice.org.  If not, see
 * <http://www.openoffice.org/license.html>
 * for a copy of the LGPLv3 License.
+*
 ************************************************************************/
+
+#ifndef INCLUDED_TEST_GETTESTARGUMENT_HXX
+#define INCLUDED_TEST_GETTESTARGUMENT_HXX
 
 #include "sal/config.h"
 
-#include "osl/diagnose.h"
-#include "rtl/bootstrap.hxx"
-#include "rtl/ustring.h"
-#include "rtl/ustring.hxx"
+#include "test/detail/testdllapi.hxx"
 
-#include "getargument.hxx"
+namespace rtl { class OUString; }
 
 namespace test {
 
-namespace detail {
-
-bool getArgument(rtl::OUString const & name, rtl::OUString * value) {
-    OSL_ASSERT(value != 0);
-    return rtl::Bootstrap::get(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("arg-")) + name, *value);
-}
+// Obtain the value of a test argument (tunneled in via an "arg-testarg.<name>"
+// bootstrap variable):
+OOO_DLLPUBLIC_TEST bool getTestArgument(
+    rtl::OUString const & name, rtl::OUString * value);
 
 }
 
-}
+#endif
