@@ -30,12 +30,10 @@
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/childwin.hxx>
 #include <vcl/toolbox.hxx>
+
 #include "smmod.hxx"
 #include "config.hxx"
-
-#include "dialog.hrc"
-
-#define NUM_TBX_CATEGORIES  9
+#include "toolbox.hrc"
 
 class SmToolBoxWindow : public SfxFloatingWindow
 {
