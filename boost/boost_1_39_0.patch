@@ -285,7 +285,7 @@ index 5d75be2..730cf0c 100644
                  ).second;
              }
  
---- misc/build/boost_1_39_0/libs/thread/src/win32/makefile.mk
+--- /dev/null
 +++ misc/build/boost_1_39_0/libs/thread/src/win32/makefile.mk
 @@ -0,0 +1,21 @@
 +PRJ=..$/..$/..$/..$/..$/..$/..$/..
