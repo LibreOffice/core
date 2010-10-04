@@ -130,7 +130,7 @@ namespace accessibility
                     }
                     break;
 
-                // --> OD 2009-04-01 #i92103#
+                // #i92103#
                 case VCLEVENT_ITEM_EXPANDED :
                 case VCLEVENT_ITEM_COLLAPSED :
                 {

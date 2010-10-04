@@ -376,7 +376,6 @@ class SvxNumPositionTabPage : public SfxTabPage
     FixedText           aLevelFT;
     MultiListBox        aLevelLB;
 
-    // --> OD 2008-01-11 #newlistlevelattrs#
     // former set of controls shown for numbering rules containing list level
     // attributes in SvxNumberFormat::SvxNumPositionAndSpaceMode == LABEL_WIDTH_AND_POSITION
     FixedText           aDistBorderFT;
@@ -390,7 +389,6 @@ class SvxNumPositionTabPage : public SfxTabPage
     ListBox             aAlignLB;
     // <--
 
-    // --> OD 2008-01-10 #newlistlevelattrs#
     // new set of controls shown for numbering rules containing list level
     // attributes in SvxNumberFormat::SvxNumPositionAndSpaceMode == LABEL_ALIGNMENT
     FixedText           aLabelFollowedByFT;
@@ -422,9 +420,7 @@ class SvxNumPositionTabPage : public SfxTabPage
     BOOL                bModified           : 1;
     BOOL                bPreset             : 1;
     BOOL                bInInintControl     : 1;  //Modify-Fehler umgehen, soll ab 391 behoben sein
-    // --> OD 2008-01-11 #newlistlevelattrs#
     bool                bLabelAlignmentPosAndSpaceModeActive;
-    // <--
 
     void                InitControls();
 
@@ -434,7 +430,6 @@ class SvxNumPositionTabPage : public SfxTabPage
     DECL_LINK( RelativeHdl_Impl, CheckBox * );
     DECL_LINK( StandardHdl_Impl, PushButton * );
 
-    // --> OD 2008-01-11 #newlistlevelattrs#
     void InitPosAndSpaceMode();
     void ShowControlsDependingOnPosAndSpaceMode();
 
@@ -442,7 +437,6 @@ class SvxNumPositionTabPage : public SfxTabPage
     DECL_LINK( ListtabPosHdl_Impl, MetricField* );
     DECL_LINK( AlignAtHdl_Impl, MetricField* );
     DECL_LINK( IndentAtHdl_Impl, MetricField* );
-    // <--
 
 public:
         SvxNumPositionTabPage(Window* pParent,

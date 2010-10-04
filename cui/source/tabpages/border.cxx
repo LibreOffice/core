@@ -396,7 +396,7 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
         AddItemConnection( svx::CreateFrameLineConnection( SID_ATTR_BORDER_DIAG_TLBR, aFrameSel, svx::FRAMEBORDER_TLBR ) );
     if( aFrameSel.IsBorderEnabled( svx::FRAMEBORDER_BLTR ) )
         AddItemConnection( svx::CreateFrameLineConnection( SID_ATTR_BORDER_DIAG_BLTR, aFrameSel, svx::FRAMEBORDER_BLTR ) );
-    // --> OD 2005-03-01 #i43593# - item connection doesn't work for Writer,
+    // #i43593# - item connection doesn't work for Writer,
     // because the Writer item sets contain these items
     // checkbox "Merge with next paragraph" only visible for Writer dialog format.paragraph
     AddItemConnection( new sfx::CheckBoxConnection( SID_ATTR_BORDER_CONNECT, aMergeWithNextCB, sfx::ITEMCONN_DEFAULT ) );
@@ -404,7 +404,6 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
     // checkbox "Merge adjacent line styles" only visible for Writer dialog format.table
     AddItemConnection( new sfx::CheckBoxConnection( SID_SW_COLLAPSING_BORDERS, aMergeAdjacentBordersCB, sfx::ITEMCONN_DEFAULT ) );
     aMergeAdjacentBordersCB.Hide();
-    // <--
 }
 
 // -----------------------------------------------------------------------
@@ -1243,7 +1242,7 @@ void SvxBorderTabPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
     if (pSWModeItem)
     {
         nSWMode = pSWModeItem->GetValue();
-        // --> OD 2005-03-01 #i43593#
+        // #i43593#
         // show checkbox <aMergeWithNextCB> for format.paragraph
         if ( nSWMode == SW_BORDER_MODE_PARA )
         {

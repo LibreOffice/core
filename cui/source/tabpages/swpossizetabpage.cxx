@@ -773,7 +773,7 @@ BOOL SvxSwPosSizeTabPage::FillItemSet( SfxItemSet& rSet)
                 USHORT nMapPos = GetMapPos(m_pVMap, m_aVertLB);
                 short nAlign = GetAlignment(m_pVMap, nMapPos, m_aVertLB, m_aVertToLB);
                 short nRel = GetRelation(m_pVMap, m_aVertToLB);
-                // --> OD 2004-10-21 #i34055# - convert vertical position for
+                // #i34055# - convert vertical position for
                 // as-character anchored objects
                 long nVertByPos =
                         static_cast<long>(m_aVertByMF.Denormalize(m_aVertByMF.GetValue(FUNIT_TWIP)));
@@ -781,7 +781,6 @@ BOOL SvxSwPosSizeTabPage::FillItemSet( SfxItemSet& rSet)
                 {
                     nVertByPos *= -1;
                 }
-                // <--
                 if ( nAlign != rVertOrient.GetValue() ||
                      nRel != rVertRelation.GetValue() ||
                      ( m_aVertByMF.IsEnabled() &&
@@ -795,7 +794,7 @@ BOOL SvxSwPosSizeTabPage::FillItemSet( SfxItemSet& rSet)
                 }
             }
 
-            // OD 19.09.2003 #i18732#
+            // #i18732#
             if(m_aFollowCB.IsChecked() != m_aFollowCB.GetSavedValue())
             {
                 //Writer internal type - based on SfxBoolItem
