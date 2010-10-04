@@ -162,7 +162,7 @@ Reference< XComponentContext > getComponentContext_Impl( void )
 {
     static Reference< XComponentContext > xContext;
 
-    // Did we have already CoreReflection; if not obtain it
+    // Do we have already CoreReflection; if not obtain it
     if( !xContext.is() )
     {
         Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
@@ -178,12 +178,12 @@ Reference< XComponentContext > getComponentContext_Impl( void )
     return xContext;
 }
 
-// save CoreReflection static
+// save CoreReflection statically
 Reference< XIdlReflection > getCoreReflection_Impl( void )
 {
     static Reference< XIdlReflection > xCoreReflection;
 
-    // Did we have already CoreReflection; if not obtain it
+    // Do we have already CoreReflection; if not obtain it
     if( !xCoreReflection.is() )
     {
         Reference< XComponentContext > xContext = getComponentContext_Impl();
@@ -204,7 +204,7 @@ Reference< XIdlReflection > getCoreReflection_Impl( void )
     return xCoreReflection;
 }
 
-// save CoreReflection static
+// save CoreReflection statically
 Reference< XHierarchicalNameAccess > getCoreReflection_HierarchicalNameAccess_Impl( void )
 {
     static Reference< XHierarchicalNameAccess > xCoreReflection_HierarchicalNameAccess;
@@ -226,7 +226,7 @@ Reference< XHierarchicalNameAccess > getTypeProvider_Impl( void )
 {
     static Reference< XHierarchicalNameAccess > xAccess;
 
-    // Did we have already CoreReflection; if not obtain it
+    // Do we have already CoreReflection; if not obtain it
     if( !xAccess.is() )
     {
         Reference< XComponentContext > xContext = getComponentContext_Impl();
@@ -253,7 +253,7 @@ Reference< XTypeConverter > getTypeConverter_Impl( void )
 {
     static Reference< XTypeConverter > xTypeConverter;
 
-    // Did we have already CoreReflection; if not obtain it
+    // Do we have already CoreReflection; if not obtain it
     if( !xTypeConverter.is() )
     {
         Reference< XComponentContext > xContext = getComponentContext_Impl();
@@ -345,7 +345,7 @@ void implAppendExceptionMsg( ::rtl::OUStringBuffer& _inout_rBuffer, const Except
 
 }
 
-// built together an error message at an exception
+// construct an error message for the exception
 ::rtl::OUString implGetExceptionMsg( const Exception& e, const ::rtl::OUString& aExceptionType_ )
 {
     ::rtl::OUStringBuffer aMessageBuf;
@@ -395,7 +395,7 @@ TYPEINIT1(SbUnoAnyObject,SbxObject)
 // TODO: source out later
 Reference<XIdlClass> TypeToIdlClass( const Type& rType )
 {
-    // enregister void as default class
+    // register void as default class
     Reference<XIdlClass> xRetClass;
     typelib_TypeDescription * pTD = 0;
     rType.getDescription( &pTD );
@@ -828,7 +828,7 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
                     SbxVariableRef xVar = new SbxVariable( eSbxElementType );
                     unoToSbxValue( (SbxVariable*)xVar, aElementAny );
 
-                    // put the into the Array
+                    // put into the Array
                     xArray->Put32( (SbxVariable*)xVar, &i );
                 }
             }
@@ -974,8 +974,8 @@ Type getUnoTypeForSbxValue( SbxValue* pVal )
             {
                 if( eElementTypeClass == TypeClass_VOID || eElementTypeClass == TypeClass_ANY )
                 {
-                    // If all elements of the arrays are from the same type, will
-                    // that be takens otherwise the whole will be considered as Any-Sequence
+                    // If all elements of the arrays are from the same type, take
+                    // this one - otherwise the whole will be considered as Any-Sequence
                     sal_Bool bNeedsInit = sal_True;
 
                     INT32 nSize = nUpper - nLower + 1;
@@ -1318,7 +1318,7 @@ Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty 
         }
         break;
 
-        /* first we leave out the following types
+        /* we leave out the following types
         case TypeClass_SERVICE:         break;
         case TypeClass_CLASS:           break;
         case TypeClass_TYPEDEF:         break;
@@ -1998,8 +1998,8 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                         // get the value
                         Reference< XPropertySet > xPropSet( mxUnoAccess->queryAdapter( ::getCppuType( (const Reference< XPropertySet > *)0 ) ), UNO_QUERY );
                         Any aRetAny = xPropSet->getPropertyValue( pProp->GetName() );
-                        // The use of getPropertyValue (instead of going over the index) is
-                        // suboptimal, but the change-over to XInvocation is already pending
+                        // The use of getPropertyValue (instead of using the index) is
+                        // suboptimal, but the refactoring to XInvocation is already pending
                         // Otherwise it is posible to use FastPropertySet
 
                         // take over the value from Uno to Sbx
@@ -2043,8 +2043,8 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                         // set the value
                         Reference< XPropertySet > xPropSet( mxUnoAccess->queryAdapter( ::getCppuType( (const Reference< XPropertySet > *)0 ) ), UNO_QUERY );
                         xPropSet->setPropertyValue( pProp->GetName(), aAnyValue );
-                        // The use of getPropertyValue (instead of going over the index) is
-                        // suboptimal, but the change-over to XInvocation is already pending
+                        // The use of getPropertyValue (instead of using the index) is
+                        // suboptimal, but the refactoring to XInvocation is already pending
                         // Otherwise it is posible to use FastPropertySet
                     }
                     catch( const Exception& )
@@ -2311,7 +2311,7 @@ SbUnoObject::SbUnoObject( const String& aName_, const Any& aUnoObj_ )
         // get the ExactName
         mxExactNameInvocation = Reference< XExactName >::query( mxInvocation );
 
-        // The rest reference only to the introspection
+        // The remainder refers only to the introspection
         if( !xTypeProvider.is() )
         {
             bNeedIntrospection = FALSE;
@@ -2620,7 +2620,7 @@ SbxVariable* SbUnoObject::Find( const String& rName, SbxClassType t )
                         // ATTENTION: Die hier erzeugte Variable darf wegen bei XNameAccess
                         // nicht als feste Property in das Object aufgenommen werden und
                         // wird daher nirgendwo gehalten.
-                        // If this makes a problem it had to be created synthetic or
+                        // If this leads to problems, it has to be created synthetically or
                         // a class SbUnoNameAccessProperty, whose existence had to be checked
                         // constantly and which were if necessary thrown away
                         // if the name was not found anymore.
@@ -3735,7 +3735,7 @@ void SbUnoSingleton::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
 //========================================================================
 
 // Implementation of an EventAttacher-drawn AllListener, which
-// only transmit several events to an general AllListener
+// solely transmits several events to an general AllListener
 class BasicAllListener_Impl : public BasicAllListenerHelper
 {
     virtual void firing_impl(const AllEventObject& Event, Any* pRet);
