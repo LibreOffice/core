@@ -46,3 +46,8 @@ mkdir: %_DEST%\xml%_EXT%\registry\data\org\openoffice
 mkdir: %_DEST%\xml%_EXT%\registry\data\org\openoffice\Office
 ..\config\*.xcu %_DEST%\xml%_EXT%\registry\data\org\openoffice\Office\*.xcu
 
+..\%__SRC%\misc\MacOSXSpell.component %_DEST%\xml%_EXT%\MacOSXSpell.component
+..\%__SRC%\misc\guesslang.component %_DEST%\xml%_EXT%\guesslang.component
+..\%__SRC%\misc\hyphen.component %_DEST%\xml%_EXT%\hyphen.component
+..\%__SRC%\misc\lnth.component %_DEST%\xml%_EXT%\lnth.component
+..\%__SRC%\misc\spell.component %_DEST%\xml%_EXT%\spell.component

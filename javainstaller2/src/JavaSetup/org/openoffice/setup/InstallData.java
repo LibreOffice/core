@@ -76,6 +76,7 @@ public class InstallData
     static private boolean useRtl = false;
     static private boolean installedProductMinorSet = false;
     static private boolean isDebianSystem = false;
+    static private boolean useForceDebian = false;  /* --force-debian */
     static private boolean debianInvestigated = false;
     static private String installType;            /* custom or typical installation */
     static private String osType;                 /* Linux, SunOS, ...              */
@@ -665,6 +666,14 @@ public class InstallData
 
     public void setIsDebianSystem(boolean value) {
         isDebianSystem = value;
+    }
+
+    public boolean useForceDebian() {
+        return useForceDebian;
+    }
+
+    public void setUseForceDebian(boolean value) {
+        useForceDebian = value;
     }
 
     public boolean databaseQueried() {
