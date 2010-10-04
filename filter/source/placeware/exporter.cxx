@@ -31,9 +31,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#ifndef _COM_SUN_STAR_PRESENTATION_PRESENTATIONPAGE_HPP_
 #include <com/sun/star/presentation/XPresentationPage.hpp>
-#endif
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/text/XText.hpp>

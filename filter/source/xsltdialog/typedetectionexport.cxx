@@ -28,12 +28,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_filter.hxx"
 
-#ifndef _COM_SUN_STAR_XML_SAX_XATTRIBUTELIST_HXX
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_BEANS_PROPERTYVALUE_HPP
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <tools/urlobj.hxx>
 

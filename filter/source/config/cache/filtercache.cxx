@@ -53,9 +53,7 @@
 #include <comphelper/locale.hxx>
 #include <unotools/processfactory.hxx>
 
-#ifndef _UNOTOOLS_CONFIGPATHES_HXX_
 #include <unotools/configpathes.hxx>
-#endif
 #include <rtl/ustrbuf.hxx>
 #include <rtl/logfile.hxx>
 #include <rtl/uri.hxx>

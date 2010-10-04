@@ -31,9 +31,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
 
-#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
 
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 #include <tools/urlobj.hxx>

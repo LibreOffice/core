@@ -28,9 +28,7 @@
 #include <osl/thread.h>
 #include <cppuhelper/factory.hxx>
 
-#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#endif
 
 #include "MSWorksImportFilter.hxx"
 

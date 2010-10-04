@@ -26,9 +26,7 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 
-#ifndef _ATTRLIST_HPP_
 #include <xmloff/attrlist.hxx>
-#endif
 
 using namespace ::rtl;
 using rtl::OUString;

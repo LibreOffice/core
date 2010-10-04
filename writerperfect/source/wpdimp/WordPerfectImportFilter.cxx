@@ -29,9 +29,7 @@
  */
 
 #include <osl/diagnose.h>
-#ifndef _RTL_TENCINFO_H_
 #include <rtl/tencinfo.h>
-#endif
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
@@ -39,13 +37,9 @@
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
 
-#ifndef _COM_SUN_STAR_UCB_XCOMMANDENVIRONMENT_HPP
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#endif
 
-#ifndef _ATTRLIST_HPP_
 #include <xmloff/attrlist.hxx>
-#endif
 #include <ucbhelper/content.hxx>
 
 #include "filter/FilterInternal.hxx"

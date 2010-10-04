@@ -38,9 +38,7 @@
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
 #include <svtools/textview.hxx>
-#ifndef _SCRBAR_HXX //autogen
 #include <vcl/scrbar.hxx>
-#endif
 #include <tools/stream.hxx>
 #include <tools/time.hxx>
 #include <osl/file.hxx>

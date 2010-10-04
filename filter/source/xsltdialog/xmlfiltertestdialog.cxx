@@ -29,12 +29,8 @@
 #include "precompiled_filter.hxx"
 #include <com/sun/star/frame/XConfigManager.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#ifndef _COM_SUN_STAR_DOCUMENT_XGRAPHICOBJECTRESOLVER_HXX_
 #include <com/sun/star/document/XGraphicObjectResolver.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XEMBEDDEDOBJECTRESOLVER_HXX_
 #include <com/sun/star/document/XEmbeddedObjectResolver.hpp>
-#endif
 #include <com/sun/star/xml/XImportFilter.hpp>
 #include <com/sun/star/xml/XExportFilter.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>

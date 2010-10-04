@@ -29,9 +29,7 @@
 #include "precompiled_filter.hxx"
 #include <vcl/graph.hxx>
 #include <vcl/bmpacc.hxx>
-#ifndef _SV_FLTCALL_HXX
 #include <svtools/fltcall.hxx>
-#endif
 #include <vcl/animate.hxx>
 #include "lzwdecom.hxx"
 #include "ccidecom.hxx"

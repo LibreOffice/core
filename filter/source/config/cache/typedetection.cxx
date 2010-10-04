@@ -35,9 +35,7 @@
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
-#ifndef _COM_SUN_STAR_IO_XINPUSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
-#endif
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <tools/wldcrd.hxx>

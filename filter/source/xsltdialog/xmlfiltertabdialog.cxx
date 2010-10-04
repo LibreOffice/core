@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_filter.hxx"
 #include <com/sun/star/container/XNameAccess.hpp>
-#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
 #include <tools/resid.hxx>
 #include <vcl/msgbox.hxx>
 #include <osl/file.hxx>

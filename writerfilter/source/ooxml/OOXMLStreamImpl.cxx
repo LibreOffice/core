@@ -30,9 +30,7 @@
 #include "ooxmlLoggers.hxx"
 #include <iostream>
 
-#ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALSTORAGEACCESS_HPP_
 #include <com/sun/star/embed/XHierarchicalStorageAccess.hpp>
-#endif
 
 //#define DEBUG_STREAM
 

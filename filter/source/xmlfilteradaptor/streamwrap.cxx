@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_filter.hxx"
 
-#ifndef _OSL_STREAM_WRAPPER_HXX_
 #include "streamwrap.hxx"
-#endif
 #include <osl/file.hxx>
 
 namespace foo
