@@ -39,9 +39,7 @@
 #include <svx/htmlmode.hxx>
 #include <fmtfsize.hxx>
 #include <wrtsh.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <docsh.hxx>
 #include <viewopt.hxx>
 #include <frmdlg.hxx>
@@ -50,12 +48,8 @@
 #include <column.hxx>
 #include <macassgn.hxx>
 
-#ifndef _FRMUI_HRC
 #include <frmui.hrc>
-#endif
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
 #include <svx/svxids.hrc>
 #include <svx/flagsdef.hxx>
 #include <svx/svxdlg.hxx>

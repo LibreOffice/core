@@ -34,16 +34,10 @@
 #include <mmpreparemergepage.hxx>
 #include <mailmergewizard.hxx>
 #include <mmconfigitem.hxx>
-#ifndef _DBUI_HRC
 #include <dbui.hrc>
-#endif
 #include <swtypes.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
-#ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
-#endif
 #include <wrtsh.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <com/sun/star/sdbc/XConnection.hpp>

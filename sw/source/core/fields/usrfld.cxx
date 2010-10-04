@@ -40,9 +40,7 @@
 #include <doc.hxx>
 #include <editsh.hxx>
 #include <dpage.hxx>
-#ifndef _UNOFLDMID_H
 #include <unofldmid.h>
-#endif
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;

@@ -37,9 +37,7 @@
 #define _NUM_CXX
 #include <hintids.hxx>
 
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <tools/urlobj.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/imgmgr.hxx>
@@ -50,16 +48,10 @@
 #include <swvset.hxx>
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
-#ifndef _WVIEW_HXX
 #include <wview.hxx>
-#endif
 #include <uitool.hxx>
-#ifndef _WDOCSH_HXX
 #include <wdocsh.hxx>
-#endif
 #include <uiitems.hxx>
 #include <docstyle.hxx>
 #include <charfmt.hxx>
@@ -71,21 +63,11 @@
 #include <viewopt.hxx>
 #include <frmmgr.hxx>
 
-#ifndef _MISC_HRC
 #include <misc.hrc>
-#endif
-#ifndef _FRMUI_HRC
 #include <frmui.hrc>
-#endif
-#ifndef _NUM_HRC
 #include <num.hrc>
-#endif
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
 #include <SwStyleNameMapper.hxx>
 #include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>

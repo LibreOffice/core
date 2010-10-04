@@ -38,9 +38,7 @@
 #include <undobj.hxx>
 #include <rolbck.hxx>
 #include <docary.hxx>
-#ifndef _UNDO_HRC
 #include <undo.hrc>
-#endif
 
 
 using namespace ::com::sun::star;

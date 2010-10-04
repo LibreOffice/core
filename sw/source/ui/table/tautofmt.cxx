@@ -35,12 +35,8 @@
 
 
 
-#ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
-#endif
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <vcl/svapp.hxx>
 #include <svl/zforlist.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -51,18 +47,12 @@
 #include <svx/framelinkarray.hxx>
 #include "swmodule.hxx"
 #include "swtypes.hxx"
-#ifndef _VIEW_HXX
 #include "view.hxx"
-#endif
 #include "wrtsh.hxx"
 #include "tblafmt.hxx"
-#ifndef _TAUTOFMT_HXX
 #include "tautofmt.hxx"
-#endif
 #include "shellres.hxx"
-#ifndef _TAUTOFMT_HRC
 #include "tautofmt.hrc"
-#endif
 
 using namespace com::sun::star;
 

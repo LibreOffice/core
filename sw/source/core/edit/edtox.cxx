@@ -34,9 +34,7 @@
 
 #include <tools/urlobj.hxx>
 #include <svtools/txtcmp.hxx>
-#ifndef SVTOOLS_FSTATHELPER_HXX
 #include <svl/fstathelper.hxx>
-#endif
 #include <sfx2/docfile.hxx>
 #include "editeng/unolingu.hxx"
 #include <swtypes.hxx>
@@ -54,9 +52,7 @@
 #include <doctxm.hxx>
 #include <docary.hxx>
 #include <mdiexp.hxx>
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>
-#endif
 #include <bookmrk.hxx>
 #include <xmloff/odffields.hxx>
 

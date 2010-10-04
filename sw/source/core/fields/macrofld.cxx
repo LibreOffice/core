@@ -32,9 +32,7 @@
 #include <hintids.hxx>
 #include <doc.hxx>
 #include <docufld.hxx>
-#ifndef _UNOFLDMID_H
 #include <unofldmid.h>
-#endif
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>

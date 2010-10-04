@@ -75,9 +75,7 @@
 #include <fmtanchr.hxx>
 #include <tools/shl.hxx>
 #include <sfx2/progress.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 
 #include "swmodule.hxx"
 #include "fmtline.hxx"

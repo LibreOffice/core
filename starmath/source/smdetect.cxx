@@ -37,9 +37,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -50,9 +48,7 @@
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <framework/interaction.hxx>
 
-#ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
 #include <ucbhelper/simpleinteractionrequest.hxx>
 
 #include <rtl/ustring.h>

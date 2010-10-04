@@ -35,33 +35,21 @@
 
 #include <sfx2/request.hxx>
 #include <svl/stritem.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #include <uitool.hxx>
 #include <swtypes.hxx>
 #include <wrtsh.hxx>
-#ifndef _BASESH_HXX
 #include <basesh.hxx>
-#endif
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <viewopt.hxx>
 #include <break.hxx>
 #include <pagedesc.hxx>
 #include <poolfmt.hxx>
 
-#ifndef _BREAK_HRC
 #include <break.hrc>
-#endif
-#ifndef _CHRDLG_HRC
 #include <chrdlg.hrc>
-#endif
 #include <SwStyleNameMapper.hxx>
 
 void SwBreakDlg::Apply()

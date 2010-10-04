@@ -29,16 +29,10 @@
 #include "precompiled_sw.hxx"
 
 
-#ifndef _OUTDEV_HXX //autogen
 #include <vcl/outdev.hxx>
-#endif
-#ifndef _PRINT_HXX //autogen
 #include <vcl/print.hxx>
-#endif
 #include <vcl/lineinfo.hxx>
-#ifndef _METRIC_HXX //autogen
 #include <vcl/metric.hxx>
-#endif
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #ifndef _COM_SUN_STAR_I18N_CHARACTERITERATORMODE_HDL_
@@ -68,9 +62,7 @@
 #include <doc.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <docsh.hxx>
-#ifndef _POOLFMT_HRC
 #include <poolfmt.hrc>
-#endif
 
 using namespace ::com::sun::star;
 

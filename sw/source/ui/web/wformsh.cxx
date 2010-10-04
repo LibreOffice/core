@@ -32,9 +32,7 @@
 
 #include <sfx2/msg.hxx>
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <svl/srchitem.hxx>
 #include <sfx2/objface.hxx>
 #include <tools/globname.hxx>

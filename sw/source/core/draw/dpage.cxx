@@ -36,9 +36,7 @@
 #include <fmturl.hxx>
 #include <frmfmt.hxx>
 #include <doc.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <shellres.hxx>
 #include <viewimp.hxx>
 #include <pagefrm.hxx>
@@ -50,9 +48,7 @@
 #include <dpage.hxx>
 #include <dcontact.hxx>
 #include <dflyobj.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <usrfld.hxx>
 #include <flyfrm.hxx>
 #include <ndnotxt.hxx>

@@ -33,9 +33,7 @@
 
 #include <sot/formats.hxx>
 
-#ifndef _CONDEDIT_HXX
 #include <condedit.hxx>
-#endif
 #include <svx/dbaexchange.hxx>
 using namespace ::svx;
 using ::rtl::OUString;

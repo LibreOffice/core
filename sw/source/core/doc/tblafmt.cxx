@@ -40,9 +40,7 @@
 #include <unotools/pathoptions.hxx>
 #include <sfx2/app.hxx>
 #include <svx/dialmgr.hxx>
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
 
 #define READ_OLDVERS        // erstmal noch alte Versionen lesen
 #include <swtypes.hxx>

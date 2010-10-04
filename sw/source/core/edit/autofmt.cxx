@@ -72,12 +72,8 @@
 #include <frmatr.hxx>
 #include <charatr.hxx>
 #include <mdiexp.hxx>
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>
-#endif
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 #include <vcl/msgbox.hxx>
 #include <numrule.hxx>
 

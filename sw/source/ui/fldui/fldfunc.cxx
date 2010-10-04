@@ -37,26 +37,16 @@
 #include <basic/sbmod.hxx>
 #include <docsh.hxx>
 #include <swtypes.hxx>
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
 #include <fldbas.hxx>
 #include <docufld.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wrtsh.hxx>
 #include <swmodule.hxx>
-#ifndef _FLDFUNC_HXX
 #include <fldfunc.hxx>
-#endif
 #include <flddropdown.hxx>
-#ifndef _FLDUI_HRC
 #include <fldui.hrc>
-#endif
-#ifndef _FLDTDLG_HRC
 #include <fldtdlg.hrc>
-#endif
 
 #define USER_DATA_VERSION_1 "1"
 #define USER_DATA_VERSION USER_DATA_VERSION_1

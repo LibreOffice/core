@@ -33,9 +33,7 @@
 
 
 
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wrtsh.hxx>
 #include <cption.hxx>
 #include <fldmgr.hxx>
@@ -61,12 +59,8 @@
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
 
-#ifndef _FRMUI_HRC
 #include <frmui.hrc>
-#endif
-#ifndef _CPTION_HRC
 #include <cption.hrc>
-#endif
 #include <SwStyleNameMapper.hxx>
 using namespace ::com::sun::star;
 

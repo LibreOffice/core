@@ -48,12 +48,8 @@
 #include <hints.hxx>
 #include <fntcache.hxx>
 
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>  // Text fuer SfxProgress
-#endif
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>

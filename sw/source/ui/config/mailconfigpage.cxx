@@ -40,9 +40,7 @@
 #include <svtools/headbar.hxx>
 #include <mmconfigitem.hxx>
 #include <mailmergehelper.hxx>
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #include <vcl/svapp.hxx>
 #include <comphelper/processfactory.hxx>
 #include "com/sun/star/mail/MailServiceType.hpp"

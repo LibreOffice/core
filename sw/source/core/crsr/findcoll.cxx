@@ -34,9 +34,7 @@
 #include <pamtyp.hxx>
 #include <swundo.hxx>
 #include <undobj.hxx>
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 #include <tools/resid.hxx>
 
 //------------------ Methoden der CrsrShell ---------------------------

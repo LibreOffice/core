@@ -38,12 +38,8 @@
 #include <tgrditem.hxx>
 #include <paratr.hxx>
 
-#ifndef _FMTLINE_HXX
 #include <fmtline.hxx>
-#endif
-#ifndef _LINEINFO_HXX
 #include <lineinfo.hxx>
-#endif
 #include <charfmt.hxx>
 #include <pagefrm.hxx>
 #include <viewsh.hxx>   // ViewShell

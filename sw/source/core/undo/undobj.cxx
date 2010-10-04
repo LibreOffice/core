@@ -45,12 +45,8 @@
 #include <mvsave.hxx>
 #include <redline.hxx>
 #include <crossrefbookmark.hxx>
-#ifndef _UNDO_HRC
 #include <undo.hrc>
-#endif
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 #include <docsh.hxx>
 
 class SwRedlineSaveData : public SwUndRng, public SwRedlineData,

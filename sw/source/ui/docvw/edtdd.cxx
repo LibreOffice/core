@@ -47,15 +47,11 @@
 #include <frmfmt.hxx>
 #include <wrtsh.hxx>
 #include <edtwin.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <viewopt.hxx>
 #include <swdtflvr.hxx>
 #include <swmodule.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <wdocsh.hxx>
 #include <swundo.hxx>
 

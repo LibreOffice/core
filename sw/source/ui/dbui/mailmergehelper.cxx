@@ -31,9 +31,7 @@
 #include <mailmergehelper.hxx>
 #include <svtools/stdctrl.hxx>
 #include <mmconfigitem.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/app.hxx>
@@ -47,9 +45,7 @@
 #include "com/sun/star/mail/XSmtpService.hpp"
 #include <comphelper/processfactory.hxx>
 #include <vcl/msgbox.hxx>
-#ifndef _PASSWD_HXX
 #include <sfx2/passwd.hxx>
-#endif
 
 #include <dbui.hrc>
 

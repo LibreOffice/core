@@ -30,9 +30,7 @@
 #include <SwXMLBlockImport.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
-#ifndef _SW_XMLBLOCKLIST_CONTEXT_HXX
 #include <SwXMLBlockListContext.hxx>
-#endif
 #include <SwXMLTextBlocks.hxx>
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;

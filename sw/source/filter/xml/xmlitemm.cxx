@@ -36,9 +36,7 @@
 #include "xmlitmap.hxx"
 #include <xmloff/xmltoken.hxx>
 
-#ifndef _UNOMID_H
 #include <unomid.h>
-#endif
 
 using namespace ::xmloff::token;
 

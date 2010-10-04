@@ -39,9 +39,7 @@
 #include <sfx2/sfx.hrc>
 #include <sfx2/viewsh.hxx>
 #include <vcl/wrkwin.hxx>
-#ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
-#endif
 #include <vcl/msgbox.hxx>
 #include <vcl/virdev.hxx>
 #include <unotools/syslocale.hxx>
@@ -49,9 +47,7 @@
 #include "smmod.hxx"
 #include "symbol.hxx"
 #include "config.hxx"
-#ifndef _DIALOG_HXX
 #include "dialog.hxx"
-#endif
 #include "edit.hxx"
 #include "view.hxx"
 #include "starmath.hrc"

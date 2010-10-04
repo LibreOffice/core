@@ -27,9 +27,7 @@
 #include "precompiled_sw.hxx"
 #include <retrieveinputstream.hxx>
 #include <comphelper/mediadescriptor.hxx>
-#ifndef _COM_SUN_STAR_IO_XSTREAM_HXX_
 #include <com/sun/star/io/XStream.hpp>
-#endif
 
 /** class for a thread to retrieve an input stream given by an URL
 

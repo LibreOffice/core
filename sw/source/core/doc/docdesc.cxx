@@ -55,9 +55,7 @@
 #include <frmtool.hxx>
 #include <pagedesc.hxx>
 #include <poolfmt.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <ndindex.hxx>
 #include <ftnidx.hxx>
 #include <fmtftn.hxx>
@@ -69,9 +67,7 @@
 #include <swwait.hxx>
 #include <GetMetricVal.hxx>
 #include <unotools/syslocale.hxx>
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>
-#endif
 
 #include <SwUndoPageDesc.hxx>
 

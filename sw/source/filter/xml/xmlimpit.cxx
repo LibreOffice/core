@@ -53,9 +53,7 @@
 #include "fmtornt.hxx"
 #include "fmtfsize.hxx"
 
-#ifndef _FMTLSPLT_HXX
 #include "fmtlsplt.hxx"
-#endif
 #include <xmloff/prhdlfac.hxx>
 #include <xmloff/xmltypes.hxx>
 #include "xmlithlp.hxx"

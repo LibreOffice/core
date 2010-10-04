@@ -78,12 +78,8 @@
 #include <pagedesc.hxx>
 #include <poolfmt.hxx>
 
-#ifndef _APP_HRC
 #include <app.hrc>
-#endif
-#ifndef _POOLFMT_HRC
 #include <poolfmt.hrc>
-#endif
 #include "swabstdlg.hxx"
 #include "envelp.hrc"
 #include <misc.hrc>

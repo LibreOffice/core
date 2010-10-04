@@ -36,9 +36,7 @@
 #include <tools/urlobj.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/dispatch.hxx>
-#ifndef _HELP_HXX
 #include <vcl/help.hxx>
-#endif
 #include <sot/formats.hxx>
 #include <vcl/sound.hxx>
 #include <uiitems.hxx>
@@ -47,13 +45,9 @@
 #include <fmtfld.hxx>
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <errhdl.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <content.hxx>
 #include <frmfmt.hxx>
 #include <fldbas.hxx>
@@ -69,24 +63,12 @@
 #include <doc.hxx>
 #include <unotools.hxx>
 #include <crsskip.hxx>
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
-#ifndef _NAVIPI_HRC
 #include <navipi.hrc>
-#endif
-#ifndef _UTLUI_HRC
 #include <utlui.hrc>
-#endif
-#ifndef _MISC_HRC
 #include <misc.hrc>
-#endif
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 #include <com/sun/star/text/XTextSectionsSupplier.hpp>
 #include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>

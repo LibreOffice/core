@@ -48,9 +48,7 @@
 #include <pagedesc.hxx>
 #include <breakit.hxx>
 #include <swerror.h>
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>          // ResId fuer Statusleiste
-#endif
 #include <mdiexp.hxx>           // ...Percent()
 #include <poolfmt.hxx>
 

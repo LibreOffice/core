@@ -30,9 +30,7 @@
 
 #include "hintids.hxx"
 #include <editeng/lrspitem.hxx>
-#ifndef _SVX_TSTPITEM_HXX //autogen
 #include <editeng/tstpitem.hxx>
-#endif
 #include <IDocumentSettingAccess.hxx>
 #include <frmatr.hxx>
 #include <SwPortionHandler.hxx>

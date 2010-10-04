@@ -40,9 +40,7 @@
 #include <editeng/langitem.hxx>
 #include <swtypes.hxx>
 #include <tools/resid.hxx>
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 #include <authfld.hxx>
 #include <expfld.hxx>
 #include <pam.hxx>
@@ -54,9 +52,7 @@
 #include <txtfld.hxx>
 #include <ndtxt.hxx>
 #include <doc.hxx>
-#ifndef _UNOFLDMID_H
 #include <unofldmid.h>
-#endif
 #include <unoprnms.hxx>
 
 #include <unomid.h>

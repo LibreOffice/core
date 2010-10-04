@@ -31,9 +31,7 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 #include <mathtype.hxx>
 
-#ifndef _TOOLS_DEBUG_H
 #include <tools/debug.hxx>
-#endif
 
 #include <sfx2/docfile.hxx>
 

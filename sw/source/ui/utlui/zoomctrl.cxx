@@ -32,9 +32,7 @@
 
 #include "hintids.hxx"
 
-#ifndef _STATUS_HXX //autogen
 #include <vcl/status.hxx>
-#endif
 #include <sfx2/app.hxx>
 #include <svl/stritem.hxx>
 #include <svx/zoomitem.hxx>

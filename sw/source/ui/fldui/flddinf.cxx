@@ -47,16 +47,10 @@
 
 #include <fldui.hrc>
 
-#ifndef _FLDTDLG_HRC
 #include <fldtdlg.hrc>
-#endif
-#ifndef _FLDDINF_HXX
 #include <flddinf.hxx>
-#endif
 #include <swmodule.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/DateTime.hpp>

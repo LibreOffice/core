@@ -49,34 +49,22 @@
 #include <fmtrowsplt.hxx>
 #include <svx/htmlmode.hxx>
 
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <wrtsh.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <viewopt.hxx>
 #include <uitool.hxx>
 #include <frmatr.hxx>
 
-#ifndef _TABLEPG_HXX
 #include <tablepg.hxx>
-#endif
 #include <tablemgr.hxx>
 #include <pagedesc.hxx>
 #include <poolfmt.hxx>
 #include <SwStyleNameMapper.hxx>
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _TABLEDLG_HRC
 #include <tabledlg.hrc>
-#endif
-#ifndef _TABLE_HRC
 #include <table.hrc>
-#endif
 #include "swtablerep.hxx"
 
 #ifdef DEBUG_TBLDLG

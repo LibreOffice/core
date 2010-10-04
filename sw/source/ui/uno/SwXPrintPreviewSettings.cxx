@@ -31,12 +31,8 @@
 #include <comphelper/ChainablePropertySetInfo.hxx>
 #include <pvprtdat.hxx>
 #include <swtypes.hxx>
-#ifndef _COM_SUN_STAR_BEANS_PropertyAttribute_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PropertyAttribute_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
 #include <doc.hxx>
 #include <vcl/svapp.hxx>
 using namespace ::com::sun::star;

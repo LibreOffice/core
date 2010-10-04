@@ -36,9 +36,7 @@
 #define _SVSTDARR_STRINGS
 #include <tools/urlobj.hxx>
 #include <tools/stream.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <vcl/help.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/tempfile.hxx>
@@ -53,15 +51,9 @@
 #include <glosdoc.hxx>
 #include <swunohelper.hxx>
 
-#ifndef _GLOSBIB_HRC
 #include <glosbib.hrc>
-#endif
-#ifndef _MISC_HRC
 #include <misc.hrc>
-#endif
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
 
 
 #define PATH_CASE_SENSITIVE 0x01

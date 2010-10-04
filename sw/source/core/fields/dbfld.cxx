@@ -44,15 +44,11 @@
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <dbfld.hxx>
-#ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
-#endif
 #include <docfld.hxx>
 #include <expfld.hxx>
 #include <txtatr.hxx>
-#ifndef _UNOFLDMID_H
 #include <unofldmid.h>
-#endif
 
 
 using namespace ::com::sun::star::sdbc;

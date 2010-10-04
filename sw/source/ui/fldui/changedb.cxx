@@ -37,22 +37,16 @@
 #define _CHANGEDB_CXX
 
 #include <svtools/stdctrl.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/sdb/XDatabaseAccess.hpp>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/viewfrm.hxx>
 
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wrtsh.hxx>
-#ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
-#endif
 #include <fldmgr.hxx>
 #include <expfld.hxx>
 #include <txtatr.hxx>
@@ -61,15 +55,9 @@
 #include <dbfld.hxx>
 #include <changedb.hxx>
 
-#ifndef _FLDUI_HRC
 #include <fldui.hrc>
-#endif
-#ifndef _UTLUI_HRC
 #include <utlui.hrc>
-#endif
-#ifndef _CHANGEDB_HRC
 #include <changedb.hrc>
-#endif
 
 #include <unomid.h>
 

@@ -48,9 +48,7 @@
 #include <vcl/cmdevt.hxx>
 #include <vcl/settings.hxx>
 #include <txtfrm.hxx>       // SwTxtFrm
-#ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
 #include <redlnitr.hxx>
 #include <extinput.hxx>
 #include <sfx2/printer.hxx>

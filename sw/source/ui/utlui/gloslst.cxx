@@ -37,16 +37,10 @@
 #include <tools/urlobj.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/msgbox.hxx>
-#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 #include <vcl/lstbox.hxx>
-#ifndef SVTOOLS_FSTATHELPER_HXX
 #include <svl/fstathelper.hxx>
-#endif
 #include <unotools/pathoptions.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <swtypes.hxx>
@@ -57,12 +51,8 @@
 #include <gloslst.hxx>
 #include <swunohelper.hxx>
 
-#ifndef _UTLUI_HRC
 #include <utlui.hrc>
-#endif
-#ifndef _GLOSLST_HRC
 #include <gloslst.hrc>
-#endif
 
 
 #define STRING_DELIM (char)0x0A

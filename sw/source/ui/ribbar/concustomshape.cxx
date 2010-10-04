@@ -40,24 +40,16 @@
 #include <svx/svdview.hxx>
 #include <svx/svdocapt.hxx>
 #include <editeng/outlobj.hxx>
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <edtwin.hxx>
 #include <wrtsh.hxx>
 #include <viewopt.hxx>
-#ifndef _DRAWBASE_HXX
 #include <drawbase.hxx>
-#endif
 #include <concustomshape.hxx>
 #include <svx/gallery.hxx>
 #include <sfx2/request.hxx>
-#ifndef _FM_FMMODEL_HXX
 #include <svx/fmmodel.hxx>
-#endif
 #include <svl/itempool.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdoashp.hxx>

@@ -39,9 +39,7 @@
 
 #include <comphelper/storagehelper.hxx>
 #include <doc.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <pam.hxx>
 #include <swblocks.hxx>
 #include <ndtxt.hxx>

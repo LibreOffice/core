@@ -36,9 +36,7 @@
 
 #define _INPDLG_CXX
 
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <unotools/charclass.hxx>
 #include <editeng/unolingu.hxx>
 #include <wrtsh.hxx>
@@ -48,12 +46,8 @@
 #include <inpdlg.hxx>
 #include <fldmgr.hxx>
 
-#ifndef _FLDUI_HRC
 #include <fldui.hrc>
-#endif
-#ifndef _INPDLG_HRC
 #include <inpdlg.hrc>
-#endif
 
 
 /*--------------------------------------------------------------------

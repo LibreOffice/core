@@ -34,9 +34,7 @@
 #include <mailmergewizard.hxx>
 #include <mmconfigitem.hxx>
 #include <swtypes.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <dbui.hrc>
 #include <mmmergepage.hrc>
 #include <svl/srchitem.hxx>

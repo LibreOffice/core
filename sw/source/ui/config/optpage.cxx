@@ -33,9 +33,7 @@
 
 
 #include <hintids.hxx>
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #include <vcl/svapp.hxx>
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_STRINGSDTOR
@@ -55,15 +53,9 @@
 #include <fmtcol.hxx>
 #include <charatr.hxx>
 #include <swtypes.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
-#ifndef IDOCUMENTDEVICEACCESS_HXX_INCLUDED
 #include <IDocumentDeviceAccess.hxx>
-#endif
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
 #include <uitool.hxx>
@@ -73,26 +65,14 @@
 #include <initui.hxx>
 #include <optpage.hxx>
 #include <swprtopt.hxx>
-#ifndef _MODCFG_HXX
 #include <modcfg.hxx>
-#endif
-#ifndef _SRCVIEW_HXX
 #include <srcview.hxx>
-#endif
 #include <crstate.hxx>
 #include <viewopt.hxx>
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
-#ifndef _CONFIG_HRC
 #include <config.hrc>
-#endif
-#ifndef _REDLOPT_HRC
 #include <redlopt.hrc>
-#endif
-#ifndef _OPTDLG_HRC
 #include <optdlg.hrc>
-#endif
 #include <svx/strarray.hxx>
 #include <svl/slstitm.hxx>
 #include <sfx2/request.hxx>

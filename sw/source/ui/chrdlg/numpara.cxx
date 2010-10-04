@@ -41,9 +41,7 @@
 #include "helpid.h"
 #include <sfx2/objsh.hxx>
 #include <svx/htmlmode.hxx>
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>

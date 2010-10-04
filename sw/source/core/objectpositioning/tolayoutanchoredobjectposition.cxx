@@ -31,9 +31,7 @@
 #include <anchoredobject.hxx>
 #include <frame.hxx>
 #include <pagefrm.hxx>
-#ifndef _SVX_SVDOBJ_HXX
 #include <svx/svdobj.hxx>
-#endif
 #include <frmfmt.hxx>
 #include <fmtanchr.hxx>
 #include <fmtornt.hxx>

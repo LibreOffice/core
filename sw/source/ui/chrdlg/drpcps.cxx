@@ -45,9 +45,7 @@
 #include "globals.hrc"
 
 
-#ifndef _METRIC_HXX //autogen
 #include <vcl/metric.hxx>
-#endif
 #include <svl/stritem.hxx>
 #include <editeng/fontitem.hxx>
 #include <svx/htmlmode.hxx>

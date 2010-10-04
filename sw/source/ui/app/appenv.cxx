@@ -75,15 +75,9 @@
 #include <crsskip.hxx>
 
 #include <cmdid.h>
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
-#ifndef _APP_HRC
 #include <app.hrc>
-#endif
-#ifndef _POOLFMT_HRC
 #include <poolfmt.hrc>
-#endif
 #include "swabstdlg.hxx"
 #include "envelp.hrc"
 #include "envimg.hxx"

@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <tools/stream.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sot/storage.hxx>
@@ -45,9 +43,7 @@
 #include <rootfrm.hxx>
 #include <drawdoc.hxx>
 #include <dpage.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <shellio.hxx>
 #include <hintids.hxx>
 #include <com/sun/star/embed/ElementModes.hpp>

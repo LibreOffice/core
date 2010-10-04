@@ -30,9 +30,7 @@
 
 
 #ifdef DBG_UTIL
-#ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
-#endif
 #endif
 #include <stdlib.h>
 #include "swrect.hxx"

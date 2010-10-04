@@ -58,9 +58,7 @@
 #include <crsskip.hxx>
 #include <vcl/msgbox.hxx>
 #include <mdiexp.hxx>           // ...Percent()
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>          // ResId fuer Statusleiste
-#endif
 #include <redline.hxx>      // SwRedline
 
 

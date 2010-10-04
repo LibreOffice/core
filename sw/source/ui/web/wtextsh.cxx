@@ -35,9 +35,7 @@
 #include <sfx2/app.hxx>
 #include <svl/srchitem.hxx> //***
 #include <basic/sbxvar.hxx>
-#ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
-#endif
 
 #include "swtypes.hxx"
 #include "cmdid.h"

@@ -32,12 +32,8 @@
 #endif
 #include <hintids.hxx>
 #include <tools/shl.hxx>
-#ifndef _MENU_HXX //autogen
 #include <vcl/menu.hxx>
-#endif
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <sfx2/tabdlg.hxx>
 #include <editeng/brshitem.hxx>
 #include <unotools/configmgr.hxx>
@@ -47,12 +43,8 @@
 #define USE_NUMTABPAGES
 #include <num.hxx>
 #endif
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <uitool.hxx>
 #include <errhdl.hxx>
 #include <wrtsh.hxx>
@@ -67,18 +59,10 @@
 #include <docstyle.hxx>
 #include <viewopt.hxx>
 #include <svtools/ctrlbox.hxx>
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>      // fuer Vorlagenname 'keins'
-#endif
-#ifndef _MISC_HRC
 #include <misc.hrc>
-#endif
-#ifndef _OUTLINE_HRC
 #include <outline.hrc>
-#endif
 #include <paratr.hxx>
 
 #include <unomid.h>

@@ -67,19 +67,13 @@
 
 #include <cmdid.h>
 #include <helpid.h>
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
-#ifndef _SHELLS_HRC
 #include <shells.hrc>
-#endif
 
 #define SwDrawTextShell
 #include <sfx2/msg.hxx>
 #include <swslots.hxx>
-#ifndef _POPUP_HRC
 #include <popup.hrc>
-#endif
 #include <uitool.hxx>
 #include <wview.hxx>
 #include <swmodule.hxx>

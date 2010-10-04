@@ -33,18 +33,14 @@
 #include <comphelper/string.hxx>
 #include <editeng/paperinf.hxx>
 #include <svtools/filter.hxx>
-#ifndef _GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
-#endif
 #include <editeng/fontitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/crsditem.hxx>
-#ifndef _SVX_CNTRITEM_HXX //autogen
 #include <editeng/cntritem.hxx>
-#endif
 #include <editeng/cmapitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/udlnitem.hxx>
@@ -52,9 +48,7 @@
 #include <editeng/colritem.hxx>
 #include <editeng/kernitem.hxx>
 #include <editeng/escpitem.hxx>
-#ifndef _SVX_TSTPITEM_HXX //autogen
 #include <editeng/tstpitem.hxx>
-#endif
 #include <svl/urihelper.hxx>
 #include <fmtfsize.hxx>
 #include <doc.hxx>
@@ -73,9 +67,7 @@
 #include <docsh.hxx>
 #include <swerror.h>
 #include <mdiexp.hxx>
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>
-#endif
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
 #endif

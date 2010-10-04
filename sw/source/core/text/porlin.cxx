@@ -29,9 +29,7 @@
 #include "precompiled_sw.hxx"
 
 
-#ifndef _OUTDEV_HXX //autogen
 #include <vcl/outdev.hxx>
-#endif
 #include <SwPortionHandler.hxx>
 
 #include "errhdl.hxx"   // ASSERT

@@ -32,9 +32,7 @@
 #include <sfx2/printer.hxx>
 #include <rtl/logfile.hxx>
 #include <doc.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <viewsh.hxx>
 #include <rootfrm.hxx>
 #include <viewimp.hxx>

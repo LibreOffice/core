@@ -106,9 +106,7 @@
 
 #include <cmdid.h>
 #include <unomid.h>
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 #include <svx/svdundo.hxx> // #111827#
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>

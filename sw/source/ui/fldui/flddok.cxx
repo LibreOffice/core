@@ -35,23 +35,13 @@
 #include <vcl/svapp.hxx>
 #include <flddat.hxx>
 #include <docufld.hxx>
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
 #include <chpfld.hxx>
-#ifndef _FLDTDLG_HRC
 #include <fldtdlg.hrc>
-#endif
-#ifndef _FLDUI_HRC
 #include <fldui.hrc>
-#endif
-#ifndef _FLDDOK_HXX
 #include <flddok.hxx>
-#endif
 #include <swmodule.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wrtsh.hxx>
 #include <svl/zformat.hxx>
 

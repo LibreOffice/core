@@ -36,12 +36,8 @@
 #include <svl/style.hxx>
 #include <errhdl.hxx>
 #include <wrtsh.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <docfnote.hxx>
 #include <impfnote.hxx>
 #include <ftninfo.hxx>
@@ -53,18 +49,10 @@
 #include <uitool.hxx>
 #include <poolfmt.hxx>
 #include <swstyle.h>
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
-#ifndef _MISC_HRC
 #include <misc.hrc>
-#endif
-#ifndef _DOCFNOTE_HRC
 #include <docfnote.hrc>
-#endif
-#ifndef _FRMUI_HRC
 #include <frmui.hrc>
-#endif
 #include <SwStyleNameMapper.hxx>
 
 SwFootNoteOptionDlg::SwFootNoteOptionDlg( Window *pParent, SwWrtShell &rS ) :

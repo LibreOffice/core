@@ -52,9 +52,7 @@
 
 #include "config.hxx"
 #include "dialog.hxx"
-#ifndef _STARMATH_HRC
 #include "starmath.hrc"
-#endif
 
 #include "dialog.hrc"
 #include "smmod.hxx"

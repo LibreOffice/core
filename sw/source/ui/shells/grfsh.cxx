@@ -31,9 +31,7 @@
 
 
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #include <hintids.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>

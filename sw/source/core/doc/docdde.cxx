@@ -32,9 +32,7 @@
 
 #include <stdlib.h>
 
-#ifndef _APP_HXX
 #include <vcl/svapp.hxx>
-#endif
 #include <tools/urlobj.hxx>
 
 #define _SVSTDARR_STRINGS

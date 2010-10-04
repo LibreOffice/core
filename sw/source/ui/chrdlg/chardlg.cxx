@@ -35,48 +35,30 @@
 
 #include <hintids.hxx>
 
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <svl/urihelper.hxx>
 #include <svl/stritem.hxx>
 #include <editeng/flstitem.hxx>
 #include <svx/htmlmode.hxx>
 #include <svl/cjkoptions.hxx>
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
 #include <swtypes.hxx>
 #include <errhdl.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wrtsh.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <uitool.hxx>
 #include <fmtinfmt.hxx>
 #include <macassgn.hxx>
-#ifndef _CHRDLG_HXX
 #include <chrdlg.hxx>       // der Dialog
-#endif
 #include <swmodule.hxx>
 #include <poolfmt.hxx>
 
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
-#ifndef _CHRDLG_HRC
 #include <chrdlg.hrc>
-#endif
-#ifndef _CHARDLG_HRC
 #include <chardlg.hrc>
-#endif
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <SwStyleNameMapper.hxx>

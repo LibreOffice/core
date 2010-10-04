@@ -33,9 +33,7 @@
 #include <vcl/svapp.hxx>
 #include <swmodule.hxx>
 
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;

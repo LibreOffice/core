@@ -109,9 +109,7 @@
 
 #include <sfx2/viewfrm.hxx>
 
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>          // ResId fuer Statusleiste
-#endif
 #include <swerror.h>
 
 #define FONTSIZE_MASK           7

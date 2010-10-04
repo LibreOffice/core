@@ -60,9 +60,7 @@
 #include <fntcache.hxx>
 #include <ptqueue.hxx>
 #include <tabfrm.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <pagedesc.hxx>
 #include <ndole.hxx>
 #include <ndindex.hxx>
@@ -70,12 +68,8 @@
 #include <svtools/colorcfg.hxx>
 #include <svtools/accessibilityoptions.hxx>
 #include <accessibilityoptions.hxx>
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>
-#endif
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 #include <pagepreviewlayout.hxx>
 #include <sortedobjs.hxx>
 #include <anchoredobject.hxx>

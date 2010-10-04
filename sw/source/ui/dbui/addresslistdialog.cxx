@@ -37,9 +37,7 @@
 #include <mailmergewizard.hxx>
 #include <mmconfigitem.hxx>
 #include <mmaddressblockpage.hxx>
-#ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
-#endif
 #include <dbconfig.hxx>
 #include <unotools/tempfile.hxx>
 #include <vcl/msgbox.hxx>
@@ -55,9 +53,7 @@
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
-#ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYCOMPOSERFACTORY_HPP_
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
-#endif
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>

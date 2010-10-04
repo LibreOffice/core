@@ -42,9 +42,7 @@
 #include "fmtornt.hxx"
 #include "fmtfsize.hxx"
 
-#ifndef _FMTLSPLT_HXX
 #include "fmtlsplt.hxx"
-#endif
 #include <xmloff/xmluconv.hxx>
 
 using ::rtl::OUString;

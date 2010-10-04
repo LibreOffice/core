@@ -32,25 +32,17 @@
 #include <svx/htmlmode.hxx>
 #include <svtools/htmlcfg.hxx>
 
-#ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
-#endif
 #include <editeng/svxenum.hxx>
 #include <editeng/svxacorr.hxx>
 #include <unotools/localedatawrapper.hxx>
-#ifndef _REGION_HXX //autogen
 #include <vcl/region.hxx>
-#endif
-#ifndef _OUTDEV_HXX //autogen
 #include <vcl/outdev.hxx>
-#endif
 #include <vcl/window.hxx>
 #include <swmodule.hxx>
 #include <swtypes.hxx>
 #include <viewopt.hxx>
-#ifndef _WDOCSH_HXX
 #include <wdocsh.hxx>
-#endif
 #include <swrect.hxx>
 #include <crstate.hxx>
 #include <svtools/colorcfg.hxx>

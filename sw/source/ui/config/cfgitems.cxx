@@ -29,13 +29,9 @@
 #include "precompiled_sw.hxx"
 
 
-#ifndef __SBX_SBXVARIABLE_HXX //autogen
 #include <basic/sbxvar.hxx>
-#endif
 
-#ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
-#endif
 #include <editeng/svxenum.hxx>
 
 

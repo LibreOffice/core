@@ -31,9 +31,7 @@
 
 
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #include <hintids.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
@@ -71,12 +69,8 @@
 #include <usrpref.hxx>
 #include <edtwin.hxx>
 #include <swwait.hxx>
-#ifndef _SHELLS_HRC
 #include <shells.hrc>
-#endif
-#ifndef _POPUP_HRC
 #include <popup.hrc>
-#endif
 
 #include <sfx2/objface.hxx>
 #include <svx/svdomedia.hxx>

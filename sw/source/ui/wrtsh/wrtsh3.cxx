@@ -29,9 +29,7 @@
 #include "precompiled_sw.hxx"
 
 
-#ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
-#endif
 #include <sfx2/app.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/bindings.hxx>

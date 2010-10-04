@@ -34,9 +34,7 @@
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
 #endif
-#ifndef _OUTDEV_HXX //autogen
 #include <vcl/outdev.hxx>
-#endif
 #include <unotools/localedatawrapper.hxx>
 #include <editeng/unolingu.hxx>
 #include <editeng/brshitem.hxx>
@@ -50,9 +48,7 @@
 #include <editeng/akrnitem.hxx>
 #include <editeng/shdditem.hxx>
 #include <editeng/charreliefitem.hxx>
-#ifndef _SVX_CNTRITEM_HXX //autogen
 #include <editeng/cntritem.hxx>
-#endif
 #include <editeng/colritem.hxx>
 #include <editeng/cscoitem.hxx>
 #include <editeng/crsditem.hxx>
@@ -61,9 +57,7 @@
 #include <editeng/postitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/fontitem.hxx>
-#ifndef _SVX_EMPHITEM_HXX //autogen
 #include <editeng/emphitem.hxx>
-#endif
 #include <editeng/charscaleitem.hxx>
 #include <editeng/charrotateitem.hxx>
 #include <editeng/twolinesitem.hxx>

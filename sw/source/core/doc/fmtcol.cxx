@@ -44,9 +44,7 @@
 #include <paratr.hxx>
 
 //--> #outlinelevel added by zhaojianwei
-#ifndef _SFXINTITEM_HXX
 #include <svl/intitem.hxx>
-#endif
 //<--end
 
 TYPEINIT1( SwTxtFmtColl, SwFmtColl );

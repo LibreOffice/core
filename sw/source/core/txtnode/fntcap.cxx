@@ -32,9 +32,7 @@
 #include <hintids.hxx>
 #include <editeng/cmapitem.hxx>
 
-#ifndef _OUTDEV_HXX //autogen
 #include <vcl/outdev.hxx>
-#endif
 #ifndef _COM_SUN_STAR_I18N_CHARTYPE_HDL
 #include <com/sun/star/i18n/CharType.hdl>
 #endif
@@ -42,9 +40,7 @@
 #include <com/sun/star/i18n/WordType.hdl>
 #endif
 
-#ifndef _PRINT_HXX //autogen
 #include <vcl/print.hxx>
-#endif
 #include <errhdl.hxx>
 #include <fntcache.hxx>
 #include <swfont.hxx>

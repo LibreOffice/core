@@ -60,9 +60,7 @@
 #include <charfmt.hxx>
 #include <fmtcol.hxx>
 #include <tox.hxx>
-#ifndef _ATTRDESC_HRC
 #include <attrdesc.hrc>
-#endif
 #include <fmtftntx.hxx>
 #include <fmtfollowtextflow.hxx>
 

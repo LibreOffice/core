@@ -33,12 +33,8 @@
 #include <swacorr.hxx>
 #include <swblocks.hxx>
 #include "SwXMLTextBlocks.hxx"
-#ifndef _SWSERROR_H
 #include <swerror.h>
-#endif
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <editsh.hxx>
 #include <sot/storage.hxx>
 

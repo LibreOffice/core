@@ -34,12 +34,8 @@
 #ifdef TEST_DELAYED_RESIZE
 #include <vcl/sound.hxx>
 #endif
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
-#ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
 #include <sot/storage.hxx>
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>

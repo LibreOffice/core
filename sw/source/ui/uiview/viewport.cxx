@@ -35,24 +35,16 @@
 #include <editeng/paperinf.hxx>
 #include <editeng/lrspitem.hxx>
 #include <sfx2/bindings.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wrtsh.hxx>
 #include <swmodule.hxx>
 #include <viewopt.hxx>
 #include <frmatr.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #include <edtwin.hxx>
 #include <scroll.hxx>
-#ifndef _WVIEW_HXX
 #include <wview.hxx>
-#endif
 #include <usrpref.hxx>
 #include <pagedesc.hxx>
 #include <workctrl.hxx>

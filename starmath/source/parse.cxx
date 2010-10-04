@@ -39,12 +39,8 @@
 #include <editeng/unolingu.hxx>
 #include <unotools/syslocale.hxx>
 #include "parse.hxx"
-#ifndef _STARMATH_HRC
 #include "starmath.hrc"
-#endif
-#ifndef _SMDLL_HXX
 #include "smdll.hxx"
-#endif
 #include "smmod.hxx"
 #include "config.hxx"
 

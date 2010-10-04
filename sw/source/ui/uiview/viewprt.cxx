@@ -34,9 +34,7 @@
 #include <cstdarg>
 #endif
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_STRINGSDTOR

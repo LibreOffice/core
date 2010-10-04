@@ -40,9 +40,7 @@
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/objsh.hxx>
 #include <editeng/boxitem.hxx>
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>       // fuer die EventIds
-#endif
 #include <sfx2/linkmgr.hxx>
 #include <svtools/soerr.hxx>
 #include <fmtfsize.hxx>

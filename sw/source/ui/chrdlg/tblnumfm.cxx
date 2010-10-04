@@ -35,16 +35,12 @@
 
 
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <svx/numinf.hxx>
 #include <swtypes.hxx>
 #include <tblnumfm.hxx>
 
-#ifndef _CHRDLG_HRC
 #include <chrdlg.hrc>
-#endif
 
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>

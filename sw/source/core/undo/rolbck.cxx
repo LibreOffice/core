@@ -59,13 +59,9 @@
 #include <undobj.hxx>           // fuer UndoDelete
 #include <IMark.hxx>            // fuer SwBookmark
 #include <charfmt.hxx> // #i27615#
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 #include <tools/resid.hxx>
-#ifndef _UNDO_HRC
 #include <undo.hrc>
-#endif
 #include <editeng/brkitem.hxx>
 #include <bookmrk.hxx>
 

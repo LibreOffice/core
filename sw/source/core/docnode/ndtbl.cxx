@@ -84,9 +84,7 @@
 #include <section.hxx>
 #include <frmtool.hxx>
 #include <node2lay.hxx>
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 #include "docsh.hxx"
 #include <tabcol.hxx>
 #include <unochart.hxx>

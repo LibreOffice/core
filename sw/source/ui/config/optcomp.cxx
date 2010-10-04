@@ -43,9 +43,7 @@
 #include "optcomp.hrc"
 #include "globals.hrc"
 #include <tools/urlobj.hxx>
-#ifndef _UTL__HXX_
 #include <unotools/configmgr.hxx>
-#endif
 #include <vcl/msgbox.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>

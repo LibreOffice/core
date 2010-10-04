@@ -30,9 +30,7 @@
 
 
 #include <sot/factory.hxx>
-#ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
-#endif
 #include <svx/modctrl.hxx>
 #include <svx/zoomctrl.hxx>
 #include <sfx2/docfac.hxx>
@@ -42,16 +40,12 @@
 #include <sfx2/app.hxx>
 #include <sfx2/taskpane.hxx>
 
-#ifndef _SMDLL_HXX
 #include <smdll.hxx>
-#endif
 #include <document.hxx>
 #include <toolbox.hxx>
 #include <view.hxx>
 
-#ifndef _STARMATH_HRC
 #include <starmath.hrc>
-#endif
 
 #include <svx/xmlsecctrl.hxx>
 

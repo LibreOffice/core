@@ -42,22 +42,12 @@
 #include <labfmt.hxx>
 #include <labprt.hxx>
 #include <unotools.hxx>
-#ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
-#endif
 #include "uitool.hxx"
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
-#ifndef _LABEL_HRC
 #include <label.hrc>
-#endif
 
 //impl in envimg.cxx
 extern SW_DLLPUBLIC String MakeSender();

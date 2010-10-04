@@ -35,9 +35,7 @@
 #define _SVSTDARR_ULONGS
 #include <svl/svstdarr.hxx>
 
-#ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
 #include <vcl/window.hxx>
 #include <editeng/boxitem.hxx>
 #include <swwait.hxx>

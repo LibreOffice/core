@@ -40,9 +40,7 @@
 #include <swtable.hxx>
 #include <swbaslnk.hxx>
 #include <swddetbl.hxx>
-#ifndef _UNOFLDMID_H
 #include <unofldmid.h>
-#endif
 #include <hints.hxx>
 
 using rtl::OUString;

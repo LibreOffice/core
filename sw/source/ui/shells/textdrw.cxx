@@ -42,9 +42,7 @@
 #include <swundo.hxx>
 #include <basesh.hxx>
 
-#ifndef _POOLFMT_HRC
 #include <poolfmt.hrc>
-#endif
 
 #include <docsh.hxx>
 #include <sfx2/docfile.hxx>

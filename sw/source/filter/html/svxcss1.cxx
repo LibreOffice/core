@@ -31,9 +31,7 @@
 
 #include <stdlib.h>
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <i18npool/mslangid.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svl/urihelper.hxx>

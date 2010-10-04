@@ -80,17 +80,13 @@
 #include <swtable.hxx>
 #include <fldbas.hxx>
 #include <fmtclds.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <wrthtml.hxx>
 #include <htmlnum.hxx>
 #include <htmlfly.hxx>
 #include <swmodule.hxx>
 
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>      // ResId fuer Statusleiste
-#endif
 #include <swerror.h>
 
 #define MAX_INDENT_LEVEL 20

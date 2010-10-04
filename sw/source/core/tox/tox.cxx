@@ -39,9 +39,7 @@
 #include <ndtxt.hxx>
 #include <txttxmrk.hxx>
 #include <tox.hxx>
-#ifndef _POOLFMT_HRC
 #include <poolfmt.hrc>
-#endif
 #include <doc.hxx>
 #include <docary.hxx>
 #include <paratr.hxx>

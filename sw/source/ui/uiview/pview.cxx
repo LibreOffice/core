@@ -54,9 +54,7 @@
 #include <svx/svdview.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/zoomslideritem.hxx>
-#ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
-#endif
 
 
 #include <swwait.hxx>
@@ -79,21 +77,11 @@
 #include <viewfunc.hxx>
 
 
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
-#ifndef _POPUP_HRC
 #include <popup.hrc>
-#endif
-#ifndef _PVIEW_HRC
 #include <pview.hrc>
-#endif
 
 #define SwPagePreView
 #include <sfx2/msg.hxx>

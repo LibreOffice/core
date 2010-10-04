@@ -69,9 +69,7 @@
 #include <authfld.hxx>
 #include <txtinet.hxx>
 #include <fmtcntnt.hxx>
-#ifndef _POOLFMT_HRC
 #include <poolfmt.hrc>      // fuer InitFldTypes
-#endif
 
 #include <SwUndoField.hxx>
 

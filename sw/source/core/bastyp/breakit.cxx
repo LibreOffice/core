@@ -36,9 +36,7 @@
 #endif
 #include <unotools/localedatawrapper.hxx>
 
-#ifndef _SVX_LINGU_HXX
 #include <editeng/unolingu.hxx>
-#endif
 #include <editeng/scripttypeitem.hxx>
 #include "swtypes.hxx"
 

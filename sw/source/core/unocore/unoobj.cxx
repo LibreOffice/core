@@ -66,9 +66,7 @@
 #include <fmtfld.hxx>
 #include <fmtpdsc.hxx>
 #include <pagedesc.hxx>
-#ifndef _POOLFMT_HRC
 #include <poolfmt.hrc>
-#endif
 #include <poolfmt.hxx>
 #include <edimp.hxx>
 #include <fchrfmt.hxx>

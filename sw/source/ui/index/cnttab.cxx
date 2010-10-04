@@ -57,20 +57,14 @@
 #include <authfld.hxx>
 #include <swtypes.hxx>
 #include <wrtsh.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
-#ifndef _BASESH_HXX
 #include <basesh.hxx>
-#endif
 #include <outline.hxx>
 #include <cnttab.hxx>
 #include <swuicnttab.hxx>
 #include <formedt.hxx>
 #include <poolfmt.hxx>
-#ifndef _POOLFMT_HRC
 #include <poolfmt.hrc>
-#endif
 #include <uitool.hxx>
 #include <fmtcol.hxx>
 #include <fldbas.hxx>
@@ -81,34 +75,18 @@
 #include <swmodule.hxx>
 #include <modcfg.hxx>
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
-#ifndef _UTLUI_HRC
 #include <utlui.hrc>
-#endif
-#ifndef _INDEX_HRC
 #include <index.hrc>
-#endif
-#ifndef _CNTTAB_HRC
 #include <cnttab.hrc>
-#endif
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
 #include <SwStyleNameMapper.hxx>
 #include <sfx2/filedlghelper.hxx>
-#ifndef _TOXHLP_HXX
 #include <toxwrap.hxx>
-#endif
 #include <chpfld.hxx>
 
-#ifndef _UTLUI_HRC
 #include "utlui.hrc"
-#endif
 
 #include <sfx2/app.hxx>
 

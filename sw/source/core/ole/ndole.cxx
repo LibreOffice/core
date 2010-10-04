@@ -47,9 +47,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <unotools/configitem.hxx>
-#ifndef _OUTDEV_HXX //autogen
 #include <vcl/outdev.hxx>
-#endif
 #include <fmtanchr.hxx>
 #include <frmfmt.hxx>
 #include <doc.hxx>
@@ -58,9 +56,7 @@
 #include <section.hxx>
 #include <cntfrm.hxx>
 #include <frmatr.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <ndole.hxx>
 
 #include <comphelper/classids.hxx>
@@ -68,9 +64,7 @@
 #include <sot/formats.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <svtools/filter.hxx>
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 
 using rtl::OUString;
 using namespace utl;

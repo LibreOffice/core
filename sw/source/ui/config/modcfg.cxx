@@ -34,18 +34,14 @@
 #include <tools/stream.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/mailenum.hxx>
-#ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
-#endif
 #include <editeng/svxenum.hxx>
 #include <tools/debug.hxx>
 
 #include <tools/globname.hxx>
 #include <swtypes.hxx>
 #include <itabenum.hxx>
-#ifndef _MODCFG_HXX
 #include <modcfg.hxx>
-#endif
 #include <fldupde.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <caption.hxx>

@@ -53,9 +53,7 @@
 #include <edtwin.hxx>
 
 #include <cmdid.h>
-#ifndef _CHARTINS_HRC
 #include <chartins.hrc>
-#endif
 #include <anchoredobject.hxx>
 
 #include <sot/clsids.hxx>

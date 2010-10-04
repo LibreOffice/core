@@ -44,9 +44,7 @@
 #include "config.hxx"
 #include "format.hxx"
 #include "smmod.hxx"
-#ifndef _STARMATH_HRC
 #include "starmath.hrc"
-#endif
 
 /////////////////////////////////////////////////////////////////
 

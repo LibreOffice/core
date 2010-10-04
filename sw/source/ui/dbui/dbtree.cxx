@@ -48,24 +48,16 @@
 #include <cppuhelper/implbase1.hxx>
 #include <svx/dbaexchange.hxx>
 
-#ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
-#endif
 #include <swmodule.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wrtsh.hxx>
 #include <dbtree.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
-#ifndef _UTLUI_HRC
 #include <utlui.hrc>
-#endif
 
 #include <unomid.h>
 

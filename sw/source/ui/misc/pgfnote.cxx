@@ -34,14 +34,10 @@
 
 
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #include <hintids.hxx>
 #include <tools/ref.hxx>
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
 #include <vcl/field.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/localedatawrapper.hxx>
@@ -55,15 +51,9 @@
 #include <pgfnote.hxx>
 #include <uiitems.hxx>
 
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
-#ifndef _MISC_HRC
 #include <misc.hrc>
-#endif
-#ifndef _PGFNOTE_HRC
 #include <pgfnote.hrc>
-#endif
 
 #define TWIP_TO_LBOX 5
 /*-----------------------------------------------------#---------------

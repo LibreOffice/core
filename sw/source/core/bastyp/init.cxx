@@ -66,9 +66,7 @@
 #include <editeng/charrotateitem.hxx>
 #include <editeng/charreliefitem.hxx>
 #include <editeng/frmdiritem.hxx>
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
 #include <editeng/swafopt.hxx>
 #include <editeng/svxacorr.hxx>
 #include <unotools/charclass.hxx>

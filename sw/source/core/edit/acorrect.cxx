@@ -32,9 +32,7 @@
 #define _STD_VAR_ARRAYS
 #include <hintids.hxx>
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <editeng/langitem.hxx>
 #include <fmtinfmt.hxx>
 #include <txtatr.hxx>

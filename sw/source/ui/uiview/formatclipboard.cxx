@@ -32,12 +32,8 @@
 
 
 #include <hintids.hxx>
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #include <format.hxx>
 #include <charfmt.hxx>
 #include <fmtcol.hxx>

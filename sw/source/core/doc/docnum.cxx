@@ -49,9 +49,7 @@
 #include <txtfrm.hxx>
 #include <pamtyp.hxx>
 #include <redline.hxx>
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 #include <editeng/adjitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <frmatr.hxx>

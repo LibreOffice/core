@@ -31,9 +31,7 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
-#ifndef _COM_SUN_STAR_I18N_XINDEXENTRYSUPPLIER_HPP_
 #include <com/sun/star/i18n/XExtendedIndexEntrySupplier.hpp>
-#endif
 #include <tools/string.hxx>
 #include <tools/debug.hxx>
 #include <toxwrap.hxx>

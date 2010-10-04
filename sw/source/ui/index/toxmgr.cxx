@@ -35,9 +35,7 @@
 #include <crsskip.hxx>
 #include <doc.hxx>
 #include <swundo.hxx>
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
 
 /*--------------------------------------------------------------------
     Beschreibung: Handhabung der Verzeichnisse durch TOXMgr

@@ -38,9 +38,7 @@
 #include "xmlitem.hxx"
 #include <xmloff/i18nmap.hxx>
 #include <xmloff/xmluconv.hxx>
-#ifndef _XMLOFF_FAMILIES_HXX
 #include <xmloff/families.hxx>
-#endif
 #include <svx/unomid.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/fontitem.hxx>
@@ -55,9 +53,7 @@
 #include "xmlbrshi.hxx"
 #include <paratr.hxx>
 #include <doc.hxx>
-#ifndef _UNOMID_H
 #include <unomid.h>
-#endif
 #include "xmlimp.hxx"
 
 using ::rtl::OUString;

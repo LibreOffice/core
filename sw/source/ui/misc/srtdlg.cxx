@@ -33,9 +33,7 @@
 
 #include "srtdlg.hxx"
 
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/dispatch.hxx>

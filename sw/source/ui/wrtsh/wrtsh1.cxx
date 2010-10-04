@@ -42,9 +42,7 @@
 #include <svx/svdview.hxx>
 #include <sot/factory.hxx>
 #include <svl/itemiter.hxx>
-#ifndef _SOUND_HXX //autogen
 #include <vcl/sound.hxx>
-#endif
 #include <tools/bigint.hxx>
 #include <sot/storage.hxx>
 #include <svtools/insdlg.hxx>
@@ -67,21 +65,13 @@
 #include <svx/fontworkbar.hxx>
 #include <fmtftn.hxx>
 #include <fmtpdsc.hxx>
-#ifndef _WDOCSH_HXX
 #include <wdocsh.hxx>
-#endif
-#ifndef _BASESH_HXX
 #include <basesh.hxx>
-#endif
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <uitool.hxx>
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #include <pagedesc.hxx>
 #include <frmmgr.hxx>
 #include <shellio.hxx>
@@ -89,9 +79,7 @@
 #include <swundo.hxx>  // fuer Undo-Ids
 #include <swcli.hxx>
 #include <poolfmt.hxx>
-#ifndef _WVIEW_HXX
 #include <wview.hxx>
-#endif
 #include <edtwin.hxx>
 #include <fmtcol.hxx>
 #include <swtable.hxx>
@@ -100,9 +88,7 @@
 #include <swdtflvr.hxx>
 #include <crsskip.hxx>
 #include <doc.hxx>
-#ifndef _WRTSH_HRC
 #include <wrtsh.hrc>
-#endif
 #include <SwStyleNameMapper.hxx>
 #include <sfx2/request.hxx>
 #include <paratr.hxx>

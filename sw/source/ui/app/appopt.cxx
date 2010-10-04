@@ -28,18 +28,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 #include <hintids.hxx>
-#ifndef _CMDID_H
 #include <cmdid.h>          // Funktion-Ids
-#endif
 
 #include <com/sun/star/i18n/ScriptType.hpp>
 
 #define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
 
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <svl/eitem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/app.hxx>
@@ -47,9 +43,7 @@
 #include <svx/htmlmode.hxx>
 #include <sfx2/bindings.hxx>
 #include <editeng/brshitem.hxx>
-#ifndef _SVX_TSTPITEM_HXX //autogen
 #include <editeng/tstpitem.hxx>
-#endif
 #include <svx/optgrid.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
@@ -59,37 +53,25 @@
 #include <optcomp.hxx>
 #include <edtwin.hxx>
 #include <swmodule.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wrtsh.hxx>
-#ifndef IDOCUMENTDEVICEACCESS_HXX_INCLUDED
 #include <IDocumentDeviceAccess.hxx>
-#endif
 #include <uitool.hxx>
 #include <initui.hxx>                   // fuer ::GetGlossaries()
 #include <fldbas.hxx>      //fuer UpdateFields
-#ifndef _WVIEW_HXX
 #include <wview.hxx>
-#endif
 #include <cfgitems.hxx>
 #include <prtopt.hxx>
-#ifndef _PVIEW_HXX
 #include <pview.hxx>
-#endif
 #include <usrpref.hxx>
-#ifndef _MODCFG_HXX
 #include <modcfg.hxx>
-#endif
 #include <glosdoc.hxx>
 #include <uiitems.hxx>
 #include <editeng/langitem.hxx>
 #include <unotools/lingucfg.hxx>
 #include <editeng/unolingu.hxx>
 
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
 #include <globals.h>        // globale Konstanten z.B.
 #include <svl/slstitm.hxx>
 #include "swabstdlg.hxx"

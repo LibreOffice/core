@@ -35,31 +35,19 @@
 #include <svx/htmlmode.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
-#ifndef _SFX_IMAGEMGR_HXX
 #include <sfx2/imagemgr.hxx>
-#endif
 #include <swmodule.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <initui.hxx>
 #include <viewopt.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <gloshdl.hxx>
 #include <glosdoc.hxx>
 #include <gloslst.hxx>
 #include <workctrl.hxx>
-#ifndef _WORKCTRL_HRC
 #include <workctrl.hrc>
-#endif
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
 #include <wrtsh.hxx>
 #include <svl/imageitm.hxx>
 #include <vcl/lstbox.hxx>

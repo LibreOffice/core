@@ -36,9 +36,7 @@
 #include <svx/htmlmode.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/dispatch.hxx>
-#ifndef _TOOLBOX_HXX //autogen
 #include <vcl/toolbox.hxx>
-#endif
 #include <sfx2/mnumgr.hxx>
 
 

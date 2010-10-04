@@ -43,13 +43,9 @@
 #include <mmlayoutpage.hxx>
 #include <mmconfigitem.hxx>
 #include <swabstdlg.hxx>
-#ifndef _DBUI_HRC
 #include <dbui.hrc>
-#endif
 #include <view.hxx>
-#ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
-#endif
 #include <sfx2/viewfrm.hxx>
 #include <wrtsh.hxx>
 #include <sfx2/viewfrm.hxx>

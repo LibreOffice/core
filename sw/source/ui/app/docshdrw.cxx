@@ -31,9 +31,7 @@
 
 #include <hintids.hxx>
 
-#ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
-#endif
 
 
 
@@ -48,9 +46,7 @@
 #include <svx/svdoutl.hxx>
 #include <svx/xtable.hxx>
 
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <doc.hxx>
 
 using namespace ::com::sun::star;

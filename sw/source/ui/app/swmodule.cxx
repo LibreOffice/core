@@ -30,9 +30,7 @@
 
 
 #include <hintids.hxx>
-#ifndef _SWERROR_H
 #include <swerror.h>
-#endif
 #include <vcl/wrkwin.hxx>
 #include <vcl/graph.hxx>
 #include <svx/galbrws.hxx>
@@ -70,24 +68,18 @@
 #include <com/sun/star/scanner/XScannerManager.hpp>
 #include <com/sun/star/container/XSet.hpp>
 #include <comphelper/processfactory.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <swmodule.hxx>
 #include <swevent.hxx>
 #include <swacorr.hxx>
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #include <dobjfac.hxx>
 #include <init.hxx>
 #include <pview.hxx>
 #include <wview.hxx>
 #include <wdocsh.hxx>
 #include <globdoc.hxx>
-#ifndef _SRCVIEW_HXX //autogen
 #include <srcview.hxx>
-#endif
 #include <glshell.hxx>
 #include <tabsh.hxx>
 #include <listsh.hxx>
@@ -100,21 +92,11 @@
 #include <beziersh.hxx>
 #include <wtextsh.hxx>
 #include <wfrmsh.hxx>
-#ifndef _DRFORMSH_HXX
 #include <drformsh.hxx>
-#endif
-#ifndef _WGRFSH_HXX
 #include <wgrfsh.hxx>
-#endif
-#ifndef _WOLESH_HXX
 #include <wolesh.hxx>
-#endif
-#ifndef _WLISTSH_HXX
 #include <wlistsh.hxx>
-#endif
-#ifndef _WTABSH_HXX
 #include <wtabsh.hxx>
-#endif
 #include <navipi.hxx>
 #include <chartins.hxx>
 #include <inputwin.hxx>
@@ -130,12 +112,8 @@
 #include <workctrl.hxx>
 #include <tbxanchr.hxx>
 #include <fldwrap.hxx>
-#ifndef _REDLNDLG_HXX
 #include <redlndlg.hxx>
-#endif
-#ifndef _SYNCBTN_HXX
 #include <syncbtn.hxx>
-#endif
 #include <mailmergechildwindow.hxx>
 #include <modcfg.hxx>
 #include <fontcfg.hxx>
@@ -145,18 +123,14 @@
 #include <swatrset.hxx>
 #include <idxmrk.hxx>
 #include <dlelstnr.hxx>
-#ifndef _BARCFG_HXX
 #include <barcfg.hxx>
-#endif
 #include <svx/rubydialog.hxx>
 #include <svtools/colorcfg.hxx>
 
 #include <editeng/acorrcfg.hxx>
 #include <unotools/moduleoptions.hxx>
 
-#ifndef _AVMEDIA_MEDIAPPLAYER_HXX
 #include <avmedia/mediaplayer.hxx>
-#endif
 #include <avmedia/mediatoolbox.hxx>
 
 #include <annotsh.hxx>

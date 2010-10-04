@@ -31,9 +31,7 @@
 #include <frame.hxx>
 #include <txtfrm.hxx>
 #include <flyfrms.hxx>
-#ifndef _SVX_SVDOBJ_HXX
 #include <svx/svdobj.hxx>
-#endif
 #include <dcontact.hxx>
 #include <frmfmt.hxx>
 #include <frmatr.hxx>

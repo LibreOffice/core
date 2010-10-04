@@ -41,9 +41,7 @@
 #include <viewsh.hxx>
 #include <accmap.hxx>
 #include "accfootnote.hxx"
-#ifndef _ACCESS_HRC
 #include "access.hrc"
-#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

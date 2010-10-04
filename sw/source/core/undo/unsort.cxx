@@ -34,9 +34,7 @@
 #include <ndtxt.hxx>
 #include <undobj.hxx>
 #include <sortopt.hxx>
-#ifndef _DOCSORT_HXX
 #include <docsort.hxx>
-#endif
 #include <redline.hxx>
 #include <node2lay.hxx>
 

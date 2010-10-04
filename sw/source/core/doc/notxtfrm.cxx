@@ -71,9 +71,7 @@
 #include <poolfmt.hxx>
 #include <mdiexp.hxx>
 #include <swwait.hxx>
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 #include <accessibilityoptions.hxx>
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>

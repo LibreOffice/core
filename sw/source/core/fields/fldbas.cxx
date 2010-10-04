@@ -35,9 +35,7 @@
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <editeng/unolingu.hxx>
-#ifndef _UNOFLDMID_H
 #include <unofldmid.h>
-#endif
 #include <doc.hxx>
 #include <editsh.hxx>
 #include <frame.hxx>
@@ -53,9 +51,7 @@
 #include <expfld.hxx>
 #include <shellres.hxx>
 #include <calc.hxx>
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 
 #include <math.h>
 #ifdef MAC

@@ -71,9 +71,7 @@
 #include <srcview.hxx>
 #include <wrtsh.hxx>
 #include <docsh.hxx>
-#ifndef _CMDID_H
 #include <cmdid.h>          // Funktion-Ids
-#endif
 #include <initui.hxx>
 #include <uitool.hxx>
 #include <swmodule.hxx>
@@ -87,9 +85,7 @@
 #include <prtopt.hxx>
 #include <modcfg.hxx>
 #include <globals.h>        // globale Konstanten z.B.
-#ifndef _APP_HRC
 #include <app.hrc>
-#endif
 #include <fontcfg.hxx>
 #include <barcfg.hxx>
 #include <uinums.hxx>

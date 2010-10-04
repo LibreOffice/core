@@ -39,9 +39,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/help.hxx>
-#ifndef _SVSTDARR_HXX
 #include <svl/svstdarr.hxx>
-#endif
 #include <svl/stritem.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/lingucfg.hxx>
@@ -79,15 +77,9 @@
 #include <cmdid.h>
 #include <helpid.h>
 #include <swerror.h>
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
-#ifndef _MISC_HRC
 #include <misc.hrc>
-#endif
-#ifndef _GLOSSARY_HRC
 #include <glossary.hrc>
-#endif
 #include <swmodule.hxx>
 #include <sfx2/filedlghelper.hxx>
 

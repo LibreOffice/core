@@ -42,9 +42,7 @@
 #endif
 #include <tools/debug.hxx>
 #include <svl/urihelper.hxx>
-#ifndef SVTOOLS_FSTATHELPER_HXX
 #include <svl/fstathelper.hxx>
-#endif
 #include <unotools/pathoptions.hxx>
 #include <unotools/tempfile.hxx>
 #include <swtypes.hxx>
@@ -56,9 +54,7 @@
 
 #include <unoatxt.hxx>
 #include <swerror.h>
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

@@ -39,14 +39,10 @@
 #define _JAVAEDIT_CXX
 #include <hintids.hxx>
 
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <vcl/svapp.hxx>
 #include <svl/urihelper.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <sfx2/docfile.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <docsh.hxx>
@@ -55,16 +51,10 @@
 #include <fldmgr.hxx>
 #include <docufld.hxx>
 #include <uitool.hxx>
-#ifndef _JAVAEDIT_HXX
 #include <javaedit.hxx>
-#endif
 
-#ifndef _FLDUI_HRC
 #include <fldui.hrc>
-#endif
-#ifndef _JAVAEDIT_HRC
 #include <javaedit.hrc>
-#endif
 
 // static ----------------------------------------------------------------
 

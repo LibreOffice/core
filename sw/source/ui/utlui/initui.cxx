@@ -38,19 +38,11 @@
 #include <glosdoc.hxx>
 #include <gloslst.hxx>
 
-#ifndef _UTLUI_HRC
 #include <utlui.hrc>
-#endif
-#ifndef _INITUI_HRC
 #include <initui.hrc>
-#endif
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 #include <authfld.hxx>
-#ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
-#endif
 #include <unotools/syslocale.hxx>
 
 #include <unomid.h>

@@ -33,20 +33,14 @@
 
 
 #include <hintids.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wrtsh.hxx>
 #include <swundo.hxx>         // fuer Undo-Ids
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
 #include <splargs.hxx>
 
 
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <editeng/unolingu.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/fontitem.hxx>
@@ -69,9 +63,7 @@
 #include <breakit.hxx>
 #include <docsh.hxx>
 
-#ifndef _OLMENU_HRC
 #include <olmenu.hrc>
-#endif
 
 #include <unomid.h>
 

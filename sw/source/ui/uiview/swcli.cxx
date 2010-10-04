@@ -32,9 +32,7 @@
 
 #include <wrtsh.hxx>
 #include <swtypes.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <edtwin.hxx>
 #include <swcli.hxx>
 

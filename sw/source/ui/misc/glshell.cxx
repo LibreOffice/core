@@ -52,15 +52,9 @@
 #include <glosdoc.hxx>
 #include <shellio.hxx>
 #include <initui.hxx>                   // fuer ::GetGlossaries()
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _SWERROR_H
 #include <swerror.h>
-#endif
-#ifndef _MISC_HRC
 #include <misc.hrc>
-#endif
 
 
 #define SwWebGlosDocShell

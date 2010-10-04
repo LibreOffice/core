@@ -34,9 +34,7 @@
 #include <txttypes.hxx>
 
 // for portion replacement in Special()
-#ifndef _ACCESS_HRC
 #include "access.hrc"
-#endif
 #include <tools/resid.hxx>
 #include "viewopt.hxx"
 

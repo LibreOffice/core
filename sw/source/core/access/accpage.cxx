@@ -37,9 +37,7 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include "accpage.hxx"
 
-#ifndef _ACCESS_HRC
 #include "access.hrc"
-#endif
 #include <pagefrm.hxx>
 
 using namespace ::com::sun::star;

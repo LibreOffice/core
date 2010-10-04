@@ -44,9 +44,7 @@
 #include <frmfmt.hxx>
 #include <ndtxt.hxx>
 #include <docary.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <SwStyleNameMapper.hxx>
 // --> OD 2006-06-28 #b6440955#
 // Needed to load default bullet list configuration

@@ -30,9 +30,7 @@
 
 
 #include <tools/stream.hxx>
-#ifndef _RESID_HXX //autogen
 #include <tools/resid.hxx>
-#endif
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <unotools/useroptions.hxx>

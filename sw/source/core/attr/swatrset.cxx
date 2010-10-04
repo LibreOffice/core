@@ -43,9 +43,7 @@
 #include <node.hxx>
 #include <paratr.hxx>       // fuer SetModifyAtAttr
 #include <cellatr.hxx>      // fuer SetModifyAtAttr
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #include <istyleaccess.hxx>
 #include <numrule.hxx>
 // --> OD 2008-03-19 #refactorlists#

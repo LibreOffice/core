@@ -38,9 +38,7 @@
 #include <swundo.hxx>                   // fuer Undo-Ids
 #include <swdtflvr.hxx>
 
-#ifndef _WRTSH_HRC
 #include <wrtsh.hrc>
-#endif
 #include <sfx2/sfx.hrc>
 
 

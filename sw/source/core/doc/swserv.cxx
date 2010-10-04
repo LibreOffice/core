@@ -41,9 +41,7 @@
 #include <bookmrk.hxx>
 #include <pam.hxx>
 #include <shellio.hxx>
-#ifndef _SWERROR_H
 #include <swerror.h>
-#endif
 
 using namespace ::com::sun::star;
 

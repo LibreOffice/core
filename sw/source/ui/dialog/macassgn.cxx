@@ -38,9 +38,7 @@
 #define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
 #include <svx/htmlmode.hxx>
-#ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
-#endif
 #include <sfx2/app.hxx>
 #include <vcl/msgbox.hxx>
 

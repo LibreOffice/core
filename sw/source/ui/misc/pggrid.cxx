@@ -36,14 +36,10 @@
 
 #include <sfx2/app.hxx>
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #include <hintids.hxx>
 #include <swtypes.hxx>
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
 #include <svx/xtable.hxx>
 #include <uitool.hxx>
 #include <editeng/sizeitem.hxx>

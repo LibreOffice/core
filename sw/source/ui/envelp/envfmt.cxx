@@ -43,44 +43,28 @@
 #define _SVSTDARR_LONGS
 #include <svl/svstdarr.hxx>
 #include <editeng/paperinf.hxx>
-#ifndef _SVX_TSTPITEM_HXX //autogen
 #include <editeng/tstpitem.hxx>
-#endif
 #include <editeng/lrspitem.hxx>
 #include <editeng/brshitem.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _MENU_HXX //autogen
 #include <vcl/menu.hxx>
-#endif
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #include <frmatr.hxx>
 #include <swtypes.hxx>
 #include <wrtsh.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
-#ifndef _BASESH_HXX
 #include <basesh.hxx>
-#endif
 #include <drpcps.hxx>
 #include <envfmt.hxx>
 #include <fmtcol.hxx>
-#ifndef _PARDLG_HXX
 #include "swuipardlg.hxx"
-#endif
 #include <pattern.hxx>
 #include <poolfmt.hxx>
 #include <uiborder.hxx>
 #include <uitool.hxx>
 
-#ifndef _ENVFMT_HRC
 #include <envfmt.hrc>
-#endif
 
 #include "swabstdlg.hxx"
 #include "chrdlg.hrc"

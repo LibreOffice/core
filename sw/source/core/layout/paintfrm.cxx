@@ -33,9 +33,7 @@
 
 #include <hintids.hxx>
 
-#ifndef _SOUND_HXX //autogen
 #include <vcl/sound.hxx>
-#endif
 #include <tools/poly.hxx>
 #define _SVSTDARR_LONGS
 #include <svl/svstdarr.hxx>
@@ -49,9 +47,7 @@
 // --> collapsing borders FME 2005-05-27 #i29550#
 #include <svx/framelink.hxx>
 // <--
-#ifndef _GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
-#endif
 #include <svx/svdpagv.hxx>
 #include <tgrditem.hxx>
 
@@ -59,9 +55,7 @@
 #include <fmtsrnd.hxx>
 #include <fmtclds.hxx>
 #include <tools/shl.hxx>
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 #include <swmodule.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
@@ -89,15 +83,11 @@
 #include <ptqueue.hxx>
 #include <noteurl.hxx>
 #include <virtoutp.hxx>
-#ifndef _LINEINFO_HXX
 #include <lineinfo.hxx>
-#endif
 #include <dbg_lay.hxx>
 #include <accessibilityoptions.hxx>
 // OD 20.12.2002 #94627#
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 // OD 28.02.2003 #b4779636#, #107692#
 #include <swtable.hxx>
 // OD 02.07.2003 #108784#

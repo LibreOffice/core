@@ -37,9 +37,7 @@
 #include <txtfld.hxx>
 #include <expfld.hxx>
 #include <docfld.hxx>   // fuer _SetGetExpFld
-#ifndef _UNOFLDMID_H
 #include <unofldmid.h>
-#endif
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;

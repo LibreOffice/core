@@ -30,18 +30,12 @@
 
 
 #include <hintids.hxx>
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 
 
 #include <svtools/textview.hxx>
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
-#ifndef _SCRBAR_HXX //autogen
 #include <vcl/scrbar.hxx>
-#endif
 #include <sfx2/dispatch.hxx>
 #include <sfx2/app.hxx>
 #include <svtools/htmltokn.h>
@@ -53,15 +47,9 @@
 #include <svtools/ctrltool.hxx>
 #include <tools/time.hxx>
 #include <swmodule.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
-#ifndef _SRCVIEW_HXX
 #include <srcview.hxx>
-#endif
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
 
 
 struct SwTextPortion

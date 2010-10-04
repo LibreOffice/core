@@ -52,9 +52,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
 
-#ifndef _POOLFMT_HRC
 #include <poolfmt.hrc>      // fuer InitFldTypes
-#endif
 #include <frmfmt.hxx>
 #include <frmatr.hxx>
 #include <fmtfsize.hxx>

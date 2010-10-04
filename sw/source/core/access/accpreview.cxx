@@ -31,9 +31,7 @@
 
 #include <vcl/svapp.hxx>
 #include <rtl/uuid.h>
-#ifndef _ACCESS_HRC
 #include "access.hrc"
-#endif
 #include <accpreview.hxx>
 
 

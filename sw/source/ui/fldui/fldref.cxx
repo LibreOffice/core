@@ -39,21 +39,13 @@
 #include <IMark.hxx>
 #include <expfld.hxx>
 #include <swmodule.hxx>
-#ifndef _FLDREF_HXX
 #include <fldref.hxx>
-#endif
 #include <reffld.hxx>
 #include <wrtsh.hxx>
 
-#ifndef _FLDUI_HRC
 #include <fldui.hrc>
-#endif
-#ifndef _FLDTDLG_HRC
 #include <fldtdlg.hrc>
-#endif
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
 // --> OD 2007-11-14 #i83479#
 #include <SwNodeNum.hxx>
 #include <IDocumentMarkAccess.hxx>

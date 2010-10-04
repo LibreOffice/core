@@ -34,14 +34,10 @@
 #include <ndtxt.hxx>            // class SwTxtNode
 #include <fltini.hxx>           // Ww1Reader
 #include <w1par.hxx>
-#ifndef _SWFLTOPT_HXX
 #include <swfltopt.hxx>
-#endif
 #include <mdiexp.hxx>           // StatLine...()
 #include <swerror.h>            // ERR_WW1_...
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>          // ResId fuer Statusleiste
-#endif
 
 //----------------------------------------
 //    Initialisieren der Feld-FilterFlags

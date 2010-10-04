@@ -51,9 +51,7 @@
 #include <authfld.hxx>
 #include <toxwrap.hxx>
 
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 #include <numrule.hxx>
 
 extern BOOL IsFrameBehind( const SwTxtNode& rMyNd, xub_StrLen nMySttPos,

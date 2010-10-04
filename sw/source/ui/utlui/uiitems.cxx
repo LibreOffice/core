@@ -38,9 +38,7 @@
 
 #include "utlui.hrc"
 #include "attrdesc.hrc"
-#ifndef _UNOMID_H
 #include <unomid.h>
-#endif
 #include <numrule.hxx>
 
 using namespace ::com::sun::star;

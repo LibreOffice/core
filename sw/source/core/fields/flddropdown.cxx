@@ -36,9 +36,7 @@
 #endif
 #include <svl/poolitem.hxx>
 
-#ifndef _UNOFLDMID_H
 #include <unofldmid.h>
-#endif
 #include <unoprnms.hxx>
 
 using namespace com::sun::star;

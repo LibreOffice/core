@@ -58,9 +58,7 @@
 #include <dbfld.hxx>
 #include <expfld.hxx>
 #include <usrfld.hxx>
-#ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
-#endif
 #include <docfld.hxx>
 #include <swunodef.hxx>
 #include <swtypes.hxx>

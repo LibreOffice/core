@@ -31,9 +31,7 @@
 
 #include <sfx2/bindings.hxx>
 #include <wrtsh.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <viewopt.hxx>
 #include <crsskip.hxx>
 

@@ -30,12 +30,8 @@
 
 
 #include <docufld.hxx>
-#ifndef _UNOFLDMID_H
 #include <unofldmid.h>
-#endif
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 #include <tools/resid.hxx>
 
 using namespace ::com::sun::star;

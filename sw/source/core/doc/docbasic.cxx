@@ -31,9 +31,7 @@
 
 #include <hintids.hxx>
 
-#ifndef _RTL_USTRING_HXX //autogen
 #include <rtl/ustring.hxx>
-#endif
 #include <svtools/imap.hxx>
 #include <svtools/imapobj.hxx>
 #include <basic/sbx.hxx>
@@ -43,9 +41,7 @@
 #include <frmatr.hxx>
 #include <docary.hxx>
 #include <doc.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <swevent.hxx>
 
 using namespace ::com::sun::star::uno;

@@ -36,32 +36,20 @@
 #include <ctype.h>
 #include <swwait.hxx>
 #include <wrtsh.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <swmodule.hxx>
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
-#ifndef _PVIEW_HXX
 #include <pview.hxx>
-#endif
 #include <doc.hxx>
 #include <docstdlg.hxx>
-#ifndef _MODCFG_HXX
 #include <modcfg.hxx>
-#endif
 
 // fuer Statistikfelder
 #include <fldmgr.hxx>
 #include <fldbas.hxx>
 
-#ifndef _DOCSTDLG_HRC
 #include <docstdlg.hrc>
-#endif
 
 
 /*--------------------------------------------------------------------

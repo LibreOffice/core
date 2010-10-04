@@ -37,9 +37,7 @@
 #include <mailmergewizard.hxx>
 #include <mmconfigitem.hxx>
 #include <vcl/msgbox.hxx>
-#ifndef _DBUI_HRC
 #include <dbui.hrc>
-#endif
 #include <swtypes.hxx>
 #include <mmoutputtypepage.hrc>
 #include <dbui.hrc>

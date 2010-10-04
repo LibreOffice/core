@@ -32,9 +32,7 @@
 #include <doc.hxx>
 #include <node.hxx>
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 
 
 /******************************************************************************

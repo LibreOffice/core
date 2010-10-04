@@ -34,9 +34,7 @@
 #include <svl/svstdarr.hxx>
 #include <tools/resmgr.hxx>
 #include <poolfmt.hxx>
-#ifndef _RDIC_HRC
 #include <rcid.hrc>
-#endif
 #include <tools/debug.hxx>
 extern ResMgr* pSwResMgr;
 // Initialise UI names to 0

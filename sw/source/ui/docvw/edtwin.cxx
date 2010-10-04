@@ -120,9 +120,7 @@
 
 #include <helpid.h>
 #include <cmdid.h>
-#ifndef _DOCVW_HRC
 #include <docvw.hrc>
-#endif
 #include <uitool.hxx>
 // OD 18.09.2003 #i18732#
 #include <fmtfollowtextflow.hxx>

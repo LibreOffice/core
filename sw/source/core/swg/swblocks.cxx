@@ -32,9 +32,7 @@
 #include <sfx2/docfilt.hxx>
 #include <sot/storage.hxx>
 #include <tools/urlobj.hxx>
-#ifndef SVTOOLS_FSTATHELPER_HXX
 #include <svl/fstathelper.hxx>
-#endif
 #include <svl/macitem.hxx>
 #include <unotools/charclass.hxx>
 #include <frmfmt.hxx>
@@ -46,14 +44,10 @@
 #include <ndtxt.hxx>
 #include <mdiexp.hxx>       // Progress
 #include <SwXMLTextBlocks.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <swunohelper.hxx>
 
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>
-#endif
 #include <swerror.h>
 
 SV_IMPL_OP_PTRARR_SORT( SwBlockNames, SwBlockName* );

@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 #include <pagepreviewlayout.hxx>
-#ifndef _PREVWPAGE_HXX
 #include <prevwpage.hxx>
-#endif
 
 #include <algorithm>
 #include <vcl/window.hxx>
@@ -40,9 +38,7 @@
 #include <viewimp.hxx>
 #include <viewopt.hxx>
 #include <swregion.hxx>
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 #include <frmtool.hxx>
 #include <svx/zoomitem.hxx>
 #include <printdata.hxx>

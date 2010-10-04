@@ -29,9 +29,7 @@
 #include "precompiled_sw.hxx"
 #include <com/sun/star/embed/EmbedStates.hpp>
 
-#ifndef _SFX_CLIENTSH_HXX
 #include <sfx2/ipclient.hxx>
-#endif
 #include <sfx2/viewsh.hxx>
 #include <sfx2/app.hxx>
 #include <unotools/moduleoptions.hxx>

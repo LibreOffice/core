@@ -36,9 +36,7 @@
 #include <txtfrm.hxx>
 #include <pagefrm.hxx>
 #include <frmtool.hxx>
-#ifndef _SVX_SVDOBJ_HXX
 #include <svx/svdobj.hxx>
-#endif
 #include <dflyobj.hxx>
 #include <dcontact.hxx>
 #include <frmfmt.hxx>

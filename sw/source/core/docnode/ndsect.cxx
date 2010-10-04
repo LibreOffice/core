@@ -58,9 +58,7 @@
 #include <node2lay.hxx>
 #include <doctxm.hxx>
 #include <fmtftntx.hxx>
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 // --> OD 2005-12-01 #i27138#
 #include <viewsh.hxx>
 #include <txtfrm.hxx>

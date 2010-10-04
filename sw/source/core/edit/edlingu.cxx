@@ -35,9 +35,7 @@
 
 #include <unoflatpara.hxx>
 
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 #include <hintids.hxx>
 #include <linguistic/lngprops.hxx>
 #include <vcl/msgbox.hxx>
@@ -57,9 +55,7 @@
 #include <viscrs.hxx>       // SwShellCrsr
 #include <SwGrammarMarkUp.hxx>      // SwWrongList
 #include <mdiexp.hxx>       // Statusanzeige
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>      // StatLine-String
-#endif
 #include <cntfrm.hxx>
 #include <crsskip.hxx>
 #include <splargs.hxx>

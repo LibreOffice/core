@@ -36,17 +36,11 @@
 #include <wrtsh.hxx>
 #include <fldbas.hxx>
 #include <fldmgr.hxx>
-#ifndef _MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
 #include <DropDownFieldDialog.hxx>
 #include <flddropdown.hxx>
-#ifndef _FLDUI_HRC
 #include <fldui.hrc>
-#endif
-#ifndef _SW_DROPDOWNFIELDDIALOG_HRC
 #include <DropDownFieldDialog.hrc>
-#endif
 
 using namespace ::com::sun::star;
 

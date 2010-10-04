@@ -48,14 +48,10 @@
 #include <swtypes.hxx>  // fuer Pathfinder
 #include <errhdl.hxx>
 #include <swmodule.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <navicfg.hxx>
 #include <wrtsh.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <actctrl.hxx>
 #include <IMark.hxx>
 #include <navipi.hxx>
@@ -64,21 +60,11 @@
 #include <section.hxx>
 #include <edtwin.hxx>
 #include <sfx2/app.hxx>
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
-#ifndef _RIBBAR_HRC
 #include <ribbar.hrc>
-#endif
-#ifndef _NAVIPI_HRC
 #include <navipi.hrc>
-#endif
-#ifndef _UTLUI_HRC
 #include <utlui.hrc>
-#endif
 
 #include <unomid.h>
 

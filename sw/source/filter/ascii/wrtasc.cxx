@@ -39,9 +39,7 @@
 #include <frmfmt.hxx>
 #include <wrtasc.hxx>
 
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>          // ResId fuer Statusleiste
-#endif
 
 //-----------------------------------------------------------------
 

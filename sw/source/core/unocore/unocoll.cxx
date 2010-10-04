@@ -31,9 +31,7 @@
 #include <swtypes.hxx>
 #include <cmdid.h>
 #include <hintids.hxx>
-#ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
-#endif
 #include <doc.hxx>
 #include <docary.hxx>
 #include <fmtcol.hxx>

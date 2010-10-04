@@ -31,9 +31,7 @@
 
 #include <hintids.hxx>
 
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <svl/whiter.hxx>
 #include <svl/stritem.hxx>
 #include <svl/itemiter.hxx>
@@ -52,29 +50,19 @@
 #include "paratr.hxx"
 
 #include <fmtinfmt.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <wrtsh.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <viewopt.hxx>
 #include <uitool.hxx>
-#ifndef _TEXTSH_HXX
 #include <textsh.hxx>
-#endif
 #include <num.hxx>
 #include <swundo.hxx>
 #include <fmtcol.hxx>
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #include <globals.h>
-#ifndef _SHELLS_HRC
 #include <shells.hrc>
-#endif
 #include <SwStyleNameMapper.hxx>
 #include "swabstdlg.hxx"
 #include "chrdlg.hrc"

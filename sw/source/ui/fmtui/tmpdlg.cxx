@@ -52,18 +52,12 @@
 #include <swmodule.hxx>
 #include <errhdl.hxx>       // fuer Create-Methoden
 #include <wrtsh.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wdocsh.hxx>
 #include <viewopt.hxx>
 #include <pgfnote.hxx>
-#ifndef _PGFGRID_HXX
 #include <pggrid.hxx>
-#endif
-#ifndef _TMPDLG_HXX
 #include <tmpdlg.hxx>       // der Dialog
-#endif
 #include <column.hxx>       // Spalten
 #include <drpcps.hxx>       // Initialen
 #include <frmpage.hxx>      // Rahmen
@@ -78,18 +72,10 @@
 #include <uitool.hxx>
 #include <shellres.hxx>
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
-#ifndef _FMTUI_HRC
 #include <fmtui.hrc>
-#endif
 #include <SwStyleNameMapper.hxx>
 #include <svx/svxids.hrc>
 #include <svl/stritem.hxx>

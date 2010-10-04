@@ -32,9 +32,7 @@
 #include <svl/urihelper.hxx>
 #include <svl/languageoptions.hxx>
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <sfx2/linkmgr.hxx>
 #include <svx/htmlmode.hxx>
 #include <svx/imapdlg.hxx>
@@ -97,15 +95,9 @@
 #include <caption.hxx>
 #include <swwait.hxx>
 #include <cmdid.h>
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
-#ifndef _SHELLS_HRC
 #include <shells.hrc>
-#endif
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>
-#endif
 #include <globals.h>
 #include <unotxdoc.hxx>
 #include <crsskip.hxx>
@@ -121,9 +113,7 @@
 #include <svx/fmshell.hxx> // for FN_XFORMS_DESIGN_MODE
 #include <SwRewriter.hxx>
 #include <undobj.hxx>
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 
 #include <unomid.h>
 

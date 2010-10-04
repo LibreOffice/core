@@ -40,18 +40,12 @@
 #include <svl/srchitem.hxx>
 #include <sfx2/request.hxx>
 #include <swmodule.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wrtsh.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <viewopt.hxx>
 #include <frmatr.hxx>
-#ifndef _WDOCSH_HXX
 #include <wdocsh.hxx>
-#endif
 #include <uitool.hxx>
 #include <edtwin.hxx>
 #include <pagedesc.hxx>
@@ -60,25 +54,13 @@
 #include <workctrl.hxx>
 #include <usrpref.hxx>
 #include <scroll.hxx>
-#ifndef _WVIEW_HXX
 #include <wview.hxx>
-#endif
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _VIEW_HRC
 #include <view.hrc>
-#endif
-#ifndef _RIBBAR_HRC
 #include <ribbar.hrc>
-#endif
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
 
 #include <IDocumentSettingAccess.hxx>
 #include <PostItMgr.hxx>

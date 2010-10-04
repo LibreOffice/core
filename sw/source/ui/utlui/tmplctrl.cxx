@@ -32,14 +32,10 @@
 
 
 #include <svl/style.hxx>
-#ifndef _MENU_HXX //autogen
 #include <vcl/menu.hxx>
-#endif
 #include <svl/stritem.hxx>
 #include <sfx2/dispatch.hxx>
-#ifndef _STATUS_HXX //autogen
 #include <vcl/status.hxx>
-#endif
 
 #include "wrtsh.hxx"
 #include "view.hxx"

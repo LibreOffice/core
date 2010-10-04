@@ -52,9 +52,7 @@
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <wrtsh.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <cnttab.hxx>
 #include <poolfmt.hxx>
 #include <unoprnms.hxx>
@@ -63,21 +61,11 @@
 #include <docsh.hxx>
 #include <swmodule.hxx>
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _UTLUI_HRC
 #include <utlui.hrc>
-#endif
-#ifndef _INDEX_HRC
 #include <index.hrc>
-#endif
-#ifndef _CNTTAB_HRC
 #include <cnttab.hrc>
-#endif
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
 #include <SwStyleNameMapper.hxx>
 #include <swuicnttab.hxx>
 #include <unomid.h>

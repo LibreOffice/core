@@ -34,9 +34,7 @@
 #include <svtools/htmlout.hxx>
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
 #include <editeng/ulspitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/brshitem.hxx>
@@ -65,9 +63,7 @@
 #include <wrthtml.hxx>
 #include <wrtswtbl.hxx>
 #ifdef DBG_UTIL
-#ifndef _VIEWSH_HXX
 #include <viewsh.hxx>
-#endif
 #include <viewopt.hxx>
 #endif
 

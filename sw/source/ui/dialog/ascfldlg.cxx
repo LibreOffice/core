@@ -51,12 +51,8 @@
 #include <doc.hxx>
 #include <errhdl.hxx>
 
-#ifndef _DIALOG_HRC
 #include <dialog.hrc>
-#endif
-#ifndef _ASCFLDLG_HRC
 #include <ascfldlg.hrc>
-#endif
 
 
 using namespace ::com::sun::star;

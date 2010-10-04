@@ -56,9 +56,7 @@
 #include <ndole.hxx>
 #include <swtable.hxx>
 #include <swtypes.hxx>
-#ifndef _UNOCORE_HRC
 #include <unocore.hrc>
-#endif
 
 #include <docary.hxx>
 

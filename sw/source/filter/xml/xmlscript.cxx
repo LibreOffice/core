@@ -33,9 +33,7 @@
 #include <hintids.hxx>
 #include <xmloff/xmlnmspe.hxx>
 
-#ifndef _XMLOFF_XMLMETAI_HXX
 #include <xmloff/xmlscripti.hxx>
-#endif
 #include "xmlimp.hxx"
 #include "xmlexp.hxx"
 

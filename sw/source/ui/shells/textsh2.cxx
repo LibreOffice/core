@@ -40,9 +40,7 @@
 #include <sfx2/event.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <svl/stritem.hxx>
 #include <svl/itemset.hxx>
 #include <sfx2/request.hxx>

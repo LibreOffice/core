@@ -33,29 +33,19 @@
 #include <svx/svdview.hxx>
 #include <svx/ruler.hxx>
 #include <idxmrk.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wrtsh.hxx>
 #include <swmodule.hxx>
 #include <viewopt.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
-#ifndef _GLOBDOC_HXX
 #include <globdoc.hxx>
-#endif
 #include <navipi.hxx>
 #include <fldwrap.hxx>
-#ifndef _REDLNDLG_HXX
 #include <redlndlg.hxx>
-#endif
 #include <dpage.hxx>
 #include <edtwin.hxx>
 #include "formatclipboard.hxx"
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 // header for class SfxRequest
 #include <sfx2/request.hxx>
 

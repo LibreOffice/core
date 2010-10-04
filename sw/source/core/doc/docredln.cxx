@@ -31,9 +31,7 @@
 
 #include <hintids.hxx>
 #include <tools/shl.hxx>
-#ifndef _SFX_ITEMITER_HXX //autogen
 #include <svl/itemiter.hxx>
-#endif
 #include <sfx2/app.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/udlnitem.hxx>

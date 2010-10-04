@@ -40,9 +40,7 @@
 #include <sfx2/docfac.hxx>
 #include <vcl/msgbox.hxx>
 #include <view.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <mmdocselectpage.hxx>
 #include <mailmergewizard.hxx>
 #include <shellio.hxx>

@@ -31,32 +31,22 @@
 
 #include <sfx2/request.hxx>
 #include <svl/eitem.hxx>
-#ifndef __SBX_SBXVARIABLE_HXX //autogen
 #include <basic/sbxvar.hxx>
-#endif
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wrtsh.hxx>
-#ifndef _TEXTSH_HXX
 #include <textsh.hxx>
-#endif
 #include <num.hxx>
 #include <edtwin.hxx>
 #include <crsskip.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #include <globals.h>
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
 
 #include <svx/svdouno.hxx>
 #include <svx/fmshell.hxx>

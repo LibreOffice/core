@@ -44,9 +44,7 @@
 #include <svl/zformat.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svtools/transfer.hxx>
-#ifndef _SFXSIDS_HRC //autogen
 #include <sfx2/dialogs.hrc>
-#endif
 #include <sfx2/dinfdlg.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
@@ -57,9 +55,7 @@
 #include <svtools/sfxecode.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
-#ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
-#endif
 #include <svx/drawitem.hxx>
 #include <editeng/svxacorr.hxx>
 #include <editeng/langitem.hxx>
@@ -103,15 +99,9 @@
 #include <cmdid.h>
 #include <globals.h>
 #include <helpid.h>
-#ifndef _APP_HRC
 #include <app.hrc>
-#endif
-#ifndef _POOLFMT_HRC
 #include <poolfmt.hrc>
-#endif
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>

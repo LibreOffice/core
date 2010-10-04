@@ -29,9 +29,7 @@
 #include "precompiled_sw.hxx"
 #include <editsh.hxx>
 #include <dbfld.hxx>
-#ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
-#endif
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

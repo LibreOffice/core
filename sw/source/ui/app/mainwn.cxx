@@ -33,13 +33,9 @@
 #include <mdiexp.hxx>
 #include <tools/shl.hxx>
 #include <tools/string.hxx>
-#ifndef _SVARRAY_HXX
 #include <svl/svstdarr.hxx>
-#endif
 #include <sfx2/progress.hxx>
-#ifndef _RESID_HXX //autogen
 #include <tools/resid.hxx>
-#endif
 #include <docsh.hxx>
 #include <swmodule.hxx>
 #include "swtypes.hxx"

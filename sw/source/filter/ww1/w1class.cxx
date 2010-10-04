@@ -32,9 +32,7 @@
 #include <string.h>
 #include <tools/stream.hxx>
 
-#ifndef _W1CLASS_HXX
 #include <w1class.hxx>
-#endif
 
 
 #ifdef DUMP

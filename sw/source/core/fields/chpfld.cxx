@@ -36,9 +36,7 @@
 #include <ndtxt.hxx>
 #include <chpfld.hxx>
 #include <expfld.hxx>       // fuer GetBodyTxtNode
-#ifndef _UNOFLDMID_H
 #include <unofldmid.h>
-#endif
 #include <numrule.hxx>
 
 using namespace ::com::sun::star;

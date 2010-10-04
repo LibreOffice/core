@@ -38,12 +38,8 @@
 #include <sfx2/imgmgr.hxx>
 #include <vcl/wrkwin.hxx>
 #include "toolbox.hxx"
-#ifndef _STARMATH_HRC
 #include "starmath.hrc"
-#endif
-#ifndef _TOOLBOX_HRC_
 #include "toolbox.hrc"
-#endif
 #include "view.hxx"
 
 

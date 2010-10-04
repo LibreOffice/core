@@ -34,9 +34,7 @@
 
 
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #include <swtypes.hxx>
 #include <unotools/confignode.hxx>
 #include <comphelper/processfactory.hxx>

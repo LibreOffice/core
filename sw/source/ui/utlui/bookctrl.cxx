@@ -37,15 +37,9 @@
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/dispatch.hxx>
-#ifndef _EVENT_HXX //autogen
 #include <vcl/event.hxx>
-#endif
-#ifndef _STATUS_HXX //autogen
 #include <vcl/status.hxx>
-#endif
-#ifndef _MENU_HXX //autogen
 #include <vcl/menu.hxx>
-#endif
 #include "cmdid.h"
 #include "errhdl.hxx"
 #include "swmodule.hxx"

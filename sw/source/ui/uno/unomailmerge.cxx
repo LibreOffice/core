@@ -54,9 +54,7 @@
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
-#ifndef _COM_SUN_STAR_UTIL_CloseVetoException_HPP_
 #include <com/sun/star/util/CloseVetoException.hpp>
-#endif
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include "com/sun/star/mail/XSmtpService.hpp"
@@ -70,9 +68,7 @@
 #include <unomap.hxx>
 #include <swunohelper.hxx>
 #include <docsh.hxx>
-#ifndef IDOCUMENTDEVICEACCESS_HXX_INCLUDED
 #include <IDocumentDeviceAccess.hxx>
-#endif
 #include <view.hxx>
 #include <dbmgr.hxx>
 #include <unotxdoc.hxx>

@@ -34,12 +34,8 @@
 #include <swcrsr.hxx>
 #include <editeng/lrspitem.hxx> // #i23725#
 // --> OD 2006-07-10 #134369#
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
-#ifndef _DRAWBASE_HXX
 #include <drawbase.hxx>
-#endif
 // <--
 
 inline void SwWrtShell::OpenMark()

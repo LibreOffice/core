@@ -36,9 +36,7 @@
 
 #include "hintids.hxx"
 #include <svx/gallery.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <editeng/brshitem.hxx>
 #include <svl/urihelper.hxx>
 #include <vcl/graph.hxx>

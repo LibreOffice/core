@@ -37,16 +37,10 @@
 #include <mailconfigpage.hxx>
 #include <cmdid.h>
 #include <swtypes.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wrtsh.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
-#ifndef IDOCUMENTDEVICEACCESS_HXX_INCLUDED
 #include <IDocumentDeviceAccess.hxx>
-#endif
 #include <hintids.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <editeng/langitem.hxx>
@@ -66,9 +60,7 @@
 //#endif
 #include <tools/urlobj.hxx>
 #include <svl/urihelper.hxx>
-#ifndef _VCL_PRINT_HXX
 #include <vcl/print.hxx>
-#endif
 #include <unotools/tempfile.hxx>
 #include <osl/file.hxx>
 #include <mmgreetingspage.hxx>
@@ -81,9 +73,7 @@
 //#ifndef _BASEDLGS_HXX
 //#include <sfx2/basedlgs.hxx>
 //#endif
-#ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
-#endif
 #include <swunohelper.hxx>
 #include <vos/mutex.hxx>
 #include <shellio.hxx>

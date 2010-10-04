@@ -35,12 +35,8 @@
 #ifndef __RSC //autogen
 #include <tools/errinf.hxx>
 #endif
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <svl/macitem.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfile.hxx>
@@ -63,21 +59,13 @@
 #include <initui.hxx>                   // fuer ::GetGlossaries()
 #include <gloslst.hxx>
 #include <swdtflvr.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <crsskip.hxx>
 
-#ifndef _DOCHDL_HRC
 #include <dochdl.hrc>
-#endif
-#ifndef _SWERROR_H
 #include <swerror.h>
-#endif
 #include <frmmgr.hxx>
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
 
 #include <editeng/acorrcfg.hxx>
 #include "swabstdlg.hxx"

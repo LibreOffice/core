@@ -34,9 +34,7 @@
 #include <tools/errinf.hxx>
 #include <vcl/svapp.hxx>
 #include <basegfx/vector/b2dvector.hxx>
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <editeng/protitem.hxx>
 #include <editeng/brshitem.hxx>
 #include <editeng/frmdiritem.hxx>

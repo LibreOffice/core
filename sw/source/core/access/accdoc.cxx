@@ -44,9 +44,7 @@
 #include <doc.hxx>
 #include <accmap.hxx>
 #include <accdoc.hxx>
-#ifndef _ACCESS_HRC
 #include "access.hrc"
-#endif
 #include <pagefrm.hxx>
 
 const sal_Char sServiceName[] = "com.sun.star.text.AccessibleTextDocumentView";

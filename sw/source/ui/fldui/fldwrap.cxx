@@ -30,35 +30,23 @@
 
 
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #include <swtypes.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/msgbox.hxx>
 #include <svx/htmlmode.hxx>
 #include <viewopt.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <fldwrap.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <swmodule.hxx>
 
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
-#ifndef _FLDUI_HRC
 #include <fldui.hrc>
-#endif
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
-#ifndef _FLDTDLG_HRC
 #include <fldtdlg.hrc>
-#endif
 #include "swabstdlg.hxx"
 
 SFX_IMPL_CHILDWINDOW(SwFldDlgWrapper, FN_INSERT_FIELD)

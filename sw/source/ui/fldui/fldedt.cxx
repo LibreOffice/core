@@ -37,45 +37,23 @@
 #include <sfx2/app.hxx>
 #include <svx/optgenrl.hxx>
 #include <docufld.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <dbfld.hxx>
 #include <wrtsh.hxx>
-#ifndef _FLDDB_HXX
 #include <flddb.hxx>
-#endif
-#ifndef _FLDDINF_HXX
 #include <flddinf.hxx>
-#endif
-#ifndef _FLDVAR_HXX
 #include <fldvar.hxx>
-#endif
-#ifndef _FLDDOK_HXX
 #include <flddok.hxx>
-#endif
-#ifndef _FLDFUNC_HXX
 #include <fldfunc.hxx>
-#endif
-#ifndef _FLDREF_HXX
 #include <fldref.hxx>
-#endif
 #include <fldedt.hxx>
 #include <crsskip.hxx>
 
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
-#ifndef _FLDUI_HRC
 #include <fldui.hrc>
-#endif
 #include "swabstdlg.hxx"
 #include "dialog.hrc"
 

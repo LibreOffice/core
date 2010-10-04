@@ -36,9 +36,7 @@
 #include "wrtsh.hxx"
 #include "globals.hrc"
 #include <vcl/msgbox.hxx>
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
 #include <linguistic/lngprops.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <swwait.hxx>

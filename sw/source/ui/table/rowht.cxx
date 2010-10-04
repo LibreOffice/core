@@ -44,24 +44,14 @@
 #include <rowht.hxx>
 #include <wrtsh.hxx>
 #include <frmatr.hxx>
-#ifndef _WDOCSH_HXX
 #include <wdocsh.hxx>
-#endif
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <swmodule.hxx>
 #include <usrpref.hxx>
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _ROWHT_HRC
 #include <rowht.hrc>
-#endif
-#ifndef _TABLE_HRC
 #include <table.hrc>
-#endif
 
 
 

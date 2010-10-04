@@ -35,12 +35,8 @@
 
 #include <swtypes.hxx>
 #include <mergetbl.hxx>
-#ifndef _MERGETBL_HRC
 #include <mergetbl.hrc>
-#endif
-#ifndef _TABLE_HRC
 #include <table.hrc>
-#endif
 
 
 SwMergeTblDlg::SwMergeTblDlg( Window *pParent, BOOL& rWithPrev )

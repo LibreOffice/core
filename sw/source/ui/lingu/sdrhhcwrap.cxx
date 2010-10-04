@@ -44,13 +44,9 @@
 #include <unotools/localedatawrapper.hxx>
 #include <sdrhhcwrap.hxx>
 #include <frmfmt.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>        //     "     "     "
-#endif
 #include <wrtsh.hxx>        //  MakeVisible
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <dcontact.hxx>     // Spelling von DrawObj
 #include <doc.hxx>        //     "     "     "
 #include <docary.hxx>

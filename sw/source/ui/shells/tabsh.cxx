@@ -96,19 +96,11 @@
 */
 //!!!
 
-#ifndef _POPUP_HRC
 #include <popup.hrc>
-#endif
-#ifndef _SHELLS_HRC
 #include <shells.hrc>
-#endif
-#ifndef _TABLE_HRC
 #include <table.hrc>
-#endif
 #include <cmdid.h>
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
 #include <helpid.h>
 #include <unobaseclass.hxx>
 

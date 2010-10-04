@@ -37,9 +37,7 @@
 #include <vcl/svapp.hxx>
 #include <hffrm.hxx>
 #include "accheaderfooter.hxx"
-#ifndef _ACCESS_HRC
 #include "access.hrc"
-#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;

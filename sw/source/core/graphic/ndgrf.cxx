@@ -31,9 +31,7 @@
 #include <vcl/salbtype.hxx>             // FRound
 #include <tools/urlobj.hxx>
 #include <svl/undo.hxx>
-#ifndef SVTOOLS_FSTATHELPER_HXX
 #include <svl/fstathelper.hxx>
-#endif
 #include <svtools/imap.hxx>
 #include <svtools/filter.hxx>
 #include <sot/storage.hxx>

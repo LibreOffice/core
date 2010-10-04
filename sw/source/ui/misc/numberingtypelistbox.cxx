@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 #include <numberingtypelistbox.hxx>
-#ifndef _MISC_HRC
 #include <misc.hrc>
-#endif
 #include <cnttab.hxx>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/text/XDefaultNumberingProvider.hpp>

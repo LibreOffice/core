@@ -36,12 +36,8 @@
 
 #include <SwSmartTagMgr.hxx>
 
-#ifndef _STMENU_HRC
 #include <stmenu.hrc>
-#endif
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <breakit.hxx>
 
 #define C2U(cChar) rtl::OUString::createFromAscii(cChar)

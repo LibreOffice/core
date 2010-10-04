@@ -29,9 +29,7 @@
 #include <charfmt.hxx>
 #include <charatr.hxx>
 #include <paratr.hxx>
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #include <numrule.hxx>
 
 #define RTF_NUMRULE_NAME "RTF_Num"

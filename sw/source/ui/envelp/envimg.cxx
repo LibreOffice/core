@@ -42,12 +42,8 @@
 #include <swtypes.hxx>
 #include <envimg.hxx>
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _ENVELP_HRC
 #include <envelp.hrc>
-#endif
 
 #include <unomid.h>
 

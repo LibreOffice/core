@@ -40,16 +40,10 @@
 #include <label.hxx>
 #include <labprt.hxx>
 #include <labimg.hxx>
-#ifndef _LABIMP_HXX
 #include "swuilabimp.hxx"
-#endif
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _LABPRT_HRC
 #include <labprt.hrc>
-#endif
 
 
 // --------------------------------------------------------------------------

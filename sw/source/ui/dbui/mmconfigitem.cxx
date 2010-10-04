@@ -47,12 +47,8 @@
 #include <unotools/configitem.hxx>
 #include <mailmergehelper.hxx>
 #include <swunohelper.hxx>
-#ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
-#endif
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wrtsh.hxx>
 #include <dbui.hrc>
 #include <vector>

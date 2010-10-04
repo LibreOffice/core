@@ -31,15 +31,11 @@
 // include ---------------------------------------------------------------
 #include <viewlayoutctrl.hxx>
 
-#ifndef _STATUS_HXX //autogen
 #include <vcl/status.hxx>
-#endif
 #include <vcl/image.hxx>
 #include <svl/eitem.hxx>
 #include <svx/viewlayoutitem.hxx>
-#ifndef _UTLUI_HRC
 #include <utlui.hrc>
-#endif
 #include <swtypes.hxx>  // fuer Pathfinder
 
 // STATIC DATA -----------------------------------------------------------

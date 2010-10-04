@@ -67,9 +67,7 @@
 #include <fmtcol.hxx>
 #include <ndtxt.hxx>
 #include <fmtline.hxx>
-#ifndef _POOLFMT_HRC
 #include <poolfmt.hrc>
-#endif
 #include <GetMetricVal.hxx>
 #include <numrule.hxx>
 

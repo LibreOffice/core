@@ -29,9 +29,7 @@
 #include "precompiled_sw.hxx"
 #include <fmtwrapinfluenceonobjpos.hxx>
 
-#ifndef _UNOMID_H
 #include <unomid.h>
-#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

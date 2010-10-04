@@ -35,16 +35,10 @@
 #include <com/sun/star/i18n/ScriptType.hdl>
 #endif
 
-#ifndef _GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
-#endif
 #include <editeng/brshitem.hxx>
-#ifndef _METRIC_HXX //autogen
 #include <vcl/metric.hxx>
-#endif
-#ifndef _OUTDEV_HXX //autogen
 #include <vcl/outdev.hxx>
-#endif
 #include <viewopt.hxx>  // SwViewOptions
 #include <txtcfg.hxx>
 #include <SwPortionHandler.hxx>
@@ -54,9 +48,7 @@
 #include <blink.hxx>    // pBlink
 #include <frmtool.hxx>  // DrawGraphic
 #include <viewsh.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <doc.hxx>
 #include <breakit.hxx>
 #include <porrst.hxx>

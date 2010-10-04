@@ -47,12 +47,8 @@
 #include <grfatr.hxx>
 #include <swunohelper.hxx>
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _UNOMID_H
 #include <unomid.h>
-#endif
 
 using namespace ::com::sun::star;
 

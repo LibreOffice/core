@@ -38,27 +38,17 @@
 #include <docufld.hxx>
 #include <expfld.hxx>
 #include <ddefld.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wrtsh.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
 #include <swmodule.hxx>
-#ifndef _FLDVAR_HXX
 #include <fldvar.hxx>
-#endif
 #include <calc.hxx>
 #include <svl/zformat.hxx>
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
-#ifndef _FLDUI_HRC
 #include <fldui.hrc>
-#endif
-#ifndef _FLDTDLG_HRC
 #include <fldtdlg.hrc>
-#endif
 
 #define USER_DATA_VERSION_1 "1"
 #define USER_DATA_VERSION USER_DATA_VERSION_1

@@ -52,9 +52,7 @@
 #include <ndtxt.hxx>
 #include <scriptinfo.hxx>
 #include <mdiexp.hxx>           // GetSearchDialog
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>          // ResId fuer Abfrage wenn zu Search & Replaces
-#endif
 
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/sdrpaintwindow.hxx>

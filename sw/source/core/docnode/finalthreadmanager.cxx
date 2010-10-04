@@ -27,9 +27,7 @@
 #include "precompiled_sw.hxx"
 #include <finalthreadmanager.hxx>
 
-#ifndef _OSL_THREAD_HXX_
 #include <osl/thread.hxx>
-#endif
 #include <errhdl.hxx>
 #include <pausethreadstarting.hxx>
 #include <swthreadjoiner.hxx>

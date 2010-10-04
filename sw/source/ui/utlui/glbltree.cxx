@@ -66,15 +66,9 @@
 
 #include <cmdid.h>
 #include <helpid.h>
-#ifndef _NAVIPI_HRC
 #include <navipi.hrc>
-#endif
-#ifndef _UTLUI_HRC
 #include <utlui.hrc>
-#endif
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 #include <globals.hrc>
 #include "swabstdlg.hxx"
 

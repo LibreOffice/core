@@ -52,9 +52,7 @@
 #include <editeng/wrlmitem.hxx>
 #include <editeng/protitem.hxx>
 #include <editeng/opaqitem.hxx>
-#ifndef _SVX_TSTPITEM_HXX //autogen
 #include <editeng/tstpitem.hxx>
-#endif
 #include <editeng/akrnitem.hxx>
 #include <editeng/keepitem.hxx>
 #include <editeng/kernitem.hxx>
@@ -82,9 +80,7 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/fhgtitem.hxx>
-#ifndef _SVX_CNTRITEM_HXX //autogen
 #include <editeng/cntritem.hxx>
-#endif
 #include <editeng/colritem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/sizeitem.hxx>

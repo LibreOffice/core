@@ -35,9 +35,7 @@
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
 #endif
-#ifndef _GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
-#endif
 #include <svl/urihelper.hxx>
 #include <svtools/rtftoken.h>
 #include <svl/zforlist.hxx>
@@ -60,9 +58,7 @@
 #include <docufld.hxx>
 #include <flddat.hxx>
 #include <charfmt.hxx>
-#ifndef _fmtruby_HXX
 #include <fmtruby.hxx>
-#endif
 #include <breakit.hxx>
 #include <reffld.hxx>
 #include <SwStyleNameMapper.hxx>

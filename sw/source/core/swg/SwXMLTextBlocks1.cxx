@@ -39,9 +39,7 @@
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <doc.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <shellio.hxx>
 #include <SwXMLTextBlocks.hxx>
 #include <SwXMLBlockImport.hxx>

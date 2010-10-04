@@ -33,32 +33,18 @@
 
 
 #include <swmodule.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wrtsh.hxx>
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
 #include <dbfld.hxx>
-#ifndef _FLDTDLG_HXX
 #include <fldtdlg.hxx>
-#endif
 #include <numrule.hxx>
 
-#ifndef _FLDTDLG_HRC
 #include <fldtdlg.hrc>
-#endif
-#ifndef _FLDUI_HRC
 #include <fldui.hrc>
-#endif
-#ifndef _FLDDB_HXX
 #include <flddb.hxx>
-#endif
 #include <dbconfig.hxx>
-#ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
-#endif
 
 #define USER_DATA_VERSION_1     "1"
 #define USER_DATA_VERSION USER_DATA_VERSION_1

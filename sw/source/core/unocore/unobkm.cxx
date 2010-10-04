@@ -42,9 +42,7 @@
 #include <doc.hxx>
 #include <docary.hxx>
 #include <swundo.hxx>
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 #include <undobj.hxx>
 #include <docsh.hxx>
 

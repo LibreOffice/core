@@ -41,17 +41,13 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <editeng/pmdlitem.hxx>
-#ifndef _SVX_TSTPITEM_HXX //autogen
 #include <editeng/tstpitem.hxx>
-#endif
 #include <editeng/boxitem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <svx/pageitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <svl/style.hxx>
-#ifndef _VCL_LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
 #include <unotools/localedatawrapper.hxx>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -66,14 +62,10 @@
 #include <fmtpdsc.hxx>
 #include <wview.hxx>
 #include <uiitems.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <wrtsh.hxx>
 #include <swmodule.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <uitool.hxx>
 #include <frmatr.hxx>
 #include <paratr.hxx>
@@ -81,18 +73,10 @@
 #include <poolfmt.hxx>
 #include "usrpref.hxx"
 
-#ifndef _ERROR_H
 #include <error.h>
-#endif
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
-#ifndef _UTLUI_HRC
 #include <utlui.hrc>
-#endif
 #include <doc.hxx>
 #include <docary.hxx>
 #include <charfmt.hxx>

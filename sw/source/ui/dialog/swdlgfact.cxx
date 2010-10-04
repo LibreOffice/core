@@ -34,9 +34,7 @@
 
 #include "swdlgfact.hxx"
 #include <svl/style.hxx>
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include "dialog.hrc"
 #include "misc.hrc"
 #include "chrdlg.hrc"
