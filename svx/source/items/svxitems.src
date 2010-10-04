@@ -32,7 +32,7 @@
 
 StringArray RID_ATTR_NAMES
 {
-    ItemList =
+    ItemList [ en-US ] =
     {
         < "Scale"           ;           SID_ATTR_ZOOM ; > ;
         < "Brush"           ;           SID_ATTR_BRUSH ; > ;

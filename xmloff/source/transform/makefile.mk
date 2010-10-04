@@ -93,3 +93,11 @@ DEF1NAME = $(SHL1TARGET)
 SLOFILES = $(SHL1OBJS)
 
 .INCLUDE: target.mk
+
+ALLTAR : $(MISC)/xof.component
+
+$(MISC)/xof.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        xof.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt xof.component

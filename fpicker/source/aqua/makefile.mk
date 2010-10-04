@@ -83,3 +83,11 @@ DEF1NAME=$(SHL1TARGET)
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
+
+ALLTAR : $(MISC)/fps_aqua.component
+
+$(MISC)/fps_aqua.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        fps_aqua.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt fps_aqua.component
