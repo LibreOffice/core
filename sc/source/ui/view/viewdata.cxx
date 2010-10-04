@@ -28,10 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
-// INCLUDE ---------------------------------------------------------------
-
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 
@@ -74,8 +70,6 @@
 
 using namespace com::sun::star;
 
-// STATIC DATA -----------------------------------------------------------
-
 #define SC_GROWY_SMALL_EXTRA    100
 #define SC_GROWY_BIG_EXTRA      200
 
@@ -83,8 +77,6 @@ using namespace com::sun::star;
 
 static BOOL bMoveArea = FALSE;              //! Member?
 USHORT nEditAdjust = SVX_ADJUST_LEFT;       //! Member !!!
-
-//==================================================================
 
 ScViewDataTable::ScViewDataTable() :
                 eZoomType( SVX_ZOOM_PERCENT ),
@@ -300,8 +292,6 @@ void ScViewDataTable::ReadUserDataSequence(const uno::Sequence <beans::PropertyV
     else
         nVSplitPos = bHasVSplitInTwips ? static_cast< long >( nTempPosVTw * rViewData.GetPPTY() ) : nTempPosV;
 }
-
-//==================================================================
 
 ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh )
     :   pDocShell   ( pDocSh ),
@@ -1064,17 +1054,13 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
             bMoveArea = bLayoutRTL;
         }
         aVis.Left() = aVis.Right() - nDiff;
-        // --> OD 2005-12-22 #i49561#
-        // Important note:
+        // #i49561# Important note:
         // The set offset of the visible area of the EditView for centered and
         // right alignment in horizontal layout is consider by instances of
         // class <ScEditObjectViewForwarder> in its methods <LogicToPixel(..)>
         // and <PixelToLogic(..)>. This is needed for the correct visibility
         // of paragraphs in edit mode at the accessibility API.
-        // <--
         pEditView[eWhich]->SetVisArea(aVis);
-        //
-
         //  UpdateMode has been disabled in ScInputHandler::StartTable
         //  must be enabled before EditGrowY (GetTextHeight)
         pNewEngine->SetUpdateMode( TRUE );
@@ -1087,8 +1073,6 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
         Point aDocPos = pEditView[eWhich]->GetWindowPosTopLeft(0);
         if (aDocPos.Y() < aOutputArea.Top())
             pEditView[eWhich]->Scroll( 0, aOutputArea.Top() - aDocPos.Y() );
-
-        //!     Status (Event) zuruecksetzen
     }
 
                                                     // hier muss bEditActive schon gesetzt sein
@@ -1100,7 +1084,6 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     Color aBackCol = ((const SvxBrushItem&)pPattern->GetItem(ATTR_BACKGROUND)).GetColor();
 
     ScModule* pScMod = SC_MOD();
-    //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
     if ( aBackCol.GetTransparency() > 0 ||
             Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
     {
@@ -2176,8 +2159,6 @@ void ScViewData::CalcPPT()
     }
 }
 
-//------------------------------------------------------------------
-
 #define SC_OLD_TABSEP   '/'
 #define SC_NEW_TABSEP   '+'
 
@@ -2272,9 +2253,7 @@ void ScViewData::ReadUserData(const String& rData)
     String aTabOpt;
     xub_StrLen nTagLen = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(TAG_TABBARWIDTH)).Len();
 
-    //-------------------
     // nicht pro Tabelle:
-    //-------------------
     SCTAB nTabStart = 2;
 
     Fraction aZoomX, aZoomY, aPageZoomX, aPageZoomY;    //! evaluate (all sheets?)
@@ -2308,9 +2287,7 @@ void ScViewData::ReadUserData(const String& rData)
         nTabStart = 3;
     }
 
-    //-------------
     // pro Tabelle:
-    //-------------
     SCTAB nPos = 0;
     while ( nCount > nPos+nTabStart )
     {

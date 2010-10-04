@@ -159,15 +159,11 @@ void ScViewForwarder::SetInvalid()
 class ScEditObjectViewForwarder : public SvxViewForwarder
 {
     Window*             mpWindow;
-    // --> OD 2005-12-21 #i49561#
-    // - EditView needed for access to its visible area.
+    // #i49561# EditView needed for access to its visible area.
     const EditView* mpEditView;
-    // <--
 public:
-                        // --> OD 2005-12-21 #i49561#
                         ScEditObjectViewForwarder( Window* pWindow,
                                                    const EditView* _pEditView);
-                        // <--
     virtual             ~ScEditObjectViewForwarder();
 
     virtual BOOL        IsValid() const;
@@ -178,7 +174,6 @@ public:
     void                SetInvalid();
 };
 
-// --> OD 2005-12-21 #i49561#
 ScEditObjectViewForwarder::ScEditObjectViewForwarder( Window* pWindow,
                                                       const EditView* _pEditView )
     :
@@ -186,7 +181,6 @@ ScEditObjectViewForwarder::ScEditObjectViewForwarder( Window* pWindow,
     mpEditView( _pEditView )
 {
 }
-// <--
 
 ScEditObjectViewForwarder::~ScEditObjectViewForwarder()
 {
@@ -219,7 +213,7 @@ Point ScEditObjectViewForwarder::LogicToPixel( const Point& rPoint, const MapMod
 {
     if (mpWindow)
     {
-        // --> OD 2005-12-21 #i49561# - consider offset of the visible area
+        // #i49561# - consider offset of the visible area
         // of the EditView before converting point to pixel.
         Point aPoint( rPoint );
         if ( mpEditView )
@@ -228,7 +222,6 @@ Point ScEditObjectViewForwarder::LogicToPixel( const Point& rPoint, const MapMod
             aPoint += aEditViewVisArea.TopLeft();
         }
         return mpWindow->LogicToPixel( aPoint, rMapMode );
-        // <--
     }
     else
     {
@@ -241,7 +234,7 @@ Point ScEditObjectViewForwarder::PixelToLogic( const Point& rPoint, const MapMod
 {
     if (mpWindow)
     {
-        // --> OD 2005-12-21 #i49561# - consider offset of the visible area
+        // #i49561# - consider offset of the visible area
         // of the EditView after converting point to logic.
         Point aPoint( mpWindow->PixelToLogic( rPoint, rMapMode ) );
         if ( mpEditView )
@@ -250,7 +243,6 @@ Point ScEditObjectViewForwarder::PixelToLogic( const Point& rPoint, const MapMod
             aPoint -= aEditViewVisArea.TopLeft();
         }
         return aPoint;
-        // <--
     }
     else
     {
@@ -263,8 +255,6 @@ void ScEditObjectViewForwarder::SetInvalid()
 {
     mpWindow = NULL;
 }
-
-// ============================================================================
 
 class ScPreviewViewForwarder : public SvxViewForwarder
 {
@@ -399,8 +389,6 @@ Rectangle ScPreviewViewForwarder::CorrectVisArea(const Rectangle& rVisArea) cons
     return aVisArea;
 }
 
-// ============================================================================
-
 class ScPreviewHeaderFooterViewForwarder : public ScPreviewViewForwarder
 {
     sal_Bool            mbHeader;
@@ -442,8 +430,6 @@ Rectangle ScPreviewHeaderFooterViewForwarder::GetVisArea() const
     return aVisArea;
 }
 
-// ============================================================================
-
 class ScPreviewCellViewForwarder : public ScPreviewViewForwarder
 {
     ScAddress           maCellPos;
@@ -483,8 +469,6 @@ Rectangle ScPreviewCellViewForwarder::GetVisArea() const
     }
     return aVisArea;
 }
-
-// ============================================================================
 
 class ScPreviewHeaderCellViewForwarder : public ScPreviewViewForwarder
 {
@@ -532,8 +516,6 @@ Rectangle ScPreviewHeaderCellViewForwarder::GetVisArea() const
     return aVisArea;
 }
 
-// ============================================================================
-
 class ScPreviewNoteViewForwarder : public ScPreviewViewForwarder
 {
     ScAddress           maCellPos;
@@ -577,8 +559,6 @@ Rectangle ScPreviewNoteViewForwarder::GetVisArea() const
     }
     return aVisArea;
 }
-
-// ============================================================================
 
 class ScEditViewForwarder : public SvxEditViewForwarder
 {
@@ -746,8 +726,6 @@ void ScEditViewForwarder::SetInvalid()
     mpWindow = NULL;
     mpEditView = NULL;
 }
-
-// ============================================================================
 
 //  ScAccessibleCellTextData: shared data between sub objects of a accessible cell text object
 
@@ -1061,8 +1039,6 @@ ScDocShell* ScAccessibleCellTextData::GetDocShell(ScTabViewShell* pViewShell)
 }
 
 
-// ============================================================================
-
 ScAccessibleEditObjectTextData::ScAccessibleEditObjectTextData(EditView* pEditView, Window* pWin)
     :
     mpViewForwarder(NULL),
@@ -1166,9 +1142,6 @@ IMPL_LINK(ScAccessibleEditObjectTextData, NotifyHdl, EENotify*, aNotify)
 
     return 0;
 }
-
-
-// ============================================================================
 
 ScAccessibleEditLineTextData::ScAccessibleEditLineTextData(EditView* pEditView, Window* pWin)
     :
@@ -1339,8 +1312,6 @@ void ScAccessibleEditLineTextData::EndEdit()
 }
 
 
-// ============================================================================
-
 //  ScAccessiblePreviewCellTextData: shared data between sub objects of a accessible cell text object
 
 ScAccessiblePreviewCellTextData::ScAccessiblePreviewCellTextData(ScPreviewShell* pViewShell,
@@ -1415,8 +1386,6 @@ ScDocShell* ScAccessiblePreviewCellTextData::GetDocShell(ScPreviewShell* pViewSh
     return pDocSh;
 }
 
-
-// ============================================================================
 
 //  ScAccessiblePreviewHeaderCellTextData: shared data between sub objects of a accessible cell text object
 
@@ -1529,9 +1498,6 @@ ScDocShell* ScAccessiblePreviewHeaderCellTextData::GetDocShell(ScPreviewShell* p
         pDocSh = (ScDocShell*) pViewShell->GetDocument()->GetDocumentShell();
     return pDocSh;
 }
-
-
-// ============================================================================
 
 ScAccessibleHeaderTextData::ScAccessibleHeaderTextData(ScPreviewShell* pViewShell,
                             const EditTextObject* pEditObj, sal_Bool bHeader, SvxAdjust eAdjust)
@@ -1646,9 +1612,6 @@ SvxViewForwarder* ScAccessibleHeaderTextData::GetViewForwarder()
         mpViewForwarder = new ScPreviewHeaderFooterViewForwarder(mpViewShell, mbHeader);
     return mpViewForwarder;
 }
-
-
-// ============================================================================
 
 ScAccessibleNoteTextData::ScAccessibleNoteTextData(ScPreviewShell* pViewShell,
                             const String& sText, const ScAddress& aCellPos, sal_Bool bMarkNote)
@@ -1816,8 +1779,6 @@ void ScCsvViewForwarder::SetInvalid()
     mpWindow = NULL;
 }
 
-// ----------------------------------------------------------------------------
-
 ScAccessibleCsvTextData::ScAccessibleCsvTextData(
         Window* pWindow, EditEngine* pEditEngine,
         const String& rCellText, const Rectangle& rBoundBox, const Size& rCellSize ) :
@@ -1879,7 +1840,3 @@ SvxEditViewForwarder* ScAccessibleCsvTextData::GetEditViewForwarder( sal_Bool /*
 {
     return NULL;
 }
-
-
-// ============================================================================
-
