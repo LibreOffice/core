@@ -43,56 +43,57 @@ import com.sun.star.linguistic2.XConversionDictionaryList;
 import com.sun.star.sheet.XSpreadsheet;
 import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.table.XCell;
-import com.sun.star.text.XTextCursor;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.text.XWordCursor;
+
 import com.sun.star.uno.UnoRuntime;
 
-import complexlib.ComplexTestCase;
 
-import java.io.PrintWriter;
 
 import util.DesktopTools;
 
+// import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openoffice.test.OfficeConnection;
+import static org.junit.Assert.*;
 
-public class HangulHanjaConversion extends ComplexTestCase {
+public class HangulHanjaConversion {
     XMultiServiceFactory xMSF = null;
     boolean disposed = false;
     Locale aLocale = new Locale("ko", "KR", "");
     short dictType = ConversionDictionaryType.HANGUL_HANJA;
 
-    public String[] getTestMethodNames() {
-        return new String[] { "ConversionDictionaryList" };
+//    public String[] getTestMethodNames() {
+//        return new String[] { "ConversionDictionaryList" };
+//    }
+
+    @Before public void before() {
+        xMSF = getMSF();
     }
 
-    public void before() {
-        xMSF = (XMultiServiceFactory) param.getMSF();
-    }
-
-    public void ConversionDictionaryList() {
+    @Test public void ConversionDictionaryList() {
         Object ConversionDictionaryList = null;
 
         try {
             ConversionDictionaryList = xMSF.createInstance(
                                                "com.sun.star.linguistic2.ConversionDictionaryList");
         } catch (com.sun.star.uno.Exception e) {
-            assure("Couldn't create ConversionDictionaryList", false);
+            fail("Couldn't create ConversionDictionaryList");
         }
 
         if (ConversionDictionaryList == null) {
-            assure("Couldn't create ConversionDictionaryList", false);
+            fail("Couldn't create ConversionDictionaryList");
         }
 
         boolean bList = checkXConversionDictionaryList(
                                 ConversionDictionaryList);
-        assure("XConversionDictionaryList doesnt work as expected", bList);
+        assertTrue("XConversionDictionaryList doesnt work as expected", bList);
     }
 
     private boolean checkXConversionDictionaryList(Object list) {
         boolean res = true;
-        XConversionDictionaryList xCList = (XConversionDictionaryList) UnoRuntime.queryInterface(
-                                                   XConversionDictionaryList.class,
-                                                   list);
+        XConversionDictionaryList xCList = UnoRuntime.queryInterface(XConversionDictionaryList.class, list);
         XConversionDictionary xDict = null;
 
         try {
@@ -100,28 +101,30 @@ public class HangulHanjaConversion extends ComplexTestCase {
                                             dictType);
         } catch (com.sun.star.lang.NoSupportException e) {
             res = false;
-            assure("Couldn't add Dictionary", false);
+            fail("Couldn't add Dictionary");
         } catch (com.sun.star.container.ElementExistException e) {
             res = false;
-            assure("Couldn't add Dictionary", false);
+            fail("Couldn't add Dictionary");
         }
 
         try {
             xCList.addNewDictionary("addNewDictionary", aLocale, dictType);
             res = false;
-            assure("wrong exception while adding Dictionary again", false);
+            fail("wrong exception while adding Dictionary again");
         } catch (com.sun.star.lang.NoSupportException e) {
             res = false;
-            assure("wrong exception while adding Dictionary again", false);
+            fail("wrong exception while adding Dictionary again");
         } catch (com.sun.star.container.ElementExistException e) {
         }
 
         boolean localRes = checkNameContainer(xCList.getDictionaryContainer());
         res &= localRes;
-        assure("getDictionaryContainer didn't work as expected", localRes);
+        assertTrue("getDictionaryContainer didn't work as expected", localRes);
 
-        String FileToLoad = util.utils.getFullTestURL("hangulhanja.sxc");
-        XComponent xDoc = DesktopTools.loadDoc(xMSF, FileToLoad,
+        String FileToLoad = TestDocument.getUrl("hangulhanja.sxc");
+        // String FileToLoad = util.utils.getFullTestURL();
+
+XComponent xDoc = DesktopTools.loadDoc(xMSF, FileToLoad,
                                                new PropertyValue[] {  });
         XSpreadsheet xSheet = getSheet(xDoc);
         boolean done = false;
@@ -145,7 +148,7 @@ public class HangulHanjaConversion extends ComplexTestCase {
                 } catch (com.sun.star.lang.IllegalArgumentException e) {
                     e.printStackTrace();
                     res = false;
-                    assure("Exception while checking adding entry", false);
+                    fail("Exception while checking adding entry");
                 } catch (com.sun.star.container.ElementExistException e) {
                     //ignored
                 }
@@ -157,7 +160,7 @@ public class HangulHanjaConversion extends ComplexTestCase {
         } catch (com.sun.star.lang.IllegalArgumentException e) {
             e.printStackTrace();
             res = false;
-            assure("Exception while checking adding entry", false);
+            fail("Exception while checking adding entry");
         } catch (com.sun.star.container.ElementExistException e) {
             //ignored
         }
@@ -165,7 +168,7 @@ public class HangulHanjaConversion extends ComplexTestCase {
         localRes = xCList.queryMaxCharCount(aLocale, dictType,
                                             ConversionDirection.FROM_LEFT) == 42;
         res &= localRes;
-        assure("queryMaxCharCount returned the wrong value", localRes);
+        assertTrue("queryMaxCharCount returned the wrong value", localRes);
 
         String[] conversion = null;
 
@@ -177,37 +180,36 @@ public class HangulHanjaConversion extends ComplexTestCase {
                                                  TextConversionOption.NONE);
         } catch (com.sun.star.lang.IllegalArgumentException e) {
             res = false;
-            assure("Exception while calling queryConversions", false);
+            fail("Exception while calling queryConversions");
         } catch (com.sun.star.lang.NoSupportException e) {
             res = false;
-            assure("Exception while calling queryConversions", false);
+            fail("Exception while calling queryConversions");
         }
 
         localRes = conversion[0].equals(expectedConversion);
         res &= localRes;
-        assure("queryConversions didn't work as expected", localRes);
+        assertTrue("queryConversions didn't work as expected", localRes);
 
         try {
             xCList.getDictionaryContainer().removeByName("addNewDictionary");
         } catch (com.sun.star.container.NoSuchElementException e) {
             res = false;
-            assure("exception while removing Dictionary again", false);
+            fail("exception while removing Dictionary again");
         } catch (com.sun.star.lang.WrappedTargetException e) {
             res = false;
-            assure("exception while removing Dictionary again", false);
+            fail("exception while removing Dictionary again");
         }
 
         localRes = !xCList.getDictionaryContainer()
                           .hasByName("addNewDictionary");
         res &= localRes;
-        assure("Dictionary hasn't been removed properly", localRes);
+        assertTrue("Dictionary hasn't been removed properly", localRes);
 
-        XComponent dicList = (XComponent) UnoRuntime.queryInterface(
-                                     XComponent.class, xCList);
+        XComponent dicList = UnoRuntime.queryInterface(XComponent.class, xCList);
         XEventListener listen = new EventListener();
         dicList.addEventListener(listen);
         dicList.dispose();
-        assure("dispose didn't work", disposed);
+        assertTrue("dispose didn't work", disposed);
         dicList.removeEventListener(listen);
 
         DesktopTools.closeDoc(xDoc);
@@ -244,23 +246,17 @@ public class HangulHanjaConversion extends ComplexTestCase {
     }
 
     private XSpreadsheet getSheet(XComponent xDoc) {
-        XSpreadsheetDocument xSheetDoc = (XSpreadsheetDocument) UnoRuntime.queryInterface(
-                                                 XSpreadsheetDocument.class,
-                                                 xDoc);
+        XSpreadsheetDocument xSheetDoc = UnoRuntime.queryInterface(XSpreadsheetDocument.class, xDoc);
         XSpreadsheet xSheet = null;
 
         try {
-            xSheet = (XSpreadsheet) UnoRuntime.queryInterface(
-                             XSpreadsheet.class,
-                             xSheetDoc.getSheets()
-                                      .getByName(xSheetDoc.getSheets()
-                                                          .getElementNames()[0]));
+            xSheet = UnoRuntime.queryInterface(XSpreadsheet.class, xSheetDoc.getSheets().getByName(xSheetDoc.getSheets().getElementNames()[0]));
         } catch (com.sun.star.container.NoSuchElementException e) {
-            log.println("Couldn't get sheet");
-            e.printStackTrace((PrintWriter) log);
+            System.out.println("Couldn't get sheet");
+            e.printStackTrace();
         } catch (com.sun.star.lang.WrappedTargetException e) {
-            log.println("Couldn't get sheet");
-            e.printStackTrace((PrintWriter) log);
+            System.out.println("Couldn't get sheet");
+            e.printStackTrace();
         }
 
         return xSheet;
@@ -280,8 +276,8 @@ public class HangulHanjaConversion extends ComplexTestCase {
         try {
             re = xSpreadsheet.getCellByPosition(x, y);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Couldn't get word");
-            e.printStackTrace((PrintWriter) log);
+            System.out.println("Couldn't get word");
+            e.printStackTrace();
         }
 
         return re;
@@ -342,4 +338,26 @@ public class HangulHanjaConversion extends ComplexTestCase {
             disposed = true;
         }
     }
+
+    private XMultiServiceFactory getMSF()
+    {
+        final XMultiServiceFactory xMSF1 = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
+        return xMSF1;
+    }
+
+    // setup and close connections
+    @BeforeClass public static void setUpConnection() throws Exception {
+        System.out.println("setUpConnection()");
+        connection.setUp();
+    }
+
+    @AfterClass public static void tearDownConnection()
+        throws InterruptedException, com.sun.star.uno.Exception
+    {
+        System.out.println("tearDownConnection()");
+        connection.tearDown();
+    }
+
+    private static final OfficeConnection connection = new OfficeConnection();
+
 }

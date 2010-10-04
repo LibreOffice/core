@@ -85,3 +85,6 @@ svx.AccessiblePresentationOLEShape::com::sun::star::accessibility::XAccessibleCo
 
 ### i111169 ###
 svx.AccessiblePageShape::com::sun::star::accessibility::XAccessibleComponent
+
+### i114642 ###
+svx.SvxUnoTextContent::com::sun::star::style::CharacterProperties

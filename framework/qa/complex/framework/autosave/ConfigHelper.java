@@ -1,6 +1,5 @@
 package complex.framework.autosave;
 
-import java.lang.*;
 import com.sun.star.uno.*;
 import com.sun.star.lang.*;
 import com.sun.star.container.*;
@@ -20,9 +19,7 @@ class ConfigHelper
     {
         m_xSMGR = xSMGR;
 
-        XMultiServiceFactory xConfigRoot = (XMultiServiceFactory)UnoRuntime.queryInterface(
-                                                XMultiServiceFactory.class,
-                                                m_xSMGR.createInstance("com.sun.star.configuration.ConfigurationProvider"));
+        XMultiServiceFactory xConfigRoot = UnoRuntime.queryInterface(XMultiServiceFactory.class, m_xSMGR.createInstance("com.sun.star.configuration.ConfigurationProvider"));
 
         PropertyValue[] lParams = new PropertyValue[1];
         lParams[0] = new PropertyValue();
@@ -31,20 +28,20 @@ class ConfigHelper
 
         Object aConfig;
         if (bReadOnly)
-            aConfig = xConfigRoot.createInstanceWithArguments(
-                            "com.sun.star.configuration.ConfigurationAccess",
-                            lParams);
+        {
+            aConfig = xConfigRoot.createInstanceWithArguments("com.sun.star.configuration.ConfigurationAccess", lParams);
+        }
         else
-            aConfig = xConfigRoot.createInstanceWithArguments(
-                            "com.sun.star.configuration.ConfigurationUpdateAccess",
-                            lParams);
+        {
+            aConfig = xConfigRoot.createInstanceWithArguments("com.sun.star.configuration.ConfigurationUpdateAccess", lParams);
+        }
 
-        m_xConfig = (XHierarchicalNameAccess)UnoRuntime.queryInterface(
-                            XHierarchicalNameAccess.class,
-                            aConfig);
+        m_xConfig = UnoRuntime.queryInterface(XHierarchicalNameAccess.class, aConfig);
 
         if (m_xConfig == null)
-            throw new com.sun.star.uno.Exception("Could not open configuration \""+sConfigPath+"\"");
+        {
+            throw new com.sun.star.uno.Exception("Could not open configuration \"" + sConfigPath + "\"");
+        }
     }
 
     //-----------------------------------------------
@@ -54,9 +51,7 @@ class ConfigHelper
     {
         try
         {
-            XPropertySet xPath = (XPropertySet)UnoRuntime.queryInterface(
-                                    XPropertySet.class,
-                                    m_xConfig.getByHierarchicalName(sRelPath));
+            XPropertySet xPath = UnoRuntime.queryInterface(XPropertySet.class, m_xConfig.getByHierarchicalName(sRelPath));
             return xPath.getPropertyValue(sKey);
         }
         catch(com.sun.star.uno.Exception ex)
@@ -73,9 +68,7 @@ class ConfigHelper
     {
         try
         {
-            XPropertySet xPath = (XPropertySet)UnoRuntime.queryInterface(
-                                    XPropertySet.class,
-                                    m_xConfig.getByHierarchicalName(sRelPath));
+            XPropertySet xPath = UnoRuntime.queryInterface(XPropertySet.class, m_xConfig.getByHierarchicalName(sRelPath));
             xPath.setPropertyValue(sKey, aValue);
         }
         catch(com.sun.star.uno.Exception ex)
@@ -89,9 +82,7 @@ class ConfigHelper
     {
         try
         {
-            XChangesBatch xBatch = (XChangesBatch)UnoRuntime.queryInterface(
-                                        XChangesBatch.class,
-                                        m_xConfig);
+            XChangesBatch xBatch = UnoRuntime.queryInterface(XChangesBatch.class, m_xConfig);
             xBatch.commitChanges();
         }
         catch(com.sun.star.uno.Exception ex)

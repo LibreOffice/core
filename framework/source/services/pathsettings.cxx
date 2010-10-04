@@ -973,6 +973,13 @@ sal_Bool PathSettings::impl_isValidPath(const OUStringList& lPath) const
 //-----------------------------------------------------------------------------
 sal_Bool PathSettings::impl_isValidPath(const ::rtl::OUString& sPath) const
 {
+    // allow empty path to reset a path.
+// idea by LLA to support empty pathes
+//    if (sPath.getLength() == 0)
+//    {
+//        return sal_True;
+//    }
+
     return (! INetURLObject(sPath).HasError());
 }
 

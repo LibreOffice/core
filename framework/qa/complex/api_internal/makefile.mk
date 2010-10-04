@@ -25,64 +25,39 @@
 #
 #*************************************************************************
 
-PRJ = ..$/..$/..
-TARGET  = CheckAPI
-PRJNAME = $(TARGET)
-PACKAGE = complex$/api_internal
+.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
+nothing .PHONY:
+.ELSE
 
-# --- Settings -----------------------------------------------------
+PRJ = ../../..
+PRJNAME = framework
+TARGET = qa_complex_api_internal
+
+.IF "$(OOO_JUNIT_JAR)" != ""
+PACKAGE = complex/api_internal
+
+# here store only Files which contain a @Test
+JAVATESTFILES = \
+    CheckAPI.java
+
+# put here all other files
+JAVAFILES = $(JAVATESTFILES)
+
+JARFILES = OOoRunner.jar ridl.jar test.jar unoil.jar
+#JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar \
+#                  OOoRunner.jar
+EXTRAJARFILES = $(OOO_JUNIT_JAR)
+
+# Sample how to debug
+# JAVAIFLAGS=-Xdebug  -Xrunjdwp:transport=dt_socket,server=y,address=9003,suspend=y
+
+.END
+
 .INCLUDE: settings.mk
+.INCLUDE: target.mk
+.INCLUDE: installationtest.mk
 
+ALLTAR : javatest
 
-#----- compile .java files -----------------------------------------
-
-JARFILES = mysql.jar ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar mysql.jar
-JAVAFILES       = CheckAPI.java
-JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
-
-#----- make a jar from compiled files ------------------------------
-
-MAXLINELENGTH = 100000
-
-JARCLASSDIRS    = $(PACKAGE)
-JARTARGET       = $(TARGET).jar
-JARCOMPRESS 	= TRUE
-
-# --- Parameters for the test --------------------------------------
-
-# start an office if the parameter is set for the makefile
-.IF "$(OFFICE)" == ""
-CT_APPEXECCOMMAND =
-.ELSE
-CT_APPEXECCOMMAND = -AppExecutionCommand "$(OFFICE)$/soffice -accept=socket,host=localhost,port=8100;urp;"
-.ENDIF
-
-# test base is java complex
-CT_TESTBASE = -TestBase java_complex
-
-# test looks something like the.full.package.TestName
-CT_TEST     = -o $(PACKAGE:s\$/\.\).$(JAVAFILES:b)
-
-# start the runner application
-CT_APP      = org.openoffice.Runner
-
-# --- Targets ------------------------------------------------------
-
-.IF "$(depend)" == ""
-ALL: ALLTAR $(CLASSDIR)$/$(PACKAGE)$/$(JAVAFILES:b).props
-.ELSE
-ALL: ALLDEP $(CLASSDIR)$/$(PACKAGE)$/$(JAVAFILES:b).props
-.ENDIF
-
-$(CLASSDIR)$/$(PACKAGE)$/$(JAVAFILES:b).props : $(JAVAFILES:b).props
-    cp $(JAVAFILES:b).props $(CLASSDIR)$/$(PACKAGE)$/$(JAVAFILES:b).props
-    jar uf $(CLASSDIR)$/$(JARTARGET) -C $(CLASSDIR) $(PACKAGE)$/$(JAVAFILES:b).props
-
-.INCLUDE :  target.mk
-
-RUN:
-    +java -cp $(CLASSPATH) $(CT_APP) $(CT_APPEXECCOMMAND) $(CT_TESTBASE) $(CT_TEST)
-
-run: RUN
-
+.END
 

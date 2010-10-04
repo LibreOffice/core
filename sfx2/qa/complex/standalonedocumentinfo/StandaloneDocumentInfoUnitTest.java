@@ -26,44 +26,76 @@
  ************************************************************************/
 package complex.standalonedocumentinfo;
 
-import complexlib.ComplexTestCase;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
+
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openoffice.test.OfficeConnection;
+import static org.junit.Assert.*;
 
 /* Document here
 */
 
-public class StandaloneDocumentInfoUnitTest extends ComplexTestCase {
+public class StandaloneDocumentInfoUnitTest {
     private XMultiServiceFactory m_xMSF = null;
 
-    public String[] getTestMethodNames() {
-        return new String[] {
-            "ExecuteTest01"};
-    }
+//    public String[] getTestMethodNames() {
+//        return new String[] {
+//            "ExecuteTest01"};
+//    }
 
-    public String[] getTestObjectNames() {
-        return new String[] {"StandaloneDocumentInfoUnitTest"};
-    }
+//    public String[] getTestObjectNames() {
+//        return new String[] {"StandaloneDocumentInfoUnitTest"};
+//    }
 
-    public void before() {
+    @Before public void before() {
         try {
-            m_xMSF = (XMultiServiceFactory)param.getMSF();
+            m_xMSF = getMSF();
         } catch(Exception e) {
-            failed( "Failed to create service factory!" );
+            fail( "Failed to create service factory!" );
         }
         if( m_xMSF ==null ) {
-            failed( "Failed to create service factory!" );
+            fail( "Failed to create service factory!" );
         }
     }
 
-    public void after() {
+    @After public void after() {
         m_xMSF = null;
     }
 
-    public void ExecuteTest01() {
-        StandaloneDocumentInfoTest aTest = new Test01 (m_xMSF, log);
-        assure( "Test01 failed!", aTest.test() );
+    @Test public void ExecuteTest01() {
+        StandaloneDocumentInfoTest aTest = new Test01 (m_xMSF);
+        assertTrue( "Test01 failed!", aTest.test() );
     }
+
+
+
+
+      private XMultiServiceFactory getMSF()
+    {
+        final XMultiServiceFactory xMSF1 = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
+        return xMSF1;
+    }
+
+    // setup and close connections
+    @BeforeClass public static void setUpConnection() throws Exception {
+        System.out.println("setUpConnection()");
+        connection.setUp();
+    }
+
+    @AfterClass public static void tearDownConnection()
+        throws InterruptedException, com.sun.star.uno.Exception
+    {
+        System.out.println("tearDownConnection()");
+        connection.tearDown();
+    }
+
+    private static final OfficeConnection connection = new OfficeConnection();
+
 }
 
 
