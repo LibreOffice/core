@@ -395,8 +395,10 @@ void __EXPORT ScInputWindow::Select()
                             const BOOL bDataFound = pViewSh->GetAutoSumArea( aRangeList );
                             if ( bDataFound )
                             {
+                                ScAddress aAddr = aRangeList.Last()->aEnd;
+                                aAddr.IncRow();
                                 const sal_Bool bSubTotal( UseSubTotal( &aRangeList ) );
-                                pViewSh->EnterAutoSum( aRangeList, bSubTotal ); // Block mit Summen fuellen
+                                pViewSh->EnterAutoSum( aRangeList, bSubTotal, aAddr );
                             }
                         }
                         else
@@ -412,7 +414,10 @@ void __EXPORT ScInputWindow::Select()
                                     pViewSh->MarkRange( aRange, FALSE, FALSE );
                                     pViewSh->SetCursor( aRange.aEnd.Col(), aRange.aEnd.Row() );
                                     const ScRangeList aRangeList;
-                                    const String aFormula = pViewSh->GetAutoSumFormula( aRangeList, bSubTotal );
+                                    ScAddress aAddr = aRange.aEnd;
+                                    aAddr.IncRow();
+                                    const String aFormula = pViewSh->GetAutoSumFormula(
+                                        aRangeList, bSubTotal, aAddr );
                                     SetFuncString( aFormula );
                                     break;
                                 }
@@ -424,7 +429,8 @@ void __EXPORT ScInputWindow::Select()
                         ScRangeList aRangeList;
                         const BOOL bDataFound = pViewSh->GetAutoSumArea( aRangeList );
                         const sal_Bool bSubTotal( UseSubTotal( &aRangeList ) );
-                        const String aFormula = pViewSh->GetAutoSumFormula( aRangeList, bSubTotal );
+                        ScAddress aAddr = pViewSh->GetViewData()->GetCurPos();
+                        const String aFormula = pViewSh->GetAutoSumFormula( aRangeList, bSubTotal, aAddr );
                         SetFuncString( aFormula );
 
                         if ( bDataFound && pScMod->IsEditMode() )

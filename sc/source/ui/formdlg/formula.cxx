@@ -452,10 +452,15 @@ void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument* pRefDoc )
         }
         else
         {
-            USHORT nFmt = ( rRef.aStart.Tab() == aCursorPos.Tab() )
-                                ? SCA_VALID
-                                : SCA_VALID | SCA_TAB_3D;
-            rRef.Format( aRefStr, nFmt, pRefDoc, pRefDoc->GetAddressConvention() );
+            ScTokenArray aArray;
+            ScComplexRefData aRefData;
+            aRefData.InitRangeRel(rRef, aCursorPos);
+            aArray.AddDoubleReference(aRefData);
+            ScCompiler aComp(pDoc, aCursorPos, aArray);
+            aComp.SetGrammar(pDoc->GetGrammar());
+            ::rtl::OUStringBuffer aBuf;
+            aComp.CreateStringFromTokenArray(aBuf);
+            aRefStr = aBuf.makeStringAndClear();
         }
 
         UpdateParaWin(theSel,aRefStr);

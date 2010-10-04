@@ -90,7 +90,12 @@
 #include <basic/sbstar.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
+
+#include <boost/scoped_ptr.hpp>
+
 using namespace com::sun::star;
+using ::rtl::OUStringBuffer;
+using ::rtl::OUString;
 
 // helper func defined in docfunc.cxx
 void VBA_DeleteModule( ScDocShell& rDocSh, String& sModuleName );
@@ -505,9 +510,9 @@ BOOL ScViewFunc::GetAutoSumArea( ScRangeList& rRangeList )
 
 //----------------------------------------------------------------------------
 
-void ScViewFunc::EnterAutoSum(const ScRangeList& rRangeList, sal_Bool bSubTotal)        // Block mit Summen fuellen
+void ScViewFunc::EnterAutoSum(const ScRangeList& rRangeList, bool bSubTotal, const ScAddress& rAddr)
 {
-    String aFormula = GetAutoSumFormula( rRangeList, bSubTotal );
+    String aFormula = GetAutoSumFormula( rRangeList, bSubTotal, rAddr );
     EnterBlock( aFormula, NULL );
 }
 
@@ -660,7 +665,8 @@ bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor
                 const ScRange aRange( nCol, nStartRow, nTab, nCol, nSumEndRow, nTab );
                 if ( lcl_GetAutoSumForColumnRange( pDoc, aRangeList, aRange ) )
                 {
-                    const String aFormula = GetAutoSumFormula( aRangeList, bSubTotal );
+                    const String aFormula = GetAutoSumFormula(
+                        aRangeList, bSubTotal, ScAddress(nCol, nInsRow, nTab));
                     EnterData( nCol, nInsRow, nTab, aFormula );
                 }
             }
@@ -693,7 +699,7 @@ bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor
                 const ScRange aRange( nStartCol, nRow, nTab, nSumEndCol, nRow, nTab );
                 if ( lcl_GetAutoSumForRowRange( pDoc, aRangeList, aRange ) )
                 {
-                    const String aFormula = GetAutoSumFormula( aRangeList, bSubTotal );
+                    const String aFormula = GetAutoSumFormula( aRangeList, bSubTotal, ScAddress(nInsCol, nRow, nTab) );
                     EnterData( nInsCol, nRow, nTab, aFormula );
                 }
             }
@@ -713,37 +719,42 @@ bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor
 
 //----------------------------------------------------------------------------
 
-String ScViewFunc::GetAutoSumFormula( const ScRangeList& rRangeList, bool bSubTotal )
+String ScViewFunc::GetAutoSumFormula( const ScRangeList& rRangeList, bool bSubTotal, const ScAddress& rAddr )
 {
-    String aFormula = '=';
-    ScFunctionMgr* pFuncMgr = ScGlobal::GetStarCalcFunctionMgr();
-    const ScFuncDesc* pDesc = NULL;
-    if ( bSubTotal )
+    ScViewData* pViewData = GetViewData();
+    ScDocument* pDoc = pViewData->GetDocument();
+    ::boost::scoped_ptr<ScTokenArray> pArray(new ScTokenArray);
+
+    pArray->AddOpCode(bSubTotal ? ocSubTotal : ocSum);
+    pArray->AddOpCode(ocOpen);
+
+    if (bSubTotal)
     {
-        pDesc = pFuncMgr->Get( SC_OPCODE_SUB_TOTAL );
+        pArray->AddDouble(9);
+        pArray->AddOpCode(ocSep);
     }
-    else
+
+    ScRangeList aRangeList = rRangeList;
+    const ScRange* pFirst = aRangeList.First();
+    for (const ScRange* p = pFirst; p; p = aRangeList.Next())
     {
-        pDesc = pFuncMgr->Get( SC_OPCODE_SUM );
+        if (p != pFirst)
+            pArray->AddOpCode(ocSep);
+        ScComplexRefData aRef;
+        aRef.InitRangeRel(*p, rAddr);
+        pArray->AddDoubleReference(aRef);
     }
-    if ( pDesc && pDesc->pFuncName )
-    {
-        aFormula += *pDesc->pFuncName;
-        if ( bSubTotal )
-        {
-            aFormula.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "(9;" ) );
-        }
-        else
-        {
-            aFormula += '(';
-        }
-        ScDocument* pDoc = GetViewData()->GetDocument();
-        String aRef;
-        rRangeList.Format( aRef, SCA_VALID, pDoc );
-        aFormula += aRef;
-        aFormula += ')';
-    }
-    return aFormula;
+
+    pArray->AddOpCode(ocClose);
+
+    ScCompiler aComp(pDoc, rAddr, *pArray);
+    aComp.SetGrammar(pDoc->GetGrammar());
+    OUStringBuffer aBuf;
+    aComp.CreateStringFromTokenArray(aBuf);
+    OUString aFormula = aBuf.makeStringAndClear();
+    aBuf.append(sal_Unicode('='));
+    aBuf.append(aFormula);
+    return aBuf.makeStringAndClear();
 }
 
 //----------------------------------------------------------------------------

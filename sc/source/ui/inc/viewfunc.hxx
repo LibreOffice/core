@@ -92,9 +92,9 @@ public:
     BYTE            GetSelectionScriptType();
 
     BOOL            GetAutoSumArea(ScRangeList& rRangeList);
-    void            EnterAutoSum(const ScRangeList& rRangeList, sal_Bool bSubTotal);
+    void            EnterAutoSum(const ScRangeList& rRangeList, bool bSubTotal, const ScAddress& rAddr);
     bool            AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor, bool bContinue );
-    String          GetAutoSumFormula( const ScRangeList& rRangeList, bool bSubTotal );
+    String          GetAutoSumFormula( const ScRangeList& rRangeList, bool bSubTotal, const ScAddress& rAddr );
 
     void            EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString,
                                BOOL bRecord = TRUE, const EditTextObject* pData = NULL );
