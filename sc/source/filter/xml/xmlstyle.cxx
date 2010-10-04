@@ -1121,7 +1121,7 @@ sal_Bool XmlScPropHdl_PrintContent::importXML(
     }
     if ((rValue >>= aCellProtection) || bDefault)
     {
-        sal_Bool bValue;
+        bool bValue;
         if (SvXMLUnitConverter::convertBool(bValue, rStrImpValue))
         {
             aCellProtection.IsPrintHidden = !bValue;
