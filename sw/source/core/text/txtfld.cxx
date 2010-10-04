@@ -541,13 +541,7 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
             }
             else
             {
-                // --> OD 2006-06-02 #b6432095#
-                // use method <SwNumRule::MakeNumString(..)> instead of
-                // method <SwTxtNode::GetNumString()>, because for levels with
-                // numbering none the prefix and the suffix strings have to be provided.
-//                XubString aTxt( pTxtNd->GetNumString() );
-                XubString aTxt( pNumRule->MakeNumString( *(pTxtNd->GetNum()) ) );
-                // <--
+                XubString aTxt( pTxtNd->GetNumString() );
                 // --> OD 2008-01-23 #newlistlevelattrs#
                 if ( aTxt.Len() > 0 )
                 {
