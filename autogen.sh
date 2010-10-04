@@ -4,7 +4,7 @@
 if test "z$1" = "z--clean"; then
     echo "Cleaning"
 
-    rm -Rf autom4te.cache bonobo/autom4te.cache
+    rm -Rf autom4te.cache
     rm -f missing install-sh mkinstalldirs libtool ltmain.sh
     exit 1;
 fi
@@ -27,7 +27,11 @@ aclocal $ACLOCAL_FLAGS || exit 1;
 #intltoolize --copy --force --automake
 autoconf || exit 1;
 if test "x$NOCONFIGURE" = "x"; then
-    eval `echo ./configure $old_args "$@"`
+    if test -n "$old_args" ; then
+        eval `echo ./configure $old_args`
+    else
+        ./configure "$@"
+    fi
 else
     echo "Skipping configure process."
 fi
