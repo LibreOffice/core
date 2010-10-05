@@ -17,7 +17,7 @@ Globals
 			SERVICETAG_URN urn:uuid:0187debd-e458-11de-82d6-080020a9ed93
 			HIDELICENSEDIALOG 1
 			PACKAGEPREFIX 
-			BASISPACKAGEPREFIX lobasis
+			BASISPACKAGEPREFIX libobasis
 			UREPACKAGEPREFIX libreoffice
 			SOLSUREPACKAGEPREFIX libreoffice
 			USE_FILEVERSION 1
@@ -105,8 +105,8 @@ OpenOffice
 		active			1
 		compression		5
 		script			setup_osl
-		downloadname	LO_{productversion}_{os}_install_{languages}
-		langpackdownloadname	LO_{productversion}_languagepack_{os}_install_{languages}
+		downloadname	LibO_{productversion}_{os}_install_{languages}
+		langpackdownloadname	LibO_{productversion}_languagepack_{os}_install_{languages}
 		include			{solarenvpath}/{os}/loader2,.,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/ooowoure,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor}/osl,{solarcommonpath}/bin.{minor},{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
 	}
 }
@@ -171,7 +171,7 @@ OpenOffice_wJRE
 		active			1
 		compression		5
 		script			setup_osljre
-		downloadname	LO_{productversion}_{os}_installwjre_{languages}
+		downloadname	LibO_{productversion}_{os}_installwjre_{languages}
 		include			{solarenvpath}/{os}/loader2,.,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor}/osl,{solarcommonpath}/bin.{minor},{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
 	}
 }
@@ -182,12 +182,12 @@ OpenOffice_Dev
 	{
 		variables
 		{
-			PRODUCTNAME LO-dev
+			PRODUCTNAME LibO-dev
 			PRODUCTVERSION 3.3
 			PRODUCTEXTENSION 
 			LONG_PRODUCTEXTENSION 
 			SHORT_PRODUCTEXTENSION 
-			BASISROOTNAME LO-dev
+			BASISROOTNAME LibO-dev
 			UNIXBASISROOTNAME lo-dev
             POSTVERSIONEXTENSION
             POSTVERSIONEXTENSIONUNIX
@@ -196,7 +196,7 @@ OpenOffice_Dev
 			ABOUTBOXPRODUCTVERSION 3.3.0
 			BASEPRODUCTVERSION 3.3
 			DEVELOPMENTPRODUCT 1
-			BASISPACKAGEPREFIX lobasis-dev
+			BASISPACKAGEPREFIX libobasis-dev
 			UREPACKAGEPREFIX lodev
 			SOLSUREPACKAGEPREFIX lodev
 			REGISTRYLAYERNAME LayerDev
@@ -243,8 +243,8 @@ OpenOffice_Dev
 		active			1
 		compression		5
 		script			setup_osljre
-		downloadname	LO-dev_{productversion}_{os}_install_{languages}
-		langpackdownloadname	LO_{productversion}_languagepack_{os}_install_{languages}
+		downloadname	LibO-dev_{productversion}_{os}_install_{languages}
+		langpackdownloadname	LibO_{productversion}_languagepack_{os}_install_{languages}
 		include			{solarenvpath}/{os}/loader2,.,{localpath}/bin/dev,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor}/osl,{solarcommonpath}/bin.{minor},{solarcommonpath}/pck.{minor}/openoffice_dev,{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
 	}
 }
@@ -343,19 +343,19 @@ OpenOffice_Dev_SDK
         downloadname OOo-Dev-SDK_{packageversion}_{os}_install_{languages}
         variables
         {
-            PRODUCTNAME LO-dev
+            PRODUCTNAME LibO-dev
             PRODUCTVERSION 3.3
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
             SHORT_PRODUCTEXTENSION
-            BASISROOTNAME LO-dev
+            BASISROOTNAME LibO-dev
             UNIXBASISROOTNAME lo-dev
             POSTVERSIONEXTENSION SDK
             POSTVERSIONEXTENSIONUNIX sdk
             BRANDPACKAGEVERSION 3
             PACKAGEVERSION 3.3.0
             PACKAGEREVISION {milestone}
-            BASISPACKAGEPREFIX lobasis-dev
+            BASISPACKAGEPREFIX libobasis-dev
             UREPACKAGEPREFIX lodev
             SOLSUREPACKAGEPREFIX lodev
             REGISTRYLAYERNAME LayerDev
@@ -540,7 +540,7 @@ BrOffice_Dev
 			PRODUCTEXTENSION 
 			LONG_PRODUCTEXTENSION 
 			SHORT_PRODUCTEXTENSION 
-			BASISROOTNAME LO-dev
+			BASISROOTNAME LibO-dev
 			UNIXBASISROOTNAME lo-dev
             POSTVERSIONEXTENSION
             POSTVERSIONEXTENSIONUNIX
@@ -548,7 +548,7 @@ BrOffice_Dev
 			USERDIRPRODUCTVERSION 3
 			ABOUTBOXPRODUCTVERSION 3.3.0
 			DEVELOPMENTPRODUCT 1
-			BASISPACKAGEPREFIX lobasis-dev
+			BASISPACKAGEPREFIX libobasis-dev
 			UREPACKAGEPREFIX lodev
 			SOLSUREPACKAGEPREFIX lodev
 			REGISTRYLAYERNAME LayerDevBroffice
