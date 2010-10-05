@@ -44,6 +44,7 @@
 #include <editeng/escpitem.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/numitem.hxx>
+#include <editeng/justifyitem.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 #include <svl/inethist.hxx>

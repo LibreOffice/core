@@ -60,6 +60,7 @@ JP 20.07.95:
 #include <editeng/shdditem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/wghtitem.hxx>
+#include <editeng/justifyitem.hxx>
 #include <svx/rotmodit.hxx>
 #include <svl/intitem.hxx>
 #include <editeng/bolnitem.hxx>

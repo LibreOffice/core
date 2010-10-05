@@ -516,8 +516,12 @@ struct XclCellAlign
 
     /** Returns the Calc horizontal alignment. */
     SvxCellHorJustify   GetScHorAlign() const;
+    /** Returns horizontal justification method as Calc's attribute. */
+    SvxCellJustifyMethod GetScHorJustifyMethod() const;
     /** Returns the Calc vertical alignment. */
     SvxCellVerJustify   GetScVerAlign() const;
+    /** Returns vertical justification method as Calc's attribute. */
+    SvxCellJustifyMethod GetScVerJustifyMethod() const;
     /** Returns the Calc frame direction. */
     SvxFrameDirection   GetScFrameDir() const;
 

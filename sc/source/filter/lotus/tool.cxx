@@ -34,6 +34,7 @@
 
 #include "scitems.hxx"
 #include <svx/algitem.hxx>
+#include <editeng/justifyitem.hxx>
 #include <svl/zforlist.hxx>
 #include <tools/solar.h>
 

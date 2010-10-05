@@ -37,6 +37,7 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/brshitem.hxx>
 #include <editeng/wghtitem.hxx>
+#include <editeng/justifyitem.hxx>
 #include <unotools/transliterationwrapper.hxx>
 
 #include "dpoutput.hxx"

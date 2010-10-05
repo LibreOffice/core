@@ -48,6 +48,7 @@
 #include <editeng/postitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/wghtitem.hxx>
+#include <editeng/justifyitem.hxx>
 
 #include "cell.hxx"
 #include "rangenam.hxx"

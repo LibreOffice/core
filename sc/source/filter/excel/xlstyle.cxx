@@ -1596,6 +1596,11 @@ SvxCellHorJustify XclCellAlign::GetScHorAlign() const
     return eHorJust;
 }
 
+SvxCellJustifyMethod XclCellAlign::GetScHorJustifyMethod() const
+{
+    return (mnHorAlign == EXC_XF_HOR_DISTRIB) ? SVX_JUSTIFY_METHOD_DISTRIBUTE : SVX_JUSTIFY_METHOD_AUTO;
+}
+
 SvxCellVerJustify XclCellAlign::GetScVerAlign() const
 {
     SvxCellVerJustify eVerJust = SVX_VER_JUSTIFY_STANDARD;
@@ -1605,10 +1610,15 @@ SvxCellVerJustify XclCellAlign::GetScVerAlign() const
         case EXC_XF_VER_CENTER:     eVerJust = SVX_VER_JUSTIFY_CENTER;      break;
         case EXC_XF_VER_BOTTOM:     eVerJust = SVX_VER_JUSTIFY_STANDARD;    break;
         case EXC_XF_VER_JUSTIFY:
-        case EXC_XF_VER_DISTRIB:    eVerJust = SVX_VER_JUSTIFY_TOP;         break;
+        case EXC_XF_VER_DISTRIB:    eVerJust = SVX_VER_JUSTIFY_BLOCK;       break;
         default:    DBG_ERRORFILE( "XclCellAlign::GetScVerAlign - unknown vertical alignment" );
     }
     return eVerJust;
+}
+
+SvxCellJustifyMethod XclCellAlign::GetScVerJustifyMethod() const
+{
+    return (mnVerAlign == EXC_XF_VER_DISTRIB) ? SVX_JUSTIFY_METHOD_DISTRIBUTE : SVX_JUSTIFY_METHOD_AUTO;
 }
 
 SvxFrameDirection XclCellAlign::GetScFrameDir() const

@@ -34,6 +34,7 @@
 
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
+#include <editeng/justifyitem.hxx>
 
 
 #include <com/sun/star/uno/Sequence.hxx>

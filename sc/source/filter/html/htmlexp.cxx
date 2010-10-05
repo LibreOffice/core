@@ -48,6 +48,7 @@
 #include <editeng/postitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/wghtitem.hxx>
+#include <editeng/justifyitem.hxx>
 #include <svx/xoutbmp.hxx>
 #include <editeng/editeng.hxx>
 #include <svtools/htmlcfg.hxx>

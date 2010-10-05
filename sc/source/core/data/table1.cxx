@@ -30,6 +30,7 @@
 
 #include "scitems.hxx"
 #include <svx/algitem.hxx>
+#include <editeng/justifyitem.hxx>
 #include <unotools/textsearch.hxx>
 #include <sfx2/objsh.hxx>
 

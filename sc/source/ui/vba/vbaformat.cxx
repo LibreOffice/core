@@ -31,7 +31,7 @@
 #include <ooo/vba/excel/XlOrientation.hpp>
 #include <ooo/vba/excel/Constants.hpp>
 #include <ooo/vba/excel/XRange.hpp>
-#include <com/sun/star/table/CellVertJustify.hpp>
+#include <com/sun/star/table/CellVertJustify2.hpp>
 #include <com/sun/star/table/CellHoriJustify.hpp>
 #include <com/sun/star/table/CellOrientation.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
@@ -86,21 +86,21 @@ ScVbaFormat<Ifc1>::setVerticalAlignment( const uno::Any& _oAlignment)   throw (s
         switch (nAlignment)
         {
             case excel::XlVAlign::xlVAlignBottom :
-                aVal =  uno::makeAny( table::CellVertJustify_BOTTOM );
+                aVal =  uno::makeAny( table::CellVertJustify2::BOTTOM );
                 break;
             case excel::XlVAlign::xlVAlignCenter :
-                aVal = uno::makeAny( table::CellVertJustify_CENTER );
+                aVal = uno::makeAny( table::CellVertJustify2::CENTER );
                 break;
             case excel::XlVAlign::xlVAlignDistributed:
             case excel::XlVAlign::xlVAlignJustify:
-                aVal = uno::makeAny( table::CellVertJustify_STANDARD );
+                aVal = uno::makeAny( table::CellVertJustify2::STANDARD );
                 break;
 
             case excel::XlVAlign::xlVAlignTop:
-                aVal = uno::makeAny( table::CellVertJustify_TOP);
+                aVal = uno::makeAny( table::CellVertJustify2::TOP);
                 break;
             default:
-                aVal = uno::makeAny( table::CellVertJustify_STANDARD );
+                aVal = uno::makeAny( table::CellVertJustify2::STANDARD );
                 break;
         }
         mxPropertySet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_CELLVJUS ) ), aVal );
@@ -120,20 +120,20 @@ ScVbaFormat<Ifc1>::getVerticalAlignment(  ) throw (script::BasicErrorException, 
     {
         if (!isAmbiguous( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_CELLVJUS ) ) ) )
         {
-            table::CellVertJustify aAPIAlignment;
+            sal_Int32 aAPIAlignment;
             mxPropertySet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_CELLVJUS ) ) ) >>= aAPIAlignment;
             switch( aAPIAlignment )
             {
-                case table::CellVertJustify_BOTTOM:
+                case table::CellVertJustify2::BOTTOM:
                     aResult = uno::makeAny( excel::XlVAlign::xlVAlignBottom );
                     break;
-                case table::CellVertJustify_CENTER:
+                case table::CellVertJustify2::CENTER:
                     aResult = uno::makeAny( excel::XlVAlign::xlVAlignCenter );
                     break;
-                case table::CellVertJustify_STANDARD:
+                case table::CellVertJustify2::STANDARD:
                     aResult = uno::makeAny( excel::XlVAlign::xlVAlignBottom );
                     break;
-                case table::CellVertJustify_TOP:
+                case table::CellVertJustify2::TOP:
                     aResult = uno::makeAny( excel::XlVAlign::xlVAlignTop );
                     break;
                 default:

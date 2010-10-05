@@ -41,6 +41,7 @@
 #include <editeng/editstat.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/unolingu.hxx>
+#include <editeng/justifyitem.hxx>
 
 #include <vcl/svapp.hxx>
 #include <rtl/math.hxx>

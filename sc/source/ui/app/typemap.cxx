@@ -105,6 +105,7 @@
 #include <svx/xftshxy.hxx>
 #include <svx/xftsfit.hxx>
 #include <editeng/langitem.hxx>
+#include <editeng/justifyitem.hxx>
 #include <svx/grafctrl.hxx>
 #include <editeng/shdditem.hxx>
 #include <editeng/shaditem.hxx>

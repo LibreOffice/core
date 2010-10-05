@@ -44,6 +44,7 @@
 #include <svx/rotmodit.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <editeng/unolingu.hxx>
+#include <editeng/justifyitem.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/broadcast.hxx>
 #include <svl/listeneriter.hxx>

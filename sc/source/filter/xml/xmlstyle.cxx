@@ -35,6 +35,7 @@
 
 #include "XMLConverter.hxx"
 #include "rangeutl.hxx"
+#include "unonames.hxx"
 
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmluconv.hxx>
@@ -49,8 +50,9 @@
 #include <tools/debug.hxx>
 #include <com/sun/star/util/CellProtection.hpp>
 #include <com/sun/star/table/CellOrientation.hpp>
-#include <com/sun/star/table/CellVertJustify.hpp>
+#include <com/sun/star/table/CellVertJustify2.hpp>
 #include <com/sun/star/table/CellHoriJustify.hpp>
+#include <com/sun/star/table/CellJustifyMethod.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
 #include <com/sun/star/sheet/XSheetConditionalEntries.hpp>
 #include <com/sun/star/sheet/XSheetConditionalEntry.hpp>
@@ -89,6 +91,7 @@ const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
     MAP( "HoriJustify", XML_NAMESPACE_FO, XML_TEXT_ALIGN, XML_TYPE_PROP_PARAGRAPH|XML_SC_TYPE_HORIJUSTIFY|MID_FLAG_MERGE_PROPERTY, 0 ),
     MAP( "HoriJustify", XML_NAMESPACE_STYLE, XML_TEXT_ALIGN_SOURCE, XML_TYPE_PROP_TABLE_CELL|XML_SC_TYPE_HORIJUSTIFYSOURCE|MID_FLAG_MERGE_PROPERTY, 0 ),
     MAP( "HoriJustify", XML_NAMESPACE_STYLE, XML_REPEAT_CONTENT, XML_TYPE_PROP_TABLE_CELL|XML_SC_TYPE_HORIJUSTIFYREPEAT|MID_FLAG_MERGE_PROPERTY, 0 ),
+    MAP( SC_UNONAME_CELLHJUS_METHOD, XML_NAMESPACE_CSS3TEXT, XML_TEXT_JUSTIFY, XML_TYPE_PROP_PARAGRAPH|XML_SC_TYPE_HORIJUSTIFY_METHOD, 0 ),
     MAP( "IsCellBackgroundTransparent", XML_NAMESPACE_FO, XML_BACKGROUND_COLOR, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_ISTRANSPARENT|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
     MAP( "IsTextWrapped", XML_NAMESPACE_FO, XML_WRAP_OPTION, XML_TYPE_PROP_TABLE_CELL|XML_SC_ISTEXTWRAPPED, 0 ),
     MAP( "LeftBorder", XML_NAMESPACE_FO, XML_BORDER, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_BORDER, CTF_SC_ALLBORDER ),
@@ -116,7 +119,9 @@ const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
     MAP( "UserDefinedAttributes", XML_NAMESPACE_TEXT, XML_XMLNS, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
     MAP( "ValidationXML", XML_NAMESPACE_TABLE, XML_CONTENT_VALIDATION, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_BUILDIN_CMP_ONLY, CTF_SC_VALIDATION ),
     MAP( "VertJustify", XML_NAMESPACE_STYLE, XML_VERTICAL_ALIGN, XML_TYPE_PROP_TABLE_CELL|XML_SC_TYPE_VERTJUSTIFY, 0),
+    MAP( SC_UNONAME_CELLVJUS_METHOD, XML_NAMESPACE_STYLE, XML_VERTICAL_JUSTIFY, XML_TYPE_PROP_TABLE_CELL|XML_SC_TYPE_VERTJUSTIFY_METHOD, 0 ),
 //    MAP( "WritingMode", XML_NAMESPACE_STYLE, XML_WRITING_MODE, XML_TYPE_PROP_PARAGRAPH|XML_TYPE_TEXT_WRITING_MODE_WITH_DEFAULT, 0 ),
+
     MAP_END()
 };
 
@@ -877,6 +882,12 @@ const XMLPropertyHandler* XMLScPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 pHdl = new XmlScPropHdl_PrintContent;
             }
             break;
+            case XML_SC_TYPE_HORIJUSTIFY_METHOD:
+            case XML_SC_TYPE_VERTJUSTIFY_METHOD:
+            {
+                pHdl = new XmlScPropHdl_JustifyMethod;
+            }
+            break;
             case XML_SC_TYPE_HORIJUSTIFY :
             {
                 pHdl = new XmlScPropHdl_HoriJustify;
@@ -1149,6 +1160,81 @@ sal_Bool XmlScPropHdl_PrintContent::exportXML(
         bRetval = sal_True;
     }
 
+    return bRetval;
+}
+
+
+XmlScPropHdl_JustifyMethod::~XmlScPropHdl_JustifyMethod()
+{
+}
+
+bool XmlScPropHdl_JustifyMethod::equals(
+    const ::com::sun::star::uno::Any& r1,
+    const ::com::sun::star::uno::Any& r2 ) const
+{
+    sal_Int32 nVal1, nVal2;
+
+    if((r1 >>= nVal1) && (r2 >>= nVal2))
+        return (nVal1 == nVal2);
+    return sal_False;
+}
+
+sal_Bool XmlScPropHdl_JustifyMethod::importXML(
+    const ::rtl::OUString& rStrImpValue,
+    ::com::sun::star::uno::Any& rValue,
+    const SvXMLUnitConverter& /* rUnitConverter */ ) const
+{
+    bool bRetval = false;
+
+    sal_Int32 nValue = table::CellJustifyMethod::AUTO;
+    if (IsXMLToken(rStrImpValue, XML_AUTO))
+    {
+        nValue = table::CellJustifyMethod::AUTO;
+        rValue <<= nValue;
+        bRetval = true;
+    }
+    else if (IsXMLToken(rStrImpValue, XML_DISTRIBUTE))
+    {
+        nValue = table::CellJustifyMethod::DISTRIBUTE;
+        rValue <<= nValue;
+        bRetval = true;
+    }
+    else
+        bRetval = true;
+
+    return bRetval;
+}
+
+sal_Bool XmlScPropHdl_JustifyMethod::exportXML(
+    ::rtl::OUString& rStrExpValue,
+    const ::com::sun::star::uno::Any& rValue,
+    const SvXMLUnitConverter& /* rUnitConverter */ ) const
+{
+    sal_Int32 nVal;
+    bool bRetval = false;
+
+    if (rValue >>= nVal)
+    {
+        switch (nVal)
+        {
+            case table::CellJustifyMethod::AUTO:
+            {
+                rStrExpValue = GetXMLToken(XML_AUTO);
+                bRetval = true;
+            }
+            break;
+            case table::CellJustifyMethod::DISTRIBUTE:
+            {
+                rStrExpValue = GetXMLToken(XML_DISTRIBUTE);
+                bRetval = true;
+            }
+            break;
+            default:
+            {
+                // added to avoid warnings
+            }
+        }
+    }
     return bRetval;
 }
 
@@ -1507,7 +1593,7 @@ bool XmlScPropHdl_RotateReference::equals(
     const ::com::sun::star::uno::Any& r1,
     const ::com::sun::star::uno::Any& r2 ) const
 {
-    table::CellVertJustify aReference1, aReference2;
+    sal_Int32 aReference1, aReference2;
 
     if((r1 >>= aReference1) && (r2 >>= aReference2))
         return (aReference1 == aReference2);
@@ -1521,28 +1607,28 @@ sal_Bool XmlScPropHdl_RotateReference::importXML(
 {
     sal_Bool bRetval(sal_False);
 
-    table::CellVertJustify nValue;
+    sal_Int32 nValue;
     if (IsXMLToken(rStrImpValue, XML_NONE))
     {
-        nValue = table::CellVertJustify_STANDARD;
+        nValue = table::CellVertJustify2::STANDARD;
         rValue <<= nValue;
         bRetval = sal_True;
     }
     else if (IsXMLToken(rStrImpValue, XML_BOTTOM))
     {
-        nValue = table::CellVertJustify_BOTTOM;
+        nValue = table::CellVertJustify2::BOTTOM;
         rValue <<= nValue;
         bRetval = sal_True;
     }
     else if (IsXMLToken(rStrImpValue, XML_TOP))
     {
-        nValue = table::CellVertJustify_TOP;
+        nValue = table::CellVertJustify2::TOP;
         rValue <<= nValue;
         bRetval = sal_True;
     }
     else if (IsXMLToken(rStrImpValue, XML_CENTER))
     {
-        nValue = table::CellVertJustify_CENTER;
+        nValue = table::CellVertJustify2::CENTER;
         rValue <<= nValue;
         bRetval = sal_True;
     }
@@ -1555,32 +1641,32 @@ sal_Bool XmlScPropHdl_RotateReference::exportXML(
     const ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
-    table::CellVertJustify nVal;
+    sal_Int32 nVal;
     sal_Bool bRetval(sal_False);
 
     if(rValue >>= nVal)
     {
         switch (nVal)
         {
-            case table::CellVertJustify_BOTTOM :
+            case table::CellVertJustify2::BOTTOM :
             {
                 rStrExpValue = GetXMLToken(XML_BOTTOM);
                 bRetval = sal_True;
             }
             break;
-            case table::CellVertJustify_CENTER :
+            case table::CellVertJustify2::CENTER :
             {
                 rStrExpValue = GetXMLToken(XML_CENTER);
                 bRetval = sal_True;
             }
             break;
-            case table::CellVertJustify_STANDARD :
+            case table::CellVertJustify2::STANDARD :
             {
                 rStrExpValue = GetXMLToken(XML_NONE);
                 bRetval = sal_True;
             }
             break;
-            case table::CellVertJustify_TOP :
+            case table::CellVertJustify2::TOP :
             {
                 rStrExpValue = GetXMLToken(XML_TOP);
                 bRetval = sal_True;
@@ -1604,7 +1690,7 @@ bool XmlScPropHdl_VertJustify::equals(
     const ::com::sun::star::uno::Any& r1,
     const ::com::sun::star::uno::Any& r2 ) const
 {
-    table::CellVertJustify aReference1, aReference2;
+    sal_Int32 aReference1, aReference2;
 
     if((r1 >>= aReference1) && (r2 >>= aReference2))
         return (aReference1 == aReference2);
@@ -1618,28 +1704,34 @@ sal_Bool XmlScPropHdl_VertJustify::importXML(
 {
     sal_Bool bRetval(sal_False);
 
-    table::CellVertJustify nValue;
+    sal_Int32 nValue;
     if (IsXMLToken(rStrImpValue, XML_AUTOMATIC))
     {
-        nValue = table::CellVertJustify_STANDARD;
+        nValue = table::CellVertJustify2::STANDARD;
         rValue <<= nValue;
         bRetval = sal_True;
     }
     else if (IsXMLToken(rStrImpValue, XML_BOTTOM))
     {
-        nValue = table::CellVertJustify_BOTTOM;
+        nValue = table::CellVertJustify2::BOTTOM;
         rValue <<= nValue;
         bRetval = sal_True;
     }
     else if (IsXMLToken(rStrImpValue, XML_TOP))
     {
-        nValue = table::CellVertJustify_TOP;
+        nValue = table::CellVertJustify2::TOP;
         rValue <<= nValue;
         bRetval = sal_True;
     }
     else if (IsXMLToken(rStrImpValue, XML_MIDDLE))
     {
-        nValue = table::CellVertJustify_CENTER;
+        nValue = table::CellVertJustify2::CENTER;
+        rValue <<= nValue;
+        bRetval = sal_True;
+    }
+    else if (IsXMLToken(rStrImpValue, XML_JUSTIFY))
+    {
+        nValue = table::CellVertJustify2::BLOCK;
         rValue <<= nValue;
         bRetval = sal_True;
     }
@@ -1652,34 +1744,40 @@ sal_Bool XmlScPropHdl_VertJustify::exportXML(
     const ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
-    table::CellVertJustify nVal;
+    sal_Int32 nVal;
     sal_Bool bRetval(sal_False);
 
     if(rValue >>= nVal)
     {
         switch (nVal)
         {
-            case table::CellVertJustify_BOTTOM :
+            case table::CellVertJustify2::BOTTOM :
             {
                 rStrExpValue = GetXMLToken(XML_BOTTOM);
                 bRetval = sal_True;
             }
             break;
-            case table::CellVertJustify_CENTER :
+            case table::CellVertJustify2::CENTER :
             {
                 rStrExpValue = GetXMLToken(XML_MIDDLE);
                 bRetval = sal_True;
             }
             break;
-            case table::CellVertJustify_STANDARD :
+            case table::CellVertJustify2::STANDARD :
             {
                 rStrExpValue = GetXMLToken(XML_AUTOMATIC);
                 bRetval = sal_True;
             }
             break;
-            case table::CellVertJustify_TOP :
+            case table::CellVertJustify2::TOP :
             {
                 rStrExpValue = GetXMLToken(XML_TOP);
+                bRetval = sal_True;
+            }
+            break;
+            case table::CellVertJustify2::BLOCK :
+            {
+                rStrExpValue = GetXMLToken(XML_JUSTIFY);
                 bRetval = sal_True;
             }
             break;

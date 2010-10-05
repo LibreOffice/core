@@ -106,6 +106,8 @@
 #define SC_UNONAME_CELLPRO          "CellProtection"
 #define SC_UNONAME_CELLHJUS         "HoriJustify"
 #define SC_UNONAME_CELLVJUS         "VertJustify"
+#define SC_UNONAME_CELLHJUS_METHOD  "HoriJustifyMethod"
+#define SC_UNONAME_CELLVJUS_METHOD  "VertJustifyMethod"
 #define SC_UNONAME_CELLORI          "Orientation"
 #define SC_UNONAME_NUMFMT           "NumberFormat"
 #define SC_UNONAME_SHADOW           "ShadowFormat"

@@ -32,6 +32,7 @@
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 #include <editeng/svxenum.hxx>
+#include <editeng/justifyitem.hxx>
 #include <svx/algitem.hxx>
 
 #include <sot/clsids.hxx>

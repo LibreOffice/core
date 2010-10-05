@@ -36,6 +36,7 @@
 #include <svx/algitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brshitem.hxx>
+#include <editeng/justifyitem.hxx>
 
 #include "document.hxx"
 #include "patattr.hxx"

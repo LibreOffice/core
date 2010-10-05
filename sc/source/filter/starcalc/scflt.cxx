@@ -52,6 +52,7 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/wghtitem.hxx>
+#include <editeng/justifyitem.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/PasswordHelper.hxx>
 #include <stdio.h>

@@ -39,6 +39,7 @@
 #include <editeng/frmdiritem.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/editobj.hxx>
+#include <editeng/justifyitem.hxx>
 #include <svl/poolcach.hxx>
 #include <editeng/fontitem.hxx>
 #include <unotools/fontcvt.hxx>

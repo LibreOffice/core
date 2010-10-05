@@ -45,6 +45,7 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/boxitem.hxx>
+#include <editeng/justifyitem.hxx>
 #include <sfx2/objsh.hxx>
 #include <svl/eitem.hxx>
 #include <svtools/filter.hxx>

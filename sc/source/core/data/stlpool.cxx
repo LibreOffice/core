@@ -46,6 +46,7 @@
 #include <editeng/postitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/wghtitem.hxx>
+#include <editeng/justifyitem.hxx>
 #include <svl/itemset.hxx>
 #include <svl/zforlist.hxx>
 #include <unotools/charclass.hxx>

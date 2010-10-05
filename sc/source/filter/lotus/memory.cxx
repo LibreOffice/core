@@ -35,6 +35,7 @@
 
 #include "scitems.hxx"
 #include <svx/algitem.hxx>
+#include <editeng/justifyitem.hxx>
 
 #include "attrib.hxx"
 

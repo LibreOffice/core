@@ -47,6 +47,7 @@
 #include <editeng/frmdiritem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/escpitem.hxx>
+#include <editeng/justifyitem.hxx>
 #include "document.hxx"
 #include "stlpool.hxx"
 #include "stlsheet.hxx"
@@ -1379,6 +1380,8 @@ bool XclExpCellAlign::FillFromItemSet(
         const SfxItemSet& rItemSet, bool bForceLineBreak, XclBiff eBiff, bool bStyle )
 {
     bool bUsed = false;
+    SvxCellHorJustify eHorAlign = GETITEMVALUE( rItemSet, SvxHorJustifyItem, ATTR_HOR_JUSTIFY, SvxCellHorJustify );
+    SvxCellVerJustify eVerAlign = GETITEMVALUE( rItemSet, SvxVerJustifyItem, ATTR_VER_JUSTIFY, SvxCellVerJustify );
 
     switch( eBiff )
     {
@@ -1405,7 +1408,7 @@ bool XclExpCellAlign::FillFromItemSet(
         case EXC_BIFF4: // attributes new in BIFF4
         {
             // vertical alignment
-            SetScVerAlign( GETITEMVALUE( rItemSet, SvxVerJustifyItem, ATTR_VER_JUSTIFY, SvxCellVerJustify ) );
+            SetScVerAlign( eVerAlign );
             bUsed |= ScfTools::CheckItem( rItemSet, ATTR_VER_JUSTIFY, bStyle );
 
             // stacked/rotation
@@ -1435,12 +1438,32 @@ bool XclExpCellAlign::FillFromItemSet(
         case EXC_BIFF2: // attributes new in BIFF2
         {
             // horizontal alignment
-            SetScHorAlign( GETITEMVALUE( rItemSet, SvxHorJustifyItem, ATTR_HOR_JUSTIFY, SvxCellHorJustify ) );
+            SetScHorAlign( eHorAlign );
             bUsed |= ScfTools::CheckItem( rItemSet, ATTR_HOR_JUSTIFY, bStyle );
         }
 
         break;
         default:    DBG_ERROR_BIFF();
+    }
+
+    if (eBiff == EXC_BIFF8)
+    {
+        // Adjust for distributed alignments.
+        if (eHorAlign == SVX_HOR_JUSTIFY_BLOCK)
+        {
+            SvxCellJustifyMethod eHorJustMethod = GETITEMVALUE(
+                rItemSet, SvxJustifyMethodItem, ATTR_HOR_JUSTIFY_METHOD, SvxCellJustifyMethod);
+            if (eHorJustMethod == SVX_JUSTIFY_METHOD_DISTRIBUTE)
+                mnHorAlign = EXC_XF_HOR_DISTRIB;
+        }
+
+        if (eVerAlign == SVX_VER_JUSTIFY_BLOCK)
+        {
+            SvxCellJustifyMethod eVerJustMethod = GETITEMVALUE(
+                rItemSet, SvxJustifyMethodItem, ATTR_VER_JUSTIFY_METHOD, SvxCellJustifyMethod);
+            if (eVerJustMethod == SVX_JUSTIFY_METHOD_DISTRIBUTE)
+                mnVerAlign = EXC_XF_VER_DISTRIB;
+        }
     }
 
     return bUsed;

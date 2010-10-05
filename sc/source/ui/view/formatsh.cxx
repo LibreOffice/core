@@ -83,6 +83,7 @@
 #include <editeng/scripttypeitem.hxx>
 #include <svtools/colorcfg.hxx>
 #include <editeng/shaditem.hxx>
+#include <editeng/justifyitem.hxx>
 
 #include "formatsh.hxx"
 #include "sc.hrc"

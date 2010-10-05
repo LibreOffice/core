@@ -38,6 +38,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/waitobj.hxx>
 #include <editeng/boxitem.hxx>
+#include <editeng/justifyitem.hxx>
 #include <sfx2/app.hxx>
 
 #include "undoblk.hxx"

@@ -46,6 +46,7 @@
 #include <editeng/crsditem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/fontitem.hxx>
+#include <editeng/justifyitem.hxx>
 #include <map>
 
 #include "global.hxx"

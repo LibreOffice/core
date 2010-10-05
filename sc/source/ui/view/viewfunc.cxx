@@ -44,6 +44,7 @@
 #include <editeng/editview.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/scripttypeitem.hxx>
+#include <editeng/justifyitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
