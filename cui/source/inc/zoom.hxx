@@ -35,24 +35,6 @@
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 
-// define ----------------------------------------------------------------
-/* CHINA001
-#define ZOOMBTN_OPTIMAL     ((USHORT)0x0001)
-#define ZOOMBTN_PAGEWIDTH   ((USHORT)0x0002)
-#define ZOOMBTN_WHOLEPAGE   ((USHORT)0x0004)
-*/
-#include "zoom_def.hxx"
-// class SvxZoomDialog ---------------------------------------------------
-/*
-    {k:\svx\prototyp\dialog\zoom.bmp}
-
-    [Beschreibung]
-    Mit diesem Dialog wird ein Zoom-Faktor eingestellt.
-
-    [Items]
-    SvxZoomItem <SID_ATTR_ZOOM>
-*/
-
 #include <layout/layout-pre.hxx>
 
 class SvxZoomDialog : public SfxModalDialog
