@@ -646,7 +646,7 @@ DBChangeDialog_Impl::DBChangeDialog_Impl(Window* pParent, BibDataManager* pMan )
         aSelectionHB.Show();
 
         aSelectionLB.SetTabs( &nTabs[0], MAP_PIXEL );
-        aSelectionLB.SetWindowBits(WB_CLIPCHILDREN|WB_SORT);
+        aSelectionLB.SetStyle(aSelectionLB.GetStyle()|WB_CLIPCHILDREN|WB_SORT);
         aSelectionLB.GetModel()->SetSortMode(SortAscending);
 
         ::rtl::OUString sActiveSource = pDatMan->getActiveDataSource();

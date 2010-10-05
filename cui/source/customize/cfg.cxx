@@ -1491,7 +1491,7 @@ SvxMenuEntriesListBox::SvxMenuEntriesListBox(
     , pPage( (SvxMenuConfigPage*) pParent )
     , m_bIsInternalDrag( FALSE )
 {
-    SetWindowBits(
+    SetStyle(
         GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_HIDESELECTION );
 
     SetSpaceBetweenEntries( 3 );

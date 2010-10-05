@@ -165,7 +165,7 @@ OfaMSFilterTabPage2::OfaMSFilterTabPage2( Window* pParent,
                     HIB_CENTER | HIB_VCENTER | HIB_FIXEDPOS | HIB_FIXED );
 
     aCheckLB.SetHelpId( HID_OFAPAGE_MSFLTR2_CLB );
-    aCheckLB.SetWindowBits( WB_HSCROLL| WB_VSCROLL );
+    aCheckLB.SetStyle( aCheckLB.GetStyle()|WB_HSCROLL| WB_VSCROLL );
 }
 
 OfaMSFilterTabPage2::~OfaMSFilterTabPage2()

@@ -596,9 +596,10 @@ ObjectPage::ObjectPage( Window * pParent, const ResId& rResId, USHORT nMode ) :
     aBasicBox.SetDragDropMode( SV_DRAGDROP_CTRL_MOVE | SV_DRAGDROP_CTRL_COPY );
     aBasicBox.EnableInplaceEditing( TRUE );
     aBasicBox.SetMode( nMode );
-    aBasicBox.SetWindowBits( WB_HASLINES | WB_HASLINESATROOT |
-                             WB_HASBUTTONS | WB_HASBUTTONSATROOT |
-                             WB_HSCROLL );
+    aBasicBox.SetStyle( WB_BORDER | WB_TABSTOP |
+                        WB_HASLINES | WB_HASLINESATROOT |
+                        WB_HASBUTTONS | WB_HASBUTTONSATROOT |
+                        WB_HSCROLL );
     aBasicBox.ScanAllEntries();
 
     aEditButton.GrabFocus();
