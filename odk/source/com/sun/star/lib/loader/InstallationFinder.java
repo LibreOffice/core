@@ -192,7 +192,7 @@ final class InstallationFinder {
      */
     private static String getPathFromWindowsRegistry() {
 
-        final String SUBKEYNAME = "Software\\OpenOffice.org\\UNO\\InstallPath";
+        final String SUBKEYNAME = "Software\\LibreOffice\\UNO\\InstallPath";
 
         String path = null;
 
