@@ -121,7 +121,7 @@ namespace oooimprovement
     Sequence<OUString> SAL_CALL InviteJob::getSupportedServiceNames_static()
     {
         Sequence<OUString> aServiceNames(1);
-        aServiceNames[0] = OUString::createFromAscii("com.sun.star.task.XAsyncJob");
+        aServiceNames[0] = OUString::createFromAscii("com.sun.star.task.AsyncJob");
         return aServiceNames;
     }
 
