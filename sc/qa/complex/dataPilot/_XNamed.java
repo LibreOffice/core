@@ -25,12 +25,12 @@
  *
  ************************************************************************/
 
-package complex.dataPilot.interfaceTests.container;
+package complex.dataPilot;
 
 import com.sun.star.container.XNamed;
 import lib.TestParameters;
-import share.LogWriter;
-import util.utils;
+// import share.LogWriter;
+// import util.utils;
 
 /**
 * Testing <code>com.sun.star.container.XNamed</code>
@@ -64,7 +64,7 @@ public class _XNamed {
     /**
      * The log writer
      */
-    private LogWriter log = null;
+    // private LogWriter log = null;
 
     /**
      * Constructor: gets the object to test, a logger and the test parameters
@@ -72,9 +72,9 @@ public class _XNamed {
      * @param log A log writer
      * @param param The test parameters
      */
-    public _XNamed(XNamed xObj, LogWriter log, TestParameters param) {
+    public _XNamed(XNamed xObj/*, LogWriter log*/, TestParameters param) {
         oObj = xObj;
-        this.log = log;
+        // this.log = log;
         this.param = param;
     }
 
@@ -87,7 +87,7 @@ public class _XNamed {
     public boolean _getName() {
 
         // write to log what we try next
-        log.println( "test for getName()" );
+        System.out.println( "test for getName()" );
 
         boolean result = true;
         boolean loc_result = true;
@@ -95,10 +95,16 @@ public class _XNamed {
         String NewName = null;
 
         loc_result = ((name = oObj.getName()) != null);
-        log.println("getting the name \"" + name + "\"");
+        System.out.println("getting the name \"" + name + "\"");
 
-        if (loc_result) log.println("... getName() - OK");
-        else log.println("... getName() - FAILED");
+        if (loc_result)
+        {
+            System.out.println("... getName() - OK");
+        }
+        else
+        {
+            System.out.println("... getName() - FAILED");
+        }
         result &= loc_result;
         return result;
     }
@@ -121,23 +127,29 @@ public class _XNamed {
     */
     public boolean _setName(){
 //        requiredMethod("getName()");
-        log.println("testing setName() ... ");
+        System.out.println("testing setName() ... ");
 
         String oldName = oObj.getName();
         String NewName = oldName == null ? "XNamed" : oldName + "X" ;
 
         boolean result = true;
         boolean loc_result = true;
-        log.println("set the name of object to \"" + NewName + "\"");
+        System.out.println("set the name of object to \"" + NewName + "\"");
         oObj.setName(NewName);
-        log.println("check that container has element with this name");
+        System.out.println("check that container has element with this name");
 
         String name = oObj.getName();
-        log.println("getting the name \"" + name + "\"");
+        System.out.println("getting the name \"" + name + "\"");
         loc_result = name.equals(NewName);
 
-        if (loc_result) log.println("... setName() - OK");
-                        else log.println("... setName() - FAILED");
+        if (loc_result)
+        {
+            System.out.println("... setName() - OK");
+        }
+        else
+        {
+            System.out.println("... setName() - FAILED");
+        }
         result &= loc_result;
         oObj.setName(oldName);
         return result;
