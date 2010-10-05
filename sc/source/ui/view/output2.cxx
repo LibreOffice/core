@@ -3011,7 +3011,7 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                         aLogicStart.Y() += nTopM;
                                 }
 
-                                if (!aAlignParam.mbAsianVertical &&
+                                if (!aAlignParam.mbAsianVertical && !aAlignParam.isVerticallyOriented() &&
                                     (aAlignParam.meOrient == SVX_ORIENTATION_STANDARD || aAlignParam.meOrient == SVX_ORIENTATION_STACKED || !aAlignParam.mbBreak))
                                 {
                                     if (aAlignParam.meVerJust==SVX_VER_JUSTIFY_BOTTOM ||
@@ -3055,7 +3055,49 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                     // nOriVal = -900;
                                     nOriVal = 2700;
                                     if (aAlignParam.meHorJust != SVX_HOR_JUSTIFY_BLOCK)
+                                    {
                                         aLogicStart.X() += nEngineWidth;
+                                        if (!aAlignParam.mbBreak)
+                                        {
+                                            // Set the paper width to text size.
+                                            Size aPSize = pEngine->GetPaperSize();
+                                            aPSize.Width() = pEngine->CalcTextWidth();
+                                            pEngine->SetPaperSize(aPSize);
+
+                                            long nGap = 0;
+                                            long nTopOffset = 0; // offset by top margin
+                                            if (bPixelToLogic)
+                                            {
+                                                nGap = pRefDevice->LogicToPixel(aPSize).Width() - pRefDevice->LogicToPixel(aCellSize).Height();
+                                                nGap = pRefDevice->PixelToLogic(Size(0, nGap)).Height();
+                                                nTopOffset = pRefDevice->PixelToLogic(Size(0,nTopM)).Height();
+                                            }
+                                            else
+                                            {
+                                                nGap = aPSize.Width() - aCellSize.Height();
+                                                nTopOffset = nTopM;
+                                            }
+                                            aLogicStart.Y() += nTopOffset;
+
+                                            switch (aAlignParam.meVerJust)
+                                            {
+                                                case SVX_VER_JUSTIFY_STANDARD:
+                                                case SVX_VER_JUSTIFY_BOTTOM:
+                                                    // align to bottom
+                                                    aLogicStart.Y() -= nGap;
+                                                break;
+                                                case SVX_VER_JUSTIFY_CENTER:
+                                                    // center it.
+                                                    aLogicStart.Y() -= nGap / 2;
+                                                break;
+                                                case SVX_VER_JUSTIFY_BLOCK:
+                                                case SVX_VER_JUSTIFY_TOP:
+                                                    // align to top (do nothing)
+                                                default:
+                                                    ;
+                                            }
+                                        }
+                                    }
                                 }
                                 else if (aAlignParam.meOrient == SVX_ORIENTATION_BOTTOMTOP)
                                 {
