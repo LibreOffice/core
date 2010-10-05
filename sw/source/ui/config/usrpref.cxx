@@ -63,12 +63,12 @@ SwMasterUsrPref::SwMasterUsrPref(BOOL bWeb) :
     bIsVScrollMetricSet(sal_False),
     nDefTab( MM50 * 4 ),
     bIsSquaredPageMode(sal_False),
-    bApplyCharUnit(sal_False),
     aContentConfig(bWeb, *this),
     aLayoutConfig(bWeb, *this),
     aGridConfig(bWeb, *this),
     aCursorConfig(*this),
-    pWebColorConfig(bWeb ? new SwWebColorConfig(*this) : 0)
+    pWebColorConfig(bWeb ? new SwWebColorConfig(*this) : 0),
+    bApplyCharUnit(sal_False)
 {
     MeasurementSystem eSystem = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
     eUserMetric = MEASURE_METRIC == eSystem ? FUNIT_CM : FUNIT_INCH;
