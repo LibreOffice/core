@@ -224,10 +224,10 @@ public:
                         ~SdDrawDocument();
 
     virtual SdrModel*   AllocModel() const;
-    virtual SdrPage*    AllocPage(FASTBOOL bMasterPage);
+    virtual SdrPage*    AllocPage(bool bMasterPage);
     virtual const SdrModel* LoadModel(const String& rFileName);
     virtual void        DisposeLoadedModels();
-    virtual FASTBOOL    IsReadOnly() const;
+    virtual bool    IsReadOnly() const;
     virtual void        SetChanged(sal_Bool bFlag = sal_True);
     virtual SvStream*   GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) const;
 
@@ -449,8 +449,8 @@ public:
     void                Merge(SdrModel& rSourceModel,
                                 USHORT nFirstPageNum=0, USHORT nLastPageNum=0xFFFF,
                                 USHORT nDestPos=0xFFFF,
-                                FASTBOOL bMergeMasterPages=FALSE, FASTBOOL bAllMasterPages=FALSE,
-                                FASTBOOL bUndo=TRUE, FASTBOOL bTreadSourceAsConst=FALSE);
+                                bool bMergeMasterPages = false, bool bAllMasterPages = false,
+                                bool bUndo = true, bool bTreadSourceAsConst = false);
 
     SD_DLLPUBLIC ::com::sun::star::text::WritingMode GetDefaultWritingMode() const;
     void SetDefaultWritingMode( ::com::sun::star::text::WritingMode eMode );

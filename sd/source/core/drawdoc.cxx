@@ -532,9 +532,9 @@ SdrModel* SdDrawDocument::AllocModel() const
 |*
 \************************************************************************/
 
-SdrPage* SdDrawDocument::AllocPage(FASTBOOL bMasterPage)
+SdrPage* SdDrawDocument::AllocPage(bool bMasterPage)
 {
-    return new SdPage(*this, NULL, (BOOL)bMasterPage);
+    return new SdPage(*this, NULL, bMasterPage);
 }
 
 /*************************************************************************

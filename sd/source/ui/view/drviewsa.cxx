@@ -769,7 +769,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
             SdrObject* pObj = NULL;
             const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
             ULONG nMarkCount = rMarkList.GetMarkCount();
-            FASTBOOL bOneLayer = TRUE;
+            bool bOneLayer = TRUE;
 
             // Use the first ten selected shapes as a (hopefully
             // representative) sample of all shapes of the current page.

@@ -184,7 +184,7 @@ public:
     virtual void    SetUppBorder(INT32 nBorder);
     virtual void    SetLwrBorder(INT32 nBorder);
     virtual void    SetModel(SdrModel* pNewModel);
-    virtual FASTBOOL IsReadOnly() const;
+    virtual bool    IsReadOnly() const;
 
     sd::ShapeList&  GetPresentationShapeList() { return maPresentationShapeList; }
 
