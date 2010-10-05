@@ -259,42 +259,6 @@ typedef ULONG SbxError;         // Preserve old type
 #define SbxERR_NOT_A_COLL                       ERRCODE_SBX_NOT_A_COLL
 
 
-/* Old codes with VB error codes
-enum SbxError {                 // Ergebnis einer Rechenoperation/Konversion
-    SbxERR_OK = 0,              // durchgefuehrt
-    SbxERR_SYNTAX = 2,          // Syntaxfehler im Parser
-    SbxERR_NOTIMP = 5,          // nicht moeglich
-    SbxERR_OVERFLOW = 6,        // Ueberlauf
-    SbxERR_BOUNDS = 9,          // Array-Index ungueltig
-    SbxERR_ZERODIV = 11,        // Division durch Null
-    SbxERR_CONVERSION = 13,     // falscher Datentyp
-    SbxERR_BAD_PARAMETER = 14,  // ung�ltiger Parameter
-    SbxERR_PROC_UNDEFINED = 35, // BASIC-Sub oder Function undefiniert
-    SbxERR_ERROR = 51,          // andere Fehler
-                                // Objektbezogene Fehler
-    SbxERR_NO_OBJECT = 91,      // Objektvariable nicht belegt
-    SbxERR_CANNOT_LOAD = 323,   // Objekt kann nicht geladen/eingerichtet werden
-    SbxERR_BAD_INDEX = 341,     // Invalid object index
-    SbxERR_NO_ACTIVE_OBJECT=366,// Objekt ist nicht aktiviert
-    SbxERR_BAD_PROP_VALUE = 380,// Bad property value
-    SbxERR_PROP_READONLY = 382, // Property is read only
-    SbxERR_PROP_WRITEONLY = 394,// Property is write only
-    SbxERR_INVALID_OBJECT = 420,// Invalid object reference
-    SbxERR_NO_METHOD = 423,     // Property oder Methode unbekannt
-    SbxERR_INVALID_USAGE_OBJECT=425,// Falsche Verwendung eines Objekts
-    SbxERR_NO_OLE = 430,        // Kein OLE-Objekt
-    SbxERR_BAD_METHOD = 438,    // Methode nicht unterst�tzt
-    SbxERR_OLE_ERROR = 440,     // OLE Automation-Fehler
-    SbxERR_BAD_ACTION = 445,    // Aktion nicht unterst�tzt
-    SbxERR_NO_NAMED_ARGS = 446, // Keine benannten Argumente
-    SbxERR_BAD_LOCALE = 447,    // Laenderspezifische Einstellungen nicht unterst�tzt
-    SbxERR_NAMED_NOT_FOUND = 448,// Unbekanntes benanntes Argument
-    SbxERR_NOT_OPTIONAL = 449,  // Argument nicht optional
-    SbxERR_WRONG_ARGS = 450,    // Falsche Zahl von Argumenten
-    SbxERR_NOT_A_COLL = 451     // Objekt enth�lt keine Elemente
-};
-*/
-
 // Flag-Bits:
 #define SBX_READ      0x0001    // Read permission
 #define SBX_WRITE     0x0002    // Write permission
