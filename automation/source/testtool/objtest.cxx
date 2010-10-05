@@ -31,6 +31,7 @@
 #ifdef OS2
 #define INCL_DOS
 #include <svpm.h>
+#endif
 
 #include "sysdir_win.hxx"
 #include "registry_win.hxx"
