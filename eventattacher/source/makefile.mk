@@ -61,3 +61,11 @@ SHL1LIBS=	$(SLB)$/$(TARGET).lib
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
+
+ALLTAR : $(MISC)/evtatt.component
+
+$(MISC)/evtatt.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        evtatt.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt evtatt.component

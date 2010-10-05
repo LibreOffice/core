@@ -708,6 +708,7 @@ void GetEnhancedPath( std::vector< com::sun::star::beans::PropertyValue >& rDest
             case '8' :
             case '9' :
             case '.' :
+            case '-' :
             {
                 com::sun::star::drawing::EnhancedCustomShapeParameterPair aPair;
                 if ( GetNextParameter( aPair.First, nIndex, rValue ) &&
@@ -1246,7 +1247,6 @@ void XMLEnhancedCustomShapeContext::EndElement()
             {
                 switch( EASGet( pValues->Name ) )
                 {
-                    case EAS_Position :
                     case EAS_RangeYMinimum :
                     case EAS_RangeYMaximum :
                     case EAS_RangeXMinimum :
@@ -1258,6 +1258,8 @@ void XMLEnhancedCustomShapeContext::EndElement()
                             pValues->Value.getValue()), pH );
                     }
                     break;
+
+                    case EAS_Position :
                     case EAS_Polar :
                     {
                         CheckAndResolveEquationParameter( (*((com::sun::star::drawing::EnhancedCustomShapeParameterPair*)

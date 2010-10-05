@@ -46,24 +46,29 @@ class SFX2_DLLPUBLIC SfxViewFactory
 {
 public:
     SfxViewFactory( SfxViewCtor fnC, SfxViewInit fnI,
-                    USHORT nOrdinal, const ResId& aDescrResId );
+                    USHORT nOrdinal, const sal_Char* asciiViewName );
     ~SfxViewFactory();
 
     SfxViewShell *CreateInstance(SfxViewFrame *pViewFrame, SfxViewShell *pOldSh);
     void          InitFactory();
 
-    String        GetDescription() const
-                  { return String( aDescription ); }
     USHORT        GetOrdinal() const { return nOrd; }
 
-    /// returns an API-compatible view name. For the moment, this is "view" with an appended ordinal/ID
-    String        GetViewName() const;
+    /// returns a legacy view name. This is "view" with an appended ordinal/ID.
+    String        GetLegacyViewName() const;
+
+    /** returns a API-compatible view name.
+
+        For details on which view names are specified, see the XModel2.getAvailableViewControllerNames
+        documentation.
+    */
+    String        GetAPIViewName() const;
 
 private:
     SfxViewCtor fnCreate;
     SfxViewInit fnInit;
     USHORT      nOrd;
-    ResId       aDescription;
+    const String    m_sViewName;
 };
 
 #endif

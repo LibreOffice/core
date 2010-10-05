@@ -77,3 +77,11 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo LibMain>>$@
     @echo CT>>$@
 .ENDIF
+
+ALLTAR : $(MISC)/avmedia.component
+
+$(MISC)/avmedia.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        avmedia.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt avmedia.component
