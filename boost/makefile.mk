@@ -116,13 +116,15 @@ $(PACKAGE_DIR)$/$(NORMALIZE_FLAG_FILE) : $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
 
 normalize: $(PACKAGE_DIR)$/$(NORMALIZE_FLAG_FILE)
 
+.IF "$(GUI)"!="WNT"
+
 $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) : normalize
 
-.IF "$(GUI)"=="WNT"
+.ELSE
 
-$(PACKAGE_DIR)/$(BUILD_FLAG_FILE) : boostthreadlib
+$(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) : boostthreadlib
 
-boostthreadlib :
+boostthreadlib : $(PACKAGE_DIR)$/$(NORMALIZE_FLAG_FILE)
     cd $(PACKAGE_DIR)/$(TARFILE_ROOTDIR)/libs/thread/src/win32 && dmake $(MFLAGS) $(CALLMACROS)
 
 .ENDIF
