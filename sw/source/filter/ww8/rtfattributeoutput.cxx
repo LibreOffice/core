@@ -563,8 +563,8 @@ void RtfAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t 
     if ( !m_pTableWrt )
         InitTableHelper( pTableTextNodeInfoInner );
 
-    const SwTableBox *pTblBox = pTableTextNodeInfoInner->getTableBox( );
-    SwFrmFmt *pFmt = pTblBox->GetFrmFmt( );
+    const SwTable *pTbl = pTableTextNodeInfoInner->getTable();
+    SwFrmFmt *pFmt = pTbl->GetFrmFmt( );
 
     m_aRowDefs.append(OOO_STRING_SVTOOLS_RTF_TROWD);
     TableOrientation( pTableTextNodeInfoInner );
@@ -604,6 +604,19 @@ void RtfAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t 
     Point aPt;
     SwRect aRect( pFmt->FindLayoutRect( false, &aPt ));
     SwTwips nPageSize = aRect.Width();
+
+    // Handle the page size when not rendered
+    if( 0 == nPageSize )
+    {
+        const SwNode* pNode = pTableTextNodeInfoInner->getNode();
+        const SwFrmFmt* pFrmFmt = GetExport().mpParentFrame ? &GetExport().mpParentFrame->GetFrmFmt() :
+            const_cast<const SwDoc *>(GetExport().pDoc)
+               ->GetPageDesc(0).GetPageFmtOfNode(*pNode, false);
+
+        const SvxLRSpaceItem& rLR = pFrmFmt->GetLRSpace();
+        nPageSize = pFrmFmt->GetFrmSize().GetWidth() -
+                        rLR.GetLeft() - rLR.GetRight();
+    }
     SwTwips nTblSz = pFmt->GetFrmSize().GetWidth();
     for( USHORT i = 0; i < pRow->GetCells().Count(); i++ )
     {
