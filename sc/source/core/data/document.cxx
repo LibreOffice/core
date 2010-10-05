@@ -3132,6 +3132,11 @@ void ScDocument::SetColWidth( SCCOL nCol, SCTAB nTab, USHORT nNewWidth )
         pTab[nTab]->SetColWidth( nCol, nNewWidth );
 }
 
+void ScDocument::SetColWidthOnly( SCCOL nCol, SCTAB nTab, USHORT nNewWidth )
+{
+    if ( ValidTab(nTab) && pTab[nTab] )
+        pTab[nTab]->SetColWidthOnly( nCol, nNewWidth );
+}
 
 void ScDocument::SetRowHeight( SCROW nRow, SCTAB nTab, USHORT nNewHeight )
 {

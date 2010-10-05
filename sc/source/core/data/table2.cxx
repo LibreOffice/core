@@ -2108,6 +2108,17 @@ void ScTable::SetColWidth( SCCOL nCol, USHORT nNewWidth )
     }
 }
 
+void ScTable::SetColWidthOnly( SCCOL nCol, USHORT nNewWidth )
+{
+    if (!VALIDCOL(nCol) || !pColWidth)
+        return;
+
+    if (!nNewWidth)
+        nNewWidth = STD_COL_WIDTH;
+
+    if (nNewWidth != pColWidth[nCol])
+        pColWidth[nCol] = nNewWidth;
+}
 
 void ScTable::SetRowHeight( SCROW nRow, USHORT nNewHeight )
 {

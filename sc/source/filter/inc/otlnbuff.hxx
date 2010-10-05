@@ -29,50 +29,31 @@
 #define SC_OTLNBUFF_HXX
 
 #include <tools/solar.h>
+#include <mdds/flat_segment_tree.hpp>
+#include <set>
 
 class ScOutlineArray;
 
 class XclImpOutlineBuffer
 {
-    // -> exctools.cxx
-    private:
-        BYTE*           pLevel;
-        BOOL*           pOuted;
-        BOOL*           pHidden;
-        SCSIZE          nSize;
-        SCSIZE          nLast;
-        BYTE            nMaxLevel;
-        ScOutlineArray* pOutlineArray;
-        BOOL            bButtonNormal;  // TRUE -> right / under
-    public:
-                        XclImpOutlineBuffer( SCSIZE nNewSize );
-                        ~XclImpOutlineBuffer();
-        void            SetLevel( SCSIZE nIndex, BYTE nVal, BOOL bOuted, BOOL bHidden );
-        void            SetOutlineArray( ScOutlineArray* pOArray );
-        void            Reset( void );
-        void            MakeScOutline( void );
-        void            SetLevelRange( SCSIZE nF, SCSIZE nL, BYTE nVal,
-                            BOOL bOuted, BOOL bHidden );
+public:
+    XclImpOutlineBuffer( SCSIZE nNewSize );
+    ~XclImpOutlineBuffer();
 
-        inline BOOL     HasOutline( void ) const;
+    void SetLevel( SCSIZE nIndex, sal_uInt8 nVal, bool bCollapsed );
+    void SetOutlineArray( ScOutlineArray* pOArray );
+    void MakeScOutline();
+    void SetLevelRange( SCSIZE nF, SCSIZE nL, sal_uInt8 nVal, bool bCollapsed );
+    void SetButtonMode( bool bRightOrUnder );
 
-        inline void     SetButtonMode( const BOOL bRightOrUnder );
+private:
+    typedef ::mdds::flat_segment_tree<SCSIZE, sal_uInt8> OutlineLevels;
+    OutlineLevels       maLevels;
+    ::std::set<SCSIZE>  maCollapsedPosSet;
+    ScOutlineArray*     mpOutlineArray;
+    sal_uInt8           mnMaxLevel;
+    bool                mbButtonAfter:1;
 };
-
-
-
-
-inline BOOL XclImpOutlineBuffer::HasOutline( void ) const
-{
-    return nMaxLevel > 0;
-}
-
-
-inline void XclImpOutlineBuffer::SetButtonMode( const BOOL b )
-{
-    bButtonNormal = b;
-}
-
 
 #endif
 

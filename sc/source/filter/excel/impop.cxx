@@ -405,9 +405,7 @@ void ImportExcel::Row25( void )
             aIn >> nGrbit;
 
             sal_uInt8 nLevel = ::extract_value< sal_uInt8 >( nGrbit, 0, 3 );
-            pRowOutlineBuff->SetLevel( nRow, nLevel,
-                ::get_flag( nGrbit, EXC_ROW_COLLAPSED ), ::get_flag( nGrbit, EXC_ROW_HIDDEN ) );
-
+            pRowOutlineBuff->SetLevel( nRow, nLevel, ::get_flag( nGrbit, EXC_ROW_COLLAPSED ) );
             pColRowBuff->SetRowSettings( nRow, nRowHeight, nGrbit );
         }
     }
@@ -668,7 +666,7 @@ void ImportExcel::Colinfo( void )
     bool bHidden = ::get_flag( nOpt, EXC_COLINFO_HIDDEN );
     bool bCollapsed = ::get_flag( nOpt, EXC_COLINFO_COLLAPSED );
     sal_uInt8 nLevel = ::extract_value< sal_uInt8 >( nOpt, 8, 3 );
-    pColOutlineBuff->SetLevelRange( nColFirst, nColLast, nLevel, bCollapsed, bHidden );
+    pColOutlineBuff->SetLevelRange( nColFirst, nColLast, nLevel, bCollapsed );
 
     if( bHidden )
         pColRowBuff->HideColRange( nColFirst, nColLast );
@@ -943,9 +941,7 @@ void ImportExcel::Row34( void )
         aIn >> nGrbit >> nXF;
 
         sal_uInt8 nLevel = ::extract_value< sal_uInt8 >( nGrbit, 0, 3 );
-        pRowOutlineBuff->SetLevel( nScRow, nLevel,
-            ::get_flag( nGrbit, EXC_ROW_COLLAPSED ), ::get_flag( nGrbit, EXC_ROW_HIDDEN ) );
-
+        pRowOutlineBuff->SetLevel( nScRow, nLevel, ::get_flag( nGrbit, EXC_ROW_COLLAPSED ) );
         pColRowBuff->SetRowSettings( nScRow, nRowHeight, nGrbit );
 
         if( nGrbit & EXC_ROW_USEDEFXF )

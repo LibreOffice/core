@@ -59,6 +59,8 @@
 #include "xilink.hxx"
 #include "xecontent.hxx"
 
+#include <vector>
+
 // - ALLGEMEINE ----------------------------------------------------------
 
 RootData::RootData( void )
@@ -91,191 +93,92 @@ RootData::~RootData()
 }
 
 
-
-
-XclImpOutlineBuffer::XclImpOutlineBuffer( SCSIZE nNewSize )
+XclImpOutlineBuffer::XclImpOutlineBuffer( SCSIZE nNewSize ) :
+    maLevels(0, nNewSize, 0),
+    mpOutlineArray(NULL),
+    mnMaxLevel(0),
+    mbButtonAfter(true)
 {
-    DBG_ASSERT( nNewSize > 0, "-OutlineBuffer::Ctor: nNewSize == 0!" );
-
-    nSize = nNewSize + 1;
-    pLevel = new BYTE[ nSize ];
-    pOuted = new BOOL[ nSize ];
-    pHidden = new BOOL[ nSize ];
-    pOutlineArray = NULL;
-
-    Reset();
 }
-
 
 XclImpOutlineBuffer::~XclImpOutlineBuffer()
 {
-    delete[] pLevel;
-    delete[] pOuted;
-    delete[] pHidden;
 }
 
-
-void XclImpOutlineBuffer::SetLevel( SCSIZE nIndex, BYTE nVal, BOOL bOuted, BOOL bHidden )
+void XclImpOutlineBuffer::SetLevel( SCSIZE nIndex, sal_uInt8 nVal, bool bCollapsed )
 {
-    if( nIndex < nSize )
-    {
-        pLevel[ nIndex ] = nVal;
-        pOuted[ nIndex ] = bOuted;
-        pHidden[ nIndex ] = bHidden;
-
-        if( nIndex > nLast )
-            nLast = nIndex;
-        if( nVal > nMaxLevel )
-            nMaxLevel = nVal;
-    }
+    maLevels.insert_back(nIndex, nIndex+1, nVal);
+    if (nVal > mnMaxLevel)
+        mnMaxLevel = nVal;
+    if (bCollapsed)
+        maCollapsedPosSet.insert(nIndex);
 }
-
 
 void XclImpOutlineBuffer::SetOutlineArray( ScOutlineArray* pOArray )
 {
-    pOutlineArray = pOArray;
+    mpOutlineArray = pOArray;
 }
 
-
-// transtorm xcl-outline into SC-outline
-void XclImpOutlineBuffer::MakeScOutline( void )
+void XclImpOutlineBuffer::MakeScOutline()
 {
-    if( !pOutlineArray || !HasOutline() )
+    if (!mpOutlineArray)
         return;
 
-    const UINT16    nNumLev         = 8;
-    BOOL            bPreOutedLevel  = FALSE;
-    BYTE            nCurrLevel      = 0;
-    BOOL            bMakeHidden[ nNumLev ];
-    BOOL            bMakeVisible[ nNumLev + 1 ];
-
-    sal_uInt16 nLevel;
-    for( nLevel = 0; nLevel < nNumLev; ++nLevel )
-        bMakeHidden[ nLevel ] = FALSE;
-    for( nLevel = 0; nLevel <= nNumLev; ++nLevel )
-        bMakeVisible[ nLevel ] = TRUE;
-    if( nLast < (nSize - 1) )
-        nLast++;
-
-    // search for hidden attributes at end of level, move them to begin
-    if( bButtonNormal )
+    ::std::vector<sal_uInt8> aOutlineStack;
+    aOutlineStack.reserve(mnMaxLevel);
+    OutlineLevels::const_iterator itr = maLevels.begin(), itr_end = maLevels.end();
+    for (; itr != itr_end; ++itr)
     {
-        for( BYTE nWorkLevel = 1; nWorkLevel <= nMaxLevel; nWorkLevel++ )
+        SCSIZE nPos = itr->first;
+        sal_uInt8 nLevel = itr->second;
+        sal_uInt8 nCurLevel = static_cast<sal_uInt8>(aOutlineStack.size());
+        if (nLevel > nCurLevel)
         {
-            UINT16  nStartPos       = 0;
-            BYTE    nCurrLevel2 = 0;
-            BYTE    nPrevLevel  = 0;
-
-            for( SCSIZE nC = 0 ; nC <= nLast ; nC++ )
+            for (sal_uInt8 i = 0; i < nLevel - nCurLevel; ++i)
+                aOutlineStack.push_back(nPos);
+        }
+        else
+        {
+            DBG_ASSERT(nLevel < nCurLevel, "XclImpOutlineBuffer::MakeScOutline: unexpected level!");
+            for (sal_uInt8 i = 0; i < nCurLevel - nLevel; ++i)
             {
-                nPrevLevel = nCurrLevel2;
-                nCurrLevel2 = pLevel[ nC ];
-                if( (nPrevLevel < nWorkLevel) && (nCurrLevel2 >= nWorkLevel) )
-                    nStartPos = static_cast< sal_uInt16 >( nC );
-                else if( (nPrevLevel >= nWorkLevel) && (nCurrLevel2 < nWorkLevel) )
+                if (aOutlineStack.empty())
                 {
-                    if( pOuted[ nC ] && pHidden[ nStartPos ] )
-                    {
-                        if( nStartPos )
-                            pOuted[ nStartPos - 1 ] = TRUE;
-                        else
-                            bPreOutedLevel = TRUE;
-                        pOuted[ nC ] = FALSE;
-                    }
+                    // Something is wrong.
+                    return;
                 }
+                SCSIZE nFirstPos = aOutlineStack.back();
+                sal_uInt8 nThisLevel = static_cast<sal_uInt8>(aOutlineStack.size());
+                aOutlineStack.pop_back();
+                bool bCollapsed = false;
+                if (mbButtonAfter)
+                    bCollapsed = maCollapsedPosSet.count(nPos) > 0;
+                else if (nFirstPos > 0)
+                    bCollapsed = maCollapsedPosSet.count(nFirstPos-1) > 0;
+
+                BOOL bDummy;
+                mpOutlineArray->Insert(nFirstPos, nPos-1, bDummy, bCollapsed);
             }
         }
     }
-    else
-        bPreOutedLevel = pHidden[ 0 ];
-
-    // generate SC outlines
-    UINT16  nPrevC;
-    UINT16  nStart[ nNumLev ];
-    BOOL    bDummy;
-    BOOL    bPrevOuted  = bPreOutedLevel;
-    BOOL    bCurrHidden = FALSE;
-    BOOL    bPrevHidden = FALSE;
-
-    for( SCSIZE nC = 0; nC <= nLast; nC++ )
-    {
-        BYTE nWorkLevel = pLevel[ nC ];
-
-        nPrevC      = static_cast< sal_uInt16 >( nC ? nC - 1 : 0 );
-        bPrevHidden = bCurrHidden;
-        bCurrHidden = pHidden[ nC ];
-
-        // open new levels
-        while( nWorkLevel > nCurrLevel )
-        {
-            nCurrLevel++;
-            bMakeHidden[ nCurrLevel ] = bPrevOuted;
-            bMakeVisible[ nCurrLevel + 1 ] =
-                bMakeVisible[ nCurrLevel ] && !bMakeHidden[ nCurrLevel ];
-            nStart[ nCurrLevel ] = static_cast< sal_uInt16 >( nC );
-        }
-        // close levels
-        while( nWorkLevel < nCurrLevel )
-        {
-            BOOL bLastLevel     = (nWorkLevel == (nCurrLevel - 1));
-            BOOL bRealHidden    = (bMakeHidden[ nCurrLevel ] && bPrevHidden );
-            BOOL bRealVisible   = (bMakeVisible[ nCurrLevel ] ||
-                                    (!bCurrHidden && bLastLevel));
-
-            pOutlineArray->Insert( nStart[ nCurrLevel ], nPrevC , bDummy,
-                bRealHidden, bRealVisible );
-            nCurrLevel--;
-        }
-
-        bPrevOuted = pOuted[ nC ];
-    }
 }
 
-
-void XclImpOutlineBuffer::SetLevelRange( SCSIZE nF, SCSIZE nL, BYTE nVal,
-                                    BOOL bOuted, BOOL bHidden )
+void XclImpOutlineBuffer::SetLevelRange( SCSIZE nF, SCSIZE nL, sal_uInt8 nVal, bool bCollapsed )
 {
-    DBG_ASSERT( nF <= nL, "+OutlineBuffer::SetLevelRange(): Last < First!" );
+    if (nF > nL)
+        // invalid range
+        return;
 
-    if( nL < nSize )
-    {
-        if( nL > nLast )
-            nLast = nL;
+    maLevels.insert_back(nF, nL+1, nVal);
 
-        BYTE*   pLevelCount;
-        BYTE*   pLast;
-        BOOL*   pOutedCount;
-        BOOL*   pHiddenCount;
-
-        pLevelCount = &pLevel[ nF ];
-        pLast = &pLevel[ nL ];
-        pOutedCount = &pOuted[ nF ];
-        pHiddenCount = &pHidden[ nF ];
-
-        while( pLevelCount <= pLast )
-        {
-            *( pLevelCount++ ) = nVal;
-            *( pOutedCount++ ) = bOuted;
-            *( pHiddenCount++ ) = bHidden;
-        }
-
-        if( nVal > nMaxLevel )
-            nMaxLevel = nVal;
-    }
+    if (bCollapsed)
+        maCollapsedPosSet.insert(nF);
 }
 
-
-void XclImpOutlineBuffer::Reset( void )
+void XclImpOutlineBuffer::SetButtonMode( bool bRightOrUnder )
 {
-    for( SCSIZE nC = 0 ; nC < nSize ; nC++  )
-    {
-        pLevel[ nC ] = 0;
-        pOuted[ nC ] = pHidden[ nC ] = FALSE;
-    }
-    nLast = 0;
-    nMaxLevel = 0;
+    mbButtonAfter = bRightOrUnder;
 }
-
 
 //___________________________________________________________________
 
