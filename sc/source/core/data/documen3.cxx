@@ -1848,11 +1848,32 @@ const ScDocOptions& ScDocument::GetDocOptions() const
 void ScDocument::SetDocOptions( const ScDocOptions& rOpt )
 {
     DBG_ASSERT( pDocOptions, "No DocOptions! :-(" );
+    bool bUpdateFuncNames = pDocOptions->GetUseEnglishFuncName() != rOpt.GetUseEnglishFuncName();
+
     *pDocOptions = rOpt;
 
     xPoolHelper->SetFormTableOpt(rOpt);
 
     SetGrammar( rOpt.GetFormulaSyntax() );
+
+    if (bUpdateFuncNames)
+    {
+        // This needs to be called first since it may re-initialize the entire
+        // opcode map.
+        if (rOpt.GetUseEnglishFuncName())
+        {
+            // switch native symbols to English.
+            ScCompiler aComp(NULL, ScAddress());
+            ScCompiler::OpCodeMapPtr xMap = aComp.GetOpCodeMap(::com::sun::star::sheet::FormulaLanguage::ENGLISH);
+            ScCompiler::SetNativeSymbols(xMap);
+        }
+        else
+            // re-initialize native symbols with localized function names.
+            ScCompiler::ResetNativeSymbols();
+
+        // Force re-population of function names for the function wizard, function tip etc.
+        ScGlobal::ResetFunctionList();
+    }
 
     // Update the separators.
     ScCompiler::UpdateSeparatorsNative(

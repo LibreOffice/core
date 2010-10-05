@@ -72,6 +72,7 @@ private:
     FixedLine maFlFormulaOpt;
     FixedText maFtFormulaSyntax;
     ListBox   maLbFormulaSyntax;
+    CheckBox  maCbEnglishFuncName;
 
     FixedLine  maFlFormulaSeps;
     FixedText  maFtSepFuncArg;

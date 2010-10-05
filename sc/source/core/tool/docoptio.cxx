@@ -103,6 +103,7 @@ ScDocOptions::ScDocOptions( const ScDocOptions& rCpy )
             bDoAutoSpell( rCpy.bDoAutoSpell ),
             bLookUpColRowNames( rCpy.bLookUpColRowNames ),
             bFormulaRegexEnabled( rCpy.bFormulaRegexEnabled ),
+            bUseEnglishFuncName( rCpy.bUseEnglishFuncName ),
             eFormulaGrammar( rCpy.eFormulaGrammar ),
             aFormulaSepArg( rCpy.aFormulaSepArg ),
             aFormulaSepArrayRow( rCpy.aFormulaSepArrayRow ),
@@ -135,6 +136,7 @@ void ScDocOptions::ResetDocOptions()
     bDoAutoSpell        = FALSE;
     bLookUpColRowNames  = TRUE;
     bFormulaRegexEnabled= TRUE;
+    bUseEnglishFuncName = false;
     eFormulaGrammar     = ::formula::FormulaGrammar::GRAM_NATIVE;
 
     ResetFormulaSeparators();
@@ -270,10 +272,11 @@ SfxPoolItem* __EXPORT ScTpCalcItem::Clone( SfxItemPool * ) const
 
 #define CFGPATH_FORMULA     "Office.Calc/Formula"
 #define SCFORMULAOPT_GRAMMAR           0
-#define SCFORMULAOPT_SEP_ARG           1
-#define SCFORMULAOPT_SEP_ARRAY_ROW     2
-#define SCFORMULAOPT_SEP_ARRAY_COL     3
-#define SCFORMULAOPT_COUNT             4
+#define SCFORMULAOPT_ENGLISH_FUNCNAME  1
+#define SCFORMULAOPT_SEP_ARG           2
+#define SCFORMULAOPT_SEP_ARRAY_ROW     3
+#define SCFORMULAOPT_SEP_ARRAY_COL     4
+#define SCFORMULAOPT_COUNT             5
 
 #define CFGPATH_DOCLAYOUT   "Office.Calc/Layout/Other"
 
@@ -311,6 +314,7 @@ Sequence<OUString> ScDocCfg::GetFormulaPropertyNames()
     static const char* aPropNames[] =
     {
         "Syntax/Grammar",             // SCFORMULAOPT_GRAMMAR
+        "Syntax/EnglishFunctionName", // SCFORMULAOPT_ENGLISH_FUNCNAME
         "Syntax/SeparatorArg",        // SCFORMULAOPT_SEP_ARG
         "Syntax/SeparatorArrayRow",   // SCFORMULAOPT_SEP_ARRAY_ROW
         "Syntax/SeparatorArrayCol",   // SCFORMULAOPT_SEP_ARRAY_COL
@@ -452,6 +456,13 @@ ScDocCfg::ScDocCfg() :
                     SetFormulaSyntax(eGram);
                 }
                 break;
+                case SCFORMULAOPT_ENGLISH_FUNCNAME:
+                {
+                    sal_Bool bEnglish;
+                    if (pValues[nProp] >>= bEnglish)
+                        SetUseEnglishFuncName(bEnglish);
+                }
+                break;
                 case SCFORMULAOPT_SEP_ARG:
                 {
                     OUString aSep;
@@ -579,6 +590,12 @@ IMPL_LINK( ScDocCfg, FormulaCommitHdl, void *, EMPTYARG )
                     case ::formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1:  nVal = 2; break;
                 }
                 pValues[nProp] <<= nVal;
+            }
+            break;
+            case SCFORMULAOPT_ENGLISH_FUNCNAME:
+            {
+                sal_Bool b = GetUseEnglishFuncName();
+                pValues[nProp] <<= b;
             }
             break;
             case SCFORMULAOPT_SEP_ARG:

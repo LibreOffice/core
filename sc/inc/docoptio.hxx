@@ -53,6 +53,7 @@ class SC_DLLPUBLIC ScDocOptions
     BOOL   bDoAutoSpell;            // Auto-Spelling
     BOOL   bLookUpColRowNames;      // Spalten-/Zeilenbeschriftungen automagisch suchen
     BOOL   bFormulaRegexEnabled;    // regular expressions in formulas enabled
+    bool   bUseEnglishFuncName;     // use English function name even if the locale is not English.
     ::formula::FormulaGrammar::Grammar eFormulaGrammar;  // formula grammar used to switch different formula syntax
 
     ::rtl::OUString aFormulaSepArg;
@@ -108,6 +109,9 @@ public:
     void SetFormulaSyntax( ::formula::FormulaGrammar::Grammar eGram ) { eFormulaGrammar = eGram; }
     ::formula::FormulaGrammar::Grammar GetFormulaSyntax() const { return eFormulaGrammar; }
 
+    void SetUseEnglishFuncName( bool bVal ) { bUseEnglishFuncName = bVal; }
+    bool GetUseEnglishFuncName() const { return bUseEnglishFuncName; }
+
     void SetFormulaSepArg(const ::rtl::OUString& rSep) { aFormulaSepArg = rSep; }
     ::rtl::OUString GetFormulaSepArg() const { return aFormulaSepArg; }
 
@@ -139,6 +143,7 @@ inline void ScDocOptions::CopyTo(ScDocOptions& rOpt)
     rOpt.bDoAutoSpell           = bDoAutoSpell;
     rOpt.bLookUpColRowNames     = bLookUpColRowNames;
     rOpt.bFormulaRegexEnabled   = bFormulaRegexEnabled;
+    rOpt.bUseEnglishFuncName    = bUseEnglishFuncName;
     rOpt.eFormulaGrammar        = eFormulaGrammar;
     rOpt.aFormulaSepArg         = aFormulaSepArg;
     rOpt.aFormulaSepArrayRow    = aFormulaSepArrayRow;
@@ -162,6 +167,7 @@ inline const ScDocOptions& ScDocOptions::operator=( const ScDocOptions& rCpy )
     bDoAutoSpell        = rCpy.bDoAutoSpell;
     bLookUpColRowNames  = rCpy.bLookUpColRowNames;
     bFormulaRegexEnabled= rCpy.bFormulaRegexEnabled;
+    bUseEnglishFuncName = rCpy.bUseEnglishFuncName;
     eFormulaGrammar     = rCpy.eFormulaGrammar;
     aFormulaSepArg      = rCpy.aFormulaSepArg;
     aFormulaSepArrayRow = rCpy.aFormulaSepArrayRow;
@@ -188,6 +194,7 @@ inline int ScDocOptions::operator==( const ScDocOptions& rOpt ) const
             &&  rOpt.bDoAutoSpell           == bDoAutoSpell
             &&  rOpt.bLookUpColRowNames     == bLookUpColRowNames
             &&  rOpt.bFormulaRegexEnabled   == bFormulaRegexEnabled
+            &&  rOpt.bUseEnglishFuncName    == bUseEnglishFuncName
             &&  rOpt.eFormulaGrammar        == eFormulaGrammar
             &&  rOpt.aFormulaSepArg         == aFormulaSepArg
             &&  rOpt.aFormulaSepArrayRow    == aFormulaSepArrayRow

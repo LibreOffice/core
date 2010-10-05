@@ -59,6 +59,7 @@ ScTpFormulaOptions::ScTpFormulaOptions(Window* pParent, const SfxItemSet& rCoreA
     maFlFormulaOpt(this, ScResId(FL_FORMULA_OPTIONS)),
     maFtFormulaSyntax(this, ScResId(FT_FORMULA_SYNTAX)),
     maLbFormulaSyntax(this, ScResId(LB_FORMULA_SYNTAX)),
+    maCbEnglishFuncName(this, ScResId(CB_ENGLISH_FUNC_NAME)),
     maFlFormulaSeps(this, ScResId(FL_FORMULA_SEPS)),
     maFtSepFuncArg(this, ScResId(FT_FORMULA_SEP_ARG)),
     maEdSepFuncArg(this, ScResId(ED_FORMULA_SEP_ARG)),
@@ -234,7 +235,7 @@ BOOL ScTpFormulaOptions::FillItemSet(SfxItemSet& rCoreSet)
     }
 
     mpNewOptions->SetFormulaSyntax(eGram);
-
+    mpNewOptions->SetUseEnglishFuncName(maCbEnglishFuncName.IsChecked());
     mpNewOptions->SetFormulaSepArg(maEdSepFuncArg.GetText());
     mpNewOptions->SetFormulaSepArrayCol(maEdSepArrayCol.GetText());
     mpNewOptions->SetFormulaSepArrayRow(maEdSepArrayRow.GetText());
@@ -265,6 +266,8 @@ void ScTpFormulaOptions::Reset(const SfxItemSet& /*rCoreSet*/)
         default:
             maLbFormulaSyntax.SelectEntryPos(0);
     }
+
+    maCbEnglishFuncName.Check(mpNewOptions->GetUseEnglishFuncName());
 
     OUString aSep = mpNewOptions->GetFormulaSepArg();
     OUString aSepArrayRow = mpNewOptions->GetFormulaSepArrayRow();
