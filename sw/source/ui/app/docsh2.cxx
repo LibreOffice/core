@@ -60,6 +60,7 @@
 #include <editeng/svxacorr.hxx>
 #include <editeng/langitem.hxx>
 #include <svx/fmshell.hxx>
+#include <sfx2/linkmgr.hxx>
 
 #include <svtools/htmlcfg.hxx>
 #include <svx/ofaitem.hxx>
@@ -1469,6 +1470,12 @@ long SwDocShell::DdeSetData( const String& rItem, const String& rMimeType,
 ::sfx2::SvLinkSource* SwDocShell::DdeCreateLinkSource( const String& rItem )
 {
     return pDoc->CreateLinkSource( rItem );
+}
+
+void SwDocShell::ReconnectDdeLink(SfxObjectShell& rServer)
+{
+    ::sfx2::LinkManager& rLinkManager = pDoc->GetLinkManager();
+    rLinkManager.ReconnectDdeLink(rServer);
 }
 
 /*--------------------------------------------------------------------

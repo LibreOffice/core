@@ -237,6 +237,8 @@ public:
     virtual long DdeSetData( const String& rItem, const String& rMimeType,
                                 const ::com::sun::star::uno::Any & rValue );
     virtual ::sfx2::SvLinkSource* DdeCreateLinkSource( const String& rItem );
+    virtual void ReconnectDdeLink(SfxObjectShell& rServer);
+
     virtual void FillClass( SvGlobalName * pClassName,
                                    sal_uInt32 * pClipFormat,
                                    String * pAppName,
