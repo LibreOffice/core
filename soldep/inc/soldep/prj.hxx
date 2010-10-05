@@ -30,9 +30,7 @@
 
 #include <tools/fsys.hxx>
 #include <tools/stream.hxx>
-#ifndef _LISTMACR_HXX
 #include <bootstrp/listmacr.hxx>
-#endif
 #include <vos/mutex.hxx>
 #include <tools/string.hxx>
 
