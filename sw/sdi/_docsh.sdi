@@ -132,6 +132,11 @@ interface BaseTextDocument
         ExecMethod = Execute;
         StateMethod = GetState;
     ]
+    SID_MAIL_PREPAREEXPORT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState;
+    ]
 }
 
 
