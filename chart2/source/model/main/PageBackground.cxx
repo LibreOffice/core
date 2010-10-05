@@ -61,39 +61,33 @@ void lcl_AddDefaultsToMap(
     ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::LineProperties::PROP_LINE_STYLE, drawing::LineStyle_NONE );
 }
 
-const uno::Sequence< Property > & lcl_GetPropertySequence()
+struct StaticPageBackgroundInfoHelper_Initializer
 {
-    static uno::Sequence< Property > aPropSeq;
-
-    // /--
-    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( 0 == aPropSeq.getLength() )
+    ::cppu::OPropertyArrayHelper* operator()()
     {
-        // get properties
+        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
+        return &aPropHelper;
+    }
+
+private:
+    uno::Sequence< Property > lcl_GetPropertySequence()
+    {
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
          ::chart::LineProperties::AddPropertiesToVector( aProperties );
         ::chart::FillProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
-        // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        // transfer result to static Sequence
-        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
 
-    return aPropSeq;
-}
+};
 
-::cppu::IPropertyArrayHelper & lcl_getInfoHelper()
+struct StaticPageBackgroundInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticPageBackgroundInfoHelper_Initializer >
 {
-    static ::cppu::OPropertyArrayHelper aArrayHelper(
-        lcl_GetPropertySequence(),
-        /* bSorted = */ sal_True );
-
-    return aArrayHelper;
-}
+};
 
 } // anonymous namespace
 
@@ -157,7 +151,7 @@ uno::Any PageBackground::GetDefaultValue( sal_Int32 nHandle ) const
 
 ::cppu::IPropertyArrayHelper & SAL_CALL PageBackground::getInfoHelper()
 {
-    return lcl_getInfoHelper();
+    return *StaticPageBackgroundInfoHelper::get();
 }
 
 

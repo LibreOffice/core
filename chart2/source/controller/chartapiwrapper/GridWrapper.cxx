@@ -59,30 +59,31 @@ namespace
 static const OUString lcl_aServiceName(
     RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart.Grid" ));
 
-const Sequence< Property > & lcl_GetPropertySequence()
+struct StaticGridWrapperPropertyArray_Initializer
 {
-    static Sequence< Property > aPropSeq;
-
-    // /--
-    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( 0 == aPropSeq.getLength() )
+    Sequence< Property >* operator()()
     {
-        // get properties
+        static Sequence< Property > aPropSeq( lcl_GetPropertySequence() );
+        return &aPropSeq;
+    }
+private:
+    Sequence< Property > lcl_GetPropertySequence()
+    {
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         ::chart::LineProperties::AddPropertiesToVector( aProperties );
-//         ::chart::NamedLineProperties::AddPropertiesToVector( aProperties );
+        //::chart::NamedLineProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
-        // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        // transfer result to static Sequence
-        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
+};
 
-    return aPropSeq;
-}
+struct StaticGridWrapperPropertyArray : public rtl::StaticAggregate< Sequence< Property >, StaticGridWrapperPropertyArray_Initializer >
+{
+};
 
 } // anonymous namespace
 
@@ -179,7 +180,7 @@ Reference< beans::XPropertySet > GridWrapper::getInnerPropertySet()
 
 const Sequence< beans::Property >& GridWrapper::getPropertySequence()
 {
-    return lcl_GetPropertySequence();
+    return *StaticGridWrapperPropertyArray::get();
 }
 
 const std::vector< WrappedProperty* > GridWrapper::createWrappedProperties()

@@ -41,6 +41,7 @@
 #include "DisposeHelper.hxx"
 #include "BaseGFXHelper.hxx"
 #include <basegfx/numeric/ftools.hxx>
+#include <rtl/instance.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
@@ -188,30 +189,34 @@ void lcl_AddDefaultsToMap(
     ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_DIAGRAM_STARTING_ANGLE, 90 );
 }
 
-const Sequence< Property > & lcl_GetPropertySequence()
+struct StaticDiagramInfoHelper_Initializer
 {
-    static Sequence< Property > aPropSeq;
-
-    // /--
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( 0 == aPropSeq.getLength() )
+    ::cppu::OPropertyArrayHelper* operator()()
     {
-        // get properties
+        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
+        return &aPropHelper;
+    }
+
+private:
+    Sequence< Property > lcl_GetPropertySequence()
+    {
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
         ::chart::SceneProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
-        // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        // transfer result to static Sequence
-        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
 
-    return aPropSeq;
-}
+
+};
+
+struct StaticDiagramInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticDiagramInfoHelper_Initializer >
+{
+};
 
 /// clones a UNO-sequence of UNO-References
 typedef Reference< chart2::XCoordinateSystem > lcl_tCooSysRef;
@@ -615,10 +620,7 @@ uno::Any Diagram::GetDefaultValue( sal_Int32 nHandle ) const
 // ____ OPropertySet ____
 ::cppu::IPropertyArrayHelper & SAL_CALL Diagram::getInfoHelper()
 {
-    static ::cppu::OPropertyArrayHelper aArrayHelper( lcl_GetPropertySequence(),
-                                                      /* bSorted = */ sal_True );
-
-    return aArrayHelper;
+    return *StaticDiagramInfoHelper::get();
 }
 
 

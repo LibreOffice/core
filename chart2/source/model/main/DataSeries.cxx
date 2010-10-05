@@ -55,30 +55,34 @@ using ::osl::MutexGuard;
 
 namespace
 {
-const uno::Sequence< Property > & lcl_GetPropertySequence()
-{
-    static uno::Sequence< Property > aPropSeq;
 
-    // /--
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( 0 == aPropSeq.getLength() )
+struct StaticDataSeriesInfoHelper_Initializer
+{
+    ::cppu::OPropertyArrayHelper* operator()()
     {
-        // get properties
+        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
+        return &aPropHelper;
+    }
+
+private:
+    uno::Sequence< Property > lcl_GetPropertySequence()
+    {
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         ::chart::DataSeriesProperties::AddPropertiesToVector( aProperties );
         ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
-        // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        // transfer result to static Sequence
-        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
 
-    return aPropSeq;
-}
+};
+
+struct StaticDataSeriesInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticDataSeriesInfoHelper_Initializer >
+{
+};
 
 void lcl_SetParent(
     const uno::Reference< uno::XInterface > & xChildInterface,
@@ -274,11 +278,7 @@ uno::Any DataSeries::GetDefaultValue( sal_Int32 nHandle ) const
 // ____ OPropertySet ____
 ::cppu::IPropertyArrayHelper & SAL_CALL DataSeries::getInfoHelper()
 {
-    static ::cppu::OPropertyArrayHelper aArrayHelper(
-        lcl_GetPropertySequence(),
-        /* bSorted = */ sal_True );
-
-    return aArrayHelper;
+    return *StaticDataSeriesInfoHelper::get();
 }
 
 

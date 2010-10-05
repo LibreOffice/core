@@ -82,39 +82,34 @@ void lcl_addDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
         rOutMap, ::chart::LineProperties::PROP_LINE_COLOR, 0xb3b3b3 );  // gray30
 }
 
-const Sequence< Property > & lcl_getPropertySequence()
+struct StaticGridInfoHelper_Initializer
 {
-    static Sequence< Property > aPropSeq;
-
-    // /--
-    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( 0 == aPropSeq.getLength() )
+    ::cppu::OPropertyArrayHelper* operator()()
     {
-        // get properties
+        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
+        return &aPropHelper;
+    }
+
+private:
+    Sequence< Property > lcl_GetPropertySequence()
+    {
         ::std::vector< Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
         ::chart::LineProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
-        // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        // transfer result to static Sequence
-        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
 
-    return aPropSeq;
-}
 
-::cppu::IPropertyArrayHelper & lcl_getInfoHelper()
+};
+
+struct StaticGridInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticGridInfoHelper_Initializer >
 {
-    static ::cppu::OPropertyArrayHelper aArrayHelper(
-        lcl_getPropertySequence(),
-        /* bSorted = */ sal_True );
-
-    return aArrayHelper;
-}
+};
 
 } // anonymous namespace
 
@@ -168,7 +163,7 @@ uno::Any GridProperties::GetDefaultValue( sal_Int32 nHandle ) const
 
 ::cppu::IPropertyArrayHelper & SAL_CALL GridProperties::getInfoHelper()
 {
-    return lcl_getInfoHelper();
+    return *StaticGridInfoHelper::get();
 }
 
 // ____ XPropertySet ____
@@ -183,7 +178,7 @@ Reference< beans::XPropertySetInfo > SAL_CALL
     if( !xInfo.is())
     {
         xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
-            lcl_getInfoHelper());
+            getInfoHelper());
     }
 
     return xInfo;

@@ -75,29 +75,31 @@ void lcl_AddDefaultsToMap(
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_COORDINATESYSTEM_SWAPXANDYAXIS, false );
 }
 
-const Sequence< Property > & lcl_GetPropertySequence()
+struct StaticCooSysInfoHelper_Initializer
 {
-    static Sequence< Property > aPropSeq;
-
-    // /--
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( 0 == aPropSeq.getLength() )
+    ::cppu::OPropertyArrayHelper* operator()()
     {
-        // get properties
+        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
+        return &aPropHelper;
+    }
+
+private:
+    Sequence< Property > lcl_GetPropertySequence()
+    {
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
-        // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        // transfer result to static Sequence
-        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
+};
 
-    return aPropSeq;
-}
+struct StaticCooSysInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticCooSysInfoHelper_Initializer >
+{
+};
 
 } // anonymous namespace
 
@@ -375,10 +377,7 @@ uno::Any BaseCoordinateSystem::GetDefaultValue( sal_Int32 nHandle ) const
 // ____ OPropertySet ____
 ::cppu::IPropertyArrayHelper & SAL_CALL BaseCoordinateSystem::getInfoHelper()
 {
-    static ::cppu::OPropertyArrayHelper aArrayHelper( lcl_GetPropertySequence(),
-                                                      /* bSorted = */ sal_True );
-
-    return aArrayHelper;
+    return *StaticCooSysInfoHelper::get();
 }
 
 

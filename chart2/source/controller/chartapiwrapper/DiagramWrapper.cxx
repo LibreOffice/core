@@ -434,15 +434,17 @@ void lcl_AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
-const uno::Sequence< Property > & lcl_GetPropertySequence()
+struct StaticDiagramWrapperPropertyArray_Initializer
 {
-    static uno::Sequence< Property > aPropSeq;
-
-    // /--
-    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( 0 == aPropSeq.getLength() )
+    Sequence< Property >* operator()()
     {
-        // get properties
+        static Sequence< Property > aPropSeq( lcl_GetPropertySequence() );
+        return &aPropSeq;
+    }
+
+private:
+    uno::Sequence< Property > lcl_GetPropertySequence()
+    {
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
         ::chart::LineProperties::AddPropertiesToVector( aProperties );
@@ -456,16 +458,16 @@ const uno::Sequence< Property > & lcl_GetPropertySequence()
         WrappedStockProperties::addProperties( aProperties );
         WrappedAutomaticPositionProperties::addProperties( aProperties );
 
-        // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        // transfer result to static Sequence
-        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
+};
 
-    return aPropSeq;
-}
+struct StaticDiagramWrapperPropertyArray : public rtl::StaticAggregate< Sequence< Property >, StaticDiagramWrapperPropertyArray_Initializer >
+{
+};
 
 bool lcl_isXYChart( const Reference< chart2::XDiagram > xDiagram )
 {
@@ -2086,7 +2088,7 @@ Reference< beans::XPropertySet > DiagramWrapper::getInnerPropertySet()
 
 const Sequence< beans::Property >& DiagramWrapper::getPropertySequence()
 {
-    return lcl_GetPropertySequence();
+    return *StaticDiagramWrapperPropertyArray::get();
 }
 
 const std::vector< WrappedProperty* > DiagramWrapper::createWrappedProperties()

@@ -217,40 +217,33 @@ void lcl_AddDefaultsToMap(
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_MARK_POSITION, ::com::sun::star::chart::ChartAxisMarkPosition_AT_LABELS_AND_AXIS );
 }
 
-const Sequence< Property > & lcl_GetPropertySequence()
+struct StaticAxisInfoHelper_Initializer
 {
-    static Sequence< Property > aPropSeq;
-
-    // /--
-    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( 0 == aPropSeq.getLength() )
+    ::cppu::OPropertyArrayHelper* operator()()
     {
-        // get properties
+        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
+        return &aPropHelper;
+    }
+
+private:
+    Sequence< Property > lcl_GetPropertySequence()
+    {
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
         ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
         ::chart::LineProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
-        // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        // transfer result to static Sequence
-        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
+};
 
-    return aPropSeq;
-}
-
-::cppu::IPropertyArrayHelper & lcl_getInfoHelper()
+struct StaticAxisInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticAxisInfoHelper_Initializer >
 {
-    static ::cppu::OPropertyArrayHelper aArrayHelper(
-        lcl_GetPropertySequence(),
-        /* bSorted = */ sal_True );
-
-    return aArrayHelper;
-}
+};
 
 typedef uno::Reference< beans::XPropertySet > lcl_tSubGridType;
 typedef uno::Sequence< lcl_tSubGridType >     lcl_tSubGridSeq;
@@ -602,7 +595,7 @@ uno::Any Axis::GetDefaultValue( sal_Int32 nHandle ) const
 
 ::cppu::IPropertyArrayHelper & SAL_CALL Axis::getInfoHelper()
 {
-    return lcl_getInfoHelper();
+    return *StaticAxisInfoHelper::get();
 }
 
 

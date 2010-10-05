@@ -57,45 +57,39 @@ namespace
 static const ::rtl::OUString lcl_aServiceName(
     RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.StockBar" ));
 
-const uno::Sequence< Property > & lcl_GetPropertySequence()
+struct StaticStockBarInfoHelper_Initializer
 {
-    static uno::Sequence< Property > aPropSeq;
-
-    // /--
-    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( 0 == aPropSeq.getLength() )
+    ::cppu::OPropertyArrayHelper* operator()()
     {
-        // get properties
+        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
+        return &aPropHelper;
+    }
+
+private:
+    uno::Sequence< Property > lcl_GetPropertySequence()
+    {
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         ::chart::LineProperties::AddPropertiesToVector( aProperties );
         ::chart::FillProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
-        // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        // transfer result to static Sequence
-        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
 
-    return aPropSeq;
-}
+};
+
+struct StaticStockBarInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticStockBarInfoHelper_Initializer >
+{
+};
 
 void lcl_AddDefaultsToMap(
     ::chart::tPropertyValueMap & rOutMap )
 {
     // override other defaults
     ::chart::PropertyHelper::setPropertyValue< sal_Int32 >( rOutMap, ::chart::FillProperties::PROP_FILL_COLOR, 0xffffff ); // white
-}
-
-::cppu::IPropertyArrayHelper & lcl_getInfoHelper()
-{
-    static ::cppu::OPropertyArrayHelper aArrayHelper(
-        lcl_GetPropertySequence(),
-        /* bSorted = */ sal_True );
-
-    return aArrayHelper;
 }
 
 } // anonymous namespace
@@ -170,7 +164,7 @@ uno::Any StockBar::GetDefaultValue( sal_Int32 nHandle ) const
 
 ::cppu::IPropertyArrayHelper & SAL_CALL StockBar::getInfoHelper()
 {
-    return lcl_getInfoHelper();
+    return *StaticStockBarInfoHelper::get();
 }
 
 // ____ XPropertySet ____
@@ -185,7 +179,7 @@ Reference< beans::XPropertySetInfo > SAL_CALL
     if( !xInfo.is())
     {
         xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
-            lcl_getInfoHelper());
+            getInfoHelper());
     }
 
     return xInfo;

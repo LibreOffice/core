@@ -182,35 +182,37 @@ void lcl_AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
-const Sequence< Property > & lcl_GetPropertySequence()
+struct StaticTitleWrapperPropertyArray_Initializer
 {
-    static Sequence< Property > aPropSeq;
-
-    // /--
-    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( 0 == aPropSeq.getLength() )
+    Sequence< Property >* operator()()
     {
-        // get properties
+        static Sequence< Property > aPropSeq( lcl_GetPropertySequence() );
+        return &aPropSeq;
+    }
+
+private:
+    Sequence< Property > lcl_GetPropertySequence()
+    {
         ::std::vector< beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
         ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
         ::chart::LineProperties::AddPropertiesToVector( aProperties );
         ::chart::FillProperties::AddPropertiesToVector( aProperties );
-//         ::chart::NamedProperties::AddPropertiesToVector( aProperties );
+        //::chart::NamedProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
         ::chart::wrapper::WrappedAutomaticPositionProperties::addProperties( aProperties );
         ::chart::wrapper::WrappedScaleTextProperties::addProperties( aProperties );
 
-        // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        // transfer result to static Sequence
-        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
+};
 
-    return aPropSeq;
-}
+struct StaticTitleWrapperPropertyArray : public rtl::StaticAggregate< Sequence< Property >, StaticTitleWrapperPropertyArray_Initializer >
+{
+};
 
 } // anonymous namespace
 
@@ -526,7 +528,7 @@ Reference< beans::XPropertySet > TitleWrapper::getInnerPropertySet()
 
 const Sequence< beans::Property >& TitleWrapper::getPropertySequence()
 {
-    return lcl_GetPropertySequence();
+    return *StaticTitleWrapperPropertyArray::get();
 }
 
 const std::vector< WrappedProperty* > TitleWrapper::createWrappedProperties()

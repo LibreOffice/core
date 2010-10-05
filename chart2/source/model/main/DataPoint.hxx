@@ -102,10 +102,6 @@ protected:
         throw (::com::sun::star::lang::NoSupportException,
                ::com::sun::star::uno::RuntimeException);
 
-    /** const variant of getInfoHelper()
-     */
-    ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelperConst() const;
-
     // ____ XModifyBroadcaster ____
     virtual void SAL_CALL addModifyListener(
         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )

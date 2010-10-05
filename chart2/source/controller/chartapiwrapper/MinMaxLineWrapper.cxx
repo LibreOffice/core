@@ -56,31 +56,33 @@ namespace
 static const OUString lcl_aServiceName(
     RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart.ChartLine" ));
 
-const Sequence< Property > & lcl_GetPropertySequence()
+struct StaticMinMaxLineWrapperPropertyArray_Initializer
 {
-    static Sequence< Property > aPropSeq;
-
-    // /--
-    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( 0 == aPropSeq.getLength() )
+    Sequence< Property >* operator()()
     {
-        // get properties
+        static Sequence< Property > aPropSeq( lcl_GetPropertySequence() );
+        return &aPropSeq;
+    }
+
+private:
+    Sequence< Property > lcl_GetPropertySequence()
+    {
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
 
         ::chart::LineProperties::AddPropertiesToVector( aProperties );
-//         ::chart::NamedLineProperties::AddPropertiesToVector( aProperties );
+        //::chart::NamedLineProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
-        // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        // transfer result to static Sequence
-        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
+};
 
-    return aPropSeq;
-}
+struct StaticMinMaxLineWrapperPropertyArray : public rtl::StaticAggregate< Sequence< Property >, StaticMinMaxLineWrapperPropertyArray_Initializer >
+{
+};
 
 } // anonymous namespace
 
@@ -139,7 +141,7 @@ void SAL_CALL MinMaxLineWrapper::removeEventListener(
         if(!m_pPropertyArrayHelper.get())
         {
             sal_Bool bSorted = sal_True;
-            m_pPropertyArrayHelper = ::boost::shared_ptr< ::cppu::OPropertyArrayHelper >( new ::cppu::OPropertyArrayHelper( lcl_GetPropertySequence(), bSorted ) );
+            m_pPropertyArrayHelper = ::boost::shared_ptr< ::cppu::OPropertyArrayHelper >( new ::cppu::OPropertyArrayHelper( *StaticMinMaxLineWrapperPropertyArray::get(), bSorted ) );
         }
         // \--
     }
@@ -383,7 +385,7 @@ uno::Any SAL_CALL MinMaxLineWrapper::getPropertyDefault( const ::rtl::OUString& 
 void SAL_CALL MinMaxLineWrapper::setAllPropertiesToDefault(  )
                     throw (uno::RuntimeException)
 {
-    const Sequence< beans::Property >&  rPropSeq = lcl_GetPropertySequence();
+    const Sequence< beans::Property >& rPropSeq = *StaticMinMaxLineWrapperPropertyArray::get();
     for(sal_Int32 nN=0; nN<rPropSeq.getLength(); nN++)
     {
         ::rtl::OUString aPropertyName( rPropSeq[nN].Name );

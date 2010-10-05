@@ -53,30 +53,34 @@ using ::rtl::OUString;
 
 namespace
 {
-const Sequence< Property > & lcl_GetPropertySequence()
-{
-    static Sequence< Property > aPropSeq;
 
-    // /--
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( 0 == aPropSeq.getLength() )
+struct StaticDataPointInfoHelper_Initializer
+{
+    ::cppu::OPropertyArrayHelper* operator()()
     {
-        // get properties
+        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
+        return &aPropHelper;
+    }
+
+private:
+    Sequence< Property > lcl_GetPropertySequence()
+    {
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         ::chart::DataPointProperties::AddPropertiesToVector( aProperties );
         ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
-        // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        // transfer result to static Sequence
-        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
+};
 
-    return aPropSeq;
-}
+struct StaticDataPointInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticDataPointInfoHelper_Initializer >
+{
+};
+
 } // anonymous namespace
 
 // ____________________________________________________________
@@ -214,16 +218,7 @@ void SAL_CALL DataPoint::setFastPropertyValue_NoBroadcast(
 
 ::cppu::IPropertyArrayHelper & SAL_CALL DataPoint::getInfoHelper()
 {
-    return getInfoHelperConst();
-}
-
-::cppu::IPropertyArrayHelper & SAL_CALL DataPoint::getInfoHelperConst() const
-{
-    static ::cppu::OPropertyArrayHelper aArrayHelper(
-        lcl_GetPropertySequence(),
-        /* bSorted = */ sal_True );
-
-    return aArrayHelper;
+    return *StaticDataPointInfoHelper::get();
 }
 
 // ____ XPropertySet ____
