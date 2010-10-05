@@ -28,7 +28,7 @@
 #define XLFD_EXTENDED_HXX
 
 #include <salunx.h>
-#include <vcl/enum.hxx>
+#include <vcl/vclenum.hxx>
 #include <vcl/outfont.hxx>
 
 #include <vector>
