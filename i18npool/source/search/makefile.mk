@@ -76,3 +76,11 @@ DEF1NAME=		$(SHL1TARGET)
 
 .INCLUDE :	target.mk
 
+
+ALLTAR : $(MISC)/i18nsearch.component
+
+$(MISC)/i18nsearch.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        i18nsearch.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt i18nsearch.component
