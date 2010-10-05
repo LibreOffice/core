@@ -61,9 +61,8 @@
 
 //#include <svx/dialogs.hrc>
 
-/*#include <unotools/localedatawrapper.hxx>
-#include <comphelper/processfactory.hxx>
-
+//#include <unotools/localedatawrapper.hxx>
+//#include <comphelper/processfactory.hxx>
 
 
 SFX_IMPL_STATUSBAR_CONTROL( XmlSecStatusBarControl, SfxUInt16Item );

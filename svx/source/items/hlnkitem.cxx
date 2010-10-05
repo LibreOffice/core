@@ -33,9 +33,7 @@
 
 #include <svx/svxids.hrc>
 #include <tools/stream.hxx>
-
-#include <svx/memberid.hrc>
-
+#include <svl/memberid.hrc>
 #include <basic/sbxvar.hxx>
 
 #include "hlnkitem.hxx"
