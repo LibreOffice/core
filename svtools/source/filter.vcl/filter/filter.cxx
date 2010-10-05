@@ -552,16 +552,48 @@ static BOOL ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtension, B
     if( !bTest || ( rFormatExtension.CompareToAscii( "PCT", 3 ) == COMPARE_EQUAL ) )
     {
         bSomethingTested = TRUE;
-        BYTE sBuf[4];
+        BYTE sBuf[3];
+        // store number format
+        sal_uInt16 oldNumberFormat = rStream.GetNumberFormatInt();
         sal_uInt32 nOffset; // in ms documents the pict format is used without the first 512 bytes
-        for ( nOffset = 10; ( nOffset <= 522 ) && ( ( nStreamPos + nOffset + 3 ) <= nStreamLen ); nOffset += 512 )
+        for ( nOffset = 0; ( nOffset <= 512 ) && ( ( nStreamPos + nOffset + 14 ) <= nStreamLen ); nOffset += 512 )
         {
-            rStream.Seek( nStreamPos + nOffset );
+            short y1,x1,y2,x2;
+            bool bdBoxOk = true;
+
+            rStream.Seek( nStreamPos + nOffset);
+            // size of the pict in version 1 pict ( 2bytes) : ignored
+            rStream.SeekRel(2);
+            // bounding box (bytes 2 -> 9)
+            rStream.SetNumberFormatInt(NUMBERFORMAT_INT_BIGENDIAN);
+            rStream >> y1 >> x1 >> y2 >> x2;
+            rStream.SetNumberFormatInt(oldNumberFormat); // reset format
+
+            if (x1 > x2 || y1 > y2 || // bad bdbox
+                (x1 == x2 && y1 == y2) || // 1 pixel picture
+                x2-x1 > 2048 || y2-y1 > 2048 ) // picture anormaly big
+              bdBoxOk = false;
+
+            // read version op
             rStream.Read( sBuf,3 );
-            if ( sBuf[ 0 ] == 0x00 && sBuf[ 1 ] == 0x11 && ( sBuf[ 2 ] == 0x01 || sBuf[ 2 ] == 0x02 ) )
+            // see http://developer.apple.com/legacy/mac/library/documentation/mac/pdf/Imaging_With_QuickDraw/Appendix_A.pdf
+            // normal version 2 - page A23 and A24
+            if ( sBuf[ 0 ] == 0x00 && sBuf[ 1 ] == 0x11 && sBuf[ 2 ] == 0x02)
             {
-                rFormatExtension = UniString::CreateFromAscii( "PCT", 3 );
-                return TRUE;
+              rFormatExtension = UniString::CreateFromAscii( "PCT", 3 );
+              return TRUE;
+            }
+            // normal version 1 - page A25
+            else if (sBuf[ 0 ] == 0x11 && sBuf[ 1 ] == 0x01 && bdBoxOk) {
+              rFormatExtension = UniString::CreateFromAscii( "PCT", 3 );
+              return TRUE;
+            }
+            // previous code kept in order to do not break any compatibility
+            // probably eroneous
+            else if ( sBuf[ 0 ] == 0x00 && sBuf[ 1 ] == 0x11 && sBuf[ 2 ] == 0x01 && bdBoxOk)
+            {
+              rFormatExtension = UniString::CreateFromAscii( "PCT", 3 );
+              return TRUE;
             }
         }
     }
