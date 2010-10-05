@@ -148,7 +148,6 @@ void XclImpOutlineBuffer::MakeScOutline()
                     return;
                 }
                 SCSIZE nFirstPos = aOutlineStack.back();
-                sal_uInt8 nThisLevel = static_cast<sal_uInt8>(aOutlineStack.size());
                 aOutlineStack.pop_back();
                 bool bCollapsed = false;
                 if (mbButtonAfter)

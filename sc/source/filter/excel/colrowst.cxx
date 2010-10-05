@@ -233,7 +233,6 @@ void XclImpColRowSettings::Convert( SCTAB nScTab )
     if( ::get_flag( mnDefRowFlags, EXC_DEFROW_UNSYNCED ) )
         // first access to row flags, do not ask for old flags
         rDoc.SetRowFlags( 0, MAXROW, nScTab, CR_MANUALSIZE );
-    bool bDefHideRow = ::get_flag( mnDefRowFlags, EXC_DEFROW_HIDDEN );
 
     maRowHeights.build_tree();
     if (!maRowHeights.is_tree_valid())
