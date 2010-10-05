@@ -1281,6 +1281,14 @@
                         </enumeration>
                     </constraints>
                 </prop>
+                <prop oor:name="EnglishFunctionName" oor:type="xs:boolean">
+                    <!-- UIHints: Tools - Options  Spreadsheet  Formula -->
+                    <info>
+                        <author>kyoshida</author>
+                        <desc>Whether to use English function names or localized function names.</desc>
+                    </info>
+                    <value>false</value>
+                </prop>
                 <prop oor:name="SeparatorArg" oor:type="xs:string">
                     <!-- UIHints: Tools - Options  Spreadsheet  Formula -->
                     <info>
