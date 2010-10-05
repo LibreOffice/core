@@ -187,6 +187,12 @@ sal_Int16 SAL_CALL KDE4FilePicker::execute()
     _dialog->setFilter(_filter);
     _dialog->filterWidget()->setEditable(false);
 
+    // We are now entering Qt code, so release the Solar Mutex, as the Qt code
+    // should not generally call back into core code (and if yes, it needs to claim
+    // the mutex again). Otherwise this would block core code (e.g. bnc#616047,
+    // KDE file dialog asks for clipboard contents, if it is owned by core code,
+    // it will try to lock the mutex and block there).
+    SolarMutexReleaser releaser;
     //block and wait for user input
     if (_dialog->exec() == KFileDialog::Accepted)
         return ExecutableDialogResults::OK;
