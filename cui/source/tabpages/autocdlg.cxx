@@ -1024,7 +1024,10 @@ OfaAutocorrReplacePage::OfaAutocorrReplacePage( Window* pParent,
 
     ::com::sun::star::lang::Locale aLcl( SvxCreateLocale(eLastDialogLanguage ));
     pCompareClass = new CollatorWrapper( GetProcessFact() );
-    pCompareClass->loadDefaultCollator( aLcl, 0 );
+    pCompareCaseClass = new CollatorWrapper( GetProcessFact() );
+    pCompareClass->loadDefaultCollator( aLcl, ::com::sun::star::i18n::
+                            CollatorOptions::CollatorOptions_IGNORE_CASE );
+    pCompareCaseClass->loadDefaultCollator( aLcl, 0 );
     pCharClass = new CharClass( aLcl );
 
     static long nTabs[] = { 2 /* Tab-Count */, 1, 61 };
@@ -1054,6 +1057,7 @@ OfaAutocorrReplacePage::~OfaAutocorrReplacePage()
     delete pFormatText;
     lcl_ClearTable(aDoubleStringTable);
     delete pCompareClass;
+    delete pCompareCaseClass;
     delete pCharClass;
 }
 /*-----------------14.10.96 15.58-------------------
@@ -1618,7 +1622,8 @@ OfaAutocorrExceptPage::OfaAutocorrExceptPage( Window* pParent,
 
     ::com::sun::star::lang::Locale aLcl( SvxCreateLocale(eLastDialogLanguage ));
     pCompareClass = new CollatorWrapper( GetProcessFact() );
-    pCompareClass->loadDefaultCollator( aLcl, 0 );
+    pCompareClass->loadDefaultCollator( aLcl, ::com::sun::star::i18n::
+                            CollatorOptions::CollatorOptions_IGNORE_CASE );
 
     aNewAbbrevPB.SetClickHdl(LINK(this, OfaAutocorrExceptPage, NewDelHdl));
     aDelAbbrevPB.SetClickHdl(LINK(this, OfaAutocorrExceptPage, NewDelHdl));
@@ -1794,7 +1799,9 @@ void OfaAutocorrExceptPage::SetLanguage(LanguageType eSet)
         eLastDialogLanguage = eSet;
         delete pCompareClass;
         pCompareClass = new CollatorWrapper( GetProcessFact() );
-        pCompareClass->loadDefaultCollator( SvxCreateLocale( eLastDialogLanguage ), 0 );
+        pCompareClass->loadDefaultCollator( SvxCreateLocale( eLastDialogLanguage ),
+                        ::com::sun::star::i18n::
+                            CollatorOptions::CollatorOptions_IGNORE_CASE );
         ModifyHdl(&aAbbrevED);
         ModifyHdl(&aDoubleCapsED);
     }
