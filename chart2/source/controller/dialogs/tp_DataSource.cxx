@@ -311,7 +311,7 @@ DataSourceTabPage::DataSourceTabPage(
     // set handlers
     m_apLB_SERIES->SetSelectHdl( LINK( this, DataSourceTabPage, SeriesSelectionChangedHdl ));
 
-    m_aLB_ROLE.SetWindowBits( WB_HSCROLL | WB_CLIPCHILDREN );
+    m_aLB_ROLE.SetStyle( m_aLB_ROLE.GetStyle() | WB_HSCROLL | WB_CLIPCHILDREN );
     m_aLB_ROLE.SetSelectionMode( SINGLE_SELECTION );
     m_aLB_ROLE.SetSelectHdl( LINK( this, DataSourceTabPage, RoleSelectionChangedHdl ));
 
