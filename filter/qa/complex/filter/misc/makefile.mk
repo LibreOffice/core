@@ -25,73 +25,35 @@
 #
 #*************************************************************************
 
-PRJ = ..$/..$/..$/..
+.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
+nothing .PHONY:
+.ELSE
+
+PRJ = ../../../..
 PRJNAME = filter
-TARGET  = Filter
-PACKAGE = complex$/filter$/misc
+TARGET = qa_complex_filter_misc
 
-# --- Settings -----------------------------------------------------
+.IF "$(OOO_JUNIT_JAR)" != ""
+PACKAGE = complex/filter/misc
+JAVATESTFILES = \
+    TypeDetection6FileFormat.java \
+    FinalizedMandatoryTest.java
+
+JAVAFILES = $(JAVATESTFILES)
+
+JARFILES = OOoRunner.jar ridl.jar test.jar unoil.jar jurt.jar
+EXTRAJARFILES = $(OOO_JUNIT_JAR)
+.END
+
+# Sample how to debug
+# JAVAIFLAGS=-Xdebug  -Xrunjdwp:transport=dt_socket,server=y,address=9003,suspend=y
+
 .INCLUDE: settings.mk
+.INCLUDE: target.mk
+.INCLUDE: installationtest.mk
 
+ALLTAR : javatest
 
-#----- compile .java files -----------------------------------------
+.END
 
-JARFILES = mysql.jar ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar
-JAVAFILES       = FinalizedMandatoryTest.java TypeDetection6FileFormat.java
-JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
-
-#----- make a jar from compiled files ------------------------------
-
-MAXLINELENGTH = 100000
-
-JARCLASSDIRS  = $(PACKAGE)
-JARTARGET     = $(TARGET).jar
-JARCOMPRESS   = TRUE
-
-# --- Parameters for the test --------------------------------------
-
-# start an office if the parameter is set for the makefile
-.IF "$(OFFICE)" == ""
-CT_APPEXECCOMMAND =
-.ELSE
-CT_APPEXECCOMMAND = -AppExecutionCommand \
-            "$(OFFICE)$/soffice -accept=socket,host=localhost,port=8100;urp;"
-.ENDIF
-
-# test base is java complex
-CT_TESTBASE = -TestBase java_complex
-
-# replace $/ with . in package name
-CT_PACKAGE  = -o $(PACKAGE:s\$/\.\)
-
-# start the runner application
-CT_APP      = org.openoffice.Runner
-
-
-# --- Targets ------------------------------------------------------
-
-.IF "$(depend)" == ""
-DisplayHint : ALLTAR
-.ELSE
-DisplayHint : ALLDEP
-.ENDIF
-
-.INCLUDE :  target.mk
-
-DisplayHint:
-    @echo "\ntype 'dmake FinalizedMandatoryTest'"
-    @echo "\ntype 'dmake TypeDetection6FileFormat'"
-    @echo "! BE SHURE YOU HAVE 'TypeDetection6FileFormat.xcu' SUCCESSFUL REGISTERED IN YOU OFFICE !"
-
-RUN: run
-
-run: \
-    DisplayHint
-
-
-FinalizedMandatoryTest:
-    java -cp $(CLASSPATH) $(CT_APP) $(CT_TESTBASE) $(CT_APPEXECCOMMAND) $(CT_PACKAGE).FinalizedMandatoryTest
-    
-TypeDetection6FileFormat:
-    java -cp $(CLASSPATH) $(CT_APP) $(CT_TESTBASE) $(CT_APPEXECCOMMAND) $(CT_PACKAGE).TypeDetection6FileFormat
 
