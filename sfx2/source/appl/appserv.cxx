@@ -177,7 +177,7 @@ namespace {
 void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 {
     DBG_MEMTEST();
-    FASTBOOL bDone = FALSE;
+    bool bDone = false;
     switch ( rReq.GetSlot() )
     {
         case SID_SETOPTIONS:
@@ -289,7 +289,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                     const short nRet = pDlg->Execute();
 
                     if ( nRet )
-                        bDone = TRUE;
+                        bDone = true;
 
                     delete pDlg;
                 }
@@ -328,7 +328,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
             BOOL bOk = ( n == 0);
             rReq.SetReturnValue( SfxBoolItem( 0, bOk ) );
-            bDone = TRUE;
+            bDone = true;
             break;
         }
 
@@ -385,7 +385,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             {
                 ULONG nHelpId =  0;
                 pHelp->Start( nHelpId, NULL ); // show start page
-                bDone = TRUE;
+                bDone = true;
             }
             break;
         }
@@ -406,7 +406,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 Help::DisableQuickHelp();
             SvtHelpOptions().SetHelpTips( bOn );
             Invalidate(SID_HELPTIPS);
-            bDone = TRUE;
+            bDone = true;
 
             // ggf. recorden
             if ( !rReq.IsAPI() )
@@ -434,7 +434,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 Help::DisableBalloonHelp();
             SvtHelpOptions().SetExtendedHelp( bOn );
             Invalidate(SID_HELPBALLOONS);
-            bDone = TRUE;
+            bDone = true;
 
             // ggf. recorden
             if ( !rReq.IsAPI() )
@@ -452,7 +452,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                             : !aHelpOpt.IsHelpAgentAutoStartMode();
             aHelpOpt.SetHelpAgentAutoStartMode( bOn );
             Invalidate(SID_HELP_PI);
-            bDone = TRUE;
+            bDone = true;
             break;
         }
 
@@ -538,7 +538,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             AboutDialog* pDlg = new AboutDialog( 0, aDialogResId, sBuildId );
             pDlg->Execute();
             delete pDlg;
-            bDone = TRUE;
+            bDone = true;
             break;
         }
 
@@ -549,7 +549,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 new SfxTemplateOrganizeDlg(NULL);
             pDlg->Execute();
             delete pDlg;
-            bDone = TRUE;
+            bDone = true;
             break;
         }
 
@@ -557,7 +557,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         {
             svt::AddressBookSourceDialog aDialog(GetTopWindow(), ::comphelper::getProcessServiceFactory());
             aDialog.Execute();
-            bDone = TRUE;
+            bDone = true;
             break;
         }
 

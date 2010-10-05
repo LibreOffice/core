@@ -201,19 +201,19 @@ public:
 
     // Gleichzeitig wird der Text in den Outliner gesetzt (ggf.
     // der des EditOutliners) und die PaperSize gesetzt.
-    virtual void TakeTextRect( const sdr::table::CellPos& rPos, SdrOutliner& rOutliner, ::Rectangle& rTextRect, FASTBOOL bNoEditText=FALSE, ::Rectangle* pAnchorRect=NULL, BOOL bLineWidth=TRUE ) const;
-    virtual void TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, FASTBOOL bNoEditText=FALSE, Rectangle* pAnchorRect=NULL, BOOL bLineWidth=TRUE ) const;
+    virtual void TakeTextRect( const sdr::table::CellPos& rPos, SdrOutliner& rOutliner, ::Rectangle& rTextRect, bool bNoEditText = false, ::Rectangle* pAnchorRect=NULL, BOOL bLineWidth=TRUE ) const;
+    virtual void TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText = false, Rectangle* pAnchorRect=NULL, BOOL bLineWidth=TRUE ) const;
     virtual void TakeTextAnchorRect(const sdr::table::CellPos& rPos, ::Rectangle& rAnchorRect ) const;
     virtual void TakeTextAnchorRect(::Rectangle& rAnchorRect) const;
 
-    virtual FASTBOOL IsAutoGrowHeight() const;
+    virtual bool IsAutoGrowHeight() const;
     long GetMinTextFrameHeight() const;
     long GetMaxTextFrameHeight() const;
-    virtual FASTBOOL IsAutoGrowWidth() const;
+    virtual bool IsAutoGrowWidth() const;
     long GetMinTextFrameWidth() const;
     long GetMaxTextFrameWidth() const;
 
-    virtual FASTBOOL IsFontwork() const;
+    virtual bool IsFontwork() const;
 
     virtual void SetPage(SdrPage* pNewPage);
     virtual void SetModel(SdrModel* pNewModel);
@@ -221,8 +221,8 @@ public:
     virtual UINT16 GetObjIdentifier() const;
     virtual void SetChanged();
 
-    virtual FASTBOOL AdjustTextFrameWidthAndHeight(Rectangle& rR, FASTBOOL bHgt=TRUE, FASTBOOL bWdt=TRUE) const;
-    virtual FASTBOOL AdjustTextFrameWidthAndHeight(FASTBOOL bHgt=TRUE, FASTBOOL bWdt=TRUE);
+    virtual bool AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt = true, bool bWdt = true) const;
+    virtual bool AdjustTextFrameWidthAndHeight(bool bHgt = true, bool bWdt = true);
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;
     virtual void operator=(const SdrObject& rObj);
@@ -250,10 +250,10 @@ public:
     virtual String getSpecialDragComment(const SdrDragStat& rDrag) const;
     virtual basegfx::B2DPolyPolygon getSpecialDragPoly(const SdrDragStat& rDrag) const;
 
-    virtual FASTBOOL BegCreate(SdrDragStat& rStat);
-    virtual FASTBOOL MovCreate(SdrDragStat& rStat);
-    virtual FASTBOOL EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
-    virtual FASTBOOL BckCreate(SdrDragStat& rStat);
+    virtual bool BegCreate(SdrDragStat& rStat);
+    virtual bool MovCreate(SdrDragStat& rStat);
+    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
+    virtual bool BckCreate(SdrDragStat& rStat);
     virtual void BrkCreate(SdrDragStat& rStat);
     virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const;
     virtual Pointer GetCreatePointer() const;

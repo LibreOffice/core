@@ -469,7 +469,7 @@ void SfxRequest::RemoveItem( USHORT nID )
 const SfxPoolItem* SfxRequest::GetArg
 (
     USHORT          nSlotId,    // Slot-Id oder Which-Id des Parameters
-    FASTBOOL        bDeep,      // FALSE: nicht in Parent-ItemSets suchen
+    bool            bDeep,      // FALSE: nicht in Parent-ItemSets suchen
     TypeId          aType       // != 0:  RTTI Pruefung mit Assertion
 )   const
 {
@@ -572,7 +572,7 @@ void SfxRequest::Done
                                     erfragt wurden, ggf. 0 falls keine
                                     Parameter gesetzt wurden */
 
-    FASTBOOL            bKeep   /*  TRUE (default)
+    bool                bKeep   /*  TRUE (default)
                                     'rSet' wird gepeichert und ist "uber
                                     GetArgs() abfragbar
 
@@ -902,7 +902,7 @@ BOOL SfxRequest::IsAPI() const
 //--------------------------------------------------------------------
 
 
-FASTBOOL SfxRequest::IsRecording() const
+bool SfxRequest::IsRecording() const
 
 /*  [Beschreibung]
 

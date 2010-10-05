@@ -365,18 +365,18 @@ SvStream& SvxSizeItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) co
 
 // -----------------------------------------------------------------------
 
-int SvxSizeItem::ScaleMetrics( long nMult, long nDiv )
+bool SvxSizeItem::ScaleMetrics( long nMult, long nDiv )
 {
     aSize.Width() = Scale( aSize.Width(), nMult, nDiv );
     aSize.Height() = Scale( aSize.Height(), nMult, nDiv );
-    return 1;
+    return true;
 }
 
 // -----------------------------------------------------------------------
 
-int SvxSizeItem::HasMetrics() const
+bool SvxSizeItem::HasMetrics() const
 {
-    return 1;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -780,20 +780,20 @@ sal_uInt16 SvxLRSpaceItem::GetVersion( sal_uInt16 nFileVersion ) const
 
 // -----------------------------------------------------------------------
 
-int SvxLRSpaceItem::ScaleMetrics( long nMult, long nDiv )
+bool SvxLRSpaceItem::ScaleMetrics( long nMult, long nDiv )
 {
     nFirstLineOfst = (short)Scale( nFirstLineOfst, nMult, nDiv );
     nTxtLeft = Scale( nTxtLeft, nMult, nDiv );
     nLeftMargin = Scale( nLeftMargin, nMult, nDiv );
     nRightMargin = Scale( nRightMargin, nMult, nDiv );
-    return 1;
+    return true;
 }
 
 // -----------------------------------------------------------------------
 
-int SvxLRSpaceItem::HasMetrics() const
+bool SvxLRSpaceItem::HasMetrics() const
 {
-    return 1;
+    return true;
 }
 
 // class SvxULSpaceItem --------------------------------------------------
@@ -1025,18 +1025,18 @@ sal_uInt16 SvxULSpaceItem::GetVersion( sal_uInt16 /*nFileVersion*/ ) const
 
 // -----------------------------------------------------------------------
 
-int SvxULSpaceItem::ScaleMetrics( long nMult, long nDiv )
+bool SvxULSpaceItem::ScaleMetrics( long nMult, long nDiv )
 {
     nUpper = (sal_uInt16)Scale( nUpper, nMult, nDiv );
     nLower = (sal_uInt16)Scale( nLower, nMult, nDiv );
-    return 1;
+    return true;
 }
 
 // -----------------------------------------------------------------------
 
-int SvxULSpaceItem::HasMetrics() const
+bool SvxULSpaceItem::HasMetrics() const
 {
-    return 1;
+    return true;
 }
 
 
@@ -1507,17 +1507,17 @@ SvStream& SvxShadowItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) 
 
 // -----------------------------------------------------------------------
 
-int SvxShadowItem::ScaleMetrics( long nMult, long nDiv )
+bool SvxShadowItem::ScaleMetrics( long nMult, long nDiv )
 {
     nWidth = (sal_uInt16)Scale( nWidth, nMult, nDiv );
-    return 1;
+    return true;
 }
 
 // -----------------------------------------------------------------------
 
-int SvxShadowItem::HasMetrics() const
+bool SvxShadowItem::HasMetrics() const
 {
-    return 1;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -2338,7 +2338,7 @@ sal_uInt16 SvxBoxItem::GetVersion( sal_uInt16 nFFVer ) const
 
 // -----------------------------------------------------------------------
 
-int SvxBoxItem::ScaleMetrics( long nMult, long nDiv )
+bool SvxBoxItem::ScaleMetrics( long nMult, long nDiv )
 {
     if ( pTop )     pTop->ScaleMetrics( nMult, nDiv );
     if ( pBottom )  pBottom->ScaleMetrics( nMult, nDiv );
@@ -2348,14 +2348,14 @@ int SvxBoxItem::ScaleMetrics( long nMult, long nDiv )
     nBottomDist = (sal_uInt16)Scale( nBottomDist, nMult, nDiv );
     nLeftDist = (sal_uInt16)Scale( nLeftDist, nMult, nDiv );
     nRightDist = (sal_uInt16)Scale( nRightDist, nMult, nDiv );
-    return 1;
+    return true;
 }
 
 // -----------------------------------------------------------------------
 
-int SvxBoxItem::HasMetrics() const
+bool SvxBoxItem::HasMetrics() const
 {
-    return 1;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -2745,19 +2745,19 @@ SvStream& SvxBoxInfoItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ )
 
 // -----------------------------------------------------------------------
 
-int SvxBoxInfoItem::ScaleMetrics( long nMult, long nDiv )
+bool SvxBoxInfoItem::ScaleMetrics( long nMult, long nDiv )
 {
     if ( pHori ) pHori->ScaleMetrics( nMult, nDiv );
     if ( pVert ) pVert->ScaleMetrics( nMult, nDiv );
     nDefDist = (sal_uInt16)Scale( nDefDist, nMult, nDiv );
-    return 1;
+    return true;
 }
 
 // -----------------------------------------------------------------------
 
-int SvxBoxInfoItem::HasMetrics() const
+bool SvxBoxInfoItem::HasMetrics() const
 {
-    return 1;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -3408,17 +3408,17 @@ SvStream& SvxLineItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) co
 
 // -----------------------------------------------------------------------
 
-int SvxLineItem::ScaleMetrics( long nMult, long nDiv )
+bool SvxLineItem::ScaleMetrics( long nMult, long nDiv )
 {
     if ( pLine ) pLine->ScaleMetrics( nMult, nDiv );
-    return 1;
+    return true;
 }
 
 // -----------------------------------------------------------------------
 
-int SvxLineItem::HasMetrics() const
+bool SvxLineItem::HasMetrics() const
 {
-    return 1;
+    return true;
 }
 
 // -----------------------------------------------------------------------

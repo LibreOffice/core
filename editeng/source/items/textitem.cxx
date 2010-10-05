@@ -1131,17 +1131,17 @@ USHORT SvxFontHeightItem::GetVersion(USHORT nFileVersion) const
 
 // -----------------------------------------------------------------------
 
-int SvxFontHeightItem::ScaleMetrics( long nMult, long nDiv )
+bool SvxFontHeightItem::ScaleMetrics( long nMult, long nDiv )
 {
     nHeight = (sal_uInt32)Scale( nHeight, nMult, nDiv );
-    return 1;
+    return true;
 }
 
 // -----------------------------------------------------------------------
 
-int SvxFontHeightItem::HasMetrics() const
+bool SvxFontHeightItem::HasMetrics() const
 {
-    return 1;
+    return true;
 }
 
 void SvxFontHeightItem::SetHeight( sal_uInt32 nNewHeight, const USHORT nNewProp,
@@ -1212,17 +1212,17 @@ SvStream& SvxFontWidthItem::Store( SvStream& rStrm , USHORT /*nItemVersion*/ ) c
 
 // -----------------------------------------------------------------------
 
-int SvxFontWidthItem::ScaleMetrics( long nMult, long nDiv )
+bool SvxFontWidthItem::ScaleMetrics( long nMult, long nDiv )
 {
     nWidth = (USHORT)Scale( nWidth, nMult, nDiv );
-    return 1;
+    return true;
 }
 
 // -----------------------------------------------------------------------
 
-int SvxFontWidthItem::HasMetrics() const
+bool SvxFontWidthItem::HasMetrics() const
 {
-    return 1;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -2211,17 +2211,17 @@ SvStream& SvxKerningItem::Store( SvStream& rStrm , USHORT /*nItemVersion*/ ) con
 
 // -----------------------------------------------------------------------
 
-int SvxKerningItem::ScaleMetrics( long nMult, long nDiv )
+bool SvxKerningItem::ScaleMetrics( long nMult, long nDiv )
 {
     SetValue( (sal_Int16)Scale( GetValue(), nMult, nDiv ) );
-    return 1;
+    return true;
 }
 
 // -----------------------------------------------------------------------
 
-int SvxKerningItem::HasMetrics() const
+bool SvxKerningItem::HasMetrics() const
 {
-    return 1;
+    return true;
 }
 
 // -----------------------------------------------------------------------

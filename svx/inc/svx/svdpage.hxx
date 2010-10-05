@@ -97,8 +97,8 @@ friend class SdrEditView;
     Rectangle   aOutRect;
     Rectangle   aSnapRect;
     SdrObjListKind eListKind;
-    FASTBOOL    bObjOrdNumsDirty;
-    FASTBOOL    bRectsDirty;
+    bool    bObjOrdNumsDirty;
+    bool    bRectsDirty;
 protected:
     virtual void RecalcRects();
 
@@ -131,7 +131,7 @@ public:
     virtual void      SetModel(SdrModel* pNewModel);
     // Neuberechnung der Objekt-Ordnungsnummern
     void     RecalcObjOrdNums();
-    FASTBOOL IsObjOrdNumsDirty() const        { return bObjOrdNumsDirty; }
+    bool IsObjOrdNumsDirty() const        { return bObjOrdNumsDirty; }
     virtual void NbcInsertObject(SdrObject* pObj, ULONG nPos=CONTAINER_APPEND
                                  , const SdrInsertReason* pReason=NULL
                                                                       );
@@ -169,7 +169,7 @@ public:
     SdrObject* GetObj(ULONG nNum) const;
 
     // Gelinkte Seite oder gelinktes Gruppenobjekt
-    virtual FASTBOOL IsReadOnly() const;
+    virtual bool IsReadOnly() const;
 
     // Zaehlt alle Objekte inkl. Objekte in Objektgruppen, ...
     ULONG   CountAllObjects() const;
@@ -480,7 +480,7 @@ public:
     virtual SdrPage* Clone(SdrModel* pNewModel) const;
     bool IsMasterPage() const       { return mbMaster; }
     void SetInserted(bool bNew = true);
-    FASTBOOL IsInserted() const         { return mbInserted; }
+    bool IsInserted() const         { return mbInserted; }
     virtual void SetChanged();
 
     // #i68775# React on PageNum changes (from Model in most cases)
@@ -532,11 +532,11 @@ public:
     // GetBitmap und GetMetafile sind noch nicht implementiert.
     // Bitmap in Bildschirmaufloesung und -farbtiefe aus den Objekten der
     // Page erzeugen.
-    Bitmap        GetBitmap(FASTBOOL bTrimBorders=TRUE) const               { return GetBitmap(aPrefVisiLayers,bTrimBorders); }
-    Bitmap        GetBitmap(const SetOfByte& rVisibleLayers, FASTBOOL bTrimBorders=TRUE) const;
+    Bitmap        GetBitmap(bool bTrimBorders = true) const             { return GetBitmap(aPrefVisiLayers,bTrimBorders); }
+    Bitmap        GetBitmap(const SetOfByte& rVisibleLayers, bool bTrimBorders = true) const;
     // Metafile aus den Objekten der Page erzeugen
-    GDIMetaFile   GetMetaFile(FASTBOOL bTrimBorders=TRUE)                   { return GetMetaFile(aPrefVisiLayers,bTrimBorders); }
-    GDIMetaFile   GetMetaFile(const SetOfByte& rVisibleLayers, FASTBOOL bTrimBorders=TRUE);
+    GDIMetaFile   GetMetaFile(bool bTrimBorders = true)                 { return GetMetaFile(aPrefVisiLayers,bTrimBorders); }
+    GDIMetaFile   GetMetaFile(const SetOfByte& rVisibleLayers, bool bTrimBorders = true);
 
     virtual String GetLayoutName() const;
 
@@ -559,7 +559,7 @@ public:
 
     virtual SfxStyleSheet* GetTextStyleSheetForObject( SdrObject* pObj ) const;
 
-    FASTBOOL HasTransparentObjects( BOOL bCheckForAlphaChannel = FALSE ) const;
+    bool HasTransparentObjects( BOOL bCheckForAlphaChannel = false ) const;
 
     /** *deprecated* returns an averaged background color of this page */
     // #i75566# GetBackgroundColor -> GetPageBackgroundColor

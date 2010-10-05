@@ -1761,7 +1761,7 @@ void SfxTabDialog::SetInputSet( const SfxItemSet* pInSet )
 */
 
 {
-    FASTBOOL bSet = ( pSet != NULL );
+    bool bSet = ( pSet != NULL );
 
     pSet = pInSet;
 

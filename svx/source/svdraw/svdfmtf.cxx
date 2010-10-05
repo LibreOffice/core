@@ -268,12 +268,12 @@ ULONG ImpSdrGDIMetaFileImport::DoImport(const GDIMetaFile& rMtf,
     return aTmpList.GetObjCount();
 }
 
-void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, FASTBOOL bForceTextAttr)
+void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, bool bForceTextAttr)
 {
     bNoLine = FALSE; bNoFill = FALSE;
-    FASTBOOL bLine=TRUE && !bForceTextAttr;
-    FASTBOOL bFill=pObj==NULL || pObj->IsClosedObj() && !bForceTextAttr;
-    FASTBOOL bText=bForceTextAttr || (pObj!=NULL && pObj->GetOutlinerParaObject()!=NULL);
+    bool bLine = !bForceTextAttr;
+    bool bFill = (pObj==NULL) || (pObj->IsClosedObj() && !bForceTextAttr);
+    bool bText = bForceTextAttr || (pObj!=NULL && pObj->GetOutlinerParaObject()!=NULL);
 
     if ( bLine )
     {
@@ -431,7 +431,7 @@ void ImpSdrGDIMetaFileImport::InsertObj( SdrObject* pObj, sal_Bool bScale )
         aTmpList.InsertObject( pObj );
         if ( HAS_BASE( SdrPathObj, pObj ) )
         {
-            FASTBOOL bClosed=pObj->IsClosedObj();
+            bool bClosed=pObj->IsClosedObj();
             bLastObjWasPolyWithoutLine=bNoLine && bClosed;
             bLastObjWasLine=!bClosed;
         }

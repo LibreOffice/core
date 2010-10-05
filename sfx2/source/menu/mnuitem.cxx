@@ -254,7 +254,7 @@ void SfxMenuControl::StateChanged
     DBG_ASSERT( nSID == GetId(), "strange SID" );
     DBG_ASSERT( pOwnMenu != 0, "setting state to dangling SfxMenuControl" );
 
-    FASTBOOL bIsObjMenu =
+    bool bIsObjMenu =
                 GetId() >= SID_OBJECTMENU0 && GetId() < SID_OBJECTMENU_LAST;
 
     // enabled/disabled-Flag pauschal korrigieren

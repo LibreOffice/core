@@ -3263,7 +3263,6 @@ BOOL SvtFileDialog::AddControl( Window* pControl, BOOL bNewLine )
     Point aNewControlPos;
     Size* pNewDlgSize = NULL;
     BOOL bNewRow = bNewLine;
-    FASTBOOL bFirstNewRow = FALSE;
 
     if ( nType == WINDOW_WINDOW )
     {
@@ -3296,7 +3295,6 @@ BOOL SvtFileDialog::AddControl( Window* pControl, BOOL bNewLine )
     {
         // Create a new row if there was no usercontrol before.
         bNewRow = TRUE;
-        bFirstNewRow = TRUE;
     }
 
     // Check if a new row has to be created.

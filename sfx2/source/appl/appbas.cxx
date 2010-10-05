@@ -293,7 +293,7 @@ StarBASIC* SfxApplication::GetBasic()
 
 //--------------------------------------------------------------------
 
-FASTBOOL SfxApplication::IsInBasicCall() const
+bool SfxApplication::IsInBasicCall() const
 {
     return 0 != pAppData_Impl->nBasicCallLevel;
 }

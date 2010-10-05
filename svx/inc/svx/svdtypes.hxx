@@ -117,7 +117,7 @@ enum SdrObjListKind {SDROBJLIST_UNKNOWN    =0x00,    // Unbekannt
                      // Hier haben zur Not noch 8 weitere Pagetypen Platz
 };   // fuer die Surrogate reserviert
 
-inline FASTBOOL SdrIsPageKind(SdrObjListKind eK) { return eK>=SDROBJLIST_DRAWPAGE && eK<=0x1A; }
+inline bool SdrIsPageKind(SdrObjListKind eK) { return eK>=SDROBJLIST_DRAWPAGE && eK<=0x1A; }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

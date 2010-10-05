@@ -342,9 +342,9 @@ Graphic SdrGrafObj::GetTransformedGraphic( ULONG nTransformFlags ) const
 
         if( bMirror )
         {
-            USHORT      nMirrorCase = ( aGeo.nDrehWink == 18000 ) ? ( bMirrored ? 3 : 4 ) : ( bMirrored ? 2 : 1 );
-            FASTBOOL    bHMirr = nMirrorCase == 2 || nMirrorCase == 4;
-            FASTBOOL    bVMirr = nMirrorCase == 3 || nMirrorCase == 4;
+            USHORT nMirrorCase = ( aGeo.nDrehWink == 18000 ) ? ( bMirrored ? 3 : 4 ) : ( bMirrored ? 2 : 1 );
+            bool bHMirr = nMirrorCase == 2 || nMirrorCase == 4;
+            bool bVMirr = nMirrorCase == 3 || nMirrorCase == 4;
 
             aActAttr.SetMirrorFlags( ( bHMirr ? BMP_MIRROR_HORZ : 0 ) | ( bVMirr ? BMP_MIRROR_VERT : 0 ) );
         }
@@ -525,8 +525,8 @@ void SdrGrafObj::ReleaseGraphicLink()
 
 void SdrGrafObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
-    FASTBOOL bAnim = pGraphic->IsAnimated();
-    FASTBOOL bNoPresGrf = ( pGraphic->GetType() != GRAPHIC_NONE ) && !bEmptyPresObj;
+    bool bAnim = pGraphic->IsAnimated();
+    bool bNoPresGrf = ( pGraphic->GetType() != GRAPHIC_NONE ) && !bEmptyPresObj;
 
     rInfo.bResizeFreeAllowed = aGeo.nDrehWink % 9000 == 0 ||
                                aGeo.nDrehWink % 18000 == 0 ||
@@ -740,8 +740,8 @@ void SdrGrafObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
 {
     SdrRectObj::NbcResize( rRef, xFact, yFact );
 
-    FASTBOOL bMirrX = xFact.GetNumerator() < 0;
-    FASTBOOL bMirrY = yFact.GetNumerator() < 0;
+    bool bMirrX = xFact.GetNumerator() < 0;
+    bool bMirrY = yFact.GetNumerator() < 0;
 
     if( bMirrX != bMirrY )
         bMirrored = !bMirrored;
@@ -764,7 +764,7 @@ void SdrGrafObj::NbcMirror(const Point& rRef1, const Point& rRef2)
 
 // -----------------------------------------------------------------------------
 
-void SdrGrafObj::NbcShear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear)
+void SdrGrafObj::NbcShear(const Point& rRef, long nWink, double tn, bool bVShear)
 {
     SdrRectObj::NbcRotate( rRef, nWink, tn, bVShear );
 }
@@ -780,7 +780,7 @@ void SdrGrafObj::NbcSetSnapRect(const Rectangle& rRect)
 
 void SdrGrafObj::NbcSetLogicRect( const Rectangle& rRect)
 {
-    //FASTBOOL bChg=rRect.GetSize()!=aRect.GetSize();
+    //bool bChg=rRect.GetSize()!=aRect.GetSize();
     SdrRectObj::NbcSetLogicRect(rRect);
 }
 
@@ -806,7 +806,7 @@ void SdrGrafObj::RestGeoData(const SdrObjGeoData& rGeo)
 {
     //long      nDrehMerk = aGeo.nDrehWink;
     //long      nShearMerk = aGeo.nShearWink;
-    //FASTBOOL  bMirrMerk = bMirrored;
+    //bool  bMirrMerk = bMirrored;
     Size        aSizMerk( aRect.GetSize() );
 
     SdrRectObj::RestGeoData(rGeo);
@@ -818,8 +818,8 @@ void SdrGrafObj::RestGeoData(const SdrObjGeoData& rGeo)
 
 void SdrGrafObj::SetPage( SdrPage* pNewPage )
 {
-    FASTBOOL bRemove = pNewPage == NULL && pPage != NULL;
-    FASTBOOL bInsert = pNewPage != NULL && pPage == NULL;
+    bool bRemove = pNewPage == NULL && pPage != NULL;
+    bool bInsert = pNewPage != NULL && pPage == NULL;
 
     if( bRemove )
     {
@@ -841,7 +841,7 @@ void SdrGrafObj::SetPage( SdrPage* pNewPage )
 
 void SdrGrafObj::SetModel( SdrModel* pNewModel )
 {
-    FASTBOOL bChg = pNewModel != pModel;
+    bool bChg = pNewModel != pModel;
 
     if( bChg )
     {
@@ -882,7 +882,7 @@ void SdrGrafObj::StopAnimation(OutputDevice* /*pOutDev*/, long /*nExtraData*/)
 
 // -----------------------------------------------------------------------------
 
-FASTBOOL SdrGrafObj::HasGDIMetaFile() const
+bool SdrGrafObj::HasGDIMetaFile() const
 {
     return( pGraphic->GetType() == GRAPHIC_GDIMETAFILE );
 }

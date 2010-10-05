@@ -77,9 +77,9 @@ public:
     long                        nEscAbs;
     long                        nLineLen;
     SdrCaptionEscDir            eEscDir;
-    FASTBOOL                    bFitLineLen;
-    FASTBOOL                    bEscRel;
-    FASTBOOL                    bFixedAngle;
+    bool                        bFitLineLen;
+    bool                        bEscRel;
+    bool                        bFixedAngle;
 
 public:
     ImpCaptParams()
@@ -115,7 +115,7 @@ void ImpCaptParams::CalcEscPos(const Point& rTailPt, const Rectangle& rRect, Poi
     nY+=rRect.Top();
     Point  aBestPt;
     EscDir eBestDir=LKS;
-    FASTBOOL bTryH=eEscDir==SDRCAPT_ESCBESTFIT;
+    bool bTryH=eEscDir==SDRCAPT_ESCBESTFIT;
     if (!bTryH) {
         if (eType!=SDRCAPT_TYPE1) {
             bTryH=eEscDir==SDRCAPT_ESCHORIZONTAL;
@@ -123,7 +123,7 @@ void ImpCaptParams::CalcEscPos(const Point& rTailPt, const Rectangle& rRect, Poi
             bTryH=eEscDir==SDRCAPT_ESCVERTICAL;
         }
     }
-    FASTBOOL bTryV=eEscDir==SDRCAPT_ESCBESTFIT;
+    bool bTryV=eEscDir==SDRCAPT_ESCBESTFIT;
     if (!bTryV) {
         if (eType!=SDRCAPT_TYPE1) {
             bTryV=eEscDir==SDRCAPT_ESCVERTICAL;
@@ -135,7 +135,7 @@ void ImpCaptParams::CalcEscPos(const Point& rTailPt, const Rectangle& rRect, Poi
     if (bTryH) {
         Point aLft(rRect.Left()-nGap,nY);
         Point aRgt(rRect.Right()+nGap,nY);
-        FASTBOOL bLft=(aTl.X()-aLft.X()<aRgt.X()-aTl.X());
+        bool bLft=(aTl.X()-aLft.X()<aRgt.X()-aTl.X());
         if (bLft) {
             eBestDir=LKS;
             aBestPt=aLft;
@@ -147,7 +147,7 @@ void ImpCaptParams::CalcEscPos(const Point& rTailPt, const Rectangle& rRect, Poi
     if (bTryV) {
         Point aTop(nX,rRect.Top()-nGap);
         Point aBtm(nX,rRect.Bottom()+nGap);
-        FASTBOOL bTop=(aTl.Y()-aTop.Y()<aBtm.Y()-aTl.Y());
+        bool bTop=(aTl.Y()-aTop.Y()<aBtm.Y()-aTl.Y());
         Point aBest2;
         EscDir eBest2;
         if (bTop) {
@@ -157,7 +157,7 @@ void ImpCaptParams::CalcEscPos(const Point& rTailPt, const Rectangle& rRect, Poi
             eBest2=UNT;
             aBest2=aBtm;
         }
-        FASTBOOL bTakeIt=eEscDir!=SDRCAPT_ESCBESTFIT;
+        bool bTakeIt=eEscDir!=SDRCAPT_ESCBESTFIT;
         if (!bTakeIt) {
             BigInt aHorX(aBestPt.X()-aTl.X()); aHorX*=aHorX;
             BigInt aHorY(aBestPt.Y()-aTl.Y()); aHorY*=aHorY;
@@ -557,7 +557,7 @@ void SdrCaptionObj::ImpCalcTail(const ImpCaptParams& rPara, Polygon& rPoly, Rect
     }
 }
 
-FASTBOOL SdrCaptionObj::BegCreate(SdrDragStat& rStat)
+bool SdrCaptionObj::BegCreate(SdrDragStat& rStat)
 {
     if (aRect.IsEmpty()) return FALSE; // Create z.Zt. nur mit vorgegebenen Rect
 
@@ -570,7 +570,7 @@ FASTBOOL SdrCaptionObj::BegCreate(SdrDragStat& rStat)
     return TRUE;
 }
 
-FASTBOOL SdrCaptionObj::MovCreate(SdrDragStat& rStat)
+bool SdrCaptionObj::MovCreate(SdrDragStat& rStat)
 {
     ImpCaptParams aPara;
     ImpGetCaptParams(aPara);
@@ -582,7 +582,7 @@ FASTBOOL SdrCaptionObj::MovCreate(SdrDragStat& rStat)
     return TRUE;
 }
 
-FASTBOOL SdrCaptionObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
+bool SdrCaptionObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
     ImpCaptParams aPara;
     ImpGetCaptParams(aPara);
@@ -592,7 +592,7 @@ FASTBOOL SdrCaptionObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     return (eCmd==SDRCREATE_FORCEEND || rStat.GetPointAnz()>=2);
 }
 
-FASTBOOL SdrCaptionObj::BckCreate(SdrDragStat& /*rStat*/)
+bool SdrCaptionObj::BckCreate(SdrDragStat& /*rStat*/)
 {
     return FALSE;
 }
@@ -761,12 +761,12 @@ SdrObject* SdrCaptionObj::DoConvertToPolyObj(BOOL bBezier) const
     SdrObject* pTail = ImpConvertMakeObj(basegfx::B2DPolyPolygon(aTailPoly.getB2DPolygon()), sal_False, bBezier);
     SdrObject* pRet=(pTail!=NULL) ? pTail : pRect;
     if (pTail!=NULL && pRect!=NULL) {
-        FASTBOOL bInsRect=TRUE;
-        FASTBOOL bInsTail=TRUE;
+        bool bInsRect = true;
+        bool bInsTail = true;
         SdrObjList* pOL=pTail->GetSubList();
-        if (pOL!=NULL) { pRet=pRect; bInsTail=FALSE; }
+        if (pOL!=NULL) { pRet=pRect; bInsTail = false; }
         if (pOL==NULL) pOL=pRect->GetSubList();
-        if (pOL!=NULL) { pRet=pRect; bInsRect=FALSE; }
+        if (pOL!=NULL) { pRet=pRect; bInsRect = false; }
         if (pOL==NULL) {
             SdrObjGroup* pGrp=new SdrObjGroup;
             pOL=pGrp->GetSubList();

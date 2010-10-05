@@ -162,7 +162,7 @@ SdrObjUserData::~SdrObjUserData()
 {
 }
 
-FASTBOOL SdrObjUserData::HasMacro(const SdrObject* /*pObj*/) const
+bool SdrObjUserData::HasMacro(const SdrObject* /*pObj*/) const
 {
     return FALSE;
 }
@@ -206,7 +206,7 @@ void SdrObjUserData::PaintMacro(OutputDevice& rOut, const Rectangle& /*rDirtyRec
     rOut.SetRasterOp(eRop);
 }
 
-FASTBOOL SdrObjUserData::DoMacro(const SdrObjMacroHitRec& /*rRec*/, SdrObject* /*pObj*/)
+bool SdrObjUserData::DoMacro(const SdrObjMacroHitRec& /*rRec*/, SdrObject* /*pObj*/)
 {
     return FALSE;
 }
@@ -678,7 +678,7 @@ AutoTimer* SdrObject::ForceAutoTimer()
     return pPlusData->pAutoTimer;
 }
 
-FASTBOOL SdrObject::HasRefPoint() const
+bool SdrObject::HasRefPoint() const
 {
     return FALSE;
 }
@@ -1115,7 +1115,7 @@ void SdrObject::ImpTakeDescriptionStr(USHORT nStrCacheID, XubString& rStr, USHOR
     }
 }
 
-XubString SdrObject::GetWinkStr(long nWink, FASTBOOL bNoDegChar) const
+XubString SdrObject::GetWinkStr(long nWink, bool bNoDegChar) const
 {
     XubString aStr;
     if (pModel!=NULL) {
@@ -1124,7 +1124,7 @@ XubString SdrObject::GetWinkStr(long nWink, FASTBOOL bNoDegChar) const
     return aStr;
 }
 
-XubString SdrObject::GetMetrStr(long nVal, MapUnit /*eWantMap*/, FASTBOOL bNoUnitChars) const
+XubString SdrObject::GetMetrStr(long nVal, MapUnit /*eWantMap*/, bool bNoUnitChars) const
 {
     XubString aStr;
     if (pModel!=NULL) {
@@ -1279,14 +1279,14 @@ Rectangle SdrObject::ImpDragCalcRect(const SdrDragStat& rDrag) const
     Rectangle aRect(aTmpRect);
     const SdrHdl* pHdl=rDrag.GetHdl();
     SdrHdlKind eHdl=pHdl==NULL ? HDL_MOVE : pHdl->GetKind();
-    FASTBOOL bEcke=(eHdl==HDL_UPLFT || eHdl==HDL_UPRGT || eHdl==HDL_LWLFT || eHdl==HDL_LWRGT);
-    FASTBOOL bOrtho=rDrag.GetView()!=NULL && rDrag.GetView()->IsOrtho();
-    FASTBOOL bBigOrtho=bEcke && bOrtho && rDrag.GetView()->IsBigOrtho();
+    bool bEcke=(eHdl==HDL_UPLFT || eHdl==HDL_UPRGT || eHdl==HDL_LWLFT || eHdl==HDL_LWRGT);
+    bool bOrtho=rDrag.GetView()!=NULL && rDrag.GetView()->IsOrtho();
+    bool bBigOrtho=bEcke && bOrtho && rDrag.GetView()->IsBigOrtho();
     Point aPos(rDrag.GetNow());
-    FASTBOOL bLft=(eHdl==HDL_UPLFT || eHdl==HDL_LEFT  || eHdl==HDL_LWLFT);
-    FASTBOOL bRgt=(eHdl==HDL_UPRGT || eHdl==HDL_RIGHT || eHdl==HDL_LWRGT);
-    FASTBOOL bTop=(eHdl==HDL_UPRGT || eHdl==HDL_UPPER || eHdl==HDL_UPLFT);
-    FASTBOOL bBtm=(eHdl==HDL_LWRGT || eHdl==HDL_LOWER || eHdl==HDL_LWLFT);
+    bool bLft=(eHdl==HDL_UPLFT || eHdl==HDL_LEFT  || eHdl==HDL_LWLFT);
+    bool bRgt=(eHdl==HDL_UPRGT || eHdl==HDL_RIGHT || eHdl==HDL_LWRGT);
+    bool bTop=(eHdl==HDL_UPRGT || eHdl==HDL_UPPER || eHdl==HDL_UPLFT);
+    bool bBtm=(eHdl==HDL_LWRGT || eHdl==HDL_LOWER || eHdl==HDL_LWLFT);
     if (bLft) aTmpRect.Left()  =aPos.X();
     if (bRgt) aTmpRect.Right() =aPos.X();
     if (bTop) aTmpRect.Top()   =aPos.Y();
@@ -1298,8 +1298,8 @@ Rectangle SdrObject::ImpDragCalcRect(const SdrDragStat& rDrag) const
         long nYMul=aTmpRect.Bottom()-aTmpRect.Top();
         long nXDiv=nWdt0;
         long nYDiv=nHgt0;
-        FASTBOOL bXNeg=(nXMul<0)!=(nXDiv<0);
-        FASTBOOL bYNeg=(nYMul<0)!=(nYDiv<0);
+        bool bXNeg=(nXMul<0)!=(nXDiv<0);
+        bool bYNeg=(nYMul<0)!=(nYDiv<0);
         nXMul=Abs(nXMul);
         nYMul=Abs(nYMul);
         nXDiv=Abs(nXDiv);
@@ -1311,7 +1311,7 @@ Rectangle SdrObject::ImpDragCalcRect(const SdrDragStat& rDrag) const
         nXDiv=aXFact.GetDenominator();
         nYDiv=aYFact.GetDenominator();
         if (bEcke) { // Eckpunkthandles
-            FASTBOOL bUseX=(aXFact<aYFact) != bBigOrtho;
+            bool bUseX=(aXFact<aYFact) != bBigOrtho;
             if (bUseX) {
                 long nNeed=long(BigInt(nHgt0)*BigInt(nXMul)/BigInt(nXDiv));
                 if (bYNeg) nNeed=-nNeed;
@@ -1401,7 +1401,7 @@ basegfx::B2DPolyPolygon SdrObject::getSpecialDragPoly(const SdrDragStat& /*rDrag
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Create
-FASTBOOL SdrObject::BegCreate(SdrDragStat& rStat)
+bool SdrObject::BegCreate(SdrDragStat& rStat)
 {
     rStat.SetOrtho4Possible();
     Rectangle aRect1(rStat.GetStart(), rStat.GetNow());
@@ -1411,7 +1411,7 @@ FASTBOOL SdrObject::BegCreate(SdrDragStat& rStat)
     return TRUE;
 }
 
-FASTBOOL SdrObject::MovCreate(SdrDragStat& rStat)
+bool SdrObject::MovCreate(SdrDragStat& rStat)
 {
     rStat.TakeCreateRect(aOutRect);
     rStat.SetActionRect(aOutRect);
@@ -1428,7 +1428,7 @@ FASTBOOL SdrObject::MovCreate(SdrDragStat& rStat)
     return TRUE;
 }
 
-FASTBOOL SdrObject::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
+bool SdrObject::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
     rStat.TakeCreateRect(aOutRect);
     aOutRect.Justify();
@@ -1444,7 +1444,7 @@ void SdrObject::BrkCreate(SdrDragStat& /*rStat*/)
 {
 }
 
-FASTBOOL SdrObject::BckCreate(SdrDragStat& /*rStat*/)
+bool SdrObject::BckCreate(SdrDragStat& /*rStat*/)
 {
     return FALSE;
 }
@@ -1475,8 +1475,8 @@ void SdrObject::NbcMove(const Size& rSiz)
 
 void SdrObject::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
-    FASTBOOL bXMirr=(xFact.GetNumerator()<0) != (xFact.GetDenominator()<0);
-    FASTBOOL bYMirr=(yFact.GetNumerator()<0) != (yFact.GetDenominator()<0);
+    bool bXMirr=(xFact.GetNumerator()<0) != (xFact.GetDenominator()<0);
+    bool bYMirr=(yFact.GetNumerator()<0) != (yFact.GetDenominator()<0);
     if (bXMirr || bYMirr) {
         Point aRef1(GetSnapRect().Center());
         if (bXMirr) {
@@ -1553,7 +1553,7 @@ void SdrObject::NbcMirror(const Point& rRef1, const Point& rRef2)
     SetGlueReallyAbsolute(FALSE);
 }
 
-void SdrObject::NbcShear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear)
+void SdrObject::NbcShear(const Point& rRef, long nWink, double tn, bool bVShear)
 {
     SetGlueReallyAbsolute(TRUE);
     NbcShearGluePoints(rRef,nWink,tn,bVShear);
@@ -1606,7 +1606,7 @@ void SdrObject::Mirror(const Point& rRef1, const Point& rRef2)
     SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
 }
 
-void SdrObject::Shear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear)
+void SdrObject::Shear(const Point& rRef, long nWink, double tn, bool bVShear)
 {
     if (nWink!=0) {
         Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
@@ -1720,7 +1720,7 @@ long SdrObject::GetRotateAngle() const
     return 0;
 }
 
-long SdrObject::GetShearAngle(FASTBOOL /*bVertical*/) const
+long SdrObject::GetShearAngle(bool /*bVertical*/) const
 {
     return 0;
 }
@@ -1764,7 +1764,7 @@ void SdrObject::NbcSetPoint(const Point& /*rPnt*/, sal_uInt32 /*i*/)
 {
 }
 
-FASTBOOL SdrObject::HasTextEdit() const
+bool SdrObject::HasTextEdit() const
 {
     return FALSE;
 }
@@ -1832,7 +1832,7 @@ SdrObjUserData* SdrObject::ImpGetMacroUserData() const
     return pData;
 }
 
-FASTBOOL SdrObject::HasMacro() const
+bool SdrObject::HasMacro() const
 {
     SdrObjUserData* pData=ImpGetMacroUserData();
     return pData!=NULL ? pData->HasMacro(this) : FALSE;
@@ -1891,7 +1891,7 @@ void SdrObject::PaintMacro(OutputDevice& rOut, const Rectangle& rDirtyRect, cons
     }
 }
 
-FASTBOOL SdrObject::DoMacro(const SdrObjMacroHitRec& rRec)
+bool SdrObject::DoMacro(const SdrObjMacroHitRec& rRec)
 {
     SdrObjUserData* pData=ImpGetMacroUserData();
     if (pData!=NULL) {
@@ -2211,13 +2211,13 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
     }
 }
 
-void lcl_SetItem(SfxItemSet& rAttr, FASTBOOL bMerge, const SfxPoolItem& rItem)
+void lcl_SetItem(SfxItemSet& rAttr, bool bMerge, const SfxPoolItem& rItem)
 {
     if (bMerge) rAttr.MergeValue(rItem,TRUE);
     else rAttr.Put(rItem);
 }
 
-void SdrObject::TakeNotPersistAttr(SfxItemSet& rAttr, FASTBOOL bMerge) const
+void SdrObject::TakeNotPersistAttr(SfxItemSet& rAttr, bool bMerge) const
 {
     const Rectangle& rSnap=GetSnapRect();
     const Rectangle& rLogic=GetLogicRect();
@@ -2291,9 +2291,9 @@ void SdrObject::NbcSetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRe
 // Das Broadcasting beim Setzen der Attribute wird vom AttrObj gemanagt
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-FASTBOOL SdrObject::IsNode() const
+bool SdrObject::IsNode() const
 {
-    return TRUE;
+    return true;
 }
 
 SdrGluePoint SdrObject::GetVertexGluePoint(USHORT nPosNum) const
@@ -2354,7 +2354,7 @@ SdrGluePointList* SdrObject::ForceGluePointList()
     return pPlusData->pGluePoints;
 }
 
-void SdrObject::SetGlueReallyAbsolute(FASTBOOL bOn)
+void SdrObject::SetGlueReallyAbsolute(bool bOn)
 {
     // erst Const-Aufruf um zu sehen, ob
     // ueberhaupt Klebepunkte da sind
@@ -2387,7 +2387,7 @@ void SdrObject::NbcMirrorGluePoints(const Point& rRef1, const Point& rRef2)
     }
 }
 
-void SdrObject::NbcShearGluePoints(const Point& rRef, long nWink, double tn, FASTBOOL bVShear)
+void SdrObject::NbcShearGluePoints(const Point& rRef, long nWink, double tn, bool bVShear)
 {
     // erst Const-Aufruf um zu sehen, ob
     // ueberhaupt Klebepunkte da sind
@@ -2398,20 +2398,20 @@ void SdrObject::NbcShearGluePoints(const Point& rRef, long nWink, double tn, FAS
     }
 }
 
-FASTBOOL SdrObject::IsEdge() const
+bool SdrObject::IsEdge() const
 {
-    return FALSE;
+    return false;
 }
 
-void SdrObject::ConnectToNode(FASTBOOL /*bTail1*/, SdrObject* /*pObj*/)
-{
-}
-
-void SdrObject::DisconnectFromNode(FASTBOOL /*bTail1*/)
+void SdrObject::ConnectToNode(bool /*bTail1*/, SdrObject* /*pObj*/)
 {
 }
 
-SdrObject* SdrObject::GetConnectedNode(FASTBOOL /*bTail1*/) const
+void SdrObject::DisconnectFromNode(bool /*bTail1*/)
+{
+}
+
+SdrObject* SdrObject::GetConnectedNode(bool /*bTail1*/) const
 {
     return NULL;
 }

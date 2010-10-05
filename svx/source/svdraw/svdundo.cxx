@@ -245,7 +245,7 @@ SdrUndoObj::SdrUndoObj(SdrObject& rNewObj):
 {
 }
 
-void SdrUndoObj::GetDescriptionStringForObject( const SdrObject& _rForObject, USHORT nStrCacheID, String& rStr, FASTBOOL bRepeat )
+void SdrUndoObj::GetDescriptionStringForObject( const SdrObject& _rForObject, USHORT nStrCacheID, String& rStr, bool bRepeat )
 {
     rStr = ImpGetResStr(nStrCacheID);
     sal_Char aSearchText[] = "%1";
@@ -271,7 +271,7 @@ void SdrUndoObj::GetDescriptionStringForObject( const SdrObject& _rForObject, US
     }
 }
 
-void SdrUndoObj::ImpTakeDescriptionStr(USHORT nStrCacheID, XubString& rStr, FASTBOOL bRepeat) const
+void SdrUndoObj::ImpTakeDescriptionStr(USHORT nStrCacheID, XubString& rStr, bool bRepeat) const
 {
     if ( pObj )
         GetDescriptionStringForObject( *pObj, nStrCacheID, rStr, bRepeat );
@@ -294,7 +294,7 @@ void SdrUndoObj::ImpShowPageOfThisObject()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SdrUndoAttrObj::SdrUndoAttrObj(SdrObject& rNewObj, FASTBOOL bStyleSheet1, FASTBOOL bSaveText)
+SdrUndoAttrObj::SdrUndoAttrObj(SdrObject& rNewObj, bool bStyleSheet1, bool bSaveText)
 :   SdrUndoObj(rNewObj),
     pUndoSet(NULL),
     pRedoSet(NULL),
@@ -1209,7 +1209,7 @@ void SdrUndoObjSetText::SdrRepeat(SdrView& rView)
 
 bool SdrUndoObjSetText::CanSdrRepeat(SdrView& rView) const
 {
-    FASTBOOL bOk=FALSE;
+    bool bOk = false;
     if (bNewTextAvailable && rView.AreObjectsMarked()) {
         bOk=TRUE;
     }
@@ -1470,7 +1470,7 @@ void SdrUndoPage::ImpMovePage(USHORT nOldNum, USHORT nNewNum)
     }
 }
 
-void SdrUndoPage::ImpTakeDescriptionStr(USHORT nStrCacheID, XubString& rStr, USHORT /*n*/, FASTBOOL /*bRepeat*/) const
+void SdrUndoPage::ImpTakeDescriptionStr(USHORT nStrCacheID, XubString& rStr, USHORT /*n*/, bool /*bRepeat*/) const
 {
     rStr=ImpGetResStr(nStrCacheID);
 }
@@ -1572,7 +1572,7 @@ void SdrUndoDelPage::SdrRepeat(SdrView& /*rView*/)
 
 bool SdrUndoDelPage::CanSdrRepeat(SdrView& /*rView*/) const
 {
-    return FALSE;
+    return false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1621,7 +1621,7 @@ void SdrUndoCopyPage::SdrRepeat(SdrView& /*rView*/)
 
 bool SdrUndoCopyPage::CanSdrRepeat(SdrView& /*rView*/) const
 {
-    return FALSE;
+    return false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

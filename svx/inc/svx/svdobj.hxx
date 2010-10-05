@@ -183,7 +183,7 @@ public:
     const SetOfByte*            pVisiLayer;
     const SdrPageView*          pPageView;
     USHORT                      nTol;
-    FASTBOOL                    bDown;
+    bool                        bDown;
 
 public:
     SdrObjMacroHitRec()
@@ -236,11 +236,11 @@ public:
     UINT32  GetInventor() const { return nInventor; }
     UINT16  GetId() const { return nIdentifier; }
 
-    virtual FASTBOOL HasMacro (const SdrObject* pObj) const;
+    virtual bool HasMacro (const SdrObject* pObj) const;
     virtual SdrObject* CheckMacroHit (const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const;
     virtual Pointer GetMacroPointer (const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const;
     virtual void PaintMacro (OutputDevice& rOut, const Rectangle& rDirtyRect, const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const;
-    virtual FASTBOOL DoMacro (const SdrObjMacroHitRec& rRec, SdrObject* pObj);
+    virtual bool DoMacro (const SdrObjMacroHitRec& rRec, SdrObject* pObj);
     virtual XubString GetMacroPopupComment(const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const;
 };
 
@@ -522,8 +522,8 @@ protected:
 
     void ImpForcePlusData() { if (pPlusData==NULL) pPlusData=NewPlusData(); }
 
-    String GetWinkStr(long nWink, FASTBOOL bNoDegChar=FALSE) const;
-    String GetMetrStr(long nVal, MapUnit eWantMap=MAP_MM, FASTBOOL bNoUnitChars=FALSE) const;
+    String GetWinkStr(long nWink, bool bNoDegChar = false) const;
+    String GetMetrStr(long nVal, MapUnit eWantMap=MAP_MM, bool bNoUnitChars = false) const;
 
     // bNotMyself=TRUE bedeutet: Nur die ObjList auf Dirty setzen, nicht mich.
     // Wird z.B. benoetigt fuer NbcMove, denn da movt man SnapRect und aOutRect
@@ -596,7 +596,7 @@ public:
     // Ein solcher Referenzpunkt ist z.B. der Punkt eines Symbols, der
     // der beim Einfuegen des Symbols auf das Raster gefangen werden soll
     // oder der Fixpunkt eines Bildes innerhalb eines Animationsobjektes.
-    virtual FASTBOOL HasRefPoint() const;
+    virtual bool HasRefPoint() const;
     virtual Point GetRefPoint() const;
     virtual void SetRefPoint(const Point& rPnt);
 
@@ -757,10 +757,10 @@ public:
     // BckCreate() -> Letztes EndCreate() rueckgaengig machen (z.B. letzten
     // Polygonpunkt wieder loeschen).
     // RetrunCode: TRUE=Weiter gehts, FALSE=Create dadurch abgebrochen.
-    virtual FASTBOOL BegCreate(SdrDragStat& rStat);
-    virtual FASTBOOL MovCreate(SdrDragStat& rStat); // TRUE=Xor muss repainted werden
-    virtual FASTBOOL EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
-    virtual FASTBOOL BckCreate(SdrDragStat& rStat);
+    virtual bool BegCreate(SdrDragStat& rStat);
+    virtual bool MovCreate(SdrDragStat& rStat); // TRUE=Xor muss repainted werden
+    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
+    virtual bool BckCreate(SdrDragStat& rStat);
     virtual void BrkCreate(SdrDragStat& rStat);
 
     // damit holt man sich den Pointer, der das Createn dieses Objekts symbolisiert
@@ -778,13 +778,13 @@ public:
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
     virtual void NbcRotate(const Point& rRef, long nWink, double sn, double cs);
     virtual void NbcMirror(const Point& rRef1, const Point& rRef2);
-    virtual void NbcShear (const Point& rRef, long nWink, double tn, FASTBOOL bVShear);
+    virtual void NbcShear (const Point& rRef, long nWink, double tn, bool bVShear);
 
     virtual void Move  (const Size& rSiz);
     virtual void Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
     virtual void Rotate(const Point& rRef, long nWink, double sn, double cs);
     virtual void Mirror(const Point& rRef1, const Point& rRef2);
-    virtual void Shear (const Point& rRef, long nWink, double tn, FASTBOOL bVShear);
+    virtual void Shear (const Point& rRef, long nWink, double tn, bool bVShear);
 
     // Die relative Position eines Zeichenobjektes ist die Entfernung der
     // linken oberen Eche des logisch umschliessenden Rechtecks (SnapRect)
@@ -821,7 +821,7 @@ public:
 
     // Drehwinkel und Shear
     virtual long GetRotateAngle() const;
-    virtual long GetShearAngle(FASTBOOL bVertical=FALSE) const;
+    virtual long GetShearAngle(bool bVertical = false) const;
 
     // Zum Fangen von/auf ausgezeichneten Punkten eines Obj (Polygonpunkte,
     // Kreismittelpunkt, ...)
@@ -864,7 +864,7 @@ public:
     void SetMergedItemSetAndBroadcast(const SfxItemSet& rSet, sal_Bool bClearAllItems = sal_False);
 
     // NotPersistAttr fuer Layer, ObjName, geometrische Transformationen, ...
-    void TakeNotPersistAttr(SfxItemSet& rAttr, FASTBOOL bMerge) const;
+    void TakeNotPersistAttr(SfxItemSet& rAttr, bool bMerge) const;
     void ApplyNotPersistAttr(const SfxItemSet& rAttr);
     void NbcApplyNotPersistAttr(const SfxItemSet& rAttr);
 
@@ -875,7 +875,7 @@ public:
     SfxStyleSheet* GetStyleSheet() const;
 
     // TextEdit
-    virtual FASTBOOL HasTextEdit() const;
+    virtual bool HasTextEdit() const;
 
     // Return==TRUE: TextEditMode gestartet
     virtual sal_Bool BegTextEdit(SdrOutliner& rOutl);
@@ -892,11 +892,11 @@ public:
     void BurnInStyleSheetAttributes();
 
     // Macrofaehigkeit, z.B. ein Rechteck als PushButton.
-    virtual FASTBOOL HasMacro() const;
+    virtual bool HasMacro() const;
     virtual SdrObject* CheckMacroHit (const SdrObjMacroHitRec& rRec) const;
     virtual Pointer GetMacroPointer (const SdrObjMacroHitRec& rRec) const;
     virtual void PaintMacro (OutputDevice& rOut, const Rectangle& rDirtyRect, const SdrObjMacroHitRec& rRec) const;
-    virtual FASTBOOL DoMacro (const SdrObjMacroHitRec& rRec);
+    virtual bool DoMacro (const SdrObjMacroHitRec& rRec);
     virtual XubString GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const;
     sal_Bool IsMacroHit(const SdrObjMacroHitRec& rRec) const { return CheckMacroHit(rRec)!=NULL; }
 
@@ -917,7 +917,7 @@ public:
     // Beim Verschieben/Resizen der Kante wird dagegen die Verbindung
     // geloesst.
     // Objekt ist ein Knoten?
-    virtual FASTBOOL IsNode() const;
+    virtual bool IsNode() const;
 
     // Automatische Klebepunkte:
     // je 4 Scheitelpunkt- und Eckpositionen muss ein Knotenobjekt liefern
@@ -935,19 +935,19 @@ public:
     virtual SdrGluePointList* ForceGluePointList();
 
     // Temporaer zu setzen fuer Transformationen am Bezugsobjekt
-    void SetGlueReallyAbsolute(FASTBOOL bOn);
+    void SetGlueReallyAbsolute(bool bOn);
     void NbcRotateGluePoints(const Point& rRef, long nWink, double sn, double cs);
     void NbcMirrorGluePoints(const Point& rRef1, const Point& rRef2);
-    void NbcShearGluePoints (const Point& rRef, long nWink, double tn, FASTBOOL bVShear);
+    void NbcShearGluePoints (const Point& rRef, long nWink, double tn, bool bVShear);
 
     // Objekt ist eine Kante?
-    virtual FASTBOOL IsEdge() const;
+    virtual bool IsEdge() const;
 
     // bTail1=TRUE: Linienanfang, sonst LinienEnde
     // pObj=NULL: Disconnect
-    virtual void ConnectToNode(FASTBOOL bTail1, SdrObject* pObj);
-    virtual void DisconnectFromNode(FASTBOOL bTail1);
-    virtual SdrObject* GetConnectedNode(FASTBOOL bTail1) const;
+    virtual void ConnectToNode(bool bTail1, SdrObject* pObj);
+    virtual void DisconnectFromNode(bool bTail1);
+    virtual SdrObject* GetConnectedNode(bool bTail1) const;
 
     /** sets the writing mode of the object's context
 

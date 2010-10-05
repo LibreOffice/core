@@ -64,8 +64,8 @@ public:
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
-    virtual FASTBOOL        HasMetrics() const;
-    virtual FASTBOOL        ScaleMetrics(long nMul, long nDiv);
+    virtual bool            HasMetrics() const;
+    virtual bool            ScaleMetrics(long nMul, long nDiv);
 
     const XDash&            GetDashValue(const XDashTable* pTable = 0) const; // GetValue -> GetDashValue
     void                    SetDashValue(const XDash& rNew)   { aDash = rNew; Detach(); } // SetValue -> SetDashValue

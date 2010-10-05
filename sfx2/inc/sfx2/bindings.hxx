@@ -142,7 +142,7 @@ public:
                      ~SfxBindings();
 
     void             HidePopups( bool bHide = true );
-    SAL_DLLPRIVATE void HidePopupCtrls_Impl( FASTBOOL bHide = sal_True );
+    SAL_DLLPRIVATE void HidePopupCtrls_Impl( bool bHide = true );
 
     void             SetDispatcher(SfxDispatcher *pDisp);
 

@@ -1011,7 +1011,7 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
 
     CalculateDelta_Impl();
 
-    FASTBOOL bDraw = FALSE;
+    bool bDraw = FALSE;
     if ( pSearchItem->GetAppFlag() == SVX_SEARCHAPP_CALC )
     {
         Link aLink = LINK( this, SvxSearchDialog, FlagHdl_Impl );
@@ -1113,7 +1113,7 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
     FlagHdl_Impl( &aSimilarityBox );
     FlagHdl_Impl( &aJapOptionsCB );
 
-    FASTBOOL bDisableSearch = FALSE;
+    bool bDisableSearch = FALSE;
     SfxViewShell* pViewShell = SfxViewShell::Current();
 
     if ( pViewShell )
@@ -1172,14 +1172,14 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
     }
     else
     {
-        FASTBOOL bSetSearch = ( ( nModifyFlag & MODIFY_SEARCH ) == 0 );
-        FASTBOOL bSetReplace = ( ( nModifyFlag & MODIFY_REPLACE ) == 0 );
+        bool bSetSearch = ( ( nModifyFlag & MODIFY_SEARCH ) == 0 );
+        bool bSetReplace = ( ( nModifyFlag & MODIFY_REPLACE ) == 0 );
 
         if ( pSearchItem->GetSearchString().Len() && bSetSearch )
             aSearchLB.SetText( pSearchItem->GetSearchString() );
         else if ( aSearchStrings.Count() )
         {
-            FASTBOOL bAttributes =
+            bool bAttributes =
                 ( ( pSearchList && pSearchList->Count() ) ||
                   ( pReplaceList && pReplaceList->Count() ) );
 
@@ -1464,7 +1464,7 @@ IMPL_LINK( SvxSearchDialog, FlagHdl_Impl, Control *, pCtrl )
 
 IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
 {
-    FASTBOOL bInclusive = ( aLayoutBtn.GetText() == aLayoutStr );
+    bool bInclusive = ( aLayoutBtn.GetText() == aLayoutStr );
 
     if ( ( pBtn == &aSearchBtn )    ||
          ( pBtn == &aSearchAllBtn ) ||
@@ -1879,19 +1879,19 @@ void SvxSearchDialog::EnableControls_Impl( const USHORT nFlags )
     }
     else if ( !IsVisible() )
         Show();
-    FASTBOOL bNoSearch = TRUE;
+    bool bNoSearch = true;
 
     sal_Bool bEnableSearch = ( SEARCH_OPTIONS_SEARCH & nOptions ) != 0;
     aSearchBtn.Enable(bEnableSearch);
 
     if( bEnableSearch )
-        bNoSearch = FALSE;
+        bNoSearch = false;
 
 
     if ( ( SEARCH_OPTIONS_SEARCH_ALL & nOptions ) != 0 )
     {
         aSearchAllBtn.Enable();
-        bNoSearch = FALSE;
+        bNoSearch = false;
     }
     else
         aSearchAllBtn.Disable();
@@ -1901,7 +1901,7 @@ void SvxSearchDialog::EnableControls_Impl( const USHORT nFlags )
         aReplaceText.Enable();
         aReplaceLB.Enable();
         aReplaceTmplLB.Enable();
-        bNoSearch = FALSE;
+        bNoSearch = false;
     }
     else
     {
@@ -1913,7 +1913,7 @@ void SvxSearchDialog::EnableControls_Impl( const USHORT nFlags )
     if ( ( SEARCH_OPTIONS_REPLACE_ALL & nOptions ) != 0 )
     {
         aReplaceAllBtn.Enable();
-        bNoSearch = FALSE;
+        bNoSearch = false;
     }
     else
         aReplaceAllBtn.Disable();

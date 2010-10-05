@@ -116,8 +116,8 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     mpImpl = new SdrModelImpl;
     mpImpl->mpUndoManager=0;
     mpImpl->mpUndoFactory=0;
-    mpImpl->mbAllowShapePropertyChangeListener=false;
-    mbInDestruction=false;
+    mpImpl->mbAllowShapePropertyChangeListener = false;
+    mbInDestruction = false;
     aObjUnit=SdrEngineDefaults::GetMapFraction();
     eObjUnit=SdrEngineDefaults::GetMapUnit();
     eUIUnit=FUNIT_MM;
@@ -232,7 +232,7 @@ SdrModel::SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, sal
 #endif
 
     DBG_CTOR(SdrModel,NULL);
-    ImpCtor(pPool,pPers,FALSE, (FASTBOOL)bLoadRefCounts);
+    ImpCtor(pPool,pPers,FALSE, (bool)bLoadRefCounts);
 }
 
 SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, sal_Bool bLoadRefCounts):
@@ -245,10 +245,10 @@ SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, ::comphelper::IEmbed
 #endif
 
     DBG_CTOR(SdrModel,NULL);
-    ImpCtor(pPool,pPers,FALSE, (FASTBOOL)bLoadRefCounts);
+    ImpCtor(pPool,pPers,FALSE, (bool)bLoadRefCounts);
 }
 
-SdrModel::SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, FASTBOOL bUseExtColorTable, sal_Bool bLoadRefCounts):
+SdrModel::SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable, sal_Bool bLoadRefCounts):
     maMaPag(1024,32,32),
     maPages(1024,32,32)
 {
@@ -257,10 +257,10 @@ SdrModel::SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, FAS
 #endif
 
     DBG_CTOR(SdrModel,NULL);
-    ImpCtor(pPool,pPers,bUseExtColorTable, (FASTBOOL)bLoadRefCounts);
+    ImpCtor(pPool,pPers,bUseExtColorTable, (bool)bLoadRefCounts);
 }
 
-SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, FASTBOOL bUseExtColorTable, sal_Bool bLoadRefCounts):
+SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable, sal_Bool bLoadRefCounts):
     maMaPag(1024,32,32),
     maPages(1024,32,32),
     aTablePath(rPath)
@@ -270,7 +270,7 @@ SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, ::comphelper::IEmbed
 #endif
 
     DBG_CTOR(SdrModel,NULL);
-    ImpCtor(pPool,pPers,bUseExtColorTable, (FASTBOOL)bLoadRefCounts);
+    ImpCtor(pPool,pPers,bUseExtColorTable, (bool)bLoadRefCounts);
 }
 
 SdrModel::SdrModel(const SdrModel& /*rSrcModel*/):
@@ -396,23 +396,23 @@ void SdrModel::operator=(const SdrModel& /*rSrcModel*/)
     DBG_ERROR("SdrModel::operator=() ist noch nicht implementiert");
 }
 
-FASTBOOL SdrModel::operator==(const SdrModel& /*rCmpModel*/) const
+bool SdrModel::operator==(const SdrModel& /*rCmpModel*/) const
 {
     DBG_ERROR("SdrModel::operator==() ist noch nicht implementiert");
     return FALSE;
 }
 
-void SdrModel::SetSwapGraphics( FASTBOOL bSwap )
+void SdrModel::SetSwapGraphics( bool bSwap )
 {
     bSwapGraphics = bSwap;
 }
 
-FASTBOOL SdrModel::IsReadOnly() const
+bool SdrModel::IsReadOnly() const
 {
     return bReadOnly;
 }
 
-void SdrModel::SetReadOnly(FASTBOOL bYes)
+void SdrModel::SetReadOnly(bool bYes)
 {
     bReadOnly=bYes;
 }
@@ -448,9 +448,9 @@ void SdrModel::ClearUndoBuffer()
     }
 }
 
-FASTBOOL SdrModel::Undo()
+bool SdrModel::Undo()
 {
-    FASTBOOL bRet=FALSE;
+    bool bRet = false;
     if( mpImpl->mpUndoManager )
     {
         DBG_ERROR("svx::SdrModel::Undo(), method not supported with application undo manager!");
@@ -472,9 +472,9 @@ FASTBOOL SdrModel::Undo()
     return bRet;
 }
 
-FASTBOOL SdrModel::Redo()
+bool SdrModel::Redo()
 {
-    FASTBOOL bRet=FALSE;
+    bool bRet=FALSE;
     if( mpImpl->mpUndoManager )
     {
         DBG_ERROR("svx::SdrModel::Redo(), method not supported with application undo manager!");
@@ -496,9 +496,9 @@ FASTBOOL SdrModel::Redo()
     return bRet;
 }
 
-FASTBOOL SdrModel::Repeat(SfxRepeatTarget& rView)
+bool SdrModel::Repeat(SfxRepeatTarget& rView)
 {
-    FASTBOOL bRet=FALSE;
+    bool bRet = false;
     if( mpImpl->mpUndoManager )
     {
         DBG_ERROR("svx::SdrModel::Redo(), method not supported with application undo manager!");
@@ -511,7 +511,7 @@ FASTBOOL SdrModel::Repeat(SfxRepeatTarget& rView)
             if(pDo->CanRepeat(rView))
             {
                 pDo->Repeat(rView);
-                bRet=TRUE;
+                bRet = true;
             }
         }
     }
@@ -806,7 +806,7 @@ SdrModel* SdrModel::AllocModel() const
     return pModel;
 }
 
-SdrPage* SdrModel::AllocPage(FASTBOOL bMasterPage)
+SdrPage* SdrModel::AllocPage(bool bMasterPage)
 {
     return new SdrPage(*this,bMasterPage);
 }
@@ -1292,7 +1292,7 @@ void SdrModel::TakeUnitStr(FieldUnit eUnit, XubString& rStr)
     }
 }
 
-void SdrModel::TakeMetricStr(long nVal, XubString& rStr, FASTBOOL bNoUnitChars, sal_Int32 nNumDigits) const
+void SdrModel::TakeMetricStr(long nVal, XubString& rStr, bool bNoUnitChars, sal_Int32 nNumDigits) const
 {
     // #i22167#
     // change to double precision usage to not loose decimal places after comma
@@ -1406,7 +1406,7 @@ void SdrModel::TakeMetricStr(long nVal, XubString& rStr, FASTBOOL bNoUnitChars, 
         rStr += aUIUnitStr;
 }
 
-void SdrModel::TakeWinkStr(long nWink, XubString& rStr, FASTBOOL bNoDegChar) const
+void SdrModel::TakeWinkStr(long nWink, XubString& rStr, bool bNoDegChar) const
 {
     BOOL bNeg(nWink < 0);
 
@@ -1434,7 +1434,7 @@ void SdrModel::TakeWinkStr(long nWink, XubString& rStr, FASTBOOL bNoDegChar) con
         rStr += DEGREE_CHAR;
 }
 
-void SdrModel::TakePercentStr(const Fraction& rVal, XubString& rStr, FASTBOOL bNoPercentChar) const
+void SdrModel::TakePercentStr(const Fraction& rVal, XubString& rStr, bool bNoPercentChar) const
 {
     INT32 nMul(rVal.GetNumerator());
     INT32 nDiv(rVal.GetDenominator());
@@ -1467,7 +1467,7 @@ void SdrModel::SetChanged(sal_Bool bFlg)
     mbChanged = bFlg;
 }
 
-void SdrModel::RecalcPageNums(FASTBOOL bMaster)
+void SdrModel::RecalcPageNums(bool bMaster)
 {
     Container& rPL=*(bMaster ? &maMaPag : &maPages);
     USHORT nAnz=USHORT(rPL.Count());
@@ -1602,9 +1602,9 @@ void SdrModel::MoveMasterPage(USHORT nPgNum, USHORT nNewPos)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-FASTBOOL SdrModel::CheckConsistence() const
+bool SdrModel::CheckConsistence() const
 {
-    FASTBOOL bRet=TRUE;
+    bool bRet = true;
 #ifdef DBG_UTIL
     DBG_CHKTHIS(SdrModel,NULL);
 #endif
@@ -1616,7 +1616,7 @@ FASTBOOL SdrModel::CheckConsistence() const
 // #48289#
 void SdrModel::CopyPages(USHORT nFirstPageNum, USHORT nLastPageNum,
                          USHORT nDestPos,
-                         FASTBOOL bUndo, FASTBOOL bMoveNoCopy)
+                         bool bUndo, bool bMoveNoCopy)
 {
     if( bUndo && !IsUndoEnabled() )
         bUndo = false;
@@ -1633,7 +1633,7 @@ void SdrModel::CopyPages(USHORT nFirstPageNum, USHORT nLastPageNum,
         nFirstPageNum=nMaxPage;
     if (nLastPageNum>nMaxPage)
         nLastPageNum =nMaxPage;
-    FASTBOOL bReverse=nLastPageNum<nFirstPageNum;
+    bool bReverse=nLastPageNum<nFirstPageNum;
     if (nDestPos>nPageAnz)
         nDestPos=nPageAnz;
 
@@ -1694,8 +1694,8 @@ void SdrModel::CopyPages(USHORT nFirstPageNum, USHORT nLastPageNum,
 void SdrModel::Merge(SdrModel& rSourceModel,
                      USHORT nFirstPageNum, USHORT nLastPageNum,
                      USHORT nDestPos,
-                     FASTBOOL bMergeMasterPages, FASTBOOL bAllMasterPages,
-                     FASTBOOL bUndo, FASTBOOL bTreadSourceAsConst)
+                     bool bMergeMasterPages, bool bAllMasterPages,
+                     bool bUndo, bool bTreadSourceAsConst)
 {
     if (&rSourceModel==this)
     { // #48289#
@@ -1712,24 +1712,24 @@ void SdrModel::Merge(SdrModel& rSourceModel,
     USHORT nSrcPageAnz=rSourceModel.GetPageCount();
     USHORT nSrcMasterPageAnz=rSourceModel.GetMasterPageCount();
     USHORT nDstMasterPageAnz=GetMasterPageCount();
-    FASTBOOL bInsPages=(nFirstPageNum<nSrcPageAnz || nLastPageNum<nSrcPageAnz);
+    bool bInsPages=(nFirstPageNum<nSrcPageAnz || nLastPageNum<nSrcPageAnz);
     USHORT nMaxSrcPage=nSrcPageAnz; if (nMaxSrcPage!=0) nMaxSrcPage--;
     if (nFirstPageNum>nMaxSrcPage) nFirstPageNum=nMaxSrcPage;
     if (nLastPageNum>nMaxSrcPage)  nLastPageNum =nMaxSrcPage;
-    FASTBOOL bReverse=nLastPageNum<nFirstPageNum;
+    bool bReverse=nLastPageNum<nFirstPageNum;
 
     USHORT*   pMasterMap=NULL;
-    FASTBOOL* pMasterNeed=NULL;
+    bool* pMasterNeed=NULL;
     USHORT    nMasterNeed=0;
     if (bMergeMasterPages && nSrcMasterPageAnz!=0) {
         // Feststellen, welche MasterPages aus rSrcModel benoetigt werden
         pMasterMap=new USHORT[nSrcMasterPageAnz];
-        pMasterNeed=new FASTBOOL[nSrcMasterPageAnz];
+        pMasterNeed=new bool[nSrcMasterPageAnz];
         memset(pMasterMap,0xFF,nSrcMasterPageAnz*sizeof(USHORT));
         if (bAllMasterPages) {
-            memset(pMasterNeed,TRUE,nSrcMasterPageAnz*sizeof(FASTBOOL));
+            memset(pMasterNeed, true, nSrcMasterPageAnz * sizeof(bool));
         } else {
-            memset(pMasterNeed,FALSE,nSrcMasterPageAnz*sizeof(FASTBOOL));
+            memset(pMasterNeed, false, nSrcMasterPageAnz * sizeof(bool));
             USHORT nAnf= bReverse ? nLastPageNum : nFirstPageNum;
             USHORT nEnd= bReverse ? nFirstPageNum : nLastPageNum;
             for (USHORT i=nAnf; i<=nEnd; i++) {
@@ -1741,7 +1741,7 @@ void SdrModel::Merge(SdrModel& rSourceModel,
 
                     if(nMPgNum < nSrcMasterPageAnz)
                     {
-                        pMasterNeed[nMPgNum] = TRUE;
+                        pMasterNeed[nMPgNum] = true;
                     }
                 }
             }
@@ -2022,20 +2022,20 @@ void SdrModel::ReformatAllTextObjects()
     ImpReformatAllTextObjects();
 }
 
-FASTBOOL SdrModel::HasTransparentObjects( BOOL bCheckForAlphaChannel ) const
+bool SdrModel::HasTransparentObjects( BOOL bCheckForAlphaChannel ) const
 {
-    FASTBOOL    bRet = FALSE;
+    bool        bRet = false;
     USHORT      n, nCount;
 
     for( n = 0, nCount = GetMasterPageCount(); ( n < nCount ) && !bRet; n++ )
         if( GetMasterPage( n )->HasTransparentObjects( bCheckForAlphaChannel ) )
-            bRet = TRUE;
+            bRet = true;
 
     if( !bRet )
     {
         for( n = 0, nCount = GetPageCount(); ( n < nCount ) && !bRet; n++ )
             if( GetPage( n )->HasTransparentObjects( bCheckForAlphaChannel ) )
-                bRet = TRUE;
+                bRet = true;
     }
 
     return bRet;

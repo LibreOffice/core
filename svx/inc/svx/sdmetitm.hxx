@@ -44,8 +44,8 @@ public:
     SdrMetricItem(USHORT nId, SvStream& rIn): SfxInt32Item(nId,rIn) {}
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=NULL) const;
     virtual SfxPoolItem* Create(SvStream& rIn, USHORT nVer) const;
-    virtual FASTBOOL HasMetrics() const;
-    virtual FASTBOOL ScaleMetrics(long nMul, long nDiv);
+    virtual bool HasMetrics() const;
+    virtual bool ScaleMetrics(long nMul, long nDiv);
 
     virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePres,
                                                 SfxMapUnit eCoreMetric,

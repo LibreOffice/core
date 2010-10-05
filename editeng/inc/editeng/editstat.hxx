@@ -88,7 +88,7 @@
     EE_STAT_CRSRLEFTPARA zur Zeit bei Cursorbewegungen und Return.
 */
 
-inline void SetFlags( ULONG& rBits, const ULONG nMask, FASTBOOL bOn )
+inline void SetFlags( ULONG& rBits, const ULONG nMask, bool bOn )
 {
     if ( bOn )
         rBits |= nMask;
@@ -107,7 +107,7 @@ public:
             EditStatus()                { nStatusBits = 0; nControlBits = 0; nPrevPara = 0xFFFF; }
 
     void    Clear()                     { nStatusBits = 0; }
-    void    SetControlBits( ULONG nMask, FASTBOOL bOn )
+    void    SetControlBits( ULONG nMask, bool bOn )
                 { SetFlags( nControlBits, nMask, bOn ); }
 
     ULONG   GetStatusWord() const       { return nStatusBits; }

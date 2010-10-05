@@ -656,7 +656,7 @@ void FmFormObj::SetUnoControlModel( const Reference< com::sun::star::awt::XContr
 }
 
 //------------------------------------------------------------------
-FASTBOOL FmFormObj::EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd )
+bool FmFormObj::EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd )
 {
     bool bResult = SdrUnoObj::EndCreate(rStat, eCmd);
     if ( bResult && SDRCREATE_FORCEEND == eCmd && rStat.GetView() )

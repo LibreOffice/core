@@ -69,12 +69,12 @@ class SVX_DLLPUBLIC SdrGluePoint {
     USHORT   nEscDir;
     USHORT   nId;
     USHORT   nAlign;
-    FASTBOOL bNoPercent:1;
-    FASTBOOL bReallyAbsolute:1; // Temporaer zu setzen fuer Transformationen am Bezugsobjekt
-    FASTBOOL bUserDefined:1; // #i38892#
+    sal_uInt8 bNoPercent:1;
+    sal_uInt8 bReallyAbsolute:1; // Temporaer zu setzen fuer Transformationen am Bezugsobjekt
+    sal_uInt8 bUserDefined:1; // #i38892#
 public:
     SdrGluePoint(): nEscDir(SDRESC_SMART),nId(0),nAlign(0) { bNoPercent=FALSE; bReallyAbsolute=FALSE; bUserDefined=TRUE; }
-    SdrGluePoint(const Point& rNewPos, FASTBOOL bNewPercent=TRUE, USHORT nNewAlign=0): aPos(rNewPos),nEscDir(SDRESC_SMART),nId(0),nAlign(nNewAlign) { bNoPercent=!bNewPercent; bReallyAbsolute=FALSE; bUserDefined=TRUE; }
+    SdrGluePoint(const Point& rNewPos, bool bNewPercent=TRUE, USHORT nNewAlign=0): aPos(rNewPos),nEscDir(SDRESC_SMART),nId(0),nAlign(nNewAlign) { bNoPercent=!bNewPercent; bReallyAbsolute=FALSE; bUserDefined=TRUE; }
     bool operator==(const SdrGluePoint& rCmpGP) const   { return aPos==rCmpGP.aPos && nEscDir==rCmpGP.nEscDir && nId==rCmpGP.nId && nAlign==rCmpGP.nAlign && bNoPercent==rCmpGP.bNoPercent && bReallyAbsolute==rCmpGP.bReallyAbsolute && bUserDefined==rCmpGP.bUserDefined; }
     bool operator!=(const SdrGluePoint& rCmpGP) const   { return !operator==(rCmpGP); }
     const Point& GetPos() const                             { return aPos; }
@@ -83,15 +83,15 @@ public:
     void         SetEscDir(USHORT nNewEsc)                  { nEscDir=nNewEsc; }
     USHORT       GetId() const                              { return nId; }
     void         SetId(USHORT nNewId)                       { nId=nNewId; }
-    bool         IsPercent() const                          { return !bNoPercent; }
-    void         SetPercent(FASTBOOL bOn)                   { bNoPercent=!bOn; }
+    bool         IsPercent() const                          { return bNoPercent ? false : true; }
+    void         SetPercent(bool bOn)                   { bNoPercent  = !bOn; }
     // Temporaer zu setzen fuer Transformationen am Bezugsobjekt
-    FASTBOOL     IsReallyAbsolute() const                   { return bReallyAbsolute; }
-    void         SetReallyAbsolute(FASTBOOL bOn, const SdrObject& rObj);
+    bool         IsReallyAbsolute() const                   { return bReallyAbsolute ? true : false; }
+    void         SetReallyAbsolute(bool bOn, const SdrObject& rObj);
 
     // #i38892#
-    FASTBOOL     IsUserDefined() const                   { return bUserDefined; }
-    void         SetUserDefined(FASTBOOL bNew)           { bUserDefined = bNew; }
+    bool         IsUserDefined() const                      { return bUserDefined ? true : false; }
+    void         SetUserDefined(bool bNew)              { bUserDefined = bNew ? true : false; }
 
     USHORT       GetAlign() const                           { return nAlign; }
     void         SetAlign(USHORT nAlg)                      { nAlign=nAlg; }
@@ -100,7 +100,7 @@ public:
     USHORT       GetVertAlign() const                       { return nAlign&0xFF00; }
     void         SetVertAlign(USHORT nAlg)                  { nAlign=(nAlign&0x00FF)|(nAlg&0xFF00); }
     void         Draw(OutputDevice& rOut, const SdrObject* pObj) const;
-    FASTBOOL     IsHit(const Point& rPnt, const OutputDevice& rOut, const SdrObject* pObj) const;
+    bool         IsHit(const Point& rPnt, const OutputDevice& rOut, const SdrObject* pObj) const;
     void         Invalidate(Window& rWin, const SdrObject* pObj) const;
     Point        GetAbsolutePos(const SdrObject& rObj) const;
     void         SetAbsolutePos(const Point& rNewPos, const SdrObject& rObj);
@@ -111,7 +111,7 @@ public:
     void         Rotate(const Point& rRef, long nWink, double sn, double cs, const SdrObject* pObj);
     void         Mirror(const Point& rRef1, const Point& rRef2, const SdrObject* pObj);
     void         Mirror(const Point& rRef1, const Point& rRef2, long nWink, const SdrObject* pObj);
-    void         Shear (const Point& rRef, long nWink, double tn, FASTBOOL bVShear, const SdrObject* pObj);
+    void         Shear (const Point& rRef, long nWink, double tn, bool bVShear, const SdrObject* pObj);
 };
 
 #define SDRGLUEPOINT_NOTFOUND 0xFFFF
@@ -134,14 +134,14 @@ public:
     SdrGluePoint&       operator[](USHORT nPos)                             { return *GetObject(nPos); }
     const SdrGluePoint& operator[](USHORT nPos) const                       { return *GetObject(nPos); }
     USHORT              FindGluePoint(USHORT nId) const;
-    USHORT              HitTest(const Point& rPnt, const OutputDevice& rOut, const SdrObject* pObj, FASTBOOL bBack=FALSE, FASTBOOL bNext=FALSE, USHORT nId0=0) const;
+    USHORT              HitTest(const Point& rPnt, const OutputDevice& rOut, const SdrObject* pObj, bool bBack=FALSE, bool bNext = false, USHORT nId0=0) const;
     void                Invalidate(Window& rWin, const SdrObject* pObj) const;
     // Temporaer zu setzen fuer Transformationen am Bezugsobjekt
-    void                SetReallyAbsolute(FASTBOOL bOn, const SdrObject& rObj);
+    void                SetReallyAbsolute(bool bOn, const SdrObject& rObj);
     void                Rotate(const Point& rRef, long nWink, double sn, double cs, const SdrObject* pObj);
     void                Mirror(const Point& rRef1, const Point& rRef2, const SdrObject* pObj);
     void                Mirror(const Point& rRef1, const Point& rRef2, long nWink, const SdrObject* pObj);
-    void                Shear (const Point& rRef, long nWink, double tn, FASTBOOL bVShear, const SdrObject* pObj);
+    void                Shear (const Point& rRef, long nWink, double tn, bool bVShear, const SdrObject* pObj);
 };
 
 

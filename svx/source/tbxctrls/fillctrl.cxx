@@ -109,7 +109,7 @@ void SvxFillToolBoxControl::StateChanged(
     USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
 
 {
-    FASTBOOL bEnableControls = FALSE;
+    bool bEnableControls = false;
 
     if ( bIgnoreStatusUpdate )
         return;
@@ -152,7 +152,7 @@ void SvxFillToolBoxControl::StateChanged(
                     pColorItem = (XFillColorItem*) pState->Clone();
 
                     if( eXFS == XFILL_SOLID )
-                        bEnableControls = TRUE;
+                        bEnableControls = true;
                 }
                 else if( nSID == SID_ATTR_FILL_GRADIENT )
                 {
@@ -160,7 +160,7 @@ void SvxFillToolBoxControl::StateChanged(
                     pGradientItem = (XFillGradientItem*) pState->Clone();
 
                     if( eXFS == XFILL_GRADIENT )
-                        bEnableControls = TRUE;
+                        bEnableControls = true;
                 }
                 else if( nSID == SID_ATTR_FILL_HATCH )
                 {
@@ -168,7 +168,7 @@ void SvxFillToolBoxControl::StateChanged(
                     pHatchItem = (XFillHatchItem*) pState->Clone();
 
                     if( eXFS == XFILL_HATCH )
-                        bEnableControls = TRUE;
+                        bEnableControls = true;
                 }
                 else if( nSID == SID_ATTR_FILL_BITMAP )
                 {
@@ -176,7 +176,7 @@ void SvxFillToolBoxControl::StateChanged(
                     pBitmapItem = (XFillBitmapItem*) pState->Clone();
 
                     if( eXFS == XFILL_BITMAP )
-                        bEnableControls = TRUE;
+                        bEnableControls = true;
                 }
             }
             if( bEnableControls )

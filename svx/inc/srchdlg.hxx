@@ -220,9 +220,9 @@ private:
     BOOL            bSearch;
     BOOL            bFormat;
     USHORT          nOptions;
-    FASTBOOL        bSet;
-    FASTBOOL        bReadOnly;
-    FASTBOOL        bConstruct;
+    bool            bSet;
+    bool            bReadOnly;
+    bool            bConstruct;
     ULONG           nModifyFlag;
     String          aStylesStr;
     String          aLayoutStr;

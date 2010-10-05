@@ -142,7 +142,7 @@ protected:
     void DoAction(MetaCommentAction& rAct, GDIMetaFile* pMtf);
 
     void ImportText( const Point& rPos, const XubString& rStr, const MetaAction& rAct );
-    void SetAttributes(SdrObject* pObj, FASTBOOL bForceTextAttr=FALSE);
+    void SetAttributes(SdrObject* pObj, bool bForceTextAttr = false);
     void InsertObj( SdrObject* pObj, sal_Bool bScale = sal_True );
     void MapScaling();
 

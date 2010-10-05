@@ -30,7 +30,7 @@
 #include <svx/svdview.hxx>
 #include <svx/svddrag.hxx>
 
-void SdrDragStat::Clear(FASTBOOL bLeaveOne)
+void SdrDragStat::Clear(bool bLeaveOne)
 {
     void* pP=aPnts.First();
     while (pP!=NULL) {
@@ -84,7 +84,7 @@ void SdrDragStat::NextMove(const Point& rPnt)
     Now()=aBla;
 }
 
-void SdrDragStat::NextPoint(FASTBOOL bSaveReal)
+void SdrDragStat::NextPoint(bool bSaveReal)
 {
     Point aPnt(GetNow());
     if (bSaveReal) aPnt=aRealNow;
@@ -108,7 +108,7 @@ Point SdrDragStat::KorregPos(const Point& rNow, const Point& /*rPrev*/) const
     return aRet;
 }
 
-FASTBOOL SdrDragStat::CheckMinMoved(const Point& rPnt)
+bool SdrDragStat::CheckMinMoved(const Point& rPnt)
 {
     if (!bMinMoved) {
         long dx=rPnt.X()-GetPrev().X(); if (dx<0) dx=-dx;

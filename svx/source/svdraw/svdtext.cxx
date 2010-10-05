@@ -144,7 +144,7 @@ void SdrText::SetModel( SdrModel* pNewModel )
 
         MapUnit aOldUnit(pOldModel->GetScaleUnit());
         MapUnit aNewUnit(pNewModel->GetScaleUnit());
-        FASTBOOL bScaleUnitChanged=aNewUnit!=aOldUnit;
+        bool bScaleUnitChanged=aNewUnit!=aOldUnit;
         // und nun dem OutlinerParaObject einen neuen Pool verpassen
         // !!! Hier muss noch DefTab und RefDevice der beiden Models
         // !!! verglichen werden und dann ggf. AutoGrow zuschlagen !!!

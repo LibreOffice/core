@@ -59,8 +59,8 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create(SvStream &, USHORT) const;
     virtual SvStream&       Store(SvStream &, USHORT nItemVersion) const;
-    virtual int             ScaleMetrics( long nMult, long nDiv );
-    virtual int             HasMetrics() const;
+    virtual bool            ScaleMetrics( long nMult, long nDiv );
+    virtual bool            HasMetrics() const;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,

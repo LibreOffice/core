@@ -390,7 +390,7 @@ const Size& SdrTextObj::GetTextSize() const
     return aTextSize;
 }
 
-FASTBOOL SdrTextObj::IsAutoGrowHeight() const
+bool SdrTextObj::IsAutoGrowHeight() const
 {
     if(!bTextFrame)
         return FALSE; // AutoGrow nur bei TextFrames
@@ -415,7 +415,7 @@ FASTBOOL SdrTextObj::IsAutoGrowHeight() const
     return bRet;
 }
 
-FASTBOOL SdrTextObj::IsAutoGrowWidth() const
+bool SdrTextObj::IsAutoGrowWidth() const
 {
     if(!bTextFrame)
         return FALSE; // AutoGrow nur bei TextFrames
@@ -528,7 +528,7 @@ void SdrTextObj::ImpCheckShear()
 
 void SdrTextObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
-    FASTBOOL bNoTextFrame=!IsTextFrame();
+    bool bNoTextFrame=!IsTextFrame();
     rInfo.bResizeFreeAllowed=bNoTextFrame || aGeo.nDrehWink%9000==0;
     rInfo.bResizePropAllowed=TRUE;
     rInfo.bRotateFreeAllowed=TRUE;
@@ -545,7 +545,7 @@ void SdrTextObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bGradientAllowed = (eFillStyle == XFILL_GRADIENT);
     rInfo.bShearAllowed     =bNoTextFrame;
     rInfo.bEdgeRadiusAllowed=TRUE;
-    FASTBOOL bCanConv=ImpCanConvTextToCurve();
+    bool bCanConv=ImpCanConvTextToCurve();
     rInfo.bCanConvToPath    =bCanConv;
     rInfo.bCanConvToPoly    =bCanConv;
     rInfo.bCanConvToPathLineToArea=bCanConv;
@@ -582,16 +582,16 @@ bool SdrTextObj::HasTextImpl( SdrOutliner* pOutliner )
     return bRet;
 }
 
-FASTBOOL SdrTextObj::HasEditText() const
+bool SdrTextObj::HasEditText() const
 {
     return HasTextImpl( pEdtOutl );
 }
 
 void SdrTextObj::SetPage(SdrPage* pNewPage)
 {
-    FASTBOOL bRemove=pNewPage==NULL && pPage!=NULL;
-    FASTBOOL bInsert=pNewPage!=NULL && pPage==NULL;
-    FASTBOOL bLinked=IsLinkedText();
+    bool bRemove=pNewPage==NULL && pPage!=NULL;
+    bool bInsert=pNewPage!=NULL && pPage==NULL;
+    bool bLinked=IsLinkedText();
 
     if (bLinked && bRemove) {
         ImpLinkAbmeldung();
@@ -637,23 +637,23 @@ void SdrTextObj::SetModel(SdrModel* pNewModel)
     }
 }
 
-FASTBOOL SdrTextObj::NbcSetEckenradius(long nRad)
+bool SdrTextObj::NbcSetEckenradius(long nRad)
 {
     SetObjectItem(SdrEckenradiusItem(nRad));
-    return TRUE;
+    return true;
 }
 
-FASTBOOL SdrTextObj::NbcSetAutoGrowHeight(bool bAuto)
+bool SdrTextObj::NbcSetAutoGrowHeight(bool bAuto)
 {
     if(bTextFrame)
     {
         SetObjectItem(SdrTextAutoGrowHeightItem(bAuto));
-        return TRUE;
+        return true;
     }
-    return FALSE;
+    return false;
 }
 
-FASTBOOL SdrTextObj::NbcSetMinTextFrameHeight(long nHgt)
+bool SdrTextObj::NbcSetMinTextFrameHeight(long nHgt)
 {
     if( bTextFrame && ( !pModel || !pModel->isLocked() ) )          // SJ: #i44922#
     {
@@ -667,32 +667,32 @@ FASTBOOL SdrTextObj::NbcSetMinTextFrameHeight(long nHgt)
             SetObjectItem(SdrTextAutoGrowHeightItem(FALSE));
         }
 
-        return TRUE;
+        return true;
     }
-    return FALSE;
+    return false;
 }
 
-FASTBOOL SdrTextObj::NbcSetMaxTextFrameHeight(long nHgt)
+bool SdrTextObj::NbcSetMaxTextFrameHeight(long nHgt)
 {
     if(bTextFrame)
     {
         SetObjectItem(SdrTextMaxFrameHeightItem(nHgt));
-        return TRUE;
+        return true;
     }
-    return FALSE;
+    return false;
 }
 
-FASTBOOL SdrTextObj::NbcSetAutoGrowWidth(bool bAuto)
+bool SdrTextObj::NbcSetAutoGrowWidth(bool bAuto)
 {
     if(bTextFrame)
     {
         SetObjectItem(SdrTextAutoGrowWidthItem(bAuto));
-        return TRUE;
+        return true;
     }
-    return FALSE;
+    return false;
 }
 
-FASTBOOL SdrTextObj::NbcSetMinTextFrameWidth(long nWdt)
+bool SdrTextObj::NbcSetMinTextFrameWidth(long nWdt)
 {
     if( bTextFrame && ( !pModel || !pModel->isLocked() ) )          // SJ: #i44922#
     {
@@ -706,29 +706,29 @@ FASTBOOL SdrTextObj::NbcSetMinTextFrameWidth(long nWdt)
             SetObjectItem(SdrTextAutoGrowWidthItem(FALSE));
         }
 
-        return TRUE;
+        return true;
     }
-    return FALSE;
+    return false;
 }
 
-FASTBOOL SdrTextObj::NbcSetMaxTextFrameWidth(long nWdt)
+bool SdrTextObj::NbcSetMaxTextFrameWidth(long nWdt)
 {
     if(bTextFrame)
     {
         SetObjectItem(SdrTextMaxFrameWidthItem(nWdt));
-        return TRUE;
+        return true;
     }
-    return FALSE;
+    return false;
 }
 
-FASTBOOL SdrTextObj::NbcSetFitToSize(SdrFitToSizeType eFit)
+bool SdrTextObj::NbcSetFitToSize(SdrFitToSizeType eFit)
 {
     if(bTextFrame)
     {
         SetObjectItem(SdrTextFitToSizeTypeItem(eFit));
-        return TRUE;
+        return true;
     }
-    return FALSE;
+    return false;
 }
 
 void SdrTextObj::ImpSetContourPolygon( SdrOutliner& rOutliner, Rectangle& rAnchorRect, BOOL bLineWidth ) const
@@ -800,7 +800,7 @@ void SdrTextObj::TakeTextAnchorRect(Rectangle& rAnchorRect) const
     long nUpperDist=GetTextUpperDistance();
     long nLowerDist=GetTextLowerDistance();
     Rectangle aAnkRect(aRect); // Rect innerhalb dem geankert wird
-    FASTBOOL bFrame=IsTextFrame();
+    bool bFrame=IsTextFrame();
     if (!bFrame) {
         TakeUnrotatedSnapRect(aAnkRect);
     }
@@ -829,7 +829,7 @@ void SdrTextObj::TakeTextAnchorRect(Rectangle& rAnchorRect) const
     rAnchorRect=aAnkRect;
 }
 
-void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, FASTBOOL bNoEditText,
+void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText,
                                Rectangle* pAnchorRect, BOOL bLineWidth ) const
 {
     Rectangle aAnkRect; // Rect innerhalb dem geankert wird
@@ -839,10 +839,10 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, FAS
     SdrTextAniKind      eAniKind=GetTextAniKind();
     SdrTextAniDirection eAniDirection=GetTextAniDirection();
 
-    FASTBOOL bFitToSize(IsFitToSize());
-    FASTBOOL bContourFrame=IsContourTextFrame();
+    bool bFitToSize(IsFitToSize());
+    bool bContourFrame=IsContourTextFrame();
 
-    FASTBOOL bFrame=IsTextFrame();
+    bool bFrame=IsTextFrame();
     ULONG nStat0=rOutliner.GetControlWord();
     Size aNullSize;
     if (!bContourFrame)
@@ -1043,7 +1043,7 @@ void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextS
 #endif
     }
     unsigned nLoopCount=0;
-    FASTBOOL bNoMoreLoop=FALSE;
+    bool bNoMoreLoop = false;
     long nXDiff0=0x7FFFFFFF;
     long nWantWdt=rShapeSize.Width();
     long nIsWdt=rTextSize.Width();
@@ -1059,8 +1059,8 @@ void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextS
 
     long nX=(nWantWdt*100) /nIsWdt; // X-Stretching berechnen
     long nY=(nWantHgt*100) /nIsHgt; // Y-Stretching berechnen
-    FASTBOOL bChkX=TRUE;
-    FASTBOOL bChkY=TRUE;
+    bool bChkX = true;
+    bool bChkY = true;
     if (bNoStretching) { // #35762# evtl. nur proportional moeglich
         if (nX>nY) { nX=nY; bChkX=FALSE; }
         else { nY=nX; bChkY=FALSE; }
@@ -1068,25 +1068,25 @@ void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextS
 
     while (nLoopCount<5 && !bNoMoreLoop) {
         if (nX<0) nX=-nX;
-        if (nX<1) { nX=1; bNoMoreLoop=TRUE; }
-        if (nX>65535) { nX=65535; bNoMoreLoop=TRUE; }
+        if (nX<1) { nX=1; bNoMoreLoop = true; }
+        if (nX>65535) { nX=65535; bNoMoreLoop = true; }
 
         if (nY<0) nY=-nY;
-        if (nY<1) { nY=1; bNoMoreLoop=TRUE; }
-        if (nY>65535) { nY=65535; bNoMoreLoop=TRUE; }
+        if (nY<1) { nY=1; bNoMoreLoop = true; }
+        if (nY>65535) { nY=65535; bNoMoreLoop = true; }
 
         // exception, there is no text yet (horizontal case)
         if(nIsWdt <= 1)
         {
             nX = nY;
-            bNoMoreLoop = TRUE;
+            bNoMoreLoop = true;
         }
 
         // #87877# exception, there is no text yet (vertical case)
         if(nIsHgt <= 1)
         {
             nY = nX;
-            bNoMoreLoop = TRUE;
+            bNoMoreLoop = true;
         }
 
         rOutliner.SetGlobalCharStretching((USHORT)nX,(USHORT)nY);
@@ -1095,7 +1095,7 @@ void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextS
         long nXDiff=aSiz.Width()-nWantWdt;
         rFitXKorreg=Fraction(nWantWdt,aSiz.Width());
         if (((nXDiff>=nXTolMi || !bChkX) && nXDiff<=nXTolPl) || nXDiff==nXDiff0/*&& Abs(nYDiff)<=nYTol*/) {
-            bNoMoreLoop=TRUE;
+            bNoMoreLoop = true;
         } else {
             // Stretchingfaktoren korregieren
             long nMul=nWantWdt;
@@ -1278,7 +1278,7 @@ basegfx::B2DPolyPolygon SdrTextObj::TakeContour() const
         Rectangle aR;
         TakeTextRect(rOutliner,aR,FALSE,&aAnchor2);
         rOutliner.Clear();
-        FASTBOOL bFitToSize(IsFitToSize());
+        bool bFitToSize(IsFitToSize());
         if (bFitToSize) aR=aAnchor2;
         Polygon aPol(aR);
         if (aGeo.nDrehWink!=0) RotatePoly(aPol,aR.TopLeft(),aGeo.nSin,aGeo.nCos);
@@ -1385,7 +1385,7 @@ boost::shared_ptr< SdrOutliner > SdrTextObj::CreateDrawOutliner()
 }
 
 // #101029#: Extracted from Paint()
-void SdrTextObj::ImpSetupDrawOutlinerForPaint( FASTBOOL         bContourFrame,
+void SdrTextObj::ImpSetupDrawOutlinerForPaint( bool             bContourFrame,
                                                SdrOutliner&     rOutliner,
                                                Rectangle&       rTextRect,
                                                Rectangle&       rAnchorRect,
@@ -1439,7 +1439,7 @@ void SdrTextObj::ImpAutoFitText( SdrOutliner& rOutliner, const Size& rTextSize, 
     USHORT nMinStretchX=0, nMinStretchY=0;
     USHORT aOldStretchXVals[]={0,0,0,0,0,0,0,0,0,0};
     const size_t aStretchArySize=sizeof(aOldStretchXVals)/sizeof(*aOldStretchXVals);
-    for(int i=0; i<aStretchArySize; ++i)
+    for(unsigned int i=0; i<aStretchArySize; ++i)
     {
         const Size aCurrTextSize = rOutliner.CalcTextSize();
         double fFactor(1.0);
@@ -1490,7 +1490,7 @@ void SdrTextObj::UpdateOutlinerFormatting( SdrOutliner& rOutl, Rectangle& rPaint
     Rectangle aAnchorRect;
     Fraction aFitXKorreg(1,1);
 
-    FASTBOOL bContourFrame=IsContourTextFrame();
+    bool bContourFrame=IsContourTextFrame();
 
     ImpSetupDrawOutlinerForPaint( bContourFrame, rOutl, aTextRect, aAnchorRect, rPaintRect, aFitXKorreg );
 
@@ -1928,21 +1928,21 @@ long SdrTextObj::GetMaxTextFrameWidth() const
     return ((SdrTextMaxFrameWidthItem&)(GetObjectItemSet().Get(SDRATTR_TEXT_MAXFRAMEWIDTH))).GetValue();
 }
 
-FASTBOOL SdrTextObj::IsFontwork() const
+bool SdrTextObj::IsFontwork() const
 {
-    return (bTextFrame) ? FALSE // Default ist FALSE
+    return (bTextFrame) ? false // Default ist FALSE
         : ((XFormTextStyleItem&)(GetObjectItemSet().Get(XATTR_FORMTXTSTYLE))).GetValue()!=XFT_NONE;
 }
 
-FASTBOOL SdrTextObj::IsHideContour() const
+bool SdrTextObj::IsHideContour() const
 {
-    return (bTextFrame) ? FALSE // Default ist: Nein, kein HideContour; HideContour nicht bei TextFrames
+    return (bTextFrame) ? false // Default ist: Nein, kein HideContour; HideContour nicht bei TextFrames
         : ((XFormTextHideFormItem&)(GetObjectItemSet().Get(XATTR_FORMTXTHIDEFORM))).GetValue();
 }
 
-FASTBOOL SdrTextObj::IsContourTextFrame() const
+bool SdrTextObj::IsContourTextFrame() const
 {
-    return (bTextFrame) ? FALSE // ContourFrame nicht bei normalen TextFrames
+    return (bTextFrame) ? false // ContourFrame nicht bei normalen TextFrames
         : ((SdrTextContourFrameItem&)(GetObjectItemSet().Get(SDRATTR_TEXT_CONTOURFRAME))).GetValue();
 }
 
@@ -2054,12 +2054,12 @@ bool SdrTextObj::IsTextAnimationAllowed() const
     return mbTextAnimationAllowed;
 }
 
-FASTBOOL SdrTextObj::IsAutoFit() const
+bool SdrTextObj::IsAutoFit() const
 {
     return GetFitToSize()==SDRTEXTFIT_AUTOFIT;
 }
 
-FASTBOOL SdrTextObj::IsFitToSize() const
+bool SdrTextObj::IsFitToSize() const
 {
     const SdrFitToSizeType eFit=GetFitToSize();
     return (eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES);
