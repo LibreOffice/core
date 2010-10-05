@@ -3,3 +3,4 @@
 ..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*
 ..\source\fileacc.xml %_DEST%\xml%_EXT%\fileacc.xml
+..\%__SRC%\misc\fileacc.component %_DEST%\xml%_EXT%\fileacc.component

@@ -486,68 +486,6 @@ extern "C"
     }
 
     /**
-     * This function creates an implementation section in the registry and another subkey
-     *
-     * for each supported service.
-     * @param pServiceManager   the service manager
-     * @param pRegistryKey      the registry key
-     */
-    sal_Bool SAL_CALL component_writeInfo( lang::XMultiServiceFactory * pServiceManager,
-        registry::XRegistryKey * pRegistryKey )
-    {
-        if (::cppu::component_writeInfoHelper( pServiceManager, pRegistryKey,
-            ::scripting_runtimemgr::s_entries ))
-        {
-            try
-            {
-                // register RuntimeManager singleton
-
-                registry::XRegistryKey * pKey =
-                    reinterpret_cast< registry::XRegistryKey * >(pRegistryKey);
-
-                Reference< registry::XRegistryKey > xKey(
-                    pKey->createKey(
-
-                    OUSTR("drafts.com.sun.star.script.framework.runtime.ScriptRuntimeManager/UNO/SINGLETONS/drafts.com.sun.star.script.framework.runtime.theScriptRuntimeManager")));
-                    xKey->setStringValue( OUSTR("drafts.com.sun.star.script.framework.runtime.ScriptRuntimeManager") );
-
-                // ScriptStorage Mangaer singleton
-
-                xKey = pKey->createKey(
-                    OUSTR("drafts.com.sun.star.script.framework.storage.ScriptStorageManager/UNO/SINGLETONS/drafts.com.sun.star.script.framework.storage.theScriptStorageManager"));
-                 xKey->setStringValue( OUSTR("drafts.com.sun.star.script.framework.storage.ScriptStorageManager") );
-                // Singleton entries are not handled by the setup process
-                // below is the only alternative at the momement which
-                // is to programmatically do this.
-
-                // "Java" Runtime singleton entry
-
-                xKey = pKey->createKey(
-                    OUSTR("com.sun.star.scripting.runtime.java.ScriptRuntimeForJava$_ScriptRuntimeForJava/UNO/SINGLETONS/drafts.com.sun.star.script.framework.runtime.theScriptRuntimeForJava"));
-                 xKey->setStringValue( OUSTR("drafts.com.sun.star.script.framework.runtime.ScriptRuntimeForJava") );
-
-                // "JavaScript" Runtime singleton entry
-
-                xKey = pKey->createKey(
-                    OUSTR("com.sun.star.scripting.runtime.javascript.ScriptRuntimeForJavaScript$_ScriptRuntimeForJavaScript/UNO/SINGLETONS/drafts.com.sun.star.script.framework.runtime.theScriptRuntimeForJavaScript"));
-                 xKey->setStringValue( OUSTR("drafts.com.sun.star.script.framework.runtime.ScriptRuntimeForJavaScript") );
-
-                // "BeanShell" Runtime singleton entry
-
-                xKey = pKey->createKey(
-                    OUSTR("com.sun.star.scripting.runtime.beanshell.ScriptRuntimeForBeanShell$_ScriptRuntimeForBeanShell/UNO/SINGLETONS/drafts.com.sun.star.script.framework.runtime.theScriptRuntimeForBeanShell"));
-                 xKey->setStringValue( OUSTR("drafts.com.sun.star.script.framework.runtime.ScriptRuntimeForBeanShell") );
-
-                return sal_True;
-            }
-            catch (Exception & exc)
-            {
-            }
-        }
-        return sal_False;
-    }
-
-    /**
      * This function is called to get service factories for an implementation.
      *
      * @param pImplName       name of implementation
