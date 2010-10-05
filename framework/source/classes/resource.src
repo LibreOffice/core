@@ -124,7 +124,7 @@ String STR_TOOLBAR_TITLE_ADDON
 
 String STR_STATUSBAR_LOGOTEXT
 {
-    Text [ en-US ] = "A %PRODUCTNAME product by Oracle";
+    Text [ en-US ] = "A %PRODUCTNAME product by %OOOVENDOR";
 };
 
 // ***********************************************************************
