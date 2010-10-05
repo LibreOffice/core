@@ -53,6 +53,177 @@
 #include "sheetevents.hxx"
 #include "segmenttree.hxx"
 
+#include <vector>
+
+using ::std::vector;
+
+namespace {
+
+ScProgress* GetProgressBar(
+    SCSIZE nCount, SCSIZE nTotalCount, ScProgress* pOuterProgress, ScDocument* pDoc)
+{
+    if (nTotalCount < 1000)
+    {
+        // if the total number of rows is less than 1000, don't even bother
+        // with the progress bar because drawing progress bar can be very
+        // expensive especially in GTK.
+        return NULL;
+    }
+
+    if (pOuterProgress)
+        return pOuterProgress;
+
+    if (nCount > 1)
+        return new ScProgress(
+            pDoc->GetDocumentShell(), ScGlobal::GetRscString(STR_PROGRESS_HEIGHTING), nTotalCount);
+
+    return NULL;
+}
+
+void GetOptimalHeightsInColumn(
+    ScColumn* pCol, SCROW nStartRow, SCROW nEndRow, vector<USHORT>& aHeights,
+    OutputDevice* pDev, double nPPTX, double nPPTY, const Fraction& rZoomX, const Fraction& rZoomY, bool bForce,
+    ScProgress* pProgress, sal_uInt32 nProgressStart)
+{
+    SCSIZE nCount = static_cast<SCSIZE>(nEndRow-nStartRow+1);
+
+    //  zuerst einmal ueber den ganzen Bereich
+    //  (mit der letzten Spalte in der Hoffnung, dass die am ehesten noch auf
+    //   Standard formatiert ist)
+
+    pCol[MAXCOL].GetOptimalHeight(
+            nStartRow, nEndRow, &aHeights[0], pDev, nPPTX, nPPTY, rZoomX, rZoomY, bForce, 0, 0 );
+
+    //  daraus Standardhoehe suchen, die im unteren Bereich gilt
+
+    USHORT nMinHeight = aHeights[nCount-1];
+    SCSIZE nPos = nCount-1;
+    while ( nPos && aHeights[nPos-1] >= nMinHeight )
+        --nPos;
+    SCROW nMinStart = nStartRow + nPos;
+
+    ULONG nWeightedCount = 0;
+    for (SCCOL nCol=0; nCol<MAXCOL; nCol++)     // MAXCOL schon oben
+    {
+        pCol[nCol].GetOptimalHeight(
+            nStartRow, nEndRow, &aHeights[0], pDev, nPPTX, nPPTY, rZoomX, rZoomY, bForce,
+            nMinHeight, nMinStart );
+
+        if (pProgress)
+        {
+            ULONG nWeight = pCol[nCol].GetWeightedCount();
+            if (nWeight)        // nochmal denselben Status muss auch nicht sein
+            {
+                nWeightedCount += nWeight;
+                pProgress->SetState( nWeightedCount + nProgressStart );
+            }
+        }
+    }
+}
+
+struct OptimalHeightsFuncObjBase
+{
+    virtual ~OptimalHeightsFuncObjBase() {}
+    virtual bool operator() (SCROW nStartRow, SCROW nEndRow, USHORT nHeight) = 0;
+};
+
+struct SetRowHeightOnlyFunc : public OptimalHeightsFuncObjBase
+{
+    ScTable* mpTab;
+    SetRowHeightOnlyFunc(ScTable* pTab) :
+        mpTab(pTab)
+    {}
+
+    virtual bool operator() (SCROW nStartRow, SCROW nEndRow, USHORT nHeight)
+    {
+        mpTab->SetRowHeightOnly(nStartRow, nEndRow, nHeight);
+        return false;
+    }
+};
+
+struct SetRowHeightRangeFunc : public OptimalHeightsFuncObjBase
+{
+    ScTable* mpTab;
+    double mnPPTX;
+    double mnPPTY;
+
+    SetRowHeightRangeFunc(ScTable* pTab, double nPPTX, double nPPTY) :
+        mpTab(pTab),
+        mnPPTX(nPPTX),
+        mnPPTY(nPPTY)
+    {}
+
+    virtual bool operator() (SCROW nStartRow, SCROW nEndRow, USHORT nHeight)
+    {
+        return mpTab->SetRowHeightRange(nStartRow, nEndRow, nHeight, mnPPTX, mnPPTY);
+    }
+};
+
+bool SetOptimalHeightsToRows(OptimalHeightsFuncObjBase& rFuncObj,
+    ScBitMaskCompressedArray<SCROW, BYTE>* pRowFlags, SCROW nStartRow, SCROW nEndRow, USHORT nExtra,
+    const vector<USHORT>& aHeights, bool bForce)
+{
+    SCSIZE nCount = static_cast<SCSIZE>(nEndRow-nStartRow+1);
+    bool bChanged = false;
+    SCROW nRngStart = 0;
+    SCROW nRngEnd = 0;
+    USHORT nLast = 0;
+    for (SCSIZE i=0; i<nCount; i++)
+    {
+        size_t nIndex;
+        SCROW nRegionEndRow;
+        BYTE nRowFlag = pRowFlags->GetValue( nStartRow+i, nIndex, nRegionEndRow );
+        if ( nRegionEndRow > nEndRow )
+            nRegionEndRow = nEndRow;
+        SCSIZE nMoreRows = nRegionEndRow - ( nStartRow+i );     // additional equal rows after first
+
+        bool bAutoSize = ((nRowFlag & CR_MANUALSIZE) == 0);
+        if ( bAutoSize || bForce )
+        {
+            if (nExtra)
+            {
+                if (bAutoSize)
+                    pRowFlags->SetValue( nStartRow+i, nRegionEndRow, nRowFlag | CR_MANUALSIZE);
+            }
+            else if (!bAutoSize)
+                pRowFlags->SetValue( nStartRow+i, nRegionEndRow, nRowFlag & ~CR_MANUALSIZE);
+
+            for (SCSIZE nInner = i; nInner <= i + nMoreRows; ++nInner)
+            {
+                if (nLast)
+                {
+                    if (aHeights[nInner]+nExtra == nLast)
+                        nRngEnd = nStartRow+nInner;
+                    else
+                    {
+                        bChanged |= rFuncObj(nRngStart, nRngEnd, nLast);
+                        nLast = 0;
+                    }
+                }
+                if (!nLast)
+                {
+                    nLast = aHeights[nInner]+nExtra;
+                    nRngStart = nStartRow+nInner;
+                    nRngEnd = nStartRow+nInner;
+                }
+            }
+        }
+        else
+        {
+            if (nLast)
+                bChanged |= rFuncObj(nRngStart, nRngEnd, nLast);
+            nLast = 0;
+        }
+        i += nMoreRows;     // already handled - skip
+    }
+    if (nLast)
+        bChanged |= rFuncObj(nRngStart, nRngEnd, nLast);
+
+    return bChanged;
+}
+
+}
+
 // -----------------------------------------------------------------------
 
 ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const String& rNewName,
@@ -290,120 +461,53 @@ BOOL ScTable::SetOptimalHeight( SCROW nStartRow, SCROW nEndRow, USHORT nExtra,
         return FALSE;
     }
 
-    BOOL    bChanged = FALSE;
     SCSIZE  nCount = static_cast<SCSIZE>(nEndRow-nStartRow+1);
 
-    ULONG nTotalCount = GetWeightedCount();
-    ScProgress* pProgress = NULL;
-    if (nTotalCount >= 1000)
-    {
-        // if the total number of rows is less than 1000, don't even bother
-        // with the progress bar because drawing progress bar can be very
-        // expensive especially in GTK.
+    ScProgress* pProgress = GetProgressBar(nCount, GetWeightedCount(), pOuterProgress, pDocument);
 
-        if ( pOuterProgress )
-            pProgress = pOuterProgress;
-        else if ( nCount > 1 )
-            pProgress = new ScProgress(
-                pDocument->GetDocumentShell(),
-                ScGlobal::GetRscString(STR_PROGRESS_HEIGHTING), nTotalCount );
-    }
+    vector<USHORT> aHeights(nCount, 0);
 
-    USHORT* pHeight = new USHORT[nCount];                   // Twips !
-    memset( pHeight, 0, sizeof(USHORT) * nCount );
+    GetOptimalHeightsInColumn(
+        aCol, nStartRow, nEndRow, aHeights, pDev, nPPTX, nPPTY, rZoomX, rZoomY, bForce,
+        pProgress, nProgressStart);
 
-    //  zuerst einmal ueber den ganzen Bereich
-    //  (mit der letzten Spalte in der Hoffnung, dass die am ehesten noch auf
-    //   Standard formatiert ist)
+    SetRowHeightRangeFunc aFunc(this, nPPTX, nPPTY);
+    bool bChanged = SetOptimalHeightsToRows(
+        aFunc, pRowFlags, nStartRow, nEndRow, nExtra, aHeights, bForce);
 
-    aCol[MAXCOL].GetOptimalHeight(
-            nStartRow, nEndRow, pHeight, pDev, nPPTX, nPPTY, rZoomX, rZoomY, bForce, 0, 0 );
-
-    //  daraus Standardhoehe suchen, die im unteren Bereich gilt
-
-    USHORT nMinHeight = pHeight[nCount-1];
-    SCSIZE nPos = nCount-1;
-    while ( nPos && pHeight[nPos-1] >= nMinHeight )
-        --nPos;
-    SCROW nMinStart = nStartRow + nPos;
-
-    ULONG nWeightedCount = 0;
-    for (SCCOL nCol=0; nCol<MAXCOL; nCol++)     // MAXCOL schon oben
-    {
-        aCol[nCol].GetOptimalHeight(
-            nStartRow, nEndRow, pHeight, pDev, nPPTX, nPPTY, rZoomX, rZoomY, bForce,
-            nMinHeight, nMinStart );
-
-        if (pProgress)
-        {
-            ULONG nWeight = aCol[nCol].GetWeightedCount();
-            if (nWeight)        // nochmal denselben Status muss auch nicht sein
-            {
-                nWeightedCount += nWeight;
-                pProgress->SetState( nWeightedCount + nProgressStart );
-            }
-        }
-    }
-
-    SCROW nRngStart = 0;
-    SCROW nRngEnd = 0;
-    USHORT nLast = 0;
-    for (SCSIZE i=0; i<nCount; i++)
-    {
-        size_t nIndex;
-        SCROW nRegionEndRow;
-        BYTE nRowFlag = pRowFlags->GetValue( nStartRow+i, nIndex, nRegionEndRow );
-        if ( nRegionEndRow > nEndRow )
-            nRegionEndRow = nEndRow;
-        SCSIZE nMoreRows = nRegionEndRow - ( nStartRow+i );     // additional equal rows after first
-
-        bool bAutoSize = ((nRowFlag & CR_MANUALSIZE) == 0);
-        if ( bAutoSize || bForce )
-        {
-            if (nExtra)
-            {
-                if (bAutoSize)
-                    pRowFlags->SetValue( nStartRow+i, nRegionEndRow, nRowFlag | CR_MANUALSIZE);
-            }
-            else if (!bAutoSize)
-                pRowFlags->SetValue( nStartRow+i, nRegionEndRow, nRowFlag & ~CR_MANUALSIZE);
-
-            for (SCSIZE nInner = i; nInner <= i + nMoreRows; ++nInner)
-            {
-                if (nLast)
-                {
-                    if (pHeight[nInner]+nExtra == nLast)
-                        nRngEnd = nStartRow+nInner;
-                    else
-                    {
-                        bChanged |= SetRowHeightRange( nRngStart, nRngEnd, nLast, nPPTX, nPPTY );
-                        nLast = 0;
-                    }
-                }
-                if (!nLast)
-                {
-                    nLast = pHeight[nInner]+nExtra;
-                    nRngStart = nStartRow+nInner;
-                    nRngEnd = nStartRow+nInner;
-                }
-            }
-        }
-        else
-        {
-            if (nLast)
-                bChanged |= SetRowHeightRange( nRngStart, nRngEnd, nLast, nPPTX, nPPTY );
-            nLast = 0;
-        }
-        i += nMoreRows;     // already handled - skip
-    }
-    if (nLast)
-        bChanged |= SetRowHeightRange( nRngStart, nRngEnd, nLast, nPPTX, nPPTY );
-
-    delete[] pHeight;
     if ( pProgress != pOuterProgress )
         delete pProgress;
 
     return bChanged;
+}
+
+void ScTable::SetOptimalHeightOnly( SCROW nStartRow, SCROW nEndRow, USHORT nExtra,
+                                OutputDevice* pDev,
+                                double nPPTX, double nPPTY,
+                                const Fraction& rZoomX, const Fraction& rZoomY,
+                                BOOL bForce, ScProgress* pOuterProgress, ULONG nProgressStart )
+{
+    DBG_ASSERT( nExtra==0 || bForce, "autom. OptimalHeight mit Extra" );
+
+    if ( !pDocument->IsAdjustHeightEnabled() )
+        return;
+
+    SCSIZE  nCount = static_cast<SCSIZE>(nEndRow-nStartRow+1);
+
+    ScProgress* pProgress = GetProgressBar(nCount, GetWeightedCount(), pOuterProgress, pDocument);
+
+    vector<USHORT> aHeights(nCount, 0);
+
+    GetOptimalHeightsInColumn(
+        aCol, nStartRow, nEndRow, aHeights, pDev, nPPTX, nPPTY, rZoomX, rZoomY, bForce,
+        pProgress, nProgressStart);
+
+    SetRowHeightOnlyFunc aFunc(this);
+    SetOptimalHeightsToRows(
+        aFunc, pRowFlags, nStartRow, nEndRow, nExtra, aHeights, bForce);
+
+    if ( pProgress != pOuterProgress )
+        delete pProgress;
 }
 
 BOOL ScTable::GetCellArea( SCCOL& rEndCol, SCROW& rEndRow ) const

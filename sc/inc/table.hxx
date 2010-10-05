@@ -606,6 +606,14 @@ public:
                                     const Fraction& rZoomX, const Fraction& rZoomY,
                                     BOOL bForce,
                                     ScProgress* pOuterProgress = NULL, ULONG nProgressStart = 0 );
+
+    void        SetOptimalHeightOnly(SCROW nStartRow, SCROW nEndRow, USHORT nExtra,
+                                     OutputDevice* pDev,
+                                     double nPPTX, double nPPTY,
+                                     const Fraction& rZoomX, const Fraction& rZoomY,
+                                     BOOL bForce,
+                                     ScProgress* pOuterProgress = NULL, ULONG nProgressStart = 0 );
+
     long        GetNeededSize( SCCOL nCol, SCROW nRow,
                                     OutputDevice* pDev,
                                     double nPPTX, double nPPTY,

@@ -3344,8 +3344,9 @@ void ScDocument::UpdateAllRowHeights( OutputDevice* pDev, double nPPTX, double n
     for ( SCTAB nTab=0; nTab<=MAXTAB; nTab++ )
         if ( pTab[nTab] && ( !pTabMark || pTabMark->GetTableSelect(nTab) ) )
         {
-            pTab[nTab]->SetOptimalHeight( 0, MAXROW, 0,
+            pTab[nTab]->SetOptimalHeightOnly( 0, MAXROW, 0,
                         pDev, nPPTX, nPPTY, rZoomX, rZoomY, FALSE, &aProgress, nProgressStart );
+            pTab[nTab]->SetDrawPageSize(true, true);
             nProgressStart += pTab[nTab]->GetWeightedCount();
         }
 }
