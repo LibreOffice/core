@@ -20,3 +20,6 @@ dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\bin%_EXT%\b
 
 *.xml %_DEST%\xml%_EXT%\*.xml
 
+..\%__SRC%\misc\fsstorage.component %_DEST%\xml%_EXT%\fsstorage.component
+..\%__SRC%\misc\passwordcontainer.component %_DEST%\xml%_EXT%\passwordcontainer.component
+..\%__SRC%\misc\svl.component %_DEST%\xml%_EXT%\svl.component

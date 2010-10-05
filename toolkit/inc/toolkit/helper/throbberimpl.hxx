@@ -43,7 +43,7 @@ namespace toolkit
     class Throbber_Impl
     {
     private:
-        NAMESPACE_VOS(IMutex)&  mrMutex;    // Reference to SolarMutex
+        vos::IMutex&    mrMutex;    // Reference to SolarMutex
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > > maImageList;
         ::com::sun::star::uno::Reference< VCLXWindow > mxParent;
 
@@ -55,7 +55,7 @@ namespace toolkit
 
         DECL_LINK( TimeOutHdl, Throbber_Impl* );
 
-        NAMESPACE_VOS(IMutex)&  GetMutex() { return mrMutex; }
+        vos::IMutex&    GetMutex() { return mrMutex; }
 
     public:
              Throbber_Impl( ::com::sun::star::uno::Reference< VCLXWindow > xParent,

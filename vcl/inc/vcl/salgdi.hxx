@@ -233,13 +233,13 @@ public:
     // release the fonts
     void                   ReleaseFonts() { SetFont( NULL, 0 ); }
     // get the current font's metrics
-    virtual void            GetFontMetric( ImplFontMetricData* ) = 0;
+    virtual void            GetFontMetric( ImplFontMetricData*, int nFallbackLevel = 0 ) = 0;
 
     // get kernign pairs of the current font
     // return only PairCount if (pKernPairs == NULL)
     virtual ULONG           GetKernPairs( ULONG nMaxPairCount, ImplKernPairData* ) = 0;
     // get the repertoire of the current font
-    virtual ImplFontCharMap* GetImplFontCharMap() const = 0;
+    virtual const ImplFontCharMap* GetImplFontCharMap() const = 0;
     // graphics must fill supplied font list
     virtual void            GetDevFontList( ImplDevFontList* ) = 0;
     // graphics should call ImplAddDevFontSubstitute on supplied
