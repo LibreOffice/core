@@ -28,9 +28,8 @@
 #ifndef _SVTOOLS_IODLGIMPL_HRC
 #define _SVTOOLS_IODLGIMPL_HRC
 
-#ifndef _SVTOOLS_HRC
 #include "svtools/svtools.hrc"
-#endif
+#include "svtools/helpid.hrc"
 
 // ModalDialog DLG_SVT_EXPLORERFILE
 
@@ -85,23 +84,6 @@
 
 #define SID_SFX_START                       5000
 #define SID_OPENURL                     (SID_SFX_START + 596)
-
-#define HID_FILEDLG_STANDARD                               "FPICKER_HID_FILEDLG_STANDARD"
-#define HID_FILEDLG_MANAGER                                "FPICKER_HID_FILEDLG_MANAGER"
-#define HID_FILEDLG_URL                                    "FPICKER_HID_FILEDLG_URL"
-#define HID_FILEDLG_USE_PASSWD                             "FPICKER_HID_FILEDLG_USE_PASSWD"
-#define HID_FILEDLG_READ_ONLY                              "FPICKER_HID_FILEDLG_READ_ONLY"
-
-#define HID_FILEDLG_AUTOCOMPLETEBOX                        "FPICKER_HID_FILEDLG_AUTOCOMPLETEBOX"
-#define HID_FILEDLG_SAVE_BTN                               "FPICKER_HID_FILEDLG_SAVE_BTN"
-#define HID_FILEDLG_SAVE_FILENAME                          "FPICKER_HID_FILEDLG_SAVE_FILENAME"
-#define HID_FILEDLG_SAVE_FILETYPE                          "FPICKER_HID_FILEDLG_SAVE_FILETYPE"
-#define HID_FILEDLG_INSERT_BTN                             "FPICKER_HID_FILEDLG_INSERT_BTN"
-#define HID_FILEDLG_PATH_BTN                               "FPICKER_HID_FILEDLG_PATH_BTN"
-#define HID_FILEDLG_PATH_FILENAME                          "FPICKER_HID_FILEDLG_PATH_FILENAME"
-#define HID_FILEDLG_FOLDER_BTN                             "FPICKER_HID_FILEDLG_FOLDER_BTN"
-#define HID_FILEDLG_FOLDER_FILENAME                        "FPICKER_HID_FILEDLG_FOLDER_FILENAME"
-#define HID_FILEDLG_SRCHFOLDER_BTN                         "FPICKER_HID_FILEDLG_SRCHFOLDER_BTN"
 
 #endif
 
