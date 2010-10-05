@@ -63,6 +63,11 @@ using ::rtl::OUString;
 // STATIC DATA -----------------------------------------------------------
 // ============================================================================
 
+ScDPName::ScDPName(const OUString& rName, const OUString& rLayoutName) :
+    maName(rName), maLayoutName(rLayoutName) {}
+
+// ============================================================================
+
 ScDPLabelData::Member::Member() :
     mbVisible(true),
     mbShowDetails(true)

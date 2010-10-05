@@ -68,6 +68,7 @@ private:
 
 class ScDPFunctionDlg : public ModalDialog
 {
+    typedef ::std::hash_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash > NameMapType;
 public:
     explicit            ScDPFunctionDlg( Window* pParent, const ScDPLabelDataVec& rLabelVec,
                             const ScDPLabelData& rLabelData, const ScDPFuncData& rFuncData );
@@ -77,6 +78,12 @@ public:
 
 private:
     void                Init( const ScDPLabelData& rLabelData, const ScDPFuncData& rFuncData );
+
+    const ::rtl::OUString& GetBaseFieldName(const ::rtl::OUString& rLayoutName) const;
+    const ::rtl::OUString& GetBaseItemName(const ::rtl::OUString& rLayoutName) const;
+
+    /** Searches for a listbox entry, starts search at specified position. */
+    sal_uInt16 FindBaseItemPos( const String& rEntry, USHORT nStartPos ) const;
 
     DECL_LINK( SelectHdl, ListBox* );
     DECL_LINK( DblClickHdl, MultiListBox* );
@@ -97,6 +104,9 @@ private:
     CancelButton        maBtnCancel;
     HelpButton          maBtnHelp;
     MoreButton          maBtnMore;
+
+    NameMapType         maBaseFieldNameMap; // cache for base field display -> original name.
+    NameMapType         maBaseItemNameMap;  // cache for base item display -> original name.
 
     ScDPListBoxWrapper  maLbTypeWrp;        /// Wrapper for direct usage of API constants.
 
@@ -160,6 +170,11 @@ private:
     void                Init( const ScDPNameVec& rDataFields, bool bEnableLayout );
     void                InitHideListBox();
 
+    const ::rtl::OUString& GetFieldName(const ::rtl::OUString& rLayoutName) const;
+
+    /** Searches for a listbox entry, starts search at specified position. */
+    sal_uInt16 FindListBoxEntry( const ListBox& rLBox, const String& rEntry, USHORT nStartPos ) const;
+
     DECL_LINK( RadioClickHdl, RadioButton* );
     DECL_LINK( CheckHdl, CheckBox* );
     DECL_LINK( SelectHdl, ListBox* );
@@ -195,6 +210,9 @@ private:
 
     ScDPObject&         mrDPObj;            /// The DataPilot object (for member names).
     ScDPLabelData       maLabelData;        /// Cache for members data.
+
+    typedef ::std::hash_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash > NameMapType;
+    NameMapType maDataFieldNameMap; /// Cache for displayed name to field name mapping.
 };
 
 // ============================================================================

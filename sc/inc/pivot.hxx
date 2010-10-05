@@ -133,6 +133,16 @@ typedef PivotField          PivotPageFieldArr[PIVOT_MAXPAGEFIELD];
 
 //------------------------------------------------------------------------
 
+struct ScDPName
+{
+    ::rtl::OUString     maName;         /// Original name of the dimension.
+    ::rtl::OUString     maLayoutName;   /// Layout name (display name)
+
+    explicit ScDPName(const ::rtl::OUString& rName, const ::rtl::OUString& rLayoutName);
+};
+
+// ============================================================================
+
 struct ScDPLabelData
 {
     ::rtl::OUString     maName;         /// Original name of the dimension.
@@ -190,7 +200,7 @@ struct ScDPFuncData
 // ============================================================================
 
 typedef std::vector< ScDPLabelData > ScDPLabelDataVec;
-typedef std::vector< String > ScDPNameVec;
+typedef std::vector<ScDPName> ScDPNameVec;
 
 // ============================================================================
 
