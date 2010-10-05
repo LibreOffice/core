@@ -360,11 +360,12 @@ struct AlignmentModel
 struct ApiAlignmentData
 {
     typedef ::com::sun::star::table::CellHoriJustify ApiCellHoriJustify;
-    typedef ::com::sun::star::table::CellVertJustify ApiCellVertJustify;
     typedef ::com::sun::star::table::CellOrientation ApiCellOrientation;
 
     ApiCellHoriJustify  meHorJustify;       /// Horizontal alignment.
-    ApiCellVertJustify  meVerJustify;       /// Vertical alignment.
+    sal_Int32           mnHorJustifyMethod;
+    sal_Int32           mnVerJustify;       /// Vertical alignment.
+    sal_Int32           mnVerJustifyMethod;
     ApiCellOrientation  meOrientation;      /// Normal or stacked text.
     sal_Int32           mnRotation;         /// Text rotation angle.
     sal_Int16           mnWritingMode;      /// CTL text direction.

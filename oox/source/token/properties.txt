@@ -195,6 +195,7 @@ Height
 HelpText
 HideInactiveSelection
 HoriJustify
+HoriJustifyMethod
 HorizontalSplitMode
 HorizontalSplitPositionTwips
 IgnoreBlankCells
@@ -445,6 +446,7 @@ VScroll
 Validation
 VaryColorsByPoint
 VertJustify
+VertJustifyMethod
 VerticalAlign
 VerticalSplitMode
 VerticalSplitPositionTwips
