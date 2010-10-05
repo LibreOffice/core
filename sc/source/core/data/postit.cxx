@@ -762,10 +762,13 @@ void ScPostIt::RemoveCaption()
         {
             pDrawPage->RecalcObjOrdNums();
             // create drawing undo action (before removing the object to have valid draw page in undo action)
-            if( pDrawLayer && pDrawLayer->IsRecording() )
+            bool bRecording = ( pDrawLayer && pDrawLayer->IsRecording() );
+            if( bRecording )
                 pDrawLayer->AddCalcUndo( pDrawLayer->GetSdrUndoFactory().CreateUndoDeleteObject( *maNoteData.mpCaption ) );
             // remove the object from the drawing page, delete if undo is disabled
-            pDrawPage->RemoveObject( maNoteData.mpCaption->GetOrdNum() );
+            SdrObject* pObj = pDrawPage->RemoveObject( maNoteData.mpCaption->GetOrdNum() );
+            if( !bRecording )
+                SdrObject::Free( pObj );
         }
     }
     maNoteData.mpCaption = 0;
