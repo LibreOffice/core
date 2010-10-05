@@ -55,7 +55,7 @@
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 
-#include <rtl/textench.h>
+#include <rtl/textenc.h>
 #include <rtl/uri.h>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
