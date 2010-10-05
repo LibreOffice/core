@@ -891,8 +891,8 @@ BOOL ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, BOOL bCopy, BOOL bRec
             {
                 SvShorts aSrcList;
                 SvShorts aDestList;
-                aSrcList.Insert(nSrcTab,0);
-                aDestList.Insert(nDestTab,0);
+                aSrcList.push_front(nSrcTab);
+                aDestList.push_front(nDestTab);
                 GetUndoManager()->AddUndoAction(
                         new ScUndoCopyTab( this, aSrcList, aDestList ) );
             }
@@ -950,8 +950,8 @@ BOOL ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, BOOL bCopy, BOOL bRec
         {
             SvShorts aSrcList;
             SvShorts aDestList;
-            aSrcList.Insert(nSrcTab,0);
-            aDestList.Insert(nDestTab,0);
+            aSrcList.push_front(nSrcTab);
+            aDestList.push_front(nDestTab);
             GetUndoManager()->AddUndoAction(
                     new ScUndoMoveTab( this, aSrcList, aDestList ) );
         }
