@@ -82,3 +82,11 @@ SHL1STDLIBS= \
 
 .INCLUDE :  target.mk
 
+
+ALLTAR : $(MISC)/unordf.component
+
+$(MISC)/unordf.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        unordf.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt unordf.component
