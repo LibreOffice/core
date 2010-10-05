@@ -62,7 +62,6 @@
 #include <tools/postwin.h>
 #include <odma_lib.hxx>
 #endif
-//#include <tools/solar.hrc>
 #include <dispatch/uieventloghelper.hxx>
 #include <vos/mutex.hxx>
 

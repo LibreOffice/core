@@ -28,10 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_formula.hxx"
 
-
-
-// INCLUDE ---------------------------------------------------------------
-
 #if STLPORT_VERSION<321
 #include <stddef.h>
 #else
@@ -47,9 +43,6 @@
 #include "formula/tokenarray.hxx"
 #include "formula/FormulaCompiler.hxx"
 #include <formula/compiler.hrc>
-//#include "rechead.hxx"
-//#include "parclass.hxx"
-//#include "jumpmatrix.hxx"
 #define MAXJUMPCOUNT 32     /* maximum number of jumps (ocChose) */
 
 namespace formula

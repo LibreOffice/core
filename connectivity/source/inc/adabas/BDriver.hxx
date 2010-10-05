@@ -36,7 +36,6 @@
 
 #include <com/sun/star/lang/XEventListener.hpp>
 
-//#include <unotools/tempfile.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include "odbc/OFunctiondefs.hxx"
 #include "odbc/ODriver.hxx"

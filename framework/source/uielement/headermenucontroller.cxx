@@ -58,7 +58,6 @@
 #include <vcl/i18nhelp.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
-//#include <tools/solar.hrc>
 #include <dispatch/uieventloghelper.hxx>
 #include <vos/mutex.hxx>
 

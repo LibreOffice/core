@@ -42,7 +42,6 @@
 // this routine became necessary
 BOOL IsTTSignatureForUnicodeTextfile( String aLine );
 
-//#include "testapp.hxx"
 #define ADD_ERROR_QUIET(nNr, aStr)                                      \
 {                                                                       \
     ErrorEntry *pErr;                                                   \

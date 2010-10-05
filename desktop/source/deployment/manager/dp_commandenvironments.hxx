@@ -30,7 +30,6 @@
 
 
 #include "cppuhelper/compbase3.hxx"
-//#include "cppuhelper/implbase2.hxx"
 #include "ucbhelper/content.hxx"
 #include "com/sun/star/uno/Type.hxx"
 

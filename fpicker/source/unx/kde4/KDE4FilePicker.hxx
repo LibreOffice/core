@@ -35,7 +35,6 @@
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/XFilterGroupManager.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
-//#include <com/sun/star/ui/dialogs/XFilePreview.hpp>
 #include <com/sun/star/util/XCancellable.hpp>
 
 #include <osl/conditn.hxx>

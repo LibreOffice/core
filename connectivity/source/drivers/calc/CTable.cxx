@@ -30,9 +30,6 @@
 #include "calc/CTable.hxx"
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
-//#ifndef _COM_SUN_STAR_UCB_XCONTENTACCESS_HPP_
-//#include <com/sun/star/ucb/XContentAccess.hpp>
-//#endif
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
@@ -79,7 +76,6 @@ using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::util;
 
-// -------------------------------------------------------------------------
 
 void lcl_UpdateArea( const Reference<XCellRange>& xUsedRange, sal_Int32& rEndCol, sal_Int32& rEndRow )
 {

@@ -32,7 +32,6 @@
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 
 #include <toolkit/helper/vclunohelper.hxx>
-//#include <toolkit/unohlp.hxx>
 
 #include <rtl/ref.hxx>
 

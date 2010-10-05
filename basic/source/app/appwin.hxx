@@ -28,7 +28,6 @@
 #ifndef _APPWIN_HXX
 #define _APPWIN_HXX
 
-//#include <sb.hxx>
 #include <vcl/dockwin.hxx>
 #include <tools/fsys.hxx>
 

@@ -28,7 +28,6 @@
 #ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_CONTEXT_BASE_HXX
 #define _SVX_ACCESSIBILITY_ACCESSIBLE_CONTEXT_BASE_HXX
 
-//#include <editeng/ChildrenManager.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>

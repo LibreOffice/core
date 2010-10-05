@@ -39,7 +39,6 @@
 #include <tools/config.hxx>
 #include "dbase/DIndex.hxx"
 #include "dbase/DIndexes.hxx"
-//#include "file/FDriver.hxx"
 #include <comphelper/sequence.hxx>
 #include <svl/zforlist.hxx>
 #include <unotools/syslocale.hxx>
@@ -51,7 +50,6 @@
 #include <connectivity/dbconversion.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <comphelper/property.hxx>
-//#include <unotools/calendarwrapper.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <comphelper/types.hxx>

@@ -47,8 +47,6 @@
 #include "sbunoobj.hxx"
 #include "sbtrace.hxx"
 
-
-//#include <basic/hilight.hxx>
 #include <svtools/syntaxhighlight.hxx>
 
 #include <basic/basrdll.hxx>

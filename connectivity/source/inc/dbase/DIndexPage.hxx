@@ -28,20 +28,11 @@
 #ifndef _CONNECTIVITY_DBASE_INDEXPAGE_HXX_
 #define _CONNECTIVITY_DBASE_INDEXPAGE_HXX_
 
-//#ifndef _REF_HXX
-//#include <tools/ref.hxx>
-//#endif
 #include <vos/ref.hxx>
 #include <tools/stream.hxx>
 #ifndef _VECTOR_
 #include <vector>
 #endif
-//#ifndef _CONNECTIVITY_FILE_FCODE_HXX_
-//#include "file/fcode.hxx"
-//#endif
-//#ifndef _CONNECTIVITY_DBASE_INDEXNODE_HXX_
-//#include "dbase/dindexnode.hxx"
-//#endif
 
 #if 0
 namespace connectivity

@@ -30,9 +30,6 @@
 #include "java/sql/Blob.hxx"
 #include "java/tools.hxx"
 #include "java/io/InputStream.hxx"
-#ifndef _INC_MEMORY
-//#include <memory.h>
-#endif
 #include <connectivity/dbexception.hxx>
 
 #include <string.h>

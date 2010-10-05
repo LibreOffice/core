@@ -31,9 +31,6 @@
 #include "NConnection.hxx"
 #include <com/sun/star/lang/DisposedException.hpp>
 #include "connectivity/dbexception.hxx"
-//#ifndef _CONNECTIVITY_EVOAB_CONFIGACCESS_HXX_
-//#include "LConfigAccess.hxx"
-//#endif
 #include <osl/file.hxx>
 #include "osl/security.hxx"
 #include <comphelper/processfactory.hxx>

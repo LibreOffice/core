@@ -36,9 +36,6 @@
 #include <com/sun/star/sdbcx/KeyType.hpp>
 #include "file/FCatalog.hxx"
 #include "file/FConnection.hxx"
-//#ifndef _CONNECTIVITY_FILE_OEMPTYCOLLECTION_HXX_
-//#include "file/FEmptyCollection.hxx"
-//#endif
 
 using namespace connectivity;
 using namespace connectivity::file;

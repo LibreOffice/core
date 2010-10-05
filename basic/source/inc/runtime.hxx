@@ -57,11 +57,6 @@ using namespace com::sun::star::container;
 // #define _OLD_FILE_IMPL
 
 
-//#include <sal/types.h>
-//#include <rtl/byteseq.hxx>
-//#include <rtl/ustring>
-
-
 namespace basicEncoder
 {
 

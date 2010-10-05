@@ -33,9 +33,6 @@
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
-#ifndef _COM_SUN_STAR_SQLC_XROW_HPP_
-//#include <com/sun/star/sdbc/XRow.hpp>
-#endif
 #include <svl/converter.hxx>
 #include "LConnection.hxx"
 #include "LColumns.hxx"

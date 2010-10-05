@@ -29,7 +29,6 @@
 #define _OBJECT_HXX
 
 #define _SVSTDARR_ULONGS
-//#include <svtools/svstdarr.hxx>
 #include <types.hxx>
 #include <slot.hxx>
 

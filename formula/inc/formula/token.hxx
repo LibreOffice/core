@@ -32,8 +32,6 @@
 #include <string.h>
 #include <vector>
 #include "formula/opcode.hxx"
-//#include "refdata.hxx"
-//#include "scmatrix.hxx"
 #include "formula/intruref.hxx"
 #include <tools/mempool.hxx>
 #include "formula/IFunctionDescription.hxx"

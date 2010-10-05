@@ -28,11 +28,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
 #include "java/io/Reader.hxx"
-#ifndef _INC_MEMORY
-//#include <memory.h>
-#endif
 #include <string.h>
 using namespace connectivity;
+
 //**************************************************************
 //************ Class: java.io.Reader
 //**************************************************************

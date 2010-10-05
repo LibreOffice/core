@@ -32,12 +32,6 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/ControlCommand.hpp>
 
-//_________________________________________________________________________________________________________________
-//  includes of other projects
-//_________________________________________________________________________________________________________________
-
-//#include <vcl/toolbox.hxx>
-//#include <vcl/combobox.hxx>
 #include <uielement/complextoolbarcontroller.hxx>
 
 namespace framework

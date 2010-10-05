@@ -28,9 +28,6 @@
 #ifndef _CONNECTIVITY_SDBCX_INDEX_HXX_
 #define _CONNECTIVITY_SDBCX_INDEX_HXX_
 
-//#ifndef _OSL_DIAGNOSE_H_
-//#include <osl/diagnose.h>
-//#endif
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/container/XNamed.hpp>

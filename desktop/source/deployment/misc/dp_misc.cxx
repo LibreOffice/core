@@ -53,12 +53,10 @@
 #include <comphelper/processfactory.hxx>
 
 #ifdef WNT
-//#include "tools/prewin.h"
 #define UNICODE
 #define _UNICODE
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
-//#include "tools/postwin.h"
 #endif
 
 using namespace ::com::sun::star;

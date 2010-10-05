@@ -42,7 +42,6 @@ class BreakpointWindow;
 
 #include "dataedit.hxx"
 
-//#include <xtextedt.hxx>
 
 class TextEditImp : public Window, public SfxListener
 {

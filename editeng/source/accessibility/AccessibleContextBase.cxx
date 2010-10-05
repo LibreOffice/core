@@ -42,7 +42,6 @@
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <rtl/uuid.h>
 #include <vos/mutex.hxx>
-//#include <vcl/svapp.hxx>
 
 #include <utility>
 

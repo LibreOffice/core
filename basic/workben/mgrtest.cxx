@@ -37,10 +37,6 @@
 #include <basic/sbmod.hxx>
 #include <basic/basrdll.hxx>
 
-//#include <sv.hxx>
-//#include <basic.hxx>
-//#include <sostor.hxx>
-
 // Defines for ToolBox-Id's
 #define TB_NEW              1
 #define TB_OPENSTORAGE      2

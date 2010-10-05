@@ -31,7 +31,7 @@
 #include "cppuhelper/implementationentry.hxx"
 #include "basicmigration.hxx"
 #include "wordbookmigration.hxx"
-//#include "extensionmigration.hxx"
+
 
 extern "C"
 {

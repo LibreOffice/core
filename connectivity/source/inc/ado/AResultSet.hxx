@@ -42,9 +42,6 @@
 #include <cppuhelper/compbase12.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include "ado/AStatement.hxx"
-//#ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
-//#include "connectivity/CommonTools.hxx"
-//#endif
 #include <comphelper/broadcasthelper.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 

@@ -28,10 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_fpicker.hxx"
 
-//------------------------------------------------------------------------
-// includes
-//------------------------------------------------------------------------
-
 #include "VistaFilePickerEventHandler.hxx"
 #include "asyncrequests.hxx"
 
@@ -44,8 +40,6 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
-//#include <tools/urlobj.hxx>
-//#include <unotools/ucbhelper.hxx>
 
 #include <osl/file.hxx>
 

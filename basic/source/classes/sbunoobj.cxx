@@ -27,7 +27,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basic.hxx"
-//#include <stl_queue.h>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/errcode.hxx>

@@ -34,7 +34,6 @@
 #include <basic/sbx.hxx>
 #include <basic/sbxvar.hxx>
 
-//#include <osl/thread.h>
 #include <basic/ttstrhlp.hxx>
 
 #include "processw.hxx"

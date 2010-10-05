@@ -29,9 +29,6 @@
 #define _CONNECTIVITY_JAVA_SQL_SQLWARNING_HXX_
 
 #include "java/sql/SQLException.hxx"
-//#ifndef _COM_SUN_STAR_SDBC_SQLWARNING_HPP_
-//#include <com/sun/star/sdbc/SQLWarning.hpp>
-//#endif
 
 namespace connectivity
 {

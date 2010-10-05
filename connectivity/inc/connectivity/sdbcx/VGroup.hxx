@@ -36,9 +36,6 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <comphelper/proparrhlp.hxx>
 #include <cppuhelper/compbase4.hxx>
-//#ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
-//#include "connectivity/CommonTools.hxx"
-//#endif
 #include <comphelper/broadcasthelper.hxx>
 #include "connectivity/sdbcx/VCollection.hxx"
 #include <comphelper/propertycontainer.hxx>

@@ -40,9 +40,6 @@
 #include <cppuhelper/compbase7.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include "ado/AStatement.hxx"
-//#ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
-//#include "connectivity/CommonTools.hxx"
-//#endif
 #include <comphelper/broadcasthelper.hxx>
 #include "connectivity/StdTypeDefs.hxx"
 

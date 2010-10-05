@@ -26,7 +26,6 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-//#include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
 //  my own includes
