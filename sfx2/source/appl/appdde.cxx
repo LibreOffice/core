@@ -365,6 +365,23 @@ long SfxObjectShell::DdeSetData
     return 0;
 }
 
+void SfxObjectShell::ReconnectDdeLink(SfxObjectShell& /*rServer*/)
+{
+}
+
+void SfxObjectShell::ReconnectDdeLinks(SfxObjectShell& rServer)
+{
+    TypeId aType = TYPE(SfxObjectShell);
+    SfxObjectShell* p = GetFirst(&aType, false);
+    while (p)
+    {
+        if (&rServer != p)
+            p->ReconnectDdeLink(rServer);
+
+        p = GetNext(*p, &aType, false);
+    }
+}
+
 //========================================================================
 
 long SfxViewFrame::DdeExecute

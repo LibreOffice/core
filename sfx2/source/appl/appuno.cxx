@@ -149,6 +149,7 @@ static char const sOpenNewView[] = "OpenNewView";
 static char const sViewId[] = "ViewId";
 static char const sPluginMode[] = "PluginMode";
 static char const sReadOnly[] = "ReadOnly";
+static char const sDdeReconnect[] = "DDEReconnect";
 static char const sStartPresentation[] = "StartPresentation";
 static char const sFrameName[] = "FrameName";
 static char const sMediaType[] = "MediaType";
@@ -608,6 +609,14 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxBoolItem( SID_DOC_READONLY, bVal ) );
                 }
+                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sDdeReconnect)) )
+                {
+                    sal_Bool bVal = sal_True;
+                    sal_Bool bOK = (rProp.Value >>= bVal);
+                    DBG_ASSERT( bOK, "invalid type for DDEReconnect" );
+                    if (bOK)
+                        rSet.Put( SfxBoolItem( SID_DDE_RECONNECT_ONLOAD, bVal ) );
+                }
                 else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sStartPresentation)) )
                 {
                     sal_Bool bVal = sal_False;
@@ -1006,6 +1015,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             if ( rSet.GetItemState( SID_PLUGIN_MODE ) == SFX_ITEM_SET )
                 nAdditional++;
             if ( rSet.GetItemState( SID_DOC_READONLY ) == SFX_ITEM_SET )
+                nAdditional++;
+            if ( rSet.GetItemState( SID_DDE_RECONNECT_ONLOAD ) == SFX_ITEM_SET )
                 nAdditional++;
             if ( rSet.GetItemState( SID_DOC_STARTPRESENTATION ) == SFX_ITEM_SET )
                 nAdditional++;
@@ -1421,6 +1432,11 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             if ( rSet.GetItemState( SID_DOC_READONLY, sal_False, &pItem ) == SFX_ITEM_SET )
             {
                 pValue[nActProp].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sReadOnly));
+                pValue[nActProp++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
+            }
+            if ( rSet.GetItemState( SID_DDE_RECONNECT_ONLOAD, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nActProp].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sDdeReconnect));
                 pValue[nActProp++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
             }
             if ( rSet.GetItemState( SID_DOC_STARTPRESENTATION, sal_False, &pItem ) == SFX_ITEM_SET )

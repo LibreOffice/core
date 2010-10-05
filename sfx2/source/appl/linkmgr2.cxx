@@ -55,6 +55,16 @@
 #define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
 
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/util/XCloseable.hpp>
+
+using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::lang::XComponent;
+using ::com::sun::star::util::XCloseable;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+
 namespace sfx2
 {
 
@@ -89,6 +99,24 @@ LinkManager::~LinkManager()
     }
 }
 
+void LinkManager::InsertCachedComp(const Reference<XComponent>& xComp)
+{
+    maCachedComps.push_back(xComp);
+}
+
+void LinkManager::CloseCachedComps()
+{
+    CompVector::iterator itr = maCachedComps.begin(), itrEnd = maCachedComps.end();
+    for (; itr != itrEnd; ++itr)
+    {
+        Reference<XCloseable> xCloseable(*itr, UNO_QUERY);
+        if (!xCloseable.is())
+            continue;
+
+        xCloseable->close(true);
+    }
+    maCachedComps.clear();
+}
 
 /************************************************************************
 |*    LinkManager::Remove()
@@ -329,6 +357,7 @@ void LinkManager::UpdateAllLinks(
 
         pLink->Update();
     }
+    CloseCachedComps();
 }
 
 /************************************************************************
@@ -385,6 +414,56 @@ void MakeLnkName( String& rName, const String* pType, const String& rFile,
         cTokenSeperator ).EraseLeadingChars().EraseTrailingChars() += rLink;
     if( pFilter )
         ((rName += cTokenSeperator ) += *pFilter).EraseLeadingChars().EraseTrailingChars();
+}
+
+void LinkManager::ReconnectDdeLink(SfxObjectShell& rServer)
+{
+    SfxMedium* pMed = rServer.GetMedium();
+    if (!pMed)
+        return;
+
+    const ::sfx2::SvBaseLinks& rLinks = GetLinks();
+    sal_uInt16 n = rLinks.Count();
+
+    for (sal_uInt16 i = 0; i < n; ++i)
+    {
+        ::sfx2::SvBaseLink* p = *rLinks[i];
+        String aType, aFile, aLink, aFilter;
+        if (!GetDisplayNames(p, &aType, &aFile, &aLink, &aFilter))
+            continue;
+
+        if (!aType.EqualsAscii("soffice"))
+            // DDE connections between OOo apps are always named 'soffice'.
+            continue;
+
+        String aTmp;
+        OUString aURL = aFile;
+        if (utl::LocalFileHelper::ConvertPhysicalNameToURL(aFile, aTmp))
+            aURL = aTmp;
+
+        if (!aURL.equalsIgnoreAsciiCase(pMed->GetName()))
+            // This DDE link is not associated with this server shell...  Skip it.
+            continue;
+
+        if (!aLink.Len())
+            continue;
+
+        LinkServerShell(aLink, rServer, *p);
+    }
+}
+
+void LinkManager::LinkServerShell(const OUString& rPath, SfxObjectShell& rServer, ::sfx2::SvBaseLink& rLink) const
+{
+    ::sfx2::SvLinkSource* pSrvSrc = rServer.DdeCreateLinkSource(rPath);
+    if (pSrvSrc)
+    {
+        ::com::sun::star::datatransfer::DataFlavor aFl;
+        SotExchange::GetFormatDataFlavor(rLink.GetContentType(), aFl);
+        rLink.SetObj(pSrvSrc);
+        pSrvSrc->AddDataAdvise(
+            &rLink, aFl.MimeType,
+            sfx2::LINKUPDATE_ONCALL == rLink.GetUpdateMode() ? ADVISEMODE_ONLYONCE : 0);
+    }
 }
 
 BOOL LinkManager::InsertFileLink( sfx2::SvBaseLink& rLink,
@@ -511,9 +590,8 @@ BOOL SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
     SfxObjectShell* pFndShell = 0;
     USHORT nUpdateMode = com::sun::star::document::UpdateDocMode::NO_UPDATE;
     String sTopic, sItem, sReferer;
-    if( pLink->GetLinkManager() &&
-        pLink->GetLinkManager()->GetDisplayNames( pLink, 0, &sTopic, &sItem )
-        && sTopic.Len() )
+    LinkManager* pLinkMgr = pLink->GetLinkManager();
+    if (pLinkMgr && pLinkMgr->GetDisplayNames(pLink, 0, &sTopic, &sItem) && sTopic.Len())
     {
         // erstmal nur ueber die DocumentShells laufen und die mit dem
         // Namen heraussuchen:
@@ -528,7 +606,7 @@ BOOL SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
         TypeId aType( TYPE(SfxObjectShell) );
 
         BOOL bFirst = TRUE;
-        SfxObjectShell* pShell = pLink->GetLinkManager()->GetPersist();
+        SfxObjectShell* pShell = pLinkMgr->GetPersist();
         if( pShell && pShell->GetMedium() )
         {
             sReferer = pShell->GetMedium()->GetBaseURL();
@@ -578,7 +656,23 @@ BOOL SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
     if( !sTopic.Len() )
         return FALSE;
 
-    if( !pFndShell )
+    if (pFndShell)
+    {
+        sfx2::SvLinkSource* pNewSrc = pFndShell->DdeCreateLinkSource( sItem );
+        if( pNewSrc )
+        {
+            ::com::sun::star::datatransfer::DataFlavor aFl;
+            SotExchange::GetFormatDataFlavor( pLink->GetContentType(), aFl );
+
+            pLink->SetObj( pNewSrc );
+            pNewSrc->AddDataAdvise( pLink, aFl.MimeType,
+                                sfx2::LINKUPDATE_ONCALL == pLink->GetUpdateMode()
+                                    ? ADVISEMODE_ONLYONCE
+                                    : 0 );
+            return true;
+        }
+    }
+    else
     {
         // dann versuche die Datei zu laden:
         INetURLObject aURL( sTopic );
@@ -593,7 +687,11 @@ BOOL SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
             SfxStringItem aTarget( SID_TARGETNAME, String::CreateFromAscii("_blank") );
             SfxStringItem aReferer( SID_REFERER, sReferer );
             SfxUInt16Item aUpdate( SID_UPDATEDOCMODE, nUpdateMode );
-            SfxBoolItem aReadOnly(SID_DOC_READONLY, TRUE);
+            SfxBoolItem aReadOnly(SID_DOC_READONLY, false);
+
+            // Disable automatic re-connection to avoid this link instance
+            // being destroyed at re-connection.
+            SfxBoolItem aDdeConnect(SID_DDE_RECONNECT_ONLOAD, false);
 
             // #i14200# (DDE-link crashes wordprocessor)
             SfxAllItemSet aArgs( SFX_APP()->GetPool() );
@@ -604,29 +702,19 @@ BOOL SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
             aArgs.Put(aName);
             aArgs.Put(aUpdate);
             aArgs.Put(aReadOnly);
-            pFndShell = SfxObjectShell::CreateAndLoadObject( aArgs );
+            aArgs.Put(aDdeConnect);
+            Reference<XComponent> xComp = SfxObjectShell::CreateAndLoadComponent(aArgs);
+            pFndShell = SfxObjectShell::GetShellFromComponent(xComp);
+            if (xComp.is() && pFndShell)
+            {
+                pLinkMgr->InsertCachedComp(xComp);
+                pLinkMgr->LinkServerShell(sItem, *pFndShell, *pLink);
+                return true;
+            }
         }
     }
 
-    BOOL bRet = FALSE;
-    if( pFndShell )
-    {
-        sfx2::SvLinkSource* pNewSrc = pFndShell->DdeCreateLinkSource( sItem );
-        if( pNewSrc )
-        {
-            bRet = TRUE;
-
-            ::com::sun::star::datatransfer::DataFlavor aFl;
-            SotExchange::GetFormatDataFlavor( pLink->GetContentType(), aFl );
-
-            pLink->SetObj( pNewSrc );
-            pNewSrc->AddDataAdvise( pLink, aFl.MimeType,
-                                sfx2::LINKUPDATE_ONCALL == pLink->GetUpdateMode()
-                                    ? ADVISEMODE_ONLYONCE
-                                    : 0 );
-        }
-    }
-    return bRet;
+    return false;
 }
 
 

@@ -127,6 +127,9 @@ namespace com { namespace sun { namespace star {
     namespace document {
         class XDocumentProperties;
     }
+    namespace lang {
+        class XComponent;
+    }
 } } }
 
 typedef sal_uInt32 SfxObjectShellFlags;
@@ -524,6 +527,9 @@ public:
                                             const String& rMimeType,
                                 const ::com::sun::star::uno::Any & rValue );
     virtual ::sfx2::SvLinkSource*       DdeCreateLinkSource( const String& rItem );
+    virtual void                ReconnectDdeLink(SfxObjectShell& rServer);
+
+    static void                 ReconnectDdeLinks(SfxObjectShell& rServer);
 
     // Contents
     virtual SfxStyleSheetBasePool*  GetStyleSheetPool();
@@ -631,6 +637,9 @@ public:
     static SfxObjectShell*      CreateObject( const String& rServiceName, SfxObjectCreateMode = SFX_CREATE_MODE_STANDARD );
     static SfxObjectShell*      CreateObjectByFactoryName( const String& rURL, SfxObjectCreateMode = SFX_CREATE_MODE_STANDARD );
     static SfxObjectShell*      CreateAndLoadObject( const SfxItemSet& rSet, SfxFrame* pFrame=0 );
+    static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
+                                CreateAndLoadComponent( const SfxItemSet& rSet, SfxFrame* pFrame = NULL );
+    static SfxObjectShell*      GetShellFromComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xComp );
     static String               GetServiceNameFromFactory( const String& rFact );
     BOOL                        IsInPlaceActive();
     BOOL                        IsUIActive();

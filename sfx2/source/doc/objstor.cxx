@@ -794,6 +794,16 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
             }
         }
 
+        const SfxBoolItem* pDdeReconnectItem = static_cast<const SfxBoolItem*>(
+            SfxRequest::GetItem(pMedium->GetItemSet(), SID_DDE_RECONNECT_ONLOAD, false, TYPE(SfxBoolItem)));
+
+        bool bReconnectDde = true; // by default, we try to auto-connect DDE connections.
+        if (pDdeReconnectItem)
+            bReconnectDde = pDdeReconnectItem->GetValue();
+
+        if (bReconnectDde)
+            ReconnectDdeLinks(*this);
+
 #if 0
         if ( pMedium->HasStorage_Impl() )
         {

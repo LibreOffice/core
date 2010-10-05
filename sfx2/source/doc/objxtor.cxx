@@ -1022,6 +1022,12 @@ SfxObjectShell* SfxObjectShell::CreateObject( const String& rServiceName, SfxObj
 
 SfxObjectShell* SfxObjectShell::CreateAndLoadObject( const SfxItemSet& rSet, SfxFrame* pFrame )
 {
+    Reference<lang::XComponent> xComp = CreateAndLoadComponent(rSet, pFrame);
+    return GetShellFromComponent(xComp);
+}
+
+Reference<lang::XComponent> SfxObjectShell::CreateAndLoadComponent( const SfxItemSet& rSet, SfxFrame* pFrame )
+{
     uno::Sequence < beans::PropertyValue > aProps;
     TransformItems( SID_OPENDOC, rSet, aProps );
     SFX_ITEMSET_ARG(&rSet, pFileNameItem, SfxStringItem, SID_FILE_NAME, FALSE);
@@ -1042,20 +1048,31 @@ SfxObjectShell* SfxObjectShell::CreateAndLoadObject( const SfxItemSet& rSet, Sfx
         xLoader = uno::Reference < frame::XComponentLoader >( comphelper::getProcessServiceFactory()->createInstance(
             ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop") ), uno::UNO_QUERY );
 
-    uno::Reference < lang::XUnoTunnel > xObj;
+    Reference <lang::XComponent> xComp;
     try
     {
-        xObj = uno::Reference< lang::XUnoTunnel >( xLoader->loadComponentFromURL( aURL, aTarget, 0, aProps ), uno::UNO_QUERY );
+        xComp = xLoader->loadComponentFromURL(aURL, aTarget, 0, aProps);
     }
     catch( uno::Exception& )
     {}
 
-    if ( xObj.is() )
+    return xComp;
+}
+
+SfxObjectShell* SfxObjectShell::GetShellFromComponent( const Reference<lang::XComponent>& xComp )
+{
+    try
     {
-        ::com::sun::star::uno::Sequence < sal_Int8 > aSeq( SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence() );
-        sal_Int64 nHandle = xObj->getSomething( aSeq );
-        if ( nHandle )
-            return reinterpret_cast< SfxObjectShell* >(sal::static_int_cast< sal_IntPtr >(  nHandle ));
+        Reference<lang::XUnoTunnel> xTunnel(xComp, UNO_QUERY_THROW);
+        Sequence <sal_Int8> aSeq( SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence() );
+        sal_Int64 nHandle = xTunnel->getSomething( aSeq );
+        if (!nHandle)
+            return NULL;
+
+        return reinterpret_cast< SfxObjectShell* >(sal::static_int_cast< sal_IntPtr >(  nHandle ));
+    }
+    catch (const Exception&)
+    {
     }
 
     return NULL;

@@ -362,6 +362,7 @@
 #define SID_OPENCOPY                        (SID_SFX_START + 674)
 #define SID_SOURCEVIEW                      (SID_SFX_START + 675)
 #define SID_DOC_STARTPRESENTATION           (SID_SFX_START + 695)
+#define SID_DDE_RECONNECT_ONLOAD            (SID_SFX_START + 696)
 
 #define SID_PLUGFRAMEARG                    (SID_SFX_START + 666)
 #define SID_NEWWINDOWFOREDIT                (SID_SFX_START + 667)

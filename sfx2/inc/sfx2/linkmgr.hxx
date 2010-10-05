@@ -33,9 +33,17 @@
 #include <tools/string.hxx>
 #include <svl/svarray.hxx>
 
+#include <vector>
+
 class SfxObjectShell;
 class Graphic;
 class Size;
+
+namespace com { namespace sun { namespace star {
+    namespace lang {
+        class XComponent;
+    }
+}}}
 
 namespace sfx2
 {
@@ -55,6 +63,10 @@ SV_DECL_PTRARR( SvLinkSources, SvLinkSourcePtr, 1, 1 )
 
 class SFX2_DLLPUBLIC LinkManager
 {
+    typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > >
+        CompVector;
+    CompVector maCachedComps;
+
     SvBaseLinks     aLinkTbl;
     SvLinkSources aServerTbl;
 
@@ -73,6 +85,16 @@ public:
 
                 LinkManager( SfxObjectShell * pCacheCont );
                 ~LinkManager();
+
+    /**
+     * Insert a component loaded during link update, which needs to be closed
+     * when the update is complete.
+     *
+     * @param xComp component loaded during link update.
+     */
+    void        InsertCachedComp(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xComp);
+
+    void        CloseCachedComps();
 
     SfxObjectShell*    GetPersist() const              { return pPersist; }
     void        SetPersist( SfxObjectShell * p )   { pPersist = p; }
@@ -99,6 +121,17 @@ public:
 
             // falls am Link schon alles eingestellt ist !
     BOOL InsertFileLink( sfx2::SvBaseLink& );
+
+    void ReconnectDdeLink(SfxObjectShell& rServer);
+
+    /**
+     * Reconnect the server document shell to a DDE link object.
+     *
+     * @param rPath path to the server document
+     * @param rServer server document shell instance
+     * @param rLink link object of the client document
+     */
+    void LinkServerShell(const ::rtl::OUString& rPath, SfxObjectShell& rServer, ::sfx2::SvBaseLink& rLink) const;
 
                 // erfrage die Strings fuer den Dialog
     BOOL GetDisplayNames( const SvBaseLink *,
