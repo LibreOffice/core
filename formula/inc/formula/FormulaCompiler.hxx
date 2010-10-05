@@ -122,6 +122,7 @@ public:
         }
         virtual ~OpCodeMap();
 
+        void copyFrom( const OpCodeMap& r );
 
         /// Get the symbol String -> OpCode hash map for finds.
         inline const OpCodeHashMap* getHashMap() const { return mpHashMap; }
@@ -243,7 +244,8 @@ public:
     inline  FormulaGrammar::Grammar   GetGrammar() const { return meGrammar; }
 
     static void UpdateSeparatorsNative( const rtl::OUString& rSep, const rtl::OUString& rArrayColSep, const rtl::OUString& rArrayRowSep );
-
+    static void ResetNativeSymbols();
+    static void SetNativeSymbols( const OpCodeMapPtr& xMap );
 protected:
     virtual String FindAddInFunction( const String& rUpperName, BOOL bLocalFirst ) const;
     virtual void fillFromAddInCollectionUpperName( NonConstOpCodeMapPtr xMap ) const;

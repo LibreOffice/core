@@ -642,6 +642,7 @@ const String& FormulaCompiler::GetNativeSymbol( OpCode eOp )
 // -----------------------------------------------------------------------------
 void FormulaCompiler::InitSymbolsNative() const
 {
+#if 0 // No point in keeping this since you can now do this from the UI.
     if (mxSymbolsNative.get())
         return;
     //! Experimental!
@@ -656,10 +657,9 @@ void FormulaCompiler::InitSymbolsNative() const
         mxSymbolsNative = mxSymbolsEnglish;
         return;
     }
-    static NonConstOpCodeMapPtr s_sSymbol;
-    if ( !s_sSymbol.get() )
-        lcl_fillNativeSymbols(s_sSymbol);
-    mxSymbolsNative = s_sSymbol;
+#endif
+
+    lcl_fillNativeSymbols(mxSymbolsNative);
 }
 // -----------------------------------------------------------------------------
 void FormulaCompiler::InitSymbolsEnglish() const
@@ -794,6 +794,22 @@ FormulaCompiler::OpCodeMap::~OpCodeMap()
     delete mpExternalHashMap;
     delete [] mpTable;
     delete mpHashMap;
+}
+// -----------------------------------------------------------------------------
+void FormulaCompiler::OpCodeMap::copyFrom( const OpCodeMap& r )
+{
+    delete mpHashMap;
+    mpHashMap = new OpCodeHashMap(mnSymbols);
+
+    USHORT n = r.getSymbolCount();
+    for (USHORT i = 0; i < n; ++i)
+    {
+        OpCode eOp = OpCode(i);
+        const String& rSymbol = r.getSymbol(eOp);
+        putOpCode(rSymbol, eOp);
+    }
+
+    // TODO: maybe copy the external maps too?
 }
 // -----------------------------------------------------------------------------
 sal_Int32 FormulaCompiler::OpCodeMap::getOpCodeUnknown()
@@ -1708,6 +1724,20 @@ void FormulaCompiler::UpdateSeparatorsNative(
     xSymbolsNative->putOpCode(rSep, ocSep);
     xSymbolsNative->putOpCode(rArrayColSep, ocArrayColSep);
     xSymbolsNative->putOpCode(rArrayRowSep, ocArrayRowSep);
+}
+
+void FormulaCompiler::ResetNativeSymbols()
+{
+    NonConstOpCodeMapPtr xSymbolsNative;
+    lcl_fillNativeSymbols(xSymbolsNative, true);
+    lcl_fillNativeSymbols(xSymbolsNative);
+}
+
+void FormulaCompiler::SetNativeSymbols( const OpCodeMapPtr& xMap )
+{
+    NonConstOpCodeMapPtr xSymbolsNative;
+    lcl_fillNativeSymbols(xSymbolsNative);
+    xSymbolsNative->copyFrom(*xMap);
 }
 
 // -----------------------------------------------------------------------------
