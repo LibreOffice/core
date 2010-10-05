@@ -63,6 +63,7 @@ private:
 
     FixedLine           aDocStatusFL;
     CheckBox            aDocStatusCB;
+    CheckBox            aSaveAlwaysCB;
 
     FixedLine           aTwoFigureFL;
     FixedText           aInterpretFT;

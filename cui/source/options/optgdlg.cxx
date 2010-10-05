@@ -210,6 +210,7 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
     aPrintDlgCB         ( this, CUI_RES( CB_PRINTDLG ) ),
     aDocStatusFL        ( this, CUI_RES( FL_DOCSTATUS ) ),
     aDocStatusCB        ( this, CUI_RES( CB_DOCSTATUS ) ),
+    aSaveAlwaysCB       ( this, CUI_RES( CB_SAVE_ALWAYS ) ),
     aTwoFigureFL        ( this, CUI_RES( FL_TWOFIGURE ) ),
     aInterpretFT        ( this, CUI_RES( FT_INTERPRET ) ),
     aYearValueField     ( this, CUI_RES( NF_YEARVALUE ) ),
@@ -240,7 +241,7 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
 
         Window* pWins[] =
         {
-            &aDocStatusFL, &aDocStatusCB, &aTwoFigureFL,
+            &aDocStatusFL, &aDocStatusCB, &aSaveAlwaysCB, &aTwoFigureFL,
             &aInterpretFT, &aYearValueField, &aToYearFT
         };
         Window** pCurrent = pWins;
@@ -262,8 +263,8 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
 
         Window* pWins[] =
         {
-            &aPrintDlgFL, &aPrintDlgCB, &aDocStatusFL, &aDocStatusCB, &aTwoFigureFL,
-            &aInterpretFT, &aYearValueField, &aToYearFT
+            &aPrintDlgFL, &aPrintDlgCB, &aDocStatusFL, &aDocStatusCB, &aSaveAlwaysCB,
+            &aTwoFigureFL, &aInterpretFT, &aYearValueField, &aToYearFT
         };
         Window** pCurrent = pWins;
         const sal_Int32 nCount = sizeof( pWins ) / sizeof( pWins[ 0 ] );
@@ -288,7 +289,7 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
 
         Window* pWins[] =
         {
-            &aDocStatusFL, &aDocStatusCB, &aTwoFigureFL,
+            &aDocStatusFL, &aDocStatusCB, &aSaveAlwaysCB, &aTwoFigureFL,
             &aInterpretFT, &aYearValueField, &aToYearFT
         };
         Window** pCurrent = pWins;
@@ -419,6 +420,13 @@ BOOL OfaMiscTabPage::FillItemSet( SfxItemSet& rSet )
         bModified = TRUE;
     }
 
+    if ( aSaveAlwaysCB.IsChecked() != aSaveAlwaysCB.GetSavedValue() )
+    {
+        SvtMiscOptions aMiscOpt;
+        aMiscOpt.SetSaveAlwaysAllowed( aSaveAlwaysCB.IsChecked() );
+        bModified = TRUE;
+    }
+
     const SfxUInt16Item* pUInt16Item =
         PTR_CAST( SfxUInt16Item, GetOldItem( rSet, SID_ATTR_YEAR2000 ) );
     USHORT nNum = (USHORT)aYearValueField.GetText().ToInt32();
@@ -460,6 +468,8 @@ void OfaMiscTabPage::Reset( const SfxItemSet& rSet )
     aFileDlgCB.SaveValue();
     aPrintDlgCB.Check( !aMiscOpt.UseSystemPrintDialog() );
     aPrintDlgCB.SaveValue();
+    aSaveAlwaysCB.Check( aMiscOpt.IsSaveAlwaysAllowed() );
+    aSaveAlwaysCB.SaveValue();
 
     aODMADlgCB.Check( aMiscOpt.TryODMADialog() );
     aODMADlgCB.SaveValue();

@@ -56,7 +56,8 @@
 #define ROW9                    (ROW8+RSC_CD_CHECKBOX_HEIGHT+ROWSPACE)
 #define ROW10                   (ROW9+RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
 #define ROW11                   (ROW10+RSC_CD_CHECKBOX_HEIGHT+ROWSPACE)
-#define ROW12                   (ROW11+RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
+#define ROW12                   (ROW11+RSC_CD_CHECKBOX_HEIGHT+ROWSPACE)
+#define ROW13                   (ROW12+RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
 
 #define DIFF(v1,v2)                     (v2-v1)
 #define OFFS_TEXTBOX_FIXEDTEXT(base)    (base+(RSC_CD_TEXTBOX_HEIGHT-RSC_CD_FIXEDTEXT_HEIGHT)/2)
@@ -201,6 +202,7 @@
 #define FL_DOCSTATUS                60
 #define CB_DOCSTATUS                61
 #define CB_ODMADLG                  62
+#define CB_SAVE_ALWAYS              74
 #endif // #ifndef _SVX_OPTGDLG_HRC
 
 // ******************************************************************* EOF
