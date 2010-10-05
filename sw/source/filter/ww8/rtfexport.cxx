@@ -936,9 +936,12 @@ USHORT RtfExport::GetColor( const Color& rColor ) const
 void RtfExport::InsColor( const Color& rCol )
 {
     USHORT n;
+    bool bContainsAuto = false;
     for (RtfColorTbl::iterator it=m_aColTbl.begin() ; it != m_aColTbl.end(); it++ )
         if ((*it).second == rCol)
             return; // Already in the table
+        else if ((*it).second == COL_AUTO)
+            bContainsAuto = true;
     if (rCol.GetColor() == COL_AUTO)
         n = 0;
     else
@@ -947,6 +950,10 @@ void RtfExport::InsColor( const Color& rCol )
         // Fix for the case when first a !COL_AUTO gets inserted as #0, then
         // gets overwritten by COL_AUTO
         if (!n)
+            n++;
+
+        // Fix the case where the table doesn't contain the COL_AUTO at #0
+        else if (!bContainsAuto)
             n++;
     }
     m_aColTbl.insert(std::pair<USHORT,Color>( n, rCol ));
