@@ -29,8 +29,7 @@
 #include "precompiled_toolkit.hxx"
 #include <toolkit/controls/roadmapentry.hxx>
 
-#include <rtl/OUString.hxx>
-
+#include <rtl/ustring.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 

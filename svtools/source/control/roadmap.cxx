@@ -40,8 +40,7 @@
 #include <algorithm>
 #include <vcl/bitmap.hxx>
 #include <tools/color.hxx>
-
-#include <rtl/OUString.hxx>
+#include <rtl/ustring.hxx>
 #include <memory>
 
 #define ROADMAP_INDENT_X        4
