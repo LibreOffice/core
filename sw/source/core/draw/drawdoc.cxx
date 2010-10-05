@@ -156,7 +156,7 @@ SwDrawDocument::~SwDrawDocument()
 \************************************************************************/
 
 
-SdrPage* SwDrawDocument::AllocPage(FASTBOOL bMasterPage)
+SdrPage* SwDrawDocument::AllocPage(bool bMasterPage)
 {
     SwDPage* pPage = new SwDPage(*this, 0 != bMasterPage);
     pPage->SetName( String::CreateFromAscii(

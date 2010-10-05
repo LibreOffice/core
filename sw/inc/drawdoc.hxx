@@ -44,7 +44,7 @@ public:
     const SwDoc& GetDoc() const { return *pDoc; }
           SwDoc& GetDoc()       { return *pDoc; }
 
-    virtual SdrPage* AllocPage(FASTBOOL bMasterPage);
+    virtual SdrPage* AllocPage(bool bMasterPage);
 
     // fuers "load on demand" von Grafiken im DrawingLayer
     virtual SvStream* GetDocumentStream( SdrDocumentStreamInfo& rInfo ) const;

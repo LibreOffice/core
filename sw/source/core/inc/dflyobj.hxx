@@ -127,7 +127,7 @@ public:
     void SetRect() const;
 
     // ist eine URL an einer Grafik gesetzt, dann ist das ein Makro-Object
-    virtual FASTBOOL HasMacro() const;
+    virtual bool       HasMacro() const;
     virtual SdrObject* CheckMacroHit       (const SdrObjMacroHitRec& rRec) const;
     virtual Pointer    GetMacroPointer     (const SdrObjMacroHitRec& rRec) const;
 

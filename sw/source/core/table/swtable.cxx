@@ -475,7 +475,7 @@ void lcl_RefreshHidden( SwTabCols &rToFill, USHORT nPos )
 
 void lcl_SortedTabColInsert( SwTabCols &rToFill, const SwTableBox *pBox,
                    const SwFrmFmt *pTabFmt, const BOOL bHidden,
-                   const FASTBOOL bRefreshHidden )
+                   const bool bRefreshHidden )
 {
     const long nWish = pTabFmt->GetFrmSize().GetWidth();
     const long nAct  = rToFill.GetRight() - rToFill.GetLeft();  // +1 why?
@@ -578,7 +578,7 @@ void lcl_SortedTabColInsert( SwTabCols &rToFill, const SwTableBox *pBox,
 }
 
 void lcl_ProcessBoxGet( const SwTableBox *pBox, SwTabCols &rToFill,
-                        const SwFrmFmt *pTabFmt, FASTBOOL bRefreshHidden )
+                        const SwFrmFmt *pTabFmt, bool bRefreshHidden )
 {
     if ( pBox->GetTabLines().Count() )
     {

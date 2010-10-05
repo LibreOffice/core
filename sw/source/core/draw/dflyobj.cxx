@@ -904,7 +904,7 @@ Pointer  __EXPORT SwVirtFlyDrawObj::GetMacroPointer(
 }
 
 
-FASTBOOL __EXPORT SwVirtFlyDrawObj::HasMacro() const
+bool __EXPORT SwVirtFlyDrawObj::HasMacro() const
 {
     const SwFmtURL &rURL = pFlyFrm->GetFmt()->GetURL();
     return rURL.GetMap() || rURL.GetURL().Len();
