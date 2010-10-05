@@ -2881,7 +2881,7 @@ void SwHTMLParser::_SetAttr( BOOL bChkEnd, BOOL bBeforeTable,
 
             pFrmFmt->MakeFrms();
             aMoveFlyFrms.Remove( n, 1 );
-            aMoveFlyCnts.Remove( n, 1 );
+            aMoveFlyCnts.erase( aMoveFlyCnts.begin() + n );
         }
     }
     while( aFields.Count() )

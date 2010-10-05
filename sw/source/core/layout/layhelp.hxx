@@ -71,11 +71,11 @@ class SwLayCacheImpl : public SvULongs
     void Insert( USHORT nType, ULONG nIndex, xub_StrLen nOffset );
 
 public:
-    SwLayCacheImpl() : SvULongs( 20, 10 ), aOffset( 20, 10 ), aType( 20, 10 ) {}
+    SwLayCacheImpl() : SvULongs( 20, 10 ), aType( 20, 10 ) {}
     BOOL Read( SvStream& rStream );
 
     ULONG GetBreakIndex( USHORT nIdx ) const { return GetObject( nIdx ); }
-    xub_StrLen GetBreakOfst( USHORT nIdx ) const { return aOffset[ nIdx ]; }
+    xub_StrLen GetBreakOfst( size_t nIdx ) const { return aOffset[ nIdx ]; }
     USHORT GetBreakType( USHORT nIdx ) const { return aType[ nIdx ]; }
 
     USHORT GetFlyCount() const { return aFlyCache.Count(); }

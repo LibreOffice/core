@@ -102,7 +102,7 @@ void SwLayCacheImpl::Insert( USHORT nType, ULONG nIndex, xub_StrLen nOffset )
 {
     aType.Insert( nType, aType.Count() );
     SvULongs::Insert( nIndex, SvULongs::Count() );
-    aOffset.Insert( nOffset, aOffset.Count() );
+    aOffset.push_back( nOffset );
 }
 
 BOOL SwLayCacheImpl::Read( SvStream& rStream )

@@ -364,10 +364,10 @@ void SwDropCapsPict::DrawPrev( const Point& rPt )
 
     Font        aOldFont = mpPrinter->GetFont();
     USHORT      nScript;
-    USHORT      nIdx = 0;
+    size_t      nIdx = 0;
     xub_StrLen  nStart = 0;
     xub_StrLen  nEnd;
-    USHORT      nCnt = maScriptChg.Count();
+    size_t      nCnt = maScriptChg.size();
 
     if( nCnt )
     {
@@ -406,10 +406,10 @@ void SwDropCapsPict::CheckScript( void )
         return;
 
     maScriptText = maText;
-    USHORT nCnt = maScriptChg.Count();
+    size_t nCnt = maScriptChg.size();
     if( nCnt )
     {
-        maScriptChg.Remove( 0, nCnt );
+        maScriptChg.clear();
         maScriptType.Remove( 0, nCnt );
         maTextWidth.Remove( 0, nCnt );
         nCnt = 0;
@@ -436,7 +436,7 @@ void SwDropCapsPict::CheckScript( void )
         do
         {
             nChg = (xub_StrLen)xBreak->endOfScript( maText, nChg, nScript );
-            maScriptChg.Insert( nChg, nCnt );
+            maScriptChg.push_back( nChg );
             maScriptType.Insert( nScript, nCnt );
             maTextWidth.Insert( ULONG(0), nCnt++ );
 
@@ -453,10 +453,10 @@ Size SwDropCapsPict::CalcTextSize( void )
     InitPrinter();
 
     USHORT      nScript;
-    USHORT      nIdx = 0;
+    size_t      nIdx = 0;
     xub_StrLen  nStart = 0;
     xub_StrLen  nEnd;
-    USHORT      nCnt = maScriptChg.Count();
+    size_t      nCnt = maScriptChg.size();
     if( nCnt )
     {
         nEnd = maScriptChg[ nIdx ];
