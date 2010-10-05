@@ -46,11 +46,13 @@ IDLFILES=\
     CellContentType.idl\
     CellCursor.idl\
     CellHoriJustify.idl\
+    CellJustifyMethod.idl\
     CellOrientation.idl\
     CellProperties.idl\
     CellRange.idl\
     CellRangeAddress.idl\
     CellVertJustify.idl\
+    CellVertJustify2.idl\
     ShadowFormat.idl\
     ShadowLocation.idl\
     TableBorder.idl\
