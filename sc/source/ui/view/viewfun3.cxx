@@ -1493,9 +1493,8 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
     if ( nFlags & IDF_OBJECTS )
     {
         ScModelObj* pModelObj = ( pDocSh ? ScModelObj::getImplementation( pDocSh->GetModel() ) : NULL );
-        if ( pDoc && pPage && pModelObj && pClipDoc )
+        if ( pDoc && pPage && pModelObj )
         {
-            ScClipParam& rClipParam = pClipDoc->GetClipParam();
             bool bSameDoc = ( rClipParam.getSourceDocID() == pDoc->GetDocumentID() );
             const ScRangeListVector& rProtectedChartRangesVector( rClipParam.maProtectedChartRangesVector );
             ScChartHelper::CreateProtectedChartListenersAndNotify( pDoc, pPage, pModelObj, nStartTab,
