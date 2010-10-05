@@ -46,8 +46,4 @@ class VCLKDEApplication : public KApplication
         VCLKDEApplication();
 
         virtual void commitData(QSessionManager&) {};
-
-        virtual bool x11EventFilter(XEvent* event);
-
-        SalKDEDisplay* disp;
 };
