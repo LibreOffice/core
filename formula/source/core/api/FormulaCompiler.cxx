@@ -881,7 +881,7 @@ BOOL FormulaCompiler::GetToken()
     }
     if( pToken->GetOpCode() == ocSubTotal )
         glSubTotal = TRUE;
-    else if ( pToken->GetOpCode() == ocExternalRef )
+    else if ( pToken->IsExternalRef() )
     {
         return HandleExternalReference(*pToken);
     }
@@ -1175,7 +1175,7 @@ void FormulaCompiler::Factor()
                 bCorrected = TRUE;
             }
         }
-        else if ( eOp == ocExternalRef )
+        else if ( pToken->IsExternalRef() )
         {
             PutCode(pToken);
             eOp = NextToken();
@@ -1595,7 +1595,7 @@ FormulaToken* FormulaCompiler::CreateStringFromToken( rtl::OUStringBuffer& rBuff
     }
     if( bNext )
     {
-        if (eOp == ocExternalRef)
+        if (t->IsExternalRef())
         {
             CreateStringFromExternal(rBuffer, pTokenP);
         }

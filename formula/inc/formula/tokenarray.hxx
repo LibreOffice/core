@@ -125,6 +125,7 @@ public:
     FormulaToken* LastRPN() { nIndex = nRPN; return PrevRPN(); }
     FormulaToken* PrevRPN();
 
+    bool    HasExternalRef() const;
     BOOL    HasOpCode( OpCode ) const;
     BOOL    HasOpCodeRPN( OpCode ) const;
     /// Token of type svIndex or opcode ocColRowName

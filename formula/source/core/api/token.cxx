@@ -145,6 +145,18 @@ BOOL FormulaToken::IsMatrixFunction() const
     return formula::FormulaCompiler::IsMatrixFunction(GetOpCode());
 }
 
+bool FormulaToken::IsExternalRef() const
+{
+    switch (eType)
+    {
+        case svExternalSingleRef:
+        case svExternalDoubleRef:
+        case svExternalName:
+            return true;
+    }
+    return false;
+}
+
 BOOL FormulaToken::operator==( const FormulaToken& rToken ) const
 {
     // don't compare reference count!
@@ -548,6 +560,16 @@ FormulaToken* FormulaTokenArray::PeekPrevNoSpaces()
     }
     else
         return NULL;
+}
+
+bool FormulaTokenArray::HasExternalRef() const
+{
+    for ( USHORT j=0; j < nLen; j++ )
+    {
+        if (pCode[j]->IsExternalRef())
+            return true;
+    }
+    return false;
 }
 
 BOOL FormulaTokenArray::HasOpCode( OpCode eOp ) const

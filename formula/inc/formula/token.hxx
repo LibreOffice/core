@@ -113,6 +113,7 @@ public:
     inline  StackVar            GetType() const         { return eType; }
             BOOL                IsFunction() const; // pure functions, no operators
             BOOL                IsMatrixFunction() const;   // if a function _always_ returns a Matrix
+            bool                IsExternalRef() const;
             BYTE                GetParamCount() const;
     inline  void                IncRef() const          { nRefCnt++; }
     inline  void                DecRef() const
