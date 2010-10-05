@@ -35,9 +35,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#ifndef _COM_SUN_STAR_LANG_XMULTI_COMPONENT_FACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 class Point;

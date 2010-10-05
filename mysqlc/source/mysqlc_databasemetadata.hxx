@@ -32,12 +32,8 @@
 
 #include "mysqlc_connection.hxx"
 
-#ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
-#endif
 
 #include <tools/preextstl.h>
 #include <cppconn/metadata.h>

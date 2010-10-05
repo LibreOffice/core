@@ -30,9 +30,7 @@
 
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#ifndef _COM_SUN_STAR_LANG_XMULTI_COMPONENT_FACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XFrame.hpp>

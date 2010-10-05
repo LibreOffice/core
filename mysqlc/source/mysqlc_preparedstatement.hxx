@@ -32,21 +32,11 @@
 #include "mysqlc_statement.hxx"
 #include "mysqlc_resultset.hxx"
 
-#ifndef _COM_SUN_STAR_SDBC_XPREPAREDSTATEMENT_HPP_
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XPARAMETERS_HPP_
 #include <com/sun/star/sdbc/XParameters.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSETMETADATASUPPLIER_HPP_
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XPREPAREDBATCHEXECUTION_HPP_
 #include <com/sun/star/sdbc/XPreparedBatchExecution.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
-#endif
 
 #include <tools/preextstl.h>
 #include <cppconn/prepared_statement.h>
