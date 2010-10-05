@@ -27,110 +27,99 @@
 
 package complex.indeterminateState;
 
-import complexlib.ComplexTestCase;
-import helper.OfficeProvider;
-import util.SOfficeFactory;
-import util.AccessibilityTools;
-import com.sun.star.awt.XWindow;
-import com.sun.star.awt.XExtendedToolkit;
-import com.sun.star.frame.XDispatch;
-import com.sun.star.frame.XController;
-import com.sun.star.frame.XDesktop;
-import com.sun.star.frame.XModel;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.AccessibleStateType;
 import com.sun.star.accessibility.XAccessible;
-import com.sun.star.accessibility.XAccessibleValue;
 import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.accessibility.XAccessibleStateSet;
-import com.sun.star.accessibility.AccessibleStateType;
-import com.sun.star.accessibility.XAccessibleAction;
-import com.sun.star.awt.XTopWindow;
+import com.sun.star.awt.FontWeight;
+import com.sun.star.awt.XWindow;
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.frame.XController;
+import com.sun.star.frame.XModel;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.text.XText;
+import com.sun.star.text.XTextDocument;
+import com.sun.star.text.XTextRange;
+import com.sun.star.text.XTextViewCursorSupplier;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.frame.XDispatchProvider;
-import com.sun.star.util.URL;
-import com.sun.star.util.XURLTransformer;
-
-import java.io.PrintWriter;
+import com.sun.star.uno.XInterface;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openoffice.test.OfficeConnection;
+import util.AccessibilityTools;
+import util.DesktopTools;
+import util.SOfficeFactory;
+import static org.junit.Assert.*;
 
 /**
  */
-public class CheckIndeterminateState extends ComplexTestCase {
-
-    /**
-     * Return all test methods.
-     * @return The test methods.
-     */
-     public String[] getTestMethodNames() {
-        return new String[]{"checkToolBoxItem"};
-    }
-
+public class CheckIndeterminateState {
     /*
      * Test the indeterminate state of AccessibleToolBarItem
      * The used tools are in project qadevOOo/runner
      */
-    public void checkToolBoxItem() {
-        log.println( "creating a test environment" );
-        XTextDocument xTextDoc = null;
-        // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory((XMultiServiceFactory) param.getMSF());
-
-        try {
-            log.println( "creating a text document" );
-            xTextDoc = SOF.createTextDoc(null);
-        } catch ( com.sun.star.uno.Exception e ) {
-            // Some exception occures.FAILED
-            e.printStackTrace( (java.io.PrintWriter)log );
-            failed (e.getMessage());
-        }
-
+    @Test public void checkToolBoxItem() throws Exception {
         XModel aModel = (XModel)
-                    UnoRuntime.queryInterface(XModel.class, xTextDoc);
+                    UnoRuntime.queryInterface(XModel.class, document);
 
         XController xController = aModel.getCurrentController();
 
+        XText text = document.getText();
+        text.setString("normal");
+        XTextRange end = text.getEnd();
+        end.setString("bold");
+        UnoRuntime.queryInterface(XPropertySet.class, end).setPropertyValue(
+            "CharWeight", FontWeight.BOLD);
+        UnoRuntime.queryInterface(XTextViewCursorSupplier.class, xController).
+            getViewCursor().gotoRange(text, false);
+
         XInterface oObj = null;
 
-        System.out.println("Press any key after making 'Bold' indeterminate.");
-        try{
-            byte[]b = new byte[16];
-            System.in.read(b);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         AccessibilityTools at = new AccessibilityTools();
-        XWindow xWindow = at.getCurrentContainerWindow((XMultiServiceFactory)param.getMSF(), aModel);
+        XWindow xWindow = at.getCurrentContainerWindow(getFactory(), aModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
-
-        // uncomment to print the whole accessible tree.
-//        at.printAccessibleTree((java.io.PrintWriter)log,xRoot);
-
-        oObj = at.getAccessibleObjectForRole(xRoot,
-            AccessibleRole.PUSH_BUTTON, "Bold");
-        System.out.println("Found a PUSH_BUTTON: " + (oObj != null));
 
         oObj = at.getAccessibleObjectForRole(xRoot,
             AccessibleRole.TOGGLE_BUTTON, "Bold");
-        System.out.println("Found a TOGGLE_BUTTON: " + (oObj != null));
-
-        log.println("ImplementationName: "+ util.utils.getImplName(oObj));
+        assertNotNull("Found a TOGGLE_BUTTON", oObj);
 
         XAccessibleContext oContext = (XAccessibleContext)
             UnoRuntime.queryInterface(XAccessibleContext.class, oObj);
 
         XAccessibleStateSet oSet = oContext.getAccessibleStateSet();
 
-        short[]states = oSet.getStates();
-        for(int i=0; i<states.length; i++)
-            System.out.println("State "+i+": "+states[i]);
-
-        assure("The 'INDETERMINATE' state is not set.",oSet.contains(AccessibleStateType.INDETERMINATE));
+        assertTrue("The 'INDETERMINATE' state is not set.",oSet.contains(AccessibleStateType.INDETERMINATE));
     }
 
+    @Before public void setUpDocument() throws com.sun.star.uno.Exception {
+        document = SOfficeFactory.getFactory(getFactory()).createTextDoc(null);
+    }
+
+    @After public void tearDownDocument() {
+        DesktopTools.closeDoc(document);
+    }
+
+    private XTextDocument document = null;
+
+    @BeforeClass public static void setUpConnection() throws Exception {
+        connection.setUp();
+    }
+
+    @AfterClass public static void tearDownConnection()
+        throws InterruptedException, com.sun.star.uno.Exception
+    {
+        connection.tearDown();
+    }
+
+    private static final OfficeConnection connection = new OfficeConnection();
+
+    private static final XMultiServiceFactory getFactory() {
+        return UnoRuntime.queryInterface(
+            XMultiServiceFactory.class,
+            connection.getComponentContext().getServiceManager());
+    }
 }
-
-
