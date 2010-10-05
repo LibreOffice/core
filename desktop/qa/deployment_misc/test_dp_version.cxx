@@ -32,7 +32,10 @@
 
 #include <cstddef>
 
-#include "testshl/simpleheader.hxx"
+#include "cppunit/TestAssert.h"
+#include "cppunit/TestFixture.h"
+#include "cppunit/extensions/HelperMacros.h"
+#include "cppunit/plugin/TestPlugIn.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 
@@ -83,8 +86,8 @@ void Test::test() {
     }
 }
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Test, "alltests");
+CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
 }
 
-NOADDITIONAL;
+CPPUNIT_PLUGIN_IMPLEMENT();

@@ -23,3 +23,9 @@ sf	sfx2\workben\custompanel                nmake   -   all sf_wb_custompanel NUL
 sf      sfx2\util                                                               nmake   -       all     sf_util sf_appl sf_bast sf_cnfg sf_ctrl sf_dlg sf_doc sf_expl sf_inet sf_menu sf_layout sf_noti sf_sbar sf_tbox sf_view NULL
 sf sfx2\qa\unoapi nmake - all sf_qa_unoapi NULL
 sf  sfx2\qa\cppunit							nmake	-	all sf_qa_cppunit sf_util NULL
+
+# fails on unxsoli4
+# sf      sfx2\qa\complex\standalonedocumentinfo  nmake   -       all     sf_qa_complex_standalonedocumentinfo sf_util NULL
+
+# sf      sfx2\qa\complex\framework               nmake   -       all     sf_qa_complex_framework sf_qa_complex_framework_dochelper NULL
+# sf      sfx2\qa\complex\docinfo                 nmake   -       all     sf_qa_complex_docinfo sf_util NULL

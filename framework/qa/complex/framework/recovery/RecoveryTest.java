@@ -84,6 +84,16 @@ import util.SOfficeFactory;
 import util.UITools;
 import util.utils;
 
+// ---------- junit imports -----------------
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openoffice.test.OfficeConnection;
+import static org.junit.Assert.*;
+// ------------------------------------------
+
 public class RecoveryTest extends ComplexTestCase {
 
     static XMultiServiceFactory xMSF;

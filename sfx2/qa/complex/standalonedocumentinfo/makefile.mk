@@ -25,61 +25,32 @@
 #
 #*************************************************************************
 
-PRJ = ..$/..$/..
-TARGET = StandaloneDocumentInfoUnitTest
-PRJNAME = binfilter
-PACKAGE = complex$/standalonedocumentinfo
-
-# --- Settings -----------------------------------------------------
-.INCLUDE: settings.mk
-
-
-#----- compile .java files -----------------------------------------
-
-JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar
-
-JAVAFILES       =\
-                                StandaloneDocumentInfoUnitTest.java\
-                                StandaloneDocumentInfoTest.java\
-                                Test01.java\
-                                TestHelper.java\
-
-JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
-
-#----- make a jar from compiled files ------------------------------
-
-MAXLINELENGTH = 100000
-
-JARCLASSDIRS    = $(PACKAGE)
-JARTARGET       = $(TARGET).jar
-JARCOMPRESS 	= TRUE
-
-# --- Parameters for the test --------------------------------------
-
-# start an office if the parameter is set for the makefile
-.IF "$(OFFICE)" == ""
-CT_APPEXECCOMMAND =
+.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
+nothing .PHONY:
 .ELSE
-CT_APPEXECCOMMAND = -AppExecutionCommand "$(OFFICE)$/soffice -accept=socket,host=localhost,port=8100;urp;"
-.ENDIF
 
-# test base is java complex
-CT_TESTBASE = -TestBase java_complex
+PRJ = ../../..
+PRJNAME = sfx2
+TARGET = qa_complex_standalonedocumentinfo
 
-# test looks something like the.full.package.TestName
-CT_TEST     = -o $(PACKAGE:s\$/\.\).$(JAVAFILES:b)
+.IF "$(OOO_JUNIT_JAR)" != ""
+PACKAGE = complex/standalonedocumentinfo
+JAVATESTFILES = \
+    StandaloneDocumentInfoUnitTest.java
 
-# start the runner application
-CT_APP      = org.openoffice.Runner
+JAVAFILES = $(JAVATESTFILES) \
+    StandaloneDocumentInfoTest.java \
+    Test01.java \
+    TestHelper.java
 
-# --- Targets ------------------------------------------------------
+JARFILES = OOoRunner.jar ridl.jar test.jar unoil.jar
+EXTRAJARFILES = $(OOO_JUNIT_JAR)
+.END
 
+.INCLUDE: settings.mk
 .INCLUDE: target.mk
+.INCLUDE: installationtest.mk
 
-RUN: run
+ALLTAR : javatest
 
-run:
-    +java -cp $(CLASSPATH) $(CT_APP) $(CT_TESTBASE) $(CT_APPEXECCOMMAND) $(CT_TEST)
-
-
-
+.END
