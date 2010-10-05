@@ -118,6 +118,7 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::com::sun::star::uno::UNO_SET_THROW;
 using ::com::sun::star::lang::DisposedException;
 using ::com::sun::star::awt::XWindow;
 using ::com::sun::star::frame::XController;
@@ -579,7 +580,7 @@ Reference< XWindow > SAL_CALL SfxBaseController::getComponentWindow() throw (Run
 
     ::rtl::OUString sViewName;
     if ( nViewNo < rDocFac.GetViewFactoryCount() )
-        sViewName = rDocFac.GetViewFactory( nViewNo ).GetViewName();
+        sViewName = rDocFac.GetViewFactory( nViewNo ).GetAPIViewName();
 
     return sViewName;
 }
@@ -1421,19 +1422,51 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
             // if so, forward it to the view/shell.
             if ( !bHasPluginMode && !bHasJumpMark )
             {
+                // Note that this might not be the ideal place here. Restoring view data should, IMO, be the
+                // responsibility of the loader, not an implementation detail burried here deep within the controller's
+                // implementation.
+                // What I think should be done to replace the below code:
+                // - change SfxBaseController::restoreViewData to also accept a PropertyValue[] (it currently accepts
+                //   a string only), and forward it to its ViewShell's ReadUserDataSequence
+                // - change the frame loader so that when a new document is loaded (as opposed to an existing
+                //   document being loaded into a new frame), the model's view data is examine the very same
+                //   way as below, and the proper view data is set via XController::restoreViewData
+                // - extend SfxViewFrame::SwitchToViewShell_Impl. Currently, it cares for the case where a non-PrintPreview
+                //   view is exchanged, and sets the old view's data at the model. It should also care for the other
+                //   way, were the PrintPreview view is left: in this case, the new view should also be initialized
+                //   with the model's view data
                 try
                 {
-                    Reference< XViewDataSupplier > xViewDataSupplier( getModel(), UNO_QUERY );
-                    Reference< XIndexAccess > xViewData;
-                    if ( xViewDataSupplier.is() )
-                        xViewData = xViewDataSupplier->getViewData();
-                    if ( xViewData.is() && xViewData->getCount() > 0 )
+                    Reference< XViewDataSupplier > xViewDataSupplier( getModel(), UNO_QUERY_THROW );
+                    Reference< XIndexAccess > xViewData( xViewDataSupplier->getViewData(), UNO_SET_THROW );
+
+                    // find the view data item whose ViewId matches the ID of the view we're just connecting to
+                    const SfxObjectFactory& rDocFactory( rDoc.GetFactory() );
+                    const sal_Int32 nCount = xViewData->getCount();
+                    sal_Int32 nViewDataIndex = 0;
+                    for ( sal_Int32 i=0; i<nCount; ++i )
+                    {
+                        const ::comphelper::NamedValueCollection aViewData( xViewData->getByIndex(i) );
+                        ::rtl::OUString sViewId( aViewData.getOrDefault( "ViewId", ::rtl::OUString() ) );
+                        if ( sViewId.getLength() == 0 )
+                            continue;
+
+                        const SfxViewFactory* pViewFactory = rDocFactory.GetViewFactoryByViewName( sViewId );
+                        if ( pViewFactory == NULL )
+                            continue;
+
+                        if ( pViewFactory->GetOrdinal() == pViewFrame->GetCurViewId() )
+                        {
+                            nViewDataIndex = i;
+                            break;
+                        }
+                    }
+                    if ( nViewDataIndex < nCount )
                     {
                         Sequence< PropertyValue > aViewData;
-                        if ( ( xViewData->getByIndex( 0 ) >>= aViewData ) && ( aViewData.getLength() ) )
-                        {
+                        OSL_VERIFY( xViewData->getByIndex( nViewDataIndex ) >>= aViewData );
+                        if ( aViewData.getLength() > 0 )
                             m_pData->m_pViewShell->ReadUserDataSequence( aViewData, TRUE );
-                        }
                     }
                 }
                 catch( const Exception& )
