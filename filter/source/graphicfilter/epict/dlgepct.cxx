@@ -88,6 +88,8 @@ DlgExportEPCT::DlgExportEPCT( FltCallDialogParameter& rPara ) :
         case FUNIT_MILE :
         case FUNIT_FOOT :
         case FUNIT_M :
+        case FUNIT_CHAR :
+        case FUNIT_LINE :
             break;  // -Wall not handled.
         case FUNIT_MM :
         case FUNIT_CM :
