@@ -748,21 +748,21 @@ elsif ( $platform =~ m/darwin/ )
       $BIG_SVX        = "TRUE";
       $COM            = "GCC";
       $COMPATH        = '@COMPATH@'; 
-      if ($platform =~ m/^i[3456]86/)
-      {
-          print "Setting values for Mac OS X/Darwin on x86... ";
-          $outfile        = "MacOSXX86Env.Set"; 
-          $CPU            = "I";
-          $CPUNAME        = "INTEL";
-          $OUTPATH        = "unxmacxi";
-      }
-      elsif ($platform =~ m/^powerpc/)
+      if ($platform =~ m/^powerpc/)
       {
           print "Setting values for Mac OS X/Darwin on PowerPC... ";
           $outfile        = "MacOSXPPCEnv.Set"; 
           $CPU            = "P";
           $CPUNAME        = "POWERPC";
           $OUTPATH        = "unxmacxp";
+      }
+      else
+      {
+          print "Setting values for Mac OS X/Darwin on default x86... ";
+          $outfile        = "MacOSXX86Env.Set"; 
+          $CPU            = "I";
+          $CPUNAME        = "INTEL";
+          $OUTPATH        = "unxmacxi";
       }
       if (@GCCVER@ >= 30401) {
 	  $CVER           = "C341";
