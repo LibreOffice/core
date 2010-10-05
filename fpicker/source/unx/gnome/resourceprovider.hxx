@@ -35,7 +35,7 @@
 
 #include <sal/types.h>
 
-#include <rtl/ustring>
+#include <rtl/ustring.hxx>
 
 #define FOLDERPICKER_TITLE            500
 #define FOLDER_PICKER_DEF_DESCRIPTION 501
