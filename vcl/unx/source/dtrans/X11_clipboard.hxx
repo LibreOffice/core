@@ -30,13 +30,9 @@
 
 #include <X11_selection.hxx>
 
-#ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBAORD_XCLIPBOARDEX_HPP_
 #include <com/sun/star/datatransfer/clipboard/XClipboardEx.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBAORD_XCLIPBOARDNOTIFIER_HPP_
 #include <com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp>
-#endif
 #include <cppuhelper/compbase4.hxx>
 
 // ------------------------------------------------------------------------

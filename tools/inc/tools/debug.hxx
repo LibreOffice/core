@@ -30,9 +30,7 @@
 
 #include "tools/toolsdllapi.h"
 
-#ifndef _SAL_TYPES_H
 #include <sal/types.h>
-#endif
 #include <tools/solar.h>
 
 // ------------

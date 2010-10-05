@@ -29,9 +29,7 @@
 
 #include "unotools/unotoolsdllapi.h"
 
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESSTATESET_HPP_
 #include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
-#endif
 #include <com/sun/star/uno/Reference.hxx>
 #include <cppuhelper/weak.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>

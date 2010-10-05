@@ -30,9 +30,7 @@
 
 #include <vcl/dllapi.h>
 #include <tools/bigint.hxx>
-#ifndef _FIELD_HXX
 #include <vcl/field.hxx>
-#endif
 
 class LocaleDataWrapper;
 

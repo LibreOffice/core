@@ -30,9 +30,7 @@
 
 #include <vcl/print.hxx>
 #include <vcl/timer.hxx>
-#ifndef _VCL_IMPDEL_HXX
 #include <vcl/impdel.hxx>
-#endif
 
 #include <vector>
 

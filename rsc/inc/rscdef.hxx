@@ -27,9 +27,7 @@
 #ifndef _RSCDEF_HXX
 #define _RSCDEF_HXX
 
-#ifndef _TOOLS_UNQIDX_HXX
 #include <tools/unqidx.hxx>
-#endif
 #include <rsctree.hxx>
 
 /****************** C L A S S E S ****************************************/

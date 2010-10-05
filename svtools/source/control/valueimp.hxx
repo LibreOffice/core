@@ -29,9 +29,7 @@
 #include <tools/list.hxx>
 #include <tools/color.hxx>
 #include <tools/string.hxx>
-#ifndef _IMAGE_HXX
 #include <vcl/image.hxx>
-#endif
 #include <rtl/uuid.h>
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/compbase6.hxx>

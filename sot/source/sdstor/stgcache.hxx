@@ -29,12 +29,8 @@
 #define _STGCACHE_HXX
 
 #include <osl/endian.h>
-#ifndef _TOOLS_SOLAR_H
 #include <tools/solar.h>
-#endif
-#ifndef _TOOLS_STREAM_HXX
 #include <tools/stream.hxx>
-#endif
 #include <stgelem.hxx>
 
 class UCBStorageStream;

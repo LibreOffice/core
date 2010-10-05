@@ -34,9 +34,7 @@
 #include <tools/globname.hxx>
 #include <sot/formats.hxx>
 
-#ifndef _OWNCONT_HXX
 #include <svl/ownlist.hxx>
-#endif
 #include <svtools/transfer.hxx>
 
 class SvObjectServer

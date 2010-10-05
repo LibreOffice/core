@@ -30,12 +30,8 @@
 
 #include "svtools/svtdllapi.h"
 
-#ifndef _CTRL_HXX
 #include <vcl/ctrl.hxx>
-#endif
-#ifndef _VIRDEV_HXX
 #include <vcl/virdev.hxx>
-#endif
 #include <vcl/timer.hxx>
 
 class MouseEvent;

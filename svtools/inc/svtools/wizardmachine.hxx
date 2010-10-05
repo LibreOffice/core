@@ -29,9 +29,7 @@
 
 #include "svtools/svtdllapi.h"
 #include <svtools/wizdlg.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/tabpage.hxx>
 #include <comphelper/stl_types.hxx>
 

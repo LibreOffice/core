@@ -37,9 +37,7 @@
 #include <tools/string.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
-#ifndef _COM_SUN_STAR_DATATRANSFER_DND_DNDCONSTANTS_HDL_
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hdl>
-#endif
 #include "sot/sotdllapi.h"
 
 class SotDataObject;

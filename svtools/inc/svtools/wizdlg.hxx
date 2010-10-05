@@ -30,9 +30,7 @@
 
 #include "svtools/svtdllapi.h"
 
-#ifndef _VCL_DIALOG_HXX
 #include <vcl/dialog.hxx>
-#endif
 
 class TabPage;
 class Button;

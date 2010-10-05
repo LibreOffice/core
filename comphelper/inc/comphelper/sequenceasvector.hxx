@@ -35,9 +35,7 @@
 #include <algorithm>
 #include <com/sun/star/uno/Sequence.hxx>
 
-#ifndef _COM_SUN_STAR_BEANS_IllegalTypeException_HPP_
 #include <com/sun/star/beans/IllegalTypeException.hpp>
-#endif
 
 //_______________________________________________
 // namespace

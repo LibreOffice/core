@@ -30,9 +30,7 @@
 
 #include "svtools/svtdllapi.h"
 #include <tools/link.hxx>
-#ifndef _MENU_HXX
 #include <vcl/menu.hxx>
-#endif
 
 class FontList;
 class FontInfo;

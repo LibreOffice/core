@@ -31,9 +31,7 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/imgctrl.hxx>
 
-#ifndef _SVTOOLS_HYPERLABEL_HXX
 #include "svtools/hyperlabel.hxx"
-#endif
 
 
 

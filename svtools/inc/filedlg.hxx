@@ -30,9 +30,7 @@
 
 #include "svtools/svtdllapi.h"
 
-#ifndef _DIALOG_HXX
 #include <vcl/dialog.hxx>
-#endif
 
 class Edit;
 class ImpSvFileDlg;

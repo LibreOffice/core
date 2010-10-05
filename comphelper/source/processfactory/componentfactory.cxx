@@ -31,9 +31,7 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HDL_
 #include <com/sun/star/registry/XRegistryKey.hpp>
-#endif
 #include <cppuhelper/shlib.hxx>
 
 

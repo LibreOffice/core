@@ -32,9 +32,7 @@
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <com/sun/star/rendering/XSprite.hpp>
 
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
-#endif
 #include <cppcanvas/sprite.hxx>
 
 #include <implspritecanvas.hxx>

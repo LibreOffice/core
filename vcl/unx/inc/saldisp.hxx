@@ -37,13 +37,9 @@ class   SalXLib;
 // -=-= #includes =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <salunx.h>
 #include <vcl/salgtype.hxx>
-#ifndef _SV_PTRSTYLE_HXX
 #include <vcl/ptrstyle.hxx>
-#endif
 #include <sal/types.h>
-#ifndef _OSL_MUTEX_H
 #include <osl/mutex.h>
-#endif
 #include <vector>
 #include <list>
 #include <hash_map>

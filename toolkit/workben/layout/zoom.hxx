@@ -31,9 +31,7 @@
 
 #include <layout/layout.hxx>
 #include <sfx2/basedlgs.hxx>
-#ifndef _SV_BUTTON_HXX //autogen wg. Radio-/OK-/Cancel-/HelpButton
 #include <vcl/button.hxx>
-#endif
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 
@@ -43,9 +41,7 @@
 #define ZOOMBTN_PAGEWIDTH   ((USHORT)0x0002)
 #define ZOOMBTN_WHOLEPAGE   ((USHORT)0x0004)
 */
-#ifndef _SVX_ZOOM_HXX
 #include "zoom_def.hxx"
-#endif
 // class SvxZoomDialog ---------------------------------------------------
 /*
     {k:\svx\prototyp\dialog\zoom.bmp}

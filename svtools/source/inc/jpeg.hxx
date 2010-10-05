@@ -28,9 +28,7 @@
 #ifndef _JPEG_HXX
 #define _JPEG_HXX
 
-#ifndef _GRAPH_HXX
 #include <vcl/graph.hxx>
-#endif
 #include <svtools/fltcall.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>

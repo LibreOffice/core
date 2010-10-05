@@ -27,9 +27,7 @@
 #ifndef SVTOOLS_SOURCE_TABLE_TABLEDATAWINDOW_HXX
 #define SVTOOLS_SOURCE_TABLE_TABLEDATAWINDOW_HXX
 
-#ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
-#endif
 #include <vcl/seleng.hxx>
 
 //........................................................................

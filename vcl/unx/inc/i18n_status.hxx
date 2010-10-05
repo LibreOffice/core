@@ -32,9 +32,7 @@
 #include <tools/link.hxx>
 #include <tools/gen.hxx>
 
-#ifndef _RTL_USTRING_HXX
 #include <rtl/ustring.hxx>
-#endif
 #include <vcl/salimestatus.hxx>
 
 #include <vector>

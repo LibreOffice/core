@@ -33,9 +33,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 
-#ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDROPTARGETLISTENR_HPP_
 #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
-#endif
 #include <com/sun/star/datatransfer/dnd/DropTargetDragEnterEvent.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTargetDragContext.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTargetDropContext.hpp>

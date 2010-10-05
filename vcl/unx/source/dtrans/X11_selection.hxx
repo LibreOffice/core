@@ -40,9 +40,7 @@
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <osl/thread.h>
 
-#ifndef _OSL_CONDITION_HXX_
 #include <osl/conditn.hxx>
-#endif
 
 #include <hash_map>
 #include <list>

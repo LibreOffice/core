@@ -30,13 +30,9 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_RENDERING_XCANVAS_HPP__
 #include <com/sun/star/rendering/XCanvas.hpp>
-#endif
 #include <cppcanvas/font.hxx>
 
 namespace rtl

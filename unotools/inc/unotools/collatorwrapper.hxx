@@ -29,9 +29,7 @@
 #ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
 #define _UNOTOOLS_COLLATORWRAPPER_HXX
 
-#ifndef _COM_SUN_STAR_UTIL_XCOLLATOR_HPP_
 #include <com/sun/star/i18n/XCollator.hpp>
-#endif
 
 namespace com { namespace sun { namespace star { namespace lang {
         class XMultiServiceFactory;

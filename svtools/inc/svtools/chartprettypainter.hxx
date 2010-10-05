@@ -28,9 +28,7 @@
 #ifndef CHARTPRETTYPAINTER_HXX
 #define CHARTPRETTYPAINTER_HXX
 
-#ifndef INCLUDED_SVTDLLAPI_H
 #include "svtools/svtdllapi.h"
-#endif
 
 //#include <svtools/embedhlp.hxx>
 #include <vcl/outdev.hxx>

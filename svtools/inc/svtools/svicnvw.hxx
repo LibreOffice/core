@@ -28,9 +28,7 @@
 #ifndef _SVICNVW_HXX
 #define _SVICNVW_HXX
 
-#ifndef _IMAGE_HXX
 #include <vcl/image.hxx>
-#endif
 #include <svtools/svlbox.hxx>
 
 class SvImpIconView;

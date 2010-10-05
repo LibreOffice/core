@@ -37,13 +37,9 @@
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardOwner.hpp>
 
-#ifndef _DATAFORMATTRANSLATOR_HXX_
 #include "DataFmtTransl.hxx"
-#endif
 
-#ifndef _FETCLIST_HXX_
 #include "FEtcList.hxx"
-#endif
 
 #if defined _MSC_VER
 #pragma warning(push,1)

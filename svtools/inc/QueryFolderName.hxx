@@ -28,9 +28,7 @@
 #define SVT_QUERYFOLDER_HXX
 
 #include <vcl/fixed.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/edit.hxx>
 #include <vcl/dialog.hxx>
 

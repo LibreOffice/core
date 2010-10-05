@@ -31,9 +31,7 @@
 #ifndef _STGELEM_HXX
 #define _STGELEM_HXX
 
-#ifndef _TOOLS_SOLAR_H
 #include <tools/solar.h>
-#endif
 
 #include <stg.hxx>
 

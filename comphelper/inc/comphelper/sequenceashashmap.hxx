@@ -44,9 +44,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 
-#ifndef _COM_SUN_STAR_BEANS_IllegalTypeException_HPP_
 #include <com/sun/star/beans/IllegalTypeException.hpp>
-#endif
 #include "comphelper/comphelperdllapi.h"
 
 // see method dbg_dumpToFile() below!

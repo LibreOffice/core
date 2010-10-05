@@ -35,17 +35,11 @@
 #define INCLUDED_DEQUE
 #endif
 
-#ifndef _CTRL_HXX
 #include <vcl/ctrl.hxx>
-#endif
 #include <vcl/seleng.hxx>
-#ifndef _EDIT_HXX
 #include <vcl/edit.hxx>
-#endif
 #include <vcl/timer.hxx>
-#ifndef _ACCEL_HXX
 #include <vcl/accel.hxx>
-#endif
 #include <vcl/mnemonicengine.hxx>
 #include <tools/gen.hxx>
 #include <svtools/treelist.hxx>

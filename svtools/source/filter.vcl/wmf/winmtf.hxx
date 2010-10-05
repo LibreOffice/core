@@ -33,12 +33,8 @@
 #endif
 
 #include <sot/object.hxx>
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
-#endif
-#ifndef _TOOL_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
 #include <tools/stack.hxx>
 #include <tools/table.hxx>
 #include <tools/dynary.hxx>

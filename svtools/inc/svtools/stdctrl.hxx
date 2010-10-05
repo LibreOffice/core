@@ -30,12 +30,8 @@
 
 #include "svtools/svtdllapi.h"
 
-#ifndef _EDIT_HXX
 #include <vcl/edit.hxx>
-#endif
-#ifndef _FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
 
 // -------------
 // - FixedInfo -

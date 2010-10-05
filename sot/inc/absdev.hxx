@@ -28,9 +28,7 @@
 #ifndef _SOT_ABSDEV_HXX
 #define _SOT_ABSDEV_HXX
 
-#ifndef _TOOLS_SOLAR_H
 #include <tools/solar.h>
-#endif
 
 class JobSetup;
 class AbstractDeviceData

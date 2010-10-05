@@ -42,9 +42,7 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 
-#ifndef  _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HDL_
 #include <com/sun/star/task/XInteractionHandler.hdl>
-#endif
 #include <com/sun/star/ucb/NumberedSortingInfo.hpp>
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>

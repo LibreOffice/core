@@ -28,9 +28,7 @@
 #ifndef _SV_SALBMP_HXX
 #define _SV_SALBMP_HXX
 
-#ifndef _TL_GEN_HXX
 #include <tools/gen.hxx>
-#endif
 #include <vcl/dllapi.h>
 
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>

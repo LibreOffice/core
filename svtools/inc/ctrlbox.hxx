@@ -30,24 +30,12 @@
 
 #include "svtools/svtdllapi.h"
 
-#ifndef _LSTBOX_HXX
 #include <vcl/lstbox.hxx>
-#endif
-#ifndef _COMBOBOX_HXX
 #include <vcl/combobox.hxx>
-#endif
-#ifndef _IMAGE_HXX
 #include <vcl/image.hxx>
-#endif
-#ifndef _VIRDEV_HXX
 #include <vcl/virdev.hxx>
-#endif
-#ifndef _METRIC_HXX
 #include <vcl/metric.hxx>
-#endif
-#ifndef _FIELD_HXX
 #include <vcl/field.hxx>
-#endif
 
 class ImplFontList;
 class ImpColorList;

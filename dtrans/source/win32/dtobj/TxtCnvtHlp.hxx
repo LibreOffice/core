@@ -31,9 +31,7 @@
 
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HPP_
 #include <com/sun/star/uno/Sequence.h>
-#endif
 #include "DTransHelper.hxx"
 
 #if defined _MSC_VER

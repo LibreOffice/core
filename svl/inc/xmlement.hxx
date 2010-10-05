@@ -28,9 +28,7 @@
 #ifndef _SVTOOLS_XMLEMENT_HXX
 #define _SVTOOLS_XMLEMENT_HXX
 
-#ifndef _SAL_TYPES_H
 #include <sal/types.h>
-#endif
 
 struct SvXMLEnumMapEntry
 {

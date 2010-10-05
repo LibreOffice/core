@@ -33,9 +33,7 @@ class SvStream;
 class ResId;
 #include <tools/solar.h>
 
-#ifndef _BGFX_COLOR_BCOLOR_HXX
 #include <basegfx/color/bcolor.hxx>
-#endif
 
 // --------------------
 // - ColorCount-Types -

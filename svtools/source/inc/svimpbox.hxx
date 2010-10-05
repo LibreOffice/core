@@ -28,12 +28,8 @@
 #ifndef _SVIMPLBOX_HXX
 #define _SVIMPLBOX_HXX
 
-#ifndef _SELENG_HXX
 #include <vcl/seleng.hxx>
-#endif
-#ifndef _SCRBAR_HXX
 #include <vcl/scrbar.hxx>
-#endif
 #include <vcl/vclevent.hxx>
 // #102891# ----------------
 #include <unotools/intlwrapper.hxx>

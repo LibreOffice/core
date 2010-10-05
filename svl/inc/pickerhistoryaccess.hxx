@@ -30,9 +30,7 @@
 
 #include "svl/svldllapi.h"
 
-#ifndef _COM_SUN_STAR_UNO_REFERENX_HXX_
 #include <com/sun/star/uno/Reference.hxx>
-#endif
 
 //.........................................................................
 namespace svt

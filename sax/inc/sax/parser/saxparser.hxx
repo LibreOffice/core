@@ -33,9 +33,7 @@
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <rtl/ref.hxx>
 
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
-#endif
 
 #include <map>
 #include <memory>

@@ -33,9 +33,7 @@
 //#include <tools/intn.hxx>
 #endif
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#ifndef _COM_SUN_STAR_UTIL_SEARCHFLAGS_HDL_
 #include <com/sun/star/util/SearchFlags.hdl>
-#endif
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <unotools/charclass.hxx>
 #include <comphelper/processfactory.hxx>

@@ -34,9 +34,7 @@
 #include <vcl/salframe.hxx>
 #include <salinst.h>
 #include <vcl/saldatabasic.hxx>
-#ifndef _OSL_MODULE_H
 #include <osl/module.h>
-#endif
 #include <vcl/dllapi.h>
 
 // -=-= forwards -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

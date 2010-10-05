@@ -27,12 +27,8 @@
 
 
 #include <osl/diagnose.h>
-#ifndef _COM_SUN_STAR_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XCONTAINER_HPP_
 #include <com/sun/star/container/XContainer.hpp>
-#endif
 
 #include <toolkit/helper/listenermultiplexer.hxx>
 

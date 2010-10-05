@@ -27,13 +27,9 @@
 #ifndef SVTOOLS_TABLEGEOMETRY_HXX
 #define SVTOOLS_TABLEGEOMETRY_HXX
 
-#ifndef SVTOOLS_INC_TABLE_TABLETYPES_HXX
 #include <svtools/table/tabletypes.hxx>
-#endif
 
-#ifndef _SV_GEN_HXX
 #include <tools/gen.hxx>
-#endif
 
 //........................................................................
 namespace svt { namespace table

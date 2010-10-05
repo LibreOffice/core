@@ -32,9 +32,7 @@
 #include <tools/solar.h>
 #include <tools/list.hxx>
 
-#ifndef _TABLE_HXX
 #include <tools/table.hxx>
-#endif
 #include <tools/link.hxx>
 #include <tools/string.hxx>
 #include <tools/debug.hxx>

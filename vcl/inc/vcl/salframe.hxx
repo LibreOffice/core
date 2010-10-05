@@ -33,9 +33,7 @@
 
 #ifdef __cplusplus
 
-#ifndef _SV_PTRSTYLE_HXX
 #include <vcl/ptrstyle.hxx>
-#endif
 #include <vcl/sndstyle.hxx>
 
 #endif // __cplusplus
@@ -44,9 +42,7 @@
 #include <tools/gen.hxx>
 #include <vcl/region.hxx>
 
-#ifndef _VCL_IMPDEL_HXX
 #include <vcl/impdel.hxx>
-#endif
 #include <rtl/ustring.hxx>
 #include <vcl/keycod.hxx>
 

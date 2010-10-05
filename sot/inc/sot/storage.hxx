@@ -31,18 +31,12 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
 
-#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_H_
 #include <com/sun/star/io/XInputStream.hpp>
-#endif
 #include <com/sun/star/embed/XStorage.hpp>
 #include <sot/object.hxx>
 #include <sot/factory.hxx>
-#ifndef _TOOLS_STREAM_HXX
 #include <tools/stream.hxx>
-#endif
-#ifndef _TOOLS_ERRCODE_HXX
 #include <tools/errcode.hxx>
-#endif
 #include "sot/sotdllapi.h"
 
 #define STORAGE_FAILIFTHERE     0x02

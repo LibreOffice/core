@@ -34,9 +34,7 @@
 #include <tools/string.hxx>
 #include <tools/urlobj.hxx>
 
-#ifndef _COMBOBOX_HXX //autogen
 #include <vcl/combobox.hxx>
-#endif
 
 class IUrlFilter;
 class SvtMatchContext_Impl;

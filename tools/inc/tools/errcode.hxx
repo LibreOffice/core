@@ -29,9 +29,7 @@
 #define _ERRCODE_HXX
 
 #ifndef __RSC
-#ifndef _SOLAR_H
 #include <tools/solar.h>
-#endif
 #endif
 
 /*

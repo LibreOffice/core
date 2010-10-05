@@ -28,18 +28,14 @@
 #ifndef _SV_SVAPP_HXX
 #define _SV_SVAPP_HXX
 
-#ifndef _VOS_THREAD_HXX
 #include <vos/thread.hxx>
-#endif
 #include <tools/string.hxx>
 #include <tools/link.hxx>
 #include <tools/unqid.hxx>
 #include <vcl/sv.h>
 #include <vcl/dllapi.h>
 #include <vcl/apptypes.hxx>
-#ifndef _VCL_SETTINGS_HXX
 #include <vcl/settings.hxx>
-#endif
 #include <vcl/vclevent.hxx>
 class Link;
 class AllSettings;

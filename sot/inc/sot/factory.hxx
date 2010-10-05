@@ -28,12 +28,8 @@
 #ifndef _SOT_FACTORY_HXX
 #define _SOT_FACTORY_HXX
 
-#ifndef _TOOLS_GLOBNAME_HXX
 #include <tools/globname.hxx>
-#endif
-#ifndef _TOOLS_RTTI_HXX
 #include <tools/rtti.hxx>
-#endif
 #include "sot/sotdllapi.h"
 
 /*************************************************************************

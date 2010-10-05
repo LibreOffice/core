@@ -30,9 +30,7 @@
 
 #include "svtools/svtdllapi.h"
 #include <tools/time.hxx>
-#ifndef _TOOLS_LIST_HXX
 #include <tools/list.hxx>
-#endif
 #include <vcl/timer.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/status.hxx>

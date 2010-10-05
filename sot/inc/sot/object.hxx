@@ -29,12 +29,8 @@
 #define _SOT_OBJECT_HXX
 
 #include <sot/sotref.hxx>
-#ifndef _SOT_SOTDATA_HXX
 #include <sot/sotdata.hxx>
-#endif
-#ifndef _TOOLS_GLOBNAME_HXX
 #include <tools/globname.hxx>
-#endif
 #include "sot/sotdllapi.h"
 
 /*************************************************************************

@@ -30,9 +30,7 @@
 
 #include "svtools/svtdllapi.h"
 
-#ifndef _SCRBAR_HXX //autogen
 #include <vcl/scrbar.hxx>
-#endif
 
 class DataChangedEvent;
 

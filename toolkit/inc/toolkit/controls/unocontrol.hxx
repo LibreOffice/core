@@ -31,9 +31,7 @@
 #include <toolkit/dllapi.h>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
-#ifndef _COM_SUN_STAR_AWT_XView_HPP_
 #include <com/sun/star/awt/XView.hpp>
-#endif
 #include <com/sun/star/beans/XPropertiesChangeListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>

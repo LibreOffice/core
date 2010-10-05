@@ -32,9 +32,7 @@
 #include <tools/string.hxx>
 #include <tools/link.hxx>
 #include <tools/wldcrd.hxx>
-#ifndef __ERRCODE_HXX
 #include <tools/errcode.hxx>
-#endif
 #include "tools/toolsdllapi.h"
 
 #include <cstdarg>

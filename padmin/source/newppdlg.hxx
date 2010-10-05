@@ -29,9 +29,7 @@
 #define _PAD_NEWPPDLG_HXX_
 
 #include <vcl/dialog.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/combobox.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>

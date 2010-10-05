@@ -28,13 +28,9 @@
 #ifndef _DOCUMENTFOCUSLISTENER_HXX_
 #define _DOCUMENTFOCUSLISTENER_HXX_
 
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEEVENTLISTENER_HPP_
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
-#endif
 
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
-#endif
 
 #include "aqua11yfocustracker.hxx"
 #include <set>

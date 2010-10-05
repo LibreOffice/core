@@ -33,13 +33,9 @@
 
 #include <vector>
 
-#ifndef __COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP__
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#endif
 
-#ifndef __COM_SUN_STAR_TASK_XINTERACTIONREQUEST_HPP__
 #include <com/sun/star/task/XInteractionRequest.hpp>
-#endif
 #include <cppuhelper/implbase1.hxx>
 #include "ucbhelper/ucbhelperdllapi.h"
 

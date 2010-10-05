@@ -28,12 +28,8 @@
 #ifndef _IMPICNVW_HXX
 #define _IMPICNVW_HXX
 
-#ifndef _VIRDEV_HXX
 #include <vcl/virdev.hxx>
-#endif
-#ifndef _SCRBAR_HXX
 #include <vcl/scrbar.hxx>
-#endif
 #include <vcl/timer.hxx>
 #include <vcl/seleng.hxx>
 #include <tools/debug.hxx>

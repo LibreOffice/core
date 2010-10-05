@@ -28,9 +28,7 @@
 #ifndef _DECODE_HXX
 #define _DECODE_HXX
 
-#ifndef _BMPACC_HXX
 #include <vcl/bmpacc.hxx>
-#endif
 
 struct GIFLZWTableEntry;
 

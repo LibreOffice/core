@@ -29,15 +29,9 @@
 #define _CANVAS_IMPLPOLYPOLYGON_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
-#ifndef _COM_SUN_STAR_RENDERING_XPOLYPOLYGON2D_HPP__
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
-#endif
-#ifndef _COM_SUN_STAR_RENDERING_XGRAPHICDEVICE_HPP__
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
-#endif
-#ifndef _COM_SUN_STAR_RENDERING_STROKEATTRIBUTES_HPP__
 #include <com/sun/star/rendering/StrokeAttributes.hpp>
-#endif
 
 #include <cppcanvas/polypolygon.hxx>
 #include <canvasgraphichelper.hxx>

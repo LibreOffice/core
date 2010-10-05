@@ -29,12 +29,8 @@
 #define _CPPCANVAS_IMPLBITMAP_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
-#ifndef _COM_SUN_STAR_RENDERING_XBITMAP_HPP__
 #include <com/sun/star/rendering/XBitmap.hpp>
-#endif
-#ifndef _COM_SUN_STAR_RENDERING_XGRAPHICDEVICE_HPP__
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
-#endif
 
 #include <cppcanvas/bitmap.hxx>
 #include <canvasgraphichelper.hxx>

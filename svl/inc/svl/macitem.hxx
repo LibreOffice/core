@@ -35,9 +35,7 @@
 #include <tools/debug.hxx>
 #include <tools/string.hxx>
 
-#ifndef _TABLE_HXX
 #include <tools/table.hxx>
-#endif
 
 class SvStream;
 

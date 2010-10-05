@@ -31,9 +31,7 @@
 
 #include <sal/types.h>
 
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
 #include <com/sun/star/uno/Sequence.hxx>
-#endif
 
 #if defined _MSC_VER
 #pragma warning(push,1)

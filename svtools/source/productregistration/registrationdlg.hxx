@@ -29,9 +29,7 @@
 #define SVTOOLS_REGISTRATIONDLG_HXX
 
 #include <vcl/fixed.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/dialog.hxx>
 
 //........................................................................

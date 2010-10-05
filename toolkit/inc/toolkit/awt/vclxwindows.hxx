@@ -64,9 +64,7 @@
 #include <com/sun/star/awt/XUnoControlContainer.hpp>
 #include <com/sun/star/awt/XTextLayoutConstrains.hpp>
 #include <com/sun/star/awt/XNumericField.hpp>
-#ifndef _COM_SUN_STAR_AWT_XMetricFIELD_HPP_
 #include <com/sun/star/awt/XMetricField.hpp>
-#endif
 #include <com/sun/star/awt/XButton.hpp>
 #include <com/sun/star/awt/XToggleButton.hpp>
 #include <com/sun/star/awt/XPointer.hpp>

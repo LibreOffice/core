@@ -29,9 +29,7 @@
 
 #include "svl/svldllapi.h"
 #include <tools/string.hxx>
-#ifndef _TABLE_HXX //autogen
 #include <tools/table.hxx>
-#endif
 #include <i18npool/lang.h>
 #include <svl/svarray.hxx>
 #include <com/sun/star/uno/Reference.hxx>

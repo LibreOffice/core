@@ -44,9 +44,7 @@
 #include <com/sun/star/datatransfer/dnd/DropTargetDragEvent.hpp>
 #include <com/sun/star/datatransfer/dnd/DropTargetDropEvent.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragSourceListener.hpp>
-#ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDROPTARGETELISTENER_HPP_
 #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
-#endif
 #include <com/sun/star/io/XInputStream.hpp>
 
 // ------------------------

@@ -28,9 +28,7 @@
 #define _TOOLS_TENCCVT_HXX
 
 #include <rtl/textenc.h>
-#ifndef _TOOLS_SOLAR_H
 #include <tools/solar.h>
-#endif
 #include "tools/toolsdllapi.h"
 
 // ----------------------------------------

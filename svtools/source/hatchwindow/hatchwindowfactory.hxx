@@ -32,9 +32,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 
-#ifndef _CPPUHELPER_IMPLBASE5_HXX_
 #include <cppuhelper/implbase2.hxx>
-#endif
 
 
 class OHatchWindowFactory : public ::cppu::WeakImplHelper2<

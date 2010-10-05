@@ -28,9 +28,7 @@
 #ifndef _RSCLST_HXX
 #define _RSCLST_HXX
 
-#ifndef _TOOLS_LIST_HXX
 #include <tools/list.hxx>
-#endif
 #include <rscall.h>
 
 class REResourceList;

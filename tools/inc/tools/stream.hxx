@@ -30,9 +30,7 @@
 #include "tools/toolsdllapi.h"
 #include <tools/solar.h>
 #include <tools/string.hxx>
-#ifndef _EINF_HXX
 #include <tools/errinf.hxx>
-#endif
 #include <tools/ref.hxx>
 #include <tools/rtti.hxx>
 

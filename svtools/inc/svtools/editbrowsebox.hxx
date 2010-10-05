@@ -36,9 +36,7 @@
 #include <vcl/combobox.hxx>
 #include <vcl/lstbox.hxx>
 
-#ifndef _IMAGEBTN_HXX
 #include <vcl/imagebtn.hxx>
-#endif
 #include <svtools/brwbox.hxx>
 #include <vcl/timer.hxx>
 #include <svtools/brwhead.hxx>

@@ -28,9 +28,7 @@
 #ifndef _COMPHELPER_OFOPXMLHELPER_HXX
 #define _COMPHELPER_OFOPXMLHELPER_HXX
 
-#ifndef _COM_SUN_STAR_XML_SAX_XDUCUMENTHANDLER_HPP_
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#endif
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>

@@ -30,13 +30,9 @@
 #include <hash_map>
 #include "tools/toolsdllapi.h"
 
-#ifndef _TABLE_HXX
 #include <tools/table.hxx>
-#endif
 
-#ifndef _INQIDX_HXX
 #include <tools/unqidx.hxx>
-#endif
 #include <tools/ref.hxx>
 #include <tools/rtti.hxx>
 #include <tools/stream.hxx>

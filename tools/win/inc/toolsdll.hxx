@@ -30,9 +30,7 @@
 
 #ifdef WIN
 
-#ifndef _STRING_H
 #include <string.h>
-#endif
 #include <tools/svwin.h>
 #include <tools/solar.h>
 #include <tools/shl.hxx>

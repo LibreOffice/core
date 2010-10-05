@@ -28,9 +28,7 @@
 #ifndef _XPMREAD_HXX
 #define _XPMREAD_HXX
 
-#ifndef _BITMAP_HXX
 #include <vcl/bitmap.hxx>
-#endif
 
 #ifdef _XPMPRIVATE
 

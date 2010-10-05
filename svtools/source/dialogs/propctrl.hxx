@@ -35,18 +35,10 @@
   */
 
 
-#ifndef __PROPED_HXX__
 #include <proped.hxx>
-#endif
-#ifndef _UNO_HXX
 #include <usr/uno.hxx>
-#endif
-#ifndef _USR_SEQU_HXX
 #include <usr/sequ.hxx>
-#endif
-#ifndef __TOOLSIDL_HXX__
 #include <usr/toolsidl.hxx>
-#endif
 
 /*
 class XPropertyEditor

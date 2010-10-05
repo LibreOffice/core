@@ -29,9 +29,7 @@
 
 #include "svl/svldllapi.h"
 
-#ifndef _HINT_HXX
 #include <svl/hint.hxx>
-#endif
 
 class SfxItemSet;
 

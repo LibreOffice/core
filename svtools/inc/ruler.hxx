@@ -31,9 +31,7 @@
 #include "svtools/svtdllapi.h"
 #include <tools/link.hxx>
 #include <vcl/window.hxx>
-#ifndef _VIRDEV_HXX
 #include <vcl/virdev.hxx>
-#endif
 #include <vcl/field.hxx>
 
 class MouseEvent;

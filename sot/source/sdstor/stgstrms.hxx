@@ -28,9 +28,7 @@
 #ifndef _STGSTRMS_HXX
 #define _STGSTRMS_HXX
 
-#ifndef _TOOLS_STREAM_HXX
 #include <tools/stream.hxx>
-#endif
 
 class StgIo;
 class StgStrm;

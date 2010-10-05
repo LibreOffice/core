@@ -30,13 +30,9 @@
 #include "tools/toolsdllapi.h"
 #include <sal/types.h>
 
-#ifndef _RTL_TEXTENC_H_
 #include <rtl/textenc.h>
-#endif
 
-#ifndef _TOOLS_INETMIME_HXX
 #include <tools/inetmime.hxx>
-#endif
 #include <tools/list.hxx>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>

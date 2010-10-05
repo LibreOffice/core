@@ -28,9 +28,7 @@
 #ifndef _AQUA11YFOCUSTRACKER_HXX_
 #define _AQUA11YFOCUSTRACKER_HXX_
 
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#endif
 
 #include "keyboardfocuslistener.hxx"
 

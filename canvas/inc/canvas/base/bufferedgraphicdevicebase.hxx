@@ -28,22 +28,12 @@
 #ifndef INCLUDED_CANVAS_BUFFEREDGRAPHICDEVICEBASE_HXX
 #define INCLUDED_CANVAS_BUFFEREDGRAPHICDEVICEBASE_HXX
 
-#ifndef _COM_SUN_STAR_AWT_XWINDOW2_HPP_
 #include <com/sun/star/awt/XWindow2.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XTOPWINDOW_HPP_
 #include <com/sun/star/awt/XTopWindow.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XWINDOWLISTENER_HPP_
 #include <com/sun/star/awt/XWindowListener.hpp>
-#endif
 
-#ifndef INCLUDED_CANVAS_CANVASTOOLS_HXX
 #include <canvas/canvastools.hxx>
-#endif
-#ifndef INCLUDED_CANVAS_GRAPHICDEVICEBASE_HXX
 #include <canvas/base/graphicdevicebase.hxx>
-#endif
 
 
 /* Definition of BufferedGraphicDeviceBase class */

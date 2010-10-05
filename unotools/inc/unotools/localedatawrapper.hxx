@@ -35,9 +35,7 @@
 #include <unotools/readwritemutexguard.hxx>
 #include "unotools/unotoolsdllapi.h"
 
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
-#endif
 
 
 namespace com { namespace sun { namespace star {

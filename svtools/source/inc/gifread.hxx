@@ -28,12 +28,8 @@
 #ifndef _GIFREAD_HXX
 #define _GIFREAD_HXX
 
-#ifndef _GRAPH_HXX
 #include <vcl/graph.hxx>
-#endif
-#ifndef _BMPACC_HXX
 #include <vcl/bmpacc.hxx>
-#endif
 
 #ifdef _GIFPRIVATE
 

@@ -30,9 +30,7 @@
 
 #include <cppuhelper/compbase3.hxx>
 
-#ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBAORD_XCLIPBOARDMANAGER_HPP_
 #include <com/sun/star/datatransfer/clipboard/XClipboardManager.hpp>
-#endif
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <map>

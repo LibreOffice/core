@@ -73,9 +73,7 @@
 #include <vcl/controllayout.hxx>
 #include <rtl/logfile.hxx>
 
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUES_HDL_
 #include <com/sun/star/beans/PropertyValues.hdl>
-#endif
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceManager.hpp>

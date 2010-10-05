@@ -30,9 +30,7 @@
 
 #include "svtools/svtdllapi.h"
 #include <vcl/dialog.hxx>
-#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
 #include <svtools/colctrl.hxx>

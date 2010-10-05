@@ -32,18 +32,12 @@
 #include <list>
 #endif
 #include <tools/string.hxx>
-#ifndef _RESID_HXX
 #include <tools/resid.hxx>
-#endif
 #include <vcl/dialog.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>
-#ifndef _SV_LISTBOX_HXX
 #include <vcl/lstbox.hxx>
-#endif
 #include <vcl/combobox.hxx>
 
 class Config;

@@ -28,13 +28,9 @@
 #ifndef TOOLKIT_HELPER_ACCESSIBLE_FACTORY_HXX
 #define TOOLKIT_HELPER_ACCESSIBLE_FACTORY_HXX
 
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX
 #include <com/sun/star/uno/Reference.hxx>
-#endif
 
-#ifndef _RTL_REF_HXX
 #include <rtl/ref.hxx>
-#endif
 
 namespace com { namespace sun { namespace star { namespace accessibility {
     class XAccessible;

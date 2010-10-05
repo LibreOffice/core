@@ -27,9 +27,7 @@
 #ifndef _WALLITEM_HXX
 #define _WALLITEM_HXX
 
-#ifndef SHL_HXX
 #include <tools/shl.hxx>
-#endif
 
 // -----------------------------------------------------------------------------------------
 // Hilfsklasse, um die Download-Funktionalitaet des SvxBrushItems unterhalb

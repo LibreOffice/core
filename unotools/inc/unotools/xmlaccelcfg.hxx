@@ -28,9 +28,7 @@
 #ifndef INCLUDED_unotools_XMLACCELCFG_HXX
 #define INCLUDED_unotools_XMLACCELCFG_HXX
 
-#ifndef __COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP_
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#endif
 #include <cppuhelper/weak.hxx>
 
 #include <unotools/accelcfg.hxx>

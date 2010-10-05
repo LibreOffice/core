@@ -27,15 +27,9 @@
 #ifndef _RSCRSC_HXX
 #define _RSCRSC_HXX
 
-#ifndef RSCALL_H
 #include <rscall.h>
-#endif
-#ifndef RSCERROR_H
 #include <rscerror.h>
-#endif
-#ifndef RSCTOOLS_HXX
 #include <rsctools.hxx>
-#endif
 
 #include <list>
 

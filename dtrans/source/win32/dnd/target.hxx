@@ -32,13 +32,9 @@
 #include <com/sun/star/datatransfer/dnd/DropTargetDragEnterEvent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#ifndef _CPPUHELPER_COMPBASE2_HXX_
 #include <cppuhelper/compbase3.hxx>
-#endif
 #include <cppuhelper/interfacecontainer.hxx>
-#ifndef _OSL_MUTEX_H_
 #include <osl/mutex.hxx>
-#endif
 
 #if defined _MSC_VER
 #pragma warning(push,1)

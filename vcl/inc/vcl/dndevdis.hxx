@@ -31,9 +31,7 @@
 #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTargetDragContext.hpp>
 
-#ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDRAGESTURERECOGNIZER_HPP_
 #include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
-#endif
 #include <cppuhelper/implbase3.hxx>
 #include <vcl/window.hxx>
 

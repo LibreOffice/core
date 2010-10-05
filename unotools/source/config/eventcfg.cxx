@@ -37,9 +37,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <cppuhelper/weakref.hxx>
 
-#ifndef __SGI_STL_HASH_MAP
 #include <hash_map>
-#endif
 #include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
 

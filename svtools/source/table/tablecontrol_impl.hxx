@@ -27,13 +27,9 @@
 #ifndef SVTOOLS_TABLECONTROL_IMPL_HXX
 #define SVTOOLS_TABLECONTROL_IMPL_HXX
 
-#ifndef SVTOOLS_INC_TABLE_TABLEMODEL_HXX
 #include <svtools/table/tablemodel.hxx>
-#endif
 
-#ifndef SVTOOLS_INC_TABLE_ABSTRACTTABLECONTROL_HXX
 #include <svtools/table/abstracttablecontrol.hxx>
-#endif
 
 #include <svtools/table/tablemodel.hxx>
 #include <vector>

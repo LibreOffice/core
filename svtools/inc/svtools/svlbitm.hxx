@@ -31,13 +31,9 @@
 
 #include "svtools/svtdllapi.h"
 
-#ifndef LINK_HXX
 #include <tools/link.hxx>
-#endif
 
-#ifndef _IMAGE_HXX
 #include <vcl/image.hxx>
-#endif
 #include <svtools/svlbox.hxx>
 
 class SvLBoxEntry;

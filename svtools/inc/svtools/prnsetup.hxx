@@ -30,24 +30,12 @@
 
 #include "svtools/svtdllapi.h"
 
-#ifndef _VCL_DIALOG_HXX
 #include <vcl/dialog.hxx>
-#endif
-#ifndef _VCL_FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _VCL_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
-#ifndef _VCL_GROUP_HXX
 #include <vcl/group.hxx>
-#endif
-#ifndef _VCL_LSTBOX_HXX
 #include <vcl/lstbox.hxx>
-#endif
-#ifndef _VCL_TIMER_HXX
 #include <vcl/timer.hxx>
-#endif
 #include <svtools/stdctrl.hxx>
 
 class Printer;

@@ -37,9 +37,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase5.hxx>
-#ifndef _CPPUHELPER_PROPERTYSETMIXIN_HXX_
 #include <cppuhelper/propertysetmixin.hxx>
-#endif
 #include <osl/mutex.hxx>
 
 class SvStream;

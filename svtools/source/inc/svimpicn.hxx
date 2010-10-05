@@ -27,13 +27,9 @@
 #ifndef _SVIMPICN_HXX
 #define _SVIMPICN_HXX
 
-#ifndef _VIRDEV_HXX
 #include <vcl/virdev.hxx>
-#endif
 
-#ifndef _SCRBAR_HXX
 #include <vcl/scrbar.hxx>
-#endif
 #include <limits.h>
 
 class SvLBoxEntry;

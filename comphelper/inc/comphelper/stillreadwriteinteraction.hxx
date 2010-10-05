@@ -32,9 +32,7 @@
 // includes
 #include <ucbhelper/interceptedinteraction.hxx>
 
-#ifndef __COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP__
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#endif
 
 #include <ucbhelper/interceptedinteraction.hxx>
 #include "comphelper/comphelperdllapi.h"

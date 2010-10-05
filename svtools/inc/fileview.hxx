@@ -33,9 +33,7 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/image.hxx>
 #include <vcl/fixed.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/dialog.hxx>
 #include <rtl/ustring.hxx>
 

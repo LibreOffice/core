@@ -27,21 +27,11 @@
 #ifndef INCLUDED_REGEXP_RECLASS_HXX
 #define INCLUDED_REGEXP_RECLASS_HXX
 
-#ifndef INCLUDED_I18NUTIL_UNICODE_HXX
 #include <i18nutil/unicode.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_SEARCHFLAGS_HPP_
 #include <com/sun/star/util/SearchFlags.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_SEARCHOPTIONS_HPP_
 #include <com/sun/star/util/SearchOptions.hpp>
-#endif
-#ifndef _SAL_TYPES_H_
 #include <sal/types.h>
-#endif
-#ifndef _COM_SUN_STAR_I18N_XEXTENDEDTRANSLITERATION_HPP_
 #include <com/sun/star/i18n/XExtendedTransliteration.hpp>
-#endif
 
 /* If any error codes are removed, changed, or added, update the
    `re_error_msg' table in regex.c.  */

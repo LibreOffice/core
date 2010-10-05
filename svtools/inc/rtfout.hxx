@@ -31,9 +31,7 @@
 #include "svtools/svtdllapi.h"
 #include <tools/solar.h>
 
-#ifndef _RTL_TEXTENC_H_
 #include <rtl/textenc.h>
-#endif
 
 class String;
 class SvStream;

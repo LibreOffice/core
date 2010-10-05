@@ -28,14 +28,10 @@
 #ifndef _SFXDATWIN_HXX
 #define _SFXDATWIN_HXX
 
-#ifndef _BRWBOX_HXX
 #include <svtools/brwbox.hxx>
-#endif
 #include <svtools/brwhead.hxx>
 #include <vcl/timer.hxx>
-#ifndef _IMAGE_HXX //autogen
 #include <vcl/image.hxx>
-#endif
 #include <tools/list.hxx>
 #include <svtools/transfer.hxx>
 

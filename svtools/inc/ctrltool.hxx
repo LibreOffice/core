@@ -30,13 +30,9 @@
 
 #include "svtools/svtdllapi.h"
 
-#ifndef _SAL_TYPES_H
 #include <sal/types.h>
-#endif
 #include <tools/list.hxx>
-#ifndef _METRIC_HXX
 #include <vcl/metric.hxx>
-#endif
 
 class ImplFontListNameInfo;
 class OutputDevice;

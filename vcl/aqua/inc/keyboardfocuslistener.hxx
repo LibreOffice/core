@@ -28,9 +28,7 @@
 #ifndef _KEYBOARDFOCUSLISTENER_HXX_
 #define _KEYBOARDFOCUSLISTENER_HXX_
 
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#endif
 
 #include <rtl/ref.hxx>
 

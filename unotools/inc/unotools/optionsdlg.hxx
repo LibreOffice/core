@@ -27,9 +27,7 @@
 #ifndef INCLUDED_unotools_OPTIONSDLG_HXX
 #define INCLUDED_unotools_OPTIONSDLG_HXX
 
-#ifndef INCLUDED_unotoolsdllapi_H
 #include "unotools/unotoolsdllapi.h"
-#endif
 #include <tools/string.hxx>
 #include <unotools/options.hxx>
 

@@ -30,9 +30,7 @@
 
 #include <sal/config.h>
 
-#ifndef INCLUDED_I18NPOOL_DLLAPI_H
 #include "i18npool/i18npooldllapi.h"
-#endif
 #include "i18npool/lang.h"
 #include <com/sun/star/lang/Locale.hpp>
 

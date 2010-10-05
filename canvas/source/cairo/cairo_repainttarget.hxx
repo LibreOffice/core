@@ -28,9 +28,7 @@
 #ifndef _CAIROCANVAS_REPAINTTARGET_HXX
 #define _CAIROCANVAS_REPAINTTARGET_HXX
 
-#ifndef _RTL_REF_HXX_
 #include <rtl/ref.hxx>
-#endif
 
 #include "cairo_cairo.hxx"
 

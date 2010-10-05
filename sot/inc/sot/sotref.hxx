@@ -28,9 +28,7 @@
 #ifndef _SOT_SOTREF_HXX
 #define _SOT_SOTREF_HXX
 
-#ifndef _TOOLS_REF_HXX
 #include <tools/ref.hxx>
-#endif
 
 //========================================================================
 enum SvCastEnum { SV_AGGREGATION_CAST };

@@ -30,9 +30,7 @@
 
 #include <tools/debug.hxx>
 #include <tools/fsys.hxx>
-#ifndef _SV_BUTTON_HXX //autogen wg. PushButton
 #include <vcl/button.hxx>
-#endif
 #include <vcl/unohelp.hxx>
 
 class FixedText;

@@ -57,9 +57,7 @@ class TETextPortion;
 #include <tools/string.hxx>
 #include <tools/gen.hxx>
 
-#ifndef _COM_SUN_STAR_LOCALE_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
-#endif
 #include <com/sun/star/uno/Reference.hxx>
 
 struct TEIMEInfos;

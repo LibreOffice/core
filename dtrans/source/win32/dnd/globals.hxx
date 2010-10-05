@@ -27,9 +27,7 @@
 #ifndef _GLOBALS_HXX_
 #define _GLOBALS_HXX_
 
-#ifndef _OSL_MUTEX_H_
 #include <osl/mutex.hxx>
-#endif
 
 #if defined _MSC_VER
 #pragma warning(push,1)

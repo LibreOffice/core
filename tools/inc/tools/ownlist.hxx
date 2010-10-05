@@ -28,9 +28,7 @@
 #ifndef _TOOLS_OWNLIST_HXX
 #define _TOOLS_OWNLIST_HXX
 
-#ifndef _TOOLS_LIST_HXX //autogen
 #include <tools/list.hxx>
-#endif
 /*************************************************************************
 *************************************************************************/
 

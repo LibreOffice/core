@@ -43,9 +43,7 @@
 #include <svl/brdcst.hxx>
 #include <svl/poolitem.hxx>
 
-#ifndef _SFX_STYLE_HRC
 #include <svl/style.hrc>
-#endif
 
 class SfxItemSet;
 class SfxItemPool;

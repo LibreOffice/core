@@ -30,9 +30,7 @@
 
 #include <vcl/dialog.hxx>
 #include <tools/config.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/fixed.hxx>
 #include <vcl/group.hxx>
 #include <vcl/combobox.hxx>

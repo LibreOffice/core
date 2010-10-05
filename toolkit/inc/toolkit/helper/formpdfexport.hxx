@@ -28,19 +28,13 @@
 #ifndef _TOOLKIT_HELPER_FORM_FORMPDFEXPORT_HXX
 #define _TOOLKIT_HELPER_FORM_FORMPDFEXPORT_HXX
 
-#ifndef TOOLKIT_DLLAPI_H
 #include <toolkit/dllapi.h>
-#endif
 
 /** === begin UNO includes === **/
-#ifndef _COM_SUN_STAR_AWT_XCONTROL_HPP_
 #include <com/sun/star/awt/XControl.hpp>
-#endif
 /** === end UNO includes === **/
 
-#ifndef _VCL_PDFWRITER_HXX
 #include <vcl/pdfwriter.hxx>
-#endif
 
 #include <memory>
 

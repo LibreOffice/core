@@ -31,9 +31,7 @@
 #include "svtools/svtdllapi.h"
 #include <vcl/window.hxx>
 #include <vcl/edit.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 
 
 #define STR_FILECTRL_BUTTONTEXT     333     // ID-Range?!

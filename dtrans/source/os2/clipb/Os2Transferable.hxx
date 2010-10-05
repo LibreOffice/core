@@ -30,9 +30,7 @@
 
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 
-#ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HDL_
 #include <com/sun/star/lang/XEventListener.hpp>
-#endif
 #include <cppuhelper/implbase1.hxx>
 #include <osl/thread.h>
 

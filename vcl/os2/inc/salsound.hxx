@@ -32,9 +32,7 @@
 #include <sv.h>
 #include <tools/string.hxx>
 #include <salframe.hxx>
-#ifndef _SV_SALSTYPE_HXX
 #include <salstype.hxx>
-#endif
 #include <salsound.hxx>
 
 // ------------

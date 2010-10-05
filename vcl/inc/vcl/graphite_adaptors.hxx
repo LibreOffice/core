@@ -35,21 +35,13 @@
 #include <stdexcept>
 // Platform
 
-#ifndef _SVWIN_H
 #include <tools/svwin.h>
-#endif
 
-#ifndef _SV_SVSYS_HXX
 #include <svsys.h>
-#endif
 
-#ifndef _SV_SALGDI_HXX
 #include <vcl/salgdi.hxx>
-#endif
 
-#ifndef _SV_SALLAYOUT_HXX
 #include <vcl/sallayout.hxx>
-#endif
 
 // Module
 #include "vcl/dllapi.h"

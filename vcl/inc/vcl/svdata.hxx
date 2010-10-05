@@ -28,9 +28,7 @@
 #ifndef _SV_SVDATA_HXX
 #define _SV_SVDATA_HXX
 
-#ifndef _VOS_THREAD_HXX
 #include <vos/thread.hxx>
-#endif
 #include <tools/string.hxx>
 #include <tools/gen.hxx>
 #include <tools/shl.hxx>

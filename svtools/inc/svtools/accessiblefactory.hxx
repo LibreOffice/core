@@ -28,13 +28,9 @@
 #ifndef SVTOOLS_ACCESSIBLE_FACTORY_HXX
 #define SVTOOLS_ACCESSIBLE_FACTORY_HXX
 
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX
 #include <com/sun/star/uno/Reference.hxx>
-#endif
 
-#ifndef _RTL_REF_HXX
 #include <rtl/ref.hxx>
-#endif
 #include "AccessibleBrowseBoxObjType.hxx"
 #include "accessibletableprovider.hxx"
 #include "accessibletable.hxx"

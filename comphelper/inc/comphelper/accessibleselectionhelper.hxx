@@ -29,9 +29,7 @@
 #define COMPHELPER_ACCESSIBLE_SELECTION_HELPER_HXX
 
 #include <comphelper/uno3.hxx>
-#ifndef COMPHELPER_ACCESSIBLE_CONTEXT_HELPER_HXX
 #include <comphelper/accessiblecomponenthelper.hxx>
-#endif
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>

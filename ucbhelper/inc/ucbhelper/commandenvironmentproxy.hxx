@@ -29,9 +29,7 @@
 #define _UCBHELPER_COMMANDENVIRONMENTPROXY_HXX
 
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#ifndef _COM_SUN_STAR_UCB_XCOMMMANDENVIRONMENT_HPP_
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#endif
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/macros.hxx>
 

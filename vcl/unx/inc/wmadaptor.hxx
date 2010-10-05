@@ -28,9 +28,7 @@
 #ifndef _VCL_WMADAPTOR_HXX_
 #define _VCL_WMADAPTOR_HXX_
 
-#ifndef _TL_STRING_HXX
 #include <tools/string.hxx>
-#endif
 #include <tools/gen.hxx>
 #include <vcl/dllapi.h>
 #ifndef _PREX_H

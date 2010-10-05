@@ -28,12 +28,8 @@
 #define XLFD_EXTENDED_HXX
 
 #include <salunx.h>
-#ifndef _VCL_VCLENUM_HXX
 #include <vcl/enum.hxx>
-#endif
-#ifndef _VCL_OUTFONT_HXX
 #include <vcl/outfont.hxx>
-#endif
 
 #include <vector>
 

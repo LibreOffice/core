@@ -32,19 +32,13 @@
 #include <vcl/dllapi.h>
 #include <vcl/outdev.hxx>
 #include <tools/resid.hxx>
-#ifndef _SV_POINTR_HXX
 #include <vcl/pointr.hxx>
-#endif
 #include <vcl/wintypes.hxx>
-#ifndef _SV_APPTYPES_HXX
 #include <vcl/apptypes.hxx>
-#endif
 #include <vcl/inputctx.hxx>
 #include <vcl/vclevent.hxx>
 // Only for compatibility - because many people outside haven't included event.hxx
-#ifndef _VCL_EVENT_HXX
 #include <vcl/event.hxx>
-#endif
 #include <vcl/region.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <rtl/ustring.hxx>

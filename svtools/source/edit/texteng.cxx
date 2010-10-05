@@ -50,9 +50,7 @@
 
 #include <com/sun/star/i18n/WordType.hpp>
 
-#ifndef _COM_SUN_STAR_I18N_XEXTENDEDINPUTSEQUENCECHECKER_HDL_
 #include <com/sun/star/i18n/XExtendedInputSequenceChecker.hpp>
-#endif
 #include <com/sun/star/i18n/InputSequenceCheckMode.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 

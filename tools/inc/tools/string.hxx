@@ -32,12 +32,8 @@
 #include <osl/thread.h>
 #include <rtl/textenc.h>
 #include <rtl/textcvt.h>
-#ifndef _RTL_STRING_HXX
 #include <rtl/string.hxx>
-#endif
-#ifndef _RTL_USTRING_HXX
 #include <rtl/ustring.hxx>
-#endif
 #include "tools/toolsdllapi.h"
 
 /*******************************************************************************

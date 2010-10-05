@@ -32,9 +32,7 @@
 
 #include "svtools/svtdllapi.h"
 
-#ifndef _EINF_HXX
 #include <tools/errinf.hxx>
-#endif
 
 class Window;
 class ResMgr;

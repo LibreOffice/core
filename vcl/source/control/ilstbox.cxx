@@ -41,9 +41,7 @@
 #include <vcl/unohelp.hxx>
 #include <com/sun/star/i18n/XCollator.hpp>
 
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HDL_
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#endif
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 

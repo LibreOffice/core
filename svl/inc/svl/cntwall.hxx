@@ -29,9 +29,7 @@
 
 #include "svl/svldllapi.h"
 
-#ifndef SHL_HXX
 #include <tools/shl.hxx>
-#endif
 #include <tools/rtti.hxx>
 #include <tools/color.hxx>
 #include <svl/poolitem.hxx>

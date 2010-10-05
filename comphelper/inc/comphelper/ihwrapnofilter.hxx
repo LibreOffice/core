@@ -44,12 +44,8 @@
 #include <com/sun/star/frame/DoubleInitializationException.hpp>
 #endif
 
-#ifndef _CPPUHELPER_IMPLBASE3_HXX_
 #include <cppuhelper/implbase3.hxx>
-#endif
-#ifndef INCLUDED_COMPHELPERDLLAPI_H
 #include "comphelper/comphelperdllapi.h"
-#endif
 
 namespace comphelper {
 

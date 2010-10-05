@@ -34,9 +34,7 @@
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
 
-#ifndef _CPPUHELPER_EXTRACT_HXX_
 #include <cppuhelper/extract.hxx>
-#endif
 
 namespace utl
 {

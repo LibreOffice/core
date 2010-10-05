@@ -33,9 +33,7 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 
-#ifndef _COM_SUN_STAR_UCB_XCOMMANDENVIRONMENT_HDL_
 #include <com/sun/star/ucb/XCommandEnvironment.hdl>
-#endif
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
 
