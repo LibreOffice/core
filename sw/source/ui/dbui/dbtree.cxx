@@ -260,7 +260,7 @@ void SwDBTreeList::InitTreeList()
     if(!pImpl->HasContext() && pImpl->GetWrtShell())
         return;
     SetSelectionMode(SINGLE_SELECTION);
-    SetWindowBits(WB_HASLINES|WB_CLIPCHILDREN|WB_SORT|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL);
+    SetStyle(GetStyle()|WB_HASLINES|WB_CLIPCHILDREN|WB_SORT|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL);
     // Font nicht setzen, damit der Font des Controls uebernommen wird!
     SetSpaceBetweenEntries(0);
     SetNodeBitmaps( aImageList.GetImage(IMG_COLLAPSE),
