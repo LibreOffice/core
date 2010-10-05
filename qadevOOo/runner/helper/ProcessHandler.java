@@ -147,8 +147,6 @@ public class ProcessHandler
     private String m_sProcessKiller;
     private ProcessWatcher m_aWatcher;
 
-    private boolean bUseOutput = true;
-
     /**
      * Creates instance with specified external command.
      * Debug info and output
