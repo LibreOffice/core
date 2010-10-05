@@ -34,25 +34,6 @@
 #include "vcl/salinst.hxx"
 #include "vcl/svapp.hxx"
 
-namespace vcl
-{
-    class SolarMutexReleaser
-    {
-        ULONG mnReleased;
-    public:
-        SolarMutexReleaser()
-        {
-            mnReleased = Application::ReleaseSolarMutex();
-        }
-
-        ~SolarMutexReleaser()
-        {
-            if( mnReleased )
-                Application::AcquireSolarMutex( mnReleased );
-        }
-    };
-}
-
 using namespace rtl;
 using namespace osl;
 using namespace vcl;

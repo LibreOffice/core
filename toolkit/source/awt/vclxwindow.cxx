@@ -339,7 +339,7 @@ IMPL_LINK( VCLXWindowImpl, OnProcessCallbacks, void*, EMPTYARG )
     }
 
     {
-        ::toolkit::ReleaseSolarMutex aReleaseSolar;
+        SolarMutexReleaser aReleaseSolar;
         for (   CallbackArray::const_iterator loop = aCallbacksCopy.begin();
                 loop != aCallbacksCopy.end();
                 ++loop

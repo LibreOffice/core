@@ -109,25 +109,6 @@ DECLARE_LIST( StringList_Impl, OUString* )
 namespace
 {
     //====================================================================
-    //= ReleaseSolarMutex
-    //====================================================================
-    struct ReleaseSolarMutex
-    {
-    private:
-        ULONG   m_nCount;
-
-    public:
-        inline ReleaseSolarMutex()
-        {
-            m_nCount = Application::ReleaseSolarMutex();
-        }
-        inline ~ReleaseSolarMutex()
-        {
-            Application::AcquireSolarMutex( m_nCount );
-        }
-    };
-
-    //====================================================================
     //= ITimeoutHandler
     //====================================================================
     class CallbackTimer;
@@ -2022,7 +2003,7 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
         // also release the SolarMutex. Not all code which is needed during the enumeration
         // is Solar-Thread-Safe, in particular there is some code which needs to access
         // string resources (and our resource system relies on the SolarMutex :()
-        ReleaseSolarMutex aSolarRelease;
+        SolarMutexReleaser aSolarRelease;
 
         // now wait. Note that if we didn't get an pAsyncDescriptor, then this is an infinite wait.
         eResult = m_aAsyncActionFinished.wait( pTimeout.get() );

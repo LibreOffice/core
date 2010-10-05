@@ -498,6 +498,26 @@ private:
     DECL_STATIC_LINK( Application, PostEventHandler, void* );
 };
 
+/**
+ A helper class that calls Application::ReleaseSolarMutex() in its constructor
+ and restores the mutex in its destructor.
+*/
+class SolarMutexReleaser
+{
+    ULONG mnReleased;
+public:
+    SolarMutexReleaser()
+    {
+        mnReleased = Application::ReleaseSolarMutex();
+    }
+
+    ~SolarMutexReleaser()
+    {
+        if( mnReleased )
+            Application::AcquireSolarMutex( mnReleased );
+    }
+};
+
 VCL_DLLPUBLIC Application* GetpApp();
 
 VCL_DLLPUBLIC BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & );
