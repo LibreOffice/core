@@ -330,6 +330,8 @@ IMPL_LINK( SvBaseLinksDlg, UpdateNowClickHdl, PushButton *, EMPTYARG )
             rListBox.Select( pE );
             rListBox.MakeVisible( pE );
         }
+
+        pNewMgr->CloseCachedComps();
     }
     return 0;
 }
