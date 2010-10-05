@@ -84,8 +84,10 @@ using namespace ::com::sun::star;
 #define PROPERTYHANDLE_SHOWLINKWARNINGDIALOG 7
 #define PROPERTYNAME_DISABLEUICUSTOMIZATION ASCII_STR("DisableUICustomization")
 #define PROPERTYHANDLE_DISABLEUICUSTOMIZATION           8
+#define PROPERTYNAME_ALWAYSALLOWSAVE ASCII_STR("AlwaysAllowSave")
+#define PROPERTYHANDLE_ALWAYSALLOWSAVE 9
 
-#define PROPERTYCOUNT                       9
+#define PROPERTYCOUNT                       10
 
 #define VCL_TOOLBOX_STYLE_FLAT              ((USHORT)0x0004) // from <vcl/toolbox.hxx>
 
@@ -119,6 +121,7 @@ class SvtMiscOptions_Impl : public ConfigItem
     sal_Bool    m_bShowLinkWarningDialog;
     sal_Bool    m_bIsShowLinkWarningDialogRO;
     sal_Bool    m_bDisableUICustomization;
+    sal_Bool    m_bAlwaysAllowSave;
 
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -198,6 +201,12 @@ class SvtMiscOptions_Impl : public ConfigItem
 
         inline sal_Bool DisableUICustomization() const
         { return m_bDisableUICustomization; }
+
+        inline void SetSaveAlwaysAllowed( sal_Bool bSet )
+        { m_bAlwaysAllowSave = bSet; SetModified(); }
+
+        inline sal_Bool IsSaveAlwaysAllowed() const
+        { return m_bAlwaysAllowSave; }
 
         inline sal_Bool IsPluginsEnabled() const
         { return m_bPluginsEnabled; }
@@ -307,6 +316,7 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
     , m_bIsUseSystemPrintDialogRO( sal_False )
     , m_bShowLinkWarningDialog( sal_True )
     , m_bIsShowLinkWarningDialogRO( sal_False )
+    , m_bAlwaysAllowSave( sal_False )
 
 {
     // Use our static list of configuration keys to get his values.
@@ -416,6 +426,12 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
             {
                 if( !(seqValues[nProperty] >>= m_bDisableUICustomization) )
                     DBG_ERROR("Wrong type of \"Misc\\DisableUICustomization\"!" );
+                    break;
+            }
+            case PROPERTYHANDLE_ALWAYSALLOWSAVE :
+            {
+                if( !(seqValues[nProperty] >>= m_bAlwaysAllowSave) )
+                    DBG_ERROR("Wrong type of \"Misc\\AlwaysAllowSave\"!" );
                     break;
             }
         }
@@ -538,6 +554,12 @@ void SvtMiscOptions_Impl::Load( const Sequence< OUString >& rPropertyNames )
                                                                 DBG_ERROR("Wrong type of \"Misc\\DisableUICustomization\"!" );
                                                         }
                                                     break;
+            case PROPERTYHANDLE_ALWAYSALLOWSAVE:
+            {
+                if( !(seqValues[nProperty] >>= m_bAlwaysAllowSave) )
+                    DBG_ERROR("Wrong type of \"Misc\\AlwaysAllowSave\"!" );
+            }
+            break;
         }
     }
 }
@@ -707,6 +729,11 @@ void SvtMiscOptions_Impl::Commit()
                 seqValues[nProperty] <<= m_bDisableUICustomization;
                 break;
             }
+            case PROPERTYHANDLE_ALWAYSALLOWSAVE :
+            {
+                seqValues[nProperty] <<= m_bAlwaysAllowSave;
+                break;
+            }
         }
     }
     // Set properties in configuration.
@@ -729,7 +756,8 @@ Sequence< OUString > SvtMiscOptions_Impl::GetPropertyNames()
         PROPERTYNAME_USESYSTEMPRINTDIALOG,
         PROPERTYNAME_TRYODMADIALOG,
         PROPERTYNAME_SHOWLINKWARNINGDIALOG,
-        PROPERTYNAME_DISABLEUICUSTOMIZATION
+        PROPERTYNAME_DISABLEUICUSTOMIZATION,
+        PROPERTYNAME_ALWAYSALLOWSAVE
     };
 
     // Initialize return sequence with these list ...
@@ -933,6 +961,16 @@ void SvtMiscOptions::SetShowLinkWarningDialog( sal_Bool bSet )
 sal_Bool SvtMiscOptions::IsShowLinkWarningDialogReadOnly() const
 {
     return m_pDataContainer->IsShowLinkWarningDialogReadOnly();
+}
+
+void SvtMiscOptions::SetSaveAlwaysAllowed( sal_Bool bSet )
+{
+    m_pDataContainer->SetSaveAlwaysAllowed( bSet );
+}
+
+sal_Bool SvtMiscOptions::IsSaveAlwaysAllowed() const
+{
+    return m_pDataContainer->IsSaveAlwaysAllowed();
 }
 
 //*****************************************************************************************************************

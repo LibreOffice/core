@@ -146,6 +146,9 @@ class SVT_DLLPUBLIC SvtMiscOptions: public utl::detail::Options
         void        SetShowLinkWarningDialog( sal_Bool bSet );
         sal_Bool    IsShowLinkWarningDialogReadOnly() const;
 
+        void        SetSaveAlwaysAllowed( sal_Bool bSet );
+        sal_Bool    IsSaveAlwaysAllowed() const;
+
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
     //-------------------------------------------------------------------------------------------------------------
