@@ -44,9 +44,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase5.hxx>
 
-#ifndef _CPPUHELPER_IMPLBASE4_HXX_
 #include <cppuhelper/implbase3.hxx>
-#endif
 
 enum FilterType
 {
