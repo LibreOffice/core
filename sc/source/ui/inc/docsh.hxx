@@ -320,6 +320,7 @@ public:
     ScDBData*       GetOldAutoDBRange();    // has to be deleted by caller!
     void            CancelAutoDBRange();    // called when dialog is cancelled
 
+    virtual void    ReconnectDdeLink(SfxObjectShell& rServer);
     void            UpdateLinks();          // Link-Eintraege aktuallisieren
     BOOL            ReloadTabLinks();       // Links ausfuehren (Inhalt aktualisieren)
 

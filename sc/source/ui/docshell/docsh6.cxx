@@ -386,6 +386,15 @@ BOOL __EXPORT ScDocShell::Insert( SfxObjectShell &rSource,
     return bRet;
 }
 
+void ScDocShell::ReconnectDdeLink(SfxObjectShell& rServer)
+{
+    ::sfx2::LinkManager* pLinkManager = aDocument.GetLinkManager();
+    if (!pLinkManager)
+        return;
+
+    pLinkManager->ReconnectDdeLink(rServer);
+}
+
 void ScDocShell::UpdateLinks()
 {
     sfx2::LinkManager* pLinkManager = aDocument.GetLinkManager();

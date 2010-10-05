@@ -41,6 +41,8 @@
 #include "rangenam.hxx"
 #include "sc.hrc"               // SC_HINT_AREAS_CHANGED
 
+using namespace formula;
+
 // -----------------------------------------------------------------------
 
 BOOL lcl_FillRangeFromName( ScRange& rRange, ScDocShell* pDocSh, const String& rName )
@@ -97,11 +99,13 @@ ScServerObject::ScServerObject( ScDocShell* pShell, const String& rItem ) :
         SCTAB nTab = pDocSh->GetCurTab();
         aRange.aStart.SetTab( nTab );
 
-        if ( aRange.Parse( rItem, pDoc ) & SCA_VALID )
+        // For DDE link, we always must parse references using OOO A1 convention.
+
+        if ( aRange.Parse( rItem, pDoc, FormulaGrammar::CONV_OOO ) & SCA_VALID )
         {
             // area reference
         }
-        else if ( aRange.aStart.Parse( rItem, pDoc, pDoc->GetAddressConvention() ) & SCA_VALID )
+        else if ( aRange.aStart.Parse( rItem, pDoc, FormulaGrammar::CONV_OOO ) & SCA_VALID )
         {
             // cell reference
             aRange.aEnd = aRange.aStart;

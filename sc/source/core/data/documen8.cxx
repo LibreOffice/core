@@ -1089,6 +1089,7 @@ void ScDocument::UpdateDdeLinks()
             if (pBase->ISA(ScDdeLink))
                 ((ScDdeLink*)pBase)->TryUpdate();       // bei DDE-Links TryUpdate statt Update
         }
+        pLinkManager->CloseCachedComps();
     }
 }
 
@@ -1118,6 +1119,7 @@ BOOL ScDocument::UpdateDdeLink( const String& rAppl, const String& rTopic, const
                 }
             }
         }
+        pLinkManager->CloseCachedComps();
     }
     return bFound;
 }

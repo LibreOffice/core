@@ -2218,6 +2218,7 @@ void ScInterpreter::ScDde()
             PushNA();
 
         pDok->DisableIdle( bOldDis );
+        pLinkMgr->CloseCachedComps();
     }
 }
 
