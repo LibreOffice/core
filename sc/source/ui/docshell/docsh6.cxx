@@ -51,6 +51,31 @@
 #include "tabvwsh.hxx"
 #include "tablink.hxx"
 #include "collect.hxx"
+#include "docoptio.hxx"
+#include "globstr.hrc"
+#include "scmod.hxx"
+
+#include "formula/FormulaCompiler.hxx"
+#include "comphelper/processfactory.hxx"
+#include "vcl/msgbox.hxx"
+
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/util/XChangesBatch.hpp>
+
+using ::com::sun::star::beans::XPropertySet;
+using ::com::sun::star::lang::XMultiServiceFactory;
+using ::com::sun::star::container::XNameAccess;
+using ::com::sun::star::util::XChangesBatch;
+using ::com::sun::star::uno::Any;
+using ::com::sun::star::uno::Exception;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::rtl::OUString;
+
+namespace {
 
 struct ScStylePair
 {
@@ -58,6 +83,12 @@ struct ScStylePair
     SfxStyleSheetBase *pDest;
 };
 
+inline OUString C2U(const char* s)
+{
+    return OUString::createFromAscii(s);
+}
+
+}
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -457,4 +488,44 @@ BOOL ScDocShell::ReloadTabLinks()
     return TRUE;        //! Fehler erkennen
 }
 
+void ScDocShell::CheckConfigOptions()
+{
+    if (IsConfigOptionsChecked())
+        // no need to check repeatedly.
+        return;
+
+    OUString aDecSep = ScGlobal::GetpLocaleData()->getNumDecimalSep();
+
+    ScModule* pScMod = SC_MOD();
+    const ScDocOptions& rOpt = pScMod->GetDocOptions();
+    OUString aSepArg = rOpt.GetFormulaSepArg();
+    OUString aSepArrRow = rOpt.GetFormulaSepArrayRow();
+    OUString aSepArrCol = rOpt.GetFormulaSepArrayCol();
+
+    if (aDecSep == aSepArg || aDecSep == aSepArrRow || aDecSep == aSepArrCol)
+    {
+        // One of arg separators conflicts with the current decimal
+        // separator.  Reset them to default.
+        ScDocOptions aNew = rOpt;
+        aNew.ResetFormulaSeparators();
+        aDocument.SetDocOptions(aNew);
+        pScMod->SetDocOptions(aNew);
+
+        // Launch a nice warning dialog to let the users know of this change.
+        ScTabViewShell* pViewShell = GetBestViewShell();
+        if (pViewShell)
+        {
+            Window* pParent = pViewShell->GetFrameWin();
+            InfoBox aBox(pParent, ScGlobal::GetRscString(STR_OPTIONS_WARN_SEPARATORS));
+            aBox.Execute();
+        }
+
+        // For now, this is the only option setting that could launch info
+        // dialog.  But in the future we may want to implement a nicer
+        // dialog to display a list of warnings in case we have several
+        // pieces of information to display.
+    }
+
+    SetConfigOptionsChecked(true);
+}
 

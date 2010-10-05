@@ -1738,6 +1738,10 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "DataPilot table needs at least two rows of data to create or refresh." ;
     };
+    String STR_OPTIONS_WARN_SEPARATORS
+    {
+        Text [ en-US ] = "Because the current formula separator settings conflict with the locale, the formula separators have been reset to their default values.";
+    };
     String STR_UNDO_INSERT_CURRENT_DATE
     {
         Text [ en-US ] = "Insert Current Date";

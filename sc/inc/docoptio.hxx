@@ -117,7 +117,8 @@ public:
     void SetFormulaSepArrayCol(const ::rtl::OUString& rSep) { aFormulaSepArrayCol = rSep; }
     ::rtl::OUString GetFormulaSepArrayCol() const { return aFormulaSepArrayCol; }
 
-    const LocaleDataWrapper& GetLocaleDataWrapper() const;
+    void ResetFormulaSeparators();
+    static const LocaleDataWrapper& GetLocaleDataWrapper();
 };
 
 

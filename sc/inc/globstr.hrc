@@ -578,7 +578,9 @@
 #define STR_UNDO_INSERT_CURRENT_DATE    440
 #define STR_UNDO_INSERT_CURRENT_TIME    441
 
-#define STR_COUNT                       442
+#define STR_OPTIONS_WARN_SEPARATORS     442
+
+#define STR_COUNT                       443
 
 #endif
 

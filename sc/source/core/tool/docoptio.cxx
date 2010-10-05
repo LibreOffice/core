@@ -137,63 +137,62 @@ void ScDocOptions::ResetDocOptions()
     bFormulaRegexEnabled= TRUE;
     eFormulaGrammar     = ::formula::FormulaGrammar::GRAM_NATIVE;
 
-    do
-    {
-        const Locale& rLocale = *ScGlobal::GetLocale();
-        const OUString& rLang = rLocale.Language;
-        if (rLang.equalsAscii("ru"))
-            // Don't do automatic guess for these languages, and fall back to
-            // the old separator set.
-            break;
-
-        const LocaleDataWrapper& rLocaleData = GetLocaleDataWrapper();
-        const OUString& rDecSep  = rLocaleData.getNumDecimalSep();
-        const OUString& rListSep = rLocaleData.getListSep();
-
-        if (!rDecSep.getLength() || !rListSep.getLength())
-            // Something is wrong.  Stick with the default separators.
-            break;
-
-        sal_Unicode cDecSep  = rDecSep.getStr()[0];
-        sal_Unicode cListSep = rListSep.getStr()[0];
-
-        // Excel by default uses system's list separator as the parameter
-        // separator, which in English locales is a comma.  However, OOo's list
-        // separator value is set to ';' for all English locales.  Because of this
-        // discrepancy, we will hardcode the separator value here, for now.
-        if (cDecSep == sal_Unicode('.'))
-            cListSep = sal_Unicode(',');
-
-        // Special case for de_CH locale.
-        if (rLocale.Language.equalsAsciiL("de", 2) && rLocale.Country.equalsAsciiL("CH", 2))
-            cListSep = sal_Unicode(';');
-
-        // by default, the parameter separator equals the locale-specific
-        // list separator.
-        aFormulaSepArg = OUString(cListSep);
-
-        if (cDecSep == cListSep && cDecSep != sal_Unicode(';'))
-            // if the decimal and list separators are equal, set the
-            // parameter separator to be ';', unless they are both
-            // semicolon in which case don't change the decimal separator.
-            aFormulaSepArg = OUString::createFromAscii(";");
-
-        aFormulaSepArrayCol = OUString::createFromAscii(",");
-        if (cDecSep == sal_Unicode(','))
-            aFormulaSepArrayCol = OUString::createFromAscii(".");
-        aFormulaSepArrayRow = OUString::createFromAscii(";");
-
-        return;
-    }
-    while (false);
-
-    // Defaults to the old separator values.
-    aFormulaSepArg      = OUString::createFromAscii(";");
-    aFormulaSepArrayCol = OUString::createFromAscii(";");
-    aFormulaSepArrayRow = OUString::createFromAscii("|");
+    ResetFormulaSeparators();
 }
 
-const LocaleDataWrapper& ScDocOptions::GetLocaleDataWrapper() const
+void ScDocOptions::ResetFormulaSeparators()
+{
+    // Defaults to the old separator values.
+    aFormulaSepArg = OUString::createFromAscii(";");
+    aFormulaSepArrayCol = OUString::createFromAscii(";");
+    aFormulaSepArrayRow = OUString::createFromAscii("|");
+
+    const Locale& rLocale = *ScGlobal::GetLocale();
+    const OUString& rLang = rLocale.Language;
+    if (rLang.equalsAscii("ru"))
+        // Don't do automatic guess for these languages, and fall back to
+        // the old separator set.
+        return;
+
+    const LocaleDataWrapper& rLocaleData = GetLocaleDataWrapper();
+    const OUString& rDecSep  = rLocaleData.getNumDecimalSep();
+    const OUString& rListSep = rLocaleData.getListSep();
+
+    if (!rDecSep.getLength() || !rListSep.getLength())
+        // Something is wrong.  Stick with the default separators.
+        return;
+
+    sal_Unicode cDecSep  = rDecSep.getStr()[0];
+    sal_Unicode cListSep = rListSep.getStr()[0];
+
+    // Excel by default uses system's list separator as the parameter
+    // separator, which in English locales is a comma.  However, OOo's list
+    // separator value is set to ';' for all English locales.  Because of this
+    // discrepancy, we will hardcode the separator value here, for now.
+    if (cDecSep == sal_Unicode('.'))
+        cListSep = sal_Unicode(',');
+
+    // Special case for de_CH locale.
+    if (rLocale.Language.equalsAsciiL("de", 2) && rLocale.Country.equalsAsciiL("CH", 2))
+        cListSep = sal_Unicode(';');
+
+    // by default, the parameter separator equals the locale-specific
+    // list separator.
+    aFormulaSepArg = OUString(cListSep);
+
+    if (cDecSep == cListSep && cDecSep != sal_Unicode(';'))
+        // if the decimal and list separators are equal, set the
+        // parameter separator to be ';', unless they are both
+        // semicolon in which case don't change the decimal separator.
+        aFormulaSepArg = OUString::createFromAscii(";");
+
+    aFormulaSepArrayCol = OUString::createFromAscii(",");
+    if (cDecSep == sal_Unicode(','))
+        aFormulaSepArrayCol = OUString::createFromAscii(".");
+    aFormulaSepArrayRow = OUString::createFromAscii(";");
+}
+
+const LocaleDataWrapper& ScDocOptions::GetLocaleDataWrapper()
 {
     return *ScGlobal::pLocaleData;
 }

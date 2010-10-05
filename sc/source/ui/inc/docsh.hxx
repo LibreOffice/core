@@ -323,6 +323,8 @@ public:
     void            UpdateLinks();          // Link-Eintraege aktuallisieren
     BOOL            ReloadTabLinks();       // Links ausfuehren (Inhalt aktualisieren)
 
+    virtual void    CheckConfigOptions();
+
     void            PostEditView( ScEditEngineDefaulter* pEditEngine, const ScAddress& rCursorPos );
 
     void            PostPaint( SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab,

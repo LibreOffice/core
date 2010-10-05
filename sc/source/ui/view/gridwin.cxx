@@ -4592,6 +4592,7 @@ void __EXPORT ScGridWindow::GetFocus()
                             //        auf dem Mac
     }
 
+    pViewData->GetDocShell()->CheckConfigOptions();
     Window::GetFocus();
 }
 
