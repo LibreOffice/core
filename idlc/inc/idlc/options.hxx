@@ -28,9 +28,7 @@
 #ifndef _IDLC_OPTIONS_HXX_
 #define _IDLC_OPTIONS_HXX_
 
-#ifndef _IDLC_IDLCTYPEs_HXX_
 #include <idlc/idlctypes.hxx>
-#endif
 
 typedef ::std::hash_map< ::rtl::OString,
                          ::rtl::OString,

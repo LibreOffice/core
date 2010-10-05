@@ -26,9 +26,7 @@
  ************************************************************************/
 #ifndef _URP_PROPERTY_HXX_
 #define _URP_PROPERTY_HXX_
-#ifndef _BRIDGES_REMOTE_REMOTE_H_
 #include <bridges/remote/remote.h>
-#endif
 #include <rtl/ustring.hxx>
 #include <rtl/byteseq.hxx>
 

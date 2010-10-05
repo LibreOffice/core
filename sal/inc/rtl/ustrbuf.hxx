@@ -30,9 +30,7 @@
 
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.h>
-#ifndef _RTL_USTRING_HXX
 #include <rtl/ustring.hxx>
-#endif
 
 #ifdef __cplusplus
 

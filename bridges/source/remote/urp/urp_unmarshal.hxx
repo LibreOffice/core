@@ -33,9 +33,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <bridges/remote/context.h>
 
-#ifndef _BRIDGES_REMOTE_HELPER_HXX_
 #include <bridges/remote/helper.hxx>
-#endif
 #include <com/sun/star/uno/Type.hxx>
 #include "urp_bridgeimpl.hxx"
 

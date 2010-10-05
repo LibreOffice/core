@@ -27,9 +27,7 @@
 #ifndef _BRIDGES_CPP_UNO_BRIDGE_HXX_
 #define _BRIDGES_CPP_UNO_BRIDGE_HXX_
 
-#ifndef _BRIDGES_CPP_UNO_BRIDGE_H_
 #include <bridges/cpp_uno/bridge.h>
-#endif
 #include <osl/mutex.hxx>
 #include <rtl/process.h>
 #include <rtl/ustrbuf.hxx>

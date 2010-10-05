@@ -28,29 +28,15 @@
 #ifndef _STORE_STORDIR_HXX_
 #define _STORE_STORDIR_HXX_ "$Revision: 1.1.2.2 $"
 
-#ifndef _SAL_TYPES_H_
 #include <sal/types.h>
-#endif
 
-#ifndef _RTL_TEXTCVT_H_
 #include <rtl/textcvt.h>
-#endif
-#ifndef _RTL_STRING_H_
 #include <rtl/string.h>
-#endif
-#ifndef _RTL_REF_HXX_
 #include <rtl/ref.hxx>
-#endif
 
-#ifndef _STORE_OBJECT_HXX_
 #include "object.hxx"
-#endif
-#ifndef _STORE_STORBASE_HXX_
 #include "storbase.hxx"
-#endif
-#ifndef _STORE_STORPAGE_HXX_
 #include "storpage.hxx"
-#endif
 
 namespace store
 {

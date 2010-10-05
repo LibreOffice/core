@@ -28,15 +28,11 @@
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
 
-#ifndef _OSL_CONDITN_H_
 #include <osl/conditn.h>
-#endif
 #include <rtl/string.hxx>
 #include <uno/sequence2.h>
 
-#ifndef _BRIDGES_REMOTE_REMOTE_H_
 #include <bridges/remote/remote.h>
-#endif
 #include "urp_property.hxx"
 
 namespace bridges_urp {

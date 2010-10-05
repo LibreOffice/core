@@ -28,17 +28,11 @@
 #ifndef _STORE_OBJECT_HXX_
 #define _STORE_OBJECT_HXX_ "$Revision: 1.1.2.1 $"
 
-#ifndef _SAL_TYPES_H_
 #include "sal/types.h"
-#endif
 
-#ifndef _RTL_REF_HXX_
 #include "rtl/ref.hxx"
-#endif
 
-#ifndef _OSL_INTERLCK_H_
 #include "osl/interlck.h"
-#endif
 
 namespace store
 {

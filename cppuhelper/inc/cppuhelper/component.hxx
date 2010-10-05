@@ -31,9 +31,7 @@
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 
-#ifndef _CPPUHELPER_IMPLBASE1_HXX
 #include <cppuhelper/implbase1.hxx>
-#endif
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>

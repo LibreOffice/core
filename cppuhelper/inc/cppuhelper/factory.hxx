@@ -27,9 +27,7 @@
 #ifndef _CPPUHELPER_FACTORY_HXX_
 #define _CPPUHELPER_FACTORY_HXX_
 
-#ifndef _RTL_STRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
 #include <uno/dispatcher.h>
 #include <rtl/unload.h>
 

@@ -31,9 +31,7 @@
 #include <sal/types.h>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
-#ifndef _OSL_SEMAPHOR_HXX_
 #include <osl/semaphor.hxx>
-#endif
 
 #ifndef __LIST__
 #include <list>

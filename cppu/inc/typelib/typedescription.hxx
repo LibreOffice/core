@@ -30,9 +30,7 @@
 #include <rtl/alloc.h>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Type.h>
-#ifndef _TYPELIB_TYPEDESCRIPTION_H
 #include <typelib/typedescription.h>
-#endif
 
 
 namespace com

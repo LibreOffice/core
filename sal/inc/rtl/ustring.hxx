@@ -30,9 +30,7 @@
 
 #ifdef __cplusplus
 
-#ifndef _RTL_DIAGNOSE_H_
 #include "osl/diagnose.h"
-#endif
 #include <rtl/ustring.h>
 #include <rtl/string.hxx>
 #include <rtl/memory.h>

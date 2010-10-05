@@ -29,9 +29,7 @@
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#ifndef _COM_SUN_STAR_UNO_XINTERFACE_HDL_
 #include <com/sun/star/uno/XInterface.hdl>
-#endif
 #include <com/sun/star/uno/genfunc.hxx>
 
 namespace com

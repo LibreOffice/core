@@ -28,23 +28,13 @@
 #ifndef _STORE_LOCKBYTE_HXX_
 #define _STORE_LOCKBYTE_HXX_ "$Revision: 1.1.2.1 $"
 
-#ifndef _SAL_TYPES_H_
 #include "sal/types.h"
-#endif
 
-#ifndef _RTL_REF_HXX_
 #include "rtl/ref.hxx"
-#endif
-#ifndef _RTL_USTRING_H_
 #include "rtl/ustring.h"
-#endif
 
-#ifndef _STORE_TYPES_H_
 #include "store/types.h"
-#endif
-#ifndef _STORE_STORBASE_HXX_
 #include "storbase.hxx"
-#endif
 
 namespace store
 {

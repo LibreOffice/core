@@ -29,9 +29,7 @@
 #define _OSL_FILE_PATH_HELPER_HXX_
 
 
-#ifndef _OSL_FILE_PATH_HELPER_H_
 #include "file_path_helper.h"
-#endif
 
 #include <rtl/ustring.hxx>
 

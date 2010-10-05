@@ -30,9 +30,7 @@
 
 #include    <hash_map>
 #include    <registry/registry.hxx>
-#ifndef __REGISTRY_REFLREAD_HXX__
 #include    <registry/reflread.hxx>
-#endif
 #include    <codemaker/typemanager.hxx>
 #include    <codemaker/global.hxx>
 #include <osl/diagnose.h>

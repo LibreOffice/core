@@ -33,19 +33,13 @@
 #include <rtl/ustring.hxx>
 #include <rtl/byteseq.hxx>
 
-#ifndef _UNO_THREADPOOL_H_
 #include <uno/threadpool.h>
-#endif
 #include <bridges/remote/bridgeimpl.hxx>
 
-#ifndef _URP_CACHE_HXX_
 #include "urp_cache.hxx"
-#endif
 #include "urp_marshal_decl.hxx"
 
-#ifndef _URP_REPLYCONTAINER_HXX_
 #include "urp_replycontainer.hxx"
-#endif
 #include "urp_property.hxx"
 
 

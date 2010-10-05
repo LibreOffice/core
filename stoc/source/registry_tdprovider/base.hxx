@@ -33,9 +33,7 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
-#ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
 #include <cppuhelper/implementationentry.hxx>
-#endif
 
 #include "registry/refltype.hxx"
 
