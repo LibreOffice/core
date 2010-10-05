@@ -38,7 +38,10 @@
 #include <map>
 #include <vector>
 #include <set>
+#include <functional>
+#include <algorithm>
 
+#include "unomodel.hxx"
 #include "utility.hxx"
 #include "smmod.hxx"
 
@@ -79,24 +82,24 @@ class SmSym
     String              m_aName;
     String              m_aExportName;
     String              m_aSetName;
-    sal_Unicode         m_cChar;
+    sal_UCS4            m_cChar;
     BOOL                m_bPredefined;
     BOOL                m_bDocSymbol;
 
 public:
     SmSym();
-    SmSym(const String& rName, const Font& rFont, sal_Unicode cChar,
+    SmSym(const String& rName, const Font& rFont, sal_UCS4 cChar,
           const String& rSet, BOOL bIsPredefined = FALSE);
     SmSym(const SmSym& rSymbol);
 
     SmSym&      operator = (const SmSym& rSymbol);
 
     const Font&     GetFace() const { return m_aFace; }
-    sal_Unicode     GetCharacter() const { return m_cChar; }
+    sal_UCS4        GetCharacter() const { return m_cChar; }
     const String&   GetName() const { return m_aName; }
 
     void            SetFace( const Font& rFont )        { m_aFace = rFont; }
-    void            SetCharacter( sal_Unicode cChar )   { m_cChar = cChar; }
+    void            SetCharacter( sal_UCS4 cChar )   { m_cChar = cChar; }
 
 //! since the symbol name is also used as key in the map it should not be possible to change the name
 //! because ten the key would not be the same as its supposed copy here
@@ -132,6 +135,15 @@ typedef std::map< String, SmSym, lt_String >    SymbolMap_t;
 
 // vector of pointers to the actual symbols in the above container
 typedef std::vector< const SmSym * >            SymbolPtrVec_t;
+
+struct lt_SmSymPtr : public std::binary_function< const SmSym *, const SmSym *, bool >
+{
+    bool operator() ( const SmSym *pSym1, const SmSym *pSym2 )
+    {
+        return pSym1->GetCharacter() < pSym2->GetCharacter();
+    }
+};
+
 
 class SmSymbolManager : public SfxListener
 {

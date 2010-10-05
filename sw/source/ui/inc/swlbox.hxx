@@ -76,11 +76,7 @@ namespace nsSwComboBoxStyle
     const SwComboBoxStyle CBS_LOWER         = 0x02;
     const SwComboBoxStyle CBS_ALL           = 0x04;
     const SwComboBoxStyle CBS_FILENAME      = 0x08;
-#ifdef WIN
-    const SwComboBoxStyle CBS_SW_FILENAME   = CBS_FILENAME | CBS_LOWER;
-#else
     const SwComboBoxStyle CBS_SW_FILENAME   = CBS_FILENAME;
-#endif
 }
 
 class SW_DLLPUBLIC SwComboBox : public ComboBox
