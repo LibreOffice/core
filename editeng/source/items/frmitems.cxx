@@ -32,14 +32,12 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/table/CellVertJustify.hpp>
 #include <com/sun/star/table/ShadowLocation.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/table/CellContentType.hpp>
 #include <com/sun/star/table/TableOrientation.hpp>
-#include <com/sun/star/table/CellHoriJustify.hpp>
 #include <com/sun/star/util/SortField.hpp>
 #include <com/sun/star/util/SortFieldType.hpp>
 #include <com/sun/star/table/CellOrientation.hpp>

@@ -56,6 +56,7 @@ SLOFILES= \
                 $(SLO)$/svdfield.obj \
         $(SLO)$/writingmodeitem.obj \
         $(SLO)$/frmitems.obj \
+        $(SLO)$/justifyitem.obj \
         $(SLO)$/paraitem.obj \
         $(SLO)$/textitem.obj \
         $(SLO)$/flditem.obj \

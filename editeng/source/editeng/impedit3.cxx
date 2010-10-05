@@ -61,6 +61,7 @@
 #include <editeng/scriptspaceitem.hxx>
 #include <editeng/charscaleitem.hxx>
 #include <editeng/numitem.hxx>
+#include <editeng/justifyitem.hxx>
 
 #include <svtools/colorcfg.hxx>
 #include <svl/ctloptions.hxx>
@@ -1427,9 +1428,10 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
             break;
             case SVX_ADJUST_BLOCK:
             {
+                bool bDistLastLine = (GetJustifyMethod(nPara) == SVX_JUSTIFY_METHOD_DISTRIBUTE);
                 long nRemainingSpace = nMaxLineWidth - aTextSize.Width();
                 pLine->SetStartPosX( (sal_uInt16)nStartX );
-                if ( !bEOC && ( nRemainingSpace > 0 ) ) // nicht die letzte Zeile...
+                if ( nRemainingSpace > 0 && (!bEOC || bDistLastLine) )
                     ImpAdjustBlocks( pParaPortion, pLine, nRemainingSpace );
             }
             break;
@@ -2003,21 +2005,41 @@ void ImpEditEngine::ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine,
 
     // Search blanks or Kashidas...
     SvUShorts aPositions;
-    USHORT nChar;
-    for ( nChar = nFirstChar; nChar <= nLastChar; nChar++ )
+    USHORT nLastScript = i18n::ScriptType::LATIN;
+    for ( USHORT nChar = nFirstChar; nChar <= nLastChar; nChar++ )
     {
+        EditPaM aPaM( pNode, nChar+1 );
+        LanguageType eLang = GetLanguage(aPaM);
+        USHORT nScript = GetScriptType(aPaM);
+        if ( MsLangId::getPrimaryLanguage( eLang) == LANGUAGE_ARABIC_PRIMARY_ONLY )
+            // Arabic script is handled later.
+            continue;
+
         if ( pNode->GetChar(nChar) == ' ' )
         {
-            // Don't use blank if language is arabic
-            LanguageType eLang = GetLanguage( EditPaM( pNode, nChar ) );
-            if ( MsLangId::getPrimaryLanguage( eLang) != LANGUAGE_ARABIC_PRIMARY_ONLY )
-                aPositions.Insert( nChar, aPositions.Count() );
+            // Normal latin script.
+            aPositions.Insert( nChar, aPositions.Count() );
         }
+        else if (nChar > nFirstChar)
+        {
+            if (nLastScript == i18n::ScriptType::ASIAN)
+            {
+                // Set break position between this and the last character if
+                // the last character is asian script.
+                aPositions.Insert( nChar-1, aPositions.Count() );
+            }
+            else if (nScript == i18n::ScriptType::ASIAN)
+            {
+                // Set break position between a latin script and asian script.
+                aPositions.Insert( nChar-1, aPositions.Count() );
+            }
+        }
+
+        nLastScript = nScript;
     }
 
     // Kashidas ?
     ImpFindKashidas( pNode, nFirstChar, nLastChar, aPositions );
-
 
     if ( !aPositions.Count() )
         return;
@@ -2058,12 +2080,13 @@ void ImpEditEngine::ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine,
     // Letztes Zeichen wird schon nicht mehr beachtet...
     for ( USHORT n = 0; n < aPositions.Count(); n++ )
     {
-        nChar = aPositions[n];
+        USHORT nChar = aPositions[n];
         if ( nChar < nLastChar )
         {
             USHORT nPortionStart, nPortion;
-            nPortion = pParaPortion->GetTextPortions().FindPortion( nChar, nPortionStart );
+            nPortion = pParaPortion->GetTextPortions().FindPortion( nChar, nPortionStart, true );
             TextPortion* pLastPortion = pParaPortion->GetTextPortions()[ nPortion ];
+            USHORT nPortionEnd = nPortionStart + pLastPortion->GetLen();
 
             // Die Breite der Portion:
             pLastPortion->GetSize().Width() += nMore4Everyone;
@@ -2072,7 +2095,7 @@ void ImpEditEngine::ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine,
 
             // Correct positions in array
             // Even for kashidas just change positions, VCL will then draw the kashida automaticly
-            USHORT nPortionEnd = nPortionStart + pLastPortion->GetLen();
+
             for ( USHORT _n = nChar; _n < nPortionEnd; _n++ )
             {
                 pLine->GetCharPosArray()[_n-nFirstChar] += nMore4Everyone;
@@ -2883,6 +2906,8 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
 //  if( GetStatus().DoOnlineSpelling() && pActiveView )
 //      aCurPos = pActiveView->pImpEditView->GetEditSelections().Max();
 
+    long nVertLineSpacing = CalcVertLineSpacing(aStartPos);
+
     // --------------------------------------------------
     // Ueber alle Absaetze...
     // --------------------------------------------------
@@ -2931,12 +2956,16 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                     aTmpPos.X() += pLine->GetStartPosX();
                     aTmpPos.Y() += pLine->GetMaxAscent();
                     aStartPos.Y() += pLine->GetHeight();
+                    if (nLine != nLastLine)
+                        aStartPos.Y() += nVertLineSpacing;
                 }
                 else
                 {
                     aTmpPos.Y() += pLine->GetStartPosX();
                     aTmpPos.X() -= pLine->GetMaxAscent();
                     aStartPos.X() -= pLine->GetHeight();
+                    if (nLine != nLastLine)
+                        aStartPos.X() -= nVertLineSpacing;
                 }
 
                 if ( ( !IsVertical() && ( aStartPos.Y() > aClipRec.Top() ) )
@@ -4036,6 +4065,54 @@ ParaPortion* ImpEditEngine::GetNextVisPortion( ParaPortion* pCurPortion )
         pPortion = GetParaPortions().SaveGetObject( ++nPara );
 
     return pPortion;
+}
+
+long ImpEditEngine::CalcVertLineSpacing(Point& rStartPos) const
+{
+    long nTotalOccupiedHeight = 0;
+    sal_uInt16 nTotalLineCount = 0;
+    const ParaPortionList& rParaPortions = GetParaPortions();
+    sal_uInt16 nParaCount = rParaPortions.Count();
+
+    for (sal_uInt16 i = 0; i < nParaCount; ++i)
+    {
+        if (GetVerJustification(i) != SVX_VER_JUSTIFY_BLOCK)
+            // All paragraphs must have the block justification set.
+            return 0;
+
+        ParaPortion* pPortion = rParaPortions.GetObject(i);
+        nTotalOccupiedHeight += pPortion->GetFirstLineOffset();
+
+        const SvxLineSpacingItem& rLSItem = (const SvxLineSpacingItem&)pPortion->GetNode()->GetContentAttribs().GetItem(EE_PARA_SBL);
+        sal_uInt16 nSBL = ( rLSItem.GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_FIX )
+                            ? GetYValue( rLSItem.GetInterLineSpace() ) : 0;
+
+        const SvxULSpaceItem& rULItem = (const SvxULSpaceItem&)pPortion->GetNode()->GetContentAttribs().GetItem(EE_PARA_ULSPACE);
+        long nUL = GetYValue( rULItem.GetLower() );
+
+        EditLineList& rLines = pPortion->GetLines();
+        sal_uInt16 nLineCount = rLines.Count();
+        nTotalLineCount += nLineCount;
+        for (sal_uInt16 j = 0; j < nLineCount; ++j)
+        {
+            EditLine* pLine = rLines.GetObject(j);
+            nTotalOccupiedHeight += pLine->GetHeight();
+            if (j < nLineCount-1)
+                nTotalOccupiedHeight += nSBL;
+            nTotalOccupiedHeight += nUL;
+        }
+    }
+
+    long nTotalSpace = IsVertical() ? aPaperSize.Width() : aPaperSize.Height();
+    nTotalSpace -= nTotalOccupiedHeight;
+    if (nTotalSpace <= 0 || nTotalLineCount <= 1)
+        return 0;
+
+    if (IsVertical())
+        // Shift the text to the right for the asian layout mode.
+        rStartPos.X() += nTotalSpace;
+
+    return nTotalSpace / (nTotalLineCount-1);
 }
 
 EditPaM ImpEditEngine::InsertParagraph( sal_uInt16 nPara )

@@ -422,6 +422,12 @@ void SvXMLExport::_InitCtor()
         mpNamespaceMap->Add( GetXMLToken(XML_NP_GRDDL),
             GetXMLToken(XML_N_GRDDL), XML_NAMESPACE_GRDDL );
     }
+    // CSS Text Level 3 for distributed text justification.
+    if ( (getExportFlags() & (EXPORT_STYLES|EXPORT_AUTOSTYLES|EXPORT_MASTERSTYLES)) != 0 )
+    {
+        mpNamespaceMap->Add(
+            GetXMLToken(XML_NP_CSS3TEXT), GetXMLToken(XML_N_CSS3TEXT), XML_NAMESPACE_CSS3TEXT );
+    }
 
     mxAttrList = (xml::sax::XAttributeList*)mpAttrList;
 

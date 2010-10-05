@@ -119,6 +119,7 @@ sal_Char __READONLY_DATA sXML_np__xsd[] = "_xsd";
 sal_Char __READONLY_DATA sXML_np__xsi[] = "_xsi";
 sal_Char __READONLY_DATA sXML_np__field[] = "_field";
 sal_Char __READONLY_DATA sXML_np__xhtml[] = "_xhtml";
+sal_Char __READONLY_DATA sXML_np__css3text[] = "_css3text";
 
 sal_Char __READONLY_DATA sXML_np__fo_old[] = "__fo";
 sal_Char __READONLY_DATA sXML_np__xlink_old[] = "__xlink";
@@ -323,6 +324,9 @@ void SvXMLImport::_InitCtor()
         mpNamespaceMap->Add(
             OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__xhtml ) ),
             GetXMLToken(XML_N_XHTML), XML_NAMESPACE_XHTML );
+        mpNamespaceMap->Add(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_np__css3text ) ),
+            GetXMLToken(XML_N_CSS3TEXT), XML_NAMESPACE_CSS3TEXT );
     }
 
     msPackageProtocol = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.Package:" ) );

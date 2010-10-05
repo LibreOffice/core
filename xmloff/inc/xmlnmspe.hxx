@@ -104,6 +104,6 @@ XML_OLD_NAMESPACE( META,    6U )
 
 // experimental namespaces
 XML_NAMESPACE( FIELD,           100U )
-
+XML_NAMESPACE( CSS3TEXT,        103U )      // CSS Text Level 3
 
 #endif  //  _XMLOFF_XMLNMSPE_HXX

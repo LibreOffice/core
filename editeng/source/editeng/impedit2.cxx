@@ -58,6 +58,7 @@
 #include <editeng/scripttypeitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/fontitem.hxx>
+#include <editeng/justifyitem.hxx>
 #include <vcl/cmdevt.h>
 
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
@@ -2134,6 +2135,20 @@ SvxAdjust ImpEditEngine::GetJustification( USHORT nPara ) const
         }
     }
     return eJustification;
+}
+
+SvxCellJustifyMethod ImpEditEngine::GetJustifyMethod( USHORT nPara ) const
+{
+    const SvxJustifyMethodItem& rItem = static_cast<const SvxJustifyMethodItem&>(
+        GetParaAttrib(nPara, EE_PARA_JUST_METHOD));
+    return static_cast<SvxCellJustifyMethod>(rItem.GetEnumValue());
+}
+
+SvxCellVerJustify ImpEditEngine::GetVerJustification( USHORT nPara ) const
+{
+    const SvxVerJustifyItem& rItem = static_cast<const SvxVerJustifyItem&>(
+        GetParaAttrib(nPara, EE_PARA_VER_JUST));
+    return static_cast<SvxCellVerJustify>(rItem.GetEnumValue());
 }
 
 

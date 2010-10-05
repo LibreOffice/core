@@ -148,8 +148,13 @@ namespace xmloff { namespace token {
         XML_NP_TABLE_EXT,
         XML_N_TABLE_EXT,
 
+
         XML_NP_DRAW_EXT,
         XML_N_DRAW_EXT,
+
+        // css text level 3
+        XML_NP_CSS3TEXT,
+        XML_N_CSS3TEXT,
 
         // units
         XML_UNIT_MM,
@@ -606,6 +611,7 @@ namespace xmloff { namespace token {
         XML_DISTANCE,
         XML_DISTANCE_AFTER_SEP,
         XML_DISTANCE_BEFORE_SEP,
+        XML_DISTRIBUTE,
         XML_DISTRIBUTE_LETTER,
         XML_DISTRIBUTE_SPACE,
         XML_DIVIDE,
@@ -1776,6 +1782,7 @@ namespace xmloff { namespace token {
         XML_TEXT_GLOBAL,
         XML_TEXT_INDENT,
         XML_TEXT_INPUT,
+        XML_TEXT_JUSTIFY,
         XML_TEXT_OUTLINE,
         XML_TEXT_POSITION,
         XML_TEXT_ROTATION_ANGLE,
@@ -1909,6 +1916,7 @@ namespace xmloff { namespace token {
         XML_VERSION_LIST,
         XML_VERTICAL,
         XML_VERTICAL_ALIGN,
+        XML_VERTICAL_JUSTIFY,
         XML_VERTICAL_LINES,
         XML_VERTICAL_POS,
         XML_VERTICAL_REL,

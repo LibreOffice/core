@@ -159,6 +159,9 @@ namespace xmloff { namespace token {
         TOKEN( "drawooo", XML_NP_DRAW_EXT ),
         TOKEN( "http://openoffice.org/2010/draw", XML_N_DRAW_EXT ),
 
+        TOKEN( "css3t",                        XML_NP_CSS3TEXT ),
+        TOKEN( "http://www.w3.org/TR/css3-text/", XML_N_CSS3TEXT ),
+
         // units
         TOKEN( "mm",                              XML_UNIT_MM ),
         TOKEN( "m",                               XML_UNIT_M ),
@@ -614,6 +617,7 @@ namespace xmloff { namespace token {
         TOKEN( "distance",                        XML_DISTANCE ),
         TOKEN( "distance-after-sep",              XML_DISTANCE_AFTER_SEP ),
         TOKEN( "distance-before-sep",             XML_DISTANCE_BEFORE_SEP ),
+        TOKEN( "distribute",                      XML_DISTRIBUTE ),
         TOKEN( "distribute-letter",               XML_DISTRIBUTE_LETTER ),
         TOKEN( "distribute-space",                XML_DISTRIBUTE_SPACE ),
         TOKEN( "divide",                          XML_DIVIDE ),
@@ -1784,6 +1788,7 @@ namespace xmloff { namespace token {
         TOKEN( "text-global",                     XML_TEXT_GLOBAL ),
         TOKEN( "text-indent",                     XML_TEXT_INDENT ),
         TOKEN( "text-input",                      XML_TEXT_INPUT ),
+        TOKEN( "text-justify",                    XML_TEXT_JUSTIFY ),
         TOKEN( "text-outline",                    XML_TEXT_OUTLINE ),
         TOKEN( "text-position",                   XML_TEXT_POSITION ),
         TOKEN( "text-rotation-angle",             XML_TEXT_ROTATION_ANGLE ),
@@ -1917,6 +1922,7 @@ namespace xmloff { namespace token {
         TOKEN( "version-list",                    XML_VERSION_LIST ),
         TOKEN( "vertical",                        XML_VERTICAL ),
         TOKEN( "vertical-align",                  XML_VERTICAL_ALIGN ),
+        TOKEN( "vertical-justify",                XML_VERTICAL_JUSTIFY ),
         TOKEN( "vertical-lines",                  XML_VERTICAL_LINES ),
         TOKEN( "vertical-pos",                    XML_VERTICAL_POS ),
         TOKEN( "vertical-rel",                    XML_VERTICAL_REL ),

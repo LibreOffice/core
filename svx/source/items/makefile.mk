@@ -50,6 +50,7 @@ SRC1FILES =  \
 
 LIB1TARGET= $(SLB)$/$(TARGET)-core.lib
 LIB1OBJFILES= \
+        $(SLO)$/algitem.obj \
         $(SLO)$/drawitem.obj	\
         $(SLO)$/chrtitem.obj	\
         $(SLO)$/e3ditem.obj \
@@ -64,7 +65,6 @@ LIB2OBJFILES= \
         $(SLO)$/hlnkitem.obj \
         $(SLO)$/pageitem.obj	\
         $(SLO)$/viewlayoutitem.obj    \
-        $(SLO)$/algitem.obj \
         $(SLO)$/rotmodit.obj \
         $(SLO)$/numinf.obj	\
         $(SLO)$/svxerr.obj	\

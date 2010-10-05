@@ -191,6 +191,8 @@
 #define MID_CASEMAP_VARIANT     0
 #define MID_CASEMAP_TRANS       1
 
-
+// SvxHorJustifyItem
+#define MID_HORJUST_HORJUST     0
+#define MID_HORJUST_ADJUST      1
 
 #endif

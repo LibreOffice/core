@@ -29,14 +29,13 @@
 #include "precompiled_svx.hxx"
 #include <tools/stream.hxx>
 #include <com/sun/star/table/BorderLine.hpp>
-#include <com/sun/star/table/CellVertJustify.hpp>
+#include <com/sun/star/table/CellVertJustify2.hpp>
 #include <com/sun/star/table/ShadowLocation.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/table/CellContentType.hpp>
 #include <com/sun/star/table/TableOrientation.hpp>
-#include <com/sun/star/table/CellHoriJustify.hpp>
 #include <com/sun/star/util/SortField.hpp>
 #include <com/sun/star/util/SortFieldType.hpp>
 #include <com/sun/star/table/CellOrientation.hpp>
@@ -134,40 +133,35 @@ USHORT __EXPORT SvxRotateModeItem::GetVersion( USHORT /*nFileVersion*/ ) const
     return 0;
 }
 
-//  QueryValue/PutValue: Der ::com::sun::star::table::CellVertJustify enum wird mitbenutzt...
-
 bool SvxRotateModeItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
 {
-    table::CellVertJustify eUno = table::CellVertJustify_STANDARD;
+    sal_Int32 nUno = table::CellVertJustify2::STANDARD;
     switch ( (SvxRotateMode)GetValue() )
     {
-        case SVX_ROTATE_MODE_STANDARD: eUno = table::CellVertJustify_STANDARD; break;
-        case SVX_ROTATE_MODE_TOP:      eUno = table::CellVertJustify_TOP;       break;
-        case SVX_ROTATE_MODE_CENTER:   eUno = table::CellVertJustify_CENTER;    break;
-        case SVX_ROTATE_MODE_BOTTOM:   eUno = table::CellVertJustify_BOTTOM;    break;
+        case SVX_ROTATE_MODE_STANDARD: nUno = table::CellVertJustify2::STANDARD; break;
+        case SVX_ROTATE_MODE_TOP:      nUno = table::CellVertJustify2::TOP;      break;
+        case SVX_ROTATE_MODE_CENTER:   nUno = table::CellVertJustify2::CENTER;   break;
+        case SVX_ROTATE_MODE_BOTTOM:   nUno = table::CellVertJustify2::BOTTOM;   break;
     }
-    rVal <<= eUno;
+    rVal <<= nUno;
     return true;
 }
 
 bool SvxRotateModeItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
 {
-    table::CellVertJustify eUno;
-    if(!(rVal >>= eUno))
+    sal_Int32 nUno;
+    if(!(rVal >>= nUno))
     {
-        sal_Int32 nValue = 0;
-        if(!(rVal >>= nValue))
-            return sal_False;
-        eUno = (table::CellVertJustify)nValue;
+        nUno = table::CellVertJustify2::STANDARD;
     }
 
     SvxRotateMode eSvx = SVX_ROTATE_MODE_STANDARD;
-    switch (eUno)
+    switch (nUno)
     {
-        case table::CellVertJustify_STANDARD: eSvx = SVX_ROTATE_MODE_STANDARD; break;
-        case table::CellVertJustify_TOP:       eSvx = SVX_ROTATE_MODE_TOP;      break;
-        case table::CellVertJustify_CENTER:   eSvx = SVX_ROTATE_MODE_CENTER;    break;
-        case table::CellVertJustify_BOTTOM:   eSvx = SVX_ROTATE_MODE_BOTTOM;    break;
+        case table::CellVertJustify2::STANDARD: eSvx = SVX_ROTATE_MODE_STANDARD; break;
+        case table::CellVertJustify2::TOP:      eSvx = SVX_ROTATE_MODE_TOP;      break;
+        case table::CellVertJustify2::CENTER:   eSvx = SVX_ROTATE_MODE_CENTER;   break;
+        case table::CellVertJustify2::BOTTOM:   eSvx = SVX_ROTATE_MODE_BOTTOM;   break;
         default: ;//prevent warning
     }
     SetValue( (USHORT)eSvx );

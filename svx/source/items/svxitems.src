@@ -216,46 +216,6 @@ String RID_SVXITEMS_BRUSHSTYLE_BITMAP
     Text [ en-US ] = "Image" ;
 };
 
-String RID_SVXITEMS_HORJUST_STANDARD
-{
-    Text [ en-US ] = "Horizontal alignment default" ;
-};
-String RID_SVXITEMS_HORJUST_LEFT
-{
-    Text [ en-US ] = "Align left" ;
-};
-String RID_SVXITEMS_HORJUST_CENTER
-{
-    Text [ en-US ] = "Centered horizontally" ;
-};
-String RID_SVXITEMS_HORJUST_RIGHT
-{
-    Text [ en-US ] = "Align right" ;
-};
-String RID_SVXITEMS_HORJUST_BLOCK
-{
-    Text [ en-US ] = "Justify" ;
-};
-String RID_SVXITEMS_HORJUST_REPEAT
-{
-    Text [ en-US ] = "Repeat alignment" ;
-};
-String RID_SVXITEMS_VERJUST_STANDARD
-{
-    Text [ en-US ] = "Vertical alignment default" ;
-};
-String RID_SVXITEMS_VERJUST_TOP
-{
-    Text [ en-US ] = "Align to top" ;
-};
-String RID_SVXITEMS_VERJUST_CENTER
-{
-    Text [ en-US ] = "Centered vertically" ;
-};
-String RID_SVXITEMS_VERJUST_BOTTOM
-{
-    Text [ en-US ] = "Align to bottom" ;
-};
 String RID_SVXITEMS_ORI_STANDARD
 {
     Text [ en-US ] = "Default orientation" ;

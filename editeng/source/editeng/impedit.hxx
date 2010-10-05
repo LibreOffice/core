@@ -666,6 +666,8 @@ private:
     void                SetBackgroundColor( const Color& rColor ) { maBackgroundColor = rColor; }
     Color               GetBackgroundColor() const { return maBackgroundColor; }
 
+    long                CalcVertLineSpacing(Point& rStartPos) const;
+
     Color               GetAutoColor() const;
     void                EnableAutoColor( BOOL b ) { bUseAutoColor = b; }
     BOOL                IsAutoColorEnabled() const { return bUseAutoColor; }
@@ -988,6 +990,8 @@ public:
 
     const SvxLRSpaceItem&   GetLRSpaceItem( ContentNode* pNode );
     SvxAdjust               GetJustification( USHORT nPara ) const;
+    SvxCellJustifyMethod    GetJustifyMethod( USHORT nPara ) const;
+    SvxCellVerJustify       GetVerJustification( USHORT nPara ) const;
 
     void                SetCharStretching( sal_uInt16 nX, sal_uInt16 nY );
     inline void         GetCharStretching( sal_uInt16& rX, sal_uInt16& rY );

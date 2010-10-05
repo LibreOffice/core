@@ -124,12 +124,19 @@ enum SvxCellHorJustify
     SVX_HOR_JUSTIFY_REPEAT
 };
 
+enum SvxCellJustifyMethod
+{
+    SVX_JUSTIFY_METHOD_AUTO,
+    SVX_JUSTIFY_METHOD_DISTRIBUTE
+};
+
 enum SvxCellVerJustify
 {
     SVX_VER_JUSTIFY_STANDARD,
     SVX_VER_JUSTIFY_TOP,
     SVX_VER_JUSTIFY_CENTER,
-    SVX_VER_JUSTIFY_BOTTOM
+    SVX_VER_JUSTIFY_BOTTOM,
+    SVX_VER_JUSTIFY_BLOCK
 };
 
 enum SvxCellOrientation
