@@ -67,6 +67,7 @@
 #include <svl/intitem.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/saveopt.hxx>
+#include <svtools/miscopt.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
@@ -696,9 +697,14 @@ sal_Int8 ModelData_Impl::CheckStateForSave()
     if ( GetMediaDescr().size() != aAcceptedArgs.size() )
         GetMediaDescr() = aAcceptedArgs;
 
-    // the document must be modified
-    if ( !GetModifiable()->isModified() && !bVersInfoNeedsStore )
-        return STATUS_NO_ACTION;
+    // the document must be modified unless the always-save flag is set.
+    SvtMiscOptions aMiscOptions;
+    sal_Bool bAlwaysAllowSave = aMiscOptions.IsSaveAlwaysAllowed();
+    if (!bAlwaysAllowSave)
+    {
+        if ( !GetModifiable()->isModified() && !bVersInfoNeedsStore )
+            return STATUS_NO_ACTION;
+    }
 
     // if the document is readonly or a new one a SaveAs operation must be used
     if ( !GetStorable()->hasLocation() || GetStorable()->isReadonly() )

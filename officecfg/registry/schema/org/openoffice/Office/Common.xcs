@@ -5791,6 +5791,13 @@
                 </info>
                 <value>false</value>
             </prop>
+            <prop oor:name="AlwaysAllowSave" oor:type="xs:boolean">
+                <info>
+                    <author>kohei</author>
+                    <desc>Determines if the user can save the document even when it's not modified.</desc>
+                </info>
+                <value>false</value>
+            </prop>
 			<prop oor:name="SymbolSet" oor:type="xs:short">
 				<!-- UIHints: Tools  Options General View -->
 				<info>

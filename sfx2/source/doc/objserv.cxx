@@ -63,8 +63,9 @@
 #include <basic/sbx.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/useroptions.hxx>
-#include <svtools/asynclink.hxx>
 #include <unotools/saveopt.hxx>
+#include <svtools/asynclink.hxx>
+#include <svtools/miscopt.hxx>
 #include <comphelper/documentconstants.hxx>
 
 #include <sfx2/app.hxx>
@@ -943,8 +944,11 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                 }
             case SID_SAVEDOC:
                 {
-                    BOOL bMediumRO = IsReadOnlyMedium();
-                    if ( !bMediumRO && GetMedium() && IsModified() )
+                    SvtMiscOptions aMiscOptions;
+                    bool bAlwaysAllowSave = aMiscOptions.IsSaveAlwaysAllowed();
+                    bool bAllowSave = (bAlwaysAllowSave || IsModified());
+                    bool bMediumRO = IsReadOnlyMedium();
+                    if ( !bMediumRO && GetMedium() && bAllowSave )
                         rSet.Put(SfxStringItem(
                             nWhich, String(SfxResId(STR_SAVEDOC))));
                     else
