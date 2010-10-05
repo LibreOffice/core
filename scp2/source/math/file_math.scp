@@ -37,9 +37,9 @@ End
 
 #endif
 
-STD_UNO_LIB_FILE( gid_File_Lib_Sm , sm)
+STD_LIB_FILE( gid_File_Lib_Sm , sm)
 
-STD_UNO_LIB_FILE( gid_File_Lib_Smd , smd)
+STD_LIB_FILE( gid_File_Lib_Smd , smd)
 
 STD_RES_FILE( gid_File_Res_Sm, sm )
 

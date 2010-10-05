@@ -29,8 +29,8 @@
 
 #ifdef WNT
 # ifdef USE_DIRECTX5
-SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Lib_DirectX5Canvas,directx5canvas.uno)
+SPECIAL_COMPONENT_LIB_FILE(gid_File_Lib_DirectX5Canvas,directx5canvas.uno)
 # endif
-SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Lib_DirectX9Canvas, directx9canvas.uno)
-SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Lib_GdiPlusCanvas,  gdipluscanvas.uno)
+SPECIAL_COMPONENT_LIB_FILE(gid_File_Lib_DirectX9Canvas, directx9canvas.uno)
+SPECIAL_COMPONENT_LIB_FILE(gid_File_Lib_GdiPlusCanvas,  gdipluscanvas.uno)
 #endif

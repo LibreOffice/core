@@ -145,7 +145,7 @@ sub register_extensions
 
         $preregdir =~ s/\/\s*$//g;
 
-        my $systemcall = $unopkgfile . " sync --verbose -env:BUNDLED_EXTENSIONS_USER=\"file://" . $slash . $preregdir . "\"" . " -env:UserInstallation=file://" . $slash . $localtemppath . " 2\>\&1 |";
+        my $systemcall = $unopkgfile . " sync --verbose -env:BUNDLED_EXTENSIONS_USER=\"file://" . $slash . $preregdir . "\"" . " -env:UserInstallation=file://" . $slash . $localtemppath . " -env:UNO_JAVA_JFW_ENV_JREHOME=true 2\>\&1 |";
 
         print "... $systemcall ...\n";
 
