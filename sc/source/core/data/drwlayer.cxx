@@ -334,11 +334,11 @@ void ScDrawLayer::UseHyphenator()
     }
 }
 
-SdrPage* __EXPORT ScDrawLayer::AllocPage(FASTBOOL bMasterPage)
+SdrPage* __EXPORT ScDrawLayer::AllocPage(bool bMasterPage)
 {
     //  don't create basic until it is needed
     StarBASIC* pBasic = NULL;
-    ScDrawPage* pPage = new ScDrawPage( *this, pBasic, sal::static_int_cast<BOOL>(bMasterPage) );
+    ScDrawPage* pPage = new ScDrawPage( *this, pBasic, bMasterPage);
     return pPage;
 }
 

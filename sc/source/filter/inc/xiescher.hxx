@@ -971,7 +971,7 @@ public:
 
 protected:
     /** Returns a color from the Excel color palette. */
-    virtual FASTBOOL    GetColorFromPalette( USHORT nIndex, Color& rColor ) const;
+    virtual int        GetColorFromPalette( USHORT nIndex, Color& rColor ) const;
 };
 
 // ----------------------------------------------------------------------------

@@ -1146,7 +1146,7 @@ void ScPrintFunc::SetDateTime( const Date& rDate, const Time& rTime )
 void lcl_DrawGraphic( const Graphic &rGraphic, OutputDevice *pOut,
                       const Rectangle &rGrf, const Rectangle &rOut )
 {
-    const FASTBOOL bNotInside = !rOut.IsInside( rGrf );
+    const bool bNotInside = !rOut.IsInside( rGrf );
     if ( bNotInside )
     {
         pOut->Push();
@@ -1181,8 +1181,8 @@ void lcl_DrawGraphic( const SvxBrushItem &rBrush, OutputDevice *pOut, OutputDevi
     Point aPos;
     Size aDrawSize = aGrfSize;
 
-    FASTBOOL bDraw = TRUE;
-//  FASTBOOL bRetouche = TRUE;
+    bool bDraw = TRUE;
+//  bool bRetouche = TRUE;
     switch ( ePos )
     {
         case GPOS_LT: aPos = rOrg.TopLeft();
