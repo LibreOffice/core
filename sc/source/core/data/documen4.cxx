@@ -305,7 +305,7 @@ bool ScDocument::MarkUsedExternalReferences( ScTokenArray & rArr )
         ScToken* t;
         while (!bAllMarked && (t = static_cast<ScToken*>(rArr.GetNextReferenceOrName())) != NULL)
         {
-            if (t->GetOpCode() == ocExternalRef)
+            if (t->IsExternalRef())
             {
                 if (!pRefMgr)
                     pRefMgr = GetExternalRefManager();

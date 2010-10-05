@@ -2104,7 +2104,7 @@ void XclExpFmlaCompImpl::ProcessExternalName( const XclExpScToken& rTokData )
             {
                 for( FormulaToken* pScToken = xArray->First(); pScToken; pScToken = xArray->Next() )
                 {
-                    if( pScToken->GetOpCode() == ocExternalRef )
+                    if( pScToken->IsExternalRef() )
                     {
                         switch( pScToken->GetType() )
                         {

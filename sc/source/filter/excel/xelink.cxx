@@ -962,7 +962,7 @@ void XclExpExtName::WriteAddData( XclExpStream& rStrm )
             break;
 
         const ScToken* p = static_cast<const ScToken*>(mpArray->First());
-        if (p->GetOpCode() != ocExternalRef)
+        if (!p->IsExternalRef())
             break;
 
         switch (p->GetType())

@@ -240,7 +240,7 @@ void ScRawToken::SetName( USHORT n )
 
 void ScRawToken::SetExternalSingleRef( sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef )
 {
-    eOp = ocExternalRef;
+    eOp = ocPush;
     eType = svExternalSingleRef;
     nRefCnt = 0;
 
@@ -255,7 +255,7 @@ void ScRawToken::SetExternalSingleRef( sal_uInt16 nFileId, const String& rTabNam
 
 void ScRawToken::SetExternalDoubleRef( sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef )
 {
-    eOp = ocExternalRef;
+    eOp = ocPush;
     eType = svExternalDoubleRef;
     nRefCnt = 0;
 
@@ -269,7 +269,7 @@ void ScRawToken::SetExternalDoubleRef( sal_uInt16 nFileId, const String& rTabNam
 
 void ScRawToken::SetExternalName( sal_uInt16 nFileId, const String& rName )
 {
-    eOp = ocExternalRef;
+    eOp = ocPush;
     eType = svExternalName;
     nRefCnt = 0;
 
@@ -319,37 +319,26 @@ ScRawToken* ScRawToken::Clone() const
         static USHORT nOffset = lcl_ScRawTokenOffset();     // offset of sbyte
         USHORT n = nOffset;
 
-        if (eOp == ocExternalRef)
+        switch( eType )
         {
-            switch (eType)
+            case svSep:         break;
+            case svByte:        n += sizeof(ScRawToken::sbyte); break;
+            case svDouble:      n += sizeof(double); break;
+            case svString:      n = sal::static_int_cast<USHORT>( n + GetStrLenBytes( cStr ) + GetStrLenBytes( 1 ) ); break;
+            case svSingleRef:
+            case svDoubleRef:   n += sizeof(aRef); break;
+            case svMatrix:      n += sizeof(ScMatrix*); break;
+            case svIndex:       n += sizeof(USHORT); break;
+            case svJump:        n += nJump[ 0 ] * 2 + 2; break;
+            case svExternal:    n = sal::static_int_cast<USHORT>( n + GetStrLenBytes( cStr+1 ) + GetStrLenBytes( 2 ) ); break;
+
+            // external references
+            case svExternalSingleRef:
+            case svExternalDoubleRef: n += sizeof(extref); break;
+            case svExternalName:      n += sizeof(extname); break;
+            default:
             {
-                case svExternalSingleRef:
-                case svExternalDoubleRef: n += sizeof(extref); break;
-                case svExternalName:      n += sizeof(extname); break;
-                default:
-                {
-                    DBG_ERROR1( "unknown ScRawToken::Clone() external type %d", int(eType));
-                }
-            }
-        }
-        else
-        {
-            switch( eType )
-            {
-                case svSep:         break;
-                case svByte:        n += sizeof(ScRawToken::sbyte); break;
-                case svDouble:      n += sizeof(double); break;
-                case svString:      n = sal::static_int_cast<USHORT>( n + GetStrLenBytes( cStr ) + GetStrLenBytes( 1 ) ); break;
-                case svSingleRef:
-                case svDoubleRef:   n += sizeof(aRef); break;
-                case svMatrix:      n += sizeof(ScMatrix*); break;
-                case svIndex:       n += sizeof(USHORT); break;
-                case svJump:        n += nJump[ 0 ] * 2 + 2; break;
-                case svExternal:    n = sal::static_int_cast<USHORT>( n + GetStrLenBytes( cStr+1 ) + GetStrLenBytes( 2 ) ); break;
-                default:
-                {
-                    DBG_ERROR1( "unknown ScRawToken::Clone() type %d", int(eType));
-                }
+                DBG_ERROR1( "unknown ScRawToken::Clone() type %d", int(eType));
             }
         }
         p = (ScRawToken*) new BYTE[ n ];
@@ -813,7 +802,7 @@ BOOL ScMatrixToken::operator==( const FormulaToken& r ) const
 // ============================================================================
 
 ScExternalSingleRefToken::ScExternalSingleRefToken( sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& r ) :
-    ScToken( svExternalSingleRef, ocExternalRef),
+    ScToken( svExternalSingleRef, ocPush),
     mnFileId(nFileId),
     maTabName(rTabName),
     maSingleRef(r)
@@ -879,7 +868,7 @@ BOOL ScExternalSingleRefToken::operator ==( const FormulaToken& r ) const
 // ============================================================================
 
 ScExternalDoubleRefToken::ScExternalDoubleRefToken( sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& r ) :
-    ScToken( svExternalDoubleRef, ocExternalRef),
+    ScToken( svExternalDoubleRef, ocPush),
     mnFileId(nFileId),
     maTabName(rTabName),
     maDoubleRef(r)
@@ -965,7 +954,7 @@ BOOL ScExternalDoubleRefToken::operator ==( const FormulaToken& r ) const
 // ============================================================================
 
 ScExternalNameToken::ScExternalNameToken( sal_uInt16 nFileId, const String& rName ) :
-    ScToken( svExternalName, ocExternalRef),
+    ScToken( svExternalName, ocPush),
     mnFileId(nFileId),
     maName(rName)
 {

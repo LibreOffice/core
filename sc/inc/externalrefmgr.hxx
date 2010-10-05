@@ -684,7 +684,47 @@ private:
 
     void insertRefCell(sal_uInt16 nFileId, const ScAddress& rCell);
 
-    ScDocument* getSrcDocument(sal_uInt16 nFileId);
+    void fillCellFormat(sal_uInt32 nFmtIndex, ScExternalRefCache::CellFormat* pFmt) const;
+
+    ScExternalRefCache::TokenRef getSingleRefTokenFromSrcDoc(
+        sal_uInt16 nFileId, const ScDocument* pSrcDoc, const ScAddress& rCell,
+        ScExternalRefCache::CellFormat* pFmt);
+
+    /**
+     * Retrieve a range token array from a source document instance.
+     *
+     * @param pSrcDoc pointer to the source document instance.
+     * @param rTabName name of the first table.
+     * @param rRange range specified.  Upon successful retrieval, this range
+     *               gets modified to contain the correct table IDs, and in
+     *               case the range is larger than the data area of the source
+     *               document, it gets reduced to the data area.
+     * @param rCacheData an array of structs, with each struct containing the
+     *                   table name and the data in the specified range.
+     *
+     * @return range token array
+     */
+    ScExternalRefCache::TokenArrayRef getDoubleRefTokensFromSrcDoc(
+        const ScDocument* pSrcDoc, const String& rTabName, ScRange& rRange,
+        ::std::vector<ScExternalRefCache::SingleRangeData>& rCacheData);
+
+    /**
+     * Retrieve range name token array from a source document instance.
+     *
+     * @param nFileId file ID of the source document.
+     * @param pSrcDoc pointer to the source document instance
+     * @param rName range name to retrieve.  Note that the range name lookup
+     *              is case <i>in</i>-sensitive, and upon successful retrieval
+     *              of the range name array, this name gets updated to the
+     *              actual range name with the correct casing.
+     *
+     * @return range name token array
+     */
+    ScExternalRefCache::TokenArrayRef getRangeNameTokensFromSrcDoc(
+        sal_uInt16 nFileId, const ScDocument* pSrcDoc, String& rName);
+
+    const ScDocument* getInMemorySrcDocument(sal_uInt16 nFileId);
+    const ScDocument* getSrcDocument(sal_uInt16 nFileId);
     SfxObjectShellRef loadSrcDocument(sal_uInt16 nFileId, String& rFilter);
     bool isFileLoadable(const String& rFile) const;
 
@@ -711,7 +751,7 @@ private:
      */
     void purgeStaleSrcDocument(sal_Int32 nTimeOut);
 
-    sal_uInt32 getMappedNumberFormat(sal_uInt16 nFileId, sal_uInt32 nNumFmt, ScDocument* pSrcDoc);
+    sal_uInt32 getMappedNumberFormat(sal_uInt16 nFileId, sal_uInt32 nNumFmt, const ScDocument* pSrcDoc);
 
 private:
     /** cache of referenced ranges and names from source documents. */

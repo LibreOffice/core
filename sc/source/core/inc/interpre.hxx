@@ -35,6 +35,7 @@
 #include "scdll.hxx"
 #include "document.hxx"
 #include "scmatrix.hxx"
+#include "externalrefmgr.hxx"
 
 #include <math.h>
 #include <map>
@@ -294,10 +295,15 @@ void DoubleRefToVars( const ScToken* p,
         SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
         SCCOL& rCol2, SCROW &rRow2, SCTAB& rTab2,
         BOOL bDontCheckForTableOp = FALSE );
-ScDBRangeBase* PopDoubleRef();
+ScDBRangeBase* PopDBDoubleRef();
 void PopDoubleRef(SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
                           SCCOL& rCol2, SCROW &rRow2, SCTAB& rTab2,
                           BOOL bDontCheckForTableOp = FALSE );
+void PopExternalSingleRef(sal_uInt16& rFileId, String& rTabName, ScSingleRefData& rRef);
+void PopExternalSingleRef(ScExternalRefCache::TokenRef& rToken, ScExternalRefCache::CellFormat* pFmt = NULL);
+void PopExternalDoubleRef(sal_uInt16& rFileId, String& rTabName, ScComplexRefData& rRef);
+void PopExternalDoubleRef(ScExternalRefCache::TokenArrayRef& rArray);
+void PopExternalDoubleRef(ScMatrixRef& rMat);
 BOOL PopDoubleRefOrSingleRef( ScAddress& rAdr );
 void PopDoubleRefPushMatrix();
 // If MatrixFormula: convert formula::svDoubleRef to svMatrix, create JumpMatrix.
@@ -315,7 +321,12 @@ void PushStringBuffer( const sal_Unicode* pString );
 void PushString( const String& rString );
 void PushSingleRef(SCCOL nCol, SCROW nRow, SCTAB nTab);
 void PushDoubleRef(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
-                                 SCCOL nCol2, SCROW nRow2, SCTAB nTab2);
+                   SCCOL nCol2, SCROW nRow2, SCTAB nTab2);
+void PushExternalSingleRef(sal_uInt16 nFileId, const String& rTabName,
+                           SCCOL nCol, SCROW nRow, SCTAB nTab);
+void PushExternalDoubleRef(sal_uInt16 nFileId, const String& rTabName,
+                           SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
+                           SCCOL nCol2, SCROW nRow2, SCTAB nTab2);
 void PushMatrix(ScMatrix* pMat);
 void PushError( USHORT nError );
 /// Raw stack type without default replacements.
@@ -327,11 +338,13 @@ formula::StackVar GetStackType( BYTE nParam );
 BYTE GetByte() { return cPar; }
 // generiert aus DoubleRef positionsabhaengige SingleRef
 BOOL DoubleRefToPosSingleRef( const ScRange& rRange, ScAddress& rAdr );
+double GetDoubleFromMatrix(const ScMatrixRef& pMat);
 double GetDouble();
 double GetDoubleWithDefault(double nDefault);
 BOOL IsMissing();
 BOOL GetBool() { return GetDouble() != 0.0; }
 const String& GetString();
+const String& GetStringFromMatrix(const ScMatrixRef& pMat);
 // pop matrix and obtain one element, upper left or according to jump matrix
 ScMatValType GetDoubleOrStringFromMatrix( double& rDouble, String& rString );
 ScMatrixRef CreateMatrixFromDoubleRef( const formula::FormulaToken* pToken,
@@ -527,7 +540,6 @@ BOOL SetSbxVariable( SbxVariable* pVar, SCCOL nCol, SCROW nRow, SCTAB nTab );
 void ScErrorType();
 void ScDBArea();
 void ScColRowNameAuto();
-void ScExternalRef();
 void ScGetPivotData();
 void ScHyperLink();
 void ScBahtText();

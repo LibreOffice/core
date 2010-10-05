@@ -2712,7 +2712,7 @@ double ScDocument::GetValue( const ScAddress& rPos )
 
 
 void ScDocument::GetNumberFormat( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                                  sal_uInt32& rFormat )
+                                  sal_uInt32& rFormat ) const
 {
     if (VALIDTAB(nTab))
         if (pTab[nTab])

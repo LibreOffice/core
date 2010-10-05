@@ -1233,40 +1233,42 @@ void ScInterpreter::DoubleRefToVars( const ScToken* p,
     }
 }
 
-ScDBRangeBase* ScInterpreter::PopDoubleRef()
+ScDBRangeBase* ScInterpreter::PopDBDoubleRef()
 {
-    if (!sp)
+    StackVar eType = GetStackType();
+    switch (eType)
     {
-        SetError(errUnknownStackVariable);
-        return NULL;
-    }
-
-    --sp;
-    FormulaToken* p = pStack[sp];
-    switch (p->GetType())
-    {
+        case svUnknown:
+            SetError(errUnknownStackVariable);
+        break;
         case svError:
-            nGlobalError = p->GetError();
+            PopError();
         break;
         case svDoubleRef:
         {
             SCCOL nCol1, nCol2;
             SCROW nRow1, nRow2;
             SCTAB nTab1, nTab2;
-            DoubleRefToVars(static_cast<ScToken*>(p),
-                            nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, false);
-
+            PopDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, false);
+            if (nGlobalError)
+                break;
             return new ScDBInternalRange(pDok,
                 ScRange(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2));
         }
         case svMatrix:
+        case svExternalDoubleRef:
         {
-            ScMatrixRef pMat = static_cast<ScToken*>(p)->GetMatrix();
+            ScMatrixRef pMat;
+            if (eType == svMatrix)
+                pMat = PopMatrix();
+            else
+                PopExternalDoubleRef(pMat);
             return new ScDBExternalRange(pDok, pMat);
         }
         default:
             SetError( errIllegalParameter);
     }
+
     return NULL;
 }
 
@@ -1386,6 +1388,171 @@ void ScInterpreter::PopDoubleRef( ScRange& rRange, BOOL bDontCheckForTableOp )
         SetError( errUnknownStackVariable);
 }
 
+void ScInterpreter::PopExternalSingleRef(sal_uInt16& rFileId, String& rTabName, ScSingleRefData& rRef)
+{
+    if (!sp)
+    {
+        SetError(errUnknownStackVariable);
+        return;
+    }
+
+    --sp;
+    FormulaToken* p = pStack[sp];
+    StackVar eType = p->GetType();
+
+    if (eType == svError)
+    {
+        nGlobalError = p->GetError();
+        return;
+    }
+
+    if (eType != svExternalSingleRef)
+    {
+        SetError( errIllegalParameter);
+        return;
+    }
+
+    rFileId = p->GetIndex();
+    rTabName = p->GetString();
+    rRef = static_cast<ScToken*>(p)->GetSingleRef();
+}
+
+void ScInterpreter::PopExternalSingleRef(ScExternalRefCache::TokenRef& rToken, ScExternalRefCache::CellFormat* pFmt)
+{
+
+    sal_uInt16 nFileId;
+    String aTabName;
+    ScSingleRefData aData;
+    PopExternalSingleRef(nFileId, aTabName, aData);
+    if (nGlobalError)
+        return;
+
+    ScExternalRefManager* pRefMgr = pDok->GetExternalRefManager();
+    const String* pFile = pRefMgr->getExternalFileName(nFileId);
+    if (!pFile)
+    {
+        SetError(errNoName);
+        return;
+    }
+
+    if (aData.IsTabRel())
+    {
+        DBG_ERROR("ScCompiler::GetToken: external single reference must have an absolute table reference!");
+        SetError(errNoRef);
+        return;
+    }
+
+    aData.CalcAbsIfRel(aPos);
+    ScAddress aAddr(aData.nCol, aData.nRow, aData.nTab);
+    ScExternalRefCache::CellFormat aFmt;
+    ScExternalRefCache::TokenRef xNew = pRefMgr->getSingleRefToken(
+        nFileId, aTabName, aAddr, &aPos, NULL, &aFmt);
+
+    if (!xNew)
+    {
+        SetError(errNoRef);
+        return;
+    }
+
+    rToken = xNew;
+    if (pFmt)
+        *pFmt = aFmt;
+}
+
+void ScInterpreter::PopExternalDoubleRef(sal_uInt16& rFileId, String& rTabName, ScComplexRefData& rRef)
+{
+    if (!sp)
+    {
+        SetError(errUnknownStackVariable);
+        return;
+    }
+
+    --sp;
+    FormulaToken* p = pStack[sp];
+    StackVar eType = p->GetType();
+
+    if (eType == svError)
+    {
+        nGlobalError = p->GetError();
+        return;
+    }
+
+    if (eType != svExternalDoubleRef)
+    {
+        SetError( errIllegalParameter);
+        return;
+    }
+
+    rFileId = p->GetIndex();
+    rTabName = p->GetString();
+    rRef = static_cast<ScToken*>(p)->GetDoubleRef();
+}
+
+void ScInterpreter::PopExternalDoubleRef(ScExternalRefCache::TokenArrayRef& rArray)
+{
+    sal_uInt16 nFileId;
+    String aTabName;
+    ScComplexRefData aData;
+    PopExternalDoubleRef(nFileId, aTabName, aData);
+    if (nGlobalError)
+        return;
+
+    ScExternalRefManager* pRefMgr = pDok->GetExternalRefManager();
+    const String* pFile = pRefMgr->getExternalFileName(nFileId);
+    if (!pFile)
+    {
+        SetError(errNoName);
+        return;
+    }
+    if (aData.Ref1.IsTabRel() || aData.Ref2.IsTabRel())
+    {
+        DBG_ERROR("ScCompiler::GetToken: external double reference must have an absolute table reference!");
+        SetError(errNoRef);
+        return;
+    }
+
+    aData.CalcAbsIfRel(aPos);
+    ScRange aRange(aData.Ref1.nCol, aData.Ref1.nRow, aData.Ref1.nTab,
+                   aData.Ref2.nCol, aData.Ref2.nRow, aData.Ref2.nTab);
+    ScExternalRefCache::TokenArrayRef pArray = pRefMgr->getDoubleRefTokens(
+        nFileId, aTabName, aRange, &aPos);
+
+    if (!pArray)
+    {
+        SetError(errIllegalArgument);
+        return;
+    }
+
+    ScToken* pToken = static_cast<ScToken*>(pArray->First());
+    if (pToken->GetType() != svMatrix)
+    {
+        SetError(errIllegalArgument);
+        return;
+    }
+
+    if (pArray->Next())
+    {
+        // Can't handle more than one matrix per parameter.
+        SetError( errIllegalArgument);
+        return;
+    }
+
+    rArray = pArray;
+}
+
+void ScInterpreter::PopExternalDoubleRef(ScMatrixRef& rMat)
+{
+    ScExternalRefCache::TokenArrayRef pArray;
+    PopExternalDoubleRef(pArray);
+    if (nGlobalError)
+        return;
+
+    // For now, we only support single range data for external
+    // references, which means the array should only contain a
+    // single matrix token.
+    ScToken* p = static_cast<ScToken*>(pArray->First());
+    rMat = p->GetMatrix();
+}
 
 BOOL ScInterpreter::PopDoubleRefOrSingleRef( ScAddress& rAdr )
 {
@@ -1668,6 +1835,40 @@ void ScInterpreter::PushDoubleRef(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
 }
 
 
+void ScInterpreter::PushExternalSingleRef(
+    sal_uInt16 nFileId, const String& rTabName, SCCOL nCol, SCROW nRow, SCTAB nTab)
+{
+    if (!IfErrorPushError())
+    {
+        ScSingleRefData aRef;
+        aRef.InitFlags();
+        aRef.nCol = nCol;
+        aRef.nRow = nRow;
+        aRef.nTab = nTab;
+        PushTempTokenWithoutError( new ScExternalSingleRefToken(nFileId, rTabName, aRef)) ;
+    }
+}
+
+
+void ScInterpreter::PushExternalDoubleRef(
+    sal_uInt16 nFileId, const String& rTabName,
+    SCCOL nCol1, SCROW nRow1, SCTAB nTab1, SCCOL nCol2, SCROW nRow2, SCTAB nTab2)
+{
+    if (!IfErrorPushError())
+    {
+        ScComplexRefData aRef;
+        aRef.InitFlags();
+        aRef.Ref1.nCol = nCol1;
+        aRef.Ref1.nRow = nRow1;
+        aRef.Ref1.nTab = nTab1;
+        aRef.Ref2.nCol = nCol2;
+        aRef.Ref2.nRow = nRow2;
+        aRef.Ref2.nTab = nTab2;
+        PushTempTokenWithoutError( new ScExternalDoubleRefToken(nFileId, rTabName, aRef) );
+    }
+}
+
+
 void ScInterpreter::PushMatrix(ScMatrix* pMat)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::PushMatrix" );
@@ -1870,6 +2071,23 @@ BOOL ScInterpreter::DoubleRefToPosSingleRef( const ScRange& rRange, ScAddress& r
     return bOk;
 }
 
+double ScInterpreter::GetDoubleFromMatrix(const ScMatrixRef& pMat)
+{
+    if (!pMat)
+        return 0.0;
+
+    if ( !pJumpMatrix )
+        return pMat->GetDouble( 0 );
+
+    SCSIZE nCols, nRows, nC, nR;
+    pMat->GetDimensions( nCols, nRows);
+    pJumpMatrix->GetPos( nC, nR);
+    if ( nC < nCols && nR < nRows )
+        return pMat->GetDouble( nC, nR);
+
+    SetError( errNoValue);
+    return 0.0;
+}
 
 double ScInterpreter::GetDouble()
 {
@@ -1905,26 +2123,28 @@ double ScInterpreter::GetDouble()
                 nVal = 0.0;
         }
         break;
+        case svExternalSingleRef:
+        {
+            ScExternalRefCache::TokenRef pToken;
+            PopExternalSingleRef(pToken);
+            if (!nGlobalError && pToken)
+                nVal = pToken->GetDouble();
+        }
+        break;
+        case svExternalDoubleRef:
+        {
+            ScMatrixRef pMat;
+            PopExternalDoubleRef(pMat);
+            if (nGlobalError)
+                break;
+
+            nVal = GetDoubleFromMatrix(pMat);
+        }
+        break;
         case svMatrix:
         {
             ScMatrixRef pMat = PopMatrix();
-            if ( !pMat )
-                nVal = 0.0;
-            else if ( !pJumpMatrix )
-                nVal = pMat->GetDouble( 0 );
-            else
-            {
-                SCSIZE nCols, nRows, nC, nR;
-                pMat->GetDimensions( nCols, nRows);
-                pJumpMatrix->GetPos( nC, nR);
-                if ( nC < nCols && nR < nRows )
-                    nVal = pMat->GetDouble( nC, nR);
-                else
-                {
-                    SetError( errNoValue);
-                    nVal = 0.0;
-                }
-            }
+            nVal = GetDoubleFromMatrix(pMat);
         }
         break;
         case svError:
@@ -2013,30 +2233,23 @@ const String& ScInterpreter::GetString()
             else
                 return EMPTY_STRING;
         }
+        case svExternalSingleRef:
+        {
+            ScExternalRefCache::TokenRef pToken;
+            PopExternalSingleRef(pToken);
+            return nGlobalError ? EMPTY_STRING : pToken->GetString();
+        }
+        case svExternalDoubleRef:
+        {
+            ScMatrixRef pMat;
+            PopExternalDoubleRef(pMat);
+            return GetStringFromMatrix(pMat);
+        }
         //break;
         case svMatrix:
         {
             ScMatrixRef pMat = PopMatrix();
-            if ( !pMat )
-                ;   // nothing
-            else if ( !pJumpMatrix )
-            {
-                aTempStr = pMat->GetString( *pFormatter, 0, 0);
-                return aTempStr;
-            }
-            else
-            {
-                SCSIZE nCols, nRows, nC, nR;
-                pMat->GetDimensions( nCols, nRows);
-                pJumpMatrix->GetPos( nC, nR);
-                if ( nC < nCols && nR < nRows )
-                {
-                    aTempStr = pMat->GetString( *pFormatter, nC, nR);
-                    return aTempStr;
-                }
-                else
-                    SetError( errNoValue);
-            }
+            return GetStringFromMatrix(pMat);
         }
         break;
         default:
@@ -2046,7 +2259,30 @@ const String& ScInterpreter::GetString()
     return EMPTY_STRING;
 }
 
-
+const String& ScInterpreter::GetStringFromMatrix(const ScMatrixRef& pMat)
+{
+    if ( !pMat )
+        ;   // nothing
+    else if ( !pJumpMatrix )
+    {
+        aTempStr = pMat->GetString( *pFormatter, 0, 0);
+        return aTempStr;
+    }
+    else
+    {
+        SCSIZE nCols, nRows, nC, nR;
+        pMat->GetDimensions( nCols, nRows);
+        pJumpMatrix->GetPos( nC, nR);
+        if ( nC < nCols && nR < nRows )
+        {
+            aTempStr = pMat->GetString( *pFormatter, nC, nR);
+            return aTempStr;
+        }
+        else
+            SetError( errNoValue);
+    }
+    return EMPTY_STRING;
+}
 
 ScMatValType ScInterpreter::GetDoubleOrStringFromMatrix( double& rDouble,
         String& rString )
@@ -3185,82 +3421,6 @@ void ScInterpreter::ScColRowNameAuto()
         PushError( errNoRef );
 }
 
-void ScInterpreter::ScExternalRef()
-{
-    ScExternalRefManager* pRefMgr = pDok->GetExternalRefManager();
-    const String* pFile = pRefMgr->getExternalFileName(pCur->GetIndex());
-    if (!pFile)
-        PushError(errNoName);
-
-    switch (pCur->GetType())
-    {
-        case svExternalSingleRef:
-        {
-            ScSingleRefData aData(static_cast<const ScToken*>(pCur)->GetSingleRef());
-            if (aData.IsTabRel())
-            {
-                DBG_ERROR("ScCompiler::GetToken: external single reference must have an absolute table reference!");
-                break;
-            }
-
-            aData.CalcAbsIfRel(aPos);
-            ScAddress aAddr(aData.nCol, aData.nRow, aData.nTab);
-            ScExternalRefCache::CellFormat aFmt;
-            ScExternalRefCache::TokenRef xNew = pRefMgr->getSingleRefToken(
-                pCur->GetIndex(), pCur->GetString(), aAddr, &aPos, NULL, &aFmt);
-
-            if (!xNew)
-                break;
-
-            PushTempToken( *xNew);      // push a clone
-
-            if (aFmt.mbIsSet)
-            {
-                nFuncFmtType = aFmt.mnType;
-                nFuncFmtIndex = aFmt.mnIndex;
-            }
-            return;
-        }
-        //break;    // unreachable, prevent compiler warning
-        case svExternalDoubleRef:
-        {
-            ScComplexRefData aData(static_cast<const ScToken*>(pCur)->GetDoubleRef());
-            if (aData.Ref1.IsTabRel() || aData.Ref2.IsTabRel())
-            {
-                DBG_ERROR("ScCompiler::GetToken: external double reference must have an absolute table reference!");
-                break;
-            }
-
-            aData.CalcAbsIfRel(aPos);
-            ScRange aRange(aData.Ref1.nCol, aData.Ref1.nRow, aData.Ref1.nTab,
-                           aData.Ref2.nCol, aData.Ref2.nRow, aData.Ref2.nTab);
-            ScExternalRefCache::TokenArrayRef xNew = pRefMgr->getDoubleRefTokens(
-                pCur->GetIndex(), pCur->GetString(), aRange, &aPos);
-
-            if (!xNew)
-                break;
-
-            ScToken* p = static_cast<ScToken*>(xNew->First());
-            if (p->GetType() != svMatrix)
-                break;
-
-            if (xNew->Next())
-            {
-                // Can't handle more than one matrix per parameter.
-                SetError( errIllegalArgument);
-                break;
-            }
-
-            PushMatrix(p->GetMatrix());
-            return;
-        }
-        //break;    // unreachable, prevent compiler warning
-        default:
-            ;
-    }
-    PushError(errNoRef);
-}
-
 // --- internals ------------------------------------------------------------
 
 
@@ -3332,6 +3492,7 @@ void ScInterpreter::GlobalExit()        // static
 
 StackVar ScInterpreter::Interpret()
 {
+//  StackPrinter __stack_printer__("ScInterpreter::Interpret");
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::Interpret" );
     short nRetTypeExpr = NUMBERFORMAT_UNDEFINED;
     ULONG nRetIndexExpr = 0;
@@ -3415,7 +3576,6 @@ StackVar ScInterpreter::Interpret()
                 case ocDBArea           : ScDBArea();                   break;
                 case ocColRowNameAuto   : ScColRowNameAuto();           break;
 // separated    case ocPush             : Push( (ScToken&) *pCur );     break;
-                case ocExternalRef      : ScExternalRef();              break;
                 case ocIf               : ScIfJump();                   break;
                 case ocChose            : ScChoseJump();                break;
                 case ocAdd              : ScAdd();                      break;
@@ -3884,9 +4044,15 @@ StackVar ScInterpreter::Interpret()
                     }
                 }
                 // no break
+                case svExternalDoubleRef:
                 case svMatrix :
                 {
-                    ScMatrixRef xMat = PopMatrix();
+                    ScMatrixRef xMat;
+                    if (pCur->GetType() == svMatrix)
+                        xMat = PopMatrix();
+                    else
+                        PopExternalDoubleRef(xMat);
+
                     if (xMat)
                     {
                         ScMatValType nMatValType;
@@ -3929,6 +4095,23 @@ StackVar ScInterpreter::Interpret()
                     }
                     else
                         SetError( errUnknownStackVariable);
+                }
+                break;
+                case svExternalSingleRef:
+                {
+                    ScExternalRefCache::TokenRef pToken;
+                    ScExternalRefCache::CellFormat aFmt;
+                    PopExternalSingleRef(pToken, &aFmt);
+                    if (nGlobalError)
+                        break;
+
+                    PushTempToken(*pToken);
+
+                    if (aFmt.mbIsSet)
+                    {
+                        nFuncFmtType = aFmt.mnType;
+                        nFuncFmtIndex = aFmt.mnIndex;
+                    }
                 }
                 break;
                 default :

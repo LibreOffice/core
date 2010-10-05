@@ -776,7 +776,7 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
         ScToken* t;
         while ( ( t = static_cast<ScToken*>(pCode->GetNextReferenceOrName()) ) != NULL && !bCompile )
         {
-            if ( t->GetOpCode() == ocExternalRef )
+            if ( t->IsExternalRef() )
             {
                 // External name, cell, and area references.
                 bCompile = true;

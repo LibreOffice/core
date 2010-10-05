@@ -496,7 +496,7 @@ public:
     ScFieldEditEngine*  CreateFieldEditEngine();
     void                DisposeFieldEditEngine(ScFieldEditEngine*& rpEditEngine);
 
-    SC_DLLPUBLIC ScRangeName*   GetRangeName();
+    SC_DLLPUBLIC ScRangeName*   GetRangeName() const;
     void            SetRangeName( ScRangeName* pNewRangeName );
     SCTAB           GetMaxTableNumber() { return nMaxTableNumber; }
     void            SetMaxTableNumber(SCTAB nNumber) { nMaxTableNumber = nNumber; }
@@ -796,7 +796,7 @@ public:
     SC_DLLPUBLIC void           GetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, double& rValue );
     SC_DLLPUBLIC double         RoundValueAsShown( double fVal, ULONG nFormat );
     SC_DLLPUBLIC void           GetNumberFormat( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                                     sal_uInt32& rFormat );
+                                     sal_uInt32& rFormat ) const;
     sal_uInt32      GetNumberFormat( const ScRange& rRange ) const;
     SC_DLLPUBLIC sal_uInt32     GetNumberFormat( const ScAddress& ) const;
                     /** If no number format attribute is set and the cell

@@ -93,7 +93,7 @@ using namespace com::sun::star;
 
 //------------------------------------------------------------------------
 
-ScRangeName* ScDocument::GetRangeName()
+ScRangeName* ScDocument::GetRangeName() const
 {
     return pRangeName;
 }
