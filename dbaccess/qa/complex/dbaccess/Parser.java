@@ -35,23 +35,34 @@ import com.sun.star.sdbc.SQLException;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 
+
+// ---------- junit imports -----------------
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openoffice.test.OfficeConnection;
+import static org.junit.Assert.*;
+// ------------------------------------------
+
 public class Parser extends CRMBasedTestCase
 {
     // --------------------------------------------------------------------------------------------------------
-    public String[] getTestMethodNames()
-    {
-        return new String[] {
-            "checkJoinSyntax",
-            "checkParameterTypes",
-            "checkWhere",
-        };
-    }
+//    public String[] getTestMethodNames()
+//    {
+//        return new String[] {
+//            "checkJoinSyntax",
+//            "checkParameterTypes",
+//            "checkWhere",
+//        };
+//    }
 
     // --------------------------------------------------------------------------------------------------------
-    public String getTestObjectName()
-    {
-        return "Parser";
-    }
+//    public String getTestObjectName()
+//    {
+//        return "Parser";
+//    }
 
     // --------------------------------------------------------------------------------------------------------
     protected void createTestCase()
@@ -64,11 +75,11 @@ public class Parser extends CRMBasedTestCase
         catch ( Exception e )
         {
             e.printStackTrace( System.err );
-            assure( "caught an exception (" + e.getMessage() + ") while creating the test case", false );
+            fail( "caught an exception (" + e.getMessage() + ") while creating the test case");
         }
     }
 
-    public void checkWhere() throws Exception
+    @Test public void checkWhere() throws Exception
     {
         final XSingleSelectQueryComposer composer = createQueryComposer();
         final String SELECT = "SELECT \"products\".\"Name\" FROM \"products\" WHERE ";
@@ -107,7 +118,7 @@ public class Parser extends CRMBasedTestCase
     // --------------------------------------------------------------------------------------------------------
     /** verifies that aliases for inner queries work as expected
      */
-    public void checkJoinSyntax() throws Exception
+    @Test public void checkJoinSyntax() throws Exception
     {
         final XSingleSelectQueryComposer composer = createQueryComposer();
 
@@ -144,7 +155,7 @@ public class Parser extends CRMBasedTestCase
         {
             caughtExpected = true;
         }
-        assure( "pre-condition not met: parser should except on unparseable statements, else the complete" +
+        assertTrue( "pre-condition not met: parser should except on unparseable statements, else the complete" +
             "test is bogus!", caughtExpected );
     }
 
@@ -154,30 +165,28 @@ public class Parser extends CRMBasedTestCase
         final XSingleSelectQueryComposer composer = createQueryComposer();
         composer.setQuery( _statement );
 
-        assureEquals( "checkParameterTypes: internal error", _expectedParameterNames.length, _expectedParameterTypes.length );
+        assertEquals( "checkParameterTypes: internal error", _expectedParameterNames.length, _expectedParameterTypes.length );
 
-        final XParametersSupplier paramSupp = (XParametersSupplier)UnoRuntime.queryInterface(
-            XParametersSupplier.class, composer );
+        final XParametersSupplier paramSupp = UnoRuntime.queryInterface(XParametersSupplier.class, composer);
         final XIndexAccess parameters = paramSupp.getParameters();
 
-        assureEquals( "(ctx: " + _context + ") unexpected parameter count", _expectedParameterNames.length, parameters.getCount() );
+        assertEquals( "(ctx: " + _context + ") unexpected parameter count", _expectedParameterNames.length, parameters.getCount() );
         for ( int i=0; i<parameters.getCount(); ++i )
         {
-            final XPropertySet parameter = (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class,
-                parameters.getByIndex(i) );
+            final XPropertySet parameter = UnoRuntime.queryInterface(XPropertySet.class, parameters.getByIndex(i));
 
             final String name = (String)parameter.getPropertyValue( "Name" );
-            assureEquals( "(ctx: " + _context + ") unexpected parameter name for parameter number " + ( i + 1 ), _expectedParameterNames[i], name );
+            assertEquals( "(ctx: " + _context + ") unexpected parameter name for parameter number " + ( i + 1 ), _expectedParameterNames[i], name );
 
             final int type = ((Integer)parameter.getPropertyValue( "Type" )).intValue();
-            assureEquals( "(ctx: " + _context + ") unexpected data type for parameter number " + ( i + 1 ), _expectedParameterTypes[i], type );
+            assertEquals( "(ctx: " + _context + ") unexpected data type for parameter number " + ( i + 1 ), _expectedParameterTypes[i], type );
         }
     }
 
     // --------------------------------------------------------------------------------------------------------
     /** verifies that the parser properly recognizes the types of parameters
      */
-    public void checkParameterTypes() throws Exception
+    @Test public void checkParameterTypes() throws Exception
     {
         impl_checkParameters(
             "SELECT * FROM \"all orders\" " +
