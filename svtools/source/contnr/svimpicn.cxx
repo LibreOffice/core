@@ -708,7 +708,7 @@ public:
 
 
 SvImpIconView::SvImpIconView( SvIconView* pCurView, SvLBoxTreeList* pTree,
-    WinBits nWinStyle ) :
+    WinBits i_nWinStyle ) :
     aVerSBar( pCurView, WB_DRAG | WB_VSCROLL ),
     aHorSBar( pCurView, WB_DRAG | WB_HSCROLL )
 {
@@ -716,7 +716,7 @@ SvImpIconView::SvImpIconView( SvIconView* pCurView, SvLBoxTreeList* pTree,
     pModel = pTree;
     pCurParent = 0;
     pZOrderList = new SvPtrarr;
-    SetWindowBits( nWinStyle );
+    SetStyle( i_nWinStyle );
     nHorDist = 0;
     nVerDist = 0;
     nFlags = 0;
@@ -785,13 +785,12 @@ void SvImpIconView::Clear( BOOL bInCtor )
     AdjustScrollBars();
 }
 
-void SvImpIconView::SetWindowBits( WinBits nWinStyle )
+void SvImpIconView::SetStyle( const WinBits i_nWinStyle )
 {
-    nWinBits = nWinStyle;
     nViewMode = VIEWMODE_TEXT;
-    if( nWinStyle & WB_NAME )
+    if( i_nWinStyle & WB_NAME )
         nViewMode = VIEWMODE_NAME;
-    if( nWinStyle & WB_ICON )
+    if( i_nWinStyle & WB_ICON )
         nViewMode = VIEWMODE_ICON;
 }
 
@@ -1754,8 +1753,8 @@ void SvImpIconView::AdjustScrollBars()
     else
         nVisibleHeight = nRealHeight;
 
-    bool bVerSBar = (pView->nWindowStyle & WB_VSCROLL) ? true : false;
-    bool bHorSBar = (pView->nWindowStyle & WB_HSCROLL) ? true : false;
+    bool bVerSBar = (pView->GetStyle() & WB_VSCROLL) ? true : false;
+    bool bHorSBar = (pView->GetStyle() & WB_HSCROLL) ? true : false;
 
     USHORT nResult = 0;
     if( nVirtHeight )
@@ -1903,7 +1902,7 @@ BOOL SvImpIconView::CheckHorScrollBar()
         return FALSE;
     const MapMode& rMapMode = pView->GetMapMode();
     Point aOrigin( rMapMode.GetOrigin() );
-    if(!(pView->nWindowStyle & WB_HSCROLL) && !aOrigin.X() )
+    if(!(pView->GetStyle() & WB_HSCROLL) && !aOrigin.X() )
     {
         long nWidth = aOutputSize.Width();
         USHORT nCount = pZOrderList->Count();
@@ -1941,7 +1940,7 @@ BOOL SvImpIconView::CheckVerScrollBar()
         return FALSE;
     const MapMode& rMapMode = pView->GetMapMode();
     Point aOrigin( rMapMode.GetOrigin() );
-    if(!(pView->nWindowStyle & WB_VSCROLL) && !aOrigin.Y() )
+    if(!(pView->GetStyle() & WB_VSCROLL) && !aOrigin.Y() )
     {
         long nDeepest = 0;
         long nHeight = aOutputSize.Height();
