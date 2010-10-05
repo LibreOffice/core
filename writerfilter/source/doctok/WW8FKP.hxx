@@ -28,12 +28,8 @@
 #ifndef INCLUDED_WW8_FKP_HXX
 #define INCLUDED_WW8_FKP_HXX
 
-#ifndef INCLUDES_WW8_CP_AND_FC_HXX
 #include <WW8CpAndFc.hxx>
-#endif
-#ifndef INCLUDE_WW8_STRUCT_BASE_HXX
 #include <WW8StructBase.hxx>
-#endif
 
 namespace writerfilter {
 namespace doctok

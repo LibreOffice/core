@@ -32,9 +32,7 @@
 #include <deque>
 #include <WW8FKP.hxx>
 
-#ifndef INCLUDED_OUTPUT_WITH_DEPTH_HXX
 #include <resourcemodel/OutputWithDepth.hxx>
-#endif
 
 namespace writerfilter {
 namespace doctok

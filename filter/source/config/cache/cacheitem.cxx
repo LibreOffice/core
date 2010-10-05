@@ -36,9 +36,7 @@
 // includes
 #include <com/sun/star/uno/Sequence.h>
 
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_Hpp_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
 
 //_______________________________________________
 // namespace

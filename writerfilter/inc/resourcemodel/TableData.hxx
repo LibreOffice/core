@@ -28,9 +28,7 @@
 #ifndef INCLUDED_TABLE_DATA
 #define INCLUDED_TABLE_DATA
 
-#ifndef INCLUDED_WW8_RESOURCE_MODEL_HXX
 #include <resourcemodel/WW8ResourceModel.hxx>
-#endif
 
 #include <vector>
 #include <boost/shared_ptr.hpp>

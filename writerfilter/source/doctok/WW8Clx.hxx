@@ -30,9 +30,7 @@
 
 #include <resources.hxx>
 
-#ifndef INCLUDED_WW8_OUTPUT_WITH_DEPTH_HXX
 #include <WW8OutputWithDepth.hxx>
-#endif
 
 namespace writerfilter {
 namespace doctok

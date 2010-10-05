@@ -33,13 +33,9 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <resourcemodel/SubSequence.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
-#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEX_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
-#endif
 
-#ifndef INCLUDED_WW8_RESOURCE_MODEL_HXX
 #include <resourcemodel/WW8ResourceModel.hxx>
-#endif
 #include <resourcemodel/OutputWithDepth.hxx>
 
 #include <WriterFilterDllApi.hxx>

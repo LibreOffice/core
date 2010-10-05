@@ -29,9 +29,7 @@
 #define INCLUDED_WW8_CP_AND_FC_HXX
 
 #include <sal/types.h>
-#ifndef INCLUDED_DOCUMENT_HXX
 #include <doctok/WW8Document.hxx>
-#endif
 #include <set>
 #include <hash_map>
 #include <iostream>

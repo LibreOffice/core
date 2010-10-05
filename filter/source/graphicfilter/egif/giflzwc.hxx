@@ -28,9 +28,7 @@
 #ifndef _GIFLZWC_HXX
 #define _GIFLZWC_HXX
 
-#ifndef _BMPACC_HXX
 #include <vcl/bmpacc.hxx>
-#endif
 
 // --------------------
 // - GIFLZWCompressor -

@@ -30,14 +30,10 @@
 
 #include <doctok/WW8Document.hxx>
 
-#ifndef INCLUDED_WW8_RESOURCE_MODEL_HXX
 #include <resourcemodel/WW8ResourceModel.hxx>
-#endif
 #include <WW8StructBase.hxx>
 
-#ifndef INCLUDED_OUTPUT_WITH_DEPTH_HXX
 #include <resourcemodel/OutputWithDepth.hxx>
-#endif
 
 #include <map>
 

@@ -28,9 +28,7 @@
 #ifndef INCLUDED_EXTERNALVIEWLOGGER_HXX
 #define INCLUDED_EXTERNALVIEWLOGGER_HXX
 
-#ifndef INCLUDED_LOGGER_HXX
 #include <odiapi/props/Logger.hxx>
-#endif
 
 #include <fstream>
 #include <stack>

@@ -28,9 +28,7 @@
 #ifndef INCLUDED_X_NOTE_HELPER_HXX
 #define INCLUDED_X_NOTE_HELPER_HXX
 
-#ifndef INLCUED_PLCF_HXX
 #include <PLCF.hxx>
-#endif
 #include <WW8DocumentImpl.hxx>
 
 namespace writerfilter {

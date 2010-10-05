@@ -32,9 +32,7 @@
 #include <WW8PieceTable.hxx>
 #include <WW8BinTable.hxx>
 #include <resources.hxx>
-#ifndef INCLUDED_WW8_RESOURCE_MODEL_HXX
 #include <resourcemodel/WW8ResourceModel.hxx>
-#endif
 #include <PLCF.hxx>
 #include <WW8Sttbf.hxx>
 #include <XNoteHelper.hxx>

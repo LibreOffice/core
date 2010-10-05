@@ -28,17 +28,11 @@
 #ifndef INCLUDED_TABLE_MANAGER_HXX
 #define INCLUDED_TABLE_MANAGER_HXX
 
-#ifndef INCLUDED_TABLE_DATA_HXX
 #include <resourcemodel/TableData.hxx>
-#endif
 
-#ifndef INCLUDED_WW8_RESOURCE_MODEL_HXX
 #include <resourcemodel/WW8ResourceModel.hxx>
-#endif
 
-#ifndef INCLUDED_SPRMIDS_HXX
 #include <doctok/sprmids.hxx>
-#endif
 
 #include <boost/shared_ptr.hpp>
 #include <stack>

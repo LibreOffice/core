@@ -30,9 +30,7 @@
 
 #include <vector>
 #include <WW8CpAndFc.hxx>
-#ifndef INCLUDE_WW8_PIECE_TABLE_HXX
 #include <WW8PieceTable.hxx>
-#endif
 
 namespace writerfilter {
 namespace doctok

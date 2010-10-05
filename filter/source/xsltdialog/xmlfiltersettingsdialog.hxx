@@ -33,9 +33,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <vcl/wrkwin.hxx>
 
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <svtools/svtabbx.hxx>
 #include <svl/poolitem.hxx>
 #include <unotools/moduleoptions.hxx>

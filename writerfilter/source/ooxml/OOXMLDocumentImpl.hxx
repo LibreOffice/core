@@ -29,9 +29,7 @@
 
 #include <ooxml/OOXMLDocument.hxx>
 
-#ifndef _COM_SUN_STAR_XML_SAX_XFAST_TOKEN_HANDLER_HPP_
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
-#endif
 
 #include "OOXMLPropertySet.hxx"
 

@@ -30,9 +30,7 @@
 #include "pptimporter.hxx"
 
 #ifdef DBG_DUMP_PPT_IMPORT
-#ifndef _COM_SUN_STAR_IO_XACTIVEDATASOURCE_HDL_
 #include <com/sun/star/io/XActiveDataSource.hpp>
-#endif
 #include <unotools/streamwrap.hxx>
 #include <comphelper/processfactory.hxx>
 #endif

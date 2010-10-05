@@ -31,17 +31,11 @@
 #include <hash_map>
 #include <boost/shared_ptr.hpp>
 
-#ifndef INCLUDED_WW8_RESOURCE_MODEL_HXX
 #include <resourcemodel/WW8ResourceModel.hxx>
-#endif
 
-#ifndef INCLUDED_OOXML_FAST_TOKENS_HXX
 #include <ooxml/OOXMLFastTokens.hxx>
-#endif
 
-#ifndef INCLUDED_OOXML_FAST_CONTEXT_HANDLER_HXX
 #include "OOXMLFastContextHandler.hxx"
-#endif
 
 namespace writerfilter {
 namespace ooxml {

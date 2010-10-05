@@ -31,9 +31,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <cppuhelper/implbase1.hxx> // helper for implementations
-#ifndef _COM_SUN_STAR_XML_SAX_XDUCUMENTHANDLER_HPP_
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#endif
 #include <comphelper/stl_types.hxx>
 
 #include "xmlfilterjar.hxx"

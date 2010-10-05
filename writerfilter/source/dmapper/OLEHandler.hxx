@@ -27,9 +27,7 @@
 #ifndef INCLUDED_OLEHANDLER_HXX
 #define INCLUDED_OLEHANDLER_HXX
 
-#ifndef INCLUDED_WRITERFILTERDLLAPI_H
 #include <WriterFilterDllApi.hxx>
-#endif
 #include <resourcemodel/WW8ResourceModel.hxx>
 #include <boost/shared_ptr.hpp>
 #include <com/sun/star/awt/Size.hpp>

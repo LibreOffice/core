@@ -30,15 +30,9 @@
 #include <sal/types.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
-#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEX_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
-#endif
-#ifndef INCLUDED_WW8_RESOURCE_MODEL_HXX
 #include <resourcemodel/WW8ResourceModel.hxx>
-#endif
-#ifndef _COM_SUN_STAR_XML_SAX_XPARSER_HOO_
 #include <com/sun/star/xml/sax/XParser.hpp>
-#endif
 #include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
 #include <com/sun/star/frame/XModel.hpp>

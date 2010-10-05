@@ -32,9 +32,7 @@
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/XText.hpp>
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HDL_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

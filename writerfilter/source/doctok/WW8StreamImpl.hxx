@@ -29,9 +29,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <doctok/WW8Document.hxx>
-#ifndef INCLUDED_OUTPUT_WITH_DEPTH_HXX
 #include <resourcemodel/OutputWithDepth.hxx>
-#endif
 
 namespace writerfilter {
 namespace doctok

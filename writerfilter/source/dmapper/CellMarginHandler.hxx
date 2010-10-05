@@ -27,9 +27,7 @@
 #ifndef INCLUDED_CELLMARGINHANDLER_HXX
 #define INCLUDED_CELLMARGINHANDLER_HXX
 
-#ifndef INCLUDED_WRITERFILTERDLLAPI_H
 #include <WriterFilterDllApi.hxx>
-#endif
 #include <resourcemodel/WW8ResourceModel.hxx>
 #include <boost/shared_ptr.hpp>
 

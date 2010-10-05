@@ -28,9 +28,7 @@
 #ifndef _TYPEDETECTION_EXPORT_HXX
 #define _TYPEDETECTION_EXPORT_HXX
 
-#ifndef _COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HXX
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#endif
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 

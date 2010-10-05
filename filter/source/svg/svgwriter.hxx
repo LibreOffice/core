@@ -35,24 +35,12 @@
 #include <tools/string.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/stack.hxx>
-#ifndef _SALBTYPE_HXX
 #include <vcl/salbtype.hxx>
-#endif
-#ifndef _GDIMTF_HXX
 #include <vcl/gdimtf.hxx>
-#endif
-#ifndef _METAACT_HXX
 #include <vcl/metaact.hxx>
-#endif
-#ifndef _METAACT_HXX
 #include <vcl/metric.hxx>
-#endif
-#ifndef _VIRDEV_HXX
 #include <vcl/virdev.hxx>
-#endif
-#ifndef _CVTGRF_HXX
 #include <vcl/cvtgrf.hxx>
-#endif
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/nmspmap.hxx>
 
