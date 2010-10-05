@@ -96,7 +96,7 @@ void OReportModel::detachController()
     m_pUndoEnv->Clear(OXUndoEnvironment::Accessor());
 }
 //----------------------------------------------------------------------------
-SdrPage* OReportModel::AllocPage(FASTBOOL /*bMasterPage*/)
+SdrPage* OReportModel::AllocPage(bool /*bMasterPage*/)
 {
     DBG_CHKTHIS( rpt_OReportModel, 0);
     OSL_ENSURE(0,"Who called me!");

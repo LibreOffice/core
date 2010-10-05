@@ -160,7 +160,7 @@ protected:
     virtual void NbcMove( const Size& rSize );
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
     virtual void NbcSetLogicRect(const Rectangle& rRect);
-    virtual FASTBOOL EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
+    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
 
     virtual void SetSnapRectImpl(const Rectangle& _rRect);
     virtual SdrPage* GetImplPage() const;
@@ -203,7 +203,7 @@ protected:
     virtual void NbcMove( const Size& rSize );
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
     virtual void NbcSetLogicRect(const Rectangle& rRect);
-    virtual FASTBOOL EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
+    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
 
     virtual void SetSnapRectImpl(const Rectangle& _rRect);
     virtual SdrPage* GetImplPage() const;
@@ -249,7 +249,7 @@ protected:
     virtual void NbcMove( const Size& rSize );
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
     virtual void NbcSetLogicRect(const Rectangle& rRect);
-    virtual FASTBOOL EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
+    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
 
     virtual void SetSnapRectImpl(const Rectangle& _rRect);
     virtual SdrPage* GetImplPage() const;

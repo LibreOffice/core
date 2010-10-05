@@ -63,7 +63,7 @@ public:
 
     OReportPage( OReportModel& rModel
                 ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection
-                ,FASTBOOL bMasterPage=FALSE );
+                ,bool bMasterPage = false );
 
 
     virtual SdrPage* Clone() const;

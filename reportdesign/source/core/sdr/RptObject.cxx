@@ -573,9 +573,9 @@ void OCustomShape::NbcSetLogicRect(const Rectangle& rRect)
     SetPropsFromRect(rRect);
 }
 //----------------------------------------------------------------------------
-FASTBOOL OCustomShape::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
+bool OCustomShape::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
-    FASTBOOL bResult = SdrObjCustomShape::EndCreate(rStat, eCmd);
+    bool bResult = SdrObjCustomShape::EndCreate(rStat, eCmd);
     if ( bResult )
     {
         OReportModel* pRptModel = static_cast<OReportModel*>(GetModel());
@@ -815,10 +815,10 @@ void OUnoObject::NbcSetLogicRect(const Rectangle& rRect)
 }
 //----------------------------------------------------------------------------
 
-FASTBOOL OUnoObject::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
+bool OUnoObject::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
     DBG_CHKTHIS( rpt_OUnoObject,NULL);
-    FASTBOOL bResult = SdrUnoObj::EndCreate(rStat, eCmd);
+    bool bResult = SdrUnoObj::EndCreate(rStat, eCmd);
     if ( bResult )
     {
         impl_setReportComponent_nothrow();
@@ -1089,10 +1089,10 @@ void OOle2Obj::NbcSetLogicRect(const Rectangle& rRect)
 }
 //----------------------------------------------------------------------------
 
-FASTBOOL OOle2Obj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
+bool OOle2Obj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
     DBG_CHKTHIS( rpt_OOle2Obj,NULL);
-    FASTBOOL bResult = SdrOle2Obj::EndCreate(rStat, eCmd);
+    bool bResult = SdrOle2Obj::EndCreate(rStat, eCmd);
     if ( bResult )
     {
         OReportModel* pRptModel = static_cast<OReportModel*>(GetModel());
