@@ -30,9 +30,7 @@
 #include <svtools/wizardmachine.hxx>
 #include <mailmergehelper.hxx>
 #include <vcl/lstbox.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <svtools/stdctrl.hxx>
 class SwMailMergeWizard;
 /*-- 02.04.2004 09:21:06---------------------------------------------------

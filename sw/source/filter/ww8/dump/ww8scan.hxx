@@ -32,13 +32,9 @@
 #ifndef LONG_MAX
 #include <limits.h>
 #endif
-#ifndef _SAL_TYPES_H
 #include <sal/types.h>
-#endif
 #include <tools/solar.h>        // UINTXX
-#ifndef _TABLE_HXX //autogen
 #include <tools/table.hxx>
-#endif
 #include <tools/datetime.hxx>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
@@ -47,9 +43,7 @@
 #define _SVSTDARR_STRINGS
 #include <svl/svstdarr.hxx>
 
-#ifndef WW8STRUC_HXX
 #include <ww8struc.hxx>     // FIB, STSHI, STD
-#endif
 
 #include <ww8scan.hxx>
 

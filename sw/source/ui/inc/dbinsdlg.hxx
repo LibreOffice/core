@@ -29,18 +29,10 @@
 #define _DBINSDLG_HXX
 
 
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
-#ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
-#endif
 #include <vcl/lstbox.hxx>
 #include <svtools/svmedit.hxx>
 #include <sfx2/basedlgs.hxx>

@@ -29,9 +29,7 @@
 
 #include <sfx2/basedlgs.hxx>
 #include <svtools/stdctrl.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <com/sun/star/uno/Sequence.h>
 
 namespace com{ namespace sun{ namespace star{

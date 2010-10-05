@@ -42,9 +42,7 @@
 #include <sys/stat.h>
 
 
-#ifndef _KEYCOD_HXX //autogen
 #include <vcl/keycod.hxx>
-#endif
 #include <tools/stream.hxx>
 
 /*$

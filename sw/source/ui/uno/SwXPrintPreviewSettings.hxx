@@ -31,9 +31,7 @@
 #include "ui_pch.hxx"
 #endif
 #include <comphelper/ChainablePropertySet.hxx>
-#ifndef _COM_SUN_STAR_TEXT_XTEXTDOCUMENT_HPP
 #include <com/sun/star/text/XTextDocument.hpp>
-#endif
 #include <cppuhelper/weak.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 

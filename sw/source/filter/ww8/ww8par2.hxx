@@ -29,20 +29,14 @@
 #ifndef _WW8PAR2_HXX
 #define _WW8PAR2_HXX
 
-#ifndef SWTYPES_HXX
 #include <swtypes.hxx>  // enum RndStdIds
-#endif
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>
 #include <fmtsrnd.hxx>
 #include <editeng/lrspitem.hxx>
 
-#ifndef WW8SCAN_HXX
 #include "ww8scan.hxx"  // class WW8Style
-#endif
-#ifndef WW8PAR_HXX
 #include "ww8par.hxx"   // WW8_BRC5
-#endif
 
 class WW8RStyle;
 

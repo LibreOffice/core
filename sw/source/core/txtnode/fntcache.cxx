@@ -35,12 +35,8 @@
 #include <vcl/metric.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
-#ifndef _COM_SUN_STAR_I18N_CHARACTERITERATORMODE_HDL_
 #include <com/sun/star/i18n/CharacterIteratorMode.hdl>
-#endif
-#ifndef _COM_SUN_STAR_I18N_WORDTYPE_HDL
 #include <com/sun/star/i18n/WordType.hdl>
-#endif
 #include <breakit.hxx>
 #include <viewsh.hxx>       // Bildschirmabgleich
 #include <viewopt.hxx>      // Bildschirmabgleich abschalten, ViewOption

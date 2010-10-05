@@ -28,19 +28,13 @@
 #ifndef _GLOSBIB_HXX
 #define _GLOSBIB_HXX
 
-#ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
-#endif
 #include <svx/stddlg.hxx>
 
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
 #include <svtools/svtabbx.hxx>
 
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <vcl/fixed.hxx>
 
 class SwGlossaryHdl;

@@ -27,9 +27,7 @@
 #ifndef _ACCPAGE_HXX
 #define _ACCPAGE_HXX
 
-#ifndef _ACCCONTEXT_HXX
 #include "acccontext.hxx"
-#endif
 
 
 /**

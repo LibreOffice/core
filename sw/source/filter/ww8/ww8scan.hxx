@@ -45,9 +45,7 @@
 #include "hash_wrap.hxx"
 #include "sortedarray.hxx"
 
-#ifndef WW8STRUC_HXX
 #include "ww8struc.hxx"         // FIB, STSHI, STD...
-#endif
 #include <types.hxx>
 
 #include <unomid.h>

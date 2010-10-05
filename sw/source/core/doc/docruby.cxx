@@ -32,12 +32,8 @@
 #include <string.h>         // fuer strchr()
 #include <hintids.hxx>
 
-#ifndef _COM_SUN_STAR_I18N_UNICODETYPE_HDL
 #include <com/sun/star/i18n/UnicodeType.hdl>
-#endif
-#ifndef _COM_SUN_STAR_I18N_WORDTYPE_HDL
 #include <com/sun/star/i18n/WordType.hdl>
-#endif
 #include <unotools/charclass.hxx>
 #include <doc.hxx>
 #include <docary.hxx>

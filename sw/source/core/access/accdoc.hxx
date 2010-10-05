@@ -26,9 +26,7 @@
  ************************************************************************/
 #ifndef _ACCDOC_HXX
 #define _ACCDOC_HXX
-#ifndef _ACCCONTEXT_HXX
 #include "acccontext.hxx"
-#endif
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <accselectionhelper.hxx>
 

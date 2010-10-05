@@ -30,9 +30,7 @@
 #include <vcl/group.hxx>
 #include <vcl/field.hxx>
 #include <svtools/stdctrl.hxx>
-#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <sfx2/tabdlg.hxx>
 
 

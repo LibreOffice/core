@@ -29,12 +29,8 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <colex.hxx>
-#ifndef _FIELD_HXX
 #include <vcl/field.hxx>
-#endif
-#ifndef _FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
 #include <svtools/ctrlbox.hxx>
 /*--------------------------------------------------------------------
     Description:   TabPage Format/(Styles/)Page/Text grid

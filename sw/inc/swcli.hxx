@@ -30,9 +30,7 @@
 
 #include <svtools/embedhlp.hxx>
 
-#ifndef _SFX_CLIENTSH_HXX //autogen
 #include <sfx2/ipclient.hxx>
-#endif
 
 class SwView;
 class SwEditWin;

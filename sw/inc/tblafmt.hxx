@@ -53,9 +53,7 @@ JP 20.07.95:
 #include <editeng/postitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/crsditem.hxx>
-#ifndef _SVX_CNTRTITEM_HXX //autogen
 #include <editeng/cntritem.hxx>
-#endif
 #include <editeng/shdditem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/boxitem.hxx>

@@ -29,9 +29,7 @@
 #include <limits.h>     // USHRT_MAX
 #include "swcont.hxx"
 
-#ifndef _MENU_HXX //autogen
 #include <vcl/menu.hxx>
-#endif
 
 class SwWrtShell;
 class SwContentArr;

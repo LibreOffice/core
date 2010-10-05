@@ -31,9 +31,7 @@
 #include <tools/solar.h>
 #include <tools/string.hxx>
 
-#ifndef _SVARRAY_H
 #include <svl/svarray.hxx>
-#endif
 
 class SdrObject;
 class SwFrmFmt;

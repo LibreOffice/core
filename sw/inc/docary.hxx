@@ -44,9 +44,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
     struct ForbiddenCharacters;    // comes from the I18N UNO interface
 }}}}
 
-#ifndef _TABLE_HXX //autogen
 #include <tools/table.hxx>
-#endif
 #include <swtypes.hxx>
 #include <svl/svarray.hxx>
 

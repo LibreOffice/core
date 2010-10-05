@@ -33,9 +33,7 @@
 #include <vcl/field.hxx>
 #include <numberingtypelistbox.hxx>
 
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
 
 class Window;
 class SfxItemSet;

@@ -30,9 +30,7 @@
 #include <svx/stddlg.hxx>
 #include <vcl/fixed.hxx>
 
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 
 #include "swlbox.hxx"       // SwComboBox
 

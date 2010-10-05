@@ -28,16 +28,10 @@
 #define SW_INPUTWIN_HXX
 
 
-#ifndef _MENU_HXX //autogen
 #include <vcl/menu.hxx>
-#endif
 #include <sfx2/childwin.hxx>
-#ifndef _TOOLBOX_HXX //autogen
 #include <vcl/toolbox.hxx>
-#endif
-#ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
-#endif
 
 class SwFldMgr;
 class SwWrtShell;

@@ -32,9 +32,7 @@
 //#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 //#include <com/sun/star/uno/Reference.hxx>
 //#endif
-#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HXX_
 #include <com/sun/star/io/XInputStream.hpp>
-#endif
 #include <retrievedinputstreamdata.hxx>
 
 /** class for a thread to retrieve an input stream given by an URL

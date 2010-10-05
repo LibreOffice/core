@@ -29,13 +29,9 @@
 
 #include <svl/svarray.hxx>
 
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
 
-#ifndef _COMBOBOX_HXX //autogen
 #include <vcl/combobox.hxx>
-#endif
 #include "swdllapi.h"
 
 class SwBoxEntry;

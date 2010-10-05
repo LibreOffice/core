@@ -27,9 +27,7 @@
 #ifndef _DPAGE_HXX
 #define _DPAGE_HXX
 
-#ifndef _FM_FMPAGE_HXX
 #include <svx/fmpage.hxx>
-#endif
 #include <svx/svdobj.hxx>
 
 class SdrPageGridFrameList;

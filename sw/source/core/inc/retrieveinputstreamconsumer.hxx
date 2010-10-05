@@ -28,9 +28,7 @@
 #define _RETRIEVEINPUTSTREAMCONSUMER_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
-#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HXX_
 #include <com/sun/star/io/XInputStream.hpp>
-#endif
 #include <osl/interlck.h>
 #include <retrievedinputstreamdata.hxx>
 

@@ -27,9 +27,7 @@
 #ifndef _MAILMERGEOUTPUTPAGE_HXX
 #define _MAILMERGEOUTPUTPAGE_HXX
 #include <svtools/wizardmachine.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <svtools/stdctrl.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/field.hxx>

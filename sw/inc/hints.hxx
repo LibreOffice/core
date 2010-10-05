@@ -27,9 +27,7 @@
 #ifndef _HINTS_HXX
 #define _HINTS_HXX
 
-#ifndef _TABLE_HXX //autogen
 #include <tools/table.hxx>
-#endif
 #include <swatrset.hxx>
 
 class SwFmt;

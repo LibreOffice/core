@@ -27,9 +27,7 @@
 #ifndef _AUTOEDIT_HXX
 #define _AUTOEDIT_HXX
 
-#ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
-#endif
 
 
 class AutoEdit : public Edit

@@ -27,15 +27,9 @@
 #ifndef _SWTABLEPG_HXX
 #define _SWTABLEPG_HXX
 #include <sfx2/tabdlg.hxx>
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _IMAGEBTN_HXX //autogen
 #include <vcl/imagebtn.hxx>
-#endif
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
 #include <actctrl.hxx>
 #include "prcntfld.hxx"
 #include "swtypes.hxx"

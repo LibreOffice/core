@@ -28,9 +28,7 @@
 #ifndef _TEXTCONTROLCOMBO_HXX
 #define _TEXTCONTROLCOMBO_HXX
 
-#ifndef _FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
 
 #include <vcl/field.hxx>
 #include "swdllapi.h"

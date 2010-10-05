@@ -27,9 +27,7 @@
 #ifndef _CONDEDTI_HXX
 #define _CONDEDTI_HXX
 
-#ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
-#endif
 #include <svtools/transfer.hxx>
 #include "swdllapi.h"
 

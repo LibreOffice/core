@@ -28,9 +28,7 @@
 #define _POPBOX_HXX
 
 
-#ifndef _TOOLBOX_HXX
 #include <vcl/toolbox.hxx>
-#endif
 #include <svtools/transfer.hxx>
 
 class SwNavigationPI;

@@ -29,25 +29,13 @@
 
 
 #include <sfx2/tabdlg.hxx>
-#ifndef _MENUBTN_HXX //autogen
 #include <vcl/menubtn.hxx>
-#endif
-#ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 #include <svtools/stdctrl.hxx>
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
-#ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
-#endif
 #include <svx/stddlg.hxx>
 #include <numprevw.hxx>
 #include "numrule.hxx"

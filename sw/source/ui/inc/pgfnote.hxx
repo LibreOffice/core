@@ -29,17 +29,11 @@
 
 #include <sfx2/tabdlg.hxx>
 
-#ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
 
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 
-#ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
 #include <svtools/ctrlbox.hxx>
 
 /*--------------------------------------------------------------------

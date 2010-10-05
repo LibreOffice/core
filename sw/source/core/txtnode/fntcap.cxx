@@ -33,12 +33,8 @@
 #include <editeng/cmapitem.hxx>
 
 #include <vcl/outdev.hxx>
-#ifndef _COM_SUN_STAR_I18N_CHARTYPE_HDL
 #include <com/sun/star/i18n/CharType.hdl>
-#endif
-#ifndef _COM_SUN_STAR_I18N_WORDTYPE_HDL
 #include <com/sun/star/i18n/WordType.hdl>
-#endif
 
 #include <vcl/print.hxx>
 #include <errhdl.hxx>

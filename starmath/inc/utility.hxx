@@ -28,9 +28,7 @@
 #define UTILITY_HXX
 
 #include <sfx2/minarray.hxx>
-#ifndef _FONT_HXX //autogen
 #include <vcl/font.hxx>
-#endif
 #include <vcl/fixed.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/lstbox.hxx>

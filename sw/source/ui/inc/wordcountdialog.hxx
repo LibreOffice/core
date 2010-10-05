@@ -28,9 +28,7 @@
 #define SW_WORDCOUNTDIALOG_HXX
 #include <sfx2/basedlgs.hxx>
 #include <svtools/stdctrl.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <layout/layout.hxx>
 #include <layout/layout-pre.hxx>
 struct SwDocStat;

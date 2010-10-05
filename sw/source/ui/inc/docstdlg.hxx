@@ -29,9 +29,7 @@
 
 #include <sfx2/tabdlg.hxx>
 
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 #include <svtools/stdctrl.hxx>
 
 #include "docstat.hxx"

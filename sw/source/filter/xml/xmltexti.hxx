@@ -27,9 +27,7 @@
 #ifndef _XMLTEXTI_HXX
 #define _XMLTEXTI_HXX
 
-#ifndef _XMLOFF_TXTIMP_HXX
 #include <xmloff/txtimp.hxx>
-#endif
 #include <xmloff/functional.hxx>
 
 class XMLRedlineImportHelper;

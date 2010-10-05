@@ -39,9 +39,7 @@
 #include <tools/string.hxx>
 #include <sfx2/frmhtml.hxx>
 #include <sfx2/frmhtmlw.hxx>
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
 #include <sot/storage.hxx>
 #include <svl/itemset.hxx>
 

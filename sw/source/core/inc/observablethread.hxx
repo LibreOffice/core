@@ -27,9 +27,7 @@
 #ifndef _OBSERVABLETHREAD_HXX
 #define _OBSERVABLETHREAD_HXX
 
-#ifndef _OSL_THREAD_HXX_
 #include <osl/thread.hxx>
-#endif
 #include <rtl/ref.hxx>
 #include <osl/interlck.h>
 

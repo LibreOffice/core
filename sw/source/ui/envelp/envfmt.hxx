@@ -33,15 +33,9 @@
 #include <svl/svstdarr.hxx>
 #endif
 #include <svtools/stdctrl.hxx>
-#ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
-#ifndef _MENUBTN_HXX //autogen
 #include <vcl/menubtn.hxx>
-#endif
-#ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
 
 #include "envlop.hxx"
 

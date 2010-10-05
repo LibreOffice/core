@@ -28,18 +28,14 @@
 #ifndef _SMMOD_HXX
 #define _SMMOD_HXX
 
-#ifndef _SV_RESARY_HXX
 #include <tools/resary.hxx>
-#endif
 #include <svl/lstner.hxx>
 #include <svtools/colorcfg.hxx>
 
 #include <tools/shl.hxx>
 #include <sfx2/module.hxx>
 
-#ifndef _STARMATH_HRC
 #include "starmath.hrc"
-#endif
 
 #include <unotools/options.hxx>
 

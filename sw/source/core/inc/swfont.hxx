@@ -29,9 +29,7 @@
 
 #include <i18npool/lang.h>
 #include <tools/color.hxx>
-#ifndef _TOOLS_STREAM_HXX //autogen
 #include <tools/stream.hxx>
-#endif
 #include <editeng/svxfont.hxx>
 #include <swtypes.hxx>
 #include <drawfont.hxx>     // SwDrawTextInfo

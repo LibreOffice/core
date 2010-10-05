@@ -31,9 +31,7 @@
 #include <redline.hxx>
 #include <tools/datetime.hxx>
 #include <vcl/msgbox.hxx>
-#ifndef _SVSTDARR_HXX
 #include <svl/svstdarr.hxx>
-#endif
 #include <svl/eitem.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/viewfrm.hxx>

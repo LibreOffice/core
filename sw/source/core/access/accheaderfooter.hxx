@@ -26,9 +26,7 @@
  ************************************************************************/
 #ifndef _ACCHEADERFOOTER_HXX
 #define _ACCHEADERFOOTER_HXX
-#ifndef _ACCCONTEXT_HXX
 #include "acccontext.hxx"
-#endif
 
 class SwHeaderFrm;
 class SwFooterFrm;

@@ -28,9 +28,7 @@
 #define _MAILMERGEPREPAREMERGEPAGE_HXX
 
 #include <svtools/wizardmachine.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/field.hxx>
 #include <svtools/stdctrl.hxx>
 #include <mailmergehelper.hxx>

@@ -27,18 +27,10 @@
 #ifndef _INSTABLE_HXX
 #define _INSTABLE_HXX
 
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
-#ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
-#endif
 #include <sfx2/basedlgs.hxx>
 #include <actctrl.hxx>
 #include <textcontrolcombo.hxx>

@@ -27,13 +27,9 @@
 #ifndef _MERGETBL_HXX
 #define _MERGETBL_HXX
 
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 #include <svx/stddlg.hxx>
 
 

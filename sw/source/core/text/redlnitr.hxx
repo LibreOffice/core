@@ -29,9 +29,7 @@
 
 #include "ndhints.hxx"
 
-#ifndef IDOCUMENTREDLINEACCESS_HXX_INCLUDED
 #include <IDocumentRedlineAccess.hxx>
-#endif
 
 #include "swfont.hxx"
 #ifndef _SVSTDARR_USHORTS

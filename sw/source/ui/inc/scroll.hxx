@@ -26,9 +26,7 @@
  ************************************************************************/
 #ifndef _SCROLL_HXX
 #define _SCROLL_HXX
-#ifndef _SCRBAR_HXX //autogen
 #include <vcl/scrbar.hxx>
-#endif
 
 class SwScrollbar: public ScrollBar
 {

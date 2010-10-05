@@ -35,9 +35,7 @@
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>
-#ifndef _COM_SUN_STAR_UCB_NAMECLASH_HDL_
 #include <com/sun/star/ucb/NameClash.hdl>
-#endif
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

@@ -30,16 +30,12 @@
 #ifndef _STMENU_HXX
 #define _STMENU_HXX
 
-#ifndef _MENU_HXX //autogen
 #include <vcl/menu.hxx>
-#endif
 
 #include <vector>
 #include <com/sun/star/smarttags/XSmartTagAction.hpp>
 
-#ifndef _COM_SUN_STAR_SMARTTAGS_XSTRINGKEYMAP_HPP_
 #include <com/sun/star/container/XStringKeyMap.hpp>
-#endif
 #include <com/sun/star/text/XTextRange.hpp>
 
 class SwView;

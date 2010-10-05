@@ -29,9 +29,7 @@
 
 #include <sfx2/basedlgs.hxx>
 #include <svtools/stdctrl.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <svtools/svtabbx.hxx>
 #include <svtools/headbar.hxx>
 #include <swdbdata.hxx>

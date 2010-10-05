@@ -32,12 +32,8 @@
 #include "ui_pch.hxx"
 #endif
 
-#ifndef _COMPHELPER_MASTERPROPERTYSET_HXX_
 #include <comphelper/MasterPropertySet.hxx>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTDOCUMENT_HPP
 #include <com/sun/star/text/XTextDocument.hpp>
-#endif
 #include  <com/sun/star/lang/XServiceInfo.hpp>
 #include  <com/sun/star/lang/XTypeProvider.hpp>
 #include <cppuhelper/weak.hxx>

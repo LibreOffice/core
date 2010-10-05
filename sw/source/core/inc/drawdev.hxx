@@ -30,9 +30,7 @@
 
 #include "swrect.hxx"
 
-#ifndef _OUTDEV_HXX //autogen
 #include <vcl/outdev.hxx>
-#endif
 
 /*************************************************************************
  *                          class SwDrawDev

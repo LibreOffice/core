@@ -30,9 +30,7 @@
 #include <sfx2/tbxctrl.hxx>
 #include <vcl/toolbox.hxx>
 #include <svtools/stdctrl.hxx>
-#ifndef _IMAGEBTN_HXX //autogen
 #include <vcl/imagebtn.hxx>
-#endif
 
 class PopupMenu;
 class SwView;

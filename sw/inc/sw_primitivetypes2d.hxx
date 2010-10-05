@@ -28,9 +28,7 @@
 #ifndef INCLUDED_SW_PRIMITIVETYPES2D_HXX
 #define INCLUDED_SW_PRIMITIVETYPES2D_HXX
 
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_PRIMITIVETYPES2D_HXX
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 

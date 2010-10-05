@@ -29,9 +29,7 @@
 
 
 #include <tools/string.hxx>
-#ifndef _KEYCOD_HXX //autogen
 #include <vcl/keycod.hxx>
-#endif
 #include <svl/svarray.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <vector>

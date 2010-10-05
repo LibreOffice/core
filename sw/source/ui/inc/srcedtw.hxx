@@ -32,9 +32,7 @@
 #include <unotools/options.hxx>
 #include <vcl/timer.hxx>
 
-#ifndef _TABLE_HXX //autogen
 #include <tools/table.hxx>
-#endif
 #include <svtools/xtextedt.hxx>
 
 class ScrollBar;

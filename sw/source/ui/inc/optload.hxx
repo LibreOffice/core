@@ -29,9 +29,7 @@
 
 #include <sfx2/tabdlg.hxx>
 
-#ifndef _GROUP_HXX
 #include <vcl/group.hxx>
-#endif
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/field.hxx>

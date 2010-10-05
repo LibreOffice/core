@@ -28,13 +28,9 @@
 #define _ROMENU_HXX
 
 
-#ifndef _GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
-#endif
 #include <tools/list.hxx>
-#ifndef _MENU_HXX //autogen
 #include <vcl/menu.hxx>
-#endif
 
 class SwView;
 class SfxDispatcher;

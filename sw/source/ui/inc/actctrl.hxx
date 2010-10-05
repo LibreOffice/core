@@ -27,9 +27,7 @@
 #ifndef _ACTCTRL_HXX
 #define _ACTCTRL_HXX
 
-#ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
 #include "swdllapi.h"
 
 /*--------------------------------------------------------------------

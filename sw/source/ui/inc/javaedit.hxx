@@ -31,21 +31,13 @@
 
 #include <svx/stddlg.hxx>
 
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 
-#ifndef _SV_SVMEDIT_HXX //autogen
 #include <svtools/svmedit.hxx>
-#endif
 
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 
-#ifndef _IMAGEBTN_HXX //autogen
 #include <vcl/imagebtn.hxx>
-#endif
 
 class SwWrtShell;
 class SwFldMgr;

@@ -28,9 +28,7 @@
 #define _CUSTOMIZEADDRESSLISTDIALOG_HXX
 #include <sfx2/basedlgs.hxx>
 
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <svtools/stdctrl.hxx>
 #include <vcl/field.hxx>
 #include <vcl/lstbox.hxx>

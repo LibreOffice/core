@@ -31,9 +31,7 @@
 
 #include <hintids.hxx>
 
-#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
-#endif
 #include <tools/string.hxx>
 #include <editeng/langitem.hxx>
 #include <txatritr.hxx>

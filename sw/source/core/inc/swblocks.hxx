@@ -29,9 +29,7 @@
 
 #include <tools/string.hxx>
 
-#ifndef _DATE_HXX //autogen
 #include <tools/datetime.hxx>
-#endif
 #include <svl/svarray.hxx>
 
 

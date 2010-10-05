@@ -27,26 +27,16 @@
 #ifndef _ENVLOP_HXX
 #define _ENVLOP_HXX
 
-#ifndef _SV_MEDIT_HXX
 #include <svtools/svmedit.hxx>
-#endif
 #include <sfx2/tabdlg.hxx>
 
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 
-#ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
-#endif
 
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
 
-#ifndef _IMAGEBTN_HXX //autogen
 #include <vcl/imagebtn.hxx>
-#endif
 
 #include "envimg.hxx"
 

@@ -32,9 +32,7 @@
 #include <ctype.h>
 #include <hintids.hxx>
 
-#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
-#endif
 #include <vcl/graph.hxx>
 #include <svl/urihelper.hxx>
 #include <svtools/rtftoken.h>

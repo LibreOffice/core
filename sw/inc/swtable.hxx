@@ -27,9 +27,7 @@
 #ifndef _SWTABLE_HXX
 #define _SWTABLE_HXX
 #include <tools/mempool.hxx>
-#ifndef _TOOLS_REF_HXX
 #include <tools/ref.hxx>
-#endif
 #include <svl/svarray.hxx>
 #include <tblenum.hxx>
 #include <swtypes.hxx>

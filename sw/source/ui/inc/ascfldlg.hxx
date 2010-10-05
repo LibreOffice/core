@@ -28,9 +28,7 @@
 #define _ASCFLDLG_HXX
 #include <vcl/fixed.hxx>
 
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/lstbox.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <svx/txencbox.hxx>

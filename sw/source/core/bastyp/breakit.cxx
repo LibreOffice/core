@@ -31,9 +31,7 @@
 #include "breakit.hxx"
 #include <unicode/uchar.h>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
-#endif
 #include <unotools/localedatawrapper.hxx>
 
 #include <editeng/unolingu.hxx>

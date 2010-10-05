@@ -28,9 +28,7 @@
 #include <tools/debug.hxx>
 
 // local
-#ifndef _W1STRUCT_HXX
 #include <w1struct.hxx>
-#endif
 
 #ifdef DUMP
 #include <fstream.h>

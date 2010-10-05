@@ -43,9 +43,7 @@
 #include <editeng/brshitem.hxx>
 #include <editeng/charrotateitem.hxx>
 #include <breakit.hxx>
-#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
-#endif
 #include <tabfrm.hxx>
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>

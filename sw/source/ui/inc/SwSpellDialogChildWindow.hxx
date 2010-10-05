@@ -29,9 +29,7 @@
 #define SW_SPELL_DIALOG_CHILD_WINDOW_HXX
 
 #include <svx/SpellDialogChildWindow.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 
 class SwWrtShell;
 struct SpellState;

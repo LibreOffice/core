@@ -28,15 +28,9 @@
 #define _CHANGEDB_HXX
 
 
-#ifndef _BITMAP_HXX //autogen
 #include <vcl/bitmap.hxx>
-#endif
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 #include <svtools/stdctrl.hxx>
 #include <svtools/svtreebx.hxx>
 #include <svx/stddlg.hxx>

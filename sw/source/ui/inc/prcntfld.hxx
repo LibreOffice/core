@@ -27,9 +27,7 @@
 #ifndef _PRCNTFLD_HXX
 #define _PRCNTFLD_HXX
 
-#ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
 #include "swdllapi.h"
 
 class SW_DLLPUBLIC PercentField : public MetricField

@@ -28,18 +28,10 @@
 #define _MAILCONFIGPAGE_HXX
 
 #include <sfx2/tabdlg.hxx>
-#ifndef _BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
-#ifndef _LSTBOX_HXX
 #include <vcl/lstbox.hxx>
-#endif
-#ifndef _FIELD_HXX
 #include <vcl/field.hxx>
-#endif
-#ifndef _FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
 #include <sfx2/basedlgs.hxx>
 
 class SwTestAccountSettingsDialog;

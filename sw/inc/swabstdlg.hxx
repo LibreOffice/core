@@ -34,9 +34,7 @@
 #include <sfx2/sfxdlg.hxx>
 #include <svx/svxdlg.hxx>
 #include <vcl/syswin.hxx>
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/frame/XModel.hpp>

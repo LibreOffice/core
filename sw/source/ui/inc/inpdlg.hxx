@@ -29,13 +29,9 @@
 
 #include <svx/stddlg.hxx>
 
-#ifndef _SV_SVMEDIT_HXX //autogen
 #include <svtools/svmedit.hxx>
-#endif
 #include <vcl/fixed.hxx>
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 
 class SwInputField;
 class SwSetExpField;

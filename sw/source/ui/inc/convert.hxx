@@ -28,9 +28,7 @@
 #define _SW_CONVERT_HXX
 
 #include <vcl/fixed.hxx>
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <vcl/edit.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <textcontrolcombo.hxx>

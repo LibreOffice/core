@@ -29,9 +29,7 @@
 
 #include <svtools/wizardmachine.hxx>
 #include <sfx2/basedlgs.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
 #include <svtools/stdctrl.hxx>

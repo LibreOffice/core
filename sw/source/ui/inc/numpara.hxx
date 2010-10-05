@@ -32,9 +32,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
-#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 
 
 /* --- class SwParagraphNumTabPage ----------------------------------------

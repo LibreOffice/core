@@ -28,9 +28,7 @@
 #define _MAILMERGEADDRESSBLOCKPAGE_HXX
 
 #include <svtools/wizardmachine.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <svtools/stdctrl.hxx>
 #include <mailmergehelper.hxx>
 #include <sfx2/basedlgs.hxx>

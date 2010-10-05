@@ -30,9 +30,7 @@
 #ifndef _ESCHER_HXX
 #define _ESCHER_HXX
 
-#ifndef _ESCHEREX_HXX
 #include <filter/msfilter/escherex.hxx>
-#endif
 
 const sal_uInt32 nInlineHack = 0x00010001;
 class SwFrmFmt;

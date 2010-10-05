@@ -29,9 +29,7 @@
 #define _W1PAR_HXX
 
 #include <fltshell.hxx>
-#ifndef _W1CLASS_HXX
 #include <w1class.hxx>
-#endif
 
 ////////////////////////////////////////////////////////////// Ww1Shell
 class Ww1Shell : public SwFltShell

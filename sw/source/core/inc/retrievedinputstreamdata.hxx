@@ -31,9 +31,7 @@
 #include <sal/types.h>
 #include <osl/mutex.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HXX_
 #include <com/sun/star/io/XInputStream.hpp>
-#endif
 
 #include <map>
 

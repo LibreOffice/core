@@ -31,9 +31,7 @@
 #ifdef _SYNCDLG
 #include <sfx2/basedlgs.hxx>
 
-#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 
 /*------------------------------------------------------------------------
     Beschreibung:

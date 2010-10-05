@@ -29,9 +29,7 @@
 #define IDOCUMENTSETTINGACCESS_HXX_INCLUDED
 
 #include <tools/solar.h>
-#ifndef _VOS_REF_HXX
 #include <vos/ref.hxx>
-#endif
 #include <chcmprse.hxx>
 #include <fldupde.hxx>
 
