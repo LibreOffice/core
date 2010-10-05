@@ -52,6 +52,9 @@ TARFILE_NAME=boost_1_39_0
 TARFILE_MD5=fcc6df1160753d0b8c835d17fdeeb0a7
 PATCH_FILES=$(TARFILE_NAME).patch
 
+#https://svn.boost.org/trac/boost/ticket/4713
+PATCH_FILES+=boost.4713.warnings.patch
+
 ADDITIONAL_FILES= \
     libs/thread/src/win32/makefile.mk
 
