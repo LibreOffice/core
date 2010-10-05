@@ -118,7 +118,7 @@ public:
         m_aOuterValue = rOuterValue;
 
         bool bHasAmbiguousValue = false;
-        PROPERTYTYPE aOldValue;
+        PROPERTYTYPE aOldValue = PROPERTYTYPE();
         if( detectInnerValue( aOldValue, bHasAmbiguousValue ) )
         {
             if( bHasAmbiguousValue || aNewValue != aOldValue )
