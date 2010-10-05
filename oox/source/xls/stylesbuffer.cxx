@@ -3015,6 +3015,9 @@ void CellStyleBuffer::finalizeImport()
     for( CellStyleVector::iterator aIt = maBuiltinStyles.begin(), aEnd = maBuiltinStyles.end(); aIt != aEnd; ++aIt )
     {
         const CellStyleModel& rModel = (*aIt)->getModel();
+        if (rModel.isDefaultStyle())
+            continue;
+
         OUString aStyleName = lclGetBuiltinStyleName( rModel.mnBuiltinId, rModel.maName, rModel.mnLevel );
         OSL_ENSURE( bReserveAll || (aCellStyles.count( aStyleName ) == 0),
             "CellStyleBuffer::finalizeImport - multiple styles with equal built-in identifier" );
@@ -3055,6 +3058,16 @@ void CellStyleBuffer::finalizeImport()
 
     // set final names and create user-defined and modified built-in cell styles
     aCellStyles.forEachMemWithKey( &CellStyle::finalizeImport );
+
+    if (mxDefStyle)
+    {
+        Reference<XNameAccess> xNA(getStyleFamily(false), UNO_QUERY_THROW);
+        if (xNA->hasByName(CREATE_OUSTRING("Default")))
+        {
+            PropertySet aPropSet(xNA->getByName(CREATE_OUSTRING("Default")));
+            getStyles().writeStyleXfToPropertySet(aPropSet, mxDefStyle->getModel().mnXfId);
+        }
+    }
 }
 
 sal_Int32 CellStyleBuffer::getDefaultXfId() const
