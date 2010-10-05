@@ -966,11 +966,17 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             {
                 VclAbstractDialog* pDlg =
                     pFact->CreateFrameDialog( NULL, xFrame, rReq.GetSlot(), sPageURL );
-                  pDlg->Execute();
+                  short nRet = pDlg->Execute();
                   delete pDlg;
                 SfxViewFrame* pView = SfxViewFrame::GetFirst();
                 while ( pView )
                 {
+                    if (nRet == RET_OK)
+                    {
+                        SfxObjectShell* pObjSh = pView->GetObjectShell();
+                        if (pObjSh)
+                            pObjSh->SetConfigOptionsChecked(false);
+                    }
                     pView->GetBindings().InvalidateAll(FALSE);
                     pView = SfxViewFrame::GetNext( *pView );
                 }

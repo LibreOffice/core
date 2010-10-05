@@ -3714,6 +3714,22 @@ void SfxObjectShell::UpdateLinks()
 {
 }
 
+void SfxObjectShell::CheckConfigOptions()
+{
+    // not handled.  Each app's shell needs to overwrite this method to add handler.
+    SetConfigOptionsChecked(true);
+}
+
+sal_Bool SfxObjectShell::IsConfigOptionsChecked() const
+{
+    return pImp->m_bConfigOptionsChecked;
+}
+
+void SfxObjectShell::SetConfigOptionsChecked( sal_Bool bChecked )
+{
+    pImp->m_bConfigOptionsChecked = bChecked;
+}
+
 sal_Bool SfxObjectShell::QuerySaveSizeExceededModules_Impl( const uno::Reference< task::XInteractionHandler >& xHandler )
 {
     if ( !HasBasic() )

@@ -346,6 +346,13 @@ public:
     virtual sal_Bool            SwitchPersistance(
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
     virtual void                UpdateLinks();
+    /**
+     * Called when the Options dialog is dismissed with the OK button, to
+     * handle potentially conflicting option settings.
+     */
+    virtual void                CheckConfigOptions();
+    sal_Bool                    IsConfigOptionsChecked() const;
+    void                        SetConfigOptionsChecked( sal_Bool bChecked );
 
     // called for a few slots like SID_SAVE[AS]DOC, SID_PRINTDOC[DIRECT], derived classes may abort the action
     virtual sal_Bool            QuerySlotExecutable( USHORT nSlotId );
