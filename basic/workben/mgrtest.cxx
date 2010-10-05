@@ -327,7 +327,7 @@ IMPL_LINK( TestWindow, TBSelect, ToolBox *, p )
         {
             if ( pBasMgr )
             {
-                // liegt in einem anderen Storage !!!
+                // is located in another storage !!!
                 USHORT nLib = pBasMgr->GetLibId( pBasMgr->CreateLib( pLib3Str ) );
                 if ( nLib != LIB_NOTFOUND )
                 {
@@ -366,7 +366,7 @@ IMPL_LINK( TestWindow, TBSelect, ToolBox *, p )
         {
             if ( pBasMgr )
             {
-                // liegt in einem anderen Storage !!!
+                // is located in another storage !!!
                 SvStorageRef xStorage = new SvStorage( "d:\\mystore2.svs" );
                 if ( !pBasMgr->AddLib( *xStorage, pLib3Str, FALSE ) )
                     Sound::Beep();
@@ -529,7 +529,7 @@ void __EXPORT TestWindow::KeyInput( const KeyEvent& rKEvt )
     char nCharCode = rKEvt.GetCharCode();
     USHORT nCode = rKEvt.GetKeyCode().GetCode();
 
-    // Nur bei Alt-Return
+    // Only at Alt-Return
     if ( ( nCode == KEY_RETURN ) && rKEvt.GetKeyCode().IsMod2() )
         ;
     else
