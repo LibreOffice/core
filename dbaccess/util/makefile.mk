@@ -128,7 +128,8 @@ SHL2STDLIBS= \
         $(CPPULIB)				\
         $(SO2LIB)				\
         $(VOSLIB)				\
-        $(SALLIB)
+        $(SALLIB) \
+        $(EDITENGLIB)
         
 .IF "$(GUI)"=="OS2"
 SHL2STDLIBS+=	$(LB)$/i$(TARGET).lib

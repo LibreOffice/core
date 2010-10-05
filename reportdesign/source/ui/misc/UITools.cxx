@@ -69,6 +69,7 @@
 #include <editeng/flstitem.hxx>
 #include <editeng/akrnitem.hxx>
 #include <editeng/colritem.hxx>
+#include <editeng/justifyitem.hxx>
 #include <svx/drawitem.hxx>
 #include <editeng/twolinesitem.hxx>
 #include <editeng/charreliefitem.hxx>

@@ -295,6 +295,8 @@
 #include <connectivity/FValue.hxx>
 #endif
 
+#include <editeng/justifyitem.hxx>
+
 // .........................................................................
 namespace dbaui
 {
