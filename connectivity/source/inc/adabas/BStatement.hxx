@@ -29,7 +29,7 @@
 
 #include "odbc/OStatement.hxx"
 #include "adabas/BConnection.hxx"
-#include "connectivity/commontools.hxx"
+#include "connectivity/CommonTools.hxx"
 #include <vos/ref.hxx>
 
 namespace connectivity
