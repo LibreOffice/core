@@ -27,47 +27,78 @@
 
 package complex.passwordcontainer;
 
-import complexlib.ComplexTestCase;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.UnoRuntime;
 
-public class PasswordContainerUnitTest extends ComplexTestCase {
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openoffice.test.OfficeConnection;
+import static org.junit.Assert.*;
+
+public class PasswordContainerUnitTest {
     private XMultiServiceFactory m_xMSF = null;
 
-    public String[] getTestMethodNames() {
-        return new String[] {
-            "ExecuteTest01",
-            "ExecuteTest02",
-            "ExecuteTest03"};
-    }
-    public String getTestObjectName() {
-        return "PasswordContainerUnitTest";
-    }
+////    public String[] getTestMethodNames() {
+////        return new String[] {
+////            "ExecuteTest01",
+////            "ExecuteTest02",
+////            "ExecuteTest03"};
+////    }
+//    public String getTestObjectName() {
+//        return "PasswordContainerUnitTest";
+//    }
 
-    public void before() {
+    @Before public void before() {
         try {
-            m_xMSF = (XMultiServiceFactory) param.getMSF();
+            m_xMSF = getMSF();
         } catch (Exception e) {
-            failed ("Cannot create service factory!");
+            fail ("Cannot create service factory!");
         }
         if (m_xMSF == null) {
-            failed ("Cannot create service factory!");
+            fail ("Cannot create service factory!");
         }
     }
 
-    public void after() {
+    @After public void after() {
         m_xMSF = null;
     }
 
-    public void ExecuteTest01() {
-        PasswordContainerTest aTest = new Test01(m_xMSF, log);
-        assure("Test01 failed!", aTest.test());
+    @Test public void ExecuteTest01()
+    {
+        PasswordContainerTest aTest = new Test01(m_xMSF);
+        assertTrue("Test01 failed!", aTest.test());
     }
-    public void ExecuteTest02() {
-        PasswordContainerTest aTest = new Test02(m_xMSF, log);
-        assure("Test02 failed!", aTest.test());
+    @Test public void ExecuteTest02() {
+        PasswordContainerTest aTest = new Test02(m_xMSF);
+        assertTrue("Test02 failed!", aTest.test());
     }
-    public void ExecuteTest03() {
-        PasswordContainerTest aTest = new Test03(m_xMSF, log);
-        assure("Test03 failed!", aTest.test());
+    @Test public void ExecuteTest03() {
+        PasswordContainerTest aTest = new Test03(m_xMSF);
+        assertTrue("Test03 failed!", aTest.test());
     }
+
+    private XMultiServiceFactory getMSF()
+    {
+        final XMultiServiceFactory xMSF1 = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
+        return xMSF1;
+    }
+
+    // setup and close connections
+    @BeforeClass public static void setUpConnection() throws Exception {
+        System.out.println("setUpConnection()");
+        connection.setUp();
+    }
+
+    @AfterClass public static void tearDownConnection()
+        throws InterruptedException, com.sun.star.uno.Exception
+    {
+        System.out.println("tearDownConnection()");
+        connection.tearDown();
+    }
+
+    private static final OfficeConnection connection = new OfficeConnection();
+
 }

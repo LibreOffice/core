@@ -26,31 +26,27 @@
  ************************************************************************/
 package complex.persistent_window_states;
 
-
-import com.sun.star.lang.XServiceInfo;
-import com.sun.star.lang.XInitialization;
-import com.sun.star.uno.Type;
 import com.sun.star.uno.Any;
-import com.sun.star.lang.XTypeProvider;
-import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lang.XComponent;
-import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XFramesSupplier;
 import com.sun.star.frame.XFrames;
-import com.sun.star.registry.XRegistryKey;
-import com.sun.star.comp.loader.FactoryHelper;
 import com.sun.star.container.XIndexAccess;
-import com.sun.star.beans.XPropertySet;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.awt.Rectangle;
 import com.sun.star.util.XCloseable;
 import helper.ConfigurationRead;
-import complexlib.ComplexTestCase;
-import helper.OfficeProvider;
-import complex.persistent_window_states.DocumentHandle;
+
+
+
+// import org.junit.After;
+import org.junit.AfterClass;
+// import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openoffice.test.OfficeConnection;
+import static org.junit.Assert.*;
 
 /**
  * Parameters:
@@ -58,10 +54,11 @@ import complex.persistent_window_states.DocumentHandle;
  *   <li>NoOffice=yes - StarOffice is not started initially.</li>
  * </ul>
  */
-public class PersistentWindowTest extends ComplexTestCase {
+public class PersistentWindowTest
+{
 
-    private XMultiServiceFactory xMSF;
-    private OfficeProvider oProvider;
+    // private XMultiServiceFactory xMSF;
+//    private OfficeProvider oProvider;
     private int iOfficeCloseTime = 0;
 
     /**
@@ -69,9 +66,18 @@ public class PersistentWindowTest extends ComplexTestCase {
      * Right now, it's only 'checkPersistentWindowState'.
      * @return All test methods.
      */
-    public String[] getTestMethodNames() {
-        return new String[]{"checkPersistentWindowState"};
-    }
+//    public String[] getTestMethodNames()
+//    {
+//        return new String[]
+//                {
+//                    "checkPersistentWindowState"
+//                };
+//    }
+
+   /**
+     * The test parameters
+     */
+  //  private static TestParameters param = null;
 
     /**
      * Test if all available document types change the
@@ -94,42 +100,32 @@ public class PersistentWindowTest extends ComplexTestCase {
      *   - close office
      * - Test finished
      */
-    public void checkPersistentWindowState()
+    @Test public void checkPersistentWindowState()
     {
-        try {
+        // final XMultiServiceFactory xMsf = getMSF();
 
-        log.println("Connect the first time.");
-    log.println("AppExecCommand: " + (String)param.get("AppExecutionCommand"));
-    log.println("ConnString: " + (String)param.get("ConnectionString"));
-        oProvider = new OfficeProvider();
-        iOfficeCloseTime = param.getInt("OfficeCloseTime");
-        if ( iOfficeCloseTime == 0 ) {
-            iOfficeCloseTime = 1000;
-        }
+        // some Tests need the qadevOOo TestParameters, it is like a Hashmap for Properties.
+//        param = new TestParameters();
+//        param.put("ServiceFactory", xMsf); // some qadevOOo functions need the ServiceFactory
 
-        if (!connect()) return;
+        try
+        {
 
-        // create the configuration provider
-        Object o = null;
-        try {
-            o = xMSF.createInstance(
-                        "com.sun.star.configuration.ConfigurationProvider");
-        }
-        catch(com.sun.star.uno.Exception e) {
-            failed("Cannot create \"com.sun.star.configuration."+
-                                            "ConfigurationProvider\"");
-            return;
-        }
+            // At first we are already connected
+            // if (!connect())
+            // {
+            //     return;
+            // }
 
-        // fetch the multi service factory for setup
-        XMultiServiceFactory xCP = (XMultiServiceFactory)
-                    UnoRuntime.queryInterface(XMultiServiceFactory.class, o);
+            // fetch the multi service factory for setup
+            // XMultiServiceFactory xCP = getMSF();
 
-        // create the configuration reader
-        ConfigurationRead cfgRead = new ConfigurationRead(xCP);
+            // create the configuration reader
+            // ConfigurationRead cfgRead = new ConfigurationRead(xCP);
 
-        // just test the wrong ones, not all.
-        String [] els = new String[]{
+            // just test the wrong ones, not all.
+            String[] els = new String[]
+            {
                 "Office/Factories/com.sun.star.drawing.DrawingDocument",
                 "Office/Factories/com.sun.star.formula.FormulaProperties",
                 //"Office/Factories/com.sun.star.presentation.PresentationDocument",
@@ -138,92 +134,98 @@ public class PersistentWindowTest extends ComplexTestCase {
                 "Office/Factories/com.sun.star.text.TextDocument",
                 "Office/Factories/com.sun.star.text.WebDocument",
             };
-        // uncomment the following line for all doc types
-//        String [] els = cfgRead.getSubNodeNames("Office/Factories");
+            // uncomment the following line for all doc types
+            // String [] els = cfgRead.getSubNodeNames("Office/Factories");
 
-        log.println("Found "+ els.length + " document types to test.\n");
-        if (!disconnect()) return;
+            System.out.println("Found " + els.length + " document types to test.\n");
+            disconnect();
 
-        // for all types
-        for(int i=0; i<els.length; i++) {
-            log.println("\tStart test for document type " + i + ": " + els[i]);
-            // exclude chart documents: cannot be created this way.
-            if ( els[i].indexOf("ChartDocument") != -1) {
-                log.println("Skipping chart document: cannot be create like this.");
-                continue;
-            }
+            // for all types
+            for (int i = 0; i < els.length; i++)
+            {
+                System.out.println("\tStart test for document type " + i + ": " + els[i]);
+                // exclude chart documents: cannot be created this way.
+                if (els[i].indexOf("ChartDocument") != -1)
+                {
+                    System.out.println("Skipping chart document: cannot be create like this.");
+                    continue;
+                }
 
-            // start an office
-            if (!connect()) return;
+                // start an office
+                connect();
 
-            // get configuration
-            String[] settings = getConfigurationAndLoader(xMSF, els[i]);
-            if (settings == null) {
-                log.println("Skipping document type " + els[i]);
+                // get configuration
+                String[] settings = getConfigurationAndLoader(getMSF(), els[i]);
+                if (settings == null)
+                {
+                    System.out.println("Skipping document type " + els[i]);
+                    disconnect();
+                    continue;
+                }
+                String cfg = settings[1];
+
+                // load a document
+                DocumentHandle handle = loadDocument(getMSF(), settings[0]);
+
+                // first size
+                Rectangle rect1 = handle.getDocumentPosSize();
+
+                // resize
+                handle.resizeDocument();
+                // after resize
+                Rectangle rect2 = handle.getDocumentPosSize();
+
+                // disposeManager and start a new office
                 disconnect();
-                continue;
+
+                connect();
+
+                // get configuration
+                settings = getConfigurationAndLoader(getMSF(), els[i]);
+
+                String newCfg = settings[1];
+
+                // load a document
+                handle = loadDocument(getMSF(), settings[0]);
+
+                Rectangle newRect = handle.getDocumentPosSize();
+
+                // print the settings and window sizes
+                System.out.println("----------------------------");
+                System.out.println("Initial Config String      : " + cfg);
+                System.out.println("Config String after restart: " + newCfg);
+
+                System.out.println("----------------------------");
+                System.out.println("Initial window       (X,Y,Width,Height): "
+                        + rect1.X + ";" + rect1.Y + ";" + rect1.Width + ";" + rect1.Height);
+                System.out.println("Window after resize  (X,Y,Width,Height): "
+                        + rect2.X + ";" + rect2.Y + ";" + rect2.Width + ";" + rect2.Height);
+                System.out.println("Window after restart (X,Y,Width,Height): "
+                        + newRect.X + ";" + newRect.Y + ";" + newRect.Width + ";"
+                        + newRect.Height);
+
+                // compare to see if resize worked
+                System.out.println("----------------------------");
+                if (els[i].indexOf("SpreadsheetDocument") == -1 &&
+                    els[i].indexOf("DrawingDocument") == -1)
+                {
+                    // leave out Spreadsheet- and DrawingDocumnt
+                    assertTrue("Resize values for " + els[i] + " are equal.", !compareRectangles(rect1, rect2));
+                }
+                // compare settings and sizes
+                assertTrue("Config settings for " + els[i] + " were not changed.", !cfg.equals(newCfg));
+                assertTrue("Resized and restarted window for " + els[i] + " are not equal.", compareRectangles(rect2, newRect));
+                System.out.println("----------------------------");
+
+                // disposeManager
+                disconnect();
+
+                System.out.println("\tFinish test for document type " + i + ": " + els[i]);
+
             }
-            String cfg = settings[1];
-
-            // load a document
-            DocumentHandle handle = loadDocument(xMSF, settings[0]);
-
-            // first size
-            Rectangle rect1 = handle.getDocumentPosSize();
-
-            // resize
-            handle.resizeDocument();
-            // after resize
-            Rectangle rect2 = handle.getDocumentPosSize();
-
-            // disposeManager and start a new office
-            if (!disconnect()) return;
-
-            if (!connect()) return;
-
-            // get configuration
-            settings = getConfigurationAndLoader(xMSF, els[i]);
-
-            String newCfg = settings[1];
-
-            // load a document
-            handle = loadDocument(xMSF, settings[0]);
-
-            Rectangle newRect = handle.getDocumentPosSize();
-
-            // print the settings and window sizes
-            log.println("----------------------------");
-            log.println("Initial Config String      : " + cfg);
-            log.println("Config String after restart: " + newCfg);
-
-            log.println("----------------------------");
-            log.println("Initial window       (X,Y,Width,Height): "
-                        +rect1.X+";"+rect1.Y+";"+ rect1.Width+";"+rect1.Height);
-            log.println("Window after resize  (X,Y,Width,Height): "
-                        +rect2.X+";"+rect2.Y+";"+ rect2.Width+";"+rect2.Height);
-            log.println("Window after restart (X,Y,Width,Height): "
-                        +newRect.X+";"+newRect.Y+";"+newRect.Width+";"
-                        +newRect.Height);
-
-            // compare to see if resize worked
-            log.println("----------------------------");
-            assure("Resize values for "+ els[i] +
-                    " are equal.", !compareRectangles(rect1, rect2), true);
-            // compare settings and sizes
-            assure("Config settings for "+ els[i] +
-                    " were not changed.", !cfg.equals(newCfg), true);
-            assure("Resized and restarted window for "+ els[i] +
-                    " are not equal.", compareRectangles(rect2, newRect), true);
-            log.println("----------------------------");
-
-            // disposeManager
-            if (!disconnect()) return;
-
-            log.println("\tFinish test for document type " + i + ": " + els[i]);
-
         }
-        }
-        catch(Exception e) {
+        catch (Exception e)
+        {
             e.printStackTrace();
         }
     }
@@ -235,16 +237,17 @@ public class PersistentWindowTest extends ComplexTestCase {
      * @return Settings and Loader
      */
     private static String[] getConfigurationAndLoader(XMultiServiceFactory xMSF,
-                                                            String cfgString) {
+            String cfgString)
+    {
         String[] conf = new String[2];
 
-        try {
+        try
+        {
             Object o = xMSF.createInstance(
-                            "com.sun.star.configuration.ConfigurationProvider");
+                    "com.sun.star.configuration.ConfigurationProvider");
 
             // fetch the multi service factory for setup
-            XMultiServiceFactory xCP = (XMultiServiceFactory)
-                        UnoRuntime.queryInterface(XMultiServiceFactory.class, o);
+            XMultiServiceFactory xCP = UnoRuntime.queryInterface(XMultiServiceFactory.class, o);
 
             // create the configuration reader
             ConfigurationRead cfgRead = new ConfigurationRead(xCP);
@@ -253,22 +256,28 @@ public class PersistentWindowTest extends ComplexTestCase {
             String loader = getStringFromObject(
                     cfgRead.getByHierarchicalName(cfgString + "/ooSetupFactoryEmptyDocumentURL"));
 
-            if (loader == null) return null;
-            log.println("\tLoader: " + loader);
+            if (loader == null)
+            {
+                return null;
+            }
+            System.out.println("\tLoader: " + loader);
 
             // read attributes
             String hierchName = cfgString + "/ooSetupFactoryWindowAttributes";
             String setupSettings = getStringFromObject(cfgRead.getByHierarchicalName(hierchName));
             // remove slots: just plain document types have to start
-            if ( loader.indexOf("?slot") != -1 ) {
+            if (loader.indexOf("?slot") != -1)
+            {
                 loader = loader.substring(0, loader.indexOf("?slot"));
-                System.out.println("Loader: "+loader);
+                System.out.println("Loader: " + loader);
             }
 
             conf[0] = loader;
             conf[1] = setupSettings;
         }
-        catch(com.sun.star.uno.Exception e) {}
+        catch (com.sun.star.uno.Exception e)
+        {
+        }
         return conf;
     }
 
@@ -279,97 +288,105 @@ public class PersistentWindowTest extends ComplexTestCase {
      * @return A handle to the document
      */
     private DocumentHandle loadDocument(XMultiServiceFactory xMSF,
-                                                            String docLoader) {
+            String docLoader)
+    {
         DocumentHandle docHandle = null;
-        try {
+        try
+        {
             // create component loaader
-            XComponentLoader xCompLoader = (XComponentLoader)
-                                UnoRuntime.queryInterface(
-                                XComponentLoader.class, xMSF.createInstance(
-                                "com.sun.star.frame.Desktop"));
-            XFramesSupplier xFrameSupp = (XFramesSupplier)UnoRuntime.queryInterface(XFramesSupplier.class, xCompLoader);
+            XComponentLoader xCompLoader = UnoRuntime.queryInterface(XComponentLoader.class, xMSF.createInstance("com.sun.star.frame.Desktop"));
+            XFramesSupplier xFrameSupp = UnoRuntime.queryInterface(XFramesSupplier.class, xCompLoader);
             // close all existing frames
             XFrames xFrames = xFrameSupp.getFrames();
-            XIndexAccess xAcc = (XIndexAccess)UnoRuntime.queryInterface(XIndexAccess.class, xFrames);
-            for ( int i=0; i<xAcc.getCount(); i++ ) {
-                XCloseable xClose = (XCloseable)UnoRuntime.queryInterface(XCloseable.class, xAcc.getByIndex(i));
-                try {
-                    if ( xClose != null ) {
+            XIndexAccess xAcc = UnoRuntime.queryInterface(XIndexAccess.class, xFrames);
+            for (int i = 0; i < xAcc.getCount(); i++)
+            {
+                XCloseable xClose = UnoRuntime.queryInterface(XCloseable.class, xAcc.getByIndex(i));
+                try
+                {
+                    if (xClose != null)
+                    {
                         xClose.close(false);
                     }
-                    else  {
-                        failed("Could not query frame for XCloseable!");
+                    else
+                    {
+                        fail("Could not query frame for XCloseable!");
                     }
                 }
-                catch( com.sun.star.uno.Exception e ) {
-                    e.printStackTrace((java.io.PrintWriter)log);
-                    failed("Could not query frame for XCloseable!");
+                catch (com.sun.star.uno.Exception e)
+                {
+                    e.printStackTrace();
+                    fail("Could not query frame for XCloseable!");
                 }
             }
             docHandle = new DocumentHandle(xCompLoader);
             docHandle.loadDocument(docLoader, false);
         }
-        catch(com.sun.star.uno.Exception e) {
+        catch (com.sun.star.uno.Exception e)
+        {
             e.printStackTrace();
         }
-        catch(java.lang.Exception e) {
+        catch (java.lang.Exception e)
+        {
             e.printStackTrace();
         }
         return docHandle;
     }
 
-    private boolean connect() {
-        try {
-            xMSF = (XMultiServiceFactory)oProvider.getManager(param);
-            try {
-                Thread.sleep(10000);
-            }
-            catch(java.lang.InterruptedException e) {}
+    private boolean connect()
+    {
+        try
+        {
+            connection.setUp();
         }
-        catch (java.lang.Exception e) {
-            log.println(e.getClass().getName());
-            log.println("Message: " + e.getMessage());
-            failed("Cannot connect the Office.");
-            return false;
+        catch (java.lang.InterruptedException e)
+        {
+            fail("can't connect.");
         }
-        return true;
-    }
-
-    private boolean disconnect() {
-        try {
-            XDesktop desk = null;
-            desk = (XDesktop) UnoRuntime.queryInterface(
-                    XDesktop.class, xMSF.createInstance(
-                    "com.sun.star.frame.Desktop"));
-            xMSF = null;
-            desk.terminate();
-            log.println("Waiting " + iOfficeCloseTime + " milliseconds for the Office to close down");
-            try {
-                Thread.sleep(iOfficeCloseTime);
-            }
-            catch(java.lang.InterruptedException e) {}
-        }
-        catch (java.lang.Exception e) {
-            e.printStackTrace();
-            failed("Cannot dispose the Office.");
-            return false;
+        catch (Exception e)
+        {
+            fail("can't connect.");
         }
         return true;
     }
 
-    private static String getStringFromObject(Object oName) {
+    private boolean disconnect()
+    {
+        try
+        {
+            connection.tearDown();
+        }
+        catch (java.lang.InterruptedException e)
+        {
+            fail("can't disconnect.");
+        }
+        catch (Exception e)
+        {
+            fail("can't disconnect.");
+        }
+        return true;
+    }
+
+    private static String getStringFromObject(Object oName)
+    {
         if (oName instanceof String)
-            return (String)oName;
+        {
+            return (String) oName;
+        }
         String value = null;
-        if (oName instanceof Any) {
-            try {
+        if (oName instanceof Any)
+        {
+            try
+            {
                 value = AnyConverter.toString(oName);
-                if (value == null) {
-                    log.println("Got a void css.uno.Any as loading string.");
+                if (value == null)
+                {
+                    System.out.println("Got a void css.uno.Any as loading string.");
                 }
             }
-            catch(Exception e) {
-                log.println("This document type cannot be opened directly.");
+            catch (Exception e)
+            {
+                System.out.println("This document type cannot be opened directly.");
             }
         }
         return value;
@@ -382,12 +399,37 @@ public class PersistentWindowTest extends ComplexTestCase {
      * @param rect2 Second Rectangle.
      * @return True, if the rectangles are equal.
      */
-    private boolean compareRectangles(Rectangle rect1, Rectangle rect2) {
+    private boolean compareRectangles(Rectangle rect1, Rectangle rect2)
+    {
         boolean result = true;
-        result &= (rect1.X==rect2.X);
-        result &= (rect1.Y==rect2.Y);
-        result &= (rect1.Width==rect2.Width);
-        result &= (rect1.Height==rect2.Height);
+        result &= (rect1.X == rect2.X);
+        result &= (rect1.Y == rect2.Y);
+        result &= (rect1.Width == rect2.Width);
+        result &= (rect1.Height == rect2.Height);
         return result;
     }
+
+
+
+        private XMultiServiceFactory getMSF()
+    {
+        final XMultiServiceFactory xMSF1 = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
+        return xMSF1;
+    }
+
+    // setup and close connections
+    @BeforeClass public static void setUpConnection() throws Exception {
+        System.out.println("setUpConnection()");
+        connection.setUp();
+    }
+
+    @AfterClass public static void tearDownConnection()
+        throws InterruptedException, com.sun.star.uno.Exception
+    {
+        System.out.println("tearDownConnection()");
+        connection.tearDown();
+    }
+
+    private static final OfficeConnection connection = new OfficeConnection();
+
 }

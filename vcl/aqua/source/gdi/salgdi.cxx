@@ -116,17 +116,15 @@ inline FourCharCode GetTag(const char aTagName[5])
 static unsigned GetUShort( const unsigned char* p ){return((p[0]<<8)+p[1]);}
 static unsigned GetUInt( const unsigned char* p ) { return((p[0]<<24)+(p[1]<<16)+(p[2]<<8)+p[3]);}
 
-ImplFontCharMap* ImplMacFontData::GetImplFontCharMap() const
+const ImplFontCharMap* ImplMacFontData::GetImplFontCharMap() const
 {
+    // return the cached charmap
     if( mpCharMap )
-    {
-        // return the cached charmap
-        mpCharMap->AddReference();
         return mpCharMap;
-    }
 
     // set the default charmap
     mpCharMap = ImplFontCharMap::GetDefaultMap();
+    mpCharMap->AddReference();
 
     // get the CMAP byte size
     ATSFontRef rFont = FMGetATSFontRefFromFont( mnFontId );
@@ -149,10 +147,14 @@ ImplFontCharMap* ImplMacFontData::GetImplFontCharMap() const
 
     // parse the CMAP
     CmapResult aCmapResult;
-    if( !ParseCMAP( &aBuffer[0], nRawLength, aCmapResult ) )
-        return mpCharMap;
+    if( ParseCMAP( &aBuffer[0], nRawLength, aCmapResult ) )
+    {
+        // create the matching charmap
+        mpCharMap->DeReference();
+        mpCharMap = new ImplFontCharMap( aCmapResult );
+        mpCharMap->AddReference();
+    }
 
-    mpCharMap = new ImplFontCharMap( aCmapResult );
     return mpCharMap;
 }
 
@@ -1992,7 +1994,7 @@ USHORT AquaSalGraphics::SetFont( ImplFontSelectData* pReqFont, int nFallbackLeve
 
 // -----------------------------------------------------------------------
 
-ImplFontCharMap* AquaSalGraphics::GetImplFontCharMap() const
+const ImplFontCharMap* AquaSalGraphics::GetImplFontCharMap() const
 {
     if( !mpMacFontData )
         return ImplFontCharMap::GetDefaultMap();
@@ -2367,6 +2369,8 @@ void AquaSalGraphics::GetGlyphWidths( const ImplFontData* pFontData, bool bVerti
                 if( nGlyph > 0 )
                     rUnicodeEnc[ nUcsChar ] = nGlyph;
             }
+
+            pMap->DeReference(); // TODO: add and use RAII object instead
         }
 
         ::CloseTTFont( pSftFont );

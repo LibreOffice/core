@@ -26,7 +26,7 @@
  ************************************************************************/
 package complex.tempfile;
 
-import complexlib.ComplexTestCase;
+// import complexlib.ComplexTestCase;
 
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.ucb.XSimpleFileAccess;
@@ -42,10 +42,10 @@ public class Test01 implements TempFileTest {
     XSimpleFileAccess m_xSFA = null;
     TestHelper m_aTestHelper = null;
 
-    public Test01(XMultiServiceFactory xMSF, XSimpleFileAccess xSFA, LogWriter aLogWriter) {
+    public Test01(XMultiServiceFactory xMSF, XSimpleFileAccess xSFA) {
         m_xMSF = xMSF;
         m_xSFA = xSFA;
-        m_aTestHelper = new TestHelper(aLogWriter, "Test01: ");
+        m_aTestHelper = new TestHelper( "Test01: ");
     }
 
     public boolean test() {
@@ -56,11 +56,9 @@ public class Test01 implements TempFileTest {
         //create a temporary file.
         try {
             Object oTempFile = m_xMSF.createInstance( "com.sun.star.io.TempFile" );
-            xTempFile = (XTempFile) UnoRuntime.queryInterface( XTempFile.class,
-                    oTempFile );
+            xTempFile = UnoRuntime.queryInterface(XTempFile.class, oTempFile);
             m_aTestHelper.Message( "Tempfile created." );
-            xTruncate = (XTruncate)UnoRuntime.queryInterface( XTruncate.class,
-                    oTempFile );
+            xTruncate = UnoRuntime.queryInterface(XTruncate.class, oTempFile);
         } catch( Exception e ) {
             m_aTestHelper.Error( "Cannot create TempFile. exception: " + e );
             return false;

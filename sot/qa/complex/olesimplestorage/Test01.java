@@ -1,6 +1,6 @@
 package complex.olesimplestorage;
 
-import complexlib.ComplexTestCase;
+
 
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.io.XInputStream;
@@ -10,7 +10,7 @@ import com.sun.star.embed.XOLESimpleStorage;
 import com.sun.star.uno.UnoRuntime;
 
 import java.util.Random;
-import share.LogWriter;
+
 
 public class Test01 implements OLESimpleStorageTest
 {
@@ -19,10 +19,10 @@ public class Test01 implements OLESimpleStorageTest
     final int pStreamCnt = 5;
     final int pBytesCnt = 10;
 
-    public Test01 ( XMultiServiceFactory xMSF, LogWriter aLogWriter )
+    public Test01 ( XMultiServiceFactory xMSF )
     {
         m_xMSF = xMSF;
-        m_aTestHelper = new TestHelper (aLogWriter, "Test01: ");
+        m_aTestHelper = new TestHelper ("Test01: ");
     }
 
     public boolean test ()
@@ -31,7 +31,7 @@ public class Test01 implements OLESimpleStorageTest
         {
             //create a new temporary stream
             Object oTempFile = m_xMSF.createInstance ( "com.sun.star.io.TempFile" );
-            XTempFile xTempFile = (XTempFile) UnoRuntime.queryInterface ( XTempFile.class, oTempFile );
+            XTempFile xTempFile = UnoRuntime.queryInterface(XTempFile.class, oTempFile);
             m_aTestHelper.Message ( "A new temporary stream created." );
 
             //create OLESimpleStorage based on it
@@ -39,7 +39,7 @@ public class Test01 implements OLESimpleStorageTest
             pArgs[0] = (Object) xTempFile;
             pArgs[1] = new Boolean( true );
             Object oOLESimpleStorage = m_xMSF.createInstanceWithArguments ( "com.sun.star.embed.OLESimpleStorage", pArgs );
-            XOLESimpleStorage xOLESimpleStorage = (XOLESimpleStorage) UnoRuntime.queryInterface ( XOLESimpleStorage.class, oOLESimpleStorage );
+            XOLESimpleStorage xOLESimpleStorage = UnoRuntime.queryInterface(XOLESimpleStorage.class, oOLESimpleStorage);
             m_aTestHelper.Message ( "OLESimpleStorage based on XStream created." );
 
             //fill it with some streams
@@ -53,7 +53,7 @@ public class Test01 implements OLESimpleStorageTest
             {
                 oRandom.nextBytes (pBytesOut[i]);
                 oStream[i] = m_xMSF.createInstance ( "com.sun.star.io.TempFile" );
-                xTempStream[i] = (XTempFile) UnoRuntime.queryInterface ( XTempFile.class, oStream[i] );
+                xTempStream[i] = UnoRuntime.queryInterface(XTempFile.class, oStream[i]);
                 xTempStream[i].getOutputStream ().writeBytes (pBytesOut[i]);
                 xTempStream[i].seek (0);
                 m_aTestHelper.Message ( "Substream " + i + " initialized." );
@@ -83,7 +83,7 @@ public class Test01 implements OLESimpleStorageTest
             //open the same stream with the constructor for inputstream
             pArgs[0] = (Object)xTempFile.getInputStream ();
             oOLESimpleStorage = m_xMSF.createInstanceWithArguments ( "com.sun.star.embed.OLESimpleStorage", pArgs );
-            xOLESimpleStorage = (XOLESimpleStorage)UnoRuntime.queryInterface ( XOLESimpleStorage.class, oOLESimpleStorage );
+            xOLESimpleStorage = UnoRuntime.queryInterface(XOLESimpleStorage.class, oOLESimpleStorage);
             m_aTestHelper.Message ( "Storage reopened, based on XInputStream." );
 
             //check that all the streams contain correct information
@@ -92,8 +92,7 @@ public class Test01 implements OLESimpleStorageTest
             {
                 if ( xOLESimpleStorage.hasByName (sSubStreamPrefix + i) )
                 {
-                    xTempStream[i] = (XTempFile)UnoRuntime.queryInterface (
-                    XTempFile.class, xOLESimpleStorage.getByName (sSubStreamPrefix + i) );
+                    xTempStream[i] = UnoRuntime.queryInterface(XTempFile.class, xOLESimpleStorage.getByName(sSubStreamPrefix + i));
                     xTempStream[i].seek (0);
                     xTempStream[i].getInputStream ().readBytes (pBytesIn[i], pBytesIn[i][0].length + 1 );
                     for ( int j = 0; j < pBytesCnt; ++j )
@@ -120,6 +119,7 @@ public class Test01 implements OLESimpleStorageTest
         catch ( Exception e )
         {
             m_aTestHelper.Error ( "Exception: " + e );
+            return false;
         }
         return true;
     }

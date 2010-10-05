@@ -46,3 +46,5 @@ mkdir: %_DEST%\inc%_EXT%\i18npool
 ..\%__SRC%\lib\libi18npaper*.so %_DEST%\lib%_EXT%\libi18npaper*.so
 ..\%__SRC%\lib\libi18npaper*.dylib %_DEST%\lib%_EXT%\libi18npaper*.dylib
 
+..\%__SRC%\misc\i18npool.component %_DEST%\xml%_EXT%\i18npool.component
+..\%__SRC%\misc\i18nsearch.component %_DEST%\xml%_EXT%\i18nsearch.component

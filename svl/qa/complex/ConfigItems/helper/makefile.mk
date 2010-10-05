@@ -24,7 +24,7 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-PRJ=..$/..$/..$/..
+PRJ=../../../..
 
 PRJNAME=			svl
 TARGET=				ConfigItemTest
@@ -38,26 +38,27 @@ NO_BSYMBOLIC=		TRUE
 
 # --- Generate -----------------------------------------------------
 
-INCPOST += $(PRJ)$/source$/inc
+INCPOST += $(PRJ)/source/inc
 
 # --- light services library ----------------------------------------------------
 
 SHL1TARGET=		svt_$(TARGET)
 
 SHL1OBJS=       \
-                $(SLO)$/UserOptTest.obj				\
-                $(SLO)$/PrintOptTest.obj			\
-                $(SLO)$/AccessibilityOptTest.obj	\
-                $(SLO)$/HistoryOptTest.obj			\
-                $(SLO)$/ConfigItemTest.obj
+                $(SLO)/UserOptTest.obj	\
+                $(SLO)/HistoryOptTest.obj \
+                $(SLO)/ConfigItemTest.obj
+
+#				$(SLO)/PrintOptTest.obj	
+#				$(SLO)/AccessibilityOptTest.obj	
 
 SHL1STDLIBS=	\
-                $(SVLIB) 						\
-                $(SVLLIB) 						    \
-                $(UNOTOOLSLIB)						\
-                $(COMPHELPERLIB)					\
-                $(CPPUHELPERLIB)					\
-                $(CPPULIB)							\
+                $(SVLIB) \
+                $(SVLLIB) \
+                $(UNOTOOLSLIB) \
+                $(COMPHELPERLIB) \
+                $(CPPUHELPERLIB) \
+                $(CPPULIB) \
                 $(SALLIB)
 
 SHL1DEF=        $(MISC)$/$(SHL1TARGET).def

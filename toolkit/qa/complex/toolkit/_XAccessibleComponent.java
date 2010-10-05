@@ -25,9 +25,9 @@
  *
  ************************************************************************/
 
-package complex.toolkit.interface_tests;
+package complex.toolkit;
 
-import share.LogWriter;
+// import share.LogWriter;
 import com.sun.star.awt.Point;
 import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.Size;
@@ -56,7 +56,7 @@ import java.util.Vector;
  */
 public class _XAccessibleComponent {
 
-    private LogWriter log;
+    // private LogWriter log;
 
     public XAccessibleComponent oObj = null;
 
@@ -67,11 +67,12 @@ public class _XAccessibleComponent {
 
     /**
      * Constructor
+     * @param object
      */
-    public _XAccessibleComponent(XInterface object, LogWriter log) {
-        oObj = (XAccessibleComponent)UnoRuntime.queryInterface(
+    public _XAccessibleComponent(XInterface object/*, LogWriter log*/) {
+        oObj = UnoRuntime.queryInterface(
                                     XAccessibleComponent.class, object);
-        this.log = log;
+        // this.log = log;
     }
 
      /**
@@ -87,7 +88,8 @@ public class _XAccessibleComponent {
      * <ul>
      *  <li> <code> getBounds() </code> : to have size of a component.</li>
      * </ul>
-     */
+      * @return
+      */
     public boolean _containsPoint() {
 
         boolean result = true ;
@@ -96,13 +98,13 @@ public class _XAccessibleComponent {
         //while (!oObj.containsPoint(new Point(curX, bounds.Y)) && curX < bounds.Width+bounds.X) {
         while (!oObj.containsPoint(new Point(curX, 0)) && curX < bounds.Width) {
             curX++;
-        };
+        }
         //if ((bounds.X <= curX) && (curX < bounds.Width+bounds.X)) {
         if (curX < bounds.Width) {
-            log.println("Upper bound of box contains point ("
+            System.out.println("Upper bound of box contains point ("
                 + curX + ",0) - OK");
         } else {
-            log.println
+            System.out.println
                 ("Upper bound of box contains no component points - FAILED");
             result = false;
         }
@@ -112,15 +114,15 @@ public class _XAccessibleComponent {
         while (!oObj.containsPoint(new Point(curX, bounds.Height - 1))
                && curX < bounds.Width) {
 
-               log.println("Contains returns false for ("+curX+","+bounds.Height+")");
+               System.out.println("Contains returns false for ("+curX+","+bounds.Height+")");
             curX++;
-        };
+        }
         //if ((bounds.X <= curX) && (curX < bounds.Width+bounds.X)) {
         if (curX < bounds.Width) {
-            log.println("Lower bound of box contains point ("
+            System.out.println("Lower bound of box contains point ("
                 + curX + "," + (bounds.Height - 1) + ") - OK");
         } else {
-            log.println
+            System.out.println
                 ("Lower bound of box contains no component points - FAILED");
             result = false;
         }
@@ -129,13 +131,13 @@ public class _XAccessibleComponent {
         //while (!oObj.containsPoint(new Point(bounds.X, curY)) && curY < bounds.Height+bounds.Y) {
         while (!oObj.containsPoint(new Point(0, curY)) && curY < bounds.Height) {
             curY++;
-        };
+        }
         //if ((bounds.Y <= curY) && (curY < bounds.Height+bounds.Y)) {
         if (curY < bounds.Height) {
-            log.println("Left bound of box contains point (0,"
+            System.out.println("Left bound of box contains point (0,"
                 + curY + ") - OK");
         } else {
-            log.println
+            System.out.println
                 ("Left bound of box contains no component points - FAILED");
             result = false;
         }
@@ -145,13 +147,13 @@ public class _XAccessibleComponent {
         //       && curY < bounds.Height+bounds.Y) {
         while (!oObj.containsPoint(new Point(bounds.Width - 1, curY)) && curY < bounds.Height) {
             curY++;
-        };
+        }
         //if ((bounds.Y <= curY) && (curY < bounds.Height + bounds.Y)) {
         if (curY < bounds.Height) {
-            log.println("Right bound of box contains point ("
+            System.out.println("Right bound of box contains point ("
                 + (bounds.Width - 1) + "," + curY + ") - OK");
         } else {
-            log.println
+            System.out.println
                 ("Right bound of box contains no component points - FAILED");
             result = false;
         }
@@ -162,10 +164,10 @@ public class _XAccessibleComponent {
             locRes &= !oObj.containsPoint(new Point(x, bounds.Height+bounds.Y));
         }
         if (locRes) {
-            log.println("Outer upper and lower bounds contain no component "
+            System.out.println("Outer upper and lower bounds contain no component "
                 + "points - OK");
         } else {
-            log.println("Outer upper and lower bounds CONTAIN some component "
+            System.out.println("Outer upper and lower bounds CONTAIN some component "
                 + "points - FAILED");
             result = false;
         }
@@ -176,10 +178,10 @@ public class _XAccessibleComponent {
             locRes &= !oObj.containsPoint(new Point(bounds.X+bounds.Width, y));
         }
         if (locRes) {
-            log.println("Outer left and right bounds contain no component "
+            System.out.println("Outer left and right bounds contain no component "
                 + "points - OK");
         } else {
-            log.println("Outer left and right bounds CONTAIN some component "
+            System.out.println("Outer left and right bounds CONTAIN some component "
                 + "points - FAILED");
             result = false;
         }
@@ -198,6 +200,7 @@ public class _XAccessibleComponent {
      * Has <b> OK </b> status if in the first cases the right children
      * are returned, and in the second <code>null</code> or
      * another child is returned.
+     * @return
      */
     public boolean _getAccessibleAtPoint() {
 
@@ -207,23 +210,26 @@ public class _XAccessibleComponent {
         if (children.length > 0) {
             for (int i = 0; i < children.length; i++) {
                 Rectangle chBnd = children[i].getBounds();
-                if (chBnd.X == -1) continue;
-                log.println("Checking child with bounds " +
+                if (chBnd.X == -1)
+                {
+                    continue;
+                }
+                System.out.println("Checking child with bounds " +
                     "(" + chBnd.X + "," + chBnd.Y + "),("
                     + chBnd.Width + "," + chBnd.Height + "): "
                     +  util.AccessibilityTools.accessibleToString(children[i]));
 
-                log.println("finding the point which lies on the component");
+                System.out.println("finding the point which lies on the component");
                 int curX = 0;
                 int curY = 0;
                 while (!children[i].containsPoint(new Point(curX, curY))
                        && curX < chBnd.Width) {
                     curX++;
                     curY++;
-                };
+                }
 
                 if (curX==chBnd.Width) {
-                    log.println("Couldn't find a point with contains");
+                    System.out.println("Couldn't find a point with contains");
                     continue;
                 }
 
@@ -231,29 +237,29 @@ public class _XAccessibleComponent {
                 XAccessible xAcc = oObj.getAccessibleAtPoint
                     (new Point(chBnd.X , chBnd.Y));
                 if (xAcc == null) {
-                    log.println("The child not found at point ("
+                    System.out.println("The child not found at point ("
                         + (chBnd.X ) + "," + chBnd.Y + ") - FAILED");
                     result = false;
                 } else {
-                    XAccessible xAccCh = (XAccessible) UnoRuntime.queryInterface
+                    XAccessible xAccCh = UnoRuntime.queryInterface
                         (XAccessible.class, children[i]);
-                    log.println("Child found at point ("
+                    System.out.println("Child found at point ("
                         + (chBnd.X ) + "," + chBnd.Y + ") - OK");
                     boolean res = util.AccessibilityTools.equals(xAccCh, xAcc);
                     if (!res) {
                         int expIndex = xAccCh.getAccessibleContext().getAccessibleIndexInParent();
                         int gotIndex = xAcc.getAccessibleContext().getAccessibleIndexInParent();
                         if (expIndex < gotIndex) {
-                            log.println("The children found is not the same");
-                            log.println("The expected child " +
+                            System.out.println("The children found is not the same");
+                            System.out.println("The expected child " +
                                 xAccCh.getAccessibleContext().getAccessibleName());
-                            log.println("is hidden behind the found Child ");
-                            log.println(xAcc.getAccessibleContext().getAccessibleName()+" - OK");
+                            System.out.println("is hidden behind the found Child ");
+                            System.out.println(xAcc.getAccessibleContext().getAccessibleName()+" - OK");
                         } else {
-                            log.println("The children found is not the same - FAILED");
-                            log.println("Expected: "
+                            System.out.println("The children found is not the same - FAILED");
+                            System.out.println("Expected: "
                                 +xAccCh.getAccessibleContext().getAccessibleName());
-                            log.println("Found: "
+                            System.out.println("Found: "
                                 +xAcc.getAccessibleContext().getAccessibleName());
                             result = false ;
                         }
@@ -264,22 +270,21 @@ public class _XAccessibleComponent {
                 xAcc = oObj.getAccessibleAtPoint
                     (new Point(chBnd.X - 1, chBnd.Y - 1));
                 if (xAcc == null) {
-                    log.println("No children found at point ("
+                    System.out.println("No children found at point ("
                         + (chBnd.X - 1) + "," + (chBnd.Y - 1) + ") - OK");
                     result &= true;
                 } else {
-                    XAccessible xAccCh = (XAccessible) UnoRuntime.queryInterface
-                        (XAccessible.class, children[i]);
+                    XAccessible xAccCh = UnoRuntime.queryInterface(XAccessible.class, children[i]);
                     boolean res = util.AccessibilityTools.equals(xAccCh, xAcc);
                     if (res) {
-                        log.println("The same child found outside "
+                        System.out.println("The same child found outside "
                             + "its bounds - FAILED");
                         result = false ;
                     }
                 }
             }
         } else {
-            log.println("There are no children supporting "
+            System.out.println("There are no children supporting "
                 + "XAccessibleComponent");
         }
 
@@ -291,6 +296,7 @@ public class _XAccessibleComponent {
      *
      * Has <b> OK </b> status if boundary position (x,y) is not negative
      * and size (Width, Height) is greater than 0.
+     * @return
      */
     public boolean _getBounds() {
         boolean result = true ;
@@ -300,7 +306,7 @@ public class _XAccessibleComponent {
             && bounds.X >=0 && bounds.Y >=0
             && bounds.Width >0 && bounds.Height >0;
 
-        log.println("Bounds = " + (bounds != null
+        System.out.println("Bounds = " + (bounds != null
              ? "(" + bounds.X + "," + bounds.Y + "),("
              + bounds.Width + "," + bounds.Height + ")" : "null"));
 
@@ -317,6 +323,7 @@ public class _XAccessibleComponent {
      * <ul>
      *  <li> <code> getBounds() </code> : to have bounds </li>
      * </ul>
+     * @return
      */
     public boolean _getLocation() {
 
@@ -341,6 +348,7 @@ public class _XAccessibleComponent {
      *  <li> <code> getBounds() </code> : to have location of the component
      *      relative to its parent</li>
      * </ul>
+     * @return
      */
     public boolean _getLocationOnScreen() {
 
@@ -348,11 +356,11 @@ public class _XAccessibleComponent {
 
         boolean result = true ;
         Point loc = oObj.getLocationOnScreen();
-        log.println("Location is (" + loc.X + "," + loc.Y + ")");
+        System.out.println("Location is (" + loc.X + "," + loc.Y + ")");
 
         if (parent != null) {
             Point parLoc = parent.getLocationOnScreen();
-            log.println("Parent location is ("
+            System.out.println("Parent location is ("
                 + parLoc.X + "," + parLoc.Y + ")");
 
             result &= parLoc.X + bounds.X == loc.X;
@@ -371,6 +379,7 @@ public class _XAccessibleComponent {
      * <ul>
      *  <li> <code> getBounds() </code>  </li>
      * </ul>
+     * @return
      */
     public boolean _getSize() {
 
@@ -387,6 +396,7 @@ public class _XAccessibleComponent {
      * Just calls the method. <p>
      *
      * Has <b> OK </b> status if no runtime exceptions occured.
+     * @return
      */
     public boolean _grabFocus() {
 
@@ -404,26 +414,26 @@ public class _XAccessibleComponent {
      * such children were not found or some error occured.
      */
     private XAccessibleComponent[] getChildrenComponents() {
-        XAccessible xAcc = (XAccessible) UnoRuntime.queryInterface
-            (XAccessible.class, oObj) ;
+        XAccessible xAcc = UnoRuntime.queryInterface(XAccessible.class, oObj) ;
         if (xAcc == null) {
-            log.println("Component doesn't support XAccessible.");
+            System.out.println("Component doesn't support XAccessible.");
             return new XAccessibleComponent[0];
         }
         XAccessibleContext xAccCon = xAcc.getAccessibleContext();
         int cnt = xAccCon.getAccessibleChildCount();
 
         // for cases when too many children exist checking only first 50
-        if (cnt > 50) cnt = 50 ;
+        if (cnt > 50)
+        {
+            cnt = 50;
+        }
 
         Vector childComp = new Vector();
         for (int i = 0; i < cnt; i++) {
             try {
                 XAccessible child = xAccCon.getAccessibleChild(i);
                 XAccessibleContext xAccConCh = child.getAccessibleContext();
-                XAccessibleComponent xChAccComp = (XAccessibleComponent)
-                    UnoRuntime.queryInterface(XAccessibleComponent.class,
-                    xAccConCh);
+                XAccessibleComponent xChAccComp = UnoRuntime.queryInterface(XAccessibleComponent.class, xAccConCh);
                 if (xChAccComp != null) {
                     childComp.add(xChAccComp) ;
                 }
@@ -442,10 +452,9 @@ public class _XAccessibleComponent {
      * has no parent or some errors occured.
      */
     private XAccessibleComponent getParentComponent() {
-        XAccessible xAcc = (XAccessible) UnoRuntime.queryInterface
-            (XAccessible.class, oObj) ;
+        XAccessible xAcc = UnoRuntime.queryInterface(XAccessible.class, oObj) ;
         if (xAcc == null) {
-            log.println("Component doesn't support XAccessible.");
+            System.out.println("Component doesn't support XAccessible.");
             return null;
         }
 
@@ -453,14 +462,13 @@ public class _XAccessibleComponent {
         XAccessible xAccPar = xAccCon.getAccessibleParent();
 
         if (xAccPar == null) {
-            log.println("Component has no accessible parent.");
+            System.out.println("Component has no accessible parent.");
             return null;
         }
         XAccessibleContext xAccConPar = xAccPar.getAccessibleContext();
-        XAccessibleComponent parent = (XAccessibleComponent)
-            UnoRuntime.queryInterface(XAccessibleComponent.class, xAccConPar);
+        XAccessibleComponent parent = UnoRuntime.queryInterface(XAccessibleComponent.class, xAccConPar);
         if (parent == null) {
-            log.println
+            System.out.println
                 ("Accessible parent doesn't support XAccessibleComponent");
             return null;
         }
@@ -470,19 +478,21 @@ public class _XAccessibleComponent {
 
     /**
      * Just calls the method.
+     * @return
      */
     public boolean _getForeground() {
         int forColor = oObj.getForeground();
-        log.println("getForeground(): " + forColor);
+        System.out.println("getForeground(): " + forColor);
         return true;
     }
 
     /**
      * Just calls the method.
+     * @return
      */
     public boolean _getBackground() {
         int backColor = oObj.getBackground();
-        log.println("getBackground(): " + backColor);
+        System.out.println("getBackground(): " + backColor);
         return true;
     }
 
