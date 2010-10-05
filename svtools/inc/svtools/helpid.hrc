@@ -42,6 +42,28 @@
 #define HID_FILEDLG_PATH                                       "SVT_HID_FILEDLG_PATH"
 #define HID_FILEDLG_TYPE                                       "SVT_HID_FILEDLG_TYPE"
 #define HID_FILEDLG_TYPES                                      "SVT_HID_FILEDLG_TYPES"
+#define HID_FILEDLG_LINK_CB                                    "SVT_HID_FILEDLG_LINK_CB"
+#define HID_FILEDLG_PREVIEW_CB                                 "SVT_HID_FILEDLG_PREVIEW_CB"
+#define HID_FILEDLG_STANDARD                                  "SVT_HID_FILEDLG_STANDARD"
+#define HID_FILEDLG_MANAGER                                   "SVT_HID_FILEDLG_MANAGER"
+#define HID_FILEDLG_URL                                       "SVT_HID_FILEDLG_URL"
+#define HID_FILEDLG_USE_PASSWD                                "SVT_HID_FILEDLG_USE_PASSWD"
+#define HID_FILEDLG_READ_ONLY                                 "SVT_HID_FILEDLG_READ_ONLY"
+#define HID_FILEDLG_AUTOCOMPLETEBOX                           "SVT_HID_FILEDLG_AUTOCOMPLETEBOX"
+#define HID_FILEDLG_SAVE_BTN                                  "SVT_HID_FILEDLG_SAVE_BTN"
+#define HID_FILEDLG_SAVE_FILENAME                             "SVT_HID_FILEDLG_SAVE_FILENAME"
+#define HID_FILEDLG_SAVE_FILETYPE                             "SVT_HID_FILEDLG_SAVE_FILETYPE"
+#define HID_FILEDLG_INSERT_BTN                                "SVT_HID_FILEDLG_INSERT_BTN"
+#define HID_FILEDLG_PATH_BTN                                  "SVT_HID_FILEDLG_PATH_BTN"
+#define HID_FILEDLG_PATH_FILENAME                             "SVT_HID_FILEDLG_PATH_FILENAME"
+#define HID_FILEDLG_FOLDER_BTN                                "SVT_HID_FILEDLG_FOLDER_BTN"
+#define HID_FILEDLG_FOLDER_FILENAME                           "SVT_HID_FILEDLG_FOLDER_FILENAME"
+#define HID_FILEDLG_SRCHFOLDER_BTN                            "SVT_HID_FILEDLG_SRCHFOLDER_BTN"
+#define HID_FILEDLG_EDIT_FAVORITES                            "SVT_HID_FILEDLG_EDIT_FAVORITES"
+#define HID_FILEDLG_NEW_FAVORITE                              "SVT_HID_FILEDLG_NEW_FAVORITE"
+#define HID_FILEDLG_EDIT_FAVORITES_LISTBOX                    "SVT_HID_FILEDLG_EDIT_FAVORITES_LISTBOX"
+#define HID_FILEDLG_EDIT_FAVORITES_HEADERBAR                  "SVT_HID_FILEDLG_EDIT_FAVORITES_HEADERBAR"
+#define HID_FILEDLG_EXPORTASPDF                               "SVT_HID_FILEDLG_EXPORTASPDF"
 
 // HelpID's fuer die Textkomponente
 #define HID_TEXTCPNT_OPEN_LINK                                 "SVT_HID_TEXTCPNT_OPEN_LINK"
@@ -92,9 +114,6 @@
 #define HID_FILEOPEN_READONLY                                  "SVT_HID_FILEOPEN_READONLY"
 #define HID_FILEOPEN_VERSION                                   "SVT_HID_FILEOPEN_VERSION"
 #define HID_FILEOPEN_IMAGE_TEMPLATE                            "SVT_HID_FILEOPEN_IMAGE_TEMPLATE"
-
-#define HID_FILEDLG_LINK_CB                                    "SVT_HID_FILEDLG_LINK_CB"
-#define HID_FILEDLG_PREVIEW_CB                                 "SVT_HID_FILEDLG_PREVIEW_CB"
 
 // uniqueid for the helpagent window (testtool)
 #define HID_HELPAGENT_WINDOW                                   "SVT_HID_HELPAGENT_WINDOW"
