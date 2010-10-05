@@ -575,9 +575,10 @@
 
 #define STR_UNDO_SET_TAB_BG_COLOR       438
 #define STR_UNDO_SET_MULTI_TAB_BG_COLOR 439
-#define STR_UNDO_INSERT_CURRENT_TIME    440
+#define STR_UNDO_INSERT_CURRENT_DATE    440
+#define STR_UNDO_INSERT_CURRENT_TIME    441
 
-#define STR_COUNT                       441
+#define STR_COUNT                       442
 
 #endif
 
