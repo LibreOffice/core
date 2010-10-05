@@ -28,17 +28,11 @@
 #ifndef SC_DBNAMDLG_HXX
 #define SC_DBNAMDLG_HXX
 
-#ifndef _COMBOBOX_HXX //autogen
 #include <vcl/combobox.hxx>
-#endif
 
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 
-#ifndef _MOREBTN_HXX //autogen
 #include <vcl/morebtn.hxx>
-#endif
 #include "anyrefdg.hxx"
 #include "dbcolect.hxx"
 #include "expftext.hxx"

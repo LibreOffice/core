@@ -32,9 +32,7 @@
 // header for FixedText
 #include <vcl/fixed.hxx>
 // header for CheckBox
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 // header for MetricField
 #include <vcl/field.hxx>
 

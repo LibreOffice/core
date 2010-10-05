@@ -34,9 +34,7 @@
 // header for class MetricField
 #include <vcl/field.hxx>
 // header for class CheckBox
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 // header for class ListBox
 #include <vcl/lstbox.hxx>
 #include <com/sun/star/drawing/ShadeMode.hpp>

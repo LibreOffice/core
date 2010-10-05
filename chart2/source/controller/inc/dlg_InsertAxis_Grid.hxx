@@ -32,9 +32,7 @@
 // header for class FixedLine
 #include <vcl/fixed.hxx>
 // header for class CheckBox
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <com/sun/star/uno/Sequence.hxx>
 
 //.............................................................................

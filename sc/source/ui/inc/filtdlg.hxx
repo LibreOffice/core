@@ -28,15 +28,9 @@
 #ifndef SC_FILTDLG_HXX
 #define SC_FILTDLG_HXX
 
-#ifndef _MOREBTN_HXX //autogen
 #include <vcl/morebtn.hxx>
-#endif
-#ifndef _COMBOBOX_HXX //autogen
 #include <vcl/combobox.hxx>
-#endif
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
 #include <svtools/stdctrl.hxx>
 #include "global.hxx" // -> ScQueryParam
 #include "address.hxx"

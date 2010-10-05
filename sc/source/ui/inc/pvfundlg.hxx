@@ -31,21 +31,11 @@
 #include <com/sun/star/sheet/DataPilotFieldReference.hpp>
 #include <com/sun/star/sheet/DataPilotFieldSortInfo.hpp>
 
-#ifndef _FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _LSTBOX_HXX
 #include <vcl/lstbox.hxx>
-#endif
-#ifndef _DIALOG_HXX
 #include <vcl/dialog.hxx>
-#endif
-#ifndef _BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
-#ifndef _MOREBTN_HXX
 #include <vcl/morebtn.hxx>
-#endif
 #include <vcl/field.hxx>
 #include <svtools/stdctrl.hxx>
 #include <svx/checklbx.hxx>

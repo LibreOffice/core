@@ -30,9 +30,7 @@
 
 #include <svx/optgrid.hxx>
 
-#ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
-#endif
 #include "scdllapi.h"
 #include "optutil.hxx"
 #include "global.hxx"

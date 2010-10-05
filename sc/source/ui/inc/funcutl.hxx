@@ -28,12 +28,8 @@
 #ifndef SC_FUNCUTL_HXX
 #define SC_FUNCUTL_HXX
 
-#ifndef _SCRBAR_HXX //autogen
 #include <vcl/scrbar.hxx>
-#endif
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 #include <svtools/svmedit.hxx>
 #include "anyrefdg.hxx"     // formula::RefButton
 

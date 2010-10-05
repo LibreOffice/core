@@ -28,9 +28,7 @@
 #ifndef SC_DRAWPAGE_HXX
 #define SC_DRAWPAGE_HXX
 
-#ifndef _FM_FMPAGE_HXX
 #include <svx/fmpage.hxx>
-#endif
 
 
 class ScDrawLayer;

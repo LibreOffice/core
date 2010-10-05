@@ -27,9 +27,7 @@
 #ifndef _CHART2_ACCSTATISTICSOBJECT_HXX
 #define _CHART2_ACCSTATISTICSOBJECT_HXX
 
-#ifndef _CHART2_ACCESSIBLE_CHART_ELEMENT_HXX_
 #include "AccessibleChartElement.hxx"
-#endif
 
 #include "ObjectIdentifier.hxx"
 

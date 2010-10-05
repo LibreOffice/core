@@ -29,9 +29,7 @@
 
 #include "TitleDialogData.hxx"
 #include <vcl/dialog.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 //for auto_ptr
 #include <memory>
 

@@ -28,15 +28,9 @@
 #ifndef SC_ANYREFDG_HXX
 #define SC_ANYREFDG_HXX
 
-#ifndef _IMAGEBTN_HXX
 #include <vcl/imagebtn.hxx>
-#endif
-#ifndef _EDIT_HXX
 #include <vcl/edit.hxx>
-#endif
-#ifndef _ACCEL_HXX
 #include <vcl/accel.hxx>
-#endif
 #include <sfx2/basedlgs.hxx>
 #include "address.hxx"
 #include "cell.hxx"

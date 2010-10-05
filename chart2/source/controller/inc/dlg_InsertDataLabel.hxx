@@ -30,9 +30,7 @@
 // header for class ModalDialog
 #include <vcl/dialog.hxx>
 // header for class CheckBox
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 // header for class SfxItemSet
 #include <svl/itemset.hxx>
 //for auto_ptr

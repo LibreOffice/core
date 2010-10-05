@@ -32,9 +32,7 @@
 #include "pagepar.hxx"
 #include "editutil.hxx"
 
-#ifndef _PRINT_HXX //autogen
 #include <vcl/print.hxx>
-#endif
 
 class SfxPrinter;
 class SfxProgress;

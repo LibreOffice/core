@@ -28,15 +28,9 @@
 #ifndef SC_DPGROUPDLG_HXX
 #define SC_DPGROUPDLG_HXX
 
-#ifndef _FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _DIALOG_HXX
 #include <vcl/dialog.hxx>
-#endif
-#ifndef _BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/field.hxx>
 #include <svx/checklbx.hxx>
 #include "editfield.hxx"

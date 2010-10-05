@@ -28,9 +28,7 @@
 #ifndef SC_POPMENU_HXX
 #define SC_POPMENU_HXX
 
-#ifndef _MENU_HXX //autogen
 #include <vcl/menu.hxx>
-#endif
 #include "scdllapi.h"
 
 class SC_DLLPUBLIC ScPopupMenu : public PopupMenu

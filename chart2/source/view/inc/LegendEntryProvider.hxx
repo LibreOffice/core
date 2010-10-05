@@ -29,9 +29,7 @@
 
 #include <com/sun/star/chart2/LegendExpansion.hpp>
 
-#ifndef _COM_SUN_STAR_CHART2_VIEWLEGENDENTRYP_HPP_
 #include <com/sun/star/chart2/ViewLegendEntry.hpp>
-#endif
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 namespace chart

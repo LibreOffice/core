@@ -47,9 +47,7 @@
 #include <formula/FormulaCompiler.hxx>
 
 
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
-#endif
 
 #ifndef INCLUDED_HASH_MAP
 #include <hash_map>

@@ -29,9 +29,7 @@
 #ifndef _SC_ACCESSIBLEPAGEHEADERAREA_HXX
 #define _SC_ACCESSIBLEPAGEHEADERAREA_HXX
 
-#ifndef _SC_ACCESSIBLE_CONTEXT_BASE_HXX
 #include "AccessibleContextBase.hxx"
-#endif
 #include <editeng/svxenum.hxx>
 
 class EditTextObject;

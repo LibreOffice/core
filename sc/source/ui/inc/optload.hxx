@@ -29,9 +29,7 @@
 
 #include <sfx2/tabdlg.hxx>
 
-#ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
 #include <vcl/fixed.hxx>
 
 class ScDocument;

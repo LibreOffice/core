@@ -31,9 +31,7 @@
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase4.hxx>
 
-#ifndef _COM_SUN_STAR_CHART2_XLABELEDDATASEQUENCE_HPP_
 #include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
-#endif
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

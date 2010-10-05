@@ -29,9 +29,7 @@
 #define SC_HDRCONT_HXX
 
 #include <vcl/window.hxx>
-#ifndef _SELENG_HXX //autogen
 #include <vcl/seleng.hxx>
-#endif
 #include "address.hxx"
 
 // ---------------------------------------------------------------------------

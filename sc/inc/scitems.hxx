@@ -28,9 +28,7 @@
 #ifndef SC_ITEMS_HXX
 #define SC_ITEMS_HXX
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 
 //  EditEngine darf nicht ihre eigenen ITEMID's definieren
 #define _EEITEMID_HXX

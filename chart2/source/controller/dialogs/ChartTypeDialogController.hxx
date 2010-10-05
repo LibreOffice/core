@@ -37,9 +37,7 @@
 #include <com/sun/star/chart2/XChartTypeTemplate.hpp>
 #include <svtools/valueset.hxx>
 // header for class CheckBox
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 // header for class FixedText
 #include <vcl/fixed.hxx>
 // header for class MetricField

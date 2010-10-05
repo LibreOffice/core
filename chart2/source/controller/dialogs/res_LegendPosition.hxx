@@ -28,9 +28,7 @@
 #define _CHART2_RES_LEGENPOSITION_HXX
 
 // header for class CheckBox
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/fixed.hxx>
 // header for class SfxItemSet
 #include <svl/itemset.hxx>

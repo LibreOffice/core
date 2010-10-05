@@ -28,16 +28,10 @@
 #ifndef SC_SHTABDLG_HXX
 #define SC_SHTABDLG_HXX
 
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <svtools/tooltiplbox.hxx>
-#ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#endif
 
 //------------------------------------------------------------------------
 

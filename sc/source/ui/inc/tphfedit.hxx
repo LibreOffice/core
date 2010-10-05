@@ -32,9 +32,7 @@
 #include <svx/pageitem.hxx>
 #include <svtools/stdctrl.hxx>
 #include <vcl/group.hxx>
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
 #include <vcl/timer.hxx>
 #include <vcl/virdev.hxx>
 #include "scdllapi.h"

@@ -29,9 +29,7 @@
 #define _CHART2_RANGESELECTIONBUTTON_HXX
 
 // header for Class ImageButton
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 
 //.............................................................................
 namespace chart

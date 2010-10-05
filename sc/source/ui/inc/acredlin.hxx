@@ -28,15 +28,9 @@
 #ifndef SC_ACREDLIN_HXX
 #define SC_ACREDLIN_HXX
 
-#ifndef _MOREBTN_HXX //autogen
 #include <vcl/morebtn.hxx>
-#endif
-#ifndef _COMBOBOX_HXX //autogen
 #include <vcl/combobox.hxx>
-#endif
-#ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
 #include <svtools/headbar.hxx>
 #include <svtools/svtabbx.hxx>
 
@@ -45,9 +39,7 @@
 #include "anyrefdg.hxx"
 #include <vcl/lstbox.hxx>
 
-#ifndef _SVX_ACREDLIN_HXX
 #include <svx/ctredlin.hxx>
-#endif
 #include <svx/simptabl.hxx>
 
 #ifndef _SVARRAY_HXX

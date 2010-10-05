@@ -28,15 +28,9 @@
 #ifndef SC_NAMEDLG_HXX
 #define SC_NAMEDLG_HXX
 
-#ifndef _MOREBTN_HXX //autogen
 #include <vcl/morebtn.hxx>
-#endif
-#ifndef _COMBOBOX_HXX //autogen
 #include <vcl/combobox.hxx>
-#endif
-#ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
 #include <vcl/fixed.hxx>
 #include "rangenam.hxx"
 #include "anyrefdg.hxx"

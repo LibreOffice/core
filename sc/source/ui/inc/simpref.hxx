@@ -28,21 +28,13 @@
 #ifndef SC_SIMPREF_HXX
 #define SC_SIMPREF_HXX
 
-#ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
 
-#ifndef _COMBOBOX_HXX //autogen
 #include <vcl/combobox.hxx>
-#endif
 
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 
-#ifndef _MOREBTN_HXX //autogen
 #include <vcl/morebtn.hxx>
-#endif
 #include "anyrefdg.hxx"
 #include "dbcolect.hxx"
 #include "expftext.hxx"

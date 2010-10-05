@@ -37,9 +37,7 @@
 // header for class ListBox
 #include <vcl/lstbox.hxx>
 // header for class PushButton, OKButton, CancelButton, HelpButton
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 // header for class FixedText, FixedLine
 #include <vcl/fixed.hxx>
 // header for class SvTabListBox

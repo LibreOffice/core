@@ -32,16 +32,10 @@
 #include <memory>
 #include <boost/shared_ptr.hpp>
 
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
-#ifndef _SCRBAR_HXX //autogen
 #include <vcl/scrbar.hxx>
-#endif
 #include <svtools/stdctrl.hxx>
-#ifndef _MOREBTN_HXX //autogen
 #include <vcl/morebtn.hxx>
-#endif
 #include "pivot.hxx"
 #include "anyrefdg.hxx"
 #include "fieldwnd.hxx"

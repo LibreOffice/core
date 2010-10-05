@@ -28,9 +28,7 @@
 #ifndef SC_CLIENT_HXX
 #define SC_CLIENT_HXX
 
-#ifndef _SFX_CLIENTSH_HXX //autogen
 #include <sfx2/ipclient.hxx>
-#endif
 
 class ScDocument;
 class ScTabViewShell;

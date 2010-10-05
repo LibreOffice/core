@@ -32,9 +32,7 @@
 // header for class TabControl
 #include <vcl/tabctrl.hxx>
 // header for class OKButton
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 
 #include "TabPageNotifiable.hxx"
 #include <com/sun/star/uno/XComponentContext.hpp>

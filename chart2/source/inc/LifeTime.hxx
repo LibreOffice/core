@@ -29,9 +29,7 @@
 
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
-#ifndef _COM_SUN_STAR_UNO_EXCEPTION_HDL_
 #include <com/sun/star/uno/Exception.hdl>
-#endif
 #include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/util/XCloseListener.hpp>
 #include <com/sun/star/util/XCloseable.hpp>

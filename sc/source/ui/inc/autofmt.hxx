@@ -28,24 +28,12 @@
 #ifndef SC_AUTOFMT_HXX
 #define SC_AUTOFMT_HXX
 
-#ifndef _VIRDEV_HXX //autogen
 #include <vcl/virdev.hxx>
-#endif
-#ifndef SV_FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
-#ifndef SV_LSTBOX_HXX
 #include <vcl/lstbox.hxx>
-#endif
-#ifndef SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
-#ifndef SV_MOREBTN_HXX
 #include <vcl/morebtn.hxx>
-#endif
-#ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#endif
 #include <svtools/scriptedtext.hxx>
 #include <svx/framelinkarray.hxx>
 #include "scdllapi.h"

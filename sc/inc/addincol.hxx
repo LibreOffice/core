@@ -41,9 +41,7 @@
 #include <rtl/ustring.h>
 #include "scdllapi.h"
 
-#ifndef SC_SCMATRIX_HXX
 #include "scmatrix.hxx"
-#endif
 
 #include <hash_map>
 

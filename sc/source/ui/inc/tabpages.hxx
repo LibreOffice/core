@@ -28,9 +28,7 @@
 #ifndef SC_TABPAGES_HXX
 #define SC_TABPAGES_HXX
 
-#ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
 #include <svtools/stdctrl.hxx>
 #include <sfx2/tabdlg.hxx>
 

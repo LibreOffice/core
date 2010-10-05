@@ -28,9 +28,7 @@
 #ifndef SC_NOTEMARK_HXX
 #define SC_NOTEMARK_HXX
 
-#ifndef _MAPMOD_HXX //autogen
 #include <vcl/mapmod.hxx>
-#endif
 #include <vcl/timer.hxx>
 #include "global.hxx"
 #include "address.hxx"

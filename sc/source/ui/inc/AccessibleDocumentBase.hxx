@@ -29,9 +29,7 @@
 #ifndef _SC_ACCESSIBLEDOCUMENTBASE_HXX
 #define _SC_ACCESSIBLEDOCUMENTBASE_HXX
 
-#ifndef _SC_ACCESSIBLE_CONTEXT_BASE_HXX
 #include "AccessibleContextBase.hxx"
-#endif
 
 class ScAccessibleDocumentBase
     :   public ScAccessibleContextBase

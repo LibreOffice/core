@@ -37,9 +37,7 @@
 // header for class MetricField
 #include <vcl/field.hxx>
 // header for class OKButton
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 
 #include "ControllerLockGuard.hxx"
 

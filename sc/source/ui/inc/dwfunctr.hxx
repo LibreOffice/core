@@ -32,17 +32,11 @@
 #include <svl/lstner.hxx>
 #include <svtools/stdctrl.hxx>
 
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
 
-#ifndef _IMAGEBTN_HXX //autogen
 #include <vcl/imagebtn.hxx>
-#endif
 
-#ifndef _COMBOBOX_HXX //autogen
 #include <vcl/combobox.hxx>
-#endif
 #include "anyrefdg.hxx"
 #include "global.hxx"       // ScAddress
 #include "privsplt.hxx"

@@ -28,9 +28,7 @@
 #ifndef SC_SELECT_HXX
 #define SC_SELECT_HXX
 
-#ifndef _SELENG_HXX //autogen
 #include <vcl/seleng.hxx>
-#endif
 
 #include "viewdata.hxx"     // ScSplitPos
 
