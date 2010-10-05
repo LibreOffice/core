@@ -1820,6 +1820,9 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
     ::vos::OClearableGuard aSolarLock1(Application::GetSolarMutex());
 
     Window*  pWindow       = VCLUnoHelper::GetWindow(xWindow);
+    if (!pWindow)
+        return;
+
     sal_Bool bSystemWindow = pWindow->IsSystemWindow();
     sal_Bool bWorkWindow   = (pWindow->GetType() == WINDOW_WORKWINDOW);
 
