@@ -30,21 +30,11 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <vcl/fixed.hxx>
-#ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
-#ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
-#ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#endif
 #include "resltn.hxx"       // enum PublishingResolution
 #include "pres.hxx"
 #include "assclass.hxx"

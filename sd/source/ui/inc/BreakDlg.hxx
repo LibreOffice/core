@@ -29,9 +29,7 @@
 #define SD_BREAK_DLG_HXX
 
 #include <vcl/group.hxx>
-#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <svx/dlgctrl.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>

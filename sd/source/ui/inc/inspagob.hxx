@@ -28,9 +28,7 @@
 #ifndef _SD_INSPAGOB_HXX
 #define _SD_INSPAGOB_HXX
 
-#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <vcl/dialog.hxx>
 #include "sdtreelb.hxx"
 

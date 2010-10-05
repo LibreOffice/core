@@ -30,25 +30,13 @@
 #define _SD_DLGSNAP_HXX
 
 
-#ifndef _IMAGEBTN_HXX //autogen
 #include <vcl/imagebtn.hxx>
-#endif
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
-#ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <tools/fract.hxx>
-#ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#endif
 #include "sdenumdef.hxx"
 /************************************************************************/
 

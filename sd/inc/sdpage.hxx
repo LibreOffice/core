@@ -28,9 +28,7 @@
 #ifndef _SDPAGE_HXX
 #define _SDPAGE_HXX
 
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
-#endif
 
 #ifndef INCLUDED_FUNCTIONAL
 #include <functional>
@@ -44,9 +42,7 @@
 #include <functional>
 #include <vector>
 #include <svx/svdobj.hxx>
-#ifndef _FM_FMPAGE_HXX //autogen
 #include <svx/fmpage.hxx>
-#endif
 #include "fadedef.h"
 #include "diadef.h"
 #ifndef _PRESENTATION

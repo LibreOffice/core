@@ -35,9 +35,7 @@
 #include <vcl/event.hxx>
 #include <rtl/ref.hxx>
 
-#ifndef _SALHELPER_SIMPLEREFERENCECOMPONENT_HXX_
 #include "helper/simplereferencecomponent.hxx"
-#endif
 
 class SdDrawDocument;
 class SfxRequest;

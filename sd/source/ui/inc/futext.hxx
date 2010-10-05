@@ -28,9 +28,7 @@
 #ifndef SD_FU_TEXT_HXX
 #define SD_FU_TEXT_HXX
 
-#ifndef _EDITDATA_HXX
 #include <editeng/editdata.hxx>
-#endif
 #include "fuconstr.hxx"
 #include <svx/svdotext.hxx>
 

@@ -30,9 +30,7 @@
 
 #include "framework/Pane.hxx"
 
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XRESOURCEID_HPP_
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
-#endif
 
 
 namespace sd { namespace framework {

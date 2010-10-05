@@ -34,9 +34,7 @@
 #include <vcl/group.hxx>
 #include <sfx2/ctrlitem.hxx>
 
-#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <vcl/field.hxx>
 #include <svx/dlgctrl.hxx>
 #include <sfx2/progress.hxx>
@@ -44,9 +42,7 @@
 
 #include <vcl/lstbox.hxx>
 
-#ifndef _SD_SDRESID_HXX
 #include "sdresid.hxx"
-#endif
 #include "misc/scopelock.hxx"
 
 class SdDrawDocument;

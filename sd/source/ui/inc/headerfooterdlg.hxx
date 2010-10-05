@@ -28,9 +28,7 @@
 #define _SD_HEADERFOOTER_DIALOG_HXX
 
 #include <vcl/tabdlg.hxx>
-#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
 

@@ -32,9 +32,7 @@
 #include "TransitionPreset.hxx"
 #include <vcl/lstbox.hxx>
 
-#ifndef _SD_SDRESID_HXX
 #include "sdresid.hxx"
-#endif
 #include "fadedef.h"
 #include "sddllapi.h"
 

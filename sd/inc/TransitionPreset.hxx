@@ -28,14 +28,10 @@
 #ifndef _SD_TRANSITIONPRESET_HXX
 #define _SD_TRANSITIONPRESET_HXX
 
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
-#endif
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#ifndef _UTL_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
-#endif
 
 #include <list>
 #include <hash_map>

@@ -28,9 +28,7 @@
 #ifndef SD_RESID_HXX
 #define SD_RESID_HXX
 
-#ifndef _RESID_HXX //autogen
 #include <tools/resid.hxx>
-#endif
 #include "sddllapi.h"
 
 class SD_DLLPUBLIC SdResId : public ResId

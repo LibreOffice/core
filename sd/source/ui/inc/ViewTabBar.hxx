@@ -36,9 +36,7 @@
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#ifndef _VCL_TABCTRL_HXX_
 #include <vcl/tabctrl.hxx>
-#endif
 #include <cppuhelper/compbase4.hxx>
 #include "MutexOwner.hxx"
 

@@ -28,21 +28,11 @@
 #ifndef INC_DLGASS
 #define INC_DLGASS
 
-#ifndef _GROUP_HXX
 #include <vcl/group.hxx>
-#endif
-#ifndef _EDIT_HXX
 #include <vcl/edit.hxx>
-#endif
-#ifndef _FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
-#ifndef _DIALOG_HXX
 #include <vcl/dialog.hxx>
-#endif
 #include <svtools/svmedit.hxx>
 #include "assclass.hxx"
 #include <vcl/lstbox.hxx>

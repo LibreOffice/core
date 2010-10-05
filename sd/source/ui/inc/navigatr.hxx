@@ -30,9 +30,7 @@
 
 #include <vcl/window.hxx>
 #include <vcl/lstbox.hxx>
-#ifndef _TOOLBOX_HXX //autogen
 #include <vcl/toolbox.hxx>
-#endif
 #include <sfx2/ctrlitem.hxx>
 #include "sdtreelb.hxx"
 #include "pres.hxx"

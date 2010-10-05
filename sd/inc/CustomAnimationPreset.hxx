@@ -28,15 +28,11 @@
 #ifndef _SD_CUSTOMANIMATIONPRESET_HXX
 #define _SD_CUSTOMANIMATIONPRESET_HXX
 
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
-#endif
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/animations/AnimationNodeType.hpp>
 
-#ifndef _UTL_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
-#endif
 #include <CustomAnimationEffect.hxx>
 
 #include <hash_map>

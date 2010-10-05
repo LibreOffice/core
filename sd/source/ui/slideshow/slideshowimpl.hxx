@@ -68,9 +68,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/fmshell.hxx>
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include "sdmod.hxx"
 #include "cusshow.hxx"
 #include "ViewShellBase.hxx"
@@ -85,9 +83,7 @@
 #include "FrameView.hxx"
 #include "DrawDocShell.hxx"
 
-#ifndef _SD_APP_HRC_
 #include "app.hrc"
-#endif
 
 #include "slideshow.hxx"
 

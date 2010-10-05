@@ -33,9 +33,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/FeatureStateEvent.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTIOIN_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
-#endif
 #include <com/sun/star/lang/XComponent.hpp>
 #include <cppuhelper/compbase1.hxx>
 #include <tools/link.hxx>

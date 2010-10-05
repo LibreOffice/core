@@ -29,9 +29,7 @@
 #define SD_PRES_LAYOUT_DLG_HXX
 
 #include <vcl/dialog.hxx>
-#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <vcl/fixed.hxx>
 #include <svtools/valueset.hxx>
 

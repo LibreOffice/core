@@ -28,9 +28,7 @@
 #ifndef SD_FU_ZOOM_HXX
 #define SD_FU_ZOOM_HXX
 
-#ifndef _SV_POINTR_HXX //autogen
 #include <vcl/pointr.hxx>
-#endif
 #include "fupoor.hxx"
 
 namespace sd {

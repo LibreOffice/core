@@ -34,9 +34,7 @@
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
 #include <tools/string.hxx>
 #include <tools/gen.hxx>
-#ifndef SD_WINDOW_HXX
 #include <vcl/window.hxx>
-#endif
 #include <memory>
 #include <boost/function.hpp>
 

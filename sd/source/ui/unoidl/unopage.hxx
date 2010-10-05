@@ -38,9 +38,7 @@
 
 #include <svl/itemprop.hxx>
 
-#ifndef _SVX_UNOPAGE_HXX
 #include <svx/unopage.hxx>
-#endif
 #include <svx/fmdpage.hxx>
 #include <svx/svdpool.hxx>
 

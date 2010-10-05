@@ -32,9 +32,7 @@
 #include "taskpane/TitleBar.hxx"
 #include <tools/string.hxx>
 #include <tools/gen.hxx>
-#ifndef SD_WINDOW_HXX
 #include <vcl/window.hxx>
-#endif
 #include <memory>
 
 class Window;

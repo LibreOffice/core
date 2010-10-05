@@ -29,9 +29,7 @@
 #define SD_CLIENT_HXX
 
 
-#ifndef _SFX_CLIENTSH_HXX //autogen
 #include <sfx2/ipclient.hxx>
-#endif
 class SdrGrafObj;
 class SdrOle2Obj;
 class OutlinerParaObject;

@@ -30,9 +30,7 @@
 
 #include <svtools/transfer.hxx>
 
-#ifndef _SD_SDRESID_HXX
 #include "sdresid.hxx"
-#endif
 #include "pres.hxx"
 #include "sddllapi.h"
 #include <tools/string.hxx>

@@ -31,9 +31,7 @@
 #include "MutexOwner.hxx"
 #include "controller/SlideSorterController.hxx"
 #include <com/sun/star/document/XEventListener.hpp>
-#ifndef _COM_SUN_STAR_DOCUMENT_XPROPERTYCHANGELISTENER_HPP_
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
-#endif
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

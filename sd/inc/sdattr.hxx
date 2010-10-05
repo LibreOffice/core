@@ -34,9 +34,7 @@
 #include <svl/stritem.hxx>
 #include <sfx2/sfx.hrc>
 
-#ifndef _SDATTR_HRC
 #include "sdattr.hrc"
-#endif
 #include "glob.hxx"
 #include "fadedef.h"
 #include "diadef.h"

@@ -30,9 +30,7 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-#ifndef _UTL_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
-#endif
 
 #include <list>
 #include <map>

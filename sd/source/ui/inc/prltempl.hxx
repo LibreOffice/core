@@ -29,9 +29,7 @@
 #ifndef SD_PRLTEMPL_HXX
 #define SD_PRLTEMPL_HXX
 
-#ifndef _SD_SDRESID_HXX
 #include "sdresid.hxx"
-#endif
 #include <sfx2/tabdlg.hxx>
 #include <svx/tabarea.hxx>
 

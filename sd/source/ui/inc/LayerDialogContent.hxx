@@ -30,9 +30,7 @@
 
 #include <sfx2/dockwin.hxx>
 #include "LayerTabBar.hxx"
-#ifndef _SD_SDRESID_HXX
 #include "sdresid.hxx"
-#endif
 
 namespace sd {
 

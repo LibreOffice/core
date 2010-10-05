@@ -28,9 +28,7 @@
 #ifndef _SD_CUSTOMANIMATION_HXX_
 #define _SD_CUSTOMANIMATION_HXX_
 
-#ifndef _COM_SUN_STAR_FRAME_XModel_HPP_
 #include <com/sun/star/frame/XModel.hpp>
-#endif
 
 class Window;
 

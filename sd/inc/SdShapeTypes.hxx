@@ -28,9 +28,7 @@
 #ifndef _SD_SD_SHAPE_TYPES_HXX
 #define _SD_SD_SHAPE_TYPES_HXX
 
-#ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_TYPE_HANDLERHXX
 #include <svx/ShapeTypeHandler.hxx>
-#endif
 #include <svx/AccessibleShape.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 

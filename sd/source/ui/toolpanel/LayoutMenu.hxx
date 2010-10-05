@@ -30,9 +30,7 @@
 
 #include "taskpane/TaskPaneTreeNode.hxx"
 
-#ifndef _COM_SUN_STAR_FRAME_XSTATUS_LISTENER_HPP_
 #include <com/sun/star/frame/XStatusListener.hpp>
-#endif
 
 #include "glob.hxx"
 #include "pres.hxx"

@@ -28,9 +28,7 @@
 #ifndef SD_FU_TRANSFORM_HXX
 #define SD_FU_TRANSFORM_HXX
 
-#ifndef _SVX_RETENUM_HXX
 #include <svx/rectenum.hxx>
-#endif
 #include "fupoor.hxx"
 
 namespace sd {

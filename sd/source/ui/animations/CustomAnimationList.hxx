@@ -32,9 +32,7 @@
 #include <svtools/svtreebx.hxx>
 #include <CustomAnimationEffect.hxx>
 #include "CustomAnimationPreset.hxx"
-#ifndef _SD_CUSTOMANIMATION_HRC
 #include "CustomAnimation.hrc"
-#endif
 
 namespace sd {
 

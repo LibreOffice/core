@@ -39,9 +39,7 @@
 #include "glob.hxx"
 #include "pres.hxx"
 #include "cfgids.hxx"
-#ifndef _SD_VIEW_HXX
 #include "View.hxx"
-#endif
 #include "sddllapi.h"
 
 #include <com/sun/star/drawing/XDrawSubController.hpp>

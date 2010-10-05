@@ -42,9 +42,7 @@
 #include "ViewShell.hxx"
 #include "assclass.hxx"
 
-#ifndef _SD_RESID_HXX
 #include "sdresid.hxx"
-#endif
 #include "pubdlg.hxx"
 
 #include <vector>

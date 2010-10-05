@@ -31,9 +31,7 @@
 #include <com/sun/star/animations/XTimeContainer.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/animations/XAnimate.hpp>
-#ifndef _SD_PPTANIMATIONS_HXX
 #include "../ppt/pptanimations.hxx"
-#endif
 #include <pptexsoundcollection.hxx>
 #include <filter/msfilter/escherex.hxx>
 
@@ -41,9 +39,7 @@
 #include <stdio.h>
 #endif
 
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
-#endif
 
 #include <list>
 

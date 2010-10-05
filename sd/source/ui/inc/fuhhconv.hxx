@@ -28,9 +28,7 @@
 #ifndef _SD_FUHHCONV_HXX
 #define _SD_FUHHCONV_HXX
 
-#ifndef _SD_FUPOOR_HXX
 #include "fupoor.hxx"
-#endif
 
 namespace sd {
 

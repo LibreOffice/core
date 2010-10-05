@@ -44,9 +44,7 @@
 
 #include "sdresid.hxx"
 #include "drawdoc.hxx"
-#ifndef SD_OUTLINE_VIEW_SHELL_HX
 #include "OutlineViewShell.hxx"
-#endif
 #include "ViewShell.hxx"
 #include "Window.hxx"
 #include "glob.hxx"

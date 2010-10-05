@@ -29,9 +29,7 @@
 #ifndef _SD_CUSTSDLG_HXX
 #define _SD_CUSTSDLG_HXX
 
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>

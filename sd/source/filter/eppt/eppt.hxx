@@ -28,9 +28,7 @@
 #ifndef _EPPT_HXX_
 #define _EPPT_HXX_
 #include <vector>
-#ifndef _PptEscherEx_HXX
 #include "escherex.hxx"
-#endif
 #include <tools/solar.h>
 #include <sot/storage.hxx>
 #include <tools/gen.hxx>

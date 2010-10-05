@@ -33,9 +33,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/graph.hxx>
 
-#ifndef SD_WINDOW_HXX
 #include "Window.hxx"
-#endif
 
 #include "slideshowimpl.hxx"
 
