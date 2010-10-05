@@ -89,9 +89,8 @@ SfxItemPresentation SvxHorJustifyItem::GetPresentation
 
 //------------------------------------------------------------------------
 
-sal_Bool SvxHorJustifyItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+bool SvxHorJustifyItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {
@@ -130,12 +129,11 @@ sal_Bool SvxHorJustifyItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
             }
             break;
     }
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvxHorJustifyItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+bool SvxHorJustifyItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {
@@ -146,7 +144,7 @@ sal_Bool SvxHorJustifyItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
                 {
                     sal_Int32 nValue = 0;
                     if(!(rVal >>= nValue))
-                        return sal_False;
+                        return false;
                     eUno = (table::CellHoriJustify)nValue;
                 }
                 SvxCellHorJustify eSvx = SVX_HOR_JUSTIFY_STANDARD;
@@ -168,7 +166,7 @@ sal_Bool SvxHorJustifyItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
                 //  property contains ParagraphAdjust values as sal_Int16
                 sal_Int16 nVal = sal_Int16();
                 if(!(rVal >>= nVal))
-                    return sal_False;
+                    return false;
 
                 SvxCellHorJustify eSvx = SVX_HOR_JUSTIFY_STANDARD;
                 switch (nVal)
@@ -183,7 +181,7 @@ sal_Bool SvxHorJustifyItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
                 SetValue( (USHORT)eSvx );
             }
     }
-    return sal_True;
+    return true;
 }
 
 //------------------------------------------------------------------------
@@ -255,7 +253,7 @@ SfxItemPresentation SvxVerJustifyItem::GetPresentation
 
 //------------------------------------------------------------------------
 
-sal_Bool SvxVerJustifyItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+bool SvxVerJustifyItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
@@ -289,10 +287,10 @@ sal_Bool SvxVerJustifyItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
                 break;
             }
     }
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvxVerJustifyItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+bool SvxVerJustifyItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
@@ -302,7 +300,7 @@ sal_Bool SvxVerJustifyItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
                 //  property contains ParagraphAdjust values as sal_Int16
                 style::VerticalAlignment nVal = style::VerticalAlignment_TOP;
                 if(!(rVal >>= nVal))
-                    return sal_False;
+                    return false;
 
                 SvxCellVerJustify eSvx = SVX_VER_JUSTIFY_STANDARD;
                 switch (nVal)
@@ -338,7 +336,7 @@ sal_Bool SvxVerJustifyItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             }
     }
 
-    return sal_True;
+    return true;
 }
 
 //------------------------------------------------------------------------
@@ -412,7 +410,7 @@ SfxItemPresentation SvxJustifyMethodItem::GetPresentation
 
 //------------------------------------------------------------------------
 
-sal_Bool SvxJustifyMethodItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
+bool SvxJustifyMethodItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
 {
     sal_Int32 nUno = table::CellJustifyMethod::AUTO;
     switch (static_cast<SvxCellJustifyMethod>(GetValue()))
@@ -425,7 +423,7 @@ sal_Bool SvxJustifyMethodItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) 
     return true;
 }
 
-sal_Bool SvxJustifyMethodItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
+bool SvxJustifyMethodItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
 {
     sal_Int32 nVal = table::CellJustifyMethod::AUTO;
     if (!(rVal >>= nVal))
