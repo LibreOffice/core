@@ -22,6 +22,7 @@ mkdir: %_DEST%\bin%_EXT%\so
 ..\%__SRC%\bin\npsoplugin_so.dll %_DEST%\bin%_EXT%\so\npsoplugin.dll
 ..\%__SRC%\bin\x64\so_activex.dll %_DEST%\bin%_EXT%\so_activex_x64.dll
 ..\%__SRC%\bin\mdibundle.zip %_DEST%\bin%_EXT%\mdibundle.zip
+..\%__SRC%\misc\oleautobridge.component %_DEST%\xml%_EXT%\oleautobridge.component
 
 ..\source\bibliography\uiconfig\sbibliography\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\sbibliography\menubar\*.xml
 
@@ -39,3 +40,19 @@ mkdir: %_DEST%\xml%_EXT%\registry\spool\org\openoffice\Office\Logging
 ..\%__SRC%\misc\registry\spool\org\openoffice\Office\Logging\*.xcu %_DEST%\xml%_EXT%\registry\spool\org\openoffice\Office\Logging
 
 ..\%__SRC%\bin\*.oxt %_DEST%\pck%_EXT%\*
+..\%__SRC%\misc\abp.component %_DEST%\xml%_EXT%\abp.component
+..\%__SRC%\misc\bib.component %_DEST%\xml%_EXT%\bib.component
+..\%__SRC%\misc\dbp.component %_DEST%\xml%_EXT%\dbp.component
+..\%__SRC%\misc\ldapbe2.component %_DEST%\xml%_EXT%\ldapbe2.component
+..\%__SRC%\misc\log.component %_DEST%\xml%_EXT%\log.component
+..\%__SRC%\misc\oooimprovecore.component %_DEST%\xml%_EXT%\oooimprovecore.component
+..\%__SRC%\misc\oooimprovement.component %_DEST%\xml%_EXT%\oooimprovement.component
+..\%__SRC%\misc\pcr.component %_DEST%\xml%_EXT%\pcr.component
+..\%__SRC%\misc\pl.component %_DEST%\xml%_EXT%\pl.component
+..\%__SRC%\misc\preload.component %_DEST%\xml%_EXT%\preload.component
+..\%__SRC%\misc\res.component %_DEST%\xml%_EXT%\res.component
+..\%__SRC%\misc\scn.component %_DEST%\xml%_EXT%\scn.component
+..\%__SRC%\misc\updatefeed.component %_DEST%\xml%_EXT%\updatefeed.component
+..\%__SRC%\misc\updchk.component %_DEST%\xml%_EXT%\updchk.component
+..\%__SRC%\misc\updchk.uno.component %_DEST%\xml%_EXT%\updchk.uno.component
+..\%__SRC%\misc\xmx.component %_DEST%\xml%_EXT%\xmx.component
