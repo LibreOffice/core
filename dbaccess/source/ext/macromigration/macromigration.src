@@ -445,7 +445,7 @@ String STR_INVALID_NUMBER_ARGS
 };
 String STR_NO_DATABASE
 {
-    Text [ en-US ] = "No database document found in the initializatin arguments.";
+    Text [ en-US ] = "No database document found in the initialization arguments.";
 };
 String STR_NOT_READONLY
 {
