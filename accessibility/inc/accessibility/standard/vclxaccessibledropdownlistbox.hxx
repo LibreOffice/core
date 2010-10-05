@@ -31,12 +31,8 @@
 #include <accessibility/standard/vclxaccessiblebox.hxx>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 
-#ifndef _CPPUHELPER_IMPLBASE1_HXX
 #include <cppuhelper/implbase1.hxx>
-#endif
-#ifndef _CPPUHELPER_WEAKREF_HXX
 #include <cppuhelper/weakref.hxx>
-#endif
 
 
 /** The accessible drop down combobox has two children.  The first is the

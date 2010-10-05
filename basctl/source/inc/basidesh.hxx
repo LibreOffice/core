@@ -33,18 +33,12 @@
 #include "doceventnotifier.hxx"
 #include <sfx2/viewfac.hxx>
 #include <sfx2/shell.hxx>
-#ifndef _SCRBAR_HXX //autogen
 #include <vcl/scrbar.hxx>
-#endif
-#ifndef _TABLE_HXX //autogen
 #include <tools/table.hxx>
-#endif
 #include <sfx2/viewsh.hxx>
 #include <svx/ifaceids.hxx>
 
-#ifndef _COM_SUN_STAR_IO_XINPUTSTREAMPROVIDER_HXX_
 #include <com/sun/star/io/XInputStreamProvider.hpp>
-#endif
 
 #include <com/sun/star/container/XContainerListener.hpp>
 

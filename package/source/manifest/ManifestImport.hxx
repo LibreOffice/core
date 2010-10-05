@@ -29,9 +29,7 @@
 #define _MANIFEST_IMPORT_HXX
 
 #include <cppuhelper/implbase1.hxx> // helper for implementations
-#ifndef _COM_SUN_STAR_XML_SAX_XDUCUMENTHANDLER_HPP_
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#endif
 #include <vector>
 
 #include <HashMaps.hxx>

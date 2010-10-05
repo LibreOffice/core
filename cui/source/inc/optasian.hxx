@@ -29,9 +29,7 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <vcl/group.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/edit.hxx>

@@ -35,15 +35,11 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
 #include "dbptypes.hxx"
-#ifndef _EXTENSIONS_DBP_DBPRESID_HRC_
 #include "dbpresid.hrc"
-#endif
 #include "componentmodule.hxx"
 #include "wizardcontext.hxx"
 

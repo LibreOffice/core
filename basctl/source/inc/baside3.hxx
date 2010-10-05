@@ -35,9 +35,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>
 
-#ifndef _COM_SUN_STAR_SCRIPT_XLIBRYARYCONTAINER_HPP_
 #include <com/sun/star/script/XLibraryContainer.hpp>
-#endif
 
 class Printer;
 class StarBASIC;

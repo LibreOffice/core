@@ -36,9 +36,7 @@
 // header for ColorLB
 #include <svx/dlgctrl.hxx>
 // header for PushButton
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 // header for XColorTable
 #include <svx/xtable.hxx>
 

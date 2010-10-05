@@ -61,9 +61,7 @@ public:
 
 #ifdef _OFA_AUTOCDLG_CXX
 #include <vcl/group.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/lstbox.hxx>
 #include <svtools/svtabbx.hxx>
 #include <svx/simptabl.hxx>

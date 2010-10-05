@@ -31,12 +31,8 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <cppuhelper/implbase2.hxx>
-#ifndef _VOS_REF_H_
 #include <vos/ref.hxx>
-#endif
-#ifndef _INFLATER_HXX
 #include <Inflater.hxx>
-#endif
 #include <ZipEntry.hxx>
 
 namespace com { namespace sun { namespace star {

@@ -28,9 +28,7 @@
 #define _EXTENSIONS_SCANNER_GRID_HXX
 
 #include <vcl/window.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/lstbox.hxx>
 #include <vcl/dialog.hxx>
 

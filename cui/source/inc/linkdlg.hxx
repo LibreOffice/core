@@ -28,9 +28,7 @@
 #ifndef _LINKDLG_HXX
 #define _LINKDLG_HXX
 
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
 
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>

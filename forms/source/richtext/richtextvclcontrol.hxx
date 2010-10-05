@@ -29,9 +29,7 @@
 
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/toolbox.hxx>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include "rtattributes.hxx"

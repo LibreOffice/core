@@ -31,9 +31,7 @@
 
 #include <svx/dlgctrl.hxx>
 
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 
 // #i75273#
 #include <basegfx/range/b2drange.hxx>

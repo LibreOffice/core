@@ -28,9 +28,7 @@
 #ifndef ACCESSIBILITY_HELPER_TKARESMGR_HXX
 #define ACCESSIBILITY_HELPER_TKARESMGR_HXX
 
-#ifndef _RTL_USTRING_HXX
 #include <rtl/ustring.hxx>
-#endif
 
 class SimpleResMgr;
 

@@ -30,15 +30,11 @@
 
 #include <vcl/fixed.hxx>
 #include <svtools/svtreebx.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/image.hxx>
 #include <vcl/dialog.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#ifndef _EXTENSIONS_PROPCTRLR_MODULEPRC_HXX_
 #include "modulepcr.hxx"
-#endif
 
 //............................................................................
 namespace pcr

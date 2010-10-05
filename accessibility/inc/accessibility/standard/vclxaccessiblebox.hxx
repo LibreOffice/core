@@ -30,13 +30,9 @@
 
 #include <map>
 #include <accessibility/standard/vclxaccessibleedit.hxx>
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_STANDARD_ACCESSIBLEROLE_HPP_
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#endif
 #include <com/sun/star/accessibility/XAccessibleKeyBinding.hpp>
-#ifndef _CPPUHELPER_IMPLBASE2_HXX
 #include <cppuhelper/implbase2.hxx>
-#endif
 
 
 typedef ::cppu::ImplHelper2<

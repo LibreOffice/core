@@ -27,12 +27,8 @@
 #ifndef _OFA_OPTFLTR_HXX
 #define _OFA_OPTFLTR_HXX
 
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
-#ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
 #include <vcl/fixed.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svx/simptabl.hxx>

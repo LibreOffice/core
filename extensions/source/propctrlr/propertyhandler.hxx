@@ -30,9 +30,7 @@
 
 #include "pcrcomponentcontext.hxx"
 #include "pcrcommon.hxx"
-#ifndef _EXTENSIONS_PROPCTRLR_MODULEPCR_HXX_
 #include "modulepcr.hxx"
-#endif
 
 /** === begin UNO includes === **/
 #include <com/sun/star/uno/XComponentContext.hpp>

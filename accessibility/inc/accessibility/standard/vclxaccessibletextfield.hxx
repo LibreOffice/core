@@ -30,9 +30,7 @@
 
 #include <accessibility/standard/vclxaccessibletextcomponent.hxx>
 
-#ifndef _CPPUHELPER_IMPLBASE1_HXX
 #include <cppuhelper/implbase1.hxx>
-#endif
 
 typedef ::cppu::ImplHelper1<
     ::com::sun::star::accessibility::XAccessible

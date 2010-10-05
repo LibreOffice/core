@@ -35,9 +35,7 @@
 #include <sfx2/basedlgs.hxx>
 #include <vcl/fixed.hxx>
 
-#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 
 #define MACRO_CLOSE         10
 #define MACRO_OK_RUN        11

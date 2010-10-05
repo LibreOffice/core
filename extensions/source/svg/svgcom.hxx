@@ -29,23 +29,15 @@
 #define _SVGCOM_HXX
 
 #include <cppuhelper/weak.hxx>
-#ifndef __RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/stack.hxx>
-#ifndef _SALBTYPE_HXX
 #include <vcl/salbtype.hxx>
-#endif
-#ifndef _GDIMTF_HXX
 #include <vcl/gdimtf.hxx>
-#endif
-#ifndef _METAACT_HXX
 #include <vcl/metaact.hxx>
-#endif
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/RuntimeException.hpp>

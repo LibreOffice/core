@@ -29,9 +29,7 @@
 #define _EXTENSIONS_PROPCTRLR_BROWSERLISTBOX_HXX_
 
 #include "browserline.hxx"
-#ifndef _EXTENSIONS_PROPCTRLR_MODULEPRC_HXX_
 #include "modulepcr.hxx"
-#endif
 #include "pcrcommon.hxx"
 
 /** === begin UNO includes === **/
@@ -40,9 +38,7 @@
 /** === end UNO includes === **/
 #include <vcl/scrbar.hxx>
 #include <vcl/lstbox.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <tools/link.hxx>
 #include <rtl/ref.hxx>
 

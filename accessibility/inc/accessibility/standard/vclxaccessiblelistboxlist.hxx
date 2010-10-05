@@ -31,15 +31,9 @@
 #include <accessibility/standard/vclxaccessiblelist.hxx>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
-#ifndef _COMPHELPER_BROADCASTHELPER_HXX
 #include <comphelper/broadcasthelper.hxx>
-#endif
-#ifndef _COMPHELPER_UNO3_HXX
 #include <comphelper/uno3.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX
 #include <cppuhelper/implbase1.hxx>
-#endif
 
 typedef ::cppu::ImplHelper1 <   ::com::sun::star::accessibility::XAccessibleSelection
                             >   VCLXAccessibleListBoxList_BASE;

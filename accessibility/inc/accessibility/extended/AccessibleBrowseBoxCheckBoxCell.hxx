@@ -30,9 +30,7 @@
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#ifndef ACCESSIBILITY_EXT_BROWSE_BOX_CELL_HXX
 #include "accessibility/extended/accessiblebrowseboxcell.hxx"
-#endif
 #include <cppuhelper/implbase2.hxx>
 #include <vcl/wintypes.hxx>
 // ============================================================================

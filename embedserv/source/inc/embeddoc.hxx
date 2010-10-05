@@ -40,9 +40,7 @@
 
 #include <hash_map>
 #include <com/sun/star/uno/Reference.h>
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
 #include <com/sun/star/uno/SEQUENCE.h>
-#endif
 
 #include "embeddocaccess.hxx"
 #include "docholder.hxx"

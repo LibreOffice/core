@@ -28,9 +28,7 @@
 #define _CONTENT_INFO_HXX_
 
 #include <com/sun/star/container/XNameContainer.hpp>
-#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEl_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#endif
 #include <ZipPackageFolder.hxx>
 #include <ZipPackageStream.hxx>
 

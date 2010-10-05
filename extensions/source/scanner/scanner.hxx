@@ -30,21 +30,15 @@
 
 #include <tools/stream.hxx>
 #include <vos/mutex.hxx>
-#ifndef __RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weak.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
-#ifndef __COM_SUN_STAR_AWT_XBITMAP_HPP
 #include <com/sun/star/awt/XBitmap.hpp>
-#endif
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
-#ifndef __COM_SUN_STAR_LANG_EVENTOBJECT_HPP
 #include <com/sun/star/lang/EventObject.hpp>
-#endif
 #include <com/sun/star/scanner/XScannerManager.hpp>
 #include <com/sun/star/scanner/ScannerException.hpp>
 

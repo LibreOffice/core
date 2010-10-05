@@ -31,9 +31,7 @@
 
 #include <vcl/dialog.hxx>
 #include <vcl/lstbox.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/fixed.hxx>
 
 #include "radiobtnbox.hxx"

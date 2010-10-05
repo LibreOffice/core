@@ -30,12 +30,8 @@
 
 #include <map>
 #include <accessibility/standard/vclxaccessiblebox.hxx>
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_STANDARD_ACCESSIBLEROLE_HPP_
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX
 #include <cppuhelper/implbase1.hxx>
-#endif
 
 
 /** The accessible combobox has two children.  The first is the text field

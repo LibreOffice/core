@@ -32,12 +32,8 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <Inflater.hxx>
 #include <com/sun/star/packages/zip/ZipEntry.hpp>
-#ifndef _VOS_REF_H_
 #include <vos/ref.hxx>
-#endif
-#ifndef _ENCRYPTION_DATA_HXX
 #include <EncryptionData.hxx>
-#endif
 class EntryInputStream : public cppu::WeakImplHelper2< com::sun::star::io::XInputStream,
                                                        com::sun::star::io::XSeekable >
 {

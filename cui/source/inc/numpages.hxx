@@ -36,9 +36,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/field.hxx>
-#ifndef _SVX_NUMDEF_HXX
 #include <editeng/numdef.hxx>
-#endif
 #include <svtools/ctrlbox.hxx>
 #include <svl/svarray.hxx>
 

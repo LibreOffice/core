@@ -29,13 +29,9 @@
 
 // include ---------------------------------------------------------------
 
-#ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
 #include <svtools/stdctrl.hxx>
-#ifndef _GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
-#endif
 #include <svtools/valueset.hxx>
 #include <svx/dlgctrl.hxx>
 

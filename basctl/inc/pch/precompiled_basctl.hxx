@@ -42,9 +42,7 @@
 #include "com/sun/star/resource/XStringResourcePersistence.hpp"
 #include "com/sun/star/script/XLibraryContainer.hpp"
 #include "com/sun/star/script/XLibraryContainerPassword.hpp"
-#ifndef _COM_SUN_STAR_SCRIPT_XLIBRYARYCONTAINER2_HPP_
 #include "com/sun/star/script/XLibraryContainer2.hpp"
-#endif
 #include "com/sun/star/task/XStatusIndicator.hpp"
 #include "com/sun/star/task/XStatusIndicatorFactory.hpp"
 #include "com/sun/star/ui/dialogs/XFilePicker.hpp"

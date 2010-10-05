@@ -30,9 +30,7 @@
 #include <vcl/tabpage.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/dialog.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/image.hxx>
 #include <svtools/ivctrl.hxx>
 #include <svl/itempool.hxx>

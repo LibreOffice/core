@@ -70,9 +70,7 @@
 #include <connectivity/filtermanager.hxx>
 #include <connectivity/warningscontainer.hxx>
 
-#ifndef FORMS_SOURCE_MISC_LISTENERCONTAINERS_HXX
 #include "listenercontainers.hxx"
-#endif
 #include "ids.hxx"
 #include <comphelper/propmultiplex.hxx>
 #include <comphelper/uno3.hxx>

@@ -30,13 +30,9 @@
 
 #include <accessibility/standard/vclxaccessibletextcomponent.hxx>
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_ACTION_HPP_
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
-#endif
 
-#ifndef _CPPUHELPER_IMPLBASE2_HXX
 #include <cppuhelper/implbase2.hxx>
-#endif
 
 
 //  ----------------------------------------------------

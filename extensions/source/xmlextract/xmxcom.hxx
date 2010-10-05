@@ -29,9 +29,7 @@
 #define _XMXCOM_HXX
 
 #include <cppuhelper/weak.hxx>
-#ifndef __RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>

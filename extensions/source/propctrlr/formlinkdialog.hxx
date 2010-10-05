@@ -30,9 +30,7 @@
 
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 
 /** === begin UNO includes === **/
 #include <com/sun/star/form/XForm.hpp>

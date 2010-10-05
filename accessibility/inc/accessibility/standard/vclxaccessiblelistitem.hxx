@@ -35,12 +35,8 @@
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#ifndef _CPPUHELPER_COMPBASE6_HXX
 #include <cppuhelper/compbase6.hxx>
-#endif
-#ifndef _COMPHELPER_BROADCASTHELPER_HXX
 #include <comphelper/broadcasthelper.hxx>
-#endif
 #include <comphelper/accessibletexthelper.hxx>
 
 // forward ---------------------------------------------------------------

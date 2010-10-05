@@ -32,9 +32,7 @@
 #include <com/sun/star/inspection/XPropertyControl.hpp>
 /** === end UNO includes === **/
 #include <vcl/fixed.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 
 namespace com { namespace sun { namespace star { namespace inspection { namespace PropertyLineElement
 {

@@ -31,13 +31,9 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/packages/XDataSinkEncrSupport.hpp>
 #include <ZipPackageEntry.hxx>
-#ifndef _VOS_REF_H_
 #include <vos/ref.hxx>
-#endif
 #include <EncryptionData.hxx>
-#ifndef _CPPUHELPER_IMPLBASE2_HXX
 #include <cppuhelper/implbase2.hxx>
-#endif
 #include <mutexholder.hxx>
 
 #define PACKAGE_STREAM_NOTSET           0

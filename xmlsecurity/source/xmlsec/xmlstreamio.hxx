@@ -28,9 +28,7 @@
 #ifndef _XMLSTREAMIO_XMLSECIMPL_HXX_
 #define _XMLSTREAMIO_XMLSECIMPL_HXX_
 
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_HPP_
 #include <com/sun/star/uno/Reference.hxx>
-#endif
 #include <com/sun/star/xml/crypto/XUriBinding.hpp>
 
 int xmlEnableStreamInputCallbacks( void ) ;

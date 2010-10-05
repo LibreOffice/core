@@ -27,9 +27,7 @@
 #ifndef _SVX_OPTCTL_HXX
 #define _SVX_OPTCTL_HXX
 
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 #include <sfx2/tabdlg.hxx>

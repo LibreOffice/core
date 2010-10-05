@@ -29,13 +29,9 @@
 
 #if OSL_DEBUG_LEVEL > 1
 
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
 
-#ifndef _EDIT_HXX //autogen
 #include <svtools/svmedit.hxx>
-#endif
 
 class ImpWorkWindow;
 

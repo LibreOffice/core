@@ -30,9 +30,7 @@
 
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <vcl/dialog.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <svtools/svtreebx.hxx>
 
 #include "hlmarkwn_def.hxx" //ADD CHINA001

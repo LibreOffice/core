@@ -32,9 +32,7 @@
 #include <svtools/stdctrl.hxx>
 #include <vcl/edit.hxx>
 #include <svtools/svxbox.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/group.hxx>
 #include <vcl/dialog.hxx>
 

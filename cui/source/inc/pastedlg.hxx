@@ -28,9 +28,7 @@
 #ifndef _PASTEDLG_HXX
 #define _PASTEDLG_HXX
 
-#ifndef _TABLE_HXX //autogen
 #include <tools/table.hxx>
-#endif
 #include <sot/formats.hxx>
 #include <tools/globname.hxx>
 #include <svtools/transfer.hxx>

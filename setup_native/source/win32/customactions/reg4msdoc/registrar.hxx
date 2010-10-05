@@ -8,9 +8,7 @@
 #include "registry.hxx"
 #include "registrationcontextinformation.hxx"
 
-#ifndef _CONSTANTS_HXX_
 #include "constants.hxx"
-#endif
 
 class Registrar
 {

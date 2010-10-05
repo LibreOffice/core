@@ -32,9 +32,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>
 
-#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>

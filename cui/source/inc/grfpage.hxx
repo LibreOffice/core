@@ -28,15 +28,9 @@
 #ifndef _SVX_GRFPAGE_HXX
 #define _SVX_GRFPAGE_HXX
 
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
-#ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
 #include <vcl/graph.hxx>
 #include <sfx2/tabdlg.hxx>
 

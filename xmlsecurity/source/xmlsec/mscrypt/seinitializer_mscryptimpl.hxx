@@ -29,9 +29,7 @@
 #define _SEINITIALIZERIMPL_HXX
 
 #include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
-#ifndef _COM_SUN_STAR_XML_CRYPTO_SEINITIALIZER_HPP_
 #include <com/sun/star/xml/crypto/XSEInitializer.hpp>
-#endif
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

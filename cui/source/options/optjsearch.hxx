@@ -29,9 +29,7 @@
 #define _SVX_OPTJSEARCH_HXX_
 
 #include <vcl/fixed.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <sfx2/tabdlg.hxx>
 
 class Window;

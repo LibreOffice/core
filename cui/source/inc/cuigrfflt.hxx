@@ -30,9 +30,7 @@
 
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/timer.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/group.hxx>

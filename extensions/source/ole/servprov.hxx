@@ -29,9 +29,7 @@
 #define _SERVPROV_HXX
 
 #include <com/sun/star/lang/XInitialization.hpp>
-#ifndef _CPPUHELPER_IMPLBASE3_HXX_
 #include <cppuhelper/implbase2.hxx>
-#endif
 
 #include "ole2uno.hxx"
 #include "unoconversionutilities.hxx"

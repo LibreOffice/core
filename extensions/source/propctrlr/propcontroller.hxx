@@ -34,9 +34,7 @@
 #include "proplinelistener.hxx"
 #include "propcontrolobserver.hxx"
 #include "browserview.hxx"
-#ifndef _EXTENSIONS_PROPCTRLR_MODULEPCR_HXX_
 #include "modulepcr.hxx"
-#endif
 #include "propertyinfo.hxx"
 #include "pcrcomponentcontext.hxx"
 

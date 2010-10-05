@@ -28,9 +28,7 @@
 #ifndef _REGISTER_HXX_
 #define _REGISTER_HXX_
 
-#ifndef _CONSTANTS_HXX_
 #include "constants.hxx"
-#endif
 
 #ifdef _MSC_VER
 #pragma warning(push, 1) /* disable warnings within system headers */

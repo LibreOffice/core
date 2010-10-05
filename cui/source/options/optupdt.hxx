@@ -31,9 +31,7 @@
 // include ---------------------------------------------------------------
 
 #include <sfx2/tabdlg.hxx>
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 #include <com/sun/star/container/XNameReplace.hpp>
 
 // class SvxPathTabPage --------------------------------------------------

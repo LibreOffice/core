@@ -40,9 +40,7 @@ class SvxSearchItem;
 #include <svtools/svtabbx.hxx>
 #include <svtools/headbar.hxx>
 
-#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <basic/sbmod.hxx>
 #include <vcl/split.hxx>
 #include "svl/lstner.hxx"

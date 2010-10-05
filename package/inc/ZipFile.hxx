@@ -33,9 +33,7 @@
 #include <com/sun/star/packages/WrongPasswordException.hpp>
 #include <ByteGrabber.hxx>
 #include <HashMaps.hxx>
-#ifndef _INFLATER_HXX
 #include <Inflater.hxx>
-#endif
 
 #include <mutexholder.hxx>
 

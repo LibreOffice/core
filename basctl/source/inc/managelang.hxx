@@ -29,15 +29,9 @@
 #define _BASCTL_MANAGELANG_HXX
 
 #include <vcl/dialog.hxx>
-#ifndef _FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _LSTBOX_HXX
 #include <vcl/lstbox.hxx>
-#endif
-#ifndef _BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <svx/langbox.hxx>
 #include <svx/checklbx.hxx>
 

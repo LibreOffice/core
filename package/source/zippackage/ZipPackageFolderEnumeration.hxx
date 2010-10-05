@@ -29,12 +29,8 @@
 
 #include <cppuhelper/implbase2.hxx> // helper for implementations
 #include <com/sun/star/container/XEnumeration.hpp>
-#ifndef _COM_SUN_STAR_LANG_XPSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _HASH_MAPS_HXX
 #include <HashMaps.hxx>
-#endif
 
 class ZipPackageFolderEnumeration : public cppu::WeakImplHelper2
 <

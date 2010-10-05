@@ -28,9 +28,7 @@
 #ifndef _ERRORCALLBACK_XMLSECIMPL_HXX_
 #define _ERRORCALLBACK_XMLSECIMPL_HXX_
 
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_HPP_
 #include <com/sun/star/uno/Reference.hxx>
-#endif
 #include <com/sun/star/xml/crypto/XXMLSignatureTemplate.hpp>
 #include <com/sun/star/xml/crypto/XXMLEncryptionTemplate.hpp>
 

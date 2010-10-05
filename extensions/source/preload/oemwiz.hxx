@@ -31,9 +31,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <svtools/wizdlg.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/tabpage.hxx>
 #include <vcl/fixed.hxx>
 #include <svtools/svmedit.hxx>

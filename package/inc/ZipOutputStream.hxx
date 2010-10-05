@@ -28,14 +28,10 @@
 #define _ZIP_OUTPUT_STREAM_HXX
 
 #include <ByteChucker.hxx>
-#ifndef _DEFLATER_HXX
 #include <Deflater.hxx>
-#endif
 #include <CRC32.hxx>
 #include <rtl/cipher.h>
-#ifndef RTL_DIGEST_H_
 #include <rtl/digest.h>
-#endif
 
 #include <vector>
 

@@ -29,15 +29,9 @@
 
 // include ---------------------------------------------------------------
 
-#ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
-#ifndef _IMAGEBTN_HXX //autogen
 #include <vcl/imagebtn.hxx>
-#endif
-#ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
-#endif
 #include <svtools/stdctrl.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <svtools/svmedit.hxx>

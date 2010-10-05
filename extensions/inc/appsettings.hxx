@@ -27,9 +27,7 @@
 #ifndef _APPSETTINGS_HXX
 #define _APPSETTINGS_HXX
 
-#ifndef __STARDIV_UNO_UTIL_CONTAINR_HXX__
 #include <stardiv/uno/util/containr.hxx>
-#endif
 
 #ifdef __cplusplus
 extern "C" {

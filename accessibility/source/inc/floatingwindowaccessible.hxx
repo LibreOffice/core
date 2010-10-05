@@ -28,9 +28,7 @@
 #ifndef ACCESSIBILITY_FLOATINGWINDOWACCESSIBLE_HXX
 #define ACCESSIBILITY_FLOATINGWINDOWACCESSIBLE_HXX
 
-#ifndef _TOOLKIT_AWT_VCLXACCESSIBLECOMPONENT_HXX_
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
-#endif
 
 class FloatingWindowAccessible : public VCLXAccessibleComponent
 {

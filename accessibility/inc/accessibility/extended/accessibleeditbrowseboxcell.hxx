@@ -27,9 +27,7 @@
 #ifndef ACCESSIBILITY_EXT_ACCESSIBILEEDITBROWSEBOXTABLECELL_HXX
 #define ACCESSIBILITY_EXT_ACCESSIBILEEDITBROWSEBOXTABLECELL_HXX
 
-#ifndef ACCESSIBILITY_EXT_BROWSE_BOX_CELL_HXX
 #include "accessiblebrowseboxcell.hxx"
-#endif
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>

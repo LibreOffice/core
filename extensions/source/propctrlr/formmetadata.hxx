@@ -29,9 +29,7 @@
 #define _EXTENSIONS_PROPCTRLR_FORMMETADATA_HXX_
 
 #include "propertyinfo.hxx"
-#ifndef _EXTENSIONS_PROPCTRLR_MODULEPRC_HXX_
 #include "modulepcr.hxx"
-#endif
 #include "enumrepresentation.hxx"
 #include <comphelper/composedprops.hxx>
 

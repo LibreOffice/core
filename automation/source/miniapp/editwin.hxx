@@ -27,9 +27,7 @@
 #ifndef _editwin
 #define _editwin
 
-#ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>
-#endif
 #include <vcl/floatwin.hxx>
 #include <svtools/svmedit.hxx>
 

@@ -30,14 +30,10 @@
 
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_ACTION_HPP_
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
-#endif
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 
-#ifndef _CPPUHELPER_IMPLBASE2_HXX
 #include <cppuhelper/implbase2.hxx>
-#endif
 
 
 //  ----------------------------------------------------
