@@ -29,9 +29,7 @@
 #define INCLUDED_DP_PLATFORM_HXX
 
 
-#ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_MISC_API_HXX
 #include "dp_misc_api.hxx"
-#endif
 
 #include "com/sun/star/uno/Sequence.hxx"
 #include "rtl/ustring.hxx"

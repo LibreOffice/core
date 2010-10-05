@@ -34,9 +34,7 @@
 
 #include <memory>
 
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/edit.hxx>
 #include <vcl/field.hxx>
 #include <vcl/lstbox.hxx>

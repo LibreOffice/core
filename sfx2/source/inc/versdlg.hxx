@@ -30,13 +30,9 @@
 
 // #include *****************************************************************
 
-#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <vcl/fixed.hxx>
-#ifndef _SVTREEBOX_HXX //autogen
 #include <svtools/svtabbx.hxx>
-#endif
 #include <svtools/svmedit.hxx>
 #include <sfx2/basedlgs.hxx>
 

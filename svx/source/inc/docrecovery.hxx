@@ -29,13 +29,9 @@
 #define _SVX_DOCRECOVERY_HXX
 
 #include <vcl/tabpage.hxx>
-#ifndef _SV_TABDIALOG_HXX
 #include <vcl/tabdlg.hxx>
-#endif
 #include <vcl/dialog.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/fixed.hxx>
 #include <svtools/svmedit2.hxx>
 #include <svtools/svtreebx.hxx>

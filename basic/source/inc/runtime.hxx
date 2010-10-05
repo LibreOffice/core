@@ -28,9 +28,7 @@
 #ifndef _SBRUNTIME_HXX
 #define _SBRUNTIME_HXX
 
-#ifndef _SBX_HXX
 #include <basic/sbx.hxx>
-#endif
 
 #include "sb.hxx"
 

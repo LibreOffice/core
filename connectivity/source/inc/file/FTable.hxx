@@ -31,9 +31,7 @@
 #include "connectivity/sdbcx/VTable.hxx"
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#ifndef _CONNECTIVITY_FILE_BCONNECTION_HXX_
 #include "file/FConnection.hxx"
-#endif
 #include "file/filedllapi.hxx"
 #include <tools/stream.hxx>
 #include "connectivity/FValue.hxx"

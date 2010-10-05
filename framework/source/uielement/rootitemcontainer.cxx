@@ -32,13 +32,9 @@
 //_________________________________________________________________________________________________________________
 #include <uielement/rootitemcontainer.hxx>
 
-#ifndef __FRAMEWORK_UIELEMENT_ITEMCONTAINER_HHX_
 #include <uielement/itemcontainer.hxx>
-#endif
 
-#ifndef __FRAMEWORK_UIELEMENT_CONSTITEMCONTAINER_HHX_
 #include <uielement/constitemcontainer.hxx>
-#endif
 #include <threadhelp/resetableguard.hxx>
 #include <general.h>
 #include <properties.h>

@@ -28,9 +28,7 @@
 #define CONNECTIVITY_HSQLDB_TERMINATELISTENER_HXX
 
 #include <cppuhelper/compbase1.hxx>
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/frame/XTerminateListener.hpp>
-#endif
 
 //........................................................................
 namespace connectivity

@@ -43,9 +43,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/broadcasthelper.hxx>
 #include "connectivity/sqliterator.hxx"
-#ifndef _CONNECTIVITY_PARSE_SQLPARSE_HXX_
 #include "connectivity/sqlparse.hxx"
-#endif
 #include <connectivity/FValue.hxx>
 #include "TSortIndex.hxx"
 #include "MConnection.hxx"

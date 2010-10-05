@@ -29,12 +29,8 @@
 
 // include ---------------------------------------------------------------
 
-#ifndef _IMAGEBTN_HXX //autogen
 #include <vcl/imagebtn.hxx>
-#endif
-#ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
 #include <svtools/stdctrl.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/xlineit0.hxx>

@@ -29,9 +29,7 @@
 
 #include <stdarg.h>
 
-#ifndef _MENU_HXX //autogen //wg. MENU_APPEND !!!!
 #include <vcl/menu.hxx>
-#endif
 #include <vcl/wintypes.hxx>
 #include <tools/link.hxx>
 #include <com/sun/star/embed/VerbDescriptor.hpp>

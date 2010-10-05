@@ -27,9 +27,7 @@
 
 #ifdef SOLAR_JAVA
 
-#ifndef _SFXSFXJS_HXX
 #include <sfx2/sfxjs.hxx>
-#endif
 
 class VCControl;
 class VCForm;

@@ -30,9 +30,7 @@
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
 
-#ifndef _TOOLS_REF_HXX
 #include <tools/ref.hxx>
-#endif
 #include <tools/rtti.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 

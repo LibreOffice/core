@@ -39,9 +39,7 @@
 //_______________________________________________
 // interface includes
 
-#ifndef __COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP_
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#endif
 
 //_______________________________________________
 // other includes

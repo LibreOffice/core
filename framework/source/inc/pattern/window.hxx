@@ -41,9 +41,7 @@
 //_______________________________________________
 // other includes
 
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 #include <vcl/window.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/wrkwin.hxx>

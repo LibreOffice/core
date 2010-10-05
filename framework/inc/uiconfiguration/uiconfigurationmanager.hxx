@@ -56,9 +56,7 @@
 #include <com/sun/star/ui/XUIConfiguration.hpp>
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
 
-#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONSTORGAE_HPP_
 #include <com/sun/star/ui/XUIConfigurationStorage.hpp>
-#endif
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/ui/ConfigurationEvent.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>

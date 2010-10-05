@@ -31,9 +31,7 @@
 #include "MacabHeader.hxx"
 #include "MacabRecord.hxx"
 
-#ifndef _COMPHELPER_TYPES_H_
 #include <comphelper/types.hxx>
-#endif
 #include <connectivity/dbexception.hxx>
 
 namespace connectivity

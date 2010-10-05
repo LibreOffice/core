@@ -27,9 +27,7 @@
 #ifndef INCLUDED_SFX_HELPINTERCEPTOR_HXX
 #define INCLUDED_SFX_HELPINTERCEPTOR_HXX
 
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase3.hxx>
-#endif
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #include <com/sun/star/frame/XInterceptorInfo.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>

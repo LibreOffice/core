@@ -54,9 +54,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 
-#ifndef __SGI_STL_HASH_MAP
 #include <hash_map>
-#endif
 
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>

@@ -27,9 +27,7 @@
 #ifndef _SFXSPLITWIN_HXX
 #define _SFXSPLITWIN_HXX
 
-#ifndef _SPLITWIN_HXX //autogen
 #include <vcl/splitwin.hxx>
-#endif
 #include <sfx2/childwin.hxx>
 
 class SfxWorkWindow;

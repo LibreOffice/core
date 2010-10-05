@@ -28,9 +28,7 @@
 #ifndef _SVX_FILLITEM_HXX
 #define _SVX_FILLITEM_HXX
 
-#ifndef _BITMAP_HXX //autogen
 #include <vcl/bitmap.hxx>
-#endif
 #include <svx/xcolit.hxx>
 #include <svx/xgrad.hxx>
 #include <svx/xhatch.hxx>

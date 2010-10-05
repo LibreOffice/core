@@ -28,13 +28,9 @@
 #ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_OLE_SHAPE_HXX
 #define _SVX_ACCESSIBILITY_ACCESSIBLE_OLE_SHAPE_HXX
 
-#ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_MANAGER_HXX
 #include <svx/AccessibleShape.hxx>
-#endif
 
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_ACTION_HPP_
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
-#endif
 #include "svx/svxdllapi.h"
 
 namespace accessibility {

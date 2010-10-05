@@ -41,12 +41,8 @@
 #include <svl/itempool.hxx>
 #include "galobj.hxx"
 
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HDL_
 #include <com/sun/star/beans/PropertyState.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HDL_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
 #include <com/sun/star/gallery/GalleryItemType.hpp>
 
 #define UNOGALLERY_GALLERYITEMTYPE  1

@@ -29,9 +29,7 @@
 #include "precompiled_svx.hxx"
 #include <com/sun/star/container/XIdentifierContainer.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
-#ifndef _COM_SUN_STAR_DRAWING_GLUEPOINT2_HDL_
 #include <com/sun/star/drawing/GluePoint2.hpp>
-#endif
 
 #include <cppuhelper/implbase2.hxx>
 

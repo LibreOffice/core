@@ -29,9 +29,7 @@
 
 #include <svx/svddef.hxx>
 
-#ifndef SXMBRITM_HXX
 #include <svx/sdynitm.hxx>
-#endif
 
 // Die Masslinie unterhalb der Bezugskante
 // Zur Bemassung einer Objektunterkante

@@ -34,9 +34,7 @@
 #include <connectivity/FValue.hxx>
 #include "MNSDeclares.hxx"
 #include <osl/thread.hxx>
-#ifndef _COM_SUN_STAR_MOZILLA_MOZILLPRODUCTTYPE_HPP_
 #include <com/sun/star/mozilla/MozillaProductType.hpp>
-#endif
 
 namespace connectivity
 {

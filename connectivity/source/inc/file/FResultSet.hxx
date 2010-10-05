@@ -28,31 +28,15 @@
 #ifndef _CONNECTIVITY_FILE_FRESULTSET_HXX_
 #define _CONNECTIVITY_FILE_FRESULTSET_HXX_
 
-#ifndef _COM_SUN_STAR_SQLC_XRESULTSET_HPP_
 #include <com/sun/star/sdbc/XResultSet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SQLC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SQLC_XRESULTSETMETADATASUPPLIER_HPP_
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SQLC_XCLOSEABLE_HPP_
 #include <com/sun/star/sdbc/XCloseable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SQLC_XCOLUMNLOCATE_HPP_
 #include <com/sun/star/sdbc/XColumnLocate.hpp>
-#endif
 #include <com/sun/star/util/XCancellable.hpp>
-#ifndef _COM_SUN_STAR_SQLC_XWARNINGSSUPPLIER_HPP_
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SQLC_XRESULTSETUPDATE_HPP_
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SQLC_XROWUPDATE_HPP_
 #include <com/sun/star/sdbc/XRowUpdate.hpp>
-#endif
 #include <cppuhelper/compbase12.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include "file/FStatement.hxx"

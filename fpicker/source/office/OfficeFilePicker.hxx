@@ -37,9 +37,7 @@
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
-#ifndef _COM_SUN_STAR_UNO_XCOMPONENT_CONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
-#endif
 
 
 #include <vcl/wintypes.hxx>

@@ -33,21 +33,13 @@
 #define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
 
-#ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#endif
 
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 
-#ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
-#endif
 #include <vcl/combobox.hxx>
 #include <vcl/lstbox.hxx>
 #include <tools/link.hxx>

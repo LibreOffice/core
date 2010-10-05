@@ -29,9 +29,7 @@
 
 #include <svx/svddef.hxx>
 
-#ifndef _SDRANGITM_HXX
 #include <svx/sdangitm.hxx>
-#endif
 #include <svx/sdooitm.hxx>
 
 //------------------------------------

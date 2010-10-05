@@ -32,9 +32,7 @@
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
 
-#ifndef _POINTR_HXX //autogen
 #include <vcl/pointr.hxx>
-#endif
 #include <tools/contnr.hxx>
 #include "svx/svxdllapi.h"
 

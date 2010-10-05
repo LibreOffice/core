@@ -29,9 +29,7 @@
 
 #include <tools/string.hxx>
 
-#ifndef _RESID_HXX //autogen
 #include <tools/resid.hxx>
-#endif
 
 class SfxResId: public ResId
 {

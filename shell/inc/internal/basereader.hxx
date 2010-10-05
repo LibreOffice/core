@@ -34,9 +34,7 @@
 #include "internal/utilities.hxx"
 #include "internal/i_xml_parser_event_handler.hxx"
 
-#ifndef XML_PARSER_HXX_INCLUDED
 #include "internal/xml_parser.hxx"
-#endif
 #include "internal/zipfile.hxx"
 
 class CBaseReader : public i_xml_parser_event_handler

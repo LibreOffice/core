@@ -28,9 +28,7 @@
 #ifndef _XMLTEXTFRAMECONTEXT_HXX
 #define _XMLTEXTFRAMECONTEXT_HXX
 
-#ifndef _COM_SUN_STAR_TEXT_TEXTCONTENTANCHORTYPE_HPP
 #include <com/sun/star/text/TextContentAnchorType.hpp>
-#endif
 #include <xmloff/xmlictxt.hxx>
 
 namespace com { namespace sun { namespace star {

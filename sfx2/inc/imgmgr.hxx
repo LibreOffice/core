@@ -33,9 +33,7 @@
 
 #include <sal/types.h>
 #include <tools/gen.hxx>
-#ifndef _IMAGE_HXX //autogen
 #include <vcl/image.hxx>
-#endif
 
 class ToolBox;
 class SfxModule;

@@ -58,9 +58,7 @@ class SfxStyleSheet;
 class Font;
 class FontList;
 
-#ifndef _EDITDATA_HXX
 #include <editeng/editdata.hxx>
-#endif
 #include <com/sun/star/uno/Reference.h>
 #include "editeng/editengdllapi.h"
 

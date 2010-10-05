@@ -28,9 +28,7 @@
 #ifndef _SVDUNDO_HXX
 #define _SVDUNDO_HXX
 
-#ifndef _SOLAR_HRC
 #include <svl/solar.hrc>
-#endif
 #include <svl/undo.hxx>
 #include <tools/contnr.hxx>
 #include <tools/gen.hxx>

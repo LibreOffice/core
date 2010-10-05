@@ -31,9 +31,7 @@
 #include <osl/conditn.h>
 #include "quicktimecommon.hxx"
 
-#ifndef _COM_SUN_STAR_MEDIA_XPLAYER_HDL_
 #include "com/sun/star/media/XPlayer.hdl"
-#endif
 
 namespace avmedia { namespace quicktime {
 

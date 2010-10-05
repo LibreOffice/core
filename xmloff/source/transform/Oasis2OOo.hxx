@@ -29,9 +29,7 @@
 #define _XMLOFF_OASIS2OOO_HXX
 
 #include "ActionMapTypesOASIS.hxx"
-#ifndef _XMLOFF_TRANSFORMERBASE_HXX_
 #include "TransformerBase.hxx"
-#endif
 
 class XMLTransformerOASISEventMap_Impl;
 

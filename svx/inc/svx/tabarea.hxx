@@ -30,12 +30,8 @@
 // include ---------------------------------------------------------------
 
 #include <svtools/valueset.hxx>
-#ifndef _IMAGEBTN_HXX //autogen
 #include <vcl/imagebtn.hxx>
-#endif
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 #include <svx/dlgctrl.hxx>
 #include <svx/xsetit.hxx>
 #include <svx/xfillit0.hxx>

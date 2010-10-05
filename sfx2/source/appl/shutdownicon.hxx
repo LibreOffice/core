@@ -12,12 +12,8 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
-#ifndef _RTL_STRING_HXX
 #include <rtl/string.hxx>
-#endif
-#ifndef _RTL_USTRING_HXX
 #include <rtl/ustring.hxx>
-#endif
 #include <osl/mutex.hxx>
 #include <osl/module.hxx>
 #include <sfx2/sfxuno.hxx>

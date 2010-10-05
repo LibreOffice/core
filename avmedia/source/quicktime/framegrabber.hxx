@@ -30,9 +30,7 @@
 
 #include "quicktimecommon.hxx"
 
-#ifndef _COM_SUN_STAR_MEDIA_XFRAMEGRABBER_HDL_
 #include "com/sun/star/media/XFrameGrabber.hdl"
-#endif
 
 namespace avmedia { namespace quicktime {
 

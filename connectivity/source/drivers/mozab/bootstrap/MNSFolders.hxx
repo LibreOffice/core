@@ -31,9 +31,7 @@
 #include <sal/types.h>
 #include <osl/diagnose.h>
 #include <osl/conditn.hxx>
-#ifndef _COM_SUN_STAR_MOZILLA_MOZILLPRODUCTTYPE_HPP_
 #include <com/sun/star/mozilla/MozillaProductType.hpp>
-#endif
 
 #include <rtl/ustring.hxx>
 

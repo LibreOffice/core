@@ -31,12 +31,8 @@
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
 #include <sot/exchange.hxx>
-#ifndef _TOOLS_REF_HXX
 #include <tools/ref.hxx>
-#endif
-#ifndef _LINKSOURCE_HXX
 #include <sfx2/linksrc.hxx>
-#endif
 
 namespace com { namespace sun { namespace star { namespace uno
 {

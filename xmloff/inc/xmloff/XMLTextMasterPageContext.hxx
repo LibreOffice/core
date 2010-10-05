@@ -31,9 +31,7 @@
 #include "xmloff/dllapi.h"
 #include "sal/types.h"
 
-#ifndef _XMLOFF_XMLSTYLE_HXX_
 #include <xmloff/xmlstyle.hxx>
-#endif
 
 namespace com { namespace sun { namespace star {
     namespace style { class XStyle; }

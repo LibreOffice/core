@@ -32,9 +32,7 @@
 #include <tools/poly.hxx>
 #include <tools/fract.hxx>
 
-#ifndef _MAPMOD_HXX //autogen
 #include <vcl/mapmod.hxx>
-#endif
 #include <tools/string.hxx>
 #include "svx/svxdllapi.h"
 

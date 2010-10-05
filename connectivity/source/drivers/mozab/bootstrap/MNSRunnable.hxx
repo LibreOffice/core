@@ -32,9 +32,7 @@
 
 #include <MNSInclude.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#ifndef _COM_SUN_STAR_MOZILLA_XCODEPROXY_HDL_
 #include <com/sun/star/mozilla/XCodeProxy.hpp>
-#endif
 
 
 using namespace com::sun::star::uno;

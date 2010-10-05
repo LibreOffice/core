@@ -38,13 +38,9 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <cppuhelper/weak.hxx>
 
-#ifndef _SFXBINDINGS_HXX
 #include <sfx2/bindings.hxx>
-#endif
 
-#ifndef _SFXMSGSERV_HXX
 #include "slotserv.hxx"
-#endif
 
 #include <sfx2/sfxuno.hxx>
 

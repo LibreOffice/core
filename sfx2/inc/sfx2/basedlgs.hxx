@@ -30,13 +30,9 @@
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
 #include "sal/types.h"
-#ifndef _FLOATWIN_HXX //autogen
 #include <vcl/floatwin.hxx>
-#endif
 #include <vcl/timer.hxx>
-#ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#endif
 
 class TabPage;
 class SfxTabPage;

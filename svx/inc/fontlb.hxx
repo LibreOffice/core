@@ -28,9 +28,7 @@
 #ifndef SVX_FONTLB_HXX
 #define SVX_FONTLB_HXX
 
-#ifndef _SVTABBOX_HXX
 #include <svtools/svtabbx.hxx>
-#endif
 #include <vcl/virdev.hxx>
 #include "svx/svxdllapi.h"
 #include <layout/layout.hxx>

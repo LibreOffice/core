@@ -40,9 +40,7 @@
 #include <macros/xserviceinfo.hxx>
 #include <threadhelp/threadhelpbase.hxx>
 
-#ifndef __FRAMEWORK_THREADHELP_TRANSACTIONBASE_HXX_
 #include <threadhelp/transactionbase.hxx>
-#endif
 #include <general.h>
 
 //_________________________________________________________________________________________________________________

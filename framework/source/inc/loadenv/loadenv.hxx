@@ -44,13 +44,9 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/util/URL.hpp>
 
-#ifndef _COM_SUN_STAR_LANG_IllegalArgumentException_HPP_
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_IO_IOException_HPP_
 #include <com/sun/star/io/IOException.hpp>
-#endif
 
 //_______________________________________________
 // includes of an other project

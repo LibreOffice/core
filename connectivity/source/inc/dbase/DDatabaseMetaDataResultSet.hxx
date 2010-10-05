@@ -39,9 +39,7 @@
 #include <com/sun/star/sdbc/XRowUpdate.hpp>
 #include <cppuhelper/compbase7.hxx>
 #include <comphelper/proparrhlp.hxx>
-#ifndef _CONNECTIVITY_FILE_ASTATEMENT_HXX_
 #include "file/FStatement.hxx"
-#endif
 #include "connectivity/CommonTools.hxx"
 #include <comphelper/propertycontainer.hxx>
 

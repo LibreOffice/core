@@ -28,9 +28,7 @@
 #ifndef _EDITDOC_HXX
 #define _EDITDOC_HXX
 
-#ifndef _COM_SUN_STAR_I18N_XEXTENDEDINPUTSEQUENCECHECKER_HDL_
 #include <com/sun/star/i18n/XExtendedInputSequenceChecker.hpp>
-#endif
 
 #include <editattr.hxx>
 #include <edtspell.hxx>

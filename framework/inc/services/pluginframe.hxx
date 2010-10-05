@@ -51,9 +51,7 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 
-#ifndef _VCL_ATOM_HXX
 #include <vcl/threadex.hxx>
-#endif
 #include <unotools/cmdoptions.hxx>
 
 

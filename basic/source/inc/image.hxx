@@ -29,9 +29,7 @@
 #define _SBIMAGE_HXX
 
 #include "sbintern.hxx"
-#ifndef _RTL_USTRING_HXX
 #include <rtl/ustring.hxx>
-#endif
 #include <filefmt.hxx>
 
 // Diese Klasse liest das vom Compiler erzeugte Image ein und verwaltet

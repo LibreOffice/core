@@ -27,9 +27,7 @@
 #ifndef _SV_XMLAUTOCORRECTIMPORT_HXX
 #define _SV_XMLAUTOCORRECTIMPORT_HXX
 
-#ifndef _SVSTOR_HXX
 #include <sot/storage.hxx>
-#endif
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>

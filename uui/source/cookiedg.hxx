@@ -28,9 +28,7 @@
 #ifndef UUI_COOKIEDG_HXX
 #define UUI_COOKIEDG_HXX
 
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/group.hxx>

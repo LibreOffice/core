@@ -29,9 +29,7 @@
 #define _SBIOSYS_HXX
 
 #include <tools/stream.hxx>
-#ifndef _SBERRORS_HXX
 #include <basic/sberrors.hxx>
-#endif
 
 class SvStream;
 

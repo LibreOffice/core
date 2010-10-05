@@ -32,9 +32,7 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_THREADHELPER_THREADHELPBASE_HXX_
 #include <threadhelp/threadhelpbase.hxx>
-#endif
 #include <macros/generic.hxx>
 #include <macros/debug.hxx>
 #include <macros/xinterface.hxx>
@@ -65,13 +63,9 @@
 #include <vcl/edit.hxx>
 #include <vcl/combobox.hxx>
 
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/morebtn.hxx>
 
 //_________________________________________________________________________________________________________________

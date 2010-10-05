@@ -29,15 +29,9 @@
 #define _BASICAPP_HXX
 
 #include <vcl/svapp.hxx>
-#ifndef _HELP_HXX //autogen
 #include <vcl/help.hxx>
-#endif
-#ifndef _MENU_HXX //autogen
 #include <vcl/menu.hxx>
-#endif
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
 #include <vcl/timer.hxx>
 #include <svl/brdcst.hxx>
 #include <svl/lstner.hxx>

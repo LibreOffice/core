@@ -32,12 +32,8 @@
 #include <sfx2/childwin.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <vcl/lstbox.hxx>
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/edit.hxx>
 #include <vcl/scrbar.hxx>
 #include <com/sun/star/uno/Reference.h>

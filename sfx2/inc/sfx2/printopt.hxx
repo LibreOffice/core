@@ -31,14 +31,10 @@
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
 #include "sal/types.h"
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
-#ifndef _SV_BUTTON_HXX //autogen wg. FixedText
 #include <vcl/button.hxx>
-#endif
 #include <vcl/lstbox.hxx>
 #include <vcl/print.hxx>
 

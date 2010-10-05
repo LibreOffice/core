@@ -32,9 +32,7 @@
 #include <comphelper/stl_types.hxx>
 #include <hash_map>
 #include <xmloff/xmltoken.hxx>
-#ifndef _XMLOFF_TRANSFORMERTOKENMAP_HXX
 #include "TransformerTokenMap.hxx"
-#endif
 
 
 

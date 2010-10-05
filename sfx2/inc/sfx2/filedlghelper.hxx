@@ -38,9 +38,7 @@
 #include <tools/errcode.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/edit.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/graph.hxx>
 #include <sfx2/sfxdefs.hxx>
 #include <sfx2/sfxuno.hxx>

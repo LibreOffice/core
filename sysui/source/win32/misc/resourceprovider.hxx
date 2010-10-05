@@ -35,9 +35,7 @@
 
 #include <sal/types.h>
 
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring>
-#endif
 
 //------------------------------------------------------------------------
 // deklarations

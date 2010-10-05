@@ -33,9 +33,7 @@
 #include <editeng/svxfont.hxx>
 #include "svx/svxdllapi.h"
 
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
 
 // forward ---------------------------------------------------------------
 

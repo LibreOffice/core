@@ -41,9 +41,7 @@
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
-#ifndef _COM_SUN_STAR_IO_XSEEKABLE_HDL_
 #include <com/sun/star/io/XSeekable.hdl>
-#endif
 #include <comphelper/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
 #include <rtl/ustrbuf.hxx>

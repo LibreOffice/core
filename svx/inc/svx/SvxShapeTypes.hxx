@@ -28,9 +28,7 @@
 #ifndef _SVX_ACCESSIBILITY_SVX_SHAPE_TYPES_HXX
 #define _SVX_ACCESSIBILITY_SVX_SHAPE_TYPES_HXX
 
-#ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_HXX
 #include <svx/ShapeTypeHandler.hxx>
-#endif
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
 namespace accessibility {

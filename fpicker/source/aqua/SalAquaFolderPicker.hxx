@@ -32,26 +32,18 @@
 //  includes of other projects
 //_______________________________________________________________________________________________________________________
 
-#ifndef _CPPUHELPER_COMPBASE4_HXX_
 #include <cppuhelper/implbase4.hxx>
-#endif
 #include <com/sun/star/util/XCancellable.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#ifndef _COM_SUN_STAR_UI_XFOLDERPICKER_HPP_
 #include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
-#endif
 
-#ifndef _SALAQUAPICKER_HXX_
 #include "SalAquaPicker.hxx"
-#endif
 
 #include <memory>
 
-#ifndef _RTL_USTRING_H_
 #include <rtl/ustring.hxx>
-#endif
 
 #include <list>
 

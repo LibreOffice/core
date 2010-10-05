@@ -30,9 +30,7 @@
 
 #include "quicktimecommon.hxx"
 
-#ifndef _COM_SUN_STAR_MEDIA_XMANAGER_HDL_
 #include "com/sun/star/media/XManager.hdl"
-#endif
 
 // -----------
 // - Manager -

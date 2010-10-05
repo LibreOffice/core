@@ -33,9 +33,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/gallery/XGalleryItem.hpp>
 #include <comphelper/propertysethelper.hxx>
-#ifndef _COMPHELPER_PROPERTYSETINFO_HXX_
 #include <comphelper/propertysetinfo.hxx>
-#endif
 
 class GalleryTheme;
 struct GalleryObject;

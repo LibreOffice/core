@@ -29,9 +29,7 @@
 #include <tools/list.hxx>
 #include <tools/color.hxx>
 #include <tools/string.hxx>
-#ifndef _IMAGE_HXX
 #include <vcl/image.hxx>
-#endif
 #include <rtl/uuid.h>
 #include <comphelper/accessibleselectionhelper.hxx>
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>

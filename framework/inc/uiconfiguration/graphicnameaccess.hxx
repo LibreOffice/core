@@ -34,9 +34,7 @@
 //  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/container/XNameContainer.hpp>
-#ifndef _COM_SUN_STAR_GRAPHIC_XGRAPHIC_HXX_
 #include <com/sun/star/graphic/XGraphic.hpp>
-#endif
 #include <cppuhelper/implbase1.hxx>
 
 namespace framework

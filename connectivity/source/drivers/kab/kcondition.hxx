@@ -28,9 +28,7 @@
 #ifndef _CONNECTIVITY_KAB_CONDITION_HXX_
 #define _CONNECTIVITY_KAB_CONDITION_HXX_
 
-#ifndef _COMPHELPER_TYPES_H_
 #include <comphelper/types.hxx>
-#endif
 #include <shell/kde_headers.h>
 #include <connectivity/dbexception.hxx>
 

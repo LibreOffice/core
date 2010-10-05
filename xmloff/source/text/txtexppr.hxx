@@ -32,9 +32,7 @@
 #include "txtdrope.hxx"
 #include "xmltabe.hxx"
 #include "XMLTextColumnsExport.hxx"
-#ifndef _XMLOFF_XMLBACKGROUNDIMAGEEXPORT_HXX
 #include "XMLBackgroundImageExport.hxx"
-#endif
 
 class SvXMLExport;
 class XMLTextExportPropertySetMapper: public SvXMLExportPropertyMapper

@@ -31,9 +31,7 @@
 
 #include <tools/solar.h>
 #include <tools/stream.hxx>
-#ifndef _TABLE_HXX
 #include <tools/table.hxx>
-#endif
 #include <tools/string.hxx>
 #include <tools/gen.hxx>
 #include "svx/svxdllapi.h"

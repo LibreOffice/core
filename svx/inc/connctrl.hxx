@@ -29,9 +29,7 @@
 
 // include ---------------------------------------------------------------
 
-#ifndef _CTRL_HXX //autogen
 #include <vcl/ctrl.hxx>
-#endif
 #include "svx/svxdllapi.h"
 
 class SfxItemSet;

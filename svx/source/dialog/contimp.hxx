@@ -27,9 +27,7 @@
 #ifndef _CONTIMP_HXX_
 #define _CONTIMP_HXX_
 
-#ifndef _CONTDLG_HXX
 #include <svx/contdlg.hxx>
-#endif
 #include "contwnd.hxx"
 #include <vcl/toolbox.hxx>
 #include <vcl/status.hxx>

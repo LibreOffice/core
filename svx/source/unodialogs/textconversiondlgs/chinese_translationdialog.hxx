@@ -32,9 +32,7 @@
 // header for class FixedLine
 #include <vcl/fixed.hxx>
 // header for class RadioButton
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 
 //.............................................................................
 namespace textconversiondlgs

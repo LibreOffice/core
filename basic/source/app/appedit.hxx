@@ -28,9 +28,7 @@
 #ifndef _APPEDIT_HXX
 #define _APPEDIT_HXX
 
-#ifndef _SCRBAR_HXX //autogen
 #include <vcl/scrbar.hxx>
-#endif
 
 #include "appwin.hxx"
 #include "textedit.hxx"

@@ -58,9 +58,7 @@
 #include <cppuhelper/weak.hxx>
 #include <rtl/ustring.hxx>
 #include <vcl/accel.hxx>
-#ifndef _VCL_MENU_HXX_
 #include <vcl/menu.hxx>
-#endif
 #include <hash_map>
 
 namespace framework

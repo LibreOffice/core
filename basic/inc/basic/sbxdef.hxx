@@ -31,9 +31,7 @@
 
 
 #ifndef __RSC
-#ifndef _SOLAR_H
 #include <tools/solar.h>
-#endif
 #include "tools/errcode.hxx"
 
 #ifndef _SBX_CLASS_TYPE

@@ -31,15 +31,9 @@
 #include "sfx2/dllapi.h"
 #include "sal/types.h"
 #include <vcl/timer.hxx>
-#ifndef _MENU_HXX //autogen
 #include <vcl/menu.hxx>
-#endif
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _FLOATWIN_HXX //autogen
 #include <vcl/floatwin.hxx>
-#endif
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/sfxstatuslistener.hxx>
 #include <svtools/toolboxcontroller.hxx>

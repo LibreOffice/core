@@ -28,17 +28,13 @@
 #ifndef __FRAMEWORK_XML_EVENTSDOCUMENTHANDLER_HXX_
 #define __FRAMEWORK_XML_EVENTSDOCUMENTHANDLER_HXX_
 
-#ifndef __FRAMEWORK_XML_TOOLBOXCONFIGURATION_HXX_
 #include <xml/eventsconfiguration.hxx>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP_
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  other includes

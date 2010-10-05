@@ -33,9 +33,7 @@
 
 #include <map>
 
-#ifndef _XMLOFF_FLATTRCONTEXT_HXX
 #include "FlatTContext.hxx"
-#endif
 
 typedef ::std::multimap< ::rtl::OUString,
                     ::rtl::Reference< XMLPersTextContentTContext >,

@@ -28,9 +28,7 @@
 #define _SFXDOCVOR_HXX
 
 
-#ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#endif
 #include <svtools/svtreebx.hxx>
 
 #include <sfx2/objsh.hxx>

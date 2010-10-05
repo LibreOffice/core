@@ -28,12 +28,8 @@
 #ifndef _SVX_CTREDLIN_HXX
 #define _SVX_CTREDLIN_HXX
 
-#ifndef _MOREBTN_HXX //autogen
 #include <vcl/morebtn.hxx>
-#endif
-#ifndef _COMBOBOX_HXX //autogen
 #include <vcl/combobox.hxx>
-#endif
 #include <svtools/headbar.hxx>
 #include <svtools/svtabbx.hxx>
 #include <vcl/lstbox.hxx>

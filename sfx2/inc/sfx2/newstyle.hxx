@@ -30,9 +30,7 @@
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
 
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/msgbox.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/dialog.hxx>

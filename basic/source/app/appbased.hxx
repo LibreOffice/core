@@ -29,12 +29,8 @@
 #define _APPBASED_HXX
 
 #include <basic/sbmod.hxx>
-#ifndef _SB_APPEDIT_HXX
 #include "appedit.hxx"
-#endif
-#ifndef _SB_TEXTEDIT_HXX
 #include "textedit.hxx"
-#endif
 
 class BasicFrame;
 class BreakpointWindow;

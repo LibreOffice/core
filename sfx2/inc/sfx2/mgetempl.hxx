@@ -31,9 +31,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 #include <svtools/stdctrl.hxx>
-#ifndef _SV_MEDIT_HXX
 #include <svtools/svmedit.hxx>
-#endif
 
 #include <sfx2/tabdlg.hxx>
 

@@ -31,9 +31,7 @@
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include "ActionMapTypesOOo.hxx"
-#ifndef _XMLOFF_TRANSFORMERBASE_HXX_
 #include "TransformerBase.hxx"
-#endif
 
 class XMLTransformerOOoEventMap_Impl;
 

@@ -32,9 +32,7 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_OMUTEXMEMBER_HXX_
 #include <threadhelp/threadhelpbase.hxx>
-#endif
 #include <macros/generic.hxx>
 #include <macros/debug.hxx>
 #include <macros/xinterface.hxx>

@@ -30,9 +30,7 @@
 
 #include <xmloff/xmlictxt.hxx>
 
-#ifndef _XMLOFF_XMLIMP_HXX_
 #include <xmloff/xmlimp.hxx>
-#endif
 #include <rtl/ustrbuf.hxx>
 
 

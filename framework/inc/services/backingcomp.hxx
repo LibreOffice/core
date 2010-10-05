@@ -45,13 +45,9 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XKeyListener.hpp>
 
-#ifndef _COM_SUN_STAR_FAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDROPTARGETELISTENER_HPP_
 #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
-#endif
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 

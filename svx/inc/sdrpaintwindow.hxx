@@ -28,9 +28,7 @@
 #ifndef _SDRPAINTWINDOW_HXX
 #define _SDRPAINTWINDOW_HXX
 
-#ifndef _VIRDEV_HXX //autogen
 #include <vcl/virdev.hxx>
-#endif
 #include "svx/svxdllapi.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

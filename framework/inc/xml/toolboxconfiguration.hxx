@@ -5,9 +5,7 @@
 #include <vcl/bitmap.hxx>
 #include <tools/string.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
-#ifndef _COM_SUN_STAR_IO_XOUPUTSTREAM_HPP_
 #include <com/sun/star/io/XOutputStream.hpp>
-#endif
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 

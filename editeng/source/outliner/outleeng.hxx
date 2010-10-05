@@ -28,9 +28,7 @@
 #define _OUTLEENG_HXX
 
 #include <editeng/outliner.hxx>
-#ifndef _EDITENG_HXX
 #include <editeng/editeng.hxx>
-#endif
 
 typedef EENotify* EENotifyPtr;
 SV_DECL_PTRARR_DEL( NotifyList, EENotifyPtr, 1, 1 )

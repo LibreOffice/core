@@ -28,12 +28,8 @@
 #ifndef SCRIPTING_DLGPROV_HXX
 #define SCRIPTING_DLGPROV_HXX
 
-#ifndef _COM_SUN_STAR_AWT_XSTRINGRESOURCEWITHSTORAGE_HPP_
 #include <com/sun/star/resource/XStringResourceWithStorage.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XSTRINGRESOURCEWITHSTORAGE_HPP_
 #include <com/sun/star/resource/XStringResourceWithLocation.hpp>
-#endif
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

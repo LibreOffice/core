@@ -33,13 +33,9 @@
 #include <comphelper/propertycontainer.hxx>
 #include "FDatabaseMetaDataResultSet.hxx"
 
-#ifndef _CONNECTIVITY_MAB_CONNECTION_HXX_
 #include <MConnection.hxx>
-#endif
 #include <com/sun/star/uno/Sequence.hxx>
-#ifndef _COM_SUN_STAR_MOZILLA_MOZILLPRODUCTTYPE_HPP_
 #include <com/sun/star/mozilla/MozillaProductType.hpp>
-#endif
 
 namespace connectivity
 {

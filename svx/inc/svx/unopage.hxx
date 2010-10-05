@@ -36,9 +36,7 @@
 #include <com/sun/star/drawing/XShapeGrouper.hpp>
 #include <com/sun/star/drawing/XShapeCombiner.hpp>
 #include <com/sun/star/drawing/XShapeBinder.hpp>
-#ifndef _COM_SUN_STAR_UNO_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#endif
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakagg.hxx>
 #include <svl/lstner.hxx>

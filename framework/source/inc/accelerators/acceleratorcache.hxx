@@ -38,9 +38,7 @@
 //__________________________________________
 // interface includes
 
-#ifndef __COM_SUN_STAR_AWT_KEYEVENT_HPP_
 #include <com/sun/star/awt/KeyEvent.hpp>
-#endif
 
 //__________________________________________
 // other includes

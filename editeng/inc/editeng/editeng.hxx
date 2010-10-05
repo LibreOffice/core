@@ -87,9 +87,7 @@ typedef std::vector<SpellPortion> SpellPortions;
 
 namespace basegfx { class B2DPolyPolygon; }
 #include <rsc/rscsfx.hxx>
-#ifndef _EDITDATA_HXX
 #include <editeng/editdata.hxx>
-#endif
 #include <i18npool/lang.h>
 #include "editeng/editengdllapi.h"
 

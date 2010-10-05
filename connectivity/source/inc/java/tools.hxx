@@ -31,9 +31,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Sequence.h>
 
-#ifndef JNI_H
 #include <jni.h>
-#endif
 #include "java/sql/SQLException.hxx"
 #include <comphelper/uno3.hxx>
 

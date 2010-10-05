@@ -32,9 +32,7 @@
 
 #include <vector>
 #include "tools/gen.hxx"
-#ifndef _SV_BUTTON_HXX
 #include "vcl/button.hxx"
-#endif
 #include "vcl/dialog.hxx"
 #include "vcl/fixed.hxx"
 #include "vcl/lstbox.hxx"

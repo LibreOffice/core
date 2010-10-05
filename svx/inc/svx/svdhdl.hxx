@@ -30,14 +30,10 @@
 
 #include <tools/gen.hxx>
 
-#ifndef _POINTR_HXX //autogen
 #include <vcl/pointr.hxx>
-#endif
 #include <tools/contnr.hxx>
 
-#ifndef _SOLAR_HRC
 #include <svl/solar.hrc>
-#endif
 
 #include <svx/xpoly.hxx>
 #include <svx/svdoedge.hxx>

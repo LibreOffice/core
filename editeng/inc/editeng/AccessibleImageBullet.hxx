@@ -32,9 +32,7 @@
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/implbase5.hxx>
 
-#ifndef _CPPUHELPER_INTERFACECONTAINER_H_
 #include <cppuhelper/interfacecontainer.hxx>
-#endif
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>

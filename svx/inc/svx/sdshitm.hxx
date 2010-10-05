@@ -27,9 +27,7 @@
 #ifndef _SDSHITM_HXX
 #define _SDSHITM_HXX
 
-#ifndef _SDOOITEM_HXX
 #include <svx/sdooitm.hxx>
-#endif
 #include <svx/svddef.hxx>
 
 //------------------------------

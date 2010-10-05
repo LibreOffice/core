@@ -35,9 +35,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/basedlgs.hxx>
 
-#ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
 #include <svx/dlgctrl.hxx>
 
 /*************************************************************************

@@ -27,9 +27,7 @@
 #ifndef _SFX_ALIENWARN_HXX
 #define _SFX_ALIENWARN_HXX
 
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/fixed.hxx>
 
 #include <sfx2/basedlgs.hxx>

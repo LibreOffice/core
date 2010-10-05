@@ -54,12 +54,8 @@
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/document/XExporter.hpp>
-#ifndef _COM_SUN_STAR_DRAWING_XGRAPHICOBJECTRESOLVER_HPP_
 #include <com/sun/star/document/XGraphicObjectResolver.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XEMBEDDEDOBJECTRESOLVER_HPP_
 #include <com/sun/star/document/XEmbeddedObjectResolver.hpp>
-#endif
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>

@@ -58,14 +58,10 @@
 #include <numeric>
 #include <algorithm>
 #include <comphelper/processfactory.hxx>
-#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
-#endif
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#ifndef _COM_SUN_STAR_I18N_CHARACTERITERATORMODE_HDL_
 #include <com/sun/star/i18n/CharacterIteratorMode.hdl>
-#endif
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
 using namespace com::sun::star;

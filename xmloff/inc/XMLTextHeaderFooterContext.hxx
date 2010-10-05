@@ -28,9 +28,7 @@
 #define _XMLOFF_TEXTHEADERFOOTERCONTEXT_HXX_
 
 
-#ifndef _XMLOFF_XMLICTXT_HXX_
 #include <xmloff/xmlictxt.hxx>
-#endif
 
 namespace com { namespace sun { namespace star {
     namespace text { class XTextCursor; }

@@ -32,19 +32,13 @@
 //  includes of other projects
 //_______________________________________________________________________________________________________________________
 
-#ifndef _CPPUHELPER_COMPBASE3_HXX_
 #include <cppuhelper/implbase3.hxx>
-#endif
 
-#ifndef _SALGTKPICKER_HXX_
 #include "SalGtkPicker.hxx"
-#endif
 
 #include <memory>
 
-#ifndef _RTL_USTRING_H_
 #include <rtl/ustring.hxx>
-#endif
 
 #include <list>
 

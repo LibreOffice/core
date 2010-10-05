@@ -29,15 +29,9 @@
 
 class SfxTemplateControllerItem;
 
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
-#ifndef _TOOLBOX_HXX //autogen
 #include <vcl/toolbox.hxx>
-#endif
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
 #include <svl/lstner.hxx>
 #include <svtools/svtreebx.hxx>
 #include <svl/eitem.hxx>

@@ -34,9 +34,7 @@
 #include <vector>
 #endif
 
-#ifndef _XMLOFF_XMLSTYLE_HXX_
 #include <xmloff/xmlstyle.hxx>
-#endif
 
 struct XMLPropertyState;
 class SvXMLTokenMap;

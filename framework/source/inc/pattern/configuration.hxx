@@ -39,9 +39,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Any.hxx>
 
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HXX_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 

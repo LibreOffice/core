@@ -27,9 +27,7 @@
 #ifndef _XMLSEARCH_DB_ENTRYPROCESSOR_HXX_
 #define _XMLSEARCH_DB_ENTRYPROCESSOR_HXX_
 
-#ifndef _RTL_USTRING_HXX_
 #include  <rtl/ustring>
-#endif
 
 namespace xmlsearch {
 

@@ -27,9 +27,7 @@
 #ifndef _SVX_UIKS_HXX
 #define _SVX_UIKS_HXX
 
-#ifndef _USR_UIKS_HXX
 #include <usr/uiks.hxx>
-#endif
 
 //  DBENGINE
 

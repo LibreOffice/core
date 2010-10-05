@@ -28,9 +28,7 @@
 #ifndef _SDR_CONTACT_VIEWCONTACTOFE3DSPHERE_HXX
 #define _SDR_CONTACT_VIEWCONTACTOFE3DSPHERE_HXX
 
-#ifndef _SDR_CONTACT_VIEWCONTACTOFE3D_HXX
 #include <svx/sdr/contact/viewcontactofe3d.hxx>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations

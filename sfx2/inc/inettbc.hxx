@@ -32,9 +32,7 @@
 #include <tools/string.hxx>
 #include <tools/urlobj.hxx>
 
-#ifndef _COMBOBOX_HXX //autogen
 #include <vcl/combobox.hxx>
-#endif
 #include <svtools/acceleratorexecute.hxx>
 
 #if _SOLAR__PRIVATE

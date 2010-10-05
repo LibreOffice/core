@@ -29,9 +29,7 @@
 
 // include ---------------------------------------------------------------
 
-#ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
 #include "svx/svxdllapi.h"
 
 

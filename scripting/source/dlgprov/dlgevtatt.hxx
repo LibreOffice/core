@@ -35,9 +35,7 @@
 #include <com/sun/star/script/XScriptListener.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/awt/XControl.hpp>
-#ifndef _COM_SUN_STAR_BEANS_XINTROSPECTION_HPP_
 #include <com/sun/star/beans/XIntrospectionAccess.hpp>
-#endif
 #include <cppuhelper/implbase1.hxx>
 
 #include <com/sun/star/script/XScriptEventsSupplier.hpp>

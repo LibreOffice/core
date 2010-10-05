@@ -29,9 +29,7 @@
 #define _SVX_XBITMAP_HXX
 
 #include <tools/color.hxx>
-#ifndef _BITMAP_HXX //autogen
 #include <vcl/bitmap.hxx>
-#endif
 #include <svtools/grfmgr.hxx>
 #include <svx/xenum.hxx>
 #include "svx/svxdllapi.h"

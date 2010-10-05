@@ -36,9 +36,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <xmloff/xmltoken.hxx>
 
-#ifndef _XMLOFF_TRANSFORMER_HXX_
 #include "Transformer.hxx"
-#endif
 
 namespace rtl { class OUString; }
 namespace com { namespace sun { namespace star {

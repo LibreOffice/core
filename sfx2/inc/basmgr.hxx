@@ -28,8 +28,6 @@
 #ifndef _SFX_BASMGR_HXX
 #define _SFX_BASMGR_HXX
 
-#ifndef _BASMGR_HXX_
 #include <basic/basmgr.hxx>
-#endif
 
 #endif  //_SFX_BASMGR_HXX

@@ -29,9 +29,7 @@
 #define CONNECTIVITY_ROWFUNCTIONPARSER_HXX_INCLUDED
 
 #include <sal/config.h>
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
-#endif
 #include "FDatabaseMetaDataResultSet.hxx"
 #include <vector>
 #include "connectivity/dbtoolsdllapi.hxx"

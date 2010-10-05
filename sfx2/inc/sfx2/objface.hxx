@@ -31,9 +31,7 @@
 #include "sfx2/dllapi.h"
 #include "sal/types.h"
 #include <tools/string.hxx>
-#ifndef _RESID_HXX //autogen
 #include <tools/resid.hxx>
-#endif
 
 #include <sfx2/msg.hxx>
 

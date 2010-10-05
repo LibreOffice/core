@@ -36,9 +36,7 @@
 #include <tools/gen.hxx>
 #include <vcl/mapmod.hxx>
 #include <tools/string.hxx>
-#ifndef _SV_COLOR_HXX //autogen
 #include <tools/color.hxx>
-#endif
 #include <svl/poolitem.hxx>
 #include <svl/itempool.hxx>
 #include "editeng/editengdllapi.h"

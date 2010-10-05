@@ -28,17 +28,13 @@
 #ifndef __FRAMEWORK_XML_STATUSBARDOCUMENTHANDLER_HXX_
 #define __FRAMEWORK_XML_STATUSBARDOCUMENTHANDLER_HXX_
 
-#ifndef __FRAMEWORK_XML_STATUSBARCONFIGURATION_HXX_
 #include <xml/statusbarconfiguration.hxx>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP_
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  other includes

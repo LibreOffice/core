@@ -30,9 +30,7 @@
 
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/awt/XControl.hpp>
-#ifndef _COM_SUN_STAR_AWT_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include "svx/svxdllapi.h"
 #include <svx/svdorect.hxx>

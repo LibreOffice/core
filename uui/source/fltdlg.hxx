@@ -34,14 +34,10 @@
 
 #include <vcl/dialog.hxx>
 
-#ifndef _MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
 #include <vcl/lstbox.hxx>
 
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/fixed.hxx>
 #include <tools/string.hxx>
 

@@ -32,9 +32,7 @@
 #include "MacabHeader.hxx"
 #include <list>
 #include "connectivity/sqliterator.hxx"
-#ifndef _CONNECTIVITY_PARSE_SQLPARSE_HXX_
 #include "connectivity/sqlparse.hxx"
-#endif
 #include <com/sun/star/sdbc/XStatement.hpp>
 #include <com/sun/star/util/XCancellable.hpp>
 #include <cppuhelper/compbase4.hxx>

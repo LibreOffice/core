@@ -51,9 +51,7 @@
 #include <sfx2/app.hxx>
 #include <svx/svdmark.hxx>
 #include <svx/fmsearch.hxx>
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <svl/svarray.hxx>
 #include <svl/lstner.hxx>
 

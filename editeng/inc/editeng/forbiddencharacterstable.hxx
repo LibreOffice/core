@@ -28,9 +28,7 @@
 #ifndef _FORBIDDENCHARACTERSTABLE_HXX
 #define _FORBIDDENCHARACTERSTABLE_HXX
 
-#ifndef _TABLE_HXX //autogen
 #include <tools/table.hxx>
-#endif
 
 #include <vos/refernce.hxx>
 #include <com/sun/star/uno/Reference.hxx>

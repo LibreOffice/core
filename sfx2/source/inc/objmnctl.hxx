@@ -28,9 +28,7 @@
 #define _SFX_OBJMNCTL_HXX
 
 
-#ifndef _SFX_HXX
 #include <sfx2/mnuitem.hxx>
-#endif
 
 class SfxBindings;
 class PopupMenu;

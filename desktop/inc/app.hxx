@@ -32,9 +32,7 @@
 #include <map>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <vcl/svapp.hxx>
-#ifndef _VCL_TIMER_HXX_
 #include <vcl/timer.hxx>
-#endif
 #include <tools/resmgr.hxx>
 #include <unotools/bootstrap.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>

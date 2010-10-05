@@ -35,9 +35,7 @@
 #include <vos/thread.hxx>
 #include <vos/signal.hxx>
 #include <rtl/ustring.hxx>
-#ifndef _CPPUHELPER_WEAKBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
-#endif
 #include <osl/conditn.hxx>
 #include "boost/optional.hpp"
 

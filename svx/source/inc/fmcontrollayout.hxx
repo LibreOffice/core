@@ -32,9 +32,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 /** === end UNO includes === **/
 
-#ifndef SVX_SOURCE_FORM_FMDOCUMENTCLASSIFICATION_HXX
 #include "fmdocumentclassification.hxx"
-#endif
 #include <unotools/confignode.hxx>
 
 //........................................................................

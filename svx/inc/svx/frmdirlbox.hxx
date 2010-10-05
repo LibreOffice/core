@@ -28,9 +28,7 @@
 #ifndef _SVX_FRMDIRLBOX_HXX
 #define _SVX_FRMDIRLBOX_HXX
 
-#ifndef _LSTBOX_HXX
 #include <vcl/lstbox.hxx>
-#endif
 #include <sfx2/itemconnect.hxx>
 #include <editeng/frmdir.hxx>
 #include "svx/svxdllapi.h"

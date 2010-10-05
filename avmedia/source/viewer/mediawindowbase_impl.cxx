@@ -33,9 +33,7 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/media/XManager.hpp>
-#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HDL_
 #include <com/sun/star/lang/XComponent.hdl>
-#endif
 
 #define MEDIA_TIMER_TIMEOUT 100
 

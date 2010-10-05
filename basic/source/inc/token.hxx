@@ -29,9 +29,7 @@
 #define _TOKEN_HXX
 
 #include "scanner.hxx"
-#ifndef _SBDEF_HXX
 #include <basic/sbdef.hxx>
-#endif
 
 #if defined( SHARED )
 #define SbiTokenSHAREDTMPUNDEF

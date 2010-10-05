@@ -40,9 +40,7 @@
 #include <com/sun/star/beans/XPropertiesChangeNotifier.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
-#ifndef _COM_SUN_STAR_UCB_XRESULTSET_HPP_
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
-#endif
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
@@ -59,9 +57,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #include <com/sun/star/ucb/InteractiveBadTransferURLException.hpp>
-#ifndef _COM_SUN_STAR_UCB_SHELL_HXX_
 #include "shell.hxx"
-#endif
 
 
 namespace fileaccess {

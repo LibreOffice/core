@@ -27,18 +27,10 @@
 #ifndef _XMLSCRIPT_XMLDLG_IMEXP_HXX_
 #define _XMLSCRIPT_XMLDLG_IMEXP_HXX_
 
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HXX_
 #include <com/sun/star/container/XNameContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XINPUTSTREAMPROVIDER_HXX_
 #include <com/sun/star/io/XInputStreamProvider.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_SAX_XEXTENDEDDOCUMENTHANDLER_HXX_
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HXX_
 #include <com/sun/star/uno/XComponentContext.hpp>
-#endif
 
 #include "xmlscript/xmlns.h"
 

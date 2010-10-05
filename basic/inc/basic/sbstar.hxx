@@ -30,9 +30,7 @@
 
 #include <basic/sbx.hxx>
 #include <basic/sbxobj.hxx>
-#ifndef _RTL_USTRING_HXX
 #include <rtl/ustring.hxx>
-#endif
 #include <osl/mutex.hxx>
 
 #include <basic/sbdef.hxx>

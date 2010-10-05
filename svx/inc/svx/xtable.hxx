@@ -37,14 +37,10 @@
 #include <svx/xflasit.hxx>
 #include <svx/xlnasit.hxx>
 
-#ifndef _SV_COLOR_HXX
 #include <tools/color.hxx>
-#endif
 #include <tools/string.hxx>
 
-#ifndef _TABLE_HXX //autogen
 #include <tools/table.hxx>
-#endif
 #include "svx/svxdllapi.h"
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 

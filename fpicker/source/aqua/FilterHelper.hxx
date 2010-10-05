@@ -47,13 +47,9 @@
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
-#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HXX_
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HXX_
 #include <com/sun/star/uno/RuntimeException.hpp>
-#endif
 
 // #ifndef _RTL_USTRING_H_
 // #include <rtl/ustring.hxx>

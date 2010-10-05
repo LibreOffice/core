@@ -29,9 +29,7 @@
 #define _SBSTDOBJ1_HXX
 
 #include <basic/sbxobj.hxx>
-#ifndef _GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
-#endif
 #include <basic/sbxfac.hxx>
 class StarBASIC;
 class SbStdFactory;

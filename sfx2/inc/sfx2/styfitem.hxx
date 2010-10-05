@@ -30,16 +30,10 @@
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
 
-#ifndef _BITMAP_HXX //autogen
 #include <vcl/bitmap.hxx>
-#endif
-#ifndef _IMAGE_HXX //autogen
 #include <vcl/image.hxx>
-#endif
 #include <tools/list.hxx>
-#ifndef _RC_HXX //autogen
 #include <tools/rc.hxx>
-#endif
 #include <rsc/rscsfx.hxx>
 
 #ifndef _SFX_STYFITEM_HXX_NOLIST

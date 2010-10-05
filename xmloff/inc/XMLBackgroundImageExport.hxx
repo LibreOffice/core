@@ -28,9 +28,7 @@
 #ifndef _XMLBACKGROUNDIMAGEEXPORT_HXX
 #define _XMLBACKGROUNDIMAGEEXPORT_HXX
 
-#ifndef _SAL_TYPES_H
 #include <sal/types.h>
-#endif
 
 namespace rtl { class OUString; }
 namespace com { namespace sun { namespace star { namespace uno {

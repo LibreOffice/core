@@ -54,9 +54,7 @@
 #include <rtl/ustrbuf.hxx>
 #include "xmlnmspe.hxx"
 #include <xmloff/xmlimp.hxx>
-#ifndef _XMLOFF_NMSPMAP_HX
 #include <xmloff/nmspmap.hxx>
-#endif
 #include "SchXMLImport.hxx"
 // header for class XMLPropStyleContext
 #include <xmloff/prstylei.hxx>

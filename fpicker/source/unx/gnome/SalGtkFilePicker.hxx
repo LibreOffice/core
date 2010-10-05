@@ -41,15 +41,11 @@
 #include <com/sun/star/ui/dialogs/XFilePreview.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
 
-#ifndef _SALGTKPICKER_HXX_
 #include "SalGtkPicker.hxx"
-#endif
 
 #include <memory>
 
-#ifndef _RTL_USTRING_H_
 #include <rtl/ustring.hxx>
-#endif
 
 #include <list>
 

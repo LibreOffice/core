@@ -27,13 +27,9 @@
 #ifndef _SVX_FMGROUP_HXX
 #define _SVX_FMGROUP_HXX
 
-#ifndef _SVX_FMCPONT_HXX
 #include "fmcpont.hxx"
-#endif
 
-#ifndef __DBFORM_HXX
 #include <dbform.hxx>
-#endif
 
 DECLARE_LIST( FmCtrlModelList, XInterface* );
 

@@ -30,9 +30,7 @@
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
 #include "sal/types.h"
-#ifndef _PRINT_HXX //autogen
 #include <vcl/print.hxx>
-#endif
 
 class SfxFont;
 class SfxTabPage;

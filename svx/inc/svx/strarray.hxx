@@ -29,9 +29,7 @@
 
 // include ---------------------------------------------------------------
 
-#ifndef _RESARY_HXX //autogen
 #include <tools/resary.hxx>
-#endif
 #include "svx/svxdllapi.h"
 
 //  class SvxStringArray -------------------------------------------------

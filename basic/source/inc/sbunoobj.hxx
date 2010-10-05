@@ -31,9 +31,7 @@
 #include <basic/sbxmeth.hxx>
 #include <basic/sbxprop.hxx>
 #include <basic/sbxfac.hxx>
-#ifndef __SBX_SBX_HXX //autogen
 #include <basic/sbx.hxx>
-#endif
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 #include <com/sun/star/beans/XExactName.hpp>
 #include <com/sun/star/beans/XIntrospectionAccess.hpp>

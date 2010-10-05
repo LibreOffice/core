@@ -27,12 +27,8 @@
 #ifndef _IODLGIMPL_HXX
 #define _IODLGIMPL_HXX
 
-#ifndef _VCL_DIALOG_HXX
 #include <vcl/dialog.hxx>
-#endif
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/combobox.hxx>

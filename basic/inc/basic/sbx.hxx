@@ -35,9 +35,7 @@
 #include <basic/sbxdef.hxx>
 #include <basic/sbxform.hxx>
 
-#ifndef __SBX_SBXOBJECT_HXX
 #include <basic/sbxobj.hxx>
-#endif
 #include <basic/sbxprop.hxx>
 #include <basic/sbxmeth.hxx>
 

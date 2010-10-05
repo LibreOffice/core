@@ -29,9 +29,7 @@
 #define _SCANNER_HXX
 
 #include <tools/string.hxx>
-#ifndef _SBERRORS_HXX
 #include <basic/sberrors.hxx>
-#endif
 
 // Der Scanner ist stand-alone, d.h. er kann von ueberallher verwendet
 // werden. Eine BASIC-Instanz ist fuer Fehlermeldungen notwendig. Ohne

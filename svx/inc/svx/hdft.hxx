@@ -31,17 +31,11 @@
 
 #include <sfx2/tabdlg.hxx>
 
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 
-#ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
 
-#ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
 #include <svx/pagectrl.hxx>
 #include "svx/svxdllapi.h"
 

@@ -42,16 +42,12 @@
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
 
-#ifndef _SALAQUAPICKER_HXX_
 #include "SalAquaPicker.hxx"
-#endif
 
 #include <memory>
 #include <list>
 
-#ifndef _RTL_USTRING_H_
 #include <rtl/ustring.hxx>
-#endif
 #include "FilterHelper.hxx"
 #include "AquaFilePickerDelegate.hxx"
 

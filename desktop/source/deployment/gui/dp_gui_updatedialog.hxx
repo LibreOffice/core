@@ -40,9 +40,7 @@
 #include "svx/checklbx.hxx"
 #include "tools/link.hxx"
 #include "tools/solar.h"
-#ifndef _SV_BUTTON_HXX
 #include "vcl/button.hxx"
-#endif
 #include "vcl/dialog.hxx"
 #include "vcl/fixed.hxx"
 #include <svtools/fixedhyper.hxx>

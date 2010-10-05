@@ -29,9 +29,7 @@
 #define _SAMPLE_OBJECT_HXX
 
 #include <basic/sbxfac.hxx>
-#ifndef __SBX_SBXVARIABLE_HXX //autogen
 #include <basic/sbxvar.hxx>
-#endif
 #include <basic/sbxobj.hxx>
 
 // 1) Properties:

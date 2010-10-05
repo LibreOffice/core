@@ -28,26 +28,16 @@
 #ifndef _DIALOGS_HXX
 #define _DIALOGS_HXX
 
-#ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#endif
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
-#ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
-#endif
-#ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
 #include <vcl/fixed.hxx>
 #include <vcl/tabdlg.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
 #include <tools/config.hxx>
-#ifndef _TOOLS_LIST_HXX
 #include <tools/list.hxx>
-#endif
 #include <vcl/lstbox.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/toolbox.hxx>
@@ -56,9 +46,7 @@
 
 class SbxVariable;
 
-#ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>
-#endif
 
 class AboutDialog : public ModalDialog {
     FixedText a1,a4,aVersionString;

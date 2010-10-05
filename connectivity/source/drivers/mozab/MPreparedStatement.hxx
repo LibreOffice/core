@@ -27,9 +27,7 @@
 #ifndef CONNECTIVITY_SPREPAREDSTATEMENT_HXX
 #define CONNECTIVITY_SPREPAREDSTATEMENT_HXX
 
-#ifndef CONNECTIVITY_SRESULTSET_HXX
 #include "MResultSet.hxx"
-#endif
 #include "MStatement.hxx"
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>

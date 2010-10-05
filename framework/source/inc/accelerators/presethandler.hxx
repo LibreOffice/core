@@ -39,13 +39,9 @@
 //__________________________________________
 // interface includes
 
-#ifndef __COM_SUN_STAR_EMBED_XSTORAGE_HPP_
 #include <com/sun/star/embed/XStorage.hpp>
-#endif
 
-#ifndef __COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
 
 //__________________________________________
 // other includes

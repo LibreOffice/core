@@ -29,16 +29,10 @@
 #define _SVX_FLOAT3D_HXX
 
 #include <sfx2/ctrlitem.hxx>
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
 #include <sfx2/dockwin.hxx>
-#ifndef _IMAGEBTN_HXX //autogen
 #include <vcl/imagebtn.hxx>
-#endif
 #include <svtools/valueset.hxx>
 #include <svtools/stdctrl.hxx>
 #include "svx/svxdllapi.h"

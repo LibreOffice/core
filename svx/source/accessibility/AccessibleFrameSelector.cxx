@@ -31,15 +31,9 @@
 #include <com/sun/star/awt/KeyEvent.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/awt/Key.hpp>
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HDL_
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLERELATIONTYPE_HDL_
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HDL_
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#endif
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/awt/FocusChangeReason.hpp>
 #include <unotools/accessiblestatesethelper.hxx>

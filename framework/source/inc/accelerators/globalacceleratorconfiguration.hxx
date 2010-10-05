@@ -34,18 +34,14 @@
 #include <accelerators/acceleratorconfiguration.hxx>
 #include <accelerators/presethandler.hxx>
 
-#ifndef __FRAMEWORK_MACROS_XINTERFACE_HXX_
 #include <macros/interface.hxx>
-#endif
 #include <macros/xtypeprovider.hxx>
 #include <macros/xserviceinfo.hxx>
 
 //__________________________________________
 // interface includes
 
-#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
-#endif
 
 //__________________________________________
 // other includes

@@ -29,9 +29,7 @@
 
 // include ---------------------------------------------------------------
 
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
 #include <rtl/textenc.h>
 #include "svx/svxdllapi.h"
 

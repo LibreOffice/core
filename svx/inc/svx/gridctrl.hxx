@@ -38,9 +38,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
 
-#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <tools/date.hxx>
 #include <tools/ref.hxx>
 #include <svtools/editbrowsebox.hxx>

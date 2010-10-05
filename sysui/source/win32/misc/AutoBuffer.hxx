@@ -34,9 +34,7 @@
 
 #include <sal/types.h>
 
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring>
-#endif
 
 //-------------------------------------------------------------
 // A simple unicode buffer management class, the class itself

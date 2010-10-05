@@ -28,9 +28,7 @@
 #define _SVX_ZOOMSLIDERITEM_HXX
 
 #include <svl/intitem.hxx>
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <com/sun/star/uno/Sequence.hxx>
 #include "svx/svxdllapi.h"
 

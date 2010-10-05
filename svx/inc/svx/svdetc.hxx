@@ -31,9 +31,7 @@
 #include <tools/string.hxx>
 #include <tools/contnr.hxx>
 
-#ifndef _OUTDEV_HXX //autogen
 #include <vcl/outdev.hxx>
-#endif
 #include <tools/shl.hxx>
 #include <editeng/outliner.hxx>
 #include "svx/svxdllapi.h"

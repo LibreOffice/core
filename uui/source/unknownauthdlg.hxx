@@ -33,9 +33,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
 #include <com/sun/star/security/XCertificate.hpp>
-#ifndef _COM_SUN_STAR_XML_CRYPTO_XXSECURITYENVIRONMENT_HPP_
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
-#endif
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 namespace cssu = com::sun::star::uno;

@@ -35,9 +35,7 @@
 #include <sfx2/module.hxx>
 #include <vcl/event.hxx>
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <svx/fmview.hxx>
 #include "svx/svxdllapi.h"
 

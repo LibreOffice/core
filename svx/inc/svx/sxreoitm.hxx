@@ -29,9 +29,7 @@
 
 #include <svx/svddef.hxx>
 
-#ifndef _SXFIITM_HXX
 #include <svx/sxfiitm.hxx>
-#endif
 
 //------------------------------
 // class SdrResizeXOneItem

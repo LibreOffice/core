@@ -27,9 +27,7 @@
 #ifndef _SXSIITM_HXX
 #define _SXSIITM_HXX
 
-#ifndef _SXFIITM_HXX
 #include <svx/sxfiitm.hxx>
-#endif
 
 class SdrScaleItem: public SdrFractionItem {
 public:

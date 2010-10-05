@@ -32,9 +32,7 @@
 
 #ifndef _FLDITEM_HXX
 #ifndef ITEMID_FIELD
-#ifndef _EDITDATA_HXX
 #include <editeng/editdata.hxx>  /* das include wird wg. EE_FEATURE_FIELD benoetigt */
-#endif
 #define ITEMID_FIELD EE_FEATURE_FIELD  /* wird fuer #include <editeng/flditem.hxx> benoetigt */
 #endif
 #include <editeng/flditem.hxx>

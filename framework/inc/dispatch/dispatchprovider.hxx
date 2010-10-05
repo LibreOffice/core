@@ -37,9 +37,7 @@
 #include <classes/protocolhandlercache.hxx>
 #include <threadhelp/threadhelpbase.hxx>
 
-#ifndef __FRAMEWORK_THREADHELP_TRANSACTIONBASE_HXX_
 #include <threadhelp/transactionbase.hxx>
-#endif
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
 #include <macros/debug.hxx>

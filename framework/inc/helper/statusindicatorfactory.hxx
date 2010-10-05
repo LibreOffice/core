@@ -58,9 +58,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 
-#ifndef _COM_SUN_STAR_URTIL_XUPDATABLE_HPP_
 #include <com/sun/star/util/XUpdatable.hpp>
-#endif
 
 //_______________________________________________
 // include others

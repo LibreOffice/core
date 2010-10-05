@@ -31,9 +31,7 @@
 #include "quicktimecommon.hxx"
 #include <cppuhelper/interfacecontainer.h>
 
-#ifndef _COM_SUN_STAR_MEDIA_XPLAYERWINDOW_HDL_
 #include "com/sun/star/media/XPlayerWindow.hdl"
-#endif
 
 namespace avmedia { namespace quicktime {
 

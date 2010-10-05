@@ -30,9 +30,7 @@
 
 #include "namecont.hxx"
 
-#ifndef _COM_SUN_STAR_AWT_XSTRINGRESOURCESUPPLIER_HPP_
 #include <com/sun/star/resource/XStringResourceSupplier.hpp>
-#endif
 #include "com/sun/star/resource/XStringResourcePersistence.hpp"
 
 #include <cppuhelper/implbase1.hxx>

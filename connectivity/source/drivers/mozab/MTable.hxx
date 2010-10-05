@@ -30,9 +30,7 @@
 
 #include "connectivity/TTableHelper.hxx"
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#ifndef _CONNECTIVITY_MOZAB_BCONNECTION_HXX_
 #include "MConnection.hxx"
-#endif
 
 namespace connectivity
 {

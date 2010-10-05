@@ -30,9 +30,7 @@
 
 #include <vcl/dialog.hxx>
 #include <vcl/lstbox.hxx>
-#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <vcl/fixed.hxx>
 class SfxFilterMatcher;
 

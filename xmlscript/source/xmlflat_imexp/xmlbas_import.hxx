@@ -32,9 +32,7 @@
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#ifndef _COM_SUN_STAR_SCRIPT_XLIBRYARYCONTAINER2_HPP_
 #include <com/sun/star/script/XLibraryContainer2.hpp>
-#endif
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/input/XRoot.hpp>
 #include <cppuhelper/implbase1.hxx>

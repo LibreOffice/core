@@ -30,9 +30,7 @@
 
 #include <svx/xit.hxx>
 
-#ifndef _SVX_XLINIIT_HXX //autogen
 #include <svx/xdash.hxx>
-#endif
 #include "svx/svxdllapi.h"
 
 class SdrModel;

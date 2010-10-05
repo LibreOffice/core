@@ -31,9 +31,7 @@
 #include <vcl/field.hxx>
 #include <vcl/dialog.hxx>
 
-#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 
 //========================================================================
 class SvxFmAbsRecWin : public NumericField

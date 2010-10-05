@@ -29,9 +29,7 @@
 #define _PROCESSW_HXX
 
 #include <basic/sbxfac.hxx>
-#ifndef __SBX_SBXVARIABLE_HXX //autogen
 #include <basic/sbxvar.hxx>
-#endif
 #include <basic/sbxobj.hxx>
 #include <basic/process.hxx>
 

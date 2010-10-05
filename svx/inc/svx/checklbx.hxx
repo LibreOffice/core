@@ -33,9 +33,7 @@
 #include <svtools/svtreebx.hxx>
 #include <svtools/svlbitm.hxx>
 
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
 #include "svx/svxdllapi.h"
 
 // class SvxCheckListBox -------------------------------------------------

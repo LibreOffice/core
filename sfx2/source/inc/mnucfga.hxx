@@ -28,9 +28,7 @@
 #define _SFXMNUCFGA_HXX
 
 #include <tools/string.hxx>
-#ifndef _SFXMINARRAY_HXX
 #include <sfx2/minarray.hxx>
-#endif
 
 //==================================================================
 

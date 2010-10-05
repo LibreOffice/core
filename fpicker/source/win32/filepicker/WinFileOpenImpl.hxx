@@ -33,9 +33,7 @@
 // includes
 //------------------------------------------------------------------------
 
-#ifndef _COM_SUN_STAR_UI_DIALOGS_XEXTENDEDFILEPICKER_HPP_
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
-#endif
 #include <com/sun/star/ui/dialogs/FilePickerEvent.hpp>
 #include <com/sun/star/ui/dialogs/XFilterGroupManager.hpp>
 #include "FilterContainer.hxx"

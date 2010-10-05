@@ -34,9 +34,7 @@
 #include <accelerators/acceleratorconfiguration.hxx>
 #include <accelerators/presethandler.hxx>
 
-#ifndef __FRAMEWORK_MACROS_XINTERFACE_HXX_
 #include <macros/interface.hxx>
-#endif
 #include <macros/xtypeprovider.hxx>
 #include <macros/xserviceinfo.hxx>
 

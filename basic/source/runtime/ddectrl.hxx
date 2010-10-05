@@ -29,9 +29,7 @@
 #define _DDECTRL_HXX
 
 #include <tools/link.hxx>
-#ifndef _SBERRORS_HXX
 #include <basic/sberrors.hxx>
-#endif
 #include <tools/string.hxx>
 
 class DdeConnection;

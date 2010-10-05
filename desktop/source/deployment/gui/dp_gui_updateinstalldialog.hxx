@@ -29,9 +29,7 @@
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_INSTALLDIALOG_HXX
 
 #include "sal/config.h"
-#ifndef _SV_BUTTON_HXX
 #include "vcl/button.hxx"
-#endif
 #include "vcl/fixed.hxx"
 #include "vcl/dialog.hxx"
 #include "svtools/prgsbar.hxx"

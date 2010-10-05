@@ -28,24 +28,14 @@
 #define _SFX_SFXTYPES_HXX
 
 #include <tools/debug.hxx>
-#ifndef _RC_HXX //autogen
 #include <tools/rc.hxx>
-#endif
-#ifndef _RCID_H //autogen
 #include <tools/rcid.h>
-#endif
-#ifndef _RESID_HXX //autogen
 #include <tools/resid.hxx>
-#endif
 #include <tools/link.hxx>
-#ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
 #include <vcl/wrkwin.hxx>
 
-#ifndef _VOS_MUTEX_HXX //autogen
 #include <vos/mutex.hxx>
-#endif
 
 #ifndef DELETEZ
 #define DELETEZ(pPtr) ( delete pPtr, pPtr = 0 )

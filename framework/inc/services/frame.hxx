@@ -39,9 +39,7 @@
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/threadhelpbase.hxx>
 
-#ifndef __FRAMEWORK_THREADHELP_TRANSACTIONBASE_HXX_
 #include <threadhelp/transactionbase.hxx>
-#endif
 #include <macros/generic.hxx>
 #include <macros/debug.hxx>
 #include <macros/xinterface.hxx>

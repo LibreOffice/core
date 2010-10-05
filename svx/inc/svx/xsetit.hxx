@@ -28,9 +28,7 @@
 #ifndef _SVX_XSETITEM_HXX
 #define _SVX_XSETITEM_HXX
 
-#ifndef _XATTR_HXX
 #include <svx/xit.hxx>
-#endif
 #include <svl/metitem.hxx>
 #include <svl/eitem.hxx>
 #include <svx/rectenum.hxx>

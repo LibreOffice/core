@@ -28,9 +28,7 @@
 #ifndef _XMLOFF_XMLEMENT_HXX
 #define _XMLOFF_XMLEMENT_HXX
 
-#ifndef _SAL_TYPES_H
 #include <sal/types.h>
-#endif
 #include <xmloff/xmltoken.hxx>
 
 /** Map an XMLTokenEnum to a sal_uInt16 value.

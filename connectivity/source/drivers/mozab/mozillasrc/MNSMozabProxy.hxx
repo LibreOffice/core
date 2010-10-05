@@ -31,15 +31,9 @@
 #include <osl/thread.hxx>
 
 #include <MNSInclude.hxx>
-#ifndef _CPPUHELPER_COMPBASE2_HXX_
 #include <cppuhelper/compbase1.hxx>
-#endif
-#ifndef _COM_SUN_STAR_MOZILLA_XCODEPROXY_HDL_
 #include <com/sun/star/mozilla/XCodeProxy.hpp>
-#endif
-#ifndef _COM_SUN_STAR_MOZILLA_XPROXYRUNNER_HDL_
 #include "com/sun/star/mozilla/XProxyRunner.hdl"
-#endif
 
 namespace connectivity
 {

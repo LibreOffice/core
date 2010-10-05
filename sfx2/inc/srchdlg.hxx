@@ -27,16 +27,10 @@
 #ifndef _SFX_SRCHDLG_HXX_
 #define _SFX_SRCHDLG_HXX_
 
-#ifndef _VCL_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/combobox.hxx>
-#ifndef _VCL_EDIT_HXX
 #include <vcl/edit.hxx>
-#endif
-#ifndef _VCL_FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
 #include <sfx2/basedlgs.hxx>
 
 // ============================================================================

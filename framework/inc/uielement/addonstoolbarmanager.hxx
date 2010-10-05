@@ -32,9 +32,7 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_UILEMENT_TOOLBARMANAGER_HXX_
 #include <uielement/toolbarmanager.hxx>
-#endif
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
 #include <macros/xinterface.hxx>

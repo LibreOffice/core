@@ -36,9 +36,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #include <com/sun/star/frame/XBorderResizeListener.hpp>
-#ifndef _COM_SUN_STAR_FRAME_XBORDERWIDTHS_HPP_
 #include <com/sun/star/frame/BorderWidths.hpp>
-#endif
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>

@@ -30,9 +30,7 @@
 #include <vector>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#ifndef _COM_SUN_STAR_UI_XUILEMENT_HPP_
 #include <com/sun/star/ui/XUIElement.hpp>
-#endif
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/frame/XLayoutManagerListener.hpp>
 #include <cppuhelper/weak.hxx>

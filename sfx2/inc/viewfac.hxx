@@ -30,9 +30,7 @@
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
 #include <tools/string.hxx>
-#ifndef _RESID_HXX //autogen
 #include <tools/resid.hxx>
-#endif
 
 class SfxViewFrame;
 class SfxViewShell;

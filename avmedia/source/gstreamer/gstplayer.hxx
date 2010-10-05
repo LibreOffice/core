@@ -31,9 +31,7 @@
 #include <osl/conditn.h>
 #include "gstcommon.hxx"
 
-#ifndef _COM_SUN_STAR_MEDIA_XPLAYER_HDL_
 #include "com/sun/star/media/XPlayer.hdl"
-#endif
 
 typedef struct _GstXOverlay GstXOverlay;
 

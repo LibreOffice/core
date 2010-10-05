@@ -34,25 +34,15 @@
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/basedlgs.hxx>
 
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 
-#ifndef _COMBOBOX_HXX //autogen
 #include <vcl/combobox.hxx>
-#endif
 
-#ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
-#endif
 
-#ifndef _TOOLBOX_HXX //autogen
 #include <vcl/toolbox.hxx>
-#endif
 
-#ifndef _STATUS_HXX //autogen
 #include <vcl/status.hxx>
-#endif
 #include "svx/svxdllapi.h"
 
 

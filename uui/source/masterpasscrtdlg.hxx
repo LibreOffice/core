@@ -28,13 +28,9 @@
 #ifndef UUI_MASTERPASSCRTDLG_HXX
 #define UUI_MASTERPASSCRTDLG_HXX
 
-#ifndef _COM_SUN_STAR_TASK_PASSWORDREQUESTMODE_HPP
 #include <com/sun/star/task/PasswordRequestMode.hpp>
-#endif
 #include <svtools/stdctrl.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/dialog.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/group.hxx>

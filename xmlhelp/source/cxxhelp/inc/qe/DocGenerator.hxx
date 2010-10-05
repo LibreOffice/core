@@ -28,9 +28,7 @@
 #define _XMLSEARCH_QE_DOCGENERATOR_HXX_
 
 #include <rtl/ref.hxx>
-#ifndef _RTL_USTRING_HXX__
 #include  <rtl/ustring.hxx>
-#endif
 #include <excep/XmlSearchExceptions.hxx>
 #include <util/CompressorIterator.hxx>
 #include <util/Decompressor.hxx>

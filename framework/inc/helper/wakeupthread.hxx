@@ -35,16 +35,12 @@
 #include <macros/debug.hxx>
 #include <macros/generic.hxx>
 
-#ifndef __FRAMEWORK_GENERAL_HXX_
 #include <general.h>
-#endif
 
 //_______________________________________________
 // include UNO interfaces
 
-#ifndef _COM_SUN_STAR_URTIL_XUPDATABLE_HPP_
 #include <com/sun/star/util/XUpdatable.hpp>
-#endif
 
 //_______________________________________________
 // include all others

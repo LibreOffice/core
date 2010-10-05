@@ -39,9 +39,7 @@
 //  interface includes
 //_________________________________________________________________________________________________________________
 
-#ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDROPTARGETELISTENER_HPP_
 #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
-#endif
 #include <com/sun/star/frame/XFrame.hpp>
 
 //_________________________________________________________________________________________________________________
@@ -49,9 +47,7 @@
 //_________________________________________________________________________________________________________________
 #include <cppuhelper/implbase1.hxx>
 
-#ifndef _SOT_EXCHANGE_HXX_
 #include <sot/exchange.hxx>
-#endif
 
 namespace framework
 {

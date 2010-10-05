@@ -29,9 +29,7 @@
 
 #include "odbc/OStatement.hxx"
 #include "adabas/BConnection.hxx"
-#ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include "connectivity/commontools.hxx"
-#endif
 #include <vos/ref.hxx>
 
 namespace connectivity

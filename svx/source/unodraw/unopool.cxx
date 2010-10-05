@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HDL_
 #include <com/sun/star/beans/PropertyState.hpp>
-#endif
 
 #include <comphelper/propertysetinfo.hxx>
 #include <rtl/uuid.h>

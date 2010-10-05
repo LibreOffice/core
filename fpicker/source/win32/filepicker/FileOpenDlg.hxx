@@ -34,9 +34,7 @@
 
 #include <sal/types.h>
 
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring>
-#endif
 #include <rtl/ustrbuf.hxx>
 
 #include "platform_xp.h"
