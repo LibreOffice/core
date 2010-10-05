@@ -1501,7 +1501,7 @@ USHORT SfxItemSet::GetWhichByPos( USHORT nPos ) const
 SvStream &SfxItemSet::Store
 (
     SvStream&   rStream,        // Zielstream f"ur normale Items
-    FASTBOOL    bDirect         // TRUE: Items direkt speicher, FALSE: Surrogate
+    bool        bDirect         // TRUE: Items direkt speicher, FALSE: Surrogate
 )   const
 
 /*  [Beschreibung]
@@ -1568,7 +1568,7 @@ SvStream &SfxItemSet::Load
 (
     SvStream&           rStream,    //  Stream, aus dem geladen werden soll
 
-    FASTBOOL            bDirect,    /*  TRUE
+    bool                bDirect,    /*  TRUE
                                         Items werden direkt aus dem Stream
                                         gelesen, nicht "uber Surrogate
 

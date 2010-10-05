@@ -80,8 +80,8 @@ struct SfxItemPool_Impl
     USHORT                          nStoringStart, nStoringEnd; // zu speichernder Range
     BYTE                            nMajorVer, nMinorVer; // Pool selbst
     SfxMapUnit                      eDefMetric;
-    FASTBOOL                        bInSetItem;
-    FASTBOOL                        bStreaming; // in Load() bzw. Store()
+    bool                            bInSetItem;
+    bool                            bStreaming; // in Load() bzw. Store()
 
     SfxItemPool_Impl( USHORT nStart, USHORT nEnd )
         : ppPoolItems (new SfxPoolItemArray_Impl*[ nEnd - nStart + 1])

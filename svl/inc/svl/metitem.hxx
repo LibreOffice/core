@@ -44,8 +44,8 @@ public:
                              ~SfxMetricItem() {
                                  DBG_DTOR(SfxMetricItem, 0); }
 
-    virtual int              ScaleMetrics( long lMult, long lDiv );
-    virtual int              HasMetrics() const;
+    virtual bool             ScaleMetrics( long lMult, long lDiv );
+    virtual bool             HasMetrics() const;
 
 };
 

@@ -239,20 +239,20 @@ SfxMetricItem::SfxMetricItem(const SfxMetricItem & rItem):
 
 //============================================================================
 // virtual
-int SfxMetricItem::ScaleMetrics(long nMult, long nDiv)
+bool SfxMetricItem::ScaleMetrics(long nMult, long nDiv)
 {
     BigInt aTheValue(GetValue());
     aTheValue *= nMult;
     aTheValue += nDiv / 2;
     aTheValue /= nDiv;
     SetValue(aTheValue);
-    return 1;
+    return true;
 }
 
 //============================================================================
 // virtual
-int SfxMetricItem::HasMetrics() const
+bool SfxMetricItem::HasMetrics() const
 {
-    return 1;
+    return true;
 }
 

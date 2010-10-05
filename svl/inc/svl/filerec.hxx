@@ -223,7 +223,7 @@ class SVL_DLLPUBLIC SfxMiniRecordWriter
 protected:
     SvStream*       _pStream;   //  <SvStream>, in dem der Record liegt
     UINT32          _nStartPos; //  Start-Position des Gesamt-Records im Stream
-    FASTBOOL        _bHeaderOk; /*  TRUE, wenn der Header schon geschrieben ist;
+    bool             _bHeaderOk; /* TRUE, wenn der Header schon geschrieben ist;
                                     bei DBG_UTIL wird SFX_BOOL_DONTCARE ver-
                                     wendet, um die Gr"o\se von Fix-Sized-Records
                                     zu pr"ufen. */
@@ -241,7 +241,7 @@ public:
 
     inline void     Reset();
 
-    UINT32          Close( FASTBOOL bSeekToEndOfRec = TRUE );
+    UINT32          Close( bool bSeekToEndOfRec = true );
 
 private:
                     // not implementend, not allowed
@@ -281,7 +281,7 @@ class SVL_DLLPUBLIC SfxMiniRecordReader
 protected:
     SvStream*           _pStream;   //  <SvStream>, aus dem gelesen wird
     UINT32              _nEofRec;   //  Position direkt hinter dem Record
-    FASTBOOL            _bSkipped;  //  TRUE: der Record wurde explizit geskippt
+    bool                _bSkipped;  //  TRUE: der Record wurde explizit geskippt
     BYTE                _nPreTag;   //  aus dem Header gelesenes Pre-Tag
 
                         // Drei-Phasen-Ctor f"ur Subklassen
@@ -292,7 +292,7 @@ protected:
                             _bSkipped = FALSE;
                             _nPreTag = nTag;
                         }
-    inline FASTBOOL     SetHeader_Impl( UINT32 nHeader );
+    inline bool         SetHeader_Impl( UINT32 nHeader );
 
                         // als ung"ultig markieren und zur"uck-seeken
     void                SetInvalid_Impl( UINT32 nRecordStartPos )
@@ -309,7 +309,7 @@ public:
     inline              ~SfxMiniRecordReader();
 
     inline BYTE         GetTag() const;
-    inline FASTBOOL     IsValid() const;
+    inline bool         IsValid() const;
 
     inline SvStream&    operator*() const;
 
@@ -374,7 +374,7 @@ public:
 
     inline void     Reset();
 
-    UINT32          Close( FASTBOOL bSeekToEndOfRec = TRUE );
+    UINT32          Close( bool bSeekToEndOfRec = true );
 };
 
 //------------------------------------------------------------------------
@@ -420,8 +420,8 @@ protected:
                             SfxMiniRecordReader::Construct_Impl(
                                     pStream, SFX_REC_PRETAG_EXT );
                         }
-    FASTBOOL            FindHeader_Impl( UINT16 nTypes, UINT16 nTag );
-    FASTBOOL            ReadHeader_Impl( USHORT nTypes );
+    bool                FindHeader_Impl( UINT16 nTypes, UINT16 nTag );
+    bool                ReadHeader_Impl( USHORT nTypes );
 
 public:
                         SfxSingleRecordReader( SvStream *pStream );
@@ -430,7 +430,7 @@ public:
     inline UINT16       GetTag() const;
 
     inline BYTE         GetVersion() const;
-    inline FASTBOOL     HasVersion( USHORT nVersion ) const;
+    inline bool         HasVersion( USHORT nVersion ) const;
 };
 
 //------------------------------------------------------------------------
@@ -505,7 +505,7 @@ public:
 
     inline void     Reset();
 
-    UINT32          Close( FASTBOOL bSeekToEndOfRec = TRUE );
+    UINT32          Close( bool bSeekToEndOfRec = true );
 };
 
 //------------------------------------------------------------------------
@@ -576,7 +576,7 @@ public:
 
     void                NewContent();
 
-    virtual UINT32      Close( FASTBOOL bSeekToEndOfRec = TRUE );
+    virtual UINT32      Close( bool bSeekToEndOfRec = true );
 };
 
 //------------------------------------------------------------------------
@@ -676,17 +676,17 @@ class SVL_DLLPUBLIC SfxMultiRecordReader: public SfxSingleRecordReader
     UINT16              _nContentTag;   //  Art-Kennung des aktuellen Contents
     BYTE                _nContentVer;   //  Versions-Kennung des akt. Contents
 
-    FASTBOOL            ReadHeader_Impl();
+    bool                ReadHeader_Impl();
 
 public:
                         SfxMultiRecordReader( SvStream *pStream );
                         SfxMultiRecordReader( SvStream *pStream, UINT16 nTag );
                         ~SfxMultiRecordReader();
 
-    FASTBOOL            GetContent();
+    bool                GetContent();
     inline UINT16       GetContentTag();
     inline BYTE         GetContentVersion() const;
-    inline FASTBOOL     HasContentVersion( USHORT nVersion ) const;
+    inline bool         HasContentVersion( USHORT nVersion ) const;
 
     inline UINT32       ContentCount() const;
 };
@@ -835,7 +835,7 @@ inline BYTE SfxMiniRecordReader::GetTag() const
 
 //-------------------------------------------------------------------------
 
-inline FASTBOOL SfxMiniRecordReader::IsValid() const
+inline bool SfxMiniRecordReader::IsValid() const
 
 /*  [Beschreibung]
 
@@ -865,9 +865,9 @@ inline SvStream& SfxMiniRecordReader::operator*() const
 
 //=========================================================================
 
-inline UINT32 SfxSingleRecordWriter::Close( FASTBOOL bSeekToEndOfRec )
+inline UINT32 SfxSingleRecordWriter::Close( bool bSeekToEndOfRec )
 
-//  siehe <SfxMiniRecordWriter::Close(FASTBOOL)>
+//  siehe <SfxMiniRecordWriter::Close(bool)>
 
 {
     UINT32 nRet = 0;
@@ -931,7 +931,7 @@ inline BYTE SfxSingleRecordReader::GetVersion() const
 
 //-------------------------------------------------------------------------
 
-inline FASTBOOL SfxSingleRecordReader::HasVersion( USHORT nVersion ) const
+inline bool SfxSingleRecordReader::HasVersion( USHORT nVersion ) const
 
 /*  [Beschreibung]
 
@@ -1054,7 +1054,7 @@ inline BYTE SfxMultiRecordReader::GetContentVersion() const
 
 //-------------------------------------------------------------------------
 
-inline FASTBOOL SfxMultiRecordReader::HasContentVersion( USHORT nVersion ) const
+inline bool SfxMultiRecordReader::HasContentVersion( USHORT nVersion ) const
 
 /*  [Beschreibung]
 
