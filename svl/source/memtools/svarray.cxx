@@ -78,7 +78,6 @@ USHORT SvPtrarrPlain::GetPos( const VoidPtr aElement ) const
 SV_IMPL_VARARR( SvULongs, ULONG )
 SV_IMPL_VARARR( SvUShorts, USHORT )
 SV_IMPL_VARARR( SvLongs, long)
-SV_IMPL_VARARR( SvShorts, short )
 
 SV_IMPL_VARARR_SORT( SvULongsSort, ULONG )
 SV_IMPL_VARARR_SORT( SvLongsSort, long )

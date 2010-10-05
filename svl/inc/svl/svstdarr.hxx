@@ -130,12 +130,7 @@ SV_DECL_VARARR_SORT_VISIBILITY( SvLongsSort, long, 1, 1, SVL_DLLPUBLIC )
 #endif
 //#endif
 
-//#ifdef _SVSTDARR_SHORTS
-#ifndef _SVSTDARR_SHORTS_DECL
-SV_DECL_VARARR_VISIBILITY( SvShorts, short, 1, 1, SVL_DLLPUBLIC )
-#define _SVSTDARR_SHORTS_DECL
-#endif
-//#endif
+typedef std::deque< short > SvShorts;
 
 /*
  form here all Arrays for Strings, ByteString and then
