@@ -27,12 +27,8 @@
 #ifndef DBAUI_QUERYVIEW_TEXT_HXX
 #define DBAUI_QUERYVIEW_TEXT_HXX
 
-#ifndef DBAUI_QUERYVIEW_HXX
 #include "queryview.hxx"
-#endif
-#ifndef DBAUI_QUERYCONTAINERWINDOW_HXX
 #include "querycontainerwindow.hxx"
-#endif
 
 class Splitter;
 namespace dbaui

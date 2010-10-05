@@ -27,15 +27,9 @@
 #ifndef DBAUI_QUERYTABLEVIEW_HXX
 #define DBAUI_QUERYTABLEVIEW_HXX
 
-#ifndef DBAUI_JOINTABLEVIEW_HXX
 #include "JoinTableView.hxx"
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
-#ifndef DBAUI_QUERYCONTROLLER_HXX
 #include "querycontroller.hxx"
-#endif
 
 namespace dbaui
 {

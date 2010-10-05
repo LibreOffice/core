@@ -27,12 +27,8 @@
 #ifndef DBAUI_TABLEFIELDDESCGENPAGE_HXX
 #define DBAUI_TABLEFIELDDESCGENPAGE_HXX
 
-#ifndef _SV_TABPAGE_HXX
 #include <vcl/tabpage.hxx>
-#endif
-#ifndef DBACCESS_TABLEDESIGN_ICLIPBOARDTEST_HXX
 #include "IClipBoardTest.hxx"
-#endif
 
 namespace dbaui
 {

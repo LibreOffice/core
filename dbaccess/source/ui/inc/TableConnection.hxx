@@ -28,18 +28,10 @@
 #define DBAUI_TABLECONNECTION_HXX
 
 #include <vector>
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
-#endif
-#ifndef _RTTI_HXX
 #include <tools/rtti.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
-#endif
 #include "TableConnectionData.hxx"
 
 class Point;

@@ -28,16 +28,10 @@
 #define DBAUI_SBATTRDLG_HXX
 
 
-#ifndef DBAUI_SBATTRDLG_HRC
 #include "dlgattr.hrc"
-#endif
 
-#ifndef _SFXTABDLG_HXX //autogen
 #include <sfx2/tabdlg.hxx>
-#endif
-#ifndef _SOLAR_H
 #include <tools/solar.h>
-#endif
 
 
 

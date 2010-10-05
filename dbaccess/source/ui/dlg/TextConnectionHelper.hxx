@@ -28,33 +28,15 @@
 #ifndef DBAUI_TEXTCONNECTIONHELPER_HXX
 #define DBAUI_TEXTCONNECTIONHELPER_HXX
 
-#ifndef DBAUI_CONNECTIONPAGESETUP_HXX
 #include "ConnectionPageSetup.hxx"
-#endif
-#ifndef _DBAUI_ADMINPAGES_HXX_
 #include "adminpages.hxx"
-#endif
-#ifndef CHARSETLISTBOX_HXX
 #include "charsetlistbox.hxx"
-#endif
-#ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
-#endif
-#ifndef _DBAUI_CURLEDIT_HXX_
 #include "curledit.hxx"
-#endif
-#ifndef SVTOOLS_INC_ROADMAPWIZARD_HXX
 #include <svtools/roadmapwizard.hxx>
-#endif
-#ifndef _SV_FIELD_HXX
 #include <vcl/field.hxx>
-#endif
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
-#ifndef _SV_LSTBOX_HXX
 #include <vcl/lstbox.hxx>
-#endif
 
 
 //.........................................................................

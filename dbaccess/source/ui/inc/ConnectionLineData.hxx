@@ -27,24 +27,14 @@
 #ifndef DBAUI_CONNECTIONLINEDATA_HXX
 #define DBAUI_CONNECTIONLINEDATA_HXX
 
-#ifndef DBAUI_ENUMTYPES_HXX
 #include "QEnumTypes.hxx"
-#endif
-#ifndef _VOS_REFERNCE_HXX_
 #include <vos/refernce.hxx>
-#endif
 #include <vector>
 
-#ifndef _VOS_REF_HXX_
 #include <vos/ref.hxx>
-#endif
 
-#ifndef DBAUI_REFFUNCTOR_HXX
 #include "RefFunctor.hxx"
-#endif
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
 
 namespace dbaui
 {

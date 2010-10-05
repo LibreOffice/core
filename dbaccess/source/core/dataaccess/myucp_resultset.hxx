@@ -28,15 +28,9 @@
 #ifndef DBA_UCPRESULTSET_HXX
 #define DBA_UCPRESULTSET_HXX
 
-#ifndef _RTL_REF_HXX_
 #include <rtl/ref.hxx>
-#endif
-#ifndef _UCBHELPER_RESULTSETHELPER_HXX
 #include <ucbhelper/resultsethelper.hxx>
-#endif
-#ifndef _DBA_COREDATAACCESS_DOCUMENTCONTAINER_HXX_
 #include "documentcontainer.hxx"
-#endif
 
 
 // @@@ Adjust namespace name.

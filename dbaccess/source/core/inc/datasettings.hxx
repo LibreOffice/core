@@ -28,24 +28,12 @@
 #ifndef _DBA_CORE_DATASETTINGS_HXX_
 #define _DBA_CORE_DATASETTINGS_HXX_
 
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTY_HPP_
 #include <com/sun/star/beans/Property.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTDESCRIPTOR_HPP_
 #include <com/sun/star/awt/FontDescriptor.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#endif
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
-#ifndef COMPHELPER_PROPERTYSTATECONTAINER_HXX
 #include <comphelper/propertystatecontainer.hxx>
-#endif
 
 //........................................................................
 namespace dbaccess

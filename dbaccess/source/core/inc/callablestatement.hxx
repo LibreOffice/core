@@ -27,15 +27,9 @@
 #ifndef _DBA_COREAPI_CALLABLESTATEMENT_HXX_
 #define _DBA_COREAPI_CALLABLESTATEMENT_HXX_
 
-#ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XOUTPARAMETERS_HPP_
 #include <com/sun/star/sdbc/XOutParameters.hpp>
-#endif
-#ifndef _DBA_COREAPI_PREPAREDSTATEMENT_HXX_
 #include <preparedstatement.hxx>
-#endif
 
 namespace dbaccess
 {

@@ -28,15 +28,9 @@
 #ifndef DBA_DATASUPPLIER_HXX
 #define DBA_DATASUPPLIER_HXX
 
-#ifndef _RTL_REF_HXX_
 #include <rtl/ref.hxx>
-#endif
-#ifndef _UCBHELPER_RESULTSET_HXX
 #include <ucbhelper/resultset.hxx>
-#endif
-#ifndef _DBA_COREDATAACCESS_DOCUMENTCONTAINER_HXX_
 #include "documentcontainer.hxx"
-#endif
 #include <memory>
 
 namespace dbaccess {

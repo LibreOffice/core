@@ -28,30 +28,14 @@
 #ifndef DBA_INTERCEPT_HXX
 #define DBA_INTERCEPT_HXX
 
-#ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE4_HXX_
 #include <cppuhelper/implbase4.hxx>
-#endif
-#ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
-#endif
-#ifndef  _COM_SUN_STAR_FRAME_XDISPATCHPROVIDERINTERCEPTOR_HPP_
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XINTERCEPTORINFO_HPP_
 #include <com/sun/star/frame/XInterceptorInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTLISTENER_HPP_
 #include <com/sun/star/document/XEventListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
 #include <com/sun/star/frame/XDispatch.hpp>
-#endif
-#ifndef _DBA_COREDATAACCESS_DOCUMENTDEFINITION_HXX_
 #include "documentdefinition.hxx"
-#endif
 #include <vcl/svapp.hxx>
 
 namespace dbaccess

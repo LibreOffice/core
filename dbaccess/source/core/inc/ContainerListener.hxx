@@ -27,19 +27,11 @@
 #ifndef DBA_CONTAINERLISTENER_HXX
 #define DBA_CONTAINERLISTENER_HXX
 
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINERLISTENER_HPP_
 #include <com/sun/star/container/XContainerListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINERAPPROVELISTENER_HPP_
 #include <com/sun/star/container/XContainerApproveListener.hpp>
-#endif
 
-#ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
-#endif
 
 //........................................................................
 namespace dbaccess

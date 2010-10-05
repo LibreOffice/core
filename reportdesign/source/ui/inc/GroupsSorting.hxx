@@ -28,9 +28,7 @@
 #define RPTUI_GROUPS_SORTING_HXX
 
 #include <vcl/floatwin.hxx>
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 #include <vcl/lstbox.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/field.hxx>

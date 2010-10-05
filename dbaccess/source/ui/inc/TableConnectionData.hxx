@@ -27,17 +27,11 @@
 #ifndef DBAUI_TABLECONNECTIONDATA_HXX
 #define DBAUI_TABLECONNECTIONDATA_HXX
 
-#ifndef DBAUI_CONNECTIONLINEDATA_HXX
 #include "ConnectionLineData.hxx"
-#endif
 #include "TableWindowData.hxx"
 #include <vector>
-#ifndef _RTTI_HXX
 #include <tools/rtti.hxx>
-#endif
-#ifndef _STRING_HXX
 #include <tools/string.hxx>
-#endif
 #include <boost/shared_ptr.hpp>
 
 namespace dbaui

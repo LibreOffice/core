@@ -28,12 +28,8 @@
 #ifndef _DBAUI_INDEXES_HXX_
 #define _DBAUI_INDEXES_HXX_
 
-#ifndef _STRING_HXX
 #include <tools/string.hxx>
-#endif
-#ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
-#endif
 
 //......................................................................
 namespace dbaui

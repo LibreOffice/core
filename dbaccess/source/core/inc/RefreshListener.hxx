@@ -28,9 +28,7 @@
 #ifndef DBA_CORE_REFRESHLISTENER_HXX
 #define DBA_CORE_REFRESHLISTENER_HXX
 
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
-#endif
 
 namespace com { namespace sun { namespace star { namespace container
 {

@@ -31,9 +31,7 @@
 #ifndef DBACCESS_CORE_API_WRAPPEDRESULTSET_HXX
 #define DBACCESS_CORE_API_WRAPPEDRESULTSET_HXX
 
-#ifndef DBACCESS_CORE_API_CACHESET_HXX
 #include "CacheSet.hxx"
-#endif
 #include <com/sun/star/sdbc/XRowUpdate.hpp>
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
 

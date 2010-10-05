@@ -28,21 +28,11 @@
 #ifndef DBAUI_DBTREEMODEL_HXX
 #define DBAUI_DBTREEMODEL_HXX
 
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
-#ifndef _SVLBOX_HXX
 #include <svtools/svlbox.hxx>
-#endif
-#ifndef _SVLBOXITM_HXX
 #include <svtools/svlbitm.hxx>
-#endif
-#ifndef _SBA_UNODATBR_HXX_
 #include "unodatbr.hxx"
-#endif
-#ifndef _DBAUI_COMMON_TYPES_HXX_
 #include "commontypes.hxx"
-#endif
 
 // syntax of the tree           userdata
 // datasource                   holds the connection

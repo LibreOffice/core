@@ -27,9 +27,7 @@
 #ifndef DBAUI_TABLEFIELDCONTROL_HXX
 #define DBAUI_TABLEFIELDCONTROL_HXX
 
-#ifndef DBAUI_FIELDDESCRIPTIONCONTROL_HXX
 #include "FieldDescControl.hxx"
-#endif
 
 namespace dbaui
 {

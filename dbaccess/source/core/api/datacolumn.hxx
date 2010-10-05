@@ -28,24 +28,12 @@
 #ifndef _DBACORE_DATACOLUMN_HXX_
 #define _DBACORE_DATACOLUMN_HXX_
 
-#ifndef _COM_SUN_STAR_SDBC_XROWUPDATE_HPP_
 #include <com/sun/star/sdbc/XRowUpdate.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSETMETADATA_HDL_
 #include <com/sun/star/sdbc/XResultSetMetaData.hdl>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XCOLUMN_HPP_
 #include <com/sun/star/sdb/XColumn.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XCOLUMNUPDATE_HPP_
 #include <com/sun/star/sdb/XColumnUpdate.hpp>
-#endif
-#ifndef _DBA_COREAPI_RESULTCOLUMN_HXX_
 #include <resultcolumn.hxx>
-#endif
 namespace dbaccess
 {
     //************************************************************

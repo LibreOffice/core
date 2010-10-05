@@ -28,18 +28,12 @@
 #ifndef DBAUI_JOINDESIGNVIEW_HXX
 #define DBAUI_JOINDESIGNVIEW_HXX
 
-#ifndef DBAUI_DATAVIEW_HXX
 #include "dataview.hxx"
-#endif
 #ifndef _VECTOR_
 #include <vector>
 #endif
-#ifndef _STRING_HXX
 #include <tools/string.hxx>
-#endif
-#ifndef DBAUI_ENUMTYPES_HXX
 #include "QEnumTypes.hxx"
-#endif
 
 #include <memory>
 

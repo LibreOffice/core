@@ -28,36 +28,16 @@
 #ifndef _DBA_COREDATAACCESS_DOCUMENTCONTAINER_HXX_
 #define _DBA_COREDATAACCESS_DOCUMENTCONTAINER_HXX_
 
-#ifndef _DBA_CORE_DEFINITIONCONTAINER_HXX_
 #include "definitioncontainer.hxx"
-#endif
-#ifndef _CPPUHELPER_IMPLBASE5_HXX_
 #include <cppuhelper/implbase5.hxx>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
 #include <com/sun/star/frame/XComponentLoader.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMECONTAINER_HPP_
 #include <com/sun/star/container/XHierarchicalNameContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAME_HPP_
 #include <com/sun/star/container/XHierarchicalName.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
 #include <com/sun/star/embed/XTransactedObject.hpp>
-#endif
-#ifndef COMPHELPER_PROPERTYSTATECONTAINER_HXX
 #include <comphelper/propertystatecontainer.hxx>
-#endif
-#ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
 #include <comphelper/proparrhlp.hxx>
-#endif
-#ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
-#endif
 
 //........................................................................
 namespace dbaccess

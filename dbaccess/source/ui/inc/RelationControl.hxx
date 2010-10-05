@@ -27,15 +27,9 @@
 #ifndef DBAUI_RELATIONCONTROL_HXX
 #define DBAUI_RELATIONCONTROL_HXX
 
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _SV_LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
-#ifndef DBAUI_JOINTABLEVIEW_HXX
 #include "JoinTableView.hxx"
-#endif
 
 namespace dbaui
 {

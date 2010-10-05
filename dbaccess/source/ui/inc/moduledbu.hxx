@@ -28,12 +28,8 @@
 #ifndef _DBAUI_MODULE_DBU_HXX_
 #define _DBAUI_MODULE_DBU_HXX_
 
-#ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
-#endif
-#ifndef _TOOLS_RESID_HXX
 #include <tools/resid.hxx>
-#endif
 
 class ResMgr;
 

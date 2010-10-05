@@ -31,18 +31,10 @@
 #define INCLUDED_VECTOR
 #include <vector>
 #endif
-#ifndef DBAUI_ENUMTYPES_HXX
 #include "QEnumTypes.hxx"
-#endif
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-#ifndef _VOS_REF_HXX_
 #include <vos/ref.hxx>
-#endif
 
 namespace comphelper
 {

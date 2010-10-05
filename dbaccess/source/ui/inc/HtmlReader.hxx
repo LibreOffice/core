@@ -27,21 +27,11 @@
 #ifndef DBAUI_HTMLREADER_HXX
 #define DBAUI_HTMLREADER_HXX
 
-#ifndef DBAUI_DATABASEEXPORT_HXX
 #include "DExport.hxx"
-#endif
-#ifndef _PARHTML_HXX //autogen
 #include <svtools/parhtml.hxx>
-#endif
-#ifndef _SVX_SVXENUM_HXX
 #include <editeng/svxenum.hxx>
-#endif
-#ifndef _STREAM_HXX
 #include <tools/stream.hxx>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTDESCRIPTOR_HPP_
 #include <com/sun/star/awt/FontDescriptor.hpp>
-#endif
 
 
 namespace dbaui

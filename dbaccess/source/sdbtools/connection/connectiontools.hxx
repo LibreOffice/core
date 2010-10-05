@@ -28,36 +28,20 @@
 #ifndef DBACCESS_CONNECTIONTOOLS_HXX
 #define DBACCESS_CONNECTIONTOOLS_HXX
 
-#ifndef DBACCESS_MODULE_SDBT_HXX
 #include "module_sdbt.hxx"
-#endif
 
-#ifndef DBACCESS_CONNECTION_DEPENDENT_HXX
 #include "connectiondependent.hxx"
-#endif
 
 /** === begin UNO includes === **/
-#ifndef _COM_SUN_STAR_SDB_TOOLS_XCONNECTIONTOOLS_HPP_
 #include <com/sun/star/sdb/tools/XConnectionTools.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
-#endif
 /** === end UNO includes === **/
 
-#ifndef _CPPUHELPER_IMPLBASE3_HXX_
 #include <cppuhelper/implbase3.hxx>
-#endif
 
-#ifndef COMPHELPER_COMPONENTCONTEXT_HXX
 #include <comphelper/componentcontext.hxx>
-#endif
 
 //........................................................................
 namespace sdbtools

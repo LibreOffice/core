@@ -27,9 +27,7 @@
 #ifndef DBAUI_RELCONTROLIFACE_HXX
 #define DBAUI_RELCONTROLIFACE_HXX
 
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
-#endif
 #include "TableConnectionData.hxx"
 
 namespace dbaui

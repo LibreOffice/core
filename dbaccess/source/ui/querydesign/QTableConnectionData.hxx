@@ -27,18 +27,10 @@
 #ifndef DBAUI_QTABLECONNECTIONDATA_HXX
 #define DBAUI_QTABLECONNECTIONDATA_HXX
 
-#ifndef DBAUI_TABLECONNECTIONDATA_HXX
 #include "TableConnectionData.hxx"
-#endif
-#ifndef DBAUI_TABLEFIELDDESC_HXX
 #include "TableFieldDescription.hxx"
-#endif
-#ifndef DBAUI_ENUMTYPES_HXX
 #include "QEnumTypes.hxx"
-#endif
-#ifndef _RTTI_HXX
 #include <tools/rtti.hxx>
-#endif
 
 namespace dbaui
 {

@@ -27,27 +27,13 @@
 #ifndef DBAUI_QUERYDESIGN_OSELECTIONBROWSEBOX_HXX
 #define DBAUI_QUERYDESIGN_OSELECTIONBROWSEBOX_HXX
 
-#ifndef _SVTOOLS_EDITBROWSEBOX_HXX_
 #include <svtools/editbrowsebox.hxx>
-#endif
-#ifndef DBAUI_TABLEFIELDDESC_HXX
 #include "TableFieldDescription.hxx"
-#endif
-#ifndef DBAUI_JOINEXCHANGE_HXX
 #include "JoinExchange.hxx"
-#endif
-#ifndef DBAUI_ENUMTYPES_HXX
 #include "QEnumTypes.hxx"
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTER_HPP_
 #include <com/sun/star/util/XNumberFormatter.hpp>
-#endif
-#ifndef _STRING_HXX
 #include <tools/string.hxx>
-#endif
-#ifndef _TRANSFER_HXX
 #include <svtools/transfer.hxx>
-#endif
 
 namespace connectivity
 {

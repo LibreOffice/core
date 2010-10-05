@@ -27,9 +27,7 @@
 #ifndef DBAUI_WIZ_EXTENDPAGES_HXX
 #define DBAUI_WIZ_EXTENDPAGES_HXX
 
-#ifndef DBAUI_WIZ_TYPESELECT_HXX
 #include "WTypeSelect.hxx"
-#endif
 
 class SvStream;
 namespace dbaui

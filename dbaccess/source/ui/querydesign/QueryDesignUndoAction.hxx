@@ -27,9 +27,7 @@
 #ifndef DBAUI_QUERYDESIGNUNDOACTION_HXX
 #define DBAUI_QUERYDESIGNUNDOACTION_HXX
 
-#ifndef DBAUI_GENERALUNDO_HXX
 #include "GeneralUndo.hxx"
-#endif
 
 namespace dbaui
 {

@@ -27,9 +27,7 @@
 #ifndef DBAUI_ACCESSIBLE_HELPER_IFACE_HXX
 #define DBAUI_ACCESSIBLE_HELPER_IFACE_HXX
 
-#ifndef _SAL_TYPES_H_
 #include <sal/types.h>
-#endif
 
 namespace dbaui
 {

@@ -28,9 +28,7 @@
 #define RPT_XMLIMAGE_HXX
 
 #include "xmlReportElementBase.hxx"
-#ifndef _COM_SUN_STAR_REPORT_XImageControl_HPP_
 #include <com/sun/star/report/XImageControl.hpp>
-#endif
 
 namespace rptxml
 {

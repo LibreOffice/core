@@ -28,12 +28,8 @@
 #ifndef _DBACORE_RESULTCOLUMN_HXX_
 #define _DBACORE_RESULTCOLUMN_HXX_
 
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSETMETADATA_HDL_
 #include <com/sun/star/sdbc/XResultSetMetaData.hdl>
-#endif
-#ifndef _DBA_COREAPI_COLUMN_HXX_
 #include <column.hxx>
-#endif
 #include <boost/optional.hpp>
 namespace dbaccess
 {

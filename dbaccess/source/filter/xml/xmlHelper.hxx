@@ -27,15 +27,9 @@
 #ifndef DBA_XMLHELPER_HXX
 #define DBA_XMLHELPER_HXX
 
-#ifndef _XMLOFF_PROPERTYSETMAPPER_HXX
 #include <xmloff/xmlprmap.hxx>
-#endif
-#ifndef _XMLOFF_CONTEXTID_HXX_
 #include <xmloff/contextid.hxx>
-#endif
-#ifndef _XMLOFF_FORMS_CONTROLPROPERTYHDL_HXX_
 #include <xmloff/controlpropertyhdl.hxx>
-#endif
 
 #include <memory>
 

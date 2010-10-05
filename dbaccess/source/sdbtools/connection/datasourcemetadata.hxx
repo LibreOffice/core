@@ -28,19 +28,13 @@
 #ifndef DBACCESS_DATASOURCEMETADATA_HXX
 #define DBACCESS_DATASOURCEMETADATA_HXX
 
-#ifndef DBACCESS_CONNECTION_DEPENDENT_HXX
 #include "connectiondependent.hxx"
-#endif
 
 /** === begin UNO includes === **/
-#ifndef _COM_SUN_STAR_SDB_TOOLS_XDATASOURCEMETADATA_HPP_
 #include <com/sun/star/sdb/tools/XDataSourceMetaData.hpp>
-#endif
 /** === end UNO includes === **/
 
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
-#endif
 
 #include <memory>
 

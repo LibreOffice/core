@@ -27,15 +27,9 @@
 #ifndef DBAUI_SCROLLHELPER_HXX
 #define DBAUI_SCROLLHELPER_HXX
 
-#ifndef _LINK_HXX
 #include <tools/link.hxx>
-#endif
-#ifndef _SV_GEN_HXX
 #include <tools/gen.hxx>
-#endif
-#ifndef _SV_TIMER_HXX
 #include <vcl/timer.hxx>
-#endif
 
 namespace dbaui
 {

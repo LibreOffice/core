@@ -28,28 +28,14 @@
 #ifndef _DBAUI_TABLETREE_HXX_
 #define _DBAUI_TABLETREE_HXX_
 
-#ifndef _DBAUI_MARKTREE_HXX_
 #include "marktree.hxx"
-#endif
 
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDRIVER_HPP_
 #include <com/sun/star/sdbc/XDriver.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_APPLICATION_NAMEDDATABASEOBJECT_HPP_
 #include <com/sun/star/sdb/application/NamedDatabaseObject.hpp>
-#endif
 
 #include <memory>
 

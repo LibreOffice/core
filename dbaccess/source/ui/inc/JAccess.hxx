@@ -27,12 +27,8 @@
 #ifndef DBACCESS_JACCESS_HXX
 #define DBACCESS_JACCESS_HXX
 
-#ifndef _TOOLKIT_AWT_VCLXACCESSIBLECOMPONENT_HXX_
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
-#endif
 
 namespace dbaui
 {

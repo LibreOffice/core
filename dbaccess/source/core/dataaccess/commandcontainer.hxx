@@ -28,17 +28,11 @@
 #ifndef _DBA_COREDATAACCESS_COMMANDCONTAINER_HXX_
 #define _DBA_COREDATAACCESS_COMMANDCONTAINER_HXX_
 
-#ifndef _DBA_CORE_DEFINITIONCONTAINER_HXX_
 #include "definitioncontainer.hxx"
-#endif
 
-#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#endif
 
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
-#endif
 
 //........................................................................
 namespace dbaccess

@@ -30,35 +30,17 @@
 
 //  #include <sdb/tools.hxx>
 
-#ifndef _SVX_FMGRIDCL_HXX
 #include <svx/fmgridcl.hxx>
-#endif
 
-#ifndef _SVX_FMGRIDIF_HXX
 #include <svx/fmgridif.hxx>
-#endif
 
-#ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSER_HPP_
 #include <com/sun/star/sdb/XSQLQueryComposer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
 #include <com/sun/star/frame/XDispatch.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_URL_HPP_
 #include <com/sun/star/util/URL.hpp>
-#endif
-#ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
-#endif
-#ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
-#endif
-#ifndef _SBA_MULTIPLEX_HXX
 #include "sbamultiplex.hxx"
-#endif
-#ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
 #include <svx/dataaccessdescriptor.hxx>
-#endif
 #include <queue>
 
 class SvNumberFormatter;

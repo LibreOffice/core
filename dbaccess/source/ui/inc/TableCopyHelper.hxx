@@ -27,27 +27,13 @@
 #ifndef DBUI_TABLECOPYHELPER_HXX
 #define DBUI_TABLECOPYHELPER_HXX
 
-#ifndef DBAUI_APPELEMENTTYPE_HXX
 #include "AppElementType.hxx"
-#endif
-#ifndef _DBAUI_COMMON_TYPES_HXX_
 #include "commontypes.hxx"
-#endif
-#ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
 #include <svx/dataaccessdescriptor.hxx>
-#endif
-#ifndef _SOT_STORAGE_HXX
 #include <sot/storage.hxx>
-#endif
-#ifndef _TRANSFER_HXX
 #include <svtools/transfer.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSET_HPP_
 #include <com/sun/star/sdbc/XResultSet.hpp>
-#endif
 #include <functional>
 
 class SvLBoxEntry;

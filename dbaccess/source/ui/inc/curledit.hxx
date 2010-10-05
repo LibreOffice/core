@@ -28,15 +28,9 @@
 #ifndef _DBAUI_CURLEDIT_HXX_
 #define _DBAUI_CURLEDIT_HXX_
 
-#ifndef _SV_EDIT_HXX
 #include <vcl/edit.hxx>
-#endif
-#ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _DBAUI_DSNTYPES_HXX_
 #include "dsntypes.hxx"
-#endif
 #include <memory>
 
 //.........................................................................

@@ -28,45 +28,19 @@
 #ifndef DBA_COREDATAACESS_COMPONENTDEFINITION_HXX
 #define DBA_COREDATAACESS_COMPONENTDEFINITION_HXX
 
-#ifndef _DBA_CORE_COMMANDBASE_HXX_
 #include "commandbase.hxx"
-#endif
-#ifndef _COMPHELPER_PROPERTYCONTAINER_HXX_
 #include <comphelper/propertycontainer.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XRENAME_HPP_
 #include <com/sun/star/sdbcx/XRename.hpp>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
-#endif
-#ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
 #include <comphelper/proparrhlp.hxx>
-#endif
-#ifndef _DBA_CORE_DATASETTINGS_HXX_
 #include "datasettings.hxx"
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYCHANGELISTENER_HPP_
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
-#endif
-#ifndef DBA_CONTENTHELPER_HXX
 #include "ContentHelper.hxx"
-#endif
-#ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
-#endif
-#ifndef _DBA_COREAPI_COLUMN_HXX_
 #include <column.hxx>
-#endif
 #include <comphelper/implementationreference.hxx>
 
 #include <memory>

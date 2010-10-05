@@ -27,24 +27,12 @@
 #ifndef DBAUI_TOOLS_HXX
 #define DBAUI_TOOLS_HXX
 
-#ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
-#endif
-#ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
-#endif
-#ifndef DBAUI_TYPEINFO_HXX
 #include "TypeInfo.hxx"
-#endif
-#ifndef _SVX_SVXENUM_HXX
 #include <editeng/svxenum.hxx>
-#endif
-#ifndef _SV_TASKPANELIST_HXX
 #include <vcl/taskpanelist.hxx>
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
-#endif
 
 #define RET_ALL     10
 

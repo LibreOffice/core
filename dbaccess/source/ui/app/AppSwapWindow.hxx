@@ -27,18 +27,10 @@
 #ifndef DBAUI_APPSWAPWINDOW_HXX
 #define DBAUI_APPSWAPWINDOW_HXX
 
-#ifndef DBACCESS_TABLEDESIGN_ICLIPBOARDTEST_HXX
 #include "IClipBoardTest.hxx"
-#endif
-#ifndef _SV_LSTBOX_HXX
 #include <vcl/lstbox.hxx>
-#endif
-#ifndef DBAUI_APPICONCONTROL_HXX
 #include "AppIconControl.hxx"
-#endif
-#ifndef DBAUI_APPELEMENTTYPE_HXX
 #include "AppElementType.hxx"
-#endif
 
 namespace dbaui
 {

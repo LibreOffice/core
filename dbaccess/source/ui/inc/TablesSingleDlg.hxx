@@ -28,18 +28,10 @@
 #ifndef _DBAUI_TABLESSINGLEDLG_HXX_
 #define _DBAUI_TABLESSINGLEDLG_HXX_
 
-#ifndef _BASEDLGS_HXX
 #include <sfx2/basedlgs.hxx>
-#endif
-#ifndef DBAUI_ITEMSETHELPER_HXX
 #include "IItemSetHelper.hxx"
-#endif
-#ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
 
 #include <memory>
 

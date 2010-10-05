@@ -28,19 +28,11 @@
 #ifndef _DBAUI_SQLMESSAGE_HXX_
 #define _DBAUI_SQLMESSAGE_HXX_
 
-#ifndef _BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
-#ifndef _FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _SV_BTNDLG_HXX
 #include <vcl/btndlg.hxx>
-#endif
 
-#ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
-#endif
 
 #include <memory>
 

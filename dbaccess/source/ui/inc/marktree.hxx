@@ -28,9 +28,7 @@
 #ifndef _DBAUI_MARKTREE_HXX_
 #define _DBAUI_MARKTREE_HXX_
 
-#ifndef DBAUI_DBTREELISTBOX_HXX
 #include "dbtreelistbox.hxx"
-#endif
 
 
 

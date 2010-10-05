@@ -28,15 +28,9 @@
 #ifndef DBAUI_ICONTROLLER_HXX
 #define DBAUI_ICONTROLLER_HXX
 
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
-#endif
-#ifndef DBAUI_IREFERENCE_HXX
 #include "IReference.hxx"
-#endif
 #include "dbaccessdllapi.h"
 
 namespace com { namespace sun { namespace star {

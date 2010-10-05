@@ -27,24 +27,12 @@
 #ifndef DBAUI_FIELDDESCRIPTIONS_HXX
 #define DBAUI_FIELDDESCRIPTIONS_HXX
 
-#ifndef DBAUI_ENUMTYPES_HXX
 #include "QEnumTypes.hxx"
-#endif
-#ifndef _SVX_SVXENUM_HXX
 #include <editeng/svxenum.hxx>
-#endif
-#ifndef DBAUI_TYPEINFO_HXX
 #include "TypeInfo.hxx"
-#endif
-#ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
-#endif
 
 namespace dbaui
 {

@@ -34,12 +34,8 @@
 #include <xmloff/maptype.hxx>
 #include <xmloff/prstylei.hxx>
 #include <xmloff/xmlimppr.hxx>
-#ifndef _XMLTEXTMASTERPAGECONTEXT_HXX
 #include <xmloff/XMLTextMasterPageContext.hxx>
-#endif
-#ifndef _XMLTEXTMASTERSTYLESCONTEXT_HXX
 #include <xmloff/XMLTextMasterStylesContext.hxx>
-#endif
 #include <xmloff/contextid.hxx>
 #include <xmloff/controlpropertyhdl.hxx>
 #include <vector>

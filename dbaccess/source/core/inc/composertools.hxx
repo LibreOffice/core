@@ -31,9 +31,7 @@
 /** === begin UNO includes === **/
 /** === end UNO includes === **/
 
-#ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
 
 #include <functional>
 

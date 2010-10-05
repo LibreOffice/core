@@ -28,9 +28,7 @@
 #ifndef DBACCESS_INDEXES_HXX_
 #define DBACCESS_INDEXES_HXX_
 
-#ifndef CONNECTIVITY_INDEXESHELPER_HXX
 #include "connectivity/TIndexes.hxx"
-#endif
 
 namespace dbaccess
 {

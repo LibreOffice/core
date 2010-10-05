@@ -30,15 +30,9 @@
 #include "WTabPage.hxx"
 #include "WCopyTable.hxx"
 
-#ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _SV_LSTBOX_HXX
 #include <vcl/lstbox.hxx>
-#endif
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <comphelper/stl_types.hxx>
 
 namespace dbaui

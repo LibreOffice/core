@@ -27,15 +27,9 @@
 #ifndef DBAUI_CONNECTIONLINE_HXX
 #define DBAUI_CONNECTIONLINE_HXX
 
-#ifndef _SV_GEN_HXX
 #include <tools/gen.hxx>
-#endif
-#ifndef _STRING_HXX
 #include <tools/string.hxx>
-#endif
-#ifndef DBAUI_CONNECTIONLINEDATA_HXX
 #include "ConnectionLineData.hxx"
-#endif
 #include <functional>
 
 class OutputDevice;

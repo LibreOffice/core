@@ -28,13 +28,9 @@
 #ifndef DBACCESS_UI_DBTREEVIEW_HXX
 #define DBACCESS_UI_DBTREEVIEW_HXX
 
-#ifndef _SV_WINDOW_HXX //autogen
 #include <vcl/window.hxx>
-#endif
 
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
 
 class SvTreeListBox;
 class SvLBoxTreeList;

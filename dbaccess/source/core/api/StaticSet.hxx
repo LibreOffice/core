@@ -28,9 +28,7 @@
 #ifndef DBACCESS_CORE_API_STATICSET_HXX
 #define DBACCESS_CORE_API_STATICSET_HXX
 
-#ifndef DBACCESS_CORE_API_CACHESET_HXX
 #include "CacheSet.hxx"
-#endif
 
 namespace dbaccess
 {

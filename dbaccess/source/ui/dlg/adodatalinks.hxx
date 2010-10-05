@@ -28,12 +28,8 @@
 #ifndef _DBAUI_ADO_DATALINK_HXX_
 #define _DBAUI_ADO_DATALINK_HXX_
 
-#ifndef _OSL_MODULE_H_
 #include <osl/module.h>
-#endif
-#ifndef _DBAUI_COMMON_TYPES_HXX_
 #include "commontypes.hxx"
-#endif
 
 ::rtl::OUString getAdoDatalink(long hWnd,::rtl::OUString& oldLink);
 #endif

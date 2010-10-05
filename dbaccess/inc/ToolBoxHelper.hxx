@@ -28,18 +28,10 @@
 #ifndef DBAUI_TOOLBOXHELPER_HXX
 #define DBAUI_TOOLBOXHELPER_HXX
 
-#ifndef _SAL_TYPES_H_
 #include <sal/types.h>
-#endif
-#ifndef _LINK_HXX
 #include <tools/link.hxx>
-#endif
-#ifndef _SV_GEN_HXX
 #include <tools/gen.hxx>
-#endif
-#ifndef _SV_IMAGE_HXX
 #include <vcl/image.hxx>
-#endif
 #include "dbaccessdllapi.h"
 
 class SvtMiscOptions;

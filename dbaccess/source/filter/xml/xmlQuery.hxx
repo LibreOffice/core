@@ -27,12 +27,8 @@
 #ifndef DBA_XMLQUERY_HXX
 #define DBA_XMLQUERY_HXX
 
-#ifndef _XMLOFF_XMLICTXT_HXX
 #include <xmloff/xmlictxt.hxx>
-#endif
-#ifndef DBA_XMLTABLE_HXX
 #include "xmlTable.hxx"
-#endif
 
 
 namespace dbaxml

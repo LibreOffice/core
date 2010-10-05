@@ -27,18 +27,10 @@
 #ifndef DBAUI_RTABLECONNECTIONDATA_HXX
 #define DBAUI_RTABLECONNECTIONDATA_HXX
 
-#ifndef DBAUI_TABLECONNECTIONDATA_HXX
 #include "TableConnectionData.hxx"
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
-#ifndef DBAUI_ENUMTYPES_HXX
 #include "QEnumTypes.hxx"
-#endif
 
 namespace dbaui
 {

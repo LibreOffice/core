@@ -28,9 +28,7 @@
 #ifndef DBAUI_QUERYTABWINSHOWUNDOACT_HXX
 #define DBAUI_QUERYTABWINSHOWUNDOACT_HXX
 
-#ifndef DBAUI_QUERYTABWINUNDOACT_HXX
 #include "QueryTabWinUndoAct.hxx"
-#endif
 
 namespace dbaui
 {

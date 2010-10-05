@@ -28,27 +28,13 @@
 #ifndef _DBAUI_TABLESPAGE_HXX_
 #define _DBAUI_TABLESPAGE_HXX_
 
-#ifndef _DBAUI_ADMINPAGES_HXX_
 #include "adminpages.hxx"
-#endif
-#ifndef _COM_SUN_STAR_I18N_XCOLLATOR_HPP_
 #include <com/sun/star/i18n/XCollator.hpp>
-#endif
-#ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
-#endif
-#ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
-#endif
-#ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _DBAUI_TABLETREE_HXX_
 #include "tabletree.hxx"
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
-#endif
 
 
 //.........................................................................

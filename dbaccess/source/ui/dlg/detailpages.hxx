@@ -28,33 +28,15 @@
 #ifndef _DBAUI_DETAILPAGES_HXX_
 #define _DBAUI_DETAILPAGES_HXX_
 
-#ifndef _DBAUI_ADMINPAGES_HXX_
 #include "adminpages.hxx"
-#endif
-#ifndef _DBAUI_CHARSETS_HXX_
 #include "charsets.hxx"
-#endif
-#ifndef CHARSETLISTBOX_HXX
 #include "charsetlistbox.hxx"
-#endif
-#ifndef _SV_FIELD_HXX
 #include <vcl/field.hxx>
-#endif
-#ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _SV_LSTBOX_HXX
 #include <vcl/lstbox.hxx>
-#endif
-#ifndef _SV_EDIT_HXX
 #include <vcl/edit.hxx>
-#endif
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
-#ifndef DBAUI_TEXTCONNECTIONHELPER_HXX
 #include "TextConnectionHelper.hxx"
-#endif
 #include "admincontrols.hxx"
 
 #include <svtools/dialogcontrolling.hxx>

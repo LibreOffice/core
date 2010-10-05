@@ -28,31 +28,15 @@
 #ifndef DBAUI_DBWIZ2_HXX
 #define DBAUI_DBWIZ2_HXX
 
-#ifndef _SFXTABDLG_HXX
 #include <sfx2/tabdlg.hxx>
-#endif
-#ifndef _DBAUI_DSNTYPES_HXX_
 #include "dsntypes.hxx"
-#endif
-#ifndef DBAUI_ITEMSETHELPER_HXX
 #include "IItemSetHelper.hxx"
-#endif
-#ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
-#endif
-#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
 #include <memory>
-#ifndef SVTOOLS_INC_ROADMAPWIZARD_HXX
 #include <svtools/roadmapwizard.hxx>
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
-#endif
 
 FORWARD_DECLARE_INTERFACE(beans,XPropertySet)
 FORWARD_DECLARE_INTERFACE(sdbc,XConnection)

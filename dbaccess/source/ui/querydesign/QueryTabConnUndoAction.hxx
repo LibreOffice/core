@@ -27,9 +27,7 @@
 #ifndef DBAUI_QUERYTABCONNUNDOACTION_HXX
 #define DBAUI_QUERYTABCONNUNDOACTION_HXX
 
-#ifndef DBAUI_QUERYDESIGNUNDOACTION_HXX
 #include "QueryDesignUndoAction.hxx"
-#endif
 
 namespace dbaui
 {

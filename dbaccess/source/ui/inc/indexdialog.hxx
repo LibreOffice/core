@@ -28,45 +28,19 @@
 #ifndef _DBAUI_INDEXDIALOG_HXX_
 #define _DBAUI_INDEXDIALOG_HXX_
 
-#ifndef _SV_DIALOG_HXX
 #include <vcl/dialog.hxx>
-#endif
-#ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _SV_LSTBOX_HXX
 #include <vcl/lstbox.hxx>
-#endif
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
-#endif
-#ifndef _SV_TOOLBOX_HXX
 #include <vcl/toolbox.hxx>
-#endif
-#ifndef _SVTREEBOX_HXX
 #include <svtools/svtreebx.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_VIEWOPTIONS_HXX
 #include <unotools/viewoptions.hxx>
-#endif
-#ifndef _DBAUI_INDEXES_HXX_
 #include "indexes.hxx"
-#endif
-#ifndef DBAUI_TOOLBOXHELPER_HXX
 #include "ToolBoxHelper.hxx"
-#endif
 
 //......................................................................
 namespace dbaui

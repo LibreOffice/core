@@ -28,9 +28,7 @@
 #ifndef DBAUI_WIZ_TABBPAGE_HXX
 #define DBAUI_WIZ_TABBPAGE_HXX
 
-#ifndef _SV_TABPAGE_HXX
 #include <vcl/tabpage.hxx>
-#endif
 
 namespace dbaui
 {

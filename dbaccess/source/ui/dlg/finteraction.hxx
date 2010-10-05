@@ -28,12 +28,8 @@
 #ifndef DBAUI_FILEPICKER_INTERACTION_HXX
 #define DBAUI_FILEPICKER_INTERACTION_HXX
 
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
-#endif
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#endif
 
 //........................................................................
 namespace dbaui

@@ -28,9 +28,7 @@
 #ifndef DBAUI_REFFUNCTOR_HXX
 #define DBAUI_REFFUNCTOR_HXX
 
-#ifndef _VOS_REF_HXX_
 #include <vos/ref.hxx>
-#endif
 #ifndef INCLUDED_FUNCTIONAL
 #define INCLUDED_FUNCTIONAL
 #include <functional>

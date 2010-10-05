@@ -27,18 +27,10 @@
 #ifndef DBAUI_TABLEDESIGNHELPBAR_HXX
 #define DBAUI_TABLEDESIGNHELPBAR_HXX
 
-#ifndef _STRING_HXX
 #include <tools/string.hxx>
-#endif
-#ifndef _SV_TABCTRL_HXX
 #include <vcl/tabctrl.hxx>
-#endif
-#ifndef _SV_TABPAGE_HXX
 #include <vcl/tabpage.hxx>
-#endif
-#ifndef DBACCESS_TABLEDESIGN_ICLIPBOARDTEST_HXX
 #include "IClipBoardTest.hxx"
-#endif
 
 class MultiLineEdit;
 namespace dbaui

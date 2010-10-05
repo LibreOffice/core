@@ -28,18 +28,10 @@
 #ifndef DBAUI_CONNECTIONPAGE_HXX
 #define DBAUI_CONNECTIONPAGE_HXX
 
-#ifndef DBAUI_CONNECTIONHELPER_HXX
 #include "ConnectionHelper.hxx"
-#endif
-#ifndef _DBAUI_ADMINPAGES_HXX_
 #include "adminpages.hxx"
-#endif
-#ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
-#endif
-#ifndef _DBAUI_CURLEDIT_HXX_
 #include "curledit.hxx"
-#endif
 
 //.........................................................................
 namespace dbaui

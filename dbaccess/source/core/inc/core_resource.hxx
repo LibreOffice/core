@@ -28,9 +28,7 @@
 #ifndef _DBA_CORE_RESOURCE_HXX_
 #define _DBA_CORE_RESOURCE_HXX_
 
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
 #include <osl/mutex.hxx>
 
 class ResMgr;

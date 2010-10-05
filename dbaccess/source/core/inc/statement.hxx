@@ -27,49 +27,21 @@
 #ifndef _DBA_COREAPI_STATEMENT_HXX_
 #define _DBA_COREAPI_STATEMENT_HXX_
 
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XSTATEMENT_HPP_
 #include <com/sun/star/sdbc/XStatement.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XCANCELLABLE_HPP_
 #include <com/sun/star/util/XCancellable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XWARNINGSSUPPLIER_HPP_
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCLOSEABLE_HPP_
 #include <com/sun/star/sdbc/XCloseable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XMULTIPLERESULTS_HDL_
 #include <com/sun/star/sdbc/XMultipleResults.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XPREPAREDBATCHEXECUTION_HDL_
 #include <com/sun/star/sdbc/XPreparedBatchExecution.hpp>
-#endif
 #include <com/sun/star/sdbc/XBatchExecution.hpp>
-#ifndef _COM_SUN_STAR_SDBC_XGENERATEDRESULTSET_HPP_
 #include <com/sun/star/sdbc/XGeneratedResultSet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYCOMPOSER_HPP_
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
-#endif
-#ifndef _CPPUHELPER_PROPSHLP_HXX
 #include <cppuhelper/propshlp.hxx>
-#endif
-#ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
 #include <comphelper/proparrhlp.hxx>
-#endif
-#ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
-#endif
-#ifndef _COMPHELPER_BROADCASTHELPER_HXX_
 #include <comphelper/broadcasthelper.hxx>
-#endif
 
 #include <cppuhelper/implbase3.hxx>
 

@@ -28,18 +28,10 @@
 #ifndef _DBAUI_INDEXFIELDSCONTROL_HXX_
 #define _DBAUI_INDEXFIELDSCONTROL_HXX_
 
-#ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
-#endif
-#ifndef _SVTOOLS_EDITBROWSEBOX_HXX_
 #include <svtools/editbrowsebox.hxx>
-#endif
-#ifndef _DBAUI_INDEXCOLLECTION_HXX_
 #include "indexcollection.hxx"
-#endif
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
-#endif
 
 //......................................................................
 namespace dbaui

@@ -27,9 +27,7 @@
 #ifndef DBA_XMLTABLEFILTERLIST_HXX
 #define DBA_XMLTABLEFILTERLIST_HXX
 
-#ifndef _XMLOFF_XMLICTXT_HXX
 #include <xmloff/xmlictxt.hxx>
-#endif
 #include <vector>
 
 namespace dbaxml

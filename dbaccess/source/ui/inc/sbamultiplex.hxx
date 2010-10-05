@@ -28,78 +28,30 @@
 #ifndef _SBA_MULTIPLEX_HXX
 #define _SBA_MULTIPLEX_HXX
 
-#ifndef _COM_SUN_STAR_BEANS_XVETOABLECHANGELISTENER_HPP_
 #include <com/sun/star/beans/XVetoableChangeListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XUPDATELISTENER_HPP_
 #include <com/sun/star/form/XUpdateListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XERRORLISTENER_HPP_
 #include <com/sun/star/form/XErrorListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XRESTORELISTENER_HPP_
 #include <com/sun/star/form/XRestoreListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XINSERTLISTENER_HPP_
 #include <com/sun/star/form/XInsertListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XDELETELISTENER_HPP_
 #include <com/sun/star/form/XDeleteListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XPOSITIONINGLISTENER_HPP_
 #include <com/sun/star/form/XPositioningListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XDATABASEPARAMETERLISTENER_HPP_
 #include <com/sun/star/form/XDatabaseParameterListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XLOADLISTENER_HPP_
 #include <com/sun/star/form/XLoadListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATECHANGELISTENER_HPP_
 #include <com/sun/star/beans/XPropertyStateChangeListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTIESCHANGELISTENER_HPP_
 #include <com/sun/star/beans/XPropertiesChangeListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYCHANGELISTENER_HPP_
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XSUBMITLISTENER_HPP_
 #include <com/sun/star/form/XSubmitListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XRESETLISTENER_HPP_
 #include <com/sun/star/form/XResetListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XREFRESHLISTENER_HPP_
 #include <com/sun/star/util/XRefreshListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XSQLERRORLISTENER_HPP_
 #include <com/sun/star/sdb/XSQLErrorListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XROWSETAPPROVELISTENER_HPP_
 #include <com/sun/star/sdb/XRowSetApproveListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XROWSETLISTENER_HPP_
 #include <com/sun/star/sdbc/XRowSetListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XSTATUSLISTENER_HPP_
 #include <com/sun/star/frame/XStatusListener.hpp>
-#endif
-#ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
-#endif
-#ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
-#endif
-#ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
-#endif
-#ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
 #include <cppuhelper/queryinterface.hxx>
-#endif
-#ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
-#endif
 
 namespace dbaui
 {

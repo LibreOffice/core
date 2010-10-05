@@ -27,35 +27,19 @@
 #ifndef DBAUI_QYDLGTAB_HXX
 #define DBAUI_QYDLGTAB_HXX
 
-#ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#endif
 
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
-#endif
 
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
-#ifndef _SV_DIALOG_HXX
 #include <vcl/dialog.hxx>
-#endif
-#ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
-#endif
 
-#ifndef _DBAUI_TABLETREE_HXX_
 #include "tabletree.hxx"
-#endif
 
 #include <memory>
 

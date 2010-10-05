@@ -27,28 +27,14 @@
 #ifndef DBAUI_JOINTABLEVIEW_HXX
 #define DBAUI_JOINTABLEVIEW_HXX
 
-#ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
-#endif
-#ifndef _SV_TIMER_HXX
 #include <vcl/timer.hxx>
-#endif
-#ifndef _SV_SCRBAR_HXX
 #include <vcl/scrbar.hxx>
-#endif
-#ifndef _RTTI_HXX
 #include <tools/rtti.hxx>
-#endif
-#ifndef _TRANSFER_HXX
 #include <svtools/transfer.hxx>
-#endif
 
-#ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
-#endif
-#ifndef _DBACCESS_UI_CALLBACKS_HXX_
 #include "callbacks.hxx"
-#endif
 #include "TableConnectionData.hxx"
 #include "TableWindowData.hxx"
 #include <memory>

@@ -28,36 +28,16 @@
 #ifndef DBA_XMLSTYLEIMPORT_HXX
 #define DBA_XMLSTYLEIMPORT_HXX
 
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
-#ifndef _XMLOFF_XMLIMP_HXX
 #include <xmloff/xmlimp.hxx>
-#endif
-#ifndef _XMLOFF_XMLICTXT_HXX
 #include <xmloff/xmlictxt.hxx>
-#endif
-#ifndef _XMLOFF_PROPMAPPINGTYPES_HXX
 #include <xmloff/maptype.hxx>
-#endif
-#ifndef _XMLOFF_PRSTYLEI_HXX_
 #include <xmloff/prstylei.hxx>
-#endif
-#ifndef _XMLOFF_XMLIMPPR_HXX
 #include <xmloff/xmlimppr.hxx>
-#endif
-#ifndef _XMLTEXTMASTERPAGECONTEXT_HXX
 #include <xmloff/XMLTextMasterPageContext.hxx>
-#endif
-#ifndef _XMLTEXTMASTERSTYLESCONTEXT_HXX
 #include <xmloff/XMLTextMasterStylesContext.hxx>
-#endif
-#ifndef _XMLOFF_CONTEXTID_HXX_
 #include <xmloff/contextid.hxx>
-#endif
-#ifndef _XMLOFF_FORMS_CONTROLPROPERTYHDL_HXX_
 #include <xmloff/controlpropertyhdl.hxx>
-#endif
 #include <vector>
 
 namespace dbaxml

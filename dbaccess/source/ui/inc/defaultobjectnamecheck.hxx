@@ -28,20 +28,12 @@
 #ifndef DBACCESS_SOURCE_UI_INC_DEFAULTOBJECTNAMECHECK_HXX
 #define DBACCESS_SOURCE_UI_INC_DEFAULTOBJECTNAMECHECK_HXX
 
-#ifndef DBACCESS_SOURCE_UI_INC_OBJECTNAMECHECK_HXX
 #include "objectnamecheck.hxx"
-#endif
 
 /** === begin UNO includes === **/
-#ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMEACCESS_HPP_
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
-#endif
 /** === end UNO includes === **/
 
 #include <memory>

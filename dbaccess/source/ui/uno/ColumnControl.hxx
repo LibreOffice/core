@@ -27,12 +27,8 @@
 #ifndef DBAUI_COLUMNCONTROL_HXX
 #define DBAUI_COLUMNCONTROL_HXX
 
-#ifndef _TOOLKIT_CONTROLS_UNOCONTROL_HXX_
 #include <toolkit/controls/unocontrol.hxx>
-#endif
-#ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
-#endif
 
 namespace dbaui
 {

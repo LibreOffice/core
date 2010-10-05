@@ -28,13 +28,9 @@
 #ifndef _DBA_CORE_USERINFORMATION_HXX_
 #define _DBA_CORE_USERINFORMATION_HXX_
 
-#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
 
 class UserInformation
 {

@@ -28,17 +28,11 @@
 #ifndef DBACCESS_IMAGEPROVIDER_HXX
 #define DBACCESS_IMAGEPROVIDER_HXX
 
-#ifndef _SV_IMAGE_HXX
 #include <vcl/image.hxx>
-#endif
 
 /** === begin UNO includes === **/
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_APPLICATION_DATABASEOBJECT_HPP_
 #include <com/sun/star/sdb/application/DatabaseObject.hpp>
-#endif
 /** === end UNO includes === **/
 
 #include <boost/shared_ptr.hpp>

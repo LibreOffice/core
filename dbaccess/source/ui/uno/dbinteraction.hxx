@@ -28,9 +28,7 @@
 #ifndef _DBAUI_INTERACTION_HXX_
 #define _DBAUI_INTERACTION_HXX_
 
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
-#endif
 
 #include "moduledbu.hxx"
 #include "apitools.hxx"

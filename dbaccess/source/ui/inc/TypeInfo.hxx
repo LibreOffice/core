@@ -28,18 +28,10 @@
 #define DBAUI_TYPEINFO_HXX
 
 
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_COLUMNSEARCH_HPP_
 #include <com/sun/star/sdbc/ColumnSearch.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
 #include <com/sun/star/sdbc/ColumnValue.hpp>
-#endif
 #include <boost/shared_ptr.hpp>
 #include <map>
 

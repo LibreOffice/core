@@ -27,12 +27,8 @@
 #ifndef DBACCESS_UI_BROWSER_ID_HXX
 #define DBACCESS_UI_BROWSER_ID_HXX
 
-#ifndef _SBASLTID_HRC
 #include <svx/svxids.hrc>
-#endif
-#ifndef _DBACCESS_SLOTID_HRC_
 #include "dbaccess_slotid.hrc"
-#endif
 
 #define ID_BROWSER_COPY                     SID_COPY
 #define ID_BROWSER_CUT                      SID_CUT

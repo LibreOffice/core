@@ -27,9 +27,7 @@
 #ifndef DBAUI_VERTSPLITVIEW_HXX
 #define DBAUI_VERTSPLITVIEW_HXX
 
-#ifndef _SV_SPLIT_HXX
 #include <vcl/split.hxx>
-#endif
 
 namespace dbaui
 {

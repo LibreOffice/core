@@ -27,9 +27,7 @@
 #ifndef RPT_INSERTFUNCTIONS_HXX_INCLUDED
 #define RPT_INSERTFUNCTIONS_HXX_INCLUDED
 
-#ifndef _EVENT_HXX //autogen
 #include <vcl/event.hxx>
-#endif
 #include <vcl/timer.hxx>
 
 class SdrView;

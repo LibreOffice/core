@@ -27,9 +27,7 @@
 #ifndef DBAUI_TABLEWINDOWTITLE_HXX
 #define DBAUI_TABLEWINDOWTITLE_HXX
 
-#ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
 
 namespace dbaui
 {

@@ -28,12 +28,8 @@
 #ifndef _DBAUI_LOCALRESACCESS_HXX_
 #define _DBAUI_LOCALRESACCESS_HXX_
 
-#ifndef _SVTOOLS_LOCALRESACCESS_HXX_
 #include <svtools/localresaccess.hxx>
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
-#endif
 
 //.........................................................................
 namespace dbaui

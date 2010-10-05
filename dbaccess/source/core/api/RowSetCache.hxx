@@ -27,78 +27,30 @@
 #ifndef DBACCESS_CORE_API_ROWSETCACHE_HXX
 #define DBACCESS_CORE_API_ROWSETCACHE_HXX
 
-#ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include <connectivity/CommonTools.hxx>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XPREPAREDSTATEMENT_HPP_
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYANALYZER_HPP_
 #include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYANALYZER_HPP_
 #include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSETMETADATASUPPLIER_HPP_
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XWARNINGSSUPPLIER_HPP_
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XRESULTSETACCESS_HPP_
 #include <com/sun/star/sdb/XResultSetAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCOLUMNLOCATE_HPP_
 #include <com/sun/star/sdbc/XColumnLocate.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XROWLOCATE_HPP_
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XROWUPDATE_HPP_
 #include <com/sun/star/sdbc/XRowUpdate.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSETUPDATE_HPP_
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XROWSETAPPROVEBROADCASTER_HPP_
 #include <com/sun/star/sdb/XRowSetApproveBroadcaster.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_RESULTSETTYPE_HPP_
 #include <com/sun/star/sdbc/ResultSetType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XDELETEROWS_HPP_
 #include <com/sun/star/sdbcx/XDeleteRows.hpp>
-#endif
-#ifndef _CPPUHELPER_COMPBASE11_HXX_
 #include <cppuhelper/compbase11.hxx>
-#endif
-#ifndef _COMPHELPER_PROPERTYCONTAINER_HXX_
 #include <comphelper/propertycontainer.hxx>
-#endif
-#ifndef COMPHELPER_COMPONENTCONTEXT_HXX
 #include <comphelper/componentcontext.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE5_HXX_
 #include <cppuhelper/implbase5.hxx>
-#endif
-#ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
 #include <comphelper/proparrhlp.hxx>
-#endif
-#ifndef DBACCESS_CORE_API_ROWSETROW_HXX
 #include "RowSetRow.hxx"
-#endif
-#ifndef DBACCESS_ROWSETCACHEITERATOR_HXX
 #include "RowSetCacheIterator.hxx"
-#endif
 
 namespace connectivity
 {

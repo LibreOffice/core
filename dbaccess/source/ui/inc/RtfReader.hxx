@@ -30,15 +30,9 @@
 #ifndef _VECTOR_
 #include <vector>
 #endif
-#ifndef _PARRTF_HXX //autogen
 #include <svtools/parrtf.hxx>
-#endif
-#ifndef DBAUI_DATABASEEXPORT_HXX
 #include "DExport.hxx"
-#endif
-#ifndef _STREAM_HXX
 #include <tools/stream.hxx>
-#endif
 
 namespace dbaui
 {

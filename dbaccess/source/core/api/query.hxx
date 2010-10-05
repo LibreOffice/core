@@ -28,27 +28,13 @@
 #ifndef _DBA_COREAPI_QUERY_HXX_
 #define _DBA_COREAPI_QUERY_HXX_
 
-#ifndef _DBA_COREAPI_QUERYDESCRIPTOR_HXX_
 #include "querydescriptor.hxx"
-#endif
-#ifndef _CPPUHELPER_IMPLBASE3_HXX_
 #include <cppuhelper/implbase3.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XDATADESCRIPTORFACTORY_HPP_
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYCHANGELISTENER_HPP_
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XRENAME_HPP_
 #include <com/sun/star/sdbcx/XRename.hpp>
-#endif
-#ifndef DBA_CONTENTHELPER_HXX
 #include "ContentHelper.hxx"
-#endif
 
 #include <map>
 

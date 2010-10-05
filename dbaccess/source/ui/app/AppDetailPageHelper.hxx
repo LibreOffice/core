@@ -29,42 +29,18 @@
 
 #include <vector>
 
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_APPLICATION_NAMEDDATABASEOBJECT_HPP_
 #include <com/sun/star/sdb/application/NamedDatabaseObject.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_XCONTENT_HPP_
 #include <com/sun/star/ucb/XContent.hpp>
-#endif
-#ifndef DBAUI_APPELEMENTTYPE_HXX
 #include "AppElementType.hxx"
-#endif
-#ifndef _SVTREEBOX_HXX
 #include <svtools/svtreebx.hxx>
-#endif
-#ifndef SVTOOLS_DOCUMENTINFOPREVIEW_HXX
 #include <svtools/DocumentInfoPreview.hxx>
-#endif
-#ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _SV_TOOLBOX_HXX
 #include <vcl/toolbox.hxx>
-#endif
-#ifndef _SV_CVTGRF_HXX
 #include <vcl/cvtgrf.hxx>
-#endif
-#ifndef _SV_GRAPH_HXX
 #include <vcl/graph.hxx>
-#endif
-#ifndef _GRFMGR_HXX
 #include <svtools/grfmgr.hxx>
-#endif
 #include "callbacks.hxx"
 #include <memory>
 

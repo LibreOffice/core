@@ -27,15 +27,9 @@
 #ifndef DBAUI_TABLEFIELDDESCRIPTION_HXX
 #define DBAUI_TABLEFIELDDESCRIPTION_HXX
 
-#ifndef _SV_TABPAGE_HXX
 #include <vcl/tabpage.hxx>
-#endif
-#ifndef DBAUI_TABLEFIELDDESCGENPAGE_HXX
 #include "FieldDescGenWin.hxx"
-#endif
-#ifndef DBACCESS_TABLEDESIGN_ICLIPBOARDTEST_HXX
 #include "IClipBoardTest.hxx"
-#endif
 
 class FixedText;
 namespace dbaui

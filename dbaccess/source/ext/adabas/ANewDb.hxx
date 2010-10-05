@@ -29,15 +29,9 @@
 #ifndef ADABASUI_NEWDB_HXX
 #define ADABASUI_NEWDB_HXX
 
-#ifndef _SVT_GENERICUNODIALOG_HXX_
 #include <svtools/genericunodialog.hxx>
-#endif
-#ifndef _EXTENSIONS_COMPONENT_MODULE_HXX_
 #include "Acomponentmodule.hxx"
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XCREATECATALOG_HPP_
 #include <com/sun/star/sdbcx/XCreateCatalog.hpp>
-#endif
 
 
 

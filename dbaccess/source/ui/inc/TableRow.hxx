@@ -27,21 +27,11 @@
 #ifndef DBAUI_TABLEROW_HXX
 #define DBAUI_TABLEROW_HXX
 
-#ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
-#endif
-#ifndef _STRING_HXX
 #include <tools/string.hxx>
-#endif
-#ifndef _STREAM_HXX
 #include <tools/stream.hxx>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef DBAUI_TYPEINFO_HXX
 #include "TypeInfo.hxx"
-#endif
 
 
 namespace dbaui

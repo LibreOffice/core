@@ -28,9 +28,7 @@
 #ifndef _DBAUI_LISTVIEWITEMS_HXX_
 #define _DBAUI_LISTVIEWITEMS_HXX_
 
-#ifndef _SVLBOXITM_HXX
 #include <svtools/svlbitm.hxx>
-#endif
 
 //........................................................................
 namespace dbaui

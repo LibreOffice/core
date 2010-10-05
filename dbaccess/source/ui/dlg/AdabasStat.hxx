@@ -27,27 +27,13 @@
 #ifndef _DBAUI_ADASTAT_HXX_
 #define _DBAUI_ADASTAT_HXX_
 
-#ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
-#ifndef _SV_DIALOG_HXX
 #include <vcl/dialog.hxx>
-#endif
-#ifndef DBAUI_FIELDCONTROLS_HXX
 #include "FieldControls.hxx"
-#endif
-#ifndef _PRGSBAR_HXX
 #include <svtools/prgsbar.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
 
 
 namespace dbaui

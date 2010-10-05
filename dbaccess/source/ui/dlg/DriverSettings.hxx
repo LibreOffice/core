@@ -27,9 +27,7 @@
 #ifndef DBAUI_DRIVERSETTINGS_HXX
 #define DBAUI_DRIVERSETTINGS_HXX
 
-#ifndef _DBAUI_DSNTYPES_HXX_
 #include "dsntypes.hxx"
-#endif
 #include <svl/poolitem.hxx>
 #include <vector>
 

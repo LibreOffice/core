@@ -28,12 +28,8 @@
 #ifndef _DBA_CORE_COMMANDBASE_HXX_
 #define _DBA_CORE_COMMANDBASE_HXX_
 
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
 
 //........................................................................
 namespace dbaccess

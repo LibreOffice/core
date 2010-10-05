@@ -27,9 +27,7 @@
 #ifndef DBAUI_QUERYVIEW_HXX
 #define DBAUI_QUERYVIEW_HXX
 
-#ifndef DBAUI_JOINDESIGNVIEW_HXX
 #include "JoinDesignView.hxx"
-#endif
 
 namespace dbaui
 {

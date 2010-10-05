@@ -28,12 +28,8 @@
 #ifndef _DBAUI_UNOSQLMESSAGE_HXX_
 #define _DBAUI_UNOSQLMESSAGE_HXX_
 
-#ifndef _SVT_GENERICUNODIALOG_HXX_
 #include <svtools/genericunodialog.hxx>
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
-#endif
 //.........................................................................
 namespace dbaui
 {

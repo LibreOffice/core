@@ -27,12 +27,8 @@
 #ifndef DBAUI_SQLNAMEEDIT_HXX
 #define DBAUI_SQLNAMEEDIT_HXX
 
-#ifndef _SV_EDIT_HXX
 #include <vcl/edit.hxx>
-#endif
-#ifndef _SV_COMBOBOX_HXX
 #include <vcl/combobox.hxx>
-#endif
 
 namespace dbaui
 {

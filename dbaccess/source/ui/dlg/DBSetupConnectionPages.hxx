@@ -28,9 +28,7 @@
 #ifndef DBAUI_DBSETUPCONNECTIONPAGES_HXX
 #define DBAUI_DBSETUPCONNECTIONPAGES_HXX
 
-#ifndef DBAUI_CONNECTIONPAGESETUP_HXX
 #include "ConnectionPageSetup.hxx"
-#endif
 
 #include "adminpages.hxx"
 #include "admincontrols.hxx"

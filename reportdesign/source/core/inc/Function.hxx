@@ -28,9 +28,7 @@
 #define RPT_FUNCTION_HXX
 
 #include <cppuhelper/propertysetmixin.hxx>
-#ifndef _COM_SUN_STAR_REPORT_XFunction_HPP_
 #include <com/sun/star/report/XFunction.hpp>
-#endif
 #include <cppuhelper/basemutex.hxx>
 #include "ReportControlModel.hxx"
 #include <cppuhelper/compbase2.hxx>

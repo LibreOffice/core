@@ -28,18 +28,10 @@
 #ifndef DBAUI_CONNECTIONHELPER_HXX
 #define DBAUI_CONNECTIONHELPER_HXX
 
-#ifndef _DBAUI_ADMINPAGES_HXX_
 #include "adminpages.hxx"
-#endif
-#ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
-#endif
-#ifndef _DBAUI_CURLEDIT_HXX_
 #include "curledit.hxx"
-#endif
-#ifndef _SFX_FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
-#endif
 
 
 #define FILL_STRING_ITEM(editcontrol, itemset, itemid, modifiedflag)    \

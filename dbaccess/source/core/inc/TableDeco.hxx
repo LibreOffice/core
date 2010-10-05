@@ -28,61 +28,25 @@
 #ifndef _DBA_CORE_TABLEDECORATOR_HXX_
 #define _DBA_CORE_TABLEDECORATOR_HXX_
 
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XDATADESCRIPTORFACTORY_HPP_
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XINDEXESSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XIndexesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XKEYSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XKeysSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XRENAME_HPP_
 #include <com/sun/star/sdbcx/XRename.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XALTERTABLE_HPP_
 #include <com/sun/star/sdbcx/XAlterTable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
-#endif
-#ifndef _CPPUHELPER_COMPBASE9_HXX_
 #include <cppuhelper/compbase9.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE5_HXX_
 #include <cppuhelper/implbase5.hxx>
-#endif
-#ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
-#endif
-#ifndef _DBA_CORE_DATASETTINGS_HXX_
 #include "datasettings.hxx"
-#endif
-#ifndef _DBA_COREAPI_COLUMN_HXX_
 #include "column.hxx"
-#endif
 
-#ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include <connectivity/CommonTools.hxx>
-#endif
-#ifndef _CONNECTIVITY_SDBCX_IREFRESHABLE_HXX_
 #include <connectivity/sdbcx/IRefreshable.hxx>
-#endif
-#ifndef COMPHELPER_IDPROPERTYARRAYUSAGEHELPER_HXX
 #include <comphelper/IdPropArrayHelper.hxx>
-#endif
 
 namespace dbaccess
 {

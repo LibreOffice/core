@@ -27,12 +27,8 @@
 #ifndef DBA_XMLDATASOURCE_HXX
 #define DBA_XMLDATASOURCE_HXX
 
-#ifndef _XMLOFF_XMLICTXT_HXX
 #include <xmloff/xmlictxt.hxx>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
 #include <vector>
 
 namespace dbaxml

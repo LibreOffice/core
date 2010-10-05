@@ -28,18 +28,10 @@
 #ifndef _DBAUI_DBADMIN_HXX_
 #define _DBAUI_DBADMIN_HXX_
 
-#ifndef _SFXTABDLG_HXX
 #include <sfx2/tabdlg.hxx>
-#endif
-#ifndef _DBAUI_DSNTYPES_HXX_
 #include "dsntypes.hxx"
-#endif
-#ifndef DBAUI_ITEMSETHELPER_HXX
 #include "IItemSetHelper.hxx"
-#endif
-#ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
-#endif
 #include <memory>
 
 FORWARD_DECLARE_INTERFACE(beans,XPropertySet)

@@ -27,45 +27,19 @@
 #ifndef DBAUI_APPDETAILVIEW_HXX
 #define DBAUI_APPDETAILVIEW_HXX
 
-#ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
 #include <com/sun/star/frame/XController.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_XCONTENT_HPP_
 #include <com/sun/star/ucb/XContent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_APPLICATION_NAMEDDATABASEOBJECT_HPP_
 #include <com/sun/star/sdb/application/NamedDatabaseObject.hpp>
-#endif
-#ifndef _SV_SPLIT_HXX
 #include <vcl/split.hxx>
-#endif
-#ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _SV_MNEMONIC_HXX
 #include <vcl/mnemonic.hxx>
-#endif
-#ifndef DBACCESS_TABLEDESIGN_ICLIPBOARDTEST_HXX
 #include "IClipBoardTest.hxx"
-#endif
-#ifndef DBAUI_TITLE_WINDOW_HXX
 #include "AppTitleWindow.hxx"
-#endif
-#ifndef DBAUI_APPELEMENTTYPE_HXX
 #include "AppElementType.hxx"
-#endif
-#ifndef _SVTREEBOX_HXX
 #include <svtools/svtreebx.hxx>
-#endif
-#ifndef DBAUI_VERTSPLITVIEW_HXX
 #include "VertSplitView.hxx"
-#endif
 
 #include <vector>
 

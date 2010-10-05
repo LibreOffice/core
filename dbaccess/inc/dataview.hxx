@@ -27,15 +27,9 @@
 #ifndef DBAUI_DATAVIEW_HXX
 #define DBAUI_DATAVIEW_HXX
 
-#ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef INCLUDED_SVTOOLS_ACCELERATOREXECUTE_HXX
 #include <svtools/acceleratorexecute.hxx>
-#endif
 #include <memory>
 #include "dbaccessdllapi.h"
 

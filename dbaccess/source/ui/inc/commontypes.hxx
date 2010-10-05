@@ -28,12 +28,8 @@
 #ifndef _DBAUI_COMMON_TYPES_HXX_
 #define _DBAUI_COMMON_TYPES_HXX_
 
-#ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
-#endif
-#ifndef UNOTOOLS_INC_SHAREDUNOCOMPONENT_HXX
 #include <unotools/sharedunocomponent.hxx>
-#endif
 
 namespace com { namespace sun { namespace star {
     namespace sdbc {

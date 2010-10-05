@@ -27,19 +27,11 @@
 #ifndef DBAUI_TABLEDESIGNCONTROL_HXX
 #define DBAUI_TABLEDESIGNCONTROL_HXX
 
-#ifndef _TABBAR_HXX //autogen
 #include <svtools/tabbar.hxx>
-#endif
-#ifndef _SVTOOLS_EDITBROWSEBOX_HXX_
 #include <svtools/editbrowsebox.hxx>
-#endif
 
-#ifndef DBACCESS_TABLEDESIGN_ICLIPBOARDTEST_HXX
 #include "IClipBoardTest.hxx"
-#endif
-#ifndef DBAUI_TYPEINFO_HXX
 #include "TypeInfo.hxx"
-#endif
 
 #define TABPAGESIZE 70
 namespace dbaui

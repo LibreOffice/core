@@ -27,9 +27,7 @@
 #ifndef DBAUI_QUERYADDTABCONNUNDOACTION_HXX
 #define DBAUI_QUERYADDTABCONNUNDOACTION_HXX
 
-#ifndef DBAUI_QUERYTABCONNUNDOACTION_HXX
 #include "QueryTabConnUndoAction.hxx"
-#endif
 
 namespace dbaui
 {

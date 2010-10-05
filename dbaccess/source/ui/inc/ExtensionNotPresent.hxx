@@ -27,27 +27,13 @@
 #ifndef DBU_EXTENSIONNOTPRESENT_HXX
 #define DBU_EXTENSIONNOTPRESENT_HXX
 
-#ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#endif
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _SV_LSTBOX_HXX
 #include <vcl/lstbox.hxx>
-#endif
-#ifndef _SV_FIELD_HXX
 #include <vcl/field.hxx>
-#endif
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
-#ifndef _COM_SUN_STAR_REPORT_XREPORTDEFINITION_HPP_
 #include <com/sun/star/report/XReportDefinition.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
-#endif
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/system/XSystemShellExecute.hpp>

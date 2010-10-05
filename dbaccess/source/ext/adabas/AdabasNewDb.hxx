@@ -29,31 +29,15 @@
 #define ADABASUI_ADABAS_CREATEDB_HXX
 
 
-#ifndef _SV_DIALOG_HXX
 #include <vcl/dialog.hxx>
-#endif
 
-#ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
-#ifndef _SV_FIELD_HXX
 #include <vcl/field.hxx>
-#endif
-#ifndef _SV_EDIT_HXX
 #include <vcl/edit.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XCREATECATALOG_HPP_
 #include <com/sun/star/sdbcx/XCreateCatalog.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
-#endif
 #include <memory>
 #include "ASQLNameEdit.hxx"
 

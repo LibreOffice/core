@@ -28,15 +28,9 @@
 #ifndef DBAUI_ITEMSETHELPER_HXX
 #define DBAUI_ITEMSETHELPER_HXX
 
-#ifndef _SAL_TYPES_H_
 #include <sal/types.h>
-#endif
-#ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
-#endif
-#ifndef _DBAUI_DSNTYPES_HXX_
 #include "dsntypes.hxx"
-#endif
 
 FORWARD_DECLARE_INTERFACE(beans,XPropertySet)
 FORWARD_DECLARE_INTERFACE(sdbc,XConnection)

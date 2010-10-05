@@ -29,9 +29,7 @@
 #define DBACCESS_CONTAINERAPPROVE_HXX
 
 /** === begin UNO includes === **/
-#ifndef _COM_SUN_STAR_UNO_XINTERFACE_HPP_
 #include <com/sun/star/uno/XInterface.hpp>
-#endif
 /** === end UNO includes === **/
 
 #include <boost/shared_ptr.hpp>

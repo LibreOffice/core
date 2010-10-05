@@ -27,9 +27,7 @@
 #ifndef DBAUI_TABLEWINDOWDATA_HXX
 #define DBAUI_TABLEWINDOWDATA_HXX
 
-#ifndef _SV_GEN_HXX
 #include <tools/gen.hxx>
-#endif
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>

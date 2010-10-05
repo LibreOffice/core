@@ -28,12 +28,8 @@
 #ifndef DBACCESS_CORE_API_BOOKMARKSET_HXX
 #define DBACCESS_CORE_API_BOOKMARKSET_HXX
 
-#ifndef DBACCESS_CORE_API_CACHESET_HXX
 #include "CacheSet.hxx"
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XROWUPDATE_HPP_
 #include <com/sun/star/sdbc/XRowUpdate.hpp>
-#endif
 
 namespace dbaccess
 {

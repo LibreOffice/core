@@ -27,12 +27,8 @@
 #ifndef DBAUI_RTABLECONNECTION_HXX
 #define DBAUI_RTABLECONNECTION_HXX
 
-#ifndef DBAUI_TABLECONNECTION_HXX
 #include "TableConnection.hxx"
-#endif
-#ifndef DBAUI_RTABLECONNECTIONDATA_HXX
 #include "RTableConnectionData.hxx"
-#endif
 
 namespace dbaui
 {

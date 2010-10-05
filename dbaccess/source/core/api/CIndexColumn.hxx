@@ -28,9 +28,7 @@
 #ifndef DBACCESS_INDEXCOLUMN_HXX_
 #define DBACCESS_INDEXCOLUMN_HXX_
 
-#ifndef _CONNECTIVITY_ADABAS_COLUMN_HXX_
 #include "adabas/BColumn.hxx"
-#endif
 
 namespace connectivity
 {

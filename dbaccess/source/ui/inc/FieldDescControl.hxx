@@ -27,21 +27,11 @@
 #ifndef DBAUI_FIELDDESCRIPTIONCONTROL_HXX
 #define DBAUI_FIELDDESCRIPTIONCONTROL_HXX
 
-#ifndef _SV_TABPAGE_HXX
 #include <vcl/tabpage.hxx>
-#endif
-#ifndef DBAUI_ENUMTYPES_HXX
 #include "QEnumTypes.hxx"
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTER_HPP_
 #include <com/sun/star/util/XNumberFormatter.hpp>
-#endif
-#ifndef DBAUI_TYPEINFO_HXX
 #include "TypeInfo.hxx"
-#endif
 
 //------------------------------------------------------------------
 // die Spalten einer Feld-Beschreibung einer Tabelle

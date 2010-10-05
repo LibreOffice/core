@@ -27,12 +27,8 @@
 #ifndef DBAUI_RELATIONCONTROLLER_HXX
 #define DBAUI_RELATIONCONTROLLER_HXX
 
-#ifndef DBAUI_JOINCONTROLLER_HXX
 #include "JoinController.hxx"
-#endif
-#ifndef DBAUI_RELATIONDESIGNVIEW_HXX
 #include "RelationDesignView.hxx"
-#endif
 
 class VCLXWindow;
 class WaitObject;

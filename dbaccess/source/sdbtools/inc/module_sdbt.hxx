@@ -28,9 +28,7 @@
 #ifndef DBACCESS_MODULE_SDBT_HXX
 #define DBACCESS_MODULE_SDBT_HXX
 
-#ifndef UNOTOOLS_INC_UNOTOOLS_COMPONENTRESMODULE_HXX
 #include <unotools/componentresmodule.hxx>
-#endif
 
 //........................................................................
 namespace sdbtools

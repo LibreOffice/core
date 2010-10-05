@@ -27,24 +27,12 @@
 #ifndef DBAUI_WIZ_NAMEMATCHING_HXX
 #define DBAUI_WIZ_NAMEMATCHING_HXX
 
-#ifndef DBAUI_WIZ_TABBPAGE_HXX
 #include "WTabPage.hxx"
-#endif
-#ifndef _DBAUI_MARKTREE_HXX_
 #include "marktree.hxx"
-#endif
-#ifndef DBAUI_DATABASEEXPORT_HXX
 #include "DExport.hxx"
-#endif
-#ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
-#ifndef DBAUI_WIZ_COPYTABLEDIALOG_HXX
 #include "WCopyTable.hxx"
-#endif
 
 namespace dbaui
 {

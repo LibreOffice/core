@@ -27,12 +27,8 @@
 #ifndef DBAUI_GENERALUNDO_HXX
 #define DBAUI_GENERALUNDO_HXX
 
-#ifndef _UNDO_HXX
 #include <svl/undo.hxx>
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
-#endif
 
 namespace dbaui
 {

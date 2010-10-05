@@ -27,12 +27,8 @@
 #ifndef DBAUI_APPICONCONTROL_HXX
 #define DBAUI_APPICONCONTROL_HXX
 
-#ifndef _ICNVW_HXX
 #include <svtools/ivctrl.hxx>
-#endif
-#ifndef _TRANSFER_HXX
 #include <svtools/transfer.hxx>
-#endif
 
 
 namespace dbaui

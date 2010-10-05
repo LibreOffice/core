@@ -28,12 +28,8 @@
 #ifndef _DBAUI_PROPERTYSETITEM_HXX_
 #define _DBAUI_PROPERTYSETITEM_HXX_
 
-#ifndef _SFXPOOLITEM_HXX
 #include <svl/poolitem.hxx>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
 
 //.........................................................................
 namespace dbaui

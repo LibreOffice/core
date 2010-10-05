@@ -28,18 +28,10 @@
 #ifndef _DBAUI_INDEXCOLLECTION_HXX_
 #define _DBAUI_INDEXCOLLECTION_HXX_
 
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_SQLEXCEPTION_HPP_
 #include <com/sun/star/sdbc/SQLException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _DBAUI_INDEXES_HXX_
 #include "indexes.hxx"
-#endif
 
 //......................................................................
 namespace dbaui

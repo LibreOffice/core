@@ -27,12 +27,8 @@
 #ifndef DBACCESS_ROWSETCACHEITERATOR_HXX
 #define DBACCESS_ROWSETCACHEITERATOR_HXX
 
-#ifndef DBACCESS_CORE_API_ROWSETROW_HXX
 #include "RowSetRow.hxx"
-#endif
-#ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
-#endif
 
 namespace dbaccess
 {

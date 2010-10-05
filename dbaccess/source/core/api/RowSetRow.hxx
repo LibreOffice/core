@@ -27,18 +27,10 @@
 #ifndef DBACCESS_CORE_API_ROWSETROW_HXX
 #define DBACCESS_CORE_API_ROWSETROW_HXX
 
-#ifndef _VOS_REF_HXX_
 #include <vos/ref.hxx>
-#endif
-#ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include <connectivity/CommonTools.hxx>
-#endif
-#ifndef _CONNECTIVITY_FILE_VALUE_HXX_
 #include "connectivity/FValue.hxx"
-#endif
-#ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
-#endif
 
 namespace dbaccess
 {

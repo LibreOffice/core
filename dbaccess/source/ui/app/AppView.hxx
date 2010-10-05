@@ -27,33 +27,15 @@
 #ifndef DBAUI_APPVIEW_HXX
 #define DBAUI_APPVIEW_HXX
 
-#ifndef DBAUI_DATAVIEW_HXX
 #include "dataview.hxx"
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_XCONTENT_HPP_
 #include <com/sun/star/ucb/XContent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_APPLICATION_NAMEDDATABASEOBJECT_HPP_
 #include <com/sun/star/sdb/application/NamedDatabaseObject.hpp>
-#endif
-#ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _UNOTOOLS_EVENTLISTENERADAPTER_HXX_
 #include <unotools/eventlisteneradapter.hxx>
-#endif
-#ifndef DBACCESS_TABLEDESIGN_ICLIPBOARDTEST_HXX
 #include "IClipBoardTest.hxx"
-#endif
-#ifndef DBAUI_APPELEMENTTYPE_HXX
 #include "AppElementType.hxx"
-#endif
 
 namespace com{ namespace sun { namespace star { namespace beans    { class XPropertySet; } } } }
 

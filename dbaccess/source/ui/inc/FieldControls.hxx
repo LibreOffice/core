@@ -27,21 +27,11 @@
 #ifndef DBAUI_FIELDCONTROLS_HXX
 #define DBAUI_FIELDCONTROLS_HXX
 
-#ifndef _SV_FIELD_HXX
 #include <vcl/field.hxx>
-#endif
-#ifndef _SV_LSTBOX_HXX
 #include <vcl/lstbox.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef DBAUI_SQLNAMEEDIT_HXX
 #include "SqlNameEdit.hxx"
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
-#endif
 
 
 namespace dbaui

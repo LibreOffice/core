@@ -28,24 +28,16 @@
 #ifndef DBACCESS_CORE_API_KEYSET_HXX
 #define DBACCESS_CORE_API_KEYSET_HXX
 
-#ifndef DBACCESS_CORE_API_CACHESET_HXX
 #include "CacheSet.hxx"
-#endif
 
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
-#endif
 #include <memory>
 #include <map>
 
-#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#endif
 #include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
-#ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
-#endif
 
 namespace dbaccess
 {

@@ -27,17 +27,11 @@
 #ifndef RPTUI_PAGENUMBER_HXX
 #define RPTUI_PAGENUMBER_HXX
 
-#ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#endif
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 #include <vcl/lstbox.hxx>
 #include <vcl/field.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <com/sun/star/report/XReportDefinition.hpp>
 
 

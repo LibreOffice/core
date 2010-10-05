@@ -27,21 +27,11 @@
 #ifndef DBA_HELPERCOLLECTIONS_HXX
 #define DBA_HELPERCOLLECTIONS_HXX
 
-#ifndef _CONNECTIVITY_SDBCX_COLLECTION_HXX_
 #include "connectivity/sdbcx/VCollection.hxx"
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
-#endif
-#ifndef _DBHELPER_DBCONVERSION_HXX_
 #include <connectivity/dbconversion.hxx>
-#endif
-#ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
 #include <connectivity/PColumn.hxx>
-#endif
-#ifndef _VOS_REF_HXX_
 #include <vos/ref.hxx>
-#endif
 
 namespace dbaccess
 {

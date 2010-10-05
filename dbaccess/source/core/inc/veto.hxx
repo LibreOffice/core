@@ -29,14 +29,10 @@
 #define DBACCESS_VETO_HXX
 
 /** === begin UNO includes === **/
-#ifndef _COM_SUN_STAR_UTIL_XVETO_HPP_
 #include <com/sun/star/util/XVeto.hpp>
-#endif
 /** === end UNO includes === **/
 
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
-#endif
 
 //........................................................................
 namespace dbaccess

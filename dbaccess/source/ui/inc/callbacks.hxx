@@ -28,15 +28,9 @@
 #ifndef _DBACCESS_UI_CALLBACKS_HXX_
 #define _DBACCESS_UI_CALLBACKS_HXX_
 
-#ifndef _SOT_EXCHANGE_HXX
 #include <sot/exchange.hxx>
-#endif
-#ifndef _SOT_FORMATS_HXX
 #include <sot/formats.hxx>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINER_HPP_
 #include <com/sun/star/container/XContainer.hpp>
-#endif
 
 class CommandEvent;
 class SvLBoxEntry;

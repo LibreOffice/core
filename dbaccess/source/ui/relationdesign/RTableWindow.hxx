@@ -27,9 +27,7 @@
 #ifndef DBAUI_RELTABLEWINDOW_HXX
 #define DBAUI_RELTABLEWINDOW_HXX
 
-#ifndef DBAUI_TABLEWINDOW_HXX
 #include "TableWindow.hxx"
-#endif
 
 namespace dbaui
 {

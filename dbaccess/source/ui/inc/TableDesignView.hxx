@@ -27,21 +27,11 @@
 #ifndef DBAUI_TABLEDESIGNVIEW_HXX
 #define DBAUI_TABLEDESIGNVIEW_HXX
 
-#ifndef DBAUI_DATAVIEW_HXX
 #include "dataview.hxx"
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
 #include <com/sun/star/frame/XController.hpp>
-#endif
-#ifndef _SV_SPLIT_HXX
 #include <vcl/split.hxx>
-#endif
-#ifndef DBACCESS_TABLEDESIGN_ICLIPBOARDTEST_HXX
 #include "IClipBoardTest.hxx"
-#endif
 
 namespace dbaui
 {

@@ -27,12 +27,8 @@
 #ifndef DBAUI_TABLEFIELDINFO_HXX
 #define DBAUI_TABLEFIELDINFO_HXX
 
-#ifndef DBAUI_ENUMTYPES_HXX
 #include "QEnumTypes.hxx"
-#endif
-#ifndef _SAL_TYPES_H_
 #include <sal/types.h>
-#endif
 
 namespace dbaui
 {

@@ -27,12 +27,8 @@
 #ifndef DBAUI_UNDOSQLEDIT_HXX
 #define DBAUI_UNDOSQLEDIT_HXX
 
-#ifndef DBAUI_GENERALUNDO_HXX
 #include "GeneralUndo.hxx"
-#endif
-#ifndef _DBU_CONTROL_HRC_
 #include "dbu_control.hrc"
-#endif
 
 namespace dbaui
 {

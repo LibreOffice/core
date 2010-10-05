@@ -27,9 +27,7 @@
 #ifndef DBA_XMLDATASOURCESETTINGS_HXX
 #define DBA_XMLDATASOURCESETTINGS_HXX
 
-#ifndef _XMLOFF_XMLICTXT_HXX
 #include <xmloff/xmlictxt.hxx>
-#endif
 
 namespace dbaxml
 {

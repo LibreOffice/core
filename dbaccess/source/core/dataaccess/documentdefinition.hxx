@@ -28,39 +28,17 @@
 #ifndef _DBA_COREDATAACCESS_DOCUMENTDEFINITION_HXX_
 #define _DBA_COREDATAACCESS_DOCUMENTDEFINITION_HXX_
 
-#ifndef _CPPUHELPER_PROPSHLP_HXX
 #include <cppuhelper/propshlp.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE4_HXX_
 #include <cppuhelper/implbase4.hxx>
-#endif
-#ifndef DBA_CONTENTHELPER_HXX
 #include "ContentHelper.hxx"
-#endif
-#ifndef COMPHELPER_PROPERTYSTATECONTAINER_HXX
 #include <comphelper/propertystatecontainer.hxx>
-#endif
-#ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
 #include <comphelper/proparrhlp.hxx>
-#endif
-#ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
-#endif
-#ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
 #include <com/sun/star/frame/XComponentLoader.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
 #include <com/sun/star/frame/XController.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_XSTATECHANGELISTENER_HPP_
 #include <com/sun/star/embed/XStateChangeListener.hpp>
-#endif
 #include <com/sun/star/sdb/XSubDocument.hpp>
 #include <com/sun/star/util/XCloseListener.hpp>
 #include <com/sun/star/container/XHierarchicalName.hpp>

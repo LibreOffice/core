@@ -27,18 +27,10 @@
 #ifndef DBACCESS_CORE_API_CROWSETCOLUMN_HXX
 #define DBACCESS_CORE_API_CROWSETCOLUMN_HXX
 
-#ifndef DBACCESS_CORE_API_ROWSETROW_HXX
 #include "RowSetRow.hxx"
-#endif
-#ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include <connectivity/CommonTools.hxx>
-#endif
-#ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
 #include <comphelper/proparrhlp.hxx>
-#endif
-#ifndef DBACCESS_CORE_API_CROWSETDATACOLUMN_HXX
 #include "CRowSetDataColumn.hxx"
-#endif
 
 namespace dbaccess
 {

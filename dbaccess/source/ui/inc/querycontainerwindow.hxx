@@ -28,24 +28,12 @@
 #ifndef DBAUI_QUERYCONTAINERWINDOW_HXX
 #define DBAUI_QUERYCONTAINERWINDOW_HXX
 
-#ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
-#endif
-#ifndef _SV_SPLIT_HXX
 #include <vcl/split.hxx>
-#endif
-#ifndef DBAUI_DATAVIEW_HXX
 #include "dataview.hxx"
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
-#endif
-#ifndef DBAUI_QUERYVIEWSWITCH_HXX
 #include "QueryViewSwitch.hxx"
-#endif
-#ifndef _SV_DOCKWIN_HXX
 #include <vcl/dockwin.hxx>
-#endif
 
 class FixedLine;
 //.........................................................................

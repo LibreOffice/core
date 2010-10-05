@@ -27,15 +27,9 @@
 #ifndef DBACCESS_CONNECTIONLINEACCESS_HXX
 #define DBACCESS_CONNECTIONLINEACCESS_HXX
 
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLERELATIONSET_HPP_
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
-#endif
-#ifndef _TOOLKIT_AWT_VCLXACCESSIBLECOMPONENT_HXX_
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
-#endif
 
 namespace dbaui
 {

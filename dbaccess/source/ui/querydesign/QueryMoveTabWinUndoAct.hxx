@@ -27,15 +27,9 @@
 #ifndef DBAUI_OQUERYMOVETABWINUNDOACT_HXX
 #define DBAUI_OQUERYMOVETABWINUNDOACT_HXX
 
-#ifndef DBAUI_QUERYDESIGNUNDOACTION_HXX
 #include "QueryDesignUndoAction.hxx"
-#endif
-#ifndef _DBU_QRY_HRC_
 #include "dbu_qry.hrc"
-#endif
-#ifndef _SV_GEN_HXX
 #include <tools/gen.hxx>
-#endif
 
 namespace dbaui
 {

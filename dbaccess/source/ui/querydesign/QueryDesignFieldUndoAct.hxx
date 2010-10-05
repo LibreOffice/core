@@ -27,15 +27,9 @@
 #ifndef DBAUI_QUERYDESIGNFIELDUNDOACT_HXX
 #define DBAUI_QUERYDESIGNFIELDUNDOACT_HXX
 
-#ifndef DBAUI_GENERALUNDO_HXX
 #include "GeneralUndo.hxx"
-#endif
-#ifndef _DBU_QRY_HRC_
 #include "dbu_qry.hrc"
-#endif
-#ifndef DBAUI_QUERYDESIGN_OSELECTIONBROWSEBOX_HXX
 #include "SelectionBrowseBox.hxx"
-#endif
 
 
 namespace dbaui

@@ -28,12 +28,8 @@
 #ifndef ADABASUI_SQLNAMEEDIT_HXX
 #define ADABASUI_SQLNAMEEDIT_HXX
 
-#ifndef _SV_EDIT_HXX
 #include <vcl/edit.hxx>
-#endif
-#ifndef _SV_COMBOBOX_HXX
 #include <vcl/combobox.hxx>
-#endif
 
 namespace adabasui
 {
