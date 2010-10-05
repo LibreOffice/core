@@ -707,22 +707,6 @@ void FileDialogHelper_Impl::updateVersions()
 }
 
 // -----------------------------------------------------------------------
-class OReleaseSolarMutex
-{
-private:
-    const sal_Int32 m_nAquireCount;
-public:
-    OReleaseSolarMutex( )
-        :m_nAquireCount( Application::ReleaseSolarMutex() )
-    {
-    }
-    ~OReleaseSolarMutex( )
-    {
-        Application::AcquireSolarMutex( m_nAquireCount );
-    }
-};
-
-// -----------------------------------------------------------------------
 IMPL_LINK( FileDialogHelper_Impl, TimeOutHdl_Impl, Timer*, EMPTYARG )
 {
     if ( !mbHasPreview )
@@ -787,7 +771,7 @@ IMPL_LINK( FileDialogHelper_Impl, TimeOutHdl_Impl, Timer*, EMPTYARG )
 
     try
     {
-        OReleaseSolarMutex aReleaseForCallback;
+        SolarMutexReleaser aReleaseForCallback;
         // clear the preview window
         xFilePicker->setImage( FilePreviewImageFormats::BITMAP, aAny );
     }
@@ -1357,7 +1341,7 @@ sal_Int16 FileDialogHelper_Impl::implDoExecute()
 #ifdef WNT
             if ( mbSystemPicker )
             {
-                OReleaseSolarMutex aSolarMutex;
+                SolarMutexReleaser aSolarMutex;
                 nRet = mxFileDlg->execute();
             }
             else
