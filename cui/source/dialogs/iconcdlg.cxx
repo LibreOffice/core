@@ -1131,7 +1131,7 @@ const USHORT* IconChoiceDialog::GetInputRanges( const SfxItemPool& rPool )
 
 void IconChoiceDialog::SetInputSet( const SfxItemSet* pInSet )
 {
-    FASTBOOL bSet = ( pSet != NULL );
+    bool bSet = ( pSet != NULL );
 
     pSet = pInSet;
 

@@ -45,7 +45,7 @@ private:
 public:
     TYPEINFO();
 
-    DlgEdPage( DlgEdModel& rModel, FASTBOOL bMasterPage=FALSE );
+    DlgEdPage( DlgEdModel& rModel, bool bMasterPage = false );
     DlgEdPage( const DlgEdPage& );
     virtual ~DlgEdPage();
 

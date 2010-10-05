@@ -452,7 +452,7 @@ String DbRegistrationOptionsPage::getFileLocation(const String& _sLocation)
 
             // old path is an URL?
             INetURLObject aObj( _sLocation );
-            FASTBOOL bURL = ( aObj.GetProtocol() != INET_PROT_NOT_VALID );
+            bool bURL = ( aObj.GetProtocol() != INET_PROT_NOT_VALID );
             Sequence< ::rtl::OUString > aFiles = xFilePicker->getFiles();
             INetURLObject aNewObj( aFiles[0] );
             aNewObj.removeFinalSlash();

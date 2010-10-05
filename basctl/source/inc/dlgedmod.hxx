@@ -54,9 +54,9 @@ public:
     DlgEdModel();
     virtual ~DlgEdModel();
 
-    virtual void DlgEdModelChanged( FASTBOOL bChanged = TRUE );
+    virtual void DlgEdModelChanged( bool bChanged = true );
 
-    virtual SdrPage*  AllocPage(FASTBOOL bMasterPage);
+    virtual SdrPage*  AllocPage(bool bMasterPage);
 
     virtual Window* GetCurDocViewWin();
 };

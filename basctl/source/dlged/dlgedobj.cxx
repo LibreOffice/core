@@ -1049,9 +1049,9 @@ void DlgEdObj::NbcResize(const Point& rRef, const Fraction& xFract, const Fracti
 
 //----------------------------------------------------------------------------
 
-FASTBOOL DlgEdObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
+bool DlgEdObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
-    FASTBOOL bResult = SdrUnoObj::EndCreate(rStat, eCmd);
+    bool bResult = SdrUnoObj::EndCreate(rStat, eCmd);
 
     SetDefaults();
     StartListening();
@@ -1825,9 +1825,9 @@ void DlgEdForm::NbcResize(const Point& rRef, const Fraction& xFract, const Fract
 
 //----------------------------------------------------------------------------
 
-FASTBOOL DlgEdForm::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
+bool DlgEdForm::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
-    FASTBOOL bResult = SdrUnoObj::EndCreate(rStat, eCmd);
+    bool bResult = SdrUnoObj::EndCreate(rStat, eCmd);
 
     // stop listening
     EndListening(sal_False);

@@ -312,7 +312,7 @@ SvxCharMapData::SvxCharMapData( SfxModalDialog* pDialog, BOOL bOne_, ResMgr* pRe
     // the font may not be in the list =>
     // try to find a font name token in list and select found font,
     // else select topmost entry
-    FASTBOOL bFound = (aFontLB.GetEntryPos( aDefStr ) == LISTBOX_ENTRY_NOTFOUND );
+    bool bFound = (aFontLB.GetEntryPos( aDefStr ) == LISTBOX_ENTRY_NOTFOUND );
     if( !bFound )
     {
         for ( xub_StrLen i = 0; i < aDefStr.GetTokenCount(); ++i )

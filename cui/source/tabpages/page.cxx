@@ -561,7 +561,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
     if ( pItem )
         aPaperSize = ( (const SvxSizeItem*)pItem )->GetSize();
 
-    FASTBOOL bOrientationSupport =
+    bool bOrientationSupport =
         pImpl->mpDefPrinter->HasSupport( SUPPORT_SET_ORIENTATION );
 #ifdef OS2
     // unter OS/2 wird bei HasSupport() immer TRUE returned
@@ -1154,7 +1154,7 @@ IMPL_LINK( SvxPageDescPage, SwapOrientation_Impl, RadioButton *, pBtn )
 
 // -----------------------------------------------------------------------
 
-void SvxPageDescPage::SwapFirstValues_Impl( FASTBOOL bSet )
+void SvxPageDescPage::SwapFirstValues_Impl( bool bSet )
 {
     MapMode aOldMode = pImpl->mpDefPrinter->GetMapMode();
     Orientation eOri = ORIENTATION_PORTRAIT;

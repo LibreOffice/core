@@ -1622,7 +1622,7 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet& rSet )
         SfxObjectShell* pDocSh = SfxObjectShell::Current();
         DBG_ASSERT( pDocSh, "DocShell not found!" );
         XColorTable* pColorTable = NULL;
-        FASTBOOL bKillTable = FALSE;
+        bool bKillTable = false;
         if ( pDocSh )
         {
             pItem = pDocSh->GetItem( SID_COLOR_TABLE );
@@ -1633,7 +1633,7 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet& rSet )
         if ( !pColorTable )
         {
             pColorTable = new XColorTable( SvtPathOptions().GetPalettePath() );
-            bKillTable = TRUE;
+            bKillTable = true;
         }
 
            aBulColLB.InsertEntry( Color( COL_AUTO ), SVX_RESSTR( RID_SVXSTR_AUTOMATIC ));
