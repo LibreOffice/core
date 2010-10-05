@@ -61,6 +61,7 @@ JP 20.07.95:
 #include <editeng/boxitem.hxx>
 #include <editeng/brshitem.hxx>
 #include <editeng/adjitem.hxx>
+#include <editeng/justifyitem.hxx>
 #include <svx/rotmodit.hxx>
 #include <svl/intitem.hxx>
 #include <editeng/bolnitem.hxx>
