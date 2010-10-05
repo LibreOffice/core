@@ -84,8 +84,6 @@ SV_IMPL_VARARR_SORT( SvULongsSort, ULONG )
 SV_IMPL_VARARR_SORT( SvLongsSort, long )
 SV_IMPL_VARARR_SORT( SvXub_StrLensSort, xub_StrLen )
 
-SV_IMPL_VARARR( SvXub_StrLens, xub_StrLen )
-
 SV_IMPL_PTRARR( SvStrings, StringPtr )
 SV_IMPL_PTRARR( SvStringsDtor, StringPtr )
 SV_IMPL_OP_PTRARR_SORT( SvStringsSort, StringPtr )
