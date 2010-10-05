@@ -1822,8 +1822,7 @@ namespace cppcanvas
                             static int count = -1, limit = 0x7fffffff;
                             if (count == -1) {
                                 count = 0;
-                                char *env;
-                                if (env = getenv ("EMF_PLUS_LIMIT")) {
+                                if (char *env = getenv ("EMF_PLUS_LIMIT")) {
                                     limit = atoi (env);
                                     EMFP_DEBUG (printf ("EMF+ records limit: %d\n", limit));
                                 }
