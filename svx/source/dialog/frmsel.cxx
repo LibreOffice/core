@@ -153,7 +153,7 @@ void FrameBorder::SetCoreStyle( const SvxBorderLine* pStyle )
         maCoreStyle = SvxBorderLine();
 
     // from twips to points
-    maUIStyle.Set( maCoreStyle, 0.05, FRAMESEL_GEOM_WIDTH, true );
+    maUIStyle.Set( maCoreStyle, 0.05, FRAMESEL_GEOM_WIDTH );
     meState = maUIStyle.Prim() ? FRAMESTATE_SHOW : FRAMESTATE_HIDE;
 }
 
@@ -633,11 +633,31 @@ void FrameSelectorImpl::DrawAllFrameBorders()
     // Copy all frame border styles to the helper array
     maArray.SetColumnStyleLeft( 0, maLeft.GetUIStyle() );
     if( mbVer ) maArray.SetColumnStyleLeft( 1, maVer.GetUIStyle() );
-    maArray.SetColumnStyleRight( mbVer ? 1 : 0, maRight.GetUIStyle() );
+
+    // Invert the style for the right line
+    const frame::Style rRightStyle = maRight.GetUIStyle( );
+    frame::Style rInvertedRight( rRightStyle.GetColor(),
+            rRightStyle.Secn(), rRightStyle.Dist(), rRightStyle.Prim( ),
+            rRightStyle.Dashing( ) );
+    maArray.SetColumnStyleRight( mbVer ? 1 : 0, rInvertedRight );
 
     maArray.SetRowStyleTop( 0, maTop.GetUIStyle() );
-    if( mbHor ) maArray.SetRowStyleTop( 1, maHor.GetUIStyle() );
-    maArray.SetRowStyleBottom( mbHor ? 1 : 0, maBottom.GetUIStyle() );
+    if( mbHor )
+    {
+        // Invert the style for the hor line to match the real borders
+        const frame::Style rHorStyle = maHor.GetUIStyle();
+        frame::Style rInvertedHor( rHorStyle.GetColor(),
+            rHorStyle.Secn(), rHorStyle.Dist(), rHorStyle.Prim( ),
+            rHorStyle.Dashing() );
+        maArray.SetRowStyleTop( 1, rInvertedHor );
+    }
+
+    // Invert the style for the bottom line
+    const frame::Style rBottomStyle = maBottom.GetUIStyle( );
+    frame::Style rInvertedBottom( rBottomStyle.GetColor(),
+            rBottomStyle.Secn(), rBottomStyle.Dist(), rBottomStyle.Prim( ),
+            rBottomStyle.Dashing() );
+    maArray.SetRowStyleBottom( mbHor ? 1 : 0, rInvertedBottom );
 
     for( size_t nCol = 0; nCol < maArray.GetColCount(); ++nCol )
         for( size_t nRow = 0; nRow < maArray.GetRowCount(); ++nRow )
@@ -858,7 +878,8 @@ void FrameSelector::HideAllBorders()
         mxImpl->SetBorderState( **aIt, FRAMESTATE_HIDE );
 }
 
-bool FrameSelector::GetVisibleWidth( USHORT& rnPrim, USHORT& rnDist, USHORT& rnSecn ) const
+bool FrameSelector::GetVisibleWidth( USHORT& rnPrim, USHORT& rnDist, USHORT& rnSecn,
+                        SvxBorderStyle& rnStyle ) const
 {
     VisFrameBorderCIter aIt( mxImpl->maEnabBorders );
     if( !aIt.Is() )
@@ -870,13 +891,15 @@ bool FrameSelector::GetVisibleWidth( USHORT& rnPrim, USHORT& rnDist, USHORT& rnS
         bFound =
             (rStyle.GetOutWidth() == (*aIt)->GetCoreStyle().GetOutWidth()) &&
             (rStyle.GetDistance() == (*aIt)->GetCoreStyle().GetDistance()) &&
-            (rStyle.GetInWidth()  == (*aIt)->GetCoreStyle().GetInWidth());
+            (rStyle.GetInWidth()  == (*aIt)->GetCoreStyle().GetInWidth()) &&
+            (rStyle.GetStyle() == (*aIt)->GetCoreStyle().GetStyle());
 
     if( bFound )
     {
         rnPrim = rStyle.GetOutWidth();
         rnDist = rStyle.GetDistance();
         rnSecn = rStyle.GetInWidth();
+        rnStyle = rStyle.GetStyle();
     }
     return bFound;
 }
@@ -937,11 +960,13 @@ void FrameSelector::SelectAllVisibleBorders( bool bSelect )
         mxImpl->SelectBorder( **aIt, bSelect );
 }
 
-void FrameSelector::SetStyleToSelection( USHORT nPrim, USHORT nDist, USHORT nSecn )
+void FrameSelector::SetStyleToSelection( USHORT nPrim, USHORT nDist, USHORT nSecn,
+        SvxBorderStyle nStyle )
 {
     mxImpl->maCurrStyle.SetOutWidth( nPrim );
     mxImpl->maCurrStyle.SetDistance( nDist );
     mxImpl->maCurrStyle.SetInWidth( nSecn );
+    mxImpl->maCurrStyle.SetStyle( nStyle );
     for( SelFrameBorderIter aIt( mxImpl->maEnabBorders ); aIt.Is(); ++aIt )
         mxImpl->SetBorderState( **aIt, FRAMESTATE_SHOW );
 }

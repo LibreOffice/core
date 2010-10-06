@@ -29,7 +29,7 @@
 #include "precompiled_xmloff.hxx"
 #include <tools/debug.hxx>
 #include <xmloff/txtprmap.hxx>
-#include <com/sun/star/table/BorderLine.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
@@ -692,7 +692,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
     {
         if( pLeftBorderWidthState && pRightBorderWidthState && pTopBorderWidthState && pBottomBorderWidthState )
         {
-            table::BorderLine aLeft, aRight, aTop, aBottom;
+            table::BorderLine2 aLeft, aRight, aTop, aBottom;
 
             pLeftBorderWidthState->maValue >>= aLeft;
             pRightBorderWidthState->maValue >>= aRight;
@@ -700,10 +700,13 @@ void XMLTextExportPropertySetMapper::ContextFilter(
             pBottomBorderWidthState->maValue >>= aBottom;
             if( aLeft.Color == aRight.Color && aLeft.InnerLineWidth == aRight.InnerLineWidth &&
                 aLeft.OuterLineWidth == aRight.OuterLineWidth && aLeft.LineDistance == aRight.LineDistance &&
+                aLeft.LineStyle == aRight.LineStyle &&
                 aLeft.Color == aTop.Color && aLeft.InnerLineWidth == aTop.InnerLineWidth &&
                 aLeft.OuterLineWidth == aTop.OuterLineWidth && aLeft.LineDistance == aTop.LineDistance &&
+                aLeft.LineStyle == aTop.LineStyle &&
                 aLeft.Color == aBottom.Color && aLeft.InnerLineWidth == aBottom.InnerLineWidth &&
-                aLeft.OuterLineWidth == aBottom.OuterLineWidth && aLeft.LineDistance == aBottom.LineDistance )
+                aLeft.OuterLineWidth == aBottom.OuterLineWidth && aLeft.LineDistance == aBottom.LineDistance &&
+                aLeft.LineStyle == aBottom.LineStyle )
             {
                 pLeftBorderWidthState->mnIndex = -1;
                 pLeftBorderWidthState->maValue.clear();
@@ -765,7 +768,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
     {
         if( pLeftBorderState && pRightBorderState && pTopBorderState && pBottomBorderState )
         {
-            table::BorderLine aLeft, aRight, aTop, aBottom;
+            table::BorderLine2 aLeft, aRight, aTop, aBottom;
 
             pLeftBorderState->maValue >>= aLeft;
             pRightBorderState->maValue >>= aRight;
@@ -773,10 +776,13 @@ void XMLTextExportPropertySetMapper::ContextFilter(
             pBottomBorderState->maValue >>= aBottom;
             if( aLeft.Color == aRight.Color && aLeft.InnerLineWidth == aRight.InnerLineWidth &&
                 aLeft.OuterLineWidth == aRight.OuterLineWidth && aLeft.LineDistance == aRight.LineDistance &&
+                aLeft.LineStyle == aRight.LineStyle &&
                 aLeft.Color == aTop.Color && aLeft.InnerLineWidth == aTop.InnerLineWidth &&
                 aLeft.OuterLineWidth == aTop.OuterLineWidth && aLeft.LineDistance == aTop.LineDistance &&
+                aLeft.LineStyle == aTop.LineStyle  &&
                 aLeft.Color == aBottom.Color && aLeft.InnerLineWidth == aBottom.InnerLineWidth &&
-                aLeft.OuterLineWidth == aBottom.OuterLineWidth && aLeft.LineDistance == aBottom.LineDistance )
+                aLeft.OuterLineWidth == aBottom.OuterLineWidth && aLeft.LineDistance == aBottom.LineDistance &&
+                aLeft.LineStyle == aBottom.LineStyle )
             {
                 pLeftBorderState->mnIndex = -1;
                 pLeftBorderState->maValue.clear();

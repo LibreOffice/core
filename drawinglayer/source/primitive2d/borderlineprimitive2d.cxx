@@ -33,6 +33,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
+#include <svtools/borderhelper.hxx>
 #include <numeric>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -157,14 +158,29 @@ namespace drawinglayer
                             // create filled polygon primitive
                             const basegfx::B2DVector aLineWidthOffset((getCorrectedLeftWidth() * 0.5) * aPerpendicular);
 
-                            aPolygon.append(aTmpStart + aLineWidthOffset);
-                            aPolygon.append(aTmpEnd + aLineWidthOffset);
-                            aPolygon.append(aTmpEnd - aLineWidthOffset);
-                            aPolygon.append(aTmpStart - aLineWidthOffset);
-                            aPolygon.setClosed(true);
+                            aPolygon.append( aTmpStart );
+                            aPolygon.append( aTmpEnd );
+
+                            basegfx::B2DPolyPolygon aDashed = svtools::ApplyLineDashing(
+                                   aPolygon, getStyle(), MAP_100TH_MM );
+                            for (sal_uInt32 i = 0; i < aDashed.count(); i++ )
+                            {
+                                basegfx::B2DPolygon aDash = aDashed.getB2DPolygon( i );
+                                basegfx::B2DPoint aDashStart = aDash.getB2DPoint( 0 );
+                                basegfx::B2DPoint aDashEnd = aDash.getB2DPoint( aDash.count() - 1 );
+
+                                basegfx::B2DPolygon aDashPolygon;
+                                aDashPolygon.append( aDashStart + aLineWidthOffset );
+                                aDashPolygon.append( aDashEnd + aLineWidthOffset );
+                                aDashPolygon.append( aDashEnd - aLineWidthOffset );
+                                aDashPolygon.append( aDashStart - aLineWidthOffset );
+                                aDashPolygon.setClosed( true );
+
+                                aDashed.setB2DPolygon( i, aDashPolygon );
+                            }
 
                             xRetval[0] = Primitive2DReference(new PolyPolygonColorPrimitive2D(
-                                basegfx::B2DPolyPolygon(aPolygon), getRGBColor()));
+                                    basegfx::B2DPolyPolygon( aDashed ), getRGBColor()));
                         }
                     }
                 }
@@ -185,7 +201,8 @@ namespace drawinglayer
             double fExtendOuterEnd,
             bool bCreateInside,
             bool bCreateOutside,
-            const basegfx::BColor& rRGBColor)
+            const basegfx::BColor& rRGBColor,
+            const short nStyle)
         :   BufferedDecompositionPrimitive2D(),
             maStart(rStart),
             maEnd(rEnd),
@@ -197,6 +214,7 @@ namespace drawinglayer
             mfExtendOuterStart(fExtendOuterStart),
             mfExtendOuterEnd(fExtendOuterEnd),
             maRGBColor(rRGBColor),
+            mnStyle(nStyle),
             mbCreateInside(bCreateInside),
             mbCreateOutside(bCreateOutside)
         {
@@ -219,7 +237,8 @@ namespace drawinglayer
                     && getExtendOuterEnd() == rCompare.getExtendOuterEnd()
                     && getCreateInside() == rCompare.getCreateInside()
                     && getCreateOutside() == rCompare.getCreateOutside()
-                    && getRGBColor() == rCompare.getRGBColor());
+                    && getRGBColor() == rCompare.getRGBColor()
+                    && getStyle() == rCompare.getStyle());
             }
 
             return false;

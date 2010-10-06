@@ -34,13 +34,17 @@
 #include <xmloff/xmluconv.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/table/BorderLine.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
+
+const sal_Int16 API_LINE_SOLID   = 0;
+const sal_Int16 API_LINE_DOTTED  = 1;
+const sal_Int16 API_LINE_DASHED  = 2;
 
 // copied from svx/boxitem.hxx
 #define DEF_LINE_WIDTH_0        1
@@ -101,6 +105,8 @@ using namespace ::xmloff::token;
 #define SVX_XML_BORDER_STYLE_NONE 0
 #define SVX_XML_BORDER_STYLE_SOLID 1
 #define SVX_XML_BORDER_STYLE_DOUBLE 2
+#define SVX_XML_BORDER_STYLE_DASHED 3
+#define SVX_XML_BORDER_STYLE_DOTTED 4
 
 #define SVX_XML_BORDER_WIDTH_THIN 0
 #define SVX_XML_BORDER_WIDTH_MIDDLE 1
@@ -112,8 +118,8 @@ SvXMLEnumMapEntry pXML_BorderStyles[] =
     { XML_HIDDEN,               SVX_XML_BORDER_STYLE_NONE   },
     { XML_SOLID,                SVX_XML_BORDER_STYLE_SOLID  },
     { XML_DOUBLE,               SVX_XML_BORDER_STYLE_DOUBLE },
-    { XML_DOTTED,               SVX_XML_BORDER_STYLE_SOLID  },
-    { XML_DASHED,               SVX_XML_BORDER_STYLE_SOLID  },
+    { XML_DOTTED,               SVX_XML_BORDER_STYLE_DOTTED },
+    { XML_DASHED,               SVX_XML_BORDER_STYLE_DASHED },
     { XML_GROOVE,               SVX_XML_BORDER_STYLE_SOLID  },
     { XML_RIDGE,                SVX_XML_BORDER_STYLE_SOLID  },
     { XML_INSET,                SVX_XML_BORDER_STYLE_SOLID  },
@@ -170,6 +176,23 @@ static sal_uInt16 __READONLY_DATA aDBorderWidths[] =
     DBORDER_ENTRY( 6 ),
     DBORDER_ENTRY( 5 )
 };
+
+void lcl_frmitems_setXMLBorderStyle( table::BorderLine2 & rBorderLine, sal_uInt16 nStyle )
+{
+    sal_Int16 eStyle = API_LINE_SOLID;
+    switch ( nStyle )
+    {
+        case SVX_XML_BORDER_STYLE_DOTTED:
+            eStyle = API_LINE_DOTTED;
+            break;
+        case SVX_XML_BORDER_STYLE_DASHED:
+            eStyle = API_LINE_DASHED;
+            break;
+        default:
+            break;
+    }
+    rBorderLine.LineStyle = eStyle;
+}
 
 void lcl_frmitems_setXMLBorderWidth( table::BorderLine &rBorderLine,
                                      sal_uInt16 nWidth, sal_Bool bDouble )
@@ -273,7 +296,7 @@ sal_Bool XMLBorderWidthHdl::importXML( const OUString& rStrImpValue, uno::Any& r
     sal_uInt16 nWidth = i < nSize ? 0 : nOutWidth + nInWidth + nDistance;
 #endif
 
-    table::BorderLine aBorderLine;
+    table::BorderLine2 aBorderLine;
     if(!(rValue >>= aBorderLine))
         aBorderLine.Color = 0;
 
@@ -289,7 +312,7 @@ sal_Bool XMLBorderWidthHdl::exportXML( OUString& rStrExpValue, const uno::Any& r
 {
     OUStringBuffer aOut;
 
-    table::BorderLine aBorderLine;
+    table::BorderLine2 aBorderLine;
     if(!(rValue >>= aBorderLine))
         return sal_False;
 
@@ -368,7 +391,7 @@ sal_Bool XMLBorderHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue
     if( !bHasStyle || (SVX_XML_BORDER_STYLE_NONE != nStyle && !bHasWidth) )
         return sal_False;
 
-    table::BorderLine aBorderLine;
+    table::BorderLine2 aBorderLine;
     if(!(rValue >>= aBorderLine))
     {
         aBorderLine.Color = 0;
@@ -400,11 +423,13 @@ sal_Bool XMLBorderHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue
         else
         {
             lcl_frmitems_setXMLBorderWidth( aBorderLine, nWidth, bDouble );
+            lcl_frmitems_setXMLBorderStyle( aBorderLine, nStyle );
         }
     }
     else
     {
         lcl_frmitems_setXMLBorderWidth( aBorderLine, 0, bDouble );
+        lcl_frmitems_setXMLBorderStyle( aBorderLine, nStyle );
     }
 
     // set color
@@ -419,7 +444,7 @@ sal_Bool XMLBorderHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue
 {
     OUStringBuffer aOut;
 
-    table::BorderLine aBorderLine;
+    table::BorderLine2 aBorderLine;
     if(!(rValue >>= aBorderLine))
         return sal_False;
 
@@ -441,7 +466,20 @@ sal_Bool XMLBorderHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue
 
         aOut.append( sal_Unicode( ' ' ) );
 
-        aOut.append( GetXMLToken((0 == nDistance) ? XML_SOLID : XML_DOUBLE) );
+        XMLTokenEnum eStyleToken = XML_SOLID;
+        switch ( aBorderLine.LineStyle )
+        {
+            case API_LINE_DASHED:
+                eStyleToken = XML_DASHED;
+                break;
+            case API_LINE_DOTTED:
+                eStyleToken = XML_DOTTED;
+                break;
+            case API_LINE_SOLID:
+            default:
+                eStyleToken = XML_SOLID;
+        }
+        aOut.append( GetXMLToken((0 == nDistance) ? eStyleToken : XML_DOUBLE) );
 
         aOut.append( sal_Unicode( ' ' ) );
 

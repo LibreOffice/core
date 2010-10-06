@@ -33,7 +33,7 @@
 #include "PageMasterPropMapper.hxx"
 #include <xmloff/PageMasterStyleMap.hxx>
 #include <xmloff/maptype.hxx>
-#include <com/sun/star/table/BorderLine.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <xmloff/xmlimp.hxx>
 
@@ -204,11 +204,11 @@ void PageMasterImportPropertyMapper::finished(::std::vector< XMLPropertyState >&
             pBorderWidths[i]->mnIndex = -1;
         if( pBorders[i] )
         {
-            table::BorderLine aBorderLine;
+            table::BorderLine2 aBorderLine;
             pBorders[i]->maValue >>= aBorderLine;
              if( pBorderWidths[i] )
             {
-                table::BorderLine aBorderLineWidth;
+                table::BorderLine2 aBorderLineWidth;
                 pBorderWidths[i]->maValue >>= aBorderLineWidth;
                 aBorderLine.OuterLineWidth = aBorderLineWidth.OuterLineWidth;
                 aBorderLine.InnerLineWidth = aBorderLineWidth.InnerLineWidth;
@@ -226,11 +226,11 @@ void PageMasterImportPropertyMapper::finished(::std::vector< XMLPropertyState >&
             pHeaderBorderWidths[i]->mnIndex = -1;
         if( pHeaderBorders[i] )
         {
-            table::BorderLine aBorderLine;
+            table::BorderLine2 aBorderLine;
             pHeaderBorders[i]->maValue >>= aBorderLine;
              if( pHeaderBorderWidths[i] )
             {
-                table::BorderLine aBorderLineWidth;
+                table::BorderLine2 aBorderLineWidth;
                 pHeaderBorderWidths[i]->maValue >>= aBorderLineWidth;
                 aBorderLine.OuterLineWidth = aBorderLineWidth.OuterLineWidth;
                 aBorderLine.InnerLineWidth = aBorderLineWidth.InnerLineWidth;
@@ -248,11 +248,11 @@ void PageMasterImportPropertyMapper::finished(::std::vector< XMLPropertyState >&
             pFooterBorderWidths[i]->mnIndex = -1;
         if( pFooterBorders[i] )
         {
-            table::BorderLine aBorderLine;
+            table::BorderLine2 aBorderLine;
             pFooterBorders[i]->maValue >>= aBorderLine;
              if( pFooterBorderWidths[i] )
             {
-                table::BorderLine aBorderLineWidth;
+                table::BorderLine2 aBorderLineWidth;
                 pFooterBorderWidths[i]->maValue >>= aBorderLineWidth;
                 aBorderLine.OuterLineWidth = aBorderLineWidth.OuterLineWidth;
                 aBorderLine.InnerLineWidth = aBorderLineWidth.InnerLineWidth;

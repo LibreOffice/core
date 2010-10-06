@@ -332,7 +332,8 @@ namespace drawinglayer
                         fExtendOE * fTwipsToMM,
                         true,
                         getLeftIsOutside(),
-                        getLeftLine().GetColor().getBColor()));
+                        getLeftLine().GetColor().getBColor(),
+                        getLeftLine().GetStyle()));
                 }
             }
 
@@ -374,7 +375,8 @@ namespace drawinglayer
                         fExtendOE * fTwipsToMM,
                         true,
                         getBottomIsOutside(),
-                        getBottomLine().GetColor().getBColor()));
+                        getBottomLine().GetColor().getBColor(),
+                        getBottomLine().GetStyle()));
                 }
             }
 
@@ -416,7 +418,8 @@ namespace drawinglayer
                         fExtendIE * fTwipsToMM,
                         getRightIsOutside(),
                         true,
-                        getRightLine().GetColor().getBColor()));
+                        getRightLine().GetColor().getBColor(),
+                        getRightLine().GetStyle()));
                 }
             }
 
@@ -458,7 +461,8 @@ namespace drawinglayer
                         fExtendIE * fTwipsToMM,
                         getTopIsOutside(),
                         true,
-                        getTopLine().GetColor().getBColor()));
+                        getTopLine().GetColor().getBColor(),
+                        getTopLine().GetStyle()));
                 }
             }
 

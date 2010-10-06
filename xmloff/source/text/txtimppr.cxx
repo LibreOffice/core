@@ -30,7 +30,7 @@
 #include <tools/debug.hxx>
 #include <com/sun/star/awt/FontFamily.hpp>
 #include <com/sun/star/awt/FontPitch.hpp>
-#include <com/sun/star/table/BorderLine.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/SizeType.hpp>
 #include <tools/string.hxx>
@@ -438,12 +438,12 @@ void XMLTextImportPropertyMapper::finished(
         sal_Bool bHasBorder = sal_False;
         if( pBorders[i] )
         {
-            table::BorderLine aBorderLine;
+            table::BorderLine2 aBorderLine;
             pBorders[i]->maValue >>= aBorderLine;
 
              if( pBorderWidths[i] )
             {
-                table::BorderLine aBorderLineWidth;
+                table::BorderLine2 aBorderLineWidth;
                 pBorderWidths[i]->maValue >>= aBorderLineWidth;
                 aBorderLine.OuterLineWidth = aBorderLineWidth.OuterLineWidth;
                 aBorderLine.InnerLineWidth = aBorderLineWidth.InnerLineWidth;
@@ -492,10 +492,10 @@ void XMLTextImportPropertyMapper::finished(
 #else
         if( pBorders[i] && pBorderWidths[i] )
         {
-            table::BorderLine aBorderLine;
+            table::BorderLine2 aBorderLine;
             pBorders[i]->maValue >>= aBorderLine;
 
-            table::BorderLine aBorderLineWidth;
+            table::BorderLine2 aBorderLineWidth;
             pBorderWidths[i]->maValue >>= aBorderLineWidth;
 
             aBorderLine.OuterLineWidth = aBorderLineWidth.OuterLineWidth;

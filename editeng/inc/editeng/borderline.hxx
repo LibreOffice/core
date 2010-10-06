@@ -90,6 +90,13 @@
 
 // ============================================================================
 
+enum SvxBorderStyle
+{
+    SOLID,
+    DOTTED,
+    DASHED
+};
+
 class EDITENG_DLLPUBLIC SvxBorderLine
 {
 protected:
@@ -97,9 +104,11 @@ protected:
     USHORT nOutWidth;
     USHORT nInWidth;
     USHORT nDistance;
+    SvxBorderStyle   m_nStyle;
 
 public:
-    SvxBorderLine( const Color *pCol = 0, USHORT nOut = 0, USHORT nIn = 0, USHORT nDist = 0 );
+    SvxBorderLine( const Color *pCol = 0, USHORT nOut = 0, USHORT nIn = 0, USHORT nDist = 0,
+           SvxBorderStyle nStyle = SOLID );
     SvxBorderLine( const SvxBorderLine& r );
 
     SvxBorderLine& operator=( const SvxBorderLine& r );
@@ -109,10 +118,13 @@ public:
     USHORT          GetInWidth() const { return nInWidth; }
     USHORT          GetDistance() const { return nDistance; }
 
+    SvxBorderStyle  GetStyle() const { return m_nStyle; }
+
     void            SetColor( const Color &rColor ) { aColor = rColor; }
     void            SetOutWidth( USHORT nNew ) { nOutWidth = nNew; }
     void            SetInWidth( USHORT nNew ) { nInWidth = nNew;  }
     void            SetDistance( USHORT nNew ) { nDistance = nNew; }
+    void            SetStyle( SvxBorderStyle nNew ) { m_nStyle = nNew; }
     void            ScaleMetrics( long nMult, long nDiv );
 
     BOOL            operator==( const SvxBorderLine &rCmp ) const;

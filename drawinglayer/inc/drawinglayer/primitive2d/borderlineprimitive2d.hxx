@@ -66,6 +66,7 @@ namespace drawinglayer
 
             /// the line color
             basegfx::BColor                                 maRGBColor;
+            short                                           mnStyle;
 
             /// bitfield
             /// flags to influence inside/outside creation
@@ -131,7 +132,8 @@ namespace drawinglayer
                 double fExtendOuterEnd,
                 bool bCreateInside,
                 bool bCreateOutside,
-                const basegfx::BColor& rRGBColor);
+                const basegfx::BColor& rRGBColor,
+                const short nStyle );
 
             /// data read access
             const basegfx::B2DPoint& getStart() const { return maStart; }
@@ -145,7 +147,8 @@ namespace drawinglayer
             double getExtendOuterEnd() const { return mfExtendOuterEnd; }
             bool getCreateInside() const { return mbCreateInside; }
             bool getCreateOutside() const { return mbCreateOutside; }
-            const basegfx::BColor& getRGBColor() const { return maRGBColor; }
+            const basegfx::BColor& getRGBColor () const { return maRGBColor; }
+            short getStyle () const { return mnStyle; }
 
             /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;

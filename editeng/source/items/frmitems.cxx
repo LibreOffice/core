@@ -40,6 +40,7 @@
 #include <com/sun/star/table/TableOrientation.hpp>
 #include <com/sun/star/util/SortField.hpp>
 #include <com/sun/star/util/SortFieldType.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/CellOrientation.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/style/PageStyleLayout.hpp>
@@ -1565,10 +1566,12 @@ void SvxShadowItem::SetEnumValue( sal_uInt16 nVal )
 
 // class SvxBorderLine  --------------------------------------------------
 
-SvxBorderLine::SvxBorderLine( const Color *pCol, sal_uInt16 nOut, sal_uInt16 nIn, sal_uInt16 nDist )
+SvxBorderLine::SvxBorderLine( const Color *pCol, sal_uInt16 nOut, sal_uInt16 nIn, sal_uInt16 nDist,
+       SvxBorderStyle nStyle )
 : nOutWidth( nOut )
 , nInWidth ( nIn )
 , nDistance( nDist )
+, m_nStyle( nStyle )
 {
     if ( pCol )
         aColor = *pCol;
@@ -1589,6 +1592,7 @@ SvxBorderLine& SvxBorderLine::operator=( const SvxBorderLine& r )
     nOutWidth = r.nOutWidth;
     nInWidth = r.nInWidth;
     nDistance = r.nDistance;
+    m_nStyle = r.m_nStyle;
     return *this;
 }
 
@@ -1608,7 +1612,8 @@ sal_Bool SvxBorderLine::operator==( const SvxBorderLine& rCmp ) const
     return ( ( aColor    == rCmp.GetColor() )    &&
              ( nInWidth  == rCmp.GetInWidth() )  &&
              ( nOutWidth == rCmp.GetOutWidth() ) &&
-             ( nDistance == rCmp.GetDistance() ) );
+             ( nDistance == rCmp.GetDistance() ) &&
+             ( m_nStyle == rCmp.GetStyle() ) );
 }
 
 // -----------------------------------------------------------------------
@@ -1825,15 +1830,16 @@ int SvxBoxItem::operator==( const SfxPoolItem& rAttr ) const
 }
 
 // -----------------------------------------------------------------------
-table::BorderLine SvxBoxItem::SvxLineToLine(const SvxBorderLine* pLine, sal_Bool bConvert)
+table::BorderLine2 SvxBoxItem::SvxLineToLine(const SvxBorderLine* pLine, sal_Bool bConvert)
 {
-    table::BorderLine aLine;
+    table::BorderLine2 aLine;
     if(pLine)
     {
         aLine.Color          = pLine->GetColor().GetColor() ;
         aLine.InnerLineWidth = sal_uInt16( bConvert ? TWIP_TO_MM100_UNSIGNED(pLine->GetInWidth() ): pLine->GetInWidth() );
         aLine.OuterLineWidth = sal_uInt16( bConvert ? TWIP_TO_MM100_UNSIGNED(pLine->GetOutWidth()): pLine->GetOutWidth() );
         aLine.LineDistance   = sal_uInt16( bConvert ? TWIP_TO_MM100_UNSIGNED(pLine->GetDistance()): pLine->GetDistance() );
+        aLine.LineStyle      = pLine->GetStyle( );
     }
     else
         aLine.Color          = aLine.InnerLineWidth = aLine.OuterLineWidth = aLine.LineDistance  = 0;
@@ -1843,7 +1849,7 @@ table::BorderLine SvxBoxItem::SvxLineToLine(const SvxBorderLine* pLine, sal_Bool
 bool SvxBoxItem::QueryValue( uno::Any& rVal, BYTE nMemberId  ) const
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
-    table::BorderLine aRetLine;
+    table::BorderLine2 aRetLine;
     sal_uInt16 nDist = 0;
     sal_Bool bDistMember = sal_False;
     nMemberId &= ~CONVERT_TWIPS;
@@ -2780,7 +2786,7 @@ void SvxBoxInfoItem::ResetFlags()
 bool SvxBoxInfoItem::QueryValue( uno::Any& rVal, BYTE nMemberId  ) const
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
-    table::BorderLine aRetLine;
+    table::BorderLine2 aRetLine;
     sal_Int16 nVal=0;
     sal_Bool bIntMember = sal_False;
     nMemberId &= ~CONVERT_TWIPS;
@@ -3321,6 +3327,7 @@ bool SvxLineItem::PutValue( const uno::Any& rVal, BYTE nMemId )
             case MID_OUTER_WIDTH:   pLine->SetOutWidth((USHORT)nVal);   break;
             case MID_INNER_WIDTH:   pLine->SetInWidth((USHORT)nVal);   break;
             case MID_DISTANCE:      pLine->SetDistance((USHORT)nVal);   break;
+            case MID_LINE_STYLE:    pLine->SetStyle((SvxBorderStyle)nVal); break;
             default:
                 DBG_ERROR( "Wrong MemberId" );
                 return sal_False;

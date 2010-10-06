@@ -1627,10 +1627,15 @@ case RTF_BRDRBAR:           break;
             }
             goto SETBORDERLINE;
 
-        case RTF_BRDRS:
         case RTF_BRDRDOT:
-        case RTF_BRDRHAIR:
+            aBrd.SetStyle( DOTTED );
+            break;
         case RTF_BRDRDASH:
+            aBrd.SetStyle( DASHED );
+            break;
+        case RTF_BRDRS:
+        case RTF_BRDRHAIR:
+            aBrd.SetStyle( SOLID );
 SETBORDERLINE:
             SetBorderLine( nBorderTyp, aAttr, aBrd );
             break;

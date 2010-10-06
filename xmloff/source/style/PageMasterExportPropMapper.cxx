@@ -30,7 +30,7 @@
 #include "PageMasterExportPropMapper.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <comphelper/types.hxx>
-#include <com/sun/star/table/BorderLine.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 #include <xmloff/PageMasterStyleMap.hxx>
 #include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -52,10 +52,11 @@ inline sal_Bool lcl_HasSameLineWidth( const table::BorderLine& rLine1, const tab
             (rLine1.LineDistance == rLine2.LineDistance);
 }
 
-inline sal_Bool operator==( const table::BorderLine& rLine1, const table::BorderLine& rLine2 )
+inline sal_Bool operator==( const table::BorderLine2& rLine1, const table::BorderLine2& rLine2 )
 {
     return  (rLine1.Color == rLine2.Color) &&
-            lcl_HasSameLineWidth( rLine1, rLine2 );
+            lcl_HasSameLineWidth( rLine1, rLine2 ) &&
+            ( rLine1.LineStyle == rLine2.LineStyle );
 }
 
 inline void lcl_RemoveState( XMLPropertyState* pState )
@@ -131,7 +132,7 @@ void XMLPropertyStateBuffer::ContextFilter( ::std::vector< XMLPropertyState >& )
     {
         if( pPMBorderTop && pPMBorderBottom && pPMBorderLeft && pPMBorderRight )
         {
-            table::BorderLine aLineTop, aLineBottom, aLineLeft, aLineRight;
+            table::BorderLine2 aLineTop, aLineBottom, aLineLeft, aLineRight;
 
             pPMBorderTop->maValue >>= aLineTop;
             pPMBorderBottom->maValue >>= aLineBottom;
@@ -156,7 +157,7 @@ void XMLPropertyStateBuffer::ContextFilter( ::std::vector< XMLPropertyState >& )
     {
         if( pPMBorderWidthTop && pPMBorderWidthBottom && pPMBorderWidthLeft && pPMBorderWidthRight )
         {
-            table::BorderLine aLineTop, aLineBottom, aLineLeft, aLineRight;
+            table::BorderLine2 aLineTop, aLineBottom, aLineLeft, aLineRight;
 
             pPMBorderWidthTop->maValue >>= aLineTop;
             pPMBorderWidthBottom->maValue >>= aLineBottom;

@@ -41,6 +41,7 @@
 #include <svtools/ctrlbox.hxx>
 #include <svl/style.hxx>
 #include <svtools/ctrltool.hxx>
+#include <svtools/borderhelper.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/tplpitem.hxx>
@@ -88,6 +89,7 @@
 #include "colorwindow.hxx"
 #include <memory>
 
+#include <svx/framelink.hxx>
 #include <svx/tbxcolorupdate.hxx>
 #include <editeng/eerdll.hxx>
 #include <editeng/editrids.hrc>
@@ -1522,6 +1524,21 @@ void SvxLineWindow_Impl::MakeLineBitmap( USHORT nNo, Bitmap& rBmp, const Size& r
             aVirDev.DrawRect( aRect );
             nLineWidth = (USHORT) (DEF_DOUBLE_LINE6_OUT+DEF_DOUBLE_LINE6_IN+DEF_DOUBLE_LINE6_DIST)/20;
             break;
+        case 17: // Dotted line
+            aRect.Top()     = 6;
+            aRect.Bottom()  = 6;
+            aVirDev.SetLineColor( rLineCol );
+            aVirDev.SetFillColor();
+            svtools::DrawLine( aVirDev, aRect.LeftCenter(), aRect.RightCenter(), 1, DOTTED );
+            break;
+
+        case 18: // Dashed line
+            aRect.Top()     = 6;
+            aRect.Bottom()  = 6;
+            aVirDev.SetLineColor( rLineCol );
+            aVirDev.SetFillColor();
+            svtools::DrawLine( aVirDev, aRect.LeftCenter(), aRect.RightCenter(), 1, DASHED );
+            break;
 
         default:
             break;
@@ -1542,6 +1559,7 @@ IMPL_LINK( SvxLineWindow_Impl, SelectHdl, void *, EMPTYARG )
     USHORT          n1 = 0,
                     n2 = 0,
                     n3 = 0;
+    SvxBorderStyle  nStyle = SOLID;
     BOOL            bSetLine = TRUE;
 
     switch ( aLineSet.GetSelectItemId() )
@@ -1585,6 +1603,14 @@ IMPL_LINK( SvxLineWindow_Impl, SelectHdl, void *, EMPTYARG )
         case 16: n1 = DEF_DOUBLE_LINE6_OUT;
                  n2 = DEF_DOUBLE_LINE6_IN;
                  n3 = DEF_DOUBLE_LINE6_DIST;     break;
+        case 17:
+                 n1 = DEF_LINE_WIDTH_5;
+                 nStyle = DOTTED;
+                 break;
+        case 18:
+                 n1 = DEF_LINE_WIDTH_5;
+                 nStyle = DASHED;
+                 break;
         case  0:
         default:
             bSetLine = FALSE;
@@ -1592,7 +1618,7 @@ IMPL_LINK( SvxLineWindow_Impl, SelectHdl, void *, EMPTYARG )
     }
     if ( bSetLine )
     {
-        SvxBorderLine aTmp( NULL, n1, n2, n3 );
+        SvxBorderLine aTmp( NULL, n1, n2, n3, nStyle );
         aLineItem.SetLine( &aTmp );
     }
     else
@@ -1676,7 +1702,7 @@ void SvxLineWindow_Impl::CreateBitmaps( void )
     ::Color                 aBackCol( rStyleSettings.GetWindowColor() );
     aLineSet.Clear();
 
-    for( USHORT i = 1 ; i < 17 ; ++i )
+    for( USHORT i = 1 ; i < 19 ; ++i )
     {
         MakeLineBitmap( i, aBmp, aBmpSize, aStr, aLineCol, aBackCol );
         aLineSet.InsertItem( i, aBmp, aStr );

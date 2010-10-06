@@ -32,6 +32,7 @@
 #include <math.h>
 #include <vcl/outdev.hxx>
 #include <editeng/borderline.hxx>
+#include <svtools/borderhelper.hxx>
 
 // ----------------------------------------------------------------------------
 
@@ -48,6 +49,9 @@
 
 #if SVX_FRAME_USE_LINEINFO
 #include <vcl/lineinfo.hxx>
+#else
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 #endif
 
 namespace svx {
@@ -755,7 +759,7 @@ inline Polygon lclCreatePolygon( const PointVec& rPoints )
 Polygon lclCreatePolygon( const Point& rP1, const Point& rP2, const Point& rP3, const Point& rP4 )
 {
     PointVec aPoints;
-    aPoints.reserve( 4 );
+    aPoints.reserve( 2 );
     aPoints.push_back( rP1 );
     aPoints.push_back( rP2 );
     aPoints.push_back( rP3 );
@@ -774,12 +778,6 @@ Polygon lclCreatePolygon( const Point& rP1, const Point& rP2, const Point& rP3, 
     aPoints.push_back( rP4 );
     aPoints.push_back( rP5 );
     return lclCreatePolygon( aPoints );
-}
-
-/** Returns a polygon constructed from the two passed line positions. */
-inline Polygon lclCreatePolygon( const LinePoints& rPoints1, const LinePoints& rPoints2 )
-{
-    return lclCreatePolygon( rPoints1.maBeg, rPoints1.maEnd, rPoints2.maEnd, rPoints2.maBeg );
 }
 
 /** Sets the color of the passed frame style to the output device.
@@ -803,73 +801,6 @@ void lclSetColorToOutDev( OutputDevice& rDev, const Style& rStyle, const Color* 
 }
 
 // ----------------------------------------------------------------------------
-// Generic drawing functions.
-
-/** Draws a thin (1 pixel wide) line, optionally dotted, into the passed output device. */
-void lclDrawThinLine( OutputDevice& rDev, const Point& rBeg, const Point& rEnd, bool bDotted )
-{
-#if SVX_FRAME_USE_LINEINFO
-    if( bDotted && (rBeg != rEnd) )
-    {
-// using LineInfo for dotted lines looks ugly and does not work well for diagonal lines
-        LineInfo aLineInfo( LINE_DASH, 1 );
-        aLineInfo.SetDotCount( 1 );
-        aLineInfo.SetDotLen( 1 );
-        aLineInfo.SetDistance( 3 );
-        rDev.DrawLine( rBeg, rEnd, aLineInfo );
-    }
-#else
-    Point aBeg( rDev.LogicToPixel( rBeg ) );
-    Point aEnd( rDev.LogicToPixel( rEnd ) );
-    if( bDotted && (aBeg != aEnd) )
-    {
-        bool bHor = Abs( aEnd.X() - aBeg.X() ) > Abs( aEnd.Y() - aBeg.Y() );
-        const Point& rBegPos( bHor ? ((aBeg.X() < aEnd.X()) ? aBeg : aEnd) : ((aBeg.Y() < aEnd.Y()) ? aBeg : aEnd ) );
-        const Point& rEndPos( (rBegPos == aBeg) ? aEnd : aBeg );
-
-        long nAlongBeg = bHor ? rBegPos.X() : rBegPos.Y();
-        long nAcrssBeg = bHor ? rBegPos.Y() : rBegPos.X();
-        long nAlongSize = (bHor ? rEndPos.X() : rEndPos.Y()) - nAlongBeg;
-        long nAcrssSize = (bHor ? rEndPos.Y() : rEndPos.X()) - nAcrssBeg;
-        double fGradient = static_cast< double >( nAcrssSize ) / nAlongSize;
-
-        PointVec aPoints;
-        aPoints.reserve( (nAlongSize + 1) / 2 );
-        for( long nAlongIdx = 0; nAlongIdx <= nAlongSize; nAlongIdx += 2 )
-        {
-            long nAl = nAlongBeg + nAlongIdx;
-            long nAc = nAcrssBeg + lclD2L( fGradient * nAlongIdx );
-            aPoints.push_back( Point( bHor ? nAl : nAc, bHor ? nAc : nAl ) );
-        }
-
-        rDev.Push( PUSH_MAPMODE );
-        rDev.SetMapMode( MAP_PIXEL );
-        rDev.DrawPixel( lclCreatePolygon( aPoints ) );
-        rDev.Pop(); // map mode
-    }
-#endif
-    else
-        rDev.DrawLine( rBeg, rEnd );
-}
-
-/** Draws a thin (1 pixel wide) line, optionally dotted, into the passed output device. */
-inline void lclDrawThinLine( OutputDevice& rDev, const LinePoints& rPoints, bool bDotted )
-{
-    lclDrawThinLine( rDev, rPoints.maBeg, rPoints.maEnd, bDotted );
-}
-
-/** Draws a polygon with four points into the passed output device. */
-inline void lclDrawPolygon( OutputDevice& rDev, const Point& rP1, const Point& rP2, const Point& rP3, const Point& rP4 )
-{
-    rDev.DrawPolygon( lclCreatePolygon( rP1, rP2, rP3, rP4 ) );
-}
-
-/** Draws a polygon specified by two borders into the passed output device. */
-inline void lclDrawPolygon( OutputDevice& rDev, const LinePoints& rPoints1, const LinePoints& rPoints2 )
-{
-    rDev.DrawPolygon( lclCreatePolygon( rPoints1, rPoints2 ) );
-}
-
 // ============================================================================
 // Drawing of horizontal frame borders.
 
@@ -882,16 +813,18 @@ void lclDrawHorLine(
         OutputDevice& rDev,
         const Point& rLPos, const LineEndResult& rLRes,
         const Point& rRPos, const LineEndResult& rRRes,
-        long nTOffs, long nBOffs, bool bDotted )
+        long nTOffs, long nBOffs, SvxBorderStyle nDashing )
 {
     LinePoints aTPoints( rLPos + lclToMapUnit( rLRes.mnOffs1, nTOffs ), rRPos + lclToMapUnit( rRRes.mnOffs1, nTOffs ) );
-    if( nTOffs == nBOffs )
-        lclDrawThinLine( rDev, aTPoints, bDotted );
-    else
-    {
-        LinePoints aBPoints( rLPos + lclToMapUnit( rLRes.mnOffs2, nBOffs ), rRPos + lclToMapUnit( rRRes.mnOffs2, nBOffs ) );
-        lclDrawPolygon( rDev, aTPoints, aBPoints );
-    }
+    LinePoints aBPoints( rLPos + lclToMapUnit( rLRes.mnOffs2, nBOffs ), rRPos + lclToMapUnit( rRRes.mnOffs2, nBOffs ) );
+
+    sal_uInt32 nWidth = lclToMapUnit( abs( nTOffs ) ) + lclToMapUnit( abs( nBOffs ) );
+    if ( ( nTOffs >= 0 && nBOffs >= 0 ) || ( nTOffs <= 0 && nBOffs <= 0 ) )
+        nWidth = abs( lclToMapUnit( nTOffs ) - lclToMapUnit( nBOffs ) ) + 1;
+    Point rLMid = ( aTPoints.maBeg + aBPoints.maBeg ) / 2;
+    Point rRMid = ( aTPoints.maEnd + aBPoints.maEnd ) / 2;
+
+    ::svtools::DrawLine( rDev, rLMid, rRMid, nWidth, nDashing );
 }
 
 /** Draws a horizontal frame border into the passed output device.
@@ -917,10 +850,10 @@ void lclDrawHorFrameBorder(
     {
         lclSetColorToOutDev( rDev, rBorder, pForceColor );
         lclDrawHorLine( rDev, rLPos, rResult.maBeg.maPrim, rRPos, rResult.maEnd.maPrim,
-            lclGetBeg( rBorder ), lclGetPrimEnd( rBorder ), rBorder.Dotted() );
+            lclGetBeg( rBorder ), lclGetPrimEnd( rBorder ), rBorder.Dashing() );
         if( rBorder.Secn() )
             lclDrawHorLine( rDev, rLPos, rResult.maBeg.maSecn, rRPos, rResult.maEnd.maSecn,
-                lclGetSecnBeg( rBorder ), lclGetEnd( rBorder ), rBorder.Dotted() );
+                lclGetSecnBeg( rBorder ), lclGetEnd( rBorder ), rBorder.Dashing() );
         rDev.Pop(); // colors
     }
 }
@@ -937,16 +870,18 @@ void lclDrawVerLine(
         OutputDevice& rDev,
         const Point& rTPos, const LineEndResult& rTRes,
         const Point& rBPos, const LineEndResult& rBRes,
-        long nLOffs, long nROffs, bool bDotted )
+        long nLOffs, long nROffs, SvxBorderStyle nDashing )
 {
     LinePoints aLPoints( rTPos + lclToMapUnit( nLOffs, rTRes.mnOffs1 ), rBPos + lclToMapUnit( nLOffs, rBRes.mnOffs1 ) );
-    if( nLOffs == nROffs )
-        lclDrawThinLine( rDev, aLPoints, bDotted );
-    else
-    {
-        LinePoints aRPoints( rTPos + lclToMapUnit( nROffs, rTRes.mnOffs2 ), rBPos + lclToMapUnit( nROffs, rBRes.mnOffs2 ) );
-        lclDrawPolygon( rDev, aLPoints, aRPoints );
-    }
+    LinePoints aRPoints( rTPos + lclToMapUnit( nROffs, rTRes.mnOffs2 ), rBPos + lclToMapUnit( nROffs, rBRes.mnOffs2 ) );
+
+    sal_uInt32 nWidth = lclToMapUnit( abs( nLOffs ) ) + lclToMapUnit( abs( nROffs ) );
+    if ( ( nLOffs >= 0 && nROffs >= 0 ) || ( nLOffs <= 0 && nROffs <= 0 ) )
+        nWidth = abs( lclToMapUnit( nLOffs ) - lclToMapUnit( nROffs ) ) + 1;
+    Point rTMid = ( aLPoints.maBeg + aRPoints.maBeg ) / 2;
+    Point rBMid = ( aLPoints.maEnd + aRPoints.maEnd ) / 2;
+
+    ::svtools::DrawLine( rDev, rTMid, rBMid, nWidth, nDashing );
 }
 
 /** Draws a vertical frame border into the passed output device.
@@ -972,10 +907,10 @@ void lclDrawVerFrameBorder(
     {
         lclSetColorToOutDev( rDev, rBorder, pForceColor );
         lclDrawVerLine( rDev, rTPos, rResult.maBeg.maPrim, rBPos, rResult.maEnd.maPrim,
-            lclGetBeg( rBorder ), lclGetPrimEnd( rBorder ), rBorder.Dotted() );
+            lclGetBeg( rBorder ), lclGetPrimEnd( rBorder ), rBorder.Dashing() );
         if( rBorder.Secn() )
             lclDrawVerLine( rDev, rTPos, rResult.maBeg.maSecn, rBPos, rResult.maEnd.maSecn,
-                lclGetSecnBeg( rBorder ), lclGetEnd( rBorder ), rBorder.Dotted() );
+                lclGetSecnBeg( rBorder ), lclGetEnd( rBorder ), rBorder.Dashing() );
         rDev.Pop(); // colors
     }
 }
@@ -1108,14 +1043,19 @@ void lclPushCrossingClipRegion( OutputDevice& rDev, const Rectangle& rRect, bool
  */
 void lclDrawDiagLine(
         OutputDevice& rDev, const Rectangle& rRect, bool bTLBR,
-        const DiagLineResult& rResult, long nDiagOffs1, long nDiagOffs2, bool bDotted )
+        const DiagLineResult& rResult, long nDiagOffs1, long nDiagOffs2, SvxBorderStyle nDashing )
 {
     lclPushDiagClipRect( rDev, rRect, rResult );
     LinePoints aLPoints( lclGetDiagLineEnds( rRect, bTLBR, nDiagOffs1 ) );
-    if( nDiagOffs1 == nDiagOffs2 )
-        lclDrawThinLine( rDev, aLPoints, bDotted );
-    else
-        lclDrawPolygon( rDev, aLPoints, lclGetDiagLineEnds( rRect, bTLBR, nDiagOffs2 ) );
+    LinePoints aL2Points( lclGetDiagLineEnds( rRect, bTLBR, nDiagOffs2 ) );
+    Point aSMid( ( aLPoints.maBeg + aL2Points.maBeg ) / 2 );
+    Point aEMid( ( aLPoints.maEnd + aL2Points.maEnd ) / 2 );
+
+    sal_uInt32 nWidth = lclToMapUnit( abs( nDiagOffs1 ) ) + lclToMapUnit( abs( nDiagOffs2 ) );
+    if ( ( nDiagOffs1 <= 0 && nDiagOffs2 <= 0 ) || ( nDiagOffs1 >=0 && nDiagOffs2 >=0 ) )
+        nWidth = lclToMapUnit( abs( nDiagOffs1 - nDiagOffs2 ) );
+
+    svtools::DrawLine( rDev, aSMid, aEMid, nWidth, nDashing );
     rDev.Pop(); // clipping region
 }
 
@@ -1147,9 +1087,9 @@ void lclDrawDiagFrameBorder(
         lclPushCrossingClipRegion( rDev, rRect, bTLBR, rCrossStyle );
 
     lclSetColorToOutDev( rDev, rBorder, pForceColor );
-    lclDrawDiagLine( rDev, rRect, bTLBR, rResult.maPrim, lclGetBeg( rBorder ), lclGetPrimEnd( rBorder ), rBorder.Dotted() );
+    lclDrawDiagLine( rDev, rRect, bTLBR, rResult.maPrim, lclGetBeg( rBorder ), lclGetPrimEnd( rBorder ), rBorder.Dashing() );
     if( rBorder.Secn() )
-        lclDrawDiagLine( rDev, rRect, bTLBR, rResult.maSecn, lclGetSecnBeg( rBorder ), lclGetEnd( rBorder ), rBorder.Dotted() );
+        lclDrawDiagLine( rDev, rRect, bTLBR, rResult.maSecn, lclGetSecnBeg( rBorder ), lclGetEnd( rBorder ), rBorder.Dashing() );
     rDev.Pop(); // colors
 
     if( bClip )
@@ -1226,7 +1166,7 @@ void Style::Set( const Color& rColor, sal_uInt16 nP, sal_uInt16 nD, sal_uInt16 n
     Set( nP, nD, nS );
 }
 
-void Style::Set( const SvxBorderLine& rBorder, double fScale, sal_uInt16 nMaxWidth, bool bUseDots )
+void Style::Set( const SvxBorderLine& rBorder, double fScale, sal_uInt16 nMaxWidth )
 {
     maColor = rBorder.GetColor();
 
@@ -1237,12 +1177,12 @@ void Style::Set( const SvxBorderLine& rBorder, double fScale, sal_uInt16 nMaxWid
     if( !nSecn )    // no or single frame border
     {
         Set( SCALEVALUE( nPrim ), 0, 0 );
-        mbDotted = bUseDots && (0 < nPrim) && (nPrim < 10);
+        mnDashing = rBorder.GetStyle();
     }
     else
     {
         Set( SCALEVALUE( nPrim ), SCALEVALUE( nDist ), SCALEVALUE( nSecn ) );
-        mbDotted = false;
+        mnDashing = SOLID;
         // Enlarge the style if distance is too small due to rounding losses.
         sal_uInt16 nPixWidth = SCALEVALUE( nPrim + nDist + nSecn );
         if( nPixWidth > GetWidth() )
@@ -1275,14 +1215,14 @@ void Style::Set( const SvxBorderLine& rBorder, double fScale, sal_uInt16 nMaxWid
     }
 }
 
-void Style::Set( const SvxBorderLine* pBorder, double fScale, sal_uInt16 nMaxWidth, bool bUseDots )
+void Style::Set( const SvxBorderLine* pBorder, double fScale, sal_uInt16 nMaxWidth )
 {
     if( pBorder )
-        Set( *pBorder, fScale, nMaxWidth, bUseDots );
+        Set( *pBorder, fScale, nMaxWidth );
     else
     {
         Clear();
-        mbDotted = false;
+        mnDashing = SOLID;
     }
 }
 
@@ -1314,7 +1254,8 @@ Style Style::Mirror() const
 bool operator==( const Style& rL, const Style& rR )
 {
     return (rL.Prim() == rR.Prim()) && (rL.Dist() == rR.Dist()) && (rL.Secn() == rR.Secn()) &&
-        (rL.GetColor() == rR.GetColor()) && (rL.GetRefMode() == rR.GetRefMode()) && (rL.Dotted() == rR.Dotted());
+        (rL.GetColor() == rR.GetColor()) && (rL.GetRefMode() == rR.GetRefMode()) &&
+        (rL.Dashing() == rR.Dashing());
 }
 
 bool operator<( const Style& rL, const Style& rR )
@@ -1331,7 +1272,7 @@ bool operator<( const Style& rL, const Style& rR )
     if( (rL.Secn() && rR.Secn()) && (rL.Dist() != rR.Dist()) ) return rL.Dist() > rR.Dist();
 
     // both lines single and 1 unit thick, only one is dotted -> rL<rR, if rL is dotted
-    if( (nLW == 1) && (rL.Dotted() != rR.Dotted()) ) return rL.Dotted();
+    if( (nLW == 1) && (rL.Dashing() != rR.Dashing()) ) return rL.Dashing();
 
     // seem to be equal
     return false;
@@ -1498,10 +1439,10 @@ void DrawVerFrameBorderSlanted( OutputDevice& rDev,
 
             lclSetColorToOutDev( rDev, aScaled, pForceColor );
             lclDrawVerLine( rDev, rTPos, aRes, rBPos, aRes,
-                lclGetBeg( aScaled ), lclGetPrimEnd( aScaled ), aScaled.Dotted() );
+                lclGetBeg( aScaled ), lclGetPrimEnd( aScaled ), aScaled.Dashing() );
             if( aScaled.Secn() )
                 lclDrawVerLine( rDev, rTPos, aRes, rBPos, aRes,
-                    lclGetSecnBeg( aScaled ), lclGetEnd( aScaled ), aScaled.Dotted() );
+                    lclGetSecnBeg( aScaled ), lclGetEnd( aScaled ), aScaled.Dashing() );
             rDev.Pop(); // colors
         }
     }

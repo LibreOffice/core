@@ -41,6 +41,8 @@
 #define MID_OUTER_WIDTH         0x41
 #define MID_INNER_WIDTH         0x35
 #define MID_LINESPACE           0x3b
+#define MID_LINE_STYLE          0x90
+
 
 //NameOrIndex
 #define MID_NAME                16

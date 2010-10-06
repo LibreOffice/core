@@ -32,6 +32,7 @@
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 
 #include <cppuhelper/typeprovider.hxx>
 #include <svl/style.hxx>

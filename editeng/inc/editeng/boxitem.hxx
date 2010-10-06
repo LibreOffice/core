@@ -30,7 +30,7 @@
 #include <svl/poolitem.hxx>
 #include <editeng/borderline.hxx>
 #include <editeng/editengdllapi.h>
-#include <com/sun/star/table/BorderLine.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 
 namespace rtl { class OUString; }
 
@@ -106,7 +106,7 @@ public:
         //JP 09.06.99: bIgnoreLine = TRUE -> Distance auch returnen, wenn
         //                          keine Line gesetzt ist
     USHORT  CalcLineSpace( USHORT nLine, BOOL bIgnoreLine = FALSE ) const;
-    static com::sun::star::table::BorderLine SvxLineToLine( const SvxBorderLine* pLine, sal_Bool bConvert );
+    static com::sun::star::table::BorderLine2 SvxLineToLine( const SvxBorderLine* pLine, sal_Bool bConvert );
     static sal_Bool LineToSvxLine(const ::com::sun::star::table::BorderLine& rLine, SvxBorderLine& rSvxLine, sal_Bool bConvert);
 };
 
