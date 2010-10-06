@@ -96,6 +96,20 @@ struct StaticBubbleChartTypeTemplateInfoHelper : public rtl::StaticAggregate< ::
 {
 };
 
+struct StaticBubbleChartTypeTemplateInfo_Initializer
+{
+    uno::Reference< beans::XPropertySetInfo >* operator()()
+    {
+        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticBubbleChartTypeTemplateInfoHelper::get() ) );
+        return &xPropertySetInfo;
+    }
+};
+
+struct StaticBubbleChartTypeTemplateInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticBubbleChartTypeTemplateInfo_Initializer >
+{
+};
+
 } // anonymous namespace
 
 namespace chart
@@ -142,24 +156,11 @@ uno::Any BubbleChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const
     return *StaticBubbleChartTypeTemplateInfoHelper::get();
 }
 
-
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL
-    BubbleChartTypeTemplate::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > SAL_CALL BubbleChartTypeTemplate::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
-    static uno::Reference< beans::XPropertySetInfo > xInfo;
-
-    // /--
-    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( !xInfo.is())
-    {
-        xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
-            getInfoHelper());
-    }
-
-    return xInfo;
-    // \--
+    return *StaticBubbleChartTypeTemplateInfo::get();
 }
 
 sal_Int32 BubbleChartTypeTemplate::getDimension() const

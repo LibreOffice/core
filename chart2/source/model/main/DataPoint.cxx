@@ -81,6 +81,20 @@ struct StaticDataPointInfoHelper : public rtl::StaticAggregate< ::cppu::OPropert
 {
 };
 
+struct StaticDataPointInfo_Initializer
+{
+    uno::Reference< beans::XPropertySetInfo >* operator()()
+    {
+        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticDataPointInfoHelper::get() ) );
+        return &xPropertySetInfo;
+    }
+};
+
+struct StaticDataPointInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticDataPointInfo_Initializer >
+{
+};
+
 } // anonymous namespace
 
 // ____________________________________________________________
@@ -222,22 +236,10 @@ void SAL_CALL DataPoint::setFastPropertyValue_NoBroadcast(
 }
 
 // ____ XPropertySet ____
-Reference< beans::XPropertySetInfo > SAL_CALL
-    DataPoint::getPropertySetInfo()
+Reference< beans::XPropertySetInfo > SAL_CALL DataPoint::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
-    static Reference< beans::XPropertySetInfo > xInfo;
-
-    // /--
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( !xInfo.is())
-    {
-        xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
-            getInfoHelper());
-    }
-
-    return xInfo;
-    // \--
+    return *StaticDataPointInfo::get();
 }
 
 // ____ XModifyBroadcaster ____

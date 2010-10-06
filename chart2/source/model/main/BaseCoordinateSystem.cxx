@@ -101,6 +101,20 @@ struct StaticCooSysInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyAr
 {
 };
 
+struct StaticCooSysInfo_Initializer
+{
+    uno::Reference< beans::XPropertySetInfo >* operator()()
+    {
+        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticCooSysInfoHelper::get() ) );
+        return &xPropertySetInfo;
+    }
+};
+
+struct StaticCooSysInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticCooSysInfo_Initializer >
+{
+};
+
 } // anonymous namespace
 
 namespace chart
@@ -382,22 +396,10 @@ uno::Any BaseCoordinateSystem::GetDefaultValue( sal_Int32 nHandle ) const
 
 
 // ____ XPropertySet ____
-Reference< beans::XPropertySetInfo > SAL_CALL
-    BaseCoordinateSystem::getPropertySetInfo()
+Reference< beans::XPropertySetInfo > SAL_CALL BaseCoordinateSystem::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
-    static Reference< beans::XPropertySetInfo > xInfo;
-
-    // /--
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( !xInfo.is())
-    {
-        xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
-            getInfoHelper());
-    }
-
-    return xInfo;
-    // \--
+    return *StaticCooSysInfo::get();
 }
 
 using impl::BaseCoordinateSystem_Base;

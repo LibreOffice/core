@@ -245,6 +245,20 @@ struct StaticAxisInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArra
 {
 };
 
+struct StaticAxisInfo_Initializer
+{
+    uno::Reference< beans::XPropertySetInfo >* operator()()
+    {
+        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticAxisInfoHelper::get() ) );
+        return &xPropertySetInfo;
+    }
+};
+
+struct StaticAxisInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticAxisInfo_Initializer >
+{
+};
+
 typedef uno::Reference< beans::XPropertySet > lcl_tSubGridType;
 typedef uno::Sequence< lcl_tSubGridType >     lcl_tSubGridSeq;
 
@@ -598,24 +612,11 @@ uno::Any Axis::GetDefaultValue( sal_Int32 nHandle ) const
     return *StaticAxisInfoHelper::get();
 }
 
-
 // ____ XPropertySet ____
-Reference< beans::XPropertySetInfo > SAL_CALL
-    Axis::getPropertySetInfo()
+Reference< beans::XPropertySetInfo > SAL_CALL Axis::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
-    static Reference< beans::XPropertySetInfo > xInfo;
-
-    // /--
-    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( !xInfo.is())
-    {
-        xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
-            getInfoHelper());
-    }
-
-    return xInfo;
-    // \--
+    return *StaticAxisInfo::get();
 }
 
 // ================================================================================

@@ -135,6 +135,20 @@ struct StaticPieChartTypeTemplateInfoHelper : public rtl::StaticAggregate< ::cpp
 {
 };
 
+struct StaticPieChartTypeTemplateInfo_Initializer
+{
+    uno::Reference< beans::XPropertySetInfo >* operator()()
+    {
+        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticPieChartTypeTemplateInfoHelper::get() ) );
+        return &xPropertySetInfo;
+    }
+};
+
+struct StaticPieChartTypeTemplateInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticPieChartTypeTemplateInfo_Initializer >
+{
+};
+
 } // anonymous namespace
 
 namespace chart
@@ -187,26 +201,12 @@ uno::Any PieChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const
     return *StaticPieChartTypeTemplateInfoHelper::get();
 }
 
-
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL
-    PieChartTypeTemplate::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > SAL_CALL PieChartTypeTemplate::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
-    static uno::Reference< beans::XPropertySetInfo > xInfo;
-
-    // /--
-    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( !xInfo.is())
-    {
-        xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
-            getInfoHelper());
-    }
-
-    return xInfo;
-    // \--
+    return *StaticPieChartTypeTemplateInfo::get();
 }
-
 
 // ____ ChartTypeTemplate ____
 sal_Int32 PieChartTypeTemplate::getDimension() const

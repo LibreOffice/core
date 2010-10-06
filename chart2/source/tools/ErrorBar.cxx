@@ -145,6 +145,20 @@ struct StaticErrorBarInfoHelper : public rtl::StaticAggregate< ::cppu::OProperty
 {
 };
 
+struct StaticErrorBarInfo_Initializer
+{
+    uno::Reference< beans::XPropertySetInfo >* operator()()
+    {
+        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticErrorBarInfoHelper::get() ) );
+        return &xPropertySetInfo;
+    }
+};
+
+struct StaticErrorBarInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticErrorBarInfo_Initializer >
+{
+};
+
 bool lcl_isInternalData( const uno::Reference< chart2::data::XLabeledDataSequence > & xLSeq )
 {
     uno::Reference< lang::XServiceInfo > xServiceInfo( xLSeq, uno::UNO_QUERY );
@@ -228,24 +242,11 @@ uno::Any ErrorBar::GetDefaultValue( sal_Int32 nHandle ) const
     return *StaticErrorBarInfoHelper::get();
 }
 
-
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL
-    ErrorBar::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > SAL_CALL ErrorBar::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
-    static uno::Reference< beans::XPropertySetInfo > xInfo;
-
-    // /--
-    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( !xInfo.is())
-    {
-        xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
-            getInfoHelper());
-    }
-
-    return xInfo;
-    // \--
+    return *StaticErrorBarInfo::get();
 }
 
 // ____ XModifyBroadcaster ____

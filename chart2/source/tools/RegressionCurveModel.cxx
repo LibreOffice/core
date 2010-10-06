@@ -88,6 +88,20 @@ struct StaticRegressionCurveInfoHelper : public rtl::StaticAggregate< ::cppu::OP
 {
 };
 
+struct StaticRegressionCurveInfo_Initializer
+{
+    uno::Reference< beans::XPropertySetInfo >* operator()()
+    {
+        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticRegressionCurveInfoHelper::get() ) );
+        return &xPropertySetInfo;
+    }
+};
+
+struct StaticRegressionCurveInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticRegressionCurveInfo_Initializer >
+{
+};
+
 } // anonymous namespace
 
 namespace chart
@@ -258,24 +272,11 @@ uno::Any RegressionCurveModel::GetDefaultValue( sal_Int32 nHandle ) const
     return *StaticRegressionCurveInfoHelper::get();
 }
 
-
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL
-    RegressionCurveModel::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > SAL_CALL RegressionCurveModel::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
-    static uno::Reference< beans::XPropertySetInfo > xInfo;
-
-    // /--
-    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( !xInfo.is())
-    {
-        xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
-            getInfoHelper());
-    }
-
-    return xInfo;
-    // \--
+    return *StaticRegressionCurveInfo::get();
 }
 
 // ================================================================================

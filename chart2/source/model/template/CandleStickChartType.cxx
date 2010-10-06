@@ -132,6 +132,20 @@ struct StaticCandleStickChartTypeInfoHelper : public rtl::StaticAggregate< ::cpp
 {
 };
 
+struct StaticCandleStickChartTypeInfo_Initializer
+{
+    uno::Reference< beans::XPropertySetInfo >* operator()()
+    {
+        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticCandleStickChartTypeInfoHelper::get() ) );
+        return &xPropertySetInfo;
+    }
+};
+
+struct StaticCandleStickChartTypeInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticCandleStickChartTypeInfo_Initializer >
+{
+};
+
 } // anonymous namespace
 
 namespace chart
@@ -290,24 +304,11 @@ uno::Any CandleStickChartType::GetDefaultValue( sal_Int32 nHandle ) const
     return *StaticCandleStickChartTypeInfoHelper::get();
 }
 
-
 // ____ XPropertySet ____
-Reference< beans::XPropertySetInfo > SAL_CALL
-    CandleStickChartType::getPropertySetInfo()
+Reference< beans::XPropertySetInfo > SAL_CALL CandleStickChartType::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
-    static Reference< beans::XPropertySetInfo > xInfo;
-
-    // /--
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( !xInfo.is())
-    {
-        xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
-            getInfoHelper());
-    }
-
-    return xInfo;
-    // \--
+    return *StaticCandleStickChartTypeInfo::get();
 }
 
 void SAL_CALL CandleStickChartType::setFastPropertyValue_NoBroadcast(

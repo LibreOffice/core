@@ -94,6 +94,20 @@ struct StaticWallInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArra
 {
 };
 
+struct StaticWallInfo_Initializer
+{
+    uno::Reference< beans::XPropertySetInfo >* operator()()
+    {
+        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticWallInfoHelper::get() ) );
+        return &xPropertySetInfo;
+    }
+};
+
+struct StaticWallInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticWallInfo_Initializer >
+{
+};
+
 } // anonymous namespace
 
 // ================================================================================
@@ -160,24 +174,11 @@ uno::Any Wall::GetDefaultValue( sal_Int32 nHandle ) const
     return *StaticWallInfoHelper::get();
 }
 
-
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL
-    Wall::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > SAL_CALL Wall::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
-    static uno::Reference< beans::XPropertySetInfo > xInfo;
-
-    // /--
-    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( !xInfo.is())
-    {
-        xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
-            getInfoHelper());
-    }
-
-    return xInfo;
-    // \--
+    return *StaticWallInfo::get();
 }
 
 // ____ XModifyBroadcaster ____

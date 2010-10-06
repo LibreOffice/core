@@ -85,6 +85,20 @@ struct StaticStockBarInfoHelper : public rtl::StaticAggregate< ::cppu::OProperty
 {
 };
 
+struct StaticStockBarInfo_Initializer
+{
+    uno::Reference< beans::XPropertySetInfo >* operator()()
+    {
+        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticStockBarInfoHelper::get() ) );
+        return &xPropertySetInfo;
+    }
+};
+
+struct StaticStockBarInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticStockBarInfo_Initializer >
+{
+};
+
 void lcl_AddDefaultsToMap(
     ::chart::tPropertyValueMap & rOutMap )
 {
@@ -168,24 +182,11 @@ uno::Any StockBar::GetDefaultValue( sal_Int32 nHandle ) const
 }
 
 // ____ XPropertySet ____
-Reference< beans::XPropertySetInfo > SAL_CALL
-    StockBar::getPropertySetInfo()
+Reference< beans::XPropertySetInfo > SAL_CALL StockBar::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
-    static Reference< beans::XPropertySetInfo > xInfo;
-
-    // /--
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( !xInfo.is())
-    {
-        xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
-            getInfoHelper());
-    }
-
-    return xInfo;
-    // \--
+    return *StaticStockBarInfo::get();
 }
-
 
 // ____ XModifyBroadcaster ____
 void SAL_CALL StockBar::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )

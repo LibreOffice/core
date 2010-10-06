@@ -127,6 +127,20 @@ struct StaticScatterChartTypeTemplateInfoHelper : public rtl::StaticAggregate< :
 {
 };
 
+struct StaticScatterChartTypeTemplateInfo_Initializer
+{
+    uno::Reference< beans::XPropertySetInfo >* operator()()
+    {
+        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticScatterChartTypeTemplateInfoHelper::get() ) );
+        return &xPropertySetInfo;
+    }
+};
+
+struct StaticScatterChartTypeTemplateInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticScatterChartTypeTemplateInfo_Initializer >
+{
+};
+
 } // anonymous namespace
 
 namespace chart
@@ -181,24 +195,11 @@ uno::Any ScatterChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const
     return *StaticScatterChartTypeTemplateInfoHelper::get();
 }
 
-
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL
-    ScatterChartTypeTemplate::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > SAL_CALL ScatterChartTypeTemplate::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
-    static uno::Reference< beans::XPropertySetInfo > xInfo;
-
-    // /--
-    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( !xInfo.is())
-    {
-        xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
-            getInfoHelper());
-    }
-
-    return xInfo;
-    // \--
+    return *StaticScatterChartTypeTemplateInfo::get();
 }
 
 sal_Int32 ScatterChartTypeTemplate::getDimension() const

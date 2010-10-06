@@ -105,6 +105,20 @@ struct StaticColumnChartTypeInfoHelper : public rtl::StaticAggregate< ::cppu::OP
 {
 };
 
+struct StaticColumnChartTypeInfo_Initializer
+{
+    uno::Reference< beans::XPropertySetInfo >* operator()()
+    {
+        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticColumnChartTypeInfoHelper::get() ) );
+        return &xPropertySetInfo;
+    }
+};
+
+struct StaticColumnChartTypeInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticColumnChartTypeInfo_Initializer >
+{
+};
+
 } // anonymous namespace
 
 namespace chart
@@ -166,24 +180,11 @@ uno::Any ColumnChartType::GetDefaultValue( sal_Int32 nHandle ) const
     return *StaticColumnChartTypeInfoHelper::get();
 }
 
-
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL
-    ColumnChartType::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > SAL_CALL ColumnChartType::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
-    static uno::Reference< beans::XPropertySetInfo > xInfo;
-
-    // /--
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( !xInfo.is())
-    {
-        xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
-            getInfoHelper());
-    }
-
-    return xInfo;
-    // \--
+    return *StaticColumnChartTypeInfo::get();
 }
 
 //

@@ -165,6 +165,20 @@ struct StaticRegressionEquationInfoHelper : public rtl::StaticAggregate< ::cppu:
 {
 };
 
+struct StaticRegressionEquationInfo_Initializer
+{
+    uno::Reference< beans::XPropertySetInfo >* operator()()
+    {
+        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticRegressionEquationInfoHelper::get() ) );
+        return &xPropertySetInfo;
+    }
+};
+
+struct StaticRegressionEquationInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticRegressionEquationInfo_Initializer >
+{
+};
+
 } // anonymous namespace
 
 // ____________________________________________________________
@@ -231,24 +245,11 @@ uno::Any RegressionEquation::GetDefaultValue( sal_Int32 nHandle ) const
 }
 
 // ____ XPropertySet ____
-Reference< beans::XPropertySetInfo > SAL_CALL
-    RegressionEquation::getPropertySetInfo()
+Reference< beans::XPropertySetInfo > SAL_CALL RegressionEquation::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
-    static Reference< beans::XPropertySetInfo > xInfo;
-
-    // /--
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( !xInfo.is())
-    {
-        xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
-            getInfoHelper());
-    }
-
-    return xInfo;
-    // \--
+    return *StaticRegressionEquationInfo::get();
 }
-
 
 // ____ XModifyBroadcaster ____
 void SAL_CALL RegressionEquation::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )

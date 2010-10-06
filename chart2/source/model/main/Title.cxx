@@ -208,6 +208,20 @@ struct StaticTitleInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArr
 {
 };
 
+struct StaticTitleInfo_Initializer
+{
+    uno::Reference< beans::XPropertySetInfo >* operator()()
+    {
+        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticTitleInfoHelper::get() ) );
+        return &xPropertySetInfo;
+    }
+};
+
+struct StaticTitleInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticTitleInfo_Initializer >
+{
+};
+
 } // anonymous namespace
 
 // ================================================================================
@@ -308,24 +322,11 @@ uno::Any Title::GetDefaultValue( sal_Int32 nHandle ) const
     return *StaticTitleInfoHelper::get();
 }
 
-
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL
-    Title::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > SAL_CALL Title::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
-    static uno::Reference< beans::XPropertySetInfo > xInfo;
-
-    // /--
-    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( !xInfo.is())
-    {
-        xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
-            getInfoHelper());
-    }
-
-    return xInfo;
-    // \--
+    return *StaticTitleInfo::get();
 }
 
 // ____ XModifyBroadcaster ____

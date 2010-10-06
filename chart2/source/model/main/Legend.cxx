@@ -149,6 +149,20 @@ struct StaticLegendInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyAr
 {
 };
 
+struct StaticLegendInfo_Initializer
+{
+    uno::Reference< beans::XPropertySetInfo >* operator()()
+    {
+        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticLegendInfoHelper::get() ) );
+        return &xPropertySetInfo;
+    }
+};
+
+struct StaticLegendInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticLegendInfo_Initializer >
+{
+};
+
 } // anonymous namespace
 
 namespace chart
@@ -330,24 +344,11 @@ Any Legend::GetDefaultValue( sal_Int32 nHandle ) const
     return *StaticLegendInfoHelper::get();
 }
 
-
 // ____ XPropertySet ____
-Reference< beans::XPropertySetInfo > SAL_CALL
-    Legend::getPropertySetInfo()
+Reference< beans::XPropertySetInfo > SAL_CALL Legend::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
-    static Reference< beans::XPropertySetInfo > xInfo;
-
-    // /--
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( !xInfo.is())
-    {
-        xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
-            getInfoHelper());
-    }
-
-    return xInfo;
-    // \--
+    return *StaticLegendInfo::get();
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static

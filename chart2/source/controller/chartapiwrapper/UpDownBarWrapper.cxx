@@ -86,6 +86,33 @@ struct StaticUpDownBarWrapperPropertyArray : public rtl::StaticAggregate< Sequen
 {
 };
 
+struct StaticUpDownBarWrapperInfoHelper_Initializer
+{
+    ::cppu::OPropertyArrayHelper* operator()()
+    {
+        static ::cppu::OPropertyArrayHelper aPropHelper( *StaticUpDownBarWrapperPropertyArray::get() );
+        return &aPropHelper;
+    }
+};
+
+struct StaticUpDownBarWrapperInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticUpDownBarWrapperInfoHelper_Initializer >
+{
+};
+
+struct StaticUpDownBarWrapperInfo_Initializer
+{
+    uno::Reference< beans::XPropertySetInfo >* operator()()
+    {
+        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticUpDownBarWrapperInfoHelper::get() ) );
+        return &xPropertySetInfo;
+    }
+};
+
+struct StaticUpDownBarWrapperInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticUpDownBarWrapperInfo_Initializer >
+{
+};
+
 } // anonymous namespace
 
 // --------------------------------------------------------------------------------
@@ -100,8 +127,6 @@ UpDownBarWrapper::UpDownBarWrapper(
         : m_spChart2ModelContact( spChart2ModelContact )
         , m_aEventListenerContainer( m_aMutex )
         , m_aPropertySetName( bUp ? C2U("WhiteDay") : C2U("BlackDay") )
-        , m_xInfo(0)
-        , m_pPropertyArrayHelper()
 {
 }
 
@@ -115,11 +140,6 @@ void SAL_CALL UpDownBarWrapper::dispose()
 {
     Reference< uno::XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
     m_aEventListenerContainer.disposeAndClear( lang::EventObject( xSource ) );
-
-    // /--
-    MutexGuard aGuard( GetMutex());
-    m_xInfo.clear();
-    // \--
 }
 
 void SAL_CALL UpDownBarWrapper::addEventListener(
@@ -138,33 +158,14 @@ void SAL_CALL UpDownBarWrapper::removeEventListener(
 
 ::cppu::IPropertyArrayHelper& UpDownBarWrapper::getInfoHelper()
 {
-    if(!m_pPropertyArrayHelper.get())
-    {
-        // /--
-        ::osl::MutexGuard aGuard( GetMutex() );
-        if(!m_pPropertyArrayHelper.get())
-        {
-            sal_Bool bSorted = sal_True;
-            m_pPropertyArrayHelper = ::boost::shared_ptr< ::cppu::OPropertyArrayHelper >( new ::cppu::OPropertyArrayHelper( *StaticUpDownBarWrapperPropertyArray::get(), bSorted ) );
-        }
-        // \--
-    }
-    return *m_pPropertyArrayHelper.get();
+    return *StaticUpDownBarWrapperInfoHelper::get();
 }
 
 //XPropertySet
 uno::Reference< beans::XPropertySetInfo > SAL_CALL UpDownBarWrapper::getPropertySetInfo()
                     throw (uno::RuntimeException)
 {
-    if( !m_xInfo.is() )
-    {
-        // /--
-        ::osl::MutexGuard aGuard( GetMutex() );
-        if( !m_xInfo.is() )
-            m_xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo( getInfoHelper() );
-        // \--
-    }
-    return m_xInfo;
+    return *StaticUpDownBarWrapperInfo::get();
 }
 void SAL_CALL UpDownBarWrapper::setPropertyValue( const ::rtl::OUString& rPropertyName, const uno::Any& rValue )
                     throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)

@@ -210,11 +210,23 @@ private:
 
         return ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
-
-
 };
 
 struct StaticDiagramInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticDiagramInfoHelper_Initializer >
+{
+};
+
+struct StaticDiagramInfo_Initializer
+{
+    uno::Reference< beans::XPropertySetInfo >* operator()()
+    {
+        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticDiagramInfoHelper::get() ) );
+        return &xPropertySetInfo;
+    }
+};
+
+struct StaticDiagramInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticDiagramInfo_Initializer >
 {
 };
 
@@ -623,24 +635,11 @@ uno::Any Diagram::GetDefaultValue( sal_Int32 nHandle ) const
     return *StaticDiagramInfoHelper::get();
 }
 
-
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL
-    Diagram::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > SAL_CALL Diagram::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
-    static uno::Reference< beans::XPropertySetInfo > xInfo;
-
-    // /--
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( !xInfo.is())
-    {
-        xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
-            getInfoHelper());
-    }
-
-    return xInfo;
-    // \--
+    return *StaticDiagramInfo::get();
 }
 
 // ____ XFastPropertySet ____

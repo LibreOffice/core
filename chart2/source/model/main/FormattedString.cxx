@@ -73,6 +73,20 @@ struct StaticFormattedStringInfoHelper : public rtl::StaticAggregate< ::cppu::OP
 {
 };
 
+struct StaticFormattedStringInfo_Initializer
+{
+    uno::Reference< beans::XPropertySetInfo >* operator()()
+    {
+        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticFormattedStringInfoHelper::get() ) );
+        return &xPropertySetInfo;
+    }
+};
+
+struct StaticFormattedStringInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticFormattedStringInfo_Initializer >
+{
+};
+
 } // anonymous namespace
 
 namespace chart
@@ -223,22 +237,10 @@ uno::Any FormattedString::GetDefaultValue( sal_Int32 nHandle ) const
 
 
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL
-    FormattedString::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > SAL_CALL FormattedString::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
-    static uno::Reference< beans::XPropertySetInfo > xInfo;
-
-    // /--
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( !xInfo.is())
-    {
-        xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
-            getInfoHelper());
-    }
-
-    return xInfo;
-    // \--
+    return *StaticFormattedStringInfo::get();
 }
 
 // ================================================================================

@@ -115,6 +115,20 @@ struct StaticLineChartTypeInfoHelper : public rtl::StaticAggregate< ::cppu::OPro
 {
 };
 
+struct StaticLineChartTypeInfo_Initializer
+{
+    uno::Reference< beans::XPropertySetInfo >* operator()()
+    {
+        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticLineChartTypeInfoHelper::get() ) );
+        return &xPropertySetInfo;
+    }
+};
+
+struct StaticLineChartTypeInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticLineChartTypeInfo_Initializer >
+{
+};
+
 } // anonymous namespace
 
 namespace chart
@@ -178,24 +192,11 @@ uno::Any LineChartType::GetDefaultValue( sal_Int32 nHandle ) const
     return *StaticLineChartTypeInfoHelper::get();
 }
 
-
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL
-    LineChartType::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > SAL_CALL LineChartType::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
-    static uno::Reference< beans::XPropertySetInfo > xInfo;
-
-    // /--
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( !xInfo.is())
-    {
-        xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
-            getInfoHelper());
-    }
-
-    return xInfo;
-    // \--
+    return *StaticLineChartTypeInfo::get();
 }
 
 uno::Sequence< ::rtl::OUString > LineChartType::getSupportedServiceNames_Static()

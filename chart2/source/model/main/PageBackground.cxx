@@ -89,6 +89,20 @@ struct StaticPageBackgroundInfoHelper : public rtl::StaticAggregate< ::cppu::OPr
 {
 };
 
+struct StaticPageBackgroundInfo_Initializer
+{
+    uno::Reference< beans::XPropertySetInfo >* operator()()
+    {
+        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticPageBackgroundInfoHelper::get() ) );
+        return &xPropertySetInfo;
+    }
+};
+
+struct StaticPageBackgroundInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticPageBackgroundInfo_Initializer >
+{
+};
+
 } // anonymous namespace
 
 // ================================================================================
@@ -154,26 +168,12 @@ uno::Any PageBackground::GetDefaultValue( sal_Int32 nHandle ) const
     return *StaticPageBackgroundInfoHelper::get();
 }
 
-
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL
-    PageBackground::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > SAL_CALL PageBackground::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
-    static uno::Reference< beans::XPropertySetInfo > xInfo;
-
-    // /--
-    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( !xInfo.is())
-    {
-        xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
-            getInfoHelper());
-    }
-
-    return xInfo;
-    // \--
+    return *StaticPageBackgroundInfo::get();
 }
-
 
 // ____ XModifyBroadcaster ____
 void SAL_CALL PageBackground::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )

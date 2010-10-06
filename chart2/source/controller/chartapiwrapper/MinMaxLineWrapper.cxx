@@ -84,6 +84,33 @@ struct StaticMinMaxLineWrapperPropertyArray : public rtl::StaticAggregate< Seque
 {
 };
 
+struct StaticMinMaxLineWrapperInfoHelper_Initializer
+{
+    ::cppu::OPropertyArrayHelper* operator()()
+    {
+        static ::cppu::OPropertyArrayHelper aPropHelper( *StaticMinMaxLineWrapperPropertyArray::get() );
+        return &aPropHelper;
+    }
+};
+
+struct StaticMinMaxLineWrapperInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticMinMaxLineWrapperInfoHelper_Initializer >
+{
+};
+
+struct StaticMinMaxLineWrapperInfo_Initializer
+{
+    uno::Reference< beans::XPropertySetInfo >* operator()()
+    {
+        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticMinMaxLineWrapperInfoHelper::get() ) );
+        return &xPropertySetInfo;
+    }
+};
+
+struct StaticMinMaxLineWrapperInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticMinMaxLineWrapperInfo_Initializer >
+{
+};
+
 } // anonymous namespace
 
 // --------------------------------------------------------------------------------
@@ -96,7 +123,6 @@ namespace wrapper
 MinMaxLineWrapper::MinMaxLineWrapper( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
         : m_spChart2ModelContact( spChart2ModelContact )
         , m_aEventListenerContainer( m_aMutex )
-        , m_pPropertyArrayHelper()
         , m_aWrappedLineJointProperty( C2U("LineJoint"), uno::makeAny( drawing::LineJoint_NONE ))
 {
 }
@@ -111,11 +137,6 @@ void SAL_CALL MinMaxLineWrapper::dispose()
 {
     Reference< uno::XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
     m_aEventListenerContainer.disposeAndClear( lang::EventObject( xSource ) );
-
-    // /--
-    MutexGuard aGuard( GetMutex());
-    m_xInfo.clear();
-    // \--
 }
 
 void SAL_CALL MinMaxLineWrapper::addEventListener(
@@ -134,34 +155,16 @@ void SAL_CALL MinMaxLineWrapper::removeEventListener(
 
 ::cppu::IPropertyArrayHelper& MinMaxLineWrapper::getInfoHelper()
 {
-    if(!m_pPropertyArrayHelper.get())
-    {
-        // /--
-        ::osl::MutexGuard aGuard( GetMutex() );
-        if(!m_pPropertyArrayHelper.get())
-        {
-            sal_Bool bSorted = sal_True;
-            m_pPropertyArrayHelper = ::boost::shared_ptr< ::cppu::OPropertyArrayHelper >( new ::cppu::OPropertyArrayHelper( *StaticMinMaxLineWrapperPropertyArray::get(), bSorted ) );
-        }
-        // \--
-    }
-    return *m_pPropertyArrayHelper.get();
+    return *StaticMinMaxLineWrapperInfoHelper::get();
 }
 
 //XPropertySet
 uno::Reference< beans::XPropertySetInfo > SAL_CALL MinMaxLineWrapper::getPropertySetInfo()
                     throw (uno::RuntimeException)
 {
-    if( !m_xInfo.is() )
-    {
-        // /--
-        ::osl::MutexGuard aGuard( GetMutex() );
-        if( !m_xInfo.is() )
-            m_xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo( getInfoHelper() );
-        // \--
-    }
-    return m_xInfo;
+    return *StaticMinMaxLineWrapperInfo::get();
 }
+
 void SAL_CALL MinMaxLineWrapper::setPropertyValue( const ::rtl::OUString& rPropertyName, const uno::Any& rValue )
                     throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {

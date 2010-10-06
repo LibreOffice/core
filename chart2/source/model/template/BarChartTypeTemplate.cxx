@@ -110,6 +110,20 @@ struct StaticBarChartTypeTemplateInfoHelper : public rtl::StaticAggregate< ::cpp
 {
 };
 
+struct StaticBarChartTypeTemplateInfo_Initializer
+{
+    uno::Reference< beans::XPropertySetInfo >* operator()()
+    {
+        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticBarChartTypeTemplateInfoHelper::get() ) );
+        return &xPropertySetInfo;
+    }
+};
+
+struct StaticBarChartTypeTemplateInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticBarChartTypeTemplateInfo_Initializer >
+{
+};
+
 } // anonymous namespace
 
 namespace chart
@@ -245,24 +259,11 @@ uno::Any BarChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const
     return *StaticBarChartTypeTemplateInfoHelper::get();
 }
 
-
 // ____ XPropertySet ____
-Reference< beans::XPropertySetInfo > SAL_CALL
-    BarChartTypeTemplate::getPropertySetInfo()
+Reference< beans::XPropertySetInfo > SAL_CALL BarChartTypeTemplate::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
-    static Reference< beans::XPropertySetInfo > xInfo;
-
-    // /--
-    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( !xInfo.is())
-    {
-        xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
-            getInfoHelper());
-    }
-
-    return xInfo;
-    // \--
+    return *StaticBarChartTypeTemplateInfo::get();
 }
 
 void SAL_CALL BarChartTypeTemplate::applyStyle(

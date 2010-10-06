@@ -84,6 +84,20 @@ struct StaticDataSeriesInfoHelper : public rtl::StaticAggregate< ::cppu::OProper
 {
 };
 
+struct StaticDataSeriesInfo_Initializer
+{
+    uno::Reference< beans::XPropertySetInfo >* operator()()
+    {
+        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticDataSeriesInfoHelper::get() ) );
+        return &xPropertySetInfo;
+    }
+};
+
+struct StaticDataSeriesInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticDataSeriesInfo_Initializer >
+{
+};
+
 void lcl_SetParent(
     const uno::Reference< uno::XInterface > & xChildInterface,
     const uno::Reference< uno::XInterface > & xParentInterface )
@@ -281,24 +295,11 @@ uno::Any DataSeries::GetDefaultValue( sal_Int32 nHandle ) const
     return *StaticDataSeriesInfoHelper::get();
 }
 
-
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL
-    DataSeries::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > SAL_CALL DataSeries::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
-    static uno::Reference< beans::XPropertySetInfo > xInfo;
-
-    // /--
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( !xInfo.is())
-    {
-        xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
-            getInfoHelper());
-    }
-
-    return xInfo;
-    // \--
+    return *StaticDataSeriesInfo::get();
 }
 
 void SAL_CALL DataSeries::getFastPropertyValue
