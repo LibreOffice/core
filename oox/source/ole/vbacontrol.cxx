@@ -58,6 +58,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::uno::UNO_SET_THROW;
 using ::com::sun::star::uno::XComponentContext;
+using ::com::sun::star::frame::XModel;
 
 namespace oox {
 namespace ole {
@@ -759,7 +760,7 @@ VbaUserForm::VbaUserForm( const Reference< XMultiServiceFactory >& rxGlobalFacto
     OSL_ENSURE( mxGlobalFactory.is(), "VbaUserForm::VbaUserForm - missing service factory" );
 }
 
-void VbaUserForm::importForm( const Reference< XNameContainer >& rxDialogLib,
+void VbaUserForm::importForm( const Reference< XModel >& rxDocModel, const Reference< XNameContainer >& rxDialogLib,
         StorageBase& rVbaFormStrg, const OUString& rModuleName, rtl_TextEncoding eTextEnc )
 {
     OSL_ENSURE( rxDialogLib.is(), "VbaUserForm::importForm - missing dialog library" );
@@ -830,7 +831,7 @@ void VbaUserForm::importForm( const Reference< XNameContainer >& rxDialogLib,
             // export the dialog to XML and insert it into the dialog library
             PropertySet aFactoryProps( mxGlobalFactory );
             Reference< XComponentContext > xCompContext( aFactoryProps.getAnyProperty( PROP_DefaultContext ), UNO_QUERY_THROW );
-            Reference< XInputStreamProvider > xDialogSource( ::xmlscript::exportDialogModel( xDialogNC, xCompContext ), UNO_SET_THROW );
+            Reference< XInputStreamProvider > xDialogSource( ::xmlscript::exportDialogModel( xDialogNC, xCompContext, rxDocModel ), UNO_SET_THROW );
             OSL_ENSURE( !rxDialogLib->hasByName( aFormName ), "VbaUserForm::importForm - multiple dialogs with equal name" );
             ContainerHelper::insertByName( rxDialogLib, aFormName, Any( xDialogSource ) );
         }

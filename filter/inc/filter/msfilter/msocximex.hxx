@@ -29,6 +29,7 @@
 
 #include <sot/storage.hxx>
 #include <tools/debug.hxx>
+#include <com/sun/star/graphic/XGraphicObject.hpp>
 
 //!! no such defines in global namespaces - it will break other existing code that uses the same define!!
 //#ifndef C2U
@@ -287,7 +288,10 @@ public:
     bool mbVisible;
     UniString sName;
     UniString msToolTip;
+    UniString msParentName;
     OCX_FontData aFontData;
+    rtl::OUString msCtrlSource;
+    rtl::OUString msRowSource;
         SfxObjectShell *pDocSh;
 protected:
 
@@ -324,14 +328,13 @@ public:
     nMultiState(0), nValueLen(0), nCaptionLen(0), nVertPos(1), nHorzPos(7),
     nSpecialEffect(2), nIcon(0), nPicture(0), nAccelerator(0), nGroupNameLen(0),
     pValue(0), pCaption(0), pGroupName(0), nIconLen(0), pIcon(0),
-    nPictureLen(0), pPicture(0) {}
+    nPictureLen(0) {}
 
     ~OCX_ModernControl() {
         if (pValue) delete[] pValue;
         if (pCaption) delete[] pCaption;
         if (pGroupName) delete[] pGroupName;
         if (pIcon) delete[] pIcon;
-        if (pPicture) delete[] pPicture;
     }
     sal_Bool Read(SotStorageStream *pS);
 
@@ -412,7 +415,8 @@ public:
 
     sal_uInt8 pPictureHeader[20];
     sal_uInt32 nPictureLen;
-    sal_uInt8 *pPicture;
+    ::rtl::OUString sImageUrl;
+    com::sun::star::uno::Reference< com::sun::star::graphic::XGraphicObject> mxGrfObj;
 
 };
 
@@ -461,6 +465,7 @@ public:
 
         bool bAutoSize;
         ::rtl::OUString sImageUrl;
+        com::sun::star::uno::Reference< com::sun::star::graphic::XGraphicObject> mxGrfObj;
         sal_Bool Read(SotStorageStream *pS);
 
     using OCX_Control::Import; // to not hide the other two import methods
@@ -485,6 +490,8 @@ struct ContainerRecord
 
     ::rtl::OUString cName;
     ::rtl::OUString controlTip;
+    ::rtl::OUString sCtrlSource;
+    ::rtl::OUString sRowSource;
 
     sal_uInt32 nTop;
     sal_uInt32 nLeft;
@@ -499,53 +506,7 @@ typedef std::vector<OCX_Control*>::iterator CtrlIterator;
 typedef std::vector<OCX_Control*>::const_iterator CtrlIteratorConst;
 typedef std::vector<OCX_Control*>  CtrlList;
 
-
-
-class RBGroup
-{
-    public:
-    RBGroup():mRBGroupPos(0){}
-    RBGroup(sal_uInt16& groupPos ):mRBGroupPos(groupPos){}
-    sal_Int16 tabPos() const { return mRBGroupPos; }
-    std::vector<OCX_Control*>::size_type numControls()
-    { return mpControls.size(); }
-    std::vector<OCX_Control*>& controls() { return mpControls; }
-
-    void add(OCX_Control* pRB);
-    private:
-    sal_uInt16 mRBGroupPos;
-    std::vector<OCX_Control*> mpControls;
-};
-
-typedef ::std::hash_map < ::rtl::OUString, RBGroup*, ::rtl::OUStringHash,
-    ::std::equal_to< ::rtl::OUString > > RBGroupHash;
-typedef std::vector<RBGroup*>::iterator GroupIterator;
-
 class OCX_OptionButton;
-
-class RBGroupManager
-{
-public:
-    RBGroupManager( String& defaultName );
-    ~RBGroupManager();
-
-    CtrlList insertGroupsIntoControlList( const CtrlList& sourceList );
-    void addRadioButton( OCX_OptionButton* pRButton );
-private:
-
-    void addSeperator( std::vector< OCX_Control* >& dest );
-    void copyList( std::vector< OCX_Control* >& src,
-                  std::vector< OCX_Control* >& dest,
-                  bool addGroupSeperator );
-
-    RBGroupHash rbGroups;
-    String mSDefaultName;
-    std::vector< RBGroup* > groupList;
-    sal_uInt16 numRadioButtons;
-};
-
-
-
 
 class OCX_ContainerControl : public OCX_Control
 {
@@ -572,8 +533,9 @@ public:
         SotStorageStreamRef getContainerStream() { return mContainerStream; }
 
         virtual void ProcessControl( OCX_Control* pControl, SvStorageStream* pS, ContainerRecord& rec );
-        bool createFromContainerRecord( const ContainerRecord& record,
+        bool createFromContainerRecord( ContainerRecord& record,
             OCX_Control*& );
+        SotStorageStreamRef getContainedControlsStream(){ return mContainedControlsStream; }
 protected:
         // This class not meant to be instantiated
         // needs to be subclassed
@@ -585,10 +547,10 @@ protected:
             OCX_Control* pParent = NULL );
         rtl::OUString createSubStreamName( const sal_uInt32& subStorageID );
 
-        RBGroupManager rbGroupMgr;
         com::sun::star::uno::Reference<
                 com::sun::star::container::XNameContainer > mxParent;
     std::vector<OCX_Control*> mpControls;
+        std::hash_map<sal_uInt16, sal_uInt16> mActiveXIDMap;
         SotStorageRef mContainerStorage;
         SotStorageStreamRef mContainerStream;
         SotStorageStreamRef mContainedControlsStream;
@@ -856,7 +818,6 @@ public:
     {
         delete[] pCaption;
         delete[] pIcon;
-        delete[] pPicture;
     }
 
     virtual sal_Bool Read(SvStorageStream *pS);
@@ -920,7 +881,8 @@ public:
 
     sal_uInt8 pPictureHeader[20];
     sal_uInt32  nPictureLen;
-    sal_uInt8 *pPicture;
+    ::rtl::OUString sImageUrl;
+    com::sun::star::uno::Reference< com::sun::star::graphic::XGraphicObject> mxGrfObj;
 private:
         com::sun::star::uno::Reference<
                 com::sun::star::uno::XComponentContext> mxCtx;
@@ -959,7 +921,8 @@ public:
     OCX_OptionButton() : OCX_ModernControl(rtl::OUString::createFromAscii("OptionButton"))
     {
         msFormType = rtl::OUString::createFromAscii("com.sun.star.form.component.RadioButton");
-        msDialogType = rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlRadioButtonModel");
+        //msDialogType = rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlRadioButtonModel");
+        msDialogType = rtl::OUString::createFromAscii("com.sun.star.form.component.RadioButton");
         mnBackColor = 0x80000005L;
         mnForeColor = 0x80000008L;
         aFontData.SetHasAlign(TRUE);
@@ -1060,7 +1023,7 @@ class OCX_ComboBox : public OCX_ModernControl
 public:
     OCX_ComboBox() : OCX_ModernControl(rtl::OUString::createFromAscii("ComboBox")){
         msFormType = rtl::OUString::createFromAscii("com.sun.star.form.component.ComboBox");
-            msDialogType = rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlComboBoxModel");
+            msDialogType = rtl::OUString::createFromAscii("com.sun.star.form.component.ComboBox");
         mnBackColor = 0x80000005;
         mnForeColor = 0x80000008;
         nBorderColor = 0x80000006;
@@ -1085,7 +1048,8 @@ class OCX_ListBox : public OCX_ModernControl
 public:
     OCX_ListBox() : OCX_ModernControl(rtl::OUString::createFromAscii("ListBox")){
         msFormType = rtl::OUString::createFromAscii("com.sun.star.form.component.ListBox");
-        msDialogType = rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlListBoxModel");
+        //msDialogType = rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlListBoxModel");
+        msDialogType = rtl::OUString::createFromAscii("com.sun.star.form.component.ListBox");
         mnBackColor = 0x80000005;
         mnForeColor = 0x80000008;
         nBorderColor = 0x80000006;
@@ -1113,7 +1077,7 @@ public:
     fEnabled(1), fLocked(0), fBackStyle(1), fWordWrap(0), fAutoSize(0),
         nCaptionLen(0), nVertPos(1), nHorzPos(7), nMousePointer(0), nPicture(0),
         nAccelerator(0), nIcon(0), pCaption(0), nIconLen(0), pIcon(0), nPictureLen(0),
-        pPicture(0), mbTakeFocus( true )
+        mbTakeFocus( true )
     {
             msFormType = rtl::OUString::createFromAscii("com.sun.star.form.component.CommandButton");
             msDialogType = rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlButtonModel");
@@ -1124,7 +1088,6 @@ public:
     ~OCX_CommandButton() {
         if (pCaption) delete[] pCaption;
         if (pIcon) delete[] pIcon;
-        if (pPicture) delete[] pPicture;
     }
     sal_Bool Read(SotStorageStream *pS);
 
@@ -1167,7 +1130,8 @@ public:
 
     sal_uInt8 pPictureHeader[20];
     sal_uInt32  nPictureLen;
-    sal_uInt8 *pPicture;
+    ::rtl::OUString sImageUrl;
+    com::sun::star::uno::Reference< com::sun::star::graphic::XGraphicObject> mxGrfObj;
 
     bool        mbTakeFocus;
 

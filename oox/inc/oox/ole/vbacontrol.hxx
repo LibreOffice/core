@@ -29,6 +29,7 @@
 #define OOX_OLE_VBACONTROL_HXX
 
 #include "oox/ole/axcontrol.hxx"
+#include <com/sun/star/frame/XModel.hpp>
 
 namespace com { namespace sun { namespace star {
     namespace container { class XNameContainer; }
@@ -192,6 +193,7 @@ public:
     /** Imports the form and its embedded controls, and inserts the form with
         all its controls into the passed dialog library. */
     void                importForm(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxDocModel,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rxDialogLib,
                             StorageBase& rVbaFormStrg,
                             const ::rtl::OUString& rModuleName,

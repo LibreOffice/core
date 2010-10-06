@@ -419,7 +419,7 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
                 // create and import the form
                 Reference< XNameContainer > xDialogLib( createDialogLibrary(), UNO_SET_THROW );
                 VbaUserForm aForm( mxGlobalFactory, rGraphicHelper, bDefaultColorBgr );
-                aForm.importForm( xDialogLib, *xSubStrg, aModuleName, eTextEnc );
+                aForm.importForm( mxDocModel, xDialogLib, *xSubStrg, aModuleName, eTextEnc );
             }
             catch( Exception& )
             {

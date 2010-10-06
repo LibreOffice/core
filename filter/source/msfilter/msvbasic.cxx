@@ -38,10 +38,803 @@
 #include <osl/endian.h>
 #include <rtl/tencinfo.h>   //rtl_getTextEncodingFromWindowsCodePage
 #include "msvbasic.hxx"
+#include <memory>
+#include <rtl/ustrbuf.hxx>
+#include <boost/shared_ptr.hpp>
+#include <boost/scoped_array.hpp>
+#include <boost/shared_array.hpp>
+#include <svtools/filterutils.hxx>
 
 #include <com/sun/star/script/ModuleType.hpp>
+#include <fstream>
 
 using namespace ::com::sun::star::script;
+
+namespace MSLZSS {
+
+static unsigned int getShift( sal_uInt32 nPos )
+{
+    if (nPos <= 0x80) {
+        if (nPos <= 0x20)
+            return (nPos <= 0x10) ? 12 : 11;
+        else
+            return (nPos <= 0x40) ? 10 : 9;
+    } else {
+    if (nPos <= 0x200)
+        return (nPos <= 0x100) ? 8 : 7;
+    else if (nPos <= 0x800)
+        return (nPos <= 0x400) ? 6 : 5;
+    else
+        return 4;
+    }
+}
+
+SvMemoryStream *decompressAsStream( SvStream *pStream, sal_uInt32 nOffset, sal_uInt32 *pCompressedLength = NULL, sal_uInt32 *pLength = NULL )
+{
+    SvMemoryStream *pResult;
+    const sal_Int32 nWINDOWLEN = 4096;
+    pResult = new SvMemoryStream();
+
+    sal_uInt8 nLeadbyte;
+    unsigned int nPos = 0;
+    int nLen, nDistance, nShift, nClean=1;
+    sal_uInt8 aHistory[ nWINDOWLEN ];
+
+    pStream->Seek( nOffset + 3 );
+
+    while( pStream->Read( &nLeadbyte, 1 ) )
+    {
+        for(int nMask=0x01; nMask < 0x100; nMask = nMask<<1)
+        {
+            // we see if the leadbyte has flagged this location as a dataunit
+            // which is actually a token which must be looked up in the history
+            if( nLeadbyte & nMask )
+            {
+                sal_uInt16 nToken;
+
+                *pStream >> nToken;
+
+                if (nClean == 0)
+                    nClean=1;
+
+                //For some reason the division of the token into the length
+                //field of the data to be inserted, and the distance back into
+                //the history differs depending on how full the history is
+                nShift = getShift( nPos % nWINDOWLEN );
+
+                nLen = (nToken & ((1<<nShift) - 1)) + 3;
+                nDistance = nToken >> nShift;
+
+                //read the len of data from the history, wrapping around the
+                //nWINDOWLEN boundary if necessary data read from the history
+                //is also copied into the recent part of the history as well.
+                for (int i = 0; i < nLen; i++)
+                {
+                    unsigned char c;
+                    c = aHistory[(nPos-nDistance-1) % nWINDOWLEN];
+                    aHistory[nPos % nWINDOWLEN] = c;
+                    nPos++;
+                }
+            }
+            else
+            {
+                // special boundary case code, not guarantueed to be correct
+                // seems to work though, there is something wrong with the
+                // compression scheme (or maybe a feature) where when the data
+                // ends on a nWINDOWLEN boundary and the excess bytes in the 8
+                // dataunit list are discarded, and not interpreted as tokens
+                // or normal data.
+                if ((nPos != 0) && ((nPos % nWINDOWLEN) == 0) && (nClean))
+                {
+                    pStream->SeekRel(2);
+                    nClean=0;
+                    pResult->Write( aHistory, nWINDOWLEN );
+                    break;
+                }
+                //This is the normal case for when the data unit is not a
+                //token to be looked up, but instead some normal data which
+                //can be output, and placed in the history.
+                if (pStream->Read(&aHistory[nPos % nWINDOWLEN],1))
+                    nPos++;
+
+                if (nClean == 0)
+                    nClean=1;
+            }
+        }
+    }
+    if (nPos % nWINDOWLEN)
+        pResult->Write( aHistory, nPos % nWINDOWLEN );
+    pResult->Flush();
+
+    if( pCompressedLength )
+        *pCompressedLength = nPos;
+
+    if( pLength )
+        *pLength = pResult->Tell();
+
+    pResult->Seek( 0 );
+
+    return pResult;
+}
+
+} //MSZSS
+
+// also _VBA_PROJECT_VDPI can be used to create a usable
+// ( and much smaller ) "_VBA_PROJECT" stream
+
+// _VBA_PROJECT Stream Version Dependant Project Information
+// _VBA_PROJECT Stream Version Dependant Project Information
+
+class _VBA_PROJECT_VDPI
+{
+public:
+sal_Int16 Reserved1;
+sal_Int16 Version;
+sal_Int8 Reserved2;
+sal_Int16 Reserved3;
+boost::scoped_array< sal_uInt8 > PerformanceCache;
+sal_Int32 PerformanceCacheSize;
+_VBA_PROJECT_VDPI(): Reserved1( 0x61CC), Version( 0xFFFF ), Reserved2(0x0), Reserved3(0x0), PerformanceCacheSize(0) {}
+~_VBA_PROJECT_VDPI()
+{
+    PerformanceCacheSize = 0;
+}
+void read(){}
+void write( SvStream* pStream )
+{
+    *pStream << Reserved1 << Version << Reserved2 << Reserved3;
+    if ( PerformanceCacheSize )
+    {
+        PerformanceCache.reset( new sal_uInt8[ PerformanceCacheSize ] );
+        pStream->Read( PerformanceCache.get(), PerformanceCacheSize );
+    }
+}
+};
+
+class ProjectSysKindRecord
+{
+public:
+sal_Int16 Id;
+sal_Int32 Size;
+sal_Int32 SysKind;
+ProjectSysKindRecord(): Id(0x1), Size(0x4), SysKind( 0x1 ) {}
+void read( SvStream* pStream )
+{
+    *pStream >> Id >> Size >> SysKind;
+}
+};
+
+class ProjectLcidRecord
+{
+public:
+sal_Int16 Id;
+sal_Int32 Size;
+sal_Int32 Lcid;
+
+ProjectLcidRecord() : Id( 0x2 ), Size( 0x4 ), Lcid( 0x409 ) {}
+void read( SvStream* pStream )
+{
+    OSL_TRACE("ProjectLcidRecord [0x%x]", pStream->Tell() );
+    *pStream >> Id >> Size >> Lcid;
+}
+};
+
+class ProjectLcidInvokeRecord
+{
+sal_Int16 Id;
+sal_Int32 Size;
+sal_Int32 LcidInvoke;
+public:
+ProjectLcidInvokeRecord() : Id( 0x14 ), Size( 0x4 ), LcidInvoke( 0x409 ) {}
+void read( SvStream* pStream )
+{
+    OSL_TRACE("ProjectLcidInvokeRecord [0x%x]", pStream->Tell() );
+    *pStream >> Id >> Size >> LcidInvoke;
+}
+};
+
+class ProjectCodePageRecord
+{
+sal_Int16 Id;
+sal_Int32 Size;
+sal_Int16 CodePage;
+public:
+// #FIXME get a better default for the CodePage
+ProjectCodePageRecord() : Id( 0x03 ), Size( 0x2 ), CodePage( 0x0 ) {}
+void read( SvStream* pStream )
+{
+    OSL_TRACE("ProjectCodePageRecord [0x%x]", pStream->Tell() );
+    *pStream >> Id >> Size >> CodePage;
+}
+};
+class ProjectNameRecord
+{
+public:
+sal_Int16 Id;
+sal_Int32 SizeOfProjectName;
+rtl::OUString ProjectName;
+ProjectNameRecord() : Id( 0x04 ), SizeOfProjectName( 0x0 ){}
+~ProjectNameRecord()
+{
+}
+void read( SvStream* pStream )
+{
+    OSL_TRACE("ProjectNameRecord [0x%x]", pStream->Tell() );
+    *pStream >> Id >> SizeOfProjectName;
+
+    if ( SizeOfProjectName )
+    {
+        boost::scoped_array< sal_uInt8 > pProjectName( new sal_uInt8[ SizeOfProjectName ] );
+        OSL_TRACE("ProjectNameRecord about to read name from [0x%x], size %d", pStream->Tell(), SizeOfProjectName );
+        pStream->Read( pProjectName.get(), SizeOfProjectName );
+        ProjectName = svt::BinFilterUtils::CreateOUStringFromStringArray( reinterpret_cast< const char* >( pProjectName.get() ), SizeOfProjectName );
+    }
+}
+};
+
+class ProjectDocStringRecord
+{
+public:
+sal_Int16 Id;
+sal_Int32 SizeOfDocString;
+sal_Int16 Reserved;
+sal_Int32 SizeOfDocStringUnicode;
+rtl::OUString DocString;
+rtl::OUString DocStringUnicode;
+
+ProjectDocStringRecord() : Id( 0x5 ), SizeOfDocString( 0x0 ), Reserved( 0x0 ), SizeOfDocStringUnicode( 0 ){}
+
+~ProjectDocStringRecord()
+{
+}
+void read( SvStream* pStream )
+{
+    OSL_TRACE("ProjectDocStringRecord [0x%x]", pStream->Tell() );
+    *pStream >> Id >> SizeOfDocString;
+
+
+    boost::scoped_array< sal_uInt8 > pDocString( new sal_uInt8[ SizeOfDocString ] );
+    pStream->Read( pDocString.get(), SizeOfDocString );
+
+    DocString = svt::BinFilterUtils::CreateOUStringFromStringArray( reinterpret_cast< const char* >( pDocString.get() ), SizeOfDocString );
+
+    *pStream >> Reserved >> SizeOfDocStringUnicode;
+
+    boost::scoped_array< sal_uInt8 > pDocStringUnicode( new sal_uInt8[ SizeOfDocStringUnicode ] );
+
+    pStream->Read( pDocStringUnicode.get(), SizeOfDocStringUnicode );
+    DocStringUnicode = svt::BinFilterUtils::CreateOUStringFromUniStringArray( reinterpret_cast< const char* >( pDocStringUnicode.get() ), SizeOfDocString );
+
+}
+
+};
+
+class ProjectHelpFilePath
+{
+public:
+sal_Int16 Id;
+sal_Int32 SizeOfHelpFile1;
+boost::scoped_array< sal_uInt8 > HelpFile1;
+sal_Int16 Reserved;
+sal_Int32 SizeOfHelpFile2;
+boost::scoped_array< sal_uInt8 > HelpFile2;
+
+ProjectHelpFilePath() : Id( 0x06 ), SizeOfHelpFile1(0), Reserved(0x0), SizeOfHelpFile2(0) {}
+~ProjectHelpFilePath()
+{
+}
+
+void read( SvStream* pStream )
+{
+    OSL_TRACE("ProjectHelpFilePath [0x%x]", pStream->Tell() );
+    *pStream >> Id >> SizeOfHelpFile1;
+
+    HelpFile1.reset( new sal_uInt8[ SizeOfHelpFile1 ] );
+    pStream->Read( HelpFile1.get(), SizeOfHelpFile1 );
+
+    *pStream >> Reserved >> SizeOfHelpFile2;
+
+    HelpFile2.reset( new sal_uInt8[ SizeOfHelpFile2 ] );
+    pStream->Read( HelpFile2.get(), SizeOfHelpFile2 );
+
+}
+};
+
+class ProjectHelpContextRecord
+{
+public:
+sal_Int16 Id;
+sal_Int32 Size;
+sal_Int32 HelpContext;
+
+ProjectHelpContextRecord() : Id( 0x7 ), Size( 0x4 ), HelpContext( 0 ) {}
+void read( SvStream* pStream )
+{
+
+   OSL_TRACE("ProjectHelpContextRecord [0x%x]", pStream->Tell() );
+   *pStream >> Id >> Size >> HelpContext;
+}
+
+};
+
+class ProjectLibFlagsRecord
+{
+sal_Int16 Id;
+sal_Int32 Size;
+sal_Int32 ProjectLibFlags;
+
+public:
+ProjectLibFlagsRecord() : Id( 0x8 ), Size( 0x4 ), ProjectLibFlags( 0x0 ) {}
+void read( SvStream* pStream )
+{
+    OSL_TRACE("ProjectLibFlagsRecord [0x%x]", pStream->Tell() );
+    *pStream >> Id >> Size >> ProjectLibFlags;
+}
+};
+
+class ProjectVersionRecord
+{
+public:
+sal_Int16 Id;
+sal_Int32 Reserved;
+sal_Int32 VersionMajor;
+sal_Int16 VersionMinor;
+ProjectVersionRecord() : Id( 0x9 ), Reserved( 0x4 ), VersionMajor( 0x1 ), VersionMinor( 0 ) {}
+void read( SvStream* pStream )
+{
+    OSL_TRACE("ProjectVersionRecord [0x%x]", pStream->Tell() );
+    *pStream >> Id >> Reserved >> VersionMajor >> VersionMinor;
+}
+};
+
+class ProjectConstantsRecord
+{
+sal_Int16 Id;
+sal_Int32 SizeOfConstants;
+boost::scoped_array< sal_uInt8 > Constants;
+sal_Int16 Reserved;
+sal_Int32 SizeOfConstantsUnicode;
+boost::scoped_array< sal_uInt8 > ConstantsUnicode;
+public:
+ProjectConstantsRecord() : Id( 0xC ), SizeOfConstants( 0 ), Constants( 0 ), Reserved( 0x3C ), SizeOfConstantsUnicode( 0 ), ConstantsUnicode(0) {}
+
+~ProjectConstantsRecord()
+{
+}
+
+void read( SvStream* pStream )
+{
+    OSL_TRACE("ProjectConstantsRecord [0x%x]", pStream->Tell() );
+   *pStream >> Id >> SizeOfConstants;
+    Constants.reset( new sal_uInt8[ SizeOfConstants ] );
+
+    pStream->Read( Constants.get(), SizeOfConstants );
+
+    *pStream >> Reserved;
+
+    *pStream >> SizeOfConstantsUnicode;
+
+    ConstantsUnicode.reset( new sal_uInt8[ SizeOfConstantsUnicode ] );
+    pStream->Read( ConstantsUnicode.get(), SizeOfConstantsUnicode );
+}
+
+};
+
+class ReferenceNameRecord
+{
+public:
+sal_Int16 Id;
+sal_Int32 SizeOfName;
+rtl::OUString Name;
+sal_Int16 Reserved;
+sal_Int32 SizeOfNameUnicode;
+rtl::OUString NameUnicode;
+
+ReferenceNameRecord() : Id( 0x16 ), SizeOfName( 0 ), Reserved( 0x3E ), SizeOfNameUnicode( 0 ){}
+~ReferenceNameRecord()
+{
+}
+
+void read( SvStream* pStream )
+{
+    OSL_TRACE("NameRecord [0x%x]", pStream->Tell() );
+    *pStream >> Id >> SizeOfName;
+
+    boost::scoped_array< sal_uInt8 > pName( new sal_uInt8[ SizeOfName ] );
+
+    pStream->Read( pName.get(), SizeOfName );
+    Name = svt::BinFilterUtils::CreateOUStringFromStringArray( reinterpret_cast< const char* >( pName.get() ), SizeOfName );
+
+    *pStream >> Reserved >> SizeOfNameUnicode;
+
+    boost::scoped_array< sal_uInt8 > pNameUnicode( new sal_uInt8[ SizeOfNameUnicode ] );
+    pStream->Read( pNameUnicode.get(), SizeOfNameUnicode );
+    NameUnicode = svt::BinFilterUtils::CreateOUStringFromUniStringArray( reinterpret_cast< const char* >( pNameUnicode.get() ), SizeOfName );
+}
+
+};
+
+// Baseclass for ReferenceControlRecord, ReferenceRegisteredRecord, ReferenceProjectRecord
+class DirDumper;
+
+class BaseReferenceRecord
+{
+public:
+virtual ~BaseReferenceRecord(){}
+virtual bool read( SvStream* pStream ) = 0;
+virtual void import( VBA_Impl& ){}
+};
+
+
+class ReferenceProjectRecord : public BaseReferenceRecord
+{
+public:
+    sal_uInt16 Id;
+    sal_uInt32 Size;
+    sal_uInt32 SizeOfLibidAbsolute;
+    sal_uInt32 SizeOfLibidRelative;
+    sal_uInt32 MajorVersion;
+    sal_uInt16 MinorVersion;
+    rtl::OUString AbsoluteLibid;
+    rtl::OUString RelativeLibid;
+
+    virtual bool read( SvStream* pStream );
+    virtual void import( VBA_Impl& rDir );
+    ReferenceProjectRecord();
+    ~ReferenceProjectRecord();
+};
+
+ReferenceProjectRecord::ReferenceProjectRecord() : Id( 0x000E ), Size( 0 ), SizeOfLibidAbsolute( 0 ), SizeOfLibidRelative( 0 ), MajorVersion( 0 ), MinorVersion( 0 )
+{
+}
+
+ReferenceProjectRecord::~ReferenceProjectRecord()
+{
+}
+
+bool ReferenceProjectRecord::read( SvStream* pStream )
+{
+    OSL_TRACE("ReferenceProjectRecord [0x%x]", pStream->Tell() );
+    *pStream >> Id >> Size >> SizeOfLibidAbsolute;
+
+    boost::scoped_array< sal_uInt8 > pLibidAbsolute( new sal_uInt8[ SizeOfLibidAbsolute ] );
+    OSL_TRACE("ReferenceProjectRecord about to read LibidAbsolute at [0x%x]", pStream->Tell() );
+    pStream->Read( pLibidAbsolute.get(), SizeOfLibidAbsolute );
+
+    *pStream >> SizeOfLibidRelative;
+
+    boost::scoped_array< sal_uInt8 > pLibidRelative( new sal_uInt8[ SizeOfLibidRelative ] );
+    OSL_TRACE("ReferenceProjectRecord about to read LibidRelative at [0x%x]", pStream->Tell() );
+    pStream->Read( pLibidRelative.get(), SizeOfLibidRelative );
+
+    *pStream >> MajorVersion >> MinorVersion;
+
+    // array size is ORed with SVX_MSOCX_COMPRESSED to force processing of ascii bytes ( and not
+    // 16 bit unicode )
+    // the offset of 3 is needed to skip the ProjectReference "*\" and project kind ( 0x4[1-4] ) info.
+
+    AbsoluteLibid = svt::BinFilterUtils::CreateOUStringFromStringArray( reinterpret_cast< const char* >( pLibidAbsolute.get() + 3 ), (SizeOfLibidAbsolute - 3 ) );
+    RelativeLibid = svt::BinFilterUtils::CreateOUStringFromStringArray( reinterpret_cast< const char* >( pLibidRelative.get() + 3 ), ( SizeOfLibidRelative -3 ) );
+
+    OSL_TRACE("ReferenceProjectRecord - absolute path %s", rtl::OUStringToOString( AbsoluteLibid, RTL_TEXTENCODING_UTF8 ).getStr() );
+    OSL_TRACE("ReferenceProjectRecord - relative path %s", rtl::OUStringToOString( RelativeLibid, RTL_TEXTENCODING_UTF8 ).getStr() );
+    return true;
+}
+
+void ReferenceProjectRecord::import( VBA_Impl& rDir )
+{
+    rDir.AddProjectReference( AbsoluteLibid );
+}
+
+class ReferenceRegisteredRecord : public BaseReferenceRecord
+{
+public:
+    sal_uInt16 Id;
+    sal_uInt32 Size;
+    sal_uInt32 SizeOfLibid;
+    boost::scoped_array< sal_uInt8> pLibid;
+    sal_Int32 Reserved1;
+    sal_Int16 Reserved2;
+
+    ReferenceRegisteredRecord();
+    ~ReferenceRegisteredRecord();
+    bool read( SvStream* pStream );
+};
+
+ReferenceRegisteredRecord::ReferenceRegisteredRecord() : Id( 0x000D ), Size( 0 ), SizeOfLibid( 0 ), Reserved1( 0 ), Reserved2( 0 )
+{
+}
+
+ReferenceRegisteredRecord::~ReferenceRegisteredRecord()
+{
+}
+
+bool
+ReferenceRegisteredRecord::read( SvStream* pStream )
+{
+    OSL_TRACE("ReferenceRegisteredRecord [0x%x]", pStream->Tell() );
+    *pStream >> Id >> Size >> SizeOfLibid;
+    if ( SizeOfLibid )
+    {
+        pLibid.reset( new sal_uInt8[ SizeOfLibid] );
+        pStream->Read( pLibid.get(), SizeOfLibid );
+    }
+    *pStream >> Reserved1 >> Reserved2;
+    return true;
+}
+
+class ReferenceOriginalRecord
+{
+public:
+    sal_uInt16 Id;
+    sal_uInt32 SizeOfLibOriginal;
+    boost::scoped_array< sal_uInt8 > pLibidOriginal;
+
+
+ReferenceOriginalRecord() : Id( 0x033 ), SizeOfLibOriginal( 0 )
+{
+}
+
+~ReferenceOriginalRecord()
+{
+}
+
+void read( SvStream* pStream )
+{
+    *pStream >> Id >> SizeOfLibOriginal;
+    if ( SizeOfLibOriginal )
+    {
+        pLibidOriginal.reset( new sal_uInt8[ SizeOfLibOriginal ] );
+        pStream->Read( pLibidOriginal.get(), SizeOfLibOriginal );
+    }
+}
+
+};
+
+class ReferenceControlRecord : public BaseReferenceRecord
+{
+public:
+std::auto_ptr< ReferenceOriginalRecord > OriginalRecord;
+sal_Int16 Id;
+sal_uInt32 SizeTwiddled;
+sal_uInt32 SizeOfLibidTwiddled;
+boost::shared_array< sal_uInt8 > LibidTwiddled;
+sal_uInt32 Reserved1;
+sal_uInt16 Reserved2;
+std::auto_ptr< ReferenceNameRecord > NameRecordExtended;// Optional
+sal_uInt16 Reserved3;
+sal_uInt32 SizeExtended;
+sal_uInt32 SizeOfLibidExtended;
+boost::shared_array< sal_uInt8 > LibidExtended;
+sal_uInt32 Reserved4;
+sal_uInt16 Reserved5;
+sal_uInt8  OriginalTypeLib[ 16 ];
+sal_uInt32 Cookie;
+
+ReferenceControlRecord() : Id( 0x2F ), SizeTwiddled( 0 ), SizeOfLibidTwiddled( 0 ), Reserved1( 0 ), Reserved2( 0 ), Reserved3( 0x30 ), SizeExtended( 0 ), SizeOfLibidExtended( 0 ), Reserved4( 0 ), Reserved5( 0 ), Cookie( 0 )
+{
+    for( int i = 0; i < 16; ++i )
+        OriginalTypeLib[ i ] = 0;
+}
+
+~ReferenceControlRecord()
+{
+}
+
+bool read( SvStream* pStream )
+{
+    OSL_TRACE("ReferenceControlRecord [0x%x]", pStream->Tell() );
+    long nPos = pStream->Tell();
+
+    *pStream >> Id;
+    pStream->Seek( nPos ); // point before the peeked Id
+    if ( Id == 0x33 ) // we have an OriginalRecord
+    {
+        OriginalRecord.reset( new ReferenceOriginalRecord() );
+        OriginalRecord->read( pStream );
+    }
+    *pStream >> Id >> SizeTwiddled >> SizeOfLibidTwiddled;
+
+    if ( SizeOfLibidTwiddled )
+    {
+        LibidTwiddled.reset( new sal_uInt8[ SizeOfLibidTwiddled ] );
+        pStream->Read( LibidTwiddled.get(),  SizeOfLibidTwiddled );
+    }
+
+    *pStream >> Reserved1 >> Reserved2;
+
+    nPos = pStream->Tell();
+    // peek at the id for optional NameRecord
+    sal_Int16 nTmpId;
+    *pStream >> nTmpId;
+    if ( nTmpId == 0x30 )
+    {
+        Reserved3 = 0x30;
+    }
+    else
+    {
+        pStream->Seek( nPos );
+        NameRecordExtended.reset( new ReferenceNameRecord() );
+        NameRecordExtended->read( pStream );
+        *pStream >> Reserved3;
+    }
+    *pStream >> SizeExtended >> SizeOfLibidExtended;
+
+    if ( SizeExtended )
+    {
+        LibidExtended.reset( new sal_uInt8[ SizeOfLibidExtended ] );
+        pStream->Read( LibidExtended.get(), SizeOfLibidExtended );
+    }
+
+    *pStream >> Reserved4;
+    *pStream >> Reserved5;
+
+    pStream->Read( OriginalTypeLib, sizeof( OriginalTypeLib ) );
+    *pStream >> Cookie;
+    return true;
+}
+
+};
+
+class ReferenceRecord : public BaseReferenceRecord
+{
+public:
+// NameRecord is Optional
+std::auto_ptr< ReferenceNameRecord > NameRecord;
+std::auto_ptr< BaseReferenceRecord >  aReferenceRecord;
+
+ReferenceRecord(){}
+~ReferenceRecord()
+{
+}
+
+// false return would mean failed to read Record e.g. end of array encountered
+// Note: this read routine will make sure the stream is pointing to where it was the
+// method was called )
+
+bool read( SvStream* pStream )
+{
+    OSL_TRACE("ReferenceRecord [0x%x]", pStream->Tell() );
+    bool bRead = true;
+    long nStart = pStream->Tell();
+    long nPos = nStart;
+    // Peek at the ID
+    sal_Int16 Id;
+    *pStream >> Id;
+    pStream->Seek( nPos ); // place back before Id
+    if ( Id == 0x16 ) // Optional NameRecord
+    {
+        NameRecord.reset( new ReferenceNameRecord() );
+        NameRecord->read( pStream );
+    }
+    else if ( Id == 0x0f )
+    {
+        pStream->Seek( nStart );
+        bRead = false;
+        return bRead; // start of module, terminate read
+    }
+
+    nPos = pStream->Tell(); // mark position, peek at next Id
+    *pStream >> Id;
+    pStream->Seek( nPos ); // place back before Id
+
+    switch( Id )
+    {
+        case 0x0D:
+            aReferenceRecord.reset( new ReferenceRegisteredRecord() );
+            break;
+        case 0x0E:
+            aReferenceRecord.reset( new ReferenceProjectRecord() );
+            break;
+        case 0x2F:
+        case 0x33:
+            aReferenceRecord.reset( new ReferenceControlRecord() );
+            break;
+        default:
+            bRead = false;
+            OSL_TRACE("Big fat error, unknown ID 0x%x", Id);
+            break;
+    }
+    if ( bRead )
+        aReferenceRecord->read( pStream );
+    return bRead;
+}
+
+void import( VBA_Impl& rVBA )
+{
+    if ( aReferenceRecord.get() )
+        aReferenceRecord->import( rVBA );
+}
+
+};
+
+class DirDumper
+{
+public:
+ProjectSysKindRecord mSysKindRec;
+ProjectLcidRecord mLcidRec;
+ProjectLcidInvokeRecord mLcidInvokeRec;
+ProjectCodePageRecord mCodePageRec;
+ProjectNameRecord mProjectNameRec;
+ProjectDocStringRecord mDocStringRec;
+ProjectHelpFilePath mHelpFileRec;
+ProjectHelpContextRecord mHelpContextRec;
+ProjectLibFlagsRecord mLibFlagsRec;
+ProjectVersionRecord mVersionRec;
+ProjectConstantsRecord mConstantsRecord;
+std::vector< ReferenceRecord* > ReferenceArray;
+
+DirDumper() {}
+~DirDumper()
+{
+    for ( std::vector< ReferenceRecord* >::iterator it = ReferenceArray.begin(); it != ReferenceArray.end(); ++it )
+        delete *it;
+
+}
+
+void read( SvStream* pStream )
+{
+    sal_Int32 nPos = pStream->Tell();
+#ifdef DEBUG
+    std::ofstream aDump("dir.dump");
+    while ( !pStream->IsEof() )
+    {
+        sal_Int8 aByte;
+        *pStream >> aByte;
+        aDump << aByte;
+    }
+    aDump.flush();
+#endif
+    pStream->Seek( nPos );
+    readProjectInformation( pStream );
+    readProjectReferenceInformation( pStream );
+}
+
+void readProjectReferenceInformation( SvStream* pStream )
+{
+    bool bKeepReading = true;
+    while( bKeepReading )
+    {
+        ReferenceRecord* pRef = new ReferenceRecord();
+        bKeepReading = pRef->read( pStream );
+        if ( bKeepReading )
+            ReferenceArray.push_back( pRef );
+    }
+}
+
+void readProjectInformation( SvStream* pStream )
+{
+    mSysKindRec.read( pStream );
+    mLcidRec.read( pStream );
+    mLcidInvokeRec.read( pStream );
+    mCodePageRec.read( pStream );
+    mProjectNameRec.read( pStream );
+    mDocStringRec.read( pStream );
+    mHelpFileRec.read( pStream );
+    mHelpContextRec.read( pStream );
+    mLibFlagsRec.read( pStream );
+    mVersionRec.read( pStream );
+    sal_Int32 nPos = pStream->Tell();
+    sal_uInt16 nTmp;
+    *pStream >> nTmp;
+    if ( nTmp == 0x0C )
+    {
+        pStream->Seek( nPos );
+        mConstantsRecord.read( pStream );
+    }
+    OSL_TRACE("After Information pos is 0x%x", pStream->Tell() );
+}
+
+void import( VBA_Impl& rVBA )
+{
+    // get project references
+    for ( std::vector< ReferenceRecord* >::iterator it = ReferenceArray.begin(); it != ReferenceArray.end(); ++it )
+        (*it)->import( rVBA );
+    rVBA.SetProjectName( mProjectNameRec.ProjectName );
+
+}
+};
+
 
 /*
 A few urls which may in the future be of some use
@@ -155,7 +948,21 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
     xVBAProject = rxVBAStorage->OpenSotStream(
                     String( RTL_CONSTASCII_USTRINGPARAM( "_VBA_PROJECT" ) ),
                     STREAM_STD_READ | STREAM_NOCREATE );
-
+    // read Dir stream
+    SvStorageStreamRef xDir = rxVBAStorage->OpenSotStream(
+                    String( RTL_CONSTASCII_USTRINGPARAM( "dir" ) ),
+                    STREAM_STD_READ | STREAM_NOCREATE );
+// disable read and import of Dir stream bits, e.g. project references and
+// project name for 3.1 ( a bit unstable yet )
+#if 1
+    // decompress the stream
+    std::auto_ptr< SvMemoryStream > xCmpDir;
+    xCmpDir.reset( MSLZSS::decompressAsStream( xDir, 0 ) );
+    // try to parse the dir stream
+    DirDumper dDump;
+    dDump.read( xCmpDir.get() );
+    dDump.import( *this );
+#endif
     if( !xVBAProject.Is() || SVSTREAM_OK != xVBAProject->GetError() )
     {
         DBG_WARNING("Not able to find vba project, cannot find macros");
@@ -416,6 +1223,7 @@ bool VBA_Impl::Open( const String &rToplevel, const String &rSublevel )
     if( !xMacros.Is() || SVSTREAM_OK != xMacros->GetError() )
     {
         DBG_WARNING("No Macros Storage");
+        OSL_TRACE("No Macros Storage");
     }
     else
     {
@@ -425,6 +1233,7 @@ bool VBA_Impl::Open( const String &rToplevel, const String &rSublevel )
         if( !xVBA.Is() || SVSTREAM_OK != xVBA->GetError() )
         {
             DBG_WARNING("No Visual Basic in Storage");
+            OSL_TRACE("No Visual Basic in Storage");
         }
         else
         {
@@ -439,6 +1248,7 @@ bool VBA_Impl::Open( const String &rToplevel, const String &rSublevel )
          * ( value ) is either a Class Module, Form Module or a plain VB Module.        */
         SvStorageStreamRef xProject = xMacros->OpenSotStream(
             String( RTL_CONSTASCII_USTRINGPARAM( "PROJECT" ) ) );
+
         SvStorageStream* pStp = xProject;
         UniString tmp;
         static const String sThisDoc(   RTL_CONSTASCII_USTRINGPARAM( "ThisDocument" ) );

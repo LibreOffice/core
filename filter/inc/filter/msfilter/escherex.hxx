@@ -45,6 +45,7 @@
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <svx/msdffdef.hxx>
+#include <memory>
 #include "filter/msfilter/msfilterdllapi.h"
 
         /*Record Name       FBT-Value   Instance                  Contents                                                          Wrd Exl PPt Ver*/
@@ -1305,6 +1306,19 @@ public:
                                     const Rectangle& rRect ) = 0;
 };
 
+class InteractionInfo
+{
+    bool            mbHasInteraction;
+    std::auto_ptr<SvMemoryStream>       mpHyperlinkRecord;
+    InteractionInfo();
+public:
+    InteractionInfo( SvMemoryStream* pStream, bool bInteraction ) : mbHasInteraction( bInteraction )
+    {
+        mpHyperlinkRecord.reset( pStream );
+    }
+    bool    hasInteraction() { return mbHasInteraction; }
+    const std::auto_ptr< SvMemoryStream >&  getHyperlinkRecord() { return mpHyperlinkRecord; }
+};
 
 class EscherExHostAppData
 {
@@ -1312,14 +1326,17 @@ private:
         EscherExClientAnchor_Base*  pClientAnchor;
         EscherExClientRecord_Base*  pClientData;
         EscherExClientRecord_Base*  pClientTextbox;
+        InteractionInfo*        pInteractionInfo;
         // ignore single shape if entire pages are written
         BOOL                        bDontWriteShape;
 
 public:
         EscherExHostAppData() : pClientAnchor(0), pClientData(0),
-                                pClientTextbox(0), bDontWriteShape(FALSE)
+                                pClientTextbox(0), pInteractionInfo(0), bDontWriteShape(FALSE)
         {}
 
+        void SetInteractionInfo( InteractionInfo* p )
+            { pInteractionInfo = p; }
         void SetClientAnchor( EscherExClientAnchor_Base* p )
             { pClientAnchor = p; }
         void SetClientData( EscherExClientRecord_Base* p )
@@ -1328,6 +1345,8 @@ public:
             { pClientTextbox = p; }
         void SetDontWriteShape( BOOL b )
             { bDontWriteShape = b; }
+        InteractionInfo* GetInteractionInfo() const
+            { return pInteractionInfo; }
         EscherExClientAnchor_Base* GetClientAnchor() const
             { return pClientAnchor; }
         EscherExClientRecord_Base* GetClientData() const

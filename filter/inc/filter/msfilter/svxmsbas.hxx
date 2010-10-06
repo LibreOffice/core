@@ -32,6 +32,8 @@
 #include "filter/msfilter/msfilterdllapi.h"
 
 #include <sot/storage.hxx>
+#include <map>
+#include <hash_map>
 
 class SfxObjectShell;
 
@@ -49,6 +51,12 @@ class SfxObjectShell;
  * does this itself when it shows the vb code in the vbeditor, so this is
  * probably what the user expects to see when viewing the code
  */
+
+typedef std::hash_map< sal_Int32, String >  ObjIdToName;
+
+typedef std::map< String, ObjIdToName >  ControlAttributeInfo;
+
+class VBA_Impl;
 
 class MSFILTER_DLLPUBLIC SvxImportMSVBasic
 {
@@ -76,23 +84,31 @@ public:
 
     // check if the MS-VBA-Storage exist in the RootStorage of the DocShell.
     // If it exist, then return the WarningId for loosing the information.
+
+        const ControlAttributeInfo& ControlNameForObjectId(){ return m_ModuleNameToObjIdHash; }
     static ULONG GetSaveWarningOfMSVBAStorage( SfxObjectShell &rDocS );
 
     static String GetMSBasicStorageName();
+        rtl::OUString GetVBAProjectName() { return msProjectName; }
 private:
     SotStorageRef xRoot;
     SfxObjectShell &rDocSh;
     BOOL bImport;
     BOOL bCopy;
+    ControlAttributeInfo m_ModuleNameToObjIdHash;
+    MSFILTER_DLLPRIVATE void extractAttribute( const String& rAttribute, const String& rModName );
 
     MSFILTER_DLLPRIVATE BOOL ImportCode_Impl( const String& rStorageName,
                           const String &rSubStorageName,
                           const std::vector< String >& codeNames,
                           BOOL bAsComment, BOOL bStripped);
     MSFILTER_DLLPRIVATE bool ImportForms_Impl(const String& rStorageName,
-        const String &rSubStorageName);
+        const String &rSubStorageName, BOOL bVBAMode);
     MSFILTER_DLLPRIVATE BOOL CopyStorage_Impl( const String& rStorageName,
                            const String &rSubStorageName);
+        rtl::OUString msProjectName;
+    MSFILTER_DLLPRIVATE BOOL ImportCode_Impl( VBA_Impl&, const std::vector< String >&, BOOL, BOOL );
+    MSFILTER_DLLPRIVATE bool ImportForms_Impl( VBA_Impl&, const String&, const String&, BOOL);
 };
 
 #endif

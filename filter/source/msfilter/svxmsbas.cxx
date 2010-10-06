@@ -66,6 +66,27 @@ using rtl::OUString;
 
 static ::rtl::OUString sVBAOption( RTL_CONSTASCII_USTRINGPARAM( "Option VBASupport 1\n" ) );
 
+void SvxImportMSVBasic::extractAttribute( const String& rAttribute, const String& rModName )
+{
+    // format of the attribute we are interested in is
+    // Attribute VB_Control = "ControlName", intString, MSForms, ControlTypeAsString
+    // e.g.
+    // Attribute VB_Control = "CommandButton1, 201, 19, MSForms, CommandButton"
+    String sControlAttribute( RTL_CONSTASCII_USTRINGPARAM("Attribute VB_Control = \"") );
+    if ( rAttribute.Search( sControlAttribute ) !=  STRING_NOTFOUND )
+    {
+        String sRest = rAttribute.Copy( sControlAttribute.Len() );
+        xub_StrLen nPos = 0;
+        String sCntrlName = sRest.GetToken( 0, ',', nPos );
+
+        sal_Int32 nCntrlId = sRest.GetToken( 0, ',', nPos).ToInt32();
+        OSL_TRACE("In module %s, assiging %d controlname %s",
+            rtl::OUStringToOString( rModName, RTL_TEXTENCODING_UTF8 ).getStr(), nCntrlId,
+            rtl::OUStringToOString( sCntrlName, RTL_TEXTENCODING_UTF8 ).getStr() );
+        m_ModuleNameToObjIdHash[ rModName ][ nCntrlId ] =  sCntrlName;
+    }
+}
+
 int SvxImportMSVBasic::Import( const String& rStorageName,
                                 const String &rSubStorageName,
                                 BOOL bAsComment, BOOL bStripped )
@@ -73,19 +94,19 @@ int SvxImportMSVBasic::Import( const String& rStorageName,
     std::vector< String > codeNames;
     return Import(  rStorageName, rSubStorageName, codeNames, bAsComment, bStripped );
 }
-
 int SvxImportMSVBasic::Import( const String& rStorageName,
                                 const String &rSubStorageName,
                                 const std::vector< String >& codeNames,
                                 BOOL bAsComment, BOOL bStripped )
 {
+        msProjectName = rtl::OUString();
     int nRet = 0;
     if( bImport && ImportCode_Impl( rStorageName, rSubStorageName, codeNames,
                                     bAsComment, bStripped ))
         nRet |= 1;
 
     if (bImport)
-        ImportForms_Impl(rStorageName, rSubStorageName);
+        ImportForms_Impl(rStorageName, rSubStorageName, !bAsComment);
 
     if( bCopy && CopyStorage_Impl( rStorageName, rSubStorageName ))
         nRet |= 2;
@@ -94,9 +115,44 @@ int SvxImportMSVBasic::Import( const String& rStorageName,
 }
 
 bool SvxImportMSVBasic::ImportForms_Impl(const String& rStorageName,
-    const String& rSubStorageName)
+    const String& rSubStorageName, BOOL bVBAMode )
 {
-    SvStorageRef xVBAStg(xRoot->OpenSotStorage(rStorageName,
+    BOOL bRet = FALSE;
+    // #FIXME VBA_Impl ( or some other new class ) should handle both userforms
+    // and code
+    VBA_Impl aVBA( *xRoot, TRUE );
+    // This call is a waste we read the source ( again ) only to get the refereneces
+    // *AGAIN*, we really need to rewrite all of this
+    aVBA.Open( rStorageName, rSubStorageName );
+
+    bRet = ImportForms_Impl( aVBA, rStorageName, rSubStorageName, bVBAMode );
+    std::vector<rtl::OUString> sProjectRefs = aVBA.ProjectReferences();
+
+    for ( std::vector<rtl::OUString>::iterator it = sProjectRefs.begin(); it != sProjectRefs.end(); ++it )
+    {
+       rtl::OUString sFileName = *it;
+#ifndef WIN
+#ifdef DEBUG
+       // hacky test code to read referenced projects on linux
+       sal_Int32 nPos = (*it).lastIndexOf('\\');
+       sFileName = (*it).copy( nPos + 1 );
+       sFileName =  rtl::OUString::createFromAscii("~/Documents/") + sFileName;
+#endif
+#endif
+       SotStorageRef rRoot = new SotStorage( sFileName, STREAM_STD_READWRITE, STORAGE_TRANSACTED );
+       VBA_Impl refVBA( *rRoot, TRUE );
+       refVBA.Open( rStorageName, rSubStorageName );
+       // The return from ImportForms doesn't indicate and error ( it could )
+       // but also it just means no userforms were imported
+       if ( ImportForms_Impl( refVBA, rStorageName, rSubStorageName, bVBAMode ) )
+           bRet = true; // mark that at least on userform was imported
+    }
+    return bRet;
+}
+
+bool SvxImportMSVBasic::ImportForms_Impl( VBA_Impl& rVBA, const String& rStorageName, const String& rSubStorageName, BOOL bVBAMode )
+{
+    SvStorageRef xVBAStg(rVBA.GetStorage()->OpenSotStorage(rStorageName,
         STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYALL));
     if (!xVBAStg.Is() || xVBAStg->GetError())
         return false;
@@ -129,6 +185,10 @@ bool SvxImportMSVBasic::ImportForms_Impl(const String& rStorageName,
         DBG_ASSERT( xLibContainer.is(), "No BasicContainer!" );
 
         String aLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
+
+        if (rVBA.ProjectName().getLength() )
+            aLibName = rVBA.ProjectName();
+        OSL_TRACE( "userformage lib name %s", rtl::OUStringToOString( aLibName, RTL_TEXTENCODING_UTF8 ).getStr() );
         Reference<XNameContainer> xLib;
         if (xLibContainer.is())
         {
@@ -178,7 +238,17 @@ bool SvxImportMSVBasic::ImportForms_Impl(const String& rStorageName,
                     xSF->createInstance(
                        OUString(RTL_CONSTASCII_USTRINGPARAM(
                            "com.sun.star.awt.UnoControlDialogModel"))), uno::UNO_QUERY);
-
+                // #FIXME HACK - mark the Model with the VBA mode
+                // In vba mode the imported userform uses 100th mm as units
+                // or geometry
+                // In non vba mode MAP_APPFONT is used ( same as normal basic
+                // dialogs
+                if ( bVBAMode )
+                {
+                    Reference<XPropertySet> xDlgProps(xDialog, UNO_QUERY);
+                    if ( xDlgProps.is() )
+                        xDlgProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("VBAForm") ), uno::makeAny( sal_True ) );
+                }
                 OCX_UserForm aForm(xVBAStg, *aIter, *aIter, xDialog, xSF );
                 aForm.pDocSh = &rDocSh;
                 sal_Bool bOk = aForm.Read(xTypes);
@@ -247,8 +317,34 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
 {
     BOOL bRet = FALSE;
     VBA_Impl aVBA( *xRoot, bAsComment );
+
     if( aVBA.Open(rStorageName,rSubStorageName) )
     {
+        msProjectName = aVBA.ProjectName();
+
+        if ( msProjectName.getLength() )
+            rDocSh.GetBasicManager()->SetName( msProjectName ); // set name of Project
+
+        bRet = ImportCode_Impl( aVBA, codeNames, bAsComment, bStripped );
+        std::vector<rtl::OUString> sProjectRefs = aVBA.ProjectReferences();
+
+        for ( std::vector<rtl::OUString>::iterator it = sProjectRefs.begin(); it != sProjectRefs.end(); ++it )
+        {
+            rtl::OUString sFileName = *it;
+            OSL_TRACE("referenced project %s ", rtl::OUStringToOString( sFileName, RTL_TEXTENCODING_UTF8 ).getStr() );
+            SotStorageRef rRoot = new SotStorage( sFileName, STREAM_STD_READWRITE, STORAGE_TRANSACTED );
+            VBA_Impl refVBA( *rRoot, bAsComment );
+            std::vector< String > codeNamesNone;
+            if( refVBA.Open(rStorageName,rSubStorageName) && ImportCode_Impl( refVBA, codeNamesNone, bAsComment, bStripped ) )
+                bRet = TRUE; // mark that some code was imported
+        }
+    }
+    return bRet;
+}
+
+BOOL SvxImportMSVBasic::ImportCode_Impl( VBA_Impl& aVBA, const std::vector< String >& codeNames, BOOL bAsComment, BOOL bStripped )
+{
+    BOOL bRet = FALSE;
         SFX_APP()->EnterBasicCall();
         Reference<XLibraryContainer> xLibContainer = rDocSh.GetBasicContainer();
         DBG_ASSERT( xLibContainer.is(), "No BasicContainer!" );
@@ -269,6 +365,8 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
         UINT16 nStreamCount = aVBA.GetNoStreams();
         Reference<XNameContainer> xLib;
         String aLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
+        if ( aVBA.ProjectName().getLength() )
+            aLibName = aVBA.ProjectName();
         if( xLibContainer.is() && nStreamCount )
         {
             if( !xLibContainer->hasByName( aLibName ) )
@@ -417,7 +515,11 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
                             if( nEnd == STRING_NOTFOUND )
                                 pStr->Erase();
                             else
+                            {
+                                String sAttr= pStr->Copy( nBegin, (nEnd-nBegin)+1);
+                                extractAttribute( sAttr, sModule );
                                 pStr->Erase(nBegin, (nEnd-nBegin)+1);
+                            }
                         }
                     }
                     if( aDecompressed.Get(j)->Len() )
@@ -496,7 +598,6 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
             bRet = true;
         }
         SFX_APP()->LeaveBasicCall();
-    }
     return bRet;
 }
 
