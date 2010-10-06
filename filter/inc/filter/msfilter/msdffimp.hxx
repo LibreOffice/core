@@ -257,6 +257,8 @@ struct MSDffTxId
 
 struct MSFILTER_DLLPUBLIC SvxMSDffImportRec
 {
+    static const int RELTO_DEFAULT = 2;
+
     SdrObject*  pObj;
     Polygon*    pWrapPolygon;
     char*       pClientAnchorBuffer;
@@ -264,9 +266,9 @@ struct MSFILTER_DLLPUBLIC SvxMSDffImportRec
     char*       pClientDataBuffer;
     UINT32      nClientDataLen;
     UINT32      nXAlign;
-    UINT32      nXRelTo;
+    UINT32      *pXRelTo;
     UINT32      nYAlign;
-    UINT32      nYRelTo;
+    UINT32      *pYRelTo;
     UINT32      nLayoutInTableCell;
     UINT32      nFlags;
     long        nTextRotationAngle;
@@ -303,6 +305,8 @@ struct MSFILTER_DLLPUBLIC SvxMSDffImportRec
     {   return nShapeId == rEntry.nShapeId; }
     BOOL operator<( const SvxMSDffImportRec& rEntry ) const
     {   return nShapeId < rEntry.nShapeId;  }
+private:
+    SvxMSDffImportRec &operator=(const SvxMSDffImportRec&);
 };
 typedef SvxMSDffImportRec* MSDffImportRec_Ptr;
 

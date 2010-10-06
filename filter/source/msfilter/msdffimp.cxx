@@ -5605,9 +5605,19 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                 switch( nPID )
                 {
                     case 0x038F: pImpRec->nXAlign = nUDData; break;
-                    case 0x0390: pImpRec->nXRelTo = nUDData; break;
+                    case 0x0390:
+                        if (pImpRec->pXRelTo)
+                            delete pImpRec->pXRelTo;
+                        pImpRec->pXRelTo = new UINT32;
+                        *(pImpRec->pXRelTo) = nUDData;
+                        break;
                     case 0x0391: pImpRec->nYAlign = nUDData; break;
-                    case 0x0392: pImpRec->nYRelTo = nUDData; break;
+                    case 0x0392:
+                        if (pImpRec->pYRelTo)
+                            delete pImpRec->pYRelTo;
+                        pImpRec->pYRelTo = new UINT32;
+                        *(pImpRec->pYRelTo) = nUDData;
+                        break;
                     case 0x03BF: pImpRec->nLayoutInTableCell = nUDData; break;
                 }
                 if ( rSt.GetError() != 0 )
@@ -7995,9 +8005,9 @@ SvxMSDffImportRec::SvxMSDffImportRec()
       pClientDataBuffer( 0 ),
       nClientDataLen(    0 ),
       nXAlign( 0 ), // position n cm from left
-      nXRelTo( 2 ), //   relative to column
+      pXRelTo( NULL ), //   relative to column
       nYAlign( 0 ), // position n cm below
-      nYRelTo( 2 ), //   relative to paragraph
+      pYRelTo( NULL ), //   relative to paragraph
       nLayoutInTableCell( 0 ), // element is laid out in table cell
       nTextRotationAngle( 0 ),
       nDxTextLeft( 144 ),
@@ -8031,9 +8041,9 @@ SvxMSDffImportRec::SvxMSDffImportRec()
 SvxMSDffImportRec::SvxMSDffImportRec(const SvxMSDffImportRec& rCopy)
     : pObj( rCopy.pObj ),
       nXAlign( rCopy.nXAlign ),
-      nXRelTo( rCopy.nXRelTo ),
+      pXRelTo( NULL ),
       nYAlign( rCopy.nYAlign ),
-      nYRelTo( rCopy.nYRelTo ),
+      pYRelTo( NULL ),
       nLayoutInTableCell( rCopy.nLayoutInTableCell ),
       nTextRotationAngle( rCopy.nTextRotationAngle ),
       nDxTextLeft( rCopy.nDxTextLeft    ),
@@ -8053,6 +8063,16 @@ SvxMSDffImportRec::SvxMSDffImportRec(const SvxMSDffImportRec& rCopy)
       nShapeId( rCopy.nShapeId ),
       eShapeType( rCopy.eShapeType )
 {
+    if (rCopy.pXRelTo)
+    {
+       pXRelTo = new UINT32;
+       *pXRelTo = *(rCopy.pXRelTo);
+    }
+    if (rCopy.pYRelTo)
+    {
+       pYRelTo = new UINT32;
+       *pYRelTo = *(rCopy.pYRelTo);
+    }
     eLineStyle       = rCopy.eLineStyle; // GPF-Bug #66227#
     bDrawHell        = rCopy.bDrawHell;
     bHidden          = rCopy.bHidden;
@@ -8098,6 +8118,10 @@ SvxMSDffImportRec::~SvxMSDffImportRec()
         delete[] pClientDataBuffer;
     if (pWrapPolygon)
         delete pWrapPolygon;
+    if (pXRelTo)
+        delete pXRelTo;
+    if (pYRelTo)
+        delete pYRelTo;
 }
 
 void SvxMSDffManager::insertShapeId( sal_Int32 nShapeId, SdrObject* pShape )
