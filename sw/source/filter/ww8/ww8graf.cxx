@@ -1954,11 +1954,17 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
 void SwWW8ImplReader::AdjustLRWrapForWordMargins(
     const SvxMSDffImportRec &rRecord, SvxLRSpaceItem &rLR)
 {
+    UINT32 nXRelTo = SvxMSDffImportRec::RELTO_DEFAULT;
+    if ( rRecord.pXRelTo )
+    {
+        nXRelTo = *(rRecord.pXRelTo);
+    }
+
     // Left adjustments - if horizontally aligned to left of
     // margin or column then remove the left wrapping
     if (rRecord.nXAlign == 1)
     {
-        if ((rRecord.nXRelTo == 0) || (rRecord.nXRelTo == 2))
+        if ((nXRelTo == 0) || (nXRelTo == 2))
             rLR.SetLeft((USHORT)0);
     }
 
@@ -1966,18 +1972,18 @@ void SwWW8ImplReader::AdjustLRWrapForWordMargins(
     // margin or column then remove the right wrapping
     if (rRecord.nXAlign == 3)
     {
-        if ((rRecord.nXRelTo == 0) || (rRecord.nXRelTo == 2))
+        if ((nXRelTo == 0) || (nXRelTo == 2))
             rLR.SetRight((USHORT)0);
     }
 
     //Inside margin, remove left wrapping
-    if ((rRecord.nXAlign == 4) && (rRecord.nXRelTo == 0))
+    if ((rRecord.nXAlign == 4) && (nXRelTo == 0))
     {
         rLR.SetLeft((USHORT)0);
     }
 
     //Outside margin, remove left wrapping
-    if ((rRecord.nXAlign == 5) && (rRecord.nXRelTo == 0))
+    if ((rRecord.nXAlign == 5) && (nXRelTo == 0))
     {
         rLR.SetRight((USHORT)0);
     }
@@ -1987,11 +1993,17 @@ void SwWW8ImplReader::AdjustLRWrapForWordMargins(
 void SwWW8ImplReader::AdjustULWrapForWordMargins(
     const SvxMSDffImportRec &rRecord, SvxULSpaceItem &rUL)
 {
+    UINT32 nYRelTo = SvxMSDffImportRec::RELTO_DEFAULT;
+    if ( rRecord.pYRelTo )
+    {
+        nYRelTo = *(rRecord.pYRelTo);
+    }
+
     // Top adjustment - remove upper wrapping if aligned to page
     // printable area or to page
     if (rRecord.nYAlign == 1)
     {
-        if ((rRecord.nYRelTo == 0) || (rRecord.nYRelTo == 1))
+        if ((nYRelTo == 0) || (nYRelTo == 1))
             rUL.SetUpper((USHORT)0);
     }
 
@@ -1999,12 +2011,12 @@ void SwWW8ImplReader::AdjustULWrapForWordMargins(
     // printable area or to page
     if (rRecord.nYAlign == 3)
     {
-        if ((rRecord.nYRelTo == 0) || (rRecord.nYRelTo == 1))
+        if ((nYRelTo == 0) || (nYRelTo == 1))
             rUL.SetLower((USHORT)0);
     }
 
     //Remove top margin if aligned vertically inside margin
-    if ((rRecord.nYAlign == 4) && (rRecord.nYRelTo == 0))
+    if ((rRecord.nYAlign == 4) && (nYRelTo == 0))
         rUL.SetUpper((USHORT)0);
 
     /*
@@ -2247,10 +2259,16 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
 
     SvxMSDffImportRec aRecordFromFSPA;
     if (!pRecord)
-    {
         pRecord = &aRecordFromFSPA;
-        pRecord->nXRelTo = pFSPA->nbx;
-        pRecord->nYRelTo = pFSPA->nby;
+    if (!(pRecord->pXRelTo) && pFSPA)
+    {
+        pRecord->pXRelTo = new UINT32;
+    *(pRecord->pXRelTo) = pFSPA->nbx;
+    }
+    if (!(pRecord->pYRelTo) && pFSPA)
+    {
+        pRecord->pYRelTo = new UINT32;
+    *(pRecord->pYRelTo) = pFSPA->nby;
     }
 
     // nXAlign - abs. Position, Left,  Centered,  Right,  Inside, Outside
@@ -2279,19 +2297,19 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
         // is a hint that these values aren't set by the escher import - see
         // method <SwMSDffManager::ProcessObj(..)>. Then, check if for each
         // values, if it differs from the one in the FSPA.
-        if ( pRecord->nXRelTo == 2 && pRecord->nYRelTo == 2 )
+        if ( *(pRecord->pXRelTo) == 2 && *(pRecord->pYRelTo) == 2 )
         {
             // if <nYRelTo> differs from <FSPA.nby> overwrite <nYRelTo>
-            if ( pFSPA->nby != pRecord->nYRelTo )
+            if ( pFSPA->nby != *(pRecord->pYRelTo) )
             {
-                pRecord->nYRelTo = pFSPA->nby;
+                *(pRecord->pYRelTo) = pFSPA->nby;
             }
         }
         // <--
     }
 
-    UINT32 nXRelTo = nCntRelTo > pRecord->nXRelTo ? pRecord->nXRelTo : 1;
-    UINT32 nYRelTo = nCntRelTo > pRecord->nYRelTo ? pRecord->nYRelTo : 1;
+    UINT32 nXRelTo = nCntRelTo > *(pRecord->pXRelTo) ? *(pRecord->pXRelTo) : 1;
+    UINT32 nYRelTo = nCntRelTo > *(pRecord->pYRelTo) ? *(pRecord->pYRelTo) : 1;
 
     // --> OD 2005-03-03 #i43718#
     RndStdIds eAnchor = IsInlineEscherHack() ? FLY_AS_CHAR : FLY_AT_CHAR;

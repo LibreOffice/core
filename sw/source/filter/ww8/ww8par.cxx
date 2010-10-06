@@ -317,9 +317,19 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                 switch( nPID )
                 {
                     case 0x038F: pImpRec->nXAlign = nUDData; break;
-                    case 0x0390: pImpRec->nXRelTo = nUDData; break;
+                    case 0x0390:
+                        if (pImpRec->pXRelTo)
+                            delete pImpRec->pXRelTo;
+                        pImpRec->pXRelTo = new UINT32;
+                        *(pImpRec->pXRelTo) = nUDData;
+                        break;
                     case 0x0391: pImpRec->nYAlign = nUDData; break;
-                    case 0x0392: pImpRec->nYRelTo = nUDData; break;
+                    case 0x0392:
+                        if (pImpRec->pYRelTo)
+                            delete pImpRec->pYRelTo;
+                        pImpRec->pYRelTo = new UINT32;
+                        *(pImpRec->pYRelTo) = nUDData;
+                        break;
                     case 0x03BF: pImpRec->nLayoutInTableCell = nUDData; break;
                 }
                 if ( rSt.GetError() != 0 )
