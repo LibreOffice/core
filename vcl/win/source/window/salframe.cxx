@@ -82,7 +82,6 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/sallayout.hxx>
 #include <vcl/svapp.hxx>
-#include <impdel.hxx>
 #define COMPILE_MULTIMON_STUBS
 #include <multimon.h>
 #include <vector>
