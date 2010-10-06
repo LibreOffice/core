@@ -59,7 +59,9 @@ SLOFILES=   \
             $(SLO)$/tkscrollbar.obj                 \
             $(SLO)$/tkspinbutton.obj                \
             $(SLO)$/tksimpleanimation.obj           \
-            $(SLO)$/tkthrobber.obj
+            $(SLO)$/tkthrobber.obj                  \
+            $(SLO)$/animatedimages.obj              \
+            $(SLO)$/spinningprogress.obj            \
 
 # --- Targets ------------------------------------------------------
 

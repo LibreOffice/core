@@ -51,6 +51,8 @@
 #include "toolkit/controls/tkspinbutton.hxx"
 #include <toolkit/controls/tksimpleanimation.hxx>
 #include <toolkit/controls/tkthrobber.hxx>
+#include <toolkit/controls/animatedimages.hxx>
+#include <toolkit/controls/spinningprogress.hxx>
 #include <toolkit/controls/dialogcontrol.hxx>
 #include "toolkit/dllapi.h"
 
@@ -135,6 +137,14 @@ namespace toolkit
     if ( pRet ) \
         return pRet; \
 
+#define TRY_OOO_FACTORY( ImplName, ServiceName ) \
+    pRet = tryCreateFactory( sImplementationName, "org.openoffice.comp.toolkit." #ImplName, \
+                ServiceName, NULL, \
+                ImplName##_CreateInstance, xServiceFactory \
+            ); \
+    if ( pRet ) \
+        return pRet; \
+
 using namespace toolkit;
 
 IMPL_CREATEINSTANCE2( VCLXToolkit )
@@ -195,6 +205,9 @@ IMPL_CREATEINSTANCE( UnoSimpleAnimationControl )
 IMPL_CREATEINSTANCE( UnoSimpleAnimationControlModel )
 IMPL_CREATEINSTANCE( UnoThrobberControl )
 IMPL_CREATEINSTANCE( UnoThrobberControlModel )
+IMPL_CREATEINSTANCE( AnimatedImagesControl )
+IMPL_CREATEINSTANCE( AnimatedImagesControlModel )
+IMPL_CREATEINSTANCE( SpinningProgressControlModel )
 
 extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL TreeControl_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
 extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL TreeControlModel_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
@@ -288,6 +301,9 @@ TOOLKIT_DLLPUBLIC void* SAL_CALL component_getFactory( const sal_Char* sImplemen
         CHECKANDCREATEFACTORY( UnoSimpleAnimationControl, szServiceName_UnoSimpleAnimationControl, szServiceName2_UnoSimpleAnimationControl )
         CHECKANDCREATEFACTORY( UnoThrobberControlModel, szServiceName_UnoThrobberControlModel, szServiceName2_UnoThrobberControlModel )
         CHECKANDCREATEFACTORY( UnoThrobberControl, szServiceName_UnoThrobberControl, szServiceName2_UnoThrobberControl )
+        TRY_OOO_FACTORY( AnimatedImagesControl, szServiceName_AnimatedImagesControl )
+        TRY_OOO_FACTORY( AnimatedImagesControlModel, szServiceName_AnimatedImagesControlModel )
+        TRY_OOO_FACTORY( SpinningProgressControlModel, szServiceName_SpinningProgressControlModel )
         CHECKANDCREATEFACTORY( UnoFixedHyperlinkControl, szServiceName_UnoControlFixedHyperlink, NULL )
         CHECKANDCREATEFACTORY( UnoControlFixedHyperlinkModel, szServiceName_UnoControlFixedHyperlinkModel, NULL )
         CHECKANDCREATEFACTORY( GridControl, szServiceName_GridControl, NULL );

@@ -53,11 +53,9 @@ namespace toolkit
 
     //--------------------------------------------------------------------
     XThrobber::XThrobber()
+        :mpThrobber( new Throbber_Impl( *this ) )
     {
         DBG_CTOR( XThrobber, NULL );
-
-        mpThrobber = new Throbber_Impl( this, 100, sal_True );
-
         InitImageList();
     }
 
@@ -65,72 +63,20 @@ namespace toolkit
     XThrobber::~XThrobber()
     {
         DBG_DTOR( XThrobber, NULL );
-        delete mpThrobber;
     }
-
-    //--------------------------------------------------------------------
-    IMPLEMENT_FORWARD_XINTERFACE2( XThrobber, VCLXWindow, XThrobber_Base )
-
-    //--------------------------------------------------------------------
-    IMPLEMENT_FORWARD_XTYPEPROVIDER2( XThrobber, VCLXWindow, XThrobber_Base )
 
     //--------------------------------------------------------------------
     void SAL_CALL XThrobber::start() throw ( uno::RuntimeException )
     {
+        ::vos::OGuard aGuard( GetMutex() );
         mpThrobber->start();
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL XThrobber::stop() throw ( uno::RuntimeException )
     {
+        ::vos::OGuard aGuard( GetMutex() );
         mpThrobber->stop();
-    }
-
-    //--------------------------------------------------------------------
-    void XThrobber::ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent )
-    {
-        static bool bInit = false;
-        if ( !bInit )
-        {
-            // Images won't be shown if set too early
-            mpThrobber->initImage();
-            bInit = true;
-        }
-        // TODO: XSimpleAnimation::ProcessWindowEvent
-        //::vos::OClearableGuard aGuard( GetMutex() );
-        //Reference< XSimpleAnimation > xKeepAlive( this );
-        //SpinButton* pSpinButton = static_cast< SpinButton* >( GetWindow() );
-        //if ( !pSpinButton )
-        //    return;
-
-        VCLXWindow::ProcessWindowEvent( _rVclWindowEvent );
-    }
-
-    //--------------------------------------------------------------------
-    void SAL_CALL XThrobber::setProperty( const ::rtl::OUString& PropertyName, const uno::Any& Value )
-        throw( uno::RuntimeException )
-    {
-        ::vos::OGuard aGuard( GetMutex() );
-
-        if ( GetWindow() )
-        {
-            VCLXWindow::setProperty( PropertyName, Value );
-        }
-    }
-
-    //--------------------------------------------------------------------
-    uno::Any SAL_CALL XThrobber::getProperty( const ::rtl::OUString& PropertyName )
-        throw( uno::RuntimeException )
-    {
-        ::vos::OGuard aGuard( GetMutex() );
-
-        uno::Any aReturn;
-
-        if ( GetWindow() )
-        {
-            aReturn = VCLXWindow::getProperty( PropertyName );
-        }
-        return aReturn;
     }
 
     //--------------------------------------------------------------------

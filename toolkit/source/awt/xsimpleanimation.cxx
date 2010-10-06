@@ -46,35 +46,28 @@ namespace toolkit
 
     //--------------------------------------------------------------------
     XSimpleAnimation::XSimpleAnimation()
+        :mpThrobber( new Throbber_Impl( *this ) )
     {
         DBG_CTOR( XSimpleAnimation, NULL );
-        mbRepeat = sal_True;
-        mnStepTime = 100;
-        mpThrobber = new Throbber_Impl( this, mnStepTime, mbRepeat );
     }
 
     //--------------------------------------------------------------------
     XSimpleAnimation::~XSimpleAnimation()
     {
         DBG_DTOR( XSimpleAnimation, NULL );
-        delete mpThrobber;
     }
-
-    //--------------------------------------------------------------------
-    IMPLEMENT_FORWARD_XINTERFACE2( XSimpleAnimation, VCLXWindow, XSimpleAnimation_Base )
-
-    //--------------------------------------------------------------------
-    IMPLEMENT_FORWARD_XTYPEPROVIDER2( XSimpleAnimation, VCLXWindow, XSimpleAnimation_Base )
 
     //--------------------------------------------------------------------
     void SAL_CALL XSimpleAnimation::start() throw ( uno::RuntimeException )
     {
+        ::vos::OGuard aGuard( GetMutex() );
         mpThrobber->start();
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL XSimpleAnimation::stop() throw ( uno::RuntimeException )
     {
+        ::vos::OGuard aGuard( GetMutex() );
         mpThrobber->stop();
     }
 
@@ -82,20 +75,8 @@ namespace toolkit
     void SAL_CALL XSimpleAnimation::setImageList( const uno::Sequence< uno::Reference< graphic::XGraphic > >& rImageList )
         throw ( uno::RuntimeException )
     {
+        ::vos::OGuard aGuard( GetMutex() );
         mpThrobber->setImageList( rImageList );
-    }
-
-    //--------------------------------------------------------------------
-    void XSimpleAnimation::ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent )
-    {
-        // TODO: XSimpleAnimation::ProcessWindowEvent
-        //::vos::OClearableGuard aGuard( GetMutex() );
-        //Reference< XSimpleAnimation > xKeepAlive( this );
-        //SpinButton* pSpinButton = static_cast< SpinButton* >( GetWindow() );
-        //if ( !pSpinButton )
-        //    return;
-
-        VCLXWindow::ProcessWindowEvent( _rVclWindowEvent );
     }
 
     //--------------------------------------------------------------------
@@ -112,20 +93,14 @@ namespace toolkit
                 case BASEPROPERTY_STEP_TIME: {
                     sal_Int32   nStepTime( 0 );
                     if ( Value >>= nStepTime )
-                    {
-                        mnStepTime = nStepTime;
-                        mpThrobber->setStepTime( mnStepTime );
-                    }
+                        mpThrobber->setStepTime( nStepTime );
 
                     break;
                 }
                 case BASEPROPERTY_REPEAT: {
                     sal_Bool bRepeat( sal_True );
                     if ( Value >>= bRepeat )
-                    {
-                        mbRepeat = bRepeat;
-                        mpThrobber->setRepeat( mbRepeat );
-                    }
+                        mpThrobber->setRepeat( bRepeat );
                     break;
                 }
                 default:
@@ -148,10 +123,10 @@ namespace toolkit
             switch ( nPropertyId )
             {
             case BASEPROPERTY_STEP_TIME:
-                aReturn <<= mnStepTime;
+                aReturn <<= mpThrobber->getStepTime();
                 break;
             case BASEPROPERTY_REPEAT:
-                aReturn <<= mbRepeat;
+                aReturn <<= mpThrobber->getRepeat();
                 break;
             default:
                 aReturn = VCLXWindow::getProperty( PropertyName );

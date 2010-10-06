@@ -28,7 +28,7 @@
 #include <toolkit/helper/throbberimpl.hxx>
 
 #include <vcl/svapp.hxx>
-#include <vcl/fixed.hxx>
+#include <vcl/imgctrl.hxx>
 
 //........................................................................
 namespace toolkit
@@ -37,14 +37,14 @@ namespace toolkit
     using namespace ::com::sun::star;
 
     //--------------------------------------------------------------------
-    Throbber_Impl::Throbber_Impl( uno::Reference< VCLXWindow > xParent,
-                                  sal_Int32 nStepTime,
-                                  sal_Bool bRepeat )
+    Throbber_Impl::Throbber_Impl( VCLXWindow& i_rParent )
         :mrMutex( Application::GetSolarMutex() )
+        ,mrParent( i_rParent )
+        ,mbRepeat( sal_True )
+        ,mnStepTime( 100 )
+        ,mnCurStep( 0 )
+        ,mnStepCount( 0 )
     {
-        mxParent = xParent;
-        mbRepeat = bRepeat;
-        mnStepTime = nStepTime;
         maWaitTimer.SetTimeout( mnStepTime );
         maWaitTimer.SetTimeoutHdl( LINK( this, Throbber_Impl, TimeOutHdl ) );
     }
@@ -53,59 +53,59 @@ namespace toolkit
     Throbber_Impl::~Throbber_Impl()
     {
         maWaitTimer.Stop();
-        mxParent = NULL;
     }
 
     //--------------------------------------------------------------------
-    void Throbber_Impl::start() throw ( uno::RuntimeException )
+    void Throbber_Impl::start()
     {
-        ::vos::OGuard aGuard( GetMutex() );
-
-        mnCurStep = 0;
+        DBG_TESTSOLARMUTEX();
         maWaitTimer.Start();
     }
 
     //--------------------------------------------------------------------
-    void Throbber_Impl::stop() throw ( uno::RuntimeException )
+    void Throbber_Impl::stop()
     {
-        ::vos::OGuard aGuard( GetMutex() );
-
+        DBG_TESTSOLARMUTEX();
         maWaitTimer.Stop();
     }
 
     //--------------------------------------------------------------------
-    void Throbber_Impl::setImageList( const uno::Sequence< uno::Reference< graphic::XGraphic > >& rImageList )
-        throw ( uno::RuntimeException )
+    bool Throbber_Impl::isRunning() const
     {
-        ::vos::OGuard aGuard( GetMutex() );
+        DBG_TESTSOLARMUTEX();
+        return maWaitTimer.IsActive();
+    }
 
-        maImageList = rImageList;
-
-        mnStepCount = maImageList.getLength();
-        FixedImage* pImage = static_cast< FixedImage* >( mxParent->GetWindow() );
-        if ( pImage )
+    //--------------------------------------------------------------------
+    namespace
+    {
+        void lcl_setImage( FixedImage& i_fixedImage, Image const& i_image )
         {
-            if ( mnStepCount )
-                pImage->SetImage( maImageList[ 0 ] );
+            ImageControl* pImageControl = dynamic_cast< ImageControl* >( &i_fixedImage );
+            if ( pImageControl != NULL )
+                pImageControl->SetBitmap( i_image.GetBitmapEx() );
             else
-                pImage->SetImage( Image() );
+                i_fixedImage.SetImage( i_image );
         }
     }
 
     //--------------------------------------------------------------------
-    void Throbber_Impl::initImage()
-        throw ( uno::RuntimeException )
+    void Throbber_Impl::setImageList( const uno::Sequence< uno::Reference< graphic::XGraphic > >& rImageList )
     {
-        FixedImage* pImage = static_cast< FixedImage* >( mxParent->GetWindow() );
-        if ( pImage && maImageList.getLength() )
-            pImage->SetImage( maImageList[ 0 ] );
+        DBG_TESTSOLARMUTEX();
+
+        maImageList = rImageList;
+
+        mnStepCount = maImageList.getLength();
+        FixedImage* pFixedImage = dynamic_cast< FixedImage* >( mrParent.GetWindow() );
+        if ( pFixedImage )
+            lcl_setImage( *pFixedImage, mnStepCount ? maImageList[ 0 ] : Image() );
     }
 
     //--------------------------------------------------------------------
     sal_Bool Throbber_Impl::isHCMode()
-        throw ( uno::RuntimeException )
     {
-        FixedImage* pImage = static_cast< FixedImage* >( mxParent->GetWindow() );
+        FixedImage* pImage = dynamic_cast< FixedImage* >( mrParent.GetWindow() );
         if ( pImage )
             return pImage->GetSettings().GetStyleSettings().GetHighContrastMode();
         else
@@ -116,18 +116,29 @@ namespace toolkit
     IMPL_LINK( Throbber_Impl, TimeOutHdl, Throbber_Impl*, EMPTYARG )
     {
         ::vos::OGuard aGuard( GetMutex() );
+        if ( !maImageList.getLength() )
+            return 0;
 
-        FixedImage* pImage = static_cast< FixedImage* >( mxParent->GetWindow() );
-
-        if ( !pImage || !maImageList.getLength() )
+        FixedImage* pFixedImage = dynamic_cast< FixedImage* >( mrParent.GetWindow() );
+        if ( pFixedImage == NULL )
             return 0;
 
         if ( mnCurStep < mnStepCount - 1 )
             mnCurStep += 1;
         else
-            mnCurStep = 0;
+        {
+            if ( mbRepeat )
+            {
+                // start over
+                mnCurStep = 0;
+            }
+            else
+            {
+                stop();
+            }
+        }
 
-        pImage->SetImage( maImageList[ mnCurStep ] );
+        lcl_setImage( *pFixedImage, maImageList[ mnCurStep ] );
 
         return 0;
     }
