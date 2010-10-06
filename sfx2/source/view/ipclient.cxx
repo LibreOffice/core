@@ -220,7 +220,6 @@ void SAL_CALL SfxInPlaceClient_Impl::notifyEvent( const document::EventObject& a
 
     if ( m_pClient && aEvent.EventName.equalsAscii("OnVisAreaChanged") && m_nAspect != embed::Aspects::MSOLE_ICON )
     {
-        m_pClient->FormatChanged(); // for Writer when format of the object is changed with the area
         m_pClient->ViewChanged();
         m_pClient->Invalidate();
     }
@@ -1079,11 +1078,6 @@ void SfxInPlaceClient::ViewChanged()
 }
 
 void SfxInPlaceClient::MakeVisible()
-{
-    // dummy implementation
-}
-
-void SfxInPlaceClient::FormatChanged()
 {
     // dummy implementation
 }
