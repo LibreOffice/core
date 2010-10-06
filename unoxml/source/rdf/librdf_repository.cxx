@@ -39,6 +39,8 @@
 #include <boost/shared_array.hpp>
 #include <boost/bind.hpp>
 
+#include <libxslt/security.h>
+
 #include <redland.h>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -64,19 +66,6 @@
 #include <comphelper/stlunosequence.hxx>
 #include <comphelper/sequenceasvector.hxx>
 #include <comphelper/makesequence.hxx>
-#include <librdf.h>
-#include <libxslt/security.h>
-
-#include <boost/utility.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/shared_array.hpp>
-#include <boost/bind.hpp>
-
-#include <map>
-#include <functional>
-#include <algorithm>
-
-#include <string.h>
 
 
 /**
