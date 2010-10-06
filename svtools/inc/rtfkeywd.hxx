@@ -70,6 +70,8 @@
 #define OOO_STRING_SVTOOLS_RTF_BRDRCF "\\brdrcf"
 #define OOO_STRING_SVTOOLS_RTF_BRDRDB "\\brdrdb"
 #define OOO_STRING_SVTOOLS_RTF_BRDRDOT "\\brdrdot"
+#define OOO_STRING_SVTOOLS_RTF_BRDRDASH "\\brdrdash"
+#define OOO_STRING_SVTOOLS_RTF_BRDRDASHSM "\\brdrdashsm"
 #define OOO_STRING_SVTOOLS_RTF_BRDRHAIR "\\brdrhair"
 #define OOO_STRING_SVTOOLS_RTF_BRDRL "\\brdrl"
 #define OOO_STRING_SVTOOLS_RTF_BRDRR "\\brdrr"

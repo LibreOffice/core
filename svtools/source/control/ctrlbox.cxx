@@ -39,8 +39,11 @@
 #include <svtools/svtools.hrc>
 #include <ctrlbox.hxx>
 #include <ctrltool.hxx>
+#include <borderhelper.hxx>
 
 #include <vcl/i18nhelp.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 
 #define IMGTEXTSPACE    2
 #define EXTRAFONTSIZE   5
@@ -248,6 +251,7 @@ struct ImpLineListData
     long    nLine1;
     long    nLine2;
     long    nDistance;
+    USHORT  nStyle;
 };
 
 DECLARE_LIST( ImpLineList, ImpLineListData* )
@@ -261,8 +265,107 @@ inline const Color& LineListBox::GetPaintColor( void ) const
 
 // -----------------------------------------------------------------------
 
+
+inline void lclDrawPolygon( OutputDevice& rDev, const basegfx::B2DPolygon& rPolygon, long nWidth, USHORT nDashing )
+{
+    USHORT nOldAA = rDev.GetAntialiasing();
+    rDev.SetAntialiasing( nOldAA & !ANTIALIASING_ENABLE_B2DDRAW );
+
+    Color aOldColor = rDev.GetFillColor( );
+    rDev.SetFillColor( rDev.GetLineColor( ) );
+
+    basegfx::B2DPolyPolygon aPolygons = svtools::ApplyLineDashing( rPolygon, nDashing, rDev.GetMapMode().GetMapUnit() );
+    for ( sal_uInt32 i = 0; i < aPolygons.count( ); i++ )
+    {
+        basegfx::B2DPolygon aDash = aPolygons.getB2DPolygon( i );
+        basegfx::B2DPoint aStart = aDash.getB2DPoint( 0 );
+        basegfx::B2DPoint aEnd = aDash.getB2DPoint( aDash.count() - 1 );
+
+        basegfx::B2DVector aVector( aEnd - aStart );
+        aVector.normalize( );
+        const basegfx::B2DVector aPerpendicular(basegfx::getPerpendicular(aVector));
+
+        const basegfx::B2DVector aWidthOffset( nWidth / 2 * aPerpendicular);
+        basegfx::B2DPolygon aDashPolygon;
+        aDashPolygon.append( aStart + aWidthOffset );
+        aDashPolygon.append( aEnd + aWidthOffset );
+        aDashPolygon.append( aEnd - aWidthOffset );
+        aDashPolygon.append( aStart - aWidthOffset );
+        aDashPolygon.setClosed( true );
+
+        rDev.DrawPolygon( aDashPolygon );
+    }
+
+    rDev.SetFillColor( aOldColor );
+    rDev.SetAntialiasing( nOldAA );
+}
+
+namespace svtools
+{
+    basegfx::B2DPolyPolygon ApplyLineDashing( const basegfx::B2DPolygon& rPolygon, USHORT nDashing, MapUnit eUnit )
+    {
+        ::std::vector < double >aPattern;
+        switch ( nDashing )
+        {
+            case STYLE_DOTTED:
+                if ( eUnit == MAP_TWIP )
+                {
+                    aPattern.push_back( 30.0 );
+                    aPattern.push_back( 110.0 );
+                }
+                else if ( eUnit == MAP_100TH_MM )
+                {
+                    aPattern.push_back( 50 );
+                    aPattern.push_back( 200 );
+                }
+                else if ( eUnit == MAP_PIXEL )
+                {
+                    aPattern.push_back( 1.0 );
+                    aPattern.push_back( 3.0 );
+                }
+                break;
+            case STYLE_DASHED:
+                if ( eUnit == MAP_TWIP )
+                {
+                    aPattern.push_back( 110 );
+                    aPattern.push_back( 110 );
+                }
+                else if ( eUnit == MAP_100TH_MM )
+                {
+                    aPattern.push_back( 200 );
+                    aPattern.push_back( 200 );
+                }
+                else if ( eUnit == MAP_PIXEL )
+                {
+                    aPattern.push_back( 10 );
+                    aPattern.push_back( 20 );
+                }
+                break;
+            default:
+                break;
+        }
+
+        basegfx::B2DPolyPolygon aPolygons;
+        if ( ! aPattern.empty() )
+            basegfx::tools::applyLineDashing( rPolygon, aPattern, &aPolygons );
+        else
+            aPolygons.append( rPolygon );
+
+        return aPolygons;
+    }
+
+    void DrawLine( OutputDevice& rDev, const Point& rP1, const Point& rP2,
+        sal_uInt32 nWidth, USHORT nDashing )
+    {
+        basegfx::B2DPolygon aPolygon;
+        aPolygon.append( basegfx::B2DPoint( rP1.X(), rP1.Y() ) );
+        aPolygon.append( basegfx::B2DPoint( rP2.X(), rP2.Y() ) );
+        lclDrawPolygon( rDev, aPolygon, nWidth, nDashing );
+    }
+}
+
 void LineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
-                            Bitmap& rBmp, XubString& rStr )
+                            USHORT nStyle, Bitmap& rBmp, XubString& rStr )
 {
     Size aSize = GetOutputSizePixel();
     aSize.Width() -= 20;
@@ -289,8 +392,8 @@ void LineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
     // Linien malen
     aSize = aVirDev.PixelToLogic( aSize );
     long nPix = aVirDev.PixelToLogic( Size( 0, 1 ) ).Height();
-    long n1 = nLine1 / 100;
-    long n2 = nLine2 / 100;
+    sal_uInt32 n1 = nLine1 / 100;
+    sal_uInt32 n2 = nLine2 / 100;
     long nDist  = nDistance / 100;
     n1 += nPix-1;
     n1 -= n1%nPix;
@@ -313,13 +416,18 @@ void LineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
         aVirDev.SetFillColor( GetSettings().GetStyleSettings().GetFieldColor() );
         aVirDev.DrawRect( Rectangle( Point(), aSize ) );
 
-        aVirDev.SetFillColor( GetPaintColor() );
-        aVirDev.DrawRect( Rectangle( 0, 0, aSize.Width(), n1-nPix ) );
+        Color oldColor = aVirDev.GetLineColor( );
+        aVirDev.SetLineColor( GetPaintColor( ) );
+
+        double y1 = n1 / 2;
+        svtools::DrawLine( aVirDev, Point( 0, y1 ), Point( aSize.Width( ), y1 ), n1, nStyle );
+
         if ( n2 )
         {
-            aVirDev.DrawRect( Rectangle( 0, n1+nDist,
-                                         aSize.Width(), n1+nDist+n2-nPix ) );
+            double y2 =  n1 + nDist + n2 / 2;
+            svtools::DrawLine( aVirDev, Point( 0, y2 ), Point( aSize.Width(), y2 ), n2, STYLE_SOLID );
         }
+        aVirDev.SetLineColor( oldColor );
         rBmp = aVirDev.GetBitmap( Point(), Size( aSize.Width(), n1+nDist+n2 ) );
     }
     // Twips nach Unit
@@ -410,11 +518,11 @@ USHORT LineListBox::InsertEntry( const XubString& rStr, USHORT nPos )
 // -----------------------------------------------------------------------
 
 USHORT LineListBox::InsertEntry( long nLine1, long nLine2, long nDistance,
-                                USHORT nPos )
+                                USHORT nStyle, USHORT nPos )
 {
     XubString   aStr;
     Bitmap      aBmp;
-    ImpGetLine( nLine1, nLine2, nDistance, aBmp, aStr );
+    ImpGetLine( nLine1, nLine2, nDistance, nStyle, aBmp, aStr );
     nPos = ListBox::InsertEntry( aStr, aBmp, nPos );
     if ( nPos != LISTBOX_ERROR )
     {
@@ -422,6 +530,7 @@ USHORT LineListBox::InsertEntry( long nLine1, long nLine2, long nDistance,
         pData->nLine1    = nLine1;
         pData->nLine2    = nLine2;
         pData->nDistance = nDistance;
+        pData->nStyle    = nStyle;
         pLineList->Insert( pData, nPos );
     }
 
@@ -459,7 +568,7 @@ void LineListBox::Clear()
 // -----------------------------------------------------------------------
 
 USHORT LineListBox::GetEntryPos( long nLine1, long nLine2,
-                                long nDistance ) const
+                                long nDistance, USHORT nStyle ) const
 {
     ULONG n = 0;
     ULONG nCount = pLineList->Count();
@@ -470,7 +579,8 @@ USHORT LineListBox::GetEntryPos( long nLine1, long nLine2,
         {
             if ( (pData->nLine1    == nLine1) &&
                 (pData->nLine2    == nLine2) &&
-                (pData->nDistance == nDistance) )
+                (pData->nDistance == nDistance) &&
+                (pData->nStyle == nStyle) )
             return (USHORT)n;
         }
 
@@ -515,6 +625,18 @@ long LineListBox::GetEntryDistance( USHORT nPos ) const
 
 // -----------------------------------------------------------------------
 
+USHORT LineListBox::GetEntryStyle( USHORT nPos ) const
+{
+    USHORT nStyle = STYLE_SOLID;
+    ImpLineListData* pData = pLineList->GetObject( nPos );
+    if ( pData )
+        nStyle = pData->nStyle;
+
+    return nStyle;
+}
+
+// -----------------------------------------------------------------------
+
 void LineListBox::UpdateLineColors( void )
 {
     if( UpdatePaintLineColor() )
@@ -537,7 +659,8 @@ void LineListBox::UpdateLineColors( void )
             {
                 // exchange listbox data
                 ListBox::RemoveEntry( USHORT( n ) );
-                ImpGetLine( pData->nLine1, pData->nLine2, pData->nDistance, aBmp, aStr );
+                ImpGetLine( pData->nLine1, pData->nLine2, pData->nDistance,
+                        pData->nStyle, aBmp, aStr );
                 ListBox::InsertEntry( aStr, aBmp, USHORT( n ) );
             }
         }

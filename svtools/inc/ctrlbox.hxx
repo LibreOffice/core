@@ -42,6 +42,10 @@ class ImpColorList;
 class ImpLineList;
 class FontList;
 
+#define STYLE_SOLID     ( ( USHORT ) 0 )
+#define STYLE_DOTTED    ( ( USHORT ) 1 )
+#define STYLE_DASHED    ( ( USHORT ) 2 )
+
 /*************************************************************************
 
 Beschreibung
@@ -243,7 +247,8 @@ class SVT_DLLPUBLIC LineListBox : public ListBox
     FieldUnit       eUnit;
     FieldUnit       eSourceUnit;
 
-    SVT_DLLPRIVATE void         ImpGetLine( long nLine1, long nLine2, long nDistance, Bitmap& rBmp, XubString& rStr );
+    SVT_DLLPRIVATE void         ImpGetLine( long nLine1, long nLine2, long nDistance,
+                                    USHORT nStyle, Bitmap& rBmp, XubString& rStr );
     using Window::ImplInit;
     SVT_DLLPRIVATE void         ImplInit();
     void            UpdateLineColors( void );
@@ -258,24 +263,30 @@ public:
 
     using ListBox::InsertEntry;
     virtual USHORT  InsertEntry( const XubString& rStr, USHORT nPos = LISTBOX_APPEND );
-    virtual USHORT  InsertEntry( long nLine1, long nLine2 = 0, long nDistance = 0, USHORT nPos = LISTBOX_APPEND );
+    virtual USHORT  InsertEntry( long nLine1, long nLine2 = 0, long nDistance = 0,
+                                USHORT nStyle = STYLE_SOLID, USHORT nPos = LISTBOX_APPEND );
     using ListBox::RemoveEntry;
     virtual void    RemoveEntry( USHORT nPos );
     virtual void    Clear();
 
     using ListBox::GetEntryPos;
-    USHORT          GetEntryPos( long nLine1, long nLine2 = 0, long nDistance = 0 ) const;
+    USHORT          GetEntryPos( long nLine1, long nLine2 = 0, long nDistance = 0,
+                                 USHORT nStyle = STYLE_SOLID ) const;
     long            GetEntryLine1( USHORT nPos ) const;
     long            GetEntryLine2( USHORT nPos ) const;
     long            GetEntryDistance( USHORT nPos ) const;
+    USHORT          GetEntryStyle( USHORT nPos ) const;
 
     inline void     SelectEntry( const XubString& rStr, BOOL bSelect = TRUE ) { ListBox::SelectEntry( rStr, bSelect ); }
-    void            SelectEntry( long nLine1, long nLine2 = 0, long nDistance = 0, BOOL bSelect = TRUE );
+    void            SelectEntry( long nLine1, long nLine2 = 0, long nDistance = 0,
+                                 USHORT nStyle = STYLE_SOLID, BOOL bSelect = TRUE );
     long            GetSelectEntryLine1( USHORT nSelIndex = 0 ) const;
     long            GetSelectEntryLine2( USHORT nSelIndex = 0 ) const;
     long            GetSelectEntryDistance( USHORT nSelIndex = 0 ) const;
+    USHORT          GetSelectEntryStyle( USHORT nSelIndex = 0 ) const;
     inline BOOL     IsEntrySelected( const XubString& rStr ) const { return ListBox::IsEntrySelected( rStr ); }
-    BOOL            IsEntrySelected( long nLine1, long nLine2 = 0, long nDistance = 0 ) const;
+    BOOL            IsEntrySelected( long nLine1, long nLine2 = 0, long nDistance = 0,
+                                     USHORT nStyle1 = STYLE_SOLID ) const;
 
     inline void     SetUnit( FieldUnit eNewUnit ) { eUnit = eNewUnit; }
     inline FieldUnit    GetUnit() const { return eUnit; }
@@ -293,9 +304,9 @@ private:
     void*           GetEntryData( USHORT nPos ) const;
 };
 
-inline void LineListBox::SelectEntry( long nLine1, long nLine2, long nDistance, BOOL bSelect )
+inline void LineListBox::SelectEntry( long nLine1, long nLine2, long nDistance, USHORT nStyle, BOOL bSelect )
 {
-    USHORT nPos = GetEntryPos( nLine1, nLine2, nDistance );
+    USHORT nPos = GetEntryPos( nLine1, nLine2, nDistance, nStyle );
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
         ListBox::SelectEntryPos( nPos, bSelect );
 }
@@ -327,9 +338,19 @@ inline long LineListBox::GetSelectEntryDistance( USHORT nSelIndex ) const
         return 0;
 }
 
-inline BOOL LineListBox::IsEntrySelected( long nLine1, long nLine2, long nDistance ) const
+inline USHORT LineListBox::GetSelectEntryStyle( USHORT nSelIndex ) const
 {
-    USHORT nPos = GetEntryPos( nLine1, nLine2, nDistance );
+    USHORT nStyle = STYLE_SOLID;
+    USHORT nPos = GetSelectEntryPos( nSelIndex );
+    if ( nPos != LISTBOX_ENTRY_NOTFOUND )
+        nStyle = GetEntryStyle( nPos );
+
+    return nStyle;
+}
+
+inline BOOL LineListBox::IsEntrySelected( long nLine1, long nLine2, long nDistance, USHORT nStyle ) const
+{
+    USHORT nPos = GetEntryPos( nLine1, nLine2, nDistance, nStyle );
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
         return IsEntryPosSelected( nPos );
     else

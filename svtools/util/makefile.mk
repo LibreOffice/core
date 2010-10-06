@@ -123,7 +123,8 @@ SHL1STDLIBS+= \
         $(VOSLIB)			\
         $(SALLIB)			\
         $(ICUUCLIB)		\
-        $(JVMFWKLIB)
+        $(JVMFWKLIB) \
+        $(BASEGFXLIB)
 
 .IF "$(OS)"=="MACOSX"
 # static libraries go at end
