@@ -247,6 +247,12 @@ ScVbaGlobals::getDebug() throw (uno::RuntimeException)
     return uno::Any();
 }
 
+uno::Any SAL_CALL
+ScVbaGlobals::MenuBars( const uno::Any& aIndex ) throw (uno::RuntimeException)
+{
+    return uno::Any( getApplication()->MenuBars(aIndex) );
+}
+
 uno::Sequence< ::rtl::OUString > SAL_CALL
 ScVbaGlobals::getAvailableServiceNames(  ) throw (uno::RuntimeException)
 {

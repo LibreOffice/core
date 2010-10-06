@@ -53,6 +53,7 @@ SRC1FILES = \
     dbnamdlg.src \
     subtdlg.src  \
     miscdlgs.src \
+	datafdlg.src \
     autofmt.src  \
     solvrdlg.src \
     optsolver.src \

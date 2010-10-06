@@ -70,6 +70,8 @@ const SfxItemPropertyMapEntry* lcl_GetShapeMap()
         {MAP_CHAR_LEN(SC_UNONAME_HORIPOS), 0, &getCppuType((sal_Int32*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_IMAGEMAP), 0, &getCppuType((uno::Reference<container::XIndexContainer>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_VERTPOS), 0, &getCppuType((sal_Int32*)0), 0, 0 },
+        // #i66550 HLINK_FOR_SHAPES
+        {MAP_CHAR_LEN(SC_UNONAME_HYPERLINK), 0, &getCppuType((rtl::OUString*)0), 0, 0 },
         {0,0,0,0,0,0}
     };
     return aShapeMap_Impl;
@@ -83,6 +85,14 @@ const SvEventDescription* ScShapeObj::GetSupportedMacroItems()
         { 0, NULL }
     };
     return aMacroDescriptionsImpl;
+}
+// #i66550 HLINK_FOR_SHAPES
+ScMacroInfo* lcl_getShapeHyperMacroInfo( ScShapeObj* pShape, BOOL bCreate = FALSE )
+{
+        if( pShape )
+            if( SdrObject* pObj = pShape->GetSdrObject() )
+                return ScDrawLayer::GetMacroInfo( pObj, bCreate );
+        return 0;
 }
 
 //------------------------------------------------------------------------
@@ -635,6 +645,13 @@ void SAL_CALL ScShapeObj::setPropertyValue(
             }
         }
     }
+    else if  ( aNameString.EqualsAscii( SC_UNONAME_HYPERLINK ) )
+    {
+                rtl::OUString sHlink;
+            ScMacroInfo* pInfo = lcl_getShapeHyperMacroInfo(this, TRUE);
+            if ( ( aValue >>= sHlink ) && pInfo )
+            pInfo->SetHlink( sHlink );
+    }
     else
     {
         GetShapePropertySet();
@@ -815,6 +832,13 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const rtl::OUString& aPropertyNa
                 }
             }
         }
+    }
+    else if ( aNameString.EqualsAscii( SC_UNONAME_HYPERLINK ) )
+    {
+        rtl::OUString sHlink;
+        if ( ScMacroInfo* pInfo = lcl_getShapeHyperMacroInfo(this) )
+            sHlink = pInfo->GetHlink();
+        aAny <<= sHlink;
     }
     else
     {
@@ -1339,11 +1363,6 @@ SdrObject* ScShapeObj::GetSdrObject() const throw()
 }
 
 #define SC_EVENTACC_ONCLICK     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnClick" ) )
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
-#define SC_EVENTACC_ONACTION    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnAction" ) )
-#define SC_EVENTACC_URL         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) )
-#define SC_EVENTACC_ACTION      ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Action" ) )
-#endif
 #define SC_EVENTACC_SCRIPT      ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Script" ) )
 #define SC_EVENTACC_EVENTTYPE   ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EventType" ) )
 
@@ -1355,10 +1374,7 @@ private:
 
     ScMacroInfo* getInfo( BOOL bCreate = FALSE )
     {
-        if( mpShape )
-            if( SdrObject* pObj = mpShape->GetSdrObject() )
-                return ScDrawLayer::GetMacroInfo( pObj, bCreate );
-        return 0;
+        return lcl_getShapeHyperMacroInfo( mpShape, bCreate );
     }
 
 public:
@@ -1384,11 +1400,7 @@ public:
                 isEventType = true;
                 continue;
             }
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
-            if ( isEventType && ((pProperties->Name == SC_EVENTACC_SCRIPT) || (pProperties->Name == SC_EVENTACC_URL)) )
-#else
             if ( isEventType && (pProperties->Name == SC_EVENTACC_SCRIPT) )
-#endif
             {
                 rtl::OUString sValue;
                 if ( pProperties->Value >>= sValue )
@@ -1399,10 +1411,8 @@ public:
                         break;
                     if ( pProperties->Name == SC_EVENTACC_SCRIPT )
                         pInfo->SetMacro( sValue );
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
                     else
                         pInfo->SetHlink( sValue );
-#endif
                 }
             }
         }
@@ -1425,19 +1435,6 @@ public:
                 aProperties[ 1 ].Value <<= pInfo->GetMacro();
             }
         }
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
-        else if( aName == SC_EVENTACC_ONACTION )
-        {
-            if ( pInfo && (pInfo->GetHlink().getLength() > 0) )
-            {
-                aProperties.realloc( 2 );
-                aProperties[ 0 ].Name = SC_EVENTACC_EVENTTYPE;
-                aProperties[ 0 ].Value <<= SC_EVENTACC_ACTION;
-                aProperties[ 1 ].Name = SC_EVENTACC_URL;
-                aProperties[ 1 ].Value <<= pInfo->GetHlink();
-            }
-        }
-#endif
         else
         {
             throw container::NoSuchElementException();
@@ -1448,25 +1445,14 @@ public:
 
     virtual uno::Sequence< rtl::OUString > SAL_CALL getElementNames() throw(uno::RuntimeException)
     {
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
-        uno::Sequence< rtl::OUString > aSeq( 2 );
-#else
         uno::Sequence< rtl::OUString > aSeq( 1 );
-#endif
         aSeq[ 0 ] = SC_EVENTACC_ONCLICK;
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
-        aSeq[ 1 ] = SC_EVENTACC_ONACTION;
-#endif
         return aSeq;
     }
 
     virtual sal_Bool SAL_CALL hasByName( const rtl::OUString& aName ) throw(uno::RuntimeException)
     {
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
-        return (aName == SC_EVENTACC_ONCLICK) || (aName == SC_EVENTACC_ONACTION);
-#else
         return aName == SC_EVENTACC_ONCLICK;
-#endif
     }
 
     // XElementAccess

@@ -134,6 +134,15 @@ public:
     static inline double div( const double& fNumerator, const double& fDenominator );
 
     ScMatrixRef GetNewMat(SCSIZE nC, SCSIZE nR);
+
+    enum VolatileType {
+        VOLATILE,
+        VOLATILE_MACRO,
+        NOT_VOLATILE
+    };
+
+    VolatileType GetVolatileType() const;
+
 private:
     static ScTokenStack*    pGlobalStack;
     static BOOL             bGlobalStackInUse;
@@ -167,6 +176,8 @@ private:
     BYTE        cPar;                   // current count of parameters
     BOOL        bCalcAsShown;           // precision as shown
     BOOL        bMatrixFormula;         // formula cell is a matrix formula
+
+    VolatileType meVolaileType;
 
 //---------------------------------Funktionen in interpre.cxx---------
 // nMust <= nAct <= nMax ? ok : PushError

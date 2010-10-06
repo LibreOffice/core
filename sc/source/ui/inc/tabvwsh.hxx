@@ -247,7 +247,7 @@ public:
 
     virtual         ~ScTabViewShell();
 
-    Window*         GetDialogParent();
+    SC_DLLPUBLIC Window* GetDialogParent();
 
     bool            IsRefInputMode() const;
     void            ExecuteInputDirect();
@@ -290,7 +290,7 @@ public:
     void            GetSaveState( SfxItemSet& rSet );
     void            ExecSearch( SfxRequest& rReq );
 
-    void            ExecuteUndo(SfxRequest& rReq);
+    SC_DLLPUBLIC    void            ExecuteUndo(SfxRequest& rReq);
     void            GetUndoState(SfxItemSet &rSet);
 
     void            ExecuteSbx( SfxRequest& rReq );

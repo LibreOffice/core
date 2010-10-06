@@ -1718,6 +1718,77 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Unknown User";
     };
+
+    String STR_SHAPE_AUTOSHAPE
+    {
+        Text [ en-US ] = "AutoShape";
+    };
+
+    String STR_SHAPE_RECTANGLE
+    {
+        Text [ en-US ] = "Rectangle";
+    };
+
+    String STR_SHAPE_LINE
+    {
+        Text [ en-US ] = "Line";
+    };
+
+    String STR_SHAPE_OVAL
+    {
+        Text [ en-US ] = "Oval";
+    };
+
+    String STR_SHAPE_TEXTBOX
+    {
+        Text [ en-US ] = "Text Box";
+    };
+
+    String STR_FORM_BUTTON
+    {
+        Text [ en-US ] = "Button";
+    };
+
+    String STR_FORM_CHECKBOX
+    {
+        Text [ en-US ] = "Check Box";
+    };
+
+    String STR_FORM_OPTIONBUTTON
+    {
+        Text [ en-US ] = "Option Button";
+    };
+
+    String STR_FORM_LABEL
+    {
+        Text [ en-US ] = "Label";
+    };
+
+    String STR_FORM_LISTBOX
+    {
+        Text [ en-US ] = "List Box";
+    };
+
+    String STR_FORM_GROUPBOX
+    {
+        Text [ en-US ] = "Group Box";
+    };
+
+    String STR_FORM_DROPDOWN
+    {
+        Text [ en-US ] = "Drop Down";
+    };
+
+    String STR_FORM_SPINNER
+    {
+        Text [ en-US ] = "Spinner";
+    };
+
+    String STR_FORM_SCROLLBAR
+    {
+        Text [ en-US ] = "Scroll Bar";
+    };
+
     String STR_STYLE_FAMILY_CELL
     {
         Text [ en-US ] = "Cell Styles";

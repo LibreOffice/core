@@ -41,6 +41,7 @@ LIBTARGET=no
 # --- Files --------------------------------------------------------
 
 SLOFILES =  \
+	$(SLO)$/datafdlg.obj		\
     $(SLO)$/delcldlg.obj		\
     $(SLO)$/inscldlg.obj		\
     $(SLO)$/delcodlg.obj		\

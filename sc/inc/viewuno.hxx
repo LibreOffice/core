@@ -199,6 +199,7 @@ private:
     XActivationEventListenerArr_Impl        aActivationListeners;
     SCTAB                                   nPreviousTab;
     sal_Bool                                bDrawSelModeSet;
+    sal_Bool                                bFilteredRangeSelection;
 
     ScViewPaneObj*          GetObjectByIndex_Impl(USHORT nIndex) const;
     INT16                   GetZoom(void) const;
@@ -312,6 +313,13 @@ public:
     virtual void SAL_CALL   setActiveSheet( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::sheet::XSpreadsheet >& xActiveSheet )
                                     throw(::com::sun::star::uno::RuntimeException);
+
+    //liuchen 2009-9-2 support expand (but not replace) the active sheet
+    virtual void SAL_CALL   selectSheet( const ::com::sun::star::uno::Reference<
+                                    ::com::sun::star::sheet::XSpreadsheet >& xActiveSheet,
+                                    sal_Bool bExpand)
+                                        throw(::com::sun::star::uno::RuntimeException);
+    //liuchen 2009-9-2
 
                             //XEnhancedMouseClickBroadcaster
 

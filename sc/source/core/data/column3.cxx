@@ -829,8 +829,10 @@ ScBaseCell* ScColumn::CloneCell(SCSIZE nIndex, USHORT nFlags, ScDocument& rDestD
     bool bCloneValue    = (nFlags & IDF_VALUE) != 0;
     bool bCloneDateTime = (nFlags & IDF_DATETIME) != 0;
     bool bCloneString   = (nFlags & IDF_STRING) != 0;
+    bool bCloneSpecialBoolean  = (nFlags & IDF_SPECIAL_BOOLEAN) != 0;
     bool bCloneFormula  = (nFlags & IDF_FORMULA) != 0;
     bool bCloneNote     = (nFlags & IDF_NOTE) != 0;
+    bool bForceFormula  = false;
 
     ScBaseCell* pNew = 0;
     ScBaseCell& rSource = *pItems[nIndex].pCell;
@@ -854,7 +856,18 @@ ScBaseCell* ScColumn::CloneCell(SCSIZE nIndex, USHORT nFlags, ScDocument& rDestD
         break;
 
         case CELLTYPE_FORMULA:
-            if (bCloneFormula)
+            if ( bCloneSpecialBoolean )
+            {
+                ScFormulaCell& rForm = (ScFormulaCell&)rSource;
+                rtl::OUStringBuffer aBuf;
+                // #TODO #FIXME do we have a localisation issue here?
+                rForm.GetFormula( aBuf );
+                rtl::OUString aVal( aBuf.makeStringAndClear() );
+                if ( aVal.equalsAscii( "=TRUE()" )
+                        || aVal.equalsAscii( "=FALSE()" ) )
+                    bForceFormula = true;
+            }
+            if (bForceFormula || bCloneFormula)
             {
                 // note will be cloned below
                 pNew = rSource.CloneWithoutNote( rDestDoc, rDestPos );

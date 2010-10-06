@@ -70,6 +70,15 @@ class XclExpOcxControlObj;
 #else
 class XclExpTbxControlObj;
 #endif
+class XclExpShapeObj;
+class EscherExHostAppData;
+class ShapeInteractionHelper
+{
+public:
+   static XclExpShapeObj* CreateShapeObj( XclExpObjectManager& rObjMgr, const ::com::sun::star::uno::Reference<
+                            ::com::sun::star::drawing::XShape >& xShape );
+   static void PopulateShapeInteractionInfo( XclExpObjectManager& rObjMgr, const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape, EscherExHostAppData& rHostAppData );
+};
 
 class XclEscherEx : public EscherEx, protected XclExpRoot
 {

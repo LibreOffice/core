@@ -441,7 +441,7 @@ public:
     /** Tries to extract an Excel macro name from the passed macro descriptor. */
     static String       ExtractFromMacroDescriptor(
                             const ::com::sun::star::script::ScriptEventDescriptor& rDescriptor,
-                            XclTbxEventType eEventType );
+                            XclTbxEventType eEventType, SfxObjectShell* pShell = NULL );
 };
 
 // ============================================================================

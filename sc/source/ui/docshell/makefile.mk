@@ -91,7 +91,8 @@ SLOFILES =  \
         $(SLO)$/hiranges.obj \
         $(SLO)$/pntlock.obj \
         $(SLO)$/sizedev.obj \
-        $(SLO)$/editable.obj
+        $(SLO)$/editable.obj \
+	$(SLO)$/macromgr.obj
 
 
 EXCEPTIONSFILES= \
@@ -101,7 +102,8 @@ EXCEPTIONSFILES= \
         $(SLO)$/docsh8.obj \
         $(SLO)$/externalrefmgr.obj \
         $(SLO)$/dbdocimp.obj \
-        $(SLO)$/docfunc.obj
+        $(SLO)$/docfunc.obj \
+	$(SLO)$/macromgr.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES =  tpstat.src
@@ -131,7 +133,8 @@ LIB1OBJFILES =  \
         $(SLO)$/hiranges.obj \
         $(SLO)$/pntlock.obj \
         $(SLO)$/sizedev.obj \
-        $(SLO)$/editable.obj
+        $(SLO)$/editable.obj \
+	$(SLO)$/macromgr.obj
 
 # --- Tagets -------------------------------------------------------
 

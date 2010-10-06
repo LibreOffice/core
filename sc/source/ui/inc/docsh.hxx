@@ -42,6 +42,7 @@
 #include "refreshtimer.hxx"
 
 #include <hash_map>
+#include <cppuhelper/implbase1.hxx>
 
 class ScEditEngineDefaulter;
 class FontList;
@@ -298,6 +299,10 @@ public:
                                     ScMarkData& rMark, BOOL bRecord = TRUE );
     void            ModifyScenario( SCTAB nTab, const String& rName, const String& rComment,
                                     const Color& rColor, USHORT nFlags );
+    ULONG TransferTab( ScDocShell& rSrcDocShell, SCTAB nSrcPos,
+                                SCTAB nDestPos, BOOL bInsertNew,
+                                BOOL bNotifyAndPaint );
+
     BOOL            MoveTable( SCTAB nSrcTab, SCTAB nDestTab, BOOL bCopy, BOOL bRecord );
 
     void            DoRecalc( BOOL bApi );

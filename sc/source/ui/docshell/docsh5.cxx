@@ -857,6 +857,47 @@ SCTAB ScDocShell::MakeScenario( SCTAB nTab, const String& rName, const String& r
     return nTab;
 }
 
+ULONG ScDocShell::TransferTab( ScDocShell& rSrcDocShell, SCTAB nSrcPos,
+                                SCTAB nDestPos, BOOL bInsertNew,
+                                BOOL bNotifyAndPaint )
+{
+    ScDocument* pSrcDoc = rSrcDocShell.GetDocument();
+
+    ULONG nErrVal =  aDocument.TransferTab( pSrcDoc, nSrcPos, nDestPos,
+                    bInsertNew );       // no insert
+
+    // TransferTab doesn't copy drawing objects with bInsertNew=FALSE
+    if ( nErrVal > 0 && !bInsertNew)
+        aDocument.TransferDrawPage( pSrcDoc, nSrcPos, nDestPos );
+
+    if(nErrVal>0 && pSrcDoc->IsScenario( nSrcPos ))
+    {
+        String aComment;
+        Color  aColor;
+        USHORT nFlags;
+
+        pSrcDoc->GetScenarioData( nSrcPos, aComment,aColor, nFlags);
+        aDocument.SetScenario(nDestPos,TRUE);
+        aDocument.SetScenarioData(nDestPos,aComment,aColor,nFlags);
+        BOOL bActive = pSrcDoc->IsActiveScenario(nSrcPos);
+        aDocument.SetActiveScenario(nDestPos, bActive );
+
+        BOOL bVisible=pSrcDoc->IsVisible(nSrcPos);
+        aDocument.SetVisible(nDestPos,bVisible );
+
+    }
+
+    if ( nErrVal > 0 && pSrcDoc->IsTabProtected( nSrcPos ) )
+        aDocument.SetTabProtection(nDestPos, pSrcDoc->GetTabProtection(nSrcPos));
+    if ( bNotifyAndPaint )
+    {
+            Broadcast( ScTablesHint( SC_TAB_INSERTED, nDestPos ) );
+            PostPaintExtras();
+            PostPaintGridAll();
+    }
+    return nErrVal;
+}
+
 BOOL ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, BOOL bCopy, BOOL bRecord )
 {
     ScDocShellModificator aModificator( *this );

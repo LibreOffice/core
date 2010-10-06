@@ -82,6 +82,8 @@ public:
     virtual void SAL_CALL setCenterHorizontally( sal_Bool centerHorizontally ) throw (css::uno::RuntimeException);
     virtual sal_Bool SAL_CALL getPrintHeadings() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setPrintHeadings( sal_Bool printHeadings ) throw (css::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getPaperSize() throw (css::uno::RuntimeException);  //liuchen 2009-12-11
+    virtual void SAL_CALL setPaperSize( sal_Int32 paperSize ) throw (css::uno::RuntimeException);  //liuchen 2009-12-11
 
     // XHelperInterface
     virtual rtl::OUString& getServiceImplName();

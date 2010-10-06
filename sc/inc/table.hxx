@@ -87,6 +87,8 @@ class ScFlatBoolRowSegments;
 class ScFlatBoolColSegments;
 struct ScSetStringParam;
 
+typedef std::hash_map< ::rtl::OUString, rtl::OUString, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > NameToNameMap;
+
 class ScTable
 {
 private:
@@ -181,6 +183,7 @@ private:
     Color           aTabBgColor;
     USHORT          nScenarioFlags;
     BOOL            bActiveScenario;
+    NameToNameMap       localNameToGlobalName;
     bool            mbPageBreaksValid;
 
 friend class ScDocument;                    // fuer FillInfo

@@ -40,6 +40,8 @@
 #include "pivot.hxx"
 #include "i18npool/lang.h"
 
+#include <tabvwsh.hxx>
+
 class ScAsciiOptions;
 class ScAutoFormat;
 class ScAutoFormatData;
@@ -111,6 +113,12 @@ class AbstractScDeleteCellDlg : public VclAbstractDialog  //add for ScDeleteCell
 {
 public:
     virtual DelCellCmd GetDelCellCmd() const = 0;
+};
+
+//for dataform
+class AbstractScDataFormDlg : public VclAbstractDialog  //add for ScDeleteCellDlg
+{
+
 };
 
 class AbstractScDeleteContentsDlg: public VclAbstractDialog  //add for ScDeleteContentsDlg
@@ -309,7 +317,7 @@ public:
 class ScAbstractDialogFactory
 {
 public:
-    static ScAbstractDialogFactory*     Create();
+    SC_DLLPUBLIC static ScAbstractDialogFactory*    Create();
 
     virtual     AbstractScImportAsciiDlg * CreateScImportAsciiDlg( Window* pParent, String aDatName, //add for ScImportAsciiDlg
                                                                     SvStream* pInStream, int nId,
@@ -342,6 +350,9 @@ public:
                                                                         int nId ) = 0;
 
     virtual AbstractScDeleteCellDlg * CreateScDeleteCellDlg( Window* pParent, int nId, BOOL bDisallowCellMove = FALSE ) = 0 ; //add for ScDeleteCellDlg
+
+    //for dataform
+    virtual AbstractScDataFormDlg * CreateScDataFormDlg( Window* pParent, int nId, ScTabViewShell*      pTabViewShell ) = 0 ; //add for ScDataFormDlg
 
     virtual AbstractScDeleteContentsDlg * CreateScDeleteContentsDlg(Window* pParent,int nId, //add for ScDeleteContentsDlg
                                                                  USHORT  nCheckDefaults = 0 ) = 0;

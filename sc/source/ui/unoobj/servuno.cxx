@@ -35,6 +35,7 @@
 #include <svx/unofill.hxx>
 #include <editeng/unonrule.hxx>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 
 #include "servuno.hxx"
 #include "unoguard.hxx"
@@ -71,7 +72,26 @@
 #include <basic/basmgr.hxx>
 #include <sfx2/app.hxx>
 
+#include <comphelper/processfactory.hxx>
+#include <com/sun/star/document/XCodeNameQuery.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/form/XFormsSupplier.hpp>
+#include <com/sun/star/script/ScriptEventDescriptor.hpp>
+#include <comphelper/componentcontext.hxx>
+#include <cppuhelper/component_context.hxx>
+#include <vbahelper/vbaaccesshelper.hxx>
+#include <com/sun/star/script/vba/XVBACompatibility.hpp>
+
 using namespace ::com::sun::star;
+
+bool isInVBAMode( ScDocShell& rDocSh )
+{
+    uno::Reference<script::XLibraryContainer> xLibContainer = rDocSh.GetBasicContainer();
+    uno::Reference<script::vba::XVBACompatibility> xVBACompat( xLibContainer, uno::UNO_QUERY );
+    if ( xVBACompat.is() )
+        return xVBACompat->getVBACompatibilityMode();
+    return false;
+}
 
 class ScVbaObjectForCodeNameProvider : public ::cppu::WeakImplHelper1< container::XNameAccess >
 {
@@ -285,7 +305,8 @@ static const ProvNamesId_Type __FAR_DATA aProvNamesId[] =
     { "com.sun.star.text.textfield.Time",               SC_SERVICE_TIMEFIELD },
     { "com.sun.star.text.textfield.DocumentTitle",      SC_SERVICE_TITLEFIELD },
     { "com.sun.star.text.textfield.FileName",           SC_SERVICE_FILEFIELD },
-    { "com.sun.star.text.textfield.SheetName",          SC_SERVICE_SHEETFIELD }
+    { "com.sun.star.text.textfield.SheetName",          SC_SERVICE_SHEETFIELD },
+    { "ooo.vba.VBAGlobals",          SC_SERVICE_VBAGLOBALS },
 };
 
 //
@@ -547,7 +568,7 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
             }
             break;
         case SC_SERVICE_VBACODENAMEPROVIDER:
-            if (pDocShell && pDocShell->GetDocument()->IsInVBAMode())
+            if ( pDocShell && ooo::vba::isAlienExcelDoc( *pDocShell ) && isInVBAMode( *pDocShell ) )
             {
                 OSL_TRACE("**** creating VBA Object provider");
                 xRet.set(static_cast<document::XCodeNameQuery*>(new ScVbaCodeNameProvider( pDocShell )));

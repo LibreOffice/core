@@ -406,7 +406,7 @@ public:
                                 const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
 
     void            SetDirty();
-    inline void     SetDirtyVar() { bDirty = TRUE; }
+    void            SetDirtyVar();
     // If setting entire document dirty after load, no broadcasts but still append to FormulaTree.
     void            SetDirtyAfterLoad();
     inline void     ResetTableOpDirtyVar() { bTableOpDirty = FALSE; }

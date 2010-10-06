@@ -577,7 +577,23 @@
 #define STR_UNDO_SET_TAB_BG_COLOR       438
 #define STR_UNDO_SET_MULTI_TAB_BG_COLOR 439
 
-#define STR_COUNT                       440
+#define STR_SHAPE_AUTOSHAPE         440
+#define STR_SHAPE_RECTANGLE         441
+#define STR_SHAPE_LINE              442
+#define STR_SHAPE_OVAL              443
+#define STR_SHAPE_TEXTBOX           444
+
+#define STR_FORM_BUTTON             445
+#define STR_FORM_CHECKBOX           446
+#define STR_FORM_OPTIONBUTTON       447
+#define STR_FORM_LABEL              448
+#define STR_FORM_LISTBOX            449
+#define STR_FORM_GROUPBOX           450
+#define STR_FORM_DROPDOWN           451
+#define STR_FORM_SPINNER            452
+#define STR_FORM_SCROLLBAR          453
+
+#define STR_COUNT                       454
 
 #endif
 

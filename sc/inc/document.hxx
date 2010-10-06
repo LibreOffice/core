@@ -103,6 +103,7 @@ class ScDrawLayer;
 class ScExtDocOptions;
 class ScExternalRefManager;
 class ScFormulaCell;
+class ScMacroManager;
 class ScMarkData;
 class ScOutlineTable;
 class ScPatternAttr;
@@ -305,6 +306,8 @@ private:
     ::std::auto_ptr<ScClipParam>     mpClipParam;
 
     ::std::auto_ptr<ScExternalRefManager> pExternalRefMgr;
+    ::std::auto_ptr<ScMacroManager> mpMacroMgr;
+
 
     // mutable for lazy construction
     mutable ::std::auto_ptr< ScFormulaParserPool >
@@ -461,6 +464,8 @@ public:
     const String&   GetCodeName() const { return aDocCodeName; }
     void            SetCodeName( const String& r ) { aDocCodeName = r; }
 
+    SC_DLLPUBLIC NameToNameMap*              GetLocalNameMap( SCTAB& rTab );
+
     void            GetDocStat( ScDocStat& rDocStat );
 
     SC_DLLPUBLIC void           InitDrawLayer( SfxObjectShell* pDocShell = NULL );
@@ -580,6 +585,7 @@ public:
     BOOL            HasSelectedBlockMatrixFragment( SCCOL nStartCol, SCROW nStartRow,
                                             SCCOL nEndCol, SCROW nEndRow,
                                             const ScMarkData& rMark ) const;
+    BOOL            HasSelectedBlockMatrixFragment( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, SCTAB nTAB ) const;
 
     BOOL            GetMatrixFormulaRange( const ScAddress& rCellPos, ScRange& rMatrix );
 
@@ -950,7 +956,7 @@ public:
                                             SCCOL nEndCol, SCROW nEndRow, SCTAB nEndTab,
                                             ScDirection eDir );
 
-    void            FindAreaPos( SCCOL& rCol, SCROW& rRow, SCTAB nTab, SCsCOL nMovX, SCsROW nMovY );
+    SC_DLLPUBLIC void           FindAreaPos( SCCOL& rCol, SCROW& rRow, SCTAB nTab, SCsCOL nMovX, SCsROW nMovY );
     SC_DLLPUBLIC void           GetNextPos( SCCOL& rCol, SCROW& rRow, SCTAB nTab, SCsCOL nMovX, SCsROW nMovY,
                                 BOOL bMarked, BOOL bUnprotected, const ScMarkData& rMark );
 
@@ -971,7 +977,7 @@ public:
                                SCROW nStartRow, SCSIZE nSize,
                                ScDocument* pRefUndoDoc = NULL, BOOL* pUndoOutline = NULL,
                                const ScMarkData* pTabMark = NULL );
-    void            DeleteRow( const ScRange& rRange,
+    SC_DLLPUBLIC void   DeleteRow( const ScRange& rRange,
                                ScDocument* pRefUndoDoc = NULL, BOOL* pUndoOutline = NULL );
     BOOL            InsertCol( SCROW nStartRow, SCTAB nStartTab,
                                SCROW nEndRow,   SCTAB nEndTab,
@@ -1009,7 +1015,7 @@ public:
     SC_DLLPUBLIC void           ResetClip( ScDocument* pSourceDoc, const ScMarkData* pMarks );
     SC_DLLPUBLIC void           ResetClip( ScDocument* pSourceDoc, SCTAB nTab );
     void            SetCutMode( BOOL bCut );
-    BOOL            IsCutMode();
+    SC_DLLPUBLIC BOOL           IsCutMode();
     void            SetClipArea( const ScRange& rArea, BOOL bCut = FALSE );
 
     SC_DLLPUBLIC BOOL           IsDocVisible() const                        { return bIsVisible; }
@@ -1030,6 +1036,9 @@ public:
     void            CopyToClip(const ScClipParam& rClipParam, ScDocument* pClipDoc,
                                const ScMarkData* pMarks = NULL, bool bAllTabs = false, bool bKeepScenarioFlags = false,
                                bool bIncludeObjects = false, bool bCloneNoteCaptions = true);
+
+    void            CopyToClip4VBA(const ScClipParam& rClipParam, ScDocument* pClipDoc, bool bKeepScenarioFlags = false,
+                                   bool bIncludeObjects = false, bool bCloneNoteCaptions = true);
 
     void            CopyTabToClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 SCTAB nTab, ScDocument* pClipDoc = NULL);
@@ -1582,6 +1591,7 @@ public:
     SC_DLLPUBLIC ScLkUpdMode        GetLinkMode() const             { return eLinkMode ;}
     void            SetLinkMode( ScLkUpdMode nSet ) {   eLinkMode  = nSet;}
 
+    SC_DLLPUBLIC ScMacroManager* GetMacroManager();
 
 private:
     ScDocument(const ScDocument& r); // disabled with no definition
@@ -1845,6 +1855,7 @@ private: // CLOOK-Impl-Methoden
                              const ScRange& r, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
 
     void    CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClipRange, const ScMarkData* pMarks, bool bAllTabs);
+    void    CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClipRange, SCTAB nTab);
     void    CopyRangeNamesFromClip(ScDocument* pClipDoc, ScClipRangeNameData& rRangeNames);
     void    UpdateRangeNamesInFormulas(
         ScClipRangeNameData& rRangeNames, const ScRangeList& rDestRanges, const ScMarkData& rMark,

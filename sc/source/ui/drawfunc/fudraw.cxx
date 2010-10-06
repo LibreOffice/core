@@ -828,11 +828,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
             SdrObjMacroHitRec aHitRec;  //! muss da noch irgendwas gesetzt werden ????
             pViewShell->SetActivePointer( pObj->GetMacroPointer(aHitRec) );
         }
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
         else if ( !bAlt && pInfo && ((pInfo->GetMacro().getLength() > 0) || (pInfo->GetHlink().getLength() > 0)) )
-#else
-        else if ( !bAlt && pInfo && (pInfo->GetMacro().getLength() > 0) )
-#endif
             pWindow->SetPointer( Pointer( POINTER_REFHAND ) );
         else if ( IsDetectiveHit( aPnt ) )
             pViewShell->SetActivePointer( Pointer( POINTER_DETECTIVE ) );

@@ -64,5 +64,13 @@ ScVbaDialogs::getServiceNames()
     return aServiceNames;
 }
 
+//liuchen 2009-7-27
+::sal_Int32
+ScVbaDialogs::getCount() throw (uno::RuntimeException)
+{
+    return ScVbaDialog::GetSupportedDialogCount();
+}
+
+
 
 

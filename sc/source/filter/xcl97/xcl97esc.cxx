@@ -54,6 +54,9 @@
 #include "global.hxx"
 #include "document.hxx"
 #include "drwlayer.hxx"
+#include "xecontent.hxx"
+#include <editeng/flditem.hxx>
+#include "userdat.hxx"
 #include "xcl97rec.hxx"
 #include "xehelper.hxx"
 #include "xechart.hxx"
@@ -256,7 +259,8 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
         {
             // #107540# ignore permanent note shapes
             // #i12190# do not ignore callouts (do not filter by object type ID)
-            pCurrXclObj = new XclObjAny( mrObjMgr );   // just a metafile
+            pCurrXclObj = ShapeInteractionHelper::CreateShapeObj( mrObjMgr, rxShape );
+            ShapeInteractionHelper::PopulateShapeInteractionInfo( mrObjMgr, rxShape, *pCurrAppData );
         }
     }
     if ( pCurrXclObj )
@@ -358,7 +362,6 @@ EscherExHostAppData* XclEscherEx::EnterAdditionalTextGroup()
     pCurrAppData->SetClientTextbox( NULL );
     return pCurrAppData;
 }
-
 
 void XclEscherEx::EndDocument()
 {
@@ -478,6 +481,7 @@ void XclEscherEx::DeleteCurrAppData()
         delete pCurrAppData->GetClientAnchor();
 //      delete pCurrAppData->GetClientData();
         delete pCurrAppData->GetClientTextbox();
+    delete pCurrAppData->GetInteractionInfo();
         delete pCurrAppData;
     }
 }
@@ -509,4 +513,40 @@ void XclEscherClientTextbox::WriteData( EscherEx& /*rEx*/ ) const
     pXclObj->SetText( GetRoot(), rTextObj );
 }
 
+XclExpShapeObj*
+ShapeInteractionHelper::CreateShapeObj( XclExpObjectManager& rObjMgr, const Reference< XShape >& xShape )
+{
+    return new XclExpShapeObj( rObjMgr, xShape );
+}
+
+void
+ShapeInteractionHelper::PopulateShapeInteractionInfo( XclExpObjectManager& rObjMgr, const Reference< XShape >& xShape, EscherExHostAppData& rHostAppData )
+{
+   try
+   {
+      SvMemoryStream* pMemStrm = NULL;
+      rtl::OUString sHyperLink;
+      rtl::OUString sMacro;
+      if ( ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( ::GetSdrObjectFromXShape( xShape ) ) )
+      {
+         sHyperLink = pInfo->GetHlink();
+         sMacro = pInfo->GetMacro();
+      }
+      if (  sHyperLink.getLength() > 0 )
+      {
+         pMemStrm = new SvMemoryStream();
+         XclExpStream tmpStream( *pMemStrm, rObjMgr.GetRoot() );
+         ScAddress dummyAddress;
+         SvxURLField aUrlField;
+         aUrlField.SetURL( sHyperLink );
+         XclExpHyperlink hExpHlink( rObjMgr.GetRoot(), aUrlField, dummyAddress );
+         hExpHlink.WriteEmbeddedData( tmpStream );
+      }
+      if ( ( sHyperLink.getLength() > 0 ) || ( sMacro.getLength() > 0 ) )
+          rHostAppData.SetInteractionInfo( new InteractionInfo( pMemStrm, true ) );
+   }
+   catch( Exception& )
+   {
+   }
+}
 

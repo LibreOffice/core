@@ -273,6 +273,7 @@ LIB8OBJFILES = \
         $(SLO)$/filldlg.obj			\
         $(SLO)$/delcodlg.obj		\
         $(SLO)$/delcldlg.obj		\
+		$(SLO)$/datafdlg.obj		\
         $(SLO)$/dapitype.obj	\
         $(SLO)$/dapidata.obj	\
         $(SLO)$/crdlg.obj			\
@@ -316,7 +317,8 @@ SHL9STDLIBS= \
         $(VCLLIB) \
         $(TKLIB) \
         $(MSFILTERLIB)		\
-        $(FORLIB)
+        $(FORLIB) \
+        $(UNOTOOLSLIB)       
 
 SHL9DEPN=$(SHL1TARGETN) $(SHL8TARGETN)
 SHL9LIBS=$(SLB)$/$(TARGET_VBA).lib
