@@ -163,6 +163,7 @@ namespace pcr
     #define PROPERTY_ID_ALLOWADDITIONS       20
     #define PROPERTY_ID_ALLOWEDITS           21
     #define PROPERTY_ID_ALLOWDELETIONS       22
+    #define PROPERTY_ID_GROUP_NAME           23
     #define PROPERTY_ID_NAVIGATION           24
     #define PROPERTY_ID_CYCLE                25
     #define PROPERTY_ID_HIDDEN_VALUE         26

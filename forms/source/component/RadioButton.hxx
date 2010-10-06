@@ -84,6 +84,8 @@ private:
             our mutex is aquired exactly once
     */
     void    setNewAggregateState( const ::com::sun::star::uno::Any& _rValue );
+
+    void setControlSource();
 };
 
 //==================================================================

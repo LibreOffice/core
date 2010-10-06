@@ -205,7 +205,7 @@ BOOL DlgEditor::RemarkDialog()
 
 //----------------------------------------------------------------------------
 
-DlgEditor::DlgEditor()
+DlgEditor::DlgEditor( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel )
     :pHScroll(NULL)
     ,pVScroll(NULL)
     ,pDlgEdModel(NULL)
@@ -227,6 +227,7 @@ DlgEditor::DlgEditor()
     ,bCreateOK(TRUE)
     ,bDialogModelChanged(FALSE)
     ,mnPaintGuard(0)
+    ,m_xDocument( xModel )
 {
     pDlgEdModel = new DlgEdModel();
     pDlgEdModel->GetItemPool().FreezeIdRanges();
@@ -835,7 +836,7 @@ void DlgEditor::Copy()
     Reference< beans::XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY );
     OSL_ASSERT( xProps.is() );
     OSL_VERIFY( xProps->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
-    Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xClipDialogModel, xContext );
+    Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xClipDialogModel, xContext, m_xDocument );
     Reference< XInputStream > xStream( xISP->createInputStream() );
     Sequence< sal_Int8 > DialogModelBytes;
     implCopyStreamToByteSequence( xStream, DialogModelBytes );
@@ -868,7 +869,7 @@ void DlgEditor::Copy()
             uno::Reference< resource::XStringResourceManager >
                 xStringResourceManager( xStringResourcePersistence, uno::UNO_QUERY );
             LocalizationMgr::resetResourceForDialog( xClipDialogModel, xStringResourceManager );
-            Reference< XInputStreamProvider > xISP2 = ::xmlscript::exportDialogModel( xClipDialogModel, xContext );
+            Reference< XInputStreamProvider > xISP2 = ::xmlscript::exportDialogModel( xClipDialogModel, xContext, m_xDocument );
             Reference< XInputStream > xStream2( xISP2->createInputStream() );
             Sequence< sal_Int8 > NoResourceDialogModelBytes;
             implCopyStreamToByteSequence( xStream2, NoResourceDialogModelBytes );
@@ -1014,7 +1015,7 @@ void DlgEditor::Paste()
                     Reference< beans::XPropertySet > xProps( xMSF, UNO_QUERY );
                     OSL_ASSERT( xProps.is() );
                     OSL_VERIFY( xProps->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
-                    ::xmlscript::importDialogModel( ::xmlscript::createInputStream( *((::rtl::ByteSequence*)(&DialogModelBytes)) ) , xClipDialogModel, xContext );
+                    ::xmlscript::importDialogModel( ::xmlscript::createInputStream( *((::rtl::ByteSequence*)(&DialogModelBytes)) ) , xClipDialogModel, xContext, m_xDocument );
                 }
 
                 // get control models from clipboard dialog model

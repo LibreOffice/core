@@ -96,7 +96,7 @@ DialogWindow* BasicIDEShell::CreateDlgWin( const ScriptDocument& rDocument, cons
                 Reference< beans::XPropertySet > xProps( xMSF, UNO_QUERY );
                 OSL_ASSERT( xProps.is() );
                 OSL_VERIFY( xProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
-                ::xmlscript::importDialogModel( xInput, xDialogModel, xContext );
+                ::xmlscript::importDialogModel( xInput, xDialogModel, xContext, rDocument.isDocument() ? rDocument.getDocument() : Reference< frame::XModel >() );
                 LocalizationMgr::setStringResourceAtDialog( rDocument, rLibName, aDlgName, xDialogModel );
 
                 // new dialog window

@@ -149,7 +149,7 @@ namespace pcr
             { "com.sun.star.form.inspection.EventHandler", false },
 
             // a handler which introduces virtual properties for binding controls to spreadsheet cells
-            { "com.sun.star.form.inspection.CellBindingPropertyHandler", true },
+            { "com.sun.star.form.inspection.CellBindingPropertyHandler", false },
 
             // properties related to binding to an XForms DOM node
             { "com.sun.star.form.inspection.XMLFormsPropertyHandler", true },

@@ -54,6 +54,7 @@
 
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/bridge/oleautomation/XAutomationObject.hpp>
+#include <com/sun/star/script//XAutomationInvocation.hpp>
 #include <rtl/ustring.hxx>
 
 #include <com/sun/star/script/XDefaultProperty.hpp>
@@ -81,7 +82,7 @@ typedef hash_multimap<OUString, unsigned int, hashOUString_Impl, equalOUString_I
 // This class wraps an IDispatch and maps XInvocation calls to IDispatch calls on the wrapped object.
 // If m_TypeDescription is set then this class represents an UNO interface implemented in a COM component.
 // The interface is not a real interface in terms of an abstract class but is realized through IDispatch.
-class IUnknownWrapper_Impl : public WeakImplHelper6<XInvocation, XBridgeSupplier2, XInitialization, XAutomationObject, XDefaultProperty, XDefaultMethod>,
+class IUnknownWrapper_Impl : public WeakImplHelper6<XAutomationInvocation, XBridgeSupplier2, XInitialization, XAutomationObject, XDefaultProperty, XDefaultMethod>,
 
                              public UnoConversionUtilities<IUnknownWrapper_Impl>
 
@@ -134,6 +135,9 @@ public:
 protected:
     virtual ::rtl::OUString SAL_CALL getDefaultMethodName(  ) throw (::com::sun::star::uno::RuntimeException) { return m_sDefaultMember; }
 
+    virtual ::com::sun::star::uno::Any SAL_CALL invokeGetProperty( const ::rtl::OUString& aFunctionName, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aParams, ::com::sun::star::uno::Sequence< ::sal_Int16 >& aOutParamIndex, ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aOutParam ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::script::CannotConvertException, ::com::sun::star::reflection::InvocationTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL invokePutProperty( const ::rtl::OUString& aFunctionName, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aParams, ::com::sun::star::uno::Sequence< ::sal_Int16 >& aOutParamIndex, ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aOutParam ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::script::CannotConvertException, ::com::sun::star::reflection::InvocationTargetException, ::com::sun::star::uno::RuntimeException);
+
     // ----------------------------------------------------------------------------
     virtual Any invokeWithDispIdUnoTlb(const OUString& sFunctionName,
                                        const Sequence< Any >& Params,
@@ -144,6 +148,12 @@ protected:
                                        const Sequence< Any >& Params,
                                        Sequence< sal_Int16 >& OutParamIndex,
                                        Sequence< Any >& OutParam);
+
+  Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
+                            const OUString& sFuncName,
+                            const Sequence< Any >& Params,
+                            Sequence< sal_Int16 >& OutParamIndex,
+                            Sequence< Any >& OutParam);
 
 //    virtual void setValueWithDispId(DISPID dispID, const Any& Value);
 
@@ -188,7 +198,10 @@ protected:
     /** Returns the DISPID for a function or property name. If true is returned then
         id contains a valid DISPID.
     */
+
     bool getDispid(const OUString& sFuncName, DISPID * id);
+
+    VARTYPE getUserDefinedElementType( ITypeInfo* pTypeInfo, const DWORD nHrefType );
 
     /** Gets the element type in a VARIANT like style. E.g. if desc->lptdesc contains
         a VT_PTR than it is replaced by VT_BYREF and VT_SAFEARRAY is replaced by VT_ARRAY

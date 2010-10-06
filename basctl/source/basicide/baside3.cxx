@@ -82,6 +82,7 @@
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
 #include <com/sun/star/resource/StringResourceWithLocation.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/script/vba/XVBACompatibility.hpp>
 
 using namespace comphelper;
 using namespace ::com::sun::star;
@@ -112,8 +113,16 @@ DialogWindow::DialogWindow( Window* pParent, const ScriptDocument& rDocument, St
 {
     InitSettings( TRUE, TRUE, TRUE );
 
-    pEditor = new DlgEditor();
+    pEditor = new DlgEditor( rDocument.isDocument() ? rDocument.getDocument() : Reference< frame::XModel >() );
     pEditor->SetWindow( this );
+    // set vba mode on DialogModel ( allows it to work in 100thmm instead of MAP_APPFONT )
+    if ( rDocument.isDocument() && rDocument.getDocument().is() )
+    {
+        uno::Reference< script::vba::XVBACompatibility > xDocVBAMode( rDocument.getLibraryContainer( E_SCRIPTS ), uno::UNO_QUERY );
+        uno::Reference< script::vba::XVBACompatibility > xDialogModelVBAMode( xDialogModel, uno::UNO_QUERY );
+        if ( xDocVBAMode.is()  &&  xDialogModelVBAMode.is() )
+            xDialogModelVBAMode->setVBACompatibilityMode( xDocVBAMode->getVBACompatibilityMode() );
+    }
     pEditor->SetDialog( xDialogModel );
 
     // Undo einrichten
@@ -728,7 +737,7 @@ BOOL DialogWindow::SaveDialog()
         Reference< beans::XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY );
         OSL_ASSERT( xProps.is() );
         OSL_VERIFY( xProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
-        Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xDialogModel, xContext );
+        Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xDialogModel, xContext, GetDocument().isDocument() ? GetDocument().getDocument() : Reference< frame::XModel >() );
         Reference< XInputStream > xInput( xISP->createInputStream() );
 
         Reference< XSimpleFileAccess > xSFI( xMSF->createInstance
@@ -1010,7 +1019,7 @@ BOOL implImportDialog( Window* pWin, const String& rCurPath, const ScriptDocumen
             Reference< beans::XPropertySet > xProps( xMSF, UNO_QUERY );
             OSL_ASSERT( xProps.is() );
             OSL_VERIFY( xProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
-            ::xmlscript::importDialogModel( xInput, xDialogModel, xContext );
+            ::xmlscript::importDialogModel( xInput, xDialogModel, xContext, rDocument.isDocument() ? rDocument.getDocument() : Reference< frame::XModel >() );
 
             String aXmlDlgName;
             Reference< beans::XPropertySet > xDialogModelPropSet( xDialogModel, UNO_QUERY );
@@ -1236,7 +1245,7 @@ BOOL implImportDialog( Window* pWin, const String& rCurPath, const ScriptDocumen
                 }
             }
 
-            Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xDialogModel, xContext );
+            Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xDialogModel, xContext, rDocument.isDocument() ? rDocument.getDocument() : Reference< frame::XModel >() );
             bool bSuccess = rDocument.insertDialog( aLibName, aNewDlgName, xISP );
             if( bSuccess )
             {
@@ -1346,7 +1355,7 @@ void DialogWindow::StoreData()
                     Reference< beans::XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY );
                     OSL_ASSERT( xProps.is() );
                     OSL_VERIFY( xProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
-                    Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xDialogModel, xContext );
+                    Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xDialogModel, xContext, GetDocument().isDocument() ? GetDocument().getDocument() : Reference< frame::XModel >() );
                     xLib->replaceByName( ::rtl::OUString( GetName() ), makeAny( xISP ) );
                 }
             }

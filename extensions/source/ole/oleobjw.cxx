@@ -49,6 +49,7 @@
 #include <com/sun/star/script/XEngine.hpp>
 #include <com/sun/star/script/InterruptEngineEvent.hpp>
 #include <com/sun/star/script/XLibraryAccess.hpp>
+#include <com/sun/star/script/BasicErrorException.hpp>
 #include <com/sun/star/bridge/ModelDependent.hpp>
 
 #include "com/sun/star/bridge/oleautomation/NamedArgument.hpp"
@@ -152,10 +153,10 @@ Any IUnknownWrapper_Impl::queryInterface(const Type& t)
         return Any();
     if (t == getCppuType(static_cast<Reference<XDefaultProperty>*>( 0)) && !m_bHasDfltProperty )
         return Any();
-    if (t == getCppuType(static_cast<Reference<XInvocation>*>( 0)) && !m_spDispatch)
+    if ( ( t == getCppuType(static_cast<Reference<XInvocation>*>( 0)) || t == getCppuType(static_cast<Reference<XAutomationInvocation>*>( 0)) ) && !m_spDispatch)
         return Any();
 
-    return WeakImplHelper6<XInvocation, XBridgeSupplier2,
+    return WeakImplHelper6<XAutomationInvocation, XBridgeSupplier2,
         XInitialization, XAutomationObject, XDefaultProperty, XDefaultMethod>::queryInterface(t);
 }
 
@@ -167,6 +168,61 @@ Reference<XIntrospectionAccess> SAL_CALL IUnknownWrapper_Impl::getIntrospection(
     return ret;
 }
 
+Any SAL_CALL IUnknownWrapper_Impl::invokeGetProperty( const OUString& aPropertyName, const Sequence< Any >& aParams, Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam )
+{
+    Any aResult;
+    try
+    {
+        o2u_attachCurrentThread();
+        ITypeInfo * pInfo = getTypeInfo();
+        FuncDesc aDescGet(pInfo);
+        FuncDesc aDescPut(pInfo);
+        VarDesc aVarDesc(pInfo);
+        getPropDesc(aPropertyName, & aDescGet, & aDescPut, & aVarDesc);
+        if ( !aDescGet )
+        {
+            OUString msg(OUSTR("[automation bridge]Property \"") + aPropertyName +
+                OUSTR("\" is not supported"));
+            throw UnknownPropertyException(msg, Reference<XInterface>());
+        }
+        aResult = invokeWithDispIdComTlb( aDescGet, aPropertyName, aParams, aOutParamIndex, aOutParam );
+    }
+    catch ( Exception& e )
+    {
+       throw RuntimeException(OUSTR("[automation bridge] unexpected exception in "
+               "IUnknownWrapper_Impl::invokeGetProperty ! Message : \n") +
+                e.Message, Reference<XInterface>());
+    }
+    return aResult;
+}
+
+Any SAL_CALL IUnknownWrapper_Impl::invokePutProperty( const OUString& aPropertyName, const Sequence< Any >& aParams, Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam )
+{
+    Any aResult;
+    try
+    {
+        o2u_attachCurrentThread();
+        ITypeInfo * pInfo = getTypeInfo();
+        FuncDesc aDescGet(pInfo);
+        FuncDesc aDescPut(pInfo);
+        VarDesc aVarDesc(pInfo);
+        getPropDesc(aPropertyName, & aDescGet, & aDescPut, & aVarDesc);
+        if ( !aDescPut )
+        {
+            OUString msg(OUSTR("[automation bridge]Property \"") + aPropertyName +
+                OUSTR("\" is not supported"));
+            throw UnknownPropertyException(msg, Reference<XInterface>());
+        }
+        aResult = invokeWithDispIdComTlb( aDescPut, aPropertyName, aParams, aOutParamIndex, aOutParam );
+    }
+    catch ( Exception& e )
+    {
+       throw RuntimeException(OUSTR("[automation bridge] unexpected exception in "
+               "IUnknownWrapper_Impl::invokePutProperty ! Message : \n") +
+                e.Message, Reference<XInterface>());
+    }
+    return aResult;
+}
 
 
 Any SAL_CALL IUnknownWrapper_Impl::invoke( const OUString& aFunctionName,
@@ -210,6 +266,10 @@ Any SAL_CALL IUnknownWrapper_Impl::invoke( const OUString& aFunctionName,
         throw;
     }
     catch (CannotConvertException &)
+    {
+        throw;
+    }
+    catch (InvocationTargetException &)
     {
         throw;
     }
@@ -658,12 +718,16 @@ sal_Bool SAL_CALL IUnknownWrapper_Impl::hasProperty( const OUString& aName )
         FuncDesc aDescPut(pInfo);
         VarDesc aVarDesc(pInfo);
         getPropDesc(aName, & aDescGet, & aDescPut, & aVarDesc);
-        // Automation properties can have parameters. If so, we access them through
-        // XInvocation::invoke. Thas is, hasProperty must return false for such a
-        // property
+
+    // we should probably just check the funckind
+        // basic has been modified to handle properties ( 'get' ) props at
+    // least with paramaters
+    // additionally you can call invoke(Get|Set)Property on the bridge
+        // you can determine if a property has parameter is hasMethod
+    // returns true for the name
         if (aVarDesc
-            || aDescPut && aDescPut->cParams == 0
-            || aDescGet && aDescGet->cParams == 0)
+            || aDescPut
+            || aDescGet )
         {
             ret = sal_True;
         }
@@ -1392,6 +1456,19 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(const OUString& sFuncName,
                                                   Sequence< sal_Int16 >& OutParamIndex,
                                                   Sequence< Any >& OutParam)
 {
+    // Get type info for the call. It can be a method call or property put or
+    // property get operation.
+    FuncDesc aFuncDesc(getTypeInfo());
+    getFuncDescForInvoke(sFuncName, Params, & aFuncDesc);
+    return invokeWithDispIdComTlb( aFuncDesc, sFuncName, Params, OutParamIndex, OutParam );
+}
+
+Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
+                                                  const OUString& sFuncName,
+                                                  const Sequence< Any >& Params,
+                                                  Sequence< sal_Int16 >& OutParamIndex,
+                                                  Sequence< Any >& OutParam)
+{
     Any ret;
     HRESULT result;
 
@@ -1410,10 +1487,6 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(const OUString& sFuncName,
     sal_Int32 revIndex = 0;
     bool bVarargParam = false;
 
-    // Get type info for the call. It can be a method call or property put or
-    // property get operation.
-    FuncDesc aFuncDesc(getTypeInfo());
-    getFuncDescForInvoke(sFuncName, Params, & aFuncDesc);
 
     //Set the array of DISPIDs for named args if it is a property put operation.
     //If there are other named arguments another array is set later on.
@@ -1832,11 +1905,24 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(const OUString& sFuncName,
                   "DISP_E_BADVARTYPE."), 0);
             break;
         case DISP_E_EXCEPTION:
+            {
                 message = OUSTR("[automation bridge]: ");
                 message += OUString(reinterpret_cast<const sal_Unicode*>(excepinfo.bstrDescription),
                     ::SysStringLen(excepinfo.bstrDescription));
-                throw InvocationTargetException(message, Reference<XInterface>(), Any());
+
+                // Add for VBA, to throw an exception with the correct error code and message.
+                sal_Int32 nErrorCode = excepinfo.wCode;
+                if ( nErrorCode == 0 )
+                {
+                    // The low 16-bit of scode describing the error or warning.
+                    nErrorCode = ( excepinfo.scode & 0xFFFF );
+                }
+                BasicErrorException aBasicErrExp(message, Reference<XInterface>(), nErrorCode, message);
+                throw InvocationTargetException(message, Reference<XInterface>(), makeAny(aBasicErrExp));
+                // End add
+
                 break;
+            }
         case DISP_E_MEMBERNOTFOUND:
             message = OUSTR("[automation bridge]: A function with the name \"")
                 + sFuncName + OUSTR("\" is not supported. Object returned "
@@ -1969,11 +2055,17 @@ void IUnknownWrapper_Impl::getFuncDesc(const OUString & sFuncName, FUNCDESC ** p
                 //get the associated index and add an entry to the map
                 //with the name sFuncName which differs in the casing of the letters to
                 //the actual name as obtained from ITypeInfo
-                cit itOrg  = m_mapComFunc.find(OUString(reinterpret_cast<const sal_Unicode*>(LPCOLESTR(memberName))));
+                OUString sRealName(reinterpret_cast<const sal_Unicode*>(LPCOLESTR(memberName)));
+                cit itOrg  = m_mapComFunc.find(sRealName);
                 OSL_ASSERT(itOrg != m_mapComFunc.end());
+                // maybe this is a property, if so we need
+                // to store either both id's ( put/get ) or
+                // just the get. Storing both is more consistent
+                pair<cit, cit> pItems = m_mapComFunc.equal_range( sRealName );
+                    for ( ;pItems.first != pItems.second; ++pItems.first )
+                    m_mapComFunc.insert( TLBFuncIndexMap::value_type ( make_pair(sFuncName, pItems.first->second ) ));
                 itIndex =
-                    m_mapComFunc.insert( TLBFuncIndexMap::value_type
-                    ( make_pair(sFuncName, itOrg->second ) ));
+                    m_mapComFunc.find( sFuncName );
             }
         }
     }
@@ -2080,6 +2172,50 @@ void IUnknownWrapper_Impl::getPropDesc(const OUString & sFuncName, FUNCDESC ** p
    //else no entry for sFuncName, pFuncDesc will not be filled in
 }
 
+VARTYPE IUnknownWrapper_Impl::getUserDefinedElementType( ITypeInfo* pTypeInfo, const DWORD nHrefType )
+{
+    VARTYPE _type( VT_NULL );
+    if ( pTypeInfo )
+    {
+        CComPtr<ITypeInfo> spRefInfo;
+        pTypeInfo->GetRefTypeInfo( nHrefType, &spRefInfo.p );
+        if ( spRefInfo )
+        {
+            TypeAttr attr( spRefInfo );
+            spRefInfo->GetTypeAttr( &attr );
+            if ( attr->typekind == TKIND_ENUM )
+            {
+                // We use the type of the first enum value.
+                if ( attr->cVars == 0 )
+                {
+                    throw BridgeRuntimeError(OUSTR("[automation bridge] Could not obtain type description"));
+                }
+                VarDesc var( spRefInfo );
+                spRefInfo->GetVarDesc( 0, &var );
+                _type = var->lpvarValue->vt;
+            }
+            else if ( attr->typekind == TKIND_INTERFACE )
+            {
+                _type = VT_UNKNOWN;
+            }
+            else if ( attr->typekind == TKIND_DISPATCH )
+            {
+                _type = VT_DISPATCH;
+            }
+            else if ( attr->typekind == TKIND_ALIAS )
+            {
+                // TKIND_ALIAS is a type that is an alias for another type. So get that alias type.
+                _type = getUserDefinedElementType( pTypeInfo, attr->tdescAlias.hreftype );
+            }
+            else
+            {
+                throw BridgeRuntimeError( OUSTR("[automation bridge] Unhandled user defined type.") );
+            }
+        }
+    }
+    return _type;
+}
+
 VARTYPE IUnknownWrapper_Impl::getElementTypeDesc(const TYPEDESC *desc)
 {
     VARTYPE _type( VT_NULL );
@@ -2097,38 +2233,7 @@ VARTYPE IUnknownWrapper_Impl::getElementTypeDesc(const TYPEDESC *desc)
     else if (desc->vt == VT_USERDEFINED)
     {
         ITypeInfo* thisInfo = getTypeInfo(); //kept by this instance
-        CComPtr<ITypeInfo>  spRefInfo;
-        thisInfo->GetRefTypeInfo(desc->hreftype, & spRefInfo.p);
-        if (spRefInfo)
-        {
-            TypeAttr  attr(spRefInfo);
-            spRefInfo->GetTypeAttr( & attr);
-            if (attr->typekind == TKIND_ENUM)
-            {
-                //We use the type of the first enum value.
-                if (attr->cVars == 0)
-                {
-                    throw BridgeRuntimeError(OUSTR("[automation bridge] Could "
-                        "not obtain type description"));
-                }
-                VarDesc var(spRefInfo);
-                spRefInfo->GetVarDesc(0, & var);
-                _type = var->lpvarValue->vt;
-            }
-            else if (attr->typekind == TKIND_INTERFACE)
-            {
-                _type = VT_UNKNOWN;
-            }
-            else if (attr->typekind == TKIND_DISPATCH)
-            {
-                _type = VT_DISPATCH;
-            }
-            else
-            {
-                throw BridgeRuntimeError(OUSTR("[automation bridge] "
-                    "Unhandled user defined type."));
-            }
-        }
+        _type = getUserDefinedElementType( thisInfo, desc->hreftype );
     }
     else
     {

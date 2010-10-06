@@ -74,6 +74,22 @@ TYPEINIT1(DlgEdObj, SdrUnoObj);
 DBG_NAME(DlgEdObj);
 
 //----------------------------------------------------------------------------
+MapMode lcl_getMapModeForForm( DlgEdForm* pForm )
+{
+    MapMode aMode( MAP_APPFONT ); //Default
+    try
+    {
+        uno::Reference< beans::XPropertySet > xProps( pForm ? pForm->GetUnoControlModel() : NULL, uno::UNO_QUERY_THROW );
+        sal_Bool bVBAForm = sal_False;
+        xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("VBAForm") ) ) >>= bVBAForm;
+        if ( bVBAForm )
+            aMode = MapMode( MAP_100TH_MM );
+    }
+    catch ( Exception& )
+    {
+    }
+    return aMode;
+}
 
 DlgEdObj::DlgEdObj()
           :SdrUnoObj(String(), sal_False)
@@ -194,8 +210,9 @@ bool DlgEdObj::TransformSdrToControlCoordinates(
     }
 
     // convert pixel to logic units
-    aPos = pDevice->PixelToLogic( aPos, MapMode( MAP_APPFONT ) );
-    aSize = pDevice->PixelToLogic( aSize, MapMode( MAP_APPFONT ) );
+    MapMode aConvMode = lcl_getMapModeForForm( pForm );
+    aPos = pDevice->PixelToLogic( aPos, aConvMode );
+    aSize = pDevice->PixelToLogic( aSize, aConvMode );
 
     // set out parameters
     nXOut = aPos.Width();
@@ -242,10 +259,10 @@ bool DlgEdObj::TransformSdrToFormCoordinates(
         aSize.Width() -= aDeviceInfo.LeftInset + aDeviceInfo.RightInset;
         aSize.Height() -= aDeviceInfo.TopInset + aDeviceInfo.BottomInset;
     }
-
+    MapMode aConvMode = lcl_getMapModeForForm( pForm );
     // convert pixel to logic units
-    aPos = pDevice->PixelToLogic( aPos, MapMode( MAP_APPFONT ) );
-    aSize = pDevice->PixelToLogic( aSize, MapMode( MAP_APPFONT ) );
+    aPos = pDevice->PixelToLogic( aPos, aConvMode );
+    aSize = pDevice->PixelToLogic( aSize, aConvMode );
 
     // set out parameters
     nXOut = aPos.Width();
@@ -287,9 +304,10 @@ bool DlgEdObj::TransformControlToSdrCoordinates(
     DBG_ASSERT( pDevice, "DlgEdObj::TransformControlToSdrCoordinates: missing default device!" );
     if ( !pDevice )
         return false;
-    aPos = pDevice->LogicToPixel( aPos, MapMode( MAP_APPFONT ) );
-    aSize = pDevice->LogicToPixel( aSize, MapMode( MAP_APPFONT ) );
-    aFormPos = pDevice->LogicToPixel( aFormPos, MapMode( MAP_APPFONT ) );
+    MapMode aConvMode = lcl_getMapModeForForm( pForm );
+    aPos = pDevice->LogicToPixel( aPos, aConvMode );
+    aSize = pDevice->LogicToPixel( aSize, aConvMode );
+    aFormPos = pDevice->LogicToPixel( aFormPos, aConvMode );
 
     // add form position
     aPos.Width() += aFormPos.Width();
@@ -333,13 +351,15 @@ bool DlgEdObj::TransformFormToSdrCoordinates(
     DBG_ASSERT( pDevice, "DlgEdObj::TransformFormToSdrCoordinates: missing default device!" );
     if ( !pDevice )
         return false;
-    aPos = pDevice->LogicToPixel( aPos, MapMode( MAP_APPFONT ) );
-    aSize = pDevice->LogicToPixel( aSize, MapMode( MAP_APPFONT ) );
 
     // take window borders into account
     DlgEdForm* pForm = NULL;
     if ( !lcl_getDlgEdForm( this, pForm ) )
         return false;
+
+    MapMode aConvMode = lcl_getMapModeForForm( pForm );
+    aPos = pDevice->LogicToPixel( aPos, aConvMode );
+    aSize = pDevice->LogicToPixel( aSize, aConvMode );
 
     // take window borders into account
     Reference< beans::XPropertySet > xPSetForm( pForm->GetUnoControlModel(), UNO_QUERY );

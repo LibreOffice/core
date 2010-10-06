@@ -43,6 +43,7 @@ class OfaMSFilterTabPage : public SfxTabPage
 {
     FixedLine       aMSWordGB;
     CheckBox        aWBasicCodeCB;
+    CheckBox        aWBasicWbctblCB;
     CheckBox        aWBasicStgCB;
     FixedLine       aMSExcelGB;
     CheckBox        aEBasicCodeCB;
@@ -55,6 +56,7 @@ class OfaMSFilterTabPage : public SfxTabPage
     OfaMSFilterTabPage( Window* pParent, const SfxItemSet& rSet );
     virtual ~OfaMSFilterTabPage();
 
+    DECL_LINK( LoadWordBasicCheckHdl_Impl, CheckBox* );
     DECL_LINK( LoadExcelBasicCheckHdl_Impl, CheckBox* );
 public:
 
