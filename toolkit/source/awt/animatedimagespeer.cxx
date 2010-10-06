@@ -136,7 +136,7 @@ namespace toolkit
 
                 const size_t nImageSetCount = i_data.aCachedImageSets.size();
                 ::std::vector< Size > aImageSizes( nImageSetCount );
-                for ( sal_Int32 nImageSet = 0; nImageSet < nImageSetCount; ++nImageSet )
+                for ( sal_Int32 nImageSet = 0; size_t( nImageSet ) < nImageSetCount; ++nImageSet )
                 {
                     Sequence< ::rtl::OUString > const& rImageSet( i_data.aCachedImageSets[ nImageSet ] );
                     if ( rImageSet.getLength() )
@@ -166,7 +166,7 @@ namespace toolkit
 
                 // found a set?
                 Sequence< Reference< XGraphic > > aImages;
-                if ( ( nPreferredSet >= 0 ) && ( nPreferredSet < nImageSetCount ) )
+                if ( ( nPreferredSet >= 0 ) && ( size_t( nPreferredSet ) < nImageSetCount ) )
                 {
                     // => set the images
                     Sequence< ::rtl::OUString > const& rImageSet( i_data.aCachedImageSets[ nPreferredSet ] );
