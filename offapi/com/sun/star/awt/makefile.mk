@@ -334,7 +334,12 @@ IDLFILES=\
     XPopupMenuExtended.idl \
     XItemList.idl \
     XItemListListener.idl \
-    ItemListEvent.idl
+    ItemListEvent.idl \
+    AnimatedImagesControl.idl \
+    AnimatedImagesControlModel.idl \
+    XAnimatedImages.idl \
+    XAnimation.idl \
+    SpinningProgressControlModel.idl
 
 # ------------------------------------------------------------------
 

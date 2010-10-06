@@ -42,17 +42,14 @@
 
 //=============================================================================
 
-/** specifies a simple animation control.
-
-    <p>The model of an <type>UnoControlSimpleAnimation</type> control must support
-    the <type>UnoControlSimpleAnimationModel</type> service.</p>
-
+/**
     @since OOo 2.2
+    @deprecated
+        You should use <type>AnimatedImagesControl</type>.
  */
 published service UnoControlSimpleAnimation
 {
     service com::sun::star::awt::UnoControl;
-
     interface com::sun::star::awt::XSimpleAnimation;
 
 };
