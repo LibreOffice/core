@@ -528,7 +528,14 @@ void ScHTMLExport::BorderToStyle( ByteString& rOut, const char* pBorderName,
         // thickness
         int nWidth = pLine->GetOutWidth();
         int nPxWidth = ( nWidth > 0 )? std::max( int( nWidth / TWIPS_PER_PIXEL ), 1 ): 0;
-        (rOut += ByteString::CreateFromInt32( nPxWidth )) += "px solid #";
+        (rOut += ByteString::CreateFromInt32( nPxWidth )) += "px ";
+        switch ( pLine->GetStyle() )
+        {
+            case DOTTED:    rOut += "dotted"; break;
+            case DASHED:    rOut += "dashed"; break;
+            default:        rOut += "solid";
+        }
+        rOut += " #";
 
         // color
         char hex[7];

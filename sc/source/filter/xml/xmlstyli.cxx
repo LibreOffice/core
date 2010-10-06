@@ -40,7 +40,7 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/sheet/XSheetConditionalEntries.hpp>
-#include <com/sun/star/table/BorderLine.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 #include <comphelper/extract.hxx>
 #include <xmloff/xmlprcon.hxx>
 #include <xmloff/xmluconv.hxx>
@@ -167,15 +167,16 @@ void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& 
             pBorderWidths[i]->mnIndex = -1;
         if( pBorders[i] )
         {
-            table::BorderLine aBorderLine;
+            table::BorderLine2 aBorderLine;
             pBorders[i]->maValue >>= aBorderLine;
              if( pBorderWidths[i] )
             {
-                table::BorderLine aBorderLineWidth;
+                table::BorderLine2 aBorderLineWidth;
                 pBorderWidths[i]->maValue >>= aBorderLineWidth;
                 aBorderLine.OuterLineWidth = aBorderLineWidth.OuterLineWidth;
                 aBorderLine.InnerLineWidth = aBorderLineWidth.InnerLineWidth;
                 aBorderLine.LineDistance = aBorderLineWidth.LineDistance;
+                aBorderLine.LineStyle = aBorderLineWidth.LineStyle;
                 pBorders[i]->maValue <<= aBorderLine;
             }
         }
@@ -184,9 +185,9 @@ void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& 
     {
         if( pDiagBorders[i] && ( pDiagBorderWidths[i] || pOldDiagBorderWidths[i] ) )
         {
-            table::BorderLine aBorderLine;
+            table::BorderLine2 aBorderLine;
             pDiagBorders[i]->maValue >>= aBorderLine;
-            table::BorderLine aBorderLineWidth;
+            table::BorderLine2 aBorderLineWidth;
             if (pDiagBorderWidths[i])
                 pDiagBorderWidths[i]->maValue >>= aBorderLineWidth;     // prefer new attribute
             else
@@ -194,6 +195,7 @@ void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& 
             aBorderLine.OuterLineWidth = aBorderLineWidth.OuterLineWidth;
             aBorderLine.InnerLineWidth = aBorderLineWidth.InnerLineWidth;
             aBorderLine.LineDistance = aBorderLineWidth.LineDistance;
+            aBorderLine.LineStyle = aBorderLineWidth.LineStyle;
             pDiagBorders[i]->maValue <<= aBorderLine;
             if (pDiagBorderWidths[i])
                 pDiagBorderWidths[i]->mnIndex = -1;

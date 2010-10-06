@@ -3022,6 +3022,7 @@ void ScViewFunc::UpdateLineAttrs( SvxBorderLine&       rLine,
             rLine.SetOutWidth   ( pDestLine->GetOutWidth() );
             rLine.SetInWidth    ( pDestLine->GetInWidth() );
             rLine.SetDistance   ( pDestLine->GetDistance() );
+            rLine.SetStyle      ( pDestLine->GetStyle() );
         }
         else
         {
@@ -3029,6 +3030,7 @@ void ScViewFunc::UpdateLineAttrs( SvxBorderLine&       rLine,
             rLine.SetOutWidth   ( pSrcLine->GetOutWidth() );
             rLine.SetInWidth    ( pSrcLine->GetInWidth() );
             rLine.SetDistance   ( pSrcLine->GetDistance() );
+            rLine.SetStyle      ( pSrcLine->GetStyle() );
         }
     }
 }

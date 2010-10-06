@@ -1570,9 +1570,26 @@ void lclGetBorderLine(
         else if( nOuterWidth > DEF_LINE_WIDTH_2 )
             rnXclLine = EXC_LINE_THICK;
         else if( nOuterWidth > DEF_LINE_WIDTH_1 )
+        {
             rnXclLine = EXC_LINE_MEDIUM;
+            if ( pLine->GetStyle( ) == DASHED )
+                rnXclLine = EXC_LINE_MEDIUMDASHED;
+        }
         else if( nOuterWidth > DEF_LINE_WIDTH_0 )
+        {
             rnXclLine = EXC_LINE_THIN;
+            switch ( pLine->GetStyle( ) )
+            {
+                case DASHED:
+                    rnXclLine = EXC_LINE_DASHED;
+                    break;
+                case DOTTED:
+                    rnXclLine = EXC_LINE_DOTTED;
+                    break;
+                default:
+                    break;
+            }
+        }
         else if( nOuterWidth > 0 )
             rnXclLine = EXC_LINE_HAIR;
         else
@@ -1738,6 +1755,9 @@ static const char* ToLineStyle( sal_uInt8 nLineStyle )
         case EXC_LINE_THICK:    return "thick";
         case EXC_LINE_DOUBLE:   return "double";
         case EXC_LINE_HAIR:     return "hair";
+        case EXC_LINE_DOTTED:     return "dotted";
+        case EXC_LINE_DASHED:     return "dashed";
+        case EXC_LINE_MEDIUMDASHED:     return "mediumdashed";
     }
     return "*unknown*";
 }

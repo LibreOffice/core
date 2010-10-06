@@ -54,6 +54,7 @@
 #include <com/sun/star/table/CellHoriJustify.hpp>
 #include <com/sun/star/table/CellJustifyMethod.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/sheet/XSheetConditionalEntries.hpp>
 #include <com/sun/star/sheet/XSheetConditionalEntry.hpp>
 #include <com/sun/star/sheet/XSheetCondition.hpp>
@@ -323,7 +324,7 @@ void ScXMLCellExportPropertyMapper::ContextFilter(
     {
         if( pBorder_Left && pBorder_Right && pBorder_Top && pBorder_Bottom )
         {
-            table::BorderLine aLeft, aRight, aTop, aBottom;
+            table::BorderLine2 aLeft, aRight, aTop, aBottom;
 
             pBorder_Left->maValue >>= aLeft;
             pBorder_Right->maValue >>= aRight;
@@ -334,7 +335,9 @@ void ScXMLCellExportPropertyMapper::ContextFilter(
                 aLeft.Color == aTop.Color && aLeft.InnerLineWidth == aTop.InnerLineWidth &&
                 aLeft.OuterLineWidth == aTop.OuterLineWidth && aLeft.LineDistance == aTop.LineDistance &&
                 aLeft.Color == aBottom.Color && aLeft.InnerLineWidth == aBottom.InnerLineWidth &&
-                aLeft.OuterLineWidth == aBottom.OuterLineWidth && aLeft.LineDistance == aBottom.LineDistance )
+                aLeft.OuterLineWidth == aBottom.OuterLineWidth && aLeft.LineDistance == aBottom.LineDistance &&
+                aLeft.LineStyle == aRight.LineStyle && aLeft.LineStyle == aTop.LineStyle &&
+                aLeft.LineStyle == aBottom.LineStyle )
             {
                 pBorder_Left->mnIndex = -1;
                 pBorder_Left->maValue.clear();
@@ -361,7 +364,7 @@ void ScXMLCellExportPropertyMapper::ContextFilter(
     {
         if( pLeftBorderWidthState && pRightBorderWidthState && pTopBorderWidthState && pBottomBorderWidthState )
         {
-            table::BorderLine aLeft, aRight, aTop, aBottom;
+            table::BorderLine2 aLeft, aRight, aTop, aBottom;
 
             pLeftBorderWidthState->maValue >>= aLeft;
             pRightBorderWidthState->maValue >>= aRight;

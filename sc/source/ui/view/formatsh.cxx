@@ -1533,6 +1533,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                             pDefLine->SetOutWidth( pLine->GetOutWidth() );
                             pDefLine->SetInWidth ( pLine->GetInWidth() );
                             pDefLine->SetDistance( pLine->GetDistance() );
+                            pDefLine->SetStyle( pLine->GetStyle( ) );
                             pTabViewShell->SetSelectionFrameLines( pDefLine, FALSE );
                         }
                         else

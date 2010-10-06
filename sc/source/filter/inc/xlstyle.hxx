@@ -48,9 +48,12 @@ class XclRoot;
 const sal_uInt8 EXC_LINE_NONE               = 0x00;
 const sal_uInt8 EXC_LINE_THIN               = 0x01;
 const sal_uInt8 EXC_LINE_MEDIUM             = 0x02;
+const sal_uInt8 EXC_LINE_DASHED             = 0x03;
+const sal_uInt8 EXC_LINE_DOTTED             = 0x04;
 const sal_uInt8 EXC_LINE_THICK              = 0x05;
 const sal_uInt8 EXC_LINE_DOUBLE             = 0x06;
 const sal_uInt8 EXC_LINE_HAIR               = 0x07;
+const sal_uInt8 EXC_LINE_MEDIUMDASHED       = 0x08;
 
 // Background patterns --------------------------------------------------------
 

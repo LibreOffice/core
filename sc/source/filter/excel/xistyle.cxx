@@ -821,23 +821,23 @@ namespace {
 /** Converts the passed line style to a SvxBorderLine, or returns false, if style is "no line". */
 bool lclConvertBorderLine( SvxBorderLine& rLine, const XclImpPalette& rPalette, sal_uInt8 nXclLine, sal_uInt16 nXclColor )
 {
-    static const sal_uInt16 ppnLineParam[][ 3 ] =
+    static const sal_uInt16 ppnLineParam[][ 4 ] =
     {
-        //  outer width,        inner width,        distance
-        {   0,                  0,                  0 },                // 0 = none
-        {   DEF_LINE_WIDTH_1,   0,                  0 },                // 1 = thin
-        {   DEF_LINE_WIDTH_2,   0,                  0 },                // 2 = medium
-        {   DEF_LINE_WIDTH_1,   0,                  0 },                // 3 = dashed
-        {   DEF_LINE_WIDTH_0,   0,                  0 },                // 4 = dotted
-        {   DEF_LINE_WIDTH_3,   0,                  0 },                // 5 = thick
-        {   DEF_LINE_WIDTH_1,   DEF_LINE_WIDTH_1,   DEF_LINE_WIDTH_1 }, // 6 = double
-        {   DEF_LINE_WIDTH_0,   0,                  0 },                // 7 = hair
-        {   DEF_LINE_WIDTH_2,   0,                  0 },                // 8 = med dash
-        {   DEF_LINE_WIDTH_1,   0,                  0 },                // 9 = thin dashdot
-        {   DEF_LINE_WIDTH_2,   0,                  0 },                // A = med dashdot
-        {   DEF_LINE_WIDTH_1,   0,                  0 },                // B = thin dashdotdot
-        {   DEF_LINE_WIDTH_2,   0,                  0 },                // C = med dashdotdot
-        {   DEF_LINE_WIDTH_2,   0,                  0 }                 // D = med slant dashdot
+        //  outer width,        inner width,        distance    type
+        {   0,                  0,                  0,          SOLID },                // 0 = none
+        {   DEF_LINE_WIDTH_1,   0,                  0,          SOLID },                // 1 = thin
+        {   DEF_LINE_WIDTH_2,   0,                  0,          SOLID },                // 2 = medium
+        {   DEF_LINE_WIDTH_1,   0,                  0,          DASHED },               // 3 = dashed
+        {   DEF_LINE_WIDTH_1,   0,                  0,          DOTTED },               // 4 = dotted
+        {   DEF_LINE_WIDTH_3,   0,                  0,          SOLID },                // 5 = thick
+        {   DEF_LINE_WIDTH_1,   DEF_LINE_WIDTH_1,   DEF_LINE_WIDTH_1 },                 // 6 = double
+        {   DEF_LINE_WIDTH_0,   0,                  0,          SOLID },                // 7 = hair
+        {   DEF_LINE_WIDTH_2,   0,                  0,          DASHED },               // 8 = med dash
+        {   DEF_LINE_WIDTH_1,   0,                  0,          SOLID },                // 9 = thin dashdot
+        {   DEF_LINE_WIDTH_2,   0,                  0,          SOLID },                // A = med dashdot
+        {   DEF_LINE_WIDTH_1,   0,                  0,          SOLID },                // B = thin dashdotdot
+        {   DEF_LINE_WIDTH_2,   0,                  0,          SOLID },                // C = med dashdotdot
+        {   DEF_LINE_WIDTH_2,   0,                  0,          SOLID }                 // D = med slant dashdot
     };
 
     if( nXclLine == EXC_LINE_NONE )
@@ -849,6 +849,7 @@ bool lclConvertBorderLine( SvxBorderLine& rLine, const XclImpPalette& rPalette, 
     rLine.SetOutWidth( ppnLineParam[ nXclLine ][ 0 ] );
     rLine.SetInWidth(  ppnLineParam[ nXclLine ][ 1 ] );
     rLine.SetDistance( ppnLineParam[ nXclLine ][ 2 ] );
+    rLine.SetStyle( (SvxBorderStyle)ppnLineParam[ nXclLine ][ 3 ] );
     return true;
 }
 
