@@ -3,8 +3,8 @@
 !define PRODUCT_PUBLISHER "PUBLISHERPLACEHOLDER"
 !define PRODUCT_WEB_SITE "WEBSITEPLACEHOLDER"
 
-; SetCompressor lzma
-SetCompressor zlib
+SetCompressor lzma
+; SetCompressor zlib
 
 ; MUI 1.67 compatible ------
 !include "MUI.nsh"
