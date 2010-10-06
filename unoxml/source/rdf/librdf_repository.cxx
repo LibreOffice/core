@@ -39,7 +39,7 @@
 #include <boost/shared_array.hpp>
 #include <boost/bind.hpp>
 
-#include <librdf.h>
+#include <redland.h>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
