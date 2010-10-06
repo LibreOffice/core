@@ -35,8 +35,10 @@ if ( !defined $completelangiso_var) {
 }
 
 my $poorhelplocalizations_var = $ENV{WITH_POOR_HELP_LOCALIZATIONS};
+$poorhelplocalizations_var = $completelangiso_var if ( $poorhelplocalizations_var eq "ALL" );
 my %poorhelplocalizations;
 foreach $lang (split (/ /, $poorhelplocalizations_var)) {
+  next if ( $lang eq "en-US");
   $poorhelplocalizations{$lang}++;
 }
 
