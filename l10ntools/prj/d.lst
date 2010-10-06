@@ -49,7 +49,6 @@ mkdir: %_DEST%\bin%_EXT%\help\com\sun\star\help
 ..\scripts\keyidGen.pl %_DEST%\bin%_EXT%\keyidGen.pl
 ..\scripts\xtxex %_DEST%\bin%_EXT%\xtxex
 ..\scripts\xhtex %_DEST%\bin%_EXT%\xhtex
-..\scripts\tool\*.py %_DEST%\bin%_EXT%\
 ..\%__SRC%\bin\const.py %_DEST%\bin%_EXT%\const.py
 ..\%__SRC%\bin\l10ntool.py %_DEST%\bin%_EXT%\l10ntool.py
 ..\%__SRC%\bin\pseudo.py %_DEST%\bin%_EXT%\pseudo.py
