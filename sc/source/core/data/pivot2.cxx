@@ -87,6 +87,7 @@ ScDPLabelData::ScDPLabelData( const String& rName, short nCol, bool bIsValue ) :
     mnCol( nCol ),
     mnFuncMask( PIVOT_FUNC_NONE ),
     mnUsedHier( 0 ),
+    mnFlags( 0 ),
     mbShowAll( false ),
     mbIsValue( bIsValue )
 {
