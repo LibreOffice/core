@@ -30,9 +30,7 @@
 
 #include <stdio.h>          // getchar
 
-//#include "defs.hxx"
 #include <tools/solar.h>            // BYTE
-//#include "wwscan.hxx" // aWwStor
 #include "ww8dout.hxx"
 #include <tools/stream.hxx>
 

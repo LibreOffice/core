@@ -26,8 +26,6 @@
  ************************************************************************/
 #define __RSC
 
-
- //#include <tools/errcode.hxx>
 #include "globals.hrc"
 #include "app.hrc"
 #include "swerror.h"

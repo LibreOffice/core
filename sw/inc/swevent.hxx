@@ -28,8 +28,6 @@
 #ifndef _SWEVENT_HXX
 #define _SWEVENT_HXX
 
-// #include *****************************************************************
-
 #include <tools/solar.h>
 #include <sfx2/sfx.hrc>
 

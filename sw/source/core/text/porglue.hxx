@@ -27,8 +27,6 @@
 #ifndef _PORGLUE_HXX
 #define _PORGLUE_HXX
 
-//#include <stdlib.h>
-
 #include "porlin.hxx"
 
 class SwRect;

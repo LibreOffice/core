@@ -94,7 +94,6 @@
 #include <paratr.hxx>
 #include <ndtxt.hxx>
 #include <editeng/acorrcfg.hxx>
-//#include <svx/acorrcfg.hxx>
 #include <IMark.hxx>
 
 // -> #111827#

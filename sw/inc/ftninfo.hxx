@@ -29,9 +29,6 @@
 
 #include <tools/string.hxx>
 #include "swdllapi.h"
-//#ifndef _NUMRULE_HXX
-//#include <numrule.hxx>
-//#endif
 #include <calbck.hxx>
 #include <editeng/numitem.hxx>
 

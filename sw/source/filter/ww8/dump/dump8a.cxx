@@ -28,13 +28,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-//#include <stdio.h>        // SEEK_SET
 #include <string.h>     // memset(), ...
 #include <io.h>         // access()
 
-
-//#include "defs.hxx"
 #include <tools/solar.h>
 #include <sot/storage.hxx>
 #include "ww8struc.hxx"

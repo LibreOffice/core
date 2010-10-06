@@ -28,8 +28,6 @@
 #ifndef _ENVPRT_HRC
 #define _ENVPRT_HRC
 
-// #include *****************************************************************
-
 #include "envelp.hrc"
 
 // Lokale Resourcen *********************************************************

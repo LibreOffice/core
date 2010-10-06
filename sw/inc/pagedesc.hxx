@@ -33,9 +33,6 @@
 #include "swdllapi.h"
 #include <swtypes.hxx>  //fuer SwTwips
 #include <frmfmt.hxx>
-//#ifndef _NUMRULE_HXX
-//#include <numrule.hxx>
-//#endif
 #include <editeng/numitem.hxx>
 
 class SfxPoolItem;

@@ -28,7 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-// #include <math.h>
 #include <tools/datetime.hxx>
 #include <svl/zforlist.hxx>
 #include <com/sun/star/util/DateTime.hpp>

@@ -47,9 +47,6 @@
 #include <editeng/brshitem.hxx>
 #include <editeng/langitem.hxx>
 
-#ifndef _XMLOFF_XMLTABI_HXX
-//#include <xmloff/xmltabi.hxx>
-#endif
 #include "xmlbrshi.hxx"
 #include <paratr.hxx>
 #include <doc.hxx>

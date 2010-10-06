@@ -35,13 +35,10 @@
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <list>
-//#ifndef _OSL_MUTEX_HXX_
-//#include <osl/mutex.hxx>
-//#endif
 #include <vos/mutex.hxx>
 
 class SwView;
-//---------------------------------------------------------------------------------------------------------------------
+
 class SwXDispatchProviderInterceptor : public cppu::WeakImplHelper3
 <
     ::com::sun::star::frame::XDispatchProviderInterceptor,

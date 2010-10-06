@@ -35,7 +35,6 @@
 #include "globals.hrc"
 #include "helpid.h"
 #include "popup.hrc"
-//#include "cfgid.h"
 
 /* --------------------- F O R M A T --------------------------------- */
 

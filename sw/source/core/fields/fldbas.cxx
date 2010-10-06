@@ -28,8 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-// #include <math.h>
 #include <float.h>
 #include <rtl/math.hxx>
 #include <svl/zforlist.hxx>

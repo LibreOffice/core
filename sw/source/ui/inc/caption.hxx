@@ -28,16 +28,9 @@
 #define _CAPTION_HXX
 
 #include <tools/string.hxx>
-//#ifndef _STREAM_HXX //autogen
-//#include <tools/stream.hxx>
-//#endif
 #include <tools/globname.hxx>
 #include <SwCapObjType.hxx>
 #include "swdllapi.h"
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC InsCaptionOpt
 {

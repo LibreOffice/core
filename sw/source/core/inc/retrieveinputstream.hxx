@@ -29,9 +29,6 @@
 
 #include <observablethread.hxx>
 #include <tools/string.hxx>
-//#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
-//#include <com/sun/star/uno/Reference.hxx>
-//#endif
 #include <com/sun/star/io/XInputStream.hpp>
 #include <retrievedinputstreamdata.hxx>
 

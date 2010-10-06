@@ -61,7 +61,6 @@
 #include <unotools/charclass.hxx>   // for GetWordBoundary
 // for get/setCharacterAttribute(...)
 #include <unocrsr.hxx>
-//#include <unoobj.hxx>
 #include <unoport.hxx>
 #include <doc.hxx>
 #include <crsskip.hxx>

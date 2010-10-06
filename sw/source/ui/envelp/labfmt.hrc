@@ -28,8 +28,6 @@
 #ifndef _LABFMT_HRC
 #define _LABFMT_HRC
 
-// #include *****************************************************************
-
 #include "envelp.hrc"
 
 // Lokale Resourcen *********************************************************

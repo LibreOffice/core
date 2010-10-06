@@ -97,7 +97,6 @@
 #include <swprtopt.hxx>
 #include <linguistic/lngprops.hxx>
 #include <editeng/unolingu.hxx>
-//#include <sfx2/app.hxx>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/scanner/ScannerContext.hpp>
 #include <com/sun/star/scanner/XScannerManager.hpp>

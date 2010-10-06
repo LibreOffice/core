@@ -142,7 +142,6 @@
 #include <view.hxx>
 #include <srcview.hxx>
 
-//#include <com/sun/star/i18n/ScriptType.hpp>
 #include <svtools/langtab.hxx>
 #include <map>
 #include <set>

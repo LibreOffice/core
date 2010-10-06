@@ -33,10 +33,6 @@
 #include <editeng/editdata.hxx>
 #include <svtools/colorcfg.hxx>
 
-//#ifndef _ACCESSIBILITY_HXX_
-//#include "accessibility.hxx"
-//#endif
-
 class SmDocShell;
 class SmViewShell;
 class EditView;

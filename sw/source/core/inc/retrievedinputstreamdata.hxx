@@ -36,10 +36,8 @@
 #include <map>
 
 #include <boost/weak_ptr.hpp>
+
 class SwAsyncRetrieveInputStreamThreadConsumer;
-//#ifndef _RETRIEVEINPUTSTREAMCONSUMER_HXX
-//#include <retrieveinputstreamconsumer.hxx>
-//#endif
 
 /** Singleton class to manage retrieved input stream data in Writer
 

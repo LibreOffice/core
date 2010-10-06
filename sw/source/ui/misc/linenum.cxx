@@ -41,11 +41,6 @@
 #include <docsh.hxx>
 #include <charfmt.hxx>
 
-//#ifndef _FLDMGR_HXX //autogen
-//#include <fldmgr.hxx>
-//#endif
-
-
 #include <docstyle.hxx>
 
 #include "fldbas.hxx"

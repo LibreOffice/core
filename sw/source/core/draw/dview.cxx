@@ -57,10 +57,6 @@
 
 #include <com/sun/star/embed/EmbedMisc.hpp>
 
-// OD 18.06.2003 #108784#
-//#ifndef _SVDVMARK_HXX //autogen
-//#include <svx/svdvmark.hxx>
-//#endif
 #include <vector>
 // --> OD 2004-06-24 #i28701#
 #include <sortedobjs.hxx>

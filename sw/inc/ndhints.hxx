@@ -33,8 +33,6 @@
 
 #include "swtypes.hxx"
 
-//#include "numrule.hxx"
-
 class SwTxtNode;
 class SwRegHistory;                 // steht im RolBck.hxx
 class SwTxtAttr;

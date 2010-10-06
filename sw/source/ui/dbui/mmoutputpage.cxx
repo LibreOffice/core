@@ -55,9 +55,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
-//#ifndef _SFX_DOCFILT_HACK_HXX
-//#include <sfx2/docfilt.hxx>
-//#endif
 #include <tools/urlobj.hxx>
 #include <svl/urihelper.hxx>
 #include <vcl/print.hxx>
@@ -67,12 +64,6 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdb/XColumn.hpp>
-//#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
-//#include <com/sun/star/beans/PropertyValue.hpp>
-//#endif
-//#ifndef _BASEDLGS_HXX
-//#include <sfx2/basedlgs.hxx>
-//#endif
 #include <dbmgr.hxx>
 #include <swunohelper.hxx>
 #include <vos/mutex.hxx>

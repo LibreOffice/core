@@ -53,11 +53,6 @@
 #include <comcore.hrc> // #111827#
 #include <undo.hrc>
 
-// #include <editeng/svxacorr.hxx>
-// #include <comphelper/processfactory.hxx>
-// #include <editeng/unolingu.hxx>
-// #include <unotools/localedatawrapper.hxx>
-
 // using namespace comphelper;
 
 inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }

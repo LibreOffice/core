@@ -47,8 +47,6 @@
 //diesem befreundet. So kann der FlowFrm anstelle des this-Pointer mit der
 //Referenz auf den SwFrm arbeiten.
 
-//#include "frame.hxx"   //fuer inlines
-
 class SwPageFrm;
 class SwRect;
 class SwBorderAttrs;

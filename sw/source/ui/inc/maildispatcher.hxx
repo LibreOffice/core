@@ -28,9 +28,6 @@
 #ifndef INCLUDED_MAILDISPATCHER_HXX
 #define INCLUDED_MAILDISPATCHER_HXX
 
-//#ifndef _COM_SUN_STAR_MAIL_XMAILSERVER_HPP_
-//#include "com/sun/star/mail/XMailServer.hpp"
-//#endif
 #include "com/sun/star/mail/XSmtpService.hpp"
 #include "com/sun/star/mail/XMailMessage.hpp"
 #include <osl/thread.hxx>

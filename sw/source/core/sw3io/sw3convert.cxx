@@ -71,26 +71,6 @@
 
 using namespace nsSwDocInfoSubType;
 
-
-//#include "poolfmt.hxx"        // fuer InSetExpField
-//#include "poolfmt.hrc"        // fuer InSetExpField
-
-//#if !defined(UNX) && !defined(MSC) && !defined(PPC) && !defined(CSET) && !defined(__MWERKS__) && !defined(WTC)
-
-//#define FIELDFNTAB_SIZE 37
-//#if FIELDFNTAB_SIZE != RES_FIELDS_END - RES_FIELDS_BEGIN
-//#error Feld-Tabelle ist ungueltigt. Wurden neue Hint-IDs zugefuegt ??
-//#endif
-
-//#endif
-
-//#define SWG_AUTHORITY_ENTRY_LCL   'E'
-
-//sal_Char __FAR_DATA sSW3IO_FixedField[] = "FixedExport";
-//sal_Char __FAR_DATA sSW3IO_AuthorityField[] = "AuthorityExport";
-/* #108791# */
-//sal_Char __FAR_DATA sSW3IO_DropDownField[] = "DropDownExport";
-
 struct OldFormats
 {
     NfIndexTableOffset  eFormatIdx;

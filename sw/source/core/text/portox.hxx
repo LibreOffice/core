@@ -29,7 +29,6 @@
 #define _PORTOX_HXX
 
 #include "portxt.hxx"
-//#include "porglue.hxx"
 
 /*************************************************************************
  *                      class SwToxPortion

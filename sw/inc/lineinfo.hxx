@@ -28,9 +28,6 @@
 #define SW_LINEINFO_HXX
 
 #include "calbck.hxx"
-//#ifndef _NUMRULE_HXX
-//#include <numrule.hxx>
-//#endif
 #include <editeng/numitem.hxx>
 #include "swdllapi.h"
 

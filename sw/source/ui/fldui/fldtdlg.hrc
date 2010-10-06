@@ -28,10 +28,6 @@
 #ifndef _FLDTDLG_HRC
 #define _FLDTDLG_HRC
 
-// #include -----------------------------------------------------------------
-
-// #define ------------------------------------------------------------------
-
 #define RC_FLDTDLG_BEGIN    0
 
 // Datenbankfeld-TabPage:
