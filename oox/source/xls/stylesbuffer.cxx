@@ -1787,6 +1787,34 @@ void Border::writeToPropertyMap( PropertyMap& rPropMap ) const
     }
 }
 
+namespace {
+
+bool lcl_isBorder(const ::com::sun::star::table::BorderLine& rBorder)
+{
+    return (rBorder.InnerLineWidth > 0) || (rBorder.OuterLineWidth > 0);
+}
+
+}
+
+bool Border::hasBorder() const
+{
+    const ApiBorderData::ApiTableBorder& rTabBorder = maApiData.maBorder;
+
+    if (rTabBorder.IsBottomLineValid && lcl_isBorder(rTabBorder.BottomLine))
+        return true;
+
+    if (rTabBorder.IsTopLineValid && lcl_isBorder(rTabBorder.TopLine))
+        return true;
+
+    if (rTabBorder.IsLeftLineValid && lcl_isBorder(rTabBorder.LeftLine))
+        return true;
+
+    if (rTabBorder.IsRightLineValid && lcl_isBorder(rTabBorder.RightLine))
+        return true;
+
+    return false;
+}
+
 BorderLineModel* Border::getBorderLine( sal_Int32 nElement )
 {
     switch( nElement )
@@ -2482,6 +2510,11 @@ void Xf::writeToPropertyMap( PropertyMap& rPropMap ) const
         rStyles.writeFillToPropertyMap( rPropMap, maModel.mnFillId );
     if( maModel.mbAlignUsed || maModel.mbBorderUsed )
         rPropMap[ PROP_RotateReference ] <<= meRotationRef;
+
+    ::com::sun::star::table::CellVertJustify eRotRef = ::com::sun::star::table::CellVertJustify_STANDARD;
+    if (maModel.mbBorderUsed && rStyles.hasBorder(maModel.mnBorderId) && maAlignment.getApiData().mnRotation)
+        eRotRef = ::com::sun::star::table::CellVertJustify_BOTTOM;
+    rPropMap[ PROP_RotateReference ] <<= eRotRef;
 }
 
 void Xf::writeToPropertySet( PropertySet& rPropSet ) const
@@ -3459,6 +3492,12 @@ void StylesBuffer::writeCellXfToPropertySet( PropertySet& rPropSet, sal_Int32 nX
 {
     if( Xf* pXf = maCellXfs.get( nXfId ).get() )
         pXf->writeToPropertySet( rPropSet );
+}
+
+bool StylesBuffer::hasBorder( sal_Int32 nBorderId ) const
+{
+    Border* pBorder = maBorders.get( nBorderId ).get();
+    return pBorder && pBorder->hasBorder();
 }
 
 void StylesBuffer::writeStyleXfToPropertySet( PropertySet& rPropSet, sal_Int32 nXfId ) const
