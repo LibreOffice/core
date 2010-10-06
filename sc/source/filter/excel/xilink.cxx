@@ -404,28 +404,28 @@ void XclImpSupbookTab::LoadCachedValues(ScExternalRefCache::TableTypeRef pCacheT
             {
                 bool b = p->GetBool();
                 ScExternalRefCache::TokenRef pToken(new formula::FormulaDoubleToken(b ? 1.0 : 0.0));
-                pCacheTable->setCell(rAddr.mnCol, rAddr.mnRow, pToken);
+                pCacheTable->setCell(rAddr.mnCol, rAddr.mnRow, pToken, 0, false);
             }
             break;
             case EXC_CACHEDVAL_DOUBLE:
             {
                 double f = p->GetValue();
                 ScExternalRefCache::TokenRef pToken(new formula::FormulaDoubleToken(f));
-                pCacheTable->setCell(rAddr.mnCol, rAddr.mnRow, pToken);
+                pCacheTable->setCell(rAddr.mnCol, rAddr.mnRow, pToken, 0, false);
             }
             break;
             case EXC_CACHEDVAL_ERROR:
             {
                 double fError = XclTools::ErrorToDouble( p->GetXclError() );
                 ScExternalRefCache::TokenRef pToken(new formula::FormulaDoubleToken(fError));
-                pCacheTable->setCell(rAddr.mnCol, rAddr.mnRow, pToken);
+                pCacheTable->setCell(rAddr.mnCol, rAddr.mnRow, pToken, 0, false);
             }
             break;
             case EXC_CACHEDVAL_STRING:
             {
                 const String& rStr = p->GetString();
                 ScExternalRefCache::TokenRef pToken(new formula::FormulaStringToken(rStr));
-                pCacheTable->setCell(rAddr.mnCol, rAddr.mnRow, pToken);
+                pCacheTable->setCell(rAddr.mnCol, rAddr.mnRow, pToken, 0, false);
             }
             break;
             default:
