@@ -46,7 +46,6 @@ namespace chart
 //.............................................................................
 
 
-//static
 Reference< chart2::XLegend > LegendHelper::showLegend( const Reference< frame::XModel >& xModel
                                                     , const uno::Reference< uno::XComponentContext >& xContext )
 {
@@ -78,7 +77,6 @@ Reference< chart2::XLegend > LegendHelper::showLegend( const Reference< frame::X
     return xLegend;
 }
 
-//static
 void LegendHelper::hideLegend( const Reference< frame::XModel >& xModel )
 {
     uno::Reference< chart2::XLegend > xLegend = LegendHelper::getLegend( xModel, 0, false );
@@ -89,7 +87,6 @@ void LegendHelper::hideLegend( const Reference< frame::XModel >& xModel )
     }
 }
 
-// static
 uno::Reference< chart2::XLegend > LegendHelper::getLegend(
       const uno::Reference< frame::XModel >& xModel
     , const uno::Reference< uno::XComponentContext >& xContext
@@ -127,7 +124,6 @@ uno::Reference< chart2::XLegend > LegendHelper::getLegend(
     return xResult;
 }
 
-// static
 bool LegendHelper::hasLegend( const uno::Reference< chart2::XDiagram > & xDiagram )
 {
     bool bReturn = false;

@@ -108,7 +108,6 @@ void LineProperties::AddDefaultsToMap(
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LINE_JOINT, drawing::LineJoint_ROUND );
 }
 
-//static
 bool LineProperties::IsLineVisible( const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet >& xLineProperties )
 {
@@ -137,7 +136,6 @@ bool LineProperties::IsLineVisible( const ::com::sun::star::uno::Reference<
     return bRet;
 }
 
-//static
 void LineProperties::SetLineVisible( const ::com::sun::star::uno::Reference<
     ::com::sun::star::beans::XPropertySet >& xLineProperties )
 {
@@ -162,7 +160,6 @@ void LineProperties::SetLineVisible( const ::com::sun::star::uno::Reference<
     }
 }
 
-//static
 void LineProperties::SetLineInvisible( const ::com::sun::star::uno::Reference<
     ::com::sun::star::beans::XPropertySet >& xLineProperties )
 {

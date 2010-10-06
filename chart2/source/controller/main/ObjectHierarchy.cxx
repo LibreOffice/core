@@ -630,13 +630,11 @@ ObjectHierarchy::ObjectHierarchy(
 ObjectHierarchy::~ObjectHierarchy()
 {}
 
-// static
 ObjectHierarchy::tOID ObjectHierarchy::getRootNodeOID()
 {
     return ObjectIdentifier( C2U( "ROOT" ) );
 }
 
-// static
 bool ObjectHierarchy::isRootNode( const ObjectHierarchy::tOID& rOID )
 {
     return ( rOID == ObjectHierarchy::getRootNodeOID() );

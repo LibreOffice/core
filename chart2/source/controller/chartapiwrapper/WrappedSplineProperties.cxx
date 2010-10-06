@@ -197,7 +197,6 @@ enum
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-//static
 void WrappedSplineProperties::addProperties( ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
@@ -226,7 +225,6 @@ void WrappedSplineProperties::addProperties( ::std::vector< Property > & rOutPro
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-//static
 void WrappedSplineProperties::addWrappedProperties( std::vector< WrappedProperty* >& rList
                                     , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {

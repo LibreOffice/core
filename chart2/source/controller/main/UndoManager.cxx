@@ -408,7 +408,6 @@ sal_Int64 UndoManager::getSomething( const Sequence< sal_Int8 >& rId )
     return 0;
 }
 
-// static
 const Sequence< sal_Int8 >& UndoManager::getUnoTunnelId()
 {
     static Sequence< sal_Int8 >* pSeq = 0;
@@ -425,7 +424,6 @@ const Sequence< sal_Int8 >& UndoManager::getUnoTunnelId()
     return *pSeq;
 }
 
-// static
 UndoManager* UndoManager::getImplementation( const Reference< uno::XInterface > xObj )
 {
     UndoManager* pRet = NULL;

@@ -430,7 +430,6 @@ uno::Reference< util::XNumberFormats > SAL_CALL AxisWrapper::getNumberFormats()
     return uno::Reference< util::XNumberFormats >();
 }
 
-// static
 void AxisWrapper::getDimensionAndMainAxisBool( tAxisType eType, sal_Int32& rnDimensionIndex, sal_Bool& rbMainAxis )
 {
     switch( eType )

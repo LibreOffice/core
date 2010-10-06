@@ -239,7 +239,6 @@ bool ItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
 
 // --------------------------------------------------------------------------------
 
-//static
 void ItemConverter::InvalidateUnequalItems( SfxItemSet  &rDestSet, const SfxItemSet &rSourceSet )
 {
     SfxWhichIter      aIter (rSourceSet);

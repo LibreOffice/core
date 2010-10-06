@@ -249,7 +249,6 @@ SfxMapUnit ChartItemPool::GetMetric(USHORT /* nWhich */) const
     return SFX_MAPUNIT_100TH_MM;
 }
 
-// static
 SfxItemPool* ChartItemPool::CreateChartItemPool()
 {
     return new ChartItemPool();

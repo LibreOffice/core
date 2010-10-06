@@ -1172,7 +1172,6 @@ void ThreeDHelper::setCameraDistance(
     }
 }
 
-//static
 double ThreeDHelper::CameraDistanceToPerspective( double fCameraDistance )
 {
     double fRet = fCameraDistance;
@@ -1188,7 +1187,6 @@ double ThreeDHelper::CameraDistanceToPerspective( double fCameraDistance )
     return fRet;
 }
 
-//static
 double ThreeDHelper::PerspectiveToCameraDistance( double fPerspective )
 {
     double fRet = fPerspective;
@@ -1204,7 +1202,6 @@ double ThreeDHelper::PerspectiveToCameraDistance( double fPerspective )
     return fRet;
 }
 
-//static
 ThreeDLookScheme ThreeDHelper::detectScheme( const uno::Reference< XDiagram >& xDiagram )
 {
     ThreeDLookScheme aScheme = ThreeDLookScheme_Unknown;
@@ -1278,7 +1275,6 @@ void ThreeDHelper::setScheme( const uno::Reference< XDiagram >& xDiagram, ThreeD
 
 }
 
-//static
 void ThreeDHelper::set3DSettingsToDefault( const uno::Reference< beans::XPropertySet >& xSceneProperties )
 {
     Reference< beans::XPropertyState > xState( xSceneProperties, uno::UNO_QUERY );
@@ -1291,7 +1287,6 @@ void ThreeDHelper::set3DSettingsToDefault( const uno::Reference< beans::XPropert
     ThreeDHelper::setDefaultIllumination( xSceneProperties );
 }
 
-//static
 void ThreeDHelper::setDefaultRotation( const uno::Reference< beans::XPropertySet >& xSceneProperties, bool bPieOrDonut )
 {
     if( !xSceneProperties.is() )
@@ -1307,14 +1302,12 @@ void ThreeDHelper::setDefaultRotation( const uno::Reference< beans::XPropertySet
         uno::makeAny( BaseGFXHelper::B3DHomMatrixToHomogenMatrix( aSceneRotation )));
 }
 
-//static
 void ThreeDHelper::setDefaultRotation( const uno::Reference< beans::XPropertySet >& xSceneProperties )
 {
     bool bPieOrDonut( DiagramHelper::isPieOrDonutChart( uno::Reference< XDiagram >(xSceneProperties, uno::UNO_QUERY) ) );
     ThreeDHelper::setDefaultRotation( xSceneProperties, bPieOrDonut );
 }
 
-//static
 void ThreeDHelper::setDefaultIllumination( const uno::Reference< beans::XPropertySet >& xSceneProperties )
 {
     if( !xSceneProperties.is() )
@@ -1341,7 +1334,6 @@ void ThreeDHelper::setDefaultIllumination( const uno::Reference< beans::XPropert
     lcl_setLightsForScheme( xSceneProperties, aScheme );
 }
 
-//static
 void ThreeDHelper::getRoundedEdgesAndObjectLines(
             const uno::Reference< XDiagram > & xDiagram
             , sal_Int32& rnRoundedEdges, sal_Int32& rnObjectLines )
@@ -1441,7 +1433,6 @@ void ThreeDHelper::getRoundedEdgesAndObjectLines(
         ASSERT_EXCEPTION( e );
     }
 }
-//static
 void ThreeDHelper::setRoundedEdgesAndObjectLines(
             const uno::Reference< XDiagram > & xDiagram
             , sal_Int32 nRoundedEdges, sal_Int32 nObjectLines )
@@ -1471,7 +1462,6 @@ void ThreeDHelper::setRoundedEdgesAndObjectLines(
     }
 }
 
-//static
 CuboidPlanePosition ThreeDHelper::getAutomaticCuboidPlanePositionForStandardLeftWall( const Reference< beans::XPropertySet >& xSceneProperties )
 {
     CuboidPlanePosition eRet(CuboidPlanePosition_Left);
@@ -1488,7 +1478,6 @@ CuboidPlanePosition ThreeDHelper::getAutomaticCuboidPlanePositionForStandardLeft
     return eRet;
 }
 
-//static
 CuboidPlanePosition ThreeDHelper::getAutomaticCuboidPlanePositionForStandardBackWall( const Reference< beans::XPropertySet >& xSceneProperties )
 {
     CuboidPlanePosition eRet(CuboidPlanePosition_Back);
@@ -1505,7 +1494,6 @@ CuboidPlanePosition ThreeDHelper::getAutomaticCuboidPlanePositionForStandardBack
     return eRet;
 }
 
-//static
 CuboidPlanePosition ThreeDHelper::getAutomaticCuboidPlanePositionForStandardBottom( const Reference< beans::XPropertySet >& xSceneProperties )
 {
     CuboidPlanePosition eRet(CuboidPlanePosition_Bottom);

@@ -92,7 +92,6 @@ beans::PropertyState WrappedIgnoreProperty::getPropertyState( const Reference< b
              : beans::PropertyState_DIRECT_VALUE );
 }
 
-//static
 void WrappedIgnoreProperties::addIgnoreLineProperties( std::vector< WrappedProperty* >& rList )
 {
     rList.push_back( new WrappedIgnoreProperty( C2U( "LineStyle" ), uno::makeAny( drawing::LineStyle_SOLID ) ) );
@@ -104,14 +103,12 @@ void WrappedIgnoreProperties::addIgnoreLineProperties( std::vector< WrappedPrope
     rList.push_back( new WrappedIgnoreProperty( C2U( "LineJoint" ), uno::makeAny( drawing::LineJoint_ROUND ) ) );
 }
 
-//static
 void WrappedIgnoreProperties::addIgnoreFillProperties( std::vector< WrappedProperty* >& rList )
 {
     addIgnoreFillProperties_without_BitmapProperties( rList );
     addIgnoreFillProperties_only_BitmapProperties( rList );
 }
 
-//static
 void WrappedIgnoreProperties::addIgnoreFillProperties_without_BitmapProperties( ::std::vector< WrappedProperty* >& rList )
 {
     rList.push_back( new WrappedIgnoreProperty( C2U( "FillStyle" ), uno::makeAny( drawing::FillStyle_SOLID ) ) );
@@ -126,7 +123,6 @@ void WrappedIgnoreProperties::addIgnoreFillProperties_without_BitmapProperties( 
     rList.push_back( new WrappedIgnoreProperty( C2U( "FillBackground" ), uno::makeAny( sal_Bool(sal_False) ) ) );
 }
 
-//static
 void WrappedIgnoreProperties::addIgnoreFillProperties_only_BitmapProperties( ::std::vector< WrappedProperty* >& rList )
 {
 //     rList.push_back( new WrappedIgnoreProperty( C2U( "FillBitmapName" ), uno::makeAny( ::rtl::OUString() ) ) );

@@ -42,7 +42,6 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
-//static
 bool ColorPerPointHelper::hasPointOwnColor(
         const ::com::sun::star::uno::Reference<
               ::com::sun::star::beans::XPropertySet >& xDataSeriesProperties
@@ -72,7 +71,6 @@ bool ColorPerPointHelper::hasPointOwnColor(
     return false;
 }
 
-// static
 bool ColorPerPointHelper::hasPointOwnProperties(
     const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet >& xSeriesProperties

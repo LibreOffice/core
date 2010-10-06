@@ -438,7 +438,6 @@ bool ChartTypeHelper::noBordersForSimpleScheme( const uno::Reference< chart2::XC
     return sal_False;
 }
 
-//static
 sal_Int32 ChartTypeHelper::getDefaultDirectLightColor( bool bSimple, const uno::Reference< chart2::XChartType >& xChartType )
 {
     sal_Int32 nRet = static_cast< sal_Int32 >( 0x808080 ); // grey
@@ -459,7 +458,6 @@ sal_Int32 ChartTypeHelper::getDefaultDirectLightColor( bool bSimple, const uno::
     return nRet;
 }
 
-//static
 sal_Int32 ChartTypeHelper::getDefaultAmbientLightColor( bool bSimple, const uno::Reference< chart2::XChartType >& xChartType )
 {
     sal_Int32 nRet = static_cast< sal_Int32 >( 0x999999 ); // grey40

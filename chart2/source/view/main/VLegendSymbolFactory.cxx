@@ -104,7 +104,6 @@ void lcl_setPropetiesToShape(
 namespace chart
 {
 
-// static
 Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
     const Reference< drawing::XShapes > xSymbolContainer,
     chart2::LegendSymbolStyle eStyle,

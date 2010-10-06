@@ -146,7 +146,6 @@ void DataSourceTabControl::EnableTabToggling()
 
 // ----------------------------------------
 
-// static
 USHORT DataSourceDialog::m_nLastPageId = 0;
 
 DataSourceDialog::DataSourceDialog(

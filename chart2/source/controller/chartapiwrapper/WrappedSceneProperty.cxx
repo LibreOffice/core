@@ -46,7 +46,6 @@ namespace chart
 namespace wrapper
 {
 
-//static
 void WrappedSceneProperty::addWrappedProperties( std::vector< WrappedProperty* >& rList
                 , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {

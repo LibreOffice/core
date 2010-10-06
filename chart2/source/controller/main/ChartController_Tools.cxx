@@ -581,7 +581,6 @@ void ChartController::executeDispatch_Cut()
     executeDispatch_Delete();
 }
 
-//static
 bool ChartController::isObjectDeleteable( const uno::Any& rSelection )
 {
     ObjectIdentifier aSelOID( rSelection );

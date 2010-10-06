@@ -424,7 +424,6 @@ void DrawViewWrapper::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
     }
 }
 
-//static
 SdrObject* DrawViewWrapper::getSdrObject( const uno::Reference<
                     drawing::XShape >& xShape )
 {

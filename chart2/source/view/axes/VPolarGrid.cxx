@@ -76,7 +76,6 @@ void VPolarGrid::getAllTickInfos( sal_Int32 nDimensionIndex, ::std::vector< ::st
     aTickmarkHelper.getAllTicks( rAllTickInfos );
 }
 
-//static
 void VPolarGrid::createLinePointSequence_ForAngleAxis(
         drawing::PointSequenceSequence& rPoints
         , ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos

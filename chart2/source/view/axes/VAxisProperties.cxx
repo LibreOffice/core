@@ -157,7 +157,6 @@ TickmarkProperties AxisProperties::makeTickmarkPropertiesForComplexCategories(
     return aTickmarkProperties;
 }
 
-//static
 TickmarkProperties AxisProperties::getBiggestTickmarkProperties()
 {
     TickmarkProperties aTickmarkProperties;

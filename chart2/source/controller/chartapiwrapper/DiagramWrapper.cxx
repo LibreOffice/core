@@ -572,7 +572,6 @@ OUString lcl_getDiagramType( const OUString & rTemplateServiceName )
 }
 
 typedef ::comphelper::MakeMap< ::rtl::OUString, ::rtl::OUString > tMakeStringStringMap;
-//static
 const tMakeStringStringMap& lcl_getChartTypeNameMap()
 {
     static tMakeStringStringMap g_aChartTypeNameMap =

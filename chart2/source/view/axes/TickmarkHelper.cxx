@@ -339,7 +339,6 @@ TickInfo* EquidistantTickIter::nextInfo()
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-//static
 double TickmarkHelper::getMinimumAtIncrement( double fMin, const ExplicitIncrementData& rIncrement )
 {
     //the returned value will be <= fMin and on a Major Tick given by rIncrement
@@ -358,7 +357,6 @@ double TickmarkHelper::getMinimumAtIncrement( double fMin, const ExplicitIncreme
     }
     return fRet;
 }
-//static
 double TickmarkHelper::getMaximumAtIncrement( double fMax, const ExplicitIncrementData& rIncrement )
 {
     //the returned value will be >= fMax and on a Major Tick given by rIncrement
@@ -781,7 +779,6 @@ bool TickmarkHelper_2D::isVerticalAxis() const
     return ( m_aAxisStartScreenPosition2D.getX() == m_aAxisEndScreenPosition2D.getX() );
 }
 
-//static
 sal_Int32 TickmarkHelper_2D::getTickScreenDistance( TickIter& rIter )
 {
     //return the positive distance between the two first tickmarks in screen values

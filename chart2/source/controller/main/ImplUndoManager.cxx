@@ -143,7 +143,6 @@ OUString UndoElement::getActionString() const
     return m_aActionString;
 }
 
-// static
 Reference< frame::XModel > UndoElement::cloneModel( const Reference< frame::XModel > & xModel )
 {
     Reference< frame::XModel > xResult;
@@ -155,7 +154,6 @@ Reference< frame::XModel > UndoElement::cloneModel( const Reference< frame::XMod
     return xResult;
 }
 
-// static
 void UndoElement::applyModelContentToModel(
     Reference< frame::XModel > & xInOutModelToChange,
     const Reference< frame::XModel > & xModelToCopyFrom,

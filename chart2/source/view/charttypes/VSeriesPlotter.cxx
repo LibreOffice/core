@@ -2070,7 +2070,6 @@ std::vector< ViewLegendEntry > SAL_CALL VSeriesPlotter::createLegendEntriesForCh
     return std::vector< ViewLegendEntry >();
 }
 
-//static
 VSeriesPlotter* VSeriesPlotter::createSeriesPlotter(
     const uno::Reference<XChartType>& xChartTypeModel
     , sal_Int32 nDimensionCount

@@ -712,19 +712,15 @@ bool DialogModel::setData(
     return true;
 }
 
-// static
 OUString DialogModel::ConvertRoleFromInternalToUI( const OUString & rRoleString )
 {
     return lcl_ConvertRole( rRoleString, true );
 }
 
-// static
 OUString DialogModel::GetRoleDataLabel()
 {
     return OUString( String( ::chart::SchResId( STR_OBJECT_DATALABELS )));
 }
-
-// static
 
 sal_Int32 DialogModel::GetRoleIndexForSorting( const ::rtl::OUString & rInternalRoleString )
 {
