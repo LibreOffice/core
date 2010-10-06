@@ -65,3 +65,11 @@ DEF1EXPORTFILE= exports.dxp
 
 
 .INCLUDE :  target.mk
+
+ALLTAR : $(MISC)/scriptframe.component
+
+$(MISC)/scriptframe.component .ERRREMOVE : \
+        $(SOLARENV)/bin/createcomponent.xslt scriptframe.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt scriptframe.component
