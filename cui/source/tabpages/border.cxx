@@ -564,9 +564,10 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
     {
         // Do all visible lines show the same line widths?
         USHORT nPrim, nDist, nSecn;
-        bool bWidthEq = aFrameSel.GetVisibleWidth( nPrim, nDist, nSecn );
+        SvxBorderStyle nStyle;
+        bool bWidthEq = aFrameSel.GetVisibleWidth( nPrim, nDist, nSecn, nStyle );
         if( bWidthEq )
-            aLbLineStyle.SelectEntry( nPrim * 100, nSecn * 100, nDist * 100 );
+            aLbLineStyle.SelectEntry( nPrim * 100, nSecn * 100, nDist * 100, nStyle );
         else
             aLbLineStyle.SelectEntryPos( 1 );
 
@@ -931,13 +932,31 @@ IMPL_LINK( SvxBorderTabPage, SelColHdl_Impl, ListBox *, pLb )
 
 // -----------------------------------------------------------------------
 
+SvxBorderStyle lcl_getBorderStyle( USHORT nStyle )
+{
+    SvxBorderStyle nResult = SOLID;
+    switch ( nStyle )
+    {
+        case STYLE_DOTTED:
+            nResult = DOTTED;
+            break;
+        case STYLE_DASHED:
+            nResult = DASHED;
+            break;
+        default:
+            nResult = SOLID;
+    }
+    return nResult;
+}
+
 IMPL_LINK( SvxBorderTabPage, SelStyleHdl_Impl, ListBox *, pLb )
 {
     if ( pLb == &aLbLineStyle )
         aFrameSel.SetStyleToSelection(
             static_cast< USHORT >( aLbLineStyle.GetSelectEntryLine1() / 100 ),
             static_cast< USHORT >( aLbLineStyle.GetSelectEntryDistance() / 100 ),
-            static_cast< USHORT >( aLbLineStyle.GetSelectEntryLine2() / 100 ) );
+            static_cast< USHORT >( aLbLineStyle.GetSelectEntryLine2() / 100 ),
+            lcl_getBorderStyle( aLbLineStyle.GetSelectEntryStyle() ) );
 
     return 0;
 }
@@ -1101,6 +1120,8 @@ void SvxBorderTabPage::FillLineListBox_Impl()
 
     aLbLineStyle.InsertEntry( LINE_WIDTH0 );
     aLbLineStyle.InsertEntry( LINE_WIDTH5 );
+    aLbLineStyle.InsertEntry( LINE_WIDTH5, 0, 0, STYLE_DOTTED );
+    aLbLineStyle.InsertEntry( LINE_WIDTH5, 0, 0, STYLE_DASHED );
     aLbLineStyle.InsertEntry( LINE_WIDTH1 );
     aLbLineStyle.InsertEntry( LINE_WIDTH2 );
     aLbLineStyle.InsertEntry( LINE_WIDTH3 );
