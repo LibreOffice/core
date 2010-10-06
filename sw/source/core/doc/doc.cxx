@@ -126,11 +126,6 @@
 // --> OD 2005-08-29 #125370#
 #include <layouter.hxx>
 // <--
-// --> 3.7.2010 i #972
-#include <toolkit/helper/vclunohelper.hxx>
-#include <comphelper/types.hxx>
-#include <fmtornt.hxx>
-// <--
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;

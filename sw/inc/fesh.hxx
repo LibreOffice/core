@@ -549,10 +549,6 @@ public:
 
     BOOL ReplaceSdrObj( const String& rGrfName, const String& rFltName,
                         const Graphic* pGrf = 0 );
-    // Sets the format of the object to be aligned baseline to baseline
-    // for starmath formulas aligned as character.
-    // Should be called only after the formula is parsed!
-    void SetBaselineFromSm( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& xObj , SwFrmFmt* pFrmFmt = 0 );
 
 //------------------------------------------
 

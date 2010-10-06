@@ -169,15 +169,3 @@ void SwOleClient::MakeVisible()
     const SwWrtShell &rSh  = ((SwView*)GetViewShell())->GetWrtShell();
     rSh.MakeObjVisible( GetObject() );
 }
-
-void SwOleClient::FormatChanged()
-{
-    const uno::Reference < embed::XEmbeddedObject >& xObj = GetObject();
-
-    SvGlobalName aCLSID( xObj->getClassID() );
-    if ( SotExchange::IsMath( aCLSID ) )
-    {
-        SwWrtShell &rSh = ((SwView*)GetViewShell())->GetWrtShell();
-        rSh.SetBaselineFromSm( xObj );
-    }
-}
