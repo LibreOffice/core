@@ -729,7 +729,7 @@ SFX_IMPL_INTERFACE(SmViewShell, SfxViewShell, SmResId(0))
 }
 
 
-SFX_IMPL_VIEWFACTORY(SmViewShell, SmResId(RID_VIEWNAME))
+SFX_IMPL_NAMED_VIEWFACTORY(SmViewShell, "Default")
 {
     SFX_VIEW_REGISTRATION(SmDocShell);
 }
