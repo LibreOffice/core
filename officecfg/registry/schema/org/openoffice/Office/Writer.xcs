@@ -2403,7 +2403,7 @@
 						<desc>Specifies if numbers in a table are recognized or if they are saved in a text format.</desc>
 						<label>Number recognition</label>
 					</info>
-                    <value>true</value>
+                    <value>false</value>
 				</prop>
 				<prop oor:name="NumberFormatRecognition" oor:type="xs:boolean">
 					<!-- OldPath: Writer/Insert/IntoTables -->
@@ -2414,7 +2414,7 @@
 						<desc>Specifies if only entries with the defined format are accepted. This option is only available if the number format recognition is active (Number_recognition = True).</desc>
 						<label>Number format recognition</label>
 					</info>
-					<value>true</value>
+					<value>false</value>
 				</prop>
 				<prop oor:name="Alignment" oor:type="xs:boolean">
 					<!-- OldPath: Writer/Insert/IntoTables -->
