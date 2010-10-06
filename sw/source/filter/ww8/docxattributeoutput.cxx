@@ -1131,6 +1131,20 @@ static void impl_borderLine( FSHelperPtr pSerializer, sal_Int32 elementToken, co
             pVal = ( sal_Char* )"thickThinMediumGap";
         }
     }
+    else
+    {
+        switch ( pBorderLine->GetStyle( ) )
+        {
+            case DOTTED:
+                pVal = ( sal_Char* )"dotted";
+                break;
+            case DASHED:
+                pVal = ( sal_Char* )"dashed";
+                break;
+            default:
+                break;
+        }
+    }
 
     pAttr->add( FSNS( XML_w, XML_val ), OString( pVal ) );
 

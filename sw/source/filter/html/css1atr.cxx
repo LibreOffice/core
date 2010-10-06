@@ -176,7 +176,6 @@ static Writer& OutCSS1_SvxULSpace_SvxLRSpace( Writer& rWrt,
 static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
                                  USHORT nMode, const String *pGrfName );
 static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt );
-static Writer& OutCSS1_SvxBox( Writer& rWrt, const SfxPoolItem& rHt );
 static Writer& OutCSS1_SwFmtFrmSize( Writer& rWrt, const SfxPoolItem& rHt,
                                      USHORT nMode );
 static Writer& OutCSS1_SvxFmtBreak_SwFmtPDesc_SvxFmtKeep( Writer& rWrt,
@@ -3600,8 +3599,24 @@ static void OutCSS1_SvxBorderLine( SwHTMLWriter& rHTMLWrt,
     }
 
     // Linien-Stil: solid oder double
-    ((sOut += ' ')
-        += (bDouble ? sCSS1_PV_double : sCSS1_PV_solid)) += ' ';
+    sOut += ' ';
+    if ( bDouble )
+        sOut += sCSS1_PV_double;
+    else
+    {
+        switch ( pLine->GetStyle( ) )
+        {
+            case DOTTED:
+                sOut += sCSS1_PV_dotted;
+                break;
+            case DASHED:
+                sOut += sCSS1_PV_dashed;
+                break;
+            default:
+                sOut += sCSS1_PV_solid;
+        }
+    }
+    sOut += ' ';
 
     // und noch die Farbe
     GetCSS1Color( pLine->GetColor(), sOut );
@@ -3609,14 +3624,14 @@ static void OutCSS1_SvxBorderLine( SwHTMLWriter& rHTMLWrt,
     rHTMLWrt.OutCSS1_PropertyAscii( pProperty, sOut );
 }
 
-static Writer& OutCSS1_SvxBox( Writer& rWrt, const SfxPoolItem& rHt )
+Writer& OutCSS1_SvxBox( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
 
     // Das Zeichen-Attribut wird nicht ausgegeben, wenn gerade
     // Optionen ausgegeben werden
-    if( !rHTMLWrt.IsHTMLMode(HTMLMODE_PARA_BORDER))
-        return rWrt;
+//    if( !rHTMLWrt.IsHTMLMode(HTMLMODE_PARA_BORDER))
+//        return rWrt;
 
     const SvxBoxItem& rBoxItem = (const SvxBoxItem&)rHt;
     const SvxBorderLine *pTop = rBoxItem.GetTop();

@@ -693,8 +693,18 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                             nWidth += pLine->GetInWidth();
                         }
 
-                        enum XMLTokenEnum eStyle =
-                            (0 == nDistance) ? XML_SOLID : XML_DOUBLE;
+                        enum XMLTokenEnum eStyle = XML_SOLID;
+                        switch ( pLine->GetStyle( ) )
+                        {
+                            case DOTTED:
+                               eStyle = XML_DOTTED;
+                               break;
+                            case DASHED:
+                               eStyle = XML_DASHED;
+                               break;
+                            default:
+                            eStyle = (0 == nDistance) ? XML_SOLID : XML_DOUBLE;
+                        }
 
                         rUnitConverter.convertMeasure( aOut, nWidth );
                         aOut.append( sal_Unicode( ' ' ) );

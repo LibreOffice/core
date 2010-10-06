@@ -1196,10 +1196,10 @@ private:
     void SetPageBorder(SwFrmFmt &rFmt, const wwSection &rSection) const;
 
     INT32 MatchSdrBoxIntoFlyBoxItem( const Color& rLineColor,
-        MSO_LineStyle eLineStyle, MSO_SPT eShapeType, INT32 &rLineWidth,
+        MSO_LineStyle eLineStyle, MSO_LineDashing eDashing, MSO_SPT eShapeType, INT32 &rLineWidth,
         SvxBoxItem& rBox );
     void MatchSdrItemsIntoFlySet( SdrObject*    pSdrObj, SfxItemSet &aFlySet,
-        MSO_LineStyle eLineStyle, MSO_SPT eShapeType, Rectangle &rInnerDist );
+        MSO_LineStyle eLineStyle, MSO_LineDashing eDashing, MSO_SPT eShapeType, Rectangle &rInnerDist );
     void AdjustLRWrapForWordMargins(const SvxMSDffImportRec &rRecord,
         SvxLRSpaceItem &rLR);
     void AdjustULWrapForWordMargins(const SvxMSDffImportRec &rRecord,

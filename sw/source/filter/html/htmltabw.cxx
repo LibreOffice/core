@@ -433,6 +433,11 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
             OutCSS1_TableBGStyleOpt( rWrt, *pBrushItem );
     }
 
+    ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_style ) += "=\"";
+    rWrt.Strm() << sOut.GetBuffer( );
+    OutCSS1_SvxBox( rWrt, pBox->GetFrmFmt()->GetBox() );
+    sOut = '"';
+
     sal_uInt32 nNumFmt = 0;
     double nValue = 0.0;
     sal_Bool bNumFmt = sal_False, bValue = sal_False;
@@ -701,19 +706,6 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     // Anderenfalls enthaelt nBorder naemlich nur die Breite der Umrandung,
     // die genutzt wird, wenn gar kein sheet::Border angegeben ist.
     sal_Bool bHasAnyBorders = nFrameMask || bColsHaveBorder || bRowsHaveBorder;
-    if( bCollectBorderWidth || nBorder==0 || bHasAnyBorders )
-        (((sOut += ' ' ) += OOO_STRING_SVTOOLS_HTML_O_border ) += '=')
-            += ByteString::CreateFromInt32( rWrt.ToPixel( nBorder ) );
-
-    // BORDERCOLOR ausgeben
-
-    if( (sal_uInt32)-1 != nBorderColor && rWrt.bCfgOutStyles && bHasAnyBorders )
-    {
-        ((sOut += ' ' ) += OOO_STRING_SVTOOLS_HTML_O_bordercolor ) += '=';
-        rWrt.Strm() << sOut.GetBuffer();
-        HTMLOutFuncs::Out_Color( rWrt.Strm(), nBorderColor, rWrt.eDestEnc );
-        sOut.Erase();
-    }
 
     // CELLPADDING ausgeben: Stammt aus Layout oder ist berechnet
     (((sOut += ' ' ) += OOO_STRING_SVTOOLS_HTML_O_cellpadding ) += '=')

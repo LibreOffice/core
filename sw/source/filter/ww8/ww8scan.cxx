@@ -1286,8 +1286,8 @@ short WW8_BRC::DetermineBorderProperties(bool bVer67, short *pSpace,
         //Dashed/Dotted unsets double/thick
         if (nMSTotalWidth > 5)
         {
+            nIdx = nMSTotalWidth;
             nMSTotalWidth=1;
-            nIdx = 1;
         }
         nMSTotalWidth = nMSTotalWidth * nIdx * 15;
     }

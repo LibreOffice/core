@@ -27,6 +27,7 @@
 #ifndef _FRAME_HXX
 #define _FRAME_HXX
 #include <svl/svarray.hxx>
+#include <editeng/borderline.hxx>
 #include "swtypes.hxx"  // fuer SwTwips
 #include "swrect.hxx"
 #include "calbck.hxx"   // fuer SwClient
@@ -522,7 +523,7 @@ public:
                           const BOOL bLowerMode = FALSE,
                           const BOOL bLowerBorder = FALSE ) const;
     void PaintBorderLine( const SwRect&, const SwRect&, const SwPageFrm*,
-                          const Color *pColor ) const;
+                          const Color *pColor, const SvxBorderStyle = SOLID ) const;
 
     //Retouche, nicht im Bereich des uebergebenen Rect!
     void Retouche( const SwPageFrm *pPage, const SwRect &rRect ) const;

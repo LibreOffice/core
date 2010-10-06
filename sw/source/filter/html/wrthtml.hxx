@@ -598,6 +598,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
 Writer& OutHTML_NumBulListEnd( SwHTMLWriter& rWrt,
                                const SwHTMLNumRuleInfo& rNextInfo );
 
+Writer& OutCSS1_SvxBox( Writer& rWrt, const SfxPoolItem& rHt );
 
 #endif  //  _WRTHTML_HXX
 

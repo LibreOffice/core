@@ -1325,13 +1325,17 @@ void GetLineIndex(SvxBoxItem &rBox, short nLineThickness, short nSpace, BYTE nCo
     // object size
     switch (nIdx)
     {
+        case  6:
+            eCodeIdx = WW8_BordersSO::dotted;
+            break;
+        case  7:
+            eCodeIdx = WW8_BordersSO::dashed;
+            break;
         // First the single lines
         case  1:
         case  2:
         case  5:
         // and the unsupported special cases which we map to a single line
-        case  6:
-        case  7:
         case  8:
         case  9:
         case 22:
@@ -1456,6 +1460,7 @@ void GetLineIndex(SvxBoxItem &rBox, short nLineThickness, short nSpace, BYTE nCo
     aLine.SetOutWidth(rBorders.mnOut);
     aLine.SetInWidth(rBorders.mnIn);
     aLine.SetDistance(rBorders.mnDist);
+    aLine.SetStyle( rBorders.mnType );
 
     //No AUTO for borders as yet, so if AUTO, use BLACK
     if (nCol == 0)
@@ -1574,7 +1579,7 @@ bool SwWW8ImplReader::SetShadow(SvxShadowItem& rShadow, const short *pSizeArray,
     const WW8_BRC *pbrc) const
 {
     bool bRet = (
-                ( bVer67 ? (pbrc[WW8_RIGHT].aBits1[ 1 ] & 0x20 )
+                ( bVer67 ? (pbrc[WW8_RIGHT].aBits1[ 0 ] & 0x20 )
                          : (pbrc[WW8_RIGHT].aBits2[ 1 ] & 0x20 ) )
                 && (pSizeArray && pSizeArray[WW8_RIGHT])
                 );

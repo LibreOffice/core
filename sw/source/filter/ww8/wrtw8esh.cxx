@@ -1696,6 +1696,21 @@ INT32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt,
                     rPropOpt.AddOpt( ESCHER_Prop_lineStyle, eStyle );
                     rPropOpt.AddOpt( ESCHER_Prop_lineWidth,
                         DrawModelToEmu( nLineWidth ));
+
+                    MSO_LineDashing eDashing = mso_lineSolid;
+                    switch ( pLine->GetStyle( ) )
+                    {
+                        case  DASHED:
+                            eDashing = mso_lineDashGEL;
+                            break;
+                        case DOTTED:
+                            eDashing = mso_lineDotGEL;
+                            break;
+                        case SOLID:
+                        default:
+                            break;
+                    }
+                    rPropOpt.AddOpt( ESCHER_Prop_lineDashing, eDashing );
                     rPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x8000E );
 
                     //Use import logic to determine how much of border will go

@@ -4142,7 +4142,23 @@ WW8_BRC WW8Export::TranslateBorderLine(const SvxBorderLine& rLine,
         else if( bThick )
             brcType = 2;
         else
+        {
+
             brcType = 1;
+            if ( bWrtWW8 )
+            {
+                switch ( rLine.GetStyle( ) )
+                {
+                    case DOTTED:
+                        brcType = 6;
+                        break;
+                    case DASHED:
+                        brcType = 7;
+                    default:
+                        break;
+                }
+            }
+        }
 
         // BRC.dxpLineWidth
         if( bThick )
@@ -4161,6 +4177,10 @@ WW8_BRC WW8Export::TranslateBorderLine(const SvxBorderLine& rLine,
             nWidth = ( nWidth + 7 ) / 15;
             if( nWidth > 5 )
                 nWidth = 5;
+            if ( DOTTED == rLine.GetStyle( ) )
+                nWidth = 6;
+            else if ( DASHED == rLine.GetStyle( ) )
+                nWidth = 7;
         }
 
         if( 0 == nWidth )                       // ganz duenne Linie

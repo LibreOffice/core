@@ -53,6 +53,8 @@ using namespace ::com::sun::star;
 #define SVX_XML_BORDER_STYLE_NONE 0
 #define SVX_XML_BORDER_STYLE_SOLID 1
 #define SVX_XML_BORDER_STYLE_DOUBLE 2
+#define SVX_XML_BORDER_STYLE_DOTTED 3
+#define SVX_XML_BORDER_STYLE_DASHED 4
 
 #define SVX_XML_BORDER_WIDTH_THIN 0
 #define SVX_XML_BORDER_WIDTH_MIDDLE 1
@@ -65,8 +67,8 @@ const struct SvXMLEnumMapEntry psXML_BorderStyles[] =
     { XML_HIDDEN,     SVX_XML_BORDER_STYLE_NONE },
     { XML_SOLID,      SVX_XML_BORDER_STYLE_SOLID },
     { XML_DOUBLE,     SVX_XML_BORDER_STYLE_DOUBLE },
-    { XML_DOTTED,     SVX_XML_BORDER_STYLE_SOLID },
-    { XML_DASHED,     SVX_XML_BORDER_STYLE_SOLID },
+    { XML_DOTTED,     SVX_XML_BORDER_STYLE_DOTTED },
+    { XML_DASHED,     SVX_XML_BORDER_STYLE_DASHED },
     { XML_GROOVE,     SVX_XML_BORDER_STYLE_SOLID },
     { XML_RIDGE,      SVX_XML_BORDER_STYLE_SOLID },
     { XML_INSET,      SVX_XML_BORDER_STYLE_SOLID },
@@ -177,6 +179,23 @@ sal_Bool lcl_frmitems_parseXMLBorder( const OUString& rValue,
     return rHasStyle || rHasWidth || rHasColor;
 }
 
+void lcl_frmitems_setXMLBorderStyle( SvxBorderLine& rLine, sal_uInt16 nStyle )
+{
+    SvxBorderStyle eStyle = SOLID;
+    switch ( nStyle )
+    {
+        case SVX_XML_BORDER_STYLE_DOTTED:
+            eStyle = DOTTED;
+            break;
+        case SVX_XML_BORDER_STYLE_DASHED:
+            eStyle = DASHED;
+            break;
+        default:
+            eStyle = SOLID;
+    }
+    rLine.SetStyle( eStyle );
+}
+
 void lcl_frmitems_setXMLBorderWidth( SvxBorderLine& rLine,
                                      sal_uInt16 nOutWidth, sal_uInt16 nInWidth,
                                      sal_uInt16 nDistance )
@@ -264,7 +283,6 @@ sal_Bool lcl_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
            rpLine->SetOutWidth( aWidths[nNWidth+1] );
            rpLine->SetInWidth( aWidths[nNWidth+2] );
            rpLine->SetDistance( aWidths[nNWidth+3] );
-
        }
        else
        {
@@ -274,6 +292,7 @@ sal_Bool lcl_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
 
            lcl_frmitems_setXMLBorderWidth( *rpLine, nWidth, bDouble );
        }
+       lcl_frmitems_setXMLBorderStyle( *rpLine, nStyle );
    }
 
     // set color

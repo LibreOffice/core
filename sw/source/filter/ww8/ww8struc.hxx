@@ -34,6 +34,8 @@
 #include <tools/string.hxx>
 #include <sal/config.h>
 
+#include <editeng/borderline.hxx>
+
 #if defined  OSL_BIGENDIAN || SAL_TYPES_ALIGNMENT4 > 2 || defined UNX
 #   define __WW8_NEEDS_COPY
 #endif
@@ -289,12 +291,14 @@ public:
     USHORT mnOut;
     USHORT mnIn;
     USHORT mnDist;
+    SvxBorderStyle mnType;
 public:
     enum eBorderCode
     {
         single0, single1, single2, single3, single4, single5,
         double0, double1, double2, double3, double4, double5, double6,
         double7, double8, double9, double10,
+        dashed, dotted,
         none
     };
     static const WW8_BordersSO &Get0x01LineMatch(eBorderCode nIdx);

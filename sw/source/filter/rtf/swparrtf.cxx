@@ -2454,7 +2454,11 @@ void SwRTFParser::SetBorderLine(SvxBoxItem& rBox, sal_uInt16 nLine)
             break;
 
         case RTF_BRDRDOT:           // SO does not have dashed or dotted lines
+            nIdx = 6;
+            break;
         case RTF_BRDRDASH:
+            nIdx = 7;
+            break;
         case RTF_BRDRDASHSM:
         case RTF_BRDRDASHD:
         case RTF_BRDRDASHDD:

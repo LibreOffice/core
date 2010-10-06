@@ -1461,7 +1461,20 @@ void SwRTFWriter::OutRTFBorder(const SvxBorderLine* aLine, const USHORT nSpace )
     int nWidth = aLine->GetOutWidth();
 
     if(nDistance == 0)  // Single Line
-        Strm() << OOO_STRING_SVTOOLS_RTF_BRDRS;
+    {
+        switch ( aLine->GetStyle( ) )
+        {
+            case DOTTED:
+                Strm() << OOO_STRING_SVTOOLS_RTF_BRDRDOT;
+                break;
+            case DASHED:
+                Strm() << OOO_STRING_SVTOOLS_RTF_BRDRDASH;
+                break;
+            case SOLID:
+            default:
+                Strm() << OOO_STRING_SVTOOLS_RTF_BRDRS;
+        }
+    }
     else                // Double Line
     {
         if(nOutWidth == nInWidth)

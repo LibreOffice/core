@@ -183,13 +183,13 @@ static CSS1PropertyEnum __READONLY_DATA aBorderWidthTable[] =
     { 0,                    0   }
 };
 
-enum CSS1BorderStyle { CSS1_BS_NONE, CSS1_BS_SINGLE, CSS1_BS_DOUBLE };
+enum CSS1BorderStyle { CSS1_BS_NONE, CSS1_BS_SINGLE, CSS1_BS_DOUBLE, CSS1_BS_DOTTED, CSS1_BS_DASHED };
 
 static CSS1PropertyEnum __READONLY_DATA aBorderStyleTable[] =
 {
     { sCSS1_PV_none,        CSS1_BS_NONE        },
-    { sCSS1_PV_dotted,      CSS1_BS_SINGLE      },
-    { sCSS1_PV_dashed,      CSS1_BS_SINGLE      },
+    { sCSS1_PV_dotted,      CSS1_BS_DOTTED      },
+    { sCSS1_PV_dashed,      CSS1_BS_DASHED      },
     { sCSS1_PV_solid,       CSS1_BS_SINGLE      },
     { sCSS1_PV_double,      CSS1_BS_DOUBLE      },
     { sCSS1_PV_groove,      CSS1_BS_SINGLE      },
@@ -367,6 +367,12 @@ void SvxCSS1BorderInfo::SetBorderLine( USHORT nLine, SvxBoxItem &rBoxItem ) cons
 
     // Linien-Stil doppelt oder einfach?
     BOOL bDouble = eStyle == CSS1_BS_DOUBLE;
+    if ( eStyle == CSS1_BS_DOTTED )
+        aBorderLine.SetStyle( DOTTED );
+    else if ( eStyle == CSS1_BS_DASHED )
+        aBorderLine.SetStyle( DASHED );
+    else
+        aBorderLine.SetStyle( SOLID );
 
     // benannte Breite umrechnenen, wenn keine absolute gegeben ist
     if( nAbsWidth==USHRT_MAX )

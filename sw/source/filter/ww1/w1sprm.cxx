@@ -208,6 +208,7 @@ STOP1(Ww1SingleSprmPPageBreakBefore, RES_BREAK)
 SvxBorderLine* Ww1SingleSprmPBrc::SetBorder(SvxBorderLine* pLine, W1_BRC10* pBrc)
 {
     USHORT nCode;
+    SvxBorderStyle eStyle = SOLID;
     if(pBrc->dxpLine2WidthGet() == 0)
     {
         switch(pBrc->dxpLine1WidthGet())
@@ -219,9 +220,18 @@ SvxBorderLine* Ww1SingleSprmPBrc::SetBorder(SvxBorderLine* pLine, W1_BRC10* pBrc
         case 3: nCode = DEF_LINE_WIDTH_2; break;
         case 4: nCode = DEF_LINE_WIDTH_3; break;
         case 5: nCode = DEF_LINE_WIDTH_4; break;
+        case 6:
+                nCode = DEF_LINE_WIDTH_5;
+                eStyle = DOTTED;
+                break;
+        case 7:
+                nCode = DEF_LINE_WIDTH_5;
+                eStyle = DASHED;
+                break;
         }
         pLine->SetOutWidth(nCode);
         pLine->SetInWidth(0);
+        pLine->SetStyle( eStyle );
     }
     else
     {

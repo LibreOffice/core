@@ -1720,12 +1720,31 @@ static void OutTBLBorderLine(SwRTFWriter& rWrt, const SvxBorderLine* pLine,
     }
     else
     {
-        // einfache Linie
-        if( DEF_LINE_WIDTH_1 >= pLine->GetOutWidth() )
-            (( sLineStr = OOO_STRING_SVTOOLS_RTF_BRDRS ) += OOO_STRING_SVTOOLS_RTF_BRDRW ) +=
+        if ( DEF_LINE_WIDTH_0 == pLine->GetOutWidth( ) )
+            // Hairline
+            sLineStr = OOO_STRING_SVTOOLS_RTF_BRDRHAIR;
+        else if( 255 >= pLine->GetOutWidth() )
+        {
+            // Simple width simple
+            sLineStr = OOO_STRING_SVTOOLS_RTF_BRDRS;
+            switch ( pLine->GetStyle( ) )
+            {
+                case DOTTED:
+                    sLineStr = OOO_STRING_SVTOOLS_RTF_BRDRDOT;
+                    break;
+                case DASHED:
+                    sLineStr = OOO_STRING_SVTOOLS_RTF_BRDRDASH;
+                    break;
+                case SOLID:
+                default:
+                    break;
+            }
+            ( sLineStr += OOO_STRING_SVTOOLS_RTF_BRDRW ) +=
                         ByteString::CreateFromInt32( pLine->GetOutWidth() );
+        }
         else
-            (( sLineStr = OOO_STRING_SVTOOLS_RTF_BRDRTH ) += OOO_STRING_SVTOOLS_RTF_BRDRW ) +=
+            // Shouldn't happen with the OOo default width values
+            (( sLineStr = OOO_STRING_SVTOOLS_RTF_BRDRTH ) += sLineStr += OOO_STRING_SVTOOLS_RTF_BRDRW ) +=
                         ByteString::CreateFromInt32( pLine->GetOutWidth() / 2 );
     }
 

@@ -1132,6 +1132,7 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
                         MatchSdrItemsIntoFlySet( pTextObj,
                                                  aFlySet,
                                                  pRecord->eLineStyle,
+                                                 pRecord->eLineDashing,
                                                  pRecord->eShapeType,
                                                  aInnerDist );
 
@@ -1477,23 +1478,25 @@ const WW8_BordersSO &WW8_BordersSO::Get0x01LineMatch(eBorderCode eCode)
     // Deklarationen gemaess BOXITEM.HXX
     static const WW8_BordersSO aLineTabVer8[] =
     {
-/* 0*/  { DEF_LINE_WIDTH_0, 0, 0 },
-/* 1*/  { DEF_LINE_WIDTH_1, 0, 0 },
-/* 2*/  { DEF_LINE_WIDTH_2, 0, 0 },
-/* 3*/  { DEF_LINE_WIDTH_3, 0, 0 },
-/* 4*/  { DEF_LINE_WIDTH_4, 0, 0 },
-/* 5*/  { DEF_LINE_WIDTH_5, 0, 0 },
-/* 6*/  { DEF_DOUBLE_LINE0_OUT, DEF_DOUBLE_LINE0_IN, DEF_DOUBLE_LINE0_DIST },
-/* 7*/  { DEF_DOUBLE_LINE1_OUT, DEF_DOUBLE_LINE1_IN, DEF_DOUBLE_LINE1_DIST },
-/* 8*/  { DEF_DOUBLE_LINE2_OUT, DEF_DOUBLE_LINE2_IN, DEF_DOUBLE_LINE2_DIST },
-/* 9*/  { DEF_DOUBLE_LINE3_OUT, DEF_DOUBLE_LINE3_IN, DEF_DOUBLE_LINE3_DIST },
-/*10*/  { DEF_DOUBLE_LINE4_OUT, DEF_DOUBLE_LINE4_IN, DEF_DOUBLE_LINE4_DIST },
-/*11*/  { DEF_DOUBLE_LINE5_OUT, DEF_DOUBLE_LINE5_IN, DEF_DOUBLE_LINE5_DIST },
-/*12*/  { DEF_DOUBLE_LINE6_OUT, DEF_DOUBLE_LINE6_IN, DEF_DOUBLE_LINE6_DIST },
-/*13*/  { DEF_DOUBLE_LINE7_OUT, DEF_DOUBLE_LINE7_IN, DEF_DOUBLE_LINE7_DIST },
-/*14*/  { DEF_DOUBLE_LINE8_OUT, DEF_DOUBLE_LINE8_IN, DEF_DOUBLE_LINE8_DIST },
-/*15*/  { DEF_DOUBLE_LINE9_OUT, DEF_DOUBLE_LINE9_IN, DEF_DOUBLE_LINE9_DIST },
-/*16*/  { DEF_DOUBLE_LINE10_OUT,DEF_DOUBLE_LINE10_IN,DEF_DOUBLE_LINE10_DIST}
+/* 0*/  { DEF_LINE_WIDTH_0, 0, 0, SOLID },
+/* 1*/  { DEF_LINE_WIDTH_1, 0, 0, SOLID },
+/* 2*/  { DEF_LINE_WIDTH_2, 0, 0, SOLID },
+/* 3*/  { DEF_LINE_WIDTH_3, 0, 0, SOLID },
+/* 4*/  { DEF_LINE_WIDTH_4, 0, 0, SOLID },
+/* 5*/  { DEF_LINE_WIDTH_5, 0, 0, SOLID },
+/* 6*/  { DEF_DOUBLE_LINE0_OUT, DEF_DOUBLE_LINE0_IN, DEF_DOUBLE_LINE0_DIST, SOLID },
+/* 7*/  { DEF_DOUBLE_LINE1_OUT, DEF_DOUBLE_LINE1_IN, DEF_DOUBLE_LINE1_DIST, SOLID },
+/* 8*/  { DEF_DOUBLE_LINE2_OUT, DEF_DOUBLE_LINE2_IN, DEF_DOUBLE_LINE2_DIST, SOLID },
+/* 9*/  { DEF_DOUBLE_LINE3_OUT, DEF_DOUBLE_LINE3_IN, DEF_DOUBLE_LINE3_DIST, SOLID },
+/*10*/  { DEF_DOUBLE_LINE4_OUT, DEF_DOUBLE_LINE4_IN, DEF_DOUBLE_LINE4_DIST, SOLID },
+/*11*/  { DEF_DOUBLE_LINE5_OUT, DEF_DOUBLE_LINE5_IN, DEF_DOUBLE_LINE5_DIST, SOLID },
+/*12*/  { DEF_DOUBLE_LINE6_OUT, DEF_DOUBLE_LINE6_IN, DEF_DOUBLE_LINE6_DIST, SOLID },
+/*13*/  { DEF_DOUBLE_LINE7_OUT, DEF_DOUBLE_LINE7_IN, DEF_DOUBLE_LINE7_DIST, SOLID },
+/*14*/  { DEF_DOUBLE_LINE8_OUT, DEF_DOUBLE_LINE8_IN, DEF_DOUBLE_LINE8_DIST, SOLID },
+/*15*/  { DEF_DOUBLE_LINE9_OUT, DEF_DOUBLE_LINE9_IN, DEF_DOUBLE_LINE9_DIST, SOLID },
+/*16*/  { DEF_DOUBLE_LINE10_OUT,DEF_DOUBLE_LINE10_IN,DEF_DOUBLE_LINE10_DIST, SOLID},
+/*17*/  { DEF_LINE_WIDTH_5, 0, 0, DASHED },
+/*18*/  { DEF_LINE_WIDTH_5, 0, 0, DOTTED }
     };
     size_t nPos = static_cast<size_t>(eCode);
     ASSERT(nPos < sizeof(aLineTabVer8), "Impossible");
@@ -1562,7 +1565,7 @@ INT32 SwMSDffManager::GetEscherLineMatch(MSO_LineStyle eStyle,
 //words positioning of borders around floating objects is that of a
 //disturbed mind.
 INT32 SwWW8ImplReader::MatchSdrBoxIntoFlyBoxItem(const Color& rLineColor,
-    MSO_LineStyle eLineStyle, MSO_SPT eShapeType, INT32 &rLineThick,
+    MSO_LineStyle eLineStyle, MSO_LineDashing eDashing, MSO_SPT eShapeType, INT32 &rLineThick,
     SvxBoxItem& rBox )
 {
     INT32 nOutsideThick = 0;
@@ -1657,6 +1660,18 @@ INT32 SwWW8ImplReader::MatchSdrBoxIntoFlyBoxItem(const Color& rLineColor,
         break;
     }
 
+    switch( eDashing )
+    {
+        case mso_lineDashGEL:
+            nIdx = WW8_BordersSO::dashed;
+            break;
+        case mso_lineDotGEL:
+            nIdx = WW8_BordersSO::dotted;
+            break;
+        default:
+            break;
+    }
+
     if (WW8_BordersSO::none != nIdx)
     {
         SvxBorderLine aLine;
@@ -1667,6 +1682,7 @@ INT32 SwWW8ImplReader::MatchSdrBoxIntoFlyBoxItem(const Color& rLineColor,
         aLine.SetOutWidth(rBorders.mnOut);
         aLine.SetInWidth (rBorders.mnIn);
         aLine.SetDistance(rBorders.mnDist);
+        aLine.SetStyle( rBorders.mnType );
 
         for(USHORT nLine = 0; nLine < 4; ++nLine)
             rBox.SetLine(new SvxBorderLine( aLine ), nLine);
@@ -1678,7 +1694,7 @@ INT32 SwWW8ImplReader::MatchSdrBoxIntoFlyBoxItem(const Color& rLineColor,
 #define WW8ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
 
 void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
-    SfxItemSet& rFlySet, MSO_LineStyle eLineStyle, MSO_SPT eShapeType,
+    SfxItemSet& rFlySet, MSO_LineStyle eLineStyle, MSO_LineDashing eDashing, MSO_SPT eShapeType,
     Rectangle& rInnerDist )
 {
 /*
@@ -1740,7 +1756,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
             nLineThick = 15; // WW-default: 0.75 pt
 
         nOutside = MatchSdrBoxIntoFlyBoxItem(aLineColor, eLineStyle,
-            eShapeType, nLineThick, aBox);
+            eDashing, eShapeType, nLineThick, aBox);
     }
 
     rInnerDist.Left()+=nLineThick;
@@ -3008,7 +3024,7 @@ SwFlyFrmFmt* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
         rFlySet.Put(aFrmSize);
 
         MatchSdrItemsIntoFlySet( rpObject, rFlySet, pRecord->eLineStyle,
-            pRecord->eShapeType, aInnerDist );
+            pRecord->eLineDashing, pRecord->eShapeType, aInnerDist );
 
 
         SdrTextObj *pSdrTextObj = PTR_CAST(SdrTextObj, rpObject);
@@ -3133,7 +3149,7 @@ SwFlyFrmFmt* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObject,
         Rectangle aInnerDist(0, 0, 0, 0);
 
         MatchSdrItemsIntoFlySet(rpObject, rFlySet, pRecord->eLineStyle,
-            pRecord->eShapeType, aInnerDist);
+            pRecord->eLineDashing, pRecord->eShapeType, aInnerDist);
 
         MatchEscherMirrorIntoFlySet(*pRecord, aGrSet);
     }

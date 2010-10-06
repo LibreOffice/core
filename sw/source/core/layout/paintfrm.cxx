@@ -109,6 +109,9 @@
 #define COL_NOTES_SIDEPANE_SCROLLAREA       RGB_COLORDATA(230,230,220)
 #include <vcl/svapp.hxx>
 
+#include <svtools/borderhelper.hxx>
+
+
 using namespace ::com::sun::star;
 
 #define GETOBJSHELL()       ((SfxObjectShell*)rSh.GetDoc()->GetDocShell())
@@ -150,15 +153,17 @@ using namespace ::com::sun::star;
 class SwLineRect : public SwRect
 {
     const Color    *pColor;
+    SvxBorderStyle  nStyle;
     const SwTabFrm *pTab;
           BYTE      nSubColor;  //Hilfslinien einfaerben
           BOOL      bPainted;   //schon gepaintet?
           BYTE      nLock;      //Um die Linien zum Hell-Layer abzugrenzen.
 public:
-    SwLineRect( const SwRect &rRect, const Color *pCol,
+    SwLineRect( const SwRect &rRect, const Color *pCol, const SvxBorderStyle nStyle,
                 const SwTabFrm *pT , const BYTE nSCol );
 
     const Color         *GetColor() const { return pColor;}
+    SvxBorderStyle       GetStyle() const { return nStyle; }
     const SwTabFrm      *GetTab()   const { return pTab;  }
     void  SetPainted()                    { bPainted = TRUE; }
     void  Lock( BOOL bLock )              { if ( bLock )
@@ -180,7 +185,7 @@ class SwLineRects : public SwLRects
     USHORT nLastCount;  //unuetze Durchlaeufe im PaintLines verhindern.
 public:
     SwLineRects() : nLastCount( 0 ) {}
-    void AddLineRect( const SwRect& rRect,  const Color *pColor,
+    void AddLineRect( const SwRect& rRect,  const Color *pColor, const SvxBorderStyle nStyle,
                       const SwTabFrm *pTab, const BYTE nSCol );
     void ConnectEdges( OutputDevice *pOut );
     void PaintLines  ( OutputDevice *pOut );
@@ -411,10 +416,11 @@ SwSavePaintStatics::~SwSavePaintStatics()
 SV_IMPL_VARARR( SwLRects, SwLineRect );
 
 
-SwLineRect::SwLineRect( const SwRect &rRect, const Color *pCol,
+SwLineRect::SwLineRect( const SwRect &rRect, const Color *pCol, const SvxBorderStyle nStyl,
                         const SwTabFrm *pT, const BYTE nSCol ) :
     SwRect( rRect ),
     pColor( pCol ),
+    nStyle( nStyl ),
     pTab( pT ),
     nSubColor( nSCol ),
     bPainted( FALSE ),
@@ -459,7 +465,7 @@ BOOL SwLineRect::MakeUnion( const SwRect &rRect )
     return FALSE;
 }
 
-void SwLineRects::AddLineRect( const SwRect &rRect, const Color *pCol,
+void SwLineRects::AddLineRect( const SwRect &rRect, const Color *pCol, const SvxBorderStyle nStyle,
                                const SwTabFrm *pTab, const BYTE nSCol )
 {
     //Rueckwaerts durch, weil Linien die zusammengefasst werden koennen i.d.R.
@@ -478,7 +484,7 @@ void SwLineRects::AddLineRect( const SwRect &rRect, const Color *pCol,
                 return;
         }
     }
-    Insert( SwLineRect( rRect, pCol, pTab, nSCol ), Count() );
+    Insert( SwLineRect( rRect, pCol, nStyle, pTab, nSCol ), Count() );
 }
 
 void SwLineRects::ConnectEdges( OutputDevice *pOut )
@@ -585,7 +591,7 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
                             if ( !rL1.IsInside( aIns ) )
                                 continue;
                             const USHORT nTmpFree = Free();
-                            Insert( SwLineRect( aIns, rL1.GetColor(),
+                            Insert( SwLineRect( aIns, rL1.GetColor(), SOLID,
                                         rL1.GetTab(), SUBCOL_TAB ), Count() );
                             if ( !nTmpFree )
                             {
@@ -626,7 +632,7 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
                             if ( !rL1.IsInside( aIns ) )
                                 continue;
                             const USHORT nTmpFree = Free();
-                            Insert( SwLineRect( aIns, rL1.GetColor(),
+                            Insert( SwLineRect( aIns, rL1.GetColor(), SOLID,
                                         rL1.GetTab(), SUBCOL_TAB ), Count() );
                             if ( !nTmpFree )
                             {
@@ -656,7 +662,7 @@ inline void SwSubsRects::Ins( const SwRect &rRect, const BYTE nSCol )
     //Linien die kuerzer als die breiteste Linienbreite sind werden
     //nicht aufgenommen.
     if ( rRect.Height() > DEF_LINE_WIDTH_4 || rRect.Width() > DEF_LINE_WIDTH_4 )
-        Insert( SwLineRect( rRect, 0, 0, nSCol ), Count());
+        Insert( SwLineRect( rRect, 0, SOLID, 0, nSCol ), Count());
 }
 
 void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects )
@@ -712,7 +718,7 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects )
                         {
                             SwRect aNewSubsRect( aSubsLineRect );
                             aNewSubsRect.Bottom( nTmp );
-                            Insert( SwLineRect( aNewSubsRect, 0, 0,
+                            Insert( SwLineRect( aNewSubsRect, 0, aSubsLineRect.GetStyle(), 0,
                                                 aSubsLineRect.GetSubColor() ), Count());
                         }
                         nTmp = rLine.Bottom()+nPixelSzH+1;
@@ -720,7 +726,7 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects )
                         {
                             SwRect aNewSubsRect( aSubsLineRect );
                             aNewSubsRect.Top( nTmp );
-                            Insert( SwLineRect( aNewSubsRect, 0, 0,
+                            Insert( SwLineRect( aNewSubsRect, 0, aSubsLineRect.GetStyle(), 0,
                                                 aSubsLineRect.GetSubColor() ), Count());
                         }
                         Remove( i, 1 );
@@ -738,7 +744,7 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects )
                         {
                             SwRect aNewSubsRect( aSubsLineRect );
                             aNewSubsRect.Right( nTmp );
-                            Insert( SwLineRect( aNewSubsRect, 0, 0,
+                            Insert( SwLineRect( aNewSubsRect, 0, aSubsLineRect.GetStyle(), 0,
                                                 aSubsLineRect.GetSubColor() ), Count());
                         }
                         nTmp = rLine.Right()+nPixelSzW+1;
@@ -746,7 +752,7 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects )
                         {
                             SwRect aNewSubsRect( aSubsLineRect );
                             aNewSubsRect.Left( nTmp );
-                            Insert( SwLineRect( aNewSubsRect, 0, 0,
+                            Insert( SwLineRect( aNewSubsRect, 0, aSubsLineRect.GetStyle(), 0,
                                                 aSubsLineRect.GetSubColor() ), Count());
                         }
                         Remove( i, 1 );
@@ -765,6 +771,44 @@ void SwLineRects::LockLines( BOOL bLock )
         operator[](i).Lock( bLock );
 }
 
+void lcl_DrawDashedRect( OutputDevice * pOut, SwLineRect & rLRect )
+{
+    double nHalfLWidth = rLRect.Height(  );
+    if ( nHalfLWidth > 1 )
+    {
+        nHalfLWidth = nHalfLWidth / 2;
+    }
+    else
+    {
+        nHalfLWidth = 1;
+    }
+
+    long startX = rLRect.Left(  );
+    long startY = rLRect.Top(  ) + nHalfLWidth;
+    long endX = rLRect.Left(  ) + rLRect.Width(  );
+    long endY = rLRect.Top(  ) + nHalfLWidth;
+
+    if ( rLRect.Height(  ) > rLRect.Width(  ) )
+    {
+        nHalfLWidth = rLRect.Width(  );
+        if ( nHalfLWidth > 1 )
+        {
+            nHalfLWidth = nHalfLWidth / 2;
+        }
+        else
+        {
+            nHalfLWidth = 1;
+        }
+        startX = rLRect.Left(  ) + nHalfLWidth;
+        startY = rLRect.Top(  );
+        endX = rLRect.Left(  ) + nHalfLWidth;
+        endY = rLRect.Top(  ) + rLRect.Height(  );
+    }
+
+    svtools::DrawLine( *pOut, Point( startX, startY ), Point( endX, endY ),
+            sal_uInt32( nHalfLWidth * 2 ), rLRect.GetStyle( ) );
+}
+
 void SwLineRects::PaintLines( OutputDevice *pOut )
 {
     //Painten der Umrandungen. Leider muessen wir zweimal durch.
@@ -778,6 +822,7 @@ void SwLineRects::PaintLines( OutputDevice *pOut )
 
         // OD 2004-04-23 #116347#
         pOut->Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
+        pOut->SetFillColor();
         pOut->SetLineColor();
         ConnectEdges( pOut );
         const Color *pLast = 0;
@@ -836,11 +881,12 @@ void SwLineRects::PaintLines( OutputDevice *pOut )
                         Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
                         pOut->SetDrawMode( 0 );
 
-                    pOut->SetFillColor( *pLast );
+                    pOut->SetLineColor( *pLast );
                     pOut->SetDrawMode( nOldDrawMode );
                 }
+
                 if( !rLRect.IsEmpty() )
-                    pOut->DrawRect( rLRect.SVRect() );
+                    lcl_DrawDashedRect( pOut, rLRect );
                 rLRect.SetPainted();
             }
             else
@@ -874,7 +920,7 @@ void SwLineRects::PaintLines( OutputDevice *pOut )
                     pOut->SetDrawMode( nOldDrawMode );
                 }
                 if( !rLRect.IsEmpty() )
-                    pOut->DrawRect( rLRect.SVRect() );
+                    lcl_DrawDashedRect( pOut, rLRect );
                 rLRect.SetPainted();
             }
         nLastCount = nMinCount;
@@ -3982,7 +4028,8 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
 void SwFrm::PaintBorderLine( const SwRect& rRect,
                              const SwRect& rOutRect,
                              const SwPageFrm *pPage,
-                             const Color *pColor ) const
+                             const Color *pColor,
+                             const SvxBorderStyle nStyle ) const
 {
     if ( !rOutRect.IsOver( rRect ) )
         return;
@@ -4005,10 +4052,10 @@ void SwFrm::PaintBorderLine( const SwRect& rRect,
         SwRegionRects aRegion( aOut, 4, 1 );
         ::lcl_SubtractFlys( this, pPage, aOut, aRegion );
         for ( USHORT i = 0; i < aRegion.Count(); ++i )
-            pLines->AddLineRect( aRegion[i], pColor, pTab, nSubCol );
+            pLines->AddLineRect( aRegion[i], pColor, nStyle, pTab, nSubCol );
     }
     else
-        pLines->AddLineRect( aOut, pColor, pTab, nSubCol );
+        pLines->AddLineRect( aOut, pColor, nStyle, pTab, nSubCol );
 }
 
 /*************************************************************************
@@ -4299,7 +4346,8 @@ void lcl_PaintLeftRightLine( const sal_Bool         _bLeft,
                 (aPaintRect.*_rRectFn->fnAddRight)( 1 );
             }
         }
-        _rFrm.PaintBorderLine( _rRect, aPaintRect, &_rPage, &pLeftRightBorder->GetColor() );
+        _rFrm.PaintBorderLine( _rRect, aPaintRect, &_rPage, &pLeftRightBorder->GetColor(),
+                pLeftRightBorder->GetStyle( ) );
     }
 
     if ( pLeftRightBorder->GetInWidth() )
@@ -4339,7 +4387,8 @@ void lcl_PaintLeftRightLine( const sal_Bool         _bLeft,
                     (aPaintRect.*_rRectFn->fnAddRight)( 1 );
                 }
             }
-            _rFrm.PaintBorderLine( _rRect, aPaintRect, &_rPage, &pLeftRightBorder->GetColor() );
+            _rFrm.PaintBorderLine( _rRect, aPaintRect, &_rPage, &pLeftRightBorder->GetColor(),
+                   SOLID );
         }
     }
 }
@@ -4403,7 +4452,8 @@ void lcl_PaintTopBottomLine( const sal_Bool         _bTop,
                 (aPaintRect.*_rRectFn->fnAddBottom)( 1 );
             }
         }
-        _rFrm.PaintBorderLine( _rRect, aPaintRect, &_rPage, &pTopBottomBorder->GetColor() );
+        _rFrm.PaintBorderLine( _rRect, aPaintRect, &_rPage, &pTopBottomBorder->GetColor(),
+               pTopBottomBorder->GetStyle( ) );
     }
 
     if ( pTopBottomBorder->GetInWidth() )
@@ -4442,7 +4492,8 @@ void lcl_PaintTopBottomLine( const sal_Bool         _bTop,
                     (aPaintRect.*_rRectFn->fnAddBottom)( 1 );
                 }
             }
-            _rFrm.PaintBorderLine( _rRect, aPaintRect, &_rPage, &pTopBottomBorder->GetColor() );
+            _rFrm.PaintBorderLine( _rRect, aPaintRect, &_rPage, &pTopBottomBorder->GetColor(),
+                   SOLID );
         }
     }
 }
@@ -4922,7 +4973,7 @@ void SwLayoutFrm::PaintColLines( const SwRect &rRect, const SwFmtCol &rFmtCol,
         (aLineRect.*fnRect->fnSetPosX)
             ( (pCol->Frm().*fnGetX)() - nPenHalf );
         if ( aRect.IsOver( aLineRect ) )
-            PaintBorderLine( aRect, aLineRect , pPage, &rFmtCol.GetLineColor());
+            PaintBorderLine( aRect, aLineRect , pPage, &rFmtCol.GetLineColor() );
         pCol = pCol->GetNext();
     }
 }
@@ -6070,7 +6121,7 @@ void MA_FASTCALL lcl_RefreshLine( const SwLayoutFrm *pLay,
             SwRect aRect( aP1, aP2 );
             // OD 18.11.2002 #99672# - use parameter <_pSubsLines> instead of
             // global variable <pSubsLines>.
-            _pSubsLines->AddLineRect( aRect, 0, 0, nSubColor );
+            _pSubsLines->AddLineRect( aRect, 0, SOLID, 0, nSubColor );
         }
         aP1 = aP2;
         aP1.*pDirPt += 1;
@@ -6209,13 +6260,13 @@ void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
             if ( aOriginal.Left() == aOut.Left() )
             {
                 const SwRect aRect( aOut.Pos(), aLB );
-                pUsedSubsLines->AddLineRect( aRect, 0, 0, nSubColor );
+                pUsedSubsLines->AddLineRect( aRect, 0, SOLID, 0, nSubColor );
             }
             // OD 14.11.2002 #104821# - in vertical layout set page/column break at right
             if ( aOriginal.Right() == nRight )
             {
                 const SwRect aRect( aRT, aRB );
-                pUsedSubsLines->AddLineRect( aRect, 0, 0,
+                pUsedSubsLines->AddLineRect( aRect, 0, SOLID, 0,
                         (bBreak && bVert) ? SUBCOL_BREAK : nSubColor );
             }
         }
@@ -6226,13 +6277,13 @@ void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
             {
                 // OD 14.11.2002 #104821# - in horizontal layout set page/column break at top
                 const SwRect aRect( aOut.Pos(), aRT );
-                pUsedSubsLines->AddLineRect( aRect, 0, 0,
+                pUsedSubsLines->AddLineRect( aRect, 0, SOLID, 0,
                         (bBreak && !bVert) ? SUBCOL_BREAK : nSubColor );
             }
             if ( aOriginal.Bottom() == nBottom )
             {
                 const SwRect aRect( aLB, aRB );
-                pUsedSubsLines->AddLineRect( aRect, 0, 0, nSubColor );
+                pUsedSubsLines->AddLineRect( aRect, 0, SOLID, 0, nSubColor );
             }
         }
     }

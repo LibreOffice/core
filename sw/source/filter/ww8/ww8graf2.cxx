@@ -633,8 +633,8 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                         pRecord->nDyTextBottom  );
 
                     MatchSdrItemsIntoFlySet( pObject, aAttrSet,
-                        pRecord->eLineStyle, pRecord->eShapeType,
-                        aInnerDist );
+                        pRecord->eLineStyle, pRecord->eLineDashing,
+                        pRecord->eShapeType, aInnerDist );
 
                     //Groesse aus der WinWord PIC-Struktur als
                     //Grafik-Groesse nehmen

@@ -733,6 +733,8 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                                                     DFF_Prop_lineStyle,
                                                     mso_lineSimple )
                               : (MSO_LineStyle)USHRT_MAX;
+        pImpRec->eLineDashing = (MSO_LineDashing)GetPropertyValue(
+                                        DFF_Prop_lineDashing, mso_lineSolid );
 
         pImpRec->nFlags = rObjData.nSpFlags;
 
@@ -3385,7 +3387,7 @@ void wwSectionManager::SetSegmentToPageDesc(const wwSection &rSection,
             {
                 SfxItemSet aSet(rFmt.GetAttrSet());
                 mrReader.MatchSdrItemsIntoFlySet(pObject, aSet, mso_lineSimple,
-                                                 mso_sptRectangle, aRect);
+                                                 mso_lineSolid, mso_sptRectangle, aRect);
                 rFmt.SetFmtAttr(aSet.Get(RES_BACKGROUND));
             }
         }
