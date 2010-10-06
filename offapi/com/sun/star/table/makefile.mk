@@ -41,6 +41,8 @@ IDLFILES=\
     AccessibleCellView.idl      \
     AccessibleTableView.idl	\
     BorderLine.idl\
+    BorderLine2.idl\
+    BorderLineStyle.idl\
     Cell.idl\
     CellAddress.idl\
     CellContentType.idl\

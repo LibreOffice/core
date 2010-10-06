@@ -2,9 +2,12 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: TableSortFieldType.idl,v $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -24,13 +27,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+#ifndef __com_sun_star_table_BorderLineStyle_idl__
+#define __com_sun_star_table_BorderLineStyle_idl__
 
-#ifndef __com_sun_star_table_BorderLine_idl__
-#define __com_sun_star_table_BorderLine_idl__
-
-#ifndef __com_sun_star_util_Color_idl__
-#include <com/sun/star/util/Color.idl>
-#endif
 
 //=============================================================================
 
@@ -38,39 +37,23 @@ module com {  module sun {  module star {  module table {
 
 //=============================================================================
 
-/** describes the line type for a single cell edge.
- */
-published struct BorderLine
+constants BorderLineStyle
 {
     //-------------------------------------------------------------------------
-
-    /** contains the color value of the line.
+    /** Solid border line.
      */
-    com::sun::star::util::Color Color;
+    const short SOLID = 0;
 
     //-------------------------------------------------------------------------
-
-    /** contains the width of the inner part of a double line (in 1/100 mm).
-
-        <p>If this value is zero, only a single line is drawn.</p>
+    /** Dotted border line.
      */
-    short InnerLineWidth;
+    const short DOTTED = 1;
 
     //-------------------------------------------------------------------------
-
-    /** contaions the width of a single line or the width of outer part of
-        a double line (in 1/100 mm).
-
-        <p>If this value is zero, no line is drawn.</p>
+    /** Dashed border line.
      */
-    short OuterLineWidth;
+    const short DASHED = 2;
 
-    //-------------------------------------------------------------------------
-
-    /** contains the distance between the inner and outer parts of a
-        double line (in 1/100 mm).
-     */
-    short LineDistance;
 };
 
 //=============================================================================
@@ -78,4 +61,3 @@ published struct BorderLine
 }; }; }; };
 
 #endif
-
