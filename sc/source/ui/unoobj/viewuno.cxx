@@ -522,41 +522,15 @@ sal_Bool SAL_CALL ScTabViewEventListener::mousePressed( const awt::EnhancedMouse
     bDelaySelectionEvent = ( e.Buttons == ::com::sun::star::awt::MouseButton::RIGHT ) ? sal_False : sal_True;
     bSelectionChangeOccured = sal_False;
 
-    sal_Bool result =  sal_False;
-    // process BeforeDoubleClick and BeforeRightClick events
-    if( e.ClickCount == 2 || e.Buttons == ::com::sun::star::awt::MouseButton::RIGHT )
-    {
-        // ensure the target is a cell
-        uno::Reference< table::XCell > xCell( e.Target, uno::UNO_QUERY );
-        if( xCell.is() && xVbaEventsHelper.is() && pViewObj)
-        {
-            uno::Sequence< uno::Any > aArgs(1);
-            aArgs[0] = pViewObj->getSelection();
-            sal_Int32 nEventId = script::vba::VBAEventId::WORKSHEET_BEFORERIGHTCLICK;
-            if( e.ClickCount == 2 )
-                nEventId = script::vba::VBAEventId::WORKSHEET_BEFOREDOUBLECLICK;
-
-            // TODO: process Cancel argument
-            try
-            {
-                xVbaEventsHelper->processVbaEvent( nEventId, aArgs );
-                result = sal_True;
-            }
-            catch( uno::Exception& )
-            {
-            }
-        }
-    }
-    return result;
+    // ScTabViewObj::MousePressed should handle process BeforeDoubleClick and BeforeRightClick events
+    return sal_True;
 }
 
 sal_Bool SAL_CALL ScTabViewEventListener::mouseReleased( const awt::EnhancedMouseEvent&/*e*/) throw (uno::RuntimeException)
 {
     if ( bSelectionChangeOccured )
-    {
         fireSelectionChangeEvent();
-    }
-    return sal_False;
+    return sal_True;
 }
 
 void SAL_CALL ScTabViewEventListener::selectionChanged( const lang::EventObject& /*aEvent*/ ) throw ( uno::RuntimeException )
@@ -591,11 +565,14 @@ ScTabViewObj::ScTabViewObj( ScTabViewShell* pViewSh ) :
     if( pViewData )
     {
             uno::Reference< script::vba::XVBAEventProcessor > xVbaEventsHelper (pViewData->GetDocument()->GetVbaEventProcessor(), uno::UNO_QUERY );
-            ScTabViewEventListener* pEventListener = new ScTabViewEventListener( this, xVbaEventsHelper );
-            uno::Reference< awt::XEnhancedMouseClickHandler > aMouseClickHandler( *pEventListener, uno::UNO_QUERY );
-            addEnhancedMouseClickHandler( aMouseClickHandler );
-            uno::Reference< view::XSelectionChangeListener > aSelectionChangeListener( *pEventListener, uno::UNO_QUERY );
-            addSelectionChangeListener( aSelectionChangeListener );
+            if ( xVbaEventsHelper.is() )
+            {
+                ScTabViewEventListener* pEventListener = new ScTabViewEventListener( this, xVbaEventsHelper );
+                uno::Reference< awt::XEnhancedMouseClickHandler > aMouseClickHandler( *pEventListener, uno::UNO_QUERY );
+                addEnhancedMouseClickHandler( aMouseClickHandler );
+                uno::Reference< view::XSelectionChangeListener > aSelectionChangeListener( *pEventListener, uno::UNO_QUERY );
+                addSelectionChangeListener( aSelectionChangeListener );
+            }
     }
     }
 }
