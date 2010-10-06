@@ -239,7 +239,6 @@ private:
         SvStringsISortDtor*     pFormatText;
         DoubleStringTable       aDoubleStringTable;
         CollatorWrapper*        pCompareClass;
-        CollatorWrapper*        pCompareCaseClass;
         CharClass*              pCharClass;
         LanguageType            eLang;
 
