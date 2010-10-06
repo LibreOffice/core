@@ -400,6 +400,16 @@ uno::Reference<io::XInputStream> OOXMLDocumentImpl::getStorageStream()
     return mpStream->getStorageStream();
 }
 
+void OOXMLDocumentImpl::setShapeContext( uno::Reference<xml::sax::XFastShapeContextHandler> xContext )
+{
+    mxShapeContext = xContext;
+}
+
+uno::Reference<xml::sax::XFastShapeContextHandler> OOXMLDocumentImpl::getShapeContext( )
+{
+    return mxShapeContext;
+}
+
 OOXMLDocument *
 OOXMLDocumentFactory::createDocument
 (OOXMLStream::Pointer_t pStream)

@@ -95,6 +95,8 @@ public:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
                             const ShapeParentAnchor* pParentAnchor = 0 ) const;
 
+    inline void                clearShapes( ) { maShapes.clear( ); }
+
 private:
     typedef RefVector< ShapeType >                  ShapeTypeVector;
     typedef RefVector< ShapeBase >                  ShapeVector;

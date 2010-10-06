@@ -54,7 +54,7 @@ using namespace ::com::sun::star;
 OLEHandler::OLEHandler() :
     m_nDxaOrig(0),
     m_nDyaOrig(0),
-    m_nWrapMode(0)
+    m_nWrapMode(1)
 {
 }
 /*-- 23.04.2008 10:46:14---------------------------------------------------

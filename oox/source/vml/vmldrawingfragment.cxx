@@ -60,7 +60,7 @@ ContextHandlerRef DrawingFragment::onCreateContext( sal_Int32 nElement, const At
     {
         // DOCX filter handles plain shape elements with this fragment handler
         case VMLDRAWING_WORD:
-            if( isRootElement() )
+            if ( getNamespace( nElement ) == NMSP_VML )
                 return ShapeContextBase::createShapeContext( *this, nElement, rAttribs, mrDrawing.getShapes() );
         break;
 

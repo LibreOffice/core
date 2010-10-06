@@ -35,6 +35,7 @@
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
+#include <com/sun/star/xml/sax/XFastShapeContextHandler.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 
@@ -244,6 +245,8 @@ public:
     virtual void setXNoteType(const Id & nId) = 0;
     virtual const Id & getXNoteType() const = 0;
     virtual const ::rtl::OUString & getTarget() const = 0;
+    virtual uno::Reference<xml::sax::XFastShapeContextHandler> getShapeContext( ) = 0;
+    virtual void setShapeContext( uno::Reference<xml::sax::XFastShapeContextHandler> xContext ) = 0;
 };
 
 

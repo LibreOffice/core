@@ -226,7 +226,10 @@ ShapeContextHandler::getShape() throw (uno::RuntimeException)
         {
             mpDrawing->finalizeFragmentImport();
             if( const ::oox::vml::ShapeBase* pShape = mpDrawing->getShapes().getFirstShape() )
+            {
+                mpDrawing->getShapes( ).clearShapes( );
                 xResult = pShape->convertAndInsert( xShapes );
+            }
         }
         else if (mpShape.get() != NULL)
         {

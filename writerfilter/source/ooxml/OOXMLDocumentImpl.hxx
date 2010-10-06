@@ -47,6 +47,7 @@ class OOXMLDocumentImpl : public OOXMLDocument
 
     uno::Reference<frame::XModel> mxModel;
     uno::Reference<drawing::XDrawPage> mxDrawPage;
+    uno::Reference<xml::sax::XFastShapeContextHandler> mxShapeContext;
 
     bool mbIsSubstream;
 
@@ -109,6 +110,8 @@ public:
     virtual void setXNoteType(const Id & rId);
     virtual const Id & getXNoteType() const;
     virtual const ::rtl::OUString & getTarget() const;
+    virtual uno::Reference<xml::sax::XFastShapeContextHandler> getShapeContext( );
+    virtual void setShapeContext( uno::Reference<xml::sax::XFastShapeContextHandler> xContext );
 };
 }}
 #endif // OOXML_DOCUMENT_IMPL_HXX

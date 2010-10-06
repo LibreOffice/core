@@ -155,6 +155,7 @@ ShapeContextBase::ShapeContextBase( ContextHandler2Helper& rParent ) :
         case VML_TOKEN( shape ):
             return new ShapeContext( rParent, rAttribs, rShapes.createShape< ComplexShape >() );
         case VML_TOKEN( rect ):
+            return new RectangleShapeContext( rParent, rAttribs, rShapes.createShape< RectangleShape >() );
         case VML_TOKEN( roundrect ):
             return new ShapeContext( rParent, rAttribs, rShapes.createShape< RectangleShape >() );
         case VML_TOKEN( oval ):
@@ -278,6 +279,7 @@ void ShapeTypeContext::setStyle( const OUString& rStyle )
 
 ShapeContext::ShapeContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, ShapeBase& rShape ) :
     ShapeTypeContext( rParent, rAttribs, rShape ),
+    mrShape( rShape ),
     mrShapeModel( rShape.getShapeModel() )
 {
     // collect shape specific attributes
@@ -288,6 +290,11 @@ ShapeContext::ShapeContext( ContextHandler2Helper& rParent, const AttributeList&
 
 ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
+    // Custom shape in Writer with a textbox are transformed into a frame
+    if ( nElement == ( NMSP_VML + XML_textbox ) )
+        dynamic_cast<SimpleShape&>( mrShape ).setService(
+            OUString::createFromAscii( "com.sun.star.text.TextFrame" ) );
+
     // Excel specific shape client data
     if( isRootElement() && (nElement == VMLX_TOKEN( ClientData )) )
         return new ShapeClientDataContext( *this, rAttribs, mrShapeModel.createClientData() );
@@ -323,6 +330,22 @@ ContextHandlerRef GroupShapeContext::onCreateContext( sal_Int32 nElement, const 
     return xContext.get() ? xContext : ShapeContext::onCreateContext( nElement, rAttribs );
 }
 
+// ============================================================================
+
+RectangleShapeContext::RectangleShapeContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, RectangleShape& rShape ) :
+    ShapeContext( rParent, rAttribs, rShape )
+{
+}
+
+ContextHandlerRef RectangleShapeContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+{
+    if ( nElement == ( NMSP_VML + XML_textbox ) )
+        dynamic_cast< SimpleShape &>( mrShape ).setService(
+            OUString::createFromAscii( "com.sun.star.text.TextFrame" ) );
+
+    // The parent class's context is fine
+    return ShapeContext::onCreateContext( nElement, rAttribs );
+}
 // ============================================================================
 
 } // namespace vml

@@ -29,12 +29,20 @@
 #include <rtl/math.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/text/HoriOrientation.hpp>
+#include <com/sun/star/text/RelOrientation.hpp>
+#include <com/sun/star/text/SizeType.hpp>
+#include <com/sun/star/text/VertOrientation.hpp>
+#include <com/sun/star/text/XTextContent.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/text/XTextFrame.hpp>
 #include "properties.hxx"
 #include "oox/helper/graphichelper.hxx"
 #include "oox/helper/propertymap.hxx"
@@ -47,6 +55,8 @@
 #include "oox/vml/vmlshapecontainer.hxx"
 
 using ::rtl::OUString;
+using ::com::sun::star::beans::XPropertySet;
+using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
@@ -64,6 +74,8 @@ using ::com::sun::star::drawing::XEnhancedCustomShapeDefaulter;
 using ::com::sun::star::drawing::XShape;
 using ::com::sun::star::drawing::XShapes;
 using ::oox::core::XmlFilterBase;
+
+using namespace ::com::sun::star::text;
 
 namespace oox {
 namespace vml {
@@ -124,13 +136,62 @@ void lclInsertXShape( const Reference< XShapes >& rxShapes, const Reference< XSh
     }
 }
 
+void lclInsertTextFrame( const XmlFilterBase& rFilter, const Reference< XShape >& rxShape )
+{
+    OSL_ENSURE( rxShape.is(), "lclInsertTextFrame - missing XShape" );
+    if ( rxShape.is( ) )
+    {
+        try
+        {
+            Reference< XTextDocument > xDoc( rFilter.getModel( ), UNO_QUERY_THROW );
+            Reference< XTextContent > xCtnt( rxShape, UNO_QUERY_THROW );
+            xCtnt->attach( xDoc->getText( )->getStart( ) );
+        }
+        catch( Exception& )
+        {
+        }
+    }
+}
+
 void lclSetXShapeRect( const Reference< XShape >& rxShape, const Rectangle& rShapeRect )
 {
     OSL_ENSURE( rxShape.is(), "lclSetXShapeRect - missing XShape" );
     if( rxShape.is() )
     {
-        rxShape->setPosition( Point( rShapeRect.X, rShapeRect.Y ) );
-        rxShape->setSize( Size( rShapeRect.Width, rShapeRect.Height ) );
+        Reference< XTextFrame > xTextFrame( rxShape, UNO_QUERY );
+        if ( !xTextFrame.is( ) )
+        {
+            rxShape->setPosition( Point( rShapeRect.X, rShapeRect.Y ) );
+            rxShape->setSize( Size( rShapeRect.Width, rShapeRect.Height ) );
+        }
+        else
+        {
+            Reference< XPropertySet > xProps( xTextFrame, UNO_QUERY_THROW );
+            try
+            {
+                // The size
+                xProps->setPropertyValue( OUString::createFromAscii( "SizeType" ), Any( SizeType::FIX ) );
+                xProps->setPropertyValue( OUString::createFromAscii( "FrameIsAutomaticHeight" ), Any( sal_False ) );
+                xProps->setPropertyValue( OUString::createFromAscii( "Height" ), Any( rShapeRect.Height ) );
+                xProps->setPropertyValue( OUString::createFromAscii( "Width" ), Any( rShapeRect.Width ) );
+
+                // The position
+                xProps->setPropertyValue( OUString::createFromAscii( "HoriOrientPosition" ), Any( rShapeRect.X ) );
+                xProps->setPropertyValue( OUString::createFromAscii( "HoriOrientRelation" ),
+                        Any( RelOrientation::FRAME ) );
+                xProps->setPropertyValue( OUString::createFromAscii( "HoriOrient" ),
+                        Any( HoriOrientation::NONE ) );
+
+                xProps->setPropertyValue( OUString::createFromAscii( "VertOrientPosition" ), Any( rShapeRect.Y ) );
+                xProps->setPropertyValue( OUString::createFromAscii( "VertOrientRelation" ),
+                        Any( RelOrientation::FRAME ) );
+                xProps->setPropertyValue( OUString::createFromAscii( "VertOrient" ),
+                        Any( VertOrientation::NONE ) );
+            }
+            catch ( Exception& )
+            {
+            }
+        }
     }
 }
 
@@ -138,8 +199,12 @@ Reference< XShape > lclCreateAndInsertXShape( const XmlFilterBase& rFilter,
         const Reference< XShapes >& rxShapes, const OUString& rService, const Rectangle& rShapeRect )
 {
     Reference< XShape > xShape = lclCreateXShape( rFilter, rService );
-    lclInsertXShape( rxShapes, xShape );
+    if ( rService.equalsAscii( "com.sun.star.text.TextFrame" ) )
+        lclInsertTextFrame( rFilter, xShape );
+    else
+        lclInsertXShape( rxShapes, xShape );
     lclSetXShapeRect( xShape, rShapeRect );
+
     return xShape;
 }
 
@@ -197,11 +262,19 @@ Rectangle ShapeType::getRectangle( const ShapeParentAnchor* pParentAnchor ) cons
 Rectangle ShapeType::getAbsRectangle() const
 {
     const GraphicHelper& rGraphicHelper = mrDrawing.getFilter().getGraphicHelper();
+
+    sal_Int32 nWidth = ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maTypeModel.maWidth, 0, true, true );
+    if ( nWidth == 0 )
+        nWidth = 1;
+
+    sal_Int32 nHeight = ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maTypeModel.maHeight, 0, true, true );
+    if ( nHeight == 0 )
+        nHeight = 1;
+
     return Rectangle(
         ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maTypeModel.maLeft, 0, true, true ) + ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maTypeModel.maMarginLeft, 0, true, true ),
         ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maTypeModel.maTop, 0, false, true ) + ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maTypeModel.maMarginTop, 0, false, true ),
-        ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maTypeModel.maWidth, 0, true, true ),
-        ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maTypeModel.maHeight, 0, false, true ) );
+        nWidth, nHeight );
 }
 
 Rectangle ShapeType::getRelRectangle() const

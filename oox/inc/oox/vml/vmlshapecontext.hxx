@@ -40,6 +40,7 @@ struct ShapeClientData;
 struct ShapeModel;
 class ShapeBase;
 class GroupShape;
+class RectangleShape;
 
 class ShapeContainer;
 
@@ -118,6 +119,9 @@ private:
     /** Processes the 'points' attribute. */
     void                setPoints( const ::rtl::OUString& rPoints );
 
+protected:
+    ShapeBase&          mrShape;
+
 private:
     ShapeModel&         mrShapeModel;
 };
@@ -139,6 +143,19 @@ private:
     ShapeContainer&     mrShapes;
 };
 
+// ============================================================================
+
+class RectangleShapeContext : public ShapeContext
+{
+public:
+    explicit            RectangleShapeContext(
+                            ::oox::core::ContextHandler2Helper& rParent,
+                            const AttributeList& rAttribs,
+                            RectangleShape& rShape );
+
+    virtual ::oox::core::ContextHandlerRef
+                        onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+};
 // ============================================================================
 
 } // namespace vml
