@@ -46,7 +46,7 @@ Globals
 	}
 }
 
-OpenOffice
+LibreOffice
 {
 	Settings
 	{
@@ -111,7 +111,7 @@ OpenOffice
 	}
 }
 
-OpenOffice_wJRE
+LibreOffice_wJRE
 {
 	Settings
 	{
@@ -176,7 +176,7 @@ OpenOffice_wJRE
 	}
 }
 
-OpenOffice_Dev
+LibreOffice_Dev
 {
 	Settings
 	{
@@ -291,7 +291,7 @@ URE
     }
 }
 
-OpenOffice_SDK
+LibreOffice_SDK
 {
     Settings
     {
@@ -336,7 +336,7 @@ OpenOffice_SDK
     }
 }
 
-OpenOffice_Dev_SDK
+LibreOffice_Dev_SDK
 {
     Settings
     {
