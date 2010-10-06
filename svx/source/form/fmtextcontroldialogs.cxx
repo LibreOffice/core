@@ -31,16 +31,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 
-#ifndef _SVX_CHARDLG_HXX
-//#include "chardlg.hxx"
-#endif
-#ifndef _SVX_PARAGRPH_HXX
-//#include "paragrph.hxx"
-#endif
 #include <editeng/eeitem.hxx>
-#ifndef _SVX_TABSTPGE_HXX
-//#include "tabstpge.hxx"
-#endif
 
 #include "flagsdef.hxx"
 #include <svl/intitem.hxx>

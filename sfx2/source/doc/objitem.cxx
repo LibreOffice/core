@@ -32,7 +32,6 @@
 #endif
 
 #include <sfx2/objsh.hxx>
-//#include "objshimp.hxx"
 #include <sfx2/objitem.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 

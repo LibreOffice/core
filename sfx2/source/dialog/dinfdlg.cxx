@@ -67,7 +67,6 @@
 #include <sfx2/frame.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/request.hxx>
-//#include "exptypes.hxx"
 #include "helper.hxx"
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>

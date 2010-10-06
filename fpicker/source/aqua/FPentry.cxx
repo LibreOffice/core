@@ -25,27 +25,14 @@
  *
  ************************************************************************/
 
-//----------------------------------------------
-//  includes of other projects
-//----------------------------------------------
-
 #include <cppuhelper/factory.hxx>
 #include <com/sun/star/container/XSet.hpp>
 
-// #ifndef _OSL_DIAGNOSE_H_
-// #include <osl/diagnose.h>
-// #endif
 #include "SalAquaFilePicker.hxx"
 #include "SalAquaFolderPicker.hxx"
 
-// #ifndef _SV_SVAPP_HXX
-// #include <vcl/svapp.hxx>
-// #endif
 #include "FPServiceInfo.hxx"
 
-//-----------------------------------------------
-// namespace directives
-//-----------------------------------------------
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
@@ -56,9 +43,6 @@ using namespace ::cppu;
 using ::com::sun::star::ui::dialogs::XFilePicker;
 using ::com::sun::star::ui::dialogs::XFolderPicker;
 
-//------------------------------------------------
-//
-//------------------------------------------------
 
 static Reference< XInterface > SAL_CALL createFileInstance(
     const Reference< XMultiServiceFactory >& rServiceManager )

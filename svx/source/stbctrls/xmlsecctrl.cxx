@@ -28,14 +28,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-// include ---------------------------------------------------------------
 #include <tools/shl.hxx>
 #include <vcl/status.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/image.hxx>
-//#ifndef _SFXITEMPOOL_HXX
-//#include <svl/itempool.hxx>
-//#endif
 #include <sfx2/signaturestate.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
@@ -53,16 +49,6 @@
 #include <tools/urlobj.hxx>
 
 #define PAINT_OFFSET    5
-
-//#include <editeng/sizeitem.hxx>
-//#include <svx/dialmgr.hxx>
-//#include "dlgutil.hxx"
-//#include "stbctrls.h"
-
-//#include <svx/dialogs.hrc>
-
-//#include <unotools/localedatawrapper.hxx>
-//#include <comphelper/processfactory.hxx>
 
 
 SFX_IMPL_STATUSBAR_CONTROL( XmlSecStatusBarControl, SfxUInt16Item );

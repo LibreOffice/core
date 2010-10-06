@@ -30,9 +30,6 @@
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 
-// #ifndef _OSL_DIAGNOSE_H_
-// #include <osl/diagnose.h>
-// #endif
 #include "CFStringUtilities.hxx"
 #include "NSString_OOoAdditions.hxx"
 #include "NSURL_OOoAdditions.hxx"

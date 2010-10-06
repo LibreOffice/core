@@ -28,7 +28,7 @@
 #include "doc.hrc"
 #define __RSC
 #include <svl/inetdef.hxx>
-//#include <so3/so2defs.hxx>
+
 
  // -----------------------------------------------------------------------
 QueryBox MSG_CONFIRM_FILTER

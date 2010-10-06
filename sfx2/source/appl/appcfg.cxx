@@ -54,8 +54,6 @@
 #include <sfx2/sfxsids.hrc>
 #include <sot/exchange.hxx>
 
-//#include <svtools/agprop.hxx>
-//#include <sj2/sjapplet.hxx>
 #include <svl/isethint.hxx>
 
 #include <unotools/configmgr.hxx>

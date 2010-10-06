@@ -548,8 +548,6 @@ void URLParameter::open( const Reference< XMultiServiceFactory >& rxSMgr,
 }
 
 
-// #include <stdio.h>
-
 void URLParameter::parse() throw( com::sun::star::ucb::IllegalIdentifierException )
 {
     // fprintf(stdout,"url send to xmlhelp: %s\n",(rtl::OUStringToOString(m_aURL,RTL_TEXTENCODING_UTF8).getStr()));

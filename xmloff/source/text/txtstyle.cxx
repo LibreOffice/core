@@ -28,9 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 
-#ifndef _TOOLS_DEBUG_HXX
-//#include <tools/debug.hxx>
-#endif
 #include <com/sun/star/style/ParagraphStyleCategory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
@@ -40,14 +37,8 @@
 
 #include <xmloff/xmltoken.hxx>
 
-#ifndef _XMLOFF_PROPERTYSETMAPPER_HXX
-//#include <xmloff/xmlprmap.hxx>
-#endif
 #include "xmlnmspe.hxx"
 #include <xmloff/families.hxx>
-#ifndef _XMLOFF_TXTPRMAP_HXX
-//#include <xmloff/txtprmap.hxx>
-#endif
 #include <xmloff/txtparae.hxx>
 #include <xmloff/xmlnume.hxx>
 #include <xmloff/xmlexp.hxx>
@@ -56,9 +47,6 @@
 #include "txtexppr.hxx"
 #include <xmloff/txtprmap.hxx>
 
-#ifndef _XMLOFF_STYLEEXP_HXX
-//#include <xmloff/styleexp.hxx>
-#endif
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;

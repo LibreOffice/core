@@ -34,7 +34,6 @@
 #include <vos/mutex.hxx>
 #include <svtools/imagemgr.hxx>
 #include <svtools/miscopt.hxx>
-// #include <cmdlineargs.hxx>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>

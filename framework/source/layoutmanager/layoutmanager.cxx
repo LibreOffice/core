@@ -32,8 +32,6 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-// #include <math.h>
-
 #include <services/layoutmanager.hxx>
 #include <threadhelp/resetableguard.hxx>
 #include <services.h>

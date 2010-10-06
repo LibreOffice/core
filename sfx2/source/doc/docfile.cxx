@@ -143,8 +143,6 @@ using namespace ::com::sun::star::io;
 #include "sfxresid.hxx"
 #include <sfx2/appuno.hxx>
 
-//#include "xmlversion.hxx"
-
 #define MAX_REDIRECT 5
 
 

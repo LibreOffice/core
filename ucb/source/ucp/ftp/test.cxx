@@ -38,34 +38,6 @@
 #include <stdio.h>
 #include <unistd.h>
 
-//  #include <osl/process.h>
-//  #include <osl/thread.hxx>
-
-//  #include <ucbhelper/configurationkeys.hxx>
-//  #include <cppuhelper/bootstrap.hxx>
-//  #include <cppuhelper/servicefactory.hxx>
-//  #include <comphelper/processfactory.hxx>
-//  #include <comphelper/regpathhelper.hxx>
-//  #include <com/sun/star/lang/XComponent.hpp>
-//  #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-//  #include <com/sun/star/ucb/XContentIdentifierFactory.hpp>
-//  #include <com/sun/star/ucb/XContent.hpp>
-//  #include <com/sun/star/ucb/XContentProvider.hpp>
-//  #include <com/sun/star/ucb/XCommandProcessor.hpp>
-//  #include <com/sun/star/ucb/OpenMode.hpp>
-//  #include <com/sun/star/ucb/Command.hpp>
-//  #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
-//  #include <com/sun/star/io/XActiveDataSink.hpp>
-//  #include <com/sun/star/beans/Property.hpp>
-
-
-//  #include "debughelper.hxx"
-//  #include "test_activedatasink.hxx"
-//  #include "test_ftpurl.hxx"
-//  #include "test_multiservicefac.hxx"
-//  #include "ftpcontentprovider.hxx"
-//  #include "ftpcontentidentifier.hxx"
-
 
 //  using namespace test_ftp;
 //  using namespace rtl;

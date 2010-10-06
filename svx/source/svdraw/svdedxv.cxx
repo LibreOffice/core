@@ -35,7 +35,6 @@
 #include <svx/svdedxv.hxx>
 #include <svl/solar.hrc>
 
-//#include <tools/string.h>
 #include <svl/itemiter.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/hatch.hxx>

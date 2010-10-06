@@ -50,7 +50,6 @@
 #include "editeng/editeng.hxx"
 #include "editeng/outlobj.hxx"
 
-//#include <tablertfexporter.hxx>
 
 using ::rtl::OUString;
 using namespace ::com::sun::star::uno;

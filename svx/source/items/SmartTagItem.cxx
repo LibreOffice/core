@@ -28,16 +28,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-// include ---------------------------------------------------------------
-
 #include <svx/SmartTagItem.hxx>
 
 #include <com/sun/star/container/XStringKeyMap.hpp>
 
-
-//#include <svl/memberid.hrc>
-//#include "svxids.hrc"
-//#include "svxitems.hrc"
 
 using namespace ::com::sun::star;
 

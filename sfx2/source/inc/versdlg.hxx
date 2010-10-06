@@ -28,8 +28,6 @@
 #ifndef _VERSDLG_HXX
 #define _VERSDLG_HXX
 
-// #include *****************************************************************
-
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <svtools/svtabbx.hxx>

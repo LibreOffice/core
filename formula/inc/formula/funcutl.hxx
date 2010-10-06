@@ -28,7 +28,6 @@
 #ifndef FORMULA_FUNCUTL_HXX
 #define FORMULA_FUNCUTL_HXX
 
-// #include <vcl/scrbar.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
 #include <vcl/edit.hxx>

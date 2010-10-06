@@ -28,32 +28,12 @@
 #ifndef _FILTERHELPER_HXX_
 #define _FILTERHELPER_HXX_
 
-// #ifndef _COM_SUN_STAR_UNO_TYPE_HXX_
-// #include <com/sun/star/uno/Type.hxx>
-// #endif
-
-// #ifndef INCLUDED_CPPU_UNOTYPE_HXX
-// #include <cppu/unotype.hxx>
-// #endif
-
-// #ifndef _TYPELIB_TYPECLASS_H_
-// #include "typelib/typeclass.h"
-// #endif
-
-// #ifndef _TYPELIB_TYPEDESCRIPTION_H_
-// #include "typelib/typedescription.h"
-// #endif
-
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 #include <com/sun/star/uno/RuntimeException.hpp>
-
-// #ifndef _RTL_USTRING_H_
-// #include <rtl/ustring.hxx>
-// #endif
 
 #include <list>
 #include <vector>

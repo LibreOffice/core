@@ -84,7 +84,6 @@
 #include <sfx2/objsh.hxx>
 #include "objshimp.hxx"
 #include "sfxtypes.hxx"
-//#include "interno.hxx"
 #include <sfx2/module.hxx>
 #include <sfx2/viewfrm.hxx>
 #include "versdlg.hxx"

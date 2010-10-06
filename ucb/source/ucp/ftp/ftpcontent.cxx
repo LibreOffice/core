@@ -77,7 +77,6 @@
 #include <com/sun/star/ucb/MissingInputStreamException.hpp>
 #include <com/sun/star/ucb/UnsupportedNameClashException.hpp>
 #include <com/sun/star/ucb/NameClashException.hpp>
-//#include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/ucb/IOErrorCode.hpp>
 

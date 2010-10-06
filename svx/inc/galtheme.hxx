@@ -40,9 +40,7 @@
 #include <svtools/transfer.hxx>
 #include <sot/storage.hxx>
 #include <svx/svdmodel.hxx>
-//#include <svx/galobj.hxx>
 #include <svx/galmisc.hxx>
-//#include <svx/gallery1.hxx>
 
 // -----------------
 // - GalleryObject -

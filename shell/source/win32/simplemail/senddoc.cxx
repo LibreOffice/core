@@ -29,9 +29,6 @@
 #include "precompiled_shell.hxx"
 #include <osl/diagnose.h>
 
-#ifndef _RTL_STRING_HXX_
-//#include <rtl/string.hxx>
-#endif
 #include "simplemapi.hxx"
 
 #define WIN32_LEAN_AND_MEAN

@@ -29,7 +29,6 @@
 #define FORMULA_FORMULA_HXX
 
 #include <sfx2/basedlgs.hxx>
-// #include "formula/funcutl.hxx"
 #include <memory>
 #include "formula/formuladllapi.h"
 

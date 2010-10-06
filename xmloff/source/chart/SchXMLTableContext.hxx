@@ -29,7 +29,6 @@
 
 #include <xmloff/xmlictxt.hxx>
 #include "SchXMLImport.hxx"
-// #include "SchXMLChartContext.hxx"
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <com/sun/star/chart/ChartDataRowSource.hpp>

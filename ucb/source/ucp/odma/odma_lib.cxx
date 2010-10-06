@@ -27,9 +27,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_ucb.hxx"
-//#ifndef _OSL_PROCESS_H_
-//#include <osl/process.h>
-//#endif
 #include <osl/module.h>
 #include <rtl/ustring.hxx>
 #include <tools/prewin.h>

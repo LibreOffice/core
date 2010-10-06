@@ -27,21 +27,6 @@
 #ifndef _XATTR_HXX
 #define _XATTR_HXX
 
-// include ---------------------------------------------------------------
-
-#ifndef _XDEF_HXX
-//#include <svx/xdef.hxx>
-#endif
-#ifndef _XENUM_HXX
-//#include <svx/xenum.hxx>
-#endif
-#ifndef _XPOLY_HXX
-//#include <svx/xpoly.hxx>
-#endif
-#ifndef _SVX_RECTENUM_HXX
-//#include <svx/rectenum.hxx>
-#endif
-
 class XColorTable;
 class XDashTable;
 class XLineEndTable;

@@ -28,8 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-// include ---------------------------------------------------------------
-
 #include <string> // HACK: prevent conflict between STLPORT and Workshop headers
 
 #include <com/sun/star/util/XURLTransformer.hpp>
@@ -55,7 +53,6 @@
 #include <svx/dialmgr.hxx>
 #include "svx/extrusioncolorcontrol.hxx"
 
-//#include "chrtitem.hxx"
 #include "helpid.hrc"
 #include "extrusioncontrols.hxx"
 #include "extrusioncontrols.hrc"

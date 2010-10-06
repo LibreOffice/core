@@ -34,7 +34,6 @@
 #include <string.h>
 #include <tools/solar.h>
 #include <tools/debug.hxx>
-//#include "typecast.hxx"
 
 #if defined (ALPHA) && defined (UNX)
 #define DEL_ARRAY( X )

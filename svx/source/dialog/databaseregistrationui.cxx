@@ -31,20 +31,15 @@
 // === includes (declaration) ============================================
 #include "databaseregistrationui.hxx"
 
-// === includes (UNO) ====================================================
-// === /includes (UNO) ===================================================
-
 // === includes (project) ================================================
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
-//#include "connpooloptions.hxx"
-// === /includes (project) ===============================================
 
 // === includes (global) =================================================
 #include <sfx2/app.hxx>
 #include <svl/itemset.hxx>
 #include <vcl/msgbox.hxx>
-// === /includes (global) ================================================
+
 
 namespace svx
 {

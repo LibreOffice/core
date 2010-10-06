@@ -61,7 +61,6 @@
 #include "editeng/fontitem.hxx"
 #include <editeng/fhgtitem.hxx>
 
-//#include <editeng/charscaleitem.hxx>
 #include <svx/xlnstcit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svl/style.hxx>

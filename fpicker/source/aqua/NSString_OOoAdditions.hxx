@@ -32,7 +32,6 @@
 #import <Cocoa/Cocoa.h>
 #include <postmac.h>
 #include <rtl/ustring.hxx>
-// #include <sal/types.h>
 
 //for Cocoa types
 @interface NSString (OOoAdditions)

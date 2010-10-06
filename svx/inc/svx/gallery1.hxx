@@ -33,7 +33,6 @@
 #include <tools/urlobj.hxx>
 #include <svl/brdcst.hxx>
 #include "svx/svxdllapi.h"
-//#include "gallery.hrc"
 
 #include <cstdio>
 #include <list>

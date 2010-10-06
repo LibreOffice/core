@@ -83,9 +83,6 @@
 #include "intercept.hxx"
 
 
-// #include <toolkit/helper/vclunohelper.hxx>
-// #include <vcl/window.hxx>
-
 #define HATCH_BORDER_WIDTH (((m_pEmbedObj->getStatus(embed::Aspects::MSOLE_CONTENT)&embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE) && \
                              m_pEmbedObj->getCurrentState()!=embed::EmbedStates::UI_ACTIVE) ? 0 : 4 )
 

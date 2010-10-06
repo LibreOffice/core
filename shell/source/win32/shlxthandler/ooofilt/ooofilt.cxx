@@ -43,7 +43,6 @@
 //--------------------------------------------------------------------------
 #include "internal/contentreader.hxx"
 #include "internal/metainforeader.hxx"
-//#include "internal/utilities.hxx"
 #include "internal/registry.hxx"
 #include "internal/fileextensions.hxx"
 

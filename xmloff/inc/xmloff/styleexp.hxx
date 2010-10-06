@@ -32,9 +32,6 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.h>
 
-#ifndef _VCL_MAPUNIT_HXX
-//#include <tools/mapunit.hxx>
-#endif
 #include <xmloff/uniref.hxx>
 
 namespace com { namespace sun { namespace star

@@ -47,9 +47,6 @@
 #include <vos/mutex.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/compbase6.hxx>
-//#ifndef _CPPUHELPER_COMPBASE7_HXX_
-//#include <cppuhelper/compbase7.hxx>
-//#endif
 #include <comphelper/broadcasthelper.hxx>
 #include <cppuhelper/implbase6.hxx>
 #include <comphelper/servicehelper.hxx>

@@ -33,7 +33,7 @@
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
 #include <sfx2/printer.hxx>
-//#include <sfx2/progress.hxx>
+
 
 class SfxViewShell;
 //class SfxProgress;

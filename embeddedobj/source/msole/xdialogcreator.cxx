@@ -45,8 +45,6 @@
 
 #include "xdialogcreator.hxx"
 #include "oleembobj.hxx"
-// LLA: tip from FS
-// #include <confighelper.hxx>
 #include <xdialogcreator.hxx>
 #include <oleembobj.hxx>
 

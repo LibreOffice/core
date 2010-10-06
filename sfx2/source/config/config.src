@@ -25,8 +25,6 @@
  *
  ************************************************************************/
 
-//#include "config.hrc"
-//#include "sfxlocal.hrc"
 #include <sfx2/sfx.hrc>
 
 String STR_FILTERNAME_CFG

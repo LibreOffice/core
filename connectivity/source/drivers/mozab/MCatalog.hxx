@@ -28,9 +28,6 @@
 #define _CONNECTIVITY_MOZAB_CATALOG_HXX_
 
 #include "connectivity/sdbcx/VCatalog.hxx"
-// #ifndef _CONNECTIVITY_OFUNCTIONDEFS_HXX_
-// #include "odbc/OFunctiondefs.hxx"
-// #endif
 
 namespace connectivity
 {
