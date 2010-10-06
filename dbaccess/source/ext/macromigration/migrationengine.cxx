@@ -1836,7 +1836,7 @@ namespace dbmm
             Reference< XInputStream > xInput( xISP->createInputStream(), UNO_QUERY_THROW );
 
             Reference< XNameContainer > xDialogModel( m_aContext.createComponent( "com.sun.star.awt.UnoControlDialogModel" ), UNO_QUERY_THROW );
-            ::xmlscript::importDialogModel( xInput, xDialogModel, m_aContext.getUNOContext() );
+            ::xmlscript::importDialogModel( xInput, xDialogModel, m_aContext.getUNOContext(), m_xDocumentModel );
 
             // adjust the events of the dialog
             impl_adjustDialogElementEvents_throw( xDialogModel );
@@ -1851,7 +1851,7 @@ namespace dbmm
             }
 
             // export dialog model
-            xISP = ::xmlscript::exportDialogModel( xDialogModel, m_aContext.getUNOContext() );
+            xISP = ::xmlscript::exportDialogModel( xDialogModel, m_aContext.getUNOContext(), m_xDocumentModel );
             _inout_rDialogLibraryElement <<= xISP;
         }
         catch( const Exception& )
