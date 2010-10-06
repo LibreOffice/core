@@ -182,6 +182,7 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_PROP_3     ( "FormatsSupplier",        FORMATSSUPPLIER,    Reference< ::com::sun::star::util::XNumberFormatsSupplier >, BOUND, MAYBEVOID, TRANSIENT ),
 
             DECL_PROP_2     ( "Graphic",                GRAPHIC,            Reference< ::com::sun::star::graphic::XGraphic >, BOUND, TRANSIENT ),
+            DECL_PROP_2     ( "GroupName",              GROUPNAME,          ::rtl::OUString,    BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "HelpText",               HELPTEXT,           ::rtl::OUString,    BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "HelpURL",                HELPURL,            ::rtl::OUString,    BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "HideInactiveSelection",  HIDEINACTIVESELECTION, bool,            BOUND, MAYBEDEFAULT ),
@@ -284,6 +285,7 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_PROP_3     ( "SelectionModel",         GRID_SELECTIONMODE,     ::com::sun::star::view::SelectionType,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_2     ( "EnableVisible",          ENABLEVISIBLE,          sal_Bool,           BOUND, MAYBEDEFAULT ),
             DECL_PROP_3     ( "ReferenceDevice",        REFERENCE_DEVICE,       Reference< XDevice >,BOUND, MAYBEDEFAULT, TRANSIENT ),
+            DECL_PROP_2     ( "VBAForm",                VBAFORM,                sal_Bool,           BOUND, MAYBEDEFAULT ),
             DECL_PROP_3     ( "EvenRowBackgroundColor", GRID_EVEN_ROW_BACKGROUND, sal_Int32,      BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_3     ( "HeaderBackgroundColor",  GRID_HEADER_BACKGROUND,  sal_Int32,      BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_3     ( "GridLineColor",          GRID_LINE_COLOR,         sal_Int32,      BOUND, MAYBEDEFAULT, MAYBEVOID ),

@@ -165,6 +165,7 @@ IMPL_CREATEINSTANCE( UnoControlTimeFieldModel )
 IMPL_CREATEINSTANCE( UnoControlProgressBarModel )
 IMPL_CREATEINSTANCE( UnoControlScrollBarModel )
 IMPL_CREATEINSTANCE( UnoSpinButtonModel )
+IMPL_CREATEINSTANCE( UnoMultiPageModel )
 IMPL_CREATEINSTANCE( UnoControlFixedLineModel )
 IMPL_CREATEINSTANCE( UnoCurrencyFieldControl )
 IMPL_CREATEINSTANCE( UnoDateFieldControl )
@@ -184,6 +185,7 @@ IMPL_CREATEINSTANCE( UnoTimeFieldControl )
 IMPL_CREATEINSTANCE( UnoProgressBarControl )
 IMPL_CREATEINSTANCE( UnoScrollBarControl )
 IMPL_CREATEINSTANCE( UnoSpinButtonControl )
+IMPL_CREATEINSTANCE( UnoMultiPageControl )
 IMPL_CREATEINSTANCE( UnoFixedLineControl )
 IMPL_CREATEINSTANCE( VCLXMenuBar )
 IMPL_CREATEINSTANCE( VCLXPointer )
@@ -276,6 +278,8 @@ TOOLKIT_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo( void* _pServiceManager,
         registerServices( xRegistryKey, "UnoControlScrollBarModel", szServiceName_UnoControlScrollBarModel, szServiceName2_UnoControlScrollBarModel );
         registerServices( xRegistryKey, "UnoSpinButtonModel", szServiceName_UnoSpinButtonModel );
         registerServices( xRegistryKey, "UnoSpinButtonControl", szServiceName_UnoSpinButtonControl );
+        registerServices( xRegistryKey, "UnoMultiPageModel", szServiceName_UnoMultiPageModel );
+        registerServices( xRegistryKey, "UnoMultiPageControl", szServiceName_UnoMultiPageControl );
         registerServices( xRegistryKey, "UnoFixedLineControl", szServiceName_UnoControlFixedLine, szServiceName2_UnoControlFixedLine );
         registerServices( xRegistryKey, "UnoControlFixedLineModel", szServiceName_UnoControlFixedLineModel, szServiceName2_UnoControlFixedLineModel );
         registerServices( xRegistryKey, "VCLXPrinterServer", szServiceName_PrinterServer, szServiceName2_PrinterServer );
@@ -366,6 +370,8 @@ TOOLKIT_DLLPUBLIC void* SAL_CALL component_getFactory( const sal_Char* sImplemen
         CHECKANDCREATEFACTORY( VCLXPrinterServer, szServiceName_PrinterServer, szServiceName2_PrinterServer )
         CHECKANDCREATEFACTORY( UnoRoadmapControl, szServiceName_UnoControlRoadmap, szServiceName2_UnoControlRoadmap )
         CHECKANDCREATEFACTORY( UnoControlRoadmapModel, szServiceName_UnoControlRoadmapModel, szServiceName2_UnoControlRoadmapModel )
+        CHECKANDCREATEFACTORY( UnoMultiPageModel, szServiceName_UnoMultiPageModel, NULL )
+        CHECKANDCREATEFACTORY( UnoMultiPageControl, szServiceName_UnoMultiPageControl, NULL )
         CHECKANDCREATEFACTORY( UnoSpinButtonModel, szServiceName_UnoSpinButtonModel, NULL )
         CHECKANDCREATEFACTORY( UnoSpinButtonControl, szServiceName_UnoSpinButtonControl, NULL )
         CHECKANDCREATEFACTORY( TreeControl, szServiceName_TreeControl, NULL )

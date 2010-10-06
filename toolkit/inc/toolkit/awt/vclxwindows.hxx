@@ -94,6 +94,7 @@
 #include <vcl/pointr.hxx>
 #include <vcl/image.hxx>
 
+#include <com/sun/star/document/XVbaMethodParameter.hpp>  //liuchen 2009-6-22, add the support of input/output parameters to VBA Dialog_QueryClose event
 class Button;
 class CheckBox;
 class RadioButton;
@@ -378,6 +379,7 @@ public:
 //  class VCLXDialog
 //  ----------------------------------------------------
 class VCLXDialog :  public ::com::sun::star::awt::XDialog2,
+                        public ::com::sun::star::document::XVbaMethodParameter, //liuchen 2009-6-22, add the support of input/output parameters to VBA UserForm_QueryClose event
                     public VCLXTopWindow
 {
 public:
@@ -415,6 +417,10 @@ public:
     // ::com::sun::star::awt::XVclWindowPeer
     void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
 
+    //liuchen 2009-6-23, support Excel VBA UserForm_QueryClose event
+    // ::com::sun::star::document::XVBAMethodParameter
+    void SAL_CALL setVbaMethodParameter( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Any SAL_CALL getVbaMethodParameter( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
 };
 
 //  ----------------------------------------------------

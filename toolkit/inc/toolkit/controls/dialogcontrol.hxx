@@ -48,6 +48,8 @@
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <list>
+#include <map>
+#include <com/sun/star/graphic/XGraphicObject.hpp>
 
 //  ----------------------------------------------------
 //  class UnoControlDialogModel
@@ -89,6 +91,8 @@ private:
     AllGroups                           maGroups;
     sal_Bool                            mbGroupsUpToDate;
 
+    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphicObject > mxGrfObj;
+    bool mbAdjustingGraphic;
 protected:
     ::com::sun::star::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const;
     ::cppu::IPropertyArrayHelper&       SAL_CALL getInfoHelper();
@@ -175,10 +179,20 @@ public:
 protected:
     void startControlListening( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& _rxChildModel );
     void stopControlListening( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& _rxChildModel );
+    // ::cppu::OPropertySetHelper
+    void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::uno::Exception);
 
     void implNotifyTabModelChange( const ::rtl::OUString& _rAccessor );
 
     void implUpdateGroupStructure();
+private:
+    void AddRadioButtonToGroup (
+            const ::com::sun::star::uno::Reference< XControlModel >& rControlModel,
+            const ::rtl::OUString& rPropertyName,
+            ::std::map< ::rtl::OUString, ModelGroup >& pNamedGroups,
+            ModelGroup*& rpCurrentGroup );
+    void AddRadioButtonGroup (
+            ::std::map< ::rtl::OUString, ModelGroup >& pNamedGroups );
 };
 
 //  ----------------------------------------------------

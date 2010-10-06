@@ -559,7 +559,18 @@ BOOL Dialog::Close()
 {
     ImplDelData aDelData;
     ImplAddDel( &aDelData );
+    //liuchen 2009-7-22, support Excel VBA UserForm_QueryClose event
+    mnCancelClose = 0;
     ImplCallEventListeners( VCLEVENT_WINDOW_CLOSE );
+        // basic boolean ( and what the user might use in the event handler) can
+    // be ambiguous ( e.g. basic true = -1 )
+    // test agains 0 ( false ) and assume anything else is true
+    // ( Note: ) this used to work ( something changes somewhere )
+    if (mnCancelClose != 0)
+    {
+        return FALSE;
+    }
+    //liuchen 2009-7-22
     if ( aDelData.IsDelete() )
         return FALSE;
     ImplRemoveDel( &aDelData );

@@ -46,6 +46,8 @@
 
 #define DIBCOREHEADERSIZE           ( 12UL )
 #define DIBINFOHEADERSIZE           ( sizeof( DIBInfoHeader ) )
+#define BITMAPINFOHEADER                        0x28
+
 #define SETPIXEL4( pBuf, nX, cChar )( (pBuf)[ (nX) >> 1 ] |= ( (nX) & 1 ) ? ( cChar ): (cChar) << 4 );
 
 // ----------------------
@@ -129,7 +131,7 @@ SvStream& operator<<( SvStream& rOStm, const Bitmap& rBitmap )
 
 // ------------------------------------------------------------------
 
-BOOL Bitmap::Read( SvStream& rIStm, BOOL bFileHeader )
+BOOL Bitmap::Read( SvStream& rIStm, BOOL bFileHeader, BOOL bIsMSOFormat )
 {
     const USHORT    nOldFormat = rIStm.GetNumberFormatInt();
     const ULONG     nOldPos = rIStm.Tell();
@@ -144,7 +146,7 @@ BOOL Bitmap::Read( SvStream& rIStm, BOOL bFileHeader )
             bRet = ImplReadDIB( rIStm, *this, nOffset );
     }
     else
-        bRet = ImplReadDIB( rIStm, *this, nOffset );
+        bRet = ImplReadDIB( rIStm, *this, nOffset, bIsMSOFormat );
 
     if( !bRet )
     {
@@ -161,14 +163,14 @@ BOOL Bitmap::Read( SvStream& rIStm, BOOL bFileHeader )
 
 // ------------------------------------------------------------------
 
-BOOL Bitmap::ImplReadDIB( SvStream& rIStm, Bitmap& rBmp, ULONG nOffset )
+BOOL Bitmap::ImplReadDIB( SvStream& rIStm, Bitmap& rBmp, ULONG nOffset, BOOL bIsMSOFormat )
 {
     DIBInfoHeader   aHeader;
     const ULONG     nStmPos = rIStm.Tell();
     BOOL            bRet = FALSE;
     sal_Bool        bTopDown = sal_False;
 
-    if( ImplReadDIBInfoHeader( rIStm, aHeader, bTopDown ) && aHeader.nWidth && aHeader.nHeight && aHeader.nBitCount )
+    if( ImplReadDIBInfoHeader( rIStm, aHeader, bTopDown, bIsMSOFormat ) && aHeader.nWidth && aHeader.nHeight && aHeader.nBitCount )
     {
         const USHORT nBitCount( discretizeBitcount(aHeader.nBitCount) );
 
@@ -299,20 +301,36 @@ BOOL Bitmap::ImplReadDIBFileHeader( SvStream& rIStm, ULONG& rOffset )
 
 // ------------------------------------------------------------------
 
-BOOL Bitmap::ImplReadDIBInfoHeader( SvStream& rIStm, DIBInfoHeader& rHeader, sal_Bool& bTopDown )
+BOOL Bitmap::ImplReadDIBInfoHeader( SvStream& rIStm, DIBInfoHeader& rHeader, sal_Bool& bTopDown, sal_Bool bIsMSOFormat )
 {
     // BITMAPINFOHEADER or BITMAPCOREHEADER
     rIStm >> rHeader.nSize;
 
     // BITMAPCOREHEADER
+    sal_Int16 nTmp16 = 0;
+    sal_uInt8 nTmp8 = 0;
     if ( rHeader.nSize == DIBCOREHEADERSIZE )
     {
-        sal_Int16 nTmp16;
 
         rIStm >> nTmp16; rHeader.nWidth = nTmp16;
         rIStm >> nTmp16; rHeader.nHeight = nTmp16;
         rIStm >> rHeader.nPlanes;
         rIStm >> rHeader.nBitCount;
+    }
+    else if ( bIsMSOFormat && ( rHeader.nSize == BITMAPINFOHEADER ) )
+    {
+        rIStm >> nTmp16; rHeader.nWidth = nTmp16;
+        rIStm >> nTmp16; rHeader.nHeight = nTmp16;
+        rIStm >> nTmp8; rHeader.nPlanes = nTmp8;
+        rIStm >> nTmp8; rHeader.nBitCount = nTmp8;
+        rIStm >> nTmp16; rHeader.nSizeImage = nTmp16;
+        rIStm >> nTmp16; rHeader.nCompression = nTmp16;
+        if ( !rHeader.nSizeImage ) // uncompressed?
+            rHeader.nSizeImage = ((rHeader.nWidth * rHeader.nBitCount + 31) & ~31) / 8 * rHeader.nHeight;
+        rIStm >> rHeader.nXPelsPerMeter;
+        rIStm >> rHeader.nYPelsPerMeter;
+        rIStm >> rHeader.nColsUsed;
+        rIStm >> rHeader.nColsImportant;
     }
     else
     {

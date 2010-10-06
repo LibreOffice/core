@@ -53,6 +53,7 @@ private:
     BOOL            mbOldSaveBack;
     BOOL            mbInClose;
     BOOL            mbModalMode;
+    sal_Int8        mnCancelClose;  //liuchen 2009-7-22, support Excel VBA UserForm_QueryClose event
 
     SAL_DLLPRIVATE void    ImplInitDialogData();
     SAL_DLLPRIVATE void    ImplInitSettings();
@@ -90,6 +91,9 @@ public:
 
     virtual short   Execute();
     BOOL            IsInExecute() const { return mbInExecute; }
+
+    sal_Int8        GetCloseFlag() const { return mnCancelClose; }  //liuchen 2009-7-22, support Excel VBA UserForm_QueryClose event
+    void            SetCloseFlag( sal_Int8 nCancel ) { mnCancelClose = nCancel; }  //liuchen 2009-7-22, support Excel VBA UserForm_QueryClose event
 
     ////////////////////////////////////////
     // Dialog::Execute replacement API

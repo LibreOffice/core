@@ -75,6 +75,8 @@ SLOFILES=\
     $(SLO)$/transfer.obj            \
     $(SLO)$/transfer2.obj           \
     $(SLO)$/unitconv.obj           \
+    $(SLO)$/bindablecontrolhelper.obj   \
+    $(SLO)$/filterutils.obj   \
     $(SLO)$/wallitem.obj           \
     $(SLO)$/xwindowitem.obj
 

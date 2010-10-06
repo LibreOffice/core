@@ -81,6 +81,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::script;
 using namespace toolkit;
 
 #define PROPERTY_RESOURCERESOLVER ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ResourceResolver" ))
@@ -90,6 +91,8 @@ using namespace toolkit;
 
 //HELPER
 ::rtl::OUString getPhysicalLocation( const ::com::sun::star::uno::Any& rbase, const ::com::sun::star::uno::Any& rUrl );
+
+uno::Reference< graphic::XGraphic > getGraphicFromURL_nothrow( uno::Reference< graphic::XGraphicObject >& rxGrfObj, const ::rtl::OUString& _rURL );
 
 struct LanguageDependentProp
 {
@@ -141,6 +144,18 @@ namespace
         }
 
         return xGraphic;
+    }
+
+    static ::rtl::OUString lcl_GetStringProperty( const ::rtl::OUString& sProperty, const Reference< XPropertySet >& xSet )
+    {
+        ::rtl::OUString sValue;
+        Reference< XPropertySetInfo > xPSI;
+        if (xSet.is() && (xPSI = xSet->getPropertySetInfo()).is() &&
+                xPSI->hasPropertyByName( sProperty ) )
+        {
+            xSet->getPropertyValue( sProperty ) >>= sValue;
+        }
+        return sValue;
     }
 
 }
@@ -254,7 +269,7 @@ static const ::rtl::OUString& getStepPropertyName( )
 UnoControlDialogModel::UnoControlDialogModel()
     :maContainerListeners( *this )
     ,maChangeListeners ( GetMutex() )
-    ,mbGroupsUpToDate( sal_False )
+    ,mbGroupsUpToDate( sal_False ), mbAdjustingGraphic( false )
 {
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
 //  ImplRegisterProperty( BASEPROPERTY_BORDER );
@@ -276,6 +291,8 @@ UnoControlDialogModel::UnoControlDialogModel()
     aBool <<= (sal_Bool) sal_True;
     ImplRegisterProperty( BASEPROPERTY_MOVEABLE, aBool );
     ImplRegisterProperty( BASEPROPERTY_CLOSEABLE, aBool );
+    aBool <<= (sal_Bool) sal_False;
+    ImplRegisterProperty( BASEPROPERTY_VBAFORM, aBool );
 }
 
 UnoControlDialogModel::UnoControlDialogModel( const UnoControlDialogModel& rModel )
@@ -283,7 +300,7 @@ UnoControlDialogModel::UnoControlDialogModel( const UnoControlDialogModel& rMode
     , UnoControlDialogModel_Base( rModel )
     , maContainerListeners( *this )
     , maChangeListeners ( GetMutex() )
-    , mbGroupsUpToDate( sal_False )
+    , mbGroupsUpToDate( sal_False ), mbAdjustingGraphic( false )
 {
 }
 
@@ -312,6 +329,40 @@ Sequence< Type > UnoControlDialogModel::getTypes() throw(RuntimeException)
 ::rtl::OUString UnoControlDialogModel::getServiceName( ) throw(RuntimeException)
 {
     return ::rtl::OUString::createFromAscii( szServiceName_UnoControlDialogModel );
+}
+
+void SAL_CALL UnoControlDialogModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::uno::Exception)
+{
+    UnoControlModel::setFastPropertyValue_NoBroadcast( nHandle, rValue );
+    try
+    {
+        switch ( nHandle )
+        {
+        case BASEPROPERTY_IMAGEURL:
+            if ( !mbAdjustingGraphic && ImplHasProperty( BASEPROPERTY_GRAPHIC ) )
+            {
+                mbAdjustingGraphic = true;
+                ::rtl::OUString sImageURL;
+                OSL_VERIFY( rValue >>= sImageURL );
+                setPropertyValue( GetPropertyName( BASEPROPERTY_GRAPHIC ), uno::makeAny( getGraphicFromURL_nothrow( mxGrfObj, sImageURL ) ) );
+                mbAdjustingGraphic = false;
+            }
+            break;
+
+        case BASEPROPERTY_GRAPHIC:
+            if ( !mbAdjustingGraphic && ImplHasProperty( BASEPROPERTY_IMAGEURL ) )
+            {
+                mbAdjustingGraphic = true;
+                setPropertyValue( GetPropertyName( BASEPROPERTY_IMAGEURL ), uno::makeAny( ::rtl::OUString() ) );
+                mbAdjustingGraphic = false;
+            }
+            break;
+    }
+    }
+    catch( const ::com::sun::star::uno::Exception& )
+    {
+        OSL_ENSURE( sal_False, "UnoControlDialogModel::setFastPropertyValue_NoBroadcast: caught an exception while setting Graphic/ImageURL properties!" );
+    }
 }
 
 Any UnoControlDialogModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -906,6 +957,63 @@ void UnoControlDialogModel::implNotifyTabModelChange( const ::rtl::OUString& _rA
     }
 }
 
+// ----------------------------------------------------------------------------
+void UnoControlDialogModel::AddRadioButtonGroup (
+        ::std::map< ::rtl::OUString, ModelGroup >& rNamedGroups )
+{
+    if ( rNamedGroups.size() == 0 )
+        return;
+
+    size_t nGroups = maGroups.size();
+    maGroups.reserve( nGroups + rNamedGroups.size() );
+    ::std::map< ::rtl::OUString, ModelGroup >::const_iterator i = rNamedGroups.begin(), e = rNamedGroups.end();
+    for( ; i != e; ++i)
+    {
+            maGroups.push_back( i->second );
+    }
+
+    rNamedGroups.clear();
+}
+
+void UnoControlDialogModel::AddRadioButtonToGroup (
+        const Reference< XControlModel >& rControlModel,
+        const ::rtl::OUString& rPropertyName,
+        ::std::map< ::rtl::OUString, ModelGroup >& rNamedGroups,
+        ModelGroup*& rpCurrentGroup )
+{
+    Reference< XPropertySet > xCurProps( rControlModel, UNO_QUERY );
+    ::rtl::OUString sGroup = lcl_GetStringProperty( rPropertyName, xCurProps );
+    const sal_Int32 nControlModelStep = lcl_getDialogStep( rControlModel );
+
+    if ( sGroup.getLength() == 0 )
+    {
+        // Create a new group if:
+        if ( maGroups.size() == 0 ||                // no groups
+                rpCurrentGroup == NULL ||           // previous group was closed
+                (nControlModelStep != 0 &&          // control step matches current group
+                 maGroups.back().size() > 0 &&      //  (group 0 == display everywhere)
+                 nControlModelStep != lcl_getDialogStep( maGroups.back().back() ) ) )
+        {
+            size_t nGroups = maGroups.size();
+            maGroups.resize( nGroups + 1 );
+        }
+        rpCurrentGroup = &maGroups.back();
+    }
+    else
+    {
+        // Different steps get different sets of named groups
+        if ( rNamedGroups.size() > 0 &&
+                rNamedGroups.begin()->second.size() > 0 )
+        {
+            const sal_Int32 nPrevStep = lcl_getDialogStep( rNamedGroups.begin()->second.front() );
+            if ( nControlModelStep != nPrevStep )
+                AddRadioButtonGroup( rNamedGroups );
+        }
+
+        rpCurrentGroup = &rNamedGroups[ sGroup ];
+    }
+    rpCurrentGroup->push_back( rControlModel );
+}
 
 // ----------------------------------------------------------------------------
 void UnoControlDialogModel::implUpdateGroupStructure()
@@ -930,9 +1038,12 @@ void UnoControlDialogModel::implUpdateGroupStructure()
 
     GroupingMachineState eState = eLookingForGroup;     // the current state of our machine
     Reference< XServiceInfo > xModelSI;                 // for checking for a radion button
-    AllGroups::iterator aCurrentGroup = maGroups.end(); // the group which we're currently building
-    sal_Int32   nCurrentGroupStep = -1;                 // the step which all controls of the current group belong to
+    ModelGroup* aCurrentGroup = NULL;                   // the group which we're currently building
     sal_Bool    bIsRadioButton;                         // is it a radio button?
+
+    const ::rtl::OUString GROUP_NAME( RTL_CONSTASCII_USTRINGPARAM( "GroupName" ) );
+
+    ::std::map< ::rtl::OUString, ModelGroup > aNamedGroups;
 
 #if OSL_DEBUG_LEVEL > 1
     ::std::vector< ::rtl::OUString > aCurrentGroupLabels;
@@ -954,14 +1065,8 @@ void UnoControlDialogModel::implUpdateGroupStructure()
                 // the current model is a radio button
                 // -> we found the beginning of a new group
                 // create the place for this group
-                size_t nGroups = maGroups.size();
-                maGroups.resize( nGroups + 1 );
-                aCurrentGroup = maGroups.begin() + nGroups;
-                // and add the (only, til now) member
-                aCurrentGroup->push_back( *pControlModels );
+                AddRadioButtonToGroup( *pControlModels, GROUP_NAME, aNamedGroups, aCurrentGroup );
 
-                // get the step which all controls of this group now have to belong to
-                nCurrentGroupStep = lcl_getDialogStep( *pControlModels );
                 // new state: looking for further members
                 eState = eExpandingGroup;
 
@@ -979,7 +1084,7 @@ void UnoControlDialogModel::implUpdateGroupStructure()
             {
                 if ( !bIsRadioButton )
                 {   // no radio button -> the group is done
-                    aCurrentGroup = maGroups.end();
+                    aCurrentGroup = NULL;
                     eState = eLookingForGroup;
 #if OSL_DEBUG_LEVEL > 1
                     aCurrentGroupLabels.clear();
@@ -987,47 +1092,8 @@ void UnoControlDialogModel::implUpdateGroupStructure()
                     continue;
                 }
 
-                // it is a radio button - is it on the proper page?
-                const sal_Int32 nThisModelStep = lcl_getDialogStep( *pControlModels );
-                if  (   ( nThisModelStep == nCurrentGroupStep ) // the current button is on the same dialog page
-                    ||  ( 0 == nThisModelStep )                 // the current button appears on all pages
-                    )
-                {
-                    // -> it belongs to the same group
-                    aCurrentGroup->push_back( *pControlModels );
-                    // state still is eExpandingGroup - we're looking for further elements
-                    eState = eExpandingGroup;
+                AddRadioButtonToGroup( *pControlModels, GROUP_NAME, aNamedGroups, aCurrentGroup );
 
-#if OSL_DEBUG_LEVEL > 1
-                    Reference< XPropertySet > xModelProps( *pControlModels, UNO_QUERY );
-                    ::rtl::OUString sLabel;
-                    if ( xModelProps.is() && xModelProps->getPropertySetInfo().is() && xModelProps->getPropertySetInfo()->hasPropertyByName( ::rtl::OUString::createFromAscii( "Label" ) ) )
-                        xModelProps->getPropertyValue( ::rtl::OUString::createFromAscii( "Label" ) ) >>= sLabel;
-                    aCurrentGroupLabels.push_back( sLabel );
-#endif
-                    continue;
-                }
-
-                // it's a radio button, but on a different page
-                // -> we open a new group for it
-
-                // close the old group
-                aCurrentGroup = maGroups.end();
-#if OSL_DEBUG_LEVEL > 1
-                aCurrentGroupLabels.clear();
-#endif
-
-                // open a new group
-                size_t nGroups = maGroups.size();
-                maGroups.resize( nGroups + 1 );
-                aCurrentGroup = maGroups.begin() + nGroups;
-                // and add the (only, til now) member
-                aCurrentGroup->push_back( *pControlModels );
-
-                nCurrentGroupStep = nThisModelStep;
-
-                // state is the same: we still are looking for further elements of the current group
-                eState = eExpandingGroup;
 #if OSL_DEBUG_LEVEL > 1
                 Reference< XPropertySet > xModelProps( *pControlModels, UNO_QUERY );
                 ::rtl::OUString sLabel;
@@ -1040,6 +1106,7 @@ void UnoControlDialogModel::implUpdateGroupStructure()
         }
     }
 
+    AddRadioButtonGroup( aNamedGroups );
     mbGroupsUpToDate = sal_True;
 }
 
@@ -1420,17 +1487,32 @@ void UnoDialogControl::ImplSetPosSize( Reference< XControl >& rxCtrl )
     xP->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Width" ) ) ) >>= nWidth;
     xP->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Height" ) ) ) >>= nHeight;
 
-    // Currentley we are simply using MAP_APPFONT
+    // Currentley we are simply using MAP_APPFONT ( for normal Dialogs )
+    // and MAP_100TH_MM for imported Userforms
+    MapMode aMode( MAP_APPFONT );
+    sal_Bool bVBAForm = sal_False;
+    Reference< XPropertySet > xDlgModelProps( getModel(), UNO_QUERY );
+    if ( xDlgModelProps.is() )
+    {
+        try
+        {
+            xDlgModelProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VBAForm" ) ) ) >>= bVBAForm;
+        }
+        catch( Exception& )
+        {
+        }
+    }
+    if ( bVBAForm )
+        aMode = MapMode( MAP_100TH_MM );
     OutputDevice*pOutDev = Application::GetDefaultDevice();
-    DBG_ASSERT( pOutDev, "Missing Default Device!" );
     if ( pOutDev )
     {
         ::Size aTmp( nX, nY );
-        aTmp = pOutDev->LogicToPixel( aTmp, MAP_APPFONT );
+        aTmp = pOutDev->LogicToPixel( aTmp, aMode );
         nX = aTmp.Width();
         nY = aTmp.Height();
         aTmp = ::Size( nWidth, nHeight );
-        aTmp = pOutDev->LogicToPixel( aTmp, MAP_APPFONT );
+        aTmp = pOutDev->LogicToPixel( aTmp, aMode );
         nWidth = aTmp.Width();
         nHeight = aTmp.Height();
     }
@@ -1649,17 +1731,16 @@ void UnoDialogControl::PrepareWindowDescriptor( ::com::sun::star::awt::WindowDes
     // can lead to overwrites we have to set the graphic property
     // before the propertiesChangeEvents are sent!
     ::rtl::OUString aImageURL;
-    Reference< graphic::XGraphic > xGraphic;
     if (( ImplGetPropertyValue( PROPERTY_IMAGEURL ) >>= aImageURL ) &&
         ( aImageURL.getLength() > 0 ))
     {
-        ::rtl::OUString absoluteUrl =
+        aImageURL =
             getPhysicalLocation( ImplGetPropertyValue( PROPERTY_DIALOGSOURCEURL ),
                                  ImplGetPropertyValue( PROPERTY_IMAGEURL ));
 
-        xGraphic = lcl_getGraphicFromURL_nothrow( absoluteUrl );
-        ImplSetPropertyValue( PROPERTY_GRAPHIC, uno::makeAny( xGraphic ), sal_True );
     }
+    if ( aImageURL.compareToAscii( UNO_NAME_GRAPHOBJ_URLPREFIX, RTL_CONSTASCII_LENGTH( UNO_NAME_GRAPHOBJ_URLPREFIX ) ) != 0 )
+        ImplSetPropertyValue( PROPERTY_IMAGEURL, uno::makeAny( aImageURL ), sal_True );
 }
 
 void UnoDialogControl::elementInserted( const ContainerEvent& Event ) throw(RuntimeException)
@@ -1891,18 +1972,16 @@ void UnoDialogControl::ImplModelPropertiesChanged( const Sequence< PropertyChang
         if ( bOwnModel && rEvt.PropertyName.equalsAsciiL( "ImageURL", 8 ))
         {
             ::rtl::OUString aImageURL;
-            Reference< graphic::XGraphic > xGraphic;
             if (( ImplGetPropertyValue( PROPERTY_IMAGEURL ) >>= aImageURL ) &&
                 ( aImageURL.getLength() > 0 ))
             {
-                ::rtl::OUString absoluteUrl =
+                aImageURL =
                     getPhysicalLocation( ImplGetPropertyValue( PROPERTY_DIALOGSOURCEURL ),
                                          ImplGetPropertyValue( PROPERTY_IMAGEURL ));
 
-                xGraphic = lcl_getGraphicFromURL_nothrow( absoluteUrl );
             }
 
-            ImplSetPropertyValue( PROPERTY_GRAPHIC, uno::makeAny( xGraphic ), sal_True );
+            ImplSetPropertyValue( PROPERTY_IMAGEURL, uno::makeAny( aImageURL ), sal_True );
             break;
         }
     }
@@ -2103,6 +2182,9 @@ throw (RuntimeException)
 
 ::rtl::OUString getPhysicalLocation( const ::com::sun::star::uno::Any& rbase, const ::com::sun::star::uno::Any& rUrl )
 {
+
+        ::rtl::OUString ret;
+
     ::rtl::OUString baseLocation;
     ::rtl::OUString url;
 
@@ -2112,9 +2194,16 @@ throw (RuntimeException)
     ::rtl::OUString absoluteURL( url );
     if ( url.getLength() > 0 )
     {
-        INetURLObject urlObj(baseLocation);
-        urlObj.removeSegment();
-        baseLocation = urlObj.GetMainURL( INetURLObject::NO_DECODE );
+        // Don't adjust GraphicObject url(s)
+        if ( url.compareToAscii( UNO_NAME_GRAPHOBJ_URLPREFIX, RTL_CONSTASCII_LENGTH( UNO_NAME_GRAPHOBJ_URLPREFIX ) ) != 0 )
+        {
+            INetURLObject urlObj(baseLocation);
+            urlObj.removeSegment();
+            baseLocation = urlObj.GetMainURL( INetURLObject::NO_DECODE );
+            ::osl::FileBase::getAbsoluteFileURL( baseLocation, url, ret );
+        }
+        else
+            ret = url;
 
         const INetURLObject protocolCheck( url );
         const INetProtocol protocol = protocolCheck.GetProtocol();

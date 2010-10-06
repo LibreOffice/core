@@ -45,6 +45,7 @@
 #endif
 #include <vcl/svapp.hxx>
 #include <vcl/bmpacc.hxx>
+#include <vcl/virdev.hxx>
 
 // ------------
 // - BitmapEx -
@@ -757,6 +758,61 @@ void BitmapEx::Draw( OutputDevice* pOutDev,
     pOutDev->DrawBitmapEx( rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, *this );
 }
 
+BitmapEx BitmapEx:: AutoScaleBitmap(BitmapEx & aBitmap, const long aStandardSize)
+{
+    Point aEmptyPoint(0,0);
+    sal_Int32 imgNewWidth = 0;
+    sal_Int32 imgNewHeight = 0;
+    double imgposX = 0;
+    double imgposY = 0;
+    BitmapEx  aRet = aBitmap;
+    double imgOldWidth = aRet.GetSizePixel().Width();
+    double imgOldHeight =aRet.GetSizePixel().Height();
+
+    Size aScaledSize;
+    if (imgOldWidth >= aStandardSize || imgOldHeight >= aStandardSize)
+    {
+        if (imgOldWidth >= imgOldHeight)
+        {
+            imgNewWidth = aStandardSize;
+            imgNewHeight = sal_Int32(imgOldHeight / (imgOldWidth / aStandardSize) + 0.5);
+            imgposX = 0;
+            imgposY = (aStandardSize - (imgOldHeight / (imgOldWidth / aStandardSize) + 0.5)) / 2 + 0.5;
+        }
+        else
+        {
+            imgNewHeight = aStandardSize;
+            imgNewWidth = sal_Int32(imgOldWidth / (imgOldHeight / aStandardSize) + 0.5);
+            imgposY = 0;
+            imgposX = (aStandardSize - (imgOldWidth / (imgOldHeight / aStandardSize) + 0.5)) / 2 + 0.5;
+        }
+
+        aScaledSize = Size( imgNewWidth, imgNewHeight );
+        aRet.Scale( aScaledSize, BMP_SCALE_INTERPOLATE );
+    }
+    else
+    {
+        imgposX = (aStandardSize - imgOldWidth) / 2 + 0.5;
+        imgposY = (aStandardSize - imgOldHeight) / 2 + 0.5;
+    }
+
+    Size aBmpSize = aRet.GetSizePixel();
+    Size aStdSize( aStandardSize, aStandardSize );
+    Rectangle aRect(aEmptyPoint, aStdSize );
+
+    VirtualDevice aVirDevice( *Application::GetDefaultDevice(), 0, 1 );
+    aVirDevice.SetOutputSizePixel( aStdSize );
+    aVirDevice.SetFillColor( COL_TRANSPARENT );
+    aVirDevice.SetLineColor( COL_TRANSPARENT );
+
+    //draw a rect into virDevice
+    aVirDevice.DrawRect( aRect );
+    Point aPointPixel( (long)imgposX, (long)imgposY );
+    aVirDevice.DrawBitmapEx( aPointPixel, aRet );
+    aRet = aVirDevice.GetBitmapEx( aEmptyPoint, aStdSize );
+
+    return aRet;
+}
 // ------------------------------------------------------------------
 
 sal_uInt8 BitmapEx::GetTransparency(sal_Int32 nX, sal_Int32 nY) const
