@@ -161,6 +161,30 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     };
     friend class ComponentPackageImpl;
 
+    class ComponentsPackageImpl : public ::dp_registry::backend::Package
+    {
+        BackendImpl * getMyBackend() const;
+
+        // Package
+        virtual beans::Optional< beans::Ambiguous<sal_Bool> > isRegistered_(
+            ::osl::ResettableMutexGuard & guard,
+            ::rtl::Reference<AbortChannel> const & abortChannel,
+            Reference<XCommandEnvironment> const & xCmdEnv );
+        virtual void processPackage_(
+            ::osl::ResettableMutexGuard & guard,
+            bool registerPackage,
+            bool startup,
+            ::rtl::Reference<AbortChannel> const & abortChannel,
+            Reference<XCommandEnvironment> const & xCmdEnv );
+    public:
+        ComponentsPackageImpl(
+            ::rtl::Reference<PackageRegistryBackend> const & myBackend,
+            OUString const & url, OUString const & name,
+            Reference<deployment::XPackageTypeInfo> const & xPackageType,
+            bool bRemoved, OUString const & identifier);
+    };
+    friend class ComponentsPackageImpl;
+
     class TypelibraryPackageImpl : public ::dp_registry::backend::Package
     {
         BackendImpl * getMyBackend() const;
@@ -194,8 +218,20 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 
     t_stringlist m_jar_typelibs;
     t_stringlist m_rdb_typelibs;
-    t_stringlist & getTypelibs( bool jar ) {
-        return jar ? m_jar_typelibs : m_rdb_typelibs;
+    t_stringlist m_components;
+
+    enum RcItem { RCITEM_JAR_TYPELIB, RCITEM_RDB_TYPELIB, RCITEM_COMPONENTS };
+
+    t_stringlist & getRcItemList( RcItem kind ) {
+        switch (kind)
+        {
+        case RCITEM_JAR_TYPELIB:
+            return m_jar_typelibs;
+        case RCITEM_RDB_TYPELIB:
+            return m_rdb_typelibs;
+        default: // case RCITEM_COMPONENTS
+            return m_components;
+        }
     }
 
     bool m_unorc_inited;
@@ -217,6 +253,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     const Reference<deployment::XPackageTypeInfo> m_xDynComponentTypeInfo;
     const Reference<deployment::XPackageTypeInfo> m_xJavaComponentTypeInfo;
     const Reference<deployment::XPackageTypeInfo> m_xPythonComponentTypeInfo;
+    const Reference<deployment::XPackageTypeInfo> m_xComponentsTypeInfo;
     const Reference<deployment::XPackageTypeInfo> m_xRDBTypelibTypeInfo;
     const Reference<deployment::XPackageTypeInfo> m_xJavaTypelibTypeInfo;
     Sequence< Reference<deployment::XPackageTypeInfo> > m_typeInfos;
@@ -254,11 +291,11 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
         OUString const & id, Reference<XInterface> const & xObject );
     void releaseObject( OUString const & id );
 
-    bool addToUnoRc( bool jarFile, OUString const & url,
+    bool addToUnoRc( RcItem kind, OUString const & url,
                      Reference<XCommandEnvironment> const & xCmdEnv );
-    bool removeFromUnoRc( bool jarFile, OUString const & url,
+    bool removeFromUnoRc( RcItem kind, OUString const & url,
                           Reference<XCommandEnvironment> const & xCmdEnv );
-    bool hasInUnoRc( bool jarFile, OUString const & url );
+    bool hasInUnoRc( RcItem kind, OUString const & url );
 
 
 
@@ -538,6 +575,13 @@ BackendImpl::BackendImpl(
                                           RID_STR_PYTHON_COMPONENT),
                                       RID_IMG_COMPONENT,
                                       RID_IMG_COMPONENT_HC ) ),
+      m_xComponentsTypeInfo( new Package::TypeInfo(
+                                 OUSTR("application/"
+                                       "vnd.sun.star.uno-components"),
+                                 OUSTR("*.components"),
+                                 getResourceString(RID_STR_COMPONENTS),
+                                 RID_IMG_COMPONENT,
+                                 RID_IMG_COMPONENT_HC ) ),
       m_xRDBTypelibTypeInfo( new Package::TypeInfo(
                                  OUSTR("application/"
                                        "vnd.sun.star.uno-typelibrary;"
@@ -553,13 +597,14 @@ BackendImpl::BackendImpl(
                                   getResourceString(RID_STR_JAVA_TYPELIB),
                                   RID_IMG_JAVA_TYPELIB,
                                   RID_IMG_JAVA_TYPELIB_HC ) ),
-      m_typeInfos( 5 )
+      m_typeInfos( 6 )
 {
     m_typeInfos[ 0 ] = m_xDynComponentTypeInfo;
     m_typeInfos[ 1 ] = m_xJavaComponentTypeInfo;
     m_typeInfos[ 2 ] = m_xPythonComponentTypeInfo;
-    m_typeInfos[ 3 ] = m_xRDBTypelibTypeInfo;
-    m_typeInfos[ 4 ] = m_xJavaTypelibTypeInfo;
+    m_typeInfos[ 3 ] = m_xComponentsTypeInfo;
+    m_typeInfos[ 4 ] = m_xRDBTypelibTypeInfo;
+    m_typeInfos[ 5 ] = m_xJavaTypelibTypeInfo;
 
     const Reference<XCommandEnvironment> xCmdEnv;
 
@@ -724,6 +769,17 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                 }
             }
             else if (subType.EqualsIgnoreCaseAscii(
+                         "vnd.sun.star.uno-components"))
+            {
+                INetContentTypeParameter const * param = params.find(
+                    ByteString("platform") );
+                if (param == 0 || platform_fits( param->m_sValue )) {
+                    return new BackendImpl::ComponentsPackageImpl(
+                        this, url, name, m_xComponentsTypeInfo, bRemoved,
+                        identifier);
+                }
+            }
+            else if (subType.EqualsIgnoreCaseAscii(
                          "vnd.sun.star.uno-typelibrary"))
             {
                 INetContentTypeParameter const * param = params.find(
@@ -816,11 +872,50 @@ void BackendImpl::unorc_verify_init(
                 while (index >= 0);
             }
             if (readLine( &line, OUSTR("UNO_SERVICES="), ucb_content,
-                          RTL_TEXTENCODING_UTF8 )) {
-                sal_Int32 start = sizeof ("UNO_SERVICES=?$ORIGIN/") - 1;
-                sal_Int32 sep = line.indexOf( ' ', start );
-                OSL_ASSERT( sep > 0 );
-                m_commonRDB_RO = line.copy( start, sep - start );
+                          RTL_TEXTENCODING_UTF8 ))
+            {
+                // The UNO_SERVICES line always has the BNF form
+                //  "UNO_SERVICES="
+                //  ("?$ORIGIN/" <common-rdb>)?                        -- first
+                //  "${$ORIGIN/${_OS}_${_ARCH}rc:UNO_SERVICES}"?       -- second
+                //  ("?" ("BUNDLED_EXTENSIONS" |                       -- third
+                //   "UNO_SHARED_PACKAGES_CACHE" | "UNO_USER_PACKAGES_CACHE")
+                //   ...)*
+                // so can unambiguously be split into its thre parts:
+                int state = 1;
+                for (sal_Int32 i = RTL_CONSTASCII_LENGTH("UNO_SERVICES=");
+                     i >= 0;)
+                {
+                    rtl::OUString token(line.getToken(0, ' ', i));
+                    if (token.getLength() != 0)
+                    {
+                        if (state == 1 &&
+                            token.matchAsciiL(
+                                RTL_CONSTASCII_STRINGPARAM("?$ORIGIN/")))
+                        {
+                            m_commonRDB_RO = token.copy(
+                                RTL_CONSTASCII_LENGTH("?$ORIGIN/"));
+                            state = 2;
+                        }
+                        else if (state <= 2 &&
+                                 token.equalsAsciiL(
+                                     RTL_CONSTASCII_STRINGPARAM(
+                                         "${$ORIGIN/${_OS}_${_ARCH}rc:"
+                                         "UNO_SERVICES}")))
+                        {
+                            state = 3;
+                        }
+                        else
+                        {
+                            if (token[0] == '?')
+                            {
+                                token = token.copy(1);
+                            }
+                            m_components.push_back(token);
+                            state = 3;
+                        }
+                    }
+                }
             }
 
             // native rc:
@@ -896,16 +991,27 @@ void BackendImpl::unorc_flush( Reference<XCommandEnvironment> const & xCmdEnv )
     OUString sCommonRDB(m_commonRDB.getLength() > 0 ? m_commonRDB : m_commonRDB_RO);
     OUString sNativeRDB(m_nativeRDB.getLength() > 0 ? m_nativeRDB : m_nativeRDB_RO);
 
-    if (sCommonRDB.getLength() > 0 || sNativeRDB.getLength() > 0)
+    if (sCommonRDB.getLength() > 0 || sNativeRDB.getLength() > 0 ||
+        !m_components.empty())
     {
-        buf.append( RTL_CONSTASCII_STRINGPARAM("UNO_SERVICES=?$ORIGIN/") );
-        buf.append( ::rtl::OUStringToOString(
-                        sCommonRDB, RTL_TEXTENCODING_ASCII_US ) );
+        buf.append( RTL_CONSTASCII_STRINGPARAM("UNO_SERVICES=") );
+        bool space = false;
+        if (sCommonRDB.getLength() > 0)
+        {
+            buf.append( RTL_CONSTASCII_STRINGPARAM("?$ORIGIN/") );
+            buf.append( ::rtl::OUStringToOString(
+                            sCommonRDB, RTL_TEXTENCODING_ASCII_US ) );
+            space = true;
+        }
         if (sNativeRDB.getLength() > 0)
         {
+            if (space)
+            {
+                buf.append(' ');
+            }
             buf.append( RTL_CONSTASCII_STRINGPARAM(
-                            " ${$ORIGIN/${_OS}_${_ARCH}rc:UNO_SERVICES}") );
-            buf.append(LF);
+                            "${$ORIGIN/${_OS}_${_ARCH}rc:UNO_SERVICES}") );
+            space = true;
 
             // write native rc:
             ::rtl::OStringBuffer buf2;
@@ -927,6 +1033,18 @@ void BackendImpl::unorc_flush( Reference<XCommandEnvironment> const & xCmdEnv )
                 xCmdEnv );
             ucb_content.writeStream( xData, true /* replace existing */ );
         }
+        for (t_stringlist::iterator i(m_components.begin());
+             i != m_components.end(); ++i)
+        {
+            if (space)
+            {
+                buf.append(' ');
+            }
+            buf.append('?');
+            buf.append(rtl::OUStringToOString(*i, RTL_TEXTENCODING_UTF8));
+            space = true;
+        }
+        buf.append(LF);
     }
 
     // write unorc:
@@ -943,13 +1061,13 @@ void BackendImpl::unorc_flush( Reference<XCommandEnvironment> const & xCmdEnv )
 }
 
 //______________________________________________________________________________
-bool BackendImpl::addToUnoRc( bool jarFile, OUString const & url_,
+bool BackendImpl::addToUnoRc( RcItem kind, OUString const & url_,
                               Reference<XCommandEnvironment> const & xCmdEnv )
 {
     const OUString rcterm( dp_misc::makeRcTerm(url_) );
     const ::osl::MutexGuard guard( getMutex() );
     unorc_verify_init( xCmdEnv );
-    t_stringlist & rSet = getTypelibs(jarFile);
+    t_stringlist & rSet = getRcItemList(kind);
     if (::std::find( rSet.begin(), rSet.end(), rcterm ) == rSet.end()) {
         rSet.push_front( rcterm ); // prepend to list, thus overriding
         // write immediately:
@@ -963,13 +1081,13 @@ bool BackendImpl::addToUnoRc( bool jarFile, OUString const & url_,
 
 //______________________________________________________________________________
 bool BackendImpl::removeFromUnoRc(
-    bool jarFile, OUString const & url_,
+    RcItem kind, OUString const & url_,
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
     const OUString rcterm( dp_misc::makeRcTerm(url_) );
     const ::osl::MutexGuard guard( getMutex() );
     unorc_verify_init( xCmdEnv );
-    getTypelibs(jarFile).remove( rcterm );
+    getRcItemList(kind).remove( rcterm );
     // write immediately:
     m_unorc_modified = true;
     unorc_flush( xCmdEnv );
@@ -978,11 +1096,11 @@ bool BackendImpl::removeFromUnoRc(
 
 //______________________________________________________________________________
 bool BackendImpl::hasInUnoRc(
-    bool jarFile, OUString const & url_ )
+    RcItem kind, OUString const & url_ )
 {
     const OUString rcterm( dp_misc::makeRcTerm(url_) );
     const ::osl::MutexGuard guard( getMutex() );
-    t_stringlist const & rSet = getTypelibs(jarFile);
+    t_stringlist const & rSet = getRcItemList(kind);
     return ::std::find( rSet.begin(), rSet.end(), rcterm ) != rSet.end();
 }
 
@@ -1264,7 +1382,7 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
         //It may fail if there is no suitable java.
         if (isJavaTypelib)
         {
-            that->addToUnoRc( java, url, xCmdEnv );
+            that->addToUnoRc( RCITEM_JAR_TYPELIB, url, xCmdEnv );
             data.javaTypeLibrary = true;
         }
 
@@ -1432,7 +1550,7 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
         xImplReg->revokeImplementation( url, xServicesRDB );
 
         if (isJavaTypelib)
-            that->removeFromUnoRc( java, url, xCmdEnv );
+            that->removeFromUnoRc( RCITEM_JAR_TYPELIB, url, xCmdEnv );
 
         if (bRemoteContext)
             that->releaseObject( url );
@@ -1480,7 +1598,8 @@ BackendImpl::TypelibraryPackageImpl::isRegistered_(
     return beans::Optional< beans::Ambiguous<sal_Bool> >(
         true /* IsPresent */,
         beans::Ambiguous<sal_Bool>(
-            that->hasInUnoRc( m_jarFile, getURL() ),
+            that->hasInUnoRc(
+                m_jarFile ? RCITEM_JAR_TYPELIB : RCITEM_RDB_TYPELIB, getURL() ),
             false /* IsAmbiguous */ ) );
 }
 
@@ -1546,11 +1665,13 @@ void BackendImpl::TypelibraryPackageImpl::processPackage_(
             }
         }
 
-        that->addToUnoRc( m_jarFile, url, xCmdEnv );
+        that->addToUnoRc( m_jarFile ? RCITEM_JAR_TYPELIB : RCITEM_RDB_TYPELIB,
+                          url, xCmdEnv );
     }
     else // revokePackage()
     {
-        that->removeFromUnoRc( m_jarFile, url, xCmdEnv );
+        that->removeFromUnoRc(
+            m_jarFile ? RCITEM_JAR_TYPELIB : RCITEM_RDB_TYPELIB, url, xCmdEnv );
 
         // revoking types at runtime, possible, sensible?
         if (!m_xTDprov.is())
@@ -1569,6 +1690,63 @@ void BackendImpl::TypelibraryPackageImpl::processPackage_(
         }
     }
 }
+
+BackendImpl * BackendImpl::ComponentsPackageImpl::getMyBackend() const
+{
+    BackendImpl * pBackend = static_cast<BackendImpl *>(m_myBackend.get());
+    if (NULL == pBackend)
+    {
+        //Throws a DisposedException
+        check();
+        //We should never get here...
+        throw RuntimeException(
+            OUSTR("Failed to get the BackendImpl"),
+            static_cast<OWeakObject*>(const_cast<ComponentsPackageImpl *>(this)));
+    }
+    return pBackend;
+}
+
+beans::Optional< beans::Ambiguous<sal_Bool> >
+BackendImpl::ComponentsPackageImpl::isRegistered_(
+    ::osl::ResettableMutexGuard &,
+    ::rtl::Reference<AbortChannel> const &,
+    Reference<XCommandEnvironment> const & )
+{
+    return beans::Optional< beans::Ambiguous<sal_Bool> >(
+        true,
+        beans::Ambiguous<sal_Bool>(
+            getMyBackend()->hasInUnoRc(RCITEM_COMPONENTS, getURL()), false));
+}
+
+void BackendImpl::ComponentsPackageImpl::processPackage_(
+    ::osl::ResettableMutexGuard &,
+    bool doRegisterPackage,
+    bool,
+    ::rtl::Reference<AbortChannel> const &,
+    Reference<XCommandEnvironment> const & xCmdEnv )
+{
+    BackendImpl * that = getMyBackend();
+    rtl::OUString url(getURL());
+    if (doRegisterPackage)
+    {
+        //TODO
+        that->addToUnoRc(RCITEM_COMPONENTS, url, xCmdEnv);
+    }
+    else // revoke
+    {
+        that->removeFromUnoRc(RCITEM_COMPONENTS, url, xCmdEnv);
+        //TODO
+    }
+}
+
+BackendImpl::ComponentsPackageImpl::ComponentsPackageImpl(
+    ::rtl::Reference<PackageRegistryBackend> const & myBackend,
+    OUString const & url, OUString const & name,
+    Reference<deployment::XPackageTypeInfo> const & xPackageType,
+    bool bRemoved, OUString const & identifier)
+    : Package( myBackend, url, name, name /* display-name */,
+               xPackageType, bRemoved, identifier)
+{}
 
 } // anon namespace
 

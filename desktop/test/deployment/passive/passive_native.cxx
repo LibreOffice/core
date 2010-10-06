@@ -29,11 +29,20 @@
 #include "sal/config.h"
 
 #include "boost/noncopyable.hpp"
+#include "com/sun/star/awt/MessageBoxButtons.hpp"
+#include "com/sun/star/awt/Rectangle.hpp"
+#include "com/sun/star/awt/XMessageBox.hpp"
+#include "com/sun/star/awt/XMessageBoxFactory.hpp"
+#include "com/sun/star/awt/XWindowPeer.hpp"
 #include "com/sun/star/beans/PropertyValue.hpp"
 #include "com/sun/star/frame/DispatchDescriptor.hpp"
+#include "com/sun/star/frame/XDesktop.hpp"
 #include "com/sun/star/frame/XDispatch.hpp"
 #include "com/sun/star/frame/XDispatchProvider.hpp"
+#include "com/sun/star/frame/XFrame.hpp"
 #include "com/sun/star/frame/XStatusListener.hpp"
+#include "com/sun/star/lang/XComponent.hpp"
+#include "com/sun/star/lang/XMultiComponentFactory.hpp"
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/lang/XSingleComponentFactory.hpp"
 #include "com/sun/star/uno/Any.hxx"
@@ -49,13 +58,11 @@
 #include "cppuhelper/implbase3.hxx"
 #include "cppuhelper/implementationentry.hxx"
 #include "cppuhelper/weak.hxx"
-#include "filter/msfilter/countryid.hxx"
 #include "osl/diagnose.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 #include "uno/lbnames.h"
-#include "vcl/svapp.hxx"
 
 namespace {
 
@@ -65,12 +72,14 @@ namespace service {
 
 rtl::OUString getImplementationName() {
     return rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.test.deployment.boxt"));
+        RTL_CONSTASCII_USTRINGPARAM(
+            "com.sun.star.comp.test.deployment.passive_native"));
 }
 
 css::uno::Sequence< rtl::OUString > getSupportedServiceNames() {
     rtl::OUString name(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.test.deployment.boxt"));
+        RTL_CONSTASCII_USTRINGPARAM(
+            "com.sun.star.test.deployment.passive_native"));
     return css::uno::Sequence< rtl::OUString >(&name, 1);
 }
 
@@ -83,7 +92,8 @@ class Service:
     private boost::noncopyable
 {
 public:
-    Service() {}
+    Service(css::uno::Reference< css::uno::XComponentContext > const & context):
+        context_(context) { OSL_ASSERT(context.is()); }
 
 private:
     virtual ~Service() {}
@@ -126,6 +136,8 @@ private:
         css::util::URL const &)
         throw (css::uno::RuntimeException)
     {}
+
+    css::uno::Reference< css::uno::XComponentContext > context_;
 };
 
 css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > >
@@ -148,11 +160,34 @@ void Service::dispatch(
     css::uno::Sequence< css::beans::PropertyValue > const &)
     throw (css::uno::RuntimeException)
 {
-    msfilter::ConvertCountryToLanguage(msfilter::COUNTRY_DONTKNOW);
-        // link against some obscure library that is unlikely already loaded
-    Application::ShowNativeErrorBox(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("boxt")),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("test")));
+    css::uno::Reference< css::lang::XMultiComponentFactory > smgr(
+        context_->getServiceManager(), css::uno::UNO_SET_THROW);
+    css::uno::Reference< css::awt::XMessageBox > box(
+        css::uno::Reference< css::awt::XMessageBoxFactory >(
+            smgr->createInstanceWithContext(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                  "com.sun.star.awt.Toolkit")), context_),
+            css::uno::UNO_QUERY_THROW)->createMessageBox(
+                css::uno::Reference< css::awt::XWindowPeer >(
+                    css::uno::Reference< css::frame::XFrame >(
+                        css::uno::Reference< css::frame::XDesktop >(
+                            smgr->createInstanceWithContext(
+                                rtl::OUString(
+                                    RTL_CONSTASCII_USTRINGPARAM(
+                                        "com.sun.star.frame.Desktop")),
+                                context_),
+                            css::uno::UNO_QUERY_THROW)->getCurrentFrame(),
+                        css::uno::UNO_SET_THROW)->getComponentWindow(),
+                    css::uno::UNO_QUERY_THROW),
+                css::awt::Rectangle(),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("infobox")),
+                css::awt::MessageBoxButtons::BUTTONS_OK,
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("passive")),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("native"))),
+        css::uno::UNO_SET_THROW);
+    box->execute();
+    css::uno::Reference< css::lang::XComponent >(
+        box, css::uno::UNO_QUERY_THROW)->dispose();
 }
 
 class Factory:
@@ -167,9 +202,9 @@ private:
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
     createInstanceWithContext(
-        css::uno::Reference< css::uno::XComponentContext > const &)
+        css::uno::Reference< css::uno::XComponentContext > const & Context)
         throw (css::uno::Exception, css::uno::RuntimeException)
-    { return static_cast< cppu::OWeakObject * >(new Service); }
+    { return static_cast< cppu::OWeakObject * >(new Service(Context)); }
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
     createInstanceWithArgumentsAndContext(
@@ -215,10 +250,4 @@ extern "C" void SAL_CALL component_getImplementationEnvironment(
     char const ** ppEnvTypeName, uno_Environment **)
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
-extern "C" sal_Bool SAL_CALL component_writeInfo(
-    void * pServiceManager, void * pRegistryKey)
-{
-    return component_writeInfoHelper(pServiceManager, pRegistryKey, services);
 }
