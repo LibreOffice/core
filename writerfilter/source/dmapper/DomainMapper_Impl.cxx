@@ -40,7 +40,7 @@
 #include <com/sun/star/style/LineNumberPosition.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
-#include <com/sun/star/table/BorderLine.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/ChapterFormat.hpp>
 #include <com/sun/star/text/FilenameDisplayFormat.hpp>
 #include <com/sun/star/text/UserDataPart.hpp>
@@ -574,7 +574,7 @@ void lcl_MoveBorderPropertiesToFrame(uno::Sequence<beans::PropertyValue>& rFrame
             pFrameProperties[nStart].Name = sPropertyName;
             pFrameProperties[nStart].Value = xTextRangeProperties->getPropertyValue(sPropertyName);
             if( nProperty < 4 )
-                xTextRangeProperties->setPropertyValue( sPropertyName, uno::makeAny(table::BorderLine()));
+                xTextRangeProperties->setPropertyValue( sPropertyName, uno::makeAny(table::BorderLine2()));
             ++nStart;
         }
         rFrameProperties.realloc(nStart);

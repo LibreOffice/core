@@ -30,8 +30,6 @@
 #include <WriterFilterDllApi.hxx>
 #include <resourcemodel/WW8ResourceModel.hxx>
 #include <boost/shared_ptr.hpp>
-//#include <com/sun/star/table/TableBorder.hpp>
-#include <com/sun/star/table/BorderLine.hpp>
 
 namespace writerfilter {
 namespace dmapper

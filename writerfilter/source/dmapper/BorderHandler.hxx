@@ -30,7 +30,7 @@
 #include <WriterFilterDllApi.hxx>
 #include <resourcemodel/WW8ResourceModel.hxx>
 #include <boost/shared_ptr.hpp>
-#include <com/sun/star/table/BorderLine.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 
 namespace writerfilter {
 namespace dmapper
@@ -61,7 +61,7 @@ private:
     bool            m_bOOXML;
 
     bool                                        m_aFilledLines[BORDER_COUNT];
-    ::com::sun::star::table::BorderLine         m_aBorderLines[BORDER_COUNT];
+    ::com::sun::star::table::BorderLine2        m_aBorderLines[BORDER_COUNT];
 
 public:
     BorderHandler( bool bOOXML );
@@ -72,7 +72,7 @@ public:
     virtual void sprm(Sprm & sprm);
 
     ::boost::shared_ptr<PropertyMap>            getProperties();
-    ::com::sun::star::table::BorderLine         getBorderLine();
+    ::com::sun::star::table::BorderLine2        getBorderLine();
     sal_Int32                                   getLineDistance() const { return m_nLineDistance;}
 };
 typedef boost::shared_ptr< BorderHandler >          BorderHandlerPtr;

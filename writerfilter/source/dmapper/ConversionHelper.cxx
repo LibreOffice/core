@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 #include <ConversionHelper.hxx>
-#include <com/sun/star/table/BorderLine.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
@@ -40,6 +40,10 @@ using namespace com::sun::star;
 namespace writerfilter {
 namespace dmapper{
 namespace ConversionHelper{
+
+const sal_Int16  API_LINE_SOLID    = 0;
+const sal_Int16  API_LINE_DOTTED   = 1;
+const sal_Int16  API_LINE_DASHED   = 2;
 
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 
@@ -95,7 +99,7 @@ namespace ConversionHelper{
 #define DOUBLE_LINE10_IN    LINE_WIDTH_0
 #define DOUBLE_LINE10_DIST  LINE_WIDTH_2
 
-sal_Int32 MakeBorderLine( sal_Int32 nSprmValue, table::BorderLine& rToFill )
+sal_Int32 MakeBorderLine( sal_Int32 nSprmValue, table::BorderLine2& rToFill )
 {
     //TODO: Lines are always solid
     //Border
@@ -120,7 +124,7 @@ sal_Int32 MakeBorderLine( sal_Int32 nSprmValue, table::BorderLine& rToFill )
 }
 void MakeBorderLine( sal_Int32 nLineThickness,   sal_Int32 nLineType,
                                             sal_Int32 nLineColor,
-                                            table::BorderLine& rToFill, bool bIsOOXML )
+                                            table::BorderLine2& rToFill, bool bIsOOXML )
 {
     static const sal_Int32 aBorderDefColor[] =
     {
@@ -141,7 +145,7 @@ void MakeBorderLine( sal_Int32 nLineThickness,   sal_Int32 nLineType,
         single0, single1, single2, single3, single4, single5,
         double0, double1, double2, double3, double4, double5, double6,
         double7, double8, double9, double10,
-        none
+        none, dashed, dotted
     } eCodeIdx = none;
 
     // Map to our border types, we should use of one equal line
@@ -154,9 +158,14 @@ void MakeBorderLine( sal_Int32 nLineThickness,   sal_Int32 nLineType,
         case  1: break;
         case  2:
         case  5:
-        // and the unsupported special cases which we map to a single line
+        // Dotted and dashed lines
         case  6:
+                 eCodeIdx = dotted;
+                 break;
         case  7:
+                 eCodeIdx = dashed;
+                 break;
+        // and the unsupported special cases which we map to a single line
         case  8:
         case  9:
         case 22:
@@ -284,29 +293,32 @@ void MakeBorderLine( sal_Int32 nLineThickness,   sal_Int32 nLineType,
         sal_Int16 nOut;
         sal_Int16 nIn;
         sal_Int16 nDist;
+        sal_Int16 eStyle;
     };
 
 
     static const BorderDefinition aLineTab[] =
     {
-        /* 0*/  { LINE_WIDTH_0, 0, 0 },
-        /* 1*/  { LINE_WIDTH_1, 0, 0 },
-        /* 2*/  { LINE_WIDTH_2, 0, 0 },
-        /* 3*/  { LINE_WIDTH_3, 0, 0 },
-        /* 4*/  { LINE_WIDTH_4, 0, 0 },
-        /* 5*/  { LINE_WIDTH_5, 0, 0 },
-        /* 6*/  { DOUBLE_LINE0_OUT, DOUBLE_LINE0_IN, DOUBLE_LINE0_DIST },
-        /* 7*/  { DOUBLE_LINE1_OUT, DOUBLE_LINE1_IN, DOUBLE_LINE1_DIST },
-        /* 8*/  { DOUBLE_LINE2_OUT, DOUBLE_LINE2_IN, DOUBLE_LINE2_DIST },
-        /* 9*/  { DOUBLE_LINE3_OUT, DOUBLE_LINE3_IN, DOUBLE_LINE3_DIST },
-        /*10*/  { DOUBLE_LINE4_OUT, DOUBLE_LINE4_IN, DOUBLE_LINE4_DIST },
-        /*11*/  { DOUBLE_LINE5_OUT, DOUBLE_LINE5_IN, DOUBLE_LINE5_DIST },
-        /*12*/  { DOUBLE_LINE6_OUT, DOUBLE_LINE6_IN, DOUBLE_LINE6_DIST },
-        /*13*/  { DOUBLE_LINE7_OUT, DOUBLE_LINE7_IN, DOUBLE_LINE7_DIST },
-        /*14*/  { DOUBLE_LINE8_OUT, DOUBLE_LINE8_IN, DOUBLE_LINE8_DIST },
-        /*15*/  { DOUBLE_LINE9_OUT, DOUBLE_LINE9_IN, DOUBLE_LINE9_DIST },
-        /*16*/  { DOUBLE_LINE10_OUT,DOUBLE_LINE10_IN,DOUBLE_LINE10_DIST},
-        /*17*/  { 0, 0, 0 }
+        /* 0*/  { LINE_WIDTH_0, 0, 0, API_LINE_SOLID },
+        /* 1*/  { LINE_WIDTH_1, 0, 0, API_LINE_SOLID },
+        /* 2*/  { LINE_WIDTH_2, 0, 0, API_LINE_SOLID },
+        /* 3*/  { LINE_WIDTH_3, 0, 0, API_LINE_SOLID },
+        /* 4*/  { LINE_WIDTH_4, 0, 0, API_LINE_SOLID },
+        /* 5*/  { LINE_WIDTH_5, 0, 0, API_LINE_SOLID },
+        /* 6*/  { DOUBLE_LINE0_OUT, DOUBLE_LINE0_IN, DOUBLE_LINE0_DIST, API_LINE_SOLID },
+        /* 7*/  { DOUBLE_LINE1_OUT, DOUBLE_LINE1_IN, DOUBLE_LINE1_DIST, API_LINE_SOLID },
+        /* 8*/  { DOUBLE_LINE2_OUT, DOUBLE_LINE2_IN, DOUBLE_LINE2_DIST, API_LINE_SOLID },
+        /* 9*/  { DOUBLE_LINE3_OUT, DOUBLE_LINE3_IN, DOUBLE_LINE3_DIST, API_LINE_SOLID },
+        /*10*/  { DOUBLE_LINE4_OUT, DOUBLE_LINE4_IN, DOUBLE_LINE4_DIST, API_LINE_SOLID },
+        /*11*/  { DOUBLE_LINE5_OUT, DOUBLE_LINE5_IN, DOUBLE_LINE5_DIST, API_LINE_SOLID },
+        /*12*/  { DOUBLE_LINE6_OUT, DOUBLE_LINE6_IN, DOUBLE_LINE6_DIST, API_LINE_SOLID },
+        /*13*/  { DOUBLE_LINE7_OUT, DOUBLE_LINE7_IN, DOUBLE_LINE7_DIST, API_LINE_SOLID },
+        /*14*/  { DOUBLE_LINE8_OUT, DOUBLE_LINE8_IN, DOUBLE_LINE8_DIST, API_LINE_SOLID },
+        /*15*/  { DOUBLE_LINE9_OUT, DOUBLE_LINE9_IN, DOUBLE_LINE9_DIST, API_LINE_SOLID },
+        /*16*/  { DOUBLE_LINE10_OUT,DOUBLE_LINE10_IN,DOUBLE_LINE10_DIST, API_LINE_SOLID},
+        /*17*/  { 0, 0, 0, API_LINE_SOLID },
+        /*18*/  { LINE_WIDTH_5, 0, 0, API_LINE_DASHED },
+        /*19*/  { LINE_WIDTH_5, 0, 0, API_LINE_DOTTED }
     };
 
     rToFill.Color = nLineColor;
@@ -315,13 +327,14 @@ void MakeBorderLine( sal_Int32 nLineThickness,   sal_Int32 nLineType,
         rToFill.InnerLineWidth = 0;
         rToFill.OuterLineWidth = sal_Int16(nLineThickness);
         rToFill.LineDistance = 0;
-
+        rToFill.LineStyle = API_LINE_SOLID;
     }
     else
     {
         rToFill.InnerLineWidth = aLineTab[eCodeIdx].nIn;
         rToFill.OuterLineWidth = aLineTab[eCodeIdx].nOut;
         rToFill.LineDistance = aLineTab[eCodeIdx].nDist;
+        rToFill.LineStyle = aLineTab[eCodeIdx].eStyle;
     }
 }
 

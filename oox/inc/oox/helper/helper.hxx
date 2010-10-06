@@ -97,6 +97,10 @@ const sal_Int32 API_RGB_TRANSPARENT         = -1;       /// Transparent color fo
 const sal_Int32 API_RGB_BLACK               = 0x000000;  /// Black color for API calls.
 const sal_Int32 API_RGB_WHITE               = 0xFFFFFF;  /// White color for API calls.
 
+const sal_Int16 API_LINE_SOLID              = 0;
+const sal_Int16 API_LINE_DOTTED             = 1;
+const sal_Int16 API_LINE_DASHED             = 2;
+
 const sal_Int16 API_LINE_NONE               = 0;
 const sal_Int16 API_LINE_HAIR               = 2;
 const sal_Int16 API_LINE_THIN               = 35;

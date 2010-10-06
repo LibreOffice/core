@@ -31,7 +31,7 @@
 #include <i18npool/paper.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/table/BorderLine.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -407,10 +407,10 @@ uno::Reference< beans::XPropertySet > SectionPropertyMap::GetPageStyle(
 /*-- 28.07.2006 10:56:26---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SectionPropertyMap::SetBorder( BorderPosition ePos, sal_Int32 nLineDistance, const table::BorderLine& rBorderLine )
+void SectionPropertyMap::SetBorder( BorderPosition ePos, sal_Int32 nLineDistance, const table::BorderLine2& rBorderLine )
 {
     delete m_pBorderLines[ePos];
-    m_pBorderLines[ePos] = new table::BorderLine( rBorderLine );
+    m_pBorderLines[ePos] = new table::BorderLine2( rBorderLine );
     m_nBorderDistances[ePos] = nLineDistance;
 }
 /*-- 28.07.2006 10:56:27---------------------------------------------------

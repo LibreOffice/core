@@ -29,7 +29,7 @@
 #include <ConversionHelper.hxx>
 #include <ooxml/resourceids.hxx>
 #include <doctok/resourceids.hxx>
-#include <com/sun/star/table/BorderLine.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/TableColumnSeparator.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 
@@ -170,7 +170,7 @@ void TDefTableHandler::localResolve(Id rName, writerfilter::Reference<Properties
     {
         m_nLineWidth = m_nLineType = m_nLineColor = m_nLineDistance = 0;
         pProperties->resolve( *this );
-        table::BorderLine aBorderLine;
+        table::BorderLine2 aBorderLine;
         ConversionHelper::MakeBorderLine( m_nLineWidth,   m_nLineType, m_nLineColor,
                                                                         aBorderLine, m_bOOXML );
 

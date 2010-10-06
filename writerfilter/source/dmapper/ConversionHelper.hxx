@@ -30,12 +30,13 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 namespace com{ namespace sun{ namespace star{
     namespace lang{
         struct Locale;
     }
     namespace table{
-        struct BorderLine;
+        struct BorderLine2;
 }}}}
 
 namespace writerfilter {
@@ -43,10 +44,10 @@ namespace dmapper{
 namespace ConversionHelper{
 
     // create a border line and return the distance value
-    sal_Int32 MakeBorderLine( sal_Int32 nSprmValue, ::com::sun::star::table::BorderLine& rToFill );
+    sal_Int32 MakeBorderLine( sal_Int32 nSprmValue, ::com::sun::star::table::BorderLine2& rToFill );
     void MakeBorderLine( sal_Int32 nLineThickness,   sal_Int32 nLineType,
                               sal_Int32 nLineColor,
-                              ::com::sun::star::table::BorderLine& rToFill, bool bIsOOXML );
+                              ::com::sun::star::table::BorderLine2& rToFill, bool bIsOOXML );
     //convert the number format string form MS format to SO format
     ::rtl::OUString ConvertMSFormatStringToSO(
             const ::rtl::OUString& rFormat, ::com::sun::star::lang::Locale& rLocale, bool bHijri);

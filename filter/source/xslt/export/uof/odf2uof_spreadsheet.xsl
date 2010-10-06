@@ -4262,7 +4262,7 @@
 				<xsl:element name="uof:左">
 					<xsl:attribute name="uof:locID">u0057</xsl:attribute>
 					<xsl:attribute name="uof:attrList">类型 宽度 边距 颜色 阴影</xsl:attribute>
-					<xsl:attribute name="uof:类型"><xsl:choose><xsl:when test="$border!='none'"><xsl:choose><xsl:when test="substring-before(substring-after($border,' '),' ')='solid'">single</xsl:when><xsl:when test="substring-before(substring-after($border,' '),' ')='double'">double</xsl:when><xsl:otherwise>none</xsl:otherwise></xsl:choose></xsl:when><xsl:otherwise>none</xsl:otherwise></xsl:choose></xsl:attribute>
+                    <xsl:attribute name="uof:类型"><xsl:choose><xsl:when test="$border!='none'"><xsl:choose><xsl:when test="substring-before(substring-after($border,' '),' ')='solid'">single</xsl:when><xsl:when test="substring-before(substring-after($border,' '),' ')='double'">double</xsl:when><xsl:when test="substring-before(substring-after($border,' '),' ')='dotted'">dotted</xsl:when><xsl:when test="substring-before(substring-after($border,' '),' ')='dashed'">dash</xsl:when><xsl:otherwise>none</xsl:otherwise></xsl:choose></xsl:when><xsl:otherwise>none</xsl:otherwise></xsl:choose></xsl:attribute>
 					<xsl:if test="$border!='none'">
 						<xsl:attribute name="uof:宽度"><xsl:value-of select="substring-before(substring-before($border,' '),$uofUnit)"/></xsl:attribute>
 						<xsl:attribute name="uof:颜色"><xsl:value-of select="substring-after(substring-after($border,' '),' ')"/></xsl:attribute>
@@ -4274,7 +4274,7 @@
 				<xsl:element name="uof:上">
 					<xsl:attribute name="uof:locID">u0058</xsl:attribute>
 					<xsl:attribute name="uof:attrList">类型 宽度 边距 颜色 阴影</xsl:attribute>
-					<xsl:attribute name="uof:类型"><xsl:choose><xsl:when test="$border!='none'"><xsl:choose><xsl:when test="substring-before(substring-after($border,' '),' ')='solid'">single</xsl:when><xsl:when test="substring-before(substring-after($border,' '),' ')='double'">double</xsl:when><xsl:otherwise>none</xsl:otherwise></xsl:choose></xsl:when><xsl:otherwise>none</xsl:otherwise></xsl:choose></xsl:attribute>
+                    <xsl:attribute name="uof:类型"><xsl:choose><xsl:when test="$border!='none'"><xsl:choose><xsl:when test="substring-before(substring-after($border,' '),' ')='solid'">single</xsl:when><xsl:when test="substring-before(substring-after($border,' '),' ')='double'">double</xsl:when><xsl:when test="substring-before(substring-after($border,' '),' ')='dotted'">dotted</xsl:when><xsl:when test="substring-before(substring-after($border,' '),' ')='dashed'">dash</xsl:when><xsl:otherwise>none</xsl:otherwise></xsl:choose></xsl:when><xsl:otherwise>none</xsl:otherwise></xsl:choose></xsl:attribute>
 					<xsl:if test="$border!='none'">
 						<xsl:attribute name="uof:宽度"><xsl:value-of select="substring-before(substring-before($border,' '),$uofUnit)"/></xsl:attribute>
 						<xsl:attribute name="uof:颜色"><xsl:value-of select="substring-after(substring-after($border,' '),' ')"/></xsl:attribute>
@@ -4286,7 +4286,7 @@
 				<xsl:element name="uof:右">
 					<xsl:attribute name="uof:locID">u0059</xsl:attribute>
 					<xsl:attribute name="uof:attrList">类型 宽度 边距 颜色 阴影</xsl:attribute>
-					<xsl:attribute name="uof:类型"><xsl:choose><xsl:when test="$border!='none'"><xsl:choose><xsl:when test="substring-before(substring-after($border,' '),' ')='solid'">single</xsl:when><xsl:when test="substring-before(substring-after($border,' '),' ')='double'">double</xsl:when><xsl:otherwise>none</xsl:otherwise></xsl:choose></xsl:when><xsl:otherwise>none</xsl:otherwise></xsl:choose></xsl:attribute>
+                    <xsl:attribute name="uof:类型"><xsl:choose><xsl:when test="$border!='none'"><xsl:choose><xsl:when test="substring-before(substring-after($border,' '),' ')='solid'">single</xsl:when><xsl:when test="substring-before(substring-after($border,' '),' ')='double'">double</xsl:when><xsl:when test="substring-before(substring-after($border,' '),' ')='dotted'">dotted</xsl:when><xsl:when test="substring-before(substring-after($border,' '),' ')='dashed'">dash</xsl:when><xsl:otherwise>none</xsl:otherwise></xsl:choose></xsl:when><xsl:otherwise>none</xsl:otherwise></xsl:choose></xsl:attribute>
 					<xsl:if test="$border!='none'">
 						<xsl:attribute name="uof:宽度"><xsl:value-of select="substring-before(substring-before($border,' '),$uofUnit)"/></xsl:attribute>
 						<xsl:attribute name="uof:颜色"><xsl:value-of select="substring-after(substring-after($border,' '),' ')"/></xsl:attribute>
@@ -4298,7 +4298,7 @@
 				<xsl:element name="uof:下">
 					<xsl:attribute name="uof:locID">u0060</xsl:attribute>
 					<xsl:attribute name="uof:attrList">类型 宽度 边距 颜色 阴影</xsl:attribute>
-					<xsl:attribute name="uof:类型"><xsl:choose><xsl:when test="$border!='none'"><xsl:choose><xsl:when test="substring-before(substring-after($border,' '),' ')='solid'">single</xsl:when><xsl:when test="substring-before(substring-after($border,' '),' ')='double'">double</xsl:when><xsl:otherwise>none</xsl:otherwise></xsl:choose></xsl:when><xsl:otherwise>none</xsl:otherwise></xsl:choose></xsl:attribute>
+                    <xsl:attribute name="uof:类型"><xsl:choose><xsl:when test="$border!='none'"><xsl:choose><xsl:when test="substring-before(substring-after($border,' '),' ')='solid'">single</xsl:when><xsl:when test="substring-before(substring-after($border,' '),' ')='double'">double</xsl:when><xsl:when test="substring-before(substring-after($border,' '),' ')='dotted'">dotted</xsl:when><xsl:when test="substring-before(substring-after($border,' '),' ')='dashed'">dash</xsl:when><xsl:otherwise>none</xsl:otherwise></xsl:choose></xsl:when><xsl:otherwise>none</xsl:otherwise></xsl:choose></xsl:attribute>
 					<xsl:if test="$border!='none'">
 						<xsl:attribute name="uof:宽度"><xsl:value-of select="substring-before(substring-before($border,' '),$uofUnit)"/></xsl:attribute>
 						<xsl:attribute name="uof:颜色"><xsl:value-of select="substring-after(substring-after($border,' '),' ')"/></xsl:attribute>

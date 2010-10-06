@@ -6020,6 +6020,10 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                             : (MSO_LineStyle)USHRT_MAX;
         pTextImpRec->eLineStyle = pImpRec->eLineStyle;
 
+        pImpRec->eLineDashing = (MSO_LineDashing)GetPropertyValue(
+                DFF_Prop_lineDashing, mso_lineSolid );
+        pTextImpRec->eLineDashing = pImpRec->eLineDashing;
+
         if( pImpRec->nShapeId )
         {
             // Import-Record-Liste ergaenzen
@@ -8028,6 +8032,7 @@ SvxMSDffImportRec::SvxMSDffImportRec()
       eShapeType( mso_sptNil )
 {
       eLineStyle      = mso_lineSimple; // GPF-Bug #66227#
+      eLineDashing    = mso_lineSolid;
       bDrawHell       = FALSE;
       bHidden         = FALSE;
       bReplaceByFly   = FALSE;
@@ -8074,6 +8079,7 @@ SvxMSDffImportRec::SvxMSDffImportRec(const SvxMSDffImportRec& rCopy)
        *pYRelTo = *(rCopy.pYRelTo);
     }
     eLineStyle       = rCopy.eLineStyle; // GPF-Bug #66227#
+    eLineDashing     = rCopy.eLineDashing;
     bDrawHell        = rCopy.bDrawHell;
     bHidden          = rCopy.bHidden;
     bReplaceByFly    = rCopy.bReplaceByFly;

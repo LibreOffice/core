@@ -29,6 +29,7 @@
 #include <StyleSheetTable.hxx>
 #include <com/sun/star/table/TableBorderDistances.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <dmapperLoggers.hxx>
 
@@ -65,7 +66,7 @@ static void  lcl_printProperties( PropertyMapPtr pProps )
             rtl::OString aOStr(aOUStr.getStr(), aOUStr.getLength(),  RTL_TEXTENCODING_ASCII_US );
             clog << aOStr.getStr();
 
-            table::BorderLine aLine;
+            table::BorderLine2 aLine;
             sal_Int32 nColor;
             if ( aMapIter->second >>= aLine )
             {

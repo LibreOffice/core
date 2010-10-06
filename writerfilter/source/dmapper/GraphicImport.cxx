@@ -43,7 +43,7 @@
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/table/BorderLine.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
@@ -1532,7 +1532,7 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
             xGraphicObject = uno::Reference< text::XTextContent >( xGraphicObjectProperties, uno::UNO_QUERY_THROW );
 
             //shapes have only one border, PICF might have four
-            table::BorderLine aBorderLine;
+            table::BorderLine2 aBorderLine;
             for( sal_Int32 nBorder = 0; nBorder < 4; ++nBorder )
             {
                 if( m_pImpl->eGraphicImportType == IMPORT_AS_GRAPHIC || !nBorder )

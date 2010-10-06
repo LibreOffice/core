@@ -289,6 +289,7 @@ struct MSFILTER_DLLPUBLIC SvxMSDffImportRec
     ULONG       nShapeId;
     MSO_SPT     eShapeType;
     MSO_LineStyle eLineStyle;   // Umrandungs-Arten
+    MSO_LineDashing eLineDashing;
     BOOL        bDrawHell       :1;
     BOOL        bHidden         :1;
     BOOL        bReplaceByFly   :1;

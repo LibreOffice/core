@@ -43,6 +43,7 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/table/CellVertJustify2.hpp>
 #include <com/sun/star/table/CellJustifyMethod.hpp>
+#include <com/sun/star/table/TableBorder.hpp>
 #include <rtl/tencinfo.h>
 #include <rtl/ustrbuf.hxx>
 #include "properties.hxx"
@@ -71,6 +72,7 @@ using ::com::sun::star::awt::FontDescriptor;
 using ::com::sun::star::awt::XDevice;
 using ::com::sun::star::awt::XFont2;
 using ::com::sun::star::table::BorderLine;
+using ::com::sun::star::table::BorderLine2;
 using ::com::sun::star::table::TableBorder;
 using ::com::sun::star::text::XText;
 using ::com::sun::star::style::XStyle;
@@ -1504,6 +1506,15 @@ void Protection::writeToPropertyMap( PropertyMap& rPropMap ) const
 
 // ============================================================================
 
+namespace {
+
+bool lcl_isBorder(const ::com::sun::star::table::BorderLine& rBorder)
+{
+    return (rBorder.InnerLineWidth > 0) || (rBorder.OuterLineWidth > 0);
+}
+
+}
+
 BorderLineModel::BorderLineModel( bool bDxf ) :
     mnStyle( XML_none ),
     mbUsed( !bDxf )
@@ -1551,10 +1562,10 @@ ApiBorderData::ApiBorderData() :
 bool ApiBorderData::hasAnyOuterBorder() const
 {
     return
-        (maBorder.IsTopLineValid    && (maBorder.TopLine.OuterLineWidth > 0)) ||
-        (maBorder.IsBottomLineValid && (maBorder.BottomLine.OuterLineWidth > 0)) ||
-        (maBorder.IsLeftLineValid   && (maBorder.LeftLine.OuterLineWidth > 0)) ||
-        (maBorder.IsRightLineValid  && (maBorder.RightLine.OuterLineWidth > 0));
+        ( ( lcl_isBorder( maTop ) &&  maTop.OuterLineWidth > 0 ) ) ||
+        ( ( lcl_isBorder( maBottom ) && maBottom.OuterLineWidth > 0 ) ) ||
+        ( ( lcl_isBorder( maLeft ) && maLeft.OuterLineWidth > 0 ) ) ||
+        ( ( lcl_isBorder( maRight ) && maRight.OuterLineWidth > 0 ) );
 }
 
 namespace {
@@ -1592,7 +1603,10 @@ bool operator==( const TableBorder& rLeft, const TableBorder& rRight )
 bool operator==( const ApiBorderData& rLeft, const ApiBorderData& rRight )
 {
     return
-        (rLeft.maBorder     == rRight.maBorder) &&
+        (rLeft.maLeft       == rRight.maLeft)   &&
+        (rLeft.maRight      == rRight.maRight)  &&
+        (rLeft.maTop        == rRight.maTop)    &&
+        (rLeft.maBottom     == rRight.maBottom) &&
         (rLeft.maTLtoBR     == rRight.maTLtoBR) &&
         (rLeft.maBLtoTR     == rRight.maBLtoTR) &&
         (rLeft.mbBorderUsed == rRight.mbBorderUsed) &&
@@ -1616,7 +1630,7 @@ inline sal_Int32 lclGetBorderLineWidth( const BorderLine& rBorderLine )
     return rBorderLine.OuterLineWidth + rBorderLine.LineDistance + rBorderLine.InnerLineWidth;
 }
 
-const BorderLine* lclGetThickerLine( const BorderLine& rBorderLine1, sal_Bool bValid1, const BorderLine& rBorderLine2, sal_Bool bValid2 )
+const BorderLine2* lclGetThickerLine( const BorderLine2& rBorderLine1, sal_Bool bValid1, const BorderLine2& rBorderLine2, sal_Bool bValid2 )
 {
     if( bValid1 && bValid2 )
         return (lclGetBorderLineWidth( rBorderLine1 ) < lclGetBorderLineWidth( rBorderLine2 )) ? &rBorderLine2 : &rBorderLine1;
@@ -1754,21 +1768,10 @@ void Border::finalizeImport()
     maApiData.mbBorderUsed = maModel.maLeft.mbUsed || maModel.maRight.mbUsed || maModel.maTop.mbUsed || maModel.maBottom.mbUsed;
     maApiData.mbDiagUsed   = maModel.maDiagonal.mbUsed;
 
-    maApiData.maBorder.IsLeftLineValid   = convertBorderLine( maApiData.maBorder.LeftLine,   maModel.maLeft );
-    maApiData.maBorder.IsRightLineValid  = convertBorderLine( maApiData.maBorder.RightLine,  maModel.maRight );
-    maApiData.maBorder.IsTopLineValid    = convertBorderLine( maApiData.maBorder.TopLine,    maModel.maTop );
-    maApiData.maBorder.IsBottomLineValid = convertBorderLine( maApiData.maBorder.BottomLine, maModel.maBottom );
-
-    if( !mbDxf )
-    {
-        maApiData.maBorder.IsVerticalLineValid = maApiData.maBorder.IsLeftLineValid || maApiData.maBorder.IsRightLineValid;
-        if( const BorderLine* pVertLine = lclGetThickerLine( maApiData.maBorder.LeftLine, maApiData.maBorder.IsLeftLineValid, maApiData.maBorder.RightLine, maApiData.maBorder.IsRightLineValid ) )
-            maApiData.maBorder.VerticalLine = *pVertLine;
-
-        maApiData.maBorder.IsHorizontalLineValid = maApiData.maBorder.IsTopLineValid || maApiData.maBorder.IsBottomLineValid;
-        if( const BorderLine* pHorLine = lclGetThickerLine( maApiData.maBorder.TopLine, maApiData.maBorder.IsTopLineValid, maApiData.maBorder.BottomLine, maApiData.maBorder.IsBottomLineValid ) )
-            maApiData.maBorder.HorizontalLine = *pHorLine;
-    }
+    convertBorderLine( maApiData.maLeft,   maModel.maLeft );
+    convertBorderLine( maApiData.maRight,  maModel.maRight );
+    convertBorderLine( maApiData.maTop,    maModel.maTop );
+    convertBorderLine( maApiData.maBottom, maModel.maBottom );
 
     if( maModel.mbDiagTLtoBR )
         convertBorderLine( maApiData.maTLtoBR, maModel.maDiagonal );
@@ -1779,7 +1782,12 @@ void Border::finalizeImport()
 void Border::writeToPropertyMap( PropertyMap& rPropMap ) const
 {
     if( maApiData.mbBorderUsed )
-        rPropMap[ PROP_TableBorder ] <<= maApiData.maBorder;
+    {
+        rPropMap[ PROP_LeftBorder ]   <<= maApiData.maLeft;
+        rPropMap[ PROP_RightBorder ]  <<= maApiData.maRight;
+        rPropMap[ PROP_TopBorder ]    <<= maApiData.maTop;
+        rPropMap[ PROP_BottomBorder ] <<= maApiData.maBottom;
+    }
     if( maApiData.mbDiagUsed )
     {
         rPropMap[ PROP_DiagonalTLBR ] <<= maApiData.maTLtoBR;
@@ -1787,29 +1795,18 @@ void Border::writeToPropertyMap( PropertyMap& rPropMap ) const
     }
 }
 
-namespace {
-
-bool lcl_isBorder(const ::com::sun::star::table::BorderLine& rBorder)
-{
-    return (rBorder.InnerLineWidth > 0) || (rBorder.OuterLineWidth > 0);
-}
-
-}
-
 bool Border::hasBorder() const
 {
-    const ApiBorderData::ApiTableBorder& rTabBorder = maApiData.maBorder;
-
-    if (rTabBorder.IsBottomLineValid && lcl_isBorder(rTabBorder.BottomLine))
+    if (lcl_isBorder(maApiData.maBottom))
         return true;
 
-    if (rTabBorder.IsTopLineValid && lcl_isBorder(rTabBorder.TopLine))
+    if (lcl_isBorder(maApiData.maTop))
         return true;
 
-    if (rTabBorder.IsLeftLineValid && lcl_isBorder(rTabBorder.LeftLine))
+    if (lcl_isBorder(maApiData.maLeft))
         return true;
 
-    if (rTabBorder.IsRightLineValid && lcl_isBorder(rTabBorder.RightLine))
+    if (lcl_isBorder(maApiData.maRight))
         return true;
 
     return false;
@@ -1828,15 +1825,25 @@ BorderLineModel* Border::getBorderLine( sal_Int32 nElement )
     return 0;
 }
 
-bool Border::convertBorderLine( BorderLine& rBorderLine, const BorderLineModel& rModel )
+bool Border::convertBorderLine( BorderLine2& rBorderLine, const BorderLineModel& rModel )
 {
     rBorderLine.Color = rModel.maColor.getColor( getBaseFilter().getGraphicHelper(), API_RGB_BLACK );
     switch( rModel.mnStyle )
     {
         case XML_dashDot:           lclSetBorderLineWidth( rBorderLine, API_LINE_THIN );    break;
         case XML_dashDotDot:        lclSetBorderLineWidth( rBorderLine, API_LINE_THIN );    break;
-        case XML_dashed:            lclSetBorderLineWidth( rBorderLine, API_LINE_THIN );    break;
-        case XML_dotted:            lclSetBorderLineWidth( rBorderLine, API_LINE_THIN );    break;
+        case XML_dashed:
+        {
+                                    lclSetBorderLineWidth( rBorderLine, API_LINE_THIN );
+                                    rBorderLine.LineStyle = API_LINE_DASHED;
+                                    break;
+        }
+        case XML_dotted:
+        {
+                                    lclSetBorderLineWidth( rBorderLine, API_LINE_THIN );
+                                    rBorderLine.LineStyle = API_LINE_DOTTED;
+                                    break;
+        }
         case XML_double:            lclSetBorderLineWidth( rBorderLine, API_LINE_THIN, API_LINE_THIN, API_LINE_THIN ); break;
         case XML_hair:              lclSetBorderLineWidth( rBorderLine, API_LINE_HAIR );    break;
         case XML_medium:            lclSetBorderLineWidth( rBorderLine, API_LINE_MEDIUM );  break;

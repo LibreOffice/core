@@ -29,7 +29,7 @@
 #include <resourcemodel/QNameToString.hxx>
 #include <doctok/resourceids.hxx>
 #include <ConversionHelper.hxx>
-#include <com/sun/star/table/BorderLine.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 #include <ooxml/resourceids.hxx>
 #include <dmapperLoggers.hxx>
 
@@ -190,9 +190,9 @@ PropertyMapPtr  BorderHandler::getProperties()
 /*-- 14.11.2007 12:42:52---------------------------------------------------
     used only in OOXML import
   -----------------------------------------------------------------------*/
-table::BorderLine BorderHandler::getBorderLine()
+table::BorderLine2 BorderHandler::getBorderLine()
 {
-    table::BorderLine aBorderLine;
+    table::BorderLine2 aBorderLine;
     ConversionHelper::MakeBorderLine( m_nLineWidth, m_nLineType, m_nLineColor, aBorderLine, m_bOOXML );
     return aBorderLine;
 }

@@ -37,7 +37,7 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/table/XTable.hpp>
 #include <com/sun/star/table/XMergeableCellRange.hpp>
-#include <com/sun/star/table/BorderLine.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
@@ -48,7 +48,7 @@ using namespace ::oox::core;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
-using ::com::sun::star::table::BorderLine;
+using ::com::sun::star::table::BorderLine2;
 using ::com::sun::star::drawing::LineStyle;
 
 namespace oox { namespace drawingml { namespace table {
@@ -76,7 +76,7 @@ void applyLineAttributes( const ::oox::core::XmlFilterBase& rFilterBase,
         Reference< XPropertySet >& rxPropSet, oox::drawingml::LineProperties& rLineProperties,
         sal_Int32 nPropId )
 {
-    BorderLine aBorderLine( 0, 0, 0, 0 );
+    BorderLine2 aBorderLine( 0, 0, 0, 0, API_LINE_SOLID );
     if( rLineProperties.maLineFill.moFillType.differsFrom( XML_noFill ) )
     {
         Color aColor = rLineProperties.maLineFill.getBestSolidColor();

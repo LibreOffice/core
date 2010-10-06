@@ -8,7 +8,7 @@
 #include <resourcemodel/WW8ResourceModel.hxx>
 #include <boost/shared_ptr.hpp>
 
-#include <com/sun/star/table/BorderLine.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 
 #include <vector>
 
@@ -19,7 +19,7 @@ namespace dmapper {
 class _PgBorder
 {
 public:
-    com::sun::star::table::BorderLine m_rLine;
+    com::sun::star::table::BorderLine2 m_rLine;
     sal_Int32   m_nDistance;
     BorderPosition m_ePos;
 

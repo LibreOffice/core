@@ -58,7 +58,7 @@ namespace com{namespace sun{namespace star{
         class XFootnote;
     }
     namespace table{
-        struct BorderLine;
+        struct BorderLine2;
     }
 }}}
 
@@ -160,7 +160,7 @@ class SectionPropertyMap : public PropertyMap
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_aFirstPageStyle;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_aFollowPageStyle;
 
-    ::com::sun::star::table::BorderLine*    m_pBorderLines[4];
+    ::com::sun::star::table::BorderLine2*   m_pBorderLines[4];
     sal_Int32                               m_nBorderDistances[4];
     sal_Int32                               m_nBorderParams;
 
@@ -236,7 +236,7 @@ public:
             const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >& xTextFactory,
             bool bFirst );
 
-    void SetBorder( BorderPosition ePos, sal_Int32 nLineDistance, const ::com::sun::star::table::BorderLine& rBorderLine );
+    void SetBorder( BorderPosition ePos, sal_Int32 nLineDistance, const ::com::sun::star::table::BorderLine2& rBorderLine );
     void SetBorderParams( sal_Int32 nSet ) { m_nBorderParams = nSet; }
 
     void SetColumnCount( sal_Int16 nCount ) { m_nColumnCount = nCount; }

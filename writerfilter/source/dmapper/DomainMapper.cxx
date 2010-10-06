@@ -1,4 +1,4 @@
-/*************************************************************************
+#/*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -66,7 +66,7 @@
 #include <com/sun/star/style/CaseMap.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
-#include <com/sun/star/table/BorderLine.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/TextGridMode.hpp>
 #include <com/sun/star/text/XDocumentIndexesSupplier.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
@@ -1273,7 +1273,7 @@ void DomainMapper::attribute(Id nName, Value & val)
         case NS_rtf::LN_BRCRIGHT:
             /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
         {
-            table::BorderLine aBorderLine;
+            table::BorderLine2 aBorderLine;
             sal_Int32 nLineDistance = ConversionHelper::MakeBorderLine( nIntValue, aBorderLine );
             (void)nLineDistance;
             PropertyIds eBorderId = PROP_LEFT_BORDER;
@@ -2528,7 +2528,7 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
             }
             else
             {
-                table::BorderLine aBorderLine;
+                table::BorderLine2 aBorderLine;
                 sal_Int32 nLineDistance = ConversionHelper::MakeBorderLine( nIntValue, aBorderLine );
                 PropertyIds eBorderId = PROP_LEFT_BORDER;
                 PropertyIds eBorderDistId = PROP_LEFT_BORDER_DISTANCE  ;
@@ -3535,7 +3535,7 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
     case NS_sprm::LN_SBrcRight:  // sprmSBrcRight
         /* WRITERFILTERSTATUS: Sectiondone: 100, planned: 0.5, spent: 0 */
         {
-            table::BorderLine aBorderLine;
+            table::BorderLine2 aBorderLine;
             sal_Int32 nLineDistance = ConversionHelper::MakeBorderLine( nIntValue, aBorderLine );
             OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
             if(pSectionContext)

@@ -34,7 +34,7 @@
 #include "oox/helper/propertyset.hxx"
 #include <com/sun/star/table/XTable.hpp>
 #include <com/sun/star/table/XMergeableCellRange.hpp>
-#include <com/sun/star/table/BorderLine.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 
 using rtl::OUString;
 using namespace ::oox::core;

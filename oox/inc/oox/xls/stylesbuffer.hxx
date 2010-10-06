@@ -33,7 +33,7 @@
 #include <com/sun/star/table/CellHoriJustify.hpp>
 #include <com/sun/star/table/CellOrientation.hpp>
 #include <com/sun/star/table/CellVertJustify.hpp>
-#include <com/sun/star/table/TableBorder.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 #include "oox/helper/containerhelper.hxx"
 #include "oox/helper/graphichelper.hxx"
 #include "oox/drawingml/color.hxx"
@@ -517,10 +517,12 @@ struct BorderModel
 /** Contains API attributes of a complete cell border. */
 struct ApiBorderData
 {
-    typedef ::com::sun::star::table::TableBorder    ApiTableBorder;
-    typedef ::com::sun::star::table::BorderLine     ApiBorderLine;
+    typedef ::com::sun::star::table::BorderLine2     ApiBorderLine;
 
-    ApiTableBorder      maBorder;           /// Left/right/top/bottom line format.
+    ApiBorderLine       maLeft;             /// Left line format
+    ApiBorderLine       maRight;            /// Right line format
+    ApiBorderLine       maTop;              /// Top line format
+    ApiBorderLine       maBottom;           /// Bottom line format
     ApiBorderLine       maTLtoBR;           /// Diagonal top-left to bottom-right line format.
     ApiBorderLine       maBLtoTR;           /// Diagonal bottom-left to top-right line format.
     bool                mbBorderUsed;       /// True = left/right/top/bottom line format used.
@@ -583,7 +585,7 @@ private:
 
     /** Converts border line data to an API struct, returns true, if the line is marked as used. */
     bool                convertBorderLine(
-                            ::com::sun::star::table::BorderLine& rBorderLine,
+                            ::com::sun::star::table::BorderLine2& rBorderLine,
                             const BorderLineModel& rModel );
 
 private:
