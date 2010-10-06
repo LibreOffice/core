@@ -195,8 +195,12 @@ class SwUnoCollection
 #define SW_SERVICE_TYPE_FIELDMARK                       107
 #define SW_SERVICE_TYPE_FORMFIELDMARK                   108
 #define SW_SERVICE_TYPE_META                            109
+#define SW_SERVICE_VBAOBJECTPROVIDER                    110
+#define SW_SERVICE_VBACODENAMEPROVIDER                  111
+#define SW_SERVICE_VBAPROJECTNAMEPROVIDER               112
+#define SW_SERVICE_VBAGLOBALS                           113
 
-#define SW_SERVICE_LAST                 SW_SERVICE_TYPE_META
+#define SW_SERVICE_LAST                 SW_SERVICE_VBAGLOBALS
 
 #define SW_SERVICE_INVALID          USHRT_MAX
 

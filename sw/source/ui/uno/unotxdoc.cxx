@@ -178,6 +178,7 @@ using ::osl::FileBase;
 #define SW_CREATE_MARKER_TABLE          0x06
 #define SW_CREATE_DRAW_DEFAULTS         0x07
 
+#include <comphelper/processfactory.hxx>
 
 /******************************************************************************
  *
@@ -255,6 +256,12 @@ sal_Int64 SAL_CALL SwXTextDocument::getSomething( const Sequence< sal_Int8 >& rI
                                         rId.getConstArray(), 16 ) )
     {
             return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( this ));
+    }
+    if( rId.getLength() == 16
+        && 0 == rtl_compareMemory( SfxObjectShell::getUnoTunnelId().getConstArray(),
+                                        rId.getConstArray(), 16 ) )
+    {
+        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(pDocShell ));
     }
 
     sal_Int64 nRet = SfxBaseModel::getSomething( rId );
@@ -404,6 +411,9 @@ SwXTextDocument::SwXTextDocument(SwDocShell* pShell) :
     m_pPrintUIOptions( NULL ),
     m_pRenderData( NULL )
 {
+    uno::Reference< document::XDocumentProperties > xWriterProps( ::comphelper::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE("com.sun.star.writer.DocumentProperties") ), uno::UNO_QUERY_THROW);
+
+    SfxBaseModel::setDocumentProperties( xWriterProps );
 }
 /*-- 18.12.98 11:53:00---------------------------------------------------
 
@@ -2173,6 +2183,9 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
     Any aAny;
     switch(pEntry->nWID)
     {
+        case WID_DOC_ISTEMPLATEID    :
+            aAny <<= pDocShell->IsTemplate();
+            break;
         case  WID_DOC_CHAR_COUNT     :
         case  WID_DOC_PARA_COUNT     :
         case  WID_DOC_WORD_COUNT     :
@@ -2280,6 +2293,14 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         break;
         case WID_DOC_DIALOG_LIBRARIES:
             aAny <<= pDocShell->GetDialogContainer();
+        break;
+        case WID_DOC_VBA_DOCOBJ:
+        {
+            beans::PropertyValue aProp;
+            aProp.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ThisWordDoc") );
+            aProp.Value <<= pDocShell->GetModel();
+            aAny <<= aProp;
+        }
         break;
         case WID_DOC_RUNTIME_UID:
             aAny <<= getRuntimeUID();
@@ -3188,6 +3209,7 @@ uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
     throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
+
 
     // possible canonical values for nScriptTypes
     // any bit wise combination is allowed

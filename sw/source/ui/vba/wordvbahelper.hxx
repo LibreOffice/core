@@ -32,6 +32,8 @@
 #include <com/sun/star/text/XTextViewCursor.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/style/XStyle.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 class SwDocShell;
 class SwView;
@@ -46,7 +48,20 @@ namespace ooo
         SwView* getView( const css::uno::Reference< css::frame::XModel>& xModel );
         css::uno::Reference< css::text::XTextViewCursor > getXTextViewCursor( const css::uno::Reference< css::frame::XModel >& xModel ) throw (css::uno::RuntimeException);
         css::uno::Reference< css::style::XStyle > getCurrentPageStyle( const css::uno::Reference< css::frame::XModel >& xModel ) throw (css::uno::RuntimeException);
+        css::uno::Reference< css::style::XStyle > getCurrentPageStyle( const css::uno::Reference< css::frame::XModel>& xModel, const css::uno::Reference< css::beans::XPropertySet >& xProps ) throw (css::uno::RuntimeException);
         sal_Int32 getPageCount( const css::uno::Reference< css::frame::XModel>& xModel ) throw (css::uno::RuntimeException);
+        css::uno::Reference< css::style::XStyle > getDefaultParagraphStyle( const css::uno::Reference< css::frame::XModel >& xModel ) throw (css::uno::RuntimeException);
+        css::uno::Reference< css::text::XTextRange > getFirstObjectPosition( const css::uno::Reference< css::text::XText >& xText ) throw (css::uno::RuntimeException);
+        css::uno::Reference< css::text::XText > getCurrentXText( const css::uno::Reference< css::frame::XModel>& xModel ) throw (css::uno::RuntimeException);
+        sal_Bool gotoSelectedObjectAnchor( const css::uno::Reference< css::frame::XModel>& xModel ) throw (css::uno::RuntimeException);
+
+    enum E_DIRECTION
+    {
+        MOVE_LEFT = 1,
+        MOVE_RIGHT,
+        MOVE_UP,
+        MOVE_DOWN
+    };
 
 } // word
 } // vba

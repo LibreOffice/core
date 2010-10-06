@@ -27,6 +27,7 @@
 #include "vbarangehelper.hxx"
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
+#include <com/sun/star/text/XBookmarksSupplier.hpp>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -111,7 +112,7 @@ uno::Reference< text::XTextCursor > SwVbaRangeHelper::initCursor( const uno::Ref
         DebugHelper::exception(e);
     }
 
-    if( !bGotTextCursor )
+    if( !bGotTextCursor || !xTextCursor.is() )
     {
         try
         {
@@ -125,7 +126,7 @@ uno::Reference< text::XTextCursor > SwVbaRangeHelper::initCursor( const uno::Ref
         }
     }
 
-    if( !bGotTextCursor )
+    if( !bGotTextCursor || !xTextCursor.is() )
     {
         try
         {
@@ -169,3 +170,29 @@ sal_Int32 SwVbaRangeHelper::getPosition( const uno::Reference< text::XText >& rT
 
     return nPosition;
 }
+
+uno::Reference< text::XTextContent > SwVbaRangeHelper::findBookmarkByPosition( const uno::Reference< text::XTextDocument >& xTextDoc, const uno::Reference< text::XTextRange >& xTextRange ) throw ( css::uno::RuntimeException )
+{
+    uno::Reference< text::XBookmarksSupplier > xBookmarksSupplier( xTextDoc, uno::UNO_QUERY_THROW );
+    uno::Reference< container::XIndexAccess > xIndexAccess( xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY_THROW );
+    for( sal_Int32 index = 0; index < xIndexAccess->getCount(); index++ )
+    {
+        uno::Reference< text::XTextContent > xBookmark( xIndexAccess->getByIndex( index ), uno::UNO_QUERY_THROW );
+        uno::Reference< text::XTextRange > xBkAnchor = xBookmark->getAnchor();
+        uno::Reference< text::XTextRangeCompare > xCompare( xBkAnchor->getText(), uno::UNO_QUERY_THROW );
+        if( xCompare->compareRegionStarts( xBkAnchor->getStart(), xBkAnchor->getEnd() ) == 0 )
+        {
+            try
+            {
+                if( xCompare->compareRegionStarts( xTextRange, xBkAnchor->getStart() ) == 0 )
+                    return xBookmark;
+            }
+            catch( uno::Exception& )
+            {
+                continue;
+            }
+        }
+    }
+    return uno::Reference< text::XTextContent >();
+}
+

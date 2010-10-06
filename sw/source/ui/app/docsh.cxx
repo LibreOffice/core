@@ -491,16 +491,6 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
             xDocSh->DoClose();
         }
 
-        if( pDoc->ContainsMSVBasic() )
-        {
-            //TODO/MBA: it looks as that this code can be removed!
-            //SvxImportMSVBasic aTmp( *this, pIo->GetStorage() );
-            //aTmp.SaveOrDelMSVBAStorage( FALSE, aEmptyStr );
-            if( SvtFilterOptions::Get()->IsLoadWordBasicStorage() )
-                nVBWarning = GetSaveWarningOfMSVBAStorage( (SfxObjectShell&) *this );
-            pDoc->SetContainsMSVBasic( FALSE );
-        }
-
         // TabellenBox Edit beenden!
         if( pWrtShell )
             pWrtShell->EndAllTblBoxEdit();

@@ -47,6 +47,9 @@ public:
     virtual ::rtl::OUString SAL_CALL getText() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setText( const ::rtl::OUString& _text ) throw (css::uno::RuntimeException);
 
+    //Methods
+    virtual void SAL_CALL ClearFormatting() throw (css::uno::RuntimeException);
+
     // XHelperInterface
     virtual rtl::OUString& getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();

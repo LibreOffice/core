@@ -79,7 +79,16 @@
 #include <unorefmark.hxx>
 #include <unometa.hxx>
 #include "docsh.hxx"
-
+#include <com/sun/star/document/XCodeNameQuery.hpp>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/form/XFormsSupplier.hpp>
+#include <com/sun/star/script/ModuleInfo.hpp>
+#include <com/sun/star/script/ModuleType.hpp>
+#include <com/sun/star/script/ScriptEventDescriptor.hpp>
+#include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
+#include <vbahelper/vbaaccesshelper.hxx>
+#include <basic/basmgr.hxx>
+#include <comphelper/processfactory.hxx>
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -88,6 +97,184 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
+
+class SwVbaCodeNameProvider : public ::cppu::WeakImplHelper1< document::XCodeNameQuery >
+{
+    SwDocShell* mpDocShell;
+    rtl::OUString msThisDocumentCodeName;
+public:
+    SwVbaCodeNameProvider( SwDocShell* pDocShell ) : mpDocShell( pDocShell ) {}
+        // XCodeNameQuery
+    rtl::OUString SAL_CALL getCodeNameForObject( const uno::Reference< uno::XInterface >& xIf ) throw( uno::RuntimeException )
+    {
+        // Initialise the code name
+        if ( msThisDocumentCodeName.getLength() == 0 )
+        {
+            try
+            {
+                uno::Reference< beans::XPropertySet > xProps( mpDocShell->GetModel(), uno::UNO_QUERY_THROW );
+                uno::Reference< container::XNameAccess > xLibContainer( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicLibraries") ) ), uno::UNO_QUERY_THROW );
+        rtl::OUString sProjectName( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Standard") ) );
+                if ( mpDocShell->GetBasicManager()->GetName().Len() )
+                    sProjectName =  mpDocShell->GetBasicManager()->GetName();
+
+                uno::Reference< container::XNameAccess > xLib( xLibContainer->getByName( sProjectName ), uno::UNO_QUERY_THROW );
+                uno::Sequence< rtl::OUString > sModuleNames = xLib->getElementNames();
+                uno::Reference< script::vba::XVBAModuleInfo > xVBAModuleInfo( xLib, uno::UNO_QUERY );
+
+                for ( sal_Int32 i=0; i < sModuleNames.getLength(); ++i )
+                {
+                    script::ModuleInfo mInfo;
+
+                    if ( xVBAModuleInfo->hasModuleInfo( sModuleNames[ i ] ) &&  xVBAModuleInfo->getModuleInfo( sModuleNames[ i ] ).ModuleType == script::ModuleType::DOCUMENT )
+                    {
+                        msThisDocumentCodeName = sModuleNames[ i ];
+                        break;
+                    }
+                }
+            }
+            catch( uno::Exception& )
+            {
+            }
+        }
+        rtl::OUString sCodeName;
+        if ( mpDocShell )
+        {
+            OSL_TRACE( "*** In ScVbaCodeNameProvider::getCodeNameForObject");
+            // need to find the page ( and index )  for this control
+            uno::Reference< drawing::XDrawPageSupplier > xSupplier( mpDocShell->GetModel(), uno::UNO_QUERY_THROW );
+            uno::Reference< container::XIndexAccess > xIndex( xSupplier->getDrawPage(), uno::UNO_QUERY_THROW );
+            sal_Int32 nLen = xIndex->getCount();
+            bool bMatched = false;
+            uno::Sequence< script::ScriptEventDescriptor > aFakeEvents;
+                try
+                {
+                    uno::Reference< form::XFormsSupplier >  xFormSupplier( xIndex, uno::UNO_QUERY_THROW );
+                    uno::Reference< container::XIndexAccess > xFormIndex( xFormSupplier->getForms(), uno::UNO_QUERY_THROW );
+                    // get the www-standard container
+                    uno::Reference< container::XIndexAccess > xFormControls( xFormIndex->getByIndex(0), uno::UNO_QUERY_THROW );
+                    sal_Int32 nCntrls = xFormControls->getCount();
+                    for( sal_Int32 cIndex = 0; cIndex < nCntrls; ++cIndex )
+                    {
+                        uno::Reference< uno::XInterface > xControl( xFormControls->getByIndex( cIndex ), uno::UNO_QUERY_THROW );
+                        bMatched = ( xControl == xIf );
+                        if ( bMatched )
+                        {
+                            sCodeName = msThisDocumentCodeName;
+                            break;
+                        }
+                    }
+                }
+                catch( uno::Exception& ) {}
+        }
+        // Probably should throw here ( if !bMatched )
+        return sCodeName;
+    }
+};
+
+typedef std::hash_map< rtl::OUString, rtl::OUString, rtl::OUStringHash > StringHashMap;
+class SwVbaProjectNameProvider : public ::cppu::WeakImplHelper1< container::XNameContainer >
+{
+    SwDocShell* mpDocShell;
+    StringHashMap mTemplateToProject;
+public:
+    SwVbaProjectNameProvider( SwDocShell* pDocShell ) : mpDocShell( pDocShell )
+    {
+    }
+    virtual ::sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException )
+    {
+        return ( mTemplateToProject.find( aName ) != mTemplateToProject.end() );
+    }
+    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+    {
+        if ( !hasByName( aName ) )
+            throw container::NoSuchElementException();
+        return uno::makeAny( mTemplateToProject.find( aName )->second );
+    }
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw (::com::sun::star::uno::RuntimeException)
+    {
+        uno::Sequence< rtl::OUString > aElements( mTemplateToProject.size() );
+        StringHashMap::iterator it_end = mTemplateToProject.end();
+        sal_Int32 index = 0;
+        for ( StringHashMap::iterator it = mTemplateToProject.begin(); it != it_end; ++it, ++index )
+            aElements[ index ] = it->first;
+        return aElements;
+    }
+
+    virtual void SAL_CALL insertByName( const rtl::OUString& aName, const uno::Any& aElement ) throw ( com::sun::star::lang::IllegalArgumentException, com::sun::star::container::ElementExistException, com::sun::star::lang::WrappedTargetException )
+    {
+
+        rtl::OUString sProjectName;
+        aElement >>= sProjectName;
+        OSL_TRACE("** Template cache inserting template name %s with project %s"
+            , rtl::OUStringToOString( aName, RTL_TEXTENCODING_UTF8 ).getStr()
+            , rtl::OUStringToOString( sProjectName, RTL_TEXTENCODING_UTF8 ).getStr() );
+        mTemplateToProject[ aName ] = sProjectName;
+    }
+
+    virtual void SAL_CALL removeByName( const rtl::OUString& Name ) throw ( com::sun::star::container::NoSuchElementException, com::sun::star::lang::WrappedTargetException )
+    {
+        if ( !hasByName( Name ) )
+            throw container::NoSuchElementException();
+        mTemplateToProject.erase( Name );
+    }
+    virtual void SAL_CALL replaceByName( const rtl::OUString& aName, const uno::Any& aElement ) throw ( com::sun::star::lang::IllegalArgumentException, com::sun::star::container::NoSuchElementException, com::sun::star::lang::WrappedTargetException )
+    {
+        if ( !hasByName( aName ) )
+            throw container::NoSuchElementException();
+        insertByName( aName, aElement ); // insert will overwrite
+    }
+    // XElemenAccess
+    virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException)
+    {
+        return ::getCppuType((const rtl::OUString*)0);
+    }
+    virtual ::sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException )
+    {
+
+        return ( mTemplateToProject.size() > 0 );
+    }
+
+};
+
+class SwVbaObjectForCodeNameProvider : public ::cppu::WeakImplHelper1< container::XNameAccess >
+{
+    SwDocShell* mpDocShell;
+public:
+    SwVbaObjectForCodeNameProvider( SwDocShell* pDocShell ) : mpDocShell( pDocShell )
+    {
+        // #FIXME #TODO is the code name for ThisDocument read anywhere?
+    }
+
+    virtual ::sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException )
+    {
+        // #FIXME #TODO we really need to be checking against the codename for
+        // ThisDocument
+        if ( aName.equals( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ThisDocument" ) ) ) )
+            return sal_True;
+        return sal_False;
+    }
+    ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+    {
+        if ( !hasByName( aName ) )
+             throw container::NoSuchElementException();
+    uno::Sequence< uno::Any > aArgs( 2 );
+        aArgs[0] = uno::Any( uno::Reference< uno::XInterface >() );
+        aArgs[1] = uno::Any( mpDocShell->GetModel() );
+        uno::Reference< uno::XInterface > xDocObj = ooo::vba::createVBAUnoAPIServiceWithArgs( mpDocShell, "ooo.vba.word.Document" , aArgs );
+        OSL_TRACE("Creating Object ( ooo.vba.word.Document ) 0x%x", xDocObj.get() );
+        return  uno::makeAny( xDocObj );
+    }
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw (::com::sun::star::uno::RuntimeException)
+    {
+        uno::Sequence< rtl::OUString > aNames;
+        return aNames;
+    }
+    // XElemenAccess
+    virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException){ return uno::Type(); }
+    virtual ::sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException ) { return sal_True; }
+
+};
 
 /******************************************************************************
  *
@@ -211,6 +398,10 @@ const ProvNamesId_Type __FAR_DATA aProvNamesId[] =
     { "com.sun.star.text.Fieldmark",                          SW_SERVICE_TYPE_FIELDMARK },
     { "com.sun.star.text.FormFieldmark",                      SW_SERVICE_TYPE_FORMFIELDMARK },
     { "com.sun.star.text.InContentMetadata",                  SW_SERVICE_TYPE_META },
+    { "ooo.vba.VBAObjectModuleObjectProvider",                SW_SERVICE_VBAOBJECTPROVIDER },
+    { "ooo.vba.VBACodeNameProvider",                          SW_SERVICE_VBACODENAMEPROVIDER },
+    { "ooo.vba.VBAProjectNameProvider",                       SW_SERVICE_VBAPROJECTNAMEPROVIDER },
+    { "ooo.vba.VBAGlobals",                       SW_SERVICE_VBAGLOBALS },
 
     // case-correct versions of the service names (see #i67811)
     { CSS_TEXT_TEXTFIELD_DATE_TIME,                   SW_SERVICE_FIELDTYPE_DATETIME },
@@ -391,6 +582,50 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
             xRet =  (cppu::OWeakObject*)pFieldmark;
         }
         break;
+        case  SW_SERVICE_VBAOBJECTPROVIDER :
+        {
+            SwVbaObjectForCodeNameProvider* pObjProv = new SwVbaObjectForCodeNameProvider( pDoc->GetDocShell() );
+            xRet =  (cppu::OWeakObject*)pObjProv;
+        }
+        break;
+        case  SW_SERVICE_VBACODENAMEPROVIDER :
+        {
+            if ( pDoc->GetDocShell()  && ooo::vba::isAlienWordDoc( *pDoc->GetDocShell() ) )
+            {
+                SwVbaCodeNameProvider* pObjProv = new SwVbaCodeNameProvider( pDoc->GetDocShell() );
+                xRet =  (cppu::OWeakObject*)pObjProv;
+            }
+        }
+        break;
+        case  SW_SERVICE_VBAPROJECTNAMEPROVIDER :
+        {
+                        uno::Reference< container::XNameContainer > xProjProv = pDoc->GetVBATemplateToProjectCache();
+                        if ( !xProjProv.is() && pDoc->GetDocShell()  && ooo::vba::isAlienWordDoc( *pDoc->GetDocShell() ) )
+                        {
+                xProjProv = new SwVbaProjectNameProvider( pDoc->GetDocShell() );
+                            pDoc->SetVBATemplateToProjectCache( xProjProv );
+                        }
+            //xRet =  (cppu::OWeakObject*)xProjProv;
+            xRet = xProjProv;
+        }
+        break;
+        case  SW_SERVICE_VBAGLOBALS :
+        {
+            if ( pDoc )
+            {
+                uno::Any aGlobs;
+                if ( !pDoc->GetDocShell()->GetBasicManager()->GetGlobalUNOConstant( "VBAGlobals", aGlobs ) )
+                {
+                    uno::Sequence< uno::Any > aArgs(1);
+                    aArgs[ 0 ] <<= pDoc->GetDocShell()->GetModel();
+                    aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( ::rtl::OUString::createFromAscii( "ooo.vba.word.Globals"), aArgs );
+                    pDoc->GetDocShell()->GetBasicManager()->SetGlobalUNOConstant( "VBAGlobals", aGlobs );
+                }
+                aGlobs >>= xRet;
+            }
+        }
+        break;
+
         case  SW_SERVICE_TYPE_FOOTNOTE :
             xRet =  (cppu::OWeakObject*)new SwXFootnote(sal_False);
         break;

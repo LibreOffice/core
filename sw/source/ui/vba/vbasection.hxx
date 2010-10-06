@@ -48,8 +48,8 @@ public:
     virtual void SAL_CALL setProtectedForForms( ::sal_Bool _protectedforforms ) throw (css::uno::RuntimeException);
 
     // Methods
-    virtual css::uno::Any SAL_CALL Headers(  ) throw (css::uno::RuntimeException);
-    virtual css::uno::Any SAL_CALL Footers(  ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL Headers( const css::uno::Any& index ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL Footers( const css::uno::Any& index ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL PageSetup(  ) throw (css::uno::RuntimeException);
 
     // XHelperInterface

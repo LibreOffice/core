@@ -48,6 +48,20 @@ SwVbaParagraph::getRange( ) throw ( uno::RuntimeException )
     return uno::Reference< word::XRange >( new SwVbaRange( this, mxContext, mxTextDocument, mxTextRange->getStart(), mxTextRange->getEnd(), mxTextRange->getText(), sal_True ) );
 }
 
+uno::Any SAL_CALL
+SwVbaParagraph::getStyle( ) throw ( uno::RuntimeException )
+{
+    uno::Reference< word::XRange > xRange = getRange();
+    return xRange->getStyle();
+}
+
+void SAL_CALL
+SwVbaParagraph::setStyle( const uno::Any& style ) throw ( uno::RuntimeException )
+{
+    uno::Reference< word::XRange > xRange = getRange();
+    xRange->setStyle( style );
+}
+
 rtl::OUString&
 SwVbaParagraph::getServiceImplName()
 {

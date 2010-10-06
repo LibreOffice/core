@@ -57,6 +57,11 @@ namespace vbaeventshelper
 extern sdecl::ServiceDecl const serviceDecl;
 }
 
+namespace vbaeventshelper
+{
+extern sdecl::ServiceDecl const serviceDecl;
+}
+
 extern "C"
 {
     void SAL_CALL component_getImplementationEnvironment(

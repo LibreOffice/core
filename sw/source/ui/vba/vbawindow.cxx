@@ -25,12 +25,21 @@
  *
  ************************************************************************/
 #include <vbahelper/helperdecl.hxx>
+#include <ooo/vba/word/WdWindowState.hpp>
+#include <vcl/wrkwin.hxx>
+
 #include "vbawindow.hxx"
 #include "vbaglobals.hxx"
 #include "vbadocument.hxx"
 #include "vbaview.hxx"
 #include "vbapanes.hxx"
 #include "vbapane.hxx"
+#include "wordvbahelper.hxx"
+#include <view.hxx>
+// #FIXME where has SfxTopViewFrame gone
+#if 0
+#include <sfx2/topfrm.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
@@ -69,6 +78,44 @@ void SAL_CALL SwVbaWindow::setView( const uno::Any& _view ) throw (uno::RuntimeE
     {
         SwVbaView view( this,  mxContext, m_xModel );
         view.setType( nType );
+    }
+}
+
+uno::Any SAL_CALL
+SwVbaWindow::getWindowState() throw (uno::RuntimeException)
+{
+    sal_Int32 nwindowState = word::WdWindowState::wdWindowStateNormal;
+    SwView* pView = word::getView( m_xModel );
+    SfxViewFrame* pViewFrame = pView -> GetViewFrame();
+    WorkWindow* pWork = (WorkWindow*) pViewFrame->GetFrame().GetSystemWindow();
+    if ( pWork )
+    {
+        if ( pWork -> IsMaximized())
+            nwindowState = word::WdWindowState::wdWindowStateMaximize;
+        else if (pWork -> IsMinimized())
+            nwindowState = word::WdWindowState::wdWindowStateMinimize;
+    }
+    return uno::makeAny( nwindowState );
+}
+
+void SAL_CALL
+SwVbaWindow::setWindowState( const uno::Any& _windowstate ) throw (uno::RuntimeException)
+{
+    sal_Int32 nwindowState = word::WdWindowState::wdWindowStateMaximize;
+    _windowstate >>= nwindowState;
+    SwView* pView = word::getView( m_xModel );
+    SfxViewFrame* pViewFrame = pView -> GetViewFrame();
+    WorkWindow* pWork = (WorkWindow*) pViewFrame->GetFrame().GetSystemWindow();
+    if ( pWork )
+    {
+        if ( nwindowState == word::WdWindowState::wdWindowStateMaximize )
+            pWork -> Maximize();
+        else if (nwindowState == word::WdWindowState::wdWindowStateMinimize)
+            pWork -> Minimize();
+        else if (nwindowState == word::WdWindowState::wdWindowStateNormal)
+            pWork -> Restore();
+        else
+            throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Invalid Parameter" ) ), uno::Reference< uno::XInterface >() );
     }
 }
 

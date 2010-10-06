@@ -82,6 +82,7 @@ SLOFILES= \
                 $(SLO)$/vbaborders.obj \
                 $(SLO)$/vbadocuments.obj \
                 $(SLO)$/vbaheaderfooter.obj \
+				$(SLO)$/vbaheadersfooters.obj \
                 $(SLO)$/vbaheaderfooterhelper.obj \
                 $(SLO)$/vbaaddin.obj \
                 $(SLO)$/vbaaddins.obj \
@@ -91,6 +92,29 @@ SLOFILES= \
                 $(SLO)$/vbapagesetup.obj \
                 $(SLO)$/vbasection.obj \
                 $(SLO)$/vbasections.obj \
+				$(SLO)$/vbarow.obj \
+				$(SLO)$/vbarows.obj \
+				$(SLO)$/vbacolumn.obj \
+				$(SLO)$/vbacolumns.obj \
+				$(SLO)$/vbatablehelper.obj \
+				$(SLO)$/vbacell.obj \
+				$(SLO)$/vbacells.obj \
+				$(SLO)$/vbatabstop.obj \
+				$(SLO)$/vbatabstops.obj \
+				$(SLO)$/vbatableofcontents.obj \
+				$(SLO)$/vbatablesofcontents.obj \
+				$(SLO)$/vbalistgallery.obj \
+				$(SLO)$/vbalistgalleries.obj \
+				$(SLO)$/vbalisthelper.obj \
+				$(SLO)$/vbalisttemplate.obj \
+				$(SLO)$/vbalisttemplates.obj \
+				$(SLO)$/vbalistlevel.obj \
+				$(SLO)$/vbalistlevels.obj \
+				$(SLO)$/vbalistformat.obj \
+				$(SLO)$/vbarevision.obj \
+				$(SLO)$/vbarevisions.obj \
+				$(SLO)$/vbaframe.obj \
+				$(SLO)$/vbaframes.obj \
                 $(SLO)$/vbaeventshelper.obj \
 
 # --- Targets ------------------------------------------------------

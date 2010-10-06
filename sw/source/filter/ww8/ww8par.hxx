@@ -1417,7 +1417,7 @@ private:
     // determine object attribute "Layout in Table Cell"
     bool IsObjectLayoutInTableCell( const UINT32 nLayoutInTableCell ) const;
     // <--
-
+    bool ReadGlobalTemplateSettings( const rtl::OUString& sCreatedFrom, const com::sun::star::uno::Reference< com::sun::star::container::XNameContainer >& xPrjNameMap );
     //No copying
     SwWW8ImplReader(const SwWW8ImplReader &);
     SwWW8ImplReader& operator=(const SwWW8ImplReader&);

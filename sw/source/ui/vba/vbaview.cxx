@@ -92,20 +92,20 @@ SwVbaView::getSeekView() throw (css::uno::RuntimeException)
     }
     else if( aImplName.equalsAscii("SwXHeadFootText") )
     {
-        if( HeaderFooterHelper::isHeader( mxModel, xCurrentText ) )
+        if( HeaderFooterHelper::isHeader( mxModel ) )
         {
-            if( HeaderFooterHelper::isFirstPageHeader( mxModel, xCurrentText ) )
+            if( HeaderFooterHelper::isFirstPageHeader( mxModel ) )
                 return word::WdSeekView::wdSeekFirstPageHeader;
-            else if( HeaderFooterHelper::isEvenPagesHeader( mxModel, xCurrentText ) )
+            else if( HeaderFooterHelper::isEvenPagesHeader( mxModel ) )
                 return word::WdSeekView::wdSeekEvenPagesHeader;
             else
                 return word::WdSeekView::wdSeekPrimaryHeader;
         }
         else
         {
-            if( HeaderFooterHelper::isFirstPageFooter( mxModel, xCurrentText ) )
+            if( HeaderFooterHelper::isFirstPageFooter( mxModel ) )
                 return word::WdSeekView::wdSeekFirstPageFooter;
-            else if( HeaderFooterHelper::isEvenPagesFooter( mxModel, xCurrentText ) )
+            else if( HeaderFooterHelper::isEvenPagesFooter( mxModel ) )
                 return word::WdSeekView::wdSeekEvenPagesFooter;
             else
                 return word::WdSeekView::wdSeekPrimaryFooter;
@@ -132,6 +132,7 @@ SwVbaView::setSeekView( ::sal_Int32 _seekview ) throw (css::uno::RuntimeExceptio
     // if( _seekview == getSeekView() )
     //    return;
 
+    word::gotoSelectedObjectAnchor( mxModel );
     switch( _seekview )
     {
         case word::WdSeekView::wdSeekFirstPageFooter:
@@ -181,7 +182,7 @@ SwVbaView::setSeekView( ::sal_Int32 _seekview ) throw (css::uno::RuntimeExceptio
         {
             uno::Reference< text::XTextDocument > xTextDocument( mxModel, uno::UNO_QUERY_THROW );
             uno::Reference< text::XText > xText = xTextDocument->getText();
-            mxViewCursor->gotoRange( getFirstObjectPosition( xText ), sal_False );
+            mxViewCursor->gotoRange( word::getFirstObjectPosition( xText ), sal_False );
             break;
         }
     }
@@ -376,28 +377,7 @@ uno::Reference< text::XTextRange > SwVbaView::getHFTextRange( sal_Int32 nType ) 
     {
         DebugHelper::exception( SbERR_INTERNAL_ERROR, rtl::OUString() );
     }
-    uno::Reference< text::XTextRange > xTextRange = getFirstObjectPosition( xText );
-    return xTextRange;
-}
-
-uno::Reference< text::XTextRange > SwVbaView::getFirstObjectPosition( const uno::Reference< text::XText >& xText ) throw (uno::RuntimeException)
-{
-    // if the first object is table, get the position of first cell
-    uno::Reference< text::XTextRange > xTextRange;
-    uno::Reference< container::XEnumerationAccess > xParaAccess( xText, uno::UNO_QUERY_THROW );
-    uno::Reference< container::XEnumeration> xParaEnum = xParaAccess->createEnumeration();
-    if( xParaEnum->hasMoreElements() )
-    {
-        uno::Reference< lang::XServiceInfo > xServiceInfo( xParaEnum->nextElement(), uno::UNO_QUERY_THROW );
-        if( xServiceInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextTable") ) ) )
-        {
-            uno::Reference< table::XCellRange > xCellRange( xServiceInfo, uno::UNO_QUERY_THROW );
-            uno::Reference< text::XText> xFirstCellText( xCellRange->getCellByPosition(0, 0), uno::UNO_QUERY_THROW );
-            xTextRange = xFirstCellText->getStart();
-        }
-    }
-    if( !xTextRange.is() )
-        xTextRange = xText->getStart();
+    uno::Reference< text::XTextRange > xTextRange = word::getFirstObjectPosition( xText );
     return xTextRange;
 }
 
