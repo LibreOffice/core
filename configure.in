@@ -6693,7 +6693,7 @@ if test "$test_kde4" = "yes" -a "$ENABLE_KDE4" = "TRUE" ; then
    qt_test_include="Qt/qobject.h"
    qt_test_library="libQtCore.so"
    kde_test_include="kwindowsystem.h"
-   kde_test_library="libkcmutils.so"
+   kde_test_library="libsolid.so"
    
    AC_MSG_CHECKING([for Qt4 headers])
    qt_header_dir="no"
