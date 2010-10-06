@@ -200,6 +200,10 @@ published service Shape
         the z-order.
     */
     [optional, property] long NavigationOrder;
+
+    /** this property lets you get and set a hyperlink for this shape.
+     */
+    [optional, property] string Hyperlink;
 };
 
 //=============================================================================
