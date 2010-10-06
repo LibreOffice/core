@@ -42,6 +42,7 @@
 #include <com/sun/star/awt/FontEmphasisMark.hpp>
 #include <com/sun/star/awt/FontRelief.hpp>
 #include <com/sun/star/xml/input/XRoot.hpp>
+#include <com/sun/star/script/XLibraryContainer.hpp>
 #include <vector>
 
 
@@ -128,6 +129,8 @@ struct DialogImport
 
     css::uno::Reference< css::container::XNameContainer > _xDialogModel;
     css::uno::Reference< css::lang::XMultiServiceFactory > _xDialogModelFactory;
+    css::uno::Reference< css::frame::XModel > _xDoc;
+    css::uno::Reference< css::script::XLibraryContainer > _xScriptLibraryContainer;
 
     sal_Int32 XMLNS_DIALOGS_UID, XMLNS_SCRIPT_UID;
 
@@ -161,16 +164,20 @@ public:
     inline DialogImport(
         css::uno::Reference<css::uno::XComponentContext> const & xContext,
         css::uno::Reference<css::container::XNameContainer>
-        const & xDialogModel )
+        const & xDialogModel,
+        css::uno::Reference<css::frame::XModel> const & xDoc )
         SAL_THROW( () )
         : _xContext( xContext )
         , _xDialogModel( xDialogModel )
-        , _xDialogModelFactory( xDialogModel, css::uno::UNO_QUERY_THROW )
+        , _xDialogModelFactory( xDialogModel, css::uno::UNO_QUERY_THROW ), _xDoc( xDoc )
         { OSL_ASSERT( _xDialogModel.is() && _xDialogModelFactory.is() &&
                       _xContext.is() ); }
     virtual ~DialogImport()
         SAL_THROW( () );
 
+    inline css::uno::Reference< css::frame::XModel > getDocOwner() { return _xDoc; }
+
+    css::uno::Reference< css::script::XLibraryContainer > getScriptLibraryContainer();
     // XRoot
     virtual void SAL_CALL startDocument(
         css::uno::Reference< css::xml::input::XNamespaceMapping >
@@ -996,6 +1003,49 @@ public:
 };
 
 //==============================================================================
+class SpinButtonElement
+    : public ControlElement
+{
+public:
+    virtual css::uno::Reference< css::xml::input::XElement >
+    SAL_CALL startChildElement(
+        sal_Int32 nUid, ::rtl::OUString const & rLocalName,
+        css::uno::Reference<css::xml::input::XAttributes> const & xAttributes )
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException);
+    virtual void SAL_CALL endElement()
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException);
+
+    inline SpinButtonElement(
+        ::rtl::OUString const & rLocalName,
+        css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
+        ElementBase * pParent, DialogImport * pImport )
+        SAL_THROW( () )
+        : ControlElement( rLocalName, xAttributes, pParent, pImport )
+        {}
+};
+
+//==============================================================================
+class MultiPage
+    : public ControlElement
+{
+public:
+    virtual css::uno::Reference< css::xml::input::XElement >
+    SAL_CALL startChildElement(
+        sal_Int32 nUid, ::rtl::OUString const & rLocalName,
+        css::uno::Reference<css::xml::input::XAttributes> const & xAttributes )
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException);
+    virtual void SAL_CALL endElement()
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException);
+
+    inline MultiPage(
+        ::rtl::OUString const & rLocalName,
+        css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
+        ElementBase * pParent, DialogImport * pImport )
+        SAL_THROW( () )
+        : ControlElement( rLocalName, xAttributes, pParent, pImport )
+        {}
+};
+
 class ProgressBarElement
     : public ControlElement
 {

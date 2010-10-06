@@ -404,8 +404,8 @@ public:
         ::com::sun::star::uno::Any& aRet,
         ::com::sun::star::uno::Sequence< sal_Int16 >& aOutParamIndex,
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aOutParam,
-        bool bRaiseError = true
-    );
+        bool bRaiseError = true,
+        const ::com::sun::star::uno::Any* aCaller = 0 );
 
     static ErrCode  CallXScript(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxScriptContext,
@@ -414,7 +414,8 @@ public:
         ::com::sun::star::uno::Any& aRet,
         ::com::sun::star::uno::Sequence< sal_Int16 >& aOutParamIndex,
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aOutParam,
-        bool bRaiseError = true
+        bool bRaiseError = true,
+        const ::com::sun::star::uno::Any* aCaller = 0
     );
 
     /** adjusts the internal macro mode, according to the current security settings

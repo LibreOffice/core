@@ -104,6 +104,7 @@ XML_OLD_NAMESPACE( META,    6U )
 
 // experimental namespaces
 XML_NAMESPACE( FIELD,           100U )
+XML_NAMESPACE( FORMX,           101U )      // form interop extensions
 
 
 #endif  //  _XMLOFF_XMLNMSPE_HXX

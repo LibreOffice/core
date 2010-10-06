@@ -219,6 +219,8 @@ public:
     void            SetCompileForFAP( BOOL bVal )
                         { bCompileForFAP = bVal; bIgnoreErrors = bVal; }
 
+    static bool IsOpCodeVolatile( OpCode eOp );
+
     static BOOL DeQuote( String& rStr );
 
     static const String&    GetNativeSymbol( OpCode eOp );

@@ -70,6 +70,8 @@ void SAL_CALL
 ScVbaCheckbox::setValue( const uno::Any& _value ) throw (css::uno::RuntimeException)
 {
     sal_Int16 nValue = 0;
+    sal_Int16 nOldValue = 0;
+    m_xProps->getPropertyValue( STATE ) >>= nOldValue;
     sal_Bool bValue = false;
     if( _value >>= nValue )
     {
@@ -82,6 +84,8 @@ ScVbaCheckbox::setValue( const uno::Any& _value ) throw (css::uno::RuntimeExcept
             nValue = 1;
     }
     m_xProps->setPropertyValue( STATE, uno::makeAny( nValue ) );
+    if ( nValue != nOldValue )
+        fireClickEvent();
 }
 rtl::OUString&
 ScVbaCheckbox::getServiceImplName()

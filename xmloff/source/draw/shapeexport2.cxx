@@ -293,9 +293,6 @@ const sal_Int32 FOUND_CLICKEVENTTYPE    = 0x00000080;
 const sal_Int32 FOUND_MACRO             = 0x00000100;
 const sal_Int32 FOUND_LIBRARY           = 0x00000200;
 const sal_Int32 FOUND_ACTIONEVENTTYPE   = 0x00000400;
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
-const sal_Int32 FOUND_URL               = 0x00000800;
-#endif
 
 } // namespace
 
@@ -384,33 +381,6 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
             }
         }
     }
-
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
-    // extract properties from "OnAction" event -------------------------------
-
-    OUString aActionEventType;
-    OUString aHyperURL;
-
-    uno::Sequence< beans::PropertyValue > aActionProperties;
-    if( xEvents->hasByName( msOnAction ) && (xEvents->getByName( msOnAction ) >>= aActionProperties) )
-    {
-        const beans::PropertyValue* pProperty = aActionProperties.getConstArray();
-        const beans::PropertyValue* pPropertyEnd = pProperty + aActionProperties.getLength();
-        for( ; pProperty != pPropertyEnd; ++pProperty )
-        {
-            if( ( ( nFound & FOUND_ACTIONEVENTTYPE ) == 0 ) && pProperty->Name == msEventType )
-            {
-                if( pProperty->Value >>= aActionEventType )
-                    nFound |= FOUND_ACTIONEVENTTYPE;
-            }
-            else if( ( ( nFound & FOUND_URL ) == 0 ) && ( pProperty->Name == msURL  ) )
-            {
-                if( pProperty->Value >>= aHyperURL )
-                    nFound |= FOUND_URL;
-            }
-        }
-    }
-#endif
 
     // create the XML elements
 
@@ -563,15 +533,9 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
             SvXMLElementExport aEventElemt(mrExport, XML_NAMESPACE_SCRIPT, XML_EVENT_LISTENER, sal_True, sal_True);
         }
     }
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
-    else if( aClickEventType == msScript || aActionEventType == msAction )
-    {
-        if( nFound & ( FOUND_MACRO | FOUND_URL ) )
-#else
     else if( aClickEventType == msScript )
     {
         if( nFound & FOUND_MACRO )
-#endif
         {
             SvXMLElementExport aEventsElemt(mrExport, XML_NAMESPACE_OFFICE, XML_EVENT_LISTENERS, sal_True, sal_True);
             if ( nFound & FOUND_MACRO )
@@ -586,18 +550,6 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
 
                 SvXMLElementExport aEventElemt(mrExport, XML_NAMESPACE_SCRIPT, XML_EVENT_LISTENER, sal_True, sal_True);
             }
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
-            if ( nFound & FOUND_URL )
-            {
-                OUString aEventQName(
-                    mrExport.GetNamespaceMap().GetQNameByKey(
-                            XML_NAMESPACE_DOM, OUString( RTL_CONSTASCII_USTRINGPARAM( "action" ) ) ) );
-                mrExport.AddAttribute( XML_NAMESPACE_SCRIPT, XML_EVENT_NAME, aEventQName );
-                mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, aHyperURL );
-
-                SvXMLElementExport aEventElemt(mrExport, XML_NAMESPACE_PRESENTATION, XML_EVENT_LISTENER, sal_True, sal_True);
-            }
-#endif
         }
     }
 }

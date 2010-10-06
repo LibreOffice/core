@@ -322,7 +322,7 @@ Any SAL_CALL SfxDialogLibraryContainer::importLibraryElement
 
     try {
         // start parsing
-        xParser->setDocumentHandler( ::xmlscript::importDialogModel( xDialogModel, xContext ) );
+        xParser->setDocumentHandler( ::xmlscript::importDialogModel( xDialogModel, xContext, mxOwnerDocument ) );
         xParser->parseStream( source );
     }
     catch( Exception& )
@@ -336,7 +336,7 @@ Any SAL_CALL SfxDialogLibraryContainer::importLibraryElement
 
     // Create InputStream, TODO: Implement own InputStreamProvider
     // to avoid creating the DialogModel here!
-    Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xDialogModel, xContext );
+    Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xDialogModel, xContext, mxOwnerDocument );
     aRetAny <<= xISP;
     return aRetAny;
 }
@@ -484,7 +484,11 @@ void SfxDialogLibraryContainer::onNewRootStorage()
     }
 }
 
-
+sal_Bool SAL_CALL
+SfxDialogLibraryContainer:: HasExecutableCode( const ::rtl::OUString& Library ) throw (uno::RuntimeException)
+{
+    return sal_False; // dialog library has no executable code
+}
 //============================================================================
 // Service
 

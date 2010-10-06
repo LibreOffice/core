@@ -34,6 +34,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XTitle.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -49,6 +50,7 @@
 #include <sfx2/objsh.hxx>
 #include <tools/urlobj.hxx>
 #include <vbahelper/vbahelper.hxx>
+#include <vbahelper/vbadocumentbase.hxx>
 #include <hash_map>
 #include <osl/file.hxx>
 
@@ -143,8 +145,13 @@ public:
             {
                 uno::Reference< frame::XModel > xModel( xServiceInfo, uno::UNO_QUERY_THROW ); // that the spreadsheetdocument is a xmodel is a given
                 m_documents.push_back( xModel );
-                INetURLObject aURL( xModel->getURL() );
-                namesToIndices[ aURL.GetLastName() ] = nIndex++;
+                rtl::OUString sName;
+                uno::Reference< ::ooo::vba::XDocumentBase > xVbaDocument = new VbaDocumentBase( uno::Reference< XHelperInterface >(), xContext, xModel );
+                if ( xVbaDocument.is() )
+                {
+                    sName = xVbaDocument->getName();
+                }
+                namesToIndices[ sName ] = nIndex++;
             }
         }
 

@@ -163,8 +163,6 @@ void SbiCodeGen::Save()
         rMod.bIsProxyModule = false;
     }
 
-    if( pParser->bText )
-        p->SetFlag( SBIMG_COMPARETEXT );
     // GlobalCode-Flag
     if( pParser->HasGlobalCode() )
         p->SetFlag( SBIMG_INITCODE );
@@ -244,6 +242,8 @@ void SbiCodeGen::Save()
                     if( nPass == 1 )
                         aPropName = aPropName.Copy( aIfaceName.Len() + 1 );
                     SbProcedureProperty* pProcedureProperty = NULL;
+                                        OSL_TRACE("*** getProcedureProperty for thing %s",
+                        rtl::OUStringToOString( aPropName,RTL_TEXTENCODING_UTF8 ).getStr() );
                     pProcedureProperty = rMod.GetProcedureProperty( aPropName, ePropType );
                 }
                 if( nPass == 1 )

@@ -42,6 +42,8 @@ interface XReplacement
     interface ooo::vba::XHelperInterface;
 
     [attribute] string Text;
+
+    void ClearFormatting();
 };
 
 }; }; };

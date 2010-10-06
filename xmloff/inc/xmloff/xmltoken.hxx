@@ -145,6 +145,10 @@ namespace xmloff { namespace token {
         XML_NP_OFFICE_EXT,
         XML_N_OFFICE_EXT,
 
+        // jonp: 2008-09-24 Excel Interop
+        XML_NP_FORMX,
+        XML_N_FORMX,
+
         XML_NP_TABLE_EXT,
         XML_N_TABLE_EXT,
 

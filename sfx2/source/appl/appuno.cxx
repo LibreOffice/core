@@ -2281,6 +2281,16 @@ SFX2_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo(
     xNewKey = xKey->createKey( aTempStr );
     xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.document.DocumentProperties") );
 
+
+    // writer compatable document properties
+    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    aImpl += comp_CompatWriterDocProps::_getImplementationName();
+
+    aTempStr = aImpl;
+    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
+    xNewKey = xKey->createKey( aTempStr );
+    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.writer.DocumentProperties") );
+
     return sal_True;
 }
 
@@ -2340,6 +2350,16 @@ SFX2_DLLPUBLIC void* SAL_CALL component_getFactory(
             ::comp_SfxDocumentMetaData::_getImplementationName(),
             ::comp_SfxDocumentMetaData::_getSupportedServiceNames());
         }
+        if ( ::comp_CompatWriterDocProps::_getImplementationName().equals(
+                 ::rtl::OUString::createFromAscii( pImplementationName ) ) )
+        {
+            xFactory = ::cppu::createSingleComponentFactory(
+            ::comp_CompatWriterDocProps::_create,
+            ::comp_CompatWriterDocProps::_getImplementationName(),
+            ::comp_CompatWriterDocProps::_getSupportedServiceNames());
+        }
+
+        // Factory is valid - service was found.
 
         // Factory is valid - service was found.
         if ( xFactory.is() )

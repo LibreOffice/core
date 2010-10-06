@@ -123,6 +123,7 @@ namespace xmloff
     #define SCA_MAX_VALUE               0x00000002
     #define SCA_MIN_VALUE               0x00000004
     #define SCA_VALIDATION              0x00000008
+    #define SCA_GROUP_NAME              0x00000010
     #define SCA_MULTI_LINE              0x00000020
     #define SCA_AUTOMATIC_COMPLETION    0x00000080
     #define SCA_MULTIPLE                0x00000100

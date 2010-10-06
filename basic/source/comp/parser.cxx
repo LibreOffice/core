@@ -49,6 +49,7 @@ struct SbiStatement {
 #define N   FALSE
 
 static SbiStatement StmntTable [] = {
+{ ATTRIBUTE, &SbiParser::Attribute, Y, Y, }, // ATTRIBUTE
 { CALL,     &SbiParser::Call,       N, Y, }, // CALL
 { CLOSE,    &SbiParser::Close,      N, Y, }, // CLOSE
 { _CONST_,  &SbiParser::Dim,        Y, Y, }, // CONST
@@ -387,6 +388,18 @@ BOOL SbiParser::Parse()
         Next(); return TRUE;
     }
 
+        // In vba it's possible to do Error.foobar ( even if it results in
+    // a runtime error
+        if ( eCurTok == _ERROR_ && IsVBASupportOn() ) // we probably need to define a subset of keywords where this madness applies e.g. if ( IsVBASupportOn() && SymbolCanBeRedined( eCurTok ) )
+        {
+            SbiTokenizer tokens( *(SbiTokenizer*)this );
+            tokens.Next();
+            if ( tokens.Peek()  == DOT )
+            {
+                eCurTok = SYMBOL;
+        ePush = eCurTok;
+            }
+    }
     // Kommt ein Symbol, ist es entweder eine Variable( LET )
     // oder eine SUB-Prozedur( CALL ohne Klammern )
     // DOT fuer Zuweisungen im WITH-Block: .A=5
@@ -795,7 +808,7 @@ void SbiParser::Option()
             bClassModule = TRUE;
             aGen.GetModule().SetModuleType( com::sun::star::script::ModuleType::CLASS );
             break;
-        case VBASUPPORT:
+        case VBASUPPORT: // Option VBASupport used to override the module mode ( in fact this must reset the mode
             if( Next() == NUMBER )
             {
                 if ( nVal == 1 || nVal == 0 )

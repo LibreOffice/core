@@ -1394,7 +1394,7 @@
               <desc>Indicates whether VBA macros are imported without comments to be executable.</desc>
               <label>Executable code</label>
             </info>
-            <value>false</value>
+            <value>true</value>
           </prop>
           <prop oor:name="Save" oor:type="xs:boolean">
 						<!-- OldPath: Filter/MS_Office/Basic/Excel -->

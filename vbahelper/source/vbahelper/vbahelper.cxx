@@ -32,6 +32,7 @@
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
+#include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #include <com/sun/star/script/XDefaultProperty.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
@@ -311,7 +312,7 @@ void dispatchExecute(SfxViewShell* pViewShell, USHORT nSlot, SfxCallMode nCall)
 }
 
 void
-dispatchRequests( const uno::Reference< frame::XModel>& xModel, const rtl::OUString& aUrl, const uno::Sequence< beans::PropertyValue >& sProps )
+dispatchRequests (const uno::Reference< frame::XModel>& xModel, const rtl::OUString & aUrl, const uno::Sequence< beans::PropertyValue >& sProps, const uno::Reference< frame::XDispatchResultListener >& rListener, const sal_Bool bSilent )
 {
     util::URL url;
     url.Complete = aUrl;
@@ -343,6 +344,7 @@ dispatchRequests( const uno::Reference< frame::XModel>& xModel, const rtl::OUStr
     }
 
     uno::Reference<frame::XDispatch> xDispatcher = xDispatchProvider->queryDispatch(url,emptyString,0);
+    uno::Reference< frame::XNotifyingDispatch > xNotifyingDispatcher( xDispatcher, uno::UNO_QUERY );
 
     uno::Sequence<beans::PropertyValue> dispatchProps(1);
 
@@ -358,11 +360,20 @@ dispatchRequests( const uno::Reference< frame::XModel>& xModel, const rtl::OUStr
             *pDest = *pSrc;
     }
 
-    (*pDest).Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Silent" ));
-    (*pDest).Value <<= (sal_Bool)sal_True;
+    if ( bSilent )
+    {
+        (*pDest).Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Silent" ));
+        (*pDest).Value <<= (sal_Bool)sal_True;
+    }
 
-    if (xDispatcher.is())
+    if ( !rListener.is() && xDispatcher.is() )
+    {
         xDispatcher->dispatch( url, dispatchProps );
+    }
+    else if ( rListener.is() && xNotifyingDispatcher.is() )
+    {
+        xNotifyingDispatcher->dispatchWithNotification( url, dispatchProps, rListener );
+    }
 }
 
 void
@@ -959,6 +970,23 @@ void setDefaultPropByIntrospection( const uno::Any& aObj, const uno::Any& aValue
         throw uno::RuntimeException();
 }
 
+uno::Any getDefaultPropByIntrospection( const uno::Any& aObj ) throw ( uno::RuntimeException )
+{
+    uno::Any aValue;
+    uno::Reference< beans::XIntrospectionAccess > xUnoAccess( getIntrospectionAccess( aObj ) );
+    uno::Reference< script::XDefaultProperty > xDefaultProperty( aObj, uno::UNO_QUERY_THROW );
+    uno::Reference< beans::XPropertySet > xPropSet;
+
+    if ( xUnoAccess.is() )
+        xPropSet.set( xUnoAccess->queryAdapter( ::getCppuType( (const uno::Reference< beans::XPropertySet > *)0 ) ), uno::UNO_QUERY );
+
+    if ( xPropSet.is() )
+        aValue = xPropSet->getPropertyValue( xDefaultProperty->getDefaultPropertyName() );
+    else
+        throw uno::RuntimeException();
+    return aValue;
+}
+
 uno::Any getPropertyValue( const uno::Sequence< beans::PropertyValue >& aProp, const rtl::OUString& aName )
 {
     uno::Any result;
@@ -984,6 +1012,18 @@ sal_Bool setPropertyValue( uno::Sequence< beans::PropertyValue >& aProp, const r
         }
     }
     return sal_False;
+}
+
+void setOrAppendPropertyValue( uno::Sequence< beans::PropertyValue >& aProp, const rtl::OUString& aName, const uno::Any& aValue )
+{
+   if( setPropertyValue( aProp, aName, aValue ) )
+    return;
+
+  // append the property
+  sal_Int32 nLength = aProp.getLength();
+  aProp.realloc( nLength + 1 );
+  aProp[ nLength ].Name = aName;
+  aProp[ nLength ].Value = aValue;
 }
 
 // ====UserFormGeomentryHelper====
@@ -1447,6 +1487,28 @@ void UserFormGeometryHelper::setHeight( double nHeight )
             }
             return xIf;
         }
+
+    // Listener for XNotifyingDispatch
+    VBADispatchListener::VBADispatchListener() : m_State( sal_False )
+    {
+    }
+
+    // Listener for XNotifyingDispatch
+    VBADispatchListener::~VBADispatchListener()
+    {
+    }
+
+    // Listener for XNotifyingDispatch
+    void SAL_CALL VBADispatchListener::dispatchFinished( const frame::DispatchResultEvent& aEvent ) throw ( uno::RuntimeException )
+    {
+        m_Result = aEvent.Result;
+        m_State = ( aEvent.State == frame::DispatchResultState::SUCCESS ) ? sal_True : sal_False;
+    }
+
+    // Listener for XNotifyingDispatch
+    void SAL_CALL VBADispatchListener::disposing( const lang::EventObject& /*aEvent*/ ) throw( uno::RuntimeException )
+    {
+    }
 
         SfxObjectShell* getSfxObjShell( const uno::Reference< frame::XModel >& xModel ) throw (uno::RuntimeException)
         {

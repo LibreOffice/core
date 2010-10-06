@@ -44,6 +44,7 @@ IDLFILES=\
     XLabel.idl \
     XTextBox.idl \
     XRadioButton.idl \
+	XCheckBox.idl \
     XShape.idl \
     XShapes.idl \
     XLineFormat.idl \
@@ -62,6 +63,8 @@ IDLFILES=\
     XSpinButton.idl \
     XImage.idl \
     XControls.idl \
+	XReturnBoolean.idl \
+	XReturnInteger.idl \
     XTextFrame.idl \
 
 # ------------------------------------------------------------------

@@ -96,7 +96,9 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames( )
         throw (::com::sun::star::uno::RuntimeException);
-
+    // XLibraryQueryExecutable
+    virtual sal_Bool SAL_CALL HasExecutableCode(const rtl::OUString&)
+        throw (::com::sun::star::uno::RuntimeException);
     // Service
     static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_static();
     static ::rtl::OUString getImplementationName_static();

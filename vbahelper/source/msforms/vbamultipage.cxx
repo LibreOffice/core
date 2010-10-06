@@ -88,8 +88,12 @@ void SAL_CALL
 ScVbaMultiPage::setValue( const sal_Int32 _value ) throw (::com::sun::star::uno::RuntimeException)
 {
     // track change in dialog ( dialog value is 1 based, 0 is a special value )
+    sal_Int32 nVal = _value; // will be _value + 1 when cws container_controls is integrated
+    sal_Int32 nOldVal = getValue();
     m_xProps->setPropertyValue( SVALUE, uno::makeAny( _value ) );
     mxDialogProps->setPropertyValue( SSTEP, uno::makeAny( _value + 1) );
+    if ( nVal != nOldVal )
+        fireChangeEvent();
 }
 
 

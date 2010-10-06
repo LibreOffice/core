@@ -874,6 +874,10 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                         aReq.AppendItem( SfxStringItem( SID_PRINTER_NAME, pDlgPrinter->GetName() ) );
                         aReq.Done();
                     }
+                    if ( nId == SID_SETUPPRINTER )
+                    {
+                        rReq.AppendItem( SfxBoolItem( SID_DIALOG_RETURN, TRUE ) );
+                    }
 
                     // take the changes made in the dialog
                     pPrinter = SetPrinter_Impl( pDlgPrinter );
@@ -894,6 +898,10 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                     rReq.Ignore();
                     if ( SID_PRINTDOC == nId )
                         rReq.SetReturnValue(SfxBoolItem(0,FALSE));
+                    if ( nId == SID_SETUPPRINTER )
+                    {
+                        rReq.AppendItem( SfxBoolItem( SID_DIALOG_RETURN, FALSE ) );
+            }
                 }
             }
         }

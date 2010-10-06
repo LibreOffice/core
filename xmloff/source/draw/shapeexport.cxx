@@ -90,11 +90,6 @@ XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
     msStartShape( RTL_CONSTASCII_USTRINGPARAM("StartShape") ),
     msEndShape( RTL_CONSTASCII_USTRINGPARAM("EndShape") ),
     msOnClick( RTL_CONSTASCII_USTRINGPARAM("OnClick") ),
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
-    msOnAction( RTL_CONSTASCII_USTRINGPARAM("OnAction") ),
-    msAction( RTL_CONSTASCII_USTRINGPARAM("Action") ),
-    msURL( RTL_CONSTASCII_USTRINGPARAM("URL") ),
-#endif
     msEventType( RTL_CONSTASCII_USTRINGPARAM("EventType") ),
     msPresentation( RTL_CONSTASCII_USTRINGPARAM("Presentation") ),
     msMacroName( RTL_CONSTASCII_USTRINGPARAM("MacroName") ),

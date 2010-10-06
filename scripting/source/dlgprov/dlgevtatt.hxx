@@ -78,7 +78,7 @@ namespace dlgprov
              const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xHandler,
              const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospectionAccess >& xIntrospect,
              bool bProviderMode,
-             const ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptListener >& xRTLListener );
+             const ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptListener >& xRTLListener ,const rtl::OUString& sDialogLibName );
         virtual ~DialogEventsAttacherImpl();
 
         // XScriptEventsAttacher

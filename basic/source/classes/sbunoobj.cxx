@@ -61,6 +61,7 @@
 #include <com/sun/star/script/XInvocationAdapterFactory.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/script/XDefaultProperty.hpp>
+#include <com/sun/star/script/XDefaultMethod.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/reflection/XIdlArray.hpp>
@@ -72,7 +73,7 @@
 #include <com/sun/star/bridge/oleautomation/Decimal.hpp>
 #include <com/sun/star/bridge/oleautomation/Currency.hpp>
 #include <com/sun/star/bridge/oleautomation/XAutomationObject.hpp>
-
+#include <com/sun/star/script/XAutomationInvocation.hpp>
 
 using com::sun::star::uno::Reference;
 using namespace com::sun::star::uno;
@@ -156,6 +157,21 @@ SbxVariable* getDefaultProp( SbxVariable* pRef )
         }
     }
     return pDefaultProp;
+}
+
+void SetSbUnoObjectDfltPropName( SbxObject* pObj )
+{
+    SbUnoObject* pUnoObj = PTR_CAST(SbUnoObject,(SbxObject*) pObj);
+    if ( pUnoObj )
+    {
+        String sDfltPropName;
+
+        if ( SbUnoObject::getDefaultPropName( pUnoObj, sDfltPropName ) )
+        {
+            OSL_TRACE("SetSbUnoObjectDfltPropName setting dflt prop for %s", rtl::OUStringToOString( pObj->GetName(), RTL_TEXTENCODING_UTF8 ).getStr() );
+            pUnoObj->SetDfltProperty( sDfltPropName );
+        }
+    }
 }
 
 Reference< XComponentContext > getComponentContext_Impl( void )
@@ -458,6 +474,32 @@ void implHandleWrappedTargetException( const Any& _rWrappedTargetException )
 
     SbError nError( ERRCODE_BASIC_EXCEPTION );
     ::rtl::OUStringBuffer aMessageBuf;
+
+    // Add for VBA, to get the correct error code and message.
+    if ( SbiRuntime::isVBAEnabled() )
+    {
+        if ( aExamine >>= aBasicError )
+        {
+            if ( aBasicError.ErrorCode != 0 )
+            {
+                nError = StarBASIC::GetSfxFromVBError( (USHORT) aBasicError.ErrorCode );
+                if ( nError == 0 )
+                {
+                    nError = (SbError) aBasicError.ErrorCode;
+                }
+                aMessageBuf.append( aBasicError.ErrorMessageArgument );
+                aExamine.clear();
+            }
+        }
+
+        IndexOutOfBoundsException aIdxOutBndsExp;
+        if ( aExamine >>= aIdxOutBndsExp )
+        {
+            nError = SbERR_OUT_OF_RANGE;
+            aExamine.clear();
+        }
+    }
+    // End add
 
     // strip any other WrappedTargetException instances, but this time preserve the error messages.
     WrappedTargetException aWrapped;
@@ -1508,6 +1550,103 @@ Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty 
     return aRetVal;
 }
 
+void processAutomationParams( SbxArray* pParams, Sequence< Any >& args, bool bOLEAutomation, UINT32 nParamCount )
+{
+    AutomationNamedArgsSbxArray* pArgNamesArray = NULL;
+    if( bOLEAutomation )
+        pArgNamesArray = PTR_CAST(AutomationNamedArgsSbxArray,pParams);
+
+    args.realloc( nParamCount );
+    Any* pAnyArgs = args.getArray();
+    bool bBlockConversionToSmallestType = pINST->IsCompatibility();
+    UINT32 i = 0;
+    if( pArgNamesArray )
+    {
+        Sequence< ::rtl::OUString >& rNameSeq = pArgNamesArray->getNames();
+        ::rtl::OUString* pNames = rNameSeq.getArray();
+        Any aValAny;
+        for( i = 0 ; i < nParamCount ; i++ )
+        {
+            USHORT iSbx = (USHORT)(i+1);
+
+            // ACHTUNG: Bei den Sbx-Parametern den Offset nicht vergessen!
+            aValAny = sbxToUnoValueImpl( pParams->Get( iSbx ),
+            bBlockConversionToSmallestType );
+
+            ::rtl::OUString aParamName = pNames[iSbx];
+            if( aParamName.getLength() )
+            {
+                oleautomation::NamedArgument aNamedArgument;
+                aNamedArgument.Name = aParamName;
+                aNamedArgument.Value = aValAny;
+                pAnyArgs[i] <<= aNamedArgument;
+            }
+            else
+            {
+                pAnyArgs[i] = aValAny;
+            }
+        }
+    }
+    else
+    {
+        for( i = 0 ; i < nParamCount ; i++ )
+        {
+            // ACHTUNG: Bei den Sbx-Parametern den Offset nicht vergessen!
+            pAnyArgs[i] = sbxToUnoValueImpl( pParams->Get( (USHORT)(i+1) ),
+            bBlockConversionToSmallestType );
+        }
+    }
+
+}
+enum INVOKETYPE
+{
+   GetProp = 0,
+   SetProp,
+   Func
+};
+Any invokeAutomationMethod( const String& Name, Sequence< Any >& args, SbxArray* pParams, UINT32 nParamCount, Reference< XInvocation >& rxInvocation, INVOKETYPE invokeType = Func )
+{
+    Sequence< INT16 > OutParamIndex;
+    Sequence< Any > OutParam;
+
+    Any aRetAny;
+    switch( invokeType )
+    {
+        case Func:
+            aRetAny = rxInvocation->invoke( Name, args, OutParamIndex, OutParam );
+            break;
+        case GetProp:
+            {
+                Reference< XAutomationInvocation > xAutoInv( rxInvocation, UNO_QUERY );
+                aRetAny = xAutoInv->invokeGetProperty( Name, args, OutParamIndex, OutParam );
+                break;
+            }
+        case SetProp:
+            {
+                Reference< XAutomationInvocation > xAutoInv( rxInvocation, UNO_QUERY_THROW );
+                aRetAny = xAutoInv->invokePutProperty( Name, args, OutParamIndex, OutParam );
+                break;
+            }
+        default:
+            break; // should introduce an error here
+
+    }
+    const INT16* pIndices = OutParamIndex.getConstArray();
+    UINT32 nLen = OutParamIndex.getLength();
+    if( nLen )
+    {
+        const Any* pNewValues = OutParam.getConstArray();
+        for( UINT32 j = 0 ; j < nLen ; j++ )
+        {
+            INT16 iTarget = pIndices[ j ];
+            if( iTarget >= (INT16)nParamCount )
+                break;
+            unoToSbxValue( (SbxVariable*)pParams->Get( (USHORT)(j+1) ), pNewValues[ j ] );
+        }
+    }
+    return aRetAny;
+}
+
 // Dbg-Hilfsmethode zum Auslesen der in einem Object implementierten Interfaces
 String Impl_GetInterfaceInfo( const Reference< XInterface >& x, const Reference< XIdlClass >& xClass, USHORT nRekLevel )
 {
@@ -2014,11 +2153,26 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                 {
                     try
                     {
-                        // Wert holen
-                        Any aRetAny = mxInvocation->getValue( pProp->GetName() );
+                        UINT32 nParamCount = pParams ? ((UINT32)pParams->Count() - 1) : 0;
+                        sal_Bool bCanBeConsideredAMethod = mxInvocation->hasMethod( pProp->GetName() );
+                        Any aRetAny;
+                        if ( bCanBeConsideredAMethod && nParamCount )
+                        {
+                            // Automation properties have methods, so.. we need to invoke this through
+                            // XInvocation
+                            Sequence<Any> args;
+                            processAutomationParams( pParams, args, true, nParamCount );
+                            aRetAny = invokeAutomationMethod( pProp->GetName(), args, pParams, nParamCount, mxInvocation, GetProp );
+                        }
+                        else
+                            // Wert holen
+                            aRetAny = mxInvocation->getValue( pProp->GetName() );
 
                         // Wert von Uno nach Sbx uebernehmen
                         unoToSbxValue( pVar, aRetAny );
+                        if( pParams && bCanBeConsideredAMethod )
+                            pVar->SetParameters( NULL );
+
                     }
                     catch( const Exception& )
                     {
@@ -2143,52 +2297,7 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                 else if( bInvocation && pParams && mxInvocation.is() )
                 {
                     bool bOLEAutomation = true;
-                    // TODO: bOLEAutomation = xOLEAutomation.is()
-
-                    AutomationNamedArgsSbxArray* pArgNamesArray = NULL;
-                    if( bOLEAutomation )
-                        pArgNamesArray = PTR_CAST(AutomationNamedArgsSbxArray,pParams);
-
-                    args.realloc( nParamCount );
-                    Any* pAnyArgs = args.getArray();
-                    bool bBlockConversionToSmallestType = pINST->IsCompatibility();
-                    if( pArgNamesArray )
-                    {
-                        Sequence< ::rtl::OUString >& rNameSeq = pArgNamesArray->getNames();
-                        ::rtl::OUString* pNames = rNameSeq.getArray();
-
-                        Any aValAny;
-                        for( i = 0 ; i < nParamCount ; i++ )
-                        {
-                            USHORT iSbx = (USHORT)(i+1);
-
-                            // ACHTUNG: Bei den Sbx-Parametern den Offset nicht vergessen!
-                            aValAny = sbxToUnoValueImpl( pParams->Get( iSbx ),
-                                                        bBlockConversionToSmallestType );
-
-                            ::rtl::OUString aParamName = pNames[iSbx];
-                            if( aParamName.getLength() )
-                            {
-                                oleautomation::NamedArgument aNamedArgument;
-                                aNamedArgument.Name = aParamName;
-                                aNamedArgument.Value = aValAny;
-                                pAnyArgs[i] <<= aNamedArgument;
-                            }
-                            else
-                            {
-                                pAnyArgs[i] = aValAny;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        for( i = 0 ; i < nParamCount ; i++ )
-                        {
-                            // ACHTUNG: Bei den Sbx-Parametern den Offset nicht vergessen!
-                            pAnyArgs[i] = sbxToUnoValueImpl( pParams->Get( (USHORT)(i+1) ),
-                                                            bBlockConversionToSmallestType );
-                        }
-                    }
+                    processAutomationParams( pParams, args, bOLEAutomation, nParamCount );
                 }
 
                 // Methode callen
@@ -2223,26 +2332,8 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                     }
                     else if( bInvocation && mxInvocation.is() )
                     {
-                        Sequence< INT16 > OutParamIndex;
-                        Sequence< Any > OutParam;
-                        Any aRetAny = mxInvocation->invoke( pMeth->GetName(), args, OutParamIndex, OutParam );
-
-                        // Wert von Uno nach Sbx uebernehmen
+                        Any aRetAny = invokeAutomationMethod( pMeth->GetName(), args, pParams, nParamCount, mxInvocation );
                         unoToSbxValue( pVar, aRetAny );
-
-                        const INT16* pIndices = OutParamIndex.getConstArray();
-                        UINT32 nLen = OutParamIndex.getLength();
-                        if( nLen )
-                        {
-                            const Any* pNewValues = OutParam.getConstArray();
-                            for( UINT32 j = 0 ; j < nLen ; j++ )
-                            {
-                                INT16 iTarget = pIndices[ j ];
-                                if( iTarget >= (INT16)nParamCount )
-                                    break;
-                                unoToSbxValue( (SbxVariable*)pParams->Get( (USHORT)(j+1) ), pNewValues[ j ] );
-                            }
-                        }
                     }
 
                     // #55460, Parameter hier weghauen, da das in unoToSbxValue()
@@ -3180,11 +3271,16 @@ getTypeDescriptorEnumeration( const ::rtl::OUString& sSearchRoot,
 
 typedef std::hash_map< ::rtl::OUString, Any, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > VBAConstantsHash;
 
-SbxVariable* getVBAConstant( const String& rName )
+VBAConstantHelper&
+VBAConstantHelper::instance()
 {
-    SbxVariable* pConst = NULL;
-    static VBAConstantsHash aConstCache;
-    static bool isInited = false;
+    static VBAConstantHelper aHelper;
+    return aHelper;
+}
+
+void
+VBAConstantHelper::init()
+{
     if ( !isInited )
     {
         Sequence< TypeClass > types(1);
@@ -3192,39 +3288,77 @@ SbxVariable* getVBAConstant( const String& rName )
         Reference< XTypeDescriptionEnumeration > xEnum = getTypeDescriptorEnumeration( defaultNameSpace, types, TypeDescriptionSearchDepth_INFINITE  );
 
         if ( !xEnum.is() )
-            return NULL;
+            return; //NULL;
 
         while ( xEnum->hasMoreElements() )
         {
             Reference< XConstantsTypeDescription > xConstants( xEnum->nextElement(), UNO_QUERY );
             if ( xConstants.is() )
             {
+                // store constant group name
+                ::rtl::OUString sFullName = xConstants->getName();
+                sal_Int32 indexLastDot = sFullName.lastIndexOf('.');
+                ::rtl::OUString sLeafName( sFullName );
+                if ( indexLastDot > -1 )
+                    sLeafName = sFullName.copy( indexLastDot + 1);
+                aConstCache.push_back( sLeafName ); // assume constant group names are unique
                 Sequence< Reference< XConstantTypeDescription > > aConsts = xConstants->getConstants();
                 Reference< XConstantTypeDescription >* pSrc = aConsts.getArray();
                 sal_Int32 nLen = aConsts.getLength();
                 for ( sal_Int32 index =0;  index<nLen; ++pSrc, ++index )
                 {
+                    // store constant member name
                     Reference< XConstantTypeDescription >& rXConst =
                         *pSrc;
-                    ::rtl::OUString sFullName = rXConst->getName();
-                    sal_Int32 indexLastDot = sFullName.lastIndexOf('.');
-                    ::rtl::OUString sLeafName;
+                    sFullName = rXConst->getName();
+                    indexLastDot = sFullName.lastIndexOf('.');
+                    sLeafName = sFullName;
                     if ( indexLastDot > -1 )
                         sLeafName = sFullName.copy( indexLastDot + 1);
-                    aConstCache[ sLeafName.toAsciiLowerCase() ] = rXConst->getConstantValue();
+                    aConstHash[ sLeafName.toAsciiLowerCase() ] = rXConst->getConstantValue();
                 }
             }
         }
         isInited = true;
     }
+}
+
+bool
+VBAConstantHelper::isVBAConstantType( const String& rName )
+{
+    init();
+    bool bConstant = false;
     ::rtl::OUString sKey( rName );
-    VBAConstantsHash::const_iterator it = aConstCache.find( sKey.toAsciiLowerCase() );
-    if ( it != aConstCache.end() )
+    VBAConstantsVector::const_iterator it = aConstCache.begin();
+
+    for( ; it != aConstCache.end(); it++ )
+    {
+        if( sKey.equalsIgnoreAsciiCase( *it ) )
+        {
+            bConstant = true;
+            break;
+        }
+    }
+    return bConstant;
+}
+
+SbxVariable*
+VBAConstantHelper::getVBAConstant( const String& rName )
+{
+    SbxVariable* pConst = NULL;
+    init();
+
+    ::rtl::OUString sKey( rName );
+
+    VBAConstantsHash::const_iterator it = aConstHash.find( sKey.toAsciiLowerCase() );
+
+    if ( it != aConstHash.end() )
     {
         pConst = new SbxVariable( SbxVARIANT );
         pConst->SetName( rName );
         unoToSbxValue( pConst, it->second );
     }
+
     return pConst;
 }
 

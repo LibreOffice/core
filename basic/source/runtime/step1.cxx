@@ -93,6 +93,15 @@ void SbiRuntime::StepARGN( UINT32 nOp1 )
     {
         String aAlias( pImg->GetString( static_cast<short>( nOp1 ) ) );
         SbxVariableRef pVal = PopVar();
+        if( bVBAEnabled && ( pVal->ISA(SbxMethod) || pVal->ISA(SbUnoProperty) || pVal->ISA(SbProcedureProperty) ) )
+        {
+            // named variables ( that are Any especially properties ) can be empty at this point and need a broadcast
+            if ( pVal->GetType() == SbxEMPTY )
+                pVal->Broadcast( SBX_HINT_DATAWANTED );
+            // Methoden und Properties evaluieren!
+            SbxVariable* pRes = new SbxVariable( *pVal );
+            pVal = pRes;
+        }
         refArgv->Put( pVal, nArgc );
         refArgv->PutAlias( aAlias, nArgc++ );
     }
@@ -182,7 +191,9 @@ void SbiRuntime::StepJUMPT( UINT32 nOp1 )
 void SbiRuntime::StepJUMPF( UINT32 nOp1 )
 {
     SbxVariableRef p = PopVar();
-    if( !p->GetBool() )
+    // In a test e.g. If Null then
+        // will evaluate Null will act as if False
+    if( ( bVBAEnabled && p->IsNull() ) || !p->GetBool() )
         StepJUMP( nOp1 );
 }
 

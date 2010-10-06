@@ -122,7 +122,9 @@ public:
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::container::NoSuchElementException,
                ::com::sun::star::uno::RuntimeException);
-
+    // XLibraryQueryExecutable
+    virtual sal_Bool SAL_CALL HasExecutableCode(const rtl::OUString&)
+        throw (::com::sun::star::uno::RuntimeException);
     // Methods XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName( )
         throw (::com::sun::star::uno::RuntimeException);

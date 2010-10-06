@@ -95,6 +95,7 @@ SHL2STDLIBS= \
         $(VCLLIB) \
         $(TKLIB) \
                 $(BASICLIB) \
+		$(SVXMSFILTERLIB) \
 
 SHL2DEPN=$(SHL1TARGETN)
 SHL2LIBS=$(SLB)$/$(TARGET_MSFORMS).lib

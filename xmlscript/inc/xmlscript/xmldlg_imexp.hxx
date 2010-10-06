@@ -27,6 +27,8 @@
 #ifndef _XMLSCRIPT_XMLDLG_IMEXP_HXX_
 #define _XMLSCRIPT_XMLDLG_IMEXP_HXX_
 
+#include <com/sun/star/frame/XModel.hpp>
+
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HXX_
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
@@ -51,7 +53,9 @@ void SAL_CALL exportDialogModel(
     ::com::sun::star::uno::Reference<
     ::com::sun::star::xml::sax::XExtendedDocumentHandler > const & xOut,
     ::com::sun::star::uno::Reference<
-    ::com::sun::star::container::XNameContainer > const & xDialogModel )
+    ::com::sun::star::container::XNameContainer > const & xDialogModel,
+    ::com::sun::star::uno::Reference<
+    ::com::sun::star::frame::XModel > const & xDocument )
     SAL_THROW( (::com::sun::star::uno::Exception) );
 
 //==============================================================================
@@ -60,7 +64,9 @@ SAL_CALL importDialogModel(
     ::com::sun::star::uno::Reference<
     ::com::sun::star::container::XNameContainer > const & xDialogModel,
     ::com::sun::star::uno::Reference<
-    ::com::sun::star::uno::XComponentContext > const & xContext )
+    ::com::sun::star::uno::XComponentContext > const & xContext,
+    ::com::sun::star::uno::Reference<
+    ::com::sun::star::frame::XModel > const & xDocument )
     SAL_THROW( (::com::sun::star::uno::Exception) );
 
 // additional functions for convenience
@@ -71,7 +77,9 @@ SAL_CALL exportDialogModel(
     ::com::sun::star::uno::Reference<
     ::com::sun::star::container::XNameContainer > const & xDialogModel,
     ::com::sun::star::uno::Reference<
-    ::com::sun::star::uno::XComponentContext > const & xContext )
+    ::com::sun::star::uno::XComponentContext > const & xContext,
+    ::com::sun::star::uno::Reference<
+    ::com::sun::star::frame::XModel > const & xDocument )
     SAL_THROW( (::com::sun::star::uno::Exception) );
 
 //==============================================================================
@@ -81,7 +89,9 @@ void SAL_CALL importDialogModel(
     ::com::sun::star::uno::Reference<
     ::com::sun::star::container::XNameContainer > const & xDialogModel,
     ::com::sun::star::uno::Reference<
-    ::com::sun::star::uno::XComponentContext > const & xContext )
+    ::com::sun::star::uno::XComponentContext > const & xContext,
+    ::com::sun::star::uno::Reference<
+    ::com::sun::star::frame::XModel > const & xDocument )
     SAL_THROW( (::com::sun::star::uno::Exception) );
 
 }

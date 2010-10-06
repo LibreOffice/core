@@ -38,6 +38,7 @@ SbxObjectRef GetSbUnoObject( const String& aName, const com::sun::star::uno::Any
 
 // Force creation of all properties for debugging
 void createAllObjectProperties( SbxObject* pObj );
+void SetSbUnoObjectDfltPropName( SbxObject* pObj );
 
 ::com::sun::star::uno::Any sbxToUnoValue( SbxVariable* pVar );
 

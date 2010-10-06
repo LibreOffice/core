@@ -165,29 +165,41 @@ extern RTLFUNC(Kill); // JSM
 extern RTLFUNC(MkDir); // JSM
 extern RTLFUNC(RmDir); // JSM
 extern RTLFUNC(SendKeys); // JSM
+extern RTLFUNC(DDB);
 extern RTLFUNC(DimArray);
 extern RTLFUNC(Dir);
 extern RTLFUNC(DoEvents);
 extern RTLFUNC(Exp);
 extern RTLFUNC(FileLen);
 extern RTLFUNC(Fix);
+extern RTLFUNC(FV);
 extern RTLFUNC(Hex);
 extern RTLFUNC(Input);
 extern RTLFUNC(InStr);
 extern RTLFUNC(InStrRev);
 extern RTLFUNC(Int);
+extern RTLFUNC(IPmt);
+extern RTLFUNC(IRR);
 extern RTLFUNC(Join);
 extern RTLFUNC(LCase);
 extern RTLFUNC(Left);
 extern RTLFUNC(Log);
 extern RTLFUNC(LTrim);
 extern RTLFUNC(Mid);
+extern RTLFUNC(MIRR);
+extern RTLFUNC(NPer);
+extern RTLFUNC(NPV);
 extern RTLFUNC(Oct);
+extern RTLFUNC(Pmt);
+extern RTLFUNC(PPmt);
+extern RTLFUNC(PV);
+extern RTLFUNC(Rate);
 extern RTLFUNC(Replace);
 extern RTLFUNC(Right);
 extern RTLFUNC(RTrim);
 extern RTLFUNC(RTL);
 extern RTLFUNC(Sgn);
+extern RTLFUNC(SLN);
 extern RTLFUNC(Space);
 extern RTLFUNC(Split);
 extern RTLFUNC(Sqr);
@@ -195,6 +207,7 @@ extern RTLFUNC(Str);
 extern RTLFUNC(StrComp);
 extern RTLFUNC(String);
 extern RTLFUNC(StrReverse);
+extern RTLFUNC(SYD);
 extern RTLFUNC(Tan);
 extern RTLFUNC(UCase);
 extern RTLFUNC(Val);
@@ -297,6 +310,7 @@ extern RTLFUNC(Switch);
 extern RTLFUNC(Wait);
 //i#64882# add new WaitUntil
 extern RTLFUNC(WaitUntil);
+extern RTLFUNC(FuncCaller);
 
 extern RTLFUNC(GetGUIVersion);
 extern RTLFUNC(Choose);

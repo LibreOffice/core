@@ -107,6 +107,7 @@ public:
     void BadSyntax();               // Falsches SbiToken
     void NoIf();                    // ELSE/ELSE IF ohne IF
     void Assign();                  // LET
+    void Attribute();                                   // Attribute
     void Call();                    // CALL
     void Close();                   // CLOSE
     void Declare();                 // DECLARE

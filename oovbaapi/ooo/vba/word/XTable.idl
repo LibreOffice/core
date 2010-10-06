@@ -70,6 +70,8 @@ interface XTable
 */
     any Borders( [in] any aIndex );
 
+    any Rows([in] any aIndex );
+    any Columns([in] any aIndex );
 };
 
 }; }; };

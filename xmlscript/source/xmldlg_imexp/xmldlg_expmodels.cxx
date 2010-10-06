@@ -29,7 +29,16 @@
 #include "precompiled_xmlscript.hxx"
 #include "exp_share.hxx"
 
+#include <com/sun/star/form/binding/XListEntrySink.hpp>
+#include <com/sun/star/form/binding/XBindableValue.hpp>
+#include <com/sun/star/form/binding/XValueBinding.hpp>
+#include <com/sun/star/table/CellAddress.hpp>
+#include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#include <com/sun/star/document/XStorageBasedDocument.hpp>
+#include <com/sun/star/document/XGraphicObjectResolver.hpp>
+#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 
 
 using namespace ::com::sun::star;
@@ -39,6 +48,66 @@ using ::rtl::OUString;
 namespace xmlscript
 {
 
+void lclExportBindableAndListSourceBits( Reference< frame::XModel > const & xDocument, const Reference< beans::XPropertySet >& _xProps, ElementDescriptor& rModel )
+{
+    Reference< lang::XMultiServiceFactory > xFac;
+    if ( xDocument.is() )
+        xFac.set( xDocument, uno::UNO_QUERY );
+
+    Reference< form::binding::XBindableValue > xBinding( _xProps, UNO_QUERY );
+
+    if ( xFac.is() && xBinding.is() )
+    {
+        try
+        {
+            Reference< beans::XPropertySet > xConvertor( xFac->createInstance( OUSTR( "com.sun.star.table.CellAddressConversion" )), uno::UNO_QUERY );
+        Reference< beans::XPropertySet > xBindable( xBinding->getValueBinding(), UNO_QUERY );
+            if ( xBindable.is() )
+            {
+                table::CellAddress aAddress;
+                xBindable->getPropertyValue( OUSTR("BoundCell") ) >>= aAddress;
+                xConvertor->setPropertyValue( OUSTR("Address"), makeAny( aAddress ) );
+                rtl::OUString sAddress;
+                xConvertor->getPropertyValue( OUSTR("PersistentRepresentation") ) >>= sAddress;
+                if ( sAddress.getLength() > 0 )
+                    rModel.addAttribute( OUSTR(XMLNS_DIALOGS_PREFIX ":linked-cell"), sAddress );
+
+                OSL_TRACE( "*** Bindable value %s", rtl::OUStringToOString( sAddress, RTL_TEXTENCODING_UTF8 ).getStr() );
+
+            }
+        }
+        catch( uno::Exception& )
+        {
+        }
+    }
+    Reference< form::binding::XListEntrySink > xEntrySink( _xProps, UNO_QUERY );
+    if ( xEntrySink.is() )
+    {
+        Reference< beans::XPropertySet > xListSource( xEntrySink->getListEntrySource(), UNO_QUERY );
+        if ( xListSource.is() )
+        {
+            try
+            {
+                Reference< beans::XPropertySet > xConvertor( xFac->createInstance( OUSTR( "com.sun.star.table.CellRangeAddressConversion" )), uno::UNO_QUERY );
+
+                table::CellRangeAddress aAddress;
+                xListSource->getPropertyValue( OUSTR( "CellRange" ) ) >>= aAddress;
+
+                rtl::OUString sAddress;
+                xConvertor->setPropertyValue( OUSTR("Address"), makeAny( aAddress ) );
+                xConvertor->getPropertyValue( OUSTR("PersistentRepresentation") ) >>= sAddress;
+                OSL_TRACE("**** cell range source list %s",
+                    rtl::OUStringToOString( sAddress, RTL_TEXTENCODING_UTF8 ).getStr() );
+                if ( sAddress.getLength() > 0 );
+                    rModel.addAttribute( OUSTR(XMLNS_DIALOGS_PREFIX ":source-cell-range"), sAddress );
+            }
+            catch( uno::Exception& )
+            {
+            }
+        }
+    }
+
+}
 static inline bool readBorderProps(
     ElementDescriptor * element, Style & style )
 {
@@ -65,6 +134,42 @@ static inline bool readFontProps( ElementDescriptor * element, Style & style )
 }
 
 //__________________________________________________________________________________________________
+void ElementDescriptor::readMultiPageModel( StyleBag * all_styles )
+{
+    // collect styles
+    Style aStyle( 0x2 | 0x8 | 0x20 );
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextColor") ) ) >>= aStyle._textColor)
+        aStyle._set |= 0x2;
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextLineColor") ) ) >>= aStyle._textLineColor)
+        aStyle._set |= 0x20;
+    if (readFontProps( this, aStyle ))
+        aStyle._set |= 0x8;
+    if (aStyle._set)
+    {
+        addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
+                      all_styles->getStyleId( aStyle ) );
+    }
+
+    // collect elements
+    readDefaults();
+    readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ProgressValue") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value") ) );
+    readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ProgressValueMax") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value-max") ) );
+
+    OUString aTitle;
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("Label") ) ) >>= aTitle)
+    {
+        ElementDescriptor * title = new ElementDescriptor(
+            _xProps, _xPropState,
+            OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":title") ) );
+        title->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value") ),
+                             aTitle );
+        addSubElement( title );
+    }
+
+    readEvents();
+}
 void ElementDescriptor::readButtonModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
@@ -206,7 +311,7 @@ void ElementDescriptor::readCheckBoxModel( StyleBag * all_styles )
     readEvents();
 }
 //__________________________________________________________________________________________________
-void ElementDescriptor::readComboBoxModel( StyleBag * all_styles )
+void ElementDescriptor::readComboBoxModel( StyleBag * all_styles, Reference< frame::XModel > const & xDocument )
     SAL_THROW( (Exception) )
 {
     // collect styles
@@ -247,7 +352,8 @@ void ElementDescriptor::readComboBoxModel( StyleBag * all_styles )
                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":maxlength") ) );
     readShortAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("LineCount") ),
                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":linecount") ) );
-
+    // Cell Range, Ref Cell etc.
+    lclExportBindableAndListSourceBits( xDocument, _xProps, *this );
     // string item list
     Sequence< OUString > itemValues;
     if ((readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("StringItemList") ) ) >>= itemValues) &&
@@ -273,7 +379,7 @@ void ElementDescriptor::readComboBoxModel( StyleBag * all_styles )
     readEvents();
 }
 //__________________________________________________________________________________________________
-void ElementDescriptor::readListBoxModel( StyleBag * all_styles )
+void ElementDescriptor::readListBoxModel( StyleBag * all_styles, Reference< frame::XModel > const & xDocument  )
     SAL_THROW( (Exception) )
 {
     // collect styles
@@ -308,7 +414,7 @@ void ElementDescriptor::readListBoxModel( StyleBag * all_styles )
                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":linecount") ) );
     readAlignAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Align") ),
                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":align") ) );
-
+    lclExportBindableAndListSourceBits( xDocument, _xProps, *this );
     // string item list
     Sequence< OUString > itemValues;
     if ((readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("StringItemList") ) ) >>= itemValues) &&
@@ -348,7 +454,7 @@ void ElementDescriptor::readListBoxModel( StyleBag * all_styles )
     readEvents();
 }
 //__________________________________________________________________________________________________
-void ElementDescriptor::readRadioButtonModel( StyleBag * all_styles )
+void ElementDescriptor::readRadioButtonModel( StyleBag * all_styles, Reference< frame::XModel > const & xDocument  )
     SAL_THROW( (Exception) )
 {
     // collect styles
@@ -385,6 +491,8 @@ void ElementDescriptor::readRadioButtonModel( StyleBag * all_styles )
                            OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":image-position") ) );
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("MultiLine") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":multiline") ) );
+    readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("GroupName") ),
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":group-name") ) );
 
     sal_Int16 nState = 0;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("State") ) ) >>= nState)
@@ -404,6 +512,7 @@ void ElementDescriptor::readRadioButtonModel( StyleBag * all_styles )
             break;
         }
     }
+    lclExportBindableAndListSourceBits( xDocument, _xProps, *this );
     readEvents();
 }
 //__________________________________________________________________________________________________
@@ -576,7 +685,7 @@ void ElementDescriptor::readEditModel( StyleBag * all_styles )
     readEvents();
 }
 //__________________________________________________________________________________________________
-void ElementDescriptor::readImageControlModel( StyleBag * all_styles )
+void ElementDescriptor::readImageControlModel( StyleBag * all_styles, com::sun::star::uno::Reference< com::sun::star::frame::XModel > const & xDocument )
     SAL_THROW( (Exception) )
 {
     // collect styles
@@ -595,8 +704,31 @@ void ElementDescriptor::readImageControlModel( StyleBag * all_styles )
     readDefaults();
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ScaleImage") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":scale-image") ) );
-    readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ImageURL") ),
-                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":src") ) );
+    rtl::OUString sURL;
+    _xProps->getPropertyValue( OUSTR("ImageURL") ) >>= sURL;
+
+    if ( sURL.indexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.GraphicObject:"  ) ) ) == 0 )
+    {
+        Reference< document::XStorageBasedDocument > xDocStorage( xDocument, UNO_QUERY );
+
+        if ( xDocStorage.is() )
+        {
+            uno::Sequence< Any > aArgs( 1 );
+            aArgs[ 0 ] <<= xDocStorage->getDocumentStorage();
+
+            ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
+            uno::Reference< document::XGraphicObjectResolver > xGraphicResolver;
+            aContext.createComponentWithArguments( OUSTR( "com.sun.star.comp.Svx.GraphicExportHelper" ), aArgs, xGraphicResolver );
+            if ( xGraphicResolver.is() )
+            {
+                sURL = xGraphicResolver->resolveGraphicObjectURL( sURL );
+            }
+        }
+    }
+    if ( sURL.getLength() > 0 )
+    {
+        addAttribute( OUSTR(XMLNS_DIALOGS_PREFIX ":src"), sURL );
+    }
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Tabstop") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":tabstop") ) );
     readEvents();
@@ -1073,7 +1205,7 @@ void ElementDescriptor::readProgressBarModel( StyleBag * all_styles )
     readEvents();
 }
 //__________________________________________________________________________________________________
-void ElementDescriptor::readScrollBarModel( StyleBag * all_styles )
+void ElementDescriptor::readScrollBarModel( StyleBag * all_styles, Reference< frame::XModel > const & xDocument  )
     SAL_THROW( (Exception) )
 {
     // collect styles
@@ -1111,6 +1243,47 @@ void ElementDescriptor::readScrollBarModel( StyleBag * all_styles )
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":live-scroll") ) );
     readHexLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("SymbolColor") ),
                      OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":symbol-color") ) );
+    // Cell Range, Ref Cell etc.
+    lclExportBindableAndListSourceBits( xDocument, _xProps, *this );
+    readEvents();
+}
+//__________________________________________________________________________________________________
+void ElementDescriptor::readSpinButtonModel( StyleBag * all_styles, Reference< frame::XModel > const & xDocument  )
+    SAL_THROW( (Exception) )
+{
+    // collect styles
+    Style aStyle( 0x1 | 0x4 );
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("BackgroundColor") ) ) >>= aStyle._backgroundColor)
+        aStyle._set |= 0x1;
+    if (readBorderProps( this, aStyle ))
+        aStyle._set |= 0x4;
+    if (aStyle._set)
+    {
+        addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
+                      all_styles->getStyleId( aStyle ) );
+    }
+
+    // collect elements
+    readDefaults();
+    readOrientationAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Orientation") ),
+                         OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":align") ) );
+    readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("SpinIncrement") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":increment") ) );
+    readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("SpinValue") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":curval") ) );
+    readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("SpinValueMax") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":maxval") ) );
+    readLongAttr( OUSTR("SpinValueMin"),
+                  OUSTR(XMLNS_DIALOGS_PREFIX ":minval") );
+    readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Repeat") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":repeat") ) );
+    readLongAttr( OUSTR("RepeatDelay"), OUSTR(XMLNS_DIALOGS_PREFIX ":repeat-delay") );
+    readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Tabstop") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":tabstop") ) );
+    readHexLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("SymbolColor") ),
+                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":symbol-color") ) );
+    // Cell Range, Ref Cell etc.
+    lclExportBindableAndListSourceBits( xDocument, _xProps, *this );
     readEvents();
 }
 //__________________________________________________________________________________________________
