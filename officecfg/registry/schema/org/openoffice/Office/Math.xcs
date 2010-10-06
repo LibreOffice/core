@@ -240,7 +240,7 @@
 					<desc>Specifies if the title (filename) is printed.</desc>
 					<label>Title row</label>
 				</info>
-				<value>true</value>
+				<value>false</value>
 			</prop>
 			<prop oor:name="FormulaText" oor:type="xs:boolean">
 				<!-- OldPath: Math/Print -->
@@ -251,7 +251,7 @@
 					<desc>Specifies if the formula text is printed.</desc>
 					<label>Formula text</label>
 				</info>
-				<value>true</value>
+				<value>false</value>
 			</prop>
 			<prop oor:name="Frame" oor:type="xs:boolean">
 				<!-- OldPath: Math/Print -->
@@ -259,10 +259,10 @@
 				<!-- UIHints: Tools - Options  Formula  Settings - [Section] Print options -->
 				<info>
 					<author>TL</author>
-					<desc>Specifies if a border is drawn around the formula.</desc>
+					<desc>Specifies if a border is drawn around the formula when printed.</desc>
 					<label>Border</label>
 				</info>
-				<value>true</value>
+				<value>false</value>
 			</prop>
 			<prop oor:name="Size" oor:type="xs:short">
 				<!-- OldPath: Math/Print -->
