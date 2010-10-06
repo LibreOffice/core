@@ -64,3 +64,11 @@ DEF1NAME=	$(SHL1TARGET)
 
 .INCLUDE : target.mk
 
+
+ALLTAR : $(MISC)/fsstorage.component
+
+$(MISC)/fsstorage.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        fsstorage.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt fsstorage.component

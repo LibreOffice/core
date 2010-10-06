@@ -488,6 +488,10 @@ sal_Int16  BreakIteratorImpl::getScriptClass(sal_uInt32 currentChar)
             // workaround for Coptic
             else if ( 0x2C80 <= currentChar && 0x2CE3 >= currentChar)
                 nRet = ScriptType::LATIN;
+            // work-around for ligatures (see http://www.unicode.org/charts/PDF/UFB00.pdf)
+            else if ((0xFB00 <= currentChar && currentChar <= 0xFB06) ||
+                     (0xFB13 <= currentChar && currentChar <= 0xFB17))
+                nRet = ScriptType::LATIN;
             else {
                 UBlockCode block=ublock_getCode(currentChar);
                 sal_uInt16 i;

@@ -217,3 +217,25 @@ SHL3STDLIBS += imdebug.lib
 
 .INCLUDE :	target.mk
 
+ALLTAR : \
+    $(MISC)/directx5canvas.component \
+    $(MISC)/directx9canvas.component \
+    $(MISC)/gdipluscanvas.component
+
+$(MISC)/directx5canvas.component .ERRREMOVE : \
+        $(SOLARENV)/bin/createcomponent.xslt directx5canvas.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL2TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt directx5canvas.component
+
+$(MISC)/directx9canvas.component .ERRREMOVE : \
+        $(SOLARENV)/bin/createcomponent.xslt directx9canvas.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt directx9canvas.component
+
+$(MISC)/gdipluscanvas.component .ERRREMOVE : \
+        $(SOLARENV)/bin/createcomponent.xslt gdipluscanvas.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL3TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt gdipluscanvas.component

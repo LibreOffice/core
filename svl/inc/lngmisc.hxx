@@ -32,6 +32,7 @@
 #include <tools/solar.h>
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
+#include <tools/string.hxx>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -67,6 +68,8 @@ SVL_DLLPUBLIC BOOL  RemoveHyphens( rtl::OUString &rTxt );
 SVL_DLLPUBLIC BOOL  RemoveControlChars( rtl::OUString &rTxt );
 
 SVL_DLLPUBLIC BOOL  ReplaceControlChars( rtl::OUString &rTxt, sal_Char aRplcChar = ' ' );
+
+SVL_DLLPUBLIC String GetThesaurusReplaceText( const String &rText );
 
 } // namespace linguistic
 
