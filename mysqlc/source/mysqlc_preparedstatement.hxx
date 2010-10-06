@@ -38,9 +38,9 @@
 #include <com/sun/star/sdbc/XPreparedBatchExecution.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 
-#include <tools/preextstl.h>
+#include <preextstl.h>
 #include <cppconn/prepared_statement.h>
-#include <tools/postextstl.h>
+#include <postextstl.h>
 
 namespace connectivity
 {
