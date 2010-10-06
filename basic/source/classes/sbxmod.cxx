@@ -1347,17 +1347,6 @@ void StarBASIC::ClearAllModuleVars( void )
             pModule->ClearPrivateVars();
     }
 
-    /* #88042 This code can delete already used public vars during runtime!
-    // Check all objects, if they are a Basic
-    // If yes, then initialise them also there
-    for ( USHORT nObj = 0; nObj < pObjs->Count(); nObj++ )
-    {
-        SbxVariable* pVar = pObjs->Get( nObj );
-        StarBASIC* pBasic = PTR_CAST(StarBASIC,pVar);
-        if( pBasic )
-            pBasic->ClearAllModuleVars();
-    }
-    */
 }
 
 // Execution of the init-code of all module
