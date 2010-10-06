@@ -168,7 +168,7 @@ SCP1FILES += \
              file_gnome.par
 .ENDIF
 
-.IF "$(ENABLE_KDE)" == "TRUE"
+.IF "$(ENABLE_KDE)" == "TRUE" || "$(ENABLE_KDE4)" == "TRUE"
 SCP1FILES += \
              module_kde.par     \
              file_kde.par
@@ -327,7 +327,7 @@ SCP2FILES += \
              file_gnome.par
 .ENDIF
 
-.IF "$(ENABLE_KDE)" == "TRUE"
+.IF "$(ENABLE_KDE)" == "TRUE" || "$(ENABLE_KDE4)" == "TRUE"
 SCP2FILES += \
              module_kde.par     \
              file_kde.par
