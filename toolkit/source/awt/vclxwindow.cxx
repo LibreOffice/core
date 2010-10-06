@@ -65,7 +65,6 @@
 #include <vcl/tabpage.hxx>
 #include <vcl/button.hxx>
 #include <comphelper/asyncnotification.hxx>
-#include <toolkit/helper/solarrelease.hxx>
 #include "stylesettings.hxx"
 
 #include <toolkit/helper/unopropertyarrayhelper.hxx>
@@ -91,7 +90,6 @@ using ::com::sun::star::style::VerticalAlignment_MAKE_FIXED_SIZE;
 
 namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
 namespace MouseWheelBehavior = ::com::sun::star::awt::MouseWheelBehavior;
-
 
 //====================================================================
 //= misc helpers
@@ -339,7 +337,7 @@ IMPL_LINK( VCLXWindowImpl, OnProcessCallbacks, void*, EMPTYARG )
     }
 
     {
-        SolarMutexReleaser aReleaseSolar;
+        SolarMutexReleaser aReleaseSolar( SolarMutexReleaser::RescheduleDuringAcquire );
         for (   CallbackArray::const_iterator loop = aCallbacksCopy.begin();
                 loop != aCallbacksCopy.end();
                 ++loop

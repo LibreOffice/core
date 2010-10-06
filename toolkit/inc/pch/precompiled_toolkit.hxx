@@ -292,7 +292,6 @@
 #include "toolkit/helper/mutexhelper.hxx"
 #include "toolkit/helper/property.hxx"
 #include "toolkit/helper/servicenames.hxx"
-#include "toolkit/helper/solarrelease.hxx"
 #include "toolkit/helper/tkresmgr.hxx"
 #include "toolkit/helper/unomemorystream.hxx"
 #include "toolkit/helper/unopropertyarrayhelper.hxx"

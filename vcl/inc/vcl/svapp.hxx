@@ -29,6 +29,7 @@
 #define _SV_SVAPP_HXX
 
 #include <vos/thread.hxx>
+#include <vos/mutex.hxx>
 #include <tools/string.hxx>
 #include <tools/link.hxx>
 #include <tools/unqid.hxx>
@@ -53,7 +54,6 @@ class NotifyEvent;
 class KeyEvent;
 class MouseEvent;
 
-namespace vos { class IMutex; }
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/connection/XConnection.hpp>
 
@@ -501,16 +501,32 @@ private:
 class SolarMutexReleaser
 {
     ULONG mnReleased;
+    const bool  mbRescheduleDuringAcquire;
 public:
-    SolarMutexReleaser()
+    enum
     {
-        mnReleased = Application::ReleaseSolarMutex();
+        RescheduleDuringAcquire = true
+    };
+    SolarMutexReleaser( const bool i_rescheduleDuringAcquire = false )
+        : mnReleased( Application::ReleaseSolarMutex())
+        , mbRescheduleDuringAcquire( i_rescheduleDuringAcquire )
+    {
     }
 
     ~SolarMutexReleaser()
     {
-        if( mnReleased )
+        if ( mnReleased > 0 )
+        {
+            if ( mbRescheduleDuringAcquire )
+            {
+                while ( !Application::GetSolarMutex().tryToAcquire() )
+                {
+                    Application::Reschedule();
+                }
+                --mnReleased;
+            }
             Application::AcquireSolarMutex( mnReleased );
+        }
     }
 };
 

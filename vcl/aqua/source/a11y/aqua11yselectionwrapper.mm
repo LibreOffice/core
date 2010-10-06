@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,20 +40,23 @@ using namespace ::com::sun::star::uno;
 +(id)selectedChildrenAttributeForElement:(AquaA11yWrapper *)wrapper
 {
     Reference< XAccessibleSelection > xAccessibleSelection = [ wrapper accessibleSelection ];
-    NSMutableArray * children = [ [ NSMutableArray alloc ] init ];
-    
-    try {
-        sal_Int32 n = xAccessibleSelection -> getSelectedAccessibleChildCount();
-        for ( sal_Int32 i=0 ; i < n ; ++i ) {
-            [ children addObject: [ AquaA11yFactory wrapperForAccessible: xAccessibleSelection -> getSelectedAccessibleChild( i ) ] ];
+    if( xAccessibleSelection.is() )
+    {
+        NSMutableArray * children = [ [ NSMutableArray alloc ] init ];
+        try {
+            sal_Int32 n = xAccessibleSelection -> getSelectedAccessibleChildCount();
+            for ( sal_Int32 i=0 ; i < n ; ++i ) {
+                [ children addObject: [ AquaA11yFactory wrapperForAccessible: xAccessibleSelection -> getSelectedAccessibleChild( i ) ] ];
+            }
+
+            return children;
+
+        } catch ( Exception& e)
+        {
         }
-        
-        return children;
-        
-    } catch ( Exception& e) {
-        return nil;
     }
-    
+
+    return nil;
 }
 
 
@@ -79,13 +82,13 @@ using namespace ::com::sun::star::uno;
     Reference< XAccessibleSelection > xAccessibleSelection = [ wrapper accessibleSelection ];
     try {
         xAccessibleSelection -> clearAccessibleSelection();
-        
+
         unsigned c = [ value count ];
         for ( unsigned i = 0 ; i < c ; ++i ) {
             xAccessibleSelection -> selectAccessibleChild( [ [ value objectAtIndex: i ] accessibleContext ] -> getAccessibleIndexInParent() );
         }
     } catch ( Exception& e) {
-    }            
+    }
 }
 
 @end
