@@ -30,6 +30,7 @@
 #include "templwin.hxx"
 #include "templdlg.hxx"
 #include <svtools/svtdata.hxx>
+#include <svtools/langhelp.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/dynamicmenuoptions.hxx>
 #include <unotools/extendedsecurityoptions.hxx>
@@ -1739,7 +1740,7 @@ void SvtDocumentTemplateDialog::InitImpl( )
     if ( !bHideLink )
          {
     aMoreTemplatesLink.SetURL( String(
-        RTL_CONSTASCII_STRINGPARAM( "http://templates.services.openoffice.org/?cid=923508" ) ) );
+        RTL_CONSTASCII_STRINGPARAM( "http://templates.documentfoundation.org/" ) ) );
     aMoreTemplatesLink.SetClickHdl( LINK( this, SvtDocumentTemplateDialog, OpenLinkHdl_Impl ) );
     }
     else
@@ -1988,6 +1989,7 @@ IMPL_LINK ( SvtDocumentTemplateDialog, OpenLinkHdl_Impl, svt::FixedHyperlink*, E
     ::rtl::OUString sURL( aMoreTemplatesLink.GetURL() );
     if ( sURL.getLength() > 0 )
     {
+        localizeWebserviceURI(sURL);
         try
         {
             uno::Reference< lang::XMultiServiceFactory > xSMGR =

@@ -68,6 +68,7 @@ SLOFILES=\
     $(SLO)$/imap3.obj               \
     $(SLO)$/itemdel.obj				\
     $(SLO)$/langtab.obj				\
+    $(SLO)$/langhelp.obj			\
     $(SLO)$/stringtransfer.obj      \
     $(SLO)$/svtaccessiblefactory.obj \
     $(SLO)$/svtdata.obj             \
