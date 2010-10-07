@@ -40,9 +40,7 @@
 #include <com/sun/star/uno/Exception.hpp>
 
 // #110680#
-//#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 //#include <comphelper/processfactory.hxx>
-//#endif
 #include <rtl/ustrbuf.hxx>
 #include "xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>

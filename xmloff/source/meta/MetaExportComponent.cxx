@@ -38,9 +38,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 // #110680#
-//#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 //#include <comphelper/processfactory.hxx>
-//#endif
 #include <comphelper/genericpropertyset.hxx>
 #include <rtl/ustrbuf.hxx>
 #include "xmlnmspe.hxx"
