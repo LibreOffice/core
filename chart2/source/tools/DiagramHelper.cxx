@@ -1486,8 +1486,8 @@ awt::Rectangle DiagramHelper::getDiagramRectangleFromModel( const uno::Reference
     xDiaProps->getPropertyValue(C2U("RelativeSize") ) >>= aRelSize;
 
     awt::Size aAbsSize(
-        aRelSize.Primary * aPageSize.Width,
-        aRelSize.Secondary * aPageSize.Height );
+        static_cast< sal_Int32 >( aRelSize.Primary * aPageSize.Width ),
+        static_cast< sal_Int32 >( aRelSize.Secondary * aPageSize.Height ));
 
     awt::Point aAbsPos(
         static_cast< sal_Int32 >( aRelPos.Primary * aPageSize.Width ),
