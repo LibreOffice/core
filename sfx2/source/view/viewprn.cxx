@@ -700,6 +700,14 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
         case SID_PRINTDOCDIRECT:
         {
             SfxObjectShell* pDoc = GetObjectShell();
+
+            // derived class may decide to abort this
+            if( !pDoc->QuerySlotExecutable( nId ) )
+            {
+                rReq.SetReturnValue( SfxBoolItem( 0, FALSE ) );
+                return;
+            }
+
             bool bDetectHidden = ( !bSilent && pDoc );
             if ( bDetectHidden && pDoc->QueryHiddenInformation( WhenPrinting, NULL ) != RET_YES )
                 break;

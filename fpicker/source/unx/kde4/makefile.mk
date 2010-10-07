@@ -80,3 +80,11 @@ DEF1VERSIONMAP=exports.map
 
 $(MISC)$/KDE4FilePicker.moc.cxx : KDE4FilePicker.hxx
     $(MOC4) $< -o $@
+
+ALLTAR : $(MISC)/fps_kde4.component
+
+$(MISC)/fps_kde4.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        fps_kde4.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt fps_kde4.component

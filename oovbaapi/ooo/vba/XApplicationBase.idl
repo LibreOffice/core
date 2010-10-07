@@ -24,21 +24,15 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef __ooo_vba_XApplicationBase_idl__
 #define __ooo_vba_XApplicationBase_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __ooo_vba_XHelperInterface_idl__
 #include <ooo/vba/XHelperInterface.idl>
-#endif
 
 module ooo {  module vba {
+
 //=============================================================================
-
-
 
 interface XApplicationBase
 {
@@ -47,8 +41,9 @@ interface XApplicationBase
     [attribute] boolean ScreenUpdating;
     [attribute] boolean DisplayStatusBar;
      [attribute] boolean Interactive;
+     [attribute] boolean Visible;
+
     [attribute, readonly] string Version;
-    //mbn
     [attribute, readonly] any VBE;
     [attribute, readonly] any VBProjects;
 
@@ -60,6 +55,8 @@ interface XApplicationBase
     float CentimetersToPoints([in] float Centimeters );
     void Undo();
 };
+
+//=============================================================================
 
 }; };
 

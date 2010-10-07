@@ -50,7 +50,6 @@ LIB1OBJFILES=   \
                 $(SLO)$/protocolhandlercache.obj                \
                 $(SLO)$/networkdomain.obj                       \
                 $(SLO)$/configaccess.obj                        \
-                $(SLO)$/framelistanalyzer.obj                   \
                 $(SLO)$/shareablemutex.obj                      \
                 $(SLO)$/itemcontainer.obj                       \
                 $(SLO)$/rootitemcontainer.obj                   \
@@ -99,6 +98,7 @@ LIB2OBJFILES=   \
                 $(SLO)$/configimporter.obj                      \
                 $(SLO)$/menuextensionsupplier.obj               \
                 $(SLO)$/preventduplicateinteraction.obj         \
+                $(SLO)$/framelistanalyzer.obj                   \
                 $(SLO)$/titlehelper.obj
 
 # --- import classes library ---------------------------------------------------
@@ -423,3 +423,23 @@ $(MISC)$/$(SHL2TARGET).flt: makefile.mk
     @echo _TI2>>$@
     @echo LIBMAIN>>$@
     @echo LibMain>>$@
+
+ALLTAR : $(MISC)/fwk.component $(MISC)/fwl.component $(MISC)/fwm.component
+
+$(MISC)/fwk.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        fwk.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL4TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt fwk.component
+
+$(MISC)/fwl.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        fwl.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL3TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt fwl.component
+
+$(MISC)/fwm.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        fwm.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL5TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt fwm.component

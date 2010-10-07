@@ -36,11 +36,7 @@
 // - Defines -
 // -----------
 
-#ifdef WIN
-#define _SVHUGE huge
-#else
 #define _SVHUGE
-#endif
 
 // ----------------
 // - SimDepthType -

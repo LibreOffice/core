@@ -43,7 +43,7 @@
 #include <editeng/wghtitem.hxx>
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
-
+#include <tools/tenccvt.hxx>
 
 #define ACTION_INSERTTEXT         1
 #define ACTION_INSERTPARABRK      2
@@ -65,6 +65,16 @@ EditHTMLParser::EditHTMLParser( SvStream& rIn, const String& rBaseURL, SvKeyValu
     nBulletLevel = 0;
     nNumberingLevel = 0;
     bFieldsInserted = FALSE;
+
+    DBG_ASSERT( RTL_TEXTENCODING_DONTKNOW == GetSrcEncoding( ), "EditHTMLParser::EditHTMLParser: Where does the encoding come from?" );
+    DBG_ASSERT( !IsSwitchToUCS2(), "EditHTMLParser::::EditHTMLParser: Switch to UCS2?" );
+
+    // Altough the real default encoding is ISO8859-1, we use MS-1252
+    // als default encoding.
+    SetSrcEncoding( GetExtendedCompatibilityTextEncoding(  RTL_TEXTENCODING_ISO_8859_1 ) );
+
+    // If the file starts with a BOM, switch to UCS2.
+    SetSwitchToUCS2( TRUE );
 
     if ( pHTTPHeaderAttrs )
         SetEncodingByHTTPHeader( pHTTPHeaderAttrs );

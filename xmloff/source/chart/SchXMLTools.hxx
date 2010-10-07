@@ -105,6 +105,8 @@ namespace SchXMLTools
 
     void exportText( SvXMLExport& rExport, const ::rtl::OUString& rText, bool bConvertTabsLFs );
 
+    void exportRangeToSomewhere( SvXMLExport& rExport, const ::rtl::OUString& rValue );
+
     /** returns the properties of the equation of the first regression curve
         that is no mean-value line
      */
