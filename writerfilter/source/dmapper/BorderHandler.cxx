@@ -51,6 +51,9 @@ BorderHandler::BorderHandler( bool bOOXML ) :
     m_nLineDistance(0),
     m_bOOXML( bOOXML )
 {
+    const int nBorderCount(BORDER_COUNT);
+    std::fill_n(m_aFilledLines, nBorderCount, false);
+    std::fill_n(m_aBorderLines, nBorderCount, table::BorderLine());
 }
 /*-- 24.04.2007 09:06:35---------------------------------------------------
 
