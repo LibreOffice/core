@@ -1938,24 +1938,30 @@ bool SvxBoxItem::QueryValue( uno::Any& rVal, BYTE nMemberId  ) const
 }
 
 // -----------------------------------------------------------------------
-sal_Bool SvxBoxItem::LineToSvxLine(const ::com::sun::star::table::BorderLine2& rLine, SvxBorderLine& rSvxLine, sal_Bool bConvert)
+sal_Bool SvxBoxItem::LineToSvxLine(const ::com::sun::star::table::BorderLine& rLine, SvxBorderLine& rSvxLine, sal_Bool bConvert)
 {
     rSvxLine.SetColor(   Color(rLine.Color));
     rSvxLine.SetInWidth( sal_uInt16( bConvert ? MM100_TO_TWIP(rLine.InnerLineWidth) : rLine.InnerLineWidth  ));
     rSvxLine.SetOutWidth( sal_uInt16( bConvert ? MM100_TO_TWIP(rLine.OuterLineWidth) : rLine.OuterLineWidth  ));
     rSvxLine.SetDistance( sal_uInt16( bConvert ? MM100_TO_TWIP(rLine.LineDistance   )  : rLine.LineDistance  ));
-    switch ( rLine.LineStyle )
+
+    const table::BorderLine2* pLine2 = static_cast< const table::BorderLine2* >( &rLine );
+
+    if ( pLine2 )
     {
-        default:
-        case table::BorderLineStyle::SOLID:
-            rSvxLine.SetStyle( SOLID );
-            break;
-        case table::BorderLineStyle::DOTTED:
-            rSvxLine.SetStyle( DOTTED );
-            break;
-        case table::BorderLineStyle::DASHED:
-            rSvxLine.SetStyle( DASHED );
-            break;
+        switch ( pLine2->LineStyle )
+        {
+            default:
+            case table::BorderLineStyle::SOLID:
+                rSvxLine.SetStyle( SOLID );
+                break;
+            case table::BorderLineStyle::DOTTED:
+                rSvxLine.SetStyle( DOTTED );
+                break;
+            case table::BorderLineStyle::DASHED:
+                rSvxLine.SetStyle( DASHED );
+                break;
+        }
     }
     sal_Bool bRet = rLine.InnerLineWidth > 0 || rLine.OuterLineWidth > 0;
     return bRet;
