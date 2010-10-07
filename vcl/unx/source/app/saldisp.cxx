@@ -2682,7 +2682,7 @@ void SalDisplay::PrintInfo() const
              sal::static_int_cast< unsigned int >(GetVisual(m_nDefaultScreen).GetVisualId()) );
 }
 
-void SalDisplay::addXineramaScreenUnique( long i_nX, long i_nY, long i_nWidth, long i_nHeight )
+void SalDisplay::addXineramaScreenUnique( int i, long i_nX, long i_nY, long i_nWidth, long i_nHeight )
 {
     // see if any frame buffers are at the same coordinates
     // this can happen with weird configuration e.g. on
@@ -2696,11 +2696,13 @@ void SalDisplay::addXineramaScreenUnique( long i_nX, long i_nY, long i_nWidth, l
             if( m_aXineramaScreens[n].GetWidth() < i_nWidth ||
                 m_aXineramaScreens[n].GetHeight() < i_nHeight )
             {
+                m_aXineramaScreenIndexMap[i] = n;
                 m_aXineramaScreens[n].SetSize( Size( i_nWidth, i_nHeight ) );
             }
             return;
         }
     }
+    m_aXineramaScreenIndexMap[i] = m_aXineramaScreens.size();
     m_aXineramaScreens.push_back( Rectangle( Point( i_nX, i_nY ), Size( i_nWidth, i_nHeight ) ) );
 }
 
@@ -2728,7 +2730,7 @@ void SalDisplay::InitXinerama()
             m_bXinerama = true;
             m_aXineramaScreens = std::vector<Rectangle>();
             for( int i = 0; i < nFramebuffers; i++ )
-                addXineramaScreenUnique( pFramebuffers[i].x,
+                addXineramaScreenUnique( i, pFramebuffers[i].x,
                                          pFramebuffers[i].y,
                                          pFramebuffers[i].width,
                                          pFramebuffers[i].height );
@@ -2746,7 +2748,7 @@ if( XineramaIsActive( pDisp_ ) )
             m_aXineramaScreens = std::vector<Rectangle>();
             for( int i = 0; i < nFramebuffers; i++ )
             {
-                addXineramaScreenUnique( pScreens[i].x_org,
+                addXineramaScreenUnique( i, pScreens[i].x_org,
                                          pScreens[i].y_org,
                                          pScreens[i].width,
                                          pScreens[i].height );

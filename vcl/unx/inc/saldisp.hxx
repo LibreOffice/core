@@ -386,6 +386,7 @@ protected:
 
     bool            m_bXinerama;
     std::vector< Rectangle > m_aXineramaScreens;
+    std::vector< int > m_aXineramaScreenIndexMap;
     std::list<SalFrame*> m_aFrames;
     std::list<SalObject*> m_aSalObjects;
 
@@ -401,7 +402,7 @@ protected:
     int             processRandREvent( XEvent* );
 
     void            doDestruct();
-    void            addXineramaScreenUnique( long i_nX, long i_nY, long i_nWidth, long i_nHeight );
+    void            addXineramaScreenUnique( int i, long i_nX, long i_nY, long i_nWidth, long i_nHeight );
 public:
     static  SalDisplay     *GetSalDisplay( Display* display );
     static  BOOL            BestVisual( Display     *pDisp,
@@ -473,6 +474,7 @@ public:
     XLIB_Window     GetDrawable( int nScreen ) const { return getDataForScreen( nScreen ).m_aRefWindow; }
     Display        *GetDisplay() const { return pDisp_; }
     int             GetDefaultScreenNumber() const { return m_nDefaultScreen; }
+    virtual int     GetDefaultMonitorNumber() const { return 0; }
     const Size&     GetScreenSize( int nScreen ) const { return getDataForScreen( nScreen ).m_aSize; }
     srv_vendor_t    GetServerVendor() const { return meServerVendor; }
     void            SetServerVendor() { meServerVendor = sal_GetServerVendor(pDisp_); }
