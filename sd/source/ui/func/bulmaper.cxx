@@ -59,51 +59,6 @@
 
 #define GetWhich(nSlot) rSet.GetPool()->GetWhich( nSlot )
 
-/* #i35937#
-
-void SdBulletMapper::PreMapNumBulletForDialog( SfxItemSet& rSet )
-{
-    if( SFX_ITEM_SET == rSet.GetItemState( EE_PARA_NUMBULLET, FALSE ) )
-    {
-        SvxNumRule* pRule = ((SvxNumBulletItem*)rSet.GetItem( EE_PARA_NUMBULLET ))->GetNumRule();
-
-        if(pRule && pRule->GetNumRuleType() == SVX_RULETYPE_PRESENTATION_NUMBERING)
-        {
-            // 10er Bullet Item auf 9er Item mappen
-            SvxNumRule aNewRule( pRule->GetFeatureFlags(), 9, FALSE, SVX_RULETYPE_PRESENTATION_NUMBERING );
-
-            for( USHORT i = 0; i < 9; i++ )
-                aNewRule.SetLevel(i, pRule->GetLevel(i));
-
-            rSet.Put( SvxNumBulletItem( aNewRule, EE_PARA_NUMBULLET ) );
-        }
-    }
-}
-
-void SdBulletMapper::PostMapNumBulletForDialog( SfxItemSet& rSet )
-{
-    if( SFX_ITEM_SET == rSet.GetItemState( EE_PARA_NUMBULLET, FALSE ) )
-    {
-        SvxNumRule* pRule = ((SvxNumBulletItem*)rSet.GetItem( EE_PARA_NUMBULLET ))->GetNumRule();
-
-        if(pRule)
-        {
-            pRule->UnLinkGraphics();
-            if(pRule->GetNumRuleType() == SVX_RULETYPE_PRESENTATION_NUMBERING)
-            {
-                // 9er Bullet Item auf 10er Item mappen
-                SvxNumRule aNewRule( pRule->GetFeatureFlags(), 10, FALSE, SVX_RULETYPE_PRESENTATION_NUMBERING );
-
-                for( USHORT i = 0; i < 9; i++ )
-                    aNewRule.SetLevel(i, pRule->GetLevel(i));
-
-                rSet.Put( SvxNumBulletItem( aNewRule, EE_PARA_NUMBULLET ) );
-            }
-        }
-    }
-}
-*/
-
 void SdBulletMapper::MapFontsInNumRule( SvxNumRule& aNumRule, const SfxItemSet& rSet )
 {
     const USHORT nCount = aNumRule.GetLevelCount();
