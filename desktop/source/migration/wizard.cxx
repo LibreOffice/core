@@ -87,16 +87,6 @@ const FirstStartWizard::WizardState FirstStartWizard::STATE_USER         = 3;
 const FirstStartWizard::WizardState FirstStartWizard::STATE_UPDATE_CHECK = 4;
 const FirstStartWizard::WizardState FirstStartWizard::STATE_REGISTRATION = 5;
 
-static uno::Reference< uno::XComponentContext > getComponentContext( const uno::Reference< lang::XMultiServiceFactory >& rFactory )
-{
-    uno::Reference< uno::XComponentContext > rContext;
-    uno::Reference< beans::XPropertySet > rPropSet( rFactory, uno::UNO_QUERY );
-    uno::Any a = rPropSet->getPropertyValue(
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) );
-    a >>= rContext;
-    return rContext;
-}
-
 static sal_Int32 getBuildId()
 {
     ::rtl::OUString aDefault;
