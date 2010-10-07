@@ -62,6 +62,7 @@
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <unotools/extendedsecurityoptions.hxx>
 #include <svtools/svlbox.hxx>
+#include <svtools/langhelp.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -146,10 +147,11 @@ static INT32 lcl_SeqGetEntryPos(
     return i < nLen ? i : -1;
 }
 
-static void lcl_OpenURL( const ::rtl::OUString& rURL )
+static void lcl_OpenURL( ::rtl::OUString sURL )
 {
-    if ( rURL.getLength() > 0 )
+    if ( sURL.getLength() > 0 )
     {
+        localizeWebserviceURI(sURL);
         try
         {
             uno::Reference< lang::XMultiServiceFactory > xSMGR =
@@ -159,7 +161,7 @@ static void lcl_OpenURL( const ::rtl::OUString& rURL )
                     RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SystemShellExecute" ) ) ),
                 uno::UNO_QUERY_THROW );
             if ( xSystemShell.is() )
-                xSystemShell->execute( rURL, ::rtl::OUString(), css::system::SystemShellExecuteFlags::DEFAULTS );
+                xSystemShell->execute( sURL, ::rtl::OUString(), css::system::SystemShellExecuteFlags::DEFAULTS );
         }
         catch( const uno::Exception& e )
         {
@@ -1170,7 +1172,7 @@ SvxLinguTabPage::SvxLinguTabPage( Window* pParent,
             != SvtExtendedSecurityOptions::OPEN_NEVER )
     {
         aMoreDictsLink.SetURL( String(
-            RTL_CONSTASCII_STRINGPARAM( "http://extensions.services.openoffice.org/dictionary?cid=926386" ) ) );
+            RTL_CONSTASCII_STRINGPARAM( "http://extensions.documentfoundation.org/dictionary/" ) ) );
         aMoreDictsLink.SetClickHdl( LINK( this, SvxLinguTabPage, OpenURLHdl_Impl ) );
     }
     else
@@ -2068,7 +2070,7 @@ SvxEditModulesDlg::SvxEditModulesDlg(Window* pParent, SvxLinguData_Impl& rData) 
             != SvtExtendedSecurityOptions::OPEN_NEVER )
     {
         aMoreDictsLink.SetURL( String(
-            RTL_CONSTASCII_STRINGPARAM( "http://extensions.services.openoffice.org/dictionary?cid=926386" ) ) );
+            RTL_CONSTASCII_STRINGPARAM( "http://extensions.documentfoundation.org/dictionary/" ) ) );
         aMoreDictsLink.SetClickHdl( LINK( this, SvxEditModulesDlg, OpenURLHdl_Impl ) );
     }
     else
