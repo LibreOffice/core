@@ -373,9 +373,9 @@ void FontCache::read()
                     xub_StrLen nLastIndex = nIndex+1;
                     for( nIndex = nLastIndex ; nIndex < nLen && pLine[nIndex] != ';'; nIndex++ )
                         ;
-                    if( nIndex - nLastIndex > 1 )
+                    if( nIndex - nLastIndex )
                     {
-                        OUString aAlias( pLine+nLastIndex, nIndex-nLastIndex-1, RTL_TEXTENCODING_UTF8 );
+                        OUString aAlias( pLine+nLastIndex, nIndex-nLastIndex, RTL_TEXTENCODING_UTF8 );
                         pFont->m_aAliases.push_back( pAtoms->getAtom( ATOM_FAMILYNAME, aAlias, sal_True ) );
                     }
                 }
