@@ -1021,7 +1021,7 @@ sub create_transforms
             my $digest = Digest::MD5->new->addfile(*FILE)->hexdigest;
             close(FILE);
 
-            my @problemchecksums = ("b66190a70145a57773ec769e16777b29", "aa25d3445b94ffde8ef0c1efb77a56b8");
+            my @problemchecksums = ("b66190a70145a57773ec769e16777b29", "aa25d3445b94ffde8ef0c1efb77a56b8", "748206e54fc93efe6a1aaa9d491f3ad1");
             my $isproblemchecksum = 0;
 
             foreach my $problemchecksum ( @problemchecksums )
