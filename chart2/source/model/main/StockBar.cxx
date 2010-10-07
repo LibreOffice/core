@@ -99,12 +99,28 @@ struct StaticStockBarInfo : public rtl::StaticAggregate< uno::Reference< beans::
 {
 };
 
-void lcl_AddDefaultsToMap(
-    ::chart::tPropertyValueMap & rOutMap )
+struct StaticStockBarDefaults_Initializer
 {
-    // override other defaults
-    ::chart::PropertyHelper::setPropertyValue< sal_Int32 >( rOutMap, ::chart::FillProperties::PROP_FILL_COLOR, 0xffffff ); // white
-}
+    ::chart::tPropertyValueMap* operator()()
+    {
+        static ::chart::tPropertyValueMap aStaticDefaults;
+        lcl_AddDefaultsToMap( aStaticDefaults );
+        return &aStaticDefaults;
+    }
+private:
+    void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
+    {
+        ::chart::LineProperties::AddDefaultsToMap( rOutMap );
+        ::chart::FillProperties::AddDefaultsToMap( rOutMap );
+
+        // override other defaults
+        ::chart::PropertyHelper::setPropertyValue< sal_Int32 >( rOutMap, ::chart::FillProperties::PROP_FILL_COLOR, 0xffffff ); // white
+    }
+};
+
+struct StaticStockBarDefaults : public rtl::StaticAggregate< ::chart::tPropertyValueMap, StaticStockBarDefaults_Initializer >
+{
+};
 
 } // anonymous namespace
 
@@ -152,28 +168,11 @@ uno::Reference< util::XCloneable > SAL_CALL StockBar::createClone()
 uno::Any StockBar::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
-    static tPropertyValueMap aStaticDefaults;
-
-    // /--
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( 0 == aStaticDefaults.size() )
-    {
-        // initialize defaults
-        LineProperties::AddDefaultsToMap( aStaticDefaults );
-        FillProperties::AddDefaultsToMap( aStaticDefaults );
-
-        // overrides a line property
-        lcl_AddDefaultsToMap( aStaticDefaults );
-    }
-
-    tPropertyValueMap::const_iterator aFound(
-        aStaticDefaults.find( nHandle ));
-
-    if( aFound == aStaticDefaults.end())
+    const tPropertyValueMap& rStaticDefaults = *StaticStockBarDefaults::get();
+    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
+    if( aFound == rStaticDefaults.end() )
         return uno::Any();
-
     return (*aFound).second;
-    // \--
 }
 
 ::cppu::IPropertyArrayHelper & SAL_CALL StockBar::getInfoHelper()

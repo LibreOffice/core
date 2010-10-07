@@ -100,14 +100,27 @@ void lcl_AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
-void lcl_AddDefaultsToMap(
-    ::chart::tPropertyValueMap & rOutMap )
+struct StaticPieChartTypeTemplateDefaults_Initializer
 {
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_PIE_TEMPLATE_OFFSET_MODE, chart2::PieChartOffsetMode_NONE );
-    ::chart::PropertyHelper::setPropertyValueDefault< double >( rOutMap, PROP_PIE_TEMPLATE_DEFAULT_OFFSET, 0.5 );
-    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_PIE_TEMPLATE_DIMENSION, 2 );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_PIE_TEMPLATE_USE_RINGS, false );
-}
+    ::chart::tPropertyValueMap* operator()()
+    {
+        static ::chart::tPropertyValueMap aStaticDefaults;
+        lcl_AddDefaultsToMap( aStaticDefaults );
+        return &aStaticDefaults;
+    }
+private:
+    void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
+    {
+        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_PIE_TEMPLATE_OFFSET_MODE, chart2::PieChartOffsetMode_NONE );
+        ::chart::PropertyHelper::setPropertyValueDefault< double >( rOutMap, PROP_PIE_TEMPLATE_DEFAULT_OFFSET, 0.5 );
+        ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_PIE_TEMPLATE_DIMENSION, 2 );
+        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_PIE_TEMPLATE_USE_RINGS, false );
+    }
+};
+
+struct StaticPieChartTypeTemplateDefaults : public rtl::StaticAggregate< ::chart::tPropertyValueMap, StaticPieChartTypeTemplateDefaults_Initializer >
+{
+};
 
 struct StaticPieChartTypeTemplateInfoHelper_Initializer
 {
@@ -176,24 +189,11 @@ PieChartTypeTemplate::~PieChartTypeTemplate()
 uno::Any PieChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
-    static tPropertyValueMap aStaticDefaults;
-
-    // /--
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( 0 == aStaticDefaults.size() )
-    {
-        // initialize defaults
-        lcl_AddDefaultsToMap( aStaticDefaults );
-    }
-
-    tPropertyValueMap::const_iterator aFound(
-        aStaticDefaults.find( nHandle ));
-
-    if( aFound == aStaticDefaults.end())
+    const tPropertyValueMap& rStaticDefaults = *StaticPieChartTypeTemplateDefaults::get();
+    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
+    if( aFound == rStaticDefaults.end() )
         return uno::Any();
-
     return (*aFound).second;
-    // \--
 }
 
 ::cppu::IPropertyArrayHelper & SAL_CALL PieChartTypeTemplate::getInfoHelper()

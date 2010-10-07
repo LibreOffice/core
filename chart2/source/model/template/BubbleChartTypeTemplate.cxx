@@ -65,10 +65,23 @@ void lcl_AddPropertiesToVector(
 {
 }
 
-void lcl_AddDefaultsToMap(
-    ::chart::tPropertyValueMap & /*rOutMap*/ )
+struct StaticBubbleChartTypeTemplateDefaults_Initializer
 {
-}
+    ::chart::tPropertyValueMap* operator()()
+    {
+        static ::chart::tPropertyValueMap aStaticDefaults;
+        lcl_AddDefaultsToMap( aStaticDefaults );
+        return &aStaticDefaults;
+    }
+private:
+    void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & /*rOutMap*/ )
+    {
+    }
+};
+
+struct StaticBubbleChartTypeTemplateDefaults : public rtl::StaticAggregate< ::chart::tPropertyValueMap, StaticBubbleChartTypeTemplateDefaults_Initializer >
+{
+};
 
 struct StaticBubbleChartTypeTemplateInfoHelper_Initializer
 {
@@ -131,24 +144,11 @@ BubbleChartTypeTemplate::~BubbleChartTypeTemplate()
 uno::Any BubbleChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
-    static tPropertyValueMap aStaticDefaults;
-
-    // /--
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( 0 == aStaticDefaults.size() )
-    {
-        // initialize defaults
-        lcl_AddDefaultsToMap( aStaticDefaults );
-    }
-
-    tPropertyValueMap::const_iterator aFound(
-        aStaticDefaults.find( nHandle ));
-
-    if( aFound == aStaticDefaults.end())
+    const tPropertyValueMap& rStaticDefaults = *StaticBubbleChartTypeTemplateDefaults::get();
+    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
+    if( aFound == rStaticDefaults.end() )
         return uno::Any();
-
     return (*aFound).second;
-    // \--
 }
 
 ::cppu::IPropertyArrayHelper & SAL_CALL BubbleChartTypeTemplate::getInfoHelper()

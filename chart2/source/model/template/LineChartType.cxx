@@ -78,16 +78,29 @@ void lcl_AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
-void lcl_AddDefaultsToMap(
-    ::chart::tPropertyValueMap & rOutMap )
+struct StaticLineChartTypeDefaults_Initializer
 {
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LINECHARTTYPE_CURVE_STYLE, ::chart2::CurveStyle_LINES );
-    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_LINECHARTTYPE_CURVE_RESOLUTION, 20 );
+    ::chart::tPropertyValueMap* operator()()
+    {
+        static ::chart::tPropertyValueMap aStaticDefaults;
+        lcl_AddDefaultsToMap( aStaticDefaults );
+        return &aStaticDefaults;
+    }
+private:
+    void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
+    {
+        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LINECHARTTYPE_CURVE_STYLE, ::chart2::CurveStyle_LINES );
+        ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_LINECHARTTYPE_CURVE_RESOLUTION, 20 );
 
-    // todo: check whether order 3 means polygons of order 3 or 2. (see
-    // http://www.people.nnov.ru/fractal/Splines/Basis.htm )
-    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_LINECHARTTYPE_SPLINE_ORDER, 3 );
-}
+        // todo: check whether order 3 means polygons of order 3 or 2. (see
+        // http://www.people.nnov.ru/fractal/Splines/Basis.htm )
+        ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_LINECHARTTYPE_SPLINE_ORDER, 3 );
+    }
+};
+
+struct StaticLineChartTypeDefaults : public rtl::StaticAggregate< ::chart::tPropertyValueMap, StaticLineChartTypeDefaults_Initializer >
+{
+};
 
 struct StaticLineChartTypeInfoHelper_Initializer
 {
@@ -167,24 +180,11 @@ uno::Reference< util::XCloneable > SAL_CALL LineChartType::createClone()
 uno::Any LineChartType::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
-    static tPropertyValueMap aStaticDefaults;
-
-    // /--
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( 0 == aStaticDefaults.size() )
-    {
-        // initialize defaults
-        lcl_AddDefaultsToMap( aStaticDefaults );
-    }
-
-    tPropertyValueMap::const_iterator aFound(
-        aStaticDefaults.find( nHandle ));
-
-    if( aFound == aStaticDefaults.end())
+    const tPropertyValueMap& rStaticDefaults = *StaticLineChartTypeDefaults::get();
+    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
+    if( aFound == rStaticDefaults.end() )
         return uno::Any();
-
     return (*aFound).second;
-    // \--
 }
 
 ::cppu::IPropertyArrayHelper & SAL_CALL LineChartType::getInfoHelper()

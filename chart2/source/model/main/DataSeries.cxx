@@ -56,6 +56,31 @@ using ::osl::MutexGuard;
 namespace
 {
 
+struct StaticDataSeriesDefaults_Initializer
+{
+    ::chart::tPropertyValueMap* operator()()
+    {
+        static ::chart::tPropertyValueMap aStaticDefaults;
+        lcl_AddDefaultsToMap( aStaticDefaults );
+        return &aStaticDefaults;
+    }
+private:
+    void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
+    {
+        ::chart::DataSeriesProperties::AddDefaultsToMap( rOutMap );
+        ::chart::CharacterProperties::AddDefaultsToMap( rOutMap );
+
+        float fDefaultCharHeight = 10.0;
+        ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_CHAR_HEIGHT, fDefaultCharHeight );
+        ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_ASIAN_CHAR_HEIGHT, fDefaultCharHeight );
+        ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_COMPLEX_CHAR_HEIGHT, fDefaultCharHeight );
+    }
+};
+
+struct StaticDataSeriesDefaults : public rtl::StaticAggregate< ::chart::tPropertyValueMap, StaticDataSeriesDefaults_Initializer >
+{
+};
+
 struct StaticDataSeriesInfoHelper_Initializer
 {
     ::cppu::OPropertyArrayHelper* operator()()
@@ -263,30 +288,11 @@ Sequence< OUString > DataSeries::getSupportedServiceNames_Static()
 uno::Any DataSeries::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
-    static tPropertyValueMap aStaticDefaults;
-
-    // /--
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( 0 == aStaticDefaults.size() )
-    {
-        // initialize defaults
-        DataSeriesProperties::AddDefaultsToMap( aStaticDefaults );
-        CharacterProperties::AddDefaultsToMap( aStaticDefaults );
-
-        float fDefaultCharHeight = 10.0;
-        ::chart::PropertyHelper::setPropertyValue( aStaticDefaults, ::chart::CharacterProperties::PROP_CHAR_CHAR_HEIGHT, fDefaultCharHeight );
-        ::chart::PropertyHelper::setPropertyValue( aStaticDefaults, ::chart::CharacterProperties::PROP_CHAR_ASIAN_CHAR_HEIGHT, fDefaultCharHeight );
-        ::chart::PropertyHelper::setPropertyValue( aStaticDefaults, ::chart::CharacterProperties::PROP_CHAR_COMPLEX_CHAR_HEIGHT, fDefaultCharHeight );
-    }
-
-    tPropertyValueMap::const_iterator aFound(
-        aStaticDefaults.find( nHandle ));
-
-    if( aFound == aStaticDefaults.end())
-        throw beans::UnknownPropertyException();
-
+    const tPropertyValueMap& rStaticDefaults = *StaticDataSeriesDefaults::get();
+    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
+    if( aFound == rStaticDefaults.end() )
+        return uno::Any();
     return (*aFound).second;
-    // \--
 }
 
 // ____ OPropertySet ____

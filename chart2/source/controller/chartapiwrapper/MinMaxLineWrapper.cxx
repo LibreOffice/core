@@ -56,6 +56,25 @@ namespace
 static const OUString lcl_aServiceName(
     RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart.ChartLine" ));
 
+struct StaticMinMaxLineWrapperDefaults_Initializer
+{
+    ::chart::tPropertyValueMap* operator()()
+    {
+        static ::chart::tPropertyValueMap aStaticDefaults;
+        lcl_AddDefaultsToMap( aStaticDefaults );
+        return &aStaticDefaults;
+    }
+private:
+    void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
+    {
+        ::chart::LineProperties::AddDefaultsToMap( rOutMap );
+    }
+};
+
+struct StaticMinMaxLineWrapperDefaults : public rtl::StaticAggregate< ::chart::tPropertyValueMap, StaticMinMaxLineWrapperDefaults_Initializer >
+{
+};
+
 struct StaticMinMaxLineWrapperPropertyArray_Initializer
 {
     Sequence< Property >* operator()()
@@ -360,26 +379,14 @@ void SAL_CALL MinMaxLineWrapper::setPropertyToDefault( const ::rtl::OUString& rP
 {
     this->setPropertyValue( rPropertyName, this->getPropertyDefault(rPropertyName) );
 }
+
 uno::Any SAL_CALL MinMaxLineWrapper::getPropertyDefault( const ::rtl::OUString& rPropertyName )
                     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    static tPropertyValueMap aStaticDefaults;
-
-    // /--
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( 0 == aStaticDefaults.size() )
-    {
-        LineProperties::AddDefaultsToMap( aStaticDefaults );
-    }
-
-    sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
-
-    tPropertyValueMap::const_iterator aFound(
-        aStaticDefaults.find( nHandle ));
-
-    if( aFound == aStaticDefaults.end())
+    const tPropertyValueMap& rStaticDefaults = *StaticMinMaxLineWrapperDefaults::get();
+    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( getInfoHelper().getHandleByName( rPropertyName ) ) );
+    if( aFound == rStaticDefaults.end() )
         return uno::Any();
-
     return (*aFound).second;
 }
 

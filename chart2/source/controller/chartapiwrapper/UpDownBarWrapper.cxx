@@ -113,6 +113,26 @@ struct StaticUpDownBarWrapperInfo : public rtl::StaticAggregate< uno::Reference<
 {
 };
 
+struct StaticUpDownBarWrapperDefaults_Initializer
+{
+    ::chart::tPropertyValueMap* operator()()
+    {
+        static ::chart::tPropertyValueMap aStaticDefaults;
+        lcl_AddDefaultsToMap( aStaticDefaults );
+        return &aStaticDefaults;
+    }
+private:
+    void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
+    {
+        ::chart::LineProperties::AddDefaultsToMap( rOutMap );
+        ::chart::FillProperties::AddDefaultsToMap( rOutMap );
+    }
+};
+
+struct StaticUpDownBarWrapperDefaults : public rtl::StaticAggregate< ::chart::tPropertyValueMap, StaticUpDownBarWrapperDefaults_Initializer >
+{
+};
+
 } // anonymous namespace
 
 // --------------------------------------------------------------------------------
@@ -323,27 +343,14 @@ void SAL_CALL UpDownBarWrapper::setPropertyToDefault( const ::rtl::OUString& rPr
 {
     this->setPropertyValue( rPropertyName, this->getPropertyDefault(rPropertyName) );
 }
+
 uno::Any SAL_CALL UpDownBarWrapper::getPropertyDefault( const ::rtl::OUString& rPropertyName )
                     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    static tPropertyValueMap aStaticDefaults;
-
-    // /--
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( 0 == aStaticDefaults.size() )
-    {
-        LineProperties::AddDefaultsToMap( aStaticDefaults );
-        FillProperties::AddDefaultsToMap( aStaticDefaults );
-    }
-
-    sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
-
-    tPropertyValueMap::const_iterator aFound(
-        aStaticDefaults.find( nHandle ));
-
-    if( aFound == aStaticDefaults.end())
+    const tPropertyValueMap& rStaticDefaults = *StaticUpDownBarWrapperDefaults::get();
+    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( getInfoHelper().getHandleByName( rPropertyName ) ) );
+    if( aFound == rStaticDefaults.end() )
         return uno::Any();
-
     return (*aFound).second;
 }
 
