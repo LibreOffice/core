@@ -244,6 +244,10 @@ SwCallLink::~SwCallLink()
     {
         const SwNodeIndex* pIndex = pFlyFrm->GetFmt()->GetCntnt().GetCntntIdx();
         ASSERT( pIndex, "Fly ohne Cntnt" );
+
+        if (!pIndex)
+            return;
+
         const SwNode& rStNd = pIndex->GetNode();
 
         if( rStNd.EndOfSectionNode()->StartOfSectionIndex() > nNode ||
