@@ -30,9 +30,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <sot/storage.hxx>
-//#ifndef _SFXDOCFILE_HXX //todo: remove sfx2!
 //#include <sfx2/docfile.hxx>
-//#endif
 #include <unotools/ucbstreamhelper.hxx>
 
 using namespace ::rtl;

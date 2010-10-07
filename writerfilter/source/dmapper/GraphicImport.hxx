@@ -27,9 +27,7 @@
 #ifndef INCLUDED_GRAPHICIMPORT_HXX
 #define INCLUDED_GRAPHICIMPORT_HXX
 
-//#ifndef INCLUDED_WRITERFILTERDLLAPI_H
 //#include <WriterFilterDllApi.hxx>
-//#endif
 #include <resourcemodel/WW8ResourceModel.hxx>
 //#include <com/sun/star/lang/XComponent.hpp>
 namespace com{ namespace sun { namespace star {
