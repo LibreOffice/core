@@ -5889,12 +5889,12 @@ dnl ===================================================================
 if test "$_os" = "WINNT"; then
    if test  "$WITH_MINGWIN" = "yes" || test "$COMEX" -ge "10"; then
    AC_MSG_CHECKING([for instmsiw.exe])
-   if test -x ./external/msi/instmsiw.exe; then
+   if test -f ./external/msi/instmsiw.exe; then
       AC_MSG_RESULT([found])
    else
       MSIWPATH=`/bin/find "$COMPATH/.." -iname instmsiw.exe | head -n 1`
       if test -n "$MSIWPATH"; then
-         cp "$MSIWPATH" ./external/msi/ && chmod +x ./external/msi/instmsiw.exe && MSIWCOPY="OK"
+         cp "$MSIWPATH" ./external/msi/ && MSIWCOPY="OK"
       fi
       if test -z "$MSIWCOPY"; then
          AC_MSG_ERROR([instmsiw.exe is missing in the default location.
