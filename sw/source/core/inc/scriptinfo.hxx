@@ -376,7 +376,6 @@ inline xub_StrLen SwScriptInfo::GetDirChg( const size_t nCnt ) const
 }
 inline BYTE SwScriptInfo::GetDirType( const size_t nCnt ) const
 {
-    //TODO Check of the solution of the error
     ASSERT( nCnt < aDirType.size(),"No DirType today!");
     return aDirType[ nCnt ];
 }
@@ -396,7 +395,6 @@ inline xub_StrLen SwScriptInfo::GetCompStart( const size_t nCnt ) const
 }
 inline xub_StrLen SwScriptInfo::GetCompLen( const size_t nCnt ) const
 {
-    //TODO Check solution of the error
     ASSERT( nCnt < aCompLen.size(),"No CompressionLen today!");
     return aCompLen[ nCnt ];
 }

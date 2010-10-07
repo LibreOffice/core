@@ -946,8 +946,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
     }
 
     // remove invalid entries from kashida array
-    //FIXME Is it correct?
-    aKashida.erase( aKashida.begin() + nCntKash, aKashida.end() - nCntKash );
+    aKashida.erase( aKashida.begin() + nCntKash, aKashida.end() );
 
     //
     // TAKE CARE OF WEAK CHARACTERS: WE MUST FIND AN APPROPRIATE
