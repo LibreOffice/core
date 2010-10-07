@@ -41,6 +41,7 @@
 #include <com/sun/star/util/SortField.hpp>
 #include <com/sun/star/util/SortFieldType.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
+#include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/table/CellOrientation.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/style/PageStyleLayout.hpp>
@@ -1937,12 +1938,25 @@ bool SvxBoxItem::QueryValue( uno::Any& rVal, BYTE nMemberId  ) const
 }
 
 // -----------------------------------------------------------------------
-sal_Bool SvxBoxItem::LineToSvxLine(const ::com::sun::star::table::BorderLine& rLine, SvxBorderLine& rSvxLine, sal_Bool bConvert)
+sal_Bool SvxBoxItem::LineToSvxLine(const ::com::sun::star::table::BorderLine2& rLine, SvxBorderLine& rSvxLine, sal_Bool bConvert)
 {
     rSvxLine.SetColor(   Color(rLine.Color));
     rSvxLine.SetInWidth( sal_uInt16( bConvert ? MM100_TO_TWIP(rLine.InnerLineWidth) : rLine.InnerLineWidth  ));
     rSvxLine.SetOutWidth( sal_uInt16( bConvert ? MM100_TO_TWIP(rLine.OuterLineWidth) : rLine.OuterLineWidth  ));
     rSvxLine.SetDistance( sal_uInt16( bConvert ? MM100_TO_TWIP(rLine.LineDistance   )  : rLine.LineDistance  ));
+    switch ( rLine.LineStyle )
+    {
+        default:
+        case table::BorderLineStyle::SOLID:
+            rSvxLine.SetStyle( SOLID );
+            break;
+        case table::BorderLineStyle::DOTTED:
+            rSvxLine.SetStyle( DOTTED );
+            break;
+        case table::BorderLineStyle::DASHED:
+            rSvxLine.SetStyle( DASHED );
+            break;
+    }
     sal_Bool bRet = rLine.InnerLineWidth > 0 || rLine.OuterLineWidth > 0;
     return bRet;
 }
@@ -1965,7 +1979,7 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
                 // 4 Borders and 5 distances
                 sal_Int32 nDist = 0;
                 SvxBorderLine aLine;
-                table::BorderLine aBorderLine;
+                table::BorderLine2 aBorderLine;
                 if ( aSeq[0] >>= aBorderLine )
                 {
                     sal_Bool bSet = SvxBoxItem::LineToSvxLine(aBorderLine, aLine, bConvert);
@@ -2067,7 +2081,7 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         if( !rVal.hasValue() )
             return sal_False;
 
-        table::BorderLine aBorderLine;
+        table::BorderLine2 aBorderLine;
         if( rVal >>= aBorderLine )
         {
             // usual struct
@@ -2880,7 +2894,7 @@ bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             if (( rVal >>= aSeq ) && ( aSeq.getLength() == 5 ))
             {
                 // 2 BorderLines, flags, valid flags and distance
-                table::BorderLine aBorderLine;
+                table::BorderLine2 aBorderLine;
                 SvxBorderLine aLine;
                 sal_Int16 nFlags( 0 );
                 sal_Int32 nVal( 0 );
@@ -2928,7 +2942,7 @@ bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             if( !rVal.hasValue() )
                 return sal_False;
 
-            table::BorderLine aBorderLine;
+            table::BorderLine2 aBorderLine;
             if( rVal >>= aBorderLine )
             {
                 // usual struct
@@ -3305,7 +3319,7 @@ bool SvxLineItem::PutValue( const uno::Any& rVal, BYTE nMemId )
     sal_Int32 nVal = 0;
     if ( nMemId == 0 )
     {
-        table::BorderLine aLine;
+        table::BorderLine2 aLine;
         if ( rVal >>= aLine )
         {
             if ( !pLine )
