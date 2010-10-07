@@ -118,6 +118,8 @@ public class HelpIds
         "",
         "",
         "",
+        "",
+        "",
         "HID:WIZARDS_HID_BG",    // HID:34290
         "HID:WIZARDS_HID_BG_BTN_OTHER",    // HID:34291
         "HID:WIZARDS_HID_BG_BTN_NONE",    // HID:34292
@@ -552,7 +554,6 @@ public class HelpIds
         "HID:WIZARDS_HID_DLGHOLIDAYCAL_0_CMDCANCEL",    // HID:34721
         "HID:WIZARDS_HID_DLGHOLIDAYCAL_0_CMDOK"    // HID:34722
     };
-
     private static String array2[] = new String[]
     {
         "HID:WIZARDS_HID_LTRWIZ_OPTBUSINESSLETTER",    // HID:40769
@@ -776,6 +777,16 @@ public class HelpIds
         "",
         "",
         "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
         "HID:WIZARDS_HID_IS",    // HID:41000
         "",
         "HID:WIZARDS_HID_IS_BTN_NONE",    // HID:41002
@@ -875,6 +886,26 @@ public class HelpIds
         "HID:WIZARDS_HID_AGWIZ_5_TXT_TOPIC_5",    // HID:41096
         "HID:WIZARDS_HID_AGWIZ_5_TXT_RESPONSIBLE_5",    // HID:41097
         "HID:WIZARDS_HID_AGWIZ_5_TXT_MINUTES_5",    // HID:41098
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
         "",
         "HID:WIZARDS_HID_FAXWIZ_OPTBUSINESSFAX",    // HID:41120
         "HID:WIZARDS_HID_FAXWIZ_LSTBUSINESSSTYLE",    // HID:41121
