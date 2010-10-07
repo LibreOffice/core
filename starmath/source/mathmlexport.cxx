@@ -55,7 +55,7 @@
 #include <rtl/math.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/docfile.hxx>
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <tools/urlobj.hxx>
 #include <svtools/sfxecode.hxx>
 #include <unotools/saveopt.hxx>
@@ -103,7 +103,7 @@ sal_Bool SmXMLExportWrapper::Export(SfxMedium &rMedium)
     sal_Bool bRet=sal_True;
     uno::Reference<lang::XMultiServiceFactory>
         xServiceFactory(utl::getProcessServiceFactory());
-    DBG_ASSERT(xServiceFactory.is(),"got no service manager");
+    OSL_ENSURE(xServiceFactory.is(),"got no service manager");
 
     //Get model
     uno::Reference< lang::XComponent > xModelComp(xModel, uno::UNO_QUERY );
@@ -125,7 +125,7 @@ sal_Bool SmXMLExportWrapper::Export(SfxMedium &rMedium)
     {
         if (pDocShell /*&& pDocShell->GetMedium()*/)
         {
-            DBG_ASSERT( pDocShell->GetMedium() == &rMedium,
+            OSL_ENSURE( pDocShell->GetMedium() == &rMedium,
                     "different SfxMedium found" );
 
             SfxItemSet* pSet = rMedium.GetItemSet();
@@ -268,16 +268,16 @@ sal_Bool SmXMLExportWrapper::WriteThroughComponent(
     Reference<beans::XPropertySet> & rPropSet,
     const sal_Char* pComponentName )
 {
-    DBG_ASSERT(xOutputStream.is(), "I really need an output stream!");
-    DBG_ASSERT(xComponent.is(), "Need component!");
-    DBG_ASSERT(NULL != pComponentName, "Need component name!");
+    OSL_ENSURE(xOutputStream.is(), "I really need an output stream!");
+    OSL_ENSURE(xComponent.is(), "Need component!");
+    OSL_ENSURE(NULL != pComponentName, "Need component name!");
 
     // get component
     Reference< io::XActiveDataSource > xSaxWriter(
         rFactory->createInstance(
             OUString::createFromAscii("com.sun.star.xml.sax.Writer") ),
         UNO_QUERY );
-    DBG_ASSERT( xSaxWriter.is(), "can't instantiate XML writer" );
+    OSL_ENSURE( xSaxWriter.is(), "can't instantiate XML writer" );
     if (!xSaxWriter.is())
         return sal_False;
 
@@ -295,7 +295,7 @@ sal_Bool SmXMLExportWrapper::WriteThroughComponent(
     Reference< document::XExporter > xExporter(
         rFactory->createInstanceWithArguments(
             OUString::createFromAscii(pComponentName), aArgs), UNO_QUERY);
-    DBG_ASSERT( xExporter.is(),
+    OSL_ENSURE( xExporter.is(),
             "can't instantiate export filter component" );
     if ( !xExporter.is() )
         return sal_False;
@@ -330,8 +330,8 @@ sal_Bool SmXMLExportWrapper::WriteThroughComponent(
     sal_Bool bCompress
     )
 {
-    DBG_ASSERT(xStorage.is(), "Need storage!");
-    DBG_ASSERT(NULL != pStreamName, "Need stream name!");
+    OSL_ENSURE(xStorage.is(), "Need storage!");
+    OSL_ENSURE(NULL != pStreamName, "Need stream name!");
 
     // open stream
     Reference < io::XStream > xStream;
@@ -657,7 +657,7 @@ void SmXMLExport::_ExportContent()
             (xTunnel->getSomething(SmModel::getUnoTunnelId()));
         SmDocShell *pDocShell = pModel ?
             static_cast<SmDocShell*>(pModel->GetObjectShell()) : 0;
-        DBG_ASSERT( pDocShell, "doc shell missing" );
+        OSL_ENSURE( pDocShell, "doc shell missing" );
         if (pDocShell)
         {
             SmParser &rParser = pDocShell->GetParser();
@@ -786,7 +786,7 @@ void SmXMLExport::ExportExpression(const SmNode *pNode, int nLevel)
 
 void SmXMLExport::ExportBinaryVertical(const SmNode *pNode, int nLevel)
 {
-    DBG_ASSERT(pNode->GetNumSubNodes()==3,"Bad Fraction");
+    OSL_ENSURE(pNode->GetNumSubNodes()==3,"Bad Fraction");
     SvXMLElementExport aFraction(*this, XML_NAMESPACE_MATH, XML_MFRAC, sal_True, sal_True);
     ExportNodes(pNode->GetSubNode(0), nLevel);
     ExportNodes(pNode->GetSubNode(2), nLevel);
@@ -837,7 +837,7 @@ void SmXMLExport::ExportMath(const SmNode *pNode, int /*nLevel*/)
     sal_Unicode cTmp = ConvertMathToMathML( nArse[0] );
     if (cTmp != 0)
         nArse[0] = cTmp;
-    DBG_ASSERT(nArse[0] != 0xffff,"Non existant symbol");
+    OSL_ENSURE(nArse[0] != 0xffff,"Non existant symbol");
     nArse[1] = 0;
     GetDocHandler()->characters(nArse);
 }
@@ -1040,11 +1040,11 @@ void SmXMLExport::ExportBrace(const SmNode *pNode, int nLevel)
         nArse[1] = 0;
         nArse[0] = static_cast<
             const SmMathSymbolNode* >(pLeft)->GetText().GetChar(0);
-        DBG_ASSERT(nArse[0] != 0xffff,"Non existant symbol");
+        OSL_ENSURE(nArse[0] != 0xffff,"Non existant symbol");
         AddAttribute(XML_NAMESPACE_MATH, XML_OPEN,nArse);
         nArse[0] = static_cast<
             const SmMathSymbolNode* >(pRight)->GetText().GetChar(0);
-        DBG_ASSERT(nArse[0] != 0xffff,"Non existant symbol");
+        OSL_ENSURE(nArse[0] != 0xffff,"Non existant symbol");
         AddAttribute(XML_NAMESPACE_MATH, XML_CLOSE,nArse);
         pFences = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MFENCED,
             sal_True,sal_True);
@@ -1185,7 +1185,7 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
             case TSERIF     : nSansSerifFixed  = 1; break;
             case TFIXED     : nSansSerifFixed  = 2; break;
             default:
-                DBG_ASSERT( 0, "unexpected case" );
+                OSL_ENSURE( 0, "unexpected case" );
         }
         // According to the parser every node that is to be evaluated heres
         // has a single non-zero subnode at index 1!! Thus we only need to check
@@ -1319,7 +1319,7 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
                     pText = "monospace";    // no modifiers allowed for monospace ...
                 else
                 {
-                    DBG_ASSERT( 0, "unexpected case" );
+                    OSL_ENSURE( 0, "unexpected case" );
                 }
                 AddAttribute(XML_NAMESPACE_MATH, XML_MATHVARIANT, A2OU(pText));
             }
@@ -1359,7 +1359,7 @@ void SmXMLExport::ExportVerticalBrace(const SmNode *pNode, int nLevel)
             break;
     }
 
-    DBG_ASSERT(pNode->GetNumSubNodes()==3,"Bad Vertical Brace");
+    OSL_ENSURE(pNode->GetNumSubNodes()==3,"Bad Vertical Brace");
     SvXMLElementExport aOver1(*this, XML_NAMESPACE_MATH,which, sal_True, sal_True);
     {//Scoping
         // using accents will draw the over-/underbraces too close to the base
@@ -1491,7 +1491,7 @@ void SmXMLExport::ExportNodes(const SmNode *pNode, int nLevel)
             ExportBlank(pNode, nLevel);
             break;
        default:
-            DBG_ASSERT( 0, "Warning: failed to export a node?" );
+            OSL_ENSURE( 0, "Warning: failed to export a node?" );
             break;
 
     }

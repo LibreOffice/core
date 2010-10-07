@@ -42,7 +42,7 @@
 #include <com/sun/star/i18n/WordType.hpp>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/unohelp2.hxx>
@@ -121,7 +121,7 @@ SmGraphicAccessible::SmGraphicAccessible( SmGraphicWindow *pGraphicWin ) :
     nClientId           (0),
     pWin                (pGraphicWin)
 {
-    DBG_ASSERT( pWin, "SmGraphicAccessible: window missing" );
+    OSL_ENSURE( pWin, "SmGraphicAccessible: window missing" );
 }
 
 
@@ -131,7 +131,7 @@ SmGraphicAccessible::SmGraphicAccessible( const SmGraphicAccessible &rSmAcc ) :
     nClientId           (0)
 {
     pWin = rSmAcc.pWin;
-    DBG_ASSERT( pWin, "SmGraphicAccessible: window missing" );
+    OSL_ENSURE( pWin, "SmGraphicAccessible: window missing" );
 }
 
 
@@ -221,7 +221,7 @@ awt::Rectangle SAL_CALL SmGraphicAccessible::getBounds()
     vos::OGuard aGuard(Application::GetSolarMutex());
     if (!pWin)
         throw RuntimeException();
-    DBG_ASSERT(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
+    OSL_ENSURE(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
             "mismatch of window parent and accessible parent" );
     return lcl_GetBounds( pWin );
 }
@@ -232,7 +232,7 @@ awt::Point SAL_CALL SmGraphicAccessible::getLocation()
     vos::OGuard aGuard(Application::GetSolarMutex());
     if (!pWin)
         throw RuntimeException();
-    DBG_ASSERT(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
+    OSL_ENSURE(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
             "mismatch of window parent and accessible parent" );
     awt::Rectangle aRect( lcl_GetBounds( pWin ) );
     return awt::Point( aRect.X, aRect.Y );
@@ -244,7 +244,7 @@ awt::Point SAL_CALL SmGraphicAccessible::getLocationOnScreen()
     vos::OGuard aGuard(Application::GetSolarMutex());
     if (!pWin)
         throw RuntimeException();
-    DBG_ASSERT(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
+    OSL_ENSURE(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
             "mismatch of window parent and accessible parent" );
     return lcl_GetLocationOnScreen( pWin );
 }
@@ -255,14 +255,14 @@ awt::Size SAL_CALL SmGraphicAccessible::getSize()
     vos::OGuard aGuard(Application::GetSolarMutex());
     if (!pWin)
         throw RuntimeException();
-    DBG_ASSERT(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
+    OSL_ENSURE(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
             "mismatch of window parent and accessible parent" );
 
     Size aSz( pWin->GetSizePixel() );
 #if OSL_DEBUG_LEVEL > 1
     awt::Rectangle aRect( lcl_GetBounds( pWin ) );
     Size aSz2( aRect.Width, aRect.Height );
-    DBG_ASSERT( aSz == aSz2, "mismatch in width" );
+    OSL_ENSURE( aSz == aSz2, "mismatch in width" );
 #endif
     return awt::Size( aSz.Width(), aSz.Height() );
 }
@@ -326,7 +326,7 @@ Reference< XAccessible > SAL_CALL SmGraphicAccessible::getAccessibleParent()
         throw RuntimeException();
 
     Window *pAccParent = pWin->GetAccessibleParentWindow();
-    DBG_ASSERT( pAccParent, "accessible parent missing" );
+    OSL_ENSURE( pAccParent, "accessible parent missing" );
     return pAccParent ? pAccParent->GetAccessible() : Reference< XAccessible >();
 }
 
@@ -525,8 +525,8 @@ awt::Rectangle SAL_CALL SmGraphicAccessible::getCharacterBounds( sal_Int32 nInde
         if (pNode)
         {
             sal_Int32 nAccIndex = pNode->GetAccessibleIndex();
-            DBG_ASSERT( nAccIndex >= 0, "invalid accessible index" );
-            DBG_ASSERT( nIndex >= nAccIndex, "index out of range" );
+            OSL_ENSURE( nAccIndex >= 0, "invalid accessible index" );
+            OSL_ENSURE( nIndex >= nAccIndex, "index out of range" );
 
             String    aNodeText;
             pNode->GetAccessibleText( aNodeText );
@@ -613,10 +613,10 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getIndexAtPoint( const awt::Point& aPoin
             Rectangle aRect( aTLPos, aSize );
             if (aRect.IsInside( aPos ))
             {
-                DBG_ASSERT( pNode->IsVisible(), "node is not a leaf" );
+                OSL_ENSURE( pNode->IsVisible(), "node is not a leaf" );
                 String aTxt;
                 pNode->GetAccessibleText( aTxt );
-                DBG_ASSERT( aTxt.Len(), "no accessible text available" );
+                OSL_ENSURE( aTxt.Len(), "no accessible text available" );
 
                 long nNodeX = pNode->GetLeft();
 
@@ -629,8 +629,8 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getIndexAtPoint( const awt::Point& aPoin
                         nRes = i;
                 }
                 delete[] pXAry;
-                DBG_ASSERT( nRes >= 0  &&  nRes < aTxt.Len(), "index out of range" );
-                DBG_ASSERT( pNode->GetAccessibleIndex() >= 0,
+                OSL_ENSURE( nRes >= 0  &&  nRes < aTxt.Len(), "index out of range" );
+                OSL_ENSURE( pNode->GetAccessibleIndex() >= 0,
                         "invalid accessible index" );
 
                 nRes = pNode->GetAccessibleIndex() + nRes;
@@ -1017,7 +1017,7 @@ String SmTextForwarder::GetText( const ESelection& rSel ) const
 SfxItemSet SmTextForwarder::GetAttribs( const ESelection& rSel, BOOL bOnlyHardAttrib ) const
 {
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
-    DBG_ASSERT( pEditEngine, "EditEngine missing" );
+    OSL_ENSURE( pEditEngine, "EditEngine missing" );
     if( rSel.nStartPara == rSel.nEndPara )
     {
         sal_uInt8 nFlags = 0;
@@ -1047,7 +1047,7 @@ SfxItemSet SmTextForwarder::GetAttribs( const ESelection& rSel, BOOL bOnlyHardAt
 SfxItemSet SmTextForwarder::GetParaAttribs( USHORT nPara ) const
 {
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
-    DBG_ASSERT( pEditEngine, "EditEngine missing" );
+    OSL_ENSURE( pEditEngine, "EditEngine missing" );
 
     SfxItemSet aSet( pEditEngine->GetParaAttribs( nPara ) );
 
@@ -1176,7 +1176,7 @@ USHORT GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection& rSe
         for( USHORT nAttrib = 0; nAttrib < aAttribs.Count(); nAttrib++ )
         {
             struct EECharAttrib aAttrib = aAttribs.GetObject( nAttrib );
-            DBG_ASSERT( aAttrib.pAttr, "GetCharAttribs gives corrupt data" );
+            OSL_ENSURE( aAttrib.pAttr, "GetCharAttribs gives corrupt data" );
 
             const sal_Bool bEmptyPortion = aAttrib.nStart == aAttrib.nEnd;
             if( (!bEmptyPortion && (aAttrib.nStart >= nEndPos)) || (bEmptyPortion && (aAttrib.nStart > nEndPos)) )
@@ -1648,7 +1648,7 @@ SmEditAccessible::SmEditAccessible( SmEditWindow *pEditWin ) :
     pTextHelper         (0),
     pWin                (pEditWin)
 {
-    DBG_ASSERT( pWin, "SmEditAccessible: window missing" );
+    OSL_ENSURE( pWin, "SmEditAccessible: window missing" );
 }
 
 
@@ -1657,7 +1657,7 @@ SmEditAccessible::SmEditAccessible( const SmEditAccessible &rSmAcc ) :
     aAccName            ( String(SmResId(STR_CMDBOXWINDOW)) )
 {
     pWin = rSmAcc.pWin;
-    DBG_ASSERT( pWin, "SmEditAccessible: window missing" );
+    OSL_ENSURE( pWin, "SmEditAccessible: window missing" );
 }
 
 SmEditAccessible::~SmEditAccessible()
@@ -1667,7 +1667,7 @@ SmEditAccessible::~SmEditAccessible()
 
 void SmEditAccessible::Init()
 {
-    DBG_ASSERT( pWin, "SmEditAccessible: window missing" );
+    OSL_ENSURE( pWin, "SmEditAccessible: window missing" );
     if (pWin)
     {
         EditEngine *pEditEngine = pWin->GetEditEngine();
@@ -1747,7 +1747,7 @@ awt::Rectangle SAL_CALL SmEditAccessible::getBounds(  )
     vos::OGuard aGuard(Application::GetSolarMutex());
     if (!pWin)
         throw RuntimeException();
-    DBG_ASSERT(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
+    OSL_ENSURE(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
             "mismatch of window parent and accessible parent" );
     return lcl_GetBounds( pWin );
 }
@@ -1758,7 +1758,7 @@ awt::Point SAL_CALL SmEditAccessible::getLocation(  )
     vos::OGuard aGuard(Application::GetSolarMutex());
     if (!pWin)
         throw RuntimeException();
-    DBG_ASSERT(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
+    OSL_ENSURE(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
             "mismatch of window parent and accessible parent" );
     awt::Rectangle aRect( lcl_GetBounds( pWin ) );
     return awt::Point( aRect.X, aRect.Y );
@@ -1770,7 +1770,7 @@ awt::Point SAL_CALL SmEditAccessible::getLocationOnScreen(  )
     vos::OGuard aGuard(Application::GetSolarMutex());
     if (!pWin)
         throw RuntimeException();
-    DBG_ASSERT(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
+    OSL_ENSURE(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
             "mismatch of window parent and accessible parent" );
     return lcl_GetLocationOnScreen( pWin );
 }
@@ -1781,14 +1781,14 @@ awt::Size SAL_CALL SmEditAccessible::getSize(  )
     vos::OGuard aGuard(Application::GetSolarMutex());
     if (!pWin)
         throw RuntimeException();
-    DBG_ASSERT(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
+    OSL_ENSURE(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
             "mismatch of window parent and accessible parent" );
 
     Size aSz( pWin->GetSizePixel() );
 #if OSL_DEBUG_LEVEL > 1
     awt::Rectangle aRect( lcl_GetBounds( pWin ) );
     Size aSz2( aRect.Width, aRect.Height );
-    DBG_ASSERT( aSz == aSz2, "mismatch in width" );
+    OSL_ENSURE( aSz == aSz2, "mismatch in width" );
 #endif
     return awt::Size( aSz.Width(), aSz.Height() );
 }
@@ -1856,7 +1856,7 @@ uno::Reference< XAccessible > SAL_CALL SmEditAccessible::getAccessibleParent(  )
         throw RuntimeException();
 
     Window *pAccParent = pWin->GetAccessibleParentWindow();
-    DBG_ASSERT( pAccParent, "accessible parent missing" );
+    OSL_ENSURE( pAccParent, "accessible parent missing" );
     return pAccParent ? pAccParent->GetAccessible() : Reference< XAccessible >();
 }
 

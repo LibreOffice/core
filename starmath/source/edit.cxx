@@ -296,7 +296,7 @@ void SmEditWindow::Resize()
         pEditView->SetOutputArea(AdjustScrollBars());
         pEditView->ShowCursor();
 
-        DBG_ASSERT( pEditView->GetEditEngine(), "EditEngine missing" );
+        OSL_ENSURE( pEditView->GetEditEngine(), "EditEngine missing" );
         const long nMaxVisAreaStart = pEditView->GetEditEngine()->GetTextHeight() -
                                       pEditView->GetOutputArea().GetHeight();
         if (pEditView->GetVisArea().Top() > nMaxVisAreaStart)
@@ -429,7 +429,7 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
         // moeglichst nur einmal am Ende aufzurufen.
         aCursorMoveTimer.Start();
 
-        DBG_ASSERT( pEditView, "EditView missing (NULL pointer)" );
+        OSL_ENSURE( pEditView, "EditView missing (NULL pointer)" );
         if (!pEditView)
             CreateEditView();
         if ( !pEditView->PostKeyEvent(rKEvt) )
@@ -528,7 +528,7 @@ IMPL_LINK( SmEditWindow, EditStatusHdl, EditStatus *, EMPTYARG /*pStat*/ )
 
 IMPL_LINK_INLINE_START( SmEditWindow, ScrollHdl, ScrollBar *, EMPTYARG /*pScrollBar*/ )
 {
-    DBG_ASSERT(pEditView, "EditView missing");
+    OSL_ENSURE(pEditView, "EditView missing");
     if (pEditView)
     {
         pEditView->SetVisArea(Rectangle(Point(pHScrollBar->GetThumbPos(),
@@ -607,7 +607,7 @@ String SmEditWindow::GetText() const
 {
     String aText;
     EditEngine *pEditEngine = const_cast< SmEditWindow* >(this)->GetEditEngine();
-    DBG_ASSERT( pEditEngine, "EditEngine missing" );
+    OSL_ENSURE( pEditEngine, "EditEngine missing" );
     if (pEditEngine)
         aText = pEditEngine->GetText( LINEEND_LF );
     return aText;
@@ -617,7 +617,7 @@ String SmEditWindow::GetText() const
 void SmEditWindow::SetText(const XubString& rText)
 {
     EditEngine *pEditEngine = GetEditEngine();
-    DBG_ASSERT( pEditEngine, "EditEngine missing" );
+    OSL_ENSURE( pEditEngine, "EditEngine missing" );
     if (pEditEngine  &&  !pEditEngine->IsModified())
     {
         if (!pEditView)
@@ -680,8 +680,8 @@ BOOL SmEditWindow::IsAllSelected() const
 {
     BOOL bRes = FALSE;
     EditEngine *pEditEngine = ((SmEditWindow *) this)->GetEditEngine();
-    DBG_ASSERT( pEditView, "NULL pointer" );
-    DBG_ASSERT( pEditEngine, "NULL pointer" );
+    OSL_ENSURE( pEditView, "NULL pointer" );
+    OSL_ENSURE( pEditEngine, "NULL pointer" );
     if (pEditEngine  &&  pEditView)
     {
         ESelection eSelection( pEditView->GetSelection() );
@@ -701,7 +701,7 @@ BOOL SmEditWindow::IsAllSelected() const
 
 void SmEditWindow::SelectAll()
 {
-    DBG_ASSERT( pEditView, "NULL pointer" );
+    OSL_ENSURE( pEditView, "NULL pointer" );
     if (pEditView)
     {
         // 0xFFFF as last two parameters refers to the end of the text
@@ -711,7 +711,7 @@ void SmEditWindow::SelectAll()
 
 void SmEditWindow::InsertCommand(USHORT nCommand)
 {
-    DBG_ASSERT( pEditView, "EditView missing" );
+    OSL_ENSURE( pEditView, "EditView missing" );
     if (pEditView)
     {
         //Anfang der Selektion merken und hinterher den Cursor daraufsetzen. Nur so
@@ -720,7 +720,7 @@ void SmEditWindow::InsertCommand(USHORT nCommand)
         aSelection.nEndPos  = aSelection.nStartPos;
         aSelection.nEndPara = aSelection.nStartPara;
 
-        DBG_ASSERT( pEditView, "NULL pointer" );
+        OSL_ENSURE( pEditView, "NULL pointer" );
         String  aText = String(SmResId(nCommand));
         pEditView->InsertText(aText);
 
@@ -745,7 +745,7 @@ void SmEditWindow::InsertCommand(USHORT nCommand)
 
 void SmEditWindow::MarkError(const Point &rPos)
 {
-    DBG_ASSERT( pEditView, "EditView missing" );
+    OSL_ENSURE( pEditView, "EditView missing" );
     if (pEditView)
     {
         const xub_StrLen    nCol = sal::static_int_cast< xub_StrLen >(rPos.X());
@@ -759,8 +759,8 @@ void SmEditWindow::MarkError(const Point &rPos)
 void SmEditWindow::SelNextMark()
 {
     EditEngine *pEditEngine = GetEditEngine();
-    DBG_ASSERT( pEditView, "NULL pointer" );
-    DBG_ASSERT( pEditEngine, "NULL pointer" );
+    OSL_ENSURE( pEditView, "NULL pointer" );
+    OSL_ENSURE( pEditEngine, "NULL pointer" );
     if (pEditEngine  &&  pEditView)
     {
         ESelection eSelection = pEditView->GetSelection();
@@ -789,8 +789,8 @@ void SmEditWindow::SelNextMark()
 void SmEditWindow::SelPrevMark()
 {
     EditEngine *pEditEngine = GetEditEngine();
-    DBG_ASSERT( pEditEngine, "NULL pointer" );
-    DBG_ASSERT( pEditView, "NULL pointer" );
+    OSL_ENSURE( pEditEngine, "NULL pointer" );
+    OSL_ENSURE( pEditView, "NULL pointer" );
     if (pEditEngine  &&  pEditView)
     {
         ESelection eSelection = pEditView->GetSelection();
@@ -853,7 +853,7 @@ ESelection SmEditWindow::GetSelection() const
 {
     // pointer may be 0 when reloading a document and the old view
     // was already destroyed
-    //(DBG_ASSERT( pEditView, "NULL pointer" );
+    //(OSL_ENSURE( pEditView, "NULL pointer" );
     ESelection eSel;
     if (pEditView)
         eSel = pEditView->GetSelection();
@@ -862,7 +862,7 @@ ESelection SmEditWindow::GetSelection() const
 
 void SmEditWindow::SetSelection(const ESelection &rSel)
 {
-    DBG_ASSERT( pEditView, "NULL pointer" );
+    OSL_ENSURE( pEditView, "NULL pointer" );
     if (pEditView)
         pEditView->SetSelection(rSel);
     InvalidateSlots();
@@ -883,7 +883,7 @@ BOOL SmEditWindow::IsSelected() const
 
 void SmEditWindow::Cut()
 {
-    DBG_ASSERT( pEditView, "EditView missing" );
+    OSL_ENSURE( pEditView, "EditView missing" );
     if (pEditView)
     {
         pEditView->Cut();
@@ -893,14 +893,14 @@ void SmEditWindow::Cut()
 
 void SmEditWindow::Copy()
 {
-    DBG_ASSERT( pEditView, "EditView missing" );
+    OSL_ENSURE( pEditView, "EditView missing" );
     if (pEditView)
         pEditView->Copy();
 }
 
 void SmEditWindow::Paste()
 {
-    DBG_ASSERT( pEditView, "EditView missing" );
+    OSL_ENSURE( pEditView, "EditView missing" );
     if (pEditView)
     {
         pEditView->Paste();
@@ -910,7 +910,7 @@ void SmEditWindow::Paste()
 
 void SmEditWindow::Delete()
 {
-    DBG_ASSERT( pEditView, "EditView missing" );
+    OSL_ENSURE( pEditView, "EditView missing" );
     if (pEditView)
     {
         pEditView->DeleteSelected();
@@ -920,7 +920,7 @@ void SmEditWindow::Delete()
 
 void SmEditWindow::InsertText(const String& Text)
 {
-    DBG_ASSERT( pEditView, "EditView missing" );
+    OSL_ENSURE( pEditView, "EditView missing" );
     if (pEditView)
     {
         pEditView->InsertText(Text);

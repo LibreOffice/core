@@ -47,7 +47,7 @@
 #include <tools/link.hxx>
 #include <svl/brdcst.hxx>
 #include <svl/svarray.hxx>
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <svl/hint.hxx>
 #include <svl/smplhint.hxx>
 #include <sot/sotref.hxx>

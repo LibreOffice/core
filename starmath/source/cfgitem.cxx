@@ -302,7 +302,7 @@ void SmFontFormatList::AddFontFormat( const String &rFntFmtId,
         const SmFontFormat &rFntFmt )
 {
     const SmFontFormat *pFntFmt = GetFontFormat( rFntFmtId );
-    DBG_ASSERT( !pFntFmt, "FontFormatId already exists" );
+    OSL_ENSURE( !pFntFmt, "FontFormatId already exists" );
     if (!pFntFmt)
     {
         SmFntFmtListEntry aEntry( rFntFmtId, rFntFmt );
@@ -411,7 +411,7 @@ const String SmFontFormatList::GetNewFontFormatId() const
         if (!GetFontFormat( aTmpId ))
             aRes = aTmpId;
     }
-    DBG_ASSERT( 0 != aRes.Len(), "failed to create new FontFormatId" );
+    OSL_ENSURE( 0 != aRes.Len(), "failed to create new FontFormatId" );
 
     return aRes;
 }
@@ -512,7 +512,7 @@ void SmMathConfig::ReadSymbol( SmSym &rSymbol,
         if (pValue->hasValue()  &&  (*pValue >>= aTmpStr))
         {
             const SmFontFormat *pFntFmt = GetFontFormatList().GetFontFormat( aTmpStr );
-            DBG_ASSERT( pFntFmt, "unknown FontFormat" );
+            OSL_ENSURE( pFntFmt, "unknown FontFormat" );
             if (pFntFmt)
                 aFont = pFntFmt->GetFont();
         }
@@ -528,11 +528,11 @@ void SmMathConfig::ReadSymbol( SmSym &rSymbol,
             {
                 String aTmp;
                 aTmp = GetUiSymbolName( rSymbolName );
-                DBG_ASSERT( aTmp.Len(), "localized symbol-name not found" );
+                OSL_ENSURE( aTmp.Len(), "localized symbol-name not found" );
                 if (aTmp.Len())
                     aUiName = aTmp;
                 aTmp = GetUiSymbolSetName( aSet );
-                DBG_ASSERT( aTmp.Len(), "localized symbolset-name not found" );
+                OSL_ENSURE( aTmp.Len(), "localized symbolset-name not found" );
                 if (aTmp.Len())
                     aUiSetName = aTmp;
             }
@@ -636,13 +636,13 @@ void SmMathConfig::SetSymbols( const std::vector< SmSym > &rNewSymbols )
         // FontFormatId
         SmFontFormat aFntFmt( rSymbol.GetFace() );
         String aFntFmtId( GetFontFormatList().GetFontFormatId( aFntFmt, TRUE ) );
-        DBG_ASSERT( aFntFmtId.Len(), "FontFormatId not found" );
+        OSL_ENSURE( aFntFmtId.Len(), "FontFormatId not found" );
         pVal->Name  = aNodeNameDelim;
         pVal->Name += *pName++;
         pVal->Value <<= OUString( aFntFmtId );
         pVal++;
     }
-    DBG_ASSERT( pVal - pValues == sal::static_int_cast< ptrdiff_t >(nCount * nSymbolProps), "properties missing" );
+    OSL_ENSURE( pVal - pValues == sal::static_int_cast< ptrdiff_t >(nCount * nSymbolProps), "properties missing" );
     ReplaceSetProperties( A2OU( SYMBOL_LIST ) , aValues );
 
     StripFontFormatList( rNewSymbols );
@@ -677,7 +677,7 @@ void SmMathConfig::LoadFontFormatList()
         ReadFontFormat( aFntFmt, pNode[i], A2OU( FONT_FORMAT_LIST ) );
         if (!pFontFormatList->GetFontFormat( pNode[i] ))
         {
-            DBG_ASSERT( 0 == pFontFormatList->GetFontFormat( pNode[i] ),
+            OSL_ENSURE( 0 == pFontFormatList->GetFontFormat( pNode[i] ),
                     "FontFormat ID already exists" );
             pFontFormatList->AddFontFormat( pNode[i], aFntFmt );
         }
@@ -746,7 +746,7 @@ void SmMathConfig::ReadFontFormat( SmFontFormat &rFontFormat,
             bOK = FALSE;
         ++pValue;
 
-        DBG_ASSERT( bOK, "read FontFormat failed" );
+        OSL_ENSURE( bOK, "read FontFormat failed" );
     }
 }
 
@@ -811,7 +811,7 @@ void SmMathConfig::SaveFontFormatList()
         pVal->Value <<= (INT16) aFntFmt.nItalic;
         pVal++;
     }
-    DBG_ASSERT( pVal - pValues == nCount * nSymbolProps, "properties missing" );
+    OSL_ENSURE( pVal - pValues == nCount * nSymbolProps, "properties missing" );
     ReplaceSetProperties( A2OU( FONT_FORMAT_LIST ) , aValues );
 
     rFntFmtList.SetModified( FALSE );
@@ -828,7 +828,7 @@ void SmMathConfig::StripFontFormatList( const std::vector< SmSym > &rSymbols )
     SmFontFormatList aUsedList;
     for (i = 0;  i < nCount;  ++i)
     {
-        DBG_ASSERT( rSymbols[i].GetName().Len() > 0, "non named symbol" );
+        OSL_ENSURE( rSymbols[i].GetName().Len() > 0, "non named symbol" );
         aUsedList.GetFontFormatId( SmFontFormat( rSymbols[i].GetFace() ) , TRUE );
     }
     const SmFormat & rStdFmt = GetStandardFormat();
@@ -914,7 +914,7 @@ void SmMathConfig::LoadOther()
             pOther->bFormulaCursor = bTmp;
         ++pVal;
 
-        DBG_ASSERT( pVal - pValues == nProps, "property mismatch" );
+        OSL_ENSURE( pVal - pValues == nProps, "property mismatch" );
         SetOtherModified( FALSE );
     }
 }
@@ -951,7 +951,7 @@ void SmMathConfig::SaveOther()
     // View/FormulaCursor
     *pValue++ <<= (BOOL) pOther->bFormulaCursor;
 
-    DBG_ASSERT( pValue - pValues == nProps, "property mismatch" );
+    OSL_ENSURE( pValue - pValues == nProps, "property mismatch" );
     PutProperties( aNames , aValues );
 
     SetOtherModified( FALSE );
@@ -1028,7 +1028,7 @@ void SmMathConfig::LoadFormat()
                 else
                 {
                     const SmFontFormat *pFntFmt = GetFontFormatList().GetFontFormat( aTmpStr );
-                    DBG_ASSERT( pFntFmt, "unknown FontFormat" );
+                    OSL_ENSURE( pFntFmt, "unknown FontFormat" );
                     if (pFntFmt)
                         aFnt = pFntFmt->GetFont();
                 }
@@ -1039,7 +1039,7 @@ void SmMathConfig::LoadFormat()
             pFormat->SetFont( i, aFnt, bUseDefaultFont );
         }
 
-        DBG_ASSERT( pVal - pValues == nProps, "property mismatch" );
+        OSL_ENSURE( pVal - pValues == nProps, "property mismatch" );
         SetFormatModified( FALSE );
     }
 }
@@ -1084,13 +1084,13 @@ void SmMathConfig::SaveFormat()
         {
             SmFontFormat aFntFmt( pFormat->GetFont( i ) );
             aFntFmtId = GetFontFormatList().GetFontFormatId( aFntFmt, TRUE );
-            DBG_ASSERT( aFntFmtId.getLength(), "FontFormatId not found" );
+            OSL_ENSURE( aFntFmtId.getLength(), "FontFormatId not found" );
         }
 
         *pValue++ <<= aFntFmtId;
     }
 
-    DBG_ASSERT( pValue - pValues == nProps, "property mismatch" );
+    OSL_ENSURE( pValue - pValues == nProps, "property mismatch" );
     PutProperties( aNames , aValues );
 
     SetFormatModified( FALSE );

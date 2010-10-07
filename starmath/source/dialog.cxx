@@ -46,7 +46,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sfx.hrc>
 #include <tools/string.hxx>
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <svx/ucsubset.hxx>
 
 
@@ -119,7 +119,7 @@ const String & SmFontStyles::GetStyleName( USHORT nIdx ) const
     // 2 = "bold",    3 = "bold italic"
 
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT( nIdx < GetCount(), "index out of range" );
+    OSL_ENSURE( nIdx < GetCount(), "index out of range" );
 #endif
     switch (nIdx)
     {
@@ -153,7 +153,7 @@ void SetFontStyle(const XubString &rStyleName, Font &rFont)
             if (rStyleName.CompareTo( rStyles.GetStyleName(i) ) == COMPARE_EQUAL)
                 break;
 #if OSL_DEBUG_LEVEL > 1
-        DBG_ASSERT(i < rStyles.GetCount(), "style-name unknown");
+        OSL_ENSURE(i < rStyles.GetCount(), "style-name unknown");
 #endif
         nIndex = i;
     }
@@ -769,7 +769,7 @@ void SmDistanceDialog::SetHelpId(MetricField &rField, ULONG nHelpId)
 
     const XubString aEmptyText;
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT(aEmptyText.Len() == 0, "Sm: Ooops...");
+    OSL_ENSURE(aEmptyText.Len() == 0, "Sm: Ooops...");
 #endif
 
     rField.SetHelpId(nHelpId);
@@ -789,14 +789,14 @@ void SmDistanceDialog::SetHelpId(MetricField &rField, ULONG nHelpId)
 void SmDistanceDialog::SetCategory(USHORT nCategory)
 {
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT(/*0 <= nCategory  &&*/  nCategory < NOCATEGORIES,
-        "Sm: falsche Kategorienummer in SmDistanceDialog");
+    OSL_ENSURE(/*0 <= nCategory  &&*/  nCategory < NOCATEGORIES,
+        "Sm: wrong category number in SmDistanceDialog");
 #endif
 
     // array to convert category- and metricfield-number in help ids.
     // 0 is used in case of unused combinations.
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT(NOCATEGORIES == 10, "Sm : Array passt nicht zu Anzahl der Kategorien");
+    OSL_ENSURE(NOCATEGORIES == 10, "Sm : array doesn't fit into the number of categories");
 #endif
     ULONG __READONLY_DATA  aCatMf2Hid[10][4] =
     {
@@ -1250,8 +1250,8 @@ SmShowSymbolSet::SmShowSymbolSet(Window *pParent, const ResId& rResId) :
         nColumns--;
     nRows    = sal::static_int_cast< USHORT >(aOutputSize.Height() / nLen);
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT(nColumns > 0, "Sm : keine Spalten");
-    DBG_ASSERT(nRows > 0, "Sm : keine Zeilen");
+    OSL_ENSURE(nColumns > 0, "Sm : no columns");
+    OSL_ENSURE(nRows > 0, "Sm : no rows");
 #endif
 
     // genau passend machen
@@ -1388,7 +1388,7 @@ IMPL_LINK( SmSymbolDialog, SymbolSetChangeHdl, ListBox *, EMPTYARG pListBox )
 {
     (void) pListBox;
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT(pListBox == &aSymbolSets, "Sm : falsches Argument");
+    OSL_ENSURE(pListBox == &aSymbolSets, "Sm : wrong argument");
 #endif
 
     SelectSymbolSet(aSymbolSets.GetSelectEntry());
@@ -1400,7 +1400,7 @@ IMPL_LINK( SmSymbolDialog, SymbolChangeHdl, SmShowSymbolSet *, EMPTYARG pShowSym
 {
     (void) pShowSymbolSet;
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT(pShowSymbolSet == &aSymbolSetDisplay, "Sm : falsches Argument");
+    OSL_ENSURE(pShowSymbolSet == &aSymbolSetDisplay, "Sm : wrong argument");
 #endif
 
     SelectSymbol(aSymbolSetDisplay.GetSelectSymbol());
@@ -1411,7 +1411,7 @@ IMPL_LINK( SmSymbolDialog, EditClickHdl, Button *, EMPTYARG pButton )
 {
     (void) pButton;
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT(pButton == &aEditBtn, "Sm : falsches Argument");
+    OSL_ENSURE(pButton == &aEditBtn, "Sm : wrong argument");
 #endif
 
     SmSymDefineDialog *pDialog = new SmSymDefineDialog(this, pFontListDev, rSymbolMgr);
@@ -1443,7 +1443,7 @@ IMPL_LINK( SmSymbolDialog, EditClickHdl, Button *, EMPTYARG pButton )
     else
     {
         // just update display of current symbol set
-        DBG_ASSERT( aSymSetName == aSymSetName, "unexpected change in symbol set name" );
+        OSL_ENSURE( aSymSetName == aSymSetName, "unexpected change in symbol set name" );
            aSymbolSet      = rSymbolMgr.GetSymbolSet( aSymbolSetName );
         aSymbolSetDisplay.SetSymbolSet( aSymbolSet );
     }
@@ -1461,7 +1461,7 @@ IMPL_LINK( SmSymbolDialog, SymbolDblClickHdl, SmShowSymbolSet *, EMPTYARG pShowS
 {
     (void) pShowSymbolSet;
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT(pShowSymbolSet == &aSymbolSetDisplay, "Sm : falsches Argument");
+    OSL_ENSURE(pShowSymbolSet == &aSymbolSetDisplay, "Sm : wrong argument");
 #endif
 
     GetClickHdl(&aGetBtn);
@@ -1474,7 +1474,7 @@ IMPL_LINK( SmSymbolDialog, GetClickHdl, Button *, EMPTYARG pButton )
 {
     (void) pButton;
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT(pButton == &aGetBtn, "Sm : falscher Button");
+    OSL_ENSURE(pButton == &aGetBtn, "Sm : wrong button");
 #endif
 
     const SmSym *pSym = GetSymbol();
@@ -1497,7 +1497,7 @@ IMPL_LINK_INLINE_START( SmSymbolDialog, CloseClickHdl, Button *, EMPTYARG pButto
 {
     (void) pButton;
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT(pButton == &aCloseBtn, "Sm : falscher Button");
+    OSL_ENSURE(pButton == &aCloseBtn, "Sm : wrong button");
 #endif
 
     EndDialog(TRUE);
@@ -1682,8 +1682,8 @@ void SmShowChar::SetFont(const Font &rFont)
 void SmSymDefineDialog::FillSymbols(ComboBox &rComboBox, BOOL bDeleteText)
 {
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT(&rComboBox == &aOldSymbols  ||  &rComboBox == &aSymbols,
-        "Sm : falsche ComboBox");
+    OSL_ENSURE(&rComboBox == &aOldSymbols  ||  &rComboBox == &aSymbols,
+        "Sm : wrong ComboBox");
 #endif
 
     rComboBox.Clear();
@@ -1700,7 +1700,7 @@ void SmSymDefineDialog::FillSymbols(ComboBox &rComboBox, BOOL bDeleteText)
 void SmSymDefineDialog::FillSymbolSets(ComboBox &rComboBox, BOOL bDeleteText)
 {
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT(&rComboBox == &aOldSymbolSets  ||  &rComboBox == &aSymbolSets,
+    OSL_ENSURE(&rComboBox == &aOldSymbolSets  ||  &rComboBox == &aSymbolSets,
         "Sm : falsche ComboBox");
 #endif
 
@@ -1748,7 +1748,7 @@ void SmSymDefineDialog::FillStyles(BOOL bDeleteText)
             aStyles.InsertEntry( rStyles.GetStyleName(i) );
 
 #if OSL_DEBUG_LEVEL > 1
-        DBG_ASSERT(aStyles.GetEntryCount() > 0, "Sm : keine Styles vorhanden");
+        OSL_ENSURE(aStyles.GetEntryCount() > 0, "Sm : no styles available");
 #endif
         aStyles.SetText( aStyles.GetEntry(0) );
     }
@@ -1758,8 +1758,8 @@ void SmSymDefineDialog::FillStyles(BOOL bDeleteText)
 SmSym * SmSymDefineDialog::GetSymbol(const ComboBox &rComboBox)
 {
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT(&rComboBox == &aOldSymbols  ||  &rComboBox == &aSymbols,
-        "Sm : falsche ComboBox");
+    OSL_ENSURE(&rComboBox == &aOldSymbols  ||  &rComboBox == &aSymbols,
+        "Sm : wrong combobox");
 #endif
     return aSymbolMgrCopy.GetSymbolByName(rComboBox.GetText());
 }
@@ -1769,7 +1769,7 @@ IMPL_LINK( SmSymDefineDialog, OldSymbolChangeHdl, ComboBox *, EMPTYARG pComboBox
 {
     (void) pComboBox;
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT(pComboBox == &aOldSymbols, "Sm : falsches Argument");
+    OSL_ENSURE(pComboBox == &aOldSymbols, "Sm : wrong argument");
 #endif
     SelectSymbol(aOldSymbols, aOldSymbols.GetText(), FALSE);
     return 0;
@@ -1780,7 +1780,7 @@ IMPL_LINK( SmSymDefineDialog, OldSymbolSetChangeHdl, ComboBox *, EMPTYARG pCombo
 {
     (void) pComboBox;
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT(pComboBox == &aOldSymbolSets, "Sm : falsches Argument");
+    OSL_ENSURE(pComboBox == &aOldSymbolSets, "Sm : wrong argument");
 #endif
     SelectSymbolSet(aOldSymbolSets, aOldSymbolSets.GetText(), FALSE);
     return 0;
@@ -1808,7 +1808,7 @@ IMPL_LINK( SmSymDefineDialog, ModifyHdl, ComboBox *, pComboBox )
     else
     {
 #if OSL_DEBUG_LEVEL > 1
-        DBG_ASSERT(0, "Sm : falsche ComboBox Argument");
+        OSL_ENSURE(0, "Sm : wrong combobox argument");
 #endif
     }
 
@@ -1824,7 +1824,7 @@ IMPL_LINK( SmSymDefineDialog, FontChangeHdl, ListBox *, EMPTYARG pListBox )
 {
     (void) pListBox;
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT(pListBox == &aFonts, "Sm : falsches Argument");
+    OSL_ENSURE(pListBox == &aFonts, "Sm : wrong argument");
 #endif
 
     SelectFont(aFonts.GetSelectEntry());
@@ -1852,7 +1852,7 @@ IMPL_LINK( SmSymDefineDialog, StyleChangeHdl, ComboBox *, EMPTYARG pComboBox )
 {
     (void) pComboBox;
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT(pComboBox == &aStyles, "Sm : falsches Argument");
+    OSL_ENSURE(pComboBox == &aStyles, "Sm : falsches Argument");
 #endif
 
     SelectStyle(aStyles.GetText());
@@ -1865,7 +1865,7 @@ IMPL_LINK( SmSymDefineDialog, CharHighlightHdl, Control *, EMPTYARG )
     sal_UCS4 cChar = aCharsetDisplay.GetSelectCharacter();
 
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT( pSubsetMap, "SubsetMap missing" );
+    OSL_ENSURE( pSubsetMap, "SubsetMap missing" );
 #endif
     if (pSubsetMap)
     {
@@ -1887,8 +1887,8 @@ IMPL_LINK( SmSymDefineDialog, AddClickHdl, Button *, EMPTYARG pButton )
 {
     (void) pButton;
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT(pButton == &aAddBtn, "Sm : falsches Argument");
-    DBG_ASSERT(aAddBtn.IsEnabled(), "Sm : Voraussetzungen erfuellt ??");
+    OSL_ENSURE(pButton == &aAddBtn, "Sm : wrong argument");
+    OSL_ENSURE(aAddBtn.IsEnabled(), "Sm : requirements met ??");
 #endif
 
     // add symbol
@@ -1896,7 +1896,7 @@ IMPL_LINK( SmSymDefineDialog, AddClickHdl, Button *, EMPTYARG pButton )
     const SmSym aNewSymbol( aSymbols.GetText(), aCharsetDisplay.GetFont(),
             sal::static_int_cast< sal_Unicode >( aCharsetDisplay.GetSelectCharacter() ),
             aSymbolSets.GetText() );
-    //DBG_ASSERT( aSymbolMgrCopy.GetSymbolByName(aTmpSymbolName) == NULL, "symbol already exists" );
+    //OSL_ENSURE( aSymbolMgrCopy.GetSymbolByName(aTmpSymbolName) == NULL, "symbol already exists" );
     aSymbolMgrCopy.AddOrReplaceSymbol( aNewSymbol );
 
     // update display of new symbol
@@ -1921,8 +1921,8 @@ IMPL_LINK( SmSymDefineDialog, ChangeClickHdl, Button *, EMPTYARG pButton )
 {
     (void) pButton;
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT(pButton == &aChangeBtn, "Sm : falsches Argument");
-    DBG_ASSERT(aChangeBtn.IsEnabled(), "Sm : Voraussetzungen erfuellt ??");
+    OSL_ENSURE(pButton == &aChangeBtn, "Sm : wrong argument");
+    OSL_ENSURE(aChangeBtn.IsEnabled(), "Sm : requirements met ??");
 #endif
 
     // get new Sybol to use
@@ -1965,8 +1965,8 @@ IMPL_LINK( SmSymDefineDialog, DeleteClickHdl, Button *, EMPTYARG pButton )
 {
     (void) pButton;
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT(pButton == &aDeleteBtn, "Sm : falsches Argument");
-    DBG_ASSERT(aDeleteBtn.IsEnabled(), "Sm : Voraussetzungen erfuellt ??");
+    OSL_ENSURE(pButton == &aDeleteBtn, "Sm : wrong argument");
+    OSL_ENSURE(aDeleteBtn.IsEnabled(), "Sm : requirements met ??");
 #endif
 
     if (pOrigSymbol)
@@ -2194,8 +2194,8 @@ BOOL SmSymDefineDialog::SelectSymbolSet(ComboBox &rComboBox,
         const XubString &rSymbolSetName, BOOL bDeleteText)
 {
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT(&rComboBox == &aOldSymbolSets  ||  &rComboBox == &aSymbolSets,
-        "Sm : falsche ComboBox");
+    OSL_ENSURE(&rComboBox == &aOldSymbolSets  ||  &rComboBox == &aSymbolSets,
+        "Sm : wrong ComboBox");
 #endif
 
     // 'Normalisieren' des SymbolNamens (ohne leading und trailing Leerzeichen)
@@ -2276,8 +2276,8 @@ BOOL SmSymDefineDialog::SelectSymbol(ComboBox &rComboBox,
         const XubString &rSymbolName, BOOL bDeleteText)
 {
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT(&rComboBox == &aOldSymbols  ||  &rComboBox == &aSymbols,
-        "Sm : falsche ComboBox");
+    OSL_ENSURE(&rComboBox == &aOldSymbols  ||  &rComboBox == &aSymbols,
+        "Sm : wrong ComboBox");
 #endif
 
     // 'Normalisieren' des SymbolNamens (ohne Leerzeichen)

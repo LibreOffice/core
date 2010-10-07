@@ -81,7 +81,7 @@ static const USHORT aCTLDefFnts[FNT_END] =
 
 String GetDefaultFontName( LanguageType nLang, USHORT nIdent )
 {
-    DBG_ASSERT( /*FNT_BEGIN <= nIdent  &&*/  nIdent <= FNT_END,
+    OSL_ENSURE( /*FNT_BEGIN <= nIdent  &&*/  nIdent <= FNT_END,
             "index out opd range" );
 
     if (FNT_MATH == nIdent)

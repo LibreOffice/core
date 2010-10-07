@@ -233,7 +233,7 @@ String SmDocShell::GetAccessibleText()
         ArrangeFormula();
     if (0 == aAccText.Len())
     {
-        DBG_ASSERT( pTree, "Tree missing" );
+        OSL_ENSURE( pTree, "Tree missing" );
         if (pTree)
             pTree->GetAccessibleText( aAccText );
     }
@@ -284,7 +284,7 @@ void SmDocShell::ArrangeFormula()
             pOutDev->SetMapMode( MapMode(MAP_100TH_MM) );
         }
     }
-    DBG_ASSERT(pOutDev->GetMapMode().GetMapUnit() == MAP_100TH_MM,
+    OSL_ENSURE(pOutDev->GetMapMode().GetMapUnit() == MAP_100TH_MM,
                "Sm : falscher MapMode");
 
     const SmFormat &rFormat = GetFormat();
@@ -429,7 +429,7 @@ SfxItemPool& SmDocShell::GetEditEngineItemPool()
 
     if (!pEditEngineItemPool)
         GetEditEngine();
-    DBG_ASSERT( pEditEngineItemPool, "EditEngineItemPool missing" );
+    OSL_ENSURE( pEditEngineItemPool, "EditEngineItemPool missing" );
     return *pEditEngineItemPool;
 }
 
@@ -440,7 +440,7 @@ void SmDocShell::Draw(OutputDevice &rDev, Point &rPosition)
 
     if (!pTree)
         Parse();
-    DBG_ASSERT(pTree, "Sm : NULL pointer");
+    OSL_ENSURE(pTree, "Sm : NULL pointer");
 
     if (!IsFormulaArranged())
         ArrangeFormula();
@@ -736,7 +736,7 @@ BOOL SmDocShell::ConvertFrom(SfxMedium &rMedium)
     BOOL     bSuccess = FALSE;
     const String& rFltName = rMedium.GetFilter()->GetFilterName();
 
-    DBG_ASSERT( !rFltName.EqualsAscii( STAROFFICE_XML ), "Wrong filter!");
+    OSL_ENSURE( !rFltName.EqualsAscii( STAROFFICE_XML ), "Wrong filter!");
 
     if ( rFltName.EqualsAscii( MATHML_XML ) )
     {
@@ -1018,7 +1018,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
             OutputDevice *pDev = GetPrinter();
             if (!pDev || pDev->GetDevFontCount() == 0)
                 pDev = &SM_MOD()->GetDefaultVirtualDev();
-            DBG_ASSERT (pDev, "device for font list missing" );
+            OSL_ENSURE (pDev, "device for font list missing" );
 
             SmFontTypeDialog *pFontTypeDialog = new SmFontTypeDialog( NULL, pDev );
 

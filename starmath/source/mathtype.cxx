@@ -31,7 +31,7 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 #include <mathtype.hxx>
 
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 
 #include <sfx2/docfile.hxx>
 
@@ -618,7 +618,7 @@ int MathType::Parse(SotStorage *pStor)
     //sigh, theres no point! MathType (in some bizarre subvarient) pads
     //the end of the formula with ENDs (0)'s
     ULONG nEnd = pS->Tell();
-    DBG_ASSERT(nEnd == pS->Seek(STREAM_SEEK_TO_END),
+    OSL_ENSURE(nEnd == pS->Seek(STREAM_SEEK_TO_END),
         "Possibly unfully parsed formula");
 #   endif
 #endif
@@ -1750,7 +1750,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                     *pS >> nTabType;
                     *pS >> nTabOffset;
                 }
-                DBG_ASSERT(FALSE,"Not seen in the wild Equation Ruler Field");
+                OSL_ENSURE(FALSE,"Not seen in the wild Equation Ruler Field");
                 break;
             case FONT:
                 {
@@ -2731,14 +2731,14 @@ int MathType::HandleTemplate(int nLevel,sal_uInt8 &rSelector,
     *pS >> rSelector;
     *pS >> rVariation;
     *pS >> nOption;
-    DBG_ASSERT(rSelector < 48,"Selector out of range");
+    OSL_ENSURE(rSelector < 48,"Selector out of range");
     if ((rSelector >= 21) && (rSelector <=26))
     {
-        DBG_ASSERT(nOption < 2,"Option out of range");
+        OSL_ENSURE(nOption < 2,"Option out of range");
     }
     else if (/*(rSelector >= 0) &&*/ (rSelector <=12))
     {
-        DBG_ASSERT(nOption < 3,"Option out of range");
+        OSL_ENSURE(nOption < 3,"Option out of range");
     }
 
     //For the (broken) case where one subscript template ends, and there is
@@ -2846,7 +2846,7 @@ void MathType::HandleEmblishments()
             APPEND(rRet," breve ");
             break;
         default:
-            DBG_ASSERT(nEmbel < 21,"Embel out of range");
+            OSL_ENSURE(nEmbel < 21,"Embel out of range");
             break;
         }
         if (nVersion < 3)

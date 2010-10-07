@@ -332,7 +332,7 @@ static const SmTokenTableEntry * GetTokenTableEntry( const String &rName )
 BOOL SmParser::IsDelimiter( const String &rTxt, xub_StrLen nPos )
     // returns 'TRUE' iff cChar is '\0' or a delimeter
 {
-    DBG_ASSERT( nPos <= rTxt.Len(), "index out of range" );
+    OSL_ENSURE( nPos <= rTxt.Len(), "index out of range" );
 
     sal_Unicode cChar = rTxt.GetChar( nPos );
     if(!cChar)
@@ -367,7 +367,7 @@ void SmParser::Insert(const String &rText, USHORT nPos)
 
 void SmParser::Replace( USHORT nPos, USHORT nLen, const String &rText )
 {
-    DBG_ASSERT( nPos + nLen <= BufferString.Len(), "argument mismatch" );
+    OSL_ENSURE( nPos + nLen <= BufferString.Len(), "argument mismatch" );
 
     BufferString.Replace( nPos, nLen, rText );
     INT16  nChg = rText.Len() - nLen;
@@ -488,7 +488,7 @@ void SmParser::NextToken()
              || (bNumStart && (aRes.TokenType & KParseType::IDENTNAME)))
     {
         INT32 n = aRes.EndPos - nRealStart;
-        DBG_ASSERT( n >= 0, "length < 0" );
+        OSL_ENSURE( n >= 0, "length < 0" );
         CurToken.eType      = TNUMBER;
         CurToken.cMathChar  = '\0';
         CurToken.nGroup     = 0;
@@ -515,7 +515,7 @@ void SmParser::NextToken()
     else if (aRes.TokenType & KParseType::IDENTNAME)
     {
         INT32 n = aRes.EndPos - nRealStart;
-        DBG_ASSERT( n >= 0, "length < 0" );
+        OSL_ENSURE( n >= 0, "length < 0" );
         String aName( BufferString.Copy( nRealStart, sal::static_int_cast< xub_StrLen >(n) ) );
         const SmTokenTableEntry *pEntry = GetTokenTableEntry( aName );
 
@@ -673,7 +673,7 @@ void SmParser::NextToken()
                     {
                         //! modifies aRes.EndPos
 
-                        DBG_ASSERT( rnEndPos >= nBufLen  ||
+                        OSL_ENSURE( rnEndPos >= nBufLen  ||
                                     '%' != BufferString.GetChar( sal::static_int_cast< xub_StrLen >(rnEndPos) ),
                                 "unexpected comment start" );
 
@@ -706,7 +706,7 @@ void SmParser::NextToken()
                             CurToken.eType      = TSPECIAL;
                             CurToken.aText      = BufferString.Copy( sal::static_int_cast< xub_StrLen >(nTmpStart-1), n+1 );
 
-                            DBG_ASSERT( aTmpRes.EndPos > rnEndPos,
+                            OSL_ENSURE( aTmpRes.EndPos > rnEndPos,
                                     "empty identifier" );
                             if (aTmpRes.EndPos > rnEndPos)
                                 rnEndPos = aTmpRes.EndPos;
@@ -1230,8 +1230,8 @@ void SmParser::Product()
 
 void SmParser::SubSup(ULONG nActiveGroup)
 {
-    DBG_ASSERT(nActiveGroup == TGPOWER  ||  nActiveGroup == TGLIMIT,
-               "Sm: falsche Tokengruppe");
+    OSL_ENSURE(nActiveGroup == TGPOWER  ||  nActiveGroup == TGLIMIT,
+               "Sm: wrong token group");
 
     if (!TokenInGroup(nActiveGroup))
         // already finish
@@ -1279,10 +1279,10 @@ void SmParser::SubSup(ULONG nActiveGroup)
             case TLSUB :    nIndex = (int) LSUB;    break;
             case TLSUP :    nIndex = (int) LSUP;    break;
             default :
-                DBG_ASSERT(FALSE, "Sm: unbekannter Fall");
+                OSL_ENSURE(FALSE, "Sm: unknown case");
         }
         nIndex++;
-        DBG_ASSERT(1 <= nIndex  &&  nIndex <= 1 + SUBSUP_NUM_ENTRIES,
+        OSL_ENSURE(1 <= nIndex  &&  nIndex <= 1 + SUBSUP_NUM_ENTRIES,
                    "SmParser::Power() : sub-/supscript index falsch");
 
         // set sub-/supscript if not already done
@@ -1319,7 +1319,7 @@ void SmParser::Power()
 
 void SmParser::Blank()
 {
-    DBG_ASSERT(TokenInGroup(TGBLANK), "Sm : falsches Token");
+    OSL_ENSURE(TokenInGroup(TGBLANK), "Sm : wrong token");
     SmBlankNode *pBlankNode = new SmBlankNode(CurToken);
 
     while (TokenInGroup(TGBLANK))
@@ -1495,7 +1495,7 @@ void SmParser::Term()
                         FontAttribut();
 
                     // check if casting in following line is ok
-                    DBG_ASSERT(!NodeStack.Top()->IsVisible(), "Sm : Ooops...");
+                    OSL_ENSURE(!NodeStack.Top()->IsVisible(), "Sm : Ooops...");
 
                     aArray[n] = (SmStructureNode *) NodeStack.Pop();
                     n++;
@@ -1652,12 +1652,12 @@ void SmParser::Oper()
         case TOPER :
             NextToken();
 
-            DBG_ASSERT(CurToken.eType == TSPECIAL, "Sm: falsches Token");
+            OSL_ENSURE(CurToken.eType == TSPECIAL, "Sm: wrong token");
             pNode = new SmGlyphSpecialNode(CurToken);
             break;
 
         default :
-            DBG_ASSERT(0, "Sm: unbekannter Fall");
+            OSL_ENSURE(0, "Sm: unknown case");
     }
     NodeStack.Push(pNode);
 
@@ -1667,7 +1667,7 @@ void SmParser::Oper()
 
 void SmParser::UnOper()
 {
-    DBG_ASSERT(TokenInGroup(TGUNOPER), "Sm: falsches Token");
+    OSL_ENSURE(TokenInGroup(TGUNOPER), "Sm: wrong token");
 
     SmToken      aNodeToken = CurToken;
     SmTokenType  eType      = CurToken.eType;
@@ -1753,7 +1753,7 @@ void SmParser::UnOper()
 
 void SmParser::Attribut()
 {
-    DBG_ASSERT(TokenInGroup(TGATTRIBUT), "Sm: falsche Tokengruppe");
+    OSL_ENSURE(TokenInGroup(TGATTRIBUT), "Sm: wrong token group");
 
     SmStructureNode *pSNode = new SmAttributNode(CurToken);
     SmNode      *pAttr;
@@ -1789,7 +1789,7 @@ void SmParser::Attribut()
 
 void SmParser::FontAttribut()
 {
-    DBG_ASSERT(TokenInGroup(TGFONTATTR), "Sm: falsche Tokengruppe");
+    OSL_ENSURE(TokenInGroup(TGFONTATTR), "Sm: wrong token group");
 
     switch (CurToken.eType)
     {
@@ -1815,14 +1815,14 @@ void SmParser::FontAttribut()
             break;
 
         default :
-            DBG_ASSERT(0, "Sm: unbekannter Fall");
+            OSL_ENSURE(0, "Sm: unknown case");
     }
 }
 
 
 void SmParser::Color()
 {
-    DBG_ASSERT(CurToken.eType == TCOLOR, "Sm : Ooops...");
+    OSL_ENSURE(CurToken.eType == TCOLOR, "Sm : Ooops...");
 
     // last color rules, get that one
     SmToken  aToken;
@@ -1843,7 +1843,7 @@ void SmParser::Color()
 
 void SmParser::Font()
 {
-    DBG_ASSERT(CurToken.eType == TFONT, "Sm : Ooops...");
+    OSL_ENSURE(CurToken.eType == TFONT, "Sm : Ooops...");
 
     // last font rules, get that one
     SmToken  aToken;
@@ -1886,7 +1886,7 @@ BOOL lcl_IsNumber(const UniString& rText)
 
 void SmParser::FontSize()
 {
-    DBG_ASSERT(CurToken.eType == TSIZE, "Sm : Ooops...");
+    OSL_ENSURE(CurToken.eType == TSIZE, "Sm : Ooops...");
 
     USHORT     Type;
     SmFontNode *pFontNode = new SmFontNode(CurToken);
@@ -1955,7 +1955,7 @@ void SmParser::FontSize()
 
 void SmParser::Brace()
 {
-    DBG_ASSERT(CurToken.eType == TLEFT  ||  TokenInGroup(TGLBRACES),
+    OSL_ENSURE(CurToken.eType == TLEFT  ||  TokenInGroup(TGLBRACES),
         "Sm: kein Klammer Ausdruck");
 
     SmStructureNode *pSNode  = new SmBraceNode(CurToken);
@@ -2019,7 +2019,7 @@ void SmParser::Brace()
                 case TLFLOOR :      eExpectedType = TRFLOOR;    break;
                 case TLCEIL :       eExpectedType = TRCEIL;     break;
                 default :
-                    DBG_ASSERT(0, "Sm: unbekannter Fall");
+                    OSL_ENSURE(0, "Sm: unknown case");
             }
 
             if (CurToken.eType == eExpectedType)
@@ -2035,8 +2035,8 @@ void SmParser::Brace()
     }
 
     if (eError == PE_NONE)
-    {   DBG_ASSERT(pLeft,  "Sm: NULL pointer");
-        DBG_ASSERT(pRight, "Sm: NULL pointer");
+    {   OSL_ENSURE(pLeft,  "Sm: NULL pointer");
+        OSL_ENSURE(pRight, "Sm: NULL pointer");
         pSNode->SetSubNodes(pLeft, pBody, pRight);
         pSNode->SetScaleMode(eScaleMode);
         NodeStack.Push(pSNode);
@@ -2304,7 +2304,7 @@ void SmParser::Special()
         }
         if (pFrom  &&  pTo)
         {
-            DBG_ASSERT( pFrom->Count() == pTo->Count(),
+            OSL_ENSURE( pFrom->Count() == pTo->Count(),
                     "array length mismatch" );
             USHORT nCount = sal::static_int_cast< USHORT >(pFrom->Count());
             for (USHORT i = 0;  i < nCount;  ++i)

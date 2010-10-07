@@ -30,7 +30,7 @@
 
 
 #include <tools/string.hxx>
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/virdev.hxx>
@@ -68,7 +68,7 @@ BOOL SmIsMathAlpha(const XubString &rText)
     if (rText.Len() == 0)
         return FALSE;
 
-    DBG_ASSERT(rText.Len() == 1, "Sm : String enthaelt nicht genau ein Zeichen");
+    OSL_ENSURE(rText.Len() == 1, "Sm : string must be exactly one character long");
     xub_Unicode cChar = rText.GetChar(0);
 
     // ist es ein griechisches Zeichen ?
@@ -94,8 +94,8 @@ BOOL SmIsMathAlpha(const XubString &rText)
 SmRect::SmRect()
     // constructs empty rectangle at (0, 0) with width and height 0.
 {
-    DBG_ASSERT(aTopLeft == Point(0, 0), "Sm: ooops...");
-    DBG_ASSERT(aSize == Size(0, 0), "Sm: ooops...");
+    OSL_ENSURE(aTopLeft == Point(0, 0), "Sm: ooops...");
+    OSL_ENSURE(aSize == Size(0, 0), "Sm: ooops...");
 
     bHasBaseline = bHasAlignInfo = FALSE;
     nBaseline = nAlignT = nAlignM = nAlignB =
@@ -142,7 +142,7 @@ void SmRect::CopyAlignInfo(const SmRect &rRect)
 void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
                        const XubString &rText, USHORT nBorder)
 {
-    DBG_ASSERT(aTopLeft == Point(0, 0), "Sm: Ooops...");
+    OSL_ENSURE(aTopLeft == Point(0, 0), "Sm: Ooops...");
 
     aSize = Size(rDev.GetTextWidth(rText), rDev.GetTextHeight());
 
@@ -229,8 +229,8 @@ void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
     if (nLoAttrFence > GetBottom())
         nLoAttrFence = GetBottom();
 
-    DBG_ASSERT(rText.Len() == 0  ||  !IsEmpty(),
-               "Sm: leeres Rechteck erzeugt");
+    OSL_ENSURE(rText.Len() == 0  ||  !IsEmpty(),
+               "Sm: empty rectangle created");
 }
 
 
@@ -245,7 +245,7 @@ void SmRect::Init(const OutputDevice &rDev, const SmFormat *pFormat,
 SmRect::SmRect(const OutputDevice &rDev, const SmFormat *pFormat,
                const XubString &rText, long nEBorderWidth)
 {
-    DBG_ASSERT( nEBorderWidth >= 0, "BorderWidth negativ" );
+    OSL_ENSURE( nEBorderWidth >= 0, "BorderWidth is negative" );
     if (nEBorderWidth < 0)
         nEBorderWidth = 0;
     Init(rDev, pFormat, rText, (USHORT) nEBorderWidth);
@@ -259,7 +259,7 @@ SmRect::SmRect(long nWidth, long nHeight)
     // as used in 'SmBinVerNode'.
 :   aSize(nWidth, nHeight)
 {
-    DBG_ASSERT(aTopLeft == Point(0, 0), "Sm: ooops...");
+    OSL_ENSURE(aTopLeft == Point(0, 0), "Sm: ooops...");
 
     bHasBaseline  = FALSE;
     bHasAlignInfo = TRUE;
@@ -349,7 +349,7 @@ const Point SmRect::AlignTo(const SmRect &rRect, RectPos ePos,
                        + GetItalicLeftSpace();
             break;
         default :
-            DBG_ASSERT(FALSE, "Sm: unbekannter Fall");
+            OSL_ENSURE(FALSE, "Sm: unknown case");
     }
 
     // check if horizontal position is already set
@@ -386,7 +386,7 @@ const Point SmRect::AlignTo(const SmRect &rRect, RectPos ePos,
                 aPos.Y() += rRect.GetLoAttrFence() - GetTop();
                 break;
         default :
-                DBG_ASSERT(FALSE, "Sm: unbekannter Fall");
+                OSL_ENSURE(FALSE, "Sm: unknown case");
         }
 
     // check if vertical position is already set
@@ -403,7 +403,7 @@ const Point SmRect::AlignTo(const SmRect &rRect, RectPos ePos,
                 aPos.X() += rRect.GetItalicRight() - GetItalicRight();
                 break;
             default :
-                DBG_ASSERT(FALSE, "Sm: unbekannter Fall");
+                OSL_ENSURE(FALSE, "Sm: unknown case");
         }
 
     return aPos;
@@ -476,7 +476,7 @@ SmRect & SmRect::ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode)
         nAlignB = Max(GetAlignB(), rRect.GetAlignB());
         nHiAttrFence = Min(GetHiAttrFence(), rRect.GetHiAttrFence());
         nLoAttrFence = Max(GetLoAttrFence(), rRect.GetLoAttrFence());
-        DBG_ASSERT(HasAlignInfo(), "Sm: ooops...");
+        OSL_ENSURE(HasAlignInfo(), "Sm: ooops...");
 
         switch (eCopyMode)
         {   case RCP_THIS:
@@ -494,7 +494,7 @@ SmRect & SmRect::ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode)
                     CopyMBL(rRect);
                 break;
             default :
-                DBG_ASSERT(FALSE, "Sm: unbekannter Fall");
+                OSL_ENSURE(FALSE, "Sm: unknown case");
         }
     }
 
@@ -509,7 +509,7 @@ SmRect & SmRect::ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode,
     // align eg "{a over b} over c" correctly where AlignM should not
     // be (AlignT + AlignB) / 2)
 {
-    DBG_ASSERT(HasAlignInfo(), "Sm: keine Align Info");
+    OSL_ENSURE(HasAlignInfo(), "Sm: no align info");
 
     ExtendBy(rRect, eCopyMode);
     nAlignM = nNewAlignM;
@@ -743,7 +743,7 @@ BOOL SmGetGlyphBoundRect(const OutputDevice &rDev,
                 aTmp;
 
     BOOL bSuccess = pGlyphDev->GetTextBoundRect(aTmp, rText, 0, 0);
-    DBG_ASSERT( bSuccess, "GetTextBoundRect failed" );
+    OSL_ENSURE( bSuccess, "GetTextBoundRect failed" );
 
 
     if (!aTmp.IsEmpty())

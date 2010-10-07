@@ -51,7 +51,7 @@ one go*/
 #include <rtl/math.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/docfile.hxx>
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <tools/urlobj.hxx>
 #include <svtools/sfxecode.hxx>
 #include <unotools/saveopt.hxx>
@@ -99,13 +99,13 @@ ULONG SmXMLImportWrapper::Import(SfxMedium &rMedium)
 
     uno::Reference<lang::XMultiServiceFactory> xServiceFactory(
         utl::getProcessServiceFactory());
-    DBG_ASSERT(xServiceFactory.is(), "XMLReader::Read: got no service manager");
+    OSL_ENSURE(xServiceFactory.is(), "XMLReader::Read: got no service manager");
     if ( !xServiceFactory.is() )
         return nError;
 
     //Make a model component from our SmModel
     uno::Reference< lang::XComponent > xModelComp( xModel, uno::UNO_QUERY );
-    DBG_ASSERT( xModelComp.is(), "XMLReader::Read: got no model" );
+    OSL_ENSURE( xModelComp.is(), "XMLReader::Read: got no model" );
 
     // try to get an XStatusIndicator from the Medium
     uno::Reference<task::XStatusIndicator> xStatusIndicator;
@@ -120,7 +120,7 @@ ULONG SmXMLImportWrapper::Import(SfxMedium &rMedium)
             static_cast<SmDocShell*>(pModel->GetObjectShell()) : 0;
     if (pDocShell)
     {
-        DBG_ASSERT( pDocShell->GetMedium() == &rMedium,
+        OSL_ENSURE( pDocShell->GetMedium() == &rMedium,
                 "different SfxMedium found" );
 
         SfxItemSet* pSet = rMedium.GetItemSet();
@@ -260,10 +260,10 @@ ULONG SmXMLImportWrapper::ReadThroughComponent(
     sal_Bool bEncrypted )
 {
     ULONG nError = ERRCODE_SFX_DOLOADFAILED;
-    DBG_ASSERT(xInputStream.is(), "input stream missing");
-    DBG_ASSERT(xModelComponent.is(), "document missing");
-    DBG_ASSERT(rFactory.is(), "factory missing");
-    DBG_ASSERT(NULL != pFilterName,"I need a service name for the component!");
+    OSL_ENSURE(xInputStream.is(), "input stream missing");
+    OSL_ENSURE(xModelComponent.is(), "document missing");
+    OSL_ENSURE(rFactory.is(), "factory missing");
+    OSL_ENSURE(NULL != pFilterName,"I need a service name for the component!");
 
     // prepare ParserInputSrouce
     xml::sax::InputSource aParserInput;
@@ -274,7 +274,7 @@ ULONG SmXMLImportWrapper::ReadThroughComponent(
         rFactory->createInstance(
             OUString::createFromAscii("com.sun.star.xml.sax.Parser") ),
         UNO_QUERY );
-    DBG_ASSERT( xParser.is(), "Can't create parser" );
+    OSL_ENSURE( xParser.is(), "Can't create parser" );
     if ( !xParser.is() )
         return nError;
 
@@ -286,7 +286,7 @@ ULONG SmXMLImportWrapper::ReadThroughComponent(
         rFactory->createInstanceWithArguments(
             OUString::createFromAscii(pFilterName), aArgs ),
         UNO_QUERY );
-    DBG_ASSERT( xFilter.is(), "Can't instantiate filter component." );
+    OSL_ENSURE( xFilter.is(), "Can't instantiate filter component." );
     if ( !xFilter.is() )
         return nError;
 
@@ -364,8 +364,8 @@ ULONG SmXMLImportWrapper::ReadThroughComponent(
     Reference<beans::XPropertySet> & rPropSet,
     const sal_Char* pFilterName )
 {
-    DBG_ASSERT(xStorage.is(), "Need storage!");
-    DBG_ASSERT(NULL != pStreamName, "Please, please, give me a name!");
+    OSL_ENSURE(xStorage.is(), "Need storage!");
+    OSL_ENSURE(NULL != pStreamName, "Please, please, give me a name!");
 
     // open stream (and set parser input)
     OUString sStreamName = OUString::createFromAscii(pStreamName);
@@ -599,7 +599,7 @@ void SmXMLImport::endDocument(void)
 
             pDocShell->SetText( aText );
         }
-        DBG_ASSERT(pModel,"So there *was* a uno problem after all");
+        OSL_ENSURE(pModel,"So there *was* a uno problem after all");
 
         bSuccess = sal_True;
     }
@@ -1463,7 +1463,7 @@ public:
 void SmXMLSubContext_Impl::GenericEndElement(SmTokenType eType, SmSubSup eSubSup)
 {
     /*The <msub> element requires exactly 2 arguments.*/
-    DBG_ASSERT(GetSmImport().GetNodeStack().Count() - nElementCount == 2,
+    OSL_ENSURE(GetSmImport().GetNodeStack().Count() - nElementCount == 2,
         "Sub has not two arguments");
     SmToken aToken;
     aToken.cMathChar = '\0';
@@ -1522,7 +1522,7 @@ void SmXMLSubSupContext_Impl::GenericEndElement(SmTokenType eType,
         SmSubSup aSub,SmSubSup aSup)
 {
     /*The <msub> element requires exactly 3 arguments.*/
-    DBG_ASSERT(GetSmImport().GetNodeStack().Count() - nElementCount == 3,
+    OSL_ENSURE(GetSmImport().GetNodeStack().Count() - nElementCount == 3,
         "SubSup has not three arguments");
 
     SmToken aToken;
@@ -1571,7 +1571,7 @@ void SmXMLUnderContext_Impl::StartElement(const uno::Reference<
 
 void SmXMLUnderContext_Impl::HandleAccent()
 {
-    DBG_ASSERT(GetSmImport().GetNodeStack().Count() - nElementCount == 2,
+    OSL_ENSURE(GetSmImport().GetNodeStack().Count() - nElementCount == 2,
         "Sub has not two arguments");
 
     /*Just one special case for the underline thing*/
@@ -1647,7 +1647,7 @@ void SmXMLOverContext_Impl::EndElement()
 
 void SmXMLOverContext_Impl::HandleAccent()
 {
-    DBG_ASSERT(GetSmImport().GetNodeStack().Count() - nElementCount == 2,
+    OSL_ENSURE(GetSmImport().GetNodeStack().Count() - nElementCount == 2,
         "Sub has not two arguments");
     SmToken aToken;
     aToken.cMathChar = '\0';
@@ -2202,7 +2202,7 @@ void SmXMLFracContext_Impl::EndElement()
     SmStructureNode *pSNode = new SmBinVerNode(aToken);
     SmNode *pOper = new SmRectangleNode(aToken);
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
-    DBG_ASSERT(rNodeStack.Count() - nElementCount == 2,
+    OSL_ENSURE(rNodeStack.Count() - nElementCount == 2,
         "Fraction (mfrac) tag is missing component");
     if (rNodeStack.Count() - nElementCount == 2)
     {
@@ -2216,7 +2216,7 @@ void SmXMLFracContext_Impl::EndElement()
 void SmXMLRootContext_Impl::EndElement()
 {
     /*The <mroot> element requires exactly 2 arguments.*/
-    DBG_ASSERT(GetSmImport().GetNodeStack().Count() - nElementCount == 2,
+    OSL_ENSURE(GetSmImport().GetNodeStack().Count() - nElementCount == 2,
         "Root tag is missing component");
 
     SmToken aToken;
@@ -2454,7 +2454,7 @@ void SmXMLMultiScriptsContext_Impl::MiddleElement()
 {
     bHasPrescripts=sal_True;
 
-    DBG_ASSERT(GetSmImport().GetNodeStack().Count() - nElementCount > 0,
+    OSL_ENSURE(GetSmImport().GetNodeStack().Count() - nElementCount > 0,
         "Sub has no arguments");
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
     if (rNodeStack.Count()-nElementCount > 1)

@@ -159,7 +159,7 @@ void SmGraphicWindow::MouseButtonDown(const MouseEvent& rMEvt)
     // set formula-cursor and selection of edit window according to the
     // position clicked at
     //
-    DBG_ASSERT(rMEvt.GetClicks() > 0, "Sm : 0 clicks");
+    OSL_ENSURE(rMEvt.GetClicks() > 0, "Sm : 0 clicks");
     if ( rMEvt.IsLeft() && pViewShell->GetEditWindow() )
     {
         const SmNode *pTree = pViewShell->GetDoc()->GetFormulaTree();
@@ -294,7 +294,7 @@ const SmNode * SmGraphicWindow::SetCursorPos(USHORT nRow, USHORT nCol)
 
 void SmGraphicWindow::Paint(const Rectangle&)
 {
-    DBG_ASSERT(pViewShell, "Sm : NULL pointer");
+    OSL_ENSURE(pViewShell, "Sm : NULL pointer");
 
     SmDocShell &rDoc = *pViewShell->GetDoc();
     Point aPoint;
@@ -353,7 +353,7 @@ void SmGraphicWindow::Command(const CommandEvent& rCEvt)
                 Point aPos(5, 5);
                 if (rCEvt.IsMouseEvent())
                     aPos = rCEvt.GetMousePosPixel();
-                DBG_ASSERT( pViewShell, "view shell missing" );
+                OSL_ENSURE( pViewShell, "view shell missing" );
 
                 // added for replaceability of context menus #96085, #93782
                 pViewShell->GetViewFrame()->GetBindings().GetDispatcher()
@@ -1141,7 +1141,7 @@ void SmViewShell::Impl_Print(
 USHORT SmViewShell::Print(SfxProgress & /*rProgress*/, BOOL /*bIsAPI*/, PrintDialog * /*pPrintDialog*/)
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::Print" );
-    DBG_ASSERT( 0, "SmViewShell::Print: no longer used with new UI print dialog. Should be removed!!" );
+    OSL_ENSURE( 0, "SmViewShell::Print: no longer used with new UI print dialog. Should be removed!!" );
     return 0;
 }
 
@@ -1195,7 +1195,7 @@ SmEditWindow *SmViewShell::GetEditWindow()
     if (pWrapper != NULL)
     {
         SmEditWindow *pEditWin  = pWrapper->GetEditWindow();
-        DBG_ASSERT( pEditWin, "SmEditWindow missing" );
+        OSL_ENSURE( pEditWin, "SmEditWindow missing" );
         return pEditWin;
     }
 
@@ -1216,7 +1216,7 @@ void SmViewShell::ShowError( const SmErrorDesc *pErrorDesc )
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::ShowError" );
 
-    DBG_ASSERT(GetDoc(), "Sm : Document missing");
+    OSL_ENSURE(GetDoc(), "Sm : Document missing");
     if (pErrorDesc || 0 != (pErrorDesc = GetDoc()->GetParser().GetError(0)) )
     {
         SetStatusText( pErrorDesc->Text );
@@ -1230,7 +1230,7 @@ void SmViewShell::NextError()
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::NextError" );
 
-    DBG_ASSERT(GetDoc(), "Sm : Document missing");
+    OSL_ENSURE(GetDoc(), "Sm : Document missing");
     const SmErrorDesc   *pErrorDesc = GetDoc()->GetParser().NextError();
 
     if (pErrorDesc)
@@ -1242,7 +1242,7 @@ void SmViewShell::PrevError()
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::PrevError" );
 
-    DBG_ASSERT(GetDoc(), "Sm : Document missing");
+    OSL_ENSURE(GetDoc(), "Sm : Document missing");
     const SmErrorDesc   *pErrorDesc = GetDoc()->GetParser().PrevError();
 
     if (pErrorDesc)
@@ -1401,7 +1401,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
             break;
 
         case SID_ZOOMOUT:
-            DBG_ASSERT(aGraphic.GetZoom() >= 25, "Sm: falsches USHORT Argument");
+            OSL_ENSURE(aGraphic.GetZoom() >= 25, "Sm: incorrect USHORT argument");
             aGraphic.SetZoom(aGraphic.GetZoom() - 25);
             break;
 
@@ -1596,7 +1596,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
                     if(pFact)
                     {
                         pDlg = pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aSet);
-                        DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                        OSL_ENSURE(pDlg, "Dialogdiet fail!");
                     }
                     pDlg->SetLimits( MINZOOM, MAXZOOM );
                     if( pDlg->Execute() != RET_CANCEL )
@@ -1653,7 +1653,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
             OutputDevice *pDev = pDoc->GetPrinter();
             if (!pDev || pDev->GetDevFontCount() == 0)
                 pDev = &SM_MOD()->GetDefaultVirtualDev();
-            DBG_ASSERT (pDev, "device for font list missing" );
+            OSL_ENSURE (pDev, "device for font list missing" );
 
             SmModule *pp = SM_MOD();
             SmSymbolDialog( NULL, pDev, pp->GetSymbolManager(), *this ).Execute();
@@ -1816,8 +1816,8 @@ void SmViewShell::Activate( BOOL bIsMDIActivate )
 
 IMPL_LINK( SmViewShell, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
 {
-    DBG_ASSERT( _pFileDlg, "SmViewShell::DialogClosedHdl(): no file dialog" );
-    DBG_ASSERT( pImpl->pDocInserter, "ScDocShell::DialogClosedHdl(): no document inserter" );
+    OSL_ENSURE( _pFileDlg, "SmViewShell::DialogClosedHdl(): no file dialog" );
+    OSL_ENSURE( pImpl->pDocInserter, "ScDocShell::DialogClosedHdl(): no document inserter" );
 
     if ( ERRCODE_NONE == _pFileDlg->GetError() )
     {

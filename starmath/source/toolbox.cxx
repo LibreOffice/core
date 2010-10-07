@@ -208,7 +208,7 @@ const ImageList * SmToolBoxWindow::GetImageList( USHORT nResId, BOOL bHighContra
         pIL = pImgList[ nIndex ];
     }
 
-    DBG_ASSERT( pIL, "image list not found!" );
+    OSL_ENSURE( pIL, "image list not found!" );
     return pIL;
 }
 
@@ -219,7 +219,7 @@ void SmToolBoxWindow::ApplyImageLists( USHORT nCategoryRID )
 
     // set image list for toolbox 'catalog'
     const ImageList *pImageList = GetImageList( bHighContrast ? RID_ILH_CATALOG : RID_IL_CATALOG, bHighContrast );
-    DBG_ASSERT( pImageList, "image list missing" );
+    OSL_ENSURE( pImageList, "image list missing" );
     if (pImageList)
         aToolBoxCat.SetImageList( *pImageList );
 
@@ -227,7 +227,7 @@ void SmToolBoxWindow::ApplyImageLists( USHORT nCategoryRID )
     sal_Int16 nIdx = GetToolBoxCategoriesIndex( nCategoryRID );
     USHORT nResId = GetImageListRID( nCategoryRID, bHighContrast );
     pImageList = GetImageList( nResId, bHighContrast );
-    DBG_ASSERT( pImageList && nIdx >= 0, "image list or index missing" );
+    OSL_ENSURE( pImageList && nIdx >= 0, "image list or index missing" );
     if (pImageList && nIdx >= 0)
         vToolBoxCategories[ nIdx ]->SetImageList( *pImageList );
 }
@@ -260,7 +260,7 @@ void SmToolBoxWindow::AdjustPosSize( BOOL bSetPos )
 {
     Size aCatSize( aToolBoxCat.CalcWindowSizePixel( 2 ) );
     Size aCmdSize( pToolBoxCmd->CalcWindowSizePixel( 5 ) );
-    DBG_ASSERT( aCatSize.Width() == aCmdSize.Width(), "width mismatch" );
+    OSL_ENSURE( aCatSize.Width() == aCmdSize.Width(), "width mismatch" );
 
     // catalog settings
     aToolBoxCat.SetPosPixel( Point(0, 3) );
@@ -286,7 +286,7 @@ void SmToolBoxWindow::AdjustPosSize( BOOL bSetPos )
     if (bSetPos)
     {
         SmViewShell *pView = GetView();
-        DBG_ASSERT( pView, "view shell missing" );
+        OSL_ENSURE( pView, "view shell missing" );
         Point aPos( 50, 75 );
         if (pView)
         {
@@ -347,14 +347,14 @@ void SmToolBoxWindow::SetCategory(USHORT nCategoryRID)
         pToolBoxCmd->Hide();
 
         sal_Int16 nIdx = GetToolBoxCategoriesIndex( nCategoryRID );
-        DBG_ASSERT( nIdx >= 0, "unkown category" );
+        OSL_ENSURE( nIdx >= 0, "unkown category" );
         if (nIdx >= 0)
             pToolBoxCmd = vToolBoxCategories[nIdx];
 
         // calculate actual size of window to use
         Size aCatSize( aToolBoxCat.CalcWindowSizePixel( 2 ) );
         Size aCmdSize( pToolBoxCmd->CalcWindowSizePixel( nLines ) );
-        DBG_ASSERT( aCatSize.Width() == aCmdSize.Width(), "width mismatch" );
+        OSL_ENSURE( aCatSize.Width() == aCmdSize.Width(), "width mismatch" );
         // main window settings
         Size  aWndSize ( aCatSize.Width(), pToolBoxCmd->GetPosPixel().Y() + aCmdSize.Height() + 3);
         SetOutputSizePixel( aWndSize );

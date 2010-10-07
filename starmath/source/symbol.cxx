@@ -184,7 +184,7 @@ const SymbolPtrVec_t SmSymbolManager::GetSymbols() const
     SymbolMap_t::const_iterator aIt( m_aSymbols.begin() );
     for ( ; aIt != m_aSymbols.end(); ++aIt)
         aRes.push_back( &aIt->second );
-//    DBG_ASSERT( sSymbols.size() == m_aSymbols.size(), "number of symbols mismatch " );
+//    OSL_ENSURE( sSymbols.size() == m_aSymbols.size(), "number of symbols mismatch " );
     return aRes;
 }
 
@@ -208,11 +208,11 @@ bool SmSymbolManager::AddOrReplaceSymbol( const SmSym &rSymbol, bool bForceChang
         else if (pFound && !bForceChange && bSymbolConflict)
         {
                 // TODO: but what ...
-                DBG_ASSERT( 0, "symbol conflict, different symbol with same name found!" );
+                OSL_ENSURE( 0, "symbol conflict, different symbol with same name found!" );
         }
     }
 
-    DBG_ASSERT( bAdded, "failed to add symbol" );
+    OSL_ENSURE( bAdded, "failed to add symbol" );
     if (bAdded)
         m_bModified = true;
 
@@ -268,7 +268,7 @@ void SmSymbolManager::Load()
     for (size_t i = 0;  i < nSymbolCount;  ++i)
     {
         const SmSym &rSym = aSymbols[i];
-        DBG_ASSERT( rSym.GetName().Len() > 0, "symbol without name!" );
+        OSL_ENSURE( rSym.GetName().Len() > 0, "symbol without name!" );
         if (rSym.GetName().Len() > 0)
             AddOrReplaceSymbol( rSym );
     }
@@ -292,7 +292,7 @@ void SmSymbolManager::Load()
         // make the new symbol a copy but with ITALIC_NORMAL, and add it to iGreek
         const SmSym &rSym = *aGreekSymbols[i];
         Font aFont( rSym.GetFace() );
-        DBG_ASSERT( aFont.GetItalic() == ITALIC_NONE, "expected Font with ITALIC_NONE, failed." );
+        OSL_ENSURE( aFont.GetItalic() == ITALIC_NONE, "expected Font with ITALIC_NONE, failed." );
         aFont.SetItalic( ITALIC_NORMAL );
         String aSymbolName( (sal_Unicode)'i' );
         aSymbolName += rSym.GetName();
