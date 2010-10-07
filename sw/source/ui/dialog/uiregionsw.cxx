@@ -935,7 +935,7 @@ IMPL_LINK( SwEditRegionDlg, ChangeProtectHdl, TriStateBox *, pBox )
         return 0;
     pBox->EnableTriState( FALSE );
     SvLBoxEntry* pEntry=aTree.FirstSelected();
-    DBG_ASSERT(pEntry,"kein Entry gefunden");
+    OSL_ENSURE(pEntry,"no entry found");
     BOOL bCheck = STATE_CHECK == pBox->GetState();
     while( pEntry )
     {
@@ -964,7 +964,7 @@ IMPL_LINK( SwEditRegionDlg, ChangeHideHdl, TriStateBox *, pBox )
         return 0;
     pBox->EnableTriState( FALSE );
     SvLBoxEntry* pEntry=aTree.FirstSelected();
-    DBG_ASSERT(pEntry,"kein Entry gefunden");
+    OSL_ENSURE(pEntry,"no entry found");
     while( pEntry )
     {
         SectReprPtr pRepr = (SectReprPtr) pEntry->GetUserData();
@@ -997,7 +997,7 @@ IMPL_LINK( SwEditRegionDlg, ChangeEditInReadonlyHdl, TriStateBox *, pBox )
         return 0;
     pBox->EnableTriState( FALSE );
     SvLBoxEntry* pEntry=aTree.FirstSelected();
-    DBG_ASSERT(pEntry,"kein Entry gefunden");
+    OSL_ENSURE(pEntry,"no entry found");
     while( pEntry )
     {
         SectReprPtr pRepr = (SectReprPtr) pEntry->GetUserData();
@@ -1283,7 +1283,7 @@ IMPL_LINK( SwEditRegionDlg, FileNameHdl, Edit *, pEdit )
         return 0;
     pEdit->SetSelection(aSelect);
     SvLBoxEntry* pEntry=aTree.FirstSelected();
-    DBG_ASSERT(pEntry,"kein Entry gefunden");
+    OSL_ENSURE(pEntry,"no entry found");
     SectReprPtr pSectRepr = (SectRepr*)pEntry->GetUserData();
     if(pEdit == &aFileNameED)
     {
@@ -1391,7 +1391,7 @@ IMPL_LINK( SwEditRegionDlg, ChangePasswdHdl, Button *, pBox )
     }
     SvLBoxEntry* pEntry=aTree.FirstSelected();
     sal_Bool bSet = bChange ? bChange : aPasswdCB.IsChecked();
-    DBG_ASSERT(pEntry,"kein Entry gefunden");
+    OSL_ENSURE(pEntry,"no entry found");
     while( pEntry )
     {
         SectReprPtr pRepr = (SectReprPtr)pEntry->GetUserData();
@@ -1443,7 +1443,7 @@ IMPL_LINK( SwEditRegionDlg, NameEditHdl, Edit *, EMPTYARG )
     if(!CheckPasswd(0))
         return 0;
     SvLBoxEntry* pEntry=aTree.FirstSelected();
-    DBG_ASSERT(pEntry,"kein Entry gefunden");
+    OSL_ENSURE(pEntry,"no entry found");
     if (pEntry)
     {
         String  aName = aCurName.GetText();
@@ -1466,7 +1466,7 @@ IMPL_LINK( SwEditRegionDlg, ConditionEditHdl, Edit *, pEdit )
         return 0;
     pEdit->SetSelection(aSelect);
     SvLBoxEntry* pEntry = aTree.FirstSelected();
-    DBG_ASSERT(pEntry,"kein Entry gefunden");
+    OSL_ENSURE(pEntry,"no entry found");
     while( pEntry )
     {
         SectReprPtr pRepr = (SectReprPtr)pEntry->GetUserData();
@@ -1495,7 +1495,7 @@ IMPL_LINK( SwEditRegionDlg, DlgClosedHdl, sfx2::FileDialogHelper *, _pFileDlg )
     }
 
     SvLBoxEntry* pEntry = aTree.FirstSelected();
-    DBG_ASSERT( pEntry, "no entry found" );
+    OSL_ENSURE( pEntry, "no entry found" );
     if ( pEntry )
     {
         SectReprPtr pSectRepr = (SectRepr*)pEntry->GetUserData();
@@ -1583,7 +1583,7 @@ SwInsertSectionTabDialog::SwInsertSectionTabDialog(
     GetOKButton().SetText(sInsert);
     FreeResource();
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialogdiet fail!");
+    OSL_ENSURE(pFact, "Dialogdiet fail!");
     AddTabPage(TP_INSERT_SECTION, SwInsertSectionTabPage::Create, 0);
     AddTabPage(TP_COLUMN,   SwColumnPage::Create,    0);
     AddTabPage(TP_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0);
@@ -1646,7 +1646,7 @@ void SwInsertSectionTabDialog::SetSectionData(SwSectionData const& rSect)
 short   SwInsertSectionTabDialog::Ok()
 {
     short nRet = SfxTabDialog::Ok();
-    DBG_ASSERT(m_pSectionData.get(),
+    OSL_ENSURE(m_pSectionData.get(),
             "SwInsertSectionTabDialog: no SectionData?");
     const SfxItemSet* pOutputItemSet = GetOutputItemSet();
     rWrtSh.InsertSection(*m_pSectionData, pOutputItemSet);
@@ -2317,7 +2317,7 @@ SwSectionPropertyTabDialog::SwSectionPropertyTabDialog(
 {
     FreeResource();
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialogdiet fail!");
+    OSL_ENSURE(pFact, "Dialogdiet fail!");
     AddTabPage(TP_COLUMN,   SwColumnPage::Create,    0);
     AddTabPage(TP_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0 );
     AddTabPage(TP_SECTION_FTNENDNOTES, SwSectionFtnEndTabPage::Create, 0);

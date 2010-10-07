@@ -290,7 +290,7 @@ BOOL  SwFldMgr::CanInsertRefMark( const String& rStr )
 {
     BOOL bRet = FALSE;
     SwWrtShell *pSh = pWrtShell ? pWrtShell : lcl_GetShell();
-    DBG_ASSERT(pSh, "no SwWrtShell found");
+    OSL_ENSURE(pSh, "no SwWrtShell found");
     if(pSh)
     {
         USHORT nCnt = pSh->GetCrsrCnt();
@@ -311,7 +311,7 @@ BOOL  SwFldMgr::CanInsertRefMark( const String& rStr )
 void SwFldMgr::RemoveFldType(USHORT nResId, const String& rName )
 {
     SwWrtShell * pSh = pWrtShell ? pWrtShell : lcl_GetShell();
-    DBG_ASSERT(pSh, "no SwWrtShell found");
+    OSL_ENSURE(pSh, "no SwWrtShell found");
     if( pSh )
         pSh->RemoveFldType(nResId, rName);
 }
@@ -319,7 +319,7 @@ void SwFldMgr::RemoveFldType(USHORT nResId, const String& rName )
 USHORT SwFldMgr::GetFldTypeCount(USHORT nResId) const
 {
     SwWrtShell * pSh = pWrtShell ? pWrtShell : lcl_GetShell();
-    DBG_ASSERT(pSh, "no SwWrtShell found");
+    OSL_ENSURE(pSh, "no SwWrtShell found");
     return pSh ? pSh->GetFldTypeCount(nResId) : 0;
 }
 
@@ -327,7 +327,7 @@ USHORT SwFldMgr::GetFldTypeCount(USHORT nResId) const
 SwFieldType* SwFldMgr::GetFldType(USHORT nResId, USHORT nId) const
 {
     SwWrtShell * pSh = pWrtShell ? pWrtShell : lcl_GetShell();
-    DBG_ASSERT(pSh, "no SwWrtShell found");
+    OSL_ENSURE(pSh, "no SwWrtShell found");
     return pSh ? pSh->GetFldType(nId, nResId) : 0;
 }
 
@@ -335,7 +335,7 @@ SwFieldType* SwFldMgr::GetFldType(USHORT nResId, USHORT nId) const
 SwFieldType* SwFldMgr::GetFldType(USHORT nResId, const String& rName) const
 {
     SwWrtShell * pSh = pWrtShell ? pWrtShell : lcl_GetShell();
-    DBG_ASSERT(pSh, "no SwWrtShell found");
+    OSL_ENSURE(pSh, "no SwWrtShell found");
     return pSh ? pSh->GetFldType(nResId, rName) : 0;
 }
 
@@ -509,7 +509,7 @@ BOOL SwFldMgr::GetSubTypes(USHORT nTypeId, SvStringsDtor& rToFill)
 {
     BOOL bRet = FALSE;
     SwWrtShell *pSh = pWrtShell ? pWrtShell : lcl_GetShell();
-    DBG_ASSERT(pSh, "no SwWrtShell found");
+    OSL_ENSURE(pSh, "no SwWrtShell found");
     if(pSh)
     {
         const USHORT nPos = GetPos(nTypeId);
@@ -836,7 +836,7 @@ BOOL SwFldMgr::GoNextPrev( BOOL bNext, SwFieldType* pTyp )
 void SwFldMgr::InsertFldType(SwFieldType& rType)
 {
     SwWrtShell* pSh = pWrtShell ? pWrtShell : ::lcl_GetShell();
-    DBG_ASSERT(pSh, "no SwWrtShell found");
+    OSL_ENSURE(pSh, "no SwWrtShell found");
     if(pSh)
         pSh->InsertFldType(rType);
 }
@@ -868,7 +868,7 @@ BOOL SwFldMgr::InsertFld(  const SwInsertFld_Data& rData )
     SwWrtShell* pCurShell = rData.pSh;
     if(!pCurShell)
         pCurShell = pWrtShell ? pWrtShell : ::lcl_GetShell();
-    DBG_ASSERT(pCurShell, "no SwWrtShell found");
+    OSL_ENSURE(pCurShell, "no SwWrtShell found");
     if(!pCurShell)
         return FALSE;
 
@@ -1443,7 +1443,7 @@ void SwFldMgr::UpdateCurFld(ULONG nFormat,
     const USHORT nTypeId = pTmpFld->GetTypeId();
 
     SwWrtShell* pSh = pWrtShell ? pWrtShell : ::lcl_GetShell();
-    DBG_ASSERT(pSh, "no SwWrtShell found");
+    OSL_ENSURE(pSh, "no SwWrtShell found");
     if(!pSh)
         return;
     pSh->StartAllAction();
@@ -1786,7 +1786,7 @@ Reference<XNumberingTypeInfo> SwFldMgr::GetNumberingInfo() const
             ::rtl::OUString::createFromAscii(
                             "com.sun.star.text.DefaultNumberingProvider" ));
         Reference<XDefaultNumberingProvider> xDefNum(xI, UNO_QUERY);
-        DBG_ASSERT(xDefNum.is(), "service missing: \"com.sun.star.text.DefaultNumberingProvider\"");
+        OSL_ENSURE(xDefNum.is(), "service missing: \"com.sun.star.text.DefaultNumberingProvider\"");
         ((SwFldMgr*)this)->xNumberingInfo = Reference<XNumberingTypeInfo>(xDefNum, UNO_QUERY);
     }
     return xNumberingInfo;
