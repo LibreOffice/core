@@ -70,3 +70,10 @@ all:
 
 .INCLUDE :	target.mk
 
+ALLTAR : $(MISC)/javaloader.component
+
+$(MISC)/javaloader.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        javaloader.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_URE_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt javaloader.component
