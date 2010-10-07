@@ -34,6 +34,9 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/XFramesSupplier.hpp>
+#include <com/sun/star/container/XChild.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -652,7 +655,51 @@ void SmCmdBoxWindow::StateChanged( StateChangedType nStateChange )
 
 IMPL_LINK( SmCmdBoxWindow, InitialFocusTimerHdl, Timer *, EMPTYARG /*pTimer*/ )
 {
-    aEdit.GrabFocus();
+    // We want to have the focus in the edit window once Math has been opened
+    // to allow for immediate typing.
+    // Problem: There is no proper way to do this
+    // Thus: this timer based soultion has been implemented (see GrabFocus below)
+    //
+    // Follow-up problem (#i114910): grabing the focus may bust the help system since
+    // it relies on getting the current frame which conflicts with grabbing the focus.
+    // Thus aside from the 'GrabFocus' call everything else is to get the
+    // help reliably working despite using 'GrabFocus'.
+
+    try
+    {
+        uno::Reference< frame::XDesktop > xDesktop;
+        uno::Reference< lang::XMultiServiceFactory > xSMGR( comphelper::getProcessServiceFactory() );
+        if (xSMGR.is())
+        {
+            xDesktop = uno::Reference< frame::XDesktop >(
+                xSMGR->createInstance( rtl::OUString::createFromAscii( "com.sun.star.frame.Desktop" )), uno::UNO_QUERY_THROW );
+        }
+
+        aEdit.GrabFocus();
+
+        if (xDesktop.is())
+        {
+            bool bInPlace = GetView()->GetViewFrame()->GetFrame().IsInPlace();
+            uno::Reference< frame::XFrame > xFrame( GetBindings().GetDispatcher()->GetFrame()->GetFrame().GetFrameInterface());
+            if ( bInPlace )
+            {
+                uno::Reference< container::XChild > xModel( GetView()->GetDoc()->GetModel(), uno::UNO_QUERY_THROW );
+                uno::Reference< frame::XModel > xParent( xModel->getParent(), uno::UNO_QUERY_THROW );
+                uno::Reference< frame::XController > xParentCtrler( xParent->getCurrentController() );
+                uno::Reference< frame::XFramesSupplier > xParentFrame( xParentCtrler->getFrame(), uno::UNO_QUERY_THROW );
+                xParentFrame->setActiveFrame( xFrame );
+            }
+            else
+            {
+                uno::Reference< frame::XFramesSupplier > xFramesSupplier( xDesktop, uno::UNO_QUERY );
+                xFramesSupplier->setActiveFrame( xFrame );
+            }
+        }
+    }
+    catch (uno::Exception &)
+    {
+        DBG_ASSERT( 0, "failed to properly set initial focus to edit window" );
+    }
     return 0;
 }
 
