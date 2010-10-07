@@ -183,7 +183,7 @@ start:
 
         case SbxBYREF | SbxCHAR:
             nRes = *p->pChar; break;
-        // ab hier wird getestet
+        // from here on will be tested
         case SbxBYREF | SbxBYTE:
             aTmp.nByte = *p->pByte; goto ref;
         case SbxBYREF | SbxINTEGER:
@@ -252,7 +252,7 @@ start:
             ImpCreateDecimal( p )->setChar( n );
             break;
 
-        // ab hier wird getestet
+        // from here on will be tested
         case SbxBYTE:
             aTmp.pByte = &p->nByte; goto direct;
         case SbxULONG:

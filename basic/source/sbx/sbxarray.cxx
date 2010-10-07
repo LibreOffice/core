@@ -33,10 +33,10 @@
 #include <vector>
 using namespace std;
 
-struct SbxDim {                 // eine Array-Dimension:
+struct SbxDim {                 // an array-dimension:
     SbxDim* pNext;              // Link
-    INT32 nLbound, nUbound;     // Begrenzungen
-    INT32 nSize;                // Anzahl Elemente
+    INT32 nLbound, nUbound;     // Limitations
+    INT32 nSize;                // Number of elements
 };
 
 class SbxVarEntry : public SbxVariableRef {
@@ -99,7 +99,7 @@ SbxArray& SbxArray::operator=( const SbxArray& rArray )
             if( pSrcRef->pAlias )
                 pDstRef->pAlias = new XubString( *pSrcRef->pAlias );
             if( eType != SbxVARIANT )
-                // Keine Objekte konvertieren
+                // Convert no objects
                 if( eType != SbxOBJECT || pSrc_->GetClass() != SbxCLASS_OBJECT )
                     ((SbxVariable*) pSrc_)->Convert( eType );
             pData->push_back( pDstRef );
@@ -149,7 +149,7 @@ USHORT SbxArray::Count() const
 
 SbxVariableRef& SbxArray::GetRef32( UINT32 nIdx )
 {
-    // Array ggf. vergroessern
+    // If necessary extend the array
     DBG_ASSERT( nIdx <= SBX_MAXINDEX32, "SBX: Array-Index > SBX_MAXINDEX32" );
     // Very Hot Fix
     if( nIdx > SBX_MAXINDEX32 )
@@ -167,7 +167,7 @@ SbxVariableRef& SbxArray::GetRef32( UINT32 nIdx )
 
 SbxVariableRef& SbxArray::GetRef( USHORT nIdx )
 {
-    // Array ggf. vergroessern
+    // If necessary extend the array
     DBG_ASSERT( nIdx <= SBX_MAXINDEX, "SBX: Array-Index > SBX_MAXINDEX" );
     // Very Hot Fix
     if( nIdx > SBX_MAXINDEX )
@@ -229,7 +229,7 @@ void SbxArray::Put32( SbxVariable* pVar, UINT32 nIdx )
     {
         if( pVar )
             if( eType != SbxVARIANT )
-                // Keine Objekte konvertieren
+                // Convert no objects
                 if( eType != SbxOBJECT || pVar->GetClass() != SbxCLASS_OBJECT )
                     pVar->Convert( eType );
         SbxVariableRef& rRef = GetRef32( nIdx );
@@ -249,7 +249,7 @@ void SbxArray::Put( SbxVariable* pVar, USHORT nIdx )
     {
         if( pVar )
             if( eType != SbxVARIANT )
-                // Keine Objekte konvertieren
+                // Convert no objects
                 if( eType != SbxOBJECT || pVar->GetClass() != SbxCLASS_OBJECT )
                     pVar->Convert( eType );
         SbxVariableRef& rRef = GetRef( nIdx );
@@ -363,8 +363,8 @@ void SbxArray::Remove( SbxVariable* pVar )
     }
 }
 
-// Uebernahme der Daten aus dem uebergebenen Array, wobei
-// gleichnamige Variable ueberschrieben werden.
+// Taking over of the data from the passed array, at which
+// the variable of the same name will be overwritten.
 
 void SbxArray::Merge( SbxArray* p )
 {
@@ -374,8 +374,8 @@ void SbxArray::Merge( SbxArray* p )
         for( UINT32 i = 0; i < nSize; i++ )
         {
             SbxVarEntryPtr pRef1 = (*(p->pData))[i];
-            // Ist das Element by name schon drin?
-            // Dann ueberschreiben!
+            // Is the element by name already inside?
+            // Then overwrite!
             SbxVariable* pVar = *pRef1;
             if( pVar )
             {
@@ -405,8 +405,8 @@ void SbxArray::Merge( SbxArray* p )
     }
 }
 
-// Suchen eines Elements ueber die Userdaten. Falls ein Element
-// ein Objekt ist, wird dieses ebenfalls durchsucht.
+// Search of an element via the user data. If the element is
+// object, it will also be scanned.
 
 SbxVariable* SbxArray::FindUserData( UINT32 nData )
 {
@@ -421,16 +421,16 @@ SbxVariable* SbxArray::FindUserData( UINT32 nData )
             {
                 p = pVar;
                 p->ResetFlag( SBX_EXTFOUND );
-                break;  // JSM 06.10.95
+                break;  // JSM 1995-10-06
             }
-            // Haben wir ein Array/Objekt mit Extended Search?
+            // Did we have an array/object with extended search?
             else if( pVar->IsSet( SBX_EXTSEARCH ) )
             {
                 switch( pVar->GetClass() )
                 {
                     case SbxCLASS_OBJECT:
                     {
-                        // Objekte duerfen ihren Parent nicht durchsuchen
+                        // Objects are not allowed to scan their parent.
                         USHORT nOld = pVar->GetFlags();
                         pVar->ResetFlag( SBX_GBLSEARCH );
                         p = ((SbxObject*) pVar)->FindUserData( nData );
@@ -453,8 +453,8 @@ SbxVariable* SbxArray::FindUserData( UINT32 nData )
     return p;
 }
 
-// Suchen eines Elements ueber den Namen und den Typ. Falls ein Element
-// ein Objekt ist, wird dieses ebenfalls durchsucht.
+// Search of an element by his name and type. If an element is an object,
+// it will also be scanned..
 
 SbxVariable* SbxArray::Find( const XubString& rName, SbxClassType t )
 {
@@ -470,8 +470,7 @@ SbxVariable* SbxArray::Find( const XubString& rName, SbxClassType t )
         SbxVariable* pVar = *pRef;
         if( pVar && pVar->IsVisible() )
         {
-            // Die ganz sichere Suche klappt auch, wenn es
-            // keinen Hascode gibt!
+            // The very secure search works as well, if there is no hashcode!
             USHORT nVarHash = pVar->GetHashCode();
             if( ( !nVarHash || nVarHash == nHash )
                 && ( t == SbxCLASS_DONTCARE || pVar->GetClass() == t )
@@ -481,14 +480,14 @@ SbxVariable* SbxArray::Find( const XubString& rName, SbxClassType t )
                 p->ResetFlag( SBX_EXTFOUND );
                 break;
             }
-            // Haben wir ein Array/Objekt mit Extended Search?
+            // Did we have an array/object with extended search?
             else if( bExtSearch && pVar->IsSet( SBX_EXTSEARCH ) )
             {
                 switch( pVar->GetClass() )
                 {
                     case SbxCLASS_OBJECT:
                     {
-                        // Objekte duerfen ihren Parent nicht durchsuchen
+                        // Objects are not allowed to scan their parent.
                         USHORT nOld = pVar->GetFlags();
                         pVar->ResetFlag( SBX_GBLSEARCH );
                         p = ((SbxObject*) pVar)->Find( rName, t );
@@ -545,7 +544,7 @@ BOOL SbxArray::StoreData( SvStream& rStrm ) const
 {
     UINT32 nElem = 0;
     UINT32 n;
-    // Welche Elemente sind ueberhaupt definiert?
+    // Which elements are even defined?
     for( n = 0; n < pData->size(); n++ )
     {
         SbxVariableRef* pRef = (*pData)[n];
@@ -630,7 +629,7 @@ void SbxDimArray::Clear()
     nDim   = 0;
 }
 
-// Dimension hinzufuegen
+// Add a dimension
 
 void SbxDimArray::AddDimImpl32( INT32 lb, INT32 ub, BOOL bAllowSize0 )
 {
@@ -675,7 +674,7 @@ void SbxDimArray::unoAddDim32( INT32 lb, INT32 ub )
 }
 
 
-// Dimensionsdaten auslesen
+// Readout dimension data
 
 BOOL SbxDimArray::GetDim32( INT32 n, INT32& rlb, INT32& rub ) const
 {
@@ -708,7 +707,7 @@ BOOL SbxDimArray::GetDim( short n, short& rlb, short& rub ) const
     return bRet;
 }
 
-// Element-Ptr anhand einer Index-Liste
+// Element-Ptr with the help of an index list
 
 UINT32 SbxDimArray::Offset32( const INT32* pIdx )
 {
@@ -779,7 +778,7 @@ void SbxDimArray::Put32( SbxVariable* p, const INT32* pIdx  )
 }
 
 
-// Element-Nr anhand eines Parameter-Arrays
+// Element-Number with the help of Parameter-Array
 
 UINT32 SbxDimArray::Offset32( SbxArray* pPar )
 {
@@ -788,7 +787,7 @@ UINT32 SbxDimArray::Offset32( SbxArray* pPar )
         SetError( SbxERR_BOUNDS ); return 0;
     }
     UINT32 nPos = 0;
-    USHORT nOff = 1;    // Nicht Element 0!
+    USHORT nOff = 1;    // Non element 0!
     for( SbxDim* p = pFirst; p && !IsError(); p = p->pNext )
     {
         INT32 nIdx = pPar->Get( nOff++ )->GetLong();

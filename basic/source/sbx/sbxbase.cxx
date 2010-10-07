@@ -36,15 +36,15 @@
 #include <basic/sbxfac.hxx>
 #include <basic/sbxbase.hxx>
 
-// AppData-Struktur fuer SBX:
+// AppData-Structure for SBX:
 
 SV_IMPL_PTRARR(SbxParams,SbxParamInfo*);
 SV_IMPL_PTRARR(SbxFacs,SbxFactory*);
 
 TYPEINIT0(SbxBase)
 
-// SBX-Daten anfordern oder ggf. anlegen
-// wir legen den Bereich einfach an und verzichten auf die Freigabe!
+// Request SBX-Data or if necessary create them
+// we just create the area and waive the release!
 
 SbxAppData* GetSbxData_Impl()
 {
@@ -159,11 +159,11 @@ void SbxBase::AddFactory( SbxFactory* pFac )
     SbxAppData* p = GetSbxData_Impl();
     const SbxFactory* pTemp = pFac;
 
-    // AB, 6.3.96: HandleLast-Flag beruecksichtigen
-    USHORT nPos = p->aFacs.Count();     // Einfuege-Position
-    if( !pFac->IsHandleLast() )         // Nur, wenn nicht selbst HandleLast
+    // From 1996-03-06: take the HandleLast-Flag into account
+    USHORT nPos = p->aFacs.Count();     // Insert-Position
+    if( !pFac->IsHandleLast() )         // Only if not self HandleLast
     {
-        // Neue Factory vor Factories mit HandleLast einordnen
+        // Rank new factory in front of factories with HandleLast
         while( nPos > 0 &&
                 (static_cast<SbxFactory*>(p->aFacs.GetObject( nPos-1 )))->IsHandleLast() )
             nPos--;
@@ -207,7 +207,7 @@ SbxBase* SbxBase::Create( UINT16 nSbxId, UINT32 nCreator )
         case SBXID_METHOD:      return new SbxMethod( aEmptyStr, SbxEMPTY );
         case SBXID_PROPERTY:    return new SbxProperty( aEmptyStr, SbxEMPTY );
     }
-    // Unbekanter Typ: Åber die Factories gehen!
+    // Unknown type: go over the factories!
     SbxAppData* p = GetSbxData_Impl();
     SbxBase* pNew = NULL;
     for( USHORT i = 0; i < p->aFacs.Count(); i++ )
@@ -252,7 +252,7 @@ SbxObject* SbxBase::CreateObject( const XubString& rClass )
 
 static BOOL bStaticEnableBroadcasting = TRUE;
 
-// Sbx-Loesung als Ersatz fuer SfxBroadcaster::Enable()
+// Sbx-Solution in exchange for SfxBroadcaster::Enable()
 void SbxBase::StaticEnableBroadcasting( BOOL bEnable )
 {
     bStaticEnableBroadcasting = bEnable;
@@ -270,7 +270,7 @@ SbxBase* SbxBase::Load( SvStream& rStrm )
     UINT32 nCreator, nSize;
     rStrm >> nCreator >> nSbxId >> nFlags >> nVer;
 
-    // Eine Dummheit meinerseits korrigieren:
+    // Correcting a foolishness of mine:
     if( nFlags & SBX_RESERVED )
         nFlags = ( nFlags & ~SBX_RESERVED ) | SBX_GBLSEARCH;
 
@@ -289,7 +289,7 @@ SbxBase* SbxBase::Load( SvStream& rStrm )
                 rStrm.Seek( nOldPos );
             if( !p->LoadCompleted() )
             {
-                // Loeschen des Objekts
+                // Deleting of the object
                 SbxBaseRef aRef( p );
                 p = NULL;
             }
@@ -297,7 +297,7 @@ SbxBase* SbxBase::Load( SvStream& rStrm )
         else
         {
             rStrm.SetError( SVSTREAM_FILEFORMAT_ERROR );
-            // Loeschen des Objekts
+            // Deleting of the object
             SbxBaseRef aRef( p );
             p = NULL;
         }
@@ -307,7 +307,7 @@ SbxBase* SbxBase::Load( SvStream& rStrm )
     return p;
 }
 
-// Sbx-Objekt im Stream ueberspringen
+// Skip the Sbx-Object inside the stream
 void SbxBase::Skip( SvStream& rStrm )
 {
     UINT16 nSbxId, nFlags, nVer;
