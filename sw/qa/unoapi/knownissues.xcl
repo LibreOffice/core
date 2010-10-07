@@ -21,9 +21,6 @@ sw.XMLStylesImporter::com::sun::star::xml::sax::XDocumentHandler
 ### i23422 ###
 sw.SwXTextViewCursor::com::sun::star::beans::XMultiPropertyStates
 
-### i112111 ###
-sw.SwXViewSettings::com::sun::star::beans::XPropertySet
-
 ### i23623 ###
 sw.SwXStyleFamily::com::sun::star::container::XNameReplace
 
