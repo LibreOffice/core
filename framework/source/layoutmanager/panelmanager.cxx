@@ -92,9 +92,8 @@ bool PanelManager::createPanels()
 {
     if ( m_xFrame.is() )
     {
-        uno::Reference< awt::XWindow > xWindow;
         vos::OGuard aGuard( Application::GetSolarMutex() );
-        xWindow = m_xFrame->getContainerWindow(), uno::UNO_QUERY;
+        uno::Reference< awt::XWindow > xWindow( m_xFrame->getContainerWindow(), uno::UNO_QUERY );
         if ( xWindow.is() )
         {
             // destroy old panel windows

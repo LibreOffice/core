@@ -54,6 +54,7 @@
 //_________________________________________________________________________________________________________________
 
 #include <vcl/window.hxx>
+#include <vcl/toolbox.hxx>
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -64,15 +65,23 @@
 #define UIRESOURCE_URL_ASCII            "private:resource"
 #define UIRESOURCE_URL                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( UIRESOURCE_URL_ASCII ))
 
+#define UIRESOURCETYPE_TOOLBAR          "toolbar"
+#define UIRESOURCETYPE_STATUSBAR        "statusbar"
+#define UIRESOURCETYPE_MENUBAR          "menubar"
+
 namespace framework
 {
 
+::rtl::OUString retrieveToolbarNameFromHelpURL( Window* pWindow );
+ToolBox* getToolboxPtr( Window* pWindow );
+Window* getWindowFromXUIElement( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement >& xUIElement );
+SystemWindow* getTopSystemWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& xWindow );
 bool equalRectangles( const css::awt::Rectangle& rRect1, const css::awt::Rectangle& rRect2 );
 void setZeroRectangle( ::Rectangle& rRect );
 bool lcl_checkUIElement(const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement >& xUIElement,::com::sun::star::awt::Rectangle& _rPosSize, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& _xWindow);
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > createToolkitWindow( const css::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rFactory, const css::uno::Reference< ::com::sun::star::awt::XWindowPeer >& rParent, const char* pService );
 WindowAlign ImplConvertAlignment( sal_Int16 aAlignment );
-bool impl_parseResourceURL( const rtl::OUString aResourceURL, rtl::OUString& aElementType, rtl::OUString& aElementName );
+void parseResourceURL( const rtl::OUString aResourceURL, rtl::OUString& aElementType, rtl::OUString& aElementName );
 ::Rectangle putAWTToRectangle( const ::com::sun::star::awt::Rectangle& rRect );
 ::com::sun::star::awt::Rectangle putRectangleValueToAWT( const ::Rectangle& rRect );
 ::com::sun::star::awt::Rectangle convertRectangleToAWT( const ::Rectangle& rRect );

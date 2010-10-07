@@ -49,6 +49,7 @@
 #include <com/sun/star/awt/XDockableWindow.hpp>
 #include <com/sun/star/awt/XDockableWindowListener.hpp>
 #include <com/sun/star/awt/XWindowListener.hpp>
+#include <com/sun/star/ui/XUIElement.hpp>
 
 //_________________________________________________________________________________________________________________
 //  other includes
@@ -56,7 +57,6 @@
 
 #include <comphelper/mediadescriptor.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/toolbox.hxx>
 #include <vos/mutex.hxx>
 #include <toolkit/unohlp.hxx>
 
@@ -68,6 +68,55 @@ using namespace com::sun::star;
 
 namespace framework
 {
+
+::rtl::OUString retrieveToolbarNameFromHelpURL( Window* pWindow )
+{
+    ::rtl::OUString aToolbarName;
+
+    if ( pWindow->GetType() == WINDOW_TOOLBOX )
+    {
+        ToolBox* pToolBox = dynamic_cast<ToolBox *>( pWindow );
+        if ( pToolBox )
+    {
+            aToolbarName = pToolBox->GetSmartHelpId().GetStr();
+            sal_Int32 i = aToolbarName.lastIndexOf( ':' );
+            if (( aToolbarName.getLength() > 0 ) && ( i > 0 ) && (( i+ 1 ) < aToolbarName.getLength() ))
+                aToolbarName = aToolbarName.copy( i+1 ); // Remove ".HelpId:" protocol from toolbar name
+            else
+          aToolbarName = ::rtl::OUString();
+    }
+    }
+    return aToolbarName;
+}
+
+ToolBox* getToolboxPtr( Window* pWindow )
+{
+    ToolBox* pToolbox(NULL);
+    if ( pWindow->GetType() == WINDOW_TOOLBOX )
+        pToolbox = dynamic_cast<ToolBox*>( pWindow );
+    return pToolbox;
+}
+
+Window* getWindowFromXUIElement( const uno::Reference< ui::XUIElement >& xUIElement )
+{
+    vos::OGuard aGuard( Application::GetSolarMutex() );
+    uno::Reference< awt::XWindow > xWindow;
+    if ( xUIElement.is() )
+        xWindow = uno::Reference< awt::XWindow >( xUIElement->getRealInterface(), uno::UNO_QUERY );
+    return VCLUnoHelper::GetWindow( xWindow );
+}
+
+SystemWindow* getTopSystemWindow( const uno::Reference< awt::XWindow >& xWindow )
+{
+    Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+    while ( pWindow && !pWindow->IsSystemWindow() )
+        pWindow = pWindow->GetParent();
+
+    if ( pWindow )
+        return (SystemWindow *)pWindow;
+    else
+        return 0;
+}
 
 void setZeroRectangle( ::Rectangle& rRect )
 {
@@ -114,12 +163,12 @@ uno::Reference< awt::XWindowPeer > createToolkitWindow( const uno::Reference< la
         {
             // describe window properties.
             css::awt::WindowDescriptor aDescriptor;
-            aDescriptor.Type                =   awt::WindowClass_SIMPLE                                       ;
-            aDescriptor.WindowServiceName   =   DECLARE_ASCII(pService)                                       ;
-            aDescriptor.ParentIndex         =   -1                                                            ;
-            aDescriptor.Parent              =   uno::Reference< awt::XWindowPeer >( rParent, uno::UNO_QUERY ) ;
-            aDescriptor.Bounds              =   awt::Rectangle(0,0,0,0)                                       ;
-            aDescriptor.WindowAttributes    =   0                                                             ;
+            aDescriptor.Type                =   awt::WindowClass_SIMPLE;
+            aDescriptor.WindowServiceName   =   ::rtl::OUString::createFromAscii( pService );
+            aDescriptor.ParentIndex         =   -1;
+            aDescriptor.Parent              =   uno::Reference< awt::XWindowPeer >( rParent, uno::UNO_QUERY );
+            aDescriptor.Bounds              =   awt::Rectangle(0,0,0,0);
+            aDescriptor.WindowAttributes    =   0;
 
             // create a awt window
             xPeer = xToolkit->createWindow( aDescriptor );
@@ -142,7 +191,7 @@ WindowAlign ImplConvertAlignment( sal_Int16 aAlignment )
         return WINDOWALIGN_BOTTOM;
 }
 
-bool impl_parseResourceURL( const rtl::OUString aResourceURL, rtl::OUString& aElementType, rtl::OUString& aElementName )
+void parseResourceURL( const rtl::OUString aResourceURL, rtl::OUString& aElementType, rtl::OUString& aElementName )
 {
     sal_Int32 nIndex = 0;
 
@@ -154,10 +203,7 @@ bool impl_parseResourceURL( const rtl::OUString aResourceURL, rtl::OUString& aEl
 
         aElementType = aPathPart.getToken( 0, (sal_Unicode)'/', nIndex );
         aElementName = aPathPart.getToken( 0, (sal_Unicode)'/', nIndex );
-        return true;
     }
-
-    return false;
 }
 
 ::com::sun::star::awt::Rectangle putRectangleValueToAWT( const ::Rectangle& rRect )
@@ -315,29 +361,6 @@ void impl_addWindowListeners(
         {
         }
     }
-}
-
-css::uno::Reference< css::awt::XWindowPeer > implts_createToolkitWindow(
-    const css::uno::Reference< css::awt::XToolkit >& rToolkit,
-    const css::uno::Reference< css::awt::XWindowPeer >& rParent )
-{
-    css::uno::Reference< css::awt::XWindowPeer > xPeer;
-    if ( rToolkit.is() )
-    {
-        // describe window properties.
-        css::awt::WindowDescriptor aDescriptor;
-        aDescriptor.Type              = css::awt::WindowClass_SIMPLE;
-        aDescriptor.WindowServiceName = DECLARE_ASCII("dockingarea");
-        aDescriptor.ParentIndex       = -1;
-        aDescriptor.Parent            = css::uno::Reference< css::awt::XWindowPeer >( rParent, css::uno::UNO_QUERY );
-        aDescriptor.Bounds            = css::awt::Rectangle(0,0,0,0);
-        aDescriptor.WindowAttributes  = 0;
-
-        // create a docking area window
-        xPeer = rToolkit->createWindow( aDescriptor );
-    }
-
-    return xPeer;
 }
 
 } // namespace framework
