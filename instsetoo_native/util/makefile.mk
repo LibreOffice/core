@@ -331,4 +331,13 @@ hack_msitemplates .PHONY:
     $(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSIURETEMPLATEDIR)$/Binary$/Image.bmp
     $(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSISDKOOTEMPLATEDIR)$/Binary$/Image.bmp
 
+.IF "$(OS)" == "WNT"
+
+ALLLANGSTRING:=$(alllangiso)
+
+openofficeall: hack_msitemplates $(LOCALPYFILES) openoffice_$(ALLLANGSTRING:s/ /,/)$(PKGFORMAT:^".")
+
+openofficedevall: hack_msitemplates $(LOCALPYFILES) openofficedev_$(ALLLANGSTRING:s/ /,/)$(PKGFORMAT:^".")
+
+.ENDIF			# "$(OS)" == "WNT"
 
