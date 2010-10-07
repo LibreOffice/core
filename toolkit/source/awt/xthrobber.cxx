@@ -30,7 +30,6 @@
 #include "toolkit/awt/xthrobber.hxx"
 #include "toolkit/helper/property.hxx"
 #include <toolkit/helper/tkresmgr.hxx>
-#include <toolkit/helper/throbberimpl.hxx>
 
 #ifndef _TOOLKIT_AWT_XTHROBBER_HRC_
 #include "xthrobber.hrc"
@@ -38,6 +37,7 @@
 #include <tools/debug.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/throbber.hxx>
 
 //........................................................................
 namespace toolkit
@@ -53,10 +53,8 @@ namespace toolkit
 
     //--------------------------------------------------------------------
     XThrobber::XThrobber()
-        :mpThrobber( new Throbber_Impl( *this ) )
     {
         DBG_CTOR( XThrobber, NULL );
-        InitImageList();
     }
 
     //--------------------------------------------------------------------
@@ -69,14 +67,25 @@ namespace toolkit
     void SAL_CALL XThrobber::start() throw ( uno::RuntimeException )
     {
         ::vos::OGuard aGuard( GetMutex() );
-        mpThrobber->start();
+        Throbber* pThrobber( dynamic_cast< Throbber* >( GetWindow() ) );
+        if ( pThrobber != NULL)
+            pThrobber->start();
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL XThrobber::stop() throw ( uno::RuntimeException )
     {
         ::vos::OGuard aGuard( GetMutex() );
-        mpThrobber->stop();
+        Throbber* pThrobber( dynamic_cast< Throbber* >( GetWindow() ) );
+        if ( pThrobber != NULL)
+            pThrobber->stop();
+    }
+
+    //--------------------------------------------------------------------
+    void XThrobber::SetWindow( Window* pWindow )
+    {
+        XThrobber_Base::SetWindow( pWindow );
+        InitImageList();
     }
 
     //--------------------------------------------------------------------
@@ -84,10 +93,15 @@ namespace toolkit
         throw( uno::RuntimeException )
     {
         ::vos::OGuard aGuard( GetMutex() );
+
+        Throbber* pThrobber( dynamic_cast< Throbber* >( GetWindow() ) );
+        if ( pThrobber != NULL)
+            return;
+
         uno::Sequence< uno::Reference< graphic::XGraphic > > aImageList(12);
         sal_uInt16 nIconIdStart = RID_TK_ICON_THROBBER_START;
 
-        if ( mpThrobber->isHCMode() )
+        if ( pThrobber->GetSettings().GetStyleSettings().GetHighContrastMode() )
             nIconIdStart = RID_TK_HC_ICON_THROBBER_START;
 
         for ( sal_uInt16 i=0; i<12; i++ )
@@ -96,7 +110,7 @@ namespace toolkit
             aImageList[i] = aImage.GetXGraphic();
         }
 
-        mpThrobber->setImageList( aImageList );
+        pThrobber->setImageList( aImageList );
     }
 
 //........................................................................

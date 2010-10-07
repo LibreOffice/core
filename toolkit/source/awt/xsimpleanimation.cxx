@@ -29,8 +29,8 @@
 #include "precompiled_toolkit.hxx"
 #include "toolkit/awt/xsimpleanimation.hxx"
 #include "toolkit/helper/property.hxx"
-#include "toolkit/helper/throbberimpl.hxx"
 #include <tools/debug.hxx>
+#include <vcl/throbber.hxx>
 
 //........................................................................
 namespace toolkit
@@ -46,7 +46,6 @@ namespace toolkit
 
     //--------------------------------------------------------------------
     XSimpleAnimation::XSimpleAnimation()
-        :mpThrobber( new Throbber_Impl( *this ) )
     {
         DBG_CTOR( XSimpleAnimation, NULL );
     }
@@ -61,14 +60,18 @@ namespace toolkit
     void SAL_CALL XSimpleAnimation::start() throw ( uno::RuntimeException )
     {
         ::vos::OGuard aGuard( GetMutex() );
-        mpThrobber->start();
+        Throbber* pThrobber( dynamic_cast< Throbber* >( GetWindow() ) );
+        if ( pThrobber != NULL)
+            pThrobber->start();
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL XSimpleAnimation::stop() throw ( uno::RuntimeException )
     {
         ::vos::OGuard aGuard( GetMutex() );
-        mpThrobber->stop();
+        Throbber* pThrobber( dynamic_cast< Throbber* >( GetWindow() ) );
+        if ( pThrobber != NULL)
+            pThrobber->stop();
     }
 
     //--------------------------------------------------------------------
@@ -76,7 +79,9 @@ namespace toolkit
         throw ( uno::RuntimeException )
     {
         ::vos::OGuard aGuard( GetMutex() );
-        mpThrobber->setImageList( rImageList );
+        Throbber* pThrobber( dynamic_cast< Throbber* >( GetWindow() ) );
+        if ( pThrobber != NULL)
+            pThrobber->setImageList( rImageList );
     }
 
     //--------------------------------------------------------------------
@@ -85,27 +90,31 @@ namespace toolkit
     {
         ::vos::OGuard aGuard( GetMutex() );
 
-        if ( GetWindow() )
+        Throbber* pThrobber( dynamic_cast< Throbber* >( GetWindow() ) );
+        if ( pThrobber == NULL )
         {
-            sal_uInt16 nPropertyId = GetPropertyId( PropertyName );
-            switch ( nPropertyId )
-            {
-                case BASEPROPERTY_STEP_TIME: {
-                    sal_Int32   nStepTime( 0 );
-                    if ( Value >>= nStepTime )
-                        mpThrobber->setStepTime( nStepTime );
+            VCLXWindow::setProperty( PropertyName, Value );
+            return;
+        }
 
-                    break;
-                }
-                case BASEPROPERTY_REPEAT: {
-                    sal_Bool bRepeat( sal_True );
-                    if ( Value >>= bRepeat )
-                        mpThrobber->setRepeat( bRepeat );
-                    break;
-                }
-                default:
-                    VCLXWindow::setProperty( PropertyName, Value );
+        sal_uInt16 nPropertyId = GetPropertyId( PropertyName );
+        switch ( nPropertyId )
+        {
+            case BASEPROPERTY_STEP_TIME: {
+                sal_Int32   nStepTime( 0 );
+                if ( Value >>= nStepTime )
+                    pThrobber->setStepTime( nStepTime );
+
+                break;
             }
+            case BASEPROPERTY_REPEAT: {
+                sal_Bool bRepeat( sal_True );
+                if ( Value >>= bRepeat )
+                    pThrobber->setRepeat( bRepeat );
+                break;
+            }
+            default:
+                VCLXWindow::setProperty( PropertyName, Value );
         }
     }
 
@@ -115,22 +124,22 @@ namespace toolkit
     {
         ::vos::OGuard aGuard( GetMutex() );
 
-        uno::Any aReturn;
+        Throbber* pThrobber( dynamic_cast< Throbber* >( GetWindow() ) );
+        if ( pThrobber == NULL )
+            return VCLXWindow::getProperty( PropertyName );
 
-        if ( GetWindow() )
+        uno::Any aReturn;
+        sal_uInt16 nPropertyId = GetPropertyId( PropertyName );
+        switch ( nPropertyId )
         {
-            sal_uInt16 nPropertyId = GetPropertyId( PropertyName );
-            switch ( nPropertyId )
-            {
-            case BASEPROPERTY_STEP_TIME:
-                aReturn <<= mpThrobber->getStepTime();
-                break;
-            case BASEPROPERTY_REPEAT:
-                aReturn <<= mpThrobber->getRepeat();
-                break;
-            default:
-                aReturn = VCLXWindow::getProperty( PropertyName );
-            }
+        case BASEPROPERTY_STEP_TIME:
+            aReturn <<= pThrobber->getStepTime();
+            break;
+        case BASEPROPERTY_REPEAT:
+            aReturn <<= pThrobber->getRepeat();
+            break;
+        default:
+            aReturn = VCLXWindow::getProperty( PropertyName );
         }
         return aReturn;
     }

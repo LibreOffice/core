@@ -38,7 +38,6 @@
 //........................................................................
 namespace toolkit
 {
-    class Throbber_Impl;
 //........................................................................
 
     //====================================================================
@@ -50,9 +49,6 @@ namespace toolkit
 
     class XSimpleAnimation : public XSimpleAnimation_Base
     {
-    private:
-        ::boost::scoped_ptr< Throbber_Impl >    mpThrobber;
-
     public:
         XSimpleAnimation();
 

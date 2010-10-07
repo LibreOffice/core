@@ -33,6 +33,7 @@
 #include <tools/svwin.h>
 #endif
 #include <stdio.h>
+#include <com/sun/star/awt/ImageScaleMode.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/awt/VclWindowPeerAttribute.hpp>
 #include <com/sun/star/awt/WindowClass.hpp>
@@ -116,6 +117,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
+#include <vcl/throbber.hxx>
 #include "toolkit/awt/vclxspinbutton.hxx"
 
 #include <tools/debug.hxx>
@@ -986,19 +988,23 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 }
             break;
             case WINDOW_CONTROL:
-                if ( aServiceName.EqualsAscii( "simpleanimation" ) )
+                if  ( aServiceName.EqualsAscii( "simpleanimation" ) )
                 {
-                    pNewWindow = new FixedImage( pParent, nWinBits | WB_SCALE );
+                    pNewWindow = new Throbber( pParent, nWinBits, Throbber::IMAGES_NONE );
+                    ((Throbber*)pNewWindow)->SetScaleMode( css::awt::ImageScaleMode::Anisotropic );
+                        // (compatibility)
                     *ppNewComp = new ::toolkit::XSimpleAnimation;
                 }
                 else if ( aServiceName.EqualsAscii( "throbber" ) )
                 {
-                    pNewWindow = new FixedImage( pParent, nWinBits | WB_SCALE );
+                    pNewWindow = new Throbber( pParent, nWinBits, Throbber::IMAGES_NONE );
+                    ((Throbber*)pNewWindow)->SetScaleMode( css::awt::ImageScaleMode::Anisotropic );
+                        // (compatibility)
                     *ppNewComp = new ::toolkit::XThrobber;
                 }
                 else if ( aServiceName.EqualsAscii( "animatedimages" ) )
                 {
-                    pNewWindow = new ImageControl( pParent, nWinBits );
+                    pNewWindow = new Throbber( pParent, nWinBits );
                     *ppNewComp = new ::toolkit::AnimatedImagesPeer;
                 }
             break;

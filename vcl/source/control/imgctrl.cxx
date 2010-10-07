@@ -30,6 +30,7 @@
 
 #include <vcl/event.hxx>
 #include <vcl/imgctrl.hxx>
+#include <tools/rcid.h>
 
 #include <com/sun/star/awt/ImageScaleMode.hdl>
 
@@ -37,10 +38,18 @@ namespace ImageScaleMode = ::com::sun::star::awt::ImageScaleMode;
 
 // -----------------------------------------------------------------------
 
-ImageControl::ImageControl( Window* pParent, WinBits nStyle ) :
-    FixedImage( pParent, nStyle )
+ImageControl::ImageControl( Window* pParent, WinBits nStyle )
+    :FixedImage( pParent, nStyle )
+    ,mnScaleMode( ImageScaleMode::Anisotropic )
 {
-    mnScaleMode = ImageScaleMode::Anisotropic;
+}
+
+// -----------------------------------------------------------------------
+
+ImageControl::ImageControl( Window* pParent, const ResId& rResId )
+    :FixedImage( pParent, rResId )
+    ,mnScaleMode( ImageScaleMode::Anisotropic )
+{
 }
 
 // -----------------------------------------------------------------------

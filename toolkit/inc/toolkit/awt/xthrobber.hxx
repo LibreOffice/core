@@ -40,7 +40,6 @@
 namespace toolkit
 {
 //........................................................................
-    class Throbber_Impl;
 
     //====================================================================
     //= XThrobber
@@ -53,7 +52,6 @@ namespace toolkit
                     ,public ::boost::noncopyable
     {
     private:
-        Throbber_Impl   *mpThrobber;
         void SAL_CALL InitImageList() throw(::com::sun::star::uno::RuntimeException);
 
     public:
@@ -65,6 +63,9 @@ namespace toolkit
         // XThrobber
         virtual void SAL_CALL start() throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL stop() throw (::com::sun::star::uno::RuntimeException);
+
+        // VCLXWindow
+        virtual void    SetWindow( Window* pWindow );
 
     private:
         XThrobber( const XThrobber& );            // never implemented

@@ -28,7 +28,6 @@
 
 #include "toolkit/awt/animatedimagespeer.hxx"
 #include "toolkit/helper/property.hxx"
-#include "toolkit/helper/throbberimpl.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/awt/XAnimatedImages.hpp>
@@ -43,7 +42,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/diagnose_ex.h>
-#include <vcl/imgctrl.hxx>
+#include <vcl/throbber.hxx>
 
 #include <stl/limits>
 
@@ -80,11 +79,11 @@ namespace toolkit
     //==================================================================================================================
     struct AnimatedImagesPeer_Data
     {
-        Throbber_Impl                                   aThrobber;
+        AnimatedImagesPeer&                             rAntiImpl;
         ::std::vector< Sequence< ::rtl::OUString > >    aCachedImageSets;
 
-        AnimatedImagesPeer_Data( VCLXWindow& i_window )
-            :aThrobber( i_window )
+        AnimatedImagesPeer_Data( AnimatedImagesPeer& i_antiImpl )
+            :rAntiImpl( i_antiImpl )
             ,aCachedImageSets()
         {
         }
@@ -124,8 +123,8 @@ namespace toolkit
         //--------------------------------------------------------------------------------------------------------------
         void lcl_updateImageList_nothrow( AnimatedImagesPeer_Data& i_data )
         {
-            const Window* pWindow = i_data.aThrobber.getWindow();
-            if ( pWindow == NULL )
+            Throbber* pThrobber = dynamic_cast< Throbber* >( i_data.rAntiImpl.GetWindow() );
+            if ( pThrobber == NULL )
                 return;
 
             try
@@ -146,7 +145,7 @@ namespace toolkit
                 }
 
                 // find the set with the smallest difference between window size and image size
-                const ::Size aWindowSizePixel = pWindow->GetSizePixel();
+                const ::Size aWindowSizePixel = pThrobber->GetSizePixel();
                 sal_Int32 nPreferredSet = -1;
                 long nMinimalDistance = ::std::numeric_limits< long >::max();
                 for (   ::std::vector< Size >::const_iterator check = aImageSizes.begin();
@@ -180,7 +179,7 @@ namespace toolkit
                         aImages[ imageIndex ] = lcl_getGraphic_throw( xGraphicProvider, *pImageURL );
                     }
                 }
-                i_data.aThrobber.setImageList( aImages );
+                pThrobber->setImageList( aImages );
             }
             catch( const Exception& )
             {
@@ -226,27 +225,41 @@ namespace toolkit
     void SAL_CALL AnimatedImagesPeer::startAnimation(  ) throw (RuntimeException)
     {
         ::vos::OGuard aGuard( GetMutex() );
-        m_pData->aThrobber.start();
+        Throbber* pThrobber( dynamic_cast< Throbber* >( GetWindow() ) );
+        if ( pThrobber != NULL)
+            pThrobber->start();
     }
 
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL AnimatedImagesPeer::stopAnimation(  ) throw (RuntimeException)
     {
         ::vos::OGuard aGuard( GetMutex() );
-        m_pData->aThrobber.stop();
+        Throbber* pThrobber( dynamic_cast< Throbber* >( GetWindow() ) );
+        if ( pThrobber != NULL)
+            pThrobber->stop();
     }
 
     //------------------------------------------------------------------------------------------------------------------
     ::sal_Bool SAL_CALL AnimatedImagesPeer::isAnimationRunning(  ) throw (RuntimeException)
     {
         ::vos::OGuard aGuard( GetMutex() );
-        return m_pData->aThrobber.isRunning();
+        Throbber* pThrobber( dynamic_cast< Throbber* >( GetWindow() ) );
+        if ( pThrobber != NULL)
+            return pThrobber->isRunning();
+        return sal_False;
     }
 
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL AnimatedImagesPeer::setProperty( const ::rtl::OUString& i_propertyName, const Any& i_value ) throw(RuntimeException)
     {
         ::vos::OGuard aGuard( GetMutex() );
+
+        Throbber* pThrobber( dynamic_cast< Throbber* >( GetWindow() ) );
+        if ( pThrobber == NULL )
+        {
+            VCLXWindow::setProperty( i_propertyName, i_value );
+            return;
+        }
 
         const sal_uInt16 nPropertyId = GetPropertyId( i_propertyName );
         switch ( nPropertyId )
@@ -255,14 +268,14 @@ namespace toolkit
             {
                 sal_Int32 nStepTime( 0 );
                 if ( i_value >>= nStepTime )
-                    m_pData->aThrobber.setStepTime( nStepTime );
+                    pThrobber->setStepTime( nStepTime );
                 break;
             }
             case BASEPROPERTY_AUTO_REPEAT:
             {
                 sal_Bool bRepeat( sal_True );
                 if ( i_value >>= bRepeat )
-                    m_pData->aThrobber.setRepeat( bRepeat );
+                    pThrobber->setRepeat( bRepeat );
                 break;
             }
 
@@ -290,15 +303,19 @@ namespace toolkit
 
         Any aReturn;
 
+        Throbber* pThrobber( dynamic_cast< Throbber* >( GetWindow() ) );
+        if ( pThrobber == NULL )
+            return VCLXWindow::getProperty( i_propertyName );
+
         const sal_uInt16 nPropertyId = GetPropertyId( i_propertyName );
         switch ( nPropertyId )
         {
         case BASEPROPERTY_STEP_TIME:
-            aReturn <<= m_pData->aThrobber.getStepTime();
+            aReturn <<= pThrobber->getStepTime();
             break;
 
         case BASEPROPERTY_AUTO_REPEAT:
-            aReturn <<= m_pData->aThrobber.getRepeat();
+            aReturn <<= pThrobber->getRepeat();
             break;
 
         case BASEPROPERTY_IMAGE_SCALE_MODE:
