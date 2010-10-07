@@ -45,9 +45,7 @@
 #include <rtl/logfile.hxx>
 #include <testshl/simpleheader.hxx>
 
-// #ifndef      _OSL_MODULE_HXX_
 // #include <osl/module.hxx>
-// #endif
 #include <osl/file.hxx>
 #if ( defined WNT )                     // Windows
 #include <tools/prewin.h>

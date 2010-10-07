@@ -44,9 +44,7 @@
 #include <wcstr.h>
 #endif
 
-// #ifndef  _OSL_DIAGNOSE_H_
 // #include <osl/diagnose.h>
-// #endif
 
 #include <rtl/ustring.hxx>
 

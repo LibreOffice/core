@@ -33,9 +33,7 @@
     #include <sal/types.h>
 #endif
 
-// #ifndef _RTL_TRES_H_
 //     #include <rtl/tres.h>
-// #endif
 
 #include <testshl/tresstatewrapper.hxx>
 

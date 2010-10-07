@@ -29,9 +29,7 @@
 #include "precompiled_sal.hxx"
 #include <sal/types.h>
 
-//# #ifndef _RTL_TRES_H_
 //#     #include <rtl/tres.h>
-//# #endif
 #include <testshl/tresstatewrapper.hxx>
 #include "stringhelper.hxx"
 #include <rtl/string.hxx>

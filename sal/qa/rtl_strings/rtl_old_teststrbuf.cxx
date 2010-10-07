@@ -38,9 +38,7 @@
 #include <string.h>
 #include <stdio.h>
 
-// #ifndef _OSL_DIAGNOSE_H_
 // #include <osl/diagnose.h>
-// #endif
 
 #include <rtl/strbuf.hxx>
 
