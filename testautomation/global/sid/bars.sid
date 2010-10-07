@@ -13,7 +13,7 @@
 ' **
 ' ** f�r alle
 FL_URL .uno:OpenUrl
-FL_NeuLaden .uno:Reload
+FL_NeuLaden SID_RELOAD
 FL_Bearbeiten .uno:EditDoc
 FL_Speichern .uno:Save
 FL_Verknuepfen .uno:AddBookmark

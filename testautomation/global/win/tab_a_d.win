@@ -130,11 +130,11 @@ AutomatischVertikal sym:cui.TriStateBox.10161.3
 AutomatischHorizontal sym:cui.TriStateBox.10161.4
 
 *TabBenutzer sym:SFX2_HID_DOCINFOUSER
-Info0 sym:sfx2.Edit.265.16
-Info1 sym:sfx2.Edit.265.18
-Info2 sym:sfx2.Edit.265.20
-Info3 sym:sfx2.Edit.265.22
-Infofelder sym:sfx2.PushButton.265.34
+Info0 sym:sfx.Edit.265.16
+Info1 sym:sfx.Edit.265.18
+Info2 sym:sfx.Edit.265.20
+Info3 sym:sfx.Edit.265.22
+Infofelder sym:sfx.PushButton.265.34
 
 +TabBenutzerdaten TabAllgemein
 
@@ -167,10 +167,10 @@ Passwort sym:sw.CheckBox.20885.9
 EnterPasswort sym:sw.PushButton.20885.51
 
 *TabBeschreibung sym:SFX2_HID_DOCINFODESC
-Titel sym:sfx2.Edit.263.10
-Thema sym:sfx2.Edit.263.12
-Schluesselwoerter sym:sfx2.Edit.263.14
-Beschreibung sym:sfx2.MultiLineEdit.263.24
+Titel sym:sfx.Edit.263.10
+Thema sym:sfx.Edit.263.12
+Schluesselwoerter sym:sfx.Edit.263.14
+Beschreibung sym:sfx.MultiLineEdit.263.24
 
 *TabBibliotheken sym:basctl.TabPage.14888
 Bibliothek sym:basctl.ListBox.14888.12
@@ -234,22 +234,22 @@ FeldVersteckterText sym:sw.CheckBox.20870.10
 VersteckterText sym:sw.CheckBox.20870.61
 
 *TabDokument sym:SFX2_HID_DOCINFODOC
-Dokumentname sym:sfx2.Edit.264.51
-Schreibgeschuetzt sym:sfx2.CheckBox.264.48
-DigitalSignature sym:sfx2.PushButton.264.79
-Loeschen sym:sfx2.PushButton.264.62
-BenutzerdatenVerwenden sym:sfx2.CheckBox.264.49
+Dokumentname sym:sfx.Edit.264.51
+Schreibgeschuetzt sym:sfx.CheckBox.264.48
+DigitalSignature sym:sfx.PushButton.264.79
+Loeschen sym:sfx.PushButton.264.62
+BenutzerdatenVerwenden sym:sfx.CheckBox.264.49
 
-FileTypeInfo sym:sfx2.Edit.264.54
-FileLocationInfo sym:sfx2.Edit.264.2
-FileSizeInfo sym:sfx2.Edit.264.56
-FileCreatedInfo sym:sfx2.Edit.264.8
-FileChangedInfo sym:sfx2.Edit.264.4
-FileSignedInfo sym:sfx2.Edit.264.77
-FileLastPrintedInfo sym:sfx2.Edit.264.59
-FileEditTimeInfo sym:sfx2.Edit.264.36
-FileRevisionInfo sym:sfx2.Edit.264.38
-FileTemplateinfo sym:sfx2.Edit.264.33
+FileTypeInfo sym:sfx.Edit.264.54
+FileLocationInfo sym:sfx.Edit.264.2
+FileSizeInfo sym:sfx.Edit.264.56
+FileCreatedInfo sym:sfx.Edit.264.8
+FileChangedInfo sym:sfx.Edit.264.4
+FileSignedInfo sym:sfx.Edit.264.77
+FileLastPrintedInfo sym:sfx.Edit.264.59
+FileEditTimeInfo sym:sfx.Edit.264.36
+FileRevisionInfo sym:sfx.Edit.264.38
+FileTemplateinfo sym:sfx.Edit.264.33
 
 *TabDokumentFeldbefehle sym:SW_HID_FLD_DOK
 Feldtyp sym:sw.ListBox.20867.48
@@ -262,10 +262,10 @@ Einfuegen sym:SW_HID_FIELD_INSERT
 Schliessen sym:SW_HID_FIELD_CLOSE
 
 *TabDokumentinfo sym:SFX2_HID_DOCINFODESC
-Beschreibung sym:sfx2.MultiLineEdit.263.24
-Schluesselworte sym:sfx2.Edit.263.14
-Thema sym:sfx2.Edit.263.12
-Titel sym:sfx2.Edit.263.10
+Beschreibung sym:sfx.MultiLineEdit.263.24
+Schluesselworte sym:sfx.Edit.263.14
+Thema sym:sfx.Edit.263.12
+Titel sym:sfx.Edit.263.10
 
 *TabDokumentInfoFeldbefehle sym:SW_HID_FLD_DOKINF
 Feldtyp sym:SW_HID_FIELD_DINF_TYPE
@@ -336,15 +336,15 @@ LeereSeitenDrucken sym:sw.CheckBox.20826.92
 Fax sym:sw.ListBox.20826.86
 Zurueck sym:SFX2_HID_TABDLG_RESET_BTN
 
-*TabDruckenMath sym:starmath.TabPage.20007
-DruckeTitelzeile sym:starmath.CheckBox.20007.11
-DruckeFormeltext sym:starmath.CheckBox.20007.12
-DruckeRahmen sym:starmath.CheckBox.20007.13
-Originalgroesse sym:starmath.RadioButton.20007.21
-DerSeiteAnpassen sym:starmath.RadioButton.20007.22
-Skalierung sym:starmath.RadioButton.20007.23
-Prozent sym:starmath.MetricField.20007.24
-Ignorieren sym:starmath.CheckBox.20007.31
+*TabDruckenMath sym:sm.TabPage.20007
+DruckeTitelzeile sym:sm.CheckBox.20007.11
+DruckeFormeltext sym:sm.CheckBox.20007.12
+DruckeRahmen sym:sm.CheckBox.20007.13
+Originalgroesse sym:sm.RadioButton.20007.21
+DerSeiteAnpassen sym:sm.RadioButton.20007.22
+Skalierung sym:sm.RadioButton.20007.23
+Prozent sym:sm.MetricField.20007.24
+Ignorieren sym:sm.CheckBox.20007.31
 
 *TabDruckerEtiketten sym:SW_HID_LAB_PRT
 GanzeSeite sym:sw.RadioButton.22757.1

@@ -29,7 +29,7 @@ DisplayHelpAtStartUp sym:SFX2_HID_HELP_ONSTARTUP_BOX
 
 *TB_MacroControls sym:BASCTL_HID_BASICIDE_CONTROLS
 CommandButton sym:.uno:InsertPushbutton
-CheckBox sym:.uno:Checkbox
+CheckBox sym:.uno:CheckBox
 Label sym:.uno:InsertFixedText
 ListBox sym:.uno:InsertListbox
 HScrollBar sym:.uno:HScrollbar

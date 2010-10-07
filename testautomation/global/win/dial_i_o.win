@@ -47,16 +47,16 @@ Hinzufuegen sym:sd.PushButton.890.1
 Entfernen sym:sd.PushButton.890.3
 
 *InfofelderBearbeiten sym:SFX2_HID_DOCINFO_EDT
-Name0 sym:sfx2.Edit.266.5
-Name1 sym:sfx2.Edit.266.7
-Name2 sym:sfx2.Edit.266.9
-Name3 sym:sfx2.Edit.266.11
+Name0 sym:sfx.Edit.266.5
+Name1 sym:sfx.Edit.266.7
+Name2 sym:sfx.Edit.266.9
+Name3 sym:sfx.Edit.266.11
 
 *InfonamenBearbeiten sym:SFX2_HID_DOCINFO_EDT
-Namen1 sym:sfx2.Edit.266.5
-Namen2 sym:sfx2.Edit.266.7
-Namen3 sym:sfx2.Edit.266.9
-Namen4 sym:sfx2.Edit.266.11
+Namen1 sym:sfx.Edit.266.5
+Namen2 sym:sfx.Edit.266.7
+Namen3 sym:sfx.Edit.266.9
+Namen4 sym:sfx.Edit.266.11
 
 *InhaltEinfuegen sym:CUI_HID_PASTE_DLG
 AlsSymbol sym:cui.CheckBox.32001.12
@@ -105,10 +105,10 @@ Vorschau sym:sd.PushButton.654.1
 
 +Interaktion TabInteraktion
 
-*JPEGOptionen sym:svtools.ModalDialog.16481
-Qualitaet sym:svtools.NumericField.16481.1
-Graustufen sym:svtools.RadioButton.16481.1
-Echtfarben sym:svtools.RadioButton.16481.2
+*JPEGOptionen sym:svt.ModalDialog.16481
+Qualitaet sym:svt.NumericField.16481.1
+Graustufen sym:svt.RadioButton.16481.1
+Echtfarben sym:svt.RadioButton.16481.2
 
 *Kommentar sym:CUI_HID_REDLINING_DLG
 KommentarText sym:CUI_HID_REDLINING_EDIT
@@ -201,10 +201,10 @@ Benutzerfeld3 sym:SW_HID_AUTH_FIELD_CUSTOM3
 Benutzerfeld4 sym:SW_HID_AUTH_FIELD_CUSTOM4
 Benutzerfeld5 sym:SW_HID_AUTH_FIELD_CUSTOM5
 
-*Loeschbestaetigung sym:svtools.ModalDialog.16376
-Ja sym:svtools.PushButton.16376.4
-Alle sym:svtools.PushButton.16376.6
-Nein sym:svtools.PushButton.16376.5
+*Loeschbestaetigung sym:svt.ModalDialog.16376
+Ja sym:svt.PushButton.16376.4
+Alle sym:svt.PushButton.16376.6
+Nein sym:svt.PushButton.16376.5
 
 *Makro sym:basctl.ModalDialog.14900
 Makroname sym:basctl.Edit.14900.5
@@ -323,7 +323,7 @@ ZugeordnetZuButton sym:sc.ImageButton.25626.16
 *NavigationsFenster sym:SW_HID_INSERT_CTRL
 Auswahl sym:SW_HID_NAVI_VS
 
-*Navigator sym:.uno:Navigator
+*Navigator sym:SFXDOCKINGWINDOW_Navigator
 
 *NavigatorCalc sym:SC_HID_SC_NAVIGATOR
 NavigatorToolboxCalc sym:SC_HID_SC_NAVIPI_TOOLBOX
@@ -388,20 +388,20 @@ NachObenVerschieben sym:SW_HID_NAVI_TBX23
 Inhaltsansicht sym:SW_HID_NAVI_TBX8
 
 *Neu sym:.uno:NewDoc
-Bereiche sym:sfx2.ListBox.2053.21
-Vorlagen sym:sfx2.ListBox.2053.52
-Zusaetze sym:sfx2.MoreButton.2053.32
-Vorschau sym:sfx2.CheckBox.2053.51
-Titel sym:sfx2.Edit.2053.56
-Thema sym:sfx2.Edit.2053.55
-Schluesselworte sym:sfx2.Edit.2053.61
-Beschreibung sym:sfx2.MultiLineEdit.2053.71
-Text sym:sfx2.CheckBox.2053.33
-Frame sym:sfx2.CheckBox.2053.34
-Pages sym:sfx2.CheckBox.2053.35
-Numbering sym:sfx2.CheckBox.2053.36
-Overwrite sym:sfx2.CheckBox.2053.37
-Fromfile sym:sfx2.PushButton.2053.38
+Bereiche sym:sfx.ListBox.2053.21
+Vorlagen sym:sfx.ListBox.2053.52
+Zusaetze sym:sfx.MoreButton.2053.32
+Vorschau sym:sfx.CheckBox.2053.51
+Titel sym:sfx.Edit.2053.56
+Thema sym:sfx.Edit.2053.55
+Schluesselworte sym:sfx.Edit.2053.61
+Beschreibung sym:sfx.MultiLineEdit.2053.71
+Text sym:sfx.CheckBox.2053.33
+Frame sym:sfx.CheckBox.2053.34
+Pages sym:sfx.CheckBox.2053.35
+Numbering sym:sfx.CheckBox.2053.36
+Overwrite sym:sfx.CheckBox.2053.37
+Fromfile sym:sfx.PushButton.2053.38
 
 *NeueBibliothek sym:basctl.ModalDialog.14892
 Bibliotheksname sym:basctl.Edit.14892.41

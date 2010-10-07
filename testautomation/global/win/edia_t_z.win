@@ -88,8 +88,8 @@ TransitionAutomaticPreview   sym:SD_HID_SD_SLIDETRANSITIONPANE_CB_AUTO_PREVIEW
 *SlideTransition sym:SD_HID_SD_SLIDE_TRANSITIONS
 
 *TemplateAndDocuments sym:SVT_HID_TEMPLATEDLG_DIALOG
-Organize sym:svtools.PushButton.16420.11
-Edit sym:svtools.PushButton.16420.12
+Organize sym:svt.PushButton.16420.11
+Edit sym:svt.PushButton.16420.12
 Backward sym:SVT_HID_TEMPLATEDLG_TB_BACK
 UpOneLevel sym:SVT_HID_TEMPLATEDLG_TB_PREV
 Print sym:SVT_HID_TEMPLATEDLG_TB_PRINT
@@ -156,12 +156,12 @@ DetectSpecialNumbers   sym:sc.CheckBox.25695.25
 Type sym:sc.ListBox.25695.28
 Preview sym:SC_HID_SC_ASCII_TABCTR
 
-*UnsatisfiedDependencies sym:desktop.ModalDialog.2001
-UnsatisfiedDependencyList sym:desktop.ListBox.2001.2
+*UnsatisfiedDependencies sym:deploymentgui.ModalDialog.2001
+UnsatisfiedDependencyList sym:deploymentgui.ListBox.2001.2
 
-*WarningPrintTransparency sym:sfx2.ModalDialog.2399
-NoButton sym:sfx2.PushButton.2399.63
-DoNotShowAgain sym:sfx2.CheckBox.2399.65
+*WarningPrintTransparency sym:sfx.ModalDialog.2399
+NoButton sym:sfx.PushButton.2399.63
+DoNotShowAgain sym:sfx.CheckBox.2399.65
 
 *WebWizard sym:WIZARDS_HID0_WEBWIZARD
 IntroductionChooseSettings sym:WIZARDS_HID1_LST_SESSIONS
@@ -269,7 +269,7 @@ SubmitBindingExpressionBtn sym:svx.PushButton.18016.19
 SubmitBinding sym:svx.ListBox.18016.21
 SubmitReplace sym:svx.ListBox.18016.23
 
-*XFormsDataNavigator sym:.uno:ShowDataNavigator
+*XFormsDataNavigator sym:SVX_HID_DATA_NAVIGATOR_WIN 
 XFormsDataNavigatorTabControl sym:SVX_HID_XFORMS_TAB_CONTROL
 'Instance svx:TabPage:RID_SVX_TP_XFORMS_INSTANCE
 Models sym:SVX_HID_XFORMS_MODELS_LIST

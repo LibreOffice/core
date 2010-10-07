@@ -229,12 +229,12 @@ EndeVertikal sym:cui.MetricField.10191.7
 Typ sym:cui.ListBox.10191.1
 
 *TabVerwalten sym:SFX2_HID_MANAGE_STYLES
-VorlagenName sym:sfx2.Edit.267.2
-Aktualisieren sym:sfx2.CheckBox.267.12
-Folgevorlage sym:sfx2.ListBox.267.4
-VerknuepftMit sym:sfx2.ListBox.267.6
-Bereich sym:sfx2.ListBox.267.8
-Enthaelt sym:sfx2.MultiLineEdit.267.11
+VorlagenName sym:sfx.Edit.267.2
+Aktualisieren sym:sfx.CheckBox.267.12
+Folgevorlage sym:sfx.ListBox.267.4
+VerknuepftMit sym:sfx.ListBox.267.6
+Bereich sym:sfx.ListBox.267.8
+Enthaelt sym:sfx.MultiLineEdit.267.11
 Zurueck sym:SFX2_HID_TABDLG_RESET_BTN
 Standard sym:SFX2_HID_TABDLG_STANDARD_BTN
 

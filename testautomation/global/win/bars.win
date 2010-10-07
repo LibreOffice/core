@@ -1285,7 +1285,7 @@ ShowFormFunctions .uno:Config
 Save .uno:Save
 SaveAs .uno:SaveAs
 SortAscending .uno:Sortup
-SortDescending .uno:Sortdown
+SortDescending .uno:SortDown
 SortierenAb .uno:SortDescending
 SortierenAuf .uno:SortAscending
 SortOrder .uno:OrderCrit
@@ -1338,7 +1338,7 @@ FormatSelection .uno:FormatSelection
 *ToolsCollectionBar .HelpId:insertcontrolsbar
 '-------------------------------------------------------------------------
 InsPushButton .uno:InsertPushbutton
-InsCheckBox .uno:Checkbox
+InsCheckBox .uno:CheckBox
 InsListBox .uno:InsertListbox
 InsFixedText .uno:InsertFixedText
 InsFrame .uno:Groupbox

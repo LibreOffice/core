@@ -65,13 +65,13 @@ Lf sym:sw.RadioButton.20209.11
 Auswahl sym:CUI_HID_SEARCHATTR_CTL_ATTR
 
 *Ausrichtung sym:.uno:ChangeAlignment
-Links sym:starmath.RadioButton.20006.1
-Zentriert sym:starmath.RadioButton.20006.2
-Rechts sym:starmath.RadioButton.20006.3
+Links sym:sm.RadioButton.20006.1
+Zentriert sym:sm.RadioButton.20006.2
+Rechts sym:sm.RadioButton.20006.3
 'Oben starmath:RadioButton:RID_ALIGNDIALOG:4
 'Mitte starmath:RadioButton:RID_ALIGNDIALOG:5
 'Unten starmath:RadioButton:RID_ALIGNDIALOG:6
-Standard sym:starmath.PushButton.20006.1
+Standard sym:sm.PushButton.20006.1
 
 *AutoAbstractErzeugen sym:SW_HID_INSERT_ABSTRACT
 Ebenen sym:sw.NumericField.20208.5
@@ -213,8 +213,8 @@ Loeschen sym:sw.PushButton.21666.4
 Umbenennen sym:sw.PushButton.21666.11
 
 *BereicheSchuetzen sym:SW_HID_DLG_PASSWD_SECTION
-PasswortName sym:sfx2.Edit.2316.14
-PasswortBestaetigen sym:sfx2.Edit.2316.16
+PasswortName sym:sfx.Edit.2316.14
+PasswortBestaetigen sym:sfx.Edit.2316.16
 
 *Beschriftung sym:SW_HID_DLG_CAPTION sym:.uno:InsertCaptionDialog
 Kategorie sym:sw.ComboBox.21011.5
@@ -255,34 +255,34 @@ AnimationenZulassen sym:sd.CheckBox.20003.6
 DiawechselAufHintergrund sym:sd.CheckBox.20003.7
 PraesentationImmerImVordergrund sym:sd.CheckBox.20003.8
 
-*BMPOptionen sym:svtools.ModalDialog.16371
-Farbaufloesung sym:svtools.ListBox.16371.1
-RLEKodierung sym:svtools.CheckBox.16371.3
-Original sym:svtools.RadioButton.16371.1
-Aufloesung sym:svtools.RadioButton.16371.2
-DPI sym:svtools.ComboBox.16371.1
-Groesse sym:svtools.RadioButton.16371.3
-Breite sym:svtools.MetricField.16371.1
-Hoehe sym:svtools.MetricField.16371.2
+*BMPOptionen sym:svt.ModalDialog.16371
+Farbaufloesung sym:svt.ListBox.16371.1
+RLEKodierung sym:svt.CheckBox.16371.3
+Original sym:svt.RadioButton.16371.1
+Aufloesung sym:svt.RadioButton.16371.2
+DPI sym:svt.ComboBox.16371.1
+Groesse sym:svt.RadioButton.16371.3
+Breite sym:svt.MetricField.16371.1
+Hoehe sym:svt.MetricField.16371.2
 
 *Browser sym:.uno:Beamer
 
-*ChineseTranslation sym:svx.CB_USE_VARIANTS.300
+*ChineseTranslation sym:textconversiondlgs.ModalDialog.300
 TChineseToSChinese sym:SVX_HID_SVX_CHINESE_TRANSLATION_RB_CONVERSION_TO_SIMPLIFIED 
 SChineseToTChinese sym:SVX_HID_SVX_CHINESE_TRANSLATION_RB_CONVERSION_TO_TRADITIONAL
 'UseSARCharacter sym:SVX_HID_SVX_CHINESE_TRANSLATION_CB_USE_VARIANTS
-TranslateCommonTerms sym:svx.CheckBox.300.2
-EditTerms sym:svx.PushButton.300.1
+TranslateCommonTerms sym:textconversiondlgs.CheckBox.300.2
+EditTerms sym:textconversiondlgs.PushButton.300.1
 
-*ChineseDictionary sym:svx.ModalDialog.301
+*ChineseDictionary sym:textconversiondlgs.ModalDialog.301
 TChineseToSChinese sym:SVX_HID_SVX_CHINESE_DICTIONARY_RB_CONVERSION_TO_SIMPLIFIED
 SChineseToTChinese sym:SVX_HID_SVX_CHINESE_DICTIONARY_RB_CONVERSION_TO_TRADITIONAL
 ReverseMapping sym:SVX_HID_SVX_CHINESE_DICTIONARY_CB_REVERSE
-Term sym:svx.Edit.301.1
-Mapping sym:svx.Edit.301.2
-Property sym:svx.ListBox.301.1
+Term sym:textconversiondlgs.Edit.301.1
+Mapping sym:textconversiondlgs.Edit.301.2
+Property sym:textconversiondlgs.ListBox.301.1
 SToTMappingContent sym:SVX_HID_SVX_CHINESE_DICTIONARY_LB_TO_TRADITIONAL
 TToSMappingContent sym:SVX_HID_SVX_CHINESE_DICTIONARY_LB_TO_SIMPLIFIED
-Add sym:svx.PushButton.301.1
-Modify sym:svx.PushButton.301.2
-Delete sym:svx.PushButton.301.3
+Add sym:textconversiondlgs.PushButton.301.1
+Modify sym:textconversiondlgs.PushButton.301.2
+Delete sym:textconversiondlgs.PushButton.301.3

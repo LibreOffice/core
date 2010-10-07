@@ -10,14 +10,14 @@ UseTextSelectionCursor sym:cui.CheckBox.10250.12
 AutomaticDetectHC sym:cui.CheckBox.10250.13
 
 *TabAdabas sym:DBACCESS_HID_DSADMIN_PAGE_ADABAS
-Hostname sym:dbaccess.Edit.19205.5
-CacheSize sym:dbaccess.NumericField.19205.2
-DataIncrement sym:dbaccess.NumericField.19205.1
-CotrolUser sym:dbaccess.Edit.19205.2
-ControlPassword sym:dbaccess.Edit.19205.1
-ShutdownService sym:dbaccess.CheckBox.19205.1
+Hostname sym:dbu.Edit.19205.5
+CacheSize sym:dbu.NumericField.19205.2
+DataIncrement sym:dbu.NumericField.19205.1
+CotrolUser sym:dbu.Edit.19205.2
+ControlPassword sym:dbu.Edit.19205.1
+ShutdownService sym:dbu.CheckBox.19205.1
 Charset sym:DBACCESS_HID_DSADMIN_CHARSET
-Extended sym:dbaccess.PushButton.19205.1
+Extended sym:dbu.PushButton.19205.1
 
 *TabAdabasUserSettings sym:DBACCESS_HID_TAB_PAGE_USERADMIN
 User sym:DBACCESS_HID_TAB_PAGE_LBUSER
@@ -26,15 +26,15 @@ ChangePassword sym:DBACCESS_HID_TAB_PAGE_PBCHGPWD
 DeleteUser sym:DBACCESS_HID_TAB_PAGE_PBUSERDELETE
 AccessRights sym:DBACCESS_HID_TAB_PAGE_TBLGRANTS
 
-*TabAdditionalSettings sym:extensions.TabPage.19701
-Settings sym:extensions.PushButton.19701.1
+*TabAdditionalSettings sym:abp.TabPage.19701
+Settings sym:abp.PushButton.19701.1
 
-*TabAddressDataSourceAutoPilot sym:extensions.TabPage.19700
-Mozilla sym:extensions.RadioButton.19700.1
-LDAP sym:extensions.RadioButton.19700.6
-Outlook sym:extensions.RadioButton.19700.7
-WinSystem sym:extensions.RadioButton.19700.8
-Other sym:extensions.RadioButton.19700.9
+*TabAddressDataSourceAutoPilot sym:abp.TabPage.19700
+Mozilla sym:abp.RadioButton.19700.1
+LDAP sym:abp.RadioButton.19700.6
+Outlook sym:abp.RadioButton.19700.7
+WinSystem sym:abp.RadioButton.19700.8
+Other sym:abp.RadioButton.19700.9
 
 *TabADO sym:DBACCESS_HID_DSADMIN_PAGE_ADO
 URL sym:DBACCESS_HID_DSADMIN_CONNURL_ADOPAGE
@@ -156,17 +156,17 @@ Zurueck sym:SFX2_HID_TABDLG_RESET_BTN
 Remove sym:SW_HID_NUM_RESET
 
 *TabChartAxisLabel sym:CHART2_HID_SCH_TP_AXIS_LABEL
- ShowLabels        sym:chart2.CheckBox.920.1
- Tile              sym:chart2.RadioButton.920.14
- StaggerOdd        sym:chart2.RadioButton.920.15
- StaggerEven       sym:chart2.RadioButton.920.16
- Automatic         sym:chart2.RadioButton.920.17
- Overlap           sym:chart2.CheckBox.920.11
- Break             sym:chart2.CheckBox.920.12
+ ShowLabels        sym:chartcontroller.CheckBox.920.1
+ Tile              sym:chartcontroller.RadioButton.920.14
+ StaggerOdd        sym:chartcontroller.RadioButton.920.15
+ StaggerEven       sym:chartcontroller.RadioButton.920.16
+ Automatic         sym:chartcontroller.RadioButton.920.17
+ Overlap           sym:chartcontroller.CheckBox.920.11
+ Break             sym:chartcontroller.CheckBox.920.12
  AngleKnob         sym:CHART2_HID_SCH_ALIGNMENT_CTR_DIAL
  AngleText         sym:CHART2_HID_SCH_ALIGNMENT_DEGREES
  VerticallyStacked sym:CHART2_HID_SCH_ALIGNMENT_STACKED 
- TextDirection     sym:chart2.ListBox.920.20 
+ TextDirection     sym:chartcontroller.ListBox.920.20 
  
 *TabChartAxisNumbers sym:CUI_HID_NUMBERFORMAT
  Category            sym:cui.ListBox.10041.9
@@ -184,70 +184,70 @@ Remove sym:SW_HID_NUM_RESET
  RemoveButton        sym:CUI_HID_NUMBERFORMAT_TBI_REMOVE
  Comment             sym:cui.Edit.10041.28 
  
-*TabChartAxisScale          sym:chart2.TabPage.903  
-MinimumValue                sym:chart2.SpinField.903.3
-MinimumAutomatic            sym:chart2.CheckBox.903.1
-MaximumValue                sym:chart2.SpinField.903.2
-MaximumAutomatic            sym:chart2.CheckBox.903.2         
-MajorIntervalValue          sym:chart2.SpinField.903.1      
-MajorIntervalAutomatic      sym:chart2.CheckBox.903.3  
-MinorIntervalCount          sym:chart2.MetricField.903.10    
-MinorIntervalCountAutomatic sym:chart2.CheckBox.903.4
-ReferenceValue              sym:chart2.SpinField.903.4              
-RreferenceValueAutomatic    sym:chart2.CheckBox.903.5
-LogarithmicScale            sym:chart2.CheckBox.903.6
-ReverseDirection            sym:chart2.CheckBox.903.7
+*TabChartAxisScale          sym:chartcontroller.TabPage.903  
+MinimumValue                sym:chartcontroller.SpinField.903.3
+MinimumAutomatic            sym:chartcontroller.CheckBox.903.1
+MaximumValue                sym:chartcontroller.SpinField.903.2
+MaximumAutomatic            sym:chartcontroller.CheckBox.903.2         
+MajorIntervalValue          sym:chartcontroller.SpinField.903.1      
+MajorIntervalAutomatic      sym:chartcontroller.CheckBox.903.3  
+MinorIntervalCount          sym:chartcontroller.MetricField.903.10    
+MinorIntervalCountAutomatic sym:chartcontroller.CheckBox.903.4
+ReferenceValue              sym:chartcontroller.SpinField.903.4              
+RreferenceValueAutomatic    sym:chartcontroller.CheckBox.903.5
+LogarithmicScale            sym:chartcontroller.CheckBox.903.6
+ReverseDirection            sym:chartcontroller.CheckBox.903.7
 
-*TabChartAxisPositioning    sym:chart2.TabPage.904
-CrossOtherAxisAt            sym:chart2.ListBox.904.1
-AxisAtValue                 sym:chart2.SpinField.904.3
-AxisAtCategory              sym:chart2.ComboBox.904.4
-Hidden_Checkbox1            sym:chart2.CheckBox.904.1
-PlaceLabels                 sym:chart2.ListBox.904.2
-Hidden_Spinfield1           sym:chart2.SpinField.904.5
-MajorIntervalMarksInner     sym:chart2.CheckBox.904.2
-MajorIntervalMarksOuter     sym:chart2.CheckBox.904.3
-MinorIntervalMarksInner     sym:chart2.CheckBox.904.4
-MinorIntervalMarksOuter     sym:chart2.CheckBox.904.5
-PlaceMarks                  sym:chart2.ListBox.904.6
-Hidden_Checkbox2            sym:chart2.CheckBox.904.6
-Hidden_MoreBtn              sym:chart2.PushButton.904.1
-Hidden_Checkbox3            sym:chart2.CheckBox.904.7
-Hidden_More2                sym:chart2.PushButton.904.2
+*TabChartAxisPositioning    sym:chartcontroller.TabPage.904
+CrossOtherAxisAt            sym:chartcontroller.ListBox.904.1
+AxisAtValue                 sym:chartcontroller.SpinField.904.3
+AxisAtCategory              sym:chartcontroller.ComboBox.904.4
+Hidden_CheckBox1            sym:chartcontroller.CheckBox.904.1
+PlaceLabels                 sym:chartcontroller.ListBox.904.2
+Hidden_Spinfield1           sym:chartcontroller.SpinField.904.5
+MajorIntervalMarksInner     sym:chartcontroller.CheckBox.904.2
+MajorIntervalMarksOuter     sym:chartcontroller.CheckBox.904.3
+MinorIntervalMarksInner     sym:chartcontroller.CheckBox.904.4
+MinorIntervalMarksOuter     sym:chartcontroller.CheckBox.904.5
+PlaceMarks                  sym:chartcontroller.ListBox.904.6
+Hidden_CheckBox2            sym:chartcontroller.CheckBox.904.6
+Hidden_MoreBtn              sym:chartcontroller.PushButton.904.1
+Hidden_CheckBox3            sym:chartcontroller.CheckBox.904.7
+Hidden_More2                sym:chartcontroller.PushButton.904.2
 
-*TabChartTypeDataRange sym:chart2.TabPage.911
- DataRange             sym:chart2.Edit.911.1
- SelectDataRange       sym:chart2.ImageButton.911.1
- Rows                  sym:chart2.RadioButton.911.1
- Columns               sym:chart2.RadioButton.911.2
- FirstRowAsLabel       sym:chart2.CheckBox.911.1
- FirstColumnAsLabel    sym:chart2.CheckBox.911.2
+*TabChartTypeDataRange sym:chartcontroller.TabPage.911
+ DataRange             sym:chartcontroller.Edit.911.1
+ SelectDataRange       sym:chartcontroller.ImageButton.911.1
+ Rows                  sym:chartcontroller.RadioButton.911.1
+ Columns               sym:chartcontroller.RadioButton.911.2
+ FirstRowAsLabel       sym:chartcontroller.CheckBox.911.1
+ FirstColumnAsLabel    sym:chartcontroller.CheckBox.911.2
  
 +TabDataRangesDataRange TabChartTypeDataRange
 +TabFormatDataRangesDataRange TabChartTypeDataRange
 
  
-*TabChartTypeDataSeries sym:chart2.TabPage.914
+*TabChartTypeDataSeries sym:chartcontroller.TabPage.914
  DataRanges             sym:CHART2_HID_SCH_DATA_RANGES_LIST
- RangeFor               sym:chart2.Edit.914.80
- SelectRange            sym:chart2.ImageButton.914.90
- Categories             sym:chart2.Edit.914.120
- SelectCategories       sym:chart2.ImageButton.914.130
- AddButton              sym:chart2.PushButton.914.30
- RemoveButton           sym:chart2.PushButton.914.40
- MoveUp                 sym:chart2.PushButton.914.140
- MoveDown               sym:chart2.PushButton.914.150
+ RangeFor               sym:chartcontroller.Edit.914.80
+ SelectRange            sym:chartcontroller.ImageButton.914.90
+ Categories             sym:chartcontroller.Edit.914.120
+ SelectCategories       sym:chartcontroller.ImageButton.914.130
+ AddButton              sym:chartcontroller.PushButton.914.30
+ RemoveButton           sym:chartcontroller.PushButton.914.40
+ MoveUp                 sym:chartcontroller.PushButton.914.140
+ MoveDown               sym:chartcontroller.PushButton.914.150
  DataSeries             sym:CHART2_HID_SCH_SERIES_LIST
  
 +TabDataRangesDataSeries TabChartTypeDataSeries
 +TabFormatDataRangesDataSeries TabChartTypeDataSeries
  
-*TabChartPieOptions sym:chart2.TabPage.909
-Clockwise           sym:chart2.CheckBox.909.1
+*TabChartPieOptions sym:chartcontroller.TabPage.909
+Clockwise           sym:chartcontroller.CheckBox.909.1
 StartingAngle       sym:CHART2_HID_SCH_STARTING_ANGLE_DIAL
-Degrees             sym:chart2.NumericField.909.1
+Degrees             sym:chartcontroller.NumericField.909.1
 
-*TabChartTypeChartElements sym:chart2.TabPage.912
+*TabChartTypeChartElements sym:chartcontroller.TabPage.912
 Title                     sym:CHART2_HID_SCH_TITLE_MAIN
 Subtitle                  sym:CHART2_HID_SCH_TITLE_SUB
 TitleXaxis                sym:CHART2_HID_SCH_TITLE_X
@@ -264,11 +264,11 @@ GridLinesXaxis            sym:CHART2_HID_SCH_CB_XGRID
 GridLinesYaxis            sym:CHART2_HID_SCH_CB_YGRID
 GridLinesZaxis            sym:CHART2_HID_SCH_CB_ZGRID
  
-*TabChartTypeChartLocation sym:chart2.TabPage.913
-InsertInSheet             sym:chart2.ListBox.913.1
+*TabChartTypeChartLocation sym:chartcontroller.TabPage.913
+InsertInSheet             sym:chartcontroller.ListBox.913.1
 
-*TabCreateOptionGroup sym:extensions.TabPage.19726
-GroupCaption sym:extensions.Edit.19726.3
+*TabCreateOptionGroup sym:dbp.TabPage.19726
+GroupCaption sym:dbp.Edit.19726.3
 
 *TabConnections sym:cui.TabPage.17022
 DriverList sym:CUI_HID_OFA_CONNPOOL_DRIVERLIST
@@ -276,15 +276,15 @@ ConnectionPoolingEnabled sym:cui.CheckBox.17022.2
 EnablePoolingForThisDriver sym:cui.CheckBox.17022.7
 Timeout sym:cui.NumericField.17022.9
 
-*TabConnection sym:dbaccess.TabPage.19206
+*TabConnection sym:dbu.TabPage.19206
 dBasePath sym:DBACCESS_HID_DSADMIN_DBASE_PATH
 SelectPath sym:DBACCESS_HID_DSADMIN_BROWSECONN
-Username sym:dbaccess.Edit.19206.1
-PasswordRequired sym:dbaccess.CheckBox.19206.1
+Username sym:dbu.Edit.19206.1
+PasswordRequired sym:dbu.CheckBox.19206.1
 JDBCDriverClass sym:DBACCESS_HID_DSADMIN_DRIVERCLASS
-TestDriver sym:dbaccess.PushButton.19206.1
+TestDriver sym:dbu.PushButton.19206.1
 MySQLODBCDatasource sym:DBACCESS_HID_DSADMIN_MYSQL_ODBC_DATASOURCE
-TestConnection sym:dbaccess.PushButton.19206.2
+TestConnection sym:dbu.PushButton.19206.2
 MySQLJDBCDatasource sym:DBACCESS_HID_DSADMIN_MYSQL_DATABASE
 AdabasDatasource sym:DBACCESS_HID_DSADMIN_ADABAS_DATABASE
 OracleJDBCDatasource sym:DBACCESS_HID_DSADMIN_ORACLE_DATABASE
@@ -297,20 +297,20 @@ TextPath sym:DBACCESS_HID_DSADMIN_FLAT_PATH
 
 *TabCopyDatabaseTable sym:DBACCESS_HID_TAB_WIZ_COPYTABLE
 TableName sym:DBACCESS_HID_TAB_WIZ_TABLENAME_EDIT
-DefinitionAndData sym:dbaccess.RadioButton.19212.1
-Definition sym:dbaccess.RadioButton.19212.2
-AsTableView sym:dbaccess.RadioButton.19212.3
-AttachData sym:dbaccess.RadioButton.19212.4
-CreatePrimaryKey sym:dbaccess.CheckBox.19212.5
-PrimaryKeyName sym:dbaccess.Edit.19212.3
+DefinitionAndData sym:dbu.RadioButton.19212.1
+Definition sym:dbu.RadioButton.19212.2
+AsTableView sym:dbu.RadioButton.19212.3
+AttachData sym:dbu.RadioButton.19212.4
+CreatePrimaryKey sym:dbu.CheckBox.19212.5
+PrimaryKeyName sym:dbu.Edit.19212.3
 
 *TabColumnSelect sym:DBACCESS_HID_TAB_WIZ_COLUMN_SELECT
-LeftColumNames sym:dbaccess.MultiListBox.19209.1
-Add sym:dbaccess.ImageButton.19209.1
-AddAll sym:dbaccess.ImageButton.19209.3
-Remove sym:dbaccess.ImageButton.19209.2
-RemoveAll sym:dbaccess.ImageButton.19209.4
-RightColumNames sym:dbaccess.MultiListBox.19209.2
+LeftColumNames sym:dbu.MultiListBox.19209.1
+Add sym:dbu.ImageButton.19209.1
+AddAll sym:dbu.ImageButton.19209.3
+Remove sym:dbu.ImageButton.19209.2
+RemoveAll sym:dbu.ImageButton.19209.4
+RightColumNames sym:dbu.MultiListBox.19209.2
 
 *TabCompatibility sym:SW_HID_OPTCOMPATIBILITY_PAGE
 Options sym:SW_HID_COMPATIBILITY_OPTIONS_BOX
@@ -357,17 +357,17 @@ SaveIn sym:CUI_HID_SVX_SAVE_IN
 ToolbarContents sym:CUI_HID_SVX_CONFIG_TOOLBAR_CONTENTS
 ResetBtn sym:SFX2_HID_TABDLG_RESET_BTN
  
-*TabDatabaseField sym:extensions.TabPage.19725
-YesSaveIt sym:extensions.RadioButton.19725.3
-NoValueForm sym:extensions.RadioButton.19725.4
-Fieldbox sym:extensions.ListBox.19725.4
+*TabDatabaseField sym:dbp.TabPage.19725
+YesSaveIt sym:dbp.RadioButton.19725.3
+NoValueForm sym:dbp.RadioButton.19725.4
+Fieldbox sym:dbp.ListBox.19725.4
 
-*TabDatabaseValues sym:extensions.TabPage.19724
-YesSaveIt sym:extensions.RadioButton.19725.3
-NoValueForm sym:extensions.RadioButton.19725.4
-Fieldbox sym:extensions.ListBox.19725.4
-WhichValue sym:extensions.Edit.19724.2
-OptionFields sym:extensions.ListBox.19724.3
+*TabDatabaseValues sym:dbp.TabPage.19724
+YesSaveIt sym:dbp.RadioButton.19725.3
+NoValueForm sym:dbp.RadioButton.19725.4
+Fieldbox sym:dbp.ListBox.19725.4
+WhichValue sym:dbp.Edit.19724.2
+OptionFields sym:dbp.ListBox.19724.3
 
 *TabDataControl sym:EXTENSIONS_HID_FM_PROPDLG_TAB_DATA
 DataField sym:EXTENSIONS_HID_PROP_CONTROLSOURCE
@@ -420,7 +420,7 @@ FormLinkDLGButton sym:EXTENSIONS_UID_PROP_DLG_FORMLINKFIELDS
 OpenQueryDesign sym:EXTENSIONS_UID_PROP_DLG_SQLCOMMAND
 SortDLGButton sym:EXTENSIONS_UID_PROP_DLG_ORDER
 
-*TabDataPointLayout sym:chart2.TabPage.907
+*TabDataPointLayout sym:chartcontroller.TabPage.907
  BarColumnShape sym:CHART2_HID_SCH_LB_BAR_GEOMETRY
 
 *TabDataSeriesLabels     sym:CHART2_HID_SCH_DATA_DESCR
@@ -439,30 +439,30 @@ RotateDegrees           sym:CHART2_HID_SCH_DATALABEL_ROTATION_EDIT
 
 +TabDataPointLabels TabDataSeriesLabels
 
-*TabDataSeriesOptions   sym:chart2.TabPage.908
-PrimaryYaxis            sym:chart2.RadioButton.908.2
-SecondaryYaxis          sym:chart2.RadioButton.908.3
-Gap                     sym:chart2.MetricField.908.4
-Overlap                 sym:chart2.MetricField.908.5
-ConnectionLines         sym:chart2.CheckBox.908.9
-ShowBarsSideBySide      sym:chart2.CheckBox.908.10
-LeaveGap sym:chart2.RadioButton.908.13
-AssumeZero sym:chart2.RadioButton.908.14
-ContinueLine sym:chart2.RadioButton.908.15
-IncludeHiddenCells sym:chart2.CheckBox.908.16
+*TabDataSeriesOptions   sym:chartcontroller.TabPage.908
+PrimaryYaxis            sym:chartcontroller.RadioButton.908.2
+SecondaryYaxis          sym:chartcontroller.RadioButton.908.3
+Gap                     sym:chartcontroller.MetricField.908.4
+Overlap                 sym:chartcontroller.MetricField.908.5
+ConnectionLines         sym:chartcontroller.CheckBox.908.9
+ShowBarsSideBySide      sym:chartcontroller.CheckBox.908.10
+LeaveGap sym:chartcontroller.RadioButton.908.13
+AssumeZero sym:chartcontroller.RadioButton.908.14
+ContinueLine sym:chartcontroller.RadioButton.908.15
+IncludeHiddenCells sym:chartcontroller.CheckBox.908.16
 
-*TabDataSourceName sym:extensions.TabPage.19704
-SourceName sym:extensions.Edit.19704.1
+*TabDataSourceName sym:abp.TabPage.19704
+SourceName sym:abp.Edit.19704.1
 
 *TabdBase sym:DBACCESS_HID_DSADMIN_PAGE_DBASE
 CharSet sym:DBACCESS_HID_DSADMIN_CHARSET
 DisplayInactiveRecords sym:DBACCESS_HID_DSADMIN_SHOWDELETED
 Indexes sym:DBACCESS_HID_DSADMIN_DBASE_INDICIES
 
-*TabDefaultFieldSelection sym:extensions.TabPage.19723
-YesFollowing sym:extensions.RadioButton.19723.1
-NoSelected sym:extensions.RadioButton.19723.2
-Selection sym:extensions.ListBox.19723.3
+*TabDefaultFieldSelection sym:dbp.TabPage.19723
+YesFollowing sym:dbp.RadioButton.19723.1
+NoSelected sym:dbp.RadioButton.19723.2
+Selection sym:dbp.ListBox.19723.3
 
 *TabDialogs sym:basctl.TabPage.14889
 ModuleList sym:BASCTL_HID_BASICIDE_MODULES_TREE

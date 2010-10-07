@@ -21,17 +21,17 @@ FileAutopilotAddressDataSource .uno:AutoPilotAddressDataSource
 FirstTimeWizard service:com.sun.star.comp.desktop.FirstStart?start
 FileWizardsWebPage service:com.sun.star.wizards.web.CallWizard?start
 FileCloseAndReturn .uno:CloseDoc
-FileSaveCopy .uno:SaveAs
+FileSaveCopy SID_SAVEASDOC
 FileClose .uno:CloseDoc
-FileSave .uno:Save
-FileSaveAs .uno:SaveAs
+FileSave SID_SAVEDOC
+FileSaveAs SID_SAVEASDOC
 FileSaveAll .uno:SaveAll
 FileExport .uno:ExportTo
 FileExportAsPDF .uno:ExportToPDF
 FileSendDocumentAsEmail .uno:SendMail
 FileSendDocumentAsPDF .uno:SendMailDocAsPDF
 FileVersions .uno:VersionDialog
-FileReload .uno:Reload SID_LASTVERSIONDOC
+FileReload SID_RELOAD
 FileProperties .uno:SetDocumentProperties
 FileTemplatesOrganize .uno:Organizer
 FileTemplatesSave .uno:SaveAsTemplate
@@ -40,7 +40,7 @@ FileTemplatesAddressbookSource .uno:AddressBookSource
 FilePageView .uno:PrintPreview
 FilePrint .uno:Print
 FilePrintersettings .uno:PrinterSetup
-FileExit .uno:Quit
+FileExit SID_QUITAPP
 
 ' **** Writer
 FileSendOutlineToPresentation .uno:SendOutlineToStarImpress
@@ -59,7 +59,7 @@ FilePack .uno:PackAndGo
 ' **** All applications
 EditUndo .uno:Undo
 EditRedo .uno:Redo
-EditRepeat .uno:RepeatAction
+EditRepeat .uno:Repeat
 EditCut .uno:Cut
 EditCopy .uno:Copy
 EditDoc .uno:EditDoc

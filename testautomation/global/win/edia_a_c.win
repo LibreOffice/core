@@ -2,14 +2,14 @@
 AreaEditField sym:sc.Edit.25729.11
 ShrinkButton sym:sc.ImageButton.25729.12
 
-*ActivationOrder sym:extensions.ModalDialog.1001
+*ActivationOrder sym:pcr.ModalDialog.1001
 ControlList sym:EXTENSIONS_HID_PROP_TABORDER_CONTROLS
-MoveUp sym:extensions.PushButton.1001.1
-MoveDown sym:extensions.PushButton.1001.2
-AutoOrder sym:extensions.PushButton.1001.3
+MoveUp sym:pcr.PushButton.1001.1
+MoveDown sym:pcr.PushButton.1001.2
+AutoOrder sym:pcr.PushButton.1001.3
 
-*AddBookmark sym:sfx2.ModalDialog.620
-Bookmarkname sym:sfx2.Edit.620.11
+*AddBookmark sym:sfx.ModalDialog.620
+Bookmarkname sym:sfx.Edit.620.11
 
 *AddConditionDLG  sym:SVX_HID_XFORMS_ADDCONDITION_DLG
 Condition sym:svx.MultiLineEdit.18013.11
@@ -24,22 +24,22 @@ AddNewControl sym:BASCTL_HID_BASICIDE_ADDNEW_CONTROL
 
 *AddTables sym:DBACCESS_HID_DLG_JOIN_TABADD
 TableName sym:DBACCESS_HID_JOINSH_ADDTAB_TABLELIST
-AddTable sym:dbaccess.PushButton.19214.1
-Tables sym:dbaccess.RadioButton.19214.1
-Queries sym:dbaccess.RadioButton.19214.2
+AddTable sym:dbu.PushButton.19214.1
+Tables sym:dbu.RadioButton.19214.1
+Queries sym:dbu.RadioButton.19214.2
 QueryName sym:DBACCESS_HID_JOINSH_ADDTAB_QUERYLIST
 CloseDlg sym:DBACCESS_HID_JOINSH_ADDTAB_CLOSE
 
-*AddressBookSource sym:svtools.ModalDialog.16484
-DataSource sym:svtools.ComboBox.16484.3
-Administrate sym:svtools.PushButton.16484.4
-Table sym:svtools.ComboBox.16484.6
+*AddressBookSource sym:svt.ModalDialog.16484
+DataSource sym:svt.ComboBox.16484.3
+Administrate sym:svt.PushButton.16484.4
+Table sym:svt.ComboBox.16484.6
 
 *AddressSourceAutopilot sym:EXTENSIONS_HID_ABSPILOT
-TabAdditionalSettings sym:extensions.TabPage.19701
-TabAddressDataSourceAutoPilot sym:extensions.TabPage.19700
-TabDataSourceName sym:extensions.TabPage.19704
-TabSelectTable sym:extensions.TabPage.19721
+TabAdditionalSettings sym:abp.TabPage.19701
+TabAddressDataSourceAutoPilot sym:abp.TabPage.19700
+TabDataSourceName sym:abp.TabPage.19704
+TabSelectTable sym:abp.TabPage.19721
 CancelButton sym:EXTENSIONS_HID_ABSPILOT_CANCEL
 BackButton sym:EXTENSIONS_HID_ABSPILOT_PREVIOUS
 NextButton sym:EXTENSIONS_HID_ABSPILOT_NEXT
@@ -54,12 +54,11 @@ Ignoreprivileges sym:DBACCESS_HID_DSADMIN_IGNOREDRIVER_PRIV
 HostName sym:DBACCESS_HID_DSADMIN_HOSTNAME
 PortNumber sym:DBACCESS_HID_DSADMIN_PORTNUMBER
 TabControl sym:DBACCESS_HID_DSADMIN_TABCONTROL
-'TabPage2 dbaccess:TabPage:PAGE_DS_ADABAS_SETTINGS
-TabGeneratedValues sym:dbaccess.TabPage.19222
+TabGeneratedValues sym:dbu.TabPage.19222
 RetrieveGeneratedValues sym:DBACCESS_HID_DSADMIN_AUTORETRIEVEENABLED
 AutoIncrementStatement sym:DBACCESS_HID_DSADMIN_AUTOINCREMENTVALUE
 QueryGeneratedValues sym:DBACCESS_HID_DSADMIN_RETRIEVE_AUTO
-AdvancedSettingsSpecial sym:dbaccess.TabPage.19223
+AdvancedSettingsSpecial sym:dbu.TabPage.19223
 DisplayVersionColumns sym:DBACCESS_HID_DSADMIN_SUPPRESS_VERSIONCL
 EnableOuterJoin sym:DBACCESS_HID_DSADMIN_ENABLEOUTERJOIN
 CheckRequiredFields sym:DBACCESS_HID_DSADMIN_CHECK_REQUIRED_FIELDS
@@ -69,7 +68,7 @@ CheckRequiredFields sym:DBACCESS_HID_DSADMIN_CHECK_REQUIRED_FIELDS
 AgingDegree sym:cui.MetricField.10334.2
 
 *AlienWarning sym:SFX2_HID_WARNING_ALIENFORMAT
-DoNotShowAgain sym:sfx2.CheckBox.2308.16
+DoNotShowAgain sym:sfx.CheckBox.2308.16
 
 *AppendLibraries sym:basctl.ModalDialog.14890
 Libraries sym:BASCTL_HID_BASICIDE_LIBSDLG_TREE
@@ -174,15 +173,15 @@ NextButton sym:WIZARDS_HID_FAXWIZARD_NEXT
 FinishButton sym:WIZARDS_HID_FAXWIZARD_CREATE
 CancelButton sym:WIZARDS_HID_FAXWIZARD_CANCEL
 
-*AutopilotGroupElement sym:extensions.ModalDialog.19721
+*AutopilotGroupElement sym:dbp.ModalDialog.19721
 BackButton sym:EXTENSIONS_HID_GROUPWIZARD_PREVIOUS
 NextButton sym:EXTENSIONS_HID_GROUPWIZARD_NEXT
 CancelButton sym:EXTENSIONS_HID_GROUPWIZARD_CANCEL
 CreateButton sym:EXTENSIONS_HID_GROUPWIZARD_FINISH
-TabGroupBoxData sym:extensions.TabPage.19722
-TabDefaultFieldSelection sym:extensions.TabPage.19723
-TabDatabaseValues sym:extensions.TabPage.19724
-TabCreateOptionGroup sym:extensions.TabPage.19726
+TabGroupBoxData sym:dbp.TabPage.19722
+TabDefaultFieldSelection sym:dbp.TabPage.19723
+TabDatabaseValues sym:dbp.TabPage.19724
+TabCreateOptionGroup sym:dbp.TabPage.19726
 
 *AutopilotLetter sym:WIZARDS_HID_LTRWIZARD
 Business sym:WIZARDS_HID_LTRWIZ_OPTBUSINESSLETTER
@@ -241,18 +240,18 @@ CancelButton sym:WIZARDS_HID_LTRWIZARD_CANCEL
 
 
 
-*AutoPilotListComboBox sym:extensions.ModalDialog.19722
-TabListBoxData sym:extensions.TabPage.19721
-TabTableSelection sym:extensions.TabPage.19727
-TabFieldLink sym:extensions.TabPage.19729
-TabDatabaseField sym:extensions.TabPage.19725
+*AutoPilotListComboBox sym:dbp.ModalDialog.19722
+TabListBoxData sym:dbp.TabPage.19721
+TabTableSelection sym:dbp.TabPage.19727
+TabFieldLink sym:dbp.TabPage.19729
+TabDatabaseField sym:dbp.TabPage.19725
 BackButton sym:EXTENSIONS_HID_LISTWIZARD_PREVIOUS
 NextButton sym:EXTENSIONS_HID_LISTWIZARD_NEXT
 CancelButton sym:EXTENSIONS_HID_LISTWIZARD_CANCEL
 CreateButton sym:EXTENSIONS_HID_LISTWIZARD_FINISH
 
-*AutopilotTableElement sym:extensions.ModalDialog.19723
-TabTableFieldSelection sym:extensions.TabPage.19730
+*AutopilotTableElement sym:dbp.ModalDialog.19723
+TabTableFieldSelection sym:dbp.TabPage.19730
 BackButton sym:EXTENSIONS_HID_GRIDWIZARD_PREVIOUS
 NextButton sym:EXTENSIONS_HID_GRIDWIZARD_NEXT
 CancelButton sym:EXTENSIONS_HID_GRIDWIZARD_CANCEL
@@ -336,23 +335,23 @@ Pass sym:basctl.NumericField.14930.10
 Import sym:cui.PushButton.390.397
 
 *ChangePassword sym:DBACCESS_HID_DLG_PASSWORD
-OldPassword sym:dbaccess.Edit.19223.19
-Password sym:dbaccess.Edit.19223.21
-ConfirmPassword sym:dbaccess.Edit.19223.23
+OldPassword sym:dbu.Edit.19223.19
+Password sym:dbu.Edit.19223.21
+ConfirmPassword sym:dbu.Edit.19223.23
 
 *ChartType sym:CHART2_HID_DIAGRAM_TYPE
 ChooseType sym:CHART2_HID_SCH_CTL_TYPE
 Variant sym:CHART2_HID_SCH_CTL_VARIANT
-XAxisWithCategories sym:chart2.CheckBox.910.1
-Look3D sym:chart2.CheckBox.910.2
-Scheme3D sym:chart2.ListBox.910.1
+XAxisWithCategories sym:chartcontroller.CheckBox.910.1
+Look3D sym:chartcontroller.CheckBox.910.2
+Scheme3D sym:chartcontroller.ListBox.910.1
 BarColumnShape sym:CHART2_HID_SCH_LB_BAR_GEOMETRY
-StackSeries sym:chart2.CheckBox.910.3
-Ontop sym:chart2.RadioButton.910.2
-Percent sym:chart2.RadioButton.910.3
-Deep sym:chart2.RadioButton.910.4
-SmoothLines sym:chart2.CheckBox.910.4
-SmoothLineProperties sym:chart2.PushButton.910.1
+StackSeries sym:chartcontroller.CheckBox.910.3
+Ontop sym:chartcontroller.RadioButton.910.2
+Percent sym:chartcontroller.RadioButton.910.3
+Deep sym:chartcontroller.RadioButton.910.4
+SmoothLines sym:chartcontroller.CheckBox.910.4
+SmoothLineProperties sym:chartcontroller.PushButton.910.1
 NumberOfLines sym:CHART2_HID_SCH_NUM_OF_LINES
 
 *ChartWizard sym:CHART2_HID_SCH_CHART_AUTO_FORMAT
@@ -439,14 +438,14 @@ BackBtn sym:DBACCESS_HID_DBWIZ_PREVIOUS
 CreateBtn sym:DBACCESS_HID_DBWIZ_FINISH
 NextBtn sym:DBACCESS_HID_DBWIZ_NEXT
 
-*CopyDatabaseTable sym:dbaccess.ModalDialog.19216
-Back sym:dbaccess.PushButton.19216.10
-NextBt sym:dbaccess.PushButton.19216.9
+*CopyDatabaseTable sym:dbu.ModalDialog.19216
+Back sym:dbu.PushButton.19216.10
+NextBt sym:dbu.PushButton.19216.9
 
-*ConfirmDelete   sym:svtools.ModalDialog.16376
-Delete   sym:svtools.PushButton.16376.4
-DeleteAll   sym:svtools.PushButton.16376.6
-DoNotDelete   sym:svtools.PushButton.16376.5
+*ConfirmDelete   sym:svt.ModalDialog.16376
+Delete   sym:svt.PushButton.16376.4
+DeleteAll   sym:svt.PushButton.16376.6
+DoNotDelete   sym:svt.PushButton.16376.5
 
 *CopyToDialog sym:SW_HID_MM_COPYTO
 CC sym:sw.Edit.22073.43

@@ -2,14 +2,14 @@
 HelpText sym:DBACCESS_HID_TABLE_DESIGN_HELP_WINDOW
 
 *TabInternet sym:SFX2_HID_DOCINFORELOAD
-DoNotRefreshAutomatically sym:sfx2.RadioButton.273.63
-RefreshThisDocument sym:sfx2.RadioButton.273.64
-RedirectFromThisDocument sym:sfx2.RadioButton.273.65
-TimeReload sym:sfx2.NumericField.273.67
-TimeForward sym:sfx2.NumericField.273.70
-URL sym:sfx2.Edit.273.44
-BrowseURL sym:sfx2.PushButton.273.74
-Frame sym:sfx2.ComboBox.273.73
+DoNotRefreshAutomatically sym:sfx.RadioButton.273.63
+RefreshThisDocument sym:sfx.RadioButton.273.64
+RedirectFromThisDocument sym:sfx.RadioButton.273.65
+TimeReload sym:sfx.NumericField.273.67
+TimeForward sym:sfx.NumericField.273.70
+URL sym:sfx.Edit.273.44
+BrowseURL sym:sfx.PushButton.273.74
+Frame sym:sfx.ComboBox.273.73
 
 *TabOOoImprovement sym:cui.TabPage.10302
 ParticipateYes sym:cui.RadioButton.10302.12
@@ -61,16 +61,16 @@ Records sym:DBACCESS_HID_DSADMIN_LDAP_ROWCOUNT
  PostionTop         sym:CHART2_HID_SCH_LEGEND_POS_TOP
  PostionRight       sym:CHART2_HID_SCH_LEGEND_POS_RIGHT
  PostionBottom      sym:CHART2_HID_SCH_LEGEND_POS_BOTTOM
- TextDirection      sym:chart2.ListBox.900.4 
+ TextDirection      sym:chartcontroller.ListBox.900.4 
 
-*TabListBoxData sym:extensions.TabPage.19721
-DataSource sym:extensions.ListBox.19721.1
-Table sym:extensions.ListBox.19721.2
+*TabListBoxData sym:dbp.TabPage.19721
+DataSource sym:dbp.ListBox.19721.1
+Table sym:dbp.ListBox.19721.2
 
 *TabLocalizedOptions sym:CUI_HID_OFAPAGE_AUTOCORR_QUOTE
 LocalizedOptionsList sym:CUI_HID_OFAPAGE_QUOTE_CLB
 LocalizedOptions sym:CUI_HID_OFAPAGE_QUOTE_SW_CLB
-SingleQuotesReplace sym:cui.Checkbox.17009.57
+SingleQuotesReplace sym:cui.CheckBox.17009.57
 SingleQuotesStart sym:cui.PushButton.17009.46
 SingleQuotesEnd sym:cui.PushButton.17009.48
 SingleQuotesDefault sym:cui.PushButton.17009.49
@@ -193,25 +193,25 @@ LoadQuickstarter sym:cui.CheckBox.17150.27
 *TabMozillaPlugin sym:cui.TabPage.12161
 Enable sym:cui.CheckBox.12161.2
 
-*TabMySQLJDBC sym:dbaccess.TabPage.19220
+*TabMySQLJDBC sym:dbu.TabPage.19220
 HostName sym:DBACCESS_HID_DSADMIN_HOSTNAME
 PortNumber sym:DBACCESS_HID_DSADMIN_PORTNUMBER
-DriverClass sym:dbaccess.Edit.19220.4
+DriverClass sym:dbu.Edit.19220.4
 Charset sym:DBACCESS_HID_DSADMIN_CHARSET
-TestClass sym:dbaccess.PushButton.19220.5
+TestClass sym:dbu.PushButton.19220.5
 
-*TabMySQLODBC sym:dbaccess.TabPage.19217
+*TabMySQLODBC sym:dbu.TabPage.19217
 Charset sym:DBACCESS_HID_DSADMIN_CHARSET
 
-*TabNameMatching sym:dbaccess.TabPage.19211
+*TabNameMatching sym:dbu.TabPage.19211
 RightColumnNames sym:DBACCESS_HID_TAB_NAMEMATCHING_COLS_AVAIL
 LeftColumnNames sym:DBACCESS_HID_TAB_NAMEMATCHING_COLS_ASSIGN
-LeftColumnUp sym:dbaccess.ImageButton.19211.12
-LeftColumnDown sym:dbaccess.ImageButton.19211.13
-RightColumnUp sym:dbaccess.ImageButton.19211.14
-RightColumnDown sym:dbaccess.ImageButton.19211.15
-ColumnAll sym:dbaccess.PushButton.19211.16
-ColumnNone sym:dbaccess.PushButton.19211.17
+LeftColumnUp sym:dbu.ImageButton.19211.12
+LeftColumnDown sym:dbu.ImageButton.19211.13
+RightColumnUp sym:dbu.ImageButton.19211.14
+RightColumnDown sym:dbu.ImageButton.19211.15
+ColumnAll sym:dbu.PushButton.19211.16
+ColumnNone sym:dbu.PushButton.19211.17
 
 *TabODBC sym:DBACCESS_HID_DSADMIN_PAGE_ODBC
 Options sym:DBACCESS_HID_DSADMIN_ODBC_OPTIONS
@@ -230,10 +230,10 @@ CheckNow sym:cui.PushButton.10298.15
 DownloadAutomatically sym:cui.CheckBox.10298.16
 Change sym:cui.PushButton.10298.19
 
-*TabOracleJDBC sym:dbaccess.TabPage.19227
+*TabOracleJDBC sym:dbu.TabPage.19227
 HostName sym:DBACCESS_HID_DSADMIN_HOSTNAME
 PortNumber sym:DBACCESS_HID_DSADMIN_PORTNUMBER
-DriverClass sym:dbaccess.Edit.19227.4
+DriverClass sym:dbu.Edit.19227.4
 Charset sym:DBACCESS_HID_DSADMIN_CHARSET
-TestClass sym:dbaccess.PushButton.19227.5         
+TestClass sym:dbu.PushButton.19227.5         
 

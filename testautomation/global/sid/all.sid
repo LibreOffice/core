@@ -11,7 +11,7 @@
 ' ** die aber noch verwendet werden **
 ' **
 DateiNeu .uno:NewDoc
-DateiLetzteVersion .uno:Reload SID_LASTVERSIONDOC
+DateiLetzteVersion SID_RELOAD
 DateiVersenden .uno:SendMail
 DateiScannenQuelleAuswaehlen .uno:TwainSelect
 DateiScannenAnfordern .uno:TwainSelect
@@ -44,7 +44,7 @@ DateiAllesSpeichern .uno:SaveAll
 DateiExportieren .uno:ExportTo
 DateiSendenDokumentAlseMail .uno:SendMail
 DateiVersionen .uno:VersionDialog
-DateiNeuLaden .uno:Reload SID_LASTVERSIONDOC
+DateiNeuLaden SID_RELOAD
 DateiEigenschaften .uno:SetDocumentProperties
 DateiDokumentvorlageSpeichern .uno:SaveAsTemplate
 DateiDokumentvorlageVerwalten .uno:Organizer
@@ -52,7 +52,7 @@ DateiDokumentvorlageBearbeiten .uno:OpenTemplate
 DateiSeitenansicht .uno:PrintPreview
 DateiDrucken .uno:Print
 DateiDruckereinstellung .uno:PrinterSetup
-DateiBeenden .uno:Quit
+DateiBeenden SID_QUITAPP
 
 ' **** Writer
 DateiSendenGliederungAnPraesentation .uno:SendOutlineToStarImpress
@@ -78,7 +78,7 @@ DateiDokumentAlsEMail .uno:SendMail
 ' **** Alle
 BearbeitenRueckgaengig .uno:Undo
 BearbeitenWiederholen .uno:Redo
-BearbeitenLetzterBefehl .uno:RepeatAction
+BearbeitenLetzterBefehl .uno:Repeat
 BearbeitenAusschneiden .uno:Cut
 BearbeitenKopieren .uno:Copy
 BearbeitenEinfuegen .uno:Paste

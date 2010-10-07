@@ -1,35 +1,35 @@
 ' **** general Printersettings-Dialog ( File/Printer settings )
 ' ****
-*DruckerEinrichten sym:svtools.ModalDialog.16511
-Drucker sym:svtools.ListBox.16511.2
-Eigenschaften sym:svtools.PushButton.16511.3
+*DruckerEinrichten sym:svt.ModalDialog.16511
+Drucker sym:svt.ListBox.16511.2
+Eigenschaften sym:svt.PushButton.16511.3
 
 '************************************************************************
 '************ all file-dialogs
 '************
 *GeneralFileDialog sym:SVT_HID_EXPLORERDLG_FILE
-UebergeordneterOrdner sym:fpicker.MenuButton.16374.14
-NeuerOrdner sym:fpicker.ImageButton.16374.11
-Standard sym:fpicker.MenuButton.16374.15
-DateiAuswahl sym:SFX2_HID_FILEDLG_STANDARD
-Dateiname sym:SFX2_HID_FILEDLG_AUTOCOMPLETEBOX
-Dateityp sym:fpicker.ListBox.16374.35
-Oeffnen sym:fpicker.PushButton.16374.16
-Auswaehlen sym:fpicker.PushButton.16374.16
+UebergeordneterOrdner sym:fps_office.MenuButton.16374.14
+NeuerOrdner sym:fps_office.ImageButton.16374.11
+Standard sym:fps_office.MenuButton.16374.15
+DateiAuswahl sym:SVT_HID_FILEDLG_STANDARD
+Dateiname sym:SVT_HID_FILEDLG_AUTOCOMPLETEBOX
+Dateityp sym:fps_office.ListBox.16374.35
+Oeffnen sym:fps_office.PushButton.16374.16
+Auswaehlen sym:fps_office.PushButton.16374.16
 
 +GrafikEinfuegenDlg GeneralFileDialog
-Pfad sym:SFX2_HID_FILEDLG_AUTOCOMPLETEBOX sym:SFX2_HID_FILEDLG_PATH_FILENAME
+Pfad sym:SVT_HID_FILEDLG_AUTOCOMPLETEBOX sym:SVT_HID_FILEDLG_PATH_FILENAME
 Stil sym:SVT_HID_FILEOPEN_IMAGE_TEMPLATE
-Verknuepfen sym:SFX2_HID_FILEDLG_LINK_CB HID_IMPGRF_CB_LINK
-Vorschau sym:SFX2_HID_FILEDLG_PREVIEW_CB HID_IMPGRF_CB_PREVIEW
-Link sym:SFX2_HID_FILEDLG_LINK_CB
-Preview sym:SFX2_HID_FILEDLG_PREVIEW_CB
+Verknuepfen sym:SVT_HID_FILEDLG_LINK_CB HID_IMPGRF_CB_LINK
+Vorschau sym:SVT_HID_FILEDLG_PREVIEW_CB HID_IMPGRF_CB_PREVIEW
+Link sym:SVT_HID_FILEDLG_LINK_CB
+Preview sym:SVT_HID_FILEDLG_PREVIEW_CB
 
 +OeffnenDlg GeneralFileDialog
-Pfad sym:SFX2_HID_FILEDLG_AUTOCOMPLETEBOX sym:SFX2_HID_FILEDLG_PATH_FILENAME
+Pfad sym:SVT_HID_FILEDLG_AUTOCOMPLETEBOX sym:SVT_HID_FILEDLG_PATH_FILENAME
 Version sym:SVT_HID_FILEOPEN_VERSION
 NurLesen sym:SVT_HID_FILEOPEN_READONLY
-Einfuegen sym:SFX2_HID_FILEDLG_INSERT_BTN
+Einfuegen sym:SVT_HID_FILEDLG_INSERT_BTN
 Play sym:SVT_HID_FILESAVE_DOPLAY
 
 +KonkordanzdateiOeffnen GeneralFileDialog
@@ -60,32 +60,32 @@ Selektion sym:SVT_HID_FILESAVE_SELECTION
 ' **** Hyperlink-File-Dialog
 ' ****
 *HyperlinkAuswahlDlg sym:SW_HID_FILEDLG_CHARDLG
-UebergeordneterOrdner sym:fpicker.MenuButton.16374.14
-NeuerOrdner sym:fpicker.ImageButton.16374.11
-Standard sym:fpicker.MenuButton.16374.15
-DateiAuswahl sym:SFX2_HID_FILEDLG_STANDARD
-Dateiname sym:SFX2_HID_FILEDLG_AUTOCOMPLETEBOX
-Dateityp sym:fpicker.ListBox.16374.35
-Oeffnen sym:fpicker.PushButton.16374.16
-NurLesen sym:fpicker.CheckBox.16374.40
+UebergeordneterOrdner sym:fps_office.MenuButton.16374.14
+NeuerOrdner sym:fps_office.ImageButton.16374.11
+Standard sym:fps_office.MenuButton.16374.15
+DateiAuswahl sym:SVT_HID_FILEDLG_STANDARD
+Dateiname sym:SVT_HID_FILEDLG_AUTOCOMPLETEBOX
+Dateityp sym:fps_office.ListBox.16374.35
+Oeffnen sym:fps_office.PushButton.16374.16
+NurLesen sym:fps_office.CheckBox.16374.40
 
 ' **** general Color-Dialog ( under tools / options / staroffice / color / edit )
 ' ****
-*FarbeDlg sym:svtools.ModalDialog.996
+*FarbeDlg sym:svt.ModalDialog.996
 'Grundfarben
 'BenutzerdefinierteFarben
-Cyan sym:svtools.MetricField.996.7
-Magenta sym:svtools.MetricField.996.8
-Yellow sym:svtools.MetricField.996.9
-Key sym:svtools.MetricField.996.10
-Rot sym:svtools.NumericField.996.1
-Gruen sym:svtools.NumericField.996.2
-Blau sym:svtools.NumericField.996.3
-Farbton sym:svtools.NumericField.996.4
-Saettigung sym:svtools.NumericField.996.5
-Hell sym:svtools.NumericField.996.6
-Links sym:svtools.PushButton.996.1
-Rechts sym:svtools.PushButton.996.2
+Cyan sym:svt.MetricField.996.7
+Magenta sym:svt.MetricField.996.8
+Yellow sym:svt.MetricField.996.9
+Key sym:svt.MetricField.996.10
+Rot sym:svt.NumericField.996.1
+Gruen sym:svt.NumericField.996.2
+Blau sym:svt.NumericField.996.3
+Farbton sym:svt.NumericField.996.4
+Saettigung sym:svt.NumericField.996.5
+Hell sym:svt.NumericField.996.6
+Links sym:svt.PushButton.996.1
+Rechts sym:svt.PushButton.996.2
 
 *SendMasterDocument sym:SVT_HID_FILESAVE_DIALOG
 Dateiname sym:SW_HID_SEND_MASTER_CTRL_EDIT_FILEURL
@@ -119,15 +119,15 @@ Standard sym:SVT_HID_FILESAVE_DEFAULTDIRECTORY
 
 ' **** new folder-dialog
 ' ****
-*NeuerOrdner sym:fpicker.ModalDialog.16375
-OrdnerName sym:fpicker.Edit.16375.11
+*NeuerOrdner sym:fps_office.ModalDialog.16375
+OrdnerName sym:fps_office.Edit.16375.11
 
 ' **** Translationwidow fuer das Ubersetzungstooling
 ' ****
-*TranslationWindow sym:svtools.WorkWindow.12348 svtools:FloatingWindow:TT_INLINE_TRANSLATION
+*TranslationWindow sym:svt.WorkWindow.12348 svtools:FloatingWindow:TT_INLINE_TRANSLATION
 
 ' **** specal longnames for bas test
 ' **** author marc.schwanz@sun.com
-*MSC_Special_Dialog MSC_Super_ID
-*MSC_Special_Dialog2 MSC_Super_ID2
-*MSC_Special_Dialog3 MSC_Super_ID3
+'*MSC_Special_Dialog MSC_Super_ID
+'*MSC_Special_Dialog2 MSC_Super_ID2
+'*MSC_Special_Dialog3 MSC_Super_ID3

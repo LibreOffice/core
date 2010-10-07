@@ -1,20 +1,20 @@
-*TabTableFieldSelection sym:extensions.TabPage.19730
-ExistingFields sym:extensions.ListBox.19730.7
-SelectedFields sym:extensions.ListBox.19730.8
-AddTo sym:extensions.PushButton.19730.3
-AddAllTo sym:extensions.PushButton.19730.4
-RemoveFrom sym:extensions.PushButton.19730.5
-RemoveAllFrom sym:extensions.PushButton.19730.6
+*TabTableFieldSelection sym:dbp.TabPage.19730
+ExistingFields sym:dbp.ListBox.19730.7
+SelectedFields sym:dbp.ListBox.19730.8
+AddTo sym:dbp.PushButton.19730.3
+AddAllTo sym:dbp.PushButton.19730.4
+RemoveFrom sym:dbp.PushButton.19730.5
+RemoveAllFrom sym:dbp.PushButton.19730.6
 
-*TabTableSelection sym:extensions.TabPage.19727
-TableSelection sym:extensions.ListBox.19727.5
+*TabTableSelection sym:dbp.TabPage.19727
+TableSelection sym:dbp.ListBox.19727.5
 
 *TabTextAnimation sym:sd.TabPage.20873
 GroupText sym:sd.ListBox.20873.2
-AutomaticallyAfter sym:sd.Checkbox.20873.3
+AutomaticallyAfter sym:sd.CheckBox.20873.3
 AutomaticallyAfterValue sym:sd.MetricField.20873.4
-AnimateAttachedShape sym:sd.Checkbox.20873.5
-InReverseOrder sym:sd.Checkbox.20873.6
+AnimateAttachedShape sym:sd.CheckBox.20873.5
+InReverseOrder sym:sd.CheckBox.20873.6
 
 *TabTextBase sym:DBACCESS_HID_DSADMIN_PAGE_TEXT
 CVSFiles sym:DBACCESS_HID_PAGE_DBWIZARD_TEXT_RB_ACCESSCSVFILES
@@ -52,7 +52,7 @@ Border              sym:cui.MetricField.10054.7
 StartValue          sym:cui.MetricField.10054.8
 EndValue            sym:cui.MetricField.10054.9
 
-*TabTrendLineType sym:chart2.TabPage.918
+*TabTrendLineType sym:chartcontroller.TabPage.918
 None                        sym:CHART2_HID_SCH_TRENDLINE_RB_NONE
 Linear                      sym:CHART2_HID_SCH_TRENDLINE_RB_LINEAR
 Logarithmic                 sym:CHART2_HID_SCH_TRENDLINE_RB_LOGARITHMIC
@@ -63,12 +63,12 @@ ShowCorrelationCoefficient  sym:CHART2_HID_SCH_TRENDLINE_SHOW_R_SQUARED
 
 
 *TabTrustedSources sym:XMLSECURITY_HID_XMLSEC_TP_TRUSTSOURCES
-SourcesAdd sym:xmlsecurity.PushButton.1008.3
-SourcesView sym:xmlsecurity.PushButton.1008.4
-SourcesRemove sym:xmlsecurity.PushButton.1008.5
-LocationsListBox sym:xmlsecurity.ListBox.1008.8
-LocationsAdd sym:xmlsecurity.PushButton.1008.9
-LocationsRemove sym:xmlsecurity.PushButton.1008.10
+SourcesAdd sym:xmlsec.PushButton.1008.3
+SourcesView sym:xmlsec.PushButton.1008.4
+SourcesRemove sym:xmlsec.PushButton.1008.5
+LocationsListBox sym:xmlsec.ListBox.1008.8
+LocationsAdd sym:xmlsec.PushButton.1008.9
+LocationsRemove sym:xmlsec.PushButton.1008.10
 
 *TabType sym:SW_HID_FRM_STD
 Width sym:sw.MetricField.20831.28
@@ -94,12 +94,12 @@ OriginalSize sym:sw.PushButton.20831.44
 FollowTextflow sym:sw.CheckBox.20831.129
 
 *TabTypeSelect sym:DBACCESS_HID_TAB_WIZ_TYPE_SELECT
-ColumnNames sym:dbaccess.MultiListBox.19210.2
+ColumnNames sym:dbu.MultiListBox.19210.2
 ColumnName sym:DBACCESS_HID_TAB_ENT_COLUMNNAME
 ColumnType sym:DBACCESS_HID_TAB_ENT_TYPE
 ColumnLength sym:DBACCESS_HID_TAB_ENT_TEXT_LEN
-ColumnAutoValue sym:dbaccess.NumericField.19210.1
-ColumnAuto sym:dbaccess.PushButton.19210.5
+ColumnAutoValue sym:dbu.NumericField.19210.1
+ColumnAuto sym:dbu.PushButton.19210.5
 
 *TabWeblog sym:vnd.com.sun.star.blogger:settings
 
@@ -123,16 +123,16 @@ BrowseTemplateForImport sym:FILTER_HID_XML_FILTER_IMPORT_TEMPLATE_BROWSE
 
 *TabXMLSecDetails sym:XMLSECURITY_HID_XMLSEC_TP_DETAILS
 XMLSecDetailsListBox sym:XMLSECURITY_HID_XMLSEC_CTRL_ELEMENTS
-XMLSecDetailsEditField sym:xmlsecurity.MultiLineEdit.1004.2
+XMLSecDetailsEditField sym:xmlsec.MultiLineEdit.1004.2
 
 *TabXMLSecGeneral sym:XMLSECURITY_HID_XMLSEC_TP_GENERAL
 
 *TabXMLSecCertPath sym:XMLSECURITY_HID_XMLSEC_TP_CERTPATH
 XMLSecViewSigTree sym:XMLSECURITY_HID_XMLSEC_CTRL_VIEWSIGNATURES
-XMLViewCertButton sym:xmlsecurity.PushButton.1005.55
-XMLSecCertStatus sym:xmlsecurity.MultiLineEdit.1005.3
+XMLViewCertButton sym:xmlsec.PushButton.1005.55
+XMLSecCertStatus sym:xmlsec.MultiLineEdit.1005.3
 
-*TabYErrorBars sym:chart2.TabPage.919
+*TabYErrorBars sym:chartcontroller.TabPage.919
 MeanValue              sym:CHART2_HID_SCH_STATISTIK_MEANVALUE
 NoFunction             sym:CHART2_HID_SCH_STATISTIK_NO_ERROR
 Variance               sym:CHART2_HID_SCH_STATISTIK_VARIANT

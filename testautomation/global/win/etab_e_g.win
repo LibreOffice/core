@@ -70,9 +70,9 @@ PBMouseExited sym:EXTENSIONS_UID_BRWEVT_MOUSEEXITED
 
 *TabEventsForm sym:EXTENSIONS_HID_FM_PROPDLG_TAB_EVT
 
-*TabFieldLink sym:extensions.TabPage.19729
-ValueTable sym:extensions.ComboBox.19729.1
-ListTable sym:extensions.ComboBox.19729.2
+*TabFieldLink sym:dbp.TabPage.19729
+ValueTable sym:dbp.ComboBox.19729.1
+ListTable sym:dbp.ComboBox.19729.2
 
 *TabFieldProperties sym:DBACCESS_HID_TAB_DESIGN_FIELDCONTROL
 IntLength sym:DBACCESS_HID_TAB_ENT_LEN
@@ -83,27 +83,27 @@ DefaultValue sym:DBACCESS_HID_TAB_ENT_DEFAULT
 FormatExample sym:DBACCESS_HID_TAB_ENT_FORMAT_SAMPLE
 BrowseBtm sym:DBACCESS_HID_TAB_ENT_FORMAT
 
-*TabFieldSelection sym:extensions.TabPage.19728
-ExistingFields sym:extensions.ListBox.19728.6
-DisplayField sym:extensions.Edit.19728.4
+*TabFieldSelection sym:dbp.TabPage.19728
+ExistingFields sym:dbp.ListBox.19728.6
+DisplayField sym:dbp.Edit.19728.4
 
 *TabFirstStartOnlineUpdate sym:DESKTOP_HID_FIRSTSTART_UPDATE_CHECK
-CheckForUpdates sym:desktop.CheckBox.3008.3
+CheckForUpdates sym:dkt.CheckBox.3008.3
 
 *TabFirstStartLicense sym:DESKTOP_HID_FIRSTSTART_LICENSE
-LicenseText sym:desktop.MultiLineEdit.3007.6
-ScrollDown sym:desktop.PushButton.3007.7
+LicenseText sym:dkt.MultiLineEdit.3007.6
+ScrollDown sym:dkt.PushButton.3007.7
 
 *TabFirstStartRegistration sym:DESKTOP_HID_FIRSTSTART_REGISTRATION
-RegisterNow sym:desktop.RadioButton.3004.5
-RegisterLater sym:desktop.RadioButton.3004.6
-DoNotWantRegister sym:desktop.RadioButton.3004.7
+RegisterNow sym:dkt.RadioButton.3004.5
+RegisterLater sym:dkt.RadioButton.3004.6
+DoNotWantRegister sym:dkt.RadioButton.3004.7
 
 *TabFirstStartUser sym:DESKTOP_HID_FIRSTSTART_USER
-FirstName sym:desktop.Edit.3006.16
-LastName sym:desktop.Edit.3006.17
-Initials sym:desktop.Edit.3006.19
-FathersName sym:desktop.Edit.3006.18
+FirstName sym:dkt.Edit.3006.16
+LastName sym:dkt.Edit.3006.17
+Initials sym:dkt.Edit.3006.19
+FathersName sym:dkt.Edit.3006.18
 
 *TabFirstStartWelcome sym:DESKTOP_HID_FIRSTSTART_WELCOME
 
@@ -161,30 +161,30 @@ PairKerning sym:cui.CheckBox.10241.324
 Super sym:cui.RadioButton.10241.301
 
 *TabFormat3dViewGeometry sym:CHART2_HID_3D_VIEW
- AxisRotationXaxis       sym:chart2.MetricField.915.1
- AxisRotationYaxis       sym:chart2.MetricField.915.2
- AxisRotationZaxis       sym:chart2.MetricField.915.3
- Perspective             sym:chart2.CheckBox.915.1
+ AxisRotationXaxis       sym:chartcontroller.MetricField.915.1
+ AxisRotationYaxis       sym:chartcontroller.MetricField.915.2
+ AxisRotationZaxis       sym:chartcontroller.MetricField.915.3
+ Perspective             sym:chartcontroller.CheckBox.915.1
  
-*TabFormat3dViewAppearance sym:chart2.TabPage.916
- Scheme                    sym:chart2.ListBox.916.2
- RoundedEdges              sym:chart2.Checkbox.916.3 
- Shading                   sym:chart2.CheckBox.916.2
- ObjectBorders             sym:chart2.CheckBox.916.1
+*TabFormat3dViewAppearance sym:chartcontroller.TabPage.916
+ Scheme                    sym:chartcontroller.ListBox.916.2
+ RoundedEdges              sym:chartcontroller.CheckBox.916.3 
+ Shading                   sym:chartcontroller.CheckBox.916.2
+ ObjectBorders             sym:chartcontroller.CheckBox.916.1
  
-*TabFormat3dViewIllumination sym:chart2.TabPage.917
- LightSource1                sym:chart2.ImageButton.917.3
- LightSource2                sym:chart2.ImageButton.917.4
- LightSource3                sym:chart2.ImageButton.917.5
- LightSource4                sym:chart2.ImageButton.917.6
- LightSource5                sym:chart2.ImageButton.917.7
- LightSource6                sym:chart2.ImageButton.917.8
- LightSource7                sym:chart2.ImageButton.917.9
- LightSource8                sym:chart2.ImageButton.917.10
- Color                       sym:chart2.ListBox.917.2
- ColorSelect                 sym:chart2.ImageButton.917.2
- AmbientLight                sym:chart2.ListBox.917.1
- AmbientLightSelect          sym:chart2.ImageButton.917.1
+*TabFormat3dViewIllumination sym:chartcontroller.TabPage.917
+ LightSource1                sym:chartcontroller.ImageButton.917.3
+ LightSource2                sym:chartcontroller.ImageButton.917.4
+ LightSource3                sym:chartcontroller.ImageButton.917.5
+ LightSource4                sym:chartcontroller.ImageButton.917.6
+ LightSource5                sym:chartcontroller.ImageButton.917.7
+ LightSource6                sym:chartcontroller.ImageButton.917.8
+ LightSource7                sym:chartcontroller.ImageButton.917.9
+ LightSource8                sym:chartcontroller.ImageButton.917.10
+ Color                       sym:chartcontroller.ListBox.917.2
+ ColorSelect                 sym:chartcontroller.ImageButton.917.2
+ AmbientLight                sym:chartcontroller.ListBox.917.1
+ AmbientLightSelect          sym:chartcontroller.ImageButton.917.1
  
 *TabFormatChartTitleAlignment sym:CHART2_HID_SCH_ALIGNMENT
  AngleKnob                    sym:CHART2_HID_SCH_ALIGNMENT_CTR_DIAL
@@ -365,10 +365,10 @@ Display sym:sw.CheckBox.20901.19
 PrintGrid sym:sw.CheckBox.20901.20
 Color sym:sw.ListBox.20901.22
 
-*TabGroupBoxData sym:extensions.TabPage.19722
+*TabGroupBoxData sym:dbp.TabPage.19722
 Address sym:.uno:OpenUrl
-Names sym:extensions.Edit.19722.1
-AddTo sym:extensions.PushButton.19722.1
-RemoveFrom sym:extensions.PushButton.19722.2
-OptionFields sym:extensions.ListBox.19722.3
+Names sym:dbp.Edit.19722.1
+AddTo sym:dbp.PushButton.19722.1
+RemoveFrom sym:dbp.PushButton.19722.2
+OptionFields sym:dbp.ListBox.19722.3
 

@@ -1,7 +1,7 @@
 *Passwort sym:SFX2_HID_PASSWD
-UserName sym:sfx2.Edit.2316.12
-PasswortName sym:sfx2.Edit.2316.14
-PasswortBestaetigen sym:sfx2.Edit.2316.16
+UserName sym:sfx.Edit.2316.12
+PasswortName sym:sfx.Edit.2316.14
+PasswortBestaetigen sym:sfx.Edit.2316.16
 
 *PasswordFileOpen sym:UUI_HID_DLG_PASSWORD_UUI
 PasswortName sym:uui.Edit.14522.2
@@ -16,8 +16,8 @@ PasswordToModifyConfirm sym:CUI_HID_DLG_PASSWORD_TO_OPEN_MODIFY_CONFIRM_PASSWORD
 
 *PasswortEingeben sym:.uno:ProtectTraceChangeMode
 SchutzAufheben sym:SC_HID_CHG_PROTECT
-PasswortEingabe sym:sfx2.Edit.2316.12
-PasswortBestaetigen sym:sfx2.Edit.2316.16
+PasswortEingabe sym:sfx.Edit.2316.12
+PasswortBestaetigen sym:sfx.Edit.2316.16
 
 *PBMOptionen sym:filter.ModalDialog.17409
 Binaer sym:filter.RadioButton.17409.1
@@ -79,9 +79,9 @@ DateiUrl sym:cui.Edit.32008.10
 Durchsuchen sym:cui.PushButton.32008.11
 Optionen sym:cui.MultiLineEdit.32008.20
 
-*PNGOptionen sym:svtools.ModalDialog.16486
-Kompression sym:svtools.NumericField.16486.1
-Interlaced sym:svtools.CheckBox.16486.1
+*PNGOptionen sym:svt.ModalDialog.16486
+Kompression sym:svt.NumericField.16486.1
+Interlaced sym:svt.CheckBox.16486.1
 
 *PPMOptionen sym:filter.ModalDialog.17411
 Binaer sym:filter.RadioButton.17411.1
@@ -148,30 +148,30 @@ StartWert sym:sc.Edit.25623.52
 EndWert sym:sc.Edit.25623.49
 Inkrement sym:sc.Edit.25623.39
 
-*Schriften sym:starmath.ModalDialog.20002
-Schriftart sym:starmath.ComboBox.20002.1
-Fett sym:starmath.CheckBox.20002.1
-Kursiv sym:starmath.CheckBox.20002.2
+*Schriften sym:sm.ModalDialog.20002
+Schriftart sym:sm.ComboBox.20002.1
+Fett sym:sm.CheckBox.20002.1
+Kursiv sym:sm.CheckBox.20002.2
 
 *Schriftarten sym:.uno:ChangeFont
-Variablen sym:starmath.ListBox.20004.1
-Funktionen sym:starmath.ListBox.20004.2
-Zahlen sym:starmath.ListBox.20004.3
-Text sym:starmath.ListBox.20004.4
-Serif sym:starmath.ListBox.20004.5
-Sans sym:starmath.ListBox.20004.6
-Fixed sym:starmath.ListBox.20004.7
-Aendern sym:starmath.MenuButton.20004.1
-Standard sym:starmath.PushButton.20004.2
+Variablen sym:sm.ListBox.20004.1
+Funktionen sym:sm.ListBox.20004.2
+Zahlen sym:sm.ListBox.20004.3
+Text sym:sm.ListBox.20004.4
+Serif sym:sm.ListBox.20004.5
+Sans sym:sm.ListBox.20004.6
+Fixed sym:sm.ListBox.20004.7
+Aendern sym:sm.MenuButton.20004.1
+Standard sym:sm.PushButton.20004.2
 
 *Schriftgroessen sym:.uno:ChangeFontSize
-BasisGroesse sym:starmath.MetricField.20003.1
-TextGroesse sym:starmath.MetricField.20003.4
-Indizes sym:starmath.MetricField.20003.5
-Funktionen sym:starmath.MetricField.20003.6
-Operatoren sym:starmath.MetricField.20003.7
-Grenzen sym:starmath.MetricField.20003.8
-Standard sym:starmath.PushButton.20003.1
+BasisGroesse sym:sm.MetricField.20003.1
+TextGroesse sym:sm.MetricField.20003.4
+Indizes sym:sm.MetricField.20003.5
+Funktionen sym:sm.MetricField.20003.6
+Operatoren sym:sm.MetricField.20003.7
+Grenzen sym:sm.MetricField.20003.8
+Standard sym:sm.PushButton.20003.1
 
 *ScriptEinfuegen sym:sw.ModalDialog.21110
 Scripttyp sym:sw.Edit.21110.11
@@ -205,14 +205,14 @@ HintergrundseiteAustauschen sym:sd.CheckBox.868.1
 DeleteUnusedBackgrounds sym:sd.CheckBox.868.2
 
 *SeitenvorlageLaden sym:SW_HID_FILEDLG_LOADTEMPLATE
-Bereiche sym:sfx2.ListBox.2053.21
-Beschreibung sym:sfx2.MultiLineEdit.2053.71
-Schluesselworte sym:sfx2.Edit.2053.61
-Thema sym:sfx2.Edit.2053.55
-Titel sym:sfx2.Edit.2053.56
-Vorlagen sym:sfx2.ListBox.2053.52
-Vorschau sym:sfx2.CheckBox.2053.51
-Zusaetze sym:sfx2.MoreButton.2053.32
+Bereiche sym:sfx.ListBox.2053.21
+Beschreibung sym:sfx.MultiLineEdit.2053.71
+Schluesselworte sym:sfx.Edit.2053.61
+Thema sym:sfx.Edit.2053.55
+Titel sym:sfx.Edit.2053.56
+Vorlagen sym:sfx.ListBox.2053.52
+Vorschau sym:sfx.CheckBox.2053.51
+Zusaetze sym:sfx.MoreButton.2053.32
 
 *Serienbrief sym:.uno:MergeDialog
 DatensaetzeAlle sym:sw.RadioButton.22758.2
@@ -284,37 +284,37 @@ Spalte sym:sw.NumericField.21456.2
 Breite sym:sw.MetricField.21456.4
 
 *Spaltenzuordnung sym:EXTENSIONS_HID_DLG_MAPPING
-Kuerzel sym:extensions.ListBox.15701.6
-Literaturart sym:extensions.ListBox.15701.9
-Autor sym:extensions.ListBox.15701.15
-Titel sym:extensions.ListBox.15701.17
-Jahr sym:extensions.ListBox.15701.21
-ISBN sym:extensions.ListBox.15701.23
-Buchtitel sym:extensions.ListBox.15701.25
-Kapitel sym:extensions.ListBox.15701.27
-Ausgabe sym:extensions.ListBox.15701.29
-Herausgeber sym:extensions.ListBox.15701.31
-Ausgabeart sym:extensions.ListBox.15701.33
-Institution sym:extensions.ListBox.15701.35
-Zeitschrift sym:extensions.ListBox.15701.37
-Monat sym:extensions.ListBox.15701.19
-Notiz sym:extensions.ListBox.15701.39
-Anmerkung sym:extensions.ListBox.15701.13
-Nummer sym:extensions.ListBox.15701.41
-Organisation sym:extensions.ListBox.15701.43
-Seiten sym:extensions.ListBox.15701.45
-Verlag sym:extensions.ListBox.15701.47
-Adresse sym:extensions.ListBox.15701.11
-Hochschule sym:extensions.ListBox.15701.49
-Serie sym:extensions.ListBox.15701.51
-ArtDesReport sym:extensions.ListBox.15701.53
-Band sym:extensions.ListBox.15701.55
-URL sym:extensions.ListBox.15701.57
-Benutzerfeld1 sym:extensions.ListBox.15701.59
-Benutzerfeld2 sym:extensions.ListBox.15701.61
-Benutzerfeld3 sym:extensions.ListBox.15701.63
-Benutzerfeld4 sym:extensions.ListBox.15701.65
-Benutzerfeld5 sym:extensions.ListBox.15701.67
+Kuerzel sym:bib.ListBox.15701.6
+Literaturart sym:bib.ListBox.15701.9
+Autor sym:bib.ListBox.15701.15
+Titel sym:bib.ListBox.15701.17
+Jahr sym:bib.ListBox.15701.21
+ISBN sym:bib.ListBox.15701.23
+Buchtitel sym:bib.ListBox.15701.25
+Kapitel sym:bib.ListBox.15701.27
+Ausgabe sym:bib.ListBox.15701.29
+Herausgeber sym:bib.ListBox.15701.31
+Ausgabeart sym:bib.ListBox.15701.33
+Institution sym:bib.ListBox.15701.35
+Zeitschrift sym:bib.ListBox.15701.37
+Monat sym:bib.ListBox.15701.19
+Notiz sym:bib.ListBox.15701.39
+Anmerkung sym:bib.ListBox.15701.13
+Nummer sym:bib.ListBox.15701.41
+Organisation sym:bib.ListBox.15701.43
+Seiten sym:bib.ListBox.15701.45
+Verlag sym:bib.ListBox.15701.47
+Adresse sym:bib.ListBox.15701.11
+Hochschule sym:bib.ListBox.15701.49
+Serie sym:bib.ListBox.15701.51
+ArtDesReport sym:bib.ListBox.15701.53
+Band sym:bib.ListBox.15701.55
+URL sym:bib.ListBox.15701.57
+Benutzerfeld1 sym:bib.ListBox.15701.59
+Benutzerfeld2 sym:bib.ListBox.15701.61
+Benutzerfeld3 sym:bib.ListBox.15701.63
+Benutzerfeld4 sym:bib.ListBox.15701.65
+Benutzerfeld5 sym:bib.ListBox.15701.67
 
 *SpalteOptimaleBreite sym:.uno:SetOptimalColumnWidth
 Extra sym:sc.MetricField.25709.1 HID_SC_MTRIN_VAL
@@ -365,25 +365,18 @@ Persistent sym:sc.CheckBox.25612.12
 
 *Statusbar sym:FWK_HID_STATUSBAR
 
-'*Standardbrowser extensions:ModalDialog:MD_PROTCHK_DIALOG
-'StarOfficeVerwenden extensions:RadioButton:MD_PROTCHK_DIALOG:RB_STAROFFICE
-'KeineAenderungen extensions:RadioButton:MD_PROTCHK_DIALOG:RB_OTHER
-'ImmerUeberpruefen extensions:CheckBox:MD_PROTCHK_DIALOG:CB_PERFORM
-'Zusaetze extensions:PushButton:MD_PROTCHK_DIALOG:BT_DETAILS
-'Protokollauswahl HID_PROTOCOLS
-
 +Stylist Gestalter
 
-*SVMOptionen sym:svtools.ModalDialog.16372
-Original sym:svtools.RadioButton.16372.1
-Groesse sym:svtools.RadioButton.16372.2
-Breite sym:svtools.MetricField.16372.1
-Hoehe sym:svtools.MetricField.16372.2
+*SVMOptionen sym:svt.ModalDialog.16372
+Original sym:svt.RadioButton.16372.1
+Groesse sym:svt.RadioButton.16372.2
+Breite sym:svt.MetricField.16372.1
+Hoehe sym:svt.MetricField.16372.2
 
-*SymboleMath sym:starmath.ModalDialog.20008
-Symbolset sym:starmath.ListBox.20008.1
-Bearbeiten sym:starmath.PushButton.20008.1
-Uebernehmen sym:starmath.PushButton.20008.2
+*SymboleMath sym:sm.ModalDialog.20008
+Symbolset sym:sm.ListBox.20008.1
+Bearbeiten sym:sm.PushButton.20008.1
+Uebernehmen sym:sm.PushButton.20008.2
 Symbols sym:STARMATH_HID_SMA_CONTROL_SYMBOLSET_VIEW
 
 *SzenarioAnlegen sym:sc.ModalDialog.25643 sym:.uno:ScenarioManager

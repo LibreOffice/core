@@ -56,8 +56,8 @@ NachRechts sym:sc.RadioButton.25618.39
 
 *TabelleSchuetzen sym:.uno:Protect
 Passwort sym:SC_HID_PASSWD_TABLE
-Bestaetigung sym:sfx2.Edit.2316.16
-IstVerdeckt sym:sfx2.Edit.2316.12
+Bestaetigung sym:sfx.Edit.2316.16
+IstVerdeckt sym:sfx.Edit.2316.12
 
 *TabelleUmbenennen sym:.uno:Name
 TabellenName sym:SC_HID_SC_RENAME_NAME sym:sc.Edit.25620.10
@@ -184,17 +184,17 @@ Loesen sym:cui.PushButton.32002.38
 
 *VersendenMonitor sym:SW_HID_MERGE_PRINTMONITOR
 
-*Versionen sym:sfx2.ModalDialog.2377
-Speichern sym:sfx2.PushButton.2377.2
-ImmerVersionSpeichern sym:sfx2.CheckBox.2377.3
-Anzeigen sym:sfx2.PushButton.2377.13
-Loeschen sym:sfx2.PushButton.2377.5
-Oeffnen sym:sfx2.PushButton.2377.6
-Vergleichen sym:sfx2.PushButton.2377.17
+*Versionen sym:sfx.ModalDialog.2377
+Speichern sym:sfx.PushButton.2377.2
+ImmerVersionSpeichern sym:sfx.CheckBox.2377.3
+Anzeigen sym:sfx.PushButton.2377.13
+Loeschen sym:sfx.PushButton.2377.5
+Oeffnen sym:sfx.PushButton.2377.6
+Vergleichen sym:sfx.PushButton.2377.17
 
-*VersionskommentarEingeben sym:sfx2.ModalDialog.2378
-Kommentar sym:sfx2.MultiLineEdit.2378.14
-Schliessen sym:sfx2.PushButton.2378.8
+*VersionskommentarEingeben sym:sfx.ModalDialog.2378
+Kommentar sym:sfx.MultiLineEdit.2378.14
+Schliessen sym:sfx.PushButton.2378.8
 
 *VerteilenDlg sym:CUI_HID_PAGE_DISTRIBUTE
 KeineHorizontal sym:cui.RadioButton.10236.2
@@ -236,16 +236,16 @@ Naechster sym:SW_HID_INSERT_IDX_MRK_NEXT
 Vorheriger sym:SW_HID_INSERT_IDX_MRK_PREV
 
 *VorlageErzeugen sym:.uno:StyleNewByExample SID_TEMPLATE_NEW_BY_EXAMPLE
-Vorlagenname sym:sfx2.ComboBox.2323.1
+Vorlagenname sym:sfx.ComboBox.2323.1
 
 *Vorlagenkatalog sym:.uno:StyleCatalog
-Vorlagen sym:sfx2.ListBox.1461.10
+Vorlagen sym:sfx.ListBox.1461.10
 Ansicht sym:SFX2_HID_TEMPLATE_FMT
-Bereich sym:sfx2.ListBox.1461.8
-Neu sym:sfx2.PushButton.1461.6
-Aendern sym:sfx2.PushButton.1461.5
-Loeschen sym:sfx2.PushButton.1461.4
-Verwalten sym:sfx2.PushButton.1461.3
+Bereich sym:sfx.ListBox.1461.8
+Neu sym:sfx.PushButton.1461.6
+Aendern sym:sfx.PushButton.1461.5
+Loeschen sym:sfx.PushButton.1461.4
+Verwalten sym:sfx.PushButton.1461.3
 
 *Vorschau sym:.uno:PreviewWindow
 
@@ -261,11 +261,11 @@ Neu sym:sw.PushButton.21666.3
 Loeschen sym:sw.PushButton.21666.4
 Umbenennen sym:sw.PushButton.21666.11
 
-*WMFOptionen sym:svtools.ModalDialog.16372
-Original sym:svtools.RadioButton.16372.1
-Groesse sym:svtools.RadioButton.16372.2
-Breite sym:svtools.MetricField.16372.1
-Hoehe sym:svtools.MetricField.16372.2
+*WMFOptionen sym:svt.ModalDialog.16372
+Original sym:svt.RadioButton.16372.1
+Groesse sym:svt.RadioButton.16372.2
+Breite sym:svt.MetricField.16372.1
+Hoehe sym:svt.MetricField.16372.2
 
 *Zahlenformat sym:CUI_HID_NUMBERFORMAT
 Kategorie sym:cui.ListBox.10041.9

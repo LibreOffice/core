@@ -34,14 +34,14 @@ Image32 sym:WIZARDS_HID_IS_BTN_IMG32
 None sym:WIZARDS_HID_IS_BTN_NONE
 CancelB sym:WIZARDS_HID_IS_BTN_CANCEL
 
-*Indexes sym:dbaccess.ModalDialog.19201
-Table sym:dbaccess.ComboBox.19201.1
-TableIndexes sym:dbaccess.ListBox.19201.1
-FreeIndexes sym:dbaccess.ListBox.19201.2
-Add sym:dbaccess.ImageButton.19201.1
-Remove sym:dbaccess.ImageButton.19201.2
-AddAll sym:dbaccess.ImageButton.19201.3
-RemoveAll sym:dbaccess.ImageButton.19201.4
+*Indexes sym:dbu.ModalDialog.19201
+Table sym:dbu.ComboBox.19201.1
+TableIndexes sym:dbu.ListBox.19201.1
+FreeIndexes sym:dbu.ListBox.19201.2
+Add sym:dbu.ImageButton.19201.1
+Remove sym:dbu.ImageButton.19201.2
+AddAll sym:dbu.ImageButton.19201.3
+RemoveAll sym:dbu.ImageButton.19201.4
 
 *InsertAxesDialog sym:CHART2_HID_INSERT_AXIS
 MajorXaxis       sym:CHART2_HID_SCH_CB_XAXIS
@@ -119,7 +119,7 @@ SecondTitleXaxis    sym:CHART2_HID_SCH_TITLE_SECONDARY_X
 SecondTitleYaxis    sym:CHART2_HID_SCH_TITLE_SECONDARY_Y 
 
 
-*InsertYErrorBarsDLG sym:chart2.ModalDialog.842
+*InsertYErrorBarsDLG sym:chartcontroller.ModalDialog.842
 MeanValue              sym:CHART2_HID_SCH_STATISTIK_MEANVALUE
 NoFunction             sym:CHART2_HID_SCH_STATISTIK_NO_ERROR
 Variance               sym:CHART2_HID_SCH_STATISTIK_VARIANT
@@ -152,7 +152,7 @@ FielsInvolved sym:DBACCESS_HID_RELDLG_KEYFIELDS
 LeftFieldCell sym:DBACCESS_HID_RELATIONDIALOG_LEFTFIELDCELL
 RightFieldCell sym:DBACCESS_HID_RELATIONDIALOG_RIGHTFIELDCELL
 
-*LabelFieldSelection sym:extensions.ModalDialog.1000
+*LabelFieldSelection sym:pcr.ModalDialog.1000
 
 *LicenseAgreementDialog sym:FWK_HID_LICENSEDIALOG
 LicenseText sym:framework.MultiLineEdit.256.11
@@ -160,7 +160,7 @@ ScrollBtn sym:framework.PushButton.256.18
 DeclineBtn sym:framework.PushButton.256.22
 AcceptBtn sym:framework.PushButton.256.23
 
-*FormLinkDialog sym:extensions.ModalDialog.1002
+*FormLinkDialog sym:pcr.ModalDialog.1002
 LinkDetail1 sym:EXTENSIONS_UID_FIELDLINK_DETAIL1
 LinkMaster1 sym:EXTENSIONS_UID_FIELDLINK_MASTER1
 LinkDetail2 sym:EXTENSIONS_UID_FIELDLINK_DETAIL2
@@ -169,11 +169,11 @@ LinkDetail3 sym:EXTENSIONS_UID_FIELDLINK_DETAIL3
 LinkMaster3 sym:EXTENSIONS_UID_FIELDLINK_MASTER3
 LinkDetail4 sym:EXTENSIONS_UID_FIELDLINK_DETAIL4
 LinkMaster4 sym:EXTENSIONS_UID_FIELDLINK_MASTER4
-SuggestBtn sym:extensions.PushButton.1002.4
+SuggestBtn sym:pcr.PushButton.1002.4
 
-*MacroMigration     sym:dbaccess.ModalDialog.19200
+*MacroMigration     sym:dbu.ModalDialog.19200
 DatabaseFile        sym:.uno:OpenUrl
-Browse              sym:dbaccess.PushButton.19201.1
+Browse              sym:dbu.PushButton.19201.1
 BackButton          sym:SVT_HID_WIZARD_PREVIOUS
 NextButton          sym:SVT_HID_WIZARD_NEXT
 BackupLocation      sym:DBACCESS_HID_MACRO_MIGRATION_BACKUP_LOCATION
@@ -244,10 +244,10 @@ MenuName sym:cui.Edit.379.388
 ButtonUp sym:cui.ImageButton.379.382
 ButtonDown sym:cui.ImageButton.379.383
 
-*ModifyLink sym:sfx2.ModalDialog.517
-ModifyDDEApplication sym:sfx2.Edit.517.50
-ModifyDDEFile sym:sfx2.Edit.517.51
-ModifyDDECategory sym:sfx2.Edit.517.52
+*ModifyLink sym:sfx.ModalDialog.517
+ModifyDDEApplication sym:sfx.Edit.517.50
+ModifyDDEFile sym:sfx.Edit.517.51
+ModifyDDECategory sym:sfx.Edit.517.52
 
 *Mosaic sym:.uno:GraphicFilterMosaic
 Width sym:cui.MetricField.10332.2

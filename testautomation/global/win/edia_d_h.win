@@ -13,14 +13,13 @@ DatabaseTablesView sym:DBACCESS_HID_APP_TABLE_TREE
 
 *DatabaseProperties sym:DBACCESS_HID_DSADMIN_DIALOG
 TabControl sym:DBACCESS_HID_DSADMIN_TABCONTROL
-TabConnection sym:dbaccess.TabPage.19206
-'URL dbaccess:Edit:PAGE_CONNECTION:ET_CONNECTURL
+TabConnection sym:dbu.TabPage.19206
 Browse sym:DBACCESS_HID_DSADMIN_BROWSECONN
-Username sym:dbaccess.Edit.19206.1
-PasswordRequired sym:dbaccess.CheckBox.19206.1
+Username sym:dbu.Edit.19206.1
+PasswordRequired sym:dbu.CheckBox.19206.1
 DriverClass sym:DBACCESS_HID_DSADMIN_DRIVERCLASS
-TestDriverClass sym:dbaccess.PushButton.19206.1
-TestConnection sym:dbaccess.PushButton.19206.2
+TestDriverClass sym:dbu.PushButton.19206.1
+TestConnection sym:dbu.PushButton.19206.2
 Reset sym:SFX2_HID_TABDLG_RESET_BTN
 TabdBase sym:DBACCESS_HID_DSADMIN_PAGE_DBASE
 TabTextBase sym:DBACCESS_HID_DSADMIN_PAGE_TEXT
@@ -34,12 +33,12 @@ FinishBtn           sym:DBACCESS_HID_DBWIZ_FINISH
 CreateNewDatabase   sym:DBACCESS_HID_PAGE_DBWIZARD_GENERAL_RB_CREATEDBDATABASE
 DatabaseType        sym:DBACCESS_HID_DSADMIN_DSTYPE
 dBasePath           sym:DBACCESS_HID_PAGE_DBWIZARD_DBASE_ET_DBASELOCATION
-DocumentList        sym:dbaccess.ListBox.19200.3
+DocumentList        sym:dbu.ListBox.19200.3
 LDAPHostName        sym:DBACCESS_HID_PAGE_DBWIZARD_LDAP_ET_HOSTSERVER
 BaseDN              sym:DBACCESS_HID_PAGE_DBWIZARD_LDAP_ET_BASEDN
 NextBtn             sym:DBACCESS_HID_DBWIZ_NEXT
-OpenBtn             sym:dbaccess.PushButton.19200.6
-OpenExistingDoc     sym:dbaccess.RadioButton.19200.3
+OpenBtn             sym:dbu.PushButton.19200.6
+OpenExistingDoc     sym:dbu.RadioButton.19200.3
 PasswordRequired    sym:DBACCESS_HID_PAGE_DBWIZARD_AUTHENTIFICATION_CB_GENERALPASSWORDREQUIRED
 SpreadsheetPath     sym:DBACCESS_HID_PAGE_DBWIZARD_SPREADSHEET_ET_SPREADSHEETPATH
 TextPath            sym:DBACCESS_HID_PAGE_DBWIZARD_TEXT_ET_LOCATIONTEXTFILE
@@ -72,10 +71,10 @@ Tables sym:CHART2_HID_SCH_CTL_DATA
 DataSeriesLabel sym:CHART2_HID_SCH_DATA_SERIES_LABEL
 
 *DigitalSignature sym:XMLSECURITY_HID_XMLSEC_DLG_DIGSIG
-ViewCertificate sym:xmlsecurity.PushButton.1000.55
+ViewCertificate sym:xmlsec.PushButton.1000.55
 CertificateList sym:XMLSECURITY_HID_XMLSEC_CTRL_SIGNATURESDLG
-Add sym:xmlsecurity.PushButton.1000.2
-Remove sym:xmlsecurity.PushButton.1000.3
+Add sym:xmlsec.PushButton.1000.2
+Remove sym:xmlsec.PushButton.1000.3
 
 *DuplicateNameWarning sym:CUI_HID_WARN_NAME_DUPLICATE
 
@@ -84,56 +83,56 @@ AllListEntrys sym:sw.ListBox.21112.2
 NextListEntry sym:sw.PushButton.21112.5
 EditListEntry sym:sw.PushButton.21112.7
 
-*EditSymbols sym:starmath.ModalDialog.20009
-OldSymbol sym:starmath.ComboBox.20009.1
-OldSymbolSet sym:starmath.ComboBox.20009.2
-Symbol sym:starmath.ComboBox.20009.4
-SymbolSet sym:starmath.ComboBox.20009.5
-Font sym:starmath.ListBox.20009.1
-Subset sym:starmath.ListBox.20009.111
-Typeface sym:starmath.ComboBox.20009.3
-Add sym:starmath.PushButton.20009.1
-Modify sym:starmath.PushButton.20009.2
-Delete sym:starmath.PushButton.20009.3
+*EditSymbols sym:sm.ModalDialog.20009
+OldSymbol sym:sm.ComboBox.20009.1
+OldSymbolSet sym:sm.ComboBox.20009.2
+Symbol sym:sm.ComboBox.20009.4
+SymbolSet sym:sm.ComboBox.20009.5
+Font sym:sm.ListBox.20009.1
+Subset sym:sm.ListBox.20009.111
+Typeface sym:sm.ComboBox.20009.3
+Add sym:sm.PushButton.20009.1
+Modify sym:sm.PushButton.20009.2
+Delete sym:sm.PushButton.20009.3
 Symbols sym:STARMATH_HID_SMA_CONTROL_FONTCHAR_VIEW
 
-*ExecuteSQLCommand sym:dbaccess.ModalDialog.19222
-CommandToExecute sym:dbaccess.MultiLineEdit.19222.3
-ExecuteBtn sym:dbaccess.PushButton.19222.4
-PreviousCommands sym:dbaccess.ListBox.19222.6
-Status sym:dbaccess.MultiLineEdit.19222.8
-CloseBtn sym:dbaccess.PushButton.19222.11
+*ExecuteSQLCommand sym:dbu.ModalDialog.19222
+CommandToExecute sym:dbu.MultiLineEdit.19222.3
+ExecuteBtn sym:dbu.PushButton.19222.4
+PreviousCommands sym:dbu.ListBox.19222.6
+Status sym:dbu.MultiLineEdit.19222.8
+CloseBtn sym:dbu.PushButton.19222.11
 
 *ExportBasicLibraryDlg sym:basctl.ModalDialog.14893
 ExportAsPackage sym:basctl.RadioButton.14893.42
 ExportAsLibrary sym:basctl.RadioButton.14893.43
 
-*ExtensionSoftwareLicenseAgreement sym:desktop.ModalDialog.6500
-LicenseText sym:desktop.MultiLineEdit.6500.51
-ScrollDown sym:desktop.PushButton.6500.50
+*ExtensionSoftwareLicenseAgreement sym:deploymentgui.ModalDialog.6500
+LicenseText sym:deploymentgui.MultiLineEdit.6500.51
+ScrollDown sym:deploymentgui.PushButton.6500.50
 Accept sym:DESKTOP_UID_BTN_LICENSE_ACCEPT
 
 *ExtensionUpdate   sym:DESKTOP_HID_DEPLOYMENT_GUI_UPDATE
-ShowAllUpdates   sym:desktop.CheckBox.2010.5
-UpdateDescriptions sym:desktop.MultiLineEdit.2010.7
-DownloadAndInstall   sym:desktop.PushButton.2010.10
+ShowAllUpdates   sym:deploymentgui.CheckBox.2010.5
+UpdateDescriptions sym:deploymentgui.MultiLineEdit.2010.7
+DownloadAndInstall   sym:deploymentgui.PushButton.2010.10
 AvailableUpdatesList sym:DESKTOP_HID_DEPLOYMENT_GUI_UPDATE_AVAILABLE_UPDATES
 UpdatePublisherText sym:DESKTOP_HID_DEPLOYMENT_GUI_UPDATE_PUBLISHER
 ReleaseNotesText sym:DESKTOP_HID_DEPLOYMENT_GUI_UPDATE_RELEASENOTES
 
 
 *FilterDialog sym:DBACCESS_HID_DLG_FILTERCRIT
-Fieldname1 sym:dbaccess.ListBox.19206.1
-Condition1 sym:dbaccess.ListBox.19206.2
-Value1 sym:dbaccess.Edit.19206.1
-Operator2 sym:dbaccess.ListBox.19206.7
-Fieldname2 sym:dbaccess.ListBox.19206.3
-Condition2 sym:dbaccess.ListBox.19206.4
-Value2 sym:dbaccess.Edit.19206.2
-Operator3 sym:dbaccess.ListBox.19206.8
-Fieldname3 sym:dbaccess.ListBox.19206.5
-Condition3 sym:dbaccess.ListBox.19206.6
-Value3 sym:dbaccess.Edit.19206.3
+Fieldname1 sym:dbu.ListBox.19206.1
+Condition1 sym:dbu.ListBox.19206.2
+Value1 sym:dbu.Edit.19206.1
+Operator2 sym:dbu.ListBox.19206.7
+Fieldname2 sym:dbu.ListBox.19206.3
+Condition2 sym:dbu.ListBox.19206.4
+Value2 sym:dbu.Edit.19206.2
+Operator3 sym:dbu.ListBox.19206.8
+Fieldname3 sym:dbu.ListBox.19206.5
+Condition3 sym:dbu.ListBox.19206.6
+Value3 sym:dbu.Edit.19206.3
 
 *FilterNavigator sym:SVX_HID_FILTER_NAVIGATOR
 
@@ -151,9 +150,8 @@ SelectAFontworkStyle sym:SVX_HID_CTL_FONTWORK_FAVORITES
 *FontworkCharacterSpacingCustom sym:svx.ModalDialog.10019
 Value sym:svx.MetricField.10019.7
 
-*FontWorkAlignment FontWork1TBO
-
-*FontWorkCharacterSpacing FontWork2TBO
+'*FontWorkAlignment FontWork1TBO
+'*FontWorkCharacterSpacing FontWork2TBO
 
 *FormatColumn sym:SW_HID_FORMAT_COLUMN
 ApplyTo sym:sw.ListBox.21004.54
@@ -180,9 +178,9 @@ Edit sym:svx.PushButton.18014.13
 Delete sym:svx.PushButton.18014.14
 
 *DatabaseTableSaveAs sym:DBACCESS_HID_DLG_SAVE_AS
-Catalog sym:dbaccess.ComboBox.19211.1
-Schema sym:dbaccess.ComboBox.19211.2
-TableName sym:dbaccess.Edit.19211.3
+Catalog sym:dbu.ComboBox.19211.1
+Schema sym:dbu.ComboBox.19211.2
+TableName sym:dbu.Edit.19211.3
 
 *DatabaseSelection sym:DBACCESS_HID_TLB_TREELISTBOX
 
@@ -205,7 +203,6 @@ TableHeader sym:DBACCESS_HID_DATABROWSE_HEADER
 'TabADO sym:DBACCESS_HID_DSADMIN_PAGE_ADO
 'TabdBase sym:DBACCESS_HID_DSADMIN_PAGE_DBASE
 'TabODBC sym:DBACCESS_HID_DSADMIN_PAGE_ODBC
-'TabAdabasStatistics dbaccess:TabPage:TAB_PAG_ADABAS_SETTINGS
 'TabAdabasUserSettings sym:DBACCESS_HID_TAB_PAGE_USERADMIN
 'TabJDBC sym:DBACCESS_HID_DSADMIN_PAGE_JDBC
 'TabLDAP sym:DBACCESS_HID_DSADMIN_PAGE_LDAP
@@ -216,14 +213,14 @@ TableHeader sym:DBACCESS_HID_DATABROWSE_HEADER
 'Apply sym:SFX2_HID_TABDLG_APPLY_BTN
 'Reset sym:SFX2_HID_TABDLG_RESET_BTN
 
-*DatabaseIndexes sym:dbaccess.ModalDialog.19219
+*DatabaseIndexes sym:dbu.ModalDialog.19219
 NewIndex sym:DBACCESS_HID_DLGIDX_NEWINDEX
 DropIndex sym:DBACCESS_HID_DLGIDX_DROPINDEX
 RenameIndex sym:DBACCESS_HID_DLGIDX_RENAMEINDEX
 SaveIndex sym:DBACCESS_HID_DLGIDX_SAVEINDEX
 ResetIndex sym:DBACCESS_HID_DLGIDX_RESETINDEX
 IndexList sym:DBACCESS_HID_DLGIDX_INDEXLIST
-Unique sym:dbaccess.CheckBox.19219.1
+Unique sym:dbu.CheckBox.19219.1
 'IndexDetails sym:DBACCESS_UID_DLGINDEX_INDEXDETAILS_BACK
 IndexDetails sym:DBACCESS_UID_DLGINDEX_INDEXDETAILS_MAIN
 '--0: CONTROL:          No entries in Hid.Lst
@@ -235,7 +232,7 @@ IndexFields sym:DBACCESS_HID_DLGINDEX_INDEXDETAILS_FIELD
 '--38974: LISTBOX: Select the sort order.   sym:DBACCESS_HID_DLGINDEX_INDEXDETAILS_SORTORDER
 '--0: CONTROL:          No entries in Hid.Lst
 '--0: PUSHBUTTON:       No entries in Hid.Lst
-DatabaseIndexesClose sym:dbaccess.PushButton.19219.1
+DatabaseIndexesClose sym:dbu.PushButton.19219.1
 
 *RecordSearch sym:CUI_HID_FM_DLG_SEARCH
 SearchForText sym:cui.RadioButton.18007.3
@@ -258,10 +255,10 @@ Search sym:CUI_HID_SEARCH_BTN_SEARCH
 CloseBtn sym:CUI_HID_SEARCH_BTN_CLOSE
 RecordCount sym:CUI_UID_SEARCH_RECORDSTATUS
 
-*DataSourceSelection sym:dbaccess.ModalDialog.19204
-SourceList sym:dbaccess.ListBox.19204.1
-Organize sym:dbaccess.PushButton.19204.5
-Create sym:dbaccess.PushButton.19204.9
+*DataSourceSelection sym:dbu.ModalDialog.19204
+SourceList sym:dbu.ListBox.19204.1
+Organize sym:dbu.PushButton.19204.5
+Create sym:dbu.PushButton.19204.9
 
 *DataSourcesNotAvailable sym:SW_HID_DATA_SOURCES_UNAVAILABLE
 
@@ -340,7 +337,7 @@ SearchInAllSheets sym:svx.CheckBox.10020.59
 Notes sym:svx.CheckBox.10020.60
 
 *FormFolderNameDialog sym:DBACCESS_HID_DLG_SAVE_AS
-FolderName sym:dbaccess.Edit.19211.3
+FolderName sym:dbu.Edit.19211.3
 FolderReName sym:DBACCESS_HID_DLG_RENAME
 
 *FormPropertiesDialog sym:SVX_UID_FORMPROPBROWSER_FRAME
@@ -350,10 +347,10 @@ TabDataForm sym:EXTENSIONS_HID_FM_PROPDLG_TAB_DATA
 TabEventsForm sym:EXTENSIONS_HID_FM_PROPDLG_TAB_EVT
 
 *FormSaveDialog sym:DBACCESS_HID_EXPLORERDLG_COLLECTION
-NewFolder sym:dbaccess.ImageButton.19227.1
-OneLevelUp sym:dbaccess.ImageButton.19227.2
-FormName sym:dbaccess.Edit.19227.1
-SaveBtn sym:dbaccess.PushButton.19227.3
+NewFolder sym:dbu.ImageButton.19227.1
+OneLevelUp sym:dbu.ImageButton.19227.2
+FormName sym:dbu.Edit.19227.1
+SaveBtn sym:dbu.PushButton.19227.3
 
 *FormWizard sym:WIZARDS_HID_DLGFORM_DIALOG
 TablesOrQueriesMaster sym:WIZARDS_HID_DLGFORM_MASTER_LBTABLES
@@ -384,7 +381,7 @@ Category sym:sc.ListBox.26248.1
 FunctionList sym:sc.ListBox.26248.2
 
 *FunctionWizard sym:FORMULA_HID_FORMULADLG_FORMULA
-FunctionWizardTabControl sym:formula.TabControl.31003.18
+FunctionWizardTabControl sym:forui.TabControl.31003.18
 TabFunctionWizardFormula sym:FORMULA_HID_FORMULA_FAP_FORMULA
 CategoryLB sym:FORMULA_HID_FORMULA_LB_CATEGORY
 FunctionLB sym:FORMULA_HID_FORMULA_LB_FUNCTION
@@ -392,7 +389,7 @@ TabFunktion sym:FORMULA_HID_FORMULATAB_FUNCTION
 Functionsbutton1 sym:FORMULA_HID_FORMULA_FAP_BTN_FX1
 Editfield1 sym:FORMULA_HID_FORMULA_FAP_EDIT1
 Shrink1 sym:FORMULA_HID_FORMULA_FAP_BTN_REF1
-Maximize sym:formula.ImageButton.31003.20
+Maximize sym:forui.ImageButton.31003.20
 Functionsbutton2 sym:FORMULA_HID_FORMULA_FAP_BTN_FX2
 Editfield2 sym:FORMULA_HID_FORMULA_FAP_EDIT2
 Shrink2 sym:FORMULA_HID_FORMULA_FAP_BTN_REF2
@@ -405,10 +402,10 @@ Shrink4 sym:FORMULA_HID_FORMULA_FAP_BTN_REF4
 TabFunctionWizardStructure sym:FORMULA_HID_FORMULATAB_STRUCT
 Structure sym:FORMULA_HID_FORMULA_FAP_STRUCT
 Formel sym:FORMULA_HID_FORMULA_FAP_FORMULA
-Matrix sym:formula.CheckBox.31003.11
-Backward sym:formula.PushButton.31003.8
-Forward sym:formula.PushButton.31003.9
-NextBt sym:formula.PushButton.31005.9
+Matrix sym:forui.CheckBox.31003.11
+Backward sym:forui.PushButton.31003.8
+Forward sym:forui.PushButton.31003.9
+NextBt sym:forui.PushButton.31005.9
 
 *FTPConnection sym:WIZARDS_HID_FTP
 ServerName sym:WIZARDS_HID_FTP_SERVER
@@ -428,7 +425,7 @@ Browse sym:UUI_HID_LOGIN_DLG_BROWSE
 Account sym:UUI_HID_LOGIN_DLG_ACCOUNT
 UseSystemCredentials sym:UUI_HID_LOGIN_DLG_USE_SYSTEM_CREDENTIALS
 
-*Gallery sym:.uno:Gallery
+*Gallery sym:SVX_HID_GALLERY_BROWSER
 NewTheme sym:SVX_HID_GALLERY_NEWTHEME
 'NewThemeName NEW_TITLE_FOR_GALLERY_THEME_EDITFIELD
 Gallerys sym:SVX_HID_GALLERY_THEMELIST

@@ -1,5 +1,5 @@
 *TabPersonalDataMigration sym:DESKTOP_HID_FIRSTSTART_MIGRATION
-TransferPersonalData sym:desktop.CheckBox.3005.3
+TransferPersonalData sym:dkt.CheckBox.3005.3
 
 *TabPositionAndSize sym:CUI_HID_TRANS_POSITION_SIZE
 PositionX sym:cui.MetricField.10087.7
@@ -37,25 +37,25 @@ Verticalto sym:cui.ListBox.10288.30
 Followtextflow sym:cui.CheckBox.10288.31
 
 *TabPrintStarOffice sym:SFX2_HID_TP_COMMONPRINTOPTIONS
-Printer sym:sfx2.RadioButton.2398.3
-PrintToFile sym:sfx2.RadioButton.2398.4
-ReduceTransparency sym:sfx2.CheckBox.2398.10
-Automatically sym:sfx2.RadioButton.2398.11
-NoTransparency sym:sfx2.RadioButton.2398.12
-ReduceGradients sym:sfx2.CheckBox.2398.20
-GradientStripes sym:sfx2.RadioButton.2398.21
-Stripes sym:sfx2.NumericField.2398.23
-IntermediateColor sym:sfx2.RadioButton.2398.22
-ReduceBitmaps sym:sfx2.CheckBox.2398.30
-GoodPrintQuality sym:sfx2.RadioButton.2398.31
-NormalPrintQuality sym:sfx2.RadioButton.2398.32
-Resolution  sym:sfx2.RadioButton.2398.33
-IncludeTransparentObjects sym:sfx2.CheckBox.2398.34
-DPI sym:sfx2.ListBox.2398.35
-ConvertColorsToGrayscale sym:sfx2.CheckBox.2398.40
-PaperSize sym:sfx2.CheckBox.2398.51
-PaperOrientation sym:sfx2.CheckBox.2398.52
-Transparency sym:sfx2.CheckBox.2398.53
+Printer sym:sfx.RadioButton.2398.3
+PrintToFile sym:sfx.RadioButton.2398.4
+ReduceTransparency sym:sfx.CheckBox.2398.10
+Automatically sym:sfx.RadioButton.2398.11
+NoTransparency sym:sfx.RadioButton.2398.12
+ReduceGradients sym:sfx.CheckBox.2398.20
+GradientStripes sym:sfx.RadioButton.2398.21
+Stripes sym:sfx.NumericField.2398.23
+IntermediateColor sym:sfx.RadioButton.2398.22
+ReduceBitmaps sym:sfx.CheckBox.2398.30
+GoodPrintQuality sym:sfx.RadioButton.2398.31
+NormalPrintQuality sym:sfx.RadioButton.2398.32
+Resolution  sym:sfx.RadioButton.2398.33
+IncludeTransparentObjects sym:sfx.CheckBox.2398.34
+DPI sym:sfx.ListBox.2398.35
+ConvertColorsToGrayscale sym:sfx.CheckBox.2398.40
+PaperSize sym:sfx.CheckBox.2398.51
+PaperOrientation sym:sfx.CheckBox.2398.52
+Transparency sym:sfx.CheckBox.2398.53
 
 *TabPrintCalcOptions sym:SC_HID_SCPAGE_PRINT
 SuppressOutput sym:sc.CheckBox.25674.2
@@ -107,10 +107,10 @@ RecommendPasswordProtectionOnSaving sym:cui.CheckBox.10300.24
 CtrlClickRequiredToFollowHyperlinks sym:cui.CheckBox.10300.26
 
 *TabSecurityLevel sym:XMLSECURITY_HID_XMLSEC_TP_SECLEVEL
-VeryHigh sym:xmlsecurity.RadioButton.1007.2
-High sym:xmlsecurity.RadioButton.1007.3
-Medium sym:xmlsecurity.RadioButton.1007.4
-Low sym:xmlsecurity.RadioButton.1007.5
+VeryHigh sym:xmlsec.RadioButton.1007.2
+High sym:xmlsec.RadioButton.1007.3
+Medium sym:xmlsec.RadioButton.1007.4
+Low sym:xmlsec.RadioButton.1007.5
 
 *TabSendAsEmail sym:.uno:MailWindow
 

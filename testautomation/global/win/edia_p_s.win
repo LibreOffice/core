@@ -1,6 +1,6 @@
 *PackageManager sym:DESKTOP_HID_PACKAGE_MANAGER
-Add sym:desktop.PushButton.2000.12
-Updates sym:desktop.PushButton.2000.13
+Add sym:deploymentgui.PushButton.2000.12
+Updates sym:deploymentgui.PushButton.2000.13
 BrowsePackages sym:DESKTOP_HID_EXTENSION_MANAGER_LISTBOX
 Options sym:DESKTOP_HID_EXTENSION_MANAGER_LISTBOX_OPTIONS
 Enable sym:DESKTOP_HID_EXTENSION_MANAGER_LISTBOX_ENABLE
@@ -10,15 +10,15 @@ Remove sym:DESKTOP_HID_EXTENSION_MANAGER_LISTBOX_REMOVE
 *Pagelayout_UndoDeleteWarning sym:SD_HID_SD_UNDODELETEWARNING_DLG
 DontShowAgain sym:SD_HID_SD_UNDODELETEWARNING_CBX
 
-*ParameterInput sym:dbaccess.ModalDialog.19205
-Parameters sym:dbaccess.ListBox.19205.1
-Value sym:dbaccess.Edit.19205.4
-NextParameter sym:dbaccess.PushButton.19205.6
+*ParameterInput sym:dbu.ModalDialog.19205
+Parameters sym:dbu.ListBox.19205.1
+Value sym:dbu.Edit.19205.4
+NextParameter sym:dbu.PushButton.19205.6
 
 *PasswordDLG sym:SFX2_HID_PASSWD
-UserName sym:sfx2.Edit.2316.12
-Password sym:sfx2.Edit.2316.14
-PasswordConfirm sym:sfx2.Edit.2316.16
+UserName sym:sfx.Edit.2316.12
+Password sym:sfx.Edit.2316.14
+PasswordConfirm sym:sfx.Edit.2316.16
 
 *PasswdDLG sym:SVX_HID_PASSWORD
 OldPassword sym:svx.Edit.10141.11
@@ -239,7 +239,7 @@ MinusBtn sym:WIZARDS_HID_QUERYWIZARD_BTNAGGREGATEMINUS
 
 *RelationDesign sym:DBACCESS_HID_CTL_RELATIONTAB
 
-*RelationProperties sym:dbaccess.ModalDialog.19217
+*RelationProperties sym:dbu.ModalDialog.19217
 UpdateNoAction sym:DBACCESS_HID_DLG_REL_NO_CASC_UPD
 UpdateCascade sym:DBACCESS_HID_DLG_REL_CASC_UPD
 UpdateSetNull sym:DBACCESS_HID_DLG_REL_CASC_UPD_NULL
@@ -270,10 +270,10 @@ NewName sym:cui.Edit.10062.1
 NewName sym:cui.Edit.10062.1
 
 *Registration sym:SVT_HID_REGISTRATION_DIALOG
-Now sym:svtools.RadioButton.16485.3
-Later sym:svtools.RadioButton.16485.4
-Never sym:svtools.RadioButton.16485.5
-AlreadyRegistered sym:svtools.RadioButton.16485.6
+Now sym:svt.RadioButton.16485.3
+Later sym:svt.RadioButton.16485.4
+Never sym:svt.RadioButton.16485.5
+AlreadyRegistered sym:svt.RadioButton.16485.6
 
 *ReportWizard sym:WIZARDS_HID_DLGREPORT_DIALOG
 CancelBtn sym:WIZARDS_HID_DLGREPORT_0_CMDCANCEL
@@ -379,7 +379,7 @@ Filter sym:sw.Edit.22069.28
 
 *SelectCertificate   sym:XMLSECURITY_HID_XMLSEC_DLG_CERTCHOOSER
 ChooseCertificate   sym:XMLSECURITY_HID_XMLSEC_CTRL_CHOOSESIGNATURES
-ViewCertificate sym:xmlsecurity.PushButton.1001.55
+ViewCertificate sym:xmlsec.PushButton.1001.55
 
 *SelectSheets sym:.uno:SelectTables
 SheetSelectionBox sym:SC_HID_SELECTTABLES
@@ -428,10 +428,10 @@ RangeCalc sym:sc.Edit.25727.15
 Shrink sym:sc.ImageButton.25727.16
 
 *SmoothLineProperties sym:CHART2_HID_SCH_DLG_SPLINE_PROPERTIES
-CubicSpline sym:chart2.RadioButton.904.5
-BSpline sym:chart2.RadioButton.904.6
-Resolution sym:chart2.MetricField.904.2
-DataPointsOrder sym:chart2.MetricField.904.1
+CubicSpline sym:chartcontroller.RadioButton.904.5
+BSpline sym:chartcontroller.RadioButton.904.6
+Resolution sym:chartcontroller.MetricField.904.2
+DataPointsOrder sym:chartcontroller.MetricField.904.1
 
 *Solarization sym:.uno:GraphicFilterSolarize
 Value sym:cui.MetricField.10333.2
@@ -487,12 +487,12 @@ SolverNumeric sym:sc.NumericField.25744.1
 *NoSolution sym:SC_HID_SC_SOLVER_NOSOLUTION
 
 *SortOrder sym:DBACCESS_HID_DLG_ORDERCRIT
-Fieldname1 sym:dbaccess.ListBox.19207.1
-Order1 sym:dbaccess.ListBox.19207.4
-Fieldname2 sym:dbaccess.ListBox.19207.2
-Order2 sym:dbaccess.ListBox.19207.5
-Fieldname3 sym:dbaccess.ListBox.19207.3
-Order3 sym:dbaccess.ListBox.19207.6
+Fieldname1 sym:dbu.ListBox.19207.1
+Order1 sym:dbu.ListBox.19207.4
+Fieldname2 sym:dbu.ListBox.19207.2
+Order2 sym:dbu.ListBox.19207.5
+Fieldname3 sym:dbu.ListBox.19207.3
+Order3 sym:dbu.ListBox.19207.6
 
 *SortRange sym:sc.ModalDialog.25751
 ExtendSelection   sym:sc.PushButton.25751.3
@@ -512,7 +512,7 @@ SpellcheckOptions sym:cui.PushButton.10032.44
 SpellcheckUndo sym:cui.PushButton.10032.46
 SpellcheckClose sym:CUI_HID_SPLDLG_BUTTON_CLOSE
 
-*SQLException sym:dbaccess.ModalDialog.19203
+*SQLException sym:dbu.ModalDialog.19203
 Errors sym:DBACCESS_HID_SQLERROR_EXCHAIN_ERRORS
 Errortext sym:DBACCESS_HID_SQLERROR_EXCHAIN_TEXT
 
@@ -529,20 +529,20 @@ ContentPage sym:SFX2_HID_HELP_TABPAGE_CONTENTS
 SearchContent sym:SFX2_HID_HELP_TREELISTBOX_CONTENTS
 
 IndexPage sym:SFX2_HID_HELP_TABPAGE_INDEX
-SearchIndex sym:sfx2.ComboBox.617.11
-DisplayIndex sym:sfx2.PushButton.617.12
+SearchIndex sym:sfx.ComboBox.617.11
+DisplayIndex sym:sfx.PushButton.617.12
 
 FindPage sym:SFX2_HID_HELP_TABPAGE_SEARCH
-SearchFind sym:sfx2.ComboBox.618.11
-FindButton sym:sfx2.PushButton.618.12
-Result sym:sfx2.ListBox.618.16
-FindInHeadingsOnly sym:sfx2.CheckBox.618.15
-FindFullWords sym:sfx2.CheckBox.618.14
-DisplayFind sym:sfx2.PushButton.618.17
+SearchFind sym:sfx.ComboBox.618.11
+FindButton sym:sfx.PushButton.618.12
+Result sym:sfx.ListBox.618.16
+FindInHeadingsOnly sym:sfx.CheckBox.618.15
+FindFullWords sym:sfx.CheckBox.618.14
+DisplayFind sym:sfx.PushButton.618.17
 
 BookmarksPage sym:SFX2_HID_HELP_TABPAGE_BOOKMARKS
-Bookmarks sym:sfx2.ListBox.619.11
-DisplayBookmarks sym:sfx2.PushButton.619.12
+Bookmarks sym:sfx.ListBox.619.11
+DisplayBookmarks sym:sfx.PushButton.619.12
 
 HelpWindow sym:SW_HID_EDIT_WIN
 
@@ -568,8 +568,8 @@ SlidesControl sym:SD_HID_SD_WIN_DOCUMENT
 Pagecontrol sym:SD_HID_SD_WIN_DOCUMENT
 
 *Spacing sym:.uno:ChangeDistance
-Category sym:starmath.MenuButton.20005.1
-Default sym:starmath.PushButton.20005.1
+Category sym:sm.MenuButton.20005.1
+Default sym:sm.PushButton.20005.1
 SpacingSpacing   sym:STARMATH_HID_SMA_DEFAULT_DIST
 LineSpacing sym:STARMATH_HID_SMA_LINE_DIST
 RootSpacing  sym:STARMATH_HID_SMA_ROOT_DIST
@@ -584,7 +584,7 @@ LowerLimit sym:STARMATH_HID_SMA_LOWERLIMIT_DIST
 ExcessSize sym:STARMATH_HID_SMA_BRACKET_EXCHEIGHT
 BracketSpacing sym:STARMATH_HID_SMA_BRACKET_DIST
 ExcessSizeAll sym:STARMATH_HID_SMA_BRACKET_EXCHEIGHT2
-ScaleAllBrackets sym:starmath.CheckBox.20005.1
+ScaleAllBrackets sym:sm.CheckBox.20005.1
 MatrixLineSpacing sym:STARMATH_HID_SMA_MATRIXROW_DIST
 ColumnSpacing sym:STARMATH_HID_SMA_MATRIXCOL_DIST
 PrimaryHeight sym:STARMATH_HID_SMA_ATTRIBUT_DIST

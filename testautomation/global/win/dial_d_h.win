@@ -88,15 +88,15 @@ Auswahl sym:EXTENSIONS_HID_SELECTION_TLB
 
 *DokumentSchuetzen sym:.uno:ToolProtectionDocument
 Passwort sym:SC_HID_PASSWD_DOC
-Bestaetigung sym:sfx2.Edit.2316.16
-IstVerdeckt sym:sfx2.Edit.2316.12
+Bestaetigung sym:sfx.Edit.2316.16
+IstVerdeckt sym:sfx.Edit.2316.12
 
 *DokumentVorlagen sym:.uno:SaveAsTemplate
-NeueDokumentVorlage sym:sfx2.Edit.2054.7
-Bereiche sym:sfx2.ListBox.2054.2
-Vorlagen sym:sfx2.ListBox.2054.4
-Bearbeiten sym:sfx2.PushButton.2054.12
-Verwalten sym:sfx2.PushButton.2054.20
+NeueDokumentVorlage sym:sfx.Edit.2054.7
+Bereiche sym:sfx.ListBox.2054.2
+Vorlagen sym:sfx.ListBox.2054.4
+Bearbeiten sym:sfx.PushButton.2054.12
+Verwalten sym:sfx.PushButton.2054.20
 
 *Drei_D_Effekte sym:.uno:Window3D
 Geometrie sym:svx.ImageButton.10209.2
@@ -231,13 +231,13 @@ Anfang sym:sd.ListBox.727.1
 Ende sym:sd.ListBox.727.2
 
 *DVVerwalten sym:.uno:Organizer
-Befehle sym:sfx2.MenuButton.2055.105
-WelcheDatei sym:sfx2.PushButton.2055.3
+Befehle sym:sfx.MenuButton.2055.105
+WelcheDatei sym:sfx.PushButton.2055.3
 ListeLinks sym:SFX2_HID_CTL_ORGANIZER_LEFT
 ListeRechts sym:SFX2_HID_CTL_ORGANIZER_RIGHT
-PopuplisteLinks sym:sfx2.ListBox.2055.2
-PopuplisteRechts sym:sfx2.ListBox.2055.11
-AddressBook sym:sfx2.PushButton.2055.4
+PopuplisteLinks sym:sfx.ListBox.2055.2
+PopuplisteRechts sym:sfx.ListBox.2055.11
+AddressBook sym:sfx.PushButton.2055.4
 
 *EinfuegenSpalten sym:.uno:InsertColumnDialog
 Anzahl sym:cui.NumericField.10156.2
@@ -270,11 +270,11 @@ Titel sym:sw.Edit.21105.7
 EingabeText sym:sw.MultiLineEdit.21105.3
 Weiter sym:sw.PushButton.21105.8
 
-*EMFOptionen sym:svtools.ModalDialog.16372
-Original sym:svtools.RadioButton.16372.1
-Groesse sym:svtools.RadioButton.16372.2
-Breite sym:svtools.MetricField.16372.1
-Hoehe sym:svtools.MetricField.16372.2
+*EMFOptionen sym:svt.ModalDialog.16372
+Original sym:svt.RadioButton.16372.1
+Groesse sym:svt.RadioButton.16372.2
+Breite sym:svt.MetricField.16372.1
+Hoehe sym:svt.MetricField.16372.2
 
 *EPSOptionen sym:filter.ModalDialog.17408
 VorschauTif sym:filter.CheckBox.17408.1
@@ -403,13 +403,13 @@ Loeschen sym:SW_HID_FLDVAR_DELETE
 *Filterauswahl sym:UUI_HID_DLG_FILTER_SELECT
 Filter sym:uui.ListBox.14510.31
 
-*FilterDlg sym:svtools.ModalDialog.16371
-Original sym:svtools.RadioButton.16371.1
-Aufloesung sym:svtools.RadioButton.16371.2
-Groesse sym:svtools.RadioButton.16371.3
-AufloesungDPI sym:svtools.ComboBox.16371.1
-Breite sym:svtools.MetricField.16371.1
-Hoehe sym:svtools.MetricField.16371.2
+*FilterDlg sym:svt.ModalDialog.16371
+Original sym:svt.RadioButton.16371.1
+Aufloesung sym:svt.RadioButton.16371.2
+Groesse sym:svt.RadioButton.16371.3
+AufloesungDPI sym:svt.ComboBox.16371.1
+Breite sym:svt.MetricField.16371.1
+Hoehe sym:svt.MetricField.16371.2
 
 *Fontwork sym:.uno:FontWork
 KreisAuswahl sym:SVX_HID_FONTWORK_CTL_FORMS
