@@ -28,9 +28,7 @@
 #ifndef _SALLANG_HXX
 #define _SALLANG_HXX
 
-//#ifndef _TOOLS_LANG_HXX
 //#include <tools/lang.hxx>
-//#endif
 #include <i18npool/mslangid.hxx>
 
 // --------------------
