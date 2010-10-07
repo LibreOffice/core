@@ -28,6 +28,7 @@
 #define _CALC_HXX
 
 #include <svl/svarray.hxx>
+#include <unotools/syslocale.hxx>
 
 #ifndef __SBX_SBXVALUE //autogen
 #include <basic/sbxvar.hxx>
@@ -185,6 +186,7 @@ class SwCalc
     xub_StrLen  nCommandPos;
 
     SwDoc&      rDoc;
+    SvtSysLocale m_aSysLocale;
     const LocaleDataWrapper* pLclData;
     CharClass*  pCharClass;
 

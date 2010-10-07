@@ -208,7 +208,8 @@ void SwAnnotationWin::InitAnswer(OutlinerParaObject* pText)
 {
     //collect our old meta data
     SwSidebarWin* pWin = Mgr().GetNextPostIt(KEY_PAGEUP, this);
-    const LocaleDataWrapper& rLocalData = SvtSysLocale().GetLocaleData();
+    const SvtSysLocale aSysLocale;
+    const LocaleDataWrapper& rLocalData = aSysLocale.GetLocaleData();
     String aText = String(SW_RES(STR_REPLY));
         SwRewriter aRewriter;
         aRewriter.AddRule(UNDO_ARG1, pWin->GetAuthor());

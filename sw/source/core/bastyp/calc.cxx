@@ -267,7 +267,7 @@ SwCalc::SwCalc( SwDoc& rD )
     :
     aErrExpr( aEmptyStr, SwSbxValue(), 0 ),
     rDoc( rD ),
-    pLclData( &SvtSysLocale().GetLocaleData() ),
+    pLclData( m_aSysLocale.GetLocaleDataPtr() ),
     pCharClass( &GetAppCharClass() ),
     nListPor( 0 ),
     eError( CALC_NOERR )
@@ -416,7 +416,7 @@ SwCalc::~SwCalc()
 {
     for( USHORT n = 0; n < TBLSZ; ++n )
         delete VarTable[n];
-    if( pLclData != &SvtSysLocale().GetLocaleData() )
+    if( pLclData != m_aSysLocale.GetLocaleDataPtr() )
         delete pLclData;
     if( pCharClass != &GetAppCharClass() )
         delete pCharClass;
@@ -1614,9 +1614,10 @@ String SwCalc::GetDBName(const String& rName)
 BOOL SwCalc::Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
                             double& rVal, const LocaleDataWrapper* pLclData )
 {
+    const SvtSysLocale aSysLocale;
     const LocaleDataWrapper* pLclD = pLclData;
     if( !pLclD )
-        pLclD = &SvtSysLocale().GetLocaleData();
+        pLclD = aSysLocale.GetLocaleDataPtr();
 
     const xub_Unicode nCurrCmdPos = rCommandPos;
     rtl_math_ConversionStatus eStatus;
@@ -1628,7 +1629,7 @@ BOOL SwCalc::Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
             &eStatus, &pEnd );
     rCommandPos = static_cast<xub_StrLen>(pEnd - rCommand.GetBuffer());
 
-    if( !pLclData && pLclD != &SvtSysLocale().GetLocaleData() )
+    if( !pLclData && pLclD != &aSysLocale.GetLocaleData() )
         delete (LocaleDataWrapper*)pLclD;
 
     return rtl_math_ConversionStatus_Ok == eStatus && nCurrCmdPos != rCommandPos;
@@ -1637,7 +1638,8 @@ BOOL SwCalc::Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
 BOOL SwCalc::Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
                             double& rVal, SwDoc* pDoc )
 {
-    const LocaleDataWrapper* pLclD = &SvtSysLocale().GetLocaleData();
+    const SvtSysLocale aSysLocale;
+    const LocaleDataWrapper* pLclD = aSysLocale.GetLocaleDataPtr();
     if( pDoc )
     {
 
@@ -1658,7 +1660,7 @@ BOOL SwCalc::Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
             &eStatus, &pEnd );
     rCommandPos = static_cast<xub_StrLen>(pEnd - rCommand.GetBuffer());
 
-    if( pLclD != &SvtSysLocale().GetLocaleData() )
+    if( pLclD != &aSysLocale.GetLocaleData() )
         delete (LocaleDataWrapper*)pLclD;
 
     return rtl_math_ConversionStatus_Ok == eStatus && nCurrCmdPos != rCommandPos;
