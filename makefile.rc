@@ -67,6 +67,7 @@ distclean .PHONY: clean
 clean .PHONY:
 	-rm -rf */$(INPATH)
 	-rm -rf solver/*/$(INPATH)
+	-rm -rf install
 .IF "$(BUILD_DMAKE)"!="NO"
 	-echo cleaning up dmake...
 	-$(GNUMAKE) -C dmake clean
