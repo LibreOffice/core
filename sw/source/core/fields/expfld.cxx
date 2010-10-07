@@ -836,13 +836,13 @@ String SwSetExpField::Expand() const
 
 String SwSetExpField::GetFieldName() const
 {
-    USHORT const nStrType( (IsSequenceFld())
+    SwFldTypesEnum const nStrType( (IsSequenceFld())
                             ? TYP_SEQFLD
                             : (bInput)
                                 ? TYP_SETINPFLD
                                 : TYP_SETFLD   );
 
-    String aStr( SwFieldType::GetTypeStr( nStrType ) );
+    String aStr( SwFieldType::GetTypeStr( static_cast<USHORT>(nStrType) ) );
     aStr += ' ';
     aStr += GetTyp()->GetName();
 
