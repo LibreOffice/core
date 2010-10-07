@@ -42,7 +42,7 @@
 #include <cppuhelper/servicefactory.hxx>
 
 #ifndef _RTL_USTRING_
-#include <rtl/ustring>
+#include <rtl/ustring.hxx>
 #endif
 #include <sal/types.h>
 #include <osl/diagnose.h>

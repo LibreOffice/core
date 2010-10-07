@@ -35,7 +35,7 @@
 
 #include <sal/types.h>
 
-#include <rtl/ustring>
+#include <rtl/ustring.hxx>
 
 //------------------------------------------------------------------------
 // deklarations
