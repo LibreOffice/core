@@ -43,7 +43,6 @@
 
 
 #include <unoctrl.hxx>
-// #include <unoctrl2.hxx>
 
 #include <svtools/unoiface.hxx> // InitExtToolkit
 

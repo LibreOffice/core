@@ -31,7 +31,6 @@
 #include <osl/time.h>
 #include <vos/socket.hxx>
 #include <vos/diagnose.hxx>
-//#include <osl/tools.h>
 
 using namespace vos;
 

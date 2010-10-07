@@ -35,7 +35,6 @@
 #include <cppuhelper/weak.hxx>
 #include <vos/mutex.hxx>
 
-// #include <com/sun/star/awt/XTextConstraints.hpp>
 #include <com/sun/star/awt/XUnitConversion.hpp>
 
 class OutputDevice;

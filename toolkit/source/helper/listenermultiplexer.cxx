@@ -26,7 +26,6 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-//#include "precompiled_toolkit.hxx"
 #include "precompiled_toolkit.hxx"
 #include <toolkit/helper/listenermultiplexer.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>

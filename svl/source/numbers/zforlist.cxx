@@ -30,7 +30,6 @@
 #ifndef GCC
 #endif
 
-// #include <math.h>
 #include <tools/debug.hxx>
 #include <unotools/charclass.hxx>
 #include <i18npool/mslangid.hxx>

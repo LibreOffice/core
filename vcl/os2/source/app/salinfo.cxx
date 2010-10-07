@@ -40,10 +40,6 @@
 #include <rtl/ustrbuf.hxx>
 #include "vcl/window.hxx"
 
-#ifndef _SV_SALGTYPE_HXX
-//#include <salgtype.hxx>
-#endif
-
 #define CHAR_POINTER(THE_OUSTRING) ::rtl::OUStringToOString (THE_OUSTRING, RTL_TEXTENCODING_UTF8).pData->buffer
 
 class Os2SalSystem : public SalSystem

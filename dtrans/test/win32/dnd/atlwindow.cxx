@@ -40,7 +40,6 @@
 #include "atlwindow.hxx"
 #include "targetlistener.hxx"
 #include "sourcelistener.hxx"
-//#include "transferable.hxx"
 #include <map>
 
 #include <winbase.h>

@@ -50,9 +50,7 @@ CComModule _Module;
 #include <com/sun/star/lang/XComponent.hpp>
 #include <rtl/process.h>
 #include <cppuhelper/servicefactory.hxx>
-//#include "transferable.hxx"
 #include "sourcelistener.hxx"
-
 
 #include "atlwindow.hxx"
 BEGIN_OBJECT_MAP(ObjectMap)

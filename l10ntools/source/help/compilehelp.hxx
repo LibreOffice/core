@@ -37,8 +37,6 @@
 #endif
 #define HELPLINKER_DLLPRIVATE SAL_DLLPRIVATE
 
-
-//#include <helplinkerdllapi.h>
 #include <rtl/ustring.hxx>
 
 enum HelpProcessingErrorClass

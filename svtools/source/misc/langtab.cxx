@@ -28,12 +28,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-// include ---------------------------------------------------------------
-
 #include <tools/shl.hxx>
 #include <tools/debug.hxx>
 
-//#include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <com/sun/star/i18n/DirectionProperty.hpp>
 
 #include <i18npool/lang.h>

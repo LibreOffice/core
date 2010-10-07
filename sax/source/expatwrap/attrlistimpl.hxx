@@ -29,7 +29,6 @@
 #define _SAX_ATTRLISTIMPL_HXX
 
 #include "sal/config.h"
-//#include "sax/saxdllapi.h"
 
 #include <cppuhelper/implbase2.hxx>
 
