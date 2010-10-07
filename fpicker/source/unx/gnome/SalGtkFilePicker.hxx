@@ -310,11 +310,13 @@ class SalGtkFilePicker :
         gulong mnHID_SelectionChange;
 
         ::rtl::OUString m_aCurrentFilter;
+        ::rtl::OUString m_aInitialFilter;
 
         bool bVersionWidthUnset;
         sal_Bool mbPreviewState;
         gulong mHID_Preview;
         GtkWidget* m_pPreview;
+        GtkFileFilter* m_pPseudoFilter;
         sal_Int32 m_PreviewImageWidth;
         sal_Int32 m_PreviewImageHeight;
 
@@ -325,8 +327,8 @@ class SalGtkFilePicker :
         void UpdateFilterfromUI();
 
         void implChangeType( GtkTreeSelection *selection );
-        int implAddFilter( const OUString& rFilter, const OUString& rType);
-        int implAddFilterGroup( const OUString& rFilter,
+        GtkFileFilter * implAddFilter( const OUString& rFilter, const OUString& rType );
+        void implAddFilterGroup( const OUString& rFilter,
                      const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair>& _rFilters );
         void updateCurrentFilterFromName(const gchar* filtername);
         void unselect_type();

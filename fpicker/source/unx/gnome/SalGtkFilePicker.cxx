@@ -52,6 +52,7 @@
 
 #include <iostream>
 #include <algorithm>
+#include <set>
 #include "resourceprovider.hxx"
 #include <tools/rc.hxx>
 
@@ -179,6 +180,7 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference<lang::XMultiServiceFact
     mbPreviewState( sal_False ),
     mHID_Preview( 0 ),
     m_pPreview( NULL ),
+    m_pPseudoFilter( NULL ),
     m_PreviewImageWidth( 256 ),
     m_PreviewImageHeight( 256 )
 {
@@ -690,7 +692,7 @@ void SalGtkFilePicker::ensureFilterList( const ::rtl::OUString& _rInitialCurrent
         m_pFilterList = new FilterList;
 
         // set the first filter to the current filter
-        if( ( !m_aCurrentFilter ) || ( !m_aCurrentFilter.getLength() ) )
+        if ( !m_aCurrentFilter.getLength() )
             m_aCurrentFilter = _rInitialCurrentFilter;
     }
 }
@@ -713,7 +715,6 @@ void SAL_CALL SalGtkFilePicker::appendFilter( const rtl::OUString& aTitle, const
 
     // append the filter
     m_pFilterList->insert( m_pFilterList->end(), FilterEntry( aTitle, aFilter ) );
-    // implAddFilter( aTitle, aFilter );
 }
 
 //-----------------------------------------------------------------------------------------
@@ -780,7 +781,10 @@ void SalGtkFilePicker::UpdateFilterfromUI()
     }
     else if( GtkFileFilter *filter = gtk_file_chooser_get_filter(GTK_FILE_CHOOSER(m_pDialog)))
     {
-        updateCurrentFilterFromName(gtk_file_filter_get_name( filter ));
+        if (m_pPseudoFilter != filter)
+            updateCurrentFilterFromName(gtk_file_filter_get_name( filter ));
+        else
+            updateCurrentFilterFromName(OUStringToOString( m_aInitialFilter, RTL_TEXTENCODING_UTF8 ).getStr());
     }
 }
 
@@ -948,9 +952,14 @@ uno::Sequence<rtl::OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles() throw
                     }
                 }
 
-                const gchar* filtername =
-                    gtk_file_filter_get_name( gtk_file_chooser_get_filter( GTK_FILE_CHOOSER( m_pDialog ) ) );
-                sFilterName = OUString( filtername, strlen( filtername ), RTL_TEXTENCODING_UTF8 );
+                GtkFileFilter *filter = gtk_file_chooser_get_filter(GTK_FILE_CHOOSER(m_pDialog));
+                if (m_pPseudoFilter != filter)
+                {
+                    const gchar* filtername = gtk_file_filter_get_name( filter );
+                    sFilterName = OUString( filtername, strlen( filtername ), RTL_TEXTENCODING_UTF8 );
+                }
+                else
+                    sFilterName = m_aInitialFilter;
             }
 
             OSL_TRACE( "2: current filter is %s\n",
@@ -1915,7 +1924,7 @@ case_insensitive_filter (const GtkFileFilterInfo *filter_info, gpointer data)
 }
 }
 
-int SalGtkFilePicker::implAddFilter( const OUString& rFilter, const OUString& rType )
+GtkFileFilter* SalGtkFilePicker::implAddFilter( const OUString& rFilter, const OUString& rType )
 {
     GdkThreadLock aLock;
 
@@ -1966,7 +1975,6 @@ int SalGtkFilePicker::implAddFilter( const OUString& rFilter, const OUString& rT
 
     gtk_file_chooser_add_filter( GTK_FILE_CHOOSER( m_pDialog ), filter );
 
-    int nAdded = 0;
     if (!bAllGlob)
     {
         GtkTreeIter iter;
@@ -1977,30 +1985,67 @@ int SalGtkFilePicker::implAddFilter( const OUString& rFilter, const OUString& rT
             2, aFilterName.getStr(),
             3, OUStringToOString(rType, RTL_TEXTENCODING_UTF8).getStr(),
             -1);
-        nAdded = 1;
     }
-    return nAdded;
+    return filter;
 }
 
-int SalGtkFilePicker::implAddFilterGroup( const OUString& /*_rFilter*/, const Sequence< StringPair >& _rFilters )
+void SalGtkFilePicker::implAddFilterGroup( const OUString& /*_rFilter*/, const Sequence< StringPair >& _rFilters )
 {
     // Gtk+ has no filter group concept I think so ...
     // implAddFilter( _rFilter, String() );
-    int nAdded = 0;
     const StringPair* pSubFilters   = _rFilters.getConstArray();
     const StringPair* pSubFiltersEnd = pSubFilters + _rFilters.getLength();
     for( ; pSubFilters != pSubFiltersEnd; ++pSubFilters )
-        nAdded += implAddFilter( pSubFilters->First, pSubFilters->Second );
-    return nAdded;
+        implAddFilter( pSubFilters->First, pSubFilters->Second );
 }
 
 void SalGtkFilePicker::SetFilters()
 {
-    OSL_TRACE( "start setting filters\n");
-
     GdkThreadLock aLock;
 
-    int nAdded = 0;
+    if (!m_aInitialFilter.getLength())
+        m_aInitialFilter = m_aCurrentFilter;
+
+    rtl::OUString sPseudoFilter;
+    if( GTK_FILE_CHOOSER_ACTION_SAVE == gtk_file_chooser_get_action( GTK_FILE_CHOOSER( m_pDialog ) ) )
+    {
+        std::set<OUString> aAllFormats;
+        if( m_pFilterList && !m_pFilterList->empty() )
+        {
+            for (   FilterList::iterator aListIter = m_pFilterList->begin();
+                    aListIter != m_pFilterList->end();
+                    ++aListIter
+                )
+            {
+                if( aListIter->hasSubFilters() )
+                {   // it's a filter group
+                    UnoFilterList aSubFilters;
+                    aListIter->getSubFilters( aSubFilters );
+                    const StringPair* pSubFilters   = aSubFilters.getConstArray();
+                    const StringPair* pSubFiltersEnd = pSubFilters + aSubFilters.getLength();
+                    for( ; pSubFilters != pSubFiltersEnd; ++pSubFilters )
+                        aAllFormats.insert(pSubFilters->Second);
+                }
+                else
+                    aAllFormats.insert(aListIter->getFilter());
+            }
+        }
+        if (aAllFormats.size() > 1)
+        {
+            rtl::OUString sAllFilter;
+            std::set<OUString>::const_iterator aEnd = aAllFormats.end();
+            for (std::set<OUString>::const_iterator aIter = aAllFormats.begin(); aIter != aEnd; ++aIter)
+            {
+                if (sAllFilter.getLength())
+                    sAllFilter += OUString(sal_Unicode(';'));
+                sAllFilter += *aIter;
+            }
+            CResourceProvider aResProvider;
+            sPseudoFilter = aResProvider.getResString(FILE_PICKER_ALLFORMATS);
+            m_pPseudoFilter = implAddFilter( sPseudoFilter, sAllFilter );
+        }
+    }
+
     if( m_pFilterList && !m_pFilterList->empty() )
     {
         for (   FilterList::iterator aListIter = m_pFilterList->begin();
@@ -2014,30 +2059,27 @@ void SalGtkFilePicker::SetFilters()
                 UnoFilterList aSubFilters;
                 aListIter->getSubFilters( aSubFilters );
 
-                nAdded += implAddFilterGroup( aListIter->getTitle(), aSubFilters );
+                implAddFilterGroup( aListIter->getTitle(), aSubFilters );
             }
             else
             {
                 // it's a single filter
 
-                nAdded += implAddFilter( aListIter->getTitle(), aListIter->getFilter() );
+                implAddFilter( aListIter->getTitle(), aListIter->getFilter() );
             }
         }
     }
 
-    if (nAdded)
+    if (gtk_tree_model_iter_n_children(GTK_TREE_MODEL(m_pFilterStore), NULL)) //If m_pFilterStore is not empty
         gtk_widget_show( m_pFilterExpander );
     else
         gtk_widget_hide( m_pFilterExpander );
 
     // set the default filter
-    if( m_aCurrentFilter && (m_aCurrentFilter.getLength() > 0) )
-    {
-        OSL_TRACE( "Setting current filter to %s\n",
-            OUStringToOString( m_aCurrentFilter, RTL_TEXTENCODING_UTF8 ).getStr() );
-
+    if (sPseudoFilter.getLength())
+        SetCurFilter( sPseudoFilter );
+    else if(m_aCurrentFilter.getLength())
         SetCurFilter( m_aCurrentFilter );
-    }
 
     OSL_TRACE( "end setting filters\n");
 }

@@ -314,5 +314,10 @@ String STR_SVT_NOREMOVABLEDEVICE
     Text [ en-US ] = "No removable storage device detected.\nMake sure it is plugged in properly and try again." ;
 };
 
+String STR_SVT_ALLFORMATS
+{
+    Text [ en-US ] = "All Formats" ;
+};
+
 //******************************************************************** EOF
 
