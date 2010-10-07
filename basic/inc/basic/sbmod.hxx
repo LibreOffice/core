@@ -33,10 +33,12 @@
 #include <basic/sbxdef.hxx>
 #include <rtl/ustring.hxx>
 
+#include <deque>
+
 class SbMethod;
 class SbProperty;
 class SbiRuntime;
-class SbiBreakpoints;
+typedef std::deque< USHORT > SbiBreakpoints;
 class SbiImage;
 class SbProcedureProperty;
 class SbIfaceMapperMethod;
@@ -109,8 +111,8 @@ public:
     const SbxObject* FindType( String aTypeName ) const;
 
     virtual BOOL    IsBreakable( USHORT nLine ) const;
-    virtual USHORT  GetBPCount() const;
-    virtual USHORT  GetBP( USHORT n ) const;
+    virtual size_t  GetBPCount() const;
+    virtual USHORT  GetBP( size_t n ) const;
     virtual BOOL    IsBP( USHORT nLine ) const;
     virtual BOOL    SetBP( USHORT nLine );
     virtual BOOL    ClearBP( USHORT nLine );

@@ -44,7 +44,6 @@ class SbiInstance;                  // runtime instance
 class SbiRuntime;                   // currently running procedure
 class SbiImage;                     // compiled image
 class BasicLibInfo;                 // info block for basic manager
-class SbiBreakpoints;
 class SbTextPortions;
 class SbMethod;
 class BasicManager;
