@@ -87,7 +87,7 @@
 #include "excimp8.hxx"
 #include "excform.hxx"
 
-#if defined( WNT ) || defined( WIN )
+#if defined( WNT )
 #include <math.h>
 #else
 #include <stdlib.h>

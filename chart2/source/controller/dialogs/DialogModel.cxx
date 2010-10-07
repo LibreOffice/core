@@ -41,6 +41,7 @@
 #include "CommonFunctors.hxx"
 #include "ControllerLockGuard.hxx"
 #include "ChartTypeHelper.hxx"
+#include "ThreeDHelper.hxx"
 
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
@@ -524,6 +525,9 @@ Reference< chart2::XDataSeries > DialogModel::insertSeriesAfter(
 
     try
     {
+        Reference< chart2::XDiagram > xDiagram( m_xChartDocument->getFirstDiagram() );
+        ThreeDLookScheme e3DScheme = ThreeDHelper::detectScheme( xDiagram );
+
         sal_Int32 nSeriesInChartType = 0;
         const sal_Int32 nTotalSeries = countSeries();
         if( xChartType.is())
@@ -539,7 +543,7 @@ Reference< chart2::XDataSeries > DialogModel::insertSeriesAfter(
                 xChartType,
                 nTotalSeries, // new series' index
                 nSeriesInChartType,
-                m_xChartDocument->getFirstDiagram(),
+                xDiagram,
                 m_xTemplate,
                 bCreateDataCachedSequences ));
 
@@ -560,6 +564,8 @@ Reference< chart2::XDataSeries > DialogModel::insertSeriesAfter(
             aSeries.insert( aIt, xNewSeries );
             xSeriesCnt->setDataSeries( ContainerToSequence( aSeries ));
         }
+
+        ThreeDHelper::setScheme( xDiagram, e3DScheme );
     }
     catch( uno::Exception & ex )
     {
@@ -693,14 +699,19 @@ bool DialogModel::setData(
             m_xTemplate->getDataInterpreter());
         if( xInterpreter.is())
         {
+            Reference< chart2::XDiagram > xDiagram( m_xChartDocument->getFirstDiagram() );
+            ThreeDLookScheme e3DScheme = ThreeDHelper::detectScheme( xDiagram );
+
             ::std::vector< Reference< XDataSeries > > aSeriesToReUse(
-                DiagramHelper::getDataSeriesFromDiagram( m_xChartDocument->getFirstDiagram()));
+                DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
             applyInterpretedData(
                 xInterpreter->interpretDataSource(
                     xDataSource, rArguments,
                     ContainerToSequence( aSeriesToReUse )),
                 aSeriesToReUse,
                 true /* bSetStyles */);
+
+            ThreeDHelper::setScheme( xDiagram, e3DScheme );
         }
     }
     catch( uno::Exception & ex )

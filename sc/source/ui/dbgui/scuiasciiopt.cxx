@@ -46,13 +46,8 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include "miscuno.hxx"
 
-
 //! TODO make dynamic
-#ifdef WIN
-const SCSIZE ASCIIDLG_MAXROWS                = 10000;
-#else
 const SCSIZE ASCIIDLG_MAXROWS                = MAXROWCOUNT;
-#endif
 
 
 using namespace rtl;

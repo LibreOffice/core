@@ -80,6 +80,15 @@ ScVbaGlobals::getApplication() throw (uno::RuntimeException)
        return mxApplication;
 }
 
+
+uno::Reference<excel::XApplication > SAL_CALL
+ScVbaGlobals::getExcel() throw (uno::RuntimeException)
+{
+       return getApplication();
+}
+
+
+
 uno::Reference< excel::XWorkbook > SAL_CALL
 ScVbaGlobals::getActiveWorkbook() throw (uno::RuntimeException)
 {
@@ -219,6 +228,25 @@ ScVbaGlobals::Rows( const uno::Any& aIndex ) throw (uno::RuntimeException)
 
 }
 
+
+uno::Any SAL_CALL
+ScVbaGlobals::getDebug() throw (uno::RuntimeException)
+{
+    try // return empty object on error
+    {
+        uno::Sequence< uno::Any > aArgs( 1 );
+        aArgs[ 0 ] <<= uno::Reference< XHelperInterface >( this );
+        uno::Reference< lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_SET_THROW );
+        uno::Reference< uno::XInterface > xVBADebug = xServiceManager->createInstanceWithArgumentsAndContext(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.Debug" ) ), aArgs, mxContext );
+        return uno::Any( xVBADebug );
+    }
+    catch( uno::Exception& )
+    {
+    }
+    return uno::Any();
+}
+
 uno::Sequence< ::rtl::OUString > SAL_CALL
 ScVbaGlobals::getAvailableServiceNames(  ) throw (uno::RuntimeException)
 {
@@ -233,6 +261,7 @@ ScVbaGlobals::getAvailableServiceNames(  ) throw (uno::RuntimeException)
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "ooo.vba.excel.Worksheet" ) ),
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "ooo.vba.excel.Application" ) ),
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "ooo.vba.excel.Hyperlink" ) ),
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.script.vba.VBASpreadsheetEventProcessor" ) )
           };
         sal_Int32 nExcelServices = ( sizeof( names )/ sizeof( names[0] ) );
         sal_Int32 startIndex = serviceNames.getLength();
