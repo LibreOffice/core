@@ -243,10 +243,3 @@ SV_DECL_PTRARR_SORT_DEL_VISIBILITY( SvByteStringsISortDtor, ByteStringPtr, 1, 1,
 
 typedef std::deque< xub_StrLen > SvXub_StrLens;
 
-//#ifdef _SVSTDARR_XUB_STRLENSORT
-#ifndef _SVSTDARR_XUB_STRLENSORT_DECL
-SV_DECL_VARARR_SORT_VISIBILITY( SvXub_StrLensSort, xub_StrLen, 1, 1, SVL_DLLPUBLIC )
-#define _SVSTDARR_XUB_STRLENSORT_DECL
-#endif
-//#endif
-
