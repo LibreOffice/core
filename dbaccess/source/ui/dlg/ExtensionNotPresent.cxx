@@ -44,6 +44,7 @@
 #include <unotools/syslocale.hxx>
 #include <svx/globlmn.hrc>
 #include <svx/svxids.hrc>
+#include <svtools/langhelp.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/confignode.hxx>
@@ -198,10 +199,11 @@ IMPL_LINK( OExtensionNotPresentDialog, Download_Click, PushButton*, EMPTYARG )
         if (suDownloadURL.getLength() == 0)
         {
             // fallback
-            suDownloadURL = UNISTRING("http://extensions.services.openoffice.org");
+            suDownloadURL = UNISTRING("http://extensions.documentfoundation.org");
         }
 
         // open such URL in a browser
+        localizeWebserviceURI(suDownloadURL);
         uno::Reference< com::sun::star::system::XSystemShellExecute > xShellExecute( getShellExecuter() );
         xShellExecute->execute( suDownloadURL, ::rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::DEFAULTS );
     }
