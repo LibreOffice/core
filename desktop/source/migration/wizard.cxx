@@ -139,53 +139,13 @@ FirstStartWizard::FirstStartWizard( Window* pParent, sal_Bool bLicenseNeedsAccep
     ,m_bLicenseNeedsAcceptance( bLicenseNeedsAcceptance )
     ,m_bLicenseWasAccepted(sal_False)
     ,m_bAutomaticUpdChk(sal_True)
+    ,m_aThrobber(this, WizardResId(CTRL_THROBBER))
     ,m_aLicensePath( rLicensePath )
 {
+    FreeResource();
     // ---
-    // FreeResource();
 //  enableState(STATE_USER, sal_False);
 //  enableState(STATE_REGISTRATION, sal_False);
-
-    try
-    {
-        Point pos(5, 210 );
-        Size size(11, 11 );
-
-        pos  = LogicToPixel( pos, MAP_APPFONT );
-        size = LogicToPixel( size, MAP_APPFONT );
-
-        uno::Reference< lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-        uno::Reference< awt::XToolkit > xToolkit(
-            uno::Reference< lang::XMultiComponentFactory >(
-                xFactory, uno::UNO_QUERY_THROW)->
-                    createInstanceWithContext(
-                        rtl::OUString(
-                            RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.Toolkit")),
-                        getComponentContext(xFactory)),
-                        uno::UNO_QUERY_THROW);
-
-        m_xThrobber = uno::Reference< awt::XThrobber >(
-            xToolkit->createWindow(
-                awt::WindowDescriptor(
-                    awt::WindowClass_SIMPLE,
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Throbber")),
-                    GetComponentInterface(), 0,
-                    awt::Rectangle(
-                        pos.X(), pos.Y(), size.Width(), size.Height()),
-                        awt::WindowAttribute::SHOW)),
-                    uno::UNO_QUERY_THROW);
-    }
-    catch (uno::RuntimeException &)
-    {
-        throw;
-    }
-    catch (Exception& )
-    {
-    }
-
-    uno::Reference< awt::XWindow > xThrobberWin( m_xThrobber, uno::UNO_QUERY );
-    if ( xThrobberWin.is() )
-        xThrobberWin->setVisible( false );
 
     Size aTPSize(TP_WIDTH, TP_HEIGHT);
     SetPageSizePixel(LogicToPixel(aTPSize, MAP_APPFONT));
@@ -352,7 +312,7 @@ TabPage* FirstStartWizard::createPage(WizardState _nState)
         pTabPage = new LicensePage(this, WizardResId(TP_LICENSE), m_aLicensePath);
         break;
     case STATE_MIGRATION:
-        pTabPage = new MigrationPage(this, WizardResId(TP_MIGRATION), m_xThrobber );
+        pTabPage = new MigrationPage(this, WizardResId(TP_MIGRATION), m_aThrobber);
         break;
     case STATE_USER:
         pTabPage = new UserPage(this, WizardResId(TP_USER));

@@ -339,14 +339,13 @@ void MigrationThread::onTerminated()
 
 MigrationPage::MigrationPage(
     svt::OWizardMachine* parent,
-    const ResId& resid,
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XThrobber > xThrobber)
+    const ResId& resid, Throbber& i_throbber )
     : OWizardPage(parent, resid)
     , m_ftHead(this, WizardResId(FT_MIGRATION_HEADER))
     , m_ftBody(this, WizardResId(FT_MIGRATION_BODY))
     , m_cbMigration(this, WizardResId(CB_MIGRATION))
+    , m_rThrobber(i_throbber)
     , m_bMigrationDone(sal_False)
-    , m_xThrobber(xThrobber)
 {
     FreeResource();
     _setBold(m_ftHead);
@@ -366,9 +365,8 @@ sal_Bool MigrationPage::commitPage( svt::WizardTypes::CommitPageReason _eReason 
         if ( pWizard )
             pWizard->DisableButtonsWhileMigration();
 
-        uno::Reference< awt::XWindow > xWin( m_xThrobber, uno::UNO_QUERY );
-        xWin->setVisible( true );
-        m_xThrobber->start();
+        m_rThrobber.Show();
+        m_rThrobber.start();
         MigrationThread* pMigThread = new MigrationThread();
         pMigThread->create();
 
@@ -377,10 +375,10 @@ sal_Bool MigrationPage::commitPage( svt::WizardTypes::CommitPageReason _eReason 
             Application::Reschedule();
         }
 
-        m_xThrobber->stop();
+        m_rThrobber.stop();
         GetParent()->LeaveWait();
         // Next state will enable buttons - so no EnableButtons necessary!
-        xWin->setVisible( false );
+        m_rThrobber.Hide();
         pMigThread->join();
         delete pMigThread;
         m_bMigrationDone = sal_True;
