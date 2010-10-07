@@ -77,8 +77,7 @@ SLOFILES=   \
 
 SRS1NAME=$(TARGET)
 SRC1FILES=\
-            xthrobber.src \
-            spinningprogress.src
+            xthrobber.src
 
 # --- Targets ------------------------------------------------------
 

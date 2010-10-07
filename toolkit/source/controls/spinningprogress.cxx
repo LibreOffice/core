@@ -35,6 +35,7 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
+#include <vcl/throbber.hxx>
 
 //......................................................................................................................
 namespace toolkit
@@ -65,36 +66,22 @@ namespace toolkit
         // default image sets
         osl_incrementInterlockedCount( &m_refCount );
         {
-            sal_Char const* const pResolutions[] = { "16", "32", "64" };
-            size_t const nImageCounts[] = { 6, 12, 12 };
-
-            for ( size_t set=0; set<3; ++set )
+            try
             {
-                ::std::vector< ::rtl::OUString > aImageURLs;
-                aImageURLs.reserve( nImageCounts[set] );
-
-                for ( size_t i=0; i<nImageCounts[set]; ++i )
+                Throbber::ImageSet aImageSets[] =
                 {
-                    ::rtl::OUStringBuffer aURL;
-                    aURL.appendAscii( "private:graphicrepository/res/shared/spinner-" );
-                    aURL.appendAscii( pResolutions[set] );
-                    aURL.appendAscii( "-" );
-                    if ( i < 9 )
-                        aURL.appendAscii( "0" );
-                    aURL.append     ( sal_Int32( i + 1 ) );
-                    aURL.appendAscii( ".png" );
-
-                    aImageURLs.push_back( aURL.makeStringAndClear() );
-                }
-
-                try
+                    Throbber::IMAGES_16_PX, Throbber::IMAGES_32_PX, Throbber::IMAGES_64_PX
+                };
+                for ( size_t i=0; i < sizeof( aImageSets ) / sizeof( aImageSets[0] ); ++i )
                 {
-                    insertImageSet( set, Sequence< ::rtl::OUString >( &aImageURLs[0], aImageURLs.size() ) );
+                    const ::std::vector< ::rtl::OUString > aDefaultURLs( Throbber::getDefaultImageURLs( aImageSets[i] ) );
+                    const Sequence< ::rtl::OUString > aImageURLs( &aDefaultURLs[0], aDefaultURLs.size() );
+                    insertImageSet( i, aImageURLs );
                 }
-                catch( const Exception& )
-                {
-                    DBG_UNHANDLED_EXCEPTION();
-                }
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
             }
         }
         osl_decrementInterlockedCount( &m_refCount );
