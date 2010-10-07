@@ -117,7 +117,7 @@ extern void lcl_GetTblBoxColStr( sal_uInt16 nCol, String& rNm );
  * --------------------------------------------------*/
 table::BorderLine lcl_SvxLineToLine(const SvxBorderLine* pLine)
 {
-     table::BorderLine aLine;
+     table::BorderLine2 aLine;
     if(pLine)
     {
         aLine.Color          = pLine->GetColor().GetColor() ;
