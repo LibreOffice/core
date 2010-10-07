@@ -109,6 +109,9 @@ AC_ARG_ENABLE(epm,
                           epm, however epm is useless for large scale
                           package building.
 ],,enable_epm="yes")
+AC_ARG_ENABLE(activex_component,
+[  --disable-activex-component Remove support for ActiveX embedding of OOo
+],,enable_activex_component=yes)
 AC_ARG_WITH(epm,
 [  --with-epm		  Decides which epm to use. Default is to use
 			  the one from the system if one is built. When
@@ -7065,6 +7068,20 @@ fi
 AC_SUBST(WITHOUT_AFMS)
 
 AC_SUBST(SCPDEFS)
+
+if test "$_os" = "WINNT"; then
+  AC_MSG_CHECKING([whether to enable ActiveX embedding of OOo components])
+  if test "$enable_activex_component" = "yes" -o "$enable_activex_component" = "TRUE" -o "$enable_activex_component" = ""; then
+    ENABLE_ACTIVEX_COMPONENT="TRUE"
+    AC_MSG_RESULT([yes])
+    SCPDEFS="$SCPDEFS -DWITH_ACTIVEX_COMPONENT"
+  else
+    ENABLE_ACTIVEX_COMPONENT=""
+    AC_MSG_RESULT([no])
+  fi
+  AC_SUBST(ENABLE_ACTIVEX_COMPONENT)
+  AC_SUBST(SCPDEFS)
+fi
 
 AC_MSG_CHECKING([whether and how to use Xinerama])
 if test "$_os" = "Darwin"; then

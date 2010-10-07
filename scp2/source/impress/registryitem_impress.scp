@@ -27,6 +27,8 @@
 
 #include "macros.inc"
 
+#ifdef WITH_ACTIVEX_COMPONENT
+
 // MSOLE embedded object in SO7 file format
 RegistryItem gid_Regitem_Clsid__E5a0b632_Dfba_4549_9346_E414da06e6f8_
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -265,7 +267,7 @@ RegistryItem gid_Regitem_Clsid__Ee5d1ea4_D445_4289_B2fc_55fc93693917__Versionind
     Value = "opendocument.ImpressDocument.1";
 End
 
-
+#endif // WITH_ACTIVEX_COMPONENT
 
 RegistryItem gid_Regitem_Soffice_Starimpressdocument_6
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -274,12 +276,16 @@ RegistryItem gid_Regitem_Soffice_Starimpressdocument_6
     REG_VALUE_LNG(SO60_PRESENT)
 End
 
+#ifdef WITH_ACTIVEX_COMPONENT
+
 RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_Clsid
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
     Subkey = "soffice.StarImpressDocument.6\CLSID";
     Value = "{E5A0B632-DFBA-4549-9346-E414DA06E6F8}";
 End
+
+#endif // WITH_ACTIVEX_COMPONENT
 
 RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -654,12 +660,16 @@ RegistryItem gid_Regitem_Openoffice_Impressdocument_1
     REG_VALUE_LNG(OO_PRESENT)
 End
 
+#ifdef WITH_ACTIVEX_COMPONENT
+
 RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Clsid
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
     Subkey = "opendocument.ImpressDocument.1\CLSID";
     Value = "{EE5D1EA4-D445-4289-B2FC-55FC93693917}";
 End
+
+#endif // WITH_ACTIVEX_COMPONENT
 
 RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
