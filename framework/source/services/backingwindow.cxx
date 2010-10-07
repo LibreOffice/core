@@ -44,6 +44,7 @@
 #include "unotools/historyoptions.hxx"
 #include "svtools/imagemgr.hxx"
 #include "svtools/svtools.hrc"
+#include "svtools/langhelp.hxx"
 
 #include "comphelper/processfactory.hxx"
 #include "comphelper/sequenceashashmap.hxx"
@@ -941,37 +942,7 @@ IMPL_LINK( BackingWindow, ToolboxHdl, void*, EMPTYARG )
                     //throws css::container::NoSuchElementException, css::lang::WrappedTargetException
                     Any value( xNameAccess->getByName(rtl::OUString::createFromAscii(pNode)) );
                     sURL = value.get<rtl::OUString> ();
-
-                    // extend the URLs with Office locale argument
-                    INetURLObject aURLObj( sURL );
-
-                    // read locale from configuration
-                    ::rtl::OUString sLocale;
-                    ::rtl::OUString sPackage = ::rtl::OUString::createFromAscii("org.openoffice.Setup");
-                    ::rtl::OUString sRelPath = ::rtl::OUString::createFromAscii("L10N");
-                    ::rtl::OUString sKey     = ::rtl::OUString::createFromAscii("ooLocale");
-
-                    try
-                    {
-                        ::comphelper::ConfigurationHelper::readDirectKey(comphelper::getProcessServiceFactory(),
-                                                                         sPackage,
-                                                                         sRelPath,
-                                                                         sKey,
-                                                                         ::comphelper::ConfigurationHelper::E_READONLY) >>= sLocale;
-                    }
-                    catch(const com::sun::star::uno::RuntimeException& exRun)
-                        { throw exRun; }
-                    catch(const com::sun::star::uno::Exception&)
-                    { sLocale = ::rtl::OUString::createFromAscii("en"); }
-
-                    // Convert the URL to something that can be handled by the website
-                    if ( sLocale.equalsAscii( "pt-BR" ) )
-                        sLocale = ::rtl::OUString::createFromAscii( "pt-br" );
-                    else
-                        sLocale = sLocale.copy( 0, sLocale.indexOf( sal_Unicode( '-' ) ) );
-
-                    aURLObj.insertName( sLocale );
-                    sURL = aURLObj.GetMainURL( INetURLObject::NO_DECODE );
+                    localizeWebserviceURI(sURL);
 
                     Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
                         comphelper::getProcessServiceFactory()->createInstance(
