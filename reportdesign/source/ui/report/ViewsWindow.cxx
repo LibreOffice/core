@@ -1709,7 +1709,7 @@ void OViewsWindow::handleKey(const KeyCode& _rCode)
 
                     if ( rView.IsDragObj() )
                     {
-                        const FASTBOOL bWasNoSnap = rDragStat.IsNoSnap();
+                        const bool bWasNoSnap = rDragStat.IsNoSnap();
                         const BOOL bWasSnapEnabled = rView.IsSnapEnabled();
 
                         // switch snapping off
