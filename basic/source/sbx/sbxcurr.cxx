@@ -151,7 +151,7 @@ start:
         case SbxBYREF | SbxCURRENCY:
             nRes = *p->pLong64; break;
 
-        // ab hier muss getestet werden
+        // from here on had to be tested
         case SbxBYREF | SbxLONG:
             aTmp.nLong = *p->pLong; goto ref;
         case SbxBYREF | SbxULONG:
@@ -182,7 +182,7 @@ void ImpPutCurrency( SbxValues* p, const SbxINT64 &r )
 start:
     switch( +p->eType )
     {
-        // Hier sind Tests notwendig
+        // Here are tests necessary
         case SbxCHAR:
             aTmp.pChar = &p->nChar; goto direct;
         case SbxBYTE:
@@ -201,7 +201,7 @@ start:
             aTmp.eType = SbxDataType( p->eType | SbxBYREF );
             p = &aTmp; goto start;
 
-        // ab hier nicht mehr
+        // from here no longer
         case SbxSINGLE:
             p->nSingle = (float)dVal; break;
         case SbxDATE:
@@ -317,7 +317,7 @@ start:
     }
 }
 
-// Hilfs-Funktionen zur Wandlung
+// help functions for the conversion
 
 static ::rtl::OUString ImpCurrencyToString( const SbxINT64 &r )
 {

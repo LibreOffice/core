@@ -102,13 +102,13 @@ double ImpGetDate( const SbxValues* p )
                 xub_StrLen nCheckPos = 0;
                 short nType = 127;
 
-                // Standard-Vorlagen des Formatters haben nur zweistellige
-                // Jahreszahl. Deshalb eigenes Format registrieren
+                // Default templates of the formatter have only two-digit
+                // date. Therefore register an own format.
 
-                // HACK, da der Numberformatter in PutandConvertEntry die Platzhalter
-                // fuer Monat, Tag, Jahr nicht entsprechend der Systemeinstellung
-                // austauscht. Problem: Print Year(Date) unter engl. BS
-                // siehe auch basic\source\runtime\runtime.cxx
+                // HACK, because the number formatter in PutandConvertEntry replace the wildcard
+                // for month, day, year not according to the configuration.
+                // Problem: Print Year(Date) under Engl. OS
+                // quod vide basic\source\runtime\runtime.cxx
 
                 SvtSysLocale aSysLocale;
                 DateFormat eDate = aSysLocale.GetLocaleData().getDateFormat();
@@ -205,7 +205,7 @@ start:
         case SbxDOUBLE:
             p->nDouble = n; break;
 
-        // ab hier wird getestet
+        // from here will be tested
         case SbxCHAR:
             aTmp.pChar = &p->nChar; goto direct;
         case SbxBYTE:
@@ -265,7 +265,7 @@ start:
             SvtSysLocale aSysLocale;
             DateFormat eDate = aSysLocale.GetLocaleData().getDateFormat();
             String aStr;
-            // ist der ganzzahlige Teil 0, wollen wir kein Jahr!
+            // if the whole-number part is 0, we want no year!
             if( n <= -1.0 || n >= 1.0 )
             {
                 // Time only if != 00:00:00
