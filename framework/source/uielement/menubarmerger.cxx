@@ -101,6 +101,14 @@ ReferencePathInfo MenuBarMerger::FindReferencePath(
 {
     sal_uInt32       i( 0 );
     const sal_uInt32 nCount( rReferencePath.size() );
+
+    ReferencePathInfo aResult;
+    if ( !nCount )
+    {
+        aResult.eResult = RP_MENUITEM_NOT_FOUND;
+        return aResult;
+    }
+
     Menu*            pCurrMenu( pMenu );
     RPResultInfo     eResult( RP_OK );
 
@@ -142,7 +150,6 @@ ReferencePathInfo MenuBarMerger::FindReferencePath(
     }
     while (( pCurrMenu != 0 ) && ( i < nCount ) && ( eResult == RP_OK ));
 
-    ReferencePathInfo aResult;
     aResult.pPopupMenu = pCurrMenu;
     aResult.nPos       = nPos;
     aResult.nLevel     = nLevel;
