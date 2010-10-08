@@ -44,7 +44,9 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
+#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -59,6 +61,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::drawing;
+using namespace ::com::sun::star::style;
 
 namespace oox { namespace drawingml {
 
@@ -85,7 +88,8 @@ void CreateShapeCallback::onXShapeCreated( const Reference< XShape >&, const Ref
 // ============================================================================
 
 Shape::Shape( const sal_Char* pServiceName )
-: mpLinePropertiesPtr( new LineProperties )
+: mbIsChild( false )
+, mpLinePropertiesPtr( new LineProperties )
 , mpFillPropertiesPtr( new FillProperties )
 , mpGraphicPropertiesPtr( new GraphicProperties )
 , mpCustomShapePropertiesPtr( new CustomShapeProperties )
@@ -114,13 +118,15 @@ table::TablePropertiesPtr Shape::getTableProperties()
 
 void Shape::setDefaults()
 {
-    maShapeProperties[ PROP_TextAutoGrowHeight ] <<= false;
-    maShapeProperties[ PROP_TextWordWrap ] <<= true;
-    maShapeProperties[ PROP_TextLeftDistance ]  <<= static_cast< sal_Int32 >( 250 );
-    maShapeProperties[ PROP_TextUpperDistance ] <<= static_cast< sal_Int32 >( 125 );
-    maShapeProperties[ PROP_TextRightDistance ] <<= static_cast< sal_Int32 >( 250 );
-    maShapeProperties[ PROP_TextLowerDistance ] <<= static_cast< sal_Int32 >( 125 );
-    maShapeProperties[ PROP_CharHeight ] <<= static_cast< float >( 18.0 );
+    maDefaultShapeProperties[ PROP_TextAutoGrowHeight ] <<= false;
+    maDefaultShapeProperties[ PROP_TextWordWrap ] <<= true;
+    maDefaultShapeProperties[ PROP_TextLeftDistance ]  <<= static_cast< sal_Int32 >( 250 );
+    maDefaultShapeProperties[ PROP_TextUpperDistance ] <<= static_cast< sal_Int32 >( 125 );
+    maDefaultShapeProperties[ PROP_TextRightDistance ] <<= static_cast< sal_Int32 >( 250 );
+    maDefaultShapeProperties[ PROP_TextLowerDistance ] <<= static_cast< sal_Int32 >( 125 );
+    maDefaultShapeProperties[ PROP_CharHeight ] <<= static_cast< float >( 18.0 );
+    maDefaultShapeProperties[ PROP_TextVerticalAdjust ] <<= TextVerticalAdjust_TOP;
+    maDefaultShapeProperties[ PROP_ParaAdjust ] <<= static_cast< sal_Int16 >( ParagraphAdjust_LEFT ); // check for RTL?
 }
 
 void Shape::setServiceName( const sal_Char* pServiceName )
@@ -193,55 +199,34 @@ void Shape::addChildren(
         Shape& rMaster,
         const Theme* pTheme,
         const Reference< XShapes >& rxShapes,
-        const awt::Rectangle& rClientRect,
+        const awt::Rectangle&,
         ShapeIdMap* pShapeMap )
 {
-    // first the global child union needs to be calculated
-    sal_Int32 nGlobalLeft  = SAL_MAX_INT32;
-    sal_Int32 nGlobalRight = SAL_MIN_INT32;
-    sal_Int32 nGlobalTop   = SAL_MAX_INT32;
-    sal_Int32 nGlobalBottom= SAL_MIN_INT32;
+    awt::Point& aPosition( mbIsChild ? maAbsolutePosition : maPosition );
+    awt::Size& aSize( mbIsChild ? maAbsoluteSize : maSize );
+
     std::vector< ShapePtr >::iterator aIter( rMaster.maChildren.begin() );
-    while( aIter != rMaster.maChildren.end() )
-    {
-        sal_Int32 l = (*aIter)->maPosition.X;
-        sal_Int32 t = (*aIter)->maPosition.Y;
-        sal_Int32 r = l + (*aIter)->maSize.Width;
-        sal_Int32 b = t + (*aIter)->maSize.Height;
-        if ( nGlobalLeft > l )
-            nGlobalLeft = l;
-        if ( nGlobalRight < r )
-            nGlobalRight = r;
-        if ( nGlobalTop > t )
-            nGlobalTop = t;
-        if ( nGlobalBottom < b )
-            nGlobalBottom = b;
-        aIter++;
-    }
-    aIter = rMaster.maChildren.begin();
     while( aIter != rMaster.maChildren.end() )
     {
         awt::Rectangle aShapeRect;
         awt::Rectangle* pShapeRect = 0;
-        if ( ( nGlobalLeft != SAL_MAX_INT32 ) && ( nGlobalRight != SAL_MIN_INT32 ) && ( nGlobalTop != SAL_MAX_INT32 ) && ( nGlobalBottom != SAL_MIN_INT32 ) )
-        {
-            sal_Int32 nGlobalWidth = nGlobalRight - nGlobalLeft;
-            sal_Int32 nGlobalHeight = nGlobalBottom - nGlobalTop;
-            if ( nGlobalWidth && nGlobalHeight )
-            {
-                double fWidth = (*aIter)->maSize.Width;
-                double fHeight= (*aIter)->maSize.Height;
-                double fXScale = (double)rClientRect.Width / (double)nGlobalWidth;
-                double fYScale = (double)rClientRect.Height / (double)nGlobalHeight;
-                aShapeRect.X = static_cast< sal_Int32 >( ( ( (*aIter)->maPosition.X - nGlobalLeft ) * fXScale ) + rClientRect.X );
-                aShapeRect.Y = static_cast< sal_Int32 >( ( ( (*aIter)->maPosition.Y - nGlobalTop  ) * fYScale ) + rClientRect.Y );
-                fWidth *= fXScale;
-                fHeight *= fYScale;
-                aShapeRect.Width = static_cast< sal_Int32 >( fWidth );
-                aShapeRect.Height = static_cast< sal_Int32 >( fHeight );
-                pShapeRect = &aShapeRect;
-            }
-        }
+        Shape& rChild = *(*aIter);
+
+        double sx = ((double)aSize.Width)/maChSize.Width;
+        double sy = ((double)aSize.Height)/maChSize.Height;
+        rChild.maAbsolutePosition.X = aPosition.X + sx*(rChild.maPosition.X - maChPosition.X);
+        rChild.maAbsolutePosition.Y = aPosition.Y + sy*(rChild.maPosition.Y - maChPosition.Y);
+        rChild.maAbsoluteSize.Width = rChild.maSize.Width*sx;
+        rChild.maAbsoluteSize.Height = rChild.maSize.Height*sy;
+        rChild.mbIsChild = true;
+
+        aShapeRect.X = rChild.maAbsolutePosition.X;
+        aShapeRect.Y = rChild.maAbsolutePosition.Y;
+        aShapeRect.Width = rChild.maAbsoluteSize.Width;
+        aShapeRect.Height = rChild.maAbsoluteSize.Height;
+
+        pShapeRect = &aShapeRect;
+
         (*aIter++)->addShape( rFilterBase, pTheme, rxShapes, pShapeRect, pShapeMap );
     }
 }
@@ -448,6 +433,8 @@ Reference< XShape > Shape::createAndInsert(
         }
 
         aShapeProperties.insert( getShapeProperties().begin(), getShapeProperties().end() );
+        aShapeProperties.insert( maDefaultShapeProperties.begin(), maDefaultShapeProperties.end() );
+
         // applying properties
         PropertySet aPropSet( xSet );
         if ( aServiceName == OUString::createFromAscii( "com.sun.star.drawing.GraphicObjectShape" ) )

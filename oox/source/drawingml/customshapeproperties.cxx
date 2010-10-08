@@ -131,6 +131,11 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
                                         aAdjustmentVal.State = PropertyState_DIRECT_VALUE;
                                         aAdjustmentSeq[ nAdjustmentIndex ] = aAdjustmentVal;
                                     }
+                                } else {
+                                    EnhancedCustomShapeAdjustmentValue aAdjustmentVal;
+                                    aAdjustmentVal.Value <<= (*aIter).maFormula.toInt32();
+                                    aAdjustmentVal.State = PropertyState_DIRECT_VALUE;
+                                    aAdjustmentSeq[ 0 ] = aAdjustmentVal;
                                 }
                                 aIter++;
                             }

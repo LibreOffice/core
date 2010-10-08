@@ -1,0 +1,37 @@
+PRJ=..
+PRJNAME=lwpft
+TARGET=lwpft
+VERSION=$(UPD)
+
+.INCLUDE :  settings.mk
+
+LIB1TARGET= $(SLB)$/$(TARGET).lib
+LIB1FILES= \
+    $(SLB)$/filter.lib  \
+    $(SLB)$/xfilter.lib
+SHL1LIBS=$(LIB1TARGET)
+SHL1STDLIBS+= \
+    $(TOOLSLIB) \
+    $(COMPHELPERLIB) \
+    $(UCBHELPERLIB) \
+    $(CPPUHELPERLIB) \
+    $(CPPULIB) \
+    $(SALLIB) \
+    $(SFXLIB) \
+    $(SOTLIB) \
+    $(VCLLIB) \
+    $(ICUUCLIB) \
+    $(ICUINLIB) \
+    $(ICULELIB) \
+    $(SVXCORELIB) \
+    $(GOODIESLIB) \
+    $(SVTOOLLIB) \
+    $(XMLOFFLIB)
+
+SHL1TARGET = $(TARGET)$(DLLPOSTFIX)
+SHL1IMPLIB = i$(SHL1TARGET)
+SHL1LIBS = $(LIB1TARGET)
+SHL1VERSIONMAP=$(TARGET).map
+DEF1NAME=$(SHL1TARGET)
+
+.INCLUDE :  target.mk

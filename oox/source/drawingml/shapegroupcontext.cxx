@@ -80,7 +80,8 @@ Reference< XFastContextHandler > ShapeGroupContext::createFastChildContext( sal_
     }
     case XML_ph:
         mpGroupShapePtr->setSubType( xAttribs->getOptionalValueToken( XML_type, FastToken::DONTKNOW ) );
-        mpGroupShapePtr->setSubTypeIndex( xAttribs->getOptionalValue( XML_idx ).toInt32() );
+        if( xAttribs->hasAttribute( XML_idx ) )
+            mpGroupShapePtr->setSubTypeIndex( xAttribs->getOptionalValue( XML_idx ).toInt32() );
         break;
     // nvSpPr CT_ShapeNonVisual end
 

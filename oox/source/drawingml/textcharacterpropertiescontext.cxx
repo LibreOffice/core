@@ -60,6 +60,8 @@ TextCharacterPropertiesContext::TextCharacterPropertiesContext(
         mrTextCharacterProperties.moLang = aAttribs.getString( XML_lang );
     if ( aAttribs.hasAttribute( XML_sz ) )
         mrTextCharacterProperties.moHeight = aAttribs.getInteger( XML_sz );
+    if ( aAttribs.hasAttribute( XML_spc ) )
+        mrTextCharacterProperties.moSpacing = aAttribs.getInteger( XML_spc );
     if ( aAttribs.hasAttribute( XML_u ) )
         mrTextCharacterProperties.moUnderline = aAttribs.getToken( XML_u );
     if ( aAttribs.hasAttribute( XML_strike ) )

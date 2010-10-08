@@ -31,6 +31,7 @@
 
 #include "oox/helper/attributelist.hxx"
 #include "oox/ppt/pptshape.hxx"
+#include "oox/ppt/pptgraphicshapecontext.hxx"
 #include "oox/ppt/pptshapecontext.hxx"
 #include "oox/ppt/pptshapegroupcontext.hxx"
 #include "oox/drawingml/graphicshapecontext.hxx"
@@ -81,7 +82,8 @@ Reference< XFastContextHandler > PPTShapeGroupContext::createFastChildContext( s
     }
     case NMSP_PPT|XML_ph:
         mpGroupShapePtr->setSubType( xAttribs->getOptionalValueToken( XML_type, FastToken::DONTKNOW ) );
-        mpGroupShapePtr->setSubTypeIndex( xAttribs->getOptionalValue( XML_idx ).toInt32() );
+        if( xAttribs->hasAttribute( XML_idx ) )
+            mpGroupShapePtr->setSubTypeIndex( xAttribs->getOptionalValue( XML_idx ).toInt32() );
         break;
     // nvSpPr CT_ShapeNonVisual end
 
@@ -106,7 +108,7 @@ Reference< XFastContextHandler > PPTShapeGroupContext::createFastChildContext( s
         xRet.set( new PPTShapeContext( *this, mpSlidePersistPtr, mpGroupShapePtr, oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.CustomShape" ) ) ) );
         break;
     case NMSP_PPT|XML_pic:          // CT_Picture
-        xRet.set( new oox::drawingml::GraphicShapeContext( *this, mpGroupShapePtr,  oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.GraphicObjectShape" ) ) ) );
+        xRet.set( new PPTGraphicShapeContext( *this, mpSlidePersistPtr, mpGroupShapePtr,  oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.GraphicObjectShape" ) ) ) );
         break;
     case NMSP_PPT|XML_graphicFrame: // CT_GraphicalObjectFrame
         xRet.set( new oox::drawingml::GraphicalObjectFrameContext( *this, mpGroupShapePtr, oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.OLE2Shape" ) ), true ) );

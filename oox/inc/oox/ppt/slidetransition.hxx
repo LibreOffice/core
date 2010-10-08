@@ -51,6 +51,8 @@ namespace oox { namespace ppt {
             { mnFadeColor = nColor; }
         void setMode( sal_Bool bMode )
             { mbMode = bMode; }
+            void setOoxAdvanceTime( sal_Int32 nAdvanceTime )
+                { mnAdvanceTime = nAdvanceTime; }
 
     static sal_Int16 ooxToOdpDirection( ::sal_Int32 nOoxType );
     static sal_Int16 ooxToOdpEightDirections( ::sal_Int32 nOoxType );
@@ -68,6 +70,7 @@ namespace oox { namespace ppt {
         ::sal_Int16 mnAnimationSpeed;
         ::sal_Int32 mnFadeColor;
         ::sal_Bool  mbMode; /**< http://api.openoffice.org/docs/common/ref/com/sun/star/animations/XTransitionFilter.html Mode property */
+        ::sal_Int32 mnAdvanceTime;
     };
 
 } }

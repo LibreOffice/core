@@ -116,7 +116,8 @@ Reference< XFastContextHandler > PPTShapeContext::createFastChildContext( sal_In
         {
             sal_Int32 nSubType( xAttribs->getOptionalValueToken( XML_type, XML_obj ) );
             mpShapePtr->setSubType( nSubType );
-            mpShapePtr->setSubTypeIndex( xAttribs->getOptionalValue( XML_idx ).toInt32() );
+            if( xAttribs->hasAttribute( XML_idx ) )
+                mpShapePtr->setSubTypeIndex( xAttribs->getOptionalValue( XML_idx ).toInt32() );
             if ( nSubType )
             {
                 PPTShape* pPPTShapePtr = dynamic_cast< PPTShape* >( mpShapePtr.get() );
@@ -180,6 +181,7 @@ Reference< XFastContextHandler > PPTShapeContext::createFastChildContext( sal_In
                                   PPTShape* pPPTShape = dynamic_cast< PPTShape* >( pPlaceholder.get() );
                                   if ( pPPTShape )
                                       pPPTShape->setReferenced( sal_True );
+                    pPPTShapePtr->setPlaceholder( pPlaceholder );
                               }
                           }
                     }
@@ -201,7 +203,7 @@ Reference< XFastContextHandler > PPTShapeContext::createFastChildContext( sal_In
 
         case NMSP_PPT|XML_txBody:
         {
-            oox::drawingml::TextBodyPtr xTextBody( new oox::drawingml::TextBody );
+            oox::drawingml::TextBodyPtr xTextBody( new oox::drawingml::TextBody( mpShapePtr->getTextBody() ) );
             xTextBody->getTextProperties().maPropertyMap[ PROP_FontIndependentLineSpacing ] <<= static_cast< sal_Bool >( sal_True );
             mpShapePtr->setTextBody( xTextBody );
             xRet = new oox::drawingml::TextBodyContext( *this, *xTextBody );
