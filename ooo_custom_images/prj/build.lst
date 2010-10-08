@@ -1,4 +1,0 @@
-oci	ooo_custom_images : solenv NULL
-oci	ooo_custom_images			usr1	-	all	oci_mkout NULL
-oci	ooo_custom_images\nologo_broffice	nmake	-	all	oci_nologo_broffice NULL
-
