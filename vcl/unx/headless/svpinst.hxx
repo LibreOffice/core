@@ -184,12 +184,6 @@ public:
     virtual void            Yield( bool bWait, bool bHandleAllCurrentEvents );
     virtual bool            AnyInput( USHORT nType );
 
-                            // Menues
-    virtual SalMenu*        CreateMenu( BOOL bMenuBar );
-    virtual void            DestroyMenu( SalMenu* pMenu);
-    virtual SalMenuItem*    CreateMenuItem( const SalItemParams* pItemData );
-    virtual void            DestroyMenuItem( SalMenuItem* pItem );
-
     // may return NULL to disable session management
     virtual SalSession*     CreateSalSession();
 

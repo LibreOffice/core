@@ -203,11 +203,12 @@ static void initAppMenu()
 
 // =======================================================================
 
-SalMenu* AquaSalInstance::CreateMenu( BOOL bMenuBar )
+SalMenu* AquaSalInstance::CreateMenu( BOOL bMenuBar, Menu* pVCLMenu )
 {
     initAppMenu();
 
     AquaSalMenu *pAquaSalMenu = new AquaSalMenu( bMenuBar );
+    pAquaSalMenu->mpVCLMenu = pVCLMenu;
 
     return pAquaSalMenu;
 }

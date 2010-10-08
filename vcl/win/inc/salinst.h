@@ -81,7 +81,7 @@ public:
 
     virtual void                Yield( bool bWait, bool bHandleAllCurrentEvents );
     virtual bool                AnyInput( USHORT nType );
-    virtual SalMenu*                CreateMenu( BOOL bMenuBar );
+    virtual SalMenu*                CreateMenu( BOOL bMenuBar, Menu* );
     virtual void                DestroyMenu( SalMenu* );
     virtual SalMenuItem*            CreateMenuItem( const SalItemParams* pItemData );
     virtual void                DestroyMenuItem( SalMenuItem* );

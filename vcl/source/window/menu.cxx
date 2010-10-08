@@ -980,7 +980,7 @@ void Menu::ImplInit()
     mpLayoutData    = NULL;
     mpFirstDel      = NULL;         // Dtor notification list
     // Native-support: returns NULL if not supported
-    mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu( bIsMenuBar );
+    mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu( bIsMenuBar, this );
 }
 
 Menu* Menu::ImplGetStartedFrom() const

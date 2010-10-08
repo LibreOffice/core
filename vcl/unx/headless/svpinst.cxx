@@ -432,24 +432,6 @@ bool SvpSalInstance::AnyInput( USHORT nType )
     return false;
 }
 
-SalMenu* SvpSalInstance::CreateMenu( BOOL )
-{
-    return NULL;
-}
-
-void SvpSalInstance::DestroyMenu( SalMenu* )
-{
-}
-
-SalMenuItem* SvpSalInstance::CreateMenuItem( const SalItemParams* )
-{
-    return NULL;
-}
-
-void SvpSalInstance::DestroyMenuItem( SalMenuItem* )
-{
-}
-
 SalSession* SvpSalInstance::CreateSalSession()
 {
     return NULL;
