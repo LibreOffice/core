@@ -88,16 +88,6 @@ struct DispatchHolder
     Reference< XDispatch > xDispatch;
 };
 
-// Temporary code
-static void impl_sleep( sal_uInt32 nSec )
-{
-    TimeValue aTime;
-    aTime.Seconds = nSec;
-    aTime.Nanosec = 0;
-
-    osl::Thread::wait( aTime );
-}
-
 static String impl_GetFilterFromExt( OUString aUrl, SfxFilterFlags nFlags,
                                         String aAppl )
 {
@@ -618,16 +608,9 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
     // implementation via statusChanged!!
     if ( bEmpty && !bNoTerminate /*m_aRequestContainer.empty()*/ )
     {
-        // Delay give a chance for threads to complete work
-        impl_sleep(2);
-
         // We have to check if we have an open task otherwise we have to shutdown the office.
         Reference< XFramesSupplier > xTasksSupplier( xDesktop, UNO_QUERY );
         aGuard.clear();
-
-        // Delay give a chance for threads to complete work
-        impl_sleep(1);
-
         Reference< XElementAccess > xList( xTasksSupplier->getFrames(), UNO_QUERY );
 
         if ( !xList->hasElements() )
