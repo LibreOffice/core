@@ -44,7 +44,9 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
+#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -59,6 +61,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::drawing;
+using namespace ::com::sun::star::style;
 
 namespace oox { namespace drawingml {
 
@@ -115,13 +118,15 @@ table::TablePropertiesPtr Shape::getTableProperties()
 
 void Shape::setDefaults()
 {
-    maShapeProperties[ PROP_TextAutoGrowHeight ] <<= false;
-    maShapeProperties[ PROP_TextWordWrap ] <<= true;
-    maShapeProperties[ PROP_TextLeftDistance ]  <<= static_cast< sal_Int32 >( 250 );
-    maShapeProperties[ PROP_TextUpperDistance ] <<= static_cast< sal_Int32 >( 125 );
-    maShapeProperties[ PROP_TextRightDistance ] <<= static_cast< sal_Int32 >( 250 );
-    maShapeProperties[ PROP_TextLowerDistance ] <<= static_cast< sal_Int32 >( 125 );
-    maShapeProperties[ PROP_CharHeight ] <<= static_cast< float >( 18.0 );
+    maDefaultShapeProperties[ PROP_TextAutoGrowHeight ] <<= false;
+    maDefaultShapeProperties[ PROP_TextWordWrap ] <<= true;
+    maDefaultShapeProperties[ PROP_TextLeftDistance ]  <<= static_cast< sal_Int32 >( 250 );
+    maDefaultShapeProperties[ PROP_TextUpperDistance ] <<= static_cast< sal_Int32 >( 125 );
+    maDefaultShapeProperties[ PROP_TextRightDistance ] <<= static_cast< sal_Int32 >( 250 );
+    maDefaultShapeProperties[ PROP_TextLowerDistance ] <<= static_cast< sal_Int32 >( 125 );
+    maDefaultShapeProperties[ PROP_CharHeight ] <<= static_cast< float >( 18.0 );
+    maDefaultShapeProperties[ PROP_TextVerticalAdjust ] <<= TextVerticalAdjust_TOP;
+    maDefaultShapeProperties[ PROP_ParaAdjust ] <<= static_cast< sal_Int16 >( ParagraphAdjust_LEFT ); // check for RTL?
 }
 
 void Shape::setServiceName( const sal_Char* pServiceName )
@@ -428,6 +433,8 @@ Reference< XShape > Shape::createAndInsert(
         }
 
         aShapeProperties.insert( getShapeProperties().begin(), getShapeProperties().end() );
+        aShapeProperties.insert( maDefaultShapeProperties.begin(), maDefaultShapeProperties.end() );
+
         // applying properties
         PropertySet aPropSet( xSet );
         if ( aServiceName == OUString::createFromAscii( "com.sun.star.drawing.GraphicObjectShape" ) )

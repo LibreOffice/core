@@ -178,14 +178,18 @@ void PPTShape::addShape(
             // use placeholder index if possible
             if( mnSubType && getSubTypeIndex() && rSlidePersist.getMasterPersist().get() ) {
                 oox::drawingml::ShapePtr pPlaceholder = PPTShape::findPlaceholderByIndex( getSubTypeIndex(), rSlidePersist.getMasterPersist()->getShapes()->getChildren() );
-                if( pPlaceholder.get() && pPlaceholder->getTextBody() ) {
-                TextListStylePtr pNewTextListStyle ( new TextListStyle() );
+                if( pPlaceholder.get() ) {
+                    if( pPlaceholder->getTextBody() ) {
+                        TextListStylePtr pNewTextListStyle ( new TextListStyle() );
 
-                pNewTextListStyle->apply( pPlaceholder->getTextBody()->getTextListStyle() );
-                if( pPlaceholder->getMasterTextListStyle().get() )
-                    pNewTextListStyle->apply( *pPlaceholder->getMasterTextListStyle() );
+                        pNewTextListStyle->apply( pPlaceholder->getTextBody()->getTextListStyle() );
+                        if( pPlaceholder->getMasterTextListStyle().get() )
+                            pNewTextListStyle->apply( *pPlaceholder->getMasterTextListStyle() );
 
-                aMasterTextListStyle = pNewTextListStyle;
+                        aMasterTextListStyle = pNewTextListStyle;
+                    }
+                } else if( !mpPlaceholder.get() ) {
+                    aMasterTextListStyle.reset();
                 }
             }
 
@@ -272,6 +276,10 @@ oox::drawingml::ShapePtr PPTShape::findPlaceholder( const sal_Int32 nMasterPlace
 oox::drawingml::ShapePtr PPTShape::findPlaceholderByIndex( const sal_Int32 nIdx, std::vector< oox::drawingml::ShapePtr >& rShapes )
 {
     oox::drawingml::ShapePtr aShapePtr;
+
+    if( nIdx == -1)
+        return aShapePtr;
+
     std::vector< oox::drawingml::ShapePtr >::reverse_iterator aRevIter( rShapes.rbegin() );
     while( aRevIter != rShapes.rend() )
     {

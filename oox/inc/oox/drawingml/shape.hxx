@@ -198,6 +198,7 @@ protected:
     CustomShapePropertiesPtr    mpCustomShapePropertiesPtr;
     table::TablePropertiesPtr   mpTablePropertiesPtr;
     PropertyMap                 maShapeProperties;
+    PropertyMap                 maDefaultShapeProperties;
     TextListStylePtr            mpMasterTextListStyle;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > mxShape;
 

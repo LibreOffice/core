@@ -55,12 +55,17 @@ using ::com::sun::star::beans::XVetoableChangeListener;
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
+#include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
+#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #define USS(x) OUStringToOString( x, RTL_TEXTENCODING_UTF8 ).getStr()
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::uno;
 using ::rtl::OString;
 using ::com::sun::star::style::LineSpacing;
 using ::com::sun::star::text::WritingMode;
+using ::com::sun::star::drawing::TextHorizontalAdjust;
+using ::com::sun::star::drawing::TextVerticalAdjust;
 #endif
 
 namespace oox {
@@ -265,6 +270,8 @@ void PropertyMap::dump( Reference< XPropertySet > rXPropSet )
     LineSpacing spacing;
 //         RectanglePoint pointValue;
     WritingMode aWritingMode;
+    TextVerticalAdjust aTextVertAdj;
+    TextHorizontalAdjust aTextHorizAdj;
 
         if( value >>= strValue )
             fprintf (stderr,"\"%s\"\n", USS( strValue ) );
@@ -280,7 +287,47 @@ void PropertyMap::dump( Reference< XPropertySet > rXPropSet )
             fprintf (stderr,"%d            (bool)\n", boolValue);
     else if( value >>= aWritingMode )
         fprintf (stderr, "%d writing mode\n", aWritingMode);
-    else if( value >>= spacing ) {
+    else if( value >>= aTextVertAdj ) {
+        const char* s = "uknown";
+        switch( aTextVertAdj ) {
+            case TextVerticalAdjust_TOP:
+                s = "top";
+                break;
+            case TextVerticalAdjust_CENTER:
+                s = "center";
+                break;
+            case TextVerticalAdjust_BOTTOM:
+                s = "bottom";
+                break;
+            case TextVerticalAdjust_BLOCK:
+                s = "block";
+                break;
+            case TextVerticalAdjust_MAKE_FIXED_SIZE:
+                s = "make_fixed_size";
+                break;
+        }
+        fprintf (stderr, "%s\n", s);
+    } else if( value >>= aTextHorizAdj ) {
+        const char* s = "uknown";
+        switch( aTextHorizAdj ) {
+            case TextHorizontalAdjust_LEFT:
+                s = "left";
+                break;
+            case TextHorizontalAdjust_CENTER:
+                s = "center";
+                break;
+            case TextHorizontalAdjust_RIGHT:
+                s = "right";
+                break;
+            case TextHorizontalAdjust_BLOCK:
+                s = "block";
+                break;
+            case TextHorizontalAdjust_MAKE_FIXED_SIZE:
+                s = "make_fixed_size";
+                break;
+        }
+        fprintf (stderr, "%s\n", s);
+    } else if( value >>= spacing ) {
         fprintf (stderr, "mode: %d value: %d\n", spacing.Mode, spacing.Height);
     } else if( value.isExtractableTo(::getCppuType((const sal_Int32*)0))) {
         fprintf (stderr,"is extractable to int32\n");
