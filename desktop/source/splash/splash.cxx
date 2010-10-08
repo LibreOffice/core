@@ -42,6 +42,7 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <rtl/bootstrap.hxx>
 #include <rtl/logfile.hxx>
+#include <rtl/locale.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 #include <vcl/graph.hxx>
@@ -424,7 +425,7 @@ void SplashScreen::initBitmap()
     }
 }
 
-bool SplashScreen::loadBitmap(
+bool SplashScreen::loadOneBitmap(
     rtl::OUString const & path, const rtl::OUString &rBmpFileName )
 {
     if ( rBmpFileName.getLength() == 0 )
@@ -449,6 +450,31 @@ bool SplashScreen::loadBitmap(
     }
 
     return false;
+}
+
+// Look for locale specific bitmap variants
+bool SplashScreen::loadBitmap(
+    rtl::OUString const & path, const rtl::OUString &rBmpFileName )
+{
+    sal_Int32 nExt = rBmpFileName.lastIndexOf ('.');
+    if( nExt > 0 )
+    {
+        rtl::OUString aBase = rBmpFileName.copy( 0, nExt );
+        rtl::OUString aExt = rBmpFileName.copy( nExt );
+
+        rtl_Locale *pLoc = NULL;
+        osl_getProcessLocale (&pLoc);
+        rtl::OLocale aLoc( pLoc );
+
+        rtl::OUString aName;
+        aName = aBase + rtl::OUString::createFromAscii ("-") +
+                aLoc.getLanguage() + rtl::OUString::createFromAscii ("_") +
+                aLoc.getCountry() + aExt;
+
+        if( loadOneBitmap( path, aName ) )
+            return true;
+    }
+    return loadOneBitmap( path, rBmpFileName );
 }
 
 bool SplashScreen::findBitmap(rtl::OUString const & path) {

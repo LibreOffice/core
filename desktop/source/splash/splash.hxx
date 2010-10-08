@@ -78,6 +78,8 @@ private:
     bool findBitmap(rtl::OUString const & path);
     bool loadBitmap(
         rtl::OUString const & path, const rtl::OUString &rBmpFileName );
+    bool loadOneBitmap(
+        rtl::OUString const & path, const rtl::OUString &rBmpFileName );
     void determineProgressRatioValues( double& rXRelPos, double& rYRelPos, double& rRelWidth, double& rRelHeight );
 
     static  SplashScreen *_pINSTANCE;
