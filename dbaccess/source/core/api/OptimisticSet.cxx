@@ -133,7 +133,7 @@ void OptimisticSet::construct(const Reference< XResultSet>& _xDriverSet,const ::
     const ::rtl::OUString* pTableNameEnd = pTableNameIter + aTableNames.getLength();
     for( ; pTableNameIter != pTableNameEnd ; ++pTableNameIter)
     {
-        findTableColumnsMatching_throw(xTables->getByName(*pTableNameIter),xMeta,xQueryColumns);
+        findTableColumnsMatching_throw(xTables->getByName(*pTableNameIter),*pTableNameIter,xMeta,xQueryColumns);
     }
 
     // the first row is empty because it's now easier for us to distinguish when we are beforefirst or first

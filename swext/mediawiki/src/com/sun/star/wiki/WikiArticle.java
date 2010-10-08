@@ -145,6 +145,8 @@ public class WikiArticle
             if ( nResultCode == 200 )
                 sWebPage = aRequest.getResponseBodyAsString();
 
+            aRequest.releaseConnection();
+
             if ( sWebPage != null )
             {
                 StringReader r = new StringReader(sWebPage);

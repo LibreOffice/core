@@ -56,13 +56,14 @@ class Xhtex(AbstractL10nTool):
             if elem.childNodes[0].nodeType == elem.TEXT_NODE and elem.getAttribute("id").strip():
                 obj = self.prepare_sdf_line(inputfile=inputfilename, lang=lang, id=elem.getAttribute("id").strip())
                 if sdfdata[obj.get_id()]:
-                    elem.childNodes[0].data = str(sdfdata[obj.get_id()].text)  
+                    elem.childNodes[0].data = unicode(str(sdfdata[obj.get_id()].text),"utf8")
+
                 
     def merge_title(self, list, sdfdata, lang, inputfilename):
         for elem in list:
             obj = self.prepare_sdf_line(inputfile=inputfilename, lang=lang, id=elem.getAttribute("id").strip())
             if elem.getAttribute("id").strip() and sdfdata[obj.get_id()]: 
-                elem.setAttribute("title", str(sdfdata[obj.get_id()].text))
+                elem.setAttribute("title", unicode(str(sdfdata[obj.get_id()].text),"utf8"))
 
     # L10N tool       
     def __init__(self):
@@ -97,7 +98,7 @@ class Xhtex(AbstractL10nTool):
         try:
             f = open(outputfilename, "w+")
             str = dom.toxml()
-            f.write(str)
+            f.write(str.encode("utf-8"))
         except IOError:
             print "ERROR: Can not write file " + outputfilename
             sys.exit(-1)

@@ -25,7 +25,6 @@
 #
 #*************************************************************************
 
-
 # Default ISO code used when no languages specified
 # This language will be always included!
 defaultlangiso=en-US
@@ -118,6 +117,7 @@ sa-IN \
 si \
 sc \
 sd \
+sq \
 sk \
 sl \
 sh \
@@ -129,6 +129,7 @@ sw \
 sw-TZ \
 te-IN \
 ti-ER \
+ta \
 ta-IN \
 th \
 tn \

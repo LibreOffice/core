@@ -66,11 +66,10 @@ class AbstractL10nTool:
         pass
     
     ################################################################################################
-    
+     
     def format_outputfile(self, filename, language):
         extension = filename[filename.rfind('.')+1:]
         file = filename[:filename.rfind('.')]
-    
         # Python 2.3.x friendly
         return self.get_outputfile_format_str().replace('[', '%(').replace(']',')s') % \
                 { 'filename': filename, 'fileNoExt': file, 'language': language, 'extension': extension, 'path_prefix': self._options.path_prefix,

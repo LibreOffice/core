@@ -223,7 +223,7 @@ private:
     void impl_fillRowSet_throw();
     void impl_executeRowSet_throw(::osl::ResettableMutexGuard& _rClearForNotifies);
     bool impl_fillParameters_nothrow( ::osl::ResettableMutexGuard& _rClearForNotifies);
-    void impl_fillInternalDataProvider_throw(sal_Bool _bHasCategories,const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > >& i_aColumnNames);
+    void impl_fillInternalDataProvider_throw(sal_Bool _bHasCategories,const ::com::sun::star::uno::Sequence< ::rtl::OUString >& i_aColumnNames);
     void impl_invalidateParameter_nothrow();
     ::com::sun::star::uno::Any impl_getNumberFormatKey_nothrow(const ::rtl::OUString & _sRangeRepresentation) const;
 

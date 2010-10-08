@@ -96,7 +96,7 @@ if [ -x "$sd_prog/../basis-link/ure-link/bin/javaldx" ] ; then
     my_path=`"$sd_prog/../basis-link/ure-link/bin/javaldx" $BOOTSTRAPVARS \
         "-env:INIFILENAME=vnd.sun.star.pathname:$sd_prog/redirectrc"`
     if [ -n "$my_path" ] ; then
-        LD_LIBRARY_PATH=$my_path${LD_LIBRARY_PATH+:$LD_LIBRARY_PATH}
+        LD_LIBRARY_PATH=$my_path${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
         export LD_LIBRARY_PATH
     fi
 fi

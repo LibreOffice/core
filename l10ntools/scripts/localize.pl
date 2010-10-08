@@ -87,7 +87,6 @@ my @sdfparticles;
 
 #### main ####
 parse_options();
-check_modules_scm();
 
 my $binpath = '';
 if( defined $ENV{UPDMINOREXT} )
@@ -159,7 +158,7 @@ sub splitfile{
             next if( $prj eq "binfilter" );     # Don't merge strings into binfilter module
             chomp( $line );
 
-            if( is_openoffice_module( $prj ) )
+            if( $force_ooo_module )
             {
                 $string_hash_ooo { $lang }{ "$prj\t$file\t$type\t$gid\t$lid\t$helpid\t$plattform\t$lang" } = $line;
             }
@@ -171,97 +170,25 @@ sub splitfile{
     }
     close( MYFILE );
 
-    if( !defined $ENV{SRC_ROOT} ){
-        print "Error, no SRC_ROOT in env found.\n";
+    if( !defined $ENV{SOURCE_ROOT_DIR} ){
+        print "Error, no SOURCE_ROOT_DIR in env found.\n";
         exit( -1 );
     }
-    my $src_root = $ENV{SRC_ROOT};
-    my $so_l10n_path  = $src_root."/l10n_so/source";
-    my $ooo_l10n_path = $src_root."/l10n/source";
+    my $src_root = $ENV{SOURCE_ROOT_DIR};
+    my $so_l10n_path  = $src_root."/sun/l10n_so/source";
+    my $ooo_l10n_path = $src_root."/ooo/l10n/source";
 
     #print "$so_l10n_path\n";
     #print "$ooo_l10n_path\n";
 
-    write_sdf( \%string_hash_so , $so_l10n_path );
-    write_sdf( \%string_hash_ooo , $ooo_l10n_path );
-
-}
-sub check_modules_scm
-{
-    #my @ooo_modules;
-    #my @so_modules;
-    my $src_path        = $ENV{ SRC_ROOT } ;
-    my $last_dir        = getcwd();
-    chdir $src_path ;
-    my @modules         = <*/.svn/entries>;
-
-    foreach my $module ( @modules )
+    if( $force_ooo_module )
     {
-        #print "$module \n";
-        if( open ( FILE , "<$module" ) )
-        {
-            while( <FILE> )
-            {
-
-                my @path = split ( "/" , $module ) ;
-
-                if( /svn.services.openoffice.org/ )
-                {
-                    my $mod = $path[ 0 ];
-                    #push @ooo_modules , $mod;
-                    $is_ooo_module{ $mod } = "true";
-                    # print "$module -> ooo ";
-                }
-                elsif ( /jumbo2.germany.sun.com/ )
-                {
-                    my $mod = $path[ 0 ];
-                    #push @so_modules , $mod;
-                    # print "$module -> so ";
-                    #$so_lookup_hash{ $mod } = "true";
-                }
-                #else
-                #{
-                #    print "ERROR: Is $module a SO or OOo module? Can not parese the $module/.svn/entries file ... please check mwsfinnish/merge/splitsdf.pl line 280\n";
-                # exit -1;
-                #}
-            }
-        }
+        write_sdf( \%string_hash_ooo , $ooo_l10n_path );
     }
-    chdir $last_dir ;
-    #print "OOO\n";
-    #print @ooo_modules;
-    #print "\nSO\n";
-    #print @so_modules;
-}
-
-
-#sub parse
-#{
-#    my $command = "$CVS_BINARY -d:pserver:anoncvs\@anoncvs.services.openoffice.org:/cvs co -c";
-#    my $output  = `$command`;
-#    my $rc = $? << 8;
-#    if ( $output eq "" || $rc < 0 ){
-#        print STDERR "ERROR: Can not fetch cvs alias list, please login to the cvs server and press at the password prompt just return\ncvs -d:pserver:anoncvs\@anoncvs.services.openoffice.org:/cvs login\n";
-#        exit ( -1 );
-#    }
-#    my @list = split /\n/ , $output ;
-#    foreach my $string( @list )
-#    {
-#
-#        #        print "Found '$1'\n" , if( $string =~ /^(\w*)/ && $1 ne "" );
-#
-#        $is_ooo_module{ $1 } = "TRUE", if( $string =~ /^(\w*)/ && $1 ne "" );
-#    }
-#    #    foreach my $key( keys( %is_ooo_module ) )
-#    #{
-#        #    print "$key\n";
-#        #}
-#}
-sub is_openoffice_module
-{
-    my $module              = shift;
-    return "TRUE", if ( $force_ooo_module || defined $is_ooo_module{ $module } );
-    return "";
+    else
+    {
+        write_sdf( \%string_hash_so , $so_l10n_path );
+    }
 }
 
 sub write_sdf
@@ -458,16 +385,9 @@ sub collectfiles{
     # $| = 1;
     STDOUT->autoflush( 1 );
 
-    ### Search sdf particles
-    #print STDOUT "### Searching sdf particles\n";
     my $working_path = getcwd();
     chdir $ENV{SOURCE_ROOT_DIR}, if defined $ENV{SOURCE_ROOT_DIR};
-    #chdir $srcpath;
-    #find ( { wanted => \&wanted , follow => 1 }, getcwd() );
-    #chdir $working_path;
     add_paths( $langhash_ref );
-    #my $nFound  = $#sdfparticles +1;
-    #print "\n    $nFound files found !\n";
 
     my ( $LOCALIZEPARTICLE , $localizeSDF ) = File::Temp::tempfile();
     close( $LOCALIZEPARTICLE );
@@ -591,7 +511,6 @@ sub collectfiles{
         }
     }
     close ALLPARTICLES_MERGED;
-#***************
 
     # Hash of array
     my %output;
@@ -1155,23 +1074,4 @@ sub usage{
     print STDERR "\nlocalize -e -l en-US,pt-BR=en-US -f my.sdf\n( Extract en-US and pt-BR with en-US fallback )\n";
     print STDERR "\nlocalize -m -l cs -f my.sdf\n( Merge cs translation into the sourcecode ) \n";
 }
-
-#            my $line           = defined $_ ? $_ : '';
-#            my $leftpart       = defined $2 ? $2 : '';
-#            my $prj            = defined $3 ? $3 : '';
-#            my $file           = defined $4 ? $4 : '';
-#            my $dummy          = defined $5 ? $5 : '';
-#            my $type           = defined $6 ? $6 : '';
-#            my $gid            = defined $7 ? $7 : '';
-#            my $lid            = defined $8 ? $8 : '';
-#            my $helpid         = defined $9 ? $9 : '';
-#            my $plattform      = defined $10 ? $10 : '';
-#            my $width          = defined $11 ? $11 : '';
-#            my $lang           = defined $12 ? $12 : '';
-#            my $rightpart      = defined $13 ? $13 : '';
-#            my $text           = defined $14 ? $14 : '';
-#            my $helptext       = defined $15 ? $15 : '';
-#            my $quickhelptext  = defined $16 ? $16 : '';
-#            my $title          = defined $17 ? $17 : '';
-#            my $timestamp      = defined $18 ? $18 : '';
 
