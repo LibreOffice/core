@@ -45,7 +45,7 @@ export PATH=".:../basis-link/program:../basis-link/ure-link/bin:$PATH"
 export GNOME_DISABLE_CRASH_DIALOG=1
 export STAR_RESOURCEPATH=`pwd`/../basis-link/program/resource
 # debugging assistance
-export OOO_FORCE_SYSALLOC=1
+export G_SLICE=always-malloc
 export MALLOC_CHECK_=2
 export OOO_DISABLE_RECOVERY=1
 export SAL_ALLOW_LINKOO_SYMLINKS=1
