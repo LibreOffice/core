@@ -51,6 +51,9 @@
 #include <layhelp.hxx>
 #include <ndtxt.hxx>
 
+// --> OD 2010-09-14 #i113730#
+#include <svx/svdogrp.hxx>
+// <--
 // OD 16.04.2003 #i13147# - for <SwFlyFrm::GetContour(..)>
 #include <ndgrf.hxx>
 // OD 29.10.2003 #113049#
@@ -2249,6 +2252,30 @@ void SwFrm::AppendDrawObj( SwAnchoredObject& _rNewObj )
         pDrawObjs->Insert( _rNewObj );
         _rNewObj.ChgAnchorFrm( this );
     }
+
+    // --> OD 2010-09-14 #i113730#
+    // Assure the control objects and group objects containing controls are on the control layer
+    if ( ::CheckControlLayer( _rNewObj.DrawObj() ) )
+    {
+        const IDocumentDrawModelAccess* pIDDMA = GetUpper()->GetFmt()->getIDocumentDrawModelAccess();
+        const SdrLayerID aCurrentLayer(_rNewObj.DrawObj()->GetLayer());
+        const SdrLayerID aControlLayerID(pIDDMA->GetControlsId());
+        const SdrLayerID aInvisibleControlLayerID(pIDDMA->GetInvisibleControlsId());
+
+        if(aCurrentLayer != aControlLayerID && aCurrentLayer != aInvisibleControlLayerID)
+        {
+            if ( aCurrentLayer == pIDDMA->GetInvisibleHellId() ||
+                 aCurrentLayer == pIDDMA->GetInvisibleHeavenId() )
+            {
+                _rNewObj.DrawObj()->SetLayer(aInvisibleControlLayerID);
+            }
+            else
+            {
+                _rNewObj.DrawObj()->SetLayer(aControlLayerID);
+            }
+        }
+    }
+    // <--
 
     // no direct positioning needed, but invalidate the drawing object position
     _rNewObj.InvalidateObjPos();
