@@ -182,7 +182,7 @@ ChartModel::~ChartModel()
         m_xOldModelAgg->setDelegator( 0 );
 }
 
-void SAL_CALL ChartModel::initialize( const Sequence< Any >& aArguments )
+void SAL_CALL ChartModel::initialize( const Sequence< Any >& /*rArguments*/ )
                 throw (uno::Exception, uno::RuntimeException)
 {
     //#i113722# avoid duplicate creation
