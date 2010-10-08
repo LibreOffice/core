@@ -42,6 +42,14 @@ TextBody::TextBody()
 {
 }
 
+TextBody::TextBody( TextBodyPtr pBody )
+{
+    if( pBody.get() ) {
+        maTextProperties = pBody->maTextProperties;
+        maTextListStyle = pBody->maTextListStyle;
+    }
+}
+
 TextBody::~TextBody()
 {
 }

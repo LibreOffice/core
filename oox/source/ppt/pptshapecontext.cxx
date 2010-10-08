@@ -203,7 +203,7 @@ Reference< XFastContextHandler > PPTShapeContext::createFastChildContext( sal_In
 
         case NMSP_PPT|XML_txBody:
         {
-            oox::drawingml::TextBodyPtr xTextBody( new oox::drawingml::TextBody );
+            oox::drawingml::TextBodyPtr xTextBody( new oox::drawingml::TextBody( mpShapePtr->getTextBody() ) );
             xTextBody->getTextProperties().maPropertyMap[ PROP_FontIndependentLineSpacing ] <<= static_cast< sal_Bool >( sal_True );
             mpShapePtr->setTextBody( xTextBody );
             xRet = new oox::drawingml::TextBodyContext( *this, *xTextBody );

@@ -29,6 +29,7 @@
 #define OOX_DRAWINGML_TEXTBODY_HXX
 
 #include "oox/helper/containerhelper.hxx"
+#include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/textbodyproperties.hxx"
 #include "oox/drawingml/textliststyle.hxx"
 
@@ -48,6 +49,7 @@ class TextBody
 {
 public:
     TextBody();
+    TextBody( TextBodyPtr pBody );
     ~TextBody();
 
     inline const TextParagraphVector&   getParagraphs() const { return maParagraphs; }
