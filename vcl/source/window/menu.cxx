@@ -2480,6 +2480,16 @@ Size Menu::ImplCalcSize( Window* pWin )
 
     if ( !bIsMenuBar )
     {
+        // popup menus should not be wider than half the screen
+        // except on rather small screens
+        // TODO: move GetScreenNumber from SystemWindow to Window ?
+        // currently we rely on internal privileges
+        unsigned int nScreenNumber = pWin->ImplGetWindowImpl()->mpFrame->maGeometry.nScreenNumber;
+        Rectangle aDispRect( Application::GetScreenPosSizePixel( nScreenNumber ) );
+        long nScreenWidth = aDispRect.GetWidth() >= 800 ? aDispRect.GetWidth() : 800;
+        if( nMaxWidth > nScreenWidth/2 )
+            nMaxWidth = nScreenWidth/2;
+
         USHORT gfxExtra = (USHORT) Max( nExtra, 7L ); // #107710# increase space between checkmarks/images/text
         nCheckPos = (USHORT)nExtra;
         if (nMenuFlags & MENU_FLAG_SHOWCHECKIMAGES)
@@ -2763,7 +2773,19 @@ void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* 
                             pWin->GetSettings().GetStyleSettings().GetMenuColor();
                         pWin->SetBackground( Wallpaper( aBg ) );
                     }
-                    pWin->DrawCtrlText( aTmpPos, pData->aText, 0, pData->aText.Len(), nStyle, pVector, pDisplayText );
+                    // how much space is there for the text ?
+                    long nMaxItemTextWidth = aOutSz.Width() - aTmpPos.X() - nExtra - nOuterSpace;
+                    if( !bIsMenuBar && pData->aAccelKey.GetCode() && !ImplAccelDisabled() )
+                    {
+                        XubString aAccText = pData->aAccelKey.GetName();
+                        nMaxItemTextWidth -= pWin->GetTextWidth( aAccText ) + 4*nExtra;
+                    }
+                    if( !bIsMenuBar && pData->pSubMenu )
+                    {
+                        nMaxItemTextWidth -= nFontHeight + nExtra;
+                    }
+                    String aItemText( pWin->GetEllipsisString( pData->aText, nMaxItemTextWidth ) );
+                    pWin->DrawCtrlText( aTmpPos, aItemText, 0, aItemText.Len(), nStyle, pVector, pDisplayText );
                     if( bSetTmpBackground )
                         pWin->SetBackground();
                 }
