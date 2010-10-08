@@ -83,7 +83,8 @@ void PPTShape::addShape(
             Reference< lang::XMultiServiceFactory > xServiceFact( rFilterBase.getModel(), UNO_QUERY_THROW );
             sal_Bool bClearText = sal_False;
 
-            if ( sServiceName != OUString::createFromAscii( "com.sun.star.drawing.GraphicObjectShape" ) )
+            if ( sServiceName != OUString::createFromAscii( "com.sun.star.drawing.GraphicObjectShape" ) &&
+                 sServiceName != OUString::createFromAscii( "com.sun.star.drawing.OLE2Shape" ) )
             {
                 switch( mnSubType )
                 {
