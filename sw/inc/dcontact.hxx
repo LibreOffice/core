@@ -351,12 +351,12 @@ class SwDrawVirtObj : public SdrVirtObj
         virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
         virtual void NbcRotate(const Point& rRef, long nWink, double sn, double cs);
         virtual void NbcMirror(const Point& rRef1, const Point& rRef2);
-        virtual void NbcShear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear);
+        virtual void NbcShear(const Point& rRef, long nWink, double tn, bool bVShear);
         virtual void Move(const Size& rSiz);
         virtual void Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
         virtual void Rotate(const Point& rRef, long nWink, double sn, double cs);
         virtual void Mirror(const Point& rRef1, const Point& rRef2);
-        virtual void Shear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear);
+        virtual void Shear(const Point& rRef, long nWink, double tn, bool bVShear);
         virtual void RecalcSnapRect();
         virtual const Rectangle& GetSnapRect() const;
         virtual void SetSnapRect(const Rectangle& rRect);
@@ -369,7 +369,7 @@ class SwDrawVirtObj : public SdrVirtObj
         virtual void NbcSetPoint(const Point& rPnt, sal_uInt32 i);
 
         // #108784#
-        virtual FASTBOOL HasTextEdit() const;
+        virtual bool HasTextEdit() const;
 
         // OD 17.06.2003 #108784# - overload 'layer' methods
         virtual SdrLayerID GetLayer() const;

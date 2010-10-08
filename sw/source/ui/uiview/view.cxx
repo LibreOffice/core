@@ -1628,7 +1628,7 @@ void SwView::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue >& rSe
 
 
 
-void SwView::ShowCursor( FASTBOOL bOn )
+void SwView::ShowCursor( bool bOn )
 {
     //JP 10.10.2001: Bug 90461 - don't scroll the cursor into the visible area
     BOOL bUnlockView = !pWrtShell->IsViewLocked();

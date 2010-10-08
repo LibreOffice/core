@@ -422,7 +422,7 @@ public:
     void                    GotFocus() const;
     virtual SdrView*        GetDrawView() const;
     virtual sal_Bool        HasUIFeature( sal_uInt32 nFeature );
-    virtual void            ShowCursor( FASTBOOL bOn = TRUE );
+    virtual void            ShowCursor( bool bOn = TRUE );
     virtual ErrCode         DoVerb( long nVerb );
 
     virtual USHORT          SetPrinter( SfxPrinter* pNew,

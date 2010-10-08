@@ -66,7 +66,6 @@
 #include <unomap.hxx>
 #include <unoprnms.hxx>
 #include <unoevent.hxx>
-#include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/style/GraphicLocation.hpp>

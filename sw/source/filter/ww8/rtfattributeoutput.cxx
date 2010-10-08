@@ -174,8 +174,24 @@ static OString OutTBLBorderLine(RtfExport &rExport, const SvxBorderLine* pLine, 
     else
     {
         // single line
-        if( DEF_LINE_WIDTH_1 >= pLine->GetOutWidth() )
-            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRS OOO_STRING_SVTOOLS_RTF_BRDRW).append((sal_Int32)pLine->GetOutWidth());
+        if( DEF_LINE_WIDTH_0 == pLine->GetOutWidth() )
+            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRHAIR);
+        else if ( 255 >= pLine->GetOutWidth() ) // That value comes from RTF specs
+        {
+            switch ( pLine->GetStyle( ) )
+            {
+                case DOTTED:
+                    aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRDOT);
+                    break;
+                case DASHED:
+                    aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRDASH);
+                    break;
+                case SOLID:
+                default:
+                    aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRS);
+            }
+            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRW).append((sal_Int32)pLine->GetOutWidth());
+        }
         else
             aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTH OOO_STRING_SVTOOLS_RTF_BRDRW).append((sal_Int32)pLine->GetOutWidth() / 2);
     }
@@ -942,7 +958,7 @@ void RtfAttributeOutput::EndTableRow( )
         m_aAfterRuns.append(OOO_STRING_SVTOOLS_RTF_NESTROW "}" "{" OOO_STRING_SVTOOLS_RTF_NONESTTABLES OOO_STRING_SVTOOLS_RTF_PAR "}");
     }
     else
-        m_aAfterRuns.append(OOO_STRING_SVTOOLS_RTF_ROW);
+        m_aAfterRuns.append(OOO_STRING_SVTOOLS_RTF_ROW).append(OOO_STRING_SVTOOLS_RTF_PARD);
 }
 
 void RtfAttributeOutput::EndTable()
