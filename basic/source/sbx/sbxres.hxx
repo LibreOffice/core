@@ -75,7 +75,7 @@
 
 #define SBXRES_MAX          44
 
-class SbxRes : public String
+class SbxRes : public ::rtl::OUString
 {
 public:
     SbxRes( USHORT );

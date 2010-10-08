@@ -866,14 +866,10 @@ void BackendImpl::PackageImpl::processPackage_(
             try {
                 xPackage->registerPackage( startup, xSubAbortChannel, xCmdEnv );
             }
-            catch (RuntimeException &) {
-                throw;
-            }
-            catch (ucb::CommandAbortedException &) {
-                throw;
-            }
-            catch (Exception &) {
-                // CommandFailedException, DeploymentException:
+            catch (Exception &)
+            {
+               //We even try a rollback if the user cancelled the action (CommandAbortedException)
+                //in order to prevent invalid database entries.
                 Any exc( ::cppu::getCaughtException() );
                 // try to handle exception, notify:
                 bool approve = false, abort = false;
@@ -904,14 +900,8 @@ void BackendImpl::PackageImpl::processPackage_(
                             bundle[ pos ]->revokePackage(
                                 xSubAbortChannel, xCmdEnv );
                         }
-                        catch (RuntimeException &) {
-                            throw;
-                        }
-                        catch (ucb::CommandAbortedException &) {
-                            throw;
-                        }
-                        catch (Exception &) {
-                            // bundle rollback error:
+                        catch (Exception &)
+                        {
                             OSL_ENSURE( 0, ::rtl::OUStringToOString(
                                             ::comphelper::anyToString(
                                                 ::cppu::getCaughtException() ),

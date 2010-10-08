@@ -74,5 +74,19 @@ DEF1NAME=$(SHL1TARGET)
 
 # --- Targets ----------------------------------------------------------
 
+ZIP1TARGET=helpxsl
+ZIP1FLAGS= -u -r
+#ZIP1DIR=$(PRJ)$/source$/auxiliary
+ZIP1LIST=main_transform*.xsl idxcaption.xsl idxcontent.xsl
+
+
 .INCLUDE: target.mk
 
+
+ALLTAR : $(MISC)/ucpchelp1.component
+
+$(MISC)/ucpchelp1.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        ucpchelp1.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt ucpchelp1.component
