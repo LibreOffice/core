@@ -29,23 +29,19 @@
 #define _SAL_MACROS_H_
 
 #ifndef SAL_MAX
-#   define SAL_MAX(a,b)            (((a) > (b)) ? (a) : (b))
+#    define SAL_MAX(a,b)            (((a) > (b)) ? (a) : (b))
 #endif
+
 #ifndef SAL_MIN
-#   define SAL_MIN(a,b)            (((a) < (b)) ? (a) : (b))
+#    define SAL_MIN(a,b)            (((a) < (b)) ? (a) : (b))
 #endif
 
 #ifndef SAL_FIELDOFFSET
-#   define SAL_FIELDOFFSET(type, field) ((sal_Int32)(&((type *)16)->field) - 16)
+#    define SAL_FIELDOFFSET(type, field) ((sal_Int32)(&((type *)16)->field) - 16)
 #endif
 
-#ifndef SAL_BOUND
-#   define SAL_BOUND(x,l,h)        ((x) <= (l) ? (l) : ((x) >= (h) ? (h) : (x)))
+#ifndef SAL_N_ELEMENTS
+#    define SAL_N_ELEMENTS(arr)     (sizeof (arr) / sizeof ((arr)[0]))
 #endif
-
-#ifndef SAL_SWAP
-#   define SAL_SWAP(a,b)           ((a) ^= (b) ^= (a) ^= (b))
-#endif
-
 
 #endif
