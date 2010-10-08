@@ -1,0 +1,66 @@
+i pkginfo=pkginfo
+i copyright=./copyright
+i depend=depend
+i postinstall=postinstall
+i postremove=postremove
+d none etc 0755 root sys
+d none usr 0755 root sys
+d none usr/bin 0755 root bin
+s none usr/bin/soffice=../../opt/%PREFIX/program/soffice
+f none usr/bin/%PREFIX=%SOURCE/openoffice.sh 0755 root bin
+f none usr/bin/%PREFIX-printeradmin=%SOURCE/printeradmin.sh 0755 root bin
+d none usr/share 0755 root sys
+d none usr/share/applications 0755 root other
+d none usr/share/mime 0755 root root
+d none usr/share/mime/packages 0755 root root
+d none usr/share/application-registry 0755 root other
+d none usr/share/mime-info 0755 root other
+d none usr/share/pixmaps 0755 root other
+d none share/mime 0755 root other
+d none share/mime/packages 0755 root other
+!default 0644 root bin
+e build etc/mime.types=./mime.types
+e build etc/mailcap=mailcap
+f none usr/share/mime/packages/%PREFIX.xml=%SOURCE/openoffice.org.xml
+f none usr/share/application-registry/%PREFIX.applications=%SOURCE/openoffice.applications
+s none usr/share/applications/%PREFIX-writer.desktop=../../../opt/%PREFIX/share/xdg/writer.desktop
+s none usr/share/applications/%PREFIX-calc.desktop=../../../opt/%PREFIX/share/xdg/calc.desktop
+s none usr/share/applications/%PREFIX-draw.desktop=../../../opt/%PREFIX/share/xdg/draw.desktop
+s none usr/share/applications/%PREFIX-impress.desktop=../../../opt/%PREFIX/share/xdg/impress.desktop
+s none usr/share/applications/%PREFIX-math.desktop=../../../opt/%PREFIX/share/xdg/math.desktop
+s none usr/share/applications/%PREFIX-base.desktop=../../../opt/%PREFIX/share/xdg/base.desktop
+s none usr/share/applications/%PREFIX-printeradmin.desktop=../../../opt/%PREFIX/share/xdg/printeradmin.desktop
+f none usr/share/mime-info/%PREFIX.keys=%SOURCE/openoffice.keys
+f none usr/share/mime-info/%PREFIX.mime=%SOURCE/openoffice.mime
+f none usr/share/pixmaps/%ICONPREFIX-writer.png=../icons/hicolor/48x48/apps/writer.png
+f none usr/share/pixmaps/%ICONPREFIX-calc.png=../icons/hicolor/48x48/apps/calc.png
+f none usr/share/pixmaps/%ICONPREFIX-draw.png=../icons/hicolor/48x48/apps/draw.png
+f none usr/share/pixmaps/%ICONPREFIX-impress.png=../icons/hicolor/48x48/apps/impress.png
+f none usr/share/pixmaps/%ICONPREFIX-math.png=../icons/hicolor/48x48/apps/math.png
+f none usr/share/pixmaps/%ICONPREFIX-base.png=../icons/hicolor/48x48/apps/base.png
+f none usr/share/pixmaps/%ICONPREFIX-printeradmin.png=../icons/hicolor/48x48/apps/printeradmin.png
+f none usr/share/pixmaps/%ICONPREFIX-text.png=../icons/hicolor/48x48/mimetypes/text.png
+f none usr/share/pixmaps/%ICONPREFIX-text-template.png=../icons/hicolor/48x48/mimetypes/text-template.png
+f none usr/share/pixmaps/%ICONPREFIX-spreadsheet.png=../icons/hicolor/48x48/mimetypes/spreadsheet.png
+f none usr/share/pixmaps/%ICONPREFIX-spreadsheet-template.png=../icons/hicolor/48x48/mimetypes/spreadsheet-template.png
+f none usr/share/pixmaps/%ICONPREFIX-drawing.png=../icons/hicolor/48x48/mimetypes/drawing.png
+f none usr/share/pixmaps/%ICONPREFIX-drawing-template.png=../icons/hicolor/48x48/mimetypes/drawing-template.png
+f none usr/share/pixmaps/%ICONPREFIX-presentation.png=../icons/hicolor/48x48/mimetypes/presentation.png
+f none usr/share/pixmaps/%ICONPREFIX-presentation-template.png=../icons/hicolor/48x48/mimetypes/presentation-template.png
+f none usr/share/pixmaps/%ICONPREFIX-master-document.png=../icons/hicolor/48x48/mimetypes/master-document.png
+f none usr/share/pixmaps/%ICONPREFIX-formula.png=../icons/hicolor/48x48/mimetypes/formula.png
+f none usr/share/pixmaps/%ICONPREFIX-database.png=../icons/hicolor/48x48/mimetypes/database.png
+f none usr/share/pixmaps/%ICONPREFIX-extension.png=../icons/hicolor/48x48/mimetypes/extension.png
+f none usr/share/pixmaps/%ICONPREFIX-oasis-text.png=../icons/hicolor/48x48/mimetypes/oasis-text.png
+f none usr/share/pixmaps/%ICONPREFIX-oasis-text-template.png=../icons/hicolor/48x48/mimetypes/oasis-text-template.png
+f none usr/share/pixmaps/%ICONPREFIX-oasis-spreadsheet.png=../icons/hicolor/48x48/mimetypes/oasis-spreadsheet.png
+f none usr/share/pixmaps/%ICONPREFIX-oasis-spreadsheet-template.png=../icons/hicolor/48x48/mimetypes/oasis-spreadsheet-template.png
+f none usr/share/pixmaps/%ICONPREFIX-oasis-drawing.png=../icons/hicolor/48x48/mimetypes/oasis-drawing.png
+f none usr/share/pixmaps/%ICONPREFIX-oasis-drawing-template.png=../icons/hicolor/48x48/mimetypes/oasis-drawing-template.png
+f none usr/share/pixmaps/%ICONPREFIX-oasis-presentation.png=../icons/hicolor/48x48/mimetypes/oasis-presentation.png
+f none usr/share/pixmaps/%ICONPREFIX-oasis-presentation-template.png=../icons/hicolor/48x48/mimetypes/oasis-presentation-template.png
+f none usr/share/pixmaps/%ICONPREFIX-oasis-master-document.png=../icons/hicolor/48x48/mimetypes/oasis-master-document.png
+f none usr/share/pixmaps/%ICONPREFIX-oasis-formula.png=../icons/hicolor/48x48/mimetypes/oasis-formula.png
+f none usr/share/pixmaps/%ICONPREFIX-oasis-database.png=../icons/hicolor/48x48/mimetypes/oasis-database.png
+f none usr/share/pixmaps/%ICONPREFIX-oasis-web-template.png=../icons/hicolor/48x48/mimetypes/oasis-web-template.png
+

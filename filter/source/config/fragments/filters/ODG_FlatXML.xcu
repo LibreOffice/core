@@ -1,0 +1,13 @@
+    <node oor:name="OpenDocument Drawing Flat XML" oor:op="replace">
+        <prop oor:name="FileFormatVersion"><value>0</value></prop>
+        <prop oor:name="Type"><value>draw_ODG_FlatXML</value></prop>
+        <prop oor:name="DocumentService"><value>com.sun.star.drawing.DrawingDocument</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="UserData"><value oor:separator=",">com.sun.star.documentconversion.XSLTFilter,,com.sun.star.comp.Draw.XMLOasisImporter,com.sun.star.comp.Draw.XMLOasisExporter,../share/xslt/odfflatxml/odfflatxmlimport.xsl,../share/xslt/odfflatxml/odfflatxmlexport.xsl</value></prop>
+        <prop oor:name="FilterService"><value>com.sun.star.comp.Writer.XmlFilterAdaptor</value></prop>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="UIName">
+            <value>OpenDocument Drawing (Flat XML)</value>
+        </prop>
+        <prop oor:name="Flags"><value>IMPORT EXPORT OWN 3RDPARTYFILTER</value></prop>
+    </node>

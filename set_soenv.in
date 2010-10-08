@@ -748,21 +748,21 @@ elsif ( $platform =~ m/darwin/ )
       $BIG_SVX        = "TRUE";
       $COM            = "GCC";
       $COMPATH        = '@COMPATH@'; 
-      if ($platform =~ m/^i[3456]86/)
-      {
-          print "Setting values for Mac OS X/Darwin on x86... ";
-          $outfile        = "MacOSXX86Env.Set"; 
-          $CPU            = "I";
-          $CPUNAME        = "INTEL";
-          $OUTPATH        = "unxmacxi";
-      }
-      elsif ($platform =~ m/^powerpc/)
+      if ($platform =~ m/^powerpc/)
       {
           print "Setting values for Mac OS X/Darwin on PowerPC... ";
           $outfile        = "MacOSXPPCEnv.Set"; 
           $CPU            = "P";
           $CPUNAME        = "POWERPC";
           $OUTPATH        = "unxmacxp";
+      }
+      else
+      {
+          print "Setting values for Mac OS X/Darwin on default x86... ";
+          $outfile        = "MacOSXX86Env.Set"; 
+          $CPU            = "I";
+          $CPUNAME        = "INTEL";
+          $OUTPATH        = "unxmacxi";
       }
       if (@GCCVER@ >= 30401) {
 	  $CVER           = "C341";
@@ -1724,6 +1724,9 @@ if ( $platform =~ m/cygwin/ )
    chomp($tmpdir);
    ToFile( "TMPDIR",     $tmpdir,            "e" );
 }
+if ("@WITH_VC_REDIST@" eq "TRUE") {
+ToFile( "WITH_VC_REDIST", "TRUE",  "e" );
+}
 ToFile( "PERL",              $PERL,              "e" );
 ToFile( "RPM",               "@RPM@",            "e" );
 ToFile( "DPKG",              "@DPKG@",           "e" );
@@ -1930,6 +1933,7 @@ ToFile( "BUILD_UNOWINREG",   "@BUILD_UNOWINREG@",  "e" );
 ToFile( "USE_XINERAMA",      "@USE_XINERAMA@",     "e" );
 ToFile( "XINERAMA_LINK",     "@XINERAMA_LINK@",    "e" );
 ToFile( "SYSTEM_REDLAND",    "@SYSTEM_REDLAND@",   "e" );
+ToFile( "REDLAND_CFLAGS",    "@REDLAND_CFLAGS@",   "e" );
 ToFile( "REDLAND_LIBS",      "@REDLAND_LIBS@",     "e" );
 ToFile( "SYSTEM_HUNSPELL",   "@SYSTEM_HUNSPELL@",  "e" );
 ToFile( "HUNSPELL_CFLAGS",   "@HUNSPELL_CFLAGS@",  "e" );
@@ -1943,6 +1947,8 @@ ToFile( "HYPHEN_LIB",        "@HYPHEN_LIB@",       "e" );
 ToFile( "SYSTEM_MYTHES",     "@SYSTEM_MYTHES@",    "e" );
 ToFile( "MYTHES_CFLAGS",     "@MYTHES_CFLAGS@",    "e" );
 ToFile( "MYTHES_LIBS",       "@MYTHES_LIBS@",      "e" );
+ToFile( "SYSTEM_LIBTEXTCAT", "@SYSTEM_LIBTEXTCAT@","e" );
+ToFile( "SYSTEM_LIBTEXTCAT_DATA","@SYSTEM_LIBTEXTCAT_DATA@","e" );
 ToFile( "PAM",               "@PAM@",              "e" );
 ToFile( "NEW_SHADOW_API",    "@NEW_SHADOW_API@",   "e" );
 ToFile( "PAM_LINK",          "@PAM_LINK@",         "e" );

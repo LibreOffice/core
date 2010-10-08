@@ -1,0 +1,116 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sheet_FunctionCategory_idl__
+#define __com_sun_star_sheet_FunctionCategory_idl__
+
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+/** used to specify the category of a spreadsheet function.
+ */
+published constants FunctionCategory
+{
+    //-------------------------------------------------------------------------
+
+    /** specifies a database function.
+     */
+    const long DATABASE = 1;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies a function that calculates with dates and/or times.
+     */
+    const long DATETIME = 2;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies a financial function.
+     */
+    const long FINANCIAL = 3;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies a function that returns information about the cell,
+        the cell contents or the current formula.
+     */
+    const long INFORMATION = 4;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies a boolean function.
+     */
+    const long LOGICAL = 5;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies a common mathematical function
+     */
+    const long MATHEMATICAL = 6;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies a matrix function.
+     */
+    const long MATRIX = 7;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies a statistical function
+     */
+    const long STATISTICAL = 8;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies a function that returns information using the spreadsheet
+        contents or specific cell positions.
+     */
+    const long SPREADSHEET = 9;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies a text function.
+     */
+    const long TEXT = 10;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies a common add-in function.
+     */
+    const long ADDIN = 11;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

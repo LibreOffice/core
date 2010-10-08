@@ -17,14 +17,14 @@ Globals
 			SERVICETAG_URN urn:uuid:0187debd-e458-11de-82d6-080020a9ed93
 			HIDELICENSEDIALOG 1
 			PACKAGEPREFIX 
-			BASISPACKAGEPREFIX lobasis
+			BASISPACKAGEPREFIX libobasis
 			UREPACKAGEPREFIX libreoffice
 			SOLSUREPACKAGEPREFIX libreoffice
 			USE_FILEVERSION 1
 			LIBRARYVERSION 9.3.0
             POOLPRODUCT 1
-            REGISTRATION_HOST https://registration2.services.openoffice.org/RegistrationWeb
-			REGISTRATIONURL http://survey.services.openoffice.org/user/index.php
+            REGISTRATION_HOST https://registration.documentfoundation.org/RegistrationWeb
+			REGISTRATIONURL http://survey.documentfoundation.org/user/index.php
 			PROGRESSBARCOLOR 126,170,23
 			PROGRESSSIZE 320,7
 			PROGRESSPOSITION 185,206
@@ -46,7 +46,7 @@ Globals
 	}
 }
 
-OpenOffice
+LibreOffice
 {
 	Settings
 	{
@@ -64,8 +64,8 @@ OpenOffice
 			ABOUTBOXPRODUCTVERSION 3.3.0
 			BASEPRODUCTVERSION 3.3
             PCPFILENAME openoffice.pcp
-			UPDATEURL http://update36.services.openoffice.org/ProductUpdateService/check.Update
-            ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
+			UPDATEURL http://update.documentfoundation.org/ProductUpdateService/check.Update
+            ODFNOTIFYURL http://odfnotify.documentfoundation.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,userland.txt,version.lst
 			REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
 			ADDSYSTEMINTEGRATION 1
@@ -94,24 +94,24 @@ OpenOffice
 			DOWNLOADBITMAP	ooobitmap.bmp
 			DOWNLOADSETUPICO	ooosetup.ico
 			RELATIVE_PATHES_IN_DDF 1
-            STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/OpenOffice.org/extensions.jsp?cid=920794
-            STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/homepage.jsp
-            STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/OpenOffice.org/templates.jsp?cid=926383
+            STARTCENTER_ADDFEATURE_URL http://extensions.documentfoundation.org/
+            STARTCENTER_INFO_URL http://www.documentfoundation.org/
+            STARTCENTER_TEMPLREP_URL http://templates.documentfoundation.org/
             STARTCENTER_LAYOUT_STYLE 0
             REGISTRATION_PRODUCT LibreOffice
             REGISTRATION_CID 926117
-            DICT_REPO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/dictionaries.jsp
+            DICT_REPO_URL http://extensions.documentfoundation.org/dictionaries/
 		}
 		active			1
 		compression		5
 		script			setup_osl
-		downloadname	LO_{productversion}_{os}_install_{languages}
-		langpackdownloadname	LO_{productversion}_languagepack_{os}_install_{languages}
+		downloadname	LibO_{productversion}_{os}_install_{languages}
+		langpackdownloadname	LibO_{productversion}_languagepack_{os}_install_{languages}
 		include			{solarenvpath}/{os}/loader2,.,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/ooowoure,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor}/osl,{solarcommonpath}/bin.{minor},{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
 	}
 }
 
-OpenOffice_wJRE
+LibreOffice_wJRE
 {
 	Settings
 	{
@@ -128,8 +128,8 @@ OpenOffice_wJRE
 			USERDIRPRODUCTVERSION 3
 			ABOUTBOXPRODUCTVERSION 3.3.0
 			BASEPRODUCTVERSION 3.3
-			UPDATEURL http://update36.services.openoffice.org/ProductUpdateService/check.Update
-            ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
+			UPDATEURL http://update.documentfoundation.org/ProductUpdateService/check.Update
+            ODFNOTIFYURL http://odfnotify.documentfoundation.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt,version.lst
 			REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
 			ADDSYSTEMINTEGRATION 1
@@ -160,34 +160,34 @@ OpenOffice_wJRE
 			DOWNLOADBITMAP	ooobitmap.bmp
 			DOWNLOADSETUPICO	ooosetup.ico
 			RELATIVE_PATHES_IN_DDF 1
-            STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/OpenOffice.org/extensions.jsp?cid=920794
-            STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/homepage.jsp
-            STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/OpenOffice.org/templates.jsp?cid=926383
+            STARTCENTER_ADDFEATURE_URL http://extensions.documentfoundation.org/
+            STARTCENTER_INFO_URL http://www.documentfoundation.org/
+            STARTCENTER_TEMPLREP_URL http://templates.documentfoundation.org/
             STARTCENTER_LAYOUT_STYLE 0
             REGISTRATION_PRODUCT LibreOffice
             REGISTRATION_CID 926117
-            DICT_REPO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/dictionaries.jsp
+            DICT_REPO_URL http://extensions.documentfoundation.org/dictionaries/
 		}
 		active			1
 		compression		5
 		script			setup_osljre
-		downloadname	LO_{productversion}_{os}_installwjre_{languages}
+		downloadname	LibO_{productversion}_{os}_installwjre_{languages}
 		include			{solarenvpath}/{os}/loader2,.,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor}/osl,{solarcommonpath}/bin.{minor},{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
 	}
 }
 
-OpenOffice_Dev
+LibreOffice_Dev
 {
 	Settings
 	{
 		variables
 		{
-			PRODUCTNAME LO-dev
+			PRODUCTNAME LibO-dev
 			PRODUCTVERSION 3.3
 			PRODUCTEXTENSION 
 			LONG_PRODUCTEXTENSION 
 			SHORT_PRODUCTEXTENSION 
-			BASISROOTNAME LO-dev
+			BASISROOTNAME LibO-dev
 			UNIXBASISROOTNAME lo-dev
             POSTVERSIONEXTENSION
             POSTVERSIONEXTENSIONUNIX
@@ -196,13 +196,13 @@ OpenOffice_Dev
 			ABOUTBOXPRODUCTVERSION 3.3.0
 			BASEPRODUCTVERSION 3.3
 			DEVELOPMENTPRODUCT 1
-			BASISPACKAGEPREFIX lobasis-dev
+			BASISPACKAGEPREFIX libobasis-dev
 			UREPACKAGEPREFIX lodev
 			SOLSUREPACKAGEPREFIX lodev
 			REGISTRYLAYERNAME LayerDev
 			SERVICETAG_URN urn:uuid:1680b00d-e45c-11de-82d6-080020a9ed93
-			UPDATEURL http://update36.services.openoffice.org/ProductUpdateService/check.Update
-            ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
+			UPDATEURL http://update.documentfoundation.org/ProductUpdateService/check.Update
+            ODFNOTIFYURL http://odfnotify.documentfoundation.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt,version.lst
 			EVAL
 			FILEFORMATNAME OpenOffice.org
@@ -232,19 +232,19 @@ OpenOffice_Dev
 			DOWNLOADSETUPICO	ooosetup.ico
 			LOCALUSERDIR $ORIGIN/..
 			RELATIVE_PATHES_IN_DDF 1
-            STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/OpenOffice.org/extensions.jsp?cid=920794
-            STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/homepage.jsp
-            STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/OpenOffice.org/templates.jsp?cid=926383
+            STARTCENTER_ADDFEATURE_URL http://extensions.documentfoundation.org/
+            STARTCENTER_INFO_URL http://www.documentfoundation.org/
+            STARTCENTER_TEMPLREP_URL http://templates.documentfoundation.org/
             STARTCENTER_LAYOUT_STYLE 0
             REGISTRATION_PRODUCT LibreOffice
             REGISTRATION_CID 926117
-            DICT_REPO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/dictionaries.jsp
+            DICT_REPO_URL http://extensions.documentfoundation.org/dictionaries/
 		}
 		active			1
 		compression		5
 		script			setup_osljre
-		downloadname	LO-dev_{productversion}_{os}_install_{languages}
-		langpackdownloadname	LO_{productversion}_languagepack_{os}_install_{languages}
+		downloadname	LibO-dev_{productversion}_{os}_install_{languages}
+		langpackdownloadname	LibO_{productversion}_languagepack_{os}_install_{languages}
 		include			{solarenvpath}/{os}/loader2,.,{localpath}/bin/dev,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor}/osl,{solarcommonpath}/bin.{minor},{solarcommonpath}/pck.{minor}/openoffice_dev,{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
 	}
 }
@@ -276,13 +276,13 @@ URE
             DONTUSESTARTMENUFOLDER 1
             SERVICESPROJEKT 1
             RELATIVE_PATHES_IN_DDF 1
-            STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/OpenOffice.org/extensions.jsp?cid=920794
-            STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/homepage.jsp
-            STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/OpenOffice.org/templates.jsp?cid=926383
+            STARTCENTER_ADDFEATURE_URL http://extensions.documentfoundation.org/
+            STARTCENTER_INFO_URL http://www.documentfoundation.org/
+            STARTCENTER_TEMPLREP_URL http://templates.documentfoundation.org/
             STARTCENTER_LAYOUT_STYLE 0
             ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,version.lst
 			PACKAGEMAP package_names_ext.txt
-            DICT_REPO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/dictionaries.jsp
+            DICT_REPO_URL http://extensions.documentfoundation.org/dictionaries/
         }
         active 1
         compression 5
@@ -291,7 +291,7 @@ URE
     }
 }
 
-OpenOffice_SDK
+LibreOffice_SDK
 {
     Settings
     {
@@ -323,11 +323,11 @@ OpenOffice_SDK
             DOWNLOADSETUPICO ooosetup.ico
             DONTUSESTARTMENUFOLDER 1
             RELATIVE_PATHES_IN_DDF 1
-            STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/OpenOffice.org/extensions.jsp?cid=920794
-            STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/homepage.jsp
-            STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/OpenOffice.org/templates.jsp?cid=926383
+            STARTCENTER_ADDFEATURE_URL http://extensions.documentfoundation.org/
+            STARTCENTER_INFO_URL http://www.documentfoundation.org/
+            STARTCENTER_TEMPLREP_URL http://templates.documentfoundation.org/
             STARTCENTER_LAYOUT_STYLE 0
-            DICT_REPO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/dictionaries.jsp
+            DICT_REPO_URL http://extensions.documentfoundation.org/dictionaries/
         }
         active 1
         compression 5
@@ -336,26 +336,26 @@ OpenOffice_SDK
     }
 }
 
-OpenOffice_Dev_SDK
+LibreOffice_Dev_SDK
 {
     Settings
     {
         downloadname OOo-Dev-SDK_{packageversion}_{os}_install_{languages}
         variables
         {
-            PRODUCTNAME LO-dev
+            PRODUCTNAME LibO-dev
             PRODUCTVERSION 3.3
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
             SHORT_PRODUCTEXTENSION
-            BASISROOTNAME LO-dev
+            BASISROOTNAME LibO-dev
             UNIXBASISROOTNAME lo-dev
             POSTVERSIONEXTENSION SDK
             POSTVERSIONEXTENSIONUNIX sdk
             BRANDPACKAGEVERSION 3
             PACKAGEVERSION 3.3.0
             PACKAGEREVISION {milestone}
-            BASISPACKAGEPREFIX lobasis-dev
+            BASISPACKAGEPREFIX libobasis-dev
             UREPACKAGEPREFIX lodev
             SOLSUREPACKAGEPREFIX lodev
             REGISTRYLAYERNAME LayerDev
@@ -375,11 +375,11 @@ OpenOffice_Dev_SDK
             DOWNLOADSETUPICO ooosetup.ico
             DONTUSESTARTMENUFOLDER 1
             RELATIVE_PATHES_IN_DDF 1
-            STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/OpenOffice.org/extensions.jsp?cid=920794
-            STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/homepage.jsp
-            STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/OpenOffice.org/templates.jsp?cid=926383
+            STARTCENTER_ADDFEATURE_URL http://extensions.documentfoundation.org/
+            STARTCENTER_INFO_URL http://www.documentfoundation.org/
+            STARTCENTER_TEMPLREP_URL http://templates.documentfoundation.org/
             STARTCENTER_LAYOUT_STYLE 0
-            DICT_REPO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/dictionaries.jsp
+            DICT_REPO_URL http://extensions.documentfoundation.org/dictionaries/
         }
         active 1
         compression 5
@@ -409,8 +409,8 @@ BrOffice
 			PROGRESSPOSITION 
 			PROGRESSFRAMECOLOR 
 			NATIVEPROGRESS
-			UPDATEURL http://update36.services.openoffice.org/ProductUpdateService/check.Update
-            ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
+			UPDATEURL http://update.documentfoundation.org/ProductUpdateService/check.Update
+            ODFNOTIFYURL http://odfnotify.documentfoundation.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,userland.txt,version.lst
 			REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
 			ADDSYSTEMINTEGRATION 1
@@ -441,13 +441,13 @@ BrOffice
 			DOWNLOADSETUPICO	ooosetup.ico
 			WINDOWSBITMAPDIRECTORY ..\inc_broffice\windows\msi_templates\Binary
 			RELATIVE_PATHES_IN_DDF 1
-            STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/BrOffice/extensions.jsp?cid=920794
-            STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/BrOffice/homepage.jsp
-            STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/BrOffice/templates.jsp?cid=926383
+            STARTCENTER_ADDFEATURE_URL http://extensions.documentfoundation.org/
+            STARTCENTER_INFO_URL http://www.documentfoundation.org/
+            STARTCENTER_TEMPLREP_URL http://templates.documentfoundation.org/
             STARTCENTER_LAYOUT_STYLE 0
             REGISTRATION_PRODUCT LibreOffice
             REGISTRATION_CID 926117
-            DICT_REPO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/dictionaries.jsp
+            DICT_REPO_URL http://extensions.documentfoundation.org/dictionaries/
 		}
 		active			1
 		compression		5
@@ -479,8 +479,8 @@ BrOffice_wJRE
 			PROGRESSPOSITION 
 			PROGRESSFRAMECOLOR 
 			NATIVEPROGRESS
-			UPDATEURL http://update36.services.openoffice.org/ProductUpdateService/check.Update
-            ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
+			UPDATEURL http://update.documentfoundation.org/ProductUpdateService/check.Update
+            ODFNOTIFYURL http://odfnotify.documentfoundation.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt,version.lst
 			REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
 			ADDSYSTEMINTEGRATION 1
@@ -513,13 +513,13 @@ BrOffice_wJRE
 			DOWNLOADSETUPICO	ooosetup.ico
 			WINDOWSBITMAPDIRECTORY ..\inc_broffice\windows\msi_templates\Binary
 			RELATIVE_PATHES_IN_DDF 1
-            STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/BrOffice/extensions.jsp?cid=920794
-            STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/BrOffice/homepage.jsp
-            STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/BrOffice/templates.jsp?cid=926383
+            STARTCENTER_ADDFEATURE_URL http://extensions.documentfoundation.org/
+            STARTCENTER_INFO_URL http://www.documentfoundation.org/
+            STARTCENTER_TEMPLREP_URL http://templates.documentfoundation.org/
             STARTCENTER_LAYOUT_STYLE 0
             REGISTRATION_PRODUCT LibreOffice
             REGISTRATION_CID 926117
-            DICT_REPO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/dictionaries.jsp
+            DICT_REPO_URL http://extensions.documentfoundation.org/dictionaries/
 		}
 		active			1
 		compression		5
@@ -540,7 +540,7 @@ BrOffice_Dev
 			PRODUCTEXTENSION 
 			LONG_PRODUCTEXTENSION 
 			SHORT_PRODUCTEXTENSION 
-			BASISROOTNAME LO-dev
+			BASISROOTNAME LibO-dev
 			UNIXBASISROOTNAME lo-dev
             POSTVERSIONEXTENSION
             POSTVERSIONEXTENSIONUNIX
@@ -548,13 +548,13 @@ BrOffice_Dev
 			USERDIRPRODUCTVERSION 3
 			ABOUTBOXPRODUCTVERSION 3.3.0
 			DEVELOPMENTPRODUCT 1
-			BASISPACKAGEPREFIX lobasis-dev
+			BASISPACKAGEPREFIX libobasis-dev
 			UREPACKAGEPREFIX lodev
 			SOLSUREPACKAGEPREFIX lodev
 			REGISTRYLAYERNAME LayerDevBroffice
 			SERVICETAG_URN urn:uuid:1680b00d-e45c-11de-82d6-080020a9ed93
-			UPDATEURL http://update36.services.openoffice.org/ProductUpdateService/check.Update
-            ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
+			UPDATEURL http://update.documentfoundation.org/ProductUpdateService/check.Update
+            ODFNOTIFYURL http://odfnotify.documentfoundation.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt,version.lst
 			EVAL
 			FILEFORMATNAME OpenOffice.org
@@ -585,13 +585,13 @@ BrOffice_Dev
 			WINDOWSBITMAPDIRECTORY ..\inc_broffice\windows\msi_templates\Binary
 			LOCALUSERDIR $ORIGIN/..
 			RELATIVE_PATHES_IN_DDF 1
-            STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/BrOffice/extensions.jsp?cid=920794
-            STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/BrOffice/homepage.jsp
-            STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/BrOffice/templates.jsp?cid=926383
+            STARTCENTER_ADDFEATURE_URL http://extensions.documentfoundation.org/
+            STARTCENTER_INFO_URL http://www.documentfoundation.org/
+            STARTCENTER_TEMPLREP_URL http://templates.documentfoundation.org/
             STARTCENTER_LAYOUT_STYLE 0
             REGISTRATION_PRODUCT LibreOffice
             REGISTRATION_CID 926117
-            DICT_REPO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/dictionaries.jsp
+            DICT_REPO_URL http://extensions.documentfoundation.org/dictionaries/
 		}
 		active			1
 		compression		5

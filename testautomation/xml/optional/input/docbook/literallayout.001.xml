@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+                  "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<article>
+<articleinfo>
+<title>Unit Test: literallayout.001</title>
+<releaseinfo role="CVS">$Id: literallayout.001.xml,v 1.2 2008-07-11 07:51:05 rt Exp $</releaseinfo>
+<author><firstname>Norman</firstname><surname>Walsh</surname>
+        <affiliation><address><email>ndw@nwalsh.com</email></address></affiliation>
+</author>
+</articleinfo>
+
+<literallayout>LiteralLayout: This is a test
+  Only a test.
+Had this been a real emegency,
+  We would have fled in terror
+And you would not have been informed.</literallayout>
+
+</article>

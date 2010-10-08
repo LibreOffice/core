@@ -30,9 +30,7 @@
 #include    <osl/file.hxx>
 #include <rtl/tres.hxx>
 
-#ifndef _SOLTOOLS_TESTSHL_TUTIL_HXX_
 #include "tutil.hxx"
-#endif
 
 #include <iostream>
 

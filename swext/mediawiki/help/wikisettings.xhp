@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************ -->
+	
+<helpdocument version="1.0">
+<meta>
+<topic id="comsunstarwikiMediaWikiwikisettingsxml" indexer="include" status="PUBLISH">
+<title id="tit" xml-lang="en-US">MediaWiki Options</title>
+<filename>/@WIKIEXTENSIONID@/wikisettings.xhp</filename>
+</topic>
+<history>
+<created date="2008-02-08T12:13:25"/>
+<lastedited date="2008-02-08T12:53:38"/>
+</history>
+</meta>
+<body>
+<bookmark branch="hid/vnd.com.sun.star.wiki:settings" id="bm_id7021088" localize="false"/> 
+<paragraph role="heading" id="hd_id6425672" xml-lang="en-US" level="1" l10n="NEW">MediaWiki Options</paragraph>
+<paragraph role="paragraph" id="par_id1188390" xml-lang="en-US" l10n="NEW">You can add, edit and remove MediaWiki servers. Open the dialog by <item type="menuitem">Tools - Options - Internet - MediaWiki</item>. Alternatively, choose <item type="menuitem">Tools - Extension Manager</item>, select the @WIKIEXTENSIONPRODUCTNAME@, and click the Options button.</paragraph><comment>Listbox</comment>
+<bookmark xml-lang="en-US" branch="hid/com.sun.star.wiki.MediaWiki.Settings.WikiList" id="bm_id6402783" localize="false"/>
+<paragraph role="paragraph" id="par_id300607" xml-lang="en-US" l10n="NEW"><ahelp hid=".">Click Add to add a new Wiki server.<br/>Select an entry and click Edit to edit the account settings.<br/>Select an entry and click Remove to remove the entry from the list.</ahelp></paragraph><comment>Add button</comment>
+<bookmark xml-lang="en-US" branch="hid/com.sun.star.wiki.MediaWiki.Settings.AddButton" id="bm_id6067384" localize="false"/>
+<paragraph role="paragraph" id="par_id9786065" xml-lang="en-US" l10n="NEW"><ahelp hid="." visibility="hidden">Opens the MediaWiki dialog to add a new entry to the list.</ahelp></paragraph><comment>Edit button</comment>
+<bookmark xml-lang="en-US" branch="hid/com.sun.star.wiki.MediaWiki.Settings.EditButton" id="bm_id6067385" localize="false"/>
+<paragraph role="paragraph" id="par_id3386333" xml-lang="en-US" l10n="NEW"><ahelp hid="." visibility="hidden">Opens the MediaWiki dialog to edit the selected entry.</ahelp></paragraph><comment>Remove button</comment>
+<bookmark xml-lang="en-US" branch="hid/com.sun.star.wiki.MediaWiki.Settings.RemoveButton" id="bm_id6067386" localize="false"/>
+<paragraph role="paragraph" id="par_id7285073" xml-lang="en-US" l10n="NEW"><ahelp hid="." visibility="hidden">Removes the selected entry from the list.</ahelp></paragraph>
+<paragraph role="paragraph" id="par_id1029084" xml-lang="en-US" l10n="NEW">When you click Add or Edit, the <link href="@WIKIEXTENSIONID@/wikiaccount.xhp">MediaWiki</link> dialog opens.</paragraph>
+</body>
+</helpdocument>

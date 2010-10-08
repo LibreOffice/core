@@ -1,0 +1,69 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_chart_ChartSeriesAddress_idl__
+#define __com_sun_star_chart_ChartSeriesAddress_idl__
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module chart {
+
+//=============================================================================
+
+/** This structure describes a single data row, specified by its name
+    and a sequence of data points.
+
+    <p>The cell addresses are in the format of the application that
+    contains this chart.</p>
+ */
+published struct ChartSeriesAddress
+{
+    /** contains the cell range address of the data for this series.
+     */
+    string DataRangeAddress;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the cell address of label (i.e. name) of this series.
+     */
+    string LabelAddress;
+
+    //-------------------------------------------------------------------------
+
+    /** contains cell addresses for each domain of this series.
+
+        <p>For XY (scatter) diagrams at least one series has a
+        domain. Most of the other chart types use an empty sequence
+        here.</p>
+     */
+    sequence< string > DomainRangeAddresses;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

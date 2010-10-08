@@ -1,0 +1,12 @@
+UDK_3_0_0 {
+global:
+    GetVersionInfo;
+    getDataArea;
+    getExistMark;
+    getIndex1;
+    getIndex2;
+    getLenArray;
+
+local:
+    *;
+};

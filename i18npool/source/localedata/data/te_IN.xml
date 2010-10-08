@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Locale SYSTEM 'locale.dtd'>
+<Locale versionDTD="2.0.3" allowUpdateFromCLDR="no" version="1.2">
+<LC_INFO>
+<Language>
+<LangID>te</LangID>
+<DefaultName>Telugu</DefaultName>
+</Language>
+<Country>
+<CountryID>IN</CountryID>
+<DefaultName>India</DefaultName>
+</Country>
+</LC_INFO>
+<LC_CTYPE ref="hi_IN"/>
+<LC_FORMAT ref="hi_IN" replaceTo="[$రృ.-44a]"/>
+<LC_COLLATION ref="en_US"/>
+<LC_SEARCH ref="en_US"/>
+<LC_INDEX ref="en_US"/>
+<LC_CALENDAR>
+<Calendar unoid="gregorian" default="true">
+<DaysOfWeek><Day>
+<DayID>sun</DayID>
+<DefaultAbbrvName>రవి.</DefaultAbbrvName>
+<DefaultFullName>రవివార</DefaultFullName>
+</Day>
+<Day>
+<DayID>mon</DayID>
+<DefaultAbbrvName>సొమ.</DefaultAbbrvName>
+<DefaultFullName>సొమవార</DefaultFullName>
+</Day>
+<Day>
+<DayID>tue</DayID>
+<DefaultAbbrvName>మంగళ.</DefaultAbbrvName>
+<DefaultFullName>మంగళవార</DefaultFullName>
+</Day>
+<Day>
+<DayID>wed</DayID>
+<DefaultAbbrvName>బుధ.</DefaultAbbrvName>
+<DefaultFullName>బుధవార</DefaultFullName>
+</Day>
+<Day>
+<DayID>thu</DayID>
+<DefaultAbbrvName>గురు.</DefaultAbbrvName>
+<DefaultFullName>గురువార</DefaultFullName>
+</Day>
+<Day>
+<DayID>fri</DayID>
+<DefaultAbbrvName>శుక్ర.</DefaultAbbrvName>
+<DefaultFullName>శుక్రవార</DefaultFullName>
+</Day>
+<Day>
+<DayID>sat</DayID>
+<DefaultAbbrvName>శని.</DefaultAbbrvName>
+<DefaultFullName>శనివార</DefaultFullName>
+</Day>
+</DaysOfWeek>
+<MonthsOfYear>
+<Month>
+<MonthID>jan</MonthID>
+<DefaultAbbrvName>జనవరి.</DefaultAbbrvName>
+<DefaultFullName>జనవరి</DefaultFullName>
+</Month>
+<Month>
+<MonthID>feb</MonthID>
+<DefaultAbbrvName>ఫెబ్రಿ.</DefaultAbbrvName>
+<DefaultFullName>ఫెబ్రಿ</DefaultFullName>
+</Month>
+<Month>
+<MonthID>mar</MonthID>
+<DefaultAbbrvName>మార్చ.</DefaultAbbrvName>
+<DefaultFullName>మార్చ</DefaultFullName>
+</Month>
+<Month>
+<MonthID>apr</MonthID>
+<DefaultAbbrvName>ఏప్రెల్.</DefaultAbbrvName>
+<DefaultFullName>ఏప్రెల్</DefaultFullName>
+</Month>
+<Month>
+<MonthID>may</MonthID>
+<DefaultAbbrvName>మౕ.</DefaultAbbrvName>
+<DefaultFullName>మౕ</DefaultFullName>
+</Month>
+<Month>
+<MonthID>jun</MonthID>
+<DefaultAbbrvName>జూన్.</DefaultAbbrvName>
+<DefaultFullName>జూన్</DefaultFullName>
+</Month>
+<Month>
+<MonthID>jul</MonthID>
+<DefaultAbbrvName>జులాఇ.</DefaultAbbrvName>
+<DefaultFullName>జులాఇ</DefaultFullName>
+</Month>
+<Month>
+<MonthID>aug</MonthID>
+<DefaultAbbrvName>అగస్ట.</DefaultAbbrvName>
+<DefaultFullName>అగస్ట</DefaultFullName>
+</Month>
+<Month>
+<MonthID>sep</MonthID>
+<DefaultAbbrvName>సెప్టంబర్.</DefaultAbbrvName>
+<DefaultFullName>సెప్టంబర్</DefaultFullName>
+</Month>
+<Month>
+<MonthID>oct</MonthID>
+<DefaultAbbrvName>అక్టొబర్.</DefaultAbbrvName>
+<DefaultFullName>అక్టొబర్</DefaultFullName>
+</Month>
+<Month>
+<MonthID>nov</MonthID>
+<DefaultAbbrvName>నవెబర్.</DefaultAbbrvName>
+<DefaultFullName>నవెబర్</DefaultFullName>
+</Month>
+<Month>
+<MonthID>dec</MonthID>
+<DefaultAbbrvName>దిసేంబర్.</DefaultAbbrvName>
+<DefaultFullName>దిసేంబర్</DefaultFullName>
+</Month>
+</MonthsOfYear>
+<Eras>
+<Era>
+<EraID>bc</EraID>
+<DefaultAbbrvName>ఈసాపూర్వ.హ्న</DefaultAbbrvName>
+<DefaultFullName>ఈసాపూర్వ.</DefaultFullName>
+</Era>
+<Era>
+<EraID>ad</EraID>
+<DefaultAbbrvName>సన్.</DefaultAbbrvName>
+<DefaultFullName>సన్.</DefaultFullName>
+</Era>
+</Eras>
+<StartDayOfWeek>
+<DayID>sun</DayID>
+</StartDayOfWeek>
+<MinimalDaysInFirstWeek>1</MinimalDaysInFirstWeek>
+</Calendar>
+</LC_CALENDAR>
+<LC_CURRENCY>
+<Currency default="true" usedInCompatibleFormatCodes="true">
+<CurrencyID>INR</CurrencyID>
+<CurrencySymbol>రృ.</CurrencySymbol>
+<BankSymbol>INR</BankSymbol>
+<CurrencyName>Rupee</CurrencyName>
+<DecimalPlaces>2</DecimalPlaces>
+</Currency>
+</LC_CURRENCY>
+<LC_TRANSLITERATION ref="en_US"/>
+<LC_MISC>
+<BreakIteratorRules>
+<EditMode/>
+<DictionaryMode/>
+<WordCountMode/>
+<CharacterMode>char_in</CharacterMode>
+<LineMode/>
+</BreakIteratorRules>
+<ReservedWords>
+<trueWord>నిజము</trueWord>
+<falseWord>అపాదము</falseWord>
+<quarter1Word>ఒకటి  1</quarter1Word>
+<quarter2Word>రెండు  2</quarter2Word>
+<quarter3Word>మూడు 3</quarter3Word>
+<quarter4Word>నాలుగు 4</quarter4Word>
+<aboveWord>పయ్న</aboveWord>
+<belowWord>కింద</belowWord>
+<quarter1Abbreviation>Q1</quarter1Abbreviation>
+<quarter2Abbreviation>Q2</quarter2Abbreviation>
+<quarter3Abbreviation>Q3</quarter3Abbreviation>
+<quarter4Abbreviation>Q4</quarter4Abbreviation>
+</ReservedWords>
+</LC_MISC>
+<LC_NumberingLevel ref="hi_IN"/>
+<LC_OutLineNumberingLevel ref="en_US"/>
+</Locale>

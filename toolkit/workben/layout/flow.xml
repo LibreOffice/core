@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<dialog xmlns="http://openoffice.org/2007/layout"
+        xmlns:cnt="http://openoffice.org/2007/layout/container"
+        title="Flowing" optimumsize="true" has_border="true" sizeable="true" moveable="true">
+    <vbox spacing="5">
+        <flow>
+            <pushbutton label="Button 1" />
+            <pushbutton label="Button 2" />
+            <pushbutton label="Button 3" />
+            <pushbutton label="Button 4" />
+            <pushbutton label="Button 5" />
+            <pushbutton label="Button 6" />
+            <pushbutton label="Button 7" />
+        </flow>
+    </vbox>
+</dialog>

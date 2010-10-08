@@ -1,0 +1,100 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef DBAUI_TABLEDESIGNCONTROL_HXX
+#define DBAUI_TABLEDESIGNCONTROL_HXX
+
+#include <svtools/tabbar.hxx>
+#include <svtools/editbrowsebox.hxx>
+
+#include "IClipBoardTest.hxx"
+#include "TypeInfo.hxx"
+
+#define TABPAGESIZE 70
+namespace dbaui
+{
+    class OTableDesignView;
+    class OTypeInfo;
+    //==================================================================
+    class OTableRowView : public ::svt::EditBrowseBox
+                        ,public IClipboardTest
+    {
+        friend class OTableDesignUndoAct;
+
+    protected:
+        long    m_nDataPos;             // derzeit benoetigte Zeile
+        long    m_nCurrentPos;          // Aktuelle Position der ausgewaehlten Column
+    private:
+        USHORT  m_nCurUndoActId;
+    protected:
+        BOOL    m_bCurrentModified;
+        BOOL    m_bUpdatable;
+        BOOL    m_bClipboardFilled;
+
+    public:
+        OTableRowView(Window* pParent);
+        virtual ~OTableRowView();
+
+        virtual void                SetCellData( long nRow, USHORT nColId, const TOTypeInfoSP& _pTypeInfo ) = 0;
+        virtual void                SetCellData( long nRow, USHORT nColId, const ::com::sun::star::uno::Any& _rNewData ) = 0;
+        virtual ::com::sun::star::uno::Any          GetCellData( long nRow, USHORT nColId ) = 0;
+        virtual void                SetControlText( long nRow, USHORT nColId, const String& rText ) = 0;
+        virtual String              GetControlText( long nRow, USHORT nColId ) = 0;
+
+        virtual OTableDesignView* GetView() const = 0;
+
+        USHORT  GetCurUndoActId(){ return m_nCurUndoActId; }
+
+        // IClipboardTest
+        virtual void cut();
+        virtual void copy();
+        virtual void paste();
+
+    protected:
+        void Paste( long nRow );
+
+        virtual void CopyRows()                             = 0;
+        virtual void DeleteRows()                           = 0;
+        virtual void InsertRows( long nRow )                = 0;
+        virtual void InsertNewRows( long nRow )             = 0;
+
+        virtual sal_Bool IsPrimaryKeyAllowed( long nRow )   = 0;
+        virtual sal_Bool IsInsertNewAllowed( long nRow )    = 0;
+        virtual sal_Bool IsDeleteAllowed( long nRow )       = 0;
+
+        virtual BOOL IsUpdatable() const {return m_bUpdatable;}
+        virtual void SetUpdatable( BOOL bUpdate=TRUE );
+
+        virtual RowStatus GetRowStatus(long nRow) const;
+        virtual void KeyInput(const KeyEvent& rEvt);
+        virtual void Command( const CommandEvent& rEvt );
+
+        virtual void Init();
+    };
+}
+#endif // DBAUI_TABLEDESIGNCONTROL_HXX
+
+

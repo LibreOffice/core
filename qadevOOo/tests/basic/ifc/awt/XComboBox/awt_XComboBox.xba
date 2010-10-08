@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="awt_XComboBox" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+Dim bIL_itemStateChanged, bAL_actionPerformed As Boolean
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.awt.XComboBox
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim oIListener, oAListener As Object
+
+    bIL_itemStateChanged = False
+    oIListener = createUnoListener("IL_", "com.sun.star.awt.XItemListener")
+
+    Test.StartMethod("addItemListener()")
+    oObj.addItemListener(oIListener)
+    bOK = True
+    Test.MethodTested("addItemListener()", bOK)
+
+    Test.StartMethod("removeItemListener()")
+    oObj.removeItemListener(oIListener)
+    bOK = True
+    Test.MethodTested("removeItemListener()", bOK)
+
+    bAL_actionPerformed = False
+    oAListener = createUnoListener("AL_", "com.sun.star.awt.XActionListener")
+    Test.StartMethod("addActionListener()")
+    oObj.addActionListener(oAListener)
+    bOK = True
+    Test.MethodTested("addActionListener()", bOK)
+
+    Test.StartMethod("removeActionListener()")
+    oObj.removeActionListener(oAListener)
+    bOK = True
+    Test.MethodTested("removeActionListener()", bOK)
+
+    Dim itemCount As Integer
+    Test.StartMethod("getItemCount()")
+    itemCount = oObj.getItemCount()
+    bOK = itemCount &gt; 0 or itemCount = 0
+    Test.MethodTested("getItemCount()", bOK)
+
+    Test.StartMethod("addItem()")
+    oObj.addItem("Item1", itemCount)
+    bOK = oObj.getItemCount() = (itemCount + 1)
+    Test.MethodTested("addItem()", bOK)
+
+    Dim itemNames As Variant
+    itemNames = Array("Item2", "Item3")
+    Dim oldCount As Integer
+    oldCount = oObj.getItemCount()
+    Test.StartMethod("addItems()")
+    oObj.addItems(itemNames(), oldCount)
+    bOK = (oldCount + 2) = oObj.getItemCount()
+    Test.MethodTested("addItems()", bOK)
+
+    Test.StartMethod("getItem()")
+    bOK = (oObj.getItem(itemCount) = "Item1")
+    Test.MethodTested("getItem()", bOK)
+
+    Test.StartMethod("getItems()")
+    itemNames = oObj.getItems()
+    Dim i As Integer
+    bOK = True
+    Dim iname As String
+    For i = itemCount to itemCount + 2
+        iname = "Item" + (i + 1)
+        bOK = bOK and itemNames(i) = iname
+        out.log(iname + "   " + itemNames(i))
+    Next i
+    Test.MethodTested("getItems()", bOK)
+
+    Test.StartMethod("removeItems()")
+    oObj.removeItems(0, oObj.getItemCount())
+    bOK = oObj.getItemCount = 0
+    Test.MethodTested("removeItems()", bOK)
+
+    Dim lineCount As Integer
+    Test.StartMethod("getDropDownLineCount()")
+    lineCount = oObj.getDropDownLineCount()
+    bOK = True
+    Test.MethodTested("getDropDownLineCount()", bOK)
+
+    Test.StartMethod("setDropDownLineCount()")
+    oObj.setDropDownLineCount(lineCount + 1)
+    bOK = oObj.getDropDownLineCount() = lineCount + 1
+    Test.MethodTested("setDropDownLineCount()", bOK)
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+
+Sub IL_itemStateChanged
+    Out.Log("CallBack for ItemListener itemStateChanged was called.")
+    bIL_itemStateChanged = true
+End Sub
+
+Sub AL_actionPerformed
+    Out.Log("CallBack for ActionListener actionPerformed was called.")
+    bAL_actionPerformed = true
+End Sub
+</script:module>

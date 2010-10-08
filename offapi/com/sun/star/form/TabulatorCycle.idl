@@ -1,0 +1,84 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_form_TabulatorCycle_idl__
+#define __com_sun_star_form_TabulatorCycle_idl__
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module form {
+
+//=============================================================================
+
+/** specifies how the TAB key should be used in a form.
+
+    <p>If the last control of a form is focused, and the user pressed the TAB key, there are
+    several possibilities how a <type>FormController</type> should handle this.
+    <type>TabulatorCycle</type> specifies these possibilities.</p>
+
+    <p>Note that the <type>TabulatorCycle</type> determines what happens when SHIFT-TAB
+    is pressed on the <em>first</em> control of a form, as well as when TAB is pressed on the
+    <em>last</em> control.</p>
+
+    <p><em>First</em> and <em>last</em> refers to the tabbing order of controls.</p>
+
+    @see FormControlModel::TabIndex
+    @see FormController
+ */
+published enum TabulatorCycle
+{
+    //-------------------------------------------------------------------------
+
+    /** pressing the TAB key from the last control moves the focus to
+        the first control in the tab order of the next record.
+     */
+    RECORDS,
+
+    //-------------------------------------------------------------------------
+
+    /** pressing the TAB key from the last control moves the focus to
+        the first control in the tab order of the same record.
+     */
+    CURRENT,
+
+    //-------------------------------------------------------------------------
+
+    /** pressing the TAB key from the last control of a form moves
+        the focus to the first control of the next form in the tab order.
+     */
+    PAGE
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

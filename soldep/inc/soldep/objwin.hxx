@@ -28,9 +28,7 @@
 #ifndef _FMRWRK_OBJWIN_HXX
 #define _FMRWRK_OBJWIN_HXX
 
-#ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
-#endif
 #include <vcl/menu.hxx>
 #include <vcl/timer.hxx>
 #include <bootstrp/listmacr.hxx>

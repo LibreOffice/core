@@ -539,5 +539,6 @@ LPSOLVELIB=lpsolve55.lib
 SOFFICELIB=isofficeapp.lib
 UNOPKGAPPLIB=iunopkgapp.lib
 TESTLIB=itest.lib
+BOOSTTHREADLIB=boostthread.lib
 
 .ENDIF              # ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"

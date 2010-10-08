@@ -1,0 +1,5 @@
+bx	basebmp	:	sal VIGRA:vigra basegfx BOOST:boost NULL
+bx	basebmp									usr1	-	all	bx_mkout NULL
+bx	basebmp\source							nmake	-	all	bx_source NULL
+bx	basebmp\util							nmake	-	all	bx_util bx_source NULL
+bx	basebmp\test							nmake	-	all	bx_test bx_util NULL

@@ -1,0 +1,54 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef SVTOOLS_UDLG_GLOBAL_HRC
+#define SVTOOLS_UDLG_GLOBAL_HRC
+
+#include <svl/solar.hrc>
+
+//=====================================================================
+//= bases
+//=====================================================================
+#define RID_UDLG_DIALOG_START       RID_SVTOOLS_START + 0
+#define RID_UDLG_TAPPAGE_START      RID_SVTOOLS_START + 0
+
+//=====================================================================
+//= dialogs
+//=====================================================================
+
+#define DLG_ROADMAP_SKELETON    RID_UDLG_DIALOG_START + 0
+
+//=====================================================================
+//= tab pages
+//=====================================================================
+
+#define TP_WELCOME          ( RID_UDLG_TAPPAGE_START + 0 )
+#define TP_PREPARE          ( RID_UDLG_TAPPAGE_START + 1 )
+#define TP_SETUP            ( RID_UDLG_TAPPAGE_START + 2 )
+#define TP_FINISH           ( RID_UDLG_TAPPAGE_START + 3 )
+
+#endif // SVTOOLS_UDLG_GLOBAL_HRC

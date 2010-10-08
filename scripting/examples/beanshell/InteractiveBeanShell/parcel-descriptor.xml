@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<parcel language="BeanShell" xmlns:parcel="scripting.dtd">
+
+    <script language="BeanShell">
+        <locale lang="en">
+            <displayname value="Interactive BeanShell"/>
+            <description>
+                Pops up a window into which you can type BeanShell code and run it against the current document
+            </description>
+        </locale>
+        <functionname value="interactive.bsh"/>
+        <logicalname value="Interactive.BeanShell"/>
+    </script>
+
+</parcel>

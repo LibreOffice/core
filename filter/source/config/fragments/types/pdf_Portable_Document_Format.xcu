@@ -1,0 +1,12 @@
+    <node oor:name="pdf_Portable_Document_Format" oor:op="replace" >
+        <prop oor:name="DetectService"/>
+        <prop oor:name="URLPattern"/>
+        <prop oor:name="Extensions"><value>pdf</value></prop>
+        <prop oor:name="MediaType"><value>application/pdf</value></prop>
+        <prop oor:name="Preferred"><value>false</value></prop>
+        <prop oor:name="PreferredFilter"/>
+        <prop oor:name="UIName">
+            <value>PDF - Portable Document Format</value>
+        </prop>
+        <prop oor:name="ClipboardFormat"/>
+    </node>

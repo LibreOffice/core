@@ -1,0 +1,16 @@
+rpb  reportbuilder    :   BOOST:boost JFREEREPORT:jfreereport wizards readlicense_oo APACHE_COMMONS:apache-commons officecfg NULL
+rpb  reportbuilder                                                        usr1    -   all rpb_mkout NULL
+rpb  reportbuilder\java							                        nmake   -   all rpb_java NULL
+rpb  reportbuilder\java\com\sun\star\report		                        nmake   -   all rpb_jreport rpb_java NULL
+rpb  reportbuilder\java\com\sun\star\report\util	                        nmake   -   all rpb_jreport_util rpb_jreport NULL
+rpb  reportbuilder\java\com\sun\star\report\pentaho                       nmake   -   all rpb_jreport_pe rpb_jreport_util rpb_jreport_f_m NULL
+rpb  reportbuilder\java\com\sun\star\report\function\metadata             nmake   -   all rpb_jreport_f_m rpb_jreport NULL
+rpb  reportbuilder\registry\schema\org\openoffice\Office                  nmake   -   all rpb_reg_schema_ooo NULL
+rpb  reportbuilder\registry\schema\org\openoffice\Office\UI               nmake   -   all rpb_reg_schema_ooo_ui NULL
+rpb  reportbuilder\registry\data\org\openoffice                           nmake   -   all rpb_data_ooOffice NULL
+rpb  reportbuilder\registry\data\org\openoffice\Office                    nmake   -   all rpb_reg_data_ooo rpb_reg_schema_ooo NULL
+rpb  reportbuilder\registry\data\org\openoffice\Office\UI                 nmake   -   all rpb_reg_data_ooo_ui rpb_reg_schema_ooo_ui NULL
+rpb  reportbuilder\registry\data\org\openoffice\TypeDetection             nmake   -   all rpb_reg_data_oot NULL
+rpb  reportbuilder\template\en-US\wizard\report				nmake   -   all rpb_template_en_us_wiz_rep NULL
+rpb  reportbuilder\util                                                   nmake   -   all rpb_util rpb_jreport_pe rpb_reg_data_ooo rpb_data_ooOffice rpb_reg_data_oot rpb_template_en_us_wiz_rep rpb_reg_data_ooo_ui NULL
+

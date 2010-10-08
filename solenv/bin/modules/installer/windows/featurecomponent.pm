@@ -181,10 +181,10 @@ sub check_number_of_components_at_feature
             if ( ${$featurecomponenttable}[$j] =~ /^\s*\Q$onefeature\E\s+(\S+)\s*$/ ) { $featurecomponents++; }
         }
 
-        if ( $featurecomponents > 816 )
-        {
-            installer::exiter::exit_program("ERROR: More than 816 components ($featurecomponents) at feature $onefeature. This causes problems on Win 98 and Win Me!", "check_number_of_components_at_feature");
-        }
+        # if ( $featurecomponents > 816 )
+        # {
+        #     installer::exiter::exit_program("ERROR: More than 816 components ($featurecomponents) at feature $onefeature. This causes problems on Win 98 and Win Me!", "check_number_of_components_at_feature");
+        # }
 
         # Logging the result
 

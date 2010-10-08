@@ -469,15 +469,15 @@ sub get_downloadname_productname
 
     my $start = "LO";
 
-    if ( $allvariables->{'PRODUCTNAME'} eq "LibreOffice" ) { $start = "LO"; }
+    if ( $allvariables->{'PRODUCTNAME'} eq "LibreOffice" ) { $start = "LibO"; }
 
-    if ( $allvariables->{'PRODUCTNAME'} eq "LO-dev" ) { $start = "LO-Dev"; }
+    if ( $allvariables->{'PRODUCTNAME'} eq "LibO-dev" ) { $start = "LibO-Dev"; }
 
-    if (( $allvariables->{'PRODUCTNAME'} eq "LibreOffice" ) && ( $allvariables->{'POSTVERSIONEXTENSION'} eq "SDK" )) { $start = "LO-SDK"; }
+    if (( $allvariables->{'PRODUCTNAME'} eq "LibreOffice" ) && ( $allvariables->{'POSTVERSIONEXTENSION'} eq "SDK" )) { $start = "LibO-SDK"; }
 
-    if (( $allvariables->{'PRODUCTNAME'} eq "LO-dev" ) && ( $allvariables->{'POSTVERSIONEXTENSION'} eq "SDK" )) { $start = "LO-Dev-SDK"; }
+    if (( $allvariables->{'PRODUCTNAME'} eq "LibO-dev" ) && ( $allvariables->{'POSTVERSIONEXTENSION'} eq "SDK" )) { $start = "LibO-Dev-SDK"; }
 
-    if ( $allvariables->{'PRODUCTNAME'} eq "URE" ) { $start = "LO-URE"; }
+    if ( $allvariables->{'PRODUCTNAME'} eq "URE" ) { $start = "LibO-URE"; }
 
     if ( $allvariables->{'PRODUCTNAME'} eq "BrOffice.org" ) { $start = "BrOo"; }
 

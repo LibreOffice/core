@@ -1,0 +1,14 @@
+Date: 2009-02-19
+
+This project is used in the Wiki filter that is installed
+with the WikiPublisher extension. The extension is built
+in mudule swext.
+
+Building of the module provides a set of xslt transformation
+related files that are used by the filter to transform
+embedded formula objects into media wiki format.
+
+The archive was downloaded from:
+http://xsltml.sourceforge.net
+on 2009-02-16.
+

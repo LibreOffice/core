@@ -1,0 +1,71 @@
+#*************************************************************************
+#
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+#
+# Copyright 2000, 2010 Oracle and/or its affiliates.
+#
+# OpenOffice.org - a multi-platform office productivity suite
+#
+# This file is part of OpenOffice.org.
+#
+# OpenOffice.org is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License version 3
+# only, as published by the Free Software Foundation.
+#
+# OpenOffice.org is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License version 3 for more details
+# (a copy is included in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU Lesser General Public License
+# version 3 along with OpenOffice.org.  If not, see
+# <http://www.openoffice.org/license.html>
+# for a copy of the LGPLv3 License.
+#
+#*************************************************************************
+
+UDK_3_0_0 {
+    global:
+        # jvmaccess/virtualmachine.hxx:
+        _ZN9jvmaccess14VirtualMachine11AttachGuard17CreationExceptionC1Ev; # jvmaccess::VirtualMachine::AttachGuard::CreationException::CreationException()
+        _ZN9jvmaccess14VirtualMachine11AttachGuard17CreationExceptionC1ERKS2_; # jvmaccess::VirtualMachine::AttachGuard::CreationException::CreationException(CreationException const &)
+        _ZN9jvmaccess14VirtualMachine11AttachGuard17CreationExceptionD0Ev; # jvmaccess::VirtualMachine::AttachGuard::CreationException::~CreationException()
+        _ZN9jvmaccess14VirtualMachine11AttachGuard17CreationExceptionaSERKS2_; # jvmaccess::VirtualMachine::AttachGuard::CreationException::operator =(CreationException const &)
+        # _ZTIN9jvmaccess14VirtualMachine11AttachGuard17CreationExceptionE; # typeinfo for jvmaccess::VirtualMachine::AttachGuard::CreationException
+        # _ZTSN9jvmaccess14VirtualMachine11AttachGuard17CreationExceptionE; # typeinfo name for jvmaccess::VirtualMachine::AttachGuard::CreationException
+        _ZN9jvmaccess14VirtualMachine11AttachGuardC1ERKN3rtl9ReferenceIS0_EE; # jvmaccess::VirtualMachine::AttachGuard::AttachGuard(rtl::Reference< VirtualMachine > const &)
+        _ZN9jvmaccess14VirtualMachine11AttachGuardC2ERKN3rtl9ReferenceIS0_EE; # jvmaccess::VirtualMachine::AttachGuard::AttachGuard(rtl::Reference< VirtualMachine > const &)
+        _ZN9jvmaccess14VirtualMachine11AttachGuardD1Ev; # jvmaccess::VirtualMachine::AttachGuard::~AttachGuard()
+        _ZN9jvmaccess14VirtualMachine11AttachGuardD2Ev; # jvmaccess::VirtualMachine::AttachGuard::~AttachGuard()
+        _ZN9jvmaccess14VirtualMachineC1EP7JavaVM_ibP7JNIEnv_; # jvmaccess::VirtualMachine::VirtualMachine(JavaVM *, int, bool, JNIEnv *)
+
+        # initially forgotten jvmaccess/virtualmachine.hxx:
+        _ZN9jvmaccess14VirtualMachine11AttachGuard17CreationExceptionC2Ev; # jvmaccess::VirtualMachine::AttachGuard::CreationException::CreationException()
+        _ZN9jvmaccess14VirtualMachine11AttachGuard17CreationExceptionC2ERKS2_; # jvmaccess::VirtualMachine::AttachGuard::CreationException::CreationException(CreationException const &)
+        _ZN9jvmaccess14VirtualMachine11AttachGuard17CreationExceptionD1Ev; # jvmaccess::VirtualMachine::AttachGuard::CreationException::~CreationException()
+        _ZN9jvmaccess14VirtualMachine11AttachGuard17CreationExceptionD2Ev; # jvmaccess::VirtualMachine::AttachGuard::CreationException::~CreationException()
+        _ZN9jvmaccess14VirtualMachineC2EP7JavaVM_ibP7JNIEnv_; # jvmaccess::VirtualMachine::VirtualMachine(JavaVM *, int, bool, JNIEnv *)
+
+        # jvmaccess/unovirtualmachine.hxx:
+        _ZN9jvmaccess17UnoVirtualMachine17CreationExceptionC1Ev; # jvmaccess::UnoVirtualMachine::CreationException::CreationException()
+        _ZN9jvmaccess17UnoVirtualMachine17CreationExceptionC2Ev; # jvmaccess::UnoVirtualMachine::CreationException::CreationException()
+        _ZN9jvmaccess17UnoVirtualMachine17CreationExceptionC1ERKS1_; # jvmaccess::UnoVirtualMachine::CreationException::CreationException(CreationException const &)
+        _ZN9jvmaccess17UnoVirtualMachine17CreationExceptionC2ERKS1_; # jvmaccess::UnoVirtualMachine::CreationException::CreationException(CreationException const &)
+        _ZN9jvmaccess17UnoVirtualMachine17CreationExceptionD0Ev; # jvmaccess::UnoVirtualMachine::CreationException::~CreationException()
+        _ZN9jvmaccess17UnoVirtualMachine17CreationExceptionD1Ev; # jvmaccess::UnoVirtualMachine::CreationException::~CreationException()
+        _ZN9jvmaccess17UnoVirtualMachine17CreationExceptionD2Ev; # jvmaccess::UnoVirtualMachine::CreationException::~CreationException()
+        _ZN9jvmaccess17UnoVirtualMachine17CreationExceptionaSERKS1_; # jvmaccess::UnoVirtualMachine::CreationException::operator =(CreationException const &)
+        # _ZTIN9jvmaccess17UnoVirtualMachine17CreationExceptionE; # typeinfo for jvmaccess::UnoVirtualMachine::CreationException
+        # _ZTSN9jvmaccess17UnoVirtualMachine17CreationExceptionE; # typeinfo name for jvmaccess::UnoVirtualMachine::CreationException
+        _ZN9jvmaccess17UnoVirtualMachineC1ERKN3rtl9ReferenceINS_14VirtualMachineEEEPv; # jvmaccess::UnoVirtualMachine::UnoVirtualMachine(rtl::Reference< jvmaccess::VirtualMachine > const &, void *)
+        _ZN9jvmaccess17UnoVirtualMachineC2ERKN3rtl9ReferenceINS_14VirtualMachineEEEPv; # jvmaccess::UnoVirtualMachine::UnoVirtualMachine(rtl::Reference< jvmaccess::VirtualMachine > const &, void *)
+        _ZNK9jvmaccess17UnoVirtualMachine17getVirtualMachineEv; # jvmaccess::UnoVirtualMachine::getVirtualMachine() const
+        _ZNK9jvmaccess17UnoVirtualMachine14getClassLoaderEv; # jvmaccess::UnoVirtualMachine::getClassLoader() const
+        # jvmaccess/classpath.hxx:
+        _ZN9jvmaccess9ClassPath11doLoadClassERKN3com3sun4star3uno9ReferenceINS4_17XComponentContextEEEPvRKN3rtl8OUStringESE_; # jvmaccess::ClassPath::doLoadClass(com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > const &, void *, rtl::OUString const &, rtl::OUString const &)
+        _ZN9jvmaccess9ClassPath17doTranslateToUrlsERKN3com3sun4star3uno9ReferenceINS4_17XComponentContextEEEPvRKN3rtl8OUStringE; # jvmaccess::ClassPath::doTranslateToUrls(com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > const &, void *, rtl::OUString const &)
+
+    local:
+        *;
+};

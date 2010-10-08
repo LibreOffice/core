@@ -1,0 +1,12 @@
+    <node oor:name="jpg_JPEG" oor:op="replace" >
+        <prop oor:name="DetectService"><value>com.sun.star.comp.draw.FormatDetector</value></prop>
+        <prop oor:name="URLPattern"/>
+        <prop oor:name="Extensions"><value>jpg jpeg jfif jif jpe</value></prop>
+        <prop oor:name="MediaType"><value>image/jpeg</value></prop>
+        <prop oor:name="Preferred"><value>false</value></prop>
+        <prop oor:name="PreferredFilter"><value>JPG - JPEG</value></prop>
+        <prop oor:name="UIName">
+            <value>JPEG - Joint Photographic Experts Group</value>
+        </prop>
+        <prop oor:name="ClipboardFormat"/>
+    </node>

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Hidden=false
+Icon=presentation
+Type=MimeType
+Patterns=*.sxi
+MimeType=application/vnd.sun.xml.impress
+Comment=%PRODUCTNAME Presentation

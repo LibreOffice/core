@@ -1,0 +1,72 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_system_SimpleMailClientFlags_idl__
+#define __com_sun_star_system_SimpleMailClientFlags_idl__
+
+
+module com { module sun { module star { module system {
+
+//=============================================================================
+/** These constants are used to specify how the SimpleMailClient Service
+    should behave.
+ */
+
+published constants SimpleMailClientFlags
+{
+    //---------------------------------------------------------------------
+    /** Uses the default settings when sending a mail, e.g.
+        launches the current configured system mail client.
+    */
+    const long DEFAULTS             = 0;
+
+    //---------------------------------------------------------------------
+    /** Does not show the current configured system mail client, but sends
+        the mail without any further user interaction.
+        If this flag is specified, a recipient address must have been
+        specified for the given <type>XSimpleMailMessage</type>
+        object given to the method
+        <member scope="com::sun::star::system">XSimpleMailClient::sendSimpleMailMessage()</member>.
+     */
+    const long NO_USER_INTERFACE    = 1;
+
+    //---------------------------------------------------------------------
+    /** No logon dialog should be displayed to prompt the user for logon
+        information if necessary.
+        When this flag is specified and the user needs to logon in order
+        to send a simple mail message via the method
+        <member scope="com::sun::star::system">XSimpleMailClient::sendSimpleMailMessage()</member>,
+        an Exception will be thrown.
+    */
+    const long NO_LOGON_DIALOG      = 2;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

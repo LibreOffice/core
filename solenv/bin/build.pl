@@ -1725,7 +1725,7 @@ sub cancel_build {
         foreach (keys %broken_build) {
             print "ERROR: error " . $broken_build{$_} . " occurred while making $_\n";
         };
-        print "\nAttention: if you fix the errors in above module(s) you may prolongue your the build issuing command:\n\n\t" . $message_part;
+        print "\nAttention: if you fix the errors in above module(s) you may continue the build issuing the following command:\n\n\t" . $message_part;
     } else {
         while (children_number()) {
             handle_dead_children(1);

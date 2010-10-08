@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+                  "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<article>
+<articleinfo>
+<title>Unit Test: link.001</title>
+<releaseinfo role="CVS">$Id: link.001.xml,v 1.2 2008-07-11 07:50:54 rt Exp $</releaseinfo>
+<author><firstname>Norman</firstname><surname>Walsh</surname>
+        <affiliation><address><email>ndw@nwalsh.com</email></address></affiliation>
+</author>
+</articleinfo>
+
+<section id="section"><title>Section Title</title>
+
+<para>A <link linkend="section">self-referential link</link>.</para>
+
+<para>A link without content: <link linkend="section2"/>.</para>
+
+<para>A link without content, but with an xreflabel:
+<link linkend="section2" xreflabel="stb"/>.</para>
+
+<para>A link with content and an xreflabel:
+<link linkend="section2" xreflabel="stb">here</link>.</para>
+
+</section>
+
+<section id="section2">
+<title>A Very Long Section Title That I Don't Want To Use For My XRef</title>
+<titleabbrev id="stb">Long Section Title</titleabbrev>
+
+<para>Some text with a <link linkend="section">link back</link> to the
+first section.</para>
+
+</section>
+
+</article>

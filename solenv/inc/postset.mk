@@ -43,7 +43,6 @@ bn \
 bn-BD \
 bn-IN \
 bs \
-by \
 ca \
 cs \
 cy \
@@ -68,7 +67,7 @@ gl \
 gu \
 gu-IN \
 he \
-hi-IN \
+hi \
 hr \
 hu \
 is \

@@ -1,0 +1,1 @@
+RegistrationClassName: com.sun.star.help.HelpComponent

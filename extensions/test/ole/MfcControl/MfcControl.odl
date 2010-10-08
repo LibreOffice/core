@@ -1,0 +1,82 @@
+// MfcControl.odl : type library source for ActiveX Control project.
+
+// This file will be processed by the Make Type Library (mktyplib) tool to
+// produce the type library (MfcControl.tlb) that will become a resource in
+// MfcControl.ocx.
+
+#include <olectl.h>
+#include <idispids.h>
+
+[ uuid(AC221FB3-A0D8-11D4-833B-005004526AB4), version(1.0),
+  helpfile("MfcControl.hlp"),
+  helpstring("MfcControl ActiveX Control module"),
+  control ]
+library MFCCONTROLLib
+{
+	importlib(STDOLE_TLB);
+	importlib(STDTYPE_TLB);
+
+	//  Primary dispatch interface for CMfcControlCtrl
+
+	[ uuid(AC221FB4-A0D8-11D4-833B-005004526AB4),
+	  helpstring("Dispatch interface for MfcControl Control"), hidden ]
+	dispinterface _DMfcControl
+	{
+		properties:
+			// NOTE - ClassWizard will maintain property information here.
+			//    Use extreme caution when editing this section.
+			//{{AFX_ODL_PROP(CMfcControlCtrl)
+			//}}AFX_ODL_PROP
+
+		methods:
+			// NOTE - ClassWizard will maintain method information here.
+			//    Use extreme caution when editing this section.
+			//{{AFX_ODL_METHOD(CMfcControlCtrl)
+			[id(1)] short inShort(short val);
+			[id(2)] long inLong(long val);
+			[id(3)] BSTR inString(BSTR* val);
+			[id(4)] float inFloat(float val);
+			[id(5)] double inDouble(double val);
+			[id(6)] VARIANT inVariant(VARIANT val);
+			[id(7)] IDispatch* inObject(IDispatch* val);
+			[id(8)] void outShort([out] short* val);
+			[id(9)] void outLong([out] long* val);
+			[id(10)] void outString([out] BSTR* val);
+			[id(11)] void outFloat([out] float* val);
+			[id(12)] void outDouble([out] double* val);
+			[id(13)] void outVariant([out] VARIANT* val);
+			[id(14)] void outObject([out] IDispatch** val);
+			//}}AFX_ODL_METHOD
+	};
+
+	//  Event dispatch interface for CMfcControlCtrl
+
+	[ uuid(AC221FB5-A0D8-11D4-833B-005004526AB4),
+	  helpstring("Event interface for MfcControl Control") ]
+	dispinterface _DMfcControlEvents
+	{
+		properties:
+			//  Event interface has no properties
+
+		methods:
+			// NOTE - ClassWizard will maintain event information here.
+			//    Use extreme caution when editing this section.
+			//{{AFX_ODL_EVENT(CMfcControlCtrl)
+			//}}AFX_ODL_EVENT
+	};
+
+	//  Class information for CMfcControlCtrl
+
+	[ uuid(AC221FB6-A0D8-11D4-833B-005004526AB4),
+	  helpstring("MfcControl Control"), control ]
+	coclass MfcControl
+	{
+		[default] dispinterface _DMfcControl;
+		[default, source] dispinterface _DMfcControlEvents;
+	};
+
+
+	//{{AFX_APPEND_ODL}}
+	//}}AFX_APPEND_ODL}}
+};
+//VT_I2

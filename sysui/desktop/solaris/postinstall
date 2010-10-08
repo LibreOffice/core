@@ -1,0 +1,23 @@
+#!/bin/sh
+
+# check whether /usr is writable
+tiptoe="${PKG_INSTALL_ROOT}/usr/_.$$"
+touch "$tiptoe" >/dev/null 2>&1
+if [ $? -ne 0 ]; then
+  exit 0
+fi
+rm -f "$tiptoe"
+
+# update shared mime database
+if [ -x /usr/bin/update-mime-database ]; then
+  update-mime-database ${PKG_INSTALL_ROOT}/usr/share/mime
+fi
+
+if [ -x /usr/bin/update-desktop-database ]; then
+    /usr/bin/update-desktop-database -q
+elif (which update-desktop-database); then
+  update-desktop-database -q /usr/share/applications
+fi
+
+
+exit 0

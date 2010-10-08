@@ -1,0 +1,52 @@
+<!ELEMENT results ( document+ ) >
+<!ATTLIST results generated-by NMTOKEN #REQUIRED >
+<!ATTLIST results version CDATA #REQUIRED >
+<!ATTLIST results timestamp CDATA #REQUIRED >
+<!ATTLIST results type NMTOKEN #REQUIRED >
+
+<!ELEMENT document ( references?, issues? ) >
+<!ATTLIST document location CDATA #REQUIRED >
+<!ATTLIST document application CDATA #REQUIRED >
+<!ATTLIST document issues-count CDATA #IMPLIED >
+<!ATTLIST document pages CDATA #REQUIRED >
+<!ATTLIST document created CDATA #REQUIRED >
+<!ATTLIST document modified CDATA #REQUIRED >
+<!ATTLIST document accessed CDATA #REQUIRED >
+<!ATTLIST document printed CDATA #REQUIRED >
+<!ATTLIST document last-save-by CDATA #REQUIRED >
+<!ATTLIST document revision CDATA #REQUIRED >
+<!ATTLIST document based-on-template CDATA #REQUIRED >
+
+<!ELEMENT references ( reference+ ) >
+
+<!ELEMENT reference EMPTY >
+<!ATTLIST reference name CDATA #REQUIRED >
+<!ATTLIST reference description CDATA #REQUIRED >
+<!ATTLIST reference location CDATA #REQUIRED >
+<!ATTLIST reference type CDATA #REQUIRED >
+<!ATTLIST reference GUID CDATA #IMPLIED >
+<!ATTLIST reference is-broken CDATA #REQUIRED >
+<!ATTLIST reference builtin CDATA #REQUIRED >
+
+
+<!ELEMENT issues ( issue+ ) >
+
+<!ELEMENT issue ( location, details+ ) >
+<!ATTLIST issue category CDATA #REQUIRED >
+<!ATTLIST issue type CDATA #REQUIRED >
+<!ATTLIST issue prepared CDATA #REQUIRED >
+
+<!ELEMENT location ( property* ) >
+<!ATTLIST location type CDATA #REQUIRED >
+
+<!ELEMENT details ( (property+), (property | note)* ) >
+
+<!ELEMENT property EMPTY >
+<!ATTLIST property name CDATA #REQUIRED >
+<!ATTLIST property value CDATA #REQUIRED >
+
+<!ELEMENT note EMPTY >
+<!ATTLIST note index CDATA #REQUIRED >
+<!ATTLIST note value CDATA #REQUIRED >
+
+

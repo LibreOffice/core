@@ -28,9 +28,7 @@
 #ifndef _FMRWRK_DEPWIN_HXX
 #define _FMRWRK_DEPWIN_HXX
 
-#ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
-#endif
 #include <vcl/menu.hxx>
 #include <svtools/scrwin.hxx>
 #include <soldep/connctr.hxx>

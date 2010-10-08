@@ -1,0 +1,175 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "dlgresid.hrc"
+
+// Dialog Controls ---------------------------------------------------------------
+
+String RID_STR_CLASS_CONTROL
+{
+    Text = "Control" ;
+};
+String RID_STR_CLASS_DIALOG
+{
+    Text = "Dialog" ;
+};
+String RID_STR_CLASS_BUTTON
+{
+    Text = "CommandButton" ;
+};
+String RID_STR_CLASS_RADIOBUTTON
+{
+    Text = "OptionButton" ;
+};
+String RID_STR_CLASS_CHECKBOX
+{
+    Text = "CheckBox" ;
+};
+String RID_STR_CLASS_LISTBOX
+{
+    Text = "ListBox" ;
+};
+String RID_STR_CLASS_COMBOBOX
+{
+    Text = "ComboBox" ;
+};
+String RID_STR_CLASS_GROUPBOX
+{
+    Text = "FrameControl" ;
+};
+String RID_STR_CLASS_EDIT
+{
+    Text = "TextField" ;
+};
+String RID_STR_CLASS_FIXEDTEXT
+{
+    Text = "Label" ;
+};
+String RID_STR_CLASS_IMAGECONTROL
+{
+    Text = "ImageControl" ;
+};
+String RID_STR_CLASS_PROGRESSBAR
+{
+    Text = "ProgressBar" ;
+};
+String RID_STR_CLASS_SCROLLBAR
+{
+    Text = "ScrollBar" ;
+};
+String RID_STR_CLASS_FIXEDLINE
+{
+    Text = "FixedLine" ;
+};
+String RID_STR_CLASS_DATEFIELD
+{
+    Text = "DateField" ;
+};
+String RID_STR_CLASS_TIMEFIELD
+{
+    Text = "TimeField" ;
+};
+String RID_STR_CLASS_NUMERICFIELD
+{
+    Text = "NumericField" ;
+};
+String RID_STR_CLASS_CURRENCYFIELD
+{
+    Text = "CurrencyField" ;
+};
+String RID_STR_CLASS_FORMATTEDFIELD
+{
+    Text = "FormattedField" ;
+};
+String RID_STR_CLASS_PATTERNFIELD
+{
+    Text = "PatternField" ;
+};
+String RID_STR_CLASS_FILECONTROL
+{
+    Text = "FileControl" ;
+};
+String RID_STR_CLASS_TREECONTROL
+{
+    Text = "TreeControl" ;
+};
+
+
+// Property Browser Headline ----------------------------------------------------------------
+
+String RID_STR_BRWTITLE_PROPERTIES
+{
+    Text [ en-US ] = "Properties: ";
+};
+String RID_STR_BRWTITLE_NO_PROPERTIES
+{
+    Text [ en-US ] = "No Control marked";
+};
+String RID_STR_BRWTITLE_MULTISELECT
+{
+    Text [ en-US ] = "Multiselection";
+};
+
+// -----------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

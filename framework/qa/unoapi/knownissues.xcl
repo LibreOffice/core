@@ -1,0 +1,59 @@
+### 112552 ###
+fwk.JobHandler::com::sun::star::frame::XDispatchProvider
+fwk.JobHandler::com::sun::star::lang::XInitialization
+
+### i8242 ###
+fwk.Desktop::com::sun::star::lang::XComponent
+
+### i30570 ###
+fwl.TypeDetection::com::sun::star::container::XNameReplace
+
+### i50165 ###
+fwk.UIConfigurationManager::com::sun::star::ui::XUIConfigurationStorage
+fwk.UIConfigurationManager::com::sun::star::ui::XUIConfigurationPersistence
+fwk.UIConfigurationManager::com::sun::star::ui::XUIConfiguration
+fwk.UIConfigurationManager::com::sun::star::ui::XUIConfigurationManager
+
+### i50578 ###
+fwk.StatusBarControllerFactory::com::sun::star::lang::XMultiComponentFactory
+
+### i68698 ###
+fwl.PathSettings::com::sun::star::beans::XMultiPropertySet
+
+### i74020 ###
+fwl.FilterFactory::com::sun::star::lang::XMultiServiceFactory
+
+### i30570 	###
+fwl.FilterFactory::com::sun::star::container::XNameReplace
+
+### i84321 ###
+fwk.PopupMenuControllerFactory
+# -> disabled in framework.sce
+
+### i84346 ###
+fwl.PathSettings::com::sun::star::beans::XMultiPropertySet
+#-> disabled in framework.sce
+
+### i84423 ###
+fwk.JobExecutor
+fwk.JobHandler 
+#-> disabled in framework.sce
+
+### i88635 ###
+fwk.Desktop::com::sun::star::frame::XFramesSupplier
+
+### i87526 ###
+fwk.Frame::com::sun::star::lang::XComponent
+
+### i87865 ###
+fwk.Desktop::com::sun::star::frame::XDesktop
+
+### i88644 ###
+fwk.Frame
+#-> disabled in framework.sce
+
+### i90345 ###
+fwk.URLTransformer::com::sun::star::util::XURLTransformer
+
+### i111180 ###
+fwk.Desktop::com::sun::star::frame::XComponentLoader

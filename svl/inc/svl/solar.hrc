@@ -1,0 +1,341 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _SOLAR_HRC
+#define _SOLAR_HRC
+
+// defines ------------------------------------------------------------------
+
+#define OWN_ATTR_VALUE_START                    3900
+#define OWN_ATTR_VALUE_END                      3988
+
+#define CREATERESMGR_NAME( Name )   #Name
+#define CREATERESMGR( Name )        ResMgr::CreateResMgr( CREATERESMGR_NAME( Name ) )
+
+#define RID_SFX_START               260
+#define RID_SFX_END                 9999
+
+#define RID_LIB_START               10000
+#define RID_LIB_END                 19999
+
+#define RID_SVX_START               (RID_LIB_START)
+#define RID_SVX_END                 (RID_LIB_START+499)
+
+#define RID_SBASIC_START            (RID_LIB_START+500)
+#define RID_SBASIC_END              (RID_LIB_START+2999)
+
+#define RID_BASIC_START             (RID_LIB_START+3000)
+#define RID_BASIC_END               (RID_LIB_START+4499)
+
+#define RID_UUI_START               (RID_LIB_START+4500)
+#define RID_UUI_END                 (RID_LIB_START+4599)
+
+#define RID_HELP_START              (RID_LIB_START+4600)
+#define RID_HELP_END                (RID_LIB_START+4799)
+
+#define RID_MAIL_START              (RID_LIB_START+4800)
+#define RID_MAIL_END                (RID_LIB_START+4849)
+
+#define RID_BASICIDE_START          (RID_LIB_START+4850)
+#define RID_BASICIDE_END            (RID_LIB_START+4949)
+
+#define RID_SVXITEMS_START          (RID_LIB_START+4950)
+#define RID_SVXITEMS_END            (RID_LIB_START+5599)
+
+#define RID_SBA_START               (RID_LIB_START+5600)
+#define RID_SBA_END                 (RID_LIB_START+5649)
+
+#define RID_ISETBRW_START           (RID_LIB_START+5650)
+#define RID_ISETBRW_END             (RID_LIB_START+5699)
+
+#define RID_EXTENSIONS_START        (RID_LIB_START+5700)
+#define RID_EXTENSIONS_END          (RID_LIB_START+5799)
+
+#define RID_EDIT_START              (RID_LIB_START+5800)
+#define RID_EDIT_END                (RID_LIB_START+6369)
+
+#define RID_SVTOOLS_START           (RID_LIB_START+6370)
+#define RID_SVTOOLS_END             (RID_LIB_START+6499)
+
+#define RID_INET_START              (RID_LIB_START+6500)
+#define RID_INET_END                (RID_LIB_START+6559)
+
+#define RID_SO2_START               (RID_LIB_START+6560)
+#define RID_SO2_END                 (RID_LIB_START+6599)
+
+#define RID_SI_START                (RID_LIB_START+6600)
+#define RID_SI_END                  (RID_LIB_START+6799)
+
+#define RID_DLG_START               (RID_LIB_START+6800)
+#define RID_DLG_END                 (RID_LIB_START+6899)
+
+#define RID_OFA_START               (RID_LIB_START+6900)
+#define RID_OFA_END                 (RID_LIB_START+7399)
+
+#define RID_GOODIES_START           (RID_LIB_START+7400)
+#define RID_GOODIES_END             (RID_LIB_START+7449)
+
+#define RID_SVL_START               (RID_LIB_START+7450)
+#define RID_SVL_END                 (RID_LIB_START+7899)
+
+#define RID_CHAOS_START             (RID_LIB_START+7900)
+#define RID_CHAOS_END               (RID_LIB_START+7999)
+
+#define RID_FORMS_START             (RID_LIB_START+8000)
+#define RID_FORMS_END               (RID_LIB_START+8999)
+
+#define RID_FORMLAYER_START         (RID_LIB_START+9000)
+#define RID_FORMLAYER_END           (RID_LIB_START+9199)
+
+#define RID_DBACCESS_START          (RID_LIB_START+9200)
+#define RID_DBACCESS_END            (RID_LIB_START+9699)
+
+#define RID_MORE_EXTENSIONS_START   (RID_LIB_START+9700)
+#define RID_MORE_EXTENSIONS_END     (RID_LIB_START+9999)
+
+#define RID_DB_EXTENSIONS_START     (RID_LIB_START+10000)
+#define RID_DB_EXTENSIONS_END       (RID_LIB_START+10199)
+
+#define RID_FILTER_START            (RID_LIB_START+10200)
+#define RID_FILTER_END              (RID_LIB_START+10299)
+
+// do *NOT* add more ranges here, RID_LIB_END is (RID_LIB_START + 10000)
+
+#define RID_APP_START               20000
+#define RID_APP_END                 31999
+
+#define RID_SW_START                            (20000)
+#define RID_SW_END                              (25999)
+
+#define RID_SC_START                            (26000)
+#define RID_SC_END                              (26999)
+
+#define RID_SD_START                            (27000)
+#define RID_SD_END                              (27999)
+
+#define RID_OBJ_START               (30000)
+#define RID_OBJ_END                 (32767)
+
+#define RID_SIM_START                           (RID_OBJ_START+   0)
+#define RID_SIM_END                             (RID_OBJ_START+ 255)
+
+#define RID_SMA_START                           (RID_OBJ_START+ 256)
+#define RID_SMA_END                             (RID_OBJ_START+ 511)
+
+#define RID_SCH_START                           (RID_OBJ_START+ 512)
+#define RID_SCH_END                             (RID_OBJ_START+ 767)
+
+#define RID_RPT_START                           (RID_OBJ_START+768)
+#define RID_RPT_END                             (RID_OBJ_START+1000)
+
+#define RID_FORMULA_START                       (RID_OBJ_START+1001)
+#define RID_FORMULA_END                         (RID_OBJ_START+1200)
+// Help-Ids --------------------------------------------------------------
+
+#define HID_OK_BUTTON               0
+#define HID_CANCEL_BUTTON           0
+#define HID_HELP_BUTTON             0
+
+#define HID_START                   32768
+
+#define HID_VCL_START               (HID_START+100)
+#define HID_VCL_END                 (HID_START+150)
+
+#define HID_SVTOOLS_START           (HID_START+200)
+#define HID_SVTOOLS_END             (HID_START+299)
+
+#define HID_SFX_START               (HID_START+300)
+#define HID_SFX_END                 (HID_START+999)
+
+#define HID_LIB_START               (HID_START+1000)
+#define HID_LIB_END                 (HID_START+19999)
+
+#define HID_SVX_START               (HID_LIB_START)
+#define HID_SVX_END                 (HID_LIB_START+431)
+
+#define HID_WIZARD_START            (HID_LIB_START+432)
+#define HID_WIZARD_END              (HID_LIB_START+999)
+//please note: There is also HID_WIZARD2 below
+
+// FREE
+
+#define HID_CUI_START               (HID_LIB_START+1100)
+#define HID_CUI_END                 (HID_LIB_START+1699)
+
+#define HID_OFA_START               (HID_LIB_START+1760)
+#define HID_OFA_END                 (HID_LIB_START+1999)
+
+#define HID_HELP_START              (HID_LIB_START+2000)
+#define HID_HELP_END                (HID_LIB_START+2050)
+
+#define HID_CHAOS_START             (HID_LIB_START+2051)
+#define HID_CHAOS_END               (HID_LIB_START+2069)
+
+#define HID_UUI_START               (HID_LIB_START+2070)
+#define HID_UUI_END                 (HID_LIB_START+2099)
+
+#define HID_GOODIES_START           (HID_LIB_START+2100)
+#define HID_GOODIES_END             (HID_LIB_START+2199)
+
+#define HID_EDIT_START          (HID_LIB_START+2200)
+#define HID_EDIT_END            (HID_LIB_START+3399)
+
+#define HID_CHANNEL_START           (HID_LIB_START+3400)
+#define HID_CHANNEL_END             (HID_LIB_START+3499)
+
+#define HID_SBA_START               (HID_LIB_START+ 3500)
+#define HID_SBA_END                 (HID_LIB_START+ 3999)
+
+#define HID_FORMS_START             (HID_LIB_START+4000)
+#define HID_FORMS_END               (HID_LIB_START+4999)
+
+#define HID_DBACCESS_START          (HID_LIB_START+5000)
+#define HID_DBACCESS_END            (HID_LIB_START+5299)
+
+#define HID_PORTAL_START            (HID_LIB_START+5300)
+#define HID_PORTAL_END              (HID_LIB_START+5599)
+
+#define HID_PORTAL_ADMIN_START      (HID_LIB_START+5600)
+#define HID_PORTAL_ADMIN_END        (HID_LIB_START+5999)
+
+#define HID_SYNCACCESS_START        (HID_LIB_START+6000)
+#define HID_SYNCACCESS_END          (HID_LIB_START+6099)
+
+#define HID_SVX_EXT0_START          (HID_LIB_START+6100)
+#define HID_SVX_EXT0_END            (HID_LIB_START+6599)
+
+#define HID_FRAMEWORK_START         (HID_LIB_START+6600)
+#define HID_FRAMEWORK_END           (HID_LIB_START+6999)
+
+#define HID_WIZARD2_START           (HID_LIB_START+7000)
+#define HID_WIZARD2_END             (HID_LIB_START+8999)
+
+#define HID_DESKTOP_START           (HID_LIB_START+9000)
+#define HID_DESKTOP_END             (HID_LIB_START+9299)
+
+#define HID_XMLSECURITY_START       (HID_LIB_START+9300)
+#define HID_XMLSECURITY_END         (HID_LIB_START+9999)
+
+#define HID_APP_START               (HID_START+20000)
+#define HID_APP_END                 (HID_START+29999)
+
+#define HID_SW_START                (HID_START+20000)
+#define HID_SW_END                  (HID_START+24999)
+
+#define HID_SC_START                (HID_START+25000)
+#define HID_SC_END                  (HID_START+26999)
+
+#define HID_SD_START                (HID_START+27000)
+#define HID_SD_END                  (HID_START+27999)
+
+#define HID_Sa_START                (HID_START+28000)
+#define HID_Sa_END                  (HID_START+28999)
+
+#define HID_Sb_START                (HID_START+29000)
+#define HID_Sb_END                  (HID_START+29999)
+
+#define HID_OBJ_START               (HID_START+30000)
+#define HID_OBJ_END                 (HID_START+32767)
+
+#define HID_CUI3_START              (HID_OBJ_START+   0)
+#define HID_CUI3_END                (HID_OBJ_START+ 239)
+
+#define HID_AVMEDIA_START           (HID_OBJ_START+ 240)
+#define HID_AVMEDIA_END             (HID_OBJ_START+ 255)
+
+#define HID_SMA_START               (HID_OBJ_START+ 256)
+#define HID_SMA_END                 (HID_OBJ_START+ 511)
+
+#define HID_SCH_START               (HID_OBJ_START+ 512)
+#define HID_SCH_END                 (HID_OBJ_START+ 767)
+
+#define HID_BASICIDE_START          (HID_OBJ_START+ 768)
+#define HID_BASICIDE_END            (HID_OBJ_START+1023)
+
+#define HID_SMA2_START              (HID_OBJ_START+1024)
+#define HID_SMA2_END                (HID_OBJ_START+1280)
+
+#define HID_FILTER_START            (HID_OBJ_START+1281)
+#define HID_FILTER_END              (HID_OBJ_START+1580)
+
+#define HID_LICENSING_START         (HID_OBJ_START+1581)
+#define HID_LICENSING_END           (HID_OBJ_START+1680)
+
+#define HID_RPT_START               (HID_OBJ_START+1681)
+#define HID_RPT_END                 (HID_OBJ_START+2080)
+
+#define HID_FORMULA_START           (HID_OBJ_START+2081)
+#define HID_FORMULA_END             (HID_OBJ_START+2280)
+
+#define HID_EXTENSIONS_START        (HID_OBJ_START+2281)
+#define HID_EXTENSIONS_END          (HID_OBJ_START+2800)
+
+// Slot Ids
+
+#define SID_SFX_START                5000
+#define SID_SFX_END                  8999
+#define SID_DOCKWIN_START            9800
+#define SID_DOCKWIN_END              9999
+
+#define SID_LIB_START               10000
+#define SID_LIB_END                 19999
+#define SID_APP_START               20000
+#define SID_APP_END                 29999
+#define SID_OBJ_START               30000
+
+#define SID_SW_START                20000
+#define SID_SW_END                  25999
+#define SID_SC_START                26000
+#define SID_SC_END                  26999
+#define SID_SD_START                27000
+#define SID_SD_END                  27999
+
+#define SID_OBJ0_START              (SID_OBJ_START +    0)
+#define SID_OBJ2_START              (SID_OBJ_START +  256)
+#define SID_OBJ1_START              (SID_OBJ_START +  512)
+#define SID_OBJ3_START              (SID_OBJ_START +  768)
+
+#define SID_SMA_START               SID_OBJ2_START
+#define SID_SMA_END                 (SID_SMA_START + 255 )
+#define SID_BASICIDE_START          (SID_OBJ3_START)
+#define SID_BASICIDE_END            (SID_BASICIDE_START + 255)
+
+#define SID_SVX_START               SID_LIB_START               // 10000
+#define SID_SVX_END                 (SID_SVX_START + 1499)
+#define SID_EDIT_START              (SID_SVX_END + 1)           // 11500
+#define SID_EDIT_END                (SID_EDIT_START + 499)
+#define SID_OPTIONS_START           (SID_EDIT_END + 1)          // 12000
+#define SID_OPTIONS_END             (SID_OPTIONS_START + 100)
+#define SID_SBA_START               (SID_OPTIONS_END + 1)       // 12101
+#define SID_SBA_END                 (SID_SBA_START + 149)
+#define SID_DBACCESS_START          (SID_SBA_END + 1)           // 12251
+#define SID_DBACCESS_END            (SID_DBACCESS_START + 200)
+#define SID_RPTUI_START             (SID_DBACCESS_END + 1)      // 12452
+#define SID_RPTUI_END               (SID_RPTUI_START + 199)
+
+#endif
+

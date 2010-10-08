@@ -1,0 +1,27 @@
+Tralay - Extract and translate strings in Layout xml files.
+
+Translatable strings in layout xml files are attributes that have name
+which starts with an underscore, eg
+
+    _title="Set Zoom"
+    _label="Whole Page"
+
+Here is how it works
+
+ * Extract: generate out.sdf
+      ../unxlngx6.pro/bin/tralay -l en-US zoom.xml > out.sdf
+
+ * Translate: do:
+      cat out.sdf > trans.sdf
+      sed 's/en-US\t/de\tde:/' out.sdf >> trans.sdf 
+
+ * Merge: translate
+     ../unxlngx6.pro/bin/tralay -m trans.sdf -l de zoom.xml > zoom-DE.xml
+
+Running
+
+   dmake test
+
+does something similar.
+
+     

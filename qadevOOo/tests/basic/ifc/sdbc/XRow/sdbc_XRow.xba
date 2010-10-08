@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="sdbc_XRow" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+'*************************************************************************
+' This Interface/Service test depends on the following GLOBAL variables,
+' which must be specified in the object creation:
+
+'     - Global rowTypes As Variant
+'       Array of Strings with description of column types
+
+'*************************************************************************
+
+
+
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.sdbc.XRow
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim i As Integer
+    Dim colType As String
+
+    Test.StartMethod("getBoolean()")
+    bOK = true
+    colType = "boolean"
+    i = findColumn(colType)
+    if i >= 0 then 
+        oObj.getBoolean(i)
+    else
+        Out.Log("!!! Column of type '" + colType + "' is not found. No test performed.")
+        Out.Log("Nevertheless status is OK")
+    end if
+    Test.MethodTested("getBoolean()", bOK)
+
+    Test.StartMethod("getByte()")
+    bOK = true
+    colType = "byte"
+    i = findColumn(colType)
+    if i >= 0 then 
+        oObj.getByte(i + 1)
+    else
+        Out.Log("!!! Column of type '" + colType + "' is not found. No test performed.")
+        Out.Log("Nevertheless status is OK")
+    end if
+    Test.MethodTested("getByte()", bOK)
+
+    Test.StartMethod("getShort()")
+    bOK = true
+    colType = "short"
+    i = findColumn(colType)
+    if i >= 0 then 
+        oObj.getShort(i + 1)
+    else
+        Out.Log("!!! Column of type '" + colType + "' is not found. No test performed.")
+        Out.Log("Nevertheless status is OK")
+    end if
+    Test.MethodTested("getShort()", bOK)
+
+    Test.StartMethod("getInt()")
+    bOK = true
+    colType = "int"
+    i = findColumn(colType)
+    if i >= 0 then 
+        oObj.getInt(i + 1)
+    else
+        Out.Log("!!! Column of type '" + colType + "' is not found. No test performed.")
+        Out.Log("Nevertheless status is OK")
+    end if
+    Test.MethodTested("getInt()", bOK)
+
+    Test.StartMethod("getLong()")
+    bOK = true
+    colType = "long"
+    i = findColumn(colType)
+    if i >= 0 then 
+        oObj.getLong(i + 1)
+    else
+        Out.Log("!!! Column of type '" + colType + "' is not found. No test performed.")
+        Out.Log("Nevertheless status is OK")
+    end if
+    Test.MethodTested("getLong()", bOK)
+
+    Test.StartMethod("getFloat()")
+    bOK = true
+    colType = "float"
+    i = findColumn(colType)
+    if i >= 0 then 
+        oObj.getFloat(i + 1)
+    else
+        Out.Log("!!! Column of type '" + colType + "' is not found. No test performed.")
+        Out.Log("Nevertheless status is OK")
+    end if
+    Test.MethodTested("getFloat()", bOK)
+
+    Test.StartMethod("getDouble()")
+    bOK = true
+    colType = "double"
+    i = findColumn(colType)
+    if i >= 0 then 
+        oObj.getDouble(i + 1)
+    else
+        Out.Log("!!! Column of type '" + colType + "' is not found. No test performed.")
+        Out.Log("Nevertheless status is OK")
+    end if
+    Test.MethodTested("getDouble()", bOK)
+
+    Test.StartMethod("getString()")
+    bOK = true
+    colType = "string"
+    i = findColumn(colType)
+    if i >= 0 then 
+        oObj.getString(i + 1)
+    else
+        Out.Log("!!! Column of type '" + colType + "' is not found. No test performed.")
+        Out.Log("Nevertheless status is OK")
+    end if
+    Test.MethodTested("getString()", bOK)
+
+    Test.StartMethod("getBytes()")
+    bOK = true
+    colType = "bytes"
+    i = findColumn(colType)
+    if i >= 0 then 
+        oObj.getBytes(i + 1)
+    else
+        Out.Log("!!! Column of type '" + colType + "' is not found. No test performed.")
+        Out.Log("Nevertheless status is OK")
+    end if
+    Test.MethodTested("getBytes()", bOK)
+
+    Test.StartMethod("getDate()")
+    bOK = true
+    colType = "date"
+    i = findColumn(colType)
+    if i >= 0 then 
+        oObj.getDate(i + 1)
+    else
+        Out.Log("!!! Column of type '" + colType + "' is not found. No test performed.")
+        Out.Log("Nevertheless status is OK")
+    end if
+    Test.MethodTested("getDate()", bOK)
+
+    Test.StartMethod("getTime()")
+    bOK = true
+    colType = "time"
+    i = findColumn(colType)
+    if i >= 0 then 
+        oObj.getTime(i + 1)
+    else
+        Out.Log("!!! Column of type '" + colType + "' is not found. No test performed.")
+        Out.Log("Nevertheless status is OK")
+    end if
+    Test.MethodTested("getTime()", bOK)
+
+    Test.StartMethod("getTimestamp()")
+    bOK = true
+    colType = "timestamp"
+    i = findColumn(colType)
+    if i >= 0 then 
+        oObj.getTimestamp(i + 1)
+    else
+        Out.Log("!!! Column of type '" + colType + "' is not found. No test performed.")
+        Out.Log("Nevertheless status is OK")
+    end if
+    Test.MethodTested("getTimestamp()", bOK)
+
+    Test.StartMethod("getBinaryStream()")
+    bOK = true
+    colType = "binarystream"
+    i = findColumn(colType)
+    if i >= 0 then 
+        oObj.getBinaryStream(i + 1)
+    else
+        Out.Log("!!! Column of type '" + colType + "' is not found. No test performed.")
+        Out.Log("Nevertheless status is OK")
+    end if
+    Test.MethodTested("getBinaryStream()", bOK)
+
+    Test.StartMethod("getCharacterStream()")
+    bOK = true
+    colType = "characterstream"
+    i = findColumn(colType)
+    if i >= 0 then 
+        oObj.getCharacterStream(i + 1)
+    else
+        Out.Log("!!! Column of type '" + colType + "' is not found. No test performed.")
+        Out.Log("Nevertheless status is OK")
+    end if
+    Test.MethodTested("getCharacterStream()", bOK)
+
+    Test.StartMethod("getObject()")
+    bOK = true
+    colType = "object"
+    i = findColumn(colType)
+    if i >= 0 then 
+        oObj.getObject(i + 1)
+    else
+        Out.Log("!!! Column of type '" + colType + "' is not found. No test performed.")
+        Out.Log("Nevertheless status is OK")
+    end if
+    Test.MethodTested("getObject()", bOK)
+
+    Test.StartMethod("getRef()")
+    bOK = true
+    colType = "ref"
+    i = findColumn(colType)
+    if i >= 0 then 
+        oObj.getRef(i + 1)
+    else
+        Out.Log("!!! Column of type '" + colType + "' is not found. No test performed.")
+        Out.Log("Nevertheless status is OK")
+    end if
+    Test.MethodTested("getRef()", bOK)
+
+    Test.StartMethod("getBlob()")
+    bOK = true
+    colType = "blob"
+    i = findColumn(colType)
+    if i >= 0 then 
+        oObj.getBlob(i + 1)
+    else
+        Out.Log("!!! Column of type '" + colType + "' is not found. No test performed.")
+        Out.Log("Nevertheless status is OK")
+    end if
+    Test.MethodTested("getBlob()", bOK)
+
+    Test.StartMethod("getClob()")
+    bOK = true
+    colType = "clob"
+    i = findColumn(colType)
+    if i >= 0 then 
+        oObj.getClob(i + 1)
+    else
+        Out.Log("!!! Column of type '" + colType + "' is not found. No test performed.")
+        Out.Log("Nevertheless status is OK")
+    end if
+    Test.MethodTested("getClob()", bOK)
+
+    Test.StartMethod("getArray()")
+    bOK = true
+    colType = "array"
+    i = findColumn(colType)
+    if i >= 0 then 
+        oObj.getArray(i + 1)
+    else
+        Out.Log("!!! Column of type '" + colType + "' is not found. No test performed.")
+        Out.Log("Nevertheless status is OK")
+    end if
+    Test.MethodTested("getArray()", bOK)
+
+
+    Test.StartMethod("wasNull()")
+    bOK = true
+    oObj.wasNull()
+    Test.MethodTested("wasNull()", bOK)
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+
+Function findColumn(cType As String) As Integer
+    Dim i As Integer
+    
+    for i = lbound(rowTypes()) to ubound(rowTypes())
+        if rowTypes(i) = cType then
+            findColumn() = rowTypesCol(i)
+            exit function
+        end if    
+    next i
+    
+    findColumn() = -1 
+End function
+</script:module>

@@ -1,0 +1,70 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_ucb_FileSystemNotation_idl__
+#define __com_sun_star_ucb_FileSystemNotation_idl__
+
+//=============================================================================
+
+module com { module sun { module star { module ucb {
+
+//=============================================================================
+/** The notational conventions used to denote file system paths on different
+    file systems or operating systems.
+*/
+published constants FileSystemNotation
+{
+    //-------------------------------------------------------------------------
+    /** No information regarding any conventions is available.
+    */
+    const long UNKNOWN_NOTATION = 0;
+
+    //-------------------------------------------------------------------------
+    /** The conventions of Unix like file systems (e.g.,
+        <code>/dir1/dir2/file</code>).
+    */
+    const long UNIX_NOTATION = 1;
+
+    //-------------------------------------------------------------------------
+    /** The conventions of DOS like file systems (e.g.,
+        <code>a:\dir1\dir2\file</code> or UNC notation like
+        <code>\\host\dir1\dir2\file</code>).
+    */
+    const long DOS_NOTATION = 2;
+
+    //-------------------------------------------------------------------------
+    /** The conventions of Mac like file systems (e.g.,
+        <code>volume:dir1:dir2:file</code>).
+    */
+    const long MAC_NOTATION = 3;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

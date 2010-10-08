@@ -1,0 +1,64 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _GLOBDOC_HRC
+#define _GLOBDOC_HRC
+
+#include "rcid.hrc"
+
+#define STR_HUMAN_SWGLOBDOC_NAME                (RC_GLOBDOC_BEGIN + 2)
+#define STR_WRITER_GLOBALDOC_FULLTYPE_40        (RC_GLOBDOC_BEGIN + 3)
+#define STR_WRITER_GLOBALDOC_FULLTYPE_50        (RC_GLOBDOC_BEGIN + 4)
+#define STR_WRITER_GLOBALDOC_FULLTYPE           (RC_GLOBDOC_BEGIN + 5)
+
+#define MN_GLOBALFILE                              (RC_GLOBDOC_BEGIN + 30)
+#define MN_GLOBALEDIT                              (RC_GLOBDOC_BEGIN + 31)
+#define MN_GLOBALVIEW                              (RC_GLOBDOC_BEGIN + 32)
+#define MN_GLOBALINS                               (RC_GLOBDOC_BEGIN + 33)
+#define MN_GLOBALFORMAT                            (RC_GLOBDOC_BEGIN + 34)
+#define MN_GLOBALEXTRA                             (RC_GLOBDOC_BEGIN + 35)
+#define MN_GLOBALWIN                               (RC_GLOBDOC_BEGIN + 36)
+
+#define MN_GLOBALFILE_PORT                         (RC_GLOBDOC_BEGIN + 47)
+#define MN_GLOBALEDIT_PORT                         (RC_GLOBDOC_BEGIN + 48)
+#define MN_GLOBALVIEW_PORT                         (RC_GLOBDOC_BEGIN + 49)
+#define MN_GLOBALINS_PORT                          (RC_GLOBDOC_BEGIN + 50)
+#define MN_GLOBALFORMAT_PORT                       (RC_GLOBDOC_BEGIN + 51)
+#define MN_GLOBALEXTRA_PORT                        (RC_GLOBDOC_BEGIN + 52)
+#define MN_GLOBALWIN_PORT                          (RC_GLOBDOC_BEGIN + 53)
+
+#define MN_GLOBAL_TEXT_POPUPMENU                  (RC_GLOBDOC_BEGIN + 63)
+// ------------------------------------------------------------------------
+
+#define GLOBDOC_ACT_END             MN_GLOBAL_TEXT_POPUPMENU
+
+
+#if GLOBDOC_ACT_END > RC_GLOBDOC_END
+#error Resource-Id Ueberlauf in #file, #line
+#endif
+
+#endif

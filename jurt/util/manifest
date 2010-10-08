@@ -1,0 +1,7 @@
+Sealed: true
+
+Name: com/sun/star/lib/util/
+Sealed: false
+
+Name: com/sun/star/uno/
+Sealed: false

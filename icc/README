@@ -1,0 +1,39 @@
+Date: 2008-01-11
+
+This project is used to generate the ICC color
+profile needed in module vcl in order to export
+to PDF/A-1a.
+It's composed of a small application, which lurks in:
+
+icc/source/create_sRGB_profile
+
+That application links to a support library
+(icc/download/SampleICC-1.3.2), build at OOo
+build time.
+Finally, the application is run at OOo build time to
+generate the only file delivered to solver:
+sRGB-IEC61966-2.1.hxx.
+
+If you need to change the data into the ICC profile,
+please change the create_sRGB_profile.
+
+The library was downloaded from:
+http://sampleicc.sourceforge.net
+on 2007-08-23.
+
+For information on ICC profiles, you may want to visit:
+http://www.color.org
+
+Notes for porters
+=================
+the endianess and other platform specific configuration
+are in:
+
+<build>/misc/build/SampleICC-1.3.2/IccProfLib/IccProfLibConf.h
+
+The patchs:
+SampleICC-1.3.2.patch tweaks the build to use the endianness
+detected in sal.
+
+beppec56@openoffice.org
+

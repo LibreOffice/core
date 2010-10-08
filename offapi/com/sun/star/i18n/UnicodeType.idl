@@ -1,0 +1,79 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_i18n_UnicodeType_idl__
+#define __com_sun_star_i18n_UnicodeType_idl__
+
+//============================================================================
+
+module com {  module sun {  module star {  module i18n {
+
+//============================================================================
+
+/**
+    Constants to classify Unicode characters, returned by
+    <member>XCharacterClassification::getType()</member>
+ */
+
+published constants UnicodeType
+{
+    const short UNASSIGNED             = 0;
+    const short UPPERCASE_LETTER       = 1;
+    const short LOWERCASE_LETTER       = 2;
+    const short TITLECASE_LETTER       = 3;
+    const short MODIFIER_LETTER        = 4;
+    const short OTHER_LETTER           = 5;
+    const short NON_SPACING_MARK       = 6;
+    const short ENCLOSING_MARK         = 7;
+    const short COMBINING_SPACING_MARK = 8;
+    const short DECIMAL_DIGIT_NUMBER   = 9;
+    const short LETTER_NUMBER          = 10;
+    const short OTHER_NUMBER           = 11;
+    const short SPACE_SEPARATOR        = 12;
+    const short LINE_SEPARATOR         = 13;
+    const short PARAGRAPH_SEPARATOR    = 14;
+    const short CONTROL                = 15;
+    const short FORMAT                 = 16;
+    const short PRIVATE_USE            = 17;
+    const short SURROGATE              = 18;
+    const short DASH_PUNCTUATION       = 19;
+    const short INITIAL_PUNCTUATION    = 20;
+    const short FINAL_PUNCTUATION      = 21;
+    const short CONNECTOR_PUNCTUATION  = 22;
+    const short OTHER_PUNCTUATION      = 23;
+    const short MATH_SYMBOL            = 24;
+    const short CURRENCY_SYMBOL        = 25;
+    const short MODIFIER_SYMBOL        = 26;
+    const short OTHER_SYMBOL           = 27;
+    const short START_PUNCTUATION      = 28;
+    const short END_PUNCTUATION        = 29;
+    const short GENERAL_TYPES_COUNT    = 30;
+};
+
+//============================================================================
+}; }; }; };
+
+#endif

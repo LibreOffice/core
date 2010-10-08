@@ -1,0 +1,167 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/#define WEBDIALOG  1000
+/*
+#define WEBERROR 1100
+// --------------------------------------------------------------------
+
+String WEBDIALOG
+{
+    Text [ en-US ] = "~Help";
+};
+
+
+String WEBDIALOG + 1
+{
+    Text [ en-US ] = "AutoPilot Web Page";
+};
+
+
+
+
+String WEBDIALOG + 2
+{
+    Text [ en-US ] = "~Cancel";
+};
+
+String WEBDIALOG + 3
+{
+    Text [ en-US ] = "C~reate";
+};
+
+
+String WEBDIALOG + 4
+{
+    Text [ en-US ] = "Which template should be used?";
+};
+
+String WEBDIALOG + 5
+{
+    Text [ en-US ] = "Which layout should be used?";
+};
+
+
+String WEBDIALOG + 6
+{
+    Text [ en-US ] = "Background Image";
+};
+
+
+
+String WEBDIALOG + 7
+{
+    Text [ en-US ] = "~Tiled";
+};
+
+
+String WEBDIALOG + 8
+{
+    Text [ en-US ] = "~Scaled";
+};
+
+
+String WEBDIALOG + 9
+{
+    Text [ en-US ] = "Edit document";
+};
+
+String WEBDIALOG + 10
+{
+    Text [ en-US ] = "Create template";
+};
+
+
+String WEBERROR + 1
+{
+    Text [ en-US ] = "A template for the page setup could not be found.";
+};
+
+String WEBERROR + 2
+{
+    Text [ en-US ] = "A Style for the Page Style could not be found.";
+};
+
+String WEBERROR + 3
+{
+    Text [ en-US ] = "An error occurred as the templates were being interpreted.";
+};
+
+String WEBERROR + 4
+{
+    Text [ en-US ] = "An error occurred as the template was being refreshed.";
+};
+
+String WEBERROR + 5
+{
+    Text [ en-US ] = "An error occurred while applying the Styles.";
+};
+
+String WEBERROR + 6
+{
+    Text [ en-US ] = "An error occurred while evaluating the documents.";
+};
+
+String WEBERROR + 7
+{
+    Text [ en-US ] = "An error occurred while running the AutoPilot.";
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*/

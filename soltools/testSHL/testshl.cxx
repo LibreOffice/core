@@ -30,13 +30,9 @@
 
 #include <stdio.h>
 
-#ifndef _SOLTOOLS_TESTSHL_TLOG_HXX_
 #include "inc/tlog.hxx"
-#endif
 
-#ifndef _SOLTOOLS_TESTSHL_TSTMGR_HXX_
 #include "inc/tstMgr.hxx"
-#endif
 
 using namespace tstutl;
 

@@ -1,0 +1,58 @@
+[info]
+filecount=7
+
+[1]
+file=pub1.oxt
+display_name=pub1.oxt Version 2.0
+publisher=My OpenOffice en-US
+has_publisher=yes
+release_notes=Release Notes
+has_release_notes=yes
+
+[2]
+file=pub2.oxt
+display_name=pub2.oxt Version 2.0
+publisher=My OpenOffice en-US-region1
+has_publisher=yes
+release_notes=Release Notes
+has_release_notes=yes
+
+[3]
+file=pub3.oxt
+display_name=pub3.oxt Version 2.0
+publisher=My OpenOffice en
+has_publisher=yes
+release_notes=Release Notes
+has_release_notes=yes
+
+[4]
+file=pub4.oxt
+display_name=pub4.oxt Version 2.0
+publisher=My OpenOffice en-GB
+has_publisher=yes
+release_notes=Release Notes
+has_release_notes=yes
+
+[5]
+file=pub5.oxt
+display_name=pub5.oxt Version 2.0
+publisher=My OpenOffice de
+has_publisher=yes
+release_notes=Release Notes
+has_release_notes=yes
+
+[6]
+file=pub6.oxt
+display_name=pub6.oxt Version 2.0
+publisher=My OpenOffice en-US
+has_publisher=yes
+release_notes=Release Notes
+has_release_notes=no
+
+[7]
+file=pub7.oxt
+display_name=pub7.oxt Version 2.0
+publisher=
+has_publisher=no
+release_notes=Release Notes
+has_release_notes=yes
