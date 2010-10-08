@@ -696,7 +696,7 @@ BOOL ScDrawView::SelectObject( const String& rName )
 }
 
 
-FASTBOOL ScDrawView::InsertObjectSafe(SdrObject* pObj, SdrPageView& rPV, ULONG nOptions)
+bool ScDrawView::InsertObjectSafe(SdrObject* pObj, SdrPageView& rPV, ULONG nOptions)
 {
     //  Markierung nicht aendern, wenn Ole-Objekt aktiv
     //  (bei Drop aus Ole-Objekt wuerde sonst mitten im ExecuteDrag deaktiviert!)

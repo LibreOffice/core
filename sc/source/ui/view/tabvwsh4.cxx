@@ -533,7 +533,7 @@ void __EXPORT ScTabViewShell::Move()
 
 //------------------------------------------------------------------
 
-void __EXPORT ScTabViewShell::ShowCursor(FASTBOOL /* bOn */)
+void __EXPORT ScTabViewShell::ShowCursor(bool /* bOn */)
 {
 /*!!!   ShowCursor wird nicht paarweise wie im gridwin gerufen.
         Der CursorLockCount am Gridwin muss hier direkt auf 0 gesetzt werden
@@ -1599,7 +1599,7 @@ BOOL ScTabViewShell::SfxKeyInput(const KeyEvent& rKeyEvent)
     return sal::static_int_cast<BOOL>(SfxViewShell::KeyInput( rKeyEvent ));
 }
 
-FASTBOOL __EXPORT ScTabViewShell::KeyInput( const KeyEvent &rKeyEvent )
+bool __EXPORT ScTabViewShell::KeyInput( const KeyEvent &rKeyEvent )
 {
 //  return SfxViewShell::KeyInput( rKeyEvent );
     return TabKeyInput( rKeyEvent );

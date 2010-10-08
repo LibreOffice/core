@@ -118,7 +118,7 @@ public:
                     ScDrawLayer( ScDocument* pDocument, const String& rName );
     virtual         ~ScDrawLayer();
 
-    virtual SdrPage*  AllocPage(FASTBOOL bMasterPage);
+    virtual SdrPage*  AllocPage(bool bMasterPage);
     virtual SdrModel* AllocModel() const;
     virtual void    SetChanged( sal_Bool bFlg = sal_True );
 

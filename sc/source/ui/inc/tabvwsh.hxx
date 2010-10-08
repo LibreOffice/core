@@ -201,7 +201,7 @@ protected:
     virtual void    Deactivate(BOOL bMDI);
     virtual USHORT  PrepareClose( BOOL bUI = TRUE, BOOL bForBrowsing = FALSE );
 
-    virtual void    ShowCursor(FASTBOOL bOn);
+    virtual void    ShowCursor(bool bOn);
 
     virtual void    Move();     // Benachrichtigung
 
@@ -226,7 +226,7 @@ protected:
 
     virtual void    UIDeactivated( SfxInPlaceClient* pClient );
 
-    virtual FASTBOOL KeyInput( const KeyEvent &rKeyEvent );
+    virtual bool    KeyInput( const KeyEvent &rKeyEvent );
     virtual SdrView* GetDrawView() const;
 
 public:

@@ -3062,15 +3062,15 @@ XclImpSimpleDffConverter::~XclImpSimpleDffConverter()
 {
 }
 
-FASTBOOL XclImpSimpleDffConverter::GetColorFromPalette( USHORT nIndex, Color& rColor ) const
+int XclImpSimpleDffConverter::GetColorFromPalette( USHORT nIndex, Color& rColor ) const
 {
     ColorData nColor = GetPalette().GetColorData( static_cast< sal_uInt16 >( nIndex ) );
 
     if( nColor == COL_AUTO )
-        return FALSE;
+        return 0;
 
     rColor.SetColor( nColor );
-    return TRUE;
+    return 1;
 }
 
 // ----------------------------------------------------------------------------
