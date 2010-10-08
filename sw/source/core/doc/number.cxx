@@ -101,8 +101,15 @@ const SwNumFmt& SwNumRule::Get( USHORT i ) const
 
 const SwNumFmt* SwNumRule::GetNumFmt( USHORT i ) const
 {
+    const SwNumFmt * pResult = NULL;
+
     ASSERT_ID( i < MAXLEVEL && eRuleType < RULE_END, ERR_NUMLEVEL);
-    return aFmts[ i ];
+    if ( i < MAXLEVEL && eRuleType < RULE_END)
+    {
+        pResult = aFmts[ i ];
+    }
+
+    return pResult;
 }
 
 // --> OD 2008-07-08 #i91400#
