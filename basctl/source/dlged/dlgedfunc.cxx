@@ -302,7 +302,7 @@ BOOL DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
 
                         if ( pView->IsDragObj() )
                         {
-                            FASTBOOL bWasNoSnap = rDragStat.IsNoSnap();
+                            bool bWasNoSnap = rDragStat.IsNoSnap();
                             BOOL bWasSnapEnabled = pView->IsSnapEnabled();
 
                             // switch snapping off

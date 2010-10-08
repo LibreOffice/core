@@ -328,10 +328,10 @@ void __EXPORT BasicIDEShell::Move()
         ((ModulWindow*)pCurWin)->FrameWindowMoved();
 }
 
-void __EXPORT BasicIDEShell::ShowCursor( FASTBOOL bOn )
+void __EXPORT BasicIDEShell::ShowCursor( bool bOn )
 {
     if ( pCurWin && pCurWin->ISA( ModulWindow ) )
-        ((ModulWindow*)pCurWin)->ShowCursor( (BOOL)bOn );
+        ((ModulWindow*)pCurWin)->ShowCursor( bOn );
 }
 
 // Hack for #101048

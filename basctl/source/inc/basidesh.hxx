@@ -151,7 +151,7 @@ protected:
     virtual void        Deactivate(BOOL bMDI);
 
     virtual void        Move();
-    virtual void        ShowCursor( FASTBOOL bOn = TRUE );
+    virtual void        ShowCursor( bool bOn = true );
 
     void                CreateModulWindowLayout();
     void                DestroyModulWindowLayout();
