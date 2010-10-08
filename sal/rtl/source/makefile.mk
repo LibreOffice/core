@@ -138,25 +138,6 @@ APP1OBJS=$(SLO)$/gen_makefile.obj
 APP1LIBSALCPPRT=
 APP1RPATH=NONE
 
-# --- Extra objs ----------------------------------------------------
-
-.IF "$(OS)"=="LINUX" || "$(OS)"=="OS2"
-
-#
-# This part builds a second version of alloc.c, with 
-# FORCE_SYSALLOC defined. Is later used in util/makefile.mk
-# to build a tiny replacement lib to LD_PRELOAD into the 
-# office, enabling e.g. proper valgrinding.
-#
-
-SECOND_BUILD=SYSALLOC
-SYSALLOC_SLOFILES=	$(SLO)$/alloc_global.obj
-SYSALLOCCDEFS+=-DFORCE_SYSALLOC
-
-.ENDIF # .IF "$(OS)"=="LINUX"
-
-#.ENDIF
-
 .ENDIF
 
 # --- Makefile snippet  --------------------------------------------

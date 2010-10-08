@@ -245,6 +245,7 @@ static oslProfile SAL_CALL osl_psz_openProfile(const sal_Char *pszProfileName, o
 
     if ( pProfile == 0 )
     {
+        closeFileImpl(pFile, Flags);
         return 0;
     }
 
