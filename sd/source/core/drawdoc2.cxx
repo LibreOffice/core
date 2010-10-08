@@ -566,8 +566,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
         /**********************************************************************
         * Handzettel-Seite einfuegen
         **********************************************************************/
-        BOOL bMasterPage;
-        SdPage* pHandoutPage = dynamic_cast< SdPage* >( AllocPage(bMasterPage=FALSE) );
+        SdPage* pHandoutPage = dynamic_cast< SdPage* >( AllocPage(FALSE) );
 
         SdPage* pRefPage = NULL;
 
@@ -592,7 +591,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
         /**********************************************************************
         * MasterPage einfuegen und an der Handzettel-Seite vermerken
         **********************************************************************/
-        SdPage* pHandoutMPage = (SdPage*) AllocPage(bMasterPage=TRUE);
+        SdPage* pHandoutMPage = (SdPage*) AllocPage(TRUE);
         pHandoutMPage->SetSize( pHandoutPage->GetSize() );
         pHandoutMPage->SetPageKind(PK_HANDOUT);
         pHandoutMPage->SetBorder( pHandoutPage->GetLftBorder(),
@@ -615,7 +614,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
 
         if (nPageCount == 0)
         {
-            pPage = dynamic_cast< SdPage* >( AllocPage(bMasterPage=FALSE) );
+            pPage = dynamic_cast< SdPage* >( AllocPage(FALSE) );
 
             if( pRefPage )
             {
@@ -671,7 +670,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
         /**********************************************************************
         * MasterPage einfuegen und an der Seite vermerken
         **********************************************************************/
-        SdPage* pMPage = (SdPage*) AllocPage(bMasterPage=TRUE);
+        SdPage* pMPage = (SdPage*) AllocPage(TRUE);
         pMPage->SetSize( pPage->GetSize() );
         pMPage->SetBorder( pPage->GetLftBorder(),
                            pPage->GetUppBorder(),
@@ -685,7 +684,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
         /**********************************************************************
         * Notizen-Seite einfuegen
         **********************************************************************/
-        SdPage* pNotesPage = (SdPage*) AllocPage(bMasterPage=FALSE);
+        SdPage* pNotesPage = (SdPage*) AllocPage(FALSE);
 
         if( pRefDocument )
             pRefPage = pRefDocument->GetSdPage( 0, PK_NOTES );
@@ -717,7 +716,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
         /**********************************************************************
         * MasterPage einfuegen und an der Notizen-Seite vermerken
         **********************************************************************/
-        SdPage* pNotesMPage = (SdPage*) AllocPage(bMasterPage=TRUE);
+        SdPage* pNotesMPage = (SdPage*) AllocPage(TRUE);
         pNotesMPage->SetSize( pNotesPage->GetSize() );
         pNotesMPage->SetPageKind(PK_NOTES);
         pNotesMPage->SetBorder( pNotesPage->GetLftBorder(),

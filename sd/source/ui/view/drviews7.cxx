@@ -236,7 +236,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem( SID_DRAW_TEXT_VERTICAL );
     }
 
-    FASTBOOL bConvertToPathPossible = mpDrawView->IsConvertToPathObjPossible(FALSE);
+    bool bConvertToPathPossible = mpDrawView->IsConvertToPathObjPossible(FALSE);
 
     const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
     const ULONG nMarkCount = rMarkList.GetMarkCount();

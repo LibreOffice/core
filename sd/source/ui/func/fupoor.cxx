@@ -816,7 +816,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
 
                             if(mpView->IsDragObj())
                             {
-                                FASTBOOL bWasNoSnap = rDragStat.IsNoSnap();
+                                bool bWasNoSnap = rDragStat.IsNoSnap();
                                 BOOL bWasSnapEnabled = mpView->IsSnapEnabled();
 
                                 // switch snapping off

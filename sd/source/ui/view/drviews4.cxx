@@ -432,7 +432,7 @@ void DrawViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
 {
     if ( !IsInputLocked() )
     {
-        FASTBOOL bIsSetPageOrg = mpDrawView->IsSetPageOrg();
+        bool bIsSetPageOrg = mpDrawView->IsSetPageOrg();
 
         if (mbIsRulerDrag)
         {

@@ -312,9 +312,9 @@ void SdPage::SetModel(SdrModel* pNewModel)
 |*
 \************************************************************************/
 
-FASTBOOL SdPage::IsReadOnly() const
+bool SdPage::IsReadOnly() const
 {
-    return FALSE;
+    return false;
 }
 
 /*************************************************************************

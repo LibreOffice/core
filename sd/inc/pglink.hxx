@@ -47,7 +47,7 @@ public:
     virtual void Closed();
     virtual void DataChanged( const String& ,
                               const ::com::sun::star::uno::Any & );
-    FASTBOOL     Connect() { return 0 != SvBaseLink::GetRealObject(); }
+    bool         Connect() { return 0 != SvBaseLink::GetRealObject(); }
 };
 
 #else
