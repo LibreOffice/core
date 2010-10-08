@@ -223,24 +223,14 @@ void Shape::addChildren(
     {
         awt::Rectangle aShapeRect;
         awt::Rectangle* pShapeRect = 0;
-        if ( ( nGlobalLeft != SAL_MAX_INT32 ) && ( nGlobalRight != SAL_MIN_INT32 ) && ( nGlobalTop != SAL_MAX_INT32 ) && ( nGlobalBottom != SAL_MIN_INT32 ) )
-        {
-            sal_Int32 nGlobalWidth = nGlobalRight - nGlobalLeft;
-            sal_Int32 nGlobalHeight = nGlobalBottom - nGlobalTop;
-            if ( nGlobalWidth && nGlobalHeight )
-            {
-                double fWidth = (*aIter)->maSize.Width;
-                double fHeight= (*aIter)->maSize.Height;
-                double fXScale = (double)rClientRect.Width / (double)nGlobalWidth;
-                double fYScale = (double)rClientRect.Height / (double)nGlobalHeight;
-                aShapeRect.X = static_cast< sal_Int32 >( ( ( (*aIter)->maPosition.X - nGlobalLeft ) * fXScale ) + rClientRect.X );
-                aShapeRect.Y = static_cast< sal_Int32 >( ( ( (*aIter)->maPosition.Y - nGlobalTop  ) * fYScale ) + rClientRect.Y );
-                fWidth *= fXScale;
-                fHeight *= fYScale;
-                aShapeRect.Width = static_cast< sal_Int32 >( fWidth );
-                aShapeRect.Height = static_cast< sal_Int32 >( fHeight );
-                pShapeRect = &aShapeRect;
-            }
+        Shape& rChild = *(*aIter);
+
+        if ( rChild.maSize.Width != maSize.Width || rChild.maSize.Height != maSize.Height || rChild.maPosition.X != maPosition.X || rChild.maPosition.Y != maPosition.Y ) {
+            aShapeRect.X = maPosition.X + rChild.maPosition.X - maChPosition.X;
+            aShapeRect.Y = maPosition.Y + rChild.maPosition.Y - maChPosition.Y;
+            aShapeRect.Width = maSize.Width + rChild.maSize.Width - maChSize.Width;
+            aShapeRect.Height = maSize.Height + rChild.maSize.Height - maChSize.Height;
+            pShapeRect = &aShapeRect;
         }
         (*aIter++)->addShape( rFilterBase, pTheme, rxShapes, pShapeRect, pShapeMap );
     }

@@ -116,6 +116,9 @@ public:
 
     table::TablePropertiesPtr       getTableProperties();
 
+    void                              setChildPosition( com::sun::star::awt::Point nPosition ){ maChPosition = nPosition; }
+    void                              setChildSize( com::sun::star::awt::Size aSize ){ maChSize = aSize; }
+
     void                            setPosition( com::sun::star::awt::Point nPosition ){ maPosition = nPosition; }
     void                            setSize( com::sun::star::awt::Size aSize ){ maSize = aSize; }
     void                            setRotation( sal_Int32 nRotation ) { mnRotation = nRotation; }
@@ -182,6 +185,9 @@ protected:
                             ShapeIdMap* pShapeMap );
 
     std::vector< ShapePtr >     maChildren;               // only used for group shapes
+    com::sun::star::awt::Size   maChSize;                 // only used for group shapes
+    com::sun::star::awt::Point  maChPosition;             // only used for group shapes
+
     TextBodyPtr                 mpTextBody;
     LinePropertiesPtr           mpLinePropertiesPtr;
     FillPropertiesPtr           mpFillPropertiesPtr;
