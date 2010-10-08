@@ -85,6 +85,7 @@ public:
     virtual vos::IMutex*        GetYieldMutex();
     virtual ULONG               ReleaseYieldMutex();
     virtual void                AcquireYieldMutex( ULONG nCount );
+    virtual bool                CheckYieldMutex();
     virtual void                Yield( bool, bool );
     virtual bool                AnyInput( USHORT nType );
     virtual SalMenu*                CreateMenu( BOOL bMenuBar );

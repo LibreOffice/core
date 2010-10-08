@@ -102,6 +102,7 @@ public:
     virtual vos::IMutex*        GetYieldMutex();
     virtual ULONG               ReleaseYieldMutex();
     virtual void                AcquireYieldMutex( ULONG nCount );
+    virtual bool                CheckYieldMutex();
 
     virtual void                Yield( bool bWait, bool bHandleAllCurrentEvents );
     virtual bool                AnyInput( USHORT nType );

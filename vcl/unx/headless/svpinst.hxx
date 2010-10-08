@@ -176,6 +176,7 @@ public:
     virtual vos::IMutex*    GetYieldMutex();
     virtual ULONG           ReleaseYieldMutex();
     virtual void            AcquireYieldMutex( ULONG nCount );
+    virtual bool            CheckYieldMutex();
 
     // wait next event and dispatch
     // must returned by UserEvent (SalFrame::PostEvent)

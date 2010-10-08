@@ -133,6 +133,8 @@ public:
     virtual vos::IMutex*        GetYieldMutex() = 0;
     virtual ULONG               ReleaseYieldMutex() = 0;
     virtual void                AcquireYieldMutex( ULONG nCount ) = 0;
+    // return true, if yield mutex is owned by this thread, else false
+    virtual bool                CheckYieldMutex() = 0;
 
     // wait next event and dispatch
     // must returned by UserEvent (SalFrame::PostEvent)

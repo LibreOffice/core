@@ -327,6 +327,19 @@ void SvpSalInstance::AcquireYieldMutex( ULONG nCount )
     }
 }
 
+bool SvpSalInstance::CheckYieldMutex()
+{
+    bool bRet = true;
+
+    if ( m_aYieldMutex.GetThreadId() !=
+         vos::OThread::getCurrentIdentifier() )
+    {
+        bRet = false;
+    }
+
+    return bRet;
+}
+
 void SvpSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
 {
     // first, check for already queued events.
