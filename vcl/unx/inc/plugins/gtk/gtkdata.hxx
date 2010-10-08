@@ -73,8 +73,6 @@ public:
     virtual long Dispatch( XEvent *pEvent );
     virtual void initScreen( int nScreen ) const;
 
-    virtual int GetDefaultMonitorNumber() const;
-
     static GdkFilterReturn filterGdkEvent( GdkXEvent* sys_event,
                                            GdkEvent* event,
                                            gpointer data );
