@@ -978,6 +978,8 @@ STD_UNO_LIB_FILE(gid_File_Lib_Msworks,msworks)
 
 STD_UNO_LIB_FILE(gid_File_Lib_T602Filter,t602filter)
 
+STD_UNO_LIB_FILE(gid_File_Lib_Wlwp,lwpft)
+
 STD_UNO_LIB_FILE(gid_File_Lib_Writerfilter,writerfilter)
 
 #ifdef WNT
