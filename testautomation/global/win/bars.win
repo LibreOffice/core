@@ -57,16 +57,16 @@ Zentriert .uno:AlignCenter
 '-------------------------------------------------------------------------
 *Arrowsbar .HelpId:arrowsbar
 '-------------------------------------------------------------------------
-LinieMitKreisPfeilende sym:.uno:LineCircleArrow
-LinieMitPfeilKreisende sym:.uno:LineArrowCircle
-LinieMitPfeilQuadratende sym:.uno:LineArrowSquare
-LinieMitPfeilanfang sym:.uno:LineArrowStart
-LinieMitPfeilende sym:.uno:LineArrowEnd
-LinieMitPfeilenden sym:.uno:LineArrows
-LinieMitQuadratKreisende sym:.uno:LineSquareArrow
-LinieWinkel sym:.uno:Line_Diagonal
-LinieZeichnen sym:.uno:Line
-Masslinie sym:.uno:MeasureLine
+LinieMitKreisPfeilende .uno:LineCircleArrow
+LinieMitPfeilKreisende .uno:LineArrowCircle
+LinieMitPfeilQuadratende .uno:LineArrowSquare
+LinieMitPfeilanfang .uno:LineArrowStart
+LinieMitPfeilende .uno:LineArrowEnd
+LinieMitPfeilenden .uno:LineArrows
+LinieMitQuadratKreisende .uno:LineSquareArrow
+LinieWinkel .uno:Line_Diagonal
+LinieZeichnen .uno:Line
+Masslinie .uno:MeasureLine
 '-------------------------------------------------------------------------
 *Arrowshapes .HelpId:arrowshapes
 '-------------------------------------------------------------------------
@@ -149,7 +149,7 @@ Line3 .uno:CalloutShapes.line-callout-3
 *ChooseModebar .HelpId:choosemodebar
 '-------------------------------------------------------------------------
 Drehen .uno:ToggleObjectRotateMode
-GluePoints sym:.uno:GlueEditMode
+GluePoints .uno:GlueEditMode
 Rotationskoerper .uno:ConvertInto3DLathe
 SetzenAufKreisPerspektivisch .uno:CrookRotate
 SetzenAufKreisSchraeggestellt .uno:CrookSlant
@@ -209,20 +209,20 @@ Vpfeile .uno:ConnectorArrows
 '-------------------------------------------------------------------------
 *DBQueryBrowsebar .HelpID:browserobjectbar
 '-------------------------------------------------------------------------
-ApplyFilter sym:.uno:FormFiltered
-Autofilter sym:.uno:AutoFilter
-CloseDoc sym:.uno:CloseWin
-DataToText sym:.uno:SbaBrwInsert
-DefaultFilter sym:.uno:FilterCrit
-Edit sym:.uno:EditDoc
-Explorer sym:.uno:DSBrowserExplorer
-Refresh sym:.uno:Refresh
-RemoveFilter sym:.uno:RemoveFilterSort
+ApplyFilter .uno:FormFiltered
+Autofilter .uno:AutoFilter
+CloseDoc .uno:CloseWin
+DataToText .uno:SbaBrwInsert
+DefaultFilter .uno:FilterCrit
+Edit .uno:EditDoc
+Explorer .uno:DSBrowserExplorer
+Refresh .uno:Refresh
+RemoveFilter .uno:RemoveFilterSort
 SaveNewDataEntry sym:DBACCESS_HID_BROWSER_SAVE_RECORD
-Search sym:.uno:RecSearch
-SortAscending sym:.uno:Sortup
-SortDescending sym:.uno:SortDown
-SortOrder sym:.uno:OrderCrit
+Search .uno:RecSearch
+SortAscending .uno:Sortup
+SortDescending .uno:SortDown
+SortOrder .uno:OrderCrit
 Undo sym:DBACCESS_HID_BROWSER_UNDO_RECORD
 '-------------------------------------------------------------------------
 *Designobjectbar .HelpId:designobjectbar
@@ -248,7 +248,7 @@ Linie .uno:Line
 Polygon .uno:Polygon_Unfilled
 Rechteck .uno:Rect
 Textobjekt .uno:DrawText
-Toolbox sym:.uno:DrawSelect
+Toolbox .uno:DrawSelect
 VerticalCallout .uno:VerticalCaption
 VerticalText .uno:VerticalText
 LineArrowEnd .uno:LineArrowEnd
@@ -308,7 +308,7 @@ Linienbreite .uno:LineWidth
 Linienendenstil .uno:LineEndStyle
 Linienfarbe .uno:XLineColor
 Linienstil .uno:XLineStyle
-PunkteBearbeiten sym:.uno:ToggleObjectBezierMode
+PunkteBearbeiten .uno:ToggleObjectBezierMode
 Schatten .uno:FillShadow
 DesignerDialog .uno:DesignerDialog
 VerankerungWechseln .uno:ToggleAnchorType
@@ -327,21 +327,21 @@ Group .uno:FormatGroup
 '-------------------------------------------------------------------------
 *Ellipsesbar .HelpId:ellipsesbar
 '-------------------------------------------------------------------------
-EllipseLeer sym:.uno:Ellipse_Unfilled
-EllipseVoll sym:.uno:Ellipse
-Ellipsen sym:.uno:EllipseToolbox
-EllipsenabschnittLeer sym:.uno:EllipseCut_Unfilled
-EllipsenabschnittVoll sym:.uno:EllipseCut
-Ellipsenbogen sym:.uno:Arc
-EllipsensegmentLeer sym:.uno:Pie_Unfilled
-EllipsensegmentVoll sym:.uno:Pie
-KreisLeer sym:.uno:Circle_Unfilled
-KreisVoll sym:.uno:Circle
-KreisabschnittLeer sym:.uno:CircleCut_Unfilled
-KreisabschnittVoll sym:.uno:CircleCut
-Kreisbogen sym:.uno:CircleArc
-KreissegmentLeer sym:.uno:CirclePie_Unfilled
-KreissegmentVoll sym:.uno:CirclePie
+EllipseLeer .uno:Ellipse_Unfilled
+EllipseVoll .uno:Ellipse
+Ellipsen .uno:EllipseToolbox
+EllipsenabschnittLeer .uno:EllipseCut_Unfilled
+EllipsenabschnittVoll .uno:EllipseCut
+Ellipsenbogen .uno:Arc
+EllipsensegmentLeer .uno:Pie_Unfilled
+EllipsensegmentVoll .uno:Pie
+KreisLeer .uno:Circle_Unfilled
+KreisVoll .uno:Circle
+KreisabschnittLeer .uno:CircleCut_Unfilled
+KreisabschnittVoll .uno:CircleCut
+Kreisbogen .uno:CircleArc
+KreissegmentLeer .uno:CirclePie_Unfilled
+KreissegmentVoll .uno:CirclePie
 '-------------------------------------------------------------------------
 *ExtrusionObjectBar .HelpId:extrusionobjectbar
 '-------------------------------------------------------------------------
@@ -590,22 +590,22 @@ ObjectAlign .uno:ObjectAlign
 *FrameObjectbar .HelpId:frameobjectbar
 '-------------------------------------------------------------------------
 Durchlauf .uno:WrapThrough
-EigenschaftenControls sym:.uno:ShowBrowser
+EigenschaftenControls .uno:ShowBrowser
 EigenschaftenObjekt .uno:FrameDialog
 GanzNachHinten .uno:SendToBack
 GanzNachVorn .uno:BringToFront
 Hintergrundfarbe .uno:BackgroundColor
-Hintergrundmuster sym:.uno:BackgroundPatternController
-HorizontalSpiegeln sym:.uno:FlipHorizontal
-InDenHintergrund sym:.uno:SetObjectToBackground
-InDenVordergrund sym:.uno:SetObjectToForeground
+Hintergrundmuster .uno:BackgroundPatternController
+HorizontalSpiegeln .uno:FlipHorizontal
+InDenHintergrund .uno:SetObjectToBackground
+InDenVordergrund .uno:SetObjectToForeground
 LinienFarbe .uno:FrameLineColor
 Linienstil .uno:LineStyle
 Links .uno:AlignLeft
 Mitte .uno:AlignVerticalCenter
 NoWrap .uno:WrapOff
 Oben .uno:AlignTop
-PositionUndGroesse sym:.uno:TransformDialog
+PositionUndGroesse .uno:TransformDialog
 Rechts .uno:AlignRight
 UmlaufDynamisch .uno:WrapIdeal
 UmlaufLinks .uno:WrapLeft
@@ -615,7 +615,7 @@ Unten .uno:AlignBottom
 Verankerungwechseln .uno:ToggleAnchorType
 Verketten .uno:ChainFrames
 VerkettungLoesen .uno:UnhainFrames
-VertikalSpiegeln sym:.uno:FlipVertical
+VertikalSpiegeln .uno:FlipVertical
 Vorlage .uno:StyleApply
 Wrap .uno:WrapOn
 Zentriert .uno:AlignHorizontalCenter
@@ -658,54 +658,54 @@ SendToBack .uno:SendToBack
 ToggleAnchorType .uno:ToggleAnchorType
 AreaFilling sym:SVX_HID_FILL_ATTR_LISTBOX
 AreaStyle sym:SVX_HID_FILL_TYPE_LISTBOX
-Ausrichtung sym:.uno:ObjectAlign
+Ausrichtung .uno:ObjectAlign
 Blauanteil .uno:GrafBlue
 ColorSettings .uno:ColorSettings
 Crop   .uno:Crop
-Drehen sym:.uno:ToggleObjectRotateMode
-Durchlauf sym:.uno:WrapThrough
-EigenschaftenControls sym:.uno:ShowBrowser
-EigenschaftenObjekt sym:.uno:FrameDialog
+Drehen .uno:ToggleObjectRotateMode
+Durchlauf .uno:WrapThrough
+EigenschaftenControls .uno:ShowBrowser
+EigenschaftenObjekt .uno:FrameDialog
 Filter .uno:GraphicFilterToolbox
 Flaeche .uno:FormatArea
-Flaechenfarbe sym:.uno:FillStyle
-Flaechenstil sym:.uno:FillStyle
+Flaechenfarbe .uno:FillStyle
+Flaechenstil .uno:FillStyle
 Gamma .uno:GrafGamma
-GanzNachHinten sym:.uno:SendToBack
-GanzNachVorn sym:.uno:BringToFront
-GrafikEigenschaften sym:.uno:GraphicDialog
+GanzNachHinten .uno:SendToBack
+GanzNachVorn .uno:BringToFront
+GrafikEigenschaften .uno:GraphicDialog
 Grafikmodus .uno:GrafMode
 Gruenanteil .uno:GrafGreen
 Helligkeit .uno:GrafLuminance
-Hintergrundfarbe sym:.uno:BackgroundColor
-Hintergrundmuster sym:.uno:BackgroundPatternController
+Hintergrundfarbe .uno:BackgroundColor
+Hintergrundmuster .uno:BackgroundPatternController
 HorizontalSpiegeln .uno:FlipHorizontal
-ImageMapEditor sym:.uno:ImageMapDialog
-InDenHintergrund sym:.uno:SetObjectToBackground
-InDenVordergrund sym:.uno:SetObjectToForeground
-KeinUmlauf sym:.uno:WrapOff
+ImageMapEditor .uno:ImageMapDialog
+InDenHintergrund .uno:SetObjectToBackground
+InDenVordergrund .uno:SetObjectToForeground
+KeinUmlauf .uno:WrapOff
 Kontrast .uno:GrafContrast
 Linie .uno:FormatLine
-Linienbreite sym:.uno:LineWidth
-Linienendenstil sym:.uno:LineEndStyle
-Linienfarbe sym:.uno:XLineColor
-Linienstil sym:.uno:XLineStyle
-Links sym:.uno:AlignLeft
-Mitte sym:.uno:AlignVerticalCenter
-Oben sym:.uno:AlignTop
-PositionUndGroesse sym:.uno:TransformDialog
-PunkteBearbeiten sym:.uno:ToggleObjectBezierMode
-Rechts sym:.uno:AlignRight
+Linienbreite .uno:LineWidth
+Linienendenstil .uno:LineEndStyle
+Linienfarbe .uno:XLineColor
+Linienstil .uno:XLineStyle
+Links .uno:AlignLeft
+Mitte .uno:AlignVerticalCenter
+Oben .uno:AlignTop
+PositionUndGroesse .uno:TransformDialog
+PunkteBearbeiten .uno:ToggleObjectBezierMode
+Rechts .uno:AlignRight
 Rotanteil .uno:GrafRed
 Schatten .uno:FillShadow
 Transparenz .uno:GrafTransparence
-Umlauf sym:.uno:WrapOn
-UmlaufLinks sym:.uno:WrapLeft
-UmlaufRechts sym:.uno:WrapRight
-Umrandung sym:.uno:SetBorderStyle
-Unten sym:.uno:AlignBottom
+Umlauf .uno:WrapOn
+UmlaufLinks .uno:WrapLeft
+UmlaufRechts .uno:WrapRight
+Umrandung .uno:SetBorderStyle
+Unten .uno:AlignBottom
 VertikalSpiegeln .uno:FlipVertical
-Zentriert sym:.uno:AlignHorizontalCenter
+Zentriert .uno:AlignHorizontalCenter
 InsertGraphic .uno:InsertGraphic
 '-------------------------------------------------------------------------
 *GraphicFilterBar .HelpId:graffilterbar
@@ -725,11 +725,11 @@ Mosaic .uno:GraphicFilterMosaic
 *Hyperlinkleiste sym:SVX_HID_OFA_HYPERLINK_DLG
 '-------------------------------------------------------------------------
 Frame sym:SVX_HID_OFA_HYPERLINK_TARGET
-Link sym:.uno:SetHyperlink
+Link .uno:SetHyperlink
 Suchen sym:SVX_HID_OFA_HYPERLINK_SEARCH
 UrlAdresse sym:SVX_HID_OFA_HYPERLINK_URL
 UrlName sym:SVX_HID_OFA_HYPERLINK_NAME
-Verknuepfung sym:.uno:AddBookmark
+Verknuepfung .uno:AddBookmark
 '-------------------------------------------------------------------------
 *Insertbar .HelpId:insertbar
 '-------------------------------------------------------------------------
@@ -743,13 +743,13 @@ Frame .uno:InsertObjectFloatingFrame
 Fussnote .uno:InsertFootnote
 Grafik .uno:InsertGraphic
 InsertSpreadsheet .uno:InsertSpreadsheet
-MehrspaltigeRahmen sym:.uno:InsertFrame
+MehrspaltigeRahmen .uno:InsertFrame
 OLEObjekt .uno:InsertObject
 Plugin .uno:InsertPlugin
 Rahmen .uno:InsertFrameInteract
 Seite .uno:InsertPage
 Sonderzeichen .uno:InsertSymbol
-Spalten sym:.uno:InsertFrameInteractNoColumns
+Spalten .uno:InsertFrameInteractNoColumns
 Tabelle .uno:InsertTable
 Textmarke .uno:InsertBookmark
 Verzeichnis .uno:InsertIndexesEntry
@@ -799,10 +799,10 @@ Controls .uno:ChooseControls
 FindParanthese .uno:MatchGroup
 InsertSourceText .uno:LoadBasic
 Library .uno:LibSelector
-Macros sym:.uno:ChooseMacro
+Macros .uno:ChooseMacro
 ManageBreakpoints .uno:ManageBreakPoints
-Modules sym:.uno:ModuleDialog
-ObjectCatalog sym:.uno:ObjectCatalog
+Modules .uno:ModuleDialog
+ObjectCatalog .uno:ObjectCatalog
 ProcedureStep .uno:BasicStepOver
 SaveSourceText .uno:SaveBasicAs
 SingleStep .uno:BasicStepInto
@@ -833,15 +833,15 @@ BulletsOnOff .uno:DefaultBullet
 '-------------------------------------------------------------------------
 *OB_DB_Tabledesign sym:DBACCESS_HID_TLB_TABLEDESIGN
 '-------------------------------------------------------------------------
-Copy sym:.uno:Copy
-Cut sym:.uno:Cut
-Edit sym:.uno:EditDoc
+Copy .uno:Copy
+Cut .uno:Cut
+Edit .uno:EditDoc
 NoConnection sym:DBACCESS_HID_TABLE_DESIGN_NO_CONNECTION
-Paste sym:.uno:Paste
-Redo sym:.uno:Redo
-Save sym:.uno:Save
-SaveAs sym:.uno:SaveAs
-Undo sym:.uno:Undo
+Paste .uno:Paste
+Redo .uno:Redo
+Save .uno:Save
+SaveAs .uno:SaveAs
+Undo .uno:Undo
 '-------------------------------------------------------------------------
 *OL_SW_Rechenleiste sym:SW_HID_CALC_TOOLBOX
 '-------------------------------------------------------------------------
@@ -886,7 +886,7 @@ ZeilenGleichmaessig .uno:DistributeRows
 *Optionsbar .HelpId:optionsbar
 '-------------------------------------------------------------------------
 AlleGruppenVerlassen .uno:LeaveAllGroups
-AlleGruppierungenVerlassen sym:.uno:ConnectorLinesCircles
+AlleGruppierungenVerlassen .uno:ConnectorLinesCircles
 DrehmodusNachKlick .uno:ClickChangeRotation
 EinfacheHandles .uno:HandlesDraft
 FangenAnObjektRahmen .uno:SnapFrame
@@ -901,8 +901,8 @@ KeineFuellungen .uno:FillDraft
 GluePoints .uno:GlueEditMode
 NurHaarlinien .uno:LineDraft
 NurTextbreichSelektieren .uno:PickThrough
-ObjektMitAttributen sym:.uno:SolidCreate
-PunkteBearbeiten sym:.uno:ToggleObjectBezierMode
+ObjektMitAttributen .uno:SolidCreate
+PunkteBearbeiten .uno:ToggleObjectBezierMode
 RasterBenutzen .uno:GridUse
 RasterSichtbar .uno:GridVisible
 Schnellbearbeitung .uno:QuickEdit
@@ -924,33 +924,33 @@ ZoomPlus .uno:ZoomPlus
 '-------------------------------------------------------------------------
 *Positionbar .HelpId:positionbar
 '-------------------------------------------------------------------------
-GanzNachHinten sym:.uno:SendToBack
-GanzNachVorn sym:.uno:BringToFront
-HinterDasObjekt sym:.uno:BehindObject
-Vertauschen sym:.uno:ReverseOrder
-VorDasObjekt sym:.uno:BeforeObject
-WeiterNachHinten sym:.uno:Backward
-WeiterNachVorn sym:.uno:Forward
+GanzNachHinten .uno:SendToBack
+GanzNachVorn .uno:BringToFront
+HinterDasObjekt .uno:BehindObject
+Vertauschen .uno:ReverseOrder
+VorDasObjekt .uno:BeforeObject
+WeiterNachHinten .uno:Backward
+WeiterNachVorn .uno:Forward
 '-------------------------------------------------------------------------
 *Previewbar .HelpId:previewbar
 '-------------------------------------------------------------------------
-DruckenSeitenansicht sym:.uno:PrintPagePreView
+DruckenSeitenansicht .uno:PrintPagePreView
 ErsteSeite .uno:FirstPage
 GanzerBildschirm .uno:FullScreen
 KopfUndFusszeilen .uno:EditHeaderAndFooter
 LetzteSeite .uno:LastPage
 Margins .uno:Margins
-Massstab sym:.uno:Zoom
+Massstab .uno:Zoom
 MassstabVergroessern .uno:ZoomIn
 MassstabVerkleinern .uno:ZoomOut
 NaechsteSeite .uno:NextPage
 ScalingFactor .uno:ScalingFactor
-Schliessen sym:.uno:CloseWin
+Schliessen .uno:CloseWin
 Seitenansicht .uno:ClosePreview
 Seitenlayout .uno:PageFormatDialog
-VierSeiten sym:.uno:ShowMultiplePages
+VierSeiten .uno:ShowMultiplePages
 VorherigeSeite .uno:PreviousPage
-ZweiSeiten sym:.uno:ShowTwoPages
+ZweiSeiten .uno:ShowTwoPages
 '-------------------------------------------------------------------------
 *PreviewObjectbar .HelpId:previewobjectbar
 '-------------------------------------------------------------------------
@@ -961,11 +961,11 @@ Groesser .uno:ZoomPlus
 Kleiner .uno:ZoomMinus
 LetzteSeite .uno:GoToEndOfDoc
 Massstab .uno:PreviewZoom
-MassstabVergroessern sym:.uno:ZoomIn
-MassstabVerkleinern sym:.uno:ZoomOut
+MassstabVergroessern .uno:ZoomIn
+MassstabVerkleinern .uno:ZoomOut
 NaechsteSeite .uno:PageDown
 SeitenansichtSchliessen .uno:ClosePreview
-Seitenlayout sym:.uno:PageFormatDialog
+Seitenlayout .uno:PageFormatDialog
 Skalierung .uno:PreviewPrintOptions
 VierSeiten .uno:ShowMultiplePages
 VorherigeSeite .uno:PageUp
@@ -984,14 +984,14 @@ Verwerfen sym:SC_HID_INSWIN_CANCEL
 '-------------------------------------------------------------------------
 *Rectanglesbar .HelpId:rectanglesbar
 '-------------------------------------------------------------------------
-QuadratLeer sym:.uno:Square_Unfilled
-QuadratRundLeer sym:.uno:Square_Rounded_Unfilled
-QuadratRundVoll sym:.uno:Square_Rounded
-QuadratVoll sym:.uno:Square
-RechteckLeer sym:.uno:Rect_Unfilled
-RechteckRundLeer sym:.uno:Rect_Rounded_Unfilled
-RechteckRundVoll sym:.uno:Rect_Rounded
-RechteckVoll sym:.uno:Rect
+QuadratLeer .uno:Square_Unfilled
+QuadratRundLeer .uno:Square_Rounded_Unfilled
+QuadratRundVoll .uno:Square_Rounded
+QuadratVoll .uno:Square
+RechteckLeer .uno:Rect_Unfilled
+RechteckRundLeer .uno:Rect_Rounded_Unfilled
+RechteckRundVoll .uno:Rect_Rounded
+RechteckVoll .uno:Rect
 '-------------------------------------------------------------------------
 *SD_Farbleiste sym:SVX_HID_CTRL_COLOR
 '-------------------------------------------------------------------------
@@ -1035,22 +1035,22 @@ NativeSql .uno:SbaNativeSql
 '-------------------------------------------------------------------------
 Ausschneiden .uno:Cut
 Bearbeiten .uno:EditDoc
-DokSchliessen sym:.uno:CloseDoc
+DokSchliessen .uno:CloseDoc
 Drucken .uno:PrintDefault
 Einfuegen .uno:Paste
 ExportAsPDF .uno:ExportDirectToPDF
 FaxDrucken .uno:SendFax
 GalleryButton .uno:Gallery
-Gesamtbild sym:.uno:FullScreen
-GestalterButton sym:.uno:DesignerDialog
+Gesamtbild .uno:FullScreen
+GestalterButton .uno:DesignerDialog
 HyperlinkDialog .uno:HyperlinkDialog
-HyperlinkLeisteButton sym:.uno:InsertHyperlink
+HyperlinkLeisteButton .uno:InsertHyperlink
 Kopieren .uno:Copy
 NavigatorButton .uno:Navigator
 Neu .uno:AddDirect
 NeuDialog .uno:NewDoc
 Oeffnen .uno:Open
-RecordMacroButton sym:.uno:MacroRecorder
+RecordMacroButton .uno:MacroRecorder
 Redo .uno:Redo
 SortAscending .uno:SortAscending
 SortDescending .uno:SortDescending
@@ -1116,17 +1116,17 @@ Sortieren .uno:OrderCrit
 Hintergrundfarbe .uno:BackgroundColor
 LinienStil .uno:LineStyle
 Optimieren .uno:OptimizeTable
-Schriftart sym:.uno:CharFontName
-Schriftgroesse sym:.uno:FontHeight
+Schriftart .uno:CharFontName
+Schriftgroesse .uno:FontHeight
 SpalteAuswaehlen .uno:EntireColumn
 SpalteEinfuegen .uno:InsertColumns
 SpalteLoeschen .uno:DeleteColumns
 TabelleAuswaehlen .uno:SelectTable
-TabellenmodeFix sym:.uno:TableModeFix
-TabellenmodeProportional sym:.uno:TableModeFixProp
-TabellenmodeVariabel sym:.uno:TableModeVariable
+TabellenmodeFix .uno:TableModeFix
+TabellenmodeProportional .uno:TableModeFixProp
+TabellenmodeVariabel .uno:TableModeVariable
 Umrandung .uno:SetBorderStyle
-Vorlage sym:.uno:StyleApplyState
+Vorlage .uno:StyleApplyState
 Vorlage2 sym:SVX_HID_STYLE_LISTBOX
 ZeileAuswaehlen .uno:EntireRow
 ZeileEinfuegen .uno:InsertRows
@@ -1143,12 +1143,12 @@ TableProperties .uno:TableDialog
 '-------------------------------------------------------------------------
 *Textbar .HelpId:textbar
 '-------------------------------------------------------------------------
-FitVerticalTextToFrame sym:.uno:VerticalTextFitToSizeTool
-Legende sym:.uno:DrawCaption
-Rahmen sym:.uno:TextFitToSizeTool
-TextEinfuegen sym:.uno:Text
-VerticalCallout sym:.uno:VerticalCaption
-VerticalText sym:.uno:VerticalText
+FitVerticalTextToFrame .uno:VerticalTextFitToSizeTool
+Legende .uno:DrawCaption
+Rahmen .uno:TextFitToSizeTool
+TextEinfuegen .uno:Text
+VerticalCallout .uno:VerticalCaption
+VerticalText .uno:VerticalText
 '-------------------------------------------------------------------------
 *TextObjectbar .HelpId:textobjectbar
 '-------------------------------------------------------------------------
@@ -1198,7 +1198,7 @@ BulletsOnOff2 .uno:Bullet
 '-------------------------------------------------------------------------
 *Toolbar .HelpId:toolbar
 '-------------------------------------------------------------------------
-AlleEbenen sym:.uno:OutlineExpandAll
+AlleEbenen .uno:OutlineExpandAll
 Anordnung .uno:ObjectPosition
 ApplyFilter .uno:FormFiltered
 ArrowsToolbox .uno:ArrowsToolbox
@@ -1215,7 +1215,7 @@ ChangeBezier .uno:ChangeBezier
 ChangePolygon .uno:ChangePolygon
 ClearQuery .uno:DBClearQuery
 ConvertInto3D .uno:ConvertInto3D
-ConvertInto3Dnew sym:.uno:ExtrusionToggle
+ConvertInto3Dnew .uno:ExtrusionToggle
 ConvertInto3DLatheFast .uno:ConvertInto3DLatheFast
 Copy .uno:Copy
 CustomAnimation .uno:CustomAnimation
@@ -1237,7 +1237,7 @@ Feldbefehle .uno:InsertFieldCtrl
 Filter .uno:DataFilterStandardFilter
 FlowChartShapes .uno:FlowChartShapes
 FontworkGalleryFloater .uno:FontworkGalleryFloater
-FormatierungEinAus sym:.uno:OutlineFormat
+FormatierungEinAus .uno:OutlineFormat
 FormControls .uno:Config
 FormelAktualisieren .uno:Draw
 FormelSymbole .uno:SymbolCatalogue
@@ -1248,10 +1248,10 @@ GrafikenAusEin .uno:Graphic
 Gruppierung .uno:Group
 GruppierungAufheben .uno:Ungroup
 HTMLQuelltext sym:SW_HID_SOURCEVIEW
-Hinunterschieben sym:.uno:OutlineDown
-Hinunterstufen sym:.uno:OutlineRight
-Hochschieben sym:.uno:OutlineUp
-Hochstufen sym:.uno:OutlineLeft
+Hinunterschieben .uno:OutlineDown
+Hinunterstufen .uno:OutlineRight
+Hochschieben .uno:OutlineUp
+Hochstufen .uno:OutlineLeft
 Hyperlink .uno:InsertHyperlink
 Insert .uno:InsertToolbox
 InsertGraphic .uno:InsertGraphic
@@ -1263,7 +1263,7 @@ LineArrowEnd .uno:LineArrowEnd
 Mirror .uno:Mirror
 NamenDefinieren .uno:DefineName
 NewDoc .uno:NewDoc
-NurErsteEbene sym:.uno:OutlineCollapseAll
+NurErsteEbene .uno:OutlineCollapseAll
 ObjectAlign .uno:ObjectAlign
 ObjektEinfuegen .uno:InsertObjCtrl
 ObjekteEinfuegen .uno:InsObjCtrl
@@ -1280,12 +1280,12 @@ Redo .uno:Redo
 Refresh .uno:Refresh
 RemoveFilter .uno:RemoveFilterSort
 Rotate .uno:ToggleObjectRotateMode
-SchwarzweisDarstellung sym:.uno:ColorView
+SchwarzweisDarstellung .uno:ColorView
 ShowFormFunctions .uno:Config
 Save .uno:Save
 SaveAs .uno:SaveAs
 SortAscending .uno:Sortup
-SortDescending .uno:SortDown
+SortDescending .uno:Sortdown
 SortierenAb .uno:SortDescending
 SortierenAuf .uno:SortAscending
 SortOrder .uno:OrderCrit
@@ -1300,8 +1300,8 @@ Thesaurus .uno:Thesaurus
 ToolsGallery .uno:Gallery
 Transform .uno:TransformDialog
 Undo .uno:Undo
-UnterpunkteAnzeigen sym:.uno:OutlineExpand
-UnterpunkteAusblenden sym:.uno:OutlineCollapse
+UnterpunkteAnzeigen .uno:OutlineExpand
+UnterpunkteAusblenden .uno:OutlineCollapse
 Verbinder .uno:ConnectorToolbox
 Vergroessern .uno:ZoomIn
 Verkleinern .uno:ZoomOut
@@ -1338,7 +1338,7 @@ FormatSelection .uno:FormatSelection
 *ToolsCollectionBar .HelpId:insertcontrolsbar
 '-------------------------------------------------------------------------
 InsPushButton .uno:InsertPushbutton
-InsCheckBox .uno:CheckBox
+InsCheckBox .uno:Checkbox
 InsListBox .uno:InsertListbox
 InsFixedText .uno:InsertFixedText
 InsFrame .uno:Groupbox

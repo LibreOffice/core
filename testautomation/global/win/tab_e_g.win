@@ -1,65 +1,65 @@
-*TabEigenschaften sym:.uno:InsertObjectFloatingFrame
-FrameName sym:cui.Edit.32011.4
-Inhalt sym:cui.Edit.32011.6
-Oeffnen sym:cui.PushButton.32011.7
-An sym:cui.RadioButton.32011.13
-Aus sym:cui.RadioButton.32011.14
-Automatisch sym:cui.RadioButton.32011.15
-UmrandungAn sym:cui.RadioButton.32011.18
-UmrandungAus sym:cui.RadioButton.32011.20
-Breite sym:cui.NumericField.32011.10
-Hoehe sym:cui.NumericField.32011.8
-BreiteStandard sym:cui.CheckBox.32011.22
-HoeheStandard sym:cui.CheckBox.32011.22
+*TabEigenschaften .uno:InsertObjectFloatingFrame
+FrameName sym:cui:Edit:MD_INSERT_OBJECT_IFRAME:ED_FRAMENAME
+Inhalt sym:cui:Edit:MD_INSERT_OBJECT_IFRAME:ED_URL
+Oeffnen sym:cui:PushButton:MD_INSERT_OBJECT_IFRAME:BT_FILEOPEN
+An sym:cui:RadioButton:MD_INSERT_OBJECT_IFRAME:RB_SCROLLINGON
+Aus sym:cui:RadioButton:MD_INSERT_OBJECT_IFRAME:RB_SCROLLINGOFF
+Automatisch sym:cui:RadioButton:MD_INSERT_OBJECT_IFRAME:RB_SCROLLINGAUTO
+UmrandungAn sym:cui:RadioButton:MD_INSERT_OBJECT_IFRAME:RB_FRMBORDER_ON
+UmrandungAus sym:cui:RadioButton:MD_INSERT_OBJECT_IFRAME:RB_FRMBORDER_OFF
+Breite sym:cui:NumericField:MD_INSERT_OBJECT_IFRAME:NM_MARGINWIDTH
+Hoehe sym:cui:NumericField:MD_INSERT_OBJECT_IFRAME:NM_MARGINHEIGHT
+BreiteStandard sym:cui:CheckBox:MD_INSERT_OBJECT_IFRAME:CB_MARGINHEIGHTDEFAULT
+HoeheStandard sym:cui:CheckBox:MD_INSERT_OBJECT_IFRAME:CB_MARGINHEIGHTDEFAULT
 
-*TabEingabehilfe sym:sc.TabPage.697
-EingabehilfenbeiSelektion sym:sc.TriStateBox.697.11
-Titel sym:sc.Edit.697.13
-EingabeHilfe sym:sc.MultiLineEdit.697.15
+*TabEingabehilfe sym:sc:TabPage:TP_VALIDATION_INPUTHELP
+EingabehilfenbeiSelektion sym:sc:TriStateBox:TP_VALIDATION_INPUTHELP:TSB_HELP
+Titel sym:sc:Edit:TP_VALIDATION_INPUTHELP:EDT_TITLE
+EingabeHilfe sym:sc:MultiLineEdit:TP_VALIDATION_INPUTHELP:EDT_INPUTHELP
 
 *TabEinzuegeUndAbstaende sym:CUI_HID_FORMAT_PARAGRAPH_STD
-Automatisch sym:cui.CheckBox.10006.48
-Vonlinks sym:cui.MetricField.10006.11
-ErsteZeile sym:cui.MetricField.10006.13
-VonRechts sym:cui.MetricField.10006.15
-Oben sym:cui.MetricField.10006.21
-Unten sym:cui.MetricField.10006.23
-Zeilenabstand sym:cui.ListBox.10006.40
-Um sym:cui.MetricField.10006.42
-Von sym:cui.MetricField.10006.43
-Registerhaltigkeit sym:cui.CheckBox.10006.84
+Automatisch sym:cui:CheckBox:RID_SVXPAGE_STD_PARAGRAPH:CB_AUTO
+Vonlinks sym:cui:MetricField:RID_SVXPAGE_STD_PARAGRAPH:ED_LEFTINDENT
+ErsteZeile sym:cui:MetricField:RID_SVXPAGE_STD_PARAGRAPH:ED_FLINEINDENT
+VonRechts sym:cui:MetricField:RID_SVXPAGE_STD_PARAGRAPH:ED_RIGHTINDENT
+Oben sym:cui:MetricField:RID_SVXPAGE_STD_PARAGRAPH:ED_TOPDIST
+Unten sym:cui:MetricField:RID_SVXPAGE_STD_PARAGRAPH:ED_BOTTOMDIST
+Zeilenabstand sym:cui:ListBox:RID_SVXPAGE_STD_PARAGRAPH:LB_LINEDIST
+Um sym:cui:MetricField:RID_SVXPAGE_STD_PARAGRAPH:ED_LINEDISTPERCENT
+Von sym:cui:MetricField:RID_SVXPAGE_STD_PARAGRAPH:ED_LINEDISTMETRIC
+Registerhaltigkeit sym:cui:CheckBox:RID_SVXPAGE_STD_PARAGRAPH:CB_REGISTER
 
 *TabEndnoten sym:SW_HID_ENDNOTE_OPTIONS
-Numerierung  sym:sw.ListBox.21013.10
-BeginnBei sym:sw.NumericField.21013.12
-Davor sym:sw.Edit.21013.46
-Dahinter sym:sw.Edit.21013.48
-Absatz sym:sw.ListBox.21013.30
-Seite sym:sw.ListBox.21013.31
-ZeichenvorlageEndnotenbereich sym:sw.ListBox.21013.50
-ZeichenvorlageTextbereich sym:sw.ListBox.21013.53
+Numerierung  sym:sw:ListBox:TP_ENDNOTEOPTION:LB_NUMVIEW
+BeginnBei sym:sw:NumericField:TP_ENDNOTEOPTION:FLD_OFFSET
+Davor sym:sw:Edit:TP_ENDNOTEOPTION:ED_PREFIX
+Dahinter sym:sw:Edit:TP_ENDNOTEOPTION:ED_SUFFIX
+Absatz sym:sw:ListBox:TP_ENDNOTEOPTION:LB_PARA_TEMPL
+Seite sym:sw:ListBox:TP_ENDNOTEOPTION:LB_PAGE_TEMPL
+ZeichenvorlageEndnotenbereich sym:sw:ListBox:TP_ENDNOTEOPTION:LB_TEXT_CHARFMT
+ZeichenvorlageTextbereich sym:sw:ListBox:TP_ENDNOTEOPTION:LB_ANCHR_CHARFMT
 
 *TabErsetzung sym:CUI_HID_OFAPAGE_AUTOCORR_REPLACE
-NurText sym:cui.CheckBox.17003.34
-Kuerzel sym:cui.Edit.17003.31
-ErsetzenDurch sym:cui.Edit.17003.32
+NurText sym:cui:CheckBox:RID_OFAPAGE_AUTOCORR_REPLACE:CB_TEXT_ONLY
+Kuerzel sym:cui:Edit:RID_OFAPAGE_AUTOCORR_REPLACE:ED_SHORT
+ErsetzenDurch sym:cui:Edit:RID_OFAPAGE_AUTOCORR_REPLACE:ED_REPLACE
 Liste sym:CUI_HID_OFACTL_AUTOCORR_REPLACE
-Neu sym:cui.PushButton.17003.35
-Loeschen sym:cui.PushButton.17003.36
+Neu sym:cui:PushButton:RID_OFAPAGE_AUTOCORR_REPLACE:PB_NEW_REPLACE
+Loeschen sym:cui:PushButton:RID_OFAPAGE_AUTOCORR_REPLACE:PB_DELETE_REPLACE
 Zurueck sym:SFX2_HID_TABDLG_RESET_BTN
 WelcheSprache sym:CUI_HID_AUTOCORR_LANGUAGE
 
 *TabEtiketten sym:SW_HID_LAB_LAB
-Adresse sym:sw.CheckBox.22755.2
-Aufschrift sym:sw.MultiLineEdit.22755.3
-Anschrift sym:sw.ListBox.22755.5
-Tabelle sym:sw.ListBox.22755.7
-Datenbankfeld sym:sw.ListBox.22755.18
-Uebernehmen sym:sw.ImageButton.22755.19
-Endlos sym:sw.RadioButton.22755.9
-Bogen sym:sw.RadioButton.22755.10
-Marke sym:sw.ListBox.22755.12
-Typ sym:sw.ListBox.22755.14
+Adresse sym:sw:CheckBox:TP_LAB_LAB:BOX_ADDR
+Aufschrift sym:sw:MultiLineEdit:TP_LAB_LAB:EDT_WRITING
+Anschrift sym:sw:ListBox:TP_LAB_LAB:LB_DATABASE
+Tabelle sym:sw:ListBox:TP_LAB_LAB:LB_TABLE
+Datenbankfeld sym:sw:ListBox:TP_LAB_LAB:LB_DBFIELD
+Uebernehmen sym:sw:ImageButton:TP_LAB_LAB:BTN_INSERT
+Endlos sym:sw:RadioButton:TP_LAB_LAB:BTN_CONT
+Bogen sym:sw:RadioButton:TP_LAB_LAB:BTN_SHEET
+Marke sym:sw:ListBox:TP_LAB_LAB:BOX_MAKE
+Typ sym:sw:ListBox:TP_LAB_LAB:BOX_TYPE
 NeuesDok sym:SW_HID_LABEL_INSERT
 Zurueck sym:SFX2_HID_TABDLG_RESET_BTN
 
@@ -71,139 +71,139 @@ Typ sym:SW_HID_BUSINESS_FMT_PAGE_TYPE
 NeuesDok sym:SW_HID_LABEL_INSERT
 Zurueck sym:SFX2_HID_TABDLG_RESET_BTN
 
-*TabFangenEinrasten sym:SD_HID_SD_OPTIONS_SNAP sc:hidspecial:HID_SC_WIN_PREVIEW
+*TabFangenEinrasten sym:SD_HID_SD_OPTIONS_SNAP sym:sc:hidspecial:HID_SC_WIN_PREVIEW
 
 *TabFarben sym:CUI_HID_OPTIONS_COLOR
-FarbName sym:cui.Edit.10060.1
-Farbe sym:cui.ListBox.10060.1
-Farbmodell sym:cui.ListBox.10060.2
+FarbName sym:cui:Edit:RID_SVXPAGE_COLOR:EDT_NAME
+Farbe sym:cui:ListBox:RID_SVXPAGE_COLOR:LB_COLOR
+Farbmodell sym:cui:ListBox:RID_SVXPAGE_COLOR:LB_COLORMODEL
 R sym:CUI_HID_TPCOLOR_RGB_1
 G sym:CUI_HID_TPCOLOR_RGB_2
 B sym:CUI_HID_TPCOLOR_RGB_3
 C sym:CUI_HID_TPCOLOR_CMYK_1
 M sym:CUI_HID_TPCOLOR_CMYK_2
 Y sym:CUI_HID_TPCOLOR_CMYK_3
-K sym:cui.MetricField.10060.4
-Aendern sym:cui.PushButton.10060.3
-Hinzufuegen sym:cui.PushButton.10060.1
-Loeschen sym:cui.PushButton.10060.4
-Oeffnen sym:cui.ImageButton.10060.5
-Speichern sym:cui.ImageButton.10060.6
-Bearbeiten sym:cui.PushButton.10060.2
+K sym:cui:MetricField:RID_SVXPAGE_COLOR:MTR_FLD_4
+Aendern sym:cui:PushButton:RID_SVXPAGE_COLOR:BTN_MODIFY
+Hinzufuegen sym:cui:PushButton:RID_SVXPAGE_COLOR:BTN_ADD
+Loeschen sym:cui:PushButton:RID_SVXPAGE_COLOR:BTN_DELETE
+Oeffnen sym:cui:ImageButton:RID_SVXPAGE_COLOR:BTN_LOAD
+Speichern sym:cui:ImageButton:RID_SVXPAGE_COLOR:BTN_SAVE
+Bearbeiten sym:cui:PushButton:RID_SVXPAGE_COLOR:BTN_WORK_ON
 
 *TabFarbverlaeufe sym:CUI_HID_AREA_GRADIENT
-Typ sym:cui.ListBox.10059.4
-ZentrumX sym:cui.MetricField.10059.2
-ZentrumY sym:cui.MetricField.10059.3
-Winkel sym:cui.MetricField.10059.1
-Rand sym:cui.MetricField.10059.6
-Von sym:cui.ListBox.10059.1
-Bis sym:cui.ListBox.10059.2
-VonWert sym:cui.MetricField.10059.4
-BisWert sym:cui.MetricField.10059.5
-Tabelle sym:cui.ListBox.10059.3
-Hinzufuegen sym:cui.PushButton.10059.1
-Aendern sym:cui.PushButton.10059.3
-Loeschen sym:cui.PushButton.10059.4
-Oeffnen sym:cui.ImageButton.10059.5
-Speichern sym:cui.ImageButton.10059.6
+Typ sym:cui:ListBox:RID_SVXPAGE_GRADIENT:LB_GRADIENT_TYPES
+ZentrumX sym:cui:MetricField:RID_SVXPAGE_GRADIENT:MTR_CENTER_X
+ZentrumY sym:cui:MetricField:RID_SVXPAGE_GRADIENT:MTR_CENTER_Y
+Winkel sym:cui:MetricField:RID_SVXPAGE_GRADIENT:MTR_ANGLE
+Rand sym:cui:MetricField:RID_SVXPAGE_GRADIENT:MTR_BORDER
+Von sym:cui:ListBox:RID_SVXPAGE_GRADIENT:LB_COLOR_FROM
+Bis sym:cui:ListBox:RID_SVXPAGE_GRADIENT:LB_COLOR_TO
+VonWert sym:cui:MetricField:RID_SVXPAGE_GRADIENT:MTR_COLOR_FROM
+BisWert sym:cui:MetricField:RID_SVXPAGE_GRADIENT:MTR_COLOR_TO
+Tabelle sym:cui:ListBox:RID_SVXPAGE_GRADIENT:LB_GRADIENTS
+Hinzufuegen sym:cui:PushButton:RID_SVXPAGE_GRADIENT:BTN_ADD
+Aendern sym:cui:PushButton:RID_SVXPAGE_GRADIENT:BTN_MODIFY
+Loeschen sym:cui:PushButton:RID_SVXPAGE_GRADIENT:BTN_DELETE
+Oeffnen sym:cui:ImageButton:RID_SVXPAGE_GRADIENT:BTN_LOAD
+Speichern sym:cui:ImageButton:RID_SVXPAGE_GRADIENT:BTN_SAVE
 
-*TabFehlermeldung sym:sc.TabPage.698
-FehlermeldungbeiEingabe sym:sc.TriStateBox.698.21
-Aktion sym:sc.ListBox.698.24
-Titel sym:sc.Edit.698.13
-Fehlermeldung sym:sc.MultiLineEdit.698.25
-Durchsuchen sym:sc.PushButton.698.26
+*TabFehlermeldung sym:sc:TabPage:TP_VALIDATION_ERROR
+FehlermeldungbeiEingabe sym:sc:TriStateBox:TP_VALIDATION_ERROR:TSB_SHOW
+Aktion sym:sc:ListBox:TP_VALIDATION_ERROR:LB_ACTION
+Titel sym:sc:Edit:TP_VALIDATION_ERROR:EDT_TITLE
+Fehlermeldung sym:sc:MultiLineEdit:TP_VALIDATION_ERROR:EDT_ERROR
+Durchsuchen sym:sc:PushButton:TP_VALIDATION_ERROR:BTN_SEARCH
 
 *TabFussEndnoten sym:SW_HID_SECTION_FTNENDNOTES_PAGE
-FussnotenAmTextendeSammeln sym:sw.CheckBox.20897.6
-FussnotenNummerNeuStarten sym:sw.CheckBox.20897.7
-FussnotenEigenesFormat sym:sw.CheckBox.20897.11
-FussnotenNummerierung sym:sw.ListBox.20897.37
-FussnotenBeginn sym:sw.NumericField.20897.24
-FussnotenDavor sym:sw.Edit.20897.17
-FussnotenDahinter sym:sw.Edit.20897.18
-EndnotenAmBereichsendeSammeln sym:sw.CheckBox.20897.3
-EndnotenNummerNeuStarten sym:sw.CheckBox.20897.4
-EndnotenEigenesFormat sym:sw.CheckBox.20897.12
-EndnotenNumerierung sym:sw.ListBox.20897.36
-EndnotenBeginn sym:sw.NumericField.20897.23
-EndnotenDavor sym:sw.Edit.20897.14
-EndnotenDahinter sym:sw.Edit.20897.15
+FussnotenAmTextendeSammeln sym:sw:CheckBox:TP_SECTION_FTNENDNOTES:CB_FTN_AT_TXTEND
+FussnotenNummerNeuStarten sym:sw:CheckBox:TP_SECTION_FTNENDNOTES:CB_FTN_NUM
+FussnotenEigenesFormat sym:sw:CheckBox:TP_SECTION_FTNENDNOTES:CB_FTN_NUM_FMT
+FussnotenNummerierung sym:sw:ListBox:TP_SECTION_FTNENDNOTES:LB_FTN_NUMVIEW
+FussnotenBeginn sym:sw:NumericField:TP_SECTION_FTNENDNOTES:FLD_FTN_OFFSET
+FussnotenDavor sym:sw:Edit:TP_SECTION_FTNENDNOTES:ED_FTN_PREFIX
+FussnotenDahinter sym:sw:Edit:TP_SECTION_FTNENDNOTES:ED_FTN_SUFFIX
+EndnotenAmBereichsendeSammeln sym:sw:CheckBox:TP_SECTION_FTNENDNOTES:CB_END_AT_TXTEND
+EndnotenNummerNeuStarten sym:sw:CheckBox:TP_SECTION_FTNENDNOTES:CB_END_NUM
+EndnotenEigenesFormat sym:sw:CheckBox:TP_SECTION_FTNENDNOTES:CB_END_NUM_FMT
+EndnotenNumerierung sym:sw:ListBox:TP_SECTION_FTNENDNOTES:LB_END_NUMVIEW
+EndnotenBeginn sym:sw:NumericField:TP_SECTION_FTNENDNOTES:FLD_END_OFFSET
+EndnotenDavor sym:sw:Edit:TP_SECTION_FTNENDNOTES:ED_END_PREFIX
+EndnotenDahinter sym:sw:Edit:TP_SECTION_FTNENDNOTES:ED_END_SUFFIX
 
 *TabFormatEtiketten sym:SW_HID_LAB_FMT
-HAbstand sym:sw.MetricField.22756.3
-VAbstand sym:sw.MetricField.22756.5
-Breite sym:sw.MetricField.22756.7
-Hoehe sym:sw.MetricField.22756.9
-RandLinks sym:sw.MetricField.22756.11
-RandRechts sym:sw.MetricField.22756.13
-Spalten sym:sw.NumericField.22756.15
-Zeilen sym:sw.NumericField.22756.17
+HAbstand sym:sw:MetricField:TP_LAB_FMT:FLD_HDIST
+VAbstand sym:sw:MetricField:TP_LAB_FMT:FLD_VDIST
+Breite sym:sw:MetricField:TP_LAB_FMT:FLD_WIDTH
+Hoehe sym:sw:MetricField:TP_LAB_FMT:FLD_HEIGHT
+RandLinks sym:sw:MetricField:TP_LAB_FMT:FLD_LEFT
+RandRechts sym:sw:MetricField:TP_LAB_FMT:FLD_UPPER
+Spalten sym:sw:NumericField:TP_LAB_FMT:FLD_COLUMNS
+Zeilen sym:sw:NumericField:TP_LAB_FMT:FLD_ROWS
 NeuesDok sym:SW_HID_LABEL_INSERT
 Zurueck sym:SFX2_HID_TABDLG_RESET_BTN
-FormatSpeichern sym:sw.PushButton.22756.19
+FormatSpeichern sym:sw:PushButton:TP_LAB_FMT:PB_SAVE
 
 *TabFunktionen sym:SW_HID_FLD_FUNC
-Feldtyp sym:sw.ListBox.20868.65
-Formatliste sym:sw.ListBox.20868.69
-Auswahl sym:sw.ListBox.20868.66
-Bedingung sym:sw.Edit.20868.71
-Dann sym:sw.Edit.20868.75
-Sonst sym:sw.Edit.20868.77
-MakroButton sym:sw.PushButton.20868.78
-Namefeld sym:sw.Edit.20868.71
-Hinweis sym:sw.Edit.20868.73
-Makroname sym:sw.Edit.20868.71
-Platzhalter sym:sw.Edit.20868.71
-Texteinfuegen sym:sw.Edit.20868.73
-Wert sym:sw.Edit.20868.73
+Feldtyp sym:sw:ListBox:TP_FLD_FUNC:LB_FUNCTYPE
+Formatliste sym:sw:ListBox:TP_FLD_FUNC:LB_FUNCFORMAT
+Auswahl sym:sw:ListBox:TP_FLD_FUNC:LB_FUNCSELECTION
+Bedingung sym:sw:Edit:TP_FLD_FUNC:ED_FUNCNAME
+Dann sym:sw:Edit:TP_FLD_FUNC:ED_FUNCCOND1
+Sonst sym:sw:Edit:TP_FLD_FUNC:ED_FUNCCOND2
+MakroButton sym:sw:PushButton:TP_FLD_FUNC:BT_FUNCMACRO
+Namefeld sym:sw:Edit:TP_FLD_FUNC:ED_FUNCNAME
+Hinweis sym:sw:Edit:TP_FLD_FUNC:ED_FUNCVALUE
+Makroname sym:sw:Edit:TP_FLD_FUNC:ED_FUNCNAME
+Platzhalter sym:sw:Edit:TP_FLD_FUNC:ED_FUNCNAME
+Texteinfuegen sym:sw:Edit:TP_FLD_FUNC:ED_FUNCVALUE
+Wert sym:sw:Edit:TP_FLD_FUNC:ED_FUNCVALUE
 Einfuegen sym:SW_HID_FIELD_INSERT
 Schliessen sym:SW_HID_FIELD_CLOSE
-AddListEntry sym:sw.PushButton.20868.82
-NewListEntry sym:sw.Edit.20868.81
-EntrysList sym:sw.ListBox.20868.84
-RemoveEntry sym:sw.PushButton.20868.85
-MoveUpEntry sym:sw.PushButton.20868.86
-MoveDownEntry sym:sw.PushButton.20868.87
-EntryName sym:sw.Edit.20868.89
+AddListEntry sym:sw:PushButton:TP_FLD_FUNC:PB_LISTADD
+NewListEntry sym:sw:Edit:TP_FLD_FUNC:ED_LISTITEM
+EntrysList sym:sw:ListBox:TP_FLD_FUNC:LB_LISTITEMS
+RemoveEntry sym:sw:PushButton:TP_FLD_FUNC:PB_LISTREMOVE
+MoveUpEntry sym:sw:PushButton:TP_FLD_FUNC:PB_LISTUP
+MoveDownEntry sym:sw:PushButton:TP_FLD_FUNC:PB_LISTDOWN
+EntryName sym:sw:Edit:TP_FLD_FUNC:ED_LISTNAME
 
 
 
 *TabFussnote sym:SW_HID_FOOTNOTE_PAGE
-HoeheWieSeite sym:sw.RadioButton.20818.1
-HoeheFussnoteOption sym:sw.RadioButton.20818.2
-HoeheFussnote sym:sw.MetricField.20818.3
-AbstandTextkoerper sym:sw.MetricField.20818.5
-Position sym:sw.ListBox.20818.23
-Art sym:sw.ListBox.20818.21
-Breite sym:sw.MetricField.20818.25
-Abstand sym:sw.MetricField.20818.27
+HoeheWieSeite sym:sw:RadioButton:TP_FOOTNOTE_PAGE:RB_MAXHEIGHT_PAGE
+HoeheFussnoteOption sym:sw:RadioButton:TP_FOOTNOTE_PAGE:RB_MAXHEIGHT
+HoeheFussnote sym:sw:MetricField:TP_FOOTNOTE_PAGE:ED_MAXHEIGHT
+AbstandTextkoerper sym:sw:MetricField:TP_FOOTNOTE_PAGE:ED_DIST
+Position sym:sw:ListBox:TP_FOOTNOTE_PAGE:DLB_LINEPOS
+Art sym:sw:ListBox:TP_FOOTNOTE_PAGE:DLB_LINETYPE
+Breite sym:sw:MetricField:TP_FOOTNOTE_PAGE:ED_LINEWIDTH
+Abstand sym:sw:MetricField:TP_FOOTNOTE_PAGE:ED_LINEDIST
 
 *TabFussnoten sym:SW_HID_FOOTNOTE_OPTIONS
-Numerierung sym:sw.ListBox.21012.10
-Pro sym:sw.ListBox.21012.11
-BeginnBei sym:sw.NumericField.21012.12
-Absatz sym:sw.ListBox.21012.30
-Seite sym:sw.ListBox.21012.31
-Folgeseite sym:sw.Edit.21012.41
-Beginn sym:sw.Edit.21012.43
-Seitenende sym:sw.RadioButton.21012.1
-Dokumentende sym:sw.RadioButton.21012.2
-Davor sym:sw.Edit.21012.46
-Dahinter sym:sw.Edit.21012.48
-ZeichenvorlageTextbereich sym:sw.ListBox.21012.53
-ZeichenvorlageFussnotenbereich sym:sw.ListBox.21012.50
+Numerierung sym:sw:ListBox:TP_FOOTNOTEOPTION:LB_NUMVIEW
+Pro sym:sw:ListBox:TP_FOOTNOTEOPTION:LB_NUMCOUNT
+BeginnBei sym:sw:NumericField:TP_FOOTNOTEOPTION:FLD_OFFSET
+Absatz sym:sw:ListBox:TP_FOOTNOTEOPTION:LB_PARA_TEMPL
+Seite sym:sw:ListBox:TP_FOOTNOTEOPTION:LB_PAGE_TEMPL
+Folgeseite sym:sw:Edit:TP_FOOTNOTEOPTION:ED_CONT
+Beginn sym:sw:Edit:TP_FOOTNOTEOPTION:ED_CONT_FROM
+Seitenende sym:sw:RadioButton:TP_FOOTNOTEOPTION:RB_POS_PAGE
+Dokumentende sym:sw:RadioButton:TP_FOOTNOTEOPTION:RB_POS_CHAPTER
+Davor sym:sw:Edit:TP_FOOTNOTEOPTION:ED_PREFIX
+Dahinter sym:sw:Edit:TP_FOOTNOTEOPTION:ED_SUFFIX
+ZeichenvorlageTextbereich sym:sw:ListBox:TP_FOOTNOTEOPTION:LB_ANCHR_CHARFMT
+ZeichenvorlageFussnotenbereich sym:sw:ListBox:TP_FOOTNOTEOPTION:LB_TEXT_CHARFMT
 
 *TabFusszeile sym:SVX_HID_FORMAT_FOOTER
-FusszeileMitAbstand sym:svx.CheckBox.10026.10 svx:CheckBox:RID_SVXPAGE_FOOTER:CB_FOOTER
-Abstand sym:svx.MetricField.10026.12
-Hoehe sym:svx.MetricField.10026.14
-Hoehedynamisch sym:svx.CheckBox.10026.15
-RechterRandFusszeile sym:svx.MetricField.10026.19
-LinkerRandFusszeile sym:svx.MetricField.10026.17
-InhaltLinksRechtsGleich sym:svx.CheckBox.10026.20
-Zusaetze sym:svx.PushButton.10026.40 svx:PushButton:RID_SVXPAGE_FOOTER:PB_BACKGROUND
+FusszeileMitAbstand sym:svx:CheckBox:RID_SVXPAGE_FOOTER:CB_TURNON svx:CheckBox:RID_SVXPAGE_FOOTER:CB_FOOTER
+Abstand sym:svx:MetricField:RID_SVXPAGE_FOOTER:ED_DIST
+Hoehe sym:svx:MetricField:RID_SVXPAGE_FOOTER:ED_HEIGHT
+Hoehedynamisch sym:svx:CheckBox:RID_SVXPAGE_FOOTER:CB_HEIGHT_DYN
+RechterRandFusszeile sym:svx:MetricField:RID_SVXPAGE_FOOTER:ED_RMARGIN
+LinkerRandFusszeile sym:svx:MetricField:RID_SVXPAGE_FOOTER:ED_LMARGIN
+InhaltLinksRechtsGleich sym:svx:CheckBox:RID_SVXPAGE_FOOTER:CB_SHARED
+Zusaetze sym:svx:PushButton:RID_SVXPAGE_FOOTER:BTN_EXTRAS svx:PushButton:RID_SVXPAGE_FOOTER:PB_BACKGROUND
 Bearbeiten sym:SC_HID_SC_FOOTER_EDIT
 
 *TabFusszeileCalc sym:SC_HID_SCPAGE_HFED_FR
@@ -211,76 +211,76 @@ LinkerBereich sym:SC_HID_SC_HF_FRL
 MittlererBereich sym:SC_HID_SC_HF_FRC
 RechterBereich sym:SC_HID_SC_HF_FRR
 PredefinedFooter sym:SC_HID_SC_HF_FR_DEFINED
-TextAttribute sym:SC_HID_SC_HF_TEXT sc:ImageButton:RID_HFBASE:BTN_TEXT
-Datei sym:SC_HID_SC_HF_FILE sc:ImageButton:RID_HFBASE:BTN_FILE
-Tabelle sym:SC_HID_SC_HF_TABLE sc:ImageButton:RID_HFBASE:BTN_TABLE
-Seitennummer sym:SC_HID_SC_HF_PAGE sc:ImageButton:RID_HFBASE:BTN_PAGE
-Seitenanzahl sym:SC_HID_SC_HF_PAGES sc:ImageButton:RID_HFBASE:BTN_PAGES
-Datum sym:SC_HID_SC_HF_DATE sc:ImageButton:RID_HFBASE:BTN_DATE
-Zeit sym:SC_HID_SC_HF_TIME sc:ImageButton:RID_HFBASE:BTN_TIME
-Hoehedynamisch sym:svx.CheckBox.10026.15
+TextAttribute sym:SC_HID_SC_HF_TEXT sym:sc:ImageButton:RID_HFBASE:BTN_TEXT
+Datei sym:SC_HID_SC_HF_FILE sym:sc:ImageButton:RID_HFBASE:BTN_FILE
+Tabelle sym:SC_HID_SC_HF_TABLE sym:sc:ImageButton:RID_HFBASE:BTN_TABLE
+Seitennummer sym:SC_HID_SC_HF_PAGE sym:sc:ImageButton:RID_HFBASE:BTN_PAGE
+Seitenanzahl sym:SC_HID_SC_HF_PAGES sym:sc:ImageButton:RID_HFBASE:BTN_PAGES
+Datum sym:SC_HID_SC_HF_DATE sym:sc:ImageButton:RID_HFBASE:BTN_DATE
+Zeit sym:SC_HID_SC_HF_TIME sym:sc:ImageButton:RID_HFBASE:BTN_TIME
+Hoehedynamisch sym:svx:CheckBox:RID_SVXPAGE_FOOTER:CB_HEIGHT_DYN
 
 *TabFusszeileCalcLinks sym:SC_HID_SCPAGE_HFED_FL
 LinkerBereich sym:SC_HID_SC_HF_FLL
 MittlererBereich sym:SC_HID_SC_HF_FLC
 RechterBereich sym:SC_HID_SC_HF_FLR
 PredefinedFooterLeft sym:SC_HID_SC_HF_FL_DEFINED
-TextAttribute sym:SC_HID_SC_HF_TEXT sc:ImageButton:RID_HFBASE:BTN_TEXT
-Datei sym:SC_HID_SC_HF_FILE sc:ImageButton:RID_HFBASE:BTN_FILE
-Tabelle sym:SC_HID_SC_HF_TABLE sc:ImageButton:RID_HFBASE:BTN_TABLE
-Seitennummer sym:SC_HID_SC_HF_PAGE sc:ImageButton:RID_HFBASE:BTN_PAGE
-Seitenanzahl sym:SC_HID_SC_HF_PAGES sc:ImageButton:RID_HFBASE:BTN_PAGES
-Datum sym:SC_HID_SC_HF_DATE sc:ImageButton:RID_HFBASE:BTN_DATE
-Zeit sym:SC_HID_SC_HF_TIME sc:ImageButton:RID_HFBASE:BTN_TIME
+TextAttribute sym:SC_HID_SC_HF_TEXT sym:sc:ImageButton:RID_HFBASE:BTN_TEXT
+Datei sym:SC_HID_SC_HF_FILE sym:sc:ImageButton:RID_HFBASE:BTN_FILE
+Tabelle sym:SC_HID_SC_HF_TABLE sym:sc:ImageButton:RID_HFBASE:BTN_TABLE
+Seitennummer sym:SC_HID_SC_HF_PAGE sym:sc:ImageButton:RID_HFBASE:BTN_PAGE
+Seitenanzahl sym:SC_HID_SC_HF_PAGES sym:sc:ImageButton:RID_HFBASE:BTN_PAGES
+Datum sym:SC_HID_SC_HF_DATE sym:sc:ImageButton:RID_HFBASE:BTN_DATE
+Zeit sym:SC_HID_SC_HF_TIME sym:sc:ImageButton:RID_HFBASE:BTN_TIME
 
 *TabGeschaeft sym:SW_HID_TP_BUSINESS_DATA
-Firma sym:sw.Edit.20896.55
-Firma2 sym:sw.Edit.20896.57
-Slogan sym:sw.Edit.20896.59
-Strasse sym:sw.Edit.20896.36
-PLZ sym:sw.Edit.20896.38
-Ort sym:sw.Edit.20896.39
-Land sym:sw.Edit.20896.41
-Bundesland sym:sw.Edit.20896.53
-Position sym:sw.Edit.20896.61
-Telefon sym:sw.Edit.20896.46
-Handy sym:sw.Edit.20896.47
-Fax sym:sw.Edit.20896.49
-Homepage sym:sw.Edit.20896.51
-Email sym:sw.Edit.20896.52
+Firma sym:sw:Edit:TP_BUSINESS_DATA:ED_COMP
+Firma2 sym:sw:Edit:TP_BUSINESS_DATA:ED_COMP_EXT
+Slogan sym:sw:Edit:TP_BUSINESS_DATA:ED_SLOGAN
+Strasse sym:sw:Edit:TP_BUSINESS_DATA:ED_STREET
+PLZ sym:sw:Edit:TP_BUSINESS_DATA:ED_ZIP
+Ort sym:sw:Edit:TP_BUSINESS_DATA:ED_CITY
+Land sym:sw:Edit:TP_BUSINESS_DATA:ED_COUNTRY
+Bundesland sym:sw:Edit:TP_BUSINESS_DATA:ED_STATE
+Position sym:sw:Edit:TP_BUSINESS_DATA:ED_POSITION
+Telefon sym:sw:Edit:TP_BUSINESS_DATA:ED_PHONE
+Handy sym:sw:Edit:TP_BUSINESS_DATA:ED_MOBILE
+Fax sym:sw:Edit:TP_BUSINESS_DATA:ED_FAX
+Homepage sym:sw:Edit:TP_BUSINESS_DATA:ED_WWW
+Email sym:sw:Edit:TP_BUSINESS_DATA:ED_MAIL
 
 *TabGrafik sym:SW_HID_GRF_EXT
-Vertikal sym:sw.CheckBox.20835.47
-Horizontal sym:sw.CheckBox.20835.46
-AufAllenSeiten sym:sw.RadioButton.20835.64
-JedeLinkeSeite sym:sw.RadioButton.20835.65
-JedeRechteSeite sym:sw.RadioButton.20835.66
-Dateiname sym:sw.Edit.20835.54
-Durchsuchen sym:sw.PushButton.20835.53
+Vertikal sym:sw:CheckBox:TP_GRF_EXT:CB_VERT
+Horizontal sym:sw:CheckBox:TP_GRF_EXT:CB_HOR
+AufAllenSeiten sym:sw:RadioButton:TP_GRF_EXT:RB_MIRROR_ALL_PAGES
+JedeLinkeSeite sym:sw:RadioButton:TP_GRF_EXT:RB_MIRROR_LEFT_PAGES
+JedeRechteSeite sym:sw:RadioButton:TP_GRF_EXT:RB_MIRROR_RIGHT_PAGES
+Dateiname sym:sw:Edit:TP_GRF_EXT:ED_CONNECT
+Durchsuchen sym:sw:PushButton:TP_GRF_EXT:PB_BROWSE
 
 *TabGrafiken sym:CUI_HID_SVXPAGE_PICK_BMP
 Auswahl sym:CUI_HID_VALUESET_NUMBMP
 Optionen sym:SW_HID_NUM_FORMAT_BTN
 Zurueck sym:SFX2_HID_TABDLG_RESET_BTN
-LinkGraphics sym:cui.CheckBox.10218.224
+LinkGraphics sym:cui:CheckBox:RID_SVXPAGE_PICK_BMP:CB_LINKED
 
 *TabGrundfarben sym:CUI_HID_OPTIONS_CHART_DEFCOLORS
-Farbliste sym:cui.ListBox.10299.2
-Standard sym:cui.PushButton.10299.5
+Farbliste sym:cui:ListBox:RID_OPTPAGE_CHART_DEFCOLORS:LB_CHART_COLOR_LIST
+Standard sym:cui:PushButton:RID_OPTPAGE_CHART_DEFCOLORS:PB_RESET_TO_DEFAULT
 
 *TabGrundschriften sym:SW_HID_STD_FONT
-StandardSchrift sym:sw.ComboBox.20847.91
-Ueberschrift sym:sw.ComboBox.20847.93
-Liste sym:sw.ComboBox.20847.95
-Beschriftung sym:sw.ComboBox.20847.97
-Verzeichnis sym:sw.ComboBox.20847.99
-AktuellesDokument sym:sw.CheckBox.20847.102
-Standard sym:sw.PushButton.20847.101
-StandardSchriftGroesse sym:sw.MetricBox.20847.108
-UeberschriftGroesse sym:sw.MetricBox.20847.109
-ListeGroesse sym:sw.MetricBox.20847.110
-BeschriftungGroesse sym:sw.MetricBox.20847.111
-VerzeichnisGroesse sym:sw.MetricBox.20847.112
+StandardSchrift sym:sw:ComboBox:TP_STD_FONT:LB_STANDARD
+Ueberschrift sym:sw:ComboBox:TP_STD_FONT:LB_TITLE
+Liste sym:sw:ComboBox:TP_STD_FONT:LB_LIST
+Beschriftung sym:sw:ComboBox:TP_STD_FONT:LB_LABEL
+Verzeichnis sym:sw:ComboBox:TP_STD_FONT:LB_IDX
+AktuellesDokument sym:sw:CheckBox:TP_STD_FONT:CB_DOCONLY
+Standard sym:sw:PushButton:TP_STD_FONT:PB_STANDARD
+StandardSchriftGroesse sym:sw:MetricBox:TP_STD_FONT:LB_STANDARD_SIZE
+UeberschriftGroesse sym:sw:MetricBox:TP_STD_FONT:LB_TITLE_SIZE
+ListeGroesse sym:sw:MetricBox:TP_STD_FONT:LB_LIST_SIZE
+BeschriftungGroesse sym:sw:MetricBox:TP_STD_FONT:LB_LABEL_SIZE
+VerzeichnisGroesse sym:sw:MetricBox:TP_STD_FONT:LB_INDEX_SIZE
 
 +TabGrundschriftenAsian TabGrundschriften
 

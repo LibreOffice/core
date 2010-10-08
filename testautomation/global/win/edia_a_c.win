@@ -1,45 +1,45 @@
-*AcceptOrRejectChangesArea sym:sc.ModelessDialog.25729
-AreaEditField sym:sc.Edit.25729.11
-ShrinkButton sym:sc.ImageButton.25729.12
+*AcceptOrRejectChangesArea sym:sc:ModelessDialog:RID_SCDLG_SIMPLEREF
+AreaEditField sym:sc:Edit:RID_SCDLG_SIMPLEREF:ED_ASSIGN
+ShrinkButton sym:sc:ImageButton:RID_SCDLG_SIMPLEREF:RB_ASSIGN
 
-*ActivationOrder sym:pcr.ModalDialog.1001
+*ActivationOrder sym:extensions:ModalDialog:RID_DLG_TABORDER
 ControlList sym:EXTENSIONS_HID_PROP_TABORDER_CONTROLS
-MoveUp sym:pcr.PushButton.1001.1
-MoveDown sym:pcr.PushButton.1001.2
-AutoOrder sym:pcr.PushButton.1001.3
+MoveUp sym:extensions:PushButton:RID_DLG_TABORDER:PB_MOVE_UP
+MoveDown sym:extensions:PushButton:RID_DLG_TABORDER:PB_MOVE_DOWN
+AutoOrder sym:extensions:PushButton:RID_DLG_TABORDER:PB_AUTO_ORDER
 
-*AddBookmark sym:sfx.ModalDialog.620
-Bookmarkname sym:sfx.Edit.620.11
+*AddBookmark sym:sfx2:ModalDialog:DLG_HELP_ADDBOOKMARK
+Bookmarkname sym:sfx2:Edit:DLG_HELP_ADDBOOKMARK:ED_BOOKMARK_TITLE
 
 *AddConditionDLG  sym:SVX_HID_XFORMS_ADDCONDITION_DLG
-Condition sym:svx.MultiLineEdit.18013.11
-EditNamespaces sym:svx.PushButton.18013.14
+Condition sym:svx:MultiLineEdit:RID_SVXDLG_ADD_CONDITION:ED_CONDITION
+EditNamespaces sym:svx:PushButton:RID_SVXDLG_ADD_CONDITION:PB_EDIT_NAMESPACES
 
 *AddingPackages sym:DESKTOP_HID_PACKAGE_MANAGER_PROGRESS
 Cancel sym:DESKTOP_HID_PACKAGE_MANAGER_PROGRESS_CANCEL
 
 *AddUserInterface sym:BASCTL_HID_BASICIDE_ADDNEW_LANGUAGE
-AvailableLanguagesListbox sym:basctl.ListBox.16872.2
+AvailableLanguagesListbox sym:basctl:ListBox:RID_DLG_SETDEF_LANGUAGE:LB_DEF_LANGUAGE
 AddNewControl sym:BASCTL_HID_BASICIDE_ADDNEW_CONTROL
 
 *AddTables sym:DBACCESS_HID_DLG_JOIN_TABADD
 TableName sym:DBACCESS_HID_JOINSH_ADDTAB_TABLELIST
-AddTable sym:dbu.PushButton.19214.1
-Tables sym:dbu.RadioButton.19214.1
-Queries sym:dbu.RadioButton.19214.2
+AddTable sym:dbaccess:PushButton:DLG_JOIN_TABADD:PB_ADDTABLE
+Tables sym:dbaccess:RadioButton:DLG_JOIN_TABADD:RB_CASE_TABLES
+Queries sym:dbaccess:RadioButton:DLG_JOIN_TABADD:RB_CASE_QUERIES
 QueryName sym:DBACCESS_HID_JOINSH_ADDTAB_QUERYLIST
 CloseDlg sym:DBACCESS_HID_JOINSH_ADDTAB_CLOSE
 
-*AddressBookSource sym:svt.ModalDialog.16484
-DataSource sym:svt.ComboBox.16484.3
-Administrate sym:svt.PushButton.16484.4
-Table sym:svt.ComboBox.16484.6
+*AddressBookSource sym:svtools:ModalDialog:DLG_ADDRESSBOOKSOURCE
+DataSource sym:svtools:ComboBox:DLG_ADDRESSBOOKSOURCE:CB_DATASOURCE
+Administrate sym:svtools:PushButton:DLG_ADDRESSBOOKSOURCE:PB_ADMINISTATE_DATASOURCES
+Table sym:svtools:ComboBox:DLG_ADDRESSBOOKSOURCE:CB_TABLE
 
 *AddressSourceAutopilot sym:EXTENSIONS_HID_ABSPILOT
-TabAdditionalSettings sym:abp.TabPage.19701
-TabAddressDataSourceAutoPilot sym:abp.TabPage.19700
-TabDataSourceName sym:abp.TabPage.19704
-TabSelectTable sym:abp.TabPage.19721
+TabAdditionalSettings sym:extensions:TabPage:RID_PAGE_ADMININVOKATION
+TabAddressDataSourceAutoPilot sym:extensions:TabPage:RID_PAGE_SELECTABTYPE
+TabDataSourceName sym:extensions:TabPage:RID_PAGE_FINAL
+TabSelectTable sym:extensions:TabPage:RID_PAGE_TABLESELECTION
 CancelButton sym:EXTENSIONS_HID_ABSPILOT_CANCEL
 BackButton sym:EXTENSIONS_HID_ABSPILOT_PREVIOUS
 NextButton sym:EXTENSIONS_HID_ABSPILOT_NEXT
@@ -54,37 +54,38 @@ Ignoreprivileges sym:DBACCESS_HID_DSADMIN_IGNOREDRIVER_PRIV
 HostName sym:DBACCESS_HID_DSADMIN_HOSTNAME
 PortNumber sym:DBACCESS_HID_DSADMIN_PORTNUMBER
 TabControl sym:DBACCESS_HID_DSADMIN_TABCONTROL
-TabGeneratedValues sym:dbu.TabPage.19222
+'TabPage2 sym:dbaccess:TabPage:PAGE_DS_ADABAS_SETTINGS
+TabGeneratedValues sym:dbaccess:TabPage:PAGE_GENERATED_VALUES
 RetrieveGeneratedValues sym:DBACCESS_HID_DSADMIN_AUTORETRIEVEENABLED
 AutoIncrementStatement sym:DBACCESS_HID_DSADMIN_AUTOINCREMENTVALUE
 QueryGeneratedValues sym:DBACCESS_HID_DSADMIN_RETRIEVE_AUTO
-AdvancedSettingsSpecial sym:dbu.TabPage.19223
+AdvancedSettingsSpecial sym:dbaccess:TabPage:PAGE_ADVANCED_SETTINGS_SPECIAL
 DisplayVersionColumns sym:DBACCESS_HID_DSADMIN_SUPPRESS_VERSIONCL
 EnableOuterJoin sym:DBACCESS_HID_DSADMIN_ENABLEOUTERJOIN
 CheckRequiredFields sym:DBACCESS_HID_DSADMIN_CHECK_REQUIRED_FIELDS
 
 
-*Aging sym:.uno:GraphicFilterSepia
-AgingDegree sym:cui.MetricField.10334.2
+*Aging .uno:GraphicFilterSepia
+AgingDegree sym:cui:MetricField:RID_SVX_GRFFILTER_DLG_SEPIA:DLG_FILTERSEPIA_MTR_SEPIA
 
 *AlienWarning sym:SFX2_HID_WARNING_ALIENFORMAT
-DoNotShowAgain sym:sfx.CheckBox.2308.16
+DoNotShowAgain sym:sfx2:CheckBox:RID_DLG_ALIEN_WARNING:CB_WARNING_OFF
 
-*AppendLibraries sym:basctl.ModalDialog.14890
+*AppendLibraries sym:basctl:ModalDialog:RID_DLG_LIBS
 Libraries sym:BASCTL_HID_BASICIDE_LIBSDLG_TREE
-InsertAsReference sym:basctl.CheckBox.14890.35
-ReplaceExistingLibraries sym:basctl.CheckBox.14890.36
+InsertAsReference sym:basctl:CheckBox:RID_DLG_LIBS:RID_CB_REF
+ReplaceExistingLibraries sym:basctl:CheckBox:RID_DLG_LIBS:RID_CB_REPL
 
 *ApplyGallery sym:CUI_HID_GALLERY_APPLY
 
-*AssingComponent sym:cui.ModalDialog.10297
-ComponentMethodName sym:cui.Edit.10297.45
+*AssingComponent sym:cui:ModalDialog:RID_SVXDLG_ASSIGNCOMPONENT
+ComponentMethodName sym:cui:Edit:RID_SVXDLG_ASSIGNCOMPONENT:EDIT_METHOD
 
-*AssignMacro sym:cui.TabPage.10296
+*AssignMacro sym:cui:TabPage:RID_SVXPAGE_MACROASSIGN
 EventListBox   sym:CUI_HID_SVX_MACRO_LB_EVENT
-AssignButton  sym:cui.PushButton.10296.2
-Component sym:cui.PushButton.10296.7
-RemoveButton   sym:cui.PushButton.10296.3
+AssignButton  sym:cui:PushButton:RID_SVXPAGE_MACROASSIGN:PB_ASSIGN
+Component sym:cui:PushButton:RID_SVXPAGE_MACROASSIGN:PB_ASSIGN_COMPONENT
+RemoveButton   sym:cui:PushButton:RID_SVXPAGE_MACROASSIGN:PB_DELETE
 
 *AutopilotAgenda sym:WIZARDS_HID_AGWIZ
 ItemScrollbar sym:WIZARDS_HID_AGWIZ_5_SCROLL_BAR
@@ -167,21 +168,28 @@ TextPath sym:WIZARDS_HID_FAXWIZ_TXTPATH
 CreateFax sym:WIZARDS_HID_OPTCREATEFAX
 MakeChanges sym:WIZARDS_HID_OPTMAKECHANGES
 UseAddressDatabase sym:WIZARDS_HID_FILETEMPLATEPATH
+BusinessFax RID_TOOLBOX_INSERT
+PageDesignBusiness RID_TOOLBOX_INSCELLS
+PersonalFax RID_TOOLBOX_INSOBJ
+MailView HID_INTERFACE_SFXMAILVIEW
+ReturnAddressUseUserData HID_INTERFACE_SFXFRAMESETVIEW
+NewReturnAddress HID_INTERFACE_SFXFRAMESETSOURCEVIEW
+Street HID_INTERFACE_SFXHELP_VIEWSH
 SaveAsButton sym:WIZARDS_HID_FAXWIZ_CMDPATH
 BackButton sym:WIZARDS_HID_FAXWIZARD_BACK
 NextButton sym:WIZARDS_HID_FAXWIZARD_NEXT
 FinishButton sym:WIZARDS_HID_FAXWIZARD_CREATE
 CancelButton sym:WIZARDS_HID_FAXWIZARD_CANCEL
 
-*AutopilotGroupElement sym:dbp.ModalDialog.19721
+*AutopilotGroupElement sym:extensions:ModalDialog:RID_DLG_GROUPBOXWIZARD
 BackButton sym:EXTENSIONS_HID_GROUPWIZARD_PREVIOUS
 NextButton sym:EXTENSIONS_HID_GROUPWIZARD_NEXT
 CancelButton sym:EXTENSIONS_HID_GROUPWIZARD_CANCEL
 CreateButton sym:EXTENSIONS_HID_GROUPWIZARD_FINISH
-TabGroupBoxData sym:dbp.TabPage.19722
-TabDefaultFieldSelection sym:dbp.TabPage.19723
-TabDatabaseValues sym:dbp.TabPage.19724
-TabCreateOptionGroup sym:dbp.TabPage.19726
+TabGroupBoxData sym:extensions:TabPage:RID_PAGE_GROUPRADIOSELECTION
+TabDefaultFieldSelection sym:extensions:TabPage:RID_PAGE_DEFAULTFIELDSELECTION
+TabDatabaseValues sym:extensions:TabPage:RID_PAGE_OPTIONVALUES
+TabCreateOptionGroup sym:extensions:TabPage:RID_PAGE_OPTIONS_FINAL
 
 *AutopilotLetter sym:WIZARDS_HID_LTRWIZARD
 Business sym:WIZARDS_HID_LTRWIZ_OPTBUSINESSLETTER
@@ -240,18 +248,18 @@ CancelButton sym:WIZARDS_HID_LTRWIZARD_CANCEL
 
 
 
-*AutoPilotListComboBox sym:dbp.ModalDialog.19722
-TabListBoxData sym:dbp.TabPage.19721
-TabTableSelection sym:dbp.TabPage.19727
-TabFieldLink sym:dbp.TabPage.19729
-TabDatabaseField sym:dbp.TabPage.19725
+*AutoPilotListComboBox sym:extensions:ModalDialog:RID_DLG_LISTCOMBOWIZARD
+TabListBoxData sym:extensions:TabPage:RID_PAGE_TABLESELECTION
+TabTableSelection sym:extensions:TabPage:RID_PAGE_LCW_CONTENTSELECTION_TABLE
+TabFieldLink sym:extensions:TabPage:RID_PAGE_LCW_FIELDLINK
+TabDatabaseField sym:extensions:TabPage:RID_PAGE_OPTION_DBFIELD
 BackButton sym:EXTENSIONS_HID_LISTWIZARD_PREVIOUS
 NextButton sym:EXTENSIONS_HID_LISTWIZARD_NEXT
 CancelButton sym:EXTENSIONS_HID_LISTWIZARD_CANCEL
 CreateButton sym:EXTENSIONS_HID_LISTWIZARD_FINISH
 
-*AutopilotTableElement sym:dbp.ModalDialog.19723
-TabTableFieldSelection sym:dbp.TabPage.19730
+*AutopilotTableElement sym:extensions:ModalDialog:RID_DLG_GRIDWIZARD
+TabTableFieldSelection sym:extensions:TabPage:RID_PAGE_GW_FIELDSELECTION
 BackButton sym:EXTENSIONS_HID_GRIDWIZARD_PREVIOUS
 NextButton sym:EXTENSIONS_HID_GRIDWIZARD_NEXT
 CancelButton sym:EXTENSIONS_HID_GRIDWIZARD_CANCEL
@@ -322,36 +330,36 @@ Custom3 sym:EXTENSIONS_HID_BIB_CUSTOM3_POS
 Custom4 sym:EXTENSIONS_HID_BIB_CUSTOM4_POS
 Custom5 sym:EXTENSIONS_HID_BIB_CUSTOM5_POS
 
-*Breakpoints sym:basctl.ModalDialog.14930
-BreakpointsList sym:basctl.ComboBox.14930.2
-NewButton sym:basctl.PushButton.14930.5
-Remove sym:basctl.PushButton.14930.6
-ActiveBox sym:basctl.CheckBox.14930.7
-Pass sym:basctl.NumericField.14930.10
+*Breakpoints sym:basctl:ModalDialog:RID_BASICIDE_BREAKPOINTDLG
+BreakpointsList sym:basctl:ComboBox:RID_BASICIDE_BREAKPOINTDLG:RID_CB_BRKPOINTS
+NewButton sym:basctl:PushButton:RID_BASICIDE_BREAKPOINTDLG:RID_PB_NEW
+Remove sym:basctl:PushButton:RID_BASICIDE_BREAKPOINTDLG:RID_PB_DEL
+ActiveBox sym:basctl:CheckBox:RID_BASICIDE_BREAKPOINTDLG:RID_CHKB_ACTIVE
+Pass sym:basctl:NumericField:RID_BASICIDE_BREAKPOINTDLG:RID_FLD_PASS
 
 *CellWarning sym:SC_HID_SC_REPLCELLSWARN
 
 *ChangeIcon sym:CUI_HID_SVX_CONFIG_ICON_SELECTOR
-Import sym:cui.PushButton.390.397
+Import sym:cui:PushButton:MD_ICONSELECTOR:BTN_IMPORT
 
 *ChangePassword sym:DBACCESS_HID_DLG_PASSWORD
-OldPassword sym:dbu.Edit.19223.19
-Password sym:dbu.Edit.19223.21
-ConfirmPassword sym:dbu.Edit.19223.23
+OldPassword sym:dbaccess:Edit:DLG_PASSWORD:ED_OLDPASSWORD
+Password sym:dbaccess:Edit:DLG_PASSWORD:ED_PASSWORD
+ConfirmPassword sym:dbaccess:Edit:DLG_PASSWORD:ED_PASSWORD_REPEAT
 
 *ChartType sym:CHART2_HID_DIAGRAM_TYPE
 ChooseType sym:CHART2_HID_SCH_CTL_TYPE
 Variant sym:CHART2_HID_SCH_CTL_VARIANT
-XAxisWithCategories sym:chartcontroller.CheckBox.910.1
-Look3D sym:chartcontroller.CheckBox.910.2
-Scheme3D sym:chartcontroller.ListBox.910.1
+XAxisWithCategories sym:chart2:CheckBox:TP_CHARTTYPE:CB_X_AXIS_CATEGORIES
+Look3D sym:chart2:CheckBox:TP_CHARTTYPE:CB_3D_LOOK
+Scheme3D sym:chart2:ListBox:TP_CHARTTYPE:LB_3D_SCHEME
 BarColumnShape sym:CHART2_HID_SCH_LB_BAR_GEOMETRY
-StackSeries sym:chartcontroller.CheckBox.910.3
-Ontop sym:chartcontroller.RadioButton.910.2
-Percent sym:chartcontroller.RadioButton.910.3
-Deep sym:chartcontroller.RadioButton.910.4
-SmoothLines sym:chartcontroller.CheckBox.910.4
-SmoothLineProperties sym:chartcontroller.PushButton.910.1
+StackSeries sym:chart2:CheckBox:TP_CHARTTYPE:CB_STACKED
+Ontop sym:chart2:RadioButton:TP_CHARTTYPE:RB_STACK_Y
+Percent sym:chart2:RadioButton:TP_CHARTTYPE:RB_STACK_Y_PERCENT
+Deep sym:chart2:RadioButton:TP_CHARTTYPE:RB_STACK_Z
+SmoothLines sym:chart2:CheckBox:TP_CHARTTYPE:CB_SPLINES
+SmoothLineProperties sym:chart2:PushButton:TP_CHARTTYPE:PB_SPLINE_DIALOG
 NumberOfLines sym:CHART2_HID_SCH_NUM_OF_LINES
 
 *ChartWizard sym:CHART2_HID_SCH_CHART_AUTO_FORMAT
@@ -438,33 +446,33 @@ BackBtn sym:DBACCESS_HID_DBWIZ_PREVIOUS
 CreateBtn sym:DBACCESS_HID_DBWIZ_FINISH
 NextBtn sym:DBACCESS_HID_DBWIZ_NEXT
 
-*CopyDatabaseTable sym:dbu.ModalDialog.19216
-Back sym:dbu.PushButton.19216.10
-NextBt sym:dbu.PushButton.19216.9
+*CopyDatabaseTable sym:dbaccess:ModalDialog:WIZ_RTFCOPYTABLE
+Back sym:dbaccess:PushButton:WIZ_RTFCOPYTABLE:PB_PREV
+NextBt sym:dbaccess:PushButton:WIZ_RTFCOPYTABLE:PB_NEXT
 
-*ConfirmDelete   sym:svt.ModalDialog.16376
-Delete   sym:svt.PushButton.16376.4
-DeleteAll   sym:svt.PushButton.16376.6
-DoNotDelete   sym:svt.PushButton.16376.5
+*ConfirmDelete   sym:svtools:ModalDialog:DLG_SVT_QUERYDELETE
+Delete   sym:svtools:PushButton:DLG_SVT_QUERYDELETE:BTN_YES
+DeleteAll   sym:svtools:PushButton:DLG_SVT_QUERYDELETE:BTN_ALL
+DoNotDelete   sym:svtools:PushButton:DLG_SVT_QUERYDELETE:BTN_NO
 
 *CopyToDialog sym:SW_HID_MM_COPYTO
-CC sym:sw.Edit.22073.43
-BCC sym:sw.Edit.22073.45
+CC sym:sw:Edit:DLG_MM_COPYTO:ED_CC
+BCC sym:sw:Edit:DLG_MM_COPYTO:ED_BCC
 
 *CustomizeAddressList sym:SW_HID_MM_CUSTOMIZE_ADDRESS_LIST
-AddressListElements sym:sw.ListBox.22067.2
-Add sym:sw.PushButton.22067.3
-Delete sym:sw.PushButton.22067.4
-Rename sym:sw.PushButton.22067.5
-MoveUp sym:sw.ImageButton.22067.6
-MoveDown sym:sw.ImageButton.22067.7
+AddressListElements sym:sw:ListBox:DLG_MM_CUSTOMIZE_ADDRESS_LIST:LB_FIELDS
+Add sym:sw:PushButton:DLG_MM_CUSTOMIZE_ADDRESS_LIST:PB_ADD
+Delete sym:sw:PushButton:DLG_MM_CUSTOMIZE_ADDRESS_LIST:PB_DELETE
+Rename sym:sw:PushButton:DLG_MM_CUSTOMIZE_ADDRESS_LIST:PB_RENAME
+MoveUp sym:sw:ImageButton:DLG_MM_CUSTOMIZE_ADDRESS_LIST:PB_UP
+MoveDown sym:sw:ImageButton:DLG_MM_CUSTOMIZE_ADDRESS_LIST:PB_DOWN
 
 *CustomizeMenuName sym:CUI_HID_SVX_CONFIG_NAME_SUBMENU
-Eingabefeld sym:cui.Edit.10062.1
+Eingabefeld sym:cui:Edit:RID_SVXDLG_NAME:EDT_STRING
 
 *CustomizeMenuReName sym:CUI_HID_SVX_CONFIG_RENAME_MENU_ITEM
-Eingabefeld sym:cui.Edit.10062.1
+Eingabefeld sym:cui:Edit:RID_SVXDLG_NAME:EDT_STRING
 
 *CustomizeToolbarsReName sym:CUI_HID_SVX_CONFIG_RENAME_TOOLBAR_ITEM
-Eingabefeld sym:cui.Edit.10062.1
+Eingabefeld sym:cui:Edit:RID_SVXDLG_NAME:EDT_STRING
 

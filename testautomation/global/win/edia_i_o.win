@@ -34,14 +34,14 @@ Image32 sym:WIZARDS_HID_IS_BTN_IMG32
 None sym:WIZARDS_HID_IS_BTN_NONE
 CancelB sym:WIZARDS_HID_IS_BTN_CANCEL
 
-*Indexes sym:dbu.ModalDialog.19201
-Table sym:dbu.ComboBox.19201.1
-TableIndexes sym:dbu.ListBox.19201.1
-FreeIndexes sym:dbu.ListBox.19201.2
-Add sym:dbu.ImageButton.19201.1
-Remove sym:dbu.ImageButton.19201.2
-AddAll sym:dbu.ImageButton.19201.3
-RemoveAll sym:dbu.ImageButton.19201.4
+*Indexes sym:dbaccess:ModalDialog:DLG_DBASE_INDEXES
+Table sym:dbaccess:ComboBox:DLG_DBASE_INDEXES:CB_TABLES
+TableIndexes sym:dbaccess:ListBox:DLG_DBASE_INDEXES:LB_TABLEINDEXES
+FreeIndexes sym:dbaccess:ListBox:DLG_DBASE_INDEXES:LB_FREEINDEXES
+Add sym:dbaccess:ImageButton:DLG_DBASE_INDEXES:IB_ADD
+Remove sym:dbaccess:ImageButton:DLG_DBASE_INDEXES:IB_REMOVE
+AddAll sym:dbaccess:ImageButton:DLG_DBASE_INDEXES:IB_ADDALL
+RemoveAll sym:dbaccess:ImageButton:DLG_DBASE_INDEXES:IB_REMOVEALL
 
 *InsertAxesDialog sym:CHART2_HID_INSERT_AXIS
 MajorXaxis       sym:CHART2_HID_SCH_CB_XAXIS
@@ -52,27 +52,27 @@ SecondaryYaxis   sym:CHART2_HID_SCH_CB_SECONDARY_YAXIS
 SecondaryZaxis   sym:CHART2_HID_SCH_CB_SECONDARY_ZAXIS
 
 *InsertDataColumns sym:SW_HID_AP_INSERT_DB_SEL
-TableBtn sym:sw.RadioButton.22052.2
-FieldsBtn sym:sw.RadioButton.22052.3
-TextBtn sym:sw.RadioButton.22052.4
-DatabaseColumnsTable sym:sw.ListBox.22052.20
-DatabaseColumns sym:sw.ListBox.22052.15
-FromDatabase sym:sw.RadioButton.22052.12
-FromUser sym:sw.RadioButton.22052.13
-FromUserList sym:sw.ListBox.22052.14
-ToEditButton sym:sw.ImageButton.22052.16
-FieldsInList sym:sw.MultiLineEdit.22052.17
-ParagraphStyle sym:sw.ListBox.22052.19
-AllToButton sym:sw.ImageButton.22052.21
-OneToButton sym:sw.ImageButton.22052.22
-OneFromButton sym:sw.ImageButton.22052.23
-AllFromButton sym:sw.ImageButton.22052.24
-TableColumns sym:sw.ListBox.22052.26
-InsertTableHeading sym:sw.CheckBox.22052.28
-ApplyColumnName sym:sw.RadioButton.22052.29
-CreateRowOnly sym:sw.RadioButton.22052.30
-Properties sym:sw.PushButton.22052.31
-AutoFormat sym:sw.PushButton.22052.32
+TableBtn sym:sw:RadioButton:DLG_AP_INSERT_DB_SEL:RB_AS_TABLE
+FieldsBtn sym:sw:RadioButton:DLG_AP_INSERT_DB_SEL:RB_AS_FIELD
+TextBtn sym:sw:RadioButton:DLG_AP_INSERT_DB_SEL:RB_AS_TEXT
+DatabaseColumnsTable sym:sw:ListBox:DLG_AP_INSERT_DB_SEL:LB_TBL_DB_COLUMN
+DatabaseColumns sym:sw:ListBox:DLG_AP_INSERT_DB_SEL:LB_TXT_DB_COLUMN
+FromDatabase sym:sw:RadioButton:DLG_AP_INSERT_DB_SEL:RB_DBFMT_FROM_DB
+FromUser sym:sw:RadioButton:DLG_AP_INSERT_DB_SEL:RB_DBFMT_FROM_USR
+FromUserList sym:sw:ListBox:DLG_AP_INSERT_DB_SEL:LB_DBFMT_FROM_USR
+ToEditButton sym:sw:ImageButton:DLG_AP_INSERT_DB_SEL:IB_DBCOL_TOEDIT
+FieldsInList sym:sw:MultiLineEdit:DLG_AP_INSERT_DB_SEL:ED_DB_TEXT
+ParagraphStyle sym:sw:ListBox:DLG_AP_INSERT_DB_SEL:LB_DB_PARA_COLL
+AllToButton sym:sw:ImageButton:DLG_AP_INSERT_DB_SEL:IB_DBCOL_ALL_TO
+OneToButton sym:sw:ImageButton:DLG_AP_INSERT_DB_SEL:IB_DBCOL_ONE_TO
+OneFromButton sym:sw:ImageButton:DLG_AP_INSERT_DB_SEL:IB_DBCOL_ONE_FROM
+AllFromButton sym:sw:ImageButton:DLG_AP_INSERT_DB_SEL:IB_DBCOL_ALL_FROM
+TableColumns sym:sw:ListBox:DLG_AP_INSERT_DB_SEL:LB_TABLE_COL
+InsertTableHeading sym:sw:CheckBox:DLG_AP_INSERT_DB_SEL:CB_TABLE_HEADON
+ApplyColumnName sym:sw:RadioButton:DLG_AP_INSERT_DB_SEL:RB_HEADL_COLNMS
+CreateRowOnly sym:sw:RadioButton:DLG_AP_INSERT_DB_SEL:RB_HEADL_EMPTY
+Properties sym:sw:PushButton:DLG_AP_INSERT_DB_SEL:PB_TBL_FORMAT
+AutoFormat sym:sw:PushButton:DLG_AP_INSERT_DB_SEL:PB_TBL_AUTOFMT
 
 *InsertLabelsDialog      sym:CHART2_HID_INSERT_DESCRIPTION
 ShowValue               sym:CHART2_HID_SCH_DATALABEL_VALUE
@@ -96,9 +96,9 @@ PositionTop        sym:CHART2_HID_SCH_LEGEND_POS_TOP
 PositionRight      sym:CHART2_HID_SCH_LEGEND_POS_RIGHT
 PositionBottom     sym:CHART2_HID_SCH_LEGEND_POS_BOTTOM
 
-*InsertPaste sym:sd.ModalDialog.678
-Before sym:sd.RadioButton.678.1
-After sym:sd.RadioButton.678.2
+*InsertPaste sym:sd:ModalDialog:DLG_INSERT_PASTE
+Before sym:sd:RadioButton:DLG_INSERT_PASTE:RB_BEFORE
+After sym:sd:RadioButton:DLG_INSERT_PASTE:RB_AFTER
  
 *InsertTrendlinesDialog sym:CHART2_HID_INSERT_STATISTICS
 None                        sym:CHART2_HID_SCH_TRENDLINE_RB_NONE
@@ -119,7 +119,7 @@ SecondTitleXaxis    sym:CHART2_HID_SCH_TITLE_SECONDARY_X
 SecondTitleYaxis    sym:CHART2_HID_SCH_TITLE_SECONDARY_Y 
 
 
-*InsertYErrorBarsDLG sym:chartcontroller.ModalDialog.842
+*InsertYErrorBarsDLG sym:chart2:ModalDialog:DLG_DATA_YERRORBAR
 MeanValue              sym:CHART2_HID_SCH_STATISTIK_MEANVALUE
 NoFunction             sym:CHART2_HID_SCH_STATISTIK_NO_ERROR
 Variance               sym:CHART2_HID_SCH_STATISTIK_VARIANT
@@ -134,16 +134,16 @@ ConstantValueMinus     sym:CHART2_HID_SCH_STATISTIK_MINUS_VALUE
 ErrorIndicator         sym:CHART2_HID_SCH_CT_INDICATE 
  
 *JavaClassPath sym:CUI_HID_OPTIONS_JAVA_CLASSPATH
-ClassPath sym:cui.ListBox.10255.11
-AddArchive sym:cui.PushButton.10255.20
-AddFolder sym:cui.PushButton.10255.21
-Remove sym:cui.PushButton.10255.22
+ClassPath sym:cui:ListBox:RID_SVXDLG_JAVA_CLASSPATH:LB_PATH
+AddArchive sym:cui:PushButton:RID_SVXDLG_JAVA_CLASSPATH:PB_ADDARCHIVE
+AddFolder sym:cui:PushButton:RID_SVXDLG_JAVA_CLASSPATH:PB_ADDPATH
+Remove sym:cui:PushButton:RID_SVXDLG_JAVA_CLASSPATH:PB_REMOVE_PATH
 
 *JavaStartParameter sym:CUI_HID_OPTIONS_JAVA_PARAMETER
-StartParameter sym:cui.Edit.10254.11
-Assign sym:cui.PushButton.10254.12
-AssignedStartParameters sym:cui.ListBox.10254.21
-Remove sym:cui.PushButton.10254.23
+StartParameter sym:cui:Edit:RID_SVXDLG_JAVA_PARAMETER:ED_PARAMETER
+Assign sym:cui:PushButton:RID_SVXDLG_JAVA_PARAMETER:PB_ASSIGN
+AssignedStartParameters sym:cui:ListBox:RID_SVXDLG_JAVA_PARAMETER:LB_ASSIGNED
+Remove sym:cui:PushButton:RID_SVXDLG_JAVA_PARAMETER:PB_REMOVE
 
 *JoinProperties sym:DBACCESS_HID_DLG_QRY_JOIN
 Type sym:DBACCESS_HID_DLG_QRY_JOINTYPE
@@ -152,15 +152,15 @@ FielsInvolved sym:DBACCESS_HID_RELDLG_KEYFIELDS
 LeftFieldCell sym:DBACCESS_HID_RELATIONDIALOG_LEFTFIELDCELL
 RightFieldCell sym:DBACCESS_HID_RELATIONDIALOG_RIGHTFIELDCELL
 
-*LabelFieldSelection sym:pcr.ModalDialog.1000
+*LabelFieldSelection sym:extensions:ModalDialog:RID_DLG_SELECTLABELCONTROL
 
 *LicenseAgreementDialog sym:FWK_HID_LICENSEDIALOG
-LicenseText sym:framework.MultiLineEdit.256.11
-ScrollBtn sym:framework.PushButton.256.18
-DeclineBtn sym:framework.PushButton.256.22
-AcceptBtn sym:framework.PushButton.256.23
+LicenseText sym:framework:MultiLineEdit:DLG_LICENSE:ML_LICENSE
+ScrollBtn sym:framework:PushButton:DLG_LICENSE:PB_PAGEDOWN
+DeclineBtn sym:framework:PushButton:DLG_LICENSE:PB_DECLINE
+AcceptBtn sym:framework:PushButton:DLG_LICENSE:PB_ACCEPT
 
-*FormLinkDialog sym:pcr.ModalDialog.1002
+*FormLinkDialog sym:extensions:ModalDialog:RID_DLG_FORMLINKS
 LinkDetail1 sym:EXTENSIONS_UID_FIELDLINK_DETAIL1
 LinkMaster1 sym:EXTENSIONS_UID_FIELDLINK_MASTER1
 LinkDetail2 sym:EXTENSIONS_UID_FIELDLINK_DETAIL2
@@ -169,46 +169,46 @@ LinkDetail3 sym:EXTENSIONS_UID_FIELDLINK_DETAIL3
 LinkMaster3 sym:EXTENSIONS_UID_FIELDLINK_MASTER3
 LinkDetail4 sym:EXTENSIONS_UID_FIELDLINK_DETAIL4
 LinkMaster4 sym:EXTENSIONS_UID_FIELDLINK_MASTER4
-SuggestBtn sym:pcr.PushButton.1002.4
+SuggestBtn sym:extensions:PushButton:RID_DLG_FORMLINKS:PB_SUGGEST
 
-*MacroMigration     sym:dbu.ModalDialog.19200
-DatabaseFile        sym:.uno:OpenUrl
-Browse              sym:dbu.PushButton.19201.1
+*MacroMigration     sym:dbaccess:ModalDialog:DLG_MACRO_MIGRATION
+DatabaseFile        .uno:OpenUrl
+Browse              sym:dbaccess:PushButton:TP_SAVE_DBDOC_AS:PB_BROWSE_SAVE_AS_LOCATION
 BackButton          sym:SVT_HID_WIZARD_PREVIOUS
 NextButton          sym:SVT_HID_WIZARD_NEXT
 BackupLocation      sym:DBACCESS_HID_MACRO_MIGRATION_BACKUP_LOCATION
 
 *MailMerge sym:SW_HID_MAIL_MERGE_CREATE_FROM
-ThisDocument sym:sw.RadioButton.22812.2
-UseTemplate sym:sw.RadioButton.22812.3
+ThisDocument sym:sw:RadioButton:DLG_MERGE_CREATE:RB_THISDOC
+UseTemplate sym:sw:RadioButton:DLG_MERGE_CREATE:RB_TEMPLATE
 
 *MailMergeFloat active
 ReturnToMailMergeWizard sym:SW_HID_RETURN_TO_MAILMERGE
 
 *MailMergeInsertFields sym:SW_HID_MAIL_MERGE_INSERT_FIELDS
-UseExisting sym:sw.RadioButton.22813.8
-CreateNewConnection sym:sw.RadioButton.22813.9
+UseExisting sym:sw:RadioButton:DLG_MERGE_FIELD_CONNECTIONS:RB_USEEXISTING
+CreateNewConnection sym:sw:RadioButton:DLG_MERGE_FIELD_CONNECTIONS:RB_CREATENEW
 
 *ManageNamespaceDLG sym:SVX_HID_XFORMS_MANAGENAMESPACE_DLG
-Prefix sym:svx.Edit.18015.11
-URL sym:svx.Edit.18015.13
+Prefix sym:svx:Edit:RID_SVXDLG_MANAGE_NAMESPACE:ED_PREFIX
+URL sym:svx:Edit:RID_SVXDLG_MANAGE_NAMESPACE:ED_URL
 
-*MailMergeWizard sym:sw.ModalDialog.22053
+*MailMergeWizard sym:sw:ModalDialog:DLG_MAILMERGEWIZARD
 BackButton sym:SW_HID_MM_PREV_PAGE
 NextButton sym:SW_HID_MM_NEXT_PAGE
 
 *ManageUILanguages sym:BASCTL_HID_BASICIDE_MANAGE_LANGUAGE
-PresentLanguages sym:basctl.ListBox.16870.2
-Add sym:basctl.PushButton.16870.3
-Delete sym:basctl.PushButton.16870.4
-Default sym:basctl.PushButton.16870.5
+PresentLanguages sym:basctl:ListBox:RID_DLG_MANAGE_LANGUAGE:LB_LANGUAGE
+Add sym:basctl:PushButton:RID_DLG_MANAGE_LANGUAGE:PB_ADD_LANG
+Delete sym:basctl:PushButton:RID_DLG_MANAGE_LANGUAGE:PB_DEL_LANG
+Default sym:basctl:PushButton:RID_DLG_MANAGE_LANGUAGE:PB_MAKE_DEFAULT
 
 *MasterPasswordDefine sym:UUI_HID_DLG_MASTERPASSWORD_CRT
-Password1 sym:uui.Edit.14521.21
-Password2 sym:uui.Edit.14521.23
+Password1 sym:uui:Edit:DLG_UUI_MASTERPASSWORD_CRT:ED_MASTERPASSWORD_CRT
+Password2 sym:uui:Edit:DLG_UUI_MASTERPASSWORD_CRT:ED_MASTERPASSWORD_REPEAT
 
 *MasterPasswordEnter sym:UUI_HID_DLG_MASTERPASSWORD_UUI
-Password sym:uui.Edit.14512.21
+Password sym:uui:Edit:DLG_UUI_MASTERPASSWORD:ED_MASTERPASSWORD
 
 *MatchFields sym:SW_HID_MM_ASSIGNFIELDS
 Title sym:SW_HID_MM_HEADER_0
@@ -240,45 +240,45 @@ mZoomlistbox sym:AVMEDIA_HID_AVMEDIA_ZOOMLISTBOX
 mTimeedit sym:AVMEDIA_HID_AVMEDIA_TIMEEDIT
 
 *MenuOrganiser sym:CUI_HID_SVX_CONFIG_MENU_ORGANIZER
-MenuName sym:cui.Edit.379.388
-ButtonUp sym:cui.ImageButton.379.382
-ButtonDown sym:cui.ImageButton.379.383
+MenuName sym:cui:Edit:MD_MENU_ORGANISER:EDIT_MENU_NAME
+ButtonUp sym:cui:ImageButton:MD_MENU_ORGANISER:BTN_MENU_UP
+ButtonDown sym:cui:ImageButton:MD_MENU_ORGANISER:BTN_MENU_DOWN
 
-*ModifyLink sym:sfx.ModalDialog.517
-ModifyDDEApplication sym:sfx.Edit.517.50
-ModifyDDEFile sym:sfx.Edit.517.51
-ModifyDDECategory sym:sfx.Edit.517.52
+*ModifyLink sym:sfx2:ModalDialog:MD_DDE_LINKEDIT
+ModifyDDEApplication sym:sfx2:Edit:MD_DDE_LINKEDIT:ED_DDE_APP
+ModifyDDEFile sym:sfx2:Edit:MD_DDE_LINKEDIT:ED_DDE_TOPIC
+ModifyDDECategory sym:sfx2:Edit:MD_DDE_LINKEDIT:ED_DDE_ITEM
 
-*Mosaic sym:.uno:GraphicFilterMosaic
-Width sym:cui.MetricField.10332.2
-Height sym:cui.MetricField.10332.4
-EnhanceEdges sym:cui.CheckBox.10332.5
+*Mosaic .uno:GraphicFilterMosaic
+Width sym:cui:MetricField:RID_SVX_GRFFILTER_DLG_MOSAIC:DLG_FILTERMOSAIC_MTR_WIDTH
+Height sym:cui:MetricField:RID_SVX_GRFFILTER_DLG_MOSAIC:DLG_FILTERMOSAIC_MTR_HEIGHT
+EnhanceEdges sym:cui:CheckBox:RID_SVX_GRFFILTER_DLG_MOSAIC:DLG_FILTERMOSAIC_CBX_EDGES
 
 *NewAddressList sym:SW_HID_MM_CREATEADDRESSLIST
-New sym:sw.PushButton.22064.3
-Delete sym:sw.PushButton.22064.4
-Find sym:sw.PushButton.22064.5
-Customize sym:sw.PushButton.22064.6
-ShowFirst sym:sw.PushButton.22064.8
-ShowPrevious sym:sw.PushButton.22064.9
-ShowNumber sym:sw.NumericField.22064.10
-ShowNext sym:sw.PushButton.22064.11
-ShowLast sym:sw.PushButton.22064.12
+New sym:sw:PushButton:DLG_MM_CREATEADDRESSLIST:PB_NEW
+Delete sym:sw:PushButton:DLG_MM_CREATEADDRESSLIST:PB_DELETE
+Find sym:sw:PushButton:DLG_MM_CREATEADDRESSLIST:PB_FIND
+Customize sym:sw:PushButton:DLG_MM_CREATEADDRESSLIST:PB_CUSTOMIZE
+ShowFirst sym:sw:PushButton:DLG_MM_CREATEADDRESSLIST:PB_START
+ShowPrevious sym:sw:PushButton:DLG_MM_CREATEADDRESSLIST:PB_PREV
+ShowNumber sym:sw:NumericField:DLG_MM_CREATEADDRESSLIST:NF_SETNO
+ShowNext sym:sw:PushButton:DLG_MM_CREATEADDRESSLIST:PB_NEXT
+ShowLast sym:sw:PushButton:DLG_MM_CREATEADDRESSLIST:PB_END
 
 *NewAddressBlock   sym:SW_HID_MM_CUSTOMIZEADDRESSBLOCK
 SelectField sym:SW_HID_MM_CUSTOMFIELDS
-Add sym:sw.ImageButton.22068.42
-Remove sym:sw.ImageButton.22068.43
-Arrange sym:sw.MultiLineEdit.22068.49
-MoveUp   sym:sw.ImageButton.22068.50
-MoveLeft   sym:sw.ImageButton.22068.51
-MoveRight   sym:sw.ImageButton.22068.52
-MoveDown   sym:sw.ImageButton.22068.53
-Select  sym:sw.ComboBox.22068.55
+Add sym:sw:ImageButton:DLG_MM_CUSTOMIZEADDRESSBLOCK:IB_INSERTFIELD
+Remove sym:sw:ImageButton:DLG_MM_CUSTOMIZEADDRESSBLOCK:IB_REMOVEFIELD
+Arrange sym:sw:MultiLineEdit:DLG_MM_CUSTOMIZEADDRESSBLOCK:ED_DRAG
+MoveUp   sym:sw:ImageButton:DLG_MM_CUSTOMIZEADDRESSBLOCK:IB_UP
+MoveLeft   sym:sw:ImageButton:DLG_MM_CUSTOMIZEADDRESSBLOCK:IB_LEFT
+MoveRight   sym:sw:ImageButton:DLG_MM_CUSTOMIZEADDRESSBLOCK:IB_RIGHT
+MoveDown   sym:sw:ImageButton:DLG_MM_CUSTOMIZEADDRESSBLOCK:IB_DOWN
+Select  sym:sw:ComboBox:DLG_MM_CUSTOMIZEADDRESSBLOCK:CB_FIELD
 
-*NewToolbar sym:cui.ModalDialog.401
-ToolbarName sym:cui.Edit.401.402
-SaveIn sym:cui.ListBox.401.324
+*NewToolbar sym:cui:ModalDialog:MD_NEW_TOOLBAR
+ToolbarName sym:cui:Edit:MD_NEW_TOOLBAR:EDT_STRING
+SaveIn sym:cui:ListBox:MD_NEW_TOOLBAR:LB_SAVEIN
 
 *NewsletterLayout sym:WIZARDS_HID_DLGNEWSLTR_DIALOG
 Newsletter sym:WIZARDS_HID_DLGNEWSLTR_OPTSTANDARDLAYOUT
@@ -288,16 +288,16 @@ Single sym:WIZARDS_HID_DLGNEWSLTR_OPTSINGLESIDED
 Duplex sym:WIZARDS_HID_DLGNEWSLTR_OPTDOUBLESIDED
 OKButton sym:WIZARDS_HID_DLGNEWSLTR_CMDGOON
 
-*OLEObjektInsert sym:.uno:InsertObject
-NeuErstellen sym:cui.RadioButton.32010.10
-AusDateiErstellen sym:cui.RadioButton.32010.11
-Objekttyp sym:cui.ListBox.32010.12
-OleDatei sym:cui.Edit.32010.10
-Verknuepfen sym:cui.CheckBox.32010.12
-Durchsuchen sym:cui.PushButton.32010.11
+*OLEObjektInsert .uno:InsertObject
+NeuErstellen sym:cui:RadioButton:MD_INSERT_OLEOBJECT:RB_NEW_OBJECT
+AusDateiErstellen sym:cui:RadioButton:MD_INSERT_OLEOBJECT:RB_OBJECT_FROMFILE
+Objekttyp sym:cui:ListBox:MD_INSERT_OLEOBJECT:LB_OBJECTTYPE
+OleDatei sym:cui:Edit:MD_INSERT_OLEOBJECT:ED_FILEPATH
+Verknuepfen sym:cui:CheckBox:MD_INSERT_OLEOBJECT:CB_FILELINK
+Durchsuchen sym:cui:PushButton:MD_INSERT_OLEOBJECT:BTN_FILEPATH
 
-*InsertTableImpress sym:cui.ModalDialog.10044
-NumberOfColumns sym:cui.NumericField.10044.2
-NumberOfRows sym:cui.NumericField.10044.4
+*InsertTableImpress sym:cui:ModalDialog:RID_SVX_NEWTABLE_DLG
+NumberOfColumns sym:cui:NumericField:RID_SVX_NEWTABLE_DLG:NF_COLUMNS
+NumberOfRows sym:cui:NumericField:RID_SVX_NEWTABLE_DLG:NF_ROWS
 
-*TableDesign sym:sd.ModalDialog.20974
+*TableDesign sym:sd:ModalDialog:DLG_TABLEDESIGNPANE

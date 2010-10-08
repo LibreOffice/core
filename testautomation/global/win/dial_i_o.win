@@ -1,4 +1,4 @@
-*ImageMapEditor sym:svx.ModelessDialog.10450
+*ImageMapEditor sym:svx:ModelessDialog:RID_SVXDLG_IMAP
 TB_ImagemapEditor sym:SVX_HID_IMAPDLG_TOOLBOX
 Zuweisen sym:SVX_HID_IMAPDLG_APPLY
 Oeffnen sym:SVX_HID_IMAPDLG_OPEN
@@ -17,121 +17,121 @@ Wiederholen sym:SVX_HID_IMAPDLG_REDO
 Aktiv sym:SVX_HID_IMAPDLG_ACTIVE
 Makro sym:SVX_HID_IMAPDLG_MACRO
 Eigenschaften sym:SVX_HID_IMAPDLG_PROPERTY
-BearbeitenImageMap sym:.uno:ImageMapDialog
-Beschreibung sym:svx.Edit.10450.1
+BearbeitenImageMap .uno:ImageMapDialog
+Beschreibung sym:svx:Edit:RID_SVXDLG_IMAP:EDT_TEXT
 Dokument sym:SVX_HID_IMAPDLG_GRAPHWND
-Adresse sym:.uno:OpenUrl
-BearbeitenText sym:svx.Edit.10450.1
+Adresse .uno:OpenUrl
+BearbeitenText sym:svx:Edit:RID_SVXDLG_IMAP:EDT_TEXT
 
-*ImageMapHyperlink sym:cui.ModalDialog.10102
-URL sym:cui.Edit.10102.2
-Alternativetext sym:cui.Edit.10102.1
-Frame sym:cui.ComboBox.10102.1
-Name sym:cui.Edit.10102.3
-Description sym:cui.MultiLineEdit.10102.4
+*ImageMapHyperlink sym:cui:ModalDialog:RID_SVXDLG_IMAPURL
+URL sym:cui:Edit:RID_SVXDLG_IMAPURL:EDT_URL
+Alternativetext sym:cui:Edit:RID_SVXDLG_IMAPURL:EDT_URLDESCRIPTION
+Frame sym:cui:ComboBox:RID_SVXDLG_IMAPURL:CBB_TARGETS
+Name sym:cui:Edit:RID_SVXDLG_IMAPURL:EDT_NAME
+Description sym:cui:MultiLineEdit:RID_SVXDLG_IMAPURL:EDT_DESCRIPTION
 
-*IndividuellePraesentation sym:.uno:CustomShowDialog
-Neu sym:sd.PushButton.843.1
-Bearbeiten sym:sd.PushButton.843.2
-Loeschen sym:sd.PushButton.843.3
-Kopieren sym:sd.PushButton.843.4
-Starten sym:sd.PushButton.843.5
-IndividuellePraesentationBenutzen sym:sd.CheckBox.843.1
-CustomSlideShowList sym:sd.ListBox.843.1
+*IndividuellePraesentation .uno:CustomShowDialog
+Neu sym:sd:PushButton:DLG_CUSTOMSHOW:BTN_NEW
+Bearbeiten sym:sd:PushButton:DLG_CUSTOMSHOW:BTN_EDIT
+Loeschen sym:sd:PushButton:DLG_CUSTOMSHOW:BTN_REMOVE
+Kopieren sym:sd:PushButton:DLG_CUSTOMSHOW:BTN_COPY
+Starten sym:sd:PushButton:DLG_CUSTOMSHOW:BTN_STARTSHOW
+IndividuellePraesentationBenutzen sym:sd:CheckBox:DLG_CUSTOMSHOW:CBX_USE_CUSTOMSHOW
+CustomSlideShowList sym:sd:ListBox:DLG_CUSTOMSHOW:LB_CUSTOMSHOWS
 
 *IndividuellePraesentationDefinieren sym:SD_HID_DLG_DEFINE_CUSTOMSHOW
-PraesentationName sym:sd.Edit.890.1
-SeitenPraesentation sym:sd.MultiListBox.890.1
+PraesentationName sym:sd:Edit:DLG_DEFINE_CUSTOMSHOW:EDT_NAME
+SeitenPraesentation sym:sd:MultiListBox:DLG_DEFINE_CUSTOMSHOW:LB_PAGES
 SelectedSlides sym:SD_HID_DLG_DEFINE_CUSTOMSHOW_CTL
-Hinzufuegen sym:sd.PushButton.890.1
-Entfernen sym:sd.PushButton.890.3
+Hinzufuegen sym:sd:PushButton:DLG_DEFINE_CUSTOMSHOW:BTN_ADD
+Entfernen sym:sd:PushButton:DLG_DEFINE_CUSTOMSHOW:BTN_REMOVE
 
 *InfofelderBearbeiten sym:SFX2_HID_DOCINFO_EDT
-Name0 sym:sfx.Edit.266.5
-Name1 sym:sfx.Edit.266.7
-Name2 sym:sfx.Edit.266.9
-Name3 sym:sfx.Edit.266.11
+Name0 sym:sfx2:Edit:DLG_DOCINFO_EDT:ED_INFO1
+Name1 sym:sfx2:Edit:DLG_DOCINFO_EDT:ED_INFO2
+Name2 sym:sfx2:Edit:DLG_DOCINFO_EDT:ED_INFO3
+Name3 sym:sfx2:Edit:DLG_DOCINFO_EDT:ED_INFO4
 
 *InfonamenBearbeiten sym:SFX2_HID_DOCINFO_EDT
-Namen1 sym:sfx.Edit.266.5
-Namen2 sym:sfx.Edit.266.7
-Namen3 sym:sfx.Edit.266.9
-Namen4 sym:sfx.Edit.266.11
+Namen1 sym:sfx2:Edit:DLG_DOCINFO_EDT:ED_INFO1
+Namen2 sym:sfx2:Edit:DLG_DOCINFO_EDT:ED_INFO2
+Namen3 sym:sfx2:Edit:DLG_DOCINFO_EDT:ED_INFO3
+Namen4 sym:sfx2:Edit:DLG_DOCINFO_EDT:ED_INFO4
 
 *InhaltEinfuegen sym:CUI_HID_PASTE_DLG
-AlsSymbol sym:cui.CheckBox.32001.12
-AndersSymbol sym:cui.PushButton.32001.14
-VerknuepfungMit sym:cui.RadioButton.32001.21
-Auswahl sym:cui.ListBox.32001.7
-EinfuegenAls sym:cui.RadioButton.32001.20
+AlsSymbol sym:cui:CheckBox:MD_PASTE_OBJECT:CB_DISPLAY_AS_ICON
+AndersSymbol sym:cui:PushButton:MD_PASTE_OBJECT:PB_CHANGE_ICON
+VerknuepfungMit sym:cui:RadioButton:MD_PASTE_OBJECT:RB_PASTE_LINK
+Auswahl sym:cui:ListBox:MD_PASTE_OBJECT:LB_INSERT_LIST
+EinfuegenAls sym:cui:RadioButton:MD_PASTE_OBJECT:RB_PASTE
 
-*InhalteEinfuegenCalc sym:.uno:InsertContents
-AllesEinfuegen sym:sc.CheckBox.25618.20
-Zeichenketten sym:sc.CheckBox.25618.21
-Zahlen sym:sc.CheckBox.25618.22
-DatumZeit sym:sc.CheckBox.25618.23
-Formeln sym:sc.CheckBox.25618.24
-Notizen sym:sc.CheckBox.25618.26
-Formate sym:sc.CheckBox.25618.25
-Objects sym:sc.CheckBox.25618.41
-LeerzellenUeberspringen sym:sc.CheckBox.25618.33
-Transponieren sym:sc.CheckBox.25618.34
-Verknuepfen sym:sc.CheckBox.25618.35
-Keine sym:sc.RadioButton.25618.27
-Addieren sym:sc.RadioButton.25618.28
-Subtrahieren sym:sc.RadioButton.25618.29
-Multiplizieren sym:sc.RadioButton.25618.30
-Dividieren sym:sc.RadioButton.25618.31
-NichtVerschieben sym:sc.RadioButton.25618.37
-NachUnten sym:sc.RadioButton.25618.38
-NachRechts sym:sc.RadioButton.25618.39
+*InhalteEinfuegenCalc .uno:InsertContents
+AllesEinfuegen sym:sc:CheckBox:RID_SCDLG_INSCONT:BTN_INSALL
+Zeichenketten sym:sc:CheckBox:RID_SCDLG_INSCONT:BTN_INSSTRINGS
+Zahlen sym:sc:CheckBox:RID_SCDLG_INSCONT:BTN_INSNUMBERS
+DatumZeit sym:sc:CheckBox:RID_SCDLG_INSCONT:BTN_INSDATETIME
+Formeln sym:sc:CheckBox:RID_SCDLG_INSCONT:BTN_INSFORMULAS
+Notizen sym:sc:CheckBox:RID_SCDLG_INSCONT:BTN_INSNOTES
+Formate sym:sc:CheckBox:RID_SCDLG_INSCONT:BTN_INSATTRS
+Objects sym:sc:CheckBox:RID_SCDLG_INSCONT:BTN_INSOBJECTS
+LeerzellenUeberspringen sym:sc:CheckBox:RID_SCDLG_INSCONT:BTN_SKIP_EMPTY
+Transponieren sym:sc:CheckBox:RID_SCDLG_INSCONT:BTN_TRANSPOSE
+Verknuepfen sym:sc:CheckBox:RID_SCDLG_INSCONT:BTN_LINK
+Keine sym:sc:RadioButton:RID_SCDLG_INSCONT:BTN_OP_NOOP
+Addieren sym:sc:RadioButton:RID_SCDLG_INSCONT:BTN_OP_ADD
+Subtrahieren sym:sc:RadioButton:RID_SCDLG_INSCONT:BTN_OP_SUB
+Multiplizieren sym:sc:RadioButton:RID_SCDLG_INSCONT:BTN_OP_MUL
+Dividieren sym:sc:RadioButton:RID_SCDLG_INSCONT:BTN_OP_DIV
+NichtVerschieben sym:sc:RadioButton:RID_SCDLG_INSCONT:BTN_MV_NONE
+NachUnten sym:sc:RadioButton:RID_SCDLG_INSCONT:BTN_MV_DOWN
+NachRechts sym:sc:RadioButton:RID_SCDLG_INSCONT:BTN_MV_RIGHT
 
-*InhalteLoeschen sym:.uno:Delete
-Alles sym:sc.CheckBox.25617.10
-Zeichenketten sym:sc.CheckBox.25617.11
-Zahlen sym:sc.CheckBox.25617.12
-DatumZeit sym:sc.CheckBox.25617.13
-Formeln sym:sc.CheckBox.25617.14
-Notizen sym:sc.CheckBox.25617.16
-Formate sym:sc.CheckBox.25617.15
-Objekte sym:sc.CheckBox.25617.17
+*InhalteLoeschen .uno:Delete
+Alles sym:sc:CheckBox:RID_SCDLG_DELCONT:BTN_DELALL
+Zeichenketten sym:sc:CheckBox:RID_SCDLG_DELCONT:BTN_DELSTRINGS
+Zahlen sym:sc:CheckBox:RID_SCDLG_DELCONT:BTN_DELNUMBERS
+DatumZeit sym:sc:CheckBox:RID_SCDLG_DELCONT:BTN_DELDATETIME
+Formeln sym:sc:CheckBox:RID_SCDLG_DELCONT:BTN_DELFORMULAS
+Notizen sym:sc:CheckBox:RID_SCDLG_DELCONT:BTN_DELNOTES
+Formate sym:sc:CheckBox:RID_SCDLG_DELCONT:BTN_DELATTRS
+Objekte sym:sc:CheckBox:RID_SCDLG_DELCONT:BTN_DELOBJECTS
 
 *InPolygonUmwandeln sym:SD_HID_VECTORIZE_DLG
-Farbanzahl sym:sd.NumericField.654.1
-Punktreduktion sym:sd.MetricField.654.3
-LoecherFuellen sym:sd.CheckBox.654.1
-Kachelgroesse sym:sd.MetricField.654.4
-Vorschau sym:sd.PushButton.654.1
+Farbanzahl sym:sd:NumericField:DLG_VECTORIZE:NM_LAYERS
+Punktreduktion sym:sd:MetricField:DLG_VECTORIZE:MT_REDUCE
+LoecherFuellen sym:sd:CheckBox:DLG_VECTORIZE:CB_FILLHOLES
+Kachelgroesse sym:sd:MetricField:DLG_VECTORIZE:MT_FILLHOLES
+Vorschau sym:sd:PushButton:DLG_VECTORIZE:BTN_PREVIEW
 
 +Interaktion TabInteraktion
 
-*JPEGOptionen sym:svt.ModalDialog.16481
-Qualitaet sym:svt.NumericField.16481.1
-Graustufen sym:svt.RadioButton.16481.1
-Echtfarben sym:svt.RadioButton.16481.2
+*JPEGOptionen sym:svtools:ModalDialog:DLG_EXPORT_JPG
+Qualitaet sym:svtools:NumericField:DLG_EXPORT_JPG:NUM_FLD_QUALITY
+Graustufen sym:svtools:RadioButton:DLG_EXPORT_JPG:RB_GRAY
+Echtfarben sym:svtools:RadioButton:DLG_EXPORT_JPG:RB_RGB
 
 *Kommentar sym:CUI_HID_REDLINING_DLG
 KommentarText sym:CUI_HID_REDLINING_EDIT
 Zurueck sym:CUI_HID_REDLINING_PREV
 Vor sym:CUI_HID_REDLINING_NEXT
 
-*Konsolidieren sym:.uno:DataConsolidate
-Berechnungsvorschrift sym:sc.ListBox.25639.12
-Konsolidierungsbereiche sym:sc.MultiListBox.25639.22
-Quelldatenbereich sym:sc.ListBox.25639.32
-Quelldaten sym:sc.Edit.25639.33
-ButtonQuelldaten sym:sc.ImageButton.25639.34
-AusgebenBereich sym:sc.ListBox.25639.42
-Ausgeben sym:sc.Edit.25639.43
-ButtonAusgeben sym:sc.ImageButton.25639.44
-Zeilenbeschriftung sym:sc.CheckBox.25639.51
-Spaltenkoepfen sym:sc.CheckBox.25639.52
-MitQuelldatenVerbinden sym:sc.CheckBox.25639.61
-Loeschen sym:sc.PushButton.25639.6
-Hinzufuegen sym:sc.PushButton.25639.5
-Zusaetze sym:sc.MoreButton.25639.4
+*Konsolidieren .uno:DataConsolidate
+Berechnungsvorschrift sym:sc:ListBox:RID_SCDLG_CONSOLIDATE:LB_FUNC
+Konsolidierungsbereiche sym:sc:MultiListBox:RID_SCDLG_CONSOLIDATE:LB_CONSAREAS
+Quelldatenbereich sym:sc:ListBox:RID_SCDLG_CONSOLIDATE:LB_DATA_AREA
+Quelldaten sym:sc:Edit:RID_SCDLG_CONSOLIDATE:ED_DATA_AREA
+ButtonQuelldaten sym:sc:ImageButton:RID_SCDLG_CONSOLIDATE:RB_DATA_AREA
+AusgebenBereich sym:sc:ListBox:RID_SCDLG_CONSOLIDATE:LB_DEST_AREA
+Ausgeben sym:sc:Edit:RID_SCDLG_CONSOLIDATE:ED_DEST_AREA
+ButtonAusgeben sym:sc:ImageButton:RID_SCDLG_CONSOLIDATE:RB_DEST_AREA
+Zeilenbeschriftung sym:sc:CheckBox:RID_SCDLG_CONSOLIDATE:BTN_BYROW
+Spaltenkoepfen sym:sc:CheckBox:RID_SCDLG_CONSOLIDATE:BTN_BYCOL
+MitQuelldatenVerbinden sym:sc:CheckBox:RID_SCDLG_CONSOLIDATE:BTN_REFS
+Loeschen sym:sc:PushButton:RID_SCDLG_CONSOLIDATE:BTN_REMOVE
+Hinzufuegen sym:sc:PushButton:RID_SCDLG_CONSOLIDATE:BTN_ADD
+Zusaetze sym:sc:MoreButton:RID_SCDLG_CONSOLIDATE:BTN_MORE
 
-*KonturEditor sym:svx.FloatingWindow.10461
+*KonturEditor sym:svx:FloatingWindow:RID_SVXDLG_CONTOUR
 Zuweisen sym:SVX_HID_CONTDLG_APPLY
 Arbeitsbereich sym:SVX_HID_CONTDLG_WORKPLACE
 Auswahl sym:SVX_HID_CONTDLG_SELECT
@@ -146,20 +146,20 @@ Autokontur sym:SVX_HID_CONTDLG_AUTOCONTOUR
 Widerrufen sym:SVX_HID_CONTDLG_UNDO
 Wiederholen sym:SVX_HID_CONTDLG_REDO
 Pipette sym:SVX_HID_CONTDLG_PIPETTE
-Toleranz sym:svx.MetricField.10461.1
+Toleranz sym:svx:MetricField:RID_SVXDLG_CONTOUR:MTF_TOLERANCE
 
-*KopfFusszeilenSeitenvorlageStandard sym:.uno:EditHeaderAndFooter
+*KopfFusszeilenSeitenvorlageStandard .uno:EditHeaderAndFooter
 
 *Linienenden sym:SVX_HID_POPUP_LINEEND
 Auswahl sym:SVX_HID_POPUP_LINEEND_CTRL
 
 *Linienstil sym:CUI_HID_DLG_MESSBOX
-Aendern sym:cui.PushButton.10063.1
-Hinzufuegen sym:cui.PushButton.10063.2
+Aendern sym:cui:PushButton:RID_SVXDLG_MESSBOX:BTN_1
+Hinzufuegen sym:cui:PushButton:RID_SVXDLG_MESSBOX:BTN_2
 
-*LinksFuellen sym:.uno:FillLeft
+*LinksFuellen .uno:FillLeft
 
-*LiteratureintragEinfuegen sym:.uno:InsertAuthoritiesEntry
+*LiteratureintragEinfuegen .uno:InsertAuthoritiesEntry
 EintragErzeugen sym:SW_HID_INSERT_AUTH_MRK_CREATE_ENTRY
 EintragEinfuegen sym:SW_HID_INSERT_AUTH_MRK_OK
 EintragSchliessen sym:SW_HID_INSERT_AUTH_MRK_CLOSE
@@ -201,89 +201,89 @@ Benutzerfeld3 sym:SW_HID_AUTH_FIELD_CUSTOM3
 Benutzerfeld4 sym:SW_HID_AUTH_FIELD_CUSTOM4
 Benutzerfeld5 sym:SW_HID_AUTH_FIELD_CUSTOM5
 
-*Loeschbestaetigung sym:svt.ModalDialog.16376
-Ja sym:svt.PushButton.16376.4
-Alle sym:svt.PushButton.16376.6
-Nein sym:svt.PushButton.16376.5
+*Loeschbestaetigung sym:svtools:ModalDialog:DLG_SVT_QUERYDELETE
+Ja sym:svtools:PushButton:DLG_SVT_QUERYDELETE:BTN_YES
+Alle sym:svtools:PushButton:DLG_SVT_QUERYDELETE:BTN_ALL
+Nein sym:svtools:PushButton:DLG_SVT_QUERYDELETE:BTN_NO
 
-*Makro sym:basctl.ModalDialog.14900
-Makroname sym:basctl.Edit.14900.5
+*Makro sym:basctl:ModalDialog:RID_MACROCHOOSER
+Makroname sym:basctl:Edit:RID_MACROCHOOSER:RID_ED_MACRONAME
 Makroliste sym:BASCTL_HID_BASICIDE_MACROS
 MakroAus sym:BASCTL_HID_BASICIDE_LIBS
-Beschreibung sym:basctl.MultiLineEdit.14900.16
-Ausfuehren sym:basctl.PushButton.14900.8
-Speichern sym:basctl.PushButton.14900.8
-Zuordnen sym:basctl.PushButton.14900.13
-Bearbeiten sym:basctl.PushButton.14900.10
-Loeschen sym:basctl.PushButton.14900.12
-Neu sym:basctl.PushButton.14900.12
-Verwalten sym:basctl.PushButton.14900.11
-NewLibrary sym:basctl.PushButton.14900.19
-NewModule sym:basctl.PushButton.14900.20
+Beschreibung sym:basctl:MultiLineEdit:RID_MACROCHOOSER:RID_ML_DESCRIPTION
+Ausfuehren sym:basctl:PushButton:RID_MACROCHOOSER:RID_PB_RUN
+Speichern sym:basctl:PushButton:RID_MACROCHOOSER:RID_PB_RUN
+Zuordnen sym:basctl:PushButton:RID_MACROCHOOSER:RID_PB_ASSIGN
+Bearbeiten sym:basctl:PushButton:RID_MACROCHOOSER:RID_PB_EDIT
+Loeschen sym:basctl:PushButton:RID_MACROCHOOSER:RID_PB_DEL
+Neu sym:basctl:PushButton:RID_MACROCHOOSER:RID_PB_DEL
+Verwalten sym:basctl:PushButton:RID_MACROCHOOSER:RID_PB_ORG
+NewLibrary sym:basctl:PushButton:RID_MACROCHOOSER:RID_PB_NEWLIB
+NewModule sym:basctl:PushButton:RID_MACROCHOOSER:RID_PB_NEWMOD
 
-*MakroOptionen sym:basctl.ModalDialog.14905
-Beschreibung sym:basctl.MultiLineEdit.14905.7
-HilfeIdentifikation sym:basctl.NumericField.14905.10
-HilfeDateiname sym:basctl.Edit.14905.12
+*MakroOptionen sym:basctl:ModalDialog:RID_MACROOPTIONS
+Beschreibung sym:basctl:MultiLineEdit:RID_MACROOPTIONS:RID_ME_DESCR
+HilfeIdentifikation sym:basctl:NumericField:RID_MACROOPTIONS:RID_NF_HELPID
+HilfeDateiname sym:basctl:Edit:RID_MACROOPTIONS:RID_ED_HELPNAME
 
-*MakroZuweisen sym:cui.TabPage.10303
+*MakroZuweisen sym:cui:TabPage:RID_SVXPAGE_EVENTASSIGN
 Ereignis sym:CUI_HID_MACRO_LB_EVENT
-Bereich sym:CUI_HID_MACRO_GROUP SFX2:LISTBOX:RID_SFX_TP_MACROASSIGN:LB_GROUP
-Makroname sym:CUI_HID_MACRO_MACROS SFX2:LISTBOX:RID_SFX_TP_MACROASSIGN:LB_MACROS
-Zuweisen sym:cui.PushButton.10303.3
-Aufheben sym:cui.PushButton.10303.4
-Scripttyp sym:cui.ListBox.10303.8
+Bereich sym:CUI_HID_MACRO_GROUP sym:sfx2:ListBox:RID_SFX_TP_MACROASSIGN:LB_GROUP
+Makroname sym:CUI_HID_MACRO_MACROS sym:sfx2:ListBox:RID_SFX_TP_MACROASSIGN:LB_MACROS
+Zuweisen sym:cui:PushButton:RID_SVXPAGE_EVENTASSIGN:PB_ASSIGN
+Aufheben sym:cui:PushButton:RID_SVXPAGE_EVENTASSIGN:PB_DELETE
+Scripttyp sym:cui:ListBox:RID_SVXPAGE_EVENTASSIGN:LB_SCRIPTTYPE
 
-*Massstab sym:.uno:Zoom
-Optimal sym:cui.RadioButton.10000.15
-GanzeSeite sym:cui.RadioButton.10000.16
-Seitenbreite sym:cui.RadioButton.10000.17
-Vergroesserung100 sym:cui.RadioButton.10000.18
-VergroesserungStufenlos sym:cui.RadioButton.10000.19
-Stufenlos sym:cui.MetricField.10000.20
-Automatic sym:cui.RadioButton.10000.22
-Singlepage sym:cui.RadioButton.10000.23
-Columns sym:cui.RadioButton.10000.24
-Columnsfield sym:cui.MetricField.10000.25
-Bookmode sym:cui.CheckBox.10000.26
+*Massstab .uno:Zoom
+Optimal sym:cui:RadioButton:RID_SVXDLG_ZOOM:BTN_OPTIMAL
+GanzeSeite sym:cui:RadioButton:RID_SVXDLG_ZOOM:BTN_WHOLE_PAGE
+Seitenbreite sym:cui:RadioButton:RID_SVXDLG_ZOOM:BTN_PAGE_WIDTH
+Vergroesserung100 sym:cui:RadioButton:RID_SVXDLG_ZOOM:BTN_100
+VergroesserungStufenlos sym:cui:RadioButton:RID_SVXDLG_ZOOM:BTN_USER
+Stufenlos sym:cui:MetricField:RID_SVXDLG_ZOOM:ED_USER
+Automatic sym:cui:RadioButton:RID_SVXDLG_ZOOM:BTN_AUTOMATIC
+Singlepage sym:cui:RadioButton:RID_SVXDLG_ZOOM:BTN_SINGLE
+Columns sym:cui:RadioButton:RID_SVXDLG_ZOOM:BTN_COLUMNS
+Columnsfield sym:cui:MetricField:RID_SVXDLG_ZOOM:ED_COLUMNS
+Bookmode sym:cui:CheckBox:RID_SVXDLG_ZOOM:CHK_BOOK
 
 *MassstabSeitenansicht sym:SW_HID_PPREV_ZOOM
-Spalten sym:sw.NumericField.20601.4
-Zeilen sym:sw.NumericField.20601.5
+Spalten sym:sw:NumericField:DLG_PAGEPREVIEW_ZOOM:ED_COL
+Zeilen sym:sw:NumericField:DLG_PAGEPREVIEW_ZOOM:ED_ROW
 
-*Mehrfachoperationen sym:.uno:TableOperationDialog
-Formeln sym:sc.Edit.25662.1
-Zeile sym:sc.Edit.25662.2
-Spalte sym:sc.Edit.25662.3
-Vorgaben1 sym:sc.ImageButton.25662.1
-Vorgaben2 sym:sc.ImageButton.25662.2
-Vorgaben3 sym:sc.ImageButton.25662.3
+*Mehrfachoperationen .uno:TableOperationDialog
+Formeln sym:sc:Edit:RID_SCDLG_TABOP:ED_FORMULARANGE
+Zeile sym:sc:Edit:RID_SCDLG_TABOP:ED_ROWCELL
+Spalte sym:sc:Edit:RID_SCDLG_TABOP:ED_COLCELL
+Vorgaben1 sym:sc:ImageButton:RID_SCDLG_TABOP:RB_FORMULARANGE
+Vorgaben2 sym:sc:ImageButton:RID_SCDLG_TABOP:RB_ROWCELL
+Vorgaben3 sym:sc:ImageButton:RID_SCDLG_TABOP:RB_COLCELL
 
-*MetOptionen sym:filter.ModalDialog.17402
-Original sym:filter.RadioButton.17402.1
-Groesse sym:filter.RadioButton.17402.2
-Breite sym:filter.MetricField.17402.1
-Hoehe sym:filter.MetricField.17402.2
+*MetOptionen sym:filter:ModalDialog:DLG_EXPORT_EMET
+Original sym:filter:RadioButton:DLG_EXPORT_EMET:RB_ORIGINAL
+Groesse sym:filter:RadioButton:DLG_EXPORT_EMET:RB_SIZE
+Breite sym:filter:MetricField:DLG_EXPORT_EMET:MTF_SIZEX
+Hoehe sym:filter:MetricField:DLG_EXPORT_EMET:MTF_SIZEY
 
 *ModuleBearbeiten sym:CUI_HID_EDIT_MODULES
-Sprache sym:cui.ListBox.10831.319
+Sprache sym:cui:ListBox:RID_SVXDLG_EDIT_MODULES:LB_EDIT_MODULES_LANGUAGE
 Module sym:CUI_HID_CLB_EDIT_MODULES_MODULES
-PrioPLus sym:cui.PushButton.10831.309
-PrioMinus sym:cui.PushButton.10831.310
-Zurueck sym:cui.PushButton.10831.311
+PrioPLus sym:cui:PushButton:RID_SVXDLG_EDIT_MODULES:PB_EDIT_MODULES_PRIO_UP
+PrioMinus sym:cui:PushButton:RID_SVXDLG_EDIT_MODULES:PB_EDIT_MODULES_PRIO_DOWN
+Zurueck sym:cui:PushButton:RID_SVXDLG_EDIT_MODULES:PB_EDIT_MODULES_PRIO_BACK
 Benutzerwoerterbuch sym:CUI_HID_CLB_EDIT_MODULES_DICS
 
 *DescriptionObject   sym:CUI_HID_DLG_OBJECT_TITLE_DESC
-DescriptionTitle sym:cui.Edit.10067.3
-DescriptionText sym:cui.MultiLineEdit.10067.4
+DescriptionTitle sym:cui:Edit:RID_SVXDLG_OBJECT_TITLE_DESC:NTD_EDT_TITLE
+DescriptionText sym:cui:MultiLineEdit:RID_SVXDLG_OBJECT_TITLE_DESC:NTD_EDT_DESC
 
 *NameDlg sym:CUI_HID_DLG_NAME
-Eingabefeld sym:cui.Edit.10062.1
+Eingabefeld sym:cui:Edit:RID_SVXDLG_NAME:EDT_STRING
 
 +LinieName NameDlg
 
 *NameDlgObject sym:CUI_HID_DLG_OBJECT_NAME
-NameField sym:cui.Edit.10064.2
+NameField sym:cui:Edit:RID_SVXDLG_OBJECT_NAME:NTD_EDT_NAME
 
 +NameDlgGroup NameDlg
 NameField sym:SW_HID_FORMAT_NAME_OBJECT_NAME
@@ -297,33 +297,33 @@ NameField sym:SD_HID_SD_NAMEDIALOG_LINEEND
 +NameDlgGroupCalc NameDlg
 NameField sym:SC_HID_SC_DRAW_RENAME
 
-*NamenEinfuegen sym:.uno:InsertName
-NamenAuswahl sym:sc.ListBox.25676.11
-Liste sym:sc.PushButton.25676.105
+*NamenEinfuegen .uno:InsertName
+NamenAuswahl sym:sc:ListBox:RID_SCDLG_NAMES_PASTE:LB_ENTRYLIST
+Liste sym:sc:PushButton:RID_SCDLG_NAMES_PASTE:BTN_ADD
 
-*NamenErzeugen sym:.uno:CreateNames
-Kopfzeile sym:sc.CheckBox.25677.4
-LinkerSpalte sym:sc.CheckBox.25677.2
-Fusszeile sym:sc.CheckBox.25677.5
-RechterSpalte sym:sc.CheckBox.25677.3
+*NamenErzeugen .uno:CreateNames
+Kopfzeile sym:sc:CheckBox:RID_SCDLG_NAMES_CREATE:BTN_TOP
+LinkerSpalte sym:sc:CheckBox:RID_SCDLG_NAMES_CREATE:BTN_LEFT
+Fusszeile sym:sc:CheckBox:RID_SCDLG_NAMES_CREATE:BTN_BOTTOM
+RechterSpalte sym:sc:CheckBox:RID_SCDLG_NAMES_CREATE:BTN_RIGHT
 
-*NamenFestlegen sym:.uno:DefineName
-BereichsName sym:sc.ComboBox.25626.12
-ZugeordnetZu sym:sc.Edit.25626.15
-Filter sym:sc.CheckBox.25626.31
-Druckbereich sym:sc.CheckBox.25626.32
-Wiederholungsspalte sym:sc.CheckBox.25626.33
-Wiederholungszeile sym:sc.CheckBox.25626.34
-Hinzufuegen sym:sc.PushButton.25626.3
-Aendern sym:sc.PushButton.25626.3
-Loeschen sym:sc.PushButton.25626.4
-Zusaetze sym:sc.MoreButton.25626.6
-ZugeordnetZuButton sym:sc.ImageButton.25626.16
+*NamenFestlegen .uno:DefineName
+BereichsName sym:sc:ComboBox:RID_SCDLG_NAMES:ED_NAME
+ZugeordnetZu sym:sc:Edit:RID_SCDLG_NAMES:ED_ASSIGN
+Filter sym:sc:CheckBox:RID_SCDLG_NAMES:BTN_CRITERIA
+Druckbereich sym:sc:CheckBox:RID_SCDLG_NAMES:BTN_PRINTAREA
+Wiederholungsspalte sym:sc:CheckBox:RID_SCDLG_NAMES:BTN_COLHEADER
+Wiederholungszeile sym:sc:CheckBox:RID_SCDLG_NAMES:BTN_ROWHEADER
+Hinzufuegen sym:sc:PushButton:RID_SCDLG_NAMES:BTN_ADD
+Aendern sym:sc:PushButton:RID_SCDLG_NAMES:BTN_ADD
+Loeschen sym:sc:PushButton:RID_SCDLG_NAMES:BTN_REMOVE
+Zusaetze sym:sc:MoreButton:RID_SCDLG_NAMES:BTN_MORE
+ZugeordnetZuButton sym:sc:ImageButton:RID_SCDLG_NAMES:RB_ASSIGN
 
 *NavigationsFenster sym:SW_HID_INSERT_CTRL
 Auswahl sym:SW_HID_NAVI_VS
 
-*Navigator sym:SFXDOCKINGWINDOW_Navigator
+*Navigator .uno:Navigator
 
 *NavigatorCalc sym:SC_HID_SC_NAVIGATOR
 NavigatorToolboxCalc sym:SC_HID_SC_NAVIPI_TOOLBOX
@@ -387,69 +387,69 @@ NachUntenVerschieben sym:SW_HID_NAVI_TBX22
 NachObenVerschieben sym:SW_HID_NAVI_TBX23
 Inhaltsansicht sym:SW_HID_NAVI_TBX8
 
-*Neu sym:.uno:NewDoc
-Bereiche sym:sfx.ListBox.2053.21
-Vorlagen sym:sfx.ListBox.2053.52
-Zusaetze sym:sfx.MoreButton.2053.32
-Vorschau sym:sfx.CheckBox.2053.51
-Titel sym:sfx.Edit.2053.56
-Thema sym:sfx.Edit.2053.55
-Schluesselworte sym:sfx.Edit.2053.61
-Beschreibung sym:sfx.MultiLineEdit.2053.71
-Text sym:sfx.CheckBox.2053.33
-Frame sym:sfx.CheckBox.2053.34
-Pages sym:sfx.CheckBox.2053.35
-Numbering sym:sfx.CheckBox.2053.36
-Overwrite sym:sfx.CheckBox.2053.37
-Fromfile sym:sfx.PushButton.2053.38
+*Neu .uno:NewDoc
+Bereiche sym:sfx2:ListBox:DLG_NEW_FILE:LB_REGION
+Vorlagen sym:sfx2:ListBox:DLG_NEW_FILE:LB_TEMPLATE
+Zusaetze sym:sfx2:MoreButton:DLG_NEW_FILE:BT_MORE
+Vorschau sym:sfx2:CheckBox:DLG_NEW_FILE:BTN_PREVIEW
+Titel sym:sfx2:Edit:DLG_NEW_FILE:ED_TITLE
+Thema sym:sfx2:Edit:DLG_NEW_FILE:ED_THEMA
+Schluesselworte sym:sfx2:Edit:DLG_NEW_FILE:ED_KEYWORDS
+Beschreibung sym:sfx2:MultiLineEdit:DLG_NEW_FILE:ED_DESC
+Text sym:sfx2:CheckBox:DLG_NEW_FILE:CB_TEXT_STYLE
+Frame sym:sfx2:CheckBox:DLG_NEW_FILE:CB_FRAME_STYLE
+Pages sym:sfx2:CheckBox:DLG_NEW_FILE:CB_PAGE_STYLE
+Numbering sym:sfx2:CheckBox:DLG_NEW_FILE:CB_NUM_STYLE
+Overwrite sym:sfx2:CheckBox:DLG_NEW_FILE:CB_MERGE_STYLE
+Fromfile sym:sfx2:PushButton:DLG_NEW_FILE:PB_LOAD_FILE
 
-*NeueBibliothek sym:basctl.ModalDialog.14892
-Bibliotheksname sym:basctl.Edit.14892.41
+*NeueBibliothek sym:basctl:ModalDialog:RID_DLG_NEWLIB
+Bibliotheksname sym:basctl:Edit:RID_DLG_NEWLIB:RID_ED_LIBNAME
 
-*NeuerDialog sym:basctl.ModalDialog.14892
-Dialogname sym:basctl.Edit.14892.41
+*NeuerDialog sym:basctl:ModalDialog:RID_DLG_NEWLIB
+Dialogname sym:basctl:Edit:RID_DLG_NEWLIB:RID_ED_LIBNAME
 
-*NeuesFangobjekt sym:.uno:CapturePoint
-Horizontal  sym:sd.ImageRadioButton.312.11
-Vertikal sym:sd.ImageRadioButton.312.12
-Punkt sym:sd.ImageRadioButton.312.13
-X sym:sd.MetricField.312.7
-Y sym:sd.MetricField.312.9
+*NeuesFangobjekt .uno:CapturePoint
+Horizontal  sym:sd:ImageRadioButton:DLG_SNAPLINE:RB_HORIZONTAL
+Vertikal sym:sd:ImageRadioButton:DLG_SNAPLINE:RB_VERTICAL
+Punkt sym:sd:ImageRadioButton:DLG_SNAPLINE:RB_POINT
+X sym:sd:MetricField:DLG_SNAPLINE:MTR_FLD_X
+Y sym:sd:MetricField:DLG_SNAPLINE:MTR_FLD_Y
 
-*NeuesModul sym:basctl.ModalDialog.14892
-Modulname sym:basctl.Edit.14892.41
+*NeuesModul sym:basctl:ModalDialog:RID_DLG_NEWLIB
+Modulname sym:basctl:Edit:RID_DLG_NEWLIB:RID_ED_LIBNAME
 
 *NotizBearbeiten sym:CUI_HID_POSTIT_DIALOG
-Texteingabe sym:cui.MultiLineEdit.10008.13 sw:MultiLineEdit:DLG_POSTIT:ED_EDIT
-Autor sym:cui.PushButton.10008.17 sw:PushButton:DLG_POSTIT:BTN_AUTHOR
-Vor sym:cui.ImageButton.10008.16
-Zurueck sym:cui.ImageButton.10008.15
+Texteingabe sym:cui:MultiLineEdit:RID_SVXDLG_POSTIT:ED_EDIT sym:sw:MultiLineEdit:DLG_POSTIT:ED_EDIT
+Autor sym:cui:PushButton:RID_SVXDLG_POSTIT:BTN_AUTHOR sym:sw:PushButton:DLG_POSTIT:BTN_AUTHOR
+Vor sym:cui:ImageButton:RID_SVXDLG_POSTIT:BTN_NEXT
+Zurueck sym:cui:ImageButton:RID_SVXDLG_POSTIT:BTN_PREV
 
 *NummernkreisOptionen sym:SW_HID_DLG_SEQUENCE_OPTION
-Ebene sym:sw.ListBox.21012.17
-Trenner sym:sw.Edit.21012.19
+Ebene sym:sw:ListBox:DLG_SEQUENCE_OPTION:LB_LEVEL
+Trenner sym:sw:Edit:DLG_SEQUENCE_OPTION:ED_SEPARATOR
 
 +NotizEinfuegen NotizBearbeiten
 
 +NotizEinfuegenCalc NotizBearbeiten
-Text sym:cui.MultiLineEdit.10008.13
+Text sym:cui:MultiLineEdit:RID_SVXDLG_POSTIT:ED_EDIT
 
-*ObenFuellen sym:.uno:FillUp
+*ObenFuellen .uno:FillUp
 
-*Objekte sym:basctl.FloatingWindow.14920
+*Objekte sym:basctl:FloatingWindow:RID_BASICIDE_OBJCAT
 Toolbox sym:BASCTL_HID_BASICIDE_OBJECTS
 Zeigen sym:BASCTL_HID_BASICIDE_OBJCAT_SHOW
 ObjektListe sym:BASCTL_HID_BASICIDE_OBJECTCAT
 
 *ObjekteUmbenennen sym:SW_HID_RENAME_XNAMED
-Objektname sym:sw.Edit.20888.2
+Objektname sym:sw:Edit:DLG_RENAME_XNAMED:ED_NEW_NAME
 
-*OLEObjektEinfuegen sym:.uno:InsertObject
-NeuErstellen sym:cui.RadioButton.32010.10
-AusDateiErstellen sym:cui.RadioButton.32010.11
-Objekttyp sym:cui.ListBox.32010.12
-OleDatei sym:cui.Edit.32010.10
-Verknuepfen sym:cui.CheckBox.32010.12
-Durchsuchen sym:cui.PushButton.32010.11
+*OLEObjektEinfuegen .uno:InsertObject
+NeuErstellen sym:cui:RadioButton:MD_INSERT_OLEOBJECT:RB_NEW_OBJECT
+AusDateiErstellen sym:cui:RadioButton:MD_INSERT_OLEOBJECT:RB_OBJECT_FROMFILE
+Objekttyp sym:cui:ListBox:MD_INSERT_OLEOBJECT:LB_OBJECTTYPE
+OleDatei sym:cui:Edit:MD_INSERT_OLEOBJECT:ED_FILEPATH
+Verknuepfen sym:cui:CheckBox:MD_INSERT_OLEOBJECT:CB_FILELINK
+Durchsuchen sym:cui:PushButton:MD_INSERT_OLEOBJECT:BTN_FILEPATH
 
 +OptionenDlg ExtrasOptionenDlg

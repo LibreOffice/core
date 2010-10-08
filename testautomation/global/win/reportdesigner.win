@@ -20,30 +20,30 @@ SectionWindow           sym:REPORTDESIGN_UID_RPT_SECTIONSWINDOW
 ' HID_ENDMARKER
 
 *ReportPageNumber         sym:REPORTDESIGN_HID_RPT_PAGENUMBERS_DLG
-PageN                     sym:reportdesign.RadioButton.30769.2
-PageNofM                  sym:reportdesign.RadioButton.30769.3
-TopOfPage                 sym:reportdesign.RadioButton.30769.5
-BottomOfpage              sym:reportdesign.RadioButton.30769.6
-PageNumberAlignment       sym:reportdesign.ListBox.30769.8
-ShowNumberOnFirstPage     sym:reportdesign.CheckBox.30769.9
+PageN                     sym:reportdesign:RadioButton:RID_PAGENUMBERS:RB_PAGE_N
+PageNofM                  sym:reportdesign:RadioButton:RID_PAGENUMBERS:RB_PAGE_N_OF_M
+TopOfPage                 sym:reportdesign:RadioButton:RID_PAGENUMBERS:RB_PAGE_TOPPAGE
+BottomOfpage              sym:reportdesign:RadioButton:RID_PAGENUMBERS:RB_PAGE_BOTTOMPAGE
+PageNumberAlignment       sym:reportdesign:ListBox:RID_PAGENUMBERS:LST_ALIGNMENT
+ShowNumberOnFirstPage     sym:reportdesign:CheckBox:RID_PAGENUMBERS:CB_SHOWNUMBERONFIRSTPAGE
 
 *ReportDateTime           sym:REPORTDESIGN_HID_RPT_DATETIME_DLG
-IncludeDate               sym:reportdesign.CheckBox.30770.1
-DateFormat                sym:reportdesign.ListBox.30770.3
-IncludeTime               sym:reportdesign.CheckBox.30770.5
-TimeFormat                sym:reportdesign.ListBox.30770.7
+IncludeDate               sym:reportdesign:CheckBox:RID_DATETIME_DLG:CB_DATE
+DateFormat                sym:reportdesign:ListBox:RID_DATETIME_DLG:LB_DATE_TYPE
+IncludeTime               sym:reportdesign:CheckBox:RID_DATETIME_DLG:CB_TIME
+TimeFormat                sym:reportdesign:ListBox:RID_DATETIME_DLG:LB_TIME_TYPE
 
 *ReportSortingGrouping    sym:REPORTDESIGN_HID_RPT_GROUPSSORTING_DLG
 Groups                    sym:REPORTDESIGN_HID_RPT_GROUPSBRW
 FieldExpression           sym:REPORTDESIGN_HID_RPT_FIELDEXPRESSION
 MoveUp                    sym:REPORTDESIGN_HID_RPT_GROUPSORT_MOVE_UP
 MoveDown                  sym:REPORTDESIGN_HID_RPT_GROUPSORT_MOVE_DOWN
-Sorting                   sym:reportdesign.ListBox.30768.17
-GroupHeader               sym:reportdesign.ListBox.30768.2
-GroupFooter               sym:reportdesign.ListBox.30768.4
-GroupOn                   sym:reportdesign.ListBox.30768.6
-GroupIntervall            sym:reportdesign.NumericField.30768.8
-KeepTogether              sym:reportdesign.ListBox.30768.10
+Sorting                   sym:reportdesign:ListBox:RID_GROUPS_SORTING:LST_ORDER
+GroupHeader               sym:reportdesign:ListBox:RID_GROUPS_SORTING:LST_HEADERLST
+GroupFooter               sym:reportdesign:ListBox:RID_GROUPS_SORTING:LST_FOOTERLST
+GroupOn                   sym:reportdesign:ListBox:RID_GROUPS_SORTING:LST_GROUPONLST
+GroupIntervall            sym:reportdesign:NumericField:RID_GROUPS_SORTING:ED_GROUPINTERVALLST
+KeepTogether              sym:reportdesign:ListBox:RID_GROUPS_SORTING:LST_KEEPTOGETHERLST
 
 *ReportNavigator          sym:REPORTDESIGN_HID_RPT_NAVIGATOR_DLG
 NavigatorTree             sym:REPORTDESIGN_HID_REPORT_NAVIGATOR_TREE

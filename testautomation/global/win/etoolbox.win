@@ -13,8 +13,8 @@
 Table sym:EXTENSIONS_HID_BIB_TBX_TABLE
 SearchKey sym:EXTENSIONS_HID_BIB_TBX_SEARCH
 AutoFilter sym:EXTENSIONS_HID_BIB_TBX_AUTOFILTER
-StandardFilter sym:.uno:FilterCrit
-RemoveFilter sym:.uno:RemoveFilterSort
+StandardFilter .uno:FilterCrit
+RemoveFilter .uno:RemoveFilterSort
 ColumnArrangement sym:EXTENSIONS_HID_BIB_MAPPINGDLG
 DataSource sym:EXTENSIONS_HID_BIB_CHANGESOURCE
 
@@ -27,35 +27,35 @@ PrintButton sym:SFX2_HID_HELP_TOOLBOXITEM_PRINT
 SetBookmarks sym:SFX2_HID_HELP_TOOLBOXITEM_BOOKMARKS
 DisplayHelpAtStartUp sym:SFX2_HID_HELP_ONSTARTUP_BOX
 
-*TB_MacroControls sym:BASCTL_HID_BASICIDE_CONTROLS
-CommandButton sym:.uno:InsertPushbutton
-CheckBox sym:.uno:CheckBox
-Label sym:.uno:InsertFixedText
-ListBox sym:.uno:InsertListbox
-HScrollBar sym:.uno:HScrollbar
-VScrollBar sym:.uno:VScrollbar
-HLine sym:.uno:HFixedLine
-VLine sym:.uno:VFixedLine
-FrameControl sym:.uno:Groupbox
-DateField sym:.uno:AddDateField
-TimeField sym:.uno:InsertTimeField
-NumericField sym:.uno:InsertNumericField
-FormattedField sym:.uno:InsertFormattedField
-FileControl sym:.uno:InsertFileControl
-Properties sym:.uno:ShowPropBrowser
-ImageControl sym:.uno:InsertImageControl
-OptionButton sym:.uno:Radiobutton
-TextField sym:.uno:InsertEdit
-ComboBox sym:.uno:Combobox
-Progressbar sym:.uno:ProgressBar
-CurrencyField sym:.uno:InsertCurrencyField
-PatternField sym:.uno:InsertPatternField
-SelectMode sym:.uno:SelectMode
-Testmode sym:.uno:TestMode
+*TB_MacroControls HID_BASICIDE_CONTROLS
+CommandButton .uno:InsertPushbutton
+CheckBox .uno:Checkbox
+Label .uno:InsertFixedText
+ListBox .uno:InsertListbox
+HScrollBar .uno:HScrollbar
+VScrollBar .uno:VScrollbar
+HLine .uno:HFixedLine
+VLine .uno:VFixedLine
+FrameControl .uno:Groupbox
+DateField .uno:AddDateField
+TimeField .uno:InsertTimeField
+NumericField .uno:InsertNumericField
+FormattedField .uno:InsertFormattedField
+FileControl .uno:InsertFileControl
+Properties .uno:ShowPropBrowser
+ImageControl .uno:InsertImageControl
+OptionButton .uno:Radiobutton
+TextField .uno:InsertEdit
+ComboBox .uno:Combobox
+Progressbar .uno:ProgressBar
+CurrencyField .uno:InsertCurrencyField
+PatternField .uno:InsertPatternField
+SelectMode .uno:SelectMode
+Testmode .uno:TestMode
 
-*TB_MacroRecording sym:.uno:MacroRecordingFloat
-StopRecording sym:.uno:StopRecording
+*TB_MacroRecording .uno:MacroRecordingFloat
+StopRecording .uno:StopRecording
 
 
 *TB_Relation sym:DBACCESS_HID_TLB_RELATIONDESIGN
-AddTables sym:.uno:AddTable
+AddTables .uno:AddTable

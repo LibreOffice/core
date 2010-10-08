@@ -13,13 +13,14 @@ DatabaseTablesView sym:DBACCESS_HID_APP_TABLE_TREE
 
 *DatabaseProperties sym:DBACCESS_HID_DSADMIN_DIALOG
 TabControl sym:DBACCESS_HID_DSADMIN_TABCONTROL
-TabConnection sym:dbu.TabPage.19206
+TabConnection sym:dbaccess:TabPage:PAGE_CONNECTION
+'URL sym:dbaccess:Edit:PAGE_CONNECTION:ET_CONNECTURL
 Browse sym:DBACCESS_HID_DSADMIN_BROWSECONN
-Username sym:dbu.Edit.19206.1
-PasswordRequired sym:dbu.CheckBox.19206.1
+Username sym:dbaccess:Edit:PAGE_CONNECTION:ET_USERNAME
+PasswordRequired sym:dbaccess:CheckBox:PAGE_CONNECTION:CB_PASSWORD_REQUIRED
 DriverClass sym:DBACCESS_HID_DSADMIN_DRIVERCLASS
-TestDriverClass sym:dbu.PushButton.19206.1
-TestConnection sym:dbu.PushButton.19206.2
+TestDriverClass sym:dbaccess:PushButton:PAGE_CONNECTION:PB_TESTDRIVERCLASS
+TestConnection sym:dbaccess:PushButton:PAGE_CONNECTION:PB_TESTCONNECTION
 Reset sym:SFX2_HID_TABDLG_RESET_BTN
 TabdBase sym:DBACCESS_HID_DSADMIN_PAGE_DBASE
 TabTextBase sym:DBACCESS_HID_DSADMIN_PAGE_TEXT
@@ -33,12 +34,12 @@ FinishBtn           sym:DBACCESS_HID_DBWIZ_FINISH
 CreateNewDatabase   sym:DBACCESS_HID_PAGE_DBWIZARD_GENERAL_RB_CREATEDBDATABASE
 DatabaseType        sym:DBACCESS_HID_DSADMIN_DSTYPE
 dBasePath           sym:DBACCESS_HID_PAGE_DBWIZARD_DBASE_ET_DBASELOCATION
-DocumentList        sym:dbu.ListBox.19200.3
+DocumentList        sym:dbaccess:ListBox:PAGE_GENERAL:LB_DOCUMENTLIST
 LDAPHostName        sym:DBACCESS_HID_PAGE_DBWIZARD_LDAP_ET_HOSTSERVER
 BaseDN              sym:DBACCESS_HID_PAGE_DBWIZARD_LDAP_ET_BASEDN
 NextBtn             sym:DBACCESS_HID_DBWIZ_NEXT
-OpenBtn             sym:dbu.PushButton.19200.6
-OpenExistingDoc     sym:dbu.RadioButton.19200.3
+OpenBtn             sym:dbaccess:PushButton:PAGE_GENERAL:PB_OPENDOCUMENT
+OpenExistingDoc     sym:dbaccess:RadioButton:PAGE_GENERAL:RB_OPENEXISTINGDOC
 PasswordRequired    sym:DBACCESS_HID_PAGE_DBWIZARD_AUTHENTIFICATION_CB_GENERALPASSWORDREQUIRED
 SpreadsheetPath     sym:DBACCESS_HID_PAGE_DBWIZARD_SPREADSHEET_ET_SPREADSHEETPATH
 TextPath            sym:DBACCESS_HID_PAGE_DBWIZARD_TEXT_ET_LOCATIONTEXTFILE
@@ -53,10 +54,10 @@ MySQLPort           sym:DBACCESS_HID_PAGE_DBWIZARD_JDBC_ET_MYSQLPORT
 AdoURL              sym:DBACCESS_HID_PAGE_DBWIZARD_ADO_ET_ADOURL
 StartTableWizard    sym:DBACCESS_HID_PAGE_DBWIZARD_FINAL_CB_STARTTABLEWIZARD
 
-*CreateDatabaseLink sym:cui.ModalDialog.17024
-DatabaseFile sym:.uno:OpenUrl
-Browse sym:cui.PushButton.17024.1
-RegisteredName sym:cui.Edit.17024.1
+*CreateDatabaseLink sym:cui:ModalDialog:DLG_DOCUMENTLINK
+DatabaseFile .uno:OpenUrl
+Browse sym:cui:PushButton:DLG_DOCUMENTLINK:PB_BROWSEFILE
+RegisteredName sym:cui:Edit:DLG_DOCUMENTLINK:ET_NAME
 
 *Diagramdata sym:CHART2_HID_DIAGRAM_DATA
 Toolbox2 sym:CHART2_HID_SCH_TBX_DATA
@@ -71,116 +72,117 @@ Tables sym:CHART2_HID_SCH_CTL_DATA
 DataSeriesLabel sym:CHART2_HID_SCH_DATA_SERIES_LABEL
 
 *DigitalSignature sym:XMLSECURITY_HID_XMLSEC_DLG_DIGSIG
-ViewCertificate sym:xmlsec.PushButton.1000.55
+ViewCertificate sym:xmlsecurity:PushButton:RID_XMLSECDLG_DIGSIG:BTN_VIEWCERT
 CertificateList sym:XMLSECURITY_HID_XMLSEC_CTRL_SIGNATURESDLG
-Add sym:xmlsec.PushButton.1000.2
-Remove sym:xmlsec.PushButton.1000.3
+Add sym:xmlsecurity:PushButton:RID_XMLSECDLG_DIGSIG:BTN_ADDCERT
+Remove sym:xmlsecurity:PushButton:RID_XMLSECDLG_DIGSIG:BTN_REMOVECERT
 
 *DuplicateNameWarning sym:CUI_HID_WARN_NAME_DUPLICATE
 
 *EditInputList sym:SW_HID_FLD_DROPDOWN
-AllListEntrys sym:sw.ListBox.21112.2
-NextListEntry sym:sw.PushButton.21112.5
-EditListEntry sym:sw.PushButton.21112.7
+AllListEntrys sym:sw:ListBox:DLG_FLD_DROPDOWN:LB_LISTITEMS
+NextListEntry sym:sw:PushButton:DLG_FLD_DROPDOWN:PB_NEXT
+EditListEntry sym:sw:PushButton:DLG_FLD_DROPDOWN:PB_EDIT
 
-*EditSymbols sym:sm.ModalDialog.20009
-OldSymbol sym:sm.ComboBox.20009.1
-OldSymbolSet sym:sm.ComboBox.20009.2
-Symbol sym:sm.ComboBox.20009.4
-SymbolSet sym:sm.ComboBox.20009.5
-Font sym:sm.ListBox.20009.1
-Subset sym:sm.ListBox.20009.111
-Typeface sym:sm.ComboBox.20009.3
-Add sym:sm.PushButton.20009.1
-Modify sym:sm.PushButton.20009.2
-Delete sym:sm.PushButton.20009.3
+*EditSymbols sym:starmath:ModalDialog:RID_SYMDEFINEDIALOG
+OldSymbol sym:starmath:ComboBox:RID_SYMDEFINEDIALOG:1
+OldSymbolSet sym:starmath:ComboBox:RID_SYMDEFINEDIALOG:2
+Symbol sym:starmath:ComboBox:RID_SYMDEFINEDIALOG:4
+SymbolSet sym:starmath:ComboBox:RID_SYMDEFINEDIALOG:5
+Font sym:starmath:ListBox:RID_SYMDEFINEDIALOG:1
+Subset sym:starmath:ListBox:RID_SYMDEFINEDIALOG:LB_FONTS_SUBSET
+Typeface sym:starmath:ComboBox:RID_SYMDEFINEDIALOG:3
+Add sym:starmath:PushButton:RID_SYMDEFINEDIALOG:1
+Modify sym:starmath:PushButton:RID_SYMDEFINEDIALOG:2
+Delete sym:starmath:PushButton:RID_SYMDEFINEDIALOG:3
 Symbols sym:STARMATH_HID_SMA_CONTROL_FONTCHAR_VIEW
 
-*ExecuteSQLCommand sym:dbu.ModalDialog.19222
-CommandToExecute sym:dbu.MultiLineEdit.19222.3
-ExecuteBtn sym:dbu.PushButton.19222.4
-PreviousCommands sym:dbu.ListBox.19222.6
-Status sym:dbu.MultiLineEdit.19222.8
-CloseBtn sym:dbu.PushButton.19222.11
+*ExecuteSQLCommand sym:dbaccess:ModalDialog:DLG_DIRECTSQL
+CommandToExecute sym:dbaccess:MultiLineEdit:DLG_DIRECTSQL:ME_SQL
+ExecuteBtn sym:dbaccess:PushButton:DLG_DIRECTSQL:PB_EXECUTE
+PreviousCommands sym:dbaccess:ListBox:DLG_DIRECTSQL:LB_HISTORY
+Status sym:dbaccess:MultiLineEdit:DLG_DIRECTSQL:ME_STATUS
+CloseBtn sym:dbaccess:PushButton:DLG_DIRECTSQL:PB_CLOSE
 
-*ExportBasicLibraryDlg sym:basctl.ModalDialog.14893
-ExportAsPackage sym:basctl.RadioButton.14893.42
-ExportAsLibrary sym:basctl.RadioButton.14893.43
+*ExportBasicLibraryDlg sym:basctl:ModalDialog:RID_DLG_EXPORT
+ExportAsPackage sym:basctl:RadioButton:RID_DLG_EXPORT:RB_EXPORTASPACKAGE
+ExportAsLibrary sym:basctl:RadioButton:RID_DLG_EXPORT:RB_EXPORTASBASIC
 
-*ExtensionSoftwareLicenseAgreement sym:deploymentgui.ModalDialog.6500
-LicenseText sym:deploymentgui.MultiLineEdit.6500.51
-ScrollDown sym:deploymentgui.PushButton.6500.50
+*ExtensionSoftwareLicenseAgreement sym:desktop:ModalDialog:RID_DLG_LICENSE
+LicenseText sym:desktop:MultiLineEdit:RID_DLG_LICENSE:ML_LICENSE
+ScrollDown sym:desktop:PushButton:RID_DLG_LICENSE:PB_LICENSE_DOWN
 Accept sym:DESKTOP_UID_BTN_LICENSE_ACCEPT
 
 *ExtensionUpdate   sym:DESKTOP_HID_DEPLOYMENT_GUI_UPDATE
-ShowAllUpdates   sym:deploymentgui.CheckBox.2010.5
-UpdateDescriptions sym:deploymentgui.MultiLineEdit.2010.7
-DownloadAndInstall   sym:deploymentgui.PushButton.2010.10
+ShowAllUpdates   sym:desktop:CheckBox:RID_DLG_UPDATE:RID_DLG_UPDATE_ALL
+UpdateDescriptions sym:desktop:MultiLineEdit:RID_DLG_UPDATE:RID_DLG_UPDATE_DESCRIPTIONS
+DownloadAndInstall   sym:desktop:PushButton:RID_DLG_UPDATE:RID_DLG_UPDATE_OK
 AvailableUpdatesList sym:DESKTOP_HID_DEPLOYMENT_GUI_UPDATE_AVAILABLE_UPDATES
 UpdatePublisherText sym:DESKTOP_HID_DEPLOYMENT_GUI_UPDATE_PUBLISHER
 ReleaseNotesText sym:DESKTOP_HID_DEPLOYMENT_GUI_UPDATE_RELEASENOTES
 
 
 *FilterDialog sym:DBACCESS_HID_DLG_FILTERCRIT
-Fieldname1 sym:dbu.ListBox.19206.1
-Condition1 sym:dbu.ListBox.19206.2
-Value1 sym:dbu.Edit.19206.1
-Operator2 sym:dbu.ListBox.19206.7
-Fieldname2 sym:dbu.ListBox.19206.3
-Condition2 sym:dbu.ListBox.19206.4
-Value2 sym:dbu.Edit.19206.2
-Operator3 sym:dbu.ListBox.19206.8
-Fieldname3 sym:dbu.ListBox.19206.5
-Condition3 sym:dbu.ListBox.19206.6
-Value3 sym:dbu.Edit.19206.3
+Fieldname1 sym:dbaccess:ListBox:DLG_FILTERCRIT:LB_WHEREFIELD1
+Condition1 sym:dbaccess:ListBox:DLG_FILTERCRIT:LB_WHERECOMP1
+Value1 sym:dbaccess:Edit:DLG_FILTERCRIT:ET_WHEREVALUE1
+Operator2 sym:dbaccess:ListBox:DLG_FILTERCRIT:LB_WHERECOND2
+Fieldname2 sym:dbaccess:ListBox:DLG_FILTERCRIT:LB_WHEREFIELD2
+Condition2 sym:dbaccess:ListBox:DLG_FILTERCRIT:LB_WHERECOMP2
+Value2 sym:dbaccess:Edit:DLG_FILTERCRIT:ET_WHEREVALUE2
+Operator3 sym:dbaccess:ListBox:DLG_FILTERCRIT:LB_WHERECOND3
+Fieldname3 sym:dbaccess:ListBox:DLG_FILTERCRIT:LB_WHEREFIELD3
+Condition3 sym:dbaccess:ListBox:DLG_FILTERCRIT:LB_WHERECOMP3
+Value3 sym:dbaccess:Edit:DLG_FILTERCRIT:ET_WHEREVALUE3
 
 *FilterNavigator sym:SVX_HID_FILTER_NAVIGATOR
 
 *FilterWarning sym:CUI_HID_SVXDLG_FILTER_WARNING
 
 *FindEntry sym:SW_HID_MM_FIND_ENTRY
-FindString sym:sw.Edit.22065.2
-FindOnlyIn sym:sw.CheckBox.22065.3
-FindOnlyInWhat sym:sw.ListBox.22065.4
-FindNow sym:sw.PushButton.22065.5
+FindString sym:sw:Edit:DLG_MM_FIND_ENTRY:ED_FIND
+FindOnlyIn sym:sw:CheckBox:DLG_MM_FIND_ENTRY:CB_FINDONLY
+FindOnlyInWhat sym:sw:ListBox:DLG_MM_FIND_ENTRY:LB_FINDONLY
+FindNow sym:sw:PushButton:DLG_MM_FIND_ENTRY:PB_FIND
 
-*FontworkGallery sym:svx.ModalDialog.10002
+*FontworkGallery sym:svx:ModalDialog:RID_SVX_MDLG_FONTWORK_GALLERY
 SelectAFontworkStyle sym:SVX_HID_CTL_FONTWORK_FAVORITES
 
-*FontworkCharacterSpacingCustom sym:svx.ModalDialog.10019
-Value sym:svx.MetricField.10019.7
+*FontworkCharacterSpacingCustom sym:svx:ModalDialog:RID_SVX_MDLG_FONTWORK_CHARSPACING
+Value sym:svx:MetricField:RID_SVX_MDLG_FONTWORK_CHARSPACING:MF_VALUE
 
-'*FontWorkAlignment FontWork1TBO
-'*FontWorkCharacterSpacing FontWork2TBO
+*FontWorkAlignment FontWork1TBO
+
+*FontWorkCharacterSpacing FontWork2TBO
 
 *FormatColumn sym:SW_HID_FORMAT_COLUMN
-ApplyTo sym:sw.ListBox.21004.54
-Columns sym:sw.NumericField.20813.2
+ApplyTo sym:sw:ListBox:DLG_COLUMN:LB_APPLY_TO
+Columns sym:sw:NumericField:TP_COLUMN:ED_NUMBER
 ColumnValueset sym:SW_HID_COLUMN_VALUESET
-BalanceColumns sym:sw.CheckBox.20813.58
-Width1 sym:sw.MetricField.20813.25
-Width2 sym:sw.MetricField.20813.26
-Width3 sym:sw.MetricField.20813.27
-ColumnRight sym:sw.ImageButton.20813.31
-ColumnLeft sym:sw.ImageButton.20813.30
-Space12 sym:sw.MetricField.20813.46
-Space23 sym:sw.MetricField.20813.47
-AutoWidth sym:sw.CheckBox.20813.4
-Line sym:sw.ListBox.20813.34
-Height sym:sw.MetricField.20813.36
-Position sym:sw.ListBox.20813.38
-TextDirection sym:sw.ListBox.20813.61
+BalanceColumns sym:sw:CheckBox:TP_COLUMN:CB_BALANCECOLS
+Width1 sym:sw:MetricField:TP_COLUMN:ED_1
+Width2 sym:sw:MetricField:TP_COLUMN:ED_2
+Width3 sym:sw:MetricField:TP_COLUMN:ED_3
+ColumnRight sym:sw:ImageButton:TP_COLUMN:BTN_DOWN
+ColumnLeft sym:sw:ImageButton:TP_COLUMN:BTN_UP
+Space12 sym:sw:MetricField:TP_COLUMN:ED_DIST1
+Space23 sym:sw:MetricField:TP_COLUMN:ED_DIST2
+AutoWidth sym:sw:CheckBox:TP_COLUMN:CB_AUTO_WIDTH
+Line sym:sw:ListBox:TP_COLUMN:LB_STYLE
+Height sym:sw:MetricField:TP_COLUMN:ED_HEIGHT
+Position sym:sw:ListBox:TP_COLUMN:LB_POSITION
+TextDirection sym:sw:ListBox:TP_COLUMN:LB_TEXTDIRECTION
 
 *NamespaceDLG sym:SVX_HID_XFORMS_NAMESPACEITEM_DLG
 Namespaces sym:SVX_HID_XFORMS_NAMESPACEITEM_LIST
-Add sym:svx.PushButton.18014.12
-Edit sym:svx.PushButton.18014.13
-Delete sym:svx.PushButton.18014.14
+Add sym:svx:PushButton:RID_SVXDLG_NAMESPACE_ITEM:PB_ADD_NAMESPACE
+Edit sym:svx:PushButton:RID_SVXDLG_NAMESPACE_ITEM:PB_EDIT_NAMESPACE
+Delete sym:svx:PushButton:RID_SVXDLG_NAMESPACE_ITEM:PB_DELETE_NAMESPACE
 
 *DatabaseTableSaveAs sym:DBACCESS_HID_DLG_SAVE_AS
-Catalog sym:dbu.ComboBox.19211.1
-Schema sym:dbu.ComboBox.19211.2
-TableName sym:dbu.Edit.19211.3
+Catalog sym:dbaccess:ComboBox:DLG_SAVE_AS:ET_CATALOG
+Schema sym:dbaccess:ComboBox:DLG_SAVE_AS:ET_SCHEMA
+TableName sym:dbaccess:Edit:DLG_SAVE_AS:ET_TITLE
 
 *DatabaseSelection sym:DBACCESS_HID_TLB_TREELISTBOX
 
@@ -203,6 +205,7 @@ TableHeader sym:DBACCESS_HID_DATABROWSE_HEADER
 'TabADO sym:DBACCESS_HID_DSADMIN_PAGE_ADO
 'TabdBase sym:DBACCESS_HID_DSADMIN_PAGE_DBASE
 'TabODBC sym:DBACCESS_HID_DSADMIN_PAGE_ODBC
+'TabAdabasStatistics sym:dbaccess:TabPage:TAB_PAG_ADABAS_SETTINGS
 'TabAdabasUserSettings sym:DBACCESS_HID_TAB_PAGE_USERADMIN
 'TabJDBC sym:DBACCESS_HID_DSADMIN_PAGE_JDBC
 'TabLDAP sym:DBACCESS_HID_DSADMIN_PAGE_LDAP
@@ -213,14 +216,14 @@ TableHeader sym:DBACCESS_HID_DATABROWSE_HEADER
 'Apply sym:SFX2_HID_TABDLG_APPLY_BTN
 'Reset sym:SFX2_HID_TABDLG_RESET_BTN
 
-*DatabaseIndexes sym:dbu.ModalDialog.19219
+*DatabaseIndexes sym:dbaccess:ModalDialog:DLG_INDEXDESIGN
 NewIndex sym:DBACCESS_HID_DLGIDX_NEWINDEX
 DropIndex sym:DBACCESS_HID_DLGIDX_DROPINDEX
 RenameIndex sym:DBACCESS_HID_DLGIDX_RENAMEINDEX
 SaveIndex sym:DBACCESS_HID_DLGIDX_SAVEINDEX
 ResetIndex sym:DBACCESS_HID_DLGIDX_RESETINDEX
 IndexList sym:DBACCESS_HID_DLGIDX_INDEXLIST
-Unique sym:dbu.CheckBox.19219.1
+Unique sym:dbaccess:CheckBox:DLG_INDEXDESIGN:CB_UNIQUE
 'IndexDetails sym:DBACCESS_UID_DLGINDEX_INDEXDETAILS_BACK
 IndexDetails sym:DBACCESS_UID_DLGINDEX_INDEXDETAILS_MAIN
 '--0: CONTROL:          No entries in Hid.Lst
@@ -232,14 +235,14 @@ IndexFields sym:DBACCESS_HID_DLGINDEX_INDEXDETAILS_FIELD
 '--38974: LISTBOX: Select the sort order.   sym:DBACCESS_HID_DLGINDEX_INDEXDETAILS_SORTORDER
 '--0: CONTROL:          No entries in Hid.Lst
 '--0: PUSHBUTTON:       No entries in Hid.Lst
-DatabaseIndexesClose sym:dbu.PushButton.19219.1
+DatabaseIndexesClose sym:dbaccess:PushButton:DLG_INDEXDESIGN:PB_CLOSE
 
 *RecordSearch sym:CUI_HID_FM_DLG_SEARCH
-SearchForText sym:cui.RadioButton.18007.3
-SearchForNull sym:cui.RadioButton.18007.4
-SearchForNotNull sym:cui.RadioButton.18007.5
+SearchForText sym:cui:RadioButton:RID_SVXDLG_SEARCHFORM:RB_SEARCHFORTEXT
+SearchForNull sym:cui:RadioButton:RID_SVXDLG_SEARCHFORM:RB_SEARCHFORNULL
+SearchForNotNull sym:cui:RadioButton:RID_SVXDLG_SEARCHFORM:RB_SEARCHFORNOTNULL
 SearchText sym:CUI_HID_SEARCH_TEXT
-Formular sym:cui.ListBox.18007.1
+Formular sym:cui:ListBox:RID_SVXDLG_SEARCHFORM:LB_FORM
 AllFields sym:CUI_HID_SEARCH_ALLFIELDS
 FieldSelection sym:CUI_HID_SEARCH_FIELDSELECTION
 Position sym:CUI_HID_SEARCH_POSITION
@@ -255,10 +258,10 @@ Search sym:CUI_HID_SEARCH_BTN_SEARCH
 CloseBtn sym:CUI_HID_SEARCH_BTN_CLOSE
 RecordCount sym:CUI_UID_SEARCH_RECORDSTATUS
 
-*DataSourceSelection sym:dbu.ModalDialog.19204
-SourceList sym:dbu.ListBox.19204.1
-Organize sym:dbu.PushButton.19204.5
-Create sym:dbu.PushButton.19204.9
+*DataSourceSelection sym:dbaccess:ModalDialog:DLG_DATASOURCE_SELECTION
+SourceList sym:dbaccess:ListBox:DLG_DATASOURCE_SELECTION:LB_DATASOURCE
+Organize sym:dbaccess:PushButton:DLG_DATASOURCE_SELECTION:PB_MANAGE
+Create sym:dbaccess:PushButton:DLG_DATASOURCE_SELECTION:PB_CREATE
 
 *DataSourcesNotAvailable sym:SW_HID_DATA_SOURCES_UNAVAILABLE
 
@@ -299,45 +302,45 @@ CancelButton sym:WIZARDS_HID_DLGIMPORT_0_CMDCANCEL
 HelpButton sym:WIZARDS_HID_DLGIMPORT_0_CMDHELP
 ContinueButton sym:WIZARDS_HID_DLGIMPORT_0_CMDNEXT
 
-*ExternalData sym:sc.ModalDialog.25736
+*ExternalData sym:sc:ModalDialog:RID_SCDLG_LINKAREA
 URLField sym:SC_HID_SCDLG_LINKAREAURL
-FileChoose sym:sc.PushButton.25736.6
-TableListBox sym:sc.MultiListBox.25736.9
-Update sym:sc.CheckBox.25736.10
-UpdateTime sym:sc.NumericField.25736.11
+FileChoose sym:sc:PushButton:RID_SCDLG_LINKAREA:BTN_BROWSE
+TableListBox sym:sc:MultiListBox:RID_SCDLG_LINKAREA:LB_RANGES
+Update sym:sc:CheckBox:RID_SCDLG_LINKAREA:BTN_RELOAD
+UpdateTime sym:sc:NumericField:RID_SCDLG_LINKAREA:NF_DELAY
 
-*FindAndReplace sym:.uno:SearchDialog
-SearchFor sym:svx.ComboBox.10020.11
-SearchForStyle sym:svx.ListBox.10020.12
-ReplaceWith sym:svx.ComboBox.10020.16
-ReplaceWithStyle sym:svx.ListBox.10020.17
-SearchNow sym:svx.PushButton.10020.20
-SearchAll sym:svx.PushButton.10020.21
-ReplaceBtn sym:svx.PushButton.10020.23
-ReplaceAll sym:svx.PushButton.10020.24
-MatchCase sym:svx.CheckBox.10020.25
-WholeWordsOnly sym:svx.CheckBox.10020.26
-More sym:svx.MoreButton.10020.31
-CurrentSelectionOnly sym:svx.CheckBox.10020.41
-Backwards sym:svx.CheckBox.10020.42
-RegularExpressions sym:svx.CheckBox.10020.43
-SimilaritySearch sym:svx.CheckBox.10020.44
-SimilaritySearchFor sym:svx.PushButton.10020.45
-SearchForStyles sym:svx.CheckBox.10020.46
-MatchFullHalfWidth sym:svx.CheckBox.10020.47
-SoundsLike sym:svx.CheckBox.10020.48
-SoundsLikeOptions sym:svx.PushButton.10020.49
-Attributes sym:svx.PushButton.10020.50
-Formats sym:svx.PushButton.10020.51
-NoFormat sym:svx.PushButton.10020.52
-SearchIn sym:svx.ListBox.10020.55
-Rows sym:svx.RadioButton.10020.57
-Columns sym:svx.RadioButton.10020.58
-SearchInAllSheets sym:svx.CheckBox.10020.59
-Notes sym:svx.CheckBox.10020.60
+*FindAndReplace .uno:SearchDialog
+SearchFor sym:svx:ComboBox:RID_SVXDLG_SEARCH:ED_SEARCH
+SearchForStyle sym:svx:ListBox:RID_SVXDLG_SEARCH:LB_SEARCH
+ReplaceWith sym:svx:ComboBox:RID_SVXDLG_SEARCH:ED_REPLACE
+ReplaceWithStyle sym:svx:ListBox:RID_SVXDLG_SEARCH:LB_REPLACE
+SearchNow sym:svx:PushButton:RID_SVXDLG_SEARCH:BTN_SEARCH
+SearchAll sym:svx:PushButton:RID_SVXDLG_SEARCH:BTN_SEARCH_ALL
+ReplaceBtn sym:svx:PushButton:RID_SVXDLG_SEARCH:BTN_REPLACE
+ReplaceAll sym:svx:PushButton:RID_SVXDLG_SEARCH:BTN_REPLACE_ALL
+MatchCase sym:svx:CheckBox:RID_SVXDLG_SEARCH:CB_MATCH_CASE
+WholeWordsOnly sym:svx:CheckBox:RID_SVXDLG_SEARCH:CB_WHOLE_WORDS
+More sym:svx:MoreButton:RID_SVXDLG_SEARCH:BTN_MORE
+CurrentSelectionOnly sym:svx:CheckBox:RID_SVXDLG_SEARCH:CB_SELECTIONS
+Backwards sym:svx:CheckBox:RID_SVXDLG_SEARCH:CB_BACKWARDS
+RegularExpressions sym:svx:CheckBox:RID_SVXDLG_SEARCH:CB_REGEXP
+SimilaritySearch sym:svx:CheckBox:RID_SVXDLG_SEARCH:CB_SIMILARITY
+SimilaritySearchFor sym:svx:PushButton:RID_SVXDLG_SEARCH:PB_SIMILARITY
+SearchForStyles sym:svx:CheckBox:RID_SVXDLG_SEARCH:CB_LAYOUTS
+MatchFullHalfWidth sym:svx:CheckBox:RID_SVXDLG_SEARCH:CB_JAP_MATCH_FULL_HALF_WIDTH
+SoundsLike sym:svx:CheckBox:RID_SVXDLG_SEARCH:CB_JAP_SOUNDS_LIKE
+SoundsLikeOptions sym:svx:PushButton:RID_SVXDLG_SEARCH:PB_JAP_OPTIONS
+Attributes sym:svx:PushButton:RID_SVXDLG_SEARCH:BTN_ATTRIBUTE
+Formats sym:svx:PushButton:RID_SVXDLG_SEARCH:BTN_FORMAT
+NoFormat sym:svx:PushButton:RID_SVXDLG_SEARCH:BTN_NOFORMAT
+SearchIn sym:svx:ListBox:RID_SVXDLG_SEARCH:LB_CALC_SEARCHIN
+Rows sym:svx:RadioButton:RID_SVXDLG_SEARCH:RB_CALC_ROWS
+Columns sym:svx:RadioButton:RID_SVXDLG_SEARCH:RB_CALC_COLUMNS
+SearchInAllSheets sym:svx:CheckBox:RID_SVXDLG_SEARCH:CB_ALL_SHEETS
+Notes sym:svx:CheckBox:RID_SVXDLG_SEARCH:CB_NOTES
 
 *FormFolderNameDialog sym:DBACCESS_HID_DLG_SAVE_AS
-FolderName sym:dbu.Edit.19211.3
+FolderName sym:dbaccess:Edit:DLG_SAVE_AS:ET_TITLE
 FolderReName sym:DBACCESS_HID_DLG_RENAME
 
 *FormPropertiesDialog sym:SVX_UID_FORMPROPBROWSER_FRAME
@@ -347,10 +350,10 @@ TabDataForm sym:EXTENSIONS_HID_FM_PROPDLG_TAB_DATA
 TabEventsForm sym:EXTENSIONS_HID_FM_PROPDLG_TAB_EVT
 
 *FormSaveDialog sym:DBACCESS_HID_EXPLORERDLG_COLLECTION
-NewFolder sym:dbu.ImageButton.19227.1
-OneLevelUp sym:dbu.ImageButton.19227.2
-FormName sym:dbu.Edit.19227.1
-SaveBtn sym:dbu.PushButton.19227.3
+NewFolder sym:dbaccess:ImageButton:DLG_COLLECTION_VIEW:BTN_EXPLORERFILE_NEWFOLDER
+OneLevelUp sym:dbaccess:ImageButton:DLG_COLLECTION_VIEW:BTN_EXPLORERFILE_UP
+FormName sym:dbaccess:Edit:DLG_COLLECTION_VIEW:ED_EXPLORERFILE_FILENAME
+SaveBtn sym:dbaccess:PushButton:DLG_COLLECTION_VIEW:BTN_EXPLORERFILE_SAVE
 
 *FormWizard sym:WIZARDS_HID_DLGFORM_DIALOG
 TablesOrQueriesMaster sym:WIZARDS_HID_DLGFORM_MASTER_LBTABLES
@@ -376,12 +379,12 @@ AlignRight sym:WIZARDS_HID_DLGFORM_CMDALIGNRIGHT
 FinishBtn   sym:WIZARDS_HID_DLGFORM_CMDFINISH
 
 *FunctionsCalc sym:SC_HID_FUNCTION_BOX
-FunctionInsert sym:sc.ImageButton.26248.1
-Category sym:sc.ListBox.26248.1
-FunctionList sym:sc.ListBox.26248.2
+FunctionInsert sym:sc:ImageButton:FID_FUNCTION_BOX:IMB_INSERT
+Category sym:sc:ListBox:FID_FUNCTION_BOX:CB_CAT
+FunctionList sym:sc:ListBox:FID_FUNCTION_BOX:LB_FUNC
 
 *FunctionWizard sym:FORMULA_HID_FORMULADLG_FORMULA
-FunctionWizardTabControl sym:forui.TabControl.31003.18
+FunctionWizardTabControl sym:formula:TabControl:RID_FORMULADLG_FORMULA:TC_FUNCTION
 TabFunctionWizardFormula sym:FORMULA_HID_FORMULA_FAP_FORMULA
 CategoryLB sym:FORMULA_HID_FORMULA_LB_CATEGORY
 FunctionLB sym:FORMULA_HID_FORMULA_LB_FUNCTION
@@ -389,7 +392,7 @@ TabFunktion sym:FORMULA_HID_FORMULATAB_FUNCTION
 Functionsbutton1 sym:FORMULA_HID_FORMULA_FAP_BTN_FX1
 Editfield1 sym:FORMULA_HID_FORMULA_FAP_EDIT1
 Shrink1 sym:FORMULA_HID_FORMULA_FAP_BTN_REF1
-Maximize sym:forui.ImageButton.31003.20
+Maximize sym:formula:ImageButton:RID_FORMULADLG_FORMULA:RB_REF
 Functionsbutton2 sym:FORMULA_HID_FORMULA_FAP_BTN_FX2
 Editfield2 sym:FORMULA_HID_FORMULA_FAP_EDIT2
 Shrink2 sym:FORMULA_HID_FORMULA_FAP_BTN_REF2
@@ -402,10 +405,10 @@ Shrink4 sym:FORMULA_HID_FORMULA_FAP_BTN_REF4
 TabFunctionWizardStructure sym:FORMULA_HID_FORMULATAB_STRUCT
 Structure sym:FORMULA_HID_FORMULA_FAP_STRUCT
 Formel sym:FORMULA_HID_FORMULA_FAP_FORMULA
-Matrix sym:forui.CheckBox.31003.11
-Backward sym:forui.PushButton.31003.8
-Forward sym:forui.PushButton.31003.9
-NextBt sym:forui.PushButton.31005.9
+Matrix sym:formula:CheckBox:RID_FORMULADLG_FORMULA:BTN_MATRIX
+Backward sym:formula:PushButton:RID_FORMULADLG_FORMULA:BTN_BACKWARD
+Forward sym:formula:PushButton:RID_FORMULADLG_FORMULA:BTN_FORWARD
+NextBt sym:formula:PushButton:RID_FORMULADLG_FORMULA_MODAL:BTN_FORWARD
 
 *FTPConnection sym:WIZARDS_HID_FTP
 ServerName sym:WIZARDS_HID_FTP_SERVER
@@ -425,7 +428,7 @@ Browse sym:UUI_HID_LOGIN_DLG_BROWSE
 Account sym:UUI_HID_LOGIN_DLG_ACCOUNT
 UseSystemCredentials sym:UUI_HID_LOGIN_DLG_USE_SYSTEM_CREDENTIALS
 
-*Gallery sym:SVX_HID_GALLERY_BROWSER
+*Gallery .uno:Gallery
 NewTheme sym:SVX_HID_GALLERY_NEWTHEME
 'NewThemeName NEW_TITLE_FOR_GALLERY_THEME_EDITFIELD
 Gallerys sym:SVX_HID_GALLERY_THEMELIST
@@ -441,18 +444,18 @@ Title sym:CUI_HID_GALLERY_TITLE_EDIT
 *HangulHanjaConversion sym:CUI_HID_DIALOG_HANGULHANJA
 Original sym:CUI_HID_SPELLDLG_SETWORD
 Word sym:CUI_HID_HANGULDLG_EDIT_NEWWORD
-Find sym:cui.PushButton.10001.1
+Find sym:cui:PushButton:RID_SVX_MDLG_HANGULHANJA:PB_FIND
 Suggestions sym:CUI_HID_HANGULDLG_SUGGESTIONS_LIST
-HangulAndHanja sym:cui.RadioButton.10001.1
-HanjaHangul sym:cui.RadioButton.10001.2
-HangulHanja  sym:cui.RadioButton.10001.3
-HanjaAsRubyAbove  sym:cui.RadioButton.10001.4
-HanjaAsRubyBelow  sym:cui.RadioButton.10001.5
-HangulAsRubyAbove  sym:cui.RadioButton.10001.6
-HangulAsRubyBelow  sym:cui.RadioButton.10001.7
-HangulOnly   sym:cui.CheckBox.10001.2
-HanjaOnly   sym:cui.CheckBox.10001.3
-ReplaceByCharacter   sym:cui.CheckBox.10001.1
+HangulAndHanja sym:cui:RadioButton:RID_SVX_MDLG_HANGULHANJA:RB_SIMPLE_CONVERSION
+HanjaHangul sym:cui:RadioButton:RID_SVX_MDLG_HANGULHANJA:RB_HANJA_HANGUL_BRACKETED
+HangulHanja  sym:cui:RadioButton:RID_SVX_MDLG_HANGULHANJA:RB_HANGUL_HANJA_BRACKETED
+HanjaAsRubyAbove  sym:cui:RadioButton:RID_SVX_MDLG_HANGULHANJA:RB_HANGUL_HANJA_ABOVE
+HanjaAsRubyBelow  sym:cui:RadioButton:RID_SVX_MDLG_HANGULHANJA:RB_HANGUL_HANJA_BELOW
+HangulAsRubyAbove  sym:cui:RadioButton:RID_SVX_MDLG_HANGULHANJA:RB_HANJA_HANGUL_ABOVE
+HangulAsRubyBelow  sym:cui:RadioButton:RID_SVX_MDLG_HANGULHANJA:RB_HANJA_HANGUL_BELOW
+HangulOnly   sym:cui:CheckBox:RID_SVX_MDLG_HANGULHANJA:CB_HANGUL_ONLY
+HanjaOnly   sym:cui:CheckBox:RID_SVX_MDLG_HANGULHANJA:CB_HANJA_ONLY
+ReplaceByCharacter   sym:cui:CheckBox:RID_SVX_MDLG_HANGULHANJA:CB_REPLACE_BY_CHARACTER
 Ignore sym:CUI_HID_HANGULDLG_BUTTON_IGNORE
 AlwaysIgnore sym:CUI_HID_HANGULDLG_BUTTON_IGNOREALL
 ReplaceBtn sym:CUI_HID_HANGULDLG_BUTTON_CHANGE
@@ -461,43 +464,43 @@ Options sym:CUI_HID_HANGULDLG_BUTTON_OPTIONS
 Grid sym:CUI_HID_HANGULDLG_SUGGESTIONS_GRID
 
 *HangulHanjaOptions sym:CUI_HID_HANGULHANJA_OPT_DLG
-NewDictionary sym:cui.PushButton.10004.1
-EditDictionary sym:cui.PushButton.10004.2
-DeleteDictionary sym:cui.PushButton.10004.3
+NewDictionary sym:cui:PushButton:RID_SVX_MDLG_HANGULHANJA_OPT:PB_HHO_NEW
+EditDictionary sym:cui:PushButton:RID_SVX_MDLG_HANGULHANJA_OPT:PB_HHO_EDIT
+DeleteDictionary sym:cui:PushButton:RID_SVX_MDLG_HANGULHANJA_OPT:PB_HHO_DELETE
 UserDefineDictionary sym:CUI_HID_HANGULHANJA_OPT_DICTS_LB
-IgnorePostPositionalWord sym:cui.CheckBox.10004.1
-ShowEntries sym:cui.CheckBox.10004.3
-ReplaceUniqueEntries sym:cui.CheckBox.10004.4
+IgnorePostPositionalWord sym:cui:CheckBox:RID_SVX_MDLG_HANGULHANJA_OPT:CB_IGNOREPOST
+ShowEntries sym:cui:CheckBox:RID_SVX_MDLG_HANGULHANJA_OPT:CB_SHOWRECENTLYFIRST
+ReplaceUniqueEntries sym:cui:CheckBox:RID_SVX_MDLG_HANGULHANJA_OPT:CB_AUTOREPLACEUNIQUE
 
 *HangulHanjaNewDictionary sym:CUI_HID_HANGULHANJA_NEWDICT_DLG
-DictionaryName sym:cui.Edit.10006.1
+DictionaryName sym:cui:Edit:RID_SVX_MDLG_HANGULHANJA_NEWDICT:ED_DICTNAME
 
 *HangulHanjaEditDictionary sym:CUI_HID_HANGULHANJA_EDIT_DLG
-Book sym:cui.ListBox.10005.1
-Original sym:cui.ComboBox.10005.2
-Suggestion1 sym:cui.Edit.10005.1
-Suggestion2 sym:cui.Edit.10005.2
-Suggestion3 sym:cui.Edit.10005.3
-Suggestion4 sym:cui.Edit.10005.4
-NewEntry sym:cui.PushButton.10005.1
-DeleteEntry sym:cui.PushButton.10005.2
+Book sym:cui:ListBox:RID_SVX_MDLG_HANGULHANJA_EDIT:LB_BOOK
+Original sym:cui:ComboBox:RID_SVX_MDLG_HANGULHANJA_EDIT:LB_ORIGINAL
+Suggestion1 sym:cui:Edit:RID_SVX_MDLG_HANGULHANJA_EDIT:ED_1
+Suggestion2 sym:cui:Edit:RID_SVX_MDLG_HANGULHANJA_EDIT:ED_2
+Suggestion3 sym:cui:Edit:RID_SVX_MDLG_HANGULHANJA_EDIT:ED_3
+Suggestion4 sym:cui:Edit:RID_SVX_MDLG_HANGULHANJA_EDIT:ED_4
+NewEntry sym:cui:PushButton:RID_SVX_MDLG_HANGULHANJA_EDIT:PB_HHE_NEW
+DeleteEntry sym:cui:PushButton:RID_SVX_MDLG_HANGULHANJA_EDIT:PB_HHE_DELETE
 
-*Hyphenation sym:CUI_HID_HYPHENATE svx:ModalDialog:RID_SVXDLG_HYPHENATE
-Wort sym:cui.Edit.10030.10
-Vor sym:cui.ImageButton.10030.11
-Zurueck sym:cui.ImageButton.10030.12
-Weiter sym:cui.PushButton.10030.20
-Entfernen sym:cui.PushButton.10030.21
-HyphenateAll sym:cui.PushButton.10030.25   
+*Hyphenation sym:CUI_HID_HYPHENATE sym:svx:ModalDialog:RID_SVXDLG_HYPHENATE
+Wort sym:cui:Edit:RID_SVXDLG_HYPHENATE:ED_WORD
+Vor sym:cui:ImageButton:RID_SVXDLG_HYPHENATE:BTN_LEFT
+Zurueck sym:cui:ImageButton:RID_SVXDLG_HYPHENATE:BTN_RIGHT
+Weiter sym:cui:PushButton:RID_SVXDLG_HYPHENATE:BTN_HYPH_CONTINUE
+Entfernen sym:cui:PushButton:RID_SVXDLG_HYPHENATE:BTN_HYPH_DELETE
+HyphenateAll sym:cui:PushButton:RID_SVXDLG_HYPHENATE:BTN_HYPH_ALL   
 
 *HyphenationOptions sym:CUI_HID_LNGDLG_NUM_PREBREAK
-ZeichenVorUmbruch sym:cui.NumericField.10830.308
+ZeichenVorUmbruch sym:cui:NumericField:RID_SVXDLG_LNG_ED_NUM_PREBREAK:ED_PREBREAK
 
-*HTMLImportOptions sym:sc.ModalDialog.25756
-Automatic   sym:sc.RadioButton.25756.5
-Custom   sym:sc.RadioButton.25756.6
-CustomLanguage sym:sc.ListBox.25756.7
-DetectSpecialNumbers sym:sc.CheckBox.25756.9
+*HTMLImportOptions sym:sc:ModalDialog:RID_SCDLG_TEXT_IMPORT_OPTIONS
+Automatic   sym:sc:RadioButton:RID_SCDLG_TEXT_IMPORT_OPTIONS:RB_AUTOMATIC
+Custom   sym:sc:RadioButton:RID_SCDLG_TEXT_IMPORT_OPTIONS:RB_CUSTOM
+CustomLanguage sym:sc:ListBox:RID_SCDLG_TEXT_IMPORT_OPTIONS:LB_CUSTOM_LANG
+DetectSpecialNumbers sym:sc:CheckBox:RID_SCDLG_TEXT_IMPORT_OPTIONS:BTN_CONVERT_DATE
 
 *HyperlinkDialog sym:CUI_HID_HYPERLINK_DIALOG
 CloseButton sym:CUI_HID_ICCDIALOG_CANCEL_BTN

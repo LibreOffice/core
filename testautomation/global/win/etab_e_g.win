@@ -1,43 +1,43 @@
-*TabEffect sym:sd.TabPage.20871
-Sound sym:sd.ListBox.20871.11
-Play sym:sd.PushButton.20871.12
-AfterAnimation sym:sd.ListBox.20871.14
-Dimcolor sym:sd.ListBox.20871.16
-TextAnimation sym:sd.ListBox.20871.18
-DelayBetweenCharacters sym:sd.MetricField.20871.19
+*TabEffect sym:sd:TabPage:RID_TP_CUSTOMANIMATION_EFFECT
+Sound sym:sd:ListBox:RID_TP_CUSTOMANIMATION_EFFECT:LB_SOUND
+Play sym:sd:PushButton:RID_TP_CUSTOMANIMATION_EFFECT:PB_SOUND_PREVIEW
+AfterAnimation sym:sd:ListBox:RID_TP_CUSTOMANIMATION_EFFECT:LB_AFTER_EFFECT
+Dimcolor sym:sd:ListBox:RID_TP_CUSTOMANIMATION_EFFECT:CLB_DIMCOLOR
+TextAnimation sym:sd:ListBox:RID_TP_CUSTOMANIMATION_EFFECT:LB_TEXT_ANIM
+DelayBetweenCharacters sym:sd:MetricField:RID_TP_CUSTOMANIMATION_EFFECT:MF_TEXT_DELAY
 
 *TabEmail sym:CUI_HID_OPTIONS_MAIL
-EmailProgram sym:cui.Edit.10155.4
-EmailOpen sym:cui.PushButton.10155.5
+EmailProgram sym:cui:Edit:RID_SVXPAGE_INET_MAIL:ED_MAILERURL
+EmailOpen sym:cui:PushButton:RID_SVXPAGE_INET_MAIL:PB_MAILERURL
 
 *TabEntrance sym:SD_HID_SD_CUSTOMANIMATIONDIALOG_ENTRANCE
-Effects sym:sd.ListBox.20874.1
-Speed sym:sd.ComboBox.20874.3
-AutomaticPreview  sym:sd.CheckBox.20874.4
+Effects sym:sd:ListBox:RID_TP_CUSTOMANIMATION_ENTRANCE:LB_EFFECTS
+Speed sym:sd:ComboBox:RID_TP_CUSTOMANIMATION_ENTRANCE:CB_SPEED
+AutomaticPreview  sym:sd:CheckBox:RID_TP_CUSTOMANIMATION_ENTRANCE:CBX_PREVIEW
 
 *TabEmphasis sym:SD_HID_SD_CUSTOMANIMATIONDIALOG_EMPHASIS
-Effects sym:sd.ListBox.20874.1
-Speed sym:sd.ComboBox.20874.3
-AutomaticPreview  sym:sd.CheckBox.20874.4
+Effects sym:sd:ListBox:RID_TP_CUSTOMANIMATION_ENTRANCE:LB_EFFECTS
+Speed sym:sd:ComboBox:RID_TP_CUSTOMANIMATION_ENTRANCE:CB_SPEED
+AutomaticPreview  sym:sd:CheckBox:RID_TP_CUSTOMANIMATION_ENTRANCE:CBX_PREVIEW
 
 *TabExit sym:SD_HID_SD_CUSTOMANIMATIONDIALOG_EXIT
-Effects sym:sd.ListBox.20874.1
-Speed sym:sd.ComboBox.20874.3
-AutomaticPreview  sym:sd.CheckBox.20874.4
+Effects sym:sd:ListBox:RID_TP_CUSTOMANIMATION_ENTRANCE:LB_EFFECTS
+Speed sym:sd:ComboBox:RID_TP_CUSTOMANIMATION_ENTRANCE:CB_SPEED
+AutomaticPreview  sym:sd:CheckBox:RID_TP_CUSTOMANIMATION_ENTRANCE:CBX_PREVIEW
 
 *TabMotionPaths sym:SD_HID_SD_CUSTOMANIMATIONDIALOG_MOTIONPATH
-Effects sym:sd.ListBox.20874.1
-Speed sym:sd.ComboBox.20874.3
-AutomaticPreview  sym:sd.CheckBox.20874.4
+Effects sym:sd:ListBox:RID_TP_CUSTOMANIMATION_ENTRANCE:LB_EFFECTS
+Speed sym:sd:ComboBox:RID_TP_CUSTOMANIMATION_ENTRANCE:CB_SPEED
+AutomaticPreview  sym:sd:CheckBox:RID_TP_CUSTOMANIMATION_ENTRANCE:CBX_PREVIEW
 
 *TabEnvelope sym:SW_HID_ENV_ENV
-Addressee sym:sw.MultiLineEdit.22752.2
-Sender sym:sw.CheckBox.22752.10
-SenderText sym:sw.MultiLineEdit.22752.11
-Database sym:sw.ListBox.22752.4
-Table sym:sw.ListBox.22752.6
-Datenbasefield sym:sw.ListBox.22752.9
-Apply sym:sw.ImageButton.22752.7
+Addressee sym:sw:MultiLineEdit:TP_ENV_ENV:EDT_ADDR
+Sender sym:sw:CheckBox:TP_ENV_ENV:BOX_SEND
+SenderText sym:sw:MultiLineEdit:TP_ENV_ENV:EDT_SEND
+Database sym:sw:ListBox:TP_ENV_ENV:LB_DATABASE
+Table sym:sw:ListBox:TP_ENV_ENV:LB_TABLE
+Datenbasefield sym:sw:ListBox:TP_ENV_ENV:LB_DBFIELD
+Apply sym:sw:ImageButton:TP_ENV_ENV:BTN_INSERT
 Print sym:SW_HID_ENVELOP_PRINT
 Insert sym:SW_HID_ENVELOP_INSERT
 Back sym:SFX2_HID_TABDLG_RESET_BTN
@@ -70,9 +70,9 @@ PBMouseExited sym:EXTENSIONS_UID_BRWEVT_MOUSEEXITED
 
 *TabEventsForm sym:EXTENSIONS_HID_FM_PROPDLG_TAB_EVT
 
-*TabFieldLink sym:dbp.TabPage.19729
-ValueTable sym:dbp.ComboBox.19729.1
-ListTable sym:dbp.ComboBox.19729.2
+*TabFieldLink sym:extensions:TabPage:RID_PAGE_LCW_FIELDLINK
+ValueTable sym:extensions:ComboBox:RID_PAGE_LCW_FIELDLINK:CMB_VALUELISTFIELD
+ListTable sym:extensions:ComboBox:RID_PAGE_LCW_FIELDLINK:CMB_TABLEFIELD
 
 *TabFieldProperties sym:DBACCESS_HID_TAB_DESIGN_FIELDCONTROL
 IntLength sym:DBACCESS_HID_TAB_ENT_LEN
@@ -83,108 +83,108 @@ DefaultValue sym:DBACCESS_HID_TAB_ENT_DEFAULT
 FormatExample sym:DBACCESS_HID_TAB_ENT_FORMAT_SAMPLE
 BrowseBtm sym:DBACCESS_HID_TAB_ENT_FORMAT
 
-*TabFieldSelection sym:dbp.TabPage.19728
-ExistingFields sym:dbp.ListBox.19728.6
-DisplayField sym:dbp.Edit.19728.4
+*TabFieldSelection sym:extensions:TabPage:RID_PAGE_LCW_CONTENTSELECTION_FIELD
+ExistingFields sym:extensions:ListBox:RID_PAGE_LCW_CONTENTSELECTION_FIELD:LB_SELECTFIELD
+DisplayField sym:extensions:Edit:RID_PAGE_LCW_CONTENTSELECTION_FIELD:ET_DISPLAYEDFIELD
 
 *TabFirstStartOnlineUpdate sym:DESKTOP_HID_FIRSTSTART_UPDATE_CHECK
-CheckForUpdates sym:dkt.CheckBox.3008.3
+CheckForUpdates sym:desktop:CheckBox:TP_UPDATE_CHECK:CB_UPDATE_CHECK
 
 *TabFirstStartLicense sym:DESKTOP_HID_FIRSTSTART_LICENSE
-LicenseText sym:dkt.MultiLineEdit.3007.6
-ScrollDown sym:dkt.PushButton.3007.7
+LicenseText sym:desktop:MultiLineEdit:TP_LICENSE:ML_LICENSE
+ScrollDown sym:desktop:PushButton:TP_LICENSE:PB_LICENSE_DOWN
 
 *TabFirstStartRegistration sym:DESKTOP_HID_FIRSTSTART_REGISTRATION
-RegisterNow sym:dkt.RadioButton.3004.5
-RegisterLater sym:dkt.RadioButton.3004.6
-DoNotWantRegister sym:dkt.RadioButton.3004.7
+RegisterNow sym:desktop:RadioButton:TP_REGISTRATION:RB_REGISTRATION_NOW
+RegisterLater sym:desktop:RadioButton:TP_REGISTRATION:RB_REGISTRATION_LATER
+DoNotWantRegister sym:desktop:RadioButton:TP_REGISTRATION:RB_REGISTRATION_NEVER
 
 *TabFirstStartUser sym:DESKTOP_HID_FIRSTSTART_USER
-FirstName sym:dkt.Edit.3006.16
-LastName sym:dkt.Edit.3006.17
-Initials sym:dkt.Edit.3006.19
-FathersName sym:dkt.Edit.3006.18
+FirstName sym:desktop:Edit:TP_USER:ED_USER_FIRST
+LastName sym:desktop:Edit:TP_USER:ED_USER_LAST
+Initials sym:desktop:Edit:TP_USER:ED_USER_INITIALS
+FathersName sym:desktop:Edit:TP_USER:ED_USER_FATHER
 
 *TabFirstStartWelcome sym:DESKTOP_HID_FIRSTSTART_WELCOME
 
 *TabFont sym:CUI_HID_SVXPAGE_CHAR_NAME
-Font sym:cui.ComboBox.10239.424
-Style sym:cui.ComboBox.10239.426
-Size sym:cui.MetricBox.10239.428
-Language sym:cui.ListBox.10239.430
-FontWest sym:cui.ComboBox.10239.102
-StyleWest sym:cui.ComboBox.10239.104
-SizeWest sym:cui.MetricBox.10239.106
-LanguageWest sym:cui.ListBox.10239.108
-FontEast sym:cui.ComboBox.10239.112
-StyleEast sym:cui.ComboBox.10239.114
-SizeEast sym:cui.MetricBox.10239.116
-LanguageEast sym:cui.ListBox.10239.118
-FontCTL sym:cui.ComboBox.10239.122
-StyleCTL sym:cui.ComboBox.10239.124
-SizeCTL sym:cui.MetricBox.10239.126
-LanguageCTL sym:cui.ListBox.10239.128
-Color sym:cui.ListBox.10239.142
+Font sym:cui:ComboBox:RID_SVXPAGE_CHAR_NAME:LB_WEST_NAME_NOCJK
+Style sym:cui:ComboBox:RID_SVXPAGE_CHAR_NAME:LB_WEST_STYLE_NOCJK
+Size sym:cui:MetricBox:RID_SVXPAGE_CHAR_NAME:LB_WEST_SIZE_NOCJK
+Language sym:cui:ListBox:RID_SVXPAGE_CHAR_NAME:LB_WEST_LANG_NOCJK
+FontWest sym:cui:ComboBox:RID_SVXPAGE_CHAR_NAME:LB_WEST_NAME
+StyleWest sym:cui:ComboBox:RID_SVXPAGE_CHAR_NAME:LB_WEST_STYLE
+SizeWest sym:cui:MetricBox:RID_SVXPAGE_CHAR_NAME:LB_WEST_SIZE
+LanguageWest sym:cui:ListBox:RID_SVXPAGE_CHAR_NAME:LB_WEST_LANG
+FontEast sym:cui:ComboBox:RID_SVXPAGE_CHAR_NAME:LB_EAST_NAME
+StyleEast sym:cui:ComboBox:RID_SVXPAGE_CHAR_NAME:LB_EAST_STYLE
+SizeEast sym:cui:MetricBox:RID_SVXPAGE_CHAR_NAME:LB_EAST_SIZE
+LanguageEast sym:cui:ListBox:RID_SVXPAGE_CHAR_NAME:LB_EAST_LANG
+FontCTL sym:cui:ComboBox:RID_SVXPAGE_CHAR_NAME:LB_CTL_NAME
+StyleCTL sym:cui:ComboBox:RID_SVXPAGE_CHAR_NAME:LB_CTL_STYLE
+SizeCTL sym:cui:MetricBox:RID_SVXPAGE_CHAR_NAME:LB_CTL_SIZE
+LanguageCTL sym:cui:ListBox:RID_SVXPAGE_CHAR_NAME:LB_CTL_LANG
+Color sym:cui:ListBox:RID_SVXPAGE_CHAR_NAME:LB_COLOR2
 
 *TabFontEffects sym:CUI_HID_SVXPAGE_CHAR_EFFECTS
-Underline sym:cui.ListBox.10240.228
-Color sym:cui.ListBox.10240.230
-Effects sym:cui.ListBox.10240.205
-StrikeThrough sym:cui.ListBox.10240.226
-IndividualWords sym:cui.CheckBox.10240.231
-Emphasis sym:cui.ListBox.10240.242
-Position sym:cui.ListBox.10240.244
-Outline sym:cui.TriStateBox.10240.208
-Overline sym:cui.ListBox.10240.222
-OverlineColor sym:cui.ListBox.10240.224
-Shadow sym:cui.TriStateBox.10240.209
-Blinking sym:cui.TriStateBox.10240.210
-Relief sym:cui.ListBox.10240.207
-FontColor sym:cui.ListBox.10240.202
-Hidden sym:cui.TriStateBox.10240.211
+Underline sym:cui:ListBox:RID_SVXPAGE_CHAR_EFFECTS:LB_UNDERLINE
+Color sym:cui:ListBox:RID_SVXPAGE_CHAR_EFFECTS:LB_UNDERLINE_COLOR
+Effects sym:cui:ListBox:RID_SVXPAGE_CHAR_EFFECTS:LB_EFFECTS2
+StrikeThrough sym:cui:ListBox:RID_SVXPAGE_CHAR_EFFECTS:LB_STRIKEOUT
+IndividualWords sym:cui:CheckBox:RID_SVXPAGE_CHAR_EFFECTS:CB_INDIVIDUALWORDS
+Emphasis sym:cui:ListBox:RID_SVXPAGE_CHAR_EFFECTS:LB_EMPHASIS
+Position sym:cui:ListBox:RID_SVXPAGE_CHAR_EFFECTS:LB_POSITION
+Outline sym:cui:TriStateBox:RID_SVXPAGE_CHAR_EFFECTS:CB_OUTLINE
+Overline sym:cui:ListBox:RID_SVXPAGE_CHAR_EFFECTS:LB_OVERLINE
+OverlineColor sym:cui:ListBox:RID_SVXPAGE_CHAR_EFFECTS:LB_OVERLINE_COLOR
+Shadow sym:cui:TriStateBox:RID_SVXPAGE_CHAR_EFFECTS:CB_SHADOW
+Blinking sym:cui:TriStateBox:RID_SVXPAGE_CHAR_EFFECTS:CB_BLINKING
+Relief sym:cui:ListBox:RID_SVXPAGE_CHAR_EFFECTS:LB_RELIEF
+FontColor sym:cui:ListBox:RID_SVXPAGE_CHAR_EFFECTS:LB_FONTCOLOR
+Hidden sym:cui:TriStateBox:RID_SVXPAGE_CHAR_EFFECTS:CB_CHARHIDDEN
 
 *TabFontPosition sym:CUI_HID_SVXPAGE_CHAR_POSITION
-SuperScript sym:cui.RadioButton.10241.301
-Normal sym:cui.RadioButton.10241.302
-Subscript sym:cui.RadioButton.10241.303
-RaiseLower sym:cui.MetricField.10241.305
-RelativeFontSize sym:cui.MetricField.10241.308
-Automatic sym:cui.CheckBox.10241.306
-n0Degree sym:cui.RadioButton.10241.311
-n90Degree sym:cui.RadioButton.10241.312
-n270Degree sym:cui.RadioButton.10241.313
-FitToLine sym:cui.CheckBox.10241.314
-ScaleWith sym:cui.MetricField.10241.316
-Spacing sym:cui.ListBox.10241.321
-SpacingBy sym:cui.MetricField.10241.323
-PairKerning sym:cui.CheckBox.10241.324
-Super sym:cui.RadioButton.10241.301
+SuperScript sym:cui:RadioButton:RID_SVXPAGE_CHAR_POSITION:RB_HIGHPOS
+Normal sym:cui:RadioButton:RID_SVXPAGE_CHAR_POSITION:RB_NORMALPOS
+Subscript sym:cui:RadioButton:RID_SVXPAGE_CHAR_POSITION:RB_LOWPOS
+RaiseLower sym:cui:MetricField:RID_SVXPAGE_CHAR_POSITION:ED_HIGHLOW
+RelativeFontSize sym:cui:MetricField:RID_SVXPAGE_CHAR_POSITION:ED_FONTSIZE
+Automatic sym:cui:CheckBox:RID_SVXPAGE_CHAR_POSITION:CB_HIGHLOW
+n0Degree sym:cui:RadioButton:RID_SVXPAGE_CHAR_POSITION:RB_0_DEG
+n90Degree sym:cui:RadioButton:RID_SVXPAGE_CHAR_POSITION:RB_90_DEG
+n270Degree sym:cui:RadioButton:RID_SVXPAGE_CHAR_POSITION:RB_270_DEG
+FitToLine sym:cui:CheckBox:RID_SVXPAGE_CHAR_POSITION:CB_FIT_TO_LINE
+ScaleWith sym:cui:MetricField:RID_SVXPAGE_CHAR_POSITION:MF_SCALE_WIDTH
+Spacing sym:cui:ListBox:RID_SVXPAGE_CHAR_POSITION:LB_KERNING2
+SpacingBy sym:cui:MetricField:RID_SVXPAGE_CHAR_POSITION:ED_KERNING2
+PairKerning sym:cui:CheckBox:RID_SVXPAGE_CHAR_POSITION:CB_PAIRKERNING
+Super sym:cui:RadioButton:RID_SVXPAGE_CHAR_POSITION:RB_HIGHPOS
 
 *TabFormat3dViewGeometry sym:CHART2_HID_3D_VIEW
- AxisRotationXaxis       sym:chartcontroller.MetricField.915.1
- AxisRotationYaxis       sym:chartcontroller.MetricField.915.2
- AxisRotationZaxis       sym:chartcontroller.MetricField.915.3
- Perspective             sym:chartcontroller.CheckBox.915.1
+ AxisRotationXaxis       sym:chart2:MetricField:TP_3D_SCENEGEOMETRY:MTR_FLD_X_ROTATION
+ AxisRotationYaxis       sym:chart2:MetricField:TP_3D_SCENEGEOMETRY:MTR_FLD_Y_ROTATION
+ AxisRotationZaxis       sym:chart2:MetricField:TP_3D_SCENEGEOMETRY:MTR_FLD_Z_ROTATION
+ Perspective             sym:chart2:CheckBox:TP_3D_SCENEGEOMETRY:CBX_PERSPECTIVE
  
-*TabFormat3dViewAppearance sym:chartcontroller.TabPage.916
- Scheme                    sym:chartcontroller.ListBox.916.2
- RoundedEdges              sym:chartcontroller.CheckBox.916.3 
- Shading                   sym:chartcontroller.CheckBox.916.2
- ObjectBorders             sym:chartcontroller.CheckBox.916.1
+*TabFormat3dViewAppearance sym:chart2:TabPage:TP_3D_SCENEAPPEARANCE
+ Scheme                    sym:chart2:ListBox:TP_3D_SCENEAPPEARANCE:LB_SCHEME
+ RoundedEdges              sym:chart2:CheckBox:TP_3D_SCENEAPPEARANCE:CB_ROUNDEDEDGE
+ Shading                   sym:chart2:CheckBox:TP_3D_SCENEAPPEARANCE:CB_SHADING
+ ObjectBorders             sym:chart2:CheckBox:TP_3D_SCENEAPPEARANCE:CB_OBJECTLINES
  
-*TabFormat3dViewIllumination sym:chartcontroller.TabPage.917
- LightSource1                sym:chartcontroller.ImageButton.917.3
- LightSource2                sym:chartcontroller.ImageButton.917.4
- LightSource3                sym:chartcontroller.ImageButton.917.5
- LightSource4                sym:chartcontroller.ImageButton.917.6
- LightSource5                sym:chartcontroller.ImageButton.917.7
- LightSource6                sym:chartcontroller.ImageButton.917.8
- LightSource7                sym:chartcontroller.ImageButton.917.9
- LightSource8                sym:chartcontroller.ImageButton.917.10
- Color                       sym:chartcontroller.ListBox.917.2
- ColorSelect                 sym:chartcontroller.ImageButton.917.2
- AmbientLight                sym:chartcontroller.ListBox.917.1
- AmbientLightSelect          sym:chartcontroller.ImageButton.917.1
+*TabFormat3dViewIllumination sym:chart2:TabPage:TP_3D_SCENEILLUMINATION
+ LightSource1                sym:chart2:ImageButton:TP_3D_SCENEILLUMINATION:BTN_LIGHT_1
+ LightSource2                sym:chart2:ImageButton:TP_3D_SCENEILLUMINATION:BTN_LIGHT_2
+ LightSource3                sym:chart2:ImageButton:TP_3D_SCENEILLUMINATION:BTN_LIGHT_3
+ LightSource4                sym:chart2:ImageButton:TP_3D_SCENEILLUMINATION:BTN_LIGHT_4
+ LightSource5                sym:chart2:ImageButton:TP_3D_SCENEILLUMINATION:BTN_LIGHT_5
+ LightSource6                sym:chart2:ImageButton:TP_3D_SCENEILLUMINATION:BTN_LIGHT_6
+ LightSource7                sym:chart2:ImageButton:TP_3D_SCENEILLUMINATION:BTN_LIGHT_7
+ LightSource8                sym:chart2:ImageButton:TP_3D_SCENEILLUMINATION:BTN_LIGHT_8
+ Color                       sym:chart2:ListBox:TP_3D_SCENEILLUMINATION:LB_LIGHTSOURCE
+ ColorSelect                 sym:chart2:ImageButton:TP_3D_SCENEILLUMINATION:BTN_LIGHTSOURCE_COLOR
+ AmbientLight                sym:chart2:ListBox:TP_3D_SCENEILLUMINATION:LB_AMBIENTLIGHT
+ AmbientLightSelect          sym:chart2:ImageButton:TP_3D_SCENEILLUMINATION:BTN_AMBIENT_COLOR
  
 *TabFormatChartTitleAlignment sym:CHART2_HID_SCH_ALIGNMENT
  AngleKnob                    sym:CHART2_HID_SCH_ALIGNMENT_CTR_DIAL
@@ -194,35 +194,35 @@ Super sym:cui.RadioButton.10241.301
  TextDirection2               sym:CHART2_HID_SCH_TEXTDIRECTION_EQUATION
 
 *TabFormatChartLine sym:CUI_HID_LINE_LINE
- Style               sym:cui.ListBox.10051.2
- Color               sym:cui.ListBox.10051.1
- Width               sym:cui.MetricField.10051.1
- Transparency        sym:cui.MetricField.10051.5
- StyleLeft           sym:cui.ListBox.10051.3
- WidthLeft           sym:cui.MetricField.10051.3
- CenterLeft          sym:cui.TriStateBox.10051.4
- StyleRight          sym:cui.ListBox.10051.4
- WidthRight          sym:cui.MetricField.10051.2
- CenterRight         sym:cui.TriStateBox.10051.5
- SynchroniteEnds     sym:cui.CheckBox.10051.1
- CornerStyle         sym:cui.ListBox.10051.5
- IconSelect          sym:cui.MenuButton.10051.26
- IconWidth           sym:cui.MetricField.10051.22
- IconHeigth          sym:cui.MetricField.10051.23
- KeepRatio           sym:cui.CheckBox.10051.24
+ Style               sym:cui:ListBox:RID_SVXPAGE_LINE:LB_LINE_STYLE
+ Color               sym:cui:ListBox:RID_SVXPAGE_LINE:LB_COLOR
+ Width               sym:cui:MetricField:RID_SVXPAGE_LINE:MTR_FLD_LINE_WIDTH
+ Transparency        sym:cui:MetricField:RID_SVXPAGE_LINE:MTR_LINE_TRANSPARENT
+ StyleLeft           sym:cui:ListBox:RID_SVXPAGE_LINE:LB_START_STYLE
+ WidthLeft           sym:cui:MetricField:RID_SVXPAGE_LINE:MTR_FLD_START_WIDTH
+ CenterLeft          sym:cui:TriStateBox:RID_SVXPAGE_LINE:TSB_CENTER_START
+ StyleRight          sym:cui:ListBox:RID_SVXPAGE_LINE:LB_END_STYLE
+ WidthRight          sym:cui:MetricField:RID_SVXPAGE_LINE:MTR_FLD_END_WIDTH
+ CenterRight         sym:cui:TriStateBox:RID_SVXPAGE_LINE:TSB_CENTER_END
+ SynchroniteEnds     sym:cui:CheckBox:RID_SVXPAGE_LINE:CBX_SYNCHRONIZE
+ CornerStyle         sym:cui:ListBox:RID_SVXPAGE_LINE:LB_EDGE_STYLE
+ IconSelect          sym:cui:MenuButton:RID_SVXPAGE_LINE:MB_SYMBOL_BITMAP
+ IconWidth           sym:cui:MetricField:RID_SVXPAGE_LINE:MF_SYMBOL_WIDTH
+ IconHeigth          sym:cui:MetricField:RID_SVXPAGE_LINE:MF_SYMBOL_HEIGHT
+ KeepRatio           sym:cui:CheckBox:RID_SVXPAGE_LINE:CB_SYMBOL_RATIO
  
 +TabFormatChartBorders TabFormatChartLine
 
 *TabFormatEnvelope sym:SW_HID_ENV_FMT
-AddresseeFromLeft sym:sw.MetricField.22753.14
-AddresseeFromRight sym:sw.MetricField.22753.16
-AddresseeEdit sym:sw.MenuButton.22753.18
-SenderFromLeft sym:sw.MetricField.22753.24
-SenderFromRight sym:sw.MetricField.22753.26
-SenderEdit sym:sw.MenuButton.22753.28
-SizeFormat sym:sw.ListBox.22753.33
-SizeWidth sym:sw.MetricField.22753.35
-SizeHeight sym:sw.MetricField.22753.37
+AddresseeFromLeft sym:sw:MetricField:TP_ENV_FMT:FLD_ADDR_LEFT
+AddresseeFromRight sym:sw:MetricField:TP_ENV_FMT:FLD_ADDR_TOP
+AddresseeEdit sym:sw:MenuButton:TP_ENV_FMT:BTN_ADDR_EDIT
+SenderFromLeft sym:sw:MetricField:TP_ENV_FMT:FLD_SEND_LEFT
+SenderFromRight sym:sw:MetricField:TP_ENV_FMT:FLD_SEND_TOP
+SenderEdit sym:sw:MenuButton:TP_ENV_FMT:BTN_SEND_EDIT
+SizeFormat sym:sw:ListBox:TP_ENV_FMT:BOX_SIZE_FORMAT
+SizeWidth sym:sw:MetricField:TP_ENV_FMT:FLD_SIZE_WIDTH
+SizeHeight sym:sw:MetricField:TP_ENV_FMT:FLD_SIZE_HEIGHT
 
 *TabGeneral sym:DBACCESS_HID_DSADMIN_PAGE_GENERAL
 DatabaseType sym:DBACCESS_HID_DSADMIN_DSTYPE
@@ -353,22 +353,22 @@ Width sym:EXTENSIONS_HID_PROP_WIDTH
 WordBreak sym:EXTENSIONS_HID_PROP_WORDBREAK
 
 *TabGrid sym:SW_HID_TEXTGRID_PAGE
-NoGrid sym:sw.RadioButton.20901.2
-LinesGrid sym:sw.RadioButton.20901.3
-CharsGrid sym:sw.RadioButton.20901.4
-LinesPerPage sym:sw.NumericField.20901.8
-TextSize sym:sw.MetricField.20901.11
-CharsPerLine sym:sw.NumericField.20901.13
-RubySize sym:sw.MetricField.20901.16
-RubyBelow sym:sw.CheckBox.20901.17
-Display sym:sw.CheckBox.20901.19
-PrintGrid sym:sw.CheckBox.20901.20
-Color sym:sw.ListBox.20901.22
+NoGrid sym:sw:RadioButton:TP_TEXTGRID_PAGE:RB_NOGRID
+LinesGrid sym:sw:RadioButton:TP_TEXTGRID_PAGE:RB_LINESGRID
+CharsGrid sym:sw:RadioButton:TP_TEXTGRID_PAGE:RB_CHARSGRID
+LinesPerPage sym:sw:NumericField:TP_TEXTGRID_PAGE:NF_LINESPERPAGE
+TextSize sym:sw:MetricField:TP_TEXTGRID_PAGE:MF_TEXTSIZE
+CharsPerLine sym:sw:NumericField:TP_TEXTGRID_PAGE:NF_CHARSPERLINE
+RubySize sym:sw:MetricField:TP_TEXTGRID_PAGE:MF_RUBYSIZE
+RubyBelow sym:sw:CheckBox:TP_TEXTGRID_PAGE:CB_RUBYBELOW
+Display sym:sw:CheckBox:TP_TEXTGRID_PAGE:CB_DISPLAY
+PrintGrid sym:sw:CheckBox:TP_TEXTGRID_PAGE:CB_PRINT
+Color sym:sw:ListBox:TP_TEXTGRID_PAGE:LB_COLOR
 
-*TabGroupBoxData sym:dbp.TabPage.19722
-Address sym:.uno:OpenUrl
-Names sym:dbp.Edit.19722.1
-AddTo sym:dbp.PushButton.19722.1
-RemoveFrom sym:dbp.PushButton.19722.2
-OptionFields sym:dbp.ListBox.19722.3
+*TabGroupBoxData sym:extensions:TabPage:RID_PAGE_GROUPRADIOSELECTION
+Address .uno:OpenUrl
+Names sym:extensions:Edit:RID_PAGE_GROUPRADIOSELECTION:ET_RADIOLABELS
+AddTo sym:extensions:PushButton:RID_PAGE_GROUPRADIOSELECTION:PB_MOVETORIGHT
+RemoveFrom sym:extensions:PushButton:RID_PAGE_GROUPRADIOSELECTION:PB_MOVETOLEFT
+OptionFields sym:extensions:ListBox:RID_PAGE_GROUPRADIOSELECTION:LB_RADIOBUTTONS
 

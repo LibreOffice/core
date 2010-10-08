@@ -1,4 +1,4 @@
-*TabColor sym:.uno:TabBgColor
+*TabColor .uno:TabBgColor
 
 *TableDesignTable sym:DBACCESS_HID_TABDESIGN_BACKGROUND
 TableWindow sym:DBACCESS_HID_CTL_TABLEEDIT
@@ -42,7 +42,7 @@ FinishBtn sym:WIZARDS_HID_DLGTABLE_CMDFINISH
 CancelBtn sym:WIZARDS_HID_DLGTABLE_CMDCANCEL
 
 ' not nice solved, but can't do better right now; complains -> TBO
-*Tasks sym:sd.DockingWindow.794
+*Tasks sym:sd:DockingWindow:FLT_TOOL_PANEL_DOCKING_WINDOW
 View sym:SFX2_HID_TASKPANE_VIEW_MENU
 '? sym:SD_HID_SD_WIN_DOCUMENT
 ' Master Pages
@@ -88,8 +88,8 @@ TransitionAutomaticPreview   sym:SD_HID_SD_SLIDETRANSITIONPANE_CB_AUTO_PREVIEW
 *SlideTransition sym:SD_HID_SD_SLIDE_TRANSITIONS
 
 *TemplateAndDocuments sym:SVT_HID_TEMPLATEDLG_DIALOG
-Organize sym:svt.PushButton.16420.11
-Edit sym:svt.PushButton.16420.12
+Organize sym:svtools:PushButton:DLG_DOCTEMPLATE:BTN_DOCTEMPLATE_MANAGE
+Edit sym:svtools:PushButton:DLG_DOCTEMPLATE:BTN_DOCTEMPLATE_EDIT
 Backward sym:SVT_HID_TEMPLATEDLG_TB_BACK
 UpOneLevel sym:SVT_HID_TEMPLATEDLG_TB_PREV
 Print sym:SVT_HID_TEMPLATEDLG_TB_PRINT
@@ -114,8 +114,8 @@ CancelButton sym:WIZARDS_HID_DLGCORRESPONDENCE_CANCEL
 *TestAccountSettings sym:SW_HID_MM_TESTACCOUNTSETTINGS
 IDontKnow sym:SW_HID_MM_TESTACCOUNTSETTINGS_HB
 TaskStatusListBox sym:SW_HID_MM_TESTACCOUNTSETTINGS_TLB
-Errors sym:sw.MultiLineEdit.21569.34
-Stop sym:sw.PushButton.21569.36
+Errors sym:sw:MultiLineEdit:DLG_MM_TESTACCOUNTSETTINGS:ED_ERROR
+Stop sym:sw:PushButton:DLG_MM_TESTACCOUNTSETTINGS:PB_STOP
 
 *TestXMLFilter sym:FILTER_HID_XML_FILTER_TEST_DIALOG
 XSLTForExport sym:FILTER_HID_XML_FILTER_TEST_EXPORT_XSLT_FILE
@@ -130,38 +130,38 @@ RecentFile sym:FILTER_HID_XML_FILTER_TEST_IMPORT_RECENT
 FixedRecentFile sym:FILTER_HID_XML_FILTER_TEST_IMPORT_RECENT_FILE
 CloseBtn sym:FILTER_HID_XML_FILTER_TEST_CLOSE
 
-*Thesaurus sym:.uno:Thesaurus
-CurrentWord sym:cui.ComboBox.10031.16
-RecallCurrentWord sym:cui.ImageButton.10031.9
+*Thesaurus .uno:Thesaurus
+CurrentWord sym:cui:ComboBox:RID_SVXDLG_THESAURUS:CB_WORD
+RecallCurrentWord sym:cui:ImageButton:RID_SVXDLG_THESAURUS:BTN_LEFT
 Alternatives sym:CUI_HID_CT_THES_ALTERNATIVES
-ReplaceWith sym:cui.Edit.10031.22
-Language sym:cui.MenuButton.10031.12
+ReplaceWith sym:cui:Edit:RID_SVXDLG_THESAURUS:ED_REPL
+Language sym:cui:MenuButton:RID_SVXDLG_THESAURUS:MB_LANGUAGE
 
-*TextImport sym:sc.ModalDialog.25695
-CharacterSet sym:sc.ListBox.25695.6
-Language sym:sc.ListBox.25695.8
-FromRow sym:sc.NumericField.25695.10
-FixedWidth sym:sc.RadioButton.25695.12
-Separated sym:sc.RadioButton.25695.13
-Tab sym:sc.CheckBox.25695.14
-Semicolon sym:sc.CheckBox.25695.18
-Comma sym:sc.CheckBox.25695.15
-SpaceCB sym:sc.CheckBox.25695.19
-Other sym:sc.CheckBox.25695.16
-OtherText sym:sc.Edit.25695.17
-MergeDelimiter sym:sc.CheckBox.25695.20
-TextDelimiter sym:sc.ComboBox.25695.21
-QuotedAsText   sym:sc.CheckBox.25695.24
-DetectSpecialNumbers   sym:sc.CheckBox.25695.25
-Type sym:sc.ListBox.25695.28
+*TextImport sym:sc:ModalDialog:RID_SCDLG_ASCII
+CharacterSet sym:sc:ListBox:RID_SCDLG_ASCII:LB_CHARSET
+Language sym:sc:ListBox:RID_SCDLG_ASCII:LB_CUSTOMLANG
+FromRow sym:sc:NumericField:RID_SCDLG_ASCII:NF_AT_ROW
+FixedWidth sym:sc:RadioButton:RID_SCDLG_ASCII:RB_FIXED
+Separated sym:sc:RadioButton:RID_SCDLG_ASCII:RB_SEPARATED
+Tab sym:sc:CheckBox:RID_SCDLG_ASCII:CKB_TAB
+Semicolon sym:sc:CheckBox:RID_SCDLG_ASCII:CKB_SEMICOLON
+Comma sym:sc:CheckBox:RID_SCDLG_ASCII:CKB_COMMA
+SpaceCB sym:sc:CheckBox:RID_SCDLG_ASCII:CKB_SPACE
+Other sym:sc:CheckBox:RID_SCDLG_ASCII:CKB_OTHER
+OtherText sym:sc:Edit:RID_SCDLG_ASCII:ED_OTHER
+MergeDelimiter sym:sc:CheckBox:RID_SCDLG_ASCII:CB_ASONCE
+TextDelimiter sym:sc:ComboBox:RID_SCDLG_ASCII:CB_TEXTSEP
+QuotedAsText   sym:sc:CheckBox:RID_SCDLG_ASCII:CB_QUOTED_AS_TEXT
+DetectSpecialNumbers   sym:sc:CheckBox:RID_SCDLG_ASCII:CB_DETECT_SPECIAL_NUMBER
+Type sym:sc:ListBox:RID_SCDLG_ASCII:LB_TYPE1
 Preview sym:SC_HID_SC_ASCII_TABCTR
 
-*UnsatisfiedDependencies sym:deploymentgui.ModalDialog.2001
-UnsatisfiedDependencyList sym:deploymentgui.ListBox.2001.2
+*UnsatisfiedDependencies sym:desktop:ModalDialog:RID_DLG_DEPENDENCIES
+UnsatisfiedDependencyList sym:desktop:ListBox:RID_DLG_DEPENDENCIES:RID_DLG_DEPENDENCIES_LIST
 
-*WarningPrintTransparency sym:sfx.ModalDialog.2399
-NoButton sym:sfx.PushButton.2399.63
-DoNotShowAgain sym:sfx.CheckBox.2399.65
+*WarningPrintTransparency sym:sfx2:ModalDialog:RID_WARN_PRINTTRANSPARENCY
+NoButton sym:sfx2:PushButton:RID_WARN_PRINTTRANSPARENCY:BTN_PRINTTRANS_NO
+DoNotShowAgain sym:sfx2:CheckBox:RID_WARN_PRINTTRANSPARENCY:CBX_NOPRINTTRANSWARN
 
 *WebWizard sym:WIZARDS_HID0_WEBWIZARD
 IntroductionChooseSettings sym:WIZARDS_HID1_LST_SESSIONS
@@ -237,44 +237,44 @@ OKBtn sym:DESKTOP_HID_FIRSTSTART_FINISH
 CancelBtn sym:DESKTOP_HID_FIRSTSTART_CANCEL
 
 *XFormAddInstance sym:SVX_HID_XFORMS_ADDINSTANCE_DLG
-InstanceName sym:svx.Edit.18018.12
-InstanceURL sym:.uno:OpenUrl
-BrowseBtn sym:svx.PushButton.18018.15
-LinkInstance sym:svx.CheckBox.18018.16
+InstanceName sym:svx:Edit:RID_SVXDLG_ADD_INSTANCE:ED_INST_NAME
+InstanceURL .uno:OpenUrl
+BrowseBtn sym:svx:PushButton:RID_SVXDLG_ADD_INSTANCE:PB_FILEPICKER
+LinkInstance sym:svx:CheckBox:RID_SVXDLG_ADD_INSTANCE:CB_INST_LINKINST
 
 *XFormAddItemDLG sym:SVX_HID_XFORMS_ADDDATAITEM_DLG
-ElementName sym:svx.Edit.18012.12
-DefaultValue sym:svx.Edit.18012.14
-DataType sym:svx.ListBox.18012.18
-Required sym:svx.CheckBox.18012.19
-RequiredBtn sym:svx.PushButton.18012.20
-Relevant sym:svx.CheckBox.18012.21
-RelevantBtn sym:svx.PushButton.18012.22
-Constraint sym:svx.CheckBox.18012.23
-ConstraintBtn sym:svx.PushButton.18012.24
-Calculate sym:svx.CheckBox.18012.27
-CalculateBtn sym:svx.PushButton.18012.28
-ReadOnly sym:svx.CheckBox.18012.25
-ReadOnlyBtn sym:svx.PushButton.18012.26
+ElementName sym:svx:Edit:RID_SVXDLG_ADD_DATAITEM:ED_NAME
+DefaultValue sym:svx:Edit:RID_SVXDLG_ADD_DATAITEM:ED_DEFAULT
+DataType sym:svx:ListBox:RID_SVXDLG_ADD_DATAITEM:LB_DATATYPE
+Required sym:svx:CheckBox:RID_SVXDLG_ADD_DATAITEM:CB_REQUIRED
+RequiredBtn sym:svx:PushButton:RID_SVXDLG_ADD_DATAITEM:PB_REQUIRED
+Relevant sym:svx:CheckBox:RID_SVXDLG_ADD_DATAITEM:CB_RELEVANT
+RelevantBtn sym:svx:PushButton:RID_SVXDLG_ADD_DATAITEM:PB_RELEVANT
+Constraint sym:svx:CheckBox:RID_SVXDLG_ADD_DATAITEM:CB_CONSTRAINT
+ConstraintBtn sym:svx:PushButton:RID_SVXDLG_ADD_DATAITEM:PB_CONSTRAINT
+Calculate sym:svx:CheckBox:RID_SVXDLG_ADD_DATAITEM:CB_CALCULATE
+CalculateBtn sym:svx:PushButton:RID_SVXDLG_ADD_DATAITEM:PB_CALCULATE
+ReadOnly sym:svx:CheckBox:RID_SVXDLG_ADD_DATAITEM:CB_READONLY
+ReadOnlyBtn sym:svx:PushButton:RID_SVXDLG_ADD_DATAITEM:PB_READONLY
 
 *XFormAddModel sym:SVX_HID_XFORMS_ADDMODEL_DLG
-ModelName sym:svx.Edit.18017.12
+ModelName sym:svx:Edit:RID_SVXDLG_ADD_MODEL:ED_INST_NAME
 
 *XFormAddSubmission sym:SVX_HID_XFORMS_ADDSUBMISSION_DLG
-SubmitName sym:svx.Edit.18016.12
-SubmitAction sym:svx.Edit.18016.14
-SubmitMethod sym:svx.ListBox.18016.16
-SubmitBindingExpression sym:svx.Edit.18016.18
-SubmitBindingExpressionBtn sym:svx.PushButton.18016.19
-SubmitBinding sym:svx.ListBox.18016.21
-SubmitReplace sym:svx.ListBox.18016.23
+SubmitName sym:svx:Edit:RID_SVXDLG_ADD_SUBMISSION:ED_SUBMIT_NAME
+SubmitAction sym:svx:Edit:RID_SVXDLG_ADD_SUBMISSION:ED_SUBMIT_ACTION
+SubmitMethod sym:svx:ListBox:RID_SVXDLG_ADD_SUBMISSION:LB_SUBMIT_METHOD
+SubmitBindingExpression sym:svx:Edit:RID_SVXDLG_ADD_SUBMISSION:ED_SUBMIT_REF
+SubmitBindingExpressionBtn sym:svx:PushButton:RID_SVXDLG_ADD_SUBMISSION:PB_SUBMIT_REF
+SubmitBinding sym:svx:ListBox:RID_SVXDLG_ADD_SUBMISSION:LB_SUBMIT_BIND
+SubmitReplace sym:svx:ListBox:RID_SVXDLG_ADD_SUBMISSION:LB_SUBMIT_REPLACE
 
-*XFormsDataNavigator sym:SVX_HID_DATA_NAVIGATOR_WIN 
+*XFormsDataNavigator .uno:ShowDataNavigator
 XFormsDataNavigatorTabControl sym:SVX_HID_XFORMS_TAB_CONTROL
-'Instance svx:TabPage:RID_SVX_TP_XFORMS_INSTANCE
+'Instance sym:svx:TabPage:RID_SVX_TP_XFORMS_INSTANCE
 Models sym:SVX_HID_XFORMS_MODELS_LIST
 ModelsBtn sym:SVX_HID_XFORMS_MODELS_MENUBTN
-TabPages sym:svx.TabPage.18020
+TabPages sym:svx:TabPage:RID_SVX_XFORMS_TABPAGES
 ItemList sym:SVX_HID_XFORMS_ITEMS_LIST
 InstanceBtn sym:SVX_HID_XFORMS_INSTANCES_MENUBTN
 
