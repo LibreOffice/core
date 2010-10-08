@@ -20,6 +20,7 @@ T4_WRITER = \
     writer_WordPerfect_Document \
     writer_MS_Works_Document \
     writer_T602_Document \
+    writer_LotusWordPro_Document \
     writer_Text \
     writer_Text_encoded \
     writer_MIZI_Hwp_97 \
@@ -51,6 +52,7 @@ F4_WRITER = \
     WordPerfect \
     MS_Works \
     T602Document \
+    LotusWordPro \
     Text \
     Text__encoded_ \
     writer_MIZI_Hwp_97 \
