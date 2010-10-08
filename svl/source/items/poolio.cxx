@@ -202,8 +202,10 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
         SfxMultiMixRecordWriter aWhichIdsRec( &rStream, SFX_ITEMPOOL_REC_WHICHIDS, 0 );
 
         // erst Atomaren-Items und dann die Sets schreiben (wichtig beim Laden)
-        for ( pImp->bInSetItem = FALSE; pImp->bInSetItem <= TRUE && !rStream.GetError(); ++pImp->bInSetItem )
+        for (int ft = 0 ; ft < 2 && !rStream.GetError(); ft++)
         {
+            pImp->bInSetItem = ft != 0;
+
             SfxPoolItemArray_Impl **pArr = pImp->ppPoolItems;
             SfxPoolItem **ppDefItem = ppStaticDefaults;
             const USHORT nSize = GetSize_Impl();
@@ -274,7 +276,7 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
             }
         }
 
-        pImp->bInSetItem = FALSE;
+        pImp->bInSetItem = false;
     }
 
     // die gesetzten Defaults speichern (Pool-Defaults)

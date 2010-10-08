@@ -187,7 +187,7 @@ SfxItemPool::SfxItemPool
     pImp->nInitRefCount = 1;
     pImp->nVerStart = nStart;
     pImp->nVerEnd = nEnd;
-    pImp->bInSetItem = FALSE;
+    pImp->bInSetItem = false;
     pImp->nStoringStart = nStartWhich;
     pImp->nStoringEnd = nEndWhich;
 
@@ -246,7 +246,7 @@ SfxItemPool::SfxItemPool
     pImp->nInitRefCount = 1;
     pImp->nVerStart = rPool.pImp->nVerStart;
     pImp->nVerEnd = rPool.pImp->nVerEnd;
-    pImp->bInSetItem = FALSE;
+    pImp->bInSetItem = false;
     pImp->nStoringStart = nStart;
     pImp->nStoringEnd = nEnd;
 
