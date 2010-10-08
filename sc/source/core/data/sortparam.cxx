@@ -52,7 +52,8 @@ ScSortParam::ScSortParam( const ScSortParam& r ) :
         bUserDef(r.bUserDef),nUserIndex(r.nUserIndex),bIncludePattern(r.bIncludePattern),
         bInplace(r.bInplace),
         nDestTab(r.nDestTab),nDestCol(r.nDestCol),nDestRow(r.nDestRow),
-        aCollatorLocale( r.aCollatorLocale ), aCollatorAlgorithm( r.aCollatorAlgorithm )
+        aCollatorLocale( r.aCollatorLocale ), aCollatorAlgorithm( r.aCollatorAlgorithm ),
+        nCompatHeader( r.nCompatHeader )
 {
     for (USHORT i=0; i<MAXSORT; i++)
     {
@@ -93,9 +94,9 @@ ScSortParam& ScSortParam::operator=( const ScSortParam& r )
     nCol2           = r.nCol2;
     nRow2           = r.nRow2;
     bHasHeader      = r.bHasHeader;
+    bByRow          = r.bByRow;
     bCaseSens       = r.bCaseSens;
     bNaturalSort    = r.bNaturalSort;
-    bByRow          = r.bByRow;
     bUserDef        = r.bUserDef;
     nUserIndex      = r.nUserIndex;
     bIncludePattern = r.bIncludePattern;
@@ -105,6 +106,7 @@ ScSortParam& ScSortParam::operator=( const ScSortParam& r )
     nDestRow        = r.nDestRow;
     aCollatorLocale         = r.aCollatorLocale;
     aCollatorAlgorithm      = r.aCollatorAlgorithm;
+    nCompatHeader   = r.nCompatHeader;
 
     for (USHORT i=0; i<MAXSORT; i++)
     {
@@ -163,11 +165,12 @@ BOOL ScSortParam::operator==( const ScSortParam& rOther ) const
 
 ScSortParam::ScSortParam( const ScSubTotalParam& rSub, const ScSortParam& rOld ) :
         nCol1(rSub.nCol1),nRow1(rSub.nRow1),nCol2(rSub.nCol2),nRow2(rSub.nRow2),
-        bHasHeader(TRUE),bByRow(TRUE),bCaseSens(rSub.bCaseSens),
+        bHasHeader(TRUE),bByRow(TRUE),bCaseSens(rSub.bCaseSens),bNaturalSort(rOld.bNaturalSort),
         bUserDef(rSub.bUserDef),nUserIndex(rSub.nUserIndex),bIncludePattern(rSub.bIncludePattern),
         bInplace(TRUE),
         nDestTab(0),nDestCol(0),nDestRow(0),
-        aCollatorLocale( rOld.aCollatorLocale ), aCollatorAlgorithm( rOld.aCollatorAlgorithm )
+        aCollatorLocale( rOld.aCollatorLocale ), aCollatorAlgorithm( rOld.aCollatorAlgorithm ),
+        nCompatHeader( rOld.nCompatHeader )
 {
     USHORT nNewCount = 0;
     USHORT i;
@@ -220,10 +223,11 @@ ScSortParam::ScSortParam( const ScSubTotalParam& rSub, const ScSortParam& rOld )
 ScSortParam::ScSortParam( const ScQueryParam& rParam, SCCOL nCol ) :
         nCol1(nCol),nRow1(rParam.nRow1),nCol2(nCol),nRow2(rParam.nRow2),
         bHasHeader(rParam.bHasHeader),bByRow(TRUE),bCaseSens(rParam.bCaseSens),
+        bNaturalSort(FALSE),
 //! TODO: what about Locale and Algorithm?
         bUserDef(FALSE),nUserIndex(0),bIncludePattern(FALSE),
         bInplace(TRUE),
-        nDestTab(0),nDestCol(0),nDestRow(0)
+        nDestTab(0),nDestCol(0),nDestRow(0), nCompatHeader(2)
 {
     bDoSort[0] = TRUE;
     nField[0] = nCol;
