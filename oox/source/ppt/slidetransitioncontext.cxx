@@ -67,12 +67,9 @@ SlideTransitionContext::SlideTransitionContext( ContextHandler& rParent, const R
     attribs.getBool( XML_advClick, true );
 
     // careful. if missing, no auto advance... 0 looks like a valid value
-  // for auto advance
+    // for auto advance
     if(attribs.hasAttribute( XML_advTm ))
-    {
-        // TODO
-        xAttribs->getOptionalValue( XML_advTm );
-    }
+        maTransition.setOoxAdvanceTime( attribs.getInteger( XML_advTm, -1 ) );
 }
 
 SlideTransitionContext::~SlideTransitionContext() throw()

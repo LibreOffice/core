@@ -40,6 +40,7 @@ CellProtection
 CellStyle
 CenterHorizontally
 CenterVertically
+Change
 CharCaseMap
 CharColor
 CharContoured
@@ -115,6 +116,7 @@ DialogLibraries
 DisplayLabels
 DrillDownOnDoubleClick
 Dropdown
+Duration
 EchoChar
 EnableVisible
 Enabled
