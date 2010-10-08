@@ -69,8 +69,8 @@ public:
     // Einem SdrLayer kann man sagen dass er ein (der) Standardlayer sein soll.
     // Es wird dann laenderspeziefisch der passende Name gesetzt. SetName()
     // setzt das Flag "StandardLayer" ggf. zurueck auf "Userdefined".
-    void          SetStandardLayer(FASTBOOL bStd=TRUE);
-    FASTBOOL      IsStandardLayer() const                     { return nType==1; }
+    void          SetStandardLayer(bool bStd = true);
+    bool          IsStandardLayer() const                     { return nType==1; }
 };
 
 // Beim Aendern von Layerdaten muss man derzeit
@@ -124,9 +124,9 @@ public:
 
     USHORT             GetLayerPos(SdrLayer* pLayer) const;
 
-    SdrLayer*          GetLayer(const String& rName, FASTBOOL bInherited)            { return (SdrLayer*)(((const SdrLayerAdmin*)this)->GetLayer(rName,bInherited)); }
-    const SdrLayer*    GetLayer(const String& rName, FASTBOOL bInherited) const;
-          SdrLayerID   GetLayerID(const String& rName, FASTBOOL bInherited) const;
+    SdrLayer*          GetLayer(const String& rName, bool bInherited)            { return (SdrLayer*)(((const SdrLayerAdmin*)this)->GetLayer(rName,bInherited)); }
+    const SdrLayer*    GetLayer(const String& rName, bool bInherited) const;
+          SdrLayerID   GetLayerID(const String& rName, bool bInherited) const;
           SdrLayer*    GetLayerPerID(USHORT nID)                                     { return (SdrLayer*)(((const SdrLayerAdmin*)this)->GetLayerPerID(nID)); }
     const SdrLayer*    GetLayerPerID(USHORT nID) const;
 

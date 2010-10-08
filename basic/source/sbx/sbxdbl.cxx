@@ -146,7 +146,7 @@ void ImpPutDouble( SbxValues* p, double n, BOOL bCoreString )
 start:
     switch( +p->eType )
     {
-        // Hier sind Tests notwendig
+        // Here are tests necessary
         case SbxCHAR:
             aTmp.pChar = &p->nChar; goto direct;
         case SbxBYTE:
@@ -176,7 +176,7 @@ start:
             aTmp.eType = SbxDataType( p->eType | SbxBYREF );
             p = &aTmp; goto start;
 
-            // ab hier nicht mehr
+            // from here on no longer
         case SbxSALINT64:
             p->nInt64 = ImpDoubleToSalInt64( n ); break;
         case SbxSALUINT64:

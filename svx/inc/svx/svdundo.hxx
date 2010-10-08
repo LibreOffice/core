@@ -143,9 +143,9 @@ protected:
 protected:
     SdrUndoObj(SdrObject& rNewObj);
 
-    void ImpTakeDescriptionStr(USHORT nStrCacheID, String& rStr, FASTBOOL bRepeat=FALSE) const;
+    void ImpTakeDescriptionStr(USHORT nStrCacheID, String& rStr, bool bRepeat = false) const;
 
-    static void GetDescriptionStringForObject( const SdrObject& _rForObject, USHORT nStrCacheID, String& rStr, FASTBOOL bRepeat = FALSE );
+    static void GetDescriptionStringForObject( const SdrObject& _rForObject, USHORT nStrCacheID, String& rStr, bool bRepeat = false );
 
     // #94278# new method for evtl. PageChange at UNDO/REDO
     void ImpShowPageOfThisObject();
@@ -171,8 +171,8 @@ protected:
     SfxStyleSheet*              pUndoStyleSheet;
     SfxStyleSheet*              pRedoStyleSheet;
     SfxStyleSheet*              pRepeatStyleSheet;
-    FASTBOOL                    bStyleSheet;
-    FASTBOOL                    bHaveToTakeRedoSet;
+    bool                        bStyleSheet;
+    bool                        bHaveToTakeRedoSet;
 
     // Bei Zuweisung von TextItems auf ein Zeichenobjekt mit Text:
     OutlinerParaObject*         pTextUndo;
@@ -184,7 +184,7 @@ protected:
     SdrUndoGroup*               pUndoGroup;
 
 public:
-    SdrUndoAttrObj(SdrObject& rNewObj, FASTBOOL bStyleSheet1=FALSE, FASTBOOL bSaveText=FALSE);
+    SdrUndoAttrObj(SdrObject& rNewObj, bool bStyleSheet1 = false, bool bSaveText = false);
     virtual ~SdrUndoAttrObj();
     void SetRepeatAttr(const SfxItemSet& rSet);
     virtual void Undo();
@@ -293,7 +293,7 @@ protected:
 class SVX_DLLPUBLIC SdrUndoRemoveObj : public SdrUndoObjList
 {
 public:
-    SdrUndoRemoveObj(SdrObject& rNewObj, FASTBOOL bOrdNumDirect=FALSE)
+    SdrUndoRemoveObj(SdrObject& rNewObj, bool bOrdNumDirect = false)
     : SdrUndoObjList(rNewObj,bOrdNumDirect) {}
 
     virtual void Undo();
@@ -312,7 +312,7 @@ public:
 class SVX_DLLPUBLIC SdrUndoInsertObj : public SdrUndoObjList
 {
 public:
-    SdrUndoInsertObj(SdrObject& rNewObj, FASTBOOL bOrdNumDirect=FALSE)
+    SdrUndoInsertObj(SdrObject& rNewObj, bool bOrdNumDirect = false)
     :   SdrUndoObjList(rNewObj,bOrdNumDirect) {}
 
     virtual void Undo();
@@ -330,7 +330,7 @@ public:
 class SVX_DLLPUBLIC SdrUndoDelObj : public SdrUndoRemoveObj
 {
 public:
-    SdrUndoDelObj(SdrObject& rNewObj, FASTBOOL bOrdNumDirect=FALSE)
+    SdrUndoDelObj(SdrObject& rNewObj, bool bOrdNumDirect = false)
     :   SdrUndoRemoveObj(rNewObj,bOrdNumDirect) { SetOwner(TRUE); }
 
     virtual void Undo();
@@ -354,7 +354,7 @@ public:
 class SVX_DLLPUBLIC SdrUndoNewObj : public SdrUndoInsertObj
 {
 public:
-    SdrUndoNewObj(SdrObject& rNewObj, FASTBOOL bOrdNumDirect=FALSE)
+    SdrUndoNewObj(SdrObject& rNewObj, bool bOrdNumDirect = false)
     :   SdrUndoInsertObj(rNewObj,bOrdNumDirect) {}
 
     virtual void Undo();
@@ -408,7 +408,7 @@ public:
 class SdrUndoCopyObj : public SdrUndoNewObj
 {
 public:
-    SdrUndoCopyObj(SdrObject& rNewObj, FASTBOOL bOrdNumDirect=FALSE)
+    SdrUndoCopyObj(SdrObject& rNewObj, bool bOrdNumDirect = false)
     :   SdrUndoNewObj(rNewObj,bOrdNumDirect) {}
 
     virtual String GetComment() const;
@@ -458,7 +458,7 @@ class SVX_DLLPUBLIC SdrUndoObjSetText : public SdrUndoObj
 protected:
     OutlinerParaObject*         pOldText;
     OutlinerParaObject*         pNewText;
-    FASTBOOL                    bNewTextAvailable;
+    bool                        bNewTextAvailable;
     BOOL                        bEmptyPresObj;
     sal_Int32                   mnText;
 
@@ -466,7 +466,7 @@ public:
     SdrUndoObjSetText(SdrObject& rNewObj, sal_Int32 nText );
     virtual ~SdrUndoObjSetText();
 
-    FASTBOOL IsDifferent() const { return pOldText!=pNewText; }
+    bool IsDifferent() const { return pOldText!=pNewText; }
     void AfterSetText();
 
     virtual void Undo();
@@ -533,7 +533,7 @@ protected:
     SdrLayer*                   pLayer;
     SdrLayerAdmin*              pLayerAdmin;
     USHORT                      nNum;
-    FASTBOOL                    bItsMine;
+    bool                        bItsMine;
 
 protected:
     SdrUndoLayer(USHORT nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel);
@@ -631,7 +631,7 @@ protected:
 protected:
     SdrUndoPage(SdrPage& rNewPg);
 
-    void ImpTakeDescriptionStr(USHORT nStrCacheID, String& rStr, USHORT n=0, FASTBOOL bRepeat=FALSE) const;
+    void ImpTakeDescriptionStr(USHORT nStrCacheID, String& rStr, USHORT n=0, bool bRepeat = false) const;
 };
 
 //************************************************************
@@ -649,7 +649,7 @@ protected:
 
     // Bei einem Undo/Redo findet moeglicherweise Uebereignung der Page
     // statt. Im Dtor wird die Page deleted, wenn bItsMine==TRUE
-    FASTBOOL                    bItsMine;
+    bool                        bItsMine;
 
 protected:
     SdrUndoPageList(SdrPage& rNewPg);

@@ -82,7 +82,7 @@ public:
 //#if 0 // _SOLAR__PRIVATE
     DECL_DLLPRIVATE_STATIC_LINK( SfxProgress, SetStateHdl, PlugInLoadStatus* );
     DECL_DLLPRIVATE_STATIC_LINK( SfxProgress, DefaultBindingProgress, SvProgressArg* );
-    SAL_DLLPRIVATE FASTBOOL StatusBarManagerGone_Impl(SfxStatusBarManager*pStb);
+    SAL_DLLPRIVATE bool  StatusBarManagerGone_Impl(SfxStatusBarManager*pStb);
     SAL_DLLPRIVATE const String& GetStateText_Impl() const;
 //#endif
 };

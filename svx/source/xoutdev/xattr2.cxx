@@ -890,7 +890,7 @@ SfxItemPresentation XFillBmpSizeXItem::GetPresentation
 |*
 \*************************************************************************/
 
-FASTBOOL XFillBmpSizeXItem::HasMetrics() const
+bool XFillBmpSizeXItem::HasMetrics() const
 {
     return GetValue() > 0L;
 }
@@ -1006,7 +1006,7 @@ SfxItemPresentation XFillBmpSizeYItem::GetPresentation
 |*
 \*************************************************************************/
 
-FASTBOOL XFillBmpSizeYItem::HasMetrics() const
+bool XFillBmpSizeYItem::HasMetrics() const
 {
     return GetValue() > 0L;
 }

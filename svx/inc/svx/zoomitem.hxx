@@ -59,7 +59,7 @@ public:
 
     void                    SetValueSet( USHORT nValues ) { nValueSet = nValues; }
     USHORT                  GetValueSet() const { return nValueSet; }
-    FASTBOOL                IsValueAllowed( USHORT nValue ) const
+    bool                    IsValueAllowed( USHORT nValue ) const
                             { return nValue == ( nValue & nValueSet ); }
 
     SvxZoomType             GetType() const { return eType; }

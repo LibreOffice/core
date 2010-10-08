@@ -266,7 +266,7 @@ BOOL SfxPrintMonitor_Impl::Close()
 
 //--------------------------------------------------------------------
 
-SfxPrintProgress::SfxPrintProgress( SfxViewShell* pViewSh, FASTBOOL bShow )
+SfxPrintProgress::SfxPrintProgress( SfxViewShell* pViewSh, bool bShow )
 :   SfxProgress( pViewSh->GetViewFrame()->GetObjectShell(),
                  String(SfxResId(STR_PRINTING)), 1, FALSE ),
     pImp( new SfxPrintProgress_Impl( pViewSh, pViewSh->GetPrinter() ) )

@@ -53,7 +53,7 @@ public:
 
         virtual                     ~SdrMediaObj();
 
-        virtual FASTBOOL            HasTextEdit() const;
+        virtual bool                HasTextEdit() const;
 
         virtual void                TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
         virtual UINT16              GetObjIdentifier() const;

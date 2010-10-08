@@ -50,7 +50,7 @@ class SVX_DLLPUBLIC Camera3D : public Viewport3D
     double      fFocalLength;
     double      fBankAngle;
 
-    FASTBOOL    bAutoAdjustProjection;
+    bool bAutoAdjustProjection;
 
  public:
     Camera3D(const basegfx::B3DPoint& rPos, const basegfx::B3DPoint& rLookAt,
@@ -86,9 +86,9 @@ class SVX_DLLPUBLIC Camera3D : public Viewport3D
     // Um den Blickpunkt drehen, Position wird dabei veraendert
     void RotateAroundLookAt(double fHAngle, double fVAngle);
 
-    void SetAutoAdjustProjection(FASTBOOL bAdjust = TRUE)
+    void SetAutoAdjustProjection(bool bAdjust = true)
         { bAutoAdjustProjection = bAdjust; }
-    FASTBOOL IsAutoAdjustProjection() const { return bAutoAdjustProjection; }
+    bool IsAutoAdjustProjection() const { return bAutoAdjustProjection; }
 };
 
 #endif      // _CAMERA3D_HXX

@@ -772,9 +772,9 @@ SdrObject* SdrObjList::GetObj(ULONG nNum) const
 
 
 
-FASTBOOL SdrObjList::IsReadOnly() const
+bool SdrObjList::IsReadOnly() const
 {
-    FASTBOOL bRet=FALSE;
+    bool bRet = false;
     if (pPage!=NULL && pPage!=this) bRet=pPage->IsReadOnly();
     return bRet;
 }
@@ -1859,13 +1859,13 @@ SfxStyleSheet* SdrPage::GetTextStyleSheetForObject( SdrObject* pObj ) const
     return pObj->GetStyleSheet();
 }
 
-FASTBOOL SdrPage::HasTransparentObjects( BOOL bCheckForAlphaChannel ) const
+bool SdrPage::HasTransparentObjects( BOOL bCheckForAlphaChannel ) const
 {
-    FASTBOOL bRet = FALSE;
+    bool bRet = false;
 
     for( ULONG n = 0, nCount = GetObjCount(); ( n < nCount ) && !bRet; n++ )
         if( GetObj( n )->IsTransparent( bCheckForAlphaChannel ) )
-            bRet = TRUE;
+            bRet = true;
 
     return bRet;
 }
@@ -1936,12 +1936,12 @@ void SdrPage::ActionChanged() const
 }
 
 // NYI: Dummy implementations for declarations in svdpage.hxx
-Bitmap      SdrPage::GetBitmap(const SetOfByte& /*rVisibleLayers*/, FASTBOOL /*bTrimBorders*/) const
+Bitmap      SdrPage::GetBitmap(const SetOfByte& /*rVisibleLayers*/, bool /*bTrimBorders*/) const
 {
     DBG_ASSERT(0, "SdrPage::GetBitmap(): not yet implemented.");
     return Bitmap();
 }
-GDIMetaFile SdrPage::GetMetaFile(const SetOfByte& /*rVisibleLayers*/, FASTBOOL /*bTrimBorders*/)
+GDIMetaFile SdrPage::GetMetaFile(const SetOfByte& /*rVisibleLayers*/, bool /*bTrimBorders*/)
 {
     DBG_ASSERT(0, "SdrPage::GetMetaFile(): not yet implemented.");
     return GDIMetaFile();

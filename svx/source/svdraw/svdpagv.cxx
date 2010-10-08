@@ -330,7 +330,7 @@ void SdrPageView::PaintOutlinerView(OutputDevice* pOut, const Rectangle& rRect) 
     if (GetView().pTextEditOutliner==NULL) return;
     //const SdrObject* pTextObjTmp=GetView().GetTextEditObject();
     //const SdrTextObj* pText=PTR_CAST(SdrTextObj,pTextObjTmp);
-    //FASTBOOL bTextFrame=pText!=NULL && pText->IsTextFrame();
+    //bool bTextFrame=pText!=NULL && pText->IsTextFrame();
     ULONG nViewAnz=GetView().pTextEditOutliner->GetViewCount();
     for (ULONG i=0; i<nViewAnz; i++) {
         OutlinerView* pOLV=GetView().pTextEditOutliner->GetView(i);
@@ -535,8 +535,8 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const Rectangle& rRect, C
         Size aMinDotDist(rOut.PixelToLogic(Size(nMinDotPix,nMinDotPix)));
         //Size a3PixSiz(rOut.PixelToLogic(Size(2,2)));
         Size aMinLinDist(rOut.PixelToLogic(Size(nMinLinPix,nMinLinPix)));
-        FASTBOOL bHoriSolid=nx2<aMinDotDist.Width();
-        FASTBOOL bVertSolid=ny2<aMinDotDist.Height();
+        bool bHoriSolid=nx2<aMinDotDist.Width();
+        bool bVertSolid=ny2<aMinDotDist.Height();
         // Linienabstand vergroessern (mind. 4 Pixel)
         // Vergroesserung: *2 *5 *10 *20 *50 *100 ...
         int nTgl=0;
@@ -571,10 +571,10 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const Rectangle& rRect, C
         //if (nx2<a2PixSiz.Width()) nx2=nx1;
         //if (ny2<a2PixSiz.Height()) ny2=ny1;
 
-        FASTBOOL bHoriFine=nx2<nx1;
-        FASTBOOL bVertFine=ny2<ny1;
-        FASTBOOL bHoriLines=bHoriSolid || bHoriFine || !bVertFine;
-        FASTBOOL bVertLines=bVertSolid || bVertFine;
+        bool bHoriFine=nx2<nx1;
+        bool bVertFine=ny2<ny1;
+        bool bHoriLines=bHoriSolid || bHoriFine || !bVertFine;
+        bool bVertLines=bVertSolid || bVertFine;
 
         Color aColorMerk( rOut.GetLineColor() );
         rOut.SetLineColor( aColor );
@@ -845,11 +845,11 @@ void SdrPageView::SetHelpLines(const SdrHelpLineList& rHLL)
 void SdrPageView::SetHelpLine(USHORT nNum, const SdrHelpLine& rNewHelpLine)
 {
     if (nNum<aHelpLines.GetCount() && aHelpLines[nNum]!=rNewHelpLine) {
-        FASTBOOL bNeedRedraw=TRUE;
+        bool bNeedRedraw = true;
         if (aHelpLines[nNum].GetKind()==rNewHelpLine.GetKind()) {
             switch (rNewHelpLine.GetKind()) {
-                case SDRHELPLINE_VERTICAL  : if (aHelpLines[nNum].GetPos().X()==rNewHelpLine.GetPos().X()) bNeedRedraw=FALSE; break;
-                case SDRHELPLINE_HORIZONTAL: if (aHelpLines[nNum].GetPos().Y()==rNewHelpLine.GetPos().Y()) bNeedRedraw=FALSE; break;
+                case SDRHELPLINE_VERTICAL  : if (aHelpLines[nNum].GetPos().X()==rNewHelpLine.GetPos().X()) bNeedRedraw = false; break;
+                case SDRHELPLINE_HORIZONTAL: if (aHelpLines[nNum].GetPos().Y()==rNewHelpLine.GetPos().Y()) bNeedRedraw = false; break;
                 default: break;
             } // switch
         }

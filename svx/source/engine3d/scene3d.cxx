@@ -840,7 +840,7 @@ basegfx::B2DPolyPolygon E3dScene::TakeCreatePoly(const SdrDragStat& /*rDrag*/) c
     return TakeXorPoly();
 }
 
-FASTBOOL E3dScene::BegCreate(SdrDragStat& rStat)
+bool E3dScene::BegCreate(SdrDragStat& rStat)
 {
     rStat.SetOrtho4Possible();
     Rectangle aRect1(rStat.GetStart(), rStat.GetNow());
@@ -850,7 +850,7 @@ FASTBOOL E3dScene::BegCreate(SdrDragStat& rStat)
     return TRUE;
 }
 
-FASTBOOL E3dScene::MovCreate(SdrDragStat& rStat)
+bool E3dScene::MovCreate(SdrDragStat& rStat)
 {
     Rectangle aRect1;
     rStat.TakeCreateRect(aRect1);
@@ -862,7 +862,7 @@ FASTBOOL E3dScene::MovCreate(SdrDragStat& rStat)
     return TRUE;
 }
 
-FASTBOOL E3dScene::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
+bool E3dScene::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
     Rectangle aRect1;
     rStat.TakeCreateRect(aRect1);
@@ -872,7 +872,7 @@ FASTBOOL E3dScene::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     return (eCmd==SDRCREATE_FORCEEND || rStat.GetPointAnz()>=2);
 }
 
-FASTBOOL E3dScene::BckCreate(SdrDragStat& /*rStat*/)
+bool E3dScene::BckCreate(SdrDragStat& /*rStat*/)
 {
     return FALSE;
 }

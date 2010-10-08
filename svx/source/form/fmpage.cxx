@@ -77,7 +77,7 @@ using com::sun::star::container::XNameContainer;
 TYPEINIT1(FmFormPage, SdrPage);
 
 //------------------------------------------------------------------
-FmFormPage::FmFormPage(FmFormModel& rModel, StarBASIC* _pBasic, FASTBOOL bMasterPage)
+FmFormPage::FmFormPage(FmFormModel& rModel, StarBASIC* _pBasic, bool bMasterPage)
            :SdrPage(rModel, bMasterPage)
 #ifndef SVX_LIGHT
            ,m_pImpl( new FmFormPageImpl( *this ) )

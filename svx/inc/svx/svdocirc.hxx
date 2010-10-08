@@ -82,7 +82,7 @@ private:
     SVX_DLLPRIVATE void ImpSetCircInfoToAttr(); // Werte in den Pool kopieren
 
     // Liefert TRUE, wenn das Painten ein XPolygon erfordert.
-    SVX_DLLPRIVATE FASTBOOL PaintNeedsXPolyCirc() const; // PaintNeedsXPoly-> PaintNeedsXPolyCirc
+    SVX_DLLPRIVATE bool PaintNeedsXPolyCirc() const; // PaintNeedsXPoly-> PaintNeedsXPolyCirc
     SVX_DLLPRIVATE virtual void RecalcXPoly();
 
 protected:
@@ -126,17 +126,17 @@ public:
     virtual bool applySpecialDrag(SdrDragStat& rDrag);
     virtual String getSpecialDragComment(const SdrDragStat& rDrag) const;
 
-    virtual FASTBOOL BegCreate(SdrDragStat& rStat);
-    virtual FASTBOOL MovCreate(SdrDragStat& rStat);
-    virtual FASTBOOL EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
-    virtual FASTBOOL BckCreate(SdrDragStat& rStat);
+    virtual bool BegCreate(SdrDragStat& rStat);
+    virtual bool MovCreate(SdrDragStat& rStat);
+    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
+    virtual bool BckCreate(SdrDragStat& rStat);
     virtual void BrkCreate(SdrDragStat& rStat);
     virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const;
     virtual Pointer GetCreatePointer() const;
     virtual void NbcMove(const Size& aSiz);
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
     virtual void NbcMirror(const Point& rRef1, const Point& rRef2);
-    virtual void NbcShear (const Point& rRef, long nWink, double tn, FASTBOOL bVShear);
+    virtual void NbcShear (const Point& rRef, long nWink, double tn, bool bVShear);
     virtual SdrObject* DoConvertToPolyObj(BOOL bBezier) const;
 
 protected:

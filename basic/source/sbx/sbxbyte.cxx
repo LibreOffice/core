@@ -200,7 +200,7 @@ start:
         case SbxBYREF | SbxBYTE:
             nRes = p->nByte; break;
 
-        // ab hier wird getestet
+        // from here on will be tested
         case SbxBYREF | SbxCHAR:
             aTmp.nChar = *p->pChar; goto ref;
         case SbxBYREF | SbxINTEGER:

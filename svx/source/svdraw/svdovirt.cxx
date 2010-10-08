@@ -347,22 +347,22 @@ String SdrVirtObj::getSpecialDragComment(const SdrDragStat& rDrag) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-FASTBOOL SdrVirtObj::BegCreate(SdrDragStat& rStat)
+bool SdrVirtObj::BegCreate(SdrDragStat& rStat)
 {
     return rRefObj.BegCreate(rStat);
 }
 
-FASTBOOL SdrVirtObj::MovCreate(SdrDragStat& rStat)
+bool SdrVirtObj::MovCreate(SdrDragStat& rStat)
 {
     return rRefObj.MovCreate(rStat);
 }
 
-FASTBOOL SdrVirtObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
+bool SdrVirtObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
     return rRefObj.EndCreate(rStat,eCmd);
 }
 
-FASTBOOL SdrVirtObj::BckCreate(SdrDragStat& rStat)
+bool SdrVirtObj::BckCreate(SdrDragStat& rStat)
 {
     return rRefObj.BckCreate(rStat);
 }
@@ -404,7 +404,7 @@ void SdrVirtObj::NbcMirror(const Point& rRef1, const Point& rRef2)
     SetRectsDirty();
 }
 
-void SdrVirtObj::NbcShear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear)
+void SdrVirtObj::NbcShear(const Point& rRef, long nWink, double tn, bool bVShear)
 {
     rRefObj.NbcShear(rRef-aAnchor,nWink,tn,bVShear);
     SetRectsDirty();
@@ -452,7 +452,7 @@ void SdrVirtObj::Mirror(const Point& rRef1, const Point& rRef2)
     SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
 }
 
-void SdrVirtObj::Shear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear)
+void SdrVirtObj::Shear(const Point& rRef, long nWink, double tn, bool bVShear)
 {
     if (nWink!=0) {
         Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
@@ -531,7 +531,7 @@ long SdrVirtObj::GetRotateAngle() const
     return rRefObj.GetRotateAngle();
 }
 
-long SdrVirtObj::GetShearAngle(FASTBOOL bVertical) const
+long SdrVirtObj::GetShearAngle(bool bVertical) const
 {
     return rRefObj.GetShearAngle(bVertical);
 }
@@ -620,7 +620,7 @@ void SdrVirtObj::ReformatText()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-FASTBOOL SdrVirtObj::HasMacro() const
+bool SdrVirtObj::HasMacro() const
 {
     return rRefObj.HasMacro();
 }
@@ -640,7 +640,7 @@ void SdrVirtObj::PaintMacro(OutputDevice& rOut, const Rectangle& rDirtyRect, con
     rRefObj.PaintMacro(rOut,rDirtyRect,rRec); // Todo: Positionsversatz
 }
 
-FASTBOOL SdrVirtObj::DoMacro(const SdrObjMacroHitRec& rRec)
+bool SdrVirtObj::DoMacro(const SdrObjMacroHitRec& rRec)
 {
     return rRefObj.DoMacro(rRec); // Todo: Positionsversatz
 }

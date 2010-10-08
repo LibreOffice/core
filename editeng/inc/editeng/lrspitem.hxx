@@ -99,8 +99,8 @@ public:
     virtual SfxPoolItem*     Create(SvStream &, USHORT) const;
     virtual SvStream&        Store(SvStream &, USHORT nItemVersion ) const;
     virtual USHORT           GetVersion( USHORT nFileVersion ) const;
-    virtual int              ScaleMetrics( long nMult, long nDiv );
-    virtual int              HasMetrics() const;
+    virtual bool             ScaleMetrics( long nMult, long nDiv );
+    virtual bool             HasMetrics() const;
 
     // Die "Layout-Schnittstelle":
     inline void   SetLeft ( const long nL, const USHORT nProp = 100 );

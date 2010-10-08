@@ -1290,7 +1290,7 @@ void SfxWorkWindow::SetObjectBar_Impl( USHORT nPos, sal_uInt32 nResId,
 
 //------------------------------------------------------------------------
 
-FASTBOOL SfxWorkWindow::KnowsObjectBar_Impl( USHORT nPos ) const
+bool SfxWorkWindow::KnowsObjectBar_Impl( USHORT nPos ) const
 
 /*  [Beschreibung]
 
@@ -1485,13 +1485,13 @@ void SfxWorkWindow::UpdateObjectBars_Impl()
 
         // die Modi bestimmen, f"ur die die ToolBox gilt
         USHORT nTbxMode = aObjBarList[n].nMode;
-        FASTBOOL bFullScreenTbx = SFX_VISIBILITY_FULLSCREEN ==
+        bool bFullScreenTbx = SFX_VISIBILITY_FULLSCREEN ==
                                   ( nTbxMode & SFX_VISIBILITY_FULLSCREEN );
         nTbxMode &= ~SFX_VISIBILITY_FULLSCREEN;
         nTbxMode &= ~SFX_VISIBILITY_VIEWER;
 
         // wird in diesem Kontext eine ToolBox gefordert?
-        FASTBOOL bModesMatching = ( nUpdateMode && ( nTbxMode & nUpdateMode) == nUpdateMode );
+        bool bModesMatching = ( nUpdateMode && ( nTbxMode & nUpdateMode) == nUpdateMode );
         if ( bDestroy )
         {
             rtl::OUString aTbxId( m_aTbxTypeName );

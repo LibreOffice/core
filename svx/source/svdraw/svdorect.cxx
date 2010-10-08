@@ -136,9 +136,9 @@ void SdrRectObj::SetXPolyDirty()
     }
 }
 
-FASTBOOL SdrRectObj::PaintNeedsXPoly(long nEckRad) const
+bool SdrRectObj::PaintNeedsXPoly(long nEckRad) const
 {
-    FASTBOOL bNeed=aGeo.nDrehWink!=0 || aGeo.nShearWink!=0 || nEckRad!=0;
+    bool bNeed=aGeo.nDrehWink!=0 || aGeo.nShearWink!=0 || nEckRad!=0;
     return bNeed;
 }
 
@@ -183,7 +183,7 @@ const XPolygon& SdrRectObj::GetXPoly() const
 
 void SdrRectObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
-    FASTBOOL bNoTextFrame=!IsTextFrame();
+    bool bNoTextFrame=!IsTextFrame();
     rInfo.bResizeFreeAllowed=bNoTextFrame || aGeo.nDrehWink%9000==0;
     rInfo.bResizePropAllowed=TRUE;
     rInfo.bRotateFreeAllowed=TRUE;
@@ -202,7 +202,7 @@ void SdrRectObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bShearAllowed     =bNoTextFrame;
     rInfo.bEdgeRadiusAllowed=TRUE;
 
-    FASTBOOL bCanConv=!HasText() || ImpCanConvTextToCurve();
+    bool bCanConv=!HasText() || ImpCanConvTextToCurve();
     if (bCanConv && !bNoTextFrame && !HasText()) {
         bCanConv=HasFill() || HasLine();
     }
@@ -509,7 +509,7 @@ void SdrRectObj::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
     SetXPolyDirty();
 }
 
-void SdrRectObj::NbcShear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear)
+void SdrRectObj::NbcShear(const Point& rRef, long nWink, double tn, bool bVShear)
 {
     SdrTextObj::NbcShear(rRef,nWink,tn,bVShear);
     SetXPolyDirty();
@@ -521,7 +521,7 @@ void SdrRectObj::NbcMirror(const Point& rRef1, const Point& rRef2)
     SetXPolyDirty();
 }
 
-FASTBOOL SdrRectObj::DoMacro(const SdrObjMacroHitRec& rRec)
+bool SdrRectObj::DoMacro(const SdrObjMacroHitRec& rRec)
 {
     return SdrTextObj::DoMacro(rRec);
 }

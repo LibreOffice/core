@@ -52,7 +52,7 @@ class SVX_DLLPUBLIC FmFormPage : public SdrPage
 public:
     TYPEINFO();
 
-    FmFormPage(FmFormModel& rModel,StarBASIC*, FASTBOOL bMasterPage=sal_False);
+    FmFormPage(FmFormModel& rModel,StarBASIC*, bool bMasterPage=sal_False);
     FmFormPage(const FmFormPage& rPage);
     ~FmFormPage();
 

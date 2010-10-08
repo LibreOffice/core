@@ -242,10 +242,10 @@ public:
     virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const;
 
     // create moves
-    virtual FASTBOOL BegCreate(SdrDragStat& rStat);
-    virtual FASTBOOL MovCreate(SdrDragStat& rStat); // TRUE=Xor muss repainted werden
-    virtual FASTBOOL EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
-    virtual FASTBOOL BckCreate(SdrDragStat& rStat);
+    virtual bool BegCreate(SdrDragStat& rStat);
+    virtual bool MovCreate(SdrDragStat& rStat); // true=Xor muss repainted werden
+    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
+    virtual bool BckCreate(SdrDragStat& rStat);
     virtual void BrkCreate(SdrDragStat& rStat);
 };
 

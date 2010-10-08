@@ -38,8 +38,8 @@ public:
     SdrTextAniAmountItem(SvStream& rIn): SfxInt16Item(SDRATTR_TEXT_ANIAMOUNT,rIn) {}
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=NULL) const;
     virtual SfxPoolItem* Create(SvStream& rIn, USHORT nVer) const;
-    virtual FASTBOOL HasMetrics() const;
-    virtual FASTBOOL ScaleMetrics(long nMul, long nDiv);
+    virtual bool HasMetrics() const;
+    virtual bool ScaleMetrics(long nMul, long nDiv);
 
     virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, String& rText, const IntlWrapper * = 0) const;
 };

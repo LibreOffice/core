@@ -66,13 +66,13 @@ static const xub_Unicode* SkipWhitespace( const xub_Unicode* p )
     return p;
 }
 
-// Scannen eines Symbol. Das Symbol wird in rSym eingetragen, der Returnwert
-// ist die neue Scanposition. Bei Fehlern ist das Symbol leer.
+// Scanning of a symbol. The symbol were inserted in rSym, the return value
+// is the new scan position. The symbol is at errors empty.
 
 static const xub_Unicode* Symbol( const xub_Unicode* p, XubString& rSym, const SbxSimpleCharClass& rCharClass )
 {
     USHORT nLen = 0;
-    // Haben wir ein Sondersymbol?
+    // Did we have a nonstandard symbol?
     if( *p == '[' )
     {
         rSym = ++p;
@@ -82,16 +82,16 @@ static const xub_Unicode* Symbol( const xub_Unicode* p, XubString& rSym, const S
     }
     else
     {
-        // Ein Symbol muss mit einem Buchstaben oder einem Underline beginnen
+        // A symbol had to begin with a alphabetic character or an underline
         if( !rCharClass.isAlpha( *p ) && *p != '_' )
             SbxBase::SetError( SbxERR_SYNTAX );
         else
         {
             rSym = p;
-            // Dann darf es Buchstaben, Zahlen oder Underlines enthalten
+            // The it can contain alphabetic characters, numbers or underlines
             while( *p && (rCharClass.isAlphaNumeric( *p ) || *p == '_') )
                 p++, nLen++;
-            // BASIC-Standard-Suffixe werden ignoriert
+            // BASIC-Standard-Suffixes were ignored
             if( *p && (*p == '%' || *p == '&' || *p == '!' || *p == '#' || *p == '$' ) )
                 p++;
         }
@@ -100,7 +100,7 @@ static const xub_Unicode* Symbol( const xub_Unicode* p, XubString& rSym, const S
     return p;
 }
 
-// Qualifizierter Name. Element.Element....
+// Qualified name. Element.Element....
 
 static SbxVariable* QualifiedName
     ( SbxObject* pObj, SbxObject* pGbl, const xub_Unicode** ppBuf, SbxClassType t )
@@ -111,21 +111,21 @@ static SbxVariable* QualifiedName
     const xub_Unicode* p = SkipWhitespace( *ppBuf );
     if( aCharClass.isAlpha( *p ) || *p == '_' || *p == '[' )
     {
-        // Element einlesen
+        // Read in the element
         refVar = Element( pObj, pGbl, &p, t, aCharClass );
         while( refVar.Is() && (*p == '.' || *p == '!') )
         {
-            // Es folgt noch ein Objektelement. Das aktuelle Element
-            // muss also ein SBX-Objekt sein oder liefern!
+            // It follows still an objectelement. The current element
+            // had to be a SBX-Object or had to deliver such an object!
             pObj = PTR_CAST(SbxObject,(SbxVariable*) refVar);
             if( !pObj )
-                // Dann muss es ein Objekt liefern
+                // Then it had to deliver an object
                 pObj = PTR_CAST(SbxObject,refVar->GetObject());
             refVar.Clear();
             if( !pObj )
                 break;
             p++;
-            // Und das naechste Element bitte
+            // And the next element please
             refVar = Element( pObj, pGbl, &p, t, aCharClass );
         }
     }
@@ -137,8 +137,8 @@ static SbxVariable* QualifiedName
     return refVar;
 }
 
-// Einlesen eines Operanden. Dies kann eine Zahl, ein String oder
-// eine Funktion (mit optionalen Parametern) sein.
+// Read in of an operand. This could be a number, a string or
+// a function (with optional parameters).
 
 static SbxVariable* Operand
     ( SbxObject* pObj, SbxObject* pGbl, const xub_Unicode** ppBuf, BOOL bVar )
@@ -152,7 +152,7 @@ static SbxVariable* Operand
      || *p == '-'
      || *p == '&' ) )
     {
-        // Eine Zahl kann direkt eingescant werden!
+        // A number could be scanned in directly!
         USHORT nLen;
         if( !refVar->Scan( XubString( p ), &nLen ) )
             refVar.Clear();
@@ -161,15 +161,15 @@ static SbxVariable* Operand
     }
     else if( !bVar && *p == '"' )
     {
-        // Ein String
+        // A string
         XubString aString;
         p++;
         for( ;; )
         {
-            // Das ist wohl ein Fehler
+            // This is perhaps an error
             if( !*p )
                 return NULL;
-            // Doppelte Quotes sind OK
+            // Double quotes are OK
             if( *p == '"' )
                 if( *++p != '"' )
                     break;
@@ -185,8 +185,8 @@ static SbxVariable* Operand
     return refVar;
 }
 
-// Einlesen einer einfachen Term. Die Operatoren +, -, * und /
-// werden unterstuetzt.
+// Read in of a simple term. The operands +, -, * and /
+// are supported.
 
 static SbxVariable* MulDiv( SbxObject* pObj, SbxObject* pGbl, const xub_Unicode** ppBuf )
 {
@@ -199,7 +199,7 @@ static SbxVariable* MulDiv( SbxObject* pObj, SbxObject* pGbl, const xub_Unicode*
         SbxVariableRef refVar2( Operand( pObj, pGbl, &p, FALSE ) );
         if( refVar2.Is() )
         {
-            // temporaere Variable!
+            // temporary variable!
             SbxVariable* pVar = refVar;
             pVar = new SbxVariable( *pVar );
             refVar = pVar;
@@ -261,7 +261,7 @@ static SbxVariable* Assign( SbxObject* pObj, SbxObject* pGbl, const xub_Unicode*
     {
         if( *p == '=' )
         {
-            // Nur auf Props zuweisen!
+            // Assign only onto properties!
             if( refVar->GetClass() != SbxCLASS_PROPERTY )
             {
                 SbxBase::SetError( SbxERR_BAD_ACTION );
@@ -281,7 +281,7 @@ static SbxVariable* Assign( SbxObject* pObj, SbxObject* pGbl, const xub_Unicode*
             }
         }
         else
-            // Einfacher Aufruf: einmal aktivieren
+            // Simple call: once activating
             refVar->Broadcast( SBX_HINT_DATAWANTED );
     }
     *ppBuf = p;
@@ -290,9 +290,9 @@ static SbxVariable* Assign( SbxObject* pObj, SbxObject* pGbl, const xub_Unicode*
     return refVar;
 }
 
-// Einlesen eines Elements. Dies ist ein Symbol, optional gefolgt
-// von einer Parameterliste. Das Symbol wird im angegebenen Objekt
-// gesucht und die Parameterliste wird ggf. angefuegt.
+// Read in of an element. This is a symbol, optional followed
+// by a parameter list. The symbol will be searched in the
+// specified object and the parameter list will be attached if necessary.
 
 static SbxVariable* Element
     ( SbxObject* pObj, SbxObject* pGbl, const xub_Unicode** ppBuf,
@@ -311,29 +311,29 @@ static SbxVariable* Element
         if( refVar.Is() )
         {
             refVar->SetParameters( NULL );
-            // folgen noch Parameter?
+            // Follow still parameter?
             p = SkipWhitespace( p );
             if( *p == '(' )
             {
                 p++;
                 SbxArrayRef refPar = new SbxArray;
                 USHORT nArg = 0;
-                // Wird sind mal relaxed und akzeptieren auch
-                // das Zeilen- oder Komandoende als Begrenzer
-                // Parameter immer global suchen!
+                // We are once relaxed and accept as well
+                // the line- or commandend as delimiter
+                // Search parameter always global!
                 while( *p && *p != ')' && *p != ']' )
                 {
                     SbxVariableRef refArg = PlusMinus( pGbl, pGbl, &p );
                     if( !refArg )
                     {
-                        // Fehler beim Parsing
+                        // Error during the parsing
                         refVar.Clear(); break;
                     }
                     else
                     {
-                        // Man kopiere den Parameter, damit
-                        // man den aktuellen Zustand hat (loest auch
-                        // den Aufruf per Zugriff aus)
+                        // One copies the parameter, so that
+                        // one have the current status (triggers also
+                        // the call per access)
                         SbxVariable* pArg = refArg;
                         refPar->Put( new SbxVariable( *pArg ), ++nArg );
                     }
@@ -356,7 +356,7 @@ static SbxVariable* Element
     return refVar;
 }
 
-// Hauptroutine
+// Mainroutine
 
 SbxVariable* SbxObject::Execute( const XubString& rTxt )
 {

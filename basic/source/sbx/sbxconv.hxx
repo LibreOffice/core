@@ -38,7 +38,7 @@ extern SbxError ImpScan
     ( const ::rtl::OUString& rSrc, double& nVal, SbxDataType& rType, USHORT* pLen,
       BOOL bAllowIntntl=FALSE, BOOL bOnlyIntntl=FALSE );
 
-// mit erweiterter Auswertung (International, "TRUE"/"FALSE")
+// with advanced evaluation (International, "TRUE"/"FALSE")
 extern BOOL ImpConvStringExt( ::rtl::OUString& rSrc, SbxDataType eTargetType );
 
 // SBXINT.CXX

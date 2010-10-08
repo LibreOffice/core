@@ -1242,7 +1242,7 @@ SvStream& SvxTabStopItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) 
     //Alles nur SWG!
 
     const SfxItemPool *pPool = SfxItemPool::GetStoringPool();
-    const FASTBOOL bStoreDefTabs = pPool
+    const bool bStoreDefTabs = pPool
         && pPool->GetName().EqualsAscii("SWG")
         && ::IsDefaultItem( this );
 
@@ -1420,7 +1420,7 @@ SfxItemPresentation SvxPageModelItem::GetPresentation
 )   const
 {
     rText.Erase();
-    FASTBOOL bSet = ( GetValue().Len() > 0 );
+    bool bSet = ( GetValue().Len() > 0 );
 
     switch ( ePres )
     {

@@ -102,10 +102,10 @@ public:
     virtual bool supportsFullDrag() const;
     virtual SdrObject* getFullDragClone() const;
 
-    virtual FASTBOOL BegCreate(SdrDragStat& rStat);
-    virtual FASTBOOL MovCreate(SdrDragStat& rStat);
-    virtual FASTBOOL EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
-    virtual FASTBOOL BckCreate(SdrDragStat& rStat);
+    virtual bool BegCreate(SdrDragStat& rStat);
+    virtual bool MovCreate(SdrDragStat& rStat);
+    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
+    virtual bool BckCreate(SdrDragStat& rStat);
     virtual void BrkCreate(SdrDragStat& rStat);
     virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const;
 
@@ -113,13 +113,13 @@ public:
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
     virtual void NbcRotate(const Point& rRef, long nWink, double sn, double cs);
     virtual void NbcMirror(const Point& rRef1, const Point& rRef2);
-    virtual void NbcShear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear);
+    virtual void NbcShear(const Point& rRef, long nWink, double tn, bool bVShear);
 
     virtual void Move(const Size& rSiz);
     virtual void Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
     virtual void Rotate(const Point& rRef, long nWink, double sn, double cs);
     virtual void Mirror(const Point& rRef1, const Point& rRef2);
-    virtual void Shear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear);
+    virtual void Shear(const Point& rRef, long nWink, double tn, bool bVShear);
 
     virtual void RecalcSnapRect();
     virtual const Rectangle& GetSnapRect() const;
@@ -131,7 +131,7 @@ public:
     virtual void NbcSetLogicRect(const Rectangle& rRect);
 
     virtual long GetRotateAngle() const;
-    virtual long GetShearAngle(FASTBOOL bVertical=FALSE) const;
+    virtual long GetShearAngle(bool bVertical = false) const;
 
     virtual sal_uInt32 GetSnapPointCount() const;
     virtual Point GetSnapPoint(sal_uInt32 i) const;
@@ -147,11 +147,11 @@ public:
     virtual void NbcReformatText();
     virtual void ReformatText();
 
-    virtual FASTBOOL HasMacro() const;
+    virtual bool HasMacro() const;
     virtual SdrObject* CheckMacroHit (const SdrObjMacroHitRec& rRec) const;
     virtual Pointer GetMacroPointer (const SdrObjMacroHitRec& rRec) const;
     virtual void PaintMacro (OutputDevice& rOut, const Rectangle& rDirtyRect, const SdrObjMacroHitRec& rRec) const;
-    virtual FASTBOOL DoMacro (const SdrObjMacroHitRec& rRec);
+    virtual bool DoMacro (const SdrObjMacroHitRec& rRec);
     virtual XubString GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const;
 
     // OD 30.06.2003 #108784# - virtual <GetOffset()> returns Point(0,0)

@@ -78,8 +78,8 @@ public:
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*     Create(SvStream &, USHORT) const;
     virtual SvStream&        Store(SvStream &, USHORT nItemVersion ) const;
-    virtual int              ScaleMetrics( long nMult, long nDiv );
-    virtual int              HasMetrics() const;
+    virtual bool             ScaleMetrics( long nMult, long nDiv );
+    virtual bool             HasMetrics() const;
 
     const Color& GetColor() const { return aShadowColor;}
     void SetColor( const Color &rNew ) { aShadowColor = rNew; }

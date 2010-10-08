@@ -776,7 +776,7 @@ void SfxVirtualMenu::RemoveMenuImages( Menu* pMenu )
 
 //--------------------------------------------------------------------
 
-FASTBOOL SfxVirtualMenu::Bind_Impl( Menu *pMenu )
+bool SfxVirtualMenu::Bind_Impl( Menu *pMenu )
 {
     // Selber suchen, da SV mit 'USHORT nSID = pSVMenu->GetCurItemId();' immer
     // 0 liefert. Das ist so, weil die Event-Weiterleitung lt. TH nichts mit
@@ -786,7 +786,7 @@ FASTBOOL SfxVirtualMenu::Bind_Impl( Menu *pMenu )
     for ( USHORT nPos = 0; nPos < nCount; ++nPos )
     {
         // angesprochenes Sub-Menu gefunden?
-        FASTBOOL bFound = FALSE;
+        bool bFound = false;
         USHORT nSID = pSVMenu->GetItemId(nPos);
         SfxMenuControl &rCtrl = pItems[nPos];
         bFound = pSVMenu->GetPopupMenu(nSID) == pMenu;

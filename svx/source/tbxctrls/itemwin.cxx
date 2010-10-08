@@ -612,18 +612,18 @@ long SvxMetricField::Notify( NotifyEvent& rNEvt )
             pSh->KeyInput( *pKEvt );
         else
         {
-            FASTBOOL bHandled = FALSE;
+            bool bHandled = false;
 
             switch ( rKey.GetCode() )
             {
                 case KEY_RETURN:
                     Reformat();
-                    bHandled = TRUE;
+                    bHandled = true;
                     break;
 
                 case KEY_ESCAPE:
                     SetText( aCurTxt );
-                    bHandled = TRUE;
+                    bHandled = true;
                     break;
             }
 

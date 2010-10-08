@@ -1490,6 +1490,24 @@ void Desktop::AppEvent( const ApplicationEvent& rAppEvent )
     HandleAppEvent( rAppEvent );
 }
 
+namespace {
+    void SetDocumentExtendedStyle( const Reference< ::com::sun::star::awt::XWindow > &xContainerWindow )
+    {
+        // set the WB_EXT_DOCUMENT style. Normally, this is done by the TaskCreator service when a "_blank"
+        // frame/window is created. Since we do not use the TaskCreator here, we need to mimic its behavior,
+        // otherwise documents loaded into this frame will later on miss functionality depending on the style.
+        Window* pContainerWindow = VCLUnoHelper::GetWindow( xContainerWindow );
+        OSL_ENSURE( pContainerWindow, "Desktop::Main: no implementation access to the frame's container window!" );
+        if (!pContainerWindow) {
+            fprintf (stderr, "Error: It very much looks as if you have used 'linkoo' (or bin/ooinstall -l)\n"
+                     "but have then forgotten to source 'ooenv' into your shell before running !\n"
+                     "to save a crash, we will exit now with an error - please '. ./ooenv' first.\n");
+            exit (1);
+        }
+        pContainerWindow->SetExtendedStyle( pContainerWindow->GetExtendedStyle() | WB_EXT_DOCUMENT );
+    }
+}
+
 void Desktop::Main()
 {
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::Desktop::Main" );
@@ -1770,13 +1788,7 @@ void Desktop::Main()
                         xContainerWindow = xBackingFrame->getContainerWindow();
                     if (xContainerWindow.is())
                     {
-                        // set the WB_EXT_DOCUMENT style. Normally, this is done by the TaskCreator service when a "_blank"
-                        // frame/window is created. Since we do not use the TaskCreator here, we need to mimic its behavior,
-                        // otherwise documents loaded into this frame will later on miss functionality depending on the style.
-                        Window* pContainerWindow = VCLUnoHelper::GetWindow( xContainerWindow );
-                        OSL_ENSURE( pContainerWindow, "Desktop::Main: no implementation access to the frame's container window!" );
-                        pContainerWindow->SetExtendedStyle( pContainerWindow->GetExtendedStyle() | WB_EXT_DOCUMENT );
-
+                        SetDocumentExtendedStyle(xContainerWindow);
                         SetSplashScreenProgress(75);
                         Sequence< Any > lArgs(1);
                         lArgs[0] <<= xContainerWindow;

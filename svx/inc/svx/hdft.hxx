@@ -84,7 +84,7 @@ protected:
     SfxItemSet*     pBBSet;
     BOOL            bDisableQueryBox;
     BOOL            bEnableBackgroundSelector;
-    FASTBOOL        bInReset;
+    bool            bInReset;
 
     void            InitHandler();
     DECL_LINK( TurnOnHdl, CheckBox*);

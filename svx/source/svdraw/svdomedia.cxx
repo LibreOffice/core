@@ -63,9 +63,9 @@ SdrMediaObj::~SdrMediaObj()
 
 // ------------------------------------------------------------------------------
 
-FASTBOOL SdrMediaObj::HasTextEdit() const
+bool SdrMediaObj::HasTextEdit() const
 {
-    return FALSE;
+    return false;
 }
 
 // ------------------------------------------------------------------------------

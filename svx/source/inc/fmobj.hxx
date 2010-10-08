@@ -111,7 +111,7 @@ public:
     virtual void SetUnoControlModel( const ::com::sun::star::uno::Reference< com::sun::star::awt::XControlModel >& _rxModel );
 
 protected:
-    virtual FASTBOOL    EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd );
+    virtual bool        EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd );
     virtual void        BrkCreate( SdrDragStat& rStat );
 
     // #i70852# overload Layer interface to force to FormColtrol layer

@@ -514,8 +514,8 @@ SfxPrinter* SfxViewShell::SetPrinter_Impl( SfxPrinter *pNewPrinter )
     SfxPrinter *pDocPrinter = GetPrinter();
 
     // Printer-Options auswerten
-    FASTBOOL bOriToDoc = FALSE;
-    FASTBOOL bSizeToDoc = FALSE;
+    bool bOriToDoc = false;
+    bool bSizeToDoc = false;
     if ( &pDocPrinter->GetOptions() )
     {
         USHORT nWhich = GetPool().GetWhich(SID_PRINTER_CHANGESTODOC);

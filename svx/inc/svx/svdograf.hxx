@@ -187,14 +187,14 @@ public:
     virtual void            NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
     virtual void            NbcRotate(const Point& rRef, long nWink, double sn, double cs);
     virtual void            NbcMirror(const Point& rRef1, const Point& rRef2);
-    virtual void            NbcShear (const Point& rRef, long nWink, double tn, FASTBOOL bVShear);
+    virtual void            NbcShear (const Point& rRef, long nWink, double tn, bool bVShear);
     virtual void            NbcSetSnapRect(const Rectangle& rRect);
     virtual void            NbcSetLogicRect(const Rectangle& rRect);
     virtual SdrObjGeoData*  NewGeoData() const;
     virtual void            SaveGeoData(SdrObjGeoData& rGeo) const;
     virtual void            RestGeoData(const SdrObjGeoData& rGeo);
 
-    FASTBOOL                HasGDIMetaFile() const;
+    bool                    HasGDIMetaFile() const;
     const GDIMetaFile*      GetGDIMetaFile() const;
 
     virtual void            SetPage(SdrPage* pNewPage);

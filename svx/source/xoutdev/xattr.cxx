@@ -1089,19 +1089,19 @@ SfxItemPresentation XLineDashItem::GetPresentation
 
 //------------------------------------------------------------------------
 
-FASTBOOL XLineDashItem::HasMetrics() const
+bool XLineDashItem::HasMetrics() const
 {
-    return TRUE;
+    return true;
 }
 
 //------------------------------------------------------------------------
 
-FASTBOOL XLineDashItem::ScaleMetrics(long nMul, long nDiv)
+bool XLineDashItem::ScaleMetrics(long nMul, long nDiv)
 {
     aDash.SetDotLen( ScaleMetricValue( aDash.GetDotLen(), nMul, nDiv ) );
     aDash.SetDashLen( ScaleMetricValue( aDash.GetDashLen(), nMul, nDiv ) );
     aDash.SetDistance( ScaleMetricValue( aDash.GetDistance(), nMul, nDiv ) );
-    return TRUE;
+    return true;
 }
 
 bool XLineDashItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
@@ -4465,17 +4465,17 @@ SfxItemPresentation XFillHatchItem::GetPresentation
 
 //------------------------------------------------------------------------
 
-FASTBOOL XFillHatchItem::HasMetrics() const
+bool XFillHatchItem::HasMetrics() const
 {
-    return TRUE;
+    return true;
 }
 
 //------------------------------------------------------------------------
 
-FASTBOOL XFillHatchItem::ScaleMetrics(long nMul, long nDiv)
+bool XFillHatchItem::ScaleMetrics(long nMul, long nDiv)
 {
     aHatch.SetDistance( ScaleMetricValue( aHatch.GetDistance(), nMul, nDiv ) );
-    return TRUE;
+    return true;
 }
 
 // -----------------------------------------------------------------------
