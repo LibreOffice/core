@@ -278,10 +278,13 @@ IDLFILES=\
     XRequestCallback.idl\
     XReschedule.idl\
     XScrollBar.idl\
-        XSimpleTabController.idl\
+    XSimpleTabController.idl\
     XSpinField.idl\
     XSpinListener.idl\
     XSpinValue.idl\
+    XStyleChangeListener.idl\
+    XStyleSettings.idl\
+    XStyleSettingsSupplier.idl\
     XSystemChildFactory.idl\
     XSystemDependentMenuPeer.idl\
     XSystemDependentWindowPeer.idl\

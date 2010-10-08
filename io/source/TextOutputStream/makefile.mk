@@ -60,3 +60,11 @@ DEF1NAME=		$(SHL1TARGET)
 .ENDIF 		# L10N_framework
 
 .INCLUDE :	target.mk
+
+ALLTAR : $(MISC)/textoutstream.component
+
+$(MISC)/textoutstream.component .ERRREMOVE : \
+        $(SOLARENV)/bin/createcomponent.xslt textoutstream.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_URE_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt textoutstream.component
