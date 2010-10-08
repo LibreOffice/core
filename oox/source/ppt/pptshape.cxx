@@ -189,6 +189,18 @@ void PPTShape::addShape(
             // use style from master slide for placeholders only, otherwise use slide's style, which might be the default style from presentation
                 if ( !aMasterTextListStyle.get() )
                     aMasterTextListStyle = ( mnSubType && rSlidePersist.getMasterPersist().get() ) ? rSlidePersist.getMasterPersist()->getOtherTextStyle() : rSlidePersist.getOtherTextStyle();
+
+            if( aMasterTextListStyle.get() && getTextBody().get() ) {
+                TextListStylePtr aCombinedTextListStyle (new TextListStyle());
+
+                aCombinedTextListStyle->apply( *aMasterTextListStyle.get() );
+
+                if( mpPlaceholder.get() && mpPlaceholder->getTextBody().get() )
+                aCombinedTextListStyle->apply( mpPlaceholder->getTextBody()->getTextListStyle() );
+                aCombinedTextListStyle->apply( getTextBody()->getTextListStyle() );
+
+                setMasterTextListStyle( aCombinedTextListStyle );
+            } else
                 setMasterTextListStyle( aMasterTextListStyle );
 
                 Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, pTheme, rxShapes, pShapeRect, bClearText ) );
