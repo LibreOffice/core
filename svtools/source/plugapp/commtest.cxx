@@ -35,7 +35,6 @@
 #include <tools/simplecm.hxx>
 #include "communi.hxx"
 #include "brooker.hxx"
-//#include <tools/bcst.hxx>
 
 #include "commtest.hrc"
 

@@ -33,8 +33,6 @@
 #include "keyboardfocuslistener.hxx"
 #include "aquavcltypes.h"
 
-// #include <com/sun/star/accessibility/XAccessibleContext.hpp>
-
 class AquaA11yFocusListener :
     public KeyboardFocusListener,
     public salhelper::ReferenceObject

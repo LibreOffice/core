@@ -39,10 +39,6 @@
 #include "sgvspln.hxx"
 #include <unotools/ucbstreamhelper.hxx>
 
-//#if OSL_DEBUG_LEVEL > 1
-//#include "Debug.c"
-//#endif
-
 #define SWAPPOINT(p) {  \
     p.x=SWAPSHORT(p.x); \
     p.y=SWAPSHORT(p.y); }

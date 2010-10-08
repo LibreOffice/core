@@ -477,15 +477,15 @@ SfxItemHandle::~SfxItemHandle()
 }
 
 // ------------------------------------------------------------------------
-int SfxPoolItem::ScaleMetrics( long /*lMult*/, long /*lDiv*/ )
+bool SfxPoolItem::ScaleMetrics( long /*lMult*/, long /*lDiv*/ )
 {
-    return 0;
+    return false;
 }
 
 // ------------------------------------------------------------------------
-int SfxPoolItem::HasMetrics() const
+bool SfxPoolItem::HasMetrics() const
 {
-    return 0;
+    return false;
 }
 
 // -----------------------------------------------------------------------

@@ -32,7 +32,6 @@
 #include <sysdep.hxx>
 #endif
 #include <string.h>
-// #include <math.h>
 #include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/wrkwin.hxx>

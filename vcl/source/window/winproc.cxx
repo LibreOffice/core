@@ -32,9 +32,6 @@
 #include <vcl/salwtype.hxx>
 #include <vcl/salframe.hxx>
 #include <tools/debug.hxx>
-#ifndef _INTN_HXX
-//#include <tools/intn.hxx>
-#endif
 #include <vcl/i18nhelp.hxx>
 #include <vcl/unohelp.hxx>
 #include <unotools/localedatawrapper.hxx>

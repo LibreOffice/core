@@ -1904,9 +1904,9 @@ int HTMLParser::FilterListing( int nToken )
     return nToken;
 }
 
-FASTBOOL HTMLParser::IsHTMLFormat( const sal_Char* pHeader,
-                                   BOOL bSwitchToUCS2,
-                                   rtl_TextEncoding eEnc )
+bool HTMLParser::IsHTMLFormat( const sal_Char* pHeader,
+                               BOOL bSwitchToUCS2,
+                               rtl_TextEncoding eEnc )
 {
     // Einer der folgenden regulaeren Ausdrucke muss sich auf den String
     // anwenden lassen, damit das Dok ein HTML-Dokument ist.

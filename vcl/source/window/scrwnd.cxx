@@ -28,7 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-// #include <math.h>
 #include <limits.h>
 #include <tools/time.hxx>
 #include <tools/debug.hxx>

@@ -168,9 +168,9 @@ public:
     void                        MergeRange( USHORT nFrom, USHORT nTo );
     const SfxItemSet*           GetParent() const { return _pParent; }
 
-    virtual SvStream &          Load( SvStream &, FASTBOOL bDirect = FALSE,
+    virtual SvStream &          Load( SvStream &, bool bDirect = false,
                                       const SfxItemPool *pRefPool = 0 );
-    virtual SvStream &          Store( SvStream &, FASTBOOL bDirect = FALSE ) const;
+    virtual SvStream &          Store( SvStream &, bool bDirect = false ) const;
 
     virtual int                 operator==(const SfxItemSet &) const;
 };

@@ -37,7 +37,6 @@
 
 #include <vcl/image.hxx>
 
-//#include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase2.hxx>
 
 

@@ -29,9 +29,6 @@
 #include "precompiled_unotools.hxx"
 #include <i18npool/mslangid.hxx>
 #include <tools/debug.hxx>
-#ifndef _INTN_HXX //autogen
-//#include <tools/intn.hxx>
-#endif
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/SearchFlags.hdl>
 #include <com/sun/star/i18n/TransliterationModules.hpp>

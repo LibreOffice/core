@@ -228,8 +228,8 @@ public:
                                     const IntlWrapper * pIntlWrapper = 0 ) const;
 
     virtual USHORT           GetVersion( USHORT nFileFormatVersion ) const;
-    virtual int              ScaleMetrics( long lMult, long lDiv );
-    virtual int              HasMetrics() const;
+    virtual bool             ScaleMetrics( long lMult, long lDiv );
+    virtual bool             HasMetrics() const;
 
     virtual bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
     virtual bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );

@@ -30,7 +30,6 @@
 
 #include "svtools/svtdllapi.h"
 
-//#include <svtools/embedhlp.hxx>
 #include <vcl/outdev.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/Sequence.hxx>

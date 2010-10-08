@@ -31,7 +31,7 @@
 #include <stdio.h>
 #include <rtl/ustring.hxx>
 #include <osl/module.h>
-//#include <osl/thread.h>
+
 using namespace rtl;
 
 #include <xrender_peer.hxx>

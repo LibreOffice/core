@@ -34,7 +34,6 @@
 #include "sgffilt.hxx"
 #include "sgfbram.hxx"
 #include "sgvmain.hxx"
-// #include "Debug.c"
 
 extern SgfFontLst* pSgfFonts;
 

@@ -202,8 +202,10 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
         SfxMultiMixRecordWriter aWhichIdsRec( &rStream, SFX_ITEMPOOL_REC_WHICHIDS, 0 );
 
         // erst Atomaren-Items und dann die Sets schreiben (wichtig beim Laden)
-        for ( pImp->bInSetItem = FALSE; pImp->bInSetItem <= TRUE && !rStream.GetError(); ++pImp->bInSetItem )
+        for (int ft = 0 ; ft < 2 && !rStream.GetError(); ft++)
         {
+            pImp->bInSetItem = ft != 0;
+
             SfxPoolItemArray_Impl **pArr = pImp->ppPoolItems;
             SfxPoolItem **ppDefItem = ppStaticDefaults;
             const USHORT nSize = GetSize_Impl();
@@ -274,7 +276,7 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
             }
         }
 
-        pImp->bInSetItem = FALSE;
+        pImp->bInSetItem = false;
     }
 
     // die gesetzten Defaults speichern (Pool-Defaults)
@@ -625,7 +627,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
     }
 
     // Items laden
-    FASTBOOL bSecondaryLoaded = FALSE;
+    bool bSecondaryLoaded = false;
     long nSecondaryEnd = 0;
     {
         SfxMultiRecordReader aWhichIdsRec( &rStream, SFX_ITEMPOOL_REC_WHICHIDS);
@@ -664,7 +666,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
 
                 // Sekund"arpool einlesen
                 pSecondary->Load( rStream );
-                bSecondaryLoaded = TRUE;
+                bSecondaryLoaded = true;
                 nSecondaryEnd = rStream.Tell();
 
                 // zur"uck zu unseren eigenen Items
@@ -817,7 +819,7 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
     // Items laden
     rStream.Seek( nStartPos );
     CHECK_FILEFORMAT( rStream, SFX_ITEMPOOL_TAG_ITEMS );
-    FASTBOOL bSecondaryLoaded = FALSE;
+    bool bSecondaryLoaded = false;
     long nSecondaryEnd = 0;
     USHORT nWhich, nSlot;
     while ( rStream >> nWhich, nWhich )
@@ -866,7 +868,7 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
 
             // Sekund"arpool einlesen
             pSecondary->Load1_Impl( rStream );
-            bSecondaryLoaded = TRUE;
+            bSecondaryLoaded = true;
             nSecondaryEnd = rStream.Tell();
 
             // zur"uck zu unseren eigenen Items
@@ -1090,7 +1092,7 @@ const SfxPoolItem* SfxItemPool::LoadSurrogate
     // auf jeden Fall aufgel"ost werden.
     if ( !pRefPool )
         pRefPool = this;
-    FASTBOOL bResolvable = pRefPool->GetName().Len() > 0;
+    bool bResolvable = pRefPool->GetName().Len() > 0;
     if ( !bResolvable )
     {
         // Bei einem anders aufgebauten Pool im Stream, mu\s die SlotId
@@ -1153,7 +1155,7 @@ const SfxPoolItem* SfxItemPool::LoadSurrogate
 //-------------------------------------------------------------------------
 
 
-FASTBOOL SfxItemPool::StoreSurrogate
+bool SfxItemPool::StoreSurrogate
 (
     SvStream&           rStream,
     const SfxPoolItem*  pItem
@@ -1166,7 +1168,7 @@ FASTBOOL SfxItemPool::StoreSurrogate
 
     [R"uckgabewert]
 
-    FASTBOOL                TRUE
+    bool                    TRUE
                             es wurde ein echtes Surrogat gespeichert, auch
                             SFX_ITEMS_NULL bei 'pItem==0',
                             SFX_ITEMS_STATICDEFAULT und SFX_ITEMS_POOLDEFAULT
@@ -1181,7 +1183,7 @@ FASTBOOL SfxItemPool::StoreSurrogate
 {
     if ( pItem )
     {
-        FASTBOOL bRealSurrogate = IsItemFlag(*pItem, SFX_ITEM_POOLABLE);
+        bool bRealSurrogate = IsItemFlag(*pItem, SFX_ITEM_POOLABLE);
         rStream << ( bRealSurrogate
                         ? GetSurrogate( pItem )
                         : (UINT16) SFX_ITEMS_DIRECT );
@@ -1227,7 +1229,7 @@ USHORT SfxItemPool::GetSurrogate(const SfxPoolItem *pItem) const
 
 // -----------------------------------------------------------------------
 
-FASTBOOL SfxItemPool::IsInStoringRange( USHORT nWhich ) const
+bool SfxItemPool::IsInStoringRange( USHORT nWhich ) const
 {
     return nWhich >= pImp->nStoringStart &&
            nWhich <= pImp->nStoringEnd;
@@ -1444,14 +1446,14 @@ USHORT SfxItemPool::GetNewWhich
 // -----------------------------------------------------------------------
 
 
-FASTBOOL SfxItemPool::IsInVersionsRange( USHORT nWhich ) const
+bool SfxItemPool::IsInVersionsRange( USHORT nWhich ) const
 {
     return nWhich >= pImp->nVerStart && nWhich <= pImp->nVerEnd;
 }
 
 // -----------------------------------------------------------------------
 
-FASTBOOL SfxItemPool::IsCurrentVersionLoading() const
+bool SfxItemPool::IsCurrentVersionLoading() const
 
 /*  [Beschreibung]
 
@@ -1542,7 +1544,7 @@ USHORT SfxItemPool::GetLoadingVersion() const
 
 //-------------------------------------------------------------------------
 
-FASTBOOL SfxItemPool::IsVer2_Impl() const
+bool SfxItemPool::IsVer2_Impl() const
 {
     return pMaster->pImp->nMajorVer >= 2;
 }
@@ -1550,8 +1552,8 @@ FASTBOOL SfxItemPool::IsVer2_Impl() const
 //-------------------------------------------------------------------------
 
 
-FASTBOOL SfxItemPool::StoreItem( SvStream &rStream, const SfxPoolItem &rItem,
-                                 FASTBOOL bDirect ) const
+bool SfxItemPool::StoreItem( SvStream &rStream, const SfxPoolItem &rItem,
+                                 bool bDirect ) const
 
 /*  [Beschreibung]
 
@@ -1576,7 +1578,7 @@ FASTBOOL SfxItemPool::StoreItem( SvStream &rStream, const SfxPoolItem &rItem,
 
     [Querverweise]
 
-    <SfxItemPool::LoadItem(SvStream&,FASTBOOL)const>
+    <SfxItemPool::LoadItem(SvStream&,bool)const>
 */
 
 {
@@ -1616,7 +1618,7 @@ FASTBOOL SfxItemPool::StoreItem( SvStream &rStream, const SfxPoolItem &rItem,
 //-------------------------------------------------------------------------
 
 
-const SfxPoolItem* SfxItemPool::LoadItem( SvStream &rStream, FASTBOOL bDirect,
+const SfxPoolItem* SfxItemPool::LoadItem( SvStream &rStream, bool bDirect,
                                           const SfxItemPool *pRefPool )
 
 // pRefPool==-1 => nicht putten!
@@ -1649,7 +1651,7 @@ const SfxPoolItem* SfxItemPool::LoadItem( SvStream &rStream, FASTBOOL bDirect,
     }
 
     // wird eine andere Version geladen?
-    FASTBOOL bCurVersion = pRefPool->IsCurrentVersionLoading();
+    bool bCurVersion = pRefPool->IsCurrentVersionLoading();
     if ( !bCurVersion )
         // Which-Id auf neue Version mappen
         nWhich = pRefPool->GetNewWhich( nWhich );

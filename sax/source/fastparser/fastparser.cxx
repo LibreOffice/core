@@ -25,9 +25,6 @@
  *
  ************************************************************************/
 
-//#include <stdlib.h>
-//#include <sal/alloca.h>
-
 #include <boost/scoped_ptr.hpp>
 
 #include <osl/diagnose.h>

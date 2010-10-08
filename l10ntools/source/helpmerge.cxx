@@ -43,7 +43,6 @@
 #include "rtl/strbuf.hxx"
 #ifdef WNT
 #include <direct.h>
-//#include <WinBase.h>
 #include "tools/prewin.h"
 #include <windows.h>
 #include "tools/postwin.h"

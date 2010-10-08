@@ -32,15 +32,8 @@
 #ifndef GCC
 #endif
 
-//------------------------------------------------------------------
-
-//#include "Svitems.hxx"
-
 #include "property.hxx"
-/*
-#include "property.hrc"
-#include "Scresid.hxx"
-*/
+
 #define FRAME_OFFSET 4
 
 

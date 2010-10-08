@@ -71,7 +71,6 @@ inline BOOL DRIVE_EXISTS( char c )
 }
 
 #include <time.h>
-//#include <datetime.hxx>
 
 inline Time MsDos2Time( FTIME* aTime )
 {

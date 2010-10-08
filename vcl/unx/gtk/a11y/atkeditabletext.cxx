@@ -34,9 +34,6 @@
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 #include <com/sun/star/accessibility/TextSegment.hpp>
 
-// #include <functional>
-// #include <hash_map>
-
 #include <stdio.h>
 #include <string.h>
 
