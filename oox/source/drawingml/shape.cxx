@@ -85,7 +85,8 @@ void CreateShapeCallback::onXShapeCreated( const Reference< XShape >&, const Ref
 // ============================================================================
 
 Shape::Shape( const sal_Char* pServiceName )
-: mpLinePropertiesPtr( new LineProperties )
+: mbIsChild( false )
+, mpLinePropertiesPtr( new LineProperties )
 , mpFillPropertiesPtr( new FillProperties )
 , mpGraphicPropertiesPtr( new GraphicProperties )
 , mpCustomShapePropertiesPtr( new CustomShapeProperties )
@@ -193,45 +194,34 @@ void Shape::addChildren(
         Shape& rMaster,
         const Theme* pTheme,
         const Reference< XShapes >& rxShapes,
-        const awt::Rectangle& rClientRect,
+        const awt::Rectangle&,
         ShapeIdMap* pShapeMap )
 {
-    // first the global child union needs to be calculated
-    sal_Int32 nGlobalLeft  = SAL_MAX_INT32;
-    sal_Int32 nGlobalRight = SAL_MIN_INT32;
-    sal_Int32 nGlobalTop   = SAL_MAX_INT32;
-    sal_Int32 nGlobalBottom= SAL_MIN_INT32;
+    awt::Point& aPosition( mbIsChild ? maAbsolutePosition : maPosition );
+    awt::Size& aSize( mbIsChild ? maAbsoluteSize : maSize );
+
     std::vector< ShapePtr >::iterator aIter( rMaster.maChildren.begin() );
-    while( aIter != rMaster.maChildren.end() )
-    {
-        sal_Int32 l = (*aIter)->maPosition.X;
-        sal_Int32 t = (*aIter)->maPosition.Y;
-        sal_Int32 r = l + (*aIter)->maSize.Width;
-        sal_Int32 b = t + (*aIter)->maSize.Height;
-        if ( nGlobalLeft > l )
-            nGlobalLeft = l;
-        if ( nGlobalRight < r )
-            nGlobalRight = r;
-        if ( nGlobalTop > t )
-            nGlobalTop = t;
-        if ( nGlobalBottom < b )
-            nGlobalBottom = b;
-        aIter++;
-    }
-    aIter = rMaster.maChildren.begin();
     while( aIter != rMaster.maChildren.end() )
     {
         awt::Rectangle aShapeRect;
         awt::Rectangle* pShapeRect = 0;
         Shape& rChild = *(*aIter);
 
-        if ( rChild.maSize.Width != maSize.Width || rChild.maSize.Height != maSize.Height || rChild.maPosition.X != maPosition.X || rChild.maPosition.Y != maPosition.Y ) {
-            aShapeRect.X = maPosition.X + rChild.maPosition.X - maChPosition.X;
-            aShapeRect.Y = maPosition.Y + rChild.maPosition.Y - maChPosition.Y;
-            aShapeRect.Width = maSize.Width + rChild.maSize.Width - maChSize.Width;
-            aShapeRect.Height = maSize.Height + rChild.maSize.Height - maChSize.Height;
-            pShapeRect = &aShapeRect;
-        }
+        double sx = ((double)aSize.Width)/maChSize.Width;
+        double sy = ((double)aSize.Height)/maChSize.Height;
+        rChild.maAbsolutePosition.X = aPosition.X + sx*(rChild.maPosition.X - maChPosition.X);
+        rChild.maAbsolutePosition.Y = aPosition.Y + sy*(rChild.maPosition.Y - maChPosition.Y);
+        rChild.maAbsoluteSize.Width = rChild.maSize.Width*sx;
+        rChild.maAbsoluteSize.Height = rChild.maSize.Height*sy;
+        rChild.mbIsChild = true;
+
+        aShapeRect.X = rChild.maAbsolutePosition.X;
+        aShapeRect.Y = rChild.maAbsolutePosition.Y;
+        aShapeRect.Width = rChild.maAbsoluteSize.Width;
+        aShapeRect.Height = rChild.maAbsoluteSize.Height;
+
+        pShapeRect = &aShapeRect;
+
         (*aIter++)->addShape( rFilterBase, pTheme, rxShapes, pShapeRect, pShapeMap );
     }
 }

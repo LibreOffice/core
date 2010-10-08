@@ -187,6 +187,9 @@ protected:
     std::vector< ShapePtr >     maChildren;               // only used for group shapes
     com::sun::star::awt::Size   maChSize;                 // only used for group shapes
     com::sun::star::awt::Point  maChPosition;             // only used for group shapes
+    com::sun::star::awt::Size   maAbsoluteSize;           // only used for group shapes
+    com::sun::star::awt::Point  maAbsolutePosition;       // only used for group shapes
+    sal_Bool                    mbIsChild;
 
     TextBodyPtr                 mpTextBody;
     LinePropertiesPtr           mpLinePropertiesPtr;
