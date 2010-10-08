@@ -182,6 +182,9 @@ sal_uInt16  LwpBorderStuff::GetSideType(sal_uInt16 side)
         return m_nBoderGroupIDBottom;
         break;
     }
+    // FIXME: this is needed to avoid warning: control reaches end of non-void function
+    //        a better solution would be to enum value for the parameter side
+    return 0;
 }
 
 LwpColor    LwpBorderStuff::GetSideColor(sal_uInt16 side)
@@ -201,6 +204,9 @@ LwpColor    LwpBorderStuff::GetSideColor(sal_uInt16 side)
         return m_aColorBottom;
         break;
     }
+    // FIXME: this is needed to avoid warning: control reaches end of non-void function
+    //        a better solution would be to enum value for the parameter side
+    return LwpColor();
 }
 
 float   LwpBorderStuff::GetSideWidth(sal_uInt16 side)
@@ -220,6 +226,9 @@ float   LwpBorderStuff::GetSideWidth(sal_uInt16 side)
         return LwpTools::ConvertToMetric(LwpTools::ConvertFromUnits(m_nWidthBottom));
         break;
     }
+    // FIXME: this is needed to avoid warning: control reaches end of non-void function
+    //        a better solution would be to enum value for the parameter side
+    return 0;
 }
 
 void LwpBorderStuff::operator = (const LwpBorderStuff& rOther)

@@ -288,7 +288,7 @@ rtl::OUString   GetCrossoutName(enumXFCrossout type)
         return A2OUSTR("X");
         break;
     }
-
+    return A2OUSTR("");
 }
 
 rtl::OUString   GetTransformName(enumXFTransform type)
@@ -425,6 +425,7 @@ rtl::OUString   GetFrameXRel(enumXFFrameXRel rel)
         return A2OUSTR("frame-start-margin");
         break;
     }
+    return A2OUSTR("");
 }
 
 rtl::OUString   GetFrameYPos(enumXFFrameYPos pos)

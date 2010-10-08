@@ -113,5 +113,8 @@ inline double LwpMargins::GetMarginsValue(const sal_uInt8& nWhichSide)
         return LwpTools::ConvertFromUnitsToMetric(m_nBottom);
         break;
     }
+    // FIXME: this is needed to avoid warning: control reaches end of non-void function
+    //        a better solution would be to enum value for the parameter side
+    return 0;
 }
 #endif

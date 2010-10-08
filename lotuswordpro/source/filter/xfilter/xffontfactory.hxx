@@ -80,8 +80,6 @@ public:
     ~XFFontFactory();
     XFFontFactory(const XFFontFactory& other){}
 
-    XFFontFactory operator=(XFFontFactory& other){}
-
 public:
     /**
      * @descr   Clear all fonts, this is called when load a file.

@@ -91,8 +91,6 @@ public:
     ~XFStyleManager();
     XFStyleManager(XFStyleManager& other){}
 
-    XFStyleManager operator=(XFStyleManager& other){}
-
 public:
     /**
      * @descr   clear all styles, called before load file.
