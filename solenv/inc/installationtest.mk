@@ -35,11 +35,11 @@ my_file = file://
 .IF "$(UPDATER)" == "YES" && "$(SHIPDRIVE)" != "" && \
     "$(CWS_WORK_STAMP)" == "" && "$(SOLARENV:s/$(SOL_TMP)//" == "$(SOLARENV)"
 my_instsets = $(shell ls -dt \
-    $(SHIPDRIVE)/$(INPATH)/OpenOffice/archive/$(WORK_STAMP)_$(LAST_MINOR)_native_packed-*_$(defaultlangiso).$(BUILD))
+    $(SHIPDRIVE)/$(INPATH)/LibreOffice/archive/$(WORK_STAMP)_$(LAST_MINOR)_native_packed-*_$(defaultlangiso).$(BUILD))
 installationtest_instset = $(my_instsets:1)
 .ELSE
 installationtest_instset = \
-    $(SOLARSRC)/instsetoo_native/$(INPATH)/OpenOffice/archive/install/$(defaultlangiso)
+    $(SOLARSRC)/instsetoo_native/$(INPATH)/LibreOffice/archive/install/$(defaultlangiso)
 .END
 
 .IF "$(OS)" == "WNT"
