@@ -116,7 +116,8 @@ Reference< XFastContextHandler > PPTShapeContext::createFastChildContext( sal_In
         {
             sal_Int32 nSubType( xAttribs->getOptionalValueToken( XML_type, XML_obj ) );
             mpShapePtr->setSubType( nSubType );
-            mpShapePtr->setSubTypeIndex( xAttribs->getOptionalValue( XML_idx ).toInt32() );
+            if( xAttribs->hasAttribute( XML_idx ) )
+                mpShapePtr->setSubTypeIndex( xAttribs->getOptionalValue( XML_idx ).toInt32() );
             if ( nSubType )
             {
                 PPTShape* pPPTShapePtr = dynamic_cast< PPTShape* >( mpShapePtr.get() );

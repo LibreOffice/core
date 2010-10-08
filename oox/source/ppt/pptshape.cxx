@@ -170,7 +170,11 @@ void PPTShape::addShape(
                 }
             }
 
-/*
+            OSL_TRACE("shape service: %s", rtl::OUStringToOString(sServiceName, RTL_TEXTENCODING_UTF8 ).getStr());
+
+            if( mnSubType && aMasterTextListStyle && getSubTypeIndex() != -1 )
+                aMasterTextListStyle.reset();
+
             // use placeholder index if possible
             if( mnSubType && getSubTypeIndex() && rSlidePersist.getMasterPersist().get() ) {
                 oox::drawingml::ShapePtr pPlaceholder = PPTShape::findPlaceholderByIndex( getSubTypeIndex(), rSlidePersist.getMasterPersist()->getShapes()->getChildren() );
@@ -184,7 +188,7 @@ void PPTShape::addShape(
                 aMasterTextListStyle = pNewTextListStyle;
                 }
             }
-*/
+
             if ( sServiceName.getLength() )
             {
             // use style from master slide for placeholders only, otherwise use slide's style, which might be the default style from presentation
