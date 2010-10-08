@@ -531,7 +531,11 @@ ExtensionManager::getSupportedPackageTypes()
 {
     return m_userRepository->getSupportedPackageTypes();
 }
-
+//Do some necessary checks and user interaction. This function does not
+//aquire the extension manager mutex and that mutex must not be aquired
+//when this function is called. doChecksForAddExtension does  synchronous
+//user interactions which may require aquiring the solar mutex.
+//Returns true if the extension can be installed.
 bool ExtensionManager::doChecksForAddExtension(
     Reference<deploy::XPackageManager> const & xPackageMgr,
     uno::Sequence<beans::NamedValue> const & properties,
@@ -708,6 +712,9 @@ Reference<deploy::XPackage> ExtensionManager::addExtension(
                             xOldExtension, Reference<task::XAbortChannel>(),
                             Reference<ucb::XCommandEnvironment>());
                         tmpExtensionRemoveGuard.reset(xExtensionBackup);
+                        //xTmpExtension will later be used to check the dependencies
+                        //again. However, only xExtensionBackup will be later removed
+                        //from the tmp repository
                         xTmpExtension = xExtensionBackup;
                         OSL_ASSERT(xTmpExtension.is());
                     }
@@ -783,18 +790,16 @@ Reference<deploy::XPackage> ExtensionManager::addExtension(
             //Use a private AbortChannel so the user cannot interrupt.
             try
             {
-                Reference<ucb::XCommandEnvironment> tmpCmdEnv(
-                    new TmpRepositoryCommandEnv());
                 if (xExtensionBackup.is())
                 {
                     Reference<deploy::XPackage> xRestored =
                         xPackageManager->importExtension(
                             xExtensionBackup, Reference<task::XAbortChannel>(),
-                            tmpCmdEnv);
+                            Reference<ucb::XCommandEnvironment>());
                 }
                 activateExtension(
                     sIdentifier, sFileName, bUserDisabled, false,
-                    Reference<task::XAbortChannel>(), tmpCmdEnv);
+                    Reference<task::XAbortChannel>(), Reference<ucb::XCommandEnvironment>());
             }
             catch (...)
             {

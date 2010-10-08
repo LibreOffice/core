@@ -299,9 +299,6 @@ private:
     getPackageManager(::rtl::OUString const & repository)
         throw (css::lang::IllegalArgumentException);
 
-    //Do some necessary checks and user interaction. This function does not
-    //aquire the extension manager mutex.
-    //Returns true if the extension can be installed.
     bool doChecksForAddExtension(
         css::uno::Reference<css::deployment::XPackageManager> const & xPackageMgr,
         css::uno::Sequence<css::beans::NamedValue> const & properties,
