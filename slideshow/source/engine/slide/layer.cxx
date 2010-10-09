@@ -36,6 +36,8 @@
 #include <basegfx/range/b2dpolyrange.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 
 #include "layer.hxx"
 
@@ -288,6 +290,8 @@ namespace slideshow
                 // clipping, and render each shape that intersects with
                 // the calculated update area
                 ::basegfx::B2DPolyPolygon aClip( maUpdateAreas.solveCrossovers() );
+                aClip = ::basegfx::tools::stripNeutralPolygons(aClip);
+                aClip = ::basegfx::tools::stripDispensablePolygons(aClip, false);
 
                 // actually, if there happen to be shapes with zero
                 // update area in the maUpdateAreas vector, the
