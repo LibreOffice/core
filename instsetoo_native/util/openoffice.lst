@@ -107,7 +107,7 @@ LibreOffice
 		script			setup_osl
 		downloadname	LibO_{productversion}_{os}_install_{languages}
 		langpackdownloadname	LibO_{productversion}_languagepack_{os}_install_{languages}
-		include			{solarenvpath}/{os}/loader2,.,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/ooowoure,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor}/osl,{solarcommonpath}/bin.{minor},{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
+		include			{solarenvpath}/{os}/loader2,.,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/ooowoure,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor}/osl,{solarcommonpath}/bin.{minor},{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},../../external/common,{solarenvpath}/{os}/OOo_external,{solarpath}/pck.{minor}/brand
 	}
 }
 
@@ -172,7 +172,7 @@ LibreOffice_wJRE
 		compression		5
 		script			setup_osljre
 		downloadname	LibO_{productversion}_{os}_installwjre_{languages}
-		include			{solarenvpath}/{os}/loader2,.,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor}/osl,{solarcommonpath}/bin.{minor},{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
+		include			{solarenvpath}/{os}/loader2,.,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor}/osl,{solarcommonpath}/bin.{minor},{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},../../external/common,{solarenvpath}/{os}/OOo_external,{solarpath}/pck.{minor}/brand
 	}
 }
 
@@ -245,7 +245,7 @@ LibreOffice_Dev
 		script			setup_osljre
 		downloadname	LibO-dev_{productversion}_{os}_install_{languages}
 		langpackdownloadname	LibO_{productversion}_languagepack_{os}_install_{languages}
-		include			{solarenvpath}/{os}/loader2,.,{localpath}/bin/dev,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor}/osl,{solarcommonpath}/bin.{minor},{solarcommonpath}/pck.{minor}/openoffice_dev,{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
+		include			{solarenvpath}/{os}/loader2,.,{localpath}/bin/dev,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor}/osl,{solarcommonpath}/bin.{minor},{solarcommonpath}/pck.{minor}/openoffice_dev,{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},../../external/common,{solarenvpath}/{os}/OOo_external,,{solarpath}/pck.{minor}/brand_dev
 	}
 }
 
@@ -386,218 +386,4 @@ LibreOffice_Dev_SDK
         script sdkoo
         include {solarenvpath}/{os}/loader2,{solarpath}/bin.{minor}/sdkoo,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarcommonpath}/bin.{minor},{solarenvpath}/{os}/MS
     }
-}
-
-BrOffice
-{
-	Settings
-	{
-		variables
-		{
-			PRODUCTNAME BrOffice.org
-			PRODUCTVERSION 3.3
-			PRODUCTEXTENSION 
-			LONG_PRODUCTEXTENSION 
-			SHORT_PRODUCTEXTENSION 
-            POSTVERSIONEXTENSION
-            POSTVERSIONEXTENSIONUNIX
-			BRANDPACKAGEVERSION 3
-			USERDIRPRODUCTVERSION 3
-			ABOUTBOXPRODUCTVERSION 3.3.0
-			PROGRESSBARCOLOR 
-			PROGRESSSIZE 
-			PROGRESSPOSITION 
-			PROGRESSFRAMECOLOR 
-			NATIVEPROGRESS
-			UPDATEURL http://update.documentfoundation.org/ProductUpdateService/check.Update
-            ODFNOTIFYURL http://odfnotify.documentfoundation.org/OOo3.0/notification.jsp?version=ODF
-			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,userland.txt,version.lst
-			REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
-			ADDSYSTEMINTEGRATION 1
-			EVAL
-			FILEFORMATNAME OpenOffice.org
-			FILEFORMATVERSION 1.0
-			WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
-			PACKAGEVERSION 3.3.0
-			PACKAGEREVISION {milestone}
-			LICENSENAME LGPL
-			SERVICESPROJEKT 1
-			SETSTATICPATH 1
-			GLOBALFILEGID gid_File_Lib_Vcl
-			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
-			SPELLCHECKERFILE spellchecker_selection.txt
-			OPENSOURCE 1
-			OOODOWNLOADNAME 1
-			XPDINSTALLER 0
-			BETAUPGRADECODE
-			STUBUPGRADECODE {0E7B27B8-D658-4BF9-98D6-EC361582EB4A}
-			CHANGETARGETDIR 1
-			USE_FILEVERSION 1
-			LIBRARYVERSION 9.3.0
-			CODEFILENAME codes_broo.txt
-			PATCHCODEFILE bro_patchcodes.txt
-			DOWNLOADBANNER	brobanner.bmp
-			DOWNLOADBITMAP	brobitmap.bmp
-			DOWNLOADSETUPICO	ooosetup.ico
-			WINDOWSBITMAPDIRECTORY ..\inc_broffice\windows\msi_templates\Binary
-			RELATIVE_PATHES_IN_DDF 1
-            STARTCENTER_ADDFEATURE_URL http://extensions.documentfoundation.org/
-            STARTCENTER_INFO_URL http://www.documentfoundation.org/
-            STARTCENTER_TEMPLREP_URL http://templates.documentfoundation.org/
-            STARTCENTER_LAYOUT_STYLE 0
-            REGISTRATION_PRODUCT LibreOffice
-            REGISTRATION_CID 926117
-            DICT_REPO_URL http://extensions.documentfoundation.org/dictionaries/
-		}
-		active			1
-		compression		5
-		script			setup_osl
-		downloadname	BrOo_{productversion}_{os}_install_{languages}
-		langpackdownloadname	BrOo_{productversion}_languagepack_{os}_install_{languages}
-		include			{solarenvpath}/{os}/loader2,.,{solarpath}/bin.{minor}/broffice,{localpath}/bin/broffice,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/broffice,{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor}/broffice,{solarcommonpath}/bin.{minor}/osl,{solarcommonpath}/bin.{minor},{solarcommonpath}/pck.{minor}/broffice,{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
-	}
-}
-
-BrOffice_wJRE
-{
-	Settings
-	{
-		variables
-		{
-			PRODUCTNAME BrOffice.org
-			PRODUCTVERSION 3.3
-			PRODUCTEXTENSION 
-			LONG_PRODUCTEXTENSION 
-			SHORT_PRODUCTEXTENSION 
-            POSTVERSIONEXTENSION
-            POSTVERSIONEXTENSIONUNIX
-			BRANDPACKAGEVERSION 3
-			USERDIRPRODUCTVERSION 3
-			ABOUTBOXPRODUCTVERSION 3.3.0
-			PROGRESSBARCOLOR 
-			PROGRESSSIZE 
-			PROGRESSPOSITION 
-			PROGRESSFRAMECOLOR 
-			NATIVEPROGRESS
-			UPDATEURL http://update.documentfoundation.org/ProductUpdateService/check.Update
-            ODFNOTIFYURL http://odfnotify.documentfoundation.org/OOo3.0/notification.jsp?version=ODF
-			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt,version.lst
-			REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
-			ADDSYSTEMINTEGRATION 1
-			EVAL
-			FILEFORMATNAME OpenOffice.org
-			FILEFORMATVERSION 1.0
-			WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
-			PACKAGEVERSION 3.3.0
-			PACKAGEREVISION {milestone}
-			LICENSENAME LGPL
-			SERVICESPROJEKT 1
-			WITHJREPRODUCT 1
-			SETSTATICPATH 1
-			GLOBALFILEGID gid_File_Lib_Vcl
-			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
-			SPELLCHECKERFILE spellchecker_selection.txt
-			OPENSOURCE 1
-			OOODOWNLOADNAME 1
-			XPDINSTALLER 1
-			BETAUPGRADECODE
-			STUBUPGRADECODE {0E7B27B8-D658-4BF9-98D6-EC361582EB4A}
-			CHANGETARGETDIR 1
-			USE_FILEVERSION 1
-			LIBRARYVERSION 9.3.0
-			CODEFILENAME codes_broo.txt
-			PATCHCODEFILE bro_patchcodes.txt
-			JAVAPRODUCT 1
-			DOWNLOADBANNER	brobanner.bmp
-			DOWNLOADBITMAP	brobitmap.bmp
-			DOWNLOADSETUPICO	ooosetup.ico
-			WINDOWSBITMAPDIRECTORY ..\inc_broffice\windows\msi_templates\Binary
-			RELATIVE_PATHES_IN_DDF 1
-            STARTCENTER_ADDFEATURE_URL http://extensions.documentfoundation.org/
-            STARTCENTER_INFO_URL http://www.documentfoundation.org/
-            STARTCENTER_TEMPLREP_URL http://templates.documentfoundation.org/
-            STARTCENTER_LAYOUT_STYLE 0
-            REGISTRATION_PRODUCT LibreOffice
-            REGISTRATION_CID 926117
-            DICT_REPO_URL http://extensions.documentfoundation.org/dictionaries/
-		}
-		active			1
-		compression		5
-		script			setup_osljre
-		downloadname	BrOo_{productversion}_{os}_installwjre_{languages}
-		include			{solarenvpath}/{os}/loader2,.,{solarpath}/bin.{minor}/broffice,{localpath}/bin/broffice,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/broffice,{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor}/broffice,{solarcommonpath}/bin.{minor}/osl,{solarcommonpath}/bin.{minor},{solarcommonpath}/pck.{minor}/broffice,{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
-	}
-}
-
-BrOffice_Dev
-{
-	Settings
-	{
-		variables
-		{
-			PRODUCTNAME BrOo-dev
-			PRODUCTVERSION 3.3
-			PRODUCTEXTENSION 
-			LONG_PRODUCTEXTENSION 
-			SHORT_PRODUCTEXTENSION 
-			BASISROOTNAME LibO-dev
-			UNIXBASISROOTNAME lo-dev
-            POSTVERSIONEXTENSION
-            POSTVERSIONEXTENSIONUNIX
-			BRANDPACKAGEVERSION 3
-			USERDIRPRODUCTVERSION 3
-			ABOUTBOXPRODUCTVERSION 3.3.0
-			DEVELOPMENTPRODUCT 1
-			BASISPACKAGEPREFIX libobasis-dev
-			UREPACKAGEPREFIX lodev
-			SOLSUREPACKAGEPREFIX lodev
-			REGISTRYLAYERNAME LayerDevBroffice
-			SERVICETAG_URN urn:uuid:1680b00d-e45c-11de-82d6-080020a9ed93
-			UPDATEURL http://update.documentfoundation.org/ProductUpdateService/check.Update
-            ODFNOTIFYURL http://odfnotify.documentfoundation.org/OOo3.0/notification.jsp?version=ODF
-			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt,version.lst
-			EVAL
-			FILEFORMATNAME OpenOffice.org
-			FILEFORMATVERSION 1.0
-			WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
-			PACKAGEVERSION 3.3.0
-			PACKAGEREVISION {milestone}
-			LICENSENAME LGPL
-			SERVICESPROJEKT 1
-			SETSTATICPATH 1
-			GLOBALFILEGID gid_File_Lib_Vcl
-			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
-			SPELLCHECKERFILE spellchecker_selection.txt
-			OPENSOURCE 1
-			OOODOWNLOADNAME 1
-			XPDINSTALLER 1
-			BETAUPGRADECODE
-			STUBUPGRADECODE {0E7B27B8-D658-4BF9-98D6-EC361582EB4A}
-			CHANGETARGETDIR 1
-			USE_FILEVERSION 1
-			JAVAPRODUCT 1
-			LIBRARYVERSION 9.3.0
-			PATCHCODEFILE brodev_patchcodes.txt
-			CODEFILENAME codes_broodev.txt
-			DOWNLOADBANNER	brobanner.bmp
-			DOWNLOADBITMAP	brobitmap.bmp
-			DOWNLOADSETUPICO	ooosetup.ico
-			WINDOWSBITMAPDIRECTORY ..\inc_broffice\windows\msi_templates\Binary
-			LOCALUSERDIR $ORIGIN/..
-			RELATIVE_PATHES_IN_DDF 1
-            STARTCENTER_ADDFEATURE_URL http://extensions.documentfoundation.org/
-            STARTCENTER_INFO_URL http://www.documentfoundation.org/
-            STARTCENTER_TEMPLREP_URL http://templates.documentfoundation.org/
-            STARTCENTER_LAYOUT_STYLE 0
-            REGISTRATION_PRODUCT LibreOffice
-            REGISTRATION_CID 926117
-            DICT_REPO_URL http://extensions.documentfoundation.org/dictionaries/
-		}
-		active			1
-		compression		5
-		script			setup_osljre
-		downloadname	BrOo-dev_{productversion}_{os}_install_{languages}
-		langpackdownloadname	BrOo_{productversion}_languagepack_{os}_install_{languages}
-		include			{solarenvpath}/{os}/loader2,.,{solarpath}/bin.{minor}/broffice,{localpath}/bin/broffice_dev,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/broffice,{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor}/broffice,{solarcommonpath}/bin.{minor}/osl,{solarcommonpath}/bin.{minor},{solarcommonpath}/pck.{minor}/broffice_dev,{solarcommonpath}/pck.{minor}/broffice,{solarcommonpath}/pck.{minor}/openoffice_dev,{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
-	}
 }
