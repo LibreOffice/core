@@ -64,43 +64,41 @@ void WrappedResultSet::construct(const Reference< XResultSet>& _xDriverSet,const
 Any SAL_CALL WrappedResultSet::getBookmark() throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "WrappedResultSet::getBookmark" );
+    if ( m_xRowLocate.is() )
+    {
+        return m_xRowLocate->getBookmark( );
+    }
     return makeAny(m_xDriverSet->getRow());
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL WrappedResultSet::moveToBookmark( const Any& bookmark ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "WrappedResultSet::moveToBookmark" );
-    sal_Int32 nPos = 1;
-    bookmark >>= nPos;
-    return m_xDriverSet->absolute(nPos);
+    return m_xRowLocate->moveToBookmark( bookmark );
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL WrappedResultSet::moveRelativeToBookmark( const Any& bookmark, sal_Int32 rows ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "WrappedResultSet::moveRelativeToBookmark" );
-    sal_Int32 nPos = 1;
-    bookmark >>= nPos;
-    return m_xDriverSet->absolute(nPos + rows);
+    return m_xRowLocate->moveRelativeToBookmark( bookmark,rows );
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL WrappedResultSet::compareBookmarks( const Any& _first, const Any& _second ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "WrappedResultSet::compareBookmarks" );
-    return _first != _second;
+    return m_xRowLocate->compareBookmarks( _first,_second );
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL WrappedResultSet::hasOrderedBookmarks(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "WrappedResultSet::hasOrderedBookmarks" );
-    return sal_True;
+    return m_xRowLocate->hasOrderedBookmarks();
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL WrappedResultSet::hashBookmark( const Any& bookmark ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "WrappedResultSet::hashBookmark" );
-    sal_Int32 nPos = 1;
-    bookmark >>= nPos;
-    return nPos;
+    return m_xRowLocate->hashBookmark(bookmark);
 }
 // -------------------------------------------------------------------------
 // ::com::sun::star::sdbcx::XDeleteRows
@@ -128,7 +126,7 @@ void SAL_CALL WrappedResultSet::insertRow( const ORowSetRow& _rInsertRow,const c
         updateColumn(i,m_xUpdRow,*aIter);
     }
     m_xUpd->insertRow();
-    (*_rInsertRow->get().begin()) = m_xDriverSet->getRow();
+    (*_rInsertRow->get().begin()) = getBookmark();
 }
 // -------------------------------------------------------------------------
 void SAL_CALL WrappedResultSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrginalRow,const connectivity::OSQLTable& /*_xTable*/  ) throw(SQLException, RuntimeException)
@@ -166,6 +164,7 @@ void SAL_CALL WrappedResultSet::moveToInsertRow(  ) throw(SQLException, RuntimeE
 void SAL_CALL WrappedResultSet::moveToCurrentRow(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "WrappedResultSet::moveToCurrentRow" );
+    m_xUpd->moveToCurrentRow();
 }
 // -------------------------------------------------------------------------
 void WrappedResultSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
