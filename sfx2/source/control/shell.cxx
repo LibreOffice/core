@@ -38,9 +38,6 @@
 
 #include <unotools/undoopt.hxx>
 
-#ifndef GCC
-#endif
-
 #include <sfx2/app.hxx>
 #include <sfx2/shell.hxx>
 #include <sfx2/bindings.hxx>

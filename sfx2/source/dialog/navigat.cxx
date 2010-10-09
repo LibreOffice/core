@@ -30,9 +30,6 @@
 
 // includes *******************************************************************
 
-#ifndef GCC
-#endif
-
 #include <sfx2/navigat.hxx>
 #include <sfx2/sfx.hrc>
 #include <sfx2/app.hxx>

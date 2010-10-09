@@ -29,8 +29,6 @@
 #include "precompiled_sfx2.hxx"
 #include <tools/stream.hxx>
 #include <rsc/rscsfx.hxx>
-#ifndef GCC
-#endif
 
 // wg. pSlotPool
 #include "appdata.hxx"

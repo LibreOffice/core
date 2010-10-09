@@ -30,8 +30,6 @@
 
 #include <vcl/msgbox.hxx>
 #include <svl/stritem.hxx>
-#ifndef GCC
-#endif
 
 #include <sfx2/doctdlg.hxx>
 #include "docvor.hxx"

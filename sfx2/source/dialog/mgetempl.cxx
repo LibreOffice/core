@@ -35,8 +35,6 @@
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/style.hxx>
-#ifndef GCC
-#endif
 
 #include <sfx2/styfitem.hxx>
 #include <sfx2/styledlg.hxx>

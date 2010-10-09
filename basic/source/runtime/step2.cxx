@@ -29,8 +29,6 @@
 #include "precompiled_basic.hxx"
 
 #include "runtime.hxx"
-#ifndef GCC
-#endif
 #include "iosys.hxx"
 #include "image.hxx"
 #include "sbintern.hxx"

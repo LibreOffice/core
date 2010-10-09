@@ -49,8 +49,6 @@
 #include <svtools/imagemgr.hxx>
 #include <svtools/menuoptions.hxx>
 #include <framework/menuconfiguration.hxx>
-#ifndef GCC
-#endif
 
 #include <sfx2/app.hxx>
 #include <sfx2/sfx.hrc>

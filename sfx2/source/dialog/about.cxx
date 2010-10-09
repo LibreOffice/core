@@ -33,8 +33,6 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
-#ifndef GCC
-#endif
 
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>

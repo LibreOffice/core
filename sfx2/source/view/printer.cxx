@@ -35,9 +35,6 @@
 #include <svtools/printoptions.hxx>
 #include <vector>
 
-#ifndef GCC
-#endif
-
 #include <sfx2/printer.hxx>
 #include <sfx2/printopt.hxx>
 #include "sfxtypes.hxx"

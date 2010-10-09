@@ -29,8 +29,6 @@
 #include "precompiled_sfx2.hxx"
 #include <svl/itempool.hxx>
 #include <svl/eitem.hxx>
-#ifndef GCC
-#endif
 
 #include <sfx2/msg.hxx>
 

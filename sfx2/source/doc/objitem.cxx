@@ -28,9 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 
-#ifndef GCC
-#endif
-
 #include <sfx2/objsh.hxx>
 #include <sfx2/objitem.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>

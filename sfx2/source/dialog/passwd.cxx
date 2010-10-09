@@ -30,8 +30,6 @@
 
 // Include ---------------------------------------------------------------
 #include <vcl/msgbox.hxx>
-#ifndef GCC
-#endif
 
 #include <sfx2/passwd.hxx>
 #include "sfxtypes.hxx"

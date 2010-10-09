@@ -49,9 +49,6 @@
 #include <comphelper/processfactory.hxx>
 #include <svtools/itemdel.hxx>
 
-#ifndef GCC
-#endif
-
 // wg. nInReschedule
 #include "appdata.hxx"
 #include <sfx2/bindings.hxx>

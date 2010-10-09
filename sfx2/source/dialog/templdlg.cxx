@@ -32,8 +32,6 @@
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/style.hxx>
-#ifndef GCC
-#endif
 
 #define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>

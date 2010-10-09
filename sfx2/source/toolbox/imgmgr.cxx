@@ -46,9 +46,6 @@
 #include <svtools/miscopt.hxx>
 #include <vos/mutex.hxx>
 
-#ifndef GCC
-#endif
-
 #include <comphelper/processfactory.hxx>
 
 const sal_uInt32 IMAGELIST_COUNT = 4; // small, small-hi, large, large-hi

@@ -39,9 +39,6 @@
 #include <unotools/printwarningoptions.hxx>
 #include <svl/eitem.hxx>
 
-#ifndef GCC
-#endif
-
 #include <sfx2/prnmon.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>

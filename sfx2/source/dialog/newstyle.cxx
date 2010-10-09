@@ -30,8 +30,6 @@
 
 // INCLUDE ---------------------------------------------------------------
 #include <svl/style.hxx>
-#ifndef GCC
-#endif
 
 #include <sfx2/newstyle.hxx>
 #include "dialog.hrc"

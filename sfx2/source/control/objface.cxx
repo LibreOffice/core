@@ -30,8 +30,6 @@
 
 #include <stdlib.h>
 #include <tools/rcid.h>
-#ifndef GCC
-#endif
 #include <tools/stream.hxx>
 
 #include <sfx2/module.hxx>

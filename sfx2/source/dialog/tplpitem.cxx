@@ -30,9 +30,6 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#ifndef GCC
-#endif
-
 #include "tplpitem.hxx"
 #include <com/sun/star/frame/status/Template.hpp>
 

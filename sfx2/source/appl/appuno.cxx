@@ -104,9 +104,6 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::io;
 
-#ifndef GCC
-#endif
-
 #include "sfxtypes.hxx"
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/app.hxx>

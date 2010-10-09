@@ -30,12 +30,6 @@
 
 #ifdef WIN
 #include <svwin.h>
-#endif
-
-#ifndef GCC
-#endif
-
-#ifdef WIN
 
 // Statische DLL-Verwaltungs-Variablen
 static HINSTANCE hDLLInst = 0;

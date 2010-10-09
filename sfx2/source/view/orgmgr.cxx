@@ -33,8 +33,6 @@
 
 #include <vcl/msgbox.hxx>
 #include <tools/urlobj.hxx>
-#ifndef GCC
-#endif
 
 #include <comphelper/processfactory.hxx>
 #include <unotools/intlwrapper.hxx>

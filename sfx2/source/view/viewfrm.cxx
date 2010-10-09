@@ -107,9 +107,6 @@ using ::com::sun::star::document::XViewDataSupplier;
 using ::com::sun::star::container::XIndexContainer;
 namespace css = ::com::sun::star;
 
-#ifndef GCC
-#endif
-
 // wg. ViewFrame::Current
 #include "appdata.hxx"
 #include <sfx2/taskpane.hxx>

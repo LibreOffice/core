@@ -33,8 +33,6 @@
 #include <tools/list.hxx>
 #include <vcl/menu.hxx>
 #include <svl/stritem.hxx>
-#ifndef GCC
-#endif
 
 #include <sfx2/sfxsids.hrc>
 #include "objmnctl.hxx"

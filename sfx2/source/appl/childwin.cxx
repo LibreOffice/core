@@ -36,9 +36,6 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <cppuhelper/implbase1.hxx>
 
-#ifndef GCC
-#endif
-
 #include <sfx2/childwin.hxx>
 #include <sfx2/app.hxx>
 #include "arrdecl.hxx"

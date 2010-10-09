@@ -32,8 +32,6 @@
 #include <svl/whiter.hxx>
 #include <svl/style.hxx>
 #include <vcl/msgbox.hxx>
-#ifndef GCC
-#endif
 
 #include <sfx2/styledlg.hxx>
 #include <sfx2/mgetempl.hxx>

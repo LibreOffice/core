@@ -39,8 +39,6 @@
 
 #include <tools/urlobj.hxx>
 #include <unotools/pathoptions.hxx>
-#ifndef GCC
-#endif
 
 #include <sfx2/app.hxx>
 #include "appdata.hxx"

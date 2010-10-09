@@ -47,9 +47,6 @@
 #include <comphelper/processfactory.hxx>
 #include <vcl/msgbox.hxx>
 
-#ifndef GCC
-#endif
-
 // wg. pTopFrames
 #include "appdata.hxx"
 #include <sfx2/app.hxx>

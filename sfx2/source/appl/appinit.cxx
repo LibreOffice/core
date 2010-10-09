@@ -59,9 +59,6 @@
 #include <rtl/logfile.hxx>
 #include <vcl/edit.hxx>
 
-#ifndef GCC
-#endif
-
 #include <sfx2/unoctitm.hxx>
 #include "app.hrc"
 #include "sfxlocal.hrc"

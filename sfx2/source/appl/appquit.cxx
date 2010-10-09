@@ -40,9 +40,6 @@
 #include <unotools/saveopt.hxx>
 #include <unotools/misccfg.hxx>
 
-#ifndef GCC
-#endif
-
 #include "app.hrc"
 #include <sfx2/app.hxx>
 #include <sfx2/unoctitm.hxx>

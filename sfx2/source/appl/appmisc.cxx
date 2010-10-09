@@ -47,8 +47,6 @@
 #include <tools/config.hxx>
 #include <tools/rcid.h>
 #include <vos/mutex.hxx>
-#ifndef GCC
-#endif
 #include <unotools/configmgr.hxx>
 #include <com/sun/star/frame/XDesktop.hpp>
 

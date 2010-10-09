@@ -75,9 +75,6 @@
 #include <svtools/menuoptions.hxx>
 #include <svtools/miscopt.hxx>
 
-#ifndef GCC
-#endif
-
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/mnumgr.hxx>
 #include <sfx2/dispatch.hxx>

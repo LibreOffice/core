@@ -37,8 +37,6 @@
 
 #include <vcl/wrkwin.hxx>
 #include <unotools/viewoptions.hxx>
-#ifndef GCC
-#endif
 
 #include <vcl/timer.hxx>
 

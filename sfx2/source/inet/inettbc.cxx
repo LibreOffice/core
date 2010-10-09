@@ -30,8 +30,6 @@
 
 #include "inettbc.hxx"
 
-#ifndef GCC
-#endif
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>

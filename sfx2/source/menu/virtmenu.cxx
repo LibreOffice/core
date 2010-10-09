@@ -39,9 +39,6 @@
 #include <toolkit/unohlp.hxx>
 #include <tools/urlobj.hxx>
 
-#ifndef GCC
-#endif
-
 #include "virtmenu.hxx"
 #include <sfx2/msgpool.hxx>
 #include "statcach.hxx"

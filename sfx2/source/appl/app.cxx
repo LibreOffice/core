@@ -54,8 +54,6 @@
 #include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
 #include <osl/file.hxx>
-#ifndef GCC
-#endif
 
 #define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>

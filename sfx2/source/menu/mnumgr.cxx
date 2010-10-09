@@ -41,8 +41,6 @@
 #include <cstdarg>  // std::va_list
 
 #include <vcl/pointr.hxx>
-#ifndef GCC
-#endif
 
 #include <unotools/streamwrap.hxx>
 #include <sfx2/objsh.hxx>

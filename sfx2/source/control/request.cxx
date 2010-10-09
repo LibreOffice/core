@@ -43,9 +43,6 @@
 
 #include <comphelper/processfactory.hxx>
 
-#ifndef GCC
-#endif
-
 #include <svl/smplhint.hxx>
 
 #include <sfx2/request.hxx>

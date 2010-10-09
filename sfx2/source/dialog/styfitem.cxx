@@ -30,9 +30,6 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#ifndef GCC
-#endif
-
 #include <sfx2/styfitem.hxx>
 #include <svtools/localresaccess.hxx>
 #include <tools/debug.hxx>

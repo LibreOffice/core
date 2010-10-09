@@ -40,9 +40,6 @@
 #include <com/sun/star/script/XEngine.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
 
-#ifndef GCC
-#endif
-
 #include <comphelper/processfactory.hxx>
 #include <unotools/intlwrapper.hxx>
 

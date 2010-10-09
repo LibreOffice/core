@@ -32,8 +32,6 @@
 #include <tools/stream.hxx>
 #include <vcl/splitwin.hxx>
 #include <svl/itemset.hxx>
-#ifndef GCC
-#endif
 
 #include <sfx2/frmdescr.hxx>
 #include <sfx2/app.hxx>

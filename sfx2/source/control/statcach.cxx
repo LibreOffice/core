@@ -49,9 +49,6 @@
 #include <svl/visitem.hxx>
 #include <comphelper/processfactory.hxx>
 
-#ifndef GCC
-#endif
-
 #include <sfx2/app.hxx>
 #include <sfx2/appuno.hxx>
 #include "statcach.hxx"

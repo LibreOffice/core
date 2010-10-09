@@ -48,9 +48,6 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#ifndef GCC
-#endif
-
 // wg. nAutoPageID
 #include "appdata.hxx"
 #include "sfxhelp.hxx"

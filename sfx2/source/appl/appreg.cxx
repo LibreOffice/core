@@ -30,9 +30,6 @@
 
 #include <vcl/toolbox.hxx>
 
-#ifndef GCC
-#endif
-
 #include <sfx2/app.hxx>
 #include "appdata.hxx"
 #include "arrdecl.hxx"
