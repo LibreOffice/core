@@ -301,7 +301,7 @@ const _pair _nl_language_list[] = {
 /* XXX MS-874 is an extension to tis620, so this is not
  * really equivalent */
 
-#elif defined(LINUX) || defined(NETBSD)
+#elif defined(LINUX)
 
 const _pair _nl_language_list[] = {
     { "ANSI_X3.110-1983",           RTL_TEXTENCODING_DONTKNOW   },  /* ISO-IR-99 NAPLPS */
@@ -310,7 +310,7 @@ const _pair _nl_language_list[] = {
     { "BALTIC",                     RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-179 */
     { "BIG5",                       RTL_TEXTENCODING_BIG5 },        /* locale: zh_TW */
     { "BIG5-HKSCS",                 RTL_TEXTENCODING_BIG5_HKSCS },  /* locale: zh_CN.BIG5HK */
-    { "BIG5HKSCS",                  RTL_TEXTENCODING_BIG5_HKSCS },  /* depricated */
+    { "BIG5HKSCS",                  RTL_TEXTENCODING_BIG5_HKSCS },  /* deprecated */
     { "BS_4730",                    RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-4 ISO646-GB */
     { "BS_VIEWDATA",                RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-47 */
     { "CP1250",                     RTL_TEXTENCODING_MS_1250 },     /* MS-EE */
@@ -512,16 +512,22 @@ const _pair _nl_language_list[] = {
 const _pair _nl_language_list[] = {
     { "ASCII",         RTL_TEXTENCODING_ASCII_US       }, /* US-ASCII */
     { "BIG5",          RTL_TEXTENCODING_BIG5           }, /* China - Traditional Chinese */
+    { "Big5",          RTL_TEXTENCODING_BIG5           }, /* China - Traditional Chinese */
+    { "Big5-HKSCS",    RTL_TEXTENCODING_BIG5_HKSCS     }, /* locale: zh_CN.BIG5HK */
+    { "Big5HKSCS",     RTL_TEXTENCODING_BIG5_HKSCS     }, /* deprecated */
     { "CP1251",        RTL_TEXTENCODING_MS_1251        }, /* MS-CYRL */
     { "CP866",         RTL_TEXTENCODING_IBM_866        }, /* CP866 866 */
     { "CTEXT",         RTL_TEXTENCODING_ASCII_US       }, /* US-ASCII */
-    { "EUCCN",         RTL_TEXTENCODING_EUC_CN         }, /* China - Simplified Chinese */
-    { "EUCJP",         RTL_TEXTENCODING_EUC_JP         }, /* Japan */
-    { "EUCKR",         RTL_TEXTENCODING_EUC_KR         }, /* Korea */
-    { "EUCTW",         RTL_TEXTENCODING_EUC_TW         }, /* China - Traditional Chinese */
+    { "eucCN",         RTL_TEXTENCODING_EUC_CN         }, /* China - Simplified Chinese */
+    { "eucJP",         RTL_TEXTENCODING_EUC_JP         }, /* Japan */
+    { "eucKR",         RTL_TEXTENCODING_EUC_KR         }, /* Korea */
+    { "eucTW",         RTL_TEXTENCODING_EUC_TW         }, /* China - Traditional Chinese */
+    { "GB18030",       RTL_TEXTENCODING_GB_18030       }, /* locale: zh_CN.gb18030 */
+    { "GB2312",        RTL_TEXTENCODING_GB_2312        }, /* locale: zh_CN */
     { "ISO-2022-JP",   RTL_TEXTENCODING_DONTKNOW       }, /* */
     { "ISO-2022-JP-2", RTL_TEXTENCODING_DONTKNOW       }, /* */
     { "ISO8859-1",     RTL_TEXTENCODING_ISO_8859_1     }, /* Western */
+    { "ISO8859-13",    RTL_TEXTENCODING_ISO_8859_13    }, /* ISO-IR-179 LATIN7 */
     { "ISO8859-15",    RTL_TEXTENCODING_ISO_8859_15    }, /* Western Updated (w/Euro sign) */
     { "ISO8859-2",     RTL_TEXTENCODING_ISO_8859_2     }, /* Central European */
     { "ISO8859-4",     RTL_TEXTENCODING_ISO_8859_4     }, /* LATIN4 L4 */
@@ -530,6 +536,7 @@ const _pair _nl_language_list[] = {
     { "ISO8859-9",     RTL_TEXTENCODING_ISO_8859_9     }, /* Turkish */
     { "KOI8-R",        RTL_TEXTENCODING_KOI8_R         }, /* KOI8-R */
     { "KOI8-U",        RTL_TEXTENCODING_KOI8_U         }, /* KOI8-U */
+    { "PT154",         RTL_TEXTENCODING_PT154          }, /* */
     { "SJIS",          RTL_TEXTENCODING_SHIFT_JIS      }, /* Japan */
     { "US-ASCII",      RTL_TEXTENCODING_ASCII_US       }, /* US-ASCII */
     { "UTF-8",         RTL_TEXTENCODING_UTF8           }  /* ISO-10646/UTF-8 */
