@@ -59,7 +59,7 @@ ModalDialog RID_SVXDLG_THESAURUS
     {
         Pos = MAP_APPFONT ( 24 , 5 ) ;
         Size = MAP_APPFONT ( 143 , 8 ) ;
-        Text [ en-US ] = "Current ~word" ;
+        Text [ en-US ] = "~Current word" ;
         LEFT = TRUE ;
     };
     ComboBox CB_WORD
@@ -95,7 +95,7 @@ ModalDialog RID_SVXDLG_THESAURUS
     {
         Pos = MAP_APPFONT ( 5 , 173 ) ;
         Size = MAP_APPFONT ( 255 , 8 ) ;
-        Text [ en-US ] = "Replace ~with" ;
+        Text [ en-US ] = "~Replace with" ;
         LEFT = TRUE ;
     };
     Edit ED_REPL
@@ -120,7 +120,7 @@ ModalDialog RID_SVXDLG_THESAURUS
     {
         Pos = MAP_APPFONT ( 105 , 210 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text [ en-US ] = "~Replace" ;
+        Text [ en-US ] = "Replace" ;
         DefButton = TRUE ;
     };
     CancelButton BTN_THES_CANCEL

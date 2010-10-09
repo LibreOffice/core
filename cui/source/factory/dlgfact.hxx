@@ -235,24 +235,6 @@ class AbstractSpellDialog_Impl : public AbstractSpellDialog
     virtual SfxBindings& GetBindings();
 };
 
-//for SvxSpellCheckDialog begin
-//STRIP001 class AbstractSvxSpellCheckDialog_Impl : public AbstractSvxSpellCheckDialog //add for FmShowColsDialog
-//STRIP001 {
-//STRIP001 SvxSpellCheckDialog * pDlg;
-//STRIP001 public
-//STRIP001 AbstractSvxSpellCheckDialog_Impl ( SvxSpellCheckDialog* p)
-//STRIP001 : pDlg(p)
-//STRIP001 {}
-//STRIP001 virtual  USHORT          Execute() ;
-//STRIP001 virtual  void SetNewEditWord( const String& _rNew ) ;
-//STRIP001 virtual void SetLanguage( sal_uInt16 nLang ) ;
-//STRIP001 virtual void HideAutoCorrect() ;
-//STRIP001 virtual String   GetNewEditWord();
-//STRIP001 virtual void SetNewEditWord( const String& _rNew );
-//STRIP001 }
-//for SvxSpellCheckDialog end
-
-
 //for SearchProgress begin
 class SearchProgress;
 class AbstractSearchProgress_Impl : public AbstractSearchProgress

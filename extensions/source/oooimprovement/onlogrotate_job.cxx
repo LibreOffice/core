@@ -35,15 +35,21 @@
 #include "soapsender.hxx"
 
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/XTerminateListener.hpp>
 #include <osl/mutex.hxx>
 #include <osl/thread.hxx>
 #include <osl/time.h>
+#include <cppuhelper/implbase1.hxx>
+#include <memory>
 
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::uno;
+using ::com::sun::star::frame::XTerminateListener;
+using ::com::sun::star::frame::XDesktop;
 using ::com::sun::star::ucb::XSimpleFileAccess;
 using ::rtl::OUString;
 using ::std::vector;
@@ -102,7 +108,8 @@ namespace
         public:
             OnLogRotateThread(Reference<XMultiServiceFactory> sf);
             virtual void SAL_CALL run();
-            void disposing();
+            OnLogRotateThread* disposing();
+
         private:
             Reference<XMultiServiceFactory> m_ServiceFactory;
             ::osl::Mutex m_ServiceFactoryMutex;
@@ -135,11 +142,35 @@ namespace
         }
     }
 
-    void OnLogRotateThread::disposing()
+    OnLogRotateThread* OnLogRotateThread::disposing()
     {
         ::osl::Guard< ::osl::Mutex> service_factory_guard(m_ServiceFactoryMutex);
         m_ServiceFactory.clear();
+        return this;
     }
+
+    class OnLogRotateThreadWatcher : public ::cppu::WeakImplHelper1<XTerminateListener>
+    {
+        public:
+            OnLogRotateThreadWatcher(Reference<XMultiServiceFactory> sf)
+                : m_Thread(new OnLogRotateThread(sf))
+            {
+                m_Thread->create();
+            }
+            virtual ~OnLogRotateThreadWatcher()
+                { m_Thread->disposing()->terminate(); };
+
+            // XTerminateListener
+            virtual void SAL_CALL queryTermination(const EventObject&) throw(RuntimeException)
+                { };
+            virtual void SAL_CALL notifyTermination(const EventObject&) throw(RuntimeException)
+                { m_Thread->disposing()->terminate(); };
+            // XEventListener
+            virtual void SAL_CALL disposing(const EventObject&) throw(RuntimeException)
+                { m_Thread->disposing()->terminate(); };
+        private:
+            ::std::auto_ptr<OnLogRotateThread> m_Thread;
+    };
 }
 
 namespace oooimprovement
@@ -163,9 +194,11 @@ namespace oooimprovement
         const Reference<XJobListener>& listener)
         throw(RuntimeException)
     {
-        OnLogRotateThread* thread = new OnLogRotateThread(m_ServiceFactory);
-        thread->create();
-
+        Reference<XDesktop> xDesktop(
+            m_ServiceFactory->createInstance(OUString::createFromAscii("com.sun.star.frame.Desktop")),
+            UNO_QUERY);
+        if(xDesktop.is())
+            xDesktop->addTerminateListener(Reference<XTerminateListener>(new OnLogRotateThreadWatcher(m_ServiceFactory)));
         Any result;
         listener->jobFinished(Reference<XAsyncJob>(this), result);
     }
@@ -190,7 +223,7 @@ namespace oooimprovement
     Sequence<OUString> SAL_CALL OnLogRotateJob::getSupportedServiceNames_static()
     {
         Sequence<OUString> aServiceNames(1);
-        aServiceNames[0] = OUString::createFromAscii("com.sun.star.task.XAsyncJob");
+        aServiceNames[0] = OUString::createFromAscii("com.sun.star.task.AsyncJob");
         return aServiceNames;
     }
 

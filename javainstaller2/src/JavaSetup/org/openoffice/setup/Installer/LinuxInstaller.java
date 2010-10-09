@@ -190,8 +190,25 @@ public class LinuxInstaller extends Installer {
                     if ( sofficeLink.exists() ) { useForce = true; }
                 }
 
-                String rpmCommand = "";
-                String[] rpmCommandArray;
+                // On Debian based systems, rpms can be installed with the switch --force-debian, if a rpm
+                // is installed.
+
+                String forceDebianString = "";
+                String nodepsString = "";
+
+                if ( ! data.debianInvestigated() ) {
+                    helper.investigateDebian(data);
+                    data.setDebianInvestigated(true);
+                }
+
+                if ( data.isDebianSystem() ) {
+                    nodepsString = "--nodeps";
+
+                    if ( data.useForceDebian() ) {
+                        forceDebianString = "--force-debian";
+                    }
+                }
+
                 String databasePath = null;
                 String databaseString = "";
                 boolean useLocalDatabase = false;
@@ -209,113 +226,56 @@ public class LinuxInstaller extends Installer {
                     useLocalDatabase = true;
                 }
 
-                if (useForce) {
-                    if (useLocalDatabase) {
-                        if ( relocations != null ) {
-                            rpmCommand = "rpm --upgrade --ignoresize --force -vh " +
-                                    "--relocate " + relocations + " " + databaseString +
-                                    " " + databasePath + " " + packageName;
-                            rpmCommandArray = new String[10];
-                            rpmCommandArray[0] = "rpm";
-                            rpmCommandArray[1] = "--upgrade";
-                            rpmCommandArray[2] = "--ignoresize";
-                            rpmCommandArray[3] = "--force";
-                            rpmCommandArray[4] = "-vh";
-                            rpmCommandArray[5] = "--relocate";
-                            rpmCommandArray[6] = relocations;
-                            rpmCommandArray[7] = databaseString;
-                            rpmCommandArray[8] = databasePath;
-                            rpmCommandArray[9] = packageName;
-                        } else {
-                            rpmCommand = "rpm --upgrade --ignoresize --force -vh " +
-                                    databaseString + " " + databasePath + " " + packageName;
-                            rpmCommandArray = new String[8];
-                            rpmCommandArray[0] = "rpm";
-                            rpmCommandArray[1] = "--upgrade";
-                            rpmCommandArray[2] = "--ignoresize";
-                            rpmCommandArray[3] = "--force";
-                            rpmCommandArray[4] = "-vh";
-                            rpmCommandArray[5] = databaseString;
-                            rpmCommandArray[6] = databasePath;
-                            rpmCommandArray[7] = packageName;
-                        }
-                    } else {
-                        if ( relocations != null )
-                        {
-                            rpmCommand = "rpm --upgrade --ignoresize --force -vh " +
-                                    "--relocate " + relocations + " " + packageName;
-                            rpmCommandArray = new String[8];
-                            rpmCommandArray[0] = "rpm";
-                            rpmCommandArray[1] = "--upgrade";
-                            rpmCommandArray[2] = "--ignoresize";
-                            rpmCommandArray[3] = "--force";
-                            rpmCommandArray[4] = "-vh";
-                            rpmCommandArray[5] = "--relocate";
-                            rpmCommandArray[6] = relocations;
-                            rpmCommandArray[7] = packageName;
-                        } else {
-                            rpmCommand = "rpm --upgrade --ignoresize --force -vh " + packageName;
-                            rpmCommandArray = new String[6];
-                            rpmCommandArray[0] = "rpm";
-                            rpmCommandArray[1] = "--upgrade";
-                            rpmCommandArray[2] = "--ignoresize";
-                            rpmCommandArray[3] = "--force";
-                            rpmCommandArray[4] = "-vh";
-                            rpmCommandArray[5] = packageName;
-                        }
-                    }
-                } else {
-                    if (useLocalDatabase) {
-                        if ( relocations != null ) {
-                            rpmCommand = "rpm --upgrade --ignoresize -vh " +
-                                    "--relocate " + relocations + " " + databaseString +
-                                    " " + databasePath + " " + packageName;
-                            rpmCommandArray = new String[9];
-                            rpmCommandArray[0] = "rpm";
-                            rpmCommandArray[1] = "--upgrade";
-                            rpmCommandArray[2] = "--ignoresize";
-                            rpmCommandArray[3] = "-vh";
-                            rpmCommandArray[4] = "--relocate";
-                            rpmCommandArray[5] = relocations;
-                            rpmCommandArray[6] = databaseString;
-                            rpmCommandArray[7] = databasePath;
-                            rpmCommandArray[8] = packageName;
-                        } else {
-                            rpmCommand = "rpm --upgrade --ignoresize -vh " +
-                                    databaseString + " " + databasePath + " " + packageName;
-                            rpmCommandArray = new String[7];
-                            rpmCommandArray[0] = "rpm";
-                            rpmCommandArray[1] = "--upgrade";
-                            rpmCommandArray[2] = "--ignoresize";
-                            rpmCommandArray[3] = "-vh";
-                            rpmCommandArray[4] = databaseString;
-                            rpmCommandArray[5] = databasePath;
-                            rpmCommandArray[6] = packageName;
-                        }
-                    } else {
-                        if ( relocations != null )
-                        {
-                            rpmCommand = "rpm --upgrade --ignoresize -vh " +
-                                    "--relocate " + relocations + " " + packageName;
-                            rpmCommandArray = new String[7];
-                            rpmCommandArray[0] = "rpm";
-                            rpmCommandArray[1] = "--upgrade";
-                            rpmCommandArray[2] = "--ignoresize";
-                            rpmCommandArray[3] = "-vh";
-                            rpmCommandArray[4] = "--relocate";
-                            rpmCommandArray[5] = relocations;
-                            rpmCommandArray[6] = packageName;
-                        } else {
-                            rpmCommand = "rpm --upgrade --ignoresize -vh " + packageName;
-                            rpmCommandArray = new String[5];
-                            rpmCommandArray[0] = "rpm";
-                            rpmCommandArray[1] = "--upgrade";
-                            rpmCommandArray[2] = "--ignoresize";
-                            rpmCommandArray[3] = "-vh";
-                            rpmCommandArray[4] = packageName;
-                        }
-                    }
+                // Defining a Vector that contains the full rpm command. Then the string array can be
+                // created dynamically. Otherwise there would be too many different scenarios.
+
+                Vector rpmVector = new Vector();
+
+                rpmVector.add("rpm");
+                rpmVector.add("--upgrade");
+                rpmVector.add("--ignoresize");
+
+                if ( useForce ) {
+                    rpmVector.add("--force");
                 }
+
+                if ( ! forceDebianString.equals("") ) {
+                    rpmVector.add(forceDebianString);
+                }
+
+                if ( ! nodepsString.equals("") ) {
+                    rpmVector.add(nodepsString);
+                }
+
+                rpmVector.add("-vh");
+
+                if ( relocations != null ) {
+                    rpmVector.add("--relocate");
+                    rpmVector.add(relocations);
+                }
+
+                if ( useLocalDatabase ) {
+                    rpmVector.add(databaseString);
+                    rpmVector.add(databasePath);
+                }
+
+                rpmVector.add(packageName);
+
+                // Creating String and StringArray for rpm command
+
+                int capacity = rpmVector.size();
+
+                String rpmCommand = "";
+                String[] rpmCommandArray = new String[capacity];
+
+                for (int i = 0; i < rpmVector.size(); i++) {
+                    rpmCommandArray[i] = (String)rpmVector.get(i);
+                    rpmCommand = rpmCommand + " " + (String)rpmVector.get(i);
+                }
+
+                rpmCommand = rpmCommand.trim();
+
+                // Staring rpm process
 
                 Vector returnVector = new Vector();
                 Vector returnErrorVector = new Vector();
@@ -375,29 +335,70 @@ public class LinuxInstaller extends Installer {
             String databasePath = data.getDatabasePath();
             String databaseString = "";
             boolean useLocalDatabase = false;
-            String rpmCommand;
-            String[] rpmCommandArray;
 
             if (( databasePath != null ) && (! databasePath.equalsIgnoreCase("null"))) {
                 databaseString = "--dbpath";
                 useLocalDatabase = true;
             }
 
-            if (useLocalDatabase) {
-                rpmCommand = "rpm -ev" + " " + databaseString + " " + databasePath + " " + packageName;
-                rpmCommandArray = new String[5];
-                rpmCommandArray[0] = "rpm";
-                rpmCommandArray[1] = "-ev";
-                rpmCommandArray[2] = databaseString;
-                rpmCommandArray[3] = databasePath;
-                rpmCommandArray[4] = packageName;
-            } else {
-                rpmCommand = "rpm -ev" + " " + packageName;
-                rpmCommandArray = new String[3];
-                rpmCommandArray[0] = "rpm";
-                rpmCommandArray[1] = "-ev";
-                rpmCommandArray[2] = packageName;
+            // On Debian based systems, rpms can be installed with the switch --force-debian, if a rpm
+            // is installed.
+
+            String forceDebianString = "";
+            String nodepsString = "";
+
+            if ( ! data.debianInvestigated() ) {
+                helper.investigateDebian(data);
+                data.setDebianInvestigated(true);
             }
+
+            if ( data.isDebianSystem() ) {
+                nodepsString = "--nodeps";
+
+                if ( data.useForceDebian() ) {
+                    forceDebianString = "--force-debian";
+                }
+            }
+
+            // Defining a Vector that contains the full rpm command. Then the string array can be
+            // created dynamically. Otherwise there would be too many different scenarios.
+
+            Vector rpmVector = new Vector();
+
+            rpmVector.add("rpm");
+
+            if ( ! forceDebianString.equals("") ) {
+                rpmVector.add(forceDebianString);
+            }
+
+            if ( ! nodepsString.equals("") ) {
+                rpmVector.add(nodepsString);
+            }
+
+            rpmVector.add("-ev");
+
+            if ( useLocalDatabase ) {
+                rpmVector.add(databaseString);
+                rpmVector.add(databasePath);
+            }
+
+            rpmVector.add(packageName);
+
+            // Creating String and StringArray for rpm command
+
+            int capacity = rpmVector.size();
+
+            String rpmCommand = "";
+            String[] rpmCommandArray = new String[capacity];
+
+            for (int i = 0; i < rpmVector.size(); i++) {
+                rpmCommandArray[i] = (String)rpmVector.get(i);
+                rpmCommand = rpmCommand + " " + (String)rpmVector.get(i);
+            }
+
+            rpmCommand = rpmCommand.trim();
+
+            // Starting rpm process
 
             Vector returnVector = new Vector();
             Vector returnErrorVector = new Vector();

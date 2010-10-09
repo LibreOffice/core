@@ -116,8 +116,6 @@ protected :
 
     USHORT              GetSlot( USHORT nWhich ) const  { return pSet->GetPool()->GetSlotId( nWhich ); }
     USHORT              GetWhich( USHORT nSlot ) const  { return pSet->GetPool()->GetWhich( nSlot ); }
-    const SfxPoolItem*  GetOldItem( const SfxItemSet& rSet, USHORT nSlot );
-    const SfxPoolItem*  GetExchangeItem( const SfxItemSet& rSet, USHORT nSlot );
 
 public :
     virtual             ~IconChoicePage();
@@ -147,8 +145,6 @@ public :
     virtual void        FillUserData();
     virtual BOOL        IsReadOnly() const;
     virtual sal_Bool    QueryClose();
-
-    static const SfxPoolItem* GetItem( const SfxItemSet& rSet, USHORT nSlot );
 
     void                StateChanged( StateChangedType nType );
     void                DataChanged( const DataChangedEvent& rDCEvt );
@@ -221,7 +217,6 @@ protected :
     void                    ResetPageImpl ();
 
     short                   Ok();
-    BOOL                    IsInOK() const;
 
 public :
 
@@ -242,16 +237,9 @@ public :
     //
 
     SvxIconChoiceCtrlEntry* AddTabPage(
-        USHORT nId, const String& rIconText, const Image& rChoiceIcon,
-        CreatePage pCreateFunc /* != NULL */, GetPageRanges pRangesFunc = NULL /* NULL allowed*/,
-        BOOL bItemsOnDemand = FALSE, ULONG nPos = LIST_APPEND );
-
-    SvxIconChoiceCtrlEntry* AddTabPage(
         USHORT nId, const String& rIconText, const Image& rChoiceIcon, const Image& rChoiceIconHC,
         CreatePage pCreateFunc /* != NULL */, GetPageRanges pRangesFunc = NULL /* NULL allowed*/,
         BOOL bItemsOnDemand = FALSE, ULONG nPos = LIST_APPEND );
-
-    void                RemoveTabPage( USHORT nId );
 
     void                SetCurPageId( USHORT nId ) { mnCurrentPageId = nId; FocusOnIcon( nId ); }
     USHORT              GetCurPageId() const       { return mnCurrentPageId; }
@@ -261,8 +249,6 @@ public :
     const USHORT*       GetInputRanges( const SfxItemPool& );
     void                SetInputSet( const SfxItemSet* pInSet );
     const SfxItemSet*   GetOutputItemSet() const { return pOutSet; }
-    const SfxItemSet*   GetOutputItemSet( USHORT nId );
-    int                 FillOutputItemSet();
 
     const OKButton&     GetOKButton() const { return aOKBtn; }
     OKButton&           GetOKButton() { return aOKBtn; }
@@ -271,18 +257,13 @@ public :
     const HelpButton&   GetHelpButton() const { return aHelpBtn; }
     HelpButton&         GetHelpButton() { return aHelpBtn; }
 
-    void                RemoveResetButton();
-
     short               Execute();
     void                Start( BOOL bShow = TRUE );
     sal_Bool            QueryClose();
 
     const SfxItemSet*   GetExampleSet() const { return pExampleSet; }
 
-    void                SetCtrlColor ( const Color& rColor );
     EIconChoicePos      SetCtrlPos   ( const EIconChoicePos& rPos );
-
-    void                CreateIconTextAutoMnemonics( void );
 };
 
 #endif //_ICCDLG_HXX

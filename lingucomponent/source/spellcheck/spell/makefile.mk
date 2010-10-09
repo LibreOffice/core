@@ -85,3 +85,11 @@ DEF1EXPORTFILE=	exports.dxp
 
 .INCLUDE : target.mk
 
+
+ALLTAR : $(MISC)/spell.component
+
+$(MISC)/spell.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        spell.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt spell.component
