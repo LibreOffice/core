@@ -52,7 +52,7 @@
 #include <comphelper/ChainablePropertySetInfo.hxx>
 #include <edtwin.hxx>
 #include <rtl/ustrbuf.hxx>
-
+#include <tools/urlobj.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

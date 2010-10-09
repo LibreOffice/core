@@ -28,7 +28,19 @@
 #ifndef _TOOLBOX_HRC_
 #define _TOOLBOX_HRC_
 
-#define FL_TOOLBOX_CAT_DELIM    21
+#define FL_TOOLBOX_CAT_DELIM    1
+#define TOOLBOX_CATALOG     10
+#define TOOLBOX_CAT_A       11
+#define TOOLBOX_CAT_B       12
+#define TOOLBOX_CAT_C       13
+#define TOOLBOX_CAT_D       14
+#define TOOLBOX_CAT_E       15
+#define TOOLBOX_CAT_F       16
+#define TOOLBOX_CAT_G       17
+#define TOOLBOX_CAT_H       18
+#define TOOLBOX_CAT_I       19
+
+#define NUM_TBX_CATEGORIES  (TOOLBOX_CAT_I - TOOLBOX_CAT_A + 1)
 
 #endif
 

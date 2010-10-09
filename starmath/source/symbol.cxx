@@ -78,7 +78,7 @@ SmSym::SmSym(const SmSym& rSymbol)
 }
 
 
-SmSym::SmSym(const String& rName, const Font& rFont, sal_Unicode cChar,
+SmSym::SmSym(const String& rName, const Font& rFont, sal_UCS4 cChar,
              const String& rSet, BOOL bIsPredefined)
 {
     m_aName     = m_aExportName   = rName;
@@ -290,6 +290,28 @@ void SmSymbolManager::Load()
         DBG_ERROR( "no symbol set found" );
         m_bModified = false;
     }
+
+    // now add a %i... symbol to the 'iGreek' set for every symbol found in the 'Greek' set.
+    SmLocalizedSymbolData   aLocalizedData;
+    const String aGreekSymbolSetName( aLocalizedData.GetUiSymbolSetName( A2OU("Greek") ) );
+    const SymbolPtrVec_t    aGreekSymbols( GetSymbolSet( aGreekSymbolSetName ) );
+    String aSymbolSetName( (sal_Unicode) 'i' );
+    aSymbolSetName += aGreekSymbolSetName;
+    size_t nSymbols = aGreekSymbols.size();
+    for (size_t i = 0;  i < nSymbols;  ++i)
+    {
+        // make the new symbol a copy but with ITALIC_NORMAL, and add it to iGreek
+        const SmSym &rSym = *aGreekSymbols[i];
+        Font aFont( rSym.GetFace() );
+        DBG_ASSERT( aFont.GetItalic() == ITALIC_NONE, "expected Font with ITALIC_NONE, failed." );
+        aFont.SetItalic( ITALIC_NORMAL );
+        String aSymbolName( (sal_Unicode)'i' );
+        aSymbolName += rSym.GetName();
+        SmSym aSymbol( aSymbolName, aFont, rSym.GetCharacter(),
+                aSymbolSetName, TRUE /*bIsPredefined*/ );
+
+        AddOrReplaceSymbol( aSymbol );
+    }
 }
 
 void SmSymbolManager::Save()
@@ -314,10 +336,21 @@ void SmSymbolManager::Save()
         }
         DBG_ASSERT(pSym - pSymbols == nSaveSymbolCnt, "wrong number of symbols" );
 #endif
+
+        // prepare to skip symbols from iGreek on saving
+        SmLocalizedSymbolData   aLocalizedData;
+        String aSymbolSetName( (sal_Unicode) 'i' );
+        aSymbolSetName += aLocalizedData.GetUiSymbolSetName( A2OU("Greek") );
+
         SymbolPtrVec_t aTmp( GetSymbols() );
         std::vector< SmSym > aSymbols;
         for (size_t i = 0; i < aTmp.size(); ++i)
-            aSymbols.push_back( *aTmp[i] );
+        {
+            // skip symbols from iGreek set since those symbols always get added
+            // by computational means in SmSymbolManager::Load
+            if (aTmp[i]->GetSymbolSetName() != aSymbolSetName)
+                aSymbols.push_back( *aTmp[i] );
+        }
         rCfg.SetSymbols( aSymbols );
 #if 0
         delete [] pSymbols;
