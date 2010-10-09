@@ -578,7 +578,7 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
             // StarView zu lang ist oder der Treiber kann die Laenge der
             // Daten nicht im voraus bestimmen - also als MemoryStream
             // speichern.
-            while ((pcbValue == SQL_NO_TOTAL ) || pcbValue > nMaxLen)
+            while ((pcbValue == SQL_NO_TOTAL ) || nLen > nMaxLen)
             {
                 // Bei Strings wird der Puffer nie ganz ausgenutzt
                 // (das letzte Byte ist immer ein NULL-Byte, das

@@ -42,7 +42,6 @@ namespace connectivity
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
         java_lang_String( JNIEnv * pEnv, jobject myObj ) : java_lang_Object( pEnv, myObj ){}
 
-        java_lang_String( const ::rtl::OUString& _par0 );
         operator ::rtl::OUString();
 
         static jclass st_getMyClass();

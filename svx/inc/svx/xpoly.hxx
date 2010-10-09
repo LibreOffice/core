@@ -45,11 +45,7 @@ class OutputDevice;
 #define XPOLYPOLY_APPEND     0xFFFF
 #define XPOLY_APPEND         0xFFFF
 
-#ifdef WIN // Windows 16 Bit
-#define XPOLY_MAXPOINTS      8160   /* =0xFF00/sizeof(Point), also mit etwas Platz! */
-#else
 #define XPOLY_MAXPOINTS      0xFFF0 /* Auch fuer die 32-Bitter etwas Luft lassen */
-#endif
 
 /************************************************************************/
 // Punktstile im XPolygon:

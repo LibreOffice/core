@@ -60,7 +60,7 @@
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/compbase8.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
-#include <com/sun/star/script/XVBACompat.hpp>
+#include <com/sun/star/script/vba/XVBACompatibility.hpp>
 
 class BasicManager;
 
@@ -74,7 +74,7 @@ typedef ::cppu::WeakComponentImplHelper8<
     ::com::sun::star::script::XLibraryContainerExport,
     ::com::sun::star::script::XLibraryContainer3,
     ::com::sun::star::container::XContainer,
-    ::com::sun::star::script::XVBACompat,
+    ::com::sun::star::script::vba::XVBACompatibility,
     ::com::sun::star::lang::XServiceInfo > LibraryContainerHelper;
 
 typedef ::cppu::WeakImplHelper2< ::com::sun::star::container::XNameContainer,
@@ -507,9 +507,9 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames( )
         throw (::com::sun::star::uno::RuntimeException) = 0;
-    // Methods XVBACompat
-    virtual ::sal_Bool SAL_CALL getVBACompatModeOn() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setVBACompatModeOn( ::sal_Bool _vbacompatmodeon ) throw (::com::sun::star::uno::RuntimeException);
+    // Methods XVBACompatibility
+    virtual ::sal_Bool SAL_CALL getVBACompatibilityMode() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setVBACompatibilityMode( ::sal_Bool _vbacompatmodeon ) throw (::com::sun::star::uno::RuntimeException);
 };
 
 class LibraryContainerMethodGuard

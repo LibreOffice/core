@@ -74,6 +74,7 @@ SRC1FILES = \
         lboxctrl.src			\
         linectrl.src			\
         tbcontrl.src			\
+        tbunosearchcontrollers.src			\
         grafctrl.src
 
 # --- Targets -------------------------------------------------------

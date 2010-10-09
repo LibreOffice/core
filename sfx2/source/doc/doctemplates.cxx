@@ -1919,7 +1919,7 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
         aStoreArgs[1].Value <<= rTemplateName;
 
         ::rtl::OUString aCurrentDocumentURL = rStorable->getLocation();
-        if( !SfxMedium::EqualURLs( aNewTemplateTargetURL, rStorable->getLocation() ))
+        if( !::utl::UCBContentHelper::EqualURLs( aNewTemplateTargetURL, rStorable->getLocation() ))
             rStorable->storeToURL( aNewTemplateTargetURL, aStoreArgs );
         else
             rStorable->store();

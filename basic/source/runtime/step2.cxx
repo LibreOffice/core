@@ -263,8 +263,10 @@ SbxVariable* SbiRuntime::FindElement
             pElem = pNew;
         }
         // Index-Access bei UnoObjekten beruecksichtigen
-        /*
-        else if( pElem->ISA(SbUnoProperty) )
+        // definitely we want this for VBA where properties are often
+        // collections ( which need index access ), but lets only do
+        // this if we actually have params following
+        else if( bVBAEnabled && pElem->ISA(SbUnoProperty) && pElem->GetParameters() )
         {
             // pElem auf eine Ref zuweisen, um ggf. eine Temp-Var zu loeschen
             SbxVariableRef refTemp = pElem;
@@ -274,7 +276,6 @@ SbxVariable* SbiRuntime::FindElement
             pElem->SetParameters( NULL ); // sonst bleibt Ref auf sich selbst
             pElem = pNew;
         }
-        */
     }
     return CheckArray( pElem );
 }
@@ -377,7 +378,8 @@ void SbiRuntime::SetupArgs( SbxVariable* p, UINT32 nOp1 )
                 bool bError_ = true;
 
                 SbUnoMethod* pUnoMethod = PTR_CAST(SbUnoMethod,p);
-                if( pUnoMethod )
+                SbUnoProperty* pUnoProperty = PTR_CAST(SbUnoProperty,p);
+                if( pUnoMethod || pUnoProperty )
                 {
                     SbUnoObject* pParentUnoObj = PTR_CAST( SbUnoObject,p->GetParent() );
                     if( pParentUnoObj )
@@ -677,7 +679,18 @@ void SbiRuntime::StepPARAM( UINT32 nOp1, UINT32 nOp2 )
         while( iLoop >= nParamCount )
         {
             p = new SbxVariable();
-            p->PutErr( 448 );       // Wie in VB: Error-Code 448 (SbERR_NAMED_NOT_FOUND)
+
+            if( SbiRuntime::isVBAEnabled() &&
+                (t == SbxOBJECT || t == SbxSTRING) )
+            {
+                if( t == SbxOBJECT )
+                    p->PutObject( NULL );
+                else
+                    p->PutString( String() );
+            }
+            else
+                p->PutErr( 448 );       // Wie in VB: Error-Code 448 (SbERR_NAMED_NOT_FOUND)
+
             refParams->Put( p, iLoop );
             iLoop--;
         }
@@ -1157,15 +1170,26 @@ void SbiRuntime::StepGLOBAL( UINT32 nOp1, UINT32 nOp2 )
         StepPUBLIC_Impl( nOp1, nOp2, true );
 
     String aName( pImg->GetString( static_cast<short>( nOp1 ) ) );
-    SbxDataType t = (SbxDataType)(SbxDataType)(nOp2 & 0xffff);;
-    BOOL bFlag = rBasic.IsSet( SBX_NO_MODIFY );
+    SbxDataType t = (SbxDataType)(nOp2 & 0xffff);
+
+    // Store module scope variables at module scope
+    // in non vba mode these are stored at the library level :/
+    // not sure if this really should not be enabled for ALL basic
+    SbxObject* pStorage = &rBasic;
+    if ( SbiRuntime::isVBAEnabled() )
+    {
+        pStorage = pMod;
+        pMod->AddVarName( aName );
+    }
+
+    BOOL bFlag = pStorage->IsSet( SBX_NO_MODIFY );
     rBasic.SetFlag( SBX_NO_MODIFY );
-    SbxVariableRef p = rBasic.Find( aName, SbxCLASS_PROPERTY );
+    SbxVariableRef p = pStorage->Find( aName, SbxCLASS_PROPERTY );
     if( p.Is() )
-        rBasic.Remove (p);
-    p = rBasic.Make( aName, SbxCLASS_PROPERTY, t );
+        pStorage->Remove (p);
+    p = pStorage->Make( aName, SbxCLASS_PROPERTY, t );
     if( !bFlag )
-        rBasic.ResetFlag( SBX_NO_MODIFY );
+        pStorage->ResetFlag( SBX_NO_MODIFY );
     if( p )
     {
         p->SetFlag( SBX_DONTSTORE );
