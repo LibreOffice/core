@@ -454,7 +454,7 @@ void ScDocument::TrackFormulas( ULONG nHintId )
     {
         erBEEPER();
         // outside the loop, check if any sheet has a "calculate" event script
-        bool bCalcEvent = HasSheetEventScript( SC_SHEETEVENT_CALCULATE );
+        bool bCalcEvent = HasAnySheetEventScript( SC_SHEETEVENT_CALCULATE, true );
         SvtBroadcaster* pBC;
         ScFormulaCell* pTrack;
         ScFormulaCell* pNext;

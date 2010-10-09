@@ -171,12 +171,11 @@ public:
 
 private:
     void        SetHashText();
-    long        GetMaxDigitWidth();
+    long        GetMaxDigitWidth();     // in logic units
     long        GetSignWidth();
     long        GetDotWidth();
     long        GetExpWidth();
     void        TextChanged();
-    long        ConvertWidthLogicToPixel( long nWidth ) const;
 };
 
 //==================================================================
@@ -518,6 +517,10 @@ void ScDrawStringsVars::SetHashText()
 
 void ScDrawStringsVars::SetTextToWidthOrHash( ScBaseCell* pCell, long nWidth )
 {
+    // #i113045# do the single-character width calculations in logic units
+    if (bPixelToLogic)
+        nWidth = pOutput->pRefDevice->PixelToLogic(Size(nWidth,0)).Width();
+
     if (!pCell)
         return;
 
@@ -565,6 +568,12 @@ void ScDrawStringsVars::SetTextToWidthOrHash( ScBaseCell* pCell, long nWidth )
         else if (c == sal_Unicode('E'))
             ++nExpCount;
     }
+
+    // #i112250# A small value might be formatted as "0" when only counting the digits,
+    // but fit into the column when considering the smaller width of the decimal separator.
+    if (aString.EqualsAscii("0") && fVal != 0.0)
+        nDecimalCount = 1;
+
     if (nDecimalCount)
         nWidth += (nMaxDigit - GetDotWidth()) * nDecimalCount;
     if (nSignCount)
@@ -582,10 +591,6 @@ void ScDrawStringsVars::SetTextToWidthOrHash( ScBaseCell* pCell, long nWidth )
     }
 
     long nActualTextWidth = pOutput->pFmtDevice->GetTextWidth(aString);
-
-    if (bPixelToLogic)
-        nActualTextWidth = ConvertWidthLogicToPixel(nActualTextWidth);
-
     if (nActualTextWidth > nWidth)
     {
         // Even after the decimal adjustment the text doesn't fit.  Give up.
@@ -594,6 +599,7 @@ void ScDrawStringsVars::SetTextToWidthOrHash( ScBaseCell* pCell, long nWidth )
     }
 
     TextChanged();
+    pLastCell = NULL;   // #i113022# equal cell and format in another column may give different string
 }
 
 void ScDrawStringsVars::SetAutoText( const String& rAutoText )
@@ -638,9 +644,6 @@ long ScDrawStringsVars::GetMaxDigitWidth()
         long n = pOutput->pFmtDevice->GetTextWidth(String(cDigit));
         nMaxDigitWidth = ::std::max(nMaxDigitWidth, n);
     }
-
-    if (bPixelToLogic)
-        nMaxDigitWidth = ConvertWidthLogicToPixel(nMaxDigitWidth);
     return nMaxDigitWidth;
 }
 
@@ -650,8 +653,6 @@ long ScDrawStringsVars::GetSignWidth()
         return nSignWidth;
 
     nSignWidth = pOutput->pFmtDevice->GetTextWidth(String('-'));
-    if (bPixelToLogic)
-        nSignWidth = ConvertWidthLogicToPixel(nSignWidth);
     return nSignWidth;
 }
 
@@ -662,8 +663,6 @@ long ScDrawStringsVars::GetDotWidth()
 
     const ::rtl::OUString& sep = ScGlobal::GetpLocaleData()->getLocaleItem().decimalSeparator;
     nDotWidth = pOutput->pFmtDevice->GetTextWidth(sep);
-    if (bPixelToLogic)
-        nDotWidth = ConvertWidthLogicToPixel(nDotWidth);
     return nDotWidth;
 }
 
@@ -673,8 +672,6 @@ long ScDrawStringsVars::GetExpWidth()
         return nExpWidth;
 
     nExpWidth = pOutput->pFmtDevice->GetTextWidth(String('E'));
-    if (bPixelToLogic)
-        nExpWidth = ConvertWidthLogicToPixel(nExpWidth);
     return nExpWidth;
 }
 
@@ -702,13 +699,6 @@ void ScDrawStringsVars::TextChanged()
     nOriginalWidth = aTextSize.Width();
     if ( bPixelToLogic )
         aTextSize = pRefDevice->LogicToPixel( aTextSize );
-}
-
-long ScDrawStringsVars::ConvertWidthLogicToPixel( long nWidth ) const
-{
-    Size aSize(nWidth, pOutput->pFmtDevice->GetTextHeight());
-    aSize = pOutput->pRefDevice->LogicToPixel(aSize);
-    return aSize.Width();
 }
 
 BOOL ScDrawStringsVars::HasEditCharacters() const

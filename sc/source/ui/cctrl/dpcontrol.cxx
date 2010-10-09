@@ -33,12 +33,16 @@
 #include "dpcontrol.hxx"
 #include "dpcontrol.hrc"
 
-#include "vcl/outdev.hxx"
-#include "vcl/settings.hxx"
-#include "vcl/wintypes.hxx"
-#include "vcl/decoview.hxx"
+#include <vcl/outdev.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/wintypes.hxx>
+#include <vcl/decoview.hxx>
 #include "strload.hxx"
 #include "global.hxx"
+#include "scitems.hxx"
+#include "document.hxx"
+#include "docpool.hxx"
+#include "patattr.hxx"
 
 #include "AccessibleFilterMenu.hxx"
 #include "AccessibleFilterTopWindow.hxx"
@@ -55,7 +59,8 @@ using ::std::vector;
 using ::std::hash_map;
 using ::std::auto_ptr;
 
-ScDPFieldButton::ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings* pStyle, const Fraction* pZoomX, const Fraction* pZoomY) :
+ScDPFieldButton::ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings* pStyle, const Fraction* pZoomX, const Fraction* pZoomY, ScDocument* pDoc) :
+    mpDoc(pDoc),
     mpOutDev(pOutDev),
     mpStyle(pStyle),
     mbBaseButton(true),
@@ -135,17 +140,28 @@ void ScDPFieldButton::draw()
                            Point(maPos.X()+maSize.Width()-1, maPos.Y()+maSize.Height()-1));
 
         // Field name.
-        Font aTextFont( mpStyle->GetLabelFont() );
-        double fFontHeight = 12.0;
-        fFontHeight *= static_cast<double>(maZoomY.GetNumerator()) / static_cast<double>(maZoomY.GetDenominator());
-        aTextFont.SetHeight(static_cast<long>(fFontHeight));
+        // Get the font and size the same way as in scenario selection (lcl_DrawOneFrame in gridwin4.cxx)
+        Font aTextFont( mpStyle->GetAppFont() );
+        if ( mpDoc )
+        {
+            //  use ScPatternAttr::GetFont only for font size
+            Font aAttrFont;
+            static_cast<const ScPatternAttr&>(mpDoc->GetPool()->GetDefaultItem(ATTR_PATTERN)).
+                GetFont( aAttrFont, SC_AUTOCOL_BLACK, mpOutDev, &maZoomY );
+            aTextFont.SetSize( aAttrFont.GetSize() );
+        }
         mpOutDev->SetFont(aTextFont);
+        mpOutDev->SetTextColor(mpStyle->GetButtonTextColor());
 
         Point aTextPos = maPos;
-        long nTHeight = static_cast<long>(fFontHeight);
+        long nTHeight = mpOutDev->GetTextHeight();
         aTextPos.setX(maPos.getX() + nMargin);
         aTextPos.setY(maPos.getY() + (maSize.Height()-nTHeight)/2);
+
+        mpOutDev->Push(PUSH_CLIPREGION);
+        mpOutDev->IntersectClipRegion(aRect);
         mpOutDev->DrawText(aTextPos, maText);
+        mpOutDev->Pop();
     }
 
     if (mbPopupButton)
@@ -959,7 +975,7 @@ ScDPFieldPopupWindow::ScDPFieldPopupWindow(Window* pParent, ScDocument* pDoc) :
     mnCurTabStop(0),
     mpExtendedData(NULL),
     mpOKAction(NULL),
-    maWndSize(160, 330),
+    maWndSize(240, 330),
     mePrevToggleAllState(STATE_DONTKNOW)
 {
     maTabStopCtrls.reserve(7);
@@ -1032,7 +1048,7 @@ void ScDPFieldPopupWindow::getSectionPosSize(Point& rPos, Size& rSize, SectionTy
     const sal_uInt16 nMenuHeight = 60;
     const sal_uInt16 nSingleItemBtnAreaHeight = 32; // height of the middle area below the list box where the single-action buttons are.
     const sal_uInt16 nBottomBtnAreaHeight = 50;     // height of the bottom area where the OK and Cancel buttons are.
-    const sal_uInt16 nBtnWidth = 60;
+    const sal_uInt16 nBtnWidth = 90;
     const sal_uInt16 nLabelHeight = static_cast< sal_uInt16 >( getLabelFont().GetHeight() );
     const sal_uInt16 nBtnHeight = nLabelHeight*2;
     const sal_uInt16 nBottomMargin = 10;
@@ -1089,7 +1105,7 @@ void ScDPFieldPopupWindow::getSectionPosSize(Point& rPos, Size& rSize, SectionTy
         {
             long h = 26;
             rPos = Point(nListBoxMargin, nSingleBtnAreaY);
-            rPos.X() += 75;
+            rPos.X() += 150;
             rPos.Y() += (nSingleItemBtnAreaHeight - h)/2;
             rSize = Size(h, h);
         }
@@ -1098,7 +1114,7 @@ void ScDPFieldPopupWindow::getSectionPosSize(Point& rPos, Size& rSize, SectionTy
         {
             long h = 26;
             rPos = Point(nListBoxMargin, nSingleBtnAreaY);
-            rPos.X() += 75 + h + 10;
+            rPos.X() += 150 + h + 10;
             rPos.Y() += (nSingleItemBtnAreaHeight - h)/2;
             rSize = Size(h, h);
         }

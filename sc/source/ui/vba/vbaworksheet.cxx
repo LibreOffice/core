@@ -40,6 +40,7 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XCalculatable.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
+#include <com/sun/star/sheet/XCellRangeReferrer.hpp>
 #include <com/sun/star/sheet/XSheetCellRange.hpp>
 #include <com/sun/star/sheet/XSheetCellCursor.hpp>
 #include <com/sun/star/sheet/XSheetAnnotationsSupplier.hpp>
@@ -60,6 +61,7 @@
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/form/XFormsSupplier.hpp>
 #include <ooo/vba/excel/XlEnableSelection.hpp>
+#include <ooo/vba/excel/XWorkbook.hpp>
 #include <ooo/vba/XControlProvider.hpp>
 
 #include <comphelper/processfactory.hxx>
@@ -318,6 +320,40 @@ ScVbaWorksheet::setEnableSelection( sal_Int32 nSelection ) throw (uno::RuntimeEx
 
 }
 
+uno::Reference< beans::XPropertySet > ScVbaWorksheet::getFirstDBRangeProperties() throw (uno::RuntimeException)
+{
+    uno::Reference< beans::XPropertySet > xModelProps( mxModel, uno::UNO_QUERY_THROW );
+    uno::Reference< container::XIndexAccess > xDBRangesIA( xModelProps->getPropertyValue(
+        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DatabaseRanges" ) ) ), uno::UNO_QUERY_THROW );
+
+    for( sal_Int32 nIndex = 0, nCount = xDBRangesIA->getCount(); nIndex < nCount; ++nIndex )
+    {
+        uno::Reference< sheet::XCellRangeReferrer > xDBRange( xDBRangesIA->getByIndex( nIndex ), uno::UNO_QUERY_THROW );
+        // check if the database area is on this sheet
+        uno::Reference< sheet::XCellRangeAddressable > xRangeAddr( xDBRange->getReferredCells(), uno::UNO_QUERY_THROW );
+        if( getSheetID() == xRangeAddr->getRangeAddress().Sheet )
+            return uno::Reference< beans::XPropertySet >( xDBRange, uno::UNO_QUERY_THROW );
+    }
+    return uno::Reference< beans::XPropertySet >();
+}
+
+sal_Bool SAL_CALL ScVbaWorksheet::getAutoFilterMode() throw (uno::RuntimeException)
+{
+    uno::Reference< beans::XPropertySet > xDBRangeProps = getFirstDBRangeProperties();
+    sal_Bool bAutoFilterMode = sal_False;
+    return
+        xDBRangeProps.is() &&
+        (xDBRangeProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AutoFilter" ) ) ) >>= bAutoFilterMode) &&
+        bAutoFilterMode;
+}
+
+void SAL_CALL ScVbaWorksheet::setAutoFilterMode( sal_Bool bAutoFilterMode ) throw (uno::RuntimeException)
+{
+    uno::Reference< beans::XPropertySet > xDBRangeProps = getFirstDBRangeProperties();
+    if( xDBRangeProps.is() )
+        xDBRangeProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AutoFilter" ) ), uno::Any( bAutoFilterMode ) );
+}
+
 uno::Reference< excel::XRange >
 ScVbaWorksheet::getUsedRange() throw (uno::RuntimeException)
 {
@@ -378,7 +414,7 @@ ScVbaWorksheet::getStandardHeight() throw (uno::RuntimeException)
 sal_Bool
 ScVbaWorksheet::getProtectionMode() throw (uno::RuntimeException)
 {
-    return false;
+    return sal_False;
 }
 
 sal_Bool
@@ -391,7 +427,13 @@ ScVbaWorksheet::getProtectContents()throw (uno::RuntimeException)
 sal_Bool
 ScVbaWorksheet::getProtectDrawingObjects() throw (uno::RuntimeException)
 {
-    return false;
+    return sal_False;
+}
+
+sal_Bool
+ScVbaWorksheet::getProtectScenarios() throw (uno::RuntimeException)
+{
+    return sal_False;
 }
 
 void
@@ -672,24 +714,26 @@ ScVbaWorksheet::Hyperlinks( const uno::Any& aIndex ) throw (uno::RuntimeExceptio
 }
 
 uno::Any SAL_CALL
+ScVbaWorksheet::Names( const css::uno::Any& aIndex ) throw (uno::RuntimeException)
+{
+    uno::Reference< excel::XWorkbook > xWorkbook( getParent(), uno::UNO_QUERY_THROW );
+    return xWorkbook->Names( aIndex );
+}
+
+uno::Any SAL_CALL
 ScVbaWorksheet::OLEObjects( const uno::Any& Index ) throw (uno::RuntimeException)
 {
-    ScVbaOLEObjects* aOleObjects;
     uno::Reference< sheet::XSpreadsheet > xSpreadsheet( getSheet(), uno::UNO_QUERY_THROW );
     uno::Reference< drawing::XDrawPageSupplier > xDrawPageSupplier( xSpreadsheet, uno::UNO_QUERY_THROW );
     uno::Reference< drawing::XDrawPage > xDrawPage( xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY_THROW );
     uno::Reference< container::XIndexAccess > xIndexAccess( xDrawPage, uno::UNO_QUERY_THROW );
-    aOleObjects = new ScVbaOLEObjects( this, mxContext, xIndexAccess );
 
+    uno::Reference< excel::XOLEObjects >xOleObjects( new ScVbaOLEObjects( this, mxContext, xIndexAccess ) );
     if( Index.hasValue() )
-    {
-            return aOleObjects->Item( Index, uno::Any() );
-    }
-    else
-    {
-        return uno::makeAny( uno::Reference< excel::XOLEObjects> ( aOleObjects ) );
-    }
+        return xOleObjects->Item( Index, uno::Any() );
+    return uno::Any( xOleObjects );
 }
+
 uno::Any SAL_CALL
 ScVbaWorksheet::Shapes( const uno::Any& aIndex ) throw (uno::RuntimeException)
 {

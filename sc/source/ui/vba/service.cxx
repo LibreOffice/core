@@ -66,6 +66,10 @@ namespace application
 {
 extern sdecl::ServiceDecl const serviceDecl;
 }
+namespace vbaeventshelper
+{
+extern sdecl::ServiceDecl const serviceDecl;
+}
 namespace textframe
 {
 extern sdecl::ServiceDecl const serviceDecl;
@@ -80,41 +84,6 @@ extern "C"
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
     }
 
-    SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
-        lang::XMultiServiceFactory * pServiceManager, registry::XRegistryKey * pRegistryKey )
-    {
-        OSL_TRACE("In component_writeInfo");
-#if 0
-    // Component registration
-        if ( component_writeInfoHelper( pServiceManager, pRegistryKey,
-        range::serviceDecl, workbook::serviceDecl, worksheet::serviceDecl, globals::serviceDecl, window::serviceDecl, hyperlink::serviceDecl, application::serviceDecl ) )
-        {
-            // Singleton registration
-            try
-            {
-                registry::XRegistryKey * pKey =
-                    reinterpret_cast< registry::XRegistryKey * >(pRegistryKey);
-
-                Reference< registry::XRegistryKey >xKey = pKey->createKey(
-                    rtl::OUString::createFromAscii( ("ooo.vba.Globals/UNO/SINGLETONS/ooo.vba.theGlobals") ) );
-                xKey->setStringValue( ::rtl::OUString::createFromAscii(
-                    ("ooo.vba.Globals") ) );
-                return sal_True;
-            }
-            catch( uno::Exception& /*e*/ )
-            {
-                //recomp & friends will detect false returned and fail
-            }
-        }
-        return sal_False;
-#else
-    // Component registration
-        return component_writeInfoHelper( pServiceManager, pRegistryKey,
-        range::serviceDecl, workbook::serviceDecl, worksheet::serviceDecl, globals::serviceDecl, window::serviceDecl, hyperlink::serviceDecl, application::serviceDecl ) && component_writeInfoHelper( pServiceManager, pRegistryKey, textframe::serviceDecl );
-#endif
-
-    }
-
     SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
         const sal_Char * pImplName, lang::XMultiServiceFactory * pServiceManager,
         registry::XRegistryKey * pRegistryKey )
@@ -122,8 +91,8 @@ extern "C"
         OSL_TRACE("In component_getFactory for %s", pImplName );
     void* pRet =  component_getFactoryHelper(
             pImplName, pServiceManager, pRegistryKey, range::serviceDecl, workbook::serviceDecl, worksheet::serviceDecl, globals::serviceDecl, window::serviceDecl, hyperlink::serviceDecl, application::serviceDecl );
-     if( !pRet )
-        pRet = component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey, textframe::serviceDecl );
+    if( !pRet )
+        pRet = component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey, vbaeventshelper::serviceDecl, textframe::serviceDecl );
     OSL_TRACE("Ret is 0x%x", pRet);
     return pRet;
     }
