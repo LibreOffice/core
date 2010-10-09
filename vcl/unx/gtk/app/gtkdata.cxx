@@ -41,7 +41,7 @@
 #include <limits.h>
 #include <errno.h>
 #include <poll.h>
-#ifdef FREEBSD
+#if defined(FREEBSD) || defined(NETBSD)
 #include <sys/types.h>
 #include <sys/time.h>
 #include <unistd.h>
