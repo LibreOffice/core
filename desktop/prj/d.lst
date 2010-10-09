@@ -105,14 +105,9 @@ mkdir: %_DEST%\bin%_EXT%\odf4ms
 ..\%__SRC%\misc\nswrapper.sh %_DEST%\bin%_EXT%\nswrapper
 ..\%__SRC%\misc\mozwrapper.sh %_DEST%\bin%_EXT%\mozwrapper
 
-mkdir: %COMMON_DEST%\pck%_EXT%\openoffice_dev
-mkdir: %COMMON_DEST%\pck%_EXT%\openoffice_dev_nologo
-mkdir: %COMMON_DEST%\pck%_EXT%\openoffice_nologo
-mkdir: %COMMON_DEST%\pck%_EXT%\broffice_dev
-mkdir: %COMMON_DEST%\pck%_EXT%\broffice
-mkdir: %COMMON_DEST%\pck%_EXT%\broffice_dev_nologo
-mkdir: %COMMON_DEST%\pck%_EXT%\broffice_nologo
-..\%__SRC%\bin\brand\intro.zip %COMMON_DEST%\pck%_EXT%\intro.zip
+mkdir: %COMMON_DEST%\pck%_EXT%\brand
+mkdir: %COMMON_DEST%\pck%_EXT%\brand_dev
+..\%__SRC%\bin\brand\intro.zip %COMMON_DEST%\pck%_EXT%\brand\intro.zip
 ..\%__SRC%\bin\brand_dev\intro.zip %COMMON_DEST%\pck%_EXT%\brand_dev\intro.zip
 
 ..\%__SRC%\bin\guiloader.exe %_DEST%\bin%_EXT%\testtool.exe

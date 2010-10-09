@@ -36,14 +36,14 @@ DEFAULT_FLAVOURS=brand brand_dev
 
 ZIP1LIST= \
     $(null,$(INTRO_BITMAPS) $(MISC)$/$(RSCDEFIMG)$/brand$/intro.png $(INTRO_BITMAPS)) \
-    $(null,$(INTRO_BITMAPS) $(MISC)$/$(RSCDEFIMG)$/brand$/intro-pt_BR.png \
     $(null,$(ABOUT_BITMAPS) $(MISC)$/$(RSCDEFIMG)$/brand$/about.png $(ABOUT_BITMAPS)) \
-    $(null,$(ABOUT_BITMAPS) $(MISC)$/$(RSCDEFIMG)$/brand$/about-pt_BR.png
+    $(MISC)$/$(RSCDEFIMG)$/brand$/intro-pt_BR.png \
+    $(MISC)$/$(RSCDEFIMG)$/brand$/about-pt_BR.png
 ZIP2LIST= \
     $(null,$(INTRO_BITMAPS) $(MISC)$/$(RSCDEFIMG)$/brand_dev$/intro.png $(INTRO_BITMAPS)) \
-    $(null,$(INTRO_BITMAPS) $(MISC)$/$(RSCDEFIMG)$/brand_dev$/intro-pt_BR.png \
     $(null,$(ABOUT_BITMAPS) $(MISC)$/$(RSCDEFIMG)$/brand_dev$/about.png $(ABOUT_BITMAPS)) \
-    $(null,$(ABOUT_BITMAPS) $(MISC)$/$(RSCDEFIMG)$/brand_dev$/about-pt_BR.png
+    $(MISC)$/$(RSCDEFIMG)$/brand_dev$/intro-pt_BR.png \
+    $(MISC)$/$(RSCDEFIMG)$/brand_dev$/about-pt_BR.png
 
 ZIP1TARGET=brand
 ZIP1DEPS=$(ZIP1LIST)
