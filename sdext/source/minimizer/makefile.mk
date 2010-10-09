@@ -61,7 +61,6 @@ SLOFILES=	$(SLO)$/unodialog.obj				\
             $(SLO)$/pppoptimizerdialog.obj		\
             $(SLO)$/fileopendialog.obj			\
             $(SLO)$/optimizationstats.obj		\
-            $(SLO)$/aboutdialog.obj				\
             $(SLO)$/graphiccollector.obj		\
             $(SLO)$/pagecollector.obj			\
             $(SLO)$/informationdialog.obj
@@ -77,9 +76,11 @@ SHL1DEPN=
 SHL1IMPLIB=		i$(SHL1TARGET)
 SHL1LIBS=		$(SLB)$/$(TARGET).lib
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
-SHL1VERSIONMAP=$(SOLARENV)/src/component.map
+SHL1VERSIONMAP=$(SOLARENV)/src/reg-component.map
 SHL1RPATH=      OXT
 DEF1NAME=		$(SHL1TARGET)
+
+COMPONENT_XCU_REPLACEMENT=s/@MINIMIZEREXTENSIONPRODUCTNAME@/Presentation Minimizer/g
 
 COMPONENT_MERGED_XCU= \
     $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/Addons.xcu \
@@ -114,6 +115,18 @@ COMPONENT_HELP= \
 
 # make sure to add your custom files here
 EXTENSION_PACKDEPS=$(COMPONENT_BITMAPS) $(COMPONENT_IMAGES) $(COMPONENT_HELP)
+
+ZIP2TARGET=     presentation_minimizer_develop
+.IF "$(WITH_LANG)"!=""
+ZIP2DIR=        $(MISC)/$(EXTENSIONNAME)_in/merge
+.ELSE          # "$(WITH_LANG)"!=""
+ZIP2DIR=        registry/data
+.ENDIF          # "$(WITH_LANG)"!=""
+ZIP2EXT=        .zip
+ZIP2FLAGS=-r
+ZIP2LIST= \
+    org/openoffice/Office/Addons.xcu \
+    org/openoffice/Office/extension/*.xcu
 
 # --- Targets ----------------------------------
 

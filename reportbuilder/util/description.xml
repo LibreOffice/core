@@ -4,6 +4,7 @@
     xmlns:xlink="http://www.w3.org/1999/xlink">
   <display-name>
     <name lang="en-US">Report Builder</name>
+    <!-- <name lang="en-US">Oracle(TM) Report Builder</name> -->
   </display-name>
   <registration>
     <simple-license accept-by="admin" default-license-id="lic-en-US" suppress-if-required="true" >

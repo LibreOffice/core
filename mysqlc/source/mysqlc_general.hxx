@@ -33,9 +33,9 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 
-#include <tools/preextstl.h>
+#include <preextstl.h>
 #include <cppconn/exception.h>
-#include <tools/postextstl.h>
+#include <postextstl.h>
 
 namespace mysqlc_sdbc_driver
 {

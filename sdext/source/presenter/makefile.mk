@@ -32,11 +32,16 @@ GEN_HID=FALSE
 EXTNAME=PresenterScreen
 
 ENABLE_EXCEPTIONS=TRUE
+# survive zip dependencies
+MAXLINELENGTH:=80000
 
 # --- Settings ----------------------------------
 
 .INCLUDE : rtlbootstrap.mk
 .INCLUDE : settings.mk
+
+PACKAGE=com.sun.PresenterScreen-$(PLATFORMID)
+
 .IF "$(L10N_framework)"==""
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
@@ -103,9 +108,15 @@ SHL1DEPN=
 SHL1IMPLIB=		i$(SHL1TARGET)
 SHL1LIBS=		$(SLB)$/$(TARGET).lib
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
-SHL1VERSIONMAP=$(SOLARENV)/src/component.map
+SHL1VERSIONMAP=$(SOLARENV)/src/reg-component.map
 SHL1RPATH=      OXT
 DEF1NAME=		$(SHL1TARGET)
+
+ZIP2TARGET=		presenter-screen_develop
+ZIP2DIR=		$(COMMONMISC)
+ZIP2EXT=		.zip
+ZIP2FLAGS=-r
+ZIP2LIST=		*/com.sun.PresenterScreen/*.xhp
 
 ZIP1TARGET=		presenter-screen
 ZIP1DIR=		$(MISC)$/$(TARGET)
@@ -248,10 +259,6 @@ PLATFORMID:=$(RTL_OS:l)_$(RTL_ARCH:l)
 COMPONENT_HELP= 								\
     $(ZIP1DIR)$/help/component.txt				\
     $(foreach,l,$(alllangiso) $(ZIP1DIR)$/help$/$l$/com.sun.PresenterScreen-$(PLATFORMID)$/presenter.xhp)
-#	$(ZIP1DIR)$/help$/en-US$/com.sun.PresenterScreen-$(PLATFORMID)$/presenter.xhp
-
-# no localization yet - see #i107498#
-#	$(foreach,l,$(alllangiso) $(ZIP1DIR)$/help$/$l$/com.sun.PresenterScreen-$(PLATFORMID)$/presenter.xhp)
 
 ZIP1DEPS=					\
     $(PACKLICS) 			\
@@ -262,14 +269,25 @@ ZIP1DEPS=					\
     $(COMPONENT_IMAGES)    	\
     $(COMPONENT_LIBRARY)	\
     $(COMPONENT_HELP)
+
 #	$(COMPONENT_MERGED_XCU) \
 
 
+LINKNAME:=help
+XHPLINKSRC:=$(ZIP1DIR)/help
+
+my_XHPFILES= \
+    presenter.xhp
+
+LINKLINKFILES= \
+    $(PACKAGE)/{$(my_XHPFILES)}
 
 # --- Targets ----------------------------------
 .ENDIF # L10N_framework
 
 .INCLUDE : target.mk
+.INCLUDE : extension_helplink.mk
+
 .IF "$(L10N_framework)"==""
 $(SLO)$/PresenterComponent.obj : $(INCCOM)$/PresenterExtensionIdentifier.hxx
 
@@ -284,10 +302,12 @@ $(ZIP1DIR)$/help$/component.txt : help$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 
-$(ZIP1DIR)$/help$/%$/com.sun.PresenterScreen-$(PLATFORMID)$/presenter.xhp : $(COMMONMISC)/%/com.sun.PresenterScreen/presenter.xhp
+$(ZIP1DIR)/help/%/com.sun.PresenterScreen-$(PLATFORMID)/presenter.xhp : $(COMMONMISC)/%/com.sun.PresenterScreen/presenter.xhp
     @echo creating $@
-    @@-$(MKDIRHIER) $(@:d)
-    $(TYPE) $< | sed "s/PLATFORMID/$(PLATFORMID)/" > $@
+    @-$(MKDIRHIER) $(@:d)
+    $(TYPE) $< | sed "s/PLATFORMID/$(PLATFORMID)/" | sed 's/@PRESENTEREXTENSIONPRODUCTNAME@/Presenter Console/g' > $@
+
+$(ZIP1TARGETN) : $(HELPLINKALLTARGETS)
 
 $(COMPONENT_BITMAPS) : bitmaps$/$$(@:f)
     @-$(MKDIRHIER) $(@:d)
@@ -370,7 +390,7 @@ DESCRIPTION_TMP:=$(ZIP1DIR)$/description.xml.tmp
 PHONYDESC=.PHONY
 .ENDIF			# "$(LAST_WITH_LANG)"!="$(WITH_LANG)"
 $(DESCRIPTION) $(PHONYDESC) : $$(@:f)
-    @@-$(MKDIRHIER) $(@:d)
+    @-$(MKDIRHIER) $(@:d)
     $(PERL) $(SOLARENV)$/bin$/licinserter.pl description.xml registry/LICENSE_xxx $(DESCRIPTION_TMP)
     @echo LAST_WITH_LANG=$(WITH_LANG) > $(ZIP1DIR)_lang_track.mk
     $(TYPE) $(DESCRIPTION_TMP) | sed s/UPDATED_PLATFORM/$(PLATFORMID)/ > $@
