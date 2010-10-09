@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : joerg.skottke@sun.com
+'* owner : joerg.skottke@oracle.com
 '*
 '* short description : global update test (Standardbar)
 '*
@@ -200,7 +200,8 @@ function hStandardbarItemGetCount() as integer
     '///<ul>
     
     dim iToolbarItemsCurrent as integer
-    const EXPECTED_TOOLBAR_ITEMCOUNT = 30
+    const DEFAULT_TOOLBAR_ITEMCOUNT = 30
+    const WEBLOG_PUBLISHER = 2
     
     const CFN = "hStandardbarItemGetCount::"
 
@@ -226,13 +227,14 @@ function hStandardbarItemGetCount() as integer
     ' violate Sun's patching policy. So StarSuite/StarOffice now have 30 or 31
     ' items on the standardbar, OOo and its spinoffs have 30.
     
-    
-    if ( iToolbarItemsCurrent = EXPECTED_TOOLBAR_ITEMCOUNT ) then
-        printlog( CFN & "Correct number of items on the StandardBar. Good" )
-    else
-        warnlog( CFN & "Expected: " & EXPECTED_TOOLBAR_ITEMCOUNT & _
-                " entries, found: " & iToolbarItemsCurrent )
-    endif
+    select case ( iToolbarItemsCurrent )
+    case DEFAULT_TOOLBAR_ITEMCOUNT
+        printlog( CFN & "Default number of items found" )
+    case DEFAULT_TOOLBAR_ITEMCOUNT + WEBLOG_PUBLISHER
+        printlog( CFN & "Default icons + Weblog publisher icons found" )
+    case else
+        warnlog( CFN & "Number of icons is unexpected: " & iToolbarItemsCurrent )
+    end select
 
     '///+<li>close the context menu</li>
     hMenuClose()

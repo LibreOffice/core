@@ -533,7 +533,7 @@ ExtrasIndividuellePraesentation .uno:CustomShowDialog
 ' ExtrasSymbole .uno:Symbols
 ExtrasSymboleKatalog .uno:SymbolCatalogue
 ' ExtrasSymboleLaden SID_SYMBOLS_LOAD
-ExtrasFormelImportieren .uno:InsertFormula
+ExtrasFormelImportieren .uno:ImportFormula
 
 ' ***********************************
 ' *********** Praesentationmenue ************

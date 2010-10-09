@@ -25,12 +25,24 @@
 '
 '/************************************************************************
 '*
-'* Owner : wolfram.garten@sun.com
+'* Owner : wolfram.garten@oracle.com
 '*
 '* short description : Testcases to test the Help-Menu.
 '*
 '\******************************************************************************
-'
+sub id_009
+
+    printLog Chr(13) + "---------    id_009    ----------"
+
+    call tCheckIfTheHelpExists
+    Call tmHelpContents
+    Call tmHelpHelpAgent
+    Call tmHelpTips
+    Call tmHelpExtendedTips
+    Call tmHelpAboutStarOffice
+
+end sub
+'------------------------------------------------------------------------------
 testcase tmHelpHelpAgent
 
     Call hNewDocument

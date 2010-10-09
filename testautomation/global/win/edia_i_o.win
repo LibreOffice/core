@@ -152,7 +152,17 @@ FielsInvolved sym:DBACCESS_HID_RELDLG_KEYFIELDS
 LeftFieldCell sym:DBACCESS_HID_RELATIONDIALOG_LEFTFIELDCELL
 RightFieldCell sym:DBACCESS_HID_RELATIONDIALOG_RIGHTFIELDCELL
 
+
 *LabelFieldSelection sym:extensions:ModalDialog:RID_DLG_SELECTLABELCONTROL
+
+*JPGOptions sym:svtools:ModalDialog:DLG_EXPORT
+Exportwidth sym:svtools:MetricField:DLG_EXPORT:MF_SIZEX
+Exportmeasurement sym:svtools:ListBox:DLG_EXPORT:LB_SIZEX
+Exportheight sym:svtools:MetricField:DLG_EXPORT:MF_SIZEY
+Resolution sym:svtools:NumericField:DLG_EXPORT:NF_RESOLUTION
+Resolutionmeasurement sym:svtools:ListBox:DLG_EXPORT:LB_RESOLUTION
+Colordepth sym:svtools:ListBox:DLG_EXPORT:LB_COLOR_DEPTH
+Quality sym:svtools:NumericField:DLG_EXPORT:NF_COMPRESSION
 
 *LicenseAgreementDialog sym:FWK_HID_LICENSEDIALOG
 LicenseText sym:framework:MultiLineEdit:DLG_LICENSE:ML_LICENSE
@@ -226,6 +236,7 @@ PhoneBusiness sym:SW_HID_MM_HEADER_11
 Email sym:SW_HID_MM_HEADER_12
 Gender sym:SW_HID_MM_HEADER_13
 
+
 *Mplayer sym:AVMEDIA_HID_AVMEDIA_PLAYERWINDOW
 Mopen sym:AVMEDIA_HID_AVMEDIA_TOOLBOXITEM_OPEN
 mInsert sym:AVMEDIA_HID_AVMEDIA_TOOLBOXITEM_INSERT
@@ -238,6 +249,11 @@ mMute sym:AVMEDIA_HID_AVMEDIA_TOOLBOXITEM_MUTE
 mVolume sym:AVMEDIA_HID_AVMEDIA_VOLUMESLIDER
 mZoomlistbox sym:AVMEDIA_HID_AVMEDIA_ZOOMLISTBOX
 mTimeedit sym:AVMEDIA_HID_AVMEDIA_TIMEEDIT
+
+*METOptions   sym:svtools:ModalDialog:DLG_EXPORT
+Exportwidth sym:svtools:MetricField:DLG_EXPORT:MF_SIZEX
+Exportmeasurement sym:svtools:ListBox:DLG_EXPORT:LB_SIZEX
+Exportheight sym:svtools:MetricField:DLG_EXPORT:MF_SIZEY
 
 *MenuOrganiser sym:CUI_HID_SVX_CONFIG_MENU_ORGANIZER
 MenuName sym:cui:Edit:MD_MENU_ORGANISER:EDIT_MENU_NAME

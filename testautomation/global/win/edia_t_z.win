@@ -236,11 +236,17 @@ NextBtn sym:DESKTOP_HID_FIRSTSTART_NEXT
 OKBtn sym:DESKTOP_HID_FIRSTSTART_FINISH
 CancelBtn sym:DESKTOP_HID_FIRSTSTART_CANCEL
 
+
 *XFormAddInstance sym:SVX_HID_XFORMS_ADDINSTANCE_DLG
 InstanceName sym:svx:Edit:RID_SVXDLG_ADD_INSTANCE:ED_INST_NAME
 InstanceURL .uno:OpenUrl
 BrowseBtn sym:svx:PushButton:RID_SVXDLG_ADD_INSTANCE:PB_FILEPICKER
 LinkInstance sym:svx:CheckBox:RID_SVXDLG_ADD_INSTANCE:CB_INST_LINKINST
+
+*WMFOptions sym:svtools:ModalDialog:DLG_EXPORT
+Exportwidth sym:svtools:MetricField:DLG_EXPORT:MF_SIZEX
+Exportmeasurement sym:svtools:ListBox:DLG_EXPORT:LB_SIZEX
+Exportheight sym:svtools:MetricField:DLG_EXPORT:MF_SIZEY
 
 *XFormAddItemDLG sym:SVX_HID_XFORMS_ADDDATAITEM_DLG
 ElementName sym:svx:Edit:RID_SVXDLG_ADD_DATAITEM:ED_NAME

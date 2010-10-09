@@ -25,12 +25,11 @@
 '
 '/************************************************************************
 '*
-'* Owner : wolfram.garten@sun.com
+'* Owner : wolfram.garten@oracle.com
 '*
 '* short description :
 '*
 '\**********************************************************************************
-
 sub id_Tools
     printLog "---------    id_006    ----------"
     call tiToolsSpellchecking

@@ -105,11 +105,6 @@ Vorschau sym:sd:PushButton:DLG_VECTORIZE:BTN_PREVIEW
 
 +Interaktion TabInteraktion
 
-*JPEGOptionen sym:svtools:ModalDialog:DLG_EXPORT_JPG
-Qualitaet sym:svtools:NumericField:DLG_EXPORT_JPG:NUM_FLD_QUALITY
-Graustufen sym:svtools:RadioButton:DLG_EXPORT_JPG:RB_GRAY
-Echtfarben sym:svtools:RadioButton:DLG_EXPORT_JPG:RB_RGB
-
 *Kommentar sym:CUI_HID_REDLINING_DLG
 KommentarText sym:CUI_HID_REDLINING_EDIT
 Zurueck sym:CUI_HID_REDLINING_PREV
@@ -258,12 +253,6 @@ Spalte sym:sc:Edit:RID_SCDLG_TABOP:ED_COLCELL
 Vorgaben1 sym:sc:ImageButton:RID_SCDLG_TABOP:RB_FORMULARANGE
 Vorgaben2 sym:sc:ImageButton:RID_SCDLG_TABOP:RB_ROWCELL
 Vorgaben3 sym:sc:ImageButton:RID_SCDLG_TABOP:RB_COLCELL
-
-*MetOptionen sym:filter:ModalDialog:DLG_EXPORT_EMET
-Original sym:filter:RadioButton:DLG_EXPORT_EMET:RB_ORIGINAL
-Groesse sym:filter:RadioButton:DLG_EXPORT_EMET:RB_SIZE
-Breite sym:filter:MetricField:DLG_EXPORT_EMET:MTF_SIZEX
-Hoehe sym:filter:MetricField:DLG_EXPORT_EMET:MTF_SIZEY
 
 *ModuleBearbeiten sym:CUI_HID_EDIT_MODULES
 Sprache sym:cui:ListBox:RID_SVXDLG_EDIT_MODULES:LB_EDIT_MODULES_LANGUAGE

@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* Owner : wolfram.garten@sun.com
+'* Owner : wolfram.garten@oracle.com
 '*
 '* short description : will be moved to autocorrection.bas/inc
 '*
@@ -280,16 +280,7 @@ testcase tiToolsThesaurusContextMenu
 
     PrintLog "Thesaurus with 1 word: " + sWord
 
-    if( Ucase(gApplication) = "DRAW" ) then
-        sExt = ".odg"
-        Kontext "DrawDocument"
-    elseif( Ucase(gApplication) = "IMPRESS" ) then
-        sExt = ".odp"
-        Kontext "ImpressDocument"
-    endif
-
-    Call hFileOpen (gTesttoolpath + "graphics\required\input\recht_" + iSprache + sExt)
-
+    Call hNewDocument
     Call hTextrahmenErstellen (sWord,20,20,50,30)
     sleep 1
 
@@ -349,7 +340,7 @@ testcase tiToolsHyphenation1
        case 46 : hTextrahmenErstellen ("Detta är en text utan delade ord",10,10,40,40)
        case 48 : hTextrahmenErstellen (" Jeoli jednak zechcesz",10,10,40,40)
        case 49 : hTextrahmenErstellen ("Dies ist ein Text ohne eine Moeglichkeit Woerter zu trennen",10,10,40,40)
-       case 50 : hTextrahmenErstellen ("Zato ves čas iščemo nove člane: sodelujte",10,10,40,40)
+       case 50 : hTextrahmenErstellen ("Zato ves �?as iš�?emo nove �?lane: sodelujte",10,10,40,40)
        case 55 : hTextrahmenErstellen ("a Sun tentou adquirir a Apple",10,10,40,40)
        case else : if bAsianLan then
                      printlog "For the language  " + iSprache +" nothing is prepared yet, but is AsianLan, so OK :-)"

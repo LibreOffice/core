@@ -25,11 +25,32 @@
 '
 '/************************************************************************
 '*
-'* Owner : wolfram.garten@sun.com 
+'* Owner : wolfram.garten@oracle.com 
 '*
 '* short description :
 '*
 '\******************************************************************************
+sub id_002
+
+    printLog Chr(13) + "---------    id_002    ----------"
+
+    call tiEditUndoRedo
+    call tiEditRepeat
+    call tiEditCutPasteCopySelectall
+    call tiEditPasteSpecial
+    call tiEditSearchAndReplace
+    call tiEditDuplicate
+    call tEditPoints
+    call tiEditFields
+    call tdEditDeleteSlide
+    call tiEditLinks
+    call tiEditImageMap
+    call tiEditObjectProperties
+    call tiEditObjectEdit
+    call tiEditPlugIn
+    call tiEditHyperlink
+end sub
+'-------------------------------------------------------------------------
 testcase tiEditUndoRedo
 
     printlog " open application"
@@ -204,6 +225,7 @@ testcase tiEditFields
     printlog " open application "
     Call hNewDocument
     WaitSlot (2000)
+    call sSelectEmptyLayout()
     printlog " insert something to be able to use this function"
     printlog "+ Insert->Fields->Date (fixed)"
     printlog "+ deselect object, select, editmode "

@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* Owner : thorsten.bosbach@sun.com
+'* Owner : thorsten.bosbach@oracle.com
 '*
 '* short description :
 '*
@@ -66,6 +66,17 @@ testcase tToolsCatalog
          sleep 1
          '/// Click Button 'Modify' ///'
          Modify.Click
+         sleep 1
+      '/// cancel dialog 'Edit Symbols' ///'
+      EditSymbols.Cancel
+      ' since cws tl82 - dev300m88 we need to go into dialog again to get the others buttons
+      Kontext "SymboleMath"
+      printlog "count of 'Symbol set' :" + Symbolset.GetItemCount
+      '/// click button 'Edit...' ///'
+      Bearbeiten.Click
+         Kontext "EditSymbols"
+         '/// select last item in listbox 'Font' ///'
+         Font.Select (Font.GetItemCount)
          sleep 1
          '/// Click Button 'Delete' ///'
          Delete.Click

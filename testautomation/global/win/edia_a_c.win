@@ -337,6 +337,15 @@ Remove sym:basctl:PushButton:RID_BASICIDE_BREAKPOINTDLG:RID_PB_DEL
 ActiveBox sym:basctl:CheckBox:RID_BASICIDE_BREAKPOINTDLG:RID_CHKB_ACTIVE
 Pass sym:basctl:NumericField:RID_BASICIDE_BREAKPOINTDLG:RID_FLD_PASS
 
+*BMPOptions sym:svtools:ModalDialog:DLG_EXPORT
+Exportwidth sym:svtools:MetricField:DLG_EXPORT:MF_SIZEX
+Exportmeasurement sym:svtools:ListBox:DLG_EXPORT:LB_SIZEX
+Exportheight sym:svtools:MetricField:DLG_EXPORT:MF_SIZEY
+Resolution sym:svtools:NumericField:DLG_EXPORT:NF_RESOLUTION
+Resolutionmeasurement sym:svtools:ListBox:DLG_EXPORT:LB_RESOLUTION
+Colordepth sym:svtools:ListBox:DLG_EXPORT:LB_COLOR_DEPTH
+Compression sym:svtools:CheckBox:DLG_EXPORT:CB_RLE_ENCODING
+
 *CellWarning sym:SC_HID_SC_REPLCELLSWARN
 
 *ChangeIcon sym:CUI_HID_SVX_CONFIG_ICON_SELECTOR

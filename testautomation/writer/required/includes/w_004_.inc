@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description :  Testcases with connection to the Insert-menu.
 '*
@@ -463,6 +463,7 @@ testcase tInsertComment
 
     printlog " Insert / Comment"
     InsertNoteWriter
+    wait 500
     Kontext "DocumentWriter"
     sNoteText = "Comment inserted by testtool !"
     Call wTypeKeys (sNoteText)

@@ -104,6 +104,24 @@ PreviousCommands sym:dbaccess:ListBox:DLG_DIRECTSQL:LB_HISTORY
 Status sym:dbaccess:MultiLineEdit:DLG_DIRECTSQL:ME_STATUS
 CloseBtn sym:dbaccess:PushButton:DLG_DIRECTSQL:PB_CLOSE
 
+*EMFOptions sym:svtools:ModalDialog:DLG_EXPORT
+Exportwidth sym:svtools:MetricField:DLG_EXPORT:MF_SIZEX
+Exportmeasurement sym:svtools:ListBox:DLG_EXPORT:LB_SIZEX
+Exportheight sym:svtools:MetricField:DLG_EXPORT:MF_SIZEY
+
+*EPSOptions sym:svtools:ModalDialog:DLG_EXPORT
+Exportwidth sym:svtools:MetricField:DLG_EXPORT:MF_SIZEX
+Exportmeasurement sym:svtools:ListBox:DLG_EXPORT:LB_SIZEX
+Exportheight sym:svtools:MetricField:DLG_EXPORT:MF_SIZEY
+Preview sym:svtools:CheckBox:DLG_EXPORT:CB_EPS_PREVIEW_TIFF
+Epsi sym:svtools:CheckBox:DLG_EXPORT:CB_EPS_PREVIEW_EPSI
+Color sym:svtools:RadioButton:DLG_EXPORT:RB_EPS_COLOR_FORMAT1
+Greyscale sym:svtools:RadioButton:DLG_EXPORT:RB_EPS_COLOR_FORMAT2
+Level1 sym:svtools:RadioButton:DLG_EXPORT:RB_EPS_LEVEL1
+Level2 sym:svtools:RadioButton:DLG_EXPORT:RB_EPS_LEVEL2
+LZWEncoding sym:svtools:RadioButton:DLG_EXPORT:RB_EPS_COMPRESSION_LZW
+NoneCompression sym:svtools:RadioButton:DLG_EXPORT:RB_EPS_COMPRESSION_NONE
+
 *ExportBasicLibraryDlg sym:basctl:ModalDialog:RID_DLG_EXPORT
 ExportAsPackage sym:basctl:RadioButton:RID_DLG_EXPORT:RB_EXPORTASPACKAGE
 ExportAsLibrary sym:basctl:RadioButton:RID_DLG_EXPORT:RB_EXPORTASBASIC
@@ -440,6 +458,15 @@ View sym:SVX_HID_GALLERY_WINDOW
 Title sym:CUI_HID_GALLERY_TITLE_EDIT
 
 *HelpAgent sym:SVT_HID_HELPAGENT_WINDOW
+
+*GIFOptions sym:svtools:ModalDialog:DLG_EXPORT
+Exportwidth sym:svtools:MetricField:DLG_EXPORT:MF_SIZEX
+Exportmeasurement sym:svtools:ListBox:DLG_EXPORT:LB_SIZEX
+Exportheight sym:svtools:MetricField:DLG_EXPORT:MF_SIZEY
+Resolution sym:svtools:NumericField:DLG_EXPORT:NF_RESOLUTION
+Resolutionmeasurement sym:svtools:ListBox:DLG_EXPORT:LB_RESOLUTION
+Interlaced sym:svtools:CheckBox:DLG_EXPORT:CB_INTERLACED
+Transparency sym:svtools:CheckBox:DLG_EXPORT:CB_SAVE_TRANSPARENCY
 
 *HangulHanjaConversion sym:CUI_HID_DIALOG_HANGULHANJA
 Original sym:CUI_HID_SPELLDLG_SETWORD

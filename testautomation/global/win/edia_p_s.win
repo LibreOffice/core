@@ -25,6 +25,7 @@ OldPassword sym:svx:Edit:RID_SVXDLG_PASSWORD:ED_OLD_PASSWD
 NewPassword sym:svx:Edit:RID_SVXDLG_PASSWORD:ED_NEW_PASSWD
 Confirm sym:svx:Edit:RID_SVXDLG_PASSWORD:ED_REPEAT_PASSWD
 
+
 *PDFOptions sym:HID_FILTER_PDF_OPTIONS
 RangeAll sym:filter:RadioButton:RID_PDF_TAB_GENER:RB_ALL
 RangePages sym:filter:RadioButton:RID_PDF_TAB_GENER:RB_RANGE
@@ -40,6 +41,20 @@ ExportNotes sym:filter:CheckBox:RID_PDF_TAB_GENER:CB_EXPORTNOTES
 TransitionEffects sym:filter:CheckBox:RID_PDF_TAB_GENER:CB_EXPORTBOOKMARKS
 FormsFormat sym:filter:ListBox:RID_PDF_TAB_GENER:LB_FORMSFORMAT
 ExportBlankPages sym:filter:CheckBox:RID_PDF_TAB_GENER:CB_EXPORTEMPTYPAGES
+
+*PBMOptions sym:svtools:ModalDialog:DLG_EXPORT
+Exportwidth sym:svtools:MetricField:DLG_EXPORT:MF_SIZEX
+Exportmeasurement sym:svtools:ListBox:DLG_EXPORT:LB_SIZEX
+Exportheight sym:svtools:MetricField:DLG_EXPORT:MF_SIZEY
+Resolution sym:svtools:NumericField:DLG_EXPORT:NF_RESOLUTION
+Resolutionmeasurement sym:svtools:ListBox:DLG_EXPORT:LB_RESOLUTION
+QualityBinary sym:svtools:RadioButton:DLG_EXPORT:RB_BINARY
+QualityText sym:svtools:RadioButton:DLG_EXPORT:RB_TEXT
+
+*PCTOptions  sym:svtools:ModalDialog:DLG_EXPORT
+ Exportwidth sym:svtools:MetricField:DLG_EXPORT:MF_SIZEX
+ Exportmeasurement sym:svtools:ListBox:DLG_EXPORT:LB_SIZEX
+ Exportheight sym:svtools:MetricField:DLG_EXPORT:MF_SIZEY
 
 *PDFOptionsInitialView sym:HID_FILTER_PDF_INITIAL_VIEW
 PageOnly sym:filter:RadioButton:RID_PDF_TAB_OPNFTR:RB_OPNMODE_PAGEONLY
@@ -63,8 +78,36 @@ HideMenubar sym:filter:CheckBox:RID_PDF_TAB_VPREFER:CB_UOP_HIDEVMENUBAR
 HideToolbar sym:filter:CheckBox:RID_PDF_TAB_VPREFER:CB_UOP_HIDEVTOOLBAR
 HideWindowControls sym:filter:CheckBox:RID_PDF_TAB_VPREFER:CB_UOP_HIDEVWINCTRL
 
+
 *Posterize .uno:GraphicFilterPoster
 PosterColors sym:cui:NumericField:RID_SVX_GRFFILTER_DLG_POSTER:DLG_FILTERPOSTER_NUM_POSTER
+
+*PGMOptions sym:svtools:ModalDialog:DLG_EXPORT
+Exportwidth sym:svtools:MetricField:DLG_EXPORT:MF_SIZEX
+Exportmeasurement sym:svtools:ListBox:DLG_EXPORT:LB_SIZEX
+Exportheight sym:svtools:MetricField:DLG_EXPORT:MF_SIZEY
+Resolution sym:svtools:NumericField:DLG_EXPORT:NF_RESOLUTION
+Resolutionmeasurement sym:svtools:ListBox:DLG_EXPORT:LB_RESOLUTION
+QualityBinary sym:svtools:RadioButton:DLG_EXPORT:RB_BINARY
+QualityText sym:svtools:RadioButton:DLG_EXPORT:RB_TEXT
+
+*PNGOptions  sym:svtools:ModalDialog:DLG_EXPORT
+Exportwidth sym:svtools:MetricField:DLG_EXPORT:MF_SIZEX
+Exportmeasurement sym:svtools:ListBox:DLG_EXPORT:LB_SIZEX
+Exportheight sym:svtools:MetricField:DLG_EXPORT:MF_SIZEY
+Resolution sym:svtools:NumericField:DLG_EXPORT:NF_RESOLUTION
+Resolutionmeasurement sym:svtools:ListBox:DLG_EXPORT:LB_RESOLUTION
+Compression sym:svtools:NumericField:DLG_EXPORT:NF_COMPRESSION
+Interlaced sym:svtools:CheckBox:DLG_EXPORT:CB_INTERLACED
+
+*PPMOptions sym:svtools:ModalDialog:DLG_EXPORT
+Exportwidth sym:svtools:MetricField:DLG_EXPORT:MF_SIZEX
+Exportmeasurement sym:svtools:ListBox:DLG_EXPORT:LB_SIZEX
+Exportheight sym:svtools:MetricField:DLG_EXPORT:MF_SIZEY
+Resolution sym:svtools:NumericField:DLG_EXPORT:NF_RESOLUTION
+Resolutionmeasurement sym:svtools:ListBox:DLG_EXPORT:LB_RESOLUTION
+QualityBinary sym:svtools:RadioButton:DLG_EXPORT:RB_BINARY
+QualityText sym:svtools:RadioButton:DLG_EXPORT:RB_TEXT
 
 *PortfolioCurrency sym:WIZARDS_HID_DLGDEPOT_DIALOG_HISTORY
 Currency sym:WIZARDS_HID_DLGDEPOT_LSTMARKETS
@@ -625,3 +668,7 @@ Remove sym:cui:PushButton:RID_SVXDLG_WEBCONNECTION_INFO:PB_REMOVE
 RemoveAll sym:cui:PushButton:RID_SVXDLG_WEBCONNECTION_INFO:PB_REMOVEALL
 changePassword sym:cui:PushButton:RID_SVXDLG_WEBCONNECTION_INFO:PB_CHANGE
 
+*SVMOptions sym:svtools:ModalDialog:DLG_EXPORT
+Exportwidth sym:svtools:MetricField:DLG_EXPORT:MF_SIZEX
+Exportmeasurement sym:svtools:ListBox:DLG_EXPORT:LB_SIZEX
+Exportheight sym:svtools:MetricField:DLG_EXPORT:MF_SIZEY

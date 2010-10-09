@@ -19,24 +19,10 @@ SchutzAufheben sym:SC_HID_CHG_PROTECT
 PasswortEingabe sym:sfx2:Edit:DLG_PASSWD:ED_PASSWD_USER
 PasswortBestaetigen sym:sfx2:Edit:DLG_PASSWD:ED_PASSWD_CONFIRM
 
-*PBMOptionen sym:filter:ModalDialog:DLG_EXPORT_EPBM
-Binaer sym:filter:RadioButton:DLG_EXPORT_EPBM:RB_RAW
-Ascii sym:filter:RadioButton:DLG_EXPORT_EPBM:RB_ASCII
-
 *PfadeAuswaehlen sym:CUI_HID_MULTIPATH
 Pfade sym:CUI_HID_OPTIONS_MULTIPATH_LIST
 Hinzufuegen sym:cui:PushButton:RID_SVXDLG_MULTIPATH:BTN_ADD_MULTIPATH
 Loeschen sym:cui:PushButton:RID_SVXDLG_MULTIPATH:BTN_DEL_MULTIPATH
-
-*PGMOptionen sym:filter:ModalDialog:DLG_EXPORT_EPGM
-Binaer sym:filter:RadioButton:DLG_EXPORT_EPGM:RB_RAW
-Ascii sym:filter:RadioButton:DLG_EXPORT_EPGM:RB_ASCII
-
-*PICTOPtionen sym:filter:ModalDialog:DLG_EXPORT_EPCT
-Original sym:filter:RadioButton:DLG_EXPORT_EPCT:RB_ORIGINAL
-Groesse sym:filter:RadioButton:DLG_EXPORT_EPCT:RB_SIZE
-Breite sym:filter:MetricField:DLG_EXPORT_EPCT:MTF_SIZEX
-Hoehe sym:filter:MetricField:DLG_EXPORT_EPCT:MTF_SIZEY
 
 *Pipette .uno:BmpMask sym:svx:DockingWindow:RID_SVXDLG_BMPMASK
 PipetteKnopf sym:SVX_HID_BMPMASK_TBI_PIPETTE
@@ -78,14 +64,6 @@ NoDuplication sym:sc:CheckBox:RID_SCDLG_PIVOTFILTER:BTN_UNIQUE
 DateiUrl sym:cui:Edit:MD_INSERT_OBJECT_PLUGIN:ED_FILEURL
 Durchsuchen sym:cui:PushButton:MD_INSERT_OBJECT_PLUGIN:BTN_FILEURL
 Optionen sym:cui:MultiLineEdit:MD_INSERT_OBJECT_PLUGIN:ED_PLUGINS_OPTIONS
-
-*PNGOptionen sym:svtools:ModalDialog:DLG_EXPORT_EPNG
-Kompression sym:svtools:NumericField:DLG_EXPORT_EPNG:NUM_COMPRESSION
-Interlaced sym:svtools:CheckBox:DLG_EXPORT_EPNG:CBX_INTERLACED
-
-*PPMOptionen sym:filter:ModalDialog:DLG_EXPORT_EPPM
-Binaer sym:filter:RadioButton:DLG_EXPORT_EPPM:RB_RAW
-Ascii sym:filter:RadioButton:DLG_EXPORT_EPPM:RB_ASCII
 
 *QuelleAuswaehlen sym:SC_HID_DATAPILOT_TYPE
 AktuelleSelektion sym:sc:RadioButton:RID_SCDLG_DAPITYPE:BTN_SELECTION
@@ -373,12 +351,6 @@ Persistent sym:sc:CheckBox:RID_SCDLG_FILTER:BTN_DEST_PERS
 'Protokollauswahl HID_PROTOCOLS
 
 +Stylist Gestalter
-
-*SVMOptionen sym:svtools:ModalDialog:DLG_EXPORT_VEC
-Original sym:svtools:RadioButton:DLG_EXPORT_VEC:RB_ORIGINAL_VEC
-Groesse sym:svtools:RadioButton:DLG_EXPORT_VEC:RB_SIZE_VEC
-Breite sym:svtools:MetricField:DLG_EXPORT_VEC:MTF_SIZEX_VEC
-Hoehe sym:svtools:MetricField:DLG_EXPORT_VEC:MTF_SIZEY_VEC
 
 *SymboleMath sym:starmath:ModalDialog:RID_SYMBOLDIALOG
 Symbolset sym:starmath:ListBox:RID_SYMBOLDIALOG:1

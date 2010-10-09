@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description : Avoid regression (issuezilla tasks)
 '*
@@ -467,11 +467,11 @@ testcase i103265
 				end if
 			Case 2:
 				if GetClipboardText <> "1. Test" then
-					Warnlog "First hyperlink not correctly jumped to. Not '# 1. Test' but " & GetClipboardtext
+					Warnlog "Second hyperlink not correctly jumped to. Not '# 1. Test' but " & GetClipboardtext
 				end if
 			Case 3:
-				if GetClipboardText <> "Test " then
-					Warnlog "First hyperlink not correctly jumped to. Not 'Test' but " & GetClipboardtext
+				if GetClipboardText <> "1 Test " then
+					Warnlog "Third hyperlink not correctly jumped to. Not '1 Test' but " & GetClipboardtext
 				end if
 		end select
 	next i
