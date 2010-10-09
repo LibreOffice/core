@@ -30,9 +30,6 @@
 
 #include "datwin.hxx"
 
-#ifndef GCC
-#endif
-
 #include <vcl/svapp.hxx>
 
 #include <vcl/help.hxx>

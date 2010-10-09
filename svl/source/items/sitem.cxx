@@ -27,10 +27,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svl.hxx"
-// INCLUDE ---------------------------------------------------------------
-
-#ifndef GCC
-#endif
 
 #include <tools/string.hxx>
 #include <tools/stream.hxx>

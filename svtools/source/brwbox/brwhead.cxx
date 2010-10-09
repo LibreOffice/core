@@ -31,9 +31,6 @@
 #include <svtools/brwhead.hxx>
 #include <svtools/brwbox.hxx>
 
-#ifndef GCC
-#endif
-
 //===================================================================
 
 BrowserHeader::BrowserHeader( BrowseBox* pParent, WinBits nWinBits )

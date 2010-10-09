@@ -34,9 +34,6 @@
 #include <cstdarg>
 #endif
 
-#ifndef GCC
-#endif
-
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_ULONGS
 

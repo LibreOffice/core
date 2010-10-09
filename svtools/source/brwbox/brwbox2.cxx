@@ -33,8 +33,6 @@
 #include <svtools/colorcfg.hxx>
 #include <vcl/salgtype.hxx>
 
-#ifndef GCC
-#endif
 #include <tools/multisel.hxx>
 #include <algorithm>
 

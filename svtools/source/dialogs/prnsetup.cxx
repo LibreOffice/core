@@ -30,9 +30,6 @@
 #include <tools/debug.hxx>
 #include <vcl/print.hxx>
 
-#ifndef GCC
-#endif
-
 #include <svtools/svtdata.hxx>
 #include "prnsetup.hrc"
 #include <svtools/prnsetup.hxx>

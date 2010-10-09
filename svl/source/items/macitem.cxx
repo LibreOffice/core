@@ -29,9 +29,6 @@
 #include "precompiled_svl.hxx"
 #include <tools/stream.hxx>
 
-#ifndef GCC
-#endif
-
 #include <svl/macitem.hxx>
 
 // STATIC DATA -----------------------------------------------------------

@@ -28,9 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svl.hxx"
 
-#ifndef GCC
-#endif
-
 #include <svl/itemiter.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>

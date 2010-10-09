@@ -33,9 +33,6 @@
 #include <svimpicn.hxx>
 #include <svtools/svlbitm.hxx>
 
-#ifndef GCC
-#endif
-
 #define ICNVW_BLOCK_ENTRYINS    0x0001
 
 SvIcnVwDataEntry::SvIcnVwDataEntry()

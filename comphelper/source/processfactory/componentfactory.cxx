@@ -35,10 +35,6 @@
 #include <cppuhelper/shlib.hxx>
 
 
-#ifndef GCC
-#endif
-
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

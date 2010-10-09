@@ -30,8 +30,6 @@
 
 #include <string.h>
 #include <stdio.h>
-#ifndef GCC
-#endif
 
 #include <svl/itempool.hxx>
 #include "whassert.hxx"

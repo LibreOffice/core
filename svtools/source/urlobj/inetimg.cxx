@@ -31,9 +31,6 @@
 #include <sot/formats.hxx>
 #include <tools/stream.hxx>
 
-#ifndef GCC
-#endif
-
 #include "inetimg.hxx"
 
 #define TOKEN_SEPARATOR '\001'

@@ -30,15 +30,7 @@
 
 #define _TREELIST_CXX
 
-#ifndef GCC
-#endif
-
 #include <svtools/treelist.hxx>
-
-#ifdef DBG_UTIL
-// Prueft Integritaet der Liste nach jeder Operation
-//#define CHECK_INTEGRITY
-#endif
 
 
 DBG_NAME(SvListEntry);

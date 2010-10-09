@@ -34,9 +34,6 @@
 #include <filectrl.hxx>
 #include <filectrl.hrc>
 
-#ifndef GCC
-#endif
-
 // =======================================================================
 
 FileControl::FileControl( Window* pParent, WinBits nStyle, FileControlMode nFlags ) :

@@ -27,12 +27,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_unotools.hxx"
-#ifndef GCC
-#endif
-
-//_________________________________________________________________________________________________________________
-// includes
-//_________________________________________________________________________________________________________________
 
 #include <unotools/historyoptions.hxx>
 #include <unotools/historyoptions_const.hxx>

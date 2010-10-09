@@ -28,9 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_unotools.hxx"
 
-#ifndef GCC
-#endif
-
 #include <unotools/saveopt.hxx>
 #include "rtl/instance.hxx"
 #include <unotools/configmgr.hxx>

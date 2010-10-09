@@ -30,8 +30,6 @@
 
 #define _SVTREEBX_CXX
 #include <vcl/svapp.hxx>
-#ifndef GCC
-#endif
 
 class TabBar;
 

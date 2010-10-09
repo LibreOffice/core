@@ -30,9 +30,6 @@
 
 #include <limits.h>
 
-#ifndef GCC
-#endif
-
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 #include "poolcach.hxx"

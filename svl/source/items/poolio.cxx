@@ -31,9 +31,6 @@
 #include <string.h>
 #include <stdio.h>
 
-#ifndef GCC
-#endif
-
 #include <tools/solar.h>
 #include <svl/itempool.hxx>
 #include "whassert.hxx"

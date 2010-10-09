@@ -27,8 +27,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svl.hxx"
-#ifndef GCC
-#endif
 
 #define _ZFORLIST_DECLARE_TABLE
 

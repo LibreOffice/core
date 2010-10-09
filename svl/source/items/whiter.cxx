@@ -27,9 +27,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svl.hxx"
-// INCLUDE ---------------------------------------------------------------
-#ifndef GCC
-#endif
 
 #include "whiter.hxx"
 #include <svl/itemset.hxx>
