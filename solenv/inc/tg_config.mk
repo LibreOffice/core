@@ -137,7 +137,7 @@ $(XCU_LANG) : $(LOCALIZESDF)
 
 $(PROCESSOUT)/merge/$(PACKAGEDIR)/%.xcu : %.xcu
     @-$(MKDIRHIER) $(@:d)
-    $(COMMAND_ECHO)$(CFGEX) $(CFGEX_VERBOSITY) -p $(PRJNAME) -i $(@:f) -o $@ -m $(LOCALIZESDF) -l all
+    $(COMMAND_ECHO)$(CFGEX)  -p $(PRJNAME) -i $(@:f) -o $@ -m $(LOCALIZESDF) -l all
 
 .IF "$(XCU_LANG)" != ""
 $(XCU_LANG) : $(XSLDIR)/alllang.xsl
