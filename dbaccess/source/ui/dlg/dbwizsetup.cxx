@@ -122,39 +122,7 @@ using namespace ::cppu;
 #define START_PAGE      0
 #define CONNECTION_PAGE 1
 
-
-
-
-//#define DBASE_PATH               1
-//#define TEXT_PATH                2
-//#define MSACCESS_PATH            3
-//#define LDAP_PATH                4
-//#define ADABAS_PATH              5
-//#define ADO_PATH                 6
-//#define JDBC_PATH                7
-//#define ORACLE_PATH              8
-//#define MYSQL_JDBC_PATH          9
-//#define MYSQL_ODBC_PATH          10
-//#define ODBC_PATH                11
-//#define SPREADSHEET_PATH         12
-//#define OUTLOOKEXP_PATH          13
-//#define OUTLOOK_PATH             14
-//#define MOZILLA_PATH             15
-//#define EVOLUTION_PATH           16
-//#define EVOLUTION_PATH_GROUPWISE 17
-//#define EVOLUTION_PATH_LDAP      18
-//#define KAB_PATH                 19
-//#define MACAB_PATH                 20
-//#define THUNDERBIRD_PATH         21
-//#define CREATENEW_PATH           22
-//#define USERDEFINED_PATH         23
-//#define OPEN_DOC_PATH            24
-//#define MSACCESS2007_PATH        25
-//#define MYSQL_NATIVE_PATH        26
-
 OFinalDBPageSetup*          pFinalPage;
-
-
 
 DBG_NAME(ODbTypeWizDialogSetup)
 //=========================================================================

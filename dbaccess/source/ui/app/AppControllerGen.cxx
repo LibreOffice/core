@@ -596,20 +596,6 @@ void OApplicationController::previewChanged( sal_Int32 _nMode )
     InvalidateFeature(SID_DB_APP_VIEW_DOC_PREVIEW);
 }
 // -----------------------------------------------------------------------------
-//void OApplicationController::updateTitle()
-//{
-//  ::rtl::OUString sName = getStrippedDatabaseName();
-//
-//  String sTitle = String(ModuleRes(STR_APP_TITLE));
-//  sName = sName + sTitle;
-//#ifdef DBG_UTIL
-//    ::rtl::OUString aDefault;
-//  sName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ["));
-//    sName += utl::Bootstrap::getBuildIdData( aDefault );
-//  sName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("]"));
-//#endif
-//}
-// -----------------------------------------------------------------------------
 void OApplicationController::askToReconnect()
 {
     if ( m_bNeedToReconnect )

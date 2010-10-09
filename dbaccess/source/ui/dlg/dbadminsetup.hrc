@@ -72,7 +72,6 @@
 #define STR_DEFAULTLDAPPORTNUMBER           60
 
 #define STR_ADABASNAME                  61
-//#define STR_ADOURL                    62
 #define STR_ODBCDATASOURCENAME          63
 #define STR_SPREADSHEETPATH             64
 #define STR_DBLOCATIONLABEL             65
