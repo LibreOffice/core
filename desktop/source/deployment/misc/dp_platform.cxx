@@ -62,6 +62,8 @@
 #define PLATFORM_SOLARIS_X86        "solaris_x86"
 #define PLATFORM_FREEBSD_X86        "freebsd_x86"
 #define PLATFORM_FREEBSD_X86_64     "freebsd_x86_64"
+#define PLATFORM_NETBSD_X86         "netbsd_x86"
+#define PLATFORM_NETBSD_X86_64      "netbsd_x86_64"
 #define PLATFORM_MACOSX_X86         "macosx_x86"
 #define PLATFORM_MACOSX_PPC         "macosx_powerpc"
 #define PLATFORM_OS2_X86            "os2_x86"
@@ -171,6 +173,10 @@ namespace
             ret = checkOSandCPU(OUSTR("FreeBSD"), OUSTR("x86"));
         else if (token.equals(OUSTR(PLATFORM_FREEBSD_X86_64)))
             ret = checkOSandCPU(OUSTR("FreeBSD"), OUSTR("X86_64"));
+        else if (token.equals(OUSTR(PLATFORM_NETBSD_X86)))
+            ret = checkOSandCPU(OUSTR("NetBSD"), OUSTR("x86"));
+        else if (token.equals(OUSTR(PLATFORM_NETBSD_X86_64)))
+            ret = checkOSandCPU(OUSTR("NetBSD"), OUSTR("X86_64"));
         else if (token.equals(OUSTR(PLATFORM_MACOSX_X86)))
             ret = checkOSandCPU(OUSTR("MacOSX"), OUSTR("x86"));
         else if (token.equals(OUSTR(PLATFORM_MACOSX_PPC)))
