@@ -309,7 +309,7 @@ static const SmTokenTableEntry * GetTokenTableEntry( const String &rName )
     const SmTokenTableEntry * pRes = 0;
     if (rName.Len())
     {
-        INT32 nEntries = sizeof( aTokenTable ) / sizeof( aTokenTable[0] );
+        INT32 nEntries = SAL_N_ELEMENTS(aTokenTable);
         for (INT32 i = 0;  i < nEntries;  ++i)
         {
             if (rName.EqualsIgnoreCaseAscii( aTokenTable[i].pIdent ))

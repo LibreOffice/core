@@ -520,7 +520,7 @@ SprmDumpInfo& WW8GetSprmDumpInfo( USHORT nId )
     if( !bInit )
     {
         qsort( (void*)aSprmDumpTab,
-            sizeof( aSprmDumpTab      ) / sizeof (aSprmDumpTab[ 0 ]),
+            SAL_N_ELEMENTS(aSprmDumpTab),
             sizeof( aSprmDumpTab[ 0 ] ),
             CompSprmDumpId );
         bInit = TRUE;
@@ -531,7 +531,7 @@ SprmDumpInfo& WW8GetSprmDumpInfo( USHORT nId )
     aSrch.nId = nId;
     if( 0 == ( pFound = bsearch( (char *) &aSrch,
                         (void*) aSprmDumpTab,
-                        sizeof( aSprmDumpTab      ) / sizeof (aSprmDumpTab[ 0 ]),
+                        SAL_N_ELEMENTS(aSprmDumpTab),
                         sizeof( aSprmDumpTab[ 0 ] ),
                         CompSprmDumpId )))
     {

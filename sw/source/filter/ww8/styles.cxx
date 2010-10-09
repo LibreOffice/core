@@ -147,7 +147,7 @@ namespace
             "Plain Text"
         };
 
-        DBG_ASSERT( (sizeof(stiName) / sizeof(stiName[0])) == ww::stiMax, "WrongSizeOfArray" );
+        DBG_ASSERT( (SAL_N_ELEMENTS(stiName)) == ww::stiMax, "WrongSizeOfArray" );
 
         return stiName;
     }

@@ -142,7 +142,7 @@ namespace ww
         };
 
         size_t nIndex = static_cast<size_t>(eIndex);
-        if (nIndex >= sizeof(aFieldNames) / sizeof(aFieldNames[0]))
+        if (nIndex >= SAL_N_ELEMENTS(aFieldNames))
             eIndex = eNONE;
         ASSERT(eIndex != eNONE, "Unknown WinWord Field, let cmc know");
         return aFieldNames[eIndex];

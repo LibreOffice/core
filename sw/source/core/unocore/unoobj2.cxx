@@ -580,7 +580,7 @@ static char const*const g_ServicesParagraphEnum[] =
     "com.sun.star.text.ParagraphEnumeration",
 };
 static const size_t g_nServicesParagraphEnum(
-    sizeof(g_ServicesParagraphEnum)/sizeof(g_ServicesParagraphEnum[0]));
+    SAL_N_ELEMENTS(g_ServicesParagraphEnum));
 
 sal_Bool SAL_CALL
 SwXParagraphEnumeration::supportsService(const OUString& rServiceName)
@@ -973,7 +973,7 @@ static char const*const g_ServicesTextRange[] =
     "com.sun.star.style.ParagraphPropertiesComplex",
 };
 static const size_t g_nServicesTextRange(
-    sizeof(g_ServicesTextRange)/sizeof(g_ServicesTextRange[0]));
+    SAL_N_ELEMENTS(g_ServicesTextRange));
 
 sal_Bool SAL_CALL SwXTextRange::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException)
@@ -1722,7 +1722,7 @@ static char const*const g_ServicesTextRanges[] =
     "com.sun.star.text.TextRanges",
 };
 static const size_t g_nServicesTextRanges(
-    sizeof(g_ServicesTextRanges)/sizeof(g_ServicesTextRanges[0]));
+    SAL_N_ELEMENTS(g_ServicesTextRanges));
 
 sal_Bool SAL_CALL SwXTextRanges::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException)
@@ -2074,7 +2074,7 @@ static char const*const g_ServicesParaFrameEnum[] =
     "com.sun.star.util.ContentEnumeration",
 };
 static const size_t g_nServicesParaFrameEnum(
-    sizeof(g_ServicesParaFrameEnum)/sizeof(g_ServicesParaFrameEnum[0]));
+    SAL_N_ELEMENTS(g_ServicesParaFrameEnum));
 
 sal_Bool SAL_CALL
 SwXParaFrameEnumeration::supportsService(const OUString& rServiceName)

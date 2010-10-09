@@ -348,7 +348,7 @@ const wwSprmSearcher *wwSprmParser::GetWW6SprmSearcher()
         {200, 4, L_FIX}  // "sprmTSetShd", tap.rgshd complex 4 bytes
     };
 
-    static wwSprmSearcher aSprmSrch(aSprms, sizeof(aSprms) / sizeof(aSprms[0]));
+    static wwSprmSearcher aSprmSrch(aSprms, SAL_N_ELEMENTS(aSprms));
     return &aSprmSrch;
 };
 
@@ -684,7 +684,7 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0x245C, 1, L_FIX}  // undocumented, para autoafter
     };
 
-    static wwSprmSearcher aSprmSrch(aSprms, sizeof(aSprms) / sizeof(aSprms[0]));
+    static wwSprmSearcher aSprmSrch(aSprms, SAL_N_ELEMENTS(aSprms));
     return &aSprmSrch;
 };
 

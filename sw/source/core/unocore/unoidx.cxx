@@ -2539,7 +2539,7 @@ static char const*const g_ServicesDocumentIndexes[] =
     "com.sun.star.text.DocumentIndexes",
 };
 static const size_t g_nServicesDocumentIndexes(
-    sizeof(g_ServicesDocumentIndexes)/sizeof(g_ServicesDocumentIndexes[0]));
+    SAL_N_ELEMENT(g_ServicesDocumentIndexes));
 
 sal_Bool SAL_CALL
 SwXDocumentIndexes::supportsService(const OUString& rServiceName)
@@ -2771,7 +2771,7 @@ static char const*const g_ServicesIndexStyleAccess[] =
     "com.sun.star.text.DocumentIndexParagraphStyles",
 };
 static const size_t g_nServicesIndexStyleAccess(
-    sizeof(g_ServicesIndexStyleAccess)/sizeof(g_ServicesIndexStyleAccess[0]));
+    SAL_N_ELEMENT(g_ServicesIndexStyleAccess));
 
 sal_Bool SAL_CALL
 SwXDocumentIndex::StyleAccess_Impl::supportsService(
@@ -2924,7 +2924,7 @@ static char const*const g_ServicesIndexTokenAccess[] =
     "com.sun.star.text.DocumentIndexLevelFormat",
 };
 static const size_t g_nServicesIndexTokenAccess(
-    sizeof(g_ServicesIndexTokenAccess)/sizeof(g_ServicesIndexTokenAccess[0]));
+    SAL_N_ELEMENT(g_ServicesIndexTokenAccess));
 
 sal_Bool SAL_CALL
 SwXDocumentIndex::TokenAccess_Impl::supportsService(

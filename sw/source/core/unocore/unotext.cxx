@@ -2424,7 +2424,7 @@ static char const*const g_ServicesBodyText[] =
     "com.sun.star.text.Text",
 };
 static const size_t g_nServicesBodyText(
-    sizeof(g_ServicesBodyText)/sizeof(g_ServicesBodyText[0]));
+    SAL_N_ELEMENTS(g_ServicesBodyText));
 
 sal_Bool SAL_CALL SwXBodyText::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException)
@@ -2757,8 +2757,7 @@ static char const*const g_ServicesHeadFootText[] =
 {
     "com.sun.star.text.Text",
 };
-static const size_t g_nServicesHeadFootText(
-    sizeof(g_ServicesHeadFootText)/sizeof(g_ServicesHeadFootText[0]));
+static const size_t g_nServicesHeadFootText(SAL_N_ELEMENTS(g_ServicesHeadFootText));
 
 sal_Bool SAL_CALL SwXHeadFootText::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException)

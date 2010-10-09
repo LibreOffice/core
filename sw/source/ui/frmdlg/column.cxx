@@ -85,7 +85,7 @@ static const USHORT __FAR_DATA nLines[] = {
     DEF_LINE_WIDTH_4
 };
 
-static const USHORT nLineCount = sizeof(nLines) / sizeof(nLines[0]);
+static const USHORT nLineCount = SAL_N_ELEMENTS(nLines);
 static const USHORT nVisCols = 3;
 
 inline BOOL IsMarkInSameSection( SwWrtShell& rWrtSh, const SwSection* pSect )

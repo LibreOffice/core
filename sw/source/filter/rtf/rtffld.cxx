@@ -145,7 +145,7 @@ static RTF_FLD_TYPES _WhichFld( String& rName, String& rNext )
     xub_StrLen nTokenStt = rName.Search( sNm );
     sNm.ToLowerAscii();
 
-    for (size_t n = 0; n < sizeof(aFldNmArr) / sizeof(aFldNmArr[0]); ++n)
+    for (size_t n = 0; n < SAL_N_ELEMENTS(aFldNmArr); ++n)
     {
         const sal_Char* pCmp = aFldNmArr[n].pFldNm;
         int nLen = *pCmp++;

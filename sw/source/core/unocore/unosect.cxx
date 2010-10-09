@@ -1875,8 +1875,7 @@ static char const*const g_ServicesTextSection[] =
     "com.sun.star.text.TextSection",
     "com.sun.star.document.LinkTarget",
 };
-static const size_t g_nServicesTextSection(
-    sizeof(g_ServicesTextSection)/sizeof(g_ServicesTextSection[0]));
+static const size_t g_nServicesTextSection(SAL_N_ELEMENTS(g_ServicesTextSection));
 
 sal_Bool SAL_CALL SwXTextSection::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException)

@@ -168,7 +168,7 @@ namespace myImplHelpers
             RES_NONE, RES_NONE, RES_POOLCOLL_DOC_SUBTITEL
         };
 
-        const size_t nArrSize = (sizeof(aArr) / sizeof(aArr[0]));
+        const size_t nArrSize = (SAL_N_ELEMENTS(aArr));
         ASSERT(nArrSize == 75, "Style Array has false size");
 
         SwTxtFmtColl* pRet = 0;

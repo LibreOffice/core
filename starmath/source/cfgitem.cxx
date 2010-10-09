@@ -184,14 +184,14 @@ static Sequence< OUString > lcl_GetPropertyNames(
 
 static Sequence< OUString > GetFormatPropertyNames()
 {
-    USHORT nCnt = sizeof(aFormatPropNames) / sizeof(aFormatPropNames[0]);
+    USHORT nCnt = SAL_N_ELEMENTS(aFormatPropNames);
     return lcl_GetPropertyNames( aFormatPropNames, nCnt );
 }
 
 
 static Sequence< OUString > GetOtherPropertyNames()
 {
-    USHORT nCnt = sizeof(aMathPropNames) / sizeof(aMathPropNames[0]);
+    USHORT nCnt = SAL_N_ELEMENTS(aMathPropNames);
     return lcl_GetPropertyNames( aMathPropNames, nCnt );
 }
 

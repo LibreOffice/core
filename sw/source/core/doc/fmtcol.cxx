@@ -316,7 +316,7 @@ void SwTxtFmtColl::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
     }
 
 
-    for( int nC = 0, nArrLen = sizeof(aFontSizeArr) / sizeof( aFontSizeArr[0]);
+    for( int nC = 0, nArrLen = SAL_N_ELEMENTS(aFontSizeArr);
             nC < nArrLen; ++nC )
     {
         SvxFontHeightItem *pFSize = aFontSizeArr[ nC ], *pOldFSize;
