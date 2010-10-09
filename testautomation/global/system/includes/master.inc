@@ -429,7 +429,7 @@ sub hStartTheOffice (optional sProfPath as String, optional sProfParameter as St
     catch
     endcatch
     Kontext "WelcomeDialog"
-    if WelcomeDialog.Exists(2) then
+    if True = False Then ' disabled: we have no welcome dialog WelcomeDialog.Exists(2) then
         '///+<li>Clicking on Next button</li>
         NextBtn.Click
         Kontext "TabFirstStartLicense"
