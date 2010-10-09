@@ -2766,8 +2766,6 @@ extern "C" BOOL __LOADONCALLAPI DoExportDialog( FltCallDialogParameter& rPara )
 }
 
 //================== ein bischen Muell fuer Windows ==========================
-#ifndef GCC
-#endif
 
 #ifdef WIN
 

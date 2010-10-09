@@ -286,8 +286,6 @@ extern "C" BOOL __LOADONCALLAPI GraphicExport( SvStream& rStream, Graphic& rGrap
 
     return aRASWriter.WriteRAS( rGraphic, rStream, pFilterConfigItem );
 }
-#ifndef GCC
-#endif
 
 // ---------------
 // - Win16 trash -

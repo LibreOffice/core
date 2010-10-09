@@ -27,8 +27,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_filter.hxx"
-#ifndef GCC
-#endif
 
 #include <tools/ref.hxx>
 #include <svtools/FilterConfigItem.hxx>

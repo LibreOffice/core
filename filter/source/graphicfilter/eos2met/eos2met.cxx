@@ -2621,8 +2621,6 @@ extern "C" BOOL SAL_CALL DoExportDialog( FltCallDialogParameter& rPara )
 }
 
 //================== ein bischen Muell fuer Windows ==========================
-#ifndef GCC
-#endif
 
 #ifdef WIN
 

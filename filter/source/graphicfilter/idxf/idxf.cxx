@@ -53,8 +53,6 @@ extern "C" BOOL __LOADONCALLAPI GraphicImport(SvStream & rStream, Graphic & rGra
 }
 
 //============================= fuer Windows ==================================
-#ifndef GCC
-#endif
 
 #ifdef WIN
 

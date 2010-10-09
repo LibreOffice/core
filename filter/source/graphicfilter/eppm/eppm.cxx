@@ -272,9 +272,6 @@ extern "C" BOOL __LOADONCALLAPI DoExportDialog( FltCallDialogParameter& rPara )
     return bRet;
 }
 
-#ifndef GCC
-#endif
-
 // ------------------------------------------------------------------------
 
 // ---------------

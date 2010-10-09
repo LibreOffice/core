@@ -743,8 +743,6 @@ extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConf
 }
 
 //================== ein bischen Muell fuer Windows ==========================
-#ifndef GCC
-#endif
 
 #ifdef WIN
 

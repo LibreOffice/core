@@ -266,8 +266,6 @@ extern "C" BOOL __LOADONCALLAPI DoExportDialog( FltCallDialogParameter& rPara )
 }
 
 // ------------------------------------------------------------------------
-#ifndef GCC
-#endif
 
 // ---------------
 // - Win16 trash -

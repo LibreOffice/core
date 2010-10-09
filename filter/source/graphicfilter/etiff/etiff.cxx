@@ -616,9 +616,6 @@ extern "C" BOOL __LOADONCALLAPI GraphicExport( SvStream& rStream, Graphic& rGrap
     return TIFFWriter().WriteTIFF( rGraphic, rStream, pFilterConfigItem );
 }
 
-#ifndef GCC
-#endif
-
 // ---------------
 // - Win16 trash -
 // ---------------

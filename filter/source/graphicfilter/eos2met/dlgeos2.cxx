@@ -27,8 +27,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_filter.hxx"
-#ifndef GCC
-#endif
 #include <com/sun/star/awt/Size.hpp>
 #include <vcl/msgbox.hxx>
 #include <svtools/FilterConfigItem.hxx>
