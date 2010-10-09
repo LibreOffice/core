@@ -76,7 +76,7 @@ CXXFLAGS:=-fno-strict-aliasing $(EXTRA_CFLAGS)
 
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)$(COM)"=="LINUXGCC"
-LDFLAGS:=-Wl,-rpath,'$$$$ORIGIN' -Wl,-z,noexecstack
+LDFLAGS:=-Wl,-rpath,'$$$$ORIGIN'
 .EXPORT: LDFLAGS
 #The current dir when linking is unxlngi6.pro/misc/build/db-4.2.52.NC/out
 # the map file is in  unxlngi6.pro/misc/build/db-4.2.52.NC
@@ -107,7 +107,7 @@ CXXFLAGS+:=$(ARCH_FLAGS)
 
 BUILD_DIR=$(CONFIGURE_DIR)
 BUILD_DIR_OUT=$(CONFIGURE_DIR)
-BUILD_ACTION=make
+BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
 
 OUT2LIB=$(BUILD_DIR)$/.libs$/libdb*$(DLLPOST)
 OUT2INC= \

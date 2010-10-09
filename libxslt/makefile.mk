@@ -50,10 +50,13 @@ LIBXSLTVERSION=$(LIBXSLT_MAJOR).$(LIBXSLT_MINOR).$(LIBXSLT_MICRO)
 
 TARFILE_NAME=$(PRJNAME)-$(LIBXSLTVERSION)
 TARFILE_MD5=e61d0364a30146aaa3001296f853b2b9
+
+# libxslt-internal-symbols: #i112480#: Solaris ld requires symbols to be defined
 PATCH_FILES=libxslt-configure.patch \
             libxslt-win_manifest.patch \
             libxslt-mingw.patch \
-            libxslt-gnome602728.patch
+            libxslt-internal-symbols.patch
+
 
 # This is only for UNX environment now
 .IF "$(OS)"=="WNT"
@@ -88,7 +91,7 @@ BUILD_DIR=$(CONFIGURE_DIR)
 .ELSE
 
 .IF "$(OS)$(COM)"=="LINUXGCC" || "$(OS)$(COM)"=="FREEBSDGCC"
-LDFLAGS:=-Wl,-rpath,'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib' -Wl,-noinhibit-exec -Wl,-z,noexecstack
+LDFLAGS:=-Wl,-rpath,'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib' -Wl,-noinhibit-exec
 .ENDIF                  # "$(OS)$(COM)"=="LINUXGCC"
 .IF "$(OS)$(COM)"=="SOLARISC52"
 LDFLAGS:=-Wl,-R'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib'

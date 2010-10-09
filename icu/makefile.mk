@@ -46,7 +46,7 @@ TARFILE_MD5=
 .ENDIF
 TARFILE_ROOTDIR=icu
 
-PATCH_FILES=${TARFILE_NAME}.patch
+PATCH_FILES=${TARFILE_NAME}.patch icu-mp.patch
 
 # ADDITIONAL_FILES=
 
@@ -77,11 +77,6 @@ CC:=gcc $(EXTRA_CFLAGS)
 .EXPORT : CPP
 .ENDIF # "$(EXTRA_CFLAGS)"!=""
 .ENDIF # "$(OS)"=="MACOSX"
-
-# Disable executable stack
-.IF "$(OS)$(COM)"=="LINUXGCC"
-icu_LDFLAGS+=-Wl,-z,noexecstack
-.ENDIF
 
 icu_CFLAGS+=-O $(ARCH_FLAGS) $(EXTRA_CDEFS)
 icu_LDFLAGS+=$(EXTRA_LINKFLAGS)
@@ -118,7 +113,7 @@ CONFIGURE_FLAGS=
 # note the position of the single quotes.
 
 BUILD_DIR=$(CONFIGURE_DIR)
-BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE)
+BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE) -j$(EXTMAXPROCESS)
 OUT2LIB= \
     $(BUILD_DIR)$/lib$/libicudata$(DLLPOST).$(ICU_MAJOR)$(ICU_MINOR).$(ICU_MICRO) \
     $(BUILD_DIR)$/lib$/libicudata$(DLLPOST).$(ICU_MAJOR)$(ICU_MINOR) \
