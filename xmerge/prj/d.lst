@@ -9,3 +9,4 @@ mkdir: %_DEST%\doc%_EXT%\xmerge
 ..\%__SRC%\doc\javadoc\package-list %_DEST%\doc%_EXT%\xmerge\package-list
 ..\%__SRC%\doc\xmerge_javadoc.zip %_DEST%\doc%_EXT%\xmerge_javadoc.zip
 ..\%__SRC%\doc\writer2latex_javadoc.zip %_DEST%\doc%_EXT%\writer2latex_javadoc.zip
+..\%__SRC%\misc\XMergeBridge.component %_DEST%\xml%_EXT%\XMergeBridge.component

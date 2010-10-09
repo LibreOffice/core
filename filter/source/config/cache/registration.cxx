@@ -94,30 +94,6 @@ static void InitConstants()
 // extern "C" component_getImplementationEnvironment()
 _COMPHELPER_COMPONENT_GETIMPLEMENTATIONENVIRONMENT
 
-// extern "C" component_writeInfo()
-_COMPHELPER_COMPONENT_WRITEINFO
-(
-    _COMPHELPER_COMPONENTINFO( TypeDetection                                 ,
-                               TypeDetection::impl_getImplementationName()   ,
-                               TypeDetection::impl_getSupportedServiceNames())
-
-    _COMPHELPER_COMPONENTINFO( FilterFactory                                 ,
-                               FilterFactory::impl_getImplementationName()   ,
-                               FilterFactory::impl_getSupportedServiceNames())
-
-    _COMPHELPER_COMPONENTINFO( ContentHandlerFactory                                 ,
-                               ContentHandlerFactory::impl_getImplementationName()   ,
-                               ContentHandlerFactory::impl_getSupportedServiceNames())
-
-    _COMPHELPER_COMPONENTINFO( FrameLoaderFactory                                 ,
-                               FrameLoaderFactory::impl_getImplementationName()   ,
-                               FrameLoaderFactory::impl_getSupportedServiceNames())
-
-    _COMPHELPER_COMPONENTINFO( ConfigFlush                                 ,
-                               ConfigFlush::impl_getImplementationName()   ,
-                               ConfigFlush::impl_getSupportedServiceNames())
-)
-
 // extern "C" component_getFactory()
 _COMPHELPER_COMPONENT_GETFACTORY
 (
