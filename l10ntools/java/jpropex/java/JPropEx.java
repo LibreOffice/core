@@ -121,16 +121,20 @@ public class JPropEx
         String key;
         SdfEntity currentStr;
         String value;
+        String str;
         for( Enumeration e = prop.propertyNames() ; e.hasMoreElements() ; )
         {
             key         = (String)      e.nextElement();
             currentStr  = (SdfEntity)   dolly.clone();
-            // Set the new LID and the string text
-            currentStr.setLid( key );
+            // Set the new GID and the string text
+            currentStr.setGid( key );
             value            = prop.getProperty( key , "" );
             //if( value.equals("") )  System.err.println("Warning: in file "+inputFileArg+" the string with the key "+key+" has a empty string!");
-            currentStr.setText( (prop.getProperty( key )).replaceAll("\t" , " " ) );     // TODO: Quoting!!!!
-            data.add( currentStr );
+            str = (prop.getProperty( key )).replaceAll("\t" , " " );    // remove tab
+            str = str.replaceAll("\n"," ");                             // remove return
+            currentStr.setText( str );
+            if( str.length() > 0 )
+                data.add( currentStr );
         }
         data.write( outputFileArg );
     }
@@ -141,8 +145,11 @@ public class JPropEx
         //String path = makeAbs( inputFileArg );
         path = path.replace( rootArg + "/" , "" );
         path = path.replace("/","\\");
-        return new SdfEntity( projectArg , path , "" /* dummy1 */ , resourceType , "", "" , "" , "" , "" /* dummy2 */ ,
-                              sourceLanguage , "",  "" , ""  , "" , "2002-02-02 02:02:02" );
+        // TODO: Make this static
+        java.text.SimpleDateFormat dateformat = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String date = dateformat.format( new Date() );
+        return new SdfEntity( projectArg , path , "0" /* dummy1 */ , resourceType , "", "" , "" , "" , "0" /* dummy2 */ ,
+                              sourceLanguage , "",  "" , ""  , "" , date );
     }
 
     private void merge()
@@ -204,7 +211,7 @@ public class JPropEx
             key          = (String) e.nextElement();
             sourceString = sourceProp.getProperty( key );
             curStr       = (SdfEntity) dolly.clone();
-            curStr.setLid( key );
+            curStr.setGid( key );
             for( Enumeration lang = langs.elements(); lang.hasMoreElements(); ) // merge in every language
             {
                 curEntity   = (SdfEntity) curStr.clone();
@@ -214,12 +221,12 @@ public class JPropEx
                 if( mergedEntity == null )
                 {
                     // in case there is no translation then fallback to the en-US source string
-                    ( (java.util.Properties) props.get( curLang )).setProperty( curEntity.getLid() , sourceString  );
+                    ( (java.util.Properties) props.get( curLang )).setProperty( curEntity.getGid() , sourceString  );
                 }
                 else
                 {
                     // Set the merged text from the sdf file
-                    ( (java.util.Properties) props.get( curLang )).setProperty( mergedEntity.getLid() , mergedEntity.getText() );  // TODO: Quoting ???
+                    ( (java.util.Properties) props.get( curLang )).setProperty( mergedEntity.getGid() , mergedEntity.getText() );  // TODO: Quoting ???
                 }
             }
 

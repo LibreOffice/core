@@ -61,7 +61,6 @@ ResMgr * ImpSvtData::GetResMgr()
     return GetResMgr(Application::GetSettings().GetUILocale());
 }
 
-
 //============================================================================
 // static
 ImpSvtData & ImpSvtData::GetSvtData()

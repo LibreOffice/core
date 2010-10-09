@@ -139,16 +139,6 @@ void SvTreeEntryList::DestroyAll()
 }
 
 
-
-
-#if defined (WIN) && defined (MSC)
-// siehe BugId 42896: Die Funktionen Prev, PrevVisible, Next, NextVisible
-// (andere?) funktionieren nicht mit Optimierung.
-#pragma optimize ("", off)
-#endif
-
-
-
 /*************************************************************************
 |*
 |*    SvTreeList::

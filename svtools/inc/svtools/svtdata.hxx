@@ -55,7 +55,7 @@ public:
     static ImpSvtData & GetSvtData();
 };
 
-
+//============================================================================
 class SvtResId: public ResId
 {
 public:

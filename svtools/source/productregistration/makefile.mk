@@ -76,3 +76,11 @@ RESLIB1SRSFILES=\
 
 .INCLUDE : target.mk
 
+
+ALLTAR : $(MISC)/productregistration.uno.component
+
+$(MISC)/productregistration.uno.component .ERRREMOVE : \
+        $(SOLARENV)/bin/createcomponent.xslt productregistration.uno.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt productregistration.uno.component
