@@ -62,7 +62,7 @@ public:
     // Methods XIndexAccess
     virtual ::sal_Int32 SAL_CALL getCount() throw (uno::RuntimeException)
     {
-        return sizeof(spnDefColorTable8) / sizeof(spnDefColorTable8[0]);
+        return SAL_N_ELEMENTS(spnDefColorTable8);
     }
 
     virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)

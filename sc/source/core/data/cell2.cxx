@@ -152,7 +152,7 @@ void ScEditCell::RemoveCharAttribs( const ScPatternAttr& rAttr )
         { ATTR_FONT_WEIGHT, EE_CHAR_WEIGHT },
         { ATTR_FONT_COLOR,  EE_CHAR_COLOR }
     };
-    USHORT nMapCount = sizeof(AttrTypeMap) / sizeof(AttrTypeMap[0]);
+    USHORT nMapCount = SAL_N_ELEMENTS(AttrTypeMap);
 
     const SfxItemSet& rSet = rAttr.GetItemSet();
     const SfxPoolItem* pItem;

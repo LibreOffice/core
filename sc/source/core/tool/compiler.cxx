@@ -2538,7 +2538,7 @@ BOOL ScCompiler::IsOpCode( const String& rName, bool bInArray )
             { "LEGACY.TDIST",                   ocTDist },          // TDIST -> LEGACY.TDIST
             { "ORG.OPENOFFICE.EASTERSUNDAY",    ocEasterSunday }    // EASTERSUNDAY -> ORG.OPENOFFICE.EASTERSUNDAY
         };
-        static const size_t nOdffAliases = sizeof(aOdffAliases) / sizeof(aOdffAliases[0]);
+        static const size_t nOdffAliases = SAL_N_ELEMENTS(aOdffAliases);
         for (size_t i=0; i<nOdffAliases; ++i)
         {
             if (rName.EqualsIgnoreCaseAscii( aOdffAliases[i].pName))

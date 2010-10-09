@@ -165,7 +165,7 @@ static BOOL lcl_MayBeDBase( SvStream& rStream )
     rStream.Seek(STREAM_SEEK_TO_BEGIN);
     rStream >> nMark;
     bool bValidMark = false;
-    for (size_t i=0; i < sizeof(nValidMarks)/sizeof(nValidMarks[0]) && !bValidMark; ++i)
+    for (size_t i=0; i < SAL_N_ELEMENTS(nValidMarks) && !bValidMark; ++i)
     {
         if (nValidMarks[i] == nMark)
             bValidMark = true;
@@ -631,7 +631,7 @@ static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                             pLotus2,
                             pQPro
                             };
-                        const UINT16 nFilterCount = sizeof(ppFilterPatterns) / sizeof(ppFilterPatterns[0]);
+                        const UINT16 nFilterCount = SAL_N_ELEMENTS(ppFilterPatterns);
 
                         static const sal_Char* const pFilterName[] =     // zugehoerige Filter
                             {

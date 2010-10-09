@@ -32,7 +32,6 @@
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <cppuhelper/component_context.hxx>
-
 #include "vbaapplication.hxx"
 #include "vbaworksheet.hxx"
 #include "vbarange.hxx"
@@ -263,7 +262,7 @@ ScVbaGlobals::getAvailableServiceNames(  ) throw (uno::RuntimeException)
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "ooo.vba.excel.Hyperlink" ) ),
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.script.vba.VBASpreadsheetEventProcessor" ) )
           };
-        sal_Int32 nExcelServices = ( sizeof( names )/ sizeof( names[0] ) );
+        sal_Int32 nExcelServices = ( SAL_N_ELEMENTS(names) );
         sal_Int32 startIndex = serviceNames.getLength();
         serviceNames.realloc( serviceNames.getLength() + nExcelServices );
         for ( sal_Int32 index = 0; index < nExcelServices; ++index )

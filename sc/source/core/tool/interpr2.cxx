@@ -2442,7 +2442,7 @@ void ScInterpreter::ScRoman()
         {
             static const sal_Unicode pChars[] = { 'M', 'D', 'C', 'L', 'X', 'V', 'I' };
             static const USHORT pValues[] = { 1000, 500, 100, 50, 10, 5, 1 };
-            static const USHORT nMaxIndex = (USHORT)(sizeof(pValues) / sizeof(pValues[0]) - 1);
+            static const USHORT nMaxIndex = (USHORT)(SAL_N_ELEMENTS(pValues) - 1);
 
             String aRoman;
             USHORT nVal = (USHORT) fVal;
@@ -2675,7 +2675,7 @@ BOOL lclConvertMoney( const String& aSearchUnit, double& rfRate, int& rnDec )
         { "SKK", 30.1260,  2 }
     };
 
-    const size_t nConversionCount = sizeof( aConvertTable ) / sizeof( aConvertTable[0] );
+    const size_t nConversionCount = SAL_N_ELEMENTS(aConvertTable);
     for ( size_t i = 0; i < nConversionCount; i++ )
         if ( aSearchUnit.EqualsIgnoreCaseAscii( aConvertTable[i].pCurrText ) )
         {
