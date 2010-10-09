@@ -1091,6 +1091,7 @@ function hDisableQuickstarter as boolean
 	    bVeto = gOOo
         end if
     end if
+    bVeto = FALSE ' For now LibreOffice struggles with some hid/whatever mismatch here
     if bVeto then
 	    'First, disabling the Quickstarter via UI
 	    ToolsOptions
