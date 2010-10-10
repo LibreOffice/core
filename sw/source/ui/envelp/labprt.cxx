@@ -45,11 +45,6 @@
 #include <cmdid.h>
 #include <labprt.hrc>
 
-
-// --------------------------------------------------------------------------
-
-
-
 SwLabPrtPage::SwLabPrtPage(Window* pParent, const SfxItemSet& rSet) :
 
     SfxTabPage(pParent, SW_RES(TP_LAB_PRT), rSet),
@@ -89,19 +84,11 @@ SwLabPrtPage::SwLabPrtPage(Window* pParent, const SfxItemSet& rSet) :
     }
 }
 
-// --------------------------------------------------------------------------
-
-
-
 SwLabPrtPage::~SwLabPrtPage()
 {
     if (pPrinter)
         delete pPrinter;
 }
-
-// --------------------------------------------------------------------------
-
-
 
 IMPL_LINK( SwLabPrtPage, CountHdl, Button *, pButton )
 {
@@ -135,27 +122,15 @@ IMPL_LINK( SwLabPrtPage, CountHdl, Button *, pButton )
     return 0;
 }
 
-// --------------------------------------------------------------------------
-
-
-
 SfxTabPage* SwLabPrtPage::Create(Window* pParent, const SfxItemSet& rSet)
 {
     return new SwLabPrtPage( pParent, rSet );
 }
 
-// --------------------------------------------------------------------------
-
-
-
 void SwLabPrtPage::ActivatePage( const SfxItemSet& rSet )
 {
     Reset(rSet);
 }
-
-// --------------------------------------------------------------------------
-
-
 
 int SwLabPrtPage::DeactivatePage(SfxItemSet* _pSet)
 {
@@ -165,10 +140,6 @@ int SwLabPrtPage::DeactivatePage(SfxItemSet* _pSet)
     return TRUE;
 }
 
-// --------------------------------------------------------------------------
-
-
-
 void SwLabPrtPage::FillItem(SwLabItem& rItem)
 {
     rItem.bPage = aPageButton.IsChecked();
@@ -176,10 +147,6 @@ void SwLabPrtPage::FillItem(SwLabItem& rItem)
     rItem.nRow  = (USHORT) aRowField.GetValue();
     rItem.bSynchron = aSynchronCB.IsChecked() && aSynchronCB.IsEnabled();
 }
-
-// --------------------------------------------------------------------------
-
-
 
 BOOL SwLabPrtPage::FillItemSet(SfxItemSet& rSet)
 {
@@ -190,10 +157,6 @@ BOOL SwLabPrtPage::FillItemSet(SfxItemSet& rSet)
 
     return TRUE;
 }
-
-// --------------------------------------------------------------------------
-
-
 
 void SwLabPrtPage::Reset(const SfxItemSet& )
 {

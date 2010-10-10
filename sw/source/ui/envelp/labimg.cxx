@@ -45,8 +45,6 @@ using namespace utl;
 using namespace rtl;
 using namespace ::com::sun::star::uno;
 
-
-// ----------------------------------------------------------------------------
 SwLabItem::SwLabItem() :
 
     SfxPoolItem(FN_LABEL),
@@ -65,13 +63,12 @@ SwLabItem::SwLabItem() :
     lHeight = 5669; // 10 cm
 }
 
-// ----------------------------------------------------------------------------
 SwLabItem::SwLabItem(const SwLabItem& rItem) :
     SfxPoolItem(FN_LABEL)
 {
         *this = rItem;
 }
-// ----------------------------------------------------------------------------
+
 SwLabItem& SwLabItem::operator =(const SwLabItem& rItem)
 {
     bAddr    = rItem.bAddr;
@@ -131,10 +128,6 @@ SwLabItem& SwLabItem::operator =(const SwLabItem& rItem)
     sGlossaryBlockName =    rItem.sGlossaryBlockName;
     return *this;
 }
-
-// --------------------------------------------------------------------------
-
-
 
 int SwLabItem::operator ==(const SfxPoolItem& rItem) const
 {
@@ -197,15 +190,11 @@ int SwLabItem::operator ==(const SfxPoolItem& rItem) const
             sGlossaryBlockName ==    rLab.sGlossaryBlockName;
 }
 
-// --------------------------------------------------------------------------
 SfxPoolItem* SwLabItem::Clone(SfxItemPool*) const
 {
     return new SwLabItem(*this);
 }
 
-/* -----------------------------25.09.00 16:25--------------------------------
-
- ---------------------------------------------------------------------------*/
 Sequence<rtl::OUString> SwLabCfgItem::GetPropertyNames()
 {
     static const char* aLabelPropNames[] =
@@ -277,9 +266,7 @@ Sequence<rtl::OUString> SwLabCfgItem::GetPropertyNames()
         pNames[nIndex++] = OUString::createFromAscii(aBusinessPropNames[nBusiness]);
     return aNames;
 }
-/* ----------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwLabCfgItem::SwLabCfgItem(sal_Bool bLabel) :
     ConfigItem(bLabel ? C2U("Office.Writer/Label") :  C2U("Office.Writer/BusinessCard")),
     bIsLabel(bLabel)
@@ -402,9 +389,7 @@ SwLabCfgItem::SwLabCfgItem(sal_Bool bLabel) :
         SetModified();
     }
 }
-/* -----------------------------25.09.00 16:26--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwLabCfgItem::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
 
 void    SwLabCfgItem::Commit()

@@ -60,7 +60,6 @@ using namespace ::com::sun::star::uno;
 
 TYPEINIT1_AUTOFACTORY( SwEnvItem, SfxPoolItem );
 
-// --------------------------------------------------------------------------
 SW_DLLPUBLIC String MakeSender()
 {
     SvtUserOptions& rUserOpt = SW_MOD()->GetUserOptions();
@@ -103,7 +102,7 @@ SW_DLLPUBLIC String MakeSender()
     }
     return sRet;
 }
-// --------------------------------------------------------------------------
+
 SwEnvItem::SwEnvItem() :
     SfxPoolItem(FN_ENVELOP)
 {
@@ -123,7 +122,7 @@ SwEnvItem::SwEnvItem() :
     lAddrFromLeft   = Max(lWidth, lHeight) / 2;
     lAddrFromTop    = Min(lWidth, lHeight) / 2;
 }
-// --------------------------------------------------------------------------
+
 SwEnvItem::SwEnvItem(const SwEnvItem& rItem) :
     SfxPoolItem(FN_ENVELOP),
     aAddrText      (rItem.aAddrText),
@@ -142,7 +141,6 @@ SwEnvItem::SwEnvItem(const SwEnvItem& rItem) :
 {
 }
 
-// --------------------------------------------------------------------------
 SwEnvItem& SwEnvItem::operator =(const SwEnvItem& rItem)
 {
     aAddrText       = rItem.aAddrText;
@@ -160,7 +158,7 @@ SwEnvItem& SwEnvItem::operator =(const SwEnvItem& rItem)
     lShiftDown      = rItem.lShiftDown;
     return *this;
 }
-// --------------------------------------------------------------------------
+
 int SwEnvItem::operator ==(const SfxPoolItem& rItem) const
 {
     const SwEnvItem& rEnv = (const SwEnvItem&) rItem;
@@ -180,13 +178,11 @@ int SwEnvItem::operator ==(const SfxPoolItem& rItem) const
            lShiftDown      == rEnv.lShiftDown;
 }
 
-// --------------------------------------------------------------------------
 SfxPoolItem* SwEnvItem::Clone(SfxItemPool*) const
 {
     return new SwEnvItem(*this);
 }
-// --------------------------------------------------------------------------
-// --------------------------------------------------------------------------
+
 SwEnvCfgItem::SwEnvCfgItem() :
     ConfigItem(C2U("Office.Writer/Envelope"))
 {
@@ -249,15 +245,11 @@ SwEnvCfgItem::SwEnvCfgItem() :
         }
     }
 }
-/* -----------------------------26.09.00 14:04--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwEnvCfgItem::~SwEnvCfgItem()
 {
 }
-/* -----------------------------26.09.00 14:05--------------------------------
 
- ---------------------------------------------------------------------------*/
 void    SwEnvCfgItem::Commit()
 {
     Sequence<OUString> aNames = GetPropertyNames();
@@ -289,9 +281,6 @@ void    SwEnvCfgItem::Commit()
 
 void SwEnvCfgItem::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
 
-/* -----------------------------26.09.00 14:04--------------------------------
-
- ---------------------------------------------------------------------------*/
 Sequence<rtl::OUString> SwEnvCfgItem::GetPropertyNames()
 {
     static const char* aPropNames[] =
@@ -342,9 +331,7 @@ bool SwEnvItem::QueryValue( Any& rVal, BYTE nMemberId ) const
     }
     return bRet;
 }
-/* -----------------------------26.04.01 12:26--------------------------------
 
- ---------------------------------------------------------------------------*/
 bool SwEnvItem::PutValue(const Any& rVal, BYTE nMemberId)
 {
     bool bRet = false;

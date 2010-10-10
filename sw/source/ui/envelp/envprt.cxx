@@ -44,10 +44,6 @@
 
 #include "envprt.hrc"
 
-
-
-
-
 SwEnvPrtPage::SwEnvPrtPage(Window* pParent, const SfxItemSet& rSet) :
 
     SfxTabPage(pParent, SW_RES(TP_ENV_PRT), rSet),
@@ -90,17 +86,9 @@ SwEnvPrtPage::SwEnvPrtPage(Window* pParent, const SfxItemSet& rSet) :
 
 }
 
-// --------------------------------------------------------------------------
-
-
-
 SwEnvPrtPage::~SwEnvPrtPage()
 {
 }
-
-// --------------------------------------------------------------------------
-
-
 
 IMPL_LINK( SwEnvPrtPage, ClickHdl, Button *, EMPTYARG )
 {
@@ -128,10 +116,6 @@ IMPL_LINK( SwEnvPrtPage, ClickHdl, Button *, EMPTYARG )
     return 0;
 }
 
-// --------------------------------------------------------------------------
-
-
-
 IMPL_LINK( SwEnvPrtPage, ButtonHdl, Button *, pBtn )
 {
     if (pBtn == &aPrtSetup)
@@ -150,10 +134,6 @@ IMPL_LINK( SwEnvPrtPage, ButtonHdl, Button *, pBtn )
     return 0;
 }
 
-// --------------------------------------------------------------------------
-
-
-
 IMPL_LINK( SwEnvPrtPage, AlignHdl, ToolBox *, EMPTYARG )
 {
     if (aAlignBox.GetCurItemId())
@@ -171,18 +151,10 @@ IMPL_LINK( SwEnvPrtPage, AlignHdl, ToolBox *, EMPTYARG )
     return 0;
 }
 
-// --------------------------------------------------------------------------
-
-
-
 SfxTabPage* SwEnvPrtPage::Create(Window* pParent, const SfxItemSet& rSet)
 {
     return new SwEnvPrtPage(pParent, rSet);
 }
-
-// --------------------------------------------------------------------------
-
-
 
 void SwEnvPrtPage::ActivatePage(const SfxItemSet&)
 {
@@ -190,20 +162,12 @@ void SwEnvPrtPage::ActivatePage(const SfxItemSet&)
         aPrinterInfo.SetText(pPrt->GetName());
 }
 
-// --------------------------------------------------------------------------
-
-
-
 int SwEnvPrtPage::DeactivatePage(SfxItemSet* _pSet)
 {
     if( _pSet )
         FillItemSet(*_pSet);
     return SfxTabPage::LEAVE_PAGE;
 }
-
-// --------------------------------------------------------------------------
-
-
 
 void SwEnvPrtPage::FillItem(SwEnvItem& rItem)
 {
@@ -218,20 +182,12 @@ void SwEnvPrtPage::FillItem(SwEnvItem& rItem)
     rItem.lShiftDown      = static_cast< sal_Int32 >(GetFldVal(aDownField ));
 }
 
-// --------------------------------------------------------------------------
-
-
-
 BOOL SwEnvPrtPage::FillItemSet(SfxItemSet& rSet)
 {
     FillItem(GetParent()->aEnvItem);
     rSet.Put(GetParent()->aEnvItem);
     return TRUE;
 }
-
-// ----------------------------------------------------------------------------
-
-
 
 void SwEnvPrtPage::Reset(const SfxItemSet& rSet)
 {

@@ -52,11 +52,8 @@ using namespace rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
-// #define ------------------------------------------------------------------
-
 #define ROUND(x) ((USHORT) ((x) + .5))
 
-// --------------------------------------------------------------------------
 SwLabPreview::SwLabPreview( const SwLabFmtPage* pParent, const ResId& rResID ) :
 
     Window((Window*) pParent, rResID),
@@ -106,11 +103,10 @@ SwLabPreview::SwLabPreview( const SwLabFmtPage* pParent, const ResId& rResID ) :
     lOutHPix23 = (long)((float)lOutHPix * fx);
 }
 
-// --------------------------------------------------------------------------
 SwLabPreview::~SwLabPreview()
 {
 }
-// --------------------------------------------------------------------------
+
 void SwLabPreview::Paint(const Rectangle &)
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
@@ -245,8 +241,6 @@ void SwLabPreview::Paint(const Rectangle &)
 
 // Pfeil bzw. Intervall zeichnen --------------------------------------------
 
-
-
 void SwLabPreview::DrawArrow(const Point &rP1, const Point &rP2, BOOL bArrow)
 {
     DrawLine(rP1, rP2);
@@ -299,17 +293,11 @@ void SwLabPreview::DrawArrow(const Point &rP1, const Point &rP2, BOOL bArrow)
     }
 }
 
-// --------------------------------------------------------------------------
-
 void SwLabPreview::Update(const SwLabItem& rItem)
 {
     aItem = rItem;
     Invalidate();
 }
-
-// --------------------------------------------------------------------------
-
-
 
 SwLabFmtPage::SwLabFmtPage(Window* pParent, const SfxItemSet& rSet) :
 
@@ -376,18 +364,11 @@ SwLabFmtPage::SwLabFmtPage(Window* pParent, const SfxItemSet& rSet) :
     aPreviewTimer.SetTimeoutHdl(LINK(this, SwLabFmtPage, PreviewHdl));
 }
 
-// --------------------------------------------------------------------------
-
-
-
 SwLabFmtPage::~SwLabFmtPage()
 {
 }
 
 // Modify-Handler der MetricFields. Preview-Timer starten -------------------
-
-
-
 IMPL_LINK_INLINE_START( SwLabFmtPage, ModifyHdl, Edit *, EMPTYARG )
 {
     bModified = TRUE;
@@ -397,9 +378,6 @@ IMPL_LINK_INLINE_START( SwLabFmtPage, ModifyHdl, Edit *, EMPTYARG )
 IMPL_LINK_INLINE_END( SwLabFmtPage, ModifyHdl, Edit *, EMPTYARG )
 
 // Preview invalidaten ------------------------------------------------------
-
-
-
 IMPL_LINK_INLINE_START( SwLabFmtPage, PreviewHdl, Timer *, EMPTYARG )
 {
     aPreviewTimer.Stop();
@@ -412,9 +390,6 @@ IMPL_LINK_INLINE_START( SwLabFmtPage, PreviewHdl, Timer *, EMPTYARG )
 IMPL_LINK_INLINE_END( SwLabFmtPage, PreviewHdl, Timer *, EMPTYARG )
 
 // LoseFocus-Handler: Bei Aenderung sofort updaten --------------------------
-
-
-
 IMPL_LINK_INLINE_START( SwLabFmtPage, LoseFocusHdl, Control *, pControl )
 {
     if (((Edit*) pControl)->IsModified())
@@ -424,8 +399,6 @@ IMPL_LINK_INLINE_START( SwLabFmtPage, LoseFocusHdl, Control *, pControl )
 IMPL_LINK_INLINE_END( SwLabFmtPage, LoseFocusHdl, Control *, pControl )
 
 // Minima und Maxima fuer Fields festlegen ----------------------------------
-
-
 void SwLabFmtPage::ChangeMinMax()
 {
     long lMax = 31748; // 56 cm
@@ -487,28 +460,16 @@ void SwLabFmtPage::ChangeMinMax()
     aRowsField  .Reformat();
 }
 
-// --------------------------------------------------------------------------
-
-
-
 SfxTabPage* SwLabFmtPage::Create(Window* pParent, const SfxItemSet& rSet)
 {
     return new SwLabFmtPage(pParent, rSet);
 }
-
-// ----------------------------------------------------------------------------
-
-
 
 void SwLabFmtPage::ActivatePage(const SfxItemSet& rSet)
 {
     SfxItemSet aSet(rSet);
     Reset(aSet);
 }
-
-// ----------------------------------------------------------------------------
-
-
 
 int SwLabFmtPage::DeactivatePage(SfxItemSet* _pSet)
 {
@@ -517,10 +478,6 @@ int SwLabFmtPage::DeactivatePage(SfxItemSet* _pSet)
 
     return TRUE;
 }
-
-// --------------------------------------------------------------------------
-
-
 
 void SwLabFmtPage::FillItem(SwLabItem& rItem)
 {
@@ -540,10 +497,6 @@ void SwLabFmtPage::FillItem(SwLabItem& rItem)
     }
 }
 
-// --------------------------------------------------------------------------
-
-
-
 BOOL SwLabFmtPage::FillItemSet(SfxItemSet& rSet)
 {
     FillItem(aItem);
@@ -552,7 +505,6 @@ BOOL SwLabFmtPage::FillItemSet(SfxItemSet& rSet)
     return TRUE;
 }
 
-// --------------------------------------------------------------------------
 void SwLabFmtPage::Reset(const SfxItemSet& )
 {
     // Fields initialisieren
@@ -581,9 +533,6 @@ void SwLabFmtPage::Reset(const SfxItemSet& )
     aTypeFI.SetText(aItem.aType);
     PreviewHdl(0);
 }
-/* -----------------------------22.01.01 15:11--------------------------------
-
- ---------------------------------------------------------------------------*/
 
 IMPL_LINK( SwLabFmtPage, SaveHdl, PushButton *, EMPTYARG )
 {
@@ -620,9 +569,7 @@ IMPL_LINK( SwLabFmtPage, SaveHdl, PushButton *, EMPTYARG )
     delete pSaveDlg;
     return 0;
 }
-/* -----------------------------23.01.01 10:41--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwSaveLabelDlg::SwSaveLabelDlg(SwLabFmtPage* pParent, SwLabRec& rRec) :
     ModalDialog(pParent, SW_RES(DLG_SAVE_LABEL)),
     aOptionsFL(this,SW_RES(FL_OPTIONS  )),
@@ -654,9 +601,7 @@ SwSaveLabelDlg::SwSaveLabelDlg(SwLabFmtPage* pParent, SwLabRec& rRec) :
     for(sal_Int32 i = 0; i < rMan.getLength(); i++)
         aMakeCB.InsertEntry(pMan[i]);
 }
-/* -----------------------------23.01.01 10:40--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SwSaveLabelDlg, OkHdl, OKButton*, EMPTYARG)
 {
     SwLabelConfig& rCfg = pLabPage->GetParent()->GetLabelsConfig();
@@ -681,17 +626,13 @@ IMPL_LINK(SwSaveLabelDlg, OkHdl, OKButton*, EMPTYARG)
     EndDialog(RET_OK);
     return 0;
 }
-/* -----------------------------23.01.01 11:22--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SwSaveLabelDlg, ModifyHdl, Edit*, EMPTYARG)
 {
     aOKPB.Enable(aMakeCB.GetText().Len() && aTypeED.GetText().Len());
     return 0;
 }
-/* -----------------------------23.01.01 16:06--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool SwSaveLabelDlg::GetLabel(SwLabItem& rItem)
 {
     if(bSuccess)

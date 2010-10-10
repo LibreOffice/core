@@ -78,9 +78,6 @@ static PopupMenu *pMenu;
 static long lUserW = 5669; // 10 cm
 static long lUserH = 5669; // 10 cm
 
-// --------------------------------------------------------------------------
-
-
 SwEnvFmtPage::SwEnvFmtPage(Window* pParent, const SfxItemSet& rSet) :
 
     SfxTabPage(pParent, SW_RES(TP_ENV_FMT), rSet),
@@ -186,18 +183,12 @@ SwEnvFmtPage::SwEnvFmtPage(Window* pParent, const SfxItemSet& rSet) :
 
 }
 
-// --------------------------------------------------------------------------
-
-
 __EXPORT SwEnvFmtPage::~SwEnvFmtPage()
 {
     aAddrEditButton.SetPopupMenu(0);
     aSendEditButton.SetPopupMenu(0);
     delete ::pMenu;
 }
-
-// --------------------------------------------------------------------------
-
 
 IMPL_LINK_INLINE_START( SwEnvFmtPage, ModifyHdl, Edit *, pEdit )
 {
@@ -233,9 +224,6 @@ IMPL_LINK_INLINE_START( SwEnvFmtPage, ModifyHdl, Edit *, pEdit )
     return 0;
 }
 IMPL_LINK_INLINE_END( SwEnvFmtPage, ModifyHdl, Edit *, pEdit )
-
-// --------------------------------------------------------------------------
-
 
 IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
 {
@@ -438,9 +426,6 @@ SfxItemSet *SwEnvFmtPage::GetCollItemSet(SwTxtFmtColl* pColl, BOOL bSender)
     return pAddrSet;
 }
 
-// --------------------------------------------------------------------------
-
-
 IMPL_LINK( SwEnvFmtPage, FormatHdl, ListBox *, EMPTYARG )
 {
     long lWidth;
@@ -483,9 +468,6 @@ IMPL_LINK( SwEnvFmtPage, FormatHdl, ListBox *, EMPTYARG )
     return 0;
 }
 
-// --------------------------------------------------------------------------
-
-
 void SwEnvFmtPage::SetMinMax()
 {
     long lWVal = static_cast< long >(GetFldVal(aSizeWidthField ));
@@ -523,16 +505,10 @@ void SwEnvFmtPage::SetMinMax()
     aSizeHeightField.Reformat();
 }
 
-// --------------------------------------------------------------------------
-
-
 SfxTabPage* __EXPORT SwEnvFmtPage::Create(Window* pParent, const SfxItemSet& rSet)
 {
     return new SwEnvFmtPage(pParent, rSet);
 }
-
-// ----------------------------------------------------------------------------
-
 
 void __EXPORT SwEnvFmtPage::ActivatePage(const SfxItemSet& rSet)
 {
@@ -541,18 +517,12 @@ void __EXPORT SwEnvFmtPage::ActivatePage(const SfxItemSet& rSet)
     Reset(aSet);
 }
 
-// ----------------------------------------------------------------------------
-
-
 int __EXPORT SwEnvFmtPage::DeactivatePage(SfxItemSet* _pSet)
 {
     if( _pSet )
         FillItemSet(*_pSet);
     return SfxTabPage::LEAVE_PAGE;
 }
-
-// --------------------------------------------------------------------------
-
 
 void SwEnvFmtPage::FillItem(SwEnvItem& rItem)
 {
@@ -578,18 +548,12 @@ void SwEnvFmtPage::FillItem(SwEnvItem& rItem)
     }
 }
 
-// --------------------------------------------------------------------------
-
-
 BOOL __EXPORT SwEnvFmtPage::FillItemSet(SfxItemSet& rSet)
 {
     FillItem(GetParent()->aEnvItem);
     rSet.Put(GetParent()->aEnvItem);
     return TRUE;
 }
-
-// --------------------------------------------------------------------------
-
 
 void __EXPORT SwEnvFmtPage::Reset(const SfxItemSet& rSet)
 {

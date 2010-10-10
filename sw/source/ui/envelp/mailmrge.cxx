@@ -90,19 +90,16 @@ using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::ui::dialogs;
 
-
-/* -----------------------------05.06.01 13:54--------------------------------
-
- ---------------------------------------------------------------------------*/
 struct SwMailMergeDlg_Impl
 {
     uno::Reference<runtime::XFormController> xFController;
     uno::Reference<XSelectionChangeListener> xChgLstnr;
     uno::Reference<XSelectionSupplier> xSelSupp;
 };
-/* -----------------------------05.06.01 13:47--------------------------------
+
+/* --------------------------------------------------------------------------
     helper classes
- ---------------------------------------------------------------------------*/
+----------------------------------------------------------------------------*/
 class SwXSelChgLstnr_Impl : public cppu::WeakImplHelper1
 <
     view::XSelectionChangeListener
@@ -116,20 +113,14 @@ public:
     virtual void SAL_CALL selectionChanged( const EventObject& aEvent ) throw (RuntimeException);
     virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException);
 };
-/* -----------------------------05.06.01 13:51--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwXSelChgLstnr_Impl::SwXSelChgLstnr_Impl(SwMailMergeDlg& rParentDlg) :
     rParent(rParentDlg)
 {}
-/* -----------------------------05.06.01 14:06--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwXSelChgLstnr_Impl::~SwXSelChgLstnr_Impl()
 {}
-/* -----------------------------05.06.01 14:06--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwXSelChgLstnr_Impl::selectionChanged( const EventObject&  ) throw (RuntimeException)
 {
     //call the parent to enable selection mode
@@ -147,13 +138,12 @@ void SwXSelChgLstnr_Impl::selectionChanged( const EventObject&  ) throw (Runtime
         rParent.m_aSelection.realloc(0);
     }
 }
-/* -----------------------------05.06.01 14:06--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwXSelChgLstnr_Impl::disposing( const EventObject&  ) throw (RuntimeException)
 {
     DBG_ERROR("disposing");
 }
+
 /*------------------------------------------------------------------------
  Beschreibung:
 ------------------------------------------------------------------------*/
@@ -511,9 +501,7 @@ SwMailMergeDlg::~SwMailMergeDlg()
 void SwMailMergeDlg::Apply()
 {
 }
-/*-- 01.06.2007 13:06:50---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void lcl_MoveControlY( Window* ppW, long nDiffSize )
 {
     Point aPos( ppW->GetPosPixel());
@@ -654,9 +642,7 @@ IMPL_LINK( SwMailMergeDlg, OutputTypeHdl, RadioButton *, pBtn )
 
     return 0;
 }
-/*-- 01.06.2007 12:36:43---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK( SwMailMergeDlg, SaveTypeHdl, RadioButton*,  pBtn )
 {
     bool bIndividual = pBtn == &aSaveIndividualRB;
@@ -882,9 +868,7 @@ IMPL_LINK( SwMailMergeDlg, AttachFileHdl, PushButton *, EMPTYARG )
     }
     return 0;
 }
-/* -----------------------------05.06.01 14:56--------------------------------
 
- ---------------------------------------------------------------------------*/
 uno::Reference<XResultSet> SwMailMergeDlg::GetResultSet() const
 {
     uno::Reference< XResultSet >  xResSetClone;
@@ -897,9 +881,7 @@ uno::Reference<XResultSet> SwMailMergeDlg::GetResultSet() const
     }
     return xResSetClone;
 }
-/*-- 27.11.2002 12:27:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwMailMergeCreateFromDlg::SwMailMergeCreateFromDlg(Window* pParent) :
     ModalDialog(pParent, SW_RES(DLG_MERGE_CREATE)),
     aCreateFromFL(  this, SW_RES( FL_CREATEFROM  )),
@@ -911,15 +893,11 @@ SwMailMergeCreateFromDlg::SwMailMergeCreateFromDlg(Window* pParent) :
 {
     FreeResource();
 }
-/*-- 27.11.2002 12:27:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwMailMergeCreateFromDlg::~SwMailMergeCreateFromDlg()
 {
 }
-/* -----------------04.02.2003 13:45-----------------
- *
- * --------------------------------------------------*/
+
 SwMailMergeFieldConnectionsDlg::SwMailMergeFieldConnectionsDlg(Window* pParent) :
     ModalDialog(pParent, SW_RES(DLG_MERGE_FIELD_CONNECTIONS)),
     aConnectionsFL( this, SW_RES( FL_CONNECTIONS  )),
@@ -932,9 +910,7 @@ SwMailMergeFieldConnectionsDlg::SwMailMergeFieldConnectionsDlg(Window* pParent) 
 {
     FreeResource();
 }
-/* -----------------04.02.2003 13:45-----------------
- *
- * --------------------------------------------------*/
+
 SwMailMergeFieldConnectionsDlg::~SwMailMergeFieldConnectionsDlg()
 {
 }
