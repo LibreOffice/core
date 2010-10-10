@@ -62,21 +62,14 @@
 
 #include <unomid.h>
 
-
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
 const sal_Char cFrameControl[] = "com.sun.star.frame.FrameControl";
 const sal_Char cFactory[] = "private:factory/swriter";
-/************************************************************************
-
-************************************************************************/
 
 sal_Bool SwOneExampleFrame::bShowServiceNotAvailableMessage = sal_True;
 
-/* -----------------27.07.99 15:26-------------------
-
- --------------------------------------------------*/
 SwOneExampleFrame::SwOneExampleFrame( Window& rWin,
                                         sal_uInt32 nFlags,
                                         const Link* pInitializedLink,
@@ -112,9 +105,6 @@ SwOneExampleFrame::SwOneExampleFrame( Window& rWin,
     aTopWindow.Show();
 }
 
-/* -----------------------------08.12.99 13:44--------------------------------
-
- ---------------------------------------------------------------------------*/
 void SwOneExampleFrame::CreateErrorMessage(Window* pParent)
 {
     if(SwOneExampleFrame::bShowServiceNotAvailableMessage)
@@ -125,16 +115,12 @@ void SwOneExampleFrame::CreateErrorMessage(Window* pParent)
         SwOneExampleFrame::bShowServiceNotAvailableMessage = sal_False;
     }
 }
-/* -----------------27.07.99 15:26-------------------
 
- --------------------------------------------------*/
 SwOneExampleFrame::~SwOneExampleFrame()
 {
     DisposeControl();
 }
-/* -----------------------------21.12.00 10:16--------------------------------
 
- ---------------------------------------------------------------------------*/
 void    SwOneExampleFrame::CreateControl()
 {
     if(_xControl.is())
@@ -189,10 +175,6 @@ void    SwOneExampleFrame::CreateControl()
     }
 }
 
-
-/* -----------------------------21.12.00 10:16--------------------------------
-
- ---------------------------------------------------------------------------*/
 void    SwOneExampleFrame::DisposeControl()
 {
     _xCursor = 0;
@@ -202,9 +184,7 @@ void    SwOneExampleFrame::DisposeControl()
     _xModel = 0;
     _xController = 0;
 }
-/* -----------------27.07.99 15:26-------------------
 
- --------------------------------------------------*/
 IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
 {
     if(!_xControl.is())
@@ -364,9 +344,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
         pTimer->Start();
     return 0;
 }
-/* -----------------------------27.12.99 09:59--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwOneExampleFrame::ClearDocument( BOOL bStartUpdateTimer )
 {
     uno::Reference< lang::XUnoTunnel> xTunnel( _xCursor, uno::UNO_QUERY);
@@ -398,9 +376,7 @@ void SwOneExampleFrame::ClearDocument( BOOL bStartUpdateTimer )
         }
     }
 }
-/* -----------------------------15.12.99 11:09--------------------------------
 
- ---------------------------------------------------------------------------*/
 static const sal_Int16 nZoomValues[] =
 {
     20,
@@ -409,7 +385,7 @@ static const sal_Int16 nZoomValues[] =
     75,
     100
 };
-//---------------------------------------------------------------------------
+
 #define ITEM_UP     100
 #define ITEM_DOWN   200
 #define ITEM_ZOOM   300
@@ -451,9 +427,7 @@ void SwOneExampleFrame::CreatePopup(const Point& rPt)
     aPop.Execute( &aTopWindow, rPt );
 
 }
-/* -----------------------------15.12.99 11:09--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SwOneExampleFrame, PopupHdl, Menu*, pMenu )
 {
     sal_uInt16 nId = pMenu->GetCurItemId();
@@ -480,18 +454,14 @@ IMPL_LINK(SwOneExampleFrame, PopupHdl, Menu*, pMenu )
     }
     return 0;
 };
-/* -----------------------------15.12.99 10:37--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwFrmCtrlWindow::SwFrmCtrlWindow(Window* pParent, WinBits nBits,
                                 SwOneExampleFrame*  pFrame) :
     Window(pParent, nBits),
     pExampleFrame(pFrame)
 {
 }
-/* -----------------------------15.12.99 09:57--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwFrmCtrlWindow::Command( const CommandEvent& rCEvt )
 {
     switch ( rCEvt.GetCommand() )
@@ -510,9 +480,7 @@ void SwFrmCtrlWindow::Command( const CommandEvent& rCEvt )
         default:;
     }
 }
-/* -----------------------------15.12.99 12:57--------------------------------
 
- ---------------------------------------------------------------------------*/
 MenuResource::MenuResource(const ResId& rResId) :
     Resource(rResId),
     aMenuArray(ResId(1,*rResId.GetResMgr()))

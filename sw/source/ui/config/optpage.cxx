@@ -81,12 +81,7 @@
 
 #include <unomid.h>
 
-
 using namespace ::com::sun::star;
-
-
-/*******************************************************
- ******************************************************/
 
 /*-----------------31.08.96 10.16-------------------
     TabPage Anzeige/Inhalt
@@ -181,24 +176,16 @@ SwContentOptPage::SwContentOptPage( Window* pParent,
     }
 }
 
-/*-----------------31.08.96 13.58-------------------
-
---------------------------------------------------*/
 SwContentOptPage::~SwContentOptPage()
 {
 }
 
-/*-----------------31.08.96 13.58-------------------
-
---------------------------------------------------*/
 SfxTabPage* SwContentOptPage::Create( Window* pParent,
                                 const SfxItemSet& rAttrSet)
 {
     return new SwContentOptPage(pParent, rAttrSet);
 }
-/* -----------------------------07.04.01 16:57--------------------------------
 
- ---------------------------------------------------------------------------*/
 static void lcl_SelectMetricLB(ListBox& rMetric, USHORT nSID, const SfxItemSet& rSet)
 {
     const SfxPoolItem* pItem;
@@ -216,9 +203,7 @@ static void lcl_SelectMetricLB(ListBox& rMetric, USHORT nSID, const SfxItemSet& 
     }
     rMetric.SaveValue();
 }
-/*-----------------31.08.96 13.58-------------------
 
---------------------------------------------------*/
 void SwContentOptPage::Reset(const SfxItemSet& rSet)
 {
     const SwElemItem* pElemAttr = 0;
@@ -250,9 +235,6 @@ void SwContentOptPage::Reset(const SfxItemSet& rSet)
     AnyRulerHdl(&aAnyRulerCB);
 }
 
-/*-----------------31.08.96 13.58-------------------
-
---------------------------------------------------*/
 BOOL SwContentOptPage::FillItemSet(SfxItemSet& rSet)
 {
     const SwElemItem*   pOldAttr = (const SwElemItem*)
@@ -309,17 +291,13 @@ BOOL SwContentOptPage::FillItemSet(SfxItemSet& rSet)
     }
     return bRet;
 }
-/* -----------------------------05.03.2002 15:07------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SwContentOptPage, VertRulerHdl, CheckBox*, pBox)
 {
     aVRulerRightCBox.Enable(pBox->IsEnabled() && pBox->IsChecked());
     return 0;
 }
-/* -----------------20.09.2002 11:30-----------------
- *
- * --------------------------------------------------*/
+
 IMPL_LINK( SwContentOptPage, AnyRulerHdl, CheckBox*, pBox)
 {
     BOOL bChecked = pBox->IsChecked();
@@ -430,8 +408,6 @@ SwAddPrinterTabPage::SwAddPrinterTabPage( Window* pParent,
     aProspectCB_RTL.Show(aCTLOptions.IsCTLFontEnabled());
 }
 
-//------------------------------------------------------------------------
-
 void SwAddPrinterTabPage::SetPreview(BOOL bPrev)
 {
     bPreview = bPrev;
@@ -450,15 +426,11 @@ void SwAddPrinterTabPage::SetPreview(BOOL bPrev)
     }
 }
 
-//------------------------------------------------------------------------
-
 SfxTabPage* SwAddPrinterTabPage::Create( Window* pParent,
                                        const SfxItemSet& rAttrSet )
 {
     return ( new SwAddPrinterTabPage( pParent, rAttrSet ) );
 }
-//------------------------------------------------------------------------
-
 
 BOOL    SwAddPrinterTabPage::FillItemSet( SfxItemSet& rCoreSet )
 {
@@ -498,8 +470,6 @@ BOOL    SwAddPrinterTabPage::FillItemSet( SfxItemSet& rCoreSet )
     }
     return bAttrModified;
 }
-//------------------------------------------------------------------------
-
 
 void    SwAddPrinterTabPage::Reset( const SfxItemSet&  )
 {
@@ -543,15 +513,11 @@ void    SwAddPrinterTabPage::Reset( const SfxItemSet&  )
     else
         aProspectCB_RTL.Enable( FALSE );
 }
-//-----------------------------------------------------------------------
-
 
 void    SwAddPrinterTabPage::Init()
 {
 
 }
-//------------------------------------------------------------------------
-
 
 IMPL_LINK_INLINE_START( SwAddPrinterTabPage, AutoClickHdl, CheckBox *, EMPTYARG )
 {
@@ -568,9 +534,6 @@ IMPL_LINK_INLINE_START( SwAddPrinterTabPage, AutoClickHdl, CheckBox *, EMPTYARG 
 }
 IMPL_LINK_INLINE_END( SwAddPrinterTabPage, AutoClickHdl, CheckBox *, EMPTYARG )
 
-//------------------------------------------------------------------------
-
-
 void  SwAddPrinterTabPage::SetFax( const SvStringsDtor& rFaxLst )
 {
     aFaxLB.InsertEntry(sNone);
@@ -578,9 +541,6 @@ void  SwAddPrinterTabPage::SetFax( const SvStringsDtor& rFaxLst )
         aFaxLB.InsertEntry( *rFaxLst.GetObject(i) );
     aFaxLB.SelectEntryPos(0);
 }
-
-//------------------------------------------------------------------------
-
 
 IMPL_LINK_INLINE_START( SwAddPrinterTabPage, SelectHdl, ListBox *, EMPTYARG )
 {
@@ -623,11 +583,10 @@ void SwAddPrinterTabPage::PageCreated (SfxAllItemSet aSet)
 */
     }
 }
+
 /*-----------------03.09.96 11.53-------------------
     Tabpage Standardfonts
 --------------------------------------------------*/
-
-
 SwStdFontTabPage::SwStdFontTabPage( Window* pParent,
                                        const SfxItemSet& rSet ) :
     SfxTabPage( pParent, SW_RES( TP_STD_FONT ), rSet),
@@ -708,28 +667,18 @@ SwStdFontTabPage::SwStdFontTabPage( Window* pParent,
     aDocOnlyCB.Check(SW_MOD()->GetModuleConfig()->IsDefaultFontInCurrDocOnly());
 }
 
-/*-----------------03.09.96 11.53-------------------
-
---------------------------------------------------*/
-
 SwStdFontTabPage::~SwStdFontTabPage()
 {
     if(bDeletePrinter)
         delete pPrt;
 }
 
-/*-----------------03.09.96 11.53-------------------
-
---------------------------------------------------*/
 SfxTabPage* SwStdFontTabPage::Create( Window* pParent,
                                 const SfxItemSet& rAttrSet )
 {
     return new SwStdFontTabPage(pParent, rAttrSet);
 }
 
-/*-----------------03.09.96 11.53-------------------
-
---------------------------------------------------*/
 void lcl_SetColl(SwWrtShell* pWrtShell, USHORT nType,
                     SfxPrinter* pPrt, const String& rStyle,
                     USHORT nFontWhich)
@@ -749,9 +698,7 @@ void lcl_SetColl(SwWrtShell* pWrtShell, USHORT nType,
         delete (SfxFont*) pFnt;
     }
 }
-/*-- 11.10.2005 15:47:52---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void lcl_SetColl(SwWrtShell* pWrtShell, USHORT nType,
                     sal_Int32 nHeight, USHORT nFontHeightWhich)
 {
@@ -760,9 +707,7 @@ void lcl_SetColl(SwWrtShell* pWrtShell, USHORT nType,
     SwTxtFmtColl *pColl = pWrtShell->GetTxtCollFromPool(nType);
     pColl->SetFmtAttr(SvxFontHeightItem(nHeight, 100, nFontHeightWhich));
 }
-/*-----------------03.09.96 11.53-------------------
 
---------------------------------------------------*/
 BOOL SwStdFontTabPage::FillItemSet( SfxItemSet& )
 {
     BOOL bNotDocOnly = !aDocOnlyCB.IsChecked();
@@ -910,9 +855,6 @@ BOOL SwStdFontTabPage::FillItemSet( SfxItemSet& )
     return FALSE;
 }
 
-/*-----------------03.09.96 11.53-------------------
-
---------------------------------------------------*/
 void SwStdFontTabPage::Reset( const SfxItemSet& rSet)
 {
     const SfxPoolItem* pLang;
@@ -1096,11 +1038,6 @@ void SwStdFontTabPage::Reset( const SfxItemSet& rSet)
     aIndexHeightLB.   SaveValue();
 }
 
-/*-----------------07.09.96 12.28-------------------
-
---------------------------------------------------*/
-
-
 IMPL_LINK( SwStdFontTabPage, StandardHdl, PushButton *, EMPTYARG )
 {
     sal_uInt8 nFontOffset = nFontGroup * FONT_PER_GROUP;
@@ -1134,9 +1071,6 @@ IMPL_LINK( SwStdFontTabPage, StandardHdl, PushButton *, EMPTYARG )
 
     return 0;
 }
-/*-----------------17.01.97 15.43-------------------
-
---------------------------------------------------*/
 
 IMPL_LINK( SwStdFontTabPage, ModifyHdl, ComboBox*, pBox )
 {
@@ -1165,9 +1099,6 @@ IMPL_LINK( SwStdFontTabPage, ModifyHdl, ComboBox*, pBox )
     return 0;
 }
 
-/*-- 11.10.2005 15:11:23---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 IMPL_LINK( SwStdFontTabPage, ModifyHeightHdl, FontSizeBox*, pBox )
 {
     if(pBox == &aStandardHeightLB)
@@ -1195,9 +1126,6 @@ IMPL_LINK( SwStdFontTabPage, ModifyHeightHdl, FontSizeBox*, pBox )
     return 0;
 }
 
-/*-- 28.09.2005 13:22:36---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 IMPL_LINK( SwStdFontTabPage, LoseFocusHdl, ComboBox*, pBox )
 {
     FontSizeBox* pHeightLB = 0;
@@ -1285,27 +1213,15 @@ SwTableOptionsTabPage::SwTableOptionsTabPage( Window* pParent, const SfxItemSet&
     aHeaderCB.SetClickHdl(aLnk);
 }
 
-/*-----------------18.01.97 12.43-------------------
-
---------------------------------------------------*/
-
 SwTableOptionsTabPage::~SwTableOptionsTabPage()
 {
 }
-
-/*-----------------18.01.97 12.43-------------------
-
---------------------------------------------------*/
 
 SfxTabPage* SwTableOptionsTabPage::Create( Window* pParent,
                                 const SfxItemSet& rAttrSet )
 {
     return new SwTableOptionsTabPage(pParent, rAttrSet );
 }
-
-/*-----------------18.01.97 12.42-------------------
-
---------------------------------------------------*/
 
 BOOL SwTableOptionsTabPage::FillItemSet( SfxItemSet& )
 {
@@ -1393,9 +1309,7 @@ BOOL SwTableOptionsTabPage::FillItemSet( SfxItemSet& )
 
     return bRet;
 }
-/*-----------------18.01.97 12.42-------------------
 
---------------------------------------------------*/
 void SwTableOptionsTabPage::Reset( const SfxItemSet& rSet)
 {
     const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
@@ -1491,9 +1405,7 @@ void SwTableOptionsTabPage::Reset( const SfxItemSet& rSet)
 
     CheckBoxHdl(0);
 }
-/*-----------------18.01.97 12.42-------------------
 
---------------------------------------------------*/
 IMPL_LINK(SwTableOptionsTabPage, CheckBoxHdl, CheckBox*, EMPTYARG)
 {
     aNumFmtFormattingCB.Enable(aNumFormattingCB.IsChecked());
@@ -1501,18 +1413,17 @@ IMPL_LINK(SwTableOptionsTabPage, CheckBoxHdl, CheckBox*, EMPTYARG)
     aRepeatHeaderCB.Enable(aHeaderCB.IsChecked());
     return 0;
 }
+
 void SwTableOptionsTabPage::PageCreated (SfxAllItemSet aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pWrtSh,SwWrtShellItem,SID_WRT_SHELL,sal_False);
     if (pWrtSh)
         SetWrtShell(pWrtSh->GetValue());
 }
-/*  */
 
 /*-----------------31.10.97 17:55-------------------
  TabPage fuer ShadowCrsr
 --------------------------------------------------*/
-
 SwShdwCrsrOptionsTabPage::SwShdwCrsrOptionsTabPage( Window* pParent,
                                                     const SfxItemSet& rSet )
     : SfxTabPage(pParent, SW_RES(TP_OPTSHDWCRSR), rSet),
@@ -1687,7 +1598,6 @@ void SwShdwCrsrOptionsTabPage::Reset( const SfxItemSet& rSet )
 /*-----------------31.10.97 17:55-------------------
  TabPage fuer Redlining
 --------------------------------------------------*/
-
 struct CharAttr
 {
     USHORT nItemId;
@@ -1724,7 +1634,6 @@ static USHORT aChangedAttrMap[] = { 0, 1, 2, 3, 4, 6, 7, 8, 9, 10 };
 /*-----------------------------------------------------------------------
     Beschreibung: Markierungsvorschau
  -----------------------------------------------------------------------*/
-
 SwMarkPreview::SwMarkPreview( Window *pParent, const ResId& rResID ) :
 
     Window(pParent, rResID),
@@ -2453,8 +2362,6 @@ void SwRedlineOptionsTabPage::InitFontStyle(SvxFontPrevWindow& rExampleWin)
 
 
 #ifdef DBG_UTIL
-/*******************************************************
- ******************************************************/
 /*----------------- OS 11.01.95  -----------------------
  TabPage Testeinstellungen
 -------------------------------------------------------*/
@@ -2521,17 +2428,11 @@ SwTestTabPage::SwTestTabPage( Window* pParent,
 
 }
 
-
-//------------------------------------------------------------------------
-
-
 SfxTabPage* SwTestTabPage::Create( Window* pParent,
                                        const SfxItemSet& rAttrSet )
 {
     return ( new SwTestTabPage( pParent, rAttrSet ) );
 }
-//------------------------------------------------------------------------
-
 
 BOOL    SwTestTabPage::FillItemSet( SfxItemSet& rCoreSet )
 {
@@ -2553,8 +2454,6 @@ BOOL    SwTestTabPage::FillItemSet( SfxItemSet& rCoreSet )
     }
     return bAttrModified;
 }
-//------------------------------------------------------------------------
-
 
 void SwTestTabPage::Reset( const SfxItemSet& )
 {
@@ -2576,8 +2475,6 @@ void SwTestTabPage::Reset( const SfxItemSet& )
         aTest10CBox.Check(pTestAttr->bTest10);
     }
 }
-//------------------------------------------------------------------------
-
 
 void SwTestTabPage::Init()
 {
@@ -2594,8 +2491,6 @@ void SwTestTabPage::Init()
     aTest9CBox.SetClickHdl( aLk );
     aTest10CBox.SetClickHdl( aLk );
 }
-//------------------------------------------------------------------------
-
 
 IMPL_LINK_INLINE_START( SwTestTabPage, AutoClickHdl, CheckBox *, EMPTYARG )
 {

@@ -83,9 +83,7 @@ void SwTOXMgr::DeleteTOXMark()
     // zur naechsten wandern
     pCurTOXMark = pNext;
 }
-/* -----------------20.08.99 10:48-------------------
 
- --------------------------------------------------*/
 void    SwTOXMgr::InsertTOXMark(const SwTOXMarkDescription& rDesc)
 {
     SwTOXMark* pMark = 0;
@@ -287,10 +285,6 @@ void SwTOXMgr::SetCurTOXMark(USHORT nId)
     pCurTOXMark = (nId < aCurMarks.Count()) ? aCurMarks[nId] : 0;
 }
 
-/* -----------------01.07.99 16:23-------------------
-
- --------------------------------------------------*/
-
 BOOL SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
                                     SwTOXBase** ppBase,
                                     const SfxItemSet* pSet)
@@ -472,9 +466,7 @@ BOOL SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
 
     return bRet;
 }
-/* -----------------20.10.99 14:11-------------------
 
- --------------------------------------------------*/
 void SwTOXDescription::SetSortKeys(SwTOXSortKey eKey1,
                         SwTOXSortKey eKey2,
                             SwTOXSortKey eKey3)
@@ -493,9 +485,6 @@ void SwTOXDescription::SetSortKeys(SwTOXSortKey eKey1,
     eSortKey3 = aArr[2];
 }
 
-/* -----------------10.09.99 10:02-------------------
-
- --------------------------------------------------*/
 void SwTOXDescription::ApplyTo(SwTOXBase& rTOXBase)
 {
     for(USHORT i = 0; i < MAXLEVEL; i++)

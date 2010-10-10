@@ -263,9 +263,7 @@ ImpAutoFmtNameListLoader::ImpAutoFmtNameListLoader( SvStringsDtor& rLst )
     }
     FreeResource();
 }
-/* -----------------16.09.99 12:28-------------------
 
- --------------------------------------------------*/
 const String&   SwAuthorityFieldType::GetAuthFieldName(ToxAuthorityField eType)
 {
     if(!pAuthFieldNameList)
@@ -279,9 +277,7 @@ const String&   SwAuthorityFieldType::GetAuthFieldName(ToxAuthorityField eType)
     }
     return *pAuthFieldNameList->GetObject( static_cast< USHORT >(eType) );
 }
-/* -----------------16.09.99 12:29-------------------
 
- --------------------------------------------------*/
 const String&   SwAuthorityFieldType::GetAuthTypeName(ToxAuthorityType eType)
 {
     if(!pAuthFieldTypeList)

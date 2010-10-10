@@ -28,9 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-// include ---------------------------------------------------------------
-
-
 #include <sot/formats.hxx>
 
 #include <condedit.hxx>
@@ -42,10 +39,6 @@ using namespace ::com::sun::star::uno;
 
 // STATIC DATA -----------------------------------------------------------
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 ConditionEdit::ConditionEdit( Window* pParent, const ResId& rResId )
     : Edit( pParent, rResId ),
     DropTargetHelper( this ),
@@ -56,7 +49,6 @@ ConditionEdit::ConditionEdit( Window* pParent, const ResId& rResId )
 /*--------------------------------------------------------------------
     Beschreibung: Drop moeglich, bzw Format bekannt?
  --------------------------------------------------------------------*/
-
 sal_Int8 ConditionEdit::AcceptDrop( const AcceptDropEvent& /*rEvt*/ )
 {
     return OColumnTransferable::canExtractColumnDescriptor

@@ -51,10 +51,6 @@
 
 SFX_IMPL_CHILDWINDOW(SwFldDlgWrapper, FN_INSERT_FIELD)
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SwChildWinWrapper::SwChildWinWrapper(Window *pParentWindow, USHORT nId) :
         SfxChildWindow(pParentWindow, nId),
         m_pDocSh(0)
@@ -63,10 +59,6 @@ SwChildWinWrapper::SwChildWinWrapper(Window *pParentWindow, USHORT nId) :
     m_aUpdateTimer.SetTimeout(200);
     m_aUpdateTimer.SetTimeoutHdl(LINK(this, SwChildWinWrapper, UpdateHdl));
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 IMPL_LINK( SwChildWinWrapper, UpdateHdl, void*, EMPTYARG )
 {
@@ -78,7 +70,6 @@ IMPL_LINK( SwChildWinWrapper, UpdateHdl, void*, EMPTYARG )
 /*--------------------------------------------------------------------
     Beschreibung: Nach Dok-Wechsel Dialog neu initialisieren
  --------------------------------------------------------------------*/
-
 BOOL SwChildWinWrapper::ReInitDlg(SwDocShell *)
 {
     BOOL bRet = FALSE;
@@ -94,21 +85,12 @@ BOOL SwChildWinWrapper::ReInitDlg(SwDocShell *)
     return bRet;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SfxChildWinInfo SwFldDlgWrapper::GetInfo() const
 {
     SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();
     aInfo.aPos = GetWindow()->OutputToAbsoluteScreenPixel(aInfo.aPos);
     return aInfo;
 }
-
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 SwFldDlgWrapper::SwFldDlgWrapper( Window* _pParent, USHORT nId,
                                     SfxBindings* pB,
@@ -129,7 +111,6 @@ SwFldDlgWrapper::SwFldDlgWrapper( Window* _pParent, USHORT nId,
 /*--------------------------------------------------------------------
     Beschreibung: Nach Dok-Wechsel Dialog neu initialisieren
  --------------------------------------------------------------------*/
-
 BOOL SwFldDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
 {
     BOOL bRet;
@@ -142,10 +123,6 @@ BOOL SwFldDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
     return bRet;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwFldDlgWrapper::ShowPage(USHORT nPage)
 {
     pDlgInterface->ShowPage(nPage ? nPage : TP_FLD_REF);
@@ -153,9 +130,6 @@ void SwFldDlgWrapper::ShowPage(USHORT nPage)
 
 SFX_IMPL_CHILDWINDOW(SwFldDataOnlyDlgWrapper, FN_INSERT_FIELD_DATA_ONLY)
 
-/* -----------------04.02.2003 14:17-----------------
- *
- * --------------------------------------------------*/
 SfxChildWinInfo SwFldDataOnlyDlgWrapper::GetInfo() const
 {
     SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();
@@ -164,9 +138,7 @@ SfxChildWinInfo SwFldDataOnlyDlgWrapper::GetInfo() const
     aInfo.bVisible = FALSE;
     return aInfo;
 }
-/* -----------------04.02.2003 14:17-----------------
- *
- * --------------------------------------------------*/
+
 SwFldDataOnlyDlgWrapper::SwFldDataOnlyDlgWrapper( Window* _pParent, USHORT nId,
                                     SfxBindings* pB,
                                     SfxChildWinInfo* pInfo )
@@ -185,6 +157,7 @@ SwFldDataOnlyDlgWrapper::SwFldDataOnlyDlgWrapper( Window* _pParent, USHORT nId,
     pDlg->Initialize( pInfo );
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
 }
+
 /* -----------------04.02.2003 14:17-----------------
  * re-init after doc activation
  * --------------------------------------------------*/

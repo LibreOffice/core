@@ -78,9 +78,7 @@ Sequence<OUString> SwPrintOptions::GetPropertyNames()
     }
     return aNames;
 }
-/* -----------------------------06.09.00 16:44--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwPrintOptions::SwPrintOptions(sal_Bool bWeb) :
     ConfigItem(bWeb ? C2U("Office.WriterWeb/Print") :  C2U("Office.Writer/Print"),
         CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE),
@@ -139,15 +137,11 @@ SwPrintOptions::SwPrintOptions(sal_Bool bWeb) :
 
     bPrintDraw = bPrintGraphic;
 }
-/* -----------------------------06.09.00 16:50--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwPrintOptions::~SwPrintOptions()
 {
 }
-/* -----------------------------06.09.00 16:43--------------------------------
 
- ---------------------------------------------------------------------------*/
 
 void SwPrintOptions::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
 

@@ -148,9 +148,6 @@ void lcl_FillSubRegionList( SwWrtShell& rSh, ComboBox& rSubRegions, ComboBox* pA
     }
 }
 
-/* -----------------25.06.99 15:38-------------------
-
- --------------------------------------------------*/
 class SwTestPasswdDlg : public SfxPasswordDialog
 {
 public:
@@ -349,14 +346,9 @@ String SectRepr::GetSubRegion() const
     return sLinkFile;
 }
 
-
-
 /*----------------------------------------------------------------------------
  Beschreibung: Dialog Bearbeiten Bereiche
 ----------------------------------------------------------------------------*/
-
-//---------------------------------------------------------------------
-
 SwEditRegionDlg::SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh )
     : SfxModalDialog( pParent, SW_RES(MD_EDIT_REGION) ),
     aNameFL             ( this, SW_RES( FL_NAME ) ),
@@ -458,9 +450,7 @@ SwEditRegionDlg::SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh )
     aTree.Show();
     bDontCheckPasswd = sal_False;
 }
-/* -----------------------------26.04.01 14:56--------------------------------
 
- ---------------------------------------------------------------------------*/
 BOOL SwEditRegionDlg::CheckPasswd(CheckBox* pBox)
 {
     if(bDontCheckPasswd)
@@ -505,10 +495,10 @@ BOOL SwEditRegionDlg::CheckPasswd(CheckBox* pBox)
 
     return bRet;
 }
+
 /*---------------------------------------------------------------------
     Beschreibung: Durchsuchen nach Child-Sections, rekursiv
 ---------------------------------------------------------------------*/
-
 void SwEditRegionDlg::RecurseList( const SwSectionFmt* pFmt, SvLBoxEntry* pEntry )
 {
     SwSection* pSect = 0;
@@ -582,9 +572,6 @@ void SwEditRegionDlg::RecurseList( const SwSectionFmt* pFmt, SvLBoxEntry* pEntry
         aTree.Select(pSelEntry);
     }
 }
-/*---------------------------------------------------------------------
-
----------------------------------------------------------------------*/
 
 USHORT SwEditRegionDlg::FindArrPos(const SwSectionFmt* pFmt )
 {
@@ -596,10 +583,10 @@ USHORT SwEditRegionDlg::FindArrPos(const SwSectionFmt* pFmt )
     DBG_ERROR(  "SectionFormat nicht in der Liste" );
     return USHRT_MAX;
 }
+
 /*---------------------------------------------------------------------
  Beschreibung:
 ---------------------------------------------------------------------*/
-
 SwEditRegionDlg::~SwEditRegionDlg( )
 {
     SvLBoxEntry* pEntry = aTree.First();
@@ -612,9 +599,7 @@ SwEditRegionDlg::~SwEditRegionDlg( )
     aSectReprArr.DeleteAndDestroy( 0, aSectReprArr.Count() );
     delete m_pDocInserter;
 }
-/* -----------------------------09.10.2001 15:41------------------------------
 
- ---------------------------------------------------------------------------*/
 void    SwEditRegionDlg::SelectSection(const String& rSectionName)
 {
     SvLBoxEntry* pEntry = aTree.First();
@@ -632,12 +617,12 @@ void    SwEditRegionDlg::SelectSection(const String& rSectionName)
         aTree.MakeVisible(pEntry);
     }
 }
+
 /*---------------------------------------------------------------------
     Beschreibung:   Selektierte Eintrag in der TreeListBox wird im
                     Edit-Fenster angezeigt
                     Bei Multiselektion werden einige Controls disabled
 ---------------------------------------------------------------------*/
-
 IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
 {
     bDontCheckPasswd = sal_True;
@@ -808,9 +793,7 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
     bDontCheckPasswd = sal_False;
     return 0;
 }
-/*-----------------28.06.97 09:19-------------------
 
---------------------------------------------------*/
 IMPL_LINK( SwEditRegionDlg, DeselectHdl, SvTreeListBox *, pBox )
 {
     if( !pBox->GetSelectionCount() )
@@ -845,7 +828,6 @@ IMPL_LINK( SwEditRegionDlg, DeselectHdl, SvTreeListBox *, pBox )
     Beschreibung:   Im OkHdl werden die veraenderten Einstellungen
                     uebernommen und aufgehobene Bereiche geloescht
 ---------------------------------------------------------------------*/
-
 IMPL_LINK( SwEditRegionDlg, OkHdl, CheckBox *, EMPTYARG )
 {
     // JP 13.03.96:
@@ -925,10 +907,10 @@ IMPL_LINK( SwEditRegionDlg, OkHdl, CheckBox *, EMPTYARG )
 
     return 0;
 }
+
 /*---------------------------------------------------------------------
  Beschreibung: Toggle protect
 ---------------------------------------------------------------------*/
-
 IMPL_LINK( SwEditRegionDlg, ChangeProtectHdl, TriStateBox *, pBox )
 {
     if(!CheckPasswd(pBox))
@@ -954,10 +936,10 @@ IMPL_LINK( SwEditRegionDlg, ChangeProtectHdl, TriStateBox *, pBox )
     aPasswdPB.Enable(bCheck);
     return 0;
 }
+
 /*---------------------------------------------------------------------
  Beschreibung: Toggle hide
 ---------------------------------------------------------------------*/
-
 IMPL_LINK( SwEditRegionDlg, ChangeHideHdl, TriStateBox *, pBox )
 {
     if(!CheckPasswd(pBox))
@@ -990,7 +972,6 @@ IMPL_LINK( SwEditRegionDlg, ChangeHideHdl, TriStateBox *, pBox )
 /*---------------------------------------------------------------------
  Beschreibung: Toggle edit in readonly
 ---------------------------------------------------------------------*/
-
 IMPL_LINK( SwEditRegionDlg, ChangeEditInReadonlyHdl, TriStateBox *, pBox )
 {
     if(!CheckPasswd(pBox))
@@ -1012,7 +993,6 @@ IMPL_LINK( SwEditRegionDlg, ChangeEditInReadonlyHdl, TriStateBox *, pBox )
 /*---------------------------------------------------------------------
  Beschreibung: selektierten Bereich aufheben
 ---------------------------------------------------------------------*/
-
 IMPL_LINK( SwEditRegionDlg, ChangeDismissHdl, CheckBox *, EMPTYARG )
 {
     if(!CheckPasswd())
@@ -1077,10 +1057,10 @@ IMPL_LINK( SwEditRegionDlg, ChangeDismissHdl, CheckBox *, EMPTYARG )
     }
     return 0;
 }
+
 /*---------------------------------------------------------------------
  Beschreibung: CheckBox mit Datei verknuepfen?
 ---------------------------------------------------------------------*/
-
 IMPL_LINK( SwEditRegionDlg, UseFileHdl, CheckBox *, pBox )
 {
     if(!CheckPasswd(pBox))
@@ -1151,7 +1131,6 @@ IMPL_LINK( SwEditRegionDlg, UseFileHdl, CheckBox *, pBox )
 /*---------------------------------------------------------------------
     Beschreibung: Dialog Datei einfuegen rufen
 ---------------------------------------------------------------------*/
-
 IMPL_LINK( SwEditRegionDlg, FileSearchHdl, PushButton *, EMPTYARG )
 {
     if(!CheckPasswd(0))
@@ -1169,7 +1148,6 @@ IMPL_LINK( SwEditRegionDlg, FileSearchHdl, PushButton *, EMPTYARG )
 /*---------------------------------------------------------------------
     Beschreibung:
 ---------------------------------------------------------------------*/
-
 IMPL_LINK( SwEditRegionDlg, OptionsHdl, PushButton *, EMPTYARG )
 {
     if(!CheckPasswd())
@@ -1275,7 +1253,6 @@ IMPL_LINK( SwEditRegionDlg, OptionsHdl, PushButton *, EMPTYARG )
     Beschreibung:   Uebernahme des Dateinamen oder
                     des verknuepften Bereichs
 ---------------------------------------------------------------------*/
-
 IMPL_LINK( SwEditRegionDlg, FileNameHdl, Edit *, pEdit )
 {
     Selection aSelect = pEdit->GetSelection();
@@ -1324,10 +1301,10 @@ IMPL_LINK( SwEditRegionDlg, FileNameHdl, Edit *, pEdit )
     }
     return 0;
 }
+
 /*---------------------------------------------------------------------
     Beschreibung:
 ---------------------------------------------------------------------*/
-
 IMPL_LINK( SwEditRegionDlg, DDEHdl, CheckBox*, pBox )
 {
     if(!CheckPasswd(pBox))
@@ -1376,9 +1353,6 @@ IMPL_LINK( SwEditRegionDlg, DDEHdl, CheckBox*, pBox )
     }
     return 0;
 }
-/*---------------------------------------------------------------------
-
----------------------------------------------------------------------*/
 
 IMPL_LINK( SwEditRegionDlg, ChangePasswdHdl, Button *, pBox )
 {
@@ -1432,12 +1406,12 @@ IMPL_LINK( SwEditRegionDlg, ChangePasswdHdl, Button *, pBox )
     }
     return 0;
 }
+
 /*---------------------------------------------------------------------
     Beschreibung:   Aktueller Bereichsname wird sofort beim editieren
                     in die TreeListBox eingetragen, mit leerem String
                     kein Ok()
 ---------------------------------------------------------------------*/
-
 IMPL_LINK( SwEditRegionDlg, NameEditHdl, Edit *, EMPTYARG )
 {
     if(!CheckPasswd(0))
@@ -1455,9 +1429,6 @@ IMPL_LINK( SwEditRegionDlg, NameEditHdl, Edit *, EMPTYARG )
     }
     return 0;
 }
-/*---------------------------------------------------------------------
-
----------------------------------------------------------------------*/
 
 IMPL_LINK( SwEditRegionDlg, ConditionEditHdl, Edit *, pEdit )
 {
@@ -1508,9 +1479,7 @@ IMPL_LINK( SwEditRegionDlg, DlgClosedHdl, sfx2::FileDialogHelper *, _pFileDlg )
     Application::SetDefDialogParent( m_pOldDefDlgParent );
     return 0;
 }
-/*-- 03.09.2009 16:24:18---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK( SwEditRegionDlg, SubRegionEventHdl, VclWindowEvent *, pEvent )
 {
     if( !bSubRegionsFilled && pEvent && pEvent->GetId() == VCLEVENT_DROPDOWN_PRE_OPEN )
@@ -1539,9 +1508,6 @@ IMPL_LINK( SwEditRegionDlg, SubRegionEventHdl, VclWindowEvent *, pEvent )
     return 0;
 }
 
-/* -----------------------------08.05.2002 15:00------------------------------
-
- ---------------------------------------------------------------------------*/
 Image SwEditRegionDlg::BuildBitmap(BOOL bProtect,BOOL bHidden, BOOL bHighContrast)
 {
     ImageList& rImgLst = bHighContrast ? aImageILH : aImageIL;
@@ -1551,7 +1517,6 @@ Image SwEditRegionDlg::BuildBitmap(BOOL bProtect,BOOL bHidden, BOOL bHighContras
 /*--------------------------------------------------------------------
     Beschreibung:   Hilfsfunktion - Bereichsnamen aus dem Medium lesen
  --------------------------------------------------------------------*/
-
 static void lcl_ReadSections( SfxMedium& rMedium, ComboBox& rBox )
 {
     rBox.Clear();
@@ -1570,9 +1535,7 @@ static void lcl_ReadSections( SfxMedium& rMedium, ComboBox& rBox )
         aArr.DeleteAndDestroy(0, aArr.Count());
     }
 }
-/* -----------------21.05.99 10:16-------------------
- *
- * --------------------------------------------------*/
+
 SwInsertSectionTabDialog::SwInsertSectionTabDialog(
             Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh) :
     SfxTabDialog( pParent, SW_RES(DLG_INSERT_SECTION), &rSet ),
@@ -1603,15 +1566,11 @@ SwInsertSectionTabDialog::SwInsertSectionTabDialog(
     }
     SetCurPageId(TP_INSERT_SECTION);
 }
-/* -----------------21.05.99 10:17-------------------
- *
- * --------------------------------------------------*/
+
 SwInsertSectionTabDialog::~SwInsertSectionTabDialog()
 {
 }
-/* -----------------21.05.99 10:23-------------------
- *
- * --------------------------------------------------*/
+
 void SwInsertSectionTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
 {
     if(TP_INSERT_SECTION == nId)
@@ -1632,17 +1591,12 @@ void SwInsertSectionTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
     else if(TP_SECTION_INDENTS == nId)
         ((SwSectionIndentTabPage&)rPage).SetWrtShell(rWrtSh);
 }
-/* -----------------21.05.99 13:08-------------------
- *
- * --------------------------------------------------*/
 
 void SwInsertSectionTabDialog::SetSectionData(SwSectionData const& rSect)
 {
     m_pSectionData.reset( new SwSectionData(rSect) );
 }
-/* -----------------21.05.99 13:10-------------------
- *
- * --------------------------------------------------*/
+
 short   SwInsertSectionTabDialog::Ok()
 {
     short nRet = SfxTabDialog::Ok();
@@ -1684,9 +1638,6 @@ short   SwInsertSectionTabDialog::Ok()
     return nRet;
 }
 
-/* -----------------21.05.99 10:31-------------------
- *
- * --------------------------------------------------*/
 SwInsertSectionTabPage::SwInsertSectionTabPage(
                             Window *pParent, const SfxItemSet &rAttrSet) :
     SfxTabPage( pParent, SW_RES(TP_INSERT_SECTION), rAttrSet ),
@@ -1736,9 +1687,7 @@ SwInsertSectionTabPage::SwInsertSectionTabPage(
     ChangeProtectHdl(&aProtectCB);
     aSubRegionED.EnableAutocomplete( sal_True, sal_True );
 }
-/* -----------------21.05.99 10:31-------------------
- *
- * --------------------------------------------------*/
+
 SwInsertSectionTabPage::~SwInsertSectionTabPage()
 {
     delete m_pDocInserter;
@@ -1843,23 +1792,16 @@ BOOL SwInsertSectionTabPage::FillItemSet( SfxItemSet& )
     ((SwInsertSectionTabDialog*)GetTabDialog())->SetSectionData(aSection);
     return TRUE;
 }
-/* -----------------21.05.99 10:32-------------------
- *
- * --------------------------------------------------*/
+
 void SwInsertSectionTabPage::Reset( const SfxItemSet& )
 {
 }
-/* -----------------21.05.99 11:22-------------------
- *
- * --------------------------------------------------*/
+
 SfxTabPage* SwInsertSectionTabPage::Create( Window* pParent,
                                 const SfxItemSet& rAttrSet)
 {
     return new SwInsertSectionTabPage(pParent, rAttrSet);
 }
-/*---------------------------------------------------------------------
-
----------------------------------------------------------------------*/
 
 IMPL_LINK( SwInsertSectionTabPage, ChangeHideHdl, CheckBox *, pBox )
 {
@@ -1868,17 +1810,11 @@ IMPL_LINK( SwInsertSectionTabPage, ChangeHideHdl, CheckBox *, pBox )
     aConditionFT.Enable(bHide);
     return 0;
 }
-/*---------------------------------------------------------------------
-
----------------------------------------------------------------------*/
 
 IMPL_LINK( SwInsertSectionTabPage, ChangeEditInReadonlyHdl, CheckBox *, EMPTYARG )
 {
     return 0;
 }
-/*---------------------------------------------------------------------
-
----------------------------------------------------------------------*/
 
 IMPL_LINK( SwInsertSectionTabPage, ChangeProtectHdl, CheckBox *, pBox )
 {
@@ -1887,9 +1823,7 @@ IMPL_LINK( SwInsertSectionTabPage, ChangeProtectHdl, CheckBox *, pBox )
     aPasswdPB.Enable(bCheck);
     return 0;
 }
-/* -----------------------------26.04.01 14:50--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK( SwInsertSectionTabPage, ChangePasswdHdl, Button *, pButton )
 {
     sal_Bool bChange = pButton == &aPasswdPB;
@@ -1920,9 +1854,6 @@ IMPL_LINK( SwInsertSectionTabPage, ChangePasswdHdl, Button *, pButton )
         m_aNewPasswd.realloc(0);
     return 0;
 }
-/*---------------------------------------------------------------------
-
----------------------------------------------------------------------*/
 
 IMPL_LINK_INLINE_START( SwInsertSectionTabPage, NameEditHdl, Edit *, EMPTYARG )
 {
@@ -1931,10 +1862,6 @@ IMPL_LINK_INLINE_START( SwInsertSectionTabPage, NameEditHdl, Edit *, EMPTYARG )
     return 0;
 }
 IMPL_LINK_INLINE_END( SwInsertSectionTabPage, NameEditHdl, Edit *, EMPTYARG )
-
-/*---------------------------------------------------------------------
-
----------------------------------------------------------------------*/
 
 IMPL_LINK( SwInsertSectionTabPage, UseFileHdl, CheckBox *, pBox )
 {
@@ -1968,10 +1895,6 @@ IMPL_LINK( SwInsertSectionTabPage, UseFileHdl, CheckBox *, pBox )
     return 0;
 }
 
-/*---------------------------------------------------------------------
-
----------------------------------------------------------------------*/
-
 IMPL_LINK( SwInsertSectionTabPage, FileSearchHdl, PushButton *, EMPTYARG )
 {
     m_pOldDefDlgParent = Application::GetDefDialogParent();
@@ -1982,10 +1905,6 @@ IMPL_LINK( SwInsertSectionTabPage, FileSearchHdl, PushButton *, EMPTYARG )
     m_pDocInserter->StartExecuteModal( LINK( this, SwInsertSectionTabPage, DlgClosedHdl ) );
     return 0;
 }
-
-/*---------------------------------------------------------------------
-
----------------------------------------------------------------------*/
 
 IMPL_LINK( SwInsertSectionTabPage, DDEHdl, CheckBox*, pBox )
 {
@@ -2307,9 +2226,6 @@ IMPL_LINK( SwSectionFtnEndTabPage, FootEndHdl, CheckBox *, pBox )
     return 0;
 }
 
-/* -----------------21.05.99 13:59-------------------
- *
- * --------------------------------------------------*/
 SwSectionPropertyTabDialog::SwSectionPropertyTabDialog(
     Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh) :
     SfxTabDialog(pParent, SW_RES(DLG_SECTION_PROPERTIES), &rSet),
@@ -2334,15 +2250,11 @@ SwSectionPropertyTabDialog::SwSectionPropertyTabDialog(
             RemoveTabPage(TP_COLUMN);
     }
 }
-/* -----------------21.05.99 13:59-------------------
- *
- * --------------------------------------------------*/
+
 SwSectionPropertyTabDialog::~SwSectionPropertyTabDialog()
 {
 }
-/* -----------------21.05.99 13:59-------------------
- *
- * --------------------------------------------------*/
+
 void SwSectionPropertyTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
 {
     if( TP_BACKGROUND == nId  )
@@ -2359,9 +2271,7 @@ void SwSectionPropertyTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
     else if(TP_SECTION_INDENTS == nId)
         ((SwSectionIndentTabPage&)rPage).SetWrtShell(rWrtSh);
 }
-/*-- 13.06.2003 09:59:08---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwSectionIndentTabPage::SwSectionIndentTabPage( Window *pParent, const SfxItemSet &rAttrSet ) :
     SfxTabPage(pParent, SW_RES(TP_SECTION_INDENTS), rAttrSet),
     aIndentFL(this,     SW_RES(FL_INDENT     )),
@@ -2376,15 +2286,11 @@ SwSectionIndentTabPage::SwSectionIndentTabPage( Window *pParent, const SfxItemSe
     aBeforeMF.SetModifyHdl(aLk);
     aAfterMF.SetModifyHdl(aLk);
 }
-/*-- 13.06.2003 09:59:23---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwSectionIndentTabPage::~SwSectionIndentTabPage()
 {
 }
-/*-- 13.06.2003 09:59:23---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 BOOL SwSectionIndentTabPage::FillItemSet( SfxItemSet& rSet)
 {
     if(aBeforeMF.IsValueModified() ||
@@ -2397,9 +2303,7 @@ BOOL SwSectionIndentTabPage::FillItemSet( SfxItemSet& rSet)
     }
     return TRUE;
 }
-/*-- 13.06.2003 09:59:24---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwSectionIndentTabPage::Reset( const SfxItemSet& rSet)
 {
     //this page doesn't show up in HTML mode
@@ -2425,16 +2329,12 @@ void SwSectionIndentTabPage::Reset( const SfxItemSet& rSet)
     aAfterMF.SaveValue();
     IndentModifyHdl(0);
 }
-/*-- 13.06.2003 09:59:24---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SfxTabPage*  SwSectionIndentTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet)
 {
     return new SwSectionIndentTabPage(pParent, rAttrSet);
 }
-/* -----------------13.06.2003 13:57-----------------
 
- --------------------------------------------------*/
 void SwSectionIndentTabPage::SetWrtShell(SwWrtShell& rSh)
 {
     //set sensible values at the preview
@@ -2444,9 +2344,7 @@ void SwSectionIndentTabPage::SetWrtShell(SwWrtShell& rSh)
     Size aPageSize(rPageRect.Width(), rPageRect.Height());
     aPreviewWin.SetSize(aPageSize);
 }
-/* -----------------13.06.2003 14:02-----------------
 
- --------------------------------------------------*/
 IMPL_LINK(SwSectionIndentTabPage, IndentModifyHdl, MetricField*, EMPTYARG)
 {
     aPreviewWin.SetLeftMargin( static_cast< long >(aBeforeMF.Denormalize(aBeforeMF.GetValue(FUNIT_TWIP))) );
@@ -2454,4 +2352,3 @@ IMPL_LINK(SwSectionIndentTabPage, IndentModifyHdl, MetricField*, EMPTYARG)
     aPreviewWin.Draw(TRUE);
     return 0;
 }
-

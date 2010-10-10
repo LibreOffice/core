@@ -41,10 +41,6 @@
 
 class SwFldVarPage;
 
-/*--------------------------------------------------------------------
-   Beschreibung:
- --------------------------------------------------------------------*/
-
 class SelectionListBox : public ListBox
 {
     SwFldVarPage*   pDlg;
@@ -59,10 +55,6 @@ public:
     BOOL            IsCallAddSelection() const {return bCallAddSelection;}
     void            ResetCallAddSelection() {bCallAddSelection = FALSE;}
 };
-
-/*--------------------------------------------------------------------
-   Beschreibung:
- --------------------------------------------------------------------*/
 
 class SwFldVarPage : public SwFldPage
 {

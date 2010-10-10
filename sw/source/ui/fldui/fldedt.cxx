@@ -60,15 +60,10 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
-
 namespace swui
 {
     SwAbstractDialogFactory * GetFactory();
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 SwFldEditDlg::SwFldEditDlg(SwView& rVw) :
     SfxSingleTabDialog(&rVw.GetViewFrame()->GetWindow(), 0, 0),
@@ -127,7 +122,6 @@ SwFldEditDlg::SwFldEditDlg(SwView& rVw) :
 /*--------------------------------------------------------------------
     Beschreibung: Controlls initialisieren
  --------------------------------------------------------------------*/
-
 void SwFldEditDlg::Init()
 {
     SwFldPage* pTabPage = (SwFldPage*)GetTabPage();
@@ -164,10 +158,6 @@ void SwFldEditDlg::Init()
     GetOKButton()->Enable( !pSh->IsReadOnlyAvailable() ||
                            !pSh->HasReadonlySel() );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 SfxTabPage* SwFldEditDlg::CreatePage(USHORT nGroup)
 {
@@ -238,19 +228,11 @@ SfxTabPage* SwFldEditDlg::CreatePage(USHORT nGroup)
     return pTabPage;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SwFldEditDlg::~SwFldEditDlg()
 {
     pSh->SetCareWin(NULL);
     pSh->EnterStdMode();
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwFldEditDlg::EnableInsert(BOOL bEnable)
 {
@@ -258,10 +240,6 @@ void SwFldEditDlg::EnableInsert(BOOL bEnable)
         bEnable = FALSE;
     GetOKButton()->Enable( bEnable );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwFldEditDlg::InsertHdl()
 {
@@ -271,7 +249,6 @@ void SwFldEditDlg::InsertHdl()
 /*--------------------------------------------------------------------
      Beschreibung: Aendern des Feldes anstossen
  --------------------------------------------------------------------*/
-
 IMPL_LINK( SwFldEditDlg, OKHdl, Button *, EMPTYARG )
 {
     if (GetOKButton()->IsEnabled())
@@ -288,10 +265,6 @@ IMPL_LINK( SwFldEditDlg, OKHdl, Button *, EMPTYARG )
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 short SwFldEditDlg::Execute()
 {
     // Ohne TabPage kein Dialog
@@ -301,7 +274,6 @@ short SwFldEditDlg::Execute()
 /*--------------------------------------------------------------------
     Beschreibung: Traveling zwishen Feldern gleichen Typs
  --------------------------------------------------------------------*/
-
 IMPL_LINK( SwFldEditDlg, NextPrevHdl, Button *, pButton )
 {
     BOOL bNext = pButton == &aNextBT;
@@ -342,10 +314,6 @@ IMPL_LINK( SwFldEditDlg, NextPrevHdl, Button *, pButton )
 
     return 0;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 IMPL_LINK( SwFldEditDlg, AddressHdl, PushButton *, EMPTYARG )
 {
@@ -395,5 +363,3 @@ IMPL_LINK( SwFldEditDlg, AddressHdl, PushButton *, EMPTYARG )
     delete pDlg;
     return 0;
 }
-
-

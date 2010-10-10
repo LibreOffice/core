@@ -28,9 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-// include ---------------------------------------------------------------
-
-
 #include <svl/style.hxx>
 #include <vcl/menu.hxx>
 #include <svl/stritem.hxx>
@@ -46,7 +43,6 @@
 
 
 // STATIC DATA -----------------------------------------------------------
-
 
 SFX_IMPL_STATUSBAR_CONTROL( SwTemplateControl, SfxStringItem );
 
@@ -65,15 +61,11 @@ private:
     virtual void    Select();
 };
 
-// -----------------------------------------------------------------------
-
 TemplatePopup_Impl::TemplatePopup_Impl() :
     PopupMenu(),
     nCurId(USHRT_MAX)
 {
 }
-
-// -----------------------------------------------------------------------
 
 void TemplatePopup_Impl::Select()
 {
@@ -89,13 +81,9 @@ SwTemplateControl::SwTemplateControl( USHORT _nSlotId,
 {
 }
 
-// -----------------------------------------------------------------------
-
 SwTemplateControl::~SwTemplateControl()
 {
 }
-
-// -----------------------------------------------------------------------
 
 void SwTemplateControl::StateChanged(
     USHORT /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
@@ -109,14 +97,10 @@ void SwTemplateControl::StateChanged(
     }
 }
 
-// -----------------------------------------------------------------------
-
 void SwTemplateControl::Paint( const UserDrawEvent&  )
 {
     GetStatusBar().SetItemText( GetId(), sTemplate );
 }
-
-// -----------------------------------------------------------------------
 
 void SwTemplateControl::Command( const CommandEvent& rCEvt )
 {

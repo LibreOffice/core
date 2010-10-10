@@ -110,10 +110,6 @@ static const sal_Unicode aDeliEnd    = ']'; //fuer die form
 #define IDX_FILE_EXTENSION String::CreateFromAscii( \
                             RTL_CONSTASCII_STRINGPARAM( "*.sdi" ))
 
-
-/* -----------------14.06.99 13:10-------------------
-
- --------------------------------------------------*/
 String lcl_CreateAutoMarkFileDlg( const String& rURL,
                                 const String& rFileString, sal_Bool bOpen )
 {
@@ -146,9 +142,7 @@ String lcl_CreateAutoMarkFileDlg( const String& rURL,
     rLastSaveDir = sSaveDir;
     return sRet;
 }
-/* -----------------------------19.01.00 11:09--------------------------------
 
- ---------------------------------------------------------------------------*/
 struct AutoMarkEntry
 {
     String sSearch;
@@ -235,9 +229,7 @@ public:
     ~SwAutoMarkDlg_Impl();
 
 };
-/* -----------------04.11.99 11:02-------------------
 
- --------------------------------------------------*/
 sal_uInt16 CurTOXType::GetFlatIndex() const
 {
     sal_uInt16 nRet = static_cast< sal_uInt16 >(eType);
@@ -247,14 +239,9 @@ sal_uInt16 CurTOXType::GetFlatIndex() const
     }
     return nRet;
 }
-/*************************************************************************
 
-*************************************************************************/
 #define EDIT_MINWIDTH 15
 
-/* -----------------14.06.99 12:12-------------------
-
- --------------------------------------------------*/
 SwMultiTOXTabDialog::SwMultiTOXTabDialog(Window* pParent, const SfxItemSet& rSet,
                     SwWrtShell &rShell,
                     SwTOXBase* pCurTOX,
@@ -365,9 +352,7 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(Window* pParent, const SfxItemSet& rSet
     if(aNewPos.X() < 0)
         SetPosPixel(aOldPos);
 }
-/*-- 14.06.99 13:11:40---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwMultiTOXTabDialog::~SwMultiTOXTabDialog()
 {
     SW_MOD()->GetModuleConfig()->SetShowIndexPreview(aShowExampleCB.IsChecked());
@@ -385,9 +370,7 @@ SwMultiTOXTabDialog::~SwMultiTOXTabDialog()
     delete pMgr;
     delete pExampleFrame;
 }
-/*-- 14.06.99 13:11:40---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void    SwMultiTOXTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
     if( TP_BACKGROUND == nId  )
@@ -411,9 +394,7 @@ void    SwMultiTOXTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
             ((SwTOXSelectTabPage&)rPage).SelectType((TOXTypes)nInitialTOXType);
     }
 }
-/*-- 14.06.99 13:11:40---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 short   SwMultiTOXTabDialog::Ok()
 {
     short nRet = SfxTabDialog::Ok();
@@ -444,9 +425,7 @@ short   SwMultiTOXTabDialog::Ok()
 
     return nRet;
 }
-/* -----------------16.06.99 11:59-------------------
 
- --------------------------------------------------*/
 SwForm* SwMultiTOXTabDialog::GetForm(CurTOXType eType)
 {
     sal_uInt16 nIndex = eType.GetFlatIndex();
@@ -454,9 +433,7 @@ SwForm* SwMultiTOXTabDialog::GetForm(CurTOXType eType)
         pFormArr[nIndex] = new SwForm(eType.eType);
     return pFormArr[nIndex];
 }
-/* -----------------09.09.99 11:29-------------------
 
- --------------------------------------------------*/
 SwTOXDescription&   SwMultiTOXTabDialog::GetTOXDescription(CurTOXType eType)
 {
     sal_uInt16 nIndex = eType.GetFlatIndex();
@@ -496,9 +473,7 @@ SwTOXDescription&   SwMultiTOXTabDialog::GetTOXDescription(CurTOXType eType)
     }
     return *pDescArr[nIndex];
 }
-/* -----------------09.09.99 11:36-------------------
 
- --------------------------------------------------*/
 SwTOXDescription* SwMultiTOXTabDialog::CreateTOXDescFromTOXBase(
             const SwTOXBase*pCurTOX)
 {
@@ -526,10 +501,6 @@ SwTOXDescription* SwMultiTOXTabDialog::CreateTOXDescFromTOXBase(
     pDesc->SetSortAlgorithm(pCurTOX->GetSortAlgorithm());
     return pDesc;
 }
-
-/* -----------------------------29.12.99 09:53--------------------------------
-
- ---------------------------------------------------------------------------*/
 
 IMPL_LINK( SwMultiTOXTabDialog, ShowPreviewHdl, CheckBox *, pBox )
 {
@@ -611,10 +582,6 @@ IMPL_LINK( SwMultiTOXTabDialog, ShowPreviewHdl, CheckBox *, pBox )
     return 0;
 }
 
-
-/* -----------------05.07.99 09:49-------------------
-
- --------------------------------------------------*/
 sal_Bool SwMultiTOXTabDialog::IsNoNum(SwWrtShell& rSh, const String& rName)
 {
     SwTxtFmtColl* pColl = rSh.GetParaStyle(rName);
@@ -630,9 +597,7 @@ sal_Bool SwMultiTOXTabDialog::IsNoNum(SwWrtShell& rSh, const String& rName)
 
     return sal_False;
 }
-/* -----------------14.07.99 16:01-------------------
 
- --------------------------------------------------*/
 class SwIndexTreeLB : public SvTreeListBox
 {
     const HeaderBar* pHeaderBar;
@@ -644,9 +609,7 @@ public:
     virtual long    GetTabPos( SvLBoxEntry*, SvLBoxTab* );
     void            SetHeaderBar(const HeaderBar* pHB) {pHeaderBar = pHB;}
 };
-/* -----------------14.07.99 16:03-------------------
 
- --------------------------------------------------*/
 long  SwIndexTreeLB::GetTabPos( SvLBoxEntry* pEntry, SvLBoxTab* pTab)
 {
     long nData = (long)pEntry->GetUserData();
@@ -660,9 +623,7 @@ long  SwIndexTreeLB::GetTabPos( SvLBoxEntry* pEntry, SvLBoxTab* pTab)
     nData += pTab->GetPos();
     return nData;
 }
-/* -----------------25.08.99 11:14-------------------
 
- --------------------------------------------------*/
 void    SwIndexTreeLB::KeyInput( const KeyEvent& rKEvt )
 {
     SvLBoxEntry* pEntry = FirstSelected();
@@ -697,9 +658,6 @@ void    SwIndexTreeLB::KeyInput( const KeyEvent& rKEvt )
         SvTreeListBox::KeyInput(rKEvt);
 }
 
-/* -----------------16.07.99 10:01-------------------
-
- --------------------------------------------------*/
 class SwHeaderTree : public Control
 {
     HeaderBar       aStylesHB;
@@ -713,9 +671,7 @@ public:
 
     virtual void    GetFocus();
 };
-/* -----------------16.07.99 10:11-------------------
 
- --------------------------------------------------*/
 SwHeaderTree::SwHeaderTree(Window* pParent, const ResId rResId) :
         Control(pParent, rResId),
         aStylesHB(  this, ResId(HB_STYLES, *rResId.GetResMgr())),
@@ -732,17 +688,13 @@ SwHeaderTree::SwHeaderTree(Window* pParent, const ResId rResId) :
     aStylesTLB.SetSizePixel(aTLBSize);
     aStylesTLB.SetHeaderBar(&aStylesHB);
 }
-/* -----------------25.08.99 10:38-------------------
 
- --------------------------------------------------*/
 void    SwHeaderTree::GetFocus()
 {
     Control::GetFocus();
     aStylesTLB.GrabFocus();
 }
-/* -----------------13.07.99 15:29-------------------
 
- --------------------------------------------------*/
 class SwAddStylesDlg_Impl : public SfxModalDialog
 {
     OKButton        aOk;
@@ -765,9 +717,7 @@ public:
     SwAddStylesDlg_Impl(Window* pParent, SwWrtShell& rWrtSh, String rStringArr[]);
     ~SwAddStylesDlg_Impl();
 };
-/* -----------------13.07.99 15:39-------------------
 
- --------------------------------------------------*/
 SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(Window* pParent,
             SwWrtShell& rWrtSh, String rStringArr[]) :
     SfxModalDialog(pParent, SW_RES(DLG_ADD_IDX_STYLES)),
@@ -851,15 +801,10 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(Window* pParent,
     rTLB.GetModel()->Resort();
 }
 
-/* -----------------13.07.99 15:39-------------------
-
- --------------------------------------------------*/
 SwAddStylesDlg_Impl::~SwAddStylesDlg_Impl()
 {
 }
-/* -----------------13.07.99 15:39-------------------
 
- --------------------------------------------------*/
 IMPL_LINK(SwAddStylesDlg_Impl, OkHdl, OKButton*, EMPTYARG)
 {
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
@@ -884,17 +829,13 @@ IMPL_LINK(SwAddStylesDlg_Impl, OkHdl, OKButton*, EMPTYARG)
     EndDialog(RET_OK);
     return 0;
 }
-/* -----------------16.07.99 09:27-------------------
 
- --------------------------------------------------*/
 IMPL_LINK(SwAddStylesDlg_Impl, HeaderDragHdl, HeaderBar*, EMPTYARG)
 {
     aHeaderTree.GetTreeListBox().Invalidate();
     return 0;
 }
-/* -----------------13.07.99 15:39-------------------
 
- --------------------------------------------------*/
 IMPL_LINK(SwAddStylesDlg_Impl, LeftRightHdl, PushButton*, pBtn)
 {
     sal_Bool bLeft = pBtn == &aLeftPB;
@@ -922,9 +863,6 @@ IMPL_LINK(SwAddStylesDlg_Impl, LeftRightHdl, PushButton*, pBtn)
     return 0;
 }
 
-/*-- 14.06.99 13:11:40---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwTOXSelectTabPage::SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrSet) :
     SfxTabPage(pParent, SW_RES(TP_TOX_SELECT), rAttrSet),
 
@@ -1051,17 +989,13 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrS
     aTypeLB.SelectEntryPos(0);
     aTitleED.SaveValue();
 }
-/*-- 14.06.99 13:11:41---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwTOXSelectTabPage::~SwTOXSelectTabPage()
 {
     delete pIndexRes;
     delete pIndexEntryWrapper;
 }
-/* -----------------21.10.99 17:03-------------------
 
- --------------------------------------------------*/
 void SwTOXSelectTabPage::SetWrtShell(SwWrtShell& rSh)
 {
     sal_uInt16 nUserTypeCount = rSh.GetTOXTypeCount(TOX_USER);
@@ -1079,16 +1013,12 @@ void SwTOXSelectTabPage::SetWrtShell(SwWrtShell& rSh)
         }
     }
 }
-/* -----------------14.06.99 13:10-------------------
 
- --------------------------------------------------*/
 sal_Bool SwTOXSelectTabPage::FillItemSet( SfxItemSet& )
 {
     return sal_True;
 }
-/* -----------------25.08.99 14:31-------------------
 
- --------------------------------------------------*/
 long lcl_TOXTypesToUserData(CurTOXType eType)
 {
     sal_uInt16 nRet = TOX_INDEX;
@@ -1109,7 +1039,7 @@ long lcl_TOXTypesToUserData(CurTOXType eType)
     }
     return nRet;
 }
-//-----------------------------------------------------------------
+
 void SwTOXSelectTabPage::SelectType(TOXTypes eSet)
 {
     CurTOXType eCurType (eSet, 0);
@@ -1121,10 +1051,6 @@ void SwTOXSelectTabPage::SelectType(TOXTypes eSet)
     TOXTypeHdl(&aTypeLB);
 }
 
-/*-- 14.06.99 13:10:45---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-//-----------------------------------------------------------------
 CurTOXType lcl_UserData2TOXTypes(sal_uInt16 nData)
 {
     CurTOXType eRet;
@@ -1147,9 +1073,7 @@ CurTOXType lcl_UserData2TOXTypes(sal_uInt16 nData)
     }
     return eRet;
 }
-/* -----------------02.09.99 08:16-------------------
 
- --------------------------------------------------*/
 void    SwTOXSelectTabPage::ApplyTOXDescription()
 {
     SwMultiTOXTabDialog* pTOXDlg = (SwMultiTOXTabDialog*)GetTabDialog();
@@ -1264,9 +1188,7 @@ void    SwTOXSelectTabPage::ApplyTOXDescription()
         }
     }
 }
-/* -----------------09.09.99 11:57-------------------
 
- --------------------------------------------------*/
 void SwTOXSelectTabPage::FillTOXDescription()
 {
     SwMultiTOXTabDialog* pTOXDlg = (SwMultiTOXTabDialog*)GetTabDialog();
@@ -1377,9 +1299,7 @@ void SwTOXSelectTabPage::FillTOXDescription()
     if(pEntryData)
         rDesc.SetSortAlgorithm(*pEntryData);
 }
-/* -----------------05.07.99 15:09-------------------
 
- --------------------------------------------------*/
 void SwTOXSelectTabPage::Reset( const SfxItemSet& )
 {
     SwMultiTOXTabDialog* pTOXDlg = (SwMultiTOXTabDialog*)GetTabDialog();
@@ -1412,16 +1332,12 @@ void SwTOXSelectTabPage::Reset( const SfxItemSet& )
     TOXTypeHdl(&aTypeLB);
     CheckBoxHdl(&aAddStylesCB);
 }
-/*-- 14.06.99 13:10:52---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwTOXSelectTabPage::ActivatePage( const SfxItemSet& )
 {
     //nothing to do
 }
-/*-- 14.06.99 13:11:00---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 int SwTOXSelectTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if(_pSet)
@@ -1430,16 +1346,12 @@ int SwTOXSelectTabPage::DeactivatePage( SfxItemSet* _pSet )
     FillTOXDescription();
     return LEAVE_PAGE;
 }
-/* -----------------14.06.99 13:10-------------------
 
- --------------------------------------------------*/
 SfxTabPage* SwTOXSelectTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet)
 {
     return new SwTOXSelectTabPage(pParent, rAttrSet);
 }
-/* -----------------14.06.99 13:10-------------------
 
- --------------------------------------------------*/
 IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl,   ListBox*, pBox)
 {
     SwMultiTOXTabDialog* pTOXDlg = (SwMultiTOXTabDialog*)GetTabDialog();
@@ -1547,9 +1459,7 @@ IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl,   ListBox*, pBox)
     ModifyHdl(0);
     return 0;
 }
-/* -----------------30.11.99 12:48-------------------
 
- --------------------------------------------------*/
 IMPL_LINK(SwTOXSelectTabPage, ModifyHdl, void*, EMPTYARG)
 {
     SwMultiTOXTabDialog* pTOXDlg = (SwMultiTOXTabDialog*)GetTabDialog();
@@ -1560,9 +1470,7 @@ IMPL_LINK(SwTOXSelectTabPage, ModifyHdl, void*, EMPTYARG)
     }
     return 0;
 }
-/* -----------------05.07.99 10:13-------------------
 
- --------------------------------------------------*/
 IMPL_LINK(SwTOXSelectTabPage, CheckBoxHdl,  CheckBox*, pBox )
 {
     SwMultiTOXTabDialog* pTOXDlg = (SwMultiTOXTabDialog*)GetTabDialog();
@@ -1592,9 +1500,7 @@ IMPL_LINK(SwTOXSelectTabPage, CheckBoxHdl,  CheckBox*, pBox )
     ModifyHdl(0);
     return 0;
 };
-/* -----------------14.07.99 14:21-------------------
 
- --------------------------------------------------*/
 IMPL_LINK(SwTOXSelectTabPage, RadioButtonHdl, RadioButton*, EMPTYARG )
 {
     sal_Bool bEnable = aFromCaptionsRB.IsChecked();
@@ -1605,9 +1511,7 @@ IMPL_LINK(SwTOXSelectTabPage, RadioButtonHdl, RadioButton*, EMPTYARG )
     ModifyHdl(0);
     return 0;
 }
-/* -----------------------------06.06.01 09:33--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SwTOXSelectTabPage, LanguageHdl, ListBox*, pBox)
 {
     Locale aLcl( SvxCreateLocale( aLanguageLB.GetSelectLanguage() ) );
@@ -1646,9 +1550,7 @@ IMPL_LINK(SwTOXSelectTabPage, LanguageHdl, ListBox*, pBox)
         ModifyHdl(0);
     return 0;
 };
-/* -----------------14.06.99 13:10-------------------
 
- --------------------------------------------------*/
 IMPL_LINK(SwTOXSelectTabPage, TOXAreaHdl,   ListBox*, pBox)
 {
     DBG_WARNING("not implemented");
@@ -1698,9 +1600,7 @@ IMPL_LINK(SwTOXSelectTabPage, TOXAreaHdl,   ListBox*, pBox)
 //  delete pDlg;
 //  return 0;
 //}
-/* -----------------14.06.99 13:10-------------------
 
- --------------------------------------------------*/
 IMPL_LINK(SwTOXSelectTabPage, AddStylesHdl, PushButton*, pButton)
 {
     SwAddStylesDlg_Impl* pDlg = new SwAddStylesDlg_Impl(pButton,
@@ -1711,9 +1611,6 @@ IMPL_LINK(SwTOXSelectTabPage, AddStylesHdl, PushButton*, pButton)
     ModifyHdl(0);
     return 0;
 }
-/* -----------------------------19.01.00 10:59--------------------------------
-
- ---------------------------------------------------------------------------*/
 
 IMPL_LINK(SwTOXSelectTabPage, MenuEnableHdl, Menu*, pMenu)
 {
@@ -1752,9 +1649,6 @@ IMPL_LINK(SwTOXSelectTabPage, MenuExecuteHdl, Menu*, pMenu)
     return 0;
 }
 
-/* -----------------16.06.99 10:46-------------------
-
- --------------------------------------------------*/
 class SwTOXEdit : public Edit
 {
     SwFormToken aFormToken;
@@ -1793,13 +1687,12 @@ public:
     void    AdjustSize();
 };
 
-//---------------------------------------------------
 void    SwTOXEdit::RequestHelp( const HelpEvent& rHEvt )
 {
     if(!m_pParent->CreateQuickHelp(this, aFormToken, rHEvt))
         Edit::RequestHelp(rHEvt);
 }
-//---------------------------------------------------
+
 void    SwTOXEdit::KeyInput( const KeyEvent& rKEvt )
 {
     const Selection& rSel = GetSelection();
@@ -1826,9 +1719,7 @@ void    SwTOXEdit::KeyInput( const KeyEvent& rKEvt )
     }
     Edit::KeyInput(rKEvt);
 }
-/* -----------------16.07.99 12:41-------------------
 
- --------------------------------------------------*/
 void SwTOXEdit::AdjustSize()
 {
      Size aSize(GetSizePixel());
@@ -1838,8 +1729,6 @@ void SwTOXEdit::AdjustSize()
     SetSizePixel(aSize);
 }
 
-//---------------------------------------------------
-//---------------------------------------------------
 class SwTOXButton : public PushButton
 {
     SwFormToken aFormToken;
@@ -1934,7 +1823,6 @@ public:
         }
 };
 
-//---------------------------------------------------
 void    SwTOXButton::KeyInput( const KeyEvent& rKEvt )
 {
     sal_Bool bCall = sal_False;
@@ -1960,23 +1848,19 @@ void    SwTOXButton::KeyInput( const KeyEvent& rKEvt )
     else
         PushButton::KeyInput(rKEvt);
 }
-//---------------------------------------------------
+
 void    SwTOXButton::RequestHelp( const HelpEvent& rHEvt )
 {
     if(!m_pParent->CreateQuickHelp(this, aFormToken, rHEvt))
         Button::RequestHelp(rHEvt);
 }
-/* -----------------------------23.12.99 14:28--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwIdxTreeListBox::SwIdxTreeListBox(SwTOXEntryTabPage* pPar, const ResId& rResId) :
         SvTreeListBox(pPar, rResId),
         pParent(pPar)
 {
 }
-/* -----------------------------23.12.99 14:19--------------------------------
 
- ---------------------------------------------------------------------------*/
 void    SwIdxTreeListBox::RequestHelp( const HelpEvent& rHEvt )
 {
     if( rHEvt.GetMode() & HELPMODE_QUICK )
@@ -2014,7 +1898,7 @@ void    SwIdxTreeListBox::RequestHelp( const HelpEvent& rHEvt )
     else
         SvTreeListBox::RequestHelp(rHEvt);
 }
-//---------------------------------------------------
+
 SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet) :
         SfxTabPage(pParent, SW_RES(TP_TOX_ENTRY), rAttrSet),
     aLevelFT(this,              SW_RES(FT_LEVEL              )),
@@ -2222,23 +2106,16 @@ IMPL_LINK(SwTOXEntryTabPage, ModifyHdl, void*, pVoid)
     return 0;
 }
 
-/*-- 16.06.99 10:47:33---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwTOXEntryTabPage::~SwTOXEntryTabPage()
 {
 }
-/*-- 16.06.99 10:47:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Bool    SwTOXEntryTabPage::FillItemSet( SfxItemSet& )
 {
     // nothing to do
     return sal_True;
 }
-/*-- 16.06.99 10:47:34---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwTOXEntryTabPage::Reset( const SfxItemSet& )
 {
     SwMultiTOXTabDialog* pTOXDlg = (SwMultiTOXTabDialog*)GetTabDialog();
@@ -2263,27 +2140,21 @@ void SwTOXEntryTabPage::Reset( const SfxItemSet& )
     aRelToStyleCB.Check(m_pCurrentForm->IsRelTabPos());
     aCommaSeparatedCB.Check(m_pCurrentForm->IsCommaSeparated());
 }
-/*-- 16.06.99 10:47:34---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void lcl_ChgWidth(Window& rWin, long nDiff)
 {
  Size aTempSz(rWin.GetSizePixel());
     aTempSz.Width() += nDiff;
     rWin.SetSizePixel(aTempSz);
 }
-/* ----------------------------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void lcl_ChgXPos(Window& rWin, long nDiff)
 {
     Point aTempPos(rWin.GetPosPixel());
     aTempPos.X() += nDiff;
     rWin.SetPosPixel(aTempPos);
 }
-/* ----------------------------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
 {
     SwMultiTOXTabDialog* pTOXDlg = (SwMultiTOXTabDialog*)GetTabDialog();
@@ -2471,9 +2342,7 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
     aTokenWIN.SetInvalid();
     LevelHdl(&aLevelLB);
 }
-/* -----------------30.11.99 15:04-------------------
 
- --------------------------------------------------*/
 void SwTOXEntryTabPage::UpdateDescriptor()
 {
     WriteBackLevel();
@@ -2513,24 +2382,18 @@ void SwTOXEntryTabPage::UpdateDescriptor()
     if(aCommaSeparatedCB.IsVisible())
         pCurrentForm->SetCommaSeparated(aCommaSeparatedCB.IsChecked());
 }
-/*-- 16.06.99 10:47:34---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 int SwTOXEntryTabPage::DeactivatePage( SfxItemSet* /*pSet*/)
 {
     UpdateDescriptor();
     return LEAVE_PAGE;
 }
-/*-- 16.06.99 10:47:34---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SfxTabPage* SwTOXEntryTabPage::Create( Window* pParent,     const SfxItemSet& rAttrSet)
 {
     return new SwTOXEntryTabPage(pParent, rAttrSet);
 }
-/*-- 16.06.99 10:47:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwTOXEntryTabPage, EditStyleHdl, PushButton*, pBtn)
 {
     if( LISTBOX_ENTRY_NOTFOUND != aCharStyleLB.GetSelectEntryPos())
@@ -2549,9 +2412,7 @@ IMPL_LINK(SwTOXEntryTabPage, EditStyleHdl, PushButton*, pBtn)
     }
     return 0;
 }
-/* -----------------04.10.99 11:34-------------------
 
- --------------------------------------------------*/
 IMPL_LINK(SwTOXEntryTabPage, RemoveInsertAuthHdl, PushButton*, pButton)
 {
     sal_Bool bInsert = pButton == &aAuthInsertPB;
@@ -2581,9 +2442,7 @@ IMPL_LINK(SwTOXEntryTabPage, RemoveInsertAuthHdl, PushButton*, pButton)
     ModifyHdl(0);
     return 0;
 }
-/* -----------------------------17.01.00 13:44--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwTOXEntryTabPage::PreTokenButtonRemoved(const SwFormToken& rToken)
 {
     //fill it into the ListBox
@@ -2651,9 +2510,7 @@ IMPL_LINK(SwTOXEntryTabPage, InsertTokenHdl, PushButton*, pBtn)
     ModifyHdl(0);
     return 0;
 }
-/* -----------------------------14.01.00 11:53--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SwTOXEntryTabPage, AllLevelsHdl, PushButton*, EMPTYARG)
 {
     //get current level
@@ -2669,9 +2526,6 @@ IMPL_LINK(SwTOXEntryTabPage, AllLevelsHdl, PushButton*, EMPTYARG)
     return 0;
 }
 
-/* -----------------02.12.99 12:40-------------------
-
- --------------------------------------------------*/
 void SwTOXEntryTabPage::WriteBackLevel()
 {
     if(aTokenWIN.IsValid())
@@ -2682,9 +2536,7 @@ void SwTOXEntryTabPage::WriteBackLevel()
             m_pCurrentForm->SetPattern(nLastLevel + 1, sNewToken );
     }
 }
-/*-- 16.06.99 10:47:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwTOXEntryTabPage, LevelHdl, SvTreeListBox*, pBox)
 {
     if(bInLevelHdl)
@@ -2728,9 +2580,7 @@ IMPL_LINK(SwTOXEntryTabPage, LevelHdl, SvTreeListBox*, pBox)
     pBox->GrabFocus();
     return 0;
 }
-/* -----------------20.10.99 13:16-------------------
 
- --------------------------------------------------*/
 IMPL_LINK(SwTOXEntryTabPage, SortKeyHdl, RadioButton*, pButton)
 {
     sal_Bool bEnable = &aSortContentRB == pButton;
@@ -2749,9 +2599,7 @@ IMPL_LINK(SwTOXEntryTabPage, SortKeyHdl, RadioButton*, pButton)
     aThirdSortDownRB.Enable(bEnable);
     return 0;
 }
-/* -----------------01.07.99 12:21-------------------
 
- --------------------------------------------------*/
 IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken*, pToken)
 {
     if(pToken->sCharStyleName.Len())
@@ -2885,9 +2733,7 @@ IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken*, pToken)
 
     return 0;
 }
-/* -----------------01.07.99 12:36-------------------
 
- --------------------------------------------------*/
 IMPL_LINK(SwTOXEntryTabPage, StyleSelectHdl, ListBox*, pBox)
 {
     String sEntry = pBox->GetSelectEntry();
@@ -2908,9 +2754,7 @@ IMPL_LINK(SwTOXEntryTabPage, StyleSelectHdl, ListBox*, pBox)
     ModifyHdl(0);
     return 0;
 }
-/* -----------------------------11.01.00 12:54--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SwTOXEntryTabPage, ChapterInfoHdl, ListBox*, pBox)
 {
     sal_uInt16 nPos = pBox->GetSelectEntryPos();
@@ -2956,9 +2800,6 @@ IMPL_LINK(SwTOXEntryTabPage, NumberFormatHdl, ListBox*, pBox)
     return 0;
 }
 
-/* -----------------19.08.99 15:37-------------------
-
- --------------------------------------------------*/
 IMPL_LINK(SwTOXEntryTabPage, TabPosHdl, MetricField*, pField)
 {
     Control* pCtrl = aTokenWIN.GetActiveControl();
@@ -2973,9 +2814,7 @@ IMPL_LINK(SwTOXEntryTabPage, TabPosHdl, MetricField*, pField)
     ModifyHdl(0);
     return 0;
 }
-/* -----------------09.09.99 15:37-------------------
 
- --------------------------------------------------*/
 IMPL_LINK(SwTOXEntryTabPage, FillCharHdl, ComboBox*, pBox)
 {
     Control* pCtrl = aTokenWIN.GetActiveControl();
@@ -2995,9 +2834,6 @@ IMPL_LINK(SwTOXEntryTabPage, FillCharHdl, ComboBox*, pBox)
     return 0;
 }
 
-/*-- 16.06.99 10:47:36---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwTOXEntryTabPage, AutoRightHdl, CheckBox*, pBox)
 {
     //the most right style::TabStop is usually right aligned
@@ -3016,9 +2852,7 @@ IMPL_LINK(SwTOXEntryTabPage, AutoRightHdl, CheckBox*, pBox)
     ModifyHdl(0);
     return 0;
 }
-/* -----------------16.06.99 11:00-------------------
 
- --------------------------------------------------*/
 void SwTOXEntryTabPage::SetWrtShell(SwWrtShell& rSh)
 {
     SwDocShell* pDocSh = rSh.GetView().GetDocShell();
@@ -3036,9 +2870,7 @@ void SwTOXEntryTabPage::SetWrtShell(SwWrtShell& rSh)
     aMainEntryStyleLB.SelectEntry( SwStyleNameMapper::GetUIName(
                                 RES_POOLCHR_IDX_MAIN_ENTRY, aEmptyStr ));
 }
-/* -----------------------------23.12.99 14:23--------------------------------
 
- ---------------------------------------------------------------------------*/
 String  SwTOXEntryTabPage::GetLevelHelp(sal_uInt16 nLevel) const
 {
     String sRet;
@@ -3055,9 +2887,6 @@ String  SwTOXEntryTabPage::GetLevelHelp(sal_uInt16 nLevel) const
     }
     return sRet;
 }
-/* -----------------16.06.99 15:18-------------------
-
- --------------------------------------------------*/
 
 SwTokenWindow::SwTokenWindow(SwTOXEntryTabPage* pParent, const ResId& rResId) :
         Window( pParent, rResId ),
@@ -3092,9 +2921,7 @@ SwTokenWindow::SwTokenWindow(SwTOXEntryTabPage* pParent, const ResId& rResId) :
     aLeftScrollWin.SetClickHdl(aLink);
     aRightScrollWin.SetClickHdl(aLink);
 }
-/* -----------------01.07.99 12:17-------------------
 
- --------------------------------------------------*/
 SwTokenWindow::~SwTokenWindow()
 {
 //  for(sal_uInt16 i = GetItemCount(); i ; i--)
@@ -3113,9 +2940,7 @@ SwTokenWindow::~SwTokenWindow()
         delete pControl;
     }
 }
-/* -----------------16.06.99 13:56-------------------
 
- --------------------------------------------------*/
 void    SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
 {
     SetActiveControl(0);
@@ -3198,9 +3023,7 @@ void    SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
     }
     AdjustScrolling();
 }
-/* -----------------19.08.99 13:00-------------------
 
- --------------------------------------------------*/
 void SwTokenWindow::SetActiveControl(Control* pSet)
 {
     if( pSet != pActiveCtrl )
@@ -3222,9 +3045,6 @@ void SwTokenWindow::SetActiveControl(Control* pSet)
     }
 }
 
-/* -----------------17.06.99 09:53-------------------
-
- --------------------------------------------------*/
 Control*    SwTokenWindow::InsertItem(const String& rText, const SwFormToken& rToken)
 {
     Control* pRet = 0;
@@ -3278,9 +3098,7 @@ Control*    SwTokenWindow::InsertItem(const String& rText, const SwFormToken& rT
     }
     return pRet;
 }
-/* -----------------16.07.99 11:50-------------------
 
- --------------------------------------------------*/
 void    SwTokenWindow::InsertAtSelection(
             const String& rText,
             const SwFormToken& rToken)
@@ -3452,9 +3270,7 @@ void    SwTokenWindow::InsertAtSelection(
 
     AdjustPositions();
 }
-/* -----------------19.08.99 12:42-------------------
 
- --------------------------------------------------*/
 void SwTokenWindow::RemoveControl(SwTOXButton* pDel, sal_Bool bInternalCall )
 {
     if(bInternalCall && TOX_AUTHORITIES == pForm->GetTOXType())
@@ -3487,9 +3303,6 @@ void SwTokenWindow::RemoveControl(SwTOXButton* pDel, sal_Bool bInternalCall )
         aModifyHdl.Call(0);
 }
 
-/* -----------------16.07.99 12:39-------------------
-
- --------------------------------------------------*/
 void SwTokenWindow::AdjustPositions()
 {
     if(aControlList.Count() > 1)
@@ -3505,9 +3318,7 @@ void SwTokenWindow::AdjustPositions()
         AdjustScrolling();
     }
 };
-/* -----------------------------16.08.00 13:22--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwTokenWindow::MoveControls(long nOffset)
 {
     // move the complete list
@@ -3519,9 +3330,7 @@ void SwTokenWindow::MoveControls(long nOffset)
         pCtrl->SetPosPixel(aPos);
     }while(0 != (pCtrl = aControlList.Next()));
 }
-/* -----------------------------14.01.00 13:03--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwTokenWindow::AdjustScrolling()
 {
     if(aControlList.Count() > 1)
@@ -3562,9 +3371,7 @@ void SwTokenWindow::AdjustScrolling()
         }
     }
 }
-/* -----------------------------14.01.00 13:57--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SwTokenWindow, ScrollHdl, ImageButton*, pBtn )
 {
     if(aControlList.Count())
@@ -3654,9 +3461,7 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, ImageButton*, pBtn )
     }
     return 0;
 }
-/* -----------------17.06.99 11:59-------------------
 
- --------------------------------------------------*/
 String  SwTokenWindow::GetPattern() const
 {
     String sRet;
@@ -3697,7 +3502,7 @@ sal_Bool SwTokenWindow::Contains(FormTokenType eSearchFor) const
     }
     return bRet;
 }
-//---------------------------------------------------
+
 BOOL SwTokenWindow::CreateQuickHelp(Control* pCtrl,
             const SwFormToken& rToken,
             const HelpEvent& rHEvt)
@@ -3745,9 +3550,7 @@ BOOL SwTokenWindow::CreateQuickHelp(Control* pCtrl,
     }
     return bRet;
 }
-/* -----------------------------14.01.00 12:22--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwTokenWindow::Resize()
 {
  Size aCompleteSize(GetOutputSizePixel());
@@ -3765,9 +3568,6 @@ void SwTokenWindow::Resize()
     aCtrlParentWin.SetSizePixel(aMiddleSize);
 }
 
-/* -----------------16.06.99 15:23-------------------
-
- --------------------------------------------------*/
 IMPL_LINK(SwTokenWindow, EditResize, Edit*, pEdit)
 {
     ((SwTOXEdit*)pEdit)->AdjustSize();
@@ -3776,9 +3576,7 @@ IMPL_LINK(SwTokenWindow, EditResize, Edit*, pEdit)
         aModifyHdl.Call(0);
     return 0;
 }
-/* -----------------16.06.99 15:56-------------------
 
- --------------------------------------------------*/
 IMPL_LINK(SwTokenWindow, NextItemHdl, SwTOXEdit*,  pEdit)
 {
     sal_uInt16 nPos = (sal_uInt16)aControlList.GetPos(pEdit);
@@ -3794,9 +3592,7 @@ IMPL_LINK(SwTokenWindow, NextItemHdl, SwTOXEdit*,  pEdit)
     }
     return 0;
 }
-/* -----------------17.06.99 08:58-------------------
 
- --------------------------------------------------*/
 IMPL_LINK(SwTokenWindow, TbxFocusHdl, SwTOXEdit*, pEdit)
 {
     for(sal_uInt16 i = 0; i < aControlList.Count(); i++)
@@ -3812,9 +3608,7 @@ IMPL_LINK(SwTokenWindow, TbxFocusHdl, SwTOXEdit*, pEdit)
     SetActiveControl(pEdit);
     return 0;
 }
-/* -----------------17.06.99 10:05-------------------
 
- --------------------------------------------------*/
 IMPL_LINK(SwTokenWindow, NextItemBtnHdl, SwTOXButton*, pBtn )
 {
     sal_uInt16 nPos = (sal_uInt16)aControlList.GetPos(pBtn);
@@ -3839,9 +3633,6 @@ IMPL_LINK(SwTokenWindow, NextItemBtnHdl, SwTOXButton*, pBtn )
     return 0;
 }
 
-/* -----------------17.06.99 10:04-------------------
-
- --------------------------------------------------*/
 IMPL_LINK(SwTokenWindow, TbxFocusBtnHdl, SwTOXButton*, pBtn )
 {
     for(sal_uInt16 i = 0; i < aControlList.Count(); i++)
@@ -3857,9 +3648,7 @@ IMPL_LINK(SwTokenWindow, TbxFocusBtnHdl, SwTOXButton*, pBtn )
     SetActiveControl(pBtn);
     return 0;
 }
-/* -----------------------------28.01.2002 12:22------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwTokenWindow::GetFocus()
 {
     if(GETFOCUS_TAB & GetGetFocusFlags())
@@ -3873,9 +3662,7 @@ void SwTokenWindow::GetFocus()
        }
     }
 }
-/* -----------------25.03.99 15:17-------------------
- *
- * --------------------------------------------------*/
+
 SwTOXStylesTabPage::SwTOXStylesTabPage(Window* pParent, const SfxItemSet& rAttrSet ) :
     SfxTabPage(pParent, SW_RES(TP_TOX_STYLES), rAttrSet),
     aLevelFT2(this,     SW_RES(FT_LEVEL  )),
@@ -3900,30 +3687,22 @@ SwTOXStylesTabPage::SwTOXStylesTabPage(Window* pParent, const SfxItemSet& rAttrS
     aLevelLB.SetSelectHdl      (LINK(   this, SwTOXStylesTabPage, EnableSelectHdl));
     aParaLayLB.SetDoubleClickHdl(LINK(  this, SwTOXStylesTabPage, DoubleClickHdl));
 }
-/* -----------------25.03.99 15:17-------------------
- *
- * --------------------------------------------------*/
+
 SwTOXStylesTabPage::~SwTOXStylesTabPage()
 {
     delete m_pCurrentForm;
 }
-/* -----------------25.03.99 15:17-------------------
- *
- * --------------------------------------------------*/
+
 sal_Bool    SwTOXStylesTabPage::FillItemSet( SfxItemSet& )
 {
     return sal_True;
 }
-/* -----------------25.03.99 15:17-------------------
- *
- * --------------------------------------------------*/
+
 void    SwTOXStylesTabPage::Reset( const SfxItemSet& rSet )
 {
     ActivatePage(rSet);
 }
-/* -----------------25.03.99 15:17-------------------
- *
- * --------------------------------------------------*/
+
 void    SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
 {
     m_pCurrentForm = new SwForm(GetForm());
@@ -3990,26 +3769,19 @@ void    SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
 
     EnableSelectHdl(&aParaLayLB);
 }
-/* -----------------25.03.99 15:17-------------------
- *
- * --------------------------------------------------*/
+
 int     SwTOXStylesTabPage::DeactivatePage( SfxItemSet* /*pSet*/  )
 {
     GetForm() = *m_pCurrentForm;
     return LEAVE_PAGE;
 }
 
-/* -----------------25.03.99 15:17-------------------
- *
- * --------------------------------------------------*/
 SfxTabPage* SwTOXStylesTabPage::Create( Window* pParent,
                                 const SfxItemSet& rAttrSet)
 {
     return new SwTOXStylesTabPage(pParent, rAttrSet);
 }
-/* -----------------26.03.99 12:47-------------------
- *
- * --------------------------------------------------*/
+
 IMPL_LINK( SwTOXStylesTabPage, EditStyleHdl, Button *, pBtn )
 {
     if( LISTBOX_ENTRY_NOTFOUND != aParaLayLB.GetSelectEntryPos())
@@ -4056,9 +3828,7 @@ IMPL_LINK( SwTOXStylesTabPage, AssignHdl, Button *, EMPTYARG )
     }
     return 0;
 }
-/* -----------------26.03.99 09:10-------------------
- *
- * --------------------------------------------------*/
+
 IMPL_LINK( SwTOXStylesTabPage, StdHdl, Button *, EMPTYARG )
 {
     sal_uInt16 nPos = aLevelLB.GetSelectEntryPos();
@@ -4075,9 +3845,7 @@ IMPL_LINK( SwTOXStylesTabPage, StdHdl, Button *, EMPTYARG )
     }
     return 0;
 }
-/* -----------------26.03.99 09:11-------------------
- *
- * --------------------------------------------------*/
+
 IMPL_LINK_INLINE_START( SwTOXStylesTabPage, DoubleClickHdl, Button *, EMPTYARG )
 {
     String aTmpName( aParaLayLB.GetSelectEntry() );
@@ -4089,6 +3857,7 @@ IMPL_LINK_INLINE_START( SwTOXStylesTabPage, DoubleClickHdl, Button *, EMPTYARG )
     return 0;
 }
 IMPL_LINK_INLINE_END( SwTOXStylesTabPage, DoubleClickHdl, Button *, EMPTYARG )
+
 /*--------------------------------------------------------------------
      Beschreibung: nur wenn selektiert enable
  --------------------------------------------------------------------*/
@@ -4105,9 +3874,7 @@ IMPL_LINK( SwTOXStylesTabPage, EnableSelectHdl, ListBox *, EMPTYARG )
     aEditStyleBT.Enable(aParaLayLB.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND );
     return 0;
 }
-/* -----------------------------18.01.00 16:54--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SwTOXStylesTabPage, ModifyHdl, void*, EMPTYARG)
 {
     SwMultiTOXTabDialog* pTOXDlg = (SwMultiTOXTabDialog*)GetTabDialog();
@@ -4118,9 +3885,7 @@ IMPL_LINK(SwTOXStylesTabPage, ModifyHdl, void*, EMPTYARG)
     }
     return 0;
 }
-/******************************************************************************
 
-******************************************************************************/
 #define ITEM_SEARCH         1
 #define ITEM_ALTERNATIVE    2
 #define ITEM_PRIM_KEY       3
@@ -4189,17 +3954,13 @@ SwEntryBrowseBox::SwEntryBrowseBox(Window* pParent, const ResId& rId,
                           HIB_STDSTYLE, HEADERBAR_APPEND );
 
 }
-/* -----------------------------19.01.00 11:29--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool    SwEntryBrowseBox::SeekRow( long nRow )
 {
     nCurrentRow = nRow;
     return TRUE;
 }
-/* -----------------------------19.01.00 15:32--------------------------------
 
- ---------------------------------------------------------------------------*/
 String SwEntryBrowseBox::GetCellText(long nRow, USHORT nColumn) const
 {
     const String* pRet = &aEmptyStr;
@@ -4220,9 +3981,6 @@ String SwEntryBrowseBox::GetCellText(long nRow, USHORT nColumn) const
     return *pRet;
 }
 
-/* -----------------------------19.01.00 11:29--------------------------------
-
- ---------------------------------------------------------------------------*/
 void    SwEntryBrowseBox::PaintCell(OutputDevice& rDev,
                                 const Rectangle& rRect, sal_uInt16 nColumnId) const
 {
@@ -4230,16 +3988,12 @@ void    SwEntryBrowseBox::PaintCell(OutputDevice& rDev,
     sal_uInt16 nStyle = TEXT_DRAW_CLIP | TEXT_DRAW_CENTER;
     rDev.DrawText( rRect, sPaint, nStyle );
 }
-/* -----------------------------19.01.00 14:51--------------------------------
 
- ---------------------------------------------------------------------------*/
 ::svt::CellController* SwEntryBrowseBox::GetController(long /*nRow*/, sal_uInt16 nCol)
 {
     return nCol < ITEM_CASE ? xController : xCheckController;
 }
-/* -----------------------------19.01.00 15:36--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool SwEntryBrowseBox::SaveModified()
 {
     SetModified();
@@ -4283,9 +4037,7 @@ sal_Bool SwEntryBrowseBox::SaveModified()
     }
     return sal_True;
 }
-/* -----------------------------19.01.00 14:32--------------------------------
 
- ---------------------------------------------------------------------------*/
 void    SwEntryBrowseBox::InitController(
                 ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol)
 {
@@ -4304,9 +4056,7 @@ void    SwEntryBrowseBox::InitController(
                                                             rTxt == sYes );
      }
 }
-/* -----------------------------19.01.00 12:19--------------------------------
 
- ---------------------------------------------------------------------------*/
 void    SwEntryBrowseBox::ReadEntries(SvStream& rInStr)
 {
     AutoMarkEntry* pToInsert = 0;
@@ -4359,9 +4109,7 @@ void    SwEntryBrowseBox::ReadEntries(SvStream& rInStr)
         aEntryArr.Insert(pToInsert, aEntryArr.Count());
     RowInserted(0, aEntryArr.Count() + 1, sal_True);
 }
-/* -----------------------------19.01.00 12:19--------------------------------
 
- ---------------------------------------------------------------------------*/
 void    SwEntryBrowseBox::WriteEntries(SvStream& rOutStr)
 {
     //check if the current controller is modified
@@ -4401,9 +4149,7 @@ void    SwEntryBrowseBox::WriteEntries(SvStream& rOutStr)
             rOutStr.WriteByteStringLine( sWrite, eTEnc );
     }
 }
-/* -----------------------------21.01.00 11:49--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool SwEntryBrowseBox::IsModified()const
 {
     if(bModified)
@@ -4419,9 +4165,7 @@ sal_Bool SwEntryBrowseBox::IsModified()const
         pController = xCheckController;
     return pController ->IsModified();
 }
-/* -----------------------------19.01.00 11:29--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwAutoMarkDlg_Impl::SwAutoMarkDlg_Impl(Window* pParent, const String& rAutoMarkURL,
         const String& rAutoMarkType, sal_Bool bCreate) :
     ModalDialog(pParent, SW_RES(DLG_CREATE_AUTOMARK)),
@@ -4456,15 +4200,11 @@ SwAutoMarkDlg_Impl::SwAutoMarkDlg_Impl(Window* pParent, const String& rAutoMarkU
     if(bError)
         EndDialog(RET_CANCEL);
 }
-/* -----------------------------19.01.00 11:12--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwAutoMarkDlg_Impl::~SwAutoMarkDlg_Impl()
 {
 }
-/* -----------------------------19.01.00 16:43--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SwAutoMarkDlg_Impl, OkHdl, OKButton*, EMPTYARG)
 {
     sal_Bool bError = sal_False;

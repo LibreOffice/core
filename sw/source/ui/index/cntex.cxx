@@ -90,9 +90,6 @@ using ::rtl::OUString;
 #endif
 #define SW_PROP_NAME_STR(nId) SwGetPropName((nId)).pName
 
-/* -----------------04.11.99 11:28-------------------
-
- --------------------------------------------------*/
 void lcl_SetProp( uno::Reference< XPropertySetInfo > & xInfo,
                            uno::Reference< XPropertySet > & xProps,
                          const char* pPropName, const String& rValue)
@@ -105,12 +102,14 @@ void lcl_SetProp( uno::Reference< XPropertySetInfo > & xInfo,
         xProps->setPropertyValue(uPropName, aValue);
     }
 }
+
 void lcl_SetProp( uno::Reference< XPropertySetInfo > & xInfo,
                            uno::Reference< XPropertySet > & xProps,
                            USHORT nId, const String& rValue)
 {
     lcl_SetProp( xInfo, xProps, SW_PROP_NAME_STR(nId), rValue);
 }
+
 void lcl_SetProp( uno::Reference< XPropertySetInfo > & xInfo,
                            uno::Reference< XPropertySet > & xProps,
                            USHORT nId, sal_Int16 nValue )
@@ -137,7 +136,7 @@ void lcl_SetBOOLProp(
         xProps->setPropertyValue(uPropName, aValue);
     }
 }
-//-----------------------------------------------------------------------------
+
 IMPL_LINK( SwMultiTOXTabDialog, CreateExample_Hdl, void*, EMPTYARG )
 {
     try
@@ -184,9 +183,6 @@ IMPL_LINK( SwMultiTOXTabDialog, CreateExample_Hdl, void*, EMPTYARG )
     return 0;
 }
 
-/* --------------------------------------------------
-
- --------------------------------------------------*/
 void SwMultiTOXTabDialog::CreateOrUpdateExample(
     TOXTypes nTOXIndex, sal_uInt16 nPage, sal_uInt16 nCurrentLevel)
 {

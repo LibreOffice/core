@@ -69,8 +69,6 @@ using namespace ::com::sun::star::lang;
 /*--------------------------------------------------------------------
     Beschreibung: Feldeinfuegen bearbeiten
  --------------------------------------------------------------------*/
-
-
 SwChangeDBDlg::SwChangeDBDlg(SwView& rVw) :
     SvxStandardDialog(&rVw.GetViewFrame()->GetWindow(), SW_RES(DLG_CHANGE_DB)),
 
@@ -123,8 +121,6 @@ SwChangeDBDlg::SwChangeDBDlg(SwView& rVw) :
 /*--------------------------------------------------------------------
     Beschreibung: Datenbank-Listboxen initialisieren
  --------------------------------------------------------------------*/
-
-
 void SwChangeDBDlg::FillDBPopup()
 {
     Reference<XNameAccess> xDBContext;
@@ -175,11 +171,6 @@ void SwChangeDBDlg::FillDBPopup()
     }
 
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 SvLBoxEntry* SwChangeDBDlg::Insert(const String& rDBName)
 {
@@ -242,9 +233,7 @@ void __EXPORT SwChangeDBDlg::Apply()
 {
     UpdateFlds();
 }
-/*--------------------------------------------------------------------
-     Beschreibung:
- --------------------------------------------------------------------*/
+
 void SwChangeDBDlg::UpdateFlds()
 {
     SvStringsDtor aDBNames( (BYTE)aUsedDBTLB.GetSelectionCount(), 1 );
@@ -278,11 +267,6 @@ void SwChangeDBDlg::UpdateFlds()
     pSh->EndAllAction();
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
-
 IMPL_LINK( SwChangeDBDlg, ButtonHdl, Button *, EMPTYARG )
 {
     String sTableName, sColumnName;
@@ -297,11 +281,6 @@ IMPL_LINK( SwChangeDBDlg, ButtonHdl, Button *, EMPTYARG )
 
     return 0;
 }
-
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
 
 IMPL_LINK( SwChangeDBDlg, TreeSelectHdl, SvTreeListBox *, EMPTYARG )
 {
@@ -321,7 +300,6 @@ IMPL_LINK( SwChangeDBDlg, TreeSelectHdl, SvTreeListBox *, EMPTYARG )
 /*--------------------------------------------------------------------
     Beschreibung: Datenbankname fuer Anzeige wandeln
  --------------------------------------------------------------------*/
-
 void SwChangeDBDlg::ShowDBName(const SwDBData& rDBData)
 {
     String sTmp(rDBData.sDataSource);
@@ -338,9 +316,7 @@ void SwChangeDBDlg::ShowDBName(const SwDBData& rDBData)
 
     aDocDBNameFT.SetText(sName);
 }
-/*-- 27.05.2004 09:14:01---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK( SwChangeDBDlg, AddDBHdl, PushButton *, EMPTYARG )
 {
     String sNewDB = SwNewDBMgr::LoadAndRegisterDataSource();

@@ -310,11 +310,6 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
 {
     const SwFrmFmt& rMaster = rPageDesc.GetMaster();
@@ -606,9 +601,6 @@ void    SetDfltMetric( FieldUnit eMetric, BOOL bWeb )
     SW_MOD()->ApplyUserMetric(eMetric, bWeb);
 }
 
-/*-----------------09.04.98 16:58-------------------
-
---------------------------------------------------*/
 USHORT InsertStringSorted(const String& rEntry, ListBox& rToFill, USHORT nOffset )
 {
     USHORT i = nOffset;
@@ -665,9 +657,6 @@ void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, BOOL bSorted, BO
     }
 };
 
-/* -----------------27.04.98 08:26-------------------
- *
- * --------------------------------------------------*/
 SwTwips GetTableWidth( SwFrmFmt* pFmt, SwTabCols& rCols, USHORT *pPercent,
             SwWrtShell* pSh )
 {
@@ -710,8 +699,6 @@ SwTwips GetTableWidth( SwFrmFmt* pFmt, SwTabCols& rCols, USHORT *pPercent,
     return nWidth;
 }
 
-/*------------------------------------------------------------------------*/
-
 String GetAppLangDateTimeString( const DateTime& rDT )
 {
     const SvtSysLocale aSysLocale;
@@ -734,9 +721,6 @@ void SetApplyCharUnit(BOOL bApplyChar, BOOL bWeb)
     SW_MOD()->ApplyUserCharUnit(bApplyChar, bWeb);
 }
 
-/*-- 26.01.2006 08:06:33---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 bool ExecuteMenuCommand( PopupMenu& rMenu, SfxViewFrame& rViewFrame, USHORT nId )
 {
     bool bRet = false;

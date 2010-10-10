@@ -40,9 +40,6 @@
 namespace com{namespace sun{ namespace star{ namespace beans{
     class XPropertySet;
 }}}}
-/*--------------------------------------------------------------------
-   Beschreibung:
- --------------------------------------------------------------------*/
 
 class SwFldDokInfPage : public SwFldPage
 {

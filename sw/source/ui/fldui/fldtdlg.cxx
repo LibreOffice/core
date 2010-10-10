@@ -128,17 +128,9 @@ SwFldDlg::SwFldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent)
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SwFldDlg::~SwFldDlg()
 {
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 BOOL SwFldDlg::Close()
 {
@@ -147,10 +139,6 @@ BOOL SwFldDlg::Close()
         SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD);
     return TRUE;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwFldDlg::Initialize(SfxChildWinInfo *pInfo)
 {
@@ -197,10 +185,6 @@ void SwFldDlg::Initialize(SfxChildWinInfo *pInfo)
 
     SetPosPixel( aPos );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 SfxItemSet* SwFldDlg::CreateInputItemSet( USHORT nID  )
 {
@@ -313,10 +297,6 @@ void SwFldDlg::Activate()
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwFldDlg::EnableInsert(BOOL bEnable)
 {
     if( bEnable )
@@ -331,17 +311,11 @@ void SwFldDlg::EnableInsert(BOOL bEnable)
     GetOKButton().Enable(bEnable);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwFldDlg::InsertHdl()
 {
     GetOKButton().Click();
 }
-/* -----------------27.11.2002 15:24-----------------
- *
- * --------------------------------------------------*/
+
 void SwFldDlg::ActivateDatabasePage()
 {
     m_bDataBaseMode = TRUE;
@@ -358,9 +332,7 @@ void SwFldDlg::ActivateDatabasePage()
     RemoveTabPage(TP_FLD_REF);
     RemoveTabPage(TP_FLD_FUNC);
 }
-/*-- 07.10.2003 14:01:44---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwFldDlg::PageCreated(USHORT nId, SfxTabPage& rPage)
 {
     if( TP_FLD_DB == nId)

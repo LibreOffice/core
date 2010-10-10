@@ -37,10 +37,6 @@
 #define VERSION_01      1
 #define CAPTION_VERSION VERSION_01
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 InsCaptionOpt::InsCaptionOpt(const SwCapObjType eType, const SvGlobalName* pOleId) :
     bUseCaption(FALSE),
     eObjType(eType),
@@ -56,26 +52,14 @@ InsCaptionOpt::InsCaptionOpt(const SwCapObjType eType, const SvGlobalName* pOleI
         aOleId = *pOleId;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 InsCaptionOpt::InsCaptionOpt(const InsCaptionOpt& rOpt)
 {
     *this = rOpt;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 InsCaptionOpt::~InsCaptionOpt()
 {
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 InsCaptionOpt& InsCaptionOpt::operator=( const InsCaptionOpt& rOpt )
 {
@@ -95,10 +79,6 @@ InsCaptionOpt& InsCaptionOpt::operator=( const InsCaptionOpt& rOpt )
 
     return *this;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 BOOL InsCaptionOpt::operator==( const InsCaptionOpt& rOpt ) const
 {

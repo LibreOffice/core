@@ -1675,10 +1675,6 @@ void SwFieldType::_GetFldName()
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 BOOL SwFldMgr::ChooseMacro(const String&)
 {
     BOOL bRet = FALSE;
@@ -1723,10 +1719,6 @@ void SwFldMgr::SetMacroPath(const String& rPath)
         }
     }
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 ULONG SwFldMgr::GetDefaultFormat(USHORT nTypeId, BOOL bIsText, SvNumberFormatter* pFormatter, double* pVal)
 {
@@ -1774,9 +1766,6 @@ ULONG SwFldMgr::GetDefaultFormat(USHORT nTypeId, BOOL bIsText, SvNumberFormatter
     return pFormatter->GetStandardFormat(nDefFormat, GetCurrLanguage());
 }
 
-/* -----------------------------01.03.01 16:46--------------------------------
-
- ---------------------------------------------------------------------------*/
 Reference<XNumberingTypeInfo> SwFldMgr::GetNumberingInfo() const
 {
     if(!xNumberingInfo.is())

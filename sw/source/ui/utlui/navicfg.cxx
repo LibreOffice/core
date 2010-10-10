@@ -42,9 +42,6 @@ using namespace ::utl;
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 
-/* -----------------------------08.09.00 16:30--------------------------------
-
- ---------------------------------------------------------------------------*/
 Sequence<OUString> SwNavigationConfig::GetPropertyNames()
 {
     static const char* aPropNames[] =
@@ -66,9 +63,6 @@ Sequence<OUString> SwNavigationConfig::GetPropertyNames()
     }
     return aNames;
 }
-/*-----------------13.11.96 11.03-------------------
-
---------------------------------------------------*/
 
 SwNavigationConfig::SwNavigationConfig() :
     utl::ConfigItem(C2U("Office.Writer/Navigator")),
@@ -105,14 +99,11 @@ SwNavigationConfig::SwNavigationConfig() :
         }
     }
 }
-/* -----------------------------08.09.00 16:35--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwNavigationConfig::~SwNavigationConfig()
-{}
-/* -----------------------------08.09.00 16:35--------------------------------
+{
+}
 
- ---------------------------------------------------------------------------*/
 void SwNavigationConfig::Commit()
 {
     Sequence<OUString> aNames = GetPropertyNames();

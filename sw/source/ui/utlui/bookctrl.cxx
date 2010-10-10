@@ -65,15 +65,11 @@ private:
     virtual void    Select();
 };
 
-// -----------------------------------------------------------------------
-
 BookmarkPopup_Impl::BookmarkPopup_Impl() :
     PopupMenu(),
     nCurId(USHRT_MAX)
 {
 }
-
-// -----------------------------------------------------------------------
 
 void BookmarkPopup_Impl::Select()
 {
@@ -89,13 +85,9 @@ SwBookmarkControl::SwBookmarkControl( USHORT _nSlotId,
 {
 }
 
-// -----------------------------------------------------------------------
-
 SwBookmarkControl::~SwBookmarkControl()
 {
 }
-
-// -----------------------------------------------------------------------
 
 void SwBookmarkControl::StateChanged(
     USHORT /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
@@ -109,14 +101,10 @@ void SwBookmarkControl::StateChanged(
     }
 }
 
-// -----------------------------------------------------------------------
-
 void SwBookmarkControl::Paint( const UserDrawEvent&  )
 {
     GetStatusBar().SetItemText( GetId(), sPageNumber );
 }
-
-// -----------------------------------------------------------------------
 
 void SwBookmarkControl::Command( const CommandEvent& rCEvt )
 {

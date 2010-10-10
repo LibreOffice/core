@@ -94,9 +94,7 @@ SwRenameXNamedDlg::SwRenameXNamedDlg( Window* pWin,
     aNewNameED.SetModifyHdl(LINK(this, SwRenameXNamedDlg, ModifyHdl));
     aOk.Enable(sal_False);
 }
-/* -----------------09.06.99 15:34-------------------
- *
- * --------------------------------------------------*/
+
 IMPL_LINK(SwRenameXNamedDlg, OkHdl, OKButton*, EMPTYARG)
 {
     try
@@ -110,9 +108,7 @@ IMPL_LINK(SwRenameXNamedDlg, OkHdl, OKButton*, EMPTYARG)
     EndDialog(RET_OK);
     return 0;
 }
-/* -----------------09.06.99 15:48-------------------
- *
- * --------------------------------------------------*/
+
 IMPL_LINK(SwRenameXNamedDlg, ModifyHdl, NoSpaceEdit*, pEdit)
 {
     String sTmp(pEdit->GetText());

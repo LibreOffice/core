@@ -47,9 +47,6 @@ using namespace com::sun::star::uno;
 #define SEL_TYPE_BEZIER         3
 #define SEL_TYPE_GRAPHIC        4
 
-/* ---------------------------------------------------------------------------
-
- ---------------------------------------------------------------------------*/
 SwToolbarConfigItem::SwToolbarConfigItem( BOOL bWeb ) :
     ConfigItem(bWeb ? C2U("Office.WriterWeb/ObjectBar") :  C2U("Office.Writer/ObjectBar"),
         CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE)
@@ -74,15 +71,11 @@ SwToolbarConfigItem::SwToolbarConfigItem( BOOL bWeb ) :
         }
     }
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwToolbarConfigItem::~SwToolbarConfigItem()
 {
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Int32 lcl_getArrayIndex(int nSelType)
 {
     sal_Int32 nRet = -1;
@@ -101,9 +94,7 @@ sal_Int32 lcl_getArrayIndex(int nSelType)
         nRet = SEL_TYPE_GRAPHIC;
     return nRet;
 }
-/* -----------------------------10.10.00 14:38--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwToolbarConfigItem::SetTopToolbar( sal_Int32 nSelType, sal_Int32 nBarId )
 {
     sal_Int32 nProp = lcl_getArrayIndex(nSelType);
@@ -113,9 +104,7 @@ void SwToolbarConfigItem::SetTopToolbar( sal_Int32 nSelType, sal_Int32 nBarId )
         SetModified();
     }
 }
-/* -----------------------------10.10.00 13:33--------------------------------
 
- ---------------------------------------------------------------------------*/
 Sequence<OUString> SwToolbarConfigItem::GetPropertyNames()
 {
     static const char* aPropNames[] =
@@ -133,9 +122,7 @@ Sequence<OUString> SwToolbarConfigItem::GetPropertyNames()
         pNames[i] = OUString::createFromAscii(aPropNames[i]);
     return aNames;
 }
-/* -----------------------------10.10.00 13:36--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwToolbarConfigItem::Commit()
 {
     Sequence<OUString> aNames = GetPropertyNames();
@@ -149,4 +136,3 @@ void SwToolbarConfigItem::Commit()
 }
 
 void SwToolbarConfigItem::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
-

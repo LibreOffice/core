@@ -38,10 +38,6 @@
 #include "numfmtlb.hxx"
 #include "fldpage.hxx"
 
-/*--------------------------------------------------------------------
-   Beschreibung:
- --------------------------------------------------------------------*/
-
 class SwFldDokPage : public SwFldPage
 {
     FixedText           aTypeFT;

@@ -86,10 +86,6 @@ NumFormatListBox::NumFormatListBox( Window* pWin, const ResId& rResId,
     Init(nFormatType, bUsrFmts);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 NumFormatListBox::NumFormatListBox( Window* pWin, SwView* pView,
                                     const ResId& rResId, short nFormatType,
                                     ULONG nDefFmt, BOOL bUsrFmts ) :
@@ -105,10 +101,6 @@ NumFormatListBox::NumFormatListBox( Window* pWin, SwView* pView,
 {
     Init(nFormatType, bUsrFmts);
 }
-
-/* -----------------15.06.98 11:29-------------------
- *
- * --------------------------------------------------*/
 
 void NumFormatListBox::Init(short nFormatType, BOOL bUsrFmts)
 {
@@ -131,18 +123,11 @@ void NumFormatListBox::Init(short nFormatType, BOOL bUsrFmts)
     SetSelectHdl(LINK(this, NumFormatListBox, SelectHdl));
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 NumFormatListBox::~NumFormatListBox()
 {
     if (pOwnFormatter)
         delete pOwnFormatter;
 }
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 SwView* NumFormatListBox::GetView()
 {
@@ -150,10 +135,6 @@ SwView* NumFormatListBox::GetView()
         return pVw;
     return ::GetActiveView();
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void NumFormatListBox::SetFormatType(const short nFormatType)
 {
@@ -298,10 +279,6 @@ void NumFormatListBox::SetFormatType(const short nFormatType)
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void NumFormatListBox::SetDefFormat(const ULONG nDefFmt)
 {
     if (nDefFmt == ULONG_MAX)
@@ -391,20 +368,12 @@ void NumFormatListBox::SetDefFormat(const ULONG nDefFmt)
     nDefFormat = GetFormat();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 ULONG NumFormatListBox::GetFormat() const
 {
     USHORT nPos = GetSelectEntryPos();
 
     return (ULONG)GetEntryData(nPos);
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
 {
@@ -487,10 +456,6 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 double NumFormatListBox::GetDefValue(const short nFormatType) const
 {
     double fDefValue = 0.0;
@@ -536,10 +501,6 @@ double NumFormatListBox::GetDefValue(const short nFormatType) const
 
     return fDefValue;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void NumFormatListBox::Clear()
 {

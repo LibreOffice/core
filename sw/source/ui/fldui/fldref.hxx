@@ -42,10 +42,6 @@
 class SwTxtNode;
 // <--
 
-/*--------------------------------------------------------------------
-   Beschreibung:
- --------------------------------------------------------------------*/
-
 class SwFldRefPage : public SwFldPage
 {
     FixedText       aTypeFT;

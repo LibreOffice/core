@@ -28,8 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
 #include "hintids.hxx"
 
 #include <vcl/status.hxx>
@@ -40,9 +38,7 @@
 #include "swtypes.hxx"
 #include "zoomctrl.hxx"
 
-
 SFX_IMPL_STATUSBAR_CONTROL( SwZoomControl, SvxZoomItem );
-
 
 SwZoomControl::SwZoomControl( USHORT _nSlotId,
                               USHORT _nId,
@@ -51,13 +47,9 @@ SwZoomControl::SwZoomControl( USHORT _nSlotId,
 {
 }
 
-// -----------------------------------------------------------------------
-
 SwZoomControl::~SwZoomControl()
 {
 }
-
-// -----------------------------------------------------------------------
 
 void SwZoomControl::StateChanged( USHORT nSID, SfxItemState eState,
                                   const SfxPoolItem* pState )
@@ -74,8 +66,6 @@ void SwZoomControl::StateChanged( USHORT nSID, SfxItemState eState,
     }
 }
 
-// -----------------------------------------------------------------------
-
 void SwZoomControl::Paint( const UserDrawEvent& rUsrEvt )
 {
     if(!sPreviewZoom.Len())
@@ -83,8 +73,6 @@ void SwZoomControl::Paint( const UserDrawEvent& rUsrEvt )
     else
         GetStatusBar().SetItemText( GetId(), sPreviewZoom );
 }
-
-// -----------------------------------------------------------------------
 
 void SwZoomControl::Command( const CommandEvent& rCEvt )
 {

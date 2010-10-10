@@ -42,13 +42,10 @@
 #include "cfgitems.hxx"
 #include "crstate.hxx"
 
-
-
 TYPEINIT1_AUTOFACTORY(SwDocDisplayItem, SfxPoolItem)
 TYPEINIT1_AUTOFACTORY(SwElemItem, SfxPoolItem)
 TYPEINIT1_AUTOFACTORY(SwAddPrinterItem, SfxPoolItem)
 TYPEINIT1_AUTOFACTORY(SwShadowCursorItem, SfxPoolItem)
-
 
 SwDocDisplayItem::SwDocDisplayItem( USHORT _nWhich ) :
         SfxPoolItem(_nWhich),
@@ -69,16 +66,11 @@ SwDocDisplayItem::SwDocDisplayItem( USHORT _nWhich ) :
 /*------------OS 12.01.95 -------------------------------------------
     Item fuer Einstellungsdialog, Seite Dokumentansicht
 --------------------------------------------------------------------*/
-
 SwDocDisplayItem::SwDocDisplayItem( const SwDocDisplayItem& rDocDisplayItem ):
             SfxPoolItem(rDocDisplayItem)
 {
     *this = rDocDisplayItem;
 };
-
-/*----------------------- -------------------------------------------
-
---------------------------------------------------------------------*/
 
 SwDocDisplayItem::SwDocDisplayItem(const SwViewOption& rVOpt, USHORT _nWhich ) :
             SfxPoolItem( _nWhich )
@@ -94,18 +86,11 @@ SwDocDisplayItem::SwDocDisplayItem(const SwViewOption& rVOpt, USHORT _nWhich ) :
     bShowHiddenPara     = rVOpt.IsShowHiddenPara();
 
 }
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 SfxPoolItem* SwDocDisplayItem::Clone( SfxItemPool*  ) const
 {
     return new SwDocDisplayItem( *this );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 int SwDocDisplayItem::operator==( const SfxPoolItem& rAttr ) const
 {
@@ -124,12 +109,6 @@ int SwDocDisplayItem::operator==( const SfxPoolItem& rAttr ) const
               bShowHiddenPara       == rItem.bShowHiddenPara );
 }
 
-
-/*-----------------31.08.96 14.14-------------------
-
---------------------------------------------------*/
-
-
 void  SwDocDisplayItem::operator=( const SwDocDisplayItem& rDocDisplayItem)
 {
     bParagraphEnd       = rDocDisplayItem.bParagraphEnd         ;
@@ -143,9 +122,6 @@ void  SwDocDisplayItem::operator=( const SwDocDisplayItem& rDocDisplayItem)
     bShowHiddenPara     = rDocDisplayItem.bShowHiddenPara       ;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 void SwDocDisplayItem::FillViewOptions( SwViewOption& rVOpt) const
 {
     rVOpt.SetParagraph  (bParagraphEnd      );
@@ -159,10 +135,6 @@ void SwDocDisplayItem::FillViewOptions( SwViewOption& rVOpt) const
     rVOpt.SetShowHiddenPara(bShowHiddenPara );
 }
 
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 SwElemItem::SwElemItem( USHORT _nWhich ) :
     SfxPoolItem(_nWhich)
 {
@@ -182,18 +154,12 @@ SwElemItem::SwElemItem( USHORT _nWhich ) :
     bFieldName          =
     bNotes              = FALSE;
 }
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 SwElemItem::SwElemItem( const SwElemItem& rElemItem ):
             SfxPoolItem(rElemItem)
 {
     *this = rElemItem;
 }
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 SwElemItem::SwElemItem(const SwViewOption& rVOpt, USHORT _nWhich) :
             SfxPoolItem( _nWhich )
@@ -216,18 +182,10 @@ SwElemItem::SwElemItem(const SwViewOption& rVOpt, USHORT _nWhich) :
 
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SfxPoolItem* SwElemItem::Clone( SfxItemPool* ) const
 {
     return new SwElemItem( *this );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 int SwElemItem::operator==( const SfxPoolItem& rAttr ) const
 {
@@ -252,11 +210,6 @@ int SwElemItem::operator==( const SfxPoolItem& rAttr ) const
                 bNotes                == rItem.bNotes             );
 }
 
-/*-----------------31.08.96 14.13-------------------
-
---------------------------------------------------*/
-
-
 void  SwElemItem::operator=( const SwElemItem& rElemItem)
 {
     bHorzScrollbar  = rElemItem.  bHorzScrollbar    ;
@@ -275,10 +228,6 @@ void  SwElemItem::operator=( const SwElemItem& rElemItem)
     bFieldName          = rElemItem.bFieldName            ;
     bNotes              = rElemItem.bNotes                ;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwElemItem::FillViewOptions( SwViewOption& rVOpt) const
 {
@@ -300,11 +249,9 @@ void SwElemItem::FillViewOptions( SwViewOption& rVOpt) const
     rVOpt.SetPostIts    (bNotes             );
 }
 
-
 /*--------------------------------------------------------------------
     Beschreibung: CopyCTOR
  --------------------------------------------------------------------*/
-
 SwAddPrinterItem::SwAddPrinterItem( const SwAddPrinterItem& rAddPrinterItem ):
             SfxPoolItem(rAddPrinterItem),
             SwPrintData( rAddPrinterItem )
@@ -314,32 +261,24 @@ SwAddPrinterItem::SwAddPrinterItem( const SwAddPrinterItem& rAddPrinterItem ):
 /*--------------------------------------------------------------------
     Beschreibung: CTOR fuer leeres Item
  --------------------------------------------------------------------*/
-
 SwAddPrinterItem::SwAddPrinterItem( USHORT _nWhich):
                 SfxPoolItem(_nWhich)
 {
 }
+
 /*--------------------------------------------------------------------
     Beschreibung: CTOR aus SwPrintOptions
  --------------------------------------------------------------------*/
-
 SwAddPrinterItem::SwAddPrinterItem( USHORT _nWhich, const SwPrintData& rPrtData ) :
     SfxPoolItem(_nWhich)
 {
     SwPrintData::operator=(rPrtData);
 }
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 SfxPoolItem* SwAddPrinterItem::Clone( SfxItemPool* ) const
 {
     return new SwAddPrinterItem( *this );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 int SwAddPrinterItem::operator==( const SfxPoolItem& rAttr ) const
 {
@@ -349,10 +288,10 @@ int SwAddPrinterItem::operator==( const SfxPoolItem& rAttr ) const
 
     return  SwPrintData::operator==(rItem);
 }
+
 /*-----------------03.11.97 10:00-------------------
  Item fuer Einstellungsdialog, ShadowCursorSeite
 --------------------------------------------------*/
-
 SwShadowCursorItem::SwShadowCursorItem( USHORT _nWhich )
     : SfxPoolItem( _nWhich ),
     eMode( FILL_TAB )
@@ -401,10 +340,6 @@ void SwShadowCursorItem::FillViewOptions( SwViewOption& rVOpt ) const
 }
 
 #ifdef DBG_UTIL
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SwTestItem::SwTestItem( const SwTestItem& rTestItem ):
             SfxPoolItem(rTestItem)
 {
@@ -420,18 +355,10 @@ SwTestItem::SwTestItem( const SwTestItem& rTestItem ):
     bTest10=rTestItem.bTest10;
 };
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SfxPoolItem* SwTestItem::Clone( SfxItemPool* ) const
 {
     return new SwTestItem( *this );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 int SwTestItem::operator==( const SfxPoolItem& rAttr ) const
 {

@@ -109,10 +109,6 @@ using namespace ::com::sun::star::container;
 
 #define NAVI_BOOKMARK_DELIM     (sal_Unicode)1
 
-/***************************************************************************
-
-***************************************************************************/
-
 typedef SwContent* SwContentPtr;
 SV_DECL_PTRARR_SORT_DEL( SwContentArr, SwContentPtr, 0,4)
 SV_IMPL_OP_PTRARR_SORT(SwContentArr, SwContentPtr)
@@ -160,7 +156,6 @@ namespace
     Beschreibung: Inhalt, enthaelt Namen und Verweis auf den Inhalstyp
 ***************************************************************************/
 
-
 SwContent::SwContent(const SwContentType* pCnt, const String& rName, long nYPos) :
     SwTypeNumber(CTYPE_CNT),
     pParent(pCnt),
@@ -169,7 +164,6 @@ SwContent::SwContent(const SwContentType* pCnt, const String& rName, long nYPos)
     bInvisible(sal_False)
 {
 }
-
 
 sal_uInt8   SwTypeNumber::GetTypeId()
 {
@@ -201,6 +195,7 @@ sal_Bool SwURLFieldContent::IsProtect() const
 SwGraphicContent::~SwGraphicContent()
 {
 }
+
 SwTOXBaseContent::~SwTOXBaseContent()
 {
 }
@@ -208,7 +203,6 @@ SwTOXBaseContent::~SwTOXBaseContent()
 /***************************************************************************
     Beschreibung:   Inhaltstyp, kennt seine Inhalte und die WrtShell
 ***************************************************************************/
-
 
 SwContentType::SwContentType(SwWrtShell* pShell, sal_uInt16 nType, sal_uInt8 nLevel) :
     SwTypeNumber(CTYPE_CTT),
@@ -230,7 +224,6 @@ SwContentType::SwContentType(SwWrtShell* pShell, sal_uInt16 nType, sal_uInt8 nLe
 /***************************************************************************
     Beschreibung:   Initialisierung
 ***************************************************************************/
-
 
 void SwContentType::Init(sal_Bool* pbInvalidateWindow)
 {
@@ -485,11 +478,6 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
         bDataValid = sal_False;
 }
 
-/***************************************************************************
-    Beschreibung:
-***************************************************************************/
-
-
 SwContentType::~SwContentType()
 {
     delete pMember;
@@ -498,7 +486,6 @@ SwContentType::~SwContentType()
 /***************************************************************************
     Beschreibung:    Inhalt liefern, dazu gfs. die Liste fuellen
 ***************************************************************************/
-
 
 const SwContent* SwContentType::GetMember(sal_uInt16 nIndex)
 {
@@ -513,12 +500,6 @@ const SwContent* SwContentType::GetMember(sal_uInt16 nIndex)
 
 }
 
-
-/***************************************************************************
-    Beschreibung:
-***************************************************************************/
-
-
 void    SwContentType::Invalidate()
 {
     bDataValid = sal_False;
@@ -527,7 +508,6 @@ void    SwContentType::Invalidate()
 /***************************************************************************
     Beschreibung: Liste der Inhalte fuellen
 ***************************************************************************/
-
 
 void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibiblityChanged)
 {
@@ -873,7 +853,6 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibiblityChanged)
     Beschreibung: TreeListBox fuer Inhaltsanzeige
 ***************************************************************************/
 
-
 SwContentTree::SwContentTree(Window* pParent, const ResId& rResId) :
         SvTreeListBox( pParent, rResId ),
 
@@ -935,11 +914,6 @@ SwContentTree::SwContentTree(Window* pParent, const ResId& rResId) :
     Clear();
     EnableContextMenuHandling();
 }
-
-/***************************************************************************
-    Beschreibung:
-***************************************************************************/
-
 
 SwContentTree::~SwContentTree()
 {
@@ -1217,11 +1191,10 @@ PopupMenu* SwContentTree::CreateContextMenu( void )
     return pPop;
 
 }
+
 /***************************************************************************
     Beschreibung:   Einrueckung fuer outlines (und sections)
 ***************************************************************************/
-
-
 long    SwContentTree::GetTabPos( SvLBoxEntry* pEntry, SvLBoxTab* pTab)
 {
     sal_uInt16 nLevel = 0;
@@ -1245,8 +1218,6 @@ long    SwContentTree::GetTabPos( SvLBoxEntry* pEntry, SvLBoxTab* pTab)
 /***************************************************************************
     Beschreibung:   Inhalte werden erst auf Anforderung in die Box eingefuegt
 ***************************************************************************/
-
-
 void  SwContentTree::RequestingChilds( SvLBoxEntry* pParent )
 {
     // ist es ein Inhaltstyp?
@@ -1319,11 +1290,10 @@ void  SwContentTree::RequestingChilds( SvLBoxEntry* pParent )
         }
     }
 }
+
 /***************************************************************************
     Beschreibung:   Expand - Zustand fuer Inhaltstypen merken
 ***************************************************************************/
-
-
 sal_Bool  SwContentTree::Expand( SvLBoxEntry* pParent )
 {
     if(!bIsRoot || (((SwContentType*)pParent->GetUserData())->GetType() == CONTENT_TYPE_OUTLINE) ||
@@ -1378,11 +1348,10 @@ sal_Bool  SwContentTree::Expand( SvLBoxEntry* pParent )
     }
     return SvTreeListBox::Expand(pParent);
 }
+
 /***************************************************************************
     Beschreibung:   Collapse - Zustand fuer Inhaltstypen merken
 ***************************************************************************/
-
-
 sal_Bool  SwContentTree::Collapse( SvLBoxEntry* pParent )
 {
     sal_Bool bRet;
@@ -1419,12 +1388,9 @@ sal_Bool  SwContentTree::Collapse( SvLBoxEntry* pParent )
     return bRet;
 }
 
-
 /***************************************************************************
     Beschreibung:   Auch auf Doppelclick wird zunaechst nur aufgeklappt
 ***************************************************************************/
-
-
 IMPL_LINK( SwContentTree, ContentDoubleClickHdl, SwContentTree *, EMPTYARG )
 {
     SvLBoxEntry* pEntry = GetCurEntry();
@@ -1454,8 +1420,6 @@ IMPL_LINK( SwContentTree, ContentDoubleClickHdl, SwContentTree *, EMPTYARG )
 /***************************************************************************
     Beschreibung:   Anzeigen der Datei
 ***************************************************************************/
-
-
 void SwContentTree::Display( sal_Bool bActive )
 {
     if(!bIsImageListInitialized)
@@ -1657,18 +1621,12 @@ void SwContentTree::Display( sal_Bool bActive )
 /***************************************************************************
     Beschreibung:   Im Clear muessen auch die ContentTypes geloescht werden
 ***************************************************************************/
-
-
 void SwContentTree::Clear()
 {
     SetUpdateMode(sal_False);
     SvTreeListBox::Clear();
     SetUpdateMode(sal_True);
 }
-
-/***************************************************************************
-    Beschreibung:
-***************************************************************************/
 
 sal_Bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
                                             sal_Int8& rDragMode )
@@ -1809,11 +1767,10 @@ sal_Bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
     }
     return bRet;
 }
+
 /***************************************************************************
     Beschreibung:   Umschalten der Anzeige auf Root
 ***************************************************************************/
-
-
 sal_Bool SwContentTree::ToggleToRoot()
 {
     if(!bIsRoot)
@@ -1846,8 +1803,6 @@ sal_Bool SwContentTree::ToggleToRoot()
 /***************************************************************************
     Beschreibung:   Angezeigten Inhalt auf Gueltigkeit pruefen
 ***************************************************************************/
-
-
 sal_Bool SwContentTree::HasContentChanged()
 {
 /*
@@ -2094,8 +2049,6 @@ void SwContentTree::FindActiveTypeAndRemoveUserData()
     Beschreibung:   Nachdem ein File auf den Navigator gedroppt wurde,
                     wird die neue Shell gesetzt
 ***************************************************************************/
-
-
 void SwContentTree::SetHiddenShell(SwWrtShell* pSh)
 {
     pHiddenShell = pSh;
@@ -2113,8 +2066,6 @@ void SwContentTree::SetHiddenShell(SwWrtShell* pSh)
 /***************************************************************************
     Beschreibung:   Dokumentwechsel - neue Shell setzen
 ***************************************************************************/
-
-
 void SwContentTree::SetActiveShell(SwWrtShell* pSh)
 {
     if(bIsInternalDrag)
@@ -2152,8 +2103,6 @@ void SwContentTree::SetActiveShell(SwWrtShell* pSh)
 /***************************************************************************
     Beschreibung:   Eine offene View als aktiv festlegen
 ***************************************************************************/
-
-
 void SwContentTree::SetConstantShell(SwWrtShell* pSh)
 {
     pActiveShell = pSh;
@@ -2166,11 +2115,10 @@ void SwContentTree::SetConstantShell(SwWrtShell* pSh)
     }
     Display(sal_True);
 }
+
 /***************************************************************************
     Beschreibung:   Kommandos des Navigators ausfuehren
 ***************************************************************************/
-
-
 void SwContentTree::ExecCommand(sal_uInt16 nCmd, sal_Bool bModifier)
 {
     sal_Bool nMove = sal_False;
@@ -2327,10 +2275,6 @@ void SwContentTree::ExecCommand(sal_uInt16 nCmd, sal_Bool bModifier)
         }
     }
 }
-/***************************************************************************
-    Beschreibung:
-***************************************************************************/
-
 
 void    SwContentTree::ShowTree()
 {
@@ -2341,8 +2285,6 @@ void    SwContentTree::ShowTree()
 /***************************************************************************
     Beschreibung:   zusammengefaltet wird nicht geidlet
 ***************************************************************************/
-
-
 void    SwContentTree::HideTree()
 {
     aUpdTimer.Stop();
@@ -2352,8 +2294,6 @@ void    SwContentTree::HideTree()
 /***************************************************************************
     Beschreibung:   Kein Idle mit Focus oder waehrend des Dragging
 ***************************************************************************/
-
-
 IMPL_LINK( SwContentTree, TimerUpdate, Timer*, EMPTYARG)
 {
     // kein Update waehrend D&D
@@ -2391,11 +2331,6 @@ IMPL_LINK( SwContentTree, TimerUpdate, Timer*, EMPTYARG)
     return 0;
 }
 
-/***************************************************************************
-    Beschreibung:
-***************************************************************************/
-
-
 DragDropMode SwContentTree::NotifyStartDrag(
                 TransferDataContainer& rContainer,
                 SvLBoxEntry* pEntry )
@@ -2415,13 +2350,10 @@ DragDropMode SwContentTree::NotifyStartDrag(
     return eMode;
 }
 
-
 /***************************************************************************
     Beschreibung :  Nach dem Drag wird der aktuelle Absatz m i t
                     Childs verschoben
 ***************************************************************************/
-
-
 sal_Bool  SwContentTree::NotifyMoving( SvLBoxEntry*  pTarget,
         SvLBoxEntry*  pEntry, SvLBoxEntry*& , ULONG& )
 {
@@ -2456,12 +2388,11 @@ sal_Bool  SwContentTree::NotifyMoving( SvLBoxEntry*  pTarget,
     //TreeListBox wird aus dem Dokument neu geladen
     return sal_False;
 }
+
 /***************************************************************************
     Beschreibung :  Nach dem Drag wird der aktuelle Absatz o h n e
                     Childs verschoben
 ***************************************************************************/
-
-
 sal_Bool  SwContentTree::NotifyCopying( SvLBoxEntry*  pTarget,
         SvLBoxEntry*  pEntry, SvLBoxEntry*& , ULONG& )
 {
@@ -2500,12 +2431,10 @@ sal_Bool  SwContentTree::NotifyCopying( SvLBoxEntry*  pTarget,
 /***************************************************************************
     Beschreibung:   Kein Drop vor den ersten Eintrag - es ist ein SwContentType
 ***************************************************************************/
-
 sal_Bool  SwContentTree::NotifyAcceptDrop( SvLBoxEntry* pEntry)
 {
     return pEntry != 0;
 }
-
 
 /***************************************************************************
     Beschreibung:   Wird ein Ctrl+DoubleClick in einen freien Bereich ausgefuehrt,
@@ -2524,8 +2453,6 @@ void  SwContentTree::MouseButtonDown( const MouseEvent& rMEvt )
 /***************************************************************************
     Beschreibung:   sofort aktualisieren
 ***************************************************************************/
-
-
 void  SwContentTree::GetFocus()
 {
     SwView* pActView = GetParentWindow()->GetCreateView();
@@ -2549,11 +2476,6 @@ void  SwContentTree::GetFocus()
         Clear();
     SvTreeListBox::GetFocus();
 }
-
-/***************************************************************************
-    Beschreibung:
-***************************************************************************/
-
 
 void  SwContentTree::KeyInput(const KeyEvent& rEvent)
 {
@@ -2605,11 +2527,6 @@ void  SwContentTree::KeyInput(const KeyEvent& rEvent)
         SvTreeListBox::KeyInput(rEvent);
 
 }
-
-/***************************************************************************
-    Beschreibung:
-***************************************************************************/
-
 
 void  SwContentTree::RequestHelp( const HelpEvent& rHEvt )
 {
@@ -2726,11 +2643,6 @@ void  SwContentTree::RequestHelp( const HelpEvent& rHEvt )
         Window::RequestHelp( rHEvt );
 }
 
-/***************************************************************************
-    Beschreibung:
-***************************************************************************/
-
-
 void    SwContentTree::ExcecuteContextMenuAction( USHORT nSelectedPopupEntry )
 {
     SvLBoxEntry* pFirst = FirstSelected();
@@ -2821,11 +2733,6 @@ void    SwContentTree::ExcecuteContextMenuAction( USHORT nSelectedPopupEntry )
     GetParentWindow()->UpdateListBox();
 }
 
-/***************************************************************************
-    Beschreibung:
-***************************************************************************/
-
-
 void SwContentTree::SetOutlineLevel(sal_uInt8 nSet)
 {
     nOutlineLevel = nSet;
@@ -2844,8 +2751,6 @@ void SwContentTree::SetOutlineLevel(sal_uInt8 nSet)
 /***************************************************************************
     Beschreibung:   Moduswechsel: gedropptes Doc anzeigen
 ***************************************************************************/
-
-
 void SwContentTree::ShowHiddenShell()
 {
     if(pHiddenShell)
@@ -2859,8 +2764,6 @@ void SwContentTree::ShowHiddenShell()
 /***************************************************************************
     Beschreibung:   Moduswechsel: aktive Sicht anzeigen
 ***************************************************************************/
-
-
 void SwContentTree::ShowActualView()
 {
     bIsActive = sal_True;
@@ -2869,11 +2772,10 @@ void SwContentTree::ShowActualView()
     GetParentWindow()->UpdateListBox();
 }
 
-/*-----------------20.11.96 13.34-------------------
+/***************************************************************************
     Beschreibung: Hier sollen die Buttons zum Verschieben von
                   Outlines en-/disabled werden
---------------------------------------------------*/
-
+***************************************************************************/
 sal_Bool  SwContentTree::Select( SvLBoxEntry* pEntry, sal_Bool bSelect )
 {
     if(!pEntry)
@@ -2897,20 +2799,12 @@ sal_Bool  SwContentTree::Select( SvLBoxEntry* pEntry, sal_Bool bSelect )
     return SvTreeListBox::Select(pEntry, bSelect);
 }
 
-/*-----------------27.11.96 12.56-------------------
-
---------------------------------------------------*/
-
 void SwContentTree::SetRootType(sal_uInt16 nType)
 {
     nRootType = nType;
     bIsRoot = sal_True;
     pConfig->SetRootType( nRootType );
 }
-
-/*-----------------10.01.97 12.19-------------------
-
---------------------------------------------------*/
 
 void SwContentType::RemoveNewline(String& rEntry)
 {
@@ -2921,10 +2815,6 @@ void SwContentType::RemoveNewline(String& rEntry)
             *pStr = 0x20;
     }
 }
-
-/*-----------------14.01.97 16.38-------------------
-
---------------------------------------------------*/
 
 void SwContentTree::EditEntry(SvLBoxEntry* pEntry, sal_uInt8 nMode)
 {
@@ -3157,10 +3047,6 @@ void SwContentTree::EditEntry(SvLBoxEntry* pEntry, sal_uInt8 nMode)
     }
 }
 
-/*-----------------14.01.97 16.53-------------------
-
---------------------------------------------------*/
-
 void SwContentTree::GotoContent(SwContent* pCnt)
 {
     pActiveShell->EnterStdMode();
@@ -3267,20 +3153,16 @@ void SwContentTree::GotoContent(SwContent* pCnt)
     rView.GetPostItMgr()->SetActiveSidebarWin(0);
     rView.GetEditWin().GrabFocus();
 }
+
 /*-----------------06.02.97 19.14-------------------
     Jetzt nochtdie passende text::Bookmark
 --------------------------------------------------*/
-
 NaviContentBookmark::NaviContentBookmark()
     :
     nDocSh(0),
     nDefDrag( REGION_MODE_NONE )
 {
 }
-
-/*-----------------06.02.97 20.12-------------------
-
---------------------------------------------------*/
 
 NaviContentBookmark::NaviContentBookmark( const String &rUrl,
                     const String& rDesc,
@@ -3322,10 +3204,6 @@ sal_Bool NaviContentBookmark::Paste( TransferableDataHelper& rData )
     return bRet;
 }
 
-
-/* -----------------------------09.12.99 13:50--------------------------------
-
- ---------------------------------------------------------------------------*/
 class SwContentLBoxString : public SvLBoxString
 {
 public:
@@ -3336,9 +3214,6 @@ public:
         SvLBoxEntry* pEntry);
 };
 
-/* -----------------------------09.12.99 13:49--------------------------------
-
- ---------------------------------------------------------------------------*/
 void SwContentTree::InitEntry(SvLBoxEntry* pEntry,
         const XubString& rStr ,const Image& rImg1,const Image& rImg2,
         SvLBoxButtonKind eButtonKind)
@@ -3349,9 +3224,7 @@ void SwContentTree::InitEntry(SvLBoxEntry* pEntry,
     SwContentLBoxString* pStr = new SwContentLBoxString( pEntry, 0, pCol->GetText() );
     pEntry->ReplaceItem( pStr, nColToHilite );
 }
-/* -----------------------------09.12.99 13:49--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwContentLBoxString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags,
     SvLBoxEntry* pEntry )
 {
@@ -3370,9 +3243,7 @@ void SwContentLBoxString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFl
     else
         SvLBoxString::Paint( rPos, rDev, nFlags, pEntry);
 }
-/* -----------------------------06.05.2002 10:20------------------------------
 
- ---------------------------------------------------------------------------*/
 void    SwContentTree::DataChanged( const DataChangedEvent& rDCEvt )
 {
   if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&

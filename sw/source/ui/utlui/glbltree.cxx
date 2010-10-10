@@ -75,7 +75,6 @@
 using namespace ::com::sun::star::uno;
 using ::rtl::OUString;
 
-
 // Kontextmenue fuer GlobalTree
 #define CTX_INSERT_ANY_INDEX 10
 //#define CTX_INSERT_CNTIDX   11
@@ -139,12 +138,6 @@ static const USHORT __FAR_DATA aHelpForMenu[] =
     HID_GLBLTREEUPD_ALL         //CTX_UPDATE_ALL
 };
 
-/************************************************************************/
-/*                                                                      */
-/************************************************************************/
-/* -----------------------------24.08.00 12:04--------------------------------
-
- ---------------------------------------------------------------------------*/
 class SwGlobalFrameListener_Impl : public SfxListener
 {
     BOOL bValid;
@@ -159,9 +152,7 @@ public:
 
     BOOL                IsValid() const {return bValid;}
 };
-/* -----------------------------24.08.00 12:05--------------------------------
 
- ---------------------------------------------------------------------------*/
 void    SwGlobalFrameListener_Impl::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
     if( rHint.ISA(SfxSimpleHint) &&
@@ -169,9 +160,6 @@ void    SwGlobalFrameListener_Impl::Notify( SfxBroadcaster& /*rBC*/, const SfxHi
         bValid = FALSE;
 }
 
-/*-----------------12.06.97 09:38-------------------
-
---------------------------------------------------*/
 SwGlobalTree::SwGlobalTree(Window* pParent, const ResId& rResId) :
 
     SvTreeListBox(pParent, rResId),
@@ -206,18 +194,12 @@ SwGlobalTree::SwGlobalTree(Window* pParent, const ResId& rResId) :
     EnableContextMenuHandling();
 }
 
-/*-----------------12.06.97 09:38-------------------
-
---------------------------------------------------*/
 SwGlobalTree::~SwGlobalTree()
 {
     delete pSwGlblDocContents;
     delete pDocInserter;
 }
 
-/*-----------------12.06.97 09:38-------------------
-
---------------------------------------------------*/
 sal_Int8 SwGlobalTree::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
     sal_Int8 nRet = DND_ACTION_NONE;
@@ -297,9 +279,7 @@ sal_Int8 SwGlobalTree::ExecuteDrop( const ExecuteDropEvent& rEvt )
     return nRet;
 
 }
-/*-----------------12.06.97 09:38-------------------
 
---------------------------------------------------*/
 sal_Int8 SwGlobalTree::AcceptDrop( const AcceptDropEvent& rEvt )
 {
     sal_Int8 nRet = rEvt.mnAction;
@@ -358,9 +338,7 @@ sal_Int8 SwGlobalTree::AcceptDrop( const AcceptDropEvent& rEvt )
     }
     return nRet;
 }
-/*-----------------12.06.97 09:38-------------------
 
---------------------------------------------------*/
 PopupMenu* SwGlobalTree::CreateContextMenu()
 {
     PopupMenu* pPop = 0;
@@ -421,9 +399,7 @@ PopupMenu* SwGlobalTree::CreateContextMenu()
     }
     return pPop;
 }
-/*-----------------16.06.97 10:41-------------------
 
---------------------------------------------------*/
 void SwGlobalTree::TbxMenuHdl(USHORT nTbxId, ToolBox* pBox)
 {
     USHORT nEnableFlags = GetEnableFlags();
@@ -463,9 +439,7 @@ void SwGlobalTree::TbxMenuHdl(USHORT nTbxId, ToolBox* pBox)
         pBox->Invalidate();
     }
 }
-/*-----------------16.06.97 11:02-------------------
 
---------------------------------------------------*/
 USHORT  SwGlobalTree::GetEnableFlags() const
 {
     SvLBoxEntry* pEntry = FirstSelected();
@@ -496,9 +470,6 @@ USHORT  SwGlobalTree::GetEnableFlags() const
     return nRet;
 }
 
-/*-----------------12.06.97 09:38-------------------
-
---------------------------------------------------*/
 void     SwGlobalTree::RequestHelp( const HelpEvent& rHEvt )
 {
     BOOL bParent = TRUE;
@@ -546,9 +517,7 @@ void     SwGlobalTree::RequestHelp( const HelpEvent& rHEvt )
     if(bParent)
         SvTreeListBox::RequestHelp(rHEvt);
 }
-/*-----------------16.06.97 16:15-------------------
 
---------------------------------------------------*/
 void     SwGlobalTree::SelectHdl()
 {
 
@@ -567,17 +536,12 @@ void     SwGlobalTree::SelectHdl()
                     nSelCount == 1 && nAbsPos < ((USHORT)GetEntryCount()) - 1 && !bReadonly);
 
 }
-/*-----------------16.06.97 16:15-------------------
 
---------------------------------------------------*/
 void     SwGlobalTree::DeselectHdl()
 {
     SelectHdl();
 }
 
-/*-----------------17.06.97 13:11-------------------
-
---------------------------------------------------*/
 DragDropMode SwGlobalTree::NotifyStartDrag( TransferDataContainer& ,
                                                 SvLBoxEntry* pEntry )
 {
@@ -586,17 +550,11 @@ DragDropMode SwGlobalTree::NotifyStartDrag( TransferDataContainer& ,
     return SV_DRAGDROP_CTRL_MOVE;
 }
 
-/*-----------------21.06.97 12:44-------------------
-
---------------------------------------------------*/
 long     SwGlobalTree::GetTabPos( SvLBoxEntry*, SvLBoxTab* pTab)
 {
     return pTab->GetPos() - GLBL_TABPOS_SUB;
 }
 
-/*-----------------12.06.97 09:38-------------------
-
---------------------------------------------------*/
 BOOL     SwGlobalTree::NotifyMoving(   SvLBoxEntry*  pTarget,
                                         SvLBoxEntry*  pSource,
                                         SvLBoxEntry*&,
@@ -613,9 +571,7 @@ BOOL     SwGlobalTree::NotifyMoving(   SvLBoxEntry*  pTarget,
         Display();
     return FALSE;
 }
-/*-----------------12.06.97 09:39-------------------
 
---------------------------------------------------*/
 BOOL     SwGlobalTree::NotifyCopying(  SvLBoxEntry*  /*pTarget*/,
                                         SvLBoxEntry*  /*pEntry*/,
                                         SvLBoxEntry*& /*rpNewParent*/,
@@ -624,24 +580,18 @@ BOOL     SwGlobalTree::NotifyCopying(  SvLBoxEntry*  /*pTarget*/,
 {
     return FALSE;
 }
-/*-----------------12.06.97 09:39-------------------
 
---------------------------------------------------*/
 BOOL SwGlobalTree::NotifyAcceptDrop( SvLBoxEntry* pEntry)
 {
     return pEntry != 0;
 }
-/*-----------------12.06.97 09:39-------------------
 
---------------------------------------------------*/
 void SwGlobalTree::StartDrag( sal_Int8 nAction, const Point& rPt )
 {
     if( 1 == GetSelectionCount() )
         SvTreeListBox::StartDrag( nAction, rPt );
 }
-/*-----------------12.06.97 09:39-------------------
 
---------------------------------------------------*/
 void SwGlobalTree::DragFinished( sal_Int8 nAction )
 {
     SvTreeListBox::DragFinished( nAction );
@@ -662,9 +612,6 @@ void  SwGlobalTree::MouseButtonDown( const MouseEvent& rMEvt )
         SvTreeListBox::MouseButtonDown( rMEvt );
 }
 
-/*-----------------12.06.97 13:08-------------------
-
---------------------------------------------------*/
 void     SwGlobalTree::GetFocus()
 {
     if(Update( FALSE ))
@@ -672,9 +619,6 @@ void     SwGlobalTree::GetFocus()
     SvTreeListBox::GetFocus();
 }
 
-/*-----------------12.06.97 12:34-------------------
-
---------------------------------------------------*/
 void     SwGlobalTree::KeyInput(const KeyEvent& rKEvt)
 {
     const KeyCode aCode = rKEvt.GetKeyCode();
@@ -692,17 +636,12 @@ void     SwGlobalTree::KeyInput(const KeyEvent& rKEvt)
         SvTreeListBox::KeyInput(rKEvt);
 }
 
-/*-----------------17.06.97 11:59-------------------
-
---------------------------------------------------*/
 void SwGlobalTree::Clear()
 {
     pEmphasisEntry = 0;
     SvTreeListBox::Clear();
 }
-/*-----------------12.06.97 12:38-------------------
 
---------------------------------------------------*/
 void    SwGlobalTree::Display(BOOL bOnlyUpdateUserData)
 {
     if(!bIsImageListInitialized)
@@ -789,9 +728,6 @@ void    SwGlobalTree::Display(BOOL bOnlyUpdateUserData)
     }
 }
 
-/*-----------------13.06.97 10:32-------------------
-
---------------------------------------------------*/
 void SwGlobalTree::InsertRegion( const SwGlblDocContent* pCont, const String* pFileName )
 {
     Sequence< OUString > aFileNames;
@@ -814,9 +750,6 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* pCont, const String* pF
     }
 }
 
-/*-----------------18.06.97 12:42-------------------
-
---------------------------------------------------*/
 void    SwGlobalTree::EditContent(const SwGlblDocContent* pCont )
 {
     USHORT nSlot = 0;
@@ -851,17 +784,12 @@ void    SwGlobalTree::EditContent(const SwGlblDocContent* pCont )
     }
 }
 
-/*-----------------13.06.97 14:22-------------------
-
---------------------------------------------------*/
 IMPL_LINK( SwGlobalTree, PopupHdl, Menu* , pMenu)
 {
     ExcecuteContextMenuAction( pMenu->GetCurItemId());
     return TRUE;
 }
-/* -----------------26.08.2003 11:57-----------------
 
- --------------------------------------------------*/
 void    SwGlobalTree::ExcecuteContextMenuAction( USHORT nSelectedPopupEntry )
 //IMPL_LINK( SwGlobalTree, PopupHdl, Menu* , pMenu)
 {
@@ -1098,9 +1026,6 @@ void    SwGlobalTree::ExcecuteContextMenuAction( USHORT nSelectedPopupEntry )
 //  return TRUE;
 }
 
-/*-----------------16.06.97 07:57-------------------
-
---------------------------------------------------*/
 IMPL_LINK( SwGlobalTree, Timeout, Timer*, EMPTYARG )
 {
     if(!HasFocus() && Update( FALSE ))
@@ -1108,9 +1033,6 @@ IMPL_LINK( SwGlobalTree, Timeout, Timer*, EMPTYARG )
     return 0;
 }
 
-/*-----------------13.06.97 16:56-------------------
-
---------------------------------------------------*/
 void SwGlobalTree::GotoContent(const SwGlblDocContent* pCont)
 {
     pActiveShell->EnterStdMode();
@@ -1132,25 +1054,19 @@ void SwGlobalTree::GotoContent(const SwGlblDocContent* pCont)
     }
 
 }
-/*-----------------16.06.97 07:42-------------------
 
---------------------------------------------------*/
 void    SwGlobalTree::ShowTree()
 {
     aUpdateTimer.Start();
     SvTreeListBox::Show();
 }
-/*-----------------16.06.97 07:42-------------------
 
---------------------------------------------------*/
 void    SwGlobalTree::HideTree()
 {
     aUpdateTimer.Stop();
     SvTreeListBox::Hide();
 }
-/*-----------------18.06.97 10:02-------------------
 
---------------------------------------------------*/
 void    SwGlobalTree::ExecCommand(USHORT nCmd)
 {
     SvLBoxEntry* pEntry = FirstSelected();
@@ -1193,9 +1109,6 @@ void    SwGlobalTree::ExecCommand(USHORT nCmd)
     }
 }
 
-/*-----------------16.06.97 07:43-------------------
-
---------------------------------------------------*/
 BOOL    SwGlobalTree::Update(BOOL bHard)
 {
     SwView* pActView = GetParentWindow()->GetCreateView();
@@ -1278,9 +1191,6 @@ BOOL    SwGlobalTree::Update(BOOL bHard)
     return bRet;
 }
 
-/*-----------------25.06.97 16:20-------------------
-
---------------------------------------------------*/
 void SwGlobalTree::OpenDoc(const SwGlblDocContent* pCont)
 {
     String sFileName(pCont->GetSection()->GetLinkFileName().GetToken(0,
@@ -1314,9 +1224,6 @@ void SwGlobalTree::OpenDoc(const SwGlblDocContent* pCont)
     }
 }
 
-/*-----------------25.06.97 16:08-------------------
-
---------------------------------------------------*/
 IMPL_LINK(  SwGlobalTree, DoubleClickHdl, SwGlobalTree *, EMPTYARG )
 {
     SvLBoxEntry* pEntry = GetCurEntry();
@@ -1331,9 +1238,6 @@ IMPL_LINK(  SwGlobalTree, DoubleClickHdl, SwGlobalTree *, EMPTYARG )
     return 0;
 }
 
-/*-----------------07.10.97 08:09-------------------
-
---------------------------------------------------*/
 IMPL_STATIC_LINK_NOINSTANCE(SwGlobalTree, ShowFrameHdl, SwGlobalTree*, EMPTYARG)
 {
     if(SwGlobalTree::GetShowShell())
@@ -1341,9 +1245,7 @@ IMPL_STATIC_LINK_NOINSTANCE(SwGlobalTree, ShowFrameHdl, SwGlobalTree*, EMPTYARG)
     SwGlobalTree::SetShowShell(0);
     return 0;
 }
-/* -----------------04.11.98 10:43-------------------
- *
- * --------------------------------------------------*/
+
 void SwGlobalTree::InitEntry(SvLBoxEntry* pEntry,
         const XubString& rStr ,const Image& rImg1,const Image& rImg2,
         SvLBoxButtonKind eButtonKind)
@@ -1354,9 +1256,6 @@ void SwGlobalTree::InitEntry(SvLBoxEntry* pEntry,
     SwLBoxString* pStr = new SwLBoxString( pEntry, 0, pCol->GetText() );
     pEntry->ReplaceItem( pStr, nColToHilite );
 }
-/* -----------------04.11.98 10:39-------------------
- *
- * --------------------------------------------------*/
 
 void SwLBoxString::Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags,
     SvLBoxEntry* pEntry )
@@ -1377,9 +1276,7 @@ void SwLBoxString::Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags,
     else
         SvLBoxString::Paint( rPos, rDev, nFlags, pEntry);
 }
-/* -----------------------------06.05.2002 10:20------------------------------
 
- ---------------------------------------------------------------------------*/
 void    SwGlobalTree::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&

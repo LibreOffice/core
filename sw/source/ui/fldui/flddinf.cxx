@@ -61,9 +61,6 @@
 
 using namespace nsSwDocInfoSubType;
 using namespace com::sun::star;
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 SwFldDokInfPage::SwFldDokInfPage(Window* pWindow, const SfxItemSet& rCoreSet ) :
     SwFldPage( pWindow, SW_RES( TP_FLD_DOKINF ), rCoreSet ),
@@ -97,17 +94,9 @@ SwFldDokInfPage::SwFldDokInfPage(Window* pWindow, const SfxItemSet& rCoreSet ) :
         pItem->GetValue() >>= xCustomPropertySet;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 __EXPORT SwFldDokInfPage::~SwFldDokInfPage()
 {
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void __EXPORT SwFldDokInfPage::Reset(const SfxItemSet& )
 {
@@ -231,10 +220,6 @@ void __EXPORT SwFldDokInfPage::Reset(const SfxItemSet& )
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 IMPL_LINK( SwFldDokInfPage, TypeHdl, ListBox *, EMPTYARG )
 {
     // Alte ListBoxPos sichern
@@ -258,9 +243,6 @@ IMPL_LINK( SwFldDokInfPage, TypeHdl, ListBox *, EMPTYARG )
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 IMPL_LINK( SwFldDokInfPage, SubTypeHdl, ListBox *, EMPTYARG )
 {
     USHORT nSubType = (USHORT)(ULONG)pSelEntry->GetUserData();
@@ -396,10 +378,6 @@ IMPL_LINK( SwFldDokInfPage, SubTypeHdl, ListBox *, EMPTYARG )
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 USHORT SwFldDokInfPage::FillSelectionLB(USHORT nSubType)
 {
     // Format-Listbox fuellen
@@ -454,10 +432,6 @@ USHORT SwFldDokInfPage::FillSelectionLB(USHORT nSubType)
     return nSize;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 BOOL __EXPORT SwFldDokInfPage::FillItemSet(SfxItemSet& )
 {
     if (!pSelEntry || (USHORT)(ULONG)pSelEntry->GetUserData() == USHRT_MAX)
@@ -495,27 +469,17 @@ BOOL __EXPORT SwFldDokInfPage::FillItemSet(SfxItemSet& )
     return FALSE;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SfxTabPage* __EXPORT SwFldDokInfPage::Create(   Window* pParent,
                         const SfxItemSet& rAttrSet )
 {
     return ( new SwFldDokInfPage( pParent, rAttrSet ) );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 USHORT SwFldDokInfPage::GetGroup()
 {
     return GRP_REG;
 }
-/* -----------------12.01.99 11:21-------------------
- *
- * --------------------------------------------------*/
+
 void    SwFldDokInfPage::FillUserData()
 {
     String sData( String::CreateFromAscii(

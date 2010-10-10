@@ -180,14 +180,10 @@ SwCompatibilityOptPage::SwCompatibilityOptPage( Window* pParent, const SfxItemSe
     m_aOptionsLB.SetSizePixel( aNewSz );
 }
 
-// -----------------------------------------------------------------------
-
 SwCompatibilityOptPage::~SwCompatibilityOptPage()
 {
     delete m_pImpl;
 }
-
-// -----------------------------------------------------------------------
 
 void SwCompatibilityOptPage::ReplaceFormatName( String& rEntry )
 {
@@ -213,8 +209,6 @@ void SwCompatibilityOptPage::ReplaceFormatName( String& rEntry )
         rEntry.SearchAndReplace( String::CreateFromAscii("%FORMATVERSION"), sFormatVersion );
     }
 }
-
-// -----------------------------------------------------------------------
 
 ULONG convertBools2Ulong_Impl
 (
@@ -269,8 +263,6 @@ ULONG convertBools2Ulong_Impl
 
     return nRet;
 }
-
-// -----------------------------------------------------------------------
 
 void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
 {
@@ -404,8 +396,6 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
     }
 }
 
-// -----------------------------------------------------------------------
-
 IMPL_LINK( SwCompatibilityOptPage, SelectHdl, ListBox*, EMPTYARG )
 {
     USHORT nPos = m_aFormattingLB.GetSelectEntryPos();
@@ -414,8 +404,6 @@ IMPL_LINK( SwCompatibilityOptPage, SelectHdl, ListBox*, EMPTYARG )
 
     return 0;
 }
-
-// -----------------------------------------------------------------------
 
 IMPL_LINK( SwCompatibilityOptPage, UseAsDefaultHdl, PushButton*, EMPTYARG )
 {
@@ -461,8 +449,6 @@ IMPL_LINK( SwCompatibilityOptPage, UseAsDefaultHdl, PushButton*, EMPTYARG )
     return 0;
 }
 
-// -----------------------------------------------------------------------
-
 void SwCompatibilityOptPage::SetCurrentOptions( ULONG nOptions )
 {
     ULONG nCount = m_aOptionsLB.GetEntryCount();
@@ -474,8 +460,6 @@ void SwCompatibilityOptPage::SetCurrentOptions( ULONG nOptions )
         nOptions = nOptions >> 1;
     }
 }
-
-// -----------------------------------------------------------------------
 
 ULONG SwCompatibilityOptPage::GetDocumentOptions() const
 {
@@ -499,8 +483,6 @@ ULONG SwCompatibilityOptPage::GetDocumentOptions() const
     return nRet;
 }
 
-// -----------------------------------------------------------------------
-
 void SwCompatibilityOptPage::WriteOptions()
 {
     m_aConfigItem.Clear();
@@ -515,14 +497,10 @@ void SwCompatibilityOptPage::WriteOptions()
             pItem->m_bExpandWordSpace );
 }
 
-// -----------------------------------------------------------------------
-
 SfxTabPage* SwCompatibilityOptPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
 {
     return new SwCompatibilityOptPage( pParent, rAttrSet );
 }
-
-// -----------------------------------------------------------------------
 
 BOOL SwCompatibilityOptPage::FillItemSet( SfxItemSet&  )
 {
@@ -612,8 +590,6 @@ BOOL SwCompatibilityOptPage::FillItemSet( SfxItemSet&  )
 
     return bModified;
 }
-
-// -----------------------------------------------------------------------
 
 void SwCompatibilityOptPage::Reset( const SfxItemSet&  )
 {

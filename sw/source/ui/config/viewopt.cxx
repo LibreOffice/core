@@ -86,10 +86,6 @@ USHORT SwViewOption::nPixelTwips = 0;   //ein Pixel auf dem Bildschirm
 
 static const char __FAR_DATA aPostItStr[] = "  ";
 
-/*************************************************************************
- *                    SwViewOption::IsEqualFlags()
- *************************************************************************/
-
 BOOL SwViewOption::IsEqualFlags( const SwViewOption &rOpt ) const
 {
     return  nCoreOptions == rOpt.nCoreOptions
@@ -120,10 +116,6 @@ BOOL SwViewOption::IsEqualFlags( const SwViewOption &rOpt ) const
             ;
 }
 
-/*************************************************************************
- *                    SwViewOption::DrawRect()
- *************************************************************************/
-
 void SwViewOption::DrawRect( OutputDevice *pOut,
                              const SwRect &rRect, long nCol ) const
 {
@@ -139,10 +131,6 @@ void SwViewOption::DrawRect( OutputDevice *pOut,
         DrawRectPrinter( pOut, rRect );
 }
 
-/*************************************************************************
- *                    SwViewOption::DrawRectPrinter()
- *************************************************************************/
-
 void SwViewOption::DrawRectPrinter( OutputDevice *pOut,
                                     const SwRect &rRect ) const
 {
@@ -155,19 +143,11 @@ void SwViewOption::DrawRectPrinter( OutputDevice *pOut,
     pOut->SetLineColor( aOldColor );
 }
 
-/*************************************************************************
- *                    SwViewOption::GetPostItsWidth()
- *************************************************************************/
-
 USHORT SwViewOption::GetPostItsWidth( const OutputDevice *pOut ) const
 {
     ASSERT( pOut, "no Outdev" );
     return USHORT(pOut->GetTextWidth( String::CreateFromAscii(aPostItStr )));
 }
-
-/*************************************************************************
- *                    SwViewOption::PaintPostIts()
- *************************************************************************/
 
 void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect, sal_Bool bIsScript ) const
 {
@@ -186,15 +166,6 @@ void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect, sal_Bo
     pOut->SetLineColor( aOldLineColor );
     }
 }
-
-
-/*************************************************************************
-|*
-|*  ViewOption::ViewOption()
-|*
-|*  Letzte Aenderung    MA 04. Aug. 93
-|*
-|*************************************************************************/
 
 SwViewOption::SwViewOption() :
     aRetoucheColor( COL_TRANSPARENT ),
@@ -334,14 +305,6 @@ SwViewOption::~SwViewOption()
 {
 }
 
-/*************************************************************************
-|*
-|*  ViewOption::Init()
-|*
-|*  Letzte Aenderung    MA 04. Aug. 93
-|*
-|*************************************************************************/
-
 void SwViewOption::Init( Window *pWin )
 {
     if( !nPixelTwips && pWin )
@@ -356,20 +319,12 @@ BOOL SwViewOption::IsAutoCompleteWords() const
     return /*rFlags.bAutoCompleteWords &&*/ rFlags.bAutoCmpltCollectWords;
 }
 
-/*************************************************************************/
-/*                                                                       */
-/*************************************************************************/
-
 AuthorCharAttr::AuthorCharAttr() :
     nItemId (SID_ATTR_CHAR_UNDERLINE),
     nAttr   (UNDERLINE_SINGLE),
     nColor  (COL_TRANSPARENT)
 {
 }
-
-/*-----------------07.01.97 13.50-------------------
-
---------------------------------------------------*/
 
 USHORT      GetHtmlMode(const SwDocShell* pShell)
 {
@@ -404,122 +359,87 @@ USHORT      GetHtmlMode(const SwDocShell* pShell)
     }
     return nRet;
 }
-/* -----------------------------24.04.2002 10:20------------------------------
 
- ---------------------------------------------------------------------------*/
 Color&   SwViewOption::GetDocColor()
 {
     return aDocColor;
 }
-/* -----------------------------23.04.2002 17:18------------------------------
 
- ---------------------------------------------------------------------------*/
 Color&   SwViewOption::GetDocBoundariesColor()
 {
     return aDocBoundColor;
 }
-/* -----------------------------23.04.2002 17:53------------------------------
 
- ---------------------------------------------------------------------------*/
 Color&   SwViewOption::GetObjectBoundariesColor()
 {
     return aObjectBoundColor;
 }
-/* -----------------------------24.04.2002 10:41------------------------------
 
- ---------------------------------------------------------------------------*/
 Color& SwViewOption::GetAppBackgroundColor()
 {
     return aAppBackgroundColor;
 }
-/*-- 24.04.2002 10:50:11---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Color&   SwViewOption::GetTableBoundariesColor()
 {
     return aTableBoundColor;
 }
-/*-- 24.04.2002 10:50:12---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Color&   SwViewOption::GetIndexShadingsColor()
 {
     return aIndexShadingsColor;
 }
-/*-- 24.04.2002 10:50:12---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Color&   SwViewOption::GetLinksColor()
 {
     return aLinksColor;
 }
-/*-- 24.04.2002 10:50:13---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Color&   SwViewOption::GetVisitedLinksColor()
 {
     return aVisitedLinksColor;
 }
-/*-- 24.04.2002 10:50:13---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Color&   SwViewOption::GetDirectCursorColor()
 {
     return aDirectCursorColor;
 }
-/*-- 24.04.2002 10:50:14---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Color&   SwViewOption::GetTextGridColor()
 {
     return aTextGridColor;
 }
-/*-- 24.04.2002 10:50:14---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Color&   SwViewOption::GetSpellColor()
 {
     return aSpellColor;
 }
-/*-- 24.04.2007 10:50:14---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Color&   SwViewOption::GetSmarttagColor()
 {
     return aSmarttagColor;
 }
-/*-- 06.12.2002 10:50:11---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Color&   SwViewOption::GetFontColor()
 {
     return aFontColor;
 }
-/*-- 24.04.2002 10:50:15---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Color&   SwViewOption::GetFieldShadingsColor()
 {
     return aFieldShadingsColor;
 }
-/*-- 24.04.2002 10:50:15---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Color&   SwViewOption::GetSectionBoundColor()
 {
     return aSectionBoundColor;
 }
-/* -----------------------------2002/07/31 14:00------------------------------
 
- ---------------------------------------------------------------------------*/
 Color& SwViewOption::GetPageBreakColor()
 {
     return aPageBreakColor;
 }
 
-/* -----------------------------23.04.2002 17:41------------------------------
-
- ---------------------------------------------------------------------------*/
 void SwViewOption::ApplyColorConfigValues(const svtools::ColorConfig& rConfig )
 {
     aDocColor.SetColor(rConfig.GetColorValue(svtools::DOCCOLOR).nColor);
@@ -582,9 +502,7 @@ void SwViewOption::ApplyColorConfigValues(const svtools::ColorConfig& rConfig )
 
     aScriptIndicatorColor.SetColor(rConfig.GetColorValue(svtools::WRITERSCRIPTINDICATOR).nColor);
 }
-/* -----------------------------23.04.2002 17:48------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwViewOption::SetAppearanceFlag(sal_Int32 nFlag, BOOL bSet, BOOL bSaveInConfig )
 {
     if(bSet)
@@ -625,9 +543,7 @@ void SwViewOption::SetAppearanceFlag(sal_Int32 nFlag, BOOL bSet, BOOL bSaveInCon
         }
     }
 }
-/* -----------------------------24.04.2002 10:42------------------------------
 
- ---------------------------------------------------------------------------*/
 BOOL SwViewOption::IsAppearanceFlag(sal_Int32 nFlag)
 {
     return 0 != (nAppearanceFlags & nFlag);

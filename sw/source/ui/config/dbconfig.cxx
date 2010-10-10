@@ -67,9 +67,7 @@ const Sequence<OUString>& SwDBConfig::GetPropertyNames()
     }
     return aNames;
 }
-/* -----------------------------06.09.00 16:44--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwDBConfig::SwDBConfig() :
     ConfigItem(C2U("Office.DataAccess"),
         CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE),
@@ -77,17 +75,13 @@ SwDBConfig::SwDBConfig() :
     pBibImpl(0)
 {
 };
-/* -----------------------------06.09.00 16:50--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwDBConfig::~SwDBConfig()
 {
     delete pAdrImpl;
     delete pBibImpl;
 }
-/* -----------------------------20.02.01 12:32--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwDBConfig::Load()
 {
     const Sequence<OUString>& rNames = GetPropertyNames();
@@ -118,18 +112,14 @@ void SwDBConfig::Load()
         }
     }
 }
-/* -----------------------------20.02.01 12:36--------------------------------
 
- ---------------------------------------------------------------------------*/
 const SwDBData& SwDBConfig::GetAddressSource()
 {
     if(!pAdrImpl)
         Load();
     return *pAdrImpl;
 }
-/* -----------------29.11.2002 11:43-----------------
- *
- * --------------------------------------------------*/
+
 const SwDBData& SwDBConfig::GetBibliographySource()
 {
     if(!pBibImpl)

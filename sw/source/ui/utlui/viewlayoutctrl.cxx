@@ -42,15 +42,11 @@
 
 SFX_IMPL_STATUSBAR_CONTROL( SwViewLayoutControl, SvxViewLayoutItem );
 
-// -----------------------------------------------------------------------
-
 const long nImageWidthSingle = 15;
 const long nImageWidthAuto = 25;
 const long nImageWidthBook = 23;
 const long nImageWidthSum = 63;
 const long nImageHeight = 11;
-
-// -----------------------------------------------------------------------
 
 struct SwViewLayoutControl::SwViewLayoutControl_Impl
 {
@@ -80,14 +76,10 @@ SwViewLayoutControl::SwViewLayoutControl( USHORT _nSlotId, USHORT _nId, StatusBa
     mpImpl->maImageBookMode_Active      = Image( bHC ? SW_RES(IMG_VIEWLAYOUT_BOOKMODE_ACTIVE_HC)     : SW_RES(IMG_VIEWLAYOUT_BOOKMODE_ACTIVE) );
 }
 
-// -----------------------------------------------------------------------
-
 SwViewLayoutControl::~SwViewLayoutControl()
 {
     delete mpImpl;
 }
-
-// -----------------------------------------------------------------------
 
 void SwViewLayoutControl::StateChanged( USHORT /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
 {
@@ -115,8 +107,6 @@ void SwViewLayoutControl::StateChanged( USHORT /*nSID*/, SfxItemState eState, co
     if ( GetStatusBar().AreItemsVisible() )
         GetStatusBar().SetItemData( GetId(), 0 );    // force repaint
 }
-
-// -----------------------------------------------------------------------
 
 void SwViewLayoutControl::Paint( const UserDrawEvent& rUsrEvt )
 {

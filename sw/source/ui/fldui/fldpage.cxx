@@ -56,10 +56,6 @@
 
 using namespace ::com::sun::star;
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SwFldPage::SwFldPage( Window *pParent, const ResId &rId,
                         const SfxItemSet &rAttrSet )
     :SfxTabPage     (pParent, rId, rAttrSet),
@@ -76,10 +72,6 @@ SwFldPage::SwFldPage( Window *pParent, const ResId &rId,
 {
 //  FreeResource();
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 SwFldPage::~SwFldPage()
 {
@@ -322,10 +314,6 @@ BOOL SwFldPage::InsertFld(USHORT nTypeId, USHORT nSubType, const String& rPar1,
     return bRet;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwFldPage::SavePos( const ListBox* pLst1, const ListBox* pLst2,
                          const ListBox* pLst3 )
 {
@@ -338,10 +326,6 @@ void SwFldPage::SavePos( const ListBox* pLst1, const ListBox* pLst2,
         else
             m_aLstStrArr[ i ].Erase();
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwFldPage::RestorePos(ListBox* pLst1, ListBox* pLst2, ListBox* pLst3)
 {
@@ -401,19 +385,13 @@ void SwFldPage::EnableInsert(BOOL bEnable)
     m_bInsert = bEnable;
 }
 
-/*--------------------------------------------------------------------
-     Beschreibung:
- --------------------------------------------------------------------*/
-
 IMPL_LINK( SwFldPage, NumFormatHdl, ListBox *, EMPTYARG )
 {
     InsertHdl();
 
     return 0;
 }
-/*-- 19.12.2005 14:05:47---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwFldPage::SetWrtShell( SwWrtShell* pShell )
 {
     m_pWrtShell = pShell;

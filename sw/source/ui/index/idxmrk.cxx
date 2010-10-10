@@ -67,10 +67,6 @@
 #include <ndtxt.hxx>
 #include <breakit.hxx>
 
-
-/* -----------------07.09.99 08:15-------------------
-
- --------------------------------------------------*/
 SFX_IMPL_CHILDWINDOW(SwInsertIdxMarkWrapper, FN_INSERT_IDX_ENTRY_DLG)
 
 SwInsertIdxMarkWrapper::SwInsertIdxMarkWrapper( Window *pParentWindow,
@@ -88,9 +84,7 @@ SwInsertIdxMarkWrapper::SwInsertIdxMarkWrapper( Window *pParentWindow,
                         // -> Show() will invoke StateChanged() and save pos
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
 }
-/* -----------------07.09.99 09:14-------------------
 
- --------------------------------------------------*/
 SfxChildWinInfo SwInsertIdxMarkWrapper::GetInfo() const
 {
     SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();
@@ -103,10 +97,6 @@ void    SwInsertIdxMarkWrapper::ReInitDlg(SwWrtShell& rWrtShell)
     pAbstDlg->ReInitDlg(rWrtShell);
 }
 
-
-/* -----------------07.09.99 08:15-------------------
-
- --------------------------------------------------*/
 SFX_IMPL_CHILDWINDOW(SwInsertAuthMarkWrapper, FN_INSERT_AUTH_ENTRY_DLG)
 
 SwInsertAuthMarkWrapper::SwInsertAuthMarkWrapper(   Window *pParentWindow,
@@ -123,17 +113,13 @@ SwInsertAuthMarkWrapper::SwInsertAuthMarkWrapper(   Window *pParentWindow,
 
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
 }
-/* -----------------07.09.99 09:14-------------------
 
- --------------------------------------------------*/
 SfxChildWinInfo SwInsertAuthMarkWrapper::GetInfo() const
 {
     SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();
     return aInfo;
 }
-/* -----------------19.10.99 11:16-------------------
 
- --------------------------------------------------*/
 void    SwInsertAuthMarkWrapper::ReInitDlg(SwWrtShell& rWrtShell)
 {
     pAbstDlg->ReInitDlg(rWrtShell);

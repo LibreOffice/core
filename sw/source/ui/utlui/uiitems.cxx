@@ -120,9 +120,7 @@ SfxItemPresentation  SwPageFtnInfoItem::GetPresentation
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
-/* -----------------------------26.04.01 12:25--------------------------------
 
- ---------------------------------------------------------------------------*/
 bool SwPageFtnInfoItem::QueryValue( Any& rVal, BYTE nMemberId ) const
 {
     bool bRet = true;
@@ -146,9 +144,7 @@ bool SwPageFtnInfoItem::QueryValue( Any& rVal, BYTE nMemberId ) const
     }
     return bRet;
 }
-/* -----------------------------26.04.01 12:26--------------------------------
 
- ---------------------------------------------------------------------------*/
 bool SwPageFtnInfoItem::PutValue(const Any& rVal, BYTE nMemberId)
 {
     sal_Int32 nSet32 = 0;
@@ -238,11 +234,6 @@ SfxPoolItem* SwPtrItem::Clone( SfxItemPool * /*pPool*/ ) const
     return new SwPtrItem( *this );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 int SwPtrItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
@@ -303,16 +294,12 @@ bool SwUINumRuleItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
     }
     return true;
 }
-/* -----------------17.06.98 17:43-------------------
- *
- * --------------------------------------------------*/
+
 SwBackgroundDestinationItem::SwBackgroundDestinationItem(USHORT  _nWhich, USHORT nValue) :
     SfxUInt16Item(_nWhich, nValue)
 {
 }
-/* -----------------17.06.98 17:44-------------------
- *
- * --------------------------------------------------*/
+
 SfxPoolItem*     SwBackgroundDestinationItem::Clone( SfxItemPool * /*pPool*/ ) const
 {
     return new SwBackgroundDestinationItem(Which(), GetValue());

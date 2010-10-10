@@ -238,8 +238,6 @@ SwIndexMarkDlg::SwIndexMarkDlg(Window *pParent,
      Beschreibung:  Controls neu initialisieren mit der aktuellen
                     Markierung
  --------------------------------------------------------------------*/
-
-
 void SwIndexMarkDlg::InitControls()
 {
     DBG_ASSERT(pSh && pTOXMgr, "Shell nicht da?");
@@ -424,7 +422,6 @@ String  SwIndexMarkDlg::GetDefaultPhoneticReading( const String& rText )
 /* -----------------07.09.99 10:43-------------------
     Change the content of aEntryED if text is selected
  --------------------------------------------------*/
-
 void    SwIndexMarkDlg::Activate()
 {
     // aktuelle Selektion (1.Element) anzeigen  ????
@@ -464,8 +461,6 @@ void SwIndexMarkDlg::Apply()
 /*--------------------------------------------------------------------
     Beschreibung: Aenderungen uebernehmen
  --------------------------------------------------------------------*/
-
-
 void SwIndexMarkDlg::InsertUpdate()
 {
     pSh->StartUndo(bDel ? UNDO_INDEX_ENTRY_DELETE : UNDO_INDEX_ENTRY_INSERT);
@@ -585,8 +580,6 @@ void SwIndexMarkDlg::InsertMark()
 /*--------------------------------------------------------------------
      Beschreibung:  Marke Updaten
  --------------------------------------------------------------------*/
-
-
 void SwIndexMarkDlg::UpdateMark()
 {
     String  aAltText(aEntryED.GetText());
@@ -629,8 +622,6 @@ void SwIndexMarkDlg::UpdateMark()
 /*--------------------------------------------------------------------
     Beschreibung: Neue Keys eintragen
  --------------------------------------------------------------------*/
-
-
 void SwIndexMarkDlg::UpdateKeyBoxes()
 {
     String aKey(aKeyDCB.GetText());
@@ -649,9 +640,7 @@ void SwIndexMarkDlg::UpdateKeyBoxes()
         aKey2DCB.InsertEntry(aKey);
     }
 }
-/* -----------------13.10.99 15:10-------------------
 
- --------------------------------------------------*/
 class SwNewUserIdxDlg : public ModalDialog
 {
     OKButton        aOKPB;
@@ -707,9 +696,7 @@ IMPL_LINK( SwIndexMarkDlg, NewUserIdxHdl, Button*, EMPTYARG)
     delete pDlg;
     return 0;
 }
-/* -----------------------------17.01.00 12:18--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK( SwIndexMarkDlg, SearchTypeHdl, CheckBox*, pBox)
 {
     sal_Bool bEnable = pBox->IsChecked() && pBox->IsEnabled();
@@ -717,9 +704,7 @@ IMPL_LINK( SwIndexMarkDlg, SearchTypeHdl, CheckBox*, pBox)
     aSearchCaseSensitiveCB.Enable(bEnable);
     return 0;
 }
-/* -----------------07.09.99 10:30-------------------
 
- --------------------------------------------------*/
 IMPL_LINK( SwIndexMarkDlg, InsertHdl, Button *, pButton )
 {
     Apply();
@@ -728,9 +713,7 @@ IMPL_LINK( SwIndexMarkDlg, InsertHdl, Button *, pButton )
         CloseHdl(pButton);
     return 0;
 }
-/* -----------------07.09.99 10:29-------------------
 
- --------------------------------------------------*/
 IMPL_LINK( SwIndexMarkDlg, CloseHdl, Button *, EMPTYARG )
 {
     if(bNewMark)
@@ -745,6 +728,7 @@ IMPL_LINK( SwIndexMarkDlg, CloseHdl, Button *, EMPTYARG )
     }
     return 0;
 }
+
 /*--------------------------------------------------------------------
      Beschreibung:  VerzeichnisTyp auswaehlen nur bei Einfuegen
  --------------------------------------------------------------------*/
@@ -823,11 +807,6 @@ IMPL_LINK( SwIndexMarkDlg, ModifyHdl, ListBox *, pBox )
     return 0;
 }
 
-/*--------------------------------------------------------------------
-     Beschreibung:
- --------------------------------------------------------------------*/
-
-
 IMPL_LINK_INLINE_START( SwIndexMarkDlg, NextHdl, Button *, EMPTYARG )
 {
     InsertUpdate();
@@ -836,7 +815,6 @@ IMPL_LINK_INLINE_START( SwIndexMarkDlg, NextHdl, Button *, EMPTYARG )
     return 0;
 }
 IMPL_LINK_INLINE_END( SwIndexMarkDlg, NextHdl, Button *, EMPTYARG )
-
 
 IMPL_LINK_INLINE_START( SwIndexMarkDlg, NextSameHdl, Button *, EMPTYARG )
 {
@@ -847,7 +825,6 @@ IMPL_LINK_INLINE_START( SwIndexMarkDlg, NextSameHdl, Button *, EMPTYARG )
 }
 IMPL_LINK_INLINE_END( SwIndexMarkDlg, NextSameHdl, Button *, EMPTYARG )
 
-
 IMPL_LINK_INLINE_START( SwIndexMarkDlg, PrevHdl, Button *, EMPTYARG )
 {
     InsertUpdate();
@@ -856,7 +833,6 @@ IMPL_LINK_INLINE_START( SwIndexMarkDlg, PrevHdl, Button *, EMPTYARG )
     return 0;
 }
 IMPL_LINK_INLINE_END( SwIndexMarkDlg, PrevHdl, Button *, EMPTYARG )
-
 
 IMPL_LINK_INLINE_START( SwIndexMarkDlg, PrevSameHdl, Button *, EMPTYARG )
 {
@@ -867,7 +843,6 @@ IMPL_LINK_INLINE_START( SwIndexMarkDlg, PrevSameHdl, Button *, EMPTYARG )
     return 0;
 }
 IMPL_LINK_INLINE_END( SwIndexMarkDlg, PrevSameHdl, Button *, EMPTYARG )
-
 
 IMPL_LINK( SwIndexMarkDlg, DelHdl, Button *, EMPTYARG )
 {
@@ -888,8 +863,6 @@ IMPL_LINK( SwIndexMarkDlg, DelHdl, Button *, EMPTYARG )
 /*--------------------------------------------------------------------
      Beschreibung: Dialoganzeige erneuern
  --------------------------------------------------------------------*/
-
-
 void SwIndexMarkDlg::UpdateDialog()
 {
     DBG_ASSERT(pSh && pTOXMgr, "Shell nicht da?");
@@ -994,7 +967,6 @@ void SwIndexMarkDlg::UpdateDialog()
 /*--------------------------------------------------------------------
      Remind wether the edit boxes for Phonetic reading are changed manually
  --------------------------------------------------------------------*/
-
 IMPL_LINK( SwIndexMarkDlg, PhoneticEDModifyHdl, Edit *, pEdit )
 {
     if(&aPhoneticED0 == pEdit)
@@ -1015,7 +987,6 @@ IMPL_LINK( SwIndexMarkDlg, PhoneticEDModifyHdl, Edit *, pEdit )
 /*--------------------------------------------------------------------
      Beschreibung: Enable Disable des 2. Schluessels
  --------------------------------------------------------------------*/
-
 IMPL_LINK( SwIndexMarkDlg, KeyDCBModifyHdl, ComboBox *, pBox )
 {
     if(&aKeyDCB == pBox)
@@ -1074,16 +1045,12 @@ IMPL_LINK( SwIndexMarkDlg, KeyDCBModifyHdl, ComboBox *, pBox )
 /*-----------------25.02.94 21:19-------------------
  dtor ueberladen
 --------------------------------------------------*/
-
-
 SwIndexMarkDlg::~SwIndexMarkDlg()
 {
     delete pTOXMgr;
     ViewShell::SetCareWin( 0 );
 }
-/* -----------------07.09.99 08:41-------------------
 
- --------------------------------------------------*/
 void    SwIndexMarkDlg::ReInitDlg(SwWrtShell& rWrtShell, SwTOXMark* pCurTOXMark)
 {
     pSh = &rWrtShell;
@@ -1100,9 +1067,7 @@ void    SwIndexMarkDlg::ReInitDlg(SwWrtShell& rWrtShell, SwTOXMark* pCurTOXMark)
     }
     InitControls();
 }
-/* -----------------06.10.99 10:00-------------------
 
- --------------------------------------------------*/
 SwIndexMarkFloatDlg::SwIndexMarkFloatDlg(SfxBindings* _pBindings,
                                    SfxChildWindow* pChild,
                                    Window *pParent,
@@ -1115,9 +1080,7 @@ SfxModelessDialog(_pBindings, pChild, pParent, SvtCJKOptions().IsCJKFontEnabled(
     aDlg.ReInitDlg(*::GetActiveWrtShell());
     Initialize(pInfo);
 }
-/* -----------------06.10.99 10:27-------------------
 
- --------------------------------------------------*/
 void    SwIndexMarkFloatDlg::Activate()
 {
     SfxModelessDialog::Activate();
@@ -1129,9 +1092,6 @@ void SwIndexMarkFloatDlg::ReInitDlg(SwWrtShell& rWrtShell)
     aDlg.ReInitDlg( rWrtShell );
 }
 
-/* -----------------06.10.99 10:35-------------------
-
- --------------------------------------------------*/
 SwIndexMarkModalDlg::SwIndexMarkModalDlg(Window *pParent, SwWrtShell& rSh, SwTOXMark* pCurTOXMark) :
 SvxStandardDialog(pParent, SvtCJKOptions().IsCJKFontEnabled()?SW_RES(DLG_EDIT_IDXMARK_CJK):SW_RES(DLG_EDIT_IDXMARK)),
     aDlg(this, sal_False, SW_RES(WIN_DLG), SvtCJKOptions().IsCJKFontEnabled()?DLG_EDIT_IDXMARK_CJK:DLG_EDIT_IDXMARK, rSh)
@@ -1139,16 +1099,12 @@ SvxStandardDialog(pParent, SvtCJKOptions().IsCJKFontEnabled()?SW_RES(DLG_EDIT_ID
     FreeResource();
     aDlg.ReInitDlg(rSh, pCurTOXMark);
 }
-/* -----------------06.10.99 10:46-------------------
 
- --------------------------------------------------*/
 void    SwIndexMarkModalDlg::Apply()
 {
     aDlg.Apply();
 }
-/* -----------------16.09.99 14:19-------------------
 
- --------------------------------------------------*/
 class SwCreateAuthEntryDlg_Impl : public ModalDialog
 {
     FixedLine       aEntriesFL;
@@ -1186,14 +1142,13 @@ public:
     void            SetCheckNameHdl(const Link& rLink) {aShortNameCheckLink = rLink;}
 
 };
-/*-- 15.09.99 08:43:24---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 struct TextInfo
 {
     sal_uInt16 nToxField;
     sal_uInt16 nHelpId;
 };
+
 static const TextInfo aTextInfoArr[] =
 {
     {AUTH_FIELD_IDENTIFIER,      HID_AUTH_FIELD_IDENTIFIER      },
@@ -1300,23 +1255,17 @@ SwAuthMarkDlg::SwAuthMarkDlg(  Window *pParent,
         aEntryLB.SetSelectHdl(LINK(this, SwAuthMarkDlg, CompEntryHdl));
     }
 }
-/*-- 15.09.99 08:43:25---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwAuthMarkDlg::~SwAuthMarkDlg()
 {
 }
-/*-- 15.09.99 08:43:25---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void    SwAuthMarkDlg::ReInitDlg(SwWrtShell& rWrtShell)
 {
     pSh = &rWrtShell;
     InitControls();
 }
-/* -----------------15.09.99 08:57-------------------
 
- --------------------------------------------------*/
 IMPL_LINK( SwAuthMarkDlg, CloseHdl, PushButton *, EMPTYARG )
 {
     if(bNewEntry)
@@ -1331,9 +1280,7 @@ IMPL_LINK( SwAuthMarkDlg, CloseHdl, PushButton *, EMPTYARG )
     }
     return 0;
 }
-/* -----------------06.12.99 13:54-------------------
 
- --------------------------------------------------*/
 static String lcl_FindColumnEntry(const beans::PropertyValue* pFields, sal_Int32 nLen, const String& rColumnTitle)
 {
     String sRet;
@@ -1350,9 +1297,7 @@ static String lcl_FindColumnEntry(const beans::PropertyValue* pFields, sal_Int32
     }
     return sRet;
 }
-/* -----------------------------07.12.99 15:39--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK( SwAuthMarkDlg, CompEntryHdl, ListBox*, pBox)
 {
     String sEntry(pBox->GetSelectEntry());
@@ -1399,9 +1344,6 @@ IMPL_LINK( SwAuthMarkDlg, CompEntryHdl, ListBox*, pBox)
     return 0;
 }
 
-/* -----------------15.09.99 08:57-------------------
-
- --------------------------------------------------*/
 IMPL_LINK( SwAuthMarkDlg, InsertHdl, PushButton *, EMPTYARG )
 {
     //insert or update the SwAuthorityField...
@@ -1456,9 +1398,7 @@ IMPL_LINK( SwAuthMarkDlg, InsertHdl, PushButton *, EMPTYARG )
         CloseHdl(0);
     return 0;
 }
-/* -----------------17.09.99 13:06-------------------
 
- --------------------------------------------------*/
 IMPL_LINK(SwAuthMarkDlg, CreateEntryHdl, PushButton*, pButton)
 {
     sal_Bool bCreate = pButton == &aCreateEntryPB;
@@ -1503,9 +1443,7 @@ IMPL_LINK(SwAuthMarkDlg, CreateEntryHdl, PushButton*, pButton)
     }
     return 0;
 }
-/* -----------------------------20.12.99 14:26--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SwAuthMarkDlg, ChangeSourceHdl, RadioButton*, pButton)
 {
     sal_Bool bFromComp = (pButton == &aFromComponentRB);
@@ -1569,9 +1507,7 @@ IMPL_LINK(SwAuthMarkDlg, ChangeSourceHdl, RadioButton*, pButton)
     CompEntryHdl(&aEntryLB);
     return 0;
 }
-/* -----------------15.10.2002 13:16-----------------
- *
- * --------------------------------------------------*/
+
 IMPL_LINK(SwAuthMarkDlg, EditModifyHdl, Edit*, pEdit)
 {
     Link aAllowed = LINK(this, SwAuthMarkDlg, IsEntryAllowedHdl);
@@ -1585,9 +1521,7 @@ IMPL_LINK(SwAuthMarkDlg, EditModifyHdl, Edit*, pEdit)
     }
     return 0;
 };
-/* -----------------------------20.12.99 15:11--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SwAuthMarkDlg, IsEntryAllowedHdl, Edit*, pEdit)
 {
     String sEntry = pEdit->GetText();
@@ -1609,9 +1543,7 @@ IMPL_LINK(SwAuthMarkDlg, IsEntryAllowedHdl, Edit*, pEdit)
     }
     return bAllowed;
 }
-/* -----------------21.09.99 14:19-------------------
 
- --------------------------------------------------*/
 void SwAuthMarkDlg::InitControls()
 {
     DBG_ASSERT(pSh, "Shell nicht da?");
@@ -1641,17 +1573,13 @@ void SwAuthMarkDlg::InitControls()
     aAuthorFI.SetText(pEntry->GetAuthorField(AUTH_FIELD_AUTHOR));
     aTitleFI.SetText(pEntry->GetAuthorField(AUTH_FIELD_TITLE));
 }
-/* -----------------------------05.09.2002 09:44------------------------------
 
- ---------------------------------------------------------------------------*/
 void    SwAuthMarkDlg::Activate()
 {
     aOKBT.Enable(!pSh->HasReadonlySel());
     Window::Activate();
 }
-/* -----------------16.09.99 14:27-------------------
 
- --------------------------------------------------*/
 SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
         const String pFields[],
         SwWrtShell& rSh,
@@ -1803,9 +1731,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
     SetSizePixel(aDlgSize);
 
 }
-/* -----------------16.09.99 14:47-------------------
 
- --------------------------------------------------*/
 SwCreateAuthEntryDlg_Impl::~SwCreateAuthEntryDlg_Impl()
 {
     for(sal_uInt16 i = 0; i < AUTH_FIELD_END; i++)
@@ -1816,9 +1742,7 @@ SwCreateAuthEntryDlg_Impl::~SwCreateAuthEntryDlg_Impl()
     delete pTypeListBox;
     delete pIdentifierBox;
 }
-/* -----------------16.09.99 14:27-------------------
 
- --------------------------------------------------*/
 String  SwCreateAuthEntryDlg_Impl::GetEntryText(ToxAuthorityField eField) const
 {
     String sRet;
@@ -1846,9 +1770,7 @@ String  SwCreateAuthEntryDlg_Impl::GetEntryText(ToxAuthorityField eField) const
     }
     return sRet;
 }
-/* -----------------21.09.99 13:54-------------------
 
- --------------------------------------------------*/
 IMPL_LINK(SwCreateAuthEntryDlg_Impl, IdentifierHdl, ComboBox*, pBox)
 {
     const SwAuthorityFieldType* pFType = (const SwAuthorityFieldType*)
@@ -1874,9 +1796,6 @@ IMPL_LINK(SwCreateAuthEntryDlg_Impl, IdentifierHdl, ComboBox*, pBox)
     }
     return 0;
 }
-/* -----------------------------20.12.99 15:07--------------------------------
-
- ---------------------------------------------------------------------------*/
 
 IMPL_LINK(SwCreateAuthEntryDlg_Impl, ShortNameHdl, Edit*, pEdit)
 {
@@ -1888,17 +1807,13 @@ IMPL_LINK(SwCreateAuthEntryDlg_Impl, ShortNameHdl, Edit*, pEdit)
     }
     return 0;
 }
-/* -----------------------------20.12.99 15:54--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SwCreateAuthEntryDlg_Impl, EnableHdl, ListBox*, pBox)
 {
     aOKBT.Enable(m_bNameAllowed && pBox->GetSelectEntryCount());
     return 0;
 };
-/* -----------------06.10.99 10:00-------------------
 
- --------------------------------------------------*/
 SwAuthMarkFloatDlg::SwAuthMarkFloatDlg(SfxBindings* _pBindings,
                                    SfxChildWindow* pChild,
                                    Window *pParent,
@@ -1913,9 +1828,7 @@ SwAuthMarkFloatDlg::SwAuthMarkFloatDlg(SfxBindings* _pBindings,
     DBG_ASSERT(pWrtShell, "No shell?");
     aDlg.ReInitDlg(*pWrtShell);
 }
-/* -----------------06.10.99 10:27-------------------
 
- --------------------------------------------------*/
 void    SwAuthMarkFloatDlg::Activate()
 {
     SfxModelessDialog::Activate();
@@ -1927,9 +1840,6 @@ void SwAuthMarkFloatDlg::ReInitDlg(SwWrtShell& rWrtShell)
     aDlg.ReInitDlg( rWrtShell );
 }
 
-/* -----------------06.10.99 10:35-------------------
-
- --------------------------------------------------*/
 SwAuthMarkModalDlg::SwAuthMarkModalDlg(Window *pParent, SwWrtShell& rSh) :
     SvxStandardDialog(pParent, SW_RES(DLG_EDIT_AUTHMARK)),
     aDlg(this, SW_RES(WIN_DLG), sal_False)
@@ -1937,9 +1847,7 @@ SwAuthMarkModalDlg::SwAuthMarkModalDlg(Window *pParent, SwWrtShell& rSh) :
     FreeResource();
     aDlg.ReInitDlg(rSh);
 }
-/* -----------------06.10.99 10:46-------------------
 
- --------------------------------------------------*/
 void    SwAuthMarkModalDlg::Apply()
 {
     aDlg.InsertHdl(0);
