@@ -498,7 +498,7 @@ void ToolBarManager::UpdateControllers()
         if ( xLayoutManager.is() && xDockable.is() )
         {
             ::com::sun::star::awt::Point aPoint;
-            aPoint.X = aPoint.Y = LONG_MAX;
+            aPoint.X = aPoint.Y = SAL_MAX_INT32;
             xLayoutManager->dockWindow( m_aResourceName, DockingArea_DOCKINGAREA_DEFAULT, aPoint );
             xLayoutManager->lockWindow( m_aResourceName );
         }

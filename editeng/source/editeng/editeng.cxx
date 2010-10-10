@@ -2482,10 +2482,12 @@ void __EXPORT EditEngine::DrawingText( const Point&, const XubString&, USHORT, U
     DBG_CHKTHIS( EditEngine, 0 );
 }
 
-void __EXPORT EditEngine::DrawingTab( const Point& rStartPos, long nWidth, const String& rChar,
-    const SvxFont& rFont, USHORT nPara, xub_StrLen nIndex, BYTE nRightToLeft,
-    bool bEndOfLine, bool bEndOfParagraph,
-    const Color& rOverlineColor, const Color& rTextLineColor)
+void __EXPORT EditEngine::DrawingTab( const Point& /*rStartPos*/, long /*nWidth*/,
+                                      const String& /*rChar*/, const SvxFont& /*rFont*/,
+                                      USHORT /*nPara*/, xub_StrLen /*nIndex*/,
+                                      BYTE /*nRightToLeft*/, bool /*bEndOfLine*/,
+                                      bool /*bEndOfParagraph*/, const Color& /*rOverlineColor*/,
+                                      const Color& /*rTextLineColor*/)
 {
     DBG_CHKTHIS( EditEngine, 0 );
 }
