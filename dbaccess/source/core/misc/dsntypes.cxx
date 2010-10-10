@@ -28,6 +28,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
+#include <sal/macros.h>
+
 #include "dsntypes.hxx"
 #include "dbamiscres.hrc"
 #include <unotools/confignode.hxx>
@@ -440,7 +442,7 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(const String& _rDsn) const
         KnownPrefix( "sdbc:address:macab",              DST_MACAB,              true )
     };
 
-    for ( size_t i=0; i < sizeof( aKnowPrefixes ) / sizeof( aKnowPrefixes[0] ); ++i )
+    for ( size_t i=0; i < SAL_N_ELEMENTS( aKnowPrefixes ); ++i )
     {
         USHORT nMatchLen = aKnowPrefixes[i].bMatchComplete ? sDsn.Len() : (USHORT)rtl_str_getLength( aKnowPrefixes[i].pAsciiPrefix );
         if ( sDsn.EqualsIgnoreCaseAscii( aKnowPrefixes[i].pAsciiPrefix, 0, nMatchLen ) )

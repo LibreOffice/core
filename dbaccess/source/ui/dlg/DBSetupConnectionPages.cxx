@@ -899,7 +899,7 @@ DBG_NAME(OFinalDBPageSetup)
         Point aPos(m_aFTFinalHeader.GetPosPixel());
         Size aStart(m_aFTFinalHeader.GetSizePixel());
         aPos.Y() += aStart.Height() + nUnrelatedHeight;
-        sal_Int32 nCount = sizeof(pWindows) / sizeof(pWindows[0]);
+        sal_Int32 nCount = SAL_N_ELEMENTS(pWindows);
         for (sal_Int32 i=0; i < nCount; ++i)
         {
             aPos.X() = pWindows[i].first->GetPosPixel().X();

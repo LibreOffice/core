@@ -34,6 +34,7 @@
 #include <vcl/msgbox.hxx>
 #include "localresaccess.hxx"
 #include <tools/rcid.h>
+#include <sal/macros.h>
 
 #include <com/sun/star/sdbcx/XCreateCatalog.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -99,7 +100,7 @@ ODatasourceSelectDialog::ODatasourceSelectDialog(Window* _pParent, const StringB
 
         // move the buttons
         PushButton* pButtons[] = { &m_aOk, &m_aCancel, &m_aHelp ,&m_aCreateAdabasDB};
-        for (size_t i=0; i<sizeof(pButtons)/sizeof(pButtons[0]); ++i)
+        for (size_t i=0; i < SAL_N_ELEMENTS(pButtons); ++i)
         {
             Point aOldPos = pButtons[i]->GetPosPixel();
             pButtons[i]->SetPosPixel(Point(aOldPos.X() - nLostPixels, aOldPos.Y()));

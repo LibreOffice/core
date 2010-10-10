@@ -30,6 +30,7 @@
 
 #include <osl/mutex.hxx>
 #include <tools/resid.hxx>
+#include <sal/macros.h>
 
 class ResMgr;
 

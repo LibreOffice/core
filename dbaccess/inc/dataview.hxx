@@ -30,6 +30,7 @@
 #include <vcl/window.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <svtools/acceleratorexecute.hxx>
+#include <sal/macros.h>
 #include <memory>
 #include "dbaccessdllapi.h"
 

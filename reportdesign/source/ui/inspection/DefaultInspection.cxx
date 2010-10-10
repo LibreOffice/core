@@ -139,7 +139,7 @@ namespace rptui
 
         };
 
-        const size_t nFactories = sizeof( aFactories ) / sizeof( aFactories[ 0 ] );
+        const size_t nFactories = SAL_N_ELEMENTS( aFactories );
         Sequence< Any > aReturn( nFactories );
         Any* pReturn = aReturn.getArray();
         for ( size_t i = 0; i < nFactories; ++i )
@@ -237,7 +237,7 @@ namespace rptui
             { "Data",       RID_STR_PROPPAGE_DATA,      HID_RPT_PROPDLG_TAB_DATA },
         };
 
-        const size_t nCategories = sizeof( aCategories ) / sizeof( aCategories[0] );
+        const size_t nCategories = SAL_N_ELEMENTS( aCategories );
         Sequence< PropertyCategoryDescriptor > aReturn( nCategories );
         PropertyCategoryDescriptor* pReturn = aReturn.getArray();
         for ( size_t i=0; i<nCategories; ++i, ++pReturn )

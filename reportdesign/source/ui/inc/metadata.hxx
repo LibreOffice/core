@@ -29,6 +29,8 @@
 
 #include "ModuleHelper.hxx"
 
+#include <sal/macros.h>
+
 /** === begin UNO includes === **/
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/inspection/XPropertyHandler.hpp>

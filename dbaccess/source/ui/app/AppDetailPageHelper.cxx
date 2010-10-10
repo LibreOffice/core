@@ -1247,7 +1247,7 @@ IMPL_LINK(OAppDetailPageHelper, OnDropdownClickHdl, ToolBox*, /*pToolBox*/)
                             , SID_DB_APP_VIEW_DOCINFO_PREVIEW
     };
 
-    for(size_t i=0; i < sizeof(pActions)/sizeof(pActions[0]);++i)
+    for(size_t i=0; i < SAL_N_ELEMENTS(pActions);++i)
     {
         aMenu->CheckItem(pActions[i],m_aMenu->IsItemChecked(pActions[i]));
     }

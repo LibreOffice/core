@@ -38,6 +38,7 @@
 #include <comphelper/property.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <sal/macros.h>
 
 //........................................................................
 namespace dbaccess
@@ -163,7 +164,7 @@ namespace dbaccess
                 { PROPERTY_HIDDEN,           PROPERTY_ID_HIDDEN }
             };
 
-            for ( size_t i=0; i < sizeof( aProps ) / sizeof( aProps[0] ); ++i )
+            for ( size_t i=0; i < SAL_N_ELEMENTS( aProps ); ++i )
             {
                 if ( xPSI->hasPropertyByName( aProps[i].sName ) )
                     if ( !isDefaulted( aProps[i].nHandle, _rxColumn->getPropertyValue( aProps[i].sName ) ) )

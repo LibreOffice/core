@@ -307,12 +307,12 @@ void OTableEditorCtrl::InitCellController()
 
     Size aHeight;
     const Control* pControls[] = { pTypeCell,pDescrCell,pNameCell,pHelpTextCell};
-    for(sal_Size i= 0; i < sizeof(pControls)/sizeof(pControls[0]);++i)
+    for(sal_Size i= 0; i < SAL_N_ELEMENTS(pControls);++i)
     {
         const Size aTemp( pControls[i]->GetOptimalSize(WINDOWSIZE_PREFERRED) );
         if ( aTemp.Height() > aHeight.Height() )
             aHeight.Height() = aTemp.Height();
-    } // for(int i= 0; i < sizeof(pControls)/sizeof(pControls[0]);++i
+    } // for(int i= 0; i < SAL_N_ELEMENTS(pControls);++i
     SetDataRowHeight(aHeight.Height());
 
     ClearModified();

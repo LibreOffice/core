@@ -59,7 +59,7 @@ uno::Sequence< ::rtl::OUString> lcl_getGroupAbsent()
                 ,PROPERTY_CANSHRINK
         };
 
-    return uno::Sequence< ::rtl::OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
+    return uno::Sequence< ::rtl::OUString >(pProps,SAL_N_ELEMENTS(pProps));
 }
 
 // -----------------------------------------------------------------------------
@@ -100,7 +100,7 @@ uno::Sequence< ::rtl::OUString> lcl_getAbsent(bool _bPageSection)
                 ,PROPERTY_CANSHRINK
                 ,PROPERTY_REPEATSECTION
         };
-        return uno::Sequence< ::rtl::OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
+        return uno::Sequence< ::rtl::OUString >(pProps,SAL_N_ELEMENTS(pProps));
     }
 
     ::rtl::OUString pProps[] = {
@@ -109,7 +109,7 @@ uno::Sequence< ::rtl::OUString> lcl_getAbsent(bool _bPageSection)
                 ,PROPERTY_REPEATSECTION
         };
 
-    return uno::Sequence< ::rtl::OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
+    return uno::Sequence< ::rtl::OUString >(pProps,SAL_N_ELEMENTS(pProps));
 }
 // -----------------------------------------------------------------------------
 OSection::OSection(const uno::Reference< report::XReportDefinition >& _xParent

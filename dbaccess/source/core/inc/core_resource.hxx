@@ -30,6 +30,7 @@
 
 #include <rtl/ustring.hxx>
 #include <osl/mutex.hxx>
+#include <sal/macros.h>
 
 class ResMgr;
 //.........................................................................

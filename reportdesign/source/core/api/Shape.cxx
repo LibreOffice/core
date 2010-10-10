@@ -57,7 +57,7 @@ uno::Sequence< ::rtl::OUString > lcl_getShapeOptionals()
         ,PROPERTY_CONTROLBACKGROUND
         ,PROPERTY_CONTROLBACKGROUNDTRANSPARENT
     };
-    return uno::Sequence< ::rtl::OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
+    return uno::Sequence< ::rtl::OUString >(pProps,SAL_N_ELEMENTS(pProps));
 }
 
 DBG_NAME( rpt_OShape )

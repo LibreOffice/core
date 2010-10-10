@@ -28,6 +28,7 @@
 #ifndef _DBAUI_DBADMIN_HXX_
 #define _DBAUI_DBADMIN_HXX_
 
+#include <sal/macros.h>
 #include <sfx2/tabdlg.hxx>
 #include "dsntypes.hxx"
 #include "IItemSetHelper.hxx"

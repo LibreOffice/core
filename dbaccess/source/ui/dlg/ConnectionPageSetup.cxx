@@ -202,7 +202,7 @@ namespace dbaui
         //{
         //  String sDisplayName = m_pCollection->getTypeDisplayName(m_eType);
         //  FixedText* ppTextControls[] ={&m_aFT_Connection};
-        //  for (size_t i = 0; i < sizeof(ppTextControls)/sizeof(ppTextControls[0]); ++i)
+        //  for (size_t i = 0; i < SAL_N_ELEMENTS(ppTextControls); ++i)
         //  {
         //      ppTextControls[i]->SetText(sDisplayName);
         //  }

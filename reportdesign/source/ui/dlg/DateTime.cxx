@@ -105,7 +105,7 @@ ODateTimeDialog::ODateTimeDialog( Window* _pParent
     m_aTimeControlling.enableOnCheckMark( m_aTime, m_aFTTimeFormat, m_aTimeListBox);
 
     CheckBox* pCheckBoxes[] = { &m_aDate,&m_aTime};
-    for ( size_t i = 0 ; i < sizeof(pCheckBoxes)/sizeof(pCheckBoxes[0]); ++i)
+    for ( size_t i = 0 ; i < SAL_N_ELEMENTS(pCheckBoxes); ++i)
         pCheckBoxes[i]->SetClickHdl(LINK(this,ODateTimeDialog,CBClickHdl));
 
     FreeResource();

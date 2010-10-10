@@ -37,6 +37,7 @@
 
 #include <tools/diagnose_ex.h>
 #include <tools/string.hxx>
+#include <sal/macros.h>
 
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
@@ -551,7 +552,7 @@ namespace
                                 ,{ITEMID_LANGUAGE_ASIAN,PROPERTY_CHARLOCALEASIAN}
                                 ,{ITEMID_LANGUAGE_COMPLEX,PROPERTY_CHARLOCALECOMPLEX}
         };
-        for(size_t k = 0; k < sizeof(pItems)/sizeof(pItems[0]);++k)
+        for(size_t k = 0; k < SAL_N_ELEMENTS(pItems);++k)
         {
             if ( SFX_ITEM_SET == _rItemSet.GetItemState( pItems[k].nWhich,sal_True,&pItem) && pItem->ISA(SvxLanguageItem))
             {
@@ -706,7 +707,7 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
 
     };
 
-    OSL_ASSERT((sizeof(pDefaults)/sizeof(pDefaults[0])) == (sizeof(aItemInfos)/sizeof(aItemInfos[0])));
+    OSL_ASSERT((SAL_N_ELEMENTS(pDefaults)) == (SAL_N_ELEMENTS(aItemInfos)));
 
     static USHORT pRanges[] =
     {
@@ -743,7 +744,7 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
     }
 
     SfxItemPool::Free(pPool);
-    for (sal_uInt16 i=0; i<sizeof(pDefaults)/sizeof(pDefaults[0]); ++i)
+    for (sal_uInt16 i=0; i < SAL_N_ELEMENTS(pDefaults); ++i)
         delete pDefaults[i];
 
     return bSuccess;

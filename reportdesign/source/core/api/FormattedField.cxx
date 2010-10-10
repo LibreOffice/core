@@ -53,7 +53,7 @@ uno::Reference< uno::XInterface > OFormattedField::create(uno::Reference< uno::X
 uno::Sequence< ::rtl::OUString > lcl_getFormattedFieldOptionals()
 {
     ::rtl::OUString pProps[] = { PROPERTY_MASTERFIELDS,PROPERTY_DETAILFIELDS };
-    return uno::Sequence< ::rtl::OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
+    return uno::Sequence< ::rtl::OUString >(pProps,SAL_N_ELEMENTS(pProps));
 }
 DBG_NAME( rpt_OFormattedField )
 // -----------------------------------------------------------------------------

@@ -211,12 +211,12 @@ void OSelectionBrowseBox::initialize()
         String sGroup = m_aFunctionStrings.GetToken(m_aFunctionStrings.GetTokenCount() - 1);
         m_aFunctionStrings = m_aFunctionStrings.GetToken(0);
 
-        for (size_t i = 0; i < sizeof(eFunctions)/sizeof(eFunctions[0]) ; ++i)
+        for (size_t i = 0; i < SAL_N_ELEMENTS(eFunctions); ++i)
         {
             m_aFunctionStrings += String(RTL_CONSTASCII_USTRINGPARAM(";"));
             m_aFunctionStrings += String(ByteString(rContext.getIntlKeywordAscii(eFunctions[i])),RTL_TEXTENCODING_UTF8);
 
-        } // for (sal_Int32 i = 0; i < sizeof(eFunctions)/sizeof(eFunctions[0]) ; ++i)
+        } // for (sal_Int32 i = 0; i < SAL_N_ELEMENTS(eFunctions) ; ++i)
         m_aFunctionStrings += String(RTL_CONSTASCII_USTRINGPARAM(";"));
         m_aFunctionStrings += sGroup;
 
@@ -361,12 +361,12 @@ void OSelectionBrowseBox::Init()
 
     Size aHeight;
     const Control* pControls[] = { m_pTextCell,m_pVisibleCell,m_pTableCell,m_pFieldCell };
-    for(sal_Size i= 0; i < sizeof(pControls)/sizeof(pControls[0]);++i)
+    for(sal_Size i= 0; i < SAL_N_ELEMENTS(pControls);++i)
     {
         const Size aTemp( pControls[i]->GetOptimalSize(WINDOWSIZE_PREFERRED) );
         if ( aTemp.Height() > aHeight.Height() )
             aHeight.Height() = aTemp.Height();
-    } // for(int i= 0; i < sizeof(pControls)/sizeof(pControls[0]);++i
+    } // for(int i= 0; i < SAL_N_ELEMENTS(pControls);++i
     SetDataRowHeight(aHeight.Height());
     SetTitleLines(1);
     // Anzahl der sichtbaren Zeilen ermitteln
@@ -2195,7 +2195,7 @@ sal_Int32 OSelectionBrowseBox::GetNoneVisibleRows() const
 {
     sal_Int32 nErg(0);
     // only the first 11 row are interesting
-    sal_Int32 nSize = sizeof(nVisibleRowMask) / sizeof(nVisibleRowMask[0]);
+    sal_Int32 nSize = SAL_N_ELEMENTS(nVisibleRowMask);
     for(sal_Int32 i=0;i<nSize;i++)
     {
         if(!m_bVisibleRow[i])
@@ -2207,7 +2207,7 @@ sal_Int32 OSelectionBrowseBox::GetNoneVisibleRows() const
 void OSelectionBrowseBox::SetNoneVisbleRow(long nRows)
 {
     // only the first 11 row are interesting
-    sal_Int32 nSize = sizeof(nVisibleRowMask) / sizeof(nVisibleRowMask[0]);
+    sal_Int32 nSize = SAL_N_ELEMENTS(nVisibleRowMask);
     for(sal_Int32 i=0;i< nSize;i++)
         m_bVisibleRow[i] = !(nRows & nVisibleRowMask[i]);
 }

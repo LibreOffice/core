@@ -35,6 +35,7 @@
 #include <connectivity/dbtools.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
+#include <sal/macros.h>
 
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/sdb/XCompletedExecution.hpp>
@@ -758,7 +759,7 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(sal_Bool _bHasCat
         {
             aRowLabels.push_back(::rtl::OUString::valueOf(h+1));
             ::std::vector< double > aRow;
-            const sal_Int32 nSize = sizeof(fDefaultData)/sizeof(fDefaultData[0]);
+            const sal_Int32 nSize = SAL_N_ELEMENTS(fDefaultData);
             for (sal_Int32 j = 0; j < (nCount-1); ++j,++k)
             {
                 if ( k >= nSize )

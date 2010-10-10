@@ -34,6 +34,7 @@
 #include <com/sun/star/report/GroupOn.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 
+#include <sal/macros.h>
 #include <tools/debug.hxx>
 #include "RptResId.hrc"
 #include "rptui_slotid.hrc"
@@ -384,7 +385,7 @@ void OFieldExpressionControl::lateInit()
         m_pComboCell->SetHelpId(HID_RPT_FIELDEXPRESSION);
 
         Control* pControls[] = {m_pComboCell};
-        for (size_t i = 0; i < sizeof(pControls)/sizeof(pControls[0]); ++i)
+        for (size_t i = 0; i < SAL_N_ELEMENTS(pControls); ++i)
         {
             pControls[i]->SetGetFocusHdl(LINK(m_pParent, OGroupsSortingDialog, OnControlFocusGot));
             pControls[i]->SetLoseFocusHdl(LINK(m_pParent, OGroupsSortingDialog, OnControlFocusLost));
@@ -1015,24 +1016,24 @@ OGroupsSortingDialog::OGroupsSortingDialog( Window* _pParent
 
 
     Control* pControlsLst[] = { &m_aHeaderLst, &m_aFooterLst, &m_aGroupOnLst, &m_aKeepTogetherLst, &m_aOrderLst, &m_aGroupIntervalEd};
-    for (size_t i = 0; i < sizeof(pControlsLst)/sizeof(pControlsLst[0]); ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(pControlsLst); ++i)
     {
         pControlsLst[i]->SetGetFocusHdl(LINK(this, OGroupsSortingDialog, OnControlFocusGot));
         pControlsLst[i]->SetLoseFocusHdl(LINK(this, OGroupsSortingDialog, OnControlFocusLost));
         pControlsLst[i]->Show(TRUE);
-    } // for (int i = 0; i < sizeof(pControls)/sizeof(pControls[0]); ++i)
+    } // for (int i = 0; i < SAL_N_ELEMENTS(pControls); ++i)
 
-    for (size_t i = 0; i < (sizeof(pControlsLst)/sizeof(pControlsLst[0]))-1; ++i)
+    for (size_t i = 0; i < (SAL_N_ELEMENTS(pControlsLst))-1; ++i)
         static_cast<ListBox*>(pControlsLst[i])->SetSelectHdl(LINK(this,OGroupsSortingDialog,LBChangeHdl));
 
     Control* pControls[]    = { &m_aHeader, &m_aFooter, &m_aGroupOn, &m_aGroupInterval, &m_aKeepTogether, &m_aOrder
                                 , &m_aMove,&m_aFL2};
     sal_Int32 nMaxTextWidth = 0;
     MnemonicGenerator aMnemonicGenerator;
-    for (size_t i = 0; i < sizeof(pControls)/sizeof(pControls[0]); ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(pControls); ++i)
         aMnemonicGenerator.RegisterMnemonic( pControls[i]->GetText() );
 
-    for (size_t i = 0; i < sizeof(pControls)/sizeof(pControls[0]); ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(pControls); ++i)
     {
         pControls[i]->Show(TRUE);
         String sText = pControls[i]->GetText();
@@ -1172,7 +1173,7 @@ void OGroupsSortingDialog::SaveData( sal_Int32 _nRow)
         xGroup->setSortAscending( m_aOrderLst.GetSelectEntryPos() == 0 );
 
     ListBox* pControls[] = { &m_aHeaderLst,&m_aFooterLst,&m_aGroupOnLst,&m_aKeepTogetherLst,&m_aOrderLst};
-    for (size_t i = 0; i < sizeof(pControls)/sizeof(pControls[0]); ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(pControls); ++i)
         pControls[i]->SaveValue();
 }
 
@@ -1204,7 +1205,7 @@ IMPL_LINK(OGroupsSortingDialog, OnControlFocusGot, Control*, pControl )
     if ( m_pFieldExpression && m_pFieldExpression->getExpressionControl() )
     {
         Control* pControls[] = { m_pFieldExpression->getExpressionControl(),&m_aHeaderLst,&m_aFooterLst,&m_aGroupOnLst,&m_aGroupIntervalEd,&m_aKeepTogetherLst,&m_aOrderLst};
-        for (size_t i = 0; i < sizeof(pControls)/sizeof(pControls[0]); ++i)
+        for (size_t i = 0; i < SAL_N_ELEMENTS(pControls); ++i)
         {
             if ( pControl == pControls[i] )
             {
@@ -1363,7 +1364,7 @@ void OGroupsSortingDialog::displayGroup(const uno::Reference<report::XGroup>& _x
         case sdbc::DataType::TIMESTAMP:
             {
                 USHORT nIds[] = { STR_RPT_YEAR, STR_RPT_QUARTER,STR_RPT_MONTH,STR_RPT_WEEK,STR_RPT_DAY,STR_RPT_HOUR,STR_RPT_MINUTE };
-                for (USHORT i = 0; i < sizeof(nIds)/sizeof(nIds[0]); ++i)
+                for (USHORT i = 0; i < SAL_N_ELEMENTS(nIds); ++i)
                 {
                     m_aGroupOnLst.InsertEntry(String(ModuleRes(nIds[i])));
                     m_aGroupOnLst.SetEntryData(i+1,reinterpret_cast<void*>(i+2));
@@ -1419,12 +1420,12 @@ void OGroupsSortingDialog::displayGroup(const uno::Reference<report::XGroup>& _x
     m_aOrderLst.SelectEntryPos(_xGroup->getSortAscending() ? 0 : 1);
 
     ListBox* pControls[] = { &m_aHeaderLst,&m_aFooterLst,&m_aGroupOnLst,&m_aKeepTogetherLst,&m_aOrderLst};
-    for (size_t i = 0; i < sizeof(pControls)/sizeof(pControls[0]); ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(pControls); ++i)
         pControls[i]->SaveValue();
 
     ListBox* pControlsLst2[] = { &m_aHeaderLst, &m_aFooterLst,  &m_aGroupOnLst, &m_aKeepTogetherLst,&m_aOrderLst};
     sal_Bool bReadOnly = !m_pController->isEditable();
-    for (size_t i = 0; i < sizeof(pControlsLst2)/sizeof(pControlsLst2[0]); ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(pControlsLst2); ++i)
         pControlsLst2[i]->SetReadOnly(bReadOnly);
     m_aGroupIntervalEd.SetReadOnly(bReadOnly);
 }
@@ -1439,13 +1440,13 @@ void OGroupsSortingDialog::Resize()
     Control* pControlsLst[] = { &m_aHeaderLst,  &m_aFooterLst,  &m_aGroupOnLst, &m_aGroupIntervalEd,&m_aKeepTogetherLst,&m_aOrderLst};
     Control* pControls[]    = { &m_aHeader,     &m_aFooter,     &m_aGroupOn,    &m_aGroupInterval,  &m_aKeepTogether,   &m_aOrder};
     sal_Int32 nMaxTextWidth = 0;
-    for (size_t i = 0; i < sizeof(pControls)/sizeof(pControls[0]); ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(pControls); ++i)
     {
         nMaxTextWidth = ::std::max<sal_Int32>(static_cast<sal_Int32>(GetTextWidth(pControls[i]->GetText())),nMaxTextWidth);
-    } // for (int i = 0; i < sizeof(pControls)/sizeof(pControls[0]); ++i)
+    } // for (int i = 0; i < SAL_N_ELEMENTS(pControls); ++i)
 
     // aTotalOutputSize.Width() - m_aHeaderLst.GetSizePixel().Width() - 3*aSpace.Width()
-    for (size_t i = 0; i < sizeof(pControls)/sizeof(pControls[0]); ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(pControls); ++i)
     {
         pControls[i]->SetSizePixel(Size(nMaxTextWidth,pControls[i]->GetSizePixel().Height()));
         Point aPos = pControls[i]->GetPosPixel();
@@ -1453,7 +1454,7 @@ void OGroupsSortingDialog::Resize()
         aPos.Y() = pControlsLst[i]->GetPosPixel().Y();
 
         pControlsLst[i]->SetPosSizePixel(aPos,Size(aTotalOutputSize.Width() - aPos.X() - aSpace.Width(),pControlsLst[i]->GetSizePixel().Height()));
-    } // for (int i = 0; i < sizeof(pControls)/sizeof(pControls[0]); ++i)
+    } // for (int i = 0; i < SAL_N_ELEMENTS(pControls); ++i)
 
     m_aFL.SetSizePixel(Size(aTotalOutputSize.Width() - aSpace.Width(),m_aFL.GetSizePixel().Height()));
     m_aFL2.SetSizePixel(Size(aTotalOutputSize.Width() - aSpace.Width(),m_aFL2.GetSizePixel().Height()));

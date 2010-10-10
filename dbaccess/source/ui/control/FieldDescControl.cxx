@@ -366,7 +366,7 @@ void OFieldDescControl::CheckScrollBars()
     // horizontal :
     long lMaxXPosition = 0;
     Control* ppAggregates[] = { pRequired, pNumType, pAutoIncrement, pDefault, pTextLen, pLength, pScale, pFormat, m_pColumnName, m_pType,m_pAutoIncrementValue};
-    for (sal_uInt16 i=0; i<sizeof(ppAggregates)/sizeof(ppAggregates[0]); ++i)
+    for (sal_uInt16 i=0; i < SAL_N_ELEMENTS(ppAggregates); ++i)
         getMaxXPosition(ppAggregates[i],lMaxXPosition);
 
     if (m_pHorzScroll)
@@ -484,9 +484,9 @@ void OFieldDescControl::ScrollAllAggregates()
                                         , pTextLenText, pLengthText
                                         , pScaleText, m_pColumnNameText
                                         , m_pTypeText, m_pAutoIncrementValueText};
-        OSL_ENSURE(sizeof(ppAggregates)/sizeof(ppAggregates[0]) == sizeof(ppAggregatesText)/sizeof(ppAggregatesText[0]),"Lists are not identical!");
+        OSL_ENSURE(SAL_N_ELEMENTS(ppAggregates) == SAL_N_ELEMENTS(ppAggregatesText),"Lists are not identical!");
 
-        for (sal_uInt16 i=0; i<sizeof(ppAggregates)/sizeof(ppAggregates[0]); ++i)
+        for (sal_uInt16 i=0; i < SAL_N_ELEMENTS(ppAggregates); ++i)
             ScrollAggregate(ppAggregatesText[i],ppAggregates[i],NULL,nDeltaX, nDeltaY);
 
         ScrollAggregate(pFormatText,pFormatSample,pFormat,nDeltaX, nDeltaY);
@@ -498,7 +498,7 @@ sal_uInt16 OFieldDescControl::CountActiveAggregates() const
 {
     Control* ppAggregates[] = { pRequired, pNumType, pAutoIncrement, pDefault, pTextLen, pLength, pScale, pFormat, m_pColumnName, m_pType,m_pAutoIncrementValue};
     sal_uInt16 nVisibleAggregates = 0;
-    for (sal_uInt16 i=0; i<sizeof(ppAggregates)/sizeof(ppAggregates[0]); ++i)
+    for (sal_uInt16 i=0; i < SAL_N_ELEMENTS(ppAggregates); ++i)
         if (ppAggregates[i])
             ++nVisibleAggregates;
     return nVisibleAggregates;
@@ -508,7 +508,7 @@ sal_Int32 OFieldDescControl::GetMaxControlHeight() const
 {
     Size aHeight;
     Control* ppAggregates[] = { pRequired, pNumType, pAutoIncrement, pDefault, pTextLen, pLength, pScale, pFormat, m_pColumnName, m_pType,m_pAutoIncrementValue};
-    for (sal_uInt16 i=0; i<sizeof(ppAggregates)/sizeof(ppAggregates[0]); ++i)
+    for (sal_uInt16 i=0; i < SAL_N_ELEMENTS(ppAggregates); ++i)
     {
         if ( ppAggregates[i] )
         {
@@ -539,9 +539,9 @@ void OFieldDescControl::SetReadOnly( sal_Bool bReadOnly )
                                         , m_pTypeText, m_pAutoIncrementValueText
                                         , pFormatText};
 
-    OSL_ENSURE(sizeof(ppAggregates)/sizeof(ppAggregates[0]) == sizeof(ppAggregatesText)/sizeof(ppAggregatesText[0]),"Lists are not identical!");
+    OSL_ENSURE(SAL_N_ELEMENTS(ppAggregates) == SAL_N_ELEMENTS(ppAggregatesText),"Lists are not identical!");
 
-    for (sal_uInt16 i=0; i<sizeof(ppAggregates)/sizeof(ppAggregates[0]); ++i)
+    for (sal_uInt16 i=0; i < SAL_N_ELEMENTS(ppAggregates); ++i)
     {
         if ( ppAggregatesText[i] )
             ppAggregatesText[i]->Enable( !bReadOnly );
@@ -833,7 +833,7 @@ void OFieldDescControl::ArrangeAggregates()
     };
 
     long nMaxWidth = 0;
-    for (size_t i=0; i<sizeof(adAggregates)/sizeof(adAggregates[0]); i++)
+    for (size_t i=0; i < SAL_N_ELEMENTS(adAggregates); i++)
     {
         if (adAggregates[i].pctrlTextControl)
         {
@@ -846,7 +846,7 @@ void OFieldDescControl::ArrangeAggregates()
     // und los ...
     int nCurrentControlPos = 0;
     Control* pZOrderPredecessor = NULL;
-    for (size_t i=0; i<sizeof(adAggregates)/sizeof(adAggregates[0]); i++)
+    for (size_t i=0; i < SAL_N_ELEMENTS(adAggregates); i++)
     {
         if (adAggregates[i].pctrlInputControl)
         {

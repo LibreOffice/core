@@ -89,6 +89,7 @@
 #include <connectivity/dbtools.hxx>
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
+#include <sal/macros.h>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #include "core_resource.hxx"
 #include "core_resource.hrc"
@@ -1561,7 +1562,7 @@ void ODocumentDefinition::separateOpenCommandArguments( const Sequence< Property
     {
         "RecoveryStorage"
     };
-    for ( size_t i=0; i < sizeof( pObjectDescriptorArgs ) / sizeof( pObjectDescriptorArgs[0] ); ++i )
+    for ( size_t i=0; i < SAL_N_ELEMENTS( pObjectDescriptorArgs ); ++i )
     {
         if ( aOpenCommandArguments.has( pObjectDescriptorArgs[i] ) )
         {

@@ -48,6 +48,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
+#include <sal/macros.h>
 
 #include <algorithm>
 
@@ -357,7 +358,7 @@ namespace dbaccess
         // read the map from sub storages to object names
         MapCompTypeToCompDescs aMapCompDescs;
         SubComponentType aKnownTypes[] = { TABLE, QUERY, FORM, REPORT, RELATION_DESIGN };
-        for ( size_t i = 0; i < sizeof( aKnownTypes ) / sizeof( aKnownTypes[0] ); ++i )
+        for ( size_t i = 0; i < SAL_N_ELEMENTS( aKnownTypes ); ++i )
         {
             if ( !xRecoveryStorage->hasByName( SubComponentRecovery::getComponentsStorageName( aKnownTypes[i] ) ) )
                 continue;

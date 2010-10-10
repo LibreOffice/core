@@ -113,7 +113,7 @@ namespace dbaui
                                 m_pAutoIncrementLabel, m_pAutoIncrement,
                                 m_pAutoRetrievingLabel, m_pAutoRetrieving };
 
-        sal_Int32 nCount = sizeof(pWindows) / sizeof(pWindows[0]);
+        sal_Int32 nCount = SAL_N_ELEMENTS(pWindows);
         for (sal_Int32 i=1; i < nCount; ++i)
         {
             if ( pWindows[i] )
@@ -366,7 +366,7 @@ namespace dbaui
                                 ,m_pOptionsLabel,m_pOptions,&m_aUseCatalog
                                 };
 
-        sal_Int32 nCount = sizeof(pWindows) / sizeof(pWindows[0]);
+        sal_Int32 nCount = SAL_N_ELEMENTS(pWindows);
         for (sal_Int32 i=1; i < nCount; ++i)
             pWindows[i]->SetZOrder(pWindows[i-1], WINDOW_ZORDER_BEHIND);
     }
@@ -547,7 +547,7 @@ namespace dbaui
                                 &m_aFTDriverClass, &m_aEDDriverClass,&m_aTestJavaDriver,
                                 m_pCharsetLabel, m_pCharset};
 
-        sal_Int32 nCount = sizeof(pWindows) / sizeof(pWindows[0]);
+        sal_Int32 nCount = SAL_N_ELEMENTS(pWindows);
         for (sal_Int32 i=1; i < nCount; ++i)
             pWindows[i]->SetZOrder(pWindows[i-1], WINDOW_ZORDER_BEHIND);
 
@@ -679,7 +679,7 @@ namespace dbaui
 
         Window* pWindows[] = {  &m_aMySQLSettings, &m_aSeparator2, &m_aUserNameLabel, &m_aUserName,
                                 &m_aPasswordRequired, m_pCharsetLabel, m_pCharset};
-        sal_Int32 nCount = sizeof(pWindows) / sizeof(pWindows[0]);
+        sal_Int32 nCount = SAL_N_ELEMENTS(pWindows);
         for (sal_Int32 i=1; i < nCount; ++i)
             pWindows[i]->SetZOrder(pWindows[i-1], WINDOW_ZORDER_BEHIND);
 
@@ -819,7 +819,7 @@ namespace dbaui
                                 ,&m_CB_SHUTDB
                                 ,m_pCharsetLabel, m_pCharset,&m_PB_STAT};
 
-        sal_Int32 nCount = sizeof(pWindows) / sizeof(pWindows[0]);
+        sal_Int32 nCount = SAL_N_ELEMENTS(pWindows);
         for (sal_Int32 i=1; i < nCount; ++i)
             pWindows[i]->SetZOrder(pWindows[i-1], WINDOW_ZORDER_BEHIND);
     }

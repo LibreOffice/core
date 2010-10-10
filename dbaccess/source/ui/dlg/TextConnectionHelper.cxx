@@ -152,7 +152,7 @@ DBG_NAME(OTextConnectionHelper)
             { 0, NULL }
         };
 
-        for ( size_t section=0; section < sizeof( aSections ) / sizeof( aSections[0] ) - 1; ++section )
+        for ( size_t section=0; section < SAL_N_ELEMENTS( aSections ) - 1; ++section )
         {
             if ( ( m_nAvailableSections & aSections[section].nFlag ) != 0 )
             {
