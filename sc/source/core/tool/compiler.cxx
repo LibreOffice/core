@@ -35,6 +35,7 @@
 #include <basic/sbmeth.hxx>
 #include <basic/sbstar.hxx>
 #include <svl/zforlist.hxx>
+#include <sal/macros.h>
 #include <tools/rcid.h>
 #include <tools/rc.hxx>
 #include <tools/solar.h>

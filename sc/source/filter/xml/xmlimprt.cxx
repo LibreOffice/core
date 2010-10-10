@@ -31,6 +31,7 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include <svl/zforlist.hxx>
+#include <sal/macros.h>
 
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>

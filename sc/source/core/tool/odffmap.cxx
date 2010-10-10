@@ -29,6 +29,7 @@
 #include "precompiled_sc.hxx"
 
 #include "compiler.hxx"
+#include <sal/macros.h>
 
 // ODFF, English, Programmatical, ODF_11
 ScCompiler::AddInMap ScCompiler::maAddInMap[] =

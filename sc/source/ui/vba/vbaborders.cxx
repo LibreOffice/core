@@ -26,6 +26,7 @@
  ************************************************************************/
 #include "vbaborders.hxx"
 
+#include <sal/macros.h>
 #include <cppuhelper/implbase3.hxx>
 #include <ooo/vba/excel/XlBordersIndex.hpp>
 #include <ooo/vba/excel/XlBorderWeight.hpp>

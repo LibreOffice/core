@@ -31,6 +31,7 @@
 
 
 #include <tools/debug.hxx>
+#include <sal/macros.h>
 #include <svtools/unoimap.hxx>
 #include <svx/unofill.hxx>
 #include <editeng/unonrule.hxx>

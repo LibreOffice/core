@@ -26,6 +26,8 @@
  ************************************************************************/
 #include "vbadialog.hxx"
 
+#include <sal/macros.h>
+
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 

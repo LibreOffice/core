@@ -27,6 +27,8 @@
 #include <vbahelper/helperdecl.hxx>
 #include "vbaglobals.hxx"
 
+#include <sal/macros.h>
+
 #include <comphelper/unwrapargs.hxx>
 
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>

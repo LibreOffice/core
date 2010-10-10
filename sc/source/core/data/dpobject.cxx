@@ -74,6 +74,7 @@
 #include <com/sun/star/sheet/XDrillDownDataSupplier.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <sal/macros.h>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <svl/zforlist.hxx>     // IsNumberFormat

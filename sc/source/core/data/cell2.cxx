@@ -35,7 +35,7 @@
 #include <deque>
 
 #include <boost/bind.hpp>
-
+#include <sal/macros.h>
 #include <vcl/mapmod.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/editstat.hxx>

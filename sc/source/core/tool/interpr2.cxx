@@ -36,6 +36,7 @@
 #include <svl/stritem.hxx>
 #include <svl/zforlist.hxx>
 #include <rtl/logfile.hxx>
+#include <sal/macros.h>
 
 #include "interpre.hxx"
 #include "attrib.hxx"

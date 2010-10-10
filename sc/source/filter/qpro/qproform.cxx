@@ -29,6 +29,7 @@
 #include "precompiled_sc.hxx"
 
 #include <sal/config.h>
+#include <sal/macros.h>
 #include "qpro.hxx"
 
 #include "qproform.hxx"

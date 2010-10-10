@@ -30,6 +30,8 @@
 
 #include "tokenuno.hxx"
 
+#include <sal/macros.h>
+
 #include <com/sun/star/sheet/ComplexReference.hpp>
 #include <com/sun/star/sheet/ExternalReference.hpp>
 #include <com/sun/star/sheet/ReferenceFlags.hpp>

@@ -30,6 +30,8 @@
 
 #include "scdetect.hxx"
 
+#include <sal/macros.h>
+
 #include <framework/interaction.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
