@@ -41,6 +41,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/msgbox.hxx>
 
+#include <sal/macros.h>
 #include <svl/style.hxx>
 #include <svl/itempool.hxx>
 #include <unotools/useroptions.hxx>
