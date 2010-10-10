@@ -49,7 +49,7 @@ public:
 
     // XFastPropertySet
     // setFastPropertyValue (0, GDIMetaFile*) is used to speedup the rendering
-    virtual ::com::sun::star::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 nHandle)  throw (::com::sun::star::uno::RuntimeException) { return ::com::sun::star::uno::Any(); }
+    virtual ::com::sun::star::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 /*nHandle*/)  throw (::com::sun::star::uno::RuntimeException) { return ::com::sun::star::uno::Any(); }
     virtual void SAL_CALL setFastPropertyValue(sal_Int32 nHandle, const ::com::sun::star::uno::Any&)  throw (::com::sun::star::uno::RuntimeException);
 
 private:

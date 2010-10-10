@@ -32,7 +32,7 @@
 
 using namespace ::com::sun::star;
 
-void MtfRenderer::setMetafile (const uno::Sequence< sal_Int8 >& rMtf) throw (uno::RuntimeException)
+void MtfRenderer::setMetafile (const uno::Sequence< sal_Int8 >& /*rMtf*/) throw (uno::RuntimeException)
 {
         // printf ("MtfRenderer::setMetafile unimplemented, use fast property set or implement me\n");
 }

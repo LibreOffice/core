@@ -474,8 +474,8 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
     BOOL    bNoTicks = FALSE;
 
     //Amelia
-    long    nTickUnit ;
-    long    nTick2 ;
+    long    nTickUnit = 0;
+    long    nTick2 = 0;
     if ( mnUnitIndex == RULER_UNIT_CHAR )
     {
         if ( mnCharWidth == 0 )
