@@ -38,6 +38,7 @@
 #include <unotools/charclass.hxx>
 #include <editeng/unolingu.hxx>
 #include <unotools/syslocale.hxx>
+#include <sal/macros.h>
 #include "parse.hxx"
 #include "starmath.hrc"
 #include "smdll.hxx"

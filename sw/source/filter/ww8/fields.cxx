@@ -31,7 +31,7 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 #include "fields.hxx"
 #include <errhdl.hxx>   //ASSERT (use our own ww header later for asserts)
-
+#include <sal/macros.h>
 #include <stddef.h>
 
 namespace ww

@@ -30,7 +30,7 @@
 
 
 #include <vcl/svapp.hxx>
-
+#include <sal/macros.h>
 #include "cfgitem.hxx"
 
 #include "starmath.hrc"

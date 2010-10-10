@@ -61,6 +61,7 @@ class SwList;
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <vcl/timer.hxx>
+#include <sal/macros.h>
 #include "swdllapi.h"
 #include <swtypes.hxx>
 #include <ndarr.hxx>

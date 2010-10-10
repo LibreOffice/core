@@ -36,6 +36,7 @@
 
 #include <string.h>         // memset()
 #include <rtl/tencinfo.h>
+#include <sal/macros.h>
 
 #ifdef DUMP
 

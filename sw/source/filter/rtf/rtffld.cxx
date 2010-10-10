@@ -32,6 +32,7 @@
 #include <ctype.h>
 #include <hintids.hxx>
 
+#include <sal/macros.h>
 #include <com/sun/star/i18n/ScriptType.hdl>
 #include <vcl/graph.hxx>
 #include <svl/urihelper.hxx>

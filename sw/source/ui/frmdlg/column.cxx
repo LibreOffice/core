@@ -45,6 +45,7 @@
 #include <sfx2/dispatch.hxx>
 #include <vcl/msgbox.hxx>
 #include <swmodule.hxx>
+#include <sal/macros.h>
 
 #include <helpid.h>
 #include "globals.hrc"
