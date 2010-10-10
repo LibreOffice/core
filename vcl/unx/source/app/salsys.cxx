@@ -71,7 +71,7 @@ bool X11SalSystem::IsMultiDisplay()
 unsigned int X11SalSystem::GetDefaultDisplayNumber()
 {
     SalDisplay* pSalDisp = GetX11SalData()->GetDisplay();
-    return pSalDisp->GetDefaultScreenNumber();
+    return pSalDisp->IsXinerama() ? pSalDisp->GetDefaultMonitorNumber() : pSalDisp->GetDefaultScreenNumber();
 }
 
 Rectangle X11SalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
