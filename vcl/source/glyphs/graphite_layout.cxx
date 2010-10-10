@@ -1085,6 +1085,7 @@ void GraphiteLayout::expandOrCondense(ImplLayoutArgs &rArgs)
             mvCharDxs[i] = fXFactor * static_cast<float>(mvCharDxs[i]);
         }
     }
+    mnWidth = rArgs.mnLayoutWidth;
 }
 
 void GraphiteLayout::ApplyDXArray(ImplLayoutArgs &args, std::vector<int> & rDeltaWidth)
