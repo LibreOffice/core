@@ -151,6 +151,7 @@ String STR_DATABASEDEFAULTNAME
 
 TabPage PAGE_DBWIZARD_MYSQL_INTRO
 {
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_MYSQL_INTRO";
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
@@ -197,6 +198,7 @@ TabPage PAGE_DBWIZARD_MYSQL_INTRO
     };
     RadioButton RB_CONNECTVIANATIVE
     {
+        HelpID = "dbaccess:RadioButton:PAGE_DBWIZARD_MYSQL_INTRO:RB_CONNECTVIANATIVE";
         Pos = MAP_APPFONT (START_X + 6 , 115 )  ;
         Size = MAP_APPFONT ( 205 , 9 ) ;
         Text[ en-US ] = "Connect directly" ;
@@ -209,6 +211,7 @@ TabPage PAGE_DBWIZARD_MYSQL_INTRO
 
 TabPage PAGE_DBWIZARD_AUTHENTIFICATION
 {
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_AUTHENTIFICATION";
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
@@ -267,6 +270,7 @@ TabPage PAGE_DBWIZARD_AUTHENTIFICATION
 
 TabPage PAGE_DBWIZARD_FINAL
 {
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_FINAL";
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
@@ -343,6 +347,7 @@ TabPage PAGE_DBWIZARD_FINAL
 
 TabPage PAGE_DBWIZARD_MYSQL_JDBC
 {
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_MYSQL_JDBC";
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
@@ -375,6 +380,7 @@ TabPage PAGE_DBWIZARD_MYSQL_JDBC
 
 TabPage PAGE_DBWIZARD_MYSQL_NATIVE
 {
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_MYSQL_NATIVE";
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0, 0 ) ;
     Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
@@ -400,6 +406,7 @@ TabPage PAGE_DBWIZARD_MYSQL_NATIVE
 
 TabPage PAGE_DBWIZARD_DBASE
 {
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_DBASE";
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
@@ -422,6 +429,7 @@ TabPage PAGE_DBWIZARD_DBASE
 
 TabPage PAGE_DBWIZARD_TEXT
 {
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_TEXT";
 
     String STR_TEXT_HEADERTEXT
     {
@@ -448,6 +456,7 @@ TabPage PAGE_DBWIZARD_TEXT
 
 TabPage PAGE_DBWIZARD_MSACCESS
 {
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_MSACCESS";
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
@@ -471,6 +480,7 @@ TabPage PAGE_DBWIZARD_MSACCESS
 
 TabPage PAGE_DBWIZARD_LDAP
 {
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_LDAP";
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
@@ -512,6 +522,7 @@ TabPage PAGE_DBWIZARD_LDAP
 
 TabPage PAGE_DBWIZARD_ADABAS
 {
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_ADABAS";
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
@@ -533,6 +544,7 @@ TabPage PAGE_DBWIZARD_ADABAS
 
 TabPage PAGE_DBWIZARD_ADO
 {
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_ADO";
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
@@ -554,6 +566,7 @@ TabPage PAGE_DBWIZARD_ADO
 
 TabPage PAGE_DBWIZARD_ODBC
 {
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_ODBC";
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
@@ -573,6 +586,7 @@ TabPage PAGE_DBWIZARD_ODBC
 
 TabPage PAGE_DBWIZARD_USERDEFINED
 {
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_USERDEFINED";
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
@@ -585,6 +599,7 @@ TabPage PAGE_DBWIZARD_USERDEFINED
 
 TabPage PAGE_DBWIZARD_JDBC
 {
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_JDBC";
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
@@ -607,6 +622,7 @@ TabPage PAGE_DBWIZARD_JDBC
 
 TabPage PAGE_DBWIZARD_ORACLE
 {
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_ORACLE";
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
@@ -638,6 +654,7 @@ TabPage PAGE_DBWIZARD_ORACLE
 
 TabPage PAGE_DBWIZARD_SPREADSHEET
 {
+    HelpID = "dbaccess:TabPage:PAGE_DBWIZARD_SPREADSHEET";
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;

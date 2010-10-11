@@ -109,6 +109,7 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
 
 ModalDialog DLG_DOMAINPASSWORD
 {
+    HelpID = "dbaccess:ModalDialog:DLG_DOMAINPASSWORD";
     Border = TRUE ;
     Moveable = TRUE ;
     OutputSize = TRUE ;
@@ -125,6 +126,7 @@ ModalDialog DLG_DOMAINPASSWORD
 
     Edit ET_PASSWORD
     {
+        HelpID = "dbaccess:Edit:DLG_DOMAINPASSWORD:ET_PASSWORD";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 + FT_SIZE_X , 16 ) ;
         Size = MAP_APPFONT ( EDIT_SIZE_X , 12 ) ;
