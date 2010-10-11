@@ -101,7 +101,7 @@ static bool makeCanonicalFileURL( rtl::OUString & rURL )
 
 OfficeInstallationDirectories::OfficeInstallationDirectories(
         const uno::Reference< uno::XComponentContext > & xCtx )
-: m_aOfficeDirMacro( RTL_CONSTASCII_USTRINGPARAM( "$(baseinsturl)" ) ),
+: m_aOfficeDirMacro( RTL_CONSTASCII_USTRINGPARAM( "$(brandbaseurl)" ) ),
   m_aUserDirMacro( RTL_CONSTASCII_USTRINGPARAM( "$(userdataurl)" ) ),
   m_xCtx( xCtx ),
   m_pOfficeDir( 0 ),
@@ -322,8 +322,7 @@ void OfficeInstallationDirectories::initDirs()
             {
                 *m_pOfficeDir =
                     xExpander->expandMacros(
-                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                            "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap" ) ":BaseInstallation}" ) ) );
+                         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "$BRAND_BASE_DIR" ) ) );
 
                 OSL_ENSURE( m_pOfficeDir->getLength() > 0,
                         "Unable to obtain office installation directory!" );
