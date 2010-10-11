@@ -35,7 +35,7 @@
 #include "unotools/unotoolsdllapi.h"
 
 #include <osl/thread.hxx>
-#include <vos/conditn.hxx>
+#include <osl/conditn.hxx>
 #include <vos/mutex.hxx>
 #include <tools/stream.hxx>
 #include <tools/link.hxx>
@@ -105,8 +105,8 @@ SV_DECL_IMPL_REF( UcbLockBytesHandler )
 
 class UNOTOOLS_DLLPUBLIC UcbLockBytes : public virtual SvLockBytes
 {
-    vos::OCondition         m_aInitialized;
-    vos::OCondition         m_aTerminated;
+    osl::Condition          m_aInitialized;
+    osl::Condition          m_aTerminated;
     vos::OMutex             m_aMutex;
 
     String                  m_aContentType;

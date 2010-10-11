@@ -37,8 +37,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-SLOFILES=       $(SLO)$/conditn.obj     \
-                $(SLO)$/mutex.obj       \
+SLOFILES=       $(SLO)$/mutex.obj       \
                 $(SLO)$/object.obj      \
                 $(SLO)$/refernce.obj    \
                 $(SLO)$/thread.obj      \
@@ -51,8 +50,7 @@ SLOFILES=       $(SLO)$/conditn.obj     \
 
 
 .IF "$(UPDATER)"=="YES"
-OBJFILES=       $(OBJ)$/conditn.obj     \
-                $(OBJ)$/mutex.obj       \
+OBJFILES=       $(OBJ)$/mutex.obj       \
                 $(OBJ)$/object.obj      \
                 $(OBJ)$/refernce.obj    \
                 $(OBJ)$/thread.obj      \

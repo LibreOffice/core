@@ -32,7 +32,7 @@
 #include <osl/diagnose.h>
 #include <vos/ref.hxx>
 #include <vos/thread.hxx>
-#include <vos/conditn.hxx>
+#include <osl/conditn.hxx>
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -82,7 +82,7 @@ protected:
     // List Protection
     NAMESPACE_VOS(OMutex)       m_Lock;
     // Signal the insertion of a timer
-    NAMESPACE_VOS(OCondition)   m_notEmpty;
+    osl::Condition               m_notEmpty;
 
     // Synchronize access to OTimerManager
     static NAMESPACE_VOS(OMutex) m_Access;
