@@ -464,6 +464,7 @@
 
 
 #include "osl/conditn.h"
+#include "osl/conditn.hxx"
 #include "osl/diagnose.h"
 #include "osl/doublecheckedlocking.h"
 #include "osl/file.hxx"
@@ -535,8 +536,6 @@
 
 #include "vcl/fldunit.hxx"
 
-#include "vos/conditn.hxx"
-#include "osl/diagnose.h"
 #include "vos/macros.hxx"
 #include "vos/module.hxx"
 #include "vos/mutex.hxx"

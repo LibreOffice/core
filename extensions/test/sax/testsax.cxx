@@ -37,7 +37,7 @@
 #include <osl/time.h>
 #include <usr/weak.hxx>
 #include <tools/string.hxx>
-#include <vos/conditn.hxx>
+#include <osl/conditn.hxx>
 
 #include <smart/com/sun/star/io/XOutputStream.hxx>
 #include <smart/com/sun/star/xml/sax/SAXParseException.hxx>

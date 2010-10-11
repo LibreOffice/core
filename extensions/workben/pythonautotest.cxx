@@ -41,7 +41,7 @@
 #include <usr/ustring.hxx>
 #include <usr/weak.hxx>
 #include <tools/string.hxx>
-#include <vos/conditn.hxx>
+#include <osl/conditn.hxx>
 
 using namespace rtl;
 using namespace vos;
@@ -279,7 +279,7 @@ public:
     void cmdLine();
 protected:
 
-    OCondition m_aDebugCondition;
+    osl::Condition m_aDebugCondition;
     XDebuggingRef *m_pDebuggingRef;
 };
 

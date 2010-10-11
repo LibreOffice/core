@@ -33,7 +33,7 @@
 #include <tools/link.hxx>
 #include <vos/pipe.hxx>
 #include <vos/mutex.hxx>
-#include <vos/conditn.hxx>
+#include <osl/conditn.hxx>
 #include <osl/thread.hxx>
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
@@ -93,7 +93,7 @@ protected:
     NAMESPACE_VOS(OMutex)               m_aQueueMutex;
     NAMESPACE_VOS(OMutex)               m_aSendMutex;
     // only one thread can send a message at any given time
-    NAMESPACE_VOS(OCondition)           m_aNewMessageCdtn;
+    osl::Condition                      m_aNewMessageCdtn;
     MediatorListener*                   m_pListener;
     // thread to fill the queue
 

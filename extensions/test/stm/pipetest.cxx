@@ -39,7 +39,7 @@
 #include <usr/reflserv.hxx>  // for EXTERN_SERVICE_CALLTYPE
 #include <usr/weak.hxx>      // OWeakObject
 
-#include <vos/conditn.hxx>
+#include <osl/conditn.hxx>
 #include <vos/mutex.hxx>
 #include <osl/thread.hxx>
 
