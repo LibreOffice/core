@@ -143,7 +143,8 @@ namespace svxform
                 Reference< XPropertySetInfo > xStylePSI( xStyle->getPropertySetInfo(), UNO_SET_THROW );
 
                 // determine the script type associated with the system locale
-                const LocaleDataWrapper& rSysLocaleData = SvtSysLocale().GetLocaleData();
+                const SvtSysLocale aSysLocale;
+                const LocaleDataWrapper& rSysLocaleData = aSysLocale.GetLocaleData();
                 const sal_Int16 eSysLocaleScriptType = MsLangId::getScriptType( MsLangId::convertLocaleToLanguage( rSysLocaleData.getLocale() ) );
 
                 // depending on this script type, use the right property from the document's style which controls the
