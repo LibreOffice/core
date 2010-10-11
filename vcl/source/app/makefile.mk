@@ -43,6 +43,7 @@ CDEFS+=-DDLLPOSTFIX=$(DLLPOSTFIX)
 # --- Files --------------------------------------------------------
 
 SLOFILES=	$(SLO)$/dbggui.obj		\
+            $(SLO)$/brand.obj		\
             $(SLO)$/help.obj		\
             $(SLO)$/idlemgr.obj 	\
             $(SLO)$/settings.obj	\

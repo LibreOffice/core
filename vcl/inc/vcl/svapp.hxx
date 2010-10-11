@@ -38,6 +38,7 @@
 #include <vcl/apptypes.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/vclevent.hxx>
+class BitmapEx;
 class Link;
 class AllSettings;
 class DataChangedEvent;
@@ -360,6 +361,7 @@ public:
 
     static void                 SetAppName( const String& rUniqueName );
     static String               GetAppName();
+    static bool                 LoadBrandBitmap (const char* pName, BitmapEx &rBitmap);
 
     static void                 SetDisplayName( const UniString& rDisplayName );
     static UniString            GetDisplayName();
