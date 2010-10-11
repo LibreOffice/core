@@ -440,7 +440,7 @@ IMPL_LINK( SbaXGridPeer, OnDispatchEvent, void*, /*NOTINTERESTEDIN*/ )
     SbaGridControl* pGrid = static_cast< SbaGridControl* >( GetWindow() );
     if ( pGrid )    // if this fails, we were disposing before arriving here
     {
-        if ( Application::GetMainThreadIdentifier() != ::vos::OThread::getCurrentIdentifier() )
+        if ( Application::GetMainThreadIdentifier() != ::osl::Thread::getCurrentIdentifier() )
         {
             // still not in the main thread (see SbaXGridPeer::dispatch). post an event, again
             // without moving the special even to the back of the queue
@@ -480,7 +480,7 @@ void SAL_CALL SbaXGridPeer::dispatch(const URL& aURL, const Sequence< PropertyVa
     if (!pGrid)
         return;
 
-    if ( Application::GetMainThreadIdentifier() != ::vos::OThread::getCurrentIdentifier() )
+    if ( Application::GetMainThreadIdentifier() != ::osl::Thread::getCurrentIdentifier() )
     {
         // we're not in the main thread. This is bad, as we want to raise windows here,
         // and VCL does not like windows to be opened in non-main threads (at least on Win32).

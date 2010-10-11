@@ -52,7 +52,7 @@
 #include <vcl/timer.hxx>
 #include <svtools/transfer.hxx>
 #include <osl/mutex.hxx>
-#include <vos/thread.hxx>
+#include <osl/thread.hxx>
 #include <cppuhelper/implbase9.hxx>
 #include <svtools/cliplistener.hxx>
 

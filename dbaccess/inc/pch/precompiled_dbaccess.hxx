@@ -501,7 +501,6 @@
 #include "vos/mutex.hxx"
 #include "vos/ref.hxx"
 #include "vos/refernce.hxx"
-#include "vos/thread.hxx"
 
 #include "xmloff/ProgressBarHelper.hxx"
 #include "xmloff/XMLConstantsPropertyHandler.hxx"
