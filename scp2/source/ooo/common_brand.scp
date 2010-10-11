@@ -64,6 +64,7 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Bin_Unopkg,
              gid_Brand_File_Bin_Msvcr71,
              gid_Brand_File_Bin_Libxml2,
+             gid_Brand_File_Bmp_Shell,
              gid_Brand_File_Bmp_IntroAbout,
              gid_Brand_File_C05_Zip_Faq,
              gid_Brand_File_C05_Zip_Register,
@@ -119,7 +120,8 @@ Module gid_Module_Langpack_Brand_Template
             gid_Brand_Dir_Help_Isolanguage,
             gid_Brand_Dir_License,
             gid_Brand_Dir_Program,
-            gid_Brand_Dir_Resource,
+            gid_Brand_Dir_Program_Shell,
+            gid_Brand_Dir_Program_Resource,
             gid_Brand_Dir_Readme,
             gid_Brand_Dir_Share,
             gid_Brand_Dir_Share_Readme);
@@ -158,9 +160,14 @@ Directory gid_Brand_Dir_Program
 #endif
 End
 
-Directory gid_Brand_Dir_Resource
+Directory gid_Brand_Dir_Program_Resource
     ParentID = gid_Brand_Dir_Program;
     DosName = "resource";
+End
+
+Directory gid_Brand_Dir_Program_Shell
+    ParentID = gid_Brand_Dir_Program;
+    DosName = "shell";
 End
 
 Directory gid_Brand_Dir_Readme
@@ -653,6 +660,13 @@ File gid_Brand_File_Images_Brand_Zip
     Dir = gid_Brand_Dir_Share_Config;
     Name = "images_brand.zip";
     Styles = (PACKED);
+End
+
+File gid_Brand_File_Bmp_Shell
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Program_Shell;
+    Name = "shell.zip";
+    Styles = (ARCHIVE);
 End
 
 File gid_Brand_File_Txt_Package

@@ -180,7 +180,7 @@
     File id \
         TXT_FILE_BODY; \
         RESFILE_ALL_LANG(name); \
-        Dir     = gid_Brand_Dir_Resource; \
+        Dir     = gid_Brand_Dir_Program_Resource; \
         Styles  = (PACKED); \
     End
 
