@@ -110,6 +110,7 @@ mkdir: %COMMON_DEST%\pck%_EXT%\brand_dev
 
 ..\%__SRC%\bin\brand\intro.zip %COMMON_DEST%\pck%_EXT%\brand\intro.zip
 ..\%__SRC%\bin\brand_dev\intro.zip %COMMON_DEST%\pck%_EXT%\brand_dev\intro.zip
+..\%__SRC%\bin\shell\shell.zip %COMMON_DEST%\pck%_EXT%\shell.zip
 
 ..\%__SRC%\bin\guiloader.exe %_DEST%\bin%_EXT%\testtool.exe
 
