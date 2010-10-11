@@ -32,8 +32,6 @@ TARGET=zipintro
 
 .INCLUDE :  settings.mk
 
-DEFAULT_FLAVOURS=brand brand_dev
-
 ZIP1LIST= \
     $(null,$(INTRO_BITMAPS) $(MISC)$/$(RSCDEFIMG)$/brand$/intro.png $(INTRO_BITMAPS)) \
     $(null,$(ABOUT_BITMAPS) $(MISC)$/$(RSCDEFIMG)$/brand$/about.png $(ABOUT_BITMAPS)) \
@@ -44,21 +42,38 @@ ZIP2LIST= \
     $(null,$(ABOUT_BITMAPS) $(MISC)$/$(RSCDEFIMG)$/brand_dev$/about.png $(ABOUT_BITMAPS)) \
     $(MISC)$/$(RSCDEFIMG)$/brand_dev$/intro-pt_BR.png  \
     $(MISC)$/$(RSCDEFIMG)$/brand_dev$/about-pt_BR.png
+ZIP3LIST= \
+    $(MISC)$/$(RSCDEFIMG)$/brand$/shell$/backing_left.png \
+    $(MISC)$/$(RSCDEFIMG)$/brand$/shell$/backing_right.png \
+    $(MISC)$/$(RSCDEFIMG)$/brand$/shell$/backing_space.png \
+    $(MISC)$/$(RSCDEFIMG)$/brand$/shell$/backing_rtl_left.png \
+    $(MISC)$/$(RSCDEFIMG)$/brand$/shell$/backing_rtl_right.png \
+    $(MISC)$/$(RSCDEFIMG)$/brand$/shell$/backing_left-pt_BR.png \
+    $(MISC)$/$(RSCDEFIMG)$/brand$/shell$/backing_right-pt_BR.png
 
 ZIP1TARGET=brand
 ZIP1DEPS=$(ZIP1LIST)
 ZIP2TARGET=brand_dev
 ZIP2DEPS=$(ZIP2LIST)
+ZIP3TARGET=shell
+ZIP3DEPS=$(ZIP1LIST)
 
 .INCLUDE :  target.mk
 
-ALLTAR : $(foreach,i,$(DEFAULT_FLAVOURS) $(COMMONBIN)$/$i$/intro.zip)
+ALLTAR : \
+    $(COMMONBIN)$/brand$/intro.zip \
+    $(COMMONBIN)$/brand_dev$/intro.zip \
+    $(COMMONBIN)$/shell/shell.zip
 
 $(COMMONBIN)$/brand_dev$/intro.zip : $(COMMONBIN)$/brand_dev.zip
     @@-$(MKDIR) $(@:d)
     @$(COPY) $< $@
 
 $(COMMONBIN)$/brand$/intro.zip : $(COMMONBIN)$/brand.zip
+    @@-$(MKDIR) $(@:d)
+    @$(COPY) $< $@
+
+$(COMMONBIN)$/shell$/shell.zip : $(COMMONBIN)$/shell.zip
     @@-$(MKDIR) $(@:d)
     @$(COPY) $< $@
 
