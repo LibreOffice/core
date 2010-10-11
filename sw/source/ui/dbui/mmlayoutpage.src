@@ -48,6 +48,7 @@ TabPage DLG_MM_LAYOUT_PAGE
     };
     CheckBox CB_ALIGN
     {
+        HelpID = "sw:CheckBox:DLG_MM_LAYOUT_PAGE:CB_ALIGN";
         Pos = MAP_APPFONT ( 6 , 40 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
         Text[ en-US ] = "Align to text body";
@@ -60,6 +61,7 @@ TabPage DLG_MM_LAYOUT_PAGE
     };
     MetricField     MF_LEFT
     {
+        HelpID = "sw:MetricField:DLG_MM_LAYOUT_PAGE:MF_LEFT";
         Pos = MAP_APPFONT ( 78 , 52 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Border = TRUE ;
@@ -83,6 +85,7 @@ TabPage DLG_MM_LAYOUT_PAGE
     };
     MetricField     MF_TOP
     {
+        HelpID = "sw:MetricField:DLG_MM_LAYOUT_PAGE:MF_TOP";
         Pos = MAP_APPFONT ( 78 , 67 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Border = TRUE ;
@@ -112,6 +115,7 @@ TabPage DLG_MM_LAYOUT_PAGE
     };
     PushButton      MF_UP
     {
+        HelpID = "sw:PushButton:DLG_MM_LAYOUT_PAGE:MF_UP";
         Pos = MAP_APPFONT ( 68 , 96 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text[ en-US ] = "~Up";
@@ -124,6 +128,7 @@ TabPage DLG_MM_LAYOUT_PAGE
     };
     PushButton      PB_DOWN
     {
+        HelpID = "sw:PushButton:DLG_MM_LAYOUT_PAGE:PB_DOWN";
         Pos = MAP_APPFONT ( 68 , 113 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text[ en-US ] = "~Down";
@@ -143,6 +148,7 @@ TabPage DLG_MM_LAYOUT_PAGE
     };
     ListBox        LB_ZOOM
     {
+        HelpID = "sw:ListBox:DLG_MM_LAYOUT_PAGE:LB_ZOOM";
         Pos = MAP_APPFONT ( 204 , 182 ) ;
         Size = MAP_APPFONT ( 50 , 50 ) ;
         Border = TRUE;

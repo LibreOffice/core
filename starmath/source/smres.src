@@ -43,6 +43,7 @@
 
 ModalDialog RID_FONTDIALOG
 {
+    HelpID = "starmath:ModalDialog:RID_FONTDIALOG";
     Moveable = TRUE ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
@@ -57,6 +58,7 @@ ModalDialog RID_FONTDIALOG
     };
     ComboBox 1
     {
+        HelpID = "starmath:ComboBox:RID_FONTDIALOG:1";
         Pos = MAP_APPFONT ( 6 , 17 ) ;
         Size = MAP_APPFONT ( 111 , 60 ) ;
         TabStop = TRUE ;
@@ -65,6 +67,7 @@ ModalDialog RID_FONTDIALOG
     };
     CheckBox 1
     {
+        HelpID = "starmath:CheckBox:RID_FONTDIALOG:1";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 60 , 84 ) ;
         Size = MAP_APPFONT ( 33 , 10 ) ;
@@ -72,6 +75,7 @@ ModalDialog RID_FONTDIALOG
     };
     CheckBox 2
     {
+        HelpID = "starmath:CheckBox:RID_FONTDIALOG:2";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 60 , 97 ) ;
         Size = MAP_APPFONT ( 33 , 10 ) ;
@@ -122,6 +126,7 @@ ModalDialog RID_FONTSIZEDIALOG
     };
     MetricField 1
     {
+        HelpID = "starmath:MetricField:RID_FONTSIZEDIALOG:1";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 57 , 6 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -142,6 +147,7 @@ ModalDialog RID_FONTSIZEDIALOG
     };
     MetricField 4
     {
+        HelpID = "starmath:MetricField:RID_FONTSIZEDIALOG:4";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 57 , 36 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -163,6 +169,7 @@ ModalDialog RID_FONTSIZEDIALOG
     };
     MetricField 5
     {
+        HelpID = "starmath:MetricField:RID_FONTSIZEDIALOG:5";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 57 , 51 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -184,6 +191,7 @@ ModalDialog RID_FONTSIZEDIALOG
     };
     MetricField 6
     {
+        HelpID = "starmath:MetricField:RID_FONTSIZEDIALOG:6";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 57 , 66 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -205,6 +213,7 @@ ModalDialog RID_FONTSIZEDIALOG
     };
     MetricField 7
     {
+        HelpID = "starmath:MetricField:RID_FONTSIZEDIALOG:7";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 57 , 81 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -226,6 +235,7 @@ ModalDialog RID_FONTSIZEDIALOG
     };
     MetricField 8
     {
+        HelpID = "starmath:MetricField:RID_FONTSIZEDIALOG:8";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 57 , 96 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -259,6 +269,7 @@ ModalDialog RID_FONTSIZEDIALOG
     };
     PushButton 1
     {
+        HelpID = "starmath:PushButton:RID_FONTSIZEDIALOG:1";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 114 , 45 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
@@ -295,6 +306,7 @@ ModalDialog RID_FONTTYPEDIALOG
     };
     ListBox 1
     {
+        HelpID = "starmath:ListBox:RID_FONTTYPEDIALOG:1";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 54 , 18 ) ;
         Size = MAP_APPFONT ( 150 , 69 ) ;
@@ -310,6 +322,7 @@ ModalDialog RID_FONTTYPEDIALOG
     };
     ListBox 2
     {
+        HelpID = "starmath:ListBox:RID_FONTTYPEDIALOG:2";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 54 , 33 ) ;
         Size = MAP_APPFONT ( 150 , 69 ) ;
@@ -325,6 +338,7 @@ ModalDialog RID_FONTTYPEDIALOG
     };
     ListBox 3
     {
+        HelpID = "starmath:ListBox:RID_FONTTYPEDIALOG:3";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 54 , 48 ) ;
         Size = MAP_APPFONT ( 150 , 69 ) ;
@@ -340,6 +354,7 @@ ModalDialog RID_FONTTYPEDIALOG
     };
     ListBox 4
     {
+        HelpID = "starmath:ListBox:RID_FONTTYPEDIALOG:4";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 54 , 63 ) ;
         Size = MAP_APPFONT ( 150 , 69 ) ;
@@ -355,6 +370,7 @@ ModalDialog RID_FONTTYPEDIALOG
     };
     ListBox 5
     {
+        HelpID = "starmath:ListBox:RID_FONTTYPEDIALOG:5";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 54 , 96 ) ;
         Size = MAP_APPFONT ( 150 , 69 ) ;
@@ -370,6 +386,7 @@ ModalDialog RID_FONTTYPEDIALOG
     };
     ListBox 6
     {
+        HelpID = "starmath:ListBox:RID_FONTTYPEDIALOG:6";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 54 , 111 ) ;
         Size = MAP_APPFONT ( 150 , 69 ) ;
@@ -385,6 +402,7 @@ ModalDialog RID_FONTTYPEDIALOG
     };
     ListBox 7
     {
+        HelpID = "starmath:ListBox:RID_FONTTYPEDIALOG:7";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 54 , 126 ) ;
         Size = MAP_APPFONT ( 150 , 69 ) ;
@@ -406,6 +424,7 @@ ModalDialog RID_FONTTYPEDIALOG
     };
     MenuButton 1
     {
+        HelpID = "starmath:MenuButton:RID_FONTTYPEDIALOG:1";
         TabStop = TRUE ;
         ButtonMenu = Menu , RID_FONTMENU ;
         Pos = MAP_APPFONT ( 225 , 48 ) ;
@@ -414,6 +433,7 @@ ModalDialog RID_FONTTYPEDIALOG
     };
     PushButton 2
     {
+        HelpID = "starmath:PushButton:RID_FONTTYPEDIALOG:2";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 225 , 66 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
@@ -437,6 +457,7 @@ ModalDialog RID_DISTANCEDIALOG
     };
     MetricField 1
     {
+        HelpID = "starmath:MetricField:RID_DISTANCEDIALOG:1";
         Border = TRUE ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -457,6 +478,7 @@ ModalDialog RID_DISTANCEDIALOG
     };
     MetricField 2
     {
+        HelpID = "starmath:MetricField:RID_DISTANCEDIALOG:2";
         Border = TRUE ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -469,6 +491,7 @@ ModalDialog RID_DISTANCEDIALOG
     };
     CheckBox 1
     {
+        HelpID = "starmath:CheckBox:RID_DISTANCEDIALOG:1";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 12 , 55 ) ;
         Size = MAP_APPFONT ( 110 , 12 ) ;
@@ -484,6 +507,7 @@ ModalDialog RID_DISTANCEDIALOG
     };
     MetricField 3
     {
+        HelpID = "starmath:MetricField:RID_DISTANCEDIALOG:3";
         Border = TRUE ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -504,6 +528,7 @@ ModalDialog RID_DISTANCEDIALOG
     };
     MetricField 4
     {
+        HelpID = "starmath:MetricField:RID_DISTANCEDIALOG:4";
         Border = TRUE ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -529,6 +554,7 @@ ModalDialog RID_DISTANCEDIALOG
     };
     PushButton 1
     {
+        HelpID = "starmath:PushButton:RID_DISTANCEDIALOG:1";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 184 , 69 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
@@ -536,6 +562,7 @@ ModalDialog RID_DISTANCEDIALOG
     };
     MenuButton 1
     {
+        HelpID = "starmath:MenuButton:RID_DISTANCEDIALOG:1";
         TabStop = TRUE ;
         ButtonMenu = Menu , RID_DISTANCEMENU ;
         Pos = MAP_APPFONT ( 184 , 51 ) ;
@@ -925,6 +952,7 @@ ModalDialog RID_ALIGNDIALOG
     Text [ en-US ] = "Alignment" ;
     RadioButton 1
     {
+        HelpID = "starmath:RadioButton:RID_ALIGNDIALOG:1";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 12 , 17 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
@@ -932,6 +960,7 @@ ModalDialog RID_ALIGNDIALOG
     };
     RadioButton 2
     {
+        HelpID = "starmath:RadioButton:RID_ALIGNDIALOG:2";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 12 , 31 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
@@ -939,6 +968,7 @@ ModalDialog RID_ALIGNDIALOG
     };
     RadioButton 3
     {
+        HelpID = "starmath:RadioButton:RID_ALIGNDIALOG:3";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 12 , 44 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
@@ -965,6 +995,7 @@ ModalDialog RID_ALIGNDIALOG
     };
     PushButton 1
     {
+        HelpID = "starmath:PushButton:RID_ALIGNDIALOG:1";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 83 , 46 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
@@ -974,6 +1005,7 @@ ModalDialog RID_ALIGNDIALOG
 
 TabPage RID_PRINTOPTIONPAGE
 {
+    HelpID = "starmath:TabPage:RID_PRINTOPTIONPAGE";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
@@ -986,6 +1018,7 @@ TabPage RID_PRINTOPTIONPAGE
     };
     CheckBox CB_TITLEROW
     {
+        HelpID = "starmath:CheckBox:RID_PRINTOPTIONPAGE:CB_TITLEROW";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 68 , 10 ) ;
@@ -993,6 +1026,7 @@ TabPage RID_PRINTOPTIONPAGE
     };
     CheckBox CB_EQUATION_TEXT
     {
+        HelpID = "starmath:CheckBox:RID_PRINTOPTIONPAGE:CB_EQUATION_TEXT";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 68 , 10 ) ;
@@ -1000,6 +1034,7 @@ TabPage RID_PRINTOPTIONPAGE
     };
     CheckBox CB_FRAME
     {
+        HelpID = "starmath:CheckBox:RID_PRINTOPTIONPAGE:CB_FRAME";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 12 , 42 ) ;
         Size = MAP_APPFONT ( 68 , 10 ) ;
@@ -1013,6 +1048,7 @@ TabPage RID_PRINTOPTIONPAGE
     };
     RadioButton RB_ORIGINAL_SIZE
     {
+        HelpID = "starmath:RadioButton:RID_PRINTOPTIONPAGE:RB_ORIGINAL_SIZE";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 12 , 69 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
@@ -1020,6 +1056,7 @@ TabPage RID_PRINTOPTIONPAGE
     };
     RadioButton RB_FIT_TO_PAGE
     {
+        HelpID = "starmath:RadioButton:RID_PRINTOPTIONPAGE:RB_FIT_TO_PAGE";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 12 , 83 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
@@ -1027,6 +1064,7 @@ TabPage RID_PRINTOPTIONPAGE
     };
     RadioButton RB_ZOOM
     {
+        HelpID = "starmath:RadioButton:RID_PRINTOPTIONPAGE:RB_ZOOM";
         Pos = MAP_APPFONT ( 12 , 97 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Text [ en-US ] = "~Scaling" ;
@@ -1034,6 +1072,7 @@ TabPage RID_PRINTOPTIONPAGE
     };
     MetricField MF_ZOOM
     {
+        HelpID = "starmath:MetricField:RID_PRINTOPTIONPAGE:MF_ZOOM";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 18 , 111 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
@@ -1054,6 +1093,7 @@ TabPage RID_PRINTOPTIONPAGE
     };
     CheckBox CB_IGNORE_SPACING
     {
+        HelpID = "starmath:CheckBox:RID_PRINTOPTIONPAGE:CB_IGNORE_SPACING";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 12 , 140 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
@@ -1063,6 +1103,7 @@ TabPage RID_PRINTOPTIONPAGE
 
 ModalDialog RID_SYMBOLDIALOG
 {
+    HelpID = "starmath:ModalDialog:RID_SYMBOLDIALOG";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Closeable = TRUE;   // Close Button in Window Leiste explizit einbauen
@@ -1078,6 +1119,7 @@ ModalDialog RID_SYMBOLDIALOG
     };
     ListBox 1
     {
+        HelpID = "starmath:ListBox:RID_SYMBOLDIALOG:1";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 17 ) ;
         Size = MAP_APPFONT ( 92, 57 ) ;
@@ -1109,6 +1151,7 @@ ModalDialog RID_SYMBOLDIALOG
     };
     PushButton 2
     {
+        HelpID = "starmath:PushButton:RID_SYMBOLDIALOG:2";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 177 , 6 ) ;
         Size = MAP_APPFONT ( 56 , 14 ) ;
@@ -1117,6 +1160,7 @@ ModalDialog RID_SYMBOLDIALOG
     };
     PushButton 3
     {
+        HelpID = "starmath:PushButton:RID_SYMBOLDIALOG:3";
         Pos = MAP_APPFONT ( 177 , 24 ) ;
         Size = MAP_APPFONT ( 56 , 14 ) ;
         TabStop = TRUE ;
@@ -1124,6 +1168,7 @@ ModalDialog RID_SYMBOLDIALOG
     };
     PushButton 1
     {
+        HelpID = "starmath:PushButton:RID_SYMBOLDIALOG:1";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 177 , 42 ) ;
         Size = MAP_APPFONT ( 56 , 14 ) ;
@@ -1133,6 +1178,7 @@ ModalDialog RID_SYMBOLDIALOG
 
 ModalDialog RID_SYMDEFINEDIALOG
 {
+    HelpID = "starmath:ModalDialog:RID_SYMDEFINEDIALOG";
     Moveable = TRUE ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
@@ -1147,6 +1193,7 @@ ModalDialog RID_SYMDEFINEDIALOG
     };
     ComboBox 1
     {
+        HelpID = "starmath:ComboBox:RID_SYMDEFINEDIALOG:1";
         Pos = MAP_APPFONT ( 59 , 6 ) ;
         Size = MAP_APPFONT ( 80 , 100 ) ;
         TabStop = TRUE ;
@@ -1162,6 +1209,7 @@ ModalDialog RID_SYMDEFINEDIALOG
     };
     ComboBox 2
     {
+        HelpID = "starmath:ComboBox:RID_SYMDEFINEDIALOG:2";
         Pos = MAP_APPFONT ( 210 , 6 ) ;
         Size = MAP_APPFONT ( 80 , 100 ) ;
         TabStop = TRUE ;
@@ -1186,6 +1234,7 @@ ModalDialog RID_SYMDEFINEDIALOG
     };
     ComboBox 4
     {
+        HelpID = "starmath:ComboBox:RID_SYMDEFINEDIALOG:4";
         Pos = MAP_APPFONT ( 80 , 115 ) ;
         Size = MAP_APPFONT ( 100 , 100 ) ;
         TabStop = TRUE ;
@@ -1201,6 +1250,7 @@ ModalDialog RID_SYMDEFINEDIALOG
     };
     ComboBox 5
     {
+        HelpID = "starmath:ComboBox:RID_SYMDEFINEDIALOG:5";
         Pos = MAP_APPFONT ( 80 , 130 ) ;
         Size = MAP_APPFONT ( 100 , 100 ) ;
         TabStop = TRUE ;
@@ -1216,6 +1266,7 @@ ModalDialog RID_SYMDEFINEDIALOG
     };
     ListBox 1
     {
+        HelpID = "starmath:ListBox:RID_SYMDEFINEDIALOG:1";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 80 , 145 ) ;
         Size = MAP_APPFONT ( 100 , 100 ) ;
@@ -1232,6 +1283,7 @@ ModalDialog RID_SYMDEFINEDIALOG
     };
     ListBox LB_FONTS_SUBSET
     {
+        HelpID = "starmath:ListBox:RID_SYMDEFINEDIALOG:LB_FONTS_SUBSET";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 80 , 160 ) ;
         Size = MAP_APPFONT ( 100 , 100 ) ;
@@ -1248,6 +1300,7 @@ ModalDialog RID_SYMDEFINEDIALOG
     };
     ComboBox 3
     {
+        HelpID = "starmath:ComboBox:RID_SYMDEFINEDIALOG:3";
         Border = TRUE;
         Pos = MAP_APPFONT ( 80 , 175 ) ;
         Size = MAP_APPFONT ( 100 , 100 ) ;
@@ -1314,6 +1367,7 @@ ModalDialog RID_SYMDEFINEDIALOG
     };
     PushButton 1
     {
+        HelpID = "starmath:PushButton:RID_SYMDEFINEDIALOG:1";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 305 , 195 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
@@ -1321,6 +1375,7 @@ ModalDialog RID_SYMDEFINEDIALOG
     };
     PushButton 2
     {
+        HelpID = "starmath:PushButton:RID_SYMDEFINEDIALOG:2";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 245 , 195 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
@@ -1328,6 +1383,7 @@ ModalDialog RID_SYMDEFINEDIALOG
     };
     PushButton 3
     {
+        HelpID = "starmath:PushButton:RID_SYMDEFINEDIALOG:3";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 185 , 195 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;

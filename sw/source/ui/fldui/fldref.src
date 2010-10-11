@@ -43,6 +43,7 @@ TabPage TP_FLD_REF
     };
     ListBox LB_REFTYPE
     {
+        HelpID = "sw:ListBox:TP_FLD_REF:LB_REFTYPE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 14 ) ;
         Size = MAP_APPFONT ( 76 , 165 ) ;
@@ -58,6 +59,7 @@ TabPage TP_FLD_REF
     };
     ListBox LB_REFSELECTION
     {
+        HelpID = "sw:ListBox:TP_FLD_REF:LB_REFSELECTION";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 88 , 14 ) ;
         Size = MAP_APPFONT ( 166 , 73 ) ;
@@ -82,6 +84,7 @@ TabPage TP_FLD_REF
     };
     ListBox LB_REFFORMAT
     {
+        HelpID = "sw:ListBox:TP_FLD_REF:LB_REFFORMAT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 88 , 104 ) ;
         Size = MAP_APPFONT ( 76 , 75 ) ;
@@ -98,6 +101,7 @@ TabPage TP_FLD_REF
     };
     Edit ED_REFNAME
     {
+        HelpID = "sw:Edit:TP_FLD_REF:ED_REFNAME";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 170 , 104 ) ;
         Size = MAP_APPFONT ( 84 , 12 ) ;
@@ -114,6 +118,7 @@ TabPage TP_FLD_REF
     };
     Edit ED_REFVALUE
     {
+        HelpID = "sw:Edit:TP_FLD_REF:ED_REFVALUE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 170 , 136 ) ;
         Size = MAP_APPFONT ( 84 , 12 ) ;

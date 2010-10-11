@@ -140,6 +140,7 @@ TabPage TP_DOC_STAT
     };
     PushButton PB_PDATE
     {
+        HelpID = "sw:PushButton:TP_DOC_STAT:PB_PDATE";
         Pos = MAP_APPFONT ( 204 , 94 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Update" ;

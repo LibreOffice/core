@@ -54,6 +54,7 @@ ModalDialog DLG_PAGEPREVIEW_ZOOM
     };
     NumericField ED_COL
     {
+        HelpID = "sw:NumericField:DLG_PAGEPREVIEW_ZOOM:ED_COL";
         Border = TRUE ;
         Size = MAP_APPFONT ( 28 , 12 ) ;
         Pos = MAP_APPFONT ( 48 , 34 ) ;
@@ -69,6 +70,7 @@ ModalDialog DLG_PAGEPREVIEW_ZOOM
     };
     NumericField ED_ROW
     {
+        HelpID = "sw:NumericField:DLG_PAGEPREVIEW_ZOOM:ED_ROW";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 48 , 13 ) ;
         Size = MAP_APPFONT ( 28 , 12 ) ;

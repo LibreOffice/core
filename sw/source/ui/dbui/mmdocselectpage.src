@@ -47,48 +47,56 @@ TabPage DLG_MM_DOCSELECT_PAGE
     };
     RadioButton RB_CURRENTDOC
     {
+        HelpID = "sw:RadioButton:DLG_MM_DOCSELECT_PAGE:RB_CURRENTDOC";
         Pos = MAP_APPFONT ( 12 , 48 ) ;
         Size = MAP_APPFONT ( 190 , 10 ) ;
         Text[ en-US ] = "Use the current ~document";
     };
     RadioButton RB_NEWDOC
     {
+        HelpID = "sw:RadioButton:DLG_MM_DOCSELECT_PAGE:RB_NEWDOC";
         Pos = MAP_APPFONT ( 12 , 66 ) ;
         Size = MAP_APPFONT ( 190 , 10 ) ;
         Text[ en-US ] = "Create a ne~w document";
     };
     RadioButton RB_LOADDOC
     {
+        HelpID = "sw:RadioButton:DLG_MM_DOCSELECT_PAGE:RB_LOADDOC";
         Pos = MAP_APPFONT ( 12 ,  84) ;
         Size = MAP_APPFONT ( 190 , 10 ) ;
         Text[ en-US ] = "Start from ~existing document";
     };
     PushButton  PB_LOADDOC
     {
+        HelpID = "sw:PushButton:DLG_MM_DOCSELECT_PAGE:PB_LOADDOC";
         Pos = MAP_APPFONT ( 204 ,  80) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text[ en-US ] = "B~rowse...";
     };
     RadioButton RB_LOADTEMPLATE
     {
+        HelpID = "sw:RadioButton:DLG_MM_DOCSELECT_PAGE:RB_LOADTEMPLATE";
         Pos = MAP_APPFONT ( 12 , 103 ) ;
         Size = MAP_APPFONT ( 190 , 10 ) ;
         Text[ en-US ] = "Start from a t~emplate";
     };
     PushButton  PB_BROWSETEMPLATE
     {
+        HelpID = "sw:PushButton:DLG_MM_DOCSELECT_PAGE:PB_BROWSETEMPLATE";
         Pos = MAP_APPFONT ( 204 , 99 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text[ en-US ] = "B~rowse...";
     };
     RadioButton RB_RECENTDOC
     {
+        HelpID = "sw:RadioButton:DLG_MM_DOCSELECT_PAGE:RB_RECENTDOC";
         Pos = MAP_APPFONT ( 12 ,  120) ;
         Size = MAP_APPFONT ( 190 , 10 ) ;
         Text[ en-US ] = "Start fro~m a recently saved starting document";
     };
     ListBox     LB_RECENTDOC
     {
+        HelpID = "sw:ListBox:DLG_MM_DOCSELECT_PAGE:LB_RECENTDOC";
         Pos = MAP_APPFONT ( 20 , 134 ) ;
         Size = MAP_APPFONT ( 180 , 50 ) ;
         DropDown = TRUE;

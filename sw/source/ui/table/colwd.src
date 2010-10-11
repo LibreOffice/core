@@ -66,6 +66,7 @@ ModalDialog DLG_COL_WIDTH
     };
     MetricField ED_WIDTH
     {
+        HelpID = "sw:MetricField:DLG_COL_WIDTH:ED_WIDTH";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 51 , 30 ) ;
         Size = MAP_APPFONT ( 38 , 12 ) ;
@@ -97,6 +98,7 @@ ModalDialog DLG_COL_WIDTH
     };
     NumericField ED_COL
     {
+        HelpID = "sw:NumericField:DLG_COL_WIDTH:ED_COL";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 51 , 14 ) ;
         Size = MAP_APPFONT ( 38 , 12 ) ;

@@ -54,6 +54,7 @@ ModalDialog DLG_MM_SELECTDBTABLEDDIALOG
     };
     PushButton      PB_PREVIEW
     {
+        HelpID = "sw:PushButton:DLG_MM_SELECTDBTABLEDDIALOG:PB_PREVIEW";
         Pos = MAP_APPFONT ( 6 , 84 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Preview";
