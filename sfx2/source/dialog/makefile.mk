@@ -113,15 +113,3 @@ $(INCCOM)$/cuilib.hxx: makefile.mk
 .ENDIF
 
 $(SLO)$/sfxdlg.obj : $(INCCOM)$/cuilib.hxx
-
-$(SLO)$/about.obj : $(INCCOM)$/aboutbmpnames.hxx
-
-.INCLUDE .IGNORE : $(MISC)$/about_bmp_names.mk
-
-.IF "$(ABOUT_BITMAPS:f)"!="$(LASTTIME_ABOUT_BITMAPS)"
-DO_PHONY=.PHONY
-.ENDIF			# "$(ABOUT_BITMAPS:f)"!="$(LASTTIME_ABOUT_BITMAPS)"
-
-$(INCCOM)$/aboutbmpnames.hxx $(DO_PHONY):
-    echo const char ABOUT_BITMAP_STRINGLIST[]=$(EMQ)"$(ABOUT_BITMAPS:f:t",")$(EMQ)"$(EMQ); > $@
-    echo LASTTIME_ABOUT_BITMAPS=$(ABOUT_BITMAPS:f) > $(MISC)$/about_bmp_names.mk

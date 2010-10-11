@@ -72,15 +72,3 @@ SHL1STDLIBS= \
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-
-$(SLO)$/splash.obj : $(INCCOM)$/introbmpnames.hxx
-
-.INCLUDE .IGNORE : $(MISC)$/intro_bmp_names.mk
-
-.IF "$(INTRO_BITMAPS:f)"!="$(LASTTIME_INTRO_BITMAPS)"
-DO_PHONY=.PHONY
-.ENDIF			# "$(INTRO_BITMAPS:f)"!="$(LASTTIME_INTRO_BITMAPS)"
-
-$(INCCOM)$/introbmpnames.hxx $(DO_PHONY):
-    echo const char INTRO_BITMAP_STRINGLIST[]=$(EMQ)"$(INTRO_BITMAPS:f:t",")$(EMQ)"$(EMQ); > $@
-    echo LASTTIME_INTRO_BITMAPS=$(INTRO_BITMAPS:f) > $(MISC)$/intro_bmp_names.mk
