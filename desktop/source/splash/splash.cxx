@@ -36,7 +36,6 @@
 #include <tools/urlobj.hxx>
 #include <tools/stream.hxx>
 #include <sfx2/sfx.hrc>
-#include <sfx2/app.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/salnativewidgets.hxx>
 
@@ -422,15 +421,15 @@ void SplashScreen::SetScreenBitmap(BitmapEx &rBitmap)
     aResBuf.append( OString::valueOf( nHeight ));
 
     aStrBuf.append( aResBuf.getStr() );
-    if (SfxApplication::LoadBrandBitmap (aStrBuf.makeStringAndClear(), rBitmap))
+    if (Application::LoadBrandBitmap (aStrBuf.makeStringAndClear(), rBitmap))
         return;
 
     aStrBuf.append( "intro_" );
     aStrBuf.append( aResBuf.getStr() );
-    if (SfxApplication::LoadBrandBitmap (aResBuf.makeStringAndClear(), rBitmap))
+    if (Application::LoadBrandBitmap (aResBuf.makeStringAndClear(), rBitmap))
         return;
 
-    SfxApplication::LoadBrandBitmap ("intro", rBitmap);
+    Application::LoadBrandBitmap ("intro", rBitmap);
 }
 
 void SplashScreen::determineProgressRatioValues(

@@ -41,6 +41,7 @@
 #include <unotools/bootstrap.hxx>
 #include <com/sun/star/uno/Any.h>
 #include <unotools/configmgr.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/graph.hxx>
 #include <svtools/filter.hxx>
 
@@ -64,7 +65,7 @@
 Image SfxApplication::GetApplicationLogo()
 {
     BitmapEx aBitmap;
-    LoadBrandBitmap ("about", aBitmap);
+    Application::LoadBrandBitmap ("about", aBitmap);
     return Image( aBitmap );
 }
 
