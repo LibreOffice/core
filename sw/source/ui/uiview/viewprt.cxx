@@ -91,12 +91,9 @@
 
 using namespace ::com::sun::star;
 
-
 /*--------------------------------------------------------------------
     Beschreibung:   Drucker an Sfx uebergeben
  --------------------------------------------------------------------*/
-
-
 SfxPrinter* __EXPORT SwView::GetPrinter( BOOL bCreate )
 {
     const IDocumentDeviceAccess* pIDDA = GetWrtShell().getIDocumentDeviceAccess();
@@ -113,7 +110,6 @@ SfxPrinter* __EXPORT SwView::GetPrinter( BOOL bCreate )
 /*--------------------------------------------------------------------
     Beschreibung:   Druckerwechsel weitermelden
  --------------------------------------------------------------------*/
-
 void SetPrinter( IDocumentDeviceAccess* pIDDA, SfxPrinter* pNew, BOOL bWeb )
 {
     SwPrintOptions* pOpt = SW_MOD()->GetPrtOptions(bWeb);
@@ -133,7 +129,6 @@ void SetPrinter( IDocumentDeviceAccess* pIDDA, SfxPrinter* pNew, BOOL bWeb )
             pOpt->SetFaxName(pAddPrinterAttr->GetFax());
     }
 }
-
 
 USHORT __EXPORT SwView::SetPrinter(SfxPrinter* pNew, USHORT nDiffFlags, bool  )
 {
@@ -174,7 +169,6 @@ USHORT __EXPORT SwView::SetPrinter(SfxPrinter* pNew, USHORT nDiffFlags, bool  )
 /*--------------------------------------------------------------------
     Beschreibung:   TabPage fuer applikationsspezifische Druckoptionen
  --------------------------------------------------------------------*/
-
 SfxTabPage* __EXPORT SwView::CreatePrintOptionsPage(Window* pParent,
                                                     const SfxItemSet& rSet)
 {
@@ -184,7 +178,6 @@ SfxTabPage* __EXPORT SwView::CreatePrintOptionsPage(Window* pParent,
 /*--------------------------------------------------------------------
     Beschreibung:   Druckerdialog
  --------------------------------------------------------------------*/
-
 PrintDialog* CreatePrintDialog( Window* pParent, USHORT nPg, SwWrtShell* pSh )
 {
     PrintDialog *pDlg = new PrintDialog( pParent, false );
@@ -205,10 +198,6 @@ PrintDialog* CreatePrintDialog( Window* pParent, USHORT nPg, SwWrtShell* pSh )
     return pDlg;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 PrintDialog* __EXPORT SwView::CreatePrintDialog( Window* pParent )
 {
     // AMA: Hier sollte vielleicht die virtuelle Seitennummer angezeigt werden,
@@ -220,7 +209,6 @@ PrintDialog* __EXPORT SwView::CreatePrintDialog( Window* pParent )
 /*--------------------------------------------------------------------
     Beschreibung:   Print-Dispatcher
  --------------------------------------------------------------------*/
-
 void __EXPORT SwView::ExecutePrint(SfxRequest& rReq)
 {
     BOOL bWeb = 0 != PTR_CAST(SwWebView, this);
@@ -315,7 +303,6 @@ void __EXPORT SwView::ExecutePrint(SfxRequest& rReq)
     Beschreibung:   Page Drucker/Zusaetze erzeugen fuer SwView und
                     SwPagePreview
  --------------------------------------------------------------------*/
-
 SfxTabPage* CreatePrintOptionsPage( Window *pParent,
                                 const SfxItemSet &rOptions, BOOL bPreview )
 {
@@ -338,7 +325,6 @@ SfxTabPage* CreatePrintOptionsPage( Window *pParent,
     }
     return pPage;
 }
-
 
 void SetAppPrintOptions( ViewShell* pSh, BOOL bWeb )
 {

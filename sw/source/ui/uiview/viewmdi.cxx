@@ -289,7 +289,6 @@ void SwView::SetViewLayout( USHORT nColumns, bool bBookMode, BOOL bViewOnly )
 /*
  * Scrollbar - Handler
  */
-
 IMPL_LINK( SwView, WindowChildEventListener, VclSimpleEvent*, pEvent )
 {
     DBG_ASSERT( pEvent && pEvent->ISA( VclWindowEvent ), "Unknown WindowEvent!" );
@@ -389,9 +388,7 @@ IMPL_LINK( SwView, BtnPage, Button *, pButton )
     Application::PostUserEvent( STATIC_LINK(this, SwView, MoveNavigationHdl), pbNext );
     return 0;
 }
-/*-----------------20.06.97 10:46-------------------
 
---------------------------------------------------*/
 IMPL_STATIC_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
 {
     if ( !pbNext )
@@ -541,16 +538,6 @@ IMPL_STATIC_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
     return 0;
 }
 
-/*************************************************************************
-|*
-|*  SwView::CreateTab()
-|*
-|*  Beschreibung
-|*  Ersterstellung      VB 29.05.91
-|*  Letzte Aenderung    OS 09.05.96
-|*
-*************************************************************************/
-
 int SwView::CreateTab()
 {
     pHRuler->SetActive(GetFrame() && IsActive());
@@ -559,16 +546,6 @@ int SwView::CreateTab()
     InvalidateBorder();
     return 1;
 }
-
-/*************************************************************************
-|*
-|*  SwView::KillTab()
-|*
-|*  Beschreibung
-|*  Ersterstellung      VB 29.05.91
-|*  Letzte Aenderung    OS 09.05.96
-|*
-*************************************************************************/
 
 int SwView::KillTab()
 {
@@ -594,28 +571,16 @@ void SwView::ChangeVLinealMetric( FieldUnit eUnit )
         pVRuler->Invalidate();
     }
 }
-/* -----------------------------07.04.01 17:09--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwView::GetVLinealMetric(FieldUnit& eToFill) const
 {
     eToFill = pVRuler->GetUnit();
 }
-/* -----------------------------07.04.01 17:09--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwView::GetHLinealMetric(FieldUnit& eToFill) const
 {
     eToFill = pHRuler->GetUnit();
 }
-/*************************************************************************
-|*
-|*  SwView::CreateVLineal()
-|*
-|*  Beschreibung
-|*  Ersterstellung  VB 29.05.91
-|*
-*************************************************************************/
 
 int SwView::CreateVLineal()
 {
@@ -627,15 +592,6 @@ int SwView::CreateVLineal()
     return 1;
 }
 
-/*************************************************************************
-|*
-|*  SwView::KillVLineal()
-|*
-|*  Beschreibung
-|*  Ersterstellung  VB 29.05.91
-|*
-*************************************************************************/
-
 int SwView::KillVLineal()
 {
     pVRuler->Hide();
@@ -643,15 +599,6 @@ int SwView::KillVLineal()
     InvalidateBorder();
     return 1;
 }
-/*************************************************************************
-|*
-|*  SwView::ExecRulerClick()
-|*
-|*  Beschreibung
-|*  Ersterstellung  OS 15.06.95
-|*  Letzte Aenderung
-|*
-*************************************************************************/
 
 IMPL_LINK( SwView, ExecRulerClick, Ruler *, pRuler )
 {
@@ -677,18 +624,10 @@ IMPL_LINK( SwView, ExecRulerClick, Ruler *, pRuler )
     return 0;
 }
 
-
-/*-----------------20.02.97 09:11-------------------
-
---------------------------------------------------*/
-
 USHORT SwView::GetMoveType()
 {
     return nMoveType;
 }
-/*-----------------20.02.97 09:11-------------------
-
---------------------------------------------------*/
 
 void SwView::SetMoveType(USHORT nSet)
 {
@@ -708,17 +647,10 @@ void SwView::SetMoveType(USHORT nSet)
     }
 }
 
-/*-----------------20.06.97 11:18-------------------
-
---------------------------------------------------*/
 void SwView::SetActMark(sal_Int32 nSet)
 {
     nActMark = nSet;
 }
-
-/*-----------------15.03.97 10:53-------------------
-
---------------------------------------------------*/
 
 void SwView::SetImageButtonColor(Color& rColor)
 {
@@ -728,25 +660,19 @@ void SwView::SetImageButtonColor(Color& rColor)
         pPageDownBtn->SetControlForeground(rColor);
     }
 }
-/* -----------------------------2002/06/26 13:57------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwView::ShowHScrollbar(sal_Bool bShow)
 {
     DBG_ASSERT(pHScrollbar, "Scrollbar invalid");
     pHScrollbar->ExtendedShow(bShow);
 }
-/* -----------------------------2002/06/26 13:57------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool SwView::IsHScrollbarVisible()const
 {
     DBG_ASSERT(pHScrollbar, "Scrollbar invalid");
     return pHScrollbar->IsVisible( FALSE ) || pHScrollbar->IsAuto();
 }
-/* -----------------------------2002/06/26 13:57------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwView::ShowVScrollbar(sal_Bool bShow)
 {
     DBG_ASSERT(pVScrollbar, "Scrollbar invalid");
@@ -755,9 +681,7 @@ void SwView::ShowVScrollbar(sal_Bool bShow)
     pPageDownBtn->Show(bShow);
     pNaviBtn->Show(bShow);
 }
-/* -----------------------------2002/06/26 13:57------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool SwView::IsVScrollbarVisible()const
 {
     DBG_ASSERT(pVScrollbar, "Scrollbar invalid");

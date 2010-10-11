@@ -114,8 +114,6 @@ using namespace ::com::sun::star::smarttags;
 /*--------------------------------------------------------------------
     Beschreibung:   Lingu-Dispatcher
  --------------------------------------------------------------------*/
-
-
 void SwView::ExecLingu(SfxRequest &rReq)
 {
     switch(rReq.GetSlot())
@@ -241,7 +239,6 @@ void SwView::ExecLingu(SfxRequest &rReq)
 /*--------------------------------------------------------------------
     Description: start language specific text conversion
  --------------------------------------------------------------------*/
-
 void SwView::StartTextConversion(
         LanguageType nSourceLang,
         LanguageType nTargetLang,
@@ -287,7 +284,6 @@ void SwView::StartTextConversion(
 /*--------------------------------------------------------------------
      spellcheck and text conversion related stuff
  --------------------------------------------------------------------*/
-
 void SwView::SpellStart( SvxSpellArea eWhich,
         sal_Bool bStartDone, sal_Bool bEndDone,
         SwConversionArgs *pConvArgs )
@@ -350,8 +346,6 @@ void SwView::SpellStart( SvxSpellArea eWhich,
 /*--------------------------------------------------------------------
     Beschreibung: Fehlermeldung beim Spelling
  --------------------------------------------------------------------*/
-
-
 // Der uebergebene Pointer nLang ist selbst der Wert
 IMPL_LINK( SwView, SpellError, LanguageType *, pLang )
 {
@@ -415,15 +409,12 @@ IMPL_LINK( SwView, SpellError, LanguageType *, pLang )
 /*--------------------------------------------------------------------
      Beschreibung: Spelling beenden und Cursor wiederherstellen
  --------------------------------------------------------------------*/
-
-
 void SwView::SpellEnd( SwConversionArgs *pConvArgs )
 {
     pWrtShell->SpellEnd( pConvArgs );
     if( pWrtShell->IsExtMode() )
         pWrtShell->SetMark();
 }
-
 
 void SwView::HyphStart( SvxSpellArea eWhich )
 {
@@ -449,8 +440,6 @@ void SwView::HyphStart( SvxSpellArea eWhich )
 /*--------------------------------------------------------------------
      Beschreibung: Interaktive Trennung
  --------------------------------------------------------------------*/
-
-
 void SwView::HyphenateDocument()
 {
     // do not hyphenate if interactive hyphenationg is active elsewhere
@@ -523,9 +512,6 @@ void SwView::HyphenateDocument()
     }
 }
 
-/*--------------------------------------------------------------------
- --------------------------------------------------------------------*/
-
 bool SwView::IsValidSelectionForThesaurus() const
 {
     // must not be a multi-selection, and if it is a selection it needs
@@ -536,12 +522,10 @@ bool SwView::IsValidSelectionForThesaurus() const
     return !bMultiSel && (!bSelection || pWrtShell->IsSelOnePara() );
 }
 
-
 String SwView::GetThesaurusLookUpText( bool bSelection ) const
 {
     return bSelection ? pWrtShell->GetSelTxt() : pWrtShell->GetCurWord();
 }
-
 
 void SwView::InsertThesaurusSynonym( const String &rSynonmText, const String &rLookUpText, bool bSelection )
 {
@@ -586,12 +570,9 @@ void SwView::InsertThesaurusSynonym( const String &rSynonmText, const String &rL
     pWrtShell->SetInsMode( bOldIns );
 }
 
-
 /*--------------------------------------------------------------------
     Beschreibung:   Thesaurus starten
  --------------------------------------------------------------------*/
-
-
 void SwView::StartThesaurus()
 {
     if (!IsValidSelectionForThesaurus())
@@ -648,7 +629,6 @@ void SwView::StartThesaurus()
 /*--------------------------------------------------------------------
     Beschreibung:   Online-Vorschlaege anbieten
  *--------------------------------------------------------------------*/
-
 //!! Start of extra code for context menu modifying extensions
 struct ExecuteInfo
 {
@@ -833,7 +813,6 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
    This function shows the popup menu for smarttag
    actions.
 */
-
 sal_Bool SwView::ExecSmartTagPopup( const Point& rPt )
 {
     sal_Bool bRet = sal_False;
@@ -863,8 +842,6 @@ sal_Bool SwView::ExecSmartTagPopup( const Point& rPt )
 
     return bRet;
 }
-
-
 
 class SwFieldPopup : public PopupMenu
 {
@@ -977,7 +954,6 @@ IMPL_LINK( SwFieldDialog, MyListBoxHandler, ListBox *, pBox )
     }
 }
 
-
 BOOL SwView::ExecFieldPopup( const Point& rPt, IFieldmark *fieldBM )
 {
     sal_Bool bRet = sal_False;
@@ -1002,4 +978,3 @@ BOOL SwView::ExecFieldPopup( const Point& rPt, IFieldmark *fieldBM )
 
     return bRet;
 }
-

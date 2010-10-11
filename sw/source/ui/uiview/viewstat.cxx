@@ -68,10 +68,6 @@
 
 using namespace ::com::sun::star;
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwView::GetState(SfxItemSet &rSet)
 {
     SfxWhichIter aIter(rSet);
@@ -435,11 +431,6 @@ void SwView::GetState(SfxItemSet &rSet)
     }
 }
 
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwView::GetDrawState(SfxItemSet &rSet)
 {
     SfxWhichIter aIter(rSet);
@@ -505,10 +496,6 @@ void SwView::GetDrawState(SfxItemSet &rSet)
         }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 sal_Bool SwView::HasUIFeature( sal_uInt32 nFeature )
 {
     sal_Bool bRet = sal_False;
@@ -519,4 +506,3 @@ sal_Bool SwView::HasUIFeature( sal_uInt32 nFeature )
     }
     return bRet;
 }
-

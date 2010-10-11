@@ -95,7 +95,6 @@
 
 using namespace ::com::sun::star;
 
-
 SFX_IMPL_NAMED_VIEWFACTORY(SwPagePreView, "PrintPreview")
 {
     SFX_VIEW_REGISTRATION(SwDocShell);
@@ -112,17 +111,13 @@ SFX_IMPL_INTERFACE(SwPagePreView, SfxViewShell, SW_RES(RID_PVIEW_TOOLBOX))
                                 SW_RES(RID_PVIEW_TOOLBOX));
 }
 
-
 TYPEINIT1(SwPagePreView,SfxViewShell)
 
 #define SWVIEWFLAGS ( SFX_VIEW_CAN_PRINT|SFX_VIEW_HAS_PRINTOPTIONS )
 
 #define MIN_PREVIEW_ZOOM 25
 #define MAX_PREVIEW_ZOOM 600
-/*  */
-/* -----------------26.11.2002 10:41-----------------
- *
- * --------------------------------------------------*/
+
 USHORT lcl_GetNextZoomStep(USHORT nCurrentZoom, BOOL bZoomIn)
 {
     static USHORT aZoomArr[] =
@@ -144,9 +139,7 @@ USHORT lcl_GetNextZoomStep(USHORT nCurrentZoom, BOOL bZoomIn)
         }
     return bZoomIn ? MAX_PREVIEW_ZOOM : MIN_PREVIEW_ZOOM;
 };
-/* -----------------02.12.2002 09:11-----------------
- *
- * --------------------------------------------------*/
+
 void lcl_InvalidateZoomSlots(SfxBindings& rBindings)
 {
     static USHORT __READONLY_DATA aInval[] =
@@ -156,12 +149,8 @@ void lcl_InvalidateZoomSlots(SfxBindings& rBindings)
     };
     rBindings.Invalidate( aInval );
 }
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 // erstmal der Zoom-Dialog
-
 class SwPreViewZoomDlg : public SvxStandardDialog
 {
     FixedText       aRowLbl;
@@ -180,11 +169,6 @@ public:
     ~SwPreViewZoomDlg();
 };
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 SwPreViewZoomDlg::SwPreViewZoomDlg( SwPagePreViewWin& rParent ) :
     SvxStandardDialog( &rParent, SW_RES(DLG_PAGEPREVIEW_ZOOM) ),
     aRowLbl(this,SW_RES(FT_ROW)),
@@ -201,12 +185,9 @@ SwPreViewZoomDlg::SwPreViewZoomDlg( SwPagePreViewWin& rParent ) :
     aColEdit.SetValue( rParent.GetCol() );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-SwPreViewZoomDlg::~SwPreViewZoomDlg() {}
-
+SwPreViewZoomDlg::~SwPreViewZoomDlg()
+{
+}
 
 void  SwPreViewZoomDlg::Apply()
 {
@@ -215,13 +196,7 @@ void  SwPreViewZoomDlg::Apply()
                 BYTE(aColEdit.GetValue()) );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 // alles fuers SwPagePreViewWin
-
-
 SwPagePreViewWin::SwPagePreViewWin( Window *pParent, SwPagePreView& rPView )
     : Window( pParent, WinBits( WB_CLIPCHILDREN) ),
     mpViewShell( 0 ),
@@ -242,21 +217,11 @@ SwPagePreViewWin::SwPagePreViewWin( Window *pParent, SwPagePreView& rPView )
     mnSttPage = USHRT_MAX;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 SwPagePreViewWin::~SwPagePreViewWin()
 {
     if( mpViewShell )
         delete mpViewShell;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void  SwPagePreViewWin::Paint( const Rectangle& rRect )
 {
@@ -286,9 +251,6 @@ void  SwPagePreViewWin::Paint( const Rectangle& rRect )
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 void SwPagePreViewWin::CalcWish( BYTE nNewRow, BYTE nNewCol )
 {
     if( !mpViewShell || !mpViewShell->GetLayout() )
@@ -334,11 +296,10 @@ void SwPagePreViewWin::CalcWish( BYTE nNewRow, BYTE nNewCol )
     // OD 18.12.2002 #103492# - adjust scrollbars
     mrView.ScrollViewSzChg();
 }
+
 /*--------------------------------------------------------------------
     Beschreibung:, mnSttPage is Absolute
  --------------------------------------------------------------------*/
-
-
 int SwPagePreViewWin::MovePage( int eMoveMode )
 {
     // soviele Seiten hoch
@@ -443,11 +404,6 @@ int SwPagePreViewWin::MovePage( int eMoveMode )
     return TRUE;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 void SwPagePreViewWin::SetWinSize( const Size& rNewSize )
 {
     // die Size wollen wir aber immer in Pixel-Einheiten haben
@@ -475,12 +431,6 @@ void SwPagePreViewWin::SetWinSize( const Size& rNewSize )
     maScale = GetMapMode().GetScaleX();
 }
 
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 void SwPagePreViewWin::GetStatusStr( String& rStr, USHORT nPageCnt ) const
 {
     // OD 24.03.2003 #108282# - show physical and virtual page number of
@@ -504,11 +454,6 @@ void SwPagePreViewWin::GetStatusStr( String& rStr, USHORT nPageCnt ) const
     rStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM(" / "));
     rStr += String::CreateFromInt32( nPageCnt );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void  SwPagePreViewWin::KeyInput( const KeyEvent &rKEvt )
 {
@@ -534,10 +479,6 @@ void  SwPagePreViewWin::KeyInput( const KeyEvent &rKEvt )
     if( !bHandled && !mrView.KeyInput( rKEvt ) )
         Window::KeyInput( rKEvt );
 }
-
-/******************************************************************************
- *  Beschreibung:
- ******************************************************************************/
 
 void SwPagePreViewWin::Command( const CommandEvent& rCEvt )
 {
@@ -625,8 +566,6 @@ void SwPagePreViewWin::MouseButtonDown( const MouseEvent& rMEvt )
 /******************************************************************************
  *  Beschreibung: Userprefs bzw Viewoptions setzen
  ******************************************************************************/
-
-
 void SwPagePreViewWin::SetPagePreview( BYTE nRow, BYTE nCol )
 {
     SwMasterUsrPref *pOpt = (SwMasterUsrPref *)SW_MOD()->GetUsrPref(FALSE);
@@ -783,9 +722,6 @@ void SwPagePreView::_ExecPgUpAndPgDown( const bool  _bPgUp,
         _pReq->Done();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 // dann mal alles fuer die SwPagePreView
 void  SwPagePreView::Execute( SfxRequest &rReq )
 {
@@ -1053,11 +989,6 @@ MOVEPAGE:
         aViewWin.Invalidate();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 void  SwPagePreView::GetState( SfxItemSet& rSet )
 {
     SfxWhichIter aIter(rSet);
@@ -1212,11 +1143,6 @@ void  SwPagePreView::GetState( SfxItemSet& rSet )
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 void  SwPagePreView::StateUndo(SfxItemSet& rSet)
 {
     SfxWhichIter aIter(rSet);
@@ -1228,11 +1154,6 @@ void  SwPagePreView::StateUndo(SfxItemSet& rSet)
         nWhich = aIter.NextWhich();
     }
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void SwPagePreView::Init(const SwViewOption * pPrefs)
 {
@@ -1301,12 +1222,6 @@ void SwPagePreView::Init(const SwViewOption * pPrefs)
     pHScrollbar->ExtendedShow(pPrefs->IsViewHScrollBar());
     pScrollFill->Show(pPrefs->IsViewVScrollBar() && pPrefs->IsViewHScrollBar());
 }
-
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 SwPagePreView::SwPagePreView(SfxViewFrame *pViewFrame, SfxViewShell* pOldSh):
     SfxViewShell( pViewFrame, SWVIEWFLAGS ),
@@ -1385,13 +1300,7 @@ SwPagePreView::SwPagePreView(SfxViewFrame *pViewFrame, SfxViewShell* pOldSh):
     Init();
 }
 
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
- SwPagePreView::~SwPagePreView()
+SwPagePreView::~SwPagePreView()
 {
     SetWindow( 0 );
 
@@ -1413,20 +1322,10 @@ SwPagePreView::SwPagePreView(SfxViewFrame *pViewFrame, SfxViewShell* pOldSh):
         }
 */}
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 SwDocShell* SwPagePreView::GetDocShell()
 {
     return PTR_CAST(SwDocShell, GetViewFrame()->GetObjectShell());
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 int SwPagePreView::_CreateScrollbar( BOOL bHori )
 {
@@ -1463,16 +1362,6 @@ int SwPagePreView::_CreateScrollbar( BOOL bHori )
     return 1;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 /*
  * Button-Handler
  */
@@ -1484,11 +1373,6 @@ IMPL_LINK_INLINE_START( SwPagePreView, BtnPage, Button *, pButton )
     return 0;
 }
 IMPL_LINK_INLINE_END( SwPagePreView, BtnPage, Button *, pButton )
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 int SwPagePreView::ChgPage( int eMvMode, int bUpdateScrollbar )
 {
@@ -1521,16 +1405,7 @@ int SwPagePreView::ChgPage( int eMvMode, int bUpdateScrollbar )
     return bChg;
 }
 
-
-/*  */
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 // ab hier alles aus der SwView uebernommen
-
-
 void SwPagePreView::CalcAndSetBorderPixel( SvBorder &rToFill, BOOL /*bInner*/ )
 {
 //  const long nAdd = bInner ? 0 : ScrollBar::GetWindowOverlapPixel();
@@ -1542,11 +1417,6 @@ void SwPagePreView::CalcAndSetBorderPixel( SvBorder &rToFill, BOOL /*bInner*/ )
         rToFill.Bottom() = nTmp;
     SetBorderPixel( rToFill );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void  SwPagePreView::InnerResizePixel( const Point &rOfst, const Size &rSize )
 {
@@ -1563,11 +1433,6 @@ void  SwPagePreView::InnerResizePixel( const Point &rOfst, const Size &rSize )
     //EditWin niemals einstellen!
     //VisArea niemals einstellen!
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void  SwPagePreView::OuterResizePixel( const Point &rOfst, const Size &rSize )
 {
@@ -1591,11 +1456,6 @@ void  SwPagePreView::OuterResizePixel( const Point &rOfst, const Size &rSize )
             ScrollDocSzChg();
         }
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void SwPagePreView::SetVisArea( const Rectangle &rRect, BOOL bUpdateScrollbar )
 {
@@ -1646,11 +1506,6 @@ void SwPagePreView::SetVisArea( const Rectangle &rRect, BOOL bUpdateScrollbar )
     aViewWin.Invalidate();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 IMPL_LINK( SwPagePreView, ScrollHdl, SwScrollbar *, pScrollbar )
 {
     if(!GetViewShell())
@@ -1684,11 +1539,6 @@ IMPL_LINK( SwPagePreView, ScrollHdl, SwScrollbar *, pScrollbar )
         EndScrollHdl( pScrollbar );
     return 0;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 IMPL_LINK( SwPagePreView, EndScrollHdl, SwScrollbar *, pScrollbar )
 {
@@ -1780,20 +1630,11 @@ IMPL_LINK( SwPagePreView, EndScrollHdl, SwScrollbar *, pScrollbar )
     }
     return 0;
 }
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 Point SwPagePreView::AlignToPixel(const Point &rPt) const
 {
     return aViewWin.PixelToLogic( aViewWin.LogicToPixel( rPt ) );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void SwPagePreView::DocSzChgd( const Size &rSz )
 {
@@ -1816,11 +1657,6 @@ void SwPagePreView::DocSzChgd( const Size &rSz )
     }
     // <--
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void SwPagePreView::ScrollViewSzChg()
 {
@@ -1891,34 +1727,16 @@ void SwPagePreView::ScrollViewSzChg()
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 void SwPagePreView::ScrollDocSzChg()
 {
     ScrollViewSzChg();
 }
 
-
-/*  */
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 // alles zum Thema Drucken
-
 SfxPrinter*  SwPagePreView::GetPrinter( BOOL bCreate )
 {
     return aViewWin.GetViewShell()->getIDocumentDeviceAccess()->getPrinter( bCreate );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 USHORT  SwPagePreView::SetPrinter( SfxPrinter *pNew, USHORT nDiffFlags, bool )
 {
@@ -1974,21 +1792,11 @@ USHORT  SwPagePreView::SetPrinter( SfxPrinter *pNew, USHORT nDiffFlags, bool )
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 SfxTabPage*  SwPagePreView::CreatePrintOptionsPage( Window *pParent,
                                                 const SfxItemSet &rOptions )
 {
     return ::CreatePrintOptionsPage( pParent, rOptions, !bNormalPrint );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 PrintDialog*  SwPagePreView::CreatePrintDialog( Window *pParent )
 {
@@ -1996,11 +1804,6 @@ PrintDialog*  SwPagePreView::CreatePrintDialog( Window *pParent )
     pDlg->DisableRange( PRINTDIALOG_SELECTION );
     return pDlg;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 // OD 18.12.2002 #103492# - no longer needed ??
 Size  SwPagePreView::GetOptimalSizePixel() const
@@ -2032,10 +1835,6 @@ Size  SwPagePreView::GetOptimalSizePixel() const
     return aMaxSize;
 */
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 // OD 12.12.2002 #103492#
 void SwPagePreViewWin::SetViewShell( ViewShell* pShell )
@@ -2099,6 +1898,7 @@ void SwPagePreViewWin::AdjustPreviewToNewZoom( const sal_uInt16 _nZoomFactor,
     }
 
 }
+
 /* -----------------04.12.2002 10:46-----------------
  * pixel scrolling - horizontally always or vertically
  * when less than the desired number of rows fits into
@@ -2144,7 +1944,6 @@ BOOL SwPagePreView::HandleWheelCommands( const CommandEvent& rCEvt )
     return bOk;
 }
 
-
 uno::Reference< ::com::sun::star::accessibility::XAccessible >
     SwPagePreViewWin::CreateAccessible()
 {
@@ -2155,34 +1954,23 @@ uno::Reference< ::com::sun::star::accessibility::XAccessible >
     return GetViewShell()->CreateAccessiblePreview();
 }
 
-/* -----------------------------06.05.2002 13:18------------------------------
-
- ---------------------------------------------------------------------------*/
 void SwPagePreView::ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibilityOptions)
 {
     GetViewShell()->ApplyAccessiblityOptions(rAccessibilityOptions);
 }
-/* -----------------------------2002/06/26 14:30------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwPagePreView::ShowHScrollbar(sal_Bool bShow)
 {
     pHScrollbar->Show(bShow);
     InvalidateBorder();
 }
 
-/* -----------------------------2002/06/26 14:30------------------------------
-
- ---------------------------------------------------------------------------*/
 void SwPagePreView::ShowVScrollbar(sal_Bool bShow)
 {
     pVScrollbar->Show(bShow);
     InvalidateBorder();
 }
 
-/* -----------------25.11.2002 16:36-----------------
- *
- * --------------------------------------------------*/
 void SwPagePreView::SetZoom(SvxZoomType eType, USHORT nFactor)
 {
     ViewShell& rSh = *GetViewShell();

@@ -79,12 +79,9 @@ using namespace ::com::sun::star;
     Beschreibung:   Debug-Methode
  --------------------------------------------------------------------*/
 
-
 /*--------------------------------------------------------------------
     Beschreibung:   Columns eintueten
  --------------------------------------------------------------------*/
-
-
 void lcl_FillSvxColumn(const SwFmtCol& rCol,
                           USHORT nTotalWidth,
                           SvxColumnItem& rColItem,
@@ -126,8 +123,6 @@ void lcl_FillSvxColumn(const SwFmtCol& rCol,
 /*--------------------------------------------------------------------
     Beschreibung:   ColumnItem in ColumnInfo ueberfuehren
  --------------------------------------------------------------------*/
-
-
 void lcl_ConvertToCols(const SvxColumnItem& rColItem,
                           USHORT nTotalWidth,
                           SwFmtCol& rCols)
@@ -178,8 +173,6 @@ void lcl_ConvertToCols(const SvxColumnItem& rColItem,
 /*--------------------------------------------------------------------
     Beschreibung:   Tabs loeschen
  --------------------------------------------------------------------*/
-
-
 void lcl_EraseDefTabs(SvxTabStopItem& rTabStops)
 {
     // Def Tabs loeschen
@@ -199,8 +192,6 @@ void lcl_EraseDefTabs(SvxTabStopItem& rTabStops)
 /*--------------------------------------------------------------------
     Beschreibung:   Seitenrand umdrehen
  --------------------------------------------------------------------*/
-
-
 void SwView::SwapPageMargin(const SwPageDesc& rDesc, SvxLRSpaceItem& rLRSpace)
 {
     USHORT nPhyPage, nVirPage;
@@ -218,8 +209,6 @@ void SwView::SwapPageMargin(const SwPageDesc& rDesc, SvxLRSpaceItem& rLRSpace)
     Beschreibung:   Wenn der Rahmenrand verschoben wird, sollen die
                     Spaltentrenner an der gleichen absoluten Position bleiben
  --------------------------------------------------------------------*/
-
-
 void lcl_Scale(long& nVal, long nScale)
 {
     nVal *= nScale;
@@ -264,12 +253,11 @@ void ResizeFrameCols(SwFmtCol& rCol,
     //reset auto width
     rCol.SetOrtho(FALSE, 0, 0 );
 }
+
 /*--------------------------------------------------------------------
     Beschreibung:   Hier werden alle Aenderungen der Tableiste
                     wieder in das Modell geschossen
  --------------------------------------------------------------------*/
-
-
 void SwView::ExecTabWin( SfxRequest& rReq )
 {
     SwWrtShell &rSh         = GetWrtShell();
@@ -902,8 +890,6 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                     sprich alle relevanten Attribute an der CursorPos
                     werden der Tableiste uebermittelt
  --------------------------------------------------------------------*/
-
-
 void SwView::StateTabWin(SfxItemSet& rSet)
 {
     SwWrtShell &rSh         = GetWrtShell();
@@ -1845,5 +1831,3 @@ void SwView::StateTabWin(SfxItemSet& rSet)
         rSet.Put(aProtect);
     }
 }
-
-

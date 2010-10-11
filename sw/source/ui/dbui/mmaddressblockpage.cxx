@@ -54,16 +54,13 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 
-//-------------------------------------------------------------------------
 void lcl_Move(Control* pCtrl, long nYOffset)
 {
     Point aPos(pCtrl->GetPosPixel());
     aPos.Y() += nYOffset;
     pCtrl->SetPosPixel(aPos);
 }
-/*-- 02.04.2004 12:46:40---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwMailMergeAddressBlockPage::SwMailMergeAddressBlockPage( SwMailMergeWizard* _pParent) :
     svt::OWizardPage(_pParent, SW_RES(DLG_MM_ADDRESSBLOCK_PAGE)),
 #ifdef MSC
@@ -112,22 +109,16 @@ SwMailMergeAddressBlockPage::SwMailMergeAddressBlockPage( SwMailMergeWizard* _pP
     m_aPrevSetIB.SetClickHdl(aLink);
     m_aNextSetIB.SetClickHdl(aLink);
 }
-/*-- 02.04.2004 12:46:40---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwMailMergeAddressBlockPage::~SwMailMergeAddressBlockPage()
 {
 }
-/*-- 05.07.2004 13:55:15---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 bool SwMailMergeAddressBlockPage::canAdvance() const
 {
     return m_pWizard->GetConfigItem().GetResultSet().is();
 }
-/*-- 16.06.2004 12:34:09---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwMailMergeAddressBlockPage::ActivatePage()
 {
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
@@ -172,18 +163,14 @@ void SwMailMergeAddressBlockPage::ActivatePage()
         InsertDataHdl_Impl(0);
     }
 }
-/*-- 27.05.2004 13:59:15---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Bool    SwMailMergeAddressBlockPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
 {
     if ( ::svt::WizardTypes::eTravelForward == _eReason && !m_pWizard->GetConfigItem().GetResultSet().is() )
         return sal_False;
     return sal_True;
 }
-/*-- 07.04.2004 16:19:30---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwMailMergeAddressBlockPage, AddressListHdl_Impl, PushButton*, EMPTYARG)
 {
     SwAddressListDialog* pAddrDialog = new SwAddressListDialog(this);
@@ -204,9 +191,7 @@ IMPL_LINK(SwMailMergeAddressBlockPage, AddressListHdl_Impl, PushButton*, EMPTYAR
     delete pAddrDialog;
     return 0;
 }
-/*-- 07.04.2004 16:19:30---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwMailMergeAddressBlockPage, SettingsHdl_Impl, PushButton*, pButton)
 {
     SwSelectAddressBlockDialog* pDlg =
@@ -233,9 +218,7 @@ IMPL_LINK(SwMailMergeAddressBlockPage, SettingsHdl_Impl, PushButton*, pButton)
     GetWizard()->enableButtons(WZB_NEXT, GetWizard()->isStateEnabled(MM_GREETINGSPAGE));
     return 0;
 }
-/*-- 07.04.2004 16:19:31---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwMailMergeAddressBlockPage, AssignHdl_Impl, PushButton*, pButton)
 {
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
@@ -253,9 +236,7 @@ IMPL_LINK(SwMailMergeAddressBlockPage, AssignHdl_Impl, PushButton*, pButton)
     delete pDlg;
     return 0;
 }
-/*-- 11.06.2004 13:37:22---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwMailMergeAddressBlockPage::EnableAddressBlock(sal_Bool bAll, sal_Bool bSelective)
 {
     m_aSettingsFI.Enable(bAll);
@@ -273,9 +254,7 @@ void SwMailMergeAddressBlockPage::EnableAddressBlock(sal_Bool bAll, sal_Bool bSe
     m_aPrevSetIB.Enable(bSelective);
     m_aNextSetIB.Enable(bSelective);
 }
-/*-- 28.04.2004 12:45:58---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwMailMergeAddressBlockPage, AddressBlockHdl_Impl, CheckBox*, pBox)
 {
     EnableAddressBlock(pBox->IsEnabled(), pBox->IsChecked());
@@ -284,9 +263,7 @@ IMPL_LINK(SwMailMergeAddressBlockPage, AddressBlockHdl_Impl, CheckBox*, pBox)
     m_pWizard->UpdateRoadmap();
     return 0;
 }
-/*-- 08.06.2004 13:00:29---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwMailMergeAddressBlockPage, AddressBlockSelectHdl_Impl, SwAddressPreview*, EMPTYARG)
 {
     sal_uInt16 nSel = m_aSettingsWIN.GetSelectedAddress();
@@ -299,9 +276,7 @@ IMPL_LINK(SwMailMergeAddressBlockPage, AddressBlockSelectHdl_Impl, SwAddressPrev
     GetWizard()->enableButtons(WZB_NEXT, GetWizard()->isStateEnabled(MM_GREETINGSPAGE));
     return 0;
 }
-/*-- 31.08.2005 15:34:55---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwMailMergeAddressBlockPage, HideParagraphsHdl_Impl, CheckBox*, pBox)
 {
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
@@ -309,7 +284,6 @@ IMPL_LINK(SwMailMergeAddressBlockPage, HideParagraphsHdl_Impl, CheckBox*, pBox)
     return 0;
 }
 
-// ------------------------------------------------------------------------------
 IMPL_LINK(SwMailMergeAddressBlockPage, InsertDataHdl_Impl, ImageButton*, pButton)
 {
     //if no pButton is given, the first set has to be pre-set
@@ -366,9 +340,7 @@ IMPL_LINK(SwMailMergeAddressBlockPage, InsertDataHdl_Impl, ImageButton*, pButton
     EnableAddressBlock(bHasResultSet, m_aAddressCB.IsChecked());
     return 0;
 }
-/*-- 13.04.2004 16:01:26---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwSelectAddressBlockDialog::SwSelectAddressBlockDialog(
                 Window* pParent, SwMailMergeConfigItem& rConfig) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_SELECTADDRESSBLOCK)),
@@ -409,15 +381,11 @@ SwSelectAddressBlockDialog::SwSelectAddressBlockDialog(
     m_aPreview.SetLayout(2, 2);
     m_aPreview.EnableScrollBar();
 }
-/*-- 13.04.2004 16:01:27---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwSelectAddressBlockDialog::~SwSelectAddressBlockDialog()
 {
 }
-/*-- 28.04.2004 11:48:11---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwSelectAddressBlockDialog::SetAddressBlocks(const uno::Sequence< ::rtl::OUString>& rBlocks,
         sal_uInt16 nSelectedAddress)
 {
@@ -426,6 +394,7 @@ void SwSelectAddressBlockDialog::SetAddressBlocks(const uno::Sequence< ::rtl::OU
         m_aPreview.AddAddress(m_aAddressBlocks[nAddress]);
     m_aPreview.SelectAddress(nSelectedAddress);
 }
+
 /*-- 25.06.2004 10:51:36---------------------------------------------------
     return the address blocks and put the selected one to the first position
   -----------------------------------------------------------------------*/
@@ -451,9 +420,7 @@ const uno::Sequence< ::rtl::OUString >&    SwSelectAddressBlockDialog::GetAddres
     }
     return m_aAddressBlocks;
 }
-/*-- 28.04.2004 11:48:11---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwSelectAddressBlockDialog::SetSettings(
         sal_Bool bIsCountry, ::rtl::OUString rCountry)
 {
@@ -466,9 +433,7 @@ void SwSelectAddressBlockDialog::SetSettings(
         m_aNeverRB.Check();
     m_aDeletePB.Enable(m_aAddressBlocks.getLength() > 1);
 }
-/*-- 10.05.2004 11:17:06---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 ::rtl::OUString     SwSelectAddressBlockDialog::GetCountry() const
 {
     ::rtl::OUString sRet;
@@ -477,9 +442,6 @@ void SwSelectAddressBlockDialog::SetSettings(
     return sRet;
 }
 
-/*-- 13.04.2004 16:02:32---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwSelectAddressBlockDialog, DeleteHdl_Impl, PushButton*, pButton)
 {
     if(m_aAddressBlocks.getLength())
@@ -500,9 +462,7 @@ IMPL_LINK(SwSelectAddressBlockDialog, DeleteHdl_Impl, PushButton*, pButton)
     }
     return 0;
 }
-/*-- 13.04.2004 16:02:32---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwSelectAddressBlockDialog, NewCustomizeHdl_Impl, PushButton*, pButton)
 {
     bool bCustomize = pButton == &m_aCustomizePB;
@@ -537,24 +497,17 @@ IMPL_LINK(SwSelectAddressBlockDialog, NewCustomizeHdl_Impl, PushButton*, pButton
     delete pDlg;
     return 0;
 }
-/*-- 13.04.2004 16:02:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwSelectAddressBlockDialog, IncludeHdl_Impl, RadioButton*, pButton)
 {
     m_aCountryED.Enable(&m_aDependentRB == pButton);
     return 0;
 }
 
-/* -----------------------------28.02.05 09:00--------------------------------
-
- ---------------------------------------------------------------------------*/
 SwRestrictedComboBox::~SwRestrictedComboBox()
 {
 }
-/* -----------------------------28.02.05 09:00--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwRestrictedComboBox::KeyInput(const KeyEvent& rEvt)
 {
     BOOL bCallParent = TRUE;
@@ -567,9 +520,7 @@ void SwRestrictedComboBox::KeyInput(const KeyEvent& rEvt)
     if(bCallParent)
         ComboBox::KeyInput(rEvt);
 }
-/* -----------------------------28.02.05 09:00--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwRestrictedComboBox::Modify()
 {
     Selection aSel = GetSelection();
@@ -590,9 +541,6 @@ void SwRestrictedComboBox::Modify()
         GetModifyHdl().Call(this);
 }
 
-/*-- 13.04.2004 16:01:08---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 #define USER_DATA_SALUTATION        -1
 #define USER_DATA_PUNCTUATION       -2
 #define USER_DATA_TEXT              -3
@@ -694,23 +642,17 @@ SwCustomizeAddressBlockDialog::SwCustomizeAddressBlockDialog(
     m_aDownIB.SetClickHdl(aImgButtonHdl);
     UpdateImageButtons_Impl();
 }
-/*-- 13.04.2004 16:01:08---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwCustomizeAddressBlockDialog::~SwCustomizeAddressBlockDialog()
 {
 }
-/*-- 07.06.2004 13:51:11---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwCustomizeAddressBlockDialog, OKHdl_Impl, OKButton*, EMPTYARG)
 {
     EndDialog(RET_OK);
     return 0;
 }
-/*-- 24.06.2004 11:36:05---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwCustomizeAddressBlockDialog, ListBoxSelectHdl_Impl, DDListBox*, pBox)
 {
     sal_Int32 nUserData = (sal_Int32)(sal_IntPtr)pBox->FirstSelected()->GetUserData();
@@ -718,9 +660,7 @@ IMPL_LINK(SwCustomizeAddressBlockDialog, ListBoxSelectHdl_Impl, DDListBox*, pBox
     m_aInsertFieldIB.Enable(nUserData >= 0 || !HasItem_Impl(nUserData));
     return 0;
 }
-/*-- 25.06.2004 11:21:24---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwCustomizeAddressBlockDialog, EditModifyHdl_Impl, AddressMultiLineEdit*, EMPTYARG)
 {
     String sAddress = SwAddressPreview::FillData(
@@ -730,9 +670,7 @@ IMPL_LINK(SwCustomizeAddressBlockDialog, EditModifyHdl_Impl, AddressMultiLineEdi
     UpdateImageButtons_Impl();
     return 0;
 }
-/*-- 25.06.2004 12:14:11---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwCustomizeAddressBlockDialog, ImageButtonHdl_Impl, ImageButton*, pButton)
 {
     if(&m_aInsertFieldIB == pButton)
@@ -764,9 +702,7 @@ IMPL_LINK(SwCustomizeAddressBlockDialog, ImageButtonHdl_Impl, ImageButton*, pBut
     UpdateImageButtons_Impl();
     return 0;
 }
-/*-- 01.07.2004 09:27:02---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Int32 SwCustomizeAddressBlockDialog::GetSelectedItem_Impl()
 {
     sal_Int32 nRet = USER_DATA_NONE;
@@ -784,9 +720,7 @@ sal_Int32 SwCustomizeAddressBlockDialog::GetSelectedItem_Impl()
         }
     return nRet;
 }
-/*-- 01.07.2004 10:01:19---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 bool   SwCustomizeAddressBlockDialog::HasItem_Impl(sal_Int32 nUserData)
 {
     //get the entry from the ListBox
@@ -808,9 +742,7 @@ bool   SwCustomizeAddressBlockDialog::HasItem_Impl(sal_Int32 nUserData)
     bool bRet = sText.Search(sEntry) != STRING_NOTFOUND;
     return bRet;
 }
-/*-- 25.06.2004 13:10:16---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwCustomizeAddressBlockDialog, SelectionChangedHdl_Impl, AddressMultiLineEdit*, pEdit)
 {
     // called in case the selection of the edit field changes.
@@ -863,9 +795,7 @@ IMPL_LINK(SwCustomizeAddressBlockDialog, SelectionChangedHdl_Impl, AddressMultiL
     bOnEntry = false;
     return 0;
 }
-/*-- 25.06.2004 13:36:29---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwCustomizeAddressBlockDialog, FieldChangeHdl_Impl, ComboBox*, EMPTYARG)
 {
     //changing the field content changes the related members, too
@@ -888,9 +818,6 @@ IMPL_LINK(SwCustomizeAddressBlockDialog, FieldChangeHdl_Impl, ComboBox*, EMPTYAR
     return 0;
 }
 
-/*-- 25.06.2004 12:35:51---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 void SwCustomizeAddressBlockDialog::UpdateImageButtons_Impl()
 {
     sal_uInt16 nMove = m_aDragED.IsCurrentItemMoveable();
@@ -903,18 +830,14 @@ void SwCustomizeAddressBlockDialog::UpdateImageButtons_Impl()
     m_aInsertFieldIB.Enable( pEntry &&
             (0 < (sal_Int32)(sal_IntPtr)pEntry->GetUserData() || m_aFieldCB.GetText().Len()));
 }
-/*-- 28.04.2004 12:04:14---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwCustomizeAddressBlockDialog::SetAddress(const ::rtl::OUString& rAddress)
 {
     m_aDragED.SetText( rAddress );
     UpdateImageButtons_Impl();
     m_aDragED.Modify();
 }
-/*-- 28.04.2004 12:04:14---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 ::rtl::OUString SwCustomizeAddressBlockDialog::GetAddress()
 {
     String sAddress(m_aDragED.GetAddress());
@@ -938,9 +861,7 @@ void SwCustomizeAddressBlockDialog::SetAddress(const ::rtl::OUString& rAddress)
     }
     return sAddress;
 }
-/*-- 28.02.2005 11:03:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwCustomizeAddressBlockDialog::MoveFocus( Window* pMember, bool bNext )
 {
     ::std::vector< Window* > aControls;
@@ -1007,9 +928,7 @@ void SwCustomizeAddressBlockDialog::MoveFocus( Window* pMember, bool bNext )
     }
 
 }
-/*-- 13.04.2004 17:49:45---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 class SwAssignFieldsControl : public Control
 {
     friend class SwAssignFieldsDialog;
@@ -1048,10 +967,7 @@ public:
                     m_aModifyHdl.Call(this);
                 }
 };
-/*-- 13.04.2004 17:51:27---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
-//-------------------------------------------------------------------------
 SwAssignFieldsControl::SwAssignFieldsControl(
         Window* pParent, const ResId& rResId, SwMailMergeConfigItem& rConfigItem) :
     Control(pParent, rResId),
@@ -1167,9 +1083,7 @@ SwAssignFieldsControl::SwAssignFieldsControl(
     m_aVScroll.SetSizePixel(Size(m_aVScroll.GetSizePixel().Width(), aOutputSize.Height() - nHBHeight));
 
 }
-/*-- 13.04.2004 17:51:28---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwAssignFieldsControl::~SwAssignFieldsControl()
 {
     ::std::vector<FixedInfo*>::iterator aFIIter;
@@ -1182,9 +1096,6 @@ SwAssignFieldsControl::~SwAssignFieldsControl()
         delete *aFIIter;
 }
 
-/*-- 07.05.2004 13:11:26---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 void SwAssignFieldsControl::Command( const CommandEvent& rCEvt )
 {
     switch ( rCEvt.GetCommand() )
@@ -1204,9 +1115,7 @@ void SwAssignFieldsControl::Command( const CommandEvent& rCEvt )
             Control::Command(rCEvt);
     }
 }
-/*-- 07.05.2004 13:11:21---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 long SwAssignFieldsControl::PreNotify( NotifyEvent& rNEvt )
 {
     if(rNEvt.GetType() == EVENT_COMMAND)
@@ -1221,9 +1130,7 @@ long SwAssignFieldsControl::PreNotify( NotifyEvent& rNEvt )
     }
     return Control::PreNotify(rNEvt);
 }
-/*-- 03.09.2004 13:19:09---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwAssignFieldsControl::MakeVisible( sal_Int32 nIndex )
 {
     long nThumb = m_aVScroll.GetThumbPos();
@@ -1236,9 +1143,7 @@ void SwAssignFieldsControl::MakeVisible( sal_Int32 nIndex )
         return;
     ScrollHdl_Impl( &m_aVScroll );
 }
-/*-- 30.04.2004 16:10:58---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwAssignFieldsControl, ScrollHdl_Impl, ScrollBar*, pScroll)
 {
     long nThumb = pScroll->GetThumbPos();
@@ -1263,9 +1168,6 @@ IMPL_LINK(SwAssignFieldsControl, ScrollHdl_Impl, ScrollBar*, pScroll)
     return 0;
 }
 
-/*-- 03.05.2004 15:37:52---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwAssignFieldsControl, MatchHdl_Impl, ListBox*, pBox)
 {
     String sColumn = pBox->GetSelectEntry();
@@ -1301,9 +1203,7 @@ IMPL_LINK(SwAssignFieldsControl, MatchHdl_Impl, ListBox*, pBox)
     m_aModifyHdl.Call(0);
     return 0;
 }
-/*-- 03.09.2004 13:16:04---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwAssignFieldsControl, GotFocusHdl_Impl, ListBox*, pBox)
 {
     if(0 != (GETFOCUS_TAB & pBox->GetGetFocusFlags()))
@@ -1321,9 +1221,7 @@ IMPL_LINK(SwAssignFieldsControl, GotFocusHdl_Impl, ListBox*, pBox)
     }
     return 0;
 }
-/*-- 13.04.2004 17:44:01---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwAssignFieldsDialog::SwAssignFieldsDialog(
         Window* pParent, SwMailMergeConfigItem& rConfigItem,
         const ::rtl::OUString& rPreview,
@@ -1375,16 +1273,12 @@ SwAssignFieldsDialog::SwAssignFieldsDialog(
 
     m_aOK.SetClickHdl(LINK(this, SwAssignFieldsDialog, OkHdl_Impl));
 }
-/*-- 13.04.2004 17:44:02---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwAssignFieldsDialog::~SwAssignFieldsDialog()
 {
     delete m_pFieldsControl;
 }
-/*-- 05.05.2004 14:39:13---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Sequence< ::rtl::OUString > SwAssignFieldsDialog::CreateAssignments()
 {
     uno::Sequence< ::rtl::OUString > aAssignments(
@@ -1404,9 +1298,7 @@ uno::Sequence< ::rtl::OUString > SwAssignFieldsDialog::CreateAssignments()
     }
     return aAssignments;
 }
-/*-- 03.05.2004 18:04:00---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwAssignFieldsDialog, OkHdl_Impl, PushButton*, EMPTYARG)
 {
     m_rConfigItem.SetColumnAssignment(
@@ -1415,9 +1307,7 @@ IMPL_LINK(SwAssignFieldsDialog, OkHdl_Impl, PushButton*, EMPTYARG)
     EndDialog(RET_OK);
     return 0;
 }
-/*-- 05.05.2004 14:37:19---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwAssignFieldsDialog, AssignmentModifyHdl_Impl, void*, EMPTYARG)
 {
     uno::Sequence< ::rtl::OUString > aAssignments = CreateAssignments();
@@ -1427,9 +1317,6 @@ IMPL_LINK(SwAssignFieldsDialog, AssignmentModifyHdl_Impl, void*, EMPTYARG)
     return 0;
 }
 
-/*-- 26.05.2004 11:20:11---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 DDListBox::DDListBox(SwCustomizeAddressBlockDialog* pParent, const ResId rResId) :
         SvTreeListBox(pParent, rResId),
         m_pParentDialog(pParent)
@@ -1446,15 +1333,11 @@ DDListBox::DDListBox(SwCustomizeAddressBlockDialog* pParent, const ResId rResId)
     Show();
 
 }
-/*-- 26.05.2004 11:20:15---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 DDListBox::~DDListBox()
 {
 }
-/*-- 26.05.2004 11:20:16---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void  DDListBox::StartDrag( sal_Int8 /*nAction*/, const Point& /*rPosPixel*/ )
 {
     SvLBoxEntry* pEntry = GetCurEntry();
@@ -1482,9 +1365,7 @@ void  DDListBox::StartDrag( sal_Int8 /*nAction*/, const Point& /*rPosPixel*/ )
         }
     }
 }
-/*-- 26.05.2004 13:14:53---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 AddressMultiLineEdit::AddressMultiLineEdit(SwCustomizeAddressBlockDialog* pParent, const ResId& rResId) :
     MultiLineEdit(pParent, rResId),
     m_pParentDialog(pParent)
@@ -1495,16 +1376,12 @@ AddressMultiLineEdit::AddressMultiLineEdit(SwCustomizeAddressBlockDialog* pParen
     //DisableSelectionOnFocus();
     EnableFocusSelectionHide(FALSE);
 }
-/*-- 26.05.2004 13:14:53---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 AddressMultiLineEdit::~AddressMultiLineEdit()
 {
     EndListening(*GetTextEngine());
 }
-/*-- 25.06.2004 13:02:49---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void    AddressMultiLineEdit::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
     if(rHint.ISA(TextHint) &&
@@ -1514,9 +1391,7 @@ void    AddressMultiLineEdit::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rH
         m_aSelectionLink.Call(this);
     }
 }
-/*-- 26.05.2004 13:45:46---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 long  AddressMultiLineEdit::PreNotify( NotifyEvent& rNEvt )
 {
     long nHandled = 0;
@@ -1541,9 +1416,7 @@ long  AddressMultiLineEdit::PreNotify( NotifyEvent& rNEvt )
     return nHandled;
 
 }
-/*-- 25.06.2004 08:20:54---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void AddressMultiLineEdit::SetText( const String& rStr )
 {
     MultiLineEdit::SetText(rStr);
@@ -1588,7 +1461,6 @@ void AddressMultiLineEdit::SetText( const String& rStr )
 
 /*-- 25.06.2004 12:32:41---------------------------------------------------
     Insert the new entry in front of the entry at the beginning of the selection
-
   -----------------------------------------------------------------------*/
 void AddressMultiLineEdit::InsertNewEntry( const String& rStr )
 {
@@ -1626,9 +1498,7 @@ void AddressMultiLineEdit::InsertNewEntryAtPosition( const String& rStr, ULONG n
     pTextView->SetSelection(aEntrySel);
     m_aSelectionLink.Call(this);
 }
-/*-- 25.06.2004 12:32:41---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void AddressMultiLineEdit::RemoveCurrentEntry()
 {
     ExtTextEngine* pTextEngine = GetTextEngine();
@@ -1648,9 +1518,7 @@ void AddressMultiLineEdit::RemoveCurrentEntry()
         Modify();
     }
 }
-/*-- 25.06.2004 12:32:41---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void AddressMultiLineEdit::MoveCurrentItem(sal_uInt16 nMove)
 {
     ExtTextEngine* pTextEngine = GetTextEngine();
@@ -1723,9 +1591,7 @@ void AddressMultiLineEdit::MoveCurrentItem(sal_uInt16 nMove)
         Modify();
     }
 }
-/*-- 25.06.2004 12:32:41---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_uInt16  AddressMultiLineEdit::IsCurrentItemMoveable()
 {
     sal_uInt16 nRet = 0;
@@ -1747,9 +1613,7 @@ sal_uInt16  AddressMultiLineEdit::IsCurrentItemMoveable()
     }
     return nRet;
 }
-/*-- 25.06.2004 12:32:42---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 bool AddressMultiLineEdit::HasCurrentItem()
 {
     ExtTextEngine* pTextEngine = GetTextEngine();
@@ -1760,9 +1624,7 @@ bool AddressMultiLineEdit::HasCurrentItem()
             (pBeginAttrib->GetStart() <= rSelection.GetStart().GetIndex()
                             && pBeginAttrib->GetEnd() >= rSelection.GetEnd().GetIndex()));
 }
-/*-- 01.07.2004 09:07:44---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 String AddressMultiLineEdit::GetCurrentItem()
 {
     String sRet;
@@ -1780,9 +1642,7 @@ String AddressMultiLineEdit::GetCurrentItem()
     }
     return sRet;
 }
-/*-- 05.07.2004 14:29:02---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void AddressMultiLineEdit::SelectCurrentItem()
 {
     ExtTextEngine* pTextEngine = GetTextEngine();
@@ -1824,4 +1684,3 @@ String AddressMultiLineEdit::GetAddress()
     }
     return sRet;
 }
-

@@ -57,9 +57,7 @@
 
 using namespace svt;
 using namespace ::com::sun::star;
-/*-- 01.04.2004 16:52:49---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwMailMergeWizard::SwMailMergeWizard(SwView& rView, SwMailMergeConfigItem& rItem) :
         RoadmapWizard(&rView.GetViewFrame()->GetWindow(),
                         SW_RES(DLG_MAILMERGEWIZARD),
@@ -118,15 +116,11 @@ SwMailMergeWizard::SwMailMergeWizard(SwView& rView, SwMailMergeConfigItem& rItem
     ActivatePage();
     UpdateRoadmap();
 }
-/*-- 01.04.2004 16:52:53---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwMailMergeWizard::~SwMailMergeWizard()
 {
 }
-/*-- 01.04.2004 16:52:53---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 OWizardPage*    SwMailMergeWizard::createPage(WizardState _nState)
 {
     OWizardPage* pRet = 0;
@@ -144,9 +138,7 @@ OWizardPage*    SwMailMergeWizard::createPage(WizardState _nState)
     DBG_ASSERT(pRet, "no page created in ::createPage");
     return pRet;
 }
-/*-- 04.06.2004 13:18:47---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwMailMergeWizard::enterState( WizardState _nState )
 {
     ::svt::RoadmapWizard::enterState( _nState );
@@ -197,9 +189,7 @@ void SwMailMergeWizard::enterState( WizardState _nState )
 
     UpdateRoadmap();
 }
-/*-- 04.06.2004 12:54:13---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 String  SwMailMergeWizard::getStateDisplayName( WizardState _nState ) const
 {
     String sRet;
@@ -305,15 +295,11 @@ void SwMailMergeWizard::CreateTargetDocument()
     if( m_rConfigItem.GetTargetView() )
         m_rConfigItem.GetTargetView()->GetViewFrame()->GetFrame().Appear();
 }
-/*-- 23.08.2004 08:51:36---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwMailMergeWizard::updateRoadmapItemLabel( WizardState _nState )
 {
     svt::RoadmapWizard::updateRoadmapItemLabel( _nState );
 }
-
-// ------------------------------------------------------------------------
 
 short SwMailMergeWizard::Execute()
 {
@@ -323,8 +309,6 @@ short SwMailMergeWizard::Execute()
                "Use Dialog::StartExecuteModal to execute the dialog!" );
     return RET_CANCEL;
 }
-
-// ------------------------------------------------------------------------
 
 void SwMailMergeWizard::StartExecuteModal( const Link& rEndDialogHdl )
 {

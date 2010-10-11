@@ -87,9 +87,7 @@ using namespace ::rtl;
 //typedef SharedUNOComponent< XConnection >   SharedConnection;
 
 static const char* cUTF8 = "UTF-8";
-/*-- 07.05.2004 14:11:34---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 struct AddressUserData_Impl
 {
     uno::Reference<XDataSource>             xSource;
@@ -105,6 +103,7 @@ struct AddressUserData_Impl
         nTableAndQueryCount(-1)
         {}
 };
+
 ::rtl::OUString lcl_getFlatURL( uno::Reference<beans::XPropertySet>& xSourceProperties )
 {
     ::rtl::OUString sURL;
@@ -150,9 +149,7 @@ struct AddressUserData_Impl
     }
     return sURL;
 }
-/*-- 07.04.2004 16:35:43---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_ADDRESSLISTDIALOG)),
 #ifdef MSC
@@ -280,9 +277,7 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent) :
     m_aListLB.SetSelectHdl(LINK(this, SwAddressListDialog, ListBoxSelectHdl_Impl));
     TableSelectHdl_Impl(NULL);
 }
-/*-- 07.04.2004 16:35:43---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwAddressListDialog::~SwAddressListDialog()
 {
     SvLBoxEntry* pEntry = m_aListLB.First();
@@ -293,9 +288,7 @@ SwAddressListDialog::~SwAddressListDialog()
         pEntry = m_aListLB.Next( pEntry );
     }
 }
-/*-- 07.04.2004 16:35:44---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwAddressListDialog, FilterHdl_Impl, PushButton*, EMPTYARG)
 {
     SvLBoxEntry* pSelect = m_aListLB.FirstSelected();
@@ -361,9 +354,7 @@ IMPL_LINK(SwAddressListDialog, FilterHdl_Impl, PushButton*, EMPTYARG)
     }
     return 0;
 }
-/*-- 07.04.2004 16:35:44---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwAddressListDialog, LoadHdl_Impl,   PushButton*, EMPTYARG)
 {
     String sNewSource = SwNewDBMgr::LoadAndRegisterDataSource();
@@ -375,9 +366,7 @@ IMPL_LINK(SwAddressListDialog, LoadHdl_Impl,   PushButton*, EMPTYARG)
     }
     return 0;
 }
-/*-- 07.04.2004 16:35:44---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwAddressListDialog, CreateHdl_Impl, PushButton*, pButton)
 {
     String sInputURL;
@@ -467,9 +456,7 @@ IMPL_LINK(SwAddressListDialog, CreateHdl_Impl, PushButton*, pButton)
     delete pDlg;
     return 0;
 }
-/*-- 22.04.2004 10:30:40---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwAddressListDialog, EditHdl_Impl, PushButton*, pButton)
 {
     SvLBoxEntry* pEntry = m_aListLB.FirstSelected();
@@ -501,9 +488,7 @@ IMPL_LINK(SwAddressListDialog, EditHdl_Impl, PushButton*, pButton)
     }
     return 0;
 };
-/*-- 19.04.2004 09:41:05---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwAddressListDialog, ListBoxSelectHdl_Impl, SvTabListBox*, EMPTYARG)
 {
     SvLBoxEntry* pSelect = m_aListLB.FirstSelected();
@@ -511,6 +496,7 @@ IMPL_LINK(SwAddressListDialog, ListBoxSelectHdl_Impl, SvTabListBox*, EMPTYARG)
                                                 StaticListBoxSelectHdl_Impl ), pSelect );
     return 0;
 }
+
 IMPL_STATIC_LINK(SwAddressListDialog, StaticListBoxSelectHdl_Impl, SvLBoxEntry*, pSelect)
 {
     //prevent nested calls of the select handler
@@ -657,9 +643,6 @@ void SwAddressListDialog::DetectTablesAndQueries(
     }
 }
 
-/*-- 13.05.2004 12:55:40---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwAddressListDialog, TableSelectHdl_Impl, PushButton*, pButton)
 {
     EnterWait();
@@ -680,18 +663,12 @@ IMPL_LINK(SwAddressListDialog, TableSelectHdl_Impl, PushButton*, pButton)
     return 0;
 }
 
-/*-- 08.04.2004 14:52:11---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwAddressListDialog, OKHdl_Impl, PushButton*, EMPTYARG)
 {
     EndDialog(TRUE);
     return 0;
 }
 
-/*-- 07.05.2004 14:17:47---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 uno::Reference< XDataSource>  SwAddressListDialog::GetSource()
 {
     uno::Reference< XDataSource>  xRet;
@@ -704,9 +681,7 @@ uno::Reference< XDataSource>  SwAddressListDialog::GetSource()
     return xRet;
 
 }
-/*-- 07.05.2004 14:17:48---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SharedConnection    SwAddressListDialog::GetConnection()
 {
     SharedConnection xRet;
@@ -718,9 +693,7 @@ SharedConnection    SwAddressListDialog::GetConnection()
     }
     return xRet;
 }
-/*-- 07.05.2004 14:17:48---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Reference< XColumnsSupplier> SwAddressListDialog::GetColumnsSupplier()
 {
     uno::Reference< XColumnsSupplier> xRet;
@@ -732,9 +705,7 @@ uno::Reference< XColumnsSupplier> SwAddressListDialog::GetColumnsSupplier()
     }
     return xRet;
 }
-/*-- 14.05.2004 15:04:09---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 ::rtl::OUString     SwAddressListDialog::GetFilter()
 {
     ::rtl::OUString sRet;

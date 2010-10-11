@@ -57,9 +57,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 
-/*-- 08.04.2004 14:33:56---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwSelectDBTableDialog::SwSelectDBTableDialog(Window* pParent,
         const uno::Reference< sdbc::XConnection>& rConnection) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_SELECTDBTABLEDDIALOG)),
@@ -148,15 +145,11 @@ SwSelectDBTableDialog::SwSelectDBTableDialog(Window* pParent,
         }
     }
 }
-/*-- 08.04.2004 14:33:57---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwSelectDBTableDialog::~SwSelectDBTableDialog()
 {
 }
-/*-- 08.04.2004 14:33:57---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwSelectDBTableDialog, PreviewHdl, PushButton*, pButton)
 {
     SvLBoxEntry* pEntry = m_aTableLB.FirstSelected();
@@ -195,18 +188,14 @@ IMPL_LINK(SwSelectDBTableDialog, PreviewHdl, PushButton*, pButton)
 
     return 0;
 }
-/*-- 19.04.2004 10:03:26---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 String      SwSelectDBTableDialog::GetSelectedTable(bool& bIsTable)
 {
     SvLBoxEntry* pEntry = m_aTableLB.FirstSelected();
     bIsTable = pEntry->GetUserData() ? false : true;
     return pEntry ? m_aTableLB.GetEntryText(pEntry, 0) : String();
 }
-/*-- 13.05.2004 12:58:26---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void   SwSelectDBTableDialog::SetSelectedTable(const String& rTable, bool bIsTable)
 {
     SvLBoxEntry*    pEntry = m_aTableLB.First();

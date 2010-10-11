@@ -42,9 +42,6 @@
 #include <svl/eitem.hxx>
 #include <swabstdlg.hxx>
 
-/*-- 02.04.2004 16:38:45---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwMailMergeMergePage::SwMailMergeMergePage( SwMailMergeWizard* _pParent) :
     svt::OWizardPage(_pParent, SW_RES(DLG_MM_MERGE_PAGE)),
 #ifdef MSC
@@ -75,24 +72,18 @@ SwMailMergeMergePage::SwMailMergeMergePage( SwMailMergeWizard* _pParent) :
     m_aFindED.SetReturnActionLink( LINK(this, SwMailMergeMergePage, EnteredFindStringHdl_Impl ));
 
 }
-/*-- 02.04.2004 16:38:45---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwMailMergeMergePage::~SwMailMergeMergePage()
 {
 }
-/*-- 25.05.2004 16:14:49---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK( SwMailMergeMergePage, EditDocumentHdl_Impl, PushButton*, EMPTYARG)
 {
     m_pWizard->SetRestartPage(MM_MERGEPAGE);
     m_pWizard->EndDialog(RET_EDIT_RESULT_DOC);
     return 0;
 }
-/*-- 25.05.2004 16:14:49---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK( SwMailMergeMergePage, FindHdl_Impl, PushButton*, EMPTYARG)
 {
     SvxSearchItem aSearchItem( SID_SEARCH_ITEM );
@@ -114,6 +105,7 @@ IMPL_LINK( SwMailMergeMergePage, FindHdl_Impl, PushButton*, EMPTYARG)
 
     return 0;
 }
+
 IMPL_LINK( SwMailMergeMergePage, EnteredFindStringHdl_Impl, void*, EMPTYARG )
 {
     m_aFindPB.GetClickHdl().Call( &m_aFindPB );

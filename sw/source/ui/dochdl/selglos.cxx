@@ -67,9 +67,7 @@ SwSelGlossaryDlg::SwSelGlossaryDlg(Window * pParent, const String &rShortName)
  dtor ueberladen
 --------------------------------------------------*/
 SwSelGlossaryDlg::~SwSelGlossaryDlg() {}
-/* -----------------25.10.99 08:33-------------------
 
- --------------------------------------------------*/
 IMPL_LINK(SwSelGlossaryDlg, DoubleClickHdl, ListBox*, /*pBox*/)
 {
     EndDialog(RET_OK);

@@ -59,9 +59,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace svt;
 
-/*-- 02.04.2004 09:40:14---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwMailMergeDocSelectPage::SwMailMergeDocSelectPage( SwMailMergeWizard* _pParent ) :
     svt::OWizardPage(_pParent, SW_RES(DLG_MM_DOCSELECT_PAGE)),
 #ifdef MSC
@@ -112,16 +109,10 @@ SwMailMergeDocSelectPage::SwMailMergeDocSelectPage( SwMailMergeWizard* _pParent 
     }
 }
 
-/*-- 02.04.2004 09:40:14---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwMailMergeDocSelectPage::~SwMailMergeDocSelectPage()
 {
 }
 
-/*-- 05.04.2004 14:21:48---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwMailMergeDocSelectPage, DocSelectHdl, RadioButton*, pButton)
 {
     m_aRecentDocLB.Enable(&m_aRecentDocRB == pButton);
@@ -131,9 +122,7 @@ IMPL_LINK(SwMailMergeDocSelectPage, DocSelectHdl, RadioButton*, pButton)
 
     return 0;
 }
-/*-- 05.04.2004 14:25:12---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwMailMergeDocSelectPage, FileSelectHdl, PushButton*, pButton)
 {
     bool bTemplate = &m_aBrowseTemplatePB == pButton;
@@ -192,9 +181,6 @@ IMPL_LINK(SwMailMergeDocSelectPage, FileSelectHdl, PushButton*, pButton)
     return 0;
 }
 
-/*-- 06.04.2004 12:52:24---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 sal_Bool SwMailMergeDocSelectPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
 {
     sal_Bool bReturn = sal_False;

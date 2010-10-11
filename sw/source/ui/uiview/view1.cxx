@@ -53,12 +53,6 @@
 
 extern int bDocSzUpdated;
 
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 void SwView::Activate(BOOL bMDIActivate)
 {
     // aktuelle View anmelden an der DocShell
@@ -129,11 +123,6 @@ void SwView::Activate(BOOL bMDIActivate)
     SfxViewShell::Activate(bMDIActivate);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 void SwView::Deactivate(BOOL bMDIActivate)
 {
     extern BOOL bFlushCharBuffer ;
@@ -151,17 +140,10 @@ void SwView::Deactivate(BOOL bMDIActivate)
     SfxViewShell::Deactivate(bMDIActivate);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwView::MarginChanged()
 {
     GetWrtShell().SetBrowseBorder( GetMargin() );
 }
-
-/*--------------------------------------------------------------------
- --------------------------------------------------------------------*/
 
 void SwView::ExecFormatPaintbrush(SfxRequest& rReq)
 {

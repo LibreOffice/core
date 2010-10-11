@@ -107,7 +107,6 @@
 #include <unomid.h>
 #include <IDocumentMarkAccess.hxx>
 
-
 namespace swui
 {
     SwAbstractDialogFactory * GetFactory();
@@ -210,15 +209,11 @@ private:
     _DB_ColumnConfigData& operator =( const _DB_ColumnConfigData& );
 };
 
-/*  */
-
 int SwInsDBColumn::operator<( const SwInsDBColumn& rCmp ) const
 {
     return 0 > GetAppCollator().compareString( sColumn, rCmp.sColumn );
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
         Reference<XDataSource> xDataSource,
         Reference<sdbcx::XColumnsSupplier> xColSupp,
@@ -453,9 +448,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
     // Controls initialisieren:
     PageHdl( aRbAsTable.IsChecked() ? &aRbAsTable : &aRbAsField );
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwInsertDBColAutoPilot::~SwInsertDBColAutoPilot()
 {
     delete pTblSet;
@@ -464,9 +457,7 @@ SwInsertDBColAutoPilot::~SwInsertDBColAutoPilot()
 //  delete pConfig;
     delete pTAutoFmt;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK( SwInsertDBColAutoPilot, PageHdl, Button*, pButton )
 {
     BOOL bShowTbl = pButton == &aRbAsTable;
@@ -500,9 +491,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, PageHdl, Button*, pButton )
 
     return 0;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK( SwInsertDBColAutoPilot, DBFormatHdl, Button*, pButton )
 {
     USHORT nFndPos;
@@ -521,9 +510,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, DBFormatHdl, Button*, pButton )
 
     return 0;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK( SwInsertDBColAutoPilot, TblToFromHdl, Button*, pButton )
 {
     BOOL bChgEnable = TRUE, bEnableTo = TRUE, bEnableFrom = TRUE;
@@ -670,9 +657,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblToFromHdl, Button*, pButton )
 
     return 0;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK( SwInsertDBColAutoPilot, DblClickHdl, ListBox*, pBox )
 {
     Button* pButton = 0;
@@ -688,9 +673,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, DblClickHdl, ListBox*, pBox )
 
     return 0;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK( SwInsertDBColAutoPilot, TblFmtHdl, PushButton*, pButton )
 {
     SwWrtShell& rSh = pView->GetWrtShell();
@@ -809,9 +792,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblFmtHdl, PushButton*, pButton )
 
     return 0;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK( SwInsertDBColAutoPilot, AutoFmtHdl, PushButton*, pButton )
 {
     SwAbstractDialogFactory* pFact = swui::GetFactory();
@@ -824,9 +805,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, AutoFmtHdl, PushButton*, pButton )
     delete pDlg;
     return 0;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK( SwInsertDBColAutoPilot, SelectHdl, ListBox*, pBox )
 {
     ListBox* pGetBox = pBox == &aLbDbFmtFromUsr
@@ -888,9 +867,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, SelectHdl, ListBox*, pBox )
     }
     return 0;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK( SwInsertDBColAutoPilot, HeaderHdl, Button*, pButton )
 {
     if( pButton == &aCbTableHeadon )
@@ -902,9 +879,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, HeaderHdl, Button*, pButton )
     }
     return 0;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 static void lcl_InsTextInArr( const String& rTxt, _DB_Columns& rColArr )
 {
     _DB_Column* pNew;
@@ -926,9 +901,7 @@ static void lcl_InsTextInArr( const String& rTxt, _DB_Columns& rColArr )
         rColArr.Insert( pNew, rColArr.Count() );
     }
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 BOOL SwInsertDBColAutoPilot::SplitTextToColArr( const String& rTxt,
                                 _DB_Columns& rColArr,
                                 BOOL bInsField )
@@ -1004,9 +977,7 @@ BOOL SwInsertDBColAutoPilot::SplitTextToColArr( const String& rTxt,
 
     return 0 != rColArr.Count();
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
     Reference< XDataSource> xSource,
     Reference< XConnection> xConnection,
@@ -1487,6 +1458,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
     if ( bDisposeResultSet )
         ::comphelper::disposeComponent(xResultSet);
 }
+
 void SwInsertDBColAutoPilot::SetTabSet()
 {
     SwWrtShell& rSh = pView->GetWrtShell();
@@ -1534,14 +1506,8 @@ void SwInsertDBColAutoPilot::SetTabSet()
     rSh.MoveTable( GetfnTableCurr(), GetfnTableStart() );
 }
 
-/*  */
-
-
 _DB_ColumnConfigData::~_DB_ColumnConfigData() {}
 
-/* -----------------------------05.12.00 16:15--------------------------------
-
- ---------------------------------------------------------------------------*/
 static Sequence<rtl::OUString> lcl_createSourceNames(const String& rNodeName)
 {
     Sequence<rtl::OUString> aSourceNames(11);
@@ -1573,9 +1539,7 @@ static Sequence<rtl::OUString> lcl_createSourceNames(const String& rNodeName)
                             RTL_CONSTASCII_STRINGPARAM( "/IsEmptyHeadline" ));
     return aSourceNames;
 }
-/* -----------------------------05.12.00 16:25--------------------------------
 
- ---------------------------------------------------------------------------*/
 static Sequence<rtl::OUString> lcl_CreateSubNames( const String& rSubNodeName )
 {
     Sequence<rtl::OUString> aSubSourceNames(6);
@@ -1596,9 +1560,7 @@ static Sequence<rtl::OUString> lcl_CreateSubNames( const String& rSubNodeName )
                             RTL_CONSTASCII_STRINGPARAM( "/NumberFormatLocale" ));
     return aSubSourceNames;
 }
-/* -----------------------------06.12.00 13:03--------------------------------
 
- ---------------------------------------------------------------------------*/
 static rtl::OUString lcl_CreateUniqueName(const Sequence<rtl::OUString>& aNames)
 {
     sal_Int32 nIdx = aNames.getLength();
@@ -1622,9 +1584,7 @@ static rtl::OUString lcl_CreateUniqueName(const Sequence<rtl::OUString>& aNames)
     }
     return sRet;
 }
-/* -----------------------------05.12.00 15:00--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwInsertDBColAutoPilot::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >&  ) {}
 
 void SwInsertDBColAutoPilot::Commit()
@@ -1760,9 +1720,7 @@ void SwInsertDBColAutoPilot::Commit()
         SetSetProperties(sColumnNode, aSubValues);
     }
 }
-/* -----------------------------05.12.00 15:00--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwInsertDBColAutoPilot::Load()
 {
     Sequence <rtl::OUString> aNames = GetNodeNames(rtl::OUString());

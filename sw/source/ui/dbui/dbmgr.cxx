@@ -215,9 +215,6 @@ void lcl_CopyCompatibilityOptions( SwWrtShell& rSourceShell, SwWrtShell& rTarget
     rTargetShell.SetUseFormerTextWrapping( pIDsa->get(IDocumentSettingAccess::USE_FORMER_TEXT_WRAPPING));
 }
 }
-/* -----------------09.12.2002 12:35-----------------
- *
- * --------------------------------------------------*/
 
 class SwConnectionDisposedListener_Impl : public cppu::WeakImplHelper1
 < lang::XEventListener >
@@ -230,7 +227,7 @@ public:
     ~SwConnectionDisposedListener_Impl();
 
 };
-// -----------------------------------------------------------------------------
+
 struct SwNewDBMgr_Impl
 {
     SwDSParam*          pMergeData;
@@ -243,9 +240,7 @@ struct SwNewDBMgr_Impl
        ,xDisposeListener(new SwConnectionDisposedListener_Impl(rDBMgr))
         {}
 };
-/*-- 24.10.2003 15:54:18---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void lcl_InitNumberFormatter(SwDSParam& rParam, uno::Reference<XDataSource> xSource)
 {
     uno::Reference<XMultiServiceFactory> xMgr = ::comphelper::getProcessServiceFactory();
@@ -276,9 +271,7 @@ void lcl_InitNumberFormatter(SwDSParam& rParam, uno::Reference<XDataSource> xSou
         }
     }
 }
-/* -----------------------------17.07.00 17:04--------------------------------
 
- ---------------------------------------------------------------------------*/
 BOOL lcl_MoveAbsolute(SwDSParam* pParam, long nAbsPos)
 {
     BOOL bRet = FALSE;
@@ -298,9 +291,7 @@ BOOL lcl_MoveAbsolute(SwDSParam* pParam, long nAbsPos)
     }
     return bRet;
 }
-/* -----------------------------17.07.00 17:23--------------------------------
 
- ---------------------------------------------------------------------------*/
 BOOL lcl_GetColumnCnt(SwDSParam* pParam,
     const String& rColumnName, long nLanguage, String& rResult, double* pNumber)
 {
@@ -334,6 +325,7 @@ BOOL lcl_GetColumnCnt(SwDSParam* pParam,
     rResult = SwNewDBMgr::GetDBField( xColumnProps, aFormatData, pNumber);
     return TRUE;
 };
+
 /*--------------------------------------------------------------------
     Beschreibung: Daten importieren
  --------------------------------------------------------------------*/
@@ -473,8 +465,6 @@ BOOL SwNewDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
 /*--------------------------------------------------------------------
     Beschreibung: Daten importieren
  --------------------------------------------------------------------*/
-
-
 BOOL SwNewDBMgr::Merge(SwWrtShell* pSh)
 {
     pSh->StartAllAction();
@@ -487,9 +477,6 @@ BOOL SwNewDBMgr::Merge(SwWrtShell* pSh)
     return TRUE;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 void SwNewDBMgr::ImportFromConnection(  SwWrtShell* pSh )
 {
     if(pImpl->pMergeData && !pImpl->pMergeData->bEndOfDB)
@@ -523,9 +510,6 @@ void SwNewDBMgr::ImportFromConnection(  SwWrtShell* pSh )
         }
     }
 }
-/*-----------------24.02.97 10.30-------------------
-
---------------------------------------------------*/
 
 String  lcl_FindColumn(const String& sFormatStr,USHORT  &nUsedPos, BYTE &nSeparator)
 {
@@ -558,9 +542,6 @@ String  lcl_FindColumn(const String& sFormatStr,USHORT  &nUsedPos, BYTE &nSepara
     return sReturn;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 void SwNewDBMgr::ImportDBEntry(SwWrtShell* pSh)
 {
     if(pImpl->pMergeData && !pImpl->pMergeData->bEndOfDB)
@@ -630,6 +611,7 @@ void SwNewDBMgr::ImportDBEntry(SwWrtShell* pSh)
         }
     }
 }
+
 /*--------------------------------------------------------------------
     Beschreibung: Listbox mit Tabellenliste fuellen
  --------------------------------------------------------------------*/
@@ -715,9 +697,7 @@ BOOL SwNewDBMgr::GetColumnNames(ListBox* pListBox,
     }
     return(TRUE);
 }
-/* -----------------------------08.06.01 15:11--------------------------------
 
- ---------------------------------------------------------------------------*/
 BOOL SwNewDBMgr::GetColumnNames(ListBox* pListBox,
         uno::Reference< XConnection> xConnection,
         const String& rTableName, BOOL bAppend)
@@ -742,7 +722,6 @@ BOOL SwNewDBMgr::GetColumnNames(ListBox* pListBox,
 /*--------------------------------------------------------------------
     Beschreibung: CTOR
  --------------------------------------------------------------------*/
-
 SwNewDBMgr::SwNewDBMgr() :
             nMergeType(DBMGR_INSERT),
             bInitDBFields(FALSE),
@@ -753,9 +732,7 @@ SwNewDBMgr::SwNewDBMgr() :
             pMergeEvtSrc(NULL)
 {
 }
-/* -----------------------------18.07.00 08:56--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwNewDBMgr::~SwNewDBMgr()
 {
     for(USHORT nPos = 0; nPos < aDataSourceParams.Count(); nPos++)
@@ -792,6 +769,7 @@ String lcl_FindUniqueName(SwWrtShell* pTargetShell, const String& rStartingPageD
         ++nDocNo;
     }while(true);
 }
+
 void lcl_CopyDynamicDefaults( const SwDoc& rSource, SwDoc& rTarget )
 {
     USHORT __FAR_DATA aRangeOfDefaults[] = {
@@ -822,6 +800,7 @@ void lcl_CopyDynamicDefaults( const SwDoc& rSource, SwDoc& rTarget )
     if( aNewDefaults.Count() )
         rTarget.SetDefault( aNewDefaults );
 }
+
 void lcl_CopyFollowPageDesc(
                             SwWrtShell& rTargetShell,
                             const SwPageDesc& rSourcePageDesc,
@@ -1372,10 +1351,6 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
     return bLoop;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
-  --------------------------------------------------------------------*/
-
 IMPL_LINK_INLINE_START( SwNewDBMgr, PrtCancelHdl, Button *, pButton )
 {
     pButton->GetParent()->Hide();
@@ -1384,12 +1359,10 @@ IMPL_LINK_INLINE_START( SwNewDBMgr, PrtCancelHdl, Button *, pButton )
 }
 IMPL_LINK_INLINE_END( SwNewDBMgr, PrtCancelHdl, Button *, pButton )
 
-
 /*--------------------------------------------------------------------
     Beschreibung: Numberformat der Spalte ermitteln und ggfs. in
                     den uebergebenen Formatter uebertragen
   --------------------------------------------------------------------*/
-
 ULONG SwNewDBMgr::GetColumnFmt( const String& rDBName,
                                 const String& rTableName,
                                 const String& rColNm,
@@ -1469,9 +1442,7 @@ ULONG SwNewDBMgr::GetColumnFmt( const String& rDBName,
     }
     return nRet;
 }
-/* -----------------------------07.06.01 15:43--------------------------------
 
- ---------------------------------------------------------------------------*/
 ULONG SwNewDBMgr::GetColumnFmt( uno::Reference< XDataSource> xSource,
                         uno::Reference< XConnection> xConnection,
                         uno::Reference< XPropertySet> xColumn,
@@ -1553,9 +1524,6 @@ ULONG SwNewDBMgr::GetColumnFmt( uno::Reference< XDataSource> xSource,
     return nRet;
 }
 
-/* -----------------------------17.07.00 09:47--------------------------------
-
- ---------------------------------------------------------------------------*/
 sal_Int32 SwNewDBMgr::GetColumnType( const String& rDBName,
                           const String& rTableName,
                           const String& rColNm )
@@ -1601,9 +1569,6 @@ sal_Int32 SwNewDBMgr::GetColumnType( const String& rDBName,
     return nRet;
 }
 
-/* -----------------------------03.07.00 17:12--------------------------------
-
- ---------------------------------------------------------------------------*/
 uno::Reference< sdbc::XConnection> SwNewDBMgr::GetConnection(const String& rDataSource,
                                                     uno::Reference<XDataSource>& rxSource)
 {
@@ -1624,9 +1589,7 @@ uno::Reference< sdbc::XConnection> SwNewDBMgr::GetConnection(const String& rData
 
     return xConnection;
 }
-/* -----------------------------03.07.00 17:12--------------------------------
 
- ---------------------------------------------------------------------------*/
 uno::Reference< sdbcx::XColumnsSupplier> SwNewDBMgr::GetColumnSupplier(uno::Reference<sdbc::XConnection> xConnection,
                                     const String& rTableOrQuery,
                                     BYTE    eTableOrQuery)
@@ -1675,9 +1638,7 @@ uno::Reference< sdbcx::XColumnsSupplier> SwNewDBMgr::GetColumnSupplier(uno::Refe
 
     return xRet;
 }
-/* -----------------------------05.07.00 13:44--------------------------------
 
- ---------------------------------------------------------------------------*/
 String SwNewDBMgr::GetDBField(uno::Reference<XPropertySet> xColumnProps,
                         const SwDBFormatData& rDBFormatData,
                         double* pNumber)
@@ -1769,6 +1730,7 @@ String SwNewDBMgr::GetDBField(uno::Reference<XPropertySet> xColumnProps,
 
     return sRet;
 }
+
 /* -----------------------------06.07.00 14:28--------------------------------
     releases the merge data source table or query after merge is completed
  ---------------------------------------------------------------------------*/
@@ -1779,6 +1741,7 @@ void    SwNewDBMgr::EndMerge()
     delete pImpl->pMergeData;
     pImpl->pMergeData = 0;
 }
+
 /* -----------------------------06.07.00 14:28--------------------------------
     checks if a desired data source table or query is open
  ---------------------------------------------------------------------------*/
@@ -1805,6 +1768,7 @@ BOOL    SwNewDBMgr::IsDataSourceOpen(const String& rDataSource,
     }
     return sal_False;
 }
+
 /* -----------------------------17.07.00 16:44--------------------------------
     read column data a a specified position
  ---------------------------------------------------------------------------*/
@@ -1870,6 +1834,7 @@ BOOL SwNewDBMgr::GetColumnCnt(const String& rSourceName, const String& rTableNam
     }
     return bRet;
 }
+
 /* -----------------------------06.07.00 16:47--------------------------------
     reads the column data at the current position
  ---------------------------------------------------------------------------*/
@@ -1885,17 +1850,13 @@ BOOL    SwNewDBMgr::GetMergeColumnCnt(const String& rColumnName, USHORT nLanguag
     BOOL bRet = lcl_GetColumnCnt(pImpl->pMergeData, rColumnName, nLanguage, rResult, pNumber);
     return bRet;
 }
-/* -----------------------------07.07.00 14:28--------------------------------
 
- ---------------------------------------------------------------------------*/
 BOOL SwNewDBMgr::ToNextMergeRecord()
 {
     DBG_ASSERT(pImpl->pMergeData && pImpl->pMergeData->xResultSet.is(), "no data source in merge");
     return ToNextRecord(pImpl->pMergeData);
 }
-/* -----------------------------10.07.01 14:28--------------------------------
 
- ---------------------------------------------------------------------------*/
 BOOL SwNewDBMgr::ToNextRecord(
     const String& rDataSource, const String& rCommand, sal_Int32 /*nCommandType*/)
 {
@@ -1914,9 +1875,7 @@ BOOL SwNewDBMgr::ToNextRecord(
     }
     return ToNextRecord(pFound);
 }
-/* -----------------------------10.07.01 14:38--------------------------------
 
- ---------------------------------------------------------------------------*/
 BOOL SwNewDBMgr::ToNextRecord(SwDSParam* pParam)
 {
     BOOL bRet = TRUE;
@@ -1969,9 +1928,7 @@ BOOL SwNewDBMgr::ExistsNextRecord() const
 {
     return pImpl->pMergeData && !pImpl->pMergeData->bEndOfDB;
 }
-/* -----------------------------13.07.00 10:41--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_uInt32  SwNewDBMgr::GetSelectedRecordId()
 {
     sal_uInt32  nRet = 0;
@@ -1987,9 +1944,7 @@ sal_uInt32  SwNewDBMgr::GetSelectedRecordId()
     }
     return nRet;
 }
-/* -----------------------------13.07.00 10:58--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool SwNewDBMgr::ToRecordId(sal_Int32 nSet)
 {
     DBG_ASSERT(pImpl->pMergeData && pImpl->pMergeData->xResultSet.is(), "no data source in merge");
@@ -2007,9 +1962,6 @@ sal_Bool SwNewDBMgr::ToRecordId(sal_Int32 nSet)
     return bRet;
 }
 
-/* -----------------------------17.07.00 14:17--------------------------------
-
- ---------------------------------------------------------------------------*/
 BOOL SwNewDBMgr::OpenDataSource(const String& rDataSource, const String& rTableOrQuery,
             sal_Int32 nCommandType, bool bCreate)
 {
@@ -2070,9 +2022,7 @@ BOOL SwNewDBMgr::OpenDataSource(const String& rDataSource, const String& rTableO
     }
     return pFound->xResultSet.is();
 }
-/* -----------------------------14.08.2001 10:26------------------------------
 
- ---------------------------------------------------------------------------*/
 uno::Reference< XConnection> SwNewDBMgr::RegisterConnection(rtl::OUString& rDataSource)
 {
     SwDSParam* pFound = SwNewDBMgr::FindDSConnection(rDataSource, TRUE);
@@ -2092,9 +2042,7 @@ uno::Reference< XConnection> SwNewDBMgr::RegisterConnection(rtl::OUString& rData
     }
     return pFound->xConnection;
 }
-/* -----------------------------17.07.00 15:55--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_uInt32      SwNewDBMgr::GetSelectedRecordId(
     const String& rDataSource, const String& rTableOrQuery, sal_Int32 nCommandType)
 {
@@ -2158,9 +2106,7 @@ void    SwNewDBMgr::CloseAll(BOOL bIncludingMerge)
         }
     }
 }
-/* -----------------------------17.07.00 14:54--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwDSParam* SwNewDBMgr::FindDSData(const SwDBData& rData, BOOL bCreate)
 {
     //prefer merge data if available
@@ -2209,9 +2155,6 @@ SwDSParam* SwNewDBMgr::FindDSData(const SwDBData& rData, BOOL bCreate)
     }
     return pFound;
 }
-/* -----------------------------14.08.2001 10:27------------------------------
-
- ---------------------------------------------------------------------------*/
 
 SwDSParam*  SwNewDBMgr::FindDSConnection(const rtl::OUString& rDataSource, BOOL bCreate)
 {
@@ -2249,16 +2192,11 @@ SwDSParam*  SwNewDBMgr::FindDSConnection(const rtl::OUString& rDataSource, BOOL 
     return pFound;
 }
 
-/* -----------------------------17.07.00 14:34--------------------------------
-
- ---------------------------------------------------------------------------*/
 const SwDBData& SwNewDBMgr::GetAddressDBName()
 {
     return SW_MOD()->GetDBConfig()->GetAddressSource();
 }
-/* -----------------------------18.07.00 13:13--------------------------------
 
- ---------------------------------------------------------------------------*/
 Sequence<rtl::OUString> SwNewDBMgr::GetExistingDatabaseNames()
 {
     uno::Reference<XNameAccess> xDBContext;
@@ -2274,9 +2212,7 @@ Sequence<rtl::OUString> SwNewDBMgr::GetExistingDatabaseNames()
     }
     return Sequence<rtl::OUString>();
 }
-/*-- 26.05.2004 14:33:13---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 String SwNewDBMgr::LoadAndRegisterDataSource()
 {
     sfx2::FileDialogHelper aDlgHelper( TemplateDescription::FILEOPEN_SIMPLE, 0 );
@@ -2467,9 +2403,7 @@ String SwNewDBMgr::LoadAndRegisterDataSource()
     return sFind;
 
 }
-/* -----------------------------10.11.00 17:10--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
                         const Sequence<PropertyValue>& rProperties,
                         BOOL bWithDataSourceBrowser)
@@ -2623,9 +2557,7 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
     }
     DELETEZ(pImpl->pMergeDialog);
 }
-/* -----------------------------13.11.00 08:20--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwNewDBMgr::InsertText(SwWrtShell& rSh,
                         const Sequence< PropertyValue>& rProperties)
 {
@@ -2700,9 +2632,7 @@ void SwNewDBMgr::InsertText(SwWrtShell& rSh,
     delete pDlg;
 
 }
-/* -----------------------------30.08.2001 12:00------------------------------
 
- ---------------------------------------------------------------------------*/
 SwDbtoolsClient* SwNewDBMgr::pDbtoolsClient = NULL;
 
 SwDbtoolsClient& SwNewDBMgr::GetDbtoolsClient()
@@ -2711,17 +2641,13 @@ SwDbtoolsClient& SwNewDBMgr::GetDbtoolsClient()
         pDbtoolsClient = new SwDbtoolsClient;
     return *pDbtoolsClient;
 }
-/* -----------------13.05.2003 15:34-----------------
 
- --------------------------------------------------*/
 void SwNewDBMgr::RemoveDbtoolsClient()
 {
     delete pDbtoolsClient;
     pDbtoolsClient = 0;
 }
-/* -----------------------------20.08.2002 12:00------------------------------
 
- ---------------------------------------------------------------------------*/
 uno::Reference<XDataSource> SwNewDBMgr::getDataSourceAsParent(const uno::Reference< XConnection>& _xConnection,const ::rtl::OUString& _sDataSourceName)
 {
     uno::Reference<XDataSource> xSource;
@@ -2739,9 +2665,7 @@ uno::Reference<XDataSource> SwNewDBMgr::getDataSourceAsParent(const uno::Referen
     }
     return xSource;
 }
-/* -----------------------------20.08.2002 12:00------------------------------
 
- ---------------------------------------------------------------------------*/
 uno::Reference<XResultSet> SwNewDBMgr::createCursor(const ::rtl::OUString& _sDataSourceName,
                                        const ::rtl::OUString& _sCommand,
                                        sal_Int32 _nCommandType,
@@ -2781,11 +2705,11 @@ uno::Reference<XResultSet> SwNewDBMgr::createCursor(const ::rtl::OUString& _sDat
     }
     return xResultSet;
 }
+
 /*-- 13.05.2004 16:14:15---------------------------------------------------
     merge all data into one resulting document and return the number of
     merged documents
   -----------------------------------------------------------------------*/
-
 sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
                             SwView& rSourceView )
 {
@@ -3039,20 +2963,16 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
     bInMerge = FALSE;
     return nRet;
 }
-/* -----------------09.12.2002 12:38-----------------
- *
- * --------------------------------------------------*/
+
 SwConnectionDisposedListener_Impl::SwConnectionDisposedListener_Impl(SwNewDBMgr& rMgr) :
     rDBMgr(rMgr)
-{};
-/* -----------------09.12.2002 12:39-----------------
- *
- * --------------------------------------------------*/
+{
+};
+
 SwConnectionDisposedListener_Impl::~SwConnectionDisposedListener_Impl()
-{};
-/* -----------------09.12.2002 12:39-----------------
- *
- * --------------------------------------------------*/
+{
+};
+
 void SwConnectionDisposedListener_Impl::disposing( const EventObject& rSource )
         throw (RuntimeException)
 {

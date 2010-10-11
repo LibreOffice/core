@@ -53,9 +53,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 using namespace ::rtl;
 
-/*-- 08.04.2004 15:12:24---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwDBTablePreviewDialog::SwDBTablePreviewDialog(Window* pParent, uno::Sequence< beans::PropertyValue>& rValues ) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_DBTABLEPREVIEWDIALOG)),
 #ifdef MSC
@@ -127,9 +124,7 @@ SwDBTablePreviewDialog::SwDBTablePreviewDialog(Window* pParent, uno::Sequence< b
 
 
 }
-/*-- 08.04.2004 15:12:24---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwDBTablePreviewDialog::~SwDBTablePreviewDialog()
 {
     if(m_xFrame.is())

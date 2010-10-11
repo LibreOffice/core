@@ -158,7 +158,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::ui::dialogs;
 
-
 static void lcl_SetAllTextToDefaultLanguage( SwWrtShell &rWrtSh, USHORT nWhichId )
 {
     if (nWhichId == RES_CHRATR_LANGUAGE ||
@@ -187,7 +186,6 @@ static void lcl_SetAllTextToDefaultLanguage( SwWrtShell &rWrtSh, USHORT nWhichId
 /*---------------------------------------------------------------------------
     Beschreibung:   String fuer die Seitenanzeige in der Statusbar basteln.
  ----------------------------------------------------------------------------*/
-
 String SwView::GetPageStr( USHORT nPg, USHORT nLogPg,
                             const String& rDisplay )
 {
@@ -207,7 +205,6 @@ String SwView::GetPageStr( USHORT nPg, USHORT nLogPg,
 
     return aStr;
 }
-
 
 int SwView::InsertGraphic( const String &rPath, const String &rFilter,
                                 BOOL bLink, GraphicFilter *pFlt,
@@ -253,7 +250,6 @@ int SwView::InsertGraphic( const String &rPath, const String &rFilter,
     }
     return nRes;
 }
-
 
 BOOL SwView::InsertGraphicDlg( SfxRequest& rReq )
 {
@@ -486,7 +482,6 @@ BOOL SwView::InsertGraphicDlg( SfxRequest& rReq )
 
     return bReturn;
 }
-
 
 void __EXPORT SwView::Execute(SfxRequest &rReq)
 {
@@ -1169,7 +1164,6 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
 /*--------------------------------------------------------------------
     Beschreibung:   SeitenNr-Feld invalidieren
  --------------------------------------------------------------------*/
-
 void SwView::UpdatePageNums(USHORT nPhyNum, USHORT nVirtNum, const String& rPgStr)
 {
     String sTemp(GetPageStr( nPhyNum, nVirtNum, rPgStr ));
@@ -1182,8 +1176,6 @@ void SwView::UpdatePageNums(USHORT nPhyNum, USHORT nVirtNum, const String& rPgSt
 /*--------------------------------------------------------------------
     Beschreibung:   Status der Stauszeile
  --------------------------------------------------------------------*/
-
-
 void SwView::StateStatusLine(SfxItemSet &rSet)
 {
     SwWrtShell& rShell = GetWrtShell();
@@ -1530,8 +1522,6 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
 /*--------------------------------------------------------------------
     Beschreibung:   Execute fuer die Stauszeile
  --------------------------------------------------------------------*/
-
-
 void SwView::ExecuteStatusLine(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetWrtShell();
@@ -1817,7 +1807,6 @@ void SwView::InsFrmMode(USHORT nCols)
 /*--------------------------------------------------------------------
     Beschreibung:   Links bearbeiten
  --------------------------------------------------------------------*/
-
 void SwView::EditLinkDlg()
 {
     BOOL bWeb = 0 != PTR_CAST(SwWebView, this);
@@ -1959,7 +1948,6 @@ BOOL SwView::JumpToSwMark( const String& rMark )
 // Undo "Insert form file" crashes with documents imported from binary filter (.sdw) => disabled
 // Undo "Insert form file" crashes with (.odt) documents crashes if these documents contains
 // page styles with active header/footer => disabled for those documents
-
 sal_uInt16 lcl_PageDescWithHeader( const SwDoc& rDoc )
 {
     sal_uInt16 nRet = 0;
@@ -1981,7 +1969,6 @@ sal_uInt16 lcl_PageDescWithHeader( const SwDoc& rDoc )
 /*--------------------------------------------------------------------
     Beschreibung:   Links bearbeiten
  --------------------------------------------------------------------*/
-
 void SwView::ExecuteInsertDoc( SfxRequest& rRequest, const SfxPoolItem* pItem )
 {
     pViewImpl->InitRequest( rRequest );
@@ -2188,9 +2175,7 @@ extern int lcl_FindDocShell( SfxObjectShellRef& xDocSh,
     delete pMedium;
     return nFound;
 }
-/* -----------------05.02.2003 12:06-----------------
- *
- * --------------------------------------------------*/
+
 void SwView::EnableMailMerge(BOOL bEnable )
 {
     bInMailMerge = bEnable;
@@ -2198,8 +2183,7 @@ void SwView::EnableMailMerge(BOOL bEnable )
     rBind.Invalidate(FN_INSERT_FIELD_DATA_ONLY);
     rBind.Update(FN_INSERT_FIELD_DATA_ONLY);
 }
-/*
-*/
+
 namespace
 {
     sal_Bool lcl_NeedAdditionalDataSource( const uno::Reference< XNameAccess >& _rDatasourceContext )
@@ -2213,10 +2197,6 @@ namespace
                 );
     }
 }
-
-/* -----------------27.11.2002 12:12-----------------
- *
- * --------------------------------------------------*/
 
 class SwMergeSourceWarningBox_Impl : public ModalDialog
 {
@@ -2263,9 +2243,6 @@ class SwMergeSourceWarningBox_Impl : public ModalDialog
         String          GetMessText() const { return aMessageFI.GetText(); }
         void            SetMessText( const String& rText ) { aMessageFI.SetText( rText ); }
 };
-
-
-
 
 void SwView::GenerateFormLetter(BOOL bUseCurrentDocument)
 {

@@ -233,9 +233,6 @@ public:
     }
 };
 
-
-// -----------------------------------------------------------------------
-
 SwTransferable::SwTransferable( SwWrtShell& rSh )
     : pWrtShell( &rSh ),
     pCreatorView( 0 ),
@@ -265,8 +262,6 @@ SwTransferable::SwTransferable( SwWrtShell& rSh )
         PrepareOLE( aObjDesc );
     }
 }
-
-// -----------------------------------------------------------------------
 
 SwTransferable::~SwTransferable()
 {
@@ -318,8 +313,6 @@ SwTransferable::~SwTransferable()
     Application::GetSolarMutex().release();
 }
 
-// -----------------------------------------------------------------------
-
 static SwDoc * lcl_GetDoc(SwDocFac & rDocFac)
 {
     SwDoc *const pDoc = rDocFac.GetDoc();
@@ -331,8 +324,6 @@ static SwDoc * lcl_GetDoc(SwDocFac & rDocFac)
     return pDoc;
 }
 
-// -----------------------------------------------------------------------
-
 void SwTransferable::ObjectReleased()
 {
     SwModule *pMod = SW_MOD();
@@ -341,8 +332,6 @@ void SwTransferable::ObjectReleased()
     else if( this == pMod->pXSelection )
         pMod->pXSelection = 0;
 }
-
-// -----------------------------------------------------------------------
 
 void SwTransferable::AddSupportedFormats()
 {
@@ -354,8 +343,6 @@ void SwTransferable::AddSupportedFormats()
     }
 }
 
-// -----------------------------------------------------------------------
-
 void SwTransferable::InitOle( SfxObjectShell* pDoc, SwDoc& rDoc )
 {
     //OleVisArea einstellen. Linke obere Ecke der Seite und Groesse
@@ -365,8 +352,6 @@ void SwTransferable::InitOle( SfxObjectShell* pDoc, SwDoc& rDoc )
     pDoc->SetVisArea( aVis.SVRect() );
     rDoc.set(IDocumentSettingAccess::BROWSE_MODE, true );
 }
-
-// -----------------------------------------------------------------------
 
 uno::Reference < embed::XEmbeddedObject > SwTransferable::FindOLEObj( sal_Int64& nAspect ) const
 {
@@ -387,8 +372,6 @@ uno::Reference < embed::XEmbeddedObject > SwTransferable::FindOLEObj( sal_Int64&
     return xObj;
 }
 
-// -----------------------------------------------------------------------
-
 Graphic* SwTransferable::FindOLEReplacementGraphic() const
 {
     if( pClpDocFac )
@@ -406,16 +389,11 @@ Graphic* SwTransferable::FindOLEReplacementGraphic() const
     return NULL;
 }
 
-
-// -----------------------------------------------------------------------
-
 void SwTransferable::RemoveDDELinkFormat( const Window& rWin )
 {
     RemoveFormat( SOT_FORMATSTR_ID_LINK );
     CopyToClipboard( (Window*)&rWin );
 }
-
-// -----------------------------------------------------------------------
 
 sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
 {
@@ -621,8 +599,6 @@ sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
     return bOK;
 }
 
-// -----------------------------------------------------------------------
-
 sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
                                     void* pObject, sal_uInt32 nObjectType,
                                     const DATA_FLAVOR& /*rFlavor*/ )
@@ -769,8 +745,6 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
     return bRet;
 }
 
-// -----------------------------------------------------------------------
-
 int SwTransferable::Cut()
 {
     int nRet = Copy( TRUE );
@@ -778,8 +752,6 @@ int SwTransferable::Cut()
         DeleteSelection();
     return nRet;
 }
-
-// -----------------------------------------------------------------------
 
 void SwTransferable::DeleteSelection()
 {
@@ -793,8 +765,6 @@ void SwTransferable::DeleteSelection()
     pWrtShell->DelRight();
     pWrtShell->EndUndo( UNDO_DELETE );
 }
-
-// -----------------------------------------------------------------------
 
 int SwTransferable::PrepareForCopy( BOOL bIsCut )
 {
@@ -1014,8 +984,6 @@ int SwTransferable::Copy( BOOL bIsCut )
     return nRet;
 }
 
-// -----------------------------------------------------------------------
-
 int SwTransferable::CalculateAndCopy()
 {
     if(!pWrtShell)
@@ -1034,8 +1002,6 @@ int SwTransferable::CalculateAndCopy()
 
     return 1;
 }
-
-// -----------------------------------------------------------------------
 
 int SwTransferable::CopyGlossary( SwTextBlocks& rGlossary,
                                     const String& rStr )
@@ -1089,7 +1055,6 @@ static inline uno::Reference < XTransferable > * lcl_getTransferPointer ( uno::R
 {
     return &xRef;
 }
-// -----------------------------------------------------------------------
 
 BOOL SwTransferable::IsPaste( const SwWrtShell& rSh,
                               const TransferableDataHelper& rData )
@@ -1131,8 +1096,6 @@ BOOL SwTransferable::IsPaste( const SwWrtShell& rSh,
 
     return bIsPaste;
 }
-
-// -----------------------------------------------------------------------
 
 int SwTransferable::Paste( SwWrtShell& rSh, TransferableDataHelper& rData )
 {
@@ -1177,8 +1140,6 @@ int SwTransferable::Paste( SwWrtShell& rSh, TransferableDataHelper& rData )
             SwTransferable::PasteData( rData, rSh, nAction, nFormat,
                                         nDestination, FALSE, FALSE );
 }
-
-// -----------------------------------------------------------------------
 
 int SwTransferable::PasteData( TransferableDataHelper& rData,
                             SwWrtShell& rSh, USHORT nAction, ULONG nFormat,
@@ -1543,8 +1504,6 @@ ASSERT( pPt, "EXCHG_OUT_ACTION_MOVE_PRIVATE: was soll hier passieren?" );
     return nRet;
 }
 
-// -----------------------------------------------------------------------
-
 USHORT SwTransferable::GetSotDestination( const SwWrtShell& rSh,
                                             const Point* pPt )
 {
@@ -1627,8 +1586,6 @@ JP 13.07.98: Bug 52637: es wird ein URL-Feld erkannt also werden nur die
 
     return nRet;
 }
-
-// -----------------------------------------------------------------------
 
 int SwTransferable::_PasteFileContent( TransferableDataHelper& rData,
                                     SwWrtShell& rSh, ULONG nFmt, BOOL bMsg )
@@ -1724,8 +1681,6 @@ int SwTransferable::_PasteFileContent( TransferableDataHelper& rData,
     }
     return nRet;
 }
-
-// -----------------------------------------------------------------------
 
 int SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
                                 ULONG nFmt, BYTE nActionFlags, BOOL bMsg )
@@ -1948,11 +1903,6 @@ int SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
     return nRet;
 }
 
-// -----------------------------------------------------------------------
-
-
-// -----------------------------------------------------------------------
-
 int SwTransferable::_PasteTargetURL( TransferableDataHelper& rData,
                                     SwWrtShell& rSh, USHORT nAction,
                                     const Point* pPt, BOOL bInsertGRF )
@@ -2032,9 +1982,6 @@ int SwTransferable::_PasteTargetURL( TransferableDataHelper& rData,
     return nRet;
 }
 
-
-// -----------------------------------------------------------------------
-
 void SwTransferable::SetSelInShell( SwWrtShell& rSh, BOOL bSelectFrm,
                                         const Point* pPt )
 {
@@ -2069,8 +2016,6 @@ void SwTransferable::SetSelInShell( SwWrtShell& rSh, BOOL bSelectFrm,
             rSh.SwCrsrShell::SetCrsr( *pPt, TRUE );
     }
 }
-
-// -----------------------------------------------------------------------
 
 int SwTransferable::_PasteDDE( TransferableDataHelper& rData,
                                 SwWrtShell& rWrtShell, BOOL bReReadGrf,
@@ -2236,8 +2181,6 @@ int SwTransferable::_PasteDDE( TransferableDataHelper& rData,
     return 1;
 }
 
-// -----------------------------------------------------------------------
-
 int SwTransferable::_PasteSdrFormat(  TransferableDataHelper& rData,
                                     SwWrtShell& rSh, USHORT nAction,
                                     const Point* pPt, BYTE nActionFlags )
@@ -2256,8 +2199,6 @@ int SwTransferable::_PasteSdrFormat(  TransferableDataHelper& rData,
     }
     return nRet;
 }
-
-// -----------------------------------------------------------------------
 
 int SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
                                 ULONG nFmt, USHORT nAction, const Point* pPt,
@@ -2425,8 +2366,6 @@ int SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
     return nRet;
 }
 
-// -----------------------------------------------------------------------
-
 int SwTransferable::_PasteImageMap( TransferableDataHelper& rData,
                                     SwWrtShell& rSh )
 {
@@ -2451,8 +2390,6 @@ int SwTransferable::_PasteImageMap( TransferableDataHelper& rData,
     }
     return nRet;
 }
-
-// -----------------------------------------------------------------------
 
 int SwTransferable::_PasteAsHyperlink( TransferableDataHelper& rData,
                                         SwWrtShell& rSh, ULONG nFmt )
@@ -2497,8 +2434,6 @@ int SwTransferable::_PasteAsHyperlink( TransferableDataHelper& rData,
     }
     return nRet;
 }
-
-// -----------------------------------------------------------------------
 
 int SwTransferable::_PasteFileName( TransferableDataHelper& rData,
                                     SwWrtShell& rSh, ULONG nFmt,
@@ -2598,8 +2533,6 @@ int SwTransferable::_PasteFileName( TransferableDataHelper& rData,
     }
     return nRet;
 }
-
-// -----------------------------------------------------------------------
 
 int SwTransferable::_PasteDBData( TransferableDataHelper& rData,
                                     SwWrtShell& rSh, ULONG nFmt, BOOL bLink,
@@ -2703,8 +2636,6 @@ int SwTransferable::_PasteDBData( TransferableDataHelper& rData,
     return nRet;
 }
 
-// -----------------------------------------------------------------------
-
 int SwTransferable::_PasteFileList( TransferableDataHelper& rData,
                                     SwWrtShell& rSh, BOOL bLink,
                                     const Point* pPt, BOOL bMsg )
@@ -2744,8 +2675,6 @@ int SwTransferable::_PasteFileList( TransferableDataHelper& rData,
     return nRet;
 }
 
-// -----------------------------------------------------------------------
-
 BOOL SwTransferable::_CheckForURLOrLNKFile( TransferableDataHelper& rData,
                                         String& rFileName, String* pTitle )
 {
@@ -2773,8 +2702,6 @@ ASSERT( !&rFileName, "how do we read today .URL - Files?" );
     return bIsURLFile;
 }
 
-// -----------------------------------------------------------------------
-
 BOOL SwTransferable::IsPasteSpecial( const SwWrtShell& rWrtShell,
                                      const TransferableDataHelper& rData )
 {
@@ -2783,8 +2710,6 @@ BOOL SwTransferable::IsPasteSpecial( const SwWrtShell& rWrtShell,
     FillClipFmtItem( rWrtShell, rData, aClipboardFmtItem);
     return aClipboardFmtItem.Count() > 0;
 }
-
-// -----------------------------------------------------------------------
 
 int SwTransferable::PasteFormat( SwWrtShell& rSh,
                                     TransferableDataHelper& rData,
@@ -2828,8 +2753,6 @@ int SwTransferable::PasteFormat( SwWrtShell& rSh,
     return nRet;
 }
 
-// -----------------------------------------------------------------------
-
 int SwTransferable::_TestAllowedFormat( const TransferableDataHelper& rData,
                                         ULONG nFormat, USHORT nDestination )
 {
@@ -2845,8 +2768,6 @@ int SwTransferable::_TestAllowedFormat( const TransferableDataHelper& rData,
     }
     return EXCHG_INOUT_ACTION_NONE != nAction;
 }
-
-// -----------------------------------------------------------------------
 
 /**
  * the list of formats which will be offered to the user in the 'Paste
@@ -2870,14 +2791,11 @@ static USHORT aPasteSpecialIds[] =
     0
 };
 
-
 int SwTransferable::PasteUnformatted( SwWrtShell& rSh, TransferableDataHelper& rData )
 {
     // Plain text == unformatted
     return SwTransferable::PasteFormat( rSh, rData, SOT_FORMAT_STRING );
 }
-
-// -----------------------------------------------------------------------
 
 int SwTransferable::PasteSpecial( SwWrtShell& rSh, TransferableDataHelper& rData, ULONG& rFormatUsed )
 {
@@ -2949,7 +2867,6 @@ int SwTransferable::PasteSpecial( SwWrtShell& rSh, TransferableDataHelper& rData
     delete pDlg;
     return nRet;
 }
-
 
 void SwTransferable::FillClipFmtItem( const SwWrtShell& rSh,
                                 const TransferableDataHelper& rData,
@@ -3216,9 +3133,6 @@ void SwTransferable::DragFinished( sal_Int8 nAction )
 
     ((SwViewOption *)pWrtShell->GetViewOptions())->SetIdle( bOldIdle );
 }
-
-
-/*  */
 
 int SwTransferable::PrivatePaste( SwWrtShell& rShell )
 {
@@ -3582,9 +3496,7 @@ void SwTransferable::ClearSelection( SwWrtShell& rSh,
         TransferableHelper::ClearSelection( rSh.GetWin() );
     }
 }
-/* -----------------3/31/2003 11:46AM----------------
 
- --------------------------------------------------*/
 const Sequence< sal_Int8 >& SwTransferable::getUnoTunnelId()
 {
     static Sequence< sal_Int8 > aSeq;
@@ -3597,9 +3509,7 @@ const Sequence< sal_Int8 >& SwTransferable::getUnoTunnelId()
     }
     return aSeq;
 }
-/* -----------------3/31/2003 11:46AM----------------
 
- --------------------------------------------------*/
 sal_Int64 SwTransferable::getSomething( const Sequence< sal_Int8 >& rId ) throw( RuntimeException )
 {
     sal_Int64 nRet;
@@ -3628,10 +3538,6 @@ SwTransferable* SwTransferable::GetSwTransferable( const TransferableDataHelper&
     return pSwTransferable;
 
 }
-
-/*  */
-
-// -----------------------------------------------------------------------
 
 SwTrnsfrDdeLink::SwTrnsfrDdeLink( SwTransferable& rTrans, SwWrtShell& rSh )
     : rTrnsfr( rTrans ), pDocShell( 0 ),
@@ -3688,15 +3594,11 @@ SwTrnsfrDdeLink::SwTrnsfrDdeLink( SwTransferable& rTrans, SwWrtShell& rSh )
     }
 }
 
-// -----------------------------------------------------------------------
-
 SwTrnsfrDdeLink::~SwTrnsfrDdeLink()
 {
     if( refObj.Is() )
         Disconnect( TRUE );
 }
-
-// -----------------------------------------------------------------------
 
 void SwTrnsfrDdeLink::DataChanged( const String& ,
                                     const uno::Any& )
@@ -3709,8 +3611,6 @@ void SwTrnsfrDdeLink::DataChanged( const String& ,
         Disconnect( FALSE );
     }
 }
-
-// -----------------------------------------------------------------------
 
 BOOL SwTrnsfrDdeLink::WriteData( SvStream& rStrm )
 {
@@ -3782,8 +3682,6 @@ BOOL SwTrnsfrDdeLink::WriteData( SvStream& rStrm )
     return true;
 }
 
-// -----------------------------------------------------------------------
-
 void SwTrnsfrDdeLink::Disconnect( BOOL bRemoveDataAdvise )
 {
     //JP 29.01.96 Bug 24432:
@@ -3834,8 +3732,6 @@ void SwTrnsfrDdeLink::Disconnect( BOOL bRemoveDataAdvise )
     bInDisconnect = bOldDisconnect;
 }
 
-// -----------------------------------------------------------------------
-
 BOOL SwTrnsfrDdeLink::FindDocShell()
 {
     TypeId aType( TYPE( SwDocShell ) );
@@ -3854,8 +3750,6 @@ BOOL SwTrnsfrDdeLink::FindDocShell()
     pDocShell = 0;
     return FALSE;
 }
-
-// -----------------------------------------------------------------------
 
 void SwTrnsfrDdeLink::Closed()
 {

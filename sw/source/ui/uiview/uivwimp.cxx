@@ -65,9 +65,6 @@ using namespace ::com::sun::star::scanner;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::datatransfer::clipboard;
 
-/* -----------------02.06.98 15:31-------------------
- *
- * --------------------------------------------------*/
 SwView_Impl::SwView_Impl(SwView* pShell) :
         pxXTextView(new uno::Reference<view::XSelectionSupplier>),
         pView(pShell),
@@ -84,9 +81,6 @@ SwView_Impl::SwView_Impl(SwView* pShell) :
     xDisProvInterceptor = new SwXDispatchProviderInterceptor(*pView);
 }
 
-/*-----------------13.12.97 09:51-------------------
-
---------------------------------------------------*/
 SwView_Impl::~SwView_Impl()
 {
     Reference<XUnoTunnel> xDispTunnel(xDisProvInterceptor, UNO_QUERY);
@@ -114,31 +108,22 @@ SwView_Impl::~SwView_Impl()
     delete m_pRequest;
 }
 
-/*-----------------13.12.97 09:54-------------------
-
---------------------------------------------------*/
 void SwView_Impl::SetShellMode(ShellModes eSet)
 {
     eShellMode = eSet;
 }
-/*-----------------13.12.97 09:59-------------------
 
---------------------------------------------------*/
 view::XSelectionSupplier*   SwView_Impl::GetUNOObject()
 {
     return pxXTextView->get();
 }
-/* -----------------02.06.98 15:29-------------------
- *
- * --------------------------------------------------*/
+
 SwXTextView*    SwView_Impl::GetUNOObject_Impl()
 {
         view::XSelectionSupplier* pTextView = pxXTextView->get();
         return ((SwXTextView*)pTextView);
 }
-/* -----------------------------29.05.00 09:04--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwView_Impl::ExecuteScan( SfxRequest& rReq )
 {
     USHORT nSlot = rReq.GetSlot();
@@ -218,16 +203,12 @@ void SwView_Impl::ExecuteScan( SfxRequest& rReq )
     }
 }
 
-/* -----------------------------29.05.00 08:26--------------------------------
-
- ---------------------------------------------------------------------------*/
 SwScannerEventListener& SwView_Impl::GetScannerEventListener()
 {
     if(!xScanEvtLstnr.is())
         xScanEvtLstnr = pScanEvtLstnr = new SwScannerEventListener(*pView);
     return *pScanEvtLstnr;
 }
-
 
 void SwView_Impl::AddClipboardListener()
 {
@@ -237,9 +218,7 @@ void SwView_Impl::AddClipboardListener()
         pClipEvtLstnr->AddRemoveListener( TRUE );
     }
 }
-/* -----------------3/31/2003 11:42AM----------------
 
- --------------------------------------------------*/
 void SwView_Impl::Invalidate()
 {
     GetUNOObject_Impl()->Invalidate();
@@ -254,9 +233,7 @@ void SwView_Impl::Invalidate()
             pTransferable->Invalidate();
     }
 }
-/* -----------------3/31/2003 12:40PM----------------
 
- --------------------------------------------------*/
 void SwView_Impl::AddTransferable(SwTransferable& rTransferable)
 {
     //prevent removing of the non-referenced SwTransferable
@@ -285,8 +262,6 @@ void SwView_Impl::InitRequest( const SfxRequest& rRequest )
     m_pRequest = new SfxRequest( rRequest );
 }
 
-// ------------------------- SwScannerEventListener ---------------------
-
 SwScannerEventListener::~SwScannerEventListener()
 {
 }
@@ -299,8 +274,6 @@ void SAL_CALL SwScannerEventListener::disposing( const EventObject& rEventObject
         pView->ScannerEventHdl( rEventObject );
 #endif
 }
-
-// ------------------------- SwClipboardChangeListener ---------------------
 
 SwClipboardChangeListener::~SwClipboardChangeListener()
 {

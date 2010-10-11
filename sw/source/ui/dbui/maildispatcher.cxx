@@ -103,7 +103,6 @@ namespace /* private */
 
 } // namespace private
 
-
 MailDispatcher::MailDispatcher(uno::Reference<mail::XSmtpService> mailserver) :
     mailserver_ (mailserver),
     run_(false),
@@ -285,9 +284,7 @@ void MailDispatcher::run()
         }
     } // end for        SSH ALI
 }
-/*-- 27.08.2004 12:04:46---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void MailDispatcher::onTerminated()
 {
     //keep the reference until the end of onTerminated() because of the call order in the
