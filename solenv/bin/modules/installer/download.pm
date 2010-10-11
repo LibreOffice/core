@@ -467,7 +467,7 @@ sub get_downloadname_productname
 {
     my ($allvariables) = @_;
 
-    my $start = "LO";
+    my $start = "LibO";
 
     if ( $allvariables->{'PRODUCTNAME'} eq "LibreOffice" ) { $start = "LibO"; }
 
