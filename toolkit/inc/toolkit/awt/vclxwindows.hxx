@@ -121,7 +121,7 @@ private:
     Image                       maImage;
 
 protected:
-    BitmapEx                    GetBitmap() const { return maImage.GetBitmapEx(); }
+    const Image&    GetImage() const { return maImage; }
 
 protected:
     // ::com::sun::star::awt::XWindow

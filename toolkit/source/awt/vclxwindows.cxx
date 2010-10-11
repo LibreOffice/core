@@ -219,7 +219,7 @@ void VCLXGraphicControl::ImplSetNewImage()
 {
     OSL_PRECOND( GetWindow(), "VCLXGraphicControl::ImplSetNewImage: window is required to be not-NULL!" );
     Button* pButton = static_cast< Button* >( GetWindow() );
-    pButton->SetModeBitmap( GetBitmap() );
+    pButton->SetModeImage( GetImage() );
 }
 
 void VCLXGraphicControl::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, short Flags ) throw(::com::sun::star::uno::RuntimeException)
@@ -660,14 +660,14 @@ void VCLXImageControl::ImplSetNewImage()
 {
     OSL_PRECOND( GetWindow(), "VCLXImageControl::ImplSetNewImage: window is required to be not-NULL!" );
     ImageControl* pControl = static_cast< ImageControl* >( GetWindow() );
-    pControl->SetBitmap( GetBitmap() );
+    pControl->SetImage( GetImage() );
 }
 
 ::com::sun::star::awt::Size VCLXImageControl::getMinimumSize(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
-    Size aSz = GetBitmap().GetSizePixel();
+    Size aSz = GetImage().GetSizePixel();
     aSz = ImplCalcWindowSize( aSz );
 
     return AWTSize(aSz);

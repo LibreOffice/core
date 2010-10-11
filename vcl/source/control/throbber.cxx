@@ -202,7 +202,7 @@ void Throbber::setImageList( ::std::vector< Image > const& i_images )
 
     mnStepCount = maImageList.size();
     const Image aInitialImage( mnStepCount ? maImageList[ 0 ] : Image() );
-    SetBitmap( aInitialImage.GetBitmapEx() );
+    SetImage( aInitialImage );
 }
 
 //--------------------------------------------------------------------
@@ -277,7 +277,7 @@ IMPL_LINK( Throbber, TimeOutHdl, void*, EMPTYARG )
         }
     }
 
-    SetBitmap( maImageList[ mnCurStep ].GetBitmapEx() );
+    SetImage( maImageList[ mnCurStep ] );
 
     return 0;
 }
