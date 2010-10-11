@@ -267,6 +267,10 @@ rtl_uString ** ContextAdmin::getConnectionList(
     ::osl::MutexGuard guard( m_mutex );
 
     *pnStringCount = m_mapContext.size();
+
+    if (*pnStringCount == 0)
+        return NULL;
+
     rtl_uString **ppReturn = ( rtl_uString ** )
         memAlloc( sizeof( rtl_uString * ) * m_mapContext.size() );
     memset( ppReturn , 0 , sizeof( rtl_uString * ) * m_mapContext.size() );
