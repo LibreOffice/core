@@ -264,17 +264,9 @@ inline void TypeDescriptor_Init_Impl::callChain(
     }
 }
 
-// never called
-#if defined(CPPU_LEAK_STATIC_DATA) && defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)
-static void dumb_sunpro5_must_have_dtor_stl_hashmap_code_if_compiled_with_minus_g() SAL_THROW( () )
-{
-    delete (WeakMap_Impl *)0xbeef1e;
-}
-#endif
 //__________________________________________________________________________________________________
 TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl() SAL_THROW( () )
 {
-#ifndef CPPU_LEAK_STATIC_DATA
     if( pCache )
     {
         TypeDescriptionList_Impl::const_iterator aIt = pCache->begin();
@@ -303,7 +295,6 @@ TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl() SAL_THROW( () )
         for( i = 0; i < nSize; i++ )
         {
             typelib_TypeDescriptionReference * pTDR = ppTDR[i];
-            sal_Int32 nStaticCounts = pTDR->nStaticRefCount;
             OSL_ASSERT( pTDR->nRefCount > pTDR->nStaticRefCount );
             pTDR->nRefCount -= pTDR->nStaticRefCount;
 
@@ -355,9 +346,7 @@ TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl() SAL_THROW( () )
 #endif
     delete pCallbacks;
     pCallbacks = 0;
-#endif // CPPU_LEAK_STATIC_DATA
 
-    // todo: maybe into leak block
     if( pMutex )
     {
         delete pMutex;
