@@ -71,15 +71,8 @@ private:
     DECL_LINK( AppEventListenerHdl, VclWindowEvent * );
     virtual ~SplashScreen();
     void loadConfig();
-    void initBitmap();
     void updateStatus();
-    bool findScreenBitmap(rtl::OUString const & path);
-    bool findAppBitmap(rtl::OUString const & path);
-    bool findBitmap(rtl::OUString const & path);
-    bool loadBitmap(
-        rtl::OUString const & path, const rtl::OUString &rBmpFileName );
-    bool loadOneBitmap(
-        rtl::OUString const & path, const rtl::OUString &rBmpFileName );
+    void SetScreenBitmap(BitmapEx &rBitmap);
     void determineProgressRatioValues( double& rXRelPos, double& rYRelPos, double& rRelWidth, double& rRelHeight );
 
     static  SplashScreen *_pINSTANCE;

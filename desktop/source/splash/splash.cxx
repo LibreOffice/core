@@ -36,6 +36,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/stream.hxx>
 #include <sfx2/sfx.hrc>
+#include <sfx2/app.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/salnativewidgets.hxx>
 
@@ -43,7 +44,7 @@
 #include <rtl/bootstrap.hxx>
 #include <rtl/logfile.hxx>
 #include <rtl/locale.hxx>
-#include <rtl/ustrbuf.hxx>
+#include <rtl/strbuf.hxx>
 #include <rtl/math.hxx>
 #include <vcl/graph.hxx>
 #include <svtools/filter.hxx>
@@ -184,7 +185,8 @@ SplashScreen::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::sta
             aArguments[1] >>= _sAppName;
 
         // start to determine bitmap and all other required value
-        initBitmap();
+        if ( _bShowLogo )
+            SetScreenBitmap (_aIntroBmp);
         Size aSize = _aIntroBmp.GetSizePixel();
         SetOutputSizePixel( aSize );
         _vdev.SetOutputSizePixel( aSize );
@@ -390,116 +392,7 @@ void SplashScreen::loadConfig()
     }
 }
 
-void SplashScreen::initBitmap()
-{
-    if ( _bShowLogo )
-    {
-        OUString sExecutePath;
-        ::rtl::Bootstrap::get(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "BRAND_BASE_DIR" ) ),
-            sExecutePath );
-        sExecutePath += OUString( RTL_CONSTASCII_USTRINGPARAM( "/program/" ) );
-
-        bool haveBitmap = false;
-
-        // Try all bitmaps in INTRO_BITMAP_NAMES
-        sal_Int32 nIndex = 0;
-        OUString  aIntroBitmapFiles( RTL_CONSTASCII_USTRINGPARAM( INTRO_BITMAP_STRINGLIST ));
-        do
-        {
-            haveBitmap = loadBitmap( sExecutePath, aIntroBitmapFiles.getToken( 0, ',', nIndex ) );
-        }
-        while ( !haveBitmap && ( nIndex >= 0 ) );
-
-        if (!haveBitmap) {
-            rtl::OUString edition(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "${BRAND_BASE_DIR}/program/edition")));
-            rtl::Bootstrap::expandMacros(edition);
-            haveBitmap = findBitmap(edition);
-        }
-        if (!haveBitmap) {
-            findBitmap(sExecutePath);
-        }
-    }
-}
-
-bool SplashScreen::loadOneBitmap(
-    rtl::OUString const & path, const rtl::OUString &rBmpFileName )
-{
-    if ( rBmpFileName.getLength() == 0 )
-        return false;
-
-    INetURLObject aObj( path, INET_PROT_FILE );
-    aObj.insertName( rBmpFileName );
-
-    SvFileStream aStrm( aObj.PathToFileName(), STREAM_STD_READ );
-    if ( !aStrm.GetError() )
-    {
-        // Use graphic class to also support more graphic formats (bmp,png,...)
-        Graphic aGraphic;
-
-        GraphicFilter* pGF = GraphicFilter::GetGraphicFilter();
-        pGF->ImportGraphic( aGraphic, String(), aStrm, GRFILTER_FORMAT_DONTKNOW );
-
-        // Default case, we load the intro bitmap from a seperate file
-        // (e.g. staroffice_intro.bmp or starsuite_intro.bmp)
-        _aIntroBmp = aGraphic.GetBitmapEx();
-        return true;
-    }
-
-    return false;
-}
-
-// Look for locale specific bitmap variants
-bool SplashScreen::loadBitmap(
-    rtl::OUString const & path, const rtl::OUString &rBmpFileName )
-{
-    sal_Int32 nExt = rBmpFileName.lastIndexOf ('.');
-    if( nExt > 0 )
-    {
-        rtl::OUString aBase = rBmpFileName.copy( 0, nExt );
-        rtl::OUString aExt = rBmpFileName.copy( nExt );
-
-        rtl_Locale *pLoc = NULL;
-        osl_getProcessLocale (&pLoc);
-        rtl::OLocale aLoc( pLoc );
-
-        rtl::OUString aName;
-        aName = aBase + rtl::OUString::createFromAscii ("-") +
-                aLoc.getLanguage() + rtl::OUString::createFromAscii ("_") +
-                aLoc.getCountry() + aExt;
-
-        if( loadOneBitmap( path, aName ) )
-            return true;
-    }
-    return loadOneBitmap( path, rBmpFileName );
-}
-
-bool SplashScreen::findBitmap(rtl::OUString const & path) {
-    bool haveBitmap = false;
-    if ( _bFullScreenSplash )
-    {
-        haveBitmap = findScreenBitmap(path);
-        if ( haveBitmap )
-            _eBitmapMode = BM_FULLSCREEN;
-        else
-            haveBitmap = findAppBitmap(path);
-    }
-    if ( !haveBitmap )
-    {
-        haveBitmap = loadBitmap(
-            path, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("intro.png")));
-        if ( !haveBitmap )
-            haveBitmap = loadBitmap(
-                path, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("intro.bmp")));
-    }
-
-    return haveBitmap;
-}
-
-bool SplashScreen::findScreenBitmap(rtl::OUString const & path)
+void SplashScreen::SetScreenBitmap(BitmapEx &rBitmap)
 {
     sal_Int32 nWidth( 0 );
     sal_Int32 nHeight( 0 );
@@ -515,70 +408,29 @@ bool SplashScreen::findScreenBitmap(rtl::OUString const & path)
     }
 
     // create file name from screen resolution information
-    OUStringBuffer aStrBuf( 128 );
-    aStrBuf.appendAscii( "intro_" );
+    OStringBuffer aStrBuf( 128 );
+    OStringBuffer aResBuf( 32 );
+    aStrBuf.append( "intro_" );
     if ( _sAppName.getLength() > 0 )
     {
-        aStrBuf.append( _sAppName );
-        aStrBuf.appendAscii( "_" );
+        aStrBuf.append( OString( _sAppName, _sAppName.getLength(),
+                                 RTL_TEXTENCODING_UTF8 ) );
+        aStrBuf.append( "_" );
     }
-    aStrBuf.append( OUString::valueOf( nWidth ));
-    aStrBuf.appendAscii( "x" );
-    aStrBuf.append( OUString::valueOf( nHeight ));
+    aResBuf.append( OString::valueOf( nWidth ));
+    aResBuf.append( "x" );
+    aResBuf.append( OString::valueOf( nHeight ));
 
-    OUString aRootIntroFileName = aStrBuf.makeStringAndClear();
-    OUString aBmpFileName       = aRootIntroFileName + OUString::createFromAscii(".png");
+    aStrBuf.append( aResBuf.getStr() );
+    if (SfxApplication::LoadBrandBitmap (aStrBuf.makeStringAndClear(), rBitmap))
+        return;
 
-    bool haveBitmap = loadBitmap( path, aBmpFileName );
-    if ( !haveBitmap )
-    {
-        aBmpFileName = aRootIntroFileName + OUString::createFromAscii(".bmp");
-        haveBitmap   = loadBitmap( path, aBmpFileName );
-    }
+    aStrBuf.append( "intro_" );
+    aStrBuf.append( aResBuf.getStr() );
+    if (SfxApplication::LoadBrandBitmap (aResBuf.makeStringAndClear(), rBitmap))
+        return;
 
-    if ( !haveBitmap )
-    {
-        aStrBuf.appendAscii( "intro_" );
-        aStrBuf.appendAscii( "_" );
-        aStrBuf.append( OUString::valueOf( nWidth ));
-        aStrBuf.appendAscii( "x" );
-        aStrBuf.append( OUString::valueOf( nHeight ));
-
-        aRootIntroFileName = aStrBuf.makeStringAndClear();
-        aBmpFileName = aRootIntroFileName + OUString::createFromAscii(".png");
-
-        haveBitmap = loadBitmap( path, aBmpFileName );
-        if ( !haveBitmap )
-        {
-            aBmpFileName = aRootIntroFileName + OUString::createFromAscii(".bmp");
-            haveBitmap   = loadBitmap( path, aBmpFileName );
-        }
-    }
-    return haveBitmap;
-}
-
-bool SplashScreen::findAppBitmap(rtl::OUString const & path)
-{
-    bool haveBitmap = false;
-
-    if ( _sAppName.getLength() > 0 )
-    {
-        OUStringBuffer aStrBuf( 128 );
-        aStrBuf.appendAscii( "intro_" );
-        aStrBuf.appendAscii( "_" );
-        aStrBuf.append( _sAppName );
-
-        OUString aRootIntroFileName = aStrBuf.makeStringAndClear();
-
-        OUString aBmpFileName = aRootIntroFileName + OUString::createFromAscii( ".png" );
-        haveBitmap = loadBitmap( path, aBmpFileName );
-        if ( !haveBitmap )
-        {
-            aBmpFileName = aRootIntroFileName + OUString::createFromAscii( ".bmp" );
-            haveBitmap = loadBitmap( path, aBmpFileName );
-        }
-    }
-    return haveBitmap;
+    SfxApplication::LoadBrandBitmap ("intro", rBitmap);
 }
 
 void SplashScreen::determineProgressRatioValues(
