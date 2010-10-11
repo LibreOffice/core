@@ -28,6 +28,7 @@
 
 ModalDialog GRID_DIALOG
 {
+    HelpID = "extensions:ModalDialog:GRID_DIALOG";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 10 , 10 ) ;
@@ -48,6 +49,7 @@ ModalDialog GRID_DIALOG
     };
     ListBox GRID_DIALOG_TYPE_BOX
     {
+        HelpID = "extensions:ListBox:GRID_DIALOG:GRID_DIALOG_TYPE_BOX";
         Border = TRUE ;
         Dropdown = TRUE ;
         Pos = MAP_APPFONT( 245, 45 );
@@ -55,6 +57,7 @@ ModalDialog GRID_DIALOG
       };
     PushButton GRID_DIALOG_RESET_BTN
     {
+        HelpID = "extensions:PushButton:GRID_DIALOG:GRID_DIALOG_RESET_BTN";
         Pos = MAP_APPFONT( 245, 65 );
         Size = MAP_APPFONT( 50, 15 );
         Text [ en-US ] = "Set";

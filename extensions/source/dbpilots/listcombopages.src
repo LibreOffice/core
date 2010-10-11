@@ -31,6 +31,7 @@
 
 TabPage RID_PAGE_LCW_CONTENTSELECTION_TABLE
 {
+    HelpID = "extensions:TabPage:RID_PAGE_LCW_CONTENTSELECTION_TABLE";
     SVLook = TRUE ;
     Size = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
 
@@ -53,6 +54,7 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_TABLE
     };
     ListBox LB_SELECTTABLE
     {
+        HelpID = "extensions:ListBox:RID_PAGE_LCW_CONTENTSELECTION_TABLE:LB_SELECTTABLE";
         Pos = MAP_APPFONT ( 130 , 52  ) ;
         Size = MAP_APPFONT ( WINDOW_SIZE_X - 130 - 7, WINDOW_SIZE_Y - 52 - 6 ) ;
         SVLook = TRUE ;
@@ -65,6 +67,7 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_TABLE
 
 TabPage RID_PAGE_LCW_CONTENTSELECTION_FIELD
 {
+    HelpID = "extensions:TabPage:RID_PAGE_LCW_CONTENTSELECTION_FIELD";
     SVLook = TRUE ;
     Size = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
 
@@ -86,6 +89,7 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_FIELD
     };
     ListBox LB_SELECTFIELD
     {
+        HelpID = "extensions:ListBox:RID_PAGE_LCW_CONTENTSELECTION_FIELD:LB_SELECTFIELD";
         Pos = MAP_APPFONT ( 7 , 26  ) ;
         Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10, WINDOW_SIZE_Y - 32 ) ;
         SVLook = TRUE ;
@@ -102,6 +106,7 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_FIELD
     };
     Edit ET_DISPLAYEDFIELD
     {
+        HelpID = "extensions:Edit:RID_PAGE_LCW_CONTENTSELECTION_FIELD:ET_DISPLAYEDFIELD";
         Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 3 , 26  ) ;
         Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10, 12 ) ;
         SVLook = TRUE ;
@@ -127,6 +132,7 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_FIELD
 
 TabPage RID_PAGE_LCW_FIELDLINK
 {
+    HelpID = "extensions:TabPage:RID_PAGE_LCW_FIELDLINK";
     SVLook = TRUE ;
     Size = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
 
@@ -153,6 +159,7 @@ TabPage RID_PAGE_LCW_FIELDLINK
     };
     ComboBox CMB_VALUELISTFIELD
     {
+        HelpID = "extensions:ComboBox:RID_PAGE_LCW_FIELDLINK:CMB_VALUELISTFIELD";
         Pos = MAP_APPFONT ( 7 , 48  ) ;
         Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10, WINDOW_SIZE_Y - 54 ) ;
         SVLook = TRUE ;
@@ -170,6 +177,7 @@ TabPage RID_PAGE_LCW_FIELDLINK
     };
     ComboBox CMB_TABLEFIELD
     {
+        HelpID = "extensions:ComboBox:RID_PAGE_LCW_FIELDLINK:CMB_TABLEFIELD";
         Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 3 , 48 ) ;
         Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10, WINDOW_SIZE_Y - 54 ) ;
         SVLook = TRUE ;

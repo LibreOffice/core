@@ -47,6 +47,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
     };
     ListBox LB_MULTIPATH
     {
+        HelpID = "cui:ListBox:RID_SVXDLG_MULTIPATH:LB_MULTIPATH";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 189 , 80 ) ;
@@ -70,12 +71,14 @@ ModalDialog RID_SVXDLG_MULTIPATH
     };
     PushButton BTN_ADD_MULTIPATH
     {
+        HelpID = "cui:PushButton:RID_SVXDLG_MULTIPATH:BTN_ADD_MULTIPATH";
         Pos = MAP_APPFONT ( 204 , 14 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Add..." ;
     };
     PushButton BTN_DEL_MULTIPATH
     {
+        HelpID = "cui:PushButton:RID_SVXDLG_MULTIPATH:BTN_DEL_MULTIPATH";
         Pos = MAP_APPFONT ( 204 , 31 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Delete" ;

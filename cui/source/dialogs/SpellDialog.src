@@ -61,6 +61,7 @@ ModelessDialog RID_SVXDLG_SPELLCHECK
     };
     ListBox LB_LANGUAGE
     {
+        HelpID = "cui:ListBox:RID_SVXDLG_SPELLCHECK:LB_LANGUAGE";
         Pos = MAP_APPFONT( 110, 6 );
         Size = MAP_APPFONT( 93, 55 );
         Border = TRUE;
@@ -76,6 +77,7 @@ ModelessDialog RID_SVXDLG_SPELLCHECK
 
     MultiLineEdit ED_NEWWORD
     {
+        HelpID = "cui:MultiLineEdit:RID_SVXDLG_SPELLCHECK:ED_NEWWORD";
         Pos = MAP_APPFONT( 6, 37 );
         Size = MAP_APPFONT( 197, 48 );
         Border = TRUE;
@@ -91,6 +93,7 @@ ModelessDialog RID_SVXDLG_SPELLCHECK
     };
     ListBox LB_SUGGESTION
     {
+        HelpID = "cui:ListBox:RID_SVXDLG_SPELLCHECK:LB_SUGGESTION";
         Pos = MAP_APPFONT( 6, 99 );
         Size = MAP_APPFONT( 197, 48 );
         Border = TRUE;
@@ -98,6 +101,7 @@ ModelessDialog RID_SVXDLG_SPELLCHECK
 
     CheckBox CB_CHECK_GRAMMAR
     {
+        HelpID = "cui:CheckBox:RID_SVXDLG_SPELLCHECK:CB_CHECK_GRAMMAR";
         Pos = MAP_APPFONT(  6, 153 );
         Size = MAP_APPFONT( 100, 10 );
         Text [ en-US ] = "Check ~grammar" ;
@@ -106,6 +110,7 @@ ModelessDialog RID_SVXDLG_SPELLCHECK
 
     PushButton PB_IGNORE
     {
+        HelpID = "cui:PushButton:RID_SVXDLG_SPELLCHECK:PB_IGNORE";
         Pos = MAP_APPFONT( 209, 37 );
         Size = MAP_APPFONT( 55, 14 );
         Text [ en-US ] = "~Ignore Once" ;
@@ -113,12 +118,14 @@ ModelessDialog RID_SVXDLG_SPELLCHECK
 
     PushButton PB_IGNOREALL
     {
+        HelpID = "cui:PushButton:RID_SVXDLG_SPELLCHECK:PB_IGNOREALL";
         Pos = MAP_APPFONT( 209, 54 );
         Size = MAP_APPFONT( 55, 14 );
         Text [ en-US ] = "I~gnore All" ;
     };
     PushButton PB_IGNORERULE
     {
+        HelpID = "cui:PushButton:RID_SVXDLG_SPELLCHECK:PB_IGNORERULE";
         Pos = MAP_APPFONT( 209, 54 );
         Size = MAP_APPFONT( 55, 14 );
         Text [ en-US ] = "I~gnore Rule" ;
@@ -126,6 +133,7 @@ ModelessDialog RID_SVXDLG_SPELLCHECK
     };
     MenuButton MB_ADDTODICT
     {
+        HelpID = "cui:MenuButton:RID_SVXDLG_SPELLCHECK:MB_ADDTODICT";
         Pos = MAP_APPFONT( 209, 71 );
         Size = MAP_APPFONT( 55, 14 );
         Text [ en-US ] = "~Add" ;
@@ -133,6 +141,7 @@ ModelessDialog RID_SVXDLG_SPELLCHECK
 
     PushButton PB_CHANGE
     {
+        HelpID = "cui:PushButton:RID_SVXDLG_SPELLCHECK:PB_CHANGE";
         Pos = MAP_APPFONT( 209, 99 );
         Size = MAP_APPFONT( 55, 14 );
         Text [ en-US ] = "~Change" ;
@@ -141,12 +150,14 @@ ModelessDialog RID_SVXDLG_SPELLCHECK
 
     PushButton PB_CHANGEALL
     {
+        HelpID = "cui:PushButton:RID_SVXDLG_SPELLCHECK:PB_CHANGEALL";
         Pos = MAP_APPFONT( 209, 117 );
         Size = MAP_APPFONT( 55, 14 );
         Text [ en-US ] = "Change A~ll" ;
     };
     PushButton PB_EXPLAIN
     {
+        HelpID = "cui:PushButton:RID_SVXDLG_SPELLCHECK:PB_EXPLAIN";
         Pos = MAP_APPFONT( 209, 117 );
         Size = MAP_APPFONT( 55, 14 );
         Hide = TRUE;
@@ -154,6 +165,7 @@ ModelessDialog RID_SVXDLG_SPELLCHECK
     };
     PushButton PB_AUTOCORR
     {
+        HelpID = "cui:PushButton:RID_SVXDLG_SPELLCHECK:PB_AUTOCORR";
         Pos = MAP_APPFONT( 209, 134 );
         Size = MAP_APPFONT( 55, 14 );
         Text [ en-US ] = "AutoCor~rect" ;
@@ -172,12 +184,14 @@ ModelessDialog RID_SVXDLG_SPELLCHECK
     };
     PushButton PB_OPTIONS
     {
+        HelpID = "cui:PushButton:RID_SVXDLG_SPELLCHECK:PB_OPTIONS";
         Pos = MAP_APPFONT( 87, 170 );
         Size = MAP_APPFONT( 55, 14 );
         Text [ en-US ] = "O~ptions..." ;
     };
     PushButton PB_UNDO
     {
+        HelpID = "cui:PushButton:RID_SVXDLG_SPELLCHECK:PB_UNDO";
         Pos = MAP_APPFONT( 148, 170 );
         Size = MAP_APPFONT( 55, 14 );
         Text [ en-US ] = "~Undo" ;
@@ -185,6 +199,7 @@ ModelessDialog RID_SVXDLG_SPELLCHECK
 
     PushButton PB_CLOSE
     {
+        HelpID = "cui:PushButton:RID_SVXDLG_SPELLCHECK:PB_CLOSE";
         Pos = MAP_APPFONT ( 209 , 170 ) ;
         Size = MAP_APPFONT ( 55 , 14 ) ;
         TabStop = TRUE ;

@@ -46,6 +46,7 @@ TabPage RID_OPTPAGE_CHART_DEFCOLORS
     };
     ListBox LB_CHART_COLOR_LIST
     {
+        HelpID = "cui:ListBox:RID_OPTPAGE_CHART_DEFCOLORS:LB_CHART_COLOR_LIST";
         Border      = TRUE;
         Pos         = MAP_APPFONT ( 12 , 15  );
         Size        = MAP_APPFONT ( 68 , 152 );
@@ -68,6 +69,7 @@ TabPage RID_OPTPAGE_CHART_DEFCOLORS
     };
     PushButton PB_RESET_TO_DEFAULT
     {
+        HelpID = "cui:PushButton:RID_OPTPAGE_CHART_DEFCOLORS:PB_RESET_TO_DEFAULT";
         Pos = MAP_APPFONT ( 204 , 165 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Default";

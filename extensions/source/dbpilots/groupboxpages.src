@@ -31,6 +31,7 @@
 
 TabPage RID_PAGE_GROUPRADIOSELECTION
 {
+    HelpID = "extensions:TabPage:RID_PAGE_GROUPRADIOSELECTION";
     SVLook = TRUE ;
     Size = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
     Text [ en-US ] = "Data";
@@ -50,6 +51,7 @@ TabPage RID_PAGE_GROUPRADIOSELECTION
     };
     Edit ET_RADIOLABELS
     {
+        HelpID = "extensions:Edit:RID_PAGE_GROUPRADIOSELECTION:ET_RADIOLABELS";
         Pos = MAP_APPFONT ( 7 , 79  ) ;
         Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 - 13, 12 ) ;
         SVLook = TRUE ;
@@ -57,12 +59,14 @@ TabPage RID_PAGE_GROUPRADIOSELECTION
     };
     PushButton PB_MOVETORIGHT
     {
+        HelpID = "extensions:PushButton:RID_PAGE_GROUPRADIOSELECTION:PB_MOVETORIGHT";
         Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 , 79  ) ;
         Size = MAP_APPFONT ( ITEM_BUTTON_SIZE_X , ITEM_BUTTON_SIZE_Y ) ;
         Text = "~>>";
     };
     PushButton PB_MOVETOLEFT
     {
+        HelpID = "extensions:PushButton:RID_PAGE_GROUPRADIOSELECTION:PB_MOVETOLEFT";
         Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 , 79 + ITEM_BUTTON_SIZE_Y + 3 ) ;
         Size = MAP_APPFONT ( ITEM_BUTTON_SIZE_X , ITEM_BUTTON_SIZE_Y ) ;
         Text = "~<<";
@@ -76,6 +80,7 @@ TabPage RID_PAGE_GROUPRADIOSELECTION
     };
     ListBox LB_RADIOBUTTONS
     {
+        HelpID = "extensions:ListBox:RID_PAGE_GROUPRADIOSELECTION:LB_RADIOBUTTONS";
         Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + ITEM_BUTTON_SIZE_X / 2 + 6 , 79  ) ;
         Size = MAP_APPFONT ( WINDOW_SIZE_X - WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 - 6 - 7, WINDOW_SIZE_Y - 79 - 6 ) ;
         SVLook = TRUE ;
@@ -87,6 +92,7 @@ TabPage RID_PAGE_GROUPRADIOSELECTION
 
 TabPage RID_PAGE_DEFAULTFIELDSELECTION
 {
+    HelpID = "extensions:TabPage:RID_PAGE_DEFAULTFIELDSELECTION";
     SVLook = TRUE ;
     Size = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
     Text [ en-US ] = "Default Field Selection";
@@ -106,6 +112,7 @@ TabPage RID_PAGE_DEFAULTFIELDSELECTION
     };
     RadioButton RB_DEFSELECTION_YES
     {
+        HelpID = "extensions:RadioButton:RID_PAGE_DEFAULTFIELDSELECTION:RB_DEFSELECTION_YES";
         Pos = MAP_APPFONT ( 7 , 44  ) ;
         Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10, 10 ) ;
         Group = TRUE;
@@ -114,6 +121,7 @@ TabPage RID_PAGE_DEFAULTFIELDSELECTION
     };
     ListBox LB_DEFSELECTIONFIELD
     {
+        HelpID = "extensions:ListBox:RID_PAGE_DEFAULTFIELDSELECTION:LB_DEFSELECTIONFIELD";
         Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 3 , 42  ) ;
         Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10, 14 ) ;
         TabStop = TRUE;
@@ -125,6 +133,7 @@ TabPage RID_PAGE_DEFAULTFIELDSELECTION
     };
     RadioButton RB_DEFSELECTION_NO
     {
+        HelpID = "extensions:RadioButton:RID_PAGE_DEFAULTFIELDSELECTION:RB_DEFSELECTION_NO";
         Pos = MAP_APPFONT ( 7 , 59  ) ;
         Size = MAP_APPFONT ( WINDOW_SIZE_X - 14, 10 ) ;
         TabStop = FALSE;
@@ -134,6 +143,7 @@ TabPage RID_PAGE_DEFAULTFIELDSELECTION
 
 TabPage RID_PAGE_OPTIONVALUES
 {
+    HelpID = "extensions:TabPage:RID_PAGE_OPTIONVALUES";
     SVLook = TRUE ;
     Size = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
     Text [ en-US ] = "Field Values";
@@ -160,6 +170,7 @@ TabPage RID_PAGE_OPTIONVALUES
     };
     Edit ET_OPTIONVALUE
     {
+        HelpID = "extensions:Edit:RID_PAGE_OPTIONVALUES:ET_OPTIONVALUE";
         Pos = MAP_APPFONT ( 7 , 61 ) ;
         Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10, 12 ) ;
         SVLook = TRUE ;
@@ -174,6 +185,7 @@ TabPage RID_PAGE_OPTIONVALUES
     };
     ListBox LB_RADIOBUTTONS
     {
+        HelpID = "extensions:ListBox:RID_PAGE_OPTIONVALUES:LB_RADIOBUTTONS";
         Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 3 , 26  ) ;
         Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10 , WINDOW_SIZE_Y - 32 ) ;
         SVLook = TRUE ;
@@ -185,6 +197,7 @@ TabPage RID_PAGE_OPTIONVALUES
 
 TabPage RID_PAGE_OPTIONS_FINAL
 {
+    HelpID = "extensions:TabPage:RID_PAGE_OPTIONS_FINAL";
     SVLook = TRUE ;
     Size = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
     Text [ en-US ] = "Create Option Group";
@@ -203,6 +216,7 @@ TabPage RID_PAGE_OPTIONS_FINAL
     };
     Edit ET_NAMEIT
     {
+        HelpID = "extensions:Edit:RID_PAGE_OPTIONS_FINAL:ET_NAMEIT";
         Pos = MAP_APPFONT ( 7 , 34 ) ;
         Size = MAP_APPFONT ( WINDOW_SIZE_X - 14, 12 ) ;
         SVLook = TRUE ;

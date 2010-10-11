@@ -56,18 +56,21 @@ ModalDialog RID_SVXDLG_WEBCONNECTION_INFO
     };
     PushButton PB_REMOVE
     {
+        HelpID = "cui:PushButton:RID_SVXDLG_WEBCONNECTION_INFO:PB_REMOVE";
         Pos = MAP_APPFONT ( COL_0 , ROW_3 ) ;
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
         Text [ en-US ] = "Remove";
     };
     PushButton PB_REMOVEALL
     {
+        HelpID = "cui:PushButton:RID_SVXDLG_WEBCONNECTION_INFO:PB_REMOVEALL";
         Pos = MAP_APPFONT ( COL_1 , ROW_3 ) ;
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
         Text [ en-US ] = "Remove All";
     };
     PushButton PB_CHANGE
     {
+        HelpID = "cui:PushButton:RID_SVXDLG_WEBCONNECTION_INFO:PB_CHANGE";
         Pos = MAP_APPFONT ( COL_C , ROW_3 ) ;
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
         Text [ en-US ] = "Change Password...";

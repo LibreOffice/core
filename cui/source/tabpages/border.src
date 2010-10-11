@@ -93,6 +93,7 @@ TabPage RID_SVXPAGE_BORDER
     };
     ListBox LB_LINESTYLE
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_BORDER:LB_LINESTYLE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 88 , 25 ) ;
         Size = MAP_APPFONT ( 74 , 66 ) ;
@@ -105,6 +106,7 @@ TabPage RID_SVXPAGE_BORDER
     };
     ListBox LB_LINECOLOR
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_BORDER:LB_LINECOLOR";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 88 , 106 ) ;
         Size = MAP_APPFONT ( 74 , 68 ) ;
@@ -125,6 +127,7 @@ TabPage RID_SVXPAGE_BORDER
     };
     MetricField MF_LEFT
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_BORDER:MF_LEFT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 213 , 14 ) ;
         Size = MAP_APPFONT ( 38 , 12 ) ;
@@ -146,6 +149,7 @@ TabPage RID_SVXPAGE_BORDER
     };
     MetricField MF_RIGHT
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_BORDER:MF_RIGHT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 213 , 30 ) ;
         Size = MAP_APPFONT ( 38 , 12 ) ;
@@ -167,6 +171,7 @@ TabPage RID_SVXPAGE_BORDER
     };
     MetricField MF_TOP
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_BORDER:MF_TOP";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 213 , 46 ) ;
         Size = MAP_APPFONT ( 38 , 12 ) ;
@@ -188,6 +193,7 @@ TabPage RID_SVXPAGE_BORDER
     };
     MetricField MF_BOTTOM
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_BORDER:MF_BOTTOM";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 213 , 62 ) ;
         Size = MAP_APPFONT ( 38 , 12 ) ;
@@ -203,6 +209,7 @@ TabPage RID_SVXPAGE_BORDER
     };
     CheckBox CB_SYNC
     {
+        HelpID = "cui:CheckBox:RID_SVXPAGE_BORDER:CB_SYNC";
         Pos = MAP_APPFONT ( 177 , 78 ) ;
         Size = MAP_APPFONT ( 74 , 10 ) ;
         Text [ en-US ] = "Synchronize";
@@ -236,6 +243,7 @@ TabPage RID_SVXPAGE_BORDER
     };
     MetricField ED_SHADOWSIZE
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_BORDER:ED_SHADOWSIZE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 88 , 144 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -257,6 +265,7 @@ TabPage RID_SVXPAGE_BORDER
     };
     ListBox LB_SHADOWCOLOR
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_BORDER:LB_SHADOWCOLOR";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 177 , 144 ) ;
         Size = MAP_APPFONT ( 74 , 68 ) ;
@@ -278,6 +287,7 @@ TabPage RID_SVXPAGE_BORDER
     };
     CheckBox  CB_MERGEWITHNEXT
     {
+        HelpID = "cui:CheckBox:RID_SVXPAGE_BORDER:CB_MERGEWITHNEXT";
         Pos = MAP_APPFONT ( 12 , 173 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
         Hide = TRUE;
@@ -285,6 +295,7 @@ TabPage RID_SVXPAGE_BORDER
     };
     CheckBox  CB_MERGEADJACENTBORDERS
     {
+        HelpID = "cui:CheckBox:RID_SVXPAGE_BORDER:CB_MERGEADJACENTBORDERS";
         Pos = MAP_APPFONT ( 12 , 173 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
         Hide = TRUE;

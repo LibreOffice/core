@@ -145,18 +145,21 @@ ModalDialog RID_XMLSECDLG_DIGSIG
     };
     PushButton BTN_VIEWCERT
     {
+        HelpID = "xmlsecurity:PushButton:RID_XMLSECDLG_DIGSIG:BTN_VIEWCERT";
         Pos = MAP_APPFONT( 6, 142 );
         Size = MAP_APPFONT( 70, 14 );
         Text [ en-US ] = "View Certificate...";
     };
     PushButton BTN_ADDCERT
     {
+        HelpID = "xmlsecurity:PushButton:RID_XMLSECDLG_DIGSIG:BTN_ADDCERT";
         Pos = MAP_APPFONT( 82, 142 );
         Size = MAP_APPFONT( 70, 14 );
         Text [ en-US ] = "Sign Document...";
     };
     PushButton BTN_REMOVECERT
     {
+        HelpID = "xmlsecurity:PushButton:RID_XMLSECDLG_DIGSIG:BTN_REMOVECERT";
         Pos = MAP_APPFONT( 158, 142 );
         Size = MAP_APPFONT( 70, 14 );
         Text [ en-US ] = "Remove";
