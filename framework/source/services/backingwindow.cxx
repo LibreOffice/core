@@ -408,7 +408,9 @@ void BackingWindow::initBackground()
     if( !! maBackgroundMiddle )
         aMiddleSize = maBackgroundMiddle.GetSizePixel();
     // load middle segment
-    maBackgroundMiddle = BitmapEx( FwkResId( BMP_BACKING_BACKGROUND_MIDDLE ) );
+
+    Application::LoadBrandBitmap ("shell/backing_space", maBackgroundMiddle);
+
     // and scale it to previous size
     if( aMiddleSize.Width() && aMiddleSize.Height() )
         maBackgroundMiddle.Scale( aMiddleSize );
@@ -416,13 +418,13 @@ void BackingWindow::initBackground()
     if( GetSettings().GetLayoutRTL() )
     {
         // replace images by RTL versions
-        maBackgroundLeft = BitmapEx( FwkResId( BMP_BACKING_BACKGROUND_RTL_RIGHT ) );
-        maBackgroundRight = BitmapEx( FwkResId( BMP_BACKING_BACKGROUND_RTL_LEFT) );
+        Application::LoadBrandBitmap ("shell/backing_rtl_right", maBackgroundLeft);
+        Application::LoadBrandBitmap ("shell/backing_rtl_left", maBackgroundRight);
     }
     else
     {
-        maBackgroundLeft = BitmapEx( FwkResId( BMP_BACKING_BACKGROUND_LEFT ) );
-        maBackgroundRight = BitmapEx( FwkResId( BMP_BACKING_BACKGROUND_RIGHT ) );
+        Application::LoadBrandBitmap ("shell/backing_left", maBackgroundLeft);
+        Application::LoadBrandBitmap ("shell/backing_right", maBackgroundRight);
     }
     maToolbox.SetItemImage( nItemId_Extensions, BitmapEx( FwkResId( BMP_BACKING_EXT ) ) );
     maToolbox.SetItemImage( nItemId_Info, BitmapEx( FwkResId( BMP_BACKING_INFO ) ) );

@@ -73,26 +73,6 @@ Window DLG_BACKING
 
 Resource RES_BACKING_IMAGES
 {
-    Bitmap BMP_BACKING_BACKGROUND_LEFT
-    {
-        File = "backing.png";
-    };
-    Bitmap BMP_BACKING_BACKGROUND_MIDDLE
-    {
-        File = "backing_space.png";
-    };
-    Bitmap BMP_BACKING_BACKGROUND_RIGHT
-    {
-        File = "backing_right.png";
-    };
-    Bitmap BMP_BACKING_BACKGROUND_RTL_LEFT
-    {
-        File = "backing_rtl_left.png";
-    };
-    Bitmap BMP_BACKING_BACKGROUND_RTL_RIGHT
-    {
-        File = "backing_rtl_right.png";
-    };
     Bitmap BMP_BACKING_EXT
     {
         File = "extension.png";
