@@ -747,7 +747,7 @@ void Desktop::DeInit()
     try {
         // instead of removing of the configManager just let it commit all the changes
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- store config items" );
-        utl::ConfigManager::GetConfigManager()->StoreConfigItems();
+        utl::ConfigManager::GetConfigManager().StoreConfigItems();
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- store config items" );
 
         // close splashscreen if it's still open
@@ -777,7 +777,7 @@ BOOL Desktop::QueryExit()
     try
     {
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- store config items" );
-        utl::ConfigManager::GetConfigManager()->StoreConfigItems();
+        utl::ConfigManager::GetConfigManager().StoreConfigItems();
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- store config items" );
     }
     catch ( RuntimeException& )
@@ -1431,14 +1431,14 @@ USHORT Desktop::Exception(USHORT nError)
         bRestart = SaveTasks();
 
     // because there is no method to flush the condiguration data, we must dispose the ConfigManager
-    Reference < XFlushable > xCFGFlush( ::utl::ConfigManager::GetConfigManager()->GetConfigurationProvider(), UNO_QUERY );
+    Reference < XFlushable > xCFGFlush( ::utl::ConfigManager::GetConfigManager().GetConfigurationProvider(), UNO_QUERY );
     if (xCFGFlush.is())
     {
         xCFGFlush->flush();
     }
     else
     {
-        Reference < XComponent > xCFGDispose( ::utl::ConfigManager::GetConfigManager()->GetConfigurationProvider(), UNO_QUERY );
+        Reference < XComponent > xCFGDispose( ::utl::ConfigManager::GetConfigManager().GetConfigurationProvider(), UNO_QUERY );
         if (xCFGDispose.is())
             xCFGDispose->dispose();
     }

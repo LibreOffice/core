@@ -116,7 +116,7 @@ rtl::OUString HelpLocaleString()
     {
         // detect installed locale
         Any aLocale =
-            ::utl::ConfigManager::GetConfigManager()->GetDirectConfigProperty(
+            ::utl::ConfigManager::GetConfigManager().GetDirectConfigProperty(
                ::utl::ConfigManager::LOCALE );
         aLocale >>= aLocaleStr;
         bool bOk = aLocaleStr.getLength() != 0;

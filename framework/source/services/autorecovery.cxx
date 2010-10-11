@@ -3698,9 +3698,8 @@ void AutoRecovery::impl_flushALLConfigChanges()
 
         // SOLAR SAFE ->
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
-        ::utl::ConfigManager* pCfgMgr = ::utl::ConfigManager::GetConfigManager();
-        if (pCfgMgr)
-            pCfgMgr->StoreConfigItems();
+        ::utl::ConfigManager& rCfgMgr = ::utl::ConfigManager::GetConfigManager();
+        rCfgMgr.StoreConfigItems();
     }
     catch(const css::uno::Exception&)
         {}
