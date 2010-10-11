@@ -1056,10 +1056,6 @@ sal_Bool ORowSetCache::last(  )
         moveWindow();
         // we have to repositioning because moveWindow can modify the cache
         m_pCacheSet->last();
-//      if(m_nPosition > m_nFetchSize)
-//          m_aMatrixIter = m_pMatrix->end() -1;
-//      else
-//          m_aMatrixIter = m_pMatrix->begin() + m_nPosition - 1;
         OSL_ENSURE(((m_nPosition - m_nStartPos) - 1) < (sal_Int32)m_pMatrix->size(),"Position is behind end()!");
         m_aMatrixIter = calcPosition();
     }

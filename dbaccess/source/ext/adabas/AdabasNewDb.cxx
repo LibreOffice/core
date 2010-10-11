@@ -217,8 +217,6 @@ OAdabasNewDbDlg::OAdabasNewDbDlg( Window* pParent,
         m_ET_CONUSR.SetModifyHdl(               LINK(this,OAdabasNewDbDlg,LoseFocusHdl));
         m_ET_DOMAIN_USR.Enable(FALSE);
 
-        //  m_ET_SYSUSR.setUpperCase();
-        //  m_ET_CONUSR.setUpperCase();
     }
 
 
@@ -250,7 +248,7 @@ OAdabasNewDbDlg::OAdabasNewDbDlg( Window* pParent,
     m_NF_DATADEVSPACE_SIZE.SetDecimalDigits(0);
     m_NF_CACHE_SIZE.SetDecimalDigits(0);
 
-    m_ET_DATABASENAME.SetMaxTextLen( 8 ); //98292
+    m_ET_DATABASENAME.SetMaxTextLen( 8 );
 
     m_PB_CONPWD.SetClickHdl(            LINK(this,OAdabasNewDbDlg,PwdClickHdl));
     m_PB_SYSPWD.SetClickHdl(            LINK(this,OAdabasNewDbDlg,PwdClickHdl));

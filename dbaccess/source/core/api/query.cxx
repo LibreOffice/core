@@ -320,7 +320,6 @@ void OQuery::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _r
 
         if ( PROPERTY_ID_COMMAND == _nHandle )
             // the columns are out of date if we are based on a new statement ....
-            // 90573 - 16.08.2001 - frank.schoenheit@sun.com
             setColumnsOutOfDate();
     }
 }

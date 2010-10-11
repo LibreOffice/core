@@ -803,17 +803,7 @@ void SAL_CALL ORowSet::updateBinaryStream( sal_Int32 columnIndex, const Referenc
     checkUpdateConditions(columnIndex);
     checkUpdateIterator();
 
-    //if(((*m_aCurrentRow)->get())[columnIndex].getTypeKind() == DataType::BLOB)
-    //{
- //       ::connectivity::ORowSetValue aOldValue = ((*m_aCurrentRow)->get())[columnIndex];
-    //  m_pCache->updateBinaryStream(columnIndex,x,length);
-    //  ((*m_aCurrentRow)->get())[columnIndex] = makeAny(x);
- //       ((*m_aCurrentRow)->get())[columnIndex].setTypeKind(DataType::BLOB);
- //       firePropertyChange(columnIndex-1 ,aOldValue);
-    //    fireProperty(PROPERTY_ID_ISMODIFIED,sal_True,sal_False);
-    //}
-    //else
-    {
+     {
         Sequence<sal_Int8> aSeq;
         if(x.is())
             x->readBytes(aSeq,length);
@@ -2363,32 +2353,6 @@ sal_Bool ORowSet::impl_buildActiveCommand_throw()
                 Reference< XNameAccess > xTables( impl_getTables_throw() );
                 if ( xTables->hasByName(m_aCommand) )
                 {
-/*
-                    Reference< XPropertySet > xTable;
-                    try
-                    {
-                        xTables->getByName( m_aCommand ) >>= xTable;
-                    }
-                    catch(const WrappedTargetException& e)
-                    {
-                        SQLException e2;
-                        if ( e.TargetException >>= e2 )
-                            throw e2;
-                    }
-                    catch(Exception&)
-                    {
-                        DBG_UNHANDLED_EXCEPTION();
-                    }
-
-                    Reference<XColumnsSupplier> xSup(xTable,UNO_QUERY);
-                    if ( xSup.is() )
-                        m_xColumns = xSup->getColumns();
-
-                    sCommand = rtl::OUString::createFromAscii("SELECT * FROM ");
-                    ::rtl::OUString sCatalog, sSchema, sTable;
-                    ::dbtools::qualifiedNameComponents( m_xActiveConnection->getMetaData(), m_aCommand, sCatalog, sSchema, sTable, ::dbtools::eInDataManipulation );
-                    sCommand += ::dbtools::composeTableNameForSelect( m_xActiveConnection, sCatalog, sSchema, sTable );
-*/
                 }
                 else
                 {
@@ -2434,11 +2398,6 @@ sal_Bool ORowSet::impl_buildActiveCommand_throw()
                         xQuery->getPropertyValue(PROPERTY_UPDATE_TABLENAME)     >>= aTable;
                         if(aTable.getLength())
                             m_aUpdateTableName = composeTableName( m_xActiveConnection->getMetaData(), aCatalog, aSchema, aTable, sal_False, ::dbtools::eInDataManipulation );
-/*
-                        Reference<XColumnsSupplier> xSup(xQuery,UNO_QUERY);
-                        if(xSup.is())
-                            m_xColumns = xSup->getColumns();
-*/
                     }
                 }
                 else

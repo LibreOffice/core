@@ -1050,7 +1050,6 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
         }
 
         // if the object is already opened, do nothing
-        // #i89509# / 2008-05-22 / frank.schoenheit@sun.com
         if ( m_xEmbeddedObject.is() )
         {
             sal_Int32 nCurrentState = m_xEmbeddedObject->getCurrentState();

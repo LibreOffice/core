@@ -415,7 +415,6 @@ void OTableContainer::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElement
 
             ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("DROP ");
 
-            // #104282# OJ
             if ( bIsView ) // here we have a view
                 aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW "));
             else
