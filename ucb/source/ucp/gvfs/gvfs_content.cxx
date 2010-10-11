@@ -1645,9 +1645,17 @@ extern "C" {
                     ucbhelper::InteractionSupplyAuthentication > & xSupp
                     = xRequest->getAuthenticationSupplier();
 
-                aUserName = xSupp->getUserName();
-                aDomain   = xSupp->getRealm();
-                aPassword = xSupp->getPassword();
+                ::rtl::OUString aNewDomain, aNewUserName, aNewPassword;
+
+                aNewUserName = xSupp->getUserName();
+                if ( aNewUserName.getLength() )
+                    aUserName = aNewUserName;
+                aNewDomain = xSupp->getRealm();
+                if ( aNewDomain.getLength() )
+                    aDomain = aNewDomain;
+                aNewPassword = xSupp->getPassword();
+                if ( aNewPassword.getLength() )
+                    aPassword = aNewPassword;
 
                 {
                     osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
