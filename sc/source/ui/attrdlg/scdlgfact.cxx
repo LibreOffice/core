@@ -80,6 +80,7 @@
 #include "tpusrlst.hxx" //add for ScTpUserLists
 #include "tpview.hxx" //add for ScTpContentOptions
 #include "tpformula.hxx"
+#include "tpcompatibility.hxx"
 
 // ause
 #include "editutil.hxx"
@@ -1557,6 +1558,8 @@ CreateTabPage ScAbstractDialogFactory_Impl::GetTabPageCreatorFunc( USHORT nId )
             //break;
         case RID_SCPAGE_FORMULA:
             return ScTpFormulaOptions::Create;
+        case RID_SCPAGE_COMPATIBILITY:
+            return ScTpCompatOptions::Create;
         case    RID_SCPAGE_PRINT :
             return ScTpPrintOptions::Create;
             //break;

@@ -279,6 +279,42 @@ TabPage RID_SCPAGE_FORMULA
     };
 };
 
+TabPage RID_SCPAGE_COMPATIBILITY
+{
+    HelpId = HID_SCPAGE_COMPATIBILITY ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+
+    FixedLine FL_KEY_BINDINGS
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Key bindings";
+    };
+
+    FixedText FT_KEY_BINDINGS
+    {
+        Pos = MAP_APPFONT ( 21, 16 ) ;
+        Size = MAP_APPFONT ( 80, 8 ) ;
+        Text [ en-US ] = "~Key bindings" ;
+    };
+
+    ListBox LB_KEY_BINDINGS
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 85, 14 ) ;
+        Size = MAP_APPFONT ( 60, 46 ) ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "Default" ; Default ; > ;
+            < "OpenOffice.org legacy" ; Default ; > ;
+        };
+    };
+};
+
 /**************************************************************************/
 /*                                                                        */
 /*                                                                        */

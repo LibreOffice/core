@@ -2109,6 +2109,13 @@ SfxTabPage*  ScModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItem
                 pRet = (*ScTpFormulaOptionsCreate)(pParent, rSet);
         }
         break;
+        case SID_SC_TP_COMPATIBILITY:
+        {
+            ::CreateTabPage ScTpCompatOptionsCreate = pFact->GetTabPageCreatorFunc (RID_SCPAGE_COMPATIBILITY);
+            if (ScTpCompatOptionsCreate)
+                pRet = (*ScTpCompatOptionsCreate)(pParent, rSet);
+        }
+        break;
         case SID_SC_TP_CHANGES:
                                 {
                                             ::CreateTabPage ScRedlineOptionsTabPageCreate = pFact->GetTabPageCreatorFunc( RID_SCPAGE_OPREDLINE );

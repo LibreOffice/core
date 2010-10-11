@@ -52,6 +52,7 @@ SLOFILES =  \
         $(SLO)$/tpview.obj   \
         $(SLO)$/tpcalc.obj	\
         $(SLO)$/tpformula.obj	\
+        $(SLO)$/tpcompatibility.obj	\
         $(SLO)$/tpprint.obj	\
         $(SLO)$/opredlin.obj
 
