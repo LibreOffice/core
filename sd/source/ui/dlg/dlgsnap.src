@@ -59,6 +59,7 @@ ModalDialog DLG_SNAPLINE
     };
     PushButton BTN_DELETE
     {
+        HelpID = "sd:PushButton:DLG_SNAPLINE:BTN_DELETE";
         Pos = MAP_APPFONT ( 88 , 63  ) ;
         Size = MAP_APPFONT ( 46 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
@@ -79,6 +80,7 @@ ModalDialog DLG_SNAPLINE
     };
     MetricField MTR_FLD_X
     {
+        HelpID = "sd:MetricField:DLG_SNAPLINE:MTR_FLD_X";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 22 , 14  ) ;
         Size = MAP_APPFONT ( 54 , 12 ) ;
@@ -102,6 +104,7 @@ ModalDialog DLG_SNAPLINE
     };
     MetricField MTR_FLD_Y
     {
+        HelpID = "sd:MetricField:DLG_SNAPLINE:MTR_FLD_Y";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 22 , 30  ) ;
         Size = MAP_APPFONT ( 54 , 12 ) ;
@@ -125,6 +128,7 @@ ModalDialog DLG_SNAPLINE
     };
     ImageRadioButton RB_POINT
     {
+        HelpID = "sd:ImageRadioButton:DLG_SNAPLINE:RB_POINT";
         Pos = MAP_APPFONT ( 12 , 61  ) ;
         Size = MAP_APPFONT ( 64 , 16 ) ;
         Text [ en-US ] = "~Point" ;
@@ -137,6 +141,7 @@ ModalDialog DLG_SNAPLINE
     };
     ImageRadioButton RB_VERTICAL
     {
+        HelpID = "sd:ImageRadioButton:DLG_SNAPLINE:RB_VERTICAL";
         Pos = MAP_APPFONT ( 12 , 81  ) ;
         Size = MAP_APPFONT ( 64 , 16 ) ;
         Text [ en-US ] = "~Vertical" ;
@@ -149,6 +154,7 @@ ModalDialog DLG_SNAPLINE
     };
     ImageRadioButton RB_HORIZONTAL
     {
+        HelpID = "sd:ImageRadioButton:DLG_SNAPLINE:RB_HORIZONTAL";
         Pos = MAP_APPFONT ( 12 , 101  ) ;
         Size = MAP_APPFONT ( 65 , 16 ) ;
         Text [ en-US ] = "Hori~zontal" ;

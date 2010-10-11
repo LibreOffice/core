@@ -29,6 +29,7 @@
 
 DockingWindow FLT_LEFT_PANE_IMPRESS_DOCKING_WINDOW
 {
+    HelpID = "sd:DockingWindow:FLT_LEFT_PANE_IMPRESS_DOCKING_WINDOW";
     Border = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
@@ -44,6 +45,7 @@ DockingWindow FLT_LEFT_PANE_IMPRESS_DOCKING_WINDOW
 
 DockingWindow FLT_LEFT_PANE_DRAW_DOCKING_WINDOW
 {
+    HelpID = "sd:DockingWindow:FLT_LEFT_PANE_DRAW_DOCKING_WINDOW";
     Border = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
@@ -59,6 +61,7 @@ DockingWindow FLT_LEFT_PANE_DRAW_DOCKING_WINDOW
 
 DockingWindow FLT_TOOL_PANEL_DOCKING_WINDOW
 {
+    HelpID = "sd:DockingWindow:FLT_TOOL_PANEL_DOCKING_WINDOW";
     Border = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;

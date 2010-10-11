@@ -28,6 +28,7 @@
 #include "brkdlg.hrc"
 ModalDialog DLG_BREAK
 {
+    HelpID = "sd:ModalDialog:DLG_BREAK";
     OutputSize = TRUE;
     SVLook   = TRUE;
     Pos      = MAP_APPFONT( 84, 34 );

@@ -458,6 +458,7 @@ ModalDialog RID_UNDO_DELETE_WARNING
     };
     CheckBox CB_UNDO_DELETE_DISABLE
     {
+        HelpID = "sd:CheckBox:RID_UNDO_DELETE_WARNING:CB_UNDO_DELETE_DISABLE";
         Pos = MAP_APPFONT( 39, (4 * 12) + 9 );
         Size = MAP_APPFONT( 175, 12 );
         Text [ en-US ] = "~Do not show this warning again";

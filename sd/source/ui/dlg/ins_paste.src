@@ -29,6 +29,7 @@
 
 ModalDialog DLG_INSERT_PASTE
 {
+    HelpID = "sd:ModalDialog:DLG_INSERT_PASTE";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 148 , 90 ) ;
@@ -61,6 +62,7 @@ ModalDialog DLG_INSERT_PASTE
     };
     RadioButton RB_BEFORE
     {
+        HelpID = "sd:RadioButton:DLG_INSERT_PASTE:RB_BEFORE";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 80, 10 ) ;
         Text [ en-US ] = "~Before" ;
@@ -68,6 +70,7 @@ ModalDialog DLG_INSERT_PASTE
     };
     RadioButton RB_AFTER
     {
+        HelpID = "sd:RadioButton:DLG_INSERT_PASTE:RB_AFTER";
         Pos = MAP_APPFONT ( 12, 27 ) ;
         Size = MAP_APPFONT ( 80, 10 ) ;
         Text [ en-US ] = "A~fter" ;
