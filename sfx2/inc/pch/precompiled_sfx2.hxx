@@ -465,6 +465,7 @@
 #include "osl/mutex.hxx"
 #include "osl/process.h"
 #include "osl/security.hxx"
+#include "osl/socket.hxx"
 #include "osl/thread.h"
 #include "osl/thread.hxx"
 #include "rsc/rscsfx.hxx"
@@ -661,8 +662,6 @@
 #include "vos/mutex.hxx"
 #include "vos/process.hxx"
 #include "vos/security.hxx"
-#include "vos/socket.hxx"
-#include "osl/thread.hxx"
 #include "vos/xception.hxx"
 //---MARKER---
 #endif

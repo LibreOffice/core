@@ -87,7 +87,7 @@
 #define ITEMID_SEARCH SID_SEARCH_ITEM
 
 #include <svl/srchitem.hxx>
-#include <vos/socket.hxx>
+#include <osl/socket.hxx>
 
 #define SFX_TYPEMAP
 #define Selection
