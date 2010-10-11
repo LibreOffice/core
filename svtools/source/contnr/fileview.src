@@ -110,6 +110,7 @@ Menu RID_FILEVIEW_CONTEXTMENU
 
 ModalDialog DLG_SVT_QUERYDELETE
 {
+    HelpID = "svtools:ModalDialog:DLG_SVT_QUERYDELETE";
     SVLook = TRUE ;
     OutputSize = TRUE ;
     Moveable = TRUE ;
@@ -142,6 +143,7 @@ ModalDialog DLG_SVT_QUERYDELETE
 
     PushButton BTN_YES
     {
+        HelpID = "svtools:PushButton:DLG_SVT_QUERYDELETE:BTN_YES";
         Pos = MAP_APPFONT ( 6 , 47 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -151,6 +153,7 @@ ModalDialog DLG_SVT_QUERYDELETE
 
     PushButton BTN_ALL
     {
+        HelpID = "svtools:PushButton:DLG_SVT_QUERYDELETE:BTN_ALL";
         Pos = MAP_APPFONT ( 59 , 47 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -160,6 +163,7 @@ ModalDialog DLG_SVT_QUERYDELETE
 
     PushButton BTN_NO
     {
+        HelpID = "svtools:PushButton:DLG_SVT_QUERYDELETE:BTN_NO";
         Pos = MAP_APPFONT ( 112 , 47 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;

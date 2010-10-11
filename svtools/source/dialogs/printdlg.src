@@ -31,6 +31,7 @@
 
 ModalDialog DLG_SVT_PRNDLG_PRINTDLG
 {
+    HelpID = "svtools:ModalDialog:DLG_SVT_PRNDLG_PRINTDLG";
     SVLook = TRUE ;
     OutputSize = TRUE ;
     Moveable = TRUE ;
@@ -50,6 +51,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     };
     ListBox LB_NAMES
     {
+        HelpID = "svtools:ListBox:DLG_SVT_PRNDLG_PRINTDLG:LB_NAMES";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 60 , 13 ) ;
         Size = MAP_APPFONT ( 130 , 80 ) ;
@@ -58,6 +60,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     };
     PushButton BTN_PROPERTIES
     {
+        HelpID = "svtools:PushButton:DLG_SVT_PRNDLG_PRINTDLG:BTN_PROPERTIES";
         Pos = MAP_APPFONT ( 193 , 12 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "Propert~ies..." ;
@@ -114,12 +117,14 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     };
     Edit EDT_FAXNO
     {
+        HelpID = "svtools:Edit:DLG_SVT_PRNDLG_PRINTDLG:EDT_FAXNO";
         Border = TRUE;
         Pos = MAP_APPFONT ( 60 , 73 );
         Size = MAP_APPFONT ( 188 , 12 );
     };
     CheckBox CBX_FILEPRINT
     {
+        HelpID = "svtools:CheckBox:DLG_SVT_PRNDLG_PRINTDLG:CBX_FILEPRINT";
         Pos = MAP_APPFONT ( 12 , 73 ) ;
         Size = MAP_APPFONT ( 75 , 10 ) ;
         Text [ en-US ] = "Print to file" ;
@@ -132,6 +137,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     /*!!!
     PushButton BTN_BROWSE
     {
+        HelpID = "svtools:PushButton:DLG_SVT_PRNDLG_PRINTDLG:BTN_BROWSE";
         Pos = MAP_APPFONT ( 234 , 75 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         Text = "~..." ;
@@ -146,18 +152,21 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     };
     RadioButton RBT_ALL_SHEETS
     {
+        HelpID = "svtools:RadioButton:DLG_SVT_PRNDLG_PRINTDLG:RBT_ALL_SHEETS";
         Pos = MAP_APPFONT ( 12 , 102 ) ;
         Size = MAP_APPFONT ( 105 , 10 ) ;
         Text [ en-US ] = "All sheets" ;
     };
     RadioButton RBT_SELECTED_SHEETS
     {
+        HelpID = "svtools:RadioButton:DLG_SVT_PRNDLG_PRINTDLG:RBT_SELECTED_SHEETS";
         Pos = MAP_APPFONT ( 12 , 115 ) ;
         Size = MAP_APPFONT ( 105 , 10 ) ;
         Text [ en-US ] = "Selected sheets" ;
     };
     RadioButton RBT_SELECTED_CELLS
     {
+        HelpID = "svtools:RadioButton:DLG_SVT_PRNDLG_PRINTDLG:RBT_SELECTED_CELLS";
         Pos = MAP_APPFONT ( 12 , 128 ) ;
         Size = MAP_APPFONT ( 105 , 10 ) ;
         Text [ en-US ] = "Selected cells" ;
@@ -170,24 +179,28 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     };
     RadioButton RBT_ALL
     {
+        HelpID = "svtools:RadioButton:DLG_SVT_PRNDLG_PRINTDLG:RBT_ALL";
         Pos = MAP_APPFONT ( 12 , 152 ) ;
         Size = MAP_APPFONT ( 105 , 10 ) ;
         Text [ en-US ] = "All pages" ;
     };
     RadioButton RBT_PAGES
     {
+        HelpID = "svtools:RadioButton:DLG_SVT_PRNDLG_PRINTDLG:RBT_PAGES";
         Pos = MAP_APPFONT ( 12 , 165 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text [ en-US ] = "Pages" ;
     };
     Edit EDT_PAGES
     {
+        HelpID = "svtools:Edit:DLG_SVT_PRNDLG_PRINTDLG:EDT_PAGES";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 65 , 164 ) ;
         Size = MAP_APPFONT ( 52 , 12 ) ;
     };
     RadioButton RBT_SELECTION
     {
+        HelpID = "svtools:RadioButton:DLG_SVT_PRNDLG_PRINTDLG:RBT_SELECTION";
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 12 , 179 ) ;
         Size = MAP_APPFONT ( 105 , 10 ) ;
@@ -213,6 +226,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     };
     NumericField NUM_COPIES
     {
+        HelpID = "svtools:NumericField:DLG_SVT_PRNDLG_PRINTDLG:NUM_COPIES";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 201 , 102 ) ;
         Size = MAP_APPFONT ( 33 , 12 ) ;
@@ -226,6 +240,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     };
     CheckBox CBX_COLLATE
     {
+        HelpID = "svtools:CheckBox:DLG_SVT_PRNDLG_PRINTDLG:CBX_COLLATE";
         Pos = MAP_APPFONT ( 201 , 123 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
         Text [ en-US ] = "Co~llate" ;
@@ -249,6 +264,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     };
     PushButton BTN_OPTIONS
     {
+        HelpID = "svtools:PushButton:DLG_SVT_PRNDLG_PRINTDLG:BTN_OPTIONS";
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 6 , 190 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
