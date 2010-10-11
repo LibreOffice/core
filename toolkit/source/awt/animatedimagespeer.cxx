@@ -202,39 +202,46 @@ namespace toolkit
 
                 const bool isHighContrast = pThrobber->GetSettings().GetStyleSettings().GetHighContrastMode();
 
+                sal_Int32 nPreferredSet = -1;
                 const size_t nImageSetCount = i_data.aCachedImageSets.size();
-                ::std::vector< Size > aImageSizes( nImageSetCount );
-                for ( sal_Int32 nImageSet = 0; size_t( nImageSet ) < nImageSetCount; ++nImageSet )
+                if ( nImageSetCount < 2 )
                 {
-                    ::std::vector< CachedImage > const& rImageSet( i_data.aCachedImageSets[ nImageSet ] );
-                    if  (   ( rImageSet.empty() )
-                        ||  ( !lcl_ensureImage_throw( xGraphicProvider, isHighContrast, rImageSet[0] ) )
+                    nPreferredSet = sal_Int32( nImageSetCount ) - 1;
+                }
+                else
+                {
+                    ::std::vector< Size > aImageSizes( nImageSetCount );
+                    for ( sal_Int32 nImageSet = 0; size_t( nImageSet ) < nImageSetCount; ++nImageSet )
+                    {
+                        ::std::vector< CachedImage > const& rImageSet( i_data.aCachedImageSets[ nImageSet ] );
+                        if  (   ( rImageSet.empty() )
+                            ||  ( !lcl_ensureImage_throw( xGraphicProvider, isHighContrast, rImageSet[0] ) )
+                            )
+                        {
+                            aImageSizes[ nImageSet ] = Size( ::std::numeric_limits< long >::max(), ::std::numeric_limits< long >::max() );
+                        }
+                        else
+                        {
+                            aImageSizes[ nImageSet ] = lcl_getGraphicSizePixel( rImageSet[0].xGraphic );
+                        }
+                    }
+
+                    // find the set with the smallest difference between window size and image size
+                    const ::Size aWindowSizePixel = pThrobber->GetSizePixel();
+                    long nMinimalDistance = ::std::numeric_limits< long >::max();
+                    for (   ::std::vector< Size >::const_iterator check = aImageSizes.begin();
+                            check != aImageSizes.end();
+                            ++check
                         )
                     {
-                        aImageSizes[ nImageSet ] = Size( ::std::numeric_limits< long >::max(), ::std::numeric_limits< long >::max() );
-                    }
-                    else
-                    {
-                        aImageSizes[ nImageSet ] = lcl_getGraphicSizePixel( rImageSet[0].xGraphic );
-                    }
-                }
-
-                // find the set with the smallest difference between window size and image size
-                const ::Size aWindowSizePixel = pThrobber->GetSizePixel();
-                sal_Int32 nPreferredSet = -1;
-                long nMinimalDistance = ::std::numeric_limits< long >::max();
-                for (   ::std::vector< Size >::const_iterator check = aImageSizes.begin();
-                        check != aImageSizes.end();
-                        ++check
-                    )
-                {
-                    const sal_Int64 distance =
-                            ( aWindowSizePixel.Width() - check->Width ) * ( aWindowSizePixel.Width() - check->Width )
-                        +   ( aWindowSizePixel.Height() - check->Height ) * ( aWindowSizePixel.Height() - check->Height );
-                    if ( distance < nMinimalDistance )
-                    {
-                        nMinimalDistance = distance;
-                        nPreferredSet = check - aImageSizes.begin();
+                        const sal_Int64 distance =
+                                ( aWindowSizePixel.Width() - check->Width ) * ( aWindowSizePixel.Width() - check->Width )
+                            +   ( aWindowSizePixel.Height() - check->Height ) * ( aWindowSizePixel.Height() - check->Height );
+                        if ( distance < nMinimalDistance )
+                        {
+                            nMinimalDistance = distance;
+                            nPreferredSet = check - aImageSizes.begin();
+                        }
                     }
                 }
 
