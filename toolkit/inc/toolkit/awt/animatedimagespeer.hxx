@@ -84,6 +84,9 @@ namespace toolkit
         // XModifyListener
         virtual void SAL_CALL modified( const ::com::sun::star::lang::EventObject& i_event ) throw (::com::sun::star::uno::RuntimeException);
 
+        // XComponent
+        void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);
+
     protected:
         void ProcessWindowEvent( const VclWindowEvent& i_windowEvent );
 

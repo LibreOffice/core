@@ -41,7 +41,9 @@
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/urlobj.hxx>
 #include <vcl/throbber.hxx>
 
 #include <stl/limits>
@@ -77,10 +79,28 @@ namespace toolkit
     //==================================================================================================================
     //= AnimatedImagesPeer_Data
     //==================================================================================================================
+    struct CachedImage
+    {
+        ::rtl::OUString                 sImageURL;
+        mutable Reference< XGraphic >   xGraphic;
+
+        CachedImage()
+            :sImageURL()
+            ,xGraphic()
+        {
+        }
+
+        CachedImage( ::rtl::OUString const& i_imageURL )
+            :sImageURL( i_imageURL )
+            ,xGraphic()
+        {
+        }
+    };
+
     struct AnimatedImagesPeer_Data
     {
         AnimatedImagesPeer&                             rAntiImpl;
-        ::std::vector< Sequence< ::rtl::OUString > >    aCachedImageSets;
+        ::std::vector< ::std::vector< CachedImage > >   aCachedImageSets;
 
         AnimatedImagesPeer_Data( AnimatedImagesPeer& i_antiImpl )
             :rAntiImpl( i_antiImpl )
@@ -95,29 +115,76 @@ namespace toolkit
     namespace
     {
         //--------------------------------------------------------------------------------------------------------------
-        Reference< XGraphic > lcl_getGraphic_throw( const Reference< XGraphicProvider >& i_graphicProvider, const ::rtl::OUString& i_imageURL )
+        ::rtl::OUString lcl_getHighContrastURL( ::rtl::OUString const& i_imageURL )
         {
-            ::comphelper::NamedValueCollection aMediaProperties;
-            aMediaProperties.put( "URL", i_imageURL );
-            return Reference< XGraphic >( i_graphicProvider->queryGraphic( aMediaProperties.getPropertyValues() ), UNO_QUERY );
+            INetURLObject aURL( i_imageURL );
+            if ( aURL.GetProtocol() != INET_PROT_PRIV_SOFFICE )
+            {
+                OSL_VERIFY( aURL.insertName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "hicontrast" ) ), false, 0 ) );
+                return aURL.GetMainURL( INetURLObject::NO_DECODE );
+            }
+            // the private: scheme is not considered to be hierarchical by INetURLObject, so manually insert the
+            // segment
+            const sal_Int32 separatorPos = i_imageURL.indexOf( '/' );
+            ENSURE_OR_RETURN( separatorPos != -1, "lcl_getHighContrastURL: unsipported URL scheme - cannot automatically determine HC version!", i_imageURL );
+
+            ::rtl::OUStringBuffer composer;
+            composer.append( i_imageURL.copy( 0, separatorPos ) );
+            composer.appendAscii( "/hicontrast" );
+            composer.append( i_imageURL.copy( separatorPos ) );
+            return composer.makeStringAndClear();
         }
 
         //--------------------------------------------------------------------------------------------------------------
-        Size lcl_getGraphicSizePixel( const Reference< XGraphicProvider >& i_graphicProvider, const ::rtl::OUString& i_imageURL )
+        bool lcl_ensureImage_throw( Reference< XGraphicProvider > const& i_graphicProvider, const bool i_isHighContrast, const CachedImage& i_cachedImage )
+        {
+            if ( !i_cachedImage.xGraphic.is() )
+            {
+                ::comphelper::NamedValueCollection aMediaProperties;
+                if ( i_isHighContrast )
+                {
+                    // try (to find) the high-contrast version of the graphic first
+                    aMediaProperties.put( "URL", lcl_getHighContrastURL( i_cachedImage.sImageURL ) );
+                    i_cachedImage.xGraphic.set( i_graphicProvider->queryGraphic( aMediaProperties.getPropertyValues() ), UNO_QUERY );
+                }
+                if ( !i_cachedImage.xGraphic.is() )
+                {
+                    aMediaProperties.put( "URL", i_cachedImage.sImageURL );
+                    i_cachedImage.xGraphic.set( i_graphicProvider->queryGraphic( aMediaProperties.getPropertyValues() ), UNO_QUERY );
+                }
+            }
+            return i_cachedImage.xGraphic.is();
+        }
+
+        //--------------------------------------------------------------------------------------------------------------
+        Size lcl_getGraphicSizePixel( Reference< XGraphic > const& i_graphic )
         {
             Size aSizePixel;
             try
             {
-                ::comphelper::NamedValueCollection aMediaProperties;
-                aMediaProperties.put( "URL", i_imageURL );
-                const Reference< XPropertySet > xGraphicProps( lcl_getGraphic_throw( i_graphicProvider, i_imageURL ), UNO_QUERY_THROW );
-                OSL_VERIFY( xGraphicProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SizePixel" ) ) ) >>= aSizePixel );
+                if ( i_graphic.is() )
+                {
+                    const Reference< XPropertySet > xGraphicProps( i_graphic, UNO_QUERY_THROW );
+                    OSL_VERIFY( xGraphicProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SizePixel" ) ) ) >>= aSizePixel );
+                }
             }
             catch( const Exception& )
             {
                 DBG_UNHANDLED_EXCEPTION();
             }
             return aSizePixel;
+        }
+
+        //--------------------------------------------------------------------------------------------------------------
+        void lcl_init( Sequence< ::rtl::OUString > const& i_imageURLs, ::std::vector< CachedImage >& o_images )
+        {
+            o_images.resize(0);
+            size_t count = size_t( i_imageURLs.getLength() );
+            o_images.reserve( count );
+            for ( size_t i = 0; i < count; ++i )
+            {
+                o_images.push_back( CachedImage( i_imageURLs[i] ) );
+            }
         }
 
         //--------------------------------------------------------------------------------------------------------------
@@ -133,15 +200,23 @@ namespace toolkit
                 const ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
                 const Reference< XGraphicProvider > xGraphicProvider( aContext.createComponent( "com.sun.star.graphic.GraphicProvider" ), UNO_QUERY_THROW );
 
+                const bool isHighContrast = pThrobber->GetSettings().GetStyleSettings().GetHighContrastMode();
+
                 const size_t nImageSetCount = i_data.aCachedImageSets.size();
                 ::std::vector< Size > aImageSizes( nImageSetCount );
                 for ( sal_Int32 nImageSet = 0; size_t( nImageSet ) < nImageSetCount; ++nImageSet )
                 {
-                    Sequence< ::rtl::OUString > const& rImageSet( i_data.aCachedImageSets[ nImageSet ] );
-                    if ( rImageSet.getLength() )
-                        aImageSizes[ nImageSet ] = lcl_getGraphicSizePixel( xGraphicProvider, rImageSet[0] );
-                    else
+                    ::std::vector< CachedImage > const& rImageSet( i_data.aCachedImageSets[ nImageSet ] );
+                    if  (   ( rImageSet.empty() )
+                        ||  ( !lcl_ensureImage_throw( xGraphicProvider, isHighContrast, rImageSet[0] ) )
+                        )
+                    {
                         aImageSizes[ nImageSet ] = Size( ::std::numeric_limits< long >::max(), ::std::numeric_limits< long >::max() );
+                    }
+                    else
+                    {
+                        aImageSizes[ nImageSet ] = lcl_getGraphicSizePixel( rImageSet[0].xGraphic );
+                    }
                 }
 
                 // find the set with the smallest difference between window size and image size
@@ -168,15 +243,16 @@ namespace toolkit
                 if ( ( nPreferredSet >= 0 ) && ( size_t( nPreferredSet ) < nImageSetCount ) )
                 {
                     // => set the images
-                    Sequence< ::rtl::OUString > const& rImageSet( i_data.aCachedImageSets[ nPreferredSet ] );
-                    aImages.realloc( rImageSet.getLength() );
+                    ::std::vector< CachedImage > const& rImageSet( i_data.aCachedImageSets[ nPreferredSet ] );
+                    aImages.realloc( rImageSet.size() );
                     sal_Int32 imageIndex = 0;
-                    for (   ::rtl::OUString const* pImageURL = rImageSet.getConstArray();
-                            pImageURL != rImageSet.getConstArray() + rImageSet.getLength();
-                            ++pImageURL, ++imageIndex
+                    for (   ::std::vector< CachedImage >::const_iterator cachedImage = rImageSet.begin();
+                            cachedImage != rImageSet.end();
+                            ++cachedImage, ++imageIndex
                         )
                     {
-                        aImages[ imageIndex ] = lcl_getGraphic_throw( xGraphicProvider, *pImageURL );
+                        lcl_ensureImage_throw( xGraphicProvider, isHighContrast, *cachedImage );
+                        aImages[ imageIndex ] = cachedImage->xGraphic;
                     }
                 }
                 pThrobber->setImageList( aImages );
@@ -195,7 +271,12 @@ namespace toolkit
                 const sal_Int32 nImageSetCount = i_images->getImageSetCount();
                 i_data.aCachedImageSets.resize(0);
                 for ( sal_Int32 set = 0;  set < nImageSetCount; ++set )
-                    i_data.aCachedImageSets.push_back( i_images->getImageSet( set ) );
+                {
+                    const Sequence< ::rtl::OUString > aImageURLs( i_images->getImageSet( set ) );
+                    ::std::vector< CachedImage > aImages;
+                    lcl_init( aImageURLs, aImages );
+                    i_data.aCachedImageSets.push_back( aImages );
+                }
 
                 lcl_updateImageList_nothrow( i_data );
             }
@@ -357,19 +438,66 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL AnimatedImagesPeer::elementInserted( const ContainerEvent& i_event ) throw (RuntimeException)
     {
-        impl_updateImages_nolck( i_event.Source );
+        ::vos::OGuard aGuard( GetMutex() );
+        Reference< XAnimatedImages > xAnimatedImages( i_event.Source, UNO_QUERY_THROW );
+
+        sal_Int32 nPosition(0);
+        OSL_VERIFY( i_event.Accessor >>= nPosition );
+        size_t position = size_t( nPosition );
+        if ( position > m_pData->aCachedImageSets.size() )
+        {
+            OSL_ENSURE( false, "AnimatedImagesPeer::elementInserted: illegal accessor/index!" );
+            lcl_updateImageList_nothrow( *m_pData, xAnimatedImages );
+        }
+
+        Sequence< ::rtl::OUString > aImageURLs;
+        OSL_VERIFY( i_event.Element >>= aImageURLs );
+        ::std::vector< CachedImage > aImages;
+        lcl_init( aImageURLs, aImages );
+        m_pData->aCachedImageSets.insert( m_pData->aCachedImageSets.begin() + position, aImages );
+        lcl_updateImageList_nothrow( *m_pData );
     }
 
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL AnimatedImagesPeer::elementRemoved( const ContainerEvent& i_event ) throw (RuntimeException)
     {
-        impl_updateImages_nolck( i_event.Source );
+        ::vos::OGuard aGuard( GetMutex() );
+        Reference< XAnimatedImages > xAnimatedImages( i_event.Source, UNO_QUERY_THROW );
+
+        sal_Int32 nPosition(0);
+        OSL_VERIFY( i_event.Accessor >>= nPosition );
+        size_t position = size_t( nPosition );
+        if ( position >= m_pData->aCachedImageSets.size() )
+        {
+            OSL_ENSURE( false, "AnimatedImagesPeer::elementRemoved: illegal accessor/index!" );
+            lcl_updateImageList_nothrow( *m_pData, xAnimatedImages );
+        }
+
+        m_pData->aCachedImageSets.erase( m_pData->aCachedImageSets.begin() + position );
+        lcl_updateImageList_nothrow( *m_pData );
     }
 
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL AnimatedImagesPeer::elementReplaced( const ContainerEvent& i_event ) throw (RuntimeException)
     {
-        impl_updateImages_nolck( i_event.Source );
+        ::vos::OGuard aGuard( GetMutex() );
+        Reference< XAnimatedImages > xAnimatedImages( i_event.Source, UNO_QUERY_THROW );
+
+        sal_Int32 nPosition(0);
+        OSL_VERIFY( i_event.Accessor >>= nPosition );
+        size_t position = size_t( nPosition );
+        if ( position >= m_pData->aCachedImageSets.size() )
+        {
+            OSL_ENSURE( false, "AnimatedImagesPeer::elementReplaced: illegal accessor/index!" );
+            lcl_updateImageList_nothrow( *m_pData, xAnimatedImages );
+        }
+
+        Sequence< ::rtl::OUString > aImageURLs;
+        OSL_VERIFY( i_event.Element >>= aImageURLs );
+        ::std::vector< CachedImage > aImages;
+        lcl_init( aImageURLs, aImages );
+        m_pData->aCachedImageSets[ position ] = aImages;
+        lcl_updateImageList_nothrow( *m_pData );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -382,6 +510,14 @@ namespace toolkit
     void SAL_CALL AnimatedImagesPeer::modified( const EventObject& i_event ) throw (RuntimeException)
     {
         impl_updateImages_nolck( i_event.Source );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void SAL_CALL AnimatedImagesPeer::dispose(  ) throw(RuntimeException)
+    {
+        AnimatedImagesPeer_Base::dispose();
+        ::vos::OGuard aGuard( GetMutex() );
+        m_pData->aCachedImageSets.resize(0);
     }
 
 //......................................................................................................................
