@@ -395,6 +395,6 @@
 #include "vcl/wintypes.hxx"
 
 #include "vos/mutex.hxx"
-#include "vos/thread.hxx"
+#include "osl/thread.hxx"
 //---MARKER---
 #endif

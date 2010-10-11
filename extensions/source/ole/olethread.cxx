@@ -36,7 +36,7 @@
 #include <tools/presys.h>
 #include <tools/postsys.h>
 
-#include <vos/thread.hxx>
+#include <osl/thread.hxx>
 
 using namespace vos;
 using namespace std;

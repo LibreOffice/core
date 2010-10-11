@@ -205,7 +205,7 @@ void CommunicationLinkViaSocket::run()
 
         TimeValue sNochEins = {0, 1000000};
         while ( schedule() && bIsInsideCallback )   // solange der letzte Callback nicht beendet ist
-            sleep( sNochEins );
+            wait( sNochEins );
         SetNewPacketAsCurrent();
         StartCallback();
         {
@@ -216,7 +216,7 @@ void CommunicationLinkViaSocket::run()
     }
     TimeValue sNochEins = {0, 1000000};
     while ( schedule() && bIsInsideCallback )   // solange der letzte Callback nicht beendet ist
-        sleep( sNochEins );
+        wait( sNochEins );
 
     StartCallback();
     {
@@ -527,7 +527,7 @@ void CommunicationManagerServerAcceptThread::run()
 
                 TimeValue sNochEins = {0, 100};
                 while ( schedule() && xmNewConnection.Is() )    // Solange die letzte Connection nicht abgeholt wurde warten wir
-                    sleep( sNochEins );
+                    wait( sNochEins );
                 xmNewConnection = new CommunicationLinkViaSocket( pMyServer, pStreamSocket );
                 xmNewConnection->StartCallback();
                 {

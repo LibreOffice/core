@@ -29,7 +29,7 @@
 #include "precompiled_extensions.hxx"
 #include <scanner.hxx>
 #include <sanedlg.hxx>
-#include <vos/thread.hxx>
+#include <osl/thread.hxx>
 #include <tools/list.hxx>
 #include <boost/shared_ptr.hpp>
 
@@ -154,7 +154,7 @@ namespace
 // - ScannerThread -
 // -----------------
 
-class ScannerThread : public vos::OThread
+class ScannerThread : public osl::Thread
 {
     boost::shared_ptr<SaneHolder>               m_pHolder;
     REF( com::sun::star::lang::XEventListener ) m_xListener;

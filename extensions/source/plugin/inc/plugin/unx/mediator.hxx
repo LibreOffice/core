@@ -34,7 +34,7 @@
 #include <vos/pipe.hxx>
 #include <vos/mutex.hxx>
 #include <vos/conditn.hxx>
-#include <vos/thread.hxx>
+#include <osl/thread.hxx>
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
 #endif
@@ -150,7 +150,7 @@ public:
         }
 };
 
-class MediatorListener : public NAMESPACE_VOS( OThread )
+class MediatorListener : public osl::Thread
 {
     friend class Mediator;
   private:

@@ -40,7 +40,7 @@
 
 #include <vos/conditn.hxx>
 #include <vos/mutex.hxx>
-#include <vos/thread.hxx>
+#include <osl/thread.hxx>
 
 #include <string.h>
 
@@ -54,7 +54,7 @@ using namespace usr;
 #endif
 
 class WriteToStreamThread :
-        public OThread
+        public osl::Thread
 {
 
 public:
@@ -369,7 +369,7 @@ void OPipeTest::testMultithreading( const XInterfaceRef &r )
     Sequence<BYTE> seqRead;
 
     // deletes itself
-    OThread *p = new WriteToStreamThread( output,  iMax );
+    osl::Thread *p = new WriteToStreamThread( output,  iMax );
 
     ERROR_ASSERT( p , "couldn't create thread for testing !\n" );
 

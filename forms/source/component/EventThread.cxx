@@ -167,7 +167,8 @@ void OComponentEventThread::implTerminated( )
 
 void SAL_CALL OComponentEventThread::kill()
 {
-    OComponentEventThread_TBASE::kill();
+    OComponentEventThread_TBASE::terminate();
+    OComponentEventThread_TBASE::join();
 
     implTerminated( );
 }

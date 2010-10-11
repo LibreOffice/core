@@ -47,7 +47,7 @@
 
 #include <vos/conditn.hxx>
 #include <vos/mutex.hxx>
-#include <vos/thread.hxx>
+#include <osl/thread.hxx>
 
 #include <string.h>
 

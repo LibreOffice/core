@@ -29,7 +29,7 @@
 #define _COMMUNI_HXX
 
 #include <svl/svarray.hxx>
-#include <vos/thread.hxx>
+#include <osl/thread.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/timer.hxx>
 #include <automation/simplecm.hxx>
@@ -76,7 +76,7 @@ public:
     CommunicationManagerClient( BOOL bUseMultiChannel = FALSE );
 };
 
-class CommunicationLinkViaSocket : public SimpleCommunicationLinkViaSocket, public NAMESPACE_VOS(OThread)
+class CommunicationLinkViaSocket : public SimpleCommunicationLinkViaSocket, public osl::Thread
 {
 public:
     CommunicationLinkViaSocket( CommunicationManager *pMan, NAMESPACE_VOS(OStreamSocket) *pSocket );
@@ -133,7 +133,7 @@ private:
     void AddConnection( CommunicationLink *pNewConnection );
 };
 
-class CommunicationManagerServerAcceptThread: public NAMESPACE_VOS(OThread)
+class CommunicationManagerServerAcceptThread: public osl::Thread
 {
 public:
     CommunicationManagerServerAcceptThread( CommunicationManagerServerViaSocket* pServer, ULONG nPort, USHORT nMaxCon = CM_UNLIMITED_CONNECTIONS );

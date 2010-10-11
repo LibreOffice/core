@@ -543,7 +543,6 @@
 #include "vos/pipe.hxx"
 #include "vos/ref.hxx"
 #include "vos/refernce.hxx"
-#include "vos/thread.hxx"
 #include "vos/timer.hxx"
 
 #include "xmloff/nmspmap.hxx"

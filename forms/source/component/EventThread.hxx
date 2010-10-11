@@ -32,7 +32,7 @@
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/awt/XControl.hpp>
-#include <vos/thread.hxx>
+#include <osl/thread.hxx>
 
 
 #include <osl/conditn.hxx>
@@ -49,7 +49,7 @@ namespace frm
 // ***************************************************************************************************
 // ***************************************************************************************************
 
-typedef ::vos::OThread  OComponentEventThread_TBASE;
+typedef ::osl::Thread   OComponentEventThread_TBASE;
 class OComponentEventThread
             :public OComponentEventThread_TBASE
             ,public ::com::sun::star::lang::XEventListener
@@ -108,8 +108,8 @@ public:
     virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& _rSource ) throw (::com::sun::star::uno::RuntimeException);
 
 /* resolve ambiguity : both OWeakObject and OObject have these memory operators */
-    void * SAL_CALL operator new( size_t size ) throw() { return OThread::operator new(size); }
-    void SAL_CALL operator delete( void * p ) throw() { OThread::operator delete(p); }
+    void * SAL_CALL operator new( size_t size ) throw() { return osl::Thread::operator new(size); }
+    void SAL_CALL operator delete( void * p ) throw() { osl::Thread::operator delete(p); }
 
 private:
     void    implStarted( );

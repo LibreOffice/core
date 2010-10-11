@@ -29,7 +29,7 @@
 #include <tools/link.hxx>
 #include <svl/svarray.hxx>
 
-#include <vos/thread.hxx>
+#include <osl/thread.hxx>
 
 #ifndef _STRING_LIST
 DECLARE_LIST( StringList, String * )
