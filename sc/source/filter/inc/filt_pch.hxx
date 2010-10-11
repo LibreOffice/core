@@ -220,7 +220,7 @@
 #include <com/sun/star/container/NoSuchElementException.hdl>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <vcl/svapp.hxx>
-#include <vos/thread.hxx>
+#include <osl/thread.hxx>
 #include <vos/runnable.hxx>
 #include <vos/refernce.hxx>
 #include <vcl/apptypes.hxx>
