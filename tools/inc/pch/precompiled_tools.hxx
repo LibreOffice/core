@@ -63,6 +63,7 @@
 #include "osl/mutex.hxx"
 #include "osl/process.h"
 #include "osl/security.h"
+#include "osl/signal.h"
 #include "osl/thread.h"
 
 #include "rtl/alloc.h"
@@ -87,7 +88,6 @@
 #include "vos/macros.hxx"
 #include "vos/mutex.hxx"
 #include "vos/process.hxx"
-#include "vos/signal.hxx"
 #include "vos/timer.hxx"
 //---MARKER---
 #endif

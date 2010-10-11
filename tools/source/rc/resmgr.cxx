@@ -32,7 +32,6 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <vos/signal.hxx>
 #include <tools/debug.hxx>
 #include <tools/table.hxx>
 #include <tools/stream.hxx>
@@ -44,6 +43,7 @@
 #include <osl/thread.h>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
+#include <osl/signal.h>
 #include <rtl/ustrbuf.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/instance.hxx>
@@ -836,19 +836,20 @@ void ResMgr::RscError_Impl( const sal_Char* pMessage, ResMgr* pResMgr,
 
 static void RscException_Impl()
 {
-    switch ( NAMESPACE_VOS(OSignalHandler)::raise( OSL_SIGNAL_USER_RESOURCEFAILURE, (void*)"" ) )
+    switch ( osl_raiseSignal( OSL_SIGNAL_USER_RESOURCEFAILURE, (void*)"" ) )
     {
-        case NAMESPACE_VOS(OSignalHandler)::TAction_CallNextHandler:
-            abort();
+    case osl_Signal_ActCallNextHdl:
+        abort();
 
-        case NAMESPACE_VOS(OSignalHandler)::TAction_Ignore:
-            return;
+    case osl_Signal_ActIgnore:
+        return;
 
-        case NAMESPACE_VOS(OSignalHandler)::TAction_AbortApplication:
-            abort();
+    case osl_Signal_ActAbortApp:
+        abort();
 
-        case NAMESPACE_VOS(OSignalHandler)::TAction_KillApplication:
-            exit(-1);
+    default:
+    case osl_Signal_ActKillApp:
+        exit(-1);
     }
 }
 

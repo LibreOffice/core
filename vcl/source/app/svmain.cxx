@@ -47,7 +47,7 @@
 #include "svsys.h"
 #include "vcl/salinst.hxx"
 #include "vcl/salwtype.hxx"
-#include "vos/signal.hxx"
+#include "osl/signal.h"
 #include "tools/tools.h"
 #include "tools/debug.hxx"
 #include "tools/unqid.hxx"
@@ -98,22 +98,14 @@ using namespace ::com::sun::star::lang;
 
 // =======================================================================
 
-class ImplVCLExceptionHandler : public ::vos::OSignalHandler
+oslSignalAction SAL_CALL VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo* pInfo)
 {
-public:
-    virtual ::vos::OSignalHandler::TSignalAction SAL_CALL signal( ::vos::OSignalHandler::TSignalInfo* pInfo );
-};
-
-// -----------------------------------------------------------------------
-
-::vos::OSignalHandler::TSignalAction SAL_CALL ImplVCLExceptionHandler::signal( ::vos::OSignalHandler::TSignalInfo* pInfo )
-{
-    static BOOL bIn = FALSE;
+    static bool bIn = false;
 
     // Wenn wir nocheinmal abstuerzen, verabschieden wir uns gleich
     if ( !bIn )
     {
-        USHORT nVCLException = 0;
+        sal_uInt16 nVCLException = 0;
 
         // UAE
         if ( (pInfo->Signal == osl_Signal_AccessViolation)     ||
@@ -139,7 +131,7 @@ public:
 
         if ( nVCLException )
         {
-            bIn = TRUE;
+            bIn = true;
 
             ::vos::OGuard aLock(&Application::GetSolarMutex());
 
@@ -148,18 +140,19 @@ public:
             ImplSVData* pSVData = ImplGetSVData();
             if ( pSVData->mpApp )
             {
-                USHORT nOldMode = Application::GetSystemWindowMode();
+                sal_uInt16 nOldMode = Application::GetSystemWindowMode();
                 Application::SetSystemWindowMode( nOldMode & ~SYSTEMWINDOW_MODE_NOAUTOMODE );
                 pSVData->mpApp->Exception( nVCLException );
                 Application::SetSystemWindowMode( nOldMode );
             }
-            bIn = FALSE;
+            bIn = false;
 
-            return vos::OSignalHandler::TAction_CallNextHandler;
+            return osl_Signal_ActCallNextHdl;
         }
     }
 
-    return vos::OSignalHandler::TAction_CallNextHandler;
+    return osl_Signal_ActCallNextHdl;
+
 }
 
 // =======================================================================
@@ -228,7 +221,7 @@ BOOL SVMain()
 // before SVInit is called
 static Application *        pOwnSvApp = NULL;
 // Exception handler. pExceptionHandler != NULL => VCL already inited
-ImplVCLExceptionHandler *   pExceptionHandler = NULL;
+oslSignalHandler   pExceptionHandler = NULL;
 
 class Application_Impl : public Application
 {
@@ -332,7 +325,7 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
     pSVData->maGDIData.mpGrfConverter       = new GraphicConverter;
 
     // Exception-Handler setzen
-    pExceptionHandler = new ImplVCLExceptionHandler();
+    pExceptionHandler = osl_addSignalHandler(VCLExceptionSignal_impl, NULL);
 
     // Debug-Daten initialisieren
     DBGGUI_INIT();
@@ -377,7 +370,7 @@ void DeInitVCL()
 
     ImplImageTreeSingletonRef()->shutDown();
 
-    delete pExceptionHandler;
+    osl_removeSignalHandler( pExceptionHandler);
     pExceptionHandler = NULL;
 
     // Debug Daten zuruecksetzen
