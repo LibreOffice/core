@@ -37,6 +37,7 @@ static ResMgr *pVCLResMgr;
 static EggTrayIcon *pTrayIcon;
 static GtkWidget *pExitMenuItem = NULL;
 static GtkWidget *pOpenMenuItem = NULL;
+static GtkWidget *pDisableMenuItem = NULL;
 
 static void open_url_cb( GtkWidget *, gpointer data )
 {
@@ -65,8 +66,10 @@ static void systray_disable_cb()
 static void exit_quickstarter_cb( GtkWidget * )
 {
     egg_tray_icon_cancel_message (pTrayIcon, 1 );
-    ShutdownIcon::getInstance()->terminateDesktop();
     plugin_shutdown_sys_tray();
+    //terminate may cause this .so to be unloaded. So we must be hands off
+    //all calls into this .so after this call
+    ShutdownIcon::terminateDesktop();
 }
 
 static void menu_deactivate_cb( GtkWidget *pMenu )
@@ -263,7 +266,7 @@ static void populate_menu( GtkWidget *pMenu )
     pMenuItem = gtk_separator_menu_item_new();
     gtk_menu_shell_append( pMenuShell, pMenuItem );
 
-    (void) add_image_menu_item
+    pDisableMenuItem = add_image_menu_item
         ( pMenuShell, GTK_STOCK_CLOSE,
           pShutdownIcon->GetResString( STR_QUICKSTART_PRELAUNCH_UNX ),
           G_CALLBACK( systray_disable_cb ) );
@@ -287,6 +290,7 @@ static void refresh_menu( GtkWidget *pMenu )
     bool bModal = ShutdownIcon::bModalMode;
     gtk_widget_set_sensitive( pExitMenuItem, !bModal);
     gtk_widget_set_sensitive( pOpenMenuItem, !bModal);
+    gtk_widget_set_sensitive( pDisableMenuItem, !bModal);
 }
 
 extern "C" {
@@ -402,6 +406,7 @@ void SAL_DLLPUBLIC_EXPORT plugin_shutdown_sys_tray()
     pTrayIcon = NULL;
     pExitMenuItem = NULL;
     pOpenMenuItem = NULL;
+    pDisableMenuItem = NULL;
 }
 
 #endif // ENABLE_QUICKSTART_APPLET
