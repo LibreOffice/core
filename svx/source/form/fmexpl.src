@@ -307,6 +307,7 @@ ImageList RID_SVXIMGLIST_FMEXPL_HC
 
 ModalDialog RID_SVXDLG_SETFORM
 {
+    HelpID = "svx:ModalDialog:RID_SVXDLG_SETFORM";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 200 , 200 ) ;
@@ -345,6 +346,7 @@ ModalDialog RID_SVXDLG_SETFORM
 };
 DockingWindow RID_SVX_FMEXPLORER
 {
+    HelpID = "svx:DockingWindow:RID_SVX_FMEXPLORER";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 200 , 200 ) ;

@@ -32,6 +32,7 @@
  // RID_SVXDLG_IMAP ----------------------------------------------------
 ModelessDialog RID_SVXDLG_IMAP
 {
+    HelpID = "svx:ModelessDialog:RID_SVXDLG_IMAP";
     OutputSize = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
@@ -193,6 +194,7 @@ ModelessDialog RID_SVXDLG_IMAP
     };
     ComboBox CBB_URL
     {
+        HelpID = "svx:ComboBox:RID_SVXDLG_IMAP:CBB_URL";
         Pos = MAP_APPFONT ( 39 , 23 ) ;
         Size = MAP_APPFONT ( 225 , 69 ) ;
         TabStop = TRUE ;
@@ -208,6 +210,7 @@ ModelessDialog RID_SVXDLG_IMAP
     };
     Edit EDT_TEXT
     {
+        HelpID = "svx:Edit:RID_SVXDLG_IMAP:EDT_TEXT";
         Border = TRUE ;
         SVLook = TRUE ;
         Pos = MAP_APPFONT ( 39 , 41 ) ;
@@ -226,6 +229,7 @@ ModelessDialog RID_SVXDLG_IMAP
      // nur temporaer
     ComboBox RID_SVXCTL_CBB_TARGET
     {
+        HelpID = "svx:ComboBox:RID_SVXDLG_IMAP:RID_SVXCTL_CBB_TARGET";
         Border = TRUE ;
         Sort = TRUE ;
         Pos = MAP_APPFONT ( 213 , 41 ) ;

@@ -58,6 +58,7 @@ String RID_BUILDVERSION
 
 ModalDialog RID_DEFAULTABOUT
 {
+    HelpID = "svx:ModalDialog:RID_DEFAULTABOUT";
     OutputSize = TRUE ;
     Size = MAP_APPFONT ( 245 , 260 ) ;
     Moveable = TRUE ;
@@ -78,6 +79,7 @@ ModalDialog RID_DEFAULTABOUT
     };
     MultiLineEdit ABOUT_FTXT_COPYRIGHT
     {
+        HelpID = "svx:MultiLineEdit:RID_DEFAULTABOUT:ABOUT_FTXT_COPYRIGHT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 54 , 25 ) ;
         Size = MAP_APPFONT ( 168 , 51 ) ;

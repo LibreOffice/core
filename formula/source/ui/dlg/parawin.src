@@ -68,6 +68,7 @@
 
 TabPage RID_FORMULATAB_PARAMETER
 {
+    HelpID = "formula:TabPage:RID_FORMULATAB_PARAMETER";
     Border  = FALSE;
     Size    = MAP_APPFONT( 203, 128 );
     DialogControl        = TRUE;
@@ -119,10 +120,18 @@ TabPage RID_FORMULATAB_PARAMETER
         HelpId=HID_FORMULA_FAP_BTN_FX4;
         FXBUTTONBLOCK ( 109 )
     };
-    Edit ED_ARG1 { ED_ARGBLOCK (  64 ) };
-    Edit ED_ARG2 { ED_ARGBLOCK (  79 ) };
-    Edit ED_ARG3 { ED_ARGBLOCK (  94 ) };
-    Edit ED_ARG4 { ED_ARGBLOCK ( 109 ) };
+    Edit ED_ARG1 { ED_ARGBLOCK (  64 )
+        HelpID = "formula:Edit:RID_FORMULATAB_PARAMETER:ED_ARG1";
+    };
+    Edit ED_ARG2 { ED_ARGBLOCK (  79 )
+        HelpID = "formula:Edit:RID_FORMULATAB_PARAMETER:ED_ARG2";
+    };
+    Edit ED_ARG3 { ED_ARGBLOCK (  94 )
+        HelpID = "formula:Edit:RID_FORMULATAB_PARAMETER:ED_ARG3";
+    };
+    Edit ED_ARG4 { ED_ARGBLOCK ( 109 )
+        HelpID = "formula:Edit:RID_FORMULATAB_PARAMETER:ED_ARG4";
+    };
 
     ImageButton RB_ARG1
     {

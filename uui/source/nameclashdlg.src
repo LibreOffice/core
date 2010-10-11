@@ -60,6 +60,7 @@ ModalDialog DLG_SIMPLE_NAME_CLASH
 
     Edit EDIT_NEW_NAME
     {
+        HelpID = "uui:Edit:DLG_SIMPLE_NAME_CLASH:EDIT_NEW_NAME";
         Border      = TRUE ;
         Pos         = MAP_APPFONT ( BORDER_OFFSET, DLG_HEIGTH - EDIT_HEIGTH - BTN_HEIGTH - 2*BORDER_OFFSET ) ;
         Size        = MAP_APPFONT ( DLG_WIDTH - 2*BORDER_OFFSET , EDIT_HEIGTH ) ;
@@ -67,6 +68,7 @@ ModalDialog DLG_SIMPLE_NAME_CLASH
 
     PushButton BTN_OVERWRITE
     {
+        HelpID = "uui:PushButton:DLG_SIMPLE_NAME_CLASH:BTN_OVERWRITE";
         Pos         = MAP_APPFONT (  DLG_WIDTH - 3*(BTN_WIDTH + BORDER_OFFSET) , DLG_HEIGTH - BTN_HEIGTH - BORDER_OFFSET ) ;
         Size        = MAP_APPFONT ( BTN_WIDTH, BTN_HEIGTH ) ;
         TabStop     = TRUE ;
@@ -75,6 +77,7 @@ ModalDialog DLG_SIMPLE_NAME_CLASH
 
     PushButton BTN_RENAME
     {
+        HelpID = "uui:PushButton:DLG_SIMPLE_NAME_CLASH:BTN_RENAME";
         Pos         = MAP_APPFONT ( DLG_WIDTH - 2*(BTN_WIDTH + BORDER_OFFSET) , DLG_HEIGTH - BTN_HEIGTH - BORDER_OFFSET ) ;
         Size        = MAP_APPFONT ( BTN_WIDTH, BTN_HEIGTH ) ;
         TabStop     = TRUE ;

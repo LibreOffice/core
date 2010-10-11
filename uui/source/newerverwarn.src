@@ -66,6 +66,7 @@ ModalDialog RID_DLG_NEWER_VERSION_WARNING
     };
     PushButton PB_UPDATE
     {
+        HelpID = "uui:PushButton:RID_DLG_NEWER_VERSION_WARNING:PB_UPDATE";
         Pos = MAP_APPFONT ( COL_3 , ROW_3 ) ;
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
         TabStop = TRUE ;
