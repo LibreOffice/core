@@ -28,7 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_desktop.hxx"
 
-#include <introbmpnames.hxx>
 #include "splash.hxx"
 #include <stdio.h>
 #include <unotools/bootstrap.hxx>

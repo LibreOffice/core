@@ -29,7 +29,6 @@
 #include "precompiled_sfx2.hxx"
 
 // include ---------------------------------------------------------------
-#include <aboutbmpnames.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
