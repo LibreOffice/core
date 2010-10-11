@@ -318,6 +318,8 @@ public:
     SAL_DLLPRIVATE ResMgr*      GetOffResManager_Impl();
 //#endif
 
+    /* loads a branded bitmap - that can be overridden per locale */
+    static bool  LoadBrandBitmap (const char* pName, BitmapEx &rBitmap);
     /** loads the application logo as used in the about dialog and impress slideshow pause screen */
     static Image GetApplicationLogo();
 };

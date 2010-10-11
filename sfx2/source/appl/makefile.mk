@@ -88,6 +88,7 @@ SFX_OBJECTS = \
     $(SLO)$/appserv.obj \
     $(SLO)$/appuno.obj \
     $(SLO)$/appbaslib.obj \
+    $(SLO)$/brand.obj \
     $(SLO)$/childwin.obj \
     $(SLO)$/fileobj.obj			\
     $(SLO)$/helpdispatch.obj \
