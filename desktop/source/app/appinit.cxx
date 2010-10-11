@@ -52,6 +52,7 @@
 #include <cppuhelper/bootstrap.hxx>
 #include <osl/file.hxx>
 #include <osl/module.h>
+#include <osl/security.hxx>
 #include <vos/process.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -108,7 +109,7 @@ static bool configureUcb(bool bServer, rtl::OUString const & rPortalConnect)
     }
 
     rtl::OUString aPipe;
-    vos::OSecurity().getUserIdent(aPipe);
+    osl::Security().getUserIdent(aPipe);
 
     rtl::OUStringBuffer aPortal;
     if (rPortalConnect.getLength() != 0)

@@ -661,7 +661,6 @@
 #include "vos/module.hxx"
 #include "vos/mutex.hxx"
 #include "vos/process.hxx"
-#include "vos/security.hxx"
 #include "vos/xception.hxx"
 //---MARKER---
 #endif

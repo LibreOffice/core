@@ -50,7 +50,7 @@
 #include <comphelper/processfactory.hxx>
 #include <unotools/configmgr.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <vos/security.hxx>
+#include <osl/security.hxx>
 #include <ucbhelper/configurationkeys.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/historyoptions.hxx>

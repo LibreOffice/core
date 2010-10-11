@@ -40,7 +40,7 @@
 #include <osl/mutex.hxx>
 #include <osl/process.h>
 #include <osl/diagnose.h>
-#include <vos/security.hxx>
+#include <osl/security.hxx>
 #include <vos/ref.hxx>
 #include <vos/process.hxx>
 

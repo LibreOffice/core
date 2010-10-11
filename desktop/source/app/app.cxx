@@ -101,7 +101,7 @@
 #include <tools/testtoolloader.hxx>
 #include <tools/solar.h>
 #include <toolkit/unohlp.hxx>
-#include <vos/security.hxx>
+#include <osl/security.hxx>
 #include <vos/ref.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/componentcontext.hxx>

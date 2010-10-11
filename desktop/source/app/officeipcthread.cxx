@@ -221,7 +221,7 @@ bool addArgument(
 }
 
 OfficeIPCThread*    OfficeIPCThread::pGlobalOfficeIPCThread = 0;
-namespace { struct Security : public rtl::Static<OSecurity, Security> {}; }
+    namespace { struct Security : public rtl::Static<osl::Security, Security> {}; }
 ::osl::Mutex*       OfficeIPCThread::pOfficeIPCThreadMutex = 0;
 
 // Turns a string in aMsg such as file://home/foo/.libreoffice/3
@@ -504,7 +504,7 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
     PipeMode nPipeMode = PIPEMODE_DONTKNOW;
     do
     {
-        OSecurity &rSecurity = Security::get();
+        osl::Security &rSecurity = Security::get();
         // Try to create pipe
         if ( pThread->maPipe.create( pThread->maPipeIdent.getStr(), OPipe::TOption_Create, rSecurity ))
         {

@@ -65,7 +65,7 @@
 #include <unotools/ucbhelper.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <vos/mutex.hxx>
-#include <vos/security.hxx>
+#include <osl/security.hxx>
 #include <osl/thread.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/msgbox.hxx>
@@ -2721,7 +2721,7 @@ void FileDialogHelper::SetDisplayDirectory( const String& _rPath )
         if ( sFolder.getLength() == 0 )
         {
             // _rPath is not a valid path -> fallback to home directory
-            NAMESPACE_VOS( OSecurity ) aSecurity;
+            osl::Security aSecurity;
             aSecurity.getHomeDir( sFolder );
         }
         mpImp->displayFolder( sFolder );

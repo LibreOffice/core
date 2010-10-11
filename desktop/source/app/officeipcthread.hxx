@@ -31,7 +31,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <vos/pipe.hxx>
-#include <vos/security.hxx>
+#include <osl/security.hxx>
 #include <vos/signal.hxx>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase2.hxx>
