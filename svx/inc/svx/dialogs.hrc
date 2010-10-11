@@ -1053,16 +1053,17 @@
 #define SID_SC_TP_MISC                  (RID_OFA_START + 239)
 #define OFA_TP_TABPROPERTIES_TEXT       (RID_OFA_START + 245)
 #define OFA_TP_HELPERPROG               (RID_OFA_START + 249)
+#define SID_SC_TP_FORMULA               (RID_OFA_START + 257)
+#define SID_SC_TP_COMPATIBILITY         (RID_OFA_START + 258)
 
 // ----------------------------------------------------------------------------
 // ooo-build specific resources
 
 #define SVX_OOO_BUILD_START             (RID_SVX_START + 1200)
 
-#define SID_SC_TP_FORMULA               (SVX_OOO_BUILD_START + 1)
-#define RID_SVXBMP_DOC_MODIFIED_YES     (SVX_OOO_BUILD_START + 2)
-#define RID_SVXBMP_DOC_MODIFIED_NO      (SVX_OOO_BUILD_START + 3)
-#define RID_SVXSTR_DOC_MODIFIED_YES     (SVX_OOO_BUILD_START + 4)
-#define RID_SVXSTR_DOC_MODIFIED_NO      (SVX_OOO_BUILD_START + 5)
+#define RID_SVXBMP_DOC_MODIFIED_YES     (SVX_OOO_BUILD_START + 1)
+#define RID_SVXBMP_DOC_MODIFIED_NO      (SVX_OOO_BUILD_START + 2)
+#define RID_SVXSTR_DOC_MODIFIED_YES     (SVX_OOO_BUILD_START + 3)
+#define RID_SVXSTR_DOC_MODIFIED_NO      (SVX_OOO_BUILD_START + 4)
 
 #endif

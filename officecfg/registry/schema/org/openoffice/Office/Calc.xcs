@@ -1542,74 +1542,34 @@
                 </prop>
             </group>
         </group>
+        <group oor:name="Compatibility">
+            <info>
+                <desc>Contains various compatibility settings.</desc>
+            </info>
+            <group oor:name="KeyBindings">
+                <info>
+                    <desc>Contains options related to key bindings</desc>
+                </info>
+                <prop oor:name="BaseGroup" oor:type="xs:int">
+                    <!-- UIHints: Tools - Options - Spreadsheet - Compatibility -->
+                    <info>
+                        <author>Kohei Yoshida</author>
+                        <desc>Specifies baseline key binding group to use.</desc>
+                    </info>
+                    <constraints>
+                        <enumeration oor:value="0">
+                            <info>
+                                <desc>Default</desc>
+                            </info>
+                        </enumeration>
+                        <enumeration oor:value="1">
+                            <info>
+                                <desc>OpenOffice.org legacy</desc>
+                            </info>
+                        </enumeration>
+                    </constraints>
+                </prop>
+            </group>
+        </group>
 	</component>
 </oor:component-schema>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
