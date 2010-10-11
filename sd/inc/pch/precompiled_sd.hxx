@@ -905,7 +905,7 @@
 #include "vcl/wintypes.hxx"
 #include "vcl/wrkwin.hxx"
 
-#include "vos/diagnose.hxx"
+#include "osl/diagnose.h"
 #include "vos/module.hxx"
 #include "vos/mutex.hxx"
 #include "vos/process.hxx"

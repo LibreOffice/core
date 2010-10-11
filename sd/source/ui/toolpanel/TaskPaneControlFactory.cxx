@@ -30,7 +30,7 @@
 
 #include "taskpane/TaskPaneControlFactory.hxx"
 
-#include <vos/diagnose.hxx>
+#include <osl/diagnose.h>
 
 namespace sd { namespace toolpanel {
 
