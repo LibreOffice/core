@@ -34,12 +34,9 @@
 #include <svx/globl3d.hxx>
 #include <svx/svdouno.hxx>
 #include <editeng/eeitem.hxx>
-#ifndef _FLDITEM_HXX
 #include <editeng/flditem.hxx>
-#endif
-#ifndef _SVXIDS_HXX
+#include <editeng/outlobj.hxx>
 #include <svx/svxids.hrc>
-#endif
 #include <svx/svdpagv.hxx>
 #include <svx/clipfmtitem.hxx>
 #include <svx/fmshell.hxx>
@@ -310,7 +307,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
         if(bDisable)
         {
-            rSet.DisableItem(SID_EXPAND_PAGE);
+            rSet.DisableItem(SID_ASSIGN_LAYOUT);
         }
     }
 
@@ -325,9 +322,26 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
             {
                 SdrObject* pObj = pPage->GetPresObj(PRESOBJ_OUTLINE);
 
-                if(pObj && !pObj->IsEmptyPresObj())
+                if (pObj!=NULL )
                 {
-                    bDisable = false;
+                    if( !pObj->IsEmptyPresObj() )
+                    {
+                        bDisable = false;
+                    }
+                    else
+                    {
+                        // check if the object is in edit, than its temporarely not empty
+                        SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObj );
+                        if( pTextObj )
+                        {
+                            OutlinerParaObject* pParaObj = pTextObj->GetEditOutlinerParaObject();
+                            if( pParaObj )
+                            {
+                                delete pParaObj;
+                                bDisable = false;
+                            }
+                        }
+                    }
                 }
             }
         }

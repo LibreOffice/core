@@ -29,6 +29,8 @@
 
 #include <com/sun/star/presentation/XPresentation2.hpp>
 
+#include <editeng/outlobj.hxx>
+
 #include "controller/SlsSlotManager.hxx"
 #include "SlideSorter.hxx"
 #include "SlideSorterViewShell.hxx"
@@ -558,8 +560,27 @@ void SlotManager::GetMenuState (SfxItemSet& rSet)
             {
                 SdPage* pPage = aSelectedPages.GetNextElement()->GetPage();
                 SdrObject* pObj = pPage->GetPresObj(PRESOBJ_OUTLINE);
-                if (pObj!=NULL && !pObj->IsEmptyPresObj())
-                    bDisable = false;
+                if (pObj!=NULL )
+                {
+                    if( !pObj->IsEmptyPresObj() )
+                    {
+                        bDisable = false;
+                    }
+                    else
+                    {
+                        // check if the object is in edit, than its temporarely not empty
+                        SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObj );
+                        if( pTextObj )
+                        {
+                            OutlinerParaObject* pParaObj = pTextObj->GetEditOutlinerParaObject();
+                            if( pParaObj )
+                            {
+                                delete pParaObj;
+                                bDisable = false;
+                            }
+                        }
+                    }
+                }
             }
         }
 
