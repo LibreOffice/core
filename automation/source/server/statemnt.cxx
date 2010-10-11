@@ -76,7 +76,6 @@
 #include <basic/ttstrhlp.hxx>
 #include <basic/dispdefs.hxx>
 #include <basic/sbuno.hxx>
-#include <vos/socket.hxx>
 #include <svl/pickerhistory.hxx>
 #include <com/sun/star/util/XCancellable.hpp>
 
