@@ -413,6 +413,7 @@ void ExtBoxWithBtns_Impl::MouseButtonDown( const MouseEvent& rMEvt )
     }
     else if ( rMEvt.IsLeft() )
     {
+        const vos::OGuard aGuard( Application::GetSolarMutex() );
         if ( rMEvt.IsMod1() && HasActive() )
             selectEntry( EXTENSION_LISTBOX_ENTRY_NOTFOUND );   // Selecting an not existing entry will deselect the current one
         else
@@ -766,6 +767,7 @@ void ExtMgrDialog::setGetExtensionsURL( const ::rtl::OUString &rURL )
 long ExtMgrDialog::addPackageToList( const uno::Reference< deployment::XPackage > &xPackage,
                                      bool bLicenseMissing )
 {
+    const vos::OGuard aGuard( Application::GetSolarMutex() );
     m_aUpdateBtn.Enable( true );
     return m_pExtensionBox->addEntry( xPackage, bLicenseMissing );
 }
@@ -1037,6 +1039,7 @@ void ExtMgrDialog::updateProgress( const OUString &rText,
 //------------------------------------------------------------------------------
 void ExtMgrDialog::updatePackageInfo( const uno::Reference< deployment::XPackage > &xPackage )
 {
+    const vos::OGuard aGuard( Application::GetSolarMutex() );
     m_pExtensionBox->updateEntry( xPackage );
 }
 
@@ -1322,6 +1325,7 @@ long UpdateRequiredDialog::addPackageToList( const uno::Reference< deployment::X
     if ( !bLicenseMissing && !checkDependencies( xPackage ) )
     {
         m_bHasLockedEntries |= m_pManager->isReadOnly( xPackage );
+        const vos::OGuard aGuard( Application::GetSolarMutex() );
         m_aUpdateBtn.Enable( true );
         return m_pExtensionBox->addEntry( xPackage );
     }
@@ -1450,6 +1454,7 @@ void UpdateRequiredDialog::updatePackageInfo( const uno::Reference< deployment::
     // We will remove all updated packages with satisfied dependencies, but
     // we will show all disabled entries so the user sees the result
     // of the 'disable all' button
+    const vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( isEnabled( xPackage ) && checkDependencies( xPackage ) )
         m_pExtensionBox->removeEntry( xPackage );
     else
