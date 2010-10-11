@@ -143,7 +143,7 @@
 #include <svl/poolitem.hxx>
 #include <svtools/args.hxx>
 #include <smmod.hxx>
-#include <vos/thread.hxx>
+#include <osl/thread.hxx>
 #include <osl/thread.h>
 #include <vos/runnable.hxx>
 #include <vcl/apptypes.hxx>
