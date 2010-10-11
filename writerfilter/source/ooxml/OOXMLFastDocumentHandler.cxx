@@ -193,9 +193,6 @@ void SAL_CALL OOXMLFastDocumentHandler::startDocument()
 void SAL_CALL OOXMLFastDocumentHandler::endDocument()
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
-#ifdef DEBUG_CONTEXT_STACK
-    OOXMLFastContextHandler::dumpOpenContexts();
-#endif
 }
 
 void SAL_CALL OOXMLFastDocumentHandler::setDocumentLocator
