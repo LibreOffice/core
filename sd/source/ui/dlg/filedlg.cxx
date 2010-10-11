@@ -43,7 +43,7 @@
 #include <vcl/msgbox.hxx>
 #include <sal/types.h>
 #include <tools/urlobj.hxx>
-#include <vos/thread.hxx>
+#include <osl/thread.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/filedlghelper.hxx>
