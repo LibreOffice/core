@@ -45,6 +45,7 @@
 
 TabPage TP_LOCATION
 {
+    HelpID = "chart2:TabPage:TP_LOCATION";
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( CHART_WIZARD_PAGEWIDTH , CHART_WIZARD_PAGEHEIGHT ) ;
@@ -65,6 +66,7 @@ TabPage TP_LOCATION
     };
     ListBox LB_TABLE
     {
+        HelpID = "chart2:ListBox:TP_LOCATION:LB_TABLE";
         Border = TRUE ;
         DropDown = TRUE ;
         Pos = MAP_APPFONT ( WIZ_POSX3 , WIZ_POSY2 ) ;

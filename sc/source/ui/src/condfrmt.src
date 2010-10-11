@@ -37,6 +37,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     Hide = TRUE ;
     CheckBox CBX_COND1
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_CONDFORMAT:CBX_COND1";
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 248 , 10 ) ;
         TabStop = TRUE ;
@@ -44,6 +45,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     ListBox LB_COND1_1
     {
+        HelpID = "sc:ListBox:RID_SCDLG_CONDFORMAT:LB_COND1_1";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 19 ) ;
         Size = MAP_APPFONT ( 48 , 40 ) ;
@@ -57,6 +59,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     ListBox LB_COND1_2
     {
+        HelpID = "sc:ListBox:RID_SCDLG_CONDFORMAT:LB_COND1_2";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 58 , 19 ) ;
         Size = MAP_APPFONT ( 62 , 88 ) ;
@@ -76,6 +79,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     Edit EDT_COND1_1
     {
+        HelpID = "sc:Edit:RID_SCDLG_CONDFORMAT:EDT_COND1_1";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 124 , 19 ) ;
         Size = MAP_APPFONT ( 41 , 12 ) ;
@@ -83,6 +87,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     ImageButton RB_COND1_1
     {
+        HelpID = "sc:ImageButton:RID_SCDLG_CONDFORMAT:RB_COND1_1";
         Pos = MAP_APPFONT ( 167 , 18 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
@@ -97,6 +102,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     Edit EDT_COND1_2
     {
+        HelpID = "sc:Edit:RID_SCDLG_CONDFORMAT:EDT_COND1_2";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 199 , 19 ) ;
         Size = MAP_APPFONT ( 41 , 12 ) ;
@@ -104,6 +110,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     ImageButton RB_COND1_2
     {
+        HelpID = "sc:ImageButton:RID_SCDLG_CONDFORMAT:RB_COND1_2";
         Pos = MAP_APPFONT ( 242 , 18 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
@@ -118,6 +125,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     ListBox LB_COND1_TEMPLATE
     {
+        HelpID = "sc:ListBox:RID_SCDLG_CONDFORMAT:LB_COND1_TEMPLATE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 58 , 35 ) ;
         Size = MAP_APPFONT ( 62 , 80 ) ;
@@ -127,6 +135,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     PushButton BTN_COND1_NEW
     {
+        HelpID = "sc:PushButton:RID_SCDLG_CONDFORMAT:BTN_COND1_NEW";
         Pos = MAP_APPFONT ( 124 , 34 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -139,6 +148,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     CheckBox CBX_COND2
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_CONDFORMAT:CBX_COND2";
         Pos = MAP_APPFONT ( 6 , 60 ) ;
         Size = MAP_APPFONT ( 248 , 10 ) ;
         TabStop = TRUE ;
@@ -146,6 +156,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     ListBox LB_COND2_1
     {
+        HelpID = "sc:ListBox:RID_SCDLG_CONDFORMAT:LB_COND2_1";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 73 ) ;
         Size = MAP_APPFONT ( 48 , 40 ) ;
@@ -159,6 +170,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     ListBox LB_COND2_2
     {
+        HelpID = "sc:ListBox:RID_SCDLG_CONDFORMAT:LB_COND2_2";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 58 , 73 ) ;
         Size = MAP_APPFONT ( 62 , 88 ) ;
@@ -178,6 +190,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     Edit EDT_COND2_1
     {
+        HelpID = "sc:Edit:RID_SCDLG_CONDFORMAT:EDT_COND2_1";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 124 , 73 ) ;
         Size = MAP_APPFONT ( 41 , 12 ) ;
@@ -185,6 +198,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     ImageButton RB_COND2_1
     {
+        HelpID = "sc:ImageButton:RID_SCDLG_CONDFORMAT:RB_COND2_1";
         Pos = MAP_APPFONT ( 167 , 72 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
@@ -199,6 +213,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     Edit EDT_COND2_2
     {
+        HelpID = "sc:Edit:RID_SCDLG_CONDFORMAT:EDT_COND2_2";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 199 , 73 ) ;
         Size = MAP_APPFONT ( 41 , 12 ) ;
@@ -206,6 +221,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     ImageButton RB_COND2_2
     {
+        HelpID = "sc:ImageButton:RID_SCDLG_CONDFORMAT:RB_COND2_2";
         Pos = MAP_APPFONT ( 242 , 72 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
@@ -220,6 +236,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     ListBox LB_COND2_TEMPLATE
     {
+        HelpID = "sc:ListBox:RID_SCDLG_CONDFORMAT:LB_COND2_TEMPLATE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 58 , 89 ) ;
         Size = MAP_APPFONT ( 62 , 80 ) ;
@@ -229,6 +246,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     PushButton BTN_COND2_NEW
     {
+        HelpID = "sc:PushButton:RID_SCDLG_CONDFORMAT:BTN_COND2_NEW";
         Pos = MAP_APPFONT ( 124 , 88 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -241,6 +259,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     CheckBox CBX_COND3
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_CONDFORMAT:CBX_COND3";
         Pos = MAP_APPFONT ( 6 , 114 ) ;
         Size = MAP_APPFONT ( 248 , 10 ) ;
         TabStop = TRUE ;
@@ -248,6 +267,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     ListBox LB_COND3_1
     {
+        HelpID = "sc:ListBox:RID_SCDLG_CONDFORMAT:LB_COND3_1";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 127 ) ;
         Size = MAP_APPFONT ( 48 , 40 ) ;
@@ -261,6 +281,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     ListBox LB_COND3_2
     {
+        HelpID = "sc:ListBox:RID_SCDLG_CONDFORMAT:LB_COND3_2";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 58 , 127 ) ;
         Size = MAP_APPFONT ( 62 , 88 ) ;
@@ -280,6 +301,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     Edit EDT_COND3_1
     {
+        HelpID = "sc:Edit:RID_SCDLG_CONDFORMAT:EDT_COND3_1";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 124 , 127 ) ;
         Size = MAP_APPFONT ( 41 , 12 ) ;
@@ -287,6 +309,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     ImageButton RB_COND3_1
     {
+        HelpID = "sc:ImageButton:RID_SCDLG_CONDFORMAT:RB_COND3_1";
         Pos = MAP_APPFONT ( 167 , 126 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
@@ -301,6 +324,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     Edit EDT_COND3_2
     {
+        HelpID = "sc:Edit:RID_SCDLG_CONDFORMAT:EDT_COND3_2";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 199 , 127 ) ;
         Size = MAP_APPFONT ( 41 , 12 ) ;
@@ -308,6 +332,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     ImageButton RB_COND3_2
     {
+        HelpID = "sc:ImageButton:RID_SCDLG_CONDFORMAT:RB_COND3_2";
         Pos = MAP_APPFONT ( 242 , 126 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
@@ -322,6 +347,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     ListBox LB_COND3_TEMPLATE
     {
+        HelpID = "sc:ListBox:RID_SCDLG_CONDFORMAT:LB_COND3_TEMPLATE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 58 , 143 ) ;
         Size = MAP_APPFONT ( 62 , 80 ) ;
@@ -331,6 +357,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     PushButton BTN_COND3_NEW
     {
+        HelpID = "sc:PushButton:RID_SCDLG_CONDFORMAT:BTN_COND3_NEW";
         Pos = MAP_APPFONT ( 124 , 142 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;

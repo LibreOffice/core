@@ -46,6 +46,7 @@
 
 TabPage TP_SCALE
 {
+    HelpID = "chart2:TabPage:TP_SCALE";
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
@@ -64,6 +65,7 @@ TabPage TP_SCALE
     };
     SpinField EDT_MIN
     {
+        HelpID = "chart2:SpinField:TP_SCALE:EDT_MIN";
         Border = TRUE ;
         SVLook = TRUE ;
         Pos = MAP_APPFONT ( X3 , Y1-2 ) ;
@@ -72,6 +74,7 @@ TabPage TP_SCALE
     };
     CheckBox CBX_AUTO_MIN
     {
+        HelpID = "chart2:CheckBox:TP_SCALE:CBX_AUTO_MIN";
         Pos = MAP_APPFONT ( X4 , Y1-1  ) ;
         Size = MAP_APPFONT ( AUTOCHECKWIDTH , 10 ) ;
         TabStop = TRUE ;
@@ -86,6 +89,7 @@ TabPage TP_SCALE
     };
     SpinField EDT_MAX
     {
+        HelpID = "chart2:SpinField:TP_SCALE:EDT_MAX";
         Border = TRUE ;
         SVLook = TRUE ;
         Pos = MAP_APPFONT ( X3 , Y2-2  ) ;
@@ -94,6 +98,7 @@ TabPage TP_SCALE
     };
     CheckBox CBX_AUTO_MAX
     {
+        HelpID = "chart2:CheckBox:TP_SCALE:CBX_AUTO_MAX";
         Pos = MAP_APPFONT ( X4 , Y2-1  ) ;
         Size = MAP_APPFONT ( AUTOCHECKWIDTH , 10 ) ;
         TabStop = TRUE ;
@@ -107,6 +112,7 @@ TabPage TP_SCALE
     };
     SpinField EDT_STEP_MAIN
     {
+        HelpID = "chart2:SpinField:TP_SCALE:EDT_STEP_MAIN";
         Border = TRUE ;
         Pos = MAP_APPFONT ( X3 , Y3-2  ) ;
         Size = MAP_APPFONT ( EDITWIDTH , 12 ) ;
@@ -114,6 +120,7 @@ TabPage TP_SCALE
     };
     CheckBox CBX_AUTO_STEP_MAIN
     {
+        HelpID = "chart2:CheckBox:TP_SCALE:CBX_AUTO_STEP_MAIN";
         Pos = MAP_APPFONT ( X4 , Y3-1  ) ;
         Size = MAP_APPFONT ( AUTOCHECKWIDTH , 10 ) ;
         TabStop = TRUE ;
@@ -127,6 +134,7 @@ TabPage TP_SCALE
     };
     MetricField MT_STEPHELP
     {
+        HelpID = "chart2:MetricField:TP_SCALE:MT_STEPHELP";
         Border = TRUE ;
         Pos = MAP_APPFONT ( X3 , Y4-2  ) ;
         Size = MAP_APPFONT ( EDITWIDTH , 12 ) ;
@@ -143,6 +151,7 @@ TabPage TP_SCALE
     };
     CheckBox CBX_AUTO_STEP_HELP
     {
+        HelpID = "chart2:CheckBox:TP_SCALE:CBX_AUTO_STEP_HELP";
         Pos = MAP_APPFONT ( X4 , Y4-1  ) ;
         Size = MAP_APPFONT ( AUTOCHECKWIDTH , 10 ) ;
         TabStop = TRUE ;
@@ -157,6 +166,7 @@ TabPage TP_SCALE
     };
     SpinField EDT_ORIGIN
     {
+        HelpID = "chart2:SpinField:TP_SCALE:EDT_ORIGIN";
         Border = TRUE ;
         SVLook = TRUE ;
         Pos = MAP_APPFONT ( X3 , Y5-2  ) ;
@@ -165,6 +175,7 @@ TabPage TP_SCALE
     };
     CheckBox CBX_AUTO_ORIGIN
     {
+        HelpID = "chart2:CheckBox:TP_SCALE:CBX_AUTO_ORIGIN";
         Pos = MAP_APPFONT ( X4 , Y5-1  ) ;
         Size = MAP_APPFONT ( AUTOCHECKWIDTH , 10 ) ;
         TabStop = TRUE ;
@@ -173,6 +184,7 @@ TabPage TP_SCALE
 
     CheckBox CBX_LOGARITHM
     {
+        HelpID = "chart2:CheckBox:TP_SCALE:CBX_LOGARITHM";
         Pos = MAP_APPFONT ( X2 , Y6  ) ;
         Size = MAP_APPFONT ( 244 , 10 ) ;
         TabStop = TRUE ;
@@ -181,6 +193,7 @@ TabPage TP_SCALE
 
     CheckBox CBX_REVERSE
     {
+        HelpID = "chart2:CheckBox:TP_SCALE:CBX_REVERSE";
         Pos = MAP_APPFONT ( X2 , Y7  ) ;
         Size = MAP_APPFONT ( 244 , 10 ) ;
         TabStop = TRUE ;

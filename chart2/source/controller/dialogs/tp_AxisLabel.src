@@ -35,6 +35,7 @@ TabPage TP_AXIS_LABEL
 
     CheckBox CB_AXIS_LABEL_SCHOW_DESCR
     {
+        HelpID = "chart2:CheckBox:TP_AXIS_LABEL:CB_AXIS_LABEL_SCHOW_DESCR";
         Pos = MAP_APPFONT ( 6 , 6  ) ;
         Size    = MAP_APPFONT ( 248 , 12 ) ;
 
@@ -112,6 +113,7 @@ TabPage TP_AXIS_LABEL
     };
         CheckBox CB_AXIS_LABEL_TEXTOVERLAP
         {
+            HelpID = "chart2:CheckBox:TP_AXIS_LABEL:CB_AXIS_LABEL_TEXTOVERLAP";
             Pos = MAP_APPFONT ( 139 , 33  ) ;
             Size = MAP_APPFONT ( 115 , 10 ) ;
             TabStop = TRUE ;
@@ -120,6 +122,7 @@ TabPage TP_AXIS_LABEL
     };
         CheckBox CB_AXIS_LABEL_TEXTBREAK
         {
+            HelpID = "chart2:CheckBox:TP_AXIS_LABEL:CB_AXIS_LABEL_TEXTBREAK";
             Pos = MAP_APPFONT ( 139 , 47  ) ;
             Size = MAP_APPFONT ( 115 , 10 ) ;
             TabStop = TRUE ;
@@ -137,6 +140,7 @@ TabPage TP_AXIS_LABEL
     };
         RadioButton RB_AXIS_LABEL_SIDEBYSIDE
         {
+            HelpID = "chart2:RadioButton:TP_AXIS_LABEL:RB_AXIS_LABEL_SIDEBYSIDE";
             Pos = MAP_APPFONT ( 12 , 33  ) ;
             Size = MAP_APPFONT ( 112 , 10 ) ;
             TabStop = TRUE ;
@@ -145,6 +149,7 @@ TabPage TP_AXIS_LABEL
     };
         RadioButton RB_AXIS_LABEL_UPDOWN
         {
+            HelpID = "chart2:RadioButton:TP_AXIS_LABEL:RB_AXIS_LABEL_UPDOWN";
             Pos = MAP_APPFONT ( 12 , 47  ) ;
             Size = MAP_APPFONT ( 112 , 10 ) ;
             TabStop = TRUE ;
@@ -153,6 +158,7 @@ TabPage TP_AXIS_LABEL
     };
         RadioButton RB_AXIS_LABEL_DOWNUP
         {
+            HelpID = "chart2:RadioButton:TP_AXIS_LABEL:RB_AXIS_LABEL_DOWNUP";
             Pos = MAP_APPFONT ( 12 , 61  ) ;
             Size = MAP_APPFONT ( 112 , 10 ) ;
             TabStop = TRUE ;
@@ -161,6 +167,7 @@ TabPage TP_AXIS_LABEL
     };
         RadioButton RB_AXIS_LABEL_AUTOORDER
         {
+            HelpID = "chart2:RadioButton:TP_AXIS_LABEL:RB_AXIS_LABEL_AUTOORDER";
             Pos = MAP_APPFONT ( 12 , 75  ) ;
             Size = MAP_APPFONT ( 112 , 10 ) ;
             TabStop = TRUE ;
@@ -176,6 +183,7 @@ TabPage TP_AXIS_LABEL
     };
     ListBox LB_AXIS_TEXTDIR
     {
+        HelpID = "chart2:ListBox:TP_AXIS_LABEL:LB_AXIS_TEXTDIR";
         Pos = MAP_APPFONT ( 78 , 154 ) ;
         Size = MAP_APPFONT ( 170 , 100 ) ;
         Border = TRUE;

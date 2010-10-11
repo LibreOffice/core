@@ -33,6 +33,7 @@
 
 ModalDialog DLG_DATA_YERRORBAR
 {
+    HelpID = "chart2:ModalDialog:DLG_DATA_YERRORBAR";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 300 , 156 ) ;

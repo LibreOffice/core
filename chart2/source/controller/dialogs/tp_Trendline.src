@@ -30,6 +30,7 @@
 
 TabPage TP_TRENDLINE
 {
+    HelpID = "chart2:TabPage:TP_TRENDLINE";
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
