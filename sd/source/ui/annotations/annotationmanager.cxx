@@ -164,7 +164,8 @@ OUString getAnnotationDateTimeString( const Reference< XAnnotation >& xAnnotatio
     OUString sRet;
     if( xAnnotation.is() )
     {
-        const LocaleDataWrapper& rLocalData = SvtSysLocale().GetLocaleData();
+        const SvtSysLocale aSysLocale;
+        const LocaleDataWrapper& rLocalData = aSysLocale.GetLocaleData();
 
         com::sun::star::util::DateTime aDateTime( xAnnotation->getDateTime() );
 
