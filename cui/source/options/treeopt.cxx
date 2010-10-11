@@ -2702,7 +2702,7 @@ short OfaTreeOptionsDialog::Execute()
             }
         }
 
-        utl::ConfigManager::GetConfigManager()->StoreConfigItems();
+        utl::ConfigManager::GetConfigManager().StoreConfigItems();
     }
 
     return nRet;

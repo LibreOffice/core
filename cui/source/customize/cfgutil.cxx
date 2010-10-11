@@ -585,7 +585,7 @@ SfxConfigGroupListBox_Impl::SfxConfigGroupListBox_Impl(
     Any value;
     sal_Bool tmp = false;
 
-    value = ::utl::ConfigManager::GetConfigManager()->GetLocalProperty(
+    value = ::utl::ConfigManager::GetConfigManager().GetLocalProperty(
         ::rtl::OUString::createFromAscii(
             "Office.Scripting/ScriptDisplaySettings/ShowBasic" ) );
 
@@ -598,7 +598,7 @@ SfxConfigGroupListBox_Impl::SfxConfigGroupListBox_Impl(
         bShowBasic = FALSE;
     }
 
-    value = ::utl::ConfigManager::GetConfigManager()->GetLocalProperty(
+    value = ::utl::ConfigManager::GetConfigManager().GetLocalProperty(
         ::rtl::OUString::createFromAscii(
             "Office.Scripting/ScriptDisplaySettings/ShowSF" ) );
 
