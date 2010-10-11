@@ -38,6 +38,7 @@
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/urlobj.hxx>
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
@@ -48,7 +49,7 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::Exception;
 namespace ImageScaleMode = ::com::sun::star::awt::ImageScaleMode;
 
-//--------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 Throbber::Throbber( Window* i_parentWindow, WinBits i_style, const ImageSet i_imageSet )
     :ImageControl( i_parentWindow, i_style )
     ,mbRepeat( sal_True )
@@ -80,16 +81,38 @@ Throbber::Throbber( Window* i_parentWindow, const ResId& i_resId, const ImageSet
     initImages();
 }
 
-//--------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 Throbber::~Throbber()
 {
     maWaitTimer.Stop();
 }
 
-//--------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 namespace
 {
-    ::std::vector< Image > lcl_loadImageSet( const Throbber::ImageSet i_imageSet )
+    //..................................................................................................................
+    ::rtl::OUString lcl_getHighContrastURL( ::rtl::OUString const& i_imageURL )
+    {
+        INetURLObject aURL( i_imageURL );
+        if ( aURL.GetProtocol() != INET_PROT_PRIV_SOFFICE )
+        {
+            OSL_VERIFY( aURL.insertName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "hicontrast" ) ), false, 0 ) );
+            return aURL.GetMainURL( INetURLObject::NO_DECODE );
+        }
+        // the private: scheme is not considered to be hierarchical by INetURLObject, so manually insert the
+        // segment
+        const sal_Int32 separatorPos = i_imageURL.indexOf( '/' );
+        ENSURE_OR_RETURN( separatorPos != -1, "lcl_getHighContrastURL: unsipported URL scheme - cannot automatically determine HC version!", i_imageURL );
+
+        ::rtl::OUStringBuffer composer;
+        composer.append( i_imageURL.copy( 0, separatorPos ) );
+        composer.appendAscii( "/hicontrast" );
+        composer.append( i_imageURL.copy( separatorPos ) );
+        return composer.makeStringAndClear();
+    }
+
+    //..................................................................................................................
+    ::std::vector< Image > lcl_loadImageSet( const Throbber::ImageSet i_imageSet, const bool i_isHiContrast )
     {
         ::std::vector< Image > aImages;
         ENSURE_OR_RETURN( i_imageSet != Throbber::IMAGES_NONE, "lcl_loadImageSet: illegal image set", aImages );
@@ -106,8 +129,17 @@ namespace
                 ++imageURL
             )
         {
-            aMediaProperties.put( "URL", *imageURL );
-            const Reference< XGraphic > xGraphic( xGraphicProvider->queryGraphic( aMediaProperties.getPropertyValues() ), UNO_QUERY );
+            Reference< XGraphic > xGraphic;
+            if ( i_isHiContrast )
+            {
+                aMediaProperties.put( "URL", lcl_getHighContrastURL( *imageURL ) );
+                xGraphic.set( xGraphicProvider->queryGraphic( aMediaProperties.getPropertyValues() ), UNO_QUERY );
+            }
+            if ( !xGraphic.is() )
+            {
+                aMediaProperties.put( "URL", *imageURL );
+                xGraphic.set( xGraphicProvider->queryGraphic( aMediaProperties.getPropertyValues() ), UNO_QUERY );
+            }
             aImages.push_back( Image( xGraphic ) );
         }
 
@@ -115,7 +147,7 @@ namespace
     }
 }
 
-//--------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 void Throbber::Resize()
 {
     ImageControl::Resize();
@@ -124,7 +156,7 @@ void Throbber::Resize()
         initImages();
 }
 
-//--------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 void Throbber::initImages()
 {
     if ( meImageSet == IMAGES_NONE )
@@ -133,15 +165,16 @@ void Throbber::initImages()
     try
     {
         ::std::vector< ::std::vector< Image > > aImageSets;
+        const bool isHiContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
         if ( meImageSet == IMAGES_AUTO )
         {
-            aImageSets.push_back( lcl_loadImageSet( IMAGES_16_PX ) );
-            aImageSets.push_back( lcl_loadImageSet( IMAGES_32_PX ) );
-            aImageSets.push_back( lcl_loadImageSet( IMAGES_64_PX ) );
+            aImageSets.push_back( lcl_loadImageSet( IMAGES_16_PX, isHiContrast ) );
+            aImageSets.push_back( lcl_loadImageSet( IMAGES_32_PX, isHiContrast ) );
+            aImageSets.push_back( lcl_loadImageSet( IMAGES_64_PX, isHiContrast ) );
         }
         else
         {
-            aImageSets.push_back( lcl_loadImageSet( meImageSet ) );
+            aImageSets.push_back( lcl_loadImageSet( meImageSet, isHiContrast ) );
         }
 
         // find the best matching image set (size-wise)
@@ -177,25 +210,25 @@ void Throbber::initImages()
     }
 }
 
-//--------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 void Throbber::start()
 {
     maWaitTimer.Start();
 }
 
-//--------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 void Throbber::stop()
 {
     maWaitTimer.Stop();
 }
 
-//--------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 bool Throbber::isRunning() const
 {
     return maWaitTimer.IsActive();
 }
 
-//--------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 void Throbber::setImageList( ::std::vector< Image > const& i_images )
 {
     maImageList = i_images;
@@ -205,7 +238,7 @@ void Throbber::setImageList( ::std::vector< Image > const& i_images )
     SetImage( aInitialImage );
 }
 
-//--------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 void Throbber::setImageList( const Sequence< Reference< XGraphic > >& rImageList )
 {
     ::std::vector< Image > aImages( rImageList.getLength() );
@@ -217,7 +250,7 @@ void Throbber::setImageList( const Sequence< Reference< XGraphic > >& rImageList
     setImageList( aImages );
 }
 
-// -----------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 ::std::vector< ::rtl::OUString > Throbber::getDefaultImageURLs( const ImageSet i_imageSet )
 {
     ::std::vector< ::rtl::OUString > aImageURLs;
@@ -255,7 +288,7 @@ void Throbber::setImageList( const Sequence< Reference< XGraphic > >& rImageList
     return aImageURLs;
 }
 
-// -----------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 IMPL_LINK( Throbber, TimeOutHdl, void*, EMPTYARG )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
