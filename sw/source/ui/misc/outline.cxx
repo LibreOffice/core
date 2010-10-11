@@ -1296,7 +1296,7 @@ void    NumberingPreview::Paint( const Rectangle& /*rRect*/ )
                 pVDev->SetFont(aStdFont);
 
                 // Changed as per BugID 79541 Branding/Configuration
-                uno::Any MyAny = ::utl::ConfigManager::GetConfigManager()->
+                uno::Any MyAny = ::utl::ConfigManager::GetConfigManager().
                         GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
                 ::rtl::OUString aProductName;
 
