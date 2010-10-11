@@ -38,7 +38,7 @@
 #include <tools/errinf.hxx>
 #endif
 #include <osl/mutex.hxx>
-#include <vos/diagnose.hxx>
+#include <osl/diagnose.h>
 #include <rtl/uri.hxx>
 #include <rtl/strbuf.hxx>
 #include <comphelper/processfactory.hxx>
@@ -3179,7 +3179,7 @@ rtl::OUString ScriptExtensionIterator::nextBasicOrDialogLibrary( bool& rbPureDia
                 break;
             }
             case END_REACHED:
-                VOS_ENSURE( false, "ScriptExtensionIterator::nextBasicOrDialogLibrary(): Invalid case END_REACHED" );
+                OSL_ENSURE( false, "ScriptExtensionIterator::nextBasicOrDialogLibrary(): Invalid case END_REACHED" );
                 break;
         }
     }
@@ -3374,7 +3374,7 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextUserScript
         {
             const Reference< deployment::XPackage >* pUserPackages = m_aUserPackagesSeq.getConstArray();
             Reference< deployment::XPackage > xPackage = pUserPackages[ m_iUserPackage ];
-            VOS_ENSURE( xPackage.is(), "ScriptExtensionIterator::implGetNextUserScriptPackage(): Invalid package" );
+            OSL_ENSURE( xPackage.is(), "ScriptExtensionIterator::implGetNextUserScriptPackage(): Invalid package" );
             m_pScriptSubPackageIterator = new ScriptSubPackageIterator( xPackage );
         }
 
@@ -3427,7 +3427,7 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextSharedScri
         {
             const Reference< deployment::XPackage >* pSharedPackages = m_aSharedPackagesSeq.getConstArray();
             Reference< deployment::XPackage > xPackage = pSharedPackages[ m_iSharedPackage ];
-            VOS_ENSURE( xPackage.is(), "ScriptExtensionIterator::implGetNextSharedScriptPackage(): Invalid package" );
+            OSL_ENSURE( xPackage.is(), "ScriptExtensionIterator::implGetNextSharedScriptPackage(): Invalid package" );
             m_pScriptSubPackageIterator = new ScriptSubPackageIterator( xPackage );
         }
 
@@ -3480,7 +3480,7 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextBundledScr
         {
             const Reference< deployment::XPackage >* pBundledPackages = m_aBundledPackagesSeq.getConstArray();
             Reference< deployment::XPackage > xPackage = pBundledPackages[ m_iBundledPackage ];
-            VOS_ENSURE( xPackage.is(), "ScriptExtensionIterator::implGetNextBundledScriptPackage(): Invalid package" );
+            OSL_ENSURE( xPackage.is(), "ScriptExtensionIterator::implGetNextBundledScriptPackage(): Invalid package" );
             m_pScriptSubPackageIterator = new ScriptSubPackageIterator( xPackage );
         }
 

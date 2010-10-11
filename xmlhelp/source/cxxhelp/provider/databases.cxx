@@ -28,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmlhelp.hxx"
 #include "db.hxx"
-#include <vos/diagnose.hxx>
+#include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <rtl/uri.hxx>
 #include <osl/file.hxx>
@@ -404,7 +404,7 @@ rtl::OUString Databases::getInstallPathAsSystemPath()
         bool bla =
             osl::FileBase::E_None ==
             osl::FileBase::getSystemPathFromFileURL( m_aInstallDirectory,m_aInstallDirectoryAsSystemPath );
-        VOS_ENSURE( bla,"HelpProvider, no installpath" );
+        OSL_ENSURE( bla,"HelpProvider, no installpath" );
 #else
         osl::FileBase::getSystemPathFromFileURL( m_aInstallDirectory,m_aInstallDirectoryAsSystemPath );
 #endif
@@ -1141,7 +1141,7 @@ Reference< XHierarchicalNameAccess > Databases::jarFile( const rtl::OUString& ja
             {
                 it->second = Reference< XHierarchicalNameAccess >( xIfc, UNO_QUERY );
 
-                VOS_ENSURE( it->second.is(),
+                OSL_ENSURE( it->second.is(),
                             "ContentProvider::createPackage - "
                             "Got no hierarchical name access!" );
 
@@ -1600,7 +1600,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextUserHelpPack
     {
         const Reference< deployment::XPackage >* pUserPackages = m_aUserPackagesSeq.getConstArray();
         Reference< deployment::XPackage > xPackage = pUserPackages[ m_iUserPackage++ ];
-        VOS_ENSURE( xPackage.is(), "ExtensionIteratorBase::implGetNextUserHelpPackage(): Invalid package" );
+        OSL_ENSURE( xPackage.is(), "ExtensionIteratorBase::implGetNextUserHelpPackage(): Invalid package" );
         xHelpPackage = implGetHelpPackageFromPackage( xPackage, o_xParentPackageBundle );
     }
 
@@ -1629,7 +1629,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextSharedHelpPa
     {
         const Reference< deployment::XPackage >* pSharedPackages = m_aSharedPackagesSeq.getConstArray();
         Reference< deployment::XPackage > xPackage = pSharedPackages[ m_iSharedPackage++ ];
-        VOS_ENSURE( xPackage.is(), "ExtensionIteratorBase::implGetNextSharedHelpPackage(): Invalid package" );
+        OSL_ENSURE( xPackage.is(), "ExtensionIteratorBase::implGetNextSharedHelpPackage(): Invalid package" );
         xHelpPackage = implGetHelpPackageFromPackage( xPackage, o_xParentPackageBundle );
     }
 
@@ -1659,7 +1659,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextBundledHelpP
         const Reference< deployment::XPackage >* pBundledPackages =
             m_aBundledPackagesSeq.getConstArray();
         Reference< deployment::XPackage > xPackage = pBundledPackages[ m_iBundledPackage++ ];
-        VOS_ENSURE( xPackage.is(), "ExtensionIteratorBase::implGetNextBundledHelpPackage(): Invalid package" );
+        OSL_ENSURE( xPackage.is(), "ExtensionIteratorBase::implGetNextBundledHelpPackage(): Invalid package" );
         xHelpPackage = implGetHelpPackageFromPackage( xPackage, o_xParentPackageBundle );
     }
 
@@ -1801,7 +1801,7 @@ Db* DataBaseIterator::nextDb( rtl::OUString* o_pExtensionPath, rtl::OUString* o_
             }
 
             case END_REACHED:
-                VOS_ENSURE( false, "DataBaseIterator::nextDb(): Invalid case END_REACHED" );
+                OSL_ENSURE( false, "DataBaseIterator::nextDb(): Invalid case END_REACHED" );
                 break;
         }
     }
@@ -1927,7 +1927,7 @@ rtl::OUString KeyDataBaseFileIterator::nextDbFile( bool& o_rbExtension )
             }
 
             case END_REACHED:
-                VOS_ENSURE( false, "DataBaseIterator::nextDbFile(): Invalid case END_REACHED" );
+                OSL_ENSURE( false, "DataBaseIterator::nextDbFile(): Invalid case END_REACHED" );
                 break;
         }
     }
@@ -2001,7 +2001,7 @@ Reference< XHierarchicalNameAccess > JarFileIterator::nextJarFile
             }
 
             case END_REACHED:
-                VOS_ENSURE( false, "JarFileIterator::nextJarFile(): Invalid case END_REACHED" );
+                OSL_ENSURE( false, "JarFileIterator::nextJarFile(): Invalid case END_REACHED" );
                 break;
         }
     }
@@ -2039,7 +2039,7 @@ Reference< XHierarchicalNameAccess > JarFileIterator::implGetJarFromPackage
         {
             xNA = Reference< XHierarchicalNameAccess >( xIfc, UNO_QUERY );
 
-            VOS_ENSURE( xNA.is(),
+            OSL_ENSURE( xNA.is(),
                 "JarFileIterator::implGetJarFromPackage() - "
                 "Got no hierarchical name access!" );
         }
@@ -2134,7 +2134,7 @@ rtl::OUString IndexFolderIterator::nextIndexFolder( bool& o_rbExtension, bool& o
             }
 
             case END_REACHED:
-                VOS_ENSURE( false, "IndexFolderIterator::nextIndexFolder(): Invalid case END_REACHED" );
+                OSL_ENSURE( false, "IndexFolderIterator::nextIndexFolder(): Invalid case END_REACHED" );
                 break;
         }
     }

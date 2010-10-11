@@ -174,7 +174,7 @@
 #include "ucbhelper/macros.hxx"
 #include "ucbhelper/proxydecider.hxx"
 
-#include "vos/diagnose.hxx"
+#include "osl/diagnose.h"
 #include "vos/mutex.hxx"
 #include "vos/process.hxx"
 #include "vos/ref.hxx"

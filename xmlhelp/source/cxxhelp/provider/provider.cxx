@@ -36,7 +36,7 @@
 
 #include <stdio.h>
 #include <osl/file.hxx>
-#include <vos/diagnose.hxx>
+#include <osl/diagnose.h>
 #include <ucbhelper/contentidentifier.hxx>
 #include <com/sun/star/frame/XConfigManager.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

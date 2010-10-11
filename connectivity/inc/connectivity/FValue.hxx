@@ -309,10 +309,10 @@ namespace connectivity
         }
 
         sal_Bool    isBound() const                     { return m_bBound;      }
-        void        setBound(sal_Bool _bBound)          { m_bBound = _bBound ? true : false; }
+        void        setBound(sal_Bool _bBound)          { m_bBound = _bBound ? 1 : 0; }
 
         sal_Bool    isModified() const                  { return m_bModified;   }
-        void        setModified(sal_Bool _bMod=sal_True){ m_bModified = _bMod ? true : false;   }
+        void        setModified(sal_Bool _bMod=sal_True){ m_bModified = _bMod ? 1 : 0;  }
 
         sal_Bool    isSigned() const                    { return m_bSigned; }
         void        setSigned(sal_Bool _bMod=sal_True);
