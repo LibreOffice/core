@@ -109,28 +109,28 @@ inline void ORef<T>::operator= (T* pBody)
 template <class T>
 inline T& ORef<T>::operator() () const
 {
-    VOS_PRECOND(m_refBody, "ORef::operator(): can't deref nil body!");
+    OSL_PRECOND(m_refBody, "ORef::operator(): can't deref nil body!");
     return *m_refBody;
 }
 
 template <class T>
 inline T& ORef<T>::operator* () const
 {
-    VOS_PRECOND(m_refBody, "ORef::operator*: can't deref nil body!");
+    OSL_PRECOND(m_refBody, "ORef::operator*: can't deref nil body!");
     return *m_refBody;
 }
 
 template <class T>
 inline T* ORef<T>::operator->() const
 {
-    VOS_PRECOND(m_refBody, "ORef::operator->: nil body!");
+    OSL_PRECOND(m_refBody, "ORef::operator->: nil body!");
     return m_refBody;
 }
 
 template <class T>
 inline T& ORef<T>::getBody() const
 {
-    VOS_PRECOND(m_refBody, "ORef::getBody(): can't deref nil body!");
+    OSL_PRECOND(m_refBody, "ORef::getBody(): can't deref nil body!");
     return *m_refBody;
 }
 

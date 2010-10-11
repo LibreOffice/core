@@ -26,9 +26,9 @@
  ************************************************************************/
 
 #include <osl/time.h>
-#include <vos/diagnose.hxx>
 #include <vos/object.hxx>
 #include <vos/thread.hxx>
+#include <osl/diagnose.h>
 
 using namespace vos;
 
@@ -76,7 +76,7 @@ OThread::~OThread()
 
 sal_Bool OThread::create()
 {
-    VOS_ASSERT(m_hThread == 0); // only one running thread per instance
+    OSL_ASSERT(m_hThread == 0); // only one running thread per instance
 
     m_hThread = osl_createSuspendedThread(
         threadWorkerFunction_impl, (void*)this);
@@ -88,7 +88,7 @@ sal_Bool OThread::create()
 
 sal_Bool OThread::createSuspended()
 {
-    VOS_ASSERT(m_hThread == 0); // only one running thread per instance
+    OSL_ASSERT(m_hThread == 0); // only one running thread per instance
 
     m_hThread= osl_createSuspendedThread(threadWorkerFunction_impl, (void*)this);
     return m_hThread != 0;
@@ -96,14 +96,14 @@ sal_Bool OThread::createSuspended()
 
 void OThread::suspend()
 {
-    VOS_ASSERT(m_hThread != 0); // use only on running thread
+    OSL_ASSERT(m_hThread != 0); // use only on running thread
 
     osl_suspendThread(m_hThread);
 }
 
 void OThread::resume()
 {
-    VOS_ASSERT(m_hThread != 0); // use only on running thread
+    OSL_ASSERT(m_hThread != 0); // use only on running thread
 
     osl_resumeThread(m_hThread);
 }
@@ -126,7 +126,7 @@ OThread::TThreadIdentifier OThread::getCurrentIdentifier()
 void OThread::join()
 {
     if (m_hThread) {
-        VOS_ASSERT(getCurrentIdentifier() != getIdentifier());
+        OSL_ASSERT(getCurrentIdentifier() != getIdentifier());
         osl_joinWithThread(m_hThread);
     }
 }
@@ -216,7 +216,7 @@ VOS_IMPLEMENT_CLASSINFO(VOS_CLASSNAME(OThreadData, vos),
 OThreadData::OThreadData( oslThreadKeyCallbackFunction pCallback )
 {
     m_hKey = osl_createThreadKey( pCallback );
-    VOS_VERIFY(m_hKey);
+    OSL_VERIFY(m_hKey);
 }
 
 OThreadData::~OThreadData()
@@ -226,14 +226,14 @@ OThreadData::~OThreadData()
 
 sal_Bool OThreadData::setData(void *pData)
 {
-    VOS_ASSERT(m_hKey != 0);
+    OSL_ASSERT(m_hKey != 0);
 
     return (osl_setThreadKeyData(m_hKey, pData));
 }
 
 void *OThreadData::getData()
 {
-    VOS_ASSERT(m_hKey != 0);
+    OSL_ASSERT(m_hKey != 0);
 
     return (osl_getThreadKeyData(m_hKey));
 }

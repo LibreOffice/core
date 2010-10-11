@@ -37,7 +37,7 @@ ORefObj<T>::ORefObj(const T& Obj)
 template <class T>
 inline ORefObj<T>::~ORefObj()
 {
-    VOS_ASSERT(m_RefCount.referenced() == 0);
+    OSL_ASSERT(m_RefCount.referenced() == 0);
 }
 
 template <class T>

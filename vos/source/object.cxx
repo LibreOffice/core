@@ -30,7 +30,7 @@
 #include <rtl/alloc.h>
 #include <rtl/memory.h>
 
-#include <vos/diagnose.hxx>
+#include <osl/diagnose.h>
 
 #include <vos/object.hxx>
 
@@ -57,7 +57,7 @@ void* OObject::operator new(size_t size)
 {
    void* p = rtl_allocateMemory(size);
 
-   VOS_ASSERT(p != NULL);
+   OSL_ASSERT(p != NULL);
 
    return (p);
 }
@@ -84,7 +84,7 @@ const OClassInfo& OObject::getClassInfo() const
 
 sal_Bool OObject::isKindOf(const OClassInfo& rClass) const
 {
-    VOS_ASSERT(this != NULL);
+    OSL_ASSERT(this != NULL);
 
     const OClassInfo& rClassThis = getClassInfo();
 
@@ -121,7 +121,7 @@ OObject* OClassInfo::createObject(const OCreateParam& rParam) const
 
 sal_Bool OClassInfo::isDerivedFrom(const OClassInfo& rClass) const
 {
-    VOS_ASSERT(this != NULL);
+    OSL_ASSERT(this != NULL);
 
     const OClassInfo* pClassThis = this;
 
@@ -138,7 +138,7 @@ sal_Bool OClassInfo::isDerivedFrom(const OClassInfo& rClass) const
 
 const OClassInfo* OClassInfo::getClassInfo(const sal_Char* pClassName)
 {
-    VOS_ASSERT(pClassName != NULL);
+    OSL_ASSERT(pClassName != NULL);
 
     const OClassInfo* pClass = &VOS_CLASSINFO(VOS_NAMESPACE(OObject, vos));
 
@@ -155,7 +155,7 @@ const OClassInfo* OClassInfo::getClassInfo(const sal_Char* pClassName)
 
 VOS_CLASSINIT::VOS_CLASSINIT(register OClassInfo* pNewClass)
 {
-    VOS_ASSERT(pNewClass != NULL);
+    OSL_ASSERT(pNewClass != NULL);
 
     OClassInfo* pClassRoot = (OClassInfo*)&VOS_CLASSINFO(VOS_NAMESPACE(OObject, vos));
 

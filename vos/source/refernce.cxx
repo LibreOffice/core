@@ -27,7 +27,7 @@
 
 
 #include <limits.h>
-#include <vos/diagnose.hxx>
+#include <osl/diagnose.h>
 
 #include <vos/refernce.hxx>
 
@@ -45,7 +45,7 @@ OReference::OReference()
 
 OReference::~OReference()
 {
-    VOS_ASSERT(m_RefCount.referenced() == 0);
+    OSL_ASSERT(m_RefCount.referenced() == 0);
 }
 
 IReference::RefCount OReference::acquire()

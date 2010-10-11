@@ -34,7 +34,7 @@
 #include <wchar.h>
 #endif
 #include <osl/mutex.hxx>
-#include <vos/diagnose.hxx>
+#include <osl/diagnose.h>
 #include <vos/macros.hxx>
 #include <comphelper/eventattachermgr.hxx>
 #include <com/sun/star/beans/XIntrospection.hpp>
@@ -97,25 +97,25 @@ struct AttacherIndex_Impl
 #if 0
 bool AttachedObject_Impl::operator<( const AttachedObject_Impl & r ) const
 {
-    VOS_ENSHURE( FALSE, "not implemented" );
+    OSL_ENSURE( FALSE, "not implemented" );
     return FALSE;
     return this < &r;
 }
 
 bool AttachedObject_Impl::operator==( const AttachedObject_Impl & r ) const
 {
-    VOS_ENSHURE( FALSE, "not implemented" );
+    OSL_ENSURE( FALSE, "not implemented" );
     return this == &r;
 }
 
 bool AttacherIndex_Impl::operator<( const AttacherIndex_Impl & r ) const
 {
-    VOS_ENSHURE( FALSE, "not implemented" );
+    OSL_ENSURE( FALSE, "not implemented" );
     return this < &r;
 }
 bool AttacherIndex_Impl::operator==( const AttacherIndex_Impl & r ) const
 {
-    VOS_ENSHURE( FALSE, "not implemented" );
+    OSL_ENSURE( FALSE, "not implemented" );
     return this == &r;
 }
 #endif
@@ -1014,7 +1014,7 @@ void SAL_CALL ImplEventAttacherManager::read(const Reference< XObjectInputStream
         // Ganze richtig sein. Sonst ist etwas voellig daneben gegangen.
         if( nRealLen > nLen || nVersion == 1 )
         {
-            VOS_ENSHURE( sal_False, "ImplEventAttacherManager::read(): Fatal Error, wrong object length" );
+            OSL_ENSURE( sal_False, "ImplEventAttacherManager::read(): Fatal Error, wrong object length" );
         }
         else
         {

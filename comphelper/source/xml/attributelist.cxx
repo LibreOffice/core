@@ -28,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_comphelper.hxx"
 #include <comphelper/attributelist.hxx>
-#include <vos/diagnose.hxx>
+#include <osl/diagnose.h>
 
 #include <vector>
 
@@ -135,7 +135,7 @@ void AttributeList::Clear()
 {
     m_pImpl->vecAttribute.clear();
 
-    VOS_ENSURE( ! getLength(), "Length > 0 after AttributeList::Clear!");
+    OSL_ENSURE( ! getLength(), "Length > 0 after AttributeList::Clear!");
 }
 
 void AttributeList::RemoveAttribute( const OUString sName )
@@ -159,7 +159,7 @@ void AttributeList::SetAttributeList( const uno::Reference< ::com::sun::star::xm
 
 void AttributeList::AppendAttributeList( const uno::Reference< ::com::sun::star::xml::sax::XAttributeList >  &r )
 {
-    VOS_ENSURE( r.is(), "r isn't!" );
+    OSL_ENSURE( r.is(), "r isn't!" );
 
     sal_Int32 nMax = r->getLength();
     sal_Int32 nTotalSize = m_pImpl->vecAttribute.size() + nMax;
@@ -172,7 +172,7 @@ void AttributeList::AppendAttributeList( const uno::Reference< ::com::sun::star:
             r->getValueByIndex( i )));
     }
 
-    VOS_ENSURE( nTotalSize == getLength(), "nTotalSize != getLength()");
+    OSL_ENSURE( nTotalSize == getLength(), "nTotalSize != getLength()");
 }
 
 } // namespace comphelper

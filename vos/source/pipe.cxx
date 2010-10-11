@@ -27,7 +27,7 @@
 
 
 #include <vos/pipe.hxx>
-#include <vos/diagnose.hxx>
+#include <osl/diagnose.h>
 
 using namespace vos;
 
@@ -58,8 +58,8 @@ OPipe::OPipe( const rtl::OUString& strName, TPipeOption Options)
                                     (oslPipeOptions)Options,
                                     NULL) );
 
-    VOS_POSTCOND(m_pPipeRef != 0, "OPipe(): new failed.\n");
-    VOS_POSTCOND((*m_pPipeRef)(), "OPipe(): creation of pipe failed!\n");
+    OSL_POSTCOND(m_pPipeRef != 0, "OPipe(): new failed.\n");
+    OSL_POSTCOND((*m_pPipeRef)(), "OPipe(): creation of pipe failed!\n");
 }
 
 /*****************************************************************************/
@@ -75,8 +75,8 @@ OPipe::OPipe( const rtl::OUString& strName,
                                    (oslPipeOptions)Options,
                                    (oslSecurity)rSecurity));
 
-    VOS_POSTCOND(m_pPipeRef != 0, "OPipe(): new failed.\n");
-    VOS_POSTCOND((*m_pPipeRef)(), "OPipe(): creation of pipe failed!\n");
+    OSL_POSTCOND(m_pPipeRef != 0, "OPipe(): new failed.\n");
+    OSL_POSTCOND((*m_pPipeRef)(), "OPipe(): creation of pipe failed!\n");
 }
 
 /*****************************************************************************/
@@ -86,7 +86,7 @@ OPipe::OPipe(const OPipe& pipe) :
 OReference(), OObject()
 {
 
-    VOS_ASSERT(pipe.m_pPipeRef != 0);
+    OSL_ASSERT(pipe.m_pPipeRef != 0);
 
     m_pPipeRef= pipe.m_pPipeRef;
 
@@ -128,7 +128,7 @@ sal_Bool OPipe::create( const rtl::OUString& strName, TPipeOption Options )
                                    (oslPipeOptions)Options,
                                    NULL));
 
-    VOS_POSTCOND(m_pPipeRef != 0, "OPipe(): new failed.\n");
+    OSL_POSTCOND(m_pPipeRef != 0, "OPipe(): new failed.\n");
 
     return (*m_pPipeRef)() != 0;
 }
@@ -153,7 +153,7 @@ sal_Bool OPipe::create( const rtl::OUString& strName,
                                    (oslPipeOptions)Options,
                                    (oslSecurity)rSecurity));
 
-    VOS_POSTCOND(m_pPipeRef != 0, "OPipe(): new failed.\n");
+    OSL_POSTCOND(m_pPipeRef != 0, "OPipe(): new failed.\n");
 
     return (*m_pPipeRef)() != 0;
 }
@@ -163,7 +163,7 @@ sal_Bool OPipe::create( const rtl::OUString& strName,
 /*****************************************************************************/
 OPipe& OPipe::operator= (const OPipe& pipe)
 {
-    VOS_PRECOND(pipe.m_pPipeRef != 0, "OPipe::operator=: tried to assign an empty/invalid pipe\n");
+    OSL_PRECOND(pipe.m_pPipeRef != 0, "OPipe::operator=: tried to assign an empty/invalid pipe\n");
 
     if (m_pPipeRef == pipe.m_pPipeRef)
         return *this;
@@ -188,7 +188,7 @@ OPipe& OPipe::operator= (const OPipe& pipe)
 /*****************************************************************************/
 OPipe::operator oslPipe() const
 {
-    VOS_ASSERT(m_pPipeRef);
+    OSL_ASSERT(m_pPipeRef);
     return (*m_pPipeRef)();
 }
 
@@ -298,7 +298,7 @@ OStreamPipe::OStreamPipe(oslPipe Pipe) :
 OStreamPipe::OStreamPipe(const OStreamPipe& pipe) :
 OPipe(), IStream()
 {
-    VOS_ASSERT(pipe.m_pPipeRef != 0);
+    OSL_ASSERT(pipe.m_pPipeRef != 0);
 
     m_pPipeRef= pipe.m_pPipeRef;
 
@@ -328,7 +328,7 @@ OStreamPipe& OStreamPipe::operator=(oslPipe Pipe)
 
     m_pPipeRef= new PipeRef(Pipe);
 
-    VOS_POSTCOND(m_pPipeRef != 0, "OPipe(): new failed.\n");
+    OSL_POSTCOND(m_pPipeRef != 0, "OPipe(): new failed.\n");
 
     return *this;
 }
@@ -348,7 +348,7 @@ OStreamPipe& OStreamPipe::operator= (const OPipe& pipe)
 /*****************************************************************************/
 sal_Int32 OStreamPipe::read(void* pBuffer, sal_uInt32 n) const
 {
-    VOS_ASSERT(m_pPipeRef && (*m_pPipeRef)());
+    OSL_ASSERT(m_pPipeRef && (*m_pPipeRef)());
 
     /* loop until all desired bytes were read or an error occured */
     sal_Int32 BytesRead= 0;
@@ -379,7 +379,7 @@ sal_Int32 OStreamPipe::read(void* pBuffer, sal_uInt32 n) const
 /*****************************************************************************/
 sal_Int32 OStreamPipe::write(const void* pBuffer, sal_uInt32 n)
 {
-    VOS_ASSERT(m_pPipeRef && (*m_pPipeRef)());
+    OSL_ASSERT(m_pPipeRef && (*m_pPipeRef)());
 
     /* loop until all desired bytes were send or an error occured */
     sal_Int32 BytesSend= 0;

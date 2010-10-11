@@ -27,7 +27,7 @@
 
 
 #include <vos/security.hxx>
-#include <vos/diagnose.hxx>
+#include <osl/diagnose.h>
 
 using namespace vos;
 
@@ -73,7 +73,7 @@ sal_Bool OSecurity::logonUser( const rtl::OUString& strName,
 
 sal_Bool OSecurity::getUserIdent( rtl::OUString& strIdent) const
 {
-    VOS_ASSERT(m_oslSecurity);
+    OSL_ASSERT(m_oslSecurity);
 
     return osl_getUserIdent( m_oslSecurity, &strIdent.pData );
 }
@@ -81,7 +81,7 @@ sal_Bool OSecurity::getUserIdent( rtl::OUString& strIdent) const
 
 sal_Bool OSecurity::getUserName( rtl::OUString& strName ) const
 {
-    VOS_ASSERT(m_oslSecurity);
+    OSL_ASSERT(m_oslSecurity);
 
     return osl_getUserName( m_oslSecurity, &strName.pData );
 }
@@ -89,7 +89,7 @@ sal_Bool OSecurity::getUserName( rtl::OUString& strName ) const
 
 sal_Bool OSecurity::getHomeDir( rtl::OUString& strDirectory) const
 {
-    VOS_ASSERT(m_oslSecurity);
+    OSL_ASSERT(m_oslSecurity);
 
     return osl_getHomeDir(m_oslSecurity, &strDirectory.pData );
 }
@@ -97,14 +97,14 @@ sal_Bool OSecurity::getHomeDir( rtl::OUString& strDirectory) const
 
 sal_Bool OSecurity::getConfigDir( rtl::OUString& strDirectory ) const
 {
-    VOS_ASSERT(m_oslSecurity);
+    OSL_ASSERT(m_oslSecurity);
 
     return osl_getConfigDir( m_oslSecurity, &strDirectory.pData );
 }
 
 sal_Bool OSecurity::isAdministrator() const
 {
-    VOS_ASSERT(m_oslSecurity);
+    OSL_ASSERT(m_oslSecurity);
 
     return osl_isAdministrator(m_oslSecurity);
 }

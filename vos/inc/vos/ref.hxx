@@ -39,10 +39,8 @@
 
 */
 
-#   include <vos/refernce.hxx>
-#ifndef _VOS_DIAGNOSE_HXX_
-#   include <vos/diagnose.hxx>
-#endif
+#include <vos/refernce.hxx>
+#include <osl/diagnose.h>
 
 namespace vos
 {

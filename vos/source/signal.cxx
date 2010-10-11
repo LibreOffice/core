@@ -26,7 +26,7 @@
  ************************************************************************/
 
 
-#include <vos/diagnose.hxx>
+#include <osl/diagnose.h>
 #include <vos/object.hxx>
 #include <vos/signal.hxx>
 

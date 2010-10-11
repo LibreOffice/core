@@ -42,7 +42,7 @@
 #include <cppuhelper/servicefactory.hxx>
 
 #include <vos/dynload.hxx>
-#include <vos/diagnose.hxx>
+#include <osl/diagnose.h>
 
 using namespace ::rtl;
 using namespace ::cppu;

@@ -32,7 +32,7 @@
 #include <rtl/instance.hxx>
 
 #include "vos/process.hxx"
-#include "vos/diagnose.hxx"
+#include "osl/diagnose.h"
 #include <osl/file.hxx>
 
 #define MAX_RESOURCES   100

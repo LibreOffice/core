@@ -28,7 +28,7 @@
 #include <osl/time.h>
 
 #include <vos/timer.hxx>
-#include <vos/diagnose.hxx>
+#include <osl/diagnose.h>
 #include <vos/ref.hxx>
 #include <vos/thread.hxx>
 #include <vos/conditn.hxx>
@@ -147,7 +147,7 @@ void OTimer::start()
 
         OTimerManager *pManager = OTimerManager::getTimerManager();
 
-        VOS_ASSERT(pManager);
+        OSL_ASSERT(pManager);
 
         if ( pManager != 0 )
         {
@@ -160,7 +160,7 @@ void OTimer::stop()
 {
     OTimerManager *pManager = OTimerManager::getTimerManager();
 
-    VOS_ASSERT(pManager);
+    OSL_ASSERT(pManager);
 
     if ( pManager != 0 )
     {
@@ -172,7 +172,7 @@ sal_Bool OTimer::isTicking() const
 {
     OTimerManager *pManager = OTimerManager::getTimerManager();
 
-    VOS_ASSERT(pManager);
+    OSL_ASSERT(pManager);
 
     if (pManager)
         return pManager->lookupTimer(this);
@@ -192,7 +192,7 @@ sal_Bool OTimer::isExpired() const
 
 sal_Bool OTimer::expiresBefore(const OTimer* pTimer) const
 {
-    VOS_ASSERT(pTimer);
+    OSL_ASSERT(pTimer);
 
     if ( pTimer != 0 )
     {
@@ -274,7 +274,7 @@ OTimerManager::OTimerManager()
 {
     OGuard Guard(&m_Access);
 
-    VOS_ASSERT(m_pManager == 0);
+    OSL_ASSERT(m_pManager == 0);
 
     m_pManager = this;
 
@@ -311,7 +311,7 @@ OTimerManager* OTimerManager::getTimerManager()
 
 sal_Bool OTimerManager::registerTimer(OTimer* pTimer)
 {
-    VOS_ASSERT(pTimer);
+    OSL_ASSERT(pTimer);
 
     if ( pTimer == 0 )
     {
@@ -352,7 +352,7 @@ sal_Bool OTimerManager::registerTimer(OTimer* pTimer)
 
 sal_Bool OTimerManager::unregisterTimer(OTimer* pTimer)
 {
-    VOS_ASSERT(pTimer);
+    OSL_ASSERT(pTimer);
 
     if ( pTimer == 0 )
     {
@@ -380,7 +380,7 @@ sal_Bool OTimerManager::unregisterTimer(OTimer* pTimer)
 
 sal_Bool OTimerManager::lookupTimer(const OTimer* pTimer)
 {
-    VOS_ASSERT(pTimer);
+    OSL_ASSERT(pTimer);
 
     if ( pTimer == 0 )
     {

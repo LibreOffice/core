@@ -27,7 +27,7 @@
 
 #include <osl/time.h>
 #include <vos/conditn.hxx>
-#include <vos/diagnose.hxx>
+#include <osl/diagnose.h>
 
 using namespace vos;
 

@@ -48,7 +48,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase3.hxx>
 
-#include <vos/diagnose.hxx>
+#include <osl/diagnose.h>
 
 #include "LocaleNode.hxx"
 

@@ -27,7 +27,7 @@
 
 
 #include <vos/module.hxx>
-#include <vos/diagnose.hxx>
+#include <osl/diagnose.h>
 
 using namespace vos;
 
@@ -55,7 +55,7 @@ OModule::~OModule()
 
 sal_Bool OModule::load(const rtl::OUString& ustrModuleName, sal_Int32 nRtldMode)
 {
-    VOS_ASSERT(ustrModuleName);
+    OSL_ASSERT(ustrModuleName);
 
     unload();
 
@@ -80,8 +80,8 @@ sal_Bool OModule::isLoaded()
 
 void *OModule::getSymbol(const rtl::OUString& strSymbolName)
 {
-    VOS_ASSERT(strSymbolName);
-    VOS_ASSERT(m_Module);
+    OSL_ASSERT(strSymbolName);
+    OSL_ASSERT(m_Module);
     return ( osl_getSymbol( m_Module, strSymbolName.pData ) );
 }
 
