@@ -241,7 +241,7 @@ void Throbber::setImageList( const Sequence< Reference< XGraphic > >& rImageList
     for ( size_t i=0; i<nImageCounts[index]; ++i )
     {
         ::rtl::OUStringBuffer aURL;
-        aURL.appendAscii( "private:graphicrepository/res/shared/spinner-" );
+        aURL.appendAscii( "private:graphicrepository/shared/spinner-" );
         aURL.appendAscii( pResolutions[index] );
         aURL.appendAscii( "-" );
         if ( i < 9 )
