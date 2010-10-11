@@ -536,7 +536,7 @@
 #include "vcl/fldunit.hxx"
 
 #include "vos/conditn.hxx"
-#include "vos/diagnose.hxx"
+#include "osl/diagnose.h"
 #include "vos/macros.hxx"
 #include "vos/module.hxx"
 #include "vos/mutex.hxx"

@@ -39,7 +39,7 @@
 #include <tools/postsys.h>
 
 
-#include <vos/diagnose.hxx>
+#include <osl/diagnose.h>
 #include <vos/refernce.hxx>
 #include <tools/debug.hxx>
 #include <rtl/ustring.hxx>

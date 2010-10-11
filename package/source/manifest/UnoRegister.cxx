@@ -31,7 +31,7 @@
 #include <ManifestWriter.hxx>
 #include <cppuhelper/factory.hxx>
 #include <com/sun/star/registry/XRegistryKey.hpp>
-#include <vos/diagnose.hxx>
+#include <osl/diagnose.h>
 #include <ZipPackage.hxx>
 
 #include <zipfileaccess.hxx>

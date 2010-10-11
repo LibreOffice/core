@@ -33,7 +33,7 @@
 
 #include <rtl/ustring.hxx>
 #include <vos/dynload.hxx>
-#include <vos/diagnose.hxx>
+#include <osl/diagnose.h>
 #include <usr/services.hxx>
 #include <vcl/svapp.hxx>
 
@@ -78,14 +78,14 @@ void MyApp::Main()
     Args.getArray()[0].setINT32( 1000 );
 
     BOOL b = xResLoader->invoke( L"hasString", Args, OutPos, OutArgs ).getBOOL();
-    VOS_ENSHURE( b, "hasString" );
+    OSL_ENSURE( b, "hasString" );
 
     UString aStr = xResLoader->invoke( L"getString", Args, OutPos, OutArgs ).getString();
-    VOS_ENSHURE( aStr == L"Hello", "getString" );
+    OSL_ENSURE( aStr == L"Hello", "getString" );
 
     Args.getArray()[0].setINT32( 1001 );
     b = xResLoader->invoke( L"hasString", Args, OutPos, OutArgs ).getBOOL();
-    VOS_ENSHURE( !b, "!hasString" );
+    OSL_ENSURE( !b, "!hasString" );
 
     xReg->revokeImplementation( aDllName, XSimpleRegistryRef() );
 }

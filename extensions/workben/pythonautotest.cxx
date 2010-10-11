@@ -34,7 +34,7 @@
 
 #include <rtl/ustring.hxx>
 #include <vos/dynload.hxx>
-#include <vos/diagnose.hxx>
+#include <osl/diagnose.h>
 #include <usr/services.hxx>
 #include <vcl/svapp.hxx>
 #include <usr/ustring.hxx>

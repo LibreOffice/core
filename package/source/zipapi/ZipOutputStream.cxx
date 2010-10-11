@@ -133,7 +133,6 @@ void SAL_CALL ZipOutputStream::closeEntry(  )
                     }
                     if (pEntry->nCompressedSize != aDeflater.getTotalOut())
                     {
-                        //VOS_DEBUG_ONLY("Invalid entry compressed size");
                         // Different compression strategies make the merit of this
                         // test somewhat dubious
                         pEntry->nCompressedSize = aDeflater.getTotalOut();
