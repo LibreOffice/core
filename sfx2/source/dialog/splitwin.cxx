@@ -614,6 +614,7 @@ void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize
     // Das Fenster mu\s vor dem ersten Fenster eingef"ugt werden, das die
     // gleiche oder eine gr"o\sere Position hat als pDockWin.
     USHORT nCount = pDockArr->Count();
+    USHORT nLastWindowIdx(0);
 
     // Wenn gar kein Fenster gefunden wird, wird als erstes eingef"ugt
     USHORT nInsertPos = 0;
@@ -627,6 +628,7 @@ void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize
             // Wenn kein geeignetes Fenster hinter der gew"unschten Einf"ugeposition
             // gefunden wird, wird am Ende eingef"ugt
             nInsertPos = nCount;
+            nLastWindowIdx = n;
             USHORT nL=0, nP=0;
             GetWindowPos( pD->pWin, nL, nP );
 
@@ -642,10 +644,14 @@ void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize
                     pDock->bNewLine = TRUE;
                 }
 
-                nInsertPos = n;
+                nInsertPos = n != 0 ? nLastWindowIdx + 1 : 0;    // ignore all non-windows after the last window
                 break;
             }
         }
+    }
+    if (nInsertPos == nCount && nLastWindowIdx != nCount - 1)
+    {
+        nInsertPos = nLastWindowIdx + 1;    // ignore all non-windows after the last window
     }
 
     pDockArr->Insert(pDock, nInsertPos);
