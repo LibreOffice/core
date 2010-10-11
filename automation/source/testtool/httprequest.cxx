@@ -30,7 +30,7 @@
 
 #include <stdio.h>
 #include "httprequest.hxx"
-#include <vos/socket.hxx>
+#include <osl/socket.hxx>
 #include <tools/debug.hxx>
 
 
@@ -78,25 +78,23 @@ BOOL HttpRequest::Execute()
     Init();
 
     // Open channel to standard redir host
-    NAMESPACE_VOS(OInetSocketAddr) aConnectAddr;
+    osl::SocketAddr aConnectAddr;
 
     if ( aProxyHost.Len() )
     {
-        aConnectAddr.setAddr( rtl::OUString( UniString( aProxyHost, RTL_TEXTENCODING_UTF8 ) ) );
-        aConnectAddr.setPort( nProxyPort );
+        aConnectAddr = osl::SocketAddr( rtl::OUString( UniString( aProxyHost, RTL_TEXTENCODING_UTF8 ) ), nProxyPort );
     }
     else
     {
-        aConnectAddr.setAddr( rtl::OUString( UniString( aRequestHost, RTL_TEXTENCODING_UTF8 ) ) );
-        aConnectAddr.setPort( nRequestPort );
+        aConnectAddr = osl::SocketAddr( rtl::OUString( UniString( aRequestHost, RTL_TEXTENCODING_UTF8 ) ), nRequestPort );
     }
 
     TimeValue aTV;
     aTV.Seconds = 10;       // Warte 10 Sekunden
     aTV.Nanosec = 0;
 
-    pOutSocket = new NAMESPACE_VOS(OConnectorSocket)();
-    if ( pOutSocket->connect( aConnectAddr, &aTV ) == NAMESPACE_VOS(ISocketTypes::TResult_Ok) )
+    pOutSocket = new osl::ConnectorSocket();
+    if ( pOutSocket->connect( aConnectAddr, &aTV ) == osl_Socket_Ok )
     {
 //      pOutSocket->setTcpNoDelay( 1 );
     }
@@ -202,7 +200,7 @@ Servlet-Engine: Tomcat Web Server/3.2.1 (JSP 1.1; Servlet 2.2; Java 1.3.0; Linux
 Connection: close
 Content-Type: text/xml; charset=ISO-8859-1
   */
-void HttpRequest::SendString( vos::OStreamSocket* pSocket , ByteString aText )
+void HttpRequest::SendString( osl::StreamSocket* pSocket , ByteString aText )
 {
     if ( nStatus == HTTP_REQUEST_PENDING )
         pSocket->write( aText.GetBuffer(), aText.Len() );

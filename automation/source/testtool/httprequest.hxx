@@ -37,10 +37,10 @@
 #include <tools/string.hxx>
 #include <tools/stream.hxx>
 
-namespace vos
+namespace osl
 {
-    class OStreamSocket;
-    class OConnectorSocket;
+    class StreamSocket;
+    class ConnectorSocket;
 }
 
 class HttpRequest
@@ -52,14 +52,14 @@ class HttpRequest
     USHORT nProxyPort;
 
     USHORT nStatus;
-    vos::OConnectorSocket *pOutSocket;
+    osl::ConnectorSocket *pOutSocket;
 
     ByteString aHeader;
     USHORT nResultId;
     ByteString aContentType;
     SvMemoryStream* pStream;
 
-    void SendString( vos::OStreamSocket* pSocket, ByteString aText );
+    void SendString( osl::StreamSocket* pSocket, ByteString aText );
     BOOL IsItem( ByteString aItem, ByteString aLine );
     void Init();
 public:

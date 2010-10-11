@@ -35,7 +35,7 @@
 #endif
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/socket.hxx>
+#include <osl/socket.hxx>
 #include <tools/stream.hxx>
 #include <vcl/timer.hxx>
 #include <tools/fsys.hxx>
@@ -68,7 +68,7 @@ SV_IMPL_PTRARR_SORT( CommunicationLinkList, CommunicationLink* );
 
 NAMESPACE_VOS(OMutex) *pMPostUserEvent=NULL;        // Notwendig, da nicht threadfest
 
-CommunicationLinkViaSocket::CommunicationLinkViaSocket( CommunicationManager *pMan, NAMESPACE_VOS(OStreamSocket) *pSocket )
+CommunicationLinkViaSocket::CommunicationLinkViaSocket( CommunicationManager *pMan, osl::StreamSocket* pSocket )
 : SimpleCommunicationLinkViaSocket( pMan, pSocket )
 , nConnectionClosedEventId( 0 )
 , nDataReceivedEventId( 0 )
@@ -132,7 +132,7 @@ BOOL CommunicationLinkViaSocket::ShutdownCommunication()
 
         join();
 
-        NAMESPACE_VOS(OStreamSocket) *pTempSocket = GetStreamSocket();
+        osl::StreamSocket* pTempSocket = GetStreamSocket();
         SetStreamSocket( NULL );
         delete pTempSocket;
 
@@ -500,11 +500,11 @@ void CommunicationManagerServerAcceptThread::run()
     if ( !nPortToListen )
         return;
 
-    pAcceptorSocket = new NAMESPACE_VOS(OAcceptorSocket)();
-    NAMESPACE_VOS(OInetSocketAddr) Addr;
+    pAcceptorSocket = new osl::AcceptorSocket();
+    osl::SocketAddr Addr;
     Addr.setPort( nPortToListen );
-    pAcceptorSocket->setReuseAddr( 1 );
-    if ( !pAcceptorSocket->bind( Addr ) )
+    pAcceptorSocket->setOption( osl_Socket_OptionReuseAddr, 1 );
+     if ( !pAcceptorSocket->bind( Addr ) )
     {
         return;
     }
@@ -514,16 +514,16 @@ void CommunicationManagerServerAcceptThread::run()
     }
 
 
-    NAMESPACE_VOS(OStreamSocket) *pStreamSocket = NULL;
+    osl::StreamSocket* pStreamSocket = NULL;
 
     while ( schedule() )
     {
-        pStreamSocket = new NAMESPACE_VOS(OStreamSocket);
+        pStreamSocket = new osl::StreamSocket;
         switch ( pAcceptorSocket->acceptConnection( *pStreamSocket ) )
         {
-        case NAMESPACE_VOS(ISocketTypes::TResult_Ok):
+        case osl_Socket_Ok:
             {
-                pStreamSocket->setTcpNoDelay( 1 );
+                pStreamSocket->setOption( osl_Socket_OptionTcpNoDelay, 1 );
 
                 TimeValue sNochEins = {0, 100};
                 while ( schedule() && xmNewConnection.Is() )    // Solange die letzte Connection nicht abgeholt wurde warten wir
@@ -537,18 +537,19 @@ void CommunicationManagerServerAcceptThread::run()
                 }
             }
             break;
-        case NAMESPACE_VOS(ISocketTypes::TResult_TimedOut):
+        case osl_Socket_TimedOut:
             delete pStreamSocket;
             pStreamSocket = NULL;
             break;
-        case NAMESPACE_VOS(ISocketTypes::TResult_Error):
+        case osl_Socket_Error:
             delete pStreamSocket;
             pStreamSocket = NULL;
             break;
 
-        case NAMESPACE_VOS(ISocketTypes::TResult_Interrupted):
-        case NAMESPACE_VOS(ISocketTypes::TResult_InProgress):
-            break;  // -Wall not handled...
+        case osl_Socket_Interrupted:
+        case osl_Socket_InProgress:
+        default:
+            break;
         }
     }
 }

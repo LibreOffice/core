@@ -79,7 +79,7 @@ public:
 class CommunicationLinkViaSocket : public SimpleCommunicationLinkViaSocket, public osl::Thread
 {
 public:
-    CommunicationLinkViaSocket( CommunicationManager *pMan, NAMESPACE_VOS(OStreamSocket) *pSocket );
+    CommunicationLinkViaSocket( CommunicationManager *pMan, osl::StreamSocket* pSocket );
     virtual ~CommunicationLinkViaSocket();
 
     virtual BOOL IsCommunicationError();
@@ -145,7 +145,7 @@ protected:
 
 private:
     CommunicationManagerServerViaSocket* pMyServer;
-    NAMESPACE_VOS(OAcceptorSocket) *pAcceptorSocket;
+    osl::AcceptorSocket* pAcceptorSocket;
     ULONG nPortToListen;
     USHORT nMaxConnections;
     ULONG nAddConnectionEventId;
@@ -174,7 +174,7 @@ private:
     ByteString aHostToTalk;
     ULONG nPortToTalk;
 protected:
-    virtual CommunicationLink *CreateCommunicationLink( CommunicationManager *pCM, NAMESPACE_VOS(OConnectorSocket) *pCS ){ return new CommunicationLinkViaSocket( pCM, pCS ); }
+    virtual CommunicationLink *CreateCommunicationLink( CommunicationManager *pCM, osl::ConnectorSocket* pCS ){ return new CommunicationLinkViaSocket( pCM, pCS ); }
 };
 
 #endif

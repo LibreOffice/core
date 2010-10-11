@@ -40,12 +40,11 @@
 #include <vcl/wrkwin.hxx>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
+#include <osl/socket.hxx>
 
 #include <vcl/dialog.hxx>
 #include <tools/stream.hxx>
 #include <tools/config.hxx>
-
-#include <vos/socket.hxx>
 
 #if 1
 #include <svtools/ttprops.hxx>
