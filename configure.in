@@ -5426,7 +5426,8 @@ dnl ===================================================================
 dnl Checking for libtextcat
 dnl ===================================================================
 AC_MSG_CHECKING([which libtextcat to use])
-if test -n "$with_system_libtextcat" && test "$with_system_libtextcat" != "no"; then
+if test -n "$with_system_libtextcat" -o -n "$with_system_libs" && \
+    test "$with_system_libtextcat" != "no"; then
     AC_MSG_RESULT([external])
     SYSTEM_LIBTEXTCAT=YES
     AC_CHECK_HEADER(libtextcat/textcat.h, [],
