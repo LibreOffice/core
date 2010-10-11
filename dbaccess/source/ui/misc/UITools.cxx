@@ -1268,29 +1268,29 @@ void fillAutoIncrementValue(const Reference<XConnection>& _xConnection,
     return sName;
 }
 // -----------------------------------------------------------------------------
-    void AppendConfigToken( ::rtl::OUString& _rURL, sal_Bool _bQuestionMark )
-    {
-        Any aLocale =
-            ::utl::ConfigManager::GetConfigManager()->GetDirectConfigProperty( ::utl::ConfigManager::LOCALE );
-        ::rtl::OUString sLocaleStr;
-        if ( !( aLocale >>= sLocaleStr ) )
-            // fallback is english
-            sLocaleStr = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en"));
+void AppendConfigToken( ::rtl::OUString& _rURL, sal_Bool _bQuestionMark )
+{
+    Any aLocale =
+    ::utl::ConfigManager::GetConfigManager().GetDirectConfigProperty( ::utl::ConfigManager::LOCALE );
+    ::rtl::OUString sLocaleStr;
+    if ( !( aLocale >>= sLocaleStr ) )
+        // fallback is english
+        sLocaleStr = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en"));
 
-        // query part exists?
-        if ( _bQuestionMark )
-            // no, so start with '?'
-            _rURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("?"));
-        else
-            // yes, so only append with '&'
-            _rURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("&"));
+    // query part exists?
+    if ( _bQuestionMark )
+        // no, so start with '?'
+        _rURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("?"));
+    else
+        // yes, so only append with '&'
+        _rURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("&"));
 
-        // set parameters
-        _rURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Language="));
-        _rURL += sLocaleStr;
-        _rURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("&System="));
-        _rURL += SvtHelpOptions().GetSystem();
-    }
+    // set parameters
+    _rURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Language="));
+    _rURL += sLocaleStr;
+    _rURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("&System="));
+    _rURL += SvtHelpOptions().GetSystem();
+}
 
 namespace
 {
