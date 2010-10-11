@@ -364,11 +364,17 @@ void PrintDialog::ShowNupOrderWindow::Paint( const Rectangle& i_rRect )
         int nX = 0, nY = 0;
         switch( mnOrderMode )
         {
-        case SV_PRINT_PRT_NUP_ORDER_LRTD:
+        case SV_PRINT_PRT_NUP_ORDER_LRTB:
             nX = (i % mnColumns); nY = (i / mnColumns);
             break;
-        case SV_PRINT_PRT_NUP_ORDER_TDLR:
+        case SV_PRINT_PRT_NUP_ORDER_TBLR:
             nX = (i / mnRows); nY = (i % mnRows);
+            break;
+        case SV_PRINT_PRT_NUP_ORDER_RLTB:
+            nX = mnColumns - 1 - (i % mnColumns); nY = (i / mnColumns);
+            break;
+        case SV_PRINT_PRT_NUP_ORDER_TBRL:
+            nX = mnColumns - 1 - (i / mnRows); nY = (i % mnRows);
             break;
         }
         Size aTextSize( GetTextWidth( aPageText ), nTextHeight );
@@ -2078,10 +2084,14 @@ void PrintDialog::updateNup()
 
     int nOrderMode = int(sal_IntPtr(maNUpPage.maNupOrderBox.GetEntryData(
                            maNUpPage.maNupOrderBox.GetSelectEntryPos() )));
-    if( nOrderMode == SV_PRINT_PRT_NUP_ORDER_LRTD )
+    if( nOrderMode == SV_PRINT_PRT_NUP_ORDER_LRTB )
         aMPS.nOrder = PrinterController::LRTB;
-    else if( nOrderMode == SV_PRINT_PRT_NUP_ORDER_TDLR )
+    else if( nOrderMode == SV_PRINT_PRT_NUP_ORDER_TBLR )
         aMPS.nOrder = PrinterController::TBLR;
+    else if( nOrderMode == SV_PRINT_PRT_NUP_ORDER_RLTB )
+        aMPS.nOrder = PrinterController::RLTB;
+    else if( nOrderMode == SV_PRINT_PRT_NUP_ORDER_TBRL )
+        aMPS.nOrder = PrinterController::TBRL;
 
     int nOrientationMode = int(sal_IntPtr(maNUpPage.maNupOrientationBox.GetEntryData(
                                  maNUpPage.maNupOrientationBox.GetSelectEntryPos() )));
