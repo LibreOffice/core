@@ -32,7 +32,6 @@
 #   include <vos/mutex.hxx>
 #   include <vos/security.hxx>
 #   include <vos/object.hxx>
-#   include <vos/socket.hxx>
 #   include <osl/process.h>
 
 namespace vos

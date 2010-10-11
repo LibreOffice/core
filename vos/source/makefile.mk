@@ -41,7 +41,6 @@ SLOFILES=       $(SLO)$/conditn.obj     \
                 $(SLO)$/mutex.obj       \
                 $(SLO)$/object.obj      \
                 $(SLO)$/refernce.obj    \
-                $(SLO)$/socket.obj      \
                 $(SLO)$/thread.obj      \
                 $(SLO)$/stream.obj      \
                 $(SLO)$/module.obj      \
@@ -58,7 +57,6 @@ OBJFILES=       $(OBJ)$/conditn.obj     \
                 $(OBJ)$/mutex.obj       \
                 $(OBJ)$/object.obj      \
                 $(OBJ)$/refernce.obj    \
-                $(OBJ)$/socket.obj      \
                 $(OBJ)$/thread.obj      \
                 $(OBJ)$/stream.obj      \
                 $(OBJ)$/module.obj      \
