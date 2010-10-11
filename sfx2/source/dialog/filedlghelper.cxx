@@ -63,9 +63,9 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <unotools/localfilehelper.hxx>
-#include <vos/thread.hxx>
 #include <vos/mutex.hxx>
 #include <vos/security.hxx>
+#include <osl/thread.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/mnemonic.hxx>
@@ -1156,7 +1156,7 @@ FileDialogHelper_Impl::~FileDialogHelper_Impl()
 
 #define nMagic -1
 
-class PickerThread_Impl : public ::vos::OThread
+class PickerThread_Impl : public ::osl::Thread
 {
     uno::Reference < XFilePicker > mxPicker;
     ::vos::OMutex           maMutex;

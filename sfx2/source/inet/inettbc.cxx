@@ -39,7 +39,7 @@
 #include <svl/folderrestriction.hxx>
 #include <vcl/toolbox.hxx>
 #include <toolkit/unohlp.hxx>
-#include <vos/thread.hxx>
+#include <osl/thread.hxx>
 #include <vos/mutex.hxx>
 #include <rtl/ustring.hxx>
 

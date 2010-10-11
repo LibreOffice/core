@@ -50,12 +50,12 @@
 //_________________________________________________________________________________________________________________
 #include <rtl/random.h>
 #include <vos/process.hxx>
-#include <vos/thread.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/time.h>
 
 #include <osl/interlock.h>
+#include <osl/thread.hxx>
 
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
@@ -485,7 +485,7 @@ sal_Int32 ThreadSafeClass::workA(   sal_Int32   nA          ,
             Otherwise all threads are sychron after first 2,3...5 calls - I think!
 *//*-*****************************************************************************************************/
 
-class TestThread : public OThread
+class TestThread : public osl::Thread
 {
     public:
 

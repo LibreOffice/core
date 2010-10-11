@@ -3626,7 +3626,7 @@ void DbGridControl::implAdjustInSolarThread(BOOL _bRows)
 {
     TRACE_RANGE("DbGridControl::implAdjustInSolarThread");
     ::osl::MutexGuard aGuard(m_aAdjustSafety);
-    if (::vos::OThread::getCurrentIdentifier() != Application::GetMainThreadIdentifier())
+    if (::osl::Thread::getCurrentIdentifier() != Application::GetMainThreadIdentifier())
     {
         m_nAsynAdjustEvent = PostUserEvent(LINK(this, DbGridControl, OnAsyncAdjust), reinterpret_cast< void* >( _bRows ));
         m_bPendingAdjustRows = _bRows;

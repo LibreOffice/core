@@ -32,11 +32,11 @@
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <vos/pipe.hxx>
 #include <vos/security.hxx>
-#include <vos/thread.hxx>
 #include <vos/signal.hxx>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <osl/conditn.hxx>
+#include <osl/thread.hxx>
 #include "boost/optional.hpp"
 
 namespace desktop
@@ -72,7 +72,7 @@ struct ProcessDocumentsRequest
 };
 
 class DispatchWatcher;
-class OfficeIPCThread : public vos::OThread
+class OfficeIPCThread : public osl::Thread
 {
   private:
     static OfficeIPCThread*     pGlobalOfficeIPCThread;

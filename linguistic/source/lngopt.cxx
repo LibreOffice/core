@@ -64,7 +64,7 @@ using namespace com::sun::star::registry;
 
 // static member intialization
 SvtLinguOptions *   LinguOptions::pData = NULL;
-vos::ORefCount      LinguOptions::aRefCount;
+oslInterlockedCount LinguOptions::nRefCount;
 
 
 LinguOptions::LinguOptions()
@@ -76,14 +76,14 @@ LinguOptions::LinguOptions()
         aLinguCfg.GetOptions( *pData );
     }
 
-    ++aRefCount;
+    osl_incrementInterlockedCount( &nRefCount );
 }
 
 
 LinguOptions::LinguOptions(const LinguOptions & /*rOpt*/)
 {
     DBG_ASSERT( pData, "lng : data missing" );
-    ++aRefCount;
+    osl_incrementInterlockedCount( &nRefCount );
 }
 
 
@@ -91,7 +91,7 @@ LinguOptions::~LinguOptions()
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    if (--aRefCount == 0)
+    if ( osl_decrementInterlockedCount( &nRefCount ) == 0 )
     {
         delete pData;   pData  = NULL;
     }

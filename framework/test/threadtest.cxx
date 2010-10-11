@@ -488,7 +488,7 @@ sal_Int32 ThreadSafeClass::workA(   sal_Int32   nA          ,
             Otherwise all threads are sychron after first 2,3...5 calls - I think!
 *//*-*****************************************************************************************************/
 
-class TestThread : public OThread
+class TestThread : public osl::Thread
 {
     public:
 

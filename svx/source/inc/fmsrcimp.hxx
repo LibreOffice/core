@@ -44,7 +44,7 @@
 #include <osl/mutex.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/collatorwrapper.hxx>
-#include <vos/thread.hxx>
+#include <osl/thread.hxx>
 
 #ifndef _SVSTDARR_ULONGS
 #define _SVSTDARR_ULONGS
@@ -61,7 +61,7 @@ SV_DECL_OBJARR(SvInt32Array, sal_Int32, 16, 16)
 // ===================================================================================================
 
 class FmSearchEngine;
-class FmSearchThread : public ::vos::OThread
+class FmSearchThread : public ::osl::Thread
 {
     FmSearchEngine*     m_pEngine;
     Link                m_aTerminationHdl;

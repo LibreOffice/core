@@ -52,7 +52,7 @@
 #include <unotools/streamhelper.hxx>
 #include <unotools/configitem.hxx>
 #include <comphelper/mediadescriptor.hxx>
-#include <vos/thread.hxx>
+#include <osl/thread.hxx>
 #include <vcl/msgbox.hxx>
 
 #include "mailmodelapi.hxx"
@@ -148,8 +148,8 @@ namespace
 
 }
 
-// class OThread
-class OMailSendThreadImpl : public ::vos::OThread
+// class osl::Thread
+class OMailSendThreadImpl : public ::osl::Thread
 {
     public:
         OMailSendThreadImpl(

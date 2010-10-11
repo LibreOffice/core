@@ -303,7 +303,7 @@ public:
 
 //=============================================================================
 
-class Updater_Impl : public ::vos::OThread
+class Updater_Impl : public ::osl::Thread
 {
 private:
     SfxDocTplService_Impl   *mpDocTemplates;
@@ -1150,7 +1150,8 @@ SfxDocTplService_Impl::~SfxDocTplService_Impl()
 
     if ( mpUpdater )
     {
-        mpUpdater->kill();
+        mpUpdater->terminate();
+        mpUpdater->join();
         delete mpUpdater;
     }
 }

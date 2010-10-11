@@ -919,7 +919,7 @@ void SAL_CALL OfficeIPCThread::run()
             TimeValue tval;
             tval.Seconds = 1;
             tval.Nanosec = 0;
-            sleep( tval );
+            wait( tval );
         }
     } while( schedule() );
 }

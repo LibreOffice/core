@@ -68,7 +68,7 @@ namespace com { namespace sun { namespace star {
 class LinguOptions
 {
     static SvtLinguOptions     *pData;
-    static vos::ORefCount       aRefCount;  // number of objects of this class
+    static oslInterlockedCount  nRefCount;  // number of objects of this class
 
     //! uses default assignment-operator
 

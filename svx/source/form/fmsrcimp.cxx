@@ -1188,7 +1188,7 @@ void FmSearchEngine::ImplStartNextSearch()
         pSearcher->setTerminationHandler(LINK(this, FmSearchEngine, OnSearchTerminated));
 
         pSearcher->createSuspended();
-        pSearcher->setPriority(::vos::OThread::TPriority_Lowest);
+        pSearcher->setPriority(osl_Thread_PriorityLowest);
         pSearcher->resume();
     }
     else

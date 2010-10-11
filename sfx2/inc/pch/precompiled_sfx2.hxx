@@ -662,7 +662,7 @@
 #include "vos/process.hxx"
 #include "vos/security.hxx"
 #include "vos/socket.hxx"
-#include "vos/thread.hxx"
+#include "osl/thread.hxx"
 #include "vos/xception.hxx"
 //---MARKER---
 #endif
