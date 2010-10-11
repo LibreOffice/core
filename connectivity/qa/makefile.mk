@@ -28,6 +28,7 @@
 PRJ = ..
 TARGET  = ConnectivityComplexTests
 PRJNAME = connectivity
+PACKAGE = complex/connectivity
 
 # --- Settings -----------------------------------------------------
 .INCLUDE: settings.mk
@@ -36,15 +37,11 @@ PRJNAME = connectivity
 
 JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar hsqldb.jar
 JAVAFILES       :=  $(shell @$(FIND) complex -name "*.java")
-JAVACLASSFILES	:= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(i:d)$/$(i:b).class)
 
 #----- make a jar from compiled files ------------------------------
 
-MAXLINELENGTH = 100000
-
-#JARCLASSDIRS    = $(PACKAGE)
-JARTARGET       = $(TARGET).jar
-JARCOMPRESS 	= TRUE
+JARCLASSDIRS = $(PACKAGE)
+JARTARGET    = $(TARGET).jar
 
 # --- Runner Settings ----------------------------------------------
 
