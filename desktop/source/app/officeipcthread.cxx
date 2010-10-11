@@ -296,11 +296,11 @@ void ImplPostProcessDocumentsEvent( ProcessDocumentsRequest* pEvent )
     Application::PostUserEvent( STATIC_LINK( NULL, ProcessEventsClass_Impl, ProcessDocumentsEvent ), pEvent );
 }
 
-OSignalHandler::TSignalAction SAL_CALL SalMainPipeExchangeSignalHandler::signal(TSignalInfo *pInfo)
+oslSignalAction SAL_CALL SalMainPipeExchangeSignal_impl(void* /*pData*/, oslSignalInfo* pInfo)
 {
     if( pInfo->Signal == osl_Signal_Terminate )
         OfficeIPCThread::DisableOfficeIPCThread();
-    return (TAction_CallNextHandler);
+    return osl_Signal_ActCallNextHdl;
 }
 
 // ----------------------------------------------------------------------------

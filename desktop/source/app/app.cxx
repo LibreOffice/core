@@ -188,7 +188,7 @@ ResMgr*                 desktop::Desktop::pResMgr = 0;
 namespace desktop
 {
 
-static SalMainPipeExchangeSignalHandler* pSignalHandler = 0;
+static oslSignalHandler pSignalHandler = 0;
 static sal_Bool _bCrashReporterEnabled = sal_True;
 
 static const ::rtl::OUString CFG_PACKAGE_COMMON_HELP   ( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Office.Common/Help"));
@@ -737,7 +737,7 @@ void Desktop::Init()
             // disable IPC thread in an instance that is just showing a help message
             OfficeIPCThread::DisableOfficeIPCThread();
         }
-        pSignalHandler = new SalMainPipeExchangeSignalHandler;
+        pSignalHandler = osl_addSignalHandler(SalMainPipeExchangeSignal_impl, NULL);
     }
 }
 
@@ -772,7 +772,7 @@ void Desktop::DeInit()
 
         OfficeIPCThread::DisableOfficeIPCThread();
         if( pSignalHandler )
-            DELETEZ( pSignalHandler );
+            osl_removeSignalHandler( pSignalHandler );
     } catch (RuntimeException&) {
         // someone threw an exception during shutdown
         // this will leave some garbage behind..
@@ -1467,7 +1467,7 @@ USHORT Desktop::Exception(USHORT nError)
             {
                 OfficeIPCThread::DisableOfficeIPCThread();
                 if( pSignalHandler )
-                    DELETEZ( pSignalHandler );
+                    osl_removeSignalHandler( pSignalHandler );
                 restartOnMac(false);
                 _exit( ExitHelper::E_CRASH_WITH_RESTART );
             }

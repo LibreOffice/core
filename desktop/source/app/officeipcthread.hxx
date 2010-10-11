@@ -32,7 +32,7 @@
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <vos/pipe.hxx>
 #include <osl/security.hxx>
-#include <vos/signal.hxx>
+#include <osl/signal.h>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <osl/conditn.hxx>
@@ -42,10 +42,7 @@
 namespace desktop
 {
 
-class SalMainPipeExchangeSignalHandler : public vos::OSignalHandler
-{
-    virtual TSignalAction SAL_CALL signal(TSignalInfo *pInfo);
-};
+oslSignalAction SAL_CALL SalMainPipeExchangeSignal_impl(void* /*pData*/, oslSignalInfo* pInfo);
 
 // A request for the current office
 // that was given by command line or by IPC pipe communication.
