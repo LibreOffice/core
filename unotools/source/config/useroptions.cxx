@@ -212,7 +212,7 @@ SvtUserOptions_Impl::SvtUserOptions_Impl() :
         LogHelper::logIt(ex);
     }
 
-    Any aAny = ConfigManager::GetConfigManager()->GetDirectConfigProperty( ConfigManager::LOCALE );
+    Any aAny = ConfigManager::GetConfigManager().GetDirectConfigProperty( ConfigManager::LOCALE );
     ::rtl::OUString aLocale;
     if ( aAny >>= aLocale )
         m_aLocale = aLocale;

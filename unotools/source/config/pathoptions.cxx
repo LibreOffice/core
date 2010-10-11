@@ -530,7 +530,7 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
     }
 
     // Set language type!
-    Any aLocale = ConfigManager::GetConfigManager()->GetDirectConfigProperty( ConfigManager::LOCALE );
+    Any aLocale = ConfigManager::GetConfigManager().GetDirectConfigProperty( ConfigManager::LOCALE );
     OUString aLocaleStr;
     if ( aLocale >>= aLocaleStr )
     {

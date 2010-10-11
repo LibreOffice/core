@@ -45,39 +45,36 @@ namespace utl
 
     // First product: branded name + version
     // version is <product_versions>_<product_extension>$<platform>
-    utl::ConfigManager* pMgr = utl::ConfigManager::GetConfigManager();
-    if ( pMgr )
+    utl::ConfigManager& rMgr = utl::ConfigManager::GetConfigManager();
+    // plain product name
+    rtl::OUString aValue;
+    uno::Any aAny = rMgr.GetDirectConfigProperty(
+                                        utl::ConfigManager::PRODUCTNAME);
+    if ( (aAny >>= aValue) && aValue.getLength() )
     {
-        // plain product name
-        rtl::OUString aValue;
-        uno::Any aAny = pMgr->GetDirectConfigProperty(
-                                            utl::ConfigManager::PRODUCTNAME);
+        aResult.append( aValue.replace( ' ', '_' ) );
+        aResult.append( (sal_Unicode)'/' );
+
+        aAny = rMgr.GetDirectConfigProperty(
+                                    utl::ConfigManager::PRODUCTVERSION);
         if ( (aAny >>= aValue) && aValue.getLength() )
         {
             aResult.append( aValue.replace( ' ', '_' ) );
-            aResult.append( (sal_Unicode)'/' );
 
-            aAny = pMgr->GetDirectConfigProperty(
-                                        utl::ConfigManager::PRODUCTVERSION);
+            aAny = rMgr.GetDirectConfigProperty(
+                                    utl::ConfigManager::PRODUCTEXTENSION);
             if ( (aAny >>= aValue) && aValue.getLength() )
             {
+                aResult.append( (sal_Unicode)'_' );
                 aResult.append( aValue.replace( ' ', '_' ) );
-
-                aAny = pMgr->GetDirectConfigProperty(
-                                        utl::ConfigManager::PRODUCTEXTENSION);
-                if ( (aAny >>= aValue) && aValue.getLength() )
-                {
-                    aResult.append( (sal_Unicode)'_' );
-                    aResult.append( aValue.replace( ' ', '_' ) );
-                }
             }
-
-            aResult.append( (sal_Unicode)'$' );
-            aResult.append( ::rtl::OUString::createFromAscii(
-                                    TOOLS_INETDEF_OS ).replace( ' ', '_' ) );
-
-            aResult.append( (sal_Unicode)' ' );
         }
+
+        aResult.append( (sal_Unicode)'$' );
+        aResult.append( ::rtl::OUString::createFromAscii(
+                                TOOLS_INETDEF_OS ).replace( ' ', '_' ) );
+
+        aResult.append( (sal_Unicode)' ' );
     }
 
     // second product: OpenOffice.org_project/<build_information>

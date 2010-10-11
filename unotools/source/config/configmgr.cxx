@@ -352,28 +352,14 @@ void ConfigManager::StoreConfigItems()
         }
     }
 }
-ConfigManager*   ConfigManager::pConfigManager = 0;
 /* -----------------------------07.09.00 11:06--------------------------------
 
  ---------------------------------------------------------------------------*/
-ConfigManager*  ConfigManager::GetConfigManager()
-{
-    if(!pConfigManager)
-    {
-        pConfigManager = new ConfigManager();
-    }
-    return pConfigManager;
-}
-/* -----------------------------07.09.00 11:06--------------------------------
+struct theConfigManager : public rtl::Static<ConfigManager, theConfigManager> {};
 
- ---------------------------------------------------------------------------*/
-void    ConfigManager::RemoveConfigManager()
+ConfigManager& ConfigManager::GetConfigManager()
 {
-    if(pConfigManager)
-    {
-        delete pConfigManager;
-        pConfigManager = 0;
-    }
+    return theConfigManager::get();
 }
 /* -----------------------------08.09.00 13:22--------------------------------
 
@@ -515,7 +501,7 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
     }
     Sequence< Any > aArgs(1);
     aArgs[0] <<= sPath;
-    Reference< XMultiServiceFactory > xCfgProvider = GetConfigManager()->GetConfigurationProvider();
+    Reference< XMultiServiceFactory > xCfgProvider = GetConfigManager().GetConfigurationProvider();
     if(!xCfgProvider.is())
         return aRet;
     Reference< XInterface > xIFace;

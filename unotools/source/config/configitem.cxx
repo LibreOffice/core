@@ -240,7 +240,7 @@ ConfigItem::ConfigItem(const OUString rSubTree, sal_Int16 nSetMode ) :
 {
     AutoDeleter<ConfigItem_Impl> aNewImpl(pImpl);
 
-    pImpl->pManager = ConfigManager::GetConfigManager();
+    pImpl->pManager = &ConfigManager::GetConfigManager();
     pImpl->nMode = nSetMode;
     if(0 != (nSetMode&CONFIG_MODE_RELEASE_TREE))
         pImpl->pManager->AddConfigItem(*this);
