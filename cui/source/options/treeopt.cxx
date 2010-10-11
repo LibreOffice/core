@@ -454,6 +454,7 @@ static OptionsMapping_Impl __READONLY_DATA OptionsMap_Impl[] =
     { "Calc",               "Formula",              SID_SC_TP_FORMULA },
     { "Calc",               "SortLists",            SID_SC_TP_USERLISTS },
     { "Calc",               "Changes",              SID_SC_TP_CHANGES },
+    { "Calc",               "Compatibility",        SID_SC_TP_COMPATIBILITY },
     { "Calc",               "Grid",                 SID_SC_TP_GRID },
     { "Calc",               "Print",                RID_SC_TP_PRINT },
     { "Impress",            NULL,                   SID_SD_EDITOPTIONS },
