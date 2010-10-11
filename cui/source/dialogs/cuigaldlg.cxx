@@ -705,7 +705,8 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
     aFtMSShowContent.SetText( aOutStr );
 
     // get locale wrapper (singleton)
-    const LocaleDataWrapper&    aLocaleData = SvtSysLocale().GetLocaleData();
+    const SvtSysLocale aSysLocale;
+    const LocaleDataWrapper&    aLocaleData = aSysLocale.GetLocaleData();
 
     // ChangeDate/Time
     aAccess = aLocaleData.getDate( pData->aThemeChangeDate );
