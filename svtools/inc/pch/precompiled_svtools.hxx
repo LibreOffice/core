@@ -352,7 +352,6 @@
 #include <cppuhelper/weakref.hxx>
 
 #include <osl/conditn.hxx>
-#include <osl/conditn.hxx>
 #include <osl/diagnose.h>
 #include <osl/endian.h>
 #include <osl/file.h>
@@ -428,7 +427,7 @@
 #include <vos/ref.hxx>
 #include <vos/refernce.hxx>
 #include <vos/security.hxx>
-#include <vos/thread.hxx>
+#include <osl/thread.hxx>
 #include <vos/timer.hxx>
 
 //---MARKER---

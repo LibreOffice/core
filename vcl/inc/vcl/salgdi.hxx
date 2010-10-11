@@ -33,7 +33,7 @@
 #include "vcl/sv.h"
 #include "vcl/dllapi.h"
 #include "vcl/salgtype.hxx"
-#include "vos/thread.hxx"
+#include "osl/thread.hxx"
 #include "vcl/outdev.hxx"
 #include "vcl/salnativewidgets.hxx"
 #include "vcl/salctrlhandle.hxx"

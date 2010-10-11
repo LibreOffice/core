@@ -28,7 +28,7 @@
 #ifndef _SV_SVAPP_HXX
 #define _SV_SVAPP_HXX
 
-#include <vos/thread.hxx>
+#include <osl/thread.hxx>
 #include <vos/mutex.hxx>
 #include <tools/string.hxx>
 #include <tools/link.hxx>
@@ -277,7 +277,7 @@ public:
     static void                 Yield( bool bAllEvents = false );
     static void                 EndYield();
     static vos::IMutex&                     GetSolarMutex();
-    static vos::OThread::TThreadIdentifier  GetMainThreadIdentifier();
+    static oslThreadIdentifier  GetMainThreadIdentifier();
     static ULONG                ReleaseSolarMutex();
     static void                 AcquireSolarMutex( ULONG nCount );
     static void                 EnableNoYieldMode( bool i_bNoYield );

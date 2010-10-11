@@ -33,8 +33,8 @@
 #ifndef _VOS_MUTEX_HXX
 #include <vos/mutex.hxx>
 #endif
-#ifndef _VOS_THREAD_HXX
-#include <vos/thread.hxx>
+#ifndef _THREAD_HXX_
+#include <osl/thread.hxx>
 #endif
 #include <vcl/salsys.hxx>
 #include <vcl/dllapi.h>

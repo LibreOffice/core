@@ -76,7 +76,7 @@ void GtkHookedYieldMutex::ThreadsLeave()
 
 #if OSL_DEBUG_LEVEL > 1
     if( mnThreadId &&
-        mnThreadId != NAMESPACE_VOS(OThread)::getCurrentIdentifier())
+        mnThreadId != osl::Thread::getCurrentIdentifier())
         fprintf( stderr, "\n\n--- A different thread owns the mutex ...---\n\n\n");
 #endif
 
@@ -242,7 +242,7 @@ GtkYieldMutex::GtkYieldMutex()
 
 void GtkYieldMutex::acquire()
 {
-    vos::OThread::TThreadIdentifier aCurrentThread = vos::OThread::getCurrentIdentifier();
+    oslThreadIdentifier aCurrentThread = osl::Thread::getCurrentIdentifier();
     // protect member manipulation
     OMutex::acquire();
     if( mnCount > 0 && mnThreadId == aCurrentThread )
@@ -265,7 +265,7 @@ void GtkYieldMutex::acquire()
 
 void GtkYieldMutex::release()
 {
-    vos::OThread::TThreadIdentifier aCurrentThread = vos::OThread::getCurrentIdentifier();
+    oslThreadIdentifier aCurrentThread = osl::Thread::getCurrentIdentifier();
     // protect member manipulation
     OMutex::acquire();
     // strange things happen, do nothing if we don't own the mutex
@@ -283,7 +283,7 @@ void GtkYieldMutex::release()
 
 sal_Bool GtkYieldMutex::tryToAcquire()
 {
-    vos::OThread::TThreadIdentifier aCurrentThread = vos::OThread::getCurrentIdentifier();
+    oslThreadIdentifier aCurrentThread = osl::Thread::getCurrentIdentifier();
     // protect member manipulation
     OMutex::acquire();
     if( mnCount > 0 )
@@ -327,9 +327,9 @@ int GtkYieldMutex::Grab()
     OMutex::acquire();
     int nRet = mnCount;
     if( mnCount == 0 ) // recursive else
-        mnThreadId = vos::OThread::getCurrentIdentifier();
+        mnThreadId = osl::Thread::getCurrentIdentifier();
 #if OSL_DEBUG_LEVEL > 1
-    else if( mnThreadId != vos::OThread::getCurrentIdentifier() )
+    else if( mnThreadId != osl::Thread::getCurrentIdentifier() )
     {
         fprintf( stderr, "Yield mutex grabbed in different thread !\n" );
         abort();

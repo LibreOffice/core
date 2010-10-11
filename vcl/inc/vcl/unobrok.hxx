@@ -29,7 +29,7 @@
 #define _UNOBROK_HXX
 
 #include <vcl/svdata.hxx>
-#include <vos/thread.hxx>
+#include <osl/thread.hxx>
 
 namespace vcl_accept
 {

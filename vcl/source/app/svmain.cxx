@@ -293,7 +293,7 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
     pSVData->maAppData.mxMSF = rSMgr;
 
     // Main-Thread-Id merken
-    pSVData->mnMainThreadId = ::vos::OThread::getCurrentIdentifier();
+    pSVData->mnMainThreadId = ::osl::Thread::getCurrentIdentifier();
 
     vos::OStartupInfo   aStartInfo;
     rtl::OUString       aExeFileName;

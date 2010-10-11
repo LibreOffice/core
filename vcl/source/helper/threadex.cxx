@@ -101,7 +101,7 @@ IMPL_LINK( SolarThreadExecutor, worker, void*, EMPTYARG )
 
 long SolarThreadExecutor::impl_execute( const TimeValue* _pTimeout )
 {
-    if( ::vos::OThread::getCurrentIdentifier() == Application::GetMainThreadIdentifier() )
+    if( ::osl::Thread::getCurrentIdentifier() == Application::GetMainThreadIdentifier() )
     {
         osl_setCondition( m_aStart );
         m_nReturn = doIt();

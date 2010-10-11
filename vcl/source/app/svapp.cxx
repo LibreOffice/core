@@ -529,7 +529,7 @@ vos::IMutex& Application::GetSolarMutex()
 
 // -----------------------------------------------------------------------
 
-vos::OThread::TThreadIdentifier Application::GetMainThreadIdentifier()
+oslThreadIdentifier Application::GetMainThreadIdentifier()
 {
     return ImplGetSVData()->mnMainThreadId;
 }

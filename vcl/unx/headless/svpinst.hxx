@@ -32,7 +32,7 @@
 #include <vcl/salwtype.hxx>
 #include <vcl/saltimer.hxx>
 #include <vos/mutex.hxx>
-#include <vos/thread.hxx>
+#include <osl/thread.hxx>
 
 #include <list>
 
@@ -50,7 +50,7 @@ class SvpSalYieldMutex : public NAMESPACE_VOS(OMutex)
 {
 protected:
     ULONG                                       mnCount;
-    NAMESPACE_VOS(OThread)::TThreadIdentifier   mnThreadId;
+    oslThreadIdentifier mnThreadId;
 
 public:
                                                 SvpSalYieldMutex();
@@ -60,7 +60,7 @@ public:
     virtual sal_Bool                            tryToAcquire();
 
     ULONG                                       GetAcquireCount() const { return mnCount; }
-    NAMESPACE_VOS(OThread)::TThreadIdentifier   GetThreadId() const { return mnThreadId; }
+    oslThreadIdentifier GetThreadId() const { return mnThreadId; }
 };
 
 // ---------------

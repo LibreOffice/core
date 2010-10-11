@@ -33,8 +33,8 @@
 #ifndef _VOS_MUTEX_HXX
 #include <vos/mutex.hxx>
 #endif
-#ifndef _VOS_THREAD_HXX
-#include <vos/thread.hxx>
+#ifndef _THREAD_HXX_
+#include <osl/thread.hxx>
 #endif
 #include <vcl/dllapi.h>
 #include <vcl/salinst.hxx>
@@ -43,7 +43,7 @@ class VCL_DLLPUBLIC SalYieldMutex : public NAMESPACE_VOS(OMutex)
 {
 protected:
     ULONG                                       mnCount;
-    NAMESPACE_VOS(OThread)::TThreadIdentifier   mnThreadId;
+    oslThreadIdentifier mnThreadId;
 
 public:
                                                 SalYieldMutex();
@@ -53,7 +53,7 @@ public:
     virtual sal_Bool                            tryToAcquire();
 
     ULONG                                       GetAcquireCount() const { return mnCount; }
-    NAMESPACE_VOS(OThread)::TThreadIdentifier   GetThreadId() const { return mnThreadId; }
+    oslThreadIdentifier GetThreadId() const { return mnThreadId; }
 };
 
 // -=-= SalInstanceData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

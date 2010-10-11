@@ -52,7 +52,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include <vcl/toolbox.hxx>
-#include <vos/thread.hxx>
+#include <osl/thread.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/historyoptions.hxx>
@@ -110,7 +110,7 @@ public:
 };
 
 // -----------------------------------------------------------------------
-class SvtMatchContext_Impl : public ::vos::OThread
+class SvtMatchContext_Impl : public ::osl::Thread
 {
     static ::vos::OMutex*           pDirMutex;
 

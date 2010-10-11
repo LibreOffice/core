@@ -28,7 +28,7 @@
 #ifndef _SV_SVDATA_HXX
 #define _SV_SVDATA_HXX
 
-#include <vos/thread.hxx>
+#include <osl/thread.hxx>
 #include <tools/string.hxx>
 #include <tools/gen.hxx>
 #include <tools/shl.hxx>
@@ -174,7 +174,7 @@ struct ImplSVAppData
      */
     ImeStatusWindowMode meShowImeStatusWindow;
 
-                            DECL_STATIC_LINK( ImplSVAppData, ImplQuitMsg, void* );
+    DECL_STATIC_LINK( ImplSVAppData, ImplQuitMsg, void* );
 
 };
 
@@ -352,7 +352,7 @@ struct ImplSVData
     DockingManager*         mpDockingManager;
     BOOL                    mbIsTestTool;
 
-    vos::OThread::TThreadIdentifier                     mnMainThreadId;
+    oslThreadIdentifier                     mnMainThreadId;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::awt::XDisplayConnection >     mxDisplayConnection;
 

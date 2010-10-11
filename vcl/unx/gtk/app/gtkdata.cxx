@@ -53,6 +53,7 @@
 #include <osl/thread.h>
 #include <osl/process.h>
 
+#include <osl/conditn.h>
 #include <tools/debug.hxx>
 #include "i18n_im.hxx"
 #include "i18n_xkb.hxx"

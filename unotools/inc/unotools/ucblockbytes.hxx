@@ -33,7 +33,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include "unotools/unotoolsdllapi.h"
 
-#include <vos/thread.hxx>
+#include <osl/thread.hxx>
 #include <vos/conditn.hxx>
 #include <vos/mutex.hxx>
 #include <tools/stream.hxx>

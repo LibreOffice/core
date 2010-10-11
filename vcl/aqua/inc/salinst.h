@@ -30,7 +30,7 @@
 
 #include "vcl/sv.h"
 #include "vos/mutex.hxx"
-#include "vos/thread.hxx"
+#include "osl/thread.hxx"
 #include "vcl/salinst.hxx"
 #include "osl/conditn.h"
 
@@ -49,7 +49,7 @@ class Image;
 class SalYieldMutex : public vos::OMutex
 {
     ULONG                                       mnCount;
-    vos::OThread::TThreadIdentifier             mnThreadId;
+    oslThreadIdentifier                         mnThreadId;
 
 public:
                                                 SalYieldMutex();
@@ -57,7 +57,7 @@ public:
     virtual void                                release();
     virtual sal_Bool                            tryToAcquire();
     ULONG                                       GetAcquireCount() const { return mnCount; }
-    vos::OThread::TThreadIdentifier             GetThreadId() const { return mnThreadId; }
+    oslThreadIdentifier                         GetThreadId() const { return mnThreadId; }
 };
 
 #define YIELD_GUARD vos::OGuard aGuard( GetSalData()->mpFirstInstance->GetYieldMutex() )
@@ -92,7 +92,7 @@ class AquaSalInstance : public SalInstance
 public:
     SalYieldMutex*                          mpSalYieldMutex;        // Sal-Yield-Mutex
     rtl::OUString                           maDefaultPrinter;
-    vos::OThread::TThreadIdentifier         maMainThread;
+    oslThreadIdentifier                     maMainThread;
     bool                                    mbWaitingYield;
     int                                     mnActivePrintJobs;
     std::list< SalUserEvent >               maUserEvents;
