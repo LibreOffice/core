@@ -83,7 +83,7 @@ namespace desktop
         "keep startup bitmap minimized.\n"\
         "no startup screen, no default document and no UI.\n"\
         "suppress restart/restore after fatal errors.\n"\
-        "starts the quickstart service (only available on windows and OS/2 platform)\n"\
+        "starts the quickstart service\n"\
         "don't show startup screen.\n"\
         "don't check for remote instances using the installation\n"\
         "don't start with an empty document\n"\

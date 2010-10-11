@@ -53,6 +53,10 @@ CFLAGS+=-DGNOME_VFS_ENABLED
 # DEPLOYMENTMISCLIB = -ldeploymentmisc$(DLLPOSTFIX)
 # .ENDIF
 
+.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2" || "$(GUIBASE)"=="aqua" || "$(ENABLE_SYSTRAY_GTK)"=="TRUE"
+CFLAGS+=-DENABLE_QUICKSTART_APPLET
+.ENDIF
+
 SHL1TARGET = sofficeapp
 SHL1OBJS = \
     $(SLO)$/app.obj \
