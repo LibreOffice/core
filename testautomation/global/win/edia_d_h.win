@@ -169,10 +169,6 @@ SelectAFontworkStyle sym:SVX_HID_CTL_FONTWORK_FAVORITES
 *FontworkCharacterSpacingCustom sym:svx:ModalDialog:RID_SVX_MDLG_FONTWORK_CHARSPACING
 Value sym:svx:MetricField:RID_SVX_MDLG_FONTWORK_CHARSPACING:MF_VALUE
 
-*FontWorkAlignment FontWork1TBO
-
-*FontWorkCharacterSpacing FontWork2TBO
-
 *FormatColumn sym:SW_HID_FORMAT_COLUMN
 ApplyTo sym:sw:ListBox:DLG_COLUMN:LB_APPLY_TO
 Columns sym:sw:NumericField:TP_COLUMN:ED_NUMBER
@@ -446,7 +442,7 @@ Browse sym:UUI_HID_LOGIN_DLG_BROWSE
 Account sym:UUI_HID_LOGIN_DLG_ACCOUNT
 UseSystemCredentials sym:UUI_HID_LOGIN_DLG_USE_SYSTEM_CREDENTIALS
 
-*Gallery .uno:Gallery
+*Gallery sym:SVX_HID_GALLERY_BROWSER
 NewTheme sym:SVX_HID_GALLERY_NEWTHEME
 'NewThemeName NEW_TITLE_FOR_GALLERY_THEME_EDITFIELD
 Gallerys sym:SVX_HID_GALLERY_THEMELIST

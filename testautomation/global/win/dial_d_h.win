@@ -422,7 +422,7 @@ Durchsuchen sym:sw:PushButton:DLG_INS_FOOTNOTE:BT_NUMBER_CHAR
 Fussnote sym:sw:RadioButton:DLG_INS_FOOTNOTE:RB_TYPE_FTN
 Endnote sym:sw:RadioButton:DLG_INS_FOOTNOTE:RB_TYPE_ENDNOTE
 
-*Gallerybeamer .uno:Beamer
+*Gallerybeamer sym:SVX_HID_GALLERY_BROWSER
 Anzeige sym:SVX_HID_GALLERY_WINDOW
 
 *Gestalter .uno:DesignerDialog

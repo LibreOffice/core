@@ -312,7 +312,7 @@ ZugeordnetZuButton sym:sc:ImageButton:RID_SCDLG_NAMES:RB_ASSIGN
 *NavigationsFenster sym:SW_HID_INSERT_CTRL
 Auswahl sym:SW_HID_NAVI_VS
 
-*Navigator .uno:Navigator
+*Navigator sym:SFX2_HID_NAVIGATOR_WINDOW
 
 *NavigatorCalc sym:SC_HID_SC_NAVIGATOR
 NavigatorToolboxCalc sym:SC_HID_SC_NAVIPI_TOOLBOX

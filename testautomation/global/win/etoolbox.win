@@ -27,7 +27,7 @@ PrintButton sym:SFX2_HID_HELP_TOOLBOXITEM_PRINT
 SetBookmarks sym:SFX2_HID_HELP_TOOLBOXITEM_BOOKMARKS
 DisplayHelpAtStartUp sym:SFX2_HID_HELP_ONSTARTUP_BOX
 
-*TB_MacroControls HID_BASICIDE_CONTROLS
+*TB_MacroControls sym:HID_BASICIDE_CONTROLS
 CommandButton .uno:InsertPushbutton
 CheckBox .uno:Checkbox
 Label .uno:InsertFixedText

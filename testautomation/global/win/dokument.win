@@ -5,7 +5,6 @@
 *DokumentCalc sym:SC_HID_SC_WIN_GRIDWIN
 *DokumentDraw sym:SD_HID_SDGRAPHICVIEWSHELL sym:SD_HID_SD_WIN_DOCUMENT
 *DokumentImpress sym:SD_HID_SDDRAWVIEWSHELL sym:SD_HID_SD_WIN_DOCUMENT
-*DokumentImpressDiatisch SD_IF_SDSLIDEVIEWSHELL
 *DokumentImpressGliederungsmodus sym:SD_HID_SDOUTLINEVIEWSHELL
 *DokumentImpressNotizen .uno:NotesMode
 *DokumentImpressHandzettel .uno:HandoutMode
@@ -30,7 +29,6 @@ Kommandos sym:STARMATH_HID_SMA_COMMAND_WIN_EDIT
 *DocumentCalc sym:SC_HID_SC_WIN_GRIDWIN
 *DocumentDraw sym:SD_HID_SDGRAPHICVIEWSHELL sym:SD_HID_SD_WIN_DOCUMENT
 *DocumentImpress sym:SD_HID_SDDRAWVIEWSHELL sym:SD_HID_SD_WIN_DOCUMENT
-*DocumentImpressSlideView SD_IF_SDSLIDEVIEWSHELL
 *DocumentImpressOutlineView sym:SD_HID_SDOUTLINEVIEWSHELL
 *DocumentImpressNotesView .uno:NotesMode
 *DocumentImpressHandoutView .uno:HandoutMode
