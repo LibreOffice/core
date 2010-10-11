@@ -286,7 +286,7 @@ OProcess::TProcessError OProcess::execute(TProcessOption Options,
 
 
 OProcess::TProcessError OProcess::execute( TProcessOption Options,
-                                           const OSecurity &Security,
+                                           const osl::Security& Security,
                                            const OArgumentList& aArgumentList,
                                            const OEnvironment&  aEnvironment )
 {
@@ -294,7 +294,7 @@ OProcess::TProcessError OProcess::execute( TProcessOption Options,
                                               aArgumentList.m_aVec,
                                               aArgumentList.n_Args,
                                               Options,
-                                              Security,
+                                              Security.getHandle(),
                                               m_strDirectory.pData,
                                               aEnvironment.m_aVec,
                                               aEnvironment.n_Vars,

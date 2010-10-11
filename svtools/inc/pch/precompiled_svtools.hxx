@@ -362,6 +362,7 @@
 #include <osl/mutex.h>
 #include <osl/mutex.hxx>
 #include <osl/process.h>
+#include <osl/security.hxx>
 #include <osl/thread.h>
 #include <osl/thread.hxx>
 
@@ -427,8 +428,6 @@
 #include <vos/process.hxx>
 #include <vos/ref.hxx>
 #include <vos/refernce.hxx>
-#include <vos/security.hxx>
-#include <osl/thread.hxx>
 #include <vos/timer.hxx>
 
 //---MARKER---

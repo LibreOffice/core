@@ -69,12 +69,12 @@ OPipe::OPipe( const rtl::OUString& strName, TPipeOption Options)
 
 OPipe::OPipe( const rtl::OUString& strName,
               TPipeOption Options,
-              const OSecurity& rSecurity)
+              const osl::Security& rSecurity)
 {
     m_pPipeRef=
         new PipeRef(osl_createPipe(strName.pData,
                                    (oslPipeOptions)Options,
-                                   (oslSecurity)rSecurity));
+                                   rSecurity.getHandle()));
 
     OSL_POSTCOND(m_pPipeRef != 0, "OPipe(): new failed.\n");
     OSL_POSTCOND((*m_pPipeRef)(), "OPipe(): creation of pipe failed!\n");
@@ -139,7 +139,7 @@ sal_Bool OPipe::create( const rtl::OUString& strName, TPipeOption Options )
 /*****************************************************************************/
 sal_Bool OPipe::create( const rtl::OUString& strName,
                         TPipeOption Options,
-                        const NAMESPACE_VOS(OSecurity)& rSecurity )
+                        const osl::Security& rSecurity )
 {
     // if this was a valid pipe, decrease reference
     if ((m_pPipeRef) && (m_pPipeRef->release() == 0))
@@ -152,7 +152,7 @@ sal_Bool OPipe::create( const rtl::OUString& strName,
     m_pPipeRef=
         new PipeRef(osl_createPipe(strName.pData,
                                    (oslPipeOptions)Options,
-                                   (oslSecurity)rSecurity));
+                                   rSecurity.getHandle()));
 
     OSL_POSTCOND(m_pPipeRef != 0, "OPipe(): new failed.\n");
 

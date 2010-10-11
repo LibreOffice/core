@@ -38,7 +38,7 @@
 #   include <vos/refernce.hxx>
 #endif
 #   include <vos/refobj.hxx>
-#   include <vos/security.hxx>
+#include <osl/security.hxx>
 #   include <rtl/ustring.hxx>
 
 
@@ -102,7 +102,7 @@ public:
         @param Security
     */
     OPipe(const ::rtl::OUString& strName, TPipeOption Options,
-          const NAMESPACE_VOS(OSecurity)& rSecurity);
+          const osl::Security& rSecurity);
 
     /** Copy constructor.
     */
@@ -133,7 +133,7 @@ public:
         @return True if socket was successfully created.
     */
     sal_Bool SAL_CALL create(const ::rtl::OUString& strName, TPipeOption Options,
-                   const NAMESPACE_VOS(OSecurity)& rSecurity);
+                             const osl::Security& rSecurity);
 
     /** Assignment operator. If pipe was already created, the old one will
         be discarded.

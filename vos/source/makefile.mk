@@ -46,7 +46,6 @@ SLOFILES=       $(SLO)$/conditn.obj     \
                 $(SLO)$/module.obj      \
                 $(SLO)$/timer.obj       \
                 $(SLO)$/process.obj     \
-                $(SLO)$/security.obj    \
                 $(SLO)$/signal.obj      \
                 $(SLO)$/pipe.obj        \
                 $(SLO)$/xception.obj
@@ -62,7 +61,6 @@ OBJFILES=       $(OBJ)$/conditn.obj     \
                 $(OBJ)$/module.obj      \
                 $(OBJ)$/timer.obj       \
                 $(OBJ)$/process.obj     \
-                $(OBJ)$/security.obj    \
                 $(OBJ)$/signal.obj      \
                 $(OBJ)$/pipe.obj        \
                 $(OBJ)$/xception.obj

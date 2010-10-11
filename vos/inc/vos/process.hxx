@@ -31,9 +31,9 @@
 
 #   include <rtl/ustring.hxx>
 #   include <vos/mutex.hxx>
-#   include <vos/security.hxx>
+#include <osl/security.hxx>
 #   include <vos/object.hxx>
-#   include <osl/process.h>
+#include <osl/process.h>
 
 namespace vos
 {
@@ -194,7 +194,7 @@ public:
         @see OStartupInfo::acceptIOResource
     */
     TProcessError SAL_CALL execute(TProcessOption Options,
-                          const OSecurity &Security,
+                          const osl::Security &Security,
                           const OArgumentList& aArgumentList = OArgumentList(),
                           const OEnvironment&  aEnvironment  = OEnvironment()
                          );
