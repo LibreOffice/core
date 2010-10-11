@@ -1322,12 +1322,6 @@ sal_uInt16 SwPagePreviewLayout::GetColOfPage( sal_uInt16 _nPageNum ) const
     return nCol;
 }
 
-Size SwPagePreviewLayout::GetMaxPageSize() const
-{
-    ASSERT( PreviewLayoutValid(), "PagePreviewLayout not valid" );
-    return maMaxPageSize;
-}
-
 Size SwPagePreviewLayout::GetPrevwDocSize() const
 {
     ASSERT( PreviewLayoutValid(), "PagePreviewLayout not valid" );
