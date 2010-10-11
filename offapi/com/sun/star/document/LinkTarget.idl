@@ -50,7 +50,7 @@ published service LinkTarget
     interface com::sun::star::beans::XPropertySet;
 
     /** a link target may have child objects which can be link targets too.
-        These are accessible by this optinonal interface.
+        These are accessible by this optional interface.
      */
     [optional] interface com::sun::star::document::XLinkTargetSupplier;
 

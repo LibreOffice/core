@@ -59,8 +59,8 @@ published interface XExtendedFilterDetection: com::sun::star::uno::XInterface
         with given URL or arguments
 
         <p>
-        Registerd services in configuration, which support this interface for different mime types,
-        will be called automaticly to look into the document stream and cdecide wich format it represent.
+        Registered services in configuration, which support this interface for different mime types,
+        will be called automatically to look into the document stream and decide which format it represent.
         Add the collected information about detected documents in given <type>MediaDescriptor</type>
         <var>Descriptor</var>. The decision must be returned as any valid type name (which specifies
         the detected format) or an empty value for unknown formats.

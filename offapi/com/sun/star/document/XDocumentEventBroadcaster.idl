@@ -65,7 +65,7 @@ interface XDocumentEventBroadcaster
     /** registers a listener which is notified about document events
 
         @param _Listener
-            the listener to register. The behaviour of the method is undefined this listener
+            the listener to register. The behavior of the method is undefined this listener
             is <NULL/>.
     */
     void    addDocumentEventListener( [in] XDocumentEventListener _Listener );
@@ -73,7 +73,7 @@ interface XDocumentEventBroadcaster
     /** revokes a listener which has previously been registered to be notified about document events.
 
         @param _Listener
-            the listener to revoke. The behaviour of the method is undefined this listener
+            the listener to revoke. The behavior of the method is undefined this listener
             is <NULL/>.
     */
     void    removeDocumentEventListener( [in] XDocumentEventListener _Listener );
@@ -84,7 +84,7 @@ interface XDocumentEventBroadcaster
         and fill in the <code>Source</code> member (denoting the broadcaster) as appropriate.</p>
 
         <p>Whether the actual notification happens synchronously or asynchronously is up to the
-        implementator of this method. However, implementations are encouraged to specify this, for the
+        implementor of this method. However, implementations are encouraged to specify this, for the
         list of supported event types, in their service contract.</p>
 
         <p>Implementations might also decide to limit the list of allowed events (means event names) at

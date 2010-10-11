@@ -62,7 +62,7 @@ published interface XFilter: com::sun::star::uno::XInterface
         /** filter the document.
 
         <p>
-        The given <type>MediaDescriptor</type> holds all neccessary information
+        The given <type>MediaDescriptor</type> holds all necessary information
         about the document.
 
         Don't hold hard references to the descriptor items. You must copy needed information!

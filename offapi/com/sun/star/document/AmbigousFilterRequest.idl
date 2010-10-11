@@ -36,7 +36,7 @@
 module com { module sun { module star { module document {
 
 //=============================================================================
-/** should be used for interaction to handle states of ambigous filter detection
+/** should be used for interaction to handle states of ambiguous filter detection
 
     <p>
     This exception indicates, that generic filter detection can't decide which of
@@ -58,7 +58,7 @@ published exception AmbigousFilterRequest : ::com::sun::star::uno::Exception
     string URL;
 
     //-------------------------------------------------------------------------
-    /** transport the pre selected filter
+    /** transport the preselected filter
      */
     string SelectedFilter;
 

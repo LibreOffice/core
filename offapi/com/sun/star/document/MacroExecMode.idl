@@ -57,7 +57,7 @@ published constants MacroExecMode
     const short FROM_LIST = 1;
 
     //-------------------------------------------------------------------------
-    /** Execute any macro, macros signed with trusted sertificates and macros
+    /** Execute any macro, macros signed with trusted certificates and macros
         from secure list are executed quietly.
 
         <p>
