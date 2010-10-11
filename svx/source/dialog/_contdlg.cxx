@@ -809,7 +809,7 @@ IMPL_LINK( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx )
 
         case( TBI_UNDO ):
         {
-            nGrfChanged = nGrfChanged ? nGrfChanged-- : 0UL;
+            nGrfChanged = nGrfChanged ? nGrfChanged - 1 : 0UL;
             aRedoGraphic = aGraphic;
             aGraphic = aUndoGraphic;
             aUndoGraphic = Graphic();
