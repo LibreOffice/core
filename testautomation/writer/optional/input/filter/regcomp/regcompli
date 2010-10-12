@@ -1,16 +1,0 @@
-ELFè=÷ÿÿt&èíõÿÿt&è}óÿÿt&èòÿÿt&è=ñÿÿt&ïÿÿƒÄëèïÿÿ‹EäƒÄôPètğÿÿƒÄƒÄühŒÒè¼(èîÿÿt&èìÿÿt&P‹EWƒÀPR‹AÿĞ‹UƒÄ‹BƒÀP‹EüƒÀPh€İ¡ØPèéâÿÿƒÄé™PWR‹AÿĞƒÄ„Àt)‹U‹BƒÀP‹EüƒÀPhèıáÿÿt&èíİÿÿt&è­Üÿÿt&èíÛÿÿt&ÛÿÿƒÄëÍè`Úÿÿ‰]Ü…Ût‹ƒÄôS‹@ÿĞƒÄ‹Uà…Òt‹ƒÄôR‹@ÿĞƒÄ‰]àë	èìÙÿÿt&è}Óÿÿt&using: regcomp -register|revoke -r registryfile -c locationUrl [-br registryfile] [-l componentLoaderUrl]
-
-                               If the bootstrap registry have the same name as the registration registry
-                               the -r option is optional.
-                               or a list of urls seperated by ';' or ' '. Note if a list of urls is specified, the
-                               components must all need the same loader (quoting is possible with \ or "").
-                               the 'com.sun.star.loader.SharedLibrary' is used.
-                               loaders: com.sun.star.loader.SharedLibrary | com.sun.star.loader.Java2
-
-register component "%s" in registry "%s" succesful!
-register component "%s" in registry "%s" failed!
-ERROR: %s
-revoke component "%s" from registry "%s" succesful!
-revoke component "%s" from registry "%s" failed!
-Component registration service could not be loaded!
-A†AƒG.«.A†Aƒk. e.n.
