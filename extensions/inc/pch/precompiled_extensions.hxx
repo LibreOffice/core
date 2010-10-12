@@ -498,6 +498,7 @@
 #include "rtl/uuid.h"
 
 #include "salhelper/simplereferenceobject.hxx"
+#include "salhelper/timer.hxx"
 
 #include "sane/sane.h"
 
@@ -542,7 +543,6 @@
 #include "vos/pipe.hxx"
 #include "vos/ref.hxx"
 #include "vos/refernce.hxx"
-#include "vos/timer.hxx"
 
 #include "xmloff/nmspmap.hxx"
 //---MARKER---

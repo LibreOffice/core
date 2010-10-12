@@ -44,7 +44,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/string.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/timer.hxx>
+#include <salhelper/timer.hxx>
 #include <osl/file.hxx>
 
 #ifdef UNX
@@ -63,7 +63,7 @@ using namespace com::sun::star::plugin;
 using namespace rtl;
 using namespace osl;
 
-class PluginDisposer : public vos::OTimer
+class PluginDisposer : public salhelper::Timer
 {
 private:
     XPlugin_Impl*       m_pPlugin;
@@ -71,8 +71,8 @@ private:
     virtual void SAL_CALL onShot();
 public:
     PluginDisposer( XPlugin_Impl* pPlugin ) :
-        OTimer( vos::TTimeValue( 2, 0 ),
-                vos::TTimeValue( 2, 0 ) ),
+        salhelper::Timer( salhelper::TTimeValue( 2, 0 ),
+                          salhelper::TTimeValue( 2, 0 ) ),
         m_pPlugin( pPlugin )
         { start(); }
     ~PluginDisposer() {}
