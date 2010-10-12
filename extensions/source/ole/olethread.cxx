@@ -38,7 +38,6 @@
 
 #include <osl/thread.hxx>
 
-using namespace vos;
 using namespace std;
 
 namespace ole_adapter
@@ -50,7 +49,7 @@ typedef DECLSPEC_IMPORT HRESULT (STDAPICALLTYPE *ptrCoInit)( LPVOID);
 
 void o2u_attachCurrentThread()
 {
-    static OThreadData oleThreadData;
+    static osl::ThreadData oleThreadData;
 
     if ((sal_Bool)(sal_IntPtr)oleThreadData.getData() != sal_True)
     {

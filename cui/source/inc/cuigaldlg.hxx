@@ -28,7 +28,7 @@
 #ifndef _CUI_GALDLG_HXX_
 #define _CUI_GALDLG_HXX_
 
-#include <vos/thread.hxx>
+#include <osl/thread.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/fixed.hxx>
@@ -71,7 +71,7 @@ struct FilterEntry
 // - SearchThread -
 // ----------------
 
-class SearchThread : public ::vos::OThread
+class SearchThread : public ::osl::Thread
 {
 private:
 
@@ -128,7 +128,7 @@ public:
 // - TakeThread -
 // --------------
 
-class TakeThread : public ::vos::OThread
+class TakeThread : public ::osl::Thread
 {
 private:
 
