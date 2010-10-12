@@ -117,6 +117,11 @@
 #include "XMLTextCharStyleNamesElementExport.hxx"
 #include <comphelper/stlunosequence.hxx>
 
+#include <xmloff/odffields.hxx>
+#include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/XTransactedObject.hpp>
+#include <com/sun/star/document/XStorageBasedDocument.hpp>
+
 // --> OD 2008-04-25 #refactorlists#
 #include <txtlists.hxx>
 // <--
@@ -417,6 +422,27 @@ void FieldParamExporter::Export()
             OUString sValue;
             aValue >>= sValue;
             ExportParameter(*pCurrent,sValue);
+
+            if ( pCurrent->equalsAscii( ODF_OLE_PARAM ) )
+            {
+                // Save the OLE object
+                Reference< embed::XStorage > xTargetStg = m_pExport->GetTargetStorage();
+                Reference< embed::XStorage > xDstStg = xTargetStg->openStorageElement(
+                        rtl::OUString::createFromAscii( "OLELinks" ), embed::ElementModes::WRITE );
+
+                if ( !xDstStg->hasByName( sValue ) ) {
+                    Reference< XStorageBasedDocument > xStgDoc (
+                            m_pExport->GetModel( ), UNO_QUERY );
+                    Reference< embed::XStorage > xDocStg = xStgDoc->getDocumentStorage();
+                    Reference< embed::XStorage > xOleStg = xDocStg->openStorageElement(
+                            rtl::OUString::createFromAscii( "OLELinks" ), embed::ElementModes::READ );
+
+                    xOleStg->copyElementTo( sValue, xDstStg, sValue );
+                    Reference< embed::XTransactedObject > xTransact( xDstStg, UNO_QUERY );
+                    if ( xTransact.is( ) )
+                        xTransact->commit( );
+                }
+            }
         }
         else if(aValueType == aBoolType)
         {
@@ -2311,46 +2337,55 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             }
             else if (sType.equals(sTextFieldStart))
             {
-                Reference<XNamed> xBookmark(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
-                if (xBookmark.is())
+                if ( GetExport().getDefaultVersion() == SvtSaveOptions::ODFVER_LATEST )
                 {
-                    GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME, xBookmark->getName());
+                    Reference<XNamed> xBookmark(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
+                    if (xBookmark.is())
+                    {
+                        GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME, xBookmark->getName());
+                    }
+                    Reference< ::com::sun::star::text::XFormField > xFormField(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
+                    if (xFormField.is())
+                    {
+                        GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_TYPE, xFormField->getFieldType());
+                    }
+                    GetExport().StartElement(XML_NAMESPACE_FIELD, XML_FIELDMARK_START, sal_False);
+                    if (xFormField.is())
+                    {
+                        FieldParamExporter(&GetExport(), xFormField->getParameters()).Export();
+                    }
+                    GetExport().EndElement(XML_NAMESPACE_FIELD, XML_FIELDMARK_START, sal_False);
                 }
-                Reference< ::com::sun::star::text::XFormField > xFormField(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
-                if (xFormField.is())
-                {
-                    GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_TYPE, xFormField->getFieldType());
-                }
-                GetExport().StartElement(XML_NAMESPACE_FIELD, XML_FIELDMARK_START, sal_False);
-                if (xFormField.is())
-                {
-                    FieldParamExporter(&GetExport(), xFormField->getParameters()).Export();
-                }
-                GetExport().EndElement(XML_NAMESPACE_FIELD, XML_FIELDMARK_START, sal_False);
             }
             else if (sType.equals(sTextFieldEnd))
             {
-                GetExport().StartElement(XML_NAMESPACE_FIELD, XML_FIELDMARK_END, sal_False);
-                GetExport().EndElement(XML_NAMESPACE_FIELD, XML_FIELDMARK_END, sal_False);
+                if ( GetExport().getDefaultVersion() == SvtSaveOptions::ODFVER_LATEST )
+                {
+                    GetExport().StartElement(XML_NAMESPACE_FIELD, XML_FIELDMARK_END, sal_False);
+                    GetExport().EndElement(XML_NAMESPACE_FIELD, XML_FIELDMARK_END, sal_False);
+                }
             }
             else if (sType.equals(sTextFieldStartEnd))
             {
-                Reference<XNamed> xBookmark(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
-                if (xBookmark.is())
+                if ( GetExport().getDefaultVersion() == SvtSaveOptions::ODFVER_LATEST )
                 {
-                    GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME, xBookmark->getName());
+                    Reference<XNamed> xBookmark(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
+                    if (xBookmark.is())
+                    {
+                        GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME, xBookmark->getName());
+                    }
+                    Reference< ::com::sun::star::text::XFormField > xFormField(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
+                    if (xFormField.is())
+                    {
+                        GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_TYPE, xFormField->getFieldType());
+                    }
+                    GetExport().StartElement(XML_NAMESPACE_FIELD, XML_FIELDMARK, sal_False);
+                    if (xFormField.is())
+                    {
+                        FieldParamExporter(&GetExport(), xFormField->getParameters()).Export();
+                    }
+                    GetExport().EndElement(XML_NAMESPACE_FIELD, XML_FIELDMARK, sal_False);
                 }
-                Reference< ::com::sun::star::text::XFormField > xFormField(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
-                if (xFormField.is())
-                {
-                    GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_TYPE, xFormField->getFieldType());
-                }
-                GetExport().StartElement(XML_NAMESPACE_FIELD, XML_FIELDMARK, sal_False);
-                if (xFormField.is())
-                {
-                    FieldParamExporter(&GetExport(), xFormField->getParameters()).Export();
-                }
-                GetExport().EndElement(XML_NAMESPACE_FIELD, XML_FIELDMARK, sal_False);
             }
             else if (sType.equals(sSoftPageBreak))
             {
