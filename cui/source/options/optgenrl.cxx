@@ -71,7 +71,6 @@ struct GeneralTabPage_Impl
 // -----------------------------------------------------------------------
 
 // kommt aus adritem.cxx
-//CHINA001 extern String ConvertToStore_Impl( const String& );
 //copy from adritem.cxx, since it will leave in svx.
 String ConvertToStore_Impl( const String& rText )
 {

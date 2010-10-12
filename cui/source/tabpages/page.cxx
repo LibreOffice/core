@@ -68,9 +68,9 @@
 
 // #i4219#
 #include <svtools/optionsdrawinglayer.hxx>
-#include <svl/slstitm.hxx> //CHINA001
-#include <svl/aeitem.hxx> //CHINA001
-#include <sfx2/request.hxx> //CHINA001
+#include <svl/slstitm.hxx>
+#include <svl/aeitem.hxx>
+#include <sfx2/request.hxx>
 // configuration helper =======================================================
 
 /** Helper to get a configuration setting.
@@ -1756,7 +1756,7 @@ bool SvxPageDescPage::IsMarginOutOfRange()
     return bRet;
 }
 
-void SvxPageDescPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
+void SvxPageDescPage::PageCreated (SfxAllItemSet aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pModeItem,SfxAllEnumItem,SID_ENUM_PAGE_MODE,sal_False);
     SFX_ITEMSET_ARG (&aSet,pPaperStartItem,SfxAllEnumItem,SID_PAPER_START,sal_False);

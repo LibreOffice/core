@@ -84,11 +84,11 @@
 #include <svl/stritem.hxx>
 #include <editeng/charscaleitem.hxx>
 #include <editeng/charrotateitem.hxx>
-#include <svx/svxdlg.hxx> //CHINA001
-#include <cuires.hrc> //CHINA001
-#include <svl/intitem.hxx> //CHINA001
-#include <sfx2/request.hxx> //CHINA001
-#include "svx/flagsdef.hxx" //CHINA001
+#include <svx/svxdlg.hxx>
+#include <cuires.hrc>
+#include <svl/intitem.hxx>
+#include <sfx2/request.hxx>
+#include "svx/flagsdef.hxx"
 
 using namespace ::com::sun::star;
 
@@ -1738,14 +1738,13 @@ void SvxCharNamePage::SetPreviewBackgroundToCharacter()
 }
 
 // -----------------------------------------------------------------------
-void SvxCharNamePage::PageCreated (SfxAllItemSet aSet) //add CHINA001
+void SvxCharNamePage::PageCreated (SfxAllItemSet aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pFontListItem,SvxFontListItem,SID_ATTR_CHAR_FONTLIST,sal_False);
     SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE,sal_False);
     SFX_ITEMSET_ARG (&aSet,pDisalbeItem,SfxUInt16Item,SID_DISABLE_CTL,sal_False);
     if (pFontListItem)
         SetFontList(*pFontListItem);
-        //CHINA001 SetFontList(pFontListItem->GetFontList());
 
     if (pFlagItem)
     {
@@ -3014,7 +3013,7 @@ void SvxCharEffectsPage::SetPreviewBackgroundToCharacter()
 }
 
 // -----------------------------------------------------------------------
-void SvxCharEffectsPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
+void SvxCharEffectsPage::PageCreated (SfxAllItemSet aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pDisableCtlItem,SfxUInt16Item,SID_DISABLE_CTL,sal_False);
     SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE,sal_False);
@@ -3790,7 +3789,7 @@ void SvxCharPositionPage::SetPreviewBackgroundToCharacter()
     m_bPreviewBackgroundToCharacter = TRUE;
 }
 // -----------------------------------------------------------------------
-void SvxCharPositionPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
+void SvxCharPositionPage::PageCreated (SfxAllItemSet aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE,sal_False);
     if (pFlagItem)
@@ -3853,25 +3852,25 @@ void SvxCharTwoLinesPage::Initialize()
 
 void SvxCharTwoLinesPage::SelectCharacter( ListBox* pBox )
 {
-    //CHINA001 SvxCharacterMap aDlg( this );
+
     bool bStart = pBox == &m_aStartBracketLB;
     //SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     //if(pFact)
     {
         //AbstractSvxCharacterMap* aDlg = pFact->CreateSvxCharacterMap( this,  RID_SVXDLG_CHARMAP );
         SvxCharacterMap* aDlg = new SvxCharacterMap( this );
-        aDlg->DisableFontSelection();//CHINA001 aDlg.DisableFontSelection();
+        aDlg->DisableFontSelection();
 
-        if ( aDlg->Execute() == RET_OK )//CHINA001 ( aDlg.Execute() == RET_OK )
+        if ( aDlg->Execute() == RET_OK )
         {
-            sal_Unicode cChar = (sal_Unicode) aDlg->GetChar();//CHINA001 aDlg.GetChar();
+            sal_Unicode cChar = (sal_Unicode) aDlg->GetChar();
             SetBracket( cChar, bStart );
         }
         else
         {
             pBox->SelectEntryPos( bStart ? m_nStartBracketPosition : m_nEndBracketPosition );
         }
-        delete aDlg; //add CHINA001
+        delete aDlg;
     }
 }
 
@@ -4032,9 +4031,7 @@ BOOL SvxCharTwoLinesPage::FillItemSet( SfxItemSet& rSet )
 
     return bModified;
 }
-/* -----------------------------04.12.00 09:48--------------------------------
 
- ---------------------------------------------------------------------------*/
 void    SvxCharTwoLinesPage::UpdatePreview_Impl()
 {
     sal_Unicode cStart = m_aStartBracketLB.GetSelectEntryPos() > 0
@@ -4052,7 +4049,7 @@ void SvxCharTwoLinesPage::SetPreviewBackgroundToCharacter()
 }
 
 // -----------------------------------------------------------------------
-void SvxCharTwoLinesPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
+void SvxCharTwoLinesPage::PageCreated (SfxAllItemSet aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE,sal_False);
     if (pFlagItem)

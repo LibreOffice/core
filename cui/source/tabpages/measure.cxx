@@ -49,8 +49,8 @@
 #include <dialmgr.hxx>
 #include "svx/dlgutil.hxx"
 #include <svx/strarray.hxx>
-#include <sfx2/request.hxx> //add CHINA001
-#include "svx/ofaitem.hxx" //add CHINA001
+#include <sfx2/request.hxx>
+#include "svx/ofaitem.hxx"
 
 static USHORT pRanges[] =
 {
@@ -862,7 +862,7 @@ void SvxMeasurePage::FillUnitLB()
         aLbUnit.SetEntryData( nPos, (void*)nUnit );
     }
 }
-void SvxMeasurePage::PageCreated (SfxAllItemSet aSet) //add CHINA001
+void SvxMeasurePage::PageCreated (SfxAllItemSet aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pOfaPtrItem,OfaPtrItem,SID_OBJECT_LIST,sal_False);
 

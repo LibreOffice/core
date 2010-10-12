@@ -1777,7 +1777,7 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
 
                 AddDicBoxEntry( xNewDic, (USHORT) nLen );
             }
-            delete aDlg; //add by CHINA001
+            delete aDlg;
         }
     }
     else if (&aLinguDicsEditPB == pBtn)

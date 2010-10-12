@@ -52,8 +52,8 @@
 #include "textattr.hrc"
 #include <dialmgr.hxx>
 #include "svx/dlgutil.hxx"
-#include <sfx2/request.hxx> //add CHINA001
-#include <svx/ofaitem.hxx> //add CHINA001
+#include <sfx2/request.hxx>
+#include <svx/ofaitem.hxx>
 #include <editeng/writingmodeitem.hxx>
 
 static USHORT pRanges[] =
@@ -81,7 +81,6 @@ static USHORT pRanges[] =
 //CHINA001 SetTabPage( pPage );
 //CHINA001 SetText( pPage->GetText() );
 //CHINA001 }
-//CHINA001
 /*************************************************************************
 |*
 |* Dtor

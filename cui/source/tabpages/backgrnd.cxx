@@ -64,9 +64,9 @@
 #include <dialmgr.hxx>
 #include <svx/htmlmode.hxx>
 #include <svtools/controldims.hrc>
-#include <svx/flagsdef.hxx> //CHINA001
-#include <svl/intitem.hxx> //CHINA001
-#include <sfx2/request.hxx> //CHINA001
+#include <svx/flagsdef.hxx>
+#include <svl/intitem.hxx>
+#include <sfx2/request.hxx>
 using namespace ::com::sun::star;
 // static ----------------------------------------------------------------
 
@@ -1959,7 +1959,7 @@ void SvxBackgroundTabPage::EnableTransparency(BOOL bColor, BOOL bGraphic)
     }
 }
 
-void SvxBackgroundTabPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
+void SvxBackgroundTabPage::PageCreated (SfxAllItemSet aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE,sal_False);
     if (pFlagItem)

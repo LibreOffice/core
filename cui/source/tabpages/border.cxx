@@ -51,9 +51,9 @@
 #include <dialmgr.hxx>
 #include "svx/htmlmode.hxx"
 #include <vcl/msgbox.hxx>
-#include "svx/flagsdef.hxx" //CHINA001
+#include "svx/flagsdef.hxx"
 #include <sfx2/request.hxx>
-#include <svl/intitem.hxx> //CHINA001
+#include <svl/intitem.hxx>
 #include <sfx2/itemconnect.hxx>
 #include "borderconn.hxx"
 
@@ -1245,9 +1245,6 @@ IMPL_LINK( SvxBorderTabPage, SyncHdl_Impl, CheckBox*, pBox)
     return 0;
 }
 
-/* -----------------------------03.06.2002 10:15------------------------------
-
- ---------------------------------------------------------------------------*/
 void SvxBorderTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
@@ -1256,7 +1253,7 @@ void SvxBorderTabPage::DataChanged( const DataChangedEvent& rDCEvt )
     SfxTabPage::DataChanged( rDCEvt );
 }
 
-void SvxBorderTabPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
+void SvxBorderTabPage::PageCreated (SfxAllItemSet aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pSWModeItem,SfxUInt16Item,SID_SWMODE_TYPE,sal_False);
     SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE,sal_False);

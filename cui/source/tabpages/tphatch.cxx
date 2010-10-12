@@ -259,18 +259,18 @@ long SvxHatchTabPage::CheckChanges_Impl()
         ResMgr& rMgr = CUI_MGR();
         Image aWarningBoxImage = WarningBox::GetStandardImage();
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+        DBG_ASSERT(pFact, "Dialogdiet fail!");
         AbstractSvxMessDialog* aMessDlg = pFact->CreateSvxMessDialog( DLGWIN, RID_SVXDLG_MESSBOX,
                                                         SVX_RESSTR( RID_SVXSTR_HATCH ),
                                                         CUI_RESSTR( RID_SVXSTR_ASK_CHANGE_HATCH ),
                                                         &aWarningBoxImage );
-        DBG_ASSERT(aMessDlg, "Dialogdiet fail!");//CHINA001
-        aMessDlg->SetButtonText( MESS_BTN_1, //CHINA001 aMessDlg.SetButtonText( MESS_BTN_1,
+        DBG_ASSERT(aMessDlg, "Dialogdiet fail!");
+        aMessDlg->SetButtonText( MESS_BTN_1,
                                 String( ResId( RID_SVXSTR_CHANGE, rMgr ) ) );
-        aMessDlg->SetButtonText( MESS_BTN_2, //CHINA001 aMessDlg.SetButtonText( MESS_BTN_2,
+        aMessDlg->SetButtonText( MESS_BTN_2,
                                 String( ResId( RID_SVXSTR_ADD, rMgr ) ) );
 
-        short nRet = aMessDlg->Execute(); //CHINA001 short nRet = aMessDlg.Execute();
+        short nRet = aMessDlg->Execute();
 
         switch( nRet )
         {
@@ -291,7 +291,7 @@ long SvxHatchTabPage::CheckChanges_Impl()
             break;
             // return( TRUE ); // Abbruch
         }
-        delete aMessDlg; //add by CHINA001
+        delete aMessDlg;
     }
 
     USHORT nPos = aLbHatchings.GetSelectEntryPos();
@@ -518,9 +518,9 @@ IMPL_LINK( SvxHatchTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
     }
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+    DBG_ASSERT(pFact, "Dialogdiet fail!");
     AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc );
-    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+    DBG_ASSERT(pDlg, "Dialogdiet fail!");
     WarningBox*    pWarnBox = NULL;
     USHORT         nError   = RID_SVXSTR_WARN_NAME_DUPLICATE;
 
@@ -609,9 +609,9 @@ IMPL_LINK( SvxHatchTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
         String aOldName = aName;
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+        DBG_ASSERT(pFact, "Dialogdiet fail!");
         AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc );
-        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+        DBG_ASSERT(pDlg, "Dialogdiet fail!");
 
         long nCount = pHatchingList->Count();
         BOOL bDifferent = FALSE;
@@ -888,4 +888,3 @@ void SvxHatchTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 
     SvxTabPage::DataChanged( rDCEvt );
 }
-

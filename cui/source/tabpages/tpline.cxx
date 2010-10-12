@@ -389,7 +389,7 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
         // Auswertung, ob von einer anderen TabPage ein anderer Fuelltyp gesetzt wurde
         if( aLbLineStyle.GetSelectEntryPos() != 0 )
         {
-            if( nPageType == 2 ) // 1//CHINA001 if( *pPageType == 2 ) // 1
+            if( nPageType == 2 ) // 1
             {
                 aLbLineStyle.SelectEntryPos( *pPosDashLb + 2 ); // +2 wegen SOLID und INVLISIBLE
                 ChangePreviewHdl_Impl( this );
@@ -454,7 +454,7 @@ int SvxLineTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if( nDlgType == 0 ) // Linien-Dialog
     {
-        nPageType = 1; // evtl. fuer Erweiterungen//CHINA001 *pPageType = 1; // evtl. fuer Erweiterungen
+        nPageType = 1; // evtl. fuer Erweiterungen
         *pPosDashLb = aLbLineStyle.GetSelectEntryPos() - 2;// erster Eintrag SOLID !!!
         USHORT nPos = aLbStartStyle.GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )

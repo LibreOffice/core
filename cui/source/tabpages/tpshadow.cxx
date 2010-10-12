@@ -48,7 +48,7 @@
 #include <cuitabline.hxx>
 
 #include <svx/xlineit0.hxx>
-#include <sfx2/request.hxx> //add CHINA001
+#include <sfx2/request.hxx>
 
 #define DLGWIN this->GetParent()->GetParent()
 
@@ -217,13 +217,13 @@ void SvxShadowTabPage::ActivatePage( const SfxItemSet& rSet )
 {
     USHORT nPos;
     USHORT nCount;
-    //add CHINA001 Begin
+
     SFX_ITEMSET_ARG (&rSet,pPageTypeItem,SfxUInt16Item,SID_PAGE_TYPE,sal_False);
     if (pPageTypeItem)
         SetPageType(pPageTypeItem->GetValue());
-    //add CHINA001 end
-    if( nDlgType == 0 ) //CHINA001 // Flaechen-Dialogif( *pDlgType == 0 ) // Flaechen-Dialog
-    {
+
+    if( nDlgType == 0 )
+
         if( pColorTab )
         {
             // ColorTable
@@ -259,7 +259,7 @@ void SvxShadowTabPage::ActivatePage( const SfxItemSet& rSet )
 
                 ModifyShadowHdl_Impl( this );
             }
-            nPageType = PT_SHADOW;//CHINA001 *pPageType = PT_SHADOW;
+            nPageType = PT_SHADOW;
         }
     }
 }
@@ -379,9 +379,9 @@ BOOL SvxShadowTabPage::FillItemSet( SfxItemSet& rAttrs )
             }
         }
     }
-    //add CHINA001  begin
+
     rAttrs.Put (CntUInt16Item(SID_PAGE_TYPE,nPageType));
-    //add CHINA001  end
+
     return( bModified );
 }
 
@@ -593,7 +593,7 @@ void SvxShadowTabPage::PointChanged( Window* pWindow, RECT_POINT eRcPt )
     ModifyShadowHdl_Impl( pWindow );
 }
 
-void SvxShadowTabPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
+void SvxShadowTabPage::PageCreated (SfxAllItemSet aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pColorTabItem,SvxColorTableItem,SID_COLOR_TABLE,sal_False);
     SFX_ITEMSET_ARG (&aSet,pPageTypeItem,SfxUInt16Item,SID_PAGE_TYPE,sal_False);

@@ -255,18 +255,18 @@ void SvxLineDefTabPage::CheckChanges_Impl()
         ResMgr& rMgr = CUI_MGR();
         Image aWarningBoxImage = WarningBox::GetStandardImage();
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+        DBG_ASSERT(pFact, "Dialogdiet fail!");
         AbstractSvxMessDialog* aMessDlg = pFact->CreateSvxMessDialog( DLGWIN, RID_SVXDLG_MESSBOX,
                                                     SVX_RESSTR( RID_SVXSTR_LINESTYLE ),
                                                     String( ResId( RID_SVXSTR_ASK_CHANGE_LINESTYLE, rMgr ) ),
                                                     &aWarningBoxImage );
-        DBG_ASSERT(aMessDlg, "Dialogdiet fail!");//CHINA001
-        aMessDlg->SetButtonText( MESS_BTN_1, //CHINA001 aMessDlg.SetButtonText( MESS_BTN_1,
+        DBG_ASSERT(aMessDlg, "Dialogdiet fail!");
+        aMessDlg->SetButtonText( MESS_BTN_1,
                                 String( ResId( RID_SVXSTR_CHANGE, rMgr ) ) );
-        aMessDlg->SetButtonText( MESS_BTN_2, //CHINA001 aMessDlg.SetButtonText( MESS_BTN_2,
+        aMessDlg->SetButtonText( MESS_BTN_2,
                                 String( ResId( RID_SVXSTR_ADD, rMgr ) ) );
 
-        short nRet = aMessDlg->Execute(); //CHINA001 short nRet = aMessDlg.Execute();
+        short nRet = aMessDlg->Execute();
 
         switch( nRet )
         {
@@ -289,7 +289,7 @@ void SvxLineDefTabPage::CheckChanges_Impl()
             break;
             // return( TRUE ); // Abbruch
         }
-        delete aMessDlg; //add by CHINA001
+        delete aMessDlg;
     }
 
 
@@ -590,9 +590,9 @@ IMPL_LINK( SvxLineDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
     }
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+    DBG_ASSERT(pFact, "Dialogdiet fail!");
     AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc );
-    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+    DBG_ASSERT(pDlg, "Dialogdiet fail!");
     BOOL bLoop = TRUE;
 
     while ( bLoop && pDlg->Execute() == RET_OK )
@@ -668,9 +668,9 @@ IMPL_LINK( SvxLineDefTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
         String aOldName = aName;
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+        DBG_ASSERT(pFact, "Dialogdiet fail!");
         AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc );
-        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+        DBG_ASSERT(pDlg, "Dialogdiet fail!");
 
         long nCount = pDashList->Count();
         BOOL bDifferent = FALSE;
@@ -1007,4 +1007,3 @@ void SvxLineDefTabPage::DataChanged( const DataChangedEvent& rDCEvt )
         aLbLineStyles.SelectEntryPos( nOldSelect );
     }
 }
-

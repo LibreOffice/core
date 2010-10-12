@@ -75,11 +75,11 @@
 #include <vector>
 #include "sfx2/opengrf.hxx"
 
-#include <cuires.hrc> //CHINA001
-#include <sfx2/request.hxx> //CHINA001
-#include <svl/aeitem.hxx> //add CHINA001
-#include <svl/stritem.hxx>//add CHINA001
-#include <svl/slstitm.hxx> //add CHINA001
+#include <cuires.hrc>
+#include <sfx2/request.hxx>
+#include <svl/aeitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/slstitm.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -627,9 +627,7 @@ IMPL_LINK(SvxBulletPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
     return 0;
 }
 
-/*-----------------06.06.97 11.16-------------------
 
---------------------------------------------------*/
 IMPL_LINK(SvxBulletPickTabPage, DoubleClickHdl_Impl, ValueSet*, EMPTYARG)
 {
     NumSelectHdl_Impl(pExamplesVS);
@@ -638,7 +636,7 @@ IMPL_LINK(SvxBulletPickTabPage, DoubleClickHdl_Impl, ValueSet*, EMPTYARG)
     return 0;
 }
 
-//Add CHINA001
+
 void SvxBulletPickTabPage::PageCreated(SfxAllItemSet aSet)
 {
 
@@ -649,7 +647,7 @@ void SvxBulletPickTabPage::PageCreated(SfxAllItemSet aSet)
 
 
 }
-//end of add CHINA001
+
 /**************************************************************************/
 /*                                                                        */
 /*                                                                        */
@@ -917,9 +915,6 @@ IMPL_LINK(SvxNumPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
     return 0;
 }
 
-/*-----------------06.06.97 11.16-------------------
-
---------------------------------------------------*/
 IMPL_LINK(SvxNumPickTabPage, DoubleClickHdl_Impl, ValueSet*, EMPTYARG)
 {
     NumSelectHdl_Impl(pExamplesVS);
@@ -928,7 +923,6 @@ IMPL_LINK(SvxNumPickTabPage, DoubleClickHdl_Impl, ValueSet*, EMPTYARG)
     return 0;
 }
 
-//add CHINA001 begin
 void SvxNumPickTabPage::PageCreated(SfxAllItemSet aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pNumCharFmt,SfxStringItem,SID_NUM_CHAR_FMT,sal_False);
@@ -938,10 +932,7 @@ void SvxNumPickTabPage::PageCreated(SfxAllItemSet aSet)
     if (pNumCharFmt &&pBulletCharFmt)
         SetCharFmtNames( pNumCharFmt->GetValue(),pBulletCharFmt->GetValue());
 }
-//end of CHINA001
-/*-----------------07.02.97 15.59-------------------
 
---------------------------------------------------*/
 void lcl_PaintLevel(OutputDevice* pVDev, sal_Int16 nNumberingType,
                         const OUString& rBulletChar, const OUString& rText, const OUString& rFontName,
                         Point& rLeft, Font& rRuleFont, const Font& rTextFont)
@@ -1223,9 +1214,6 @@ IMPL_LINK(SvxBitmapPickTabPage, LinkBmpHdl_Impl, CheckBox*, EMPTYARG )
     }
     return 0;
 }
-/*-----------------13.02.97 09.40-------------------
-
---------------------------------------------------*/
 
 //CHINA001 SvxBmpNumValueSet::SvxBmpNumValueSet( Window* pParent, const ResId& rResId/*, const List& rStrNames*/ ) :
 //CHINA001
@@ -1241,18 +1229,11 @@ IMPL_LINK(SvxBitmapPickTabPage, LinkBmpHdl_Impl, CheckBox*, EMPTYARG )
 //CHINA001 aFormatTimer.SetTimeoutHdl(LINK(this, SvxBmpNumValueSet, FormatHdl_Impl));
 //CHINA001 }
 //CHINA001
-//CHINA001 /*-----------------13.02.97 09.41-------------------
-//CHINA001
-//CHINA001 --------------------------------------------------*/
-//CHINA001
 //CHINA001 SvxBmpNumValueSet::~SvxBmpNumValueSet()
 //CHINA001 {
 //CHINA001 GalleryExplorer::EndLocking(GALLERY_THEME_BULLETS);
 //CHINA001 aFormatTimer.Stop();
 //CHINA001 }
-//CHINA001 /*-----------------13.02.97 09.41-------------------
-//CHINA001
-//CHINA001 --------------------------------------------------*/
 //CHINA001
 //CHINA001 void     SvxBmpNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 //CHINA001 {
@@ -1283,10 +1264,6 @@ IMPL_LINK(SvxBitmapPickTabPage, LinkBmpHdl_Impl, CheckBox*, EMPTYARG )
 //CHINA001      }
 //CHINA001  }
 //CHINA001 }
-//CHINA001
-//CHINA001 /*-----------------14.02.97 07.34-------------------
-//CHINA001
-//CHINA001 --------------------------------------------------*/
 //CHINA001
 //CHINA001 IMPL_LINK(SvxBmpNumValueSet, FormatHdl_Impl, Timer*, EMPTYARG)
 //CHINA001 {
@@ -3958,7 +3935,7 @@ void SvxNumOptionsTabPage::SetModified(BOOL bRepaint)
     }
 }
 
-//Add CHINA001
+
 void SvxNumOptionsTabPage::PageCreated(SfxAllItemSet aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pListItem,SfxStringListItem,SID_CHAR_FMT_LIST_BOX,sal_False);
@@ -3983,10 +3960,6 @@ void SvxNumOptionsTabPage::PageCreated(SfxAllItemSet aSet)
     if (pMetricItem)
         SetMetric(static_cast<FieldUnit>(pMetricItem->GetValue()));
 }
-
-//end of add CHINA001
-
-//add CHINA001 begin
 
 void SvxNumPositionTabPage::PageCreated(SfxAllItemSet aSet)
 {

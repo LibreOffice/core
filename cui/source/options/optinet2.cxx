@@ -61,7 +61,7 @@
 #define _SVX_OPTINET2_CXX
 #include <dialmgr.hxx>
 #include "optinet2.hxx"
-#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/svxdlg.hxx>
 #include <cuires.hrc>
 #include "optinet2.hrc"
 #include "helpid.hrc"
@@ -108,7 +108,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::sfx2;
 using ::rtl::OUString;
 
-//CHINA001 copy from multipat.hxx begin
+
 // define ----------------------------------------------------------------
 
 // different delimiter for Unix (:) and Windows (;)
@@ -118,7 +118,7 @@ using ::rtl::OUString;
 #else
 #define CLASSPATH_DELIMITER ';'
 #endif
-//CHINA001 copy from multipat.hxx end
+
 // static ----------------------------------------------------------------
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
