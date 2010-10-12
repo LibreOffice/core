@@ -223,11 +223,14 @@ OfficeIPCThread*    OfficeIPCThread::pGlobalOfficeIPCThread = 0;
 namespace { struct Security : public rtl::Static<OSecurity, Security> {}; }
 ::osl::Mutex*       OfficeIPCThread::pOfficeIPCThreadMutex = 0;
 
-
+// Turns a string in aMsg such as file://home/foo/.libreoffice/3
+// Into a hex string of well known length ff132a86...
 String CreateMD5FromString( const OUString& aMsg )
 {
-    // PRE: aStr "file"
-    // BACK: Str "ababab....0f" Hexcode String
+#if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
+    fprintf (stderr, "create md5 frim '%s'\n",
+             (const sal_Char *)rtl::OUStringToOString (aMsg, RTL_TEXTENCODING_UTF8));
+#endif
 
     rtlDigest handle = rtl_digest_create( rtl_Digest_AlgorithmMD5 );
     if ( handle > 0 )

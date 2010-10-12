@@ -71,6 +71,26 @@ do
   esac
 done
 
+# test for availability of the fast external splash
+for arg in $@; do
+    if [ "$arg" = "-nologo" -o "$arg" = "-no-oosplash" ]; then
+       no_oosplash=y
+    fi
+done
+
+# Setup our app as oosplash, but try to avoid executing pagein,
+# and other expensive environment setup pieces wherever possible
+# for a second started office
+if [ "$sd_binary" = "soffice.bin" -a -x "$sd_prog/oosplash.bin" ] && [ "$no_oosplash" != "y" ] ; then
+    sd_binary="oosplash.bin"
+
+    export QSTART_CHECK_ONLY=1
+    if "$sd_prog/$sd_binary" -qsend-and-report $*; then
+        exit 0
+    fi
+    unset QSTART_CHECK_ONLY
+fi
+
 # pagein
 sd_pagein_args=@pagein-common
 for sd_arg in "$@"; do

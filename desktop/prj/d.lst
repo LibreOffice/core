@@ -10,6 +10,7 @@ mkdir: %_DEST%\bin%_EXT%\odf4ms
 ..\%__SRC%\bin\officeloader.exe %_DEST%\bin%_EXT%\soffice.exe
 ..\%__SRC%\bin\soffice %_DEST%\bin%_EXT%\soffice.bin
 ..\%__SRC%\bin\soffice_mac %_DEST%\bin%_EXT%\soffice
+..\%__SRC%\bin\oosplash %_DEST%\bin%_EXT%\oosplash.bin
 ..\%__SRC%\bin\so\soffice.bin %_DEST%\bin%_EXT%\so\soffice.bin
 ..\%__SRC%\bin\so\officeloader.exe %_DEST%\bin%_EXT%\so\soffice.exe
 ..\%__SRC%\bin\so\soffice %_DEST%\bin%_EXT%\so\soffice.bin

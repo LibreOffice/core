@@ -527,6 +527,11 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
         SetBoolParam_Impl( CMD_BOOLPARAM_HELPMATH, sal_True );
         return sal_True;
     }
+    else if ( aArgStr.Copy(0, 13).EqualsIgnoreCaseAscii( "-splash-pipe=" ))
+    {
+        AddStringListParam_Impl( CMD_STRINGPARAM_SPLASHPIPE, aArgStr.Copy( 13 ) );
+        return sal_True;
+    }
     #ifdef MACOSX
     /* #i84053# ignore -psn on Mac
        Platform dependent #ifdef here is ugly, however this is currently
@@ -678,6 +683,14 @@ void CommandLineArgs::SetBoolParam( BoolParam eParam, sal_Bool bNewValue )
 
     OSL_ASSERT( ( eParam >= 0 && eParam < CMD_BOOLPARAM_COUNT ) );
     m_aBoolParams[eParam] = bNewValue;
+}
+
+const rtl::OUString& CommandLineArgs::GetStringParam( StringParam eParam ) const
+{
+       osl::MutexGuard  aMutexGuard( m_aMutex );
+
+       OSL_ASSERT( ( eParam >= 0 && eParam < CMD_STRINGPARAM_COUNT ) );
+       return m_aStrParams[eParam];
 }
 
 sal_Bool CommandLineArgs::IsMinimized() const
@@ -981,6 +994,7 @@ sal_Bool CommandLineArgs::IsEmptyOrAcceptOnly() const
     osl::MutexGuard  aMutexGuard( m_aMutex );
 
     return m_eArgumentCount == NONE ||
+           ( ( m_eArgumentCount == ONE ) && ( m_aStrParams[ CMD_STRINGPARAM_SPLASHPIPE ].getLength() )) ||
            ( ( m_eArgumentCount == ONE ) && ( m_aStrParams[ CMD_STRINGPARAM_ACCEPT ].getLength() )) ||
            ( ( m_eArgumentCount == ONE ) && m_aBoolParams[ CMD_BOOLPARAM_PSN ] );
 }

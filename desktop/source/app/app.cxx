@@ -740,6 +740,13 @@ void Desktop::Init()
     }
 }
 
+void Desktop::InitFinished()
+{
+    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::Desktop::InitFinished" );
+
+    CloseSplashScreen();
+}
+
 void Desktop::DeInit()
 {
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::Desktop::DeInit" );
@@ -1546,6 +1553,7 @@ void Desktop::Main()
     OpenSplashScreen();
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (lo119109) Desktop::Main } OpenSplashScreen" );
 
+    SetSplashScreenProgress(10);
     {
         UserInstall::UserInstallError instErr_fin = UserInstall::finalize();
         if ( instErr_fin != UserInstall::E_None)
@@ -1561,7 +1569,7 @@ void Desktop::Main()
         }
         // refresh path information
         utl::Bootstrap::reloadData();
-        SetSplashScreenProgress(25);
+        SetSplashScreenProgress(20);
     }
 
     Reference< XMultiServiceFactory > xSMgr =
@@ -1579,7 +1587,7 @@ void Desktop::Main()
     {
         RegisterServices( xSMgr );
 
-        //SetSplashScreenProgress(15);
+        SetSplashScreenProgress(25);
 
 #ifndef UNX
         if ( pCmdLineArgs->IsHelp() ) {
@@ -1617,7 +1625,7 @@ void Desktop::Main()
         //  Read the common configuration items for optimization purpose
         if ( !InitializeConfiguration() ) return;
 
-        //SetSplashScreenProgress(20);
+        SetSplashScreenProgress(30);
 
         // set static variable to enabled/disable crash reporter
         retrieveCrashReporterState();
@@ -1678,10 +1686,10 @@ void Desktop::Main()
 #endif
 
         SetDisplayName( aTitle );
-//        SetSplashScreenProgress(30);
+        SetSplashScreenProgress(35);
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ create SvtPathOptions and SvtLanguageOptions" );
         pPathOptions.reset( new SvtPathOptions);
-//        SetSplashScreenProgress(40);
+        SetSplashScreenProgress(40);
 //        pLanguageOptions = new SvtLanguageOptions(sal_True);
 //        SetSplashScreenProgress(45);
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} create SvtPathOptions and SvtLanguageOptions" );
@@ -1779,7 +1787,7 @@ void Desktop::Main()
                     OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ))), UNO_QUERY );
                 if (xDesktopFrame.is())
                 {
-    //                SetSplashScreenProgress(60);
+                    SetSplashScreenProgress(60);
                     Reference< XFrame > xBackingFrame;
                     Reference< ::com::sun::star::awt::XWindow > xContainerWindow;
 
@@ -1796,7 +1804,7 @@ void Desktop::Main()
                         Reference< XController > xBackingComp(
                             xSMgr->createInstanceWithArguments(OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.StartModule") ), lArgs),
                             UNO_QUERY);
-    //                    SetSplashScreenProgress(80);
+                        SetSplashScreenProgress(80);
                         if (xBackingComp.is())
                         {
                             Reference< ::com::sun::star::awt::XWindow > xBackingWin(xBackingComp, UNO_QUERY);
@@ -1836,7 +1844,7 @@ void Desktop::Main()
         return;
     }
     */
-//    SetSplashScreenProgress(55);
+    SetSplashScreenProgress(55);
 
     SvtFontSubstConfig().Apply();
 
@@ -1845,7 +1853,7 @@ void Desktop::Main()
     aAppearanceCfg.SetApplicationDefaults( this );
     SvtAccessibilityOptions aOptions;
     aOptions.SetVCLSettings();
-//    SetSplashScreenProgress(60);
+    SetSplashScreenProgress(60);
 
     if ( !bRestartRequested )
     {
@@ -1859,7 +1867,7 @@ void Desktop::Main()
         // use system window dialogs
         Application::SetSystemWindowMode( SYSTEMWINDOW_MODE_DIALOG );
 
-    //    SetSplashScreenProgress(80);
+        SetSplashScreenProgress(80);
 
         if ( !bTerminateRequested && !pCmdLineArgs->IsInvisible() &&
              !pCmdLineArgs->IsNoQuickstart() )
@@ -3196,14 +3204,18 @@ void Desktop::OpenSplashScreen()
         else if ( pCmdLine->IsWeb() )
             aAppName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "web" ));
 
+        // Which splash to use
+        OUString aSplashService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.SplashScreen" ));
+        if ( pCmdLine->GetStringParam( CommandLineArgs::CMD_STRINGPARAM_SPLASHPIPE ).getLength() )
+            aSplashService = OUString::createFromAscii("com.sun.star.office.PipeSplashScreen");
+
         bVisible = sal_True;
         Sequence< Any > aSeq( 2 );
         aSeq[0] <<= bVisible;
         aSeq[1] <<= aAppName;
         m_rSplashScreen = Reference<XStatusIndicator>(
             comphelper::getProcessServiceFactory()->createInstanceWithArguments(
-            OUString::createFromAscii("com.sun.star.office.SplashScreen"),
-            aSeq), UNO_QUERY);
+            aSplashService, aSeq), UNO_QUERY);
 
         if(m_rSplashScreen.is())
                 m_rSplashScreen->start(OUString::createFromAscii("SplashScreen"), 100);
