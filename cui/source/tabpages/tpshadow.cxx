@@ -223,7 +223,7 @@ void SvxShadowTabPage::ActivatePage( const SfxItemSet& rSet )
         SetPageType(pPageTypeItem->GetValue());
 
     if( nDlgType == 0 )
-
+    {
         if( pColorTab )
         {
             // ColorTable
