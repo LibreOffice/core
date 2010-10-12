@@ -45,7 +45,6 @@ SLOFILES=       $(SLO)$/mutex.obj       \
                 $(SLO)$/module.obj      \
                 $(SLO)$/timer.obj       \
                 $(SLO)$/process.obj     \
-                $(SLO)$/pipe.obj        \
                 $(SLO)$/xception.obj
 
 
@@ -58,7 +57,6 @@ OBJFILES=       $(OBJ)$/mutex.obj       \
                 $(OBJ)$/module.obj      \
                 $(OBJ)$/timer.obj       \
                 $(OBJ)$/process.obj     \
-                $(OBJ)$/pipe.obj        \
                 $(OBJ)$/xception.obj
 
 .ENDIF
