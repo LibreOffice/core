@@ -54,8 +54,7 @@
 #include "gallery.hrc"
 #include <vcl/svapp.hxx>
 #include <svx/fmmodel.hxx>
-#include <svx/svxdlg.hxx> //CHINA001
-//CHINA001 #include <svx/dialogs.hrc> //CHINA001
+#include <svx/svxdlg.hxx>
 
 // -----------
 // - Defines -
@@ -1010,15 +1009,15 @@ void GalleryBrowser2::ImplExecute( USHORT nId )
                 if( pObj )
                 {
                     const String    aOldTitle( GetItemText( *mpCurTheme, *pObj, GALLERY_ITEM_TITLE ) );
-                    //CHINA001 TitleDialog      aDlg( this, aOldTitle );
+
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
                     {
                         AbstractTitleDialog* aDlg = pFact->CreateTitleDialog( this, aOldTitle );
-                        DBG_ASSERT(aDlg, "Dialogdiet fail!");//CHINA001
-                        if( aDlg->Execute() == RET_OK )//CHINA001 if( aDlg.Execute() == RET_OK )
+                        DBG_ASSERT(aDlg, "Dialogdiet fail!");
+                        if( aDlg->Execute() == RET_OK )
                         {
-                            String aNewTitle( aDlg->GetTitle() );//CHINA001 String aNewTitle( aDlg.GetTitle() );
+                            String aNewTitle( aDlg->GetTitle() );
 
                             if( ( !aNewTitle.Len() && pObj->GetTitle().Len() ) || ( aNewTitle != aOldTitle ) )
                             {
@@ -1031,7 +1030,7 @@ void GalleryBrowser2::ImplExecute( USHORT nId )
                         }
 
                         mpCurTheme->ReleaseObject( pObj );
-                        delete aDlg; //add CHINA001
+                        delete aDlg;
                     }
                 }
             }

@@ -893,7 +893,7 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
             if(pFact)
             {
                 AbstractFmShowColsDialog* pDlg = pFact->CreateFmShowColsDialog(NULL);
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                DBG_ASSERT(pDlg, "Dialogdiet fail!");
                 pDlg->SetColumns(xCols);
                 pDlg->Execute();
                 delete pDlg;

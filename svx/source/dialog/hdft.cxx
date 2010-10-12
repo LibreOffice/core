@@ -47,7 +47,7 @@
 
 #include <svx/hdft.hxx>
 #include <svx/pageitem.hxx>
-//CHINA001 #include "bbdlg.hxx"
+
 #include "dlgutil.hxx"
 #include <svx/dialmgr.hxx>
 #include "htmlmode.hxx"
@@ -59,8 +59,8 @@
 #include <editeng/sizeitem.hxx>
 #include <editeng/boxitem.hxx>
 
-#include <svx/svxdlg.hxx> //CHINA001
-#include <svx/dialogs.hrc> //CHINA001
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
 // static ----------------------------------------------------------------
 
 // --> OD 2004-06-18 #i19922#
@@ -544,13 +544,11 @@ IMPL_LINK( SvxHFPage, BackgroundHdl, Button *, EMPTYARG )
             pBBSet->Put( *pItem );
     }
 
-    //CHINA001 SvxBorderBackgroundDlg* pDlg =
-//CHINA001      new SvxBorderBackgroundDlg( this, *pBBSet, bEnableBackgroundSelector );
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
         SfxAbstractTabDialog* pDlg = pFact->CreateSvxBorderBackgroundDlg( this, *pBBSet, bEnableBackgroundSelector );
-        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+        DBG_ASSERT(pDlg, "Dialogdiet fail!");
         if ( pDlg->Execute() == RET_OK && pDlg->GetOutputItemSet() )
         {
             SfxItemIter aIter( *pDlg->GetOutputItemSet() );

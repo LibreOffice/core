@@ -448,12 +448,11 @@ const SfxPoolItem* SfxTabPage::GetExchangeItem( const SfxItemSet& rSet,
         return GetOldItem( rSet, nSlot );
 }
 
-// add CHINA001  begin
+
 void SfxTabPage::PageCreated( SfxAllItemSet /*aSet*/ )
 {
     DBG_ASSERT(0, "SfxTabPage::PageCreated should not be called");
-}//CHINA001
-// add CHINA001 end
+}
 
 // -----------------------------------------------------------------------
 

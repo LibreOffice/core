@@ -59,8 +59,8 @@
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <sdrpaintwindow.hxx>
 
-#include <svx/svxdlg.hxx> //CHINA001
-#include <svx/dialogs.hrc> //CHINA001
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
 #include <rtl/logfile.hxx>
 //............................................................................
 namespace svxform

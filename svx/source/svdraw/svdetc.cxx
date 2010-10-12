@@ -66,7 +66,7 @@
 #include <svx/xflbckit.hxx>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
-#include <vcl/svapp.hxx> //add CHINA001
+#include <vcl/svapp.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdotable.hxx>
