@@ -56,10 +56,10 @@
 #include <pgfnote.hrc>
 
 #define TWIP_TO_LBOX 5
+
 /*-----------------------------------------------------#---------------
     Beschreibung:   vordefinierte Linien in Point
  --------------------------------------------------------------------*/
-
 static const USHORT __FAR_DATA nLines[] = {
     0,
     50,
@@ -76,13 +76,10 @@ static USHORT __FAR_DATA aPageRg[] = {
     0
 };
 
-
 /*------------------------------------------------------------------------
  Beschreibung:  liefert zurueck, ob die Linienbreite nWidth bereits
                 in der Listbox enthalten ist.
 ------------------------------------------------------------------------*/
-
-
 BOOL lcl_HasLineWidth(USHORT nWidth)
 {
     for(USHORT i = 0; i < nLineCount; ++i) {
@@ -97,8 +94,6 @@ BOOL lcl_HasLineWidth(USHORT nWidth)
                 Arten, wie die Hoehe des Fussnotenbereiches angegeben
                 werden kann.
 ------------------------------------------------------------------------*/
-
-
 IMPL_LINK_INLINE_START( SwFootNotePage, HeightPage, Button *, EMPTYARG )
 {
     aMaxHeightEdit.Enable(FALSE);
@@ -118,8 +113,6 @@ IMPL_LINK_INLINE_END( SwFootNotePage, HeightMetric, Button *, EMPTYARG )
 /*------------------------------------------------------------------------
  Beschreibung:  Handler Grenzwerte
 ------------------------------------------------------------------------*/
-
-
 IMPL_LINK( SwFootNotePage, HeightModify, MetricField *, EMPTYARG )
 {
     aMaxHeightEdit.SetMax(aMaxHeightEdit.Normalize(lMaxHeight -
@@ -180,17 +173,10 @@ SwFootNotePage::~SwFootNotePage()
 {
 }
 
-
 SfxTabPage* SwFootNotePage::Create(Window *pParent, const SfxItemSet &rSet)
 {
     return new SwFootNotePage(pParent, rSet);
 }
-
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void SwFootNotePage::Reset(const SfxItemSet &rSet)
 {
@@ -257,8 +243,6 @@ void SwFootNotePage::Reset(const SfxItemSet &rSet)
 /*--------------------------------------------------------------------
     Beschreibung:   Attribute in den Set stopfen bei OK
  --------------------------------------------------------------------*/
-
-
 BOOL SwFootNotePage::FillItemSet(SfxItemSet &rSet)
 {
     SwPageFtnInfoItem aItem((const SwPageFtnInfoItem&)GetItemSet().Get(FN_PARAM_FTN_INFO));
@@ -358,6 +342,3 @@ USHORT* SwFootNotePage::GetRanges()
 {
     return aPageRg;
 }
-
-
-

@@ -40,16 +40,11 @@
 using namespace com::sun::star;
 using namespace rtl;
 
-/* -----------------------------01.03.01 16:04--------------------------------
-
- ---------------------------------------------------------------------------*/
 struct SwNumberingTypeListBox_Impl
 {
     uno::Reference<text::XNumberingTypeInfo> xInfo;
 };
-/* -----------------------------01.03.01 14:46--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwNumberingTypeListBox::SwNumberingTypeListBox( Window* pWin, const ResId& rResId,
         USHORT nTypeFlags ) :
     ListBox(pWin, rResId),
@@ -64,16 +59,12 @@ SwNumberingTypeListBox::SwNumberingTypeListBox( Window* pWin, const ResId& rResI
     pImpl->xInfo = uno::Reference<text::XNumberingTypeInfo>(xDefNum, uno::UNO_QUERY);
     Reload(nTypeFlags);
 }
-/* -----------------------------01.03.01 14:46--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwNumberingTypeListBox::~SwNumberingTypeListBox()
 {
     delete pImpl;
 }
-/* -----------------------------01.03.01 16:02--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwNumberingTypeListBox::Reload(USHORT nTypeFlags)
 {
     Clear();
@@ -148,9 +139,7 @@ void SwNumberingTypeListBox::Reload(USHORT nTypeFlags)
         SelectEntryPos(0);
     }
 }
-/* -----------------------------01.03.01 14:46--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Int16   SwNumberingTypeListBox::GetSelectedNumberingType()
 {
     sal_Int16 nRet = 0;
@@ -163,13 +152,10 @@ sal_Int16   SwNumberingTypeListBox::GetSelectedNumberingType()
 #endif
     return nRet;
 }
-/* -----------------------------01.03.01 14:46--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool    SwNumberingTypeListBox::SelectNumberingType(sal_Int16 nType)
 {
     USHORT nPos = GetEntryPos((void*)(ULONG)nType);
     SelectEntryPos( nPos );
     return LISTBOX_ENTRY_NOTFOUND != nPos;
 }
-

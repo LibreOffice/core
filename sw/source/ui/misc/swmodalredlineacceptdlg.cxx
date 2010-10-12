@@ -69,7 +69,6 @@
 
 #include <unomid.h>
 
-
 SwModalRedlineAcceptDlg::SwModalRedlineAcceptDlg(Window *pParent) :
     SfxModalDialog(pParent, SW_RES(DLG_MOD_REDLINE_ACCEPT))
 {
@@ -81,10 +80,6 @@ SwModalRedlineAcceptDlg::SwModalRedlineAcceptDlg(Window *pParent) :
     FreeResource();
 }
 
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
-
 SwModalRedlineAcceptDlg::~SwModalRedlineAcceptDlg()
 {
     AcceptAll(FALSE);   // Alles uebriggebliebene ablehnen
@@ -93,27 +88,15 @@ SwModalRedlineAcceptDlg::~SwModalRedlineAcceptDlg()
     delete pImplDlg;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwModalRedlineAcceptDlg::Activate()
 {
 }
-
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
 
 void SwModalRedlineAcceptDlg::Resize()
 {
     pImplDlg->Resize();
     SfxModalDialog::Resize();
 }
-
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
 
 void SwModalRedlineAcceptDlg::AcceptAll( BOOL bAccept )
 {
