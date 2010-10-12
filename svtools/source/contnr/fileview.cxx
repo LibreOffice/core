@@ -72,7 +72,7 @@
 #include <tools/config.hxx>
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
-#include <vos/timer.hxx>
+#include <salhelper/timer.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/sound.hxx>
 #include <unotools/ucbhelper.hxx>
@@ -90,7 +90,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::comphelper;
 using ::svt::SortingData_Impl;
 using ::svt::FolderDescriptor;
-using ::vos::TTimeValue;
 using ::rtl::OUString;
 
 #define ALL_FILES_FILTER    "*.*"
@@ -120,7 +119,7 @@ namespace
     //====================================================================
     //= CallbackTimer
     //====================================================================
-    class CallbackTimer : public ::vos::OTimer
+    class CallbackTimer : public ::salhelper::Timer
     {
     protected:
         ITimeoutHandler* m_pTimeoutHandler;
@@ -534,7 +533,7 @@ protected:
                                         m_pContentEnumerator;
     Link                                m_aCurrentAsyncActionHandler;
     ::osl::Condition                    m_aAsyncActionFinished;
-    ::rtl::Reference< ::vos::OTimer >   m_pCancelAsyncTimer;
+    ::rtl::Reference< ::salhelper::Timer > m_pCancelAsyncTimer;
     ::svt::EnumerationResult            m_eAsyncActionResult;
     bool                                m_bRunningAsyncAction;
     bool                                m_bAsyncActionCancelled;
@@ -2019,7 +2018,7 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
             "SvtFileView_Impl::GetFolderContent_Impl: invalid maximum timeout!" );
         if ( nMaxTimeout <= nMinTimeout )
             nMaxTimeout = nMinTimeout + 5000;
-        m_pCancelAsyncTimer->setRemainingTime( TTimeValue( nMaxTimeout - nMinTimeout ) );
+        m_pCancelAsyncTimer->setRemainingTime( salhelper::TTimeValue( nMaxTimeout - nMinTimeout ) );
             // we already waited for nMinTimeout milliseconds, so take this into account
         m_pCancelAsyncTimer->start();
 

@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#include <vos/timer.hxx>
+#include <salhelper/timer.hxx>
 #include <tools/debug.hxx>
 #include <vcl/outdev.hxx>
 #include <tools/poly.hxx>
@@ -410,7 +410,7 @@ class GraphicDisplayCacheEntry
 {
 private:
 
-    ::vos::TTimeValue           maReleaseTime;
+    ::salhelper::TTimeValue     maReleaseTime;
     const GraphicCacheEntry*    mpRefCacheEntry;
     GDIMetaFile*                mpMtf;
     BitmapEx*                   mpBmpEx;
@@ -463,8 +463,8 @@ public:
     ULONG                   GetOutDevDrawMode() const { return mnOutDevDrawMode; }
     USHORT              GetOutDevBitCount() const { return mnOutDevBitCount; }
 
-    void                        SetReleaseTime( const ::vos::TTimeValue& rReleaseTime ) { maReleaseTime = rReleaseTime; }
-    const ::vos::TTimeValue&    GetReleaseTime() const { return maReleaseTime; }
+    void                        SetReleaseTime( const ::salhelper::TTimeValue& rReleaseTime ) { maReleaseTime = rReleaseTime; }
+    const ::salhelper::TTimeValue&    GetReleaseTime() const { return maReleaseTime; }
 
     BOOL                        Matches( OutputDevice* pOut, const Point& /*rPtPixel*/, const Size& rSzPixel,
                                          const GraphicCacheEntry* pCacheEntry, const GraphicAttr& rAttr ) const
@@ -802,12 +802,12 @@ void GraphicCache::SetCacheTimeout( ULONG nTimeoutSeconds )
     if( mnReleaseTimeoutSeconds != nTimeoutSeconds )
     {
         GraphicDisplayCacheEntry*   pDisplayEntry = (GraphicDisplayCacheEntry*) maDisplayCache.First();
-        ::vos::TTimeValue           aReleaseTime;
+        ::salhelper::TTimeValue           aReleaseTime;
 
         if( ( mnReleaseTimeoutSeconds = nTimeoutSeconds ) != 0 )
         {
             osl_getSystemTime( &aReleaseTime );
-            aReleaseTime.addTime( ::vos::TTimeValue( nTimeoutSeconds, 0 ) );
+            aReleaseTime.addTime( ::salhelper::TTimeValue( nTimeoutSeconds, 0 ) );
         }
 
         while( pDisplayEntry )
@@ -898,10 +898,10 @@ BOOL GraphicCache::CreateDisplayCacheObj( OutputDevice* pOut, const Point& rPt, 
 
         if( GetCacheTimeout() )
         {
-            ::vos::TTimeValue aReleaseTime;
+            ::salhelper::TTimeValue aReleaseTime;
 
             osl_getSystemTime( &aReleaseTime );
-            aReleaseTime.addTime( ::vos::TTimeValue( GetCacheTimeout(), 0 ) );
+            aReleaseTime.addTime( ::salhelper::TTimeValue( GetCacheTimeout(), 0 ) );
             pNewEntry->SetReleaseTime( aReleaseTime );
         }
 
@@ -932,10 +932,10 @@ BOOL GraphicCache::CreateDisplayCacheObj( OutputDevice* pOut, const Point& rPt, 
 
         if( GetCacheTimeout() )
         {
-            ::vos::TTimeValue aReleaseTime;
+            ::salhelper::TTimeValue aReleaseTime;
 
             osl_getSystemTime( &aReleaseTime );
-            aReleaseTime.addTime( ::vos::TTimeValue( GetCacheTimeout(), 0 ) );
+            aReleaseTime.addTime( ::salhelper::TTimeValue( GetCacheTimeout(), 0 ) );
             pNewEntry->SetReleaseTime( aReleaseTime );
         }
 
@@ -962,7 +962,7 @@ BOOL GraphicCache::DrawDisplayCacheObj( OutputDevice* pOut, const Point& rPt, co
     {
         if( pDisplayCacheEntry->Matches( pOut, aPtPixel, aSzPixel, pCacheEntry, rAttr ) )
         {
-            ::vos::TTimeValue aReleaseTime;
+            ::salhelper::TTimeValue aReleaseTime;
 
             // put found object at last used position
             maDisplayCache.Insert( maDisplayCache.Remove( pDisplayCacheEntry ), LIST_APPEND );
@@ -970,7 +970,7 @@ BOOL GraphicCache::DrawDisplayCacheObj( OutputDevice* pOut, const Point& rPt, co
             if( GetCacheTimeout() )
             {
                 osl_getSystemTime( &aReleaseTime );
-                aReleaseTime.addTime( ::vos::TTimeValue( GetCacheTimeout(), 0 ) );
+                aReleaseTime.addTime( ::salhelper::TTimeValue( GetCacheTimeout(), 0 ) );
             }
 
             pDisplayCacheEntry->SetReleaseTime( aReleaseTime );
@@ -1037,14 +1037,14 @@ IMPL_LINK( GraphicCache, ReleaseTimeoutHdl, Timer*, pTimer )
 {
     pTimer->Stop();
 
-    ::vos::TTimeValue           aCurTime;
+    ::salhelper::TTimeValue           aCurTime;
     GraphicDisplayCacheEntry*   pDisplayEntry = (GraphicDisplayCacheEntry*) maDisplayCache.First();
 
     osl_getSystemTime( &aCurTime );
 
     while( pDisplayEntry )
     {
-        const ::vos::TTimeValue& rReleaseTime = pDisplayEntry->GetReleaseTime();
+        const ::salhelper::TTimeValue& rReleaseTime = pDisplayEntry->GetReleaseTime();
 
         if( !rReleaseTime.isEmpty() && ( rReleaseTime < aCurTime ) )
         {

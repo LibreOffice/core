@@ -395,8 +395,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/uuid.h>
 
-#include "unotools/configitem.hxx"
-#include "unotools/configmgr.hxx"
+#include <salhelper/timer.hxx>
 
 #include <sot/clsids.hxx>
 
@@ -428,7 +427,6 @@
 #include <vos/process.hxx>
 #include <vos/ref.hxx>
 #include <vos/refernce.hxx>
-#include <vos/timer.hxx>
 
 //---MARKER---
 

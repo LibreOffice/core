@@ -82,13 +82,14 @@
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 
+#include "salhelper/timer.hxx"
+
 #include "sys/stat.h"
 #include "sys/types.h"
 
 #include "vos/macros.hxx"
 #include "vos/mutex.hxx"
 #include "vos/process.hxx"
-#include "vos/timer.hxx"
 //---MARKER---
 #endif
 

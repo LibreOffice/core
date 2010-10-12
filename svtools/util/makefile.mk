@@ -122,6 +122,7 @@ SHL1STDLIBS+= \
         $(CPPULIB)			\
         $(VOSLIB)			\
         $(SALLIB)			\
+        $(SALHELPERLIB)			\
         $(ICUUCLIB)		\
         $(JVMFWKLIB) \
         $(BASEGFXLIB)
