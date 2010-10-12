@@ -404,9 +404,22 @@ static Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevic
             break;
 
         case META_LINE_ACTION:
+        {
+            const MetaLineAction& rMetaLineAction = static_cast<const MetaLineAction&>(rAct);
+            aActionBounds = Rectangle( rMetaLineAction.GetStartPoint(),  rMetaLineAction.GetEndPoint() );
+            const long nLineWidth(rMetaLineAction.GetLineInfo().GetWidth());
+            if(nLineWidth)
+            {
+                const long nHalfLineWidth((nLineWidth + 1) / 2);
+                aActionBounds.Left() -= nHalfLineWidth;
+                aActionBounds.Top() -= nHalfLineWidth;
+                aActionBounds.Right() += nHalfLineWidth;
+                aActionBounds.Bottom() += nHalfLineWidth;
+            }
             aActionBounds = Rectangle( static_cast<const MetaLineAction&>(rAct).GetStartPoint(),
                                        static_cast<const MetaLineAction&>(rAct).GetEndPoint() );
             break;
+        }
 
         case META_RECT_ACTION:
             aActionBounds = static_cast<const MetaRectAction&>(rAct).GetRect();
@@ -446,8 +459,20 @@ static Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevic
             break;
 
         case META_POLYLINE_ACTION:
-            aActionBounds = static_cast<const MetaPolyLineAction&>(rAct).GetPolygon().GetBoundRect();
+        {
+            const MetaPolyLineAction& rMetaPolyLineAction = static_cast<const MetaPolyLineAction&>(rAct);
+            aActionBounds = rMetaPolyLineAction.GetPolygon().GetBoundRect();
+            const long nLineWidth(rMetaPolyLineAction.GetLineInfo().GetWidth());
+            if(nLineWidth)
+            {
+                const long nHalfLineWidth((nLineWidth + 1) / 2);
+                aActionBounds.Left() -= nHalfLineWidth;
+                aActionBounds.Top() -= nHalfLineWidth;
+                aActionBounds.Right() += nHalfLineWidth;
+                aActionBounds.Bottom() += nHalfLineWidth;
+            }
             break;
+        }
 
         case META_POLYGON_ACTION:
             aActionBounds = static_cast<const MetaPolygonAction&>(rAct).GetPolygon().GetBoundRect();
