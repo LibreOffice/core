@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -279,3 +280,5 @@ void PageDescriptor::SetIsCurrentPage (const bool bIsCurrent)
 
 
 } } } // end of namespace ::sd::slidesorter::model
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

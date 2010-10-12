@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include "sal/config.h"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "cppuhelper/implbase1.hxx"
@@ -57,3 +58,4 @@ css::uno::Reference< css::office::XAnnotationEnumeration > SAL_CALL AnnotationAc
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
