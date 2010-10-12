@@ -1370,22 +1370,44 @@ BOOL SwCursor::SelectWordWT( sal_Int16 nWordType, const Point* pPt )
     const SwTxtNode* pTxtNd = GetNode()->GetTxtNode();
     if( pTxtNd && pBreakIt->GetBreakIter().is() )
     {
-        xub_StrLen nPtPos = GetPoint()->nContent.GetIndex();
-        Boundary aBndry( pBreakIt->GetBreakIter()->getWordBoundary(
-                            pTxtNd->GetTxt(), nPtPos,
-                            pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
-                            nWordType,
-                            bForward ));
-
-        if( aBndry.startPos != aBndry.endPos )
+        // Should we select the whole fieldmark?
+        const IDocumentMarkAccess* pMarksAccess = GetDoc()->getIDocumentMarkAccess( );
+        sw::mark::IMark* pMark = GetPoint() ? pMarksAccess->getFieldmarkFor( *GetPoint( ) ) : NULL;
+        if ( pMark )
         {
-            GetPoint()->nContent = (xub_StrLen)aBndry.endPos;
-            if( !IsSelOvr() )
+            const SwPosition rStart = pMark->GetMarkStart();
+            GetPoint()->nNode = rStart.nNode;
+            GetPoint()->nContent = rStart.nContent;
+
+            const SwPosition rEnd = pMark->GetMarkEnd();
+
+            if ( rStart != rEnd )
             {
                 SetMark();
-                GetMark()->nContent = (xub_StrLen)aBndry.startPos;
+                GetMark()->nNode = rEnd.nNode;
+                GetMark()->nContent = rEnd.nContent;
+            }
+            bRet = TRUE;
+        }
+        else
+        {
+            xub_StrLen nPtPos = GetPoint()->nContent.GetIndex();
+            Boundary aBndry( pBreakIt->GetBreakIter()->getWordBoundary(
+                                pTxtNd->GetTxt(), nPtPos,
+                                pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
+                                nWordType,
+                                bForward ));
+
+            if( aBndry.startPos != aBndry.endPos )
+            {
+                GetPoint()->nContent = (xub_StrLen)aBndry.endPos;
                 if( !IsSelOvr() )
-                    bRet = TRUE;
+                {
+                    SetMark();
+                    GetMark()->nContent = (xub_StrLen)aBndry.startPos;
+                    if( !IsSelOvr() )
+                        bRet = TRUE;
+                }
             }
         }
     }
