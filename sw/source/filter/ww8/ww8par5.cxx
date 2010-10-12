@@ -234,19 +234,28 @@ xub_StrLen _ReadFieldParams::FindNextStringPiece(const xub_StrLen nStart)
     while( (nLen > n) && (aData.GetChar( n ) == ' ') )
         ++n;
 
+    if ( aData.GetChar( n ) == 0x13 )
+    {
+        // Skip the nested field code since it's not supported
+        while ( ( nLen > n ) && ( aData.GetChar( n ) != 0x14 ) )
+            n++;
+    }
+
     if( nLen == n )
         return STRING_NOTFOUND;     // String End reached!
 
     if(     (aData.GetChar( n ) == '"')     // Anfuehrungszeichen vor Para?
         ||  (aData.GetChar( n ) == 0x201c)
-        ||  (aData.GetChar( n ) == 132) )
+        ||  (aData.GetChar( n ) == 132)
+        ||  (aData.GetChar( n ) == 0x14) )
     {
         n++;                        // Anfuehrungszeichen ueberlesen
         n2 = n;                     // ab hier nach Ende suchen
         while(     (nLen > n2)
                 && (aData.GetChar( n2 ) != '"')
                 && (aData.GetChar( n2 ) != 0x201d)
-                && (aData.GetChar( n2 ) != 147) )
+                && (aData.GetChar( n2 ) != 147)
+                && (aData.GetChar( n2 ) != 0x15) )
             n2++;                   // Ende d. Paras suchen
     }
     else                        // keine Anfuehrungszeichen
@@ -1025,6 +1034,8 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
 
     ASSERT(bOk, "WW8: Bad Field!\n");
     if (aF.nId == 33) aF.bCodeNest=false; //#124716#: do not recurse into nested page fields
+    bool bCodeNest = aF.bCodeNest;
+    if ( aF.nId == 6 ) bCodeNest = false; // We can handle them and loose the inner data
 
     maFieldStack.push_back(FieldEntry(*pPaM->GetPoint(), aF.nId));
 
@@ -1054,7 +1065,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
         return aF.nLen;
 
     // keine Routine vorhanden
-    if (bNested || !aWW8FieldTab[aF.nId] || aF.bCodeNest)
+    if (bNested || !aWW8FieldTab[aF.nId] || bCodeNest)
     {
         if( nFieldTagBad[nI] & nMask )      // Flag: Tag it when bad
             return Read_F_Tag( &aF );       // Resultat nicht als Text
@@ -1073,8 +1084,9 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
         if ( STRING_NOTFOUND == nSpacePos )
             nSpacePos = aStr.Len( );
         xub_StrLen nSearchPos = STRING_NOTFOUND;
-        if ( ( ( nSearchPos = aStr.Search('.') ) != STRING_NOTFOUND && nSearchPos < nSpacePos ) ||
-             ( ( nSearchPos = aStr.Search('/') ) != STRING_NOTFOUND && nSearchPos < nSpacePos ) )
+        if ( !( aStr.EqualsAscii( "=", 1, 1 ) ) && (
+                ( ( nSearchPos = aStr.Search('.') ) != STRING_NOTFOUND && nSearchPos < nSpacePos ) ||
+                ( ( nSearchPos = aStr.Search('/') ) != STRING_NOTFOUND && nSearchPos < nSpacePos ) ) )
             return aF.nLen;
         else
         {
@@ -1092,8 +1104,17 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
     {                                   // Lies Feld
         long nOldPos = pStrm->Tell();
         String aStr;
-        aF.nLCode = pSBase->WW8ReadString( *pStrm, aStr, pPlcxMan->GetCpOfs()+
-            aF.nSCode, aF.nLCode, eTextCharSet );
+        if ( aF.nId == 6 && aF.bCodeNest )
+        {
+            // TODO Extract the whole code string using the nested codes
+            aF.nLCode = pSBase->WW8ReadString( *pStrm, aStr, pPlcxMan->GetCpOfs() +
+                aF.nSCode, aF.nSRes - aF.nSCode - 1, eTextCharSet );
+        }
+        else
+        {
+            aF.nLCode = pSBase->WW8ReadString( *pStrm, aStr, pPlcxMan->GetCpOfs()+
+                aF.nSCode, aF.nLCode, eTextCharSet );
+        }
 
         // --> OD 2005-07-25 #i51312# - graphics inside field code not supported
         // by Writer. Thus, delete character 0x01, which stands for such a graphic.
@@ -2147,7 +2168,7 @@ eF_ResT SwWW8ImplReader::Read_F_Ref( WW8FieldDesc*, String& rStr )
             */
             SwGetRefField aFld(
                 (SwGetRefFieldType*)rDoc.GetSysFldType( RES_GETREFFLD ),
-                sOrigBkmName,REF_BOOKMARK,0,REF_CONTENT);
+                sBkmName,REF_BOOKMARK,0,REF_CONTENT);
             pReffingStck->NewAttr( *pPaM->GetPoint(), SwFmtFld(aFld) );
             pReffingStck->SetAttr( *pPaM->GetPoint(), RES_TXTATR_FIELD);
         }
