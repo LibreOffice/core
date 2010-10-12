@@ -106,7 +106,7 @@ namespace editeng
         static StringMap        m_aRecentlyUsedList;
 
         // general
-        AbstractHangulHanjaConversionDialog* //CHINA001 HangulHanjaConversionDialog*
+        AbstractHangulHanjaConversionDialog*
                                 m_pConversionDialog;    // the dialog to display for user interaction
         Window*                 m_pUIParent;            // the parent window for any UI we raise
         Reference< XMultiServiceFactory >
@@ -344,7 +344,7 @@ namespace editeng
             if(pFact)
             {
                 m_pConversionDialog = pFact->CreateHangulHanjaConversionDialog(m_pUIParent, m_ePrimaryConversionDirection );
-                DBG_ASSERT(m_pConversionDialog, "Dialogdiet fail!");//CHINA001
+                DBG_ASSERT(m_pConversionDialog, "Dialogdiet fail!");
 
                 m_pConversionDialog->EnableRubySupport( m_pAntiImpl->HasRubySupport() );
 

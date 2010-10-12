@@ -50,8 +50,8 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 
-#include <svx/svxdlg.hxx> //CHINA001
-#include <svx/dialogs.hrc> //CHINA001
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
 
 // #i37011#
 #include <svx/svdoashp.hxx>
@@ -809,12 +809,12 @@ void SdrEditView::DistributeMarkedObjects()
     if(nMark > 2)
     {
         SfxItemSet aNewAttr(pMod->GetItemPool());
-        //CHINA001 SvxDistributeDialog* pDlg = new SvxDistributeDialog(NULL, aNewAttr);
+
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {
             AbstractSvxDistributeDialog *pDlg = pFact->CreateSvxDistributeDialog(NULL, aNewAttr);
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");
 
             UINT16 nResult = pDlg->Execute();
 

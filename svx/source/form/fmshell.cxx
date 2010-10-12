@@ -88,28 +88,28 @@
 #include "fmdocumentclassification.hxx"
 #include "formtoolbars.hxx"
 
-#include <svx/svxdlg.hxx> //CHINA001
-#include <svx/dialogs.hrc> //CHINA001
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
 
 #include "svx/sdrobjectfilter.hxx"
 
-#define HANDLE_SQL_ERRORS( action, successflag, context, message )          \
-    try                                                                     \
-    {                                                                       \
-        successflag = sal_False;                                                \
-        action;                                                             \
-        successflag = sal_True;                                                 \
-    }                                                                       \
-    catch(::com::sun::star::sdbc::SQLException& e)                                                  \
-    {                                                                       \
-        ::com::sun::star::sdb::SQLContext eExtendedInfo =                                           \
-        GetImpl()->prependContextInfo(e, Reference< XInterface > (), context, ::rtl::OUString());              \
-        displayException(eExtendedInfo);                                    \
-    }                                                                       \
-    catch(Exception&)                                                           \
-    {                                                                       \
-        DBG_ERROR(message);                                                 \
-    }                                                                       \
+#define HANDLE_SQL_ERRORS( action, successflag, context, message )                  \
+    try                                                 \
+    {                                                   \
+        successflag = sal_False;                                    \
+        action;                                             \
+        successflag = sal_True;                                     \
+    }                                                   \
+    catch(::com::sun::star::sdbc::SQLException& e)                          \
+    {                                                   \
+        ::com::sun::star::sdb::SQLContext eExtendedInfo =                       \
+        GetImpl()->prependContextInfo(e, Reference< XInterface > (), context, ::rtl::OUString());   \
+        displayException(eExtendedInfo);                                \
+    }                                                   \
+    catch(Exception&)                                           \
+    {                                                   \
+        DBG_ERROR(message);                                         \
+    }                                                   \
 
 
 #define DO_SAFE_WITH_ERROR( action, message ) try { action; } catch(Exception&) { DBG_ERROR(message); }

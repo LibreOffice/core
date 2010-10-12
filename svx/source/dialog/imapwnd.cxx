@@ -882,7 +882,7 @@ void IMapWindow::DoPropertyDialog()
                 pModel->SetChanged( sal_True );
                 UpdateInfo( TRUE );
             }
-            delete aDlg; //add by CHINA001
+            delete aDlg;
         }
     }
 }
