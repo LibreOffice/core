@@ -30,7 +30,7 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
-#include <vos/pipe.hxx>
+#include <osl/pipe.hxx>
 #include <osl/security.hxx>
 #include <osl/signal.h>
 #include <rtl/ustring.hxx>
@@ -75,8 +75,8 @@ class OfficeIPCThread : public osl::Thread
     static OfficeIPCThread*     pGlobalOfficeIPCThread;
     static ::osl::Mutex*        pOfficeIPCThreadMutex;
 
-    vos::OPipe                  maPipe;
-    vos::OStreamPipe            maStreamPipe;
+    osl::Pipe                   maPipe;
+    osl::StreamPipe             maStreamPipe;
     rtl::OUString               maPipeIdent;
     bool                        mbDowning;
     bool                        mbRequestsEnabled;

@@ -49,12 +49,10 @@
 #include <rtl/bootstrap.hxx>
 #include <rtl/strbuf.hxx>
 #include <comphelper/processfactory.hxx>
-#include "osl/file.hxx"
+#include <osl/file.hxx>
 #include "rtl/process.h"
 #include "tools/getprocessworkingdir.hxx"
-#include "osl/file.hxx"
 
-using namespace vos;
 using namespace rtl;
 using namespace desktop;
 using namespace ::com::sun::star::uno;
@@ -506,20 +504,20 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
     {
         osl::Security &rSecurity = Security::get();
         // Try to create pipe
-        if ( pThread->maPipe.create( pThread->maPipeIdent.getStr(), OPipe::TOption_Create, rSecurity ))
+        if ( pThread->maPipe.create( pThread->maPipeIdent.getStr(), osl_Pipe_CREATE, rSecurity ))
         {
             // Pipe created
             nPipeMode = PIPEMODE_CREATED;
         }
-        else if( pThread->maPipe.create( pThread->maPipeIdent.getStr(), OPipe::TOption_Open, rSecurity )) // Creation not successfull, now we try to connect
+        else if( pThread->maPipe.create( pThread->maPipeIdent.getStr(), osl_Pipe_OPEN, rSecurity )) // Creation not successfull, now we try to connect
         {
             // Pipe connected to first office
             nPipeMode = PIPEMODE_CONNECTED;
         }
         else
         {
-            OPipe::TPipeError eReason = pThread->maPipe.getError();
-            if ((eReason == OPipe::E_ConnectionRefused) || (eReason == OPipe::E_invalidError))
+            oslPipeError eReason = pThread->maPipe.getError();
+            if ((eReason == osl_Pipe_E_ConnectionRefused) || (eReason == osl_Pipe_E_invalidError))
                 return IPC_STATUS_BOOTSTRAP_ERROR;
 
             // Wait for second office to be ready
@@ -540,7 +538,7 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
     else
     {
         // Seems another office is running. Pipe arguments to it and self terminate
-        pThread->maStreamPipe = pThread->maPipe;
+        osl::StreamPipe aStreamPipe(pThread->maPipe.getHandle());
 
         sal_Bool bWaitBeforeClose = sal_False;
         ByteString aArguments(RTL_CONSTASCII_STRINGPARAM(ARGUMENT_PREFIX));
@@ -563,13 +561,13 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
             }
         }
         // finaly, write the string onto the pipe
-        pThread->maStreamPipe.write( aArguments.GetBuffer(), aArguments.Len() );
-        pThread->maStreamPipe.write( "\0", 1 );
+        aStreamPipe.write( aArguments.GetBuffer(), aArguments.Len() );
+        aStreamPipe.write( "\0", 1 );
 
         // wait for confirmation #95361# #95425#
         ByteString aToken(sc_aConfirmationSequence);
         char *aReceiveBuffer = new char[aToken.Len()+1];
-        int n = pThread->maStreamPipe.read( aReceiveBuffer, aToken.Len() );
+        int n = aStreamPipe.read( aReceiveBuffer, aToken.Len() );
         aReceiveBuffer[n]='\0';
 
         delete pThread;
@@ -598,15 +596,15 @@ void OfficeIPCThread::DisableOfficeIPCThread()
         // send thread a termination message
         // this is done so the subsequent join will not hang
         // because the thread hangs in accept of pipe
-        OPipe Pipe( pOfficeIPCThread->maPipeIdent, OPipe::TOption_Open, Security::get() );
+        osl::StreamPipe aPipe ( pOfficeIPCThread->maPipeIdent, osl_Pipe_OPEN, Security::get() );
         //Pipe.send( TERMINATION_SEQUENCE, TERMINATION_LENGTH );
-        if (Pipe.isValid())
+        if (aPipe.is())
         {
-            Pipe.send( sc_aTerminationSequence, sc_nTSeqLength+1 ); // also send 0-byte
+            aPipe.send( sc_aTerminationSequence, sc_nTSeqLength+1 ); // also send 0-byte
 
             // close the pipe so that the streampipe on the other
             // side produces EOF
-            Pipe.close();
+            aPipe.close();
         }
 
         // release mutex to avoid deadlocks
@@ -661,11 +659,10 @@ void SAL_CALL OfficeIPCThread::run()
 {
     do
     {
-        OPipe::TPipeError
-            nError = maPipe.accept( maStreamPipe );
+        oslPipeError nError = maPipe.accept( maStreamPipe );
 
 
-        if( nError == OStreamPipe::E_None )
+        if( nError == osl_Pipe_E_None )
         {
 
             // #111143# and others:
