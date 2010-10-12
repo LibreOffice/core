@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -291,3 +292,5 @@ uno::Any ScVbaHyperlinks::createCollectionObject( const uno::Any& rSource )
 VBAHELPER_IMPL_XHELPERINTERFACE( ScVbaHyperlinks, "ooo.vba.excel.Hyperlinks" )
 
 // ============================================================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

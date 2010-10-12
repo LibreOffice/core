@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -4160,3 +4161,5 @@ StackVar ScInterpreter::Interpret()
         static_cast<ScToken*>(xResult.operator->())->GetMatrix()->SetImmutable( true);
     return eType;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

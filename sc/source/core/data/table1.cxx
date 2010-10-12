@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1811,3 +1812,4 @@ SCROW ScTable::VisibleDataCellIterator::getRow() const
     return mnCurRow;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
