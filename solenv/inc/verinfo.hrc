@@ -54,11 +54,7 @@
 
 // define order of date parts --------------------------------------------
 
-#if defined(LG_D)
-  #define VER_DMY
-#else
-  #define VER_YMD
-#endif
+#define VER_YMD
 
 // set VERVARIANT to 0 if not defined ------------------------------------
 
@@ -158,19 +154,11 @@
 #elif VER_MONTH==2
   #define VER2 Feb
 #elif VER_MONTH==3
-  #ifdef LG_D
-    #define VER2 M\344r
-  #else
-    #define VER2 Mar
-  #endif
+  #define VER2 Mar
 #elif VER_MONTH==4
   #define VER2 Apr
 #elif VER_MONTH==5
-  #ifdef LG_D
-    #define VER2 Mai
-  #else
-    #define VER2 May
-  #endif
+  #define VER2 May
 #elif VER_MONTH==6
   #define VER2 Jun
 #elif VER_MONTH==7
@@ -180,26 +168,14 @@
 #elif VER_MONTH==9
   #define VER2 Sep
 #elif VER_MONTH==10
-  #ifdef LG_D
-    #define VER2 Okt
-  #else
-    #define VER2 Oct
-  #endif
+  #define VER2 Oct
 #elif VER_MONTH==11
   #define VER2 Nov
 #elif VER_MONTH==12
-  #ifdef LG_D
-    #define VER2 Dez
-  #else
-    #define VER2 Dec
-  #endif
+  #define VER2 Dec
 #endif
 
-#ifdef LG_D
-  #define VERC3(a, b, c) a.b.c
-#else
-  #define VERC3(a, b, c) c-b-a
-#endif
+#define VERC3(a, b, c) c-b-a
 #define VERC4(a, b, c) VERC3(a, b, c)
 #define VER_DATE VERC4(VER5, VER2, VER_YEAR)
 
@@ -219,11 +195,7 @@
 
 #define S_CRIGHT PPS(VERC6(VER_YEARRANGE))
 
-#ifdef LG_D
-#define S_VERSION PPS(Version VER_LEVEL vom VER_DATE)
-#else
 #define S_VERSION PPS(Version VER_LEVEL of VER_DATE)
-#endif
 
 #endif  // _VERINFO_HRC
 
