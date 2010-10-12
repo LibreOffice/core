@@ -261,6 +261,7 @@ public:
     virtual void                DataChanged( const DataChangedEvent& rDCEvt );
 
     virtual void                Init();
+    virtual void                InitFinished();
     virtual void                DeInit();
 
     static void                 InitAppRes( const ResId& rResId );
