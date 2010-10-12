@@ -898,7 +898,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
     static FNReadField aWW8FieldTab[eMax+1] =
     {
         0,
-        0,
+        &SwWW8ImplReader::Read_F_Input,
         0,
         &SwWW8ImplReader::Read_F_Ref,               // 3
         0,
@@ -1289,9 +1289,12 @@ eF_ResT SwWW8ImplReader::Read_F_Input( WW8FieldDesc* pF, String& rStr )
     if( !aDef.Len() )
         aDef = GetFieldResult( pF );
 
-    SwInputField aFld( (SwInputFieldType*)rDoc.GetSysFldType( RES_INPUTFLD ),
-                        aDef, aQ, INP_TXT, 0 ); // sichtbar ( geht z.Zt. nicht anders )
-    rDoc.InsertPoolItem( *pPaM, SwFmtFld( aFld ), 0 );
+    if ( pF->nId != 0x01 ) // 0x01 fields have no result
+    {
+        SwInputField aFld( (SwInputFieldType*)rDoc.GetSysFldType( RES_INPUTFLD ),
+                            aDef, aQ, INP_TXT, 0 ); // sichtbar ( geht z.Zt. nicht anders )
+        rDoc.InsertPoolItem( *pPaM, SwFmtFld( aFld ), 0 );
+    }
 
     return FLD_OK;
 }
