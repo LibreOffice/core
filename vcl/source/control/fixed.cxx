@@ -27,13 +27,13 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-#include <vcl/decoview.hxx>
-#include <vcl/event.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/controldata.hxx>
-#include <vcl/window.h>
+#include "vcl/decoview.hxx"
+#include "vcl/event.hxx"
+#include "vcl/fixed.hxx"
+#include "vcl/controldata.hxx"
+#include "vcl/window.h"
 
-#include <tools/rc.h>
+#include "tools/rc.h"
 
 // =======================================================================
 
@@ -501,7 +501,7 @@ void FixedLine::ImplDraw( bool bLayout )
     String*                 pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL;
 
     DecorationView aDecoView( this );
-    if ( !aText.Len() || (nWinStyle & WB_VERT) )
+    if ( !aText.Len() )
     {
         if( !pVector )
         {
@@ -520,11 +520,34 @@ void FixedLine::ImplDraw( bool bLayout )
             }
         }
     }
+    else if( (nWinStyle & WB_VERT) )
+    {
+        long nWidth = GetTextWidth( aText );
+        Push( PUSH_FONT );
+        Font aFont( GetFont() );
+        aFont.SetOrientation( 900 );
+        SetFont( aFont );
+        Point aStartPt( aOutSize.Width()/2, aOutSize.Height()-1 );
+        if( (nWinStyle & WB_VCENTER) )
+            aStartPt.Y() -= (aOutSize.Height() - nWidth)/2;
+        Point aTextPt( aStartPt );
+        aTextPt.X() -= GetTextHeight()/2;
+        DrawText( aTextPt, aText, 0, STRING_LEN, pVector, pDisplayText );
+        Pop();
+        if( aOutSize.Height() - aStartPt.Y() > FIXEDLINE_TEXT_BORDER )
+            aDecoView.DrawSeparator( Point( aStartPt.X(), aOutSize.Height()-1 ),
+                                     Point( aStartPt.X(), aStartPt.Y() + FIXEDLINE_TEXT_BORDER ) );
+        if( aStartPt.Y() - nWidth - FIXEDLINE_TEXT_BORDER > 0 )
+            aDecoView.DrawSeparator( Point( aStartPt.X(), aStartPt.Y() - nWidth - FIXEDLINE_TEXT_BORDER ),
+                                     Point( aStartPt.X(), 0 ) );
+    }
     else
     {
         USHORT      nStyle = TEXT_DRAW_MNEMONIC | TEXT_DRAW_LEFT | TEXT_DRAW_VCENTER | TEXT_DRAW_ENDELLIPSIS;
         Rectangle   aRect( 0, 0, aOutSize.Width(), aOutSize.Height() );
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+        if( (nWinStyle & WB_CENTER) )
+            nStyle |= TEXT_DRAW_CENTER;
 
         if ( !IsEnabled() )
             nStyle |= TEXT_DRAW_DISABLE;
@@ -539,6 +562,8 @@ void FixedLine::ImplDraw( bool bLayout )
         {
             long nTop = aRect.Top() + ((aRect.GetHeight()-1)/2);
             aDecoView.DrawSeparator( Point( aRect.Right()+FIXEDLINE_TEXT_BORDER, nTop ), Point( aOutSize.Width()-1, nTop ), false );
+            if( aRect.Left() > FIXEDLINE_TEXT_BORDER )
+                aDecoView.DrawSeparator( Point( 0, nTop ), Point( aRect.Left()-FIXEDLINE_TEXT_BORDER, nTop ), false );
         }
     }
 }
