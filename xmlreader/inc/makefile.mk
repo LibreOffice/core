@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -23,32 +23,18 @@
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
-#*************************************************************************
-PRJ=..$/..
+#***********************************************************************/
 
-PRJNAME=cpputools
-TARGET=regcomplazy
-TARGETTYPE=CUI
-LIBTARGET=NO
+PRJ = ..
+PRJNAME = xmlreader
+TARGET = inc
 
-ENABLE_EXCEPTIONS=TRUE
+ENABLE_EXCEPTIONS = TRUE
+VISIBILITY_HIDDEN = TRUE
 
-# --- Settings -----------------------------------------------------
+.INCLUDE: settings.mk
+.INCLUDE: target.mk
 
-.INCLUDE :  settings.mk
-
-# --- Files --------------------------------------------------------
-
-DEPOBJFILES= \
-    $(OBJ)$/regcomplazy.obj 
-
-APP1TARGET=$(TARGET)
-APP1OBJS=$(DEPOBJFILES)  
-
-APP1STDLIBS= \
-    $(SALLIB) \
-    $(SALHELPERLIB) \
-    $(REGLIB)
-
-.INCLUDE :  target.mk
-
+.IF "$(ENABLE_PCH)" != ""
+ALLTAR: $(SLO)/precompiled.pch $(SLO)/precompiled_ex.pch
+.ENDIF

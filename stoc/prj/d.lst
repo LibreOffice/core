@@ -4,6 +4,16 @@ mkdir: %_DEST%\inc%_EXT%\stoc
 ..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 ..\%__SRC%\bin\*.rdb %_DEST%\rdb%_EXT%\*
+..\%__SRC%\misc\bootstrap.component %_DEST%\xml%_EXT%\bootstrap.component
+..\%__SRC%\misc\introspection.component %_DEST%\xml%_EXT%\introspection.component
+..\%__SRC%\misc\invocadapt.component %_DEST%\xml%_EXT%\invocadapt.component
+..\%__SRC%\misc\invocation.component %_DEST%\xml%_EXT%\invocation.component
+..\%__SRC%\misc\javaloader.component %_DEST%\xml%_EXT%\javaloader.component
+..\%__SRC%\misc\javavm.component %_DEST%\xml%_EXT%\javavm.component
+..\%__SRC%\misc\namingservice.component %_DEST%\xml%_EXT%\namingservice.component
+..\%__SRC%\misc\proxyfac.component %_DEST%\xml%_EXT%\proxyfac.component
+..\%__SRC%\misc\reflection.component %_DEST%\xml%_EXT%\reflection.component
+..\%__SRC%\misc\stocservices.component %_DEST%\xml%_EXT%\stocservices.component
 
 ..\source\module-description.dtd %_DEST%\xml%_EXT%\module-description.dtd
 ..\source\corereflection\corefl.xml %_DEST%\xml%_EXT%\reflection.uno.xml

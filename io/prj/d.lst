@@ -5,3 +5,8 @@
 ..\source\stm\stm.xml %_DEST%\xml%_EXT%\streams.uno.xml
 ..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*
+..\%__SRC%\misc\acceptor.component %_DEST%\xml%_EXT%\acceptor.component
+..\%__SRC%\misc\connector.component %_DEST%\xml%_EXT%\connector.component
+..\%__SRC%\misc\streams.component %_DEST%\xml%_EXT%\streams.component
+..\%__SRC%\misc\textinstream.component %_DEST%\xml%_EXT%\textinstream.component
+..\%__SRC%\misc\textoutstream.component %_DEST%\xml%_EXT%\textoutstream.component
