@@ -60,24 +60,12 @@
 
 using namespace ::com::sun::star;
 
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 static USHORT __FAR_DATA aWrapPageRg[] = {
     RES_LR_SPACE, RES_UL_SPACE,
     RES_PROTECT, RES_SURROUND,
     RES_PRINT, RES_PRINT,
     0
 };
-
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 
 SwWrapDlg::SwWrapDlg(Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, BOOL bDrawMode) :
     SfxSingleTabDialog(pParent, rSet, 0),
@@ -94,17 +82,9 @@ SwWrapDlg::SwWrapDlg(Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, BOOL bD
     SetText(sTitle);
 }
 
-
-
 SwWrapDlg::~SwWrapDlg()
 {
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 
 SwWrapTabPage::SwWrapTabPage(Window *pParent, const SfxItemSet &rSet) :
     SfxTabPage(pParent, SW_RES(TP_FRM_WRAP), rSet),
@@ -187,23 +167,14 @@ SwWrapTabPage::SwWrapTabPage(Window *pParent, const SfxItemSet &rSet) :
     aWrapOutlineCB.SetClickHdl(LINK(this, SwWrapTabPage, ContourHdl));
 }
 
-
-
 SwWrapTabPage::~SwWrapTabPage()
 {
 }
-
-
 
 SfxTabPage* SwWrapTabPage::Create(Window *pParent, const SfxItemSet &rSet)
 {
     return new SwWrapTabPage(pParent, rSet);
 }
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 
 void SwWrapTabPage::Reset(const SfxItemSet &rSet)
 {
@@ -337,9 +308,6 @@ void SwWrapTabPage::Reset(const SfxItemSet &rSet)
 /*--------------------------------------------------------------------
     Beschreibung:   Attribute in den Set stopfen bei OK
  --------------------------------------------------------------------*/
-
-
-
 BOOL SwWrapTabPage::FillItemSet(SfxItemSet &rSet)
 {
     BOOL bModified = FALSE;
@@ -445,9 +413,6 @@ BOOL SwWrapTabPage::FillItemSet(SfxItemSet &rSet)
 /*--------------------------------------------------------------------
     Beschreibung:   Bsp - Update
  --------------------------------------------------------------------*/
-
-
-
 void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
 {
     // Anchor
@@ -642,8 +607,6 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
     ContourHdl(0);
 }
 
-
-
 int SwWrapTabPage::DeactivatePage(SfxItemSet* _pSet)
 {
     if(_pSet)
@@ -655,9 +618,6 @@ int SwWrapTabPage::DeactivatePage(SfxItemSet* _pSet)
 /*--------------------------------------------------------------------
     Beschreibung:   Bereichspruefung
  --------------------------------------------------------------------*/
-
-
-
 IMPL_LINK( SwWrapTabPage, RangeModifyHdl, MetricField *, pEdit )
 {
     if(bHtmlMode && 0 == (nHtmlMode & HTMLMODE_FULL_ABS_POS))
@@ -695,12 +655,6 @@ IMPL_LINK( SwWrapTabPage, RangeModifyHdl, MetricField *, pEdit )
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
-
 IMPL_LINK( SwWrapTabPage, WrapTypeHdl, ImageRadioButton *, pBtn )
 {
     BOOL bWrapThrough = (pBtn == &aWrapThroughRB);
@@ -715,12 +669,6 @@ IMPL_LINK( SwWrapTabPage, WrapTypeHdl, ImageRadioButton *, pBtn )
     ContourHdl(0);
     return 0;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 
 IMPL_LINK( SwWrapTabPage, ContourHdl, CheckBox *, EMPTYARG )
 {
@@ -738,16 +686,11 @@ IMPL_LINK( SwWrapTabPage, ContourHdl, CheckBox *, EMPTYARG )
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 USHORT* SwWrapTabPage::GetRanges()
 {
     return aWrapPageRg;
 }
-/* -----------------------------08.05.2002 14:28------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwWrapTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
@@ -756,9 +699,7 @@ void SwWrapTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 
     SfxTabPage::DataChanged( rDCEvt );
 }
-/* -----------------------------08.05.2002 14:28------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwWrapTabPage::ApplyImageList()
 {
     ImageList& rImgLst = GetSettings().GetStyleSettings().GetHighContrastMode() ?

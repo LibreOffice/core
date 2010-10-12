@@ -340,8 +340,6 @@ IMPL_LINK_INLINE_START( SwCaptionDialog, SelectHdl, ListBox *, EMPTYARG )
 }
 IMPL_LINK_INLINE_END( SwCaptionDialog, SelectHdl, ListBox *, EMPTYARG )
 
-
-
 IMPL_LINK( SwCaptionDialog, ModifyHdl, Edit *, EMPTYARG )
 {
     SwWrtShell &rSh = rView.GetWrtShell();
@@ -477,8 +475,6 @@ SwCaptionDialog::~SwCaptionDialog()
 {
     delete pMgr;
 }
-/*  */
-
 
 SwSequenceOptionDialog::SwSequenceOptionDialog( Window *pParent, SwView &rV,
                                             const String& rSeqFldType )
@@ -560,9 +556,6 @@ void SwSequenceOptionDialog::Apply()
         rSh.UpdateExpFlds();
 }
 
-/*-- 24.08.2004 16:13:53---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 String  SwSequenceOptionDialog::GetCharacterStyle() const
 {
     String sRet;
@@ -571,9 +564,6 @@ String  SwSequenceOptionDialog::GetCharacterStyle() const
     return sRet;
 }
 
-/*-- 24.08.2004 16:14:00---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 void    SwSequenceOptionDialog::SetCharacterStyle(const String& rStyle)
 {
     aLbCharStyle.SelectEntryPos(0);
@@ -607,6 +597,7 @@ long SwCaptionDialog::CategoryBox::PreNotify( NotifyEvent& rNEvt )
         nHandled = ComboBox::PreNotify( rNEvt );
     return nHandled;
 }
+
 /*-- 01.11.2007 10:45:51---------------------------------------------------
     //#i61007# order of captions
   -----------------------------------------------------------------------*/
@@ -616,6 +607,7 @@ void lcl_MoveH( Window& rWin, sal_Int32 nMove )
     aPos.Y() += nMove;
     rWin.SetPosPixel(aPos);
 }
+
 void SwCaptionDialog::ApplyCaptionOrder()
 {
     //have the settings changed?
