@@ -35,7 +35,7 @@
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <rtl/ref.hxx>
-#include <vos/timer.hxx>
+#include <salhelper/timer.hxx>
 
 namespace css = ::com::sun::star;
 

@@ -34,7 +34,7 @@
 #include "PresenterTimer.hxx"
 #include <osl/diagnose.h>
 #include <osl/time.h>
-#include <vos/timer.hxx>
+#include <salhelper/timer.hxx>
 #include <boost/bind.hpp>
 #include <boost/function.hpp>
 

@@ -50,7 +50,7 @@
 #include <osl/mutex.hxx>
 #include <osl/time.h>
 #include <rtl/ref.hxx>
-#include <vos/timer.hxx>
+#include <salhelper/timer.hxx>
 #include <boost/bind.hpp>
 #include <cmath>
 
@@ -64,7 +64,7 @@ namespace sdext { namespace presenter {
 
 /** Wrapper around a library timer.
 */
-class PresenterClock::Timer : public vos::OTimer
+class PresenterClock::Timer : public salhelper::Timer
 {
 public:
     explicit Timer (const ::rtl::Reference<PresenterClock>& rpClock);
@@ -681,7 +681,7 @@ void PresenterClock::ThrowIfDisposed (void)
 //===== Timer =================================================================
 
 PresenterClock::Timer::Timer (const ::rtl::Reference<PresenterClock>& rpClock)
-    : OTimer(vos::TTimeValue(10), vos::TTimeValue(100/*ms*/)),
+    : salhelper::Timer(salhelper::TTimeValue(10), salhelper::TTimeValue(100/*ms*/)),
       mpClock(rpClock)
 {
     acquire();
