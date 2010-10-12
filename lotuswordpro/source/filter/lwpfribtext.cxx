@@ -120,7 +120,7 @@ void LwpFribText::XFConvert(XFContentContainer* pXFPara,LwpStory* pStory)
  * @param:   pObjStrm wordpro object stream.
  * @param:   len length of the frib
  */
-void LwpFribParaNumber::Read(LwpObjectStream* pObjStrm, sal_uInt16 len)
+void LwpFribParaNumber::Read(LwpObjectStream* pObjStrm, sal_uInt16 /*len*/)
 {
     pObjStrm->QuickRead(&m_nStyleID, sizeof(m_nStyleID));
     pObjStrm->QuickRead(&m_nNumberChar, sizeof(m_nNumberChar));
@@ -151,7 +151,7 @@ LwpFribDocVar::~LwpFribDocVar()
  * @param:   pObjStrm wordpro object stream.
  * @param:   len length of the frib
  */
-void LwpFribDocVar::Read(LwpObjectStream* pObjStrm, sal_uInt16 len)
+void LwpFribDocVar::Read(LwpObjectStream* pObjStrm, sal_uInt16 /*len*/)
 {
     pObjStrm->QuickRead(&m_nType, sizeof(m_nType));
     m_pName->Read(pObjStrm);
@@ -438,7 +438,7 @@ void LwpFribUnicode::XFConvert(XFContentContainer* pXFPara,LwpStory* pStory)
  * @param:
  * @param:
  */
-void LwpFribPageNumber::Read(LwpObjectStream* pObjStrm, sal_uInt16 len)
+void LwpFribPageNumber::Read(LwpObjectStream* pObjStrm, sal_uInt16 /*len*/)
 {
     m_nNumStyle = pObjStrm->QuickReaduInt16();
     m_aBefText.Read(pObjStrm);

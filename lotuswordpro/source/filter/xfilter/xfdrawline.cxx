@@ -95,6 +95,8 @@ void XFDrawLine::ToXml(IXFStream *pStrm)
     case enumXFAnchorFrame:
         pAttrList->AddAttribute( A2OUSTR("text:anchor-type"), A2OUSTR("frame") );
         break;
+    default:
+        break;
     }
     pAttrList->AddAttribute( A2OUSTR("draw:z-index"), Int32ToOUString(m_nZIndex) );
 

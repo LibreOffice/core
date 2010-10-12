@@ -262,6 +262,8 @@ void LwpParaStyle::ApplySubBorder(LwpBorderStuff* pBorderStuff, LwpBorderStuff::
     case LwpBorderStuff::BOTTOM:
         eXFBorderSide = enumXFBorderBottom;
         break;
+    default:
+        break;
     }
 
     LwpColor    aColor = pBorderStuff->GetSideColor(eType);
@@ -428,6 +430,8 @@ void LwpParaStyle::ApplyAlignment(XFParaStyle* pParaStyle, LwpAlignmentOverride*
         pParaStyle->SetNumberRight(sal_True);//to identify its align attribute
         alignType = enumXFAlignEnd;
         break;
+    default:
+        break;
     }
     pParaStyle->SetAlignType(alignType);
 }
@@ -507,7 +511,6 @@ void LwpParaStyle::ApplyIndent(LwpPara* pPara, XFParaStyle* pParaStyle, LwpInden
 void LwpParaStyle::ApplySpacing(LwpPara* pPara, XFParaStyle* pParaStyle, LwpSpacingOverride* pSpacing)
 {
     LwpSpacingCommonOverride* spacing = pSpacing->GetSpacing();
-    LwpSpacingCommonOverride* aboveline = pSpacing->GetAboveLineSpacing();
     LwpSpacingCommonOverride* abovepara = pSpacing->GetAboveSpacing();
     LwpSpacingCommonOverride* belowpara = pSpacing->GetBelowSpacing();
 
@@ -603,9 +606,9 @@ void LwpParaStyle::ApplySpacing(LwpPara* pPara, XFParaStyle* pParaStyle, LwpSpac
  * @param:
  * @return:
 **************************************************************************/
-void LwpParaStyle::ApplyTab(XFParaStyle *pParaStyle, LwpTabOverride *pTab)
+void LwpParaStyle::ApplyTab(XFParaStyle *pParaStyle, LwpTabOverride *pTabOverRide)
 {
-    LwpObjectID* pTabRackID = pTab->GetTabRackID();
+    LwpObjectID* pTabRackID = pTabOverRide->GetTabRackID();
     if(pTabRackID->IsNull())
     {
         //assert(false);
@@ -631,7 +634,7 @@ void LwpParaStyle::ApplyTab(XFParaStyle *pParaStyle, LwpTabOverride *pTab)
         if(!pTab)
             return;
 
-        enumXFTab eType;
+        enumXFTab eType = enumXFTabNone;
         LwpTab::TabType type = pTab->GetTabType();
         switch(type)
         {

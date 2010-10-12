@@ -64,8 +64,8 @@
 #include    "xfstylemanager.hxx"
 #include    "ixfstyle.hxx"
 
-XFStyleManager::XFStyleManager() : s_aStdArrowStyles( A2OUSTR("arrow") ),s_aListStyles( A2OUSTR("L") ),
-    s_aTextStyles( A2OUSTR("T") ),s_aParaStyles( A2OUSTR("P") ),s_aSectionStyles( A2OUSTR("Sect") ),
+XFStyleManager::XFStyleManager() : s_aStdArrowStyles( A2OUSTR("arrow") ), s_aTextStyles( A2OUSTR("T") ),
+    s_aParaStyles( A2OUSTR("P") ),s_aListStyles( A2OUSTR("L") ),s_aSectionStyles( A2OUSTR("Sect") ),
     s_aPageMasters( A2OUSTR("PM") ),s_aMasterpages( A2OUSTR("MP") ),s_aDateStyles( A2OUSTR("N") ),
     s_aGraphicsStyles( A2OUSTR("fr") ),s_aTableStyles( A2OUSTR("table") ),s_aTableCellStyles( A2OUSTR("cell") ),
     s_aTableRowStyles( A2OUSTR("row") ),s_aTableColStyles( A2OUSTR("col") ),s_pOutlineStyle(NULL)

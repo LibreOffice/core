@@ -147,7 +147,7 @@ void    XFColumnSep::ToXml(IXFStream *pStrm)
     pStrm->EndElement( A2OUSTR("style:column-sep") );
 }
 
-void    XFColumns::SetSeperator(sal_Int32 height, double width, XFColor color,enumXFAlignType align)
+void    XFColumns::SetSeperator(sal_Int32 height, double /*width*/, XFColor color,enumXFAlignType align)
 {
     m_aSeperator.SetRelHeight(height);
     m_aSeperator.SetWidth(0.1);

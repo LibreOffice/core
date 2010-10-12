@@ -98,10 +98,12 @@ void LwpCellList::Read()
     m_pObjStrm->SkipExtra();
 
 }
- void  LwpCellList::Parse(IXFStream* pOutputStream)
+
+void  LwpCellList::Parse(IXFStream* /*pOutputStream*/)
 {
 }
-void LwpCellList::Convert(XFCell * pCell, LwpTableLayout* pCellsMap)
+
+void LwpCellList::Convert(XFCell * pCell, LwpTableLayout* /*pCellsMap*/)
 {
     LwpObjectID aValueID = GetValueID();
     LwpNumericValue* pValue = (LwpNumericValue*)aValueID.obj();
@@ -124,7 +126,7 @@ void LwpNumericValue::Read()
     m_pObjStrm->SkipExtra();
 
 }
- void  LwpNumericValue::Parse(IXFStream* pOutputStream)
+ void  LwpNumericValue::Parse(IXFStream* /*pOutputStream*/)
 {
 }
 //////////////////////////////////////////////////////////////////
@@ -149,7 +151,7 @@ void LwpRowList::Read()
 
     m_pObjStrm->SkipExtra();
 }
- void  LwpRowList::Parse(IXFStream* pOutputStream)
+ void  LwpRowList::Parse(IXFStream* /*pOutputStream*/)
 {
 }
 
@@ -169,9 +171,11 @@ void LwpTableRange::Read()
     cpCellRange.ReadIndexed(m_pObjStrm);
     m_pObjStrm->SkipExtra();
 }
- void  LwpTableRange::Parse(IXFStream* pOutputStream)
+
+void  LwpTableRange::Parse(IXFStream* /*pOutputStream*/)
 {
 }
+
 //////////////////////////////////////////////////////////////////
  LwpCellRange::LwpCellRange(LwpObjectHeader &objHdr, LwpSvStream* pStrm):LwpObject(objHdr, pStrm)
 {}
@@ -184,9 +188,11 @@ void LwpCellRange::Read()
     cpFolder.ReadIndexed(m_pObjStrm);
     m_pObjStrm->SkipExtra();
 }
- void  LwpCellRange::Parse(IXFStream* pOutputStream)
+
+void  LwpCellRange::Parse(IXFStream* /*pOutputStream*/)
 {
 }
+
 //////////////////////////////////////////////////////////////////
 
  LwpFolder::LwpFolder(LwpObjectHeader &objHdr, LwpSvStream* pStrm):LwpDLVList(objHdr, pStrm)
@@ -209,12 +215,14 @@ void LwpFolder::Read()
     cqTable.ReadIndexed(m_pObjStrm);
     m_pObjStrm->SkipExtra();
 }
- void  LwpFolder::Parse(IXFStream* pOutputStream)
+
+void  LwpFolder::Parse(IXFStream* /*pOutputStream*/)
 {
 }
+
 //////////////////////////////////////////////////////////////////
 
- LwpDependent::LwpDependent(LwpObjectHeader &objHdr, LwpSvStream* pStrm):LwpDLVList(objHdr, pStrm)
+LwpDependent::LwpDependent(LwpObjectHeader &objHdr, LwpSvStream* pStrm):LwpDLVList(objHdr, pStrm)
 {}
 
 LwpDependent::~LwpDependent()
@@ -230,7 +238,8 @@ void LwpDependent::Read()
 
     m_pObjStrm->SkipExtra();
 }
- void  LwpDependent::Parse(IXFStream* pOutputStream)
+
+void  LwpDependent::Parse(IXFStream* /*pOutputStream*/)
 {
 }
 //////////////////////////////////////////////////////////////////

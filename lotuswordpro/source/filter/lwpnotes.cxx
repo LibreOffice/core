@@ -75,7 +75,7 @@
 /**
  * @descr  read  frib information
  */
-void LwpFribNote::Read(LwpObjectStream *pObjStrm, sal_uInt16 len)
+void LwpFribNote::Read(LwpObjectStream *pObjStrm, sal_uInt16 /*len*/)
 {
     m_Layout.ReadIndexed(pObjStrm);
 }
@@ -253,7 +253,7 @@ void LwpNoteHeaderLayout::RegisterStyle()
 {
 }
 
-void LwpNoteHeaderLayout::XFConvert(XFContentContainer * pCont)
+void LwpNoteHeaderLayout::XFConvert(XFContentContainer * /*pCont*/)
 {
 }
 
@@ -322,7 +322,7 @@ void LwpViewportLayout::RegisterStyle()
 {
 }
 
-void LwpViewportLayout::XFConvert(XFContentContainer * pCont)
+void LwpViewportLayout::XFConvert(XFContentContainer * /*pCont*/)
 {
 }
 

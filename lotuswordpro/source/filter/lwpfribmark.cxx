@@ -86,7 +86,7 @@
  * @param:
  * @param:
  */
-void LwpFribCHBlock::Read(LwpObjectStream* pObjStrm, sal_uInt16 len)
+void LwpFribCHBlock::Read(LwpObjectStream* pObjStrm, sal_uInt16 /*len*/)
 {
     m_objMarker.ReadIndexed(pObjStrm);
     m_nType = pObjStrm->QuickReaduInt8();
@@ -182,7 +182,7 @@ LwpFribBookMark::LwpFribBookMark(LwpPara* pPara ) : LwpFrib(pPara),m_pStart(NULL
  * @param:
  * @param:
  */
-void LwpFribBookMark::Read(LwpObjectStream* pObjStrm, sal_uInt16 len)
+void LwpFribBookMark::Read(LwpObjectStream* pObjStrm, sal_uInt16 /*len*/)
 {
     m_objMarker.ReadIndexed(pObjStrm);
     m_nType = pObjStrm->QuickReaduInt8();
@@ -222,7 +222,7 @@ LwpFribField::LwpFribField( LwpPara* pPara ) : LwpFrib(pPara)
     m_nDateTimeType = 0;
 }
 
-void LwpFribField::Read(LwpObjectStream* pObjStrm, sal_uInt16 len)
+void LwpFribField::Read(LwpObjectStream* pObjStrm, sal_uInt16 /*len*/)
 {
     m_objMarker.ReadIndexed(pObjStrm);
     m_nType = pObjStrm->QuickReaduInt8();
@@ -324,7 +324,7 @@ void LwpFribField::XFConvert(XFContentContainer* pXFPara)
     {
         sal_uInt8 nDatetype;
         OUString sFormula;
-        sal_Bool bIsDateTime = pFieldMark->IsDateTimeField(nDatetype,sFormula);
+        /*sal_Bool bIsDateTime =*/ pFieldMark->IsDateTimeField(nDatetype,sFormula);
 
         if (m_nSubType == SUBFIELD_DATETIME)//date time
         {
@@ -1424,7 +1424,7 @@ LwpRubyMarker* LwpFribRubyMarker::GetMarker()
     return static_cast<LwpRubyMarker*>(m_objMarker.obj(VO_RUBYMARKER));
 }
 
-void LwpFribRubyMarker::Read(LwpObjectStream* pObjStrm, sal_uInt16 len)
+void LwpFribRubyMarker::Read(LwpObjectStream* pObjStrm, sal_uInt16 /*len*/)
 {
     m_objMarker.ReadIndexed(pObjStrm);
     m_nType = pObjStrm->QuickReaduInt8();
@@ -1456,7 +1456,7 @@ void LwpFribRubyMarker::XFConvert(XFContentContainer* pXFPara)
     }
 }
 
-void LwpFribRubyMarker::RegisterStyle(LwpFoundry* pFoundry)
+void LwpFribRubyMarker::RegisterStyle(LwpFoundry* /*pFoundry*/)
 {
 }
 

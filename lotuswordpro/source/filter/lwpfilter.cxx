@@ -406,7 +406,7 @@ using namespace OpenStormBento;
 
     LwpSvStream * pLwpStream = new LwpSvStream(pCompressed);
     LtcBenContainer* pBentoContainer;
-    ULONG ulRet = BenOpenContainer(pLwpStream, &pBentoContainer);
+    /*ULONG ulRet = */ BenOpenContainer(pLwpStream, &pBentoContainer);
     LtcUtBenValueStream * pWordProData = (LtcUtBenValueStream *)pBentoContainer->FindValueStreamWithPropertyName("WordProData");
 
     // decompressing
@@ -517,7 +517,7 @@ int ReadWordproFile(SvStream* pStream, uno::Reference<XDocumentHandler>& xHandle
     return 1;
 }
 
-void ErrorMsg(int iErrCode)
+void ErrorMsg(int /*iErrCode*/)
 {
 
 }
@@ -540,7 +540,7 @@ sal_Bool IsWordProStr(const sal_Int8 *pBuf)
         0, 0, 0, 0
 #endif
     };
-    for(int i=0; i<sizeof(pLotusLwp); i++)
+    for(size_t i=0; i<sizeof(pLotusLwp); ++i)
     {
         if( pBuf[i] != pLotusLwp[i] )
         {
@@ -560,11 +560,10 @@ sal_Bool IsWordproFile(rtl::OUString file)
     {
         sal_Int8 buf[16];
         bRet = sal_True;
-        sal_Int32   nRead = -1;
 
         pStm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
         pStm->Seek(STREAM_SEEK_TO_BEGIN);
-        nRead = pStm->Read(buf, sizeof(buf));
+        sal_Size nRead = pStm->Read(buf, sizeof(buf));
         if( nRead< sizeof(buf) )
             bRet = sal_False;
         else
@@ -577,10 +576,9 @@ sal_Bool IsWordproFile(rtl::OUString file)
 sal_Bool IsWordproFile( uno::Reference<XInputStream>& rInputStream)
 {
     Sequence<sal_Int8> aData;
-    sal_Int32   nRead = -1;
     sal_Bool bRet = sal_False;
 
-    nRead = rInputStream->readBytes(aData,16);
+    sal_Int32 nRead = rInputStream->readBytes(aData, 16);
     if( nRead != 16 )
     {
         bRet = sal_False;

@@ -153,20 +153,20 @@ class LwpOlePres
 
     UINT32  nAdvFlags;
     INT32   nJobLen;
-    void *  pJob;
+    BYTE *  pJob;
     Size    aSize;      // Groesse in 100TH_MM
 public:
     LwpOlePres( ULONG nF )
         : nFormat( nF )
+        , pBmp( NULL )
+        , pMtf( NULL )
         , nAdvFlags( 0x2 ) // in Dokument gefunden
         , nJobLen( 0 )
         , pJob( NULL )
-        , pBmp( NULL )
-        , pMtf( NULL )
     {}
     ~LwpOlePres()
     {
-        delete pJob;
+        delete [] pJob;
         delete pBmp;
         delete pMtf;
     }

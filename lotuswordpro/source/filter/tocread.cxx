@@ -99,7 +99,10 @@ CBenTOCReader::ReadLabel(unsigned long * pTOCOffset, unsigned long * pTOCSize)
 
     BenByte * pCurrLabel = Label + BEN_MAGIC_BYTES_SIZE;
 
-    BenWord Flags = UtGetIntelWord(pCurrLabel); pCurrLabel += 2; // Flags
+#ifndef NDEBUG
+    BenWord Flags =
+#endif
+        UtGetIntelWord(pCurrLabel); pCurrLabel += 2; // Flags
     // Newer files are 0x0101--indicates if big or little endian.  Older
     // files are 0x0 for flags
     assert(Flags == 0x0101 || Flags == 0x0);

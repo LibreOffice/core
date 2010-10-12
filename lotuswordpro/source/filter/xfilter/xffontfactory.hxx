@@ -78,7 +78,7 @@ class XFFontFactory
 public:
     XFFontFactory();
     ~XFFontFactory();
-    XFFontFactory(const XFFontFactory& other){}
+    XFFontFactory(const XFFontFactory&){}
 
 public:
     /**

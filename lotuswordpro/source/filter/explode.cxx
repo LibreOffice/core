@@ -142,9 +142,14 @@
         "00000000",
     };
 
-Decompression::Decompression(SvStream * pInStream, SvStream * pOutStream):
-    m_pInStream(pInStream), m_pOutStream(pOutStream), m_pBuffer(m_Buffer), m_nOutputBufferPos(0),
-        m_nBitsLeft(0), m_nBytesLeft(0), m_nCurrent4Byte(0)
+Decompression::Decompression(SvStream * pInStream, SvStream * pOutStream)
+    : m_pInStream(pInStream)
+    , m_pOutStream(pOutStream)
+    , m_nCurrent4Byte(0)
+    , m_nBitsLeft(0)
+    , m_pBuffer(m_Buffer)
+    , m_nBytesLeft(0)
+    , m_nOutputBufferPos(0)
 {
     if (!m_pInStream || !m_pOutStream )
     {

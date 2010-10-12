@@ -90,7 +90,7 @@ rtl::OUString Int16ToOUString(sal_Int16 num)
     return rtl::OUString::valueOf(nNum);
 }
 
-rtl::OUString   FloatToOUString(float num, sal_Int32 precision)
+rtl::OUString   FloatToOUString(float num, sal_Int32 /*precision*/)
 {
     /*std::stringstream sstrm;
     std::string         strRet;
@@ -102,7 +102,7 @@ rtl::OUString   FloatToOUString(float num, sal_Int32 precision)
     return rtl::OUString::valueOf(num);
 }
 
-rtl::OUString   DoubleToOUString(double num, sal_Int32 precision)
+rtl::OUString   DoubleToOUString(double num, sal_Int32 /*precision*/)
 {
     /*std::stringstream sstrm;
     std::string         strRet;
@@ -114,7 +114,7 @@ rtl::OUString   DoubleToOUString(double num, sal_Int32 precision)
     return rtl::OUString::valueOf(num);
 }
 
-rtl::OUString   OEMToOUString(const std::string& str)
+rtl::OUString   OEMToOUString(const std::string& /*str*/)
 {
     return rtl::OUString();
 }
@@ -265,6 +265,8 @@ rtl::OUString   GetReliefName(enumXFRelief type)
         case enumXFReliefEmbossed:
             return A2OUSTR("embossed");
             break;
+        default:
+            break;
     }
     return A2OUSTR("");
 }
@@ -288,6 +290,8 @@ rtl::OUString   GetCrossoutName(enumXFCrossout type)
     case enumXFCrossoutX:
         return A2OUSTR("X");
         break;
+    default:
+        break;
     }
     return A2OUSTR("");
 }
@@ -307,6 +311,8 @@ rtl::OUString   GetTransformName(enumXFTransform type)
     case enumXFTransformSmallCaps:
         return A2OUSTR("small-caps");
         break;
+    default:
+        break;
     }
     return A2OUSTR("");
 }
@@ -325,6 +331,8 @@ rtl::OUString   GetEmphasizeName(enumXFEmphasize type)
         break;
     case enumXFEmphasizeAccent:
         return A2OUSTR("accent");
+        break;
+    default:
         break;
     }
     return A2OUSTR("");
@@ -358,6 +366,8 @@ rtl::OUString   GetTextDirName(enumXFTextDir dir)
     case enumXFTextDirTB_RL:
         return A2OUSTR("tb-rl");
         break;
+    default:
+        break;
     }
     return A2OUSTR("");
 }
@@ -377,6 +387,8 @@ rtl::OUString   GetFrameXPos(enumXFFrameXPos pos)
         break;
     case enumXFFrameXPosFromLeft:
         return A2OUSTR("from-left");
+        break;
+    default:
         break;
     }
     return A2OUSTR("");
@@ -424,6 +436,8 @@ rtl::OUString   GetFrameXRel(enumXFFrameXRel rel)
         break;
     case enumXFFrameXRelFrameStartMargin:
         return A2OUSTR("frame-start-margin");
+        break;
+    default:
         break;
     }
     return A2OUSTR("");
@@ -521,6 +535,8 @@ rtl::OUString   GetPageUsageName(enumXFPageUsage usage)
         return A2OUSTR("right");
     case enumXFPageUsageMirror:
         return A2OUSTR("mirrored");
+    default:
+        return A2OUSTR("mirrored");
     }
     return A2OUSTR("");
 }
@@ -543,6 +559,8 @@ rtl::OUString   GetValueType(enumXFValueType type)
         return A2OUSTR("string");
     case enumXFValueTypeTime:
         return A2OUSTR("time");
+    default:
+        return A2OUSTR("mirrored");
     }
     return A2OUSTR("");
 }

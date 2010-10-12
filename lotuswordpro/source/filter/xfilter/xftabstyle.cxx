@@ -90,6 +90,8 @@ void    XFTabStyle::ToXml(IXFStream *pStrm)
     case enumXFTabChar:
         pAttrList->AddAttribute( A2OUSTR("style:type"), A2OUSTR("char") );
         break;
+    default:
+        break;
     }
     //delimiter:
     if( m_eType == enumXFTabChar )

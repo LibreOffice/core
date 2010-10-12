@@ -77,7 +77,7 @@ void XFChangeList::ToXml(IXFStream *pStrm)
     pStrm->EndElement(A2OUSTR("text:tracked-changes"));
 }
 
-void XFChangeRegion::ToXml(IXFStream *pStrm)
+void XFChangeRegion::ToXml(IXFStream * /*pStrm*/)
 {
 }
 

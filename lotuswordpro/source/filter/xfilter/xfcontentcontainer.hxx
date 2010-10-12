@@ -136,7 +136,7 @@ private:
 
 inline IXFContent* XFContentContainer::GetContent(sal_uInt32 index) const
 {
-    if( index<0 || index>m_aContents.size()-1 )
+    if (index > m_aContents.size()-1)
         return NULL;
     return m_aContents[index];
 }

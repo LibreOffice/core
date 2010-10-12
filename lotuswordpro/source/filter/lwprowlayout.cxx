@@ -198,9 +198,6 @@ void LwpRowLayout::ConvertRow(XFTable* pXFTable,sal_uInt8 nStartCol,sal_uInt8 nE
     sal_uInt16 nRowMark = crowid + GetCurMaxSpannedRows(nStartCol,nEndCol);
     RegisterCurRowStyle(pXFRow,nRowMark);
 
-    sal_Bool bIsRight = sal_False;
-    sal_Bool bIsTop = sal_False;
-
     //if there is connected cell
     for (sal_uInt8 i=nStartCol; i<nEndCol; )
     {
@@ -373,8 +370,6 @@ void LwpRowLayout::ConvertCommonRow(XFTable* pXFTable,sal_uInt8 nStartCol,sal_uI
     XFCell * pCell;
     LwpTableLayout* pTableLayout = GetParentTableLayout();
     LwpTable* pTable = pTableLayout->GetTable();
-    sal_Bool bIsRight = sal_False;
-    sal_Bool bIsTop = sal_False;
     sal_uInt8 nCellStartCol,nCellEndCol;
 
     for (sal_uInt8 i = nStartCol; i < nEndCol ; i++)

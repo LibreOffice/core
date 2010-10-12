@@ -105,6 +105,8 @@ void    XFTimePart::ToXml(IXFStream *pStrm)
         pStrm->Characters( m_strText );
         pStrm->EndElement( A2OUSTR("number:text") );
         break;
+    default:
+        break;
     }
 }
 

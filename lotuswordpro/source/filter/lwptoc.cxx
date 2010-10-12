@@ -438,7 +438,7 @@ void LwpTocLevelData::RegisterStyle()
  * @param  pCont - container
  * @return none
  */
-void LwpTocLevelData::XFConvert(XFContentContainer* pCont)
+void LwpTocLevelData::XFConvert(XFContentContainer* /*pCont*/)
 {
 }
 /**

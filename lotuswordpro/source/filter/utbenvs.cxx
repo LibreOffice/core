@@ -85,7 +85,7 @@ ULONG   LtcUtBenValueStream::GetData( void* pData, ULONG nSize )
     //GetAmountLeft(&AmtLeft);
 
     //unsigned long AmtShouldRead = UtMin(nSize, AmtLeft);
-    BenError Err = cpValue->ReadValueData(pData, cCurrentPosition, nSize,
+    /*BenError Err = */cpValue->ReadValueData(pData, cCurrentPosition, nSize,
       &AmtRead);
     cCurrentPosition += AmtRead;
 
@@ -98,7 +98,7 @@ ULONG   LtcUtBenValueStream::GetData( void* pData, ULONG nSize )
 *   @param  size of buffer to be written
 *   @return number of bytes written into value stream
 */
-ULONG   LtcUtBenValueStream::PutData( const void* pData, ULONG nSize )
+ULONG   LtcUtBenValueStream::PutData( const void* /*pData*/, ULONG nSize )
 {
     /* Because we only support IMPORT filter, PutData implementation is ignored
         It won't bring negative influence to read-only stream object */
@@ -125,9 +125,9 @@ ULONG   LtcUtBenValueStream::PutData( const void* pData, ULONG nSize )
 *   @param  size of buffer
 *   @return
 */
- void   LtcUtBenValueStream::SetSize( ULONG nSize )
+ void   LtcUtBenValueStream::SetSize( ULONG /*nSize*/ )
 {
-    pLtcBenContainer pContainer = cpValue->GetContainer();
+    //pLtcBenContainer pContainer = cpValue->GetContainer();
     //pContainer->GetStream()->SetStreamSize(nSize);
 
     return;

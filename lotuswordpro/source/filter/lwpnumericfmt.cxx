@@ -176,7 +176,9 @@ LwpNumericFormatSubset::~LwpNumericFormatSubset()
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
-LwpNumericFormat::LwpNumericFormat(LwpObjectStream * pStrm):cDecimalPlaces(0),cFormat(FMT_DEFAULT)
+LwpNumericFormat::LwpNumericFormat(LwpObjectStream * pStrm)
+    : cFormat(FMT_DEFAULT)
+    , cDecimalPlaces(0)
 {
     assert(pStrm);
     m_pObjStrm = pStrm;
@@ -481,7 +483,7 @@ OUString    LwpNumericFormat::reencode(OUString sCode)
     if (bFound)
     {
         pBuff[i] = 0xffe1;
-        for (sal_uInt32 j=i+1; j < sCode.getLength() - 1; j++)
+        for (sal_Int32 j=i+1; j < sCode.getLength() - 1; ++j)
         {
             pBuff[j] = pString[j+1];
         }

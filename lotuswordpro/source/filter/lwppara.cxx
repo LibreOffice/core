@@ -99,10 +99,14 @@
 
 #include "lwpdropcapmgr.hxx"
 #include "lwptable.hxx"
+
 LwpPara::LwpPara(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
-    : LwpDLVList(objHdr, pStrm), m_pBreaks(NULL), m_pIndentOverride(NULL), m_bHasBullet(sal_False), m_bBullContinue(sal_False),
-    /*m_pParaNumbering(NULL),*/ m_pSilverBullet(NULL), m_pBullOver(NULL),m_bHasDropcap(sal_False),m_nLines(0),m_nChars(0),
-    m_BelowSpacing(0),m_pDropcapLayout(NULL), m_pXFContainer(NULL)
+    : LwpDLVList(objHdr, pStrm), m_pBreaks(NULL), m_pIndentOverride(NULL)
+    , m_bHasBullet(sal_False), m_pSilverBullet(NULL)
+    , /*m_pParaNumbering(NULL),*/ m_pBullOver(NULL)
+    , m_bBullContinue(sal_False)
+    , m_bHasDropcap(sal_False), m_nLines(0), m_nChars(0)
+    , m_pDropcapLayout(NULL), m_BelowSpacing(0), m_pXFContainer(NULL)
 {
     m_pProps = NULL;
     m_SectionStyleName = A2OUSTR("");
@@ -580,12 +584,12 @@ void LwpPara::RegisterStyle()
                     LwpNumberingOverride* pNumbering = this->GetParaNumbering();
                     sal_uInt16 nPosition = pNumbering->GetPosition();
                     sal_Bool bLesser = m_pSilverBullet->IsLesserLevel(nPosition);
-                    sal_Bool bResetSection = m_pSilverBullet->IsNewSection(nPosition);
+                    /*sal_Bool bResetSection =*/ m_pSilverBullet->IsNewSection(nPosition);
                     sal_Bool bHeading;
                     LwpPara* pPara = this;
                     LwpPara* pPrePara = NULL;
                     LwpSilverBullet* pParaSilverBullet = NULL;
-                    sal_uInt16 nNum = 0, nOffset = 0, nLevel = 0, nFoundLevel = 0xffff, nFoundBound = 0;
+                    sal_uInt16 nNum = 0, nLevel = 0, nFoundLevel = 0xffff, nFoundBound = 0;
 
                     nFoundBound = nLevel = pNumbering->GetLevel();
                     if (nPosition == pNumbering->GetPosition())
@@ -942,7 +946,7 @@ LwpBulletStyleMgr* LwpPara::GetBulletStyleMgr()
 
 XFContentContainer* LwpPara::AddBulletList(XFContentContainer* pCont)
 {
-    LwpBulletStyleMgr* pBulletStyleMgr = this->GetBulletStyleMgr();
+    LwpBulletStyleMgr* pBulletStyleMgr = GetBulletStyleMgr();
     if (!pBulletStyleMgr)
     {
         assert(false);
@@ -951,7 +955,7 @@ XFContentContainer* LwpPara::AddBulletList(XFContentContainer* pCont)
 
     sal_uInt16 nLevel = m_nLevel;
     sal_Bool bOrdered = sal_False;
-    LwpStory* pMyStory = this->GetStory();
+    /*LwpStory* pMyStory =*/ GetStory();
 
     pBulletStyleMgr->SetContinueFlag(m_bBullContinue);
 #if 0

@@ -71,7 +71,7 @@
  * @param:
  */
 
-void LwpFribFrame::Read(LwpObjectStream* pObjStrm, sal_uInt16 len)
+void LwpFribFrame::Read(LwpObjectStream* pObjStrm, sal_uInt16 /*len*/)
 {
     m_objLayout.ReadIndexed(pObjStrm);
 }
@@ -200,7 +200,7 @@ void LwpFribFrame::XFConvert(XFContentContainer* pCont)
  *  @descr:  Read Ruby frame
  *
  */
-void LwpFribRubyFrame::Read(LwpObjectStream* pObjStrm, sal_uInt16 len)
+void LwpFribRubyFrame::Read(LwpObjectStream* pObjStrm, sal_uInt16 /*len*/)
 {
     m_objLayout.ReadIndexed(pObjStrm);
 }
@@ -221,7 +221,7 @@ void LwpFribRubyFrame::RegisterStyle(LwpFoundry* pFoundry)
  *  @descr:  convert Ruby frame
  *
  */
-void LwpFribRubyFrame::XFConvert(XFContentContainer* pCont)
+void LwpFribRubyFrame::XFConvert(XFContentContainer* /*pCont*/)
 {
     LwpRubyLayout* pLayout = GetLayout();
     if (pLayout)

@@ -108,7 +108,7 @@
 //LwpObjectFactory* LwpObjectFactory::m_pMgr = NULL;
 
 LwpObjectFactory::LwpObjectFactory(LwpSvStream* pSvStream)
-    : m_pSvStream(pSvStream), m_nNumObjs(0)
+    : m_nNumObjs(0), m_pSvStream(pSvStream)
 {
     m_ObjList.clear();
 }

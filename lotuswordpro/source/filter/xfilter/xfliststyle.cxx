@@ -75,7 +75,7 @@ XFListLevel::XFListLevel()
     m_eListType = enumXFListLevelNumber;
 }
 
-void XFListLevel::ToXml(IXFStream *pStrm)
+void XFListLevel::ToXml(IXFStream * /*pStrm*/)
 {
 }
 
@@ -259,7 +259,7 @@ void    XFListStyle::SetListPosition(sal_Int32 level,
     XFListLevel *pLevel = m_pListLevels[level-1];
     if( !pLevel )
     {
-        XFListLevelBullet * pLevel = new XFListLevelBullet();
+        pLevel = new XFListLevelBullet();
         pLevel->SetListlevelType(enumXFListLevelNumber);
         pLevel->SetLevel(level+1);
         pLevel->SetIndent(indent);

@@ -111,7 +111,7 @@ sal_Bool LwpVirtualLayout::MarginsSameAsParent()
 * @descr:   Get column width
 *
 */
-double LwpVirtualLayout::GetColWidth(sal_uInt16 nIndex)
+double LwpVirtualLayout::GetColWidth(sal_uInt16 /*nIndex*/)
 {
     //return GetContentWidth(); //not support now
     //return LwpTools::ConvertToMetric(5); //test
@@ -122,7 +122,7 @@ double LwpVirtualLayout::GetColWidth(sal_uInt16 nIndex)
 * @descr:   Get the gap between columns
 *
 */
-double LwpVirtualLayout::GetColGap(sal_uInt16 nIndex)
+double LwpVirtualLayout::GetColGap(sal_uInt16 /*nIndex*/)
 {
     //return DEFAULTGAPSIZE;
     //return LwpTools::ConvertToMetric(0.17);//DEFAULTGAPSIZE=0.17
@@ -527,18 +527,16 @@ LwpVirtualLayout* LwpHeadLayout::FindEnSuperTableLayout()
     return NULL;
 }
 
-LwpLayoutStyle::LwpLayoutStyle() :
-m_nStyleDefinition(0), m_nKey(0),
-m_pDescription(new LwpAtomHolder)
+LwpLayoutStyle::LwpLayoutStyle()
+    : m_nStyleDefinition(0)
+    , m_pDescription(new LwpAtomHolder)
+    , m_nKey(0)
 {
 }
 
 LwpLayoutStyle::~LwpLayoutStyle()
 {
-    if (m_pDescription)
-    {
-        delete m_pDescription;
-    }
+    delete m_pDescription;
 }
 
 void LwpLayoutStyle::Read(LwpObjectStream* pStrm)
@@ -1748,7 +1746,7 @@ sal_uInt16 LwpLayout::GetUsePage()
         if(pUseWhen)
             return pUseWhen->GetUsePage();
         else
-            return NULL;
+            return 0;
     }
     else if( !m_BasedOnStyle.IsNull() )
     {
@@ -1788,7 +1786,7 @@ sal_Bool LwpLayout::IsUseOnAllPages()
         if(pUseWhen)
             return pUseWhen->IsUseOnAllPages();
         else
-            return NULL;
+            return sal_False;
     }
     else if( !m_BasedOnStyle.IsNull() )
     {
@@ -1810,7 +1808,7 @@ sal_Bool LwpLayout::IsUseOnAllEvenPages()
         if(pUseWhen)
             return pUseWhen->IsUseOnAllEvenPages();
         else
-            return NULL;
+            return sal_False;
     }
     else if( !m_BasedOnStyle.IsNull() )
     {
@@ -1832,7 +1830,7 @@ sal_Bool LwpLayout::IsUseOnAllOddPages()
         if(pUseWhen)
             return pUseWhen->IsUseOnAllOddPages();
         else
-            return NULL;
+            return sal_False;
     }
     else if( !m_BasedOnStyle.IsNull() )
     {
@@ -1854,7 +1852,7 @@ sal_Bool LwpLayout::IsUseOnPage()
         if(pUseWhen)
             return pUseWhen->IsUseOnPage();
         else
-            return NULL;
+            return sal_False;
     }
     else if( !m_BasedOnStyle.IsNull() )
     {

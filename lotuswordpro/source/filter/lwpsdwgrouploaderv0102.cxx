@@ -82,7 +82,9 @@
 
 LwpSdwGroupLoaderV0102::LwpSdwGroupLoaderV0102(SvStream* pStream, LwpGraphicObject* pGraphicObj,
     IXFStream* pOutputStream)
-:m_pStream(pStream), m_pGraphicObj(pGraphicObj), m_pOutputStream(pOutputStream)
+    : m_pStream(pStream)
+    , m_pOutputStream(pOutputStream)
+    , m_pGraphicObj(pGraphicObj)
 {
 }
 LwpSdwGroupLoaderV0102::~LwpSdwGroupLoaderV0102(void)

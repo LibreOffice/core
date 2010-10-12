@@ -81,7 +81,7 @@ LwpFribFootnote::LwpFribFootnote(LwpPara* pPara ):LwpFrib(pPara)
 /**
  * @descr  read footnote frib information
  */
-void LwpFribFootnote::Read(LwpObjectStream *pObjStrm, sal_uInt16 len)
+void LwpFribFootnote::Read(LwpObjectStream * pObjStrm, sal_uInt16 /*len*/)
 {
     m_Footnote.ReadIndexed(pObjStrm);
 }

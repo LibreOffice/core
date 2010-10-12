@@ -122,7 +122,7 @@ XFParaStyle::XFParaStyle(XFParaStyle& other)
     m_aPadding = other.m_aPadding;
     m_aBreaks = other.m_aBreaks;
 //  m_aTabs = other.m_aTabs;
-    for( int i=0; i<other.m_aTabs.GetCount(); i++ )
+    for (size_t i=0; i<other.m_aTabs.GetCount(); ++i)
     {
         IXFStyle *pStyle = other.m_aTabs.Item(i);
         if( pStyle )
@@ -169,7 +169,7 @@ XFParaStyle& XFParaStyle::operator=(XFParaStyle& other)
     m_aPadding = other.m_aPadding;
     m_aBreaks = other.m_aBreaks;
     //  m_aTabs = other.m_aTabs;
-    for( int i=0; i<other.m_aTabs.GetCount(); i++ )
+    for (size_t i=0; i<other.m_aTabs.GetCount(); ++i)
     {
         IXFStyle *pStyle = other.m_aTabs.Item(i);
         if( pStyle )
@@ -281,6 +281,8 @@ void    XFParaStyle::SetLineHeight(enumLHType type, double value)
         break;
     case enumLHSpace:
         m_aLineHeight.SetSpace(value*0.5666);   //don't known why,just suspect.
+        break;
+    default:
         break;
     }
 }

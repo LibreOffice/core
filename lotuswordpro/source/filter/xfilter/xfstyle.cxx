@@ -102,7 +102,7 @@ void    XFStyle::SetStyleFamily(enumXFStyle family)
     m_enumFamily = family;
 }
 
-sal_Bool    XFStyle::Equal(IXFStyle *pStyle)
+sal_Bool    XFStyle::Equal(IXFStyle * /*pStyle*/)
 {
     return sal_False;
 }

@@ -251,7 +251,7 @@ sal_Bool LwpFoundry::FindBookMarkByName(OUString sName)
     if (pObjID)
         pBookMark = static_cast<LwpBookMark*>(pObjID->obj());
     else
-        return NULL;
+        return sal_False;
 
     while (pBookMark)
     {

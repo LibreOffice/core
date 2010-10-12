@@ -864,7 +864,7 @@ XFCell* LwpConnectedCellLayout::ConvertCell(LwpObjectID aTableID, sal_uInt16 nRo
  * @param pOutputStream - output stream
  * @return
  */
- void  LwpConnectedCellLayout::Parse(IXFStream* pOutputStream)
+ void  LwpConnectedCellLayout::Parse(IXFStream* /*pOutputStream*/)
 {
 }
 
@@ -938,7 +938,7 @@ XFCell* LwpHiddenCellLayout::ConvertCell(LwpObjectID aTableID, sal_uInt16 nRow, 
  * @param pOutputStream - output stream
  * @return
  */
- void  LwpHiddenCellLayout::Parse(IXFStream* pOutputStream)
+ void  LwpHiddenCellLayout::Parse(IXFStream* /*pOutputStream*/)
 {
 }
 

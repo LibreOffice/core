@@ -250,7 +250,7 @@ inline void XFDateStyle::AddSecond( sal_Bool bLongFmt, sal_Int16 pos)
     m_aParts.AddStyle(part);
 }
 
-inline void XFDateStyle::AddAmPm(sal_Bool bAmPm)
+inline void XFDateStyle::AddAmPm(sal_Bool /*bAmPm*/)
 {
     XFDatePart  *part = new XFDatePart();
     part->SetPartType(enumXFDateAmPm);

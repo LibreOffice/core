@@ -288,7 +288,7 @@ void    XFTable::ToXml(IXFStream *pStrm)
     //output rows:
     {
         int     lastRow = 0;
-        IXFAttrList *pAttrList = pStrm->GetAttrList();
+        pAttrList = pStrm->GetAttrList();
 
         std::map<sal_Int32,XFRow* >::iterator it = m_aRows.begin();
         for( ; it!=m_aRows.end(); it++ )

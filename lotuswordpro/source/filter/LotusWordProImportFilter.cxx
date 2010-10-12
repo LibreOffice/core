@@ -127,7 +127,6 @@ private:
     {
         UINT8 nDelim, nDummy, nLen, nData;
         UINT16 nOpcode;
-        int nCount = 0;
         OUStringBuffer sBuf( MAXCHARS );
         sal_Int32 nChars = 0;
 
@@ -233,7 +232,6 @@ sal_Bool SAL_CALL LotusWordProImportFilter::importImpl( const Sequence< ::com::s
         pValue[i].Value >>= xInputStream;
         else if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "URL" ) ) )
         pValue[i].Value >>= sURL;
-        rtl_TextEncoding encoding = RTL_TEXTENCODING_INFO_ASCII;
     }
     if ( !xInputStream.is() )
     {
@@ -244,9 +242,9 @@ sal_Bool SAL_CALL LotusWordProImportFilter::importImpl( const Sequence< ::com::s
     OString sFileName;
     sFileName = OUStringToOString(sURL, RTL_TEXTENCODING_INFO_ASCII);
 
-        SvFileStream inputStream( sURL, STREAM_READ );
-        if ( inputStream.IsEof() || ( inputStream.GetError() != SVSTREAM_OK ) )
-             return sal_False;
+    SvFileStream inputStream( sURL, STREAM_READ );
+    if ( inputStream.IsEof() || ( inputStream.GetError() != SVSTREAM_OK ) )
+         return sal_False;
 
     // An XML import service: what we push sax messages to..
     OUString sXMLImportService ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.XMLImporter" ) );
@@ -300,33 +298,31 @@ OUString SAL_CALL LotusWordProImportFilter::detect( com::sun::star::uno::Sequenc
             pValue[i].Value >>= xInputStream;
         else if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "URL" ) ) )
             pValue[i].Value >>= sURL;
-
-        rtl_TextEncoding encoding = RTL_TEXTENCODING_INFO_ASCII;
     }
 
-        uno::Reference< com::sun::star::ucb::XCommandEnvironment > xEnv;
-        if (!xInputStream.is())
-        {
-        try
-        {
-            ::ucbhelper::Content aContent(sURL, xEnv);
-                    xInputStream = aContent.openStream();
-        }
-        catch ( Exception& )
-        {
-            return ::rtl::OUString();
-        }
+    uno::Reference< com::sun::star::ucb::XCommandEnvironment > xEnv;
+    if (!xInputStream.is())
+    {
+    try
+    {
+        ::ucbhelper::Content aContent(sURL, xEnv);
+                xInputStream = aContent.openStream();
+    }
+    catch ( Exception& )
+    {
+        return ::rtl::OUString();
+    }
 
-                if (!xInputStream.is())
-                    return ::rtl::OUString();
-        }
+            if (!xInputStream.is())
+                return ::rtl::OUString();
+    }
 
-        Sequence< ::sal_Int8 > aData;
-        sal_Int32 nLen = sizeof( header ) / sizeof( header[0] );
-        if ( ( nLen == xInputStream->readBytes(  aData, nLen ) ) )
-            if ( memcmp( ( void* )header, (void*) aData.getConstArray(), nLen ) == 0 )
-                sTypeName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "writer_LotusWordPro_Document" ) );
-        return sTypeName;
+    Sequence< ::sal_Int8 > aData;
+    sal_Int32 nLen = sizeof( header ) / sizeof( header[0] );
+    if ( ( nLen == xInputStream->readBytes(  aData, nLen ) ) )
+        if ( memcmp( ( void* )header, (void*) aData.getConstArray(), nLen ) == 0 )
+            sTypeName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "writer_LotusWordPro_Document" ) );
+    return sTypeName;
 }
 
 

@@ -76,7 +76,7 @@ XFCell::XFCell()
     m_bProtect = sal_False;
 }
 
-XFCell::XFCell(const XFCell& other)
+XFCell::XFCell(const XFCell& other) : XFContentContainer(other)
 {
     if( other.m_pSubTable )
         m_pSubTable = new XFTable(*other.m_pSubTable);

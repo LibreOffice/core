@@ -180,7 +180,7 @@ protected:
     enumXFFrameYRel m_eYRel;
 };
 
-inline void XFFrameStyle::SetWrapType(enumXFWrap wrap, sal_Int32 nParagraphs)
+inline void XFFrameStyle::SetWrapType(enumXFWrap wrap, sal_Int32 /*nParagraphs*/)
 {
     m_eWrap = wrap;
 }

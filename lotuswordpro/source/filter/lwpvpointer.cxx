@@ -66,8 +66,10 @@ void LwpVersionedPointer::Read()
     if( LwpFileHeader::m_nFileRevision < 0x0006 )
         m_pObjStrm->SkipExtra();
 }
-void LwpVersionedPointer::Parse(IXFStream* pOutputStream)
-{}
+
+void LwpVersionedPointer::Parse(IXFStream* /*pOutputStream*/)
+{
+}
 
 void LwpVersionedPointer::RegisterStyle()
 {

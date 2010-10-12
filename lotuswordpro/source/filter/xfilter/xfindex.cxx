@@ -111,7 +111,7 @@ void    XFIndex::SetTitle(rtl::OUString title, rtl::OUString strParaStyle)
 }
 
 void    XFIndex::AddTemplate(sal_uInt32 level,
-                    rtl::OUString style,
+                    rtl::OUString /*style*/,
                     enumXFIndexTemplate type1,
                     enumXFIndexTemplate type2,
                     enumXFIndexTemplate type3,
@@ -184,7 +184,7 @@ void XFIndex::AddTocSource(sal_uInt16 nLevel, const rtl::OUString sStyleName)
     m_aTOCSource[nLevel].push_back(sStyleName);
 }
 
-void XFIndex::SetDefaultAlphaIndex(rtl::OUString strDivision,sal_Bool bRunin, sal_Bool bSeparator)
+void XFIndex::SetDefaultAlphaIndex(rtl::OUString /*strDivision*/,sal_Bool bRunin, sal_Bool bSeparator)
 {
     XFIndexTemplate * pTemplateSep = new XFIndexTemplate();
     if (bSeparator)
@@ -320,11 +320,11 @@ void    XFIndex::ToXml(IXFStream *pStrm)
             pAttrList->AddAttribute( A2OUSTR("text:outline-level"), Int32ToOUString(i));
             pStrm->StartElement( A2OUSTR("text:index-source-styles") );
 
-            std::vector<rtl::OUString>::iterator it;
-            for (it = m_aTOCSource[i].begin(); it != m_aTOCSource[i].end(); it++)
+            std::vector<rtl::OUString>::iterator it_str;
+            for (it_str = m_aTOCSource[i].begin(); it_str != m_aTOCSource[i].end(); it++)
             {
                 pAttrList->Clear();
-                pAttrList->AddAttribute( A2OUSTR("text:style-name"), *it);
+                pAttrList->AddAttribute( A2OUSTR("text:style-name"), *it_str);
                 pStrm->StartElement( A2OUSTR("text:index-source-style") );
                 pStrm->EndElement( A2OUSTR("text:index-source-style") );
             }
@@ -406,6 +406,8 @@ void XFIndexTemplate::ToXml(IXFStream *pStrm)
             case enumXFTabChar:
                 pAttrList->AddAttribute( A2OUSTR("style:type"), A2OUSTR("char") );
                 break;
+            default:
+                break;
             }
             //delimiter:
             if( m_eTabType == enumXFTabChar )
@@ -442,6 +444,8 @@ void XFIndexTemplate::ToXml(IXFStream *pStrm)
         case enumXFIndexTemplateBibliography:
             pStrm->StartElement( A2OUSTR("text:index-entry-bibliography") );
             pStrm->EndElement( A2OUSTR("text:index-entry-bibliography") );
+            break;
+        default:
             break;
         }
     }

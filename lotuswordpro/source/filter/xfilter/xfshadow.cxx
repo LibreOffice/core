@@ -93,6 +93,8 @@ rtl::OUString XFShadow::ToString()
     case enumXFShadowLeftTop:
         buf += A2OUSTR(" -") + strOff + A2OUSTR("cm") + A2OUSTR(" -") + strOff + A2OUSTR("cm");
         break;
+    default:
+        break;
     }
 
     return buf;

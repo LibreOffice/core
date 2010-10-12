@@ -98,7 +98,7 @@ void LwpLayoutGeometry::Read()
         m_pObjStrm->SkipExtra();
     }
 }
-void LwpLayoutGeometry::Parse(IXFStream* pOutputStream)
+void LwpLayoutGeometry::Parse(IXFStream* /*pOutputStream*/)
 {}
 
 LwpLayoutScale::LwpLayoutScale(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
@@ -126,7 +126,7 @@ void LwpLayoutScale::Read()
     }
 }
 
-void LwpLayoutScale::Parse(IXFStream* pOutputStream)
+void LwpLayoutScale::Parse(IXFStream* /*pOutputStream*/)
 {}
 
 LwpLayoutMargins::LwpLayoutMargins(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
@@ -149,7 +149,7 @@ void LwpLayoutMargins::Read()
     }
 }
 
-void LwpLayoutMargins::Parse(IXFStream* pOutputStream)
+void LwpLayoutMargins::Parse(IXFStream* /*pOutputStream*/)
 {}
 
 LwpLayoutBorder::LwpLayoutBorder(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
@@ -170,7 +170,7 @@ void LwpLayoutBorder::Read()
     }
 }
 
-void LwpLayoutBorder::Parse(IXFStream* pOutputStream)
+void LwpLayoutBorder::Parse(IXFStream* /*pOutputStream*/)
 {}
 
 LwpLayoutBackground::LwpLayoutBackground(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
@@ -191,7 +191,7 @@ void LwpLayoutBackground::Read()
     }
 }
 
-void LwpLayoutBackground::Parse(IXFStream* pOutputStream)
+void LwpLayoutBackground::Parse(IXFStream* /*pOutputStream*/)
 {}
 
 LwpExternalBorder::LwpExternalBorder()
@@ -236,7 +236,7 @@ void LwpLayoutExternalBorder::Read()
     }
 }
 
-void LwpLayoutExternalBorder::Parse(IXFStream* pOutputStream)
+void LwpLayoutExternalBorder::Parse(IXFStream* /*pOutputStream*/)
 {}
 
 LwpColumnInfo::LwpColumnInfo()
@@ -299,7 +299,7 @@ double LwpLayoutColumns::GetColGap(sal_uInt16 nIndex)
     return m_pColumns[nIndex].GetGap();
 }
 
-void LwpLayoutColumns::Parse(IXFStream* pOutputStream)
+void LwpLayoutColumns::Parse(IXFStream* /*pOutputStream*/)
 {}
 
 LwpLayoutGutters::LwpLayoutGutters(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
@@ -321,7 +321,7 @@ void LwpLayoutGutters::Read()
 }
 
 
-void LwpLayoutGutters::Parse(IXFStream* pOutputStream)
+void LwpLayoutGutters::Parse(IXFStream* /*pOutputStream*/)
 {}
 
 LwpJoinStuff::LwpJoinStuff()
@@ -369,7 +369,7 @@ void LwpLayoutJoins::Read()
     }
 }
 
-void LwpLayoutJoins::Parse(IXFStream* pOutputStream)
+void LwpLayoutJoins::Parse(IXFStream* /*pOutputStream*/)
 {}
 
 LwpLayoutShadow::LwpLayoutShadow(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
@@ -390,7 +390,7 @@ void LwpLayoutShadow::Read()
     }
 }
 
-void LwpLayoutShadow::Parse(IXFStream* pOutputStream)
+void LwpLayoutShadow::Parse(IXFStream* /*pOutputStream*/)
 {}
 /**************************************************************************
  * @descr: Constructor
@@ -460,7 +460,7 @@ void LwpLayoutRelativity::Read()
     }
 }
 
-void LwpLayoutRelativity::Parse(IXFStream *pOutputStream)
+void LwpLayoutRelativity::Parse(IXFStream * /*pOutputStream*/)
 {
 }
 
