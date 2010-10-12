@@ -784,6 +784,9 @@ protected:
     /// Output SwOLENode
     virtual void OutputOLENode( const SwOLENode& ) = 0;
 
+    virtual void OutputLinkedOLE( const rtl::OUString& ) = 0;
+
+
     /// Output SwSectionNode
     virtual void OutputSectionNode( const SwSectionNode& );
 
@@ -1122,6 +1125,8 @@ protected:
 
     /// Output SwOLENode
     virtual void OutputOLENode( const SwOLENode& );
+
+    virtual void OutputLinkedOLE( const rtl::OUString& );
 
     virtual void AppendSection( const SwPageDesc *pPageDesc, const SwSectionFmt* pFmt, ULONG nLnNum );
 

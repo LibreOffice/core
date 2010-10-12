@@ -362,6 +362,7 @@ class FieldEntry
     private:
         ::rtl::OUString msBookmarkName;
         ::rtl::OUString msMarkType;
+        ::rtl::OUString msMarkCode;
         ::sw::mark::IFieldmark::parameter_map_t maParams;
 
     public:
@@ -377,8 +378,10 @@ class FieldEntry
 
         ::rtl::OUString GetBookmarkName();
         ::rtl::OUString GetBookmarkType();
+        ::rtl::OUString GetBookmarkCode();
         void SetBookmarkName(::rtl::OUString bookmarkName);
         void SetBookmarkType(::rtl::OUString bookmarkType);
+        void SetBookmarkCode(::rtl::OUString bookmarkCode);
         ::sw::mark::IFieldmark::parameter_map_t& getParameters();
 };
 

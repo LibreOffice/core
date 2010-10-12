@@ -36,6 +36,7 @@
 
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
 #include <rtl/math.hxx>
 #include <svtools/filter.hxx>
 #include <svl/itemiter.hxx>
@@ -364,6 +365,48 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
                 if (bEndCR) //No newline in inline case
                     WriteCR();
             }
+        }
+    }
+}
+
+void WW8Export::OutputLinkedOLE( const rtl::OUString& rOleId )
+{
+    uno::Reference< embed::XStorage > xDocStg = pDoc->GetDocStorage();
+    uno::Reference< embed::XStorage > xOleStg = xDocStg->openStorageElement(
+            rtl::OUString::createFromAscii( "OLELinks" ), embed::ElementModes::READ );
+    SotStorageRef xObjSrc = SotStorage::OpenOLEStorage( xOleStg, rOleId, STREAM_READ );
+
+    SotStorageRef xObjStg = GetWriter().GetStorage().OpenSotStorage(
+        CREATE_CONST_ASC(SL::aObjectPool), STREAM_READWRITE |
+        STREAM_SHARE_DENYALL );
+
+    if( xObjStg.Is() && xObjSrc.Is() )
+    {
+        SotStorageRef xOleDst = xObjStg->OpenSotStorage( rOleId,
+                STREAM_READWRITE | STREAM_SHARE_DENYALL );
+        if ( xOleDst.Is() )
+            xObjSrc->CopyTo( xOleDst );
+
+        if ( !xOleDst->GetError( ) )
+        {
+            xOleDst->Commit();
+
+            // Ouput the cPicLocation attribute
+            WW8Bytes* pBuf = new WW8Bytes( 128, 128 );
+            GetWriter().InsUInt16( *pBuf, NS_sprm::LN_CPicLocation );
+            GetWriter().InsUInt32( *pBuf, rOleId.copy( 1 ).toInt32() );
+
+            GetWriter().InsUInt16( *pBuf, NS_sprm::LN_CFOle2 );
+            pBuf->Insert( 1, pBuf->Count() );
+
+            GetWriter().InsUInt16( *pBuf, NS_sprm::LN_CFSpec );
+            pBuf->Insert( 1, pBuf->Count() );
+
+            GetWriter().InsUInt16( *pBuf, NS_sprm::LN_CFObj );
+            pBuf->Insert( 1, pBuf->Count() );
+
+            pChpPlc->AppendFkpEntry( Strm().Tell(), pBuf->Count(), pBuf->GetData() );
+            delete pBuf;
         }
     }
 }

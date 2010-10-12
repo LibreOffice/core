@@ -419,6 +419,7 @@ namespace sw { namespace mark
         OSL_TRACE("Fieldmarks");
         lcl_DebugMarks(m_vFieldmarks);
 #endif
+
         return pMark.get();
     }
 
@@ -810,6 +811,7 @@ namespace sw { namespace mark
 
     IFieldmark* MarkManager::getFieldmarkBefore(const SwPosition& rPos) const
         { return dynamic_cast<IFieldmark*>(lcl_getMarkBefore(m_vFieldmarks, rPos)); }
+
 
     ::rtl::OUString MarkManager::getUniqueMarkName(const ::rtl::OUString& rName) const
     {

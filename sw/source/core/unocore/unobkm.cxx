@@ -129,6 +129,11 @@ void SwXBookmark::Impl::registerInMark(SwXBookmark & rThis,
     m_pRegisteredBookmark = pBkmk;
 }
 
+void SwXBookmark::registerInMark(SwXBookmark & rThis,
+        ::sw::mark::IMark *const pBkmk)
+{
+    m_pImpl->registerInMark( rThis, pBkmk );
+}
 
 const ::sw::mark::IMark* SwXBookmark::GetBookmark() const
 {
@@ -645,5 +650,29 @@ uno::Reference<container::XNameContainer> SwXFieldmark::getParameters()
     if(!pBkm)
         throw uno::RuntimeException();
     return uno::Reference<container::XNameContainer>(new SwXFieldmarkParameters(pBkm));
+}
+
+uno::Reference<text::XTextContent>
+SwXFieldmark::CreateXFieldmark(SwDoc & rDoc, ::sw::mark::IMark & rMark)
+{
+    // #i105557#: do not iterate over the registered clients: race condition
+    ::sw::mark::MarkBase *const pMarkBase(
+        dynamic_cast< ::sw::mark::MarkBase * >(&rMark));
+    OSL_ENSURE(pMarkBase, "CreateXBookmark: no MarkBase?");
+    if (!pMarkBase) { return 0; }
+    uno::Reference<text::XTextContent> xMark(pMarkBase->GetXBookmark());
+    if (!xMark.is())
+    {
+        // FIXME: These belong in XTextFieldsSupplier
+        SwXFieldmark* pXBkmk = NULL;
+        if (dynamic_cast< ::sw::mark::TextFieldmark* >(&rMark))
+            pXBkmk = new SwXFieldmark(false, &rMark, &rDoc);
+        else if (dynamic_cast< ::sw::mark::CheckboxFieldmark* >(&rMark))
+            pXBkmk = new SwXFieldmark(true, &rMark, &rDoc);
+
+        xMark.set(pXBkmk);
+        pXBkmk->registerInMark(*pXBkmk, pMarkBase);
+    }
+    return xMark;
 }
 

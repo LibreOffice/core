@@ -376,7 +376,7 @@ lcl_ExportFieldMark(
             pUnoCrsr, i_xParentText, PORTION_FIELD_START);
         xRef = pPortion;
         if (pPortion && pFieldmark && pDoc)
-            pPortion->SetBookmark(new SwXFieldmark(false, pFieldmark, pDoc));
+            pPortion->SetBookmark( SwXFieldmark::CreateXFieldmark( *pDoc, *pFieldmark ) );
     }
     else if (CH_TXT_ATR_FIELDEND == Char)
     {
@@ -390,7 +390,7 @@ lcl_ExportFieldMark(
             pUnoCrsr, i_xParentText, PORTION_FIELD_END);
         xRef = pPortion;
         if (pPortion && pFieldmark && pDoc)
-            pPortion->SetBookmark(new SwXFieldmark(false, pFieldmark, pDoc));
+            pPortion->SetBookmark( SwXFieldmark::CreateXFieldmark( *pDoc, *pFieldmark ) );
     }
     else if (CH_TXT_ATR_FORMELEMENT == Char)
     {
@@ -404,7 +404,7 @@ lcl_ExportFieldMark(
             pUnoCrsr, i_xParentText, PORTION_FIELD_START_END);
         xRef = pPortion;
         if (pPortion && pFieldmark && pDoc)
-            pPortion->SetBookmark(new SwXFieldmark(true, pFieldmark, pDoc));
+            pPortion->SetBookmark( SwXFieldmark::CreateXFieldmark( *pDoc, *pFieldmark ) );
     }
     else
     {

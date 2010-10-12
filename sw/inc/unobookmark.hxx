@@ -80,6 +80,8 @@ protected:
 
     const ::sw::mark::IMark* GetBookmark() const;
 
+    void registerInMark( SwXBookmark& rXMark, ::sw::mark::IMark* const pMarkBase );
+
     virtual ~SwXBookmark();
 
     /// @param pDoc and pMark != 0, but not & because of ImplInheritanceHelper
@@ -238,6 +240,10 @@ private:
     bool isReplacementObject;
 
 public:
+
+    static ::com::sun::star::uno::Reference<
+            ::com::sun::star::text::XTextContent>
+        CreateXFieldmark( SwDoc & rDoc, ::sw::mark::IMark & rMark );
 
     SwXFieldmark(bool isReplacementObject,
             ::sw::mark::IMark* pBkm = 0, SwDoc* pDoc = 0);

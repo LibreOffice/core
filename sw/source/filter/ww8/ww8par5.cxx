@@ -36,6 +36,13 @@
 #include <sal/types.h>
 #include <tools/solar.h>
 
+#include <comphelper/storagehelper.hxx>
+#include <sot/storinfo.hxx>
+#include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/XTransactedObject.hpp>
+#include <com/sun/star/io/XStream.hpp>
+
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <svl/urihelper.hxx>
 #include <svl/zforlist.hxx>
@@ -87,6 +94,7 @@
 #include "writerhelper.hxx"
 #include "fields.hxx"
 #include <unotools/fltrcfg.hxx>
+#include <xmloff/odffields.hxx>
 
 #include <algorithm> // #i24377#
 
@@ -725,6 +733,72 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                 *pPaM->GetPoint() = maFieldStack.back().maStartPos;
                 break;
             default:
+                rtl::OUString aCode = maFieldStack.back().GetBookmarkCode();
+                if ( aCode.getLength() > 0 )
+                {
+                    // Unhandled field with stored code
+                    SwPosition aEndPos = *pPaM->GetPoint();
+                    SwPaM aFldPam(
+                            maFieldStack.back().GetPtNode(), maFieldStack.back().GetPtCntnt(),
+                            aEndPos.nNode, aEndPos.nContent.GetIndex());
+
+                    IDocumentMarkAccess* pMarksAccess = rDoc.getIDocumentMarkAccess( );
+
+                    IFieldmark* pFieldmark = pMarksAccess->makeFieldBookmark(
+                                aFldPam,
+                                maFieldStack.back().GetBookmarkName(),
+                                rtl::OUString::createFromAscii( ODF_UNHANDLED ) );
+                    if ( pFieldmark )
+                    {
+                        const IFieldmark::parameter_map_t& pParametersToAdd = maFieldStack.back().getParameters();
+                        pFieldmark->GetParameters()->insert(pParametersToAdd.begin(), pParametersToAdd.end());
+                        rtl::OUString sFieldId = rtl::OUString::valueOf( sal_Int32( maFieldStack.back().mnFieldId ) );
+                        pFieldmark->GetParameters()->insert(
+                                std::pair< rtl::OUString, uno::Any > (
+                                    rtl::OUString::createFromAscii( ODF_ID_PARAM ),
+                                    uno::makeAny( sFieldId ) ) );
+                        pFieldmark->GetParameters()->insert(
+                                std::pair< rtl::OUString, uno::Any > (
+                                    rtl::OUString::createFromAscii( ODF_CODE_PARAM ),
+                                    uno::makeAny( aCode ) ) );
+
+                        if ( nObjLocFc > 0 )
+                        {
+                            // Store the OLE object as an internal link
+                            String sOleId = '_';
+                            sOleId += String::CreateFromInt32( nObjLocFc );
+
+                            SvStorageRef xSrc0 = pStg->OpenSotStorage(CREATE_CONST_ASC(SL::aObjectPool));
+                            SvStorageRef xSrc1 = xSrc0->OpenSotStorage( sOleId, STREAM_READ );
+
+                            // Store it now!
+                            uno::Reference< embed::XStorage > xDocStg = GetDoc().GetDocStorage();
+                            uno::Reference< embed::XStorage > xOleStg = xDocStg->openStorageElement(
+                                    rtl::OUString::createFromAscii( "OLELinks" ), embed::ElementModes::WRITE );
+                            SotStorageRef xObjDst = SotStorage::OpenOLEStorage( xOleStg, sOleId );
+
+                            if ( xObjDst.Is() )
+                            {
+                                xSrc1->CopyTo( xObjDst );
+
+                                if ( !xObjDst->GetError() )
+                                    xObjDst->Commit();
+                            }
+
+                            uno::Reference< embed::XTransactedObject > xTransact( xOleStg, uno::UNO_QUERY );
+                            if ( xTransact.is() )
+                                xTransact->commit();
+
+                            // Store the OLE Id as a parameter
+                            pFieldmark->GetParameters()->insert(
+                                    std::pair< rtl::OUString, uno::Any >(
+                                        rtl::OUString::createFromAscii( ODF_OLE_PARAM ),
+                                        uno::makeAny( rtl::OUString( sOleId ) ) ) );
+                        }
+
+                    }
+                }
+
                 break;
         }
         maFieldStack.pop_back();
@@ -788,6 +862,11 @@ FieldEntry &FieldEntry::operator=(const FieldEntry &rOther) throw()
     return msMarkType;
 }
 
+::rtl::OUString FieldEntry::GetBookmarkCode()
+{
+    return msMarkCode;
+}
+
 void FieldEntry::SetBookmarkName(::rtl::OUString bookmarkName)
 {
     msBookmarkName=bookmarkName;
@@ -796,6 +875,11 @@ void FieldEntry::SetBookmarkName(::rtl::OUString bookmarkName)
 void FieldEntry::SetBookmarkType(::rtl::OUString bookmarkType)
 {
     msMarkType=bookmarkType;
+}
+
+void FieldEntry::SetBookmarkCode(::rtl::OUString bookmarkCode)
+{
+    msMarkCode = bookmarkCode;
 }
 
 
@@ -871,7 +955,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
         0,
 
 
-        0,      // 56: VERKNUePFUNG     // fehlt noch !!!!!!!!!!!!!!!!!!!!!!!
+        0,                                          // 56
 
 
         &SwWW8ImplReader::Read_F_Symbol,            // 57
@@ -993,8 +1077,16 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
              ( ( nSearchPos = aStr.Search('/') ) != STRING_NOTFOUND && nSearchPos < nSpacePos ) )
             return aF.nLen;
         else
+        {
+            // Link fields aren't supported, but they are bound to an OLE object
+            // that needs to be roundtripped
+            if ( aF.nId == 56 )
+                bEmbeddObj = true;
+            // Field not supported: store the field code for later use
+            maFieldStack.back().SetBookmarkCode( aStr );
             return aF.nLen - aF.nLRes - 1;  // so viele ueberlesen, das Resultfeld
                                             // wird wie Haupttext eingelesen
+        }
     }
     else
     {                                   // Lies Feld

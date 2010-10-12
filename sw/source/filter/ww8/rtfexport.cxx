@@ -728,6 +728,11 @@ void RtfExport::OutputOLENode( const SwOLENode& )
     /* noop, see RtfAttributeOutput::FlyFrameOLE */
 }
 
+void RtfExport::OutputLinkedOLE( const rtl::OUString& )
+{
+    OSL_TRACE("%s", OSL_THIS_FUNC);
+}
+
 void RtfExport::AppendSection( const SwPageDesc* pPageDesc, const SwSectionFmt* pFmt, ULONG nLnNum )
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);

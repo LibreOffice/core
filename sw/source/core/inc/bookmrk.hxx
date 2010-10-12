@@ -35,6 +35,7 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/noncopyable.hpp>
 #include <map>
+#include <rtl/ustring.hxx>
 
 #include <IMark.hxx>
 
@@ -255,6 +256,8 @@ namespace sw { namespace mark
             virtual void InitDoc(SwDoc* const io_pDoc);
             bool IsChecked() const;
             void SetChecked(bool checked);
+
+            virtual rtl::OUString toString( ) const;
     };
 
 }}

@@ -373,6 +373,11 @@ void DocxExport::OutputOLENode( const SwOLENode& )
     OSL_TRACE( "TODO DocxExport::OutputOLENode( const SwOLENode& )\n" );
 }
 
+void DocxExport::OutputLinkedOLE( const OUString& )
+{
+    // Nothing to implement here: WW8 only
+}
+
 ULONG DocxExport::ReplaceCr( BYTE )
 {
     // Completely unused for Docx export... only here for code sharing

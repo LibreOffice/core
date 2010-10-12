@@ -116,9 +116,9 @@ using namespace sw::types;
 using namespace sw::mark;
 using namespace nsFieldFlags;
 
-
 static String lcl_getFieldCode( const IFieldmark* pFieldmark ) {
     ASSERT(pFieldmark!=NULL, "where is my fieldmark???");
+
     if ( pFieldmark->GetFieldname( ).equalsAscii( ODF_FORMTEXT ) ) {
         return String::CreateFromAscii(" FORMTEXT ");
     } else if ( pFieldmark->GetFieldname( ).equalsAscii( ODF_FORMDROPDOWN ) ) {
@@ -1818,12 +1818,49 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
 
                 if ( pFieldmark->GetFieldname().equalsAscii( ODF_FORMTEXT ) )
                     AppendBookmark( pFieldmark->GetName(), false );
-                OutputField( NULL, lcl_getFieldId( pFieldmark ), lcl_getFieldCode( pFieldmark ), WRITEFIELD_START | WRITEFIELD_CMD_START );
+                ww::eField eFieldId = lcl_getFieldId( pFieldmark );
+                String sCode = lcl_getFieldCode( pFieldmark );
+                if ( pFieldmark->GetFieldname().equalsAscii( ODF_UNHANDLED ) )
+                {
+                    IFieldmark::parameter_map_t::const_iterator it = pFieldmark->GetParameters()->find(
+                            rtl::OUString::createFromAscii( ODF_ID_PARAM ) );
+                    if ( it != pFieldmark->GetParameters()->end() )
+                    {
+                        rtl::OUString sFieldId;
+                        it->second >>= sFieldId;
+                        eFieldId = (ww::eField)sFieldId.toInt32();
+                    }
+
+                    it = pFieldmark->GetParameters()->find(
+                            rtl::OUString::createFromAscii( ODF_CODE_PARAM ) );
+                    if ( it != pFieldmark->GetParameters()->end() )
+                    {
+                        rtl::OUString sOUCode;
+                        it->second >>= sOUCode;
+                        sCode = sOUCode;
+                    }
+                }
+                OutputField( NULL, eFieldId, sCode, WRITEFIELD_START | WRITEFIELD_CMD_START );
                 if ( pFieldmark->GetFieldname( ).equalsAscii( ODF_FORMTEXT ) )
                     WriteFormData( *pFieldmark );
                 else if ( pFieldmark->GetFieldname( ).equalsAscii( ODF_HYPERLINK ) )
                     WriteHyperlinkData( *pFieldmark );
                 OutputField( NULL, lcl_getFieldId( pFieldmark ), String(), WRITEFIELD_CMD_END );
+
+                if ( pFieldmark->GetFieldname().equalsAscii( ODF_UNHANDLED ) )
+                {
+                    // Check for the presence of a linked OLE object
+                    IFieldmark::parameter_map_t::const_iterator it = pFieldmark->GetParameters()->find(
+                            rtl::OUString::createFromAscii( ODF_OLE_PARAM ) );
+                    if ( it != pFieldmark->GetParameters()->end() )
+                    {
+                        rtl::OUString sOleId;
+                        uno::Any aValue = it->second;
+                        aValue >>= sOleId;
+                        if ( sOleId.getLength( ) > 0 )
+                            OutputLinkedOLE( sOleId );
+                    }
+                }
             }
             else if ( ch == CH_TXT_ATR_FIELDEND )
             {
@@ -1831,7 +1868,20 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 ::sw::mark::IFieldmark const * const pFieldmark = pMarkAccess->getFieldmarkFor( aPosition );
                 OSL_ENSURE( pFieldmark, "Looks like this doc is broken...; where is the Fieldmark for the FIELDSTART??" );
 
-                OutputField( NULL, lcl_getFieldId( pFieldmark ), String(), WRITEFIELD_CLOSE );
+                ww::eField eFieldId = lcl_getFieldId( pFieldmark );
+                if ( pFieldmark->GetFieldname().equalsAscii( ODF_UNHANDLED ) )
+                {
+                    IFieldmark::parameter_map_t::const_iterator it = pFieldmark->GetParameters()->find(
+                            rtl::OUString::createFromAscii( ODF_ID_PARAM ) );
+                    if ( it != pFieldmark->GetParameters()->end() )
+                    {
+                        rtl::OUString sFieldId;
+                        it->second >>= sFieldId;
+                        eFieldId = (ww::eField)sFieldId.toInt32();
+                    }
+                }
+
+                OutputField( NULL, eFieldId, String(), WRITEFIELD_CLOSE );
                 if ( pFieldmark->GetFieldname().equalsAscii( ODF_FORMTEXT ) )
                     AppendBookmark( pFieldmark->GetName(), false );
             }
