@@ -40,7 +40,6 @@
 #include "bridges/cpp_uno/shared/vtablefactory.hxx"
 
 #include "share.hxx"
-// #include <stdio.h>
 
 
 using namespace ::com::sun::star::uno;
@@ -48,7 +47,6 @@ using namespace ::com::sun::star::uno;
 namespace
 {
 
-//==================================================================================================
 static typelib_TypeClass cpp2uno_call(
     bridges::cpp_uno::shared::CppInterfaceProxy * pThis,
     const typelib_TypeDescription * pMemberTypeDescr,

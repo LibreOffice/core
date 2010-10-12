@@ -31,13 +31,9 @@
 #include "uno/mapping.hxx"
 #include "uno/dispatcher.h"
 
-//#include "cascade_mappping.hxx"
 #include "cppu/EnvDcp.hxx"
 
 
-//#define LOG_CALLING_named_purpose_getMapping
-
-//#define LOG_LIFECYLE_MediatorMapping
 #ifdef LOG_LIFECYLE_MediatorMapping
 #  include <iostream>
 #  define LOG_LIFECYLE_MediatorMapping_emit(x) x

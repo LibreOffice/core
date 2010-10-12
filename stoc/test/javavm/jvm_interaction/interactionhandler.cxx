@@ -31,7 +31,6 @@
 
 #include <jni.h>
 
-//#include <iostream>
 #include <stdio.h>
 #include <sal/main.h>
 #include <rtl/process.h>

@@ -66,7 +66,6 @@ static const sal_Char* MOUNTTAB="/etc/mnttab";
 #include <sys/vfs.h>
 #define  HAVE_STATFS_H
 #include <sys/quota.h>
-//#include <ctype.h>
 static const sal_Char* MOUNTTAB="/etc/mtab";
 
 #elif defined(NETBSD) || defined(FREEBSD)
@@ -75,7 +74,6 @@ static const sal_Char* MOUNTTAB="/etc/mtab";
 #include <sys/ucred.h>
 #include <sys/mount.h>
 #include <ufs/ufs/quota.h>
-//#include <ctype.h>
 #define  HAVE_STATFS_H
 
 /* No mounting table on *BSD
@@ -85,7 +83,6 @@ static const sal_Char* MOUNTTAB="/etc/mtab";
 #elif defined(MACOSX)
 
 #include <ufs/ufs/quota.h>
-//#include <ctype.h>
 #include <sys/param.h>
 #include <sys/mount.h>
 #define HAVE_STATFS_H

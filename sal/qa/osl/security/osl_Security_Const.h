@@ -25,22 +25,15 @@
  *
  ************************************************************************/
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-
 #ifndef _OSL_SECURITY_CONST_H_
 #define _OSL_SECURITY_CONST_H_
 
 #if ( defined WNT )                     // Windows
-//#define UNICODE
 #include <tools/prewin.h>
-// #include <windows.h>
 #include <io.h>
 #include <tools/postwin.h>
 #endif
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <osl/file.hxx>
@@ -55,7 +48,6 @@
 #endif
 
 #include <testshl/simpleheader.hxx>
-// LLA: #include <testshl2/cmdlinebits.hxx>
 
 
 #define BUFSIZE 1024

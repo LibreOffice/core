@@ -29,21 +29,16 @@
 #include <osl/thread.h>
 
 #include <osl/diagnose.h>
-//#include <osl/socket.h>
 
 #ifndef _OSL_FILE_PATH_HELPER_H_
 #include "file_path_helper.h"
 #endif
 
 #include "procimpl.h"
-//#include "sockimpl.h"
-//#include "secimpl.h"
 
 #include <ctype.h>
 
-//#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-//#endif
 
 // for exception logging
 #include <stdio.h>

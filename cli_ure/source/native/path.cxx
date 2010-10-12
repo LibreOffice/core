@@ -35,7 +35,6 @@
 #include <windows.h>
 
 #include "sal/types.h"
-//#include "tools/pathutils.hxx"
 
 namespace cli_ure {
 

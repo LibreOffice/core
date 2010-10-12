@@ -24,12 +24,10 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-//#include <com/sun/star/bridge/XServer.hpp>
-//#include <com/sun/star/bridge/XClient.hpp>
+
 #include <stdio.h>
 
 #include <com/sun/star/bridge/XInstanceProvider.hpp>
-//#include <com/sun/star/bridge/XConnectionAdministration.hpp>
 #include <osl/thread.hxx>
 
 
