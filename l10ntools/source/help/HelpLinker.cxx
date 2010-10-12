@@ -1022,8 +1022,8 @@ void HelpLinker::main( std::vector<std::string> &args,
         idxCaptionStylesheet = fs::path( aStdStr_IdxCaptionPathFileURL );
     }
 
-    if (!bExtensionMode && idxContentStylesheet.empty()
-        || !extsource.empty() && idxContentStylesheet.empty())
+    if ( (!bExtensionMode && idxContentStylesheet.empty())
+        || (!extsource.empty() && idxContentStylesheet.empty()) )
     {
         //No extension mode and extension mode using commandline
         //!extsource.empty indicates extension mode using commandline
