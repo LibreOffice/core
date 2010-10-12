@@ -998,8 +998,8 @@ void HelpLinker::main( std::vector<std::string> &args,
         throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
     }
 
-    if (!bExtensionMode && idxCaptionStylesheet.empty()
-        || !extsource.empty() && idxCaptionStylesheet.empty())
+    if ( (!bExtensionMode && idxCaptionStylesheet.empty())
+        || (!extsource.empty() && idxCaptionStylesheet.empty()) )
     {
         //No extension mode and extension mode using commandline
         //!extsource.empty indicates extension mode using commandline
