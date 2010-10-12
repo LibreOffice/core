@@ -33,7 +33,7 @@
 #include <sal/macros.h>
 
 class ResMgr;
-//.........................................................................
+
 namespace dbaccess
 {
 
@@ -119,11 +119,6 @@ namespace dbaccess
         OModuleClient()     { ResourceManager::registerClient(); }
         ~OModuleClient()    { ResourceManager::revokeClient(); }
     };
-
-
-//.........................................................................
 }
-//.........................................................................
 
 #endif // _DBA_CORE_RESOURCE_HXX_
-

@@ -36,10 +36,8 @@
 
 #include <vector>
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
     // ===================================================================
     // = OPropertyForward
@@ -77,8 +75,6 @@ namespace dbaccess
         inline ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getDefinition() const { return m_xDest; }
     };
 
-//........................................................................
 }   // namespace dbaccess
-//........................................................................
-#endif // DBA_PROPERTYSETFORWARD_HXX
 
+#endif // DBA_PROPERTYSETFORWARD_HXX

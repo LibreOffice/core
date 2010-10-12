@@ -40,10 +40,8 @@
 
 #include <map>
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
     class OPropertyForward;
 
@@ -98,8 +96,7 @@ namespace dbaccess
                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxDestination
                 );
     };
-//........................................................................
+
 }   // namespace dbaccess
-//........................................................................
 
 #endif // DBA_CONTAINERMEDIATOR_HXX

@@ -73,7 +73,6 @@ namespace dbaccess
                                                 ::com::sun::star::container::XNamed
                                             >   OColumnBase;
 
-    //------------------------------------------------------------
     class OColumn   :public comphelper::OBaseMutex
                     ,public OColumnBase
                     ,public ::comphelper::OPropertyContainer
@@ -163,7 +162,7 @@ namespace dbaccess
     class OContainerMediator;
     typedef ::cppu::ImplHelper1< ::com::sun::star::container::XChild > TXChild;
     typedef connectivity::OColumnsHelper OColumns_BASE;
-    //------------------------------------------------------------
+
     class OColumns : public OColumns_BASE
                     ,public TXChild
     {
@@ -255,4 +254,3 @@ namespace dbaccess
     };
 }
 #endif // _DBA_COREAPI_COLUMN_HXX_
-

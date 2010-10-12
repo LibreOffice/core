@@ -60,10 +60,8 @@ namespace dbtools
     class IWarningsContainer;
 }
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
     typedef ::cppu::ImplHelper5 <   ::com::sun::star::container::XContainerListener
                                 ,   ::com::sun::star::container::XContainerApproveListener
@@ -93,7 +91,6 @@ namespace dbaccess
 
         OContainerListener*     m_pCommandsListener;
 
-        // ------------------------------------------------------------------------
         /** a class which automatically resets m_eDoingCurrently in it's destructor
         */
         class OAutoActionReset; // just for the following friend declaration
@@ -181,10 +178,6 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent > implCreateWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent >& _rxCommandDesc);
 
     };
-//........................................................................
 }   // namespace dbaccess
-//........................................................................
 
 #endif // _DBA_CORE_QUERYCONTAINER_HXX_
-
-

@@ -36,10 +36,8 @@ namespace com { namespace sun { namespace star { namespace container
 }
 }}}
 
-//.........................................................................
 namespace dbaccess
 {
-//.........................................................................
 
     //=====================================================================
     //= IRefreshListener
@@ -49,9 +47,7 @@ namespace dbaccess
     public:
         virtual void refresh(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rToBeRefreshed) = 0;
     };
-//.........................................................................
+
 }   // namespace dbaccess
-//.........................................................................
 
 #endif // DBA_CORE_REFRESHLISTENER_HXX
-
