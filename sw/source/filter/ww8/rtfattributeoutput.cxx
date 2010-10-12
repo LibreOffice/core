@@ -284,6 +284,8 @@ void RtfAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pTextN
                 {
                     ww8::WW8TableNodeInfoInner::Pointer_t pInner( pTextNodeInfo->getInnerForDepth( nDepth ) );
 
+                    delete m_pTableWrt, m_pTableWrt = NULL;
+
                     StartTable( pInner );
                     StartTableRow( pInner );
                     StartTableCell( pInner );
@@ -937,8 +939,10 @@ void RtfAttributeOutput::EndTable()
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
 
-    if ( m_nTableDepth > 0 )
+    if ( m_nTableDepth > 0 ) {
         m_nTableDepth--;
+        delete m_pTableWrt, m_pTableWrt = NULL;
+    }
 
     // We closed the table; if it is a nested table, the cell that contains it
     // still continues
