@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -544,3 +545,5 @@ WriteOut_LinkedFunctionText( csi::xml::Element &            o_rTitleOut,
 
 
 }   // namespace dshelp
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

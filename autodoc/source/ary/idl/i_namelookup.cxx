@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,3 +61,5 @@ NameLookup::Add_Name( const String &      i_name,
 
 }   //  namespace   idl
 }   //  namespace   ary
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -390,3 +391,5 @@ HtmlDocuFile::WriteBody( csv::File & io_aFile )
     aBodyData.WriteOut(aBuffer);
     io_aFile.write(aBuffer.c_str(), aBuffer.size());
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

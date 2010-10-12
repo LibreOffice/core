@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -98,3 +99,5 @@ ExplicitNameRoom::inq_Get_Text( StringVector &      o_module,
 
 }   // namespace idl
 }   // namespace ary
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

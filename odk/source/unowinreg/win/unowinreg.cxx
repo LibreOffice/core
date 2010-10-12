@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -183,3 +184,5 @@ extern "C" JNIEXPORT jboolean JNICALL
     env->ReleaseLongArrayElements(secDescriptor, (jlong*)psecDescriptor, 0);
     return ret;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
