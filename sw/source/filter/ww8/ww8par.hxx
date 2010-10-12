@@ -368,6 +368,7 @@ class FieldEntry
     public:
         sw::hack::Position maStartPos;
         sal_uInt16 mnFieldId;
+        ULONG mnObjLocFc;
         FieldEntry(SwPosition &rPos, sal_uInt16 nFieldId) throw();
         FieldEntry(const FieldEntry &rOther) throw();
         FieldEntry &operator=(const FieldEntry &rOther) throw();

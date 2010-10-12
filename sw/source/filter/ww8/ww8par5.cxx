@@ -762,11 +762,11 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                                     rtl::OUString::createFromAscii( ODF_CODE_PARAM ),
                                     uno::makeAny( aCode ) ) );
 
-                        if ( nObjLocFc > 0 )
+                        if ( maFieldStack.back().mnObjLocFc > 0 )
                         {
                             // Store the OLE object as an internal link
                             String sOleId = '_';
-                            sOleId += String::CreateFromInt32( nObjLocFc );
+                            sOleId += String::CreateFromInt32( maFieldStack.back().mnObjLocFc );
 
                             SvStorageRef xSrc0 = pStg->OpenSotStorage(CREATE_CONST_ASC(SL::aObjectPool));
                             SvStorageRef xSrc1 = xSrc0->OpenSotStorage( sOleId, STREAM_READ );
@@ -830,12 +830,12 @@ bool AcceptableNestedField(sal_uInt16 nFieldCode)
 }
 
 FieldEntry::FieldEntry(SwPosition &rPos, sal_uInt16 nFieldId) throw()
-    : maStartPos(rPos), mnFieldId(nFieldId)
+    : maStartPos(rPos), mnFieldId(nFieldId), mnObjLocFc(0)
 {
 }
 
 FieldEntry::FieldEntry(const FieldEntry &rOther) throw()
-    : maStartPos(rOther.maStartPos), mnFieldId(rOther.mnFieldId)
+    : maStartPos(rOther.maStartPos), mnFieldId(rOther.mnFieldId), mnObjLocFc(rOther.mnObjLocFc)
 {
 }
 

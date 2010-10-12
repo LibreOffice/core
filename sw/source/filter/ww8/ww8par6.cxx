@@ -2827,7 +2827,14 @@ void SwWW8ImplReader::Read_Obj(USHORT , const BYTE* pData, short nLen)
         bObj = 0 != *pData;
 
         if( bObj && nPicLocFc && bEmbeddObj )
-            nObjLocFc = nPicLocFc;
+        {
+            if ( maFieldStack.back().mnFieldId == 56 ) {
+                // For LINK fields, store the nObjLocFc value in the field entry
+                maFieldStack.back().mnObjLocFc = nPicLocFc;
+            } else {
+                nObjLocFc = nPicLocFc;
+            }
+        }
     }
 }
 
