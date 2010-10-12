@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,3 +36,5 @@ MyHashObject::MyHashObject( ULONG nId, ObjectWin* pWin )
     mnId = nId;
     mpWin = pWin;
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

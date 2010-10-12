@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include  "collectdircontent.hxx"
 
 PathFilePair IncludesCollection::split_path(const string& filePath) {
@@ -81,3 +82,5 @@ extern "C" {
         return m->exists(filePath);
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
