@@ -41,12 +41,12 @@ ORowSetCacheIterator::ORowSetCacheIterator(const ORowSetCacheIterator& _rRH)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCacheIterator::ORowSetCacheIterator" );
 }
-// -----------------------------------------------------------------------------
+
 ORowSetCacheIterator::operator ORowSetMatrix::iterator()
 {
     return m_aIter->second.aIterator;
 }
-// -----------------------------------------------------------------------------
+
 ORowSetCacheIterator& ORowSetCacheIterator::operator =(const ORowSetCacheIterator& _rRH)
 {
     if(this == &_rRH)
@@ -58,18 +58,18 @@ ORowSetCacheIterator& ORowSetCacheIterator::operator =(const ORowSetCacheIterato
 
     return *this;
 }
-// -----------------------------------------------------------------------------
+
 ORowSetCacheIterator& ORowSetCacheIterator::operator =(const ORowSetMatrix::iterator& _rIter)
 {
     m_aIter->second.aIterator = _rIter;
     return *this;
 }
-// -----------------------------------------------------------------------------
+
 ORowSetRow& ORowSetCacheIterator::operator *()
 {
     return *m_aIter->second.aIterator;
 }
-// -----------------------------------------------------------------------------
+
 const ORowSetRow& ORowSetCacheIterator::operator *() const
 {
     if ( !m_pRowSet->isInsertRow() && m_aIter->second.aIterator == m_pCache->m_pMatrix->end() )
@@ -80,12 +80,12 @@ const ORowSetRow& ORowSetCacheIterator::operator *() const
     }
     return *m_aIter->second.aIterator;
 }
-// -----------------------------------------------------------------------------
+
 ORowSetMatrix::iterator& ORowSetCacheIterator::operator ->()
 {
     return m_aIter->second.aIterator;
 }
-// -----------------------------------------------------------------------------
+
 const ORowSetMatrix::iterator& ORowSetCacheIterator::operator ->() const
 {
     if ( !m_pRowSet->isInsertRow() && m_aIter->second.aIterator == m_pCache->m_pMatrix->end() )
@@ -96,33 +96,33 @@ const ORowSetMatrix::iterator& ORowSetCacheIterator::operator ->() const
     }
     return m_aIter->second.aIterator;
 }
-// -----------------------------------------------------------------------------
+
 bool ORowSetCacheIterator::operator <=(const ORowSetMatrix::iterator& _rRH) const
 {
     return m_aIter->second.aIterator <= _rRH;
 }
-// -----------------------------------------------------------------------------
+
 bool ORowSetCacheIterator::operator <(const ORowSetMatrix::iterator& _rRH) const
 {
     return m_aIter->second.aIterator < _rRH;
 }
-// -----------------------------------------------------------------------------
+
 bool ORowSetCacheIterator::operator !=(const ORowSetMatrix::iterator& _rRH) const
 {
     return m_aIter->second.aIterator != _rRH;
 }
-// -----------------------------------------------------------------------------
+
 bool ORowSetCacheIterator::operator ==(const ORowSetMatrix::iterator& _rRH) const
 {
     return m_aIter->second.aIterator == _rRH;
 }
-// -----------------------------------------------------------------------------
+
 void ORowSetCacheIterator::setBookmark(const ::com::sun::star::uno::Any&    _rBookmark)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCacheIterator::setBookmark" );
     m_aIter->second.aBookmark = _rBookmark;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool ORowSetCacheIterator::isNull() const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCacheIterator::isNull" );
@@ -139,7 +139,7 @@ sal_Bool ORowSetCacheIterator::isNull() const
     }
     return  bRet;
 }
-// -----------------------------------------------------------------------------
+
 ::osl::Mutex* ORowSetCacheIterator::getMutex() const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCacheIterator::getMutex" );

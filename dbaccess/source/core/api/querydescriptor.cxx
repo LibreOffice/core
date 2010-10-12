@@ -49,16 +49,14 @@ using namespace ::comphelper;
 using namespace ::osl;
 using namespace ::cppu;
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
 //==========================================================================
 //= OQueryDescriptor
 //==========================================================================
 DBG_NAME(OQueryDescriptor)
-//--------------------------------------------------------------------------
+
 OQueryDescriptor::OQueryDescriptor()
     :OQueryDescriptor_Base(m_aMutex,*this)
     ,ODataSettings(m_aBHelper,sal_True)
@@ -68,7 +66,6 @@ OQueryDescriptor::OQueryDescriptor()
     ODataSettings::registerPropertiesFor(this);
 }
 
-//--------------------------------------------------------------------------
 OQueryDescriptor::OQueryDescriptor(const OQueryDescriptor_Base& _rSource)
     :OQueryDescriptor_Base(_rSource,*this)
     ,ODataSettings(m_aBHelper,sal_True)
@@ -77,15 +74,15 @@ OQueryDescriptor::OQueryDescriptor(const OQueryDescriptor_Base& _rSource)
     registerProperties();
     ODataSettings::registerPropertiesFor(this);
 }
-// -----------------------------------------------------------------------------
+
 OQueryDescriptor::~OQueryDescriptor()
 {
     DBG_DTOR(OQueryDescriptor,NULL);
 }
-// -----------------------------------------------------------------------------
+
 IMPLEMENT_TYPEPROVIDER2(OQueryDescriptor,OQueryDescriptor_Base,ODataSettings);
 IMPLEMENT_FORWARD_XINTERFACE3( OQueryDescriptor,OWeakObject,OQueryDescriptor_Base,ODataSettings)
-//--------------------------------------------------------------------------
+
 void OQueryDescriptor::registerProperties()
 {
     // the properties which OCommandBase supplies (it has no own registration, as it's not derived from
@@ -111,19 +108,17 @@ void OQueryDescriptor::registerProperties()
     registerProperty(PROPERTY_LAYOUTINFORMATION, PROPERTY_ID_LAYOUTINFORMATION, PropertyAttribute::BOUND,
                     &m_aLayoutInformation, ::getCppuType(&m_aLayoutInformation));
 }
-// -----------------------------------------------------------------------------
-//--------------------------------------------------------------------------
+
 Reference< XPropertySetInfo > SAL_CALL OQueryDescriptor::getPropertySetInfo(  ) throw(RuntimeException)
 {
     return createPropertySetInfo( getInfoHelper() ) ;
 }
 
-//------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper& OQueryDescriptor::getInfoHelper()
 {
     return *getArrayHelper();
 }
-//--------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper* OQueryDescriptor::createArrayHelper( ) const
 {
     Sequence< Property > aProps;
@@ -131,9 +126,8 @@ Reference< XPropertySetInfo > SAL_CALL OQueryDescriptor::getPropertySetInfo(  ) 
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
 
-// -----------------------------------------------------------------------------
 DBG_NAME(OQueryDescriptor_Base);
-//--------------------------------------------------------------------------
+
 OQueryDescriptor_Base::OQueryDescriptor_Base(::osl::Mutex&  _rMutex,::cppu::OWeakObject& _rMySelf)
     :m_bColumnsOutOfDate(sal_True)
     ,m_rMutex(_rMutex)
@@ -141,7 +135,7 @@ OQueryDescriptor_Base::OQueryDescriptor_Base(::osl::Mutex&  _rMutex,::cppu::OWea
     DBG_CTOR(OQueryDescriptor_Base,NULL);
     m_pColumns = new OColumns(_rMySelf, m_rMutex, sal_True,::std::vector< ::rtl::OUString>(), this,this);
 }
-//--------------------------------------------------------------------------
+
 OQueryDescriptor_Base::OQueryDescriptor_Base(const OQueryDescriptor_Base& _rSource,::cppu::OWeakObject& _rMySelf)
     :m_bColumnsOutOfDate(sal_True)
     ,m_rMutex(_rSource.m_rMutex)
@@ -157,7 +151,6 @@ OQueryDescriptor_Base::OQueryDescriptor_Base(const OQueryDescriptor_Base& _rSour
     m_aLayoutInformation = _rSource.m_aLayoutInformation;
 }
 
-//--------------------------------------------------------------------------
 OQueryDescriptor_Base::~OQueryDescriptor_Base()
 {
     m_pColumns->acquire();
@@ -166,7 +159,7 @@ OQueryDescriptor_Base::~OQueryDescriptor_Base()
 
     DBG_DTOR(OQueryDescriptor_Base,NULL);
 }
-// -----------------------------------------------------------------------------
+
 sal_Int64 SAL_CALL OQueryDescriptor_Base::getSomething( const Sequence< sal_Int8 >& _rIdentifier ) throw(RuntimeException)
 {
     if (_rIdentifier.getLength() != 16)
@@ -177,9 +170,9 @@ sal_Int64 SAL_CALL OQueryDescriptor_Base::getSomething( const Sequence< sal_Int8
 
     return 0;
 }
-//--------------------------------------------------------------------------
+
 IMPLEMENT_IMPLEMENTATION_ID(OQueryDescriptor_Base)
-//--------------------------------------------------------------------------
+
 void OQueryDescriptor_Base::setColumnsOutOfDate( sal_Bool _bOutOfDate )
 {
     m_bColumnsOutOfDate = _bOutOfDate;
@@ -187,13 +180,11 @@ void OQueryDescriptor_Base::setColumnsOutOfDate( sal_Bool _bOutOfDate )
         m_pColumns->setInitialized();
 }
 
-//--------------------------------------------------------------------------
 void OQueryDescriptor_Base::implAppendColumn( const ::rtl::OUString& _rName, OColumn* _pColumn )
 {
     m_pColumns->append( _rName, _pColumn );
 }
 
-//--------------------------------------------------------------------------
 void OQueryDescriptor_Base::clearColumns( )
 {
     m_pColumns->clearColumns();
@@ -201,7 +192,6 @@ void OQueryDescriptor_Base::clearColumns( )
     setColumnsOutOfDate();
 }
 
-//--------------------------------------------------------------------------
 Reference< XNameAccess > SAL_CALL OQueryDescriptor_Base::getColumns( ) throw (RuntimeException)
 {
     MutexGuard aGuard(m_rMutex);
@@ -232,19 +222,16 @@ Reference< XNameAccess > SAL_CALL OQueryDescriptor_Base::getColumns( ) throw (Ru
     return m_pColumns;
 }
 
-//--------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OQueryDescriptor_Base::getImplementationName(  ) throw(RuntimeException)
 {
     return ::rtl::OUString::createFromAscii("com.sun.star.sdb.OQueryDescriptor");
 }
 
-//--------------------------------------------------------------------------
 sal_Bool SAL_CALL OQueryDescriptor_Base::supportsService( const ::rtl::OUString& _rServiceName ) throw(RuntimeException)
 {
     return ::comphelper::findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
 }
 
-//--------------------------------------------------------------------------
 Sequence< ::rtl::OUString > SAL_CALL OQueryDescriptor_Base::getSupportedServiceNames(  ) throw(RuntimeException)
 {
     Sequence< ::rtl::OUString > aSupported(2);
@@ -252,37 +239,32 @@ Sequence< ::rtl::OUString > SAL_CALL OQueryDescriptor_Base::getSupportedServiceN
     aSupported.getArray()[1] = SERVICE_SDB_QUERYDESCRIPTOR;
     return aSupported;
 }
-//--------------------------------------------------------------------------
+
 void OQueryDescriptor_Base::disposeColumns()
 {
     m_pColumns->disposing();
 }
 
-// -----------------------------------------------------------------------------
 void OQueryDescriptor_Base::columnAppended( const Reference< XPropertySet >& /*_rxSourceDescriptor*/ )
 {
     // not interested in
 }
 
-// -----------------------------------------------------------------------------
 void OQueryDescriptor_Base::columnDropped(const ::rtl::OUString& /*_sName*/)
 {
     // not interested in
 }
 
-// -----------------------------------------------------------------------------
 Reference< XPropertySet > OQueryDescriptor_Base::createColumnDescriptor()
 {
     OSL_ENSURE( false, "OQueryDescriptor_Base::createColumnDescriptor: called why?" );
     return NULL;
 }
 
-// -----------------------------------------------------------------------------
 void OQueryDescriptor_Base::rebuildColumns( )
 {
 }
 
-// -----------------------------------------------------------------------------
 // IRefreshableColumns
 void OQueryDescriptor_Base::refreshColumns()
 {
@@ -292,16 +274,14 @@ void OQueryDescriptor_Base::refreshColumns()
     rebuildColumns();
 }
 
-//------------------------------------------------------------------------------
 OColumn* OQueryDescriptor_Base::createColumn( const ::rtl::OUString& /*_rName*/ ) const
 {
     // creating a column/descriptor for a query/descriptor does not make sense at all
     return NULL;
 }
-// -----------------------------------------------------------------------------
-//........................................................................
-}   // namespace dbaccess
-//........................................................................
 
-
+<<<<<<< HEAD
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+=======
+}   // namespace dbaccess
+>>>>>>> Removed comments, trailing spaces and death code

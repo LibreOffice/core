@@ -54,7 +54,6 @@ using namespace dbtools;
 
 DBG_NAME(OStatementBase)
 
-//--------------------------------------------------------------------------
 OStatementBase::OStatementBase(const Reference< XConnection > & _xConn,
                                const Reference< XInterface > & _xStatement)
     :OSubComponent(m_aMutex, _xConn)
@@ -70,14 +69,12 @@ OStatementBase::OStatementBase(const Reference< XConnection > & _xConn,
     m_xAggregateAsCancellable = Reference< ::com::sun::star::util::XCancellable > (m_xAggregateAsSet, UNO_QUERY);
 }
 
-//--------------------------------------------------------------------------
 OStatementBase::~OStatementBase()
 {
     DBG_DTOR(OStatementBase, NULL);
 }
 
 // com::sun::star::lang::XTypeProvider
-//--------------------------------------------------------------------------
 Sequence< Type > OStatementBase::getTypes() throw (RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatementBase::getTypes" );
@@ -98,7 +95,6 @@ Sequence< Type > OStatementBase::getTypes() throw (RuntimeException)
 }
 
 // com::sun::star::uno::XInterface
-//--------------------------------------------------------------------------
 Any OStatementBase::queryInterface( const Type & rType ) throw (RuntimeException)
 {
     //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatementBase::queryInterface" );
@@ -128,19 +124,16 @@ Any OStatementBase::queryInterface( const Type & rType ) throw (RuntimeException
     return aIface;
 }
 
-//--------------------------------------------------------------------------
 void OStatementBase::acquire() throw ()
 {
     OSubComponent::acquire();
 }
 
-//--------------------------------------------------------------------------
 void OStatementBase::release() throw ()
 {
     OSubComponent::release();
 }
 
-//------------------------------------------------------------------------------
 void OStatementBase::disposeResultSet()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatementBase::disposeResultSet" );
@@ -152,7 +145,6 @@ void OStatementBase::disposeResultSet()
 }
 
 // OComponentHelper
-//------------------------------------------------------------------------------
 void OStatementBase::disposing()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatementBase::disposing" );
@@ -186,7 +178,6 @@ void OStatementBase::disposing()
 }
 
 // XCloseable
-//------------------------------------------------------------------------------
 void OStatementBase::close(void) throw( SQLException, RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatementBase::close" );
@@ -198,7 +189,6 @@ void OStatementBase::close(void) throw( SQLException, RuntimeException )
 }
 
 // OPropertySetHelper
-//------------------------------------------------------------------------------
 Reference< XPropertySetInfo > OStatementBase::getPropertySetInfo() throw (RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatementBase::getPropertySetInfo" );
@@ -206,7 +196,6 @@ Reference< XPropertySetInfo > OStatementBase::getPropertySetInfo() throw (Runtim
 }
 
 // comphelper::OPropertyArrayUsageHelper
-//------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* OStatementBase::createArrayHelper( ) const
 {
     //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatementBase::createArrayHelper" );
@@ -225,14 +214,12 @@ Reference< XPropertySetInfo > OStatementBase::getPropertySetInfo() throw (Runtim
 }
 
 // cppu::OPropertySetHelper
-//------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper& OStatementBase::getInfoHelper()
 {
     //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatementBase::getInfoHelper" );
     return *getArrayHelper();
 }
 
-//------------------------------------------------------------------------------
 sal_Bool OStatementBase::convertFastPropertyValue( Any & rConvertedValue, Any & rOldValue, sal_Int32 nHandle, const Any& rValue ) throw( IllegalArgumentException  )
 {
     //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatementBase::convertFastPropertyValue" );
@@ -268,7 +255,6 @@ sal_Bool OStatementBase::convertFastPropertyValue( Any & rConvertedValue, Any & 
     return bModified;
 }
 
-//------------------------------------------------------------------------------
 void OStatementBase::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw (Exception)
 {
     //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatementBase::setFastPropertyValue_NoBroadcast" );
@@ -299,7 +285,6 @@ void OStatementBase::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const 
     }
 }
 
-//------------------------------------------------------------------------------
 void OStatementBase::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
 {
     //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatementBase::getFastPropertyValue" );
@@ -327,7 +312,6 @@ void OStatementBase::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) cons
 }
 
 // XWarningsSupplier
-//------------------------------------------------------------------------------
 Any OStatementBase::getWarnings(void) throw( SQLException, RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatementBase::getWarnings" );
@@ -337,7 +321,6 @@ Any OStatementBase::getWarnings(void) throw( SQLException, RuntimeException )
     return Reference< XWarningsSupplier >(m_xAggregateAsSet, UNO_QUERY)->getWarnings();
 }
 
-//------------------------------------------------------------------------------
 void OStatementBase::clearWarnings(void) throw( SQLException, RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatementBase::clearWarnings" );
@@ -348,7 +331,6 @@ void OStatementBase::clearWarnings(void) throw( SQLException, RuntimeException )
 }
 
 // ::com::sun::star::util::XCancellable
-//------------------------------------------------------------------------------
 void OStatementBase::cancel(void) throw( RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatementBase::cancel" );
@@ -360,7 +342,6 @@ void OStatementBase::cancel(void) throw( RuntimeException )
 }
 
 // XMultipleResults
-//------------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL OStatementBase::getResultSet(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatementBase::getResultSet" );
@@ -375,7 +356,6 @@ Reference< XResultSet > SAL_CALL OStatementBase::getResultSet(  ) throw(SQLExcep
     return Reference< XMultipleResults >(m_xAggregateAsSet, UNO_QUERY)->getResultSet();
 }
 
-//------------------------------------------------------------------------------
 sal_Int32 SAL_CALL OStatementBase::getUpdateCount(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatementBase::getUpdateCount" );
@@ -390,7 +370,6 @@ sal_Int32 SAL_CALL OStatementBase::getUpdateCount(  ) throw(SQLException, Runtim
     return Reference< XMultipleResults >(m_xAggregateAsSet, UNO_QUERY)->getUpdateCount();
 }
 
-//------------------------------------------------------------------------------
 sal_Bool SAL_CALL OStatementBase::getMoreResults(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatementBase::getMoreResults" );
@@ -410,7 +389,6 @@ sal_Bool SAL_CALL OStatementBase::getMoreResults(  ) throw(SQLException, Runtime
 }
 
 // XPreparedBatchExecution
-//------------------------------------------------------------------------------
 void SAL_CALL OStatementBase::addBatch(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatementBase::addBatch" );
@@ -425,7 +403,6 @@ void SAL_CALL OStatementBase::addBatch(  ) throw(SQLException, RuntimeException)
     Reference< XPreparedBatchExecution >(m_xAggregateAsSet, UNO_QUERY)->addBatch();
 }
 
-//------------------------------------------------------------------------------
 void SAL_CALL OStatementBase::clearBatch(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatementBase::clearBatch" );
@@ -440,7 +417,6 @@ void SAL_CALL OStatementBase::clearBatch(  ) throw(SQLException, RuntimeExceptio
     Reference< XPreparedBatchExecution >(m_xAggregateAsSet, UNO_QUERY)->clearBatch();
 }
 
-//------------------------------------------------------------------------------
 Sequence< sal_Int32 > SAL_CALL OStatementBase::executeBatch(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatementBase::executeBatch" );
@@ -457,7 +433,7 @@ Sequence< sal_Int32 > SAL_CALL OStatementBase::executeBatch(  ) throw(SQLExcepti
 
     return Reference< XPreparedBatchExecution >(m_xAggregateAsSet, UNO_QUERY)->executeBatch();
 }
-// -----------------------------------------------------------------------------
+
 Reference< XResultSet > SAL_CALL OStatementBase::getGeneratedValues(  ) throw (SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatementBase::getGeneratedValues" );
@@ -473,7 +449,6 @@ Reference< XResultSet > SAL_CALL OStatementBase::getGeneratedValues(  ) throw (S
 //************************************************************
 //  OStatement
 //************************************************************
-//------------------------------------------------------------------------------
 OStatement::OStatement( const Reference< XConnection >& _xConn, const Reference< XInterface > & _xStatement )
     :OStatementBase( _xConn, _xStatement )
     ,m_bAttemptedComposerCreation( false )
@@ -482,26 +457,22 @@ OStatement::OStatement( const Reference< XConnection >& _xConn, const Reference<
     m_xAggregateStatement.set( _xStatement, UNO_QUERY_THROW );
 }
 
-//------------------------------------------------------------------------------
 IMPLEMENT_FORWARD_XINTERFACE2( OStatement, OStatementBase, OStatement_IFACE );
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( OStatement, OStatementBase, OStatement_IFACE );
 
 // XServiceInfo
-//------------------------------------------------------------------------------
 rtl::OUString OStatement::getImplementationName(  ) throw(RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatement::getImplementationName" );
     return rtl::OUString::createFromAscii("com.sun.star.sdb.OStatement");
 }
 
-//------------------------------------------------------------------------------
 sal_Bool OStatement::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatement::supportsService" );
     return ::comphelper::findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
 }
 
-//------------------------------------------------------------------------------
 Sequence< ::rtl::OUString > OStatement::getSupportedServiceNames(  ) throw (RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatement::getSupportedServiceNames" );
@@ -511,7 +482,6 @@ Sequence< ::rtl::OUString > OStatement::getSupportedServiceNames(  ) throw (Runt
 }
 
 // XStatement
-//------------------------------------------------------------------------------
 Reference< XResultSet > OStatement::executeQuery( const rtl::OUString& _rSQL ) throw( SQLException, RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatement::executeQuery" );
@@ -539,7 +509,6 @@ Reference< XResultSet > OStatement::executeQuery( const rtl::OUString& _rSQL ) t
     return xResultSet;
 }
 
-//------------------------------------------------------------------------------
 sal_Int32 OStatement::executeUpdate( const rtl::OUString& _rSQL ) throw( SQLException, RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatement::executeUpdate" );
@@ -552,7 +521,6 @@ sal_Int32 OStatement::executeUpdate( const rtl::OUString& _rSQL ) throw( SQLExce
     return m_xAggregateStatement->executeUpdate( sSQL );
 }
 
-//------------------------------------------------------------------------------
 sal_Bool OStatement::execute( const rtl::OUString& _rSQL ) throw( SQLException, RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatement::execute" );
@@ -564,7 +532,7 @@ sal_Bool OStatement::execute( const rtl::OUString& _rSQL ) throw( SQLException, 
     ::rtl::OUString sSQL( impl_doEscapeProcessing_nothrow( _rSQL ) );
     return m_xAggregateStatement->execute( sSQL );
 }
-//------------------------------------------------------------------------------
+
 void OStatement::addBatch( const rtl::OUString& _rSQL ) throw( SQLException, RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatement::execute" );
@@ -579,7 +547,7 @@ void OStatement::addBatch( const rtl::OUString& _rSQL ) throw( SQLException, Run
     ::rtl::OUString sSQL( impl_doEscapeProcessing_nothrow( _rSQL ) );
     Reference< XBatchExecution >(m_xAggregateAsSet, UNO_QUERY)->addBatch( sSQL );
 }
-//------------------------------------------------------------------------------
+
 void OStatement::clearBatch( ) throw( SQLException, RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatement::execute" );
@@ -592,7 +560,7 @@ void OStatement::clearBatch( ) throw( SQLException, RuntimeException )
 
     Reference< XBatchExecution >(m_xAggregateAsSet, UNO_QUERY)->clearBatch();
 }
-//------------------------------------------------------------------------------
+
 Sequence< sal_Int32 > OStatement::executeBatch( ) throw( SQLException, RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatement::execute" );
@@ -605,14 +573,13 @@ Sequence< sal_Int32 > OStatement::executeBatch( ) throw( SQLException, RuntimeEx
     return Reference< XBatchExecution >(m_xAggregateAsSet, UNO_QUERY)->executeBatch( );
 }
 
-//------------------------------------------------------------------------------
+
 Reference< XConnection > OStatement::getConnection(void) throw( SQLException, RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatement::getConnection" );
     return Reference< XConnection >( m_xParent, UNO_QUERY );
 }
 
-// -----------------------------------------------------------------------------
 void SAL_CALL OStatement::disposing()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatement::disposing" );
@@ -621,7 +588,6 @@ void SAL_CALL OStatement::disposing()
     m_xAggregateStatement.clear();
 }
 
-// -----------------------------------------------------------------------------
 ::rtl::OUString OStatement::impl_doEscapeProcessing_nothrow( const ::rtl::OUString& _rSQL ) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatement::impl_doEscapeProcessing_nothrow" );
@@ -651,7 +617,6 @@ void SAL_CALL OStatement::disposing()
     return _rSQL;
 }
 
-// -----------------------------------------------------------------------------
 bool OStatement::impl_ensureComposer_nothrow() const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatement::impl_ensureComposer_nothrow" );

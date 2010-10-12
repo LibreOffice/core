@@ -51,10 +51,6 @@ namespace dbaccess
             : m_refCount(0)
             , m_aRow(_rRow)
         {}
-//      ORowSetOldRowHelper(const ORowSetOldRowHelper& _rRh)
-//          : m_refCount(0)
-//          , m_aRow(_rRh.m_aRow)
-//      {}
 
         void acquire()
         {
@@ -97,4 +93,3 @@ namespace dbaccess
     };
 }
 #endif // DBACCESS_CORE_API_ROWSETROW_HXX
-

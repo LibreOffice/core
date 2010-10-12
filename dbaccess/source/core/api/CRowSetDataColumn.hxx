@@ -83,9 +83,6 @@ namespace dbaccess
     protected:
         using ODataColumn::getFastPropertyValue;
     };
-    // -------------------------------------------------------------------------
-//  typedef connectivity::ORefVector< ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> >
-//          ORowSetDataColumns_COLLECTION;
 
     typedef connectivity::sdbcx::OCollection ORowSetDataColumns_BASE;
     class ORowSetDataColumns : public ORowSetDataColumns_BASE
@@ -110,4 +107,3 @@ namespace dbaccess
 }
 
 #endif
-

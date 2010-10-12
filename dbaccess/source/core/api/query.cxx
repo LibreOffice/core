@@ -75,16 +75,14 @@ using namespace ::osl;
 using namespace ::cppu;
 using namespace ::utl;
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
 //==========================================================================
 //= OQuery
 //==========================================================================
 DBG_NAME(OQuery)
-//--------------------------------------------------------------------------
+
 OQuery::OQuery( const Reference< XPropertySet >& _rxCommandDefinition
                ,const Reference< XConnection >& _rxConn
                ,const Reference< XMultiServiceFactory >& _xORB)
@@ -123,16 +121,15 @@ OQuery::OQuery( const Reference< XPropertySet >& _rxCommandDefinition
     osl_decrementInterlockedCount(&m_refCount);
 }
 
-//--------------------------------------------------------------------------
 OQuery::~OQuery()
 {
     DBG_DTOR(OQuery, NULL);
 }
-// -----------------------------------------------------------------------------
+
 IMPLEMENT_IMPLEMENTATION_ID(OQuery);
 IMPLEMENT_GETTYPES3(OQuery,OQueryDescriptor_Base,ODataSettings,OContentHelper);
 IMPLEMENT_FORWARD_XINTERFACE3( OQuery,OContentHelper,OQueryDescriptor_Base,ODataSettings)
-//--------------------------------------------------------------------------
+
 void OQuery::rebuildColumns()
 {
     OSL_PRECOND( getColumnCount() == 0, "OQuery::rebuildColumns: column container should be empty!" );
@@ -232,11 +229,9 @@ void OQuery::rebuildColumns()
 }
 
 // XServiceInfo
-//--------------------------------------------------------------------------
 IMPLEMENT_SERVICE_INFO3(OQuery, "com.sun.star.sdb.dbaccess.OQuery", SERVICE_SDB_DATASETTINGS, SERVICE_SDB_QUERY, SERVICE_SDB_QUERYDEFINITION)
 
 // ::com::sun::star::beans::XPropertyChangeListener
-//--------------------------------------------------------------------------
 void SAL_CALL OQuery::propertyChange( const PropertyChangeEvent& _rSource ) throw(RuntimeException)
 {
     sal_Int32 nOwnHandle = -1;
@@ -269,7 +264,6 @@ void SAL_CALL OQuery::propertyChange( const PropertyChangeEvent& _rSource ) thro
     fire(&nOwnHandle, &_rSource.NewValue, &_rSource.OldValue, 1, sal_False);
 }
 
-//--------------------------------------------------------------------------
 void SAL_CALL OQuery::disposing( const EventObject& _rSource ) throw (RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
@@ -283,14 +277,12 @@ void SAL_CALL OQuery::disposing( const EventObject& _rSource ) throw (RuntimeExc
 }
 
 // XDataDescriptorFactory
-//--------------------------------------------------------------------------
 Reference< XPropertySet > SAL_CALL OQuery::createDataDescriptor(  ) throw(RuntimeException)
 {
     return new OQueryDescriptor(*this);
 }
 
 // pseudo-XComponent
-//--------------------------------------------------------------------------
 void SAL_CALL OQuery::disposing()
 {
     MutexGuard aGuard(m_aMutex);
@@ -304,7 +296,6 @@ void SAL_CALL OQuery::disposing()
     m_pWarnings = NULL;
 }
 
-//--------------------------------------------------------------------------
 void OQuery::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue ) throw (Exception)
 {
     ODataSettings::setFastPropertyValue_NoBroadcast(_nHandle, _rValue);
@@ -325,19 +316,16 @@ void OQuery::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _r
     }
 }
 
-//--------------------------------------------------------------------------
 Reference< XPropertySetInfo > SAL_CALL OQuery::getPropertySetInfo(  ) throw(RuntimeException)
 {
     return createPropertySetInfo( getInfoHelper() ) ;
 }
 
-//------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper& OQuery::getInfoHelper()
 {
     return *getArrayHelper();
 }
 
-//--------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* OQuery::createArrayHelper( ) const
 {
     Sequence< Property > aProps;
@@ -345,12 +333,12 @@ Reference< XPropertySetInfo > SAL_CALL OQuery::getPropertySetInfo(  ) throw(Runt
     describeProperties(aProps);
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
-// -----------------------------------------------------------------------------
+
 OColumn* OQuery::createColumn(const ::rtl::OUString& /*_rName*/) const
 {
     return NULL;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OQuery::rename( const ::rtl::OUString& newName ) throw (SQLException, ElementExistException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
@@ -359,7 +347,7 @@ void SAL_CALL OQuery::rename( const ::rtl::OUString& newName ) throw (SQLExcepti
     if(xRename.is())
         xRename->rename(newName);
 }
-// -----------------------------------------------------------------------------
+
 void OQuery::registerProperties()
 {
     // the properties which OCommandBase supplies (it has no own registration, as it's not derived from
@@ -386,15 +374,10 @@ void OQuery::registerProperties()
                     &m_aLayoutInformation, ::getCppuType(&m_aLayoutInformation));
 }
 
-// -----------------------------------------------------------------------------
 ::rtl::OUString OQuery::determineContentType() const
 {
     return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.org.openoffice.DatabaseQuery" ) );
 }
 
-// -----------------------------------------------------------------------------
-//........................................................................
 }   // namespace dbaccess
-//........................................................................
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -61,7 +61,7 @@ void WrappedResultSet::construct(const Reference< XResultSet>& _xDriverSet,const
     m_xRowLocate.set(_xDriverSet,UNO_QUERY_THROW);
     m_xUpdRow.set(_xDriverSet,UNO_QUERY_THROW);
 }
-// -----------------------------------------------------------------------------
+
 Any SAL_CALL WrappedResultSet::getBookmark() throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "WrappedResultSet::getBookmark" );
@@ -71,37 +71,37 @@ Any SAL_CALL WrappedResultSet::getBookmark() throw(SQLException, RuntimeExceptio
     }
     return makeAny(m_xDriverSet->getRow());
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL WrappedResultSet::moveToBookmark( const Any& bookmark ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "WrappedResultSet::moveToBookmark" );
     return m_xRowLocate->moveToBookmark( bookmark );
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL WrappedResultSet::moveRelativeToBookmark( const Any& bookmark, sal_Int32 rows ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "WrappedResultSet::moveRelativeToBookmark" );
     return m_xRowLocate->moveRelativeToBookmark( bookmark,rows );
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL WrappedResultSet::compareBookmarks( const Any& _first, const Any& _second ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "WrappedResultSet::compareBookmarks" );
     return m_xRowLocate->compareBookmarks( _first,_second );
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL WrappedResultSet::hasOrderedBookmarks(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "WrappedResultSet::hasOrderedBookmarks" );
     return m_xRowLocate->hasOrderedBookmarks();
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL WrappedResultSet::hashBookmark( const Any& bookmark ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "WrappedResultSet::hashBookmark" );
     return m_xRowLocate->hashBookmark(bookmark);
 }
-// -------------------------------------------------------------------------
+
 // ::com::sun::star::sdbcx::XDeleteRows
 Sequence< sal_Int32 > SAL_CALL WrappedResultSet::deleteRows( const Sequence< Any >& rows ,const connectivity::OSQLTable& /*_xTable*/) throw(SQLException, RuntimeException)
 {
@@ -113,7 +113,7 @@ Sequence< sal_Int32 > SAL_CALL WrappedResultSet::deleteRows( const Sequence< Any
     }
     return Sequence< sal_Int32 >();
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL WrappedResultSet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& /*_xTable*/ ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "WrappedResultSet::insertRow" );
@@ -129,7 +129,7 @@ void SAL_CALL WrappedResultSet::insertRow( const ORowSetRow& _rInsertRow,const c
     m_xUpd->insertRow();
     (*_rInsertRow->get().begin()) = getBookmark();
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL WrappedResultSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrginalRow,const connectivity::OSQLTable& /*_xTable*/  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "WrappedResultSet::updateRow" );
@@ -143,37 +143,37 @@ void SAL_CALL WrappedResultSet::updateRow(const ORowSetRow& _rInsertRow ,const O
     }
     m_xUpd->updateRow();
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL WrappedResultSet::deleteRow(const ORowSetRow& /*_rDeleteRow*/ ,const connectivity::OSQLTable& /*_xTable*/  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "WrappedResultSet::deleteRow" );
     m_xUpd->deleteRow();
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL WrappedResultSet::cancelRowUpdates(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "WrappedResultSet::cancelRowUpdates" );
     m_xUpd->cancelRowUpdates();
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL WrappedResultSet::moveToInsertRow(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "WrappedResultSet::moveToInsertRow" );
     m_xUpd->moveToInsertRow();
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL WrappedResultSet::moveToCurrentRow(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "WrappedResultSet::moveToCurrentRow" );
     m_xUpd->moveToCurrentRow();
 }
-// -------------------------------------------------------------------------
+
 void WrappedResultSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "WrappedResultSet::fillValueRow" );
     OCacheSet::fillValueRow(_rRow,_nPosition);
 }
-// -------------------------------------------------------------------------
+
 void WrappedResultSet::updateColumn(sal_Int32 nPos,Reference< XRowUpdate > _xParameter,const ORowSetValue& _rValue)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "WrappedResultSet::updateColumn" );
@@ -253,5 +253,4 @@ void WrappedResultSet::updateColumn(sal_Int32 nPos,Reference< XRowUpdate > _xPar
         }
     }
 }
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

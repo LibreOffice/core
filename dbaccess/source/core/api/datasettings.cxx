@@ -51,13 +51,11 @@ using namespace ::com::sun::star::beans;
 using namespace ::comphelper;
 using namespace ::cppu;
 
-//........................................................................
 namespace dbaccess
 {
 //==========================================================================
 //= ODataSettings
 //==========================================================================
-//--------------------------------------------------------------------------
 void ODataSettings::registerPropertiesFor(ODataSettings_Base* _pItem)
 {
     if ( m_bQuery )
@@ -113,7 +111,6 @@ void ODataSettings::registerPropertiesFor(ODataSettings_Base* _pItem)
     registerProperty(PROPERTY_FONTTYPE,         PROPERTY_ID_FONTTYPE,        PropertyAttribute::BOUND,&_pItem->m_aFont.Type,            ::getCppuType(&_pItem->m_aFont.Type));
 }
 
-//--------------------------------------------------------------------------
 ODataSettings::ODataSettings(OBroadcastHelper& _rBHelper,sal_Bool _bQuery)
     :OPropertyStateContainer(_rBHelper)
     ,ODataSettings_Base()
@@ -121,7 +118,6 @@ ODataSettings::ODataSettings(OBroadcastHelper& _rBHelper,sal_Bool _bQuery)
 {
 }
 
-//--------------------------------------------------------------------------
 ODataSettings_Base::ODataSettings_Base()
     :m_bApplyFilter(sal_False)
     ,m_aFont(::comphelper::getDefaultFont())
@@ -130,7 +126,6 @@ ODataSettings_Base::ODataSettings_Base()
 {
 }
 
-//--------------------------------------------------------------------------
 ODataSettings_Base::ODataSettings_Base(const ODataSettings_Base& _rSource)
     :m_sFilter( _rSource.m_sFilter )
     ,m_sHavingClause( _rSource.m_sHavingClause )
@@ -146,12 +141,10 @@ ODataSettings_Base::ODataSettings_Base(const ODataSettings_Base& _rSource)
 {
 }
 
-// -----------------------------------------------------------------------------
 ODataSettings_Base::~ODataSettings_Base()
 {
 }
 
-// -----------------------------------------------------------------------------
 void ODataSettings::getPropertyDefaultByHandle( sal_Int32 _nHandle, Any& _rDefault ) const
 {
     static ::com::sun::star::awt::FontDescriptor aFD = ::comphelper::getDefaultFont();
@@ -225,8 +218,6 @@ void ODataSettings::getPropertyDefaultByHandle( sal_Int32 _nHandle, Any& _rDefau
             break;
     }
 }
-//........................................................................
-}   // namespace dbaccess
-//........................................................................
 
+}   // namespace dbaccess
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

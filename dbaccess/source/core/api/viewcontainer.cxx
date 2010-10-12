@@ -73,7 +73,7 @@ using namespace ::connectivity::sdbcx;
 //= OViewContainer
 //==========================================================================
 DBG_NAME(OViewContainer)
-//------------------------------------------------------------------------------
+
 OViewContainer::OViewContainer(::cppu::OWeakObject& _rParent
                                  ,::osl::Mutex& _rMutex
                                  ,const Reference< XConnection >& _xCon
@@ -87,17 +87,15 @@ OViewContainer::OViewContainer(::cppu::OWeakObject& _rParent
     DBG_CTOR(OViewContainer, NULL);
 }
 
-//------------------------------------------------------------------------------
 OViewContainer::~OViewContainer()
 {
     //  dispose();
     DBG_DTOR(OViewContainer, NULL);
 }
-//------------------------------------------------------------------------------
+
 // XServiceInfo
-//------------------------------------------------------------------------------
 IMPLEMENT_SERVICE_INFO2(OViewContainer, "com.sun.star.sdb.dbaccess.OViewContainer", SERVICE_SDBCX_CONTAINER, SERVICE_SDBCX_TABLES)
-// -----------------------------------------------------------------------------
+
 ObjectType OViewContainer::createObject(const ::rtl::OUString& _rName)
 {
     ObjectType xProp;
@@ -123,7 +121,7 @@ ObjectType OViewContainer::createObject(const ::rtl::OUString& _rName)
 
     return xProp;
 }
-// -----------------------------------------------------------------------------
+
 Reference< XPropertySet > OViewContainer::createDescriptor()
 {
     Reference< XPropertySet > xRet;
@@ -138,7 +136,7 @@ Reference< XPropertySet > OViewContainer::createDescriptor()
 
     return xRet;
 }
-// -----------------------------------------------------------------------------
+
 // XAppend
 ObjectType OViewContainer::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
@@ -182,7 +180,7 @@ ObjectType OViewContainer::appendObject( const ::rtl::OUString& _rForName, const
 
     return createObject( _rForName );
 }
-// -------------------------------------------------------------------------
+
 // XDrop
 void OViewContainer::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
@@ -222,7 +220,7 @@ void OViewContainer::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementN
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OViewContainer::elementInserted( const ContainerEvent& Event ) throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_rMutex);
@@ -239,7 +237,7 @@ void SAL_CALL OViewContainer::elementInserted( const ContainerEvent& Event ) thr
             insertElement(sName,createObject(sName));
     }
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OViewContainer::elementRemoved( const ContainerEvent& Event ) throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_rMutex);
@@ -259,15 +257,15 @@ void SAL_CALL OViewContainer::elementRemoved( const ContainerEvent& Event ) thro
         m_bInElementRemoved = false;
     }
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OViewContainer::disposing( const ::com::sun::star::lang::EventObject& /*Source*/ ) throw (RuntimeException)
 {
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OViewContainer::elementReplaced( const ContainerEvent& /*Event*/ ) throw (RuntimeException)
 {
 }
-// -----------------------------------------------------------------------------
+
 ::rtl::OUString OViewContainer::getTableTypeRestriction() const
 {
     // no restriction at all (other than the ones provided externally)

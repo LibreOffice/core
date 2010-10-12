@@ -44,19 +44,15 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::beans;
 
-//..............................................................................
 namespace dbaccess
 {
-//..............................................................................
 
-//------------------------------------------------------------------------------
 ORowSetColumn::ORowSetColumn(   const Reference < XResultSetMetaData >& _xMetaData, const Reference < XRow >& _xRow, sal_Int32 _nPos,
                 const Reference< XDatabaseMetaData >& _rxDBMeta, const ::rtl::OUString& _rDescription, const ::rtl::OUString& i_sLabel,ORowSetCacheIterator& _rColumnValue )
     :ORowSetDataColumn( _xMetaData, _xRow, NULL, _nPos, _rxDBMeta, _rDescription, i_sLabel,_rColumnValue )
 {
 }
 
-//------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* ORowSetColumn::createArrayHelper( ) const
 {
     const sal_Int32 nDerivedProperties = 21;
@@ -93,13 +89,11 @@ ORowSetColumn::ORowSetColumn(   const Reference < XResultSetMetaData >& _xMetaDa
     return new ::cppu::OPropertyArrayHelper( ::comphelper::concatSequences( aDerivedProperties, aRegisteredProperties ), sal_False );
 }
 
-//------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper& ORowSetColumn::getInfoHelper()
 {
     return *static_cast< ::comphelper::OPropertyArrayUsageHelper< ORowSetColumn >* >(this)->getArrayHelper();
 }
 
-//------------------------------------------------------------------------------
 void SAL_CALL ORowSetColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue )throw (Exception)
 {
     OSL_ENSURE( nHandle != PROPERTY_ID_VALUE, "ORowSetColumn::setFastPropertyValue_NoBroadcast: hmm? This property is marked as READONLY!" );
@@ -107,8 +101,5 @@ void SAL_CALL ORowSetColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,
         ORowSetDataColumn::setFastPropertyValue_NoBroadcast( nHandle, rValue );
 }
 
-//..............................................................................
 }   // namespace dbaccess
-//..............................................................................
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

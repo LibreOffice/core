@@ -78,7 +78,7 @@ using namespace ::osl;
 #define CHECK_MATRIX_POS(M) OSL_ENSURE(((M) >= static_cast<ORowSetMatrix::difference_type>(0)) && ((M) < static_cast<sal_Int32>(m_pMatrix->size())),"Position is invalid!")
 
 DBG_NAME(ORowSetCache)
-// -------------------------------------------------------------------------
+
 ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                            const Reference< XSingleSelectQueryAnalyzer >& _xAnalyzer,
                            const ::comphelper::ComponentContext& _rContext,
@@ -341,7 +341,6 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
         m_nPrivileges = Privilege::SELECT;
 }
 
-// -------------------------------------------------------------------------
 ORowSetCache::~ORowSetCache()
 {
     m_pCacheSet = NULL;
@@ -364,7 +363,6 @@ ORowSetCache::~ORowSetCache()
     DBG_DTOR(ORowSetCache,NULL);
 }
 
-// -------------------------------------------------------------------------
 void ORowSetCache::setMaxRowSize(sal_Int32 _nSize)
 {
 
@@ -434,14 +432,13 @@ void ORowSetCache::setMaxRowSize(sal_Int32 _nSize)
         m_nEndPos = _nSize;
     }
 }
-// -------------------------------------------------------------------------
 
 // XResultSetMetaDataSupplier
 Reference< XResultSetMetaData > ORowSetCache::getMetaData(  )
 {
     return m_xMetaData;
 }
-// -------------------------------------------------------------------------
+
 Any lcl_getBookmark(ORowSetValue& i_aValue,OCacheSet* i_pCacheSet)
 {
     switch ( i_aValue.getTypeKind() )
@@ -456,7 +453,7 @@ Any lcl_getBookmark(ORowSetValue& i_aValue,OCacheSet* i_pCacheSet)
             return i_aValue.getAny();
     }
 }
-// -------------------------------------------------------------------------
+
 // ::com::sun::star::sdbcx::XRowLocate
 Any ORowSetCache::getBookmark(  )
 {
@@ -471,7 +468,7 @@ Any ORowSetCache::getBookmark(  )
 
     return lcl_getBookmark(((*m_aMatrixIter)->get())[0],m_pCacheSet);
 }
-// -------------------------------------------------------------------------
+
 sal_Bool ORowSetCache::moveToBookmark( const Any& bookmark )
 {
     if ( m_pCacheSet->moveToBookmark(bookmark) )
@@ -501,7 +498,7 @@ sal_Bool ORowSetCache::moveToBookmark( const Any& bookmark )
 
     return m_aMatrixIter != m_pMatrix->end() && (*m_aMatrixIter).isValid();
 }
-// -------------------------------------------------------------------------
+
 sal_Bool ORowSetCache::moveRelativeToBookmark( const Any& bookmark, sal_Int32 rows )
 {
     sal_Bool bRet( moveToBookmark( bookmark ) );
@@ -516,23 +513,23 @@ sal_Bool ORowSetCache::moveRelativeToBookmark( const Any& bookmark, sal_Int32 ro
 
     return bRet;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 ORowSetCache::compareBookmarks( const Any& _first, const Any& _second )
 {
     return (!_first.hasValue() || !_second.hasValue()) ? CompareBookmark::NOT_COMPARABLE : m_pCacheSet->compareBookmarks(_first,_second);
 }
-// -------------------------------------------------------------------------
+
 sal_Bool ORowSetCache::hasOrderedBookmarks(  )
 {
     return m_pCacheSet->hasOrderedBookmarks();
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 ORowSetCache::hashBookmark( const Any& bookmark )
 {
     return m_pCacheSet->hashBookmark(bookmark);
 }
+
 // XRowUpdate
-// -----------------------------------------------------------------------------
 void ORowSetCache::updateNull(sal_Int32 columnIndex,ORowSetValueVector::Vector& io_aRow
                               ,::std::vector<sal_Int32>& o_ChangedColumns
                               )
@@ -548,7 +545,7 @@ void ORowSetCache::updateNull(sal_Int32 columnIndex,ORowSetValueVector::Vector& 
     m_pCacheSet->mergeColumnValues(columnIndex,rInsert,io_aRow,o_ChangedColumns);
     impl_updateRowFromCache_throw(io_aRow,o_ChangedColumns);
 }
-// -----------------------------------------------------------------------------
+
 void ORowSetCache::updateValue(sal_Int32 columnIndex,const ORowSetValue& x
                                ,ORowSetValueVector::Vector& io_aRow
                                ,::std::vector<sal_Int32>& o_ChangedColumns
@@ -565,7 +562,7 @@ void ORowSetCache::updateValue(sal_Int32 columnIndex,const ORowSetValue& x
     m_pCacheSet->mergeColumnValues(columnIndex,rInsert,io_aRow,o_ChangedColumns);
     impl_updateRowFromCache_throw(io_aRow,o_ChangedColumns);
 }
-// -------------------------------------------------------------------------
+
 void ORowSetCache::updateCharacterStream( sal_Int32 columnIndex, const Reference< ::com::sun::star::io::XInputStream >& x
                                          , sal_Int32 length,ORowSetValueVector::Vector& io_aRow
                                          ,::std::vector<sal_Int32>& o_ChangedColumns
@@ -586,7 +583,7 @@ void ORowSetCache::updateCharacterStream( sal_Int32 columnIndex, const Reference
     m_pCacheSet->mergeColumnValues(columnIndex,rInsert,io_aRow,o_ChangedColumns);
     impl_updateRowFromCache_throw(io_aRow,o_ChangedColumns);
 }
-// -------------------------------------------------------------------------
+
 void ORowSetCache::updateObject( sal_Int32 columnIndex, const Any& x
                                 ,ORowSetValueVector::Vector& io_aRow
                                 ,::std::vector<sal_Int32>& o_ChangedColumns
@@ -603,7 +600,7 @@ void ORowSetCache::updateObject( sal_Int32 columnIndex, const Any& x
     m_pCacheSet->mergeColumnValues(columnIndex,rInsert,io_aRow,o_ChangedColumns);
     impl_updateRowFromCache_throw(io_aRow,o_ChangedColumns);
 }
-// -------------------------------------------------------------------------
+
 void ORowSetCache::updateNumericObject( sal_Int32 columnIndex, const Any& x, sal_Int32 /*scale*/
                                        ,ORowSetValueVector::Vector& io_aRow
                                        ,::std::vector<sal_Int32>& o_ChangedColumns
@@ -620,7 +617,7 @@ void ORowSetCache::updateNumericObject( sal_Int32 columnIndex, const Any& x, sal
     m_pCacheSet->mergeColumnValues(columnIndex,rInsert,io_aRow,o_ChangedColumns);
     impl_updateRowFromCache_throw(io_aRow,o_ChangedColumns);
 }
-// -------------------------------------------------------------------------
+
 // XResultSet
 sal_Bool ORowSetCache::next(  )
 {
@@ -643,33 +640,33 @@ sal_Bool ORowSetCache::next(  )
 
     return !m_bAfterLast;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool ORowSetCache::isBeforeFirst(  )
 {
     //  return !m_nPosition;
 
     return m_bBeforeFirst;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool ORowSetCache::isAfterLast(  )
 {
 
     return m_bAfterLast;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool ORowSetCache::isFirst(  )
 {
 
     return m_nPosition == 1; // ask resultset for
 }
-// -------------------------------------------------------------------------
+
 sal_Bool ORowSetCache::isLast(  )
 {
     //  return m_bRowCountFinal ? (m_nPosition==m_nRowCount) : m_pCacheSet->isLast();
 
     return m_nPosition == m_nRowCount;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool ORowSetCache::beforeFirst(  )
 {
 
@@ -685,7 +682,7 @@ sal_Bool ORowSetCache::beforeFirst(  )
     }
     return sal_True;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool ORowSetCache::afterLast(  )
 {
 
@@ -708,7 +705,7 @@ sal_Bool ORowSetCache::afterLast(  )
     }
     return sal_True;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool ORowSetCache::fillMatrix(sal_Int32& _nNewStartPos,sal_Int32 _nNewEndPos)
 {
     OSL_ENSURE(_nNewStartPos != _nNewEndPos,"ORowSetCache::fillMatrix: StartPos and EndPos can not be equal!");
@@ -778,7 +775,7 @@ sal_Bool ORowSetCache::fillMatrix(sal_Int32& _nNewStartPos,sal_Int32 _nNewEndPos
     }
     return bCheck;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool ORowSetCache::moveWindow()
 {
 
@@ -1016,7 +1013,7 @@ sal_Bool ORowSetCache::moveWindow()
 
     return bRet;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool ORowSetCache::first(  )
 {
     // first move to the first row
@@ -1041,7 +1038,7 @@ sal_Bool ORowSetCache::first(  )
     }
     return bRet;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool ORowSetCache::last(  )
 {
     sal_Bool bRet = m_pCacheSet->last();
@@ -1076,12 +1073,12 @@ sal_Bool ORowSetCache::last(  )
 
     return bRet;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 ORowSetCache::getRow(  )
 {
     return (isBeforeFirst() || isAfterLast()) ? 0 : m_nPosition;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool ORowSetCache::absolute( sal_Int32 row )
 {
     if(!row )
@@ -1134,7 +1131,7 @@ sal_Bool ORowSetCache::absolute( sal_Int32 row )
 
     return !(m_bAfterLast || m_bBeforeFirst);
 }
-// -------------------------------------------------------------------------
+
 sal_Bool ORowSetCache::relative( sal_Int32 rows )
 {
     sal_Bool bErg = sal_True;
@@ -1162,7 +1159,7 @@ sal_Bool ORowSetCache::relative( sal_Int32 rows )
     }
     return bErg;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool ORowSetCache::previous(  )
 {
     sal_Bool bRet = sal_False;
@@ -1193,7 +1190,7 @@ sal_Bool ORowSetCache::previous(  )
     }
     return bRet;
 }
-// -------------------------------------------------------------------------
+
 void ORowSetCache::refreshRow(  )
 {
     if(isAfterLast())
@@ -1206,17 +1203,17 @@ void ORowSetCache::refreshRow(  )
         cancelRowModification();
     }
 }
-// -------------------------------------------------------------------------
+
 sal_Bool ORowSetCache::rowUpdated(  )
 {
     return m_pCacheSet->rowUpdated();
 }
-// -------------------------------------------------------------------------
+
 sal_Bool ORowSetCache::rowInserted(  )
 {
     return m_pCacheSet->rowInserted();
 }
-// -------------------------------------------------------------------------
+
 // XResultSetUpdate
 sal_Bool ORowSetCache::insertRow(::std::vector< Any >& o_aBookmarks)
 {
@@ -1252,7 +1249,7 @@ sal_Bool ORowSetCache::insertRow(::std::vector< Any >& o_aBookmarks)
     }
     return bRet;
 }
-// -------------------------------------------------------------------------
+
 void ORowSetCache::resetInsertRow(sal_Bool _bClearInsertRow)
 {
     if ( _bClearInsertRow )
@@ -1260,7 +1257,7 @@ void ORowSetCache::resetInsertRow(sal_Bool _bClearInsertRow)
     m_bNew      = sal_False;
     m_bModified = sal_False;
 }
-// -------------------------------------------------------------------------
+
 void ORowSetCache::cancelRowModification()
 {
     // clear the insertrow references   -> implies that the current row of the rowset changes as well
@@ -1273,7 +1270,7 @@ void ORowSetCache::cancelRowModification()
     } // for(;aCacheIter != aCacheEnd;++aCacheIter)
     resetInsertRow(sal_False);
 }
-// -------------------------------------------------------------------------
+
 void ORowSetCache::updateRow( ORowSetMatrix::iterator& _rUpdateRow,::std::vector< Any >& o_aBookmarks )
 {
     if(isAfterLast() || isBeforeFirst())
@@ -1304,7 +1301,7 @@ void ORowSetCache::updateRow( ORowSetMatrix::iterator& _rUpdateRow,::std::vector
 
     m_bModified = sal_False;
 }
-// -------------------------------------------------------------------------
+
 bool ORowSetCache::deleteRow(  )
 {
     if(isAfterLast() || isBeforeFirst())
@@ -1331,7 +1328,7 @@ bool ORowSetCache::deleteRow(  )
     --m_nPosition;
     return true;
 }
-// -------------------------------------------------------------------------
+
 void ORowSetCache::cancelRowUpdates(  )
 {
     m_bNew = m_bModified = sal_False;
@@ -1349,7 +1346,7 @@ void ORowSetCache::cancelRowUpdates(  )
         ::dbtools::throwFunctionSequenceException(NULL);
     }
 }
-// -------------------------------------------------------------------------
+
 void ORowSetCache::moveToInsertRow(  )
 {
     m_bNew      = sal_True;
@@ -1370,7 +1367,7 @@ void ORowSetCache::moveToInsertRow(  )
         aIter->setTypeKind(m_xMetaData->getColumnType(i));
     }
 }
-// -------------------------------------------------------------------------
+
 ORowSetCacheIterator ORowSetCache::createIterator(ORowSetBase* _pRowSet)
 {
 
@@ -1379,7 +1376,7 @@ ORowSetCacheIterator ORowSetCache::createIterator(ORowSetBase* _pRowSet)
     aHelper.pRowSet = _pRowSet;
     return ORowSetCacheIterator(m_aCacheIterators.insert(m_aCacheIterators.begin(),ORowSetCacheMap::value_type(m_aCacheIterators.size()+1,aHelper)),this,_pRowSet);
 }
-// -----------------------------------------------------------------------------
+
 void ORowSetCache::deleteIterator(const ORowSetBase* _pRowSet)
 {
     ORowSetCacheMap::iterator aCacheIter = m_aCacheIterators.begin();
@@ -1394,7 +1391,7 @@ void ORowSetCache::deleteIterator(const ORowSetBase* _pRowSet)
             ++aCacheIter;
     }
 }
-// -----------------------------------------------------------------------------
+
 void ORowSetCache::rotateCacheIterator(ORowSetMatrix::difference_type _nDist)
 {
     if(_nDist)
@@ -1423,7 +1420,7 @@ void ORowSetCache::rotateCacheIterator(ORowSetMatrix::difference_type _nDist)
         }
     }
 }
-// -------------------------------------------------------------------------
+
 void ORowSetCache::setUpdateIterator(const ORowSetMatrix::iterator& _rOriginalRow)
 {
     m_aInsertRow = m_pInsertMatrix->begin();
@@ -1437,7 +1434,7 @@ void ORowSetCache::setUpdateIterator(const ORowSetMatrix::iterator& _rOriginalRo
     for(;aIter != aEnd;++aIter)
         aIter->setModified(sal_False);
 }
-// -----------------------------------------------------------------------------
+
 void ORowSetCache::checkPositionFlags()
 {
     if(m_bRowCountFinal)
@@ -1447,13 +1444,13 @@ void ORowSetCache::checkPositionFlags()
             m_nPosition = 0;//m_nRowCount;
     }
 }
-// -----------------------------------------------------------------------------
+
 void ORowSetCache::checkUpdateConditions(sal_Int32 columnIndex)
 {
     if(m_bAfterLast || columnIndex >= (sal_Int32)(*m_aInsertRow)->get().size())
         throwFunctionSequenceException(m_xSet.get());
 }
-//------------------------------------------------------------------------------
+
 sal_Bool ORowSetCache::checkInnerJoin(const ::connectivity::OSQLParseNode *pNode,const Reference< XConnection>& _xConnection,const ::rtl::OUString& _sUpdateTableName)
 {
     sal_Bool bOk = sal_False;
@@ -1492,7 +1489,7 @@ sal_Bool ORowSetCache::checkInnerJoin(const ::connectivity::OSQLParseNode *pNode
     }
     return bOk;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool ORowSetCache::checkJoin(const Reference< XConnection>& _xConnection,
                                  const Reference< XSingleSelectQueryAnalyzer >& _xAnalyzer,
                                  const ::rtl::OUString& _sUpdateTableName )
@@ -1552,7 +1549,7 @@ sal_Bool ORowSetCache::checkJoin(const Reference< XConnection>& _xConnection,
     }
     return bOk;
 }
-// -----------------------------------------------------------------------------
+
 void ORowSetCache::clearInsertRow()
 {
     // we don't unbound the bookmark column
@@ -1568,14 +1565,14 @@ void ORowSetCache::clearInsertRow()
         } // for(;aIter != (*m_aInsertRow)->end();++aIter)
     }
 }
-// -----------------------------------------------------------------------------
+
 ORowSetMatrix::iterator ORowSetCache::calcPosition() const
 {
     sal_Int32 nValue = (m_nPosition - m_nStartPos) - 1;
     CHECK_MATRIX_POS(nValue);
     return ( nValue < 0 || nValue >= static_cast<sal_Int32>(m_pMatrix->size()) ) ? m_pMatrix->end() : (m_pMatrix->begin() + nValue);
 }
-// -----------------------------------------------------------------------------
+
 
 TORowSetOldRowHelperRef ORowSetCache::registerOldRow()
 {
@@ -1583,7 +1580,7 @@ TORowSetOldRowHelperRef ORowSetCache::registerOldRow()
     m_aOldRows.push_back(pRef);
     return pRef;
 }
-// -----------------------------------------------------------------------------
+
 void ORowSetCache::deregisterOldRow(const TORowSetOldRowHelperRef& _rRow)
 {
     TOldRowSetRows::iterator aOldRowEnd = m_aOldRows.end();
@@ -1597,7 +1594,7 @@ void ORowSetCache::deregisterOldRow(const TORowSetOldRowHelperRef& _rRow)
 
     }
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool ORowSetCache::reFillMatrix(sal_Int32 _nNewStartPos,sal_Int32 _nNewEndPos)
 {
     TOldRowSetRows::iterator aOldRowEnd = m_aOldRows.end();
@@ -1612,7 +1609,7 @@ sal_Bool ORowSetCache::reFillMatrix(sal_Int32 _nNewStartPos,sal_Int32 _nNewEndPo
     rotateCacheIterator(static_cast<sal_Int16>(m_nFetchSize+1)); // forces that every iterator will be set to null
     return bRet;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool ORowSetCache::fill(ORowSetMatrix::iterator& _aIter,const ORowSetMatrix::iterator& _aEnd,sal_Int32& _nPos,sal_Bool _bCheck)
 {
     sal_Int32 nColumnCount = m_xMetaData->getColumnCount();
@@ -1634,12 +1631,12 @@ sal_Bool ORowSetCache::fill(ORowSetMatrix::iterator& _aIter,const ORowSetMatrix:
     }
     return _bCheck;
 }
-// -----------------------------------------------------------------------------
+
 bool ORowSetCache::isResultSetChanged() const
 {
     return m_pCacheSet->isResultSetChanged();
 }
-// -----------------------------------------------------------------------------
+
 void ORowSetCache::reset(const Reference< XResultSet>& _xDriverSet)
 {
     m_xMetaData.set(Reference< XResultSetMetaDataSupplier >(_xDriverSet,UNO_QUERY)->getMetaData());
@@ -1649,7 +1646,7 @@ void ORowSetCache::reset(const Reference< XResultSet>& _xDriverSet)
     m_nRowCount = 0;
     reFillMatrix(m_nStartPos+1,m_nEndPos+1);
 }
-// -----------------------------------------------------------------------------
+
 void ORowSetCache::impl_updateRowFromCache_throw(ORowSetValueVector::Vector& io_aRow
                                            ,::std::vector<sal_Int32>& o_ChangedColumns)
 {
@@ -1670,6 +1667,4 @@ void ORowSetCache::impl_updateRowFromCache_throw(ORowSetValueVector::Vector& io_
         }
     }
 }
-// -----------------------------------------------------------------------------
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

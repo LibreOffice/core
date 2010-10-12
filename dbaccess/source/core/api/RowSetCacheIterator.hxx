@@ -84,5 +84,3 @@ namespace dbaccess
     };
 }
 #endif // DBACCESS_ROWSETCACHEITERATOR_HXX
-
-
