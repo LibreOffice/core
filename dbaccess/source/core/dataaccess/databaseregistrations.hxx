@@ -36,16 +36,12 @@ namespace comphelper
     class ComponentContext;
 }
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >
         createDataSourceRegistrations( const ::comphelper::ComponentContext& _rxContext );
 
-//........................................................................
 } // namespace dbaccess
-//........................................................................
 
 #endif // OOO_DATASOURCEREGISTRATIONS_HXX

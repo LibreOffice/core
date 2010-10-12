@@ -41,10 +41,8 @@ namespace comphelper
     class ComponentContext;
 }
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
     struct DocumentEventExecutor_Data;
     //====================================================================
@@ -71,8 +69,6 @@ namespace dbaccess
         ::std::auto_ptr< DocumentEventExecutor_Data >   m_pData;
     };
 
-//........................................................................
 } // namespace dbaccess
-//........................................................................
 
 #endif // DBACCESS_DOCUMENTEVENTEXECUTOR_HXX

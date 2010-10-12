@@ -58,10 +58,9 @@ extern "C" void SAL_CALL createRegistryInfo_OComponentDefinition()
     static ::dba::OAutoRegistration< ::dbaccess::OComponentDefinition > aAutoRegistration;
 }
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
+
 /// helper class for column property change events which holds the OComponentDefinition weak
 typedef ::cppu::WeakImplHelper1 < XPropertyChangeListener > TColumnPropertyListener_BASE;
 class OColumnPropertyListener : public TColumnPropertyListener_BASE
@@ -91,7 +90,7 @@ OComponentDefinition_Impl::OComponentDefinition_Impl()
 {
     DBG_CTOR(OComponentDefinition_Impl,NULL);
 }
-// -----------------------------------------------------------------------------
+
 OComponentDefinition_Impl::~OComponentDefinition_Impl()
 {
     DBG_DTOR(OComponentDefinition_Impl,NULL);
@@ -99,9 +98,9 @@ OComponentDefinition_Impl::~OComponentDefinition_Impl()
 //==========================================================================
 //= OComponentDefinition
 //==========================================================================
-//--------------------------------------------------------------------------
+
 DBG_NAME(OComponentDefinition)
-//--------------------------------------------------------------------------
+
 void OComponentDefinition::registerProperties()
 {
     m_xColumnPropertyListener = ::comphelper::ImplementationReference<OColumnPropertyListener,XPropertyChangeListener>(new OColumnPropertyListener(this));
@@ -121,7 +120,6 @@ void OComponentDefinition::registerProperties()
     }
 }
 
-//--------------------------------------------------------------------------
 OComponentDefinition::OComponentDefinition(const Reference< XMultiServiceFactory >& _xORB
                                            ,const Reference< XInterface >&  _xParentContainer
                                            ,const TContentPtr& _pImpl
@@ -133,13 +131,13 @@ OComponentDefinition::OComponentDefinition(const Reference< XMultiServiceFactory
     DBG_CTOR(OComponentDefinition, NULL);
     registerProperties();
 }
-//--------------------------------------------------------------------------
+
 OComponentDefinition::~OComponentDefinition()
 {
     DBG_DTOR(OComponentDefinition, NULL);
 }
 
-//--------------------------------------------------------------------------
+
 OComponentDefinition::OComponentDefinition( const Reference< XInterface >& _rxContainer
                                        ,const ::rtl::OUString& _rElementName
                                        ,const Reference< XMultiServiceFactory >& _xORB
@@ -156,23 +154,20 @@ OComponentDefinition::OComponentDefinition( const Reference< XInterface >& _rxCo
     DBG_ASSERT(m_pImpl->m_aProps.aTitle.getLength() != 0, "OComponentDefinition::OComponentDefinition : invalid name !");
 }
 
-//--------------------------------------------------------------------------
 IMPLEMENT_IMPLEMENTATION_ID(OComponentDefinition);
 IMPLEMENT_GETTYPES3(OComponentDefinition,ODataSettings,OContentHelper,OComponentDefinition_BASE);
 IMPLEMENT_FORWARD_XINTERFACE3( OComponentDefinition,OContentHelper,ODataSettings,OComponentDefinition_BASE)
-//--------------------------------------------------------------------------
+
 ::rtl::OUString OComponentDefinition::getImplementationName_static(  ) throw(RuntimeException)
 {
     return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.dba.OComponentDefinition"));
 }
 
-//--------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OComponentDefinition::getImplementationName(  ) throw(RuntimeException)
 {
     return getImplementationName_static();
 }
 
-//--------------------------------------------------------------------------
 Sequence< ::rtl::OUString > OComponentDefinition::getSupportedServiceNames_static(  ) throw(RuntimeException)
 {
     Sequence< ::rtl::OUString > aServices(2);
@@ -182,18 +177,17 @@ Sequence< ::rtl::OUString > OComponentDefinition::getSupportedServiceNames_stati
     return aServices;
 }
 
-//--------------------------------------------------------------------------
 Sequence< ::rtl::OUString > SAL_CALL OComponentDefinition::getSupportedServiceNames(  ) throw(RuntimeException)
 {
     return getSupportedServiceNames_static();
 }
-//------------------------------------------------------------------------------
+
 Reference< XInterface > OComponentDefinition::Create( const Reference< XComponentContext >& _rxContext )
 {
     ::comphelper::ComponentContext aContext( _rxContext );
     return *(new OComponentDefinition( aContext.getLegacyServiceFactory(), NULL, TContentPtr( new OComponentDefinition_Impl ) ) );
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OComponentDefinition::disposing()
 {
     OContentHelper::disposing();
@@ -202,26 +196,25 @@ void SAL_CALL OComponentDefinition::disposing()
     m_xColumnPropertyListener->clear();
     m_xColumnPropertyListener.dispose();
 }
-// -----------------------------------------------------------------------------
+
 IPropertyArrayHelper& OComponentDefinition::getInfoHelper()
 {
     return *getArrayHelper();
 }
-//--------------------------------------------------------------------------
+
 IPropertyArrayHelper* OComponentDefinition::createArrayHelper( ) const
 {
     Sequence< Property > aProps;
     describeProperties(aProps);
     return new OPropertyArrayHelper(aProps);
 }
-//--------------------------------------------------------------------------
+
 Reference< XPropertySetInfo > SAL_CALL OComponentDefinition::getPropertySetInfo(  ) throw(RuntimeException)
 {
     Reference<XPropertySetInfo> xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
 
-// -----------------------------------------------------------------------------
 ::rtl::OUString OComponentDefinition::determineContentType() const
 {
     return m_bTable
@@ -229,7 +222,6 @@ Reference< XPropertySetInfo > SAL_CALL OComponentDefinition::getPropertySetInfo(
         :   ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.org.openoffice.DatabaseCommandDefinition" ) );
 }
 
-// -----------------------------------------------------------------------------
 Reference< XNameAccess> OComponentDefinition::getColumns() throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -252,7 +244,7 @@ Reference< XNameAccess> OComponentDefinition::getColumns() throw (RuntimeExcepti
     }
     return m_pColumns.get();
 }
-// -----------------------------------------------------------------------------
+
 OColumn* OComponentDefinition::createColumn(const ::rtl::OUString& _rName) const
 {
     const OComponentDefinition_Impl& rDefinition( getDefinition() );
@@ -266,24 +258,24 @@ OColumn* OComponentDefinition::createColumn(const ::rtl::OUString& _rName) const
         // This here is the last place creating a OTableColumn, and somehow /me thinks it is not needed ...
     return new OTableColumn( _rName );
 }
-// -----------------------------------------------------------------------------
+
 Reference< XPropertySet > OComponentDefinition::createColumnDescriptor()
 {
     return new OTableColumnDescriptor( true );
 }
-// -----------------------------------------------------------------------------
+
 void OComponentDefinition::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue) throw (Exception)
 {
     ODataSettings::setFastPropertyValue_NoBroadcast(nHandle,rValue);
     notifyDataSourceModified();
 }
-// -----------------------------------------------------------------------------
+
 void OComponentDefinition::columnDropped(const ::rtl::OUString& _sName)
 {
     getDefinition().erase( _sName );
     notifyDataSourceModified();
 }
-// -----------------------------------------------------------------------------
+
 void OComponentDefinition::columnAppended( const Reference< XPropertySet >& _rxSourceDescriptor )
 {
     ::rtl::OUString sName;
@@ -305,8 +297,5 @@ void OComponentDefinition::columnAppended( const Reference< XPropertySet >& _rxS
     notifyDataSourceModified();
 }
 
-//........................................................................
 }   // namespace dbaccess
-//........................................................................
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -145,7 +145,6 @@ namespace dbaccess
 #define REGISTER_PROPERTY( propname, member ) \
     registerProperty( PROPERTY_##propname, PROPERTY_ID_##propname, PropertyAttribute::BOUND, &member, ::getCppuType( &member ) )
 
-    //--------------------------------------------------------------------
     DataAccessDescriptor::DataAccessDescriptor( const ::comphelper::ComponentContext& _rContext )
         :DataAccessDescriptor_MutexBase()
         ,DataAccessDescriptor_TypeBase()
@@ -188,24 +187,19 @@ namespace dbaccess
         REGISTER_PROPERTY( COLUMN,              m_xColumn );
     }
 
-    //--------------------------------------------------------------------
     DataAccessDescriptor::~DataAccessDescriptor()
     {
     }
 
-    //--------------------------------------------------------------------
     IMPLEMENT_FORWARD_XINTERFACE2( DataAccessDescriptor, DataAccessDescriptor_TypeBase, DataAccessDescriptor_PropertyBase );
 
-    //--------------------------------------------------------------------
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( DataAccessDescriptor, DataAccessDescriptor_TypeBase, DataAccessDescriptor_PropertyBase );
 
-    //--------------------------------------------------------------------
     ::rtl::OUString SAL_CALL DataAccessDescriptor::getImplementationName() throw (RuntimeException)
     {
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.dba.DataAccessDescriptor" ) );
     }
 
-    //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL DataAccessDescriptor::supportsService( const ::rtl::OUString& rServiceName ) throw (RuntimeException)
     {
         Sequence< ::rtl::OUString > aServices( getSupportedServiceNames() );
@@ -214,7 +208,6 @@ namespace dbaccess
         return ::std::find( pStart, pEnd, rServiceName ) != pEnd;
     }
 
-    //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL DataAccessDescriptor::getSupportedServiceNames(  ) throw (RuntimeException)
     {
         Sequence< ::rtl::OUString > aServices(1);
@@ -222,20 +215,17 @@ namespace dbaccess
         return aServices;
     }
 
-    //-------------------------------------------------------------------------
     Reference< XPropertySetInfo > SAL_CALL DataAccessDescriptor::getPropertySetInfo() throw(RuntimeException)
     {
         Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
         return xInfo;
     }
 
-    //-------------------------------------------------------------------------
     ::cppu::IPropertyArrayHelper& DataAccessDescriptor::getInfoHelper()
     {
         return *getArrayHelper();
     }
 
-    //------------------------------------------------------------------------------
     ::cppu::IPropertyArrayHelper* DataAccessDescriptor::createArrayHelper( ) const
     {
         Sequence< Property > aProps;
@@ -274,24 +264,20 @@ namespace dbaccess
         ::comphelper::ComponentContext  m_aContext;
     };
 
-    //--------------------------------------------------------------------
     DataAccessDescriptorFactory::DataAccessDescriptorFactory( const Reference< XComponentContext >& _rxContext )
         :m_aContext( _rxContext )
     {
     }
 
-    //--------------------------------------------------------------------
     DataAccessDescriptorFactory::~DataAccessDescriptorFactory()
     {
     }
 
-    //--------------------------------------------------------------------
     ::rtl::OUString DataAccessDescriptorFactory::getSingletonName_static()
     {
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.DataAccessDescriptorFactory" ) );
     }
 
-    //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > DataAccessDescriptorFactory::getSupportedServiceNames_static() throw( RuntimeException )
     {
         Sequence< ::rtl::OUString > aServices(1);
@@ -299,25 +285,21 @@ namespace dbaccess
         return aServices;
     }
 
-    //--------------------------------------------------------------------
     ::rtl::OUString DataAccessDescriptorFactory::getImplementationName_static() throw( RuntimeException )
     {
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.dba.DataAccessDescriptorFactory" ) );
     }
 
-    //--------------------------------------------------------------------
     Reference< XInterface > DataAccessDescriptorFactory::Create( const Reference< XComponentContext >& _rxContext )
     {
         return *( new DataAccessDescriptorFactory( _rxContext ) );
     }
 
-    //--------------------------------------------------------------------
     ::rtl::OUString SAL_CALL DataAccessDescriptorFactory::getImplementationName() throw (RuntimeException)
     {
         return getImplementationName_static();
     }
 
-    //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL DataAccessDescriptorFactory::supportsService( const ::rtl::OUString& rServiceName ) throw (RuntimeException)
     {
         Sequence< ::rtl::OUString > aServices( getSupportedServiceNames_static() );
@@ -326,23 +308,18 @@ namespace dbaccess
         return ::std::find( pStart, pEnd, rServiceName ) != pEnd;
     }
 
-    //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL DataAccessDescriptorFactory::getSupportedServiceNames(  ) throw (RuntimeException)
     {
         return getSupportedServiceNames_static();
     }
 
-    //--------------------------------------------------------------------
     Reference< XPropertySet > SAL_CALL DataAccessDescriptorFactory::createDataAccessDescriptor(  ) throw (RuntimeException)
     {
         return new DataAccessDescriptor( m_aContext );
     }
 
-//........................................................................
 } // namespace dbaccess
-//........................................................................
 
-//--------------------------------------------------------------------------
 extern "C" void SAL_CALL createRegistryInfo_DataAccessDescriptorFactory()
 {
     static ::dba::OSingletonRegistration< ::dbaccess::DataAccessDescriptorFactory > aAutoRegistration;

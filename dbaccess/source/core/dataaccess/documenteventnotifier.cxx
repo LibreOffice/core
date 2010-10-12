@@ -39,10 +39,8 @@
 #include <cppuhelper/weak.hxx>
 #include <tools/diagnose_ex.h>
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
     /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
@@ -149,20 +147,17 @@ namespace dbaccess
         void impl_notifyEventAsync_nothrow( const DocumentEvent& _rEvent );
     };
 
-    //--------------------------------------------------------------------
     void SAL_CALL DocumentEventNotifier_Impl::acquire()
     {
         osl_incrementInterlockedCount( &m_refCount );
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL DocumentEventNotifier_Impl::release()
     {
         if ( 0 == osl_decrementInterlockedCount( &m_refCount ) )
             delete this;
     }
 
-    //--------------------------------------------------------------------
     void DocumentEventNotifier_Impl::disposing()
     {
         // SYNCHRONIZED ->
@@ -188,7 +183,6 @@ namespace dbaccess
         // <-- SYNCHRONIZED
     }
 
-    //--------------------------------------------------------------------
     void DocumentEventNotifier_Impl::onDocumentInitialized()
     {
         if ( m_bInitialized )
@@ -200,7 +194,6 @@ namespace dbaccess
             m_pEventBroadcaster->create();
     }
 
-    //--------------------------------------------------------------------
     void DocumentEventNotifier_Impl::impl_notifyEvent_nothrow( const DocumentEvent& _rEvent )
     {
         OSL_PRECOND( m_bInitialized,
@@ -224,7 +217,6 @@ namespace dbaccess
         }
     }
 
-    //--------------------------------------------------------------------
     void DocumentEventNotifier_Impl::impl_notifyEventAsync_nothrow( const DocumentEvent& _rEvent )
     {
         if ( !m_pEventBroadcaster.is() )
@@ -238,7 +230,6 @@ namespace dbaccess
         m_pEventBroadcaster->addEvent( new DocumentEventHolder( _rEvent ), this );
     }
 
-    // -----------------------------------------------------------------------------
     void DocumentEventNotifier_Impl::processEvent( const ::comphelper::AnyEvent& _rEvent )
     {
         // beware, this is called from the notification thread
@@ -254,69 +245,56 @@ namespace dbaccess
     //====================================================================
     //= DocumentEventNotifier
     //====================================================================
-    //--------------------------------------------------------------------
     DocumentEventNotifier::DocumentEventNotifier( ::cppu::OWeakObject& _rBroadcasterDocument, ::osl::Mutex& _rMutex )
         :m_pImpl( new DocumentEventNotifier_Impl( _rBroadcasterDocument, _rMutex ) )
     {
     }
 
-    //--------------------------------------------------------------------
     DocumentEventNotifier::~DocumentEventNotifier()
     {
     }
 
-    //--------------------------------------------------------------------
     void DocumentEventNotifier::disposing()
     {
         m_pImpl->disposing();
     }
 
-    //--------------------------------------------------------------------
     void DocumentEventNotifier::onDocumentInitialized()
     {
         m_pImpl->onDocumentInitialized();
     }
 
-    //--------------------------------------------------------------------
     void DocumentEventNotifier::addLegacyEventListener( const Reference< document::XEventListener >& _Listener )
     {
         m_pImpl->addLegacyEventListener( _Listener );
     }
 
-    //--------------------------------------------------------------------
     void DocumentEventNotifier::removeLegacyEventListener( const Reference< document::XEventListener >& _Listener )
     {
         m_pImpl->removeLegacyEventListener( _Listener );
     }
 
-    //--------------------------------------------------------------------
     void DocumentEventNotifier::addDocumentEventListener( const Reference< XDocumentEventListener >& _Listener )
     {
         m_pImpl->addDocumentEventListener( _Listener );
     }
 
-    //--------------------------------------------------------------------
     void DocumentEventNotifier::removeDocumentEventListener( const Reference< XDocumentEventListener >& _Listener )
     {
         m_pImpl->removeDocumentEventListener( _Listener );
     }
 
-    //--------------------------------------------------------------------
     void DocumentEventNotifier::notifyDocumentEvent( const ::rtl::OUString& _EventName,
         const Reference< XController2 >& _ViewController, const Any& _Supplement )
     {
         m_pImpl->notifyDocumentEvent( _EventName, _ViewController, _Supplement );
     }
 
-    //--------------------------------------------------------------------
     void DocumentEventNotifier::notifyDocumentEventAsync( const ::rtl::OUString& _EventName,
         const Reference< XController2 >& _ViewController, const Any& _Supplement )
     {
         m_pImpl->notifyDocumentEventAsync( _EventName, _ViewController, _Supplement );
     }
 
-//........................................................................
 } // namespace dbaccess
-//........................................................................
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

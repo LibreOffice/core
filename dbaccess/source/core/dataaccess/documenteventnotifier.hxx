@@ -40,10 +40,8 @@ namespace cppu
     class OWeakObject;
 }
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
     class DocumentEventNotifier_Impl;
     //====================================================================
@@ -137,8 +135,6 @@ namespace dbaccess
         ::rtl::Reference< DocumentEventNotifier_Impl >   m_pImpl;
     };
 
-//........................................................................
 } // namespace dbaccess
-//........................................................................
 
 #endif // DBACCESS_DOCUMENTEVENTNOTIFIER_HXX

@@ -84,14 +84,13 @@ namespace dbaccess
                 aReturn = OSharedConnection_BASE2::queryInterface(_rType);
             return aReturn;
         }
-        // --------------------------------------------------------------------------------
+
         // XCloseable
         virtual void SAL_CALL close(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
         {
             {
                 ::osl::MutexGuard aGuard( m_aMutex );
                 ::connectivity::checkDisposed(rBHelper.bDisposed);
-
             }
             dispose();
         }
@@ -136,9 +135,7 @@ namespace dbaccess
 #ifdef IMPLEMENT_GET_IMPLEMENTATION_ID
     IMPLEMENT_GET_IMPLEMENTATION_ID( OSharedConnection );
 #endif
-//........................................................................
+
 }   // namespace dbaccess
-//........................................................................
+
 #endif // DBA_CORE_SHARED_CONNECTION_HXX
-
-

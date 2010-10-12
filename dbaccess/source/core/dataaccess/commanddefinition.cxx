@@ -50,10 +50,8 @@ using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::cppu;
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
 //==========================================================================
 //= OCommandDefinition
@@ -63,9 +61,8 @@ extern "C" void SAL_CALL createRegistryInfo_OCommandDefinition()
     static ::dba::OAutoRegistration< OCommandDefinition > aAutoRegistration;
 }
 
-//--------------------------------------------------------------------------
 DBG_NAME(OCommandDefinition)
-//--------------------------------------------------------------------------
+
 void OCommandDefinition::registerProperties()
 {
     OCommandDefinition_Impl& rCommandDefinition( getCommandDefinition() );
@@ -87,7 +84,6 @@ void OCommandDefinition::registerProperties()
                     &rCommandDefinition.m_aLayoutInformation, ::getCppuType(&rCommandDefinition.m_aLayoutInformation));
 }
 
-//--------------------------------------------------------------------------
 OCommandDefinition::OCommandDefinition(const Reference< XMultiServiceFactory >& _xORB
                                        ,const Reference< XInterface >& _rxContainer
                                        ,const TContentPtr& _pImpl)
@@ -96,13 +92,12 @@ OCommandDefinition::OCommandDefinition(const Reference< XMultiServiceFactory >& 
     DBG_CTOR(OCommandDefinition, NULL);
     registerProperties();
 }
-//--------------------------------------------------------------------------
+
 OCommandDefinition::~OCommandDefinition()
 {
     DBG_DTOR(OCommandDefinition, NULL);
 }
 
-//--------------------------------------------------------------------------
 OCommandDefinition::OCommandDefinition( const Reference< XInterface >& _rxContainer
                                        ,const ::rtl::OUString& _rElementName
                                        ,const Reference< XMultiServiceFactory >& _xORB
@@ -113,24 +108,21 @@ OCommandDefinition::OCommandDefinition( const Reference< XInterface >& _rxContai
     registerProperties();
 }
 
-//--------------------------------------------------------------------------
 IMPLEMENT_IMPLEMENTATION_ID(OCommandDefinition);
 IMPLEMENT_GETTYPES2(OCommandDefinition,OCommandDefinition_Base,OComponentDefinition);
 IMPLEMENT_FORWARD_XINTERFACE2( OCommandDefinition,OComponentDefinition,OCommandDefinition_Base)
 IMPLEMENT_PROPERTYCONTAINER_DEFAULTS2(OCommandDefinition,OCommandDefinition_PROP)
-//--------------------------------------------------------------------------
+
 ::rtl::OUString OCommandDefinition::getImplementationName_static(  ) throw(RuntimeException)
 {
     return ::rtl::OUString::createFromAscii("com.sun.star.comp.dba.OCommandDefinition");
 }
 
-//--------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OCommandDefinition::getImplementationName(  ) throw(RuntimeException)
 {
     return getImplementationName_static();
 }
 
-//--------------------------------------------------------------------------
 Sequence< ::rtl::OUString > OCommandDefinition::getSupportedServiceNames_static(  ) throw(RuntimeException)
 {
     Sequence< ::rtl::OUString > aServices(3);
@@ -140,20 +132,17 @@ Sequence< ::rtl::OUString > OCommandDefinition::getSupportedServiceNames_static(
     return aServices;
 }
 
-//--------------------------------------------------------------------------
 Sequence< ::rtl::OUString > SAL_CALL OCommandDefinition::getSupportedServiceNames(  ) throw(RuntimeException)
 {
     return getSupportedServiceNames_static();
 }
 
-//------------------------------------------------------------------------------
 Reference< XInterface > OCommandDefinition::Create(const Reference< XComponentContext >& _rxContext)
 {
     ::comphelper::ComponentContext aContext( _rxContext );
     return *(new OCommandDefinition( aContext.getLegacyServiceFactory(), NULL, TContentPtr( new OCommandDefinition_Impl ) ) );
 }
 
-// -----------------------------------------------------------------------------
 void SAL_CALL OCommandDefinition::rename( const ::rtl::OUString& newName ) throw (SQLException, ElementExistException, RuntimeException)
 {
     try
@@ -173,9 +162,6 @@ void SAL_CALL OCommandDefinition::rename( const ::rtl::OUString& newName ) throw
         throw ElementExistException(newName,*this);
     }
 }
-// -----------------------------------------------------------------------------
-//........................................................................
-}   // namespace dbaccess
-//........................................................................
 
+}   // namespace dbaccess
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -39,10 +39,8 @@
 #include <algorithm>
 #include <functional>
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
     /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
@@ -88,7 +86,6 @@ namespace dbaccess
         bool            bNeedsSyncNotify;
     };
 
-    //--------------------------------------------------------------------
     namespace
     {
         static const DocumentEventData* lcl_getDocumentEventData()
@@ -127,7 +124,6 @@ namespace dbaccess
     //====================================================================
     //= DocumentEvents
     //====================================================================
-    //--------------------------------------------------------------------
     DocumentEvents::DocumentEvents( ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex, DocumentEventsData& _rEventsData )
         :m_pData( new DocumentEvents_Data( _rParent, _rMutex, _rEventsData ) )
     {
@@ -142,24 +138,20 @@ namespace dbaccess
         }
     }
 
-    //--------------------------------------------------------------------
     DocumentEvents::~DocumentEvents()
     {
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL DocumentEvents::acquire() throw()
     {
         m_pData->rParent.acquire();
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL DocumentEvents::release() throw()
     {
         m_pData->rParent.release();
     }
 
-    //--------------------------------------------------------------------
     bool DocumentEvents::needsSynchronousNotification( const ::rtl::OUString& _rEventName )
     {
         const DocumentEventData* pEventData = lcl_getDocumentEventData();
@@ -174,7 +166,6 @@ namespace dbaccess
         return false;
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL DocumentEvents::replaceByName( const ::rtl::OUString& _Name, const Any& _Element ) throw (IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_pData->rMutex );
@@ -208,7 +199,6 @@ namespace dbaccess
         elementPos->second = aEventDescriptor;
     }
 
-    //--------------------------------------------------------------------
     Any SAL_CALL DocumentEvents::getByName( const ::rtl::OUString& _Name ) throw (NoSuchElementException, WrappedTargetException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_pData->rMutex );
@@ -224,7 +214,6 @@ namespace dbaccess
         return aReturn;
     }
 
-    //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL DocumentEvents::getElementNames(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_pData->rMutex );
@@ -239,7 +228,6 @@ namespace dbaccess
         return aNames;
     }
 
-    //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL DocumentEvents::hasByName( const ::rtl::OUString& _Name ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_pData->rMutex );
@@ -247,22 +235,16 @@ namespace dbaccess
         return m_pData->rEventsData.find( _Name ) != m_pData->rEventsData.end();
     }
 
-    //--------------------------------------------------------------------
     Type SAL_CALL DocumentEvents::getElementType(  ) throw (RuntimeException)
     {
         return ::cppu::UnoType< Sequence< PropertyValue > >::get();
     }
 
-    //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL DocumentEvents::hasElements(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_pData->rMutex );
         return !m_pData->rEventsData.empty();
     }
 
-
-//........................................................................
 } // namespace dbaccess
-//........................................................................
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

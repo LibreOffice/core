@@ -61,7 +61,6 @@ class OCommandDefinition;
 typedef ::comphelper::OPropertyArrayUsageHelper< OCommandDefinition >
                         OCommandDefinition_PROP;
 
-
 class OCommandDefinition    :public OComponentDefinition
                             ,public OCommandDefinition_Base
                             ,public OCommandDefinition_PROP

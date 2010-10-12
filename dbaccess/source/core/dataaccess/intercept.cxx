@@ -417,7 +417,7 @@ void SAL_CALL OInterceptor::setMasterDispatchProvider(
     osl::MutexGuard aGuard(m_aMutex);
     m_xMasterDispatchProvider = NewSupplier;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OInterceptor::notifyEvent( const ::com::sun::star::document::EventObject& Event ) throw (::com::sun::star::uno::RuntimeException)
 {
     osl::ResettableMutexGuard _rGuard(m_aMutex);
@@ -437,13 +437,10 @@ void SAL_CALL OInterceptor::notifyEvent( const ::com::sun::star::document::Event
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OInterceptor::disposing( const ::com::sun::star::lang::EventObject& /*Source*/ ) throw (::com::sun::star::uno::RuntimeException)
 {
 }
 
-//........................................................................
 }   // namespace dbaccess
-//........................................................................
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
