@@ -112,4 +112,5 @@ class KDESalGraphics : public X11SalGraphics
                                             const rtl::OUString& aCaption,
                                             Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion );
 };
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

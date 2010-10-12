@@ -34,4 +34,5 @@ SalFrame* KDESalInstance::CreateFrame( SalFrame *pParent, ULONG nState )
 {
     return new KDESalFrame( pParent, nState );
 }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

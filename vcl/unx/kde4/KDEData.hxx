@@ -41,4 +41,5 @@ class KDEData : public X11SalData
         virtual void initNWF();
         virtual void deInitNWF();
 };
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

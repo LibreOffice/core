@@ -51,4 +51,5 @@ bool VCLKDEApplication::x11EventFilter(XEvent* event)
 
     return false;
 }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

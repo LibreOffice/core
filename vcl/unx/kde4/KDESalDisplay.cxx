@@ -44,4 +44,5 @@ SalKDEDisplay::~SalKDEDisplay()
     // prevent SalDisplay from closing KApplication's display
     pDisp_ = NULL;
 }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

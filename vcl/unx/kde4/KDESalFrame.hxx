@@ -57,4 +57,5 @@ class KDESalFrame : public X11SalFrame
         virtual void UpdateSettings( AllSettings& rSettings );
         virtual void Show( BOOL bVisible, BOOL bNoActivate );
 };
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

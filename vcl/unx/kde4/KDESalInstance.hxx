@@ -40,4 +40,5 @@ class KDESalInstance : public X11SalInstance
         virtual ~KDESalInstance() {}
         virtual SalFrame* CreateFrame( SalFrame* pParent, ULONG nStyle );
 };
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -52,4 +52,5 @@ class VCLKDEApplication : public KApplication
 
         SalKDEDisplay* disp;
 };
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
