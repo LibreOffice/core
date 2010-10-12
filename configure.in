@@ -7571,7 +7571,23 @@ AC_SUBST(BUILD_TYPE)
 # make sure config.guess is +x; we execute config.guess, so it has to be so; 
 chmod +x ./config.guess
 
+# Generate a configuration timestamp we can use for deps
+if test -f set_soenv; then
+   mv -f set_soenv set_soenv.last
+else
+   echo > set_soenv.last
+fi
+
 AC_OUTPUT([set_soenv Makefile])
+
+# touch the config timestamp file set_soenv.stamp
+if test ! -f set_soenv.stamp; then
+   echo > set_soenv.stamp
+elif diff set_soenv set_soenv.last >/dev/null 2>&1; then
+   echo "Configuration unchanged - avoiding scp2 stamp update"
+else
+   echo > set_soenv.stamp
+fi
 
 dnl Executing the set_soenv script to setup the environment variables.
 chmod a+x set_soenv
