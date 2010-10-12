@@ -210,7 +210,7 @@ public:
 
     USHORT                          GetSurrogate(const SfxPoolItem *) const;
     const SfxPoolItem *             GetItem(USHORT nWhich, USHORT nSurrogate) const;
-    USHORT                          GetItemCount(USHORT nWhich) const;
+    size_t                          GetItemCount(USHORT nWhich) const;
     const SfxPoolItem*              LoadSurrogate(SvStream& rStream,
                                             USHORT &rWhich, USHORT nSlotId,
                                             const SfxItemPool* pRefPool = 0 );
