@@ -51,9 +51,7 @@
 #include <index.hrc>
 #include <globals.hrc>
 
-
 // STATIC DATA -----------------------------------------------------------
-
 void SwTextShell::ExecIdx(SfxRequest &rReq)
 {
     const SfxItemSet *pArgs = rReq.GetArgs();
@@ -179,7 +177,6 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
     }
 }
 
-
 void SwTextShell::GetIdxState(SfxItemSet &rSet)
 {
     SwWrtShell& rSh = GetShell();
@@ -256,6 +253,3 @@ void SwTextShell::GetIdxState(SfxItemSet &rSet)
         rSet.DisableItem(FN_REMOVE_CUR_TOX);
     }
 }
-
-// -----------------------------------------------------------------------
-

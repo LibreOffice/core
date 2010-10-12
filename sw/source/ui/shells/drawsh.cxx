@@ -83,11 +83,6 @@ SFX_IMPL_INTERFACE(SwDrawShell, SwDrawBaseShell, SW_RES(STR_SHELLNAME_DRAW))
 
 TYPEINIT1(SwDrawShell,SwDrawBaseShell)
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 void SwDrawShell::Execute(SfxRequest &rReq)
 {
     SwWrtShell          &rSh = GetShell();
@@ -298,12 +293,6 @@ void SwDrawShell::Execute(SfxRequest &rReq)
         pSdrView->GetModel()->SetChanged(TRUE);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
-
 void SwDrawShell::GetState(SfxItemSet& rSet)
 {
     SwWrtShell &rSh = GetShell();
@@ -377,12 +366,6 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
     svx::FontworkBar::getState( pSdrView, rSet );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
-
 SwDrawShell::SwDrawShell(SwView &_rView) :
     SwDrawBaseShell(_rView)
 {
@@ -395,9 +378,6 @@ SwDrawShell::SwDrawShell(SwView &_rView) :
 |* SfxRequests fuer FontWork bearbeiten
 |*
 \************************************************************************/
-
-
-
 void SwDrawShell::ExecFormText(SfxRequest& rReq)
 {
     SwWrtShell &rSh = GetShell();
@@ -449,9 +429,6 @@ void SwDrawShell::ExecFormText(SfxRequest& rReq)
 |* Statuswerte fuer FontWork zurueckgeben
 |*
 \************************************************************************/
-
-
-
 void SwDrawShell::GetFormTextState(SfxItemSet& rSet)
 {
     SwWrtShell &rSh = GetShell();
@@ -491,7 +468,3 @@ void SwDrawShell::GetFormTextState(SfxItemSet& rSet)
         pDrView->GetAttributes( rSet );
     }
 }
-
-
-
-

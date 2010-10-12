@@ -84,7 +84,6 @@
 
 using namespace nsSwDocInfoSubType;
 
-
 extern BOOL bNoInterrupt;       // in mainwn.cxx
 
 String& lcl_AppendRedlineStr( String& rStr, USHORT nRedlId )
@@ -104,7 +103,6 @@ String& lcl_AppendRedlineStr( String& rStr, USHORT nRedlId )
 }
 
 // STATIC DATA -----------------------------------------------------------
-
 void SwTextShell::ExecField(SfxRequest &rReq)
 {
     SwWrtShell& rSh = GetShell();
@@ -722,11 +720,6 @@ void SwTextShell::StateField( SfxItemSet &rSet )
     }
 }
 
-/*---------------------------------------------------------------------------
-    Beschreibung:
- ----------------------------------------------------------------------------*/
-
-
 void SwTextShell::InsertHyperlink(const SvxHyperlinkItem& rHlnkItem)
 {
     const String& rName   = rHlnkItem.GetName();
@@ -890,5 +883,3 @@ IMPL_LINK( SwTextShell, RedlinePrevHdl, AbstractSvxPostItDialog *, pBtn )
 
     return 0;
 }
-
-

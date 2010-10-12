@@ -29,9 +29,6 @@
 #include "precompiled_sw.hxx"
 
 
-
-
-
 #include <svx/svxids.hrc>
 #include <vcl/msgbox.hxx>
 #include <sfx2/request.hxx>
@@ -50,11 +47,6 @@
 #include "drawsh.hxx"
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
 {
@@ -182,11 +174,6 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
             pDoc->SetChanged(TRUE);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 void SwDrawShell::ExecDrawAttrArgs(SfxRequest& rReq)
 {
     SwWrtShell* pSh   = &GetShell();
@@ -231,11 +218,6 @@ void SwDrawShell::ExecDrawAttrArgs(SfxRequest& rReq)
             pView->GetModel()->SetChanged(TRUE);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 void SwDrawShell::GetDrawAttrState(SfxItemSet& rSet)
 {
     SdrView* pSdrView = GetShell().GetDrawView();
@@ -250,6 +232,3 @@ void SwDrawShell::GetDrawAttrState(SfxItemSet& rSet)
     else
         rSet.Put(pSdrView->GetDefaultAttr());
 }
-
-
-

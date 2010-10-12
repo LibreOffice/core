@@ -46,7 +46,6 @@
 #include <misc.hrc>
 
 // STATIC DATA -----------------------------------------------------------
-
 void SwTextShell::ExecGlossary(SfxRequest &rReq)
 {
     USHORT nSlot = rReq.GetSlot();
@@ -141,5 +140,3 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
             pList->Update();
     }
 }
-
-

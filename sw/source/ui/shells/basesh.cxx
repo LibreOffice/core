@@ -119,7 +119,6 @@
 
 FlyMode SwBaseShell::eFrameMode = FLY_DRAG_END;
 
-
 //Fuer die Erkennung der Id, die variable von Gallery mit SID_GALLERY_BG_BRUSH
 //ankommt.
 static BYTE nParagraphPos;
@@ -155,7 +154,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 
-
 SFX_IMPL_INTERFACE(SwBaseShell, SfxShell, SW_RES(0))
 {
     SFX_CHILDWINDOW_REGISTRATION(SvxIMapDlgChildWindow::GetChildWindowId());
@@ -167,8 +165,6 @@ TYPEINIT1(SwBaseShell,SfxShell)
 /*--------------------------------------------------------------------
     Beschreibung:   statics
  --------------------------------------------------------------------*/
-
-
 void lcl_UpdateIMapDlg( SwWrtShell& rSh )
 {
     Graphic aGrf( rSh.GetIMapGraphic() );
@@ -193,7 +189,6 @@ void lcl_UpdateIMapDlg( SwWrtShell& rSh )
     delete pList;
 }
 
-
 BOOL lcl_UpdateContourDlg( SwWrtShell &rSh, int nSel )
 {
     Graphic aGraf( rSh.GetIMapGraphic() );
@@ -215,7 +210,6 @@ BOOL lcl_UpdateContourDlg( SwWrtShell &rSh, int nSel )
 /*--------------------------------------------------------------------
     Beschreibung:   loeschen
  --------------------------------------------------------------------*/
-
 void SwBaseShell::ExecDelete(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
@@ -263,10 +257,6 @@ void SwBaseShell::ExecDelete(SfxRequest &rReq)
     //#i42732# - notify the edit window that from now on we do not use the input language
     rTmpEditWin.SetUseInputLanguage( sal_False );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
 {
@@ -433,7 +423,6 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
 /*--------------------------------------------------------------------
     Beschreibung:   ClipBoard-Status
  --------------------------------------------------------------------*/
-
 void SwBaseShell::StateClpbrd(SfxItemSet &rSet)
 {
     SwWrtShell &rSh = GetShell();
@@ -490,7 +479,6 @@ void SwBaseShell::StateClpbrd(SfxItemSet &rSet)
 /*--------------------------------------------------------------------
     Beschreibung:   Undo ausfuehren
  --------------------------------------------------------------------*/
-
 void SwBaseShell::ExecUndo(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
@@ -531,7 +519,6 @@ void SwBaseShell::ExecUndo(SfxRequest &rReq)
 /*--------------------------------------------------------------------
     Beschreibung:   Zustand Undo
  --------------------------------------------------------------------*/
-
 void SwBaseShell::StateUndo(SfxItemSet &rSet)
 {
     SwWrtShell &rSh = GetShell();
@@ -599,7 +586,6 @@ void SwBaseShell::StateUndo(SfxItemSet &rSet)
 /*--------------------------------------------------------------------
     Beschreibung:   Slot-Id auswerten bzw. Dispatchen
  --------------------------------------------------------------------*/
-
 void SwBaseShell::Execute(SfxRequest &rReq)
 {
     const SfxPoolItem *pItem;
@@ -1809,8 +1795,6 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
 /*--------------------------------------------------------------------
     Beschreibung:   Slots mit dieser Statusmethode disablen
  --------------------------------------------------------------------*/
-
-
 void SwBaseShell::StateDisableItems( SfxItemSet &rSet )
 {
     SfxWhichIter aIter(rSet);
@@ -1826,8 +1810,6 @@ void SwBaseShell::StateDisableItems( SfxItemSet &rSet )
 /*--------------------------------------------------------------------
     Beschreibung:   Slots mit dieser Statusmethode disablen
  --------------------------------------------------------------------*/
-
-
 void SwBaseShell::StateStyle( SfxItemSet &rSet )
 {
     BOOL bParentCntProt = GetShell().IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT ) != 0;
@@ -1851,11 +1833,6 @@ void SwBaseShell::StateStyle( SfxItemSet &rSet )
     else
         GetView().GetDocShell()->StateStyleSheet(rSet, &GetShell());
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void SwBaseShell::SetWrapMode( USHORT nSlot )
 {
@@ -1948,7 +1925,6 @@ void SwBaseShell::SetWrapMode( USHORT nSlot )
 /*--------------------------------------------------------------------
     Beschreibung:   Update der Statuszeile erzwingen
  --------------------------------------------------------------------*/
-
 void SwBaseShell::SetFrmMode(FlyMode eMode, SwWrtShell *pSh )
 {
     eFrameMode = eMode;
@@ -1975,7 +1951,6 @@ void SwBaseShell::SetFrmMode(FlyMode eMode, SwWrtShell *pSh )
 /*--------------------------------------------------------------------
     Beschreibung:   Ctor
  --------------------------------------------------------------------*/
-
 SwBaseShell::SwBaseShell(SwView& rVw) :
     SfxShell( &rVw ),
     rView(rVw),
@@ -1988,7 +1963,6 @@ SwBaseShell::SwBaseShell(SwView& rVw) :
     rWrtSh.SetGrfArrivedLnk( LINK( this, SwBaseShell, GraphicArrivedHdl));
 }
 
-
 SwBaseShell::~SwBaseShell()
 {
     if( rView.GetCurShell() == this )
@@ -1998,10 +1972,6 @@ SwBaseShell::~SwBaseShell()
     if( aTmp == rView.GetWrtShell().GetGrfArrivedLnk() )
         rView.GetWrtShell().SetGrfArrivedLnk( Link() );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwBaseShell::ExecTxtCtrl( SfxRequest& rReq )
 {
@@ -2128,10 +2098,6 @@ void SwBaseShell::ExecTxtCtrl( SfxRequest& rReq )
     rReq.Done();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwBaseShell::GetTxtCtrlState( SfxItemSet& rSet )
 {
     SwWrtShell &rSh = GetShell();
@@ -2218,10 +2184,6 @@ void SwBaseShell::GetTxtFontCtrlState( SfxItemSet& rSet )
     delete pFntCoreSet;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwBaseShell::GetBckColState(SfxItemSet &rSet)
 {
     SwWrtShell &rSh = GetShell();
@@ -2278,10 +2240,6 @@ void SwBaseShell::GetBckColState(SfxItemSet &rSet)
         nWhich = aIter.NextWhich();
     }
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwBaseShell::ExecBckCol(SfxRequest& rReq)
 {
@@ -2387,11 +2345,6 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
     rReq.Done();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 void SwBaseShell::GetBorderState(SfxItemSet &rSet)
 {
     SwWrtShell &rSh = GetShell();
@@ -2422,11 +2375,6 @@ void SwBaseShell::GetBorderState(SfxItemSet &rSet)
     // switch the border toolbox controller mode
     rSet.Put( SfxBoolItem( SID_BORDER_REDUCED_MODE, !bTableMode ));
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void SwBaseShell::ExecDlg(SfxRequest &rReq)
 {
@@ -2604,22 +2552,15 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
         rReq.Done();
 }
 
-// ----------------------------------------------------------------------------
-
-
 SwWrtShell& SwBaseShell::GetShell()
 {
     return rView.GetWrtShell();
 }
 
-// ----------------------------------------------------------------------------
-
 SwWrtShell* SwBaseShell::GetShellPtr()
 {
     return rView.GetWrtShellPtr();
 }
-
-// ----------------------------------------------------------------------------
 
 void SwBaseShell::InsertTable( SfxRequest& _rRequest )
 {
@@ -2757,8 +2698,6 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
     }
 }
 
-// ----------------------------------------------------------------------------
-
 void SwBaseShell::GetGalleryState( SfxItemSet &rSet )
 {
     SwWrtShell &rSh = GetShell();
@@ -2838,7 +2777,6 @@ void SwBaseShell::GetGalleryState( SfxItemSet &rSet )
         }
     }
 }
-
 
 void SwBaseShell::ExecuteGallery(SfxRequest &rReq)
 {
@@ -2920,4 +2858,3 @@ void SwBaseShell::ExecField( SfxRequest& rReq )
             ASSERT(FALSE, falscher Dispatcher);
     }
 }
-

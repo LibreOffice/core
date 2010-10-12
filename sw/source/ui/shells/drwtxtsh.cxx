@@ -95,8 +95,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::i18n;
 
-
-
 SFX_IMPL_INTERFACE(SwDrawTextShell, SfxShell, SW_RES(STR_SHELLNAME_DRAW_TEXT))
 {
     SFX_POPUPMENU_REGISTRATION(SW_RES(MN_DRWTXT_POPUPMENU));
@@ -105,12 +103,6 @@ SFX_IMPL_INTERFACE(SwDrawTextShell, SfxShell, SW_RES(STR_SHELLNAME_DRAW_TEXT))
 }
 
 TYPEINIT1(SwDrawTextShell,SfxShell)
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 
 void SwDrawTextShell::Init()
 {
@@ -140,11 +132,6 @@ void SwDrawTextShell::Init()
     pOLV->ShowCursor();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 SwDrawTextShell::SwDrawTextShell(SwView &rV) :
     SfxShell(&rV),
     rView(rV)
@@ -158,12 +145,6 @@ SwDrawTextShell::SwDrawTextShell(SwView &rV) :
     SetName(String::CreateFromAscii("ObjectText"));
     SetHelpId(SW_DRWTXTSHELL);
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 
 __EXPORT SwDrawTextShell::~SwDrawTextShell()
 {
@@ -188,11 +169,9 @@ SwWrtShell& SwDrawTextShell::GetShell()
     return rView.GetWrtShell();
 }
 
-
 /*--------------------------------------------------------------------
     Beschreibung:   Slots mit dieser Statusmethode disablen
  --------------------------------------------------------------------*/
-
 void SwDrawTextShell::StateDisableItems( SfxItemSet &rSet )
 {
     SfxWhichIter aIter(rSet);
@@ -205,15 +184,11 @@ void SwDrawTextShell::StateDisableItems( SfxItemSet &rSet )
     }
 }
 
-
 /*************************************************************************
 |*
 |* Attribute setzen
 |*
 \************************************************************************/
-
-
-
 void SwDrawTextShell::SetAttrToMarked(const SfxItemSet& rAttr)
 {
     Rectangle aNullRect;
@@ -227,22 +202,10 @@ void SwDrawTextShell::SetAttrToMarked(const SfxItemSet& rAttr)
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
-
 BOOL SwDrawTextShell::IsTextEdit()
 {
     return pSdrView->IsTextEdit();
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 
 void SwDrawTextShell::ExecFontWork(SfxRequest& rReq)
 {
@@ -262,12 +225,6 @@ void SwDrawTextShell::ExecFontWork(SfxRequest& rReq)
     pVFrame->GetBindings().Invalidate(SID_FONTWORK);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
-
 void SwDrawTextShell::StateFontWork(SfxItemSet& rSet)
 {
     const USHORT nId = SvxFontWorkChildWindow::GetChildWindowId();
@@ -279,9 +236,6 @@ void SwDrawTextShell::StateFontWork(SfxItemSet& rSet)
 |* SfxRequests fuer FontWork bearbeiten
 |*
 \************************************************************************/
-
-
-
 void SwDrawTextShell::ExecFormText(SfxRequest& rReq)
 {
     SwWrtShell &rSh = GetShell();
@@ -331,9 +285,6 @@ void SwDrawTextShell::ExecFormText(SfxRequest& rReq)
 |* Statuswerte fuer FontWork zurueckgeben
 |*
 \************************************************************************/
-
-
-
 void SwDrawTextShell::GetFormTextState(SfxItemSet& rSet)
 {
     SwWrtShell &rSh = GetShell();
@@ -372,12 +323,6 @@ void SwDrawTextShell::GetFormTextState(SfxItemSet& rSet)
         pDrView->GetAttributes( rSet );
     }
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 
 void SwDrawTextShell::ExecDrawLingu(SfxRequest &rReq)
 {
@@ -472,9 +417,6 @@ void SwDrawTextShell::ExecDrawLingu(SfxRequest &rReq)
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
@@ -596,9 +538,6 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
 /*--------------------------------------------------------------------
     Beschreibung:   Undo ausfuehren
  --------------------------------------------------------------------*/
-
-
-
 void SwDrawTextShell::ExecUndo(SfxRequest &rReq)
 {
     if( IsTextEdit() )
@@ -644,9 +583,6 @@ void SwDrawTextShell::ExecUndo(SfxRequest &rReq)
 /*--------------------------------------------------------------------
     Beschreibung:   Zustand Undo
  --------------------------------------------------------------------*/
-
-
-
 void SwDrawTextShell::StateUndo(SfxItemSet &rSet)
 {
     if ( !IsTextEdit() )
@@ -757,7 +693,6 @@ void SwDrawTextShell::ExecTransliteration( SfxRequest & rReq )
 /*--------------------------------------------------------------------
     Beschreibung:   Sonderzeichen einfuegen (siehe SDraw: FUBULLET.CXX)
  --------------------------------------------------------------------*/
-
 void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
 {
     OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
@@ -890,9 +825,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
         rReq.Done();
     }
 }
-/*-- 22.10.2003 14:26:32---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SfxUndoManager* SwDrawTextShell::GetUndoManager()
 {
     SwWrtShell &rSh = GetShell();
@@ -901,6 +834,3 @@ SfxUndoManager* SwDrawTextShell::GetUndoManager()
     pOutliner = pSdrView->GetTextEditOutliner();
     return &pOutliner->GetUndoManager();
 }
-
-
-

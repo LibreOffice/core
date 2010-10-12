@@ -128,12 +128,6 @@ using ::rtl::OUString;
 #include <frmui.hrc>
 #include <unomid.h>
 
-
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SFX_IMPL_INTERFACE(SwTextShell, SwBaseShell, SW_RES(STR_SHELLNAME_TEXT))
 {
     SFX_POPUPMENU_REGISTRATION(SW_RES(MN_TEXT_POPUPMENU));
@@ -145,11 +139,7 @@ SFX_IMPL_INTERFACE(SwTextShell, SwBaseShell, SW_RES(STR_SHELLNAME_TEXT))
     SFX_CHILDWINDOW_REGISTRATION(SID_RUBY_DIALOG);
 }
 
-
-
 TYPEINIT1(SwTextShell,SwBaseShell)
-
-
 
 void SwTextShell::ExecInsert(SfxRequest &rReq)
 {
@@ -790,7 +780,6 @@ bool lcl_IsMarkInSameSection( SwWrtShell& rWrtSh, const SwSection* pSect )
     return bRet;
 }
 
-
 void SwTextShell::StateInsert( SfxItemSet &rSet )
 {
     USHORT nHtmlMode = ::GetHtmlMode(GetView().GetDocShell());
@@ -963,10 +952,6 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void  SwTextShell::ExecDelete(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
@@ -1059,13 +1044,6 @@ void SwTextShell::ExecTransliteration( SfxRequest & rReq )
     }
 }
 
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
-
 SwTextShell::SwTextShell(SwView &_rView) :
     SwBaseShell(_rView), pPostItFldMgr( 0 )
 {
@@ -1073,17 +1051,9 @@ SwTextShell::SwTextShell(SwView &_rView) :
     SetHelpId(SW_TEXTSHELL);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SwTextShell::~SwTextShell()
 {
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwTextShell::InsertSymbol( SfxRequest& rReq )
 {
@@ -1258,5 +1228,3 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
         }
     }
 }
-
-

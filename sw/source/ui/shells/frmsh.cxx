@@ -91,7 +91,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 // Prototypen ------------------------------------------------------------
-
 void lcl_FrmGetMaxLineWidth(const SvxBorderLine* pBorderLine, SvxBorderLine& rBorderLine);
 const SwFrmFmt* lcl_GetFrmFmtByName(SwWrtShell& rSh, const String& rName)
 {
@@ -114,8 +113,6 @@ SFX_IMPL_INTERFACE(SwFrameShell, SwBaseShell, SW_RES(STR_SHELLNAME_FRAME))
     SFX_POPUPMENU_REGISTRATION(SW_RES(MN_FRM_POPUPMENU));
     SFX_OBJECTBAR_REGISTRATION(SFX_OBJECTBAR_OBJECT, SW_RES(RID_FRAME_TOOLBOX));
 }
-
-
 
 void SwFrameShell::Execute(SfxRequest &rReq)
 {
@@ -650,11 +647,6 @@ void SwFrameShell::Execute(SfxRequest &rReq)
 
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 void SwFrameShell::GetState(SfxItemSet& rSet)
 {
     SwWrtShell &rSh = GetShell();
@@ -894,8 +886,6 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
 /*--------------------------------------------------------------------
     Beschreibung:   Ctor fuer FrameShell
  --------------------------------------------------------------------*/
-
-
 SwFrameShell::SwFrameShell(SwView &_rView) :
     SwBaseShell( _rView )
 {
@@ -913,12 +903,6 @@ SwFrameShell::~SwFrameShell()
        it. */
     SwTransferable::ClearSelection( GetShell(), (ViewShell *) this );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 
 void SwFrameShell::ExecFrameStyle(SfxRequest& rReq)
 {
@@ -1095,8 +1079,6 @@ void SwFrameShell::ExecFrameStyle(SfxRequest& rReq)
 
 }
 
-
-
 void lcl_FrmGetMaxLineWidth(const SvxBorderLine* pBorderLine, SvxBorderLine& rBorderLine)
 {
     if(pBorderLine->GetInWidth() > rBorderLine.GetInWidth())
@@ -1110,8 +1092,6 @@ void lcl_FrmGetMaxLineWidth(const SvxBorderLine* pBorderLine, SvxBorderLine& rBo
 
     rBorderLine.SetColor(pBorderLine->GetColor());
 }
-
-
 
 void SwFrameShell::GetLineStyleState(SfxItemSet &rSet)
 {
