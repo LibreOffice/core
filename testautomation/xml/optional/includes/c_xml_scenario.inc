@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : oliver.creamer@oracle.com
+'* owner : oliver.craemer@oracle.com
 '*
 '* short description : Check content.xml for correct scenario attributes
 '*
