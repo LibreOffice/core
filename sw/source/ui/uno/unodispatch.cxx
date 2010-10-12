@@ -51,9 +51,7 @@ const char* cURLInsertContent   = ".uno:DataSourceBrowser/InsertContent";//data 
 const char* cURLInsertColumns   = ".uno:DataSourceBrowser/InsertColumns";//data into text
 const char* cURLDocumentDataSource  = ".uno:DataSourceBrowser/DocumentDataSource";//current data source of the document
 const sal_Char* cInternalDBChangeNotification = ".uno::Writer/DataSourceChanged";
-/*-- 07.11.00 13:25:51---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwXDispatchProviderInterceptor::SwXDispatchProviderInterceptor(SwView& rVw) :
     m_pView(&rVw)
 {
@@ -71,15 +69,11 @@ SwXDispatchProviderInterceptor::SwXDispatchProviderInterceptor(SwView& rVw) :
         m_refCount--;
     }
 }
-/*-- 07.11.00 13:25:51---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwXDispatchProviderInterceptor::~SwXDispatchProviderInterceptor()
 {
 }
-/*-- 07.11.00 13:25:51---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Reference< frame::XDispatch > SwXDispatchProviderInterceptor::queryDispatch(
     const util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags )
         throw(uno::RuntimeException)
@@ -106,9 +100,7 @@ uno::Reference< frame::XDispatch > SwXDispatchProviderInterceptor::queryDispatch
 
     return xResult;
 }
-/*-- 07.11.00 13:25:52---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Sequence< uno::Reference< frame::XDispatch > > SwXDispatchProviderInterceptor::queryDispatches(
     const uno::Sequence< frame::DispatchDescriptor >& aDescripts ) throw(uno::RuntimeException)
 {
@@ -123,45 +115,35 @@ uno::Sequence< uno::Reference< frame::XDispatch > > SwXDispatchProviderIntercept
     }
     return aReturn;
 }
-/*-- 07.11.00 13:25:52---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Reference< frame::XDispatchProvider > SwXDispatchProviderInterceptor::getSlaveDispatchProvider(  )
         throw(uno::RuntimeException)
 {
     DispatchMutexLock_Impl aLock(*this);
     return m_xSlaveDispatcher;
 }
-/*-- 07.11.00 13:25:52---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXDispatchProviderInterceptor::setSlaveDispatchProvider(
     const uno::Reference< frame::XDispatchProvider >& xNewDispatchProvider ) throw(uno::RuntimeException)
 {
     DispatchMutexLock_Impl aLock(*this);
     m_xSlaveDispatcher = xNewDispatchProvider;
 }
-/*-- 07.11.00 13:25:52---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Reference< frame::XDispatchProvider > SwXDispatchProviderInterceptor::getMasterDispatchProvider(  )
         throw(uno::RuntimeException)
 {
     DispatchMutexLock_Impl aLock(*this);
     return m_xMasterDispatcher;
 }
-/*-- 07.11.00 13:25:52---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXDispatchProviderInterceptor::setMasterDispatchProvider(
     const uno::Reference< frame::XDispatchProvider >& xNewSupplier ) throw(uno::RuntimeException)
 {
     DispatchMutexLock_Impl aLock(*this);
     m_xMasterDispatcher = xNewSupplier;
 }
-/*-- 07.11.00 13:25:53---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXDispatchProviderInterceptor::disposing( const lang::EventObject& )
     throw(uno::RuntimeException)
 {
@@ -176,17 +158,13 @@ void SwXDispatchProviderInterceptor::disposing( const lang::EventObject& )
     }
     m_xIntercepted = NULL;
 }
-/* -----------------------------01.10.2001 14:31------------------------------
 
- ---------------------------------------------------------------------------*/
 const uno::Sequence< sal_Int8 > & SwXDispatchProviderInterceptor::getUnoTunnelId()
 {
     static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
     return aSeq;
 }
-/* -----------------------------01.10.2001 14:31------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Int64 SwXDispatchProviderInterceptor::getSomething(
     const uno::Sequence< sal_Int8 >& aIdentifier )
         throw(uno::RuntimeException)
@@ -199,9 +177,7 @@ sal_Int64 SwXDispatchProviderInterceptor::getSomething(
     }
     return 0;
 }
-/* -----------------------------01.10.2001 14:32------------------------------
 
- ---------------------------------------------------------------------------*/
 void    SwXDispatchProviderInterceptor::Invalidate()
 {
     DispatchMutexLock_Impl aLock(*this);
@@ -216,18 +192,14 @@ void    SwXDispatchProviderInterceptor::Invalidate()
     m_xIntercepted = NULL;
     m_pView = 0;
 }
-/* -----------------------------07.11.00 14:26--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwXDispatch::SwXDispatch(SwView& rVw) :
     m_pView(&rVw),
     m_bOldEnable(sal_False),
     m_bListenerAdded(sal_False)
 {
 }
-/*-- 07.11.00 14:26:13---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwXDispatch::~SwXDispatch()
 {
     if(m_bListenerAdded && m_pView)
@@ -237,9 +209,7 @@ SwXDispatch::~SwXDispatch()
         xSupplier->removeSelectionChangeListener(xThis);
     }
 }
-/*-- 07.11.00 14:26:13---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXDispatch::dispatch(
     const util::URL& aURL, const uno::Sequence< beans::PropertyValue >& aArgs ) throw(uno::RuntimeException)
 {
@@ -300,9 +270,7 @@ void SwXDispatch::dispatch(
         throw uno::RuntimeException();
 
 }
-/*-- 07.11.00 14:26:13---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXDispatch::addStatusListener(
     const uno::Reference< frame::XStatusListener >& xControl, const util::URL& aURL ) throw(uno::RuntimeException)
 {
@@ -351,9 +319,7 @@ void SwXDispatch::addStatusListener(
         m_bListenerAdded = sal_True;
     }
 }
-/*-- 07.11.00 14:26:15---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXDispatch::removeStatusListener(
     const uno::Reference< frame::XStatusListener >& xControl, const util::URL&  ) throw(uno::RuntimeException)
 {
@@ -375,9 +341,7 @@ void SwXDispatch::removeStatusListener(
         m_bListenerAdded = sal_False;
     }
 }
-/* -----------------------------07.03.01 10:27--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwXDispatch::selectionChanged( const lang::EventObject&  ) throw(uno::RuntimeException)
 {
     ShellModes eMode = m_pView->GetShellMode();
@@ -403,9 +367,7 @@ void SwXDispatch::selectionChanged( const lang::EventObject&  ) throw(uno::Runti
         }
     }
 }
-/* -----------------------------07.03.01 10:46--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwXDispatch::disposing( const lang::EventObject& rSource ) throw(uno::RuntimeException)
 {
     uno::Reference<view::XSelectionSupplier> xSupplier(rSource.Source, uno::UNO_QUERY);
@@ -423,25 +385,19 @@ void SwXDispatch::disposing( const lang::EventObject& rSource ) throw(uno::Runti
     }
     m_pView = 0;
 }
-/* -----------------------------12.07.01 13:30--------------------------------
 
- ---------------------------------------------------------------------------*/
 const sal_Char* SwXDispatch::GetDBChangeURL()
 {
     return cInternalDBChangeNotification;
 }
-/* -----------------------------09.09.2002 08:48------------------------------
 
- ---------------------------------------------------------------------------*/
 SwXDispatchProviderInterceptor::DispatchMutexLock_Impl::DispatchMutexLock_Impl(
                                                  SwXDispatchProviderInterceptor& ) :
 //    aGuard(rInterceptor.m_aMutex) #102295# solar mutex has to be used currently
     aGuard(Application::GetSolarMutex())
 {
 }
-/* -----------------------------09.09.2002 08:48------------------------------
 
- ---------------------------------------------------------------------------*/
 SwXDispatchProviderInterceptor::DispatchMutexLock_Impl::~DispatchMutexLock_Impl()
 {
 }

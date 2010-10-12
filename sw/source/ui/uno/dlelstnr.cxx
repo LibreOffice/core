@@ -28,9 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
-
 #include <com/sun/star/linguistic2/DictionaryListEventFlags.hpp>
 #include <com/sun/star/linguistic2/XDictionaryList.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
@@ -50,7 +47,6 @@
 #include <wrtsh.hxx>
 #include <view.hxx>
 
-
 using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -61,9 +57,6 @@ using namespace ::com::sun::star::linguistic2::LinguServiceEventFlags;
 
 #define A2OU(x) OUString::createFromAscii(x)
 
-/* -----------------------------17.03.00 09:07--------------------------------
-
- ---------------------------------------------------------------------------*/
 SwLinguServiceEventListener::SwLinguServiceEventListener()
 {
     Reference< XMultiServiceFactory > xMgr( comphelper::getProcessServiceFactory() );
@@ -97,16 +90,10 @@ SwLinguServiceEventListener::SwLinguServiceEventListener()
         }
     }
 }
-/* -----------------------------17.03.00 09:07--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwLinguServiceEventListener::~SwLinguServiceEventListener()
 {
 }
-
-/* -----------------------------17.03.00 09:06--------------------------------
-
- ---------------------------------------------------------------------------*/
 
 void SwLinguServiceEventListener::processDictionaryListEvent(
             const DictionaryListEvent& rDicListEvent)
@@ -132,7 +119,6 @@ void SwLinguServiceEventListener::processDictionaryListEvent(
     if (bIsSpellWrong || bIsSpellAll)
         SW_MOD()->CheckSpellChanges( sal_False, bIsSpellWrong, bIsSpellAll, sal_False );
 }
-
 
 void SAL_CALL SwLinguServiceEventListener::processLinguServiceEvent(
             const LinguServiceEvent& rLngSvcEvent )
@@ -164,7 +150,6 @@ void SAL_CALL SwLinguServiceEventListener::processLinguServiceEvent(
     }
 }
 
-
 void SAL_CALL SwLinguServiceEventListener::disposing(
             const EventObject& rEventObj )
         throw(RuntimeException)
@@ -177,14 +162,12 @@ void SAL_CALL SwLinguServiceEventListener::disposing(
         xGCIterator = 0;
 }
 
-
 void SAL_CALL SwLinguServiceEventListener::queryTermination(
             const EventObject& /*rEventObj*/ )
         throw(TerminationVetoException, RuntimeException)
 {
     //vos::OGuard aGuard(Application::GetSolarMutex());
 }
-
 
 void SAL_CALL SwLinguServiceEventListener::notifyTermination(
             const EventObject& rEventObj )
@@ -201,4 +184,3 @@ void SAL_CALL SwLinguServiceEventListener::notifyTermination(
         xDesktop = NULL;
     }
 }
-

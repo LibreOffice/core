@@ -117,7 +117,6 @@
 #include <osl/file.hxx>
 #include <comphelper/storagehelper.hxx>
 
-
 // --> FME 2004-06-08 #i12836# enhanced pdf export
 #include <EnhancedPDFExportHelper.hxx>
 // <--
@@ -167,9 +166,6 @@ using namespace ::com::sun::star::i18n;
 using ::rtl::OUString;
 using ::osl::FileBase;
 
-/* -----------------------------17.01.01 15:43--------------------------------
-
- ---------------------------------------------------------------------------*/
 #define SW_CREATE_DASH_TABLE            0x01
 #define SW_CREATE_GRADIENT_TABLE        0x02
 #define SW_CREATE_HATCH_TABLE           0x03
@@ -177,11 +173,6 @@ using ::osl::FileBase;
 #define SW_CREATE_TRANSGRADIENT_TABLE   0x05
 #define SW_CREATE_MARKER_TABLE          0x06
 #define SW_CREATE_DRAW_DEFAULTS         0x07
-
-
-/******************************************************************************
- *
- ******************************************************************************/
 
 extern bool lcl_GetPostIts( IDocumentFieldsAccess* pIDFA, _SetGetExpFlds * pSrtLst );
 
@@ -205,9 +196,6 @@ SwPrintUIOptions * lcl_GetPrintUIOptions(
     return new SwPrintUIOptions( bWebDoc, bSwSrcView, bHasSelection, bHasPostIts, *pPrintData );
 }
 
-////////////////////////////////////////////////////////////
-
-
 SwTxtFmtColl *lcl_GetParaStyle(const String& rCollName, SwDoc* pDoc)
 {
     SwTxtFmtColl* pColl = pDoc->FindTxtFmtCollByName( rCollName );
@@ -219,6 +207,7 @@ SwTxtFmtColl *lcl_GetParaStyle(const String& rCollName, SwDoc* pDoc)
     }
     return pColl;
 }
+
 void lcl_DisposeView( SfxViewFrame* pToClose, SwDocShell* pDocShell )
 {
     // check if the view frame still exists
@@ -236,17 +225,13 @@ void lcl_DisposeView( SfxViewFrame* pToClose, SwDocShell* pDocShell )
                                 FALSE );
     }
 }
-/* -----------------------------10.03.00 18:02--------------------------------
 
- ---------------------------------------------------------------------------*/
 const Sequence< sal_Int8 > & SwXTextDocument::getUnoTunnelId()
 {
     static Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
     return aSeq;
 }
-/* -----------------------------10.03.00 18:04--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Int64 SAL_CALL SwXTextDocument::getSomething( const Sequence< sal_Int8 >& rId )
     throw(RuntimeException)
 {
@@ -272,9 +257,7 @@ sal_Int64 SAL_CALL SwXTextDocument::getSomething( const Sequence< sal_Int8 >& rI
 
     return SfxBaseModel::getSomething( rId );
 }
-/* -----------------------------16.03.00 14:12--------------------------------
 
- ---------------------------------------------------------------------------*/
 Any SAL_CALL SwXTextDocument::queryInterface( const uno::Type& rType ) throw(RuntimeException)
 {
     Any aRet = SwXTextDocumentBaseClass::queryInterface(rType);
@@ -302,30 +285,22 @@ Any SAL_CALL SwXTextDocument::queryInterface( const uno::Type& rType ) throw(Run
     }
     return aRet;
 }
-/* -----------------------------16.03.00 14:12--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SAL_CALL SwXTextDocument::acquire()throw()
 {
     SfxBaseModel::acquire();
 }
-/* -----------------------------16.03.00 14:12--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SAL_CALL SwXTextDocument::release()throw()
 {
     SfxBaseModel::release();
 }
-/* -----------------------------07.12.00 11:37--------------------------------
 
- ---------------------------------------------------------------------------*/
 Reference< XAdapter > SwXTextDocument::queryAdapter(  ) throw(RuntimeException)
 {
     return SfxBaseModel::queryAdapter();
 }
-/* -----------------------------16.03.00 14:12--------------------------------
 
- ---------------------------------------------------------------------------*/
 Sequence< uno::Type > SAL_CALL SwXTextDocument::getTypes() throw(RuntimeException)
 {
     Sequence< uno::Type > aBaseTypes = SfxBaseModel::getTypes();
@@ -361,9 +336,7 @@ Sequence< uno::Type > SAL_CALL SwXTextDocument::getTypes() throw(RuntimeExceptio
     pBaseTypes[nIndex++] = ::getCppuType((Reference<lang::XMultiServiceFactory>*)0);
     return aBaseTypes;
 }
-/*-- 18.12.98 11:52:59---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwXTextDocument::SwXTextDocument(SwDocShell* pShell) :
     SfxBaseModel(pShell),
 
@@ -405,9 +378,7 @@ SwXTextDocument::SwXTextDocument(SwDocShell* pShell) :
     m_pRenderData( NULL )
 {
 }
-/*-- 18.12.98 11:53:00---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwXTextDocument::~SwXTextDocument()
 {
     InitNewDoc();
@@ -421,13 +392,6 @@ SwXTextDocument::~SwXTextDocument()
     delete m_pRenderData;
 }
 
-
-/*-- 18.12.98 11:55:08---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-/* -----------------18.12.98 12:49-------------------
- *
- * --------------------------------------------------*/
 SwXDocumentPropertyHelper * SwXTextDocument::GetPropertyHelper ()
 {
     if(!xPropertyHelper.is())
@@ -437,6 +401,7 @@ SwXDocumentPropertyHelper * SwXTextDocument::GetPropertyHelper ()
     }
     return pPropertyHelper;
 }
+
 void SwXTextDocument::GetNumberFormatter()
 {
     if(IsValid())
@@ -471,9 +436,7 @@ void SwXTextDocument::GetNumberFormatter()
         }
     }
 }
-/*-- 18.12.98 11:55:11---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Reference< XText >  SwXTextDocument::getText(void) throw( RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
@@ -486,18 +449,14 @@ Reference< XText >  SwXTextDocument::getText(void) throw( RuntimeException )
     }
     return xBodyText;
 }
-/*-- 18.12.98 11:55:11---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXTextDocument::reformat(void) throw( RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     if(!IsValid())
         throw RuntimeException();
 }
-/*-- 18.12.98 11:55:16---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXTextDocument::lockControllers(void) throw( RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
@@ -509,9 +468,7 @@ void SwXTextDocument::lockControllers(void) throw( RuntimeException )
     else
         throw RuntimeException();
 }
-/*-- 18.12.98 11:55:16---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXTextDocument::unlockControllers(void) throw( RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
@@ -524,32 +481,24 @@ void SwXTextDocument::unlockControllers(void) throw( RuntimeException )
     else
         throw RuntimeException();
 }
-/*-- 18.12.98 11:55:17---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Bool SwXTextDocument::hasControllersLocked(void) throw( RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     return aActionArr.Count() > 0;
 }
-/*-- 18.12.98 13:12:23---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Reference< frame::XController >  SwXTextDocument::getCurrentController(void) throw( RuntimeException )
 {
     return SfxBaseModel::getCurrentController();
 }
-/*-- 18.12.98 13:12:24---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXTextDocument::setCurrentController(const Reference< frame::XController > & xController)
     throw( NoSuchElementException, RuntimeException )
 {
     SfxBaseModel::setCurrentController(xController);
 }
-/* -----------------27.01.99 11:48-------------------
- *
- * --------------------------------------------------*/
+
 Reference< XInterface >  SwXTextDocument::getCurrentSelection() throw( RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
@@ -572,76 +521,54 @@ Reference< XInterface >  SwXTextDocument::getCurrentSelection() throw( RuntimeEx
     return xRef;
 }
 
-/*-- 18.12.98 13:12:24---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 sal_Bool SwXTextDocument::attachResource(const OUString& aURL, const Sequence< beans::PropertyValue >& aArgs)
         throw( RuntimeException )
 {
     return SfxBaseModel::attachResource(aURL, aArgs);
 }
-/*-- 18.12.98 13:12:24---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 OUString SwXTextDocument::getURL(void) throw( RuntimeException )
 {
     return SfxBaseModel::getURL();
 }
-/*-- 18.12.98 13:12:24---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Sequence< beans::PropertyValue > SwXTextDocument::getArgs(void) throw( RuntimeException )
 {
     return SfxBaseModel::getArgs();
 }
-/*-- 18.12.98 13:12:24---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXTextDocument::connectController(const Reference< frame::XController > & xController) throw( RuntimeException )
 {
     SfxBaseModel::connectController(xController);
 }
-/*-- 18.12.98 13:12:25---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXTextDocument::disconnectController(const Reference< frame::XController > & xController) throw( RuntimeException )
 {
     SfxBaseModel::disconnectController(xController);
 }
-/*-- 18.12.98 13:12:25---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXTextDocument::dispose(void) throw( RuntimeException )
 {
     SfxBaseModel::dispose();
 }
-/*-- 10.05.2005 14:14:39---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXTextDocument::close( sal_Bool bDeliverOwnership ) throw( util::CloseVetoException, RuntimeException )
 {
     if(IsValid() && m_pHiddenViewFrame)
         lcl_DisposeView( m_pHiddenViewFrame, pDocShell);
     SfxBaseModel::close(bDeliverOwnership);
 }
-/*-- 18.12.98 13:12:25---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXTextDocument::addEventListener(const Reference< lang::XEventListener > & aListener) throw( RuntimeException )
 {
     SfxBaseModel::addEventListener(aListener);
 }
-/*-- 18.12.98 13:12:26---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXTextDocument::removeEventListener(const Reference< lang::XEventListener > & aListener) throw( RuntimeException )
 {
     SfxBaseModel::removeEventListener(aListener);
 }
 
-/*-- 18.12.98 11:55:19---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 Reference< XPropertySet > SwXTextDocument::getLineNumberingProperties(void)
             throw( RuntimeException )
 {
@@ -658,9 +585,7 @@ Reference< XPropertySet > SwXTextDocument::getLineNumberingProperties(void)
         throw RuntimeException();
     return *pxXLineNumberingProperties;
 }
-/*-- 18.12.98 11:55:20---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Reference< XIndexReplace >  SwXTextDocument::getChapterNumberingRules(void)
                                     throw( RuntimeException )
 {
@@ -688,9 +613,6 @@ Reference< XIndexAccess >  SwXTextDocument::getNumberingRules(void) throw( Runti
     return *pxXNumberingRules;
 }
 
-/*-- 18.12.98 11:55:21---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 Reference< XIndexAccess >  SwXTextDocument::getFootnotes(void) throw( RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
@@ -703,9 +625,7 @@ Reference< XIndexAccess >  SwXTextDocument::getFootnotes(void) throw( RuntimeExc
     }
     return *pxXFootnotes;
 }
-/*-- 18.12.98 11:55:21---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Reference< XPropertySet >  SAL_CALL
         SwXTextDocument::getFootnoteSettings(void) throw( RuntimeException )
 {
@@ -719,9 +639,7 @@ Reference< XPropertySet >  SAL_CALL
     }
     return *pxXFootnoteSettings;
 }
-/*-- 18.12.98 11:55:21---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Reference< XIndexAccess >  SwXTextDocument::getEndnotes(void) throw( RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
@@ -734,9 +652,7 @@ Reference< XIndexAccess >  SwXTextDocument::getEndnotes(void) throw( RuntimeExce
     }
     return *pxXEndnotes;
 }
-/*-- 18.12.98 11:55:22---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Reference< XPropertySet >  SwXTextDocument::getEndnoteSettings(void) throw( RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
@@ -749,9 +665,7 @@ Reference< XPropertySet >  SwXTextDocument::getEndnoteSettings(void) throw( Runt
     }
     return *pxXEndnoteSettings;
 }
-/*-- 18.12.98 11:55:22---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Reference< util::XReplaceDescriptor >  SwXTextDocument::createReplaceDescriptor(void)
     throw( RuntimeException )
 {
@@ -759,9 +673,7 @@ Reference< util::XReplaceDescriptor >  SwXTextDocument::createReplaceDescriptor(
     Reference< util::XReplaceDescriptor >  xRet = new SwXTextSearch;
     return xRet;
 }
-/* -----------------26.02.99 15:52-------------------
- *
- * --------------------------------------------------*/
+
 SwUnoCrsr*  SwXTextDocument::CreateCursorForSearch(Reference< XTextCursor > & xCrsr)
 {
     getText();
@@ -775,9 +687,6 @@ SwUnoCrsr*  SwXTextDocument::CreateCursorForSearch(Reference< XTextCursor > & xC
     return pUnoCrsr;
 }
 
-/*-- 18.12.98 11:55:22---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor > & xDesc)
                                         throw( RuntimeException )
 {
@@ -850,9 +759,7 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
     return (sal_Int32)nResult;
 
 }
-/*-- 18.12.98 11:55:22---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Reference< util::XSearchDescriptor >  SwXTextDocument::createSearchDescriptor(void)
                                                     throw( RuntimeException )
 {
@@ -861,6 +768,7 @@ Reference< util::XSearchDescriptor >  SwXTextDocument::createSearchDescriptor(vo
     return xRet;
 
 }
+
 /* -----------------26.02.99 16:08-------------------
  * wird fuer findAll/First/Next verwendet
  * --------------------------------------------------*/
@@ -986,9 +894,7 @@ SwUnoCrsr*  SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > 
     }
     return pUnoCrsr;
 }
-/*-- 18.12.98 11:55:23---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Reference< XIndexAccess >
     SwXTextDocument::findAll(const Reference< util::XSearchDescriptor > & xDesc)
                                                 throw( RuntimeException )
@@ -1005,9 +911,7 @@ Reference< XIndexAccess >
     delete pResultCrsr;
     return xRet;
 }
-/*-- 18.12.98 11:55:23---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Reference< XInterface >  SwXTextDocument::findFirst(const Reference< util::XSearchDescriptor > & xDesc)
                                             throw( RuntimeException )
 {
@@ -1029,9 +933,7 @@ Reference< XInterface >  SwXTextDocument::findFirst(const Reference< util::XSear
     }
     return xRet;
 }
-/*-- 18.12.98 11:55:24---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Reference< XInterface >  SwXTextDocument::findNext(const Reference< XInterface > & xStartAt,
             const Reference< util::XSearchDescriptor > & xDesc)
             throw( RuntimeException )
@@ -1057,9 +959,7 @@ Reference< XInterface >  SwXTextDocument::findNext(const Reference< XInterface >
     }
     return xRet;
 }
-/*-- 18.12.98 11:55:24---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Sequence< beans::PropertyValue > SwXTextDocument::getPagePrintSettings(void)
     throw( RuntimeException )
 {
@@ -1097,9 +997,7 @@ Sequence< beans::PropertyValue > SwXTextDocument::getPagePrintSettings(void)
         throw RuntimeException();
     return aSeq;
 }
-/* -----------------24.02.99 10:57-------------------
- *
- * --------------------------------------------------*/
+
 sal_uInt32 lcl_Any_To_ULONG(const Any& rValue, sal_Bool& bException)
 {
     bException = sal_False;
@@ -1118,9 +1016,7 @@ sal_uInt32 lcl_Any_To_ULONG(const Any& rValue, sal_Bool& bException)
 
     return nRet;
 }
-/*-- 09.06.2004 12:18:10---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 String lcl_CreateOutlineString( USHORT nIndex,
             const SwOutlineNodes& rOutlineNodes, const SwNumRule* pOutlRule)
 {
@@ -1142,9 +1038,7 @@ String lcl_CreateOutlineString( USHORT nIndex,
                     GetTxtNode()->GetExpandTxt( 0, STRING_LEN, sal_False );
     return sEntry;
 }
-/*-- 18.12.98 11:55:25---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXTextDocument::setPagePrintSettings(const Sequence< beans::PropertyValue >& aSettings)
     throw( RuntimeException )
 {
@@ -1215,9 +1109,7 @@ void SwXTextDocument::setPagePrintSettings(const Sequence< beans::PropertyValue 
     else
         throw RuntimeException();
 }
-/*-- 18.12.98 11:55:25---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOptions)
     throw( IllegalArgumentException, RuntimeException )
 {
@@ -1303,9 +1195,7 @@ void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOption
     else
         throw RuntimeException();
 }
-/*-- 18.12.98 11:55:25---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Reference< XNameAccess >  SwXTextDocument::getReferenceMarks(void)
                                         throw( RuntimeException )
 {
@@ -1319,9 +1209,7 @@ Reference< XNameAccess >  SwXTextDocument::getReferenceMarks(void)
     }
     return *pxXReferenceMarks;
 }
-/* -----------------21.12.98 10:20-------------------
- *
- * --------------------------------------------------*/
+
 Reference< XEnumerationAccess >  SwXTextDocument::getTextFields(void) throw( RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
@@ -1334,9 +1222,7 @@ Reference< XEnumerationAccess >  SwXTextDocument::getTextFields(void) throw( Run
     }
     return *pxXTextFieldTypes;
 }
-/*-- 21.12.98 10:21:12---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Reference< XNameAccess >  SwXTextDocument::getTextFieldMasters(void)
     throw( RuntimeException )
 {
@@ -1350,9 +1236,7 @@ Reference< XNameAccess >  SwXTextDocument::getTextFieldMasters(void)
     }
     return *pxXTextFieldMasters;
 }
-/*-- 21.12.98 10:21:12---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Reference< XNameAccess >  SwXTextDocument::getEmbeddedObjects(void) throw( RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
@@ -1365,9 +1249,7 @@ Reference< XNameAccess >  SwXTextDocument::getEmbeddedObjects(void) throw( Runti
     }
     return *pxXEmbeddedObjects;
 }
-/*-- 21.12.98 10:21:13---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Reference< XNameAccess >  SwXTextDocument::getBookmarks(void) throw( RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
@@ -1380,9 +1262,7 @@ Reference< XNameAccess >  SwXTextDocument::getBookmarks(void) throw( RuntimeExce
     }
     return *pxXBookmarks;
 }
-/*-- 21.12.98 10:21:13---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Reference< XNameAccess >  SwXTextDocument::getTextSections(void) throw( RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
@@ -1395,9 +1275,7 @@ Reference< XNameAccess >  SwXTextDocument::getTextSections(void) throw( RuntimeE
     }
     return *pxXTextSections;
 }
-/*-- 21.12.98 10:21:13---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Reference< XNameAccess >  SwXTextDocument::getTextTables(void) throw( RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
@@ -1410,9 +1288,7 @@ Reference< XNameAccess >  SwXTextDocument::getTextTables(void) throw( RuntimeExc
     }
     return *pxXTextTables;
 }
-/*-- 21.12.98 10:21:13---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Reference< XNameAccess >  SwXTextDocument::getGraphicObjects(void) throw( RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
@@ -1425,9 +1301,7 @@ Reference< XNameAccess >  SwXTextDocument::getGraphicObjects(void) throw( Runtim
     }
     return *pxXGraphicObjects;
 }
-/*-- 21.12.98 10:21:14---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Reference< XNameAccess >  SwXTextDocument::getTextFrames(void) throw( RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
@@ -1440,9 +1314,7 @@ Reference< XNameAccess >  SwXTextDocument::getTextFrames(void) throw( RuntimeExc
     }
     return *pxXTextFrames;
 }
-/* -----------------21.12.98 10:56-------------------
- *
- * --------------------------------------------------*/
+
 Reference< XNameAccess >  SwXTextDocument::getStyleFamilies(void) throw( RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
@@ -1455,9 +1327,7 @@ Reference< XNameAccess >  SwXTextDocument::getStyleFamilies(void) throw( Runtime
     }
     return *pxXStyleFamilies;
 }
-/*-- 19.05.06 10:15:22---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Reference< style::XAutoStyles > SwXTextDocument::getAutoStyles(  )
     throw (uno::RuntimeException)
 {
@@ -1472,9 +1342,7 @@ uno::Reference< style::XAutoStyles > SwXTextDocument::getAutoStyles(  )
     return *pxXAutoStyles;
 
 }
-/*-- 22.01.99 10:18:03---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Reference< drawing::XDrawPage >  SwXTextDocument::getDrawPage(void) throw( RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
@@ -1494,9 +1362,7 @@ Reference< drawing::XDrawPage >  SwXTextDocument::getDrawPage(void) throw( Runti
     }
     return *pxXDrawPage;
 }
-/* -----------------07.04.99 10:11-------------------
- *
- * --------------------------------------------------*/
+
 SwXDrawPage* SwXTextDocument::GetDrawPage()
 {
     if(!IsValid())
@@ -1505,9 +1371,7 @@ SwXDrawPage* SwXTextDocument::GetDrawPage()
         getDrawPage();
     return pDrawPage;
 }
-/*-- 18.12.98 11:55:26---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXTextDocument::Invalidate()
 {
     bObjectValid = sal_False;
@@ -1529,9 +1393,7 @@ void SwXTextDocument::Invalidate()
     pDocShell = 0;
     aRefreshCont.Disposing();
 }
-/* -----------------------------13.07.00 15:59--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwXTextDocument::Reactivate(SwDocShell* pNewDocShell)
 {
     if(pDocShell && pDocShell != pNewDocShell)
@@ -1539,9 +1401,7 @@ void SwXTextDocument::Reactivate(SwDocShell* pNewDocShell)
     pDocShell = pNewDocShell;
     bObjectValid = TRUE;
 }
-/*-- 18.12.98 11:55:26---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void    SwXTextDocument::InitNewDoc()
 {
     // zunaechst alle Collections invalidieren, dann Referenzen loeschen und Null setzen
@@ -1750,9 +1610,6 @@ void    SwXTextDocument::InitNewDoc()
     }
 }
 
-/*-- 11.03.99 11:51:40---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 #define COM_SUN_STAR__DRAWING_LENGTH 13
 Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServiceName)
                                         throw( Exception, RuntimeException )
@@ -1860,9 +1717,7 @@ Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServic
     }
     return xRet;
 }
-/*-- 11.03.99 11:51:40---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Reference< XInterface >  SwXTextDocument::createInstanceWithArguments(
         const OUString& ServiceSpecifier,
         const Sequence< Any >& /*Arguments*/)
@@ -1873,9 +1728,7 @@ Reference< XInterface >  SwXTextDocument::createInstanceWithArguments(
     //Parameter zwingend angewiesen sind - bis jetzt haben wir das nicht
     return xInt;
 }
-/*-- 11.03.99 11:51:41---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Sequence< OUString > SwXTextDocument::getAvailableServiceNames(void)
                                         throw( RuntimeException )
 {
@@ -1899,16 +1752,12 @@ Sequence< OUString > SwXTextDocument::getAvailableServiceNames(void)
 
     return aServices;
 }
-/* -----------------18.03.99 11:36-------------------
- *
- * --------------------------------------------------*/
+
 OUString SwXTextDocument::getImplementationName(void) throw( RuntimeException )
 {
     return C2U("SwXTextDocument");
 }
-/* -----------------20.01.04 10:14-------------------
- *
- * --------------------------------------------------*/
+
 sal_Bool SwXTextDocument::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     if (
@@ -1927,9 +1776,7 @@ sal_Bool SwXTextDocument::supportsService(const OUString& rServiceName) throw( R
             (bTextDoc   && rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextDocument"  )))
            );
 }
-/* -----------------20.01.04 10:17-------------------
- *
- * --------------------------------------------------*/
+
 Sequence< OUString > SwXTextDocument::getSupportedServiceNames(void) throw( RuntimeException )
 {
     BOOL bWebDoc    = (0 != PTR_CAST(SwWebDocShell,    pDocShell));
@@ -1953,9 +1800,7 @@ Sequence< OUString > SwXTextDocument::getSupportedServiceNames(void) throw( Runt
 
     return aRet;
 }
-/* -----------------05.05.99 12:10-------------------
- *
- * --------------------------------------------------*/
+
 Reference< XIndexAccess >  SwXTextDocument::getDocumentIndexes(void) throw( RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
@@ -1969,17 +1814,12 @@ Reference< XIndexAccess >  SwXTextDocument::getDocumentIndexes(void) throw( Runt
     return *pxXDocumentIndexes;
 }
 
-/*-- 10.05.99 13:58:58---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 Reference< XPropertySetInfo >  SwXTextDocument::getPropertySetInfo(void) throw( RuntimeException )
 {
     static Reference< XPropertySetInfo >  xRet = pPropSet->getPropertySetInfo();
     return xRet;
 }
-/*-- 10.05.99 13:58:58---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
     const Any& aValue)
     throw( UnknownPropertyException, PropertyVetoException, IllegalArgumentException,
@@ -2157,9 +1997,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
         }
     }
 }
-/*-- 10.05.99 13:58:59---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
@@ -2309,45 +2147,35 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
     }
     return aAny;
 }
-/*-- 10.05.99 13:58:59---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXTextDocument::addPropertyChangeListener(const OUString& /*PropertyName*/,
     const Reference< XPropertyChangeListener > & /*aListener*/)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
     DBG_WARNING("not implemented");
 }
-/*-- 10.05.99 13:58:59---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXTextDocument::removePropertyChangeListener(const OUString& /*PropertyName*/,
     const Reference< XPropertyChangeListener > & /*aListener*/)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
     DBG_WARNING("not implemented");
 }
-/*-- 10.05.99 13:59:00---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXTextDocument::addVetoableChangeListener(const OUString& /*PropertyName*/,
     const Reference< XVetoableChangeListener > & /*aListener*/)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
     DBG_WARNING("not implemented");
 }
-/*-- 10.05.99 13:59:00---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXTextDocument::removeVetoableChangeListener(const OUString& /*PropertyName*/,
                         const Reference< XVetoableChangeListener > & /*aListener*/)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
     DBG_WARNING("not implemented");
 }
-/* -----------------25.10.99 10:42-------------------
 
- --------------------------------------------------*/
 Reference< XNameAccess >  SwXTextDocument::getLinks(void) throw( RuntimeException )
 {
     if(!pxLinkTargetSupplier)
@@ -2357,9 +2185,7 @@ Reference< XNameAccess >  SwXTextDocument::getLinks(void) throw( RuntimeExceptio
     }
     return (*pxLinkTargetSupplier);
 }
-/* -----------------------------11.01.01 15:01--------------------------------
 
- ---------------------------------------------------------------------------*/
 Reference< XEnumerationAccess > SwXTextDocument::getRedlines(  ) throw(RuntimeException)
 {
     if(!pxXRedlines)
@@ -2369,9 +2195,7 @@ Reference< XEnumerationAccess > SwXTextDocument::getRedlines(  ) throw(RuntimeEx
     }
     return *pxXRedlines;
 }
-/*-- 21.02.00 08:41:06---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXTextDocument::refresh(void) throw( RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
@@ -2382,9 +2206,7 @@ void SwXTextDocument::refresh(void) throw( RuntimeException )
     if(pWrtShell)
         pWrtShell->CalcLayout();
 }
-/*-- 21.02.00 08:41:06---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXTextDocument::addRefreshListener(const Reference< util::XRefreshListener > & l)
     throw( RuntimeException )
 {
@@ -2393,9 +2215,7 @@ void SwXTextDocument::addRefreshListener(const Reference< util::XRefreshListener
         throw RuntimeException();
     aRefreshCont.AddListener ( reinterpret_cast < const Reference < lang::XEventListener > &> ( l ));
 }
-/*-- 21.02.00 08:41:07---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXTextDocument::removeRefreshListener(const Reference< util::XRefreshListener > & l)
     throw( RuntimeException )
 {
@@ -2403,9 +2223,7 @@ void SwXTextDocument::removeRefreshListener(const Reference< util::XRefreshListe
     if ( !IsValid() || !aRefreshCont.RemoveListener ( reinterpret_cast < const Reference < lang::XEventListener > &> ( l ) ) )
         throw RuntimeException();
 }
-/* -----------------------------26.02.01 12:22--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwXTextDocument::updateLinks(  ) throw(RuntimeException)
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
@@ -2419,6 +2237,7 @@ void SwXTextDocument::updateLinks(  ) throw(RuntimeException)
         rLnkMan.UpdateAllLinks( FALSE, FALSE, TRUE );
     }
 }
+
 //XPropertyState
 PropertyState SAL_CALL SwXTextDocument::getPropertyState( const OUString& rPropertyName )
     throw (UnknownPropertyException, RuntimeException)
@@ -2438,6 +2257,7 @@ PropertyState SAL_CALL SwXTextDocument::getPropertyState( const OUString& rPrope
     }
     return eRet;
 }
+
 Sequence< PropertyState > SAL_CALL SwXTextDocument::getPropertyStates( const Sequence< OUString >& rPropertyNames )
     throw (UnknownPropertyException, RuntimeException)
 {
@@ -2451,6 +2271,7 @@ Sequence< PropertyState > SAL_CALL SwXTextDocument::getPropertyStates( const Seq
 
     return aRet;
 }
+
 void SAL_CALL SwXTextDocument::setPropertyToDefault( const OUString& rPropertyName )
     throw (UnknownPropertyException, RuntimeException)
 {
@@ -2465,6 +2286,7 @@ void SAL_CALL SwXTextDocument::setPropertyToDefault( const OUString& rPropertyNa
         case 0:default:break;
     }
 }
+
 Any SAL_CALL SwXTextDocument::getPropertyDefault( const OUString& rPropertyName )
     throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
@@ -2498,7 +2320,6 @@ static OutputDevice * lcl_GetOutputDevice( const SwPrintUIOptions &rPrintUIOptio
     return pOut;
 }
 
-
 static bool lcl_SeqHasProperty(
     const uno::Sequence< beans::PropertyValue >& rOptions,
     const sal_Char *pPropName )
@@ -2513,7 +2334,6 @@ static bool lcl_SeqHasProperty(
     }
     return bRes;
 }
-
 
 SfxViewShell * SwXTextDocument::GetRenderView(
     bool &rbIsSwSrcView,
@@ -2548,7 +2368,6 @@ SfxViewShell * SwXTextDocument::GetRenderView(
     return pView;
 }
 
-
 /*
  *  GetRenderDoc:
  *  returns the document to be rendered, usually this will be the 'regular'
@@ -2557,7 +2376,6 @@ SfxViewShell * SwXTextDocument::GetRenderView(
  *  The rpView variable will be set (if not already done) to the used
  *  SfxViewShell.
 */
-
 SwDoc * SwXTextDocument::GetRenderDoc(
     SfxViewShell *&rpView,
     const uno::Any& rSelection,
@@ -2610,10 +2428,6 @@ SwDoc * SwXTextDocument::GetRenderDoc(
     return pDoc;
 }
 
-/* -----------------------------23.08.02 16:00--------------------------------
-
- ---------------------------------------------------------------------------*/
-
 static void lcl_SavePrintUIOptionsToDocumentPrintData(
     SwDoc &rDoc,
     const SwPrintUIOptions &rPrintUIOptions,
@@ -2647,7 +2461,6 @@ static void lcl_SavePrintUIOptionsToDocumentPrintData(
     pDocPrintData->SetPrintHiddenText( rPrintUIOptions.IsPrintHiddenText() );
     pDocPrintData->SetPrintTextPlaceholder( rPrintUIOptions.IsPrintTextPlaceholders() );
 }
-
 
 sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
         const uno::Any& rSelection,
@@ -2798,9 +2611,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
 
     return nRet;
 }
-/* -----------------------------23.08.02 16:00--------------------------------
 
- ---------------------------------------------------------------------------*/
 uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
         sal_Int32 nRenderer,
         const uno::Any& rSelection,
@@ -2939,9 +2750,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
 
     return aRenderer;
 }
-/* -----------------------------28.10.02 16:00--------------------------------
 
- ---------------------------------------------------------------------------*/
 SfxViewShell * SwXTextDocument::GuessViewShell(
     /* out */ bool &rbIsSwSrcView,
     const uno::Reference< css::frame::XController > xController )
@@ -2983,7 +2792,6 @@ SfxViewShell * SwXTextDocument::GuessViewShell(
 //            (pSwSrcView ? dynamic_cast< SfxViewShell * >(pSwSrcView) :
 //                          dynamic_cast< SfxViewShell * >(pSwPagePreView) );
 }
-
 
 void SAL_CALL SwXTextDocument::render(
         sal_Int32 nRenderer,
@@ -3138,10 +2946,8 @@ void SAL_CALL SwXTextDocument::render(
         delete m_pPrintUIOptions;   m_pPrintUIOptions = NULL;
     }
 }
-/* -----------------------------03.10.04 -------------------------------------
 
- ---------------------------------------------------------------------------*/
-    // xforms::XFormsSupplier
+// xforms::XFormsSupplier
 Reference<XNameContainer> SAL_CALL SwXTextDocument::getXForms()
     throw( RuntimeException )
 {
@@ -3151,17 +2957,12 @@ Reference<XNameContainer> SAL_CALL SwXTextDocument::getXForms()
     return pDoc->getXForms();
 }
 
-/* -----------------------------25.09.07 -------------------------------------
-
- ---------------------------------------------------------------------------*/
 uno::Reference< text::XFlatParagraphIterator > SAL_CALL SwXTextDocument::getFlatParagraphIterator(::sal_Int32 nTextMarkupType, sal_Bool bAutomatic)
     throw ( uno::RuntimeException )
 {
     return new SwXFlatParagraphIterator( *pDocShell->GetDoc(), nTextMarkupType, bAutomatic );
 }
-/*-- 07.05.2009 09:21:12---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Reference< util::XCloneable > SwXTextDocument::createClone(  ) throw (uno::RuntimeException)
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
@@ -3177,21 +2978,16 @@ uno::Reference< util::XCloneable > SwXTextDocument::createClone(  ) throw (uno::
     xStorageDoc->loadFromStorage( xNewStorage, aTempMediaDescriptor );
     return uno::Reference< util::XCloneable >( xNewModel, UNO_QUERY );
 }
-/* -----------------------------20.06.00 09:54--------------------------------
 
- ---------------------------------------------------------------------------*/
 void * SAL_CALL SwXTextDocument::operator new( size_t t) throw()
 {
     return SwXTextDocumentBaseClass::operator new(t);
 }
-/* -----------------------------20.06.00 09:54--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SAL_CALL SwXTextDocument::operator delete( void * p) throw()
 {
     SwXTextDocumentBaseClass::operator delete(p);
 }
-
 
 /*---------------------------------------------------
 retrieve languages already used in current document
@@ -3389,9 +3185,6 @@ uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
     return aLanguages;
 }
 
-/* -----------------25.10.99 11:06-------------------
-
- --------------------------------------------------*/
 SwXLinkTargetSupplier::SwXLinkTargetSupplier(SwXTextDocument& rxDoc) :
     pxDoc(&rxDoc)
 {
@@ -3403,16 +3196,11 @@ SwXLinkTargetSupplier::SwXLinkTargetSupplier(SwXTextDocument& rxDoc) :
     sOutlines   = String(SW_RES(STR_CONTENT_TYPE_OUTLINE));
     sBookmarks  = String(SW_RES(STR_CONTENT_TYPE_BOOKMARK));
 }
-/* -----------------25.10.99 11:11-------------------
 
- --------------------------------------------------*/
 SwXLinkTargetSupplier::~SwXLinkTargetSupplier()
 {
 }
 
-/*-- 25.10.99 11:12:45---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 Any SwXLinkTargetSupplier::getByName(const OUString& rName)
     throw( NoSuchElementException, WrappedTargetException, RuntimeException )
 {
@@ -3490,9 +3278,7 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
         throw NoSuchElementException();
     return aRet;
 }
-/*-- 25.10.99 11:12:46---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Sequence< OUString > SwXLinkTargetSupplier::getElementNames(void)
                                         throw( RuntimeException )
 {
@@ -3507,9 +3293,7 @@ Sequence< OUString > SwXLinkTargetSupplier::getElementNames(void)
     pNames[6] = sBookmarks;
     return aRet;
 }
-/*-- 25.10.99 11:12:46---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Bool SwXLinkTargetSupplier::hasByName(const OUString& rName)
                                     throw( RuntimeException )
 {
@@ -3524,40 +3308,30 @@ sal_Bool SwXLinkTargetSupplier::hasByName(const OUString& rName)
         return sal_True;
     return sal_False;
 }
-/*-- 25.10.99 11:12:47---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Type  SwXLinkTargetSupplier::getElementType(void)
                                     throw( RuntimeException )
 {
     return ::getCppuType((Reference< XPropertySet>*)0);
 
 }
-/*-- 25.10.99 11:12:47---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Bool SwXLinkTargetSupplier::hasElements(void) throw( RuntimeException )
 {
     return 0 != pxDoc;
 }
-/*-- 25.10.99 11:12:47---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 OUString SwXLinkTargetSupplier::getImplementationName(void) throw( RuntimeException )
 {
     return C2U("SwXLinkTargetSupplier");
 }
-/*-- 25.10.99 11:12:48---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Bool SwXLinkTargetSupplier::supportsService(const OUString& rServiceName)
                                                 throw( RuntimeException )
 {
     return (rServiceName == C2U("com.sun.star.document.LinkTargets"));
 }
-/*-- 25.10.99 11:12:48---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Sequence< OUString > SwXLinkTargetSupplier::getSupportedServiceNames(void)
                                                 throw( RuntimeException )
 {
@@ -3567,9 +3341,6 @@ Sequence< OUString > SwXLinkTargetSupplier::getSupportedServiceNames(void)
     return aRet;
 }
 
-/*-- 26.10.99 09:16:23---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwXLinkNameAccessWrapper::SwXLinkNameAccessWrapper(
             Reference< XNameAccess >  xAccess, const String& rLinkDisplayName, String sSuffix ) :
     xRealAccess(xAccess),
@@ -3579,9 +3350,7 @@ SwXLinkNameAccessWrapper::SwXLinkNameAccessWrapper(
     pxDoc(0)
 {
 }
-/* -----------------26.10.99 14:17-------------------
 
- --------------------------------------------------*/
 SwXLinkNameAccessWrapper::SwXLinkNameAccessWrapper(SwXTextDocument& rxDoc,
             const String& rLinkDisplayName, String sSuffix) :
     pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_LINK_TARGET)),
@@ -3591,15 +3360,11 @@ SwXLinkNameAccessWrapper::SwXLinkNameAccessWrapper(SwXTextDocument& rxDoc,
     pxDoc(&rxDoc)
 {
 }
-/*-- 26.10.99 09:16:23---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwXLinkNameAccessWrapper::~SwXLinkNameAccessWrapper()
 {
 }
-/*-- 26.10.99 09:16:24---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Any SwXLinkNameAccessWrapper::getByName(const OUString& rName)
     throw( NoSuchElementException, WrappedTargetException, RuntimeException )
 {
@@ -3651,9 +3416,7 @@ Any SwXLinkNameAccessWrapper::getByName(const OUString& rName)
         throw NoSuchElementException();
     return aRet;
 }
-/*-- 26.10.99 09:16:24---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Sequence< OUString > SwXLinkNameAccessWrapper::getElementNames(void)
                                     throw( RuntimeException )
 {
@@ -3691,9 +3454,7 @@ Sequence< OUString > SwXLinkNameAccessWrapper::getElementNames(void)
     }
     return aRet;
 }
-/*-- 26.10.99 09:16:25---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Bool SwXLinkNameAccessWrapper::hasByName(const OUString& rName)
     throw( RuntimeException )
 {
@@ -3732,17 +3493,13 @@ sal_Bool SwXLinkNameAccessWrapper::hasByName(const OUString& rName)
     }
     return bRet;
 }
-/*-- 26.10.99 09:16:25---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Type  SwXLinkNameAccessWrapper::getElementType(void)
                                 throw( RuntimeException )
 {
     return ::getCppuType((Reference<XPropertySet>*)0);
 }
-/*-- 26.10.99 09:16:25---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Bool SwXLinkNameAccessWrapper::hasElements(void) throw( RuntimeException )
 {
     sal_Bool bRet = sal_False;
@@ -3756,18 +3513,14 @@ sal_Bool SwXLinkNameAccessWrapper::hasElements(void) throw( RuntimeException )
     }
     return bRet;
 }
-/*-- 26.10.99 09:16:26---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Reference< XPropertySetInfo >  SwXLinkNameAccessWrapper::getPropertySetInfo(void)
                                         throw( RuntimeException )
 {
     static Reference< XPropertySetInfo >  xRet = pPropSet->getPropertySetInfo();
     return xRet;
 }
-/*-- 26.10.99 09:16:26---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXLinkNameAccessWrapper::setPropertyValue(
     const OUString& , const Any& )
     throw( UnknownPropertyException,
@@ -3778,9 +3531,7 @@ void SwXLinkNameAccessWrapper::setPropertyValue(
 {
     throw UnknownPropertyException();
 }
-/* -----------------------------08.12.99 11:10--------------------------------
 
- ---------------------------------------------------------------------------*/
 Any lcl_GetDisplayBitmap(String sLinkSuffix)
 {
     Any aRet;
@@ -3816,9 +3567,7 @@ Any lcl_GetDisplayBitmap(String sLinkSuffix)
     }
     return aRet;
 }
-/*-- 26.10.99 09:16:27---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Any SwXLinkNameAccessWrapper::getPropertyValue(const OUString& rPropertyName)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
@@ -3835,62 +3584,44 @@ Any SwXLinkNameAccessWrapper::getPropertyValue(const OUString& rPropertyName)
         throw UnknownPropertyException();
     return aRet;
 }
-/*-- 26.10.99 09:16:27---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXLinkNameAccessWrapper::addPropertyChangeListener(
     const OUString& /*PropertyName*/, const Reference< XPropertyChangeListener > & /*aListener*/)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {}
-/*-- 26.10.99 09:16:28---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXLinkNameAccessWrapper::removePropertyChangeListener(
     const OUString& /*PropertyName*/, const Reference< XPropertyChangeListener > & /*aListener*/)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {}
-/*-- 26.10.99 09:16:28---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXLinkNameAccessWrapper::addVetoableChangeListener(
     const OUString& /*PropertyName*/, const Reference< XVetoableChangeListener > & /*aListener*/)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {}
-/*-- 26.10.99 09:16:29---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXLinkNameAccessWrapper::removeVetoableChangeListener(
     const OUString& /*PropertyName*/, const Reference< XVetoableChangeListener > & /*aListener*/)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {}
-/*-- 26.10.99 09:16:32---------------------------------------------------
 
-
-  -----------------------------------------------------------------------*/
 Reference< XNameAccess >  SwXLinkNameAccessWrapper::getLinks(void)
                                     throw( RuntimeException )
 {
     return (SwXLinkNameAccessWrapper*)this;
 }
 
-/*-- 26.10.99 09:21:48---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 OUString SwXLinkNameAccessWrapper::getImplementationName(void) throw( RuntimeException )
 {
     return C2U("SwXLinkNameAccessWrapper");
 }
-/*-- 26.10.99 09:21:48---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Bool SwXLinkNameAccessWrapper::supportsService(const OUString& rServiceName)
                                                     throw( RuntimeException )
 {
     return (rServiceName == C2U("com.sun.star.document.LinkTargets"));
 }
-/*-- 26.10.99 09:21:48---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Sequence< OUString > SwXLinkNameAccessWrapper::getSupportedServiceNames(void)
                                                     throw( RuntimeException )
 {
@@ -3899,31 +3630,23 @@ Sequence< OUString > SwXLinkNameAccessWrapper::getSupportedServiceNames(void)
     pNames[0] = C2U("com.sun.star.document.LinkTargets");
     return aRet;
 }
-/* -----------------26.10.99 15:50-------------------
 
- --------------------------------------------------*/
 SwXOutlineTarget::SwXOutlineTarget(const String& rOutlineText) :
     pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_LINK_TARGET)),
     sOutlineText(rOutlineText)
 {
 }
-/*-- 26.10.99 15:51:45---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwXOutlineTarget::~SwXOutlineTarget()
 {
 }
-/*-- 26.10.99 15:51:46---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Reference< XPropertySetInfo >  SwXOutlineTarget::getPropertySetInfo(void) throw( RuntimeException )
 {
     static Reference< XPropertySetInfo >  xRet = pPropSet->getPropertySetInfo();
     return xRet;
 }
-/*-- 26.10.99 15:51:46---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXOutlineTarget::setPropertyValue(
     const OUString& /*PropertyName*/, const Any& /*aValue*/)
     throw( UnknownPropertyException, PropertyVetoException,
@@ -3931,9 +3654,7 @@ void SwXOutlineTarget::setPropertyValue(
 {
     throw UnknownPropertyException();
 }
-/*-- 26.10.99 15:51:46---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Any SwXOutlineTarget::getPropertyValue(const OUString& rPropertyName)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
@@ -3944,55 +3665,41 @@ Any SwXOutlineTarget::getPropertyValue(const OUString& rPropertyName)
         throw UnknownPropertyException();
     return aRet;
 }
-/*-- 26.10.99 15:51:46---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXOutlineTarget::addPropertyChangeListener(
     const OUString& /*PropertyName*/, const Reference< XPropertyChangeListener > & /*aListener*/)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
 }
-/*-- 26.10.99 15:51:47---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXOutlineTarget::removePropertyChangeListener(
     const OUString& /*PropertyName*/, const Reference< XPropertyChangeListener > & /*aListener*/)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
 }
-/*-- 26.10.99 15:51:47---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXOutlineTarget::addVetoableChangeListener(
     const OUString& /*PropertyName*/, const Reference< XVetoableChangeListener > & /*aListener*/)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
 }
-/*-- 26.10.99 15:51:47---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXOutlineTarget::removeVetoableChangeListener(
     const OUString& /*PropertyName*/, const Reference< XVetoableChangeListener > & /*aListener*/)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
 }
-/* -----------------03.05.99 12:28-------------------
- *
- * --------------------------------------------------*/
+
 OUString SwXOutlineTarget::getImplementationName(void) throw( RuntimeException )
 {
     return C2U("SwXOutlineTarget");
 }
-/* -----------------03.05.99 12:28-------------------
- *
- * --------------------------------------------------*/
+
 sal_Bool SwXOutlineTarget::supportsService(const OUString& ServiceName) throw( RuntimeException )
 {
     return C2U("com.sun.star.document.LinkTarget") == ServiceName;
 }
-/* -----------------03.05.99 12:28-------------------
- *
- * --------------------------------------------------*/
+
 Sequence< OUString > SwXOutlineTarget::getSupportedServiceNames(void) throw( RuntimeException )
 {
     Sequence < OUString > aRet(1);
@@ -4001,23 +3708,17 @@ Sequence< OUString > SwXOutlineTarget::getSupportedServiceNames(void) throw( Run
 
     return aRet;
 }
-/* -----------------------------17.01.01 16:06--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwXDocumentPropertyHelper::SwXDocumentPropertyHelper(SwDoc& rDoc) :
 SvxUnoForbiddenCharsTable ( rDoc.getForbiddenCharacterTable() )
 ,m_pDoc(&rDoc)
 {
 }
-/* -----------------------------17.01.01 16:06--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwXDocumentPropertyHelper::~SwXDocumentPropertyHelper()
 {
 }
-/* -----------------------------17.01.01 16:06--------------------------------
 
- ---------------------------------------------------------------------------*/
 Reference<XInterface> SwXDocumentPropertyHelper::GetDrawTable(short nWhich)
 {
     Reference<XInterface> xRet;
@@ -4083,17 +3784,12 @@ void SwXDocumentPropertyHelper::Invalidate()
     m_pDoc = 0;
     SvxUnoForbiddenCharsTable::mxForbiddenChars.unbind();
 }
-/* -----------------13.08.2003 12:43-----------------
 
- --------------------------------------------------*/
 void SwXDocumentPropertyHelper::onChange()
 {
     if(m_pDoc)
        m_pDoc->SetModified();
 }
-
-
-/*****************************************************************************/
 
 SwViewOptionAdjust_Impl::SwViewOptionAdjust_Impl( SwWrtShell& rSh, const SwViewOption &rViewOptions ) :
     m_rShell( rSh ),
@@ -4101,12 +3797,10 @@ SwViewOptionAdjust_Impl::SwViewOptionAdjust_Impl( SwWrtShell& rSh, const SwViewO
 {
 }
 
-
 SwViewOptionAdjust_Impl::~SwViewOptionAdjust_Impl()
 {
     m_rShell.ApplyViewOptions( m_aOldViewOptions );
 }
-
 
 void SwViewOptionAdjust_Impl::AdjustViewOptions(
     const SwPrtOptions *pPrtOptions )
@@ -4163,8 +3857,3 @@ void SwViewOptionAdjust_Impl::AdjustViewOptions(
         m_rShell.ApplyViewOptions( aRenderViewOptions );
     }
 }
-
-
-/*****************************************************************************/
-
-
