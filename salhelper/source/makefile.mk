@@ -46,7 +46,8 @@ UNIXVERSIONNAMES=UDK
 SLOFILES=	\
     $(SLO)$/condition.obj \
     $(SLO)$/dynload.obj \
-    $(SLO)$/simplereferenceobject.obj
+    $(SLO)$/simplereferenceobject.obj \
+    $(SLO)$/timer.obj
 
 .IF "$(GUI)" == "WNT"
 SHL1TARGET=	$(TARGET)$(UDK_MAJOR)$(COMID)
