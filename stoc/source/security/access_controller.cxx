@@ -57,6 +57,8 @@
 
 #include "lru_cache.h"
 #include "permissions.h"
+#include "bootstrapservices.hxx"
+
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 #define SERVICE_NAME "com.sun.star.security.AccessController"
@@ -79,11 +81,7 @@ namespace stoc_sec
 {
 // static stuff initialized when loading lib
 static OUString s_envType = OUSTR(CPPU_CURRENT_LANGUAGE_BINDING_NAME);
-static OUString s_implName = OUSTR(IMPL_NAME);
-static OUString s_serviceName = OUSTR(SERVICE_NAME);
 static OUString s_acRestriction = OUSTR("access-control.restriction");
-
-static Sequence< OUString > s_serviceNames = Sequence< OUString >( &s_serviceName, 1 );
 
 //##################################################################################################
 
@@ -1008,14 +1006,15 @@ Reference< security::XAccessControlContext > AccessController::getContext()
 OUString AccessController::getImplementationName()
     throw (RuntimeException)
 {
-    return s_implName;
+    return stoc_bootstrap::ac_getImplementationName();
 }
 //__________________________________________________________________________________________________
 sal_Bool AccessController::supportsService( OUString const & serviceName )
     throw (RuntimeException)
 {
-    OUString const * pNames = s_serviceNames.getConstArray();
-    for ( sal_Int32 nPos = s_serviceNames.getLength(); nPos--; )
+    Sequence< OUString > aSNL = getSupportedServiceNames();
+    const OUString * pNames = aSNL.getConstArray();
+    for ( sal_Int32 nPos = aSNL.getLength(); --nPos; )
     {
         if (serviceName.equals( pNames[ nPos ] ))
         {
@@ -1028,7 +1027,7 @@ sal_Bool AccessController::supportsService( OUString const & serviceName )
 Sequence< OUString > AccessController::getSupportedServiceNames()
     throw (RuntimeException)
 {
-    return s_serviceNames;
+    return stoc_bootstrap::ac_getSupportedServiceNames();
 }
 }
 //##################################################################################################
@@ -1043,12 +1042,15 @@ Reference< XInterface > SAL_CALL ac_create(
 //--------------------------------------------------------------------------------------------------
 Sequence< OUString > ac_getSupportedServiceNames() SAL_THROW( () )
 {
-    return stoc_sec::s_serviceNames;
+    static OUString s_serviceName = OUSTR(SERVICE_NAME);
+    static Sequence< OUString > s_serviceNames = Sequence< OUString >( &s_serviceName, 1 );
+    return s_serviceNames;
 }
 //--------------------------------------------------------------------------------------------------
 OUString ac_getImplementationName() SAL_THROW( () )
 {
-    return stoc_sec::s_implName;
+    static OUString s_implName = OUSTR(IMPL_NAME);
+    return s_implName;
 }
 //--------------------------------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL filepolicy_create(

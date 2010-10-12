@@ -48,10 +48,11 @@
 #include <com/sun/star/io/FilePermission.hpp>
 #include <com/sun/star/connection/SocketPermission.hpp>
 
+#include "bootstrapservices.hxx"
+
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 #define SERVICE_NAME "com.sun.star.security.Policy"
 #define IMPL_NAME "com.sun.star.security.comp.stoc.FilePolicy"
-
 
 using namespace ::osl;
 using namespace ::rtl;
@@ -63,13 +64,6 @@ extern ::rtl_StandardModuleCount g_moduleCount;
 
 namespace stoc_sec
 {
-// static stuff initialized when loading lib
-static OUString s_implName = OUSTR(IMPL_NAME);
-static OUString s_serviceName = OUSTR(SERVICE_NAME);
-
-static Sequence< OUString > s_serviceNames = Sequence< OUString >( &s_serviceName, 1 );
-//##################################################################################################
-
 //--------------------------------------------------------------------------------------------------
 static inline void dispose( Reference< XInterface > const & x )
     SAL_THROW( (RuntimeException) )
@@ -558,14 +552,15 @@ void FilePolicy::refresh()
 OUString FilePolicy::getImplementationName()
     throw (RuntimeException)
 {
-    return s_implName;
+    return stoc_bootstrap::filepolicy_getImplementationName();
 }
 //__________________________________________________________________________________________________
 sal_Bool FilePolicy::supportsService( OUString const & serviceName )
     throw (RuntimeException)
 {
-    OUString const * pNames = s_serviceNames.getConstArray();
-    for ( sal_Int32 nPos = s_serviceNames.getLength(); nPos--; )
+    Sequence< OUString > aSNL = getSupportedServiceNames();
+    const OUString * pNames = aSNL.getConstArray();
+    for ( sal_Int32 nPos = aSNL.getLength(); --nPos; )
     {
         if (serviceName.equals( pNames[ nPos ] ))
         {
@@ -578,7 +573,7 @@ sal_Bool FilePolicy::supportsService( OUString const & serviceName )
 Sequence< OUString > FilePolicy::getSupportedServiceNames()
     throw (RuntimeException)
 {
-    return s_serviceNames;
+    return stoc_bootstrap::filepolicy_getSupportedServiceNames();
 }
 }
 //##################################################################################################
@@ -594,11 +589,14 @@ Reference< XInterface > SAL_CALL filepolicy_create(
 //--------------------------------------------------------------------------------------------------
 Sequence< OUString > filepolicy_getSupportedServiceNames() SAL_THROW( () )
 {
-    return stoc_sec::s_serviceNames;
+    static OUString s_serviceName = OUSTR(SERVICE_NAME);
+    static Sequence< OUString > s_serviceNames = Sequence< OUString >( &s_serviceName, 1 );
+    return s_serviceNames;
 }
 //--------------------------------------------------------------------------------------------------
 OUString filepolicy_getImplementationName() SAL_THROW( () )
 {
-    return stoc_sec::s_implName;
+    static OUString s_implName = OUSTR(IMPL_NAME);
+    return s_implName;
 }
 }
