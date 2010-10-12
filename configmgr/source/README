@@ -51,16 +51,13 @@ propertynode.cxx
 setnode.cxx
  Internal representations of data nodes.
 
-pad.cxx
 parsemanager.cxx
 parser.hxx
-span.hxx
 valueparser.cxx
 xcdparser.cxx
 xcsparser.cxx
 xcuparser.cxx
 xmldata.cxx
-xmlreader.cxx
  XML file reading.
 
 modifications.cxx
@@ -70,6 +67,7 @@ writemodfile.cxx
 broadcaster.cxx
  Notification management.
 
+additions.hxx
 update.cxx
  Extension manager interface.
 

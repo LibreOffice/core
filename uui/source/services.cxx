@@ -41,49 +41,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 
-namespace {
-
-sal_Bool writeInfo( void * pRegistryKey,
-                    const OUString & rImplementationName,
-                    Sequence< OUString > const & rServiceNames )
-{
-    OUString aKeyName( OUString::createFromAscii( "/" ) );
-    aKeyName += rImplementationName;
-    aKeyName += OUString::createFromAscii( "/UNO/SERVICES" );
-
-    Reference< XRegistryKey > xKey;
-    try
-    {
-        xKey = static_cast< XRegistryKey * >(
-            pRegistryKey )->createKey( aKeyName );
-    }
-    catch ( InvalidRegistryException const & )
-    {
-    }
-
-    if ( !xKey.is() )
-    {
-        return sal_False;
-    }
-    sal_Bool bSuccess = sal_True;
-
-    for ( sal_Int32 n = 0; n < rServiceNames.getLength(); ++n )
-    {
-        try
-        {
-            xKey->createKey( rServiceNames[ n ] );
-        }
-        catch ( InvalidRegistryException const & )
-        {
-            bSuccess = sal_False;
-            break;
-        }
-    }
-    return bSuccess;
-}
-
-} // namespace
-
 //============================================================================
 //
 //  component_getImplementationEnvironment
@@ -95,43 +52,6 @@ component_getImplementationEnvironment(sal_Char const ** pEnvTypeName,
                        uno_Environment **)
 {
     *pEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
-//============================================================================
-//
-//  component_writeInfo
-//
-//============================================================================
-
-extern "C" sal_Bool SAL_CALL component_writeInfo(void *, void * pRegistryKey)
-{
-    return pRegistryKey &&
-
-    //////////////////////////////////////////////////////////////////////
-    // UUI Interaction Handler.
-    //////////////////////////////////////////////////////////////////////
-
-    writeInfo( pRegistryKey,
-            OUString::createFromAscii(
-                UUIInteractionHandler::m_aImplementationName ),
-            UUIInteractionHandler::getSupportedServiceNames_static() ) &&
-
-    //////////////////////////////////////////////////////////////////////
-    // UUI Interaction Request String Resolver.
-    //////////////////////////////////////////////////////////////////////
-
-    writeInfo( pRegistryKey,
-            OUString::createFromAscii(
-                UUIInteractionRequestStringResolver::m_aImplementationName ),
-            UUIInteractionRequestStringResolver::getSupportedServiceNames_static() ) &&
-
-    //////////////////////////////////////////////////////////////////////
-    // UUI Password Container Interaction Handler.
-    //////////////////////////////////////////////////////////////////////
-
-    writeInfo( pRegistryKey,
-            uui::PasswordContainerInteractionHandler::getImplementationName_Static(),
-            uui::PasswordContainerInteractionHandler::getSupportedServiceNames_Static() );
 }
 
 //============================================================================
