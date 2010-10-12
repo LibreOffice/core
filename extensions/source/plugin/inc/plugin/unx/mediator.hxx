@@ -31,7 +31,7 @@
 #include <stdarg.h>
 #include <tools/string.hxx>
 #include <tools/link.hxx>
-#include <vos/pipe.hxx>
+#include <osl/pipe.hxx>
 #include <vos/mutex.hxx>
 #include <osl/conditn.hxx>
 #include <osl/thread.hxx>

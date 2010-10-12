@@ -474,6 +474,7 @@
 #include "osl/module.hxx"
 #include "osl/mutex.hxx"
 #include "osl/nlsupport.h"
+#include "osl/pipe.hxx"
 #include "osl/process.h"
 #include "osl/security.hxx"
 #include "osl/thread.h"
@@ -540,7 +541,6 @@
 #include "vos/macros.hxx"
 #include "vos/module.hxx"
 #include "vos/mutex.hxx"
-#include "vos/pipe.hxx"
 #include "vos/ref.hxx"
 #include "vos/refernce.hxx"
 
