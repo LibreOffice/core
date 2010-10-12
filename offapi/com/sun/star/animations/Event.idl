@@ -57,7 +57,7 @@ struct Event
 
     /** an option repeat value. If the <member>Trigger</member> is
         <const>EventTrigger</const>, this is the number of repeats
-        after wich the event is initially raised.
+        after which the event is initially raised.
     */
     unsigned short Repeat;
 };

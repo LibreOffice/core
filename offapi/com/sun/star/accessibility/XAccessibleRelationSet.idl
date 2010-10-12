@@ -51,7 +51,7 @@ module com { module sun { module star { module accessibility {
     clean it up.  These methods are <member>add</member>,
     <member>addAll</member>, <member>clear</member>, and
     <member>remove</member>.  The other methods have been renamed to achieve
-    a geater conformance with the other accessibility interfaces.</p>
+    a greater conformance with the other accessibility interfaces.</p>
 
     @since OOo 1.1.2
 */
@@ -68,7 +68,7 @@ published interface XAccessibleRelationSet : ::com::sun::star::uno::XInterface
         the given index.
 
         @param nIndex
-            This index specifies the relatio to return.
+            This index specifies the relation to return.
 
         @return
             For a valid index, i.e. inside the range 0 to the number of

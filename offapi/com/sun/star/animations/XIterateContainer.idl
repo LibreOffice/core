@@ -45,7 +45,7 @@
 */
 interface XIterateContainer : XTimeContainer
 {
-    /** a target that contains iterateable contents, f.e. a paragraph.
+    /** a target that contains iterable contents, f.e. a paragraph.
         <br>
         See documentation of used animation engine for supported targets.
     */

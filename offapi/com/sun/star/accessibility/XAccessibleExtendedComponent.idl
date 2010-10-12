@@ -76,7 +76,7 @@ published interface XAccessibleExtendedComponent : XAccessibleComponent
     /** Returns the font of this object.
 
         @return
-            The returend reference to a font object is empty if a font is not
+            The returned reference to a font object is empty if a font is not
             supported by this object.
     */
     ::com::sun::star::awt::XFont getFont ();

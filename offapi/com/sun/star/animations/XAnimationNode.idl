@@ -51,7 +51,7 @@ interface XAnimationNode : ::com::sun::star::container::XChild
     */
     [readonly, attribute] short Type;
 
-    /** a sequnece of values that define the begining of this element
+    /** a sequence of values that define the beginning of this element
         <br>
         <member>Begin</member> is
             <ul>
@@ -65,7 +65,7 @@ interface XAnimationNode : ::com::sun::star::container::XChild
                 external event to the element.</li>
             <li><type>sequence&lt;any&gt;</type> a sequence of values described above if more than
                 one begin value is defined for this element.</li>
-            <li><void/> if no begin behaviour is defined for this element.</li>
+            <li><void/> if no begin behavior is defined for this element.</li>
             </ul>
 
         @see http://www.w3.org/TR/smil20/smil-timing.html#adef-begin
@@ -86,7 +86,7 @@ interface XAnimationNode : ::com::sun::star::container::XChild
     */
     [attribute] any Duration;
 
-    /** a sequnece of values that define the ending of this element
+    /** a sequence of values that define the ending of this element
         <br>
         <member>End</member> is
             <ul>
@@ -100,7 +100,7 @@ interface XAnimationNode : ::com::sun::star::container::XChild
                 external event to the element.</li>
             <li><type>sequence&lt;any&gt;</type> a sequence of values described above if more than
                 one begin value is defined for this element.</li>
-            <li><void/> if no end behaviour is defined for this element.</li>
+            <li><void/> if no end behavior is defined for this element.</li>
             </ul>
 
         @see http://www.w3.org/TR/smil20/smil-timing.html#adef-end
@@ -110,12 +110,12 @@ interface XAnimationNode : ::com::sun::star::container::XChild
     /** controls the implicit duration of time containers,
         as a function of the children.
         <br>
-        The endsync attribute is only valid for
+        The EndSync attribute is only valid for
         par and excl time container elements, and media elements with timed
         children (e.g. animate or area elements).
 
         <member>EndSync</member> is
-            eiter a <atom>short</atom> constant from <const>EndSync</const>,
+            either a <atom>short</atom> constant from <const>EndSync</const>,
             an interface reference to a child <type>XTimeContainer</type>
             or <void/>.
 
@@ -160,7 +160,7 @@ interface XAnimationNode : ::com::sun::star::container::XChild
     */
     [attribute] any RepeatDuration;
 
-    /** the attribute that specify the behaviour how an element
+    /** the attribute that specify the behavior how an element
         should be extended beyond the active duration by freezing the final
         state of the element.
         <br>
@@ -173,7 +173,7 @@ interface XAnimationNode : ::com::sun::star::container::XChild
     [attribute] short Fill;
 
     /** the default value for the fill behavior for this element and all
-        descendents.
+        descendants.
         <br>
         <member>FillDefault</member> is
             <ul>
@@ -190,7 +190,7 @@ interface XAnimationNode : ::com::sun::star::container::XChild
     */
     [attribute] short FillDefault;
 
-    /** defines the restart behaviour of this element.
+    /** defines the restart behavior of this element.
         <br>
         <member>Restart</member> is
             a <atom>short</atom> value from <const>AnimationRestart</const>.
@@ -200,7 +200,7 @@ interface XAnimationNode : ::com::sun::star::container::XChild
     */
     [attribute] short Restart;
 
-    /** defines the default restart behaviour for this element and all descendents.
+    /** defines the default restart behavior for this element and all descendants.
 
         @returns
             a value from <const>Restart</const>.

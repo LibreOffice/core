@@ -53,7 +53,7 @@ published interface XAccessibleImage : ::com::sun::star::uno::XInterface
         embedded into a document.)</p>
 
         @return
-            Returns a localized string that describes the images's function
+            Returns a localized string that describes the image's function
             or content.
     */
     string getAccessibleImageDescription ();

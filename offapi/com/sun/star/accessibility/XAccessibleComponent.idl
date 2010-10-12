@@ -72,7 +72,7 @@ module com { module sun { module star { module accessibility {
 
     <p>Coordinates used by the functions of this interface are specified in
     different coordinate systems.  Their scale is the same and is equal to
-    that of the screen coordiante system.  In other words all coordinates
+    that of the screen coordinate system.  In other words all coordinates
     are measured in pixel.  They differ in their respective origin:
     <ul><li>The screen coordinate system has its origin in the upper left
     corner of the current screen.  Used by the
@@ -113,7 +113,7 @@ published interface XAccessibleComponent : ::com::sun::star::uno::XInterface
             Coordinates of the point to test.  The origin of the coordinate
             system is the upper left corner of the object's bounding box as
             returned by the <method>getBounds</method>.  The scale of the
-            coordinate system is identical to that of the screen coordiante
+            coordinate system is identical to that of the screen coordinate
             system.
 
         @return
@@ -134,7 +134,7 @@ published interface XAccessibleComponent : ::com::sun::star::uno::XInterface
             child.  The origin of the coordinate system is the upper left
             corner of the object's bounding box as returned by the
             <method>getBounds</method>.  The scale of the coordinate
-            system is identical to that of the screen coordiante system.
+            system is identical to that of the screen coordinate system.
 
         @return
             If there is one child which is rendered so that its bounding box
@@ -159,7 +159,7 @@ published interface XAccessibleComponent : ::com::sun::star::uno::XInterface
             The coordinates of the returned rectangle are relative to this
             object's parent or relative to the screen on which this object
             is rendered if it has no parent.  If the object is not on any
-            screen the returnred rectangle is empty and located at position
+            screen the returned rectangle is empty and located at position
             (0,0).
     */
     ::com::sun::star::awt::Rectangle getBounds ();
@@ -174,7 +174,7 @@ published interface XAccessibleComponent : ::com::sun::star::uno::XInterface
             The coordinates of the returned position are relative to this
             object's parent or relative to the screen on which this object
             is rendered if it has no parent.  If the object is not on any
-            screen the returnred position is (0,0).
+            screen the returned position is (0,0).
     */
     ::com::sun::star::awt::Point getLocation ();
 
@@ -190,7 +190,7 @@ published interface XAccessibleComponent : ::com::sun::star::uno::XInterface
         @return
             The coordinates of the returned position are relative to the
             screen on which this object is rendered.  If the object is not
-            on any screen the returnred position is (0,0).
+            on any screen the returned position is (0,0).
     */
     ::com::sun::star::awt::Point getLocationOnScreen ();
 

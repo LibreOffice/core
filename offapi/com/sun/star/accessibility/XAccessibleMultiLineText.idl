@@ -73,7 +73,7 @@ interface XAccessibleMultiLineText
     long getLineNumberAtIndex([in] long nIndex)
         raises (::com::sun::star::lang::IndexOutOfBoundsException);
 
-    /** Retuns the text of the specified line.
+    /** Returns the text of the specified line.
 
         <p>Returns the substring of text that makes up the specified line
         number.</p>

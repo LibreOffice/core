@@ -154,7 +154,7 @@ published constants AccessibleEventId
     */
     const short SELECTION_CHANGED = 9;
 
-    /** A visibile data event indicates the change of the visual appearance
+    /** A visible data event indicates the change of the visual appearance
         of an accessible object.  This includes for example most of the
         attributes available over the <type>XAccessibleComponent</type> and
         <type>XAccessibleExtendedComponent</type> interfaces.  The
@@ -168,7 +168,7 @@ published constants AccessibleEventId
         <member>AccessibleEventObject::OldValue</member> and
         <member>AccessibleEventObject::NewValue</member> field contain the
         old and new value as a number.  Its exact type is implementation
-        dependant but has to be the same as is returned by the
+        dependent but has to be the same as is returned by the
         <member>XAccessibleValue::getCurrentValue</member> function.
     */
 
@@ -179,7 +179,7 @@ published constants AccessibleEventId
 
         <p>Not used: The <member>AccessibleEventObject::OldValue</member> and
         <member>AccessibleEventObject::NewValue</member> fields contain
-        refrences to the old and new predecessor.  Note that both references
+        references to the old and new predecessor.  Note that both references
         my be <NULL/> to indicate that a flow to the sending object has not
         existed or does not exist anymore.</p>
     */
@@ -190,7 +190,7 @@ published constants AccessibleEventId
 
         <p>Not used: The <member>AccessibleEventObject::OldValue</member> and
         <member>AccessibleEventObject::NewValue</member> fields contain
-        refrences to the old and new successor.  Note that both references
+        references to the old and new successor.  Note that both references
         my be <NULL/> to indicate that a flow from the sending object has not
         existed or does not exist anymore.</p>
     */
@@ -287,14 +287,14 @@ published constants AccessibleEventId
         fields remain empty.  In this case the whole text may have changed
         and the listener should refetch the text completely.</li> </ol>
 
-        <p>When broadcasting an event allways prefer the first three cases
+        <p>When broadcasting an event always prefer the first three cases
         to the last one.  Use it only as a last resort.</p>
 
         <p> Text ranges should be as small as possible but, of course,
         include all the text that is involved in a modification.  That means
-        that when two or more discontiguous text ranges are inserted,
+        that when two or more discontinuous text ranges are inserted,
         deleted, or otherwise modified the two fields of the event have to
-        cover all the effected text ranges as well as the text in
+        cover all the affected text ranges as well as the text in
         between.</p>
     */
     const short TEXT_CHANGED = 22;

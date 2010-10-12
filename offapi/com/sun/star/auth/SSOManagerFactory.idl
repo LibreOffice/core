@@ -35,13 +35,13 @@
 module com { module sun { module star { module auth {
 
 /** represents a starting point for Single Signon interactions.
-    <P>The Single Signon ( SSO ) apis provide UNO based access to underlying
-       SSO implementations ( e.g. Kerberos ). The aim of the SSO apis is to
+    <P>The Single Signon ( SSO ) APIs provide UNO based access to underlying
+       SSO implementations ( e.g. Kerberos ). The aim of the SSO APIs is to
        enable authentication ( possibly mutual ) between a client ( source or
        initiator ) and a network service ( target or acceptor ). This is
        achieved via. the creation and processing of security tokens sent
        between the two parties. The steps which should be followed to
-       successfully use the SSO apis are as follows:
+       successfully use the SSO APIs are as follows:
     <UL>
         <LI>Create an <type>XSSOManagerFactory</type> instance</LI>
         <LI>Use this factory to create/retrieve an <type>XSSOManager</type>

@@ -65,7 +65,7 @@ constants EventTrigger
     const short ON_MOUSE_ENTER = 7;
     const short ON_MOUSE_LEAVE = 8;
 
-    /** This event is raised when the user wants the presentation to go one step foreward.
+    /** This event is raised when the user wants the presentation to go one step forward.
     */
     const short ON_NEXT = 9;
 

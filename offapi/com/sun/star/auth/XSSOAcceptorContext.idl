@@ -40,7 +40,7 @@ module com { module sun { module star { module auth {
 
 /** represents an acceptor side security context.
     <P>This context may be used to authenticate a Single Signon initiator based
-       on a security token sent by the intiator and to generate a token to be
+       on a security token sent by the initiator and to generate a token to be
        sent back to the initiator so that it can authenticate the acceptor.
 
     @since OOo 1.1.2

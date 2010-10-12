@@ -32,9 +32,9 @@ module com { module sun { module star { module accessibility {
 
 /** Collection of roles.
 
-    <p>This collection of constans defines the set of possible roles of
+    <p>This collection of constants defines the set of possible roles of
     classes implementing the <type>XAccessible</type> interface according to
-    the java class javax.accessibility.AccessibleRole.  The role of an
+    the Java class javax.accessibility.AccessibleRole.  The role of an
     object describes its generic function like 'button', 'menu', or 'text'.
     You can obtain an object's role by calling the
     <member>getAccessibleRole</member> method of the
@@ -46,7 +46,7 @@ module com { module sun { module star { module accessibility {
     here.</p>
 
     <p>For some roles there exist two labels with the same value.  Please
-    use the one with the underscrores.  The other ones are somewhat
+    use the one with the underscores.  The other ones are somewhat
     deprecated and will be removed in the future. </p>
 
     @see XAccessibleContext
@@ -73,7 +73,7 @@ published constants AccessibleRole
 
     /** Object that can be drawn into and is used to trap events.
 
-        <p>See alse <const>FRAME</const>, <const>GLASS_PANE</const>, and
+        <p>See also <const>FRAME</const>, <const>GLASS_PANE</const>, and
         <const>LAYERED_PANE</const>.</p>
     */
     const short CANVAS = 3;
@@ -148,11 +148,11 @@ published constants AccessibleRole
     /** View of a document.
 
         <p>The view of an actual document.  Its content depends on the
-        documen type.</p>
+        document type.</p>
     */
     const short DOCUMENT = 13;
 
-    /** Embeded (OLE) object.
+    /** Embedded (OLE) object.
     */
     const short EMBEDDED_OBJECT = 14;
 
@@ -372,7 +372,7 @@ published constants AccessibleRole
     */
     const short PASSWORD_TEXT = 42;
 
-    /** Popup menu role.
+    /** Pop-up menu role.
 
         <p>A temporary window that is usually used to offer the user a list
         of choices, and then hides when the user selects one of those
@@ -431,7 +431,7 @@ published constants AccessibleRole
         <p>An object usually used to allow a user to incrementally view a
         large amount of data. Usually used only by a scroll pane.</p>
 
-        <p>Ssee also <const>SCROLL_PANE</const>.</p>
+        <p>See also <const>SCROLL_PANE</const>.</p>
     */
     const short SCROLL_BAR = 50;
 
@@ -539,7 +539,7 @@ published constants AccessibleRole
     /** Tool tip role.
 
         <p>An object that provides information about another object. The
-        accessibleDescription property of the tool tip is often displayed to
+        accessible Description property of the tool tip is often displayed to
         the user in a small "help bubble" when the user causes the mouse to
         hover over the object associated with the tool tip.</p>
     */

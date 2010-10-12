@@ -79,7 +79,7 @@ published interface XAccessibleHypertext
             This index specifies the hyperlink to return.
 
         @return
-            If the given index is valid, i.e. lies in the intervall from 0
+            If the given index is valid, i.e. lies in the interval from 0
             to the number of links minus one, a reference to the specified
             hyperlink object is returned.  If the index is invalid then an
             empty reference is returned.
@@ -97,7 +97,7 @@ published interface XAccessibleHypertext
         @param nCharIndex
             Index of the character for which to return the link index.  If
             the <type>XAccessibleText</type> interface is used to represent
-            the text containting the link, then the character index is only
+            the text containing the link, then the character index is only
             valid if it is greater than or equal to zero and lower then the
             number of characters in the text.  See that interface's
             documentation for more details.
