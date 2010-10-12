@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1417,3 +1418,5 @@ void UpdateHandler::createDialog()
     mxUpdDlg.set( xControl, uno::UNO_QUERY_THROW );
     mnLastCtrlState = -1;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

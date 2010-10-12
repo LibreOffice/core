@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -368,3 +369,5 @@ namespace accessibility
         return Rectangle(Point(0,0),Point(0,0));//To Do - return headercell rectangle
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

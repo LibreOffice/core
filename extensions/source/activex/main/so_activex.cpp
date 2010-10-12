@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 // so_activex.cpp : Implementation of DLL Exports.
 
 
@@ -688,3 +689,4 @@ STDAPI DllUnregisterServer( void )
     return DllUnregisterServerNative( 63, TRUE, bX64 );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

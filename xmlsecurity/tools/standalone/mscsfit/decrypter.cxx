@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /** -- C++ Source File -- **/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
@@ -244,3 +245,4 @@ done:
     return 0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

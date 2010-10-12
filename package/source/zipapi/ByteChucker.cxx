@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -110,3 +111,5 @@ ByteChucker& ByteChucker::operator << (sal_uInt32 nuInt32)
     WriteBytes( a4Sequence );
     return *this;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
