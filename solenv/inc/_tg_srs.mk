@@ -1,18 +1,6 @@
 # unroll begin
 
 .IF "$(SRS1NAME)"!=""
-.IF "$(BUILDHIDS)"!=""
-HID1FILES=$(foreach,i,$(SRC1FILES:f) $(SRS)/$(i:s/.src/.hid/))
-HIDSRS1PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(SRS))/$(SRS1NAME)_srs.hid
-$(HIDSRS1PARTICLE) : $(HID1FILES)
-    @echo "Making:   " $(@:f)
-    @-$(RM) $@
-    $(COMMAND_ECHO)$(TYPE) $(mktmp  $(subst,/,/ $(HID1FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
-    @$(RENAME) $@.$(ROUT).tmp $@
-
-ALLTAR : $(HIDSRS1PARTICLE)
-
-.ENDIF # "$(BUILDHIDS)"!=""
 
 $(MISC)/$(TARGET).$(SRS1NAME).dprr: $(LOCALIZE_ME_DEST)
 

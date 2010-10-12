@@ -29,18 +29,6 @@
 # unroll begin
 
 .IF "$(SRS$(TNR)NAME)"!=""
-.IF "$(BUILDHIDS)"!=""
-HID$(TNR)FILES=$(foreach,i,$(SRC$(TNR)FILES:f) $(SRS)/$(i:s/.src/.hid/))
-HIDSRS$(TNR)PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(SRS))/$(SRS$(TNR)NAME)_srs.hid
-$(HIDSRS$(TNR)PARTICLE) : $(HID$(TNR)FILES)
-    @echo "Making:   " $(@:f)
-    @-$(RM) $@
-    $(COMMAND_ECHO)$(TYPE) $(mktmp  $(subst,/,/ $(HID$(TNR)FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
-    @$(RENAME) $@.$(ROUT).tmp $@
-
-ALLTAR : $(HIDSRS$(TNR)PARTICLE)
-
-.ENDIF # "$(BUILDHIDS)"!=""
 
 $(MISC)/$(TARGET).$(SRS$(TNR)NAME).dprr: $(LOCALIZE_ME_DEST)
 
