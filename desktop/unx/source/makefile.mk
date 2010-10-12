@@ -41,6 +41,8 @@ dummy:
 
 STDLIB=
 
+CFLAGS+=$(LIBPNG_CFLAGS)
+
 OBJFILES= \
     $(OBJ)$/splashx.obj \
     $(OBJ)$/start.obj
@@ -50,7 +52,7 @@ APP1RPATH  = BRAND
 APP1OBJS   = $(OBJFILES)
 APP1LIBSALCPPRT=
 APP1CODETYPE = C
-APP1STDLIBS = $(SALLIB) -lX11 `pkg-config --libs libpng`
+APP1STDLIBS = $(SALLIB) -lX11 $(LIBPNG_LIBS)
 .IF "$(OS)"=="SOLARIS"
 APP1STDLIBS+= -lsocket
 .ENDIF
