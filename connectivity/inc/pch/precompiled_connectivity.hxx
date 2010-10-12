@@ -308,6 +308,8 @@
 #include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.hxx"
 
+#include "salhelper/timer.hxx"
+
 #include "sys/types.h"
 
 #include "tools/diagnose_ex.h"
@@ -328,7 +330,6 @@
 #include "vos/ref.hxx"
 #include "vos/ref.hxx"
 #include "vos/refernce.hxx"
-#include "vos/timer.hxx"
 //---MARKER---
 
 #endif

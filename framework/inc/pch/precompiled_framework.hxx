@@ -371,6 +371,7 @@
 #include "sal/main.h"
 
 #include "salhelper/singletonref.hxx"
+#include "salhelper/timer.hxx"
 
 #include "sot/exchange.hxx"
 #include "sot/filelist.hxx"
@@ -488,7 +489,6 @@
 #include "vos/process.hxx"
 #include "vos/ref.hxx"
 #include "vos/thread.hxx"
-#include "vos/timer.hxx"
 
 //---MARKER---
 #endif

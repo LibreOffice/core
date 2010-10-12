@@ -37,7 +37,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/stl_types.hxx>
 #include <osl/mutex.hxx>
-#include <vos/timer.hxx>
+#include <salhelper/timer.hxx>
 #include <vos/ref.hxx>
 #include <rtl/digest.h>
 
@@ -47,12 +47,12 @@ namespace connectivity
     //==========================================================================
     /// OPoolTimer - Invalidates the connection pool
     //==========================================================================
-    class OPoolTimer : public ::vos::OTimer
+    class OPoolTimer : public ::salhelper::Timer
     {
         OConnectionPool* m_pPool;
     public:
-        OPoolTimer(OConnectionPool* _pPool,const ::vos::TTimeValue& _Time)
-            : ::vos::OTimer(_Time)
+        OPoolTimer(OConnectionPool* _pPool,const ::salhelper::TTimeValue& _Time)
+            : ::salhelper::Timer(_Time)
             ,m_pPool(_pPool)
         {}
     protected:

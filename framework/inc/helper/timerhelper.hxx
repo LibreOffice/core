@@ -29,7 +29,7 @@
 #define __FRAMEWORK_HELPER_TIMERHELPER_HXX_
 
 #include <threadhelp/threadhelpbase.hxx>
-#include <vos/timer.hxx>
+#include <salhelper/timer.hxx>
 #include <osl/mutex.hxx>
 
 //........................................................................

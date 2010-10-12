@@ -95,7 +95,7 @@ OConnectionPool::OConnectionPool(const Reference< XDriver >& _xDriver,
     OPoolCollection::getNodeValue(getTimeoutNodeName(),m_xDriverNode) >>= m_nALiveCount;
     calculateTimeOuts();
 
-    m_xInvalidator = new OPoolTimer(this,::vos::TTimeValue(m_nTimeOut,0));
+    m_xInvalidator = new OPoolTimer(this,::salhelper::TTimeValue(m_nTimeOut,0));
     m_xInvalidator->start();
 }
 // -----------------------------------------------------------------------------

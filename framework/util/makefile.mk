@@ -354,6 +354,7 @@ SHL4STDLIBS=    \
                 $(CPPULIB)                          \
                 $(SALLIB)                           \
                 $(UCBHELPERLIB)                     \
+                $(SALHELPERLIB)                     \
                 $(I18NISOLANGLIB)
 
 SHL4DEF=        $(MISC)$/$(SHL4TARGET).def
