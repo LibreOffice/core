@@ -32,6 +32,10 @@
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 
+#include <boost/shared_ptr.hpp>
+
+class ScDocOptions;
+
 class ScTpCompatOptions : public SfxTabPage
 {
 public:
@@ -50,6 +54,8 @@ private:
     FixedText maFtKeyBindings;
     ListBox   maLbKeyBindings;
 
+    ::boost::shared_ptr<ScDocOptions> mpOldOptions;
+    ::boost::shared_ptr<ScDocOptions> mpNewOptions;
 };
 
 #endif

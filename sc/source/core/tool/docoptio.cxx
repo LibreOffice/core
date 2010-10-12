@@ -91,6 +91,7 @@ ScDocOptions::ScDocOptions( const ScDocOptions& rCpy )
         :   fIterEps( rCpy.fIterEps ),
             nIterCount( rCpy.nIterCount ),
             nPrecStandardFormat( rCpy.nPrecStandardFormat ),
+            eKeyBindingType( rCpy.eKeyBindingType ),
             nDay( rCpy.nDay ),
             nMonth( rCpy.nMonth ),
             nYear( rCpy.nYear ),
@@ -126,6 +127,7 @@ void ScDocOptions::ResetDocOptions()
     nIterCount          = 100;
     fIterEps            = 1.0E-3;
     nPrecStandardFormat = SvNumberFormatter::UNLIMITED_PRECISION;
+    eKeyBindingType     = KEY_DEFAULT;
     nDay                = 30;
     nMonth              = 12;
     nYear               = 1899;
@@ -283,6 +285,9 @@ SfxPoolItem* __EXPORT ScTpCalcItem::Clone( SfxItemPool * ) const
 #define SCDOCLAYOUTOPT_TABSTOP      0
 #define SCDOCLAYOUTOPT_COUNT        1
 
+#define CFGPATH_COMPAT      "Office.Calc/Compatibility"
+#define SCCOMPATOPT_KEY_BINDING     0
+#define SCCOMPATOPT_COUNT           1
 
 Sequence<OUString> ScDocCfg::GetCalcPropertyNames()
 {
@@ -345,10 +350,25 @@ Sequence<OUString> ScDocCfg::GetLayoutPropertyNames()
     return aNames;
 }
 
+Sequence<OUString> ScDocCfg::GetCompatPropertyNames()
+{
+    static const char* aPropNames[] =
+    {
+        "KeyBindings/BaseGroup"             // SCCOMPATOPT_KEY_BINDING
+    };
+    Sequence<OUString> aNames(SCCOMPATOPT_COUNT);
+    OUString* pNames = aNames.getArray();
+    for (int i = 0; i < SCCOMPATOPT_COUNT; ++i)
+        pNames[i] = OUString::createFromAscii(aPropNames[i]);
+
+    return aNames;
+}
+
 ScDocCfg::ScDocCfg() :
     aCalcItem( OUString::createFromAscii( CFGPATH_CALC ) ),
     aFormulaItem(OUString::createFromAscii(CFGPATH_FORMULA)),
-    aLayoutItem( OUString::createFromAscii( CFGPATH_DOCLAYOUT ) )
+    aLayoutItem(OUString::createFromAscii(CFGPATH_DOCLAYOUT)),
+    aCompatItem(OUString::createFromAscii(CFGPATH_COMPAT))
 {
     sal_Int32 nIntVal = 0;
     double fDoubleVal = 0;
@@ -513,6 +533,33 @@ ScDocCfg::ScDocCfg() :
         }
     }
     aLayoutItem.SetCommitLink( LINK( this, ScDocCfg, LayoutCommitHdl ) );
+
+    aNames = GetCompatPropertyNames();
+    aValues = aCompatItem.GetProperties(aNames);
+    aCompatItem.EnableNotification(aNames);
+    pValues = aValues.getConstArray();
+    if (aValues.getLength() == aNames.getLength())
+    {
+        for (int nProp = 0; nProp < aNames.getLength(); ++nProp)
+        {
+            switch (nProp)
+            {
+                case SCCOMPATOPT_KEY_BINDING:
+                {
+                    fprintf(stdout, "ScDocCfg::ScDocCfg:   SCCOMPATOPT_KEY_BINDING\n");
+                    nIntVal = 0;
+                    if (pValues[nProp] >>= nIntVal)
+                        fprintf(stdout, "ScDocCfg::ScDocCfg:   key binding = %ld\n", nIntVal);
+                    else
+                        fprintf(stdout, "ScDocCfg::ScDocCfg:   key binding failed to load\n");
+
+                    SetKeyBindingType(static_cast<ScDocOptions::KeyBindingType>(nIntVal));
+                }
+                break;
+            }
+        }
+    }
+    aCompatItem.SetCommitLink( LINK(this, ScDocCfg, CompatCommitHdl) );
 }
 
 IMPL_LINK( ScDocCfg, CalcCommitHdl, void *, EMPTYARG )
@@ -637,6 +684,27 @@ IMPL_LINK( ScDocCfg, LayoutCommitHdl, void *, EMPTYARG )
     return 0;
 }
 
+IMPL_LINK( ScDocCfg, CompatCommitHdl, void *, EMPTYARG )
+{
+    Sequence<OUString> aNames = GetCompatPropertyNames();
+    Sequence<Any> aValues(aNames.getLength());
+    Any* pValues = aValues.getArray();
+
+    for (int nProp = 0; nProp < aNames.getLength(); ++nProp)
+    {
+        switch(nProp)
+        {
+            case SCCOMPATOPT_KEY_BINDING:
+            {
+                fprintf(stdout, "IMPL_LINK:   pushing key binding type (%d)\n", GetKeyBindingType());
+                pValues[nProp] <<= static_cast<sal_Int32>(GetKeyBindingType());
+            }
+            break;
+        }
+    }
+    aCompatItem.PutProperties(aNames, aValues);
+    return 0;
+}
 
 void ScDocCfg::SetOptions( const ScDocOptions& rNew )
 {
@@ -645,6 +713,7 @@ void ScDocCfg::SetOptions( const ScDocOptions& rNew )
     aCalcItem.SetModified();
     aFormulaItem.SetModified();
     aLayoutItem.SetModified();
+    aCompatItem.SetModified();
 }
 
 

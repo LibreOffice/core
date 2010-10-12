@@ -38,9 +38,15 @@
 
 class SC_DLLPUBLIC ScDocOptions
 {
+public:
+    // values must correspond with integer values stored in the configuration
+    enum KeyBindingType { KEY_DEFAULT = 0, KEY_OOO_LEGACY = 1 };
+
+private:
     double fIterEps;                // Epsilon-Wert dazu
     USHORT nIterCount;              // Anzahl
     sal_uInt16 nPrecStandardFormat; // precision for standard format
+    KeyBindingType eKeyBindingType; // key binding type: Default (0), OOo legacy (1)
     USHORT nDay;                    // Nulldatum:
     USHORT nMonth;
     USHORT nYear;
@@ -88,7 +94,6 @@ public:
     void   SetTabDistance( USHORT nTabDist ) {nTabDistance = nTabDist;}
 
     void        ResetDocOptions();
-    inline void     CopyTo(ScDocOptions& rOpt);
 
     inline const ScDocOptions&  operator=( const ScDocOptions& rOpt );
     inline int                  operator==( const ScDocOptions& rOpt ) const;
@@ -96,6 +101,9 @@ public:
 
     sal_uInt16  GetStdPrecision() const { return nPrecStandardFormat; }
     void        SetStdPrecision( sal_uInt16 n ) { nPrecStandardFormat = n; }
+
+    KeyBindingType GetKeyBindingType() const { return eKeyBindingType; }
+    void        SetKeyBindingType( KeyBindingType e ) { eKeyBindingType = e; }
 
     BOOL    IsCalcAsShown() const       { return bCalcAsShown; }
     void    SetCalcAsShown( BOOL bVal ) { bCalcAsShown = bVal; }
@@ -125,31 +133,6 @@ public:
     static const LocaleDataWrapper& GetLocaleDataWrapper();
 };
 
-
-inline void ScDocOptions::CopyTo(ScDocOptions& rOpt)
-{
-    rOpt.bIsIgnoreCase          = bIsIgnoreCase;
-    rOpt.bIsIter                = bIsIter;
-    rOpt.nIterCount             = nIterCount;
-    rOpt.fIterEps               = fIterEps;
-    rOpt.nPrecStandardFormat    = nPrecStandardFormat;
-    rOpt.nDay                   = nDay;
-    rOpt.nMonth                 = nMonth;
-    rOpt.nYear2000              = nYear2000;
-    rOpt.nYear                  = nYear;
-    rOpt.nTabDistance           = nTabDistance;
-    rOpt.bCalcAsShown           = bCalcAsShown;
-    rOpt.bMatchWholeCell        = bMatchWholeCell;
-    rOpt.bDoAutoSpell           = bDoAutoSpell;
-    rOpt.bLookUpColRowNames     = bLookUpColRowNames;
-    rOpt.bFormulaRegexEnabled   = bFormulaRegexEnabled;
-    rOpt.bUseEnglishFuncName    = bUseEnglishFuncName;
-    rOpt.eFormulaGrammar        = eFormulaGrammar;
-    rOpt.aFormulaSepArg         = aFormulaSepArg;
-    rOpt.aFormulaSepArrayRow    = aFormulaSepArrayRow;
-    rOpt.aFormulaSepArrayCol    = aFormulaSepArrayCol;
-}
-
 inline const ScDocOptions& ScDocOptions::operator=( const ScDocOptions& rCpy )
 {
     bIsIgnoreCase       = rCpy.bIsIgnoreCase;
@@ -157,6 +140,7 @@ inline const ScDocOptions& ScDocOptions::operator=( const ScDocOptions& rCpy )
     nIterCount          = rCpy.nIterCount;
     fIterEps            = rCpy.fIterEps;
     nPrecStandardFormat = rCpy.nPrecStandardFormat;
+    eKeyBindingType     = rCpy.eKeyBindingType;
     nDay                = rCpy.nDay;
     nMonth              = rCpy.nMonth;
     nYear               = rCpy.nYear;
@@ -184,6 +168,7 @@ inline int ScDocOptions::operator==( const ScDocOptions& rOpt ) const
             &&  rOpt.nIterCount             == nIterCount
             &&  rOpt.fIterEps               == fIterEps
             &&  rOpt.nPrecStandardFormat    == nPrecStandardFormat
+            &&  rOpt.eKeyBindingType        == eKeyBindingType
             &&  rOpt.nDay                   == nDay
             &&  rOpt.nMonth                 == nMonth
             &&  rOpt.nYear                  == nYear
@@ -239,14 +224,17 @@ class ScDocCfg : public ScDocOptions
     ScLinkConfigItem    aCalcItem;
     ScLinkConfigItem    aFormulaItem;
     ScLinkConfigItem    aLayoutItem;
+    ScLinkConfigItem    aCompatItem;
 
     DECL_LINK( CalcCommitHdl, void* );
     DECL_LINK( FormulaCommitHdl, void* );
     DECL_LINK( LayoutCommitHdl, void* );
+    DECL_LINK( CompatCommitHdl, void* );
 
     com::sun::star::uno::Sequence<rtl::OUString> GetCalcPropertyNames();
     com::sun::star::uno::Sequence<rtl::OUString> GetFormulaPropertyNames();
     com::sun::star::uno::Sequence<rtl::OUString> GetLayoutPropertyNames();
+    com::sun::star::uno::Sequence<rtl::OUString> GetCompatPropertyNames();
 
 public:
             ScDocCfg();

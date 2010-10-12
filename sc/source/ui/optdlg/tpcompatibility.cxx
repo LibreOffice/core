@@ -33,6 +33,7 @@
 #include "tpcompatibility.hxx"
 #include "optdlg.hrc"
 #include "scresid.hxx"
+#include "docoptio.hxx"
 
 ScTpCompatOptions::ScTpCompatOptions(Window *pParent, const SfxItemSet &rCoreAttrs) :
     SfxTabPage(pParent, ScResId(RID_SCPAGE_COMPATIBILITY), rCoreAttrs),
@@ -41,6 +42,11 @@ ScTpCompatOptions::ScTpCompatOptions(Window *pParent, const SfxItemSet &rCoreAtt
     maLbKeyBindings(this, ScResId(LB_KEY_BINDINGS))
 {
     FreeResource();
+
+    const ScTpCalcItem& rItem = static_cast<const ScTpCalcItem&>(
+        rCoreAttrs.Get(GetWhich(SID_SCDOCOPTIONS)));
+    mpOldOptions.reset(new ScDocOptions(rItem.GetDocOptions()));
+    mpNewOptions.reset(new ScDocOptions(rItem.GetDocOptions()));
 }
 
 ScTpCompatOptions::~ScTpCompatOptions()
@@ -54,11 +60,43 @@ SfxTabPage* ScTpCompatOptions::Create(Window *pParent, const SfxItemSet &rCoreAt
 
 BOOL ScTpCompatOptions::FillItemSet(SfxItemSet &rCoreAttrs)
 {
-    return false;
+    ScDocOptions::KeyBindingType eKeyB = ScDocOptions::KEY_DEFAULT;
+    switch (maLbKeyBindings.GetSelectEntryPos())
+    {
+        case 0:
+            eKeyB = ScDocOptions::KEY_DEFAULT;
+        break;
+        case 1:
+            eKeyB = ScDocOptions::KEY_OOO_LEGACY;
+        break;
+        default:
+            ;
+    }
+    mpNewOptions->SetKeyBindingType(eKeyB);
+
+    if (*mpNewOptions != *mpOldOptions)
+    {
+        rCoreAttrs.Put(ScTpCalcItem(GetWhich(SID_SCDOCOPTIONS), *mpNewOptions));
+        return true;
+    }
+    else
+        return false;
 }
 
 void ScTpCompatOptions::Reset(const SfxItemSet &rCoreAttrs)
 {
+    ScDocOptions::KeyBindingType eKeyB = mpOldOptions->GetKeyBindingType();
+    switch (eKeyB)
+    {
+        case ScDocOptions::KEY_DEFAULT:
+            maLbKeyBindings.SelectEntryPos(0);
+        break;
+        case ScDocOptions::KEY_OOO_LEGACY:
+            maLbKeyBindings.SelectEntryPos(1);
+        break;
+        default:
+            ;
+    }
 }
 
 int ScTpCompatOptions::DeactivatePage(SfxItemSet* /*pSet*/)
