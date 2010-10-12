@@ -2209,7 +2209,10 @@ WW8FlySet::WW8FlySet(SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
         Put(SvxULSpaceItem(pFS->nUpMgn, pFS->nLoMgn, RES_UL_SPACE));
 
     //we no longer need to hack around the header/footer problems
-    Put(SwFmtSurround(pFS->eSurround));
+    SwFmtSurround aSurround(pFS->eSurround);
+    if ( pFS->eSurround == SURROUND_IDEAL )
+        aSurround.SetAnchorOnly( TRUE );
+    Put( aSurround );
 
     short aSizeArray[5]={0};
     rReader.SetFlyBordersShadow(*this,(const WW8_BRC*)pFW->brc,&aSizeArray[0]);
