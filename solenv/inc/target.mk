@@ -1008,17 +1008,6 @@ TARGETDPJ=$(MISC)/$(TARGET).dpj
 .ENDIF			# "$(L10N_framework)"==""
 .ENDIF
 
-.IF "$(no_hids)$(NO_HIDS)"==""
-BUILDHIDS:=TRUE
-.IF "$(GEN_HID_OTHER)"!=""
-PRJHIDOTHERTARGET=$(SRS)/hidother.hid
-COMMONPRJHIDOTHERTARGET=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC)/$(TARGET)_othr.hid)
-.ENDIF
-.IF "$(GEN_HID2)"!=""
-PRJHID2TARGET=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))/hid.lst
-.ENDIF
-.ENDIF			# "$(no_hids)$(NO_HIDS)"==""
-
 .IF "$(make_srs_deps)"==""
 .IF "$(SRCFILES)" != "" || "$(SRC1FILES)" != "" || "$(SRC2FILES)" != ""
 DPRTARGET= $(MISC)/$(TARGET).dpr
