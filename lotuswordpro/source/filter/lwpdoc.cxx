@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  The Contents of this file are made available subject to the terms of
@@ -828,3 +829,5 @@ void LwpDocSock::Parse(IXFStream* pOutputStream)
     if(pDoc)
         pDoc->Parse(pOutputStream);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

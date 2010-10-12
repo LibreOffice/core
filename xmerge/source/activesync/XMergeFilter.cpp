@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 // XMergeFilter.cpp: implementation of the CXMergeFilter class.
 //
 //////////////////////////////////////////////////////////////////////
@@ -493,3 +494,5 @@ TCHAR* CXMergeFilter::GetXMergeClassPath()
     // Return the data
     return _strdup(clsPath.c_str());
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

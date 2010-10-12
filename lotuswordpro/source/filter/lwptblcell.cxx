@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  The Contents of this file are made available subject to the terms of
@@ -250,3 +251,5 @@ void LwpRowColumnQualifier::QuickRead(LwpObjectStream *pStrm)
     // written as lushort for future flags
     cFlags = (sal_uInt8)pStrm->QuickReaduInt16();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

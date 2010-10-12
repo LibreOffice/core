@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* SectionStyle: Stores (and writes) section-based information (e.g.: a column
  * break needs a new section) that is needed at the head of an OO document and
  * is referenced throughout the entire document
@@ -171,3 +172,4 @@ void PageSpan::_writeHeaderFooter(const char *headerFooterTagName,
     headerFooterClose.write(pHandler);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

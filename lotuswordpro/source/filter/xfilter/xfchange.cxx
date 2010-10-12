@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  The Contents of this file are made available subject to the terms of
@@ -161,3 +162,5 @@ void XFChangeEnd::ToXml(IXFStream *pStrm)
     pStrm->StartElement( A2OUSTR("text:change-end") );
     pStrm->EndElement( A2OUSTR("text:change-end") );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

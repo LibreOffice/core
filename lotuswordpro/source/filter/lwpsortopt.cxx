@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  The Contents of this file are made available subject to the terms of
@@ -103,3 +104,5 @@ sal_uInt16 LwpSortOption::DiskSize()
     sal_uInt16 keysize = 4 * sizeof(sal_uInt16);
     return (3* keysize + (2 * sizeof(sal_uInt16)) + sizeof(sal_uInt8) + sizeof(sal_uInt16));
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

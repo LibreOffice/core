@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  The Contents of this file are made available subject to the terms of
@@ -81,3 +82,5 @@ sal_uInt32 LwpFileHeader::Read(LwpSvStream *pStrm)
         len += pStrm->Read(&m_nRootIndexOffset, sizeof(m_nRootIndexOffset));
     return(len);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

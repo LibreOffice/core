@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* MSWorksCollector: Collects sections and runs of text from a
  * wordperfect file (and styles to go along with them) and writes them
  * to a Writer target document
@@ -46,3 +47,5 @@ bool MSWorksCollector::parseSourceDocument(WPSInputStream &input)
 
     return true;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

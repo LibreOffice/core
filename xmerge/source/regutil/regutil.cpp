@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * Simple Application which calls the DllRegisterServer or DllUnregisterServer functions
  * of the XMerge ActiveSync plugin.
@@ -100,3 +101,4 @@ int main(int argc, char* argv[])
 
     return 0;
 }
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

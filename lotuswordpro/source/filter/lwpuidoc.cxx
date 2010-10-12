@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  The Contents of this file are made available subject to the terms of
@@ -137,3 +138,5 @@ void LwpMergeOptions::Read(LwpObjectStream *pStrm)
     pStrm->QuickRead(&m_nLastActionFlag, sizeof(m_nLastActionFlag));
     pStrm->SkipExtra();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

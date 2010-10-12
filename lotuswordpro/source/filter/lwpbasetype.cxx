@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  The Contents of this file are made available subject to the terms of
@@ -90,3 +91,5 @@ void LwpPoint::Reset()
     m_nX=0L;
     m_nY=0L;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

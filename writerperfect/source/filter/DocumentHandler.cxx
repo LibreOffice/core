@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * Copyright (C) 2004 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2004 Net Integration Technologies (http://www.net-itech.com)
@@ -79,3 +80,5 @@ void DocumentHandler::characters(const WPXString &sCharacters)
         OUString sCharU16(sCharacters.cstr(), strlen(sCharacters.cstr()), RTL_TEXTENCODING_UTF8);
         mxHandler->characters(sCharU16);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

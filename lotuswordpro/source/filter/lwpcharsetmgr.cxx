@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  The Contents of this file are made available subject to the terms of
@@ -117,3 +118,5 @@ rtl_TextEncoding LwpCharSetMgr::GetTextCharEncoding()
 {
     return RTL_TEXTENCODING_MS_1252;//here should be a default value,1252 or get from platform,  1-18
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

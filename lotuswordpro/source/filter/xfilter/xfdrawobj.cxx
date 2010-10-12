@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  The Contents of this file are made available subject to the terms of
@@ -132,3 +133,4 @@ void XFDrawObject::ToXml(IXFStream *pStrm)
     if( strTransform.getLength() > 0 )
         pAttrList->AddAttribute( A2OUSTR("draw:transform"), strTransform );
 }
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

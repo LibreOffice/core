@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* genericfilter: mostly generic code for registering the filter
  *
  * Portions of this code Copyright 2000 by Sun Microsystems, Inc.
@@ -96,3 +97,5 @@ void * SAL_CALL component_getFactory(
     return pRet;
 }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

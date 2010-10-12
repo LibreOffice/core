@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  The Contents of this file are made available subject to the terms of
@@ -570,3 +571,5 @@ void LwpRubyMarker::Read()
     m_objLayout.ReadIndexed(m_pObjStrm);
     m_pObjStrm->SkipExtra();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

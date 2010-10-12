@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  The Contents of this file are made available subject to the terms of
@@ -106,3 +107,5 @@ void LwpAtomHolder::ReadPathAtom(LwpObjectStream *pStrm)
     // TODO:  Read the data. Now just skip it. The method to skip is same as above.
     Skip(pStrm);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

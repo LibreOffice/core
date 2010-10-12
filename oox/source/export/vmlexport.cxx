@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -835,3 +836,5 @@ void VMLExport::EndShape( sal_Int32 nShapeElement )
         m_pSerializer->endElementNS( XML_v, nShapeElement );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* WPGImportFilter: Sets up the filter, and calls OdgExporter
  * to do the actual filtering
  *
@@ -300,3 +301,5 @@ Sequence< OUString > SAL_CALL WPGImportFilter::getSupportedServiceNames(  )
 #endif
     return WPGImportFilter_getSupportedServiceNames();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

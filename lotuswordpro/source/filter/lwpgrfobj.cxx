@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  The Contents of this file are made available subject to the terms of
@@ -839,3 +840,5 @@ void LwpGraphicObject::GetGrafOrgSize(double & rWidth, double & rHeight)
     rWidth = (double)m_Cache.Width/TWIPS_PER_CM;
     rHeight = (double)m_Cache.Height/TWIPS_PER_CM;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

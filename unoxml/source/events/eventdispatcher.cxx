@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include "eventdispatcher.hxx"
 #include "event.hxx"
 #include "mutationevent.hxx"
@@ -196,3 +197,5 @@ namespace DOM { namespace events {
         return sal_True;
     }
 }}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

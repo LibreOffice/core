@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include "PageBordersHandler.hxx"
 
 #include <ooxml/resourceids.hxx>
@@ -119,3 +120,5 @@ void PageBordersHandler::SetBorders( SectionPropertyMap* pSectContext )
 }
 
 } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

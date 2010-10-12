@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include <osl/diagnose.h>
 #include <rtl/tencinfo.h>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -398,3 +399,5 @@ Sequence< OUString > SAL_CALL LotusWordProImportFilter::getSupportedServiceNames
 {
     return LotusWordProImportFilter_getSupportedServiceNames();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

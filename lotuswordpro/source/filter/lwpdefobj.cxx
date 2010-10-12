@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  The Contents of this file are made available subject to the terms of
@@ -86,3 +87,5 @@ void LwpDefaultObject::Read()
     m_DataBuffer = new sal_uInt8[m_ObjHdr.GetSize()];
     m_pObjStrm->QuickRead(m_DataBuffer, m_ObjHdr.GetSize());
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

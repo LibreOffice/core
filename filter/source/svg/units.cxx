@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *    OpenOffice.org - a multi-platform office productivity suite
@@ -114,3 +115,5 @@ double convLength( const rtl::OUString& sValue, const State& rState, char dir )
 }
 
 } // namespace svgi
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

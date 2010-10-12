@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  The Contents of this file are made available subject to the terms of
@@ -89,3 +90,5 @@ UtBool CBenPropertyName::IsPropertyName()
 UtBool CBenTypeName::IsTypeName()
 { return UT_TRUE; }
 } // end namespace OpenStormBento
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

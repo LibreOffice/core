@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  The Contents of this file are made available subject to the terms of
@@ -358,3 +359,5 @@ void    XFBorders::ToXml(IXFStream *pStrm)
         pAttrList->AddAttribute( A2OUSTR("fo:border-bottom"), A2OUSTR("none") );
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
