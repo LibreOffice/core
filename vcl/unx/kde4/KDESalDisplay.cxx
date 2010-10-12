@@ -30,9 +30,15 @@
 
 #include "KDEXLib.hxx"
 
+#include <assert.h>
+
+SalKDEDisplay* SalKDEDisplay::selfptr = NULL;
+
 SalKDEDisplay::SalKDEDisplay( Display* pDisp )
     : SalX11Display( pDisp )
 {
+    assert( selfptr == NULL );
+    selfptr = this;
 }
 
 SalKDEDisplay::~SalKDEDisplay()
@@ -41,6 +47,7 @@ SalKDEDisplay::~SalKDEDisplay()
     static_cast<KDEXLib*>(GetXLib())->doStartup();
     // clean up own members
     doDestruct();
+    selfptr = NULL;
     // prevent SalDisplay from closing KApplication's display
     pDisp_ = NULL;
 }

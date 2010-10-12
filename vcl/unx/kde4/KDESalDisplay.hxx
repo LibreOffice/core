@@ -34,7 +34,15 @@ class SalKDEDisplay : public SalX11Display
 {
     public:
         SalKDEDisplay( Display* pDisp );
-            virtual ~SalKDEDisplay();
+        virtual ~SalKDEDisplay();
+        static SalKDEDisplay* self();
+    private:
+        static SalKDEDisplay* selfptr;
 };
+
+inline SalKDEDisplay* SalKDEDisplay::self()
+{
+    return selfptr;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

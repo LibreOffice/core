@@ -36,8 +36,6 @@
 
 #undef Region
 
-class SalKDEDisplay;
-
 /* #i59042# override KApplications method for session management
  * since it will interfere badly with our own.
  */
@@ -49,8 +47,6 @@ class VCLKDEApplication : public KApplication
         virtual void commitData(QSessionManager&) {};
 
         virtual bool x11EventFilter(XEvent* event);
-
-        SalKDEDisplay* disp;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
