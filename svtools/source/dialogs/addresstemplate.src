@@ -125,7 +125,6 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         };  \
         ListBox LB_FIELD_BASE + row * 2 + column    \
         {   \
-            HelpID = "svtools:ListBox:DLG_ADDRESSBOOKSOURCE:LB_FIELD_BASE";
             SVLook = TRUE;  \
             Pos = MAP_APPFONT ( 89 + column * 134, RSC_SP_CTRL_GROUP_Y + row * FIELD_ROW_HEIGHT ) ;  \
             Size = MAP_APPFONT ( 42 , 14 ) ;    \
