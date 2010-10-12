@@ -470,7 +470,7 @@ AquaSalInstance::AquaSalInstance()
     mpSalYieldMutex = new SalYieldMutex;
     mpSalYieldMutex->acquire();
     ::tools::SolarMutex::SetSolarMutex( mpSalYieldMutex );
-    maMainThread = vos::OThread::getCurrentIdentifier();
+    maMainThread = osl::Thread::getCurrentIdentifier();
     mbWaitingYield = false;
     maUserEventListMutex = osl_createMutex();
     mnActivePrintJobs = 0;
@@ -568,7 +568,7 @@ void AquaSalInstance::AcquireYieldMutex( ULONG nCount )
 
 bool AquaSalInstance::isNSAppThread() const
 {
-    return vos::OThread::getCurrentIdentifier() == maMainThread;
+    return osl::Thread::getCurrentIdentifier() == maMainThread;
 }
 
 // -----------------------------------------------------------------------
