@@ -416,8 +416,6 @@ static Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevic
                 aActionBounds.Right() += nHalfLineWidth;
                 aActionBounds.Bottom() += nHalfLineWidth;
             }
-            aActionBounds = Rectangle( static_cast<const MetaLineAction&>(rAct).GetStartPoint(),
-                                       static_cast<const MetaLineAction&>(rAct).GetEndPoint() );
             break;
         }
 
