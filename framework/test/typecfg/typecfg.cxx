@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -247,3 +248,5 @@ void TypeApplication::impl_generateTypeDetectionXCD()
     aCache.impldbg_generateXCD( "org.openoffice.Office.TypeDetection.xcd", bWriteable, cSeparator );
     #endif  //ENABLE_GENERATEFILTERCACHE
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

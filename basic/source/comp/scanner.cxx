@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -580,3 +581,5 @@ bool LetterTable::isLetterUnicode( sal_Unicode c )
     bool bRet = pCharClass->isLetter( aStr, 0 );
     return bRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -661,3 +662,4 @@ void SAL_CALL OwnView_Impl::disposing( const lang::EventObject& Source )
         m_xModel = uno::Reference< frame::XModel >();
 };
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -412,3 +413,5 @@ void XMLBackgroundImageContext::EndElement()
     if( -1 != aTransparencyProp.mnIndex )
         rProperties.push_back( aTransparencyProp );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -808,3 +809,4 @@ Any Package::TypeInfo::getIcon( sal_Bool highContrast, sal_Bool smallIcon )
 }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

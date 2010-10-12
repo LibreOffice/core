@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1344,3 +1345,5 @@ String FmUndoModelReplaceAction::GetComment() const
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmUndoModelReplaceAction::GetComment" );
     return SVX_RES(RID_STR_UNDO_MODEL_REPLACE);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

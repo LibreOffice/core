@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -921,3 +922,4 @@ void Gallery::ReleaseTheme( GalleryTheme* pTheme, SfxListener& rListener )
 BOOL GalleryThemeEntry::IsDefault() const
 { return( ( nId > 0 ) && ( nId != ( RID_GALLERYSTR_THEME_MYTHEME - RID_GALLERYSTR_THEME_START ) ) ); }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

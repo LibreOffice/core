@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -232,3 +233,5 @@ Image SAL_CALL GetImage( const ::com::sun::star::uno::Reference< ::com::sun::sta
 
     return Image();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
