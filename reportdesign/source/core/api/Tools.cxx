@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -73,3 +74,5 @@ uno::Reference< util::XCloneable > cloneObject(const uno::Reference< report::XRe
 // =============================================================================
 } // namespace reportdesign
 // =============================================================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

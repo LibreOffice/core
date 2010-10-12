@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -144,3 +145,5 @@ sal_Bool ORowSetCacheIterator::isNull() const
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCacheIterator::getMutex" );
     return m_pRowSet ? m_pRowSet->getMutex() : NULL;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

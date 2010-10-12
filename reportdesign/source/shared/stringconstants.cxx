@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -274,3 +275,5 @@ IMPLEMENT_CONSTASCII_USTRING(PROPERTY_UNVISITEDCHARSTYLENAME, "UnvisitedCharStyl
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_ORDER,                "Order");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_APPLYFILTER,          "ApplyFilter");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_MAXROWS,              "MaxRows");
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

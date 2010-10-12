@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -2260,3 +2261,4 @@ void NameChangeNotifier::impl_fireEvent_throw( const sal_Bool i_bVetoable )
 }   // namespace dbaccess
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

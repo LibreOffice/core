@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -272,3 +273,5 @@ void SAL_CALL OViewContainer::elementReplaced( const ContainerEvent& /*Event*/ )
     // no restriction at all (other than the ones provided externally)
     return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VIEW" ) );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
