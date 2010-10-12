@@ -931,9 +931,6 @@ void RtfAttributeOutput::EndTableRow( )
     }
     else
         m_aAfterRuns.append(OOO_STRING_SVTOOLS_RTF_ROW);
-
-    // Cleans the table helper
-    delete m_pTableWrt, m_pTableWrt = NULL;
 }
 
 void RtfAttributeOutput::EndTable()
@@ -946,6 +943,9 @@ void RtfAttributeOutput::EndTable()
     // We closed the table; if it is a nested table, the cell that contains it
     // still continues
     m_bTableCellOpen = true;
+
+    // Cleans the table helper
+    delete m_pTableWrt, m_pTableWrt = NULL;
 }
 
 void RtfAttributeOutput::FinishTableRowCell( ww8::WW8TableNodeInfoInner::Pointer_t pInner, bool /*bForceEmptyParagraph*/ )
