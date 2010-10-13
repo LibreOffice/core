@@ -231,6 +231,10 @@ String RID_STR_NAME
 {
     Text [ en-US ] = "Name" ;
 };
+String RID_STR_GROUP_NAME
+{
+    Text [ en-US ] = "Group name" ;
+};
 String RID_STR_TABINDEX
 {
     Text [ en-US ] = "Tab order" ;

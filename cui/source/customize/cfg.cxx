@@ -5711,7 +5711,7 @@ bool SvxIconSelectorDialog::ReplaceGraphicItem(
                 if ( bOK && ((aSize.Width != m_nExpectedSize) || (aSize.Height != m_nExpectedSize)) )
                 {
                     BitmapEx aBitmap = aImage.GetBitmapEx();
-                    BitmapEx aBitmapex = AutoScaleBitmap(aBitmap, m_nExpectedSize);
+                    BitmapEx aBitmapex = BitmapEx::AutoScaleBitmap(aBitmap, m_nExpectedSize);
                     aImage = Image( aBitmapex);
                 }
                 aTbSymbol.InsertItem( nId,aImage, aURL, 0, 0 ); //modify
@@ -5875,7 +5875,7 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
                 if ( bOK && ((aSize.Width != m_nExpectedSize) || (aSize.Height != m_nExpectedSize)) )
                 {
                     BitmapEx aBitmap = aImage.GetBitmapEx();
-                    BitmapEx aBitmapex = AutoScaleBitmap(aBitmap, m_nExpectedSize);
+                    BitmapEx aBitmapex = BitmapEx::AutoScaleBitmap(aBitmap, m_nExpectedSize);
                     aImage = Image( aBitmapex);
                 }
                 if ( bOK && !!aImage )

@@ -97,6 +97,7 @@ namespace frm
     FORMS_CONSTASCII_STRING( PROPERTY_TABINDEX,                 "TabIndex" );
     FORMS_CONSTASCII_STRING( PROPERTY_TAG,                      "Tag" );
     FORMS_CONSTASCII_STRING( PROPERTY_NAME,                     "Name" );
+    FORMS_CONSTASCII_STRING( PROPERTY_GROUP_NAME,               "GroupName" );
     FORMS_CONSTASCII_STRING( PROPERTY_CLASSID,                  "ClassId" );
     FORMS_CONSTASCII_STRING( PROPERTY_FETCHSIZE,                "FetchSize" );
     FORMS_CONSTASCII_STRING( PROPERTY_VALUE,                    "Value" );

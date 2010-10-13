@@ -326,9 +326,10 @@
 #define HID_FM_PROPDLG_TAB_GENERAL              ( HID_PROPC_START + 294)
 #define HID_FM_PROPDLG_TAB_DATA                 ( HID_PROPC_START + 295)
 #define HID_FM_PROPDLG_TAB_EVT                  ( HID_PROPC_START + 296)
+#define HID_PROP_GROUP_NAME                     ( HID_PROPC_START + 297)
     // please adjust HID_LAST_PROPC_ID if you add new ids here!
 
-#define HID_LAST_PROPC_ID   HID_FM_PROPDLG_TAB_EVT
+#define HID_LAST_PROPC_ID   HID_PROP_GROUP_NAME
 
 #if HID_LAST_PROPC_ID > HID_PROPC_END
     #error help id overflow (PROPC)

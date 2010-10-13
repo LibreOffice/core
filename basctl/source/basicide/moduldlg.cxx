@@ -308,7 +308,7 @@ void BasicIDEShell::CopyDialogResources( Reference< io::XInputStreamProvider >& 
     Reference< beans::XPropertySet > xProps( xMSF, UNO_QUERY );
     OSL_ASSERT( xProps.is() );
     OSL_VERIFY( xProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
-    ::xmlscript::importDialogModel( xInput, xDialogModel, xContext );
+    ::xmlscript::importDialogModel( xInput, xDialogModel, xContext, rSourceDoc.isDocument() ? rSourceDoc.getDocument() : Reference< frame::XModel >() );
 
     if( xDialogModel.is() )
     {
@@ -325,7 +325,7 @@ void BasicIDEShell::CopyDialogResources( Reference< io::XInputStreamProvider >& 
         {
             LocalizationMgr::setResourceIDsForDialog( xDialogModel, xDestMgr );
         }
-        io_xISP = ::xmlscript::exportDialogModel( xDialogModel, xContext );
+        io_xISP = ::xmlscript::exportDialogModel( xDialogModel, xContext, rDestDoc.isDocument() ? rDestDoc.getDocument() : Reference< frame::XModel >() );
     }
 }
 
