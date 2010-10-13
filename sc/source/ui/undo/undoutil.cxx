@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -131,3 +132,5 @@ void ScUndoUtil::PaintMore( ScDocShell* pDocShell,
     pDocShell->PostPaint( nCol1,nRow1,rRange.aStart.Tab(),
                           nCol2,nRow2,rRange.aEnd.Tab(), PAINT_GRID );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

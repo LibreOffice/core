@@ -88,7 +88,6 @@ public:
     void   SetTabDistance( USHORT nTabDist ) {nTabDistance = nTabDist;}
 
     void        ResetDocOptions();
-    inline void     CopyTo(ScDocOptions& rOpt);
 
     inline const ScDocOptions&  operator=( const ScDocOptions& rOpt );
     inline int                  operator==( const ScDocOptions& rOpt ) const;
@@ -124,31 +123,6 @@ public:
     void ResetFormulaSeparators();
     static const LocaleDataWrapper& GetLocaleDataWrapper();
 };
-
-
-inline void ScDocOptions::CopyTo(ScDocOptions& rOpt)
-{
-    rOpt.bIsIgnoreCase          = bIsIgnoreCase;
-    rOpt.bIsIter                = bIsIter;
-    rOpt.nIterCount             = nIterCount;
-    rOpt.fIterEps               = fIterEps;
-    rOpt.nPrecStandardFormat    = nPrecStandardFormat;
-    rOpt.nDay                   = nDay;
-    rOpt.nMonth                 = nMonth;
-    rOpt.nYear2000              = nYear2000;
-    rOpt.nYear                  = nYear;
-    rOpt.nTabDistance           = nTabDistance;
-    rOpt.bCalcAsShown           = bCalcAsShown;
-    rOpt.bMatchWholeCell        = bMatchWholeCell;
-    rOpt.bDoAutoSpell           = bDoAutoSpell;
-    rOpt.bLookUpColRowNames     = bLookUpColRowNames;
-    rOpt.bFormulaRegexEnabled   = bFormulaRegexEnabled;
-    rOpt.bUseEnglishFuncName    = bUseEnglishFuncName;
-    rOpt.eFormulaGrammar        = eFormulaGrammar;
-    rOpt.aFormulaSepArg         = aFormulaSepArg;
-    rOpt.aFormulaSepArrayRow    = aFormulaSepArrayRow;
-    rOpt.aFormulaSepArrayCol    = aFormulaSepArrayCol;
-}
 
 inline const ScDocOptions& ScDocOptions::operator=( const ScDocOptions& rCpy )
 {

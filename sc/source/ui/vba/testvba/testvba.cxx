@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include "cppuhelper/bootstrap.hxx"
 
 #include <com/sun/star/beans/Property.hpp>
@@ -307,3 +308,5 @@ int main( int argv, char** argc )
     }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

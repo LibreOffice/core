@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -344,3 +345,5 @@ void ScDLL::Exit()
 
 // DetectFilter functionality has moved - please update your bookmarks
 // see sc/source/ui/unoobj/scdetect.cxx, have a nice day.
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
