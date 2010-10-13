@@ -41,7 +41,7 @@
 
 #ifdef  SAL_UNX
 #include <unistd.h>
-#if defined(MACOSX) || defined(FREEBSD) || defined(NETBSD)
+#if defined(MACOSX) || defined(FREEBSD) || defined(NETBSD) || defined(AIX)
 #include <sys/wait.h>
 #else
 #include <wait.h>
