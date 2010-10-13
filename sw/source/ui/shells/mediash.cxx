@@ -29,8 +29,6 @@
 #include "precompiled_sw.hxx"
 
 
-
-
 #include <cmdid.h>
 #include <hintids.hxx>
 #include <tools/urlobj.hxx>
@@ -87,8 +85,6 @@ SFX_IMPL_INTERFACE(SwMediaShell, SwBaseShell, SW_RES(STR_SHELLNAME_MEDIA))
     SFX_POPUPMENU_REGISTRATION(SW_RES(MN_MEDIA_POPUPMENU));
     SFX_OBJECTBAR_REGISTRATION(SFX_OBJECTBAR_OBJECT, SW_RES(RID_MEDIA_TOOLBOX));
 }
-
-// ------------------------------------------------------------------------------
 
 void SwMediaShell::ExecMedia(SfxRequest &rReq)
 {
@@ -161,8 +157,6 @@ void SwMediaShell::ExecMedia(SfxRequest &rReq)
     }
 }
 
-// ------------------------------------------------------------------------------
-
 void SwMediaShell::GetMediaState(SfxItemSet &rSet)
 {
     SfxWhichIter    aIter( rSet );
@@ -204,8 +198,6 @@ void SwMediaShell::GetMediaState(SfxItemSet &rSet)
         nWhich = aIter.NextWhich();
     }
 }
-
-// ------------------------------------------------------------------------------
 
 SwMediaShell::SwMediaShell(SwView &_rView) :
     SwBaseShell(_rView)

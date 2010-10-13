@@ -47,9 +47,7 @@
 #include "bookmark.hrc"
 #include "misc.hrc"
 
-
 const String BookmarkCombo::aForbiddenChars = String::CreateFromAscii("/\\@:*?\";,.#");
-
 
 IMPL_LINK( SwInsertBookmarkDlg, ModifyHdl, BookmarkCombo *, pBox )
 {
@@ -88,7 +86,6 @@ IMPL_LINK( SwInsertBookmarkDlg, ModifyHdl, BookmarkCombo *, pBox )
 /*------------------------------------------------------------------------
      Beschreibung: Callback zum Loeschen einer Textmarke
  -----------------------------------------------------------------------*/
-
 IMPL_LINK( SwInsertBookmarkDlg, DeleteHdl, Button *, EMPTYARG )
 {
     // Textmarken aus der ComboBox entfernen
@@ -109,8 +106,6 @@ IMPL_LINK( SwInsertBookmarkDlg, DeleteHdl, Button *, EMPTYARG )
      an die akt. Position ein. Geloeschte Textmarken werden auch am Modell
      entfernt.
  -----------------------------------------------------------------------*/
-
-
 void SwInsertBookmarkDlg::Apply()
 {
     //at first remove deleted bookmarks to prevent multiple bookmarks with the same
@@ -147,8 +142,6 @@ void SwInsertBookmarkDlg::Apply()
 /*------------------------------------------------------------------------
      Beschreibung: CTOR
  -----------------------------------------------------------------------*/
-
-
 SwInsertBookmarkDlg::SwInsertBookmarkDlg( Window *pParent, SwWrtShell &rS, SfxRequest& rRequest ) :
 
     SvxStandardDialog(pParent,SW_RES(DLG_INSERT_BOOKMARK)),
@@ -181,44 +174,24 @@ SwInsertBookmarkDlg::SwInsertBookmarkDlg( Window *pParent, SwWrtShell &rS, SfxRe
     sRemoveWarning = String(SW_RES(STR_REMOVE_WARNING));
 }
 
-/*------------------------------------------------------------------------
-     Beschreibung:
- -----------------------------------------------------------------------*/
-
 SwInsertBookmarkDlg::~SwInsertBookmarkDlg()
 {
 }
-
-/*------------------------------------------------------------------------
-     Beschreibung:
- -----------------------------------------------------------------------*/
 
 BookmarkCombo::BookmarkCombo( Window* pWin, const ResId& rResId ) :
     SwComboBox(pWin, rResId)
 {
 }
 
-/*------------------------------------------------------------------------
-     Beschreibung:
- -----------------------------------------------------------------------*/
-
 USHORT BookmarkCombo::GetFirstSelEntryPos() const
 {
     return GetSelEntryPos(0);
 }
 
-/*------------------------------------------------------------------------
-     Beschreibung:
- -----------------------------------------------------------------------*/
-
 USHORT BookmarkCombo::GetNextSelEntryPos(USHORT nPos) const
 {
     return GetSelEntryPos(nPos + 1);
 }
-
-/*------------------------------------------------------------------------
-     Beschreibung:
- -----------------------------------------------------------------------*/
 
 USHORT BookmarkCombo::GetSelEntryPos(USHORT nPos) const
 {
@@ -238,10 +211,6 @@ USHORT BookmarkCombo::GetSelEntryPos(USHORT nPos) const
     return COMBOBOX_ENTRY_NOTFOUND;
 }
 
-/*------------------------------------------------------------------------
-     Beschreibung:
- -----------------------------------------------------------------------*/
-
 USHORT BookmarkCombo::GetSelectEntryCount() const
 {
     USHORT nCnt = 0;
@@ -259,7 +228,6 @@ USHORT BookmarkCombo::GetSelectEntryCount() const
 /*------------------------------------------------------------------------
      Beschreibung: Position in der Listbox (der ComboBox)
  -----------------------------------------------------------------------*/
-
 USHORT BookmarkCombo::GetSelectEntryPos( USHORT nSelIndex ) const
 {
     USHORT nCnt = 0;
@@ -282,9 +250,7 @@ USHORT BookmarkCombo::GetSelectEntryPos( USHORT nSelIndex ) const
 
     return COMBOBOX_ENTRY_NOTFOUND;
 }
-/* -----------------05.02.99 08:39-------------------
- *
- * --------------------------------------------------*/
+
 long BookmarkCombo::PreNotify( NotifyEvent& rNEvt )
 {
     long nHandled = 0;
@@ -299,6 +265,3 @@ long BookmarkCombo::PreNotify( NotifyEvent& rNEvt )
         nHandled = SwComboBox::PreNotify( rNEvt );
     return nHandled;
 }
-
-
-

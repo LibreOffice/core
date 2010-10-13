@@ -136,10 +136,6 @@
 
 using namespace ::com::sun::star;
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwDrawTextShell::Execute( SfxRequest &rReq )
 {
     SwWrtShell &rSh = GetShell();
@@ -575,10 +571,6 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwDrawTextShell::GetState(SfxItemSet& rSet)
 {
     if (!IsTextEdit())  // Sonst manchmal Absturz!
@@ -801,9 +793,6 @@ ASK_ESCAPE:
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 void SwDrawTextShell::GetDrawTxtCtrlState(SfxItemSet& rSet)
 {
     if (!IsTextEdit())  // Sonst Absturz!
@@ -868,9 +857,6 @@ void SwDrawTextShell::GetDrawTxtCtrlState(SfxItemSet& rSet)
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 void SwDrawTextShell::ExecClpbrd(SfxRequest &rReq)
 {
     if (!IsTextEdit())  // Sonst Absturz!
@@ -958,7 +944,6 @@ void SwDrawTextShell::StateClpbrd(SfxItemSet &rSet)
 /*--------------------------------------------------------------------
     Beschreibung:   Hyperlink-Status
  --------------------------------------------------------------------*/
-
 void SwDrawTextShell::StateInsert(SfxItemSet &rSet)
 {
     if (!IsTextEdit())  // Sonst Absturz!
@@ -1009,4 +994,3 @@ void SwDrawTextShell::StateInsert(SfxItemSet &rSet)
         nWhich = aIter.NextWhich();
     }
 }
-

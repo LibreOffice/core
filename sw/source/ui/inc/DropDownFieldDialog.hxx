@@ -65,5 +65,4 @@ public:
 };
 } //namespace sw
 
-
 #endif

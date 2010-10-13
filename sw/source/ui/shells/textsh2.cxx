@@ -88,7 +88,6 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 
-
 #define DB_DD_DELIM 0x0b
 
 struct DBTextStruct_Impl
@@ -98,10 +97,12 @@ struct DBTextStruct_Impl
     Reference<XResultSet>   xCursor;
     Reference<XConnection>  xConnection;
 };
+
 inline void AddSelList( List& rLst, long nRow )
 {
     rLst.Insert( (void*)nRow , LIST_APPEND );
 }
+
 void SwTextShell::ExecDB(SfxRequest &rReq)
 {
     const SfxItemSet *pArgs = rReq.GetArgs();
@@ -254,10 +255,6 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 IMPL_STATIC_LINK( SwBaseShell, InsertDBTextHdl, DBTextStruct_Impl*, pDBStruct )
 {
     if( pDBStruct )
@@ -305,6 +302,3 @@ IMPL_STATIC_LINK( SwBaseShell, InsertDBTextHdl, DBTextStruct_Impl*, pDBStruct )
     delete pDBStruct;
     return 0;
 }
-
-
-

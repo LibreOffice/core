@@ -85,11 +85,6 @@ SFX_IMPL_INTERFACE(SwDrawBaseShell, SwBaseShell, SW_RES(0))
 
 TYPEINIT1(SwDrawBaseShell,SwBaseShell)
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 SwDrawBaseShell::SwDrawBaseShell(SwView &_rView):
     SwBaseShell( _rView )
 {
@@ -105,22 +100,12 @@ SwDrawBaseShell::SwDrawBaseShell(SwView &_rView):
     SwTransferable::CreateSelection( GetShell() );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 SwDrawBaseShell::~SwDrawBaseShell()
 {
     GetView().ExitDraw();
     GetShell().Edit();
     SwTransferable::ClearSelection( GetShell() );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void SwDrawBaseShell::Execute(SfxRequest &rReq)
 {
@@ -631,6 +616,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
             GetView().AttrChangedNotify(pSh); // ggf Shellwechsel...
     }
 }
+
 /* -----------------------------27.02.2002 15:27------------------------------
     Checks whether a given name is allowed for a group shape
  ---------------------------------------------------------------------------*/
@@ -678,9 +664,7 @@ IMPL_LINK( SwDrawBaseShell, CheckGroupShapeNameHdl, AbstractSvxNameDialog*, pNam
     }
     return nRet;
 }
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
+
 void SwDrawBaseShell::GetState(SfxItemSet& rSet)
 {
     SwWrtShell &rSh = GetShell();
@@ -772,11 +756,6 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
         nWhich = aIter.NextWhich();
     }
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 BOOL SwDrawBaseShell::Disable(SfxItemSet& rSet, USHORT nWhich)
 {
@@ -989,7 +968,3 @@ IMPL_LINK(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation*, pValidation 
         pValidation->nHeight = pValidation->nMaxHeight;
     return 0;
 }
-
-
-
-

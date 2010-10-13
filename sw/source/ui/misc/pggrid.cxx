@@ -57,9 +57,7 @@
 #include "uiitems.hxx"
 #include "swmodule.hxx"
 #include "view.hxx"
-/*-- 06.02.2002 15:25:39---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwTextGridPage::SwTextGridPage(Window *pParent, const SfxItemSet &rSet) :
     SfxTabPage(pParent, SW_RES(TP_TEXTGRID_PAGE), rSet),
     aGridTypeFL             (this, SW_RES(FL_GRID_TYPE       )),
@@ -189,22 +187,16 @@ SwTextGridPage::SwTextGridPage(Window *pParent, const SfxItemSet &rSet) :
         aCharWidthMF.Show();
     }
 }
-/*-- 06.02.2002 15:25:40---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwTextGridPage::~SwTextGridPage()
 {
 }
-/*-- 06.02.2002 15:25:40---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SfxTabPage *SwTextGridPage::Create(Window *pParent, const SfxItemSet &rSet)
 {
     return new SwTextGridPage(pParent, rSet);
 }
-/*-- 06.02.2002 15:25:40---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 BOOL    SwTextGridPage::FillItemSet(SfxItemSet &rSet)
 {
     BOOL bRet = FALSE;
@@ -235,9 +227,7 @@ BOOL    SwTextGridPage::FillItemSet(SfxItemSet &rSet)
         pView->GetVLineal().DrawTicks();
     return bRet;
 }
-/*-- 06.02.2002 15:25:40---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void    SwTextGridPage::Reset(const SfxItemSet &rSet)
 {
     if(SFX_ITEM_AVAILABLE <= rSet.GetItemState(RES_TEXTGRID, TRUE))
@@ -280,9 +270,7 @@ void    SwTextGridPage::Reset(const SfxItemSet &rSet)
     aPrintCB.SaveValue();
     aColorLB.SaveValue();
 }
-/*-- 06.02.2002 15:25:41---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void    SwTextGridPage::ActivatePage( const SfxItemSet& rSet )
 {
     aExampleWN.Hide();
@@ -291,16 +279,12 @@ void    SwTextGridPage::ActivatePage( const SfxItemSet& rSet )
     aExampleWN.Show();
     aExampleWN.Invalidate();
 }
-/*-- 06.02.2002 15:25:41---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 int SwTextGridPage::DeactivatePage( SfxItemSet* )
 {
     return LEAVE_PAGE;
 }
-/* -----------------------------08.02.2002 11:57------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwTextGridPage::PutGridItem(SfxItemSet& rSet)
 {
         SwTextGridItem aGridItem;
@@ -332,9 +316,7 @@ void SwTextGridPage::PutGridItem(SfxItemSet& rSet)
             pView->GetVLineal().SetLineHeight((long)(aTextSizeMF.GetValue(FUNIT_TWIP)/56.7));
         }
 }
-/* -----------------------------08.02.2002 10:54------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwTextGridPage::UpdatePageSize(const SfxItemSet& rSet)
 {
     if( SFX_ITEM_UNKNOWN !=  rSet.GetItemState( RES_FRAMEDIR, TRUE ))
@@ -401,9 +383,7 @@ void SwTextGridPage::UpdatePageSize(const SfxItemSet& rSet)
         }
     }
 }
-/* -----------------------------30.05.2008 14:12------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwTextGridPage::SetLinesOrCharsRanges(FixedText & rField, const sal_Int32 nValue )
 {
     String aFieldStr = String::CreateFromAscii("( 1 -");
@@ -411,9 +391,7 @@ void SwTextGridPage::SetLinesOrCharsRanges(FixedText & rField, const sal_Int32 n
     aFieldStr += String::CreateFromAscii(" )");
     rField.SetText( aFieldStr );
 }
-/* -----------------------------06.02.2002 15:24------------------------------
 
- ---------------------------------------------------------------------------*/
 USHORT* SwTextGridPage::GetRanges()
 {
     static USHORT __FAR_DATA aPageRg[] = {
@@ -421,9 +399,7 @@ USHORT* SwTextGridPage::GetRanges()
         0};
     return aPageRg;
 }
-/* -----------------------------08.02.2002 10:56------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SwTextGridPage, CharorLineChangedHdl, SpinField*, pField)
 {
     //if in squared mode
@@ -470,8 +446,7 @@ IMPL_LINK(SwTextGridPage, CharorLineChangedHdl, SpinField*, pField)
     GridModifyHdl(0);
     return 0;
 }
-/* -----------------------------04.09.2006 15:46------------------------------
- ---------------------------------------------------------------------------*/
+
 IMPL_LINK(SwTextGridPage, TextSizeChangedHdl, SpinField*, pField)
 {
     //if in squared mode
@@ -514,9 +489,7 @@ IMPL_LINK(SwTextGridPage, TextSizeChangedHdl, SpinField*, pField)
     GridModifyHdl(0);
     return 0;
 }
-/* -----------------------------22.04.2002 14:53------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SwTextGridPage, GridTypeHdl, RadioButton*, pButton)
 {
     sal_Bool bEnable = &aNoGridRB != pButton;
@@ -543,17 +516,13 @@ IMPL_LINK(SwTextGridPage, GridTypeHdl, RadioButton*, pButton)
     GridModifyHdl(0);
     return 0;
 }
-/* -----------------------------22.04.2002 15:46------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SwTextGridPage, DisplayGridHdl, CheckBox*, EMPTYARG)
 {
     aPrintCB.Enable(aDisplayCB.IsChecked());
     return 0;
 }
-/* -----------------------------08.02.2002 11:54------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SwTextGridPage, GridModifyHdl, void*, EMPTYARG)
 {
     const SfxItemSet& rOldSet = GetItemSet();
@@ -565,4 +534,3 @@ IMPL_LINK(SwTextGridPage, GridModifyHdl, void*, EMPTYARG)
     aExampleWN.UpdateExample(aSet);
     return 0;
 }
-

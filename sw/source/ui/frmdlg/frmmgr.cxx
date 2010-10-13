@@ -65,7 +65,6 @@ static USHORT __FAR_DATA aFrmMgrRange[] = {
 /*--------------------------------------------------------------------
      Beschreibung: Rahmen-Attribute ueber Shell ermitteln
  --------------------------------------------------------------------*/
-
 SwFlyFrmAttrMgr::SwFlyFrmAttrMgr( BOOL bNew, SwWrtShell* pSh, BYTE nType ) :
     aSet( (SwAttrPool&)pSh->GetAttrPool(), aFrmMgrRange ),
     pOwnSh( pSh ),
@@ -111,11 +110,9 @@ SwFlyFrmAttrMgr::SwFlyFrmAttrMgr( BOOL bNew, SwWrtShell* pSh, const SfxItemSet &
     }
 }
 
-
 /*--------------------------------------------------------------------
      Beschreibung:  Initialisieren
  --------------------------------------------------------------------*/
-
 void SwFlyFrmAttrMgr::UpdateAttrMgr()
 {
     if ( !bNewFrm && pOwnSh->IsFrmSelected() )
@@ -142,7 +139,6 @@ void SwFlyFrmAttrMgr::_UpdateFlyFrm()
 /*--------------------------------------------------------------------
     Beschreibung: Bestehenden Fly-Frame aendern
  --------------------------------------------------------------------*/
-
 void SwFlyFrmAttrMgr::UpdateFlyFrm()
 {
     ASSERT( pOwnSh->IsFrmSelected(),
@@ -176,7 +172,6 @@ void SwFlyFrmAttrMgr::UpdateFlyFrm()
 /*--------------------------------------------------------------------
      Beschreibung:  Rahmen einfuegen
  --------------------------------------------------------------------*/
-
 BOOL SwFlyFrmAttrMgr::InsertFlyFrm()
 {
     pOwnSh->StartAllAction();
@@ -200,7 +195,6 @@ BOOL SwFlyFrmAttrMgr::InsertFlyFrm()
                 Nicht erlaubte Werte des Aufzaehlungstypes werden
                 korrigiert.
 ------------------------------------------------------------------------*/
-
 void SwFlyFrmAttrMgr::InsertFlyFrm(RndStdIds    eAnchorType,
                                    const Point  &rPos,
                                    const Size   &rSize,
@@ -225,7 +219,6 @@ void SwFlyFrmAttrMgr::InsertFlyFrm(RndStdIds    eAnchorType,
 /*--------------------------------------------------------------------
      Beschreibung:  Anker setzen
  --------------------------------------------------------------------*/
-
 void SwFlyFrmAttrMgr::SetAnchor( RndStdIds eId )
 {
     USHORT nPhyPageNum, nVirtPageNum;
@@ -247,15 +240,14 @@ void SwFlyFrmAttrMgr::SetAnchor( RndStdIds eId )
 /*------------------------------------------------------------------------
  Beschreibung:  Setzen des Attributs fuer Spalten
 ------------------------------------------------------------------------*/
-
 void SwFlyFrmAttrMgr::SetCol( const SwFmtCol &rCol )
 {
     aSet.Put( rCol );
 }
+
 /*--------------------------------------------------------------------
      Beschreibung:  Absolute Position setzen
  --------------------------------------------------------------------*/
-
 void SwFlyFrmAttrMgr::SetAbsPos( const Point& rPoint )
 {
     bAbsPos = TRUE;
@@ -511,7 +503,6 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
 /*--------------------------------------------------------------------
     Beschreibung: Korrektur fuer Umrandung
  --------------------------------------------------------------------*/
-
 SwTwips SwFlyFrmAttrMgr::CalcTopSpace()
 {
     const SvxShadowItem& rShadow = GetShadow();
@@ -539,7 +530,6 @@ SwTwips SwFlyFrmAttrMgr::CalcRightSpace()
     const SvxBoxItem&    rBox    = GetBox();
     return rShadow.CalcShadowSpace(SHADOW_RIGHT) + rBox.CalcLineSpace(BOX_LINE_RIGHT);
 }
-
 
 /*--------------------------------------------------------------------
     Beschreibung: Attribut aus dem Set loeschen

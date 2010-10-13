@@ -40,7 +40,6 @@ class SvStream;
 typedef SfxPoolItem* SfxPoolItemPtr;
 SV_DECL_PTRARR_DEL( _SwNumFmtsAttrs, SfxPoolItemPtr, 5,0 )
 
-//------------------------------------------------------------------------
 class SW_DLLPUBLIC SwNumRulesWithName
 {
     String aName;
@@ -83,9 +82,7 @@ public:
 
     void Store( SvStream& );
 };
-/********************************************************************
 
-********************************************************************/
 class SwBaseNumRules
 {
 public:
@@ -112,9 +109,6 @@ public:
 
 };
 
-/********************************************************************
-
-********************************************************************/
 class SwChapterNumRules : public SwBaseNumRules
 {
 

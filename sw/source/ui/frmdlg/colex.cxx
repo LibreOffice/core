@@ -204,10 +204,6 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
 
     Invalidate();
 }
-/*-----------------------------------------------------------------------
-    Beschreibung:
- -----------------------------------------------------------------------*/
-
 
 void SwColExample::DrawPage( const Point& rOrg,
                             const BOOL bSecond,
@@ -307,11 +303,6 @@ void SwColExample::DrawPage( const Point& rOrg,
     }
 }
 
-/*-----------------25.10.96 09.15-------------------
-
---------------------------------------------------*/
-
-
 SwColumnOnlyExample::SwColumnOnlyExample( Window* pParent, const ResId& rResId) :
     Window(pParent, rResId),
     m_aFrmSize(1,1)
@@ -335,11 +326,6 @@ SwColumnOnlyExample::SwColumnOnlyExample( Window* pParent, const ResId& rResId) 
     aMapMode.SetScaleY( aScale );
     SetMapMode( aMapMode );
 }
-
-/*-----------------25.10.96 09.16-------------------
-
---------------------------------------------------*/
-
 
 void SwColumnOnlyExample::Paint( const Rectangle& /*rRect*/ )
 {
@@ -429,11 +415,6 @@ void SwColumnOnlyExample::Paint( const Rectangle& /*rRect*/ )
     }
 }
 
-/*-----------------25.10.96 12.05-------------------
-
---------------------------------------------------*/
-
-
 void  SwColumnOnlyExample::SetColumns(const SwFmtCol& rCol)
 {
     m_aCols = rCol;
@@ -477,16 +458,12 @@ void  SwColumnOnlyExample::SetColumns(const SwFmtCol& rCol)
         }
     }
 }
-/* -----------------------------08.02.2002 11:44------------------------------
 
- ---------------------------------------------------------------------------*/
 SwPageGridExample::~SwPageGridExample()
 {
     delete pGridItem;
 }
-/* -----------------------------08.02.2002 11:48------------------------------
 
- ---------------------------------------------------------------------------*/
 #define MAX_ROWS    10
 #define MAX_LINES   15
 void SwPageGridExample::DrawPage( const Point& rOrg,
@@ -589,9 +566,7 @@ void SwPageGridExample::DrawPage( const Point& rOrg,
         }
     }
 }
-/* -----------------------------08.02.2002 11:48------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwPageGridExample::UpdateExample( const SfxItemSet& rSet )
 {
     DELETEZ(pGridItem);
@@ -607,4 +582,3 @@ void SwPageGridExample::UpdateExample( const SfxItemSet& rSet )
     }
     SwPageExample::UpdateExample(rSet);
 }
-

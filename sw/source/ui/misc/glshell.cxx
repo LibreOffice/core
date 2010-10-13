@@ -72,10 +72,8 @@ SFX_IMPL_INTERFACE( SwWebGlosDocShell, SwWebDocShell, SW_RES(0) )
 {
 }
 
-
 TYPEINIT1( SwGlosDocShell, SwDocShell );
 TYPEINIT1( SwWebGlosDocShell, SwWebDocShell );
-
 
 void lcl_Execute( SwDocShell& rSh, SfxRequest& rReq )
 {
@@ -96,7 +94,6 @@ void lcl_Execute( SwDocShell& rSh, SfxRequest& rReq )
     }
 }
 
-
 void lcl_GetState( SwDocShell& rSh, SfxItemSet& rSet )
 {
     if( SFX_ITEM_AVAILABLE >= rSet.GetItemState( SID_SAVEDOC, FALSE ))
@@ -107,7 +104,6 @@ void lcl_GetState( SwDocShell& rSh, SfxItemSet& rSet )
             rSet.Put( SfxStringItem( SID_SAVEDOC, SW_RESSTR(STR_SAVE_GLOSSARY)));
     }
 }
-
 
 BOOL lcl_Save( SwWrtShell& rSh, const String& rGroupName,
                 const String& rShortNm, const String& rLongNm )
@@ -140,11 +136,6 @@ BOOL lcl_Save( SwWrtShell& rSh, const String& rGroupName,
     return nRet != USHRT_MAX;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 SwGlosDocShell::SwGlosDocShell(sal_Bool bNewShow)
     : SwDocShell( (bNewShow)
             ? SFX_CREATE_MODE_STANDARD : SFX_CREATE_MODE_INTERNAL )
@@ -153,39 +144,19 @@ SwGlosDocShell::SwGlosDocShell(sal_Bool bNewShow)
     SetHelpId(SW_GLOSDOCSHELL);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 SwGlosDocShell::~SwGlosDocShell(  )
 {
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void SwGlosDocShell::Execute( SfxRequest& rReq )
 {
     ::lcl_Execute( *this, rReq );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 void SwGlosDocShell::GetState( SfxItemSet& rSet )
 {
     ::lcl_GetState( *this, rSet );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 BOOL SwGlosDocShell::Save()
 {
@@ -203,52 +174,25 @@ BOOL SwGlosDocShell::Save()
     }
 }
 
-
-/**/
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 SwWebGlosDocShell::SwWebGlosDocShell()
     : SwWebDocShell( SFX_CREATE_MODE_STANDARD )
 {
     SetHelpId(SW_WEBGLOSDOCSHELL);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 SwWebGlosDocShell::~SwWebGlosDocShell(  )
 {
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void SwWebGlosDocShell::Execute( SfxRequest& rReq )
 {
     ::lcl_Execute( *this, rReq );
 }
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void SwWebGlosDocShell::GetState( SfxItemSet& rSet )
 {
     ::lcl_GetState( *this, rSet );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 BOOL SwWebGlosDocShell::Save()
 {
@@ -261,10 +205,6 @@ BOOL SwWebGlosDocShell::Save()
         return FALSE;
     }
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 SV_IMPL_REF ( SwDocShell )
 
@@ -343,5 +283,3 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const String& rGroup, const String& rS
     }
     return xDocSh;
 }
-
-

@@ -51,12 +51,8 @@
 
 #include <unomid.h>
 
-
 using namespace ::com::sun::star;
 using ::rtl::OUString;
-/*---------------------------------------------------------------------------
-    Beschreibung:
- ----------------------------------------------------------------------------*/
 
 void SwBaseShell::InsertURLButton(const String& rURL, const String& rTarget, const String& rTxt)
 {
@@ -137,5 +133,3 @@ void SwBaseShell::InsertURLButton(const String& rURL, const String& rTarget, con
     rSh.EndUndo( UNDO_UI_INSERT_URLBTN );
     rSh.EndAction();
 }
-
-

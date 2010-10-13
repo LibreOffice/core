@@ -34,6 +34,7 @@
 // forward ---------------------------------------------------------------
 
 class ResMgr;
+
 struct SwDialogsResMgr
 {
     static ResMgr*      GetResMgr();
@@ -45,4 +46,3 @@ struct SwDialogsResMgr
 #define SW_RESSSTR(i)   String(ResId(i,SWDIALOG_MGR()))
 
 #endif
-

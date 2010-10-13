@@ -32,11 +32,9 @@
 #include "swdllapi.h"
 
 // MakeSender -----------------------------------------------------------------
-
 SW_DLLPUBLIC String MakeSender();
 
 // enum -----------------------------------------------------------------------
-
 enum SwEnvAlign
 {
     ENV_HOR_LEFT = 0,
@@ -48,7 +46,6 @@ enum SwEnvAlign
 };
 
 // class SwEnvItem ------------------------------------------------------------
-
 class SW_DLLPUBLIC SwEnvItem : public SfxPoolItem
 {
 public:
@@ -96,5 +93,5 @@ public:
     virtual void            Commit();
     virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
 };
-#endif
 
+#endif

@@ -32,10 +32,10 @@
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <svtools/ctrlbox.hxx>
+
 /*--------------------------------------------------------------------
     Description:   TabPage Format/(Styles/)Page/Text grid
  --------------------------------------------------------------------*/
-
 class SwTextGridPage: public SfxTabPage
 {
     FixedLine       aGridTypeFL;

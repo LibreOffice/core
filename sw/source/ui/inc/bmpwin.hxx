@@ -35,7 +35,6 @@
 /*--------------------------------------------------------------------
     Beschreibung:   Extended Page fuer Grafiken
  --------------------------------------------------------------------*/
-
 class BmpWindow : public Window
 {
 private:

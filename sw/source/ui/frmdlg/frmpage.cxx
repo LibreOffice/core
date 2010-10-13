@@ -180,7 +180,6 @@ static RelationMap __FAR_DATA aAsCharRelationMap[] =
 /*--------------------------------------------------------------------
     Beschreibung: Seite verankert
  --------------------------------------------------------------------*/
-
 #define HORI_PAGE_REL   (LB_REL_PG_FRAME|LB_REL_PG_PRTAREA|LB_REL_PG_LEFT| \
                         LB_REL_PG_RIGHT)
 
@@ -215,7 +214,6 @@ static FrmMap __FAR_DATA aVPageHtmlMap[] =
 /*--------------------------------------------------------------------
     Beschreibung: Rahmen verankert
  --------------------------------------------------------------------*/
-
 #define HORI_FRAME_REL  (LB_FLY_REL_PG_FRAME|LB_FLY_REL_PG_PRTAREA| \
                         LB_FLY_REL_PG_LEFT|LB_FLY_REL_PG_RIGHT)
 
@@ -255,7 +253,6 @@ static FrmMap __FAR_DATA aVFlyHtmlMap[] =
 /*--------------------------------------------------------------------
     Beschreibung: Absatz verankert
  --------------------------------------------------------------------*/
-
 #define HORI_PARA_REL   (LB_FRAME|LB_PRTAREA|LB_REL_PG_LEFT|LB_REL_PG_RIGHT| \
                         LB_REL_PG_FRAME|LB_REL_PG_PRTAREA|LB_REL_FRM_LEFT| \
                         LB_REL_FRM_RIGHT)
@@ -302,7 +299,6 @@ static FrmMap __FAR_DATA aVParaHtmlMap[] =
 /*--------------------------------------------------------------------
     Beschreibung: Relativ zum Zeichen verankert
  --------------------------------------------------------------------*/
-
 #define HORI_CHAR_REL   (LB_FRAME|LB_PRTAREA|LB_REL_PG_LEFT|LB_REL_PG_RIGHT| \
                         LB_REL_PG_FRAME|LB_REL_PG_PRTAREA|LB_REL_FRM_LEFT| \
                         LB_REL_FRM_RIGHT|LB_REL_CHAR)
@@ -355,7 +351,6 @@ static FrmMap __FAR_DATA aVCharMap[] =
     {SwFPos::CENTER_VERT,   SwFPos::CENTER_VERT,    text::VertOrientation::LINE_CENTER,   LB_VERT_LINE}
 };
 
-
 static FrmMap __FAR_DATA aVCharHtmlMap[] =
 {
     {SwFPos::BELOW,         SwFPos::BELOW,          text::VertOrientation::CHAR_BOTTOM,   LB_REL_CHAR}
@@ -366,10 +361,10 @@ static FrmMap __FAR_DATA aVCharHtmlAbsMap[] =
     {SwFPos::TOP,           SwFPos::TOP,            text::VertOrientation::TOP,           LB_REL_CHAR},
     {SwFPos::BELOW,             SwFPos::BELOW,          text::VertOrientation::CHAR_BOTTOM,   LB_REL_CHAR}
 };
+
 /*--------------------------------------------------------------------
     Beschreibung: Als Zeichen verankert
  --------------------------------------------------------------------*/
-
 static FrmMap __FAR_DATA aVAsCharMap[] =
 {
     {SwFPos::TOP,               SwFPos::TOP,            text::VertOrientation::TOP,           LB_REL_BASE},
@@ -413,10 +408,6 @@ static USHORT __FAR_DATA aAddPgRg[] = {
     FN_SET_FRM_ALT_NAME,    FN_SET_FRM_ALT_NAME,
     0
 };
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 size_t lcl_GetFrmMapCount( const FrmMap* pMap)
 {
@@ -468,9 +459,7 @@ size_t lcl_GetFrmMapCount( const FrmMap* pMap)
     }
     return 0;
 }
-/* -----------------------------08.08.2002 14:45------------------------------
 
- ---------------------------------------------------------------------------*/
 void lcl_InsertVectors(ListBox& rBox,
     const ::std::vector< String >& rPrev, const ::std::vector< String >& rThis,
     const ::std::vector< String >& rNext, const ::std::vector< String >& rRemain)
@@ -497,9 +486,6 @@ void lcl_InsertVectors(ListBox& rBox,
         ::InsertStringSorted(*aIt, rBox, nStartPos );
 }
 
-/* -----------------------------20.08.2002 16:12------------------------------
-
- ---------------------------------------------------------------------------*/
 SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(SvxSwFramePosString::StringId eStringId, BOOL bVertical, BOOL bRTL)
 {
     //special handling of STR_FROMLEFT
@@ -599,7 +585,6 @@ ULONG lcl_GetLBRelationsForStrID( const FrmMap* _pMap,
 /*--------------------------------------------------------------------
     Beschreibung:   StandardRahmenTabPage
  --------------------------------------------------------------------*/
-
 namespace
 {
     void HandleAutoCB( BOOL _bChecked, FixedText& _rFT_man, FixedText& _rFT_auto )
@@ -608,7 +593,6 @@ namespace
         _rFT_auto.Show( _bChecked );
     }
 }
-
 
 SwFrmPage::SwFrmPage ( Window *pParent, const SfxItemSet &rSet ) :
     SfxTabPage      (pParent, SW_RES(TP_FRM_STD), rSet),
@@ -722,7 +706,6 @@ SwFrmPage::SwFrmPage ( Window *pParent, const SfxItemSet &rSet ) :
 /*--------------------------------------------------------------------
     Beschreibung:   Dtor
  --------------------------------------------------------------------*/
-
 SwFrmPage::~SwFrmPage()
 {
 }
@@ -947,11 +930,9 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
     fWidthHeightRatio = nHeight ? double(nWidth) / double(nHeight) : 1.0;
 }
 
-
 /*--------------------------------------------------------------------
     Beschreibung:   Attribute in den Set stopfen bei OK
  --------------------------------------------------------------------*/
-
 BOOL SwFrmPage::FillItemSet(SfxItemSet &rSet)
 {
     BOOL bRet = FALSE;
@@ -1147,7 +1128,6 @@ BOOL SwFrmPage::FillItemSet(SfxItemSet &rSet)
 /*--------------------------------------------------------------------
     Beschreibung:   Horizontale und vertikale Pos initialisieren
  --------------------------------------------------------------------*/
-
 void SwFrmPage::InitPos(RndStdIds eId,
                                 USHORT nH,
                                 USHORT nHRel,
@@ -1285,10 +1265,6 @@ void SwFrmPage::InitPos(RndStdIds eId,
     UpdateExample();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 USHORT SwFrmPage::FillPosLB(const FrmMap* _pMap,
                             const USHORT _nAlign,
                             const USHORT _nRel,
@@ -1342,9 +1318,6 @@ USHORT SwFrmPage::FillPosLB(const FrmMap* _pMap,
     return GetMapPos(_pMap, _rLB);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 ULONG SwFrmPage::FillRelLB( const FrmMap* _pMap,
                             const USHORT _nLBSelPos,
                             const USHORT _nAlign,
@@ -1496,10 +1469,6 @@ ULONG SwFrmPage::FillRelLB( const FrmMap* _pMap,
     return nLBRelations;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 short SwFrmPage::GetRelation(FrmMap * /*pMap*/, ListBox &rRelationLB)
 {
     short nRel = 0;
@@ -1513,10 +1482,6 @@ short SwFrmPage::GetRelation(FrmMap * /*pMap*/, ListBox &rRelationLB)
 
     return nRel;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 short SwFrmPage::GetAlignment(FrmMap *pMap, USHORT nMapPos,
         ListBox &/*rAlignLB*/, ListBox &rRelationLB)
@@ -1554,10 +1519,6 @@ short SwFrmPage::GetAlignment(FrmMap *pMap, USHORT nMapPos,
     return nAlign;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 USHORT SwFrmPage::GetMapPos( const FrmMap *pMap, ListBox &rAlignLB )
 {
     USHORT nMapPos = 0;
@@ -1591,10 +1552,6 @@ USHORT SwFrmPage::GetMapPos( const FrmMap *pMap, ListBox &rAlignLB )
     return nMapPos;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 RndStdIds SwFrmPage::GetAnchor()
 {
     RndStdIds nRet = FLY_AT_PAGE;
@@ -1620,7 +1577,6 @@ RndStdIds SwFrmPage::GetAnchor()
 /*--------------------------------------------------------------------
     Beschreibung:   Bsp - Update
  --------------------------------------------------------------------*/
-
 void SwFrmPage::ActivatePage(const SfxItemSet& rSet)
 {
     bNoModifyHdl = TRUE;
@@ -1657,7 +1613,6 @@ int SwFrmPage::DeactivatePage(SfxItemSet * _pSet)
 /*--------------------------------------------------------------------
     Beschreibung: Links/rechts mit Innen/aussen tauschen
  --------------------------------------------------------------------*/
-
 IMPL_LINK( SwFrmPage, MirrorHdl, CheckBox *, EMPTYARG )
 {
     RndStdIds eId = GetAnchor();
@@ -1665,10 +1620,6 @@ IMPL_LINK( SwFrmPage, MirrorHdl, CheckBox *, EMPTYARG )
 
     return 0;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 IMPL_LINK( SwFrmPage, RelSizeClickHdl, CheckBox *, pBtn )
 {
@@ -1699,7 +1650,6 @@ IMPL_LINK( SwFrmPage, RelSizeClickHdl, CheckBox *, pBtn )
 /*--------------------------------------------------------------------
     Beschreibung:   Bereichspruefung
  --------------------------------------------------------------------*/
-
 IMPL_LINK( SwFrmPage, RangeModifyHdl, Edit *, EMPTYARG )
 {
     if (bNoModifyHdl)
@@ -1853,10 +1803,6 @@ IMPL_LINK( SwFrmPage, AnchorTypeHdl, RadioButton *, EMPTYARG )
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 IMPL_LINK( SwFrmPage, PosHdl, ListBox *, pLB )
 {
     BOOL bHori = pLB == &aHorizontalDLB;
@@ -1964,7 +1910,6 @@ IMPL_LINK( SwFrmPage, PosHdl, ListBox *, pLB )
 /*--------------------------------------------------------------------
     Beschreibung:   Horizontale Pos
  --------------------------------------------------------------------*/
-
 IMPL_LINK( SwFrmPage, RelHdl, ListBox *, pLB )
 {
     BOOL bHori = pLB == &aHoriRelationLB;
@@ -1997,7 +1942,6 @@ IMPL_LINK( SwFrmPage, RelHdl, ListBox *, pLB )
     return 0;
 }
 
-
 IMPL_LINK_INLINE_START( SwFrmPage, RealSizeHdl, Button *, EMPTYARG )
 {
     aWidthED.SetUserValue( aWidthED. NormalizePercent(aGrfSize.Width() ), FUNIT_TWIP);
@@ -2007,7 +1951,6 @@ IMPL_LINK_INLINE_START( SwFrmPage, RealSizeHdl, Button *, EMPTYARG )
     return 0;
 }
 IMPL_LINK_INLINE_END( SwFrmPage, RealSizeHdl, Button *, EMPTYARG )
-
 
 IMPL_LINK( SwFrmPage, AutoWidthClickHdl, void*, EMPTYARG )
 {
@@ -2044,10 +1987,6 @@ IMPL_LINK( SwFrmPage, ModifyHdl, Edit *, pEdit )
     UpdateExample();
     return 0;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwFrmPage::UpdateExample()
 {
@@ -2280,9 +2219,7 @@ USHORT* SwFrmPage::GetRanges()
 {
     return aPageRg;
 }
-/* -----------------------------03.11.00 10:52--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwFrmPage::SetFormatUsed(BOOL bFmt)
 {
     bFormat     = bFmt;
@@ -2303,10 +2240,6 @@ void SwFrmPage::SetFormatUsed(BOOL bFmt)
 //        aSizeFL.SetSizePixel(aSizeSize);
     }
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 SwGrfExtPage::SwGrfExtPage(Window *pParent, const SfxItemSet &rSet) :
     SfxTabPage( pParent, SW_RES(TP_GRF_EXT), rSet ),
@@ -2331,27 +2264,15 @@ SwGrfExtPage::SwGrfExtPage(Window *pParent, const SfxItemSet &rSet) :
     aBrowseBT.SetClickHdl    ( LINK(this, SwGrfExtPage, BrowseHdl));
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SwGrfExtPage::~SwGrfExtPage()
 {
     delete pGrfDlg;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SfxTabPage* SwGrfExtPage::Create( Window *pParent, const SfxItemSet &rSet )
 {
     return new SwGrfExtPage( pParent, rSet );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwGrfExtPage::Reset(const SfxItemSet &rSet)
 {
@@ -2368,10 +2289,6 @@ void SwGrfExtPage::Reset(const SfxItemSet &rSet)
 
     ActivatePage(rSet);
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwGrfExtPage::ActivatePage(const SfxItemSet& rSet)
 {
@@ -2458,10 +2375,6 @@ void SwGrfExtPage::ActivatePage(const SfxItemSet& rSet)
     aBmpWin.Invalidate();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 BOOL SwGrfExtPage::FillItemSet( SfxItemSet &rSet )
 {
     BOOL bModified = FALSE;
@@ -2500,9 +2413,6 @@ BOOL SwGrfExtPage::FillItemSet( SfxItemSet &rSet )
     }
     return bModified;
 }
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 int SwGrfExtPage::DeactivatePage(SfxItemSet *_pSet)
 {
@@ -2510,10 +2420,6 @@ int SwGrfExtPage::DeactivatePage(SfxItemSet *_pSet)
         FillItemSet( *_pSet );
     return TRUE;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 IMPL_LINK( SwGrfExtPage, BrowseHdl, Button *, EMPTYARG )
 {
@@ -2563,9 +2469,6 @@ IMPL_LINK( SwGrfExtPage, BrowseHdl, Button *, EMPTYARG )
     }
     return 0;
 }
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 IMPL_LINK( SwGrfExtPage, MirrorHdl, CheckBox *, EMPTYARG )
 {
@@ -2587,7 +2490,6 @@ IMPL_LINK( SwGrfExtPage, MirrorHdl, CheckBox *, EMPTYARG )
 /*--------------------------------------------------------------------
     Beschreibung: BeispielWindow
  --------------------------------------------------------------------*/
-
 BmpWindow::BmpWindow( Window* pPar, USHORT nId,
                         const Graphic& rGraphic, const BitmapEx& rBmp, const BitmapEx& rBmpHC ) :
     Window(pPar, SW_RES(nId)),
@@ -2660,8 +2562,6 @@ void BmpWindow::SetGraphic(const Graphic& rGrf)
 /***************************************************************************
     Beschreibung:   URL und ImageMap an Rahmen einstellen
 ***************************************************************************/
-
-
 SwFrmURLPage::SwFrmURLPage( Window *pParent, const SfxItemSet &rSet ) :
     SfxTabPage(pParent,     SW_RES(TP_FRM_URL), rSet),
     aHyperLinkFL    (this, SW_RES( FL_HYPERLINK )),
@@ -2681,17 +2581,9 @@ SwFrmURLPage::SwFrmURLPage( Window *pParent, const SfxItemSet &rSet ) :
     aSearchPB.SetClickHdl(LINK(this, SwFrmURLPage, InsertFileHdl));
 }
 
-/***************************************************************************
-    Beschreibung:
-***************************************************************************/
-
 SwFrmURLPage::~SwFrmURLPage()
 {
 }
-
-/***************************************************************************
-    Beschreibung:
-***************************************************************************/
 
 void SwFrmURLPage::Reset( const SfxItemSet &rSet )
 {
@@ -2739,12 +2631,6 @@ void SwFrmURLPage::Reset( const SfxItemSet &rSet )
     aClientCB.SaveValue();
 }
 
-
-
-/***************************************************************************
-    Beschreibung:
-***************************************************************************/
-
 BOOL SwFrmURLPage::FillItemSet(SfxItemSet &rSet)
 {
     BOOL bModified = FALSE;
@@ -2784,18 +2670,10 @@ BOOL SwFrmURLPage::FillItemSet(SfxItemSet &rSet)
     return bModified;
 }
 
-/***************************************************************************
-    Beschreibung:
-***************************************************************************/
-
 SfxTabPage* SwFrmURLPage::Create(Window *pParent, const SfxItemSet &rSet)
 {
     return new SwFrmURLPage( pParent, rSet );
 }
-
-/***************************************************************************
-    Beschreibung:
-***************************************************************************/
 
 IMPL_LINK( SwFrmURLPage, InsertFileHdl, PushButton *, EMPTYARG )
 {
@@ -2820,19 +2698,12 @@ IMPL_LINK( SwFrmURLPage, InsertFileHdl, PushButton *, EMPTYARG )
     return 0;
 }
 
-/* -----------------------------03.11.00 10:56--------------------------------
-
- ---------------------------------------------------------------------------*/
 void lcl_Move(Window& rWin, sal_Int32 nDiff)
 {
     Point aPos(rWin.GetPosPixel());
     aPos.Y() -= nDiff;
     rWin.SetPosPixel(aPos);
 }
-
-/*-----------------13.11.96 13.15-------------------
-
---------------------------------------------------*/
 
 SwFrmAddPage::SwFrmAddPage(Window *pParent, const SfxItemSet &rSet ) :
     SfxTabPage(pParent,     SW_RES(TP_FRM_ADD), rSet),
@@ -2870,26 +2741,14 @@ SwFrmAddPage::SwFrmAddPage(Window *pParent, const SfxItemSet &rSet ) :
 
 }
 
-/*-----------------13.11.96 13.15-------------------
-
---------------------------------------------------*/
-
 SwFrmAddPage::~SwFrmAddPage()
 {
 }
-
-/*-----------------13.11.96 13.15-------------------
-
---------------------------------------------------*/
 
 SfxTabPage* SwFrmAddPage::Create(Window *pParent, const SfxItemSet &rSet)
 {
     return new SwFrmAddPage(pParent, rSet);
 }
-
-/*-----------------13.11.96 13.14-------------------
-
---------------------------------------------------*/
 
 void SwFrmAddPage::Reset(const SfxItemSet &rSet )
 {
@@ -3089,10 +2948,6 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
     }
 }
 
-/*-----------------13.11.96 13.20-------------------
-
---------------------------------------------------*/
-
 BOOL SwFrmAddPage::FillItemSet(SfxItemSet &rSet)
 {
     BOOL bRet = FALSE;
@@ -3155,18 +3010,10 @@ BOOL SwFrmAddPage::FillItemSet(SfxItemSet &rSet)
     return bRet;
 }
 
-/*-----------------13.11.96 15.05-------------------
-
---------------------------------------------------*/
-
 USHORT* SwFrmAddPage::GetRanges()
 {
     return aAddPgRg;
 }
-
-/*-----------------13.11.96 16.12-------------------
-
---------------------------------------------------*/
 
 IMPL_LINK(SwFrmAddPage, EditModifyHdl, Edit*, EMPTYARG)
 {
@@ -3176,7 +3023,7 @@ IMPL_LINK(SwFrmAddPage, EditModifyHdl, Edit*, EMPTYARG)
 
     return 0;
 }
-//-----------------------------------------------------------------------------
+
 void    SwFrmAddPage::SetFormatUsed(BOOL bFmt)
 {
     bFormat  = bFmt;
@@ -3211,9 +3058,7 @@ void    SwFrmAddPage::SetFormatUsed(BOOL bFmt)
             lcl_Move(*aWindows[nIdx++], nDiff);
     }
 }
-/* -----------------------------08.08.2002 16:24------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SwFrmAddPage, ChainModifyHdl, ListBox*, pBox)
 {
     String sCurrentPrevChain, sCurrentNextChain;
@@ -3246,4 +3091,3 @@ IMPL_LINK(SwFrmAddPage, ChainModifyHdl, ListBox*, pBox)
     }
     return 0;
 }
-

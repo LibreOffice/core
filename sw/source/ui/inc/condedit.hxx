@@ -31,10 +31,6 @@
 #include <svtools/transfer.hxx>
 #include "swdllapi.h"
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 class SW_DLLPUBLIC ConditionEdit : public Edit, public DropTargetHelper
 {
     BOOL bBrackets, bEnableDrop;
@@ -52,19 +48,3 @@ public:
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

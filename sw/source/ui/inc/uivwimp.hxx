@@ -52,9 +52,6 @@ namespace com{ namespace sun{ namespace star {
     }
 }}}
 
-/* -----------------------------29.05.00 08:22--------------------------------
-
- ---------------------------------------------------------------------------*/
 class SwScannerEventListener : public ::cppu::WeakImplHelper1<
     STAR_NMSPC::lang::XEventListener >
 {
@@ -73,7 +70,6 @@ public:
 };
 
 // --------------------------- Clipboard EventListener ------------------
-
 class SwClipboardChangeListener : public ::cppu::WeakImplHelper1<
     CLIP_NMSPC::XClipboardListener >
 {
@@ -96,11 +92,8 @@ public:
     void AddRemoveListener( BOOL bAdd );
 };
 
-
-/* ---------------------------------------------------------------------------
-
- ---------------------------------------------------------------------------*/
 class SwMailMergeConfigItem;
+
 class SwView_Impl
 {
     STAR_REFERENCE( lang::XEventListener )  xScanEvtLstnr;
@@ -188,4 +181,3 @@ public:
     inline void             SetParam( sal_Int16 nParam ) { m_nParam = nParam; }
 };
 #endif
-

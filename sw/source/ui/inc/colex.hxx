@@ -36,9 +36,6 @@
 class SwColMgr;
 class SfxItemSet;
 
-/* -----------------------------08.02.2002 11:32------------------------------
-
- ---------------------------------------------------------------------------*/
 class SW_DLLPUBLIC SwPageExample : public SvxPageWindow
 {
 public:
@@ -48,10 +45,9 @@ public:
 
     void UpdateExample( const SfxItemSet& rSet );
 };
-/* -----------------------------08.02.2002 11:34------------------------------
 
- ---------------------------------------------------------------------------*/
 class SwTextGridItem;
+
 class SW_DLLPUBLIC SwPageGridExample : public SwPageExample
 {
     SwTextGridItem*     pGridItem;
@@ -68,9 +64,6 @@ public:
     ~SwPageGridExample();
     void UpdateExample( const SfxItemSet& rSet );
 };
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwColExample : public SwPageExample
 {
@@ -94,9 +87,6 @@ public:
         }
 };
 
-/*-----------------25.10.96 08.23-------------------
-
---------------------------------------------------*/
 class SW_DLLPUBLIC SwColumnOnlyExample : public Window
 {
 private:

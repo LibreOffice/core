@@ -77,7 +77,6 @@ SV_IMPL_PTRARR( SwColumns, SwColumnPtr )
 /*--------------------------------------------------------------------
     Beschreibung:  Statische Daten
  --------------------------------------------------------------------*/
-
 static const USHORT __FAR_DATA nLines[] = {
     DEF_LINE_WIDTH_0,
     DEF_LINE_WIDTH_1,
@@ -96,10 +95,6 @@ inline BOOL IsMarkInSameSection( SwWrtShell& rWrtSh, const SwSection* pSect )
     rWrtSh.SwapPam();
     return bRet;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 SwColumnDlg::SwColumnDlg(Window* pParent, SwWrtShell& rSh) :
     SfxModalDialog(pParent, SW_RES(DLG_COLUMN)),
@@ -232,10 +227,6 @@ SwColumnDlg::SwColumnDlg(Window* pParent, SwWrtShell& rSh) :
     pTabPage->ActivateColumnControl();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SwColumnDlg::~SwColumnDlg()
 {
     delete pTabPage;
@@ -244,9 +235,6 @@ SwColumnDlg::~SwColumnDlg()
     delete pSelectionSet;
 }
 
-/* -----------------26.05.99 11:40-------------------
- *
- * --------------------------------------------------*/
 IMPL_LINK(SwColumnDlg, ObjectHdl, ListBox*, pBox)
 {
     SfxItemSet* pSet = 0;
@@ -309,9 +297,7 @@ IMPL_LINK(SwColumnDlg, ObjectHdl, ListBox*, pBox)
         pTabPage->Reset(*pSet);
     return 0;
 }
-/* -----------------26.05.99 12:32-------------------
- *
- * --------------------------------------------------*/
+
 IMPL_LINK(SwColumnDlg, OkHdl, OKButton*, EMPTYARG)
 {
     //aktuelle Selektion auswerten
@@ -393,10 +379,6 @@ IMPL_LINK(SwColumnDlg, OkHdl, OKButton*, EMPTYARG)
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 #if OSL_DEBUG_LEVEL < 2
 inline
 #endif
@@ -413,10 +395,7 @@ static USHORT __FAR_DATA aPageRg[] = {
     0
 };
 
-
 DBG_NAME(columnhdl)
-
-
 
 USHORT lcl_LineWidthToPos(ULONG nWidth)
 {
@@ -426,8 +405,6 @@ USHORT lcl_LineWidthToPos(ULONG nWidth)
             return i;
     return 0;
 }
-
-
 
 void SwColumnPage::ResetColWidth()
 {
@@ -445,9 +422,6 @@ void SwColumnPage::ResetColWidth()
 /*--------------------------------------------------------------------
     Beschreibung:   Jetzt als TabPage
  --------------------------------------------------------------------*/
-
-
-
 SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
 
     : SfxTabPage(pParent, SW_RES(TP_COLUMN), rSet),
@@ -560,17 +534,10 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
         aLineTypeDLB.InsertEntry( 100 * nLines[ i ] );
 }
 
-
-
 SwColumnPage::~SwColumnPage()
 {
     delete pColMgr;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void SwColumnPage::SetPageWidth(long nPageWidth)
 {
@@ -582,12 +549,6 @@ void SwColumnPage::SetPageWidth(long nPageWidth)
     aEd2.SetMax(nNewMaxWidth, FUNIT_TWIP);
     aEd3.SetMax(nNewMaxWidth, FUNIT_TWIP);
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 
 void SwColumnPage::Reset(const SfxItemSet &rSet)
 {
@@ -647,9 +608,6 @@ void SwColumnPage::Reset(const SfxItemSet &rSet)
 /*--------------------------------------------------------------------
     Beschreibung:   TabPage erzeugen
  --------------------------------------------------------------------*/
-
-
-
 SfxTabPage* SwColumnPage::Create(Window *pParent, const SfxItemSet &rSet)
 {
     return new SwColumnPage(pParent, rSet);
@@ -658,9 +616,6 @@ SfxTabPage* SwColumnPage::Create(Window *pParent, const SfxItemSet &rSet)
 /*--------------------------------------------------------------------
     Beschreibung:   Attribute in den Set stopfen bei OK
  --------------------------------------------------------------------*/
-
-
-
 BOOL SwColumnPage::FillItemSet(SfxItemSet &rSet)
 {
     if(aCLNrEdt.HasChildPathFocus())
@@ -693,9 +648,6 @@ BOOL SwColumnPage::FillItemSet(SfxItemSet &rSet)
 /*--------------------------------------------------------------------
     Beschreibung:   ColumnManager updaten
  --------------------------------------------------------------------*/
-
-
-
 IMPL_LINK( SwColumnPage, UpdateColMgr, void *, /*pField*/ )
 {
     long nGutterWidth = pColMgr->GetGutterWidth();
@@ -786,9 +738,6 @@ IMPL_LINK( SwColumnPage, UpdateColMgr, void *, /*pField*/ )
 /*------------------------------------------------------------------------
  Beschreibung:  Initialisierung
 ------------------------------------------------------------------------*/
-
-
-
 void SwColumnPage::Init()
 {
     aCLNrEdt.SetValue(nCols);
@@ -857,9 +806,6 @@ void SwColumnPage::Init()
                 Andernfalls werden die Edits jeweils fuer die entsprechenden
                 Spaltenzahl enabled; eine Spalte kann nicht bearbeitet werden.
 ------------------------------------------------------------------------*/
-
-
-
 void SwColumnPage::UpdateCols()
 {
     BOOL bEnableBtns= FALSE;
@@ -929,7 +875,6 @@ void SwColumnPage::SetLabels( USHORT nVis )
                 Breiteneinstellungen des Benutzers; alle Spalten sind
                 gleich breit.
 ------------------------------------------------------------------------*/
-
 IMPL_LINK( SwColumnPage, ColModify, NumericField *, pNF )
 {
     nCols = (USHORT)aCLNrEdt.GetValue();
@@ -965,9 +910,6 @@ IMPL_LINK( SwColumnPage, ColModify, NumericField *, pNF )
                 eine Aenderung der Spaltenzahl kehrt wieder zu diesem
                 Default zurueck.
 ------------------------------------------------------------------------*/
-
-
-
 IMPL_LINK( SwColumnPage, GapModify, PercentField *, pFld )
 {
     long nActValue = static_cast< long >(pFld->DenormalizePercent(pFld->GetValue(FUNIT_TWIP)));
@@ -1039,26 +981,18 @@ IMPL_LINK( SwColumnPage, GapModify, PercentField *, pFld )
     return 0;
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
-
-
 IMPL_LINK( SwColumnPage, EdModify, PercentField *, pField )
 {
     pModifiedField = pField;
     Timeout(0);
     return 0;
 }
+
 /*------------------------------------------------------------------------
  Beschreibung:  Handler hinter der Checkbox fuer automatische Breite.
                 Ist die Box gecheckt, koennen keine expliziten Werte
                 fuer die Spaltenbreite eingegeben werden.
 ------------------------------------------------------------------------*/
-
-
-
 IMPL_LINK( SwColumnPage, AutoWidthHdl, CheckBox *, pBox )
 {
     long nDist = static_cast< long >(aDistEd1.DenormalizePercent(aDistEd1.GetValue(FUNIT_TWIP)));
@@ -1079,7 +1013,6 @@ IMPL_LINK( SwColumnPage, AutoWidthHdl, CheckBox *, pBox )
 /*------------------------------------------------------------------------
  Beschreibung:  Raufscrollen der Inhalte der Edits.
 ------------------------------------------------------------------------*/
-
 IMPL_LINK( SwColumnPage, Up, Button *, EMPTYARG )
 {
     if( nFirstVis )
@@ -1090,10 +1023,10 @@ IMPL_LINK( SwColumnPage, Up, Button *, EMPTYARG )
     }
     return 0;
 }
+
 /*------------------------------------------------------------------------
  Beschreibung:  Runterscrollen der Inhalte der Edits.
 ------------------------------------------------------------------------*/
-
 IMPL_LINK( SwColumnPage, Down, Button *, EMPTYARG )
 {
     if( nFirstVis + nVisCols < nCols )
@@ -1104,12 +1037,12 @@ IMPL_LINK( SwColumnPage, Down, Button *, EMPTYARG )
     }
     return 0;
 }
+
 /*------------------------------------------------------------------------
  Beschreibung:  Relikt aus alten Zeiten - jetzt direkt ohne time
  *              Timer- Handler; angetriggert durch eine Aenderung der
                 Spaltenbreite oder des Spaltenabstandes.
 ------------------------------------------------------------------------*/
-
 IMPL_LINK( SwColumnPage, Timeout, Timer *, EMPTYARG )
 {
     DBG_PROFSTART(columnhdl) ;
@@ -1155,12 +1088,10 @@ IMPL_LINK( SwColumnPage, Timeout, Timer *, EMPTYARG )
     DBG_PROFSTOP(columnhdl) ;
     return 0;
 }
+
 /*------------------------------------------------------------------------
  Beschreibung:  Aktualisierung der Anzeige
 ------------------------------------------------------------------------*/
-
-
-
 void SwColumnPage::Update()
 {
     aBalanceColsCB.Enable(nCols > 1);
@@ -1194,9 +1125,6 @@ void SwColumnPage::Update()
 /*--------------------------------------------------------------------
     Beschreibung:   Update Bsp
  --------------------------------------------------------------------*/
-
-
-
 void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
 {
     if(!bFrm)
@@ -1271,12 +1199,6 @@ void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
     Update();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
-
 int SwColumnPage::DeactivatePage(SfxItemSet *_pSet)
 {
     if(_pSet)
@@ -1285,18 +1207,10 @@ int SwColumnPage::DeactivatePage(SfxItemSet *_pSet)
     return TRUE;
 }
 
-
-
 USHORT* SwColumnPage::GetRanges()
 {
     return aPageRg;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 
 IMPL_LINK( SwColumnPage, SetDefaultsHdl, ValueSet *, pVS )
 {
@@ -1334,18 +1248,11 @@ IMPL_LINK( SwColumnPage, SetDefaultsHdl, ValueSet *, pVS )
     return 0;
 }
 
-/*-----------------25.10.96 11.41-------------------
-
---------------------------------------------------*/
-
-
 void SwColumnPage::SetFrmMode(BOOL bMod)
 {
     bFrm = bMod;
 }
-/* -----------------------------2002/06/19 13:08------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwColumnPage::SetInSection(BOOL bSet)
 {
     if(!SW_MOD()->GetCTLOptions().IsCTLFontEnabled())
@@ -1371,11 +1278,6 @@ void SwColumnPage::SetInSection(BOOL bSet)
         aFLLineType.SetSizePixel(aSz);
     }
 }
-
-/*-----------------07.03.97 08.33-------------------
-
---------------------------------------------------*/
-
 
 void ColumnValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 {
@@ -1442,16 +1344,10 @@ void ColumnValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     pDev->SetLineColor(aLineColor);
 }
 
-/*-----------------07.03.97 08.48-------------------
-
---------------------------------------------------*/
-
 ColumnValueSet::~ColumnValueSet()
 {
 }
-/* -----------------------------02.04.2002 16:01------------------------------
 
- ---------------------------------------------------------------------------*/
 void ColumnValueSet::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
@@ -1461,4 +1357,3 @@ void ColumnValueSet::DataChanged( const DataChangedEvent& rDCEvt )
     }
     ValueSet::DataChanged( rDCEvt );
 }
-

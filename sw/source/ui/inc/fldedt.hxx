@@ -32,10 +32,6 @@
 class SwView;
 class SwWrtShell;
 
-/*--------------------------------------------------------------------
-   Beschreibung:
- --------------------------------------------------------------------*/
-
 class SwFldEditDlg : public SfxSingleTabDialog
 {
     SwWrtShell* pSh;
@@ -61,6 +57,5 @@ public:
     void            EnableInsert(BOOL bEnable);
     void            InsertHdl();
 };
-
 
 #endif

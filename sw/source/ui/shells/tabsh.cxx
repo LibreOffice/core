@@ -85,8 +85,6 @@
 
 #include <dialog.hrc>
 
-
-
 //!!! new: insert table
 /*
 #include <svx/htmlmode.hxx>
@@ -113,18 +111,13 @@
 
 using namespace ::com::sun::star;
 
-//-----------------------------------------------------------------------------
-
 SFX_IMPL_INTERFACE(SwTableShell, SwBaseShell, SW_RES(STR_SHELLNAME_TABLE))
 {
     SFX_POPUPMENU_REGISTRATION(SW_RES(MN_TAB_POPUPMENU));
     SFX_OBJECTBAR_REGISTRATION(SFX_OBJECTBAR_OBJECT, SW_RES(RID_TABLE_TOOLBOX));
 }
 
-
 TYPEINIT1(SwTableShell,SwBaseShell)
-
-/************************************************************************/
 
 const USHORT __FAR_DATA aUITableAttrRange[] =
 {
@@ -164,9 +157,6 @@ static void lcl_SetAttr( SwWrtShell &rSh, const SfxPoolItem &rItem )
     aSet.Put( rItem );
     rSh.SetTblAttr( aSet );
 }
-
-/************************************************************************/
-
 
 static SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
 {
@@ -294,9 +284,6 @@ static SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
     rSet.Put(SwPtrItem(FN_TABLE_REP, pRep));
     return pRep;
 }
-
-/************************************************************************/
-
 
 void ItemSetToTableParam( const SfxItemSet& rSet,
                                 SwWrtShell &rSh )
@@ -475,9 +462,6 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
     rSh.EndAllAction();
 }
 
-/************************************************************************/
-
-
 static void lcl_TabGetMaxLineWidth(const SvxBorderLine* pBorderLine, SvxBorderLine& rBorderLine)
 {
     if(pBorderLine->GetInWidth() > rBorderLine.GetInWidth())
@@ -491,7 +475,6 @@ static void lcl_TabGetMaxLineWidth(const SvxBorderLine* pBorderLine, SvxBorderLi
 
     rBorderLine.SetColor(pBorderLine->GetColor());
 }
-
 
 void SwTableShell::Execute(SfxRequest &rReq)
 {
@@ -1234,9 +1217,6 @@ void SwTableShell::Execute(SfxRequest &rReq)
     if(bCallDone)
         rReq.Done();
 }
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwTableShell::GetState(SfxItemSet &rSet)
 {
@@ -1419,20 +1399,12 @@ void SwTableShell::GetState(SfxItemSet &rSet)
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SwTableShell::SwTableShell(SwView &_rView) :
     SwBaseShell(_rView)
 {
     SetName(String::CreateFromAscii("Table"));
     SetHelpId(SW_TABSHELL);
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwTableShell::GetFrmBorderState(SfxItemSet &rSet)
 {
@@ -1444,10 +1416,6 @@ void SwTableShell::GetFrmBorderState(SfxItemSet &rSet)
     GetShell().GetTabBorders( aCoreSet );
     rSet.Put( aCoreSet );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwTableShell::ExecTableStyle(SfxRequest& rReq)
 {
@@ -1502,7 +1470,6 @@ void SwTableShell::ExecTableStyle(SfxRequest& rReq)
             }
         }
 }
-
 
 void SwTableShell::GetLineStyleState(SfxItemSet &rSet)
 {
@@ -1586,4 +1553,3 @@ void SwTableShell::ExecNumberFormat(SfxRequest& rReq)
     }
 
 }
-

@@ -42,10 +42,8 @@
 #include <swunodef.hxx>
 #include "swdllapi.h"
 
-/* -----------------------------15.12.99 09:55--------------------------------
-
- ---------------------------------------------------------------------------*/
 class SwOneExampleFrame;
+
 class SwFrmCtrlWindow : public Window
 {
     SwOneExampleFrame*  pExampleFrame;
@@ -54,9 +52,7 @@ public:
 
     virtual void    Command( const CommandEvent& rCEvt );
 };
-/* -----------------------------15.12.99 12:56--------------------------------
 
- ---------------------------------------------------------------------------*/
 class MenuResource : public Resource
 {
     ResStringArray      aMenuArray;
@@ -66,9 +62,7 @@ public:
 
     ResStringArray& GetMenuArray() {return aMenuArray;}
 };
-/* -----------------27.07.99 15:20-------------------
 
- --------------------------------------------------*/
 #define EX_SHOW_ONLINE_LAYOUT   0x001
 
 // hard zoom value
@@ -77,6 +71,7 @@ public:
 #define EX_SHOW_DEFAULT_PAGE    0x04
 
 class SwView;
+
 class SW_DLLPUBLIC SwOneExampleFrame
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >         _xControl;
@@ -130,4 +125,3 @@ public:
 };
 
 #endif
-

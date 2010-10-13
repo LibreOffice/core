@@ -42,9 +42,6 @@
 /*------------------------------------------------------------------------
  Beschreibung:  Spaltenbreite auf aktuelle Breite einstellen
 ------------------------------------------------------------------------*/
-
-
-
 void FitToActualSize(SwFmtCol& rCol, USHORT nWidth)
 {
     const USHORT nCount = rCol.GetColumns().Count();
@@ -56,22 +53,16 @@ void FitToActualSize(SwFmtCol& rCol, USHORT nWidth)
     rCol.SetWishWidth(nWidth);
 }
 
-
 // PUBLIC METHODES -------------------------------------------------------
 /*------------------------------------------------------------------------
  Beschreibung:  Setzen Spaltenanzahl und Gutterwidth
 ------------------------------------------------------------------------*/
-
-
-
 void SwColMgr::SetCount(USHORT nCount, USHORT  nGutterWidth)
 {
     aFmtCol.Init(nCount, nGutterWidth, nWidth);
     aFmtCol.SetWishWidth(nWidth);
     aFmtCol.SetGutterWidth(nGutterWidth, nWidth);
 }
-
-
 
 USHORT SwColMgr::GetGutterWidth( USHORT nPos ) const
 {
@@ -86,11 +77,6 @@ USHORT SwColMgr::GetGutterWidth( USHORT nPos ) const
     }
     return nRet;
 }
-
-/*-----------------22.10.96 14.28-------------------
-
---------------------------------------------------*/
-
 
 void SwColMgr::SetGutterWidth(USHORT nGutterWidth, USHORT nPos )
 {
@@ -109,34 +95,25 @@ void SwColMgr::SetGutterWidth(USHORT nGutterWidth, USHORT nPos )
 /*------------------------------------------------------------------------
  Beschreibung:  Hoehe Trennlinie
 ------------------------------------------------------------------------*/
-
-
-
 short SwColMgr::GetLineHeightPercent() const
 {
     return (short)aFmtCol.GetLineHeight();
 }
-
-
 
 void SwColMgr::SetLineHeightPercent(short nPercent)
 {
     ASSERT(nPercent <= 100, LineHeight darf nur bis 100 % gross  sein);
     aFmtCol.SetLineHeight((BYTE)nPercent);
 }
+
 /*------------------------------------------------------------------------
  Beschreibung:  Spaltenbreite
 ------------------------------------------------------------------------*/
-
-
-
 USHORT SwColMgr::GetColWidth(USHORT nIdx) const
 {
     ASSERT(nIdx < GetCount(), Spaltenarray ueberindiziert.);
     return aFmtCol.CalcPrtColWidth(nIdx, nWidth);
 }
-
-
 
 void SwColMgr::SetColWidth(USHORT nIdx, USHORT nWd)
 {
@@ -148,9 +125,6 @@ void SwColMgr::SetColWidth(USHORT nIdx, USHORT nWd)
 /*--------------------------------------------------------------------
     Beschreibung:   Groesse neu setzen
  --------------------------------------------------------------------*/
-
-
-
 void SwColMgr::SetActualWidth(USHORT nW)
 {
     nWidth = nW;
@@ -160,9 +134,6 @@ void SwColMgr::SetActualWidth(USHORT nW)
 /*--------------------------------------------------------------------
     Beschreibung: ctor
  --------------------------------------------------------------------*/
-
-
-
 SwColMgr::SwColMgr(const SfxItemSet& rSet, USHORT nActWidth) :
     aFmtCol((const SwFmtCol&)rSet.Get(RES_COL)),
     nWidth(nActWidth)
@@ -179,13 +150,7 @@ SwColMgr::SwColMgr(const SfxItemSet& rSet, USHORT nActWidth) :
     ::FitToActualSize(aFmtCol, nWidth);
 }
 
-
-
-
-SwColMgr::~SwColMgr() {}
-
-
-
-
-
+SwColMgr::~SwColMgr()
+{
+}
 

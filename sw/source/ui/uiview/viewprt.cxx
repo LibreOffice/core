@@ -306,23 +306,25 @@ void __EXPORT SwView::ExecutePrint(SfxRequest& rReq)
 SfxTabPage* CreatePrintOptionsPage( Window *pParent,
                                 const SfxItemSet &rOptions, BOOL bPreview )
 {
-    SfxTabPage* pPage = NULL;
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    DBG_ASSERT( pFac, "No Print Dialog" );
-    if ( pFact )
-    {
-        ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( TP_OPTPRINT_PAGE );
-        pPage = (*fnCreatePage)( pParent, rOptions );
-    }
+    OSL_ENSURE(pFact, "No Print Dialog");
+    if (!pFact)
+        return NULL;
 
-    DBG_ASSERT( pPage, "No page" );
-    if ( pPage )
-    {
-        SfxAllItemSet aSet(*(rOptions.GetPool()));
-        aSet.Put (SfxBoolItem(SID_PREVIEWFLAG_TYPE, bPreview));
-        aSet.Put (SfxBoolItem(SID_FAX_LIST, sal_True));
-        pPage->PageCreated(aSet);
-    }
+    ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc(TP_OPTPRINT_PAGE);
+    OSL_ENSURE(pFact, "No Page Creator");
+    if (!fnCreatePage)
+        return NULL;
+
+    SfxTabPage* pPage = (*fnCreatePage)(pParent, rOptions);
+    OSL_ENSURE(pPage, "No page");
+    if (!pPage)
+        return NULL;
+
+    SfxAllItemSet aSet(*(rOptions.GetPool()));
+    aSet.Put(SfxBoolItem(SID_PREVIEWFLAG_TYPE, bPreview));
+    aSet.Put(SfxBoolItem(SID_FAX_LIST, sal_True));
+    pPage->PageCreated(aSet);
     return pPage;
 }
 

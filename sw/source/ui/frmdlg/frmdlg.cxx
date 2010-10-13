@@ -57,7 +57,6 @@
 /*--------------------------------------------------------------------
     Beschreibung:   Der Traeger des Dialoges
  --------------------------------------------------------------------*/
-
 SwFrmDlg::SwFrmDlg( SfxViewFrame*       pViewFrame,
                     Window*             pParent,
                     const SfxItemSet&   rCoreSet,
@@ -135,16 +134,9 @@ SwFrmDlg::SwFrmDlg( SfxViewFrame*       pViewFrame,
         SetCurPageId(nDefPage);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SwFrmDlg::~SwFrmDlg()
 {
 }
-
-
-
 
 void SwFrmDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
 {

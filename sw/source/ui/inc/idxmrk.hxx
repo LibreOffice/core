@@ -33,9 +33,6 @@
 
 class SwWrtShell;
 
-/* -----------------07.09.99 08:02-------------------
-
- --------------------------------------------------*/
 class SwInsertIdxMarkWrapper : public SfxChildWindow
 {
     AbstractMarkFloatDlg*   pAbstDlg;
@@ -51,9 +48,6 @@ public:
     void    ReInitDlg(SwWrtShell& rWrtShell);
 };
 
-/* -----------------07.09.99 08:02-------------------
-
- --------------------------------------------------*/
 class SwInsertAuthMarkWrapper : public SfxChildWindow
 {
     AbstractMarkFloatDlg*   pAbstDlg;
@@ -70,4 +64,3 @@ public:
 };
 
 #endif // _IDXMRK_HXX
-

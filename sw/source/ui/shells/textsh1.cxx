@@ -132,7 +132,6 @@
 
 using namespace ::com::sun::star;
 
-
 void lcl_CharDialog( SwWrtShell &rWrtSh, BOOL bUseDialog, USHORT nSlot,const SfxItemSet *pArgs, SfxRequest *pReq )
 {
     FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &rWrtSh.GetView()));
@@ -261,10 +260,6 @@ void lcl_CharDialog( SwWrtShell &rWrtSh, BOOL bUseDialog, USHORT nSlot,const Sfx
 
     delete pDlg;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 short lcl_AskRedlineMode(Window *pWin)
 {
@@ -1349,12 +1344,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
     }
 }
 
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 void SwTextShell::GetState( SfxItemSet &rSet )
 {
     SwWrtShell &rSh = GetShell();
@@ -1737,6 +1726,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
         nWhich = aIter.NextWhich();
     }
 }
+
 /* -----------------------------2002/07/05 10:31------------------------------
     Switch on/off header of footer of a page style - if an empty name is
     given all styles are changed
@@ -1802,4 +1792,3 @@ void SwTextShell::ChangeHeaderOrFooter(
     rSh.EndUndo( UNDO_HEADER_FOOTER ); // #i7983#
     rSh.EndAllAction();
 }
-
