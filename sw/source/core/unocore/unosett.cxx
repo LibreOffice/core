@@ -334,7 +334,7 @@ uno::Reference< beans::XPropertySetInfo >  SwXFootnoteProperties::getPropertySet
 void SwXFootnoteProperties::setPropertyValue(const OUString& rPropertyName, const uno::Any& aValue)
     throw( beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(pDoc)
     {
         const SfxItemPropertySimpleEntry*  pEntry = m_pPropertySet->getPropertyMap()->getByName( rPropertyName );
@@ -456,7 +456,7 @@ void SwXFootnoteProperties::setPropertyValue(const OUString& rPropertyName, cons
 uno::Any SwXFootnoteProperties::getPropertyValue(const OUString& rPropertyName)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Any aRet;
     if(pDoc)
     {
@@ -645,7 +645,7 @@ void SwXEndnoteProperties::setPropertyValue(const OUString& rPropertyName, const
     throw( beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException,
         lang::WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(pDoc)
     {
         const SfxItemPropertySimpleEntry*  pEntry = m_pPropertySet->getPropertyMap()->getByName( rPropertyName );
@@ -722,7 +722,7 @@ void SwXEndnoteProperties::setPropertyValue(const OUString& rPropertyName, const
 uno::Any SwXEndnoteProperties::getPropertyValue(const OUString& rPropertyName)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Any aRet;
     if(pDoc)
     {
@@ -877,7 +877,7 @@ void SwXLineNumberingProperties::setPropertyValue(
         throw( UnknownPropertyException, PropertyVetoException,
                 IllegalArgumentException, WrappedTargetException, RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(pDoc)
     {
         const SfxItemPropertySimpleEntry*  pEntry = m_pPropertySet->getPropertyMap()->getByName( rPropertyName );
@@ -995,7 +995,7 @@ void SwXLineNumberingProperties::setPropertyValue(
 Any SwXLineNumberingProperties::getPropertyValue(const OUString& rPropertyName)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     Any aRet;
     if(pDoc)
     {
@@ -1228,7 +1228,7 @@ SwXNumberingRules::SwXNumberingRules(SwDoc& rDoc) :
 
 SwXNumberingRules::~SwXNumberingRules()
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(pDoc && sCreatedNumRuleName.Len())
         pDoc->DelNumRule( sCreatedNumRuleName );
     if( pNumRule && bOwnNumRuleCreated )
@@ -1239,7 +1239,7 @@ void SwXNumberingRules::replaceByIndex(sal_Int32 nIndex, const uno::Any& rElemen
     throw( lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
                   lang::WrappedTargetException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(nIndex < 0 || MAXLEVEL <= nIndex)
         throw lang::IndexOutOfBoundsException();
 
@@ -1320,7 +1320,7 @@ uno::Any SwXNumberingRules::getByIndex(sal_Int32 nIndex)
     throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException,
             uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(nIndex < 0 || MAXLEVEL <= nIndex)
         throw lang::IndexOutOfBoundsException();
 
@@ -1360,7 +1360,7 @@ sal_Bool SwXNumberingRules::hasElements(void) throw( uno::RuntimeException )
 uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
                 const SwNumRule& rNumRule, sal_Int32 nIndex) const
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     DBG_ASSERT( 0 <= nIndex && nIndex < MAXLEVEL, "index out of range" );
 
     const SwNumFmt& rFmt = rNumRule.Get( (sal_uInt16)nIndex );
@@ -1636,7 +1636,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
             const uno::Sequence<beans::PropertyValue>& rProperties, sal_Int32 nIndex)
     throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     DBG_ASSERT( 0 <= nIndex && nIndex < MAXLEVEL, "index out of range" );
 
     // the order of the names is important!
@@ -2436,19 +2436,19 @@ SwXTextColumns::~SwXTextColumns()
 
 sal_Int32 SwXTextColumns::getReferenceValue(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return nReference;
 }
 
 sal_Int16 SwXTextColumns::getColumnCount(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return static_cast< sal_Int16>( aTextColumns.getLength() );
 }
 
 void SwXTextColumns::setColumnCount(sal_Int16 nColumns) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(nColumns <= 0)
         throw uno::RuntimeException();
     bIsAutomaticWidth = sal_True;
@@ -2469,14 +2469,14 @@ void SwXTextColumns::setColumnCount(sal_Int16 nColumns) throw( uno::RuntimeExcep
 
 uno::Sequence< TextColumn > SwXTextColumns::getColumns(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return aTextColumns;
 }
 
 void SwXTextColumns::setColumns(const uno::Sequence< TextColumn >& rColumns)
             throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     sal_Int32 nReferenceTemp = 0;
     const TextColumn* prCols = rColumns.getConstArray();
     for(long i = 0; i < rColumns.getLength(); i++)

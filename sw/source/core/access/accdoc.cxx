@@ -79,7 +79,7 @@ SwAccessibleDocumentBase::~SwAccessibleDocumentBase()
 
 void SwAccessibleDocumentBase::SetVisArea()
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SwRect aOldVisArea( GetVisArea() );
     const SwRect& rNewVisArea = GetMap()->GetVisArea();
@@ -97,7 +97,7 @@ void SwAccessibleDocumentBase::SetVisArea()
 
 void SwAccessibleDocumentBase::AddChild( Window *pWin, sal_Bool bFireEvent )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     ASSERT( !mpChildWin, "only one child window is supported" );
     if( !mpChildWin )
@@ -116,7 +116,7 @@ void SwAccessibleDocumentBase::AddChild( Window *pWin, sal_Bool bFireEvent )
 
 void SwAccessibleDocumentBase::RemoveChild( Window *pWin )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     ASSERT( !mpChildWin || pWin == mpChildWin, "invalid child window to remove" );
     if( mpChildWin && pWin == mpChildWin )
@@ -133,7 +133,7 @@ void SwAccessibleDocumentBase::RemoveChild( Window *pWin )
 sal_Int32 SAL_CALL SwAccessibleDocumentBase::getAccessibleChildCount( void )
         throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     // CHECK_FOR_DEFUNC is called by parent
 
@@ -149,7 +149,7 @@ uno::Reference< XAccessible> SAL_CALL
         throw (uno::RuntimeException,
                 lang::IndexOutOfBoundsException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if( mpChildWin  )
     {
@@ -173,7 +173,7 @@ uno::Reference< XAccessible> SAL_CALL SwAccessibleDocumentBase::getAccessiblePar
 sal_Int32 SAL_CALL SwAccessibleDocumentBase::getAccessibleIndexInParent (void)
         throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     uno::Reference < XAccessibleContext > xAcc( mxParent->getAccessibleContext() );
     uno::Reference < XAccessible > xThis( this );
@@ -196,7 +196,7 @@ OUString SAL_CALL SwAccessibleDocumentBase::getAccessibleDescription (void)
 awt::Rectangle SAL_CALL SwAccessibleDocumentBase::getBounds()
         throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     Window *pWin = GetWindow();
 
@@ -213,7 +213,7 @@ awt::Rectangle SAL_CALL SwAccessibleDocumentBase::getBounds()
 awt::Point SAL_CALL SwAccessibleDocumentBase::getLocation()
         throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     Window *pWin = GetWindow();
 
@@ -229,7 +229,7 @@ awt::Point SAL_CALL SwAccessibleDocumentBase::getLocation()
 ::com::sun::star::awt::Point SAL_CALL SwAccessibleDocumentBase::getLocationOnScreen()
         throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     Window *pWin = GetWindow();
 
@@ -245,7 +245,7 @@ awt::Point SAL_CALL SwAccessibleDocumentBase::getLocation()
 ::com::sun::star::awt::Size SAL_CALL SwAccessibleDocumentBase::getSize()
         throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     Window *pWin = GetWindow();
 
@@ -261,7 +261,7 @@ sal_Bool SAL_CALL SwAccessibleDocumentBase::containsPoint(
             const awt::Point& aPoint )
         throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     Window *pWin = GetWindow();
 
@@ -278,7 +278,7 @@ uno::Reference< XAccessible > SAL_CALL SwAccessibleDocumentBase::getAccessibleAt
                 const awt::Point& aPoint )
         throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if( mpChildWin  )
     {
@@ -449,7 +449,7 @@ uno::Sequence< uno::Type > SAL_CALL SwAccessibleDocument::getTypes()
 uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleDocument::getImplementationId()
         throw(uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     static uno::Sequence< sal_Int8 > aId( 16 );
     static sal_Bool bInit = sal_False;
     if(!bInit)

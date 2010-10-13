@@ -574,7 +574,7 @@ throw (uno::RuntimeException)
 sal_Bool SAL_CALL
 SwXParagraphEnumeration::hasMoreElements() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     return (m_pImpl->m_bFirstParagraph) ? sal_True : m_pImpl->m_xNextPara.is();
 }
@@ -721,7 +721,7 @@ uno::Any SAL_CALL SwXParagraphEnumeration::nextElement()
 throw (container::NoSuchElementException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (m_pImpl->m_bFirstParagraph)
     {
@@ -951,7 +951,7 @@ SwXTextRange::getSupportedServiceNames() throw (uno::RuntimeException)
 uno::Reference< text::XText > SAL_CALL
 SwXTextRange::getText() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!m_pImpl->m_xParentText.is())
     {
@@ -974,7 +974,7 @@ SwXTextRange::getText() throw (uno::RuntimeException)
 uno::Reference< text::XTextRange > SAL_CALL
 SwXTextRange::getStart() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     uno::Reference< text::XTextRange >  xRet;
     ::sw::mark::IMark const * const pBkmk = m_pImpl->GetBookmark();
@@ -1002,7 +1002,7 @@ SwXTextRange::getStart() throw (uno::RuntimeException)
 uno::Reference< text::XTextRange > SAL_CALL
 SwXTextRange::getEnd() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     uno::Reference< text::XTextRange >  xRet;
     ::sw::mark::IMark const * const pBkmk = m_pImpl->GetBookmark();
@@ -1029,7 +1029,7 @@ SwXTextRange::getEnd() throw (uno::RuntimeException)
 
 OUString SAL_CALL SwXTextRange::getString() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     OUString sRet;
     // for tables there is no bookmark, thus also no text
@@ -1045,7 +1045,7 @@ OUString SAL_CALL SwXTextRange::getString() throw (uno::RuntimeException)
 void SAL_CALL SwXTextRange::setString(const OUString& rString)
 throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     DeleteAndInsert(rString, false);
 }
@@ -1306,7 +1306,7 @@ uno::Reference< container::XEnumeration > SAL_CALL
 SwXTextRange::createContentEnumeration(const OUString& rServiceName)
 throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     if (!rServiceName.equalsAscii("com.sun.star.text.TextContent"))
     {
@@ -1333,7 +1333,7 @@ throw (uno::RuntimeException)
 uno::Reference< container::XEnumeration > SAL_CALL
 SwXTextRange::createEnumeration() throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     if (!GetDoc() || !m_pImpl->GetBookmark())
     {
@@ -1380,7 +1380,7 @@ SwXTextRange::getAvailableServiceNames() throw (uno::RuntimeException)
 uno::Reference< beans::XPropertySetInfo > SAL_CALL
 SwXTextRange::getPropertySetInfo() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     static uno::Reference< beans::XPropertySetInfo > xRef =
         m_pImpl->m_rPropSet.getPropertySetInfo();
@@ -1394,7 +1394,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         lang::IllegalArgumentException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!GetDoc() || !m_pImpl->GetBookmark())
     {
@@ -1411,7 +1411,7 @@ SwXTextRange::getPropertyValue(const OUString& rPropertyName)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!GetDoc() || !m_pImpl->GetBookmark())
     {
@@ -1471,7 +1471,7 @@ beans::PropertyState SAL_CALL
 SwXTextRange::getPropertyState(const OUString& rPropertyName)
 throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!GetDoc() || !m_pImpl->GetBookmark())
     {
@@ -1487,7 +1487,7 @@ uno::Sequence< beans::PropertyState > SAL_CALL
 SwXTextRange::getPropertyStates(const uno::Sequence< OUString >& rPropertyName)
 throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     if (!GetDoc() || !m_pImpl->GetBookmark())
     {
@@ -1502,7 +1502,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
 void SAL_CALL SwXTextRange::setPropertyToDefault(const OUString& rPropertyName)
 throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!GetDoc() || !m_pImpl->GetBookmark())
     {
@@ -1519,7 +1519,7 @@ SwXTextRange::getPropertyDefault(const OUString& rPropertyName)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!GetDoc() || !m_pImpl->GetBookmark())
     {
@@ -1537,7 +1537,7 @@ SwXTextRange::makeRedline(
     const uno::Sequence< beans::PropertyValue >& rRedlineProperties )
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!GetDoc() || !m_pImpl->GetBookmark())
     {
@@ -1677,7 +1677,7 @@ SwXTextRanges::getSupportedServiceNames() throw (uno::RuntimeException)
 
 sal_Int32 SAL_CALL SwXTextRanges::getCount() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     return static_cast<sal_Int32>(m_pImpl->m_Ranges.size());
 }
@@ -1686,7 +1686,7 @@ uno::Any SAL_CALL SwXTextRanges::getByIndex(sal_Int32 nIndex)
 throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if ((nIndex < 0) ||
         (static_cast<size_t>(nIndex) >= m_pImpl->m_Ranges.size()))
@@ -1923,7 +1923,7 @@ SwXParaFrameEnumeration::~SwXParaFrameEnumeration()
 sal_Bool SAL_CALL
 SwXParaFrameEnumeration::hasMoreElements() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!m_pImpl->GetCursor())
         throw uno::RuntimeException();
@@ -1938,7 +1938,7 @@ uno::Any SAL_CALL SwXParaFrameEnumeration::nextElement()
 throw (container::NoSuchElementException,
         lang::WrappedTargetException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!m_pImpl->GetCursor())
     {

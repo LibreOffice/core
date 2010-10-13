@@ -261,7 +261,7 @@ void SwXDocumentSettings::release ()
 uno::Sequence< uno::Type > SAL_CALL SwXDocumentSettings::getTypes(  )
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     uno::Sequence< uno::Type > aBaseTypes( 5 );
     uno::Type* pBaseTypes = aBaseTypes.getArray();
@@ -280,7 +280,7 @@ uno::Sequence< uno::Type > SAL_CALL SwXDocumentSettings::getTypes(  )
 uno::Sequence< sal_Int8 > SAL_CALL SwXDocumentSettings::getImplementationId(  )
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     static Sequence< sal_Int8 > aId( 16 );
     static sal_Bool bInit = sal_False;
     if(!bInit)

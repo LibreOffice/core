@@ -63,7 +63,7 @@ SwSmartTagMgr::~SwSmartTagMgr()
 // ::com::sun::star::util::XModifyListener
 void SwSmartTagMgr::modified( const lang::EventObject& rEO ) throw( RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     // Installed recognizers have changed. We remove all existing smart tags:
     SW_MOD()->CheckSpellChanges( sal_False, sal_True, sal_True, sal_True );
@@ -74,7 +74,7 @@ void SwSmartTagMgr::modified( const lang::EventObject& rEO ) throw( RuntimeExcep
 // ::com::sun::star::util::XChangesListener
 void SwSmartTagMgr::changesOccurred( const util::ChangesEvent& rEvent ) throw( RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     // Configuration has changed. We remove all existing smart tags:
     SW_MOD()->CheckSpellChanges( sal_False, sal_True, sal_True, sal_True );

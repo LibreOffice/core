@@ -269,7 +269,7 @@ SwScannerEventListener::~SwScannerEventListener()
 
 void SAL_CALL SwScannerEventListener::disposing( const EventObject& rEventObject) throw(uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 #if defined WIN || defined WNT || defined UNX
     if( pView )
         pView->ScannerEventHdl( rEventObject );
@@ -289,7 +289,7 @@ void SAL_CALL SwClipboardChangeListener::changedContents( const CLIP_NMSPC::Clip
     throw ( RuntimeException )
 
 {
-    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aGuard;
     if( pView )
     {
         {

@@ -833,7 +833,7 @@ SwXFrame::~SwXFrame()
 
 OUString SwXFrame::getName(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     String sRet;
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
@@ -847,7 +847,7 @@ OUString SwXFrame::getName(void) throw( uno::RuntimeException )
 
 void SwXFrame::setName(const :: OUString& rName) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     SwFrmFmt* pFmt = GetFrmFmt();
     String sTmpName(rName);
     if(pFmt)
@@ -950,7 +950,7 @@ SwFrmFmt *lcl_GetFrmFmt( const :: uno::Any& rValue, SwDoc *pDoc )
 void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::Any& aValue)
     throw( beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     SwFrmFmt* pFmt = GetFrmFmt();
     const :: SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap()->getByName(rPropertyName);
 
@@ -1417,7 +1417,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
 uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Any aAny;
     SwFrmFmt* pFmt = GetFrmFmt();
     const SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap()->getByName(rPropertyName);
@@ -1706,7 +1706,7 @@ void SwXFrame::removeVetoableChangeListener(
 beans::PropertyState SwXFrame::getPropertyState( const OUString& rPropertyName )
     throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Sequence< OUString > aPropertyNames(1);
     OUString* pNames = aPropertyNames.getArray();
     pNames[0] = rPropertyName;
@@ -1718,7 +1718,7 @@ uno::Sequence< beans::PropertyState > SwXFrame::getPropertyStates(
     const uno::Sequence< OUString >& aPropertyNames )
         throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Sequence< beans::PropertyState > aStates(aPropertyNames.getLength());
     beans::PropertyState* pStates = aStates.getArray();
     SwFrmFmt* pFmt = GetFrmFmt();
@@ -1781,7 +1781,7 @@ uno::Sequence< beans::PropertyState > SwXFrame::getPropertyStates(
 void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
     throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
     {
@@ -1878,7 +1878,7 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
 uno::Any SwXFrame::getPropertyDefault( const OUString& rPropertyName )
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Any aRet;
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
@@ -1928,7 +1928,7 @@ void    SwXFrame::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 
 void SwXFrame::dispose(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     SwFrmFmt* pFmt = GetFrmFmt();
     if ( pFmt )
     {
@@ -1957,7 +1957,7 @@ void SwXFrame::dispose(void) throw( uno::RuntimeException )
 
 uno::Reference< text::XTextRange >  SwXFrame::getAnchor(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Reference< text::XTextRange >  aRef;
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
@@ -1988,7 +1988,7 @@ void SwXFrame::ResetDescriptor()
 void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRange)
             throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsDescriptor())
         throw uno::RuntimeException();
     uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
@@ -2354,7 +2354,7 @@ void SwXFrame::attach(const uno::Reference< text::XTextRange > & xTextRange)
 
 awt::Point SwXFrame::getPosition(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::RuntimeException aRuntime;
     aRuntime.Message = C2U("position cannot be determined with this method");
     throw aRuntime;
@@ -2362,7 +2362,7 @@ awt::Point SwXFrame::getPosition(void) throw( uno::RuntimeException )
 
 void SwXFrame::setPosition(const awt::Point& /*aPosition*/) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::RuntimeException aRuntime;
     aRuntime.Message = C2U("position cannot be changed with this method");
     throw aRuntime;
@@ -2455,7 +2455,7 @@ uno::Sequence< uno::Type > SAL_CALL SwXTextFrame::getTypes(  ) throw(uno::Runtim
 
 uno::Sequence< sal_Int8 > SAL_CALL SwXTextFrame::getImplementationId(  ) throw(uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     static uno::Sequence< sal_Int8 > aId( 16 );
     static sal_Bool bInit = sal_False;
     if(!bInit)
@@ -2494,7 +2494,7 @@ SwXTextFrame::CreateCursor() throw (uno::RuntimeException)
 
 uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursor(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Reference< text::XTextCursor >  aRef;
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
@@ -2541,7 +2541,7 @@ uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursor(void) throw(
 
 uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursorByRange(const uno::Reference< text::XTextRange > & aTextPosition) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Reference< text::XTextCursor >  aRef;
     SwFrmFmt* pFmt = GetFrmFmt();
     SwUnoInternalPaM aPam(*GetDoc());
@@ -2568,7 +2568,7 @@ uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursorByRange(const
 
 uno::Reference< container::XEnumeration >  SwXTextFrame::createEnumeration(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Reference< container::XEnumeration >  aRef;
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
@@ -2605,13 +2605,13 @@ void SwXTextFrame::attach(const uno::Reference< text::XTextRange > & xTextRange)
 
 uno::Reference< text::XTextRange >  SwXTextFrame::getAnchor(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return SwXFrame::getAnchor();
 }
 
 void SwXTextFrame::dispose(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     SwXFrame::dispose();
 }
 
@@ -2676,7 +2676,7 @@ sal_Int64 SAL_CALL SwXTextFrame::getSomething( const uno::Sequence< sal_Int8 >& 
 ::uno::Any SwXTextFrame::getPropertyValue(const OUString& rPropertyName)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     ::uno::Any aRet;
     if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_START_REDLINE))||
             rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_END_REDLINE)))
@@ -2750,7 +2750,7 @@ uno::Sequence< uno::Type > SAL_CALL
 
 uno::Sequence< sal_Int8 > SAL_CALL SwXTextGraphicObject::getImplementationId(  ) throw(uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     static uno::Sequence< sal_Int8 > aId( 16 );
     static sal_Bool bInit = sal_False;
     if(!bInit)
@@ -2768,13 +2768,13 @@ void SwXTextGraphicObject::attach(const uno::Reference< text::XTextRange > & xTe
 
 uno::Reference< text::XTextRange >  SwXTextGraphicObject::getAnchor(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return SwXFrame::getAnchor();
 }
 
 void SwXTextGraphicObject::dispose(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     SwXFrame::dispose();
 }
 
@@ -2885,7 +2885,7 @@ uno::Sequence< uno::Type > SAL_CALL SwXTextEmbeddedObject::getTypes(  ) throw(un
 
 uno::Sequence< sal_Int8 > SAL_CALL SwXTextEmbeddedObject::getImplementationId(  ) throw(uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     static uno::Sequence< sal_Int8 > aId( 16 );
     static sal_Bool bInit = sal_False;
     if(!bInit)
@@ -2903,13 +2903,13 @@ void SwXTextEmbeddedObject::attach(const uno::Reference< text::XTextRange > & xT
 
 uno::Reference< text::XTextRange >  SwXTextEmbeddedObject::getAnchor(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return SwXFrame::getAnchor();
 }
 
 void SwXTextEmbeddedObject::dispose(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     SwXFrame::dispose();
 }
 
@@ -3110,7 +3110,7 @@ SwXOLEListener::~SwXOLEListener()
 void SwXOLEListener::modified( const lang::EventObject& /*rEvent*/ )
                                         throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SwOLENode* pNd = 0;
     SwFmt* pFmt = GetFmt();
@@ -3142,7 +3142,7 @@ void SwXOLEListener::modified( const lang::EventObject& /*rEvent*/ )
 void SwXOLEListener::disposing( const lang::EventObject& rEvent )
                         throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     uno::Reference< util::XModifyListener >  xListener( this );
 

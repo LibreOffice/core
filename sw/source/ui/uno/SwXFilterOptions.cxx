@@ -184,7 +184,7 @@ uno::Sequence< ::rtl::OUString > SwXFilterOptions::getSupportedServiceNames()
 uno::Reference<uno::XInterface> SAL_CALL SwXFilterOptions_createInstance(
                         const uno::Reference<lang::XMultiServiceFactory>& )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     SwDLL::Init();
     return (::cppu::OWeakObject*) new SwXFilterOptions;
 }

@@ -5533,7 +5533,7 @@ void SwEditWin::SetChainMode( BOOL bOn )
 
 uno::Reference< ::com::sun::star::accessibility::XAccessible > SwEditWin::CreateAccessible()
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());   // this should have
+    SolarMutexGuard aGuard;   // this should have
                                                         // happend already!!!
     SwWrtShell *pSh = rView.GetWrtShellPtr();
     OSL_ENSURE( pSh, "no writer shell, no accessible object" );

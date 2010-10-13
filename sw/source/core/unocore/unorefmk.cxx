@@ -280,7 +280,7 @@ void SAL_CALL
 SwXReferenceMark::attach(const uno::Reference< text::XTextRange > & xTextRange)
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!m_pImpl->m_bIsDescriptor)
     {
@@ -313,7 +313,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
 uno::Reference< text::XTextRange > SAL_CALL
 SwXReferenceMark::getAnchor() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (m_pImpl->IsValid())
     {
@@ -343,7 +343,7 @@ SwXReferenceMark::getAnchor() throw (uno::RuntimeException)
 
 void SAL_CALL SwXReferenceMark::dispose() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if (m_pImpl->IsValid())
     {
         SwFmtRefMark const*const pNewMark =
@@ -376,7 +376,7 @@ void SAL_CALL SwXReferenceMark::addEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     if (!m_pImpl->IsValid())
     {
@@ -389,7 +389,7 @@ void SAL_CALL SwXReferenceMark::removeEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     if (!m_pImpl->IsValid() ||
         !m_pImpl->m_ListenerContainer.RemoveListener(xListener))
@@ -401,7 +401,7 @@ throw (uno::RuntimeException)
 OUString SAL_CALL SwXReferenceMark::getName()
 throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if (!m_pImpl->IsValid() ||
         !m_pImpl->m_pDoc->GetRefMark(m_pImpl->m_sMarkName))
     {
@@ -413,7 +413,7 @@ throw (uno::RuntimeException)
 void SAL_CALL SwXReferenceMark::setName(const OUString& rName)
 throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if (m_pImpl->m_bIsDescriptor)
     {
         m_pImpl->m_sMarkName = rName;
@@ -460,7 +460,7 @@ throw (uno::RuntimeException)
 uno::Reference< beans::XPropertySetInfo > SAL_CALL
 SwXReferenceMark::getPropertySetInfo() throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     static uno::Reference< beans::XPropertySetInfo >  xRef =
         aSwMapProvider.GetPropertySet(PROPERTY_MAP_PARAGRAPH_EXTENSIONS)
@@ -934,7 +934,7 @@ SwXMeta::addEventListener(
         uno::Reference< lang::XEventListener> const & xListener )
 throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     m_pImpl->m_ListenerContainer.AddListener(xListener);
     if (m_pImpl->m_bIsDisposed)
@@ -948,7 +948,7 @@ SwXMeta::removeEventListener(
         uno::Reference< lang::XEventListener> const & xListener )
 throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     if (!m_pImpl->m_bIsDisposed)
     {
@@ -959,7 +959,7 @@ throw (uno::RuntimeException)
 void SAL_CALL
 SwXMeta::dispose() throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     if (m_pImpl->m_bIsDescriptor)
     {
@@ -993,7 +993,7 @@ SwXMeta::AttachImpl(const uno::Reference< text::XTextRange > & i_xTextRange,
         const USHORT i_nWhich)
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     if (m_pImpl->m_bIsDisposed)
     {
@@ -1087,7 +1087,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
 uno::Reference< text::XTextRange > SAL_CALL
 SwXMeta::getAnchor() throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     if (m_pImpl->m_bIsDisposed)
     {
@@ -1121,35 +1121,35 @@ SwXMeta::getAnchor() throw (uno::RuntimeException)
 uno::Reference< text::XText > SAL_CALL
 SwXMeta::getText() throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
     return this;
 }
 
 uno::Reference< text::XTextRange > SAL_CALL
 SwXMeta::getStart() throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
     return m_pImpl->m_Text.getStart();
 }
 
 uno::Reference< text::XTextRange > SAL_CALL
 SwXMeta::getEnd() throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
     return m_pImpl->m_Text.getEnd();
 }
 
 rtl::OUString SAL_CALL
 SwXMeta::getString() throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
     return m_pImpl->m_Text.getString();
 }
 
 void SAL_CALL
 SwXMeta::setString(const rtl::OUString& rString) throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
     return m_pImpl->m_Text.setString(rString);
 }
 
@@ -1157,7 +1157,7 @@ SwXMeta::setString(const rtl::OUString& rString) throw (uno::RuntimeException)
 uno::Reference< text::XTextCursor > SAL_CALL
 SwXMeta::createTextCursor() throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
     return m_pImpl->m_Text.createTextCursor();
 }
 
@@ -1166,7 +1166,7 @@ SwXMeta::createTextCursorByRange(
         const uno::Reference<text::XTextRange> & xTextPosition)
     throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
     return m_pImpl->m_Text.createTextCursorByRange(xTextPosition);
 }
 
@@ -1175,7 +1175,7 @@ SwXMeta::insertString(const uno::Reference<text::XTextRange> & xRange,
         const rtl::OUString& rString, sal_Bool bAbsorb)
 throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
     return m_pImpl->m_Text.insertString(xRange, rString, bAbsorb);
 }
 
@@ -1184,7 +1184,7 @@ SwXMeta::insertControlCharacter(const uno::Reference<text::XTextRange> & xRange,
         sal_Int16 nControlCharacter, sal_Bool bAbsorb)
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
     return m_pImpl->m_Text.insertControlCharacter(xRange, nControlCharacter,
                 bAbsorb);
 }
@@ -1195,7 +1195,7 @@ SwXMeta::insertTextContent( const uno::Reference<text::XTextRange> & xRange,
         const uno::Reference<text::XTextContent> & xContent, sal_Bool bAbsorb)
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
     return m_pImpl->m_Text.insertTextContent(xRange, xContent, bAbsorb);
 }
 
@@ -1204,7 +1204,7 @@ SwXMeta::removeTextContent(
         const uno::Reference< text::XTextContent > & xContent)
     throw (container::NoSuchElementException, uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
     return m_pImpl->m_Text.removeTextContent(xContent);
 }
 
@@ -1212,7 +1212,7 @@ SwXMeta::removeTextContent(
 uno::Reference< uno::XInterface > SAL_CALL
 SwXMeta::getParent() throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
     SwTxtNode * pTxtNode;
     xub_StrLen nMetaStart;
     xub_StrLen nMetaEnd;
@@ -1245,7 +1245,7 @@ SwXMeta::getElementType() throw (uno::RuntimeException)
 sal_Bool SAL_CALL
 SwXMeta::hasElements() throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     return m_pImpl->GetRegisteredIn() ? sal_True : sal_False;
 }
@@ -1254,7 +1254,7 @@ SwXMeta::hasElements() throw (uno::RuntimeException)
 uno::Reference< container::XEnumeration > SAL_CALL
 SwXMeta::createEnumeration() throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     if (m_pImpl->m_bIsDisposed)
     {
@@ -1408,7 +1408,7 @@ SwXMetaField::getAnchor() throw (uno::RuntimeException)
 uno::Reference< beans::XPropertySetInfo > SAL_CALL
 SwXMetaField::getPropertySetInfo() throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     static uno::Reference< beans::XPropertySetInfo > xRef(
         aSwMapProvider.GetPropertySet(PROPERTY_MAP_METAFIELD)
@@ -1423,7 +1423,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     lang::IllegalArgumentException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     ::sw::MetaField * const pMeta(
             const_cast< ::sw::MetaField * >(m_pImpl->GetMetaField()) );
@@ -1457,7 +1457,7 @@ SwXMetaField::getPropertyValue(const ::rtl::OUString& rPropertyName)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     ::sw::MetaField const * const pMeta( m_pImpl->GetMetaField() );
     if (!pMeta)
@@ -1608,7 +1608,7 @@ getPrefixAndSuffix(
 SwXMetaField::getPresentation(sal_Bool bShowCommand)
 throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     if (bShowCommand)
     {

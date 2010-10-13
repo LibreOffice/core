@@ -111,7 +111,7 @@ SwAccessibleCell::SwAccessibleCell( SwAccessibleMap *pInitMap,
     : SwAccessibleContext( pInitMap, AccessibleRole::TABLE_CELL, pCellFrm )
     , bIsSelected( sal_False )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     OUString sBoxName( pCellFrm->GetTabBox()->GetName() );
     SetName( sBoxName );
 
@@ -309,7 +309,7 @@ uno::Sequence< uno::Type > SAL_CALL SwAccessibleCell::getTypes()
 uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleCell::getImplementationId()
         throw(uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     static uno::Sequence< sal_Int8 > aId( 16 );
     static sal_Bool bInit = sal_False;
     if(!bInit)
@@ -335,7 +335,7 @@ SwFrmFmt* SwAccessibleCell::GetTblBoxFormat() const
 uno::Any SwAccessibleCell::getCurrentValue( )
     throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     CHECK_FOR_DEFUNC( XAccessibleValue );
 
     uno::Any aAny;
@@ -346,7 +346,7 @@ uno::Any SwAccessibleCell::getCurrentValue( )
 sal_Bool SwAccessibleCell::setCurrentValue( const uno::Any& aNumber )
     throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     CHECK_FOR_DEFUNC( XAccessibleValue );
 
     double fValue = 0;

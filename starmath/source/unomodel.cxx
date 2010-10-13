@@ -351,7 +351,7 @@ void SAL_CALL SmModel::release() throw()
 
 uno::Sequence< uno::Type > SAL_CALL SmModel::getTypes(  ) throw(uno::RuntimeException)
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Sequence< uno::Type > aTypes = SfxBaseModel::getTypes();
     sal_Int32 nLen = aTypes.getLength();
     aTypes.realloc(nLen + 4);
@@ -431,7 +431,7 @@ uno::Sequence< OUString > SmModel::getSupportedServiceNames(void) throw( uno::Ru
 
 uno::Sequence< OUString > SmModel::getSupportedServiceNames_Static(void)
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     uno::Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
@@ -443,7 +443,7 @@ uno::Sequence< OUString > SmModel::getSupportedServiceNames_Static(void)
 void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* pValues)
     throw( UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException)
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SmDocShell *pDocSh = static_cast < SmDocShell * > (GetObjectShell());
 
@@ -932,7 +932,7 @@ sal_Int32 SAL_CALL SmModel::getRendererCount(
         const uno::Sequence< beans::PropertyValue >& /*xOptions*/ )
     throw (IllegalArgumentException, RuntimeException)
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return 1;
 }
 
@@ -965,7 +965,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SmModel::getRenderer(
         const uno::Sequence< beans::PropertyValue >& /*rxOptions*/ )
     throw (IllegalArgumentException, RuntimeException)
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (0 != nRenderer)
         throw IllegalArgumentException();
@@ -1002,7 +1002,7 @@ void SAL_CALL SmModel::render(
         const uno::Sequence< beans::PropertyValue >& rxOptions )
     throw (IllegalArgumentException, RuntimeException)
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (0 != nRenderer)
         throw IllegalArgumentException();
@@ -1099,7 +1099,7 @@ void SAL_CALL SmModel::render(
 void SAL_CALL SmModel::setParent( const uno::Reference< uno::XInterface >& xParent)
         throw( lang::NoSupportException, uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     SfxBaseModel::setParent( xParent );
     uno::Reference< lang::XUnoTunnel > xParentTunnel( xParent, uno::UNO_QUERY );
     if ( xParentTunnel.is() )

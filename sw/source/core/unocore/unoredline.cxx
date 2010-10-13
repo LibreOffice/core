@@ -108,7 +108,7 @@ uno::Sequence<uno::Type> SwXRedlineText::getTypes()
 uno::Sequence<sal_Int8> SwXRedlineText::getImplementationId()
     throw(uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     static uno::Sequence< sal_Int8 > aId( 16 );
     static sal_Bool bInit = sal_False;
     if(!bInit)
@@ -122,7 +122,7 @@ uno::Sequence<sal_Int8> SwXRedlineText::getImplementationId()
 uno::Reference<text::XTextCursor> SwXRedlineText::createTextCursor(void)
     throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SwPosition aPos(aNodeIndex);
     SwXTextCursor *const pXCursor =
@@ -175,7 +175,7 @@ uno::Reference<text::XTextCursor> SwXRedlineText::createTextCursorByRange(
 uno::Reference<container::XEnumeration> SwXRedlineText::createEnumeration(void)
     throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     SwPaM aPam(aNodeIndex);
     aPam.Move(fnMoveForward, fnGoNode);
     ::std::auto_ptr<SwUnoCrsr> pUnoCursor(
@@ -260,7 +260,7 @@ static uno::Sequence<beans::PropertyValue> lcl_GetSuccessorProperties(const SwRe
 uno::Any SwXRedlinePortion::getPropertyValue( const OUString& rPropertyName )
         throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     Validate();
     uno::Any aRet;
     if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_REDLINE_TEXT)))
@@ -306,7 +306,7 @@ void SwXRedlinePortion::Validate() throw( uno::RuntimeException )
 
 uno::Sequence< sal_Int8 > SAL_CALL SwXRedlinePortion::getImplementationId(  ) throw(uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     static uno::Sequence< sal_Int8 > aId( 16 );
     static sal_Bool bInit = sal_False;
     if(!bInit)
@@ -435,7 +435,7 @@ void SwXRedline::setPropertyValue( const OUString& rPropertyName, const uno::Any
     throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException,
         lang::WrappedTargetException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!pDoc)
         throw uno::RuntimeException();
     if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_REDLINE_AUTHOR)))
@@ -504,7 +504,7 @@ void SwXRedline::setPropertyValue( const OUString& rPropertyName, const uno::Any
 uno::Any SwXRedline::getPropertyValue( const OUString& rPropertyName )
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!pDoc)
         throw uno::RuntimeException();
     uno::Any aRet;
@@ -608,7 +608,7 @@ void SwXRedline::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 
 uno::Reference< container::XEnumeration >  SwXRedline::createEnumeration(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Reference< container::XEnumeration > xRet;
     if(!pDoc)
         throw uno::RuntimeException();
@@ -639,7 +639,7 @@ sal_Bool SwXRedline::hasElements(  ) throw(uno::RuntimeException)
 
 uno::Reference< text::XTextCursor >  SwXRedline::createTextCursor(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!pDoc)
         throw uno::RuntimeException();
 
@@ -708,7 +708,7 @@ uno::Sequence<uno::Type> SwXRedline::getTypes()
 uno::Sequence<sal_Int8> SwXRedline::getImplementationId()
     throw(uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     static uno::Sequence< sal_Int8 > aId( 16 );
     static sal_Bool bInit = sal_False;
     if(!bInit)

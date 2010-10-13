@@ -471,7 +471,7 @@ Reference<XTextCursor> XMLRedlineImportHelper::CreateRedlineTextSection(
     Reference<XTextCursor> xReturn;
 
     // this method will modify the document directly -> lock SolarMutex
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     // get RedlineInfo
     RedlineMapType::iterator aFind = aRedlineMap.find(rId);
@@ -563,7 +563,7 @@ void XMLRedlineImportHelper::AdjustStartNodeCursor(
     Reference<XTextRange> & /*rRange*/)
 {
     // this method will modify the document directly -> lock SolarMutex
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     // start + end nodes are treated the same. For either it's
     // necessary that the target node already exists.
@@ -603,7 +603,7 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
     DBG_ASSERT(IsReady(pRedlineInfo), "redline info not complete yet!");
 
     // this method will modify the document directly -> lock SolarMutex
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     // Insert the Redline as described by pRedlineInfo into the
     // document.  If we are in insert mode, don't insert any redlines

@@ -58,7 +58,7 @@ uno::Sequence< rtl::OUString > SAL_CALL SmDocument_getSupportedServiceNames() th
 uno::Reference< uno::XInterface > SAL_CALL SmDocument_createInstance(
                 const uno::Reference< lang::XMultiServiceFactory > & /*rSMgr*/, const sal_uInt64 _nCreationFlags ) throw( uno::Exception )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( !SM_MOD() )
         SmDLL::Init();
 

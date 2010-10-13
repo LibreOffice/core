@@ -56,7 +56,7 @@ SwAccessibleHeaderFooter::SwAccessibleHeaderFooter(
         const SwHeaderFrm* pHdFrm    ) :
     SwAccessibleContext( pInitMap, AccessibleRole::HEADER, pHdFrm )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     OUString sArg( OUString::valueOf( (sal_Int32)pHdFrm->GetPhyPageNum() ) );
     SetName( GetResource( STR_ACCESS_HEADER_NAME, &sArg ) );
@@ -67,7 +67,7 @@ SwAccessibleHeaderFooter::SwAccessibleHeaderFooter(
         const SwFooterFrm* pFtFrm    ) :
     SwAccessibleContext( pInitMap, AccessibleRole::FOOTER, pFtFrm )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     OUString sArg( OUString::valueOf( (sal_Int32)pFtFrm->GetPhyPageNum() ) );
     SetName( GetResource( STR_ACCESS_FOOTER_NAME, &sArg ) );
@@ -80,7 +80,7 @@ SwAccessibleHeaderFooter::~SwAccessibleHeaderFooter()
 OUString SAL_CALL SwAccessibleHeaderFooter::getAccessibleDescription (void)
         throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC( XAccessibleContext )
 
@@ -132,7 +132,7 @@ Sequence< OUString > SAL_CALL SwAccessibleHeaderFooter::getSupportedServiceNames
 Sequence< sal_Int8 > SAL_CALL SwAccessibleHeaderFooter::getImplementationId()
         throw(RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     static Sequence< sal_Int8 > aId( 16 );
     static sal_Bool bInit = sal_False;
     if(!bInit)

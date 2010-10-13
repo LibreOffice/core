@@ -213,7 +213,7 @@ static const size_t g_nServicesFootnote( g_nServicesEndnote - 1 ); // NB: omit!
 sal_Bool SAL_CALL SwXFootnote::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
     return ::sw::SupportsServiceImpl(
             (m_pImpl->m_bIsEndnote) ? g_nServicesEndnote : g_nServicesFootnote,
             g_ServicesFootnote, rServiceName);
@@ -222,7 +222,7 @@ throw (uno::RuntimeException)
 uno::Sequence< OUString > SAL_CALL
 SwXFootnote::getSupportedServiceNames() throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
     return ::sw::GetSupportedServiceNamesImpl(
             (m_pImpl->m_bIsEndnote) ? g_nServicesEndnote : g_nServicesFootnote,
             g_ServicesFootnote);
@@ -239,7 +239,7 @@ SwXFootnote::getTypes() throw (uno::RuntimeException)
 uno::Sequence< sal_Int8 > SAL_CALL
 SwXFootnote::getImplementationId() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     static uno::Sequence< sal_Int8 > aId( 16 );
     static sal_Bool bInit = sal_False;
     if(!bInit)
@@ -262,7 +262,7 @@ throw (uno::RuntimeException)
 
 OUString SAL_CALL SwXFootnote::getLabel() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     ::rtl::OUString sRet;
     SwFmtFtn const*const pFmt = m_pImpl->GetFootnoteFormat();
@@ -284,7 +284,7 @@ OUString SAL_CALL SwXFootnote::getLabel() throw (uno::RuntimeException)
 void SAL_CALL
 SwXFootnote::setLabel(const OUString& aLabel) throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SwFmtFtn const*const pFmt = m_pImpl->GetFootnoteFormat();
     if(pFmt)
@@ -310,7 +310,7 @@ void SAL_CALL
 SwXFootnote::attach(const uno::Reference< text::XTextRange > & xTextRange)
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!m_pImpl->m_bIsDescriptor)
     {
@@ -378,7 +378,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
 uno::Reference< text::XTextRange > SAL_CALL
 SwXFootnote::getAnchor() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SwFmtFtn const& rFmt( m_pImpl->GetFootnoteFormatOrThrow() );
 
@@ -394,7 +394,7 @@ SwXFootnote::getAnchor() throw (uno::RuntimeException)
 
 void SAL_CALL SwXFootnote::dispose() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SwFmtFtn const& rFmt( m_pImpl->GetFootnoteFormatOrThrow() );
 
@@ -411,7 +411,7 @@ SwXFootnote::addEventListener(
     const uno::Reference< lang::XEventListener > & xListener)
 throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     if (!m_pImpl->GetFootnoteFormat())
     {
@@ -425,7 +425,7 @@ SwXFootnote::removeEventListener(
     const uno::Reference< lang::XEventListener > & xListener)
 throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     if (!m_pImpl->GetFootnoteFormat() ||
         !m_pImpl->m_ListenerContainer.RemoveListener(xListener))
@@ -457,7 +457,7 @@ SwXFootnote::CreateCursor() throw (uno::RuntimeException)
 uno::Reference< text::XTextCursor > SAL_CALL
 SwXFootnote::createTextCursor() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SwFmtFtn const& rFmt( m_pImpl->GetFootnoteFormatOrThrow() );
 
@@ -477,7 +477,7 @@ SwXFootnote::createTextCursorByRange(
     const uno::Reference< text::XTextRange > & xTextPosition)
 throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SwFmtFtn const& rFmt( m_pImpl->GetFootnoteFormatOrThrow() );
 
@@ -506,7 +506,7 @@ throw (uno::RuntimeException)
 uno::Reference< container::XEnumeration > SAL_CALL
 SwXFootnote::createEnumeration() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SwFmtFtn const& rFmt( m_pImpl->GetFootnoteFormatOrThrow() );
 
@@ -534,7 +534,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL
 SwXFootnote::getPropertySetInfo()
 throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
     static uno::Reference< beans::XPropertySetInfo > xRet =
         aSwMapProvider.GetPropertySet(PROPERTY_MAP_FOOTNOTE)
             ->getPropertySetInfo();
@@ -556,7 +556,7 @@ SwXFootnote::getPropertyValue(const OUString& rPropertyName)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     uno::Any aRet;
     if (! ::sw::GetDefaultTextContentValue(aRet, rPropertyName))

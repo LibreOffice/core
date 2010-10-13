@@ -1948,7 +1948,7 @@ BOOL SwPagePreView::HandleWheelCommands( const CommandEvent& rCEvt )
 uno::Reference< ::com::sun::star::accessibility::XAccessible >
     SwPagePreViewWin::CreateAccessible()
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());   // this should have
+    SolarMutexGuard aGuard; // this should have
                                                         // happend already!!!
 
     OSL_ENSURE( GetViewShell() != NULL, "We need a view shell" );

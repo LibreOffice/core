@@ -476,7 +476,7 @@ const SvEventDescription* lcl_GetSupportedMacroItems()
  ******************************************************************/
 OUString    SwXServiceProvider::GetProviderName(sal_uInt16 nObjectType)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     OUString sRet;
     sal_uInt16 nEntries = SAL_N_ELEMENTS(aProvNamesId);
     if(nObjectType < nEntries)
@@ -517,7 +517,7 @@ sal_uInt16  SwXServiceProvider::GetProviderType(const OUString& rServiceName)
 
 uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 nObjectType, SwDoc* pDoc)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Reference< uno::XInterface >  xRet;
     switch(nObjectType)
     {
@@ -856,7 +856,7 @@ SwXTextTables::~SwXTextTables()
 
 sal_Int32 SwXTextTables::getCount(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     sal_Int32 nRet = 0;
     if(IsValid())
         nRet = GetDoc()->GetTblFrmFmtCount(sal_True);
@@ -866,7 +866,7 @@ sal_Int32 SwXTextTables::getCount(void) throw( uno::RuntimeException )
 uno::Any SAL_CALL SwXTextTables::getByIndex(sal_Int32 nIndex)
         throw( IndexOutOfBoundsException, WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Any aRet;
     if(IsValid())
     {
@@ -888,7 +888,7 @@ uno::Any SAL_CALL SwXTextTables::getByIndex(sal_Int32 nIndex)
 uno::Any SwXTextTables::getByName(const OUString& rItemName)
     throw( NoSuchElementException, WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Any aRet;
     if(IsValid())
     {
@@ -917,7 +917,7 @@ uno::Any SwXTextTables::getByName(const OUString& rItemName)
 uno::Sequence< OUString > SwXTextTables::getElementNames(void)
         throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     sal_uInt16 nCount = GetDoc()->GetTblFrmFmtCount(sal_True);
@@ -938,7 +938,7 @@ uno::Sequence< OUString > SwXTextTables::getElementNames(void)
 sal_Bool SwXTextTables::hasByName(const OUString& rName)
     throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     sal_Bool bRet= sal_False;
     if(IsValid())
     {
@@ -968,7 +968,7 @@ uno::Type SAL_CALL
 
 sal_Bool SwXTextTables::hasElements(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     return 0 != GetDoc()->GetTblFrmFmtCount(sal_True);
@@ -994,7 +994,7 @@ uno::Sequence< OUString > SwXTextTables::getSupportedServiceNames(void) throw( u
 
 XTextTable* SwXTextTables::GetObject( SwFrmFmt& rFmt )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     SwXTextTable* pTbl = (SwXTextTable*)SwClientIter( rFmt ).
                                     First( TYPE( SwXTextTable ));
     if( !pTbl )
@@ -1087,7 +1087,7 @@ template<FlyCntType T>
 SwXFrameEnumeration<T>::SwXFrameEnumeration(const SwDoc* const pDoc)
     : m_aFrames()
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     const SwSpzFrmFmts* const pFmts = pDoc->GetSpzFrmFmts();
     if(!pFmts->Count())
         return;
@@ -1119,14 +1119,14 @@ SwXFrameEnumeration<T>::SwXFrameEnumeration(const SwDoc* const pDoc)
 template<FlyCntType T>
 sal_Bool SwXFrameEnumeration<T>::hasMoreElements(void) throw( RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return !m_aFrames.empty();
 }
 
 template<FlyCntType T>
 Any SwXFrameEnumeration<T>::nextElement(void) throw( NoSuchElementException, WrappedTargetException, RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(m_aFrames.empty())
         throw NoSuchElementException();
     Any aResult = *m_aFrames.begin();
@@ -1180,7 +1180,7 @@ SwXFrames::~SwXFrames()
 
 uno::Reference<container::XEnumeration> SwXFrames::createEnumeration(void) throw(uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     switch(eType)
@@ -1201,7 +1201,7 @@ uno::Reference<container::XEnumeration> SwXFrames::createEnumeration(void) throw
 
 sal_Int32 SwXFrames::getCount(void) throw(uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     return GetDoc()->GetFlyCount(eType);
@@ -1210,7 +1210,7 @@ sal_Int32 SwXFrames::getCount(void) throw(uno::RuntimeException)
 uno::Any SwXFrames::getByIndex(sal_Int32 nIndex)
     throw(IndexOutOfBoundsException, WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     if(nIndex < 0 || nIndex >= USHRT_MAX)
@@ -1224,7 +1224,7 @@ uno::Any SwXFrames::getByIndex(sal_Int32 nIndex)
 uno::Any SwXFrames::getByName(const OUString& rName)
     throw(NoSuchElementException, WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     const SwFrmFmt* pFmt;
@@ -1247,7 +1247,7 @@ uno::Any SwXFrames::getByName(const OUString& rName)
 
 uno::Sequence<OUString> SwXFrames::getElementNames(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     const Reference<XEnumeration> xEnum = createEnumeration();
@@ -1264,7 +1264,7 @@ uno::Sequence<OUString> SwXFrames::getElementNames(void) throw( uno::RuntimeExce
 
 sal_Bool SwXFrames::hasByName(const OUString& rName) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     switch(eType)
@@ -1280,7 +1280,7 @@ sal_Bool SwXFrames::hasByName(const OUString& rName) throw( uno::RuntimeExceptio
 
 uno::Type SAL_CALL SwXFrames::getElementType() throw(uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     switch(eType)
     {
         case FLYCNTTYPE_FRM:
@@ -1296,7 +1296,7 @@ uno::Type SAL_CALL SwXFrames::getElementType() throw(uno::RuntimeException)
 
 sal_Bool SwXFrames::hasElements(void) throw(uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     return GetDoc()->GetFlyCount(eType) > 0;
@@ -1441,7 +1441,7 @@ SwXTextSections::~SwXTextSections()
 
 sal_Int32 SwXTextSections::getCount(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     const SwSectionFmts& rSectFmts = GetDoc()->GetSections();
@@ -1457,7 +1457,7 @@ sal_Int32 SwXTextSections::getCount(void) throw( uno::RuntimeException )
 uno::Any SwXTextSections::getByIndex(sal_Int32 nIndex)
     throw( IndexOutOfBoundsException, WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Reference< XTextSection >  xRet;
     if(IsValid())
     {
@@ -1490,7 +1490,7 @@ uno::Any SwXTextSections::getByIndex(sal_Int32 nIndex)
 uno::Any SwXTextSections::getByName(const OUString& Name)
     throw( NoSuchElementException, WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Any aRet;
     if(IsValid())
     {
@@ -1519,7 +1519,7 @@ uno::Any SwXTextSections::getByName(const OUString& Name)
 uno::Sequence< OUString > SwXTextSections::getElementNames(void)
     throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     sal_uInt16 nCount = GetDoc()->GetSections().Count();
@@ -1552,7 +1552,7 @@ uno::Sequence< OUString > SwXTextSections::getElementNames(void)
 sal_Bool SwXTextSections::hasByName(const OUString& Name)
     throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     sal_Bool bRet = sal_False;
     String aName(Name);
     if(IsValid())
@@ -1584,7 +1584,7 @@ uno::Type SAL_CALL SwXTextSections::getElementType() throw(uno::RuntimeException
 
 sal_Bool SwXTextSections::hasElements(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     sal_uInt16 nCount = 0;
     if(IsValid())
     {
@@ -1628,7 +1628,7 @@ SwXBookmarks::~SwXBookmarks()
 sal_Int32 SwXBookmarks::getCount(void)
     throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     return GetDoc()->getIDocumentMarkAccess()->getMarksCount();
@@ -1637,7 +1637,7 @@ sal_Int32 SwXBookmarks::getCount(void)
 uno::Any SwXBookmarks::getByIndex(sal_Int32 nIndex)
     throw( IndexOutOfBoundsException, WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     IDocumentMarkAccess* const pMarkAccess = GetDoc()->getIDocumentMarkAccess();
@@ -1655,7 +1655,7 @@ uno::Any SwXBookmarks::getByIndex(sal_Int32 nIndex)
 uno::Any SwXBookmarks::getByName(const rtl::OUString& rName)
     throw( NoSuchElementException, WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
 
@@ -1674,7 +1674,7 @@ uno::Any SwXBookmarks::getByName(const rtl::OUString& rName)
 uno::Sequence< OUString > SwXBookmarks::getElementNames(void)
     throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
 
@@ -1690,7 +1690,7 @@ uno::Sequence< OUString > SwXBookmarks::getElementNames(void)
 sal_Bool SwXBookmarks::hasByName(const OUString& rName)
     throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
 
@@ -1707,7 +1707,7 @@ uno::Type SAL_CALL SwXBookmarks::getElementType()
 sal_Bool SwXBookmarks::hasElements(void)
     throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     return GetDoc()->getIDocumentMarkAccess()->getBookmarksCount() != 0;
@@ -1724,7 +1724,7 @@ SwXNumberingRulesCollection::~SwXNumberingRulesCollection()
 
 sal_Int32 SwXNumberingRulesCollection::getCount(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     return GetDoc()->GetNumRuleTbl().Count();
@@ -1733,7 +1733,7 @@ sal_Int32 SwXNumberingRulesCollection::getCount(void) throw( uno::RuntimeExcepti
 uno::Any SwXNumberingRulesCollection::getByIndex(sal_Int32 nIndex)
     throw( IndexOutOfBoundsException, WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Any aRet;
     if(IsValid())
     {
@@ -1759,7 +1759,7 @@ uno::Type SAL_CALL SwXNumberingRulesCollection::getElementType() throw(uno::Runt
 
 sal_Bool SwXNumberingRulesCollection::hasElements(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     return GetDoc()->GetNumRuleTbl().Count() > 0;
@@ -1795,7 +1795,7 @@ SwXFootnotes::~SwXFootnotes()
 
 sal_Int32 SwXFootnotes::getCount(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     sal_Int32 nCount = 0;
@@ -1815,7 +1815,7 @@ sal_Int32 SwXFootnotes::getCount(void) throw( uno::RuntimeException )
 uno::Any SwXFootnotes::getByIndex(sal_Int32 nIndex)
     throw( IndexOutOfBoundsException, WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Any aRet;
     sal_Int32 nCount = 0;
     if(IsValid())
@@ -1853,7 +1853,7 @@ uno::Type SAL_CALL SwXFootnotes::getElementType() throw(uno::RuntimeException)
 
 sal_Bool SwXFootnotes::hasElements(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     return GetDoc()->GetFtnIdxs().Count() > 0;
@@ -1893,7 +1893,7 @@ SwXReferenceMarks::~SwXReferenceMarks()
 
 sal_Int32 SwXReferenceMarks::getCount(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     return GetDoc()->GetRefMarks();
@@ -1902,7 +1902,7 @@ sal_Int32 SwXReferenceMarks::getCount(void) throw( uno::RuntimeException )
 uno::Any SwXReferenceMarks::getByIndex(sal_Int32 nIndex)
     throw( IndexOutOfBoundsException, WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Any aRet;
     if(!IsValid())
         throw uno::RuntimeException();
@@ -1924,7 +1924,7 @@ uno::Any SwXReferenceMarks::getByIndex(sal_Int32 nIndex)
 uno::Any SwXReferenceMarks::getByName(const OUString& rName)
     throw( NoSuchElementException, WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Any aRet;
     if(IsValid())
     {
@@ -1944,7 +1944,7 @@ uno::Any SwXReferenceMarks::getByName(const OUString& rName)
 
 uno::Sequence< OUString > SwXReferenceMarks::getElementNames(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Sequence<OUString> aRet;
     if(IsValid())
     {
@@ -1962,7 +1962,7 @@ uno::Sequence< OUString > SwXReferenceMarks::getElementNames(void) throw( uno::R
 
 sal_Bool SwXReferenceMarks::hasByName(const OUString& rName) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     return 0 != GetDoc()->GetRefMark( rName);
@@ -1975,7 +1975,7 @@ uno::Type SAL_CALL SwXReferenceMarks::getElementType() throw(uno::RuntimeExcepti
 
 sal_Bool SwXReferenceMarks::hasElements(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     return 0 != GetDoc()->GetRefMarks();
@@ -1983,7 +1983,7 @@ sal_Bool SwXReferenceMarks::hasElements(void) throw( uno::RuntimeException )
 
 SwXReferenceMark* SwXReferenceMarks::GetObject( SwDoc* pDoc, const SwFmtRefMark* pMark )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     return SwXReferenceMark::CreateXReferenceMark(*pDoc, *pMark);
 }

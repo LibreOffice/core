@@ -79,7 +79,7 @@ sal_Int32 SAL_CALL SwAccessibleHyperlink::getAccessibleActionCount()
 sal_Bool SAL_CALL SwAccessibleHyperlink::doAccessibleAction( sal_Int32 nIndex )
         throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     sal_Bool bRet = sal_False;
 
@@ -179,13 +179,13 @@ sal_Int32 SAL_CALL SwAccessibleHyperlink::getEndIndex()
 sal_Bool SAL_CALL SwAccessibleHyperlink::isValid(  )
         throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return xPara.isValid();
 }
 
 void SwAccessibleHyperlink::Invalidate()
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     xPara = 0;
 }
 

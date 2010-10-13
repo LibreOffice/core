@@ -137,7 +137,7 @@ SwAccessibleFrameBase::SwAccessibleFrameBase(
     SwAccessibleContext( pInitMap, nInitRole, pFlyFrm ),
     bIsSelected( sal_False )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     const SwFrmFmt *pFrmFmt = pFlyFrm->GetFmt();
     const_cast< SwFrmFmt * >( pFrmFmt )->Add( this );
@@ -269,7 +269,7 @@ void SwAccessibleFrameBase::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 
 void SwAccessibleFrameBase::Dispose( sal_Bool bRecursive )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if( GetRegisteredIn() )
         pRegisteredIn->Remove( this );

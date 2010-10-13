@@ -133,7 +133,7 @@ SwAccessiblePage::SwAccessiblePage( SwAccessibleMap* pInitMap,
     DBG_ASSERT( pInitMap != NULL, "need map" );
     DBG_ASSERT( pFrame->IsPageFrm(), "need page frame" );
 
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     OUString sPage = OUString::valueOf(
         static_cast<sal_Int32>(
@@ -178,7 +178,7 @@ Sequence<OUString> SwAccessiblePage::getSupportedServiceNames( )
 Sequence< sal_Int8 > SAL_CALL SwAccessiblePage::getImplementationId()
         throw(RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     static Sequence< sal_Int8 > aId( 16 );
     static sal_Bool bInit = sal_False;
     if(!bInit)

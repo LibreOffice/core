@@ -208,7 +208,7 @@ void SwMailDispatcherListener_Impl::stopped(
 
 void SwMailDispatcherListener_Impl::idle(::rtl::Reference<MailDispatcher> /*xMailDispatcher*/)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     m_pSendMailDialog->AllMailsSent();
 }
 
@@ -216,7 +216,7 @@ void SwMailDispatcherListener_Impl::mailDelivered(
                         ::rtl::Reference<MailDispatcher> /*xMailDispatcher*/,
                         uno::Reference< mail::XMailMessage> xMailMessage)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     m_pSendMailDialog->DocumentSent( xMailMessage, true, 0 );
     DeleteAttachments( xMailMessage );
 }
@@ -226,7 +226,7 @@ void SwMailDispatcherListener_Impl::mailDeliveryError(
                 uno::Reference< mail::XMailMessage> xMailMessage,
                 const rtl::OUString& sErrorMessage)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     m_pSendMailDialog->DocumentSent( xMailMessage, false, &sErrorMessage );
     DeleteAttachments( xMailMessage );
 }

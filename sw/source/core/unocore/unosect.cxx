@@ -233,7 +233,7 @@ throw (uno::RuntimeException)
 uno::Reference< text::XTextSection > SAL_CALL
 SwXTextSection::getParentSection() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SwSectionFmt & rSectionFmt( m_pImpl->GetSectionFmtOrThrow() );
 
@@ -246,7 +246,7 @@ SwXTextSection::getParentSection() throw (uno::RuntimeException)
 uno::Sequence< uno::Reference< text::XTextSection > > SAL_CALL
 SwXTextSection::getChildSections() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SwSectionFmt & rSectionFmt( m_pImpl->GetSectionFmtOrThrow() );
 
@@ -266,7 +266,7 @@ void SAL_CALL
 SwXTextSection::attach(const uno::Reference< text::XTextRange > & xTextRange)
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     if (!m_pImpl->m_bIsDescriptor)
     {
@@ -431,7 +431,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
 uno::Reference< text::XTextRange > SAL_CALL
 SwXTextSection::getAnchor() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     uno::Reference< text::XTextRange >  xRet;
     SwSectionFmt *const pSectFmt = m_pImpl->GetSectionFmt();
@@ -458,7 +458,7 @@ SwXTextSection::getAnchor() throw (uno::RuntimeException)
 
 void SAL_CALL SwXTextSection::dispose() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SwSectionFmt *const pSectFmt = m_pImpl->GetSectionFmt();
     if (pSectFmt)
@@ -471,7 +471,7 @@ void SAL_CALL SwXTextSection::addEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     if (!m_pImpl->GetSectionFmt())
     {
@@ -484,7 +484,7 @@ void SAL_CALL SwXTextSection::removeEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     if (!m_pImpl->GetSectionFmt() ||
         !m_pImpl->m_ListenerContainer.RemoveListener(xListener))
@@ -496,7 +496,7 @@ throw (uno::RuntimeException)
 uno::Reference< beans::XPropertySetInfo > SAL_CALL
 SwXTextSection::getPropertySetInfo() throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     static const uno::Reference< beans::XPropertySetInfo >  aRef =
         m_pImpl->m_rPropSet.getPropertySetInfo();
@@ -937,7 +937,7 @@ SwXTextSection::setPropertyValues(
 throw (beans::PropertyVetoException, lang::IllegalArgumentException,
         lang::WrappedTargetException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     // workaround for bad designed API
     try
@@ -960,7 +960,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         lang::IllegalArgumentException, lang::WrappedTargetException,
         uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     uno::Sequence< ::rtl::OUString > aPropertyNames(1);
     aPropertyNames.getArray()[0] = rPropertyName;
@@ -1291,7 +1291,7 @@ SwXTextSection::getPropertyValues(
     const uno::Sequence< ::rtl::OUString >& rPropertyNames)
 throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Sequence< uno::Any > aValues;
 
     // workaround for bad designed API
@@ -1320,7 +1320,7 @@ SwXTextSection::getPropertyValue(const OUString& rPropertyName)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     uno::Sequence< ::rtl::OUString > aPropertyNames(1);
     aPropertyNames.getArray()[0] = rPropertyName;
@@ -1401,7 +1401,7 @@ beans::PropertyState SAL_CALL
 SwXTextSection::getPropertyState(const OUString& rPropertyName)
 throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     uno::Sequence< OUString > aNames(1);
     aNames.getArray()[0] = rPropertyName;
@@ -1413,7 +1413,7 @@ SwXTextSection::getPropertyStates(
         const uno::Sequence< OUString >& rPropertyNames)
 throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SwSectionFmt *const pFmt = m_pImpl->GetSectionFmt();
     if (!pFmt && !m_pImpl->m_bIsDescriptor)
@@ -1497,7 +1497,7 @@ void SAL_CALL
 SwXTextSection::setPropertyToDefault(const OUString& rPropertyName)
 throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SwSectionFmt *const pFmt = m_pImpl->GetSectionFmt();
     if (!pFmt && !m_pImpl->m_bIsDescriptor)
@@ -1645,7 +1645,7 @@ SwXTextSection::getPropertyDefault(const OUString& rPropertyName)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     uno::Any aRet;
     SwSectionFmt *const pFmt = m_pImpl->GetSectionFmt();
@@ -1707,7 +1707,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
 OUString SAL_CALL SwXTextSection::getName() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     ::rtl::OUString sRet;
     SwSectionFmt const*const pFmt = m_pImpl->GetSectionFmt();
@@ -1729,7 +1729,7 @@ OUString SAL_CALL SwXTextSection::getName() throw (uno::RuntimeException)
 void SAL_CALL SwXTextSection::setName(const OUString& rName)
 throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SwSectionFmt *const pFmt = m_pImpl->GetSectionFmt();
     if(pFmt)

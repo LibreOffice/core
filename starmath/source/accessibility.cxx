@@ -186,7 +186,7 @@ void SmGraphicAccessible::LaunchEvent(
 uno::Reference< XAccessibleContext > SAL_CALL SmGraphicAccessible::getAccessibleContext()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return this;
 }
 
@@ -196,7 +196,7 @@ sal_Bool SAL_CALL SmGraphicAccessible::containsPoint( const awt::Point& aPoint )
     //! the arguments coordinates are relativ to the current window !
     //! Thus the top-left point is (0, 0)
 
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if (!pWin)
         throw RuntimeException();
 
@@ -209,7 +209,7 @@ uno::Reference< XAccessible > SAL_CALL SmGraphicAccessible::getAccessibleAtPoint
         const awt::Point& aPoint )
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     XAccessible *pRes = 0;
     if (containsPoint( aPoint ))
         pRes = this;
@@ -219,7 +219,7 @@ uno::Reference< XAccessible > SAL_CALL SmGraphicAccessible::getAccessibleAtPoint
 awt::Rectangle SAL_CALL SmGraphicAccessible::getBounds()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if (!pWin)
         throw RuntimeException();
     OSL_ENSURE(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
@@ -230,7 +230,7 @@ awt::Rectangle SAL_CALL SmGraphicAccessible::getBounds()
 awt::Point SAL_CALL SmGraphicAccessible::getLocation()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if (!pWin)
         throw RuntimeException();
     OSL_ENSURE(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
@@ -242,7 +242,7 @@ awt::Point SAL_CALL SmGraphicAccessible::getLocation()
 awt::Point SAL_CALL SmGraphicAccessible::getLocationOnScreen()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if (!pWin)
         throw RuntimeException();
     OSL_ENSURE(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
@@ -253,7 +253,7 @@ awt::Point SAL_CALL SmGraphicAccessible::getLocationOnScreen()
 awt::Size SAL_CALL SmGraphicAccessible::getSize()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if (!pWin)
         throw RuntimeException();
     OSL_ENSURE(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
@@ -271,7 +271,7 @@ awt::Size SAL_CALL SmGraphicAccessible::getSize()
 void SAL_CALL SmGraphicAccessible::grabFocus()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if (!pWin)
         throw RuntimeException();
 
@@ -281,7 +281,7 @@ void SAL_CALL SmGraphicAccessible::grabFocus()
 sal_Int32 SAL_CALL SmGraphicAccessible::getForeground()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!pWin)
         throw RuntimeException();
@@ -291,7 +291,7 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getForeground()
 sal_Int32 SAL_CALL SmGraphicAccessible::getBackground()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!pWin)
         throw RuntimeException();
@@ -307,7 +307,7 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getBackground()
 sal_Int32 SAL_CALL SmGraphicAccessible::getAccessibleChildCount()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return 0;
 }
 
@@ -315,14 +315,14 @@ Reference< XAccessible > SAL_CALL SmGraphicAccessible::getAccessibleChild(
         sal_Int32 /*i*/ )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     throw IndexOutOfBoundsException();  // there is no child...
 }
 
 Reference< XAccessible > SAL_CALL SmGraphicAccessible::getAccessibleParent()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if (!pWin)
         throw RuntimeException();
 
@@ -334,7 +334,7 @@ Reference< XAccessible > SAL_CALL SmGraphicAccessible::getAccessibleParent()
 sal_Int32 SAL_CALL SmGraphicAccessible::getAccessibleIndexInParent()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     sal_Int32 nIdx = -1;
     Window *pAccParent = pWin ? pWin->GetAccessibleParentWindow() : 0;
     if (pAccParent)
@@ -350,14 +350,14 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getAccessibleIndexInParent()
 sal_Int16 SAL_CALL SmGraphicAccessible::getAccessibleRole()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return AccessibleRole::DOCUMENT;
 }
 
 OUString SAL_CALL SmGraphicAccessible::getAccessibleDescription()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     SmDocShell *pDoc = GetDoc_Impl();
     return pDoc ? OUString(pDoc->GetText()) : OUString();
 }
@@ -365,14 +365,14 @@ OUString SAL_CALL SmGraphicAccessible::getAccessibleDescription()
 OUString SAL_CALL SmGraphicAccessible::getAccessibleName()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return aAccName;
 }
 
 Reference< XAccessibleRelationSet > SAL_CALL SmGraphicAccessible::getAccessibleRelationSet()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     Reference< XAccessibleRelationSet > xRelSet = new utl::AccessibleRelationSetHelper();
     return xRelSet;   // empty relation set
 }
@@ -380,7 +380,7 @@ Reference< XAccessibleRelationSet > SAL_CALL SmGraphicAccessible::getAccessibleR
 Reference< XAccessibleStateSet > SAL_CALL SmGraphicAccessible::getAccessibleStateSet()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     ::utl::AccessibleStateSetHelper *pStateSet =
             new ::utl::AccessibleStateSetHelper;
 
@@ -410,7 +410,7 @@ Reference< XAccessibleStateSet > SAL_CALL SmGraphicAccessible::getAccessibleStat
 Locale SAL_CALL SmGraphicAccessible::getLocale()
     throw (IllegalAccessibleComponentStateException, RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     // should be the document language...
     // We use the language of the localized symbol names here.
     return Application::GetSettings().GetUILocale();
@@ -423,7 +423,7 @@ void SAL_CALL SmGraphicAccessible::addEventListener(
 {
     if (xListener.is())
     {
-        vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         if (pWin)
         {
             if (!nClientId)
@@ -439,7 +439,7 @@ void SAL_CALL SmGraphicAccessible::removeEventListener(
 {
     if (xListener.is())
     {
-        vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( nClientId, xListener );
         if ( !nListenerCount )
         {
@@ -456,7 +456,7 @@ void SAL_CALL SmGraphicAccessible::removeEventListener(
 sal_Int32 SAL_CALL SmGraphicAccessible::getCaretPosition()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return 0;
 }
 
@@ -473,7 +473,7 @@ sal_Bool SAL_CALL SmGraphicAccessible::setCaretPosition( sal_Int32 nIndex )
 sal_Unicode SAL_CALL SmGraphicAccessible::getCharacter( sal_Int32 nIndex )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     xub_StrLen nIdx = (xub_StrLen) nIndex;
     String aTxt( GetAccessibleText_Impl() );
@@ -487,7 +487,7 @@ Sequence< beans::PropertyValue > SAL_CALL SmGraphicAccessible::getCharacterAttri
         const uno::Sequence< ::rtl::OUString > & /*rRequestedAttributes*/ )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     INT32 nLen = GetAccessibleText_Impl().Len();
     if (!(0 <= nIndex  &&  nIndex < nLen))
         throw IndexOutOfBoundsException();
@@ -497,7 +497,7 @@ Sequence< beans::PropertyValue > SAL_CALL SmGraphicAccessible::getCharacterAttri
 awt::Rectangle SAL_CALL SmGraphicAccessible::getCharacterBounds( sal_Int32 nIndex )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     awt::Rectangle aRes;
 
@@ -571,14 +571,14 @@ awt::Rectangle SAL_CALL SmGraphicAccessible::getCharacterBounds( sal_Int32 nInde
 sal_Int32 SAL_CALL SmGraphicAccessible::getCharacterCount()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return GetAccessibleText_Impl().Len();
 }
 
 sal_Int32 SAL_CALL SmGraphicAccessible::getIndexAtPoint( const awt::Point& aPoint )
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     sal_Int32 nRes = -1;
     if (pWin)
@@ -644,21 +644,21 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getIndexAtPoint( const awt::Point& aPoin
 OUString SAL_CALL SmGraphicAccessible::getSelectedText()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return OUString();
 }
 
 sal_Int32 SAL_CALL SmGraphicAccessible::getSelectionStart()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return -1;
 }
 
 sal_Int32 SAL_CALL SmGraphicAccessible::getSelectionEnd()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return -1;
 }
 
@@ -667,7 +667,7 @@ sal_Bool SAL_CALL SmGraphicAccessible::setSelection(
         sal_Int32 nEndIndex )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     INT32 nLen = GetAccessibleText_Impl().Len();
     if (!(0 <= nStartIndex  &&  nStartIndex < nLen) ||
         !(0 <= nEndIndex    &&  nEndIndex   < nLen))
@@ -678,7 +678,7 @@ sal_Bool SAL_CALL SmGraphicAccessible::setSelection(
 OUString SAL_CALL SmGraphicAccessible::getText()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return GetAccessibleText_Impl();
 }
 
@@ -691,7 +691,7 @@ OUString SAL_CALL SmGraphicAccessible::getTextRange(
     //!! text should be copied exclusive that end index though. And arguments
     //!! may be switched.
 
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     String aTxt( GetAccessibleText_Impl() );
     xub_StrLen nStart = (xub_StrLen) Min(nStartIndex, nEndIndex);
     xub_StrLen nEnd   = (xub_StrLen) Max(nStartIndex, nEndIndex);
@@ -703,7 +703,7 @@ OUString SAL_CALL SmGraphicAccessible::getTextRange(
 
 ::com::sun::star::accessibility::TextSegment SAL_CALL SmGraphicAccessible::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     String aTxt( GetAccessibleText_Impl() );
     xub_StrLen nIdx = (xub_StrLen) nIndex;
     //!! nIndex is allowed to be the string length
@@ -724,7 +724,7 @@ OUString SAL_CALL SmGraphicAccessible::getTextRange(
 
 ::com::sun::star::accessibility::TextSegment SAL_CALL SmGraphicAccessible::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     String aTxt( GetAccessibleText_Impl() );
     xub_StrLen nIdx = (xub_StrLen) nIndex;
     //!! nIndex is allowed to be the string length
@@ -746,7 +746,7 @@ OUString SAL_CALL SmGraphicAccessible::getTextRange(
 
 ::com::sun::star::accessibility::TextSegment SAL_CALL SmGraphicAccessible::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     String aTxt( GetAccessibleText_Impl() );
     xub_StrLen nIdx = (xub_StrLen) nIndex;
     //!! nIndex is allowed to be the string length
@@ -772,7 +772,7 @@ sal_Bool SAL_CALL SmGraphicAccessible::copyText(
         sal_Int32 nEndIndex )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     sal_Bool bReturn = sal_False;
 
     if (!pWin)
@@ -1713,7 +1713,7 @@ void SmEditAccessible::ClearWin()
 uno::Reference< XAccessibleContext > SAL_CALL SmEditAccessible::getAccessibleContext(  )
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return this;
 }
 
@@ -1724,7 +1724,7 @@ sal_Bool SAL_CALL SmEditAccessible::containsPoint( const awt::Point& aPoint )
     //! the arguments coordinates are relativ to the current window !
     //! Thus the top left-point is (0, 0)
 
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if (!pWin)
         throw RuntimeException();
 
@@ -1736,7 +1736,7 @@ sal_Bool SAL_CALL SmEditAccessible::containsPoint( const awt::Point& aPoint )
 uno::Reference< XAccessible > SAL_CALL SmEditAccessible::getAccessibleAtPoint( const awt::Point& aPoint )
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if (!pTextHelper)
         throw RuntimeException();
     return pTextHelper->GetAt( aPoint );
@@ -1745,7 +1745,7 @@ uno::Reference< XAccessible > SAL_CALL SmEditAccessible::getAccessibleAtPoint( c
 awt::Rectangle SAL_CALL SmEditAccessible::getBounds(  )
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if (!pWin)
         throw RuntimeException();
     OSL_ENSURE(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
@@ -1756,7 +1756,7 @@ awt::Rectangle SAL_CALL SmEditAccessible::getBounds(  )
 awt::Point SAL_CALL SmEditAccessible::getLocation(  )
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if (!pWin)
         throw RuntimeException();
     OSL_ENSURE(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
@@ -1768,7 +1768,7 @@ awt::Point SAL_CALL SmEditAccessible::getLocation(  )
 awt::Point SAL_CALL SmEditAccessible::getLocationOnScreen(  )
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if (!pWin)
         throw RuntimeException();
     OSL_ENSURE(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
@@ -1779,7 +1779,7 @@ awt::Point SAL_CALL SmEditAccessible::getLocationOnScreen(  )
 awt::Size SAL_CALL SmEditAccessible::getSize(  )
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if (!pWin)
         throw RuntimeException();
     OSL_ENSURE(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
@@ -1797,7 +1797,7 @@ awt::Size SAL_CALL SmEditAccessible::getSize(  )
 void SAL_CALL SmEditAccessible::grabFocus(  )
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if (!pWin)
         throw RuntimeException();
 
@@ -1807,7 +1807,7 @@ void SAL_CALL SmEditAccessible::grabFocus(  )
 sal_Int32 SAL_CALL SmEditAccessible::getForeground()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!pWin)
         throw RuntimeException();
@@ -1817,7 +1817,7 @@ sal_Int32 SAL_CALL SmEditAccessible::getForeground()
 sal_Int32 SAL_CALL SmEditAccessible::getBackground()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!pWin)
         throw RuntimeException();
@@ -1834,7 +1834,7 @@ sal_Int32 SAL_CALL SmEditAccessible::getBackground()
 sal_Int32 SAL_CALL SmEditAccessible::getAccessibleChildCount(  )
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if (!pTextHelper)
         throw RuntimeException();
     return pTextHelper->GetChildCount();
@@ -1843,7 +1843,7 @@ sal_Int32 SAL_CALL SmEditAccessible::getAccessibleChildCount(  )
 uno::Reference< XAccessible > SAL_CALL SmEditAccessible::getAccessibleChild( sal_Int32 i )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if (!pTextHelper)
         throw RuntimeException();
     return pTextHelper->GetChild( i );
@@ -1852,7 +1852,7 @@ uno::Reference< XAccessible > SAL_CALL SmEditAccessible::getAccessibleChild( sal
 uno::Reference< XAccessible > SAL_CALL SmEditAccessible::getAccessibleParent(  )
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if (!pWin)
         throw RuntimeException();
 
@@ -1864,7 +1864,7 @@ uno::Reference< XAccessible > SAL_CALL SmEditAccessible::getAccessibleParent(  )
 sal_Int32 SAL_CALL SmEditAccessible::getAccessibleIndexInParent(  )
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     sal_Int32 nIdx = -1;
     Window *pAccParent = pWin ? pWin->GetAccessibleParentWindow() : 0;
     if (pAccParent)
@@ -1880,21 +1880,21 @@ sal_Int32 SAL_CALL SmEditAccessible::getAccessibleIndexInParent(  )
 sal_Int16 SAL_CALL SmEditAccessible::getAccessibleRole(  )
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return AccessibleRole::PANEL /*TEXT ?*/;
 }
 
 rtl::OUString SAL_CALL SmEditAccessible::getAccessibleDescription(  )
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return OUString();  // empty as agreed with product-management
 }
 
 rtl::OUString SAL_CALL SmEditAccessible::getAccessibleName(  )
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     // same name as displayed by the window when not docked
     return aAccName;
 }
@@ -1902,7 +1902,7 @@ rtl::OUString SAL_CALL SmEditAccessible::getAccessibleName(  )
 uno::Reference< XAccessibleRelationSet > SAL_CALL SmEditAccessible::getAccessibleRelationSet(  )
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     Reference< XAccessibleRelationSet > xRelSet = new utl::AccessibleRelationSetHelper();
     return xRelSet;   // empty relation set
 }
@@ -1910,7 +1910,7 @@ uno::Reference< XAccessibleRelationSet > SAL_CALL SmEditAccessible::getAccessibl
 uno::Reference< XAccessibleStateSet > SAL_CALL SmEditAccessible::getAccessibleStateSet(  )
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     ::utl::AccessibleStateSetHelper *pStateSet =
             new ::utl::AccessibleStateSetHelper;
 
@@ -1941,7 +1941,7 @@ uno::Reference< XAccessibleStateSet > SAL_CALL SmEditAccessible::getAccessibleSt
 Locale SAL_CALL SmEditAccessible::getLocale(  )
     throw (IllegalAccessibleComponentStateException, RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     // should be the document language...
     // We use the language of the localized symbol names here.
     return Application::GetSettings().GetUILocale();

@@ -200,7 +200,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
         return ERR_SWG_WRITE_ERROR;
 
     // from here, we use core interfaces -> lock Solar-Mutex (#91949#)
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     {
         Reference<XPropertySet> rInfoSet = getExportInfo();

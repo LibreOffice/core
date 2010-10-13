@@ -58,7 +58,7 @@ uno::Sequence< rtl::OUString > SAL_CALL SwUnoModule_getSupportedServiceNames() t
 uno::Reference< uno::XInterface > SAL_CALL SwUnoModule_createInstance(
                 const uno::Reference< lang::XMultiServiceFactory > & rSMgr )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     return uno::Reference< uno::XInterface >( dynamic_cast< frame::XDispatch * >(new SwUnoModule( rSMgr )), uno::UNO_QUERY );
 }
 
@@ -70,7 +70,7 @@ void SAL_CALL SwUnoModule::dispatchWithNotification( const util::URL& aURL, cons
     // asynchronous ...
     uno::Reference< uno::XInterface > xThis(static_cast< frame::XNotifyingDispatch* >(this));
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     SwDLL::Init();
     const SfxSlot* pSlot = SW_MOD()->GetInterface()->GetSlot( aURL.Complete );
 
@@ -137,7 +137,7 @@ REFERENCE< XDISPATCH > SAL_CALL SwUnoModule::queryDispatch(
 {
     REFERENCE< XDISPATCH > xReturn;
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     SwDLL::Init();
     const SfxSlot* pSlot = SW_MOD()->GetInterface()->GetSlot( aURL.Complete );
     if ( pSlot )

@@ -297,7 +297,7 @@ SwXText::insertString(const uno::Reference< text::XTextRange >& xTextRange,
     const OUString& rString, sal_Bool bAbsorb)
 throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!xTextRange.is())
     {
@@ -405,7 +405,7 @@ SwXText::insertControlCharacter(
         sal_Int16 nControlCharacter, sal_Bool bAbsorb)
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!xTextRange.is())
     {
@@ -519,7 +519,7 @@ SwXText::insertTextContent(
         sal_Bool bAbsorb)
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!xRange.is())
     {
@@ -632,7 +632,7 @@ SwXText::insertTextContentBefore(
     const uno::Reference< text::XTextContent>& xSuccessor)
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if(!GetDoc())
     {
@@ -693,7 +693,7 @@ SwXText::insertTextContentAfter(
     const uno::Reference< text::XTextContent>& xPredecessor)
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if(!GetDoc())
     {
@@ -750,7 +750,7 @@ SwXText::removeTextContentBefore(
     const uno::Reference< text::XTextContent>& xSuccessor)
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if(!GetDoc())
     {
@@ -803,7 +803,7 @@ SwXText::removeTextContentAfter(
         const uno::Reference< text::XTextContent>& xPredecessor)
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if(!GetDoc())
     {
@@ -870,7 +870,7 @@ throw (container::NoSuchElementException, uno::RuntimeException)
 uno::Reference< text::XText > SAL_CALL
 SwXText::getText() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     const uno::Reference< text::XText > xRet(this);
     return xRet;
@@ -879,7 +879,7 @@ SwXText::getText() throw (uno::RuntimeException)
 uno::Reference< text::XTextRange > SAL_CALL
 SwXText::getStart() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     const uno::Reference< text::XTextCursor > xRef = CreateCursor();
     if(!xRef.is())
@@ -896,7 +896,7 @@ SwXText::getStart() throw (uno::RuntimeException)
 uno::Reference< text::XTextRange > SAL_CALL
 SwXText::getEnd() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     const uno::Reference< text::XTextCursor > xRef = CreateCursor();
     if(!xRef.is())
@@ -912,7 +912,7 @@ SwXText::getEnd() throw (uno::RuntimeException)
 
 OUString SAL_CALL SwXText::getString() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     const uno::Reference< text::XTextCursor > xRet = CreateCursor();
     if(!xRet.is())
@@ -928,7 +928,7 @@ OUString SAL_CALL SwXText::getString() throw (uno::RuntimeException)
 void SAL_CALL
 SwXText::setString(const OUString& rString) throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!GetDoc())
     {
@@ -1086,7 +1086,7 @@ SwXText::compareRegionStarts(
     const uno::Reference<text::XTextRange>& xRange2)
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!xRange1.is() || !xRange2.is())
     {
@@ -1104,7 +1104,7 @@ SwXText::compareRegionEnds(
     const uno::Reference<text::XTextRange>& xRange2)
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!xRange1.is() || !xRange2.is())
     {
@@ -1119,7 +1119,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
 uno::Reference< beans::XPropertySetInfo > SAL_CALL
 SwXText::getPropertySetInfo() throw(uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     static uno::Reference< beans::XPropertySetInfo > xInfo =
         m_pImpl->m_rPropSet.getPropertySetInfo();
@@ -1142,7 +1142,7 @@ SwXText::getPropertyValue(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if(!IsValid())
     {
@@ -1254,7 +1254,7 @@ SwXText::appendParagraph(
         const uno::Sequence< beans::PropertyValue > & rProperties)
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     return m_pImpl->finishOrAppendParagraph(false, rProperties);
 }
@@ -1264,7 +1264,7 @@ SwXText::finishParagraph(
         const uno::Sequence< beans::PropertyValue > & rProperties)
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     return m_pImpl->finishOrAppendParagraph(true, rProperties);
 }
@@ -1382,7 +1382,7 @@ SwXText::appendTextPortion(
             rCharacterAndParagraphProperties)
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if(!IsValid())
     {
@@ -1488,7 +1488,7 @@ SwXText::appendTextContent(
         rCharacterAndParagraphProperties)
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!IsValid())
     {
@@ -1549,7 +1549,7 @@ SwXText::convertToTextFrame(
     const uno::Sequence< beans::PropertyValue >& rFrameProperties)
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if(!IsValid())
     {
@@ -2186,7 +2186,7 @@ SwXText::convertToTable(
     const uno::Sequence< beans::PropertyValue >& rTableProperties)
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if(!IsValid())
     {
@@ -2389,7 +2389,7 @@ SwXBodyText::getTypes() throw (uno::RuntimeException)
 uno::Sequence< sal_Int8 > SAL_CALL
 SwXBodyText::getImplementationId() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     static uno::Sequence< sal_Int8 > aId( 16 );
     static sal_Bool bInit = sal_False;
     if(!bInit)
@@ -2441,7 +2441,7 @@ SwXTextCursor * SwXBodyText::CreateTextCursor(const bool bIgnoreTables)
 uno::Reference< text::XTextCursor > SAL_CALL
 SwXBodyText::createTextCursor() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     const uno::Reference< text::XTextCursor > xRef(
             static_cast<text::XWordCursor*>(CreateTextCursor(false)) );
@@ -2459,7 +2459,7 @@ SwXBodyText::createTextCursorByRange(
     const uno::Reference< text::XTextRange > & xTextPosition)
 throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if(!IsValid())
     {
@@ -2500,7 +2500,7 @@ uno::Reference< container::XEnumeration > SAL_CALL
 SwXBodyText::createEnumeration()
 throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!IsValid())
     {
@@ -2528,7 +2528,7 @@ SwXBodyText::getElementType() throw (uno::RuntimeException)
 sal_Bool SAL_CALL
 SwXBodyText::hasElements() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!IsValid())
     {
@@ -2675,7 +2675,7 @@ SwXHeadFootText::getTypes() throw (uno::RuntimeException)
 uno::Sequence< sal_Int8 > SAL_CALL
 SwXHeadFootText::getImplementationId() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     static uno::Sequence< sal_Int8 > aId( 16 );
     static sal_Bool bInit = sal_False;
     if(!bInit)
@@ -2699,7 +2699,7 @@ throw (uno::RuntimeException)
 uno::Reference< text::XTextCursor > SAL_CALL
 SwXHeadFootText::createTextCursor() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SwFrmFmt & rHeadFootFmt( m_pImpl->GetHeadFootFmtOrThrow() );
 
@@ -2747,7 +2747,7 @@ SwXHeadFootText::createTextCursorByRange(
     const uno::Reference< text::XTextRange > & xTextPosition)
 throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SwFrmFmt & rHeadFootFmt( m_pImpl->GetHeadFootFmtOrThrow() );
 
@@ -2782,7 +2782,7 @@ uno::Reference< container::XEnumeration > SAL_CALL
 SwXHeadFootText::createEnumeration()
 throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SwFrmFmt & rHeadFootFmt( m_pImpl->GetHeadFootFmtOrThrow() );
 

@@ -225,7 +225,7 @@ SwChartDataProvider * SwDoc::GetChartDataProvider( bool bCreate ) const
 {
     // since there must be only one instance of this object per document
     // we need a mutex here
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if (bCreate && !aChartDataProviderImplRef.get())
     {

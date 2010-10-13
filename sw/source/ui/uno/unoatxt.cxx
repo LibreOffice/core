@@ -75,7 +75,7 @@ uno::Reference< uno::XInterface > SAL_CALL SwXAutoTextContainer_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & ) throw( uno::Exception )
 {
     //the module may not be loaded
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     SwDLL::Init();
     static uno::Reference< uno::XInterface > xAText = (cppu::OWeakObject*)new SwXAutoTextContainer();;
     return xAText;
@@ -112,7 +112,7 @@ sal_Int32 SwXAutoTextContainer::getCount(void) throw( uno::RuntimeException )
 uno::Any SwXAutoTextContainer::getByIndex(sal_Int32 nIndex)
     throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Any aRet;
     sal_uInt16 nCount = pGlossaries->GetGroupCnt();
     if ( 0 <= nIndex && nIndex < nCount )
@@ -137,7 +137,7 @@ sal_Bool SwXAutoTextContainer::hasElements(void) throw( uno::RuntimeException )
 uno::Any SwXAutoTextContainer::getByName(const OUString& GroupName)
     throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     uno::Reference< text::XAutoTextGroup > xGroup;
     if ( pGlossaries && hasByName( GroupName ) )    // group name already known?
@@ -152,7 +152,7 @@ uno::Any SwXAutoTextContainer::getByName(const OUString& GroupName)
 
 uno::Sequence< OUString > SwXAutoTextContainer::getElementNames(void) throw( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     sal_uInt16 nCount = pGlossaries->GetGroupCnt();
 
     uno::Sequence< OUString > aGroupNames(nCount);
@@ -172,7 +172,7 @@ uno::Sequence< OUString > SwXAutoTextContainer::getElementNames(void) throw( uno
 sal_Bool SwXAutoTextContainer::hasByName(const OUString& Name)
     throw( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     String sGroupName( pGlossaries->GetCompleteGroupName( Name ) );
     if(sGroupName.Len())
         return sal_True;
@@ -183,7 +183,7 @@ uno::Reference< text::XAutoTextGroup >  SwXAutoTextContainer::insertNewByName(
     const OUString& aGroupName)
     throw( lang::IllegalArgumentException, container::ElementExistException, uno::RuntimeException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(hasByName(aGroupName))
         throw container::ElementExistException();
     //check for non-ASCII characters
@@ -227,7 +227,7 @@ uno::Reference< text::XAutoTextGroup >  SwXAutoTextContainer::insertNewByName(
 void SwXAutoTextContainer::removeByName(const OUString& aGroupName)
     throw( container::NoSuchElementException, uno::RuntimeException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     //zunaechst den Namen mit Pfad-Extension finden
     String sGroupName = pGlossaries->GetCompleteGroupName( aGroupName );
     if(!sGroupName.Len())
@@ -291,7 +291,7 @@ SwXAutoTextGroup::~SwXAutoTextGroup()
 
 uno::Sequence< OUString > SwXAutoTextGroup::getTitles(void) throw( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     sal_uInt16 nCount = 0;
     SwTextBlocks* pGlosGroup = pGlossaries ? pGlossaries->GetGroupDoc(m_sGroupName, sal_False) : 0;
     if(pGlosGroup && !pGlosGroup->GetError())
@@ -313,7 +313,7 @@ void SwXAutoTextGroup::renameByName(const OUString& aElementName,
     throw( lang::IllegalArgumentException, container::ElementExistException, io::IOException,
                                                      uno::RuntimeException)
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     // throw exception only if the programmatic name is to be changed into an existing name
     if(aNewElementName != aElementName && hasByName(aNewElementName))
         throw container::ElementExistException();
@@ -384,7 +384,7 @@ uno::Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const 
         const OUString& aTitle, const uno::Reference< text::XTextRange > & xTextRange)
         throw( container::ElementExistException, uno::RuntimeException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(hasByName(aName))
         throw container::ElementExistException();
     if(!xTextRange.is())
@@ -465,7 +465,7 @@ uno::Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const 
 
 void SwXAutoTextGroup::removeByName(const OUString& aEntryName) throw( container::NoSuchElementException, uno::RuntimeException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     SwTextBlocks* pGlosGroup = pGlossaries ? pGlossaries->GetGroupDoc(m_sGroupName, sal_False) : 0;
     if(pGlosGroup && !pGlosGroup->GetError())
     {
@@ -480,13 +480,13 @@ void SwXAutoTextGroup::removeByName(const OUString& aEntryName) throw( container
 
 OUString SwXAutoTextGroup::getName(void) throw( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return sName;
 }
 
 void SwXAutoTextGroup::setName(const OUString& rName) throw( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if( !pGlossaries )
         throw uno::RuntimeException();
 
@@ -532,7 +532,7 @@ void SwXAutoTextGroup::setName(const OUString& rName) throw( uno::RuntimeExcepti
 
 sal_Int32 SwXAutoTextGroup::getCount(void) throw( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     int nCount = 0;
     SwTextBlocks* pGlosGroup = pGlossaries ? pGlossaries->GetGroupDoc(m_sGroupName, sal_False) : 0;
     if(pGlosGroup && !pGlosGroup->GetError())
@@ -546,7 +546,7 @@ sal_Int32 SwXAutoTextGroup::getCount(void) throw( uno::RuntimeException )
 uno::Any SwXAutoTextGroup::getByIndex(sal_Int32 nIndex)
     throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Any aRet;
     sal_uInt16 nCount = 0;
     SwTextBlocks* pGlosGroup = pGlossaries ? pGlossaries->GetGroupDoc(m_sGroupName, sal_False) : 0;
@@ -570,7 +570,7 @@ uno::Type SwXAutoTextGroup::getElementType(void) throw( uno::RuntimeException )
 
 sal_Bool SwXAutoTextGroup::hasElements(void) throw( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     SwTextBlocks* pGlosGroup = pGlossaries ? pGlossaries->GetGroupDoc(m_sGroupName, sal_False) : 0;
     sal_uInt16 nCount = 0;
     if(pGlosGroup && !pGlosGroup->GetError())
@@ -585,7 +585,7 @@ sal_Bool SwXAutoTextGroup::hasElements(void) throw( uno::RuntimeException )
 uno::Any SwXAutoTextGroup::getByName(const OUString& _rName)
     throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Reference< text::XAutoTextEntry > xEntry = pGlossaries->GetAutoTextEntry( m_sGroupName, sName, _rName, true );
     OSL_ENSURE( xEntry.is(), "SwXAutoTextGroup::getByName: GetAutoTextEntry is fractious!" );
         // we told it to create the object, so why didn't it?
@@ -595,7 +595,7 @@ uno::Any SwXAutoTextGroup::getByName(const OUString& _rName)
 uno::Sequence< OUString > SwXAutoTextGroup::getElementNames(void)
     throw( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     sal_uInt16 nCount = 0;
     SwTextBlocks* pGlosGroup = pGlossaries ? pGlossaries->GetGroupDoc(m_sGroupName, sal_False) : 0;
     if(pGlosGroup && !pGlosGroup->GetError())
@@ -615,7 +615,7 @@ uno::Sequence< OUString > SwXAutoTextGroup::getElementNames(void)
 sal_Bool SwXAutoTextGroup::hasByName(const OUString& rName)
     throw( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     sal_Bool bRet = sal_False;
     sal_uInt16 nCount = 0;
     SwTextBlocks* pGlosGroup = pGlossaries ? pGlossaries->GetGroupDoc(m_sGroupName, sal_False) : 0;
@@ -649,7 +649,7 @@ void SwXAutoTextGroup::setPropertyValue(
     throw( beans::UnknownPropertyException, beans::PropertyVetoException,
          lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     const SfxItemPropertySimpleEntry*   pEntry = pPropSet->getPropertyMap()->getByName( rPropertyName );
 
     if(!pEntry)
@@ -679,7 +679,7 @@ void SwXAutoTextGroup::setPropertyValue(
 uno::Any SwXAutoTextGroup::getPropertyValue(const OUString& rPropertyName)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     const SfxItemPropertySimpleEntry*   pEntry = pPropSet->getPropertyMap()->getByName( rPropertyName);
 
     if(!pEntry)
@@ -781,7 +781,7 @@ SwXAutoTextEntry::SwXAutoTextEntry(SwGlossaries* pGlss, const String& rGroupName
 SwXAutoTextEntry::~SwXAutoTextEntry()
 {
     {
-        ::vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
 
         // ensure that any pending modifications are written
         implFlushDocument( true );
@@ -841,7 +841,7 @@ void SwXAutoTextEntry::Notify( SfxBroadcaster& _rBC, const SfxHint& _rHint )
 
 void SwXAutoTextEntry::GetBodyText ()
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     xDocSh = pGlossaries->EditGroupDoc ( sGroupName, sEntryName, FALSE );
     OSL_ENSURE( xDocSh.Is(), "SwXAutoTextEntry::GetBodyText: unexpected: no doc returned by EditGroupDoc!" );
@@ -855,7 +855,7 @@ void SwXAutoTextEntry::GetBodyText ()
 
 uno::Reference< text::XTextCursor >  SwXAutoTextEntry::createTextCursor(void) throw( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     EnsureBodyText();
     return pBodyText->createTextCursor();
 }
@@ -863,14 +863,14 @@ uno::Reference< text::XTextCursor >  SwXAutoTextEntry::createTextCursor(void) th
 uno::Reference< text::XTextCursor >  SwXAutoTextEntry::createTextCursorByRange(
     const uno::Reference< text::XTextRange > & aTextPosition) throw( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     EnsureBodyText();
     return pBodyText->createTextCursorByRange ( aTextPosition );
 }
 
 void SwXAutoTextEntry::insertString(const uno::Reference< text::XTextRange > & xRange, const OUString& aString, sal_Bool bAbsorb) throw( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     EnsureBodyText();
     pBodyText->insertString ( xRange, aString, bAbsorb );
 }
@@ -879,7 +879,7 @@ void SwXAutoTextEntry::insertControlCharacter(const uno::Reference< text::XTextR
     sal_Int16 nControlCharacter, sal_Bool bAbsorb)
         throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     EnsureBodyText();
     pBodyText->insertControlCharacter ( xRange, nControlCharacter, bAbsorb );
 }
@@ -889,7 +889,7 @@ void SwXAutoTextEntry::insertTextContent(
     const uno::Reference< text::XTextContent > & xContent, sal_Bool bAbsorb)
         throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     EnsureBodyText();
     pBodyText->insertTextContent ( xRange, xContent, bAbsorb );
 }
@@ -898,49 +898,49 @@ void SwXAutoTextEntry::removeTextContent(
     const uno::Reference< text::XTextContent > & xContent)
         throw( container::NoSuchElementException, uno::RuntimeException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     EnsureBodyText();
     pBodyText->removeTextContent ( xContent );
 }
 
 uno::Reference< text::XText >  SwXAutoTextEntry::getText(void) throw( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Reference< text::XText >  xRet =  (text::XText*)this;
     return xRet;
 }
 
 uno::Reference< text::XTextRange >  SwXAutoTextEntry::getStart(void) throw( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     EnsureBodyText();
     return pBodyText->getStart();
 }
 
 uno::Reference< text::XTextRange >  SwXAutoTextEntry::getEnd(void) throw( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     EnsureBodyText();
     return pBodyText->getEnd();
 }
 
 OUString SwXAutoTextEntry::getString(void) throw( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     EnsureBodyText();
     return pBodyText->getString();
 }
 
 void SwXAutoTextEntry::setString(const OUString& aString) throw( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     EnsureBodyText();
     pBodyText->setString( aString );
 }
 
 void SwXAutoTextEntry::applyTo(const uno::Reference< text::XTextRange > & xTextRange)throw( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     // ensure that any pending modifications are written
     // reason is that we're holding the _copy_ of the auto text, while the real auto text

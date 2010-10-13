@@ -270,7 +270,7 @@ SwXTextPortionEnumeration::SwXTextPortionEnumeration(
 
 SwXTextPortionEnumeration::~SwXTextPortionEnumeration()
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SwUnoCrsr* pUnoCrsr = GetCursor();
     delete pUnoCrsr;
@@ -279,7 +279,7 @@ SwXTextPortionEnumeration::~SwXTextPortionEnumeration()
 sal_Bool SwXTextPortionEnumeration::hasMoreElements()
 throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     return (m_Portions.size() > 0) ? sal_True : sal_False;
 }
@@ -288,7 +288,7 @@ uno::Any SwXTextPortionEnumeration::nextElement()
 throw( container::NoSuchElementException, lang::WrappedTargetException,
        uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!m_Portions.size())
         throw container::NoSuchElementException();

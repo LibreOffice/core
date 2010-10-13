@@ -81,7 +81,7 @@ uno::Sequence< uno::Type > SwXFlatParagraph::getTypes(  ) throw(uno::RuntimeExce
 
 uno::Sequence< sal_Int8 > SwXFlatParagraph::getImplementationId(  ) throw(uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     static uno::Sequence< sal_Int8 > aId( 16 );
     static sal_Bool bInit = sal_False;
     if(!bInit)
@@ -124,7 +124,7 @@ css::uno::Reference< css::container::XStringKeyMap > SAL_CALL SwXFlatParagraph::
 
 void SAL_CALL SwXFlatParagraph::commitTextMarkup(::sal_Int32 nType, const ::rtl::OUString & rIdentifier, ::sal_Int32 nStart, ::sal_Int32 nLength, const css::uno::Reference< css::container::XStringKeyMap > & rxMarkupInfoContainer) throw (css::uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     SwXTextMarkup::commitTextMarkup( nType, rIdentifier, nStart, nLength,  rxMarkupInfoContainer );
 }
 
@@ -137,7 +137,7 @@ void SAL_CALL SwXFlatParagraph::commitTextMarkup(::sal_Int32 nType, const ::rtl:
 // text::XFlatParagraph:
 void SAL_CALL SwXFlatParagraph::setChecked( ::sal_Int32 nType, ::sal_Bool bVal ) throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if ( mpTxtNode )
     {
@@ -157,7 +157,7 @@ void SAL_CALL SwXFlatParagraph::setChecked( ::sal_Int32 nType, ::sal_Bool bVal )
 // text::XFlatParagraph:
 ::sal_Bool SAL_CALL SwXFlatParagraph::isChecked( ::sal_Int32 nType ) throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if ( mpTxtNode )
     {
         if ( text::TextMarkupType::SPELLCHECK == nType )
@@ -174,7 +174,7 @@ void SAL_CALL SwXFlatParagraph::setChecked( ::sal_Int32 nType, ::sal_Bool bVal )
 // text::XFlatParagraph:
 ::sal_Bool SAL_CALL SwXFlatParagraph::isModified() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return 0 == mpTxtNode;
 }
 
@@ -182,7 +182,7 @@ void SAL_CALL SwXFlatParagraph::setChecked( ::sal_Int32 nType, ::sal_Bool bVal )
 lang::Locale SAL_CALL SwXFlatParagraph::getLanguageOfText(::sal_Int32 nPos, ::sal_Int32 nLen)
     throw (uno::RuntimeException, lang::IllegalArgumentException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if (!mpTxtNode)
         return SvxCreateLocale( LANGUAGE_NONE );
 
@@ -194,7 +194,7 @@ lang::Locale SAL_CALL SwXFlatParagraph::getLanguageOfText(::sal_Int32 nPos, ::sa
 lang::Locale SAL_CALL SwXFlatParagraph::getPrimaryLanguageOfText(::sal_Int32 nPos, ::sal_Int32 nLen)
     throw (uno::RuntimeException, lang::IllegalArgumentException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!mpTxtNode)
         return SvxCreateLocale( LANGUAGE_NONE );
@@ -206,7 +206,7 @@ lang::Locale SAL_CALL SwXFlatParagraph::getPrimaryLanguageOfText(::sal_Int32 nPo
 // text::XFlatParagraph:
 void SAL_CALL SwXFlatParagraph::changeText(::sal_Int32 nPos, ::sal_Int32 nLen, const ::rtl::OUString & aNewText, const css::uno::Sequence< css::beans::PropertyValue > & aAttributes) throw (css::uno::RuntimeException, css::lang::IllegalArgumentException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if ( !mpTxtNode )
         return;
@@ -238,7 +238,7 @@ void SAL_CALL SwXFlatParagraph::changeText(::sal_Int32 nPos, ::sal_Int32 nLen, c
 // text::XFlatParagraph:
 void SAL_CALL SwXFlatParagraph::changeAttributes(::sal_Int32 nPos, ::sal_Int32 nLen, const css::uno::Sequence< css::beans::PropertyValue > & aAttributes) throw (css::uno::RuntimeException, css::lang::IllegalArgumentException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if ( !mpTxtNode )
         return;
@@ -263,7 +263,7 @@ void SAL_CALL SwXFlatParagraph::changeAttributes(::sal_Int32 nPos, ::sal_Int32 n
 // text::XFlatParagraph:
 css::uno::Sequence< ::sal_Int32 > SAL_CALL SwXFlatParagraph::getLanguagePortions() throw (css::uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return css::uno::Sequence< ::sal_Int32>();
 }
 
@@ -315,7 +315,7 @@ void SwXFlatParagraphIterator::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
     // check if document gets closed...
     if(!GetRegisteredIn())
     {
-        vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         mpDoc = 0;
     }
 }
@@ -330,7 +330,7 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getFirstPara()
 uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getNextPara()
     throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     uno::Reference< text::XFlatParagraph > xRet;
     if (!mpDoc)
@@ -440,7 +440,7 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getLastPara()
 uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getParaAfter(const uno::Reference< text::XFlatParagraph > & xPara)
     throw ( uno::RuntimeException, lang::IllegalArgumentException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     uno::Reference< text::XFlatParagraph > xRet;
     if (!mpDoc)
@@ -487,7 +487,7 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getParaAfter(co
 uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getParaBefore(const uno::Reference< text::XFlatParagraph > & xPara )
     throw ( uno::RuntimeException, lang::IllegalArgumentException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     uno::Reference< text::XFlatParagraph > xRet;
     if (!mpDoc)

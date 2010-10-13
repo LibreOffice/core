@@ -65,7 +65,7 @@ uno::Reference< uno::XInterface > SAL_CALL SwTextDocument_createInstance(
         const uno::Reference< lang::XMultiServiceFactory >&, const sal_uInt64 _nCreationFlags )
     throw( uno::Exception )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     SwDLL::Init();
     SfxObjectShell* pShell = new SwDocShell( _nCreationFlags );
     return uno::Reference< uno::XInterface >( pShell->GetModel() );
@@ -94,7 +94,7 @@ uno::Reference< uno::XInterface > SAL_CALL SwWebDocument_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & )
         throw( uno::Exception )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     SwDLL::Init();
     SfxObjectShell* pShell = new SwWebDocShell( SFX_CREATE_MODE_STANDARD );
     return uno::Reference< uno::XInterface >( pShell->GetModel() );
@@ -121,7 +121,7 @@ uno::Reference< uno::XInterface > SAL_CALL SwGlobalDocument_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > &)
         throw( uno::Exception )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     SwDLL::Init();
     SfxObjectShell* pShell = new SwGlobalDocShell( SFX_CREATE_MODE_STANDARD );
     return uno::Reference< uno::XInterface >( pShell->GetModel() );

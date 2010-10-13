@@ -100,7 +100,7 @@ void SwLinguServiceEventListener::processDictionaryListEvent(
             const DictionaryListEvent& rDicListEvent)
         throw( RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     sal_Int16 nEvt = rDicListEvent.nCondensedEvent;
 
@@ -125,7 +125,7 @@ void SAL_CALL SwLinguServiceEventListener::processLinguServiceEvent(
             const LinguServiceEvent& rLngSvcEvent )
         throw(RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     sal_Bool bIsSpellWrong = 0 != (rLngSvcEvent.nEvent & SPELL_WRONG_WORDS_AGAIN);
     sal_Bool bIsSpellAll   = 0 != (rLngSvcEvent.nEvent & SPELL_CORRECT_WORDS_AGAIN);
@@ -155,7 +155,7 @@ void SAL_CALL SwLinguServiceEventListener::disposing(
             const EventObject& rEventObj )
         throw(RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (xLngSvcMgr.is()  &&  rEventObj.Source == xLngSvcMgr)
         xLngSvcMgr = 0;
@@ -167,14 +167,14 @@ void SAL_CALL SwLinguServiceEventListener::queryTermination(
             const EventObject& /*rEventObj*/ )
         throw(TerminationVetoException, RuntimeException)
 {
-    //vos::OGuard aGuard(Application::GetSolarMutex());
+    //SolarMutexGuard aGuard;
 }
 
 void SAL_CALL SwLinguServiceEventListener::notifyTermination(
             const EventObject& rEventObj )
         throw(RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (xDesktop.is()  &&  rEventObj.Source == xDesktop)
     {

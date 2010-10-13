@@ -124,7 +124,7 @@ void SwDBTreeList_Impl::elementInserted( const ContainerEvent&  ) throw (Runtime
 
 void SwDBTreeList_Impl::elementRemoved( const ContainerEvent& rEvent ) throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     ::rtl::OUString sSource;
     rEvent.Accessor >>= sSource;
     for(USHORT i = 0; i < aConnections.Count(); i++)

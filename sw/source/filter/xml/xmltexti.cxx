@@ -231,7 +231,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
         sal_Int32 nWidth, sal_Int32 nHeight )
 {
     // this method will modify the document directly -> lock SolarMutex
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     uno::Reference < XPropertySet > xPropSet;
 
@@ -550,7 +550,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
         sal_Int32 nWidth, sal_Int32 nHeight )
 {
     // this method will modify the document directly -> lock SolarMutex
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     uno::Reference < XPropertySet > xPropSet;
 
@@ -639,7 +639,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertApplet(
         sal_Int32 nWidth, sal_Int32 nHeight )
 {
     // this method will modify the document directly -> lock SolarMutex
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     uno::Reference < XPropertySet > xPropSet;
     uno::Reference<XUnoTunnel> xCrsrTunnel( GetCursor(), UNO_QUERY );
@@ -766,7 +766,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
         sal_Int32 nWidth, sal_Int32 nHeight )
 {
     // this method will modify the document directly -> lock SolarMutex
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     uno::Reference < XPropertySet > xPropSet;
     uno::Reference<XUnoTunnel> xCrsrTunnel( GetCursor(), UNO_QUERY );
@@ -917,7 +917,7 @@ void SwXMLTextImportHelper::endAppletOrPlugin(
         ::std::map < const ::rtl::OUString, ::rtl::OUString, ::comphelper::UStringLess > &rParamMap)
 {
     // this method will modify the document directly -> lock SolarMutex
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     uno::Reference<XUnoTunnel> xCrsrTunnel( rPropSet, UNO_QUERY );
     ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for embedded" );

@@ -97,7 +97,7 @@ void SwAccessibleSelectionHelper::selectAccessibleChild(
     throw ( lang::IndexOutOfBoundsException,
             RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     // Get the respective child as SwFrm (also do index checking), ...
     const SwAccessibleChild aChild = rContext.GetChild( *(rContext.GetMap()),
@@ -127,7 +127,7 @@ sal_Bool SwAccessibleSelectionHelper::isAccessibleChildSelected(
     throw ( lang::IndexOutOfBoundsException,
             RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     // Get the respective child as SwFrm (also do index checking), ...
     const SwAccessibleChild aChild = rContext.GetChild( *(rContext.GetMap()),
@@ -162,7 +162,7 @@ void SwAccessibleSelectionHelper::clearAccessibleSelection(  )
 void SwAccessibleSelectionHelper::selectAllAccessibleChildren(  )
     throw ( RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     // We can select only one. So iterate over the children to find
     // the first we can select, and select it.
@@ -194,7 +194,7 @@ void SwAccessibleSelectionHelper::selectAllAccessibleChildren(  )
 sal_Int32 SwAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
     throw ( RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     sal_Int32 nCount = 0;
     // Only one frame can be selected at a time, and we only frames
@@ -246,7 +246,7 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
     throw ( lang::IndexOutOfBoundsException,
             RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     // Since the index is relative to the selected children, and since
     // there can be at most one selected frame child, the index must

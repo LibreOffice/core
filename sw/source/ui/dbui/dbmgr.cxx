@@ -2944,7 +2944,7 @@ SwConnectionDisposedListener_Impl::~SwConnectionDisposedListener_Impl()
 void SwConnectionDisposedListener_Impl::disposing( const EventObject& rSource )
         throw (RuntimeException)
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Reference<XConnection> xSource(rSource.Source, UNO_QUERY);
     for(USHORT nPos = rDBMgr.aDataSourceParams.Count(); nPos; nPos--)
     {

@@ -458,26 +458,26 @@ sal_Int64 SAL_CALL SwXTextSearch::getSomething( const uno::Sequence< sal_Int8 >&
 
 OUString SwXTextSearch::getSearchString(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return sSearchText;
 }
 
 void SwXTextSearch::setSearchString(const OUString& rString)
                                         throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     sSearchText = String(rString);
 }
 
 OUString SwXTextSearch::getReplaceString(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return sReplaceText;
 }
 
 void SwXTextSearch::setReplaceString(const OUString& rReplaceString) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     sReplaceText = String(rReplaceString);
 }
 
@@ -491,7 +491,7 @@ void SwXTextSearch::setPropertyValue(const OUString& rPropertyName, const uno::A
     throw( beans::UnknownPropertyException, beans::PropertyVetoException,
         lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     const SfxItemPropertySimpleEntry*  pEntry = m_pPropSet->getPropertyMap()->getByName(rPropertyName);
     if(pEntry)
     {
@@ -522,7 +522,7 @@ void SwXTextSearch::setPropertyValue(const OUString& rPropertyName, const uno::A
 
 uno::Any SwXTextSearch::getPropertyValue(const OUString& rPropertyName) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Any aRet;
 
     const SfxItemPropertySimpleEntry*  pEntry = m_pPropSet->getPropertyMap()->getByName(rPropertyName);
@@ -579,13 +579,13 @@ void SwXTextSearch::removeVetoableChangeListener(const OUString& /*rPropertyName
 
 sal_Bool SwXTextSearch::getValueSearch(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return bIsValueSearch;
 }
 
 void SwXTextSearch::setValueSearch(sal_Bool ValueSearch_) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     bIsValueSearch = ValueSearch_;
 }
 

@@ -506,7 +506,7 @@ SwXFieldMaster::~SwXFieldMaster()
 uno::Reference< beans::XPropertySetInfo >  SwXFieldMaster::getPropertySetInfo(void)
                                             throw( uno::RuntimeException )
 {
-    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Reference< beans::XPropertySetInfo >  aRef =
                         aSwMapProvider.GetPropertySet(
                                 lcl_GetPropMapIdForFieldType( nResTypeId ) )->getPropertySetInfo();
@@ -518,7 +518,7 @@ void SwXFieldMaster::setPropertyValue( const OUString& rPropertyName,
     throw( beans::UnknownPropertyException, beans::PropertyVetoException,
             lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     SwFieldType* pType = GetFldType(sal_True);
     if(pType)
     {
@@ -730,7 +730,7 @@ SV_IMPL_PTRARR(SwDependentFields, SwFmtFldPtr)
 uno::Any SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
         throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Any aRet;
     SwFieldType* pType = GetFldType(sal_True);
     if( rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_INSTANCE_NAME)) )
@@ -900,7 +900,7 @@ void SwXFieldMaster::removeVetoableChangeListener(const OUString& /*PropertyName
 
 void SwXFieldMaster::dispose(void)          throw( uno::RuntimeException )
 {
-    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     SwFieldType* pFldType = GetFldType(sal_True);
     if(pFldType)
     {
@@ -1156,7 +1156,7 @@ SwXTextField::~SwXTextField()
 void SwXTextField::attachTextFieldMaster(const uno::Reference< beans::XPropertySet > & xFieldMaster)
                     throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
-    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!m_bIsDescriptor)
         throw uno::RuntimeException();
     uno::Reference< lang::XUnoTunnel > xMasterTunnel(xFieldMaster, uno::UNO_QUERY);
@@ -1178,7 +1178,7 @@ void SwXTextField::attachTextFieldMaster(const uno::Reference< beans::XPropertyS
 
 uno::Reference< beans::XPropertySet >  SwXTextField::getTextFieldMaster(void) throw( uno::RuntimeException )
 {
-    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     SwFieldType* pType = 0;
     if( m_bIsDescriptor && m_aFieldTypeClient.GetRegisteredIn() )
     {
@@ -1200,7 +1200,7 @@ uno::Reference< beans::XPropertySet >  SwXTextField::getTextFieldMaster(void) th
 
 OUString SwXTextField::getPresentation(sal_Bool bShowCommand) throw( uno::RuntimeException )
 {
-    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     OUString sRet;
     const SwField* pField = GetField();
     if(pField)
@@ -1214,7 +1214,7 @@ void SwXTextField::attachToRange(
         const uno::Reference< text::XTextRange > & xTextRange)
     throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
-    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!m_bIsDescriptor)
         throw uno::RuntimeException();
     uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
@@ -1787,13 +1787,13 @@ void SwXTextField::attachToRange(
 void SwXTextField::attach(const uno::Reference< text::XTextRange > & xTextRange)
     throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     attachToRange( xTextRange );
 }
 
 uno::Reference< text::XTextRange >  SwXTextField::getAnchor(void) throw( uno::RuntimeException )
 {
-    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Reference< text::XTextRange >   aRef;
     SwField* pField = (SwField*)GetField();
     if(pField)
@@ -1814,7 +1814,7 @@ uno::Reference< text::XTextRange >  SwXTextField::getAnchor(void) throw( uno::Ru
 
 void SwXTextField::dispose(void) throw( uno::RuntimeException )
 {
-    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     SwField* pField = (SwField*)GetField();
     if(pField)
     {
@@ -1851,7 +1851,7 @@ void SwXTextField::removeEventListener(const uno::Reference< lang::XEventListene
 uno::Reference< beans::XPropertySetInfo >  SwXTextField::getPropertySetInfo(void)
         throw( uno::RuntimeException )
 {
-    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     //kein static
     uno::Reference< beans::XPropertySetInfo >  aRef;
     if(m_nServiceId != USHRT_MAX)
@@ -1874,7 +1874,7 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
     throw( beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException,
         lang::WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     SwField* pField = (SwField*)GetField();
     const SfxItemPropertySet* _pPropSet = aSwMapProvider.GetPropertySet(
                                 lcl_GetPropertyMapOfService( m_nServiceId));
@@ -2034,7 +2034,7 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
 uno::Any SwXTextField::getPropertyValue(const OUString& rPropertyName)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Any aRet;
     const SwField* pField = GetField();
     const SfxItemPropertySet* _pPropSet = aSwMapProvider.GetPropertySet(
@@ -2239,7 +2239,7 @@ void SwXTextField::removeVetoableChangeListener(const OUString& /*PropertyName*/
 
 void SwXTextField::update(  ) throw (uno::RuntimeException)
 {
-    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     const SwField* pFld = GetField();
     if(pFld)
     {
@@ -2476,7 +2476,7 @@ sal_uInt16 lcl_GetIdByName( String& rName, String& rTypeName )
 uno::Any SwXTextFieldMasters::getByName(const OUString& rName)
     throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!GetDoc())
         throw uno::RuntimeException();
 
@@ -2546,7 +2546,7 @@ sal_Bool SwXTextFieldMasters::getInstanceName(
 uno::Sequence< OUString > SwXTextFieldMasters::getElementNames(void)
     throw( uno::RuntimeException )
 {
-    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!GetDoc())
         throw uno::RuntimeException();
 
@@ -2583,7 +2583,7 @@ uno::Sequence< OUString > SwXTextFieldMasters::getElementNames(void)
 
 sal_Bool SwXTextFieldMasters::hasByName(const OUString& rName) throw( uno::RuntimeException )
 {
-    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!GetDoc())
         throw uno::RuntimeException();
 
@@ -2606,7 +2606,7 @@ uno::Type  SwXTextFieldMasters::getElementType(void) throw( uno::RuntimeExceptio
 
 sal_Bool SwXTextFieldMasters::hasElements(void) throw( uno::RuntimeException )
 {
-    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     return sal_True;
@@ -2650,7 +2650,7 @@ void SwXTextFieldTypes::Invalidate()
 uno::Reference< container::XEnumeration >  SwXTextFieldTypes::createEnumeration(void)
     throw( uno::RuntimeException )
 {
-    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     return new SwXFieldEnumeration(GetDoc());
@@ -2663,7 +2663,7 @@ uno::Type  SwXTextFieldTypes::getElementType(void) throw( uno::RuntimeException 
 
 sal_Bool SwXTextFieldTypes::hasElements(void) throw( uno::RuntimeException )
 {
-    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     //es gibt sie immer
@@ -2672,7 +2672,7 @@ sal_Bool SwXTextFieldTypes::hasElements(void) throw( uno::RuntimeException )
 
 void SwXTextFieldTypes::refresh(void)  throw( uno::RuntimeException )
 {
-    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     UnoActionContext aContext(GetDoc());
@@ -2687,7 +2687,7 @@ void SwXTextFieldTypes::refresh(void)  throw( uno::RuntimeException )
 void SwXTextFieldTypes::addRefreshListener(const uno::Reference< util::XRefreshListener > & l)
     throw( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if ( !IsValid() )
         throw uno::RuntimeException();
     aRefreshCont.AddListener ( reinterpret_cast < const uno::Reference < lang::XEventListener > &> ( l ));
@@ -2696,7 +2696,7 @@ void SwXTextFieldTypes::addRefreshListener(const uno::Reference< util::XRefreshL
 void SwXTextFieldTypes::removeRefreshListener(const uno::Reference< util::XRefreshListener > & l)
      throw( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if ( !IsValid() || !aRefreshCont.RemoveListener ( reinterpret_cast < const uno::Reference < lang::XEventListener > &> ( l ) ) )
         throw uno::RuntimeException();
 }
@@ -2790,14 +2790,14 @@ SwXFieldEnumeration::~SwXFieldEnumeration()
 sal_Bool SwXFieldEnumeration::hasMoreElements(void)
     throw( uno::RuntimeException )
 {
-    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return nNextIndex < aItems.getLength();
 }
 
 uno::Any SwXFieldEnumeration::nextElement(void)
     throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!(nNextIndex < aItems.getLength()))
         throw container::NoSuchElementException();

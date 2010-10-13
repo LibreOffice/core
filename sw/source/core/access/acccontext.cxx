@@ -524,7 +524,7 @@ void SwAccessibleContext::FireStateChangedEvent( sal_Int16 nState,
 void SwAccessibleContext::GetStates(
         ::utl::AccessibleStateSetHelper& rStateSet )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     // SHOWING
     if( bIsShowingState )
@@ -576,7 +576,7 @@ SwAccessibleContext::SwAccessibleContext( SwAccessibleMap *pM,
 
 SwAccessibleContext::~SwAccessibleContext()
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     DBG_MSG_CD( "destructed" )
     RemoveFrmFromAccessibleMap();
@@ -593,7 +593,7 @@ uno::Reference< XAccessibleContext > SAL_CALL
 sal_Int32 SAL_CALL SwAccessibleContext::getAccessibleChildCount( void )
         throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC( XAccessibleContext )
 
@@ -604,7 +604,7 @@ uno::Reference< XAccessible> SAL_CALL
     SwAccessibleContext::getAccessibleChild( sal_Int32 nIndex )
         throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC( XAccessibleContext )
 
@@ -648,7 +648,7 @@ uno::Reference< XAccessible> SAL_CALL
 uno::Reference< XAccessible> SAL_CALL SwAccessibleContext::getAccessibleParent (void)
         throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC( XAccessibleContext )
 
@@ -673,7 +673,7 @@ uno::Reference< XAccessible> SAL_CALL SwAccessibleContext::getAccessibleParent (
 sal_Int32 SAL_CALL SwAccessibleContext::getAccessibleIndexInParent (void)
         throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC( XAccessibleContext )
 
@@ -725,7 +725,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     SwAccessibleContext::getAccessibleStateSet (void)
         throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC( XAccessibleContext )
 
@@ -741,7 +741,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
 lang::Locale SAL_CALL SwAccessibleContext::getLocale (void)
         throw (IllegalAccessibleComponentStateException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     lang::Locale aLoc( Application::GetSettings().GetLocale() );
     return aLoc;
@@ -755,7 +755,7 @@ void SAL_CALL SwAccessibleContext::addEventListener(
 
     if (xListener.is())
     {
-        vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         if (!nClientId)
             nClientId = comphelper::AccessibleEventNotifier::registerClient( );
         comphelper::AccessibleEventNotifier::addEventListener( nClientId, xListener );
@@ -770,7 +770,7 @@ void SAL_CALL SwAccessibleContext::removeEventListener(
 
     if (xListener.is())
     {
-        vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( nClientId, xListener );
         if ( !nListenerCount )
         {
@@ -811,7 +811,7 @@ uno::Reference< XAccessible > SAL_CALL SwAccessibleContext::getAccessibleAtPoint
                 const awt::Point& aPoint )
         throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC( XAccessibleComponent )
 
@@ -868,7 +868,7 @@ uno::Reference< XAccessible > SAL_CALL SwAccessibleContext::getAccessibleAtPoint
 awt::Rectangle SAL_CALL SwAccessibleContext::getBoundsImpl(sal_Bool bRelative)
         throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC( XAccessibleComponent )
 
@@ -954,7 +954,7 @@ awt::Size SAL_CALL SwAccessibleContext::getSize()
 void SAL_CALL SwAccessibleContext::grabFocus()
         throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC( XAccessibleContext );
 
@@ -1079,7 +1079,7 @@ void SwAccessibleContext::ScrolledInShape( const SdrObject* ,
 
 void SwAccessibleContext::Dispose( sal_Bool bRecursive )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     ASSERT( GetFrm() && GetMap(), "already disposed" );
     ASSERT( GetMap()->GetVisArea() == GetVisArea(),
@@ -1132,7 +1132,7 @@ void SwAccessibleContext::Dispose( sal_Bool bRecursive )
 void SwAccessibleContext::DisposeChild( const SwAccessibleChild& rChildFrmOrObj,
                                         sal_Bool bRecursive )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if ( IsShowing( *(GetMap()), rChildFrmOrObj ) ||
          rChildFrmOrObj.AlwaysIncludeAsChild() ||
@@ -1172,7 +1172,7 @@ void SwAccessibleContext::DisposeChild( const SwAccessibleChild& rChildFrmOrObj,
 
 void SwAccessibleContext::InvalidatePosOrSize( const SwRect& )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     ASSERT( GetFrm() && !GetFrm()->Frm().IsEmpty(), "context should have a size" );
 
@@ -1211,7 +1211,7 @@ void SwAccessibleContext::InvalidateChildPosOrSize(
                     const SwAccessibleChild& rChildFrmOrObj,
                     const SwRect& rOldFrm )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     ASSERT( !rChildFrmOrObj.GetSwFrm() ||
             !rChildFrmOrObj.GetSwFrm()->Frm().IsEmpty(),
@@ -1304,21 +1304,21 @@ void SwAccessibleContext::InvalidateChildPosOrSize(
 
 void SwAccessibleContext::InvalidateContent()
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     _InvalidateContent( sal_False );
 }
 
 void SwAccessibleContext::InvalidateCursorPos()
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     _InvalidateCursorPos();
 }
 
 void SwAccessibleContext::InvalidateFocus()
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     _InvalidateFocus();
 }
@@ -1460,7 +1460,7 @@ OUString SwAccessibleContext::GetResource( sal_uInt16 nResId,
 {
     String sStr;
     {
-        vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
 
         sStr = SW_RES( nResId );
     }

@@ -59,7 +59,7 @@ SwXRedlines::~SwXRedlines()
 
 sal_Int32 SwXRedlines::getCount(  ) throw(uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     const SwRedlineTbl& rRedTbl = GetDoc()->GetRedlineTbl();
@@ -69,7 +69,7 @@ sal_Int32 SwXRedlines::getCount(  ) throw(uno::RuntimeException)
 uno::Any SwXRedlines::getByIndex(sal_Int32 nIndex)
     throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     const SwRedlineTbl& rRedTbl = GetDoc()->GetRedlineTbl();
@@ -87,7 +87,7 @@ uno::Any SwXRedlines::getByIndex(sal_Int32 nIndex)
 uno::Reference< container::XEnumeration >  SwXRedlines::createEnumeration(void)
     throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     return uno::Reference< container::XEnumeration >(new SwXRedlineEnumeration(*GetDoc()));
@@ -100,7 +100,7 @@ uno::Type SwXRedlines::getElementType(  ) throw(uno::RuntimeException)
 
 sal_Bool SwXRedlines::hasElements(  ) throw(uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     const SwRedlineTbl& rRedTbl = GetDoc()->GetRedlineTbl();

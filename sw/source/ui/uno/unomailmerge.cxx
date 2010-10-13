@@ -459,7 +459,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         const uno::Sequence< beans::NamedValue >& rArguments )
     throw (IllegalArgumentException, Exception, RuntimeException)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     //
     // get property values to be used
@@ -881,7 +881,7 @@ void SwXMailMerge::launchEvent( const PropertyChangeEvent &rEvt ) const
 uno::Reference< beans::XPropertySetInfo > SAL_CALL SwXMailMerge::getPropertySetInfo(  )
     throw (RuntimeException)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     static Reference< XPropertySetInfo > aRef = pPropSet->getPropertySetInfo();
     return aRef;
 }
@@ -890,7 +890,7 @@ void SAL_CALL SwXMailMerge::setPropertyValue(
         const OUString& rPropertyName, const uno::Any& rValue )
     throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     const SfxItemPropertySimpleEntry* pCur = pPropSet->getPropertyMap()->getByName( rPropertyName );
     if (!pCur)
@@ -1045,7 +1045,7 @@ uno::Any SAL_CALL SwXMailMerge::getPropertyValue(
         const OUString& rPropertyName )
     throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     Any aRet;
 
@@ -1100,7 +1100,7 @@ void SAL_CALL SwXMailMerge::addPropertyChangeListener(
         const uno::Reference< beans::XPropertyChangeListener >& rListener )
     throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if (!bDisposing && rListener.is())
     {
         const SfxItemPropertySimpleEntry* pCur = pPropSet->getPropertyMap()->getByName( rPropertyName );
@@ -1116,7 +1116,7 @@ void SAL_CALL SwXMailMerge::removePropertyChangeListener(
         const uno::Reference< beans::XPropertyChangeListener >& rListener )
     throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if (!bDisposing && rListener.is())
     {
         const SfxItemPropertySimpleEntry* pCur = pPropSet->getPropertyMap()->getByName( rPropertyName );
@@ -1149,7 +1149,7 @@ void SAL_CALL SwXMailMerge::removeVetoableChangeListener(
 void SAL_CALL SwXMailMerge::dispose()
     throw(RuntimeException)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if (!bDisposing)
     {
@@ -1166,7 +1166,7 @@ void SAL_CALL SwXMailMerge::addEventListener(
         const Reference< XEventListener >& rxListener )
     throw(RuntimeException)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if (!bDisposing && rxListener.is())
         aEvtListeners.addInterface( rxListener );
 }
@@ -1175,7 +1175,7 @@ void SAL_CALL SwXMailMerge::removeEventListener(
         const Reference< XEventListener >& rxListener )
     throw(RuntimeException)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if (!bDisposing && rxListener.is())
         aEvtListeners.removeInterface( rxListener );
 }
@@ -1184,7 +1184,7 @@ void SAL_CALL SwXMailMerge::addMailMergeEventListener(
         const uno::Reference< XMailMergeListener >& rxListener )
     throw (RuntimeException)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if (!bDisposing && rxListener.is())
         aMergeListeners.addInterface( rxListener );
 }
@@ -1193,7 +1193,7 @@ void SAL_CALL SwXMailMerge::removeMailMergeEventListener(
         const uno::Reference< XMailMergeListener >& rxListener )
     throw (RuntimeException)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if (!bDisposing && rxListener.is())
         aMergeListeners.removeInterface( rxListener );
 }
@@ -1201,14 +1201,14 @@ void SAL_CALL SwXMailMerge::removeMailMergeEventListener(
 OUString SAL_CALL SwXMailMerge::getImplementationName()
     throw(RuntimeException)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     return SwXMailMerge_getImplementationName();
 }
 
 sal_Bool SAL_CALL SwXMailMerge::supportsService( const OUString& rServiceName )
     throw(RuntimeException)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     return C2U( SN_MAIL_MERGE ) == rServiceName ||
            C2U( SN_DATA_ACCESS_DESCRIPTOR ) == rServiceName;
 }
@@ -1216,7 +1216,7 @@ sal_Bool SAL_CALL SwXMailMerge::supportsService( const OUString& rServiceName )
 uno::Sequence< OUString > SAL_CALL SwXMailMerge::getSupportedServiceNames()
     throw(RuntimeException)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     return SwXMailMerge_getSupportedServiceNames();
 }
 
@@ -1242,7 +1242,7 @@ uno::Reference< uno::XInterface > SAL_CALL SwXMailMerge_createInstance(
         const uno::Reference< XMultiServiceFactory > & /*rSMgr*/)
     throw( uno::Exception )
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     //the module may not be loaded
     SwDLL::Init();

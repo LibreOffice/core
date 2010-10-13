@@ -86,7 +86,7 @@ Sequence< OUString > SAL_CALL SwAccessibleGraphic::getSupportedServiceNames()
 Sequence< sal_Int8 > SAL_CALL SwAccessibleGraphic::getImplementationId()
         throw(RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     static Sequence< sal_Int8 > aId( 16 );
     static sal_Bool bInit = sal_False;
     if(!bInit)

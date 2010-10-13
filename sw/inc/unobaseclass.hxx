@@ -124,7 +124,7 @@ namespace sw {
 
             ~UnoImplPtr()
             {
-                ::vos::OGuard g(Application::GetSolarMutex());
+                SolarMutexGuard g;
                 delete m_p; // #i105557#: call dtor with locked solar mutex
                 m_p = 0;
             }

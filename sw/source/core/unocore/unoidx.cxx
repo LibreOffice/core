@@ -464,7 +464,7 @@ sal_Bool SAL_CALL
 SwXDocumentIndex::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     return C2U("com.sun.star.text.BaseIndex") == rServiceName
         || ((TOX_INDEX == m_pImpl->m_eTOXType) &&
@@ -486,7 +486,7 @@ throw (uno::RuntimeException)
 uno::Sequence< OUString > SAL_CALL
 SwXDocumentIndex::getSupportedServiceNames() throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     uno::Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
@@ -521,7 +521,7 @@ SwXDocumentIndex::getSupportedServiceNames() throw (uno::RuntimeException)
 OUString SAL_CALL SwXDocumentIndex::getServiceName()
 throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     USHORT nObjectType = SW_SERVICE_TYPE_INDEX;
     switch (m_pImpl->m_eTOXType)
@@ -547,7 +547,7 @@ throw (uno::RuntimeException)
 
 void SAL_CALL SwXDocumentIndex::update() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SwSectionFmt *const pFmt = m_pImpl->GetSectionFmt();
     SwTOXBaseSection *const pTOXBase = (pFmt) ?
@@ -564,7 +564,7 @@ void SAL_CALL SwXDocumentIndex::update() throw (uno::RuntimeException)
 uno::Reference< beans::XPropertySetInfo > SAL_CALL
 SwXDocumentIndex::getPropertySetInfo() throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     const uno::Reference< beans::XPropertySetInfo > xRef =
         m_pImpl->m_rPropSet.getPropertySetInfo();
@@ -578,7 +578,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     lang::IllegalArgumentException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SfxItemPropertySimpleEntry const*const pEntry =
         m_pImpl->m_rPropSet.getPropertyMap()->getByName(rPropertyName);
@@ -893,7 +893,7 @@ SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     uno::Any aRet;
     SfxItemPropertySimpleEntry const*const pEntry =
@@ -1284,7 +1284,7 @@ void SAL_CALL
 SwXDocumentIndex::attach(const uno::Reference< text::XTextRange > & xTextRange)
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!m_pImpl->m_bIsDescriptor)
     {
@@ -1345,7 +1345,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
 uno::Reference< text::XTextRange > SAL_CALL
 SwXDocumentIndex::getAnchor() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SwSectionFmt *const pSectionFmt( m_pImpl->GetSectionFmt() );
     if (!pSectionFmt)
@@ -1389,7 +1389,7 @@ void lcl_RemoveChildSections(SwSectionFmt& rParentFmt)
 
 void SAL_CALL SwXDocumentIndex::dispose() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SwSectionFmt *const pSectionFmt( m_pImpl->GetSectionFmt() );
     if (pSectionFmt)
@@ -1405,7 +1405,7 @@ SwXDocumentIndex::addEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     if (!m_pImpl->GetRegisteredIn())
     {
@@ -1419,7 +1419,7 @@ SwXDocumentIndex::removeEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     if (!m_pImpl->GetRegisteredIn() ||
         !m_pImpl->m_ListenerContainer.RemoveListener(xListener))
@@ -1430,7 +1430,7 @@ throw (uno::RuntimeException)
 
 OUString SAL_CALL SwXDocumentIndex::getName() throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     OUString uRet;
     SwSectionFmt *const pSectionFmt( m_pImpl->GetSectionFmt() );
@@ -1452,7 +1452,7 @@ OUString SAL_CALL SwXDocumentIndex::getName() throw (uno::RuntimeException)
 void SAL_CALL
 SwXDocumentIndex::setName(const OUString& rName) throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     if (!rName.getLength())
     {
@@ -1688,7 +1688,7 @@ sal_Bool SAL_CALL
 SwXDocumentIndexMark::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     return rServiceName.equalsAscii(cBaseMark)
         || rServiceName.equalsAscii(cTextContent)
@@ -1705,7 +1705,7 @@ throw (uno::RuntimeException)
 uno::Sequence< OUString > SAL_CALL
 SwXDocumentIndexMark::getSupportedServiceNames() throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     const sal_Int32 nCnt = (m_pImpl->m_eTOXType == TOX_INDEX) ? 4 : 3;
     uno::Sequence< OUString > aRet(nCnt);
@@ -1734,7 +1734,7 @@ SwXDocumentIndexMark::getSupportedServiceNames() throw (uno::RuntimeException)
 OUString SAL_CALL
 SwXDocumentIndexMark::getMarkEntry() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     OUString sRet;
     SwTOXType *const pType = m_pImpl->GetTOXType();
@@ -1757,7 +1757,7 @@ void SAL_CALL
 SwXDocumentIndexMark::setMarkEntry(const OUString& rIndexEntry)
 throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SwTOXType *const pType = m_pImpl->GetTOXType();
     if (pType && m_pImpl->m_pTOXMark)
@@ -1792,7 +1792,7 @@ SwXDocumentIndexMark::attach(
         const uno::Reference< text::XTextRange > & xTextRange)
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!m_pImpl->m_bIsDescriptor)
     {
@@ -1999,7 +1999,7 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
 uno::Reference< text::XTextRange > SAL_CALL
 SwXDocumentIndexMark::getAnchor() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SwTOXType *const pType = m_pImpl->GetTOXType();
     if (!pType || !m_pImpl->m_pTOXMark)
@@ -2033,7 +2033,7 @@ SwXDocumentIndexMark::getAnchor() throw (uno::RuntimeException)
 void SAL_CALL
 SwXDocumentIndexMark::dispose() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SwTOXType *const pType = m_pImpl->GetTOXType();
     if (pType && m_pImpl->m_pTOXMark)
@@ -2047,7 +2047,7 @@ SwXDocumentIndexMark::addEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     if (!m_pImpl->GetRegisteredIn())
     {
@@ -2061,7 +2061,7 @@ SwXDocumentIndexMark::removeEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     if (!m_pImpl->GetRegisteredIn() ||
         !m_pImpl->m_ListenerContainer.RemoveListener(xListener))
@@ -2073,7 +2073,7 @@ throw (uno::RuntimeException)
 uno::Reference< beans::XPropertySetInfo > SAL_CALL
 SwXDocumentIndexMark::getPropertySetInfo() throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     static uno::Reference< beans::XPropertySetInfo >  xInfos[3];
     int nPos = 0;
@@ -2106,7 +2106,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     lang::IllegalArgumentException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SfxItemPropertySimpleEntry const*const pEntry =
         m_pImpl->m_rPropSet.getPropertyMap()->getByName(rPropertyName);
@@ -2230,7 +2230,7 @@ SwXDocumentIndexMark::getPropertyValue(const OUString& rPropertyName)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     uno::Any aRet;
     SfxItemPropertySimpleEntry const*const pEntry =
@@ -2420,7 +2420,7 @@ SwXDocumentIndexes::getSupportedServiceNames() throw (uno::RuntimeException)
 sal_Int32 SAL_CALL
 SwXDocumentIndexes::getCount() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if(!IsValid())
         throw uno::RuntimeException();
@@ -2444,7 +2444,7 @@ SwXDocumentIndexes::getByIndex(sal_Int32 nIndex)
 throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if(!IsValid())
         throw uno::RuntimeException();
@@ -2476,7 +2476,7 @@ SwXDocumentIndexes::getByName(const OUString& rName)
 throw (container::NoSuchElementException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if(!IsValid())
         throw uno::RuntimeException();
@@ -2505,7 +2505,7 @@ throw (container::NoSuchElementException, lang::WrappedTargetException,
 uno::Sequence< OUString > SAL_CALL
 SwXDocumentIndexes::getElementNames() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if(!IsValid())
         throw uno::RuntimeException();
@@ -2543,7 +2543,7 @@ sal_Bool SAL_CALL
 SwXDocumentIndexes::hasByName(const OUString& rName)
 throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if(!IsValid())
         throw uno::RuntimeException();
@@ -2629,7 +2629,7 @@ SwXDocumentIndex::StyleAccess_Impl::replaceByIndex(
 throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
           lang::WrappedTargetException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if(nIndex < 0 || nIndex > MAXLEVEL)
     {
@@ -2672,7 +2672,7 @@ SwXDocumentIndex::StyleAccess_Impl::getByIndex(sal_Int32 nIndex)
 throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if(nIndex < 0 || nIndex > MAXLEVEL)
     {
@@ -2783,7 +2783,7 @@ SwXDocumentIndex::TokenAccess_Impl::replaceByIndex(
 throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
         lang::WrappedTargetException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SwTOXBase & rTOXBase( m_xParent->m_pImpl->GetTOXSectionOrThrow() );
 
@@ -2974,7 +2974,7 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
 sal_Int32 SAL_CALL
 SwXDocumentIndex::TokenAccess_Impl::getCount() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     const sal_Int32 nRet = m_xParent->m_pImpl->GetFormMax();
     return nRet;
@@ -2985,7 +2985,7 @@ SwXDocumentIndex::TokenAccess_Impl::getByIndex(sal_Int32 nIndex)
 throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SwTOXBase & rTOXBase( m_xParent->m_pImpl->GetTOXSectionOrThrow() );
 
