@@ -61,7 +61,8 @@ constants FormulaLanguage
     const long NATIVE   = 3;
 
     /** Function names and operators as used in the English version of
-        Excel.
+        Excel.  This formula language is also used in VBA formulas and
+        OOXML import/export.
      */
     const long XL_ENGLISH = 4;
 };
