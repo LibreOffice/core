@@ -50,6 +50,8 @@
 #define THIS_OS "NetBSD"
 #elif defined FREEBSD
 #define THIS_OS "FreeBSD"
+#elif defined AIX
+#define THIS_OS "AIX"
 #endif
 
 #if ! defined THIS_OS

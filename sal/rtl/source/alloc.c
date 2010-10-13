@@ -75,7 +75,7 @@ static sal_Size __rtl_memory_vmpagesize (void)
     /* xBSD */
     return (sal_Size)(getpagesize());
 }
-#elif defined(LINUX) || defined(SOLARIS)
+#elif defined(LINUX) || defined(SOLARIS) || defined(AIX)
 static sal_Size __rtl_memory_vmpagesize (void)
 {
     /* POSIX */
@@ -87,7 +87,7 @@ static sal_Size __rtl_memory_vmpagesize (void)
     /* other */
     return (sal_Size)(0x2000);
 }
-#endif /* FREEBSD || NETBSD || MACOSX || LINUX || SOLARIS */
+#endif /* FREEBSD || NETBSD || MACOSX || LINUX || SOLARIS || AIX */
 
 #ifndef PROT_HEAP
 #define PROT_HEAP (PROT_READ | PROT_WRITE | PROT_EXEC)

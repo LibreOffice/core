@@ -93,7 +93,7 @@ oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* 
     return --nCount;
 }
 
-#elif defined ( GCC ) && defined ( POWERPC )
+#elif defined ( GCC ) && defined ( POWERPC ) && !defined( AIX )
 
 /*****************************************************************************/
 /* osl_incrementInterlockedCount */

@@ -157,7 +157,7 @@ rtl_memory_init (void)
   Delegated the call to "rtl_memory_fini" into a dummy C++ object,
   see memory_fini.cxx .
 */
-#if defined(__GNUC__) && !defined(MACOSX)
+#if defined(__GNUC__) && !defined(MACOSX) && !defined(AIX)
 static void rtl_memory_fini (void) __attribute__((destructor));
 #elif defined(__SUNPRO_C) || defined(__SUNPRO_CC)
 #pragma fini(rtl_memory_fini)

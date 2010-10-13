@@ -802,6 +802,10 @@ static struct hostent* _osl_gethostbyname_r (
     __error = gethostbyname_r (name, result, buffer, buflen,
                  &__result, h_errnop);
     return __error ? NULL : __result ;
+#elif defined(AIX)
+    *h_errnop = gethostbyname_r (name, result, (struct hostent_data *)buffer);
+    (void)buflen;
+    return *h_errnop ? NULL : result ;
 #else
     return gethostbyname_r( name, result, buffer, buflen, h_errnop);
 #endif

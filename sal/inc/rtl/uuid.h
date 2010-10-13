@@ -198,6 +198,8 @@ void SAL_CALL rtl_createNamedUuid(
 #define UUID_SYSTEM_TIME_RESOLUTION_100NS_TICKS 10
 #elif MACOSX
 #define UUID_SYSTEM_TIME_RESOLUTION_100NS_TICKS 100000
+#elif AIX
+#define UUID_SYSTEM_TIME_RESOLUTION_100NS_TICKS 10
 #else
 #error "System time resolution must be calculated!"
 #endif

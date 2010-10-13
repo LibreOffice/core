@@ -110,9 +110,13 @@
 #   include <dlfcn.h>
 #   include <endian.h>
 #   if __BYTE_ORDER == __LITTLE_ENDIAN
-#       define _LITTLE_ENDIAN
+#       ifndef _LITTLE_ENDIAN
+#           define _LITTLE_ENDIAN
+#       endif
 #   elif __BYTE_ORDER == __BIG_ENDIAN
-#       define _BIG_ENDIAN
+#       ifndef _BIG_ENDIAN
+#           define _BIG_ENDIAN
+#       endif
 #   elif __BYTE_ORDER == __PDP_ENDIAN
 #       define _PDP_ENDIAN
 #   endif
@@ -230,22 +234,25 @@ extern unsigned int nanosleep(unsigned int);
 #   define AF_IPX -1
 #   include <strings.h>
 #   include <pthread.h>
+#   include <dlfcn.h>
 #   include <sys/time.h>
 #   include <sys/un.h>
 #   include <netinet/tcp.h>
 #   include <sys/machine.h>
 #   if BYTE_ORDER == LITTLE_ENDIAN
-#       define _LITTLE_ENDIAN
+#       ifndef _LITTLE_ENDIAN
+#           define _LITTLE_ENDIAN
+#       endif
 #   elif BYTE_ORDER == BIG_ENDIAN
-#       define _BIG_ENDIAN
+#       ifndef _BIG_ENDIAN
+#           define _BIG_ENDIAN
+#       endif
 #   elif BYTE_ORDER == PDP_ENDIAN
 #       define _PDP_ENDIAN
 #   endif
-#   define  sched_yield()               pthread_yield()
 #   define  SLEEP_TIMESPEC(timespec)    nsleep(&timespec, 0)
 #   define  LIBPATH "LIBPATH"
 #   define  NO_PTHREAD_SEMAPHORES
-#   define  NO_DL_FUNCTIONS
 #endif
 
 #ifdef HPUX

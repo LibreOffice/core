@@ -485,6 +485,7 @@ pid_t getpid(void)
 #ifdef NO_PTHREAD_SEMAPHORES
 int sem_init(sem_t* sem, int pshared, unsigned int value)
 {
+    (void)pshared;
     pthread_mutex_init(&sem->mutex, PTHREAD_MUTEXATTR_DEFAULT);
     pthread_cond_init(&sem->increased, PTHREAD_CONDATTR_DEFAULT);
 

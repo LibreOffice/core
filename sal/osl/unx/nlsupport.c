@@ -924,7 +924,7 @@ int _imp_setProcessLocale( rtl_Locale * pLocale )
     {
         /* only change env vars that exist already */
         if( getenv( "LC_ALL" ) ) {
-#if defined( FREEBSD ) || defined( NETBSD ) || defined( MACOSX )
+#if defined( FREEBSD ) || defined( NETBSD ) || defined( MACOSX ) || defined ( AIX )
             setenv( "LC_ALL", locale_buf, 1);
 #else
             setenv( "LC_ALL", locale_buf );
@@ -932,7 +932,7 @@ int _imp_setProcessLocale( rtl_Locale * pLocale )
         }
 
         if( getenv( "LC_CTYPE" ) ) {
-#if defined( FREEBSD ) || defined( NETBSD ) || defined( MACOSX )
+#if defined( FREEBSD ) || defined( NETBSD ) || defined( MACOSX ) || defined ( AIX )
             setenv("LC_CTYPE", locale_buf, 1 );
 #else
             setenv( "LC_CTYPE", locale_buf );
@@ -940,7 +940,7 @@ int _imp_setProcessLocale( rtl_Locale * pLocale )
         }
 
         if( getenv( "LANG" ) ) {
-#if defined( FREEBSD ) || defined( NETBSD ) || defined( MACOSX )
+#if defined( FREEBSD ) || defined( NETBSD ) || defined( MACOSX ) || defined (AIX )
             setenv("LC_CTYPE", locale_buf, 1 );
 #else
             setenv( "LANG", locale_buf );
@@ -951,6 +951,6 @@ int _imp_setProcessLocale( rtl_Locale * pLocale )
     return 0;
 }
 
-#endif /* ifdef LINUX || SOLARIS || MACOSX || NETBSD */
+#endif /* ifdef LINUX || SOLARIS || MACOSX || NETBSD || AIX */
 
 

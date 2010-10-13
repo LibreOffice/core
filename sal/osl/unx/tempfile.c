@@ -66,16 +66,18 @@ oslFileError SAL_CALL osl_getTempDirURL( rtl_uString** pustrTempDir )
     const char *pValue = getenv( "TEMP" );
 
     if ( !pValue )
-    {
         pValue = getenv( "TMP" );
-#if defined(SOLARIS) || defined (LINUX) || defined (FREEBSD)
-        if ( !pValue )
-            pValue = P_tmpdir;
-#elif defined(NETBSD)
-        if ( !pValue )
-            pValue = _PATH_TMP;
+
+#if defined(NETBSD)
+    if ( !pValue )
+        pValue = _PATH_TMP;
+#else
+    if ( !pValue )
+        pValue = P_tmpdir;
 #endif
-    }
+
+    if ( !pValue )
+        pValue = "/tmp";
 #endif /* MACOSX */
 
     if ( pValue )

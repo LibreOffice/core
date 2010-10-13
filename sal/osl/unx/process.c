@@ -70,7 +70,7 @@
 #define MAX_ARGS        255
 #define MAX_ENVS        255
 
-#if defined(MACOSX) || defined(IORESOURCE_TRANSFER_BSD)
+#if defined(MACOSX) || defined(IORESOURCE_TRANSFER_BSD) || defined(AIX)
 #define CONTROLLEN (sizeof(struct cmsghdr) + sizeof(int))
 #endif
 

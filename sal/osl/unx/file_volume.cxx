@@ -252,7 +252,7 @@ oslFileError osl_getVolumeInformation( rtl_uString* ustrDirectoryURL, oslVolumeI
 #else /* no statfs available */
 
 #   define __OSL_STATFS_STRUCT                   struct dummy {int i;}
-#   define __OSL_STATFS_INIT(a)                  ((void)0)
+#   define __OSL_STATFS_INIT(a)                  ((void)a)
 #   define __OSL_STATFS(dir, sfs)                (1)
 #   define __OSL_STATFS_ISREMOTE(sfs)            (0)
 #   define __OSL_STATFS_IS_CASE_SENSITIVE_FS(a)  (1)
@@ -540,7 +540,7 @@ oslFileError osl_releaseVolumeDeviceHandle( oslVolumeDeviceHandle Handle )
     return osl_File_E_None;
 }
 
-#ifndef MACOSX
+#if !defined(MACOSX) && !defined(AIX)
 
 /*****************************************
  * osl_newVolumeDeviceHandleImpl
@@ -1116,23 +1116,26 @@ osl_isFloppyMounted (oslVolumeDeviceHandleImpl* pDevice)
  *
  *****************************************************************************/
 
-#if (defined(MACOSX) || defined(NETBSD) || defined(FREEBSD))
+#if (defined(MACOSX) || defined(NETBSD) || defined(FREEBSD) || defined(AIX))
 static oslVolumeDeviceHandle osl_isFloppyDrive(const sal_Char* pszPath)
 {
+    (void)pszPath;
     return NULL;
 }
 #endif /* MACOSX */
 
-#if ( defined(MACOSX) || defined(NETBSD) || defined(FREEBSD))
+#if ( defined(MACOSX) || defined(NETBSD) || defined(FREEBSD) || defined(AIX))
 static oslFileError osl_mountFloppy(oslVolumeDeviceHandle hFloppy)
 {
+    (void)hFloppy;
     return osl_File_E_BUSY;
 }
 #endif /* MACOSX */
 
-#if ( defined(MACOSX) || defined(NETBSD) || defined(FREEBSD))
+#if ( defined(MACOSX) || defined(NETBSD) || defined(FREEBSD) || defined(AIX))
 static oslFileError osl_unmountFloppy(oslVolumeDeviceHandle hFloppy)
 {
+    (void)hFloppy;
     return osl_File_E_BUSY;
 }
 #endif /* MACOSX */

@@ -357,3 +357,14 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
 }
 
 #endif /* defined MACOSX */
+
+#if defined(AIX)
+int backtrace( void **buffer, int max_frames )
+{
+    return 0;
+}
+
+void backtrace_symbols_fd( void **buffer, int size, int fd )
+{
+}
+#endif

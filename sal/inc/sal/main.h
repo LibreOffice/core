@@ -29,6 +29,9 @@
 #define _SAL_MAIN_H_
 
 #include <sal/types.h>
+#if defined(AIX)
+#   include <unistd.h>
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -44,7 +47,7 @@ int SAL_CALL main(int argc, char ** argv) \
     sal_detail_initialize(argc, argv);   \
     ret = sal_main_with_args(argc, argv); \
     sal_detail_deinitialize(); \
-    return ret; \
+    return x; \
 }
 
 #define SAL_MAIN_IMPL \
@@ -54,9 +57,8 @@ int SAL_CALL main(int argc, char ** argv) \
     sal_detail_initialize(argc, argv); \
     ret = sal_main(); \
     sal_detail_deinitialize(); \
-    return ret; \
+    return x; \
 }
-
 
 /* Definition macros for CRT entries */
 

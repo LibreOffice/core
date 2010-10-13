@@ -38,6 +38,10 @@
 #include <stdio.h>
 #endif
 
+#ifdef AIX
+#include <sys/ldr.h>
+#endif
+
 /* implemented in file.c */
 extern int UnicodeToText(char *, size_t, const sal_Unicode *, sal_Int32);
 
@@ -201,6 +205,67 @@ osl_getFunctionSymbol(oslModule module, rtl_uString *puFunctionSymbolName)
 sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibraryUrl)
 {
     sal_Bool result = sal_False;
+#if defined(AIX)
+    int i;
+    int size = 4 * 1024;
+    char *buf, *filename=NULL;
+    struct ld_info *lp;
+
+    if ((buf = malloc(size)) == NULL)
+        return result;
+
+    while((i = loadquery(L_GETINFO, buf, size)) == -1 && errno == ENOMEM)
+    {
+        size += 4 * 1024;
+        if ((buf = malloc(size)) == NULL)
+            break;
+    }
+
+    lp = (struct ld_info*) buf;
+    while (lp)
+    {
+        unsigned long start = (unsigned long)lp->ldinfo_dataorg;
+        unsigned long end = start + lp->ldinfo_datasize;
+        if (start <= (unsigned long)addr && end > (unsigned long)addr)
+        {
+            filename = lp->ldinfo_filename;
+            break;
+        }
+        if (!lp->ldinfo_next)
+            break;
+        lp = (struct ld_info*) ((char *) lp + lp->ldinfo_next);
+    }
+
+    if (filename)
+    {
+        rtl_uString * workDir = NULL;
+        osl_getProcessWorkingDir(&workDir);
+        if (workDir)
+        {
+#if OSL_DEBUG_LEVEL > 1
+            OSL_TRACE("module.c::osl_getModuleURLFromAddress - %s\n", filaname);
+#endif
+            rtl_string2UString(ppLibraryUrl,
+                               filename,
+                               strlen(filename),
+                               osl_getThreadTextEncoding(),
+                               OSTRING_TO_OUSTRING_CVTFLAGS);
+
+            OSL_ASSERT(*ppLibraryUrl != NULL);
+            osl_getFileURLFromSystemPath(*ppLibraryUrl, ppLibraryUrl);
+            osl_getAbsoluteFileURL(workDir, *ppLibraryUrl, ppLibraryUrl);
+
+            rtl_uString_release(workDir);
+            result = sal_True;
+        }
+        else
+        {
+            result = sal_False;
+        }
+    }
+
+    free(buf);
+#else
     Dl_info dl_info;
 
     if ((result = dladdr(addr, &dl_info)) != 0)
@@ -230,6 +295,7 @@ sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibr
             result = sal_False;
         }
     }
+#endif
     return result;
 }
 

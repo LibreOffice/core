@@ -206,9 +206,11 @@ oslFileError oslTranslateFileError(sal_Bool bIsError, int Errno)
            osl_error = osl_File_E_NOSYS;
             break;
 
+#if !defined(AIX) || !(defined(_ALL_SOURCE) && !defined(_LINUX_SOURCE_COMPAT))
         case ENOTEMPTY:
             osl_error = osl_File_E_NOTEMPTY;
             break;
+#endif
 
         case ELOOP:
             osl_error = osl_File_E_LOOP;

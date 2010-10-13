@@ -504,6 +504,9 @@ osl_psz_loginUser(const sal_Char* pszUserName, const sal_Char* pszPasswd,
 {
 #if defined NETBSD || defined SCO || defined AIX || defined FREEBSD || \
     defined MACOSX
+    (void)pszUserName;
+    (void)pszPasswd;
+    (void)pSecurity;
 
     return osl_Security_E_None;
 

@@ -61,7 +61,9 @@ UWINAPILIB:=
 
 .IF "$(header)" == ""
 
+.IF "$(OS)" != "AIX"
 ALWAYSDBGFILES=$(SLO)$/debugprint.obj
+.ENDIF
 
 .IF "$(ALWAYSDBGFILES)" != ""
 ALWAYSDBGTARGET=do_it_alwaysdebug
@@ -95,7 +97,7 @@ SLOFILES=   \
             $(SLO)$/alloc_cache.obj \
             $(SLO)$/alloc_arena.obj
 
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)"=="MACOSX" || "$(OS)"=="AIX"
 SLOFILES+=$(SLO)$/memory_fini.obj
 .ENDIF
 
@@ -128,7 +130,7 @@ OBJFILES=   \
             $(OBJ)$/alloc_cache.obj \
             $(OBJ)$/alloc_arena.obj
 
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)"=="MACOSX" || "$(OS)"=="AIX"
 OBJFILES+=$(OBJ)$/memory_fini.obj
 .ENDIF
 
