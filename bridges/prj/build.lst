@@ -31,6 +31,7 @@ br	bridges\source\cpp_uno\cc50_solaris_intel			nmake	-	u	br_cc50soli br_unotypes
 br	bridges\source\cpp_uno\gcc3_solaris_sparc			nmake	-	u	br_gcc3sogs br_cppuno_shared br_unotypes br_inc NULL
 br	bridges\source\cpp_uno\gcc3_solaris_intel			nmake	-	u	br_gcc3sogi br_cppuno_shared br_unotypes br_inc NULL
 br	bridges\source\cpp_uno\gcc3_netbsd_intel	nmake	-	u	br_gccni br_unotypes br_inc NULL
+br	bridges\source\cpp_uno\gcc3_netbsd_x86-64	nmake	-	u	br_gcc3nx br_cppuno_shared br_unotypes br_inc NULL
 br  bridges\source\cpp_uno\shared           nmake   -   all br_cppuno_shared br_unotypes br_inc NULL
 br	bridges\source\jni_uno					nmake	-	all	br_jni_uno br_unotypes br_inc NULL
 br	bridges\source\jni_uno\java\com\sun\star\bridges\jni_uno				nmake	-	all	br_jni_uno_java br_unotypes br_inc NULL
