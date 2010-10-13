@@ -211,7 +211,7 @@ void SAL_CALL MenuDispatcher::frameAction( const FrameActionEvent& aEvent ) thro
         {
             uno::Reference< ::com::sun::star::awt::XWindow >xContainerWindow = xFrame->getContainerWindow();
 
-            OGuard aSolarGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aSolarGuard;
             {
                 Window* pWindow = VCLUnoHelper::GetWindow( xContainerWindow );
                 while ( pWindow && !pWindow->IsSystemWindow() )
@@ -307,7 +307,7 @@ sal_Bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, sal_Bool bMenuFromR
         Window* pWindow = NULL;
 
         // Use SolarMutex for threadsafe code too!
-        OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         {
             pWindow = VCLUnoHelper::GetWindow( xContainerWindow );
             while ( pWindow && !pWindow->IsSystemWindow() )

@@ -101,7 +101,7 @@ void SAL_CALL SplashScreen::start(const OUString&, sal_Int32 nRange)
     _iMax = nRange;
     if (_bVisible) {
         _bProgressEnd = sal_False;
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         if ( _eBitmapMode == BM_FULLSCREEN )
             ShowFullScreenMode( TRUE );
         Show();
@@ -139,7 +139,7 @@ void SAL_CALL SplashScreen::reset()
 void SAL_CALL SplashScreen::setText(const OUString& rText)
     throw (RuntimeException)
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     if ( _sProgressText != rText )
     {
         _sProgressText = rText;
@@ -160,7 +160,7 @@ void SAL_CALL SplashScreen::setValue(sal_Int32 nValue)
     RTL_LOGFILE_CONTEXT( aLog, "::SplashScreen::setValue (lo119109)" );
     RTL_LOGFILE_CONTEXT_TRACE1( aLog, "value=%d", nValue );
 
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     if (_bVisible && !_bProgressEnd) {
         if ( _eBitmapMode == BM_FULLSCREEN )
             ShowFullScreenMode( TRUE );

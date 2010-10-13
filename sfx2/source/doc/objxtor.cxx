@@ -183,14 +183,14 @@ void SAL_CALL SfxModelListener_Impl::queryClosing( const com::sun::star::lang::E
 
 void SAL_CALL SfxModelListener_Impl::notifyClosing( const com::sun::star::lang::EventObject& ) throw ( com::sun::star::uno::RuntimeException )
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     mpDoc->Broadcast( SfxSimpleHint(SFX_HINT_DEINITIALIZING) );
 }
 
 void SAL_CALL SfxModelListener_Impl::disposing( const com::sun::star::lang::EventObject& _rEvent ) throw ( com::sun::star::uno::RuntimeException )
 {
     // am I ThisComponent in AppBasic?
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     if ( SfxObjectShell::GetCurrentComponent() == _rEvent.Source )
     {
         lcl_UpdateAppBasicDocVars( SfxObjectShell::GetCurrentComponent(), true );
@@ -868,7 +868,7 @@ SEQUENCE< OUSTRING > SfxObjectShell::GetEventNames()
 
     if ( !pEventNameContainer )
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         if ( !pEventNameContainer )
         {
             static uno::Sequence< ::rtl::OUString > aEventNameContainer = GlobalEventConfig().getElementNames();

@@ -104,7 +104,7 @@ void FontMenuController::fillPopupMenu( const Sequence< ::rtl::OUString >& rFont
     VCLXPopupMenu*          pPopupMenu = (VCLXPopupMenu *)VCLXMenu::GetImplementation( rPopupMenu );
     PopupMenu*              pVCLPopupMenu = 0;
 
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     resetPopupMenu( rPopupMenu );
     if ( pPopupMenu )

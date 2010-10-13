@@ -1653,7 +1653,7 @@ void SAL_CALL SfxMacroLoader::dispatchWithNotification( const ::com::sun::star::
                                                         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchResultListener >& xListener )
               throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     sal_uInt32 nPropertyCount = lArgs.getLength();
     ::rtl::OUString aReferer;
@@ -1698,7 +1698,7 @@ void SAL_CALL SfxMacroLoader::dispatch( const ::com::sun::star::util::URL&      
                                         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArgs )
               throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     sal_uInt32 nPropertyCount = lArgs.getLength();
     ::rtl::OUString aReferer;
@@ -1976,7 +1976,7 @@ throw( RuntimeException )
 Sequence< sal_Int16 > SAL_CALL SfxAppDispatchProvider::getSupportedCommandGroups()
 throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     std::list< sal_Int16 > aGroupList;
     SfxSlotPool* pAppSlotPool = &SFX_APP()->GetAppSlotPool_Impl();
@@ -2011,7 +2011,7 @@ throw (::com::sun::star::uno::RuntimeException)
 {
     std::list< ::com::sun::star::frame::DispatchInformation > aCmdList;
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     SfxSlotPool* pAppSlotPool = &SFX_APP()->GetAppSlotPool_Impl();
 
     if ( pAppSlotPool )

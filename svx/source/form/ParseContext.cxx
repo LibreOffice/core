@@ -51,7 +51,7 @@ DBG_NAME(OSystemParseContext)
 OSystemParseContext::OSystemParseContext() : IParseContext()
 {
     DBG_CTOR(OSystemParseContext,NULL);
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     ::svx::StringListResource aKeywords( SVX_RES( RID_RSC_SQL_INTERNATIONAL ) );
     aKeywords.get( m_aLocalizedKeywords );
@@ -73,7 +73,7 @@ OSystemParseContext::~OSystemParseContext()
 ::rtl::OUString OSystemParseContext::getErrorMessage(ErrorCode _eCode) const
 {
     String aMsg;
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     switch (_eCode)
     {
         case ERROR_GENERAL:                 aMsg = SVX_RES(RID_STR_SVT_SQL_SYNTAX_ERROR); break;

@@ -260,7 +260,7 @@ void ControlMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rP
     VCLXPopupMenu*                                     pPopupMenu        = (VCLXPopupMenu *)VCLXMenu::GetImplementation( rPopupMenu );
     PopupMenu*                                         pVCLPopupMenu     = 0;
 
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     resetPopupMenu( rPopupMenu );
     if ( pPopupMenu )
@@ -305,7 +305,7 @@ void SAL_CALL ControlMenuController::statusChanged( const FeatureStateEvent& Eve
     {
         VCLXPopupMenu*  pPopupMenu = (VCLXPopupMenu *)VCLXMenu::GetImplementation( m_xPopupMenu );
 
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
 
         PopupMenu* pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
 
@@ -358,7 +358,7 @@ void SAL_CALL ControlMenuController::activate( const css::awt::MenuEvent& ) thro
 
     if ( m_xPopupMenu.is() )
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
 
         // Check if some modes have changed so we have to update our menu images
         const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();

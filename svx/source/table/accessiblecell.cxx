@@ -195,7 +195,7 @@ void SAL_CALL AccessibleCell::release(  ) throw ()
 */
 sal_Int32 SAL_CALL AccessibleCell::getAccessibleChildCount() throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aSolarGuard (::Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     ThrowIfDisposed ();
     return mpText != NULL ? mpText->GetChildCount () : 0;
 }
@@ -207,7 +207,7 @@ sal_Int32 SAL_CALL AccessibleCell::getAccessibleChildCount() throw (::com::sun::
 */
 Reference<XAccessible> SAL_CALL AccessibleCell::getAccessibleChild (sal_Int32 nIndex) throw (IndexOutOfBoundsException, RuntimeException)
 {
-    ::vos::OGuard aSolarGuard (::Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     ThrowIfDisposed ();
 
     // todo: does GetChild throw IndexOutOfBoundsException?
@@ -224,7 +224,7 @@ Reference<XAccessible> SAL_CALL AccessibleCell::getAccessibleChild (sal_Int32 nI
 */
 Reference<XAccessibleStateSet> SAL_CALL AccessibleCell::getAccessibleStateSet (void) throw (RuntimeException)
 {
-    ::vos::OGuard aSolarGuard (::Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard (maMutex);
     Reference<XAccessibleStateSet> xStateSet;
 
@@ -276,7 +276,7 @@ sal_Bool SAL_CALL AccessibleCell::containsPoint( const ::com::sun::star::awt::Po
 */
 Reference<XAccessible > SAL_CALL  AccessibleCell::getAccessibleAtPoint ( const ::com::sun::star::awt::Point& aPoint) throw(RuntimeException)
 {
-    ::vos::OGuard aSolarGuard (::Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard (maMutex);
 
     sal_Int32 nChildCount = getAccessibleChildCount ();
@@ -307,7 +307,7 @@ Reference<XAccessible > SAL_CALL  AccessibleCell::getAccessibleAtPoint ( const :
 
 ::com::sun::star::awt::Rectangle SAL_CALL AccessibleCell::getBounds(void) throw(RuntimeException)
 {
-    ::vos::OGuard aSolarGuard (::Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard (maMutex);
 
     ThrowIfDisposed ();
@@ -466,7 +466,7 @@ sal_Int32 SAL_CALL AccessibleCell::getBackground (void) throw (RuntimeException)
 
 void SAL_CALL AccessibleCell::addEventListener( const Reference<XAccessibleEventListener >& rxListener)  throw (RuntimeException)
 {
-    ::vos::OGuard aSolarGuard (::Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard (maMutex);
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
@@ -486,7 +486,7 @@ void SAL_CALL AccessibleCell::addEventListener( const Reference<XAccessibleEvent
 
 void SAL_CALL AccessibleCell::removeEventListener( const Reference<XAccessibleEventListener >& rxListener) throw (RuntimeException)
 {
-    ::vos::OGuard aSolarGuard (::Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     AccessibleContextBase::removeEventListener(rxListener);
     if (mpText != NULL)
         mpText->RemoveEventListener (rxListener);
@@ -540,7 +540,7 @@ void AccessibleCell::ViewForwarderChanged (ChangeType /*aChangeType*/, const IAc
 
 void AccessibleCell::disposing (void)
 {
-    ::vos::OGuard aSolarGuard (::Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard (maMutex);
 
     // Make sure to send an event that this object looses the focus in the
@@ -574,7 +574,7 @@ sal_Int32 SAL_CALL AccessibleCell::getAccessibleIndexInParent (void) throw (Runt
 ::rtl::OUString SAL_CALL AccessibleCell::getAccessibleName (void) throw (::com::sun::star::uno::RuntimeException)
 {
     ThrowIfDisposed ();
-    ::vos::OGuard aSolarGuard (::Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
 
     if( mxCell.is() )
         return mxCell->getName();

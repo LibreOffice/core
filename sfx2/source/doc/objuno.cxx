@@ -1241,7 +1241,7 @@ uno::Reference< embed::XStorage > GetStorage_Impl( const ::rtl::OUString& rName,
     // Client code checks the returned reference but is not interested on error details.
     try
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         return ::comphelper::OStorageHelper::GetStorageFromURL(
                         rName,
                         bWrite ? embed::ElementModes::READWRITE : embed::ElementModes::READ,

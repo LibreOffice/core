@@ -40,7 +40,7 @@
 
 void SAL_CALL RefreshToolbars( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( xFrame.is() )
     {
         SfxFrame* pFrame=0;

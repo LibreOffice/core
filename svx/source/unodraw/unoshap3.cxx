@@ -151,7 +151,7 @@ uno::Sequence< sal_Int8 > SAL_CALL Svx3DSceneObject::getImplementationId()
 void SAL_CALL Svx3DSceneObject::add( const Reference< drawing::XShape >& xShape )
     throw( uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     SvxShape* pShape = SvxShape::getImplementation( xShape );
 
@@ -180,7 +180,7 @@ void SAL_CALL Svx3DSceneObject::add( const Reference< drawing::XShape >& xShape 
 void SAL_CALL Svx3DSceneObject::remove( const Reference< drawing::XShape >& xShape )
     throw( uno::RuntimeException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     SvxShape* pShape = SvxShape::getImplementation( xShape );
 
@@ -221,7 +221,7 @@ void SAL_CALL Svx3DSceneObject::remove( const Reference< drawing::XShape >& xSha
 sal_Int32 SAL_CALL Svx3DSceneObject::getCount()
     throw( uno::RuntimeException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     sal_Int32 nRetval = 0;
 
@@ -235,7 +235,7 @@ sal_Int32 SAL_CALL Svx3DSceneObject::getCount()
 uno::Any SAL_CALL Svx3DSceneObject::getByIndex( sal_Int32 Index )
     throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if( !mpObj.is() || mpObj->GetSubList() == NULL )
         throw uno::RuntimeException();
@@ -266,7 +266,7 @@ uno::Type SAL_CALL Svx3DSceneObject::getElementType()
 sal_Bool SAL_CALL Svx3DSceneObject::hasElements()
     throw( uno::RuntimeException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     return mpObj.is() && mpObj->GetSubList() && (mpObj->GetSubList()->GetObjCount() > 0);
 }
@@ -515,7 +515,7 @@ Svx3DCubeObject::~Svx3DCubeObject() throw()
 //----------------------------------------------------------------------
 bool Svx3DCubeObject::setPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     switch( pProperty->nWID )
     {

@@ -1152,7 +1152,7 @@ executeMessageBox(
     WinBits nButtonMask )
     SAL_THROW((uno::RuntimeException))
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     MessBox xBox( pParent, nButtonMask, rTitle, rMessage );
 
@@ -1410,7 +1410,7 @@ UUIInteractionHelper::handleBrokenPackageRequest(
 
     ::rtl::OUString aMessage;
     {
-        vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         std::auto_ptr< ResMgr > xManager(
             ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
         if (!xManager.get())

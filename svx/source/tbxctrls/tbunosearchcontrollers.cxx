@@ -340,7 +340,7 @@ css::uno::Sequence< ::rtl::OUString >  FindTextToolbarController::getSupportedSe
 // XComponent
 void SAL_CALL FindTextToolbarController::dispose() throw ( css::uno::RuntimeException )
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     SearchToolbarControllersManager::createControllersManager()->freeController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY), m_aCommandURL);
 
@@ -400,7 +400,7 @@ css::uno::Reference< css::awt::XWindow > SAL_CALL FindTextToolbarController::cre
 // XStatusListener
 void SAL_CALL FindTextToolbarController::statusChanged( const css::frame::FeatureStateEvent& rEvent ) throw ( css::uno::RuntimeException )
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     if ( m_bDisposed )
         return;
 
@@ -504,7 +504,7 @@ css::uno::Sequence< ::rtl::OUString >  DownSearchToolboxController::getSupported
 // XComponent
 void SAL_CALL DownSearchToolboxController::dispose() throw ( css::uno::RuntimeException )
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     SearchToolbarControllersManager::createControllersManager()->freeController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY), m_aCommandURL);
 
@@ -561,7 +561,7 @@ void SAL_CALL DownSearchToolboxController::execute( sal_Int16 /*KeyModifier*/ ) 
 // XStatusListener
 void SAL_CALL DownSearchToolboxController::statusChanged( const css::frame::FeatureStateEvent& /*rEvent*/ ) throw ( css::uno::RuntimeException )
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     if ( m_bDisposed )
         return;
 }
@@ -633,7 +633,7 @@ css::uno::Sequence< ::rtl::OUString >  UpSearchToolboxController::getSupportedSe
 // XComponent
 void SAL_CALL UpSearchToolboxController::dispose() throw ( css::uno::RuntimeException )
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     SearchToolbarControllersManager::createControllersManager()->freeController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY), m_aCommandURL);
 
@@ -690,7 +690,7 @@ void SAL_CALL UpSearchToolboxController::execute( sal_Int16 /*KeyModifier*/ ) th
 // XStatusListener
 void SAL_CALL UpSearchToolboxController::statusChanged( const css::frame::FeatureStateEvent& /*rEvent*/ ) throw ( css::uno::RuntimeException )
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     if ( m_bDisposed )
         return;
 }

@@ -312,7 +312,7 @@ Any SAL_CALL MenuBarManager::getMenuHandle( const Sequence< sal_Int8 >& /*Proces
 
     if ( m_pVCLMenu )
     {
-        OGuard  aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
 
         SystemMenuData aSystemMenuData;
         aSystemMenuData.nSize = sizeof( SystemMenuData );
@@ -349,7 +349,7 @@ MenuBarManager::~MenuBarManager()
 void MenuBarManager::Destroy()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::Destroy" );
-    OGuard  aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if ( !m_bDisposed )
     {
@@ -508,7 +508,7 @@ throw ( RuntimeException )
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::statusChanged" );
     ::rtl::OUString aFeatureURL = Event.FeatureURL.Complete;
 
-    OGuard  aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     {
         ResetableGuard aGuard( m_aLock );
 
@@ -669,7 +669,7 @@ void MenuBarManager::RemoveListener()
             {
                 {
                     // Remove popup menu from menu structure
-                    OGuard  aGuard2( Application::GetSolarMutex() );
+                    SolarMutexGuard aGuard2;
                     m_pVCLMenu->SetPopupMenu( pItemHandler->nItemId, 0 );
                 }
 
@@ -767,7 +767,7 @@ void SAL_CALL MenuBarManager::disposing( const EventObject& Source ) throw ( Run
                 {
                     // Remove popup menu from menu structure as we release our reference to
                     // the controller.
-                    OGuard  aGuard2( Application::GetSolarMutex() );
+                    SolarMutexGuard aGuard2;
                     m_pVCLMenu->SetPopupMenu( pMenuItemDisposing->nItemId, 0 );
                 }
 
@@ -1061,7 +1061,7 @@ IMPL_LINK( MenuBarManager, Deactivate, Menu *, pMenu )
 
 IMPL_LINK( MenuBarManager, AsyncSettingsHdl, Timer*,)
 {
-    OGuard  aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     Reference< XInterface > xSelfHold(
         static_cast< ::cppu::OWeakObject* >( this ), UNO_QUERY_THROW );
 
@@ -1928,7 +1928,7 @@ void MenuBarManager::SetItemContainer( const Reference< XIndexAccess >& rItemCon
 
     // Clear MenuBarManager structures
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
 
         // Check active state as we cannot change our VCL menu during activation by the user
         if ( m_bActive )
@@ -1970,7 +1970,7 @@ void MenuBarManager::GetPopupController( PopupControllerCache& rPopupController 
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::GetPopupController" );
     String aPopupScheme = String::CreateFromAscii( "vnd.sun.star.popup:" );
 
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     std::vector< MenuItemHandler* >::iterator p;
     for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); p++ )

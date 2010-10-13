@@ -430,7 +430,7 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
                 dp_misc::Dependencies::getErrorText( depExc.UnsatisfiedDependencies[i]) );
         }
         {
-            vos::OGuard guard(Application::GetSolarMutex());
+            SolarMutexGuard guard;
             short n = DependencyDialog( m_pDialogHelper? m_pDialogHelper->getWindow() : NULL, deps ).Execute();
             // Distinguish between closing the dialog and programatically
             // canceling the dialog (headless VCL):
@@ -474,7 +474,7 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
         bool bEqualNames = verExc.NewDisplayName.equals(
             verExc.Deployed->getDisplayName());
         {
-            vos::OGuard guard(Application::GetSolarMutex());
+            SolarMutexGuard guard;
             WarningBox box( m_pDialogHelper? m_pDialogHelper->getWindow() : NULL, ResId(id, *DeploymentGuiResMgr::get()));
             String s;
             if (bEqualNames)
@@ -515,7 +515,7 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
         {
             if ( m_pDialogHelper )
             {
-                vos::OGuard guard(Application::GetSolarMutex());
+                SolarMutexGuard guard;
 
                 approve = m_pDialogHelper->installExtensionWarn( instExc.displayName );
             }
@@ -526,7 +526,7 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
     }
     else if (request >>= platExc)
     {
-        vos::OGuard guard( Application::GetSolarMutex() );
+        SolarMutexGuard guard;
         String sMsg( ResId( RID_STR_UNSUPPORTED_PLATFORM, *DeploymentGuiResMgr::get() ) );
         sMsg.SearchAndReplaceAllAscii( "%Name", platExc.package->getDisplayName() );
         ErrorBox box( m_pDialogHelper? m_pDialogHelper->getWindow() : NULL, WB_OK, sMsg );
@@ -600,7 +600,7 @@ void ProgressCmdEnv::update_( uno::Any const & rStatus )
         if ( text.getLength() == 0 )
             text = ::comphelper::anyToString( rStatus ); // fallback
 
-        const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        const SolarMutexGuard aGuard;
         const ::std::auto_ptr< ErrorBox > aBox( new ErrorBox( m_pDialogHelper? m_pDialogHelper->getWindow() : NULL, WB_OK, text ) );
         aBox->Execute();
     }
@@ -891,7 +891,7 @@ void ExtensionCmdQueue::Thread::execute()
                 if (msg.getLength() == 0) // fallback for debugging purposes
                     msg = ::comphelper::anyToString(exc);
 
-                const ::vos::OGuard guard( Application::GetSolarMutex() );
+                const SolarMutexGuard guard;
                 ::std::auto_ptr<ErrorBox> box(
                     new ErrorBox( currentCmdEnv->activeDialog(), WB_OK, msg ) );
                 if ( m_pDialogHelper )
@@ -1005,7 +1005,7 @@ void ExtensionCmdQueue::Thread::_checkForUpdates(
     UpdateDialog* pUpdateDialog;
     std::vector< UpdateData > vData;
 
-    const ::vos::OGuard guard( Application::GetSolarMutex() );
+    const SolarMutexGuard guard;
 
     pUpdateDialog = new UpdateDialog( m_xContext, m_pDialogHelper? m_pDialogHelper->getWindow() : NULL, vExtensionList, &vData );
 

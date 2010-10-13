@@ -145,7 +145,7 @@ GenericToolbarController::~GenericToolbarController()
 void SAL_CALL GenericToolbarController::dispose()
 throw ( RuntimeException )
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     svt::ToolboxController::dispose();
 
@@ -161,7 +161,7 @@ throw ( RuntimeException )
     ::rtl::OUString                     aCommandURL;
 
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
 
         if ( m_bDisposed )
             throw DisposedException();
@@ -208,7 +208,7 @@ throw ( RuntimeException )
 void GenericToolbarController::statusChanged( const FeatureStateEvent& Event )
 throw ( RuntimeException )
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     if ( m_bDisposed )
         return;

@@ -88,7 +88,7 @@ void SAL_CALL LogoImageStatusbarController::release() throw ()
 void SAL_CALL LogoImageStatusbarController::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
 throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     svt::StatusbarController::initialize( aArguments );
 }
@@ -152,7 +152,7 @@ void SAL_CALL LogoImageStatusbarController::paint(
     ::sal_Int32 /*nStyle*/ )
 throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     OutputDevice* pOutDev = VCLUnoHelper::GetOutputDevice( xGraphics );;
     if ( pOutDev )

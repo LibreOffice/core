@@ -131,7 +131,7 @@ void SAL_CALL LanguageSelectionMenuController::disposing( const EventObject& ) t
 // XStatusListener
 void SAL_CALL LanguageSelectionMenuController::statusChanged( const FeatureStateEvent& Event ) throw ( RuntimeException )
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     if (rBHelper.bDisposed || rBHelper.bInDispose)
         return;
@@ -227,7 +227,7 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
     VCLXPopupMenu* pVCLPopupMenu = (VCLXPopupMenu *)VCLXMenu::GetImplementation( rPopupMenu );
     PopupMenu*     pPopupMenu    = 0;
 
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     resetPopupMenu( rPopupMenu );
     if (!m_bShowMenu)

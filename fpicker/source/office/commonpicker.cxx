@@ -121,7 +121,7 @@ namespace svt
     //---------------------------------------------------------------------
     void SAL_CALL OCommonPicker::disposing()
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         stopWindowListening();
 
@@ -152,7 +152,7 @@ namespace svt
     //---------------------------------------------------------------------
     void SAL_CALL OCommonPicker::disposing( const EventObject& _rSource ) throw (RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         sal_Bool bDialogDying = _rSource.Source == m_xWindow;
         sal_Bool bParentDying = _rSource.Source == m_xDialogParent;
 
@@ -210,7 +210,7 @@ namespace svt
     //---------------------------------------------------------------------
     sal_Bool OCommonPicker::createPicker()
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         if ( !m_pDlg )
         {
@@ -263,7 +263,7 @@ namespace svt
     {
         checkAlive();
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         if ( createPicker() )
         {
             ::svt::OControlAccess aAccess( m_pDlg, m_pDlg->GetView() );
@@ -276,7 +276,7 @@ namespace svt
     {
         checkAlive();
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         if ( createPicker() )
         {
             ::svt::OControlAccess aAccess( m_pDlg, m_pDlg->GetView() );
@@ -293,7 +293,7 @@ namespace svt
     {
         checkAlive();
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         if ( createPicker() )
         {
             ::svt::OControlAccess aAccess( m_pDlg, m_pDlg->GetView() );
@@ -308,7 +308,7 @@ namespace svt
     {
         checkAlive();
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         if ( createPicker() )
         {
             ::svt::OControlAccess aAccess( m_pDlg, m_pDlg->GetView() );
@@ -323,7 +323,7 @@ namespace svt
     {
         checkAlive();
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         if ( createPicker() )
         {
             ::svt::OControlAccess aAccess( m_pDlg, m_pDlg->GetView() );
@@ -338,7 +338,7 @@ namespace svt
     {
         checkAlive();
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         if ( createPicker() )
         {
             ::svt::OControlAccess aAccess( m_pDlg, m_pDlg->GetView() );
@@ -353,14 +353,14 @@ namespace svt
     //---------------------------------------------------------------------
     void SAL_CALL OCommonPicker::setTitle( const rtl::OUString& _rTitle ) throw( RuntimeException )
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         m_aTitle = _rTitle;
     }
 
     //---------------------------------------------------------------------
     sal_Int16 OCommonPicker::execute() throw (RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         prepareDialog();
 

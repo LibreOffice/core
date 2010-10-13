@@ -70,7 +70,7 @@ ChineseTranslation_UnoDialog::ChineseTranslation_UnoDialog( const uno::Reference
 
 ChineseTranslation_UnoDialog::~ChineseTranslation_UnoDialog()
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     impl_DeleteDialog();
 }
 
@@ -132,7 +132,7 @@ void SAL_CALL ChineseTranslation_UnoDialog::setTitle( const ::rtl::OUString& ) t
 //-------------------------------------------------------------------------
 void SAL_CALL ChineseTranslation_UnoDialog::initialize( const uno::Sequence< uno::Any >& aArguments ) throw(uno::Exception, uno::RuntimeException)
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     if( m_bDisposed || m_bInDispose )
         return;
 
@@ -155,7 +155,7 @@ sal_Int16 SAL_CALL ChineseTranslation_UnoDialog::execute() throw(uno::RuntimeExc
 {
     sal_Int16 nRet = ui::dialogs::ExecutableDialogResults::CANCEL;
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+        SolarMutexGuard aSolarGuard;
         if( m_bDisposed || m_bInDispose )
             return nRet;
 
@@ -187,7 +187,7 @@ void SAL_CALL ChineseTranslation_UnoDialog::dispose() throw (uno::RuntimeExcepti
 {
     lang::EventObject aEvt;
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+        SolarMutexGuard aSolarGuard;
         if( m_bDisposed || m_bInDispose )
             return;
         m_bInDispose = true;
@@ -204,7 +204,7 @@ void SAL_CALL ChineseTranslation_UnoDialog::dispose() throw (uno::RuntimeExcepti
 
 void SAL_CALL ChineseTranslation_UnoDialog::addEventListener( const uno::Reference< lang::XEventListener > & xListener ) throw (uno::RuntimeException)
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     if( m_bDisposed || m_bInDispose )
         return;
     m_aDisposeEventListeners.addInterface( xListener );
@@ -212,7 +212,7 @@ void SAL_CALL ChineseTranslation_UnoDialog::addEventListener( const uno::Referen
 
 void SAL_CALL ChineseTranslation_UnoDialog::removeEventListener( const uno::Reference< lang::XEventListener > & xListener ) throw (uno::RuntimeException)
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     if( m_bDisposed || m_bInDispose )
         return;
     m_aDisposeEventListeners.removeInterface( xListener );
@@ -239,7 +239,7 @@ uno::Any SAL_CALL ChineseTranslation_UnoDialog::getPropertyValue( const ::rtl::O
     sal_Bool bTranslateCommonTerms = sal_False;
 
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+        SolarMutexGuard aSolarGuard;
         if( m_bDisposed || m_bInDispose || !m_pDialog )
             return aRet;
         m_pDialog->getSettings( bDirectionToSimplified, bUseCharacterVariants, bTranslateCommonTerms );

@@ -386,7 +386,7 @@ extern "C"
 
 void aqua_init_systray()
 {
-	::vos::OGuard aGuard( Application::GetSolarMutex() );
+	SolarMutexGuard aGuard;
 
     ShutdownIcon *pShutdownIcon = ShutdownIcon::getInstance();
     if( ! pShutdownIcon )

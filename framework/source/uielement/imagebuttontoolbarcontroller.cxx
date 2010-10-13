@@ -90,7 +90,7 @@ uno::Reference< util::XMacroExpander > GetMacroExpander()
     uno::Reference< util::XMacroExpander > xMacroExpander( m_xMacroExpander );
     if ( !xMacroExpander.is() )
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
 
         if ( !xMacroExpander.is() )
         {
@@ -155,7 +155,7 @@ ImageButtonToolbarController::~ImageButtonToolbarController()
 void SAL_CALL ImageButtonToolbarController::dispose()
 throw ( RuntimeException )
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     ComplexToolbarController::dispose();
 }
 
@@ -163,7 +163,7 @@ throw ( RuntimeException )
 
 void ImageButtonToolbarController::executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand )
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     // i73486 to be downward compatible use old and "wrong" also!
     if (( rControlCommand.Command.equalsAsciiL( "SetImag", 7 )) ||
         ( rControlCommand.Command.equalsAsciiL( "SetImage", 8 )) )

@@ -99,7 +99,7 @@ void TabDialog4Recovery::addTabPage(IExtendedTabPage* pPage)
 //===============================================
 short TabDialog4Recovery::Execute()
 {
-    ::vos::OGuard aLock(Application::GetSolarMutex());
+    SolarMutexGuard aLock;
 
     Show();
     m_pActualPage = m_lTabPages.begin();
@@ -807,7 +807,7 @@ IMPL_LINK( SaveDialog, OKButtonHdl, void*, EMPTYARG )
 //===============================================
 short SaveDialog::execute()
 {
-    ::vos::OGuard aLock(Application::GetSolarMutex());
+    SolarMutexGuard aLock;
 
     // wait for user input "OK"
     m_nResult = DLG_RET_UNKNOWN;
@@ -858,7 +858,7 @@ SaveProgressDialog::~SaveProgressDialog()
 //===============================================
 short SaveProgressDialog::Execute()
 {
-    ::vos::OGuard aLock(Application::GetSolarMutex());
+    SolarMutexGuard aLock;
 
     m_pCore->setProgressHandler(m_xProgress);
     m_pCore->setUpdateListener(this);
@@ -1121,7 +1121,7 @@ RecoveryDialog::~RecoveryDialog()
 //===============================================
 short RecoveryDialog::execute()
 {
-    ::vos::OGuard aSolarLock(Application::GetSolarMutex());
+    SolarMutexGuard aSolarLock;
 
     switch(m_eRecoveryState)
     {
@@ -1658,7 +1658,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
 
         short ErrorRepWelcomeDialog::execute()
         {
-            ::vos::OGuard aLock(Application::GetSolarMutex());
+            SolarMutexGuard aLock;
             Show();
             m_nResult = DLG_RET_UNKNOWN;
             while(m_nResult == DLG_RET_UNKNOWN)
@@ -1768,7 +1768,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
 
         short ErrorRepSendDialog::execute()
         {
-            ::vos::OGuard aLock(Application::GetSolarMutex());
+            SolarMutexGuard aLock;
             Show();
             m_nResult = DLG_RET_UNKNOWN;
             while(m_nResult == DLG_RET_UNKNOWN)

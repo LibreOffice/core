@@ -89,7 +89,7 @@ throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException
 {
     const rtl::OUString aPropValueName( RTL_CONSTASCII_USTRINGPARAM( "Value" ));
 
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     svt::StatusbarController::initialize( aArguments );
 

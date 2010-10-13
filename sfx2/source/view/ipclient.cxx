@@ -217,7 +217,7 @@ throw (::com::sun::star::uno::RuntimeException)
 
 void SAL_CALL SfxInPlaceClient_Impl::notifyEvent( const document::EventObject& aEvent ) throw( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if ( m_pClient && aEvent.EventName.equalsAscii("OnVisAreaChanged") && m_nAspect != embed::Aspects::MSOLE_ICON )
     {
@@ -354,7 +354,7 @@ void SAL_CALL SfxInPlaceClient_Impl::visibilityChanged( sal_Bool bVisible )
     throw ( embed::WrongStateException,
             uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if ( !m_pClient || !m_pClient->GetViewShell() )
         throw uno::RuntimeException();

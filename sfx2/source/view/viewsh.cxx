@@ -150,7 +150,7 @@ void SAL_CALL SfxClipboardChangeListener::disposing( const lang::EventObject& /*
 throw ( uno::RuntimeException )
 {
     // either clipboard or ViewShell is going to be destroyed -> no interest in listening anymore
-    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aGuard;
     if ( pViewShell )
     {
         uno::Reference < lang::XComponent > xCtrl( pViewShell->GetController(), uno::UNO_QUERY );
@@ -164,7 +164,7 @@ throw ( uno::RuntimeException )
 void SAL_CALL SfxClipboardChangeListener::changedContents( const datatransfer::clipboard::ClipboardEvent& )
     throw ( RuntimeException )
 {
-    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aGuard;
     if( pViewShell )
     {
         SfxBindings& rBind = pViewShell->GetViewFrame()->GetBindings();
@@ -652,7 +652,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                     }
                     catch ( uno::Exception& )
                     {
-                        vos::OGuard aGuard( Application::GetSolarMutex() );
+                        SolarMutexGuard aGuard;
                         Window *pParent = SFX_APP()->GetTopWindow();
                         ErrorBox( pParent, SfxResId( MSG_ERROR_NO_WEBBROWSER_FOUND )).Execute();
                         bRet = FALSE;

@@ -134,7 +134,7 @@ throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException
     bool bInitialized( true );
 
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
 
         if ( m_bDisposed )
             throw DisposedException();
@@ -144,7 +144,7 @@ throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException
 
     if ( !bInitialized )
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
         m_bInitialized = sal_True;
 
         PropertyValue aPropValue;
@@ -169,7 +169,7 @@ void SAL_CALL ButtonToolbarController::dispose() throw (::com::sun::star::uno::R
     Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
 
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
         if ( m_bDisposed )
             throw DisposedException();
 
@@ -199,7 +199,7 @@ throw (::com::sun::star::uno::RuntimeException)
 void SAL_CALL ButtonToolbarController::update()
 throw (::com::sun::star::uno::RuntimeException)
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     if ( m_bDisposed )
         throw DisposedException();
 }
@@ -211,7 +211,7 @@ throw ( ::com::sun::star::uno::RuntimeException )
 {
     uno::Reference< uno::XInterface > xSource( Source.Source );
 
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     if ( m_bDisposed )
         return;
@@ -240,7 +240,7 @@ throw (::com::sun::star::uno::RuntimeException)
     ::com::sun::star::util::URL             aTargetURL;
 
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
 
         if ( m_bDisposed )
             throw DisposedException();
@@ -294,7 +294,7 @@ throw (::com::sun::star::uno::RuntimeException)
 void SAL_CALL ButtonToolbarController::click()
 throw (::com::sun::star::uno::RuntimeException)
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     if ( m_bDisposed )
         throw DisposedException();

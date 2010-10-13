@@ -296,7 +296,7 @@ void ShutdownIcon::FileOpen()
 {
     if ( getInstance() && getInstance()->m_xDesktop.is() )
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         EnterModalMode();
         getInstance()->StartFileDialog();
     }
@@ -349,7 +349,7 @@ void ShutdownIcon::FromTemplate()
 #include <tools/rcid.h>
 OUString ShutdownIcon::GetResString( int id )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if( ! m_pResMgr )
         m_pResMgr = SfxResId::GetResMgr();
@@ -366,7 +366,7 @@ OUString ShutdownIcon::GetResString( int id )
 
 OUString ShutdownIcon::GetUrlDescription( const OUString& aUrl )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     return OUString( SvFileInformationManager::GetDescription( INetURLObject( aUrl ) ) );
 }
@@ -375,7 +375,7 @@ OUString ShutdownIcon::GetUrlDescription( const OUString& aUrl )
 
 void ShutdownIcon::StartFileDialog()
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     bool bDirty = ( m_bSystemDialogs != static_cast<bool>(SvtMiscOptions().UseSystemFileDialog()) );
 
@@ -619,7 +619,7 @@ ShutdownIcon* ShutdownIcon::createInstance()
 void ShutdownIcon::init() throw( ::com::sun::star::uno::Exception )
 {
     // access resource system and sfx only protected by solarmutex
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ResMgr *pResMgr = SfxResId::GetResMgr();
 
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
@@ -813,7 +813,7 @@ rtl::OUString ShutdownIcon::getShortcutName()
     ResMgr* pMgr = SfxResId::GetResMgr();
     if( pMgr )
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         UniString aRes( SfxResId( STR_QUICKSTART_LNKNAME ) );
         aShortcutName = OUString( aRes );
     }

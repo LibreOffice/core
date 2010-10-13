@@ -481,7 +481,7 @@ uno::Reference<XAccessible > SAL_CALL
 awt::Rectangle SAL_CALL AccessibleShape::getBounds (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aSolarGuard (::Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard (maMutex);
 
     ThrowIfDisposed ();
@@ -878,7 +878,7 @@ void SAL_CALL
     AccessibleShape::disposing (const lang::EventObject& aEvent)
     throw (uno::RuntimeException)
 {
-    ::vos::OGuard aSolarGuard (::Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard (maMutex);
 
     try
@@ -1143,7 +1143,7 @@ uno::Reference< drawing::XShape > AccessibleShape::GetXShape()
 // protected
 void AccessibleShape::disposing (void)
 {
-    ::vos::OGuard aSolarGuard (::Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard (maMutex);
 
     // Make sure to send an event that this object looses the focus in the

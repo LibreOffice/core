@@ -131,7 +131,7 @@ void InsertSubMenuItems( Menu* pSubMenu, USHORT& nItemId, Reference< XIndexConta
                     if ( IsSeparator( xPropSet ))
                     {
                         // Separator
-                        OGuard aGuard( Application::GetSolarMutex() );
+                        SolarMutexGuard aGuard;
                         pSubMenu->InsertSeparator();
                     }
                     else
@@ -147,7 +147,7 @@ void InsertSubMenuItems( Menu* pSubMenu, USHORT& nItemId, Reference< XIndexConta
                         USHORT nNewItemId = nItemId++;
                         GetMenuItemAttributes( xPropSet, aLabel, aCommandURL, aHelpURL, xBitmap, xSubContainer );
 
-                        OGuard aGuard( Application::GetSolarMutex() );
+                        SolarMutexGuard aGuard;
                         {
                             // insert new menu item
                             sal_Int32 nIndex = aCommandURL.indexOf( aSlotURL );
@@ -336,7 +336,7 @@ Reference< XIndexContainer > CreateActionTriggerContainer( const Reference< XInd
 
 void FillActionTriggerContainerWithMenu( const Menu* pMenu, Reference< XIndexContainer >& rActionTriggerContainer )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     for ( USHORT nPos = 0; nPos < pMenu->GetItemCount(); nPos++ )
     {

@@ -74,7 +74,7 @@ void SAL_CALL MediaEventListenersImpl::keyPressed( const ::com::sun::star::awt::
     throw (::com::sun::star::uno::RuntimeException)
 {
     const ::osl::MutexGuard aGuard( maMutex );
-    const ::vos::OGuard aAppGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aAppGuard;
 
     if( mpNotifyWindow )
     {
@@ -94,7 +94,7 @@ void SAL_CALL MediaEventListenersImpl::keyReleased( const ::com::sun::star::awt:
     throw (::com::sun::star::uno::RuntimeException)
 {
     const ::osl::MutexGuard aGuard( maMutex );
-    const ::vos::OGuard aAppGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aAppGuard;
 
     if( mpNotifyWindow )
     {
@@ -113,7 +113,7 @@ void SAL_CALL MediaEventListenersImpl::mousePressed( const ::com::sun::star::awt
     throw (::com::sun::star::uno::RuntimeException)
 {
     const ::osl::MutexGuard aGuard( maMutex );
-    const ::vos::OGuard aAppGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aAppGuard;
 
     if( mpNotifyWindow )
     {
@@ -134,7 +134,7 @@ void SAL_CALL MediaEventListenersImpl::mouseReleased( const ::com::sun::star::aw
     throw (::com::sun::star::uno::RuntimeException)
 {
     const ::osl::MutexGuard aGuard( maMutex );
-    const ::vos::OGuard aAppGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aAppGuard;
 
     if( mpNotifyWindow )
     {
@@ -155,7 +155,7 @@ void SAL_CALL MediaEventListenersImpl::mouseEntered( const ::com::sun::star::awt
     throw (::com::sun::star::uno::RuntimeException)
 {
     const ::osl::MutexGuard aGuard( maMutex );
-    const ::vos::OGuard aAppGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aAppGuard;
 
     if( mpNotifyWindow )
     {
@@ -168,7 +168,7 @@ void SAL_CALL MediaEventListenersImpl::mouseExited( const ::com::sun::star::awt:
     throw (::com::sun::star::uno::RuntimeException)
 {
     const ::osl::MutexGuard aGuard( maMutex );
-    const ::vos::OGuard aAppGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aAppGuard;
 
     if( mpNotifyWindow )
     {
@@ -181,7 +181,7 @@ void SAL_CALL MediaEventListenersImpl::mouseDragged( const ::com::sun::star::awt
     throw (::com::sun::star::uno::RuntimeException)
 {
     const ::osl::MutexGuard aGuard( maMutex );
-    const ::vos::OGuard aAppGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aAppGuard;
 
     if( mpNotifyWindow )
     {
@@ -196,7 +196,7 @@ void SAL_CALL MediaEventListenersImpl::mouseMoved( const ::com::sun::star::awt::
     throw (::com::sun::star::uno::RuntimeException)
 {
     const ::osl::MutexGuard aGuard( maMutex );
-    const ::vos::OGuard aAppGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aAppGuard;
 
     if( mpNotifyWindow )
     {

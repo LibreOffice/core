@@ -554,7 +554,7 @@ namespace svxform
 
         {
             // object shells are not thread safe, so guard the destruction
-            ::vos::OGuard aSolarGuarsReset( Application::GetSolarMutex() );
+            SolarMutexGuard aSolarGuarsReset;
             xObjectShell = NULL;
         }
     }

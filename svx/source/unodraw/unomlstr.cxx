@@ -50,7 +50,7 @@ SvxUnoShapeModifyListener::~SvxUnoShapeModifyListener() throw()
 // ::com::sun::star::util::XModifyListener
 void SAL_CALL SvxUnoShapeModifyListener::modified(const lang::EventObject& ) throw( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if( mpObj )
     {
         mpObj->SetChanged();

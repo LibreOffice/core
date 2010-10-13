@@ -166,7 +166,7 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
         Printer*        pInfoPrinter = 0;
         rtl::OUString   aPrinterName;
 
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
 
         // try to retrieve printer name of document
         aPrinterName = retrievePrinterName( m_xFrame );
@@ -305,7 +305,7 @@ void SAL_CALL FontSizeMenuController::statusChanged( const FeatureStateEvent& Ev
 
         if ( m_xPopupMenu.is() )
         {
-            vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aSolarMutexGuard;
             setCurHeight( long( m_aFontHeight.Height * 10), m_xPopupMenu );
         }
     }

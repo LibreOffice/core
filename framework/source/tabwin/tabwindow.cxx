@@ -420,7 +420,7 @@ throw (css::uno::Exception, css::uno::RuntimeException)
 
                     xWindow->setPosSize( 0, 0, aSize.Width, aSize.Height, css::awt::PosSize::POSSIZE );
 
-                    vos::OGuard aGuard( Application::GetSolarMutex() );
+                    SolarMutexGuard aGuard;
                     Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                     if( pWindow )
                         pWindow->Show( TRUE );

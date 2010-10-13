@@ -68,7 +68,7 @@ ShapeTypeHandler& ShapeTypeHandler::Instance (void)
     // the shape type handler is instantiated.
     if (instance == NULL)
     {
-        ::vos::OGuard aGuard (::Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         if (instance == NULL)
         {
             // Create the single instance of the shape type handler.
@@ -181,7 +181,7 @@ ShapeTypeHandler::~ShapeTypeHandler (void)
 bool ShapeTypeHandler::AddShapeTypeList (int nDescriptorCount,
     ShapeTypeDescriptor aDescriptorList[])
 {
-    ::vos::OGuard aGuard (::Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     // Determine first id of new type descriptor(s).
     int nFirstId = maShapeTypeDescriptorList.size();
@@ -329,7 +329,7 @@ long ShapeTypeHandler::GetSlotId (const uno::Reference<drawing::XShape>& rxShape
 
     if (nResourceId != -1)
     {
-        ::vos::OGuard aGuard (::Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         sName = OUString (SVX_RESSTR((unsigned short)nResourceId));
     }
 

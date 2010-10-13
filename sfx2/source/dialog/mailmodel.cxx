@@ -871,7 +871,7 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
                     {
                         css::uno::Reference< css::awt::XWindow > xParentWindow = xFrame->getContainerWindow();
 
-                        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+                        SolarMutexGuard aGuard;
                         Window* pParentWindow = VCLUnoHelper::GetWindow( xParentWindow );
 
                         ErrorBox aBox( pParentWindow, SfxResId( RID_ERRBOX_MAIL_CONFIG ));

@@ -481,7 +481,7 @@ void SfxDocTplService_Impl::init_Impl()
             update( sal_True );
 
             anotherGuard.clear();
-            ::vos::OGuard aSecondSolarGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aSecondSolarGuard;
 
             delete pWin;
         }
@@ -541,7 +541,7 @@ void SfxDocTplService_Impl::getDefaultLocale()
 // -----------------------------------------------------------------------
 void SfxDocTplService_Impl::readFolderList()
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     ResStringArray  aShortNames( SfxResId( TEMPLATE_SHORT_NAMES_ARY ) );
     ResStringArray  aLongNames( SfxResId( TEMPLATE_LONG_NAMES_ARY ) );

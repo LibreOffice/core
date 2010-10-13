@@ -1588,7 +1588,7 @@ Metadatable::JoinMetadatable(Metadatable const & i_rOther,
 ::rtl::OUString SAL_CALL MetadatableMixin::getLocalName()
     throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     beans::StringPair mdref( getMetadataReference() );
     if (!mdref.Second.getLength())
     {
@@ -1605,7 +1605,7 @@ Metadatable::JoinMetadatable(Metadatable const & i_rOther,
 ::rtl::OUString SAL_CALL MetadatableMixin::getNamespace()
     throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     const uno::Reference< frame::XModel > xModel( GetModel() );
     const uno::Reference< rdf::XURI > xDMA( xModel, uno::UNO_QUERY_THROW );
     return xDMA->getStringValue();
@@ -1616,7 +1616,7 @@ beans::StringPair SAL_CALL
 MetadatableMixin::getMetadataReference()
 throw (uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     Metadatable *const pObject( GetCoreObject() );
     if (!pObject)
@@ -1634,7 +1634,7 @@ MetadatableMixin::setMetadataReference(
     const beans::StringPair & i_rReference)
 throw (uno::RuntimeException, lang::IllegalArgumentException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     Metadatable *const pObject( GetCoreObject() );
     if (!pObject)
@@ -1650,7 +1650,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException)
 void SAL_CALL MetadatableMixin::ensureMetadataReference()
 throw (uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     Metadatable *const pObject( GetCoreObject() );
     if (!pObject)

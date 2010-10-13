@@ -3698,7 +3698,7 @@ void AutoRecovery::impl_flushALLConfigChanges()
             ::comphelper::ConfigurationHelper::flush(xRecoveryCfg);
 
         // SOLAR SAFE ->
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         ::utl::ConfigManager& rCfgMgr = ::utl::ConfigManager::GetConfigManager();
         rCfgMgr.StoreConfigItems();
     }

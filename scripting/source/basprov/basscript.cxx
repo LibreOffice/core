@@ -154,7 +154,7 @@ namespace basprov
         // TODO: throw CannotConvertException
         // TODO: check length of aOutParamIndex, aOutParam
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         Any aReturn;
 

@@ -71,7 +71,7 @@ executeLoginDialog(
 {
     try
     {
-        vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
 
         bool bAccount = (rInfo.GetFlags() & LOGINERROR_FLAG_MODIFY_ACCOUNT) != 0;
         bool bSavePassword   = rInfo.GetCanRememberPassword();
@@ -424,7 +424,7 @@ executeMasterPasswordDialog(
     rtl::OString aMaster;
     try
     {
-        vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
 
         std::auto_ptr< ResMgr > xManager(
             ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
@@ -526,7 +526,7 @@ executePasswordDialog(
 {
     try
     {
-        vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
 
         std::auto_ptr< ResMgr > xManager(
             ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));

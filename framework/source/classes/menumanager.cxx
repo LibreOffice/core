@@ -385,7 +385,7 @@ throw ( RuntimeException )
 
     if ( pStatusChangedMenu )
     {
-        OGuard  aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         {
             ResetableGuard aGuard( m_aLock );
 

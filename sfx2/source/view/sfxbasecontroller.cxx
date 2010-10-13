@@ -276,7 +276,7 @@ public:
 
 void SAL_CALL SfxStatusIndicator::start(const ::rtl::OUString& aText, sal_Int32 nRange) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( xOwner.is() )
     {
         _nRange = nRange;
@@ -295,7 +295,7 @@ void SAL_CALL SfxStatusIndicator::start(const ::rtl::OUString& aText, sal_Int32 
 
 void SAL_CALL SfxStatusIndicator::end(void) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( xOwner.is() )
     {
         if ( !xProgress.is() )
@@ -310,7 +310,7 @@ void SAL_CALL SfxStatusIndicator::end(void) throw(::com::sun::star::uno::Runtime
 
 void SAL_CALL SfxStatusIndicator::setText(const ::rtl::OUString& aText) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( xOwner.is() )
     {
         if ( !xProgress.is() )
@@ -325,7 +325,7 @@ void SAL_CALL SfxStatusIndicator::setText(const ::rtl::OUString& aText) throw(::
 
 void SAL_CALL SfxStatusIndicator::setValue( sal_Int32 nValue ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( xOwner.is() )
     {
         _nValue = nValue;
@@ -344,7 +344,7 @@ void SAL_CALL SfxStatusIndicator::setValue( sal_Int32 nValue ) throw(::com::sun:
 
 void SAL_CALL SfxStatusIndicator::reset() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( xOwner.is() )
     {
         if ( !xProgress.is() )
@@ -359,7 +359,7 @@ void SAL_CALL SfxStatusIndicator::reset() throw(::com::sun::star::uno::RuntimeEx
 
 void SAL_CALL SfxStatusIndicator::disposing( const com::sun::star::lang::EventObject& /*Source*/ ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     xOwner = 0;
     xProgress.clear();
 }
@@ -421,7 +421,7 @@ void SAL_CALL IMPL_SfxBaseController_CloseListenerHelper::disposing( const EVENT
 void SAL_CALL IMPL_SfxBaseController_CloseListenerHelper::queryClosing( const EVENTOBJECT& aEvent, sal_Bool bDeliverOwnership )
     throw (RUNTIMEEXCEPTION, com::sun::star::util::CloseVetoException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     SfxViewShell* pShell = m_pController->GetViewShell_Impl();
     if  ( m_pController !=  NULL &&  pShell )
     {
@@ -505,7 +505,7 @@ IMPL_SfxBaseController_ListenerHelper::~IMPL_SfxBaseController_ListenerHelper()
 
 void SAL_CALL IMPL_SfxBaseController_ListenerHelper::frameAction( const FRAMEACTIONEVENT& aEvent ) throw( RUNTIMEEXCEPTION )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if  (
             ( m_pController !=  NULL ) &&
             ( aEvent.Frame  ==  m_pController->getFrame() ) &&
@@ -530,7 +530,7 @@ void SAL_CALL IMPL_SfxBaseController_ListenerHelper::frameAction( const FRAMEACT
 
 void SAL_CALL IMPL_SfxBaseController_ListenerHelper::disposing( const EVENTOBJECT& /*aEvent*/ ) throw( ::com::sun::star::uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( m_pController && m_pController->getFrame().is() )
         m_pController->getFrame()->removeFrameActionListener( this ) ;
 }
@@ -562,7 +562,7 @@ SfxBaseController::~SfxBaseController()
 
 Reference< XWindow > SAL_CALL SfxBaseController::getComponentWindow() throw (RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( !m_pData->m_pViewShell )
         throw DisposedException();
 
@@ -571,7 +571,7 @@ Reference< XWindow > SAL_CALL SfxBaseController::getComponentWindow() throw (Run
 
 ::rtl::OUString SAL_CALL SfxBaseController::getViewControllerName() throw (RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( !m_pData->m_pViewShell || !m_pData->m_pViewShell->GetObjectShell() )
         throw DisposedException();
 
@@ -588,7 +588,7 @@ Reference< XWindow > SAL_CALL SfxBaseController::getComponentWindow() throw (Run
 
 Sequence< PropertyValue > SAL_CALL SfxBaseController::getCreationArguments() throw (RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( !m_pData->m_pViewShell || !m_pData->m_pViewShell->GetObjectShell() )
         throw DisposedException();
 
@@ -617,7 +617,7 @@ void SAL_CALL SfxBaseController::attachFrame( const REFERENCE< XFRAME >& xFrame 
 {
     REFERENCE< XFRAME > xTemp( getFrame() ) ;
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( xTemp.is() )
     {
         xTemp->removeFrameActionListener( m_pData->m_xListener ) ;
@@ -671,7 +671,7 @@ sal_Bool SAL_CALL SfxBaseController::attachModel( const REFERENCE< XMODEL >& xMo
 
 sal_Bool SAL_CALL SfxBaseController::suspend( sal_Bool bSuspend ) throw( ::com::sun::star::uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     // ignore dublicate calls, which doesnt change anything real
     if (bSuspend == m_pData->m_bSuspendState)
@@ -731,7 +731,7 @@ ANY SfxBaseController::getViewData() throw( ::com::sun::star::uno::RuntimeExcept
 {
     ANY         aAny;
     String      sData1;
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( m_pData->m_pViewShell )
     {
         m_pData->m_pViewShell->WriteUserData( sData1 ) ;
@@ -748,7 +748,7 @@ ANY SfxBaseController::getViewData() throw( ::com::sun::star::uno::RuntimeExcept
 
 void SAL_CALL SfxBaseController::restoreViewData( const ANY& aValue ) throw( ::com::sun::star::uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( m_pData->m_pViewShell )
     {
         OUSTRING sData;
@@ -763,7 +763,7 @@ void SAL_CALL SfxBaseController::restoreViewData( const ANY& aValue ) throw( ::c
 
 REFERENCE< XFRAME > SAL_CALL SfxBaseController::getFrame() throw( ::com::sun::star::uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     return m_pData->m_xFrame;
 }
 
@@ -773,7 +773,7 @@ REFERENCE< XFRAME > SAL_CALL SfxBaseController::getFrame() throw( ::com::sun::st
 
 REFERENCE< XMODEL > SAL_CALL SfxBaseController::getModel() throw( ::com::sun::star::uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     return m_pData->m_pViewShell ? m_pData->m_pViewShell->GetObjectShell()->GetModel() : REFERENCE < XMODEL > () ;
 }
 
@@ -785,7 +785,7 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
                                                                     const   OUSTRING&           sTargetFrameName,
                                                                             sal_Int32           eSearchFlags    ) throw( RUNTIMEEXCEPTION )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     REFERENCE< XDISPATCH >  xDisp;
     if ( m_pData->m_pViewShell )
     {
@@ -965,7 +965,7 @@ frame::BorderWidths SAL_CALL SfxBaseController::getBorder()
 {
     frame::BorderWidths aResult;
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( m_pData->m_pViewShell )
     {
         SvBorder aBorder = m_pData->m_pViewShell->GetBorderPixel();
@@ -995,7 +995,7 @@ void SAL_CALL SfxBaseController::removeBorderResizeListener( const uno::Referenc
 awt::Rectangle SAL_CALL SfxBaseController::queryBorderedArea( const awt::Rectangle& aPreliminaryRectangle )
     throw ( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( m_pData->m_pViewShell )
     {
         Rectangle aTmpRect = VCLRectangle( aPreliminaryRectangle );
@@ -1036,7 +1036,7 @@ void SfxBaseController::BorderWidthsChanged_Impl()
 
 void SAL_CALL SfxBaseController::dispose() throw( ::com::sun::star::uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     Reference< XController > xTmp( this );
     m_pData->m_bDisposing = sal_True ;
 
@@ -1121,7 +1121,7 @@ void SAL_CALL SfxBaseController::removeEventListener( const REFERENCE< XEVENTLIS
 
 void SfxBaseController::ReleaseShell_Impl()
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( m_pData->m_pViewShell )
     {
         SfxObjectShell* pDoc = m_pData->m_pViewShell->GetObjectShell() ;
@@ -1147,7 +1147,7 @@ SfxViewShell* SfxBaseController::GetViewShell_Impl() const
 
 ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > SAL_CALL SfxBaseController::getStatusIndicator(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( m_pData->m_pViewShell && !m_pData->m_xIndicator.is() )
         m_pData->m_xIndicator = new SfxStatusIndicator( this, m_pData->m_pViewShell->GetViewFrame()->GetFrame().GetWorkWindow_Impl() );
     return m_pData->m_xIndicator;
@@ -1158,7 +1158,7 @@ void SAL_CALL SfxBaseController::registerContextMenuInterceptor( const REFERENCE
 {
     m_pData->m_aInterceptorContainer.addInterface( xInterceptor );
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( m_pData->m_pViewShell )
         m_pData->m_pViewShell->AddContextMenuInterceptor_Impl( xInterceptor );
 }
@@ -1168,39 +1168,39 @@ void SAL_CALL SfxBaseController::releaseContextMenuInterceptor( const REFERENCE<
 {
     m_pData->m_aInterceptorContainer.removeInterface( xInterceptor );
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( m_pData->m_pViewShell )
         m_pData->m_pViewShell->RemoveContextMenuInterceptor_Impl( xInterceptor );
 }
 
 void SAL_CALL SfxBaseController::addKeyHandler( const ::com::sun::star::uno::Reference< XKEYHANDLER >& xHandler ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     m_pData->m_aUserInputInterception.addKeyHandler( xHandler );
 }
 
 void SAL_CALL SfxBaseController::removeKeyHandler( const ::com::sun::star::uno::Reference< XKEYHANDLER >& xHandler ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     m_pData->m_aUserInputInterception.removeKeyHandler( xHandler );
 }
 
 void SAL_CALL SfxBaseController::addMouseClickHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseClickHandler >& xHandler ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     m_pData->m_aUserInputInterception.addMouseClickHandler( xHandler );
 }
 
 void SAL_CALL SfxBaseController::removeMouseClickHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseClickHandler >& xHandler ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     m_pData->m_aUserInputInterception.removeMouseClickHandler( xHandler );
 }
 
 ::com::sun::star::uno::Sequence< sal_Int16 > SAL_CALL SfxBaseController::getSupportedCommandGroups()
 throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     std::list< sal_Int16 > aGroupList;
     SfxViewFrame* pViewFrame( m_pData->m_pViewShell->GetFrame() );
@@ -1236,7 +1236,7 @@ throw (::com::sun::star::uno::RuntimeException)
 {
     std::list< ::com::sun::star::frame::DispatchInformation > aCmdList;
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( m_pData->m_pViewShell )
     {
         const ULONG nMode( SFX_SLOT_TOOLBOXCONFIG|SFX_SLOT_ACCELCONFIG|SFX_SLOT_MENUCONFIG );
@@ -1488,7 +1488,7 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
 //=============================================================================
 css::uno::Reference< css::frame::XTitle > SfxBaseController::impl_getTitleHelper ()
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if ( ! m_pData->m_xTitleHelper.is ())
     {

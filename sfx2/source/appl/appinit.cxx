@@ -113,7 +113,7 @@ void SAL_CALL SfxTerminateListener_Impl::disposing( const EventObject& ) throw( 
 
 void SAL_CALL SfxTerminateListener_Impl::queryTermination( const EventObject& ) throw(TerminationVetoException, RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( !SFX_APP()->QueryExit_Impl() )
         throw TerminationVetoException();
 }
@@ -127,8 +127,9 @@ void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& a
     if( xDesktop.is() == sal_True )
         xDesktop->removeTerminateListener( this );
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     utl::ConfigManager::GetConfigManager().StoreConfigItems();
+
     SfxApplication* pApp = SFX_APP();
     pApp->Broadcast( SfxSimpleHint( SFX_HINT_DEINITIALIZING ) );
     pApp->Get_Impl()->pAppDispatch->ReleaseAll();
@@ -202,7 +203,7 @@ String GetSpecialCharsForEdit(Window* pParent, const Font& rFont)
     static bool bDetermineFunction = false;
     static PFunc_getSpecialCharsForEdit pfunc_getSpecialCharsForEdit = 0;
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( !bDetermineFunction )
     {
         bDetermineFunction = true;
@@ -304,7 +305,7 @@ bool SfxApplication::Initialize_Impl()
     pAppData_Impl->pAppDispat->DoActivate_Impl( sal_True, NULL );
 
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         // Set special characters callback on vcl edit control
         Edit::SetGetSpecialCharsFunction(&GetSpecialCharsForEdit);
     }

@@ -171,7 +171,7 @@ public:
         String   aResString;
         OUString aResOUString;
 
-        const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        const SolarMutexGuard aGuard;
 
         try
         {

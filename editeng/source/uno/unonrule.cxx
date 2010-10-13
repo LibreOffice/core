@@ -116,7 +116,7 @@ SvxUnoNumberingRules::~SvxUnoNumberingRules() throw()
 void SAL_CALL SvxUnoNumberingRules::replaceByIndex( sal_Int32 Index, const uno::Any& Element )
     throw( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if( Index < 0 || Index >= maRule.GetLevelCount() )
         throw IndexOutOfBoundsException();
@@ -131,7 +131,7 @@ void SAL_CALL SvxUnoNumberingRules::replaceByIndex( sal_Int32 Index, const uno::
 // XIndexAccess
 sal_Int32 SAL_CALL SvxUnoNumberingRules::getCount() throw( RuntimeException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     return maRule.GetLevelCount();
 }
@@ -139,7 +139,7 @@ sal_Int32 SAL_CALL SvxUnoNumberingRules::getCount() throw( RuntimeException )
 Any SAL_CALL SvxUnoNumberingRules::getByIndex( sal_Int32 Index )
     throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if( Index < 0 || Index >= maRule.GetLevelCount() )
         throw IndexOutOfBoundsException();

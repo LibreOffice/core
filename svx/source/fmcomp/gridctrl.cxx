@@ -2272,7 +2272,7 @@ void DbGridControl::forceROController(sal_Bool bForce)
 void DbGridControl::AdjustDataSource(sal_Bool bFull)
 {
     TRACE_RANGE("DbGridControl::AdjustDataSource");
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     // wird die aktuelle Zeile gerade neu bestimmt,
     // wird kein abgleich vorgenommen
 
@@ -2804,7 +2804,7 @@ void DbGridControl::PostExecuteRowContextMenu(sal_uInt16 /*nRow*/, const PopupMe
 void DbGridControl::DataSourcePropertyChanged(const PropertyChangeEvent& evt) throw( RuntimeException )
 {
     TRACE_RANGE("DbGridControl::DataSourcePropertyChanged");
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     // prop "IsModified" changed ?
     // during update don't care about the modified state
     if (!IsUpdating() && evt.PropertyName.compareTo(FM_PROP_ISMODIFIED) == COMPARE_EQUAL)
@@ -3791,7 +3791,7 @@ void DbGridControl::FieldValueChanged(sal_uInt16 _nId, const PropertyChangeEvent
             return;
         }
         // here we got the solar mutex, transfer it to a guard for safety reasons
-        ::vos::OGuard aPaintSafety(Application::GetSolarMutex());
+        SolarMutexGuard aPaintSafety;
         Application::GetSolarMutex().release();
 
         // and finally do the update ...

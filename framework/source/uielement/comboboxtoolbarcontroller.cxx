@@ -194,7 +194,7 @@ ComboboxToolbarController::~ComboboxToolbarController()
 void SAL_CALL ComboboxToolbarController::dispose()
 throw ( RuntimeException )
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     m_pToolbar->SetItemWindow( m_nID, 0 );
     delete m_pComboBox;

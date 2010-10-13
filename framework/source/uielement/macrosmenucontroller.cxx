@@ -88,7 +88,7 @@ void MacrosMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPo
     VCLXPopupMenu* pVCLPopupMenu = (VCLXPopupMenu *)VCLXMenu::GetImplementation( rPopupMenu );
     PopupMenu*     pPopupMenu    = 0;
 
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     resetPopupMenu( rPopupMenu );
     if ( pVCLPopupMenu )

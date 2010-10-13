@@ -188,7 +188,7 @@ UpdateInstallDialog::Thread::Thread(
 void UpdateInstallDialog::Thread::stop() {
     cssu::Reference< css::task::XAbortChannel > abort;
     {
-        vos::OGuard g(Application::GetSolarMutex());
+        SolarMutexGuard g;
         abort = m_abort;
         m_stop = true;
     }
@@ -217,7 +217,7 @@ void UpdateInstallDialog::Thread::execute()
 
     {
         //make sure m_dialog is still alive
-        ::vos::OGuard g(Application::GetSolarMutex());
+        SolarMutexGuard g;
         if (! m_stop)
              m_dialog.updateDone();
     }
@@ -389,7 +389,7 @@ void UpdateInstallDialog::Thread::downloadExtensions()
 
             //update the name of the extension which is to be downloaded
             {
-                ::vos::OGuard g(Application::GetSolarMutex());
+                SolarMutexGuard g;
                 if (m_stop) {
                     return;
                 }
@@ -423,7 +423,7 @@ void UpdateInstallDialog::Thread::downloadExtensions()
             }
             //update the progress and display download error
             {
-                ::vos::OGuard g(Application::GetSolarMutex());
+                SolarMutexGuard g;
                 if (m_stop) {
                     return;
                 }
@@ -450,7 +450,7 @@ void UpdateInstallDialog::Thread::downloadExtensions()
     }
     catch (cssu::Exception & e)
     {
-        ::vos::OGuard g(Application::GetSolarMutex());
+        SolarMutexGuard g;
         if (m_stop) {
             return;
         }
@@ -461,7 +461,7 @@ void UpdateInstallDialog::Thread::installExtensions()
 {
     //Update the fix text in the dialog to "Installing extensions..."
     {
-        vos::OGuard g(Application::GetSolarMutex());
+        SolarMutexGuard g;
         if (m_stop) {
             return;
         }
@@ -475,7 +475,7 @@ void UpdateInstallDialog::Thread::installExtensions()
     {
         //update the name of the extension which is to be installed
         {
-            ::vos::OGuard g(Application::GetSolarMutex());
+            SolarMutexGuard g;
             if (m_stop) {
                 return;
             }
@@ -499,7 +499,7 @@ void UpdateInstallDialog::Thread::installExtensions()
             cssu::Reference< css::task::XAbortChannel > xAbortChannel(
                 curData.aInstalledPackage->createAbortChannel() );
             {
-                vos::OGuard g(Application::GetSolarMutex());
+                SolarMutexGuard g;
                 if (m_stop) {
                     return;
                 }
@@ -555,7 +555,7 @@ void UpdateInstallDialog::Thread::installExtensions()
 
         if (bLicenseDeclined)
         {
-            ::vos::OGuard g(Application::GetSolarMutex());
+            SolarMutexGuard g;
             if (m_stop) {
                 return;
             }
@@ -564,7 +564,7 @@ void UpdateInstallDialog::Thread::installExtensions()
         }
         else if (!xExtension.is() || bError)
         {
-            ::vos::OGuard g(Application::GetSolarMutex());
+            SolarMutexGuard g;
             if (m_stop) {
                 return;
             }
@@ -573,7 +573,7 @@ void UpdateInstallDialog::Thread::installExtensions()
         }
     }
     {
-        vos::OGuard g(Application::GetSolarMutex());
+        SolarMutexGuard g;
         if (m_stop) {
             return;
         }
@@ -600,7 +600,7 @@ void UpdateInstallDialog::Thread::removeTempDownloads()
 void UpdateInstallDialog::Thread::download(OUString const & sDownloadURL, UpdateData & aUpdateData)
 {
     {
-        ::vos::OGuard g(Application::GetSolarMutex());
+        SolarMutexGuard g;
         if (m_stop) {
             return;
         }
@@ -635,7 +635,7 @@ void UpdateInstallDialog::Thread::download(OUString const & sDownloadURL, Update
     {
         //the user may have cancelled the dialog because downloading took to long
         {
-            ::vos::OGuard g(Application::GetSolarMutex());
+            SolarMutexGuard g;
             if (m_stop) {
                 return;
             }

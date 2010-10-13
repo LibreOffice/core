@@ -126,7 +126,7 @@ void SAL_CALL StatusBarWrapper::initialize( const Sequence< Any >& aArguments ) 
             StatusBar*        pStatusBar( 0 );
             StatusBarManager* pStatusBarManager( 0 );
             {
-                vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aSolarMutexGuard;
                 Window* pWindow = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
                 if ( pWindow )
                 {

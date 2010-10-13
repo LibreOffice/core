@@ -368,7 +368,7 @@ ScVbaShape::TextFrame() throw (uno::RuntimeException)
 void SAL_CALL
 ScVbaShape::Delete() throw (uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     m_xShapes->remove( m_xShape );
 }
 

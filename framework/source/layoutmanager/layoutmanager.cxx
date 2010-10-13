@@ -125,7 +125,7 @@ bool lcl_checkUIElement(const Reference< XUIElement >& xUIElement,css::awt::Rect
     bool bRet = xUIElement.is();
     if ( bRet )
     {
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         _xWindow.set( xUIElement->getRealInterface(), UNO_QUERY );
         _rPosSize = _xWindow->getPosSize();
 
@@ -450,7 +450,7 @@ void LayoutManager::impl_clearUpMenuBar()
     // Clear up VCL menu bar to prepare shutdown
     if ( m_xContainerWindow.is() )
     {
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         Window* pWindow = VCLUnoHelper::GetWindow( m_xContainerWindow );
         while ( pWindow && !pWindow->IsSystemWindow() )
@@ -823,7 +823,7 @@ void LayoutManager::implts_createCustomToolBar( const rtl::OUString& aTbxResName
             Reference< XUIElement > xUIElement = getElement( aTbxResName );
             if ( xUIElement.is() )
             {
-                vos::OGuard aGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aGuard;
 
                 Reference< css::awt::XWindow > xWindow( xUIElement->getRealInterface(), UNO_QUERY );
                 Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
@@ -1006,7 +1006,7 @@ void LayoutManager::implts_createAddonsToolBars()
                 if ( xWindow.is() )
                 {
                     // Set generic title for add-on toolbar
-                    vos::OGuard aGuard( Application::GetSolarMutex() );
+                    SolarMutexGuard aGuard;
                     Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                     if ( pWindow->GetText().Len() == 0 )
                         pWindow->SetText( aGenericAddonTitle );
@@ -1121,7 +1121,7 @@ void LayoutManager::implts_toggleFloatingUIElementsVisibility( sal_Bool bActive 
             if ( xDockWindow.is() && xWindow.is() )
             {
                 sal_Bool bVisible( sal_True );
-                vos::OGuard aGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aGuard;
                 Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                 if ( pWindow )
                     bVisible = pWindow->IsVisible();
@@ -1608,7 +1608,7 @@ void LayoutManager::implts_setElementData( UIElement& rElement, const Reference<
     if ( xDockWindow.is() && xWindow.is() )
     {
         {
-            vos::OGuard aGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
             pWindow = VCLUnoHelper::GetWindow( xWindow );
             if ( pWindow )
             {
@@ -1635,7 +1635,7 @@ void LayoutManager::implts_setElementData( UIElement& rElement, const Reference<
         {
             if ( pWindow )
             {
-                vos::OGuard aGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aGuard;
                 String aText = pWindow->GetText();
                 if ( aText.Len() == 0 )
                     pWindow->SetText( rElement.m_aUIName );
@@ -1663,7 +1663,7 @@ void LayoutManager::implts_setElementData( UIElement& rElement, const Reference<
                 if( pToolBox )
                 {
                     // set an optimal initial floating size
-                    vos::OGuard       aGuard( Application::GetSolarMutex() );
+                    SolarMutexGuard aGuard;
                     ::Size aSize( pToolBox->CalcFloatingWindowSizePixel() );
                     pToolBox->SetOutputSizePixel( aSize );
                 }
@@ -1684,7 +1684,7 @@ void LayoutManager::implts_setElementData( UIElement& rElement, const Reference<
                 implts_writeWindowStateData( rElement.m_aName, rElement );
             if ( bShowElement && pWindow )
             {
-                vos::OGuard aGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aGuard;
                 pWindow->Show( sal_True, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
             }
         }
@@ -1697,7 +1697,7 @@ void LayoutManager::implts_setElementData( UIElement& rElement, const Reference<
 
             if ( pToolBox )
             {
-                vos::OGuard aGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aGuard;
                 pToolBox->SetAlign( ImplConvertAlignment(rElement.m_aDockedData.m_nDockedArea )  );
                 pToolBox->SetLineCount( 1 );
                 if ( rElement.m_aDockedData.m_bLocked )
@@ -1725,7 +1725,7 @@ void LayoutManager::implts_setElementData( UIElement& rElement, const Reference<
 
             if ( bShowElement && pWindow )
             {
-                vos::OGuard aGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aGuard;
                 pWindow->Show( sal_True );
             }
         }
@@ -1752,7 +1752,7 @@ void LayoutManager::implts_setElementData( UIElement& rElement, const Reference<
     Window* pContainerWindow( 0 );
     if ( xContainerWindow.is() )
     {
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         pContainerWindow = VCLUnoHelper::GetWindow( xContainerWindow );
         if ( pContainerWindow )
             aStartPos = pContainerWindow->OutputToScreenPixel( aStartPos );
@@ -1776,7 +1776,7 @@ void LayoutManager::implts_setElementData( UIElement& rElement, const Reference<
             Reference< css::awt::XWindow > xWindow( xDockWindow, UNO_QUERY );
             if ( xDockWindow.is() && xDockWindow->isFloating() )
             {
-                vos::OGuard aGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aGuard;
                 Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                 if ( pWindow && pWindow->IsVisible() )
                 {
@@ -1811,7 +1811,7 @@ void LayoutManager::implts_findNextDockingPos( DockingArea DockingArea, const ::
 
     {
         // Retrieve output size from container Window
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         pDockingWindow  = VCLUnoHelper::GetWindow( xDockingWindow );
         if ( pDockingWindow )
             aDockingWinSize = pDockingWindow->GetOutputSizePixel();
@@ -1956,7 +1956,7 @@ void LayoutManager::implts_findNextDockingPos( DockingArea DockingArea, const ::
     aReadLock.unlock();
 
     // Retrieve output size from container Window
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     pContainerWindow  = VCLUnoHelper::GetWindow( xContainerWindow );
     if ( pContainerWindow )
         return pContainerWindow->GetOutputSizePixel();
@@ -2202,7 +2202,7 @@ void LayoutManager::implts_getDockingAreaElementInfoOnSingleRowCol( DockingArea 
                 Reference< css::awt::XWindow > xWindow( xUIElement->getRealInterface(), UNO_QUERY );
                 if ( xWindow.is() )
                 {
-                    vos::OGuard aGuard( Application::GetSolarMutex() );
+                    SolarMutexGuard aGuard;
                     Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                     Reference< css::awt::XDockableWindow > xDockWindow( xWindow, UNO_QUERY );
                     if ( pWindow && pIter->m_bVisible && xDockWindow.is() && !pIter->m_bFloating )
@@ -2378,7 +2378,7 @@ void LayoutManager::implts_getDockingAreaElementInfoOnSingleRowCol( DockingArea 
         aReadLock.unlock();
 
         // Calc correct position of the column/row rectangle to be able to compare it with mouse pos/tracking rect
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         // Retrieve output size from container Window
         Window* pContainerWindow( VCLUnoHelper::GetWindow( xContainerWindow ));
@@ -2513,7 +2513,7 @@ LayoutManager::implts_determineDockingOperation(
         Window* pDockingAreaWindow( 0 );
         Window* pContainerWindow( 0 );
         {
-            vos::OGuard aGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
             pDockingAreaWindow = VCLUnoHelper::GetWindow( xDockingAreaWindow );
             pContainerWindow = VCLUnoHelper::GetWindow( xContainerWindow );
             nDockPosY = pDockingAreaWindow->ScreenToOutputPixel(
@@ -2555,7 +2555,7 @@ void LayoutManager::implts_calcDockingPosSize(
 
     {
         // Retrieve output size from container Window
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         pContainerWindow  = VCLUnoHelper::GetWindow( xContainerWindow );
         aContainerWinSize = pContainerWindow->GetOutputSizePixel();
     }
@@ -2589,7 +2589,7 @@ void LayoutManager::implts_calcDockingPosSize(
     aReadLock.unlock();
 
     {
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         pDockingAreaWindow = VCLUnoHelper::GetWindow( xDockingAreaWindow );
         pDockWindow        = VCLUnoHelper::GetWindow( xWindow );
         if ( pDockWindow && pDockWindow->GetType() == WINDOW_TOOLBOX )
@@ -2641,7 +2641,7 @@ void LayoutManager::implts_calcDockingPosSize(
 
             {
                 // Calc correct position of the column/row rectangle to be able to compare it with mouse pos/tracking rect
-                vos::OGuard aGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aGuard;
                 aRect.SetPos( pContainerWindow->ScreenToOutputPixel( pDockingAreaWindow->OutputToScreenPixel( aRect.TopLeft() )));
             }
 
@@ -2740,7 +2740,7 @@ void LayoutManager::implts_calcDockingPosSize(
                             // Set virtual position
                             sal_Int32 nPosY( 0 );
                             {
-                                vos::OGuard aGuard( Application::GetSolarMutex() );
+                                SolarMutexGuard aGuard;
                                 nPosY = pDockingAreaWindow->ScreenToOutputPixel(
                                                     pContainerWindow->OutputToScreenPixel( aWindowRect.BottomRight() )).Y();
                             }
@@ -2866,7 +2866,7 @@ void LayoutManager::implts_calcDockingPosSize(
             rTrackingRect.setWidth( nSize );
 
             {
-                vos::OGuard aGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aGuard;
                 nPosX = pDockingAreaWindow->ScreenToOutputPixel(
                                     pContainerWindow->OutputToScreenPixel( rTrackingRect.TopLeft() )).X();
             }
@@ -2914,7 +2914,7 @@ void LayoutManager::implts_calcDockingPosSize(
             rTrackingRect.setHeight( nSize );
 
             {
-                vos::OGuard aGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aGuard;
                 nPosY = pDockingAreaWindow->ScreenToOutputPixel(
                                     pContainerWindow->OutputToScreenPixel( rTrackingRect.TopLeft() )).Y();
             }
@@ -3138,7 +3138,7 @@ void LayoutManager::implts_updateUIElementsVisibleState( sal_Bool bSetVisible )
 
     try
     {
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         const sal_uInt32 nCount = aWinVector.size();
         for ( sal_uInt32 i = 0; i < nCount; i++ )
         {
@@ -3166,7 +3166,7 @@ void LayoutManager::implts_updateUIElementsVisibleState( sal_Bool bSetVisible )
 
     if (( xMenuBar.is() || xInplaceMenuBar.is() ) && xContainerWindow.is() )
     {
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         MenuBar* pMenuBar( 0 );
         if ( xInplaceMenuBar.is() )
@@ -3344,7 +3344,7 @@ void LayoutManager::implts_createProgressBar()
     {
         Reference< css::awt::XWindow > xStatusBarWindow = pWrapper->getStatusBar();
 
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         Window* pStatusBarWnd = VCLUnoHelper::GetWindow( xStatusBarWindow );
         if ( !pStatusBarWnd )
         {
@@ -3434,7 +3434,7 @@ void LayoutManager::implts_setStatusBarPosSize( const ::Point& rPos, const ::Siz
 
     if ( xWindow.is() )
     {
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         Window* pParentWindow = VCLUnoHelper::GetWindow( xContainerWindow );
         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pParentWindow && ( pWindow && pWindow->GetType() == WINDOW_STATUSBAR ))
@@ -3475,7 +3475,7 @@ sal_Bool LayoutManager::implts_showProgressBar()
     }
     aWriteLock.unlock();
 
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
     if ( pWindow )
     {
@@ -3517,7 +3517,7 @@ sal_Bool LayoutManager::implts_hideProgressBar()
     bHideStatusBar = !m_aStatusBarElement.m_bVisible;
     aWriteLock.unlock();
 
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
     if ( pWindow && pWindow->IsVisible() &&
          ( bHideStatusBar || bInternalStatusBar ))
@@ -3544,7 +3544,7 @@ sal_Bool LayoutManager::implts_showStatusBar( sal_Bool bStoreState )
     {
         Reference< css::awt::XWindow > xWindow( xStatusBar->getRealInterface(), UNO_QUERY );
 
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pWindow && !pWindow->IsVisible() )
         {
@@ -3570,7 +3570,7 @@ sal_Bool LayoutManager::implts_hideStatusBar( sal_Bool bStoreState )
     {
         Reference< css::awt::XWindow > xWindow( xStatusBar->getRealInterface(), UNO_QUERY );
 
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pWindow && pWindow->IsVisible() )
         {
@@ -3590,7 +3590,7 @@ throw (::com::sun::star::uno::RuntimeException)
 
      if ( !m_bInplaceMenuSet )
      {
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         // Reset old inplace menubar!
         m_pInplaceMenuBar = 0;
@@ -3640,7 +3640,7 @@ throw (::com::sun::star::uno::RuntimeException)
     // if ( m_xMenuBar.is() &&
     if ( m_xContainerWindow.is() )
     {
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         MenuBarWrapper* pMenuBarWrapper = SAL_STATIC_CAST( MenuBarWrapper*, m_xMenuBar.get() );
         Window* pWindow = VCLUnoHelper::GetWindow( m_xContainerWindow );
         while ( pWindow && !pWindow->IsSystemWindow() )
@@ -3805,7 +3805,7 @@ throw ( RuntimeException )
         // #i37884# set initial visibility state - in the plugin case the container window is already shown
         // and we get no notification anymore
         {
-            vos::OGuard aGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
             Window* pContainerWindow = VCLUnoHelper::GetWindow( m_xContainerWindow );
             if( pContainerWindow )
                 m_bParentWindowVisible = pContainerWindow->IsVisible();
@@ -3827,7 +3827,7 @@ throw ( RuntimeException )
 
     if ( xDockingAreaAcceptor.is() )
     {
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         ::DockingAreaWindow* pWindow;
         pWindow = dynamic_cast< ::DockingAreaWindow* >(VCLUnoHelper::GetWindow( xTopDockWindow ) );
         if( pWindow ) pWindow->SetAlign( WINDOWALIGN_TOP );
@@ -3922,7 +3922,7 @@ void LayoutManager::implts_reparentChildWindows()
         }
     }
 
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     Window* pContainerWindow    = VCLUnoHelper::GetWindow( xContainerWindow );
     Window* pTopDockWindow      = VCLUnoHelper::GetWindow( xTopDockWindow );
     Window* pBottomDockWindow   = VCLUnoHelper::GetWindow( xBottomDockWindow );
@@ -4177,7 +4177,7 @@ throw (RuntimeException)
         {
             if ( aElementName.equalsIgnoreAsciiCaseAscii( "menubar" ) && !bInPlaceMenu )
             {
-                vos::OGuard aGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aGuard;
                 // PB 2004-12-15 #i38743# don't create a menubar if frame isn't top
                 if ( !m_xMenuBar.is() && implts_isFrameOrWindowTop(xFrame) )
                     m_xMenuBar = implts_createElement( aName );
@@ -4432,7 +4432,7 @@ throw (::com::sun::star::uno::RuntimeException)
                 if ( xUIElement.is() )
                 {
                     // we need VCL here to pass special flags to Show()
-                    vos::OGuard aGuard( Application::GetSolarMutex() );
+                    SolarMutexGuard aGuard;
                     Reference< css::awt::XWindow > xWindow( xUIElement->getRealInterface(), UNO_QUERY );
                     Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                     if ( pWindow )
@@ -4486,7 +4486,7 @@ throw (::com::sun::star::uno::RuntimeException)
                                 aWriteLock.unlock();
 
                                 // we need VCL here to pass special flags to Show()
-                                vos::OGuard aGuard( Application::GetSolarMutex() );
+                                SolarMutexGuard aGuard;
                                 Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                                 if( pWindow && !pWindow->IsReallyVisible() )
                                 {
@@ -4675,7 +4675,7 @@ throw (RuntimeException)
                     if ( xDockWindow.is() && bShowElement )
                     {
                         // we need VCL here to pass special flags to Show()
-                        vos::OGuard aGuard( Application::GetSolarMutex() );
+                        SolarMutexGuard aGuard;
                         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                         if( pWindow )
                         {
@@ -4744,7 +4744,7 @@ throw (RuntimeException)
 
             if ( m_xContainerWindow.is() )
             {
-                vos::OGuard aGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aGuard;
                 Window* pWindow = VCLUnoHelper::GetWindow( m_xContainerWindow );
                 while ( pWindow && !pWindow->IsSystemWindow() )
                     pWindow = pWindow->GetParent();
@@ -4859,7 +4859,7 @@ throw (RuntimeException)
                     ToolBox*    pToolBox( 0 );
 
                     {
-                        vos::OGuard aGuard( Application::GetSolarMutex() );
+                        SolarMutexGuard aGuard;
                         pWindow = VCLUnoHelper::GetWindow( xWindow );
                         if ( pWindow && pWindow->GetType() == WINDOW_TOOLBOX )
                         {
@@ -4878,7 +4878,7 @@ throw (RuntimeException)
                         // we have to find a good place for it.
                         ::Size      aSize;
 
-                        vos::OGuard aGuard( Application::GetSolarMutex() );
+                        SolarMutexGuard aGuard;
                         {
                             if ( pToolBox )
                                 aSize = pToolBox->CalcWindowSizePixel( 1, ImplConvertAlignment( aUIElement.m_aDockedData.m_nDockedArea ) );
@@ -5219,7 +5219,7 @@ throw (RuntimeException)
             {
                 aReadLock.unlock();
 
-                vos::OGuard aGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aGuard;
                 Window* pWindow = VCLUnoHelper::GetWindow( m_xContainerWindow );
                 while ( pWindow && !pWindow->IsSystemWindow() )
                     pWindow = pWindow->GetParent();
@@ -5776,7 +5776,7 @@ void LayoutManager::implts_calcWindowPosSizeOnSingleRowColumn( sal_Int32 nDockin
             css::awt::Rectangle& rWinRect = rRowColumnWindowData.aRowColumnWindowSizes[i];
             ::Size               aMinSize;
 
-            vos::OGuard aGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
             {
                 Reference< css::awt::XWindow > xWindow = rRowColumnWindowData.aRowColumnWindows[i];
                 Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
@@ -5845,7 +5845,7 @@ void LayoutManager::implts_calcWindowPosSizeOnSingleRowColumn( sal_Int32 nDockin
     else if ( nDockingArea == DockingArea_DOCKINGAREA_BOTTOM )
         nStartOffset = pDockAreaWindow->GetSizePixel().Height() - rRowColumnWindowData.nStaticSize;
 
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     for ( sal_uInt32 i = 0; i < nCount; i++ )
     {
         Reference< css::awt::XWindow > xWindow = rRowColumnWindowData.aRowColumnWindows[i];
@@ -5952,7 +5952,7 @@ css::awt::Rectangle LayoutManager::implts_calcDockingAreaSizes()
                 Reference< css::awt::XDockableWindow > xDockWindow( xWindow, UNO_QUERY );
                 if ( xWindow.is() && xDockWindow.is() )
                 {
-                    vos::OGuard aGuard( Application::GetSolarMutex() );
+                    SolarMutexGuard aGuard;
 
                     Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                     if ( pWindow && pWindow->IsVisible() && !xDockWindow->isFloating() )
@@ -6123,7 +6123,7 @@ void LayoutManager::implts_updateMenuBarClose()
 
     if ( xContainerWindow.is() )
     {
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         Window* pWindow = VCLUnoHelper::GetWindow( xContainerWindow );
         while ( pWindow && !pWindow->IsSystemWindow() )
@@ -6170,7 +6170,7 @@ sal_Bool LayoutManager::implts_resetMenuBar()
     aWriteLock.unlock();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     Window* pWindow = VCLUnoHelper::GetWindow( m_xContainerWindow );
     while ( pWindow && !pWindow->IsSystemWindow() )
         pWindow = pWindow->GetParent();
@@ -6191,7 +6191,7 @@ sal_Int16 LayoutManager::implts_getCurrentSymbolsSize()
 
     {
         ReadGuard aReadLock( m_aLock );
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         if ( m_pMiscOptions )
             eOptSymbolsSize = m_pMiscOptions->GetCurrentSymbolsSize();
     }
@@ -6205,7 +6205,7 @@ sal_Int16 LayoutManager::implts_getCurrentSymbolsStyle()
 
     {
         ReadGuard aReadLock( m_aLock );
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         if ( m_pMiscOptions )
             eOptSymbolsStyle = m_pMiscOptions->GetCurrentSymbolsStyle();
     }
@@ -6304,7 +6304,7 @@ void SAL_CALL LayoutManager::startDocking( const ::com::sun::star::awt::DockingE
     Window* pWindow( 0 );
     ::Point aMousePos;
     {
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         pContainerWindow = VCLUnoHelper::GetWindow( xContainerWindow );
         aMousePos = pContainerWindow->ScreenToOutputPixel( ::Point( e.MousePos.X, e.MousePos.Y ));
     }
@@ -6323,7 +6323,7 @@ void SAL_CALL LayoutManager::startDocking( const ::com::sun::star::awt::DockingE
             aUIElement.m_aFloatingData.m_aPos    = ::Point( aPos.X, aPos.Y );
             aUIElement.m_aFloatingData.m_aSize   = ::Size( aSize.Width, aSize.Height );
 
-            vos::OGuard aGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
             pWindow = VCLUnoHelper::GetWindow( xWindow );
             if ( pWindow && pWindow->GetType() == WINDOW_TOOLBOX )
             {
@@ -6396,7 +6396,7 @@ throw (::com::sun::star::uno::RuntimeException)
     {
         try
         {
-            vos::OGuard aGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
 
             sal_Int16 eDockingArea( -1 ); // none
             sal_Int32 nMagneticZone( aUIDockingElement.m_bFloating ? MAGNETIC_DISTANCE_DOCK : MAGNETIC_DISTANCE_UNDOCK );
@@ -6607,7 +6607,7 @@ throw (::com::sun::star::uno::RuntimeException)
 
     if ( bDockingInProgress )
     {
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         Window*  pWindow = VCLUnoHelper::GetWindow( Reference< css::awt::XWindow >( e.Source, UNO_QUERY ));
         ToolBox* pToolBox = 0;
         if ( pWindow && pWindow->GetType() == WINDOW_TOOLBOX )
@@ -6672,7 +6672,7 @@ throw (::com::sun::star::uno::RuntimeException)
             if ( xDockWindow->isFloating() )
             {
                 {
-                    vos::OGuard aGuard( Application::GetSolarMutex() );
+                    SolarMutexGuard aGuard;
                     Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                     if ( pWindow )
                     {
@@ -6717,7 +6717,7 @@ throw (::com::sun::star::uno::RuntimeException)
     Reference< css::awt::XWindow2 > xWindow;
 
     {
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         xWindow = Reference< css::awt::XWindow2 >( e.Source, UNO_QUERY );
         pWindow = VCLUnoHelper::GetWindow( xWindow );
 
@@ -6739,7 +6739,7 @@ throw (::com::sun::star::uno::RuntimeException)
 
             if ( aUIDockingElement.m_bFloating )
             {
-                vos::OGuard aGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aGuard;
                 if ( pToolBox )
                 {
                     pToolBox->SetLineCount( aUIDockingElement.m_aFloatingData.m_nLines );
@@ -6782,7 +6782,7 @@ throw (::com::sun::star::uno::RuntimeException)
                     ::Size  aSize;
 
                     {
-                        vos::OGuard aGuard( Application::GetSolarMutex() );
+                        SolarMutexGuard aGuard;
                         if ( pToolBox )
                             aSize = pToolBox->CalcWindowSizePixel( 1, ImplConvertAlignment( aUIDockingElement.m_aDockedData.m_nDockedArea ) );
                         else
@@ -6796,7 +6796,7 @@ throw (::com::sun::star::uno::RuntimeException)
                     aUIDockingElement.m_aDockedData.m_aPos = aDockPos;
                 }
 
-                vos::OGuard aGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aGuard;
                 if ( pToolBox )
                 {
                     pToolBox->SetAlign( ImplConvertAlignment( aUIDockingElement.m_aDockedData.m_nDockedArea) );
@@ -6822,7 +6822,7 @@ throw (::com::sun::star::uno::RuntimeException)
     }
     else
     {
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         if ( pToolBox )
         {
             if ( aUIDockingElement.m_bFloating )
@@ -7336,7 +7336,7 @@ void SAL_CALL LayoutManager::elementInserted( const ::com::sun::star::ui::Config
                     }
 
                     {
-                        vos::OGuard aGuard( Application::GetSolarMutex() );
+                        SolarMutexGuard aGuard;
                         Reference< css::awt::XWindow > xWindow( xUIElement->getRealInterface(), UNO_QUERY );
                         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                         if ( pWindow  )

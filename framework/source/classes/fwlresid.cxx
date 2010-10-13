@@ -48,7 +48,7 @@ ResMgr* FwlResId::GetResManager()
         rtl::OStringBuffer aBuf( 32 );
         aBuf.append( "fwe" );
 
-        vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         pResMgr = ResMgr::CreateResMgr( aBuf.getStr() );
     }
 

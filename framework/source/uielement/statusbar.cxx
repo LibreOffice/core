@@ -61,7 +61,7 @@ FrameworkStatusBar::~FrameworkStatusBar()
 
 void FrameworkStatusBar::SetStatusBarManager( StatusBarManager* pStatusBarManager )
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     m_pMgr = pStatusBarManager;
 }
 

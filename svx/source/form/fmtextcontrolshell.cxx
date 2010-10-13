@@ -343,7 +343,7 @@ namespace svx
     //--------------------------------------------------------------------
     void SAL_CALL FmMouseListenerAdapter::mousePressed( const awt::MouseEvent& _rEvent ) throw (::com::sun::star::uno::RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         // is this a request for a context menu?
         if ( _rEvent.PopupTrigger )
         {

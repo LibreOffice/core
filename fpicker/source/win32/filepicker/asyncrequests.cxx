@@ -67,7 +67,7 @@ void Request::wait(::sal_Int32 nMilliSeconds)
 
 void Request::waitProcessMessages()
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     while (!m_aJoiner.check())
         Application::Yield();
 }

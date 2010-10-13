@@ -155,7 +155,7 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
             MenuBar*        pVCLMenuBar = 0;
             VCLXMenuBar*    pAwtMenuBar = 0;
             {
-                vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aSolarMutexGuard;
                 pVCLMenuBar = new MenuBar();
             }
 

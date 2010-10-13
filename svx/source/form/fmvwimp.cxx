@@ -295,7 +295,7 @@ Any SAL_CALL FmXPageViewWinRec::getByIndex(sal_Int32 nIndex) throw( IndexOutOfBo
 //------------------------------------------------------------------------
 void SAL_CALL FmXPageViewWinRec::makeVisible( const Reference< XControl >& _Control ) throw (RuntimeException)
 {
-    ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
 
     Reference< XWindow >  xWindow( _Control, UNO_QUERY );
     if ( xWindow.is() && m_pViewImpl->getView() && m_pWindow )

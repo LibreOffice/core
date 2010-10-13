@@ -328,7 +328,7 @@ UpdateDialog::Thread::Thread(
 void UpdateDialog::Thread::stop() {
     css::uno::Reference< css::task::XAbortChannel > abort;
     {
-        vos::OGuard g(Application::GetSolarMutex());
+        SolarMutexGuard g;
         abort = m_abort;
         m_stop = true;
     }
@@ -358,7 +358,7 @@ UpdateDialog::Thread::~Thread()
 void UpdateDialog::Thread::execute()
 {
     {
-        vos::OGuard g( Application::GetSolarMutex() );
+        SolarMutexGuard g;
         if ( m_stop ) {
             return;
         }
@@ -445,7 +445,7 @@ void UpdateDialog::Thread::execute()
     }
 
 
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
     if (!m_stop) {
         m_dialog.checkingDone();
     }
@@ -463,7 +463,7 @@ void UpdateDialog::Thread::handleSpecificError(
     if (exception >>= e) {
         data.message = e.Message;
     }
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
     if (!m_stop) {
         m_dialog.addSpecificError(data);
     }
@@ -476,7 +476,7 @@ void UpdateDialog::Thread::handleSpecificError(
     rtl::OUStringBuffer b(data.aInstalledPackage->getDisplayName());
     b.append(static_cast< sal_Unicode >(' '));
     {
-        vos::OGuard g( Application::GetSolarMutex() );
+        SolarMutexGuard g;
         if(!m_stop)
             b.append(m_dialog.m_version);
     }
@@ -490,7 +490,7 @@ void UpdateDialog::Thread::handleSpecificError(
     {
         b.append(static_cast< sal_Unicode >(' '));
         {
-            vos::OGuard g( Application::GetSolarMutex() );
+            SolarMutexGuard g;
             if(!m_stop)
                 b.append(m_dialog.m_browserbased);
         }
@@ -538,13 +538,13 @@ bool UpdateDialog::Thread::update(
     bool ret = false;
     if (du.unsatisfiedDependencies.getLength() == 0)
     {
-        vos::OGuard g(Application::GetSolarMutex());
+        SolarMutexGuard g;
         if (!m_stop) {
             m_dialog.addEnabledUpdate(getUpdateDisplayString(data), data);
         }
         ret = !m_stop;
     } else {
-        vos::OGuard g(Application::GetSolarMutex());
+        SolarMutexGuard g;
         if (!m_stop) {
                 m_dialog.addDisabledUpdate(du);
         }

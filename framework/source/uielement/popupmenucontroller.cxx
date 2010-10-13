@@ -193,7 +193,7 @@ bool PopupMenuController::CreatePopupMenuController() throw (Exception)
 
 Reference< awt::XWindow > SAL_CALL PopupMenuController::createPopupWindow() throw (RuntimeException)
 {
-    ::vos::OGuard aSolarLock(Application::GetSolarMutex());
+    SolarMutexGuard aSolarLock;
 
     Reference< awt::XWindow > xRet;
 

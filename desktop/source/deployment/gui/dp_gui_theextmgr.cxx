@@ -127,7 +127,7 @@ TheExtensionManager::~TheExtensionManager()
 //------------------------------------------------------------------------------
 void TheExtensionManager::createDialog( const bool bCreateUpdDlg )
 {
-    const ::vos::OGuard guard( Application::GetSolarMutex() );
+    const SolarMutexGuard guard;
 
     if ( bCreateUpdDlg )
     {
@@ -152,7 +152,7 @@ void TheExtensionManager::createDialog( const bool bCreateUpdDlg )
 //------------------------------------------------------------------------------
 void TheExtensionManager::Show()
 {
-    const ::vos::OGuard guard( Application::GetSolarMutex() );
+    const SolarMutexGuard guard;
 
     getDialog()->Show();
 }
@@ -160,7 +160,7 @@ void TheExtensionManager::Show()
 //------------------------------------------------------------------------------
 void TheExtensionManager::SetText( const ::rtl::OUString &rTitle )
 {
-    const ::vos::OGuard guard( Application::GetSolarMutex() );
+    const SolarMutexGuard guard;
 
     getDialog()->SetText( rTitle );
 }
@@ -168,7 +168,7 @@ void TheExtensionManager::SetText( const ::rtl::OUString &rTitle )
 //------------------------------------------------------------------------------
 void TheExtensionManager::ToTop( USHORT nFlags )
 {
-    const ::vos::OGuard guard( Application::GetSolarMutex() );
+    const SolarMutexGuard guard;
 
     getDialog()->ToTop( nFlags );
 }
@@ -279,7 +279,7 @@ void TheExtensionManager::terminateDialog()
 {
     if ( ! dp_misc::office_is_running() )
     {
-        const ::vos::OGuard guard( Application::GetSolarMutex() );
+        const SolarMutexGuard guard;
         delete m_pExtMgrDialog;
         m_pExtMgrDialog = NULL;
         delete m_pUpdReqDialog;
@@ -446,7 +446,7 @@ void TheExtensionManager::disposing( lang::EventObject const & rEvt )
     {
         if ( dp_misc::office_is_running() )
         {
-            const ::vos::OGuard guard( Application::GetSolarMutex() );
+            const SolarMutexGuard guard;
             delete m_pExtMgrDialog;
             m_pExtMgrDialog = NULL;
             delete m_pUpdReqDialog;
@@ -515,7 +515,7 @@ void TheExtensionManager::modified( ::lang::EventObject const & /*rEvt*/ )
 
     ::rtl::Reference<TheExtensionManager> that( new TheExtensionManager( pParent, xContext ) );
 
-    const ::vos::OGuard guard( Application::GetSolarMutex() );
+    const SolarMutexGuard guard;
     if ( ! s_ExtMgr.is() )
     {
         OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();

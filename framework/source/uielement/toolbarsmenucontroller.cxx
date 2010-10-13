@@ -197,7 +197,7 @@ void ToolbarsMenuController::addCommand(
             m_xPopupMenu->enableItem( nItemId, sal_False );
     }
 
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     Image                aImage;
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
@@ -225,7 +225,7 @@ Reference< XDispatch > ToolbarsMenuController::getDispatchFromCommandURL( const 
     Reference< XFrame >          xFrame;
 
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
         xURLTransformer = m_xURLTransformer;
         xFrame = m_xFrame;
     }
@@ -334,7 +334,7 @@ Sequence< Sequence< com::sun::star::beans::PropertyValue > > ToolbarsMenuControl
 
                     aToolBarInfo.aToolBarResName = aResName;
 
-                    vos::OGuard aGuard( Application::GetSolarMutex() );
+                    SolarMutexGuard aGuard;
                     Reference< css::awt::XWindow > xWindow( xUIElement->getRealInterface(), UNO_QUERY );
                     Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                     if ( pWindow )
@@ -375,7 +375,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
     if( SvtMiscOptions().DisableUICustomization() )
         return;
 
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     resetPopupMenu( rPopupMenu );
 
     m_aCommandVector.clear();
@@ -476,7 +476,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
                 m_xPopupMenu->checkItem( nIndex, sal_True );
 
             {
-                vos::OGuard aGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aGuard;
                 VCLXPopupMenu* pXPopupMenu = (VCLXPopupMenu *)VCLXMenu::GetImplementation( m_xPopupMenu );
                 PopupMenu*     pVCLPopupMenu = (PopupMenu *)pXPopupMenu->GetMenu();
 
@@ -588,7 +588,7 @@ void SAL_CALL ToolbarsMenuController::statusChanged( const FeatureStateEvent& Ev
 
     if ( xPopupMenu.is() )
     {
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         VCLXPopupMenu* pXPopupMenu = (VCLXPopupMenu *)VCLXMenu::GetImplementation( xPopupMenu );
         PopupMenu*     pVCLPopupMenu = (PopupMenu *)pXPopupMenu->GetMenu();
 
@@ -644,7 +644,7 @@ void SAL_CALL ToolbarsMenuController::select( const css::awt::MenuEvent& rEvent 
         VCLXPopupMenu* pPopupMenu = (VCLXPopupMenu *)VCLXPopupMenu::GetImplementation( xPopupMenu );
         if ( pPopupMenu )
         {
-            vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aSolarMutexGuard;
             PopupMenu* pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
 
             rtl::OUString aCmd( pVCLPopupMenu->GetItemCommand( rEvent.MenuId ));
@@ -834,7 +834,7 @@ void SAL_CALL ToolbarsMenuController::setPopupMenu( const Reference< css::awt::X
     if ( m_xFrame.is() && !m_xPopupMenu.is() )
     {
         // Create popup menu on demand
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
 
         m_xPopupMenu = xPopupMenu;
         m_xPopupMenu->addMenuListener( Reference< css::awt::XMenuListener >( (OWeakObject*)this, UNO_QUERY ));

@@ -174,7 +174,7 @@ void SAL_CALL SvxTbxCtlCustomShapes::functionSelected( const ::rtl::OUString& rC
     m_aCommand = rCommand;
     // Our sub-toolbar wants to execute a function.
     // We have to change the image of our toolbar button to reflect the new function.
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( !m_bDisposed )
     {
         if ( m_aCommand.getLength() > 0 )
@@ -191,7 +191,7 @@ void SAL_CALL SvxTbxCtlCustomShapes::updateImage(  ) throw (::com::sun::star::un
 {
     // We should update the button image of our parent (toolbar).
     // Use the stored command to set the correct current image.
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( m_aCommand.getLength() > 0 )
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame( getFrameInterface());

@@ -159,7 +159,7 @@ void MessagePrinter::print( const sal_Char* pText )
 //-------------------------------------------------------------------------
 void MessagePrinter::print( const UniString& rText )
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if ( m_pOutEdit )
     {
@@ -2100,7 +2100,7 @@ void MyWin::print( const sal_Char* pText )
 //-------------------------------------------------------------------------
 void MyWin::print( const UniString& rText )
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if ( m_pOutEdit )
     {
@@ -2121,7 +2121,7 @@ IMPL_LINK( MyWin, ToolBarHandler, ToolBox*, pToolBox )
     {
         case MYWIN_ITEMID_CLEAR:
         {
-            vos::OGuard aGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
 
             m_pOutEdit->Clear();
             m_pOutEdit->Show();

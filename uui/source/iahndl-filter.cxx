@@ -63,7 +63,7 @@ executeFilterDialog(
 {
     try
     {
-        vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
 
         std::auto_ptr< ResMgr > xManager(
             ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));

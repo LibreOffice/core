@@ -392,7 +392,7 @@ static SfxWorkWindow* lcl_getWorkWindowFromXFrame( const uno::Reference< frame::
 */
 void SAL_CALL SfxDockingWindowFactory( const uno::Reference< frame::XFrame >& rFrame, const rtl::OUString& rDockingWindowName )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     USHORT nID = USHORT(rDockingWindowName.toInt32());
 
     // Check the range of the provided ID otherwise nothing will happen
@@ -418,7 +418,7 @@ void SAL_CALL SfxDockingWindowFactory( const uno::Reference< frame::XFrame >& rF
 */
 bool SAL_CALL IsDockingWindowVisible( const uno::Reference< frame::XFrame >& rFrame, const rtl::OUString& rDockingWindowName )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     USHORT nID = USHORT(rDockingWindowName.toInt32());
 

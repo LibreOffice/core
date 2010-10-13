@@ -75,7 +75,7 @@ namespace basprov
 
     ::rtl::OUString BasicModuleNodeImpl::getName(  ) throw (RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         ::rtl::OUString sModuleName;
         if ( m_pModule )
@@ -88,7 +88,7 @@ namespace basprov
 
     Sequence< Reference< browse::XBrowseNode > > BasicModuleNodeImpl::getChildNodes(  ) throw (RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         Sequence< Reference< browse::XBrowseNode > > aChildNodes;
 
@@ -125,7 +125,7 @@ namespace basprov
 
     sal_Bool BasicModuleNodeImpl::hasChildNodes(  ) throw (RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         sal_Bool bReturn = sal_False;
         if ( m_pModule )
@@ -142,7 +142,7 @@ namespace basprov
 
     sal_Int16 BasicModuleNodeImpl::getType(  ) throw (RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         return browse::BrowseNodeTypes::CONTAINER;
     }

@@ -1100,7 +1100,7 @@ void FmGridControl::propertyChange(const ::com::sun::star::beans::PropertyChange
             if (eStatus != xRow->GetStatus())
             {
                 xRow->SetStatus(eStatus);
-                vos::OGuard aGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aGuard;
                 RowModified(GetCurrentPos());
             }
         }
@@ -1839,7 +1839,7 @@ void FmGridControl::ShowColumn(sal_uInt16 nId)
 //------------------------------------------------------------------------------
 sal_Bool FmGridControl::selectBookmarks(const Sequence< Any >& _rBookmarks)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
         // need to lock the SolarMutex so that no paint call disturbs us ...
 
     if ( !m_pSeekCursor )

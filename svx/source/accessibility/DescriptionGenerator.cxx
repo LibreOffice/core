@@ -92,7 +92,7 @@ void DescriptionGenerator::Initialize (sal_Int32 nResourceId)
     // Get the string from the resource for the specified id.
     OUString sPrefix;
     {
-        ::vos::OGuard aGuard (::Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         sPrefix = OUString (SVX_RESSTR (nResourceId));
     }
 
@@ -109,7 +109,7 @@ void DescriptionGenerator::Initialize (::rtl::OUString sPrefix)
     if (mxSet.is())
     {
         {
-            ::vos::OGuard aGuard (::Application::GetSolarMutex());
+            SolarMutexGuard aGuard;
 
             msDescription.append (sal_Unicode (' '));
             msDescription.append (OUString (SVX_RESSTR(RID_SVXSTR_A11Y_WITH)));
@@ -160,7 +160,7 @@ void DescriptionGenerator::AddProperty (
 {
     OUString sLocalizedName;
     {
-        ::vos::OGuard aGuard (::Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         sLocalizedName = SVX_RESSTR (nLocalizedNameId);
     }
     AddProperty (sPropertyName, aType, sLocalizedName, nWhichId);
@@ -182,7 +182,7 @@ void DescriptionGenerator::AddProperty (const OUString& sPropertyName,
                 msDescription.append (sal_Unicode (','));
             else
             {
-                ::vos::OGuard aGuard (::Application::GetSolarMutex());
+                SolarMutexGuard aGuard;
 
                 msDescription.append (sal_Unicode (' '));
                 msDescription.append (OUString (SVX_RESSTR(RID_SVXSTR_A11Y_AND)));
@@ -355,7 +355,7 @@ void DescriptionGenerator::AddString (const OUString& sPropertyName,
 
             if (nWhichId >= 0)
             {
-                ::vos::OGuard aGuard (::Application::GetSolarMutex());
+                SolarMutexGuard aGuard;
                 String sLocalizedValue;
                 SvxUnogetInternalNameForItem (sal::static_int_cast<sal_Int16>(nWhichId),
                                               sValue, sLocalizedValue);
@@ -392,7 +392,7 @@ void DescriptionGenerator::AddFillStyle (const OUString& sPropertyName,
             // Get the fill style name from the resource.
             OUString sFillStyleName;
             {
-                ::vos::OGuard aGuard (::Application::GetSolarMutex());
+                SolarMutexGuard aGuard;
                 switch (aFillStyle)
                 {
                     case drawing::FillStyle_NONE:

@@ -235,7 +235,7 @@ SpinfieldToolbarController::~SpinfieldToolbarController()
 void SAL_CALL SpinfieldToolbarController::dispose()
 throw ( RuntimeException )
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     m_pToolbar->SetItemWindow( m_nID, 0 );
     delete m_pSpinfieldControl;

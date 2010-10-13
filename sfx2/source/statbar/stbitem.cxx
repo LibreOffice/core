@@ -85,7 +85,7 @@ svt::StatusbarController* SAL_CALL SfxStatusBarControllerFactory(
     unsigned short nID,
     const ::rtl::OUString& aCommandURL )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     util::URL aTargetURL;
     aTargetURL.Complete = aCommandURL;
@@ -220,7 +220,7 @@ throw ( ::com::sun::star::uno::RuntimeException )
     SfxViewFrame* pViewFrame = NULL;
     uno::Reference < frame::XController > xController;
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( m_xFrame.is() )
         xController = m_xFrame->getController();
 
@@ -325,7 +325,7 @@ throw ( ::com::sun::star::uno::RuntimeException )
     const awt::MouseEvent& rMouseEvent )
 throw ( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     ::Point aPos( rMouseEvent.X, rMouseEvent.Y );
 
     ::MouseEvent aMouseEvent( aPos,
@@ -343,7 +343,7 @@ throw ( uno::RuntimeException )
     const awt::MouseEvent& rMouseEvent )
 throw (uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     ::Point aPos( rMouseEvent.X, rMouseEvent.Y );
 
     ::MouseEvent aMouseEvent( aPos,
@@ -360,7 +360,7 @@ throw (uno::RuntimeException)
     const ::awt::MouseEvent& rMouseEvent )
 throw ( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     ::Point aPos( rMouseEvent.X, rMouseEvent.Y );
 
     ::MouseEvent aMouseEvent( aPos,
@@ -380,7 +380,7 @@ void SAL_CALL SfxStatusBarControl::command(
     const ::com::sun::star::uno::Any& /*aData*/ )
 throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     ::Point aPos( rPos.X, rPos.Y );
     CommandEvent aCmdEvent( aPos, (USHORT)nCommand, TRUE, NULL );
 
@@ -396,7 +396,7 @@ void SAL_CALL SfxStatusBarControl::paint(
     ::sal_Int32 nStyle )
 throw ( ::uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     OutputDevice* pOutDev = VCLUnoHelper::GetOutputDevice( xGraphics );;
     if ( pOutDev )
@@ -412,7 +412,7 @@ throw ( ::uno::RuntimeException )
 void SAL_CALL SfxStatusBarControl::click()
 throw ( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     Click();
 }
 
@@ -421,7 +421,7 @@ throw ( uno::RuntimeException )
 void SAL_CALL SfxStatusBarControl::doubleClick()
 throw ( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     DoubleClick();
 }
 
@@ -639,7 +639,7 @@ SfxStatusBarControl* SfxStatusBarControl::CreateControl
     SfxModule* pMod
 )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     SfxApplication *pApp = SFX_APP();
 
     SfxSlotPool *pSlotPool;

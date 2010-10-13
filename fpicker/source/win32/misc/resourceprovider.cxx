@@ -121,7 +121,7 @@ public:
 
     CResourceProvider_Impl( )
     {
-        const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        const SolarMutexGuard aGuard;
 
         com::sun::star::lang::Locale aLoc( Application::GetSettings().GetUILocale() );
         m_ResMgr = new SimpleResMgr( CREATEVERSIONRESMGR_NAME( fps_office ), aLoc );

@@ -169,7 +169,7 @@ void ControlHelper::enableControl( const sal_Int16 nControlId, const sal_Bool bE
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "controlId", nControlId, "enable", bEnable);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if (nControlId == ExtendedFilePickerElementIds::CHECKBOX_PREVIEW) {
         OSL_TRACE(" preview checkbox cannot be changed");
@@ -197,7 +197,7 @@ OUString ControlHelper::getLabel( sal_Int16 nControlId )
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "controlId", nControlId);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     NSControl* pControl = getControl( nControlId );
 
@@ -226,7 +226,7 @@ void ControlHelper::setLabel( sal_Int16 nControlId, const NSString* aLabel )
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "controlId", nControlId, "label", aLabel);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
 
@@ -258,7 +258,7 @@ void ControlHelper::setValue( sal_Int16 nControlId, sal_Int16 nControlAction, co
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "controlId", nControlId, "controlAction", nControlAction);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if (nControlId == ExtendedFilePickerElementIds::CHECKBOX_PREVIEW) {
         OSL_TRACE(" value for preview is unchangeable");
@@ -291,7 +291,7 @@ uno::Any ControlHelper::getValue( sal_Int16 nControlId, sal_Int16 nControlAction
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "controlId", nControlId, "controlAction", nControlAction);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     uno::Any aRetval;
 
     NSControl* pControl = getControl( nControlId );
@@ -805,7 +805,7 @@ void ControlHelper::layoutControls()
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if (nil == m_pUserPane) {
         OSL_TRACE("no user pane to layout");

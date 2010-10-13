@@ -171,7 +171,7 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments ) th
             ToolBar* pToolBar = 0;
             ToolBarManager* pToolBarManager = 0;
             {
-                vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aSolarMutexGuard;
                 Window* pWindow = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
                 if ( pWindow )
                 {

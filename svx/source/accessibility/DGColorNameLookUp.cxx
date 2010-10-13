@@ -52,7 +52,7 @@ DGColorNameLookUp& DGColorNameLookUp::Instance (void)
     // the shape type handler is instantiated.
     if (mpInstance == NULL)
     {
-        ::vos::OGuard aGuard (::Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         if (mpInstance == NULL)
         {
             // Create the single instance of the color name look up.
@@ -108,7 +108,7 @@ DGColorNameLookUp::DGColorNameLookUp (void)
         {
             // Look the solar mutex here as workarround for missing lock in
             // called function.
-            ::vos::OGuard aGuard (::Application::GetSolarMutex());
+            SolarMutexGuard aGuard;
             aNames = xNA->getElementNames();
         }
     }

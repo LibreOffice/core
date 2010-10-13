@@ -343,14 +343,14 @@ OUString AccessibleTableShape::CreateAccessibleBaseName(void) throw (RuntimeExce
 
 sal_Int32 SAL_CALL AccessibleTableShape::getAccessibleChildCount( ) throw(RuntimeException)
 {
-    ::vos::OGuard aSolarGuard(::Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     return mxImpl->mxTable.is() ? mxImpl->mxTable->getRowCount() * mxImpl->mxTable->getColumnCount() : 0;
 }
 
 //--------------------------------------------------------------------
 Reference< XAccessible > SAL_CALL AccessibleTableShape::getAccessibleChild( sal_Int32 i ) throw(IndexOutOfBoundsException, RuntimeException)
 {
-    ::vos::OGuard aSolarGuard (::Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     ThrowIfDisposed();
 
     return mxImpl->getAccessibleChild( i );
@@ -385,7 +385,7 @@ void SAL_CALL AccessibleTableShape::disposing (void)
 
 sal_Int32 SAL_CALL AccessibleTableShape::getAccessibleRowCount() throw (RuntimeException)
 {
-    ::vos::OGuard aSolarGuard (::Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     return mxImpl->mxTable.is() ? mxImpl->mxTable->getRowCount() : 0;
 }
 
@@ -393,7 +393,7 @@ sal_Int32 SAL_CALL AccessibleTableShape::getAccessibleRowCount() throw (RuntimeE
 
 sal_Int32 SAL_CALL AccessibleTableShape::getAccessibleColumnCount(  ) throw (RuntimeException)
 {
-    ::vos::OGuard aSolarGuard (::Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     return mxImpl->mxTable.is() ? mxImpl->mxTable->getColumnCount() : 0;
 }
 
@@ -409,7 +409,7 @@ OUString SAL_CALL AccessibleTableShape::getAccessibleRowDescription( sal_Int32 n
 
 OUString SAL_CALL AccessibleTableShape::getAccessibleColumnDescription( sal_Int32 nColumn ) throw (IndexOutOfBoundsException, RuntimeException)
 {
-    ::vos::OGuard aSolarGuard (::Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     checkCellPosition( nColumn, 0 );
     return OUString();
 }
@@ -418,7 +418,7 @@ OUString SAL_CALL AccessibleTableShape::getAccessibleColumnDescription( sal_Int3
 
 sal_Int32 SAL_CALL AccessibleTableShape::getAccessibleRowExtentAt( sal_Int32 nRow, sal_Int32 nColumn ) throw (IndexOutOfBoundsException, RuntimeException)
 {
-    ::vos::OGuard aSolarGuard (::Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     checkCellPosition( nColumn, nRow );
     if( mxImpl->mxTable.is() )
     {
@@ -433,7 +433,7 @@ sal_Int32 SAL_CALL AccessibleTableShape::getAccessibleRowExtentAt( sal_Int32 nRo
 
 sal_Int32 SAL_CALL AccessibleTableShape::getAccessibleColumnExtentAt( sal_Int32 nRow, sal_Int32 nColumn ) throw (IndexOutOfBoundsException, RuntimeException)
 {
-    ::vos::OGuard aSolarGuard (::Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     checkCellPosition( nColumn, nRow );
     if( mxImpl->mxTable.is() )
     {
@@ -480,7 +480,7 @@ Sequence< sal_Int32 > SAL_CALL AccessibleTableShape::getSelectedAccessibleColumn
 
 sal_Bool SAL_CALL AccessibleTableShape::isAccessibleRowSelected( sal_Int32 nRow ) throw (IndexOutOfBoundsException, RuntimeException)
 {
-    ::vos::OGuard aSolarGuard (::Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     checkCellPosition( 0, nRow );
     return sal_False;
 }
@@ -489,7 +489,7 @@ sal_Bool SAL_CALL AccessibleTableShape::isAccessibleRowSelected( sal_Int32 nRow 
 
 sal_Bool SAL_CALL AccessibleTableShape::isAccessibleColumnSelected( sal_Int32 nColumn ) throw (IndexOutOfBoundsException, RuntimeException)
 {
-    ::vos::OGuard aSolarGuard (::Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     checkCellPosition( nColumn, 0 );
     return sal_False;
 }
@@ -498,7 +498,7 @@ sal_Bool SAL_CALL AccessibleTableShape::isAccessibleColumnSelected( sal_Int32 nC
 
 Reference< XAccessible > SAL_CALL AccessibleTableShape::getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn ) throw (IndexOutOfBoundsException, RuntimeException)
 {
-    ::vos::OGuard aSolarGuard (::Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     checkCellPosition( nColumn, nRow );
 
     sal_Int32 nChildIndex = 0;
@@ -528,7 +528,7 @@ Reference< XAccessible > SAL_CALL AccessibleTableShape::getAccessibleSummary(  )
 
 sal_Bool SAL_CALL AccessibleTableShape::isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn ) throw (IndexOutOfBoundsException, RuntimeException)
 {
-    ::vos::OGuard aSolarGuard (::Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     checkCellPosition( nColumn, nRow );
 
     SvxTableController* pController = getTableController();
@@ -547,7 +547,7 @@ sal_Bool SAL_CALL AccessibleTableShape::isAccessibleSelected( sal_Int32 nRow, sa
 
 sal_Int32 SAL_CALL AccessibleTableShape::getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn ) throw (IndexOutOfBoundsException, RuntimeException)
 {
-    ::vos::OGuard aSolarGuard (::Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     checkCellPosition( nColumn, nRow );
     return  mxImpl->mxTable.is() ? (nRow * mxImpl->mxTable->getColumnCount() + nColumn) : 0;
 }
@@ -556,7 +556,7 @@ sal_Int32 SAL_CALL AccessibleTableShape::getAccessibleIndex( sal_Int32 nRow, sal
 
 sal_Int32 SAL_CALL AccessibleTableShape::getAccessibleRow( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
-    ::vos::OGuard aSolarGuard (::Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     sal_Int32 nColumn = 0, nRow = 0;
     mxImpl->getColumnAndRow( nChildIndex, nColumn, nRow );
     return nRow;
@@ -566,7 +566,7 @@ sal_Int32 SAL_CALL AccessibleTableShape::getAccessibleRow( sal_Int32 nChildIndex
 
 sal_Int32 SAL_CALL AccessibleTableShape::getAccessibleColumn( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
-    ::vos::OGuard aSolarGuard (::Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     sal_Int32 nColumn = 0, nRow = 0;
     mxImpl->getColumnAndRow( nChildIndex, nColumn, nRow );
     return nChildIndex;
@@ -578,7 +578,7 @@ sal_Int32 SAL_CALL AccessibleTableShape::getAccessibleColumn( sal_Int32 nChildIn
 
 void SAL_CALL AccessibleTableShape::selectAccessibleChild( sal_Int32 nChildIndex ) throw ( IndexOutOfBoundsException, RuntimeException )
 {
-    ::vos::OGuard aSolarGuard (::Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     CellPos aPos;
     mxImpl->getColumnAndRow( nChildIndex, aPos.mnCol, aPos.mnRow );
 
@@ -604,7 +604,7 @@ void SAL_CALL AccessibleTableShape::selectAccessibleChild( sal_Int32 nChildIndex
 
 sal_Bool SAL_CALL AccessibleTableShape::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw ( IndexOutOfBoundsException, RuntimeException )
 {
-    ::vos::OGuard aSolarGuard (::Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     CellPos aPos;
     mxImpl->getColumnAndRow( nChildIndex, aPos.mnCol, aPos.mnRow );
 
@@ -615,7 +615,7 @@ sal_Bool SAL_CALL AccessibleTableShape::isAccessibleChildSelected( sal_Int32 nCh
 
 void SAL_CALL AccessibleTableShape::clearAccessibleSelection() throw ( RuntimeException )
 {
-   ::vos::OGuard aSolarGuard (::Application::GetSolarMutex());
+   SolarMutexGuard aSolarGuard;
 
     SvxTableController* pController = getTableController();
     if( pController )
@@ -625,7 +625,7 @@ void SAL_CALL AccessibleTableShape::clearAccessibleSelection() throw ( RuntimeEx
 
 void SAL_CALL AccessibleTableShape::selectAllAccessibleChildren() throw ( RuntimeException )
 {
-   ::vos::OGuard aSolarGuard (::Application::GetSolarMutex());
+   SolarMutexGuard aSolarGuard;
 
    // todo: force selection of shape?
     SvxTableController* pController = getTableController();
@@ -637,7 +637,7 @@ void SAL_CALL AccessibleTableShape::selectAllAccessibleChildren() throw ( Runtim
 
 sal_Int32 SAL_CALL AccessibleTableShape::getSelectedAccessibleChildCount() throw ( RuntimeException )
 {
-    ::vos::OGuard aSolarGuard (::Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
 
     SvxTableController* pController = getTableController();
     if( pController && pController->hasSelectedCells() )
@@ -657,7 +657,7 @@ sal_Int32 SAL_CALL AccessibleTableShape::getSelectedAccessibleChildCount() throw
 
 Reference< XAccessible > SAL_CALL AccessibleTableShape::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw ( IndexOutOfBoundsException, RuntimeException)
 {
-    ::vos::OGuard aSolarGuard (::Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
 
     SvxTableController* pController = getTableController();
     if( pController && pController->hasSelectedCells() )
@@ -686,7 +686,7 @@ Reference< XAccessible > SAL_CALL AccessibleTableShape::getSelectedAccessibleChi
 
 void SAL_CALL AccessibleTableShape::deselectAccessibleChild( sal_Int32 nChildIndex )  throw ( IndexOutOfBoundsException, RuntimeException )
 {
-   ::vos::OGuard aSolarGuard (::Application::GetSolarMutex());
+   SolarMutexGuard aSolarGuard;
     CellPos aPos;
     mxImpl->getColumnAndRow( nChildIndex, aPos.mnCol, aPos.mnRow );
 

@@ -100,7 +100,7 @@ ComplexToolbarController::~ComplexToolbarController()
 void SAL_CALL ComplexToolbarController::dispose()
 throw ( RuntimeException )
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     m_pToolbar->SetItemWindow( m_nID, 0 );
     svt::ToolboxController::dispose();
@@ -131,7 +131,7 @@ throw ( RuntimeException )
     Sequence<PropertyValue> aArgs;
 
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
 
         if ( m_bDisposed )
             throw DisposedException();
@@ -171,7 +171,7 @@ throw ( RuntimeException )
 void ComplexToolbarController::statusChanged( const FeatureStateEvent& Event )
 throw ( RuntimeException )
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     if ( m_bDisposed )
         return;

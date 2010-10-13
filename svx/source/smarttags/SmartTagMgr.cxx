@@ -262,7 +262,7 @@ void SmartTagMgr::WriteConfiguration( const bool* pIsLabelTextWithSmartTags,
 // ::com::sun::star::util::XModifyListener
 void SmartTagMgr::modified( const lang::EventObject& )  throw( RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     maRecognizerList.clear();
     maActionList.clear();
@@ -274,7 +274,7 @@ void SmartTagMgr::modified( const lang::EventObject& )  throw( RuntimeException 
 // ::com::sun::star::lang::XEventListener
 void SmartTagMgr::disposing( const lang::EventObject& rEvent ) throw( RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     uno::Reference< frame::XModel >  xModel( rEvent.Source, uno::UNO_QUERY );
     uno::Reference< util::XModifyBroadcaster >  xMB(xModel, uno::UNO_QUERY);
@@ -301,7 +301,7 @@ void SmartTagMgr::disposing( const lang::EventObject& rEvent ) throw( RuntimeExc
 // ::com::sun::star::util::XChangesListener
 void SmartTagMgr::changesOccurred( const util::ChangesEvent& rEvent ) throw( RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     const util::ElementChange* pElementChanges = rEvent.Changes.getConstArray();
     const sal_Int32 nNumberOfChanges = rEvent.Changes.getLength();

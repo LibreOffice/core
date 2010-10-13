@@ -346,7 +346,7 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopup
     VCLXPopupMenu* pPopupMenu    = (VCLXPopupMenu *)VCLXMenu::GetImplementation( rPopupMenu );
     PopupMenu*     pVCLPopupMenu = 0;
 
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     resetPopupMenu( rPopupMenu );
     if ( pPopupMenu )
@@ -439,7 +439,7 @@ void SAL_CALL NewMenuController::select( const css::awt::MenuEvent& rEvent ) thr
         if ( pPopupMenu )
         {
             {
-                vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aSolarMutexGuard;
                 PopupMenu* pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
                 aTargetURL.Complete = pVCLPopupMenu->GetItemCommand( rEvent.MenuId );
             }
@@ -475,7 +475,7 @@ void SAL_CALL NewMenuController::select( const css::awt::MenuEvent& rEvent ) thr
 
 void SAL_CALL NewMenuController::activate( const css::awt::MenuEvent& ) throw (RuntimeException)
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     if ( m_xFrame.is() && m_xPopupMenu.is() )
     {
         VCLXPopupMenu* pPopupMenu = (VCLXPopupMenu *)VCLXPopupMenu::GetImplementation( m_xPopupMenu );

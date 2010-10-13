@@ -107,7 +107,7 @@ void SAL_CALL SalAquaFolderPicker::setTitle( const rtl::OUString& aTitle ) throw
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "title", aTitle);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     implsetTitle(aTitle);
 
@@ -118,7 +118,7 @@ sal_Int16 SAL_CALL SalAquaFolderPicker::execute() throw( uno::RuntimeException )
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     sal_Int16 retVal = 0;
 
@@ -154,7 +154,7 @@ void SAL_CALL SalAquaFolderPicker::setDisplayDirectory( const rtl::OUString& aDi
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "directory", aDirectory);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     implsetDisplayDirectory(aDirectory);
 
@@ -165,7 +165,7 @@ rtl::OUString SAL_CALL SalAquaFolderPicker::getDisplayDirectory() throw( uno::Ru
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     OUString aDirectory = implgetDisplayDirectory();
 
@@ -178,7 +178,7 @@ rtl::OUString SAL_CALL SalAquaFolderPicker::getDirectory() throw( uno::RuntimeEx
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     NSArray *files = nil;
     if (m_nDialogType == NAVIGATIONSERVICES_DIRECTORY) {
@@ -269,7 +269,7 @@ void SAL_CALL SalAquaFolderPicker::cancel() throw( uno::RuntimeException )
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     [m_pDialog cancel:nil];
 

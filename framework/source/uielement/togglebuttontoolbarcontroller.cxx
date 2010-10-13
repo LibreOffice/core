@@ -105,7 +105,7 @@ ToggleButtonToolbarController::~ToggleButtonToolbarController()
 void SAL_CALL ToggleButtonToolbarController::dispose()
 throw ( RuntimeException )
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     ComplexToolbarController::dispose();
 }
 
@@ -129,7 +129,7 @@ throw (::com::sun::star::uno::RuntimeException)
 {
     uno::Reference< awt::XWindow > xWindow;
 
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     if (( m_eStyle == STYLE_DROPDOWNBUTTON ) ||
         ( m_eStyle == STYLE_TOGGLE_DROPDOWNBUTTON ))
     {
@@ -159,7 +159,7 @@ throw (::com::sun::star::uno::RuntimeException)
 
 void ToggleButtonToolbarController::executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand )
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     if (( m_eStyle == STYLE_DROPDOWNBUTTON ) ||
         ( m_eStyle == STYLE_TOGGLE_DROPDOWNBUTTON ))
@@ -303,7 +303,7 @@ void ToggleButtonToolbarController::executeControlCommand( const ::com::sun::sta
 
 IMPL_LINK( ToggleButtonToolbarController, MenuSelectHdl, Menu *, pMenu )
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     sal_uInt16 nItemId = pMenu->GetCurItemId();
     if ( nItemId > 0 && nItemId <= m_aDropdownMenuList.size() )

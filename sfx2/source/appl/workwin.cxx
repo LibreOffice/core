@@ -169,7 +169,7 @@ LayoutManagerListener::~LayoutManagerListener()
 
 void LayoutManagerListener::setFrame( const css::uno::Reference< css::frame::XFrame >& xFrame )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( m_pWrkWin && !m_bHasFrame )
     {
         m_xFrame    = xFrame;
@@ -234,7 +234,7 @@ throw (::com::sun::star::uno::RuntimeException)
 void SAL_CALL LayoutManagerListener::dispose()
 throw( css::uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     // reset member
     m_pWrkWin = 0;
@@ -281,7 +281,7 @@ void SAL_CALL LayoutManagerListener::disposing(
     const css::lang::EventObject& )
 throw( css::uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     m_pWrkWin = 0;
     m_bHasFrame = sal_False;
     m_xFrame = css::uno::Reference< css::frame::XFrame >();
@@ -296,7 +296,7 @@ void SAL_CALL LayoutManagerListener::layoutEvent(
     const css::uno::Any&                        )
 throw (css::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( m_pWrkWin )
     {
         if ( eLayoutEvent == css::frame::LayoutManagerEvents::VISIBLE )

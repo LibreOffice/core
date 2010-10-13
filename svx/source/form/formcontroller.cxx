@@ -3927,7 +3927,7 @@ void SAL_CALL FormController::removeParameterListener(const Reference< XDatabase
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL FormController::approveParameter(const DatabaseParameterEvent& aEvent) throw( RuntimeException )
 {
-    ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
 

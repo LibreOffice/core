@@ -181,7 +181,7 @@ void GraphCtrl::SetWinStyle( WinBits nWinBits )
 
 void GraphCtrl::InitSdrModel()
 {
-    ::vos::OGuard aGuard (Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SdrPage* pPage;
 

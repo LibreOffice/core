@@ -136,7 +136,7 @@ void SAL_CALL AddonsToolBarWrapper::initialize( const Sequence< Any >& aArgument
             ToolBar* pToolBar = 0;
             AddonsToolBarManager* pToolBarManager = 0;
             {
-                vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aSolarMutexGuard;
                 Window* pWindow = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
                 if ( pWindow )
                 {

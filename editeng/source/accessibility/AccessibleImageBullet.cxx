@@ -168,7 +168,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         // Get the string from the resource for the specified id.
         return ::rtl::OUString( String( EditResId (RID_SVXSTR_A11Y_IMAGEBULLET_DESCRIPTION) ) );
@@ -178,7 +178,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         // Get the string from the resource for the specified id.
         return ::rtl::OUString( String ( EditResId (RID_SVXSTR_A11Y_IMAGEBULLET_NAME) ) );
@@ -196,7 +196,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         // Create a copy of the state set and return it.
         ::utl::AccessibleStateSetHelper* pStateSet = static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
@@ -211,7 +211,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         lang::Locale        aLocale;
 
@@ -242,7 +242,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
                    "AccessibleEditableTextPara::contains: index value overflow");
@@ -266,7 +266,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
                    "AccessibleEditableTextPara::getBounds: index value overflow");
@@ -305,7 +305,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         awt::Rectangle aRect = getBounds();
 
@@ -316,7 +316,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         // relate us to parent
         uno::Reference< XAccessible > xParent = getAccessibleParent();
@@ -343,7 +343,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         awt::Rectangle aRect = getBounds();
 

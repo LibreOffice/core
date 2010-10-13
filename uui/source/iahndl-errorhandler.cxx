@@ -58,7 +58,7 @@ executeErrorDialog(
     WinBits nButtonMask)
     SAL_THROW((uno::RuntimeException))
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     rtl::OUStringBuffer aText(rContext);
     if (rContext.getLength() != 0 && rMessage.getLength() != 0)
@@ -183,7 +183,7 @@ UUIInteractionHelper::handleErrorHandlerRequest(
             SOURCE_SVX :
             SOURCE_UUI;
 
-        vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         std::auto_ptr< ResMgr > xManager;
         xManager.reset(ResMgr::CreateResMgr(aManager[eSource]));
         if (!xManager.get())
@@ -267,7 +267,7 @@ UUIInteractionHelper::handleErrorHandlerRequest(
         rtl::OUString aContext(getContextProperty());
         if (aContext.getLength() == 0 && nErrorCode != 0)
         {
-            vos::OGuard aGuard(Application::GetSolarMutex());
+            SolarMutexGuard aGuard;
             ErrorContext * pContext = ErrorContext::GetContext();
             if (pContext)
             {

@@ -206,7 +206,7 @@ throw ( ::com::sun::star::container::NoSuchElementException,
         aPropValue.Value <<= aResourceURL;
         aPropSeq[2] <<= aPropValue;
 
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         AddonsToolBarWrapper* pToolBarWrapper = new AddonsToolBarWrapper( m_xServiceManager );
         xToolBar = Reference< ::com::sun::star::ui::XUIElement >( (OWeakObject *)pToolBarWrapper, UNO_QUERY );
         Reference< XInitialization > xInit( xToolBar, UNO_QUERY );

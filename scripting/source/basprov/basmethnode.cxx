@@ -130,7 +130,7 @@ namespace basprov
 
     ::rtl::OUString BasicMethodNodeImpl::getName(  ) throw (RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         ::rtl::OUString sMethodName;
         if ( m_pMethod )
@@ -143,7 +143,7 @@ namespace basprov
 
     Sequence< Reference< browse::XBrowseNode > > BasicMethodNodeImpl::getChildNodes(  ) throw (RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         return Sequence< Reference< browse::XBrowseNode > >();
     }
@@ -152,7 +152,7 @@ namespace basprov
 
     sal_Bool BasicMethodNodeImpl::hasChildNodes(  ) throw (RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         return sal_False;
     }
@@ -161,7 +161,7 @@ namespace basprov
 
     sal_Int16 BasicMethodNodeImpl::getType(  ) throw (RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         return browse::BrowseNodeTypes::SCRIPT;
     }

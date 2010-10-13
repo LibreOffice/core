@@ -191,7 +191,7 @@ throw ( RuntimeException )
 void SAL_CALL SfxStatusListener::disposing( const EventObject& Source )
 throw( RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if ( Source.Source == Reference< XInterface >( m_xDispatch, UNO_QUERY ))
         m_xDispatch.clear();
@@ -202,7 +202,7 @@ throw( RuntimeException )
 void SAL_CALL SfxStatusListener::statusChanged( const FeatureStateEvent& rEvent)
 throw( RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     SfxViewFrame* pViewFrame = NULL;
     if ( m_xDispatch.is() )

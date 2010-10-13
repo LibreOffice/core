@@ -202,7 +202,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::changingState( const ::com::sun::star
 void SdrLightEmbeddedClient_Impl::Release()
 {
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         mpObj = NULL;
     }
 
@@ -212,7 +212,7 @@ void SdrLightEmbeddedClient_Impl::Release()
 //--------------------------------------------------------------------
 void SAL_CALL SdrLightEmbeddedClient_Impl::stateChanged( const ::com::sun::star::lang::EventObject& /*aEvent*/, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if ( mpObj && nOldState == embed::EmbedStates::LOADED && nNewState == embed::EmbedStates::RUNNING )
     {
@@ -228,7 +228,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::stateChanged( const ::com::sun::star:
 //--------------------------------------------------------------------
 void SAL_CALL SdrLightEmbeddedClient_Impl::disposing( const ::com::sun::star::lang::EventObject& /*aEvent*/ ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     GetSdrGlobalData().GetOLEObjCache().RemoveObj(mpObj);
 }
@@ -238,7 +238,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::notifyEvent( const document::EventObj
 {
     // TODO/LATER: when writer uses this implementation the code could be shared with SfxInPlaceClient_Impl
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     // the code currently makes sence only in case there is no other client
     if ( mpObj && mpObj->GetAspect() != embed::Aspects::MSOLE_ICON && aEvent.EventName.equalsAscii("OnVisAreaChanged")
@@ -310,7 +310,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::saveObject()
     uno::Reference< util::XModifiable > xModifiable;
 
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         if ( !mpObj )
             throw embed::ObjectSaveVetoException();
@@ -353,7 +353,7 @@ uno::Reference< util::XCloseable > SAL_CALL SdrLightEmbeddedClient_Impl::getComp
 {
     uno::Reference< util::XCloseable > xResult;
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( mpObj )
         xResult = uno::Reference< util::XCloseable >( mpObj->GetParentXModel(), uno::UNO_QUERY );
 
@@ -365,7 +365,7 @@ sal_Bool SAL_CALL SdrLightEmbeddedClient_Impl::canInplaceActivate()
     throw ( uno::RuntimeException )
 {
     sal_Bool bRet = sal_False;
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( mpObj )
     {
         uno::Reference< embed::XEmbeddedObject > xObject = mpObj->GetObjRef();
@@ -389,7 +389,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::activatingUI()
     throw ( embed::WrongStateException,
             uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     uno::Reference < beans::XPropertySet > xFrame( lcl_getFrame_throw(mpObj));
     uno::Reference < frame::XFrame > xOwnFrame( xFrame,uno::UNO_QUERY);
@@ -443,7 +443,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::deactivatedUI()
     throw ( embed::WrongStateException,
             uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager(getLayoutManager());
     if ( xLayoutManager.is() )
     {
@@ -459,7 +459,7 @@ uno::Reference< ::com::sun::star::frame::XLayoutManager > SAL_CALL SdrLightEmbed
             uno::RuntimeException )
 {
     uno::Reference< ::com::sun::star::frame::XLayoutManager > xMan;
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     uno::Reference < beans::XPropertySet > xFrame( lcl_getFrame_throw(mpObj));
     try
     {
@@ -478,7 +478,7 @@ uno::Reference< frame::XDispatchProvider > SAL_CALL SdrLightEmbeddedClient_Impl:
     throw ( embed::WrongStateException,
             uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     return uno::Reference < frame::XDispatchProvider >( lcl_getFrame_throw(mpObj), uno::UNO_QUERY_THROW );
 }
 
@@ -487,7 +487,7 @@ awt::Rectangle SAL_CALL SdrLightEmbeddedClient_Impl::getPlacement()
     throw ( embed::WrongStateException,
             uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( !mpObj )
         throw uno::RuntimeException();
 
@@ -529,7 +529,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::changedPlacement( const awt::Rectangl
             uno::Exception,
             uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( !mpObj )
         throw uno::RuntimeException();
 
@@ -589,7 +589,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::changedPlacement( const awt::Rectangl
 uno::Reference< awt::XWindow > SAL_CALL SdrLightEmbeddedClient_Impl::getWindow()
     throw ( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     uno::Reference< awt::XWindow > xCurrent = m_xWindow;
     if ( !xCurrent.is() )
     {

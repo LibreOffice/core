@@ -182,7 +182,7 @@ SfxDocInfoListener_Impl::~SfxDocInfoListener_Impl()
 void SAL_CALL SfxDocInfoListener_Impl::modified( const lang::EventObject& )
         throw ( uno::RuntimeException )
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     // notify changes to the SfxObjectShell
     m_rShell.FlushDocInfo();
@@ -922,7 +922,7 @@ SfxBaseModel::getDocumentProperties()
 void SAL_CALL SfxBaseModel::disposing( const lang::EventObject& aObject )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( impl_isDisposed() )
         return;
 
@@ -1368,7 +1368,7 @@ void SAL_CALL SfxBaseModel::close( sal_Bool bDeliverOwnership ) throw (util::Clo
 {
     static ::rtl::OUString MSG_1 = ::rtl::OUString::createFromAscii("Cant close while saving.");
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( impl_isDisposed() || m_pData->m_bClosed || m_pData->m_bClosing )
         return;
 
@@ -3033,7 +3033,7 @@ void SAL_CALL SfxBaseModel::removePrintJobListener( const uno::Reference< view::
 class SvObject;
 sal_Int64 SAL_CALL SfxBaseModel::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( GetObjectShell() )
     {
         SvGlobalName aName( aIdentifier );
@@ -3174,7 +3174,7 @@ rtl::OUString SfxBaseModel::getRuntimeUID() const
 
 sal_Bool SfxBaseModel::hasValidSignatures() const
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( m_pData->m_pObjectShell.Is() )
         return ( m_pData->m_pObjectShell->ImplGetSignatureState( sal_False ) == SIGNATURESTATE_SIGNATURES_OK );
     return sal_False;

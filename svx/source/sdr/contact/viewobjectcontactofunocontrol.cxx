@@ -1431,7 +1431,7 @@ namespace sdr { namespace contact {
     //--------------------------------------------------------------------
     void SAL_CALL ViewObjectContactOfUnoControl_Impl::disposing( const EventObject& Source ) throw(RuntimeException)
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
             // some code below - in particular our disposal - might trigger actions which require the
             // SolarMutex. In particular, in our disposal, we remove ourself as listener from the control,
             // which alone needs the SolarMutex. Of course this - a removeFooListener needed the SolarMutex -
@@ -1484,7 +1484,7 @@ namespace sdr { namespace contact {
     //--------------------------------------------------------------------
     void SAL_CALL ViewObjectContactOfUnoControl_Impl::propertyChange( const PropertyChangeEvent& /*_rEvent*/ ) throw(RuntimeException)
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
             // (re)painting might require VCL operations, which need the SolarMutex
 
         OSL_PRECOND( !impl_isDisposed_nofail(), "ViewObjectContactOfUnoControl_Impl::propertyChange: already disposed()" );
@@ -1536,7 +1536,7 @@ namespace sdr { namespace contact {
     //--------------------------------------------------------------------
     void SAL_CALL ViewObjectContactOfUnoControl_Impl::elementRemoved( const ContainerEvent& Event ) throw (RuntimeException)
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
             // some code below - in particular our disposal - might trigger actions which require the
             // SolarMutex. In particular, in our disposal, we remove ourself as listener from the control,
             // which alone needs the SolarMutex. Of course this - a removeFooListener needed the SolarMutex -

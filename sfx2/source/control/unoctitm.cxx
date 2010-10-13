@@ -131,7 +131,7 @@ void SfxUnoControllerItem::UnBind()
 
 void SAL_CALL SfxUnoControllerItem::statusChanged(const ::com::sun::star::frame::FeatureStateEvent& rEvent) throw ( ::com::sun::star::uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     DBG_ASSERT( pCtrlItem, "Dispatch hat den StatusListener nicht entfern!" );
 
     if ( rEvent.Requery )
@@ -668,7 +668,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchResultListener >& rListener ) throw( ::com::sun::star::uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if (
         pDispatch &&
         (
@@ -885,7 +885,7 @@ SfxDispatcher* SfxDispatchController_Impl::GetDispatcher()
 
 void SAL_CALL SfxDispatchController_Impl::addStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & aListener, const ::com::sun::star::util::URL& aURL) throw ( ::com::sun::star::uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( !pDispatch )
         return;
 

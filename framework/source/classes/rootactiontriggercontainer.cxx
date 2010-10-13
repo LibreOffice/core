@@ -212,7 +212,7 @@ throw ( RuntimeException )
     {
         if ( m_pMenu )
         {
-            vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aSolarMutexGuard;
             return m_pMenu->GetItemCount();
         }
         else
@@ -248,7 +248,7 @@ throw (::com::sun::star::uno::RuntimeException)
 {
     if ( m_pMenu )
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
         return ( m_pMenu->GetItemCount() > 0 );
     }
 

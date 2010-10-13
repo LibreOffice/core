@@ -159,7 +159,7 @@ void SAL_CALL
 ImeStatusWindow::propertyChange(css::beans::PropertyChangeEvent const & )
     throw (css::uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     SfxApplication* pApp = SfxApplication::Get();
     if (pApp)
     pApp->Invalidate(SID_SHOW_IME_STATUS_WINDOW);

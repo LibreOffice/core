@@ -207,7 +207,7 @@ void ServiceImpl::setDialogTitle( OUString const & title )
 {
     if ( dp_gui::TheExtensionManager::s_ExtMgr.is() )
     {
-        const ::vos::OGuard guard( Application::GetSolarMutex() );
+        const SolarMutexGuard guard;
         ::rtl::Reference< ::dp_gui::TheExtensionManager > dialog(
             ::dp_gui::TheExtensionManager::get( m_xComponentContext,
                                                 m_parent ? *m_parent : Reference<awt::XWindow>(),
@@ -235,7 +235,7 @@ void ServiceImpl::startExecuteModal(
         }
         catch (Exception & exc) {
             if (bAppUp) {
-                const vos::OGuard guard( Application::GetSolarMutex() );
+                const SolarMutexGuard guard;
                 std::auto_ptr<ErrorBox> box(
                     new ErrorBox( Application::GetActiveTopWindow(),
                                   WB_OK, exc.Message ) );
@@ -279,7 +279,7 @@ void ServiceImpl::startExecuteModal(
     }
 
     {
-        const ::vos::OGuard guard( Application::GetSolarMutex() );
+        const SolarMutexGuard guard;
         ::rtl::Reference< ::dp_gui::TheExtensionManager > myExtMgr(
             ::dp_gui::TheExtensionManager::get(
                 m_xComponentContext,

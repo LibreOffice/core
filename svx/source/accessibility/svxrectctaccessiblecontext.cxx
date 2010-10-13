@@ -167,7 +167,7 @@ SvxRectCtlAccessibleContext::SvxRectCtlAccessibleContext(
         msName = *pName;
     else
     {
-        ::vos::OGuard   aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         msName = SVX_RESSTR( mbAngleMode? RID_SVXSTR_RECTCTL_ACC_ANGL_NAME : RID_SVXSTR_RECTCTL_ACC_CORN_NAME );
     }
 
@@ -175,7 +175,7 @@ SvxRectCtlAccessibleContext::SvxRectCtlAccessibleContext(
         msDescription = *pDesc;
     else
     {
-        ::vos::OGuard   aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         msDescription = SVX_RESSTR( mbAngleMode? RID_SVXSTR_RECTCTL_ACC_ANGL_DESCR : RID_SVXSTR_RECTCTL_ACC_CORN_DESCR );
     }
 
@@ -292,7 +292,7 @@ Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleChil
     Reference< XAccessible >    xChild = mpChilds[ nIndex ];
     if( !xChild.is() )
     {
-        ::vos::OGuard       aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
 
         ::osl::MutexGuard   aGuard( m_aMutex );
 
@@ -486,7 +486,7 @@ void SAL_CALL SvxRectCtlAccessibleContext::removeFocusListener( const Reference<
 
 void SAL_CALL SvxRectCtlAccessibleContext::grabFocus() throw( RuntimeException )
 {
-    ::vos::OGuard       aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard   aGuard( m_aMutex );
 
     ThrowExceptionIfNotAlive();
@@ -503,7 +503,7 @@ Any SAL_CALL SvxRectCtlAccessibleContext::getAccessibleKeyBinding() throw( Runti
 sal_Int32 SvxRectCtlAccessibleContext::getForeground(  )
         throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard       aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard   aGuard( m_aMutex );
     ThrowExceptionIfNotAlive();
 
@@ -512,7 +512,7 @@ sal_Int32 SvxRectCtlAccessibleContext::getForeground(  )
 sal_Int32 SvxRectCtlAccessibleContext::getBackground(  )
         throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard       aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard   aGuard( m_aMutex );
     ThrowExceptionIfNotAlive();
 
@@ -561,7 +561,7 @@ Sequence< sal_Int8 > SAL_CALL SvxRectCtlAccessibleContext::getImplementationId( 
 
 void SAL_CALL SvxRectCtlAccessibleContext::selectAccessibleChild( sal_Int32 nIndex ) throw( lang::IndexOutOfBoundsException, RuntimeException )
 {
-    ::vos::OGuard       aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     ::osl::MutexGuard   aGuard( m_aMutex );
 
@@ -756,7 +756,7 @@ void SAL_CALL SvxRectCtlAccessibleContext::disposing()
 
 Rectangle SvxRectCtlAccessibleContext::GetBoundingBoxOnScreen( void ) throw( RuntimeException )
 {
-    ::vos::OGuard       aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard   aGuard( m_aMutex );
 
     ThrowExceptionIfNotAlive();
@@ -766,7 +766,7 @@ Rectangle SvxRectCtlAccessibleContext::GetBoundingBoxOnScreen( void ) throw( Run
 
 Rectangle SvxRectCtlAccessibleContext::GetBoundingBox( void ) throw( RuntimeException )
 {
-    ::vos::OGuard       aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard   aGuard( m_aMutex );
 
     ThrowExceptionIfNotAlive();
@@ -922,7 +922,7 @@ Any SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleKeyBinding() throw( 
 sal_Int32 SvxRectCtlChildAccessibleContext::getForeground(  )
         throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard       aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard   aGuard( maMutex );
     ThrowExceptionIfNotAlive();
     return mrParentWindow.GetControlForeground().GetColor();
@@ -930,7 +930,7 @@ sal_Int32 SvxRectCtlChildAccessibleContext::getForeground(  )
 sal_Int32 SvxRectCtlChildAccessibleContext::getBackground(  )
         throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard       aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard   aGuard( maMutex );
 
     ThrowExceptionIfNotAlive();

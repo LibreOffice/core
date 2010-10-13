@@ -126,7 +126,7 @@ void SAL_CALL LangSelectionStatusbarController::initialize( const ::com::sun::st
 throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "LangSelectionStatusbarController::initialize" );
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     svt::StatusbarController::initialize( aArguments );
 
@@ -390,7 +390,7 @@ throw ( RuntimeException )
     //      m_nScriptType, m_aCurLang, m_aKeyboardLang, m_aGuessedText
 
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "LangSelectionStatusbarController::statusChanged" );
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     if ( m_bDisposed )
         return;

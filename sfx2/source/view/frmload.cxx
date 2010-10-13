@@ -546,7 +546,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
 {
     ENSURE_OR_THROW( _rTargetFrame.is(), "illegal NULL frame" );
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mb93783) ::SfxFrameLoader::load" );
 

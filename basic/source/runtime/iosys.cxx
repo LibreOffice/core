@@ -1036,7 +1036,7 @@ void SbiIoSystem::WriteCon( const ByteString& rText )
             aOut.Erase( 0, 1 );
         String aStr( s, gsl_getSystemTextEncoding() );
         {
-            vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aSolarGuard;
             if( !MessBox( GetpApp()->GetDefDialogParent(),
                         WinBits( WB_OK_CANCEL | WB_DEF_OK ),
                         String(), aStr ).Execute() )

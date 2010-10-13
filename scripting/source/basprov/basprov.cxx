@@ -240,7 +240,7 @@ namespace basprov
     {
         // TODO
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         if ( aArguments.getLength() != 1 )
         {
@@ -333,7 +333,7 @@ namespace basprov
     {
         // TODO
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         Reference< provider::XScript > xScript;
         Reference< lang::XMultiComponentFactory > xMcFac ( m_xContext->getServiceManager() );
@@ -467,7 +467,7 @@ namespace basprov
     {
         // TODO
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         return ::rtl::OUString::createFromAscii( "Basic" );
     }
@@ -476,7 +476,7 @@ namespace basprov
 
     Sequence< Reference< browse::XBrowseNode > > BasicProviderImpl::getChildNodes(  ) throw (RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         Reference< script::XLibraryContainer > xLibContainer;
         BasicManager* pBasicManager = NULL;
@@ -534,7 +534,7 @@ namespace basprov
 
     sal_Bool BasicProviderImpl::hasChildNodes(  ) throw (RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         sal_Bool bReturn = sal_False;
         Reference< script::XLibraryContainer > xLibContainer;
@@ -556,7 +556,7 @@ namespace basprov
 
     sal_Int16 BasicProviderImpl::getType(  ) throw (RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         return browse::BrowseNodeTypes::CONTAINER;
     }

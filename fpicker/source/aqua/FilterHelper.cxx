@@ -270,7 +270,7 @@ void FilterHelper::SetCurFilter( const rtl::OUString& rFilter )
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "filter", rFilter);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if(m_aCurrentFilter.equals(rFilter) == false)
     {
@@ -317,7 +317,7 @@ void FilterHelper::appendFilter(const ::rtl::OUString& aTitle, const ::rtl::OUSt
 throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException ) {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "title", aTitle, "filter", aFilterString);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if( FilterNameExists( aTitle ) ) {
         throw com::sun::star::lang::IllegalArgumentException();
@@ -359,7 +359,7 @@ throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::
 
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "title", OUStringToOString(sGroupTitle, RTL_TEXTENCODING_UTF8).getStr());
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     //add a separator if this is not the first group to be added
     sal_Bool bPrependSeparator = m_pFilterList != NULL;

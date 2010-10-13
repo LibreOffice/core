@@ -939,7 +939,7 @@ CellEditSource::CellEditSource( CellEditSourceImpl* pImpl )
 //------------------------------------------------------------------------
 CellEditSource::~CellEditSource()
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     mpImpl->release();
 }
 

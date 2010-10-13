@@ -256,7 +256,7 @@ SvxUnoTextRangeBase::SvxUnoTextRangeBase( const SvxItemPropertySet* _pSet ) thro
 SvxUnoTextRangeBase::SvxUnoTextRangeBase( const SvxEditSource* pSource, const SvxItemPropertySet* _pSet ) throw()
 : mpPropSet(_pSet)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     DBG_ASSERT(pSource,"SvxUnoTextRangeBase: I need a valid SvxEditSource!");
 
@@ -285,7 +285,7 @@ SvxUnoTextRangeBase::SvxUnoTextRangeBase( const SvxUnoTextRangeBase& rRange ) th
 ,   lang::XUnoTunnel()
 ,   mpPropSet(rRange.getPropertySet())
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     mpEditSource = rRange.mpEditSource ? rRange.mpEditSource->Clone() : NULL;
 
@@ -333,7 +333,7 @@ void SvxUnoTextRangeBase::SetEditSource( SvxEditSource* pSource ) throw()
     corresponding with this range */
 void SvxUnoTextRangeBase::attachField( const SvxFieldData* pData ) throw()
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if( pData )
     {
@@ -348,7 +348,7 @@ void SvxUnoTextRangeBase::attachField( const SvxFieldData* pData ) throw()
 
 void SvxUnoTextRangeBase::SetSelection( const ESelection& rSelection ) throw()
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     maSelection = rSelection;
     if (mpEditSource != NULL)
@@ -360,7 +360,7 @@ void SvxUnoTextRangeBase::SetSelection( const ESelection& rSelection ) throw()
 uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextRangeBase::getStart(void)
     throw( uno::RuntimeException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     uno::Reference< text::XTextRange > xRange;
 
@@ -390,7 +390,7 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextRangeBase::getStart(void)
 uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextRangeBase::getEnd(void)
     throw( uno::RuntimeException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     uno::Reference< text::XTextRange > xRet;
 
@@ -418,7 +418,7 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextRangeBase::getEnd(void)
 OUString SAL_CALL SvxUnoTextRangeBase::getString(void)
     throw( uno::RuntimeException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : NULL;
     if( pForwarder )
@@ -437,7 +437,7 @@ OUString SAL_CALL SvxUnoTextRangeBase::getString(void)
 void SAL_CALL SvxUnoTextRangeBase::setString(const OUString& aString)
     throw( uno::RuntimeException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : NULL;
     if( pForwarder )
@@ -477,7 +477,7 @@ void SAL_CALL SvxUnoTextRangeBase::setPropertyValue(const OUString& PropertyName
 void SAL_CALL SvxUnoTextRangeBase::_setPropertyValue( const OUString& PropertyName, const uno::Any& aValue, sal_Int32 nPara )
     throw( beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : NULL;
     if( pForwarder )
@@ -643,7 +643,7 @@ uno::Any SAL_CALL SvxUnoTextRangeBase::getPropertyValue(const OUString& Property
 uno::Any SAL_CALL SvxUnoTextRangeBase::_getPropertyValue(const OUString& PropertyName, sal_Int32 nPara )
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     uno::Any aAny;
 
@@ -804,7 +804,7 @@ void SAL_CALL SvxUnoTextRangeBase::setPropertyValues( const uno::Sequence< ::rtl
 
 void SAL_CALL SvxUnoTextRangeBase::_setPropertyValues( const uno::Sequence< ::rtl::OUString >& aPropertyNames, const uno::Sequence< uno::Any >& aValues, sal_Int32 nPara ) throw (beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : NULL;
     if( pForwarder )
@@ -928,7 +928,7 @@ uno::Sequence< uno::Any > SAL_CALL SvxUnoTextRangeBase::getPropertyValues( const
 
 uno::Sequence< uno::Any > SAL_CALL SvxUnoTextRangeBase::_getPropertyValues( const uno::Sequence< ::rtl::OUString >& aPropertyNames, sal_Int32 nPara ) throw (uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     sal_Int32 nCount = aPropertyNames.getLength();
 
@@ -1082,7 +1082,7 @@ beans::PropertyState SAL_CALL SvxUnoTextRangeBase::_getPropertyState(const SfxIt
 beans::PropertyState SAL_CALL SvxUnoTextRangeBase::_getPropertyState(const OUString& PropertyName, sal_Int32 nPara /* = -1 */)
     throw( beans::UnknownPropertyException, uno::RuntimeException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     return _getPropertyState( mpPropSet->getPropertyMapEntry( PropertyName ), nPara);
 }
@@ -1233,7 +1233,7 @@ void SAL_CALL SvxUnoTextRangeBase::setPropertyToDefault( const OUString& Propert
 void SvxUnoTextRangeBase::_setPropertyToDefault(const OUString& PropertyName, sal_Int32 nPara /* = -1 */)
     throw( beans::UnknownPropertyException, uno::RuntimeException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : NULL;
 
@@ -1296,7 +1296,7 @@ void SvxUnoTextRangeBase::_setPropertyToDefault(SvxTextForwarder* pForwarder, co
 uno::Any SAL_CALL SvxUnoTextRangeBase::getPropertyDefault( const OUString& aPropertyName )
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : NULL;
     if( pForwarder )
@@ -1342,7 +1342,7 @@ uno::Any SAL_CALL SvxUnoTextRangeBase::getPropertyDefault( const OUString& aProp
 // beans::XMultiPropertyStates
 void SAL_CALL SvxUnoTextRangeBase::setAllPropertiesToDefault(  ) throw (uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : NULL;
 
@@ -1856,14 +1856,14 @@ uno::Reference< text::XTextCursor > SvxUnoTextBase::createTextCursorBySelection(
 uno::Reference< text::XTextCursor > SAL_CALL SvxUnoTextBase::createTextCursor()
     throw(uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     return new SvxUnoTextCursor( *this );
 }
 
 uno::Reference< text::XTextCursor > SAL_CALL SvxUnoTextBase::createTextCursorByRange( const uno::Reference< text::XTextRange >& aTextPosition )
     throw(uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     uno::Reference< text::XTextCursor >  xCursor;
 
@@ -1880,7 +1880,7 @@ uno::Reference< text::XTextCursor > SAL_CALL SvxUnoTextBase::createTextCursorByR
 void SAL_CALL SvxUnoTextBase::insertString( const uno::Reference< text::XTextRange >& xRange, const OUString& aString, sal_Bool bAbsorb )
     throw(uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if( !xRange.is() )
         return;
@@ -1908,7 +1908,7 @@ void SAL_CALL SvxUnoTextBase::insertString( const uno::Reference< text::XTextRan
 void SAL_CALL SvxUnoTextBase::insertControlCharacter( const uno::Reference< text::XTextRange >& xRange, sal_Int16 nControlCharacter, sal_Bool bAbsorb )
     throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     SvxTextForwarder* pForwarder = GetEditSource() ? GetEditSource()->GetTextForwarder() : NULL;
 
@@ -1996,7 +1996,7 @@ void SAL_CALL SvxUnoTextBase::insertControlCharacter( const uno::Reference< text
 void SAL_CALL SvxUnoTextBase::insertTextContent( const uno::Reference< text::XTextRange >& xRange, const uno::Reference< text::XTextContent >& xContent, sal_Bool bAbsorb )
     throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     SvxTextForwarder* pForwarder = GetEditSource() ? GetEditSource()->GetTextForwarder() : NULL;
     if( pForwarder )
@@ -2043,7 +2043,7 @@ void SAL_CALL SvxUnoTextBase::removeTextContent( const uno::Reference< text::XTe
 uno::Reference< text::XText > SAL_CALL SvxUnoTextBase::getText()
     throw(uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if (GetEditSource())
     {
@@ -2082,7 +2082,7 @@ void SAL_CALL SvxUnoTextBase::setString( const OUString& aString ) throw(uno::Ru
 uno::Reference< container::XEnumeration > SAL_CALL SvxUnoTextBase::createEnumeration()
     throw(uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     ESelection aSelection;
     ::GetSelection( aSelection, GetEditSource()->GetTextForwarder() );
@@ -2100,7 +2100,7 @@ uno::Type SAL_CALL SvxUnoTextBase::getElementType(  ) throw(uno::RuntimeExceptio
 
 sal_Bool SAL_CALL SvxUnoTextBase::hasElements(  ) throw(uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if(GetEditSource())
     {
@@ -2196,7 +2196,7 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextBase::appendParagraph(
         const uno::Sequence< beans::PropertyValue >& rCharAndParaProps )
     throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     uno::Reference< text::XTextRange > xRet;
     SvxEditSource *pEditSource = GetEditSource();
     SvxTextForwarder *pTextForwarder = pEditSource ? pEditSource->GetTextForwarder() : 0;
@@ -2226,7 +2226,7 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextBase::finishParagraph(
         const uno::Sequence< beans::PropertyValue >& rCharAndParaProps )
     throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     uno::Reference< text::XTextRange > xRet;
     SvxEditSource *pEditSource = GetEditSource();
@@ -2258,7 +2258,7 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextBase::appendTextPortion(
         const uno::Sequence< beans::PropertyValue >& rCharAndParaProps )
     throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     SvxEditSource *pEditSource = GetEditSource();
     SvxTextForwarder *pTextForwarder = pEditSource ? pEditSource->GetTextForwarder() : 0;
@@ -2297,7 +2297,7 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextBase::appendTextPortion(
 void SvxUnoTextBase::copyText(
     const uno::Reference< text::XTextCopy >& xSource ) throw ( uno::RuntimeException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     uno::Reference< lang::XUnoTunnel > xUT( xSource, uno::UNO_QUERY );
     SvxEditSource *pEditSource = GetEditSource();
     SvxTextForwarder *pTextForwarder = pEditSource ? pEditSource->GetTextForwarder() : 0;

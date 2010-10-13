@@ -1419,7 +1419,7 @@ void SvxUnogetInternalNameForItem( const sal_Int16 nWhich, const rtl::OUString& 
 
 comphelper::PropertySetInfo* SvxPropertySetInfoPool::getOrCreate( sal_Int32 nServiceId ) throw()
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if( nServiceId > SVXUNO_SERVICEID_LASTID )
     {

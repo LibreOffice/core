@@ -139,7 +139,7 @@ throw (uno::RuntimeException)
 
     if ( xWindow.is() )
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pWindow && pWindow->GetType() == WINDOW_STATUSBAR )
         {
@@ -177,7 +177,7 @@ throw (uno::RuntimeException)
 
     if ( xWindow.is() )
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pWindow && pWindow->GetType() == WINDOW_STATUSBAR )
         {
@@ -207,7 +207,7 @@ throw (uno::RuntimeException)
 
     if ( xWindow.is() )
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pWindow && pWindow->GetType() == WINDOW_STATUSBAR )
         {
@@ -260,7 +260,7 @@ throw (uno::RuntimeException)
 
     if ( xWindow.is() && bSetValue )
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pWindow && pWindow->GetType() == WINDOW_STATUSBAR )
         {

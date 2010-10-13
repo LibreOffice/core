@@ -674,7 +674,7 @@ void DbCellControl::implAdjustGenericFieldSetting( const Reference< XPropertySet
 //------------------------------------------------------------------------------
 void DbCellControl::_propertyChanged(const PropertyChangeEvent& _rEvent) throw(RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     Reference< XPropertySet > xSourceProps( _rEvent.Source, UNO_QUERY );
 
@@ -4043,7 +4043,7 @@ void SAL_CALL FmXCheckBoxCell::removeActionListener( const Reference< awt::XActi
 //------------------------------------------------------------------
 void SAL_CALL FmXCheckBoxCell::setLabel( const ::rtl::OUString& _Label ) throw (RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( m_pColumn )
     {
         DbGridControl& rGrid( m_pColumn->GetParent() );

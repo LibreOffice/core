@@ -1248,7 +1248,7 @@ USHORT SbModule::Run( SbMethod* pMeth )
                 delete pINST, pINST = NULL, bDelInst = FALSE;
 
                 // #i30690
-                vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aSolarGuard;
                 SendHint( GetParent(), SBX_HINT_BASICSTOP, pMeth );
 
                 GlobalRunDeInit();

@@ -177,7 +177,7 @@ DropdownToolbarController::~DropdownToolbarController()
 void SAL_CALL DropdownToolbarController::dispose()
 throw ( RuntimeException )
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     m_pToolbar->SetItemWindow( m_nID, 0 );
     delete m_pListBoxControl;

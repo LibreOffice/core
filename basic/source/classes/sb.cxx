@@ -1460,7 +1460,7 @@ BOOL runsInSetup( void )
 
 void StarBASIC::MakeErrorText( SbError nId, const String& aMsg )
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     if( bStaticSuppressSfxResource )
     {
@@ -1504,7 +1504,7 @@ void StarBASIC::MakeErrorText( SbError nId, const String& aMsg )
 BOOL StarBASIC::CError
     ( SbError code, const String& rMsg, USHORT l, USHORT c1, USHORT c2 )
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     // compiler error during runtime -> stop programm
     if( IsRunning() )
@@ -1546,7 +1546,7 @@ BOOL StarBASIC::RTError
 
 BOOL StarBASIC::RTError( SbError code, const String& rMsg, USHORT l, USHORT c1, USHORT c2 )
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     SbError c = code;
     if( (c & ERRCODE_CLASS_MASK) == ERRCODE_CLASS_COMPILER )

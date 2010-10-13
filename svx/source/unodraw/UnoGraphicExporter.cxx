@@ -1000,7 +1000,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
 sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDescriptor )
     throw(RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if( NULL == mpUnoPage )
         return sal_False;
@@ -1091,7 +1091,7 @@ void SAL_CALL GraphicExporter::cancel()
 void SAL_CALL GraphicExporter::setSourceDocument( const Reference< lang::XComponent >& xComponent )
     throw(IllegalArgumentException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     mxShapes = NULL;
     mpUnoPage = NULL;

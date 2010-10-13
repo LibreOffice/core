@@ -201,7 +201,7 @@ void MenuBarFactory::CreateUIElement(const ::rtl::OUString& ResourceURL
         aPropSeq[4] <<= aPropValue;
     }
 
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     Reference< XInitialization > xInit( _xMenuBar, UNO_QUERY );
     xInit->initialize( aPropSeq );
 }

@@ -91,7 +91,7 @@ static ImageList*            pImageListHiBig=0;
 
 static SfxImageManager_Impl* GetImageManager( SfxModule* pModule )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if ( pModule == 0 )
     {
@@ -120,7 +120,7 @@ static SfxImageManager_Impl* GetImageManager( SfxModule* pModule )
 // Global image list
 static ImageList* GetImageList( BOOL bBig, BOOL bHiContrast )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     // Has to be changed if we know how the IDs are named!!!
     ImageList*& rpList = bBig ? ( bHiContrast ? pImageListHiBig : pImageListBig ) :
@@ -209,7 +209,7 @@ Image SfxImageManager_Impl::GetImage( USHORT nId, BOOL bBig, BOOL bHiContrast )
 
 void SfxImageManager_Impl::SetSymbolsSize_Impl( sal_Int16 nNewSymbolsSize )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if ( nNewSymbolsSize != m_nSymbolsSize )
     {
@@ -290,7 +290,7 @@ SfxImageManager::~SfxImageManager()
 
 SfxImageManager* SfxImageManager::GetImageManager( SfxModule* pModule )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     SfxImageManagerMap::const_iterator pIter =
         m_ImageManagerMap.find( sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( pModule )));
@@ -353,7 +353,7 @@ Image SfxImageManager::SeekImage( USHORT nId, BOOL bHiContrast ) const
 
 void SfxImageManager::RegisterToolBox( ToolBox *pBox, USHORT nFlags )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     ToolBoxInf_Impl* pInf = new ToolBoxInf_Impl;
     pInf->pToolBox = pBox;
@@ -365,7 +365,7 @@ void SfxImageManager::RegisterToolBox( ToolBox *pBox, USHORT nFlags )
 
 void SfxImageManager::ReleaseToolBox( ToolBox *pBox )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     for ( sal_uInt32 n=0; n < pImp->m_aToolBoxes.size(); n++ )
     {

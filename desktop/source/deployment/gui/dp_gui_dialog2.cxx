@@ -101,7 +101,7 @@ namespace dp_gui {
 struct StrAllFiles : public rtl::StaticWithInit< const OUString, StrAllFiles >
 {
     const OUString operator () () {
-        const ::vos::OGuard guard( Application::GetSolarMutex() );
+        const SolarMutexGuard guard;
         ::std::auto_ptr< ResMgr > const resmgr( ResMgr::CreateResMgr( "fps_office" ) );
         OSL_ASSERT( resmgr.get() != 0 );
         String ret( ResId( STR_FILTERNAME_ALL, *resmgr.get() ) );
@@ -414,7 +414,7 @@ void ExtBoxWithBtns_Impl::MouseButtonDown( const MouseEvent& rMEvt )
     }
     else if ( rMEvt.IsLeft() )
     {
-        const vos::OGuard aGuard( Application::GetSolarMutex() );
+        const SolarMutexGuard aGuard;
         if ( rMEvt.IsMod1() && HasActive() )
             selectEntry( EXTENSION_LISTBOX_ENTRY_NOTFOUND );   // Selecting an not existing entry will deselect the current one
         else
@@ -560,7 +560,7 @@ DialogHelper::~DialogHelper()
 //------------------------------------------------------------------------------
 ResId DialogHelper::getResId( USHORT nId )
 {
-    const ::vos::OGuard guard( Application::GetSolarMutex() );
+    const SolarMutexGuard guard;
     return ResId( nId, *DeploymentGuiResMgr::get() );
 }
 
@@ -569,7 +569,7 @@ String DialogHelper::getResourceString( USHORT id )
 {
     // init with non-acquired solar mutex:
     BrandName::get();
-    const ::vos::OGuard guard( Application::GetSolarMutex() );
+    const SolarMutexGuard guard;
     String ret( ResId( id, *DeploymentGuiResMgr::get() ) );
     if (ret.SearchAscii( "%PRODUCTNAME" ) != STRING_NOTFOUND) {
         ret.SearchAndReplaceAllAscii( "%PRODUCTNAME", BrandName::get() );
@@ -594,7 +594,7 @@ bool DialogHelper::continueOnSharedExtension( const uno::Reference< deployment::
 {
     if ( !bHadWarning && IsSharedPkgMgr( xPackage ) )
     {
-        const ::vos::OGuard guard( Application::GetSolarMutex() );
+        const SolarMutexGuard guard;
         WarningBox aInfoBox( pParent, getResId( nResID ) );
         String aMsgText = aInfoBox.GetMessText();
         aMsgText.SearchAndReplaceAllAscii( "%PRODUCTNAME", BrandName::get() );
@@ -628,7 +628,7 @@ void DialogHelper::openWebBrowser( const OUString & sURL, const OUString &sTitle
     {
         uno::Any exc( ::cppu::getCaughtException() );
         OUString msg( ::comphelper::anyToString( exc ) );
-        const ::vos::OGuard guard( Application::GetSolarMutex() );
+        const SolarMutexGuard guard;
         ErrorBox aErrorBox( NULL, WB_OK, msg );
         aErrorBox.SetText( sTitle );
         aErrorBox.Execute();
@@ -638,7 +638,7 @@ void DialogHelper::openWebBrowser( const OUString & sURL, const OUString &sTitle
 //------------------------------------------------------------------------------
 bool DialogHelper::installExtensionWarn( const OUString &rExtensionName ) const
 {
-    const ::vos::OGuard guard( Application::GetSolarMutex() );
+    const SolarMutexGuard guard;
     WarningBox aInfo( m_pVCLWindow, getResId( RID_WARNINGBOX_INSTALL_EXTENSION ) );
 
     String sText( aInfo.GetMessText() );
@@ -651,7 +651,7 @@ bool DialogHelper::installExtensionWarn( const OUString &rExtensionName ) const
 //------------------------------------------------------------------------------
 bool DialogHelper::installForAllUsers( bool &bInstallForAll ) const
 {
-    const ::vos::OGuard guard( Application::GetSolarMutex() );
+    const SolarMutexGuard guard;
     QueryBox aQuery( m_pVCLWindow, getResId( RID_QUERYBOX_INSTALL_FOR_ALL ) );
 
     String sMsgText = aQuery.GetMessText();
@@ -768,7 +768,7 @@ void ExtMgrDialog::setGetExtensionsURL( const ::rtl::OUString &rURL )
 long ExtMgrDialog::addPackageToList( const uno::Reference< deployment::XPackage > &xPackage,
                                      bool bLicenseMissing )
 {
-    const vos::OGuard aGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aGuard;
     m_aUpdateBtn.Enable( true );
     return m_pExtensionBox->addEntry( xPackage, bLicenseMissing );
 }
@@ -782,14 +782,14 @@ void ExtMgrDialog::prepareChecking()
 //------------------------------------------------------------------------------
 void ExtMgrDialog::checkEntries()
 {
-    const ::vos::OGuard guard( Application::GetSolarMutex() );
+    const SolarMutexGuard guard;
     m_pExtensionBox->checkEntries();
 }
 
 //------------------------------------------------------------------------------
 bool ExtMgrDialog::removeExtensionWarn( const OUString &rExtensionName ) const
 {
-    const ::vos::OGuard guard( Application::GetSolarMutex() );
+    const SolarMutexGuard guard;
     WarningBox aInfo( const_cast< ExtMgrDialog* >(this), getResId( RID_WARNINGBOX_REMOVE_EXTENSION ) );
 
     String sText( aInfo.GetMessText() );
@@ -1040,7 +1040,7 @@ void ExtMgrDialog::updateProgress( const OUString &rText,
 //------------------------------------------------------------------------------
 void ExtMgrDialog::updatePackageInfo( const uno::Reference< deployment::XPackage > &xPackage )
 {
-    const vos::OGuard aGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aGuard;
     m_pExtensionBox->updateEntry( xPackage );
 }
 
@@ -1326,7 +1326,7 @@ long UpdateRequiredDialog::addPackageToList( const uno::Reference< deployment::X
     if ( !bLicenseMissing && !checkDependencies( xPackage ) )
     {
         m_bHasLockedEntries |= m_pManager->isReadOnly( xPackage );
-        const vos::OGuard aGuard( Application::GetSolarMutex() );
+        const SolarMutexGuard aGuard;
         m_aUpdateBtn.Enable( true );
         return m_pExtensionBox->addEntry( xPackage );
     }
@@ -1342,7 +1342,7 @@ void UpdateRequiredDialog::prepareChecking()
 //------------------------------------------------------------------------------
 void UpdateRequiredDialog::checkEntries()
 {
-    const ::vos::OGuard guard( Application::GetSolarMutex() );
+    const SolarMutexGuard guard;
     m_pExtensionBox->checkEntries();
 
     if ( ! hasActiveEntries() )
@@ -1455,7 +1455,7 @@ void UpdateRequiredDialog::updatePackageInfo( const uno::Reference< deployment::
     // We will remove all updated packages with satisfied dependencies, but
     // we will show all disabled entries so the user sees the result
     // of the 'disable all' button
-    const vos::OGuard aGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aGuard;
     if ( isEnabled( xPackage ) && checkDependencies( xPackage ) )
         m_pExtensionBox->removeEntry( xPackage );
     else

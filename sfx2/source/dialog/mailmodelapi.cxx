@@ -199,7 +199,7 @@ void SAL_CALL OMailSendThreadImpl::run()
 
     if ( m_bSend == sal_False )
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         Reference< ::com::sun::star::awt::XWindow > xParentWindow = m_xCurrentFrame->getContainerWindow();
         Window*                                     pParentWindow = VCLUnoHelper::GetWindow( xParentWindow );
 

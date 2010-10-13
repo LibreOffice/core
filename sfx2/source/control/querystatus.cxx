@@ -112,14 +112,14 @@ SfxQueryStatus_Impl::~SfxQueryStatus_Impl()
 void SAL_CALL SfxQueryStatus_Impl::disposing( const EventObject& )
 throw( RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     m_xDispatch.clear();
 }
 
 void SAL_CALL SfxQueryStatus_Impl::statusChanged( const FeatureStateEvent& rEvent)
 throw( RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     m_pItem  = NULL;
     m_eState = SFX_ITEM_DISABLED;
@@ -190,7 +190,7 @@ throw( RuntimeException )
 // Query method
 SfxItemState SfxQueryStatus_Impl::QueryState( SfxPoolItem*& rpPoolItem )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( !m_bQueryInProgress )
     {
         m_pItem  = NULL;
@@ -237,7 +237,7 @@ SfxQueryStatus::~SfxQueryStatus()
 
 SfxItemState SfxQueryStatus::QueryState( SfxPoolItem*& rpPoolItem )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     return m_pSfxQueryStatusImpl->QueryState( rpPoolItem );
 }
 
