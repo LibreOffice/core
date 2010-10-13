@@ -32,21 +32,20 @@
 #include <dlfcn.h>
 #include <cxxabi.h>
 #include <hash_map>
+#include <sys/param.h>
 
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 
-#include <bridges/cpp_uno/bridge.hxx>
+#include <com/sun/star/uno/genfunc.hxx>
+#include "com/sun/star/uno/RuntimeException.hpp"
 #include <typelib/typedescription.hxx>
 #include <uno/any2.h>
 
 #include "share.hxx"
 
-#ifndef RTLD_DEFAULT
-#define RTLD_DEFAULT    ((void *) -2)
-#endif
 
 using namespace ::std;
 using namespace ::osl;
@@ -119,7 +118,11 @@ public:
 };
 //__________________________________________________________________________________________________
 RTTI::RTTI() SAL_THROW( () )
-    : m_hApp( dlopen( 0 , RTLD_LAZY ) )
+#if 1
+    : m_hApp( dlopen( 0, RTLD_NOW | RTLD_GLOBAL ) )
+#else
+    : m_hApp( dlopen( 0, RTLD_LAZY ) )
+#endif
 {
 }
 //__________________________________________________________________________________________________
@@ -136,8 +139,8 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
     OUString const & unoName = *(OUString const *)&pTypeDescr->aBase.pTypeName;
 
     MutexGuard guard( m_mutex );
-    t_rtti_map::const_iterator iFind( m_rttis.find( unoName ) );
-    if (iFind == m_rttis.end())
+    t_rtti_map::const_iterator iRttiFind( m_rttis.find( unoName ) );
+    if (iRttiFind == m_rttis.end())
     {
         // RTTI symbol
         OStringBuffer buf( 64 );
@@ -154,7 +157,11 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
         buf.append( 'E' );
 
         OString symName( buf.makeStringAndClear() );
+#if 1 /* #i22253# */
         rtti = (type_info *)dlsym( RTLD_DEFAULT, symName.getStr() );
+#else
+        rtti = (type_info *)dlsym( m_hApp, symName.getStr() );
+#endif
 
         if (rtti)
         {
@@ -201,7 +208,7 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
     }
     else
     {
-        rtti = iFind->second;
+        rtti = iRttiFind->second;
     }
 
     return rtti;
@@ -225,7 +232,7 @@ static void deleteException( void * pExc )
 //==================================================================================================
 void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
 {
-#if defined DEBUG
+#if OSL_DEBUG_LEVEL > 1
     OString cstr(
         OUStringToOString(
             *reinterpret_cast< OUString const * >( &pUnoExc->pType->pTypeName ),
@@ -293,7 +300,7 @@ void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping 
             Reference< XInterface >() );
         Type const & rType = ::getCppuType( &aRE );
         uno_type_any_constructAndConvert( pUnoExc, &aRE, rType.getTypeLibType(), pCpp2Uno );
-#if defined _DEBUG
+#if OSL_DEBUG_LEVEL > 0
         OString cstr( OUStringToOString( aRE.Message, RTL_TEXTENCODING_ASCII_US ) );
         OSL_ENSURE( 0, cstr.getStr() );
 #endif
@@ -302,7 +309,7 @@ void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping 
 
     typelib_TypeDescription * pExcTypeDescr = 0;
     OUString unoName( toUNOname( header->exceptionType->name() ) );
-#if defined DEBUG
+#if OSL_DEBUG_LEVEL > 1
     OString cstr_unoName( OUStringToOString( unoName, RTL_TEXTENCODING_ASCII_US ) );
     fprintf( stderr, "> c++ exception occured: %s\n", cstr_unoName.getStr() );
 #endif
@@ -314,7 +321,7 @@ void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping 
             Reference< XInterface >() );
         Type const & rType = ::getCppuType( &aRE );
         uno_type_any_constructAndConvert( pUnoExc, &aRE, rType.getTypeLibType(), pCpp2Uno );
-#if defined _DEBUG
+#if OSL_DEBUG_LEVEL > 0
         OString cstr( OUStringToOString( aRE.Message, RTL_TEXTENCODING_ASCII_US ) );
         OSL_ENSURE( 0, cstr.getStr() );
 #endif
