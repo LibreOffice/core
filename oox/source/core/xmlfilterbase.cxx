@@ -396,9 +396,13 @@ writeElement( FSHelperPtr pDoc, sal_Int32 nXmlElement, const Locale& rLocale )
 static void
 writeCoreProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xProperties )
 {
-    rSelf.addRelation(
-            CREATE_OUSTRING( "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" ),
-            CREATE_OUSTRING( "docProps/core.xml" ) );
+    OUString sValue;
+    if( rSelf.getVersion() == oox::core::ISOIEC_29500_2008  )
+        sValue = CREATE_OUSTRING( "http://schemas.openxmlformats.org/officedocument/2006/relationships/metadata/core-properties" );
+    else
+        sValue = CREATE_OUSTRING( "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" );
+
+    rSelf.addRelation( sValue, CREATE_OUSTRING( "docProps/core.xml" ) );
     FSHelperPtr pCoreProps = rSelf.openFragmentStreamWithSerializer(
             CREATE_OUSTRING( "docProps/core.xml" ),
             CREATE_OUSTRING( "application/vnd.openxmlformats-package.core-properties+xml" ) );
