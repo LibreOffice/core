@@ -242,7 +242,7 @@ Service::createInstanceWithArguments(
     if (nodepath.getLength() == 0) {
         badNodePath();
     }
-    // For backwards compatibility, allow a notepath that misses the leading
+    // For backwards compatibility, allow a nodepath that misses the leading
     // slash:
     if (nodepath[0] != '/') {
         nodepath = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + nodepath;
@@ -457,7 +457,8 @@ Factory::createInstanceWithArgumentsAndContext(
                             " arguments")),
                     0);
             }
-            // For backwards compatibility, allow "Locale" in any case:
+            // For backwards compatibility, allow "Locale" and (ignored)
+            // "EnableAsync" in any case:
             if (name.equalsIgnoreAsciiCaseAsciiL(
                     RTL_CONSTASCII_STRINGPARAM("locale")))
             {
@@ -472,8 +473,9 @@ Factory::createInstanceWithArgumentsAndContext(
                                 " one, non-empty, string Locale argument")),
                         0);
                 }
-            } else {
-                //TODO
+            } else if (!name.equalsIgnoreAsciiCaseAsciiL(
+                           RTL_CONSTASCII_STRINGPARAM("enableasync")))
+            {
                 throw css::uno::Exception(
                     rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM(
