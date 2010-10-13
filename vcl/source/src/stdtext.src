@@ -101,6 +101,11 @@ String SV_ACCESSERROR_TURNAROUND_MSG
     Text [ en-US ] = "The Java Access Bridge could not be started.";
 };
 
+String SV_ACCESSERROR_NO_FONTS
+{
+    Text [ en-US ] = "No fonts could be found on the system.";
+};
+
 String SV_STDTEXT_ABOUT
 {
     Text [ en-US ] = "About %PRODUCTNAME";
