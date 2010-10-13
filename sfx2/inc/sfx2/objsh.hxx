@@ -368,7 +368,7 @@ public:
     sal_Bool                    SaveCompletedChildren( sal_Bool bSuccess );
 
     sal_Bool                    InsertFrom( SfxMedium &rMedium );
-    sal_Bool                    ImportFrom( SfxMedium &rMedium );
+    virtual sal_Bool            ImportFrom( SfxMedium &rMedium );
     sal_Bool                    ExportTo( SfxMedium &rMedium );
 
     // xmlsec05, check with SFX team
