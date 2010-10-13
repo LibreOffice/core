@@ -296,15 +296,16 @@ TabPage RID_SCPAGE_COMPATIBILITY
 
     FixedText FT_KEY_BINDINGS
     {
-        Pos = MAP_APPFONT ( 21, 16 ) ;
-        Size = MAP_APPFONT ( 80, 8 ) ;
-        Text [ en-US ] = "~Key bindings" ;
+        Pos = MAP_APPFONT ( 12, 16 ) ;
+        Size = MAP_APPFONT ( 165, 24 ) ;
+        Wordbreak = TRUE;
+        Text [ en-US ] = "Select desired ~key binding type. This may overwrite the existing key bindings if any." ;
     };
 
     ListBox LB_KEY_BINDINGS
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 85, 14 ) ;
+        Pos = MAP_APPFONT ( 179, 20 ) ;
         Size = MAP_APPFONT ( 75, 46 ) ;
         DropDown = TRUE ;
         StringList [ en-US ] =
