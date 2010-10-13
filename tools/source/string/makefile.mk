@@ -37,7 +37,9 @@ TARGET=str
 
 # --- Files --------------------------------------------------------
 
+.IF "$(OS)"!="AIX"
 ALWAYSDBGFILES = $(SLO)$/debugprint.obj
+.ENDIF
 
 .IF "$(ALWAYSDBGFILES)" != ""
 ALWAYSDBGTARGET=do_it_alwaysdebug
