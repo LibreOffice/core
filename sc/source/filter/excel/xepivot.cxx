@@ -740,6 +740,8 @@ void XclExpPivotCache::Save( XclExpStream& rStrm )
 void XclExpPivotCache::SaveXml( XclExpXmlStream& rStrm )
 {
     DBG_ASSERT( mbValid, "XclExpPivotCache::Save - invalid pivot cache" );
+#ifdef XLSX_PIVOT_CACHE /* <pivotCache> without xl/pivotCaches/ cacheStream
+                           results in a broken .xlsx */
     sax_fastparser::FSHelperPtr& rWorkbook = rStrm.GetCurrentStream();
     OUString sId = OUStringBuffer()
         .appendAscii("rId")
@@ -758,6 +760,7 @@ void XclExpPivotCache::SaveXml( XclExpXmlStream& rStrm )
     // create the pivot cache storage stream
     // OOXTODO: WriteCacheStream();
     rWorkbook->endElement( XML_pivotCache );
+#endif /* XLSX_PIVOT_CACHE */
 }
 
 // private --------------------------------------------------------------------
@@ -1871,12 +1874,15 @@ void XclExpPivotTableManager::WritePivotCaches( XclExpStream& rStrm )
 
 void XclExpPivotTableManager::WritePivotCachesXml( XclExpXmlStream& rStrm )
 {
+#ifdef XLSX_PIVOT_CACHE /* <pivotCache> without xl/pivotCaches/ cacheStream
+                           results in a broken .xlsx */
     if( maPCacheList.IsEmpty() )
         return;
     sax_fastparser::FSHelperPtr& rWorkbook = rStrm.GetCurrentStream();
     rWorkbook->startElement( XML_pivotCaches, FSEND );
     maPCacheList.SaveXml( rStrm );
     rWorkbook->endElement( XML_pivotCaches );
+#endif /* XLSX_PIVOT_CACHE */
 }
 
 void XclExpPivotTableManager::WritePivotTables( XclExpStream& rStrm, SCTAB nScTab )
