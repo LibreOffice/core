@@ -76,6 +76,8 @@ void OfficeConnection::setUp() {
         rtl::OUString nofirstArg(
             RTL_CONSTASCII_USTRINGPARAM("-nofirststartwizard"));
         rtl::OUString norestoreArg(RTL_CONSTASCII_USTRINGPARAM("-norestore"));
+        //Disable use of the unix standalone splash screen app for the tests
+        rtl::OUString noSplashArg(RTL_CONSTASCII_USTRINGPARAM("-no-oosplash"));
         rtl::OUString acceptArg(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-accept=")) + desc +
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";urp")));
@@ -93,7 +95,7 @@ void OfficeConnection::setUp() {
             RTL_CONSTASCII_USTRINGPARAM(
                 "-env:UNO_JAVA_JFW_ENV_CLASSPATH=true"));
         rtl_uString * args[] = {
-            noquickArg.pData, nofirstArg.pData, norestoreArg.pData,
+            noquickArg.pData, nofirstArg.pData, norestoreArg.pData, noSplashArg.pData,
             acceptArg.pData, userArg.pData, jreArg.pData, classpathArg.pData };
         rtl_uString ** envs = 0;
         rtl::OUString argEnv;
