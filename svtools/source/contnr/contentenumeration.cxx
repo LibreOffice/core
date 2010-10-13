@@ -312,7 +312,7 @@ namespace svt
 
                             if ( pData->mbIsFolder )
                             {
-                                ::vos::OGuard aGuard( Application::GetSolarMutex() );
+                                SolarMutexGuard aGuard;
                                 ::svtools::VolumeInfo aVolInfo( pData->mbIsVolume, pData->mbIsRemote,
                                                                 pData->mbIsRemoveable, pData->mbIsFloppy,
                                                                 pData->mbIsCompactDisc );

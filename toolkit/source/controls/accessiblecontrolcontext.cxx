@@ -252,7 +252,7 @@ namespace toolkit
     //--------------------------------------------------------------------
     awt::Rectangle SAL_CALL OAccessibleControlContext::implGetBounds(  ) throw (RuntimeException)
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
             // want to do some VCL stuff here ...
         OContextEntryGuard aGuard( this );
 
@@ -332,7 +332,7 @@ namespace toolkit
     //--------------------------------------------------------------------
     sal_Int32 SAL_CALL OAccessibleControlContext::getForeground(  ) throw (::com::sun::star::uno::RuntimeException)
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
             // want to do some VCL stuff here ...
         OContextEntryGuard aGuard( this );
 
@@ -358,7 +358,7 @@ namespace toolkit
     //--------------------------------------------------------------------
     sal_Int32 SAL_CALL OAccessibleControlContext::getBackground(  ) throw (::com::sun::star::uno::RuntimeException)
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
             // want to do some VCL stuff here ...
         OContextEntryGuard aGuard( this );
 

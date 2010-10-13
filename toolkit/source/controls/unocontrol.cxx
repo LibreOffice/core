@@ -1480,7 +1480,7 @@ Sequence< ::rtl::OUString > UnoControl::getSupportedServiceNames(  ) throw(Runti
 Reference< XAccessibleContext > SAL_CALL UnoControl::getAccessibleContext(  ) throw (RuntimeException)
 {
     // creation of the context will certainly require the SolarMutex ...
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( GetMutex() );
 
     Reference< XAccessibleContext > xCurrentContext( maAccessibleContext.get(), UNO_QUERY );

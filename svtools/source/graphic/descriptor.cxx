@@ -309,7 +309,7 @@ uno::Sequence< uno::Type > SAL_CALL GraphicDescriptor::getTypes()
 uno::Sequence< sal_Int8 > SAL_CALL GraphicDescriptor::getImplementationId()
     throw( uno::RuntimeException )
 {
-    vos::OGuard                         aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     static uno::Sequence< sal_Int8 >    aId;
 
     if( aId.getLength() == 0 )
@@ -325,7 +325,7 @@ uno::Sequence< sal_Int8 > SAL_CALL GraphicDescriptor::getImplementationId()
 
 ::comphelper::PropertySetInfo* GraphicDescriptor::createPropertySetInfo()
 {
-    vos::OGuard                     aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     ::comphelper::PropertySetInfo*  pRet = new ::comphelper::PropertySetInfo();
 
     static ::comphelper::PropertyMapEntry aEntries[] =
@@ -364,7 +364,7 @@ void GraphicDescriptor::_setPropertyValues( const comphelper::PropertyMapEntry**
 void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, uno::Any* pValues )
     throw( beans::UnknownPropertyException, lang::WrappedTargetException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     while( *ppEntries )
     {

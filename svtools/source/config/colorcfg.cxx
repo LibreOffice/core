@@ -364,7 +364,7 @@ sal_Bool ColorConfig_Impl::RemoveScheme(const rtl::OUString& rScheme)
  ---------------------------------------------------------------------------*/
 void ColorConfig_Impl::SettingsChanged()
 {
-    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aVclGuard;
 
     ImplUpdateApplicationSettings();
 

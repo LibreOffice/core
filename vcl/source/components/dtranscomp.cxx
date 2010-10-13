@@ -272,7 +272,7 @@ Reference< XInterface > ClipboardFactory::createInstance() throw()
 
 Reference< XInterface > ClipboardFactory::createInstanceWithArguments( const Sequence< Any >& arguments ) throw()
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     Reference< XInterface > xResult = ImplGetSVData()->mpDefInst->CreateClipboard( arguments );
     return xResult;
 }
@@ -410,7 +410,7 @@ OUString SAL_CALL DragSource_getImplementationName()
 
 Reference< XInterface > SAL_CALL DragSource_createInstance( const Reference< XMultiServiceFactory >&  )
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     Reference< XInterface > xResult = ImplGetSVData()->mpDefInst->CreateDragSource();
     return xResult;
 }
@@ -525,7 +525,7 @@ OUString SAL_CALL DropTarget_getImplementationName()
 
 Reference< XInterface > SAL_CALL DropTarget_createInstance( const Reference< XMultiServiceFactory >&  )
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     Reference< XInterface > xResult = ImplGetSVData()->mpDefInst->CreateDropTarget();
     return xResult;
 }

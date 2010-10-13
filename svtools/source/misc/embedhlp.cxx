@@ -133,7 +133,7 @@ void SAL_CALL EmbedEventListener_Impl::stateChanged( const lang::EventObject&,
                                                     ::sal_Int32 nNewState )
     throw ( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     nState = nNewState;
     if ( !pObject )
         return;
@@ -169,7 +169,7 @@ void SAL_CALL EmbedEventListener_Impl::stateChanged( const lang::EventObject&,
 
 void SAL_CALL EmbedEventListener_Impl::modified( const lang::EventObject& ) throw (uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( pObject && pObject->GetViewAspect() != embed::Aspects::MSOLE_ICON )
     {
         if ( nState == embed::EmbedStates::RUNNING )
@@ -190,7 +190,7 @@ void SAL_CALL EmbedEventListener_Impl::modified( const lang::EventObject& ) thro
 
 void SAL_CALL EmbedEventListener_Impl::notifyEvent( const document::EventObject& aEvent ) throw( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if ( pObject && aEvent.EventName.equalsAscii("OnVisAreaChanged") && pObject->GetViewAspect() != embed::Aspects::MSOLE_ICON && !pObject->IsChart() )
     {

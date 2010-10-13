@@ -148,7 +148,7 @@ uno::Sequence< uno::Type > SAL_CALL GraphicProvider::getTypes()
 uno::Sequence< sal_Int8 > SAL_CALL GraphicProvider::getImplementationId()
     throw(uno::RuntimeException)
 {
-    vos::OGuard                         aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     static uno::Sequence< sal_Int8 >    aId;
 
     if( aId.getLength() == 0 )

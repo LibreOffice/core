@@ -62,7 +62,7 @@ void SAL_CALL TransferableClipboardListener::changedContents(
 {
     if ( aLink.IsSet() )
     {
-        const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        const SolarMutexGuard aGuard;
 
         TransferableDataHelper aDataHelper( rEventObject.Contents );
         aLink.Call( &aDataHelper );

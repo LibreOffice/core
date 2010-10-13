@@ -119,7 +119,7 @@ namespace canvas
             {
                 // This here is the whole purpose of the template:
                 // protecting object deletion with the solar mutex
-                ::vos::OGuard aGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aGuard;
 
                 if( mpWrappee )
                     delete mpWrappee;

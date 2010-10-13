@@ -495,7 +495,7 @@ static String GetDescriptionByFactory_Impl( const String& rFactory )
     String aRet;
     if ( nResId )
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         aRet = String( SvtResId( nResId ) );
     }
     return aRet;
@@ -773,7 +773,7 @@ String SvFileInformationManager::GetDescription_Impl( const INetURLObject& rObje
             sDescription = sExtension;
             sDescription += '-';
         }
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         sDescription += String( SvtResId( nResId ) );
     }
 

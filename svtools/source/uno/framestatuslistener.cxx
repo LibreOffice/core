@@ -62,13 +62,13 @@ FrameStatusListener::~FrameStatusListener()
 
 Reference< XFrame > FrameStatusListener::getFrameInterface() const
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     return m_xFrame;
 }
 
 Reference< XMultiServiceFactory > FrameStatusListener::getServiceManager() const
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     return m_xServiceManager;
 }
 
@@ -106,7 +106,7 @@ throw (::com::sun::star::uno::RuntimeException)
 {
     Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
 
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     if ( m_bDisposed )
         throw DisposedException();
 
@@ -156,7 +156,7 @@ throw ( RuntimeException )
 {
     Reference< XInterface > xSource( Source.Source );
 
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     URLToDispatchMap::iterator pIter = m_aListenerMap.begin();
     while ( pIter != m_aListenerMap.end() )
@@ -193,7 +193,7 @@ void FrameStatusListener::addStatusListener( const rtl::OUString& aCommandURL )
     com::sun::star::util::URL    aTargetURL;
 
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
         URLToDispatchMap::iterator pIter = m_aListenerMap.find( aCommandURL );
 
         // Already in the list of status listener. Do nothing.
@@ -256,7 +256,7 @@ void FrameStatusListener::addStatusListener( const rtl::OUString& aCommandURL )
 
 void FrameStatusListener::removeStatusListener( const rtl::OUString& aCommandURL )
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     URLToDispatchMap::iterator pIter = m_aListenerMap.find( aCommandURL );
     if ( pIter != m_aListenerMap.end() )
@@ -289,7 +289,7 @@ void FrameStatusListener::bindListener()
     Reference< XStatusListener > xStatusListener;
 
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
 
         if ( !m_bInitialized )
             return;
@@ -360,7 +360,7 @@ void FrameStatusListener::bindListener()
 
 void FrameStatusListener::unbindListener()
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     if ( !m_bInitialized )
         return;
@@ -406,7 +406,7 @@ void FrameStatusListener::updateStatus( const rtl::OUString aCommandURL )
     com::sun::star::util::URL aTargetURL;
 
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
 
         if ( !m_bInitialized )
             return;

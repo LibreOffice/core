@@ -90,7 +90,7 @@ IMPL_STATIC_LINK( MainThreadFrameCloserRequest, worker, MainThreadFrameCloserReq
         if ( pMTRequest->m_xFrame.is() )
         {
             // this is the main thread, the solar mutex must be locked
-            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
 
             try
             {

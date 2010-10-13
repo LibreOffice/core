@@ -433,7 +433,7 @@ void    ExtendedColorConfig_Impl::Notify( const uno::Sequence<OUString>& /*rProp
     //loading via notification always uses the default setting
     Load(::rtl::OUString());
 
-    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aVclGuard;
 
     if(m_bLockBroadcast)
     {
@@ -565,7 +565,7 @@ sal_Bool ExtendedColorConfig_Impl::RemoveScheme(const rtl::OUString& rScheme)
  ---------------------------------------------------------------------------*/
 void ExtendedColorConfig_Impl::SettingsChanged()
 {
-    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aVclGuard;
 
     Broadcast( SfxSimpleHint( SFX_HINT_COLORS_CHANGED ) );
 }
@@ -677,7 +677,7 @@ ExtendedColorConfigValue ExtendedColorConfig::GetComponentColorConfigValue(const
  ---------------------------------------------------------------------------*/
 void ExtendedColorConfig::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
-    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aVclGuard;
 
     Broadcast( rHint );
 }

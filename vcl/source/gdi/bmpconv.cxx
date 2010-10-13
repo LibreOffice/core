@@ -150,7 +150,7 @@ Any SAL_CALL BmpConverter::invoke(
         Sequence< sal_Int8 > aDIB = xBM->getDIB();
 
         // call into vcl not thread safe
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         SvMemoryStream aStream( aDIB.getArray(), aDIB.getLength(), STREAM_READ | STREAM_WRITE );
         Bitmap aBM;

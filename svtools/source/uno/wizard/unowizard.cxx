@@ -274,7 +274,7 @@ namespace svt { namespace uno
     //------------------------------------------------------------------------------------------------------------------
     ::rtl::OUString SAL_CALL Wizard::getHelpURL() throw (RuntimeException)
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
         if ( !m_pDialog )
@@ -287,7 +287,7 @@ namespace svt { namespace uno
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL Wizard::setHelpURL( const ::rtl::OUString& i_HelpURL ) throw (RuntimeException)
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
         if ( !m_pDialog )
@@ -299,7 +299,7 @@ namespace svt { namespace uno
     //------------------------------------------------------------------------------------------------------------------
     Reference< XWindow > SAL_CALL Wizard::getDialogWindow() throw (RuntimeException)
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
         ENSURE_OR_RETURN( m_pDialog, "Wizard::getDialogWindow: illegal call (execution did not start, yet)!", NULL );
@@ -309,7 +309,7 @@ namespace svt { namespace uno
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL Wizard::enableButton( ::sal_Int16 i_WizardButton, ::sal_Bool i_Enable ) throw (RuntimeException)
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
         WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_pDialog );
@@ -321,7 +321,7 @@ namespace svt { namespace uno
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL Wizard::setDefaultButton( ::sal_Int16 i_WizardButton ) throw (RuntimeException)
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
         WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_pDialog );
@@ -333,7 +333,7 @@ namespace svt { namespace uno
     //------------------------------------------------------------------------------------------------------------------
     sal_Bool SAL_CALL Wizard::travelNext(  ) throw (RuntimeException)
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
         WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_pDialog );
@@ -345,7 +345,7 @@ namespace svt { namespace uno
     //------------------------------------------------------------------------------------------------------------------
     sal_Bool SAL_CALL Wizard::travelPrevious(  ) throw (RuntimeException)
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
         WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_pDialog );
@@ -357,7 +357,7 @@ namespace svt { namespace uno
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL Wizard::enablePage( ::sal_Int16 i_PageID, ::sal_Bool i_Enable ) throw (NoSuchElementException, InvalidStateException, RuntimeException)
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
         WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_pDialog );
@@ -375,7 +375,7 @@ namespace svt { namespace uno
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL Wizard::updateTravelUI(  ) throw (RuntimeException)
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
         WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_pDialog );
@@ -387,7 +387,7 @@ namespace svt { namespace uno
     //------------------------------------------------------------------------------------------------------------------
     ::sal_Bool SAL_CALL Wizard::advanceTo( ::sal_Int16 i_PageId ) throw (RuntimeException)
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
         WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_pDialog );
@@ -399,7 +399,7 @@ namespace svt { namespace uno
     //------------------------------------------------------------------------------------------------------------------
     ::sal_Bool SAL_CALL Wizard::goBackTo( ::sal_Int16 i_PageId ) throw (RuntimeException)
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
         WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_pDialog );
@@ -411,7 +411,7 @@ namespace svt { namespace uno
     //------------------------------------------------------------------------------------------------------------------
     Reference< XWizardPage > SAL_CALL Wizard::getCurrentPage(  ) throw (RuntimeException)
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
         WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_pDialog );
@@ -423,7 +423,7 @@ namespace svt { namespace uno
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL Wizard::activatePath( ::sal_Int16 i_PathIndex, ::sal_Bool i_Final ) throw (NoSuchElementException, InvalidStateException, RuntimeException)
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
         if ( ( i_PathIndex < 0 ) || ( i_PathIndex >= m_aWizardSteps.getLength() ) )

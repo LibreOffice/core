@@ -95,7 +95,7 @@ OGenericUnoDialog::~OGenericUnoDialog()
 {
     if ( m_pDialog )
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( m_pDialog )
             destroyDialog();
@@ -242,7 +242,7 @@ bool OGenericUnoDialog::impl_ensureDialog_lck()
 sal_Int16 SAL_CALL OGenericUnoDialog::execute(  ) throw(RuntimeException)
 {
     // both creation and execution of the dialog must be guarded with the SolarMutex, so be generous here
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     Dialog* pDialogToExecute = NULL;
     // create the dialog, if neccessary

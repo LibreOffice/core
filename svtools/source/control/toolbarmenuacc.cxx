@@ -172,7 +172,7 @@ Reference< XAccessibleContext > SAL_CALL ToolbarMenuAcc::getAccessibleContext() 
 
 sal_Int32 SAL_CALL ToolbarMenuAcc::getAccessibleChildCount() throw (RuntimeException)
 {
-    const vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     ThrowIfDisposed();
 
     return mpParent->getAccessibleChildCount();
@@ -182,7 +182,7 @@ sal_Int32 SAL_CALL ToolbarMenuAcc::getAccessibleChildCount() throw (RuntimeExcep
 
 Reference< XAccessible > SAL_CALL ToolbarMenuAcc::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException, RuntimeException)
 {
-    const vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     ThrowIfDisposed();
 
     return mpParent->getAccessibleChild(i);
@@ -193,7 +193,7 @@ Reference< XAccessible > SAL_CALL ToolbarMenuAcc::getAccessibleChild( sal_Int32 
 Reference< XAccessible > SAL_CALL ToolbarMenuAcc::getAccessibleParent() throw (RuntimeException)
 {
     ThrowIfDisposed();
-    const vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
 
     Reference< XAccessible > xRet;
 
@@ -208,7 +208,7 @@ Reference< XAccessible > SAL_CALL ToolbarMenuAcc::getAccessibleParent() throw (R
 
 sal_Int32 SAL_CALL ToolbarMenuAcc::getAccessibleIndexInParent() throw (RuntimeException)
 {
-    const vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     ThrowIfDisposed();
 
     Window* pParent = mpParent->mrMenu.GetParent();
@@ -245,7 +245,7 @@ OUString SAL_CALL ToolbarMenuAcc::getAccessibleDescription() throw (RuntimeExcep
 OUString SAL_CALL ToolbarMenuAcc::getAccessibleName() throw (RuntimeException)
 {
     ThrowIfDisposed();
-    const vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     OUString aRet;
 
     if( mpParent )
@@ -294,7 +294,7 @@ Reference< XAccessibleStateSet > SAL_CALL ToolbarMenuAcc::getAccessibleStateSet(
 Locale SAL_CALL ToolbarMenuAcc::getLocale() throw (IllegalAccessibleComponentStateException, RuntimeException)
 {
     ThrowIfDisposed();
-    const vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     const ::rtl::OUString aEmptyStr;
     Reference< XAccessible > xParent( getAccessibleParent() );
     Locale aRet( aEmptyStr, aEmptyStr, aEmptyStr );
@@ -376,7 +376,7 @@ sal_Bool SAL_CALL ToolbarMenuAcc::containsPoint( const awt::Point& aPoint ) thro
 
 Reference< XAccessible > SAL_CALL ToolbarMenuAcc::getAccessibleAtPoint( const awt::Point& aPoint ) throw (RuntimeException)
 {
-    const vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     ThrowIfDisposed();
 
     Reference< XAccessible > xRet;
@@ -409,7 +409,7 @@ Reference< XAccessible > SAL_CALL ToolbarMenuAcc::getAccessibleAtPoint( const aw
 awt::Rectangle SAL_CALL ToolbarMenuAcc::getBounds() throw (RuntimeException)
 {
     ThrowIfDisposed();
-    const vos::OGuard   aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     const Point         aOutPos( mpParent->mrMenu.GetPosPixel() );
     const Size          aOutSize( mpParent->mrMenu.GetOutputSizePixel() );
     awt::Rectangle      aRet;
@@ -427,7 +427,7 @@ awt::Rectangle SAL_CALL ToolbarMenuAcc::getBounds() throw (RuntimeException)
 awt::Point SAL_CALL ToolbarMenuAcc::getLocation() throw (RuntimeException)
 {
     ThrowIfDisposed();
-    const vos::OGuard   aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     const Point aOutPos( mpParent->mrMenu.GetPosPixel() );
     return awt::Point( aOutPos.X(), aOutPos.Y() );
 }
@@ -437,7 +437,7 @@ awt::Point SAL_CALL ToolbarMenuAcc::getLocation() throw (RuntimeException)
 awt::Point SAL_CALL ToolbarMenuAcc::getLocationOnScreen()  throw (RuntimeException)
 {
     ThrowIfDisposed();
-    const vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     const Point aScreenPos( mpParent->mrMenu.OutputToAbsoluteScreenPixel( Point() ) );
     return awt::Point( aScreenPos.X(), aScreenPos.Y() );
 }
@@ -447,7 +447,7 @@ awt::Point SAL_CALL ToolbarMenuAcc::getLocationOnScreen()  throw (RuntimeExcepti
 awt::Size SAL_CALL ToolbarMenuAcc::getSize() throw (RuntimeException)
 {
     ThrowIfDisposed();
-    const vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     const Size aOutSize( mpParent->mrMenu.GetOutputSizePixel() );
     return awt::Size( aOutSize.Width(), aOutSize.Height() );
 }
@@ -457,7 +457,7 @@ awt::Size SAL_CALL ToolbarMenuAcc::getSize() throw (RuntimeException)
 void SAL_CALL ToolbarMenuAcc::grabFocus() throw (RuntimeException)
 {
     ThrowIfDisposed();
-    const vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     mpParent->mrMenu.GrabFocus();
 }
 
@@ -491,7 +491,7 @@ sal_Int32 SAL_CALL ToolbarMenuAcc::getBackground() throw (RuntimeException)
 
 void SAL_CALL ToolbarMenuAcc::selectAccessibleChild( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
-    const vos::OGuard   aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     ThrowIfDisposed();
 
     mpParent->selectAccessibleChild( nChildIndex );
@@ -501,7 +501,7 @@ void SAL_CALL ToolbarMenuAcc::selectAccessibleChild( sal_Int32 nChildIndex ) thr
 
 sal_Bool SAL_CALL ToolbarMenuAcc::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
-    const vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     ThrowIfDisposed();
     return mpParent->isAccessibleChildSelected( nChildIndex );
 }
@@ -510,7 +510,7 @@ sal_Bool SAL_CALL ToolbarMenuAcc::isAccessibleChildSelected( sal_Int32 nChildInd
 
 void SAL_CALL ToolbarMenuAcc::clearAccessibleSelection() throw (RuntimeException)
 {
-    const vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     ThrowIfDisposed();
     mpParent->clearAccessibleSelection();
 }
@@ -527,7 +527,7 @@ void SAL_CALL ToolbarMenuAcc::selectAllAccessibleChildren() throw (RuntimeExcept
 
 sal_Int32 SAL_CALL ToolbarMenuAcc::getSelectedAccessibleChildCount() throw (RuntimeException)
 {
-    const vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     ThrowIfDisposed();
 
     return mpParent->mnHighlightedEntry != -1 ? 1 : 0;
@@ -538,7 +538,7 @@ sal_Int32 SAL_CALL ToolbarMenuAcc::getSelectedAccessibleChildCount() throw (Runt
 Reference< XAccessible > SAL_CALL ToolbarMenuAcc::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     ThrowIfDisposed();
-    const vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
 
     if( (mpParent->mnHighlightedEntry != -1) && (nSelectedChildIndex == 0) )
     {
@@ -563,7 +563,7 @@ Reference< XAccessible > SAL_CALL ToolbarMenuAcc::getSelectedAccessibleChild( sa
 void SAL_CALL ToolbarMenuAcc::deselectAccessibleChild( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     ThrowIfDisposed();
-    const vos::OGuard   aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     // Because of the single selection we can reset the whole selection when
     // the specified child is currently selected.
     if (isAccessibleChildSelected(nChildIndex))
@@ -578,7 +578,7 @@ void SAL_CALL ToolbarMenuAcc::disposing (void)
 
     {
         // Make a copy of the list and clear the original.
-        const vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        const SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard (m_aMutex);
         aListenerListCopy = mxEventListeners;
         mxEventListeners.clear();
@@ -662,7 +662,7 @@ void SAL_CALL ToolbarMenuEntryAcc::disposing (void)
 
     {
         // Make a copy of the list and clear the original.
-        const vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        const SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard (m_aMutex);
         aListenerListCopy = mxEventListeners;
         mxEventListeners.clear();
@@ -714,7 +714,7 @@ Reference< XAccessible > SAL_CALL ToolbarMenuEntryAcc::getAccessibleChild( sal_I
 
 Reference< XAccessible > SAL_CALL ToolbarMenuEntryAcc::getAccessibleParent() throw (RuntimeException)
 {
-    const vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     Reference< XAccessible > xRet;
 
     if( mpParent )
@@ -727,7 +727,7 @@ Reference< XAccessible > SAL_CALL ToolbarMenuEntryAcc::getAccessibleParent() thr
 
 sal_Int32 SAL_CALL ToolbarMenuEntryAcc::getAccessibleIndexInParent() throw (RuntimeException)
 {
-    const vos::OGuard   aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     // The index defaults to -1 to indicate the child does not belong to its
     // parent.
     sal_Int32 nIndexInParent = -1;
@@ -773,7 +773,7 @@ sal_Int16 SAL_CALL ToolbarMenuEntryAcc::getAccessibleRole() throw (RuntimeExcept
 
 ::rtl::OUString SAL_CALL ToolbarMenuEntryAcc::getAccessibleName() throw (RuntimeException)
 {
-    const vos::OGuard   aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     String              aRet;
 
     if( mpParent )
@@ -801,7 +801,7 @@ Reference< XAccessibleRelationSet > SAL_CALL ToolbarMenuEntryAcc::getAccessibleR
 
 Reference< XAccessibleStateSet > SAL_CALL ToolbarMenuEntryAcc::getAccessibleStateSet() throw (RuntimeException)
 {
-    const vos::OGuard                   aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     ::utl::AccessibleStateSetHelper*    pStateSet = new ::utl::AccessibleStateSetHelper;
 
     if( mpParent )
@@ -914,7 +914,7 @@ Reference< XAccessible > SAL_CALL ToolbarMenuEntryAcc::getAccessibleAtPoint( con
 
 awt::Rectangle SAL_CALL ToolbarMenuEntryAcc::getBounds() throw (RuntimeException)
 {
-    const vos::OGuard   aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     awt::Rectangle      aRet;
 
     if( mpParent )
@@ -946,7 +946,7 @@ awt::Point SAL_CALL ToolbarMenuEntryAcc::getLocation() throw (RuntimeException)
 
 awt::Point SAL_CALL ToolbarMenuEntryAcc::getLocationOnScreen() throw (RuntimeException)
 {
-    const vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     awt::Point aRet;
 
     if( mpParent )

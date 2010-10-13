@@ -55,7 +55,7 @@ namespace vclcanvas
     {
         // make sure solar mutex is held on deletion (other methods
         // are supposed to be called with already locked solar mutex)
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         if( mpVDev )
             delete mpVDev;

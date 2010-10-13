@@ -3848,7 +3848,7 @@ void SelectionManager::shutdown() throw()
         aGuard.clear();
         while (osl_isThreadRunning(m_aThread))
         {
-            vos::OGuard guard2(Application::GetSolarMutex());
+            SolarMutexGuard guard2;
             Application::Reschedule();
         }
         osl_joinWithThread( m_aThread );

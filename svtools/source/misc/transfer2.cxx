@@ -83,7 +83,7 @@ void SAL_CALL DragSourceHelper::DragGestureListener::disposing( const EventObjec
 
 void SAL_CALL DragSourceHelper::DragGestureListener::dragGestureRecognized( const DragGestureEvent& rDGE ) throw( RuntimeException )
 {
-    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aGuard;
 
     const Point aPtPixel( rDGE.DragOriginX, rDGE.DragOriginY );
     mrParent.StartDrag( rDGE.DragAction, aPtPixel );
@@ -144,7 +144,7 @@ void SAL_CALL DropTargetHelper::DropTargetListener::disposing( const EventObject
 
 void SAL_CALL DropTargetHelper::DropTargetListener::drop( const DropTargetDropEvent& rDTDE ) throw( RuntimeException )
 {
-    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aGuard;
 
     try
     {
@@ -195,7 +195,7 @@ void SAL_CALL DropTargetHelper::DropTargetListener::drop( const DropTargetDropEv
 
 void SAL_CALL DropTargetHelper::DropTargetListener::dragEnter( const DropTargetDragEnterEvent& rDTDEE ) throw( RuntimeException )
 {
-    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aGuard;
 
     try
     {
@@ -212,7 +212,7 @@ void SAL_CALL DropTargetHelper::DropTargetListener::dragEnter( const DropTargetD
 
 void SAL_CALL DropTargetHelper::DropTargetListener::dragOver( const DropTargetDragEvent& rDTDE ) throw( RuntimeException )
 {
-    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aGuard;
 
     try
     {
@@ -238,7 +238,7 @@ void SAL_CALL DropTargetHelper::DropTargetListener::dragOver( const DropTargetDr
 
 void SAL_CALL DropTargetHelper::DropTargetListener::dragExit( const DropTargetEvent& ) throw( RuntimeException )
 {
-    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aGuard;
 
     try
     {

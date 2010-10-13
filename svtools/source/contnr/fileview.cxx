@@ -2234,7 +2234,7 @@ void SvtFileView_Impl::CancelRunningAsyncAction()
 //-----------------------------------------------------------------------
 void SvtFileView_Impl::onTimeout( CallbackTimer* )
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( maMutex );
     if ( !m_bRunningAsyncAction )
         // there might have been a race condition while we waited for the mutex
@@ -2252,7 +2252,7 @@ void SvtFileView_Impl::onTimeout( CallbackTimer* )
 //-----------------------------------------------------------------------
 void SvtFileView_Impl::enumerationDone( ::svt::EnumerationResult _eResult )
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( maMutex );
 
     m_pContentEnumerator = NULL;

@@ -146,7 +146,7 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
         if( ! (m_bShowErrorsOnce && m_bJavaNotFound_Handled))
         {
            // No suitable JRE found
-            vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aSolarGuard;
             m_bJavaNotFound_Handled = true;
             //We first try to get the patch resource svp680xxx.res
             //If the resource is not found then svt680xxx.res is used
@@ -181,7 +181,7 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
         if( !(m_bShowErrorsOnce && m_bInvalidSettings_Handled))
         {
            // javavendors.xml was updated and Java has not been configured yet
-            vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aSolarGuard;
             m_bInvalidSettings_Handled = true;
             //We first try to get the patch resource svp680xxx.res
             //If the resource is not found then svt680xxx.res is used
@@ -214,7 +214,7 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
     {
         if( !(m_bShowErrorsOnce && m_bJavaDisabled_Handled))
         {
-            vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aSolarGuard;
             m_bJavaDisabled_Handled = true;
             // Java disabled. Give user a chance to enable Java inside Office.
             //We first try to get the patch resource svp680xxx.res
@@ -259,7 +259,7 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
         if( !(m_bShowErrorsOnce && m_bVMCreationFailure_Handled))
         {
             // Java not correctly installed, or damaged
-            vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aSolarGuard;
             m_bVMCreationFailure_Handled = true;
             //We first try to get the patch resource svp680xxx.res
             //If the resource is not found then svt680xxx.res is used
@@ -294,7 +294,7 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
         {
             // a new JRE was selected, but office needs to be restarted
             //before it can be used.
-            vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aSolarGuard;
             m_bRestartRequired_Handled = true;
             //We first try to get the patch resource svp680xxx.res
             //If the resource is not found then svt680xxx.res is used

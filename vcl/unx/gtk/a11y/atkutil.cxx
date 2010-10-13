@@ -77,7 +77,7 @@ extern "C" {
 static gint
 atk_wrapper_focus_idle_handler (gpointer data)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     focus_notify_handler = 0;
 

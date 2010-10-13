@@ -2089,7 +2089,7 @@ void TextView::dragGestureRecognized( const ::com::sun::star::datatransfer::dnd:
 {
     if ( mpImpl->mbClickedInSelection )
     {
-        vos::OGuard aVclGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aVclGuard;
 
         DBG_ASSERT( mpImpl->maSelection.HasRange(), "TextView::dragGestureRecognized: mpImpl->mbClickedInSelection, but no selection?" );
 
@@ -2142,7 +2142,7 @@ void TextView::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSourc
 
 void TextView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent& rDTDE ) throw (::com::sun::star::uno::RuntimeException)
 {
-    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aVclGuard;
 
     BOOL bChanges = FALSE;
     if ( !mpImpl->mbReadOnly && mpImpl->mpDDInfo )
@@ -2258,13 +2258,13 @@ void TextView::dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetD
 
 void TextView::dragExit( const ::com::sun::star::datatransfer::dnd::DropTargetEvent& ) throw (::com::sun::star::uno::RuntimeException)
 {
-    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aVclGuard;
     ImpHideDDCursor();
 }
 
 void TextView::dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& rDTDE ) throw (::com::sun::star::uno::RuntimeException)
 {
-    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aVclGuard;
 
     if ( !mpImpl->mpDDInfo )
         mpImpl->mpDDInfo = new TextDDInfo;
