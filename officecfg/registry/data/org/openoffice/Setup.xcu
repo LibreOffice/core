@@ -783,12 +783,12 @@
     </node>
   <node oor:name="Migration">
     <node oor:name="SupportedVersions">
-      <node oor:name="OpenOffice.org2+StarOffice8+StarSuite8" oor:op="replace">
+      <node oor:name="OpenOffice.org3+OpenOffice.org2+StarOffice8+StarSuite8" oor:op="replace">
         <prop oor:name="Priority">
           <value>10</value>
         </prop>
         <prop oor:name="VersionIdentifiers">
-          <value oor:separator=",">OpenOffice.org 2=openoffice.org2,StarOffice 8=staroffice8,StarSuite 8=starsuite8</value>
+          <value oor:separator=",">Openofice.org 3=openoffice.org/3,OpenOffice.org 2=openoffice.org2,StarOffice 8=staroffice8,StarSuite 8=starsuite8</value>
         </prop>
         <node oor:name="MigrationSteps">
           <node oor:name="Datasources" oor:op="replace">
