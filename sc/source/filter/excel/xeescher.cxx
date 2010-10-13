@@ -999,7 +999,12 @@ XclExpNote::XclExpNote( const XclExpRoot& rRoot, const ScAddress& rScPos,
     // get the main note text
     String aNoteText;
     if( pScNote )
+    {
         aNoteText = pScNote->GetText();
+        const EditTextObject *pEditObj = pScNote->GetEditTextObject();
+        if( pEditObj )
+            mpNoteContents = XclExpStringHelper::CreateString( rRoot, *pEditObj );
+    }
     // append additional text
     ScGlobal::AddToken( aNoteText, rAddText, '\n', 2 );
     maOrigNoteText = aNoteText;
