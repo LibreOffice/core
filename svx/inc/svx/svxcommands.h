@@ -433,7 +433,7 @@
 #define CMD_SID_TEXTDIRECTION_LEFT_TO_RIGHT         ".uno:TextdirectionLeftToRight"
 #define CMD_SID_TEXTDIRECTION_TOP_TO_BOTTOM         ".uno:TextdirectionTopToBottom"
 #define CMD_SID_ATTR_TEXT_FITTOSIZE                 ".uno:TextFitToSize"
-#define CMD_SID_THESAURUS                           ".uno:Thesaurus"
+#define CMD_SID_THESAURUS                           ".uno:ThesaurusDialog"
 #define CMD_SID_INSERT_TIMEFIELD                    ".uno:InsertTimeField"
 #define CMD_SID_FM_TIMEFIELD                        ".uno:TimeField"
 #define CMD_SID_BEZIER_EDIT                         ".uno:ToggleObjectBezierMode"
