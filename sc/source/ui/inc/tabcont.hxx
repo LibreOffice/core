@@ -76,6 +76,7 @@ public:
 
     using TabBar::StartDrag;
 
+    void            UpdateInputContext();
     void            UpdateStatus();
     void            ActivateView(BOOL bActivate);
 

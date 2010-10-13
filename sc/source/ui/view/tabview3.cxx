@@ -2610,6 +2610,9 @@ void ScTabView::UpdateInputContext()
     ScGridWindow* pWin = pGridWin[aViewData.GetActivePart()];
     if (pWin)
         pWin->UpdateInputContext();
+
+    if (pTabControl)
+        pTabControl->UpdateInputContext();
 }
 
 //  GetGridWidth - Breite eines Ausgabebereichs (fuer ViewData)

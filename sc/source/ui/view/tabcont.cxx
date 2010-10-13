@@ -54,8 +54,9 @@
 //==================================================================
 
 ScTabControl::ScTabControl( Window* pParent, ScViewData* pData ) :
-            TabBar( pParent, WinBits( WB_BORDER | WB_3DLOOK | WB_SCROLL | WB_INSERTTAB |
-                                    WB_RANGESELECT | WB_MULTISELECT | WB_DRAG | WB_SIZEABLE ) ),
+    TabBar( pParent,
+            WinBits(WB_BORDER | WB_3DLOOK | WB_SCROLL | WB_RANGESELECT |
+                    WB_MULTISELECT | WB_DRAG | WB_SIZEABLE) ),
             DropTargetHelper( this ),
             DragSourceHelper( this ),
             pViewData( pData ),
@@ -94,6 +95,7 @@ ScTabControl::ScTabControl( Window* pParent, ScViewData* pData ) :
     SetSplitHdl( LINK( pViewData->GetView(), ScTabView, TabBarResize ) );
 
     EnableEditMode();
+    UpdateInputContext();
 }
 
 ScTabControl::~ScTabControl()
@@ -295,6 +297,17 @@ void ScTabControl::Select()
             pScMod->SetReference( aRange, pDoc, &rMark );
             pScMod->EndReference();                     // wegen Auto-Hide
         }
+}
+
+void ScTabControl::UpdateInputContext()
+{
+    ScDocument* pDoc = pViewData->GetDocument();
+    WinBits nStyle = GetStyle();
+    if (pDoc->GetDocumentShell()->IsReadOnly())
+        // no insert sheet tab for readonly doc.
+        SetStyle((nStyle & ~WB_INSERTTAB));
+    else
+        SetStyle((nStyle | WB_INSERTTAB));
 }
 
 void ScTabControl::UpdateStatus()
