@@ -52,7 +52,6 @@ using ::rtl::OUString;
 /******************************************************************
  * SwXReferenceMark
  ******************************************************************/
-
 class SwXReferenceMark::Impl
     : public SwClient
 {
@@ -88,9 +87,6 @@ public:
 
 };
 
-/* -----------------------------07.01.00 12:51--------------------------------
-
- ---------------------------------------------------------------------------*/
 void SwXReferenceMark::Impl::Invalidate()
 {
     if (IsValid())
@@ -102,9 +98,6 @@ void SwXReferenceMark::Impl::Invalidate()
     m_pMarkFmt = 0;
 }
 
-/*-- 11.12.98 10:28:37---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 void SwXReferenceMark::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
@@ -128,19 +121,12 @@ void SwXReferenceMark::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
     }
 }
 
-
-/*-- 11.12.98 10:28:32---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwXReferenceMark::SwXReferenceMark(
         SwDoc *const pDoc, SwFmtRefMark const*const pRefMark)
     : m_pImpl( new SwXReferenceMark::Impl(*this, pDoc, pRefMark) )
 {
 }
 
-/*-- 11.12.98 10:28:33---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwXReferenceMark::~SwXReferenceMark()
 {
 }
@@ -180,39 +166,31 @@ SwXReferenceMark::CreateXReferenceMark(
         :   new SwXReferenceMark(&rDoc, &rMarkFmt);
 }
 
-/* -----------------------------13.03.00 12:15--------------------------------
-
- ---------------------------------------------------------------------------*/
 const uno::Sequence< sal_Int8 > & SwXReferenceMark::getUnoTunnelId()
 {
     static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
     return aSeq;
 }
-/* -----------------------------10.03.00 18:04--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Int64 SAL_CALL
 SwXReferenceMark::getSomething(const uno::Sequence< sal_Int8 >& rId)
 throw (uno::RuntimeException)
 {
     return ::sw::UnoTunnelImpl<SwXReferenceMark>(rId, this);
 }
-/* -----------------------------06.04.00 16:41--------------------------------
 
- ---------------------------------------------------------------------------*/
 OUString SAL_CALL SwXReferenceMark::getImplementationName()
 throw (uno::RuntimeException)
 {
     return C2U("SwXReferenceMark");
 }
-/* -----------------------------06.04.00 16:41--------------------------------
 
- ---------------------------------------------------------------------------*/
 static char const*const g_ServicesReferenceMark[] =
 {
     "com.sun.star.text.TextContent",
     "com.sun.star.text.ReferenceMark",
 };
+
 static const size_t g_nServicesReferenceMark(
     SAL_N_ELEMENTS(g_ServicesReferenceMark));
 
@@ -223,9 +201,7 @@ throw (uno::RuntimeException)
     return ::sw::SupportsServiceImpl(
             g_nServicesReferenceMark, g_ServicesReferenceMark, rServiceName);
 }
-/* -----------------------------06.04.00 16:41--------------------------------
 
- ---------------------------------------------------------------------------*/
 uno::Sequence< OUString > SAL_CALL
 SwXReferenceMark::getSupportedServiceNames()
 throw (uno::RuntimeException)
@@ -234,9 +210,6 @@ throw (uno::RuntimeException)
             g_nServicesReferenceMark, g_ServicesReferenceMark);
 }
 
-/* -----------------03.11.99 14:14-------------------
-
- --------------------------------------------------*/
 template<typename T> struct NotContainedIn
 {
     ::std::vector<T> const& m_rVector;
@@ -316,9 +289,6 @@ void SwXReferenceMark::Impl::InsertRefMark(SwPaM& rPam,
     pDoc2->GetUnoCallBack()->Add(this);
 }
 
-/*-- 11.12.98 10:28:34---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 void SAL_CALL
 SwXReferenceMark::attach(const uno::Reference< text::XTextRange > & xTextRange)
 throw (lang::IllegalArgumentException, uno::RuntimeException)
@@ -353,9 +323,6 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     m_pImpl->m_pDoc = pDocument;
 }
 
-/*-- 11.12.98 10:28:34---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 uno::Reference< text::XTextRange > SAL_CALL
 SwXReferenceMark::getAnchor() throw (uno::RuntimeException)
 {
@@ -386,9 +353,7 @@ SwXReferenceMark::getAnchor() throw (uno::RuntimeException)
     }
     return 0;
 }
-/*-- 11.12.98 10:28:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SAL_CALL SwXReferenceMark::dispose() throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
@@ -419,9 +384,7 @@ void SAL_CALL SwXReferenceMark::dispose() throw (uno::RuntimeException)
         m_pImpl->Invalidate();
     }
 }
-/*-- 11.12.98 10:28:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SAL_CALL SwXReferenceMark::addEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 throw (uno::RuntimeException)
@@ -434,9 +397,7 @@ throw (uno::RuntimeException)
     }
     m_pImpl->m_ListenerContainer.AddListener(xListener);
 }
-/*-- 11.12.98 10:28:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SAL_CALL SwXReferenceMark::removeEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 throw (uno::RuntimeException)
@@ -449,9 +410,7 @@ throw (uno::RuntimeException)
         throw uno::RuntimeException();
     }
 }
-/*-- 11.12.98 10:28:36---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 OUString SAL_CALL SwXReferenceMark::getName()
 throw (uno::RuntimeException)
 {
@@ -463,9 +422,7 @@ throw (uno::RuntimeException)
     }
     return m_pImpl->m_sMarkName;
 }
-/*-- 11.12.98 10:28:36---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SAL_CALL SwXReferenceMark::setName(const OUString& rName)
 throw (uno::RuntimeException)
 {
@@ -513,9 +470,6 @@ throw (uno::RuntimeException)
     }
 }
 
-/*-- 12.09.00 12:58:20---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 uno::Reference< beans::XPropertySetInfo > SAL_CALL
 SwXReferenceMark::getPropertySetInfo() throw (uno::RuntimeException)
 {
@@ -526,9 +480,7 @@ SwXReferenceMark::getPropertySetInfo() throw (uno::RuntimeException)
             ->getPropertySetInfo();
     return xRef;
 }
-/*-- 12.09.00 12:58:20---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SAL_CALL SwXReferenceMark::setPropertyValue(
     const OUString& /*rPropertyName*/, const uno::Any& /*rValue*/ )
 throw (beans::UnknownPropertyException, beans::PropertyVetoException,
@@ -537,9 +489,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
 {
     throw lang::IllegalArgumentException();
 }
-/*-- 12.09.00 12:58:20---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Any SAL_CALL
 SwXReferenceMark::getPropertyValue(const OUString& rPropertyName)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
@@ -553,9 +503,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     }
     return aRet;
 }
-/*-- 12.09.00 12:58:20---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SAL_CALL SwXReferenceMark::addPropertyChangeListener(
         const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/)
@@ -565,9 +513,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     OSL_ENSURE(false,
         "SwXReferenceMark::addPropertyChangeListener(): not implemented");
 }
-/*-- 12.09.00 12:58:20---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SAL_CALL SwXReferenceMark::removePropertyChangeListener(
         const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/)
@@ -577,9 +523,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     OSL_ENSURE(false,
         "SwXReferenceMark::removePropertyChangeListener(): not implemented");
 }
-/*-- 12.09.00 12:58:20---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SAL_CALL SwXReferenceMark::addVetoableChangeListener(
         const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/)
@@ -589,9 +533,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     OSL_ENSURE(false,
         "SwXReferenceMark::addVetoableChangeListener(): not implemented");
 }
-/*-- 12.09.00 12:58:21---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SAL_CALL SwXReferenceMark::removeVetoableChangeListener(
     const OUString& /*rPropertyName*/,
     const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/)
@@ -610,12 +552,9 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 #include <fmtmeta.hxx>
 #include <docsh.hxx>
 
-//=============================================================================
-
 /******************************************************************
  * SwXMetaText
  ******************************************************************/
-
 class SwXMetaText
     : public SwXText
 {
@@ -736,11 +675,9 @@ SwXMetaText::createTextCursorByRange(
 /******************************************************************
  * SwXMeta
  ******************************************************************/
-
 // the Meta has a cached list of text portions for its contents
 // this list is created by SwXTextPortionEnumeration
 // the Meta listens at the SwTxtNode and throws away the cache when it changes
-
 class SwXMeta::Impl
     : public SwClient
 {
@@ -876,7 +813,6 @@ SwXMeta::CreateXMeta(::sw::Meta & rMeta,
     return xMeta;
 }
 
-
 bool SwXMeta::SetContentRange(
         SwTxtNode *& rpNode, xub_StrLen & rStart, xub_StrLen & rEnd ) const
 {
@@ -987,6 +923,7 @@ static char const*const g_ServicesMeta[] =
     "com.sun.star.text.TextContent",
     "com.sun.star.text.InContentMetadata",
 };
+
 static const size_t g_nServicesMeta(
     SAL_N_ELEMENTS(g_ServicesMeta));
 
@@ -1003,7 +940,6 @@ SwXMeta::getSupportedServiceNames() throw (uno::RuntimeException)
 {
     return ::sw::GetSupportedServiceNamesImpl(g_nServicesMeta, g_ServicesMeta);
 }
-
 
 // XComponent
 void SAL_CALL
@@ -1064,7 +1000,6 @@ SwXMeta::dispose() throw (uno::RuntimeException)
         }
     }
 }
-
 
 void SAL_CALL
 SwXMeta::AttachImpl(const uno::Reference< text::XTextRange > & i_xTextRange,
@@ -1366,7 +1301,6 @@ SwXMeta::createEnumeration() throw (uno::RuntimeException)
     }
 }
 
-
 // MetadatableMixin
 ::sfx2::Metadatable* SwXMeta::GetCoreObject()
 {
@@ -1388,11 +1322,9 @@ uno::Reference<frame::XModel> SwXMeta::GetModel()
     return 0;
 }
 
-
 /******************************************************************
  * SwXMetaField
  ******************************************************************/
-
 inline const ::sw::MetaField * SwXMeta::Impl::GetMetaField() const
 {
     return static_cast< const ::sw::MetaField * >(GetRegisteredIn());
@@ -1429,6 +1361,7 @@ static char const*const g_ServicesMetaField[] =
     "com.sun.star.text.TextField",
     "com.sun.star.text.textfield.MetadataField",
 };
+
 static const size_t g_nServicesMetaField(
     SAL_N_ELEMENTS(g_ServicesMetaField));
 
@@ -1705,4 +1638,3 @@ throw (uno::RuntimeException)
         return prefix + content + suffix;
     }
 }
-
