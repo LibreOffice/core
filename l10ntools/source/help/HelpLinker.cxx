@@ -25,6 +25,10 @@
  *
  ************************************************************************/
 
+#ifdef AIX
+#    undef _THREAD_SAFE
+#endif
+
 #include "HelpCompiler.hxx"
 
 #include <map>
