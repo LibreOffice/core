@@ -361,6 +361,7 @@ Exc1904::Exc1904( ScDocument& rDoc )
 {
     Date* pDate = rDoc.GetFormatTable()->GetNullDate();
     bVal = pDate ? (*pDate == Date( 1, 1, 1904 )) : FALSE;
+    bDateCompatibility = pDate ? !( *pDate == Date( 30, 12, 1899 )) : FALSE;
 }
 
 
@@ -372,9 +373,21 @@ UINT16 Exc1904::GetNum( void ) const
 
 void Exc1904::SaveXml( XclExpXmlStream& rStrm )
 {
-    rStrm.WriteAttributes(
+    bool bISOIEC = ( rStrm.getVersion() == oox::core::ISOIEC_29500_2008 );
+
+    if( bISOIEC )
+    {
+        rStrm.WriteAttributes(
+            XML_dateCompatibility, XclXmlUtils::ToPsz( bDateCompatibility ),
+            FSEND );
+    }
+
+    if( !bISOIEC || bDateCompatibility )
+    {
+        rStrm.WriteAttributes(
             XML_date1904, XclXmlUtils::ToPsz( bVal ),
             FSEND );
+    }
 }
 
 

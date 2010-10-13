@@ -286,6 +286,8 @@ public:
     virtual UINT16          GetNum( void ) const;
 
     virtual void            SaveXml( XclExpXmlStream& rStrm );
+private:
+    BOOL                    bDateCompatibility;
 };
 
 
