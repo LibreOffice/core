@@ -36,6 +36,7 @@
 #include "oox/helper/propertyset.hxx"
 #include "oox/helper/recordinputstream.hxx"
 #include "oox/core/filterbase.hxx"
+#include "oox/core/xmlfilterbase.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/unitconverter.hxx"
 
@@ -141,7 +142,7 @@ void WorkbookSettings::importWorkbookPr( const AttributeList& rAttribs )
     maBookSettings.mnUpdateLinksMode   = rAttribs.getToken( XML_updateLinks, XML_userSet );
     maBookSettings.mnDefaultThemeVer   = rAttribs.getInteger( XML_defaultThemeVersion, -1 );
     maBookSettings.mbSaveExtLinkValues = rAttribs.getBool( XML_saveExternalLinkValues, true );
-    setDateMode( rAttribs.getBool( XML_date1904, false ) );
+    setDateMode( rAttribs.getBool( XML_date1904, false ), rAttribs.getBool( XML_dateCompatibility, true ) );
 }
 
 void WorkbookSettings::importCalcPr( const AttributeList& rAttribs )
@@ -354,13 +355,27 @@ sal_Int16 WorkbookSettings::getApiShowObjectMode() const
 
 Date WorkbookSettings::getNullDate() const
 {
-    static const Date saDate1900( 30, 12, 1899 ), saDate1904( 1, 1, 1904 );
+    static const Date saDate1900                 ( 30, 12, 1899 );
+    static const Date saDate1904                 ( 1, 1, 1904 );
+    static const Date saDateBackCompatibility1900( 31, 12, 1899 );
+
+    if( getOoxFilter().getVersion() == oox::core::ISOIEC_29500_2008 )
+    {
+        if( !maBookSettings.mbDateCompatibility )
+            return saDate1900;
+
+        return maBookSettings.mbDateMode1904 ? saDate1904 :
+                                               saDateBackCompatibility1900;
+    }
+
     return maBookSettings.mbDateMode1904 ? saDate1904 : saDate1900;
 }
 
-void WorkbookSettings::setDateMode( bool bDateMode1904 )
+void WorkbookSettings::setDateMode( bool bDateMode1904, bool bDateCompatibility )
 {
-    maBookSettings.mbDateMode1904 = bDateMode1904;
+    maBookSettings.mbDateMode1904      = bDateMode1904;
+    maBookSettings.mbDateCompatibility = bDateCompatibility;
+
     getUnitConverter().finalizeNullDate( getNullDate() );
 }
 

@@ -50,6 +50,8 @@
 #include "oox/xls/excelhandlers.hxx"
 #include "oox/xls/stylesbuffer.hxx"
 #include "oox/xls/unitconverter.hxx"
+#include "tools/mapunit.hxx"
+#include "xmloff/xmluconv.hxx"
 
 using ::rtl::OString;
 using ::rtl::OStringBuffer;
@@ -130,6 +132,8 @@ PageSettingsModel::PageSettingsModel() :
     mfHeaderMargin( OOX_MARGIN_DEFAULT_HF ),
     mfFooterMargin( OOX_MARGIN_DEFAULT_HF ),
     mnPaperSize( 1 ),
+    mnPaperWidth( 0 ),
+    mnPaperHeight( 0 ),
     mnCopies( 1 ),
     mnScale( 100 ),
     mnFirstPage( 1 ),
@@ -188,8 +192,13 @@ void PageSettings::importPageMargins( const AttributeList& rAttribs )
 
 void PageSettings::importPageSetup( const Relations& rRelations, const AttributeList& rAttribs )
 {
+    OUString aStr;
     maModel.maBinSettPath   = rRelations.getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
     maModel.mnPaperSize     = rAttribs.getInteger( XML_paperSize, 1 );
+    aStr                    = rAttribs.getString ( XML_paperWidth, OUString() );
+    SvXMLUnitConverter::convertMeasure( maModel.mnPaperWidth, aStr, MAP_100TH_MM );
+    aStr                    = rAttribs.getString ( XML_paperHeight, OUString() );
+    SvXMLUnitConverter::convertMeasure( maModel.mnPaperHeight, aStr, MAP_100TH_MM );
     maModel.mnCopies        = rAttribs.getInteger( XML_copies, 1 );
     maModel.mnScale         = rAttribs.getInteger( XML_scale, 100 );
     maModel.mnFirstPage     = rAttribs.getInteger( XML_firstPageNumber, 1 );
@@ -209,8 +218,13 @@ void PageSettings::importPageSetup( const Relations& rRelations, const Attribute
 
 void PageSettings::importChartPageSetup( const Relations& rRelations, const AttributeList& rAttribs )
 {
+    OUString aStr;
     maModel.maBinSettPath   = rRelations.getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
     maModel.mnPaperSize     = rAttribs.getInteger( XML_paperSize, 1 );
+    aStr                    = rAttribs.getString ( XML_paperWidth, OUString() );
+    SvXMLUnitConverter::convertMeasure( maModel.mnPaperWidth, aStr, MAP_100TH_MM );
+    aStr                    = rAttribs.getString ( XML_paperHeight, OUString() );
+    SvXMLUnitConverter::convertMeasure( maModel.mnPaperHeight, aStr, MAP_100TH_MM );
     maModel.mnCopies        = rAttribs.getInteger( XML_copies, 1 );
     maModel.mnFirstPage     = rAttribs.getInteger( XML_firstPageNumber, 1 );
     maModel.mnHorPrintRes   = rAttribs.getInteger( XML_horizontalDpi, 600 );
@@ -1142,13 +1156,29 @@ void PageSettingsConverter::writePageSettingsProperties(
         bLandscape = bChartSheet;
 
     // paper size
-    if( rModel.mbValidSettings && (0 < rModel.mnPaperSize) && (rModel.mnPaperSize < static_cast< sal_Int32 >( STATIC_ARRAY_SIZE( spPaperSizeTable ) )) )
+    if( !rModel.mbValidSettings )
     {
-        const ApiPaperSize& rPaperSize = spPaperSizeTable[ rModel.mnPaperSize ];
-        Size aSize( rPaperSize.mnWidth, rPaperSize.mnHeight );
-        if( bLandscape )
-            ::std::swap( aSize.Width, aSize.Height );
-        rPropSet.setProperty( PROP_Size, aSize );
+        Size aSize;
+        bool bValid = false;
+
+        if( (0 < rModel.mnPaperSize) && (rModel.mnPaperSize < static_cast< sal_Int32 >( STATIC_ARRAY_SIZE( spPaperSizeTable ) )) )
+        {
+            const ApiPaperSize& rPaperSize = spPaperSizeTable[ rModel.mnPaperSize ];
+            aSize = Size( rPaperSize.mnWidth, rPaperSize.mnHeight );
+            bValid = true;
+        }
+        if( rModel.mnPaperWidth > 0 && rModel.mnPaperHeight > 0 )
+        {
+            aSize = Size( rModel.mnPaperWidth, rModel.mnPaperHeight );
+            bValid = true;
+        }
+
+        if( bValid )
+        {
+            if( bLandscape )
+                ::std::swap( aSize.Width, aSize.Height );
+            rPropSet.setProperty( PROP_Size, aSize );
+        }
     }
 
     // header/footer

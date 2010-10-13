@@ -58,6 +58,8 @@ struct PageSettingsModel
     double              mfHeaderMargin;         /// Margin between top edge of page and begin of header.
     double              mfFooterMargin;         /// Margin between end of footer and bottom edge of page.
     sal_Int32           mnPaperSize;            /// Paper size (enumeration).
+    sal_Int32           mnPaperWidth;           /// Paper width in twips
+    sal_Int32           mnPaperHeight;          /// Paper height in twips
     sal_Int32           mnCopies;               /// Number of copies to print.
     sal_Int32           mnScale;                /// Page scale (zoom in percent).
     sal_Int32           mnFirstPage;            /// First page number.
