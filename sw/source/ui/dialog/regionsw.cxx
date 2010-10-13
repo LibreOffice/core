@@ -67,11 +67,6 @@
 #include <svx/dlgutil.hxx>
 #include "swabstdlg.hxx"
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Bereiche einfuegen
- --------------------------------------------------------------------*/
-
-
 void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
 {
     SwWrtShell& rSh = GetShell();
@@ -222,10 +217,6 @@ IMPL_STATIC_LINK( SwWrtShell, InsertRegionDialog, SwSectionData*, pSect )
     }
     return 0;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:   Bereich bearbeiten
- --------------------------------------------------------------------*/
 
 void SwBaseShell::EditRegionDialog(SfxRequest& rReq)
 {

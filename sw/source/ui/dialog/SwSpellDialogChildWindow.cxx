@@ -144,9 +144,7 @@ struct SpellState
                 pOtherCursor = 0;
             }
 };
-/*-- 30.10.2003 14:33:26---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void lcl_LeaveDrawText(SwWrtShell& rSh)
 {
     if(rSh.GetDrawView())
@@ -159,9 +157,7 @@ void lcl_LeaveDrawText(SwWrtShell& rSh)
         rSh.GetView().AttrChangedNotify(&rSh);
     }
 }
-/*-- 09.09.2003 10:39:22---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwSpellDialogChildWindow::SwSpellDialogChildWindow (
             Window* _pParent,
             USHORT nId,
@@ -175,9 +171,7 @@ SwSpellDialogChildWindow::SwSpellDialogChildWindow (
     String aPropName( String::CreateFromAscii(UPN_IS_GRAMMAR_INTERACTIVE ) );
     SvtLinguConfig().GetProperty( aPropName ) >>= m_bIsGrammarCheckingOn;
 }
-/*-- 09.09.2003 10:39:22---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwSpellDialogChildWindow::~SwSpellDialogChildWindow ()
 {
     SwWrtShell* pWrtShell = GetWrtShell_Impl();
@@ -186,9 +180,7 @@ SwSpellDialogChildWindow::~SwSpellDialogChildWindow ()
     delete m_pSpellState;
 }
 
-/*-- 09.09.2003 12:40:07---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SfxChildWinInfo SwSpellDialogChildWindow::GetInfo (void) const
 {
     SfxChildWinInfo aInfo = svx::SpellDialogChildWindow::GetInfo();
@@ -196,10 +188,7 @@ SfxChildWinInfo SwSpellDialogChildWindow::GetInfo (void) const
     return aInfo;
 }
 
-/*-- 09.09.2003 10:39:40---------------------------------------------------
 
-
-  -----------------------------------------------------------------------*/
 svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence(bool bRecheck)
 {
     svx::SpellPortions aRet;
@@ -457,9 +446,7 @@ The code below would only be part of the solution.
     return aRet;
 
 }
-/*-- 09.09.2003 10:39:40---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwSpellDialogChildWindow::ApplyChangedSentence(const svx::SpellPortions& rChanged, bool bRecheck)
 {
     SwWrtShell* pWrtShell = GetWrtShell_Impl();
@@ -489,39 +476,29 @@ void SwSpellDialogChildWindow::ApplyChangedSentence(const svx::SpellPortions& rC
         }
     }
 }
-/*-- 21.10.2003 09:33:57---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwSpellDialogChildWindow::AddAutoCorrection(
         const String& rOld, const String& rNew, LanguageType eLanguage)
 {
     SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get()->GetAutoCorrect();
     pACorr->PutText( rOld, rNew, eLanguage );
 }
-/*-- 21.10.2003 09:33:59---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 bool SwSpellDialogChildWindow::HasAutoCorrection()
 {
     return true;
 }
-/*-- 16.06.2008 11:59:17---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 bool SwSpellDialogChildWindow::HasGrammarChecking()
 {
     return SvtLinguConfig().HasGrammarChecker();
 }
-/*-- 18.06.2008 12:27:11---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 bool SwSpellDialogChildWindow::IsGrammarChecking()
 {
     return m_bIsGrammarCheckingOn;
 }
-/*-- 18.06.2008 12:27:11---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwSpellDialogChildWindow::SetGrammarChecking(bool bOn)
 {
     uno::Any aVal;
@@ -555,9 +532,7 @@ void SwSpellDialogChildWindow::SetGrammarChecking(bool bOn)
         }
     }
 }
-/*-- 28.10.2003 08:41:09---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwSpellDialogChildWindow::GetFocus()
 {
     if(m_pSpellState->m_bLockFocus)
@@ -616,9 +591,7 @@ void SwSpellDialogChildWindow::GetFocus()
     if(bInvalidate)
         InvalidateSpellDialog();
 }
-/*-- 28.10.2003 08:41:09---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwSpellDialogChildWindow::LoseFocus()
 {
     //prevent initial invalidation
@@ -668,9 +641,7 @@ void SwSpellDialogChildWindow::LoseFocus()
     else
         m_pSpellState->m_eSelMode = SHELL_MODE_OBJECT;
 }
-/*-- 18.09.2003 12:50:18---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwSpellDialogChildWindow::InvalidateSpellDialog()
 {
     SwWrtShell* pWrtShell = GetWrtShell_Impl();
@@ -680,9 +651,6 @@ void SwSpellDialogChildWindow::InvalidateSpellDialog()
     svx::SpellDialogChildWindow::InvalidateSpellDialog();
 }
 
-/*-- 18.09.2003 12:54:59---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwWrtShell* SwSpellDialogChildWindow::GetWrtShell_Impl()
 {
     SfxDispatcher* pDispatch = GetBindings().GetDispatcher();
@@ -701,7 +669,7 @@ SwWrtShell* SwSpellDialogChildWindow::GetWrtShell_Impl()
     return pView ? pView->GetWrtShellPtr(): 0;
 }
 
-/*-- 13.10.2003 15:19:04---------------------------------------------------
+/*-------------------------------------------------------------------------
     set the cursor into the body text - necessary if any object is selected
     on start of the spelling dialog
   -----------------------------------------------------------------------*/
@@ -770,7 +738,7 @@ bool SwSpellDialogChildWindow::MakeTextSelection_Impl(SwWrtShell& rShell, ShellM
     }
     return true;
 }
-/*-- 13.10.2003 15:20:09---------------------------------------------------
+/*-------------------------------------------------------------------------
     select the next draw text object that has a spelling error
   -----------------------------------------------------------------------*/
 bool SwSpellDialogChildWindow::FindNextDrawTextError_Impl(SwWrtShell& rSh)
@@ -893,9 +861,7 @@ bool SwSpellDialogChildWindow::FindNextDrawTextError_Impl(SwWrtShell& rSh)
     return bNextDoc;
 }
 
-/*-- 13.10.2003 15:24:27---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 bool SwSpellDialogChildWindow::SpellDrawText_Impl(SwWrtShell& rSh, ::svx::SpellPortions& rPortions)
 {
     bool bRet = false;
@@ -922,9 +888,7 @@ bool SwSpellDialogChildWindow::SpellDrawText_Impl(SwWrtShell& rSh, ::svx::SpellP
     }
     return bRet;
 }
-/*-- 30.10.2003 14:54:59---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwSpellDialogChildWindow::LockFocusNotification(bool bLock)
 {
     OSL_ENSURE(m_pSpellState->m_bLockFocus != bLock, "invalid locking - no change of state");
