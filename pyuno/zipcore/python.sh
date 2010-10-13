@@ -43,9 +43,9 @@ cd "$sd_cwd"
 PATH=$sd_prog${PATH+:$PATH}
 export PATH
 
-# Set LD_LIBRARY_PATH so that "import pyuno" finds libpyuno.so:
-LD_LIBRARY_PATH=$sd_prog/../basis-link/program:$sd_prog/../basis-link/ure-link/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
-export LD_LIBRARY_PATH
+# Set %%OOO_LIBRARY_PATH_VAR%% so that "import pyuno" finds libpyuno.so:
+%%OOO_LIBRARY_PATH_VAR%%=$sd_prog/../basis-link/program:$sd_prog/../basis-link/ure-link/lib${%%OOO_LIBRARY_PATH_VAR%%:+:$%%OOO_LIBRARY_PATH_VAR%%}
+export %%OOO_LIBRARY_PATH_VAR%%
 
 # Set UNO_PATH so that "officehelper.bootstrap()" can find soffice executable:
 : ${UNO_PATH=$sd_prog}
