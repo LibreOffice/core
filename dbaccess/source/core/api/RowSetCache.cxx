@@ -29,38 +29,41 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#include <comphelper/seqstream.hxx>
-#include <comphelper/uno3.hxx>
-#include <comphelper/extract.hxx>
+#include "BookmarkSet.hxx"
+#include "CRowSetColumn.hxx"
+#include "CRowSetDataColumn.hxx"
+#include "KeySet.hxx"
+#include "OptimisticSet.hxx"
+#include "RowSetBase.hxx"
+#include "RowSetCache.hxx"
+#include "StaticSet.hxx"
+#include "WrappedResultSet.hxx"
+#include "core_resource.hrc"
+#include "core_resource.hxx"
+#include "dbastrings.hrc"
+
+#include <com/sun/star/sdbc/ColumnValue.hpp>
+#include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
+#include <com/sun/star/sdbcx/CompareBookmark.hpp>
+#include <com/sun/star/sdbcx/KeyType.hpp>
+#include <com/sun/star/sdbcx/Privilege.hpp>
+#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbcx/XKeysSupplier.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#include <com/sun/star/sdbcx/KeyType.hpp>
-#include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
-#include <com/sun/star/sdbc/ColumnValue.hpp>
-#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include <com/sun/star/sdbcx/Privilege.hpp>
-#include "CRowSetDataColumn.hxx"
-#include "CRowSetColumn.hxx"
-#include "RowSetBase.hxx"
+
+#include <comphelper/extract.hxx>
+#include <comphelper/property.hxx>
+#include <comphelper/seqstream.hxx>
+#include <comphelper/uno3.hxx>
 #include <connectivity/dbexception.hxx>
-#include <connectivity/sqlparse.hxx>
-#include <connectivity/sqlnode.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/sqliterator.hxx>
-#include <comphelper/property.hxx>
-#include <com/sun/star/sdbcx/CompareBookmark.hpp>
+#include <connectivity/sqlnode.hxx>
+#include <connectivity/sqlparse.hxx>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <algorithm>
-#include "RowSetCache.hxx"
-#include "core_resource.hxx"
-#include "core_resource.hrc"
-#include "BookmarkSet.hxx"
-#include "StaticSet.hxx"
-#include "KeySet.hxx"
-#include "dbastrings.hrc"
-#include "WrappedResultSet.hxx"
-#include "OptimisticSet.hxx"
 
 using namespace dbaccess;
 using namespace dbtools;
@@ -183,7 +186,10 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                 }
                 catch(const Exception&)
                 {
+                    DBG_UNHANDLED_EXCEPTION();
                 }
+                m_pCacheSet = NULL;
+                m_xCacheSet.clear();
             }
             else
             {

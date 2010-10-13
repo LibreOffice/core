@@ -1790,7 +1790,7 @@ bool OApplicationController::onEntryDoubleClick( SvTreeListBox& _rTree )
         }
         catch(const Exception&)
         {
-            OSL_ENSURE(0,"Could not open element!");
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
     return false;   // not handled
@@ -1843,12 +1843,20 @@ Reference< XComponent > OApplicationController::openElementWithArguments( const 
         getContainer()->showPreview(NULL);
     }
 
+    bool isStandaloneDocument = false;
     switch ( _eType )
     {
     case E_REPORT:
+        if ( _eOpenMode != E_OPEN_DESIGN )
+        {
+            // reports which are opened in a mode other than design are no sub components of our application
+            // component, but standalone documents.
+            isStandaloneDocument = true;
+        }
+        // NO break!
     case E_FORM:
     {
-        if ( !m_pSubComponentManager->activateSubFrame( _sName, _eType, _eOpenMode, xRet ) )
+        if ( isStandaloneDocument || !m_pSubComponentManager->activateSubFrame( _sName, _eType, _eOpenMode, xRet ) )
         {
             ::std::auto_ptr< OLinkedDocumentsAccess > aHelper = getDocumentsAccess( _eType );
             if ( !aHelper->isConnected() )
@@ -1857,7 +1865,8 @@ Reference< XComponent > OApplicationController::openElementWithArguments( const 
             Reference< XComponent > xDefinition;
             xRet = aHelper->open( _sName, xDefinition, _eOpenMode, _rAdditionalArguments );
 
-            onDocumentOpened( _sName, _eType, _eOpenMode, xRet, xDefinition );
+            if ( !isStandaloneDocument )
+                onDocumentOpened( _sName, _eType, _eOpenMode, xRet, xDefinition );
         }
     }
     break;
@@ -2782,9 +2791,9 @@ void OApplicationController::containerFound( const Reference< XContainer >& _xCo
             _xContainer->addContainerListener(this);
         }
     }
-    catch(Exception)
+    catch(const Exception&)
     {
-        OSL_ENSURE(0,"Could not listener on the container!");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 // -----------------------------------------------------------------------------
