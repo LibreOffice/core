@@ -3004,18 +3004,15 @@ SwFlyFrmFmt* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
     long nStartCp;
     long nEndCp;
 
-    // Pruefen, ob in dieser Textbox-Kette denn Text enthalten ist.  (
-    // Umwandeln einer leeren Kette in Rahmen waere Unsinn. )
+    // Check if this textbox chain contains text as conversion of an empty
+    // chain would not make sense.
     if ( TxbxChainContainsRealText(pRecord->aTextId.nTxBxS,nStartCp,nEndCp) )
     {
-        // Der Text wird nicht in das SdrTextObj eingelesen!  Stattdessen wird
-        // ein Rahmen eingefuegt und der Text von nStartCp bis nEndCp dort
-        // hinein gelesen.
+        // The Text is not read into SdrTextObj!  Rather insert a frame and
+        // insert the text from nStartCp to nEndCp.
         //
-        // Vorteil: im Rahmen sind viel mehr Attribute moeglich als in der
-        // Edit-Enging, und es koennen auch Felder, OLEs oder Grafiken darin
-        // sein...
-
+        // More attributes can be used in a frame compared to the
+        // Edit-Enging, and it can contain field, OLEs or graphics...
         Rectangle aInnerDist(pRecord->nDxTextLeft, pRecord->nDyTextTop,
             pRecord->nDxTextRight, pRecord->nDyTextBottom);
 
@@ -3035,18 +3032,17 @@ SwFlyFrmFmt* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
         ASSERT(pRetFrmFmt->GetAnchor().GetAnchorId() == eAnchor,
             "Not the anchor type requested!");
 
-        // falls alles Ok, Zeiger auf neues Objekt ermitteln und Z-Order-Liste
-        // entsprechend korrigieren (oder Eintrag loeschen)
+        // if everything is OK, find pointer on new object and correct
+        // Z-order list (oder delete entry)
         rpOurNewObject = CreateContactObject(pRetFrmFmt);
 
-        // altes Objekt aus der Z-Order-Liste entfernen
+        // remove old object from the Z-Order list
         pMSDffManager->RemoveFromShapeOrder( rpObject );
 
-        // und das Objekt loeschen
+        // and delete the object
         SdrObject::Free( rpObject );
         /*
-            Achtung: ab jetzt nur noch pOrgShapeObject
-            abfragen!
+            NB: only query pOrgShapeObject starting here!
         */
 
         if (rpOurNewObject)
@@ -3067,23 +3063,21 @@ SwFlyFrmFmt* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
                 (((ULONG)pRecord->aTextId.nTxBxS) << 16) +
                 pRecord->aTextId.nSequence, 0, pRetFrmFmt);
 
-            // Das Kontakt-Objekt MUSS in die Draw-Page gesetzt werden, damit
-            // in SwWW8ImplReader::LoadDoc1() die Z-Order festgelegt werden
-            // kann !!!
+            // The Kontakt object has to be inserted into the draw page, so
+            // SwWW8ImplReader::LoadDoc1() can determine the z-order.
             if (!rpOurNewObject->IsInserted())
             {
-                // --> OD 2004-12-13 #117915# - pass information, if object
+                // 2004-12-13 #117915# - pass information, if object
                 // is in page header|footer to method.
                 pWWZOrder->InsertEscherObject( rpOurNewObject, pF->nSpId,
                                                bIsHeader || bIsFooter );
-                // <--
             }
         }
 
-        // Box-0 erhaelt den Text fuer die ganze Kette!
+        // Box-0 receives the text for the whole chain!
         if( !pRecord->aTextId.nSequence )
         {
-            // rette Flags u.ae. und setze sie zurueck
+            // save flags etc and reset them
             WW8ReaderSave aSave( this );
 
             MoveInsideFly(pRetFrmFmt);
@@ -3092,7 +3086,7 @@ SwFlyFrmFmt* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
 
             pWWZOrder->InsideEscher(pF->nSpId);
 
-            // lies den Text ein
+            // read in the text
             bTxbxFlySection = true;
             bool bJoined = ReadText(nStartCp, (nEndCp-nStartCp),
                 MAN_MAINTEXT == pPlcxMan->GetManType() ?
