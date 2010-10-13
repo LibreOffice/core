@@ -31,9 +31,6 @@
 #include <vcl/toolbox.hxx>
 #include "swdllapi.h"
 
-/*-- 25.05.2004 15:25:56---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 class SwMailMergeChildWin : public SfxFloatingWindow
 {
     ToolBox                 m_aBackTB;
@@ -47,10 +44,8 @@ public:
     virtual void    FillInfo(SfxChildWinInfo&) const;
 };
 
-/*-- 25.05.2004 15:25:56---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 class SwSendMailDialog;
+
 class SwMailMergeChildWindow : public SfxChildWindow
 {
 public:
@@ -63,4 +58,3 @@ public:
 };
 
 #endif
-

@@ -43,7 +43,6 @@ class SwWrtShell;
 /*--------------------------------------------------------------------
    Beschreibung: SingleTabDialog
  --------------------------------------------------------------------*/
-
 class SwLineNumberingDlg : public SfxSingleTabDialog
 {
     SwWrtShell* pSh;
@@ -60,7 +59,6 @@ public:
 /*--------------------------------------------------------------------
    Beschreibung: TabPage
  --------------------------------------------------------------------*/
-
 class SwLineNumberingPage : public SfxTabPage
 {
     CheckBox        aNumberingOnCB;
@@ -104,5 +102,3 @@ public:
 };
 
 #endif
-
-

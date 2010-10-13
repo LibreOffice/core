@@ -42,7 +42,6 @@ SV_DECL_PTRARR_DEL(SwEntryLst, SwBoxEntry*, 10, 10)
 /*--------------------------------------------------------------------
      Beschreibung: SwBoxEntry
  --------------------------------------------------------------------*/
-
 class SW_DLLPUBLIC SwBoxEntry
 {
     friend class SwComboBox;
@@ -64,8 +63,8 @@ public:
 /*--------------------------------------------------------------------
      Beschreibung: fuer ComboBoxen
  --------------------------------------------------------------------*/
-
 typedef USHORT SwComboBoxStyle;
+
 namespace nsSwComboBoxStyle
 {
     const SwComboBoxStyle CBS_UPPER         = 0x01;

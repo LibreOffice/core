@@ -28,11 +28,9 @@
 #define _VIEWLAYOUTCTRL_HXX
 
 // include ---------------------------------------------------------------
-
 #include <sfx2/stbitem.hxx>
 
 // class SwViewLayoutControl ----------------------------------------------
-
 class SwViewLayoutControl : public SfxStatusBarControl
 {
 private:
@@ -53,4 +51,3 @@ public:
 };
 
 #endif
-

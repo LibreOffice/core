@@ -37,7 +37,6 @@
 /*--------------------------------------------------------------------
     Beschreibung:   DocInfo jetzt als Page
  --------------------------------------------------------------------*/
-
 class SwDocStatPage: public SfxTabPage
 {
 public:

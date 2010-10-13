@@ -49,9 +49,6 @@ const int nMaxCols = 99;
 class SwColMgr;
 class SwWrtShell;
 class SwColumnPage;
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 class SwColumnDlg : public SfxModalDialog
 {
@@ -89,9 +86,6 @@ public:
     SwWrtShell&     GetWrtShell()   { return rWrtShell; }
 };
 
-/*-----------------07.03.97 08.26-------------------
-
---------------------------------------------------*/
 class ColumnValueSet : public ValueSet
 {
     public:
@@ -210,4 +204,3 @@ public:
 };
 
 #endif
-

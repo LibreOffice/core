@@ -35,7 +35,6 @@ class SwWrtShell;
 /*--------------------------------------------------------------------
    Beschreibung:    Rahmendialog
  --------------------------------------------------------------------*/
-
 class SwFrmDlg : public SfxTabDialog
 {
     BOOL                m_bFormat;
@@ -61,6 +60,5 @@ public:
 
     inline SwWrtShell*  GetWrtShell()   { return m_pWrtShell; }
 };
-
 
 #endif // _FRMDLG_HXX

@@ -38,10 +38,6 @@ class SwDocShell;
 class SvxSearchItem;
 class SfxMedium;
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 class SwSrcView: public SfxViewShell
 {
     SwSrcEditWindow     aEditWin;
@@ -101,26 +97,4 @@ public:
 
 };
 
-
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

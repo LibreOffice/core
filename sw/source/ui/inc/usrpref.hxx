@@ -34,10 +34,8 @@
 #include "viewopt.hxx"
 #include <vcl/fldunit.hxx>
 
-/* -----------------------------28.09.00 09:45--------------------------------
-
- ---------------------------------------------------------------------------*/
 class SwMasterUsrPref;
+
 class SwContentViewConfig : public utl::ConfigItem
 {
     SwMasterUsrPref&        rParent;
@@ -55,9 +53,7 @@ class SwContentViewConfig : public utl::ConfigItem
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };
-/* -----------------------------28.09.00 09:45--------------------------------
 
- ---------------------------------------------------------------------------*/
 class SwLayoutViewConfig : public utl::ConfigItem
 {
     SwMasterUsrPref&    rParent;
@@ -73,9 +69,7 @@ class SwLayoutViewConfig : public utl::ConfigItem
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };
-/* -----------------------------19.01.01 13:06--------------------------------
 
- ---------------------------------------------------------------------------*/
 class SwGridConfig : public utl::ConfigItem
 {
     SwMasterUsrPref&    rParent;
@@ -91,9 +85,7 @@ class SwGridConfig : public utl::ConfigItem
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };
-/* -----------------------------19.01.01 13:06--------------------------------
 
- ---------------------------------------------------------------------------*/
 class SwCursorConfig : public utl::ConfigItem
 {
     SwMasterUsrPref&    rParent;
@@ -108,9 +100,7 @@ class SwCursorConfig : public utl::ConfigItem
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };
-/* -----------------------------28.09.00 09:45--------------------------------
 
- ---------------------------------------------------------------------------*/
 class SwWebColorConfig : public utl::ConfigItem
 {
     SwMasterUsrPref&        rParent;
@@ -125,9 +115,7 @@ class SwWebColorConfig : public utl::ConfigItem
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };
-/* -----------------------------28.09.00 09:45--------------------------------
 
- ---------------------------------------------------------------------------*/
 class SwMasterUsrPref : public SwViewOption
 {
     friend class SwContentViewConfig;
@@ -286,4 +274,3 @@ public:
 };
 
 #endif
-

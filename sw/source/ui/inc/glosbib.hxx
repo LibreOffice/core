@@ -48,15 +48,14 @@ class FEdit : public Edit
 
     virtual void KeyInput( const KeyEvent& rKEvent );
 };
-/* -----------------------------08.02.00 15:04--------------------------------
 
- ---------------------------------------------------------------------------*/
 struct GlosBibUserData
 {
     String sPath;
     String sGroupName;
     String sGroupTitle;
 };
+
 class SwGlossaryGroupTLB : public SvTabListBox
 {
 public:
@@ -110,6 +109,4 @@ public:
     const String&       GetCreatedGroupName() const {return sCreatedGroup;}
 };
 
-
 #endif
-

@@ -34,7 +34,6 @@
 #include <svx/checklbx.hxx>
 
 // class SwCompatibilityOptPage ------------------------------------------
-
 class SwWrtShell;
 struct SwCompatibilityOptPage_Impl;
 
@@ -84,4 +83,3 @@ public:
 };
 
 #endif
-

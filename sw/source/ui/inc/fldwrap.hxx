@@ -42,6 +42,7 @@ public:
     virtual BOOL    ReInitDlg(SwDocShell *pDocSh);
     void            ShowPage(USHORT nPage = 0);
 };
+
 /* -----------------04.02.2003 14:14-----------------
  * field dialog only showing database page to support
  * mail merge
@@ -58,6 +59,4 @@ public:
     virtual BOOL    ReInitDlg(SwDocShell *pDocSh);
 };
 
-
 #endif
-

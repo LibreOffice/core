@@ -100,7 +100,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using ::rtl::OUString;
 
-
 namespace SwUnoCursorHelper
 {
 
@@ -133,7 +132,6 @@ GetNestedTextContent(SwTxtNode & rTextNode, xub_StrLen const nIndex,
     }
     return xRet;
 }
-
 
 /* -----------------16.09.98 12:27-------------------
 *   Lesen spezieller Properties am Cursor
@@ -597,9 +595,7 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         eState = eNewState;
     return bDone;
 };
-/* -----------------30.06.98 10:30-------------------
- *
- * --------------------------------------------------*/
+
 sal_Int16 IsNodeNumStart(SwPaM& rPam, PropertyState& eState)
 {
     const SwTxtNode* pTxtNd = rPam.GetNode()->GetTxtNode();
@@ -618,9 +614,6 @@ sal_Int16 IsNodeNumStart(SwPaM& rPam, PropertyState& eState)
     return -1;
 }
 
-/* -----------------25.05.98 11:41-------------------
- *
- * --------------------------------------------------*/
 void setNumberingProperty(const Any& rValue, SwPaM& rPam)
 {
     uno::Reference<XIndexReplace> xIndexReplace;
@@ -760,10 +753,6 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
     }
 }
 
-
-/* -----------------25.05.98 11:40-------------------
- *
- * --------------------------------------------------*/
 void  getNumberingProperty(SwPaM& rPam, PropertyState& eState, Any * pAny )
 {
     const SwNumRule* pNumRule = rPam.GetDoc()->GetCurrNumRule( *rPam.GetPoint() );
@@ -777,15 +766,14 @@ void  getNumberingProperty(SwPaM& rPam, PropertyState& eState, Any * pAny )
     else
         eState = PropertyState_DEFAULT_VALUE;
 }
-/* -----------------04.07.98 15:15-------------------
- *
- * --------------------------------------------------*/
+
 void GetCurPageStyle(SwPaM& rPaM, String &rString)
 {
     const SwPageFrm* pPage = rPaM.GetCntntNode()->GetFrm()->FindPageFrm();
     if(pPage)
         SwStyleNameMapper::FillProgName( pPage->GetPageDesc()->GetName(), rString, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, sal_True );
 }
+
 /* -----------------30.03.99 10:52-------------------
  * spezielle Properties am Cursor zuruecksetzen
  * --------------------------------------------------*/
@@ -831,9 +819,7 @@ void resetCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry, SwPaM& rPa
         break;
     }
 }
-/* -----------------21.07.98 11:36-------------------
- *
- * --------------------------------------------------*/
+
 void InsertFile(SwUnoCrsr* pUnoCrsr,
     const String& rURL,
     const uno::Sequence< beans::PropertyValue >& rOptions
@@ -987,10 +973,6 @@ void InsertFile(SwUnoCrsr* pUnoCrsr,
     delete pMed;
 }
 
-/* -----------------14.07.04 ------------------------
- *
- * --------------------------------------------------*/
-
 // insert text and scan for CR characters in order to insert
 // paragraph breaks at those positions by calling SplitNode
 sal_Bool DocInsertStringSplitCR(
@@ -1048,9 +1030,7 @@ sal_Bool DocInsertStringSplitCR(
 
     return bOK;
 }
-/*-- 10.03.2008 09:58:47---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void makeRedline( SwPaM& rPaM,
     const ::rtl::OUString& rRedlineType,
     const uno::Sequence< beans::PropertyValue >& rRedlineProperties )
@@ -1104,9 +1084,6 @@ void makeRedline( SwPaM& rPaM,
         throw lang::IllegalArgumentException();
 }
 
-/*-- 19.02.2009 09:27:26---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwAnyMapHelper::~SwAnyMapHelper()
 {
     AnyMapHelper_t::iterator aIt = begin();
@@ -1116,9 +1093,7 @@ SwAnyMapHelper::~SwAnyMapHelper()
         ++aIt;
     }
 }
-/*-- 19.02.2009 09:27:26---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwAnyMapHelper::SetValue( USHORT nWhichId, USHORT nMemberId, const uno::Any& rAny )
 {
     sal_uInt32 nKey = (nWhichId << 16) + nMemberId;
@@ -1130,9 +1105,7 @@ void SwAnyMapHelper::SetValue( USHORT nWhichId, USHORT nMemberId, const uno::Any
     else
         insert( value_type(nKey, new uno::Any( rAny )) );
 }
-/*-- 19.02.2009 09:27:26---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 bool    SwAnyMapHelper::FillValue( USHORT nWhichId, USHORT nMemberId, const uno::Any*& pAny )
 {
     bool bRet = false;
@@ -1147,4 +1120,3 @@ bool    SwAnyMapHelper::FillValue( USHORT nWhichId, USHORT nMemberId, const uno:
 }
 
 }//namespace SwUnoCursorHelper
-

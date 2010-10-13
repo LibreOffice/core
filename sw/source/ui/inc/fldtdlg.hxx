@@ -33,10 +33,6 @@ class SfxTabPage;
 class SwChildWinWrapper;
 struct SfxChildWinInfo;
 
-/*--------------------------------------------------------------------
-   Beschreibung:
- --------------------------------------------------------------------*/
-
 class SwFldDlg: public SfxTabDialog
 {
     SwChildWinWrapper*  m_pChildWin;

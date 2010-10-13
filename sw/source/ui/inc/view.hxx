@@ -135,7 +135,6 @@ enum ShellModes
 /*--------------------------------------------------------------------
     Beschreibung:   Anwendung einer Vorlage
  --------------------------------------------------------------------*/
-
 struct SwApplyTemplate
 {
     union
@@ -162,11 +161,9 @@ struct SwApplyTemplate
     }
 };
 
-
 /*--------------------------------------------------------------------
     Beschreibung:   Sicht auf ein Dokument
  --------------------------------------------------------------------*/
-
 class SW_DLLPUBLIC SwView: public SfxViewShell
 {
     //Messehack (MA,MBA)
@@ -673,7 +670,6 @@ public:
 };
 
 // ----------------- inline Methoden ----------------------
-
 inline long SwView::GetXScroll() const
 {
     return aVisArea.GetWidth() * nScrollX / 100L;
@@ -688,8 +684,6 @@ inline const SwDocShell *SwView::GetDocShell() const
 {
     return ((SwView*)this)->GetDocShell();
 }
-
-//***********************************************************
 
 SfxTabPage* CreatePrintOptionsPage( Window *pParent,
                                     const SfxItemSet &rOptions,

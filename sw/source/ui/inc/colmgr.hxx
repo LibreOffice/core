@@ -81,48 +81,57 @@ private:
 };
 
 // INLINE METHODE --------------------------------------------------------
-
 inline  USHORT SwColMgr::GetCount() const
 {
     return aFmtCol.GetNumCols();
 }
+
 inline void         SwColMgr::SetLineWidthAndColor(ULONG nLWidth, const Color& rCol)
 {
     aFmtCol.SetLineWidth(nLWidth);
     aFmtCol.SetLineColor(rCol);
 }
+
 inline ULONG        SwColMgr::GetLineWidth() const
 {
     return aFmtCol.GetLineWidth();
 }
+
 inline const Color& SwColMgr::GetLineColor() const
 {
     return aFmtCol.GetLineColor();
 }
+
 inline  SwColLineAdj SwColMgr::GetAdjust() const
 {
     return aFmtCol.GetLineAdj();
 }
+
 inline  void SwColMgr::SetAdjust(SwColLineAdj eAdj)
 {
     aFmtCol.SetLineAdj(eAdj);
 }
+
 inline BOOL SwColMgr::IsAutoWidth() const
 {
     return aFmtCol.IsOrtho();
 }
+
 inline void SwColMgr::SetAutoWidth(BOOL bOn, USHORT nGutterWidth)
 {
     aFmtCol.SetOrtho(bOn, nGutterWidth, nWidth);
 }
+
 inline void SwColMgr::NoCols()
 {
     aFmtCol.GetColumns().DeleteAndDestroy(0, aFmtCol.GetColumns().Count());
 }
+
 inline BOOL SwColMgr::HasLine() const
 {
     return GetAdjust() != COLADJ_NONE;
 }
+
 inline void SwColMgr::SetNoLine()
 {
     SetAdjust(COLADJ_NONE);

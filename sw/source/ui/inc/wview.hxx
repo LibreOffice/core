@@ -30,10 +30,6 @@
 #include "swdllapi.h"
 #include "view.hxx"
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 class SW_DLLPUBLIC SwWebView: public SwView
 {
 protected:
