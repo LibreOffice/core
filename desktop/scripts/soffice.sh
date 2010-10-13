@@ -57,7 +57,7 @@ cd "$sd_cwd"
 
 # linked build needs additional settings
 if [ -e ooenv ] ; then
-    source ooenv
+    . ./ooenv
 fi
 
 sd_binary=`basename "$0"`.bin
