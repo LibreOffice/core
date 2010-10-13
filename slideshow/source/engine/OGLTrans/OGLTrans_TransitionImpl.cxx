@@ -25,8 +25,8 @@
  *
  ************************************************************************/
 
-#include "OGLTrans_TransitionImpl.hxx"
 #include "OGLTrans_Shaders.hxx"
+#include "OGLTrans_TransitionImpl.hxx"
 #include <GL/gl.h>
 #include <math.h>
 
