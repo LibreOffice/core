@@ -498,6 +498,31 @@ private:
     DECL_STATIC_LINK( Application, PostEventHandler, void* );
 };
 
+
+class VCL_DLLPUBLIC SolarMutexGuard
+{
+    private:
+        SolarMutexGuard( const SolarMutexGuard& );
+        const SolarMutexGuard& operator = ( const SolarMutexGuard& );
+        ::vos::IMutex& m_solarMutex;
+
+    public:
+
+        /** Acquires the object specified as parameter.
+         */
+        SolarMutexGuard() :
+        m_solarMutex(Application::GetSolarMutex())
+    {
+        m_solarMutex.acquire();
+    }
+
+    /** Releases the mutex or interface. */
+    ~SolarMutexGuard()
+    {
+        m_solarMutex.release();
+    }
+};
+
 /**
  A helper class that calls Application::ReleaseSolarMutex() in its constructor
  and restores the mutex in its destructor.
