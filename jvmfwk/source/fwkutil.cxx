@@ -270,8 +270,10 @@ rtl::OUString findPlugin(
         {
             rtl::OUString url;
 #ifdef UNX
-#ifdef MACOSX
+#if defined(MACOSX)
             rtl::OUString path = rtl::OUString::createFromAscii("DYLD_LIBRARY_PATH");
+#elif defined(AIX)
+            rtl::OUString path = rtl::OUString::createFromAscii("LIBPATH");
 #else
             rtl::OUString path = rtl::OUString::createFromAscii("LD_LIBRARY_PATH");
 #endif
