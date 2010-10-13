@@ -2927,7 +2927,7 @@ sub filter_layerlinks_from_unixlinks
         if ( $styles =~ /\bLAYERLINK\b/ )
         {
             # Platforms, that do not need the layer links
-            if (( $installer::globals::islinuxrpmbuild ) || ( $installer::globals::issolarispkgbuild ))
+            if (( $installer::globals::isrpmbuild ) || ( $installer::globals::issolarispkgbuild ))
             {
                 $isrequired = 0;
             }

@@ -585,7 +585,7 @@ sub remove_package
         $packagestring = "\<pkgunit";
         $namestring = "pkgName";
     }
-    elsif ( $installer::globals::islinuxrpmbuild )
+    elsif ( $installer::globals::isrpmbuild )
     {
         $packagestring = "\<rpmunit";
         $namestring = "rpmUniqueName";
@@ -752,7 +752,7 @@ sub remove_font_package_from_unit
         $packagestring = "\<pkgunit";
         $namestring = "pkgName";
     }
-    elsif ( $installer::globals::islinuxrpmbuild )
+    elsif ( $installer::globals::isrpmbuild )
     {
         $packagestring = "\<rpmunit";
         $namestring = "rpmUniqueName";
@@ -1110,7 +1110,7 @@ sub create_empty_packages
 
     # "-novalidate" does not work for Linux RPMs
 
-    if ( $installer::globals::islinuxrpmbuild )
+    if ( $installer::globals::isrpmbuild )
     {
         for ( my $i = 0; $i <= $#{$xmlfile}; $i++ )
         {
@@ -1353,7 +1353,7 @@ sub get_all_packages_in_installdir
     my $directory = $installdir . $installer::globals::separator . $subdir;
     $directory =~ s/\Q$installer::globals::separator\E\s*$//;
 
-    if ( $installer::globals::islinuxrpmbuild )
+    if ( $installer::globals::isrpmbuild )
     {
         $allrpms = installer::systemactions::find_file_with_file_extension("rpm", $directory);
 
@@ -1798,7 +1798,7 @@ sub create_java_installer
     {
         $xmlfilename = "pkgUnit.xml";
     }
-    elsif ( $installer::globals::islinuxrpmbuild )
+    elsif ( $installer::globals::isrpmbuild )
     {
         $xmlfilename = "rpmUnit.xml";
     }
@@ -1817,14 +1817,14 @@ sub create_java_installer
     my $xmlfilename3 = $xmlfilename . ".test3";
     installer::files::save_file($xmlfilename3, $xmlfile);
     substitute_variables($xmlfile, $allvariableshashref);
-    if (( $installer::globals::islinuxrpmbuild ) && ( $#installer::globals::linkrpms > -1 )) { prepare_linkrpm_in_xmlfile($xmlfile,\@installer::globals::linkrpms); }
+    if (( $installer::globals::isrpmbuild ) && ( $#installer::globals::linkrpms > -1 )) { prepare_linkrpm_in_xmlfile($xmlfile,\@installer::globals::linkrpms); }
     if ( $installer::globals::issolarisx86build || $installer::globals::islinuxbuild ) { remove_w4w_from_xmlfile($xmlfile); }
     remove_module_if_not_defined($xmlfile, $modulesarrayref, "gid_Module_Optional_Onlineupdate");
     replace_component_names($xmlfile, $templatefilename, $modulesarrayref, $javatemplateorigfile, $ulffile);
     my $xmlfilename4 = $xmlfilename . ".test4";
     installer::files::save_file($xmlfilename4, $xmlfile);
-    if ( $installer::globals::islinuxrpmbuild ) { put_rpmpath_into_xmlfile($xmlfile, $listofpackages); }
-    if ( $installer::globals::islinuxrpmbuild ) { put_filesize_into_xmlfile($xmlfile, $listofpackages); }
+    if ( $installer::globals::isrpmbuild ) { put_rpmpath_into_xmlfile($xmlfile, $listofpackages); }
+    if ( $installer::globals::isrpmbuild ) { put_filesize_into_xmlfile($xmlfile, $listofpackages); }
     installer::files::save_file($xmlfilename, $xmlfile);
     $infoline = "Saving xml file: $xmlfilename\n";
     push( @installer::globals::logfileinfo, $infoline);

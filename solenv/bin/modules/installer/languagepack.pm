@@ -232,7 +232,7 @@ sub determine_packagename
     my $packagename = "";
     my $allnames = "";
 
-    if ( $installer::globals::islinuxrpmbuild )
+    if ( $installer::globals::isrpmbuild )
     {
         # determining the rpm file in directory $installdir
 
@@ -295,13 +295,13 @@ sub put_packagename_into_script
 
     if ( $installer::globals::issolarisbuild ) { $installline = "  /usr/sbin/pkgadd -d \$outdir -a \$adminfile"; }
 
-    if ( $installer::globals::islinuxrpmbuild ) { $installline = "  rpm --prefix \$PRODUCTINSTALLLOCATION --replacepkgs -i"; }
+    if ( $installer::globals::isrpmbuild ) { $installline = "  rpm --prefix \$PRODUCTINSTALLLOCATION --replacepkgs -i"; }
 
     for ( my $i = 0; $i <= $#{$allnames}; $i++ )
     {
         if ( $installer::globals::issolarisbuild ) { $installline = $installline . " ${$allnames}[$i]"; }
 
-        if ( $installer::globals::islinuxrpmbuild ) { $installline = $installline . " \$outdir/${$allnames}[$i]"; }
+        if ( $installer::globals::isrpmbuild ) { $installline = $installline . " \$outdir/${$allnames}[$i]"; }
     }
 
     for ( my $j = 0; $j <= $#{$scriptfile}; $j++ )
@@ -411,7 +411,7 @@ sub determine_scriptfile_name
 
     my $scriptfilename = $packagename;
 
-#   if ( $installer::globals::islinuxrpmbuild ) { $scriptfilename =~ s/\.rpm\s*$/\.sh/; }
+#   if ( $installer::globals::isrpmbuild ) { $scriptfilename =~ s/\.rpm\s*$/\.sh/; }
 #   if ( $installer::globals::issolarisbuild ) { $scriptfilename =~ s/\.tar\.gz\s*$/\.sh/; }
 
     $scriptfilename =~ s/\.tar\.gz\s*$/\.sh/;

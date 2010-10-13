@@ -366,7 +366,7 @@ sub create_epm_header
     push(@epmheader, $line);
 
     $line = "%release" . " " . $installer::globals::packagerevision . "\n";
-    if ( $installer::globals::islinuxrpmbuild ) { $line = "%release" . " " . $installer::globals::buildid . "\n"; }
+    if ( $installer::globals::isrpmbuild ) { $line = "%release" . " " . $installer::globals::buildid . "\n"; }
     push(@epmheader, $line);
 
     # Description, Copyright and Vendor are multilingual and are defined in
@@ -585,7 +585,7 @@ sub create_epm_header
         $provides = "freebsdprovides";   # the name in the packagelist
         $requires = "freebsdrequires";   # the name in the packagelist
     }
-    elsif (( $installer::globals::islinuxrpmbuild ) &&
+    elsif (( $installer::globals::isrpmbuild ) &&
             ( $installer::globals::patch ) &&
             ( exists($onepackage->{'linuxpatchrequires'}) ))
     {
@@ -880,7 +880,7 @@ sub set_patch_state
         push( @installer::globals::logfileinfo, $infoline);
     }
 
-    if ( ( $installer::globals::is_special_epm ) && (($installer::globals::islinuxrpmbuild) || ($installer::globals::issolarispkgbuild)) )
+    if ( ( $installer::globals::is_special_epm ) && (($installer::globals::isrpmbuild) || ($installer::globals::issolarispkgbuild)) )
     {
         # Special postprocess handling only for Linux RPM and Solaris packages
         $installer::globals::postprocess_specialepm = 1;
@@ -994,7 +994,7 @@ sub add_one_line_into_file
         push(@{$file}, $insertline);        # simply adding at the end of pkginfo file
     }
 
-    if ( $installer::globals::islinuxrpmbuild )
+    if ( $installer::globals::isrpmbuild )
     {
         # Adding behind the line beginning with: Group:
 
@@ -1687,7 +1687,7 @@ sub set_tab_into_datafile
         $newclassesstring = installer::converter::convert_array_to_space_separated_string(\@newclasses);
     }
 
-    if ( $installer::globals::islinuxrpmbuild )
+    if ( $installer::globals::isrpmbuild )
     {
         for ( my $i = 0; $i <= $#{$filesref}; $i++ )
         {
@@ -2011,7 +2011,7 @@ sub collect_patch_files
     {
         my $line = ${$file}[$i];
 
-        if ( $installer::globals::islinuxrpmbuild )
+        if ( $installer::globals::isrpmbuild )
         {
             # %attr(0444,root,root) "/opt/openofficeorg20/program/about.bmp"
 
@@ -2101,7 +2101,7 @@ sub prepare_packages
         $newline = "BASEDIR\=" . $localrelocatablepath . "\n";
     }
 
-    if ( $installer::globals::islinuxrpmbuild )
+    if ( $installer::globals::isrpmbuild )
     {
         # if ( $localrelocatablepath =~ /^\s*$/ ) { $localrelocatablepath = "/"; }; # at least the "/"
         $filename =  $packagename . ".spec";
@@ -2123,7 +2123,7 @@ sub prepare_packages
 
     # adding new "topdir" and removing old "topdir" in specfile
 
-    if ( $installer::globals::islinuxrpmbuild )
+    if ( $installer::globals::isrpmbuild )
     {
         set_topdir_in_specfile($changefile, $filename, $newepmdir);
         set_autoprovreq_in_specfile($changefile, $onepackage->{'findrequires'}, "$installer::globals::unpackpath" . "/bin");
@@ -2554,7 +2554,7 @@ sub create_packages_without_epm
 
     # Linux: rpm -bb so8m35.spec    ( -> dependency check abklemmen? )
 
-    if ( $installer::globals::islinuxrpmbuild )
+    if ( $installer::globals::isrpmbuild )
     {
         my $specfilename = $epmdir . $packagename . ".spec";
         if (! -f $specfilename) { installer::exiter::exit_program("ERROR: Did not find file: $specfilename", "create_packages_without_epm"); }
@@ -2571,6 +2571,7 @@ sub create_packages_without_epm
 
         my $target = "";
         if ( $installer::globals::compiler =~ /unxlngi/) { $target = "i586"; }
+        if ( $installer::globals::compiler =~ /unxaigppc/) { $target = "ppc"; }
         elsif ( $installer::globals::compiler =~ /unxlng/) {$target = (POSIX::uname())[4]; }
 
         # rpm 4.6 ignores buildroot tag in spec file
@@ -2742,7 +2743,7 @@ sub remove_temporary_epm_files
 #       }
     }
 
-    if ( $installer::globals::islinuxrpmbuild )
+    if ( $installer::globals::isrpmbuild )
     {
         my $removefile = $epmdir . $packagename . ".spec";
         my $destfile = $loggingdir . $packagename . ".spec.log";
@@ -2824,12 +2825,16 @@ sub create_new_directory_structure
 
     my $newdir = $installer::globals::epmoutpath;
 
-    if ( $installer::globals::islinuxrpmbuild )
+    if ( $installer::globals::isrpmbuild )
     {
         my $rpmdir;
                 my $machine = "";
         if ( $installer::globals::compiler =~ /unxlngi/) {
                     $rpmdir = "$installer::globals::epmoutpath/RPMS/i586";
+                }
+        elsif ( $installer::globals::compiler =~ /unxaigppc/) {
+                    $machine = ppc;
+                    $rpmdir = "$installer::globals::epmoutpath/RPMS/$machine";
                 }
         elsif ( $installer::globals::compiler =~ /unxlng/) {
                     $machine = (POSIX::uname())[4];
@@ -2861,6 +2866,7 @@ sub create_new_directory_structure
         {
             installer::systemactions::remove_empty_directory("$installer::globals::epmoutpath/RPMS/$machine");
         }
+        installer::systemactions::remove_empty_directory("$installer::globals::epmoutpath/RPMS/powerpc");
         installer::systemactions::remove_empty_directory("$installer::globals::epmoutpath/RPMS/x86_64");
         installer::systemactions::remove_empty_directory("$installer::globals::epmoutpath/RPMS/i586");
         installer::systemactions::remove_empty_directory("$installer::globals::epmoutpath/RPMS/i386");
@@ -3230,13 +3236,13 @@ sub analyze_rootpath
     # For RPM version 3.x it is required, that Prefix is not "/" in spec file. In this case --relocate will not work,
     # because RPM 3.x says, that the package is not relocatable. Therefore we have to use Prefix=/opt and for
     # all usages of --relocate this path has to be on both sides of the "=": --relocate /opt=<myselectdir>/opt .
-    if ( $installer::globals::islinuxrpmbuild )
+    if ( $installer::globals::isrpmbuild )
     {
         $$relocatablepathref = $rootpath . "\/"; # relocatable path must end with "/", will be "/opt/"
         $$staticpathref = $installer::globals::officedirhostname; # to be used as replacement in shell scripts
     }
 
-    if ( $installer::globals::islinuxdebbuild )
+    if ( $installer::globals::isdebbuild )
     {
         $$relocatablepathref = "";
         # $$staticpathref is already "/opt/openoffice.org3", no additional $rootpath required.

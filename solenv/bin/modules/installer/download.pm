@@ -657,12 +657,12 @@ sub get_install_type
     {
         $type = "langpack";
 
-        if ( $installer::globals::islinuxrpmbuild )
+        if ( $installer::globals::isrpmbuild )
         {
             $type = $type . "-rpm";
         }
 
-        if ( $installer::globals::islinuxdebbuild )
+        if ( $installer::globals::isdebbuild )
         {
             $type = $type . "-deb";
         }
@@ -676,12 +676,12 @@ sub get_install_type
     {
         $type = "install";
 
-        if ( $installer::globals::islinuxrpmbuild )
+        if ( $installer::globals::isrpmbuild )
         {
             $type = $type . "-rpm";
         }
 
-        if ( $installer::globals::islinuxdebbuild )
+        if ( $installer::globals::isdebbuild )
         {
             $type = $type . "-deb";
         }
@@ -709,7 +709,7 @@ sub get_downloadname_addon
 {
     my $addon = "";
 
-    if ( $installer::globals::islinuxdebbuild ) { $addon = $addon . "_deb"; }
+    if ( $installer::globals::isdebbuild ) { $addon = $addon . "_deb"; }
 
     if ( $installer::globals::product =~ /_wJRE\s*$/ ) { $addon = "_wJRE"; }
 
@@ -1914,7 +1914,7 @@ sub is_supported_platform
 {
     my $is_supported = 0;
 
-    if (( $installer::globals::islinuxrpmbuild ) ||
+    if (( $installer::globals::isrpmbuild ) ||
         ( $installer::globals::issolarissparcbuild ) ||
         ( $installer::globals::issolarisx86build ) ||
         ( $installer::globals::iswindowsbuild ))

@@ -437,8 +437,8 @@ $filesinproductarrayref = installer::scriptitems::remove_delete_only_files_from_
 if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles2.log", $filesinproductarrayref); }
 
 if (( ! $installer::globals::iswindowsbuild ) &&
-    ( ! $installer::globals::islinuxrpmbuild ) &&
-    ( ! $installer::globals::islinuxdebbuild ) &&
+    ( ! $installer::globals::isrpmbuild ) &&
+    ( ! $installer::globals::isdebbuild ) &&
     ( ! $installer::globals::issolarispkgbuild ) &&
     ( $installer::globals::packageformat ne "installed" ) &&
     ( $installer::globals::packageformat ne "dmg" ) &&
@@ -1486,7 +1486,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             #################################################################
 
             # Linux Patch: The complete RPM has to be built, if one file in the RPM has the flag PATCH (also for DEBs)
-            if (( $installer::globals::patch ) && (( $installer::globals::islinuxrpmbuild ) || ( $installer::globals::islinuxdebbuild )))
+            if (( $installer::globals::patch ) && (( $installer::globals::isrpmbuild ) || ( $installer::globals::isdebbuild )))
             {
                 my $patchfiles = installer::worker::collect_all_items_with_special_flag($filesinpackage ,"PATCH");
                 if ( ! ( $#{$patchfiles} > -1 ))
@@ -1692,7 +1692,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                     # Solaris: Adding into the pkginfo file: BASEDIR=/opt
                     # Attention: Changing of the path can influence the shell scripts
 
-                    if (( $installer::globals::is_special_epm ) && ( ($installer::globals::islinuxrpmbuild) || ($installer::globals::issolarispkgbuild) ))  # special handling only for Linux RPMs and Solaris Packages
+                    if (( $installer::globals::is_special_epm ) && ( ($installer::globals::isrpmbuild) || ($installer::globals::issolarispkgbuild) ))   # special handling only for Linux RPMs and Solaris Packages
                     {
                         if ( $installer::globals::call_epm )    # only do something, if epm is really executed
                         {
@@ -1734,7 +1734,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
                             if ( $installer::globals::call_epm ) { installer::epmfile::call_epm($epmexecutable, $completeepmfilename, $packagename, $includepatharrayref); }
 
-                            if (($installer::globals::islinuxrpmbuild) || ($installer::globals::issolarispkgbuild) || ($installer::globals::debian))
+                            if (($installer::globals::isrpmbuild) || ($installer::globals::issolarispkgbuild) || ($installer::globals::debian))
                             {
                                 $installer::globals::postprocess_standardepm = 1;
                             }
@@ -1802,7 +1802,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
             # Finalizing patch installation sets
             if (( $installer::globals::patch ) && ( $installer::globals::issolarispkgbuild )) { installer::epmfile::finalize_patch($installer::globals::epmoutpath, $allvariableshashref); }
-            if (( $installer::globals::patch ) && ( $installer::globals::islinuxrpmbuild )) { installer::epmfile::finalize_linux_patch($installer::globals::epmoutpath, $allvariableshashref, $includepatharrayref); }
+            if (( $installer::globals::patch ) && ( $installer::globals::isrpmbuild )) { installer::epmfile::finalize_linux_patch($installer::globals::epmoutpath, $allvariableshashref, $includepatharrayref); }
 
             # Copying the xpd installer into the installation set
             if (( $allvariableshashref->{'XPDINSTALLER'} ) && ( $installer::globals::isxpdplatform ) && ( $installer::globals::xpd_files_prepared ))

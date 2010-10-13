@@ -118,6 +118,12 @@ GNUCOPY*=gnucp
 GNUPATCH*=gnupatch
 GNUTAR*=/usr/sfw/bin/gtar
 DEREFERENCE=
+.ELIF "$(OS)"=="AIX"
+AWK*=/opt/freeware/bin/awk
+GNUCOPY*=cp
+GNUPATCH*=/opt/freeware/bin/patch
+GNUTAR*=gtar
+DEREFERENCE=-L
 .ELSE			# "$(OS)"=="SOLARIS"
 AWK*=awk
 GNUCOPY*=cp

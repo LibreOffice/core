@@ -99,6 +99,10 @@
 .INCLUDE : unxlngppc64.mk
 .ENDIF
 
+.IF "$(COM)$(OS)$(CPU)" == "GCCAIXP"
+.INCLUDE : unxaigppc.mk
+.ENDIF
+
 .IF "$(COM)$(OS)$(CPU)$(CPUNAME)" == "GCCLINUX3S390"
 .INCLUDE : unxlngs390.mk
 .ENDIF
@@ -125,10 +129,6 @@
 
 .IF "$(COM)$(OS)$(CPU)" == "GCCNETBSDA"
 .INCLUDE : unxbsda.mk
-.ENDIF
-
-.IF "$(COM)$(OS)$(CPU)" == "ICCAIXP"
-.INCLUDE : unxaixp.mk
 .ENDIF
 
 .IF "$(COM)$(CVER)$(OS)$(CPU)" == "GCCC295NETBSDI"

@@ -56,6 +56,11 @@ if [ -x $checkdll ]; then
         *) DYLD_LIBRARY_PATH=$libpath;;
         esac
         export DYLD_LIBRARY_PATH;;
+    AIX) case "${LIBPATH:+X}" in
+        X) LIBPATH=$libpath:$LIBPATH;;
+        *) LIBPATH=$libpath;;
+        esac
+        export LIBPATH;;
     *)  case "${LD_LIBRARY_PATH:+X}" in
         X) LD_LIBRARY_PATH=$libpath:$LD_LIBRARY_PATH;;
         *) LD_LIBRARY_PATH=$libpath;;

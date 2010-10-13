@@ -1860,7 +1860,7 @@ sub get_all_packages_in_installdir
     my @allpackages = ();
     my $allpackages = \@allpackages;
 
-    if ( $installer::globals::islinuxrpmbuild )
+    if ( $installer::globals::isrpmbuild )
     {
         $allpackages = installer::systemactions::find_file_with_file_extension("rpm", $directory);
     }
@@ -1930,7 +1930,7 @@ sub copy_all_packages
             if ( ! is_matching($packagename, $allexcludepackages ) )
             {
 
-                if ( $installer::globals::islinuxrpmbuild )
+                if ( $installer::globals::isrpmbuild )
                 {
                     my $sourcepackage = $sourcedir . $installer::globals::separator . $packagename;
                     my $destfile = $destdir . $installer::globals::separator . $packagename;

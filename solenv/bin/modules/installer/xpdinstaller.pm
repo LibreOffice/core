@@ -579,7 +579,7 @@ sub get_size_value
     my $isrpmfile = 0;
     if ( $packagename =~ /\.rpm\s*$/ ) { $isrpmfile = 1; }
 
-    if (( $installer::globals::islinuxrpmbuild ) && ( $isrpmfile ))
+    if (( $installer::globals::isrpmbuild ) && ( $isrpmfile ))
     {
         # if ( ! $installer::globals::rpmquerycommand ) { installer::exiter::exit_program("ERROR: rpm not found for querying packages!", "get_size_value"); }
         if ( ! $installer::globals::rpmquerycommand ) { $installer::globals::rpmquerycommand = "rpm"; }
@@ -658,7 +658,7 @@ sub get_md5_value
         return $value;
     }
 
-    if ( $installer::globals::islinuxrpmbuild )
+    if ( $installer::globals::isrpmbuild )
     {
         my $md5file = "/usr/bin/md5sum";
 
@@ -712,7 +712,7 @@ sub get_fullpkgname_value
     my $isrpmfile = 0;
     if ( $packagename =~ /\.rpm\s*$/ ) { $isrpmfile = 1; }
 
-    if (( $installer::globals::islinuxrpmbuild ) && ( $isrpmfile ))
+    if (( $installer::globals::isrpmbuild ) && ( $isrpmfile ))
     {
         if ( $xpdinfo->{'FullPackageName'} )
         {

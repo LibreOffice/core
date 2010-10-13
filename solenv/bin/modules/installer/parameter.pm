@@ -314,12 +314,23 @@ sub setglobalvariables
 
     if ( $installer::globals::compiler =~ /unxso[lg]i/ ) { $installer::globals::issolarisx86build = 1; }
 
+    if ($ENV{OS} eq 'AIX')
+    {
+        if ( $installer::globals::packageformat eq "rpm" )
+        {
+            $installer::globals::isrpmbuild = 1;
+            $installer::globals::isxpdplatform = 1;
+            $installer::globals::epmoutpath = "RPMS";
+        }
+        if ( $installer::globals::rpm eq "" ) { installer::exiter::exit_program("ERROR: Environment variable \"\$RPM\" has to be defined!", "setglobalvariables"); }
+    }
+
     if ($ENV{OS} eq 'LINUX')
     {
         $installer::globals::islinuxbuild = 1;
         if ( $installer::globals::packageformat eq "rpm" )
         {
-            $installer::globals::islinuxrpmbuild = 1;
+            $installer::globals::isrpmbuild = 1;
             $installer::globals::isxpdplatform = 1;
             $installer::globals::epmoutpath = "RPMS";
             if ( $installer::globals::compiler =~ /unxlngi/ )
@@ -346,8 +357,8 @@ sub setglobalvariables
             my $message = "Creating Debian packages";
             installer::logger::print_message( $message );
             push(@installer::globals::globallogfileinfo, $message);
-            $installer::globals::islinuxrpmbuild = 0;
-            $installer::globals::islinuxdebbuild = 1;
+            $installer::globals::isrpmbuild = 0;
+            $installer::globals::isdebbuild = 1;
             $installer::globals::epmoutpath = "DEBS";
             if ( $installer::globals::compiler =~ /unxlngi/ )
             {
@@ -411,7 +422,7 @@ sub setglobalvariables
 
     # setting jds exclude file list
 
-    if ( $installer::globals::islinuxrpmbuild )
+    if ( $installer::globals::isrpmbuild )
     {
         $installer::globals::jdsexcludefilename = "jds_excludefiles_linux.txt";
     }
@@ -545,7 +556,7 @@ sub control_required_parameter
     # for Solaris packages and Linux
     #######################################
 
-    if (( $installer::globals::patch ) && ( ! $installer::globals::issolarispkgbuild ) && ( ! $installer::globals::islinuxrpmbuild ) && ( ! $installer::globals::islinuxdebbuild ) && ( ! $installer::globals::iswindowsbuild ) && ( ! $installer::globals::ismacdmgbuild ))
+    if (( $installer::globals::patch ) && ( ! $installer::globals::issolarispkgbuild ) && ( ! $installer::globals::isrpmbuild ) && ( ! $installer::globals::isdebbuild ) && ( ! $installer::globals::iswindowsbuild ) && ( ! $installer::globals::ismacdmgbuild ))
     {
         installer::logger::print_error( "Sorry, Patch flag currently only available for Solaris pkg, Linux RPM and Windows builds!" );
         usage();
