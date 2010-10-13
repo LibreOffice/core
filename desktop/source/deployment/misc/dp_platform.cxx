@@ -190,7 +190,7 @@ namespace
         else
         {
             OSL_ENSURE(0, "Extension Manager: The extension supports an unknown platform. "
-            "Check the platform element in the descripion.xml");
+            "Check the platform element in the description.xml");
             ret = false;
         }
         return ret;
