@@ -89,12 +89,10 @@
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
-// steht im appenv.cxx
+// is in appenv.cxx
 extern String InsertLabEnvText( SwWrtShell& , SwFldMgr& , const String& );
 
 const char __FAR_DATA MASTER_LABEL[] = "MasterLabel";
-
-// --------------------------------------------------------------------------
 
 const SwFrmFmt *lcl_InsertBCText( SwWrtShell& rSh, const SwLabItem& rItem,
                         SwFrmFmt &rFmt,
@@ -113,18 +111,17 @@ const SwFrmFmt *lcl_InsertBCText( SwWrtShell& rSh, const SwLabItem& rItem,
         aSet.Put(SwFmtVertOrient(rItem.lUpper + nRow * rItem.lVDist,
                                                     text::VertOrientation::NONE, text::RelOrientation::PAGE_FRAME ));
     }
-    const SwFrmFmt *pFmt = rSh.NewFlyFrm(aSet, sal_True,  &rFmt );  // Fly einfuegen
-    ASSERT( pFmt, "Fly not inserted" );
+    const SwFrmFmt *pFmt = rSh.NewFlyFrm(aSet, sal_True,  &rFmt );  // Insert Fly
+    OSL_ENSURE( pFmt, "Fly not inserted" );
 
-    rSh.UnSelectFrm();  //Rahmen wurde automatisch selektiert
+    rSh.UnSelectFrm();  //Frame was selected automatically
 
     rSh.SetTxtFmtColl( rSh.GetTxtCollFromPool( RES_POOLCOLL_STANDARD ) );
 
-    //
     if(!rItem.bSynchron || !(nCol|nRow))
     {
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialogdiet fail!");
+        OSL_ENSURE(pFact, "Dialogdiet fail!");
         ::GlossarySetActGroup fnSetActGroup = pFact->SetGlossaryActGroupFunc( DLG_RENAME_GLOS );
         if ( fnSetActGroup )
             (*fnSetActGroup)( rItem.sGlossaryGroup );
@@ -153,10 +150,10 @@ const SwFrmFmt *lcl_InsertLabText( SwWrtShell& rSh, const SwLabItem& rItem,
         aSet.Put(SwFmtVertOrient(rItem.lUpper + nRow * rItem.lVDist,
                                                     text::VertOrientation::NONE, text::RelOrientation::PAGE_FRAME ));
     }
-    const SwFrmFmt *pFmt = rSh.NewFlyFrm(aSet, sal_True,  &rFmt );  // Fly einfuegen
-    ASSERT( pFmt, "Fly not inserted" );
+    const SwFrmFmt *pFmt = rSh.NewFlyFrm(aSet, sal_True,  &rFmt );  // Insert Fly
+    OSL_ENSURE( pFmt, "Fly not inserted" );
 
-    rSh.UnSelectFrm();  //Rahmen wurde automatisch selektiert
+    rSh.UnSelectFrm();  //Frame was selected automatically
 
     rSh.SetTxtFmtColl( rSh.GetTxtCollFromPool( RES_POOLCOLL_STANDARD ) );
 
@@ -172,13 +169,11 @@ const SwFrmFmt *lcl_InsertLabText( SwWrtShell& rSh, const SwLabItem& rItem,
     return pFmt;
 }
 
-// ----------------------------------------------------------------------------
-
 
 void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
 {
-static sal_uInt16 nLabelTitleNo = 0;
-static sal_uInt16 nBCTitleNo = 0;
+    static sal_uInt16 nLabelTitleNo = 0;
+    static sal_uInt16 nBCTitleNo = 0;
 
     // DB-Manager anlegen
     SwNewDBMgr* pNewDBMgr = new SwNewDBMgr;
@@ -191,24 +186,24 @@ static sal_uInt16 nBCTitleNo = 0;
     aSet.Put( aLabCfg.GetItem() );
 
     SwAbstractDialogFactory* pDialogFactory = SwAbstractDialogFactory::Create();
-    DBG_ASSERT(pDialogFactory, "SwAbstractDialogFactory fail!");
+    OSL_ENSURE(pDialogFactory, "SwAbstractDialogFactory fail!");
 
     AbstarctSwLabDlg* pDlg = pDialogFactory->CreateSwLabDlg( 0, aSet, pNewDBMgr, bLabel, DLG_LAB );
-    DBG_ASSERT(pDlg, "Dialogdiet fail!");
+    OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
     if ( RET_OK == pDlg->Execute() )
     {
-        // Dialog auslesen, Item in Config speichern
+        // Read dialog, store item in config
         const SwLabItem& rItem = (const SwLabItem&) pDlg->
                                             GetOutputItemSet()->Get(FN_LABEL);
         aLabCfg.GetItem() = rItem;
         aLabCfg.Commit();
 
-        // Neues Dokument erzeugen.
+        // Create new document
         SfxObjectShellRef xDocSh( new SwDocShell( SFX_CREATE_MODE_STANDARD));
         xDocSh->DoInitNew( 0 );
 
-        // Drucker
+        // Printer
         Printer *pPrt = pDlg->GetPrt();
         if (pPrt)
         {
@@ -221,7 +216,7 @@ static sal_uInt16 nBCTitleNo = 0;
         SwView      *pNewView = (SwView*) pViewFrame->GetViewShell();
         pNewView->AttrChangedNotify( &pNewView->GetWrtShell() );//Damit SelectShell gerufen wird.
 
-        // Dokumenttitel setzen
+        // Set document title
         String aTmp;
         if(bLabel)
         {
@@ -239,7 +234,7 @@ static sal_uInt16 nBCTitleNo = 0;
 
         // Shell ermitteln
         SwWrtShell *pSh = pNewView->GetWrtShellPtr();
-        ASSERT( pSh, "missing WrtShell" );
+        OSL_ENSURE( pSh, "missing WrtShell" );
 
         {   // block for locks the dispatcher!!
 
@@ -250,7 +245,7 @@ static sal_uInt16 nBCTitleNo = 0;
             pSh->DoUndo( sal_False );
             pSh->StartAllAction();
 
-            pSh->SetNewDoc();       // Performanceprobleme vermeiden
+            pSh->SetNewDoc();       // Avoid performance problems
 
             SwPageDesc aDesc = pSh->GetPageDesc( 0 );
             SwFrmFmt&  rFmt  = aDesc.GetMaster();
@@ -265,7 +260,7 @@ static sal_uInt16 nBCTitleNo = 0;
             rFmt.SetFmtAttr(aLRMargin);
             rFmt.SetFmtAttr(aULMargin);
 
-            // Kopf- und Fusszeilen
+            // Header and footer
             rFmt.SetFmtAttr(SwFmtHeader(sal_Bool(sal_False)));
             aDesc.ChgHeaderShare(sal_False);
             rFmt.SetFmtAttr(SwFmtFooter(sal_Bool(sal_False)));
@@ -396,7 +391,7 @@ static sal_uInt16 nBCTitleNo = 0;
                         pSh->Pop( sal_False );
                     }
                     if ( i + 1 != rItem.nRows )
-                        pSh->SplitNode(); // Kleine Optimierung
+                        pSh->SplitNode(); // Small optimisation
                 }
             }
             else
@@ -414,7 +409,7 @@ static sal_uInt16 nBCTitleNo = 0;
             if(!bLabel)
             {
                 uno::Reference< frame::XModel >  xModel = pSh->GetView().GetDocShell()->GetBaseModel();
-                DBG_ASSERT(pDialogFactory, "SwAbstractDialogFactory fail!");
+                OSL_ENSURE(pDialogFactory, "SwAbstractDialogFactory fail!");
                 SwLabDlgMethod SwLabDlgUpdateFieldInformation = pDialogFactory->GetSwLabDlgStaticMethod ();
                 SwLabDlgUpdateFieldInformation(xModel, rItem);
             }
@@ -432,14 +427,14 @@ static sal_uInt16 nBCTitleNo = 0;
 
         if( rItem.aWriting.indexOf( '<' ) >= 0 )
         {
-            // Datenbankbrowser mit zuletzt verwendeter Datenbank oeffnen
+            // Open database browser on recently used database
             ShowDBObj( *pNewView, pSh->GetDBData() );
         }
 
         if( rItem.bSynchron )
         {
             SfxDispatcher* pDisp = pViewFrame->GetDispatcher();
-            ASSERT(pDisp, "Heute kein Dispatcher am Frame?");
+            OSL_ENSURE(pDisp, "No dispatcher in frame?");
             pDisp->Execute(FN_SYNC_LABELS, SFX_CALLMODE_ASYNCHRON);
         }
         rReq.SetReturnValue(SfxVoidItem(bLabel ? FN_LABEL : FN_BUSINESS_CARD));

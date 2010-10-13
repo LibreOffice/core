@@ -154,8 +154,6 @@ TYPEINIT1( SwModule, SfxModule );
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-//************************************************************************
-
 SwModule::SwModule( SfxObjectFactory* pWebFact,
                     SfxObjectFactory* pFact,
                     SfxObjectFactory* pGlobalFact )
@@ -217,9 +215,6 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
     // at the view options.
     GetColorConfig();
 }
-
-//************************************************************************
-
 uno::Reference< scanner::XScannerManager >
 SwModule::GetScannerManager()
 {
@@ -256,8 +251,6 @@ uno::Reference< linguistic2::XLanguageGuessing > SwModule::GetLanguageGuesser()
     return m_xLanguageGuesser;
 }
 
-//************************************************************************
-
 SwModule::~SwModule()
 {
     SetPool(0);
@@ -266,15 +259,11 @@ SwModule::~SwModule()
     EndListening( *SFX_APP() );
 }
 
-//************************************************************************
-
 void SwModule::CreateLngSvcEvtListener()
 {
     if (!xLngSvcEvtListener.is())
         xLngSvcEvtListener = new SwLinguServiceEventListener;
 }
-
-//************************************************************************
 
 void SwDLL::RegisterFactories()
 {
@@ -291,9 +280,6 @@ void SwDLL::RegisterFactories()
         SwPagePreView::RegisterFactory  ( 7 );
     }
 }
-
-//************************************************************************
-
 
 void SwDLL::RegisterInterfaces()
 {
@@ -331,8 +317,6 @@ void SwDLL::RegisterInterfaces()
     SwMediaShell::RegisterInterface(pMod);
     SwAnnotationShell::RegisterInterface(pMod);
 }
-
-//************************************************************************
 
 void SwDLL::RegisterControls()
 {
@@ -454,7 +438,7 @@ void SwDLL::RegisterControls()
 
 void    SwModule::InitAttrPool()
 {
-    DBG_ASSERT(!pAttrPool, "Pool ist schon da!");
+    OSL_ENSURE(!pAttrPool, "Pool already exists!");
     pAttrPool = new SwAttrPool(0);
     SetPool(pAttrPool);
 }

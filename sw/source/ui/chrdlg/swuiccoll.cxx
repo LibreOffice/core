@@ -32,8 +32,6 @@
 #undef SW_DLLIMPLEMENTATION
 #endif
 
-
-
 #include "cmdid.h"
 #include <tools/list.hxx>
 #include "swmodule.hxx"
@@ -237,21 +235,10 @@ void __EXPORT SwCondCollPage::Reset(const SfxItemSet &/*rSet*/)
 
 }
 
-/****************************************************************************
-
-****************************************************************************/
-
-
 USHORT* __EXPORT SwCondCollPage::GetRanges()
 {
     return aPageRg;
 }
-
-
-/****************************************************************************
-
-****************************************************************************/
-
 
 IMPL_LINK( SwCondCollPage, OnOffHdl, CheckBox*, pBox )
 {
@@ -269,11 +256,6 @@ IMPL_LINK( SwCondCollPage, OnOffHdl, CheckBox*, pBox )
     return 0;
 }
 
-/****************************************************************************
-
-****************************************************************************/
-
-
 IMPL_LINK( SwCondCollPage, AssignRemoveHdl, PushButton*, pBtn)
 {
     SvLBoxEntry* pE = aTbLinks.FirstSelected();
@@ -281,7 +263,7 @@ IMPL_LINK( SwCondCollPage, AssignRemoveHdl, PushButton*, pBtn)
     if( !pE || LISTBOX_ENTRY_NOTFOUND ==
         ( nPos = aTbLinks.GetModel()->GetAbsPos( pE ) ) )
     {
-        ASSERT( pE, "wo kommt der leere Eintrag her?" );
+        OSL_ENSURE( pE, "where's the empty entry from?" );
         return 0;
     }
 
@@ -303,11 +285,6 @@ IMPL_LINK( SwCondCollPage, AssignRemoveHdl, PushButton*, pBtn)
     return 0;
 }
 
-/****************************************************************************
-
-****************************************************************************/
-
-
 IMPL_LINK( SwCondCollPage, SelectHdl, ListBox*, pBox)
 {
     if(pBox == &aFilterLB)
@@ -318,6 +295,7 @@ IMPL_LINK( SwCondCollPage, SelectHdl, ListBox*, pBox)
         SfxStyleSheetBasePool* pPool = rSh.GetView().GetDocShell()->GetStyleSheetPool();
         pPool->SetSearchMask(SFX_STYLE_FAMILY_PARA, nSearchFlags);
         const SfxStyleSheetBase* pBase = pPool->First();
+
         while( pBase )
         {
             if(!pFmt || pBase->GetName() != pFmt->GetName())
@@ -344,11 +322,6 @@ IMPL_LINK( SwCondCollPage, SelectHdl, ListBox*, pBox)
     }
     return 0;
 }
-
-/****************************************************************************
-
-****************************************************************************/
-
 
 void SwCondCollPage::SetCollection( SwFmt* pFormat, BOOL bNew )
 {

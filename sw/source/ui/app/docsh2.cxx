@@ -149,7 +149,7 @@ SfxDocumentInfoDialog* SwDocShell::CreateDocumentInfoDialog(
         if ( pVSh && !pVSh->ISA(SwSrcView) )
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+            OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
             pDlg->AddTabPage(TP_DOC_STAT, SW_RESSTR(STR_DOC_STAT),pFact->GetTabPageCreatorFunc( TP_DOC_STAT ),0);
         }
     }
@@ -199,7 +199,7 @@ void lcl_processCompatibleSfxHint( const uno::Reference< script::vba::XVBAEventP
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Benachrichtigung bei geaenderter DocInfo
+    Beschreibung: Benachrichtigung bei geaenderter DocInfo
  --------------------------------------------------------------------*/
 
 void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
@@ -498,7 +498,7 @@ BOOL SwDocShell::Insert( SfxObjectShell &rSource,
         pMyPool->SetSearchMask( eMyOldFamily, nMySrchMask );
 
         // Model geaendert
-        ASSERT(pDoc, "Doc fehlt");
+        OSL_ENSURE(pDoc, "Doc missing");
         GetDoc()->SetModified();
 
         bRet = TRUE;
@@ -588,16 +588,12 @@ BOOL SwDocShell::Remove(USHORT nIdx1,       // siehe Insert
                                         nIdx3 );
 
 
-    // Model geaendert
-    ASSERT(pDoc, "Doc fehlt");
+    // Model changed
+    OSL_ENSURE(pDoc, "Doc missing");
     GetDoc()->SetModified();
 
     return bRet;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwDocShell::Execute(SfxRequest& rReq)
 {
@@ -896,10 +892,10 @@ void SwDocShell::Execute(SfxRequest& rReq)
                             break;
                     }
                 }
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
                 {
                     BOOL bWeb = 0 != dynamic_cast<SwWebDocShell*>(this);
-                    DBG_ASSERT(bWeb == TRUE, "SourceView nur in der WebDocShell");
+                    OSL_ENSURE(bWeb == TRUE, "SourceView only in WebDocShell");
                 }
 #endif
                 // die SourceView ist fuer die SwWebDocShell die 1
@@ -957,10 +953,10 @@ void SwDocShell::Execute(SfxRequest& rReq)
         case FN_ABSTRACT_NEWDOC:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+            OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
             AbstractSwInsertAbstractDlg* pDlg = pFact->CreateSwInsertAbstractDlg(0, DLG_INSERT_ABSTRACT );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             if(RET_OK == pDlg->Execute())
             {
                 BYTE nLevel = pDlg->GetLevel();
@@ -1408,7 +1404,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
         case SID_ATTR_YEAR2000:
             if ( pArgs && SFX_ITEM_SET == pArgs->GetItemState( nWhich , FALSE, &pItem ))
             {
-                DBG_ASSERT(pItem->ISA(SfxUInt16Item), "falsches Item");
+                OSL_ENSURE(pItem->ISA(SfxUInt16Item), "wrong Item");
                 USHORT nYear2K = ((SfxUInt16Item*)pItem)->GetValue();
                 //ueber Views iterieren und den State an den FormShells setzen
 
@@ -1498,10 +1494,6 @@ void SwDocShell::ReconnectDdeLink(SfxObjectShell& rServer)
     rLinkManager.ReconnectDdeLink(rServer);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwDocShell::FillClass( SvGlobalName * pClassName,
                                    sal_uInt32 * pClipFormat,
                                    String * /*pAppName*/,
@@ -1532,11 +1524,6 @@ void SwDocShell::FillClass( SvGlobalName * pClassName,
     *pUserName = SW_RESSTR(STR_HUMAN_SWDOC_NAME);
 }
 
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwDocShell::SetModified( BOOL bSet )
 {
     SfxObjectShell::SetModified( bSet );
@@ -1563,10 +1550,6 @@ void SwDocShell::SetModified( BOOL bSet )
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwDocShell::UpdateChildWindows()
 {
     // Flddlg ggf neu initialisieren (z.B. fuer TYP_SETVAR)
@@ -1585,9 +1568,6 @@ void SwDocShell::UpdateChildWindows()
         pRed->ReInitDlg( this );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 // #i48748#
 class SwReloadFromHtmlReader : public SwReader
 {
@@ -1645,8 +1625,8 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
                 }
             }
 
-            ASSERT( pBasicMan->GetLibCount() <= 1,
-                    "Loschen des Basics hat nicht geklappt" );
+            OSL_ENSURE( pBasicMan->GetLibCount() <= 1,
+                    "Deleting Basics didn't work" );
         }
     }
     sal_Bool bWasBrowseMode = pDoc->get(IDocumentSettingAccess::BROWSE_MODE);
@@ -1804,7 +1784,7 @@ ULONG SwDocShell::LoadStylesFromFile( const String& rURL,
     }
     if( aMed.IsStorage() )
     {
-        DBG_ASSERT((pFlt ? pFlt->GetVersion() : 0) >= SOFFICE_FILEFORMAT_60, "which file version?");
+        OSL_ENSURE((pFlt ? pFlt->GetVersion() : 0) >= SOFFICE_FILEFORMAT_60, "which file version?");
         pRead =  ReadXML;
         // the SW3IO - Reader need the pam/wrtshell, because only then he
         // insert the styles!
@@ -1822,7 +1802,7 @@ ULONG SwDocShell::LoadStylesFromFile( const String& rURL,
         pReader = new SwReader( aMed, rURL, pDoc );
     }
 
-    ASSERT( pRead, "no reader found" );
+    OSL_ENSURE( pRead, "no reader found" );
     if( pRead )
     {
         pRead->GetReaderOpt().SetTxtFmts( rOpt.IsTxtFmts() );

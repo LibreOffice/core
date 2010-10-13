@@ -183,7 +183,7 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
     else
         return 0;
 
-    // PassWord Checken
+    // Check password
     String aPasswd;
     if ((*ppRdr)->NeedsPasswd( *pRead ))
     {
@@ -215,13 +215,13 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
         const SfxPoolItem *pItem;
         if(pSet && SFX_ITEM_SET == pSet->GetItemState(SID_PASSWORD, TRUE, &pItem))
         {
-            DBG_ASSERT(pItem->IsA( TYPE(SfxStringItem) ), "Fehler Parametertype");
+            OSL_ENSURE(pItem->IsA( TYPE(SfxStringItem) ), "Wrong parameter type");
             comphelper::OStorageHelper::SetCommonStoragePassword( rMedium.GetStorage(), ((const SfxStringItem *)pItem)->GetValue() );
         }
         // Fuer's Dokument-Einfuegen noch die FF-Version, wenn's der
         // eigene Filter ist.
-        ASSERT( /*pRead != ReadSw3 || */pRead != ReadXML || pFlt->GetVersion(),
-                "Am Filter ist keine FF-Version gesetzt" );
+        OSL_ENSURE( /*pRead != ReadSw3 || */pRead != ReadXML || pFlt->GetVersion(),
+                "No FF version set in filter" );
     }
     // #i30171# set the UpdateDocMode at the SwDocShell
     SFX_ITEMSET_ARG( rMedium.GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
@@ -550,7 +550,7 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
     WriterRef xWriter;
     SwReaderWriter::GetWriter( pFlt->GetUserData(), rMedium.GetBaseURL( true ), xWriter );
     if( !xWriter.Is() )
-    {   // Der Filter ist nicht vorhanden
+    {   // Filter not available
         InfoBox( 0,
                  SW_RESSTR(STR_DLLNOTFOUND) ).Execute();
         return FALSE;
@@ -578,7 +578,7 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
         if ( bSave )
         {
             SvStorageRef xStg = new SotStorage( rMedium.GetOutStream(), FALSE );
-            DBG_ASSERT( !xStg->GetError(), "No storage available for storing VBA macros!" );
+            OSL_ENSURE( !xStg->GetError(), "No storage available for storing VBA macros!" );
             if ( !xStg->GetError() )
             {
                 nVBWarning = SaveOrDelMSVBAStorage( (SfxObjectShell&) *this, *xStg, bSave, String::CreateFromAscii("Macros") );
@@ -960,7 +960,7 @@ sal_uInt16 SwDocShell::GetHiddenInformationState( sal_uInt16 nStates )
     }
     if ( nStates & HIDDENINFORMATION_NOTES )
     {
-        ASSERT( GetWrtShell(), "No SwWrtShell, no information" )
+        OSL_ENSURE( GetWrtShell(), "No SwWrtShell, no information" )
         if ( GetWrtShell() )
         {
             SwFieldType* pType = GetWrtShell()->GetFldType( RES_POSTITFLD, aEmptyStr );
@@ -1088,7 +1088,7 @@ void SwDocShell::GetState(SfxItemSet& rSet)
         }
         break;
 
-        default: DBG_ASSERT(!this,"Hier darfst Du nicht hinein!");
+        default: OSL_ENSURE(!this,"You cannot get here!");
 
         }
         nWhich = aIter.NextWhich();

@@ -122,7 +122,7 @@ IMPL_LINK( SwBreakDlg, OkHdl, Button *, EMPTYARG )
         else
             pPageDesc = &rSh.GetPageDesc(rSh.GetCurPageDesc());
 
-        ASSERT(pPageDesc, Seitenvorlage nicht gefunden.);
+        OSL_ENSURE(pPageDesc, "Seitenvorlage nicht gefunden.");
         const USHORT nUserPage = USHORT(aPageNumEdit.GetValue());
         BOOL bOk = TRUE;
         switch(pPageDesc->GetUseOn())
@@ -200,7 +200,6 @@ SwBreakDlg::SwBreakDlg( Window *pParent, SwWrtShell &rS ) :
     aPageNumEdit.SetText( aEmptyStr );
     FreeResource();
 }
-
 
 void SwBreakDlg::CheckEnable()
 {

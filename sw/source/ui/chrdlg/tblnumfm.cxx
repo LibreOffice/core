@@ -32,9 +32,6 @@
 #undef SW_DLLIMPLEMENTATION
 #endif
 
-
-
-
 #include <svx/svxids.hrc>
 #include <svx/numinf.hxx>
 #include <swtypes.hxx>
@@ -52,8 +49,9 @@ SwNumFmtDlg::SwNumFmtDlg(Window* pParent, const SfxItemSet& rSet)
 {
     // TabPage erzeugen
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialogdiet fail!");
+    OSL_ENSURE(pFact, "Dialogdiet fail!");
     ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUMBERFORMAT );
+
     if ( fnCreatePage )
     {
         SfxTabPage* pNewPage = (*fnCreatePage)( this, rSet );
@@ -63,7 +61,6 @@ SwNumFmtDlg::SwNumFmtDlg(Window* pParent, const SfxItemSet& rSet)
         SetTabPage(pNewPage);
     }
 }
-
 
 SwNumFmtDlg::~SwNumFmtDlg()
 {

@@ -30,7 +30,7 @@
 #include <hintids.hxx>
 #include <tools/urlobj.hxx>
 
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <tools/link.hxx>
 
 #define _SVSTDARR_STRINGSDTOR
@@ -297,8 +297,8 @@ SwMailMergeWizardExecutor::SwMailMergeWizardExecutor()
 
 SwMailMergeWizardExecutor::~SwMailMergeWizardExecutor()
 {
-    DBG_ASSERT( m_pWizard == 0, "SwMailMergeWizardExecutor: m_pWizard must be Null!" );
-    DBG_ASSERT( m_pMMConfig == 0, "SwMailMergeWizardExecutor: m_pMMConfig must be Null!" );
+    OSL_ENSURE( m_pWizard == 0, "SwMailMergeWizardExecutor: m_pWizard must be Null!" );
+    OSL_ENSURE( m_pMMConfig == 0, "SwMailMergeWizardExecutor: m_pMMConfig must be Null!" );
 }
 
 void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs )
@@ -310,7 +310,7 @@ void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs
     }
 
     m_pView = ::GetActiveView(); // not owner!
-    DBG_ASSERT(m_pView, "no current view?");
+    OSL_ENSURE(m_pView, "no current view?");
     if(m_pView)
     {
         // keep self alive until done.
@@ -331,7 +331,7 @@ void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs
             m_pView->SetMailMergeConfigItem(0, 0, sal_True);
             SfxViewFrame* pViewFrame = m_pView->GetViewFrame();
             pViewFrame->ShowChildWindow(FN_MAILMERGE_CHILDWINDOW, FALSE);
-            DBG_ASSERT(m_pMMConfig, "no MailMergeConfigItem available");
+            OSL_ENSURE(m_pMMConfig, "no MailMergeConfigItem available");
             bRestoreWizard = true;
         }
         // to make it bullet proof ;-)
@@ -427,7 +427,7 @@ IMPL_LINK( SwMailMergeWizardExecutor, EndDialogHdl, AbstractMailMergeWizard*, EM
 #endif
 {
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT( pDialog == m_pWizard, "wrong dialog passed to EndDialogHdl!" );
+    OSL_ENSURE( pDialog == m_pWizard, "wrong dialog passed to EndDialogHdl!" );
     (void) pDialog;
 #endif
 
@@ -469,7 +469,7 @@ IMPL_LINK( SwMailMergeWizardExecutor, EndDialogHdl, AbstractMailMergeWizard*, EM
             uno::Reference< frame::XFrame > xFrame =
                 m_pView->GetViewFrame()->GetFrame().GetFrameInterface();
             xFrame->getContainerWindow()->setVisible(sal_False);
-            DBG_ASSERT(pTargetView, "No target view has been created");
+            OSL_ENSURE(pTargetView, "No target view has been created");
             if(pTargetView)
             {
                 // destroy wizard asynchronously
@@ -508,7 +508,7 @@ IMPL_LINK( SwMailMergeWizardExecutor, EndDialogHdl, AbstractMailMergeWizard*, EM
         {
             SwView* pTargetView = m_pMMConfig->GetTargetView();
             SwView* pSourceView = m_pMMConfig->GetSourceView();
-            DBG_ASSERT(pTargetView && pSourceView, "source or target view not available" );
+            OSL_ENSURE(pTargetView && pSourceView, "source or target view not available" );
             if(pTargetView && pSourceView)
             {
                 m_pView2Close = pTargetView;
@@ -678,11 +678,11 @@ void SwModule::ExecOther(SfxRequest& rReq)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Notifies abfangen
+    Beschreibung: Catch notifications
  --------------------------------------------------------------------*/
 
 
-    // Hint abfangen fuer DocInfo
+// Catch hint for DocInfo
 void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
     if( rHint.ISA( SfxEventHint ) )
@@ -792,7 +792,7 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, sal
         if(!nNew || !nOld)
         {
             sal_Bool bUndo = nNew != 0;
-            //ueber DocShells iterieren und Undo umschalten
+            // Iterate through DocShells and switch undos
 
             TypeId aType(TYPE(SwDocShell));
             SwDocShell* pDocShell = (SwDocShell*)SfxObjectShell::GetFirst(&aType);

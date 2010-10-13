@@ -106,9 +106,7 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
         }
 
     /********************************************************************/
-    /*                                                                  */
-    /* Optionen/Bearbeiten                                              */
-    /*                                                                  */
+    /* Options/Edit                                              */
     /********************************************************************/
     SfxItemSet* pRet = new SfxItemSet (GetPool(),   FN_PARAM_DOCDISP,       FN_PARAM_ELEM,
                                     SID_PRINTPREVIEW,       SID_PRINTPREVIEW,
@@ -127,7 +125,7 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
                                     SID_ATTR_LANGUAGE,      SID_ATTR_LANGUAGE,
                                     SID_ATTR_CHAR_CJK_LANGUAGE,   SID_ATTR_CHAR_CJK_LANGUAGE,
                                     SID_ATTR_CHAR_CTL_LANGUAGE, SID_ATTR_CHAR_CTL_LANGUAGE,
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
                                     FN_PARAM_SWTEST,        FN_PARAM_SWTEST,
 #endif
                                     0);
@@ -246,7 +244,7 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
         pRet->Put(SvxBrushItem(aViewOpt.GetRetoucheColor(), RES_BACKGROUND));
     }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         // Test options
         SwTestItem aTestItem(FN_PARAM_SWTEST);
         aTestItem.bTest1 = aViewOpt.IsTest1();
@@ -454,7 +452,7 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
     }
 
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     /*--------------------------------------------------------------------------
                 Writer Testseite auswerten
     ----------------------------------------------------------------------------*/
@@ -575,7 +573,7 @@ SfxTabPage* SwModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItemS
             }
         }
         break;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         case  RID_SW_TP_OPTTEST_PAGE:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
@@ -613,7 +611,7 @@ SfxTabPage* SwModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItemS
         break;
     }
 
-    DBG_ASSERT( pRet, "SwModule::CreateTabPage(): Unknown tabpage id" );
+    OSL_ENSURE( pRet, "SwModule::CreateTabPage(): Unknown tabpage id" );
     return pRet;
 }
 

@@ -59,7 +59,7 @@
 #include <docsh.hxx>
 #include <dbmgr.hxx>
 #include <uinums.hxx>
-#include <prtopt.hxx>       // fuer PrintOptions
+#include <prtopt.hxx>   // for PrintOptions
 #include <navicfg.hxx>
 #include <doc.hxx>
 #include <cmdid.h>
@@ -118,11 +118,6 @@ void lcl_SetUIPrefs(const SwViewOption* pPref, SwView* pView, ViewShell* pSh )
     pView->GetPostItMgr()->PrepareView(true);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Aktuelle SwWrtShell
- --------------------------------------------------------------------*/
-
-
 SwWrtShell* GetActiveWrtShell()
 {
     SwView *pActive = ::GetActiveView();
@@ -131,32 +126,23 @@ SwWrtShell* GetActiveWrtShell()
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Pointer auf die aktuelle Sicht
- --------------------------------------------------------------------*/
-
-
 SwView* GetActiveView()
 {
     SfxViewShell* pView = SfxViewShell::Current();
     return PTR_CAST( SwView, pView );
 }
-/*--------------------------------------------------------------------
-    Beschreibung:   Ueber Views iterieren - static
- --------------------------------------------------------------------*/
 
 SwView* SwModule::GetFirstView()
 {
-    // liefert nur sichtbare SwViews
+    // returns only sivible SwView
     const TypeId aTypeId = TYPE(SwView);
     SwView* pView = (SwView*)SfxViewShell::GetFirst(&aTypeId);
     return pView;
 }
 
-
 SwView* SwModule::GetNextView(SwView* pView)
 {
-    DBG_ASSERT(PTR_CAST(SwView, pView),"keine SwView uebergeben");
+    OSL_ENSURE(PTR_CAST(SwView, pView),"return no SwView");
     const TypeId aTypeId = TYPE(SwView);
     SwView* pNView = (SwView*)SfxViewShell::GetNext(*pView, &aTypeId, TRUE);
     return pNView;
@@ -365,7 +351,6 @@ void SwModule::ApplyUserCharUnit(BOOL bApplyChar, BOOL bWeb)
     }
 }
 
-
 SwNavigationConfig*  SwModule::GetNavigationConfig()
 {
     if(!pNavigationConfig)
@@ -374,7 +359,6 @@ SwNavigationConfig*  SwModule::GetNavigationConfig()
     }
     return pNavigationConfig;
 }
-
 
 SwPrintOptions*     SwModule::GetPrtOptions(sal_Bool bWeb)
 {
@@ -396,10 +380,6 @@ SwChapterNumRules*  SwModule::GetChapterNumRules()
         pChapterNumRules = new SwChapterNumRules;
     return pChapterNumRules;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwModule::ShowDBObj(SwView& rView, const SwDBData& rData, BOOL /*bOnlyIfAvailable*/)
 {
@@ -427,9 +407,6 @@ void SwModule::ShowDBObj(SwView& rView, const SwDBData& rData, BOOL /*bOnlyIfAva
         }
     }
 }
-/*--------------------------------------------------------------------
-    Beschreibung: Redlining
- --------------------------------------------------------------------*/
 
 sal_uInt16 SwModule::GetRedlineAuthor()
 {
@@ -444,23 +421,15 @@ sal_uInt16 SwModule::GetRedlineAuthor()
     return InsertRedlineAuthor( sActAuthor );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 const String& SwModule::GetRedlineAuthor(sal_uInt16 nPos)
 {
-    DBG_ASSERT(nPos<pAuthorNames->Count(), "author not found!"); //#i45342# RTF doc with no author table caused reader to crash
+    OSL_ENSURE(nPos<pAuthorNames->Count(), "author not found!"); //#i45342# RTF doc with no author table caused reader to crash
     while (!(nPos<pAuthorNames->Count()))
     {
         InsertRedlineAuthor(String(RTL_CONSTASCII_USTRINGPARAM("nn")));
     };
     return *pAuthorNames->GetObject(nPos);
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 sal_uInt16 SwModule::InsertRedlineAuthor(const String& rAuthor)
 {
@@ -474,10 +443,6 @@ sal_uInt16 SwModule::InsertRedlineAuthor(const String& rAuthor)
 
     return nPos;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void lcl_FillAuthorAttr( sal_uInt16 nAuthor, SfxItemSet &rSet,
                         const AuthorCharAttr &rAttr )
@@ -545,18 +510,10 @@ void lcl_FillAuthorAttr( sal_uInt16 nAuthor, SfxItemSet &rSet,
         rSet.Put( SvxColorItem( aCol, RES_CHRATR_COLOR ) );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwModule::GetInsertAuthorAttr(sal_uInt16 nAuthor, SfxItemSet &rSet)
 {
     lcl_FillAuthorAttr(nAuthor, rSet, pModuleConfig->GetInsertAuthorAttr());
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwModule::GetDeletedAuthorAttr(sal_uInt16 nAuthor, SfxItemSet &rSet)
 {
@@ -572,18 +529,10 @@ void SwModule::GetFormatAuthorAttr( sal_uInt16 nAuthor, SfxItemSet &rSet )
     lcl_FillAuthorAttr( nAuthor, rSet, pModuleConfig->GetFormatAuthorAttr() );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 sal_uInt16 SwModule::GetRedlineMarkPos()
 {
     return pModuleConfig->GetMarkAlignMode();
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 sal_Bool SwModule::IsInsTblFormatNum(sal_Bool bHTML) const
 {
@@ -595,18 +544,10 @@ sal_Bool SwModule::IsInsTblChangeNumFormat(sal_Bool bHTML) const
     return pModuleConfig->IsInsTblChangeNumFormat(bHTML);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 sal_Bool SwModule::IsInsTblAlignNum(sal_Bool bHTML) const
 {
     return pModuleConfig->IsInsTblAlignNum(bHTML);
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 const Color &SwModule::GetRedlineMarkColor()
 {
@@ -618,7 +559,6 @@ const SwViewOption* SwModule::GetViewOption(sal_Bool bWeb)
     return GetUsrPref( bWeb );
 }
 
-// returne den definierten DocStat - WordDelimiter
 const String& SwModule::GetDocStatWordDelim() const
 {
     return pModuleConfig->GetWordDelimiter();

@@ -28,18 +28,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <hintids.hxx>
-
 #include <svx/svxids.hrc>
-
-
-
-
-
-
-
-
 #include <svl/stritem.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/svdmodel.hxx>

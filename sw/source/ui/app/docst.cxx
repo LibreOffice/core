@@ -382,7 +382,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
             }
             else
             {
-                ASSERT( pArgs->Count(), "SfxBug ItemSet ist leer");
+                OSL_ENSURE( pArgs->Count(), "SfxBug ItemSet is empty");
 
                 SwWrtShell* pShell = GetWrtShell();
                 if( SFX_ITEM_SET == pArgs->GetItemState(nSlot, FALSE, &pItem ))
@@ -484,7 +484,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                     break;
 
                     default:
-                        DBG_ERROR( "Falsche Slot-Id");
+                        DBG_ERROR( "Invalid SlotId");
                 }
 
                 rReq.Done();
@@ -513,7 +513,7 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
                          BOOL bNew, BOOL bColumn, SwWrtShell* pActShell,
                          BOOL bBasic )
 {
-    ASSERT(GetWrtShell(), "Keine Shell, keine Styles");
+    OSL_ENSURE(GetWrtShell(), "No Shell, no Styles");
     SfxStyleSheetBase *pStyle = 0;
 
     USHORT nRet = nMask;
@@ -614,7 +614,7 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
     else
     {
         pStyle = mxBasePool->Find( rName, (SfxStyleFamily)nFamily );
-        ASSERT(pStyle, "Vorlage nicht gefunden");
+        OSL_ENSURE(pStyle, "Vorlage nicht gefunden");
     }
 
     if(!pStyle)
@@ -663,11 +663,11 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
         FieldUnit eMetric = ::GetDfltMetric(0 != (HTMLMODE_ON&nHtmlMode));
         SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< UINT16 >(eMetric)));
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialogdiet fail!");
+        OSL_ENSURE(pFact, "Dialogdiet fail!");
         SfxAbstractTabDialog* pDlg = pFact->CreateTemplateDialog( DLG_TEMPLATE_BASE,
                                                     0, *(xTmp.get()), nFamily, bColumn,
                                                     pActShell ? pActShell : pWrtShell, bNew);
-        DBG_ASSERT(pDlg, "Dialogdiet fail!");
+        OSL_ENSURE(pDlg, "Dialogdiet fail!");
         if(RET_OK == pDlg->Execute())
         {
             GetWrtShell()->StartAllAction();
@@ -817,7 +817,7 @@ USHORT SwDocShell::Delete(const String &rName, USHORT nFamily)
 
     if(pStyle)
     {
-        ASSERT(GetWrtShell(), "Keine Shell, keine Styles");
+        OSL_ENSURE(GetWrtShell(), "No Shell, no Styles");
 
         GetWrtShell()->StartAllAction();
         mxBasePool->Remove(pStyle);
@@ -839,13 +839,14 @@ USHORT SwDocShell::ApplyStyles(const String &rName, USHORT nFamily,
     SwDocStyleSheet* pStyle =
         (SwDocStyleSheet*)mxBasePool->Find(rName, (SfxStyleFamily)nFamily);
 
-    ASSERT(pStyle, "Wo ist der StyleSheet");
+    OSL_ENSURE(pStyle, "Where's the StyleSheet");
+
     if(!pStyle)
         return FALSE;
 
     SwWrtShell *pSh = pShell ? pShell : GetWrtShell();
 
-    ASSERT( pSh, "Keine Shell, keine Styles");
+    OSL_ENSURE( pSh, "No Shell, no Styles");
 
     pSh->StartAllAction();
 
@@ -891,7 +892,7 @@ USHORT SwDocShell::ApplyStyles(const String &rName, USHORT nFamily,
             break;
         }
         default:
-            DBG_ERROR("Unbekannte Familie");
+            DBG_ERROR("Unknown family");
     }
     pSh->EndAllAction();
 
@@ -906,13 +907,15 @@ USHORT SwDocShell::ApplyStyles(const String &rName, USHORT nFamily,
 
 USHORT SwDocShell::DoWaterCan(const String &rName, USHORT nFamily)
 {
-    ASSERT(GetWrtShell(), "Keine Shell, keine Styles");
+    OSL_ENSURE(GetWrtShell(), "No Shell, no Styles");
 
     SwEditWin& rEdtWin = pView->GetEditWin();
     SwApplyTemplate* pApply = rEdtWin.GetApplyTemplate();
     BOOL bWaterCan = !(pApply && pApply->eType != 0);
+
     if( !rName.Len() )
         bWaterCan = FALSE;
+
     SwApplyTemplate aTemplate;
     aTemplate.eType = nFamily;
 
@@ -921,7 +924,8 @@ USHORT SwDocShell::DoWaterCan(const String &rName, USHORT nFamily)
         SwDocStyleSheet* pStyle =
             (SwDocStyleSheet*)mxBasePool->Find(rName, (SfxStyleFamily)nFamily);
 
-        ASSERT(pStyle, "Wo ist der StyleSheet");
+        OSL_ENSURE (pStyle, "Where's the StyleSheet");
+
         if(!pStyle) return nFamily;
 
         switch(nFamily)
@@ -943,13 +947,12 @@ USHORT SwDocShell::DoWaterCan(const String &rName, USHORT nFamily)
                 break;
 
             default:
-                DBG_ERROR( "Unbekannte Familie");
+                DBG_ERROR( "Unknown family");
         }
     }
     else
         aTemplate.eType = 0;
 
-    // Template anwenden
     pView->GetEditWin().SetApplyTemplate(aTemplate);
 
     return nFamily;
@@ -963,7 +966,7 @@ USHORT SwDocShell::DoWaterCan(const String &rName, USHORT nFamily)
 USHORT SwDocShell::UpdateStyle(const String &rName, USHORT nFamily, SwWrtShell* pShell)
 {
     SwWrtShell* pCurrWrtShell = pShell ? pShell : GetWrtShell();
-    ASSERT(GetWrtShell(), "Keine Shell, keine Styles");
+    OSL_ENSURE(GetWrtShell(), "No Shell, no Styles");
 
     SwDocStyleSheet* pStyle =
         (SwDocStyleSheet*)mxBasePool->Find(rName, (SfxStyleFamily)nFamily);

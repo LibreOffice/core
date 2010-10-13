@@ -87,11 +87,7 @@
 #define ENV_CANCEL      SHRT_MAX
 
 
-// --------------------------------------------------------------------------
-
-
-// Funktion wird fuer Etiketten und Briefumschlaege benutzt!
-//  im applab.cxx und appenv.cxx
+// Function used for labels and envelopes in applab.cxx and appenv.cxx
 String InsertLabEnvText( SwWrtShell& rSh, SwFldMgr& rFldMgr, const String& rText )
 {
     String sRet;
@@ -127,7 +123,7 @@ String InsertLabEnvText( SwWrtShell& rSh, SwFldMgr& rFldMgr, const String& rText
                     sTmpText = aLine.Copy( 0, nPos + 1);
                     aLine.Erase( 0, nPos + 1);
 
-                    // Datenbankfelder muesen mind. 3 Punkte beinhalten!
+                    // Database fields must contain at least 3 points!
                     String sDBName( sTmpText.Copy( 1, sTmpText.Len() - 2));
                     USHORT nCnt = sDBName.GetTokenCount('.');
                     if (nCnt >= 3)
@@ -145,13 +141,10 @@ String InsertLabEnvText( SwWrtShell& rSh, SwFldMgr& rFldMgr, const String& rText
         }
         rSh.InsertLineBreak();
     }
-    rSh.DelLeft();  // Letzten Linebreak wieder l???schen
+    rSh.DelLeft();  // Again remove last linebreak
 
     return sRet;
 }
-
-// ----------------------------------------------------------------------------
-
 
 void lcl_CopyCollAttr(SwWrtShell* pOldSh, SwWrtShell* pNewSh, USHORT nCollId)
 {
@@ -162,12 +155,9 @@ void lcl_CopyCollAttr(SwWrtShell* pOldSh, SwWrtShell* pNewSh, USHORT nCollId)
             pNewSh->GetTxtCollFromPool(nCollId)->SetFmtAttr(pColl->GetAttrSet());
 }
 
-// ----------------------------------------------------------------------------
-
-
 void SwModule::InsertEnv( SfxRequest& rReq )
 {
-static USHORT nTitleNo = 0;
+    static USHORT nTitleNo = 0;
 
     SwDocShell      *pMyDocSh;
     SfxViewFrame    *pFrame;
@@ -175,11 +165,11 @@ static USHORT nTitleNo = 0;
     SwWrtShell      *pOldSh,
                     *pSh;
 
-    //aktuelle Shell besorgen
+    // Get current shell
     pMyDocSh = (SwDocShell*) SfxObjectShell::Current();
     pOldSh   = pMyDocSh ? pMyDocSh->GetWrtShell() : 0;
 
-    // Neues Dokument erzeugen (kein Show!)
+    // Create new document (don't show!)
     SfxObjectShellRef xDocSh( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
     xDocSh->DoInitNew( 0 );
     pFrame = SfxViewFrame::LoadHiddenDocument( *xDocSh, 0 );
@@ -199,10 +189,10 @@ static USHORT nTitleNo = 0;
         ::lcl_CopyCollAttr(pOldSh, pSh, RES_POOLCOLL_SENDADRESS);
     }
 
-    // SwEnvItem aus Config lesen
+    // Read SwEnvItem from config
     SwEnvCfgItem aEnvCfg;
 
-    //Haben wir schon einen Briefumschlag.
+    // Check if there's already an envelope.
     BOOL bEnvChange = FALSE;
 
     SfxItemSet aSet(GetPool(), FN_ENVELOP, FN_ENVELOP, 0);
@@ -236,10 +226,10 @@ static USHORT nTitleNo = 0;
     if ( !pItem )
     {
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+        OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
         pDlg = pFact->CreateSwEnvDlg( pParent, aSet, pOldSh, pTempPrinter, !bEnvChange, DLG_ENV );
-        DBG_ASSERT(pDlg, "Dialogdiet fail!");
+        OSL_ENSURE(pDlg, "Dialogdiet fail!");
         nMode = pDlg->Execute();
     }
     else
@@ -253,7 +243,7 @@ static USHORT nTitleNo = 0;
     {
         SwWait aWait( (SwDocShell&)*xDocSh, TRUE );
 
-        // Dialog auslesen, Item in Config speichern
+        // Read dialog and save item to config
         const SwEnvItem& rItem = pItem ? *pItem : (const SwEnvItem&) pDlg->GetOutputItemSet()->Get(FN_ENVELOP);
         aEnvCfg.GetItem() = rItem;
         aEnvCfg.Commit();
@@ -264,7 +254,7 @@ static USHORT nTitleNo = 0;
         //gereicht wurde.
         if ( nMode != ENV_NEWDOC )
         {
-            ASSERT(pOldSh, "Kein Dokument - war 'Einfuegen' nicht disabled???");
+            OSL_ENSURE(pOldSh, "No document - wasn't 'Insert' disabled???");
             SvxPaperBinItem aItem( RES_PAPER_BIN );
             aItem.SetValue((BYTE)pSh->getIDocumentDeviceAccess()->getPrinter(true)->GetPaperBin());
             pOldSh->GetPageDescFromPool(RES_POOLPAGE_JAKET)->GetMaster().SetFmtAttr(aItem);
@@ -280,15 +270,15 @@ static USHORT nTitleNo = 0;
         if (nMode == ENV_INSERT)
         {
 
-            SetView(&pOldSh->GetView()); // Pointer auf oberste View restaurieren
+            SetView(&pOldSh->GetView()); // Set pointer to top view
 
-            //Neues Dok wieder loeschen
+            // Delete new document
             xDocSh->DoClose();
             pSh = pOldSh;
             //#i4251# selected text or objects in the document should
             //not be deleted on inserting envelopes
             pSh->EnterStdMode();
-            // Los geht's (Einfuegen)
+            // Here it goes (insert)
             pSh->StartUndo(UNDO_UI_INSERT_ENVELOPE, NULL);
             pSh->StartAllAction();
             pSh->SttEndDoc(TRUE);
@@ -298,11 +288,11 @@ static USHORT nTitleNo = 0;
                 // Folgevorlage: Seite 2
                 pFollow = pSh->GetPageDesc(pSh->GetCurPageDesc()).GetFollow();
 
-                // Text der ersten Seite loeschen
+                // Delete text from the first page
                 if ( !pSh->SttNxtPg(TRUE) )
                     pSh->EndPg(TRUE);
                 pSh->DelRight();
-                // Rahmen der ersten Seite loeschen
+                // Delete frame of the first page
                 if( pSh->GotoFly( rSendMark ) )
                 {
                     pSh->EnterSelFrmMode();
@@ -319,7 +309,7 @@ static USHORT nTitleNo = 0;
                 // Folgevorlage: Seite 1
                 pFollow = &pSh->GetPageDesc(pSh->GetCurPageDesc());
 
-            // Seitenumbruch einfuegen
+            // Insert page break
             if ( pSh->IsCrsrInTbl() )
             {
                 pSh->SplitNode();
@@ -349,14 +339,14 @@ static USHORT nTitleNo = 0;
         }
 
         SET_CURR_SHELL(pSh);
-        pSh->SetNewDoc();       // Performanceprobleme vermeiden
+        pSh->SetNewDoc();   // Avoid performance problems
 
         // Flys dieser Seite merken
         SvPtrarr aFlyArr(0, 5);
         if( ENV_NEWDOC != nMode && !bEnvChange )
             pSh->GetPageObjs( aFlyArr );
 
-        // Page-Desc ermitteln
+        // Get page description
         SwPageDesc* pDesc = pSh->GetPageDescFromPool(RES_POOLPAGE_JAKET);
         SwFrmFmt&   rFmt  = pDesc->GetMaster();
 
@@ -399,20 +389,20 @@ static USHORT nTitleNo = 0;
         rFmt.SetFmtAttr(aLRMargin);
         rFmt.SetFmtAttr(aULMargin);
 
-        // Kopf-, Fusszeilen
+        // Header and footer
         rFmt.SetFmtAttr(SwFmtHeader(BOOL(FALSE)));
         pDesc->ChgHeaderShare(FALSE);
         rFmt.SetFmtAttr(SwFmtFooter(BOOL(FALSE)));
         pDesc->ChgFooterShare(FALSE);
 
-        // Seitennumerierung
+        // Page numbering
         pDesc->SetUseOn(nsUseOnPage::PD_ALL);
 
-        // Einstellen der Seitengroesse
+        // Page size
         rFmt.SetFmtAttr(SwFmtFrmSize(ATT_FIX_SIZE,
                                             nPageW + lLeft, nPageH + lUpper));
 
-        // Einstellen der Numerierungsart der Seite
+        // Set type of page numbering
         SvxNumberType aType;
         aType.SetNumberingType(SVX_NUM_NUMBER_NONE);
         pDesc->SetNumType(aType);
@@ -425,7 +415,7 @@ static USHORT nTitleNo = 0;
         pDesc->SetLandscape( rItem.eAlign >= ENV_VER_LEFT &&
                              rItem.eAlign <= ENV_VER_RGHT);
 
-        // Page-Desc anwenden
+        // Apply page description
 
         USHORT nPos;
         pSh->FindPageDescByName( pDesc->GetName(),
@@ -446,7 +436,7 @@ static USHORT nTitleNo = 0;
         aMgr.SetULSpace( 0L, 0L );
         aMgr.SetLRSpace( 0L, 0L );
 
-        // Absender
+        // Sender
         if (rItem.bSend)
         {
             pSh->SttEndDoc(TRUE);
@@ -463,7 +453,7 @@ static USHORT nTitleNo = 0;
             aMgr.UpdateAttrMgr();
         }
 
-        // Empfaenger
+        // Addressee
         pSh->SttEndDoc(TRUE);
 
         aMgr.InsertFlyFrm(FLY_AT_PAGE,
@@ -480,7 +470,7 @@ static USHORT nTitleNo = 0;
         if (aFlyArr.Count())
             pSh->SetPageObjsNewPage(aFlyArr, 1);
 
-        // Fertig
+        // Finished
         pSh->SttEndDoc(TRUE);
 
         pSh->EndAllAction();
@@ -526,7 +516,7 @@ static USHORT nTitleNo = 0;
         xDocSh->DoClose();
         --nTitleNo;
 
-        // Pointer auf oberste View restaurieren
+        // Set pointer to top view
         if (pOldSh)
             SetView(&pOldSh->GetView());
     }
