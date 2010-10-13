@@ -456,7 +456,16 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
     else if( rUrl.GetChar( 0 ) == '#' )     // hack for #89066#
     {
         String aTextMark( rUrl.Copy( 1 ) );
-        aTextMark.SearchAndReplace( '.', '!' );
+
+        xub_StrLen nSepPos = aTextMark.SearchAndReplace( '.', '!' );
+        String aSheetName( aTextMark.Copy(0, nSepPos));
+
+        if ( aSheetName.Search(' ') != STRING_NOTFOUND && aSheetName.GetChar(0) != '\'')
+        {
+            aTextMark.Insert('\'', nSepPos);
+            aTextMark.Insert('\'', 0);
+        }
+
         mxTextMark.reset( new XclExpString( aTextMark, EXC_STR_FORCEUNICODE, 255 ) );
     }
 
@@ -533,13 +542,15 @@ void XclExpHyperlink::WriteEmbeddedData( XclExpStream& rStrm )
 
 void XclExpHyperlink::SaveXml( XclExpXmlStream& rStrm )
 {
-    OUString sId = rStrm.addRelation( rStrm.GetCurrentStream()->getOutputStream(),
+    OUString sId = msTarget.getLength() ? rStrm.addRelation( rStrm.GetCurrentStream()->getOutputStream(),
             XclXmlUtils::ToOUString( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" ),
             msTarget,
-            XclXmlUtils::ToOUString( "External" ) );
+            XclXmlUtils::ToOUString( "External" ) ) : OUString();
     rStrm.GetCurrentStream()->singleElement( XML_hyperlink,
             XML_ref,                XclXmlUtils::ToOString( maScPos ).getStr(),
-            FSNS( XML_r, XML_id ),  XclXmlUtils::ToOString( sId ).getStr(),
+            FSNS( XML_r, XML_id ),  sId.getLength()
+                                       ? XclXmlUtils::ToOString( sId ).getStr()
+                                       : NULL,
             XML_location,           mxTextMark.get() != NULL
                                         ? XclXmlUtils::ToOString( *mxTextMark ).getStr()
                                         : NULL,
