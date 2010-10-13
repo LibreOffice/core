@@ -1173,7 +1173,6 @@ case "$build_os" in
 		test_randr=no
 		test_freetype=yes
 	   PTHREAD_LIBS=-pthread
-		echo "AIX is an alpha port --- Use at own risk" >> warn
 		_os=AIX
 		;;
    *)
@@ -1343,7 +1342,7 @@ AC_SUBST(ENABLE_FONTCONFIG)
 dnl ===================================================================
 dnl find external tarballs.
 dnl ===================================================================
-if test -z $TARFILE_LOCATION; then
+if test -z "$TARFILE_LOCATION"; then
    TARFILE_LOCATION="DEFAULT"
 fi
 AC_SUBST(TARFILE_LOCATION)
@@ -2648,7 +2647,7 @@ dnl ===================================================================
 if test "$GCC" = "yes"; then
    AC_MSG_CHECKING([whether $CC supports -fvisibility=hidden])
    save_CFLAGS=$CFLAGS
-   CFLAGS="$CFLAGS -fvisibility=hidden"
+   CFLAGS="$CFLAGS -Werror -fvisibility=hidden"
    AC_TRY_LINK([], [ return 0; ], [ HAVE_GCC_VISIBILITY_FEATURE=TRUE ], [])
    CFLAGS=$save_CFLAGS
    if test "$HAVE_GCC_VISIBILITY_FEATURE" = "TRUE"; then
@@ -3474,7 +3473,7 @@ if test "$enable_epm" = "yes"; then
       fi
 		;;
 	AIX)
-		PKGFORMAT=aix
+		PKGFORMAT=rpm
 		;;
 	*BSD)
 		PKGFORMAT=bsd
@@ -3537,7 +3536,7 @@ msi - Windows .msi
        done
        if test -z "$RPM" ; then
           AC_MSG_ERROR([not found])
-       elif "$RPM" --usage 2>&1 | $EGREP -- -bb >/dev/null; then
+       elif "$RPM" --help 2>&1 | $EGREP buildroot >/dev/null; then
           RPM_PATH=`which $RPM`
           AC_MSG_RESULT([$RPM_PATH])
        else
@@ -7153,6 +7152,8 @@ elif test "$_os" = "Linux" -o "$_os" = "FreeBSD"; then
       AC_MSG_RESULT([no, libXinerama not found or wrong architecture.])
    fi
 else
+   USE_XINERAMA=NO
+   XINERAMA_LINK=none
    AC_MSG_RESULT([no])
 fi
 AC_SUBST(USE_XINERAMA)
