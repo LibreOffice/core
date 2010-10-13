@@ -778,16 +778,11 @@ elsif ( $platform =~ m/darwin/ )
 }
 elsif ( $platform =~ m/aix/ )
 {
-   if( $platform !~ m/^powerpc/ )
-   {
-	print "\nAIX has only been ported and tested on powerpc\n";
-	AddWarning( "set_soenv", "Platform $platform has not been tested");
-   }
    print "Setting AIX PPC specific values... ";
    $outfile        = "aixPPCEnv.Set"; 
    $CPU            = "P";
    $CPUNAME        = "POWERPC";
-   $OUTPATH        = "unxlngppc";
+   $OUTPATH        = "unxaigppc";
    $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc";
    $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."classic";
    $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."native_threads";
@@ -1380,7 +1375,7 @@ $SOLARINC             = $I.$cur_dir.
                         $I.'$SOLARENV'.$INC.
                         $I.'$SRC_ROOT'.$ds."res";
 
-if ($platform =~ m/solaris|linux|osf1|freebsd|netbsd/)
+if ($platform =~ m/solaris|linux|osf1|freebsd|netbsd|aix/)
 {
 $SOLARINC	     .= $STLPORT_stlport;
 if ($platform =~ m/linux|freebsd|netbsd/)
@@ -1425,13 +1420,16 @@ if ($platform =~ m/linux/)
    		elsif ($platform =~ m/netbsd/)
    		{  $SOLARINC   .=$I.'$JAVA_HOME'.$INCLUDE.$ds."netbsd";
    		}
+		elsif ( $platform =~ m/aix/ )
+		{  $SOLARINC   .=$I.'$JAVA_HOME'.$INCLUDE.$ds."aix";
+		}
 
    		#java threads include path
 
    		$SOLARINC .=$I.'$JAVA_HOME'.$INCLUDE.$ds."native_threads".$ds."include";
 	}
     #The tail, if needed
-    if ($platform =~ m/linux|freebsd|netbsd/)
+    if ($platform =~ m/linux|freebsd|netbsd|aix/)
     {  $SOLARINC  .= $I.$XINC;
     }
     elsif ($platform =~ m/osf1/)
