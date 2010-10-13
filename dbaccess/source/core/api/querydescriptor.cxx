@@ -280,8 +280,4 @@ OColumn* OQueryDescriptor_Base::createColumn( const ::rtl::OUString& /*_rName*/ 
     return NULL;
 }
 
-<<<<<<< HEAD
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
-=======
-}   // namespace dbaccess
->>>>>>> Removed comments, trailing spaces and death code
