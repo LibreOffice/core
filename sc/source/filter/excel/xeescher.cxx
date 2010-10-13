@@ -1162,7 +1162,7 @@ XclMacroHelper::SetMacroLink( const String& rMacroName )
 }
 
 XclExpShapeObj::XclExpShapeObj( XclExpObjectManager& rRoot, ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape ) :
-    XclObjAny( rRoot ),
+    XclObjAny( rRoot, xShape ),
     XclMacroHelper( rRoot )
 {
     if( SdrObject* pSdrObj = ::GetSdrObjectFromXShape( xShape ) )
