@@ -1,0 +1,6 @@
+<node oor:name="Calc Office Open XML Template">
+    <prop oor:name="UIName">
+        <value xml:lang="en-US">Office Open XML Spreadsheet Template</value>
+        <value xml:lang="de">Office Open XML Spreadsheet Vorlage</value>
+    </prop>
+</node>
