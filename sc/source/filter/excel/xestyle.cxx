@@ -2242,7 +2242,10 @@ void XclExpStyle::SaveXml( XclExpXmlStream& rStrm )
     rStrm.GetCurrentStream()->singleElement( XML_cellStyle,
             XML_name,           sName.getStr(),
             XML_xfId,           OString::valueOf( nXFId ).getStr(),
-            XML_builtinId,      OString::valueOf( (sal_Int32) mnStyleId ).getStr(),
+/* mso-excel 2007 complains when it finds builtinId >= 55, it is not
+ * bothered by multiple 54 values. */
+#define CELL_STYLE_MAX_BUILTIN_ID 55
+                                             XML_builtinId, OString::valueOf( std::min( static_cast<sal_Int32>( CELL_STYLE_MAX_BUILTIN_ID - 1 ), static_cast <sal_Int32>( mnStyleId ) ) ).getStr(),
             // OOXTODO: XML_iLevel,
             // OOXTODO: XML_hidden,
             XML_customBuiltin,  XclXmlUtils::ToPsz( ! IsBuiltIn() ),
