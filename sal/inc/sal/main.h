@@ -47,7 +47,7 @@ int SAL_CALL main(int argc, char ** argv) \
     sal_detail_initialize(argc, argv);   \
     ret = sal_main_with_args(argc, argv); \
     sal_detail_deinitialize(); \
-    return x; \
+    return ret; \
 }
 
 #define SAL_MAIN_IMPL \
@@ -57,7 +57,7 @@ int SAL_CALL main(int argc, char ** argv) \
     sal_detail_initialize(argc, argv); \
     ret = sal_main(); \
     sal_detail_deinitialize(); \
-    return x; \
+    return ret; \
 }
 
 /* Definition macros for CRT entries */
