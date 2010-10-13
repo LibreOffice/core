@@ -633,10 +633,10 @@ void Window::ImplInitWindowData( WindowType nType )
     mpWindowImpl->mbDockWin           = FALSE;        // TRUE: DockingWindow is the base class
     mpWindowImpl->mbFloatWin          = FALSE;        // TRUE: FloatingWindow is the base class
     mpWindowImpl->mbPushButton        = FALSE;        // TRUE: PushButton is the base class
-    mpWindowImpl->mbToolBox         = FALSE;        // TRUE: ToolBox is the base class
-    mpWindowImpl->mbMenuFloatingWindow= FALSE;      // TRUE: MenuFloatingWindow is the base class
-    mpWindowImpl->mbToolbarFloatingWindow= FALSE;       // TRUE: ImplPopupFloatWin is the base class, used for subtoolbars
-    mpWindowImpl->mbSplitter            = FALSE;        // TRUE: Splitter is the base class
+    mpWindowImpl->mbToolBox                     = FALSE;                // TRUE: ToolBox is the base class
+    mpWindowImpl->mbMenuFloatingWindow= FALSE;          // TRUE: MenuFloatingWindow is the base class
+    mpWindowImpl->mbToolbarFloatingWindow= FALSE;               // TRUE: ImplPopupFloatWin is the base class, used for subtoolbars
+    mpWindowImpl->mbSplitter                    = FALSE;                // TRUE: Splitter is the base class
     mpWindowImpl->mbVisible           = FALSE;        // TRUE: Show( true ) called
     mpWindowImpl->mbOverlapVisible    = FALSE;        // TRUE: Hide called for visible window from ImplHideAllOverlapWindow()
     mpWindowImpl->mbDisabled          = FALSE;        // TRUE: Enable( FALSE ) called
@@ -6585,10 +6585,19 @@ void Window::Show( BOOL bVisible, USHORT nFlags )
             mpWindowImpl->mpBorderWindow->Show( true, nFlags );
         else if ( mpWindowImpl->mbFrame )
         {
-            ImplSVData* pSVData = ImplGetSVData();
             // #106431#, hide SplashScreen
-            if( pSVData->mpIntroWindow && !ImplIsWindowOrChild( pSVData->mpIntroWindow ) )
+            ImplSVData* pSVData = ImplGetSVData();
+            if ( !pSVData->mpIntroWindow )
+            {
+                // The right way would be just to call this (not even in the 'if')
+                GetpApp()->InitFinished();
+            }
+            else if ( !ImplIsWindowOrChild( pSVData->mpIntroWindow ) )
+            {
+                // ... but the VCL splash is broken, and it needs this
+                // (for ./soffice slot:5500)
                 pSVData->mpIntroWindow->Hide();
+            }
 
             //DBG_ASSERT( !mpWindowImpl->mbSuppressAccessibilityEvents, "Window::Show() - Frame reactivated");
             mpWindowImpl->mbSuppressAccessibilityEvents = FALSE;
@@ -8717,8 +8726,8 @@ Reference< XClipboard > Window::GetPrimarySelection()
 
                     mpWindowImpl->mpFrameData->mxSelection = Reference< XClipboard >( xFactory->createInstanceWithArguments(
                     OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ), aArgumentList ), UNO_QUERY );
-#   else
-                    static Reference< XClipboard >  s_xSelection;
+#       else
+                    static Reference< XClipboard >      s_xSelection;
 
                     if ( !s_xSelection.is() )
                          s_xSelection = Reference< XClipboard >( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.GenericClipboardExt" ) ), UNO_QUERY );
@@ -8727,7 +8736,7 @@ Reference< XClipboard > Window::GetPrimarySelection()
                          s_xSelection = Reference< XClipboard >( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.GenericClipboard" ) ), UNO_QUERY );
 
                     mpWindowImpl->mpFrameData->mxSelection = s_xSelection;
-#   endif
+#       endif
                 }
             }
 
