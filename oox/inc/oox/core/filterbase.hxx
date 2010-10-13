@@ -75,6 +75,12 @@ namespace core {
 
 // ============================================================================
 
+enum OoxmlVersion
+{
+    ECMA_DIALECT,
+    ISOIEC_29500_2008
+};
+
 struct FilterBaseImpl;
 
 typedef ::cppu::WeakImplHelper5<
@@ -97,6 +103,8 @@ public:
     bool                isImportFilter() const;
     /** Returns true, if filter is an export filter. */
     bool                isExportFilter() const;
+
+    OoxmlVersion getVersion( );
 
     /** Derived classes implement import of the entire document. */
     virtual bool        importDocument() = 0;

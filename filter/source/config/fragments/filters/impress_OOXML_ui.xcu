@@ -1,0 +1,5 @@
+<node oor:name="Office Open XML Presentation">
+    <prop oor:name="UIName">
+        <value xml:lang="en-US">Office Open XML Presentation</value>
+    </prop>
+</node>

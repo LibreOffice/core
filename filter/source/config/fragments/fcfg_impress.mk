@@ -16,7 +16,9 @@ T4_IMPRESS = \
     draw8\
     MS_PowerPoint_2007_XML\
     MS_PowerPoint_2007_XML_AutoPlay\
-    MS_PowerPoint_2007_XML_Template
+    MS_PowerPoint_2007_XML_Template\
+    impress_OOXML_Presentation\
+    impress_OOXML_Presentation_Template
 
 # -----------------------------------------------
 # count = 20
@@ -34,7 +36,9 @@ F4_IMPRESS = \
     impress8_draw\
     impress_MS_PowerPoint_2007_XML\
     impress_MS_PowerPoint_2007_XML_AutoPlay\
-    impress_MS_PowerPoint_2007_XML_Template
+    impress_MS_PowerPoint_2007_XML_Template\
+    impress_OOXML\
+    impress_OOXML_Template
 
 # -----------------------------------------------
 # count = 12
@@ -47,7 +51,8 @@ F4_UI_IMPRESS = \
     impress8_template_ui \
     impress8_draw_ui \
     impress_MS_PowerPoint_2007_XML_ui \
-    impress_MS_PowerPoint_2007_XML_Template_ui
+    impress_OOXML_ui\
+    impress_OOXML_Template_ui
 
 # -----------------------------------------------
 # count = 0
