@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -261,3 +262,4 @@ void SAL_CALL SalAquaPicker::implsetTitle( const rtl::OUString& aTitle ) throw( 
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

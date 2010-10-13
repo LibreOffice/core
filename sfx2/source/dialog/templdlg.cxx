@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -3059,3 +3060,4 @@ sal_Int8    DropToolBox_Impl::ExecuteDrop( const ExecuteDropEvent& rEvt )
      return rParent.aFmtLb.ExecuteDrop(rEvt);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

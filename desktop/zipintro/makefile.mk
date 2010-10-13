@@ -34,22 +34,28 @@ TARGET=zipintro
 
 ZIP1LIST= \
     $(null,$(INTRO_BITMAPS) $(MISC)$/$(RSCDEFIMG)$/brand$/intro.png $(INTRO_BITMAPS)) \
-    $(null,$(ABOUT_BITMAPS) $(MISC)$/$(RSCDEFIMG)$/brand$/about.png $(ABOUT_BITMAPS)) \
-    $(MISC)$/$(RSCDEFIMG)$/brand$/intro-pt_BR.png  \
-    $(MISC)$/$(RSCDEFIMG)$/brand$/about-pt_BR.png
+    $(null,$(ABOUT_BITMAPS) $(MISC)$/$(RSCDEFIMG)$/brand$/about.png $(ABOUT_BITMAPS))
 ZIP2LIST= \
     $(null,$(INTRO_BITMAPS) $(MISC)$/$(RSCDEFIMG)$/brand_dev$/intro.png $(INTRO_BITMAPS)) \
-    $(null,$(ABOUT_BITMAPS) $(MISC)$/$(RSCDEFIMG)$/brand_dev$/about.png $(ABOUT_BITMAPS)) \
-    $(MISC)$/$(RSCDEFIMG)$/brand_dev$/intro-pt_BR.png  \
-    $(MISC)$/$(RSCDEFIMG)$/brand_dev$/about-pt_BR.png
+    $(null,$(ABOUT_BITMAPS) $(MISC)$/$(RSCDEFIMG)$/brand_dev$/about.png $(ABOUT_BITMAPS))
 ZIP3LIST= \
     $(MISC)$/$(RSCDEFIMG)$/brand$/shell$/backing_left.png \
     $(MISC)$/$(RSCDEFIMG)$/brand$/shell$/backing_right.png \
     $(MISC)$/$(RSCDEFIMG)$/brand$/shell$/backing_space.png \
     $(MISC)$/$(RSCDEFIMG)$/brand$/shell$/backing_rtl_left.png \
-    $(MISC)$/$(RSCDEFIMG)$/brand$/shell$/backing_rtl_right.png \
+    $(MISC)$/$(RSCDEFIMG)$/brand$/shell$/backing_rtl_right.png
+
+.IF "$(ENABLE_BROFFICE)"=="TRUE"
+ZIP1LIST+= \
+    $(MISC)$/$(RSCDEFIMG)$/brand$/intro-pt_BR.png  \
+    $(MISC)$/$(RSCDEFIMG)$/brand$/about-pt_BR.png
+ZIP2LIST+= \
+    $(MISC)$/$(RSCDEFIMG)$/brand_dev$/intro-pt_BR.png  \
+    $(MISC)$/$(RSCDEFIMG)$/brand_dev$/about-pt_BR.png
+ZIP3LIST+= \
     $(MISC)$/$(RSCDEFIMG)$/brand$/shell$/backing_left-pt_BR.png \
     $(MISC)$/$(RSCDEFIMG)$/brand$/shell$/backing_right-pt_BR.png
+.ENDIF # ENABLE_BROFFICE
 
 ZIP1TARGET=brand
 ZIP1DEPS=$(ZIP1LIST)

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -283,3 +284,5 @@ void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProper
     if( AVMEDIA_SETMASK_ZOOM & nMaskSet )
         maMediaProperties.setZoom( rNewProperties.getZoom() );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -575,3 +576,5 @@ LCID LocaleSetToLCID( const LocaleSet_t & Locale )
 
     return MAKELCID( MAKELANGID( usPrimaryLang, usSubLang ), SORT_DEFAULT );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

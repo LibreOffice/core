@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -549,3 +550,5 @@ SAL_DLLPUBLIC_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStor
     write_to_storage_stream( env, obj_this, name, key, v );
 #endif
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

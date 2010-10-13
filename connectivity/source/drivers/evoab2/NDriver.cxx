@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -185,3 +186,5 @@ sal_Bool OEvoabDriver::acceptsURL_Stat( const ::rtl::OUString& url )
     return (url.equalsAscii("sdbc:address:evolution:local") || url.equalsAscii("sdbc:address:evolution:groupwise")||url.equalsAscii("sdbc:address:evolution:ldap"))&& EApiInit();
 }
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

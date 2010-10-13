@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -331,3 +332,5 @@ sal_Bool SAL_CALL ODatabaseMetaDataBase::storesMixedCaseQuotedIdentifiers(  ) th
     return callImplMethod(m_storesMixedCaseQuotedIdentifiers,::std::mem_fun_t< sal_Bool,ODatabaseMetaDataBase>(&ODatabaseMetaDataBase::impl_storesMixedCaseQuotedIdentifiers_throw));
 }
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1319,3 +1320,4 @@ SWORD ODatabaseMetaDataResultSet::impl_getColumnType_nothrow(sal_Int32 columnInd
     return aFind->second;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

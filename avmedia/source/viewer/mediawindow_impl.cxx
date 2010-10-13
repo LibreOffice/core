@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -584,3 +585,5 @@ void MediaWindowImpl::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
 
 } // namespace priv
 } // namespace avmedia
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

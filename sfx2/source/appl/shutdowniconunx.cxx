@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 
 #ifdef ENABLE_QUICKSTART_APPLET
 
@@ -410,3 +411,5 @@ void SAL_DLLPUBLIC_EXPORT plugin_shutdown_sys_tray()
 }
 
 #endif // ENABLE_QUICKSTART_APPLET
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

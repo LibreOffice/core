@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -537,3 +538,5 @@ PCodeBuffConvertor<T,S>::convert()
 
 template class PCodeBuffConvertor< UINT16, UINT32 >;
 template class PCodeBuffConvertor< UINT32, UINT16 >;
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

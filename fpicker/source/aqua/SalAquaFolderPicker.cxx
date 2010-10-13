@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -285,3 +286,5 @@ void SAL_CALL SalAquaFolderPicker::disposing( const lang::EventObject& )
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

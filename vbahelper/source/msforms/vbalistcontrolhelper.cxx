@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include <vbalistcontrolhelper.hxx>
 #include <vector>
 #include <vbahelper/vbapropvalue.hxx>
@@ -176,3 +177,5 @@ ListControlHelper::List( const ::uno::Any& pvargIndex, const uno::Any& pvarColum
 {
     return uno::makeAny( uno::Reference< XPropValue > ( new ScVbaPropValue( new ListPropListener( m_xProps, pvargIndex, pvarColumn ) ) ) );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

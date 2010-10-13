@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -183,3 +184,5 @@ void SfxAppData_Impl::OnApplicationBasicManagerCreated( BasicManager& _rBasicMan
     Reference< XInterface > xCurrentComponent = SfxObjectShell::GetCurrentComponent();
     _rBasicManager.SetGlobalUNOConstant( "ThisComponent", makeAny( xCurrentComponent ) );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

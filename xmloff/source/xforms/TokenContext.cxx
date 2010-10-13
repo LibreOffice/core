@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -144,3 +145,5 @@ void TokenContext::Characters( const ::rtl::OUString& rCharacters )
     if( ::std::find_if( pBegin, pEnd, ::std::not1(::std::ptr_fun(lcl_IsWhiteSpace)) ) != pEnd )
         GetImport().SetError( XMLERROR_UNKNOWN_CHARACTERS, rCharacters );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

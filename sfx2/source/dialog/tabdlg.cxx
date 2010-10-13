@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1795,3 +1796,5 @@ long SfxTabDialog::Notify( NotifyEvent& rNEvt )
 }
 
 END_NAMESPACE_LAYOUT_SFX_TABDIALOG
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

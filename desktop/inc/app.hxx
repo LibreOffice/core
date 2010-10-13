@@ -86,6 +86,7 @@ class Desktop : public Application
                                 ~Desktop();
         virtual void            Main( );
         virtual void            Init();
+        virtual void            InitFinished();
         virtual void            DeInit();
         virtual BOOL            QueryExit();
         virtual USHORT          Exception(USHORT nError);

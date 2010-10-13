@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -847,3 +848,5 @@ void SvxFontPrevWindow::AutoCorrectFontColor( void )
     if( COL_AUTO == pImpl->aCTLFont.GetColor().GetColor() )
         pImpl->aCTLFont.SetColor( aFontColor );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
