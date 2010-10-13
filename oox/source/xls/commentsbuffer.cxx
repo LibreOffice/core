@@ -37,6 +37,10 @@
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/drawingfragment.hxx"
 
+
+#include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
+
 using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;
@@ -49,6 +53,10 @@ using ::com::sun::star::sheet::XSheetAnnotationAnchor;
 using ::com::sun::star::sheet::XSheetAnnotationShapeSupplier;
 using ::com::sun::star::sheet::XSheetAnnotations;
 using ::com::sun::star::sheet::XSheetAnnotationsSupplier;
+
+using ::com::sun::star::text::XText;
+using ::com::sun::star::text::XTextRange;
+
 
 namespace oox {
 namespace xls {
@@ -110,6 +118,11 @@ void Comment::finalizeImport()
             Reference< XSheetAnnotation > xAnno( xAnnoAnchor->getAnnotation(), UNO_SET_THROW );
             Reference< XSheetAnnotationShapeSupplier > xAnnoShapeSupp( xAnno, UNO_QUERY_THROW );
             Reference< XShape > xAnnoShape( xAnnoShapeSupp->getAnnotationShape(), UNO_SET_THROW );
+            Reference <XText> xText( xAnnoShape, UNO_QUERY_THROW );
+            Reference <XTextRange> xTextRange( xText, UNO_QUERY_THROW );
+            xTextRange->setString( OUString::createFromAscii("") ); // Clear contents
+            maModel.mxText->convert( xText, -1 );
+
             // convert shape formatting
             if( const ::oox::vml::ShapeBase* pNoteShape = getVmlDrawing().getNoteShape( aNotePos ) )
             {
