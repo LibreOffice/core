@@ -296,7 +296,7 @@ sal_Bool SAL_CALL XMLFilterDialogComponent::supportsService(const ::rtl::OUStrin
 */
 void SAL_CALL XMLFilterDialogComponent::disposing()
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if( mpDialog )
     {
@@ -316,7 +316,7 @@ void SAL_CALL XMLFilterDialogComponent::disposing()
 // XTerminateListener
 void SAL_CALL XMLFilterDialogComponent::queryTermination( const EventObject& /* Event */ ) throw (TerminationVetoException, RuntimeException)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     // we will never give a veto here
     if( mpDialog && !mpDialog->isClosable() )
@@ -346,7 +346,7 @@ void SAL_CALL XMLFilterDialogComponent::setTitle( const ::rtl::OUString& /* _rTi
 //-------------------------------------------------------------------------
 sal_Int16 SAL_CALL XMLFilterDialogComponent::execute(  ) throw(RuntimeException)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if( NULL == mpResMgr )
     {

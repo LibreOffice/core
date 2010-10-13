@@ -103,7 +103,7 @@ XMLErrorHandler::XMLErrorHandler( XMLSourceFileDialog* pParent, ListBox& rListBo
 // XMLErrorHandler
 void SAL_CALL XMLErrorHandler::error( const Any& aSAXParseException ) throw (SAXException, RuntimeException)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     SAXParseException e;
     if( aSAXParseException >>= e )
@@ -118,7 +118,7 @@ void SAL_CALL XMLErrorHandler::error( const Any& aSAXParseException ) throw (SAX
 
 void SAL_CALL XMLErrorHandler::fatalError( const Any& aSAXParseException ) throw (SAXException, RuntimeException)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     SAXParseException e;
     if( aSAXParseException >>= e )

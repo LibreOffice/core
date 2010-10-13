@@ -77,7 +77,7 @@ SVGFilter::~SVGFilter()
 sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescriptor )
     throw (RuntimeException)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     Window*     pFocusWindow = Application::GetFocusWindow();
     sal_Int16   nCurrentPageNumber = -1;
     sal_Bool    bRet;
