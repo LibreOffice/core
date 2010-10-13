@@ -134,7 +134,7 @@ private:
 
     oslCondition m_conditionBytesAvail;
     Mutex     m_mutexAccess;
-    IFIFO       *m_pFIFO;
+    I_FIFO      *m_pFIFO;
 };
 
 
@@ -346,13 +346,13 @@ void OPipeImpl::writeBytes(const Sequence< sal_Int8 >& aData)
         }
         m_nBytesToSkip = 0;
     }
-    catch ( IFIFO_OutOfBoundsException & )
+    catch ( I_FIFO_OutOfBoundsException & )
     {
         throw BufferSizeExceededException(
             OUString( RTL_CONSTASCII_USTRINGPARAM( "Pipe::writeBytes BufferSizeExceededException" )),
             *this );
     }
-    catch ( IFIFO_OutOfMemoryException & )
+    catch ( I_FIFO_OutOfMemoryException & )
     {
         throw BufferSizeExceededException(
             OUString( RTL_CONSTASCII_USTRINGPARAM( "Pipe::writeBytes BufferSizeExceededException" )),
