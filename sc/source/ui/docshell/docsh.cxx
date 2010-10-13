@@ -2845,6 +2845,27 @@ ScSheetSaveData* ScDocShell::GetSheetSaveData()
     return pSheetSaveData;
 }
 
+namespace {
+
+void removeKeysIfExists(Reference<ui::XAcceleratorConfiguration>& xScAccel, const vector<const awt::KeyEvent*>& rKeys)
+{
+    vector<const awt::KeyEvent*>::const_iterator itr = rKeys.begin(), itrEnd = rKeys.end();
+    for (; itr != itrEnd; ++itr)
+    {
+        const awt::KeyEvent* p = *itr;
+        if (!p)
+            continue;
+
+        try
+        {
+            xScAccel->removeKeyEvent(*p);
+        }
+        catch (const container::NoSuchElementException&) {}
+    }
+}
+
+}
+
 void ScDocShell::ResetKeyBindings( ScOptionsUtil::KeyBindingType eType )
 {
     using namespace ::com::sun::star::ui;
@@ -2876,39 +2897,49 @@ void ScDocShell::ResetKeyBindings( ScOptionsUtil::KeyBindingType eType )
     if (!xScAccel.is())
         return;
 
+    vector<const awt::KeyEvent*> aKeys;
+    aKeys.reserve(3);
+
     // Backsapce key
-    awt::KeyEvent aBackEv;
-    aBackEv.KeyCode = awt::Key::BACKSPACE;
-    aBackEv.Modifiers = 0;
+    awt::KeyEvent aBackspace;
+    aBackspace.KeyCode = awt::Key::BACKSPACE;
+    aBackspace.Modifiers = 0;
+    aKeys.push_back(&aBackspace);
 
     // Delete key
-    awt::KeyEvent aDeleteEv;
-    aDeleteEv.KeyCode = awt::Key::DELETE;
-    aDeleteEv.Modifiers = 0;
+    awt::KeyEvent aDelete;
+    aDelete.KeyCode = awt::Key::DELETE;
+    aDelete.Modifiers = 0;
+    aKeys.push_back(&aDelete);
 
     // Ctrl-D
     awt::KeyEvent aCtrlD;
     aCtrlD.KeyCode = awt::Key::D;
     aCtrlD.Modifiers = awt::KeyModifier::MOD1;
+    aKeys.push_back(&aCtrlD);
+
+    // Remove all involved keys first, as swapping of commands don't work well
+    // without this.
+    removeKeysIfExists(xScAccel, aKeys);
+    xScAccel->store();
 
     switch (eType)
     {
         case ScOptionsUtil::KEY_DEFAULT:
-            fprintf(stdout, "ScDocShell::ResetKeyBindings:   default\n");
-            xScAccel->setKeyEvent(aDeleteEv, OUString::createFromAscii(".uno:ClearContents"));
-            xScAccel->setKeyEvent(aBackEv, OUString::createFromAscii(".uno:Delete"));
+            xScAccel->setKeyEvent(aDelete, OUString::createFromAscii(".uno:ClearContents"));
+            xScAccel->setKeyEvent(aBackspace, OUString::createFromAscii(".uno:Delete"));
+            xScAccel->setKeyEvent(aCtrlD, OUString::createFromAscii(".uno:FillDown"));
         break;
         case ScOptionsUtil::KEY_OOO_LEGACY:
-            fprintf(stdout, "ScDocShell::ResetKeyBindings:   ooo legacy\n");
-            xScAccel->setKeyEvent(aDeleteEv, OUString::createFromAscii(".uno:Delete"));
-            xScAccel->setKeyEvent(aBackEv, OUString::createFromAscii(".uno:ClearContents"));
+            xScAccel->setKeyEvent(aDelete, OUString::createFromAscii(".uno:Delete"));
+            xScAccel->setKeyEvent(aBackspace, OUString::createFromAscii(".uno:ClearContents"));
+            xScAccel->setKeyEvent(aCtrlD, OUString::createFromAscii(".uno:DataSelect"));
         break;
         default:
             ;
     }
 
     xScAccel->store();
-    fprintf(stdout, "ScDocShell::ResetKeyBindings:   stored\n");
 }
 
 void ScDocShell::UseSheetSaveEntries()
