@@ -38,6 +38,9 @@
 #include "xeformula.hxx"
 #include "xestyle.hxx"
 
+#include <boost/shared_ptr.hpp>
+#include <map>
+
 /* ============================================================================
 Export of cell tables including row and column description.
 - Managing all used and formatted cells in a sheet.
@@ -980,14 +983,12 @@ private:
     XclExpRow&          GetOrCreateRow( sal_uInt16 nXclRow, bool bRowAlwaysEmpty );
 
 private:
-    typedef XclExpRecordList< XclExpRow >   XclExpRowList;
-    typedef XclExpRowList::RecordRefType    XclExpRowRef;
+    typedef ::boost::shared_ptr<XclExpRow>  RowRef;
+    typedef ::std::map<sal_uInt32, RowRef>  RowMap;
 
-    XclExpRowList       maRowList;          /// List of all ROW records.
+    RowMap              maRowMap;
     XclExpRowOutlineBuffer maOutlineBfr;    /// Buffer for row outline groups.
     XclExpDimensions    maDimensions;       /// DIMENSIONS record for used area.
-    XclExpRow*          mpLastUsedRow;      /// Last used row for faster access.
-    sal_uInt16          mnLastUsedXclRow;   /// Last used row for faster access.
 };
 
 // ============================================================================
