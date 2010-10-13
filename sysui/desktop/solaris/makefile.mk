@@ -124,7 +124,7 @@ $(PKGFILES) : $(MISC)$/{$(PRODUCTLIST)}$/prototype
 .IF "$(DONTCOMPRESS)"==""
     $(FASPAC) $(SOLARBINDIR)/faspac-so.sh -a -d $(PKGDIR) $(@:b:b:s/-/ /:1:s/.//)$(PRODUCTVERSIONSHORT)-desktop-int
 .ENDIF # "$(DONTCOMPRESS)"==""
-    @tar -cf - -C $(PKGDIR) $(@:b:b:s/-/ /:1:s/.//)$(PRODUCTVERSIONSHORT)-desktop-int | gzip > $@
+    @$(GNUTAR) -cf - -C $(PKGDIR) $(@:b:b:s/-/ /:1:s/.//)$(PRODUCTVERSIONSHORT)-desktop-int | gzip > $@
     @rm -rf $(PKGDIR)/$(@:b:b:s/-/ /:1:s/.//)$(PRODUCTVERSIONSHORT)-desktop-int
 
 .ENDIF

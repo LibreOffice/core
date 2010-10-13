@@ -33,7 +33,7 @@ PKGREV          = $(LAST_MINOR:s/m//:s/s/./)
 ABSLOCALOUT:=$(shell @cd $(PRJ) && pwd)$/$(ROUT)
 
 # create desktop-integration subfolder on linux
-.IF "$(OS)"=="LINUX"
+.IF "$(OS)"=="LINUX" || "$(OS)"=="AIX"
 # rpm seems to require absolute paths here :(
 PKGDIR:=$(ABSLOCALOUT)$/bin$/desktop-integration
 RPMMACROS= \
@@ -43,11 +43,8 @@ RPMMACROS= \
 PKGDIR=$(BIN)
 .ENDIF
 
-PRODUCTLIST = libreoffice broffice.org
+.INCLUDE : productversion.mk
 
-# default values to minimize maintainance effort 
-PRODUCTVERSION = 3.3
-PRODUCTVERSIONSHORT = 3
 PKGVERSION = $(PRODUCTVERSION)
 # gnome-vfs treats everything behind the last '.' as an icon extension, 
 # even though the "icon_filename" in '.keys' is specified as filename 
