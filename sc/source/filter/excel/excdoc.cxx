@@ -781,19 +781,17 @@ void ExcDocument::Write( SvStream& rSvStrm )
         pExpChangeTrack->Write();
 }
 
-void ExcDocument::WriteXml( SvStream& rStrm )
+void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
 {
-    XclExpXmlStream aStrm( ::comphelper::getProcessServiceFactory(), rStrm, GetRoot() );
-
     SfxObjectShell* pDocShell = GetDocShell();
 
     using namespace ::com::sun::star;
     uno::Reference<document::XDocumentPropertiesSupplier> xDPS( pDocShell->GetModel(), uno::UNO_QUERY_THROW );
     uno::Reference<document::XDocumentProperties> xDocProps = xDPS->getDocumentProperties();
 
-    aStrm.exportDocumentProperties( xDocProps );
+    rStrm.exportDocumentProperties( xDocProps );
 
-    sax_fastparser::FSHelperPtr& rWorkbook = aStrm.GetCurrentStream();
+    sax_fastparser::FSHelperPtr& rWorkbook = rStrm.GetCurrentStream();
     rWorkbook->startElement( XML_workbook,
             XML_xmlns, "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
             FSNS(XML_xmlns, XML_r), "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
@@ -810,7 +808,7 @@ void ExcDocument::WriteXml( SvStream& rStrm )
     {
         InitializeSave();
 
-        aHeader.WriteXml( aStrm );
+        aHeader.WriteXml( rStrm );
 
         for( size_t nTab = 0, nTabCount = maTableList.GetSize(); nTab < nTabCount; ++nTab )
         {
@@ -821,17 +819,17 @@ void ExcDocument::WriteXml( SvStream& rStrm )
                 xBoundsheet->SetStreamPos( aXclStrm.GetSvStreamPos() );
 #endif
             // write the table
-            maTableList.GetRecord( nTab )->WriteXml( aStrm );
+            maTableList.GetRecord( nTab )->WriteXml( rStrm );
         }
     }
 
     if( pExpChangeTrack )
-        pExpChangeTrack->WriteXml( aStrm );
+        pExpChangeTrack->WriteXml( rStrm );
 
     rWorkbook->endElement( XML_workbook );
     rWorkbook.reset();
 
-    aStrm.commitStorage();
+    rStrm.commitStorage();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

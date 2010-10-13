@@ -257,6 +257,7 @@ private:
     (s.Len() && s.GetChar( 0 ) != 0 ? XclXmlUtils::ToOString( s ).getStr() : NULL)
 
 class ScAddress;
+class ScDocShell;
 class ScDocument;
 class ScFormulaCell;
 class ScRange;
@@ -305,11 +306,11 @@ public:
 class XclExpXmlStream : public oox::core::XmlFilterBase
 {
 public:
-    XclExpXmlStream( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rSMgr, SvStream& rStrm, const XclExpRoot& rRoot );
+    XclExpXmlStream( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rSMgr );
     virtual ~XclExpXmlStream();
 
     /** Returns the filter root data. */
-    inline const XclExpRoot& GetRoot() const { return mrRoot; }
+    inline const XclExpRoot& GetRoot() const { return *mpRoot; }
 
     sax_fastparser::FSHelperPtr& GetCurrentStream();
     void PushStream( sax_fastparser::FSHelperPtr aStream );
@@ -341,12 +342,13 @@ public:
     void Trace( const char* format, ...);
 private:
     virtual ::rtl::OUString implGetImplementationName() const;
+    ScDocShell *getDocShell();
 
     typedef std::map< ::rtl::OUString,
         std::pair< ::rtl::OUString,
             sax_fastparser::FSHelperPtr > >     XclExpXmlPathToStateMap;
 
-    const XclExpRoot&                           mrRoot;         /// Filter root data.
+    const XclExpRoot*                           mpRoot;
     std::stack< sax_fastparser::FSHelperPtr >   maStreams;
     XclExpXmlPathToStateMap                     maOpenedStreamMap;
 };

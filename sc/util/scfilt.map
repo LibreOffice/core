@@ -1,6 +1,9 @@
 UDK_3_0_0 {
   global:
     ScFilterCreate;
+    component_getImplementationEnvironment;
+    component_writeInfo;
+    component_getFactory;
   local:
     *;
 };

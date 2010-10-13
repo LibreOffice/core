@@ -172,7 +172,6 @@ static const sal_Char __FAR_DATA pFilterExcel95[]   = "MS Excel 95";
 static const sal_Char __FAR_DATA pFilterEx95Temp[]  = "MS Excel 95 Vorlage/Template";
 static const sal_Char __FAR_DATA pFilterExcel97[]   = "MS Excel 97";
 static const sal_Char __FAR_DATA pFilterEx97Temp[]  = "MS Excel 97 Vorlage/Template";
-static const sal_Char __FAR_DATA pFilterEx07Xml[]   = "Calc MS Excel 2007 XML";
 static const sal_Char __FAR_DATA pFilterDBase[]     = "dBase";
 static const sal_Char __FAR_DATA pFilterDif[]       = "DIF";
 static const sal_Char __FAR_DATA pFilterSylk[]      = "SYLK";
@@ -2091,8 +2090,7 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
     }
     else if (aFltName.EqualsAscii(pFilterExcel5) || aFltName.EqualsAscii(pFilterExcel95) ||
              aFltName.EqualsAscii(pFilterExcel97) || aFltName.EqualsAscii(pFilterEx5Temp) ||
-             aFltName.EqualsAscii(pFilterEx95Temp) || aFltName.EqualsAscii(pFilterEx97Temp) ||
-             aFltName.EqualsAscii(pFilterEx07Xml))
+             aFltName.EqualsAscii(pFilterEx95Temp) || aFltName.EqualsAscii(pFilterEx97Temp))
     {
         WaitObject aWait( GetActiveDialogParent() );
 
@@ -2134,8 +2132,6 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
             ExportFormatExcel eFormat = ExpBiff5;
             if( aFltName.EqualsAscii( pFilterExcel97 ) || aFltName.EqualsAscii( pFilterEx97Temp ) )
                 eFormat = ExpBiff8;
-            if( aFltName.EqualsAscii( pFilterEx07Xml ) )
-                eFormat = Exp2007Xml;
             FltError eError = ScFormatFilter::Get().ScExportExcel5( rMed, &aDocument, eFormat, RTL_TEXTENCODING_MS_1252 );
 
             if( eError && !GetError() )

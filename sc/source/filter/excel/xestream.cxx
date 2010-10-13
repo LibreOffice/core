@@ -47,6 +47,9 @@
 #include "rangelst.hxx"
 #include "compiler.hxx"
 
+#include <../../ui/inc/docsh.hxx>
+#include <excdoc.hxx>
+
 #include <oox/core/tokens.hxx>
 #include <formula/grammar.hxx>
 #include <oox/export/drawingml.hxx>
@@ -54,14 +57,20 @@
 #define DEBUG_XL_ENCRYPTION 0
 
 using ::com::sun::star::beans::PropertyValue;
+using ::com::sun::star::embed::XStorage;
 using ::com::sun::star::io::XOutputStream;
 using ::com::sun::star::io::XStream;
 using ::com::sun::star::lang::XComponent;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::lang::XServiceInfo;
+using ::com::sun::star::lang::XSingleServiceFactory;
+using ::com::sun::star::registry::InvalidRegistryException;
+using ::com::sun::star::registry::XRegistryKey;
+using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::uno::XInterface;
 using ::rtl::OString;
 using ::rtl::OUString;
 using ::utl::OStreamWrapper;
@@ -951,29 +960,10 @@ sax_fastparser::FSHelperPtr XclXmlUtils::WriteFontData( sax_fastparser::FSHelper
 
 // ============================================================================
 
-XclExpXmlStream::XclExpXmlStream( const Reference< XMultiServiceFactory >& rSMgr, SvStream& rStrm, const XclExpRoot& rRoot )
-    : XmlFilterBase( rSMgr )
-    , mrRoot( rRoot )
+XclExpXmlStream::XclExpXmlStream( const Reference< XMultiServiceFactory >& rSMgr )
+    : XmlFilterBase( rSMgr ),
+      mpRoot( NULL )
 {
-    Sequence< PropertyValue > aArgs( 1 );
-    const OUString sStream( RTL_CONSTASCII_USTRINGPARAM( "StreamForOutput" ) );
-    aArgs[0].Name  = sStream;
-    aArgs[0].Value <<= Reference< XStream > ( new OStreamWrapper( rStrm ) );
-
-    XServiceInfo* pInfo = rRoot.GetDocModelObj();
-    Reference< XComponent > aComponent( pInfo, UNO_QUERY );
-    setSourceDocument( aComponent );
-    filter( aArgs );
-
-    PushStream( CreateOutputStream(
-                OUString::createFromAscii( "xl/workbook.xml" ),
-                OUString::createFromAscii( "xl/workbook.xml" ),
-                Reference< XOutputStream >(),
-                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml",
-                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" ) );
-
-    DrawingML::ResetCounters();
-    XclObjList::ResetCounters();
 }
 
 XclExpXmlStream::~XclExpXmlStream()
@@ -1086,14 +1076,57 @@ oox::drawingml::chart::ChartConverter& XclExpXmlStream::getChartConverter()
     return * (oox::drawingml::chart::ChartConverter*) NULL;
 }
 
-bool XclExpXmlStream::exportDocument() throw()
+ScDocShell* XclExpXmlStream::getDocShell()
 {
-    return false;
+    Reference< XInterface > xModel( getModel(), UNO_QUERY );
+
+    ScModelObj *pObj = dynamic_cast < ScModelObj* >( xModel.get() );
+
+    if ( pObj )
+        return reinterpret_cast < ScDocShell* >( pObj->GetEmbeddedObject() );
+
+    return 0;
 }
 
-::rtl::OUString XclExpXmlStream::implGetImplementationName() const
+bool XclExpXmlStream::exportDocument() throw()
 {
-    return CREATE_OUSTRING( "TODO" );
+    ScDocShell* pShell = getDocShell();
+    ScDocument* pDoc = pShell->GetDocument();
+    SotStorageRef rStorage = dynamic_cast <SotStorage*>( Reference<XStorage>( pShell->GetStorage() ).get() );
+
+    XclExpRootData aData( EXC_BIFF8, *pShell->GetMedium (), rStorage, *pDoc, RTL_TEXTENCODING_DONTKNOW );
+    XclExpRoot aRoot( aData );
+
+    mpRoot = &aRoot;
+    aRoot.GetOldRoot().pER = &aRoot;
+    aRoot.GetOldRoot().eDateiTyp = Biff8;
+
+    if ( SvtFilterOptions* pOptions = SvtFilterOptions::Get() )
+        if ( pShell && pOptions->IsLoadExcelBasicStorage() )
+            if ( sal_uInt32 nError
+                 = SvxImportMSVBasic( *pShell, *rStorage,
+                                      pOptions->IsLoadExcelBasicCode(),
+                                      pOptions->IsLoadExcelBasicStorage() )
+                .SaveOrDelMSVBAStorage( true, EXC_STORAGE_VBA_PROJECT) )
+            {
+                pShell->SetError( nError, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
+            }
+
+    OUString const workbook = CREATE_OUSTRING( "xl/workbook.xml" );
+    PushStream( CreateOutputStream( workbook, workbook,
+                                    Reference <XOutputStream>(),
+                                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml",
+                                    "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" ) );
+
+    // destruct at the end of the block
+    {
+        ExcDocument aDocRoot( aRoot );
+        aDocRoot.ReadDoc();
+        aDocRoot.WriteXml( *this );
+    }
+
+    mpRoot = NULL;
+    return true;
 }
 
 void XclExpXmlStream::Trace( const char* format, ...)
@@ -1104,4 +1137,99 @@ void XclExpXmlStream::Trace( const char* format, ...)
     va_end( ap );
 }
 
+//////////////////////////////////////////////////////////////////////////
+// UNO stuff so that the filter is registered
+//////////////////////////////////////////////////////////////////////////
+
+#define IMPL_NAME "com.sun.star.comp.oox.ExcelFilterExport"
+
+OUString XlsxExport_getImplementationName()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( IMPL_NAME ) );
+}
+
+::rtl::OUString XclExpXmlStream::implGetImplementationName() const
+{
+    return CREATE_OUSTRING( "TODO" );
+}
+
+
+Sequence< OUString > SAL_CALL XlsxExport_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.ExportFilter" ) );
+    const Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+Reference< XInterface > SAL_CALL XlsxExport_createInstance(const Reference< XMultiServiceFactory > & rSMgr ) throw( Exception )
+{
+    return (cppu::OWeakObject*) new XclExpXmlStream( rSMgr );
+}
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
+SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** /* ppEnv */ )
+{
+    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+}
+
+SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo( void* /* pServiceManager */, void* pRegistryKey )
+{
+    sal_Bool bRet = sal_False;
+
+    if( pRegistryKey )
+    {
+        try
+        {
+            Reference< XRegistryKey > xNewKey1(
+                    static_cast< XRegistryKey* >( pRegistryKey )->createKey(
+                        OUString::createFromAscii( IMPL_NAME "/UNO/SERVICES/" ) ) );
+            xNewKey1->createKey( XlsxExport_getSupportedServiceNames().getConstArray()[0] );
+
+            bRet = sal_True;
+        }
+        catch( InvalidRegistryException& )
+        {
+            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
+        }
+    }
+
+    return bRet;
+}
+
+// ------------------------
+// - component_getFactory -
+// ------------------------
+
+SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* /* pRegistryKey */ )
+{
+    Reference< XSingleServiceFactory > xFactory;
+    void* pRet = 0;
+
+    if ( rtl_str_compare( pImplName, IMPL_NAME ) == 0 )
+    {
+        const OUString aServiceName( OUString::createFromAscii( IMPL_NAME ) );
+
+        xFactory = Reference< XSingleServiceFactory >( ::cppu::createSingleFactory(
+                    reinterpret_cast< XMultiServiceFactory* >( pServiceManager ),
+                    XlsxExport_getImplementationName(),
+                    XlsxExport_createInstance,
+                    XlsxExport_getSupportedServiceNames() ) );
+    }
+
+    if ( xFactory.is() )
+    {
+        xFactory->acquire();
+        pRet = xFactory.get();
+    }
+
+    return pRet;
+}
+
+#ifdef __cplusplus
+}
+#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
