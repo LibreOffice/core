@@ -546,13 +546,8 @@ ScDocCfg::ScDocCfg() :
             {
                 case SCCOMPATOPT_KEY_BINDING:
                 {
-                    fprintf(stdout, "ScDocCfg::ScDocCfg:   SCCOMPATOPT_KEY_BINDING\n");
-                    nIntVal = 0;
-                    if (pValues[nProp] >>= nIntVal)
-                        fprintf(stdout, "ScDocCfg::ScDocCfg:   key binding = %ld\n", nIntVal);
-                    else
-                        fprintf(stdout, "ScDocCfg::ScDocCfg:   key binding failed to load\n");
-
+                    nIntVal = 0; // 0 = 'Default'
+                    pValues[nProp] >>= nIntVal;
                     SetKeyBindingType(static_cast<ScOptionsUtil::KeyBindingType>(nIntVal));
                 }
                 break;
@@ -695,10 +690,7 @@ IMPL_LINK( ScDocCfg, CompatCommitHdl, void *, EMPTYARG )
         switch(nProp)
         {
             case SCCOMPATOPT_KEY_BINDING:
-            {
-                fprintf(stdout, "IMPL_LINK:   pushing key binding type (%d)\n", GetKeyBindingType());
                 pValues[nProp] <<= static_cast<sal_Int32>(GetKeyBindingType());
-            }
             break;
         }
     }
