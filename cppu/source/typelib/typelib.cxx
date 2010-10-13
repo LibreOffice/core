@@ -69,8 +69,15 @@ using namespace osl;
  */
 struct AlignSize_Impl
 {
-    sal_Int16   nInt16;
-    double      dDouble;
+    sal_Int16 nInt16;
+#ifdef AIX
+    //double: doubleword aligned if -qalign=natural/-malign=natural
+    //which isn't the default ABI. Otherwise word aligned, While a long long int
+    //is always doubleword aligned, so use that instead.
+    sal_Int64 dDouble;
+#else
+    double dDouble;
+#endif
 };
 
 #ifdef SAL_W32
@@ -1941,7 +1948,13 @@ extern "C" sal_Int32 SAL_CALL typelib_typedescription_getAlignedUnoSize(
                 nSize = rMaxIntegralTypeSize = (sal_Int32)(sizeof( float ));
                 break;
             case typelib_TypeClass_DOUBLE:
+#ifdef AIX
+                //See previous AIX ifdef comment for an explanation
+                nSize = (sal_Int32)(sizeof(double));
+                rMaxIntegralTypeSize = (sal_Int32)(sizeof(void*));
+#else
                 nSize = rMaxIntegralTypeSize = (sal_Int32)(sizeof( double ));
+#endif
                 break;
             case typelib_TypeClass_BYTE:
                 nSize = rMaxIntegralTypeSize = (sal_Int32)(sizeof( sal_Int8 ));
