@@ -460,6 +460,91 @@ void SAL_CALL ScViewPaneObj::release() throw()
     OWeakObject::release();
 }
 
+// To process sheet compatibile event
+typedef ::cppu::WeakImplHelper2< awt::XEnhancedMouseClickHandler, view::XSelectionChangeListener > TabViewEventListener_BASE;
+class ScTabViewEventListener: public TabViewEventListener_BASE
+{
+private:
+    ScTabViewObj* pViewObj;
+    uno::Reference< script::vba::XVBAEventProcessor > xVbaEventsHelper;
+    sal_Bool bDelaySelectionEvent;
+    sal_Bool bSelectionChangeOccured;
+
+    void fireSelectionChangeEvent();
+
+public:
+    ScTabViewEventListener( ScTabViewObj* pObj, uno::Reference< script::vba::XVBAEventProcessor >& rVbaEventsHelper);
+    ~ScTabViewEventListener();
+    // XEnhancedMouseClickHandler
+    virtual sal_Bool SAL_CALL mousePressed( const awt::EnhancedMouseEvent& e ) throw (uno::RuntimeException);
+    virtual sal_Bool SAL_CALL mouseReleased( const awt::EnhancedMouseEvent& e ) throw (uno::RuntimeException);
+
+    // XSelectionChangeListener
+    virtual void SAL_CALL selectionChanged( const lang::EventObject& aEvent ) throw ( uno::RuntimeException );
+    // XEventListener
+    virtual void SAL_CALL disposing( const lang::EventObject& aEvent ) throw ( uno::RuntimeException );
+};
+
+ScTabViewEventListener::ScTabViewEventListener(ScTabViewObj* pObj, uno::Reference< script::vba::XVBAEventProcessor >& rVbaEventsHelper):
+    pViewObj( pObj ),xVbaEventsHelper( rVbaEventsHelper ), bDelaySelectionEvent( sal_False ), bSelectionChangeOccured( sal_False )
+{
+}
+
+ScTabViewEventListener::~ScTabViewEventListener()
+{
+}
+
+void SAL_CALL ScTabViewEventListener::disposing(  const lang::EventObject& /*aEvent*/ ) throw ( uno::RuntimeException )
+{
+}
+
+void ScTabViewEventListener::fireSelectionChangeEvent()
+{
+    if ( xVbaEventsHelper.is() && pViewObj )
+    {
+        uno::Sequence< uno::Any > aArgs(1);
+        aArgs[0] = pViewObj->getSelection();
+                try
+                {
+            xVbaEventsHelper->processVbaEvent( script::vba::VBAEventId::WORKSHEET_SELECTIONCHANGE, aArgs );
+                }
+                catch( uno::Exception& )
+                {
+                }
+    }
+    bDelaySelectionEvent = sal_False;
+    bSelectionChangeOccured = sal_False;
+}
+
+sal_Bool SAL_CALL ScTabViewEventListener::mousePressed( const awt::EnhancedMouseEvent& e ) throw (uno::RuntimeException)
+{
+    // Delay to fire the selection change event if clicking the left mouse button to do selection.
+    bDelaySelectionEvent = ( e.Buttons == ::com::sun::star::awt::MouseButton::RIGHT ) ? sal_False : sal_True;
+    bSelectionChangeOccured = sal_False;
+
+    // ScTabViewObj::MousePressed should handle process BeforeDoubleClick and BeforeRightClick events
+    return sal_True;
+}
+
+sal_Bool SAL_CALL ScTabViewEventListener::mouseReleased( const awt::EnhancedMouseEvent&/*e*/) throw (uno::RuntimeException)
+{
+    if ( bSelectionChangeOccured )
+        fireSelectionChangeEvent();
+    return sal_True;
+}
+
+void SAL_CALL ScTabViewEventListener::selectionChanged( const lang::EventObject& /*aEvent*/ ) throw ( uno::RuntimeException )
+{
+    if ( !bDelaySelectionEvent )
+    {
+        fireSelectionChangeEvent();
+    }
+    else
+    {
+        bSelectionChangeOccured = sal_True;
+    }
+}
+
 //------------------------------------------------------------------------
 
 //  Default-ctor wird fuer SMART_REFLECTION_IMPLEMENTATION gebraucht
@@ -474,7 +559,22 @@ ScTabViewObj::ScTabViewObj( ScTabViewShell* pViewSh ) :
     bDrawSelModeSet(sal_False)
 {
     if (pViewSh)
+    {
         nPreviousTab = pViewSh->GetViewData()->GetTabNo();
+    ScViewData* pViewData = pViewSh->GetViewData();
+    if( pViewData )
+    {
+            uno::Reference< script::vba::XVBAEventProcessor > xVbaEventsHelper (pViewData->GetDocument()->GetVbaEventProcessor(), uno::UNO_QUERY );
+            if ( xVbaEventsHelper.is() )
+            {
+                ScTabViewEventListener* pEventListener = new ScTabViewEventListener( this, xVbaEventsHelper );
+                uno::Reference< awt::XEnhancedMouseClickHandler > aMouseClickHandler( *pEventListener, uno::UNO_QUERY );
+                addEnhancedMouseClickHandler( aMouseClickHandler );
+                uno::Reference< view::XSelectionChangeListener > aSelectionChangeListener( *pEventListener, uno::UNO_QUERY );
+                addSelectionChangeListener( aSelectionChangeListener );
+            }
+    }
+    }
 }
 
 ScTabViewObj::~ScTabViewObj()
@@ -1162,10 +1262,20 @@ uno::Reference<sheet::XSpreadsheet> SAL_CALL ScTabViewObj::getActiveSheet()
     return NULL;
 }
 
+//liuchen 2009-9-2 support expand (but not replace) the active sheet
 void SAL_CALL ScTabViewObj::setActiveSheet( const uno::Reference<sheet::XSpreadsheet>& xActiveSheet )
                                                 throw(uno::RuntimeException)
 {
+    selectSheet(xActiveSheet, false);
+}
+
+void SAL_CALL
+ScTabViewObj::selectSheet( const uno::Reference<sheet::XSpreadsheet>& xActiveSheet,
+                             sal_Bool bExpand)
+                                                throw(uno::RuntimeException)
+{
     ScUnoGuard aGuard;
+    sal_Bool bNew = bExpand;
 
     ScTabViewShell* pViewSh = GetViewShell();
     if ( pViewSh && xActiveSheet.is() )
@@ -1180,7 +1290,7 @@ void SAL_CALL ScTabViewObj::setActiveSheet( const uno::Reference<sheet::XSpreads
             {
                 SCTAB nNewTab = rRanges.GetObject(0)->aStart.Tab();
                 if ( pViewSh->GetViewData()->GetDocument()->HasTable(nNewTab) )
-                    pViewSh->SetTabNo( nNewTab );
+                    pViewSh->SetTabNo( nNewTab, bNew, bExpand );
             }
         }
     }
@@ -1837,19 +1947,7 @@ void ScTabViewObj::SelectionChanged()
             /*ErrCode eRet =*/ pDocSh->CallXScript( *pScript, aParams, aRet, aOutArgsIndex, aOutArgs );
         }
     }
-
-    // execute VBA event handler
-    try
-    {
-        uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents( pDoc->GetVbaEventProcessor(), uno::UNO_SET_THROW );
-        // the parameter is the clicked object, as in the mousePressed call above
-        uno::Sequence< uno::Any > aArgs( 1 );
-        aArgs[ 0 ] <<= getSelection();
-        xVbaEvents->processVbaEvent( ScSheetEvents::GetVbaSheetEventId( SC_SHEETEVENT_SELECT ), aArgs );
-    }
-    catch( uno::Exception& )
-    {
-    }
+    // Removed Sun/Oracle code intentionally, it doesn't work properly ( selection should be fired after mouse release )
 }
 
 
@@ -1873,6 +1971,12 @@ void SAL_CALL ScTabViewObj::setPropertyValue(
 {
     ScUnoGuard aGuard;
     String aString(aPropertyName);
+
+    if ( aString.EqualsAscii(SC_UNO_FILTERED_RANGE_SELECTION) )
+    {
+        bFilteredRangeSelection = ScUnoHelpFunctions::GetBoolFromAny(aValue);
+        return;
+    }
 
     ScTabViewShell* pViewSh = GetViewShell();
     if (pViewSh)
@@ -1993,6 +2097,12 @@ uno::Any SAL_CALL ScTabViewObj::getPropertyValue( const rtl::OUString& aProperty
     ScUnoGuard aGuard;
     String aString(aPropertyName);
     uno::Any aRet;
+
+    if ( aString.EqualsAscii(SC_UNO_FILTERED_RANGE_SELECTION) )
+    {
+        ScUnoHelpFunctions::SetBoolInAny(aRet, bFilteredRangeSelection);
+        return aRet;
+    }
 
     ScTabViewShell* pViewSh = GetViewShell();
     if (pViewSh)

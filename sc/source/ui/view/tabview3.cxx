@@ -1419,9 +1419,11 @@ void ScTabView::MarkRange( const ScRange& rRange, BOOL bSetCursor, BOOL bContinu
     {
         SCCOL nAlignX = rRange.aStart.Col();
         SCROW nAlignY = rRange.aStart.Row();
-        if ( rRange.aStart.Col() == 0 && rRange.aEnd.Col() == MAXCOL )
+        bool bCol = ( rRange.aStart.Col() == 0 && rRange.aEnd.Col() == MAXCOL ) && !aViewData.GetDocument()->IsInVBAMode();
+        bool bRow = ( rRange.aStart.Row() == 0 && rRange.aEnd.Row() == MAXROW );
+        if ( bCol )
             nAlignX = aViewData.GetPosX(WhichH(aViewData.GetActivePart()));
-        if ( rRange.aStart.Row() == 0 && rRange.aEnd.Row() == MAXROW )
+        if ( bRow )
             nAlignY = aViewData.GetPosY(WhichV(aViewData.GetActivePart()));
         AlignToCursor( nAlignX, nAlignY, SC_FOLLOW_JUMP );
     }
@@ -1535,6 +1537,7 @@ void ScTabView::SetTabNo( SCTAB nTab, BOOL bNew, BOOL bExtendSelection )
                                         //  nicht InputEnterHandler wegen Referenzeingabe !
 
         ScDocument* pDoc = aViewData.GetDocument();
+
         pDoc->MakeTable( nTab );
 
         // Update pending row heights before switching the sheet, so Reschedule from the progress bar

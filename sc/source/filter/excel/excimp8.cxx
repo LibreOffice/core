@@ -99,15 +99,20 @@
 #include "stlpool.hxx"
 #include "stlsheet.hxx"
 #include "detfunc.hxx"
+#include "macromgr.hxx"
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/script/ModuleInfo.hpp>
 #include <cppuhelper/component_context.hxx>
 #include <sfx2/app.hxx>
+#include "xltoolbar.hxx"
 
 using namespace com::sun::star;
 using ::rtl::OUString;
 
+// defined in docfunc.cxx ( really this needs a new name )
+script::ModuleInfo lcl_InitModuleInfo( SfxObjectShell& rDocSh, String& sModule );
 
 ImportExcel8::ImportExcel8( XclImpRootData& rImpData, SvStream& rStrm ) :
     ImportExcel( rImpData, rStrm )
@@ -242,7 +247,30 @@ void ImportExcel8::ReadBasic( void )
         {
             SvxImportMSVBasic aBasicImport( *pShell, *xRootStrg, bLoadCode, bLoadStrg );
             bool bAsComment = !bLoadExecutable;
+
+            if ( !bAsComment )
+            {
+                ScDocument& rDoc = GetDoc();
+#if 1
+                // see if we have the XCB stream
+                SvStorageStreamRef xXCB = xRootStrg->OpenSotStream( String( RTL_CONSTASCII_USTRINGPARAM( "XCB" ) ), STREAM_STD_READ | STREAM_NOCREATE  );
+                if ( xXCB.Is()|| SVSTREAM_OK == xXCB->GetError() )
+                {
+                    CTBWrapper wrapper;
+                    if ( wrapper.Read( xXCB ) )
+                    {
+#if DEBUG
+                        wrapper.Print( stderr );
+#endif
+                        wrapper.ImportCustomToolBar( *pShell );
+                    }
+                }
+#endif
+
+            }
             aBasicImport.Import( EXC_STORAGE_VBA_PROJECT, EXC_STORAGE_VBA, bAsComment );
+            if ( !bAsComment )
+                GetObjectManager().SetOleNameOverrideInfo( aBasicImport.ControlNameForObjectId() );
         }
     }
 }

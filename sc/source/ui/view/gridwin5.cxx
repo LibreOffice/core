@@ -343,14 +343,12 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
                                     if ( pDrView->PickObj(aMDPos, pDrView->getHitTolLog(), pHit, pPV, SDRSEARCH_DEEP ) )
                                         pObj = pHit;
                             }
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
                             ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj );
                             if ( pInfo && (pInfo->GetHlink().getLength() > 0) )
                             {
                                 aPixRect = LogicToPixel(aVEvt.pObj->GetLogicRect());
                                 aHelpText = pInfo->GetHlink();
                             }
-#endif
                         }
                     }
                 }

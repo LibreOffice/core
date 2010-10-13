@@ -110,6 +110,8 @@ public:
     SC_DLLPUBLIC void           CutToClip( ScDocument* pClipDoc = NULL, BOOL bIncludeObjects = FALSE );
     SC_DLLPUBLIC BOOL           CopyToClip( ScDocument* pClipDoc = NULL, BOOL bCut = FALSE, BOOL bApi = FALSE,
                                 BOOL bIncludeObjects = FALSE, BOOL bStopEdit = TRUE );
+    SC_DLLPUBLIC BOOL           CopyToClip( ScDocument* pClipDoc, const ScRange& rRange, BOOL bCut = FALSE,
+                                BOOL bApi = FALSE, BOOL bIncludeObjects = FALSE, BOOL bStopEdit = TRUE );
     ScTransferObj*              CopyToTransferable();
     SC_DLLPUBLIC BOOL           PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
                                     USHORT nFunction = PASTE_NOFUNC, BOOL bSkipEmpty = FALSE,
@@ -336,6 +338,13 @@ public:
 
     void            ForgetFormatArea()      { bFormatValid = FALSE; }
     BOOL            SelectionEditable( BOOL* pOnlyNotBecauseOfMatrix = NULL );
+
+        // Amelia Wang
+        SC_DLLPUBLIC void                   DataFormPutData( SCROW nCurrentRow ,
+                                                             SCROW nStartRow , SCCOL nStartCol ,
+                                                             SCROW nEndRow , SCCOL nEndCol ,
+                                                             Edit** pEdits ,
+                                                             sal_uInt16 aColLength );
 
                                                 // interne Hilfsfunktionen
 protected:

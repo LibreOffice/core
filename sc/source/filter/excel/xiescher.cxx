@@ -109,6 +109,8 @@
 #include "xipage.hxx"
 #include "xichart.hxx"
 #include "xicontent.hxx"
+#include "scextopt.hxx"
+
 #include "namebuff.hxx"
 
 using ::rtl::OUString;
@@ -236,6 +238,7 @@ XclImpDrawObjBase::~XclImpDrawObjBase()
         }
     }
 
+    xDrawObj->mnTab = rRoot.GetCurrScTab();
     xDrawObj->ImplReadObj3( rStrm );
     return xDrawObj;
 }
@@ -268,6 +271,7 @@ XclImpDrawObjBase::~XclImpDrawObjBase()
         }
     }
 
+    xDrawObj->mnTab = rRoot.GetCurrScTab();
     xDrawObj->ImplReadObj4( rStrm );
     return xDrawObj;
 }
@@ -310,6 +314,7 @@ XclImpDrawObjBase::~XclImpDrawObjBase()
         }
     }
 
+    xDrawObj->mnTab = rRoot.GetCurrScTab();
     xDrawObj->ImplReadObj5( rStrm );
     return xDrawObj;
 }
@@ -368,6 +373,7 @@ XclImpDrawObjBase::~XclImpDrawObjBase()
         }
     }
 
+    xDrawObj->mnTab = rRoot.GetCurrScTab();
     xDrawObj->ImplReadObj8( rStrm );
     return xDrawObj;
 }
@@ -468,8 +474,9 @@ void XclImpDrawObjBase::PreProcessSdrObject( XclImpDffConverter& rDffConv, SdrOb
     }
 
     // macro and hyperlink
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
-    if( mbSimpleMacro && ((maMacroName.Len() > 0) || (maHyperlink.getLength() > 0)) )
+    // removed oracle/sun check for mbSimpleMacro ( no idea what its for )
+    if( (maMacroName.Len() > 0 ) ||
+ (maHyperlink.Len() > 0) )
     {
         if( ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( &rSdrObj, TRUE ) )
         {
@@ -477,11 +484,6 @@ void XclImpDrawObjBase::PreProcessSdrObject( XclImpDffConverter& rDffConv, SdrOb
             pInfo->SetHlink( maHyperlink );
         }
     }
-#else
-    if( mbSimpleMacro && (maMacroName.Len() > 0) )
-        if( ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( &rSdrObj, TRUE ) )
-            pInfo->SetMacro( XclTools::GetSbMacroUrl( maMacroName, GetDocShell() ) );
-#endif
 
     // call virtual function for object type specific processing
     DoPreProcessSdrObj( rDffConv, rSdrObj );
@@ -1761,22 +1763,15 @@ SdrObject* XclImpControlHelper::CreateSdrObjectFromShape(
     return xSdrObj.release();
 }
 
-void XclImpControlHelper::ProcessControl( const XclImpDrawObjBase& rDrawObj ) const
+void XclImpControlHelper::ApplySheetLinkProps() const
 {
+
     Reference< XControlModel > xCtrlModel = XclControlHelper::GetControlModel( mxShape );
     if( !xCtrlModel.is() )
         return;
-
     ScfPropertySet aPropSet( xCtrlModel );
 
-    // #118053# #i51348# set object name at control model
-    aPropSet.SetStringProperty( CREATE_OUSTRING( "Name" ), rDrawObj.GetObjName() );
-
-    // control visible and printable?
-    aPropSet.SetBoolProperty( CREATE_OUSTRING( "EnableVisible" ), rDrawObj.IsVisible() );
-    aPropSet.SetBoolProperty( CREATE_OUSTRING( "Printable" ), rDrawObj.IsPrintable() );
-
-    // sheet links
+   // sheet links
     if( SfxObjectShell* pDocShell = mrRoot.GetDocShell() )
     {
         Reference< XMultiServiceFactory > xFactory( pDocShell->GetModel(), UNO_QUERY );
@@ -1839,6 +1834,25 @@ void XclImpControlHelper::ProcessControl( const XclImpDrawObjBase& rDrawObj ) co
             }
         }
     }
+}
+
+void XclImpControlHelper::ProcessControl( const XclImpDrawObjBase& rDrawObj ) const
+{
+    Reference< XControlModel > xCtrlModel = XclControlHelper::GetControlModel( mxShape );
+    if( !xCtrlModel.is() )
+        return;
+
+    ApplySheetLinkProps();
+
+    ScfPropertySet aPropSet( xCtrlModel );
+
+    // #118053# #i51348# set object name at control model
+    aPropSet.SetStringProperty( CREATE_OUSTRING( "Name" ), rDrawObj.GetObjName() );
+
+    // control visible and printable?
+    aPropSet.SetBoolProperty( CREATE_OUSTRING( "EnableVisible" ), rDrawObj.IsVisible() );
+    aPropSet.SetBoolProperty( CREATE_OUSTRING( "Printable" ), rDrawObj.IsPrintable() );
+
 
     // virtual call for type specific processing
     DoProcessControl( aPropSet );
@@ -2170,6 +2184,45 @@ void XclImpOptionButtonObj::DoProcessControl( ScfPropertySet& rPropSet ) const
 {
     XclImpCheckBoxObj::DoProcessControl( rPropSet );
     // TODO: grouping
+    XclImpOptionButtonObj* pTbxObj = dynamic_cast< XclImpOptionButtonObj* >( GetObjectManager().GetSheetDrawing( GetTab() ).FindDrawObj( mnNextInGroup ).get() );
+    if ( ( pTbxObj && pTbxObj->mnFirstInGroup ) )
+    {
+        // Group has terminated
+        // traverse each RadioButton in group and
+        //     a) apply the groupname
+        //     b) propagate the linked cell from the lead radiobutton
+        //     c) apply the correct Ref value
+        XclImpOptionButtonObj* pLeader = pTbxObj;
+ ;
+        sal_Int32 nRefVal = 1;
+        OSL_TRACE( "0x%x start group ", pLeader->GetObjId()/*.mnObjId */);
+        do
+        {
+
+            Reference< XControlModel > xCtrlModel = XclControlHelper::GetControlModel( pTbxObj->mxShape );
+            if ( xCtrlModel.is() )
+            {
+                ScfPropertySet aProps( xCtrlModel );
+                rtl::OUString sGroupName = rtl::OUString::valueOf( static_cast< sal_Int32 >( pLeader->GetDffShapeId() ) );
+
+                aProps.SetStringProperty( CREATE_OUSTRING( "GroupName" ), sGroupName );
+                aProps.SetStringProperty( CREATE_OUSTRING( "RefValue" ), rtl::OUString::valueOf( nRefVal++ ) );
+                if ( pLeader->HasCellLink() && !pTbxObj->HasCellLink() )
+                {
+                    // propagate cell link info
+                    pTbxObj->mxCellLink.reset( new ScAddress( *pLeader->mxCellLink.get() ) );
+                    pTbxObj->ApplySheetLinkProps();
+                }
+                pTbxObj = dynamic_cast< XclImpOptionButtonObj* >( GetObjectManager().GetSheetDrawing( GetTab() ).FindDrawObj( pTbxObj->mnNextInGroup ).get() );
+            }
+            else
+                pTbxObj = NULL;
+        } while ( pTbxObj && !( pTbxObj->mnFirstInGroup == 1 ) );
+    }
+    else
+    {
+        // not the leader? try and find it
+    }
 }
 
 OUString XclImpOptionButtonObj::DoGetServiceName() const
@@ -2806,6 +2859,17 @@ SdrObject* XclImpPictureObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, const
     return xSdrObj.release();
 }
 
+String XclImpPictureObj::GetObjName() const
+{
+    if( IsOcxControl() )
+    {
+        String sName( GetObjectManager().GetOleNameOverride( GetTab(), GetObjId() ) );
+        if ( sName.Len() > 0 )
+            return sName;
+    }
+    return XclImpDrawObjBase::GetObjName();
+}
+
 void XclImpPictureObj::DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const
 {
     if( IsOcxControl() )
@@ -3113,6 +3177,27 @@ XclImpDffConverter::XclImpDffConverter( const XclImpRoot& rRoot, SvStream& rDffS
 
 XclImpDffConverter::~XclImpDffConverter()
 {
+}
+
+String XclImpObjectManager::GetOleNameOverride( SCTAB nTab, sal_uInt16 nObjId )
+{
+    String sOleName;
+    String sCodeName = GetExtDocOptions().GetCodeName( nTab );
+
+    CodeNameToCntrlObjIdInfo::iterator it = maOleCtrlNameOverride.find( sCodeName );
+    if ( it != maOleCtrlNameOverride.end() )
+    {
+        CntrlObjIdToName::iterator it_id = it->second.find( nObjId );
+        if ( it_id != it->second.end() )
+        {
+            sOleName = it_id->second;
+        }
+    }
+    OSL_TRACE("XclImpObjectManager::GetOleNameOverride tab %d, ( module %s ) object id ( %d ) is %s", nTab,
+        rtl::OUStringToOString( sCodeName, RTL_TEXTENCODING_UTF8 ).getStr(), nObjId,
+        rtl::OUStringToOString( sOleName, RTL_TEXTENCODING_UTF8 ).getStr() );
+
+    return sOleName;
 }
 
 void XclImpDffConverter::StartProgressBar( sal_Size nProgressSize )
@@ -3985,27 +4070,27 @@ XclImpObjectManager::XclImpObjectManager( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot )
 {
     maDefObjNames[ EXC_OBJTYPE_GROUP ]          = CREATE_STRING( "Group" );
-    maDefObjNames[ EXC_OBJTYPE_LINE ]           = CREATE_STRING( "Line" );
-    maDefObjNames[ EXC_OBJTYPE_RECTANGLE ]      = CREATE_STRING( "Rectangle" );
-    maDefObjNames[ EXC_OBJTYPE_OVAL ]           = CREATE_STRING( "Oval" );
+    maDefObjNames[ EXC_OBJTYPE_LINE ]           = ScGlobal::GetRscString( STR_SHAPE_LINE );
+    maDefObjNames[ EXC_OBJTYPE_RECTANGLE ]      = ScGlobal::GetRscString( STR_SHAPE_RECTANGLE );
+    maDefObjNames[ EXC_OBJTYPE_OVAL ]           = ScGlobal::GetRscString( STR_SHAPE_OVAL );
     maDefObjNames[ EXC_OBJTYPE_ARC ]            = CREATE_STRING( "Arc" );
     maDefObjNames[ EXC_OBJTYPE_CHART ]          = CREATE_STRING( "Chart" );
     maDefObjNames[ EXC_OBJTYPE_TEXT ]           = CREATE_STRING( "Text" );
-    maDefObjNames[ EXC_OBJTYPE_BUTTON ]         = CREATE_STRING( "Button" );
+    maDefObjNames[ EXC_OBJTYPE_BUTTON ]         =  ScGlobal::GetRscString( STR_FORM_BUTTON );
     maDefObjNames[ EXC_OBJTYPE_PICTURE ]        = CREATE_STRING( "Picture" );
     maDefObjNames[ EXC_OBJTYPE_POLYGON ]        = CREATE_STRING( "Freeform" );
-    maDefObjNames[ EXC_OBJTYPE_CHECKBOX ]       = CREATE_STRING( "Check Box" );
-    maDefObjNames[ EXC_OBJTYPE_OPTIONBUTTON ]   = CREATE_STRING( "Option Button" );
+    maDefObjNames[ EXC_OBJTYPE_CHECKBOX ]       = ScGlobal::GetRscString( STR_FORM_CHECKBOX );
+    maDefObjNames[ EXC_OBJTYPE_OPTIONBUTTON ]   = ScGlobal::GetRscString( STR_FORM_OPTIONBUTTON );
     maDefObjNames[ EXC_OBJTYPE_EDIT ]           = CREATE_STRING( "Edit Box" );
-    maDefObjNames[ EXC_OBJTYPE_LABEL ]          = CREATE_STRING( "Label" );
+    maDefObjNames[ EXC_OBJTYPE_LABEL ]          = ScGlobal::GetRscString( STR_FORM_LABEL );
     maDefObjNames[ EXC_OBJTYPE_DIALOG ]         = CREATE_STRING( "Dialog Frame" );
-    maDefObjNames[ EXC_OBJTYPE_SPIN ]           = CREATE_STRING( "Spinner" );
-    maDefObjNames[ EXC_OBJTYPE_SCROLLBAR ]      = CREATE_STRING( "Scroll Bar" );
-    maDefObjNames[ EXC_OBJTYPE_LISTBOX ]        = CREATE_STRING( "List Box" );
-    maDefObjNames[ EXC_OBJTYPE_GROUPBOX ]       = CREATE_STRING( "Group Box" );
-    maDefObjNames[ EXC_OBJTYPE_DROPDOWN ]       = CREATE_STRING( "Drop Down" );
+    maDefObjNames[ EXC_OBJTYPE_SPIN ]           = ScGlobal::GetRscString( STR_FORM_SPINNER );
+    maDefObjNames[ EXC_OBJTYPE_SCROLLBAR ]      = ScGlobal::GetRscString( STR_FORM_SCROLLBAR );
+    maDefObjNames[ EXC_OBJTYPE_LISTBOX ]        = ScGlobal::GetRscString( STR_FORM_LISTBOX );
+    maDefObjNames[ EXC_OBJTYPE_GROUPBOX ]       = ScGlobal::GetRscString( STR_FORM_GROUPBOX );
+    maDefObjNames[ EXC_OBJTYPE_DROPDOWN ]       = ScGlobal::GetRscString( STR_FORM_DROPDOWN );
     maDefObjNames[ EXC_OBJTYPE_NOTE ]           = CREATE_STRING( "Comment" );
-    maDefObjNames[ EXC_OBJTYPE_DRAWING ]        = CREATE_STRING( "AutoShape" );
+    maDefObjNames[ EXC_OBJTYPE_DRAWING ]        = ScGlobal::GetRscString( STR_SHAPE_AUTOSHAPE );
 }
 
 XclImpObjectManager::~XclImpObjectManager()

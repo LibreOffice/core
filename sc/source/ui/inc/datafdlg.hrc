@@ -1,0 +1,15 @@
+
+#include "sc.hrc"   // -> RID_SCDLG_DATAFORM
+
+//dataform
+#define BTN_DATAFORM_NEW          1001
+#define BTN_DATAFORM_DELETE       1002
+#define BTN_DATAFORM_RESTORE      1003
+#define BTN_DATAFORM_LAST         1004
+#define BTN_DATAFORM_NEXT         1005
+#define BTN_DATAFORM_CLOSE        1007
+#define WND_DATAFORM_SCROLLBAR    1008
+#define LAB_DATAFORM_RECORDNO     1009
+
+#define FT_DATAFORM_FIXEDTEXT1    2001
+#define ED_DATAFORM_EDIT1         2002

@@ -44,9 +44,7 @@ class ScDrawShell : public SfxShell
 
     DECL_LINK( NameObjectHdl, AbstractSvxNameDialog* );
 
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
     void SetHlinkForObject( SdrObject* pObj, const rtl::OUString& rHlnk );
-#endif
 
 protected:
     ScViewData* GetViewData()   { return pViewData; }

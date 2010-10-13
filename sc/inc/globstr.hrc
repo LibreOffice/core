@@ -579,8 +579,23 @@
 #define STR_UNDO_INSERT_CURRENT_TIME    441
 
 #define STR_OPTIONS_WARN_SEPARATORS     442
+#define STR_SHAPE_AUTOSHAPE         443
+#define STR_SHAPE_RECTANGLE         444
+#define STR_SHAPE_LINE              445
+#define STR_SHAPE_OVAL              446
+#define STR_SHAPE_TEXTBOX           447
 
-#define STR_COUNT                       443
+#define STR_FORM_BUTTON             448
+#define STR_FORM_CHECKBOX           449
+#define STR_FORM_OPTIONBUTTON       450
+#define STR_FORM_LABEL              451
+#define STR_FORM_LISTBOX            452
+#define STR_FORM_GROUPBOX           453
+#define STR_FORM_DROPDOWN           454
+#define STR_FORM_SPINNER            455
+#define STR_FORM_SCROLLBAR          456
+
+#define STR_COUNT                       456
 
 #endif
 

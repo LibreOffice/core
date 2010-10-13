@@ -94,6 +94,7 @@
 #include "tabprotection.hxx"
 #include "formulaparserpool.hxx"
 #include "clipparam.hxx"
+#include "macromgr.hxx"
 
 using namespace com::sun::star;
 
@@ -156,6 +157,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         pCacheFieldEditEngine( NULL ),
         pDocProtection( NULL ),
         mpClipParam( NULL),
+        mpMacroMgr( NULL ),
         pExternalRefMgr( NULL ),
         pViewOptions( NULL ),
         pDocOptions( NULL ),

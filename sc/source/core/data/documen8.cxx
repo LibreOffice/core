@@ -93,6 +93,7 @@
 #include "globstr.hrc"
 #include "sc.hrc"
 #include "charthelper.hxx"
+#include "macromgr.hxx"
 #include "dpobject.hxx"
 
 #define GET_SCALEVALUE(set,id)  ((const SfxUInt16Item&)(set.Get( id ))).GetValue()
@@ -410,6 +411,13 @@ BYTE ScDocument::GetEditTextDirection(SCTAB nTab) const
     }
 
     return sal::static_int_cast<BYTE>(eRet);
+}
+
+ScMacroManager* ScDocument::GetMacroManager()
+{
+    if (!mpMacroMgr.get())
+        mpMacroMgr.reset(new ScMacroManager(this));
+    return mpMacroMgr.get();
 }
 
 //------------------------------------------------------------------------

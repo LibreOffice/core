@@ -33,10 +33,14 @@
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
+#include <sfx2/docfilt.hxx>
 #include <basic/sbmeth.hxx>
 #include <basic/sbmod.hxx>
 #include <basic/sbstar.hxx>
 #include <basic/sbx.hxx>
+#include <basic/sbxobj.hxx>
+#include <basic/sbuno.hxx>
+#include <svl/zforlist.hxx>
 #include <svl/zforlist.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/logfile.hxx>
@@ -45,6 +49,8 @@
 #include <signal.h>
 
 #include <com/sun/star/table/XCellRange.hpp>
+#include <com/sun/star/sheet/XSheetCellRange.hpp>
+#include <comphelper/processfactory.hxx>
 
 #include "interpre.hxx"
 #include "global.hxx"
@@ -65,6 +71,8 @@
 #include "jumpmatrix.hxx"
 #include "parclass.hxx"
 #include "externalrefmgr.hxx"
+#include "formula/FormulaCompiler.hxx"
+#include "macromgr.hxx"
 #include "doubleref.hxx"
 
 #include <math.h>
@@ -72,6 +80,8 @@
 #include <map>
 #include <algorithm>
 #include <functional>
+#include <basic/basmgr.hxx>
+#include <vbahelper/vbaaccesshelper.hxx>
 #include <memory>
 
 using namespace com::sun::star;
@@ -2925,6 +2935,61 @@ void ScInterpreter::ScMissing()
     PushTempToken( new FormulaMissingToken );
 }
 
+uno::Any lcl_getSheetModule( const uno::Reference<table::XCellRange>& xCellRange, ScDocument* pDok )
+{
+    uno::Reference< sheet::XSheetCellRange > xSheetRange( xCellRange, uno::UNO_QUERY_THROW );
+    uno::Reference< beans::XPropertySet > xProps( xSheetRange->getSpreadsheet(), uno::UNO_QUERY_THROW );
+    rtl::OUString sCodeName;
+    xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CodeName") ) ) >>= sCodeName;
+    // #TODO #FIXME ideally we should 'throw' here if we don't get a valid parent, but... it is possible
+    // to create a module ( and use 'Option VBASupport 1' ) for a calc document, in this scenario there
+    // are *NO* special document module objects ( of course being able to switch between vba/non vba mode at
+    // the document in the future could fix this, especially IF the switching of the vba mode takes care to
+    // create the special document module objects if they don't exist.
+    BasicManager* pBasMgr = pDok->GetDocumentShell()->GetBasicManager();
+
+    uno::Reference< uno::XInterface > xIf;
+    if ( pBasMgr && pBasMgr->GetName().Len() )
+    {
+        String sProj = String( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
+        if ( pDok->GetDocumentShell()->GetBasicManager()->GetName().Len() )
+            sProj = pDok->GetDocumentShell()->GetBasicManager()->GetName();
+        StarBASIC* pBasic = pDok->GetDocumentShell()->GetBasicManager()->GetLib( sProj );
+        if ( pBasic )
+        {
+            SbModule* pMod = pBasic->FindModule( sCodeName );
+            if ( pMod )
+                xIf = pMod->GetUnoModule();
+        }
+    }
+    return uno::makeAny( xIf );
+}
+
+bool
+lcl_setVBARange( ScRange& aRange, ScDocument* pDok, SbxVariable* pPar )
+{
+    bool bOk = false;
+    try
+    {
+        uno::Reference< uno::XInterface > xVBARange;
+        uno::Reference<table::XCellRange> xCellRange = ScCellRangeObj::CreateRangeFromDoc( pDok, aRange );
+        uno::Sequence< uno::Any > aArgs(2);
+        aArgs[0] = lcl_getSheetModule( xCellRange, pDok );
+        aArgs[1] = uno::Any( xCellRange );
+        xVBARange = ooo::vba::createVBAUnoAPIServiceWithArgs( pDok->GetDocumentShell(), "ooo.vba.excel.Range", aArgs );
+        if ( xVBARange.is() )
+        {
+            String sDummy(RTL_CONSTASCII_USTRINGPARAM("A-Range") );
+            SbxObjectRef aObj = GetSbUnoObject( sDummy, uno::Any( xVBARange ) );
+            SetSbUnoObjectDfltPropName( aObj );
+            bOk = pPar->PutObject( aObj );
+        }
+    }
+    catch( uno::Exception& )
+    {
+    }
+    return bOk;
+}
 
 void ScInterpreter::ScMacro()
 {
@@ -2962,8 +3027,11 @@ void ScInterpreter::ScMacro()
         return;
     }
 
+    bool bVolatileMacro = false;
     SbMethod* pMethod = (SbMethod*)pVar;
+
     SbModule* pModule = pMethod->GetModule();
+    bool bUseVBAObjects = pModule->IsVBACompat();
     SbxObject* pObject = pModule->GetParent();
     DBG_ASSERT(pObject->IsA(TYPE(StarBASIC)), "Kein Basic gefunden!");
     String aMacroStr = pObject->GetName();
@@ -2973,7 +3041,13 @@ void ScInterpreter::ScMacro()
     aMacroStr += pMethod->GetName();
     String aBasicStr;
     if (pObject->GetParent())
+    {
         aBasicStr = pObject->GetParent()->GetName();    // Dokumentenbasic
+        const SfxFilter* pFilter = NULL;
+        SfxMedium* pMedium = pDok->GetDocumentShell()->GetMedium();
+        if ( pMedium )
+            pFilter = pMedium->GetFilter();
+    }
     else
         aBasicStr = SFX_APP()->GetName();               // Applikationsbasic
 
@@ -2997,7 +3071,13 @@ void ScInterpreter::ScMacro()
             {
                 ScAddress aAdr;
                 PopSingleRef( aAdr );
-                bOk = SetSbxVariable( pPar, aAdr );
+                if ( bUseVBAObjects )
+                {
+                    ScRange aRange( aAdr );
+                    bOk = lcl_setVBARange( aRange, pDok, pPar );
+                }
+                else
+                    bOk = SetSbxVariable( pPar, aAdr );
             }
             break;
             case svDoubleRef:
@@ -3016,24 +3096,32 @@ void ScInterpreter::ScMacro()
                 }
                 else
                 {
-                    SbxDimArrayRef refArray = new SbxDimArray;
-                    refArray->AddDim32( 1, nRow2 - nRow1 + 1 );
-                    refArray->AddDim32( 1, nCol2 - nCol1 + 1 );
-                    ScAddress aAdr( nCol1, nRow1, nTab1 );
-                    for( SCROW nRow = nRow1; bOk && nRow <= nRow2; nRow++ )
+                    if ( bUseVBAObjects )
                     {
-                        aAdr.SetRow( nRow );
-                        INT32 nIdx[ 2 ];
-                        nIdx[ 0 ] = nRow-nRow1+1;
-                        for( SCCOL nCol = nCol1; bOk && nCol <= nCol2; nCol++ )
-                        {
-                            aAdr.SetCol( nCol );
-                            nIdx[ 1 ] = nCol-nCol1+1;
-                            SbxVariable* p = refArray->Get32( nIdx );
-                            bOk = SetSbxVariable( p, aAdr );
-                        }
+                        ScRange aRange( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
+                        bOk = lcl_setVBARange( aRange, pDok, pPar );
                     }
-                    pPar->PutObject( refArray );
+                    else
+                    {
+                        SbxDimArrayRef refArray = new SbxDimArray;
+                        refArray->AddDim32( 1, nRow2 - nRow1 + 1 );
+                        refArray->AddDim32( 1, nCol2 - nCol1 + 1 );
+                        ScAddress aAdr( nCol1, nRow1, nTab1 );
+                        for( SCROW nRow = nRow1; bOk && nRow <= nRow2; nRow++ )
+                        {
+                            aAdr.SetRow( nRow );
+                            INT32 nIdx[ 2 ];
+                            nIdx[ 0 ] = nRow-nRow1+1;
+                            for( SCCOL nCol = nCol1; bOk && nCol <= nCol2; nCol++ )
+                            {
+                                aAdr.SetCol( nCol );
+                                nIdx[ 1 ] = nCol-nCol1+1;
+                                SbxVariable* p = refArray->Get32( nIdx );
+                                bOk = SetSbxVariable( p, aAdr );
+                            }
+                        }
+                        pPar->PutObject( refArray );
+                    }
                 }
             }
             break;
@@ -3080,6 +3168,13 @@ void ScInterpreter::ScMacro()
         ErrCode eRet = pDocSh->CallBasic( aMacroStr, aBasicStr, NULL, refPar, refRes );
         pDok->DecMacroInterpretLevel();
         pDok->UnlockTable( aPos.Tab() );
+
+        ScMacroManager* pMacroMgr = pDok->GetMacroManager();
+        if (pMacroMgr)
+        {
+            bVolatileMacro = pMacroMgr->GetUserFuncVolatile( pMethod->GetName() );
+            pMacroMgr->AddDependentCell(pModule->GetName(), pMyFormulaCell);
+        }
 
         SbxDataType eResType = refRes->GetType();
         if( pVar->GetError() )
@@ -3152,6 +3247,9 @@ void ScInterpreter::ScMacro()
     }
 
     pSfxApp->LeaveBasicCall();
+
+    if (bVolatileMacro && meVolaileType == NOT_VOLATILE)
+        meVolaileType = VOLATILE_MACRO;
 }
 
 
@@ -3448,7 +3546,8 @@ ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc,
     pMyFormulaCell( pCell ),
     pFormatter( pDoc->GetFormatTable() ),
     mnStringNoValueError( errNoValue),
-    bCalcAsShown( pDoc->GetDocOptions().IsCalcAsShown() )
+    bCalcAsShown( pDoc->GetDocOptions().IsCalcAsShown() ),
+    meVolaileType(NOT_VOLATILE)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScTTT" );
 //  pStack = new ScToken*[ MAXSTACK ];
@@ -3894,6 +3993,9 @@ StackVar ScInterpreter::Interpret()
                 Pop();
                 continue;   // while( ( pCur = aCode.Next() ) != NULL  ...
             }
+
+            if (FormulaCompiler::IsOpCodeVolatile(eOp))
+                meVolaileType = VOLATILE;
 
             // Remember result matrix in case it could be reused.
             if (pTokenMatrixMap && sp && GetStackType() == svMatrix)

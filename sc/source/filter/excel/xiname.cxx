@@ -35,7 +35,8 @@
 #include "excform.hxx"
 // for filter manager
 #include "excimp8.hxx"
-
+#include "scextopt.hxx"
+#include "document.hxx"
 // ============================================================================
 // *** Implementation ***
 // ============================================================================
@@ -127,6 +128,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
         maScName = maXclName;
         ScfTools::ConvertToScDefinedName( maScName );
     }
+    rtl::OUString aRealOrigName = maScName;
 
     // add index for local names
     if( nXclTab != EXC_NAME_GLOBAL )
@@ -219,6 +221,25 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
         pData->GuessPosition();             // calculate base position for relative refs
         pData->SetIndex( nXclNameIdx );     // used as unique identifier in formulas
         rRangeNames.Insert( pData );        // takes ownership of pData
+        if( nXclTab != EXC_NAME_GLOBAL )
+        {
+            if (GetBiff() == EXC_BIFF8)
+            {
+                ScRange aRange;
+                // discard deleted ranges ( for the moment at least )
+                if ( pData->IsValidReference( aRange ) )
+                {
+                    ScExtTabSettings& rTabSett = GetExtDocOptions().GetOrCreateTabSettings( nXclTab );
+                    // create a mapping between the unmodified localname to
+                    // the name in the global name container for named ranges
+                    OSL_TRACE(" mapping local name to global name for tab %d which exists? %s", nXclTab, GetDoc().HasTable( mnScTab ) ? "true" : "false" );
+                    SCTAB nTab( static_cast< SCTAB >( mnScTab ) );
+                    NameToNameMap* pMap = GetDoc().GetLocalNameMap( nTab );
+                    if ( pMap )
+                       (*pMap)[ aRealOrigName ] = maScName;
+                }
+            }
+        }
         mpScData = pData;                   // cache for later use
     }
 }

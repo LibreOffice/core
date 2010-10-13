@@ -1378,7 +1378,7 @@ lcl_ScRange_Parse_OOo( ScRange &aRange, const String& r, ScDocument* pDoc, ScAdd
     }
     nRes1 = ( ( nRes1 | nRes2 ) & SCA_VALID )
           | nRes1
-          | ( ( nRes2 & 0x070F ) << 4 );
+          | ( ( nRes2 & SCA_BITS ) << 4 );
     return nRes1;
 }
 

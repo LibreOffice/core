@@ -1762,6 +1762,13 @@ void ScTabViewShell::Construct( BYTE nForceDesignMode )
             if ( pDocSh->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
             {
                 SCTAB nInitTabCount = 3;                            //! konfigurierbar !!!
+                // Get the customized initial tab count, we only can set the count by VBA API currently.
+                const ScAppOptions& rAppOpt = SC_MOD()->GetAppOptions();
+                SCTAB nNewTabCount = rAppOpt.GetTabCountInNewSpreadsheet();
+                if ( nNewTabCount >= 1 && nNewTabCount <= MAXTAB )
+                {
+                    nInitTabCount = nNewTabCount;
+                }
                 for (SCTAB i=1; i<nInitTabCount; i++)
                     pDoc->MakeTable(i,false);
             }

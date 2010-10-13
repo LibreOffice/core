@@ -516,12 +516,17 @@ void XclExpHyperlink::WriteBody( XclExpStream& rStrm )
 {
     sal_uInt16 nXclCol = static_cast< sal_uInt16 >( maScPos.Col() );
     sal_uInt16 nXclRow = static_cast< sal_uInt16 >( maScPos.Row() );
-    mxVarData->Seek( STREAM_SEEK_TO_BEGIN );
+    rStrm   << nXclRow << nXclRow << nXclCol << nXclCol;
+    WriteEmbeddedData( rStrm );
+}
 
-    rStrm   << nXclRow << nXclRow << nXclCol << nXclCol
-            << XclTools::maGuidStdLink
+void XclExpHyperlink::WriteEmbeddedData( XclExpStream& rStrm )
+{
+    rStrm << XclTools::maGuidStdLink
             << sal_uInt32( 2 )
             << mnFlags;
+
+    mxVarData->Seek( STREAM_SEEK_TO_BEGIN );
     rStrm.CopyFromStream( *mxVarData );
 }
 

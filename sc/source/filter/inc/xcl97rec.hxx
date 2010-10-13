@@ -220,7 +220,7 @@ public:
 
 class XclObjAny : public XclObj
 {
-private:
+protected:
     virtual void                WriteSubRecs( XclExpStream& rStrm );
 
 public:

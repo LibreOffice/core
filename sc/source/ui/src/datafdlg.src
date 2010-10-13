@@ -1,0 +1,70 @@
+
+#include "datafdlg.hrc"
+
+//zhangyun, dataform
+ModalDialog RID_SCDLG_DATAFORM
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 191 , 180 ) ;
+    Text [ en-US ] = "Data Form" ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    FixedText LAB_DATAFORM_RECORDNO
+    {
+        Pos = MAP_APPFONT ( 136 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+        Text [ en-US ] = "/" ;
+    };
+    PushButton BTN_DATAFORM_NEW
+    {
+        Pos = MAP_APPFONT ( 135 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+        Text [ en-US ] = "New" ;
+    };
+    PushButton BTN_DATAFORM_DELETE
+    {
+        Pos = MAP_APPFONT ( 135 , 40 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Delete" ;
+    };
+    PushButton BTN_DATAFORM_RESTORE
+    {
+        Pos = MAP_APPFONT ( 135 , 57 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Restore" ;
+    };
+    PushButton BTN_DATAFORM_LAST
+    {
+        Pos = MAP_APPFONT ( 135 , 82 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Last Record" ;
+    };
+    PushButton BTN_DATAFORM_NEXT
+    {
+        Pos = MAP_APPFONT ( 135 , 99 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Next Record" ;
+    };
+    PushButton BTN_DATAFORM_CLOSE
+    {
+        Pos = MAP_APPFONT ( 135 , 116 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Close" ;
+    };
+    ScrollBar WND_DATAFORM_SCROLLBAR
+    {
+        Pos = MAP_APPFONT ( 124 , 6 ) ;
+        Size = MAP_APPFONT ( 8 , 135 ) ;
+        HScroll = FALSE ;
+        TabStop = FALSE ;
+    };
+};
+//end

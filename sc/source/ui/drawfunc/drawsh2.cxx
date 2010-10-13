@@ -197,24 +197,20 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disabl
     BOOL bCanRename = FALSE;
     if ( nMarkCount > 1 )
     {
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
         // no hypelink options for a selected group
         rSet.DisableItem( SID_DRAW_HLINK_EDIT );
         rSet.DisableItem( SID_DRAW_HLINK_DELETE );
         rSet.DisableItem( SID_OPEN_HYPERLINK );
-#endif
     }
     else if ( nMarkCount == 1 )
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
         ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj );
         if ( !pInfo || (pInfo->GetHlink().getLength() == 0) )
         {
             rSet.DisableItem( SID_DRAW_HLINK_DELETE );
             rSet.DisableItem( SID_OPEN_HYPERLINK );
         }
-#endif
         SdrLayerID nLayerID = pObj->GetLayer();
         if ( nLayerID != SC_LAYER_INTERN )
             bCanRename = TRUE;                          // #i51351# anything except internal objects can be renamed

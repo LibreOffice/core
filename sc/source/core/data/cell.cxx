@@ -51,6 +51,7 @@
 #include "recursionhelper.hxx"
 #include "postit.hxx"
 #include "externalrefmgr.hxx"
+#include "macromgr.hxx"
 #include <editeng/editobj.hxx>
 #include <svl/intitem.hxx>
 #include <editeng/flditem.hxx>
@@ -826,6 +827,8 @@ ScFormulaCell::~ScFormulaCell()
 {
     pDocument->RemoveFromFormulaTree( this );
     pDocument->RemoveSubTotalCell(this);
+    if (pCode->HasOpCode(ocMacro))
+        pDocument->GetMacroManager()->RemoveDependentCell(this);
 
     if (pDocument->HasExternalRefManager())
         pDocument->GetExternalRefManager()->removeRefCell(this);
@@ -1757,6 +1760,36 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
         // Reschedule verlangsamt das ganze erheblich, nur bei Prozentaenderung ausfuehren
         ScProgress::GetInterpretProgress()->SetStateCountDownOnPercent(
             pDocument->GetFormulaCodeInTree()/MIN_NO_CODES_PER_PROGRESS_UPDATE );
+
+        switch (p->GetVolatileType())
+        {
+            case ScInterpreter::VOLATILE:
+                // Volatile via built-in volatile functions.  No actions needed.
+            break;
+            case ScInterpreter::VOLATILE_MACRO:
+                // The formula contains a volatile macro.
+                pCode->SetRecalcModeAlways();
+                pDocument->PutInFormulaTree(this);
+                StartListeningTo(pDocument);
+            break;
+            case ScInterpreter::NOT_VOLATILE:
+                if (pCode->IsRecalcModeAlways())
+                {
+                    // The formula was previously volatile, but no more.
+                    EndListeningTo(pDocument);
+                    pCode->SetRecalcModeNormal();
+                }
+                else
+                {
+                    // non-volatile formula.  End listening to the area in case
+                    // it's listening due to macro module change.
+                    pDocument->EndListeningArea(BCA_LISTEN_ALWAYS, this);
+                }
+                pDocument->RemoveFromFormulaTree(this);
+            break;
+            default:
+                ;
+        }
     }
     else
     {
@@ -1824,7 +1857,7 @@ void __EXPORT ScFormulaCell::Notify( SvtBroadcaster&, const SfxHint& rHint)
             else
             {
                 bForceTrack = !bDirty;
-                bDirty = TRUE;
+                SetDirtyVar();
             }
             // #35962# Don't remove from FormulaTree to put in FormulaTrack to
             // put in FormulaTree again and again, only if necessary.
@@ -1847,7 +1880,7 @@ void ScFormulaCell::SetDirty()
     if ( !IsInChangeTrack() )
     {
         if ( pDocument->GetHardRecalcState() )
-            bDirty = TRUE;
+            SetDirtyVar();
         else
         {
             // Mehrfach-FormulaTracking in Load und in CompileAll
@@ -1856,7 +1889,7 @@ void ScFormulaCell::SetDirty()
             // setzen, z.B. in CompileTokenArray
             if ( !bDirty || !pDocument->IsInFormulaTree( this ) )
             {
-                bDirty = TRUE;
+                SetDirtyVar();
                 pDocument->AppendToFormulaTrack( this );
                 pDocument->TrackFormulas();
             }
@@ -1865,6 +1898,13 @@ void ScFormulaCell::SetDirty()
         if (pDocument->IsStreamValid(aPos.Tab()))
             pDocument->SetStreamValid(aPos.Tab(), FALSE);
     }
+}
+
+void ScFormulaCell::SetDirtyVar()
+{
+    bDirty = TRUE;
+    // mark the sheet of this cell to be calculated
+    //#FIXME do we need to revert this remnant of old fake vba events? pDocument->AddCalculateTable( aPos.Tab() );
 }
 
 void ScFormulaCell::SetDirtyAfterLoad()

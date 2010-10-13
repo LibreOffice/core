@@ -372,7 +372,15 @@ void ScVbaEventsListener::processWindowResizeMacro()
 {
     OSL_TRACE( "**** Attempt to FIRE MACRO **** " );
     if( !mbDisposed )
-        mrVbaEvents.processVbaEvent( WORKBOOK_WINDOWRESIZE, uno::Sequence< uno::Any >() );
+    {
+        try
+        {
+            mrVbaEvents.processVbaEvent( WORKBOOK_WINDOWRESIZE, uno::Sequence< uno::Any >() );
+        }
+        catch( uno::Exception& )
+        {
+        }
+    }
 }
 
 // ============================================================================

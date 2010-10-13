@@ -334,6 +334,20 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
             }
             break;
 
+        case SID_DATA_FORM:
+            {
+                ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+
+                AbstractScDataFormDlg* pDlg = pFact->CreateScDataFormDlg( pTabViewShell->GetDialogParent(),RID_SCDLG_DATAFORM, pTabViewShell);
+                DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+
+                pDlg->Execute();
+
+                rReq.Done();
+            }
+            break;
+
         case SID_SUBTOTALS:
             {
                 const SfxItemSet* pArgs = rReq.GetArgs();
