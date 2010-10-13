@@ -54,6 +54,10 @@
 #include <formula/grammar.hxx>
 #include <oox/export/drawingml.hxx>
 
+#include <sfx2/docfile.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/app.hxx>
+
 #define DEBUG_XL_ENCRYPTION 0
 
 using ::com::sun::star::beans::PropertyValue;
@@ -1092,7 +1096,9 @@ bool XclExpXmlStream::exportDocument() throw()
 {
     ScDocShell* pShell = getDocShell();
     ScDocument* pDoc = pShell->GetDocument();
-    SotStorageRef rStorage = dynamic_cast <SotStorage*>( Reference<XStorage>( pShell->GetStorage() ).get() );
+    SfxMedium* pMedium = pShell->GetMedium();
+    SvStream* pMediumStream = pMedium->GetOutStream();
+    SotStorageRef rStorage = new SotStorage( pMediumStream, false );
 
     XclExpRootData aData( EXC_BIFF8, *pShell->GetMedium (), rStorage, *pDoc, RTL_TEXTENCODING_DONTKNOW );
     aData.meOutput = EXC_OUTPUT_XML_2007;
