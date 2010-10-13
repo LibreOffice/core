@@ -52,8 +52,6 @@
 #include <unotools/processfactory.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
-//#include <toolkit/unohlp.hxx>
-
 #include "main.hxx"
 #include "outact.hxx"
 

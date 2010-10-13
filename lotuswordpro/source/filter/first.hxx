@@ -55,7 +55,6 @@
 #ifndef FIRST_HXX
 #define FIRST_HXX
 
-//#include "utfirst.h"                  // Deleted by  2004-06-16
 #include "bento.hxx"        // Public header
 
 //#define ASSERT(cond) UT_ASSERT(cond)      // Deleted by  2004-06-16
@@ -77,5 +76,4 @@ pCBenIDListElmt FindID(pCUtList pList, BenObjectID ObjectID,
 // Private headers
 #include "bentoid.hxx"
 #include "tocread.hxx"
-//#include "tocwrite.h"             // Deleted by  2004-06-16
 #endif

@@ -46,8 +46,6 @@
 
 #include "swfexporter.hxx"
 
-//#include <stdlib.h>
-//#include <windows.h>
 #include <string.h>
 
 using namespace ::com::sun::star::uno;

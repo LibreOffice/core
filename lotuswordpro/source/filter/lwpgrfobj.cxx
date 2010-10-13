@@ -78,7 +78,6 @@
 
 //For chart
 #include "string.h"
-//#include "lwpchartstreamtools.hxx"
 
 #ifndef _OSL_THREAD_H_
 #include <osl/thread.h>

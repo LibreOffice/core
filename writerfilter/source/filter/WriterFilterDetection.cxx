@@ -31,7 +31,6 @@
 #include <comphelper/storagehelper.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <sot/storage.hxx>
-//#include <sfx2/docfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
 using namespace ::rtl;

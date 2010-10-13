@@ -70,9 +70,6 @@ using namespace std;
 
 #include "ut.hxx"
 #include "utlist.hxx"
-// removed for WordPro filter,  2005-01-27
-//#include <scerrors.hxx>       // error code defined for SC
-//#include <filter.hxx>         // error code defined for SC filters
 #include <tools/stream.hxx> // SvStream definition
 #include <sot/storage.hxx>  // SotStorageStream definition, add by  10/24/2005
 

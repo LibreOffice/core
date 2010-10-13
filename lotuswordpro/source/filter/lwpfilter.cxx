@@ -76,7 +76,6 @@
 #include <osl/file.h>
 #include <osl/file.hxx>
 #include <vcl/svapp.hxx>
-//#include <vcl/vclasynload.hxx>
 #include <xmloff/attrlist.hxx>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>

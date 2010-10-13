@@ -65,7 +65,6 @@
 
 #include "lwpfilehdr.hxx"
 #include <map>
-//#include <pair>
 
 class LwpCharSetMgr
 {

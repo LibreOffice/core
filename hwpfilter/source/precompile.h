@@ -35,7 +35,6 @@
     #endif
 #include "windows.h"
 #ifndef __MINGW32__
-//#include "stdafx.h"
 #include "crtdbg.h"
     #if defined _MSC_VER
         #pragma warning(pop)

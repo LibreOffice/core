@@ -39,7 +39,6 @@
 #pragma implementation "mzstring.h"
 #endif
 
-//#include "stdafx.h"       //
 #include "mzstring.h"
 
 #ifndef WIN32
@@ -52,7 +51,6 @@
     #if defined _MSC_VER
         #pragma warning(pop)
     #endif
-//# include <crtdbg.h>
 #endif                                            /* WIN32 */
 #include <stdio.h>
 #include <stdlib.h>

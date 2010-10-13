@@ -28,7 +28,6 @@
 /* compile with flex++ -8 -f -+ -Sflex.skl -ortfparser.cxx rtfparser.lex */
 %option yylineno
 %{
-  //#include <io.h>
 #include <math.h>
 #include <string.h>
 #include <osl/file.h>
