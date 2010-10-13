@@ -36,7 +36,7 @@ class SwVbaTemplate : public SwVbaTemplate_BASE
 {
 private:
     css::uno::Reference< css::frame::XModel > mxModel;
-    rtl::OUString msName;
+    rtl::OUString msFullUrl;
 public:
     SwVbaTemplate( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext,
         const css::uno::Reference< css::frame::XModel >& rModel, const rtl::OUString& );
@@ -44,6 +44,7 @@ public:
 
    // XTemplate
     virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException);
+    virtual rtl::OUString SAL_CALL getPath() throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL AutoTextEntries( const css::uno::Any& index ) throw (css::uno::RuntimeException);
     // XHelperInterface
     virtual rtl::OUString& getServiceImplName();

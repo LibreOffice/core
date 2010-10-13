@@ -110,10 +110,8 @@
 #include <com/sun/star/ui/dialogs/ListboxControlActions.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
-#ifdef FUTURE_VBA
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <com/sun/star/script/vba/VBAEventId.hpp>
-#endif
 #include <editeng/acorrcfg.hxx>
 #include <SwStyleNameMapper.hxx>
 
@@ -181,7 +179,6 @@ void SwDocShell::DoFlushDocInfo()
     }
 }
 
-#ifdef FUTURE_VBA
 void lcl_processCompatibleSfxHint( const uno::Reference< script::vba::XVBAEventProcessor >& xVbaEvents, const SfxHint& rHint )
 {
     using namespace com::sun::star::script::vba::VBAEventId;
@@ -200,7 +197,6 @@ void lcl_processCompatibleSfxHint( const uno::Reference< script::vba::XVBAEventP
         }
     }
 }
-#endif
 
 /*--------------------------------------------------------------------
     Beschreibung:   Benachrichtigung bei geaenderter DocInfo
@@ -213,11 +209,9 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
         return ;
     }
 
-#ifdef FUTURE_VBA
     uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents = pDoc->GetVbaEventProcessor();
     if( xVbaEvents.is() )
         lcl_processCompatibleSfxHint( xVbaEvents, rHint );
-#endif
 
     USHORT nAction = 0;
     if( rHint.ISA(SfxSimpleHint) )
@@ -298,7 +292,6 @@ USHORT SwDocShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
     if( TRUE == nRet ) //Unbedingt auf TRUE abfragen! (RET_NEWTASK)
         EndListening( *this );
 
-#ifdef FUTURE_VBA
     if( pDoc && IsInPrepareClose() )
     {
         uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents = pDoc->GetVbaEventProcessor();
@@ -309,7 +302,6 @@ USHORT SwDocShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
             xVbaEvents->processVbaEvent( DOCUMENT_CLOSE, aArgs );
         }
     }
-#endif
     return nRet;
 }
 
@@ -1440,6 +1432,34 @@ void SwDocShell::Execute(SfxRequest& rReq)
     }
 }
 
+ // #FIXME - align with NEW event stuff ( if possible )
+#if 0
+void lcl_processCompatibleSfxHint( const uno::Reference< document::XVbaEventsHelper >& xVbaEventsHelper, const SfxHint& rHint )
+{
+    if ( rHint.ISA( SfxEventHint ) )
+    {
+        uno::Sequence< uno::Any > aArgs;
+        ULONG nEventId = ((SfxEventHint&)rHint).GetEventId();
+        switch( nEventId )
+        {
+            case SFX_EVENT_CREATEDOC:
+            {
+                xVbaEventsHelper->ProcessCompatibleVbaEvent( VBAEVENT_DOCUMENT_NEW, aArgs );
+                break;
+            }
+            case SFX_EVENT_OPENDOC:
+            {
+                xVbaEventsHelper->ProcessCompatibleVbaEvent( VBAEVENT_DOCUMENT_OPEN, aArgs );
+                break;
+            }
+            default:
+            {
+                //do nothing
+            }
+        }
+    }
+}
+#endif
 
 /*--------------------------------------------------------------------
     Beschreibung:
@@ -1502,6 +1522,12 @@ void SwDocShell::FillClass( SvGlobalName * pClassName,
         *pClipFormat    = bTemplate ? SOT_FORMATSTR_ID_STARWRITER_8_TEMPLATE : SOT_FORMATSTR_ID_STARWRITER_8;
         *pLongUserName = SW_RESSTR(STR_WRITER_DOCUMENT_FULLTYPE);
     }
+// #FIXME check with new Event handling
+#if 0
+    uno::Reference< document::XVbaEventsHelper > xVbaEventsHelper = pDoc->GetVbaEventsHelper();
+    if( xVbaEventsHelper.is() )
+        lcl_processCompatibleSfxHint( xVbaEventsHelper, rHint );
+#endif
 
     *pUserName = SW_RESSTR(STR_HUMAN_SWDOC_NAME);
 }

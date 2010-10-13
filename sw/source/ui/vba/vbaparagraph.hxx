@@ -50,6 +50,8 @@ public:
 
     // XParagraph
     virtual css::uno::Reference< ooo::vba::word::XRange > SAL_CALL getRange() throw ( css::uno::RuntimeException );
+    virtual css::uno::Any SAL_CALL getStyle() throw ( css::uno::RuntimeException );
+    virtual void SAL_CALL setStyle( const css::uno::Any& style ) throw ( css::uno::RuntimeException );
 
     // XHelperInterface
     virtual rtl::OUString& getServiceImplName();

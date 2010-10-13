@@ -119,9 +119,7 @@
 
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
-#ifdef FUTURE_VBA
 #include <vbahelper/vbaaccesshelper.hxx>
-#endif
 
 /* @@@MAINTAINABILITY-HORROR@@@
    Probably unwanted dependency on SwDocShell
@@ -2738,7 +2736,6 @@ void SwDoc::ChkCondColls()
      }
 }
 
-#ifdef FUTURE_VBA
 uno::Reference< script::vba::XVBAEventProcessor >
 SwDoc::GetVbaEventProcessor()
 {
@@ -2757,7 +2754,6 @@ SwDoc::GetVbaEventProcessor()
     }
     return mxVbaEvents;
 }
-#endif
 
 void SwDoc::setExternalData(::sw::tExternalDataType eType,
                             ::sw::tExternalDataPointer pPayload)

@@ -337,7 +337,7 @@ public:
     SwXTextTable(SwFrmFmt& rFrmFmt);
 
 
-    static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
+    SW_DLLPUBLIC static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
     //XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);

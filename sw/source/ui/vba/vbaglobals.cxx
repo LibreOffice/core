@@ -129,6 +129,12 @@ SwVbaGlobals::Dialogs( const uno::Any& index ) throw (uno::RuntimeException)
     return getApplication()->Dialogs( index );
 }
 
+uno::Any SAL_CALL
+SwVbaGlobals::ListGalleries( const uno::Any& index ) throw (uno::RuntimeException)
+{
+    return getApplication()->ListGalleries( index );
+}
+
 uno::Reference<word::XSelection > SAL_CALL
 SwVbaGlobals::getSelection() throw (uno::RuntimeException)
 {

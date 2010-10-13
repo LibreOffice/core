@@ -40,6 +40,7 @@
 #include <editeng/acorrcfg.hxx>
 #include "wordvbahelper.hxx"
 #include <docsh.hxx>
+#include "vbalistgalleries.hxx"
 
 using namespace ::ooo;
 using namespace ::ooo::vba;
@@ -148,6 +149,16 @@ SwVbaApplication::Dialogs( const uno::Any& index ) throw (uno::RuntimeException)
     uno::Reference< word::XDialogs > xCol( new SwVbaDialogs( this, mxContext, getCurrentDocument() ));
     if ( index.hasValue() )
         return xCol->Item( index );
+    return uno::makeAny( xCol );
+}
+
+uno::Any SAL_CALL
+SwVbaApplication::ListGalleries( const uno::Any& index ) throw (uno::RuntimeException)
+{
+    uno::Reference< text::XTextDocument > xTextDoc( getCurrentDocument(), uno::UNO_QUERY_THROW );
+    uno::Reference< XCollection > xCol( new SwVbaListGalleries( this, mxContext, xTextDoc ) );
+    if ( index.hasValue() )
+        return xCol->Item( index, uno::Any() );
     return uno::makeAny( xCol );
 }
 

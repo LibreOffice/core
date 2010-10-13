@@ -50,6 +50,12 @@ void SAL_CALL SwVbaReplacement::setText( const ::rtl::OUString& _text ) throw (u
     mxPropertyReplace->setReplaceString( _text );
 }
 
+void SAL_CALL SwVbaReplacement::ClearFormatting( ) throw (uno::RuntimeException)
+{
+    uno::Sequence< beans::PropertyValue > aPropValues;
+    mxPropertyReplace->setReplaceAttributes( aPropValues );
+}
+
 rtl::OUString&
 SwVbaReplacement::getServiceImplName()
 {

@@ -337,6 +337,7 @@ SHL4STDLIBS= \
     $(SALLIB) \
     $(ICUUCLIB) \
     $(BASICLIB)     \
+                $(MSFILTERLIB) \
     $(I18NUTILLIB)
 
 .IF "$(ENABLE_VBA)" == "YES"
@@ -370,6 +371,10 @@ SHL5STDLIBS= \
                 $(EDITENGLIB) \
                 $(SVXCORELIB) \
                 $(MSFILTERLIB)
+
+.IF "$(GUI)"=="WNT"
+SHL5STDLIBS+=$(SHELLLIB)
+.ENDIF #WNT
 
 SHL5DEPN=$(SHL1TARGETN)
 SHL5LIBS=$(SLB)$/$(TARGET_VBA).lib

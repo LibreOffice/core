@@ -80,9 +80,7 @@ class SwList;
 #include "comphelper/implementationreference.hxx"
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
-#ifdef FUTURE_VBA
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
-#endif
 
 #include <hash_map>
 #include <stringhash.hxx>
@@ -409,9 +407,8 @@ class SW_DLLPUBLIC SwDoc :
 
     // table of forbidden characters of this document
     vos::ORef<SvxForbiddenCharactersTable>  xForbiddenCharsTable;
-#ifdef FUTURE_VBA
     com::sun::star::uno::Reference< com::sun::star::script::vba::XVBAEventProcessor > mxVbaEvents;
-#endif
+    com::sun::star::uno::Reference<com::sun::star::container::XNameContainer> m_xTemplateToProjectCache;
     // --> OD 2007-10-26 #i83479#
 public:
     struct lessThanNodeNum
@@ -2137,9 +2134,9 @@ public:
     {
         return n32DummyCompatabilityOptions2;
     }
-#ifdef FUTURE_VBA
     com::sun::star::uno::Reference< com::sun::star::script::vba::XVBAEventProcessor > GetVbaEventProcessor();
-#endif
+    void SetVBATemplateToProjectCache( com::sun::star::uno::Reference< com::sun::star::container::XNameContainer >& xCache ) { m_xTemplateToProjectCache = xCache; };
+        com::sun::star::uno::Reference< com::sun::star::container::XNameContainer > GetVBATemplateToProjectCache() { return m_xTemplateToProjectCache; };
     ::sfx2::IXmlIdRegistry& GetXmlIdRegistry();
     ::sw::MetaFieldManager & GetMetaFieldManager();
     SfxObjectShell* CreateCopy(bool bCallInitNew) const;

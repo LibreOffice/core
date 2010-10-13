@@ -42,6 +42,7 @@ class SwVbaField : public SwVbaField_BASE
 public:
     SwVbaField( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextDocument >& rDocument, const css::uno::Reference< css::text::XTextField >& xTextField) throw ( css::uno::RuntimeException);
 
+    virtual sal_Bool SAL_CALL Update() throw ( css::uno::RuntimeException);
     // XHelperInterface
     virtual rtl::OUString& getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
@@ -57,6 +58,7 @@ class SwVbaFields : public SwVbaFields_BASE
     css::uno::Reference< css::lang::XMultiServiceFactory > mxMSF;
 private:
     css::uno::Reference< css::text::XTextField > Create_Field_FileName( const rtl::OUString _text ) throw (css::uno::RuntimeException);
+    css::uno::Reference< css::text::XTextField > Create_Field_DocProperty( const rtl::OUString _text ) throw (css::uno::RuntimeException);
 
 public:
     SwVbaFields( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::frame::XModel >& xModel );

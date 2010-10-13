@@ -35,6 +35,8 @@
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <ooo/vba/word/XStyle.hpp>
+#include <ooo/vba/word/XListFormat.hpp>
+#include "wordvbahelper.hxx"
 
 typedef InheritedHelperInterfaceImpl1< ooo::vba::word::XRange > SwVbaRange_BASE;
 
@@ -48,6 +50,7 @@ private:
 
 private:
     void initialize( const css::uno::Reference< css::text::XTextRange >& rStart, const css::uno::Reference< css::text::XTextRange >& rEnd ) throw (css::uno::RuntimeException);
+    void GetStyleInfo(rtl::OUString& aStyleName, rtl::OUString& aStyleType ) throw ( css::uno::RuntimeException );
 public:
     SwVbaRange( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextDocument >& rTextDocument, const css::uno::Reference< css::text::XTextRange >& rStart, sal_Bool _bMaySpanEndOfDocument = sal_False ) throw (css::uno::RuntimeException);
     SwVbaRange( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextDocument >& rTextDocument, const css::uno::Reference< css::text::XTextRange >& rStart, const css::uno::Reference< css::text::XTextRange >& rEnd, sal_Bool _bMaySpanEndOfDocument = sal_False ) throw (css::uno::RuntimeException);
@@ -61,16 +64,18 @@ public:
 #endif
     css::uno::Reference< css::text::XText > getXText() { return mxText; }
     void setXTextCursor( const css::uno::Reference< css::text::XTextCursor >& xTextCursor ) { mxTextCursor = xTextCursor; }
+    void Move( const css::uno::Any& _unit, const css::uno::Any& _count, const css::uno::Any& _extend, ooo::vba::word::E_DIRECTION eDirection ) throw (css::uno::RuntimeException);
 
     // Attribute
     virtual rtl::OUString SAL_CALL getText() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setText( const rtl::OUString& rText ) throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ooo::vba::word::XParagraphFormat > SAL_CALL getParagraphFormat() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setParagraphFormat( const css::uno::Reference< ooo::vba::word::XParagraphFormat >& rParagraphFormat ) throw (css::uno::RuntimeException);
-    virtual css::uno::Reference< ooo::vba::word::XStyle > SAL_CALL getStyle() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setStyle( const css::uno::Reference< ooo::vba::word::XStyle >& _xStyle ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL getStyle() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setStyle( const css::uno::Any& _xStyle ) throw (css::uno::RuntimeException);
 
     virtual css::uno::Reference< ooo::vba::word::XFont > SAL_CALL getFont() throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< ooo::vba::word::XListFormat > SAL_CALL getListFormat() throw (css::uno::RuntimeException);
     // Methods
     virtual void SAL_CALL InsertBreak( const css::uno::Any& _breakType ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL Select() throw (css::uno::RuntimeException);
@@ -84,6 +89,10 @@ public:
     virtual void SAL_CALL setStart( ::sal_Int32 _start ) throw (css::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getEnd() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setEnd( ::sal_Int32 _end ) throw (css::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL InRange( const css::uno::Reference< ::ooo::vba::word::XRange >& Range ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL Revisions( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL Sections( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL Fields( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
 
     // XHelperInterface
     virtual rtl::OUString& getServiceImplName();
