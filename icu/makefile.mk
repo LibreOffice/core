@@ -46,7 +46,9 @@ TARFILE_MD5=
 .ENDIF
 TARFILE_ROOTDIR=icu
 
-PATCH_FILES=${TARFILE_NAME}.patch
+PATCH_FILES=\
+    ${TARFILE_NAME}.patch \
+    icu4c-aix.patch
 
 # ADDITIONAL_FILES=
 
@@ -94,6 +96,11 @@ CONFIGURE_ACTION=rm data/mappings/ucm*.mk data/translit/trn*.mk ;
 .IF "$(OS)"=="SOLARIS"
 DISABLE_64BIT=--enable-64bit-libs=no
 .ENDIF			# "$(OS)"=="SOLARIS"
+
+.IF "$(OS)"=="AIX"
+DISABLE_64BIT=--enable-64bit-libs=no
+LDFLAGSADD+=$(LINKFLAGS) $(LINKFLAGSRUNPATH_OOO)
+.ENDIF                  # "$(OS)"=="AIX"
 
 .IF "$(HAVE_LD_HASH_STYLE)"  == "TRUE"
 LDFLAGSADD += -Wl,--hash-style=both
