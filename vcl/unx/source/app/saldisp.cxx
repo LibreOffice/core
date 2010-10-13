@@ -41,7 +41,7 @@
 #include <ctype.h>
 #include <string.h>
 
-#if defined(SOLARIS)
+#if defined(SOLARIS) || defined(AIX)
 #include <sal/alloca.h>
 #include <osl/module.h>
 #endif

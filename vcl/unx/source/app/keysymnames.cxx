@@ -28,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#ifndef SOLARIS
+#if !defined(SOLARIS) && !defined(AIX)
 #include <tools/prex.h>
 #include <X11/XKBlib.h>
 #include <tools/postx.h>
@@ -601,7 +601,7 @@ const char* SalDisplay::GetKeyboardName( bool bRefresh )
 {
     if( bRefresh || ! m_aKeyboardName.Len() )
     {
-#ifdef SOLARIS
+#if defined(SOLARIS)
         if( IsLocal() )
         {
             int kbd = open( "/dev/kbd", O_RDONLY );
@@ -640,7 +640,7 @@ const char* SalDisplay::GetKeyboardName( bool bRefresh )
                 close(kbd);
             }
         }
-#else
+#elif !defined(AIX)
         int opcode, event, error;
         int major = XkbMajorVersion, minor = XkbMinorVersion;
         if( XkbQueryExtension( GetDisplay(), &opcode, &event,&error, &major, &minor ) )

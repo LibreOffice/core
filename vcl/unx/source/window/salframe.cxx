@@ -38,7 +38,7 @@
 #include <X11/keysym.h>
 #include "FWS.hxx"
 #include <X11/extensions/shape.h>
-#ifndef SOLARIS
+#if !defined(SOLARIS) && !defined(AIX)
 #include <X11/extensions/dpms.h>
 #endif
 #include <tools/postx.h>
@@ -2360,7 +2360,7 @@ void X11SalFrame::StartPresentation( BOOL bStart )
     // needs static here to save DPMS settings
     int dummy;
     static bool DPMSExtensionAvailable =
-#ifndef SOLARIS
+#if !defined(SOLARIS) && !defined(AIX)
         (DPMSQueryExtension(GetXDisplay(), &dummy, &dummy) != 0);
     static XLIB_BOOL DPMSEnabled = false;
 #else
@@ -2395,7 +2395,7 @@ void X11SalFrame::StartPresentation( BOOL bStart )
         // get the DPMS state right before the start
         if (DPMSExtensionAvailable)
         {
-#ifndef SOLARIS
+#if !defined(SOLARIS) && !defined(AIX)
             CARD16 state; // card16 is defined in Xdm.h
             DPMSInfo(   GetXDisplay(),
                         &state,
@@ -2414,7 +2414,7 @@ void X11SalFrame::StartPresentation( BOOL bStart )
                                  prefer_blanking,
                                  allow_exposures );
             }
-#ifndef SOLARIS
+#if !defined(SOLARIS) && !defined(AIX)
             if( DPMSEnabled )
             {
                 if ( DPMSExtensionAvailable )
@@ -2439,7 +2439,7 @@ void X11SalFrame::StartPresentation( BOOL bStart )
                              allow_exposures );
                 nScreenSaversTimeout_ = 0;
             }
-#ifndef SOLARIS
+#if !defined(SOLARIS) && !defined(AIX)
             if ( DPMSEnabled )
             {
                 if ( DPMSExtensionAvailable )
