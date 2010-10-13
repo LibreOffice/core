@@ -539,6 +539,14 @@ void VCLXMenu::setPopupMenu( sal_Int16 nItemId, const ::com::sun::star::uno::Ref
                 break;
             }
         }
+        // it seems the popup menu is not insert into maPopupMenueRefs
+        // if the popup men is not created by stardiv.Toolkit.VCLXPopupMenu
+        if( !aRef.is() )
+        {
+            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu > * pNewRef = new ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu > ;
+            *pNewRef = new VCLXPopupMenu( (PopupMenu*)pMenu );
+            aRef = *pNewRef;
+        }
     }
     return aRef;
 }
@@ -1100,4 +1108,9 @@ VCLXPopupMenu::VCLXPopupMenu()
 {
     DBG_CTOR( VCLXPopupMenu, 0 );
     ImplCreateMenu( TRUE );
+}
+
+VCLXPopupMenu::VCLXPopupMenu( PopupMenu* pPopMenu ) : VCLXMenu( (Menu *)pPopMenu )
+{
+    DBG_CTOR( VCLXPopupMenu, 0 );
 }

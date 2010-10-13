@@ -44,7 +44,7 @@
 
 
 // =======================================================================
-
+
 inline ULONG ImplCreateKey( USHORT nPos )
 {
     // Key = Pos+1, wegen Pos 0
@@ -66,7 +66,7 @@ static void lcl_GetSelectedEntries( Table& rSelectedPos, const XubString& rText,
 }
 
 // =======================================================================
-
+
 ComboBox::ComboBox( WindowType nType ) :
     Edit( nType )
 {
@@ -467,7 +467,10 @@ IMPL_LINK( ComboBox, ImplSelectHdl, void*, EMPTYARG )
         mbSyntheticModify = TRUE;
         Modify();
         mbSyntheticModify = FALSE;
-        Select();
+        if (ImplGetWindowImpl() != NULL) //liuchen 2009-7-28, resolve the problem that soffice get crashed if in ComboBox_Change event a Worksheets("SheetX").Activate sentence needs to be executed
+        {
+            Select();
+        }
     }
 
     return 0;

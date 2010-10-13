@@ -349,6 +349,7 @@ sal_Bool UnoControlModel::ImplHasProperty( sal_uInt16 nPropId ) const
             case BASEPROPERTY_ENABLEVISIBLE:
             case BASEPROPERTY_DECORATION:           aDefault <<= (sal_Bool) sal_True; break;
 
+            case BASEPROPERTY_GROUPNAME:
             case BASEPROPERTY_HELPTEXT:
             case BASEPROPERTY_HELPURL:
             case BASEPROPERTY_IMAGEURL:

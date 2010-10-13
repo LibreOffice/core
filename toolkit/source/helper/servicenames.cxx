@@ -37,6 +37,8 @@ const sal_Char __FAR_DATA szServiceName_PopupMenu[] = "stardiv.vcl.PopupMenu", s
 const sal_Char __FAR_DATA szServiceName_MenuBar[] = "stardiv.vcl.MenuBar", szServiceName2_MenuBar[] = "com.sun.star.awt.MenuBar";
 const sal_Char __FAR_DATA szServiceName_Pointer[] = "stardiv.vcl.Pointer", szServiceName2_Pointer[] = "com.sun.star.awt.Pointer";
 const sal_Char __FAR_DATA szServiceName_UnoControlContainer[] = "stardiv.vcl.control.ControlContainer", szServiceName2_UnoControlContainer[] = "com.sun.star.awt.UnoControlContainer";
+
+
 const sal_Char __FAR_DATA szServiceName_UnoControlContainerModel[] = "stardiv.vcl.controlmodel.ControlContainer", szServiceName2_UnoControlContainerModel[] = "com.sun.star.awt.UnoControlContainerModel";
 const sal_Char __FAR_DATA szServiceName_TabController[] = "stardiv.vcl.control.TabController", szServiceName2_TabController[] = "com.sun.star.awt.TabController";
 const sal_Char __FAR_DATA szServiceName_TabControllerModel[] = "stardiv.vcl.controlmodel.TabController", szServiceName2_TabControllerModel[] = "com.sun.star.awt.TabControllerModel";
@@ -88,6 +90,8 @@ const sal_Char __FAR_DATA szServiceName_UnoControlRoadmap[] = "stardiv.vcl.contr
 const sal_Char __FAR_DATA szServiceName_UnoControlRoadmapModel[] = "stardiv.vcl.controlmodel.Roadmap", szServiceName2_UnoControlRoadmapModel[] = "com.sun.star.awt.UnoControlRoadmapModel";
 const sal_Char __FAR_DATA szServiceName_UnoSpinButtonControl[] = "com.sun.star.awt.UnoControlSpinButton";
 const sal_Char __FAR_DATA szServiceName_UnoSpinButtonModel[] = "com.sun.star.awt.UnoControlSpinButtonModel";
+const sal_Char __FAR_DATA szServiceName_UnoMultiPageControl[] = "com.sun.star.awt.UnoControlMultiPage";
+const sal_Char __FAR_DATA szServiceName_UnoMultiPageModel[] = "com.sun.star.awt.UnoMultiPageModel";
 const sal_Char __FAR_DATA szServiceName_TreeControl[] = "com.sun.star.awt.tree.TreeControl";
 const sal_Char __FAR_DATA szServiceName_TreeControlModel[] = "com.sun.star.awt.tree.TreeControlModel";
 const sal_Char __FAR_DATA szServiceName_MutableTreeDataModel[] = "com.sun.star.awt.tree.MutableTreeDataModel";

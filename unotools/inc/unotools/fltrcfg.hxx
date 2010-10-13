@@ -48,6 +48,8 @@ public:
 
     void SetLoadWordBasicCode( sal_Bool bFlag );
     sal_Bool IsLoadWordBasicCode() const;
+    void SetLoadWordBasicExecutable( sal_Bool bFlag );
+    sal_Bool IsLoadWordBasicExecutable() const;
     void SetLoadWordBasicStorage( sal_Bool bFlag );
     sal_Bool IsLoadWordBasicStorage() const;
 

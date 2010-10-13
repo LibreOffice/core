@@ -223,7 +223,6 @@ private:
     bool                                                                                    mbAdjustingGraphic;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphicObject > mxGrfObj;
-    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > getGraphicFromURL_nothrow( const ::rtl::OUString& _rURL );
 
 protected:
     GraphicControlModel() : mbAdjustingImagePosition( false ), mbAdjustingGraphic( false ) { }
@@ -634,6 +633,44 @@ public:
 
     // ::com::sun::star::lang::XServiceInfo
     DECLIMPL_SERVICEINFO_DERIVED( UnoControlFixedTextModel, UnoControlModel, szServiceName2_UnoControlFixedTextModel )
+
+};
+
+class UnoMultiPageModel : public UnoControlModel
+{
+protected:
+    ::com::sun::star::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const;
+    ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper();
+
+public:
+                        UnoMultiPageModel();
+                        UnoMultiPageModel( const UnoMultiPageModel& rModel ) : UnoControlModel( rModel ) {;}
+
+    UnoControlModel*    Clone() const { return new UnoMultiPageModel( *this ); }
+
+    // ::com::sun::star::io::XPersistObject
+    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::beans::XMultiPropertySet
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::lang::XServiceInfo
+    DECLIMPL_SERVICEINFO_DERIVED( UnoMultiPageModel, UnoControlModel, szServiceName_UnoMultiPageModel )
+
+};
+//  ----------------------------------------------------
+//  class UnoGroupBoxControl
+//  ----------------------------------------------------
+class UnoMultiPageControl : public UnoControlBase
+{
+public:
+                        UnoMultiPageControl();
+    ::rtl::OUString     GetComponentServiceName();
+
+    sal_Bool SAL_CALL isTransparent(  ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::lang::XServiceInfo
+    DECLIMPL_SERVICEINFO_DERIVED( UnoMultiPageControl, UnoControlBase, szServiceName_UnoMultiPageControl )
 
 };
 

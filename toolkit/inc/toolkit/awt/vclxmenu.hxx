@@ -45,6 +45,7 @@
 class Menu;
 class MenuBar;
 class VclSimpleEvent;
+class PopupMenu;
 
 DECLARE_LIST( PopupMenuRefList, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu >* )
 
@@ -181,6 +182,7 @@ class TOOLKIT_DLLPUBLIC VCLXPopupMenu : public VCLXMenu
 {
 public:
         VCLXPopupMenu();
+        VCLXPopupMenu( PopupMenu* pPopMenu );
 };
 
 #endif // _TOOLKIT_AWT_VCLXMENU_HXX_

@@ -536,7 +536,7 @@ uno::Any GraphicControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
-    uno::Reference< graphic::XGraphic > GraphicControlModel::getGraphicFromURL_nothrow( const ::rtl::OUString& _rURL )
+    uno::Reference< graphic::XGraphic > getGraphicFromURL_nothrow( uno::Reference< graphic::XGraphicObject >& rxGrfObj, const ::rtl::OUString& _rURL )
     {
         uno::Reference< graphic::XGraphic > xGraphic;
 
@@ -546,10 +546,10 @@ uno::Any GraphicControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
             rtl::OUString sID = _rURL.copy( sizeof( UNO_NAME_GRAPHOBJ_URLPREFIX ) - 1 );
             // get the DefaultContext
             ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-            mxGrfObj = graphic::GraphicObject::createWithId( aContext.getUNOContext(), sID );
+            rxGrfObj = graphic::GraphicObject::createWithId( aContext.getUNOContext(), sID );
         }
         else // linked
-            mxGrfObj = NULL; // release the GraphicObject
+            rxGrfObj = NULL; // release the GraphicObject
 
         if ( !_rURL.getLength() )
             return xGraphic;
@@ -590,7 +590,7 @@ void SAL_CALL GraphicControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 n
                 mbAdjustingGraphic = true;
                 ::rtl::OUString sImageURL;
                 OSL_VERIFY( rValue >>= sImageURL );
-                setPropertyValue( GetPropertyName( BASEPROPERTY_GRAPHIC ), uno::makeAny( getGraphicFromURL_nothrow( sImageURL ) ) );
+                setPropertyValue( GetPropertyName( BASEPROPERTY_GRAPHIC ), uno::makeAny( getGraphicFromURL_nothrow( mxGrfObj, sImageURL ) ) );
                 mbAdjustingGraphic = false;
             }
             break;
@@ -1724,6 +1724,75 @@ UnoGroupBoxControl::UnoGroupBoxControl()
 }
 
 sal_Bool UnoGroupBoxControl::isTransparent() throw(uno::RuntimeException)
+{
+    return sal_True;
+}
+
+// MultiPage
+
+UnoMultiPageModel::UnoMultiPageModel()
+{
+    ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
+    ImplRegisterProperty( BASEPROPERTY_ENABLED );
+    ImplRegisterProperty( BASEPROPERTY_FONTDESCRIPTOR );
+    ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
+    ImplRegisterProperty( BASEPROPERTY_HELPURL );
+    ImplRegisterProperty( BASEPROPERTY_LABEL );
+    ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
+    ImplRegisterProperty( BASEPROPERTY_PROGRESSVALUE );
+    ImplRegisterProperty( BASEPROPERTY_PROGRESSVALUE_MAX );
+}
+
+::rtl::OUString UnoMultiPageModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
+{
+    return ::rtl::OUString::createFromAscii( szServiceName_UnoMultiPageModel );
+}
+
+uno::Any UnoMultiPageModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
+{
+    if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
+    {
+        uno::Any aAny;
+        aAny <<= ::rtl::OUString::createFromAscii( szServiceName_UnoControlGroupBox );
+        //aAny <<= ::rtl::OUString::createFromAscii( szServiceName_UnoMultiPageControl );
+        return aAny;
+    }
+    return UnoControlModel::ImplGetDefaultValue( nPropId );
+}
+
+::cppu::IPropertyArrayHelper& UnoMultiPageModel::getInfoHelper()
+{
+    static UnoPropertyArrayHelper* pHelper = NULL;
+    if ( !pHelper )
+    {
+        uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
+        pHelper = new UnoPropertyArrayHelper( aIDs );
+    }
+    return *pHelper;
+}
+
+// beans::XMultiPropertySet
+uno::Reference< beans::XPropertySetInfo > UnoMultiPageModel::getPropertySetInfo(  ) throw(uno::RuntimeException)
+{
+    static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
+    return xInfo;
+}
+
+//  ----------------------------------------------------
+//  class MultiPageControl
+//  ----------------------------------------------------
+UnoMultiPageControl::UnoMultiPageControl()
+{
+    maComponentInfos.nWidth = 100;
+    maComponentInfos.nHeight = 100;
+}
+
+::rtl::OUString UnoMultiPageControl::GetComponentServiceName()
+{
+    return ::rtl::OUString::createFromAscii( "multipage" );
+}
+
+sal_Bool UnoMultiPageControl::isTransparent() throw(uno::RuntimeException)
 {
     return sal_True;
 }

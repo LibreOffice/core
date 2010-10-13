@@ -395,6 +395,7 @@ public:
 
     friend VCL_DLLPUBLIC SvStream&  operator<<( SvStream& rOStm, const BitmapEx& rBitmapEx );
     friend VCL_DLLPUBLIC SvStream&  operator>>( SvStream& rIStm, BitmapEx& rBitmapEx );
+    static BitmapEx AutoScaleBitmap(BitmapEx & aBitmap, const long aStandardSize);
 };
 
 #endif // _SV_BITMAPEX_HXX
