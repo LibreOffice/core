@@ -520,7 +520,7 @@ ExtrasAutomatischBerechnen .uno:AutomaticCalculation
 ExtrasAutoEingabe .uno:AutoComplete
 
 ' **** Draw / Impress
-ExtrasThesaurusDraw .uno:Thesaurus
+ExtrasThesaurusDraw .uno:ThesaurusDialog
 ExtrasPipette .uno:BmpMask
 ExtrasDiawechsel .uno:SlideChangeWindow
 ExtrasAnimation .uno:AnimationObjects
