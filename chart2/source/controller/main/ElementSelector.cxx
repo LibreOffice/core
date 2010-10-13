@@ -308,7 +308,7 @@ void SAL_CALL ElementSelectorToolbarController::statusChanged( const frame::Feat
 {
     if( m_apSelectorListBox.get() )
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
         if( rEvent.FeatureURL.Path.equalsAscii( "ChartElementSelector" ) )
         {
             Reference< frame::XController > xChartController;

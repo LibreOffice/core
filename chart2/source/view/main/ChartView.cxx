@@ -200,7 +200,7 @@ void SAL_CALL ChartView::initialize( const uno::Sequence< uno::Any >& aArguments
     if( !m_pDrawModelWrapper.get() )
     {
         // /--
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+        SolarMutexGuard aSolarGuard;
         m_pDrawModelWrapper = ::boost::shared_ptr< DrawModelWrapper >( new DrawModelWrapper( m_xCC ) );
         m_xShapeFactory = m_pDrawModelWrapper->getShapeFactory();
         m_xDrawPage = m_pDrawModelWrapper->getMainDrawPage();
@@ -214,7 +214,7 @@ ChartView::~ChartView()
     if( m_pDrawModelWrapper.get() )
     {
         EndListening( m_pDrawModelWrapper->getSdrModel(), FALSE /*bAllDups*/ );
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         m_pDrawModelWrapper.reset();
     }
     m_xDrawPage = NULL;
@@ -1689,7 +1689,7 @@ SdrPage* ChartView::getSdrPage()
 
 uno::Reference< drawing::XShape > ChartView::getShapeForCID( const rtl::OUString& rObjectCID )
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     SdrObject* pObj = DrawModelWrapper::getNamedSdrObject( rObjectCID, this->getSdrPage() );
     if( pObj )
         return uno::Reference< drawing::XShape >( pObj->getUnoShape(), uno::UNO_QUERY);
@@ -1715,7 +1715,7 @@ awt::Rectangle ChartView::getRectangleOfObject( const rtl::OUString& rObjectCID,
         ObjectType eObjectType( ObjectIdentifier::getObjectType( rObjectCID ) );
         if( eObjectType == OBJECTTYPE_AXIS || eObjectType == OBJECTTYPE_DIAGRAM )
         {
-            ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+            SolarMutexGuard aSolarGuard;
             SvxShape* pRoot = SvxShape::getImplementation( xShape );
             if( pRoot )
             {
@@ -2604,7 +2604,7 @@ void ChartView::createShapes()
     if( m_pDrawModelWrapper )
     {
         // /--
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+        SolarMutexGuard aSolarGuard;
         // #i12587# support for shapes in chart
         m_pDrawModelWrapper->getSdrModel().EnableUndo( FALSE );
         m_pDrawModelWrapper->clearMainDrawPage();
@@ -2627,7 +2627,7 @@ void ChartView::createShapes()
     }
 
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+        SolarMutexGuard aSolarGuard;
 
         //------------ apply fill properties to page
         // todo: it would be nicer to just pass the page m_xDrawPage and format it,
@@ -2769,7 +2769,7 @@ void ChartView::createShapes()
     // #i12587# support for shapes in chart
     if ( m_pDrawModelWrapper )
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         m_pDrawModelWrapper->getSdrModel().EnableUndo( TRUE );
     }
 
@@ -2813,7 +2813,7 @@ void ChartView::impl_updateView()
             //prepare draw model
             {
                 // /--
-                ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+                SolarMutexGuard aSolarGuard;
                 m_pDrawModelWrapper->lockControllers();
                 // \--
             }
@@ -2850,7 +2850,7 @@ void ChartView::impl_updateView()
 
         {
             // /--
-            ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+            SolarMutexGuard aSolarGuard;
             m_pDrawModelWrapper->unlockControllers();
             // \--
         }

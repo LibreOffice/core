@@ -59,7 +59,7 @@ uno::Sequence< rtl::OUString > SAL_CALL ScDocument_getSupportedServiceNames() th
 uno::Reference< uno::XInterface > SAL_CALL ScDocument_createInstance(
                 const uno::Reference< lang::XMultiServiceFactory > & /* rSMgr */, const sal_uInt64 _nCreationFlags ) throw( uno::Exception )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     ScDLL::Init();
     SfxObjectShell* pShell = new ScDocShell( _nCreationFlags );
     return uno::Reference< uno::XInterface >( pShell->GetModel() );

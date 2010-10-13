@@ -87,7 +87,7 @@ void SAL_CALL AccessibleTextHelper::initialize( const Sequence< uno::Any >& aArg
         return;
 
     // /-- solar
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     if( m_pTextHelper )
         delete m_pTextHelper;
@@ -121,7 +121,7 @@ void SAL_CALL AccessibleTextHelper::initialize( const Sequence< uno::Any >& aArg
     if( m_pTextHelper )
     {
         // /-- solar
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         return m_pTextHelper->GetChildCount();
         // \-- solar
     }
@@ -135,7 +135,7 @@ Reference< XAccessible > SAL_CALL AccessibleTextHelper::getAccessibleChild( ::sa
     if( m_pTextHelper )
     {
         // /-- solar
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         return m_pTextHelper->GetChild( i );
         // \-- solar
     }

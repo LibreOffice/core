@@ -359,7 +359,7 @@ APPHELPER_XSERVICEINFO_IMPL(ChartController,CHART_CONTROLLER_SERVICE_IMPLEMENTAT
 ::attachFrame( const uno::Reference<frame::XFrame>& xFrame )
         throw(uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if( impl_isDisposedOrSuspended() ) //@todo? allow attaching the frame while suspended?
         return; //behave passive if already disposed or suspended
@@ -408,7 +408,7 @@ APPHELPER_XSERVICEINFO_IMPL(ChartController,CHART_CONTROLLER_SERVICE_IMPLEMENTAT
         awt::Size aPageSize( ChartModelHelper::getPageSize(getModel()) );
 
         // calls to VCL
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+        SolarMutexGuard aSolarGuard;
         m_pChartWindow = new ChartWindow(this,pParent,pParent?pParent->GetStyle():0);
         m_pChartWindow->SetBackground();//no Background
         m_xViewWindow = uno::Reference< awt::XWindow >( m_pChartWindow->GetComponentInterface(), uno::UNO_QUERY );
@@ -477,7 +477,7 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
     {
         //the view is about to become invalid so end all actions on it
         impl_invalidateAccessible();
-        ::vos::OGuard aGuard( Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         if( m_pDrawViewWrapper && m_pDrawViewWrapper->IsTextEdit() )
             this->EndTextEdit();
         if( m_pDrawViewWrapper )
@@ -500,7 +500,7 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
                 if(m_pDrawModelWrapper)
                 {
                     {
-                        ::vos::OGuard aGuard( Application::GetSolarMutex());
+                        SolarMutexGuard aGuard;
                         if( m_pDrawViewWrapper )
                             m_pDrawViewWrapper->ReInit();
                     }
@@ -647,7 +647,7 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
     //set of data that can be used to restore the current view status at later time
     //  by using XController::restoreViewData()
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if( impl_isDisposedOrSuspended() )
         return uno::Any(); //behave passive if already disposed or suspended //@todo? or throw an exception??
 
@@ -664,7 +664,7 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
 {
     //restores the view status using the data gotten from a previous call to XController::getViewData()
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if( impl_isDisposedOrSuspended() )
         return; //behave passive if already disposed or suspended //@todo? or throw an exception??
 
@@ -682,7 +682,7 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
 
     //we may show dialogs here to ask the user for saving changes ... @todo?
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if( m_aLifeTimeManager.impl_isDisposed() )
         return sal_False; //behave passive if already disposed, return false because request was not accepted //@todo? correct
 
@@ -716,7 +716,7 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
 
 void ChartController::impl_createDrawViewController()
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!m_pDrawViewWrapper)
     {
         if( m_pDrawModelWrapper )
@@ -730,7 +730,7 @@ void ChartController::impl_deleteDrawViewController()
 {
     if( m_pDrawViewWrapper )
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         if( m_pDrawViewWrapper->IsTextEdit() )
             this->EndTextEdit();
         DELETEZ( m_pDrawViewWrapper );
@@ -782,7 +782,7 @@ void ChartController::impl_deleteDrawViewController()
                 xViewBroadcaster->removeModeChangeListener(this);
             // /--
             impl_invalidateAccessible();
-            ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+            SolarMutexGuard aSolarGuard;
             impl_deleteDrawViewController();
             m_pDrawModelWrapper.reset();
 
@@ -846,7 +846,7 @@ void ChartController::impl_deleteDrawViewController()
 ::addEventListener( const uno::Reference<lang::XEventListener>& xListener )
         throw(uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if( impl_isDisposedOrSuspended() )//@todo? allow adding of listeners in suspend mode?
         return; //behave passive if already disposed or suspended
 
@@ -859,7 +859,7 @@ void ChartController::impl_deleteDrawViewController()
         lang::XEventListener>& xListener )
         throw(uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if( m_aLifeTimeManager.impl_isDisposed(false) )
         return; //behave passive if already disposed or suspended
 
@@ -1254,7 +1254,7 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
             throw (uno::RuntimeException)
 {
 //     // TODO: add listener by URL !
-//  ::vos::OGuard aGuard( Application::GetSolarMutex());
+//  SolarMutexGuard aGuard;
 //  if( impl_isDisposedOrSuspended() )//@todo? allow adding of listeners in suspend mode?
 //      return; //behave passive if already disposed or suspended
 
@@ -1268,7 +1268,7 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
             throw (uno::RuntimeException)
 {
 //     // TODO: remove listener by URL !
-//  ::vos::OGuard aGuard( Application::GetSolarMutex());
+//  SolarMutexGuard aGuard;
 //     if( m_aLifeTimeManager.impl_isDisposed() )
 //      return; //behave passive if already disposed or suspended
 
@@ -1309,7 +1309,7 @@ void SAL_CALL ChartController::executeDispatch_ChartType()
         ::rtl::OUString( String( SchResId( STR_ACTION_EDIT_CHARTTYPE ))), m_xUndoManager, getModel() );
 
     // /--
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     //prepare and open dialog
     ChartTypeDialog aDlg( m_pChartWindow, getModel(), m_xCC );
     if( aDlg.Execute() == RET_OK )
@@ -1335,7 +1335,7 @@ void SAL_CALL ChartController::executeDispatch_SourceData()
     if( xChartDoc.is())
     {
         // /--
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+        SolarMutexGuard aSolarGuard;
         ::chart::DataSourceDialog aDlg( m_pChartWindow, xChartDoc, m_xCC );
         if( aDlg.Execute() == RET_OK )
         {

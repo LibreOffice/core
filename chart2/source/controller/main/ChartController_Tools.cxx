@@ -283,7 +283,7 @@ void ChartController::executeDispatch_NewArrangement()
 
 void ChartController::executeDispatch_ScaleText()
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     // using assignment for broken gcc 3.3
     UndoGuard aUndoGuard = UndoGuard(
         ::rtl::OUString( String( SchResId( STR_ACTION_SCALE_TEXT ))),
@@ -544,7 +544,7 @@ void ChartController::executeDispatch_Copy()
         {
             Reference< datatransfer::XTransferable > xTransferable;
             {
-                ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aSolarGuard;
                 SdrObject* pSelectedObj = 0;
                 if ( m_pDrawModelWrapper )
                 {
@@ -830,7 +830,7 @@ bool ChartController::executeDispatch_Delete()
         //remove additional shape
         impl_ClearSelection();
         {
-            ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aSolarGuard;
             if ( m_pDrawViewWrapper )
             {
                 m_pDrawViewWrapper->DeleteMarked();

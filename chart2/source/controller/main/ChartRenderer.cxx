@@ -100,7 +100,7 @@ bool ChartRenderer::DoPaint(OutputDevice* pOutDev, const Rectangle& rLogicObject
         {
             awt::Size aResolution(1000,1000);
             {
-                ::vos::OGuard aGuard( Application::GetSolarMutex());
+                SolarMutexGuard aGuard;
                 Rectangle aPixelRect( pOutDev->LogicToPixel( rLogicObjectRect ) );
                 aResolution.Width = aPixelRect.GetWidth();
                 aResolution.Height = aPixelRect.GetHeight();
@@ -113,7 +113,7 @@ bool ChartRenderer::DoPaint(OutputDevice* pOutDev, const Rectangle& rLogicObject
         if( xUpdatable.is() )
             xUpdatable->update();
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         ExplicitValueProvider* pProvider = ExplicitValueProvider::getExplicitValueProvider( xChartView );
         if( !pProvider )
             return false;

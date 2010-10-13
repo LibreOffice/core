@@ -192,7 +192,7 @@ bool ChartController::EndTextEdit()
 
 void SAL_CALL ChartController::executeDispatch_InsertSpecialCharacter()
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if( m_pDrawViewWrapper && !m_pDrawViewWrapper->IsTextEdit() )
         this->StartTextEdit();

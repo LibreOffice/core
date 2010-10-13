@@ -151,7 +151,7 @@ void SAL_CALL ChartController::executeDispatch_PositionAndSize()
         SdrView* pSdrView = m_pDrawViewWrapper;
         bool bResizePossible = m_aSelection.isResizeableObjectSelected();
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         SvxAbstractDialogFactory * pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT( pFact, "No dialog factory" );
         pDlg = pFact->CreateSchTransformTabDialog(

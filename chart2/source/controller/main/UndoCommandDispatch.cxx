@@ -114,7 +114,7 @@ void SAL_CALL UndoCommandDispatch::dispatch(
     {
         // why is it necessary to lock the solar mutex here?
         // /--
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+        SolarMutexGuard aSolarGuard;
         if( URL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Undo" )))
             m_xUndoManager->undo( m_xModel );
         else

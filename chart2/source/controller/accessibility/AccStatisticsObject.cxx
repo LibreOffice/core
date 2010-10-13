@@ -47,7 +47,7 @@ AccStatisticsObject::AccStatisticsObject( const AccessibleElementInfo& rAccInfo 
 //    OSL_ASSERT( pModel );
 
     // /-- solar
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 /*    switch( eType )
     {
         case MEAN_VAL_LINE:

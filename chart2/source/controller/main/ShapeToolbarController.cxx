@@ -121,7 +121,7 @@ void ShapeToolbarController::release() throw ()
 void ShapeToolbarController::initialize( const Sequence< uno::Any >& rArguments ) throw (uno::Exception, uno::RuntimeException)
 {
     ToolboxController::initialize( rArguments );
-    ::vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
 
     ToolBox* pToolBox = static_cast< ToolBox* >( VCLUnoHelper::GetWindow( getParent() ) );
@@ -234,7 +234,7 @@ void ShapeToolbarController::statusChanged( const frame::FeatureStateEvent& Even
 // ::com::sun::star::frame::XToolbarController
 Reference< awt::XWindow > ShapeToolbarController::createPopupWindow() throw (uno::RuntimeException)
 {
-    ::vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
 
     Reference< awt::XWindow > xRet;
@@ -259,7 +259,7 @@ Reference< awt::XWindow > ShapeToolbarController::createPopupWindow() throw (uno
 
 ::rtl::OUString ShapeToolbarController::getSubToolbarName() throw (uno::RuntimeException)
 {
-    ::vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     ::osl::MutexGuard aGuard(m_aMutex);
     uno::Reference< frame::XSubToolbarController > xSub( m_pToolbarController.getRef(), uno::UNO_QUERY );
     if ( xSub.is() )
@@ -271,7 +271,7 @@ Reference< awt::XWindow > ShapeToolbarController::createPopupWindow() throw (uno
 
 void ShapeToolbarController::functionSelected( const ::rtl::OUString& rCommand ) throw (uno::RuntimeException)
 {
-    ::vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
 
     uno::Reference< frame::XSubToolbarController > xSub( m_pToolbarController.getRef(), uno::UNO_QUERY );
@@ -284,7 +284,7 @@ void ShapeToolbarController::functionSelected( const ::rtl::OUString& rCommand )
 
 void ShapeToolbarController::updateImage() throw (uno::RuntimeException)
 {
-    ::vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
 
     uno::Reference< frame::XSubToolbarController > xSub( m_pToolbarController.getRef(), uno::UNO_QUERY );

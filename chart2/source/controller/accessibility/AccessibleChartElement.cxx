@@ -133,7 +133,7 @@ void AccessibleChartElement::InitTextEdit()
 //     OSL_ASSERT( m_pTextHelper == 0 );
 
 //     // /-- solar
-//     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+//     SolarMutexGuard aSolarGuard;
 //     Window* pWindow( VCLUnoHelper::GetWindow( GetInfo().m_xWindow ));
 //     if( pWindow )
 //     {
@@ -172,7 +172,7 @@ Reference< XAccessible > AccessibleChartElement::ImplGetAccessibleChildById( sal
     {
         xResult.set( m_xTextHelper->getAccessibleChild( i ));
         // /-- solar
-//         ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+//         SolarMutexGuard aSolarGuard;
 //         if( m_pTextHelper )
 //             xResult.set( m_pTextHelper->GetChild( i ) );
         // \-- solar

@@ -64,7 +64,7 @@ void ChartController::executeDispatch_EditData()
 
         {
             // /--
-            ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+            SolarMutexGuard aSolarGuard;
             // using assignment for broken gcc 3.3
             UndoLiveUpdateGuardWithData aUndoGuard = UndoLiveUpdateGuardWithData(
                 ::rtl::OUString( String( SchResId( STR_ACTION_EDIT_CHART_DATA ))),

@@ -780,7 +780,7 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard( const ::rtl:
         aDialogParameter.init( getModel() );
         ViewElementListProvider aViewElementListProvider( m_pDrawModelWrapper.get() );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         SchAttribTabDlg aDlg( m_pChartWindow, &aItemSet, &aDialogParameter, &aViewElementListProvider
             , uno::Reference< util::XNumberFormatsSupplier >( getModel(), uno::UNO_QUERY ) );
 
@@ -844,7 +844,7 @@ void SAL_CALL ChartController::executeDispatch_View3D()
 
         // /--
         //open dialog
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+        SolarMutexGuard aSolarGuard;
         View3DDialog aDlg( m_pChartWindow, getModel(), m_pDrawModelWrapper->GetColorTable() );
         if( aDlg.Execute() == RET_OK )
             aUndoGuard.commitAction();

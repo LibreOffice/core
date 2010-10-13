@@ -519,7 +519,7 @@ void ChartController::execute_Paint( const Rectangle& rRect )
         {
             awt::Size aResolution(1000,1000);
             {
-                ::vos::OGuard aGuard( Application::GetSolarMutex());
+                SolarMutexGuard aGuard;
                 if( m_pChartWindow )
                 {
                     aResolution.Width = m_pChartWindow->GetSizePixel().Width();
@@ -536,7 +536,7 @@ void ChartController::execute_Paint( const Rectangle& rRect )
 
         Window* pWindow = m_pChartWindow;
         {
-            ::vos::OGuard aGuard( Application::GetSolarMutex());
+            SolarMutexGuard aGuard;
             DrawViewWrapper* pDrawViewWrapper = m_pDrawViewWrapper;
             if(pDrawViewWrapper)
                 pDrawViewWrapper->CompleteRedraw(pWindow, Region(rRect) );
@@ -605,7 +605,7 @@ IMPL_LINK( ChartController, DoubleClickWaitingHdl, void*, EMPTYARG )
 
 void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     m_bWaitingForMouseUp = true;
 
@@ -749,7 +749,7 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
 
 void ChartController::execute_MouseMove( const MouseEvent& rMEvt )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     Window* pWindow = m_pChartWindow;
     DrawViewWrapper* pDrawViewWrapper = m_pDrawViewWrapper;
@@ -784,7 +784,7 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
     m_bWaitingForMouseUp = false;
     bool bNotifySelectionChange = false;
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
 
         Window* pWindow = m_pChartWindow;
         DrawViewWrapper* pDrawViewWrapper = m_pDrawViewWrapper;
@@ -997,7 +997,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
 
     bool bIsAction = false;
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         DrawViewWrapper* pDrawViewWrapper = m_pDrawViewWrapper;
         if(!pWindow || !pDrawViewWrapper)
             return;
@@ -1688,7 +1688,7 @@ bool ChartController::requestQuickHelp(
         view::XSelectionChangeListener > & xListener )
         throw(uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if( impl_isDisposedOrSuspended() )//@todo? allow adding of listeners in suspend mode?
         return; //behave passive if already disposed or suspended
 
@@ -1701,7 +1701,7 @@ bool ChartController::requestQuickHelp(
         view::XSelectionChangeListener > & xListener )
         throw(uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if( impl_isDisposedOrSuspended() ) //@todo? allow removing of listeners in suspend mode?
         return; //behave passive if already disposed or suspended
 
@@ -1862,7 +1862,7 @@ bool ChartController::impl_DragDataPoint( const ::rtl::OUString & rCID, double f
 
 void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     Window* pWindow = m_pChartWindow;
     if( m_pDrawViewWrapper && pWindow )
     {

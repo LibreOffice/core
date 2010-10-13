@@ -289,7 +289,7 @@ static BOOL lcl_MayBeDBase( SvStream& rStream )
     }
 
     // can't check the type for external filters, so set the "dont" flag accordingly
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     //SfxFilterFlags nMust = SFX_FILTER_IMPORT, nDont = SFX_FILTER_NOTINSTALLED;
 
     SfxAllItemSet *pSet = new SfxAllItemSet( SFX_APP()->GetPool() );

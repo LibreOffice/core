@@ -385,7 +385,7 @@ void DrawCommandDispatch::execute( const ::rtl::OUString& rCommand, const Sequen
             DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
             if ( pDrawViewWrapper )
             {
-                ::vos::OGuard aGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aGuard;
                 m_pChartController->setDrawMode( eDrawMode );
                 setInsertObj( sal::static_int_cast< USHORT >( eKind ) );
                 if ( bCreate )
@@ -465,7 +465,7 @@ SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
         SdrPage* pPage = GetSdrPageFromXDrawPage( xDrawPage );
         if ( pPage )
         {
-            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
             pObj = SdrObjFactory::MakeNewObject( pDrawViewWrapper->GetCurrentObjInventor(),
                 pDrawViewWrapper->GetCurrentObjIdentifier(), pPage );
             if ( pObj )
