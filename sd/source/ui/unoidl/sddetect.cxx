@@ -355,10 +355,12 @@ SdFilterDetect::~SdFilterDetect()
                                 String aFileName(aMedium.GetName());
                                 aFileName.ToUpperAscii();
 
-                                if( aFileName.SearchAscii( ".POT" ) == STRING_NOTFOUND )
-                                    pFilter = SfxFilter::GetFilterByName( pFilterPowerPoint97);
-                                else
+                                if( aFileName.SearchAscii( ".POT" ) != STRING_NOTFOUND )
                                     pFilter = SfxFilter::GetFilterByName( pFilterPowerPoint97Template );
+                                else if( aFileName.SearchAscii( ".PPS" ) != STRING_NOTFOUND )
+                                    pFilter = SfxFilter::GetFilterByName( pFilterPowerPoint97AutoPlay );
+                                else
+                                    pFilter = SfxFilter::GetFilterByName( pFilterPowerPoint97);
                             }
                         }
                         else

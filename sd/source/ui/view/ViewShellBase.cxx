@@ -488,7 +488,6 @@ void ViewShellBase::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
                 {
                     if( GetViewFrame() )
                     {
-                        GetDocument()->SetStartWithPresentation( false );
                         GetViewFrame()->GetDispatcher()->Execute(
                             SID_PRESENTATION, SFX_CALLMODE_ASYNCHRON );
                     }

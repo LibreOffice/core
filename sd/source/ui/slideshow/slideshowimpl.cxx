@@ -3490,7 +3490,8 @@ void SAL_CALL SlideshowImpl::gotoNextSlide(  ) throw (RuntimeException)
                     if( mpShowWindow )
                     {
                         mpShowWindow->SetEndMode();
-                        pause();
+                        if( !mpViewShell->GetDoc()->IsStartWithPresentation() )
+                            pause();
                     }
                 }
             }

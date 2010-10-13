@@ -446,6 +446,37 @@ BOOL DrawDocShell::LoadFrom( SfxMedium& rMedium )
 
 /*************************************************************************
 |*
+|* ImportFrom: load from 3rd party format
+|*
+\************************************************************************/
+
+sal_Bool DrawDocShell::ImportFrom( SfxMedium &rMedium )
+{
+    const sal_Bool bRet=SfxObjectShell::ImportFrom(rMedium);
+
+    SfxItemSet* pSet = rMedium.GetItemSet();
+    if( pSet )
+    {
+        if( SFX_ITEM_SET == pSet->GetItemState(SID_DOC_STARTPRESENTATION)&&
+            ( (SfxBoolItem&) ( pSet->Get( SID_DOC_STARTPRESENTATION ) ) ).GetValue() )
+        {
+            mpDoc->SetStartWithPresentation( true );
+
+            // tell SFX to change viewshell when in preview mode
+            if( IsPreview() )
+            {
+                SfxItemSet *pMediumSet = GetMedium()->GetItemSet();
+                if( pMediumSet )
+                    pMediumSet->Put( SfxUInt16Item( SID_VIEW_ID, 1 ) );
+            }
+        }
+    }
+
+    return bRet;
+}
+
+/*************************************************************************
+|*
 |* ConvertFrom: aus Fremdformat laden
 |*
 \************************************************************************/
@@ -476,7 +507,9 @@ BOOL DrawDocShell::ConvertFrom( SfxMedium& rMedium )
         }
     }
 
-    if( aFilterName == pFilterPowerPoint97 || aFilterName == pFilterPowerPoint97Template)
+    if( aFilterName == pFilterPowerPoint97
+        || aFilterName == pFilterPowerPoint97Template
+        || aFilterName == pFilterPowerPoint97AutoPlay)
     {
         mpDoc->StopWorkStartupDelay();
         bRet = SdPPTFilter( rMedium, *this, sal_True ).Import();

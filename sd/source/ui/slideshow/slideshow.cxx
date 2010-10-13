@@ -33,6 +33,8 @@
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <comphelper/serviceinfohelper.hxx>
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/util/URL.hpp>
 
 #include <cppuhelper/bootstrap.hxx>
 
@@ -69,6 +71,7 @@ using ::com::sun::star::awt::XWindow;
 using namespace ::sd;
 using namespace ::cppu;
 using namespace ::vos;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::drawing;
@@ -774,6 +777,28 @@ void SAL_CALL SlideShow::end() throw(RuntimeException)
                     DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>( pViewShell );
                     if( pDrawViewShell )
                         pDrawViewShell->SwitchPage( (USHORT)xController->getRestoreSlide() );
+                }
+
+                if( pViewShell->GetDoc()->IsStartWithPresentation() )
+                {
+                    pViewShell->GetDoc()->SetStartWithPresentation( false );
+
+                    Reference<frame::XDispatchProvider> xProvider(pViewShell->GetViewShellBase().GetController()->getFrame(),
+                                                                  UNO_QUERY);
+                    if( xProvider.is() )
+                    {
+                        util::URL aURL;
+                        aURL.Complete = ::rtl::OUString::createFromAscii(".uno:CloseFrame");
+
+                        uno::Reference< frame::XDispatch > xDispatch(
+                            xProvider->queryDispatch(
+                                aURL, ::rtl::OUString(), 0));
+                        if( xDispatch.is() )
+                        {
+                            xDispatch->dispatch(aURL,
+                                                uno::Sequence< beans::PropertyValue >());
+                        }
+                    }
                 }
             }
         }
