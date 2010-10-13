@@ -28,13 +28,10 @@
 #define _TMPLCTRL_HXX
 
 // include ---------------------------------------------------------------
-
 #include <sfx2/stbitem.hxx>
 #include <tools/string.hxx>
 
-
 // class BookmarkToolBoxControl -------------------------------------------
-
 class SwTemplateControl : public SfxStatusBarControl
 {
 protected:
@@ -53,6 +50,4 @@ private:
     String  sTemplate;
 };
 
-
 #endif
-

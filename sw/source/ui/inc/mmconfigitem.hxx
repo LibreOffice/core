@@ -44,18 +44,17 @@ namespace com{namespace sun{namespace star{
         class XColumnsSupplier;
     }
 }}}
+
 class SwMailMergeConfigItem_Impl;
 class SwView;
 
-/*-- 06.04.2004 10:43:35---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 struct SwDocMergeInfo
 {
     long    nStartPageInTarget;
     long    nEndPageInTarget;
     long    nDBRow;
 };
+
 class SW_DLLPUBLIC SwMailMergeConfigItem
 {
 //    com::sun::star::uno::Sequence< ::rtl::OUString>     m_aSavedDocuments;
@@ -275,5 +274,5 @@ public:
     //helper methods
     ::rtl::OUString     GetAssignedColumn(sal_uInt32 nColumn)const;
 };
-#endif
 
+#endif

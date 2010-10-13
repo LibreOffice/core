@@ -28,9 +28,7 @@
 #define _NAVICFG_HXX
 
 #include <unotools/configitem.hxx>
-/* -----------------------------08.09.00 16:27--------------------------------
 
- ---------------------------------------------------------------------------*/
 class SwNavigationConfig : public utl::ConfigItem
 {
     sal_Int32   nRootType;      //RootType
@@ -115,5 +113,6 @@ public:
                         }
                     }
 };
+
 #endif
 

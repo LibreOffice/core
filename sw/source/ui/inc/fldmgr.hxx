@@ -52,10 +52,10 @@ class SbModule;
 class SvxMacroItem;
 class SvNumberFormatter;
 class Window;
+
 /*--------------------------------------------------------------------
     Beschreibung: Die Gruppen von Feldern
  --------------------------------------------------------------------*/
-
 enum SwFldGroups
 {
     GRP_DOC,
@@ -229,6 +229,4 @@ inline const String& SwFldMgr::GetCurFldPar2() const
 inline ULONG SwFldMgr::GetCurFldFmt() const
     { return nCurFmt; }
 
-
 #endif
-

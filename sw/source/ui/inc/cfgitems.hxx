@@ -50,7 +50,6 @@ class SwDocEditDialog;
 SfxPrinter* GetPrt( ViewShell* );
 void        SetPrt( SfxPrinter* );
 
-
 /*--------OS 12.01.95 -----------------------------------
 Item fuer Einstellungsdialog - Dokumentanzeige
 --------------------------------------------------------- */
@@ -87,6 +86,7 @@ public:
     void                        operator=( const SwDocDisplayItem& );
     void                        FillViewOptions( SwViewOption& rVOpt) const;
 };
+
 /*--------OS 12.01.95 -----------------------------------
 Item fuer Einstellungsdialog, Elementeseite
 --------------------------------------------------------- */
@@ -127,10 +127,10 @@ public:
     void                    FillViewOptions( SwViewOption& rVOpt) const;
 
 };
+
 /*--------OS 12.01.95 -----------------------------------
 Item fuer Einstellungsdialog - Drucker/Zusaetze
 --------------------------------------------------------- */
-
 class SW_DLLPUBLIC SwAddPrinterItem : public SfxPoolItem, public SwPrintData
 {
     friend class SwAddPrinterTabPage;
@@ -175,11 +175,9 @@ public:
 
 };
 
-
 /*--------OS 12.01.95 -----------------------------------
 Item fuer Einstellungsdialog, ShadowCursorSeite
 --------------------------------------------------------- */
-
 class SW_DLLPUBLIC SwShadowCursorItem : public SfxPoolItem
 {
     BYTE eMode;
@@ -205,6 +203,7 @@ public:
 };
 
 #ifdef DBG_UTIL
+
 /*--------OS 12.01.95 -----------------------------------
 Item fuer Einstellungsdialog - Testeinstellungen
 --------------------------------------------------------- */
@@ -238,5 +237,3 @@ public:
 #endif
 
 #endif
-
-

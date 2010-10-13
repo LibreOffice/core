@@ -36,9 +36,7 @@
 
 class SwTestAccountSettingsDialog;
 class SwMailMergeConfigItem;
-/*-- 05.05.2004 16:45:45---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 class SwMailConfigPage : public SfxTabPage
 {
     friend class SwTestAccountSettingsDialog;
@@ -87,9 +85,6 @@ public:
 
 };
 
-/*-- 18.08.2004 12:02:02---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 class SwMailConfigDlg : public SfxSingleTabDialog
 {
 public:
@@ -99,4 +94,3 @@ public:
 };
 
 #endif
-

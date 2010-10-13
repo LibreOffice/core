@@ -47,9 +47,8 @@ class SwView;
 class SwNavigationConfig;
 class SfxObjectShellLock;
 class SfxChildWindowContext;
-
-//-----------------------------------------------------------------------
 class SwNavigationPI;
+
 class SwNavHelpToolBox : public SwHelpToolBox
 {
     virtual void    MouseButtonDown(const MouseEvent &rEvt);
@@ -57,7 +56,6 @@ class SwNavHelpToolBox : public SwHelpToolBox
     public:
         SwNavHelpToolBox(SwNavigationPI* pParent, const ResId &rResId);
 };
-
 
 // CLASS -----------------------------------------------------------------
 class SwNavigationPI : public Window,

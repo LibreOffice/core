@@ -39,7 +39,6 @@
 /*--------------------------------------------------------------------
     Beschreibung:   Fussnoteneinstellungs-TabPage
  --------------------------------------------------------------------*/
-
 class SwFootNotePage: public SfxTabPage
 {
 public:

@@ -49,7 +49,6 @@ class SwWrtShell;
 class Printer;
 
 // class SwEnvPreview ---------------------------------------------------------
-
 class SwEnvPreview : public Window
 {
     void Paint(const Rectangle&);
@@ -64,7 +63,6 @@ protected:
 };
 
 // class SwEnvDlg -----------------------------------------------------------
-
 class SwEnvDlg : public SfxTabDialog
 {
 friend class SwEnvPage;
@@ -89,7 +87,6 @@ public:
 };
 
 // class SwEnvPage ----------------------------------------------------------
-
 class SwEnvPage : public SfxTabPage
 {
     FixedText     aAddrText;
@@ -135,5 +132,3 @@ public:
 };
 
 #endif
-
-

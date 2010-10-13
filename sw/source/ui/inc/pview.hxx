@@ -170,11 +170,9 @@ public:
                     CreateAccessible();
 };
 
-
 /*--------------------------------------------------------------------
     Beschreibung:   Sicht auf ein Dokument
  --------------------------------------------------------------------*/
-
 class SW_DLLPUBLIC SwPagePreView: public SfxViewShell
 {
     // ViewWindow und Henkel zur Core
@@ -327,8 +325,6 @@ public:
 };
 
 // ----------------- inline Methoden ----------------------
-
-
 inline void SwPagePreView::AdjustEditWin()
 {
     OuterResizePixel( Point(), GetFrameWindow()->GetOutputSizePixel() );

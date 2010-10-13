@@ -39,7 +39,6 @@ class SwForm;
     Beschreibung: Manager fuer Verzeichnisfunktionalitaet
  --------------------------------------------------------------------*/
 //one single method will be sufficient to insert AND upate indexes
-
 class SW_DLLPUBLIC SwTOXDescription
 {
     TOXTypes            eTOXType;
@@ -183,7 +182,7 @@ public:
     void            ApplyTo(SwTOXBase& rTOXBase);
 
 };
-// --------------------------------------------------------------------------------
+
 class SwTOXMarkDescription
 {
     TOXTypes    eTOXType;
@@ -309,14 +308,11 @@ public:
 
 };
 
-
 /*--------------------------------------------------------------------
     Beschreibung: Inlines
  --------------------------------------------------------------------*/
-
 inline USHORT SwTOXMgr::GetTOXMarkCount()
     {   return aCurMarks.Count();   }
-
 
 inline SwTOXMark* SwTOXMgr::GetCurTOXMark()
     {   return pCurTOXMark; }

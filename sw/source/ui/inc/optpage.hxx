@@ -46,10 +46,6 @@ class SwStdFontConfig;
 class SwWrtShell;
 class FontList;
 
-/*-----------------31.08.96 10.09-------------------
-
---------------------------------------------------*/
-
 class SwContentOptPage : public SfxTabPage
 {
     //visual aids
@@ -100,8 +96,6 @@ public:
 /*-------- OS 27.01.95 -----------------------------------
  TabPage Druckereinstellungen Zusaetze
 --------------------------------------------------------- */
-
-
 class SwAddPrinterTabPage : public SfxTabPage
 {
     FixedLine       aFL1;
@@ -161,10 +155,6 @@ public:
     virtual void        PageCreated (SfxAllItemSet aSet);
 
 };
-
-/*-----------------03.09.96 11.50-------------------
-
---------------------------------------------------*/
 
 class SwStdFontTabPage : public SfxTabPage
 {
@@ -250,10 +240,6 @@ public:
     virtual void        PageCreated (SfxAllItemSet aSet);
 };
 
-/*-----------------18.01.97 12.10-------------------
-
---------------------------------------------------*/
-
 class SwTableOptionsTabPage : public SfxTabPage
 {
     FixedLine   aTableFL;
@@ -312,6 +298,7 @@ public:
     virtual void        PageCreated (SfxAllItemSet aSet);
 
 };
+
 /*-----------------31.10.97 17:55-------------------
  TabPage fuer ShadowCrsr
 --------------------------------------------------*/
@@ -357,7 +344,6 @@ public:
 /*-----------------------------------------------------------------------
     Beschreibung: Markierungsvorschau
  -----------------------------------------------------------------------*/
-
 class SwMarkPreview : public Window
 {
     Color           m_aBgCol;           // background
@@ -395,7 +381,6 @@ public:
 /*-----------------------------------------------------------------------
     Beschreibung: Redlining-Optionen
  -----------------------------------------------------------------------*/
-
 class SwRedlineOptionsTabPage : public SfxTabPage
 {
     FixedLine           aInsertFL;
@@ -487,6 +472,5 @@ private:
 
 };
 #endif //PRODUCT
+
 #endif
-
-

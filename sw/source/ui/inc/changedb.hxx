@@ -45,7 +45,6 @@ struct SwDBData;
 /*--------------------------------------------------------------------
      Beschreibung: Datenbank an Feldern austauschen
  --------------------------------------------------------------------*/
-
 class SwChangeDBDlg: public SvxStandardDialog
 {
     FixedLine       aDBListFL;

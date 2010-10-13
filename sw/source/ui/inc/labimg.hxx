@@ -33,8 +33,8 @@
 #include "swdllapi.h"
 
 // class SwLabItem ----------------------------------------------------------
-
 class SwLabCfgItem;
+
 class SW_DLLPUBLIC SwLabItem : public SfxPoolItem
 {
 
@@ -111,7 +111,6 @@ public:
 };
 
 // class SwLabCfgItem -------------------------------------------------------
-
 class SwLabCfgItem : public utl::ConfigItem
 {
     SwLabItem   aItem;
@@ -128,4 +127,3 @@ public:
 };
 
 #endif
-

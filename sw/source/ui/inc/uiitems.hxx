@@ -64,8 +64,6 @@ public:
     void SetPageFtnInfo(SwPageFtnInfo& rInf)    { aFtnInfo = rInf; }
 };
 
-/*******************************************************************/
-
 class SW_DLLPUBLIC SwPtrItem : public SfxPoolItem
 {
     void* pMisc;
@@ -80,8 +78,6 @@ public:
     void    SetValue(void * pPtr)   { pMisc= pPtr; }
     void*   GetValue() const        { return pMisc; }
 };
-
-/*******************************************************************/
 
 class SW_DLLPUBLIC SwUINumRuleItem : public SfxPoolItem
 {
@@ -102,9 +98,6 @@ public:
           SwNumRule* GetNumRule()               { return pRule; }
 };
 
-/* -----------------17.06.98 17:40-------------------
- *
- * --------------------------------------------------*/
 class SwBackgroundDestinationItem : public SfxUInt16Item
 {
 public:

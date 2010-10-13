@@ -65,5 +65,4 @@ inline  String SwCfgDesc::GetFuncText() const { return aFuncText; }
 inline  String SwCfgDesc::GetMacro() const { return aFuncText; }
 inline  String SwCfgDesc::GetLib() const { return aLibName; }
 
-
 #endif

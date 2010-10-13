@@ -45,7 +45,6 @@ class SwForm;
 /*--------------------------------------------------------------------
      Beschreibung:  Markierung fuer Verzeichniseintrag einfuegen
  --------------------------------------------------------------------*/
-
 class SwIdxFormDlg : public SvxStandardDialog
 {
     DECL_LINK( EntryHdl, Button * );
