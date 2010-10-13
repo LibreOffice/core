@@ -39,8 +39,17 @@ epath=`dirname "$0"`
 if [ -x "${epath}/javaldx" ] ; then
     jpath=`"${epath}/javaldx" $my_envargs`
     if [ -n "${jpath}" ]; then
-        LD_LIBRARY_PATH=${jpath}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
-        export LD_LIBRARY_PATH
+        sd_platform=`uname -s`
+        case $sd_platform in
+          AIX)
+            LIBPAT=${jpath}${LIBPATH:+:${LIBPATH}}
+            export LIBPATH
+            ;;
+          *)
+            LD_LIBRARY_PATH=${jpath}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+            export LD_LIBRARY_PATH
+            ;;
+        esac
     fi
 fi
 
