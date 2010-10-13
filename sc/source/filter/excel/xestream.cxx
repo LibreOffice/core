@@ -48,6 +48,7 @@
 #include "compiler.hxx"
 
 #include <../../ui/inc/docsh.hxx>
+#include <../../ui/inc/viewdata.hxx>
 #include <excdoc.hxx>
 
 #include <oox/core/tokens.hxx>
@@ -1120,6 +1121,10 @@ bool XclExpXmlStream::exportDocument() throw()
                 pShell->SetError( nError, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
             }
 #endif
+    // Get the viewsettings before processing
+    if( pShell->GetViewData() )
+        pShell->GetViewData()->WriteExtOptions( mpRoot->GetExtDocOptions() );
+
     OUString const workbook = CREATE_OUSTRING( "xl/workbook.xml" );
     PushStream( CreateOutputStream( workbook, workbook,
                                     Reference <XOutputStream>(),
