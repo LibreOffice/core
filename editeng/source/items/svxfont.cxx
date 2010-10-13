@@ -47,7 +47,7 @@
 #define MINKERNPERCENT 5
 
 // prop. Groesse der Kleinbuchstaben bei Kapitaelchen
-#define KAPITAELCHENPROP 66
+#define KAPITAELCHENPROP 80
 
 #ifndef REDUCEDSVXFONT
     const sal_Unicode CH_BLANK = sal_Unicode(' ');      // ' ' Leerzeichen
