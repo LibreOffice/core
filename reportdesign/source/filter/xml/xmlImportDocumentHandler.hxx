@@ -85,6 +85,7 @@ private:
     virtual ~ImportDocumentHandler();
 
     ::osl::Mutex                                                                        m_aMutex;
+    bool                                                                                m_bImportedChart;
     ::std::vector< ::rtl::OUString>                                                     m_aMasterFields;
     ::std::vector< ::rtl::OUString>                                                     m_aDetailFields;
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >           m_aArguments;
