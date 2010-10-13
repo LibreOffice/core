@@ -79,6 +79,7 @@
 #include <unomodel.hxx>
 #include <document.hxx>
 #include <utility.hxx>
+#include <config.hxx>
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -742,6 +743,9 @@ void SmXMLExport::GetConfigurationSettings( Sequence < PropertyValue > & rProps)
                 PropertyValue* pProps = rProps.getArray();
                 if (pProps)
                 {
+                    SmConfig *pConfig = SM_MOD()->GetConfig();
+                    const bool bUsedSymbolsOnly = pConfig ? pConfig->IsSaveOnlyUsedSymbols() : false;
+
                     const OUString sFormula ( RTL_CONSTASCII_USTRINGPARAM ( "Formula" ) );
                     const OUString sBasicLibraries ( RTL_CONSTASCII_USTRINGPARAM ( "BasicLibraries" ) );
                     const OUString sDialogLibraries ( RTL_CONSTASCII_USTRINGPARAM ( "DialogLibraries" ) );
@@ -755,7 +759,14 @@ void SmXMLExport::GetConfigurationSettings( Sequence < PropertyValue > & rProps)
                             rPropName != sRuntimeUID)
                         {
                             pProps->Name = rPropName;
-                            pProps->Value = xProps->getPropertyValue(rPropName);
+
+                            rtl::OUString aActualName( rPropName );
+
+                            // handle 'save used symbols only'
+                            if (bUsedSymbolsOnly && rPropName.equalsAscii("Symbols"))
+                                aActualName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "UserDefinedSymbolsInUse" ) );
+
+                            pProps->Value = xProps->getPropertyValue( aActualName );
                         }
                     }
                 }

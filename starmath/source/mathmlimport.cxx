@@ -3168,8 +3168,14 @@ void SmXMLImport::SetConfigurationSettings(const Sequence<PropertyValue>& aConfP
                         if ( xInfo->hasPropertyByName( pValues->Name ) )
                             xProps->setPropertyValue( pValues->Name, pValues->Value );
                     }
-                    catch( Exception& )
+                    catch (beans::PropertyVetoException &e)
                     {
+                        (void) e;
+                        // dealing with read-only properties here. Nothing to do...
+                    }
+                    catch( Exception& e)
+                    {
+                        (void) e;
                         DBG_ERROR( "SmXMLImport::SetConfigurationSettings: Exception!" );
                     }
                 }

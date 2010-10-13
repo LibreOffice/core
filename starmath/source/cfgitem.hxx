@@ -200,6 +200,9 @@ public:
     USHORT          GetPrintZoomFactor() const;
     void            SetPrintZoomFactor( USHORT nVal );
 
+    BOOL            IsSaveOnlyUsedSymbols() const;
+    void            SetSaveOnlyUsedSymbols( BOOL bVal );
+
     BOOL            IsIgnoreSpacesRight() const;
     void            SetIgnoreSpacesRight( BOOL bVal );
     BOOL            IsAutoRedraw() const;

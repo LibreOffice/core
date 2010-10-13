@@ -29,18 +29,20 @@
 
 #define SMDLL   1
 
-#include <sot/storage.hxx>
-#include <sot/sotref.hxx>
-#include <sfx2/objsh.hxx>
-#include <svl/lstner.hxx>
+#include <rtl/ustring.hxx>
 #include <sfx2/docfac.hxx>
+#include <sfx2/objsh.hxx>
+#include <sot/sotref.hxx>
+#include <sot/storage.hxx>
+#include <svl/lstner.hxx>
+#include <vcl/jobset.hxx>
 #include <vcl/virdev.hxx>
+
+#include <set>
 
 #include "format.hxx"
 #include "parse.hxx"
 #include "smmod.hxx"
-
-#include <vcl/jobset.hxx>
 
 class SmNode;
 class SfxMenuBarManager;
@@ -124,6 +126,8 @@ class SmDocShell : public SfxObjectShell, public SfxListener
     USHORT              nModifyCount;
     BOOL                bIsFormulaArranged;
 
+    std::set< rtl::OUString >    aUsedSymbols;   // to export used symbols only when saving
+
 
 
     virtual void SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType,
@@ -199,6 +203,8 @@ public:
     SmParser &      GetParser() { return aInterpreter; }
     const SmNode *  GetFormulaTree() const  { return pTree; }
     void            SetFormulaTree(SmNode *&rTree) { pTree = rTree; }
+
+    const std::set< rtl::OUString > &    GetUsedSymbols() const  { return aUsedSymbols; }
 
     String          GetAccessibleText();
 

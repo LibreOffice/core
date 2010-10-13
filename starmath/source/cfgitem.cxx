@@ -113,7 +113,8 @@ static const char * aMathPropNames[] =
     "Print/Frame",
     "Print/Size",
     "Print/ZoomFactor",
-    //"Misc/NoSymbolsWarning",
+    "LoadSave/IsSaveOnlyUsedSymbols",
+    //"Misc/NoSymbolsWarning",  @deprecated
     "Misc/IgnoreSpacesRight",
     "View/ToolboxVisible",
     "View/AutoRedraw",
@@ -208,6 +209,7 @@ struct SmCfgOther
     BOOL            bPrintTitle;
     BOOL            bPrintFormulaText;
     BOOL            bPrintFrame;
+    BOOL            bIsSaveOnlyUsedSymbols;
     BOOL            bIgnoreSpacesRight;
     BOOL            bToolboxVisible;
     BOOL            bAutoRedraw;
@@ -225,7 +227,7 @@ SmCfgOther::SmCfgOther()
     bPrintTitle         = bPrintFormulaText   =
     bPrintFrame         = bIgnoreSpacesRight  =
     bToolboxVisible     = bAutoRedraw         =
-    bFormulaCursor      = /*bNoSymbolsWarning   =*/ TRUE;
+    bFormulaCursor      = bIsSaveOnlyUsedSymbols = TRUE;
 }
 
 /////////////////////////////////////////////////////////////////
@@ -902,6 +904,10 @@ void SmMathConfig::LoadOther()
         // Print/ZoomFactor
         if (pVal->hasValue()  &&  (*pVal >>= nTmp16))
             pOther->nPrintZoomFactor = nTmp16;
+        ++pVal;
+        // LoadSave/IsSaveOnlyUsedSymbols
+        if (pVal->hasValue()  &&  (*pVal >>= bTmp))
+            pOther->bIsSaveOnlyUsedSymbols = bTmp;
 /*        ++pVal;
         // Misc/NoSymbolsWarning
         if (pVal->hasValue()  &&  (*pVal >>= bTmp))
@@ -953,6 +959,8 @@ void SmMathConfig::SaveOther()
     *pValue++ <<= (INT16) pOther->ePrintSize;
     // Print/ZoomFactor
     *pValue++ <<= (INT16) pOther->nPrintZoomFactor;
+    // LoadSave/IsSaveOnlyUsedSymbols
+    *pValue++ <<= (BOOL) pOther->bIsSaveOnlyUsedSymbols;
 /*    // Misc/NoSymbolsWarning
     *pValue++ <<= (BOOL) pOther->bNoSymbolsWarning;
 */
@@ -1234,6 +1242,22 @@ void SmMathConfig::SetPrintFrame( BOOL bVal )
     if (!pOther)
         LoadOther();
     SetOtherIfNotEqual( pOther->bPrintFrame, bVal );
+}
+
+
+BOOL SmMathConfig::IsSaveOnlyUsedSymbols() const
+{
+    if (!pOther)
+        ((SmMathConfig *) this)->LoadOther();
+    return pOther->bIsSaveOnlyUsedSymbols;
+}
+
+
+void SmMathConfig::SetSaveOnlyUsedSymbols( BOOL bVal )
+{
+    if (!pOther)
+        LoadOther();
+    SetOtherIfNotEqual( pOther->bIsSaveOnlyUsedSymbols, bVal );
 }
 
 

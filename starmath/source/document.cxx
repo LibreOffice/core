@@ -251,6 +251,8 @@ void SmDocShell::Parse()
     pTree = aInterpreter.Parse(aText);
     nModifyCount++;     //! see comment for SID_GAPHIC_SM in SmDocShell::GetState
     SetFormulaArranged( FALSE );
+
+    aUsedSymbols = aInterpreter.GetUsedSymbols();
 }
 
 

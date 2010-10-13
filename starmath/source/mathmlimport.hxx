@@ -251,10 +251,10 @@ public:
     const SvXMLTokenMap &GetPresTableElemTokenMap();
     const SvXMLTokenMap &GetColorTokenMap();
 
-    SmNodeStack & GetNodeStack() {return aNodeStack;}
-    SmNode *GetTree() { return aNodeStack.Pop();}
-    sal_Bool GetSuccess() { return bSuccess; }
-    String &GetText() { return aText;}
+    SmNodeStack & GetNodeStack()    { return aNodeStack; }
+    SmNode *GetTree()               { return aNodeStack.Pop(); }
+    sal_Bool GetSuccess()           { return bSuccess; }
+    String &GetText()               { return aText; }
 
     virtual void SetViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps);
     virtual void SetConfigurationSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps);

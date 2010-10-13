@@ -81,6 +81,7 @@
 #define SID_CMDBOXWINDOW            (SID_SMA_START + 122)
 #define SID_TOOLBOXWINDOW           (SID_SMA_START + 123)
 #define SID_NO_RIGHT_SPACES         (SID_SMA_START + 124)
+#define SID_SAVE_ONLY_USED_SYMBOLS  (SID_SMA_START + 125)
 #define SID_DUMMY                               (SID_SMA_START + 254)
 
 //#define GID_FORMEL                            (RID_GROUPS_OFFSET + 1)
