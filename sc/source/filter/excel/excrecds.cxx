@@ -843,6 +843,7 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab ) :
     XclExpRoot( rRoot ),
     pFilterMode( NULL ),
     pFilterInfo( NULL )
+    , mbAutoFilter (false)
 {
     ScDBCollection& rDBColl = GetDatabaseRanges();
     XclExpNameManager& rNameMgr = GetNameManager();
@@ -943,6 +944,9 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab ) :
             if( !maFilterList.IsEmpty() )
                 pFilterMode = new XclExpFiltermode;
             pFilterInfo = new XclExpAutofilterinfo( aRange.aStart, nColCnt );
+
+            if (maFilterList.IsEmpty () && !bConflict)
+                mbAutoFilter = true;
         }
     }
 }
@@ -1000,7 +1004,7 @@ void ExcAutoFilterRecs::Save( XclExpStream& rStrm )
 
 void ExcAutoFilterRecs::SaveXml( XclExpXmlStream& rStrm )
 {
-    if( maFilterList.IsEmpty() )
+    if( maFilterList.IsEmpty() && !mbAutoFilter )
         return;
 
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
@@ -1008,7 +1012,8 @@ void ExcAutoFilterRecs::SaveXml( XclExpXmlStream& rStrm )
             XML_ref,    XclXmlUtils::ToOString( maRef ).getStr(),
             FSEND );
     // OOXTODO: XML_extLst, XML_sortState
-    maFilterList.SaveXml( rStrm );
+    if( !maFilterList.IsEmpty() )
+        maFilterList.SaveXml( rStrm );
     rWorksheet->endElement( XML_autoFilter );
 }
 

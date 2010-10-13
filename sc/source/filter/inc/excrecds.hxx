@@ -472,6 +472,7 @@ private:
     XclExpFiltermode*   pFilterMode;
     XclExpAutofilterinfo* pFilterInfo;
     ScRange                 maRef;
+    bool mbAutoFilter;
 };
 
 // ----------------------------------------------------------------------------
