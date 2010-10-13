@@ -32,7 +32,7 @@
 static pthread_mutex_t getrtl_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 /* struct passwd differs on some platforms */
-#if defined NETBSD
+#if defined NETBSD && (__NetBSD_Version__ < 299001000)
 struct passwd *getpwnam_r(const char* name, struct passwd* s, char* buffer, int size )
 {
       struct passwd* res;

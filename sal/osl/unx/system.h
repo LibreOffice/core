@@ -131,7 +131,10 @@
 #endif
 
 #ifdef NETBSD
-#   define  ETIME ETIMEDOUT
+#   include <sys/param.h>
+#       ifndef ETIME
+#     define  ETIME ETIMEDOUT
+#       endif
 #   define _POSIX_THREAD_SYSCALL_SOFT 1
 #   include <pthread.h>
 #   include <netdb.h>
@@ -478,7 +481,9 @@ extern int sem_post(sem_t* sem);
 
 #ifdef NO_PTHREAD_RTL
 #if !defined FREEBSD || (__FreeBSD_version < 500112)
+#if !defined NETBSD
 struct passwd *getpwent_r(struct passwd *pwd, char *buffer,  int buflen);
+#endif
 extern struct spwd *getspnam_r(const char *name, struct spwd *result,
                                char *buffer, int buflen);
 
