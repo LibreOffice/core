@@ -80,9 +80,9 @@ pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugMessageFunc( pf
 /* the macro OSL_THIS_FUNC is intended to be an office internal macro for now */
 #ifdef __func__
 #define OSL_THIS_FUNC __func__
-#elifdef __PRETTY_FUNCTION__
+#elif defined (__PRETTY_FUNCTION__)
 #define OSL_THIS_FUNC __PRETTY_FUNCTION__
-#elifdef __FUNCTION__
+#elif defined (__FUNCTION__)
 #define OSL_THIS_FUNC __FUNCTION__
 #else
 #define OSL_THIS_FUNC " "
