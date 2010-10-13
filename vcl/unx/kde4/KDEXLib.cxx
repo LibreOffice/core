@@ -35,6 +35,8 @@
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <kstartupinfo.h>
+#include <qabstracteventdispatcher.h>
+#include <qthread.h>
 
 #undef Region
 
@@ -56,6 +58,17 @@ KDEXLib::KDEXLib() :
     SalXLib(),  m_bStartupDone(false), m_pApplication(0),
     m_pFreeCmdLineArgs(0), m_pAppCmdLineArgs(0), m_nFakeCmdLineArgs( 0 )
 {
+    // the timers created here means they belong to the main thread
+    connect( &timeoutTimer, SIGNAL( timeout()), this, SLOT( timeoutActivated()));
+    connect( &userEventTimer, SIGNAL( timeout()), this, SLOT( userEventActivated()));
+    // QTimer::start() can be called only in its (here main) thread, so this will
+    // forward between threads if needed
+    connect( this, SIGNAL( startTimeoutTimerSignal()), this, SLOT( startTimeoutTimer()), Qt::QueuedConnection );
+    connect( this, SIGNAL( startUserEventTimerSignal()), this, SLOT( startUserEventTimer()), Qt::QueuedConnection );
+    // this one needs to be blocking, so that the handling in main thread is processed before
+    // the thread emitting the signal continues
+    connect( this, SIGNAL( processYieldSignal( bool, bool )), this, SLOT( processYield( bool, bool )),
+        Qt::BlockingQueuedConnection );
 }
 
 KDEXLib::~KDEXLib()
@@ -159,6 +172,124 @@ void KDEXLib::Init()
     PopXErrorLevel();
 
     pSalDisplay->SetKbdExtension( pKbdExtension );
+}
+
+void KDEXLib::Insert( int fd, void* data, YieldFunc pending, YieldFunc queued, YieldFunc handle )
+{
+    SocketData sdata;
+    sdata.data = data;
+    sdata.pending = pending;
+    sdata.queued = queued;
+    sdata.handle = handle;
+    // qApp as parent to make sure it uses the main thread event loop
+    sdata.notifier = new QSocketNotifier( fd, QSocketNotifier::Read, qApp );
+    connect( sdata.notifier, SIGNAL( activated( int )), this, SLOT( socketNotifierActivated( int )));
+    socketData[ fd ] = sdata;
+}
+
+void KDEXLib::Remove( int fd )
+{
+    SocketData sdata = socketData.take( fd );// according to SalXLib::Remove() this should be safe
+    delete sdata.notifier;
+}
+
+void KDEXLib::socketNotifierActivated( int fd )
+{
+    SalData *pSalData = GetSalData();
+    const SocketData& sdata = socketData[ fd ];
+    pSalData->m_pInstance->GetYieldMutex()->acquire();
+    sdata.handle( fd, sdata.data );
+    pSalData->m_pInstance->GetYieldMutex()->release();
+}
+
+void KDEXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
+{
+    // if we are the main thread (which is where the event processing is done),
+    // good, just do it
+    if( qApp->thread() == QThread::currentThread())
+        processYield( bWait, bHandleAllCurrentEvents );
+    else
+    { // if this deadlocks, event processing needs to go into a separate thread
+      // or some other solution needs to be found
+        emit processYieldSignal( bWait, bHandleAllCurrentEvents );
+    }
+}
+
+void KDEXLib::processYield( bool bWait, bool bHandleAllCurrentEvents )
+{
+    YieldMutexReleaser aReleaser;
+    QAbstractEventDispatcher* dispatcher = QAbstractEventDispatcher::instance( qApp->thread());
+    bool wasEvent = false;
+    for( int cnt = bHandleAllCurrentEvents ? 100 : 1;
+         cnt > 0;
+         --cnt )
+    {
+        if( !dispatcher->processEvents( QEventLoop::AllEvents ))
+            break;
+        wasEvent = true;
+    }
+    if( bWait && !wasEvent )
+        dispatcher->processEvents( QEventLoop::WaitForMoreEvents );
+}
+
+void KDEXLib::StartTimer( ULONG nMS )
+{
+    timeoutTimer.setInterval( nMS );
+    // QTimer's can be started only in their thread (main thread here)
+    if( qApp->thread() == QThread::currentThread())
+        startTimeoutTimer();
+    else
+        emit startTimeoutTimerSignal();
+}
+
+void KDEXLib::startTimeoutTimer()
+{
+    timeoutTimer.start();
+}
+
+void KDEXLib::StopTimer()
+{
+    timeoutTimer.stop();
+}
+
+void KDEXLib::timeoutActivated()
+{
+    SalData *pSalData = GetSalData();
+    pSalData->m_pInstance->GetYieldMutex()->acquire();
+    GetX11SalData()->Timeout();
+    // QTimer is not single shot, so will be restarted immediatelly
+    pSalData->m_pInstance->GetYieldMutex()->release();
+}
+
+void KDEXLib::Wakeup()
+{
+    QAbstractEventDispatcher::instance( qApp->thread())->wakeUp(); // main thread event loop
+}
+
+void KDEXLib::PostUserEvent()
+{
+    if( qApp->thread() == QThread::currentThread())
+        startUserEventTimer();
+    else
+        emit startUserEventTimerSignal();
+}
+
+void KDEXLib::startUserEventTimer()
+{
+    userEventTimer.start( 0 );
+}
+
+void KDEXLib::userEventActivated()
+{
+    SalData *pSalData = GetSalData();
+    pSalData->m_pInstance->GetYieldMutex()->acquire();
+    SalKDEDisplay::self()->EventGuardAcquire();
+    if( SalKDEDisplay::self()->userEventsCount() <= 1 )
+        userEventTimer.stop();
+    SalKDEDisplay::self()->EventGuardRelease();
+    SalKDEDisplay::self()->DispatchInternalEvent();
+    pSalData->m_pInstance->GetYieldMutex()->release();
+    // QTimer is not single shot, so will be restarted immediatelly
 }
 
 void KDEXLib::doStartup()

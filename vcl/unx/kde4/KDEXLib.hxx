@@ -30,22 +30,59 @@
 
 #include <saldisp.hxx>
 
+#include <fixx11h.h>
+
+#include <qhash.h>
+#include <qsocketnotifier.h>
+#include <qtimer.h>
+
 class VCLKDEApplication;
 
-class KDEXLib : public SalXLib
+class KDEXLib : public QObject, public SalXLib
 {
+    Q_OBJECT
     private:
         bool m_bStartupDone;
         VCLKDEApplication* m_pApplication;
         char** m_pFreeCmdLineArgs;
         char** m_pAppCmdLineArgs;
         int m_nFakeCmdLineArgs;
+        struct SocketData
+            {
+            void* data;
+            YieldFunc pending;
+            YieldFunc queued;
+            YieldFunc handle;
+            QSocketNotifier* notifier;
+            };
+        QHash< int, SocketData > socketData; // key is fd
+        QTimer timeoutTimer;
+        QTimer userEventTimer;
+
+    private slots:
+        void socketNotifierActivated( int fd );
+        void timeoutActivated();
+        void userEventActivated();
+        void startTimeoutTimer();
+        void startUserEventTimer();
+        void processYield( bool bWait, bool bHandleAllCurrentEvents );
+    signals:
+        void startTimeoutTimerSignal();
+        void startUserEventTimerSignal();
+        void processYieldSignal( bool bWait, bool bHandleAllCurrentEvents );
 
     public:
         KDEXLib();
-
         virtual ~KDEXLib();
+
         virtual void Init();
+        virtual void Yield( bool bWait, bool bHandleAllCurrentEvents );
+        virtual void Insert( int fd, void* data, YieldFunc pending, YieldFunc queued, YieldFunc handle );
+        virtual void Remove( int fd );
+        virtual void StartTimer( ULONG nMS );
+        virtual void StopTimer();
+        virtual void Wakeup();
+        virtual void PostUserEvent();
 
         void doStartup();
 };

@@ -29,8 +29,10 @@
 #include "KDESalDisplay.hxx"
 
 #include "KDEXLib.hxx"
+#include "VCLKDEApplication.hxx"
 
 #include <assert.h>
+#include <saldata.hxx>
 
 SalKDEDisplay* SalKDEDisplay::selfptr = NULL;
 
@@ -50,6 +52,21 @@ SalKDEDisplay::~SalKDEDisplay()
     selfptr = NULL;
     // prevent SalDisplay from closing KApplication's display
     pDisp_ = NULL;
+}
+
+void SalKDEDisplay::Yield()
+{
+    if( DispatchInternalEvent() )
+        return;
+
+    DBG_ASSERT( static_cast<SalYieldMutex*>(GetSalData()->m_pInstance->GetYieldMutex())->GetThreadId() ==
+                osl::Thread::getCurrentIdentifier(),
+                "will crash soon since solar mutex not locked in SalKDEDisplay::Yield" );
+
+    XEvent event;
+    XNextEvent( pDisp_, &event );
+    qApp->x11ProcessEvent( &event );
+    // TODO maybe Qt needs locking and unlocking too?
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
