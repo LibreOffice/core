@@ -36,11 +36,6 @@
 #include <svx/svxdlg.hxx>
 #include <sfx2/sfx.hrc>
 
-/****************************************************************************
-Ctor
-****************************************************************************/
-
-
 SwAddrDlg::SwAddrDlg(Window* pParent, const SfxItemSet& rSet ) :
 
     SfxSingleTabDialog(pParent, rSet, 0)
@@ -56,11 +51,6 @@ SwAddrDlg::SwAddrDlg(Window* pParent, const SfxItemSet& rSet ) :
         SetTabPage(pPage2);
     }
 }
-
-/****************************************************************************
-Dtor
-****************************************************************************/
-
 
 __EXPORT SwAddrDlg::~SwAddrDlg()
 {

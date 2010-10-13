@@ -41,10 +41,6 @@
 #include "abstract.hrc"
 
 
-/*-----------------22.02.97 15.32-------------------
-
---------------------------------------------------*/
-
 SwInsertAbstractDlg::SwInsertAbstractDlg( Window* pParent ) :
     SfxModalDialog(pParent, SW_RES(DLG_INSERT_ABSTRACT)),
     aFL     (this, SW_RES(FL_1       )),
@@ -60,25 +56,14 @@ SwInsertAbstractDlg::SwInsertAbstractDlg( Window* pParent ) :
     FreeResource();
 }
 
-/*-----------------22.02.97 15.32-------------------
-
---------------------------------------------------*/
-
 SwInsertAbstractDlg::~SwInsertAbstractDlg()
 {
 }
-
-/*-----------------22.02.97 15.34-------------------
-
---------------------------------------------------*/
 
 BYTE SwInsertAbstractDlg::GetLevel() const
 {
     return static_cast< BYTE >(aLevelNF.GetValue() - 1);
 }
-/*-----------------22.02.97 15.34-------------------
-
---------------------------------------------------*/
 
 BYTE SwInsertAbstractDlg::GetPara() const
 {

@@ -47,9 +47,6 @@
 #include <helpid.h>
 #endif /* ENABLE_LAYOUT */
 
-/*-- 06.04.2004 16:05:55---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwWordCountDialog::SwWordCountDialog(Window* pParent) :
     SfxModalDialog(pParent, SW_RES(DLG_WORDCOUNT)),
 #if defined _MSC_VER
@@ -78,15 +75,11 @@ SwWordCountDialog::SwWordCountDialog(Window* pParent) :
 #endif /* ENABLE_LAYOUT */
     FreeResource();
 }
-/*-- 06.04.2004 16:05:56---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwWordCountDialog::~SwWordCountDialog()
 {
 }
-/*-- 06.04.2004 16:05:57---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void  SwWordCountDialog::SetValues(const SwDocStat& rCurrent, const SwDocStat& rDoc)
 {
     aCurrentWordFI.SetText(     String::CreateFromInt32(rCurrent.nWord ));
@@ -94,6 +87,4 @@ void  SwWordCountDialog::SetValues(const SwDocStat& rCurrent, const SwDocStat& r
     aDocWordFI.SetText(         String::CreateFromInt32(rDoc.nWord ));
     aDocCharacterFI.SetText(    String::CreateFromInt32(rDoc.nChar ));
 }
-
-
 

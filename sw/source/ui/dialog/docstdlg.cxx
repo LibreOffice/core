@@ -52,20 +52,10 @@
 #include <docstdlg.hrc>
 
 
-/*--------------------------------------------------------------------
-    Beschreibung: Create
- --------------------------------------------------------------------*/
-
-
 SfxTabPage *  SwDocStatPage::Create(Window *pParent, const SfxItemSet &rSet)
 {
     return new SwDocStatPage(pParent, rSet);
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:   Ctor
- --------------------------------------------------------------------*/
-
 
 SwDocStatPage::SwDocStatPage(Window *pParent, const SfxItemSet &rSet) :
 
@@ -119,11 +109,6 @@ BOOL  SwDocStatPage::FillItemSet(SfxItemSet & /*rSet*/)
 {
     return FALSE;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void  SwDocStatPage::Reset(const SfxItemSet &/*rSet*/)
 {
