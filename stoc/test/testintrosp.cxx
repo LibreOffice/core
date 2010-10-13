@@ -34,8 +34,6 @@
 #include <cppuhelper/servicefactory.hxx>
 #include <osl/diagnose.h>
 
-//#include <vos/dynload.hxx>
-
 #include <ModuleA/XIntroTest.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XIntrospection.hpp>
@@ -48,7 +46,6 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/reflection/XIdlReflection.hpp>
-//#include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 

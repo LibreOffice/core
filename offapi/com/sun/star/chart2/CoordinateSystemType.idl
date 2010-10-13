@@ -1,15 +1,8 @@
 #ifndef com_sun_star_chart2_CoordinateSystemType_idl
 #define com_sun_star_chart2_CoordinateSystemType_idl
 
-// #ifndef com_sun_star_chart2_XCoordinateSystemType_idl
-// #include <com/sun/star/chart2/XCoordinateSystemType.idl>
-// #endif
-
-//=============================================================================
 
 module com {  module sun {  module star {  module chart2 {
-
-//=============================================================================
 
 /**
 <p>
@@ -28,8 +21,6 @@ service CoordinateSystemType
     */
 //  interface ::com::sun::star::chart2::XCoordinateSystemType;
 };
-
-//=============================================================================
 
 }; }; }; };
 

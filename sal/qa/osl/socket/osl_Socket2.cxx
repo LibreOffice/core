@@ -54,13 +54,8 @@
     inline sal_Bool SAL_CALL operator== (const SocketAddr & Addr) const;
  */
 
-//------------------------------------------------------------------------
-// include files
-//------------------------------------------------------------------------
-
 #include <testshl/simpleheader.hxx>
 
-//#include "osl_Socket_Const.h"
 #include "sockethelper.hxx"
 
 using namespace osl;

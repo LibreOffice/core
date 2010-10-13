@@ -29,7 +29,6 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/frame/XModel.idl>
-// #include <com/sun/star/beans/PropertyValue.idl>
 
 module com
 {

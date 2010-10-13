@@ -28,10 +28,7 @@
 #ifndef _RTL_TRES_HXX_
 #define _RTL_TRES_HXX_
 
-
 #include <rtl/tres.h>
-
-//#include <stdarg.h>
 
 // <namespace_rtl>
 namespace rtl

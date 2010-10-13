@@ -29,9 +29,6 @@
 #include <systools/win32/shell9x.h>
 #include <systools/win32/kernel9x.h>
 
-//#include <windows.h>
-//#include <shlobj.h>
-
 int _cdecl main( int argc, char * argv[] )
 {
     BROWSEINFOW bi;

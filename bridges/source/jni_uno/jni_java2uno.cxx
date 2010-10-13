@@ -31,7 +31,6 @@
 #include <sal/alloca.h>
 
 #include "jni_bridge.h"
-//#include "jni_finalizer.h"
 
 #include <rtl/ustrbuf.hxx>
 

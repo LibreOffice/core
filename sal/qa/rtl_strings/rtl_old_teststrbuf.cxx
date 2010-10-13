@@ -32,13 +32,8 @@
 // this file is converted to use with testshl2
 // original was placed in sal/test/textenc.cxx
 
-
-// -----------------------------------------------------------------------------
-
 #include <string.h>
 #include <stdio.h>
-
-// #include <osl/diagnose.h>
 
 #include <rtl/strbuf.hxx>
 
@@ -50,13 +45,7 @@ using namespace rtl;
 
 #define TEST_ENSURE(c, m) CPPUNIT_ASSERT_MESSAGE((m), (c))
 
-// #if OSL_DEBUG_LEVEL > 0
-// #define TEST_ENSHURE(c, m)   OSL_ENSURE(c, m)
-// #else
-// #define TEST_ENSHURE(c, m)   OSL_VERIFY(c)
-// #endif
 
-// -----------------------------------------------------------------------------
 namespace rtl_OStringBuffer
 {
     class oldtests : public CppUnit::TestFixture

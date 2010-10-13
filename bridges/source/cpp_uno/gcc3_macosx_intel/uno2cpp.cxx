@@ -30,8 +30,6 @@
 
 #include <stdio.h>
 
-// #include <malloc.h>
-
 #include <com/sun/star/uno/genfunc.hxx>
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include <uno/data.h>

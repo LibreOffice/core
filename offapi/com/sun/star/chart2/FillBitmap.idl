@@ -27,10 +27,6 @@
 #ifndef com_sun_star_chart2_FillBitmap_idl
 #define com_sun_star_chart2_FillBitmap_idl
 
-// #ifndef __com_sun_star_awt_XBitmap_idl__
-// #include <com/sun/star/awt/XBitmap.idl>
-// #endif
-
 #ifndef __com_sun_star_awt_Point_idl__
 #include <com/sun/star/awt/Point.idl>
 #endif

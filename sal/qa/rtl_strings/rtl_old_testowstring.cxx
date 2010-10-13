@@ -32,8 +32,6 @@
 // this file is converted to use with testshl2
 // original was placed in sal/test/textenc.cxx
 
-
-// -----------------------------------------------------------------------------
 #include <string.h>
 #include <stdio.h>
 
@@ -44,8 +42,6 @@
 #include <wcstr.h>
 #endif
 
-// #include <osl/diagnose.h>
-
 #include <rtl/ustring.hxx>
 
 #include <rtl/string.hxx>
@@ -55,15 +51,10 @@
 #include <testshl/simpleheader.hxx>
 
 #define TEST_ENSURE(c, m) CPPUNIT_ASSERT_MESSAGE((m), (c))
-// #if OSL_DEBUG_LEVEL > 0
-// #define TEST_ENSHURE(c, m)   OSL_ENSURE(c, m)
-// #else
-// #define TEST_ENSHURE(c, m)   OSL_VERIFY(c)
-// #endif
+
 
 using namespace rtl;
 
-// -----------------------------------------------------------------------------
 namespace rtl_OUString
 {
     class oldtests : public CppUnit::TestFixture

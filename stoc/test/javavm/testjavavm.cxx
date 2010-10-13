@@ -31,7 +31,6 @@
 
 #include <jni.h>
 
-//#include <iostream>
 #include <stdio.h>
 #include <sal/main.h>
 #include <rtl/process.h>
@@ -46,8 +45,6 @@
 #include <com/sun/star/java/XJavaVM.hpp>
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
 #include <com/sun/star/java/XJavaThreadRegister_11.hpp>
-
-//#include <cppuhelper/implbase1.hxx>
 
 using namespace std;
 using namespace rtl;

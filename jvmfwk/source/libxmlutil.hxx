@@ -30,7 +30,6 @@
 
 #include "libxml/parser.h"
 #include "libxml/xpath.h"
-//#include "libxml/xpathinternals.h"
 #include "rtl/ustring.hxx"
 namespace jfw
 {

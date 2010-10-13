@@ -39,8 +39,6 @@
 #include "testshl/stringhelper.hxx"
 
 #include <testshl/simpleheader.hxx>
-//#include "stringhelper.hxx"
-//#include "valueequal.hxx"
 #include <rtl/bootstrap.hxx>
 
 #include <rtl/ustrbuf.hxx>

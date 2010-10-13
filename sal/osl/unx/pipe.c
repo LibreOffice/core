@@ -25,12 +25,10 @@
  *
  ************************************************************************/
 
-
 #include "system.h"
 
 #include <osl/pipe.h>
 #include <osl/diagnose.h>
-/*#include <osl/signal.h>*/
 #include <osl/thread.h>
 #include <osl/interlck.h>
 
@@ -44,9 +42,6 @@
 
 sal_Bool SAL_CALL osl_psz_getUserIdent(oslSecurity Security, sal_Char *pszIdent, sal_uInt32 nMax);
 oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions Options, oslSecurity Security);
-
-/*#define DEBUG_OSL_PIPE*/
-/*#define TRACE_OSL_PIPE*/
 
 
 /*****************************************************************************/
