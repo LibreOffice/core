@@ -52,7 +52,7 @@ PATCH_FILES=libxml2-configure.patch \
             libxml2-mingw.patch \
             libxml2-gnome599717.patch \
             libxml2-global-symbols.patch \
-
+            libxml2-aix.patch
 
 # This is only for UNX environment now
 
@@ -100,7 +100,7 @@ CONFIGURE_ACTION=sh .$/configure
 CONFIGURE_FLAGS=--enable-ipv6=no --without-python --without-zlib --enable-static=yes --with-sax1=yes ADDCFLAGS="$(xml2_CFLAGS)" CFLAGS="$(EXTRA_CFLAGS)" LDFLAGS="$(xml2_LDFLAGS) $(EXTRA_LINKFLAGS)"
 .ELSE
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FLAGS=--enable-ipv6=no --without-python --without-zlib --enable-static=no --with-sax1=yes ADDCFLAGS="$(xml2_CFLAGS) $(EXTRA_CFLAGS)" LDFLAGS="$(xml2_LDFLAGS) $(EXTRA_LINKFLAGS)"
+CONFIGURE_FLAGS=--enable-ipv6=no --without-python --without-zlib --enable-shared --disable-static --with-sax1=yes ADDCFLAGS="$(xml2_CFLAGS) $(EXTRA_CFLAGS)" LDFLAGS="$(xml2_LDFLAGS) $(EXTRA_LINKFLAGS)"
 .ENDIF
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
