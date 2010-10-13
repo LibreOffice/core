@@ -562,6 +562,7 @@ End
 #define SCP2_URE_DL_BARE(n) n ".dll"
 #define SCP2_URE_DL_VER(n, v) n v ".dll"
 #define SCP2_URE_DL_COMID_VER(n, v) n v STRING(COMID) ".dll"
+#define SCP2_URE_DL_COMID_NORMAL(n) n STRING(COMID) ".dll"
 #define SCP2_URE_DL_UNO_VER(n, v) n v ".dll"
 #define SCP2_URE_DL_UNO_COMID_VER(n, v) n v STRING(COMID) ".dll"
 #define SCP2_URE_SHARE_DIR gid_Dir_Common_Ure
@@ -577,6 +578,8 @@ End
 #define SCP2_URE_DL_VER(n, v) "lib" n STRING(UNXSUFFIX) "." v
 #define SCP2_URE_DL_COMID_VER(n, v) \
     "lib" n STRING(COMID) STRING(UNXSUFFIX) "." v
+#define SCP2_URE_DL_COMID_NORMAL(n) \
+    "lib" n STRING(COMID) STRING(UNXSUFFIX)
 #define SCP2_URE_DL_UNO_VER(n, v) "libuno_" n STRING(UNXSUFFIX) "." v
 #define SCP2_URE_DL_UNO_NORMAL(n) "libuno_" n STRING(UNXSUFFIX)
 #define SCP2_URE_DL_UNO_COMID_VER(n, v)	\
