@@ -509,24 +509,29 @@ namespace
 
         std::vector<lang_and_family>::const_iterator aEnd = families.end();
         bool alreadyclosematch = false;
-        for (std::vector<lang_and_family>::const_iterator aIter = families.begin(); aIter != aEnd; ++aIter)
+        for( std::vector<lang_and_family>::const_iterator aIter = families.begin(); aIter != aEnd; ++aIter )
         {
             const char *pLang = (const char*)aIter->first;
-            if( rtl_str_compare(pLang,sFullMatch.getStr() ) == 0)
+            if( rtl_str_compare( pLang, sFullMatch.getStr() ) == 0)
             {
-                //perfect match
+                // both language and country match
                 candidate = aIter->second;
                 break;
             }
-            else if( (rtl_str_compare(pLang,sLangMatch.getStr()) == 0) && (!alreadyclosematch))
+            else if( alreadyclosematch )
             {
-                //fairly close
+                // override candidate only if there is a perfect match
+                continue;
+            }
+            else if( rtl_str_compare( pLang, sLangMatch.getStr()) == 0)
+            {
+                // just the language matches
                 candidate = aIter->second;
                 alreadyclosematch = true;
             }
-            else if( (rtl_str_compare(pLang,"en") == 0) && (!alreadyclosematch) )
+            else if( rtl_str_compare( pLang, "en") == 0)
             {
-                //english name
+                // fallback to the english family name
                 candidate = aIter->second;
             }
         }
