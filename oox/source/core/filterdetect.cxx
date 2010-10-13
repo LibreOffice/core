@@ -205,6 +205,10 @@ OUString FilterDetectDocHandler::getFilterNameFromContentType( const OUString& r
         rContentType.equalsAscii( "application/vnd.ms-powerpoint.presentation.macroEnabled.main+xml" ) )
         return CREATE_OUSTRING( "MS PowerPoint 2007 XML" );
 
+    if( rContentType.equalsAscii( "application/vnd.openxmlformats-officedocument.presentationml.slideshow.main+xml" ) ||
+        rContentType.equalsAscii( "application/vnd.ms-powerpoint.slideshow.macroEnabled.main+xml" ) )
+        return CREATE_OUSTRING( "MS PowerPoint 2007 XML AutoPlay" );
+
     if( rContentType.equalsAscii( "application/vnd.openxmlformats-officedocument.presentationml.template.main+xml" ) ||
         rContentType.equalsAscii( "application/vnd.ms-powerpoint.template.macroEnabled.main+xml" ) )
         return CREATE_OUSTRING( "MS PowerPoint 2007 XML Template" );
