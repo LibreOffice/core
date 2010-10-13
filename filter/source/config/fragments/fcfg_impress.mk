@@ -18,7 +18,8 @@ T4_IMPRESS = \
     MS_PowerPoint_2007_XML_AutoPlay\
     MS_PowerPoint_2007_XML_Template\
     impress_OOXML_Presentation\
-    impress_OOXML_Presentation_Template
+    impress_OOXML_Presentation_Template\
+    impress_OOXML_Presentation_AutoPlay
 
 # -----------------------------------------------
 # count = 20
@@ -38,7 +39,8 @@ F4_IMPRESS = \
     impress_MS_PowerPoint_2007_XML_AutoPlay\
     impress_MS_PowerPoint_2007_XML_Template\
     impress_OOXML\
-    impress_OOXML_Template
+    impress_OOXML_Template\
+    impress_OOXML_AutoPlay
 
 # -----------------------------------------------
 # count = 12
