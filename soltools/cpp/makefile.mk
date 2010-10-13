@@ -55,7 +55,7 @@ OBJFILES= \
 
 # nonstandard cpp options needed for Mac (-isysroot),
 # needs the custom stgetopt defined here :/
-.IF "$(OS)" == "MACOSX" || "$(HAVE_GETOPT)" != "YES"
+.IF "$(OS)" == "MACOSX" || "$(OS)" == "AIX" || "$(HAVE_GETOPT)" != "YES"
 OBJFILES += $(OBJ)$/_getopt.obj
 .ENDIF
 .IF "$(HAVE_GETOPT)" == "YES"
