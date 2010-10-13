@@ -118,6 +118,49 @@
 #define SC_IDLE_STEP    75
 #define SC_IDLE_COUNT   50
 
+
+#include <stdio.h>
+#include <string>
+#include <sys/time.h>
+
+namespace {
+
+class StackPrinter
+{
+public:
+    explicit StackPrinter(const char* msg) :
+        msMsg(msg)
+    {
+        fprintf(stdout, "%s: --begin\n", msMsg.c_str());
+        mfStartTime = getTime();
+    }
+
+    ~StackPrinter()
+    {
+        double fEndTime = getTime();
+        fprintf(stdout, "%s: --end (duration: %g sec)\n", msMsg.c_str(), (fEndTime-mfStartTime));
+    }
+
+    void printTime(int line) const
+    {
+        double fEndTime = getTime();
+        fprintf(stdout, "%s: --(%d) (duration: %g sec)\n", msMsg.c_str(), line, (fEndTime-mfStartTime));
+    }
+
+private:
+    double getTime() const
+    {
+        timeval tv;
+        gettimeofday(&tv, NULL);
+        return tv.tv_sec + tv.tv_usec / 1000000.0;
+    }
+
+    ::std::string msMsg;
+    double mfStartTime;
+};
+
+}
+
 static USHORT nIdleCount = 0;
 
 //------------------------------------------------------------------
@@ -1021,6 +1064,7 @@ USHORT ScModule::GetOptDigitLanguage()
 
 void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
 {
+    StackPrinter __stack_printer__("ScModule::ModifyOptions");
     USHORT nOldSpellLang, nOldCjkLang, nOldCtlLang;
     BOOL bOldAutoSpell;
     GetSpellSettings( nOldSpellLang, nOldCjkLang, nOldCtlLang, bOldAutoSpell );
@@ -1152,6 +1196,14 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         if ( pDoc )
         {
             const ScDocOptions& rOldOpt = pDoc->GetDocOptions();
+            ScOptionsUtil::KeyBindingType eKeyOld = rOldOpt.GetKeyBindingType();
+            ScOptionsUtil::KeyBindingType eKeyNew = rNewOpt.GetKeyBindingType();
+            fprintf(stdout, "ScModule::ModifyOptions:   key (old: %d  new: %d)\n", eKeyOld, eKeyNew);
+            if (eKeyOld != eKeyNew)
+            {
+                fprintf(stdout, "ScModule::ModifyOptions:   key binding base changed.  Reset the key bindings.\n");
+                pDocSh->ResetKeyBindings(eKeyNew);
+            }
 
             bRepaint = ( bRepaint || ( rOldOpt != rNewOpt )   );
             bCalcAll =   bRepaint &&

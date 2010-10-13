@@ -65,12 +65,16 @@
 #include "chgtrack.hxx"
 #include "chgviset.hxx"
 #include <sfx2/request.hxx>
+#include <com/sun/star/awt/Key.hpp>
+#include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/script/vba/VBAEventId.hpp>
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <com/sun/star/sheet/XSpreadsheetView.hpp>
 #include <com/sun/star/task/XJob.hpp>
+#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
 #include <basic/sbstar.hxx>
 #include <basic/basmgr.hxx>
 #include <vbahelper/vbaaccesshelper.hxx>
@@ -138,10 +142,56 @@
 #include <boost/shared_ptr.hpp>
 
 using namespace com::sun::star;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::lang::XMultiServiceFactory;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::boost::shared_ptr;
 using ::std::vector;
+
+
+#include <stdio.h>
+#include <string>
+#include <sys/time.h>
+
+namespace {
+
+class StackPrinter
+{
+public:
+    explicit StackPrinter(const char* msg) :
+        msMsg(msg)
+    {
+        fprintf(stdout, "%s: --begin\n", msMsg.c_str());
+        mfStartTime = getTime();
+    }
+
+    ~StackPrinter()
+    {
+        double fEndTime = getTime();
+        fprintf(stdout, "%s: --end (duration: %g sec)\n", msMsg.c_str(), (fEndTime-mfStartTime));
+    }
+
+    void printTime(int line) const
+    {
+        double fEndTime = getTime();
+        fprintf(stdout, "%s: --(%d) (duration: %g sec)\n", msMsg.c_str(), line, (fEndTime-mfStartTime));
+    }
+
+private:
+    double getTime() const
+    {
+        timeval tv;
+        gettimeofday(&tv, NULL);
+        return tv.tv_sec + tv.tv_usec / 1000000.0;
+    }
+
+    ::std::string msMsg;
+    double mfStartTime;
+};
+
+}
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -2793,6 +2843,72 @@ ScSheetSaveData* ScDocShell::GetSheetSaveData()
         pSheetSaveData = new ScSheetSaveData;
 
     return pSheetSaveData;
+}
+
+void ScDocShell::ResetKeyBindings( ScOptionsUtil::KeyBindingType eType )
+{
+    using namespace ::com::sun::star::ui;
+
+    StackPrinter __stack_printer__("ScDocShell::ResetKeyBindings");
+    Reference<XMultiServiceFactory> xServiceManager = ::comphelper::getProcessServiceFactory();
+    if (!xServiceManager.is())
+        return;
+
+    Reference<XModuleUIConfigurationManagerSupplier> xModuleCfgSupplier(
+        xServiceManager->createInstance(
+            OUString::createFromAscii("com.sun.star.ui.ModuleUIConfigurationManagerSupplier")), UNO_QUERY);
+
+    if (!xModuleCfgSupplier.is())
+        return;
+
+    // Grab the Calc configuration.
+    Reference<XUIConfigurationManager> xConfigMgr =
+        xModuleCfgSupplier->getUIConfigurationManager(
+            OUString::createFromAscii("com.sun.star.sheet.SpreadsheetDocument"));
+
+    if (!xConfigMgr.is())
+        return;
+
+    // shortcut manager
+    Reference<XAcceleratorConfiguration> xScAccel(
+        xConfigMgr->getShortCutManager(), UNO_QUERY);
+
+    if (!xScAccel.is())
+        return;
+
+    // Backsapce key
+    awt::KeyEvent aBackEv;
+    aBackEv.KeyCode = awt::Key::BACKSPACE;
+    aBackEv.Modifiers = 0;
+
+    // Delete key
+    awt::KeyEvent aDeleteEv;
+    aDeleteEv.KeyCode = awt::Key::DELETE;
+    aDeleteEv.Modifiers = 0;
+
+    // Ctrl-D
+    awt::KeyEvent aCtrlD;
+    aCtrlD.KeyCode = awt::Key::D;
+    aCtrlD.Modifiers = awt::KeyModifier::MOD1;
+
+    switch (eType)
+    {
+        case ScOptionsUtil::KEY_DEFAULT:
+            fprintf(stdout, "ScDocShell::ResetKeyBindings:   default\n");
+            xScAccel->setKeyEvent(aDeleteEv, OUString::createFromAscii(".uno:ClearContents"));
+            xScAccel->setKeyEvent(aBackEv, OUString::createFromAscii(".uno:Delete"));
+        break;
+        case ScOptionsUtil::KEY_OOO_LEGACY:
+            fprintf(stdout, "ScDocShell::ResetKeyBindings:   ooo legacy\n");
+            xScAccel->setKeyEvent(aDeleteEv, OUString::createFromAscii(".uno:Delete"));
+            xScAccel->setKeyEvent(aBackEv, OUString::createFromAscii(".uno:ClearContents"));
+        break;
+        default:
+            ;
+    }
+
+    xScAccel->store();
+    fprintf(stdout, "ScDocShell::ResetKeyBindings:   stored\n");
 }
 
 void ScDocShell::UseSheetSaveEntries()

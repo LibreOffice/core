@@ -38,15 +38,10 @@
 
 class SC_DLLPUBLIC ScDocOptions
 {
-public:
-    // values must correspond with integer values stored in the configuration
-    enum KeyBindingType { KEY_DEFAULT = 0, KEY_OOO_LEGACY = 1 };
-
-private:
     double fIterEps;                // Epsilon-Wert dazu
     USHORT nIterCount;              // Anzahl
     sal_uInt16 nPrecStandardFormat; // precision for standard format
-    KeyBindingType eKeyBindingType; // key binding type: Default (0), OOo legacy (1)
+    ScOptionsUtil::KeyBindingType eKeyBindingType;
     USHORT nDay;                    // Nulldatum:
     USHORT nMonth;
     USHORT nYear;
@@ -102,8 +97,8 @@ public:
     sal_uInt16  GetStdPrecision() const { return nPrecStandardFormat; }
     void        SetStdPrecision( sal_uInt16 n ) { nPrecStandardFormat = n; }
 
-    KeyBindingType GetKeyBindingType() const { return eKeyBindingType; }
-    void        SetKeyBindingType( KeyBindingType e ) { eKeyBindingType = e; }
+    ScOptionsUtil::KeyBindingType GetKeyBindingType() const { return eKeyBindingType; }
+    void        SetKeyBindingType( ScOptionsUtil::KeyBindingType e ) { eKeyBindingType = e; }
 
     BOOL    IsCalcAsShown() const       { return bCalcAsShown; }
     void    SetCalcAsShown( BOOL bVal ) { bCalcAsShown = bVal; }

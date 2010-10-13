@@ -127,7 +127,7 @@ void ScDocOptions::ResetDocOptions()
     nIterCount          = 100;
     fIterEps            = 1.0E-3;
     nPrecStandardFormat = SvNumberFormatter::UNLIMITED_PRECISION;
-    eKeyBindingType     = KEY_DEFAULT;
+    eKeyBindingType     = ScOptionsUtil::KEY_DEFAULT;
     nDay                = 30;
     nMonth              = 12;
     nYear               = 1899;
@@ -553,7 +553,7 @@ ScDocCfg::ScDocCfg() :
                     else
                         fprintf(stdout, "ScDocCfg::ScDocCfg:   key binding failed to load\n");
 
-                    SetKeyBindingType(static_cast<ScDocOptions::KeyBindingType>(nIntVal));
+                    SetKeyBindingType(static_cast<ScOptionsUtil::KeyBindingType>(nIntVal));
                 }
                 break;
             }

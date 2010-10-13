@@ -60,14 +60,14 @@ SfxTabPage* ScTpCompatOptions::Create(Window *pParent, const SfxItemSet &rCoreAt
 
 BOOL ScTpCompatOptions::FillItemSet(SfxItemSet &rCoreAttrs)
 {
-    ScDocOptions::KeyBindingType eKeyB = ScDocOptions::KEY_DEFAULT;
+    ScOptionsUtil::KeyBindingType eKeyB = ScOptionsUtil::KEY_DEFAULT;
     switch (maLbKeyBindings.GetSelectEntryPos())
     {
         case 0:
-            eKeyB = ScDocOptions::KEY_DEFAULT;
+            eKeyB = ScOptionsUtil::KEY_DEFAULT;
         break;
         case 1:
-            eKeyB = ScDocOptions::KEY_OOO_LEGACY;
+            eKeyB = ScOptionsUtil::KEY_OOO_LEGACY;
         break;
         default:
             ;
@@ -85,13 +85,13 @@ BOOL ScTpCompatOptions::FillItemSet(SfxItemSet &rCoreAttrs)
 
 void ScTpCompatOptions::Reset(const SfxItemSet &rCoreAttrs)
 {
-    ScDocOptions::KeyBindingType eKeyB = mpOldOptions->GetKeyBindingType();
+    ScOptionsUtil::KeyBindingType eKeyB = mpOldOptions->GetKeyBindingType();
     switch (eKeyB)
     {
-        case ScDocOptions::KEY_DEFAULT:
+        case ScOptionsUtil::KEY_DEFAULT:
             maLbKeyBindings.SelectEntryPos(0);
         break;
-        case ScDocOptions::KEY_OOO_LEGACY:
+        case ScOptionsUtil::KEY_OOO_LEGACY:
             maLbKeyBindings.SelectEntryPos(1);
         break;
         default:

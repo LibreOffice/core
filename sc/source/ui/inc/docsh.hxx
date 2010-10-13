@@ -40,6 +40,7 @@
 #include "document.hxx"
 #include "shellids.hxx"
 #include "refreshtimer.hxx"
+#include "optutil.hxx"
 
 #include <hash_map>
 
@@ -424,6 +425,8 @@ public:
     sal_Bool        AcceptStateUpdate() const;
     //-->Added by PengYunQuan for Validity Cell Range Picker
     ScSheetSaveData* GetSheetSaveData();
+
+    void ResetKeyBindings( ScOptionsUtil::KeyBindingType eType );
 
     // passwword protection for Calc (derived from SfxObjectShell)
     // see also:    FID_CHG_RECORD, SID_CHG_PROTECT
