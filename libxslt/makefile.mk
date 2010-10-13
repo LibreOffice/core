@@ -55,8 +55,8 @@ TARFILE_MD5=e61d0364a30146aaa3001296f853b2b9
 PATCH_FILES=libxslt-configure.patch \
             libxslt-win_manifest.patch \
             libxslt-mingw.patch \
-            libxslt-internal-symbols.patch
-
+            libxslt-internal-symbols.patch \
+            libxslt-aix.patch
 
 # This is only for UNX environment now
 .IF "$(OS)"=="WNT"
@@ -96,6 +96,9 @@ LDFLAGS:=-Wl,-rpath,'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib' -Wl,-noinhibit-exec 
 .IF "$(OS)$(COM)"=="SOLARISC52"
 LDFLAGS:=-Wl,-R'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib'
 .ENDIF                  # "$(OS)$(COM)"=="SOLARISC52"
+.IF "$(OS)"=="AIX"
+LDFLAGS+:=$(LINKFLAGS) $(LINKFLAGSRUNPATH_OOO)
+.ENDIF
 
 .IF "$(SYSBASE)"!=""
 CPPFLAGS+:=-I$(SOLARINCDIR)$/external -I$(SYSBASE)$/usr$/include $(EXTRA_CFLAGS)

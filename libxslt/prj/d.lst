@@ -3,7 +3,8 @@ mkdir: %_DEST%\inc%_EXT%\external\libxslt
 ..\%__SRC%\lib\libxslt.so.1 %_DEST%\lib%_EXT%\libxslt.so.1
 symlink: %_DEST%\lib%_EXT%\libxslt.so.1 %_DEST%\lib%_EXT%\libxslt.so
 ..\%__SRC%\lib\libexslt.so.0 %_DEST%\lib%_EXT%\libexslt.so.0
-..\%__SRC%\lib\libxslt*.lib %_DEST%\lib%_EXT%
+symlink: %_DEST%\lib%_EXT%\libexslt.so.0 %_DEST%\lib%_EXT%\libexslt.so
+..\%__SRC%\lib\libxslt*.* %_DEST%\lib%_EXT%\libxslt*.*
 ..\%__SRC%\lib\lib*.dll.a %_DEST%\lib%_EXT%\*.a
 ..\%__SRC%\bin\lib*.dll %_DEST%\bin%_EXT%
 ..\%__SRC%\bin\xsltproc* %_DEST%\bin%_EXT%
