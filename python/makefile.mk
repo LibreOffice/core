@@ -49,7 +49,8 @@ TARFILE_NAME=Python-$(PYVERSION)
 TARFILE_MD5=e81c2f0953aa60f8062c05a4673f2be0
 PATCH_FILES=\
     Python-$(PYVERSION).patch \
-    Python-ssl.patch
+    Python-ssl.patch \
+    Python-aix.patch
 
 CONFIGURE_DIR=
 
@@ -75,9 +76,16 @@ CC+:=$(ARCH_FLAGS)
 python_LDFLAGS+=$(ARCH_FLAGS)
 .ENDIF
 
+.IF "$(OS)"=="AIX"
+python_CFLAGS=-g0
+.ENDIF
+
 CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) ./configure --prefix=$(MYCWD)/python-inst --enable-shared CFLAGS="$(python_CFLAGS)" LDFLAGS="$(python_LDFLAGS)"
 .IF "$(OS)$(CPU)" == "SOLARISI"
 CONFIGURE_ACTION += --disable-ipv6
+.ENDIF
+.IF "$(OS)"=="AIX"
+CONFIGURE_ACTION += --disable-ipv6 --with-threads
 .ENDIF
 BUILD_ACTION=$(ENV_BUILD) $(GNUMAKE) -j$(EXTMAXPROCESS) && $(GNUMAKE) install && chmod -R ug+w $(MYCWD)/python-inst && chmod g+w Include
 .ELSE

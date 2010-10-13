@@ -19,6 +19,9 @@ mkdir: %_DEST%\lib%_EXT%\python\xml\sax
 mkdir: %_DEST%\lib%_EXT%\python\xml\etree
 mkdir: %_DEST%\lib%_EXT%\python\curses
 mkdir: %_DEST%\lib%_EXT%\python\plat-linux2
+mkdir: %_DEST%\lib%_EXT%\python\plat-aix5
+mkdir: %_DEST%\lib%_EXT%\python\plat-aix6
+mkdir: %_DEST%\lib%_EXT%\python\plat-aix7
 mkdir: %_DEST%\lib%_EXT%\python\config
 mkdir: %_DEST%\lib%_EXT%\python\lib-dynload
 mkdir: %_DEST%\lib%_EXT%\python\bsddb
@@ -54,6 +57,9 @@ mkdir: %_DEST%\lib%_EXT%\python\ctypes\macholib
 ..\%__SRC%\misc\build\Python-2.6.1\Lib\xml\sax\* %_DEST%\lib%_EXT%\python\xml\sax\*
 ..\%__SRC%\misc\build\Python-2.6.1\Lib\curses\* %_DEST%\lib%_EXT%\python\curses\*
 ..\%__SRC%\misc\build\Python-2.6.1\Lib\plat-linux2\* %_DEST%\lib%_EXT%\python\plat-linux2\*
+..\%__SRC%\misc\build\Python-2.6.1\Lib\plat-aix5\* %_DEST%\lib%_EXT%\python\plat-aix5\*
+..\%__SRC%\misc\build\Python-2.6.1\Lib\plat-aix6\* %_DEST%\lib%_EXT%\python\plat-aix6\*
+..\%__SRC%\misc\build\Python-2.6.1\Lib\plat-aix7\* %_DEST%\lib%_EXT%\python\plat-aix7\*
 ..\%__SRC%\misc\build\Python-2.6.1\Lib\config\* %_DEST%\lib%_EXT%\python\config\*
 ..\%__SRC%\misc\build\Python-2.6.1\Lib\bsddb\* %_DEST%\lib%_EXT%\python\bsddb\*
 ..\%__SRC%\misc\build\Python-2.6.1\Lib\logging\* %_DEST%\lib%_EXT%\python\logging\*
