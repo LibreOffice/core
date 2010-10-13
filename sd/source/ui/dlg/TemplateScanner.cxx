@@ -278,7 +278,7 @@ TemplateScanner::State TemplateScanner::ScanEntry (void)
             }
             else
             {
-                ::vos::OGuard aGuard(Application::GetSolarMutex());
+                SolarMutexGuard aGuard;
                 maFolderList.push_back(mpTemplateDirectory);
             }
 

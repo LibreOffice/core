@@ -469,7 +469,7 @@ void DrawViewShell::ScannerEvent( const ::com::sun::star::lang::EventObject& )
 
                 if( !!aScanBmp )
                 {
-                    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+                    const SolarMutexGuard aGuard;
                     SdrPage*            pPage = mpDrawView->GetSdrPageView()->GetPage();
                     Size                aBmpSize( aScanBmp.GetPrefSize() ), aPageSize( pPage->GetSize() );
                     const MapMode       aMap100( MAP_100TH_MM );

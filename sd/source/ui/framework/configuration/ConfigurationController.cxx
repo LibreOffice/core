@@ -206,7 +206,7 @@ void SAL_CALL ConfigurationController::disposing (void)
     aEvent.Source = uno::Reference<uno::XInterface>((cppu::OWeakObject*)this);
 
     {
-        const ::vos::OGuard aSolarGuard (Application::GetSolarMutex());
+        const SolarMutexGuard aSolarGuard;
         mpImplementation->mpBroadcaster->DisposeAndClear();
     }
 
@@ -656,7 +656,7 @@ void SAL_CALL ConfigurationController::initialize (const Sequence<Any>& aArgumen
 
     if (aArguments.getLength() == 1)
     {
-        const ::vos::OGuard aSolarGuard (Application::GetSolarMutex());
+        const SolarMutexGuard aSolarGuard;
 
         mpImplementation.reset(new Implementation(
             *this,

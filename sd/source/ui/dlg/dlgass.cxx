@@ -886,7 +886,7 @@ void AssistentDlgImpl::TemplateScanDone (
     std::vector<TemplateDir*>& rTemplateFolder)
 {
     //  This method is called from a thread.  Therefore we get the solar mutex.
-    ::vos::OGuard aGuard (Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     // Copy the contents of the given template folders to a local list.
     maPresentList.swap (rTemplateFolder);

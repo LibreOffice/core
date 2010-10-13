@@ -232,7 +232,7 @@ const TransitionPresetList& TransitionPreset::getTransitionPresetList()
 {
     if( !mpTransitionPresetList )
     {
-        OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         if( !mpTransitionPresetList )
         {
             mpTransitionPresetList = new sd::TransitionPresetList();

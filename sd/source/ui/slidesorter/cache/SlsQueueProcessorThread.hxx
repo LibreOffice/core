@@ -205,7 +205,7 @@ void QueueProcessorThread<Queue, Request, Cache, Factory>
                 break;
         }
         OSL_TRACE ("QueueProcessorThread::ProcessQueueEntry():acquiring mutex for bitmap creation %p", this);
-        ::vos::OGuard aSolarGuard (Application::GetSolarMutex());
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard (maMutex);
         if (mbIsTerminated)
             break;
@@ -306,7 +306,7 @@ void QueueProcessorThread<
     Queue, RequestData, BitmapCache, BitmapFactory
     >::Terminate (void)
 {
-    //    ::vos::OGuard aSolarGuard (Application::GetSolarMutex());
+    //    SolarMutexGuard aSolarGuard;
     OSL_TRACE("QueueProcessorThread::Terminate(): terminating thread %p", this);
     ::osl::Thread::terminate ();
     {

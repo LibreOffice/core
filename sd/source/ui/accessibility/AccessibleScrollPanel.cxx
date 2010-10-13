@@ -77,7 +77,7 @@ sal_Int32 SAL_CALL
     throw (RuntimeException)
 {
     ThrowIfDisposed();
-    const vos::OGuard aSolarGuard (Application::GetSolarMutex());
+    const SolarMutexGuard aSolarGuard;
 
     sal_Int32 nChildCount (mrTreeNode.GetControlContainer().GetControlCount());
     if (GetScrollPanel().IsVerticalScrollBarVisible())
@@ -97,7 +97,7 @@ Reference<XAccessible> SAL_CALL
         RuntimeException)
 {
     ThrowIfDisposed();
-    const vos::OGuard aSolarGuard (Application::GetSolarMutex());
+    const SolarMutexGuard aSolarGuard;
 
     Reference<XAccessible> xChild;
 

@@ -134,7 +134,7 @@ Reference<awt::XBitmap> SlideRenderer::createPreview (
     throw (css::uno::RuntimeException)
 {
     ThrowIfDisposed();
-    ::vos::OGuard aGuard (Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     return VCLUnoHelper::CreateBitmap(
         CreatePreview(rxSlide, rMaximalSize, nSuperSampleFactor));
@@ -151,7 +151,7 @@ Reference<rendering::XBitmap> SlideRenderer::createPreviewForCanvas (
     throw (css::uno::RuntimeException)
 {
     ThrowIfDisposed();
-    ::vos::OGuard aGuard (Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     cppcanvas::BitmapCanvasSharedPtr pCanvas (cppcanvas::VCLFactory::getInstance().createCanvas(
         Reference<rendering::XBitmapCanvas>(rxCanvas, UNO_QUERY)));

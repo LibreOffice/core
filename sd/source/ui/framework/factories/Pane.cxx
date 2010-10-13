@@ -200,7 +200,7 @@ const Sequence<sal_Int8>& Pane::getUnoTunnelId (void)
     static Sequence<sal_Int8>* pSequence = NULL;
     if (pSequence == NULL)
     {
-        const ::vos::OGuard aSolarGuard (Application::GetSolarMutex());
+        const SolarMutexGuard aSolarGuard;
         if (pSequence == NULL)
         {
             static ::com::sun::star::uno::Sequence<sal_Int8> aSequence (16);

@@ -63,7 +63,7 @@ uno::Sequence< rtl::OUString > SAL_CALL SdDrawingDocument_getSupportedServiceNam
 uno::Reference< uno::XInterface > SAL_CALL SdDrawingDocument_createInstance(
                 const uno::Reference< lang::XMultiServiceFactory > &, const sal_uInt64 _nCreationFlags )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     SdDLL::Init();
 
@@ -92,7 +92,7 @@ uno::Sequence< rtl::OUString > SAL_CALL SdPresentationDocument_getSupportedServi
 uno::Reference< uno::XInterface > SAL_CALL SdPresentationDocument_createInstance(
                 const uno::Reference< lang::XMultiServiceFactory > &, const sal_uInt64 _nCreationFlags )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     SdDLL::Init();
 

@@ -143,7 +143,7 @@ namespace sd { namespace toolpanel
     //------------------------------------------------------------------------------------------------------------------
     Reference< XUIElement > SAL_CALL ToolPanelFactory::createUIElement( const ::rtl::OUString& i_rResourceURL, const Sequence< PropertyValue >& i_rArgs ) throw (NoSuchElementException, IllegalArgumentException, RuntimeException)
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
 
         const PanelId ePanelId( toolpanel::GetStandardPanelId( i_rResourceURL ) );
         if ( ePanelId == PID_UNKNOWN )

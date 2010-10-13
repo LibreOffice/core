@@ -320,7 +320,7 @@ void SAL_CALL SlideShowView::clear() throw (::com::sun::star::uno::RuntimeExcept
 {
     // paint background in black
     ::osl::MutexGuard aGuard( m_aMutex );
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     // fill the bounds rectangle in black
     // ----------------------------------
@@ -344,7 +344,7 @@ void SAL_CALL SlideShowView::clear() throw (::com::sun::star::uno::RuntimeExcept
 geometry::AffineMatrix2D SAL_CALL SlideShowView::getTransformation(  ) throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     const Size& rTmpSize( mrOutputWindow.GetSizePixel() );
 

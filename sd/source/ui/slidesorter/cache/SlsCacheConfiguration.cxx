@@ -51,7 +51,7 @@ Timer CacheConfiguration::maReleaseTimer;
 
 ::boost::shared_ptr<CacheConfiguration> CacheConfiguration::Instance (void)
 {
-    ::vos::OGuard aSolarGuard (Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     if (mpInstance.get() == NULL)
     {
         // Maybe somebody else kept a previously created instance alive.

@@ -296,7 +296,7 @@ Sequence< OUString > SAL_CALL SlideShow::getSupportedServiceNames(  ) throw(Runt
 
 Reference< XPropertySetInfo > SAL_CALL SlideShow::getPropertySetInfo() throw(RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     static Reference< XPropertySetInfo > xInfo = maPropSet.getPropertySetInfo();
     return xInfo;
  }
@@ -305,7 +305,7 @@ Reference< XPropertySetInfo > SAL_CALL SlideShow::getPropertySetInfo() throw(Run
 
 void SAL_CALL SlideShow::setPropertyValue( const OUString& aPropertyName, const Any& aValue ) throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     ThrowIfDisposed();
 
     sd::PresentationSettings& rPresSettings = mpDoc->getPresentationSettings();
@@ -578,7 +578,7 @@ void SAL_CALL SlideShow::setPropertyValue( const OUString& aPropertyName, const 
 
 Any SAL_CALL SlideShow::getPropertyValue( const OUString& PropertyName ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     ThrowIfDisposed();
 
     const sd::PresentationSettings& rPresSettings = mpDoc->getPresentationSettings();
@@ -680,7 +680,7 @@ void SAL_CALL SlideShow::start() throw(RuntimeException)
 
 void SAL_CALL SlideShow::end() throw(RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     // The mbIsInStartup flag should have been reset during the start of the
     // slide show.  Reset it here just in case that something has horribly
@@ -822,7 +822,7 @@ void SAL_CALL SlideShow::rehearseTimings() throw(RuntimeException)
 
 void SAL_CALL SlideShow::startWithArguments( const Sequence< PropertyValue >& rArguments ) throw (RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     ThrowIfDisposed();
 
     // Stop a running show before starting a new one.
@@ -872,7 +872,7 @@ void SAL_CALL SlideShow::startWithArguments( const Sequence< PropertyValue >& rA
 
 ::sal_Bool SAL_CALL SlideShow::isRunning(  ) throw (RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     return mxController.is() && mxController->isRunning();
 }
 
@@ -892,7 +892,7 @@ Reference< XSlideShowController > SAL_CALL SlideShow::getController(  ) throw (R
 
 void SAL_CALL SlideShow::disposing (void)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if( mnInPlaceConfigEvent )
     {

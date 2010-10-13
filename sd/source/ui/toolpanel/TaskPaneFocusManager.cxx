@@ -78,7 +78,7 @@ FocusManager& FocusManager::Instance (void)
 {
     if (spInstance == NULL)
     {
-        ::vos::OGuard aGuard (::Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         if (spInstance == NULL)
             spInstance = new FocusManager ();
     }

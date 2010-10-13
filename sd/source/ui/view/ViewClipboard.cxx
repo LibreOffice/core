@@ -245,7 +245,7 @@ USHORT ViewClipboard::InsertSlides (
     }
     if (nInsertPgCnt > 0)
     {
-        const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        const SolarMutexGuard aGuard;
         ::sd::Window* pWin = mrView.GetViewShell()->GetActiveWindow();
         const BOOL bWait = pWin && pWin->IsWait();
 

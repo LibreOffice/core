@@ -614,7 +614,7 @@ const CustomAnimationPresets& CustomAnimationPresets::getCustomAnimationPresets(
 {
     if( !mpCustomAnimationPresets )
     {
-        OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         if( !mpCustomAnimationPresets )
         {

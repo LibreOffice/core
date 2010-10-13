@@ -100,7 +100,7 @@ public:
 // ------------------------------------------------------------------------
 void SAL_CALL SdFileDialog_Imp::ControlStateChanged( const css::ui::dialogs::FilePickerEvent& aEvent )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     switch( aEvent.ElementId )
     {
@@ -192,7 +192,7 @@ IMPL_LINK( SdFileDialog_Imp, PlayMusicHdl, void *, EMPTYARG )
 // ------------------------------------------------------------------------
 IMPL_LINK( SdFileDialog_Imp, IsMusicStoppedHdl, void *, EMPTYARG )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if (
         mxPlayer.is() && mxPlayer->isPlaying() &&

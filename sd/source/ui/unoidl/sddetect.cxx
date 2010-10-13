@@ -175,7 +175,7 @@ SdFilterDetect::~SdFilterDetect()
     }
 
     // can't check the type for external filters, so set the "dont" flag accordingly
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     //SfxFilterFlags nMust = SFX_FILTER_IMPORT, nDont = SFX_FILTER_NOTINSTALLED;
 
     SfxApplication* pApp = SFX_APP();

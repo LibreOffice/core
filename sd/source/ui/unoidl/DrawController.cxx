@@ -161,7 +161,7 @@ void SAL_CALL DrawController::dispose (void)
 {
     if( !mbDisposing )
     {
-        OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         if( !mbDisposing )
         {
@@ -283,7 +283,7 @@ sal_Bool SAL_CALL DrawController::select (const Any& aSelection)
     throw(lang::IllegalArgumentException, RuntimeException)
 {
     ThrowIfDisposed();
-    ::vos::OGuard aGuard (Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (mxSubController.is())
         return mxSubController->select(aSelection);
@@ -298,7 +298,7 @@ Any SAL_CALL DrawController::getSelection()
     throw(RuntimeException)
 {
     ThrowIfDisposed();
-    ::vos::OGuard aGuard (Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (mxSubController.is())
         return mxSubController->getSelection();
@@ -387,7 +387,7 @@ void SAL_CALL DrawController::setCurrentPage( const Reference< drawing::XDrawPag
     throw(RuntimeException)
 {
     ThrowIfDisposed();
-    ::vos::OGuard aGuard (Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (mxSubController.is())
         mxSubController->setCurrentPage(xPage);
@@ -400,7 +400,7 @@ Reference< drawing::XDrawPage > SAL_CALL DrawController::getCurrentPage (void)
     throw(RuntimeException)
 {
     ThrowIfDisposed();
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     Reference<drawing::XDrawPage> xPage;
 
     // Get current page from sub controller.
@@ -712,7 +712,7 @@ void DrawController::FillPropertyTable (
 
 IPropertyArrayHelper & DrawController::getInfoHelper()
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if (mpPropertyArrayHelper.get() == NULL)
     {
@@ -733,7 +733,7 @@ IPropertyArrayHelper & DrawController::getInfoHelper()
 Reference < beans::XPropertySetInfo >  DrawController::getPropertySetInfo()
         throw ( ::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     static Reference < beans::XPropertySetInfo >  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
@@ -742,7 +742,7 @@ Reference < beans::XPropertySetInfo >  DrawController::getPropertySetInfo()
 
 uno::Reference< form::runtime::XFormController > SAL_CALL DrawController::getFormController( const uno::Reference< form::XForm >& Form ) throw (uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     FmFormShell* pFormShell = mpBase->GetFormShellManager()->GetFormShell();
     SdrView* pSdrView = mpBase->GetDrawView();
@@ -757,7 +757,7 @@ uno::Reference< form::runtime::XFormController > SAL_CALL DrawController::getFor
 
 ::sal_Bool SAL_CALL DrawController::isFormDesignMode(  ) throw (uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     sal_Bool bIsDesignMode = sal_True;
 
@@ -770,7 +770,7 @@ uno::Reference< form::runtime::XFormController > SAL_CALL DrawController::getFor
 
 void SAL_CALL DrawController::setFormDesignMode( ::sal_Bool _DesignMode ) throw (uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     FmFormShell* pFormShell = mpBase->GetFormShellManager()->GetFormShell();
     if ( pFormShell )
@@ -779,7 +779,7 @@ void SAL_CALL DrawController::setFormDesignMode( ::sal_Bool _DesignMode ) throw 
 
 uno::Reference< awt::XControl > SAL_CALL DrawController::getControl( const uno::Reference< awt::XControlModel >& xModel ) throw (container::NoSuchElementException, uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     FmFormShell* pFormShell = mpBase->GetFormShellManager()->GetFormShell();
     SdrView* pSdrView = mpBase->GetDrawView();
@@ -834,7 +834,7 @@ void DrawController::setFastPropertyValue_NoBroadcast (
     const Any& rValue)
     throw ( com::sun::star::uno::Exception)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if (nHandle == PROPERTY_SUB_CONTROLLER)
         SetSubController(Reference<drawing::XDrawSubController>(rValue, UNO_QUERY));
     else if (mxSubController.is())
@@ -848,7 +848,7 @@ void DrawController::getFastPropertyValue (
     Any & rRet,
     sal_Int32 nHandle ) const
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     switch( nHandle )
     {
@@ -878,7 +878,7 @@ void DrawController::getFastPropertyValue (
 
 void DrawController::ProvideFrameworkControllers (void)
 {
-    ::vos::OGuard aGuard (Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     try
     {
         Reference<XController> xController (this);

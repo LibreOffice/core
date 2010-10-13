@@ -98,7 +98,7 @@ uno::Sequence< OUString > SAL_CALL SdXCustomPresentation::getSupportedServiceNam
 void SAL_CALL SdXCustomPresentation::insertByIndex( sal_Int32 Index, const uno::Any& Element )
     throw(lang::IllegalArgumentException, lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if( bDisposing )
         throw lang::DisposedException();
@@ -132,7 +132,7 @@ void SAL_CALL SdXCustomPresentation::insertByIndex( sal_Int32 Index, const uno::
 void SAL_CALL SdXCustomPresentation::removeByIndex( sal_Int32 Index )
     throw(lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if( bDisposing )
         throw lang::DisposedException();
@@ -172,7 +172,7 @@ uno::Type SAL_CALL SdXCustomPresentation::getElementType()
 sal_Bool SAL_CALL SdXCustomPresentation::hasElements()
     throw(uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if( bDisposing )
         throw lang::DisposedException();
@@ -184,7 +184,7 @@ sal_Bool SAL_CALL SdXCustomPresentation::hasElements()
 sal_Int32 SAL_CALL SdXCustomPresentation::getCount()
     throw(uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if( bDisposing )
         throw lang::DisposedException();
 
@@ -194,7 +194,7 @@ sal_Int32 SAL_CALL SdXCustomPresentation::getCount()
 uno::Any SAL_CALL SdXCustomPresentation::getByIndex( sal_Int32 Index )
     throw(lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if( bDisposing )
         throw lang::DisposedException();
@@ -221,7 +221,7 @@ uno::Any SAL_CALL SdXCustomPresentation::getByIndex( sal_Int32 Index )
 OUString SAL_CALL SdXCustomPresentation::getName()
     throw(uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if( bDisposing )
         throw lang::DisposedException();
@@ -235,7 +235,7 @@ OUString SAL_CALL SdXCustomPresentation::getName()
 void SAL_CALL SdXCustomPresentation::setName( const OUString& aName )
     throw(uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if( bDisposing )
         throw lang::DisposedException();
@@ -247,7 +247,7 @@ void SAL_CALL SdXCustomPresentation::setName( const OUString& aName )
 // XComponent
 void SAL_CALL SdXCustomPresentation::dispose() throw(uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if( bDisposing )
         return; // catched a recursion
@@ -333,7 +333,7 @@ uno::Reference< uno::XInterface > SAL_CALL SdXCustomPresentationAccess::createIn
 void SAL_CALL SdXCustomPresentationAccess::insertByName( const OUString& aName, const uno::Any& aElement )
     throw(lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     // get the documents custom show list
     List* pList = 0;
@@ -387,7 +387,7 @@ void SAL_CALL SdXCustomPresentationAccess::insertByName( const OUString& aName, 
 void SAL_CALL SdXCustomPresentationAccess::removeByName( const OUString& Name )
     throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     SdCustomShow* pShow = getSdCustomShow(Name);
 
@@ -412,7 +412,7 @@ void SAL_CALL SdXCustomPresentationAccess::replaceByName( const OUString& aName,
 uno::Any SAL_CALL SdXCustomPresentationAccess::getByName( const OUString& aName )
     throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     uno::Any aAny;
 
@@ -433,7 +433,7 @@ uno::Any SAL_CALL SdXCustomPresentationAccess::getByName( const OUString& aName 
 uno::Sequence< OUString > SAL_CALL SdXCustomPresentationAccess::getElementNames()
     throw(uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     List* pList = GetCustomShowList();
     const sal_uInt32 nCount = pList?pList->Count():0;
@@ -456,7 +456,7 @@ uno::Sequence< OUString > SAL_CALL SdXCustomPresentationAccess::getElementNames(
 sal_Bool SAL_CALL SdXCustomPresentationAccess::hasByName( const OUString& aName )
     throw(uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     return getSdCustomShow(aName) != NULL;
 }
 
@@ -470,7 +470,7 @@ uno::Type SAL_CALL SdXCustomPresentationAccess::getElementType()
 sal_Bool SAL_CALL SdXCustomPresentationAccess::hasElements()
     throw(uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     List* pList = GetCustomShowList();
     return pList && pList->Count() > 0;

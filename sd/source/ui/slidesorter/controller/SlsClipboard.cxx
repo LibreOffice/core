@@ -268,7 +268,7 @@ sal_Int32 Clipboard::PasteTransferable (sal_Int32 nInsertPosition)
     if (pClipTransferable->HasPageBookmarks())
     {
         const List& rBookmarkList = pClipTransferable->GetPageBookmarks();
-        const ::vos::OGuard aGuard (Application::GetSolarMutex());
+        const SolarMutexGuard aGuard;
 
         nInsertPageCount = (USHORT) rBookmarkList.Count();
         mrSlideSorter.GetModel().GetDocument()->InsertBookmarkAsPage(
@@ -292,7 +292,7 @@ sal_Int32 Clipboard::PasteTransferable (sal_Int32 nInsertPosition)
         if (pDataDoc!=NULL
             && pDataDoc->GetSdPageCount(PK_STANDARD))
         {
-            const ::vos::OGuard aGuard (Application::GetSolarMutex());
+            const SolarMutexGuard aGuard;
 
             bMergeMasterPages = (pDataDoc != mrSlideSorter.GetModel().GetDocument());
             nInsertPageCount = pDataDoc->GetSdPageCount( PK_STANDARD );

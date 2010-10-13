@@ -874,7 +874,7 @@ void EditWindow::Delete()
 void EditWindow::InsertText(const String& Text)
 {
     DBG_ASSERT( mpEditView, "EditView missing" );
-    ::vos::OGuard aGuard (::Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if (mpEditView)
         mpEditView->InsertText(Text);
 }

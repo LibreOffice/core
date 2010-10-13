@@ -197,7 +197,7 @@ void ViewTabBar::disposing (void)
     }
 
     {
-        const ::vos::OGuard aSolarGuard (Application::GetSolarMutex());
+        const SolarMutexGuard aSolarGuard;
         // Set all references to the one tab page to NULL and delete the page.
         for (USHORT nIndex=0; nIndex<mpTabControl->GetPageCount(); ++nIndex)
             mpTabControl->SetTabPage(nIndex, NULL);
@@ -321,7 +321,7 @@ void SAL_CALL ViewTabBar::addTabBarButtonAfter (
     const TabBarButton& rAnchor)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    const ::vos::OGuard aSolarGuard (Application::GetSolarMutex());
+    const SolarMutexGuard aSolarGuard;
     AddTabBarButton(rButton, rAnchor);
 }
 
@@ -331,7 +331,7 @@ void SAL_CALL ViewTabBar::addTabBarButtonAfter (
 void SAL_CALL ViewTabBar::appendTabBarButton (const TabBarButton& rButton)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    const ::vos::OGuard aSolarGuard (Application::GetSolarMutex());
+    const SolarMutexGuard aSolarGuard;
     AddTabBarButton(rButton);
 }
 
@@ -340,7 +340,7 @@ void SAL_CALL ViewTabBar::appendTabBarButton (const TabBarButton& rButton)
 void SAL_CALL ViewTabBar::removeTabBarButton (const TabBarButton& rButton)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    const ::vos::OGuard aSolarGuard (Application::GetSolarMutex());
+    const SolarMutexGuard aSolarGuard;
     RemoveTabBarButton(rButton);
 }
 
@@ -350,7 +350,7 @@ void SAL_CALL ViewTabBar::removeTabBarButton (const TabBarButton& rButton)
 sal_Bool SAL_CALL ViewTabBar::hasTabBarButton (const TabBarButton& rButton)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    const ::vos::OGuard aSolarGuard (Application::GetSolarMutex());
+    const SolarMutexGuard aSolarGuard;
     return HasTabBarButton(rButton);
 }
 
@@ -360,7 +360,7 @@ sal_Bool SAL_CALL ViewTabBar::hasTabBarButton (const TabBarButton& rButton)
 Sequence<TabBarButton> SAL_CALL ViewTabBar::getTabBarButtons (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    const ::vos::OGuard aSolarGuard (Application::GetSolarMutex());
+    const SolarMutexGuard aSolarGuard;
     return GetTabBarButtons();
 }
 
@@ -394,7 +394,7 @@ const Sequence<sal_Int8>& ViewTabBar::getUnoTunnelId (void)
     static Sequence<sal_Int8>* pSequence = NULL;
     if (pSequence == NULL)
     {
-        const ::vos::OGuard aSolarGuard (Application::GetSolarMutex());
+        const SolarMutexGuard aSolarGuard;
         if (pSequence == NULL)
         {
             static ::com::sun::star::uno::Sequence<sal_Int8> aSequence (16);
