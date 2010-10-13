@@ -52,6 +52,11 @@ LD_LIBRARY_PATH!:=$(LD_LIBRARY_PATH)$(PATH_SEPERATOR)$(PKGCONFIG_ROOT)$/lib
 DISABLE_MOZ_EXECUTABLE=TRUE
 .EXPORT : DISABLE_MOZ_EXECUTABLE
 
+.IF "$(OS)"=="AIX"
+LDFLAGS+:=$(LINKFLAGS) $(LINKFLAGSRUNPATH_OOO)
+.EXPORT : LDFLAGS
+.ENDIF
+
 .IF "$(SYSBASE)"!="" && "$(OS)" == "LINUX"
 ## hmm... rather gcc specific switches...
 CFLAGS:=-isystem $(SYSBASE)/usr/include -B$(SYSBASE)/usr/lib
@@ -87,7 +92,8 @@ PATCH_FILES = \
     patches/respect_disable_pango.patch \
     patches/arm_build_fix.patch \
     patches/link_fontconfig.patch \
-    patches/brokenmakefile.patch
+    patches/brokenmakefile.patch \
+    patches/aix_build_fix.patch
 
 # This file is needed for the W32 build when BUILD_MOZAB is set
 # (currently only vc8/vs2005 is supported when BUILD_MOZAB is set)
