@@ -34,6 +34,7 @@
 #include <filter/msfilter/escherex.hxx>
 #include "xlescher.hxx"
 #include "xeroot.hxx"
+#include <vector>
 
 // 0 = Export TBX form controls, 1 = Export OCX form controls.
 #define EXC_EXP_OCX_CTRL 0

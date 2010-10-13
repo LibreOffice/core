@@ -69,6 +69,7 @@
 #include "svx/unoapi.hxx"
 
 #include <oox/core/tokens.hxx>
+#include <oox/export/drawingml.hxx>
 
 using ::rtl::OString;
 using ::rtl::OUString;
@@ -90,6 +91,7 @@ using ::com::sun::star::form::binding::XListEntrySource;
 using ::com::sun::star::script::ScriptEventDescriptor;
 using ::com::sun::star::table::CellAddress;
 using ::com::sun::star::table::CellRangeAddress;
+using ::oox::drawingml::DrawingML;
 
 // Escher client anchor =======================================================
 
@@ -296,6 +298,17 @@ void XclExpImgData::Save( XclExpStream& rStrm )
         }
         aBmp.ReleaseAccess( pAccess );
     }
+}
+
+void XclExpImgData::SaveXml( XclExpXmlStream& rStrm )
+{
+    sax_fastparser::FSHelperPtr pWorksheet = rStrm.GetCurrentStream();
+
+    DrawingML aDML( pWorksheet, &rStrm, DrawingML::DOCUMENT_XLSX );
+    OUString rId = aDML.WriteImage( maGraphic );
+    pWorksheet->singleElement( XML_picture,
+            FSNS( XML_r, XML_id ),  XclXmlUtils::ToOString( rId ).getStr(),
+            FSEND );
 }
 
 // ============================================================================
@@ -1004,7 +1017,7 @@ XclExpNote::XclExpNote( const XclExpRoot& rRoot, const ScAddress& rScPos,
             if( pScNote )
                 if( SdrCaptionObj* pCaption = pScNote->GetOrCreateCaption( maScPos ) )
                     if( const OutlinerParaObject* pOPO = pCaption->GetOutlinerParaObject() )
-                        mnObjId = rRoot.GetObjectManager().AddObj( new XclObjComment( rRoot.GetObjectManager(), pCaption->GetLogicRect(), pOPO->GetTextObject(), pCaption, mbVisible ) );
+                        mnObjId = rRoot.GetObjectManager().AddObj( new XclObjComment( rRoot.GetObjectManager(), pCaption->GetLogicRect(), pOPO->GetTextObject(), pCaption, mbVisible, maScPos ) );
 
             SetRecSize( 9 + maAuthor.GetSize() );
         }
@@ -1089,9 +1102,14 @@ void XclExpNote::WriteXml( sal_Int32 nAuthorId, XclExpXmlStream& rStrm )
             FSEND );
     rComments->startElement( XML_text, FSEND );
     // OOXTODO: phoneticPr, rPh, r
+#if 0
     rComments->startElement( XML_t, FSEND );
     rComments->writeEscaped( XclXmlUtils::ToOUString( maOrigNoteText ) );
     rComments->endElement ( XML_t );
+#else
+    if( mpNoteContents.is() )
+        mpNoteContents->WriteXml( rStrm );
+#endif
     rComments->endElement( XML_text );
     rComments->endElement( XML_comment );
 }
@@ -1173,7 +1191,7 @@ struct OUStringLess : public std::binary_function<OUString, OUString, bool>
 {
     bool operator()(const OUString& x, const OUString& y) const
     {
-        return x.compareTo( y ) <= 0;
+        return x.compareTo( y ) < 0;
     }
 };
 

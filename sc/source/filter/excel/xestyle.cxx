@@ -982,7 +982,7 @@ void XclExpFont::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
     rStyleSheet->startElement( XML_font, FSEND );
-    rStrm.WriteFontData( maData, XML_name );
+    XclXmlUtils::WriteFontData( rStyleSheet, maData, XML_name );
     // OOXTODO: XML_scheme; //scheme/@val values: "major", "minor", "none"
     rStyleSheet->endElement( XML_font );
 }

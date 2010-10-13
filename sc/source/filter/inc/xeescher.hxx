@@ -168,6 +168,7 @@ public:
 
     /** Writes the BITMAP record. */
     virtual void        Save( XclExpStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
 
 private:
     Graphic             maGraphic;      /// The VCL graphic.
@@ -364,6 +365,7 @@ private:
     XclExpString        maAuthor;       /// Name of the author.
     String              maOrigNoteText; /// Original main text of the note.
     ByteString          maNoteText;     /// Main text of the note (<=BIFF7).
+    XclExpStringRef     mpNoteContents; /// Text and formatting data (OOXML)
     ScAddress           maScPos;        /// Calc cell address of the note.
     sal_uInt16          mnObjId;        /// Escher object ID (BIFF8).
     bool                mbVisible;      /// true = permanently visible.

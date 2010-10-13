@@ -371,6 +371,7 @@ public:
 
     /** Writes the entire pivot table. */
     virtual void        Save( XclExpStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
 
     // ------------------------------------------------------------------------
 private:

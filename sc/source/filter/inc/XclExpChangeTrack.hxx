@@ -238,6 +238,8 @@ public:
 
     virtual UINT16              GetNum() const;
     virtual sal_Size            GetLen() const;
+
+    virtual void                SaveXml( XclExpXmlStream& rStrm );
 };
 
 //___________________________________________________________________
@@ -247,6 +249,7 @@ class XclExpChTrInfo : public ExcRecord
 {
 private:
     XclExpString                sUsername;
+    sal_Int32                   mnLogNumber;
     DateTime                    aDateTime;
     sal_uInt8                   aGUID[ 16 ];
 
@@ -256,15 +259,19 @@ public:
     inline                      XclExpChTrInfo(
                                     const String& rUsername,
                                     const DateTime& rDateTime,
-                                    const sal_uInt8* pGUID );
+                                    const sal_uInt8* pGUID,
+                                    sal_Int32 nLogNumber );
     virtual                     ~XclExpChTrInfo();
 
     virtual UINT16              GetNum() const;
     virtual sal_Size            GetLen() const;
+
+    virtual void                SaveXml( XclExpXmlStream& rStrm );
 };
 
-inline XclExpChTrInfo::XclExpChTrInfo( const String& rUsername, const DateTime& rDateTime, const sal_uInt8* pGUID ) :
+inline XclExpChTrInfo::XclExpChTrInfo( const String& rUsername, const DateTime& rDateTime, const sal_uInt8* pGUID, sal_Int32 nLogNumber ) :
     sUsername( rUsername ),
+    mnLogNumber( nLogNumber ),
     aDateTime( rDateTime )
 {
     memcpy( aGUID, pGUID, 16 );
@@ -322,6 +329,7 @@ class XclExpChTrTabId : public ExcRecord
 private:
     sal_uInt16*                 pBuffer;
     sal_uInt16                  nTabCount;
+    bool                        mbInRevisionHeaders;
 
     inline void                 Clear() { if( pBuffer ) delete[] pBuffer; pBuffer = NULL; }
 
@@ -329,14 +337,16 @@ private:
 
 public:
     inline                      XclExpChTrTabId( sal_uInt16 nCount ) :
-                                    pBuffer( NULL ), nTabCount( nCount ) {}
-                                XclExpChTrTabId( const XclExpChTrTabIdBuffer& rBuffer );
+                                    pBuffer( NULL ), nTabCount( nCount ), mbInRevisionHeaders( false ) {}
+                                XclExpChTrTabId( const XclExpChTrTabIdBuffer& rBuffer, bool bInRevisionHeaders = false );
     virtual                     ~XclExpChTrTabId();
 
     void                        Copy( const XclExpChTrTabIdBuffer& rBuffer );
 
     virtual UINT16              GetNum() const;
     virtual sal_Size            GetLen() const;
+
+    virtual void                SaveXml( XclExpXmlStream& rStrm );
 };
 
 //___________________________________________________________________
@@ -368,6 +378,7 @@ protected:
 
     inline void                 Write2DAddress( XclExpStream& rStrm, const ScAddress& rAddress ) const;
     inline void                 Write2DRange( XclExpStream& rStrm, const ScRange& rRange ) const;
+    inline sal_uInt16           GetTabId( SCTAB nTabId ) const;
     inline void                 WriteTabId( XclExpStream& rStrm, SCTAB nTabId ) const;
 
                                 // save header data, call SaveActionData()
@@ -383,6 +394,9 @@ protected:
     virtual void                PrepareSaveAction( XclExpStream& rStrm ) const;
                                 // do something after writing the record
     virtual void                CompleteSaveAction( XclExpStream& rStrm ) const;
+
+    inline sal_uInt32           GetActionNumber() const { return nIndex; }
+    inline sal_Bool             GetAccepted() const { return bAccepted; }
 
 public:
                                 XclExpChTrAction(
@@ -403,6 +417,8 @@ public:
 
     virtual void                Save( XclExpStream& rStrm );
     virtual sal_Size            GetLen() const;
+
+    inline XclExpChTrAction*    GetAddAction() { return pAddAction; }
 };
 
 inline void XclExpChTrAction::Write2DAddress( XclExpStream& rStrm, const ScAddress& rAddress ) const
@@ -419,9 +435,14 @@ inline void XclExpChTrAction::Write2DRange( XclExpStream& rStrm, const ScRange& 
             << (sal_uInt16) rRange.aEnd.Col();
 }
 
+inline sal_uInt16 XclExpChTrAction::GetTabId( SCTAB nTab ) const
+{
+    return rIdBuffer.GetId( rTabInfo.GetXclTab( nTab ) );
+}
+
 inline void XclExpChTrAction::WriteTabId( XclExpStream& rStrm, SCTAB nTab ) const
 {
-    rStrm << rIdBuffer.GetId( rTabInfo.GetXclTab( nTab ) );
+    rStrm << GetTabId( nTab );
 }
 
 //___________________________________________________________________
@@ -430,6 +451,8 @@ inline void XclExpChTrAction::WriteTabId( XclExpStream& rStrm, SCTAB nTab ) cons
 struct XclExpChTrData
 {
     XclExpString*               pString;
+    XclExpStringRef             mpFormattedString;
+    const ScFormulaCell*        mpFormulaCell;
     XclTokenArrayRef            mxTokArr;
     XclExpRefLog                maRefLog;
     double                      fValue;
@@ -465,6 +488,7 @@ protected:
     ScAddress                   aPosition;
 
     void                        GetCellData(
+                                    const XclExpRoot& rRoot,
                                     const ScBaseCell* pScCell,
                                     XclExpChTrData*& rpData,
                                     sal_uInt32& rXclLength1,
@@ -481,6 +505,8 @@ public:
 
     virtual UINT16              GetNum() const;
     virtual sal_Size            GetActionByteCount() const;
+
+    virtual void                SaveXml( XclExpXmlStream& rStrm );
 };
 
 //___________________________________________________________________
@@ -508,6 +534,8 @@ public:
 
     virtual UINT16              GetNum() const;
     virtual sal_Size            GetActionByteCount() const;
+
+    virtual void                SaveXml( XclExpXmlStream& rStrm );
 };
 
 //___________________________________________________________________
@@ -530,6 +558,8 @@ public:
 
     virtual UINT16              GetNum() const;
     virtual sal_Size            GetActionByteCount() const;
+
+    virtual void                SaveXml( XclExpXmlStream& rStrm );
 };
 
 //___________________________________________________________________
@@ -555,6 +585,8 @@ public:
 
     virtual UINT16              GetNum() const;
     virtual sal_Size            GetActionByteCount() const;
+
+    virtual void                SaveXml( XclExpXmlStream& rStrm );
 };
 
 //___________________________________________________________________
@@ -571,6 +603,8 @@ public:
 
     virtual UINT16              GetNum() const;
     virtual sal_Size            GetActionByteCount() const;
+
+    virtual void                SaveXml( XclExpXmlStream& rStrm );
 };
 
 //___________________________________________________________________
@@ -603,6 +637,7 @@ public:
     using                       List::Count;
     void                        Append( ExcRecord* pNewRec );
     void                        Save( XclExpStream& rStrm );
+    void                        SaveXml( XclExpXmlStream& rStrm );
 };
 
 //___________________________________________________________________
@@ -633,6 +668,7 @@ public:
                                 ~XclExpChangeTrack();
 
     void                        Write();
+    void                        WriteXml( XclExpXmlStream& rStrm );
 };
 
 //___________________________________________________________________

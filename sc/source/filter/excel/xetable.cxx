@@ -883,76 +883,12 @@ void XclExpFormulaCell::Save( XclExpStream& rStrm )
         mxStringRec->Save( rStrm );
 }
 
-static const char* lcl_GetErrorString( USHORT nScErrCode )
-{
-    sal_uInt8 nXclErrCode = XclTools::GetXclErrorCode( nScErrCode );
-    switch( nXclErrCode )
-    {
-        case EXC_ERR_NULL:  return "#NULL!";
-        case EXC_ERR_DIV0:  return "#DIV/0!";
-        case EXC_ERR_VALUE: return "#VALUE!";
-        case EXC_ERR_REF:   return "#REF!";
-        case EXC_ERR_NAME:  return "#NAME?";
-        case EXC_ERR_NUM:   return "#NUM!";
-        case EXC_ERR_NA:
-        default:            return "#N/A";
-    }
-}
-
-static void lcl_GetFormulaInfo( ScFormulaCell& rCell, const char** pType, OUString& rValue)
-{
-    switch( rCell.GetFormatType() )
-    {
-        case NUMBERFORMAT_NUMBER:
-        {
-            // either value or error code
-            USHORT nScErrCode = rCell.GetErrCode();
-            if( nScErrCode )
-            {
-                *pType = "e";
-                rValue = XclXmlUtils::ToOUString( lcl_GetErrorString( nScErrCode ) );
-            }
-            else
-            {
-                *pType = "n";
-                rValue = OUString::valueOf( rCell.GetValue() );
-            }
-        }
-        break;
-
-        case NUMBERFORMAT_TEXT:
-        {
-            *pType = "str";
-            String aResult;
-            rCell.GetString( aResult );
-            rValue = XclXmlUtils::ToOUString( aResult );
-        }
-        break;
-
-        case NUMBERFORMAT_LOGICAL:
-        {
-            *pType = "b";
-            rValue = XclXmlUtils::ToOUString( rCell.GetValue() == 0.0 ? "0" : "1" );
-        }
-        break;
-
-        default:
-        {
-            *pType = "inlineStr";
-            String aResult;
-            rCell.GetString( aResult );
-            rValue = XclXmlUtils::ToOUString( aResult );
-        }
-        break;
-    }
-}
-
 void XclExpFormulaCell::SaveXml( XclExpXmlStream& rStrm )
 {
     const char* sType = NULL;
     OUString    sValue;
 
-    lcl_GetFormulaInfo( mrScFmlaCell, &sType, sValue );
+    XclXmlUtils::GetFormulaTypeAndValue( mrScFmlaCell, sType, sValue );
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElement( XML_c,
             XML_r,      XclXmlUtils::ToOString( GetXclPos() ).getStr(),

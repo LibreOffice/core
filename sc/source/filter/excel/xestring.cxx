@@ -31,6 +31,8 @@
 
 #include <algorithm>
 #include <stdio.h>
+#include "xlstyle.hxx"
+#include "xestyle.hxx"
 #include "xestream.hxx"
 #include "xlstyle.hxx"
 #include "xestyle.hxx"
@@ -453,7 +455,7 @@ static sal_uInt16 lcl_WriteRun( XclExpXmlStream& rStrm, const ScfUInt16Vec& rBuf
     {
         const XclFontData& rFontData = pFont->GetFontData();
         rWorksheet->startElement( XML_rPr, FSEND );
-        rStrm.WriteFontData( rFontData, XML_rFont );
+        XclXmlUtils::WriteFontData( rWorksheet, rFontData, XML_rFont );
         rWorksheet->endElement( XML_rPr );
     }
     rWorksheet->startElement( XML_t,
@@ -462,7 +464,7 @@ static sal_uInt16 lcl_WriteRun( XclExpXmlStream& rStrm, const ScfUInt16Vec& rBuf
     rWorksheet->writeEscaped( XclXmlUtils::ToOUString( rBuffer, nStart, nLength ) );
     rWorksheet->endElement( XML_t );
     rWorksheet->endElement( XML_r );
-    return static_cast<sal_uInt16>(nStart + nLength);
+    return nStart + nLength;
 }
 
 void XclExpString::WriteXml( XclExpXmlStream& rStrm ) const

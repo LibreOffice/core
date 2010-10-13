@@ -155,6 +155,10 @@ void ExcRecord::WriteBody( XclExpStream& rStrm )
     SaveCont( rStrm );
 }
 
+void ExcRecord::SaveXml( XclExpXmlStream& rStrm )
+{
+}
+
 
 //--------------------------------------------------------- class ExcEmptyRec -
 

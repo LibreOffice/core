@@ -214,7 +214,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
     pCurrAppData = new XclEscherHostAppData;
     SdrObject* pObj = GetSdrObjectFromXShape( rxShape );
     if ( !pObj )
-        pCurrXclObj = new XclObjAny( mrObjMgr );  // just what is it?!?
+        pCurrXclObj = new XclObjAny( mrObjMgr, rxShape );  // just what is it?!?
     else
     {
         pCurrXclObj = NULL;
@@ -239,10 +239,10 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
                         pCurrXclObj = new XclObjOle( mrObjMgr, *pObj );
                 }
                 else    // just a metafile
-                    pCurrXclObj = new XclObjAny( mrObjMgr );
+                    pCurrXclObj = new XclObjAny( mrObjMgr, rxShape );
             }
             else
-                pCurrXclObj = new XclObjAny( mrObjMgr );
+                pCurrXclObj = new XclObjAny( mrObjMgr, rxShape );
         }
         else if( nObjType == OBJ_UNO )
         {
@@ -254,7 +254,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
             pCurrXclObj = CreateCtrlObj( rxShape, pChildAnchor );
 #endif
             if( !pCurrXclObj )
-                pCurrXclObj = new XclObjAny( mrObjMgr );   // just a metafile
+                pCurrXclObj = new XclObjAny( mrObjMgr, rxShape );   // just a metafile
         }
         else if( !ScDrawLayer::IsNoteCaption( pObj ) )
         {

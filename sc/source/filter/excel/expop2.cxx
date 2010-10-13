@@ -195,20 +195,6 @@ FltError ExportXml2007::Write()
     pExcDoc->ReadDoc();         // ScDoc -> ExcDoc
     pExcDoc->WriteXml( aOut );  // wechstreamen
 
-    if( pDocShell && xRootStrg.Is() )
-    {
-        using namespace ::com::sun::star;
-        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-                pDocShell->GetModel(), uno::UNO_QUERY_THROW);
-        uno::Reference<document::XDocumentProperties> xDocProps
-                = xDPS->getDocumentProperties();
-        ::boost::shared_ptr<GDIMetaFile> pMetaFile =
-            pDocShell->GetPreviewMetaFile (sal_False);
-        uno::Sequence<sal_uInt8> metaFile(
-            sfx2::convertMetaFile(pMetaFile.get()));
-        sfx2::SaveOlePropertySet(xDocProps, xRootStrg, &metaFile);
-    }
-
     //! TODO: separate warnings for columns and sheets
     const XclExpAddressConverter& rAddrConv = GetAddressConverter();
     if( rAddrConv.IsColTruncated() || rAddrConv.IsRowTruncated() || rAddrConv.IsTabTruncated() )

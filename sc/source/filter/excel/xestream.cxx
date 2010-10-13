@@ -43,11 +43,13 @@
 #include "xlstring.hxx"
 #include "xeroot.hxx"
 #include "xestyle.hxx"
+#include "xcl97rec.hxx"
 #include "rangelst.hxx"
 #include "compiler.hxx"
 
 #include <oox/core/tokens.hxx>
 #include <formula/grammar.hxx>
+#include <oox/export/drawingml.hxx>
 
 #define DEBUG_XL_ENCRYPTION 0
 
@@ -644,6 +646,70 @@ void XclExpBiff8Encrypter::EncryptBytes( SvStream& rStrm, vector<sal_uInt8>& aBy
     mnOldPos = nStrmPos;
 }
 
+static const char* lcl_GetErrorString( USHORT nScErrCode )
+{
+    sal_uInt8 nXclErrCode = XclTools::GetXclErrorCode( nScErrCode );
+    switch( nXclErrCode )
+    {
+        case EXC_ERR_NULL:  return "#NULL!";
+        case EXC_ERR_DIV0:  return "#DIV/0!";
+        case EXC_ERR_VALUE: return "#VALUE!";
+        case EXC_ERR_REF:   return "#REF!";
+        case EXC_ERR_NAME:  return "#NAME?";
+        case EXC_ERR_NUM:   return "#NUM!";
+        case EXC_ERR_NA:
+        default:            return "#N/A";
+    }
+}
+
+void XclXmlUtils::GetFormulaTypeAndValue( ScFormulaCell& rCell, const char*& rsType, OUString& rsValue )
+{
+    switch( rCell.GetFormatType() )
+    {
+        case NUMBERFORMAT_NUMBER:
+        {
+            // either value or error code
+            USHORT nScErrCode = rCell.GetErrCode();
+            if( nScErrCode )
+            {
+                rsType = "e";
+                rsValue = ToOUString( lcl_GetErrorString( nScErrCode ) );
+            }
+            else
+            {
+                rsType = "n";
+                rsValue = OUString::valueOf( rCell.GetValue() );
+            }
+        }
+        break;
+
+        case NUMBERFORMAT_TEXT:
+        {
+            rsType = "str";
+            String aResult;
+            rCell.GetString( aResult );
+            rsValue = ToOUString( aResult );
+        }
+        break;
+
+        case NUMBERFORMAT_LOGICAL:
+        {
+            rsType = "b";
+            rsValue = ToOUString( rCell.GetValue() == 0.0 ? "0" : "1" );
+        }
+        break;
+
+        default:
+        {
+            rsType = "inlineStr";
+            String aResult;
+            rCell.GetString( aResult );
+            rsValue = ToOUString( aResult );
+        }
+        break;
+    }
+}
+
 rtl::OUString XclXmlUtils::GetStreamName( const char* sStreamDir, const char* sStream, sal_Int32 nId )
 {
     rtl::OUStringBuffer sBuf;
@@ -735,6 +801,11 @@ static ScRange lcl_ToRange( const XclRange& rRange )
     return aRange;
 }
 
+rtl::OString XclXmlUtils::ToOString( const XclRange& rRange )
+{
+    return ToOString( lcl_ToRange( rRange ) );
+}
+
 rtl::OString XclXmlUtils::ToOString( const XclRangeList& rRanges )
 {
     ScRangeList aRanges;
@@ -767,7 +838,7 @@ OUString XclXmlUtils::ToOUString( const String& s )
 rtl::OUString XclXmlUtils::ToOUString( ScDocument& rDocument, const ScAddress& rAddress, ScTokenArray* pTokenArray )
 {
     ScCompiler aCompiler( &rDocument, rAddress, *pTokenArray);
-    aCompiler.SetGrammar(FormulaGrammar::GRAM_NATIVE_XL_A1);
+    aCompiler.SetGrammar(FormulaGrammar::GRAM_ENGLISH_XL_A1);
     String s;
     aCompiler.CreateStringFromTokenArray( s );
     return ToOUString( s );
@@ -783,6 +854,100 @@ const char* XclXmlUtils::ToPsz( bool b )
 {
     return b ? "true" : "false";
 }
+
+sax_fastparser::FSHelperPtr XclXmlUtils::WriteElement( sax_fastparser::FSHelperPtr pStream, sal_Int32 nElement, sal_Int32 nValue )
+{
+    pStream->startElement( nElement, FSEND );
+    pStream->write( nValue );
+    pStream->endElement( nElement );
+
+    return pStream;
+}
+
+sax_fastparser::FSHelperPtr XclXmlUtils::WriteElement( sax_fastparser::FSHelperPtr pStream, sal_Int32 nElement, sal_Int64 nValue )
+{
+    pStream->startElement( nElement, FSEND );
+    pStream->write( nValue );
+    pStream->endElement( nElement );
+
+    return pStream;
+}
+
+sax_fastparser::FSHelperPtr XclXmlUtils::WriteElement( sax_fastparser::FSHelperPtr pStream, sal_Int32 nElement, const char* sValue )
+{
+    pStream->startElement( nElement, FSEND );
+    pStream->write( sValue );
+    pStream->endElement( nElement );
+
+    return pStream;
+}
+
+static void lcl_WriteValue( sax_fastparser::FSHelperPtr& rStream, sal_Int32 nElement, const char* pValue )
+{
+    if( !pValue )
+        return;
+    rStream->singleElement( nElement,
+            XML_val, pValue,
+            FSEND );
+}
+
+static const char* lcl_GetUnderlineStyle( FontUnderline eUnderline, bool& bHaveUnderline )
+{
+    bHaveUnderline = true;
+    switch( eUnderline )
+    {
+        // OOXTODO: doubleAccounting, singleAccounting
+        // OOXTODO: what should be done with the other FontUnderline values?
+        case UNDERLINE_SINGLE:  return "single";
+        case UNDERLINE_DOUBLE:  return "double";
+        case UNDERLINE_NONE:
+        default:                bHaveUnderline = false; return "none";
+    }
+}
+
+static const char* lcl_ToVerticalAlignmentRun( SvxEscapement eEscapement, bool& bHaveAlignment )
+{
+    bHaveAlignment = true;
+    switch( eEscapement )
+    {
+        case SVX_ESCAPEMENT_SUPERSCRIPT:    return "superscript";
+        case SVX_ESCAPEMENT_SUBSCRIPT:      return "subscript";
+        case SVX_ESCAPEMENT_OFF:
+        default:                            bHaveAlignment = false; return "baseline";
+    }
+}
+
+sax_fastparser::FSHelperPtr XclXmlUtils::WriteFontData( sax_fastparser::FSHelperPtr pStream, const XclFontData& rFontData, sal_Int32 nFontId )
+{
+    bool bHaveUnderline, bHaveVertAlign;
+    const char* pUnderline = lcl_GetUnderlineStyle( rFontData.GetScUnderline(), bHaveUnderline );
+    const char* pVertAlign = lcl_ToVerticalAlignmentRun( rFontData.GetScEscapement(), bHaveVertAlign );
+
+    lcl_WriteValue( pStream, nFontId,        XclXmlUtils::ToOString( rFontData.maName ).getStr() );
+    lcl_WriteValue( pStream, XML_charset,    rFontData.mnCharSet != 0 ? OString::valueOf( (sal_Int32) rFontData.mnCharSet ).getStr() : NULL );
+    lcl_WriteValue( pStream, XML_family,     OString::valueOf( (sal_Int32) rFontData.mnFamily ).getStr() );
+    lcl_WriteValue( pStream, XML_b,          rFontData.mnWeight > 400 ? XclXmlUtils::ToPsz( rFontData.mnWeight > 400 ) : NULL );
+    lcl_WriteValue( pStream, XML_i,          rFontData.mbItalic ? XclXmlUtils::ToPsz( rFontData.mbItalic ) : NULL );
+    lcl_WriteValue( pStream, XML_strike,     rFontData.mbStrikeout ? XclXmlUtils::ToPsz( rFontData.mbStrikeout ) : NULL );
+    lcl_WriteValue( pStream, XML_outline,    rFontData.mbOutline ? XclXmlUtils::ToPsz( rFontData.mbOutline ) : NULL );
+    lcl_WriteValue( pStream, XML_shadow,     rFontData.mbShadow ? XclXmlUtils::ToPsz( rFontData.mbShadow ) : NULL );
+    // OOXTODO: lcl_WriteValue( rStream, XML_condense, );    // mac compatibility setting
+    // OOXTODO: lcl_WriteValue( rStream, XML_extend, );      // compatibility setting
+    if( rFontData.maColor != Color( 0xFF, 0xFF, 0xFF, 0xFF ) )
+        pStream->singleElement( XML_color,
+                // OOXTODO: XML_auto,       bool
+                // OOXTODO: XML_indexed,    uint
+                XML_rgb,    XclXmlUtils::ToOString( rFontData.maColor ).getStr(),
+                // OOXTODO: XML_theme,      index into <clrScheme/>
+                // OOXTODO: XML_tint,       double
+                FSEND );
+    lcl_WriteValue( pStream, XML_sz,         OString::valueOf( (double) (rFontData.mnHeight / 20.0) ) );  // Twips->Pt
+    lcl_WriteValue( pStream, XML_u,          bHaveUnderline ? pUnderline : NULL );
+    lcl_WriteValue( pStream, XML_vertAlign,  bHaveVertAlign ? pVertAlign : NULL );
+
+    return pStream;
+}
+
 
 // ============================================================================
 
@@ -806,6 +971,9 @@ XclExpXmlStream::XclExpXmlStream( const Reference< XMultiServiceFactory >& rSMgr
                 Reference< XOutputStream >(),
                 "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml",
                 "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" ) );
+
+    DrawingML::ResetCounters();
+    XclObjList::ResetCounters();
 }
 
 XclExpXmlStream::~XclExpXmlStream()
@@ -868,75 +1036,6 @@ sax_fastparser::FSHelperPtr& XclExpXmlStream::WriteAttributes( sal_Int32 nAttrib
 
     return rStream;
 }
-
-static void lcl_WriteValue( sax_fastparser::FSHelperPtr& rStream, sal_Int32 nElement, const char* pValue )
-{
-    if( !pValue )
-        return;
-    rStream->singleElement( nElement,
-            XML_val, pValue,
-            FSEND );
-}
-
-static const char* lcl_GetUnderlineStyle( FontUnderline eUnderline, bool& bHaveUnderline )
-{
-    bHaveUnderline = true;
-    switch( eUnderline )
-    {
-        // OOXTODO: doubleAccounting, singleAccounting
-        // OOXTODO: what should be done with the other FontUnderline values?
-        case UNDERLINE_SINGLE:  return "single";
-        case UNDERLINE_DOUBLE:  return "double";
-        case UNDERLINE_NONE:
-        default:                bHaveUnderline = false; return "none";
-    }
-}
-
-static const char* lcl_ToVerticalAlignmentRun( SvxEscapement eEscapement, bool& bHaveAlignment )
-{
-    bHaveAlignment = true;
-    switch( eEscapement )
-    {
-        case SVX_ESCAPEMENT_SUPERSCRIPT:    return "superscript";
-        case SVX_ESCAPEMENT_SUBSCRIPT:      return "subscript";
-        case SVX_ESCAPEMENT_OFF:
-        default:                            bHaveAlignment = false; return "baseline";
-    }
-}
-
-sax_fastparser::FSHelperPtr& XclExpXmlStream::WriteFontData( const XclFontData& rFontData, sal_Int32 nFontId )
-{
-    bool bHaveUnderline, bHaveVertAlign;
-    const char* pUnderline = lcl_GetUnderlineStyle( rFontData.GetScUnderline(), bHaveUnderline );
-    const char* pVertAlign = lcl_ToVerticalAlignmentRun( rFontData.GetScEscapement(), bHaveVertAlign );
-
-    sax_fastparser::FSHelperPtr& rStream = GetCurrentStream();
-
-    lcl_WriteValue( rStream, nFontId,        XclXmlUtils::ToOString( rFontData.maName ).getStr() );
-    lcl_WriteValue( rStream, XML_charset,    rFontData.mnCharSet != 0 ? OString::valueOf( (sal_Int32) rFontData.mnCharSet ).getStr() : NULL );
-    lcl_WriteValue( rStream, XML_family,     OString::valueOf( (sal_Int32) rFontData.mnFamily ).getStr() );
-    lcl_WriteValue( rStream, XML_b,          rFontData.mnWeight > 400 ? XclXmlUtils::ToPsz( rFontData.mnWeight > 400 ) : NULL );
-    lcl_WriteValue( rStream, XML_i,          rFontData.mbItalic ? XclXmlUtils::ToPsz( rFontData.mbItalic ) : NULL );
-    lcl_WriteValue( rStream, XML_strike,     rFontData.mbStrikeout ? XclXmlUtils::ToPsz( rFontData.mbStrikeout ) : NULL );
-    lcl_WriteValue( rStream, XML_outline,    rFontData.mbOutline ? XclXmlUtils::ToPsz( rFontData.mbOutline ) : NULL );
-    lcl_WriteValue( rStream, XML_shadow,     rFontData.mbShadow ? XclXmlUtils::ToPsz( rFontData.mbShadow ) : NULL );
-    // OOXTODO: lcl_WriteValue( rStream, XML_condense, );    // mac compatibility setting
-    // OOXTODO: lcl_WriteValue( rStream, XML_extend, );      // compatibility setting
-    if( rFontData.maColor != Color( 0xFF, 0xFF, 0xFF, 0xFF ) )
-        rStream->singleElement( XML_color,
-                // OOXTODO: XML_auto,       bool
-                // OOXTODO: XML_indexed,    uint
-                XML_rgb,    XclXmlUtils::ToOString( rFontData.maColor ).getStr(),
-                // OOXTODO: XML_theme,      index into <clrScheme/>
-                // OOXTODO: XML_tint,       double
-                FSEND );
-    lcl_WriteValue( rStream, XML_sz,         OString::valueOf( (double) (rFontData.mnHeight / 20.0) ) );  // Twips->Pt
-    lcl_WriteValue( rStream, XML_u,          bHaveUnderline ? pUnderline : NULL );
-    lcl_WriteValue( rStream, XML_vertAlign,  bHaveVertAlign ? pVertAlign : NULL );
-
-    return rStream;
-}
-
 sax_fastparser::FSHelperPtr XclExpXmlStream::CreateOutputStream (
     const OUString& sFullStream,
     const OUString& sRelativeStream,
