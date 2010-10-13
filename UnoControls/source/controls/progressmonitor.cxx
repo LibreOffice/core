@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1064,3 +1065,5 @@ sal_Bool ProgressMonitor::impl_debug_checkParameter ( const OUString& rTopic, sa
 #endif  // #ifdef DBG_UTIL
 
 }   // namespace unocontrols
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

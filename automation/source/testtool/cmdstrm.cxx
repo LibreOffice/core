@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -466,3 +467,4 @@ void CmdStream::Reset( comm_ULONG nSequence )
     GenCmdFlow (F_Sequence,nSequence);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

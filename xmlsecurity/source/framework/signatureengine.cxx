@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -266,3 +267,5 @@ cssu::Reference< com::sun::star::io::XInputStream > SAL_CALL SignatureEngine::ge
     return xInputStream;
 }
 
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

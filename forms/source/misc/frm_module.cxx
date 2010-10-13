@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,3 +35,4 @@
     #include "forms_module_impl.hxx"
 #undef FORMS_MODULE_IMPLEMENTATION_INCLUDE_CONTEXT
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

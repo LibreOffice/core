@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -132,3 +133,4 @@ void FmShowColsDialog::SetColumns(const ::com::sun::star::uno::Reference< ::com:
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

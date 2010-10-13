@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -170,3 +171,4 @@ int  SpellBackgroundAttrib::operator==( const TextAttrib& rAttr ) const
             m_aBackgroundColor == static_cast<const SpellBackgroundAttrib&>(rAttr).m_aBackgroundColor;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

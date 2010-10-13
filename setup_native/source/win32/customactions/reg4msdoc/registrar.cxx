@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 // Registrar.cpp: Implementierung der Klasse Registrar.
 //
 //////////////////////////////////////////////////////////////////////
@@ -755,3 +756,5 @@ bool Registrar::IsOpenOfficeRegisteredForMsApplication(const std::wstring& Docum
 {
     return (std::wstring::npos != DocumentExtensionDefValue.find(FORWARD_KEY_PREFIX));
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
