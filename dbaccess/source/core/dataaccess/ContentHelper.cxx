@@ -60,18 +60,16 @@ using namespace ::com::sun::star::container;
 using namespace ::comphelper;
 using namespace ::cppu;
 
-// -----------------------------------------------------------------------------
 DBG_NAME(OContentHelper_Impl)
 OContentHelper_Impl::OContentHelper_Impl()
 {
     DBG_CTOR(OContentHelper_Impl,NULL);
 }
-// -----------------------------------------------------------------------------
+
 OContentHelper_Impl::~OContentHelper_Impl()
 {
     DBG_DTOR(OContentHelper_Impl,NULL);
 }
-// -----------------------------------------------------------------------------
 
 OContentHelper::OContentHelper(const Reference< XMultiServiceFactory >& _xORB
                                ,const Reference< XInterface >&  _xParentContainer
@@ -86,7 +84,7 @@ OContentHelper::OContentHelper(const Reference< XMultiServiceFactory >& _xORB
     ,m_nCommandId(0)
 {
 }
-//--------------------------------------------------------------------------
+
 void SAL_CALL OContentHelper::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -97,10 +95,10 @@ void SAL_CALL OContentHelper::disposing()
 
     m_xParentContainer = NULL;
 }
-// -----------------------------------------------------------------------------
+
 IMPLEMENT_SERVICE_INFO1(OContentHelper,"com.sun.star.comp.sdb.Content","com.sun.star.ucb.Content");
 IMPLEMENT_IMPLEMENTATION_ID(OContentHelper)
-// -----------------------------------------------------------------------------
+
 // XContent
 Reference< XContentIdentifier > SAL_CALL OContentHelper::getIdentifier(  ) throw (RuntimeException)
 {
@@ -110,7 +108,7 @@ Reference< XContentIdentifier > SAL_CALL OContentHelper::getIdentifier(  ) throw
     aIdentifier.append( impl_getHierarchicalName( true ) );
     return new ::ucbhelper::ContentIdentifier( m_aContext.getLegacyServiceFactory(), aIdentifier.makeStringAndClear() );
 }
-// -----------------------------------------------------------------------------
+
 ::rtl::OUString OContentHelper::impl_getHierarchicalName( bool _includingRootContainer ) const
 {
     ::rtl::OUStringBuffer aHierarchicalName( m_pImpl->m_aProps.aTitle );
@@ -137,7 +135,6 @@ Reference< XContentIdentifier > SAL_CALL OContentHelper::getIdentifier(  ) throw
     return sHierarchicalName;
 }
 
-// -----------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OContentHelper::getContentType() throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -149,21 +146,20 @@ Reference< XContentIdentifier > SAL_CALL OContentHelper::getIdentifier(  ) throw
 
     return *m_pImpl->m_aProps.aContentType;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OContentHelper::addContentEventListener( const Reference< XContentEventListener >& _rxListener ) throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     if ( _rxListener.is() )
         m_aContentListeners.addInterface(_rxListener);
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OContentHelper::removeContentEventListener( const Reference< XContentEventListener >& _rxListener ) throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     if (_rxListener.is())
         m_aContentListeners.removeInterface(_rxListener);
 }
-// -----------------------------------------------------------------------------
 
 // XCommandProcessor
 sal_Int32 SAL_CALL OContentHelper::createCommandIdentifier(  ) throw (RuntimeException)
@@ -172,7 +168,7 @@ sal_Int32 SAL_CALL OContentHelper::createCommandIdentifier(  ) throw (RuntimeExc
     // Just increase counter on every call to generate an identifier.
     return ++m_nCommandId;
 }
-// -----------------------------------------------------------------------------
+
 Any SAL_CALL OContentHelper::execute( const Command& aCommand, sal_Int32 /*CommandId*/, const Reference< XCommandEnvironment >& Environment ) throw (Exception, CommandAbortedException, RuntimeException)
 {
     Any aRet;
@@ -258,11 +254,10 @@ Any SAL_CALL OContentHelper::execute( const Command& aCommand, sal_Int32 /*Comma
 
     return aRet;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OContentHelper::abort( sal_Int32 /*CommandId*/ ) throw (RuntimeException)
 {
 }
-// -----------------------------------------------------------------------------
 
 // XPropertiesChangeNotifier
 void SAL_CALL OContentHelper::addPropertiesChangeListener( const Sequence< ::rtl::OUString >& PropertyNames, const Reference< XPropertiesChangeListener >& Listener ) throw (RuntimeException)
@@ -286,7 +281,7 @@ void SAL_CALL OContentHelper::addPropertiesChangeListener( const Sequence< ::rtl
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OContentHelper::removePropertiesChangeListener( const Sequence< ::rtl::OUString >& PropertyNames, const Reference< XPropertiesChangeListener >& Listener ) throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -308,19 +303,18 @@ void SAL_CALL OContentHelper::removePropertiesChangeListener( const Sequence< ::
         }
     }
 }
-// -----------------------------------------------------------------------------
 
 // XPropertyContainer
 void SAL_CALL OContentHelper::addProperty( const ::rtl::OUString& /*Name*/, sal_Int16 /*Attributes*/, const Any& /*DefaultValue*/ ) throw (PropertyExistException, IllegalTypeException, IllegalArgumentException, RuntimeException)
 {
     DBG_ERROR( "OContentHelper::addProperty: not implemented!" );
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OContentHelper::removeProperty( const ::rtl::OUString& /*Name*/ ) throw (UnknownPropertyException, NotRemoveableException, RuntimeException)
 {
     DBG_ERROR( "OContentHelper::removeProperty: not implemented!" );
 }
-// -----------------------------------------------------------------------------
+
 // XInitialization
 void SAL_CALL OContentHelper::initialize( const Sequence< Any >& _aArguments ) throw(Exception, RuntimeException)
 {
@@ -344,7 +338,7 @@ void SAL_CALL OContentHelper::initialize( const Sequence< Any >& _aArguments ) t
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 Sequence< Any > OContentHelper::setPropertyValues(const Sequence< PropertyValue >& rValues,const Reference< XCommandEnvironment >& /*xEnv*/ )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
@@ -456,7 +450,7 @@ Sequence< Any > OContentHelper::setPropertyValues(const Sequence< PropertyValue 
 
     return aRet;
 }
-// -----------------------------------------------------------------------------
+
 //=========================================================================
 // static
 Reference< XRow > OContentHelper::getPropertyValues( const Sequence< Property >& rProperties)
@@ -539,8 +533,7 @@ Reference< XRow > OContentHelper::getPropertyValues( const Sequence< Property >&
 
     return Reference< XRow >( xRow.get() );
 }
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+
 void OContentHelper::notifyPropertiesChange( const Sequence< PropertyChangeEvent >& evt ) const
 {
 
@@ -564,7 +557,6 @@ void OContentHelper::notifyPropertiesChange( const Sequence< PropertyChangeEvent
         typedef Sequence< PropertyChangeEvent > PropertyEventSequence;
         typedef ::std::map< XPropertiesChangeListener*, PropertyEventSequence* > PropertiesEventListenerMap;
         PropertiesEventListenerMap aListeners;
-
 
         const PropertyChangeEvent* propertyChangeEvent = evt.getConstArray();
 
@@ -618,9 +610,8 @@ void OContentHelper::notifyPropertiesChange( const Sequence< PropertyChangeEvent
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 // com::sun::star::lang::XUnoTunnel
-//------------------------------------------------------------------
 sal_Int64 OContentHelper::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
     if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
@@ -629,7 +620,6 @@ sal_Int64 OContentHelper::getSomething( const Sequence< sal_Int8 > & rId ) throw
     return 0;
 }
 
-// -----------------------------------------------------------------------------
 OContentHelper* OContentHelper::getImplementation( const Reference< XInterface >& _rxComponent )
 {
     OContentHelper* pContent( NULL );
@@ -641,20 +631,18 @@ OContentHelper* OContentHelper::getImplementation( const Reference< XInterface >
     return pContent;
 }
 
-// -----------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL OContentHelper::getParent(  ) throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_xParentContainer;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OContentHelper::setParent( const Reference< XInterface >& _xParent ) throw (NoSupportException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     m_xParentContainer = _xParent;
 }
 
-// -----------------------------------------------------------------------------
 void OContentHelper::impl_rename_throw(const ::rtl::OUString& _sNewName,bool _bNotify )
 {
     osl::ClearableGuard< osl::Mutex > aGuard(m_aMutex);
@@ -683,50 +671,18 @@ void OContentHelper::impl_rename_throw(const ::rtl::OUString& _sNewName,bool _bN
         throw ElementExistException(_sNewName,*this);
     }
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OContentHelper::rename( const ::rtl::OUString& newName ) throw (SQLException, ElementExistException, RuntimeException)
 {
 
     impl_rename_throw(newName);
-    //Reference<XNameContainer> xNameCont(m_xParentContainer,UNO_QUERY);
-    //if ( xNameCont.is() )
-    //{
-    //  if ( xNameCont->hasByName(newName) )
-    //      throw ElementExistException(newName,*this);
-
-    //  try
-    //  {
-    //      if ( xNameCont->hasByName(m_pImpl->m_aProps.aTitle) )
-    //          xNameCont->removeByName(m_pImpl->m_aProps.aTitle);
-
-    //      m_pImpl->m_aProps.aTitle = newName;
-    //      xNameCont->insertByName(m_pImpl->m_aProps.aTitle,makeAny(Reference<XContent>(*this,UNO_QUERY)));
-    //      notifyDataSourceModified();
-    //  }
-    //  catch(IllegalArgumentException)
-    //  {
-    //      throw SQLException();
-    //  }
-    //  catch(NoSuchElementException)
-    //  {
-    //      throw SQLException();
-    //  }
-    //  catch(WrappedTargetException)
-    //  {
-    //      throw SQLException();
-    //  }
-    //}
-    //else
-    //  m_pImpl->m_aProps.aTitle = newName;
 
 }
-// -----------------------------------------------------------------------------
+
 void OContentHelper::notifyDataSourceModified()
 {
     ::dbaccess::notifyDataSourceModified(m_xParentContainer,sal_True);
 }
-//........................................................................
-}   // namespace dbaccess
-//........................................................................
 
+}   // namespace dbaccess
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

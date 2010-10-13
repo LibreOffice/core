@@ -50,7 +50,7 @@ using namespace ::comphelper;
 using namespace ::cppu;
 
 DBG_NAME(ODataColumn)
-//--------------------------------------------------------------------------
+
 ODataColumn::ODataColumn(
                          const Reference < XResultSetMetaData >& _xMetaData,
                          const Reference < XRow >& _xRow,
@@ -63,14 +63,13 @@ ODataColumn::ODataColumn(
 {
     DBG_CTOR(ODataColumn,NULL);
 }
-// -----------------------------------------------------------------------------
+
 ODataColumn::~ODataColumn()
 {
     DBG_DTOR(ODataColumn,NULL);
 }
 
 // com::sun::star::lang::XTypeProvider
-//--------------------------------------------------------------------------
 Sequence< Type > ODataColumn::getTypes() throw (RuntimeException)
 {
     OTypeCollection aTypes(::getCppuType( (const Reference< XColumn > *)0 ),
@@ -79,7 +78,6 @@ Sequence< Type > ODataColumn::getTypes() throw (RuntimeException)
     return aTypes.getTypes();
 }
 
-//--------------------------------------------------------------------------
 Sequence< sal_Int8 > ODataColumn::getImplementationId() throw (RuntimeException)
 {
     static OImplementationId * pId = 0;
@@ -95,7 +93,6 @@ Sequence< sal_Int8 > ODataColumn::getImplementationId() throw (RuntimeException)
     return pId->getImplementationId();
 }
 
-//------------------------------------------------------------------------------
 Any SAL_CALL ODataColumn::queryInterface( const Type & _rType ) throw (RuntimeException)
 {
     Any aReturn = OResultColumn::queryInterface(_rType);
@@ -108,13 +105,11 @@ Any SAL_CALL ODataColumn::queryInterface( const Type & _rType ) throw (RuntimeEx
 }
 
 // XServiceInfo
-//------------------------------------------------------------------------------
 rtl::OUString ODataColumn::getImplementationName(  ) throw(RuntimeException)
 {
     return rtl::OUString::createFromAscii("com.sun.star.sdb.ODataColumn");
 }
 
-//------------------------------------------------------------------------------
 Sequence< ::rtl::OUString > ODataColumn::getSupportedServiceNames(  ) throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aSNS( 3 );
@@ -125,7 +120,6 @@ Sequence< ::rtl::OUString > ODataColumn::getSupportedServiceNames(  ) throw (Run
 }
 
 // OComponentHelper
-//------------------------------------------------------------------------------
 void ODataColumn::disposing()
 {
     OResultColumn::disposing();
@@ -135,7 +129,6 @@ void ODataColumn::disposing()
 }
 
 // ::com::sun::star::sdb::XColumn
-//------------------------------------------------------------------------------
 sal_Bool ODataColumn::wasNull(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
@@ -144,7 +137,6 @@ sal_Bool ODataColumn::wasNull(void) throw( SQLException, RuntimeException )
     return m_xRow->wasNull();
 }
 
-//------------------------------------------------------------------------------
 rtl::OUString ODataColumn::getString(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
@@ -153,7 +145,6 @@ rtl::OUString ODataColumn::getString(void) throw( SQLException, RuntimeException
     return m_xRow->getString(m_nPos);
 }
 
-//------------------------------------------------------------------------------
 sal_Bool ODataColumn::getBoolean(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
@@ -162,7 +153,6 @@ sal_Bool ODataColumn::getBoolean(void) throw( SQLException, RuntimeException )
     return m_xRow->getBoolean(m_nPos);
 }
 
-//------------------------------------------------------------------------------
 sal_Int8 ODataColumn::getByte(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
@@ -171,7 +161,6 @@ sal_Int8 ODataColumn::getByte(void) throw( SQLException, RuntimeException )
     return m_xRow->getByte(m_nPos);
 }
 
-//------------------------------------------------------------------------------
 sal_Int16 ODataColumn::getShort(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
@@ -180,7 +169,6 @@ sal_Int16 ODataColumn::getShort(void) throw( SQLException, RuntimeException )
     return m_xRow->getShort(m_nPos);
 }
 
-//------------------------------------------------------------------------------
 sal_Int32 ODataColumn::getInt(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
@@ -189,7 +177,6 @@ sal_Int32 ODataColumn::getInt(void) throw( SQLException, RuntimeException )
     return m_xRow->getInt(m_nPos);
 }
 
-//------------------------------------------------------------------------------
 sal_Int64 ODataColumn::getLong(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
@@ -198,7 +185,6 @@ sal_Int64 ODataColumn::getLong(void) throw( SQLException, RuntimeException )
     return m_xRow->getLong(m_nPos);
 }
 
-//------------------------------------------------------------------------------
 float ODataColumn::getFloat(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
@@ -206,7 +192,7 @@ float ODataColumn::getFloat(void) throw( SQLException, RuntimeException )
 
     return m_xRow->getFloat(m_nPos);
 }
-//------------------------------------------------------------------------------
+
 double ODataColumn::getDouble(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
@@ -215,7 +201,6 @@ double ODataColumn::getDouble(void) throw( SQLException, RuntimeException )
     return m_xRow->getDouble(m_nPos);
 }
 
-//------------------------------------------------------------------------------
 Sequence< sal_Int8 > ODataColumn::getBytes(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
@@ -223,7 +208,7 @@ Sequence< sal_Int8 > ODataColumn::getBytes(void) throw( SQLException, RuntimeExc
 
     return m_xRow->getBytes(m_nPos);
 }
-//------------------------------------------------------------------------------
+
 com::sun::star::util::Date ODataColumn::getDate(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
@@ -232,7 +217,6 @@ com::sun::star::util::Date ODataColumn::getDate(void) throw( SQLException, Runti
     return m_xRow->getDate(m_nPos);
 }
 
-//------------------------------------------------------------------------------
 com::sun::star::util::Time ODataColumn::getTime(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
@@ -240,7 +224,7 @@ com::sun::star::util::Time ODataColumn::getTime(void) throw( SQLException, Runti
 
     return m_xRow->getTime(m_nPos);
 }
-//------------------------------------------------------------------------------
+
 com::sun::star::util::DateTime ODataColumn::getTimestamp(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
@@ -249,7 +233,6 @@ com::sun::star::util::DateTime ODataColumn::getTimestamp(void) throw( SQLExcepti
     return m_xRow->getTimestamp(m_nPos);
 }
 
-//------------------------------------------------------------------------------
 Reference< ::com::sun::star::io::XInputStream >  ODataColumn::getBinaryStream(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
@@ -258,7 +241,6 @@ Reference< ::com::sun::star::io::XInputStream >  ODataColumn::getBinaryStream(vo
     return m_xRow->getBinaryStream(m_nPos);
 }
 
-//------------------------------------------------------------------------------
 Reference< ::com::sun::star::io::XInputStream >  ODataColumn::getCharacterStream(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
@@ -267,7 +249,6 @@ Reference< ::com::sun::star::io::XInputStream >  ODataColumn::getCharacterStream
     return m_xRow->getCharacterStream(m_nPos);
 }
 
-//------------------------------------------------------------------------------
 Any ODataColumn::getObject(const Reference< ::com::sun::star::container::XNameAccess > & typeMap) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
@@ -276,7 +257,6 @@ Any ODataColumn::getObject(const Reference< ::com::sun::star::container::XNameAc
     return m_xRow->getObject(m_nPos, typeMap);
 }
 
-//------------------------------------------------------------------------------
 Reference< XRef >  ODataColumn::getRef(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
@@ -285,7 +265,6 @@ Reference< XRef >  ODataColumn::getRef(void) throw( SQLException, RuntimeExcepti
     return m_xRow->getRef(m_nPos);
 }
 
-//------------------------------------------------------------------------------
 Reference< XBlob >  ODataColumn::getBlob(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
@@ -294,7 +273,6 @@ Reference< XBlob >  ODataColumn::getBlob(void) throw( SQLException, RuntimeExcep
     return m_xRow->getBlob(m_nPos);
 }
 
-//------------------------------------------------------------------------------
 Reference< XClob >  ODataColumn::getClob(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
@@ -303,7 +281,6 @@ Reference< XClob >  ODataColumn::getClob(void) throw( SQLException, RuntimeExcep
     return m_xRow->getClob(m_nPos);
 }
 
-//------------------------------------------------------------------------------
 Reference< XArray >  ODataColumn::getArray(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
@@ -313,7 +290,6 @@ Reference< XArray >  ODataColumn::getArray(void) throw( SQLException, RuntimeExc
 }
 
 // ::com::sun::star::sdb::XColumnUpdate
-//------------------------------------------------------------------------------
 void ODataColumn::updateNull(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard( m_aMutex );
@@ -322,7 +298,6 @@ void ODataColumn::updateNull(void) throw( SQLException, RuntimeException )
     m_xRowUpdate->updateNull(m_nPos);
 }
 
-//------------------------------------------------------------------------------
 void ODataColumn::updateBoolean(sal_Bool x) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard( m_aMutex );
@@ -331,7 +306,6 @@ void ODataColumn::updateBoolean(sal_Bool x) throw( SQLException, RuntimeExceptio
     m_xRowUpdate->updateBoolean(m_nPos, x);
 }
 
-//------------------------------------------------------------------------------
 void ODataColumn::updateByte(sal_Int8 x) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard( m_aMutex );
@@ -340,7 +314,6 @@ void ODataColumn::updateByte(sal_Int8 x) throw( SQLException, RuntimeException )
     m_xRowUpdate->updateByte(m_nPos, x);
 }
 
-//------------------------------------------------------------------------------
 void ODataColumn::updateShort(sal_Int16 x) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard( m_aMutex );
@@ -349,7 +322,6 @@ void ODataColumn::updateShort(sal_Int16 x) throw( SQLException, RuntimeException
     m_xRowUpdate->updateShort(m_nPos, x);
 }
 
-//------------------------------------------------------------------------------
 void ODataColumn::updateInt(sal_Int32 x) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard( m_aMutex );
@@ -358,7 +330,6 @@ void ODataColumn::updateInt(sal_Int32 x) throw( SQLException, RuntimeException )
     m_xRowUpdate->updateInt(m_nPos, x);
 }
 
-//------------------------------------------------------------------------------
 void ODataColumn::updateLong(sal_Int64 x) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard( m_aMutex );
@@ -367,7 +338,6 @@ void ODataColumn::updateLong(sal_Int64 x) throw( SQLException, RuntimeException 
     m_xRowUpdate->updateLong(m_nPos, x);
 }
 
-//------------------------------------------------------------------------------
 void ODataColumn::updateFloat(float x) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard( m_aMutex );
@@ -376,7 +346,6 @@ void ODataColumn::updateFloat(float x) throw( SQLException, RuntimeException )
     m_xRowUpdate->updateFloat(m_nPos, x);
 }
 
-//------------------------------------------------------------------------------
 void ODataColumn::updateDouble(double x) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard( m_aMutex );
@@ -385,7 +354,6 @@ void ODataColumn::updateDouble(double x) throw( SQLException, RuntimeException )
     m_xRowUpdate->updateDouble(m_nPos, x);
 }
 
-//------------------------------------------------------------------------------
 void ODataColumn::updateString(const rtl::OUString& x) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard( m_aMutex );
@@ -394,7 +362,6 @@ void ODataColumn::updateString(const rtl::OUString& x) throw( SQLException, Runt
     m_xRowUpdate->updateString(m_nPos, x);
 }
 
-//------------------------------------------------------------------------------
 void ODataColumn::updateBytes(const Sequence< sal_Int8 >& x) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard( m_aMutex );
@@ -403,7 +370,6 @@ void ODataColumn::updateBytes(const Sequence< sal_Int8 >& x) throw( SQLException
     m_xRowUpdate->updateBytes(m_nPos, x);
 }
 
-//------------------------------------------------------------------------------
 void ODataColumn::updateDate(const com::sun::star::util::Date& x) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard( m_aMutex );
@@ -412,7 +378,6 @@ void ODataColumn::updateDate(const com::sun::star::util::Date& x) throw( SQLExce
     m_xRowUpdate->updateDate(m_nPos, x);
 }
 
-//------------------------------------------------------------------------------
 void ODataColumn::updateTime(const ::com::sun::star::util::Time& x) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard( m_aMutex );
@@ -421,7 +386,6 @@ void ODataColumn::updateTime(const ::com::sun::star::util::Time& x) throw( SQLEx
     m_xRowUpdate->updateTime(m_nPos, x);
 }
 
-//------------------------------------------------------------------------------
 void ODataColumn::updateTimestamp(const ::com::sun::star::util::DateTime& x) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard( m_aMutex );
@@ -430,7 +394,6 @@ void ODataColumn::updateTimestamp(const ::com::sun::star::util::DateTime& x) thr
     m_xRowUpdate->updateTimestamp(m_nPos, x);
 }
 
-//------------------------------------------------------------------------------
 void ODataColumn::updateCharacterStream(const Reference< ::com::sun::star::io::XInputStream > & x, sal_Int32 length) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard( m_aMutex );
@@ -439,7 +402,6 @@ void ODataColumn::updateCharacterStream(const Reference< ::com::sun::star::io::X
     m_xRowUpdate->updateCharacterStream(m_nPos, x, length);
 }
 
-//------------------------------------------------------------------------------
 void ODataColumn::updateBinaryStream(const Reference< ::com::sun::star::io::XInputStream > & x, sal_Int32 length) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard( m_aMutex );
@@ -448,7 +410,6 @@ void ODataColumn::updateBinaryStream(const Reference< ::com::sun::star::io::XInp
     m_xRowUpdate->updateBinaryStream(m_nPos, x, length);
 }
 
-//------------------------------------------------------------------------------
 void ODataColumn::updateNumericObject(const Any& x, sal_Int32 scale) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard( m_aMutex );
@@ -457,7 +418,6 @@ void ODataColumn::updateNumericObject(const Any& x, sal_Int32 scale) throw( SQLE
     m_xRowUpdate->updateNumericObject(m_nPos, x, scale);
 }
 
-//------------------------------------------------------------------------------
 void ODataColumn::updateObject(const Any& x) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard( m_aMutex );
@@ -465,5 +425,4 @@ void ODataColumn::updateObject(const Any& x) throw( SQLException, RuntimeExcepti
 
     m_xRowUpdate->updateObject(m_nPos, x);
 }
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

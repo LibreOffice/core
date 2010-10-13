@@ -91,7 +91,6 @@ private:
     /** loads the given object from the given URL
     @throws WrappedTargetException
         if an error occurs accessing the URL via the UCB
-
     */
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > loadObjectFromURL(const ::rtl::OUString& _rName,const ::rtl::OUString& _sURL);
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getObject( const ::rtl::OUString& _rURL );

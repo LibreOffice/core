@@ -53,11 +53,9 @@ using namespace ::com::sun::star::container;
 using namespace dbaccess;
 
 //=========================================================================
-//=========================================================================
 //
 // DynamicResultSet Implementation.
 //
-//=========================================================================
 //=========================================================================
 
 DynamicResultSet::DynamicResultSet(
@@ -76,7 +74,6 @@ DynamicResultSet::DynamicResultSet(
 // Non-interface methods.
 //
 //=========================================================================
-
 void DynamicResultSet::initStatic()
 {
     m_xResultSet1
@@ -88,7 +85,6 @@ void DynamicResultSet::initStatic()
                                       m_xEnv );
 }
 
-//=========================================================================
 void DynamicResultSet::initDynamic()
 {
     m_xResultSet1
@@ -100,5 +96,4 @@ void DynamicResultSet::initDynamic()
                                       m_xEnv );
     m_xResultSet2 = m_xResultSet1;
 }
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

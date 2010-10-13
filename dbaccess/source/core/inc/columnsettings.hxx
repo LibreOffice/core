@@ -31,10 +31,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 /** === end UNO includes === **/
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
     // TODO: move the following to comphelper/propertycontainerhelper.hxx
     class IPropertyContainer
@@ -102,8 +100,6 @@ namespace dbaccess
         static bool hasDefaultSettings( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColumn );
     };
 
-//........................................................................
 } // namespace dbaccess
-//........................................................................
 
 #endif // COLUMNSETTINGS_HXX

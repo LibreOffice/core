@@ -78,7 +78,6 @@ DBG_NAME(OColumn)
 //============================================================
 //= OColumn
 //============================================================
-//--------------------------------------------------------------------------
 OColumn::OColumn( const bool _bNameIsReadOnly )
         :OColumnBase( m_aMutex )
         ,::comphelper::OPropertyContainer( OColumnBase::rBHelper )
@@ -89,14 +88,12 @@ OColumn::OColumn( const bool _bNameIsReadOnly )
         &m_sName, ::getCppuType( &m_sName ) );
 }
 
-//--------------------------------------------------------------------------
 OColumn::~OColumn()
 {
     DBG_DTOR(OColumn, NULL);
 }
 
 // com::sun::star::lang::XTypeProvider
-//--------------------------------------------------------------------------
 Sequence< Type > OColumn::getTypes() throw (RuntimeException)
 {
     return ::comphelper::concatSequences(
@@ -109,19 +106,16 @@ Sequence< Type > OColumn::getTypes() throw (RuntimeException)
 IMPLEMENT_FORWARD_XINTERFACE2( OColumn, OColumnBase, ::comphelper::OPropertyContainer )
 
 // ::com::sun::star::lang::XServiceInfo
-//------------------------------------------------------------------------------
 rtl::OUString OColumn::getImplementationName(  ) throw(RuntimeException)
 {
     return rtl::OUString::createFromAscii("com.sun.star.sdb.OColumn");
 }
 
-//------------------------------------------------------------------------------
 sal_Bool OColumn::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)
 {
     return ::comphelper::findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
 }
 
-//------------------------------------------------------------------------------
 Sequence< ::rtl::OUString > OColumn::getSupportedServiceNames(  ) throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aSNS( 1 );
@@ -130,49 +124,42 @@ Sequence< ::rtl::OUString > OColumn::getSupportedServiceNames(  ) throw (Runtime
 }
 
 // OComponentHelper
-//------------------------------------------------------------------------------
 void OColumn::disposing()
 {
     OPropertyContainer::disposing();
 }
 
 // com::sun::star::beans::XPropertySet
-//------------------------------------------------------------------------------
 Reference< XPropertySetInfo > OColumn::getPropertySetInfo() throw (RuntimeException)
 {
     return createPropertySetInfo( getInfoHelper() ) ;
 }
 
-// -----------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OColumn::getName(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     return m_sName;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OColumn::setName( const ::rtl::OUString& _rName ) throw(::com::sun::star::uno::RuntimeException)
 {
     m_sName = _rName;
 }
 
-// -----------------------------------------------------------------------------
 void OColumn::fireValueChange(const ::connectivity::ORowSetValue& /*_rOldValue*/)
 {
     DBG_ERROR( "OColumn::fireValueChange: not implemented!" );
 }
 
-//------------------------------------------------------------------------------
 void OColumn::registerProperty( const ::rtl::OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes, void* _pPointerToMember, const Type& _rMemberType )
 {
     ::comphelper::OPropertyContainer::registerProperty( _rName, _nHandle, _nAttributes, _pPointerToMember, _rMemberType );
 }
 
-//------------------------------------------------------------------------------
 void OColumn::registerMayBeVoidProperty( const ::rtl::OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes, Any* _pPointerToMember, const Type& _rExpectedType )
 {
     ::comphelper::OPropertyContainer::registerMayBeVoidProperty( _rName, _nHandle, _nAttributes, _pPointerToMember, _rExpectedType );
 }
 
-//------------------------------------------------------------------------------
 void OColumn::registerPropertyNoMember( const ::rtl::OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes, const Type& _rType, const void* _pInitialValue )
 {
     ::comphelper::OPropertyContainer::registerPropertyNoMember( _rName, _nHandle, _nAttributes, _rType, _pInitialValue );
@@ -183,7 +170,6 @@ void OColumn::registerPropertyNoMember( const ::rtl::OUString& _rName, sal_Int32
 //============================================================
 DBG_NAME(OColumns);
 
-//--------------------------------------------------------------------------
 OColumns::OColumns(::cppu::OWeakObject& _rParent,
                    ::osl::Mutex& _rMutex,
                    sal_Bool _bCaseSensitive,const ::std::vector< ::rtl::OUString> &_rVector,
@@ -204,7 +190,6 @@ OColumns::OColumns(::cppu::OWeakObject& _rParent,
     DBG_CTOR(OColumns, NULL);
 }
 
-// -------------------------------------------------------------------------
 OColumns::OColumns(::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxDrvColumns,
         sal_Bool _bCaseSensitive,const ::std::vector< ::rtl::OUString> &_rVector,
@@ -224,26 +209,23 @@ OColumns::OColumns(::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
 {
     DBG_CTOR(OColumns, NULL);
 }
-//--------------------------------------------------------------------------
+
 OColumns::~OColumns()
 {
     DBG_DTOR(OColumns, NULL);
 }
 
 // XServiceInfo
-//------------------------------------------------------------------------------
 rtl::OUString OColumns::getImplementationName(  ) throw(RuntimeException)
 {
     return rtl::OUString::createFromAscii("com.sun.star.sdb.OColumns");
 }
 
-//------------------------------------------------------------------------------
 sal_Bool OColumns::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)
 {
     return ::comphelper::findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
 }
 
-//------------------------------------------------------------------------------
 Sequence< ::rtl::OUString > OColumns::getSupportedServiceNames(  ) throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aSNS( 1 );
@@ -272,7 +254,6 @@ void OColumns::clearColumns()
     disposing();
 }
 
-// -----------------------------------------------------------------------------
 void SAL_CALL OColumns::disposing(void)
 {
     MutexGuard aGuard(m_rMutex);
@@ -282,14 +263,12 @@ void SAL_CALL OColumns::disposing(void)
     OColumns_BASE::disposing();
 }
 
-// -------------------------------------------------------------------------
 void OColumns::impl_refresh() throw(::com::sun::star::uno::RuntimeException)
 {
     if (m_pRefreshColumns)
         m_pRefreshColumns->refreshColumns();
 }
 
-// -------------------------------------------------------------------------
 connectivity::sdbcx::ObjectType OColumns::createObject(const ::rtl::OUString& _rName)
 {
     OSL_ENSURE(m_pColFactoryImpl, "OColumns::createObject: no column factory!");
@@ -309,7 +288,7 @@ connectivity::sdbcx::ObjectType OColumns::createObject(const ::rtl::OUString& _r
 
     return xRet;
 }
-// -------------------------------------------------------------------------
+
 Reference< XPropertySet > OColumns::createDescriptor()
 {
     if ( m_pColFactoryImpl )
@@ -323,7 +302,7 @@ Reference< XPropertySet > OColumns::createDescriptor()
     else
         return Reference< XPropertySet >();
 }
-// -------------------------------------------------------------------------
+
 Any SAL_CALL OColumns::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     Any aRet;
@@ -349,7 +328,7 @@ Any SAL_CALL OColumns::queryInterface( const Type & rType ) throw(RuntimeExcepti
         aRet = TXChild::queryInterface( rType);
     return aRet;
 }
-// -------------------------------------------------------------------------
+
 Sequence< Type > SAL_CALL OColumns::getTypes(  ) throw(RuntimeException)
 {
     sal_Bool bAppendFound = sal_False,bDropFound = sal_False;
@@ -400,7 +379,7 @@ Sequence< Type > SAL_CALL OColumns::getTypes(  ) throw(RuntimeException)
     }
     return aRet;
 }
-// -------------------------------------------------------------------------
+
 // XAppend
 sdbcx::ObjectType OColumns::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
@@ -438,7 +417,7 @@ sdbcx::ObjectType OColumns::appendObject( const ::rtl::OUString& _rForName, cons
 
     return xReturn;
 }
-// -------------------------------------------------------------------------
+
 // XDrop
 void OColumns::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
@@ -466,19 +445,16 @@ void OColumns::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 
     ::dbaccess::notifyDataSourceModified(m_xParent,sal_True);
 }
-// -----------------------------------------------------------------------------
 
 Reference< XInterface > SAL_CALL OColumns::getParent(  ) throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     return m_xParent;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OColumns::setParent( const Reference< XInterface >& _xParent ) throw (NoSupportException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     m_xParent = _xParent;
 }
-// -----------------------------------------------------------------------------
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -41,10 +41,8 @@ namespace comphelper
     class ComponentContext;
 }
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
     //====================================================================
     //= DatabaseDocumentRecovery
@@ -85,8 +83,6 @@ namespace dbaccess
         const ::std::auto_ptr< DatabaseDocumentRecovery_Data >  m_pData;
     };
 
-//........................................................................
 } // namespace dbaccess
-//........................................................................
 
 #endif // DBACCESS_DBDOCRECOVERY_HXX

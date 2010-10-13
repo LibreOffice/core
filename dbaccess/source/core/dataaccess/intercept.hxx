@@ -110,7 +110,6 @@ public:
             ::com::sun::star::uno::RuntimeException
         );
 
-
     //XDispatchProviderInterceptor
     virtual ::com::sun::star::uno::Reference<
     ::com::sun::star::frame::XDispatchProvider > SAL_CALL
@@ -146,7 +145,6 @@ public:
     virtual void SAL_CALL notifyEvent( const ::com::sun::star::document::EventObject& Event ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
 
-
 private:
 
     osl::Mutex   m_aMutex;
@@ -163,12 +161,6 @@ private:
     sal_Bool                            m_bAllowEditDoc;
 };
 
-
-//........................................................................
 }   // namespace dbaccess
-//........................................................................
-
 
 #endif //DBA_INTERCEPT_HXX
-
-

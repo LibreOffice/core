@@ -80,27 +80,23 @@ using ::com::sun::star::sdb::tools::XTableName;
 using ::com::sun::star::sdb::tools::XObjectNames;
 using ::com::sun::star::sdb::tools::XDataSourceMetaData;
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
 //==========================================================================
 // XServiceInfo
-//------------------------------------------------------------------------------
 rtl::OUString OConnection::getImplementationName(  ) throw(RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::getImplementationName" );
     return rtl::OUString::createFromAscii("com.sun.star.comp.dbaccess.Connection");
 }
-//------------------------------------------------------------------------------
+
 sal_Bool OConnection::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::supportsService" );
     return findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
 }
 
-//------------------------------------------------------------------------------
 Sequence< ::rtl::OUString > OConnection::getSupportedServiceNames(  ) throw (RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::getSupportedServiceNames" );
@@ -117,7 +113,6 @@ Sequence< ::rtl::OUString > OConnection::getSupportedServiceNames(  ) throw (Run
 }
 
 // XCloseable
-//------------------------------------------------------------------------------
 void OConnection::close(void) throw( SQLException, RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::close" );
@@ -125,7 +120,6 @@ void OConnection::close(void) throw( SQLException, RuntimeException )
     dispose();
 }
 
-//------------------------------------------------------------------------------
 sal_Bool OConnection::isClosed(void) throw( SQLException, RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::isClosed" );
@@ -134,7 +128,6 @@ sal_Bool OConnection::isClosed(void) throw( SQLException, RuntimeException )
 }
 
 // XConnection
-//------------------------------------------------------------------------------
 Reference< XStatement >  OConnection::createStatement(void) throw( SQLException, RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::createStatement" );
@@ -150,7 +143,6 @@ Reference< XStatement >  OConnection::createStatement(void) throw( SQLException,
     }
     return xStatement;
 }
-//------------------------------------------------------------------------------
 Reference< XPreparedStatement >  OConnection::prepareStatement(const rtl::OUString& sql) throw( SQLException, RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::prepareStatement" );
@@ -168,7 +160,6 @@ Reference< XPreparedStatement >  OConnection::prepareStatement(const rtl::OUStri
     return xStatement;
 }
 
-//------------------------------------------------------------------------------
 Reference< XPreparedStatement >  OConnection::prepareCall(const rtl::OUString& sql) throw( SQLException, RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::prepareCall" );
@@ -185,7 +176,6 @@ Reference< XPreparedStatement >  OConnection::prepareCall(const rtl::OUString& s
     return xStatement;
 }
 
-//------------------------------------------------------------------------------
 rtl::OUString OConnection::nativeSQL(const rtl::OUString& sql) throw( SQLException, RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::nativeSQL" );
@@ -194,7 +184,6 @@ rtl::OUString OConnection::nativeSQL(const rtl::OUString& sql) throw( SQLExcepti
     return m_xMasterConnection->nativeSQL(sql);
 }
 
-//------------------------------------------------------------------------------
 void OConnection::setAutoCommit(sal_Bool autoCommit) throw( SQLException, RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::setAutoCommit" );
@@ -203,7 +192,6 @@ void OConnection::setAutoCommit(sal_Bool autoCommit) throw( SQLException, Runtim
     m_xMasterConnection->setAutoCommit(autoCommit);
 }
 
-//------------------------------------------------------------------------------
 sal_Bool OConnection::getAutoCommit(void) throw( SQLException, RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::getAutoCommit" );
@@ -212,7 +200,6 @@ sal_Bool OConnection::getAutoCommit(void) throw( SQLException, RuntimeException 
     return m_xMasterConnection->getAutoCommit();
 }
 
-//------------------------------------------------------------------------------
 void OConnection::commit(void) throw( SQLException, RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::commit" );
@@ -221,7 +208,6 @@ void OConnection::commit(void) throw( SQLException, RuntimeException )
     m_xMasterConnection->commit();
 }
 
-//------------------------------------------------------------------------------
 void OConnection::rollback(void) throw( SQLException, RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::rollback" );
@@ -230,7 +216,6 @@ void OConnection::rollback(void) throw( SQLException, RuntimeException )
     m_xMasterConnection->rollback();
 }
 
-//------------------------------------------------------------------------------
 Reference< XDatabaseMetaData >  OConnection::getMetaData(void) throw( SQLException, RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::getMetaData" );
@@ -239,7 +224,6 @@ Reference< XDatabaseMetaData >  OConnection::getMetaData(void) throw( SQLExcepti
     return m_xMasterConnection->getMetaData();
 }
 
-//------------------------------------------------------------------------------
 void OConnection::setReadOnly(sal_Bool readOnly) throw( SQLException, RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::setReadOnly" );
@@ -248,7 +232,6 @@ void OConnection::setReadOnly(sal_Bool readOnly) throw( SQLException, RuntimeExc
     m_xMasterConnection->setReadOnly(readOnly);
 }
 
-//------------------------------------------------------------------------------
 sal_Bool OConnection::isReadOnly(void) throw( SQLException, RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::isReadOnly" );
@@ -257,7 +240,6 @@ sal_Bool OConnection::isReadOnly(void) throw( SQLException, RuntimeException )
     return m_xMasterConnection->isReadOnly();
 }
 
-//------------------------------------------------------------------------------
 void OConnection::setCatalog(const rtl::OUString& catalog) throw( SQLException, RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::setCatalog" );
@@ -266,7 +248,6 @@ void OConnection::setCatalog(const rtl::OUString& catalog) throw( SQLException, 
     m_xMasterConnection->setCatalog(catalog);
 }
 
-//------------------------------------------------------------------------------
 rtl::OUString OConnection::getCatalog(void) throw( SQLException, RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::getCatalog" );
@@ -275,7 +256,6 @@ rtl::OUString OConnection::getCatalog(void) throw( SQLException, RuntimeExceptio
     return m_xMasterConnection->getCatalog();
 }
 
-//------------------------------------------------------------------------------
 void OConnection::setTransactionIsolation(sal_Int32 level) throw( SQLException, RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::setTransactionIsolation" );
@@ -284,7 +264,6 @@ void OConnection::setTransactionIsolation(sal_Int32 level) throw( SQLException, 
     m_xMasterConnection->setTransactionIsolation(level);
 }
 
-//------------------------------------------------------------------------------
 sal_Int32 OConnection::getTransactionIsolation(void) throw( SQLException, RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::getTransactionIsolation" );
@@ -293,7 +272,6 @@ sal_Int32 OConnection::getTransactionIsolation(void) throw( SQLException, Runtim
     return m_xMasterConnection->getTransactionIsolation();
 }
 
-//------------------------------------------------------------------------------
 Reference< XNameAccess >  OConnection::getTypeMap(void) throw( SQLException, RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::getTypeMap" );
@@ -302,7 +280,6 @@ Reference< XNameAccess >  OConnection::getTypeMap(void) throw( SQLException, Run
     return m_xMasterConnection->getTypeMap();
 }
 
-//------------------------------------------------------------------------------
 void OConnection::setTypeMap(const Reference< XNameAccess > & typeMap) throw( SQLException, RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::setTypeMap" );
@@ -314,7 +291,7 @@ void OConnection::setTypeMap(const Reference< XNameAccess > & typeMap) throw( SQ
 //= OConnection
 //==========================================================================
 DBG_NAME(OConnection)
-//--------------------------------------------------------------------------
+
 OConnection::OConnection(ODatabaseSource& _rDB
                          , Reference< XConnection >& _rxMaster
                          , const Reference< XMultiServiceFactory >& _rxORB)
@@ -415,7 +392,6 @@ OConnection::OConnection(ODatabaseSource& _rDB
     osl_decrementInterlockedCount( &m_refCount );
 }
 
-//--------------------------------------------------------------------------
 OConnection::~OConnection()
 {
     delete m_pTables;
@@ -423,9 +399,7 @@ OConnection::~OConnection()
     DBG_DTOR(OConnection,NULL);
 }
 
-
 // XWarningsSupplier
-//--------------------------------------------------------------------------
 Any SAL_CALL OConnection::getWarnings() throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::getWarnings" );
@@ -434,7 +408,6 @@ Any SAL_CALL OConnection::getWarnings() throw(SQLException, RuntimeException)
     return m_aWarnings.getWarnings();
 }
 
-//--------------------------------------------------------------------------
 void SAL_CALL OConnection::clearWarnings(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::clearWarnings" );
@@ -443,7 +416,6 @@ void SAL_CALL OConnection::clearWarnings(  ) throw(SQLException, RuntimeExceptio
     m_aWarnings.clearWarnings();
 }
 
-//--------------------------------------------------------------------------
 namespace
 {
     struct CompareTypeByName : public ::std::binary_function< Type, Type, bool >
@@ -461,8 +433,8 @@ namespace
             ::std::insert_iterator< TypeBag >( _out_rTypes, _out_rTypes.begin() ) );
     }
 }
+
 // com::sun::star::lang::XTypeProvider
-//--------------------------------------------------------------------------
 Sequence< Type > OConnection::getTypes() throw (RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::getTypes" );
@@ -484,7 +456,6 @@ Sequence< Type > OConnection::getTypes() throw (RuntimeException)
     return aSupportedTypes;
 }
 
-//--------------------------------------------------------------------------
 Sequence< sal_Int8 > OConnection::getImplementationId() throw (RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::getImplementationId" );
@@ -492,7 +463,6 @@ Sequence< sal_Int8 > OConnection::getImplementationId() throw (RuntimeException)
 }
 
 // com::sun::star::uno::XInterface
-//--------------------------------------------------------------------------
 Any OConnection::queryInterface( const Type & rType ) throw (RuntimeException)
 {
     if ( !m_bSupportsViews && rType.equals( XViewsSupplier::static_type() ) )
@@ -511,24 +481,19 @@ Any OConnection::queryInterface( const Type & rType ) throw (RuntimeException)
     return aReturn;
 }
 
-//--------------------------------------------------------------------------
 void OConnection::acquire() throw ()
 {
     // include this one when you want to see who calls it (call graph)
-    //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::acquire" );
     OSubComponent::acquire();
 }
 
-//--------------------------------------------------------------------------
 void OConnection::release() throw ()
 {
     // include this one when you want to see who calls it (call graph)
-    //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::release" );
     OSubComponent::release();
 }
 
 // OSubComponent
-//------------------------------------------------------------------------------
 void OConnection::disposing()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::disposing" );
@@ -574,7 +539,6 @@ void OConnection::disposing()
 }
 
 // XChild
-//------------------------------------------------------------------------------
 Reference< XInterface >  OConnection::getParent(void) throw( RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::getParent" );
@@ -583,7 +547,6 @@ Reference< XInterface >  OConnection::getParent(void) throw( RuntimeException )
     return m_xParent;
 }
 
-//------------------------------------------------------------------------------
 void OConnection::setParent(const Reference< XInterface > & /*Parent*/) throw( NoSupportException, RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::setParent" );
@@ -591,7 +554,6 @@ void OConnection::setParent(const Reference< XInterface > & /*Parent*/) throw( N
 }
 
 // XSQLQueryComposerFactory
-//------------------------------------------------------------------------------
 Reference< XSQLQueryComposer >  OConnection::createQueryComposer(void) throw( RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::createQueryComposer" );
@@ -603,7 +565,7 @@ Reference< XSQLQueryComposer >  OConnection::createQueryComposer(void) throw( Ru
     m_aComposers.push_back(WeakReferenceHelper(xComposer));
     return xComposer;
 }
-// -----------------------------------------------------------------------------
+
 void OConnection::impl_fillTableFilter()
 {
     Reference<XPropertySet> xProp(getParent(),UNO_QUERY);
@@ -614,7 +576,6 @@ void OConnection::impl_fillTableFilter()
     }
 }
 
-// -----------------------------------------------------------------------------
 void OConnection::refresh(const Reference< XNameAccess >& _rToBeRefreshed)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::refresh" );
@@ -651,10 +612,8 @@ void OConnection::refresh(const Reference< XNameAccess >& _rToBeRefreshed)
         }
     }
 }
-// -----------------------------------------------------------------------------
 
 // XTablesSupplier
-//------------------------------------------------------------------------------
 Reference< XNameAccess >  OConnection::getTables() throw( RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::getTables" );
@@ -665,7 +624,7 @@ Reference< XNameAccess >  OConnection::getTables() throw( RuntimeException )
 
     return m_pTables;
 }
-// -----------------------------------------------------------------------------
+
 Reference< XNameAccess > SAL_CALL OConnection::getViews(  ) throw(RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::getViews" );
@@ -677,7 +636,6 @@ Reference< XNameAccess > SAL_CALL OConnection::getViews(  ) throw(RuntimeExcepti
     return m_pViews;
 }
 // XQueriesSupplier
-//------------------------------------------------------------------------------
 Reference< XNameAccess >  OConnection::getQueries(void) throw( RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::getQueries" );
@@ -688,7 +646,6 @@ Reference< XNameAccess >  OConnection::getQueries(void) throw( RuntimeException 
 }
 
 // ::com::sun::star::sdb::XCommandPreparation
-//------------------------------------------------------------------------------
 Reference< XPreparedStatement >  SAL_CALL OConnection::prepareCommand( const ::rtl::OUString& command, sal_Int32 commandType ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::prepareCommand" );
@@ -720,7 +677,7 @@ Reference< XPreparedStatement >  SAL_CALL OConnection::prepareCommand( const ::r
     // TODO EscapeProcessing
     return prepareStatement(aStatement);
 }
-// -----------------------------------------------------------------------------
+
 Reference< XInterface > SAL_CALL OConnection::createInstance( const ::rtl::OUString& _sServiceSpecifier ) throw (Exception, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::createInstance" );
@@ -749,13 +706,13 @@ Reference< XInterface > SAL_CALL OConnection::createInstance( const ::rtl::OUStr
     }
     return Reference< XInterface >(xRet,UNO_QUERY);
 }
-// -----------------------------------------------------------------------------
+
 Reference< XInterface > SAL_CALL OConnection::createInstanceWithArguments( const ::rtl::OUString& _sServiceSpecifier, const Sequence< Any >& /*Arguments*/ ) throw (Exception, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::createInstanceWithArguments" );
     return createInstance(_sServiceSpecifier);
 }
-// -----------------------------------------------------------------------------
+
 Sequence< ::rtl::OUString > SAL_CALL OConnection::getAvailableServiceNames(  ) throw (RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::getAvailableServiceNames" );
@@ -763,7 +720,7 @@ Sequence< ::rtl::OUString > SAL_CALL OConnection::getAvailableServiceNames(  ) t
     aRet[0] = SERVICE_NAME_SINGLESELECTQUERYCOMPOSER;
     return aRet;
 }
-// -----------------------------------------------------------------------------
+
 Reference< XTablesSupplier > OConnection::getMasterTables()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::getMasterTables" );
@@ -782,7 +739,7 @@ Reference< XTablesSupplier > OConnection::getMasterTables()
     }
     return m_xMasterTables;
 }
-// -----------------------------------------------------------------------------
+
 // XUsersSupplier
 Reference< XNameAccess > SAL_CALL OConnection::getUsers(  ) throw(RuntimeException)
 {
@@ -793,7 +750,7 @@ Reference< XNameAccess > SAL_CALL OConnection::getUsers(  ) throw(RuntimeExcepti
     Reference<XUsersSupplier> xUsr(getMasterTables(),UNO_QUERY);
     return xUsr.is() ? xUsr->getUsers() : Reference< XNameAccess >();
 }
-// -----------------------------------------------------------------------------
+
 // XGroupsSupplier
 Reference< XNameAccess > SAL_CALL OConnection::getGroups(  ) throw(RuntimeException)
 {
@@ -804,7 +761,6 @@ Reference< XNameAccess > SAL_CALL OConnection::getGroups(  ) throw(RuntimeExcept
     return xGrp.is() ? xGrp->getGroups() : Reference< XNameAccess >();
 }
 
-// -----------------------------------------------------------------------------
 void OConnection::impl_loadConnectionTools_throw()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::impl_loadConnectionTools_throw" );
@@ -815,7 +771,6 @@ void OConnection::impl_loadConnectionTools_throw()
         throw RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "service not registered: com.sun.star.sdb.tools.ConnectionTools" ) ), *this );
 }
 
-// -----------------------------------------------------------------------------
 Reference< XTableName > SAL_CALL OConnection::createTableName(  ) throw (RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::createTableName" );
@@ -826,7 +781,6 @@ Reference< XTableName > SAL_CALL OConnection::createTableName(  ) throw (Runtime
     return m_xConnectionTools->createTableName();
 }
 
-// -----------------------------------------------------------------------------
 Reference< XObjectNames > SAL_CALL OConnection::getObjectNames(  ) throw (RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::getObjectNames" );
@@ -837,7 +791,6 @@ Reference< XObjectNames > SAL_CALL OConnection::getObjectNames(  ) throw (Runtim
     return m_xConnectionTools->getObjectNames();
 }
 
-// -----------------------------------------------------------------------------
 Reference< XDataSourceMetaData > SAL_CALL OConnection::getDataSourceMetaData(  ) throw (RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::getDataSourceMetaData" );
@@ -847,7 +800,7 @@ Reference< XDataSourceMetaData > SAL_CALL OConnection::getDataSourceMetaData(  )
 
     return m_xConnectionTools->getDataSourceMetaData();
 }
-// -----------------------------------------------------------------------------
+
 Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OConnection::getFieldsByCommandDescriptor( ::sal_Int32 commandType, const ::rtl::OUString& command, ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& keepFieldsAlive ) throw (::com::sun::star::sdbc::SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::getFieldsByCommandDescriptor" );
@@ -857,7 +810,7 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OConnection::getF
 
     return m_xConnectionTools->getFieldsByCommandDescriptor(commandType,command,keepFieldsAlive);
 }
-//--------------------------------------------------------------------
+
 Reference< XSingleSelectQueryComposer > SAL_CALL OConnection::getComposer( ::sal_Int32 commandType, const ::rtl::OUString& command ) throw (::com::sun::star::uno::RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::getComposer" );
@@ -868,7 +821,6 @@ Reference< XSingleSelectQueryComposer > SAL_CALL OConnection::getComposer( ::sal
     return m_xConnectionTools->getComposer(commandType,command);
 }
 
-// -----------------------------------------------------------------------------
 void OConnection::impl_checkTableQueryNames_nothrow()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::impl_checkTableQueryNames_nothrow" );
@@ -904,7 +856,6 @@ void OConnection::impl_checkTableQueryNames_nothrow()
     }
 }
 
-// -----------------------------------------------------------------------------
 Reference< XGraphic > SAL_CALL OConnection::getTableIcon( const ::rtl::OUString& _TableName, ::sal_Int32 _ColorMode ) throw (RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::getTableIcon" );
@@ -922,7 +873,6 @@ Reference< XGraphic > SAL_CALL OConnection::getTableIcon( const ::rtl::OUString&
     return xReturn;
 }
 
-// -----------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL OConnection::getTableEditor( const Reference< XDatabaseDocumentUI >& _DocumentUI, const ::rtl::OUString& _TableName ) throw (IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::getTableEditor" );
@@ -940,9 +890,5 @@ Reference< XInterface > SAL_CALL OConnection::getTableEditor( const Reference< X
     return xReturn;
 }
 
-
-//........................................................................
 }   // namespace dbaccess
-//........................................................................
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

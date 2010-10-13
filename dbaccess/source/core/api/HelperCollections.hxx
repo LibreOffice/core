@@ -48,7 +48,7 @@ namespace dbaccess
     using namespace ::com::sun::star::script;
     using namespace ::cppu;
     using namespace ::osl;
-    // -----------------------------------------------------------------------------
+
     typedef connectivity::sdbcx::OCollection OPrivateColumns_Base;
     class OPrivateColumns : public OPrivateColumns_Base
     {

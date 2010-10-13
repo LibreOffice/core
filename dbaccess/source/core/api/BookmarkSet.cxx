@@ -56,43 +56,43 @@ void OBookmarkSet::construct(const Reference< XResultSet>& _xDriverSet,const ::r
     OCacheSet::construct(_xDriverSet,i_sRowSetFilter);
     m_xRowLocate.set(_xDriverSet,UNO_QUERY);
 }
-// -----------------------------------------------------------------------------
+
 Any SAL_CALL OBookmarkSet::getBookmark() throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OBookmarkSet::getBookmark" );
     return m_xRowLocate->getBookmark();
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OBookmarkSet::moveToBookmark( const Any& bookmark ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OBookmarkSet::moveToBookmark" );
     return m_xRowLocate->moveToBookmark(bookmark);
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OBookmarkSet::moveRelativeToBookmark( const Any& bookmark, sal_Int32 rows ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OBookmarkSet::moveRelativeToBookmark" );
     return m_xRowLocate->moveRelativeToBookmark(bookmark,rows);
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OBookmarkSet::compareBookmarks( const Any& _first, const Any& _second ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OBookmarkSet::compareBookmarks" );
     return m_xRowLocate->compareBookmarks(_first,_second);
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OBookmarkSet::hasOrderedBookmarks(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OBookmarkSet::hasOrderedBookmarks" );
     return m_xRowLocate->hasOrderedBookmarks();
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OBookmarkSet::hashBookmark( const Any& bookmark ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OBookmarkSet::hashBookmark" );
     return m_xRowLocate->hashBookmark(bookmark);
 }
-// -------------------------------------------------------------------------
+
 // ::com::sun::star::sdbcx::XDeleteRows
 Sequence< sal_Int32 > SAL_CALL OBookmarkSet::deleteRows( const Sequence< Any >& rows ,const connectivity::OSQLTable& /*_xTable*/) throw(SQLException, RuntimeException)
 {
@@ -104,7 +104,7 @@ Sequence< sal_Int32 > SAL_CALL OBookmarkSet::deleteRows( const Sequence< Any >& 
     }
     return Sequence< sal_Int32 >();
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OBookmarkSet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& /*_xTable*/ ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OBookmarkSet::insertRow" );
@@ -129,7 +129,7 @@ void SAL_CALL OBookmarkSet::insertRow( const ORowSetRow& _rInsertRow,const conne
     else
         ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_XRESULTSETUPDATE ), SQL_GENERAL_ERROR, *this );
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OBookmarkSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrginalRow,const connectivity::OSQLTable& /*_xTable*/  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OBookmarkSet::updateRow" );
@@ -154,7 +154,7 @@ void SAL_CALL OBookmarkSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowS
     else
         ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_XRESULTSETUPDATE ), SQL_GENERAL_ERROR, *this );
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OBookmarkSet::deleteRow(const ORowSetRow& /*_rDeleteRow*/ ,const connectivity::OSQLTable& /*_xTable*/  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OBookmarkSet::deleteRow" );
@@ -162,12 +162,12 @@ void SAL_CALL OBookmarkSet::deleteRow(const ORowSetRow& /*_rDeleteRow*/ ,const c
 
     xUpd->deleteRow();
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OBookmarkSet::cancelRowUpdates(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OBookmarkSet::cancelRowUpdates" );
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OBookmarkSet::moveToInsertRow(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OBookmarkSet::moveToInsertRow" );
@@ -175,18 +175,18 @@ void SAL_CALL OBookmarkSet::moveToInsertRow(  ) throw(SQLException, RuntimeExcep
     if(xUpd.is())
         xUpd->moveToInsertRow();
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OBookmarkSet::moveToCurrentRow(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OBookmarkSet::moveToCurrentRow" );
 }
-// -------------------------------------------------------------------------
+
 void OBookmarkSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OBookmarkSet::fillValueRow" );
     OCacheSet::fillValueRow(_rRow,_nPosition);
 }
-// -------------------------------------------------------------------------
+
 void OBookmarkSet::updateColumn(sal_Int32 nPos,Reference< XRowUpdate > _xParameter,const ORowSetValue& _rValue)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OBookmarkSet::updateColumn" );
@@ -266,5 +266,4 @@ void OBookmarkSet::updateColumn(sal_Int32 nPos,Reference< XRowUpdate > _xParamet
         }
     }
 }
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -33,10 +33,8 @@
 
 #include <cppuhelper/weak.hxx>
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
     //==========================================================================
     //= OContainerListener
@@ -82,8 +80,7 @@ namespace dbaccess
     protected:
         virtual ~OContainerListener();
     };
-//........................................................................
-}   // namespace dbaccess
-//........................................................................
-#endif // DBA_CONTAINERLISTENER_HXX
 
+}   // namespace dbaccess
+
+#endif // DBA_CONTAINERLISTENER_HXX

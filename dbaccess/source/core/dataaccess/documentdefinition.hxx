@@ -344,9 +344,7 @@ private:
     */
     sal_Bool objectSupportsEmbeddedScripts() const;
 
-    //-------------------------------------------------------------------------
     //- commands
-    //-------------------------------------------------------------------------
 
     void onCommandGetDocumentProperties( ::com::sun::star::uno::Any& _rProps );
     void onCommandInsert( const ::rtl::OUString& _sURL, const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >& Environment ) throw( ::com::sun::star::uno::Exception );
@@ -380,9 +378,6 @@ private:
     void    impl_fireEvent_throw( const sal_Bool i_bVetoable );
 };
 
-//........................................................................
 }   // namespace dbaccess
-//........................................................................
 
 #endif // _DBA_COREDATAACCESS_DOCUMENTDEFINITION_HXX_
-

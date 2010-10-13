@@ -60,7 +60,7 @@ ObjectType OIndexes::createObject(const ::rtl::OUString& _rName)
 
     return xRet;
 }
-// -------------------------------------------------------------------------
+
 Reference< XPropertySet > OIndexes::createDescriptor()
 {
     Reference<XDataDescriptorFactory> xData( m_xIndexes,UNO_QUERY);
@@ -69,7 +69,7 @@ Reference< XPropertySet > OIndexes::createDescriptor()
     else
         return OIndexesHelper::createDescriptor();
 }
-// -------------------------------------------------------------------------
+
 // XAppend
 ObjectType OIndexes::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
@@ -80,7 +80,7 @@ ObjectType OIndexes::appendObject( const ::rtl::OUString& _rForName, const Refer
     xData->appendByDescriptor(descriptor);
     return createObject( _rForName );
 }
-// -------------------------------------------------------------------------
+
 // XDrop
 void OIndexes::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
@@ -93,7 +93,7 @@ void OIndexes::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
     else
         OIndexesHelper::dropObject(_nPos,_sElementName);
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OIndexes::disposing(void)
 {
     if ( m_xIndexes.is() )
@@ -101,9 +101,4 @@ void SAL_CALL OIndexes::disposing(void)
     else
         OIndexesHelper::disposing();
 }
-// -----------------------------------------------------------------------------
-
-
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -68,7 +68,6 @@ using namespace dbaccess;
 //============================================================
 IMPLEMENT_FORWARD_XINTERFACE2(OTableColumnDescriptor,OColumn,TXChild)
 
-//------------------------------------------------------------------------------
 void OTableColumnDescriptor::impl_registerProperties()
 {
     sal_Int32 nDefaultAttr = m_bActAsDescriptor ? 0 : PropertyAttribute::READONLY;
@@ -91,17 +90,14 @@ void OTableColumnDescriptor::impl_registerProperties()
     OColumnSettings::registerProperties( *this );
 }
 
-//--------------------------------------------------------------------------
 IMPLEMENT_GET_IMPLEMENTATION_ID( OTableColumnDescriptor )
 
 // ::com::sun::star::lang::XServiceInfo
-//------------------------------------------------------------------------------
 rtl::OUString OTableColumnDescriptor::getImplementationName(  ) throw (RuntimeException)
 {
     return rtl::OUString::createFromAscii("com.sun.star.sdb.OTableColumnDescriptor");
 }
 
-//------------------------------------------------------------------------------
 Sequence< ::rtl::OUString > OTableColumnDescriptor::getSupportedServiceNames(  ) throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aSNS( 2 );
@@ -111,7 +107,6 @@ Sequence< ::rtl::OUString > OTableColumnDescriptor::getSupportedServiceNames(  )
 }
 
 // comphelper::OPropertyArrayUsageHelper
-//------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* OTableColumnDescriptor::createArrayHelper( ) const
 {
     Sequence< Property > aProps;
@@ -120,26 +115,23 @@ Sequence< ::rtl::OUString > OTableColumnDescriptor::getSupportedServiceNames(  )
 }
 
 // cppu::OPropertySetHelper
-//------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper& OTableColumnDescriptor::getInfoHelper()
 {
     return *static_cast< ::comphelper::OPropertyArrayUsageHelper< OTableColumnDescriptor >* >(this)->getArrayHelper();
 }
 
-//------------------------------------------------------------------------------
 void OTableColumnDescriptor::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw (Exception)
 {
     OColumn::setFastPropertyValue_NoBroadcast( nHandle, rValue );
     ::dbaccess::notifyDataSourceModified( m_xParent, sal_True );
 }
 
-// -----------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL OTableColumnDescriptor::getParent(  ) throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_xParent;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OTableColumnDescriptor::setParent( const Reference< XInterface >& _xParent ) throw (NoSupportException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -150,7 +142,6 @@ void SAL_CALL OTableColumnDescriptor::setParent( const Reference< XInterface >& 
 //============================================================
 DBG_NAME(OTableColumn);
 
-// -------------------------------------------------------------------------
 OTableColumn::OTableColumn( const ::rtl::OUString& _rName )
     :OTableColumnDescriptor( false /* do not act as descriptor */ )
 {
@@ -158,28 +149,23 @@ OTableColumn::OTableColumn( const ::rtl::OUString& _rName )
     m_sName = _rName;
 }
 
-// -----------------------------------------------------------------------------
 OTableColumn::~OTableColumn()
 {
     DBG_DTOR(OTableColumn,NULL);
 }
 
-//--------------------------------------------------------------------------
 IMPLEMENT_GET_IMPLEMENTATION_ID( OTableColumn )
 
-//------------------------------------------------------------------------------
 rtl::OUString OTableColumn::getImplementationName(  ) throw (RuntimeException)
 {
     return rtl::OUString::createFromAscii("com.sun.star.sdb.OTableColumn");
 }
 
-//------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper& SAL_CALL OTableColumn::getInfoHelper()
 {
     return *OTableColumn_PBase::getArrayHelper();
 }
 
-//------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* OTableColumn::createArrayHelper( ) const
 {
     return OTableColumnDescriptor::createArrayHelper();
@@ -190,7 +176,6 @@ rtl::OUString OTableColumn::getImplementationName(  ) throw (RuntimeException)
 // =========================================================================
 DBG_NAME( OQueryColumn );
 
-// -------------------------------------------------------------------------
 OQueryColumn::OQueryColumn( const Reference< XPropertySet >& _rxParserColumn, const Reference< XConnection >& _rxConnection,const ::rtl::OUString i_sLabel )
     :OTableColumnDescriptor( false /* do not act as descriptor */ )
     ,m_sLabel(i_sLabel)
@@ -246,13 +231,11 @@ OQueryColumn::OQueryColumn( const Reference< XPropertySet >& _rxParserColumn, co
     osl_decrementInterlockedCount( &m_refCount );
 }
 
-//--------------------------------------------------------------------------
 OQueryColumn::~OQueryColumn()
 {
     DBG_DTOR( OQueryColumn, NULL );
 }
 
-//--------------------------------------------------------------------------
 Reference< XPropertySet > OQueryColumn::impl_determineOriginalTableColumn( const Reference< XConnection >& _rxConnection )
 {
     OSL_PRECOND( _rxConnection.is(), "OQueryColumn::impl_determineOriginalTableColumn: illegal connection!" );
@@ -297,28 +280,23 @@ Reference< XPropertySet > OQueryColumn::impl_determineOriginalTableColumn( const
     return xOriginalTableColumn;
 }
 
-//--------------------------------------------------------------------------
 IMPLEMENT_GET_IMPLEMENTATION_ID( OQueryColumn )
 
-//--------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OQueryColumn::getImplementationName(  ) throw(RuntimeException)
 {
     return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.comp.dbaccess.OQueryColumn" ) );
 }
 
-//------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper& SAL_CALL OQueryColumn::getInfoHelper()
 {
     return *OQueryColumn_PBase::getArrayHelper();
 }
 
-//--------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* OQueryColumn::createArrayHelper() const
 {
     return OTableColumnDescriptor::createArrayHelper();
 }
 
-//--------------------------------------------------------------------------
 void SAL_CALL OQueryColumn::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
 {
     OTableColumnDescriptor::getFastPropertyValue( _rValue, _nHandle );
@@ -355,7 +333,7 @@ void SAL_CALL OQueryColumn::getFastPropertyValue( Any& _rValue, sal_Int32 _nHand
 //= OColumnWrapper
 //==========================================================================
 DBG_NAME(OColumnWrapper);
-//--------------------------------------------------------------------------
+
 OColumnWrapper::OColumnWrapper( const Reference< XPropertySet > & rCol, const bool _bNameIsReadOnly )
     :OColumn( _bNameIsReadOnly )
     ,m_xAggregate(rCol)
@@ -376,13 +354,12 @@ OColumnWrapper::OColumnWrapper( const Reference< XPropertySet > & rCol, const bo
         m_xAggregate->getPropertyValue(PROPERTY_NAME) >>= m_sName;
     }
 }
-// -----------------------------------------------------------------------------
+
 OColumnWrapper::~OColumnWrapper()
 {
     DBG_DTOR(OColumnWrapper,NULL);
 }
 
-//------------------------------------------------------------------------------
 ::rtl::OUString OColumnWrapper::impl_getPropertyNameFromHandle( const sal_Int32 _nHandle ) const
 {
     ::rtl::OUString sPropName;
@@ -392,7 +369,6 @@ OColumnWrapper::~OColumnWrapper()
     return sPropName;
 }
 
-//------------------------------------------------------------------------------
 void OColumnWrapper::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
 {
     // derived classes are free to either use the OPropertyContainer(Helper) mechanisms for properties,
@@ -408,7 +384,6 @@ void OColumnWrapper::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) cons
     }
 }
 
-//------------------------------------------------------------------------------
 sal_Bool OColumnWrapper::convertFastPropertyValue( Any & rConvertedValue, Any & rOldValue, sal_Int32 nHandle,
             const Any& rValue ) throw (IllegalArgumentException)
 {
@@ -429,7 +404,6 @@ sal_Bool OColumnWrapper::convertFastPropertyValue( Any & rConvertedValue, Any & 
     return bModified;
 }
 
-//------------------------------------------------------------------------------
 void OColumnWrapper::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw (Exception)
 {
     if ( OColumn::isRegisteredProperty( nHandle ) )
@@ -442,7 +416,6 @@ void OColumnWrapper::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const 
     }
 }
 
-// -----------------------------------------------------------------------------
 sal_Int64 SAL_CALL OColumnWrapper::getSomething( const Sequence< sal_Int8 >& aIdentifier ) throw(RuntimeException)
 {
     Reference< XUnoTunnel > xTunnel( m_xAggregate, UNO_QUERY);
@@ -454,7 +427,6 @@ sal_Int64 SAL_CALL OColumnWrapper::getSomething( const Sequence< sal_Int8 >& aId
 //============================================================
 //= OTableColumnDescriptorWrapper
 //============================================================
-//--------------------------------------------------------------------------
 OTableColumnDescriptorWrapper::OTableColumnDescriptorWrapper( const Reference< XPropertySet >& _rCol, const bool _bPureWrap, const bool _bIsDescriptor )
     :OColumnWrapper( _rCol, !_bIsDescriptor )
     ,m_bPureWrap( _bPureWrap )
@@ -465,17 +437,14 @@ OTableColumnDescriptorWrapper::OTableColumnDescriptorWrapper( const Reference< X
 }
 
 // com::sun::star::lang::XTypeProvider
-//--------------------------------------------------------------------------
 IMPLEMENT_GET_IMPLEMENTATION_ID( OTableColumnDescriptorWrapper )
 
 // ::com::sun::star::lang::XServiceInfo
-//------------------------------------------------------------------------------
 rtl::OUString OTableColumnDescriptorWrapper::getImplementationName(  ) throw (RuntimeException)
 {
     return rtl::OUString::createFromAscii("com.sun.star.sdb.OTableColumnDescriptorWrapper");
 }
 
-//------------------------------------------------------------------------------
 Sequence< ::rtl::OUString > OTableColumnDescriptorWrapper::getSupportedServiceNames(  ) throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aSNS( 2 );
@@ -485,7 +454,6 @@ Sequence< ::rtl::OUString > OTableColumnDescriptorWrapper::getSupportedServiceNa
 }
 
 // comphelper::OPropertyArrayUsageHelper
-//------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* OTableColumnDescriptorWrapper::createArrayHelper( sal_Int32 nId ) const
 {
     const sal_Int32 nHaveAlways = 7;
@@ -553,13 +521,11 @@ Sequence< ::rtl::OUString > OTableColumnDescriptorWrapper::getSupportedServiceNa
 }
 
 // cppu::OPropertySetHelper
-//------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper& OTableColumnDescriptorWrapper::getInfoHelper()
 {
     return *static_cast< OIdPropertyArrayUsageHelper< OTableColumnDescriptorWrapper >* >(this)->getArrayHelper(m_nColTypeID);
 }
 
-//------------------------------------------------------------------------------
 void OTableColumnDescriptorWrapper::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
 {
     if ( m_bPureWrap )
@@ -572,7 +538,6 @@ void OTableColumnDescriptorWrapper::getFastPropertyValue( Any& rValue, sal_Int32
     }
 }
 
-//------------------------------------------------------------------------------
 sal_Bool OTableColumnDescriptorWrapper::convertFastPropertyValue( Any & rConvertedValue, Any & rOldValue, sal_Int32 nHandle, const Any& rValue ) throw (IllegalArgumentException)
 {
     sal_Bool bModified(sal_False);
@@ -597,7 +562,6 @@ sal_Bool OTableColumnDescriptorWrapper::convertFastPropertyValue( Any & rConvert
     return bModified;
 }
 
-//------------------------------------------------------------------------------
 void OTableColumnDescriptorWrapper::setFastPropertyValue_NoBroadcast(
                                                 sal_Int32 nHandle,
                                                 const Any& rValue
@@ -617,7 +581,6 @@ void OTableColumnDescriptorWrapper::setFastPropertyValue_NoBroadcast(
 //============================================================
 //= OTableColumnWrapper
 //============================================================
-//--------------------------------------------------------------------------
 OTableColumnWrapper::OTableColumnWrapper( const Reference< XPropertySet >& rCol, const Reference< XPropertySet >& _xColDefintion,
             const bool _bPureWrap )
     :OTableColumnDescriptorWrapper( rCol, _bPureWrap, false )
@@ -637,21 +600,17 @@ OTableColumnWrapper::OTableColumnWrapper( const Reference< XPropertySet >& rCol,
     osl_decrementInterlockedCount( &m_refCount );
 }
 
-//--------------------------------------------------------------------------
 OTableColumnWrapper::~OTableColumnWrapper()
 {
 }
 
-//--------------------------------------------------------------------------
 IMPLEMENT_GET_IMPLEMENTATION_ID( OTableColumnWrapper )
 
-//------------------------------------------------------------------------------
 rtl::OUString OTableColumnWrapper::getImplementationName(  ) throw (RuntimeException)
 {
     return rtl::OUString::createFromAscii( "com.sun.star.sdb.OTableColumnWrapper" );
 }
 
-//------------------------------------------------------------------------------
 Sequence< ::rtl::OUString > OTableColumnWrapper::getSupportedServiceNames(  ) throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aSNS( 2 );
@@ -660,17 +619,14 @@ Sequence< ::rtl::OUString > OTableColumnWrapper::getSupportedServiceNames(  ) th
     return aSNS;
 }
 
-//------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper& OTableColumnWrapper::getInfoHelper()
 {
     return *static_cast< OIdPropertyArrayUsageHelper< OTableColumnWrapper >* >(this)->getArrayHelper(m_nColTypeID);
 }
 
 // comphelper::OPropertyArrayUsageHelper
-//------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* OTableColumnWrapper::createArrayHelper( sal_Int32 nId ) const
 {
     return OTableColumnDescriptorWrapper::createArrayHelper( nId );
 }
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -47,7 +47,7 @@ namespace dbaccess
     using namespace ::com::sun::star::script;
     using namespace ::cppu;
     using namespace ::osl;
-    // -----------------------------------------------------------------------------
+
     OPrivateColumns::OPrivateColumns(const ::vos::ORef< ::connectivity::OSQLColumns>& _rColumns,
                         sal_Bool _bCase,
                         ::cppu::OWeakObject& _rParent,
@@ -59,7 +59,6 @@ namespace dbaccess
     {
     }
 
-    // -------------------------------------------------------------------------
     OPrivateColumns* OPrivateColumns::createWithIntrinsicNames( const ::vos::ORef< ::connectivity::OSQLColumns >& _rColumns,
         sal_Bool _bCase, ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex )
     {
@@ -78,7 +77,6 @@ namespace dbaccess
         return new OPrivateColumns( _rColumns, _bCase, _rParent, _rMutex, aNames, sal_False );
     }
 
-    // -------------------------------------------------------------------------
     void SAL_CALL OPrivateColumns::disposing(void)
     {
         m_aColumns = NULL;
@@ -87,7 +85,7 @@ namespace dbaccess
             // So we're not allowed to dispose our elements.
         OPrivateColumns_Base::disposing();
     }
-    // -------------------------------------------------------------------------
+
     connectivity::sdbcx::ObjectType OPrivateColumns::createObject(const ::rtl::OUString& _rName)
     {
         if ( m_aColumns.isValid() )
@@ -103,7 +101,7 @@ namespace dbaccess
         }
         return NULL;
     }
-    // -------------------------------------------------------------------------
+
     connectivity::sdbcx::ObjectType OPrivateTables::createObject(const ::rtl::OUString& _rName)
     {
         if ( !m_aTables.empty() )
@@ -115,7 +113,6 @@ namespace dbaccess
         }
         return NULL;
     }
-    // -----------------------------------------------------------------------------
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

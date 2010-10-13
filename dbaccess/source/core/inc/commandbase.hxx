@@ -31,10 +31,8 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
 //==========================================================================
 //= OCommandBase - a base class (in fact just a container for some members)
@@ -58,10 +56,6 @@ protected:
 
 };
 
-//........................................................................
 }   // namespace dbaccess
-//........................................................................
 
 #endif // _DBA_CORE_COMMANDBASE_HXX_
-
-

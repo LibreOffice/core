@@ -68,20 +68,18 @@ namespace dbaccess
     //= OColumnSettings
     //==============================================================================
     DBG_NAME( OColumnSettings )
-    //------------------------------------------------------------------------------
+
     OColumnSettings::OColumnSettings()
         :m_bHidden(sal_False)
     {
         DBG_CTOR( OColumnSettings, NULL );
     }
 
-    //------------------------------------------------------------------------------
     OColumnSettings::~OColumnSettings()
     {
         DBG_DTOR( OColumnSettings, NULL );
     }
 
-    //------------------------------------------------------------------------------
     void OColumnSettings::registerProperties( IPropertyContainer& _rPropertyContainer )
     {
         const sal_Int32 nBoundAttr = PropertyAttribute::BOUND;
@@ -100,7 +98,6 @@ namespace dbaccess
         _rPropertyContainer.registerProperty( PROPERTY_HIDDEN, PROPERTY_ID_HIDDEN, nBoundAttr, &m_bHidden, ::getCppuType( &m_bHidden ) );
     }
 
-    //------------------------------------------------------------------------------
     bool OColumnSettings::isColumnSettingProperty( const sal_Int32 _nPropertyHandle )
     {
         return  ( _nPropertyHandle == PROPERTY_ID_ALIGN )
@@ -113,7 +110,6 @@ namespace dbaccess
             ||  ( _nPropertyHandle == PROPERTY_ID_HIDDEN );
     }
 
-    //------------------------------------------------------------------------------
     bool OColumnSettings::isDefaulted( const sal_Int32 _nPropertyHandle, const Any& _rPropertyValue )
     {
         switch ( _nPropertyHandle )
@@ -140,7 +136,6 @@ namespace dbaccess
         return sal_False;
     }
 
-    //------------------------------------------------------------------------------
     bool OColumnSettings::hasDefaultSettings( const Reference< XPropertySet >& _rxColumn )
     {
         ENSURE_OR_THROW( _rxColumn.is(), "illegal column" );

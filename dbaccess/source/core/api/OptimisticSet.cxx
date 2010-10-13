@@ -99,7 +99,7 @@ namespace
 }
 
 DBG_NAME(OptimisticSet)
-// -------------------------------------------------------------------------
+
 OptimisticSet::OptimisticSet(const ::comphelper::ComponentContext& _rContext,
                              const Reference< XConnection>& i_xConnection,
                              const Reference< XSingleSelectQueryAnalyzer >& _xComposer,
@@ -112,12 +112,12 @@ OptimisticSet::OptimisticSet(const ::comphelper::ComponentContext& _rContext,
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OptimisticSet::OptimisticSet" );
     DBG_CTOR(OptimisticSet,NULL);
 }
-// -----------------------------------------------------------------------------
+
 OptimisticSet::~OptimisticSet()
 {
     DBG_DTOR(OptimisticSet,NULL);
 }
-// -----------------------------------------------------------------------------
+
 void OptimisticSet::construct(const Reference< XResultSet>& _xDriverSet,const ::rtl::OUString& i_sRowSetFilter)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OptimisticSet::construct" );
@@ -170,14 +170,14 @@ void OptimisticSet::construct(const Reference< XResultSet>& _xDriverSet,const ::
     m_xStatement = m_xConnection->prepareStatement(xAnalyzer->getQueryWithSubstitution());
     ::comphelper::disposeComponent(xAnalyzer);
 }
-// -------------------------------------------------------------------------
+
 // ::com::sun::star::sdbcx::XDeleteRows
 Sequence< sal_Int32 > SAL_CALL OptimisticSet::deleteRows( const Sequence< Any >& /*rows*/ ,const connectivity::OSQLTable& /*_xTable*/) throw(SQLException, RuntimeException)
 {
     Sequence< sal_Int32 > aRet;
     return aRet;
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrginalRow,const connectivity::OSQLTable& /*_xTable*/  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OptimisticSet::updateRow" );
@@ -265,7 +265,7 @@ void SAL_CALL OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORow
         }
     }
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OptimisticSet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& /*_xTable*/ ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OptimisticSet::insertRow" );
@@ -376,7 +376,7 @@ void SAL_CALL OptimisticSet::insertRow( const ORowSetRow& _rInsertRow,const conn
         }
     }
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OptimisticSet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivity::OSQLTable& /*_xTable*/   ) throw(SQLException, RuntimeException)
 {
     ::rtl::OUString sParam(RTL_CONSTASCII_USTRINGPARAM(" = ?"));
@@ -422,7 +422,7 @@ void SAL_CALL OptimisticSet::deleteRow(const ORowSetRow& _rDeleteRow,const conne
         }
     }
 }
-// -------------------------------------------------------------------------
+
 void OptimisticSet::executeDelete(const ORowSetRow& _rDeleteRow,const ::rtl::OUString& i_sSQL,const ::rtl::OUString& i_sTableName)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OptimisticSet::executeDelete" );
@@ -450,41 +450,17 @@ void OptimisticSet::executeDelete(const ORowSetRow& _rDeleteRow,const ::rtl::OUS
         m_bDeleted = sal_True;
     }
 }
-// -----------------------------------------------------------------------------
+
 ::rtl::OUString OptimisticSet::getComposedTableName(const ::rtl::OUString& /*_sCatalog*/,
                                               const ::rtl::OUString& /*_sSchema*/,
                                               const ::rtl::OUString& /*_sTable*/)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OptimisticSet::getComposedTableName" );
     ::rtl::OUString aComposedName;
-/*
-    Reference<XDatabaseMetaData> xMetaData = m_xConnection->getMetaData();
 
-    if( xMetaData.is() && xMetaData->supportsTableCorrelationNames() )
-    {
-        aComposedName = ::dbtools::composeTableName( xMetaData, _sCatalog, _sSchema, _sTable, sal_False, ::dbtools::eInDataManipulation );
-        // first we have to check if the composed tablename is in the select clause or if an alias is used
-        Reference<XTablesSupplier> xTabSup(m_xComposer,UNO_QUERY);
-        Reference<XNameAccess> xSelectTables = xTabSup->getTables();
-        OSL_ENSURE(xSelectTables.is(),"No Select tables!");
-        if(xSelectTables.is())
-        {
-            if(!xSelectTables->hasByName(aComposedName))
-            { // the composed name isn't used in the select clause so we have to find out which name is used instead
-                ::rtl::OUString sCatalog,sSchema,sTable;
-                ::dbtools::qualifiedNameComponents(xMetaData,m_sUpdateTableName,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
-                aComposedName = ::dbtools::composeTableNameForSelect( m_xConnection, sCatalog, sSchema, sTable );
-            }
-            else
-                aComposedName = ::dbtools::composeTableNameForSelect( m_xConnection, _sCatalog, _sSchema, _sTable );
-        }
-    }
-    else
-        aComposedName = ::dbtools::composeTableNameForSelect( m_xConnection, _sCatalog, _sSchema, _sTable );
-*/
     return aComposedName;
 }
-// -----------------------------------------------------------------------------
+
 void OptimisticSet::fillJoinedColumns_throw(const ::std::vector< TNodePair >& i_aJoinColumns)
 {
     ::std::vector< TNodePair >::const_iterator aIter = i_aJoinColumns.begin();
@@ -503,7 +479,7 @@ void OptimisticSet::fillJoinedColumns_throw(const ::std::vector< TNodePair >& i_
         fillJoinedColumns_throw(sLeft.makeStringAndClear(),sRight.makeStringAndClear());
     }
 }
-// -----------------------------------------------------------------------------
+
 void OptimisticSet::fillJoinedColumns_throw(const ::rtl::OUString& i_sLeftColumn,const ::rtl::OUString& i_sRightColumn)
 {
     sal_Int32 nLeft = 0,nRight = 0;
@@ -543,14 +519,14 @@ void OptimisticSet::fillJoinedColumns_throw(const ::rtl::OUString& i_sLeftColumn
     else
         m_aJoinedColumns[nRight] = nLeft;
 }
-// -----------------------------------------------------------------------------
+
 bool OptimisticSet::isResultSetChanged() const
 {
     bool bOld = m_bResultSetChanged;
     m_bResultSetChanged = false;
     return bOld;
 }
-// -----------------------------------------------------------------------------
+
 void OptimisticSet::reset(const Reference< XResultSet>& _xDriverSet)
 {
     OCacheSet::construct(_xDriverSet,::rtl::OUString());
@@ -559,7 +535,7 @@ void OptimisticSet::reset(const Reference< XResultSet>& _xDriverSet)
     m_aKeyMap.insert(OKeySetMatrix::value_type(0,OKeySetValue(NULL,::std::pair<sal_Int32,Reference<XRow> >(0,NULL))));
     m_aKeyIter = m_aKeyMap.begin();
 }
-// -----------------------------------------------------------------------------
+
 void OptimisticSet::mergeColumnValues(sal_Int32 i_nColumnIndex,ORowSetValueVector::Vector& io_aInsertRow,ORowSetValueVector::Vector& io_aRow,::std::vector<sal_Int32>& o_aChangedColumns)
 {
     o_aChangedColumns.push_back(i_nColumnIndex);
@@ -601,7 +577,7 @@ namespace
         }
     };
 }
-// -----------------------------------------------------------------------------
+
 bool OptimisticSet::updateColumnValues(const ORowSetValueVector::Vector& io_aCachedRow,ORowSetValueVector::Vector& io_aRow,const ::std::vector<sal_Int32>& i_aChangedColumns)
 {
     bool bRet = false;
@@ -638,7 +614,7 @@ bool OptimisticSet::updateColumnValues(const ORowSetValueVector::Vector& io_aCac
     }
     return bRet;
 }
-// -----------------------------------------------------------------------------
+
 bool OptimisticSet::columnValuesUpdated(ORowSetValueVector::Vector& o_aCachedRow,const ORowSetValueVector::Vector& i_aRow)
 {
     bool bRet = false;
@@ -677,7 +653,7 @@ bool OptimisticSet::columnValuesUpdated(ORowSetValueVector::Vector& o_aCachedRow
     }
     return bRet;
 }
-// -----------------------------------------------------------------------------
+
 void OptimisticSet::fillMissingValues(ORowSetValueVector::Vector& io_aRow) const
 {
     TSQLStatements aSql;
@@ -761,6 +737,4 @@ void OptimisticSet::fillMissingValues(ORowSetValueVector::Vector& io_aRow) const
         }
     }
 }
-// -----------------------------------------------------------------------------
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

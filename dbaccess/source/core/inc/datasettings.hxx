@@ -35,10 +35,8 @@
 #include <rtl/ustring.hxx>
 #include <comphelper/propertystatecontainer.hxx>
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
 //==========================================================================
 //= ODataSettings_Base - a base class which implements the property member
@@ -89,9 +87,6 @@ protected:
     void registerPropertiesFor(ODataSettings_Base* _pItem);
 };
 
-//........................................................................
 }   // namespace dbaccess
-//........................................................................
 
 #endif // _DBA_CORE_DATASETTINGS_HXX_
-

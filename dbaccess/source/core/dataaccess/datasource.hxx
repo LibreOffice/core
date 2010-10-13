@@ -61,10 +61,8 @@
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
 #include "ModelImpl.hxx"
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
 class OSharedConnectionManager;
 class OChildCommitListen_Impl;
@@ -232,9 +230,7 @@ protected:
     using ::cppu::OPropertySetHelper::getFastPropertyValue;
 };
 
-//........................................................................
 }   // namespace dbaccess
-//........................................................................
 
 #endif // _DBA_COREDATAACCESS_DATALINK_HXX_
 

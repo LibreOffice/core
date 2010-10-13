@@ -199,7 +199,6 @@ namespace dbaccess
         virtual ::rtl::OUString determineContentType() const = 0;
     };
 
-//........................................................................
 }   // namespace dbaccess
-//........................................................................
+
 #endif // DBA_CONTENTHELPER_HXX
