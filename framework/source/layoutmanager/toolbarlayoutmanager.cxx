@@ -4208,10 +4208,41 @@ throw (uno::RuntimeException)
     }
 }
 
-void SAL_CALL ToolbarLayoutManager::elementReplaced(
-    const ui::ConfigurationEvent& /*Event*/ )
+void SAL_CALL ToolbarLayoutManager::elementReplaced( const ui::ConfigurationEvent& rEvent )
 throw (uno::RuntimeException)
 {
+    ::rtl::OUString aElementType;
+    ::rtl::OUString aElementName;
+    UIElement       aUIElement = implts_findToolbar( rEvent.ResourceURL );
+
+    uno::Reference< ui::XUIElementSettings > xElementSettings( aUIElement.m_xUIElement, uno::UNO_QUERY );
+    if ( xElementSettings.is() )
+    {
+        ::rtl::OUString                       aConfigSourcePropName( RTL_CONSTASCII_USTRINGPARAM( "ConfigurationSource" ));
+        uno::Reference< uno::XInterface >     xElementCfgMgr;
+        uno::Reference< beans::XPropertySet > xPropSet( xElementSettings, uno::UNO_QUERY );
+
+        if ( xPropSet.is() )
+            xPropSet->getPropertyValue( aConfigSourcePropName ) >>= xElementCfgMgr;
+
+        if ( !xElementCfgMgr.is() )
+            return;
+
+        // Check if the same UI configuration manager has changed => update settings
+        if ( rEvent.Source == xElementCfgMgr )
+        {
+            xElementSettings->updateSettings();
+
+            WriteGuard aWriteLock( m_aLock );
+            bool bDirty = !aUIElement.m_bFloating;
+            m_bLayoutDirty = bDirty;
+            ILayoutNotifications* pParentLayouter( m_pParentLayouter );
+            aWriteLock.unlock();
+
+            if ( bDirty && pParentLayouter )
+                pParentLayouter->requestLayout( ILayoutNotifications::HINT_TOOLBARSPACE_HAS_CHANGED );
+        }
+    }
 }
 
 //---------------------------------------------------------------------------------------------------------

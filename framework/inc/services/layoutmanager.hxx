@@ -368,7 +368,7 @@ namespace framework
             ::cppu::OMultiTypeInterfaceContainerHelper                                  m_aListenerContainer; // container for ALL Listener
             PanelManager*                                                               m_pPanelManager;
             ToolbarLayoutManager*                                                       m_pToolbarManager;
-            css::uno::Reference< ::com::sun::star::lang::XComponent >                   m_xToolbarManager;
+            css::uno::Reference< ::com::sun::star::ui::XUIConfigurationListener >       m_xToolbarManager;
     };
 
 } // namespace framework

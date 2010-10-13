@@ -189,7 +189,7 @@ LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceM
     m_aStatusBarElement.m_aName = m_aStatusBarAlias;
 
     m_pToolbarManager = new ToolbarLayoutManager( xServiceManager, m_xUIElementFactoryManager, this );
-    m_xToolbarManager = uno::Reference< lang::XComponent >( static_cast< OWeakObject* >( m_pToolbarManager ), uno::UNO_QUERY );
+    m_xToolbarManager = uno::Reference< ui::XUIConfigurationListener >( static_cast< OWeakObject* >( m_pToolbarManager ), uno::UNO_QUERY );
 
     Application::AddEventListener( LINK( this, LayoutManager, SettingsChanged ) );
 
@@ -482,7 +482,7 @@ sal_Bool LayoutManager::implts_isEmbeddedLayoutManager() const
 void LayoutManager::implts_destroyElements()
 {
     WriteGuard aWriteLock( m_aLock );
-    uno::Reference< lang::XComponent > xThis( m_xToolbarManager );
+    uno::Reference< ui::XUIConfigurationListener > xThis( m_xToolbarManager );
     ToolbarLayoutManager* pToolbarManager = m_pToolbarManager;
     aWriteLock.unlock();
 
@@ -499,7 +499,7 @@ void LayoutManager::implts_destroyElements()
 void LayoutManager::implts_toggleFloatingUIElementsVisibility( sal_Bool bActive )
 {
     ReadGuard aReadLock( m_aLock );
-    uno::Reference< lang::XComponent > xThis( m_xToolbarManager );
+    uno::Reference< ui::XUIConfigurationListener > xThis( m_xToolbarManager );
     ToolbarLayoutManager* pToolbarManager = m_pToolbarManager;
     aReadLock.unlock();
 
@@ -921,7 +921,7 @@ void LayoutManager::implts_updateUIElementsVisibleState( sal_Bool bSetVisible )
 
     if ( bSetVisible )
     {
-        uno::Reference< lang::XComponent > xThis( m_xToolbarManager );
+        uno::Reference< ui::XUIConfigurationListener > xThis( m_xToolbarManager );
         if ( xThis.is() )
             m_pToolbarManager->setVisible(bSetVisible);
         implts_doLayout_notify( sal_False );
@@ -1270,7 +1270,7 @@ void LayoutManager::implts_setOffset( const sal_Int32 nBottomOffset )
     aOffsetRect.setHeight( nBottomOffset );
 
     // make sure that the toolbar manager refernence/pointer is valid
-    uno::Reference< lang::XComponent > xThis( m_xToolbarManager );
+    uno::Reference< ui::XUIConfigurationListener > xThis( m_xToolbarManager );
     if ( xThis.is() )
         m_pToolbarManager->setDockingAreaOffsets( aOffsetRect );
 }
@@ -1427,7 +1427,7 @@ throw ( RuntimeException )
     sal_Bool bAutomaticToolbars( m_bAutomaticToolbars );
     std::vector< Reference< awt::XWindow > > oldDockingAreaWindows;
 
-    uno::Reference< lang::XComponent > xToolbarManager( m_xToolbarManager );
+    uno::Reference< ui::XUIConfigurationListener > xToolbarManager( m_xToolbarManager );
     ToolbarLayoutManager* pToolbarManager = m_pToolbarManager;
 
     if ( !xDockingAreaAcceptor.is() )
@@ -1566,7 +1566,7 @@ IMPL_LINK( LayoutManager, WindowEventListener, VclSimpleEvent*, pEvent )
     long nResult( 1 );
 
     ReadGuard aReadLock( m_aLock );
-    uno::Reference< lang::XComponent > xThis( m_xToolbarManager );
+    uno::Reference< ui::XUIConfigurationListener > xThis( m_xToolbarManager );
     ToolbarLayoutManager*              pToolbarManager( m_pToolbarManager );
     aReadLock.unlock();
 
@@ -1827,14 +1827,15 @@ throw (uno::RuntimeException)
         bNotify   = true;
         bDoLayout = true;
     }
-    else if ( aElementType.equalsIgnoreAsciiCaseAscii( UIRESOURCETYPE_TOOLBAR ) && m_bParentWindowVisible )
+    else if ( aElementType.equalsIgnoreAsciiCaseAscii( UIRESOURCETYPE_TOOLBAR ) &&
+              m_bParentWindowVisible && m_bVisible )
     {
-        ReadGuard aReadLock( m_aLock );
+        bool bComponentAttached( m_aModuleIdentifier.getLength() > 0 );
         uno::Reference< uno::XInterface > xThis( m_xToolbarManager, uno::UNO_QUERY );
         ToolbarLayoutManager* pToolbarManager = m_pToolbarManager;
-        aReadLock.unlock();
+        aWriteLock.unlock();
 
-        if ( pToolbarManager )
+        if ( pToolbarManager && bComponentAttached )
         {
         bNotify   = pToolbarManager->requestToolbar( rResourceURL );
             bDoLayout = true;
@@ -2243,7 +2244,7 @@ throw (RuntimeException)
     if ( aElementType.equalsIgnoreAsciiCaseAscii( UIRESOURCETYPE_TOOLBAR ))
     {
         ReadGuard aReadLock( m_aLock );
-        uno::Reference< lang::XComponent > xToolbarManager( m_xToolbarManager );
+        uno::Reference< ui::XUIConfigurationListener > xToolbarManager( m_xToolbarManager );
         ToolbarLayoutManager* pToolbarManager( m_pToolbarManager );
         aReadLock.unlock();
 
@@ -2262,7 +2263,7 @@ throw (RuntimeException)
     if ( aElementType.equalsIgnoreAsciiCaseAscii( UIRESOURCETYPE_TOOLBAR ))
     {
         ReadGuard aReadLock( m_aLock );
-        uno::Reference< lang::XComponent > xToolbarManager( m_xToolbarManager );
+        uno::Reference< ui::XUIConfigurationListener > xToolbarManager( m_xToolbarManager );
         ToolbarLayoutManager* pToolbarManager( m_pToolbarManager );
         aReadLock.unlock();
 
@@ -3163,7 +3164,7 @@ throw( RuntimeException )
     else if ( rEvent.Source == Reference< XInterface >( m_xContainerWindow, UNO_QUERY ))
     {
         // Our container window gets disposed. Remove all user interface elements.
-        uno::Reference< lang::XComponent > xToolbarManager( m_xToolbarManager );
+        uno::Reference< ui::XUIConfigurationListener > xToolbarManager( m_xToolbarManager );
         ToolbarLayoutManager* pToolbarManager = m_pToolbarManager;
         if ( pToolbarManager )
     {
