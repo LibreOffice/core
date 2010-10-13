@@ -1148,10 +1148,21 @@ void ExtensionManager::synchronizeBundledPrereg(
 
         uno::Sequence<Reference<deploy::XPackage> > extensions = xMgr->getDeployedPackages(
             xAbortChannel, xCmdEnv);
-        for (sal_Int32 i = 0; i < extensions.getLength(); i++)
+        try
         {
-            extensions[i]->registerPackage(true, xAbortChannel, xCmdEnv);
+            for (sal_Int32 i = 0; i < extensions.getLength(); i++)
+            {
+                extensions[i]->registerPackage(true, xAbortChannel, xCmdEnv);
+            }
         }
+        catch (...)
+        {
+            OSL_ASSERT(0);
+        }
+        OUString lastSyncBundled(RTL_CONSTASCII_USTRINGPARAM(
+                                     "$BUNDLED_EXTENSIONS_PREREG/lastsynchronized"));
+        writeLastModified(lastSyncBundled, xCmdEnv);
+
     } catch (deploy::DeploymentException& ) {
         throw;
     } catch (ucb::CommandFailedException & ) {
