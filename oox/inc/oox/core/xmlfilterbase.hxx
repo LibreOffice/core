@@ -198,6 +198,8 @@ public:
      */
     XmlFilterBase& exportDocumentProperties( ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentProperties > xProperties );
 
+    void importDocumentProperties() throw();
+
 protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
                         implGetInputStream( ::comphelper::MediaDescriptor& rMediaDesc ) const;

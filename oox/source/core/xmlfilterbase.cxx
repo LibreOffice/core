@@ -81,6 +81,22 @@ using ::comphelper::MediaDescriptor;
 using ::sax_fastparser::FastSerializerHelper;
 using ::sax_fastparser::FSHelperPtr;
 
+
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/document/XOOXMLDocumentPropertiesImporter.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/mediadescriptor.hxx>
+#include <oox/core/filterdetect.hxx>
+#include <comphelper/storagehelper.hxx>
+
+using ::com::sun::star::uno::XComponentContext;
+using ::com::sun::star::document::XOOXMLDocumentPropertiesImporter;
+using ::com::sun::star::document::XDocumentPropertiesSupplier;
+using ::com::sun::star::beans::XPropertySet;
+using ::com::sun::star::lang::XComponent;
+
+
 namespace oox {
 namespace core {
 
@@ -116,6 +132,22 @@ XmlFilterBaseImpl::XmlFilterBaseImpl() :
     maBinSuffix( CREATE_OUSTRING( ".bin" ) ),
     maVmlSuffix( CREATE_OUSTRING( ".vml" ) )
 {
+}
+
+// ============================================================================
+static Reference< XComponentContext > lcl_getComponentContext(Reference< XMultiServiceFactory > aFactory)
+{
+    Reference< XComponentContext > xContext;
+    try
+    {
+        Reference< XPropertySet > xFactProp( aFactory, UNO_QUERY );
+        if( xFactProp.is() )
+            xFactProp->getPropertyValue( OUString::createFromAscii("DefaultContext") ) >>= xContext;
+    }
+    catch( Exception& )
+    {}
+
+    return xContext;
 }
 
 // ============================================================================
@@ -165,6 +197,25 @@ XmlFilterBase::~XmlFilterBase()
 }
 
 // ----------------------------------------------------------------------------
+
+void XmlFilterBase::importDocumentProperties() throw()
+{
+    Reference< XMultiServiceFactory > xFactory( getGlobalFactory(), UNO_QUERY );
+    MediaDescriptor aMediaDesc( getMediaDescriptor() );
+    Reference< XInputStream > xInputStream;
+    ::oox::core::FilterDetect aDetector( xFactory );
+    xInputStream = aDetector.extractUnencryptedPackage( aMediaDesc );
+    Reference< XComponent > xModel( getModel(), UNO_QUERY );
+    Reference< XComponentContext > xContext = lcl_getComponentContext(getGlobalFactory());
+    Reference< XStorage > xDocumentStorage (
+            ::comphelper::OStorageHelper::GetStorageOfFormatFromInputStream( OFOPXML_STORAGE_FORMAT_STRING, xInputStream ) );
+    Reference< XInterface > xTemp = xContext->getServiceManager()->createInstanceWithContext(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.OOXMLDocumentPropertiesImporter")),
+            xContext);
+    Reference< XOOXMLDocumentPropertiesImporter > xImporter( xTemp, UNO_QUERY );
+    Reference< XDocumentPropertiesSupplier > xPropSupplier( xModel, UNO_QUERY);
+    xImporter->importProperties( xDocumentStorage, xPropSupplier->getDocumentProperties() );
+}
 
 OUString XmlFilterBase::getFragmentPathFromFirstType( const OUString& rType )
 {
