@@ -1162,7 +1162,8 @@ void XclExpDV::SaveXml( XclExpXmlStream& rStrm )
             XML_operator,           lcl_GetOperatorType( mnFlags ),
             XML_prompt,             XESTRING_TO_PSZ( maPromptText ),
             XML_promptTitle,        XESTRING_TO_PSZ( maPromptTitle ),
-            XML_showDropDown,       XclXmlUtils::ToPsz( ! ::get_flag( mnFlags, EXC_DV_SUPPRESSDROPDOWN ) ),
+            // showDropDown should have been showNoDropDown - check oox/xlsx import for details
+            XML_showDropDown,       XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_DV_SUPPRESSDROPDOWN ) ),
             XML_showErrorMessage,   XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_DV_SHOWERROR ) ),
             XML_showInputMessage,   XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_DV_SHOWPROMPT ) ),
             XML_sqref,              XclXmlUtils::ToOString( maScRanges ).getStr(),
