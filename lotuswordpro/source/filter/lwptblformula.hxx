@@ -132,7 +132,7 @@ class LwpFormulaText:public LwpFormulaArg
 {
 public:
     LwpFormulaText( String aText);
-    virtual String ToString(LwpTableLayout* pCellsMap){return m_aText;}
+    virtual String ToString(LwpTableLayout* /*pCellsMap*/){return m_aText;}
 private:
     String m_aText;
 };

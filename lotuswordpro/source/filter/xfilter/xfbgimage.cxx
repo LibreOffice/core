@@ -80,7 +80,7 @@ void XFBGImage::SetImageData(sal_uInt8 *buf, int len)
     m_bUserFileLink = sal_False;
 }
 
-sal_Bool    XFBGImage::Equal(IXFStyle *pStyle)
+sal_Bool    XFBGImage::Equal(IXFStyle * /* pStyle */)
 {
     return sal_False;
 }

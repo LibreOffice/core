@@ -109,7 +109,7 @@ void    XFFrame::Add(IXFContent *pContent)
 
 }
 
-void    XFFrame::SetZIndex(sal_Int32 zIndex)
+void    XFFrame::SetZIndex(sal_uInt32 zIndex)
 {
     if( zIndex == m_nZIndex )
         return;
@@ -164,6 +164,8 @@ void    XFFrame::StartFrame(IXFStream *pStrm)
         break;
     case enumXFAnchorFrame:
         pAttrList->AddAttribute( A2OUSTR("text:anchor-type"), A2OUSTR("frame") );
+        break;
+    default:
         break;
     }
     pAttrList->AddAttribute( A2OUSTR("svg:x"), DoubleToOUString(m_aRect.GetX()) + A2OUSTR("cm") );

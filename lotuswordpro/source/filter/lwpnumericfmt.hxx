@@ -113,11 +113,11 @@ struct LwpCurrencyInfo
         bPost = sal_False;
         bShowSpace = sal_False;
     }
-    LwpCurrencyInfo(String sSym,sal_Bool bPost, sal_Bool bShowSpace)
+    LwpCurrencyInfo(String sSym,sal_Bool bPost_, sal_Bool bShowSpace_)
     {
-        this->sSymbol = sSym;
-        this->bPost = bPost;
-        this->bShowSpace = bShowSpace;
+        sSymbol = sSym;
+        bPost = bPost_;
+        bShowSpace = bShowSpace_;
     }
 };
 

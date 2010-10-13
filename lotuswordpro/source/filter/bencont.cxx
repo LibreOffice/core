@@ -394,7 +394,7 @@ BenError LtcBenContainer::CreateGraphicStreams(std::vector<SvStream *> * pStream
     CBenObject * pObj= NULL;
     char *pName;
     std::vector<std::string> aGrPropertyVector ;
-    while(pObj = GetNextObject(pObj) )
+    while( (pObj = GetNextObject(pObj)) )
     {
         if(pObj->IsNamedObject())
         {

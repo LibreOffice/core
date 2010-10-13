@@ -113,7 +113,7 @@ void LwpPageHint::Read()
     m_pObjStrm->SkipExtra();
 }
 
-void LwpPageHint::Parse(IXFStream *pOutputStream)
+void LwpPageHint::Parse(IXFStream * /*pOutputStream*/)
 {
 }
 

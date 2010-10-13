@@ -111,7 +111,7 @@ public:
     /**
      * @descr   Set z-index of the frame.
      */
-    void    SetZIndex(sal_Int32 zIndex);
+    void    SetZIndex(sal_uInt32 zIndex);
     /**
      * @descr   Set frame position X.
      */

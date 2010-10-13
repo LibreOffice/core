@@ -76,13 +76,16 @@ void LwpSuperTable::Read()
     m_pObjStrm->SkipExtra();
 
 }
- void  LwpSuperTable::Parse(IXFStream* pOutputStream)
+
+void  LwpSuperTable::Parse(IXFStream* /*pOutputStream*/)
 {
 }
 
 //Added by  for XFConvert refactor, 03/31/2005
-void LwpSuperTable::XFConvert(XFContentContainer* pCont)
-{}
+void LwpSuperTable::XFConvert(XFContentContainer* /*pCont*/)
+{
+}
+
 //End of Add
 /*****************************************************************************/
  LwpTable::LwpTable(LwpObjectHeader &objHdr, LwpSvStream* pStrm):LwpContent(objHdr, pStrm)
@@ -126,7 +129,7 @@ sal_Bool LwpTable::IsNumberDown()
     return sal_False;
 }
 
- void  LwpTable::Parse(IXFStream* pOutputStream)
+void  LwpTable::Parse(IXFStream* /*pOutputStream*/)
 {
 }
 
@@ -150,7 +153,8 @@ void LwpTableHeading::Read()
 {
     m_pObjStrm->SkipExtra();
 }
- void  LwpTableHeading::Parse(IXFStream* pOutputStream)
+
+void  LwpTableHeading::Parse(IXFStream* /*pOutputStream*/)
 {
 }
 
@@ -197,7 +201,8 @@ void LwpTableHint::Read()
 
     m_pObjStrm->SkipExtra();
 }
- void  LwpTableHint::Parse(IXFStream* pOutputStream)
+
+void  LwpTableHint::Parse(IXFStream* /*pOutputStream*/)
 {
 }
 

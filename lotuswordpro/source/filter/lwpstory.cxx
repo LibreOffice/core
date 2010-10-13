@@ -541,7 +541,7 @@ sal_Bool LwpStory::IsBullStyleUsedBefore(const rtl::OUString& rStyleName, const 
     {
         rtl::OUString aName = (*rIter).first;
         sal_uInt8 nPosition = (*rIter).second;
-        if ((*rIter).first == rStyleName && (*rIter).second == nPos)
+        if (aName == rStyleName && nPosition == nPos)
         {
             return sal_True;
         }

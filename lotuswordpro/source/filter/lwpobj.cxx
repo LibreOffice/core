@@ -70,7 +70,7 @@ LwpObject::LwpObject()
  * @descr  construct lwpobject from stream
  */
 LwpObject::LwpObject(LwpObjectHeader objHdr, LwpSvStream* pStrm)
-    : m_ObjHdr(objHdr), m_pStrm(pStrm), m_pObjStrm(NULL), m_pFoundry(NULL)
+    : m_ObjHdr(objHdr), m_pObjStrm(NULL), m_pFoundry(NULL), m_pStrm(pStrm)
 {
     m_pObjStrm = new LwpObjectStream(pStrm, m_ObjHdr.IsCompressed(),
             static_cast<sal_uInt16>(m_ObjHdr.GetSize()) );
@@ -105,7 +105,7 @@ void LwpObject::Read()
 /**
  * @descr  default parse function
  */
-void LwpObject::Parse(IXFStream* pOutputStream)
+void LwpObject::Parse(IXFStream* /*pOutputStream*/)
 {}
 /**
  * @descr  default register style function
@@ -117,7 +117,7 @@ void LwpObject::RegisterStyle()
  * @descr  default XFConvert function
  * pCont is the XFContentContainer for the object conversion
  */
-void LwpObject::XFConvert(XFContentContainer* pCont)
+void LwpObject::XFConvert(XFContentContainer* /*pCont*/)
 {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

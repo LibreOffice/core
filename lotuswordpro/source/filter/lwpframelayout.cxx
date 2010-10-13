@@ -148,7 +148,7 @@ void  LwpFrame::RegisterStyle(XFFrameStyle* pFrameStyle)
         pXFFrame->SetHeight( fHeight );
 
         //Get content obj;
-        LwpObject* pObj = m_pLayout->GetContent()->obj();
+        /*LwpObject* pObj =*/ m_pLayout->GetContent()->obj();
         if(m_pLayout->IsGroupHead()&&(m_pLayout->IsMinimumHeight()))
         {
             //process grouplayout height. there is problems now
@@ -1132,7 +1132,7 @@ void LwpGroupFrame::Read()
  void  LwpGroupFrame::RegisterStyle()
 {
 }
-void LwpGroupFrame::XFConvert(XFContentContainer* pCont)
+void LwpGroupFrame::XFConvert(XFContentContainer* /*pCont*/)
 {
 }
 

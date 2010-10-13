@@ -89,7 +89,7 @@
 
 
 LwpFribPtr::LwpFribPtr()
-    : m_pFribs(NULL),m_pPara(NULL),m_pXFPara(NULL)
+    : m_pFribs(NULL),m_pXFPara(NULL),m_pPara(NULL)
 {}
 
 LwpFribPtr::~LwpFribPtr()

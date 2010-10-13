@@ -89,7 +89,7 @@ class XFStyleManager// : public IXFObject
 public:
     XFStyleManager();
     ~XFStyleManager();
-    XFStyleManager(XFStyleManager& other){}
+    XFStyleManager(XFStyleManager&){}
 
 public:
     /**

@@ -90,7 +90,10 @@
 #define EF_NOS 0x0003
 
 LwpGraphicObject::LwpGraphicObject(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
-:LwpGraphicOleObject(objHdr, pStrm),m_bCompressed(0),m_bIsLinked(0),m_nCachedBaseLine(0)
+    : LwpGraphicOleObject(objHdr, pStrm)
+    , m_nCachedBaseLine(0)
+    , m_bIsLinked(0)
+    , m_bCompressed(0)
 {
 }
 LwpGraphicObject::~LwpGraphicObject()
@@ -263,7 +266,7 @@ void LwpGraphicObject::XFConvert (XFContentContainer* pCont)
     }
     if (m_sServerContextFormat[1]=='l'&&m_sServerContextFormat[2]=='c'&&m_sServerContextFormat[3]=='h')
     {
-        LwpSvStream* pDocStream = m_pStrm;
+        //LwpSvStream* pDocStream = m_pStrm;
         //LwpChartStreamTools::ParseChart(pDocStream, GetObjectID(),
         //                              GetRectIn100thMM(), GetRectInCM(), pOutputStream);
         //LwpChartStreamTools::ParseChart(pDocStream, GetObjectID(),
@@ -421,7 +424,7 @@ void LwpGraphicObject::CreateDrawObjects()
     LwpSvStream* pStream = m_pStrm->GetCompressedStream() ?  m_pStrm->GetCompressedStream(): m_pStrm;
 
     OpenStormBento::LtcBenContainer* pBentoContainer;
-    ULONG ulRet = OpenStormBento::BenOpenContainer(pStream, &pBentoContainer);
+    /*ULONG ulRet =*/ OpenStormBento::BenOpenContainer(pStream, &pBentoContainer);
     SvStream* pDrawObjStream = NULL;
 
     // get graphic object's bento objet name
@@ -447,10 +450,10 @@ void LwpGraphicObject::CreateDrawObjects()
 void LwpGraphicObject::GetBentoNamebyID(LwpObjectID* pMyID, std::string& rName)
 {
     sal_uInt16 nHigh = pMyID->GetHigh();
-    sal_uInt32 nLow = pMyID->GetLow();
+    sal_uInt16 nLow = pMyID->GetLow();
     char pTempStr[32];
     rName = std::string("Gr");
-    sprintf(pTempStr, "%X,%lX", nHigh, nLow);
+    sprintf(pTempStr, "%X,%X", nHigh, nLow);
     rName.append(pTempStr);
 }
 
@@ -466,7 +469,7 @@ sal_uInt32 LwpGraphicObject::GetRawGrafData(sal_uInt8*& pGrafData)
     LwpSvStream* pStream = m_pStrm->GetCompressedStream() ?  m_pStrm->GetCompressedStream(): m_pStrm;
 
     OpenStormBento::LtcBenContainer* pBentoContainer;
-    ULONG ulRet = OpenStormBento::BenOpenContainer(pStream, &pBentoContainer);
+    /*ULONG ulRet =*/ OpenStormBento::BenOpenContainer(pStream, &pBentoContainer);
     SvStream* pGrafStream = NULL;
 
     // get graphic object's bento objet name
@@ -506,7 +509,7 @@ sal_uInt32 LwpGraphicObject::GetGrafData(sal_uInt8*& pGrafData)
     LwpSvStream* pStream = m_pStrm->GetCompressedStream() ?  m_pStrm->GetCompressedStream(): m_pStrm;
 
     OpenStormBento::LtcBenContainer* pBentoContainer;
-    ULONG ulRet = OpenStormBento::BenOpenContainer(pStream, &pBentoContainer);
+    /*ULONG ulRet =*/ OpenStormBento::BenOpenContainer(pStream, &pBentoContainer);
 
     SvStream* pGrafStream = NULL;
 

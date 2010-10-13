@@ -378,8 +378,12 @@ sal_Bool LwpBookMark::IsRightName(OUString sName)
     return sName.equals(GetName());
 }
 
-LwpFieldMark::LwpFieldMark(LwpObjectHeader &objHdr, LwpSvStream *pStrm):LwpStoryMarker(objHdr,pStrm),
-    m_bHasStyle(sal_False),m_bHasStart(sal_False),m_bRevisionFlag(sal_False),m_pFrib(NULL)
+LwpFieldMark::LwpFieldMark(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
+    : LwpStoryMarker(objHdr,pStrm)
+    , m_bHasStyle(sal_False)
+    , m_bHasStart(sal_False)
+    , m_pFrib(NULL)
+    , m_bRevisionFlag(sal_False)
 {
 }
 

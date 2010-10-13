@@ -72,7 +72,7 @@
 #include "lwpglobalmgr.hxx"
 
 LwpObjectID::LwpObjectID(sal_uInt32 low, sal_uInt16 high)
-    :m_nLow(low), m_nHigh(high), m_bIsCompressed(sal_False), m_nIndex(0)
+    :m_nLow(low), m_nHigh(high), m_nIndex(0), m_bIsCompressed(sal_False)
 {
 }
 /**

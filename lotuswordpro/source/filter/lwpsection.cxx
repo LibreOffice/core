@@ -114,7 +114,7 @@ void LwpSection::Read()
  * @descr: do nothing
  *
  */
-void LwpSection::Parse(IXFStream *pOutputStream)
+void LwpSection::Parse(IXFStream * /*pOutputStream*/)
 {
 
 }

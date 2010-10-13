@@ -91,7 +91,7 @@ LwpFribSection::~LwpFribSection()
  * @descr:  Read section frib information
  *
  */
-void LwpFribSection::Read(LwpObjectStream *pObjStrm, sal_uInt16 len)
+void LwpFribSection::Read(LwpObjectStream *pObjStrm, sal_uInt16 /*len*/)
 {
     m_Section.ReadIndexed(pObjStrm);
 }
@@ -169,12 +169,12 @@ void LwpFribSection::ParseSection()
         LwpStory* pStory = static_cast<LwpStory*> ( m_pPara->GetStoryID()->obj() );
         if (m_Section.obj()->GetTag() == VO_INDEXSECTION)
         {
-            sal_Bool bRunin = sal_False;
-            sal_Bool bSeparator = sal_False;
             //create a new section and add it to container
             XFIndex* pIndex = new XFIndex;
             pIndex->SetIndexType(enumXFIndexAlphabetical);
             /*
+            sal_Bool bRunin = sal_False;
+            sal_Bool bSeparator = sal_False;
             LwpIndexSection* pIndexSection = static_cast<LwpIndexSection*>(m_Section.obj());
             if (pIndexSection->IsFormatRunin())
                 bRunin = sal_True;
@@ -248,7 +248,7 @@ void LwpFribSection::SetDefaultAlphaIndex(XFIndex * pXFIndex)
 
 
 LwpMasterPage::LwpMasterPage(LwpPara* pPara, LwpPageLayout* pLayout)
-    :m_pPara(pPara),m_pLayout(pLayout),m_bNewSection(sal_False)
+    :m_bNewSection(sal_False),m_pPara(pPara),m_pLayout(pLayout)
 {
 }
 
@@ -318,7 +318,7 @@ sal_Bool LwpMasterPage::RegisterMasterPage(LwpFrib* pFrib)
     {
         XFSectionStyle* pSectStyle= new XFSectionStyle();
         //set margin
-        LwpStory* pStory = static_cast<LwpStory*>(m_pPara->GetStoryID()->obj());
+        pStory = static_cast<LwpStory*>(m_pPara->GetStoryID()->obj());
         if(pStory)
         {
             LwpPageLayout* pCurrentLayout = pStory->GetCurrentLayout();

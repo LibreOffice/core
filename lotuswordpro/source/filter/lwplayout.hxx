@@ -101,8 +101,8 @@ public:
     inline virtual sal_uInt16 GetNumCols(){return 1;}
     virtual double GetColWidth(sal_uInt16 nIndex);
     virtual double GetColGap(sal_uInt16 nIndex);
-    virtual double GetMarginsValue(const sal_uInt8& nWhichSide){return 0;}
-    virtual double GetExtMarginsValue(const sal_uInt8& nWhichSide){return 0;}
+    virtual double GetMarginsValue(const sal_uInt8& /*nWhichSide*/){return 0;}
+    virtual double GetExtMarginsValue(const sal_uInt8& /*nWhichSide*/){return 0;}
     virtual sal_Bool IsAutoGrow(){ return sal_False;}
     virtual sal_Bool IsAutoGrowUp(){ return sal_False;}
     virtual sal_Bool IsAutoGrowDown(){ return sal_False;}
@@ -135,7 +135,7 @@ public:
     virtual sal_Bool IsUseOnAllEvenPages(){ return sal_False;}
     virtual sal_Bool IsUseOnAllOddPages(){ return sal_False;}
     virtual sal_Bool IsUseOnPage(){ return sal_False;}
-    virtual sal_Int32 GetPageNumber(sal_uInt16 nLayoutNumber = 0){ return -1;}
+    virtual sal_Int32 GetPageNumber(sal_uInt16 /*nLayoutNumber*/ = 0){ return -1;}
     virtual sal_Bool IsMinimumHeight();
     virtual sal_Bool IsForWaterMark(){ return sal_False;}
     virtual LwpPara* GetLastParaOfPreviousStory() { return NULL; }
@@ -427,7 +427,7 @@ public:
     virtual sal_Bool IsAnchorPage();
     virtual sal_Bool IsAnchorFrame();
     virtual sal_Bool IsAnchorCell();
-    virtual void XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart = 0, sal_Int32 nEnd = 0, sal_Bool bAll = sal_False){}
+    virtual void XFConvertFrame(XFContentContainer* /*pCont*/, sal_Int32 /*nStart*/ = 0, sal_Int32 /*nEnd*/ = 0, sal_Bool /*bAll*/ = sal_False) {}
     XFFont* GetFont();
     void SetFont(XFFont* pFont);
     enum WrapType

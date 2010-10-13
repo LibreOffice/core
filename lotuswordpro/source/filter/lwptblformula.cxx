@@ -71,7 +71,9 @@
 
 //////////////////////////////////////////////////////////////////
  LwpFormulaInfo::LwpFormulaInfo(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
-:LwpCellList(objHdr, pStrm),m_nFormulaRow(0),m_bSupported(sal_True)
+    : LwpCellList(objHdr, pStrm)
+    , m_bSupported(sal_True)
+    , m_nFormulaRow(0)
 {}
 
 LwpFormulaInfo::~LwpFormulaInfo()
@@ -447,7 +449,7 @@ LwpFormulaConst::LwpFormulaConst(double dVal)
 *   @param
 *   @return sal_Bool.
 */
-String LwpFormulaConst::ToString(LwpTableLayout* pCellsMap)
+String LwpFormulaConst::ToString(LwpTableLayout* /*pCellsMap*/)
 {
     return String::CreateFromDouble(m_dVal);
 }

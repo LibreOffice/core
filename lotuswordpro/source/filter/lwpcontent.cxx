@@ -134,7 +134,7 @@ LwpVirtualLayout* LwpContent::GetLayout(LwpVirtualLayout* pStartLayout)
 sal_Bool LwpContent::HasNonEmbeddedLayouts()
 {
     LwpVirtualLayout* pLayout = NULL;
-    while(pLayout = GetLayout(pLayout))
+    while( (pLayout = GetLayout(pLayout)) )
     {
         if(!pLayout->NoContentReference())
             return sal_True;
@@ -145,7 +145,7 @@ sal_Bool LwpContent::HasNonEmbeddedLayouts()
 sal_Bool LwpContent::IsStyleContent()
 {
     LwpVirtualLayout* pLayout = NULL;
-    while(pLayout = GetLayout(pLayout))
+    while( (pLayout = GetLayout(pLayout)) )
     {
         if(pLayout->IsStyleLayout())
             return sal_True;

@@ -215,7 +215,6 @@ void LwpOleObject::Read()
     cPersistentFlags = m_pObjStrm->QuickReaduInt16();
 
     sal_uInt16 nNonVersionedPersistentFlags = 0;
-    sal_uInt32 nFormat = 0;
     sal_uInt16 nNumberOfPages = 0;
     // qCMarker read
     LwpObjectID ID;
@@ -266,7 +265,7 @@ void LwpOleObject::GetChildStorageName(char *pObjName)
 
     char sName[MAX_STREAMORSTORAGENAME];
     //LwpObjectID ID(nLowID, GetObjectID()->GetHigh());
-    sprintf( sName, "%s%lX,%lX", "Ole",
+    sprintf( sName, "%s%X,%X", "Ole",
       GetObjectID()->GetHigh(), GetObjectID()->GetLow());
 
     strcpy( pObjName, sName);
@@ -279,7 +278,7 @@ void LwpOleObject::GetChildStorageName(char *pObjName)
  * @return:  None
  * @date:    2/22/2005
  */
-void LwpOleObject::Parse(IXFStream* pOutputStream)
+void LwpOleObject::Parse(IXFStream* /*pOutputStream*/)
 {
 #if 0
 #ifdef WIN32
@@ -404,7 +403,7 @@ void LwpOleObject::Parse(IXFStream* pOutputStream)
 #endif
 }
 
-void LwpOleObject::XFConvert(XFContentContainer * pCont)
+void LwpOleObject::XFConvert(XFContentContainer * /*pCont*/)
 {
 #if 0
     //Add by  10/24/2005
@@ -590,7 +589,7 @@ Rectangle LwpOleObject::GetOLEObjectSize( SotStorage * pStor ) const
 /**
 * @descr:   Read OLE object picture information
 */
-BOOL LwpOlePres::Read( SvStream & rStm )
+BOOL LwpOlePres::Read( SvStream & /*rStm*/ )
 {
 #if 0
     ULONG nBeginPos = rStm.Tell();

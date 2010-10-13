@@ -717,7 +717,7 @@ LwpPara* LwpPageLayout::GetPagePosition()
     LwpFoundry* pFoundry = GetFoundry();
     if(pFoundry)
     {
-        while(pSection = pFoundry->EnumSections(pSection))
+        while( (pSection = pFoundry->EnumSections(pSection)) )
         {
             if(pSection->GetPageLayout() == this)
                 return static_cast<LwpPara*>(pSection->GetPosition()->obj());

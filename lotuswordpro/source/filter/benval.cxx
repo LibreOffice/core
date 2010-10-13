@@ -146,8 +146,8 @@ CBenValue::ReadValueDataKnownSize(BenDataPtr pBuffer, unsigned long Offset,
 }
 
 BenError
-CBenValue::WriteValueData(BenConstDataPtr pWriteBuffer, unsigned long Offset,
-  unsigned long Amt, unsigned long * pAmtWritten)
+CBenValue::WriteValueData(BenConstDataPtr /*pWriteBuffer*/, unsigned long /*Offset*/,
+  unsigned long /*Amt*/, unsigned long * /*pAmtWritten*/)
 {
 #if 0// Deleted by  2004-06-16
     unsigned long AmtWritten;

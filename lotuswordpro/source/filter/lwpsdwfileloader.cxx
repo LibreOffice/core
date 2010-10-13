@@ -65,7 +65,9 @@
 
 LwpSdwFileLoader::LwpSdwFileLoader(SvStream* pStream, LwpGraphicObject* pGraphicObj,
     IXFStream* pOutputStream)
-:m_pStream(pStream), m_pGraphicObj(pGraphicObj), m_pOutputStream(pOutputStream)
+    : m_pStream(pStream)
+    , m_pOutputStream(pOutputStream)
+    , m_pGraphicObj(pGraphicObj)
 {
     pStream->Seek(0);
 }

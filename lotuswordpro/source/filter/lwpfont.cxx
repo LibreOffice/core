@@ -542,7 +542,7 @@ Called by VO_PARA to get style name based on the Para Style ID
     return OUString();
 }*/
 
-void LwpFontManager::SetDfltFont(XFFont* pFont)
+void LwpFontManager::SetDfltFont(XFFont* /*pFont*/)
 {
     // TODO:  Set default XFFont values in lwp filter
     //color:black, background color: transparent, Orientation: left to right, top to bottom, others: 0

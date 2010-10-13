@@ -66,7 +66,7 @@
  * @param:
  */
 
-void LwpFribTable::Read(LwpObjectStream* pObjStrm, sal_uInt16 len)
+void LwpFribTable::Read(LwpObjectStream* pObjStrm, sal_uInt16 /*len*/)
 {
     m_objTable.ReadIndexed(pObjStrm);
 }

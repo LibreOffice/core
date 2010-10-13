@@ -209,6 +209,8 @@ void    XFBorders::SetColor(enumXFBorder side, XFColor& color)
     case enumXFBorderBottom:
         m_aBorderBottom.SetColor(color);
         break;
+    default:
+        break;
     }
 }
 
@@ -227,6 +229,8 @@ void    XFBorders::SetWidth(enumXFBorder side, double width)
         break;
     case enumXFBorderBottom:
         m_aBorderBottom.SetWidth(width);
+        break;
+    default:
         break;
     }
 }
@@ -247,6 +251,8 @@ void    XFBorders::SetDoubleLine(enumXFBorder side, sal_Bool dual,sal_Bool bSame
     case enumXFBorderBottom:
         m_aBorderBottom.SetDoubleLine(dual,bSameWidth);
         break;
+    default:
+        break;
     }
 }
 
@@ -265,6 +271,8 @@ void    XFBorders::SetWidthInner(enumXFBorder side, double inner)
         break;
     case enumXFBorderBottom:
         m_aBorderBottom.SetWidthInner(inner);
+        break;
+    default:
         break;
     }
 }
@@ -285,6 +293,8 @@ void    XFBorders::SetWidthSpace(enumXFBorder side, double space)
     case enumXFBorderBottom:
         m_aBorderBottom.SetWidthSpace(space);
         break;
+    default:
+        break;
     }
 }
 
@@ -303,6 +313,8 @@ void    XFBorders::SetWidthOutter(enumXFBorder side, double outer)
         break;
     case enumXFBorderBottom:
         m_aBorderBottom.SetWidthOutter(outer);
+        break;
+    default:
         break;
     }
 }

@@ -106,7 +106,7 @@ void LwpFribColumnBreak::RegisterBreakStyle(LwpPara * pPara)
 }
 
 LwpFribPageBreak::LwpFribPageBreak( LwpPara* pPara )
-    : LwpFrib(pPara), m_pMasterPage(NULL),m_bLastFrib(sal_False)
+    : LwpFrib(pPara), m_bLastFrib(sal_False), m_pMasterPage(NULL)
 {
 }
 
@@ -119,7 +119,7 @@ LwpFribPageBreak::~LwpFribPageBreak()
     }
 }
 
-void LwpFribPageBreak::Read(LwpObjectStream * pObjStrm, sal_uInt16 len)
+void LwpFribPageBreak::Read(LwpObjectStream * pObjStrm, sal_uInt16 /*len*/)
 {
     m_Layout.ReadIndexed(pObjStrm);
 }

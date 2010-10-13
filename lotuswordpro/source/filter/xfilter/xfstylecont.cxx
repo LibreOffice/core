@@ -188,10 +188,10 @@ IXFStyle*   XFStyleContainer::FindStyle(rtl::OUString name)
     return NULL;
 }
 
-IXFStyle*   XFStyleContainer::Item(int index)
+IXFStyle*   XFStyleContainer::Item(size_t index)
 {
-    assert(index>=0&&index<m_aStyles.size());
-    if( index >=0 && index < m_aStyles.size() )
+    assert(index<m_aStyles.size());
+    if (index < m_aStyles.size())
     {
         return m_aStyles[index];
     }
@@ -273,7 +273,7 @@ bool operator==(XFStyleContainer& b1, XFStyleContainer& b2)
         return false;
     if( b1.m_aStyles.size() != b2.m_aStyles.size() )
         return false;
-    for( int i=0; i<b1.m_aStyles.size(); i++ )
+    for( size_t i=0; i<b1.m_aStyles.size(); ++i )
     {
         IXFStyle *pS1 = b1.m_aStyles[i];
         IXFStyle *pS2 = b2.m_aStyles[i];

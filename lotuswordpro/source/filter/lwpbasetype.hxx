@@ -100,8 +100,8 @@ public:
     LwpPoint();
     void Read(LwpObjectStream *pStrm);
     void Reset();
-    inline const sal_Int32 GetX();
-    inline const sal_Int32 GetY();
+    inline sal_Int32 GetX() const;
+    inline sal_Int32 GetY() const;
     inline void SetX(sal_Int32 nX);
     inline void SetY(sal_Int32 nY);
 protected:
@@ -109,8 +109,8 @@ protected:
     sal_Int32 m_nY;
 };
 
-const sal_Int32 LwpPoint::GetX(){return m_nX;}
-const sal_Int32 LwpPoint::GetY(){return m_nY;}
+sal_Int32 LwpPoint::GetX() const {return m_nX;}
+sal_Int32 LwpPoint::GetY() const {return m_nY;}
 void LwpPoint::SetX(sal_Int32 nX){m_nX = nX;}
 void LwpPoint::SetY(sal_Int32 nY){m_nY = nY;}
 

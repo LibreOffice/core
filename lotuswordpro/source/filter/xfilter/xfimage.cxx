@@ -119,6 +119,8 @@ void    XFImage::ToXml(IXFStream *pStrm)
     case enumXFAnchorFrame:
         pAttrList->AddAttribute( A2OUSTR("text:anchor-type"), A2OUSTR("frame") );
         break;
+    default:
+        break;
     }
     pAttrList->AddAttribute( A2OUSTR("svg:x"), DoubleToOUString(m_aRect.GetX()) + A2OUSTR("cm") );
     pAttrList->AddAttribute( A2OUSTR("svg:y"), DoubleToOUString(m_aRect.GetY()) + A2OUSTR("cm") );

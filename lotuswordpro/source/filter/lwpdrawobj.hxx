@@ -156,8 +156,8 @@ public:
 protected:
     virtual void Read() {}
     virtual rtl::OUString RegisterStyle() { return rtl::OUString::createFromAscii(""); }
-    virtual XFFrame* CreateDrawObj(const rtl::OUString& rStyleName) { return NULL; }
-    virtual XFFrame* CreateStandardDrawObj(const rtl::OUString& rStyleName) { return NULL; }
+    virtual XFFrame* CreateDrawObj(const rtl::OUString& /*rStyleName*/) { return NULL; }
+    virtual XFFrame* CreateStandardDrawObj(const rtl::OUString& /*rStyleName*/) { return NULL; }
 };
 
 
@@ -350,8 +350,8 @@ public:
 protected:
     virtual void Read();
     virtual rtl::OUString RegisterStyle() {return rtl::OUString::createFromAscii("");}
-    virtual XFFrame* CreateDrawObj(const rtl::OUString& rStyleName){return NULL;}
-    virtual XFFrame* CreateStandardDrawObj(const rtl::OUString& rStyleName){return NULL;}
+    virtual XFFrame* CreateDrawObj(const rtl::OUString& /*rStyleName*/){return NULL;}
+    virtual XFFrame* CreateStandardDrawObj(const rtl::OUString& /*rStyleName*/){return NULL;}
 };
 
 /**

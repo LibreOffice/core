@@ -429,7 +429,7 @@ void  LwpSuperTableLayout::RegisterFrameStyle()
 }
 
 LwpTableLayout::LwpTableLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
-    : LwpLayout(objHdr, pStrm),m_pXFTable(NULL), m_nRows(0), m_nCols(0)
+    : LwpLayout(objHdr, pStrm), m_nRows(0), m_nCols(0), m_pXFTable(NULL)
 {
     m_CellsMap.clear();
     m_pColumns = NULL;
@@ -466,11 +466,10 @@ LwpCellLayout * LwpTableLayout::GetCellByRowCol(sal_uInt16 nRow, sal_uInt16 nCol
  */
 void LwpTableLayout::TraverseTable()
 {
-    sal_uInt32 iLoop, jLoop;
     sal_uInt32 nCount = m_nRows*m_nCols;
 
     // new cell map nRow*nCOl and initialize
-    for(iLoop = 0;iLoop<nCount; iLoop++)
+    for (sal_uInt32 iLoop = 0; iLoop < nCount; ++iLoop)
     {
         m_WordProCellsMap.push_back(GetDefaultCellLayout());
     }
@@ -1346,8 +1345,6 @@ void LwpTableLayout::ConvertDefaultRow(XFTable* pXFTable,sal_uInt8 nStartCol,
     // current row doesn't exist in the file
     XFRow * pRow = new XFRow();
     pRow->SetStyleName(m_DefaultRowStyleName);
-    sal_Bool bIsTop = sal_False;
-    sal_Bool bIsRight = sal_False;
 
     for (sal_uInt16 j =0;j < nEndCol-nStartCol; j++)
     {
