@@ -1096,9 +1096,10 @@ bool XclExpXmlStream::exportDocument() throw()
 {
     ScDocShell* pShell = getDocShell();
     ScDocument* pDoc = pShell->GetDocument();
-    SfxMedium* pMedium = pShell->GetMedium();
-    SvStream* pMediumStream = pMedium->GetOutStream();
-    SotStorageRef rStorage = new SotStorage( pMediumStream, false );
+    // NOTE: Don't use SotStorage or SvStream any more, and never call
+    // SfxMedium::GetOutStream() anywhere in the xlsx export filter code!
+    // Instead, write via XOutputStream instance.
+    SotStorageRef rStorage = static_cast<SotStorage*>(NULL);
 
     XclExpRootData aData( EXC_BIFF8, *pShell->GetMedium (), rStorage, *pDoc, RTL_TEXTENCODING_DONTKNOW );
     aData.meOutput = EXC_OUTPUT_XML_2007;
@@ -1107,7 +1108,7 @@ bool XclExpXmlStream::exportDocument() throw()
     mpRoot = &aRoot;
     aRoot.GetOldRoot().pER = &aRoot;
     aRoot.GetOldRoot().eDateiTyp = Biff8;
-
+#if 0 // FIXME: Re-write this block without using SotStorage.
     if ( SvtFilterOptions* pOptions = SvtFilterOptions::Get() )
         if ( pShell && pOptions->IsLoadExcelBasicStorage() )
             if ( sal_uInt32 nError
@@ -1118,7 +1119,7 @@ bool XclExpXmlStream::exportDocument() throw()
             {
                 pShell->SetError( nError, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
             }
-
+#endif
     OUString const workbook = CREATE_OUSTRING( "xl/workbook.xml" );
     PushStream( CreateOutputStream( workbook, workbook,
                                     Reference <XOutputStream>(),
