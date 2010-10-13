@@ -80,6 +80,8 @@ APP1STDLIBS+=-lXaw
 .ENDIF
 .IF "$(OS)"=="FREEBSD" || "$(OS)"=="NETBSD"
 APP1STDLIBS+= -lXt -lXext -lX11
+.ELIF "$(OS)"=="AIX"
+APP1STDLIBS+= -lXpm -lXmu -lXt $(X11LINK_DYNAMIC) -ldl
 .ELSE
 APP1STDLIBS+= -lXt $(X11LINK_DYNAMIC) -ldl
 .ENDIF

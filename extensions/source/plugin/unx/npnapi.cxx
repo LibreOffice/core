@@ -28,6 +28,13 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
+
+#ifdef AIX
+#define _LINUX_SOURCE_COMPAT
+#include <sys/timer.h>
+#undef _LINUX_SOURCE_COMPAT
+#endif
+
 #include <plugin/unx/plugcon.hxx>
 
 #include <unistd.h>
