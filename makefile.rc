@@ -71,6 +71,7 @@ clean .PHONY:
 .IF "$(BUILD_DMAKE)"!="NO"
 	-echo cleaning up dmake...
 	-$(GNUMAKE) -C dmake clean
+	-rm -f solenv/*/bin/dmake*
 .ENDIF
 
 # 
