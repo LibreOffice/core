@@ -1444,17 +1444,14 @@ void XPolygon::Rotate20()
     long     nPntCnt = pImpXPolygon->nPoints;
     long     nIndex0 = 0;
 
-    for (long nPoints = 1;
-              nPoints < nPntCnt;
-              nPoints ++)
+    for (long nPoints = 1; nPoints < nPntCnt; ++nPoints)
     {
-        Point &rPnt = pImpXPolygon->pPointAry[nPoints];
+        const Point &rPnt = pImpXPolygon->pPointAry[nPoints];
 
-        if ((rPnt.X () < fMinX) || (fMinX == rPnt.X ()) &&
-                                   (fMinY >= rPnt.Y ()))
+        if ( (rPnt.X() < fMinX) || (fMinX == rPnt.X() && fMinY >= rPnt.Y()) )
         {
-            fMinX   = rPnt.X ();
-            fMinY   = rPnt.Y ();
+            fMinX   = rPnt.X();
+            fMinY   = rPnt.Y();
             nIndex0 = nPoints;
         }
     }
