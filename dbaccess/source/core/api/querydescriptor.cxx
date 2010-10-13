@@ -280,4 +280,6 @@ OColumn* OQueryDescriptor_Base::createColumn( const ::rtl::OUString& /*_rName*/ 
     return NULL;
 }
 
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
