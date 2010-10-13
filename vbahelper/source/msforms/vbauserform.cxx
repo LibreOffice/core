@@ -28,6 +28,7 @@
 #include "vbauserform.hxx"
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
+#include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/beans/PropertyConcept.hpp>
 #include <basic/sbx.hxx>
 #include <basic/sbstar.hxx>
@@ -53,6 +54,8 @@ ScVbaUserForm::ScVbaUserForm( uno::Sequence< uno::Any > const& aArgs, uno::Refer
     uno::Reference< awt::XControl > xControl( m_xDialog, uno::UNO_QUERY_THROW );
     m_xProps.set( xControl->getModel(), uno::UNO_QUERY_THROW );
     setGeometryHelper( new UserFormGeometryHelper( xContext, xControl ) );
+    if ( aArgs.getLength() >= 4 )
+        aArgs[ 3 ] >>= m_sLibName;
 }
 
 ScVbaUserForm::~ScVbaUserForm()
@@ -102,6 +105,24 @@ ScVbaUserForm::Hide(  ) throw (uno::RuntimeException)
     mbDispose = false;  // hide not dispose
     if ( m_xDialog.is() )
         m_xDialog->endExecute();
+}
+
+sal_Bool SAL_CALL ScVbaUserForm::getVisible() throw (uno::RuntimeException)
+{
+    uno::Reference< awt::XWindow2 > xWindow2( getWindowPeer(), uno::UNO_QUERY_THROW );
+    return xWindow2->isVisible();
+}
+
+void SAL_CALL ScVbaUserForm::setVisible( sal_Bool bVisible ) throw (uno::RuntimeException)
+{
+    if ( bVisible )
+    {
+        Show();
+    }
+    else
+    {
+        Hide();
+    }
 }
 
 void SAL_CALL
@@ -184,6 +205,8 @@ ScVbaUserForm::getValue( const ::rtl::OUString& aPropertyName ) throw (beans::Un
             uno::Reference< msforms::XControl > xVBAControl( aFac.createControl( xDialogControl->getModel() ) );
             ScVbaControl* pControl  = dynamic_cast< ScVbaControl* >( xVBAControl.get() );
             pControl->setGeometryHelper( new UserFormGeometryHelper( mxContext, xControl ) );
+        if ( m_sLibName.getLength() )
+            pControl->setLibraryAndCodeName( m_sLibName.concat( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "." ) ) ).concat( getName() ) );
         aResult = uno::makeAny( xVBAControl );
     }
 

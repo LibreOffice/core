@@ -59,6 +59,8 @@ class SbModule : public SbxObject
 
     SbModuleImpl*   mpSbModuleImpl;     // Impl data
     std::vector< String > mModuleVariableNames;
+    SbModule();
+    SbModule(const SbModule&);
 
 protected:
     com::sun::star::uno::Reference< com::sun::star::script::XInvocation > mxWrapper;
@@ -132,6 +134,7 @@ public:
     BOOL LoadBinaryData( SvStream& );
     BOOL ExceedsLegacyModuleSize();
     void fixUpMethodStart( bool bCvtToLegacy, SbiImage* pImg = NULL ) const;
+    bool HasExeCode();
     BOOL IsVBACompat() const;
     void SetVBACompat( BOOL bCompat );
     INT32 GetModuleType() { return mnType; }

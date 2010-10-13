@@ -64,7 +64,8 @@
 #include <xmlscript/xmlmod_imexp.hxx>
 #include <cppuhelper/factory.hxx>
 #include <com/sun/star/util/VetoException.hpp>
-
+#include <com/sun/star/script/XLibraryQueryExecutable.hpp>
+#include <cppuhelper/implbase1.hxx>
 namespace basic
 {
 
@@ -134,7 +135,6 @@ sal_Bool SfxScriptLibraryContainer::hasLibraryPassword( const String& rLibraryNa
     SfxLibrary* pImplLib = getImplLib( rLibraryName );
     return pImplLib->mbPasswordProtected;
 }
-
 
 // Ctor for service
 SfxScriptLibraryContainer::SfxScriptLibraryContainer( void )
@@ -1161,6 +1161,17 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
 
 void SfxScriptLibraryContainer::onNewRootStorage()
 {
+}
+
+sal_Bool SAL_CALL
+SfxScriptLibraryContainer:: HasExecutableCode( const ::rtl::OUString& Library ) throw (uno::RuntimeException)
+{
+    BasicManager* pBasicMgr = getBasicManager();
+    OSL_ENSURE( pBasicMgr, "we need a basicmanager, really we do" );
+    if ( pBasicMgr )
+        return pBasicMgr->HasExeCode( Library ); // need to change this to take name
+    // default to it has code if we can't decide
+    return sal_True;
 }
 
 //============================================================================

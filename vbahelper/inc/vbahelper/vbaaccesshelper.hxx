@@ -71,7 +71,9 @@ namespace ooo
             return bRes;
         }
         VBAHELPER_DLLPUBLIC inline bool isAlienExcelDoc( SfxObjectShell& rDocShell ) { return isAlienDoc( rDocShell, "application/vnd.ms-excel" ); }
-        VBAHELPER_DLLPUBLIC inline bool isAlienWordDoc( SfxObjectShell& rDocShell ) { return isAlienDoc( rDocShell, "application/vnd.ms-word" ); }
+        //VBAHELPER_DLLPUBLIC inline bool isAlienWordDoc( SfxObjectShell& rDocShell ) { return isAlienDoc( rDocShell, "application/vnd.ms-word" ); }
+        // word seems to return an erroneous mime type :-/ "application/msword"  not consistent with the excel one
+        VBAHELPER_DLLPUBLIC inline bool isAlienWordDoc( SfxObjectShell& rDocShell ) { return isAlienDoc( rDocShell, "application/msword" ); }
 
     } // openoffice
 } // org

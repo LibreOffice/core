@@ -36,6 +36,8 @@
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/reflection/XInterfaceMethodTypeDescription.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/EventObject.hpp>
+#include <com/sun/star/awt/XControl.hpp>
 /** === end UNO includes === **/
 #include <tools/diagnose_ex.h>
 #include <cppuhelper/implbase1.hxx>
@@ -71,6 +73,9 @@ namespace svxform
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::XInterface;
+    using ::com::sun::star::lang::EventObject;
+    using ::com::sun::star::awt::XControl;
+    using ::com::sun::star::beans::XPropertySet;
     /** === end UNO using === **/
 
     class FormScriptingEnvironment;
@@ -413,8 +418,19 @@ namespace svxform
         {
             Sequence< sal_Int16 > aOutArgsIndex;
             Sequence< Any > aOutArgs;
-
-            m_rObjectShell.CallXScript( m_sScriptCode, _rArguments, _rSynchronousResult, aOutArgsIndex, aOutArgs );
+            EventObject aEvent;
+            Any aCaller;
+            if ( ( _rArguments.getLength() > 0 ) && ( _rArguments[ 0 ] >>= aEvent ) )
+            {
+                try
+                {
+                    Reference< XControl > xControl( aEvent.Source, UNO_QUERY_THROW );
+                    Reference< XPropertySet > xProps( xControl->getModel(), UNO_QUERY_THROW );
+                    aCaller = xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Name") ) );
+                }
+                catch( Exception& ) {}
+            }
+            m_rObjectShell.CallXScript( m_sScriptCode, _rArguments, _rSynchronousResult, aOutArgsIndex, aOutArgs, true, aCaller.hasValue() ? &aCaller : 0 );
         }
 
         //................................................................

@@ -1139,6 +1139,25 @@ void BasicManager::LegacyDeleteBasicManager( BasicManager*& _rpManager )
     _rpManager = NULL;
 }
 
+
+bool BasicManager::HasExeCode( const String& sLib )
+{
+    StarBASIC* pLib = GetLib(sLib);
+    if ( pLib )
+    {
+        SbxArray* pMods = pLib->GetModules();
+        USHORT nMods = pMods ? pMods->Count() : 0;
+        for( USHORT i = 0; i < nMods; i++ )
+        {
+            SbModule* p = (SbModule*) pMods->Get( i );
+            if ( p )
+                if ( p->HasExeCode() )
+                    return true;
+        }
+    }
+    return false;
+}
+
 void BasicManager::Init()
 {
     DBG_CHKTHIS( BasicManager, 0 );

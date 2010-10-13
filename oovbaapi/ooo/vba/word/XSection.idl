@@ -43,8 +43,8 @@ interface XSection
 
     [attribute] boolean ProtectedForForms;
 
-    any Headers();
-    any Footers();
+    any Headers( [in] any aIndex );
+    any Footers( [in] any aIndex );
     any PageSetup();
 };
 

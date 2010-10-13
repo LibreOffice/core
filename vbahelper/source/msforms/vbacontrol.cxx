@@ -28,6 +28,7 @@
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
+#include <com/sun/star/awt/XActionListener.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
@@ -39,6 +40,9 @@
 #include <com/sun/star/form/binding/XListEntrySink.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
+#include <com/sun/star/script/XScriptListener.hpp>
+#include <com/sun/star/document/XCodeNameQuery.hpp>
+#include <com/sun/star/form/XChangeListener.hpp>
 #include <ooo/vba/XControlProvider.hpp>
 #ifdef VBA_OOBUILD_HACK
 #include <svtools/bindablecontrolhelper.hxx>
@@ -127,7 +131,7 @@ ScVbaControlListener::disposing( const lang::EventObject& ) throw( uno::RuntimeE
 
 //ScVbaControl
 
-ScVbaControl::ScVbaControl( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< ::uno::XInterface >& xControl,  const css::uno::Reference< css::frame::XModel >& xModel, AbstractGeometryAttributes* pGeomHelper ) : ControlImpl_BASE( xParent, xContext ),  m_xControl( xControl ), m_xModel( xModel )
+ScVbaControl::ScVbaControl( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< ::uno::XInterface >& xControl,  const css::uno::Reference< css::frame::XModel >& xModel, AbstractGeometryAttributes* pGeomHelper ) : ControlImpl_BASE( xParent, xContext ),  bIsDialog(false), m_xControl( xControl ), m_xModel( xModel )
 {
     //add listener
     m_xEventListener.set( new ScVbaControlListener( this ) );
@@ -139,9 +143,18 @@ ScVbaControl::ScVbaControl( const uno::Reference< XHelperInterface >& xParent, c
     uno::Reference< drawing::XControlShape > xControlShape( m_xControl, uno::UNO_QUERY ) ;
     uno::Reference< awt::XControl> xUserFormControl( m_xControl, uno::UNO_QUERY ) ;
     if ( xControlShape.is() ) // form control
+    {
         m_xProps.set( xControlShape->getControl(), uno::UNO_QUERY_THROW );
+        rtl::OUString sDefaultControl;
+        m_xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultControl") ) ) >>= sDefaultControl;
+        uno::Reference< lang::XMultiComponentFactory > xMFac( mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
+        m_xEmptyFormControl.set( xMFac->createInstanceWithContext( sDefaultControl, mxContext ), uno::UNO_QUERY_THROW );
+    }
     else if ( xUserFormControl.is() ) // userform control
+    {
         m_xProps.set( xUserFormControl->getModel(), uno::UNO_QUERY_THROW );
+        bIsDialog = true;
+    }
 }
 
 ScVbaControl::~ScVbaControl()
@@ -398,6 +411,85 @@ void SAL_CALL ScVbaControl::setTag( const ::rtl::OUString& aTag )
     m_aControlTag = aTag;
 }
 
+::sal_Int32 SAL_CALL ScVbaControl::getForeColor() throw (::com::sun::star::uno::RuntimeException)
+{
+    sal_Int32 nForeColor = -1;
+    m_xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TextColor" ) ) ) >>= nForeColor;
+    return OORGBToXLRGB( nForeColor );
+}
+
+void SAL_CALL ScVbaControl::setForeColor( ::sal_Int32 _forecolor ) throw (::com::sun::star::uno::RuntimeException)
+{
+     m_xProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TextColor" ) ), uno::makeAny( XLRGBToOORGB( _forecolor ) ) );
+}
+
+void ScVbaControl::fireEvent( script::ScriptEvent& evt )
+{
+    uno::Reference<lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
+    uno::Reference< script::XScriptListener > xScriptListener( xServiceManager->createInstanceWithContext( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.EventListener" ) ), mxContext ), uno::UNO_QUERY_THROW );
+
+    uno::Reference< beans::XPropertySet > xProps( xScriptListener, uno::UNO_QUERY_THROW );
+    xProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Model" ) ), uno::makeAny( m_xModel ) );
+
+    // handling for sheet control
+    uno::Reference< msforms::XControl > xThisControl( this );
+    try
+    {
+        evt.Arguments.realloc( 1 );
+        lang::EventObject aEvt;
+
+        uno::Reference< drawing::XControlShape > xControlShape( m_xControl, uno::UNO_QUERY ) ;
+       uno::Reference< awt::XControl > xControl( m_xControl, uno::UNO_QUERY ) ;
+
+        if ( xControlShape.is() )
+        {
+            evt.Source = xControlShape;
+            aEvt.Source = m_xEmptyFormControl;
+            // Set up proper scriptcode
+            uno::Reference< lang::XMultiServiceFactory > xDocFac(  m_xModel, uno::UNO_QUERY_THROW );
+            uno::Reference< document::XCodeNameQuery > xNameQuery(  xDocFac->createInstance( rtl::OUString::createFromAscii( "ooo.vba.VBACodeNameProvider" ) ), uno::UNO_QUERY_THROW );
+            uno::Reference< uno::XInterface > xIf( xControlShape->getControl(), uno::UNO_QUERY_THROW );
+            evt.ScriptCode = xNameQuery->getCodeNameForObject( xIf );
+            evt.Arguments[ 0 ] = uno::makeAny( aEvt );
+            xScriptListener->firing( evt );
+        }
+        else
+        {
+            if ( xControl.is() ) // normal control ( from dialog/userform )
+            {
+                // #FIXME We should probably store a reference to the
+                // parent dialog/userform here ( other wise the name of
+                // dialog could be changed and we won't be aware of it.
+                // ( OTOH this is probably an unlikely scenario )
+                evt.Source = xThisControl;
+                aEvt.Source = xControl;
+                evt.ScriptCode = m_sLibraryAndCodeName;
+                evt.Arguments[ 0 ] = uno::makeAny( aEvt );
+                xScriptListener->firing( evt );
+            }
+        }
+    }
+    catch( uno::Exception& e )
+    {
+    }
+}
+void ScVbaControl::fireChangeEvent()
+{
+    script::ScriptEvent evt;
+    evt.ScriptType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("VBAInterop") );
+    evt.ListenerType = form::XChangeListener::static_type(0);
+    evt.MethodName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("changed") );
+    fireEvent( evt );
+}
+
+void ScVbaControl::fireClickEvent()
+{
+    script::ScriptEvent evt;
+    evt.ScriptType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("VBAInterop") );
+    evt.ListenerType = awt::XActionListener::static_type(0);
+    evt.MethodName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("actionPerformed") );
+    fireEvent( evt );
+}
 
 //ScVbaControlFactory
 
@@ -423,16 +515,25 @@ ScVbaControl* ScVbaControlFactory::createControl(const uno::Reference< drawing::
     const static rtl::OUString sClassId( RTL_CONSTASCII_USTRINGPARAM("ClassId") );
     xProps->getPropertyValue( sClassId ) >>= nClassId;
     uno::Reference< XHelperInterface > xVbaParent; // #FIXME - should be worksheet I guess
+    sal_Bool bToggle = sal_False;  //liuchen 2009-8-11,
     switch( nClassId )
     {
         case form::FormComponentType::COMBOBOX:
             return new ScVbaComboBox( xVbaParent, m_xContext, xControlShape, m_xModel, new ConcreteXShapeGeometryAttributes( m_xContext, uno::Reference< drawing::XShape >( xControlShape, uno::UNO_QUERY_THROW ) ) );
         case form::FormComponentType::COMMANDBUTTON:
-            return new ScVbaButton( xVbaParent, m_xContext, xControlShape, m_xModel, new ConcreteXShapeGeometryAttributes( m_xContext, uno::Reference< drawing::XShape >( xControlShape, uno::UNO_QUERY_THROW ) ) );
+            //liuchen 2009-8-11
+            xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Toggle") ) ) >>= bToggle;
+            if ( bToggle )
+                return new ScVbaToggleButton( xVbaParent, m_xContext, xControlShape, m_xModel, new ConcreteXShapeGeometryAttributes( m_xContext, uno::Reference< drawing::XShape >( xControlShape, uno::UNO_QUERY_THROW ) ) );
+            else
+                return new ScVbaButton( xVbaParent, m_xContext, xControlShape, m_xModel, new ConcreteXShapeGeometryAttributes( m_xContext, uno::Reference< drawing::XShape >( xControlShape, uno::UNO_QUERY_THROW ) ) );
+            //liuchen 2009-8-11
         case form::FormComponentType::FIXEDTEXT:
             return new ScVbaLabel( xVbaParent, m_xContext, xControlShape, m_xModel, new ConcreteXShapeGeometryAttributes( m_xContext, uno::Reference< drawing::XShape >( xControlShape, uno::UNO_QUERY_THROW ) ) );
         case form::FormComponentType::TEXTFIELD:
             return new ScVbaTextBox( xVbaParent, m_xContext, xControlShape, m_xModel, new ConcreteXShapeGeometryAttributes( m_xContext, uno::Reference< drawing::XShape >( xControlShape, uno::UNO_QUERY_THROW ) ) );
+        case form::FormComponentType::CHECKBOX:
+            return new ScVbaCheckbox( xVbaParent, m_xContext, xControlShape, m_xModel, new ConcreteXShapeGeometryAttributes( m_xContext, uno::Reference< drawing::XShape >( xControlShape, uno::UNO_QUERY_THROW ) ) );
         case form::FormComponentType::RADIOBUTTON:
             return new ScVbaRadioButton( xVbaParent, m_xContext, xControlShape, m_xModel, new ConcreteXShapeGeometryAttributes( m_xContext, uno::Reference< drawing::XShape >( xControlShape, uno::UNO_QUERY_THROW ) ) );
         case form::FormComponentType::LISTBOX:

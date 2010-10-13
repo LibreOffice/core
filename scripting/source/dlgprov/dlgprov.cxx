@@ -189,7 +189,15 @@ static ::rtl::OUString aResourceResolverPropName = ::rtl::OUString::createFromAs
         Reference< beans::XPropertySet > xDlgPropSet( xDialogModel, UNO_QUERY );
         xDlgPropSet->setPropertyValue( aDlgSrcUrlPropName, aDialogSourceURL );
 
-        ::xmlscript::importDialogModel( xInput, xDialogModel, m_xContext );
+        // #TODO we really need to detect the source of the Dialog, is it
+        // located in the document or not. m_xModel need not be the location of
+        // the dialog. E.g. if the dialog was created from basic ( then we just
+        // can't tell  where its from )
+        // If we are happy to always substitute the form model for the awt
+        // one then maybe the presence of a document model is enough to trigger
+        // swapping out the models ( or perhaps we only want to do this
+        // for vba mode ) there are a number of feasible and valid possibilities
+        ::xmlscript::importDialogModel( xInput, xDialogModel, m_xContext, m_xModel );
         // Set resource property
         if( xStringResourceManager.is() )
         {
@@ -403,6 +411,7 @@ static ::rtl::OUString aResourceResolverPropName = ::rtl::OUString::createFromAs
 
             if ( xISP.is() )
                 xInput = xISP->createInputStream();
+            msDialogLibName = sLibName;
         }
 
         // import dialog model
@@ -520,7 +529,7 @@ static ::rtl::OUString aResourceResolverPropName = ::rtl::OUString::createFromAs
         const Reference< XControl >& rxControl,
         const Reference< XInterface >& rxHandler,
         const Reference< XIntrospectionAccess >& rxIntrospectionAccess,
-        bool bDialogProviderMode )
+        bool bDialogProviderMode, const rtl::OUString& sDialogLibName )
     {
         if ( rxControl.is() )
         {
@@ -544,7 +553,7 @@ static ::rtl::OUString aResourceResolverPropName = ::rtl::OUString::createFromAs
 
                 Reference< XScriptEventsAttacher > xScriptEventsAttacher = new DialogEventsAttacherImpl
                     ( m_xContext, m_xModel, rxControl, rxHandler, rxIntrospectionAccess,
-                      bDialogProviderMode, ( m_BasicInfo.get() ? m_BasicInfo->mxBasicRTLListener : NULL ) );
+                      bDialogProviderMode, ( m_BasicInfo.get() ? m_BasicInfo->mxBasicRTLListener : NULL ), msDialogLibName );
 
                 Any aHelper;
                 xScriptEventsAttacher->attachEvents( aObjects, Reference< XScriptListener >(), aHelper );
@@ -649,7 +658,10 @@ static ::rtl::OUString aResourceResolverPropName = ::rtl::OUString::createFromAs
             aArguments[0] >>= m_xModel;
             m_BasicInfo.reset( new BasicRTLParams() );
             m_BasicInfo->mxInput.set( aArguments[ 1 ], UNO_QUERY_THROW );
-            m_BasicInfo->mxDlgLib.set( aArguments[ 2 ], UNO_QUERY_THROW );
+            // allow null mxDlgLib, a document dialog instantiated from
+            // from application basic is unable to provide ( or find ) it's
+            // Library
+            aArguments[ 2 ] >>= m_BasicInfo->mxDlgLib;
             // leave the possibility to optionally allow the old dialog creation
             // to use the new XScriptListener ( which converts the old style macro
             // to a SF url )
@@ -733,7 +745,7 @@ static ::rtl::OUString aResourceResolverPropName = ::rtl::OUString::createFromAs
             {
                 //xDialog = Reference< XDialog >( xCtrl, UNO_QUERY );
                 Reference< XIntrospectionAccess > xIntrospectionAccess = inspectHandler( xHandler );
-                attachControlEvents( xCtrl, xHandler, xIntrospectionAccess, bDialogProviderMode );
+                attachControlEvents( xCtrl, xHandler, xIntrospectionAccess, bDialogProviderMode, msDialogLibName );
             }
         }
 

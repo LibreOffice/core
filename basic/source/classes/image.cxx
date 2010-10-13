@@ -431,7 +431,7 @@ void SbiImage::AddString( const String& r )
                 memcpy( p, pStrings, nStringSize * sizeof( sal_Unicode ) );
                 delete[] pStrings;
                 pStrings = p;
-                nStringSize = sal::static_int_cast< UINT16 >(nNewLen);
+                nStringSize = sal::static_int_cast< UINT32 >(nNewLen);
             }
             else
                 bError = TRUE;

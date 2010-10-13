@@ -153,6 +153,9 @@ namespace xmloff { namespace token {
         TOKEN( "officeooo", XML_NP_OFFICE_EXT ),
         TOKEN( "http://openoffice.org/2009/office", XML_N_OFFICE_EXT ),
 
+        // jonp: 2008-09-24 Excel Interop
+        TOKEN( "formx",                           XML_NP_FORMX ),
+        TOKEN( "urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0", XML_N_FORMX ),
         TOKEN( "tableooo", XML_NP_TABLE_EXT ),
         TOKEN( "http://openoffice.org/2009/table", XML_N_TABLE_EXT ),
 

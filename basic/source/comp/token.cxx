@@ -58,6 +58,7 @@ static TokenTable aTokTable_Basic [] = {        // Token-Tabelle:
     { ANY,      "Any" },
     { APPEND,   "Append" },
     { AS,       "As" },
+    { ATTRIBUTE,"Attribute" },
     { BASE,     "Base" },
     { BINARY,   "Binary" },
     { TBOOLEAN, "Boolean" },

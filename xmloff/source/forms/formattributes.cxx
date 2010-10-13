@@ -192,6 +192,7 @@ namespace xmloff
             case SCA_MAX_VALUE:             return "max-value";
             case SCA_MIN_VALUE:             return "min-value";
             case SCA_VALIDATION:            return "validation";
+            case SCA_GROUP_NAME:            return "group-name";
             case SCA_MULTI_LINE:            return "multi-line";
             case SCA_AUTOMATIC_COMPLETION:  return "auto-complete";
             case SCA_MULTIPLE:              return "multiple";
@@ -212,9 +213,12 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    sal_uInt16 OAttributeMetaData::getSpecialAttributeNamespace(sal_Int32 /*_nId*/)
+    sal_uInt16 OAttributeMetaData::getSpecialAttributeNamespace(sal_Int32 _nId)
     {
-        // nothing special here
+        switch( _nId )
+        {
+            case SCA_GROUP_NAME:            return XML_NAMESPACE_FORMX;
+        }
         return XML_NAMESPACE_FORM;
     }
 

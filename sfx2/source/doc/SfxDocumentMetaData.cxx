@@ -87,6 +87,10 @@
 #include <cstring>
 #include <limits>
 
+
+#include <cppuhelper/implbase1.hxx>
+#include <com/sun/star/document/XCompatWriterDocProperties.hpp>
+
 /**
  * This file contains the implementation of the service
  * com.sun.star.document.DocumentProperties.
@@ -292,12 +296,12 @@ public:
         const css::uno::Sequence< css::beans::StringPair >& i_rNamespaces)
         throw (css::uno::RuntimeException, css::xml::sax::SAXException);
 
-private:
+protected:
     SfxDocumentMetaData(SfxDocumentMetaData &); // not defined
     SfxDocumentMetaData& operator =(SfxDocumentMetaData &); // not defined
 
     virtual ~SfxDocumentMetaData() {}
-
+    virtual SfxDocumentMetaData* createMe( css::uno::Reference< css::uno::XComponentContext > const & context ) { return new SfxDocumentMetaData( context ); };
     const css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
     /// for notification
@@ -372,6 +376,54 @@ private:
     void createUserDefined();
 };
 
+typedef ::cppu::ImplInheritanceHelper1< SfxDocumentMetaData, css::document::XCompatWriterDocProperties > CompatWriterDocPropsImpl_BASE;
+
+class CompatWriterDocPropsImpl : public CompatWriterDocPropsImpl_BASE
+{
+    rtl::OUString msManager;
+    rtl::OUString msCategory;
+    rtl::OUString msCompany;
+protected:
+    virtual SfxDocumentMetaData* createMe( css::uno::Reference< css::uno::XComponentContext > const & context ) { return new CompatWriterDocPropsImpl( context ); };
+public:
+    CompatWriterDocPropsImpl( css::uno::Reference< css::uno::XComponentContext > const & context) : CompatWriterDocPropsImpl_BASE( context ) {}
+// XCompatWriterDocPropsImpl
+    virtual ::rtl::OUString SAL_CALL getManager() throw (::com::sun::star::uno::RuntimeException) { return msManager; }
+    virtual void SAL_CALL setManager( const ::rtl::OUString& _manager ) throw (::com::sun::star::uno::RuntimeException) { msManager = _manager; }
+    virtual ::rtl::OUString SAL_CALL getCategory() throw (::com::sun::star::uno::RuntimeException){ return msCategory; }
+    virtual void SAL_CALL setCategory( const ::rtl::OUString& _category ) throw (::com::sun::star::uno::RuntimeException){ msCategory = _category; }
+    virtual ::rtl::OUString SAL_CALL getCompany() throw (::com::sun::star::uno::RuntimeException){ return msCompany; }
+    virtual void SAL_CALL setCompany( const ::rtl::OUString& _company ) throw (::com::sun::star::uno::RuntimeException){ msCompany = _company; }
+
+// XServiceInfo
+    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)
+    {
+        return comp_CompatWriterDocProps::_getImplementationName();
+    }
+
+    virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException)
+    {
+        css::uno::Sequence< rtl::OUString > sServiceNames= getSupportedServiceNames();
+        sal_Int32 nLen = sServiceNames.getLength();
+        rtl::OUString* pIt = sServiceNames.getArray();
+        rtl::OUString* pEnd = ( pIt + nLen );
+        sal_Bool bRes = sal_False;
+        for ( ; pIt != pEnd; ++pIt )
+        {
+            if ( pIt->equals( ServiceName ) )
+            {
+                bRes = sal_True;
+                break;
+            }
+        }
+        return bRes;
+    }
+
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException)
+    {
+        return comp_CompatWriterDocProps::_getSupportedServiceNames();
+    }
+};
 ////////////////////////////////////////////////////////////////////////////
 
 bool operator== (const css::util::DateTime &i_rLeft,
@@ -2156,7 +2208,7 @@ SfxDocumentMetaData::createClone()
     ::osl::MutexGuard g(m_aMutex);
     checkInit();
 
-    SfxDocumentMetaData *pNew = new SfxDocumentMetaData(m_xContext);
+    SfxDocumentMetaData *pNew = createMe(m_xContext);
 
     // NB: do not copy the modification listeners, only DOM
     css::uno::Reference<css::xml::dom::XDocument> xDoc = createDOM();
@@ -2334,6 +2386,32 @@ void SfxDocumentMetaData::createUserDefined()
 
 
 // component helper namespace
+namespace comp_CompatWriterDocProps {
+
+    ::rtl::OUString SAL_CALL _getImplementationName() {
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "CompatWriterDocPropsImpl"));
+}
+
+   css::uno::Sequence< ::rtl::OUString > SAL_CALL _getSupportedServiceNames()
+   {
+        static css::uno::Sequence< rtl::OUString > aServiceNames;
+        if ( aServiceNames.getLength() == 0 )
+        {
+            aServiceNames.realloc( 1 );
+            aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.writer.DocumentProperties" ) );
+        }
+        return aServiceNames;
+   }
+    css::uno::Reference< css::uno::XInterface > SAL_CALL _create(
+        const css::uno::Reference< css::uno::XComponentContext > & context)
+            SAL_THROW((css::uno::Exception))
+    {
+        return static_cast< ::cppu::OWeakObject * >
+                    (new CompatWriterDocPropsImpl(context));
+    }
+
+}
 namespace comp_SfxDocumentMetaData {
 
 ::rtl::OUString SAL_CALL _getImplementationName() {

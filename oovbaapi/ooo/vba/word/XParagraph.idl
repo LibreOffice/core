@@ -43,6 +43,7 @@ interface XParagraph
     interface ooo::vba::XHelperInterface;
 
     [attribute, readonly] XRange Range;
+    [attribute] any Style;
 };
 
 }; }; };

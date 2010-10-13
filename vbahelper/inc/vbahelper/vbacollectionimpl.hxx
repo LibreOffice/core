@@ -243,12 +243,25 @@ typedef InheritedHelperInterfaceImpl< Ifc1 > BaseColBase;
 protected:
     css::uno::Reference< css::container::XIndexAccess > m_xIndexAccess;
     css::uno::Reference< css::container::XNameAccess > m_xNameAccess;
+    sal_Bool mbIgnoreCase;
 
     virtual css::uno::Any getItemByStringIndex( const rtl::OUString& sIndex ) throw (css::uno::RuntimeException)
     {
         if ( !m_xNameAccess.is() )
             throw css::uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ScVbaCollectionBase string index access not supported by this object") ), css::uno::Reference< css::uno::XInterface >() );
 
+        if( mbIgnoreCase )
+        {
+            css::uno::Sequence< rtl::OUString > sElementNames = m_xNameAccess->getElementNames();
+            for( sal_Int32 i = 0; i < sElementNames.getLength(); i++ )
+            {
+                rtl::OUString aName = sElementNames[i];
+                if( aName.equalsIgnoreAsciiCase( sIndex ) )
+                {
+                    return createCollectionObject( m_xNameAccess->getByName( aName ) );
+                }
+            }
+        }
         return createCollectionObject( m_xNameAccess->getByName( sIndex ) );
     }
 
@@ -275,7 +288,7 @@ protected:
     }
 
 public:
-    ScVbaCollectionBase( const css::uno::Reference< ov::XHelperInterface >& xParent,   const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess ) : BaseColBase( xParent, xContext ), m_xIndexAccess( xIndexAccess ){ m_xNameAccess.set(m_xIndexAccess, css::uno::UNO_QUERY); }
+    ScVbaCollectionBase( const css::uno::Reference< ov::XHelperInterface >& xParent,   const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess, sal_Bool bIgnoreCase = sal_False ) : BaseColBase( xParent, xContext ), m_xIndexAccess( xIndexAccess ), mbIgnoreCase( bIgnoreCase ) { m_xNameAccess.set(m_xIndexAccess, css::uno::UNO_QUERY); }
     //XCollection
     virtual ::sal_Int32 SAL_CALL getCount() throw (css::uno::RuntimeException)
     {
@@ -340,7 +353,7 @@ class VBAHELPER_DLLPUBLIC CollTestImplHelper :  public ScVbaCollectionBase< ::cp
 typedef ScVbaCollectionBase< ::cppu::WeakImplHelper1< Ifc >  > ImplBase1;
 
 public:
-    CollTestImplHelper( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,  const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess ) throw( css::uno::RuntimeException ) : ImplBase1( xParent, xContext, xIndexAccess ) {}
+    CollTestImplHelper( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,  const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess, sal_Bool bIgnoreCase = sal_False ) throw( css::uno::RuntimeException ) : ImplBase1( xParent, xContext, xIndexAccess, bIgnoreCase ) {}
 };
 
 

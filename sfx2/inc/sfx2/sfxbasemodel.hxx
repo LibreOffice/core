@@ -1505,6 +1505,7 @@ protected:
     /* returns true if the document signatures are valid, otherwise false */
     sal_Bool hasValidSignatures() const;
 
+    void setDocumentProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentProperties >& );
 //________________________________________________________________________________________________________
 //  private methods
 //________________________________________________________________________________________________________

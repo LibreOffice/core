@@ -70,6 +70,9 @@ void SAL_CALL
 ScVbaRadioButton::setValue( const uno::Any& _value ) throw (uno::RuntimeException)
 {
     sal_Int16 nValue = 0;
+    sal_Int16 nOldValue = 0;
+    m_xProps->getPropertyValue( STATE ) >>= nOldValue;
+
     sal_Bool bValue = sal_False;
     if( _value >>= nValue )
     {
@@ -82,6 +85,15 @@ ScVbaRadioButton::setValue( const uno::Any& _value ) throw (uno::RuntimeExceptio
             nValue = 1;
     }
     m_xProps->setPropertyValue( STATE, uno::makeAny( nValue ) );
+    if ( nValue != nOldValue )
+    {
+        fireChangeEvent();
+        // In Excel, only when the radio button is checked, the click event is fired.
+        if ( nValue != 0 )
+        {
+            fireClickEvent();
+        }
+    }
 }
 
 rtl::OUString&

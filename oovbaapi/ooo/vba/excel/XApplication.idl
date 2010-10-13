@@ -32,6 +32,14 @@
 #include <ooo/vba/XHelperInterface.idl>
 #include <ooo/vba/XAssistant.idl>
 
+#ifndef __ooo_vba_excel_XFileDialog_idl__
+#include <ooo/vba/XFileDialog.idl>
+#endif
+
+#ifndef __ooo_vba_XFileSearch_idl__
+#include <ooo/vba/XFileSearch.idl>
+#endif
+
 module ooo {  module vba {  module excel {
 
 interface XRange;
@@ -41,6 +49,8 @@ interface XWorksheets;
 interface XWorksheetFunction;
 interface XWindow;
 interface XWorksheet;
+interface XFileDialog;
+interface XFileSearch;
 
 interface XApplication
 {
@@ -56,8 +66,10 @@ interface XApplication
     [attribute, readonly] XWindow ActiveWindow;
     [attribute, readonly] XWorksheet ActiveSheet;
     [attribute, readonly] ooo::vba::XAssistant Assistant;
+    [attribute, readonly] ooo::vba::XFileSearch FileSearch; //liuchen 2009-8-18, add the support of VBA Application.FileSearch
     [attribute] long Calculation;
     [attribute, readonly] XWorkbook ThisWorkbook;
+    [attribute, readonly] ooo::vba::XFileDialog FileDialog;
     [attribute, readonly] string Name;
     [attribute] boolean DisplayAlerts;
     [attribute] boolean DisplayFormulaBar;
@@ -65,10 +77,15 @@ interface XApplication
     [attribute] any StatusBar;
     [attribute] long Cursor;
         [attribute] boolean EnableEvents;
+    [attribute] boolean Visible;
+    [attribute] boolean Iteration;  //liuchen 2009-11-25
+    [attribute] long EnableCancelKey;  //liuchen 2009-11-26
 
     void setDefaultFilePath([in] string DefaultFilePath) raises(com::sun::star::script::BasicErrorException);
 
     string getDefaultFilePath() raises(com::sun::star::script::BasicErrorException);
+
+    any GetOpenFilename([in] /*Optional*/ any FileFilter, [in] /*Optional*/ any FilterIndex, [in] /*Optional*/ any Title, [in] /*Optional*/ any ButtonText, [in] /*Optional*/ any MultiSelect); //minz, 2009-07-08
 
     string LibraryPath() raises(com::sun::star::script::BasicErrorException);
     string TemplatesPath() raises(com::sun::star::script::BasicErrorException);
@@ -91,8 +108,14 @@ interface XApplication
     XRange Union([in] XRange Arg1, [in] XRange Arg2, [in] /*Optional*/ any Arg3, [in] /*Optional*/ any Arg4, [in] /*Optional*/ any Arg5, [in] /*Optional*/ any Arg6, [in] /*Optional*/ any Arg7, [in] /*Optional*/ any Arg8, [in] /*Optional*/ any Arg9, [in] /*Optional*/ any Arg10, [in] /*Optional*/ any Arg11, [in] /*Optional*/ any Arg12, [in] /*Optional*/ any Arg13, [in] /*Optional*/ any Arg14, [in] /*Optional*/ any Arg15, [in] /*Optional*/ any Arg16, [in] /*Optional*/ any Arg17, [in] /*Optional*/ any Arg18, [in] /*Optional*/ any Arg19, [in] /*Optional*/ any Arg20, [in] /*Optional*/ any Arg21, [in] /*Optional*/ any Arg22, [in] /*Optional*/ any Arg23, [in] /*Optional*/ any Arg24, [in] /*Optional*/ any Arg25, [in] /*Optional*/ any Arg26, [in] /*Optional*/ any Arg27, [in] /*Optional*/ any Arg28, [in] /*Optional*/ any Arg29, [in] /*Optional*/ any Arg30)
         raises(com::sun::star::script::BasicErrorException);
     void Volatile([in] any Volatile);
-    void DoEvents();
     any Caller( [in] any aIndex );
+    any MenuBars( [in] any aIndex );
+    any International([in] long Index);  //liuchen 2009-11-26
+    any GetSaveAsFilename( [in] any InitialFilename, [in] any FileFilter, [in] any FilterIndex, [in] any Title,[in] any ButtonText);
+    void Undo();  //2009-10-11  limingl
+    double InchesToPoints([in] double Inches);
+    void setSheetsInNewWorkbook( [in] long SheetsInNewWorkbook ) raises(com::sun::star::script::BasicErrorException);
+    long getSheetsInNewWorkbook();
 };
 
 }; }; };

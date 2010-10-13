@@ -41,6 +41,7 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::frame;
 
 namespace xmlscript
 {
@@ -70,7 +71,8 @@ Reference< io::XInputStream > InputStreamProvider::createInputStream()
 //==================================================================================================
 Reference< io::XInputStreamProvider > SAL_CALL exportDialogModel(
     Reference< container::XNameContainer > const & xDialogModel,
-    Reference< XComponentContext > const & xContext )
+    Reference< XComponentContext > const & xContext,
+    Reference< XModel > const & xDocument )
     SAL_THROW( (Exception) )
 {
     Reference< lang::XMultiComponentFactory > xSMgr( xContext->getServiceManager() );
@@ -95,7 +97,7 @@ Reference< io::XInputStreamProvider > SAL_CALL exportDialogModel(
 
     Reference< io::XActiveDataSource > xSource( xHandler, UNO_QUERY );
     xSource->setOutputStream( createOutputStream( &aBytes ) );
-    exportDialogModel( xHandler, xDialogModel );
+    exportDialogModel( xHandler, xDialogModel, xDocument );
 
     return new InputStreamProvider( aBytes );
 }
@@ -104,7 +106,8 @@ Reference< io::XInputStreamProvider > SAL_CALL exportDialogModel(
 void SAL_CALL importDialogModel(
     Reference< io::XInputStream > xInput,
     Reference< container::XNameContainer > const & xDialogModel,
-    Reference< XComponentContext > const & xContext )
+    Reference< XComponentContext > const & xContext,
+    Reference< XModel > const & xDocument )
     SAL_THROW( (Exception) )
 {
     Reference< lang::XMultiComponentFactory > xSMgr( xContext->getServiceManager() );
@@ -126,7 +129,7 @@ void SAL_CALL importDialogModel(
     }
 
     // error handler, entity resolver omitted for this helper function
-    xParser->setDocumentHandler( importDialogModel( xDialogModel, xContext ) );
+    xParser->setDocumentHandler( importDialogModel( xDialogModel, xContext, xDocument ) );
 
     xml::sax::InputSource source;
     source.aInputStream = xInput;

@@ -1107,6 +1107,39 @@ namespace xmloff
         }
 
         // ----------------------------------
+        // the string properties
+        {
+            static sal_Int32 nStringPropertyAttributeIds[] =
+            {   // attribute flags
+                SCA_GROUP_NAME
+            };
+            static const ::rtl::OUString* pStringPropertyNames[] =
+            {   // property names
+                &PROPERTY_GROUP_NAME
+            };
+
+            sal_Int32 nIdCount = sizeof( nStringPropertyAttributeIds ) / sizeof( nStringPropertyAttributeIds[0] );
+        #if OSL_DEBUG_LEVEL > 0
+            sal_Int32 nNameCount = sizeof( pStringPropertyNames ) / sizeof( pStringPropertyNames[0] );
+            OSL_ENSURE( ( nIdCount == nNameCount ),
+                "OControlExport::exportSpecialAttributes: somebody tampered with the maps (2)!" );
+        #endif
+            for ( i = 0; i < nIdCount; ++i )
+                if ( nStringPropertyAttributeIds[i] & m_nIncludeSpecial )
+                {
+                    exportStringPropertyAttribute(
+                        OAttributeMetaData::getSpecialAttributeNamespace( nStringPropertyAttributeIds[i] ),
+                        OAttributeMetaData::getSpecialAttributeName( nStringPropertyAttributeIds[i] ),
+                        *( pStringPropertyNames[i] )
+                    );
+            #if OSL_DEBUG_LEVEL > 0
+                //  reset the bit for later checking
+                m_nIncludeSpecial = m_nIncludeSpecial & ~nStringPropertyAttributeIds[i];
+            #endif
+                }
+        }
+
+        // ----------------------------------
         if ((SCA_MIN_VALUE | SCA_MAX_VALUE) & m_nIncludeSpecial)
         {
             // need to export the min value and the max value as attributes
@@ -1564,6 +1597,8 @@ namespace xmloff
                 }
                 if ( m_xPropertyInfo->hasPropertyByName( PROPERTY_IMAGE_POSITION ) )
                     m_nIncludeSpecial |= SCA_IMAGE_POSITION;
+                if ( m_xPropertyInfo->hasPropertyByName( PROPERTY_GROUP_NAME ) )
+                    m_nIncludeSpecial |= SCA_GROUP_NAME;
                 m_nIncludeDatabase = DA_DATA_FIELD | DA_INPUT_REQUIRED;
                 m_nIncludeEvents = EA_CONTROL_EVENTS | EA_ON_CHANGE;
                 break;

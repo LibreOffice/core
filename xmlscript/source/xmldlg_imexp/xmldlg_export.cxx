@@ -1325,7 +1325,8 @@ void StyleBag::dump( Reference< xml::sax::XExtendedDocumentHandler > const & xOu
 //==================================================================================================
 void SAL_CALL exportDialogModel(
     Reference< xml::sax::XExtendedDocumentHandler > const & xOut,
-    Reference< container::XNameContainer > const & xDialogModel )
+    Reference< container::XNameContainer > const & xDialogModel,
+    Reference< frame::XModel > const & xDocument )
     SAL_THROW( (Exception) )
 {
     StyleBag all_styles;
@@ -1373,7 +1374,7 @@ void SAL_CALL exportDialogModel(
                 xProps, xPropState,
                 OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":radio") ) );
             xElem = static_cast< xml::sax::XAttributeList * >( pElem );
-            pElem->readRadioButtonModel( &all_styles );
+            pElem->readRadioButtonModel( &all_styles, xDocument  );
             pRadioGroup->addSubElement( xElem );
         }
         else // no radio
@@ -1402,7 +1403,7 @@ void SAL_CALL exportDialogModel(
                     xProps, xPropState,
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":combobox") ) );
                 xElem = static_cast< xml::sax::XAttributeList * >( pElem );
-                pElem->readComboBoxModel( &all_styles );
+                pElem->readComboBoxModel( &all_styles, xDocument );
             }
             else if (xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlListBoxModel") ) ) )
             {
@@ -1410,7 +1411,7 @@ void SAL_CALL exportDialogModel(
                     xProps, xPropState,
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":menulist") ) );
                 xElem = static_cast< xml::sax::XAttributeList * >( pElem );
-                pElem->readListBoxModel( &all_styles );
+                pElem->readListBoxModel( &all_styles, xDocument );
             }
             else if (xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlGroupBoxModel") ) ) )
             {
@@ -1419,6 +1420,14 @@ void SAL_CALL exportDialogModel(
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":titledbox") ) );
                 xElem = static_cast< xml::sax::XAttributeList * >( pElem );
                 pElem->readGroupBoxModel( &all_styles );
+            }
+            else if (xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoMultiPageModel") ) ) )
+            {
+                pElem = new ElementDescriptor(
+                    xProps, xPropState,
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":multipage") ) );
+                xElem = static_cast< xml::sax::XAttributeList * >( pElem );
+                pElem->readMultiPageModel( &all_styles );
             }
             else if (xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlFixedTextModel") ) ) )
             {
@@ -1451,7 +1460,7 @@ void SAL_CALL exportDialogModel(
                     xProps, xPropState,
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":img") ) );
                 xElem = static_cast< xml::sax::XAttributeList * >( pElem );
-                pElem->readImageControlModel( &all_styles );
+                pElem->readImageControlModel( &all_styles, xDocument );
             }
             else if (xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlFileControlModel") ) ) )
             {
@@ -1531,7 +1540,15 @@ void SAL_CALL exportDialogModel(
                     xProps, xPropState,
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":scrollbar") ) );
                 xElem = static_cast< xml::sax::XAttributeList * >( pElem );
-                pElem->readScrollBarModel( &all_styles );
+                pElem->readScrollBarModel( &all_styles, xDocument );
+            }
+            else if (xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlSpinButtonModel") ) ) )
+            {
+                pElem = new ElementDescriptor(
+                    xProps, xPropState,
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":spinbutton") ) );
+                xElem = static_cast< xml::sax::XAttributeList * >( pElem );
+                pElem->readSpinButtonModel( &all_styles, xDocument );
             }
             else if (xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlProgressBarModel") ) ) )
             {

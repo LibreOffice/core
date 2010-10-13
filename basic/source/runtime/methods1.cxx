@@ -76,11 +76,15 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/i18n/XCalendar.hpp>
+#include <com/sun/star/sheet/XFunctionAccess.hpp>
 
 using namespace comphelper;
+using namespace com::sun::star::sheet;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::i18n;
 
+void unoToSbxValue( SbxVariable* pVar, const Any& aValue );
+Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, com::sun::star::beans::Property* pUnoProperty = NULL );
 
 static Reference< XCalendar > getLocaleCalendar( void )
 {
@@ -526,6 +530,10 @@ RTLFUNC(DoEvents)
     (void)pBasic;
     (void)bWrite;
     (void)rPar;
+// don't undstand what upstream are up to
+// we already process application events etc. in between
+// basic runtime pcode ( on a timed basis )
+#if 0
     // Dummy implementation as the following code leads
     // to performance problems for unknown reasons
     //Timer aTimer;
@@ -533,6 +541,9 @@ RTLFUNC(DoEvents)
     //aTimer.Start();
     //while ( aTimer.IsActive() )
     //  Application::Reschedule();
+#endif
+    // always return 0
+    rPar.Get(0)->PutInteger( 0 );
 }
 
 RTLFUNC(GetGUIVersion)
@@ -2514,6 +2525,546 @@ RTLFUNC(Round)
             dRes = -dRes;
     }
     rPar.Get(0)->PutDouble( dRes );
+}
+
+void CallFunctionAccessFunction( const Sequence< Any >& aArgs, const rtl::OUString& sFuncName, SbxVariable* pRet )
+{
+    static Reference< XFunctionAccess > xFunc;
+    Any aRes;
+    try
+    {
+        if ( !xFunc.is() )
+        {
+            Reference< XMultiServiceFactory > xFactory( getProcessServiceFactory() );
+            if( xFactory.is() )
+            {
+                xFunc.set( xFactory->createInstance(::rtl::OUString::createFromAscii( "com.sun.star.sheet.FunctionAccess")), UNO_QUERY_THROW);
+            }
+        }
+        Any aRet = xFunc->callFunction( sFuncName, aArgs );
+
+        unoToSbxValue( pRet, aRet );
+
+    }
+    catch( Exception& )
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+    }
+}
+
+RTLFUNC(SYD)
+{
+    (void)pBasic;
+    (void)bWrite;
+
+    ULONG nArgCount = rPar.Count()-1;
+
+    if ( nArgCount < 4 )
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return;
+    }
+
+    // retrieve non-optional params
+
+    Sequence< Any > aParams( 4 );
+    aParams[ 0 ] <<= makeAny( rPar.Get(1)->GetDouble() );
+    aParams[ 1 ] <<= makeAny( rPar.Get(2)->GetDouble() );
+    aParams[ 2 ] <<= makeAny( rPar.Get(3)->GetDouble() );
+    aParams[ 3 ] <<= makeAny( rPar.Get(4)->GetDouble() );
+
+    CallFunctionAccessFunction( aParams, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("SYD") ), rPar.Get( 0 ) );
+}
+
+RTLFUNC(SLN)
+{
+    (void)pBasic;
+    (void)bWrite;
+
+    ULONG nArgCount = rPar.Count()-1;
+
+    if ( nArgCount < 3 )
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return;
+    }
+
+    // retrieve non-optional params
+
+    Sequence< Any > aParams( 3 );
+    aParams[ 0 ] <<= makeAny( rPar.Get(1)->GetDouble() );
+    aParams[ 1 ] <<= makeAny( rPar.Get(2)->GetDouble() );
+    aParams[ 2 ] <<= makeAny( rPar.Get(3)->GetDouble() );
+
+    CallFunctionAccessFunction( aParams, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("SLN") ), rPar.Get( 0 ) );
+}
+
+RTLFUNC(Pmt)
+{
+    (void)pBasic;
+    (void)bWrite;
+
+    ULONG nArgCount = rPar.Count()-1;
+
+    if ( nArgCount < 3 || nArgCount > 5 )
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return;
+    }
+    // retrieve non-optional params
+
+    double rate = rPar.Get(1)->GetDouble();
+    double nper = rPar.Get(2)->GetDouble();
+    double pmt = rPar.Get(3)->GetDouble();
+
+    // set default values for Optional args
+    double fv = 0;
+    double type = 0;
+
+    // fv
+    if ( nArgCount >= 4 )
+    {
+        if( rPar.Get(4)->GetType() != SbxEMPTY )
+            fv = rPar.Get(4)->GetDouble();
+    }
+    // type
+    if ( nArgCount >= 5 )
+    {
+        if( rPar.Get(5)->GetType() != SbxEMPTY )
+            type = rPar.Get(5)->GetDouble();
+    }
+
+    Sequence< Any > aParams( 5 );
+    aParams[ 0 ] <<= rate;
+    aParams[ 1 ] <<= nper;
+    aParams[ 2 ] <<= pmt;
+    aParams[ 3 ] <<= fv;
+    aParams[ 4 ] <<= type;
+
+    CallFunctionAccessFunction( aParams, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Pmt") ), rPar.Get( 0 ) );
+}
+
+RTLFUNC(PPmt)
+{
+    (void)pBasic;
+    (void)bWrite;
+
+    ULONG nArgCount = rPar.Count()-1;
+
+    if ( nArgCount < 4 || nArgCount > 6 )
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return;
+    }
+    // retrieve non-optional params
+
+    double rate = rPar.Get(1)->GetDouble();
+    double per = rPar.Get(2)->GetDouble();
+    double nper = rPar.Get(3)->GetDouble();
+    double pv = rPar.Get(4)->GetDouble();
+
+    // set default values for Optional args
+    double fv = 0;
+    double type = 0;
+
+    // fv
+    if ( nArgCount >= 5 )
+    {
+        if( rPar.Get(5)->GetType() != SbxEMPTY )
+            fv = rPar.Get(5)->GetDouble();
+    }
+    // type
+    if ( nArgCount >= 6 )
+    {
+        if( rPar.Get(6)->GetType() != SbxEMPTY )
+            type = rPar.Get(6)->GetDouble();
+    }
+
+    Sequence< Any > aParams( 6 );
+    aParams[ 0 ] <<= rate;
+    aParams[ 1 ] <<= per;
+    aParams[ 2 ] <<= nper;
+    aParams[ 3 ] <<= pv;
+    aParams[ 4 ] <<= fv;
+    aParams[ 5 ] <<= type;
+
+    CallFunctionAccessFunction( aParams, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("PPmt") ), rPar.Get( 0 ) );
+}
+
+RTLFUNC(PV)
+{
+    (void)pBasic;
+    (void)bWrite;
+
+    ULONG nArgCount = rPar.Count()-1;
+
+    if ( nArgCount < 3 || nArgCount > 5 )
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return;
+    }
+    // retrieve non-optional params
+
+    double rate = rPar.Get(1)->GetDouble();
+    double nper = rPar.Get(2)->GetDouble();
+    double pmt = rPar.Get(3)->GetDouble();
+
+    // set default values for Optional args
+    double fv = 0;
+    double type = 0;
+
+    // fv
+    if ( nArgCount >= 4 )
+    {
+        if( rPar.Get(4)->GetType() != SbxEMPTY )
+            fv = rPar.Get(4)->GetDouble();
+    }
+    // type
+    if ( nArgCount >= 5 )
+    {
+        if( rPar.Get(5)->GetType() != SbxEMPTY )
+            type = rPar.Get(5)->GetDouble();
+    }
+
+    Sequence< Any > aParams( 5 );
+    aParams[ 0 ] <<= rate;
+    aParams[ 1 ] <<= nper;
+    aParams[ 2 ] <<= pmt;
+    aParams[ 3 ] <<= fv;
+    aParams[ 4 ] <<= type;
+
+    CallFunctionAccessFunction( aParams, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("PV") ), rPar.Get( 0 ) );
+}
+
+RTLFUNC(NPV)
+{
+    (void)pBasic;
+    (void)bWrite;
+
+    ULONG nArgCount = rPar.Count()-1;
+
+    if ( nArgCount < 1 || nArgCount > 2 )
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return;
+    }
+
+    Sequence< Any > aParams( 2 );
+    aParams[ 0 ] <<= makeAny( rPar.Get(1)->GetDouble() );
+    Any aValues = sbxToUnoValue( rPar.Get(2),
+                getCppuType( (Sequence<double>*)0 ) );
+
+    // convert for calc functions
+    Sequence< Sequence< double > > sValues(1);
+    aValues >>= sValues[ 0 ];
+    aValues <<= sValues;
+
+    aParams[ 1 ] <<= aValues;
+
+    CallFunctionAccessFunction( aParams, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("NPV") ), rPar.Get( 0 ) );
+}
+
+RTLFUNC(NPer)
+{
+    (void)pBasic;
+    (void)bWrite;
+
+    ULONG nArgCount = rPar.Count()-1;
+
+    if ( nArgCount < 3 || nArgCount > 5 )
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return;
+    }
+    // retrieve non-optional params
+
+    double rate = rPar.Get(1)->GetDouble();
+    double pmt = rPar.Get(2)->GetDouble();
+    double pv = rPar.Get(3)->GetDouble();
+
+    // set default values for Optional args
+    double fv = 0;
+    double type = 0;
+
+    // fv
+    if ( nArgCount >= 4 )
+    {
+        if( rPar.Get(4)->GetType() != SbxEMPTY )
+            fv = rPar.Get(4)->GetDouble();
+    }
+    // type
+    if ( nArgCount >= 5 )
+    {
+        if( rPar.Get(5)->GetType() != SbxEMPTY )
+            type = rPar.Get(5)->GetDouble();
+    }
+
+    Sequence< Any > aParams( 5 );
+    aParams[ 0 ] <<= rate;
+    aParams[ 1 ] <<= pmt;
+    aParams[ 2 ] <<= pv;
+    aParams[ 3 ] <<= fv;
+    aParams[ 4 ] <<= type;
+
+    CallFunctionAccessFunction( aParams, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("NPer") ), rPar.Get( 0 ) );
+}
+
+RTLFUNC(MIRR)
+{
+    (void)pBasic;
+    (void)bWrite;
+
+    ULONG nArgCount = rPar.Count()-1;
+
+    if ( nArgCount < 3 )
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return;
+    }
+
+    // retrieve non-optional params
+
+    Sequence< Any > aParams( 3 );
+    Any aValues = sbxToUnoValue( rPar.Get(1),
+                getCppuType( (Sequence<double>*)0 ) );
+
+    // convert for calc functions
+    Sequence< Sequence< double > > sValues(1);
+    aValues >>= sValues[ 0 ];
+    aValues <<= sValues;
+
+    aParams[ 0 ] <<= aValues;
+    aParams[ 1 ] <<= makeAny( rPar.Get(2)->GetDouble() );
+    aParams[ 2 ] <<= makeAny( rPar.Get(3)->GetDouble() );
+
+    CallFunctionAccessFunction( aParams, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("MIRR") ), rPar.Get( 0 ) );
+}
+
+RTLFUNC(IRR)
+{
+    (void)pBasic;
+    (void)bWrite;
+
+    ULONG nArgCount = rPar.Count()-1;
+
+    if ( nArgCount < 1 || nArgCount > 2 )
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return;
+    }
+    // retrieve non-optional params
+    Any aValues = sbxToUnoValue( rPar.Get(1),
+                getCppuType( (Sequence<double>*)0 ) );
+
+    // convert for calc functions
+    Sequence< Sequence< double > > sValues(1);
+    aValues >>= sValues[ 0 ];
+    aValues <<= sValues;
+
+    // set default values for Optional args
+    double guess = 0.1;
+    // guess
+    if ( nArgCount >= 2 )
+    {
+        if( rPar.Get(2)->GetType() != SbxEMPTY )
+            guess = rPar.Get(2)->GetDouble();
+    }
+
+    Sequence< Any > aParams( 2 );
+    aParams[ 0 ] <<= aValues;
+    aParams[ 1 ] <<= guess;
+
+    CallFunctionAccessFunction( aParams, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("IRR") ), rPar.Get( 0 ) );
+}
+
+RTLFUNC(IPmt)
+{
+    (void)pBasic;
+    (void)bWrite;
+
+    ULONG nArgCount = rPar.Count()-1;
+
+    if ( nArgCount < 4 || nArgCount > 6 )
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return;
+    }
+    // retrieve non-optional params
+
+    double rate = rPar.Get(1)->GetDouble();
+    double per = rPar.Get(2)->GetInteger();
+    double nper = rPar.Get(3)->GetDouble();
+    double pv = rPar.Get(4)->GetDouble();
+
+    // set default values for Optional args
+    double fv = 0;
+    double type = 0;
+
+    // fv
+    if ( nArgCount >= 5 )
+    {
+        if( rPar.Get(5)->GetType() != SbxEMPTY )
+            fv = rPar.Get(5)->GetDouble();
+    }
+    // type
+    if ( nArgCount >= 6 )
+    {
+        if( rPar.Get(6)->GetType() != SbxEMPTY )
+            type = rPar.Get(6)->GetDouble();
+    }
+
+    Sequence< Any > aParams( 6 );
+    aParams[ 0 ] <<= rate;
+    aParams[ 1 ] <<= per;
+    aParams[ 2 ] <<= nper;
+    aParams[ 3 ] <<= pv;
+    aParams[ 4 ] <<= fv;
+    aParams[ 5 ] <<= type;
+
+    CallFunctionAccessFunction( aParams, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("IPmt") ), rPar.Get( 0 ) );
+}
+
+RTLFUNC(FV)
+{
+    (void)pBasic;
+    (void)bWrite;
+
+    ULONG nArgCount = rPar.Count()-1;
+
+    if ( nArgCount < 3 || nArgCount > 5 )
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return;
+    }
+    // retrieve non-optional params
+
+    double rate = rPar.Get(1)->GetDouble();
+    double nper = rPar.Get(2)->GetDouble();
+    double pmt = rPar.Get(3)->GetDouble();
+
+    // set default values for Optional args
+    double pv = 0;
+    double type = 0;
+
+    // pv
+    if ( nArgCount >= 4 )
+    {
+        if( rPar.Get(4)->GetType() != SbxEMPTY )
+            pv = rPar.Get(4)->GetDouble();
+    }
+    // type
+    if ( nArgCount >= 5 )
+    {
+        if( rPar.Get(5)->GetType() != SbxEMPTY )
+            type = rPar.Get(5)->GetDouble();
+    }
+
+    Sequence< Any > aParams( 5 );
+    aParams[ 0 ] <<= rate;
+    aParams[ 1 ] <<= nper;
+    aParams[ 2 ] <<= pmt;
+    aParams[ 3 ] <<= pv;
+    aParams[ 4 ] <<= type;
+
+    CallFunctionAccessFunction( aParams, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FV") ), rPar.Get( 0 ) );
+}
+
+RTLFUNC(DDB)
+{
+    (void)pBasic;
+    (void)bWrite;
+
+    ULONG nArgCount = rPar.Count()-1;
+
+    if ( nArgCount < 4 || nArgCount > 5 )
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return;
+    }
+    // retrieve non-optional params
+
+    double cost = rPar.Get(1)->GetDouble();
+    double salvage = rPar.Get(2)->GetDouble();
+    double life = rPar.Get(3)->GetDouble();
+    double period = rPar.Get(4)->GetDouble();
+
+    // set default values for Optional args
+    double factor = 2;
+
+    // factor
+    if ( nArgCount >= 5 )
+    {
+        if( rPar.Get(5)->GetType() != SbxEMPTY )
+            factor = rPar.Get(5)->GetDouble();
+    }
+
+    Sequence< Any > aParams( 5 );
+    aParams[ 0 ] <<= cost;
+    aParams[ 1 ] <<= salvage;
+    aParams[ 2 ] <<= life;
+    aParams[ 3 ] <<= period;
+    aParams[ 4 ] <<= factor;
+
+    CallFunctionAccessFunction( aParams, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("DDB") ), rPar.Get( 0 ) );
+}
+
+RTLFUNC(Rate)
+{
+    (void)pBasic;
+    (void)bWrite;
+
+    ULONG nArgCount = rPar.Count()-1;
+
+    if ( nArgCount < 3 || nArgCount > 6 )
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return;
+    }
+    // retrieve non-optional params
+
+    double nper = 0;
+    double pmt = 0;
+    double pv = 0;
+
+    nper = rPar.Get(1)->GetDouble();
+    pmt = rPar.Get(2)->GetDouble();
+    pv = rPar.Get(3)->GetDouble();
+
+    // set default values for Optional args
+    double fv = 0;
+    double type = 0;
+    double guess = 0.1;
+
+    // fv
+    if ( nArgCount >= 4 )
+    {
+        if( rPar.Get(4)->GetType() != SbxEMPTY )
+            fv = rPar.Get(4)->GetDouble();
+    }
+
+    // type
+    if ( nArgCount >= 5 )
+    {
+        if( rPar.Get(5)->GetType() != SbxEMPTY )
+            type = rPar.Get(5)->GetDouble();
+    }
+
+    // guess
+    if ( nArgCount >= 6 )
+    {
+        if( rPar.Get(6)->GetType() != SbxEMPTY )
+            type = rPar.Get(6)->GetDouble();
+    }
+
+    Sequence< Any > aParams( 6 );
+    aParams[ 0 ] <<= nper;
+    aParams[ 1 ] <<= pmt;
+    aParams[ 2 ] <<= pv;
+    aParams[ 3 ] <<= fv;
+    aParams[ 4 ] <<= type;
+    aParams[ 5 ] <<= guess;
+
+    CallFunctionAccessFunction( aParams, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Rate") ), rPar.Get( 0 ) );
 }
 
 RTLFUNC(StrReverse)

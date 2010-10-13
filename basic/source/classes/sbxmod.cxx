@@ -56,6 +56,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
+#include <com/sun/star/document/XVbaMethodParameter.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 using namespace com::sun::star;
@@ -498,7 +499,6 @@ IMPL_LINK( AsyncQuitHandler, OnAsyncQuit, void*, /*pNull*/ )
     return 0L;
 }
 
-#if 0
 bool UnlockControllerHack( StarBASIC* pBasic )
 {
     bool bRes = false;
@@ -524,7 +524,7 @@ bool UnlockControllerHack( StarBASIC* pBasic )
     }
     return bRes;
 }
-#endif
+
 /////////////////////////////////////////////////////////////////////////////
 
 // A Basic module has set EXTSEARCH, so that the elements, that the modul contains,
@@ -793,6 +793,82 @@ void SbModule::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
         SbxVariable* pVar = pHint->GetVar();
         SbProperty* pProp = PTR_CAST(SbProperty,pVar);
         SbMethod* pMeth = PTR_CAST(SbMethod,pVar);
+        SbProcedureProperty* pProcProperty = PTR_CAST( SbProcedureProperty, pVar );
+        if( pProcProperty )
+        {
+
+            if( pHint->GetId() == SBX_HINT_DATAWANTED )
+            {
+                String aProcName;
+                aProcName.AppendAscii( "Property Get " );
+                aProcName += pProcProperty->GetName();
+
+                SbxVariable* pMethVar = Find( aProcName, SbxCLASS_METHOD );
+                if( pMethVar )
+                {
+                    SbxValues aVals;
+                    aVals.eType = SbxVARIANT;
+
+                    SbxArray* pArg = pVar->GetParameters();
+                    USHORT nVarParCount = (pArg != NULL) ? pArg->Count() : 0;
+                    if( nVarParCount > 1 )
+                    {
+                        SbxArrayRef xMethParameters = new SbxArray;
+                        xMethParameters->Put( pMethVar, 0 );    // Method as parameter 0
+                        for( USHORT i = 1 ; i < nVarParCount ; ++i )
+                        {
+                            SbxVariable* pPar = pArg->Get( i );
+                            xMethParameters->Put( pPar, i );
+                        }
+
+                        pMethVar->SetParameters( xMethParameters );
+                        pMethVar->Get( aVals );
+                        pMethVar->SetParameters( NULL );
+                    }
+                    else
+                    {
+                        pMethVar->Get( aVals );
+                    }
+
+                    pVar->Put( aVals );
+                }
+            }
+            else if( pHint->GetId() == SBX_HINT_DATACHANGED )
+            {
+                SbxVariable* pMethVar = NULL;
+
+                bool bSet = pProcProperty->isSet();
+                if( bSet )
+                {
+                    pProcProperty->setSet( false );
+
+                    String aProcName;
+                    aProcName.AppendAscii( "Property Set " );
+                    aProcName += pProcProperty->GetName();
+                    pMethVar = Find( aProcName, SbxCLASS_METHOD );
+                }
+                if( !pMethVar ) // Let
+                {
+                    String aProcName;
+                    aProcName.AppendAscii( "Property Let " );
+                    aProcName += pProcProperty->GetName();
+                    pMethVar = Find( aProcName, SbxCLASS_METHOD );
+                }
+
+                if( pMethVar )
+                {
+                    // Setup parameters
+                    SbxArrayRef xArray = new SbxArray;
+                    xArray->Put( pMethVar, 0 ); // Method as parameter 0
+                    xArray->Put( pVar, 1 );
+                    pMethVar->SetParameters( xArray );
+
+                    SbxValues aVals;
+                    pMethVar->Get( aVals );
+                    pMethVar->SetParameters( NULL );
+                }
+            }
+        }
         if( pProp )
         {
             if( pProp->GetModule() != this )
@@ -847,6 +923,7 @@ void SbModule::SetSource32( const ::rtl::OUString& r )
     aOUSource = r;
     StartDefinitions();
     SbiTokenizer aTok( r );
+        aTok.SetCompatible( IsVBACompat() );
     while( !aTok.IsEof() )
     {
         SbiToken eEndTok = NIL;
@@ -1034,12 +1111,14 @@ void SbModule::SetVBACompat( BOOL bCompat )
 // Run a Basic-subprogram
 USHORT SbModule::Run( SbMethod* pMeth )
 {
+    OSL_TRACE("About to run %s, vba compatmode is %d", rtl::OUStringToOString( pMeth->GetName(), RTL_TEXTENCODING_UTF8 ).getStr(), mbVBACompat );
     static USHORT nMaxCallLevel = 0;
     static String aMSOMacroRuntimeLibName = String::CreateFromAscii( "Launcher" );
     static String aMSOMacroRuntimeAppSymbol = String::CreateFromAscii( "Application" );
 
     USHORT nRes = 0;
     BOOL bDelInst = BOOL( pINST == NULL );
+        bool bQuit = false;
     StarBASICRef xBasic;
     if( bDelInst )
     {
@@ -1172,6 +1251,15 @@ USHORT SbModule::Run( SbMethod* pMeth )
 
             delete pRt;
             pMOD = pOldMod;
+            if ( pINST->nCallLvl == 0 && IsVBACompat() )
+            {
+                // VBA always ensure screenupdating is enabled after completing
+                StarBASIC* pBasic = PTR_CAST(StarBASIC,GetParent());
+                if ( pBasic && pBasic->IsDocBasic() )
+                {
+                    UnlockControllerHack( pBasic );
+                }
+            }
             if( bDelInst )
             {
                 // #57841 Clear Uno-Objects, which were helt in RTL functions,
@@ -1199,10 +1287,8 @@ USHORT SbModule::Run( SbMethod* pMeth )
 
     // VBA always ensure screenupdating is enabled after completing
     StarBASIC* pBasic = PTR_CAST(StarBASIC,GetParent());
-#if 0
     if ( pBasic && pBasic->IsDocBasic() && !pINST )
         UnlockControllerHack( pBasic );
-#endif
     if( bDelInst )
     {
        // #57841 Clear Uno-Objects, which were helt in RTL functions,
@@ -1213,6 +1299,8 @@ USHORT SbModule::Run( SbMethod* pMeth )
         pINST = NULL;
     }
     if ( pBasic && pBasic->IsDocBasic() && pBasic->IsQuitApplication() && !pINST )
+            bQuit = true;
+        if ( bQuit )
     {
         Application::PostUserEvent( LINK( &AsyncQuitHandler::instance(), AsyncQuitHandler, OnAsyncQuit ), NULL );
     }
@@ -1663,6 +1751,48 @@ BOOL SbModule::ExceedsLegacyModuleSize()
     return false;
 }
 
+class ErrorHdlResetter
+{
+    Link    mErrHandler;
+    bool mbError;
+    public:
+    ErrorHdlResetter() : mbError( false )
+    {
+        // save error handler
+        mErrHandler = StarBASIC::GetGlobalErrorHdl();
+        // set new error handler
+        StarBASIC::SetGlobalErrorHdl( LINK( this, ErrorHdlResetter, BasicErrorHdl ) );
+    }
+    ~ErrorHdlResetter()
+    {
+        // restore error handler
+        StarBASIC::SetGlobalErrorHdl(mErrHandler);
+    }
+    DECL_LINK( BasicErrorHdl, StarBASIC * );
+    bool HasError() { return mbError; }
+};
+IMPL_LINK( ErrorHdlResetter, BasicErrorHdl, StarBASIC *, /*pBasic*/)
+{
+    mbError = true;
+    return 0;
+}
+
+bool SbModule::HasExeCode()
+{
+
+        ErrorHdlResetter aGblErrHdl;
+    // And empty Image always has the Global Chain set up
+        static const unsigned char pEmptyImage[] = { 0x45, 0x0 , 0x0, 0x0, 0x0 };
+        // lets be stricter for the moment than VBA
+
+    bool bRes = false;
+    if ( !IsCompiled() )
+        Compile();
+    if ( pImage && !( pImage->GetCodeSize() == 5 && ( memcmp( pImage->GetCode(), pEmptyImage, pImage->GetCodeSize() ) == 0 ) )
+        || aGblErrHdl.HasError() )
+        bRes = true;
+    return bRes;
+}
 
 // Store only image, no source
 BOOL SbModule::StoreBinaryData( SvStream& rStrm )
@@ -1711,7 +1841,6 @@ BOOL SbModule::LoadBinaryData( SvStream& rStrm )
     aOUSource = aKeepSource;
     return bRet;
 }
-
 
 BOOL SbModule::LoadCompleted()
 {
@@ -1780,6 +1909,7 @@ SbMethod::SbMethod( const String& r, SbxDataType t, SbModule* p )
     nLine1       =
     nLine2       = 0;
     refStatics = new SbxArray;
+    mCaller          = 0;
     // From: 1996-07.02: HACK due to 'Referenz could not be saved'
     SetFlag( SBX_NO_MODIFY );
 }
@@ -1794,6 +1924,7 @@ SbMethod::SbMethod( const SbMethod& r )
     nLine1       = r.nLine1;
     nLine2       = r.nLine2;
         refStatics = r.refStatics;
+    mCaller          = r.mCaller;
     SetFlag( SBX_NO_MODIFY );
 }
 
@@ -1862,9 +1993,14 @@ SbxInfo* SbMethod::GetInfo()
 // Interface to execute a method of the applications
 // #34191# With special RefCounting, damit so that the Basic was not fired of by CloseDocument()
 // The return value will be delivered as string.
-ErrCode SbMethod::Call( SbxValue* pRet )
+ErrCode SbMethod::Call( SbxValue* pRet, SbxVariable* pCaller )
 {
-    // Increment the RefCount of the module
+    if ( pCaller )
+    {
+        OSL_TRACE("SbMethod::Call Have been passed a caller 0x%x", pCaller );
+        mCaller = pCaller;
+    }
+    // RefCount vom Modul hochzaehlen
     SbModule* pMod_ = (SbModule*)GetParent();
     pMod_->AddRef();
 
@@ -1891,7 +2027,7 @@ ErrCode SbMethod::Call( SbxValue* pRet )
     // Release objects
     pMod_->ReleaseRef();
     pBasic->ReleaseRef();
-
+    mCaller = 0;
     return nErr;
 }
 
@@ -2074,9 +2210,8 @@ public:
     }
 
     //liuchen 2009-7-21, support Excel VBA Form_QueryClose event
-    virtual void SAL_CALL windowClosing( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException)
+    virtual void SAL_CALL windowClosing( const lang::EventObject& e ) throw (uno::RuntimeException)
     {
-#if IN_THE_FUTURE
         uno::Reference< awt::XDialog > xDialog( e.Source, uno::UNO_QUERY );
         if ( xDialog.is() )
         {
@@ -2104,7 +2239,6 @@ public:
         }
 
         mpUserForm->triggerMethod( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Userform_QueryClose") ) );
-#endif
     }
     //liuchen 2009-7-21
 
@@ -2201,14 +2335,13 @@ void SbUserFormModule::triggerMethod( const String& aMethodToRun )
     Sequence< Any > aArguments;
     triggerMethod( aMethodToRun, aArguments );
 }
-void SbUserFormModule::triggerMethod( const String& aMethodToRun, Sequence< Any >& /*aArguments*/)
+void SbUserFormModule::triggerMethod( const String& aMethodToRun, Sequence< Any >& aArguments)
 {
     OSL_TRACE("*** trigger %s ***", rtl::OUStringToOString( aMethodToRun, RTL_TEXTENCODING_UTF8 ).getStr() );
     // Search method
     SbxVariable* pMeth = SbObjModule::Find( aMethodToRun, SbxCLASS_METHOD );
     if( pMeth )
     {
-#if IN_THE_FUTURE
                  //liuchen 2009-7-21, support Excel VBA UserForm_QueryClose event with parameters
         if ( aArguments.getLength() > 0 )   // Setup parameters
         {
@@ -2238,7 +2371,6 @@ void SbUserFormModule::triggerMethod( const String& aMethodToRun, Sequence< Any 
         }
         else
 //liuchen 2009-7-21
-#endif
         {
             SbxValues aVals;
             pMeth->Get( aVals );
@@ -2340,7 +2472,10 @@ void SbUserFormModule::Unload()
     triggerMethod( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Userform_QueryClose") ), aParams);
 
     aParams[0] >>= nCancel;
-    if (nCancel == 1)
+    // basic boolean ( and what the user might use ) can be ambiguous ( e.g. basic true = -1 )
+    // test agains 0 ( false ) and assume anything else is true
+    // ( Note: ) this used to work ( something changes somewhere )
+    if (nCancel != 0)
     {
         return;
     }
@@ -2401,7 +2536,7 @@ void SbUserFormModule::InitObject()
             aArgs[ 0 ] = uno::Any();
             aArgs[ 1 ] <<= m_xDialog;
             aArgs[ 2 ] <<= m_xModel;
-            aArgs[ 3 ] <<= rtl::OUString( GetParent()->GetName() );
+            aArgs[ 3 ] <<= sProjectName;
             pDocObject = new SbUnoObject( GetName(), uno::makeAny( xVBAFactory->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.msforms.UserForm")), aArgs  ) ) );
             uno::Reference< lang::XComponent > xComponent( aArgs[ 1 ], uno::UNO_QUERY_THROW );
             // remove old listener if it exists
