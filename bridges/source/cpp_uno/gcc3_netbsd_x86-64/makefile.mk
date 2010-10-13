@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-.IF "$(COM)$(OS)$(CPU)$(COMNAME)" == "GCCNETBSDIgcc3"
+.IF "$(COM)$(OS)$(CPU)$(COMNAME)" == "GCCNETBSDXgcc3"
 
 .IF "$(cppu_no_leak)" == ""
 CFLAGS += -DLEAK_STATIC_DATA
@@ -48,12 +48,11 @@ CFLAGS += -DLEAK_STATIC_DATA
 # work with the .cxx sources in this directory:
 CFLAGSCXX += -fno-omit-frame-pointer
 
-CFLAGSNOOPT=-O0
-
 SLOFILES= \
+    $(SLO)$/abi.obj			\
     $(SLO)$/except.obj		\
     $(SLO)$/cpp2uno.obj		\
-    $(SLO)$/uno2cpp.obj \
+    $(SLO)$/uno2cpp.obj		\
     $(SLO)$/call.obj
 
 SHL1TARGET= $(TARGET)

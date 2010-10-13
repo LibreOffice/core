@@ -139,8 +139,8 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
     OUString const & unoName = *(OUString const *)&pTypeDescr->aBase.pTypeName;
 
     MutexGuard guard( m_mutex );
-    t_rtti_map::const_iterator iRttiFind( m_rttis.find( unoName ) );
-    if (iRttiFind == m_rttis.end())
+    t_rtti_map::const_iterator iFind( m_rttis.find( unoName ) );
+    if (iFind == m_rttis.end())
     {
         // RTTI symbol
         OStringBuffer buf( 64 );
@@ -157,7 +157,7 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
         buf.append( 'E' );
 
         OString symName( buf.makeStringAndClear() );
-#if 1 /* #i22253# */
+#if 1  /* #i22253# */
         rtti = (type_info *)dlsym( RTLD_DEFAULT, symName.getStr() );
 #else
         rtti = (type_info *)dlsym( m_hApp, symName.getStr() );
@@ -208,7 +208,7 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
     }
     else
     {
-        rtti = iRttiFind->second;
+        rtti = iFind->second;
     }
 
     return rtti;
@@ -335,4 +335,3 @@ void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping 
 }
 
 }
-

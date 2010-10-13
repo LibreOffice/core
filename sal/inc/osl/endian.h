@@ -66,11 +66,14 @@ extern "C" {
 #ifdef NETBSD
 #   include <machine/endian.h>
 #   if BYTE_ORDER == LITTLE_ENDIAN
-#       define _LITTLE_ENDIAN
+#   undef _BIG_ENDIAN
+#   undef _PDP_ENDIAN
 #   elif BYTE_ORDER == BIG_ENDIAN
-#       define _BIG_ENDIAN
+#   undef _LITTLE_ENDIAN
+#   undef _PDP_ENDIAN
 #   elif BYTE_ORDER == PDP_ENDIAN
-#       define _PDP_ENDIAN
+#   undef _LITTLE_ENDIAN
+#   undef _BIG_ENDIAN
 #   endif
 #endif
 
