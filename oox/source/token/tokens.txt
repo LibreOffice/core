@@ -482,6 +482,7 @@ alg
 algIdExt
 algIdExtSource
 algn
+algorithmName
 alias
 aliases
 aliceBlue
@@ -1098,6 +1099,7 @@ char
 charRg
 charSpace
 character
+characterSet
 characterSpacingControl
 characteristic
 charset
@@ -1277,6 +1279,7 @@ confettiGrays
 confettiOutline
 confettiStreamers
 confettiWhite
+conformance
 conn
 connDist
 connRout
@@ -1583,6 +1586,7 @@ date
 date1904
 dateAx
 dateBetween
+dateCompatibility
 dateEqual
 dateFormat
 dateGroupItem
@@ -2502,6 +2506,7 @@ harsh
 hasCustomPrompt
 hash
 hashData
+hashValue
 hc
 hd2
 hd4
@@ -3714,8 +3719,11 @@ panose
 panose1
 papayaWhip
 paperClips
+paperHeight
 paperSize
 paperSrc
+paperUnits
+paperWidth
 papyrus
 par
 parOf
@@ -4291,6 +4299,7 @@ saka
 salmon
 salt
 saltData
+saltValue
 sameClick
 sameDir
 sampData
