@@ -1095,6 +1095,7 @@ bool XclExpXmlStream::exportDocument() throw()
     SotStorageRef rStorage = dynamic_cast <SotStorage*>( Reference<XStorage>( pShell->GetStorage() ).get() );
 
     XclExpRootData aData( EXC_BIFF8, *pShell->GetMedium (), rStorage, *pDoc, RTL_TEXTENCODING_DONTKNOW );
+    aData.meOutput = EXC_OUTPUT_XML_2007;
     XclExpRoot aRoot( aData );
 
     mpRoot = &aRoot;
