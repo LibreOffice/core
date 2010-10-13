@@ -978,10 +978,10 @@ namespace basegfx
         // calculate the x-extrema parameters by zeroing first x-derivative
         // of the cubic bezier's parametric formula, which results in a
         // quadratic equation: dBezier/dt = t*t*fAX - 2*t*fBX + fCX
-        const B2DPoint aRelativeEndPoint(maEndPoint-maStartPoint);
-        const double fAX = 3 * (maControlPointA.getX() - maControlPointB.getX()) + aRelativeEndPoint.getX();
-        const double fBX = 2 * maControlPointA.getX() - maControlPointB.getX() - maStartPoint.getX();
-        double fCX(maControlPointA.getX() - maStartPoint.getX());
+        const B2DPoint aControlDiff( maControlPointA - maControlPointB );
+        double fCX = maControlPointA.getX() - maStartPoint.getX();
+        const double fBX = fCX + aControlDiff.getX();
+        const double fAX = 3 * aControlDiff.getX() + (maEndPoint.getX() - maStartPoint.getX());
 
         if(fTools::equalZero(fCX))
         {
@@ -997,9 +997,9 @@ namespace basegfx
             {
                 const double fS = sqrt(fD);
                 // calculate both roots (avoiding a numerically unstable subtraction)
-                const double fQ = -(fBX + ((fBX >= 0) ? +fS : -fS));
+                const double fQ = fBX + ((fBX >= 0) ? +fS : -fS);
                 impCheckExtremumResult(fQ / fAX, rResults);
-                if( fD > 0.0 ) // ignore root multiplicity
+                if( !fTools::equalZero(fS) ) // ignore root multiplicity
                     impCheckExtremumResult(fCX / fQ, rResults);
             }
         }
@@ -1010,9 +1010,9 @@ namespace basegfx
         }
 
         // calculate the y-extrema parameters by zeroing first y-derivative
-        const double fAY = 3 * (maControlPointA.getY() - maControlPointB.getY()) + aRelativeEndPoint.getY();
-        const double fBY = 2 * maControlPointA.getY() - maControlPointB.getY() - maStartPoint.getY();
-        double fCY(maControlPointA.getY() - maStartPoint.getY());
+        double fCY = maControlPointA.getY() - maStartPoint.getY();
+        const double fBY = fCY + aControlDiff.getY();
+        const double fAY = 3 * aControlDiff.getY() + (maEndPoint.getY() - maStartPoint.getY());
 
         if(fTools::equalZero(fCY))
         {
@@ -1024,13 +1024,13 @@ namespace basegfx
         {
             // derivative is polynomial of order 2 => use binomial formula
             const double fD = fBY*fBY - fAY*fCY;
-            if( fD >= 0 )
+            if( fD >= 0.0 )
             {
                 const double fS = sqrt(fD);
                 // calculate both roots (avoiding a numerically unstable subtraction)
-                const double fQ = -(fBY + ((fBY >= 0) ? +fS : -fS));
+                const double fQ = fBY + ((fBY >= 0) ? +fS : -fS);
                 impCheckExtremumResult(fQ / fAY, rResults);
-                if( fD > 0.0 ) // ignore root multiplicity, TODO: use equalZero() instead?
+                if( !fTools::equalZero(fS) ) // ignore root multiplicity
                     impCheckExtremumResult(fCY / fQ, rResults);
             }
         }
