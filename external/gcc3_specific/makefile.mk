@@ -44,6 +44,7 @@ $(MINGWGXXDLL) :
 
 .IF "$(OS)"!="MACOSX"
 .IF "$(OS)"!="FREEBSD"
+.IF "$(OS)"!="NETBSD"
 
 .EXPORT : CC
 
@@ -56,6 +57,7 @@ $(LB)$/libstdc++.so.$(SHORTSTDCPP3) :
 $(LB)$/libgcc_s.so.$(SHORTSTDC3) :
     $(GCCINSTLIB) libgcc_s.so.$(SHORTSTDC3) $(LB)
 
+.ENDIF
 .ENDIF
 .ENDIF 
 
