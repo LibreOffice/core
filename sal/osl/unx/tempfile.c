@@ -30,6 +30,9 @@
 /*****************************************************************/
 
 #include <stdio.h>
+#if defined(NETBSD)
+#include <paths.h>
+#endif
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -68,6 +71,9 @@ oslFileError SAL_CALL osl_getTempDirURL( rtl_uString** pustrTempDir )
 #if defined(SOLARIS) || defined (LINUX) || defined (FREEBSD)
         if ( !pValue )
             pValue = P_tmpdir;
+#elif defined(NETBSD)
+        if ( !pValue )
+            pValue = _PATH_TMP;
 #endif
     }
 #endif /* MACOSX */
