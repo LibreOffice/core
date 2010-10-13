@@ -216,7 +216,7 @@ void OApplicationController::openDialog( const ::rtl::OUString& _sServiceName )
 {
     try
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( getMutex() );
         WaitObject aWO(getView());
 
@@ -306,7 +306,7 @@ void OApplicationController::openDirectSQLDialog()
 // -----------------------------------------------------------------------------
 void SAL_CALL OApplicationController::propertyChange( const PropertyChangeEvent& evt ) throw (RuntimeException)
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
     if ( evt.PropertyName == PROPERTY_USER )
     {
@@ -393,7 +393,7 @@ Reference< XConnection > SAL_CALL OApplicationController::getActiveConnection() 
 // -----------------------------------------------------------------------------
 void SAL_CALL OApplicationController::connect(  ) throw (SQLException, RuntimeException)
 {
-    ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
 
     SQLExceptionInfo aError;
@@ -432,7 +432,7 @@ beans::Pair< ::sal_Int32, ::rtl::OUString > SAL_CALL OApplicationController::ide
 // -----------------------------------------------------------------------------
 ::sal_Bool SAL_CALL OApplicationController::closeSubComponents(  ) throw (RuntimeException)
 {
-    ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
     return m_pSubComponentManager->closeSubComponents();
 }
@@ -517,7 +517,7 @@ Reference< XComponent > SAL_CALL OApplicationController::loadComponent( ::sal_In
 Reference< XComponent > SAL_CALL OApplicationController::loadComponentWithArguments( ::sal_Int32 _ObjectType,
     const ::rtl::OUString& _ObjectName, ::sal_Bool _ForEditing, const Sequence< PropertyValue >& _Arguments ) throw (IllegalArgumentException, NoSuchElementException, SQLException, RuntimeException)
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
 
     impl_validateObjectTypeAndName_throw( _ObjectType, _ObjectName );
@@ -542,7 +542,7 @@ Reference< XComponent > SAL_CALL OApplicationController::createComponent( ::sal_
 // -----------------------------------------------------------------------------
 Reference< XComponent > SAL_CALL OApplicationController::createComponentWithArguments( ::sal_Int32 i_nObjectType, const Sequence< PropertyValue >& i_rArguments, Reference< XComponent >& o_DocumentDefinition ) throw (IllegalArgumentException, SQLException, RuntimeException)
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
 
     impl_validateObjectTypeAndName_throw( i_nObjectType, ::boost::optional< ::rtl::OUString >() );
@@ -572,7 +572,7 @@ void SAL_CALL OApplicationController::releaseContextMenuInterceptor( const Refer
 // -----------------------------------------------------------------------------
 void OApplicationController::previewChanged( sal_Int32 _nMode )
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
 
     if ( m_xDataSource.is() && !isDataSourceReadOnly() )

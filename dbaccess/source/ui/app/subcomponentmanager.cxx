@@ -464,7 +464,7 @@ namespace dbaui
     //------------------------------------------------------------------------------------------------------------------
     sal_Bool SubComponentManager::closeSubComponents()
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_pData->getMutex() );
 
         try

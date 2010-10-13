@@ -134,7 +134,7 @@ DBG_NAME(DirectSQLDialog)
     //--------------------------------------------------------------------
     void DirectSQLDialog::_disposing( const EventObject& _rSource )
     {
-        ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard(m_aMutex);
 
         OSL_ENSURE(Reference< XConnection >(_rSource.Source, UNO_QUERY).get() == m_xConnection.get(),

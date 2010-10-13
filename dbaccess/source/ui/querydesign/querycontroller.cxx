@@ -1079,7 +1079,7 @@ void OQueryController::onLoadedMenu(const Reference< ::com::sun::star::frame::XL
     {
         if ( !editingCommand() )
         {
-            ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
+            SolarMutexGuard aSolarGuard;
             ::osl::MutexGuard aGuard( getMutex() );
             String aDefaultName = String( ModuleRes( editingView() ? STR_VIEW_TITLE : STR_QRY_TITLE ) );
             sName = aDefaultName.GetToken(0,' ');
@@ -1160,7 +1160,7 @@ void OQueryController::impl_onModifyChanged()
 // -----------------------------------------------------------------------------
 void SAL_CALL OQueryController::disposing( const EventObject& Source ) throw(RuntimeException)
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if ( getContainer() && Source.Source.is() )
     {
@@ -1636,7 +1636,7 @@ bool OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
 // -----------------------------------------------------------------------------
 short OQueryController::saveModified()
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
     short nRet = RET_YES;
     if ( !isConnected() || !isModified() )

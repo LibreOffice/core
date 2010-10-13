@@ -983,7 +983,7 @@ namespace
 // -----------------------------------------------------------------------------
 void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >& aArgs)
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
     if ( !getView() )
     {
@@ -1847,7 +1847,7 @@ sal_Bool SAL_CALL OReportController::suspend(sal_Bool /*_bSuspend*/) throw( Runt
     if ( getBroadcastHelper().bInDispose || getBroadcastHelper().bDisposed )
         return sal_True;
 
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
 
     if ( getView() && getView()->IsInModalMode() )
@@ -2176,7 +2176,7 @@ void OReportController::notifyGroupSections(const ContainerEvent& _rEvent,bool _
     uno::Reference< report::XGroup> xGroup(_rEvent.Element,uno::UNO_QUERY);
     if ( xGroup.is() )
     {
-        ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( getMutex() );
         sal_Int32 nGroupPos = 0;
         _rEvent.Accessor >>= nGroupPos;
@@ -2232,14 +2232,14 @@ void SAL_CALL OReportController::elementRemoved( const ContainerEvent& _rEvent )
 // -----------------------------------------------------------------------------
 void SAL_CALL OReportController::elementReplaced( const ContainerEvent& /*_rEvent*/ ) throw(RuntimeException)
 {
-    ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
     OSL_ENSURE(0,"Not yet implemented!");
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OReportController::propertyChange( const beans::PropertyChangeEvent& evt ) throw (RuntimeException)
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
     try
     {
@@ -4064,7 +4064,7 @@ void OReportController::checkChartEnabled()
 ::rtl::OUString SAL_CALL OReportController::getTitle()
     throw (uno::RuntimeException)
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
 
     uno::Reference< frame::XTitle> xTitle(m_xReportDefinition,uno::UNO_QUERY_THROW);
@@ -4336,7 +4336,7 @@ awt::Size SAL_CALL OReportController::getVisualAreaSize( ::sal_Int64 /*nAspect*/
 // -----------------------------------------------------------------------------
 embed::VisualRepresentation SAL_CALL OReportController::getPreferredVisualRepresentation( ::sal_Int64 _nAspect ) throw (lang::IllegalArgumentException, embed::WrongStateException, uno::Exception, uno::RuntimeException)
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
     embed::VisualRepresentation aResult;
     if ( !m_bInGeneratePreview )

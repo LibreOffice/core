@@ -815,7 +815,7 @@ void SAL_CALL OReportDefinition::disposing()
     m_pImpl->m_aStorageChangeListeners.disposeAndClear( aDisposeEvent );
 
     // SYNCHRONIZED --->
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::ResettableMutexGuard aGuard(m_aMutex);
 
     m_pImpl->m_aControllers.clear();
@@ -1250,7 +1250,7 @@ void SAL_CALL OReportDefinition::removeCloseListener( const uno::Reference< util
 // XCloseable
 void SAL_CALL OReportDefinition::close( ::sal_Bool _bDeliverOwnership ) throw (util::CloseVetoException, uno::RuntimeException)
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     ::osl::ResettableMutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
@@ -1469,7 +1469,7 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
     if ( !_xStorageToSaveTo.is() )
         throw lang::IllegalArgumentException(RPT_RESSTRING(RID_STR_ARGUMENT_IS_NULL,m_aProps->m_xContext->getServiceManager()),*this,1);
 
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
     // create XStatusIndicator
@@ -2727,7 +2727,7 @@ bool OReportDefinition::isEnableSetModified() const
 }
 uno::Reference< frame::XTitle > OReportDefinition::impl_getTitleHelper_throw()
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
@@ -2749,7 +2749,7 @@ uno::Reference< frame::XTitle > OReportDefinition::impl_getTitleHelper_throw()
 // -----------------------------------------------------------------------------
 uno::Reference< frame::XUntitledNumbers > OReportDefinition::impl_getUntitledHelper_throw()
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
@@ -2772,7 +2772,7 @@ uno::Reference< frame::XUntitledNumbers > OReportDefinition::impl_getUntitledHel
     throw (uno::RuntimeException)
 {
     // SYNCHRONIZED ->
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
@@ -2785,7 +2785,7 @@ void SAL_CALL OReportDefinition::setTitle( const ::rtl::OUString& sTitle )
     throw (uno::RuntimeException)
 {
     // SYNCHRONIZED ->
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
@@ -2798,7 +2798,7 @@ void SAL_CALL OReportDefinition::addTitleChangeListener( const uno::Reference< f
     throw (uno::RuntimeException)
 {
     // SYNCHRONIZED ->
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
@@ -2813,7 +2813,7 @@ void SAL_CALL OReportDefinition::removeTitleChangeListener( const uno::Reference
     throw (uno::RuntimeException)
 {
     // SYNCHRONIZED ->
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
@@ -2829,7 +2829,7 @@ void SAL_CALL OReportDefinition::removeTitleChangeListener( const uno::Reference
            uno::RuntimeException         )
 {
     // object already disposed?
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
 
@@ -2842,7 +2842,7 @@ void SAL_CALL OReportDefinition::releaseNumber( ::sal_Int32 nNumber )
            uno::RuntimeException         )
 {
     // object already disposed?
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
 
@@ -2855,7 +2855,7 @@ void SAL_CALL OReportDefinition::releaseNumberForComponent( const uno::Reference
            uno::RuntimeException         )
 {
     // object already disposed?
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
 
@@ -2867,7 +2867,7 @@ void SAL_CALL OReportDefinition::releaseNumberForComponent( const uno::Reference
     throw (uno::RuntimeException)
 {
     // object already disposed?
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
 

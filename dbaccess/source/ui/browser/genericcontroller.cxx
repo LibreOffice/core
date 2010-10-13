@@ -292,7 +292,7 @@ void OGenericUnoController::impl_initialize()
 // -------------------------------------------------------------------------
 void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException)
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
 
     Reference< XWindow >        xParent;
@@ -425,7 +425,7 @@ Sequence< PropertyValue > SAL_CALL OGenericUnoController::getCreationArguments()
 // -----------------------------------------------------------------------
 void OGenericUnoController::attachFrame( const Reference< XFrame >& _rxFrame ) throw( RuntimeException )
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
 
     stopFrameListening( m_aCurrentFrame.getFrame() );
@@ -767,7 +767,7 @@ void OGenericUnoController::setMasterDispatchProvider(const Reference< XDispatch
 // -----------------------------------------------------------------------
 void OGenericUnoController::dispatch(const URL& _aURL, const Sequence< PropertyValue >& aArgs) throw(RuntimeException)
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     // Since the fix for #123967#, the SolarMutex is not locked anymore when the framework calls into
     // here. So, lock it ourself. The real solution would be to lock it only in the places
     // where it's needed, but a) this might turn out difficult, since we then also need to care
@@ -1377,7 +1377,7 @@ Reference< awt::XWindow> OGenericUnoController::getTopMostContainerWindow() cons
 // -----------------------------------------------------------------------------
 Reference< XTitle > OGenericUnoController::impl_getTitleHelper_throw()
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
 
     if ( ! m_xTitleHelper.is ())
@@ -1411,7 +1411,7 @@ Reference< XTitle > OGenericUnoController::impl_getTitleHelper_throw()
 void SAL_CALL OGenericUnoController::setTitle(const ::rtl::OUString& sTitle)
     throw (RuntimeException)
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
     m_bExternalTitle = sal_True;
     impl_getTitleHelper_throw()->setTitle (sTitle);
@@ -1613,7 +1613,7 @@ void OGenericUnoController::fillSupportedFeatures()
 
 void SAL_CALL OGenericUnoController::dispose() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     OGenericUnoController_Base::dispose();
 }
 }   // namespace dbaui

@@ -242,7 +242,7 @@ namespace dbaui
     IMPL_LINK( SbaTableQueryBrowser, OnAsyncDrop, void*, /*NOTINTERESTEDIN*/ )
     {
         m_nAsyncDrop = 0;
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( getMutex() );
 
         if ( m_aAsyncDrop.nType == E_TABLE )

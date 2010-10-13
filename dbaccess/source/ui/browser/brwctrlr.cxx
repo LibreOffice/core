@@ -1185,7 +1185,7 @@ void SbaXDataBrowserController::propertyChange(const PropertyChangeEvent& evt) t
     if (!xSource.is())
         return;
 
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     // the IsModified changed to sal_False ?
     if  (   (evt.PropertyName.equals(PROPERTY_ISMODIFIED))
         &&  (::comphelper::getBOOL(evt.NewValue) == sal_False)
@@ -1455,7 +1455,7 @@ sal_Bool SbaXDataBrowserController::approveParameter(const ::com::sun::star::for
     }
 
     Reference< ::com::sun::star::container::XIndexAccess >  xParameters = aEvent.Parameters;
-    ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
         // this may be executed in a non-main thread and we want to use vcl ...
     Window* pParent = Application::GetDefDialogParent();
         // don't use the content as parent if it isn't visible
@@ -2468,7 +2468,7 @@ void SbaXDataBrowserController::CellDeactivated()
 //------------------------------------------------------------------------------
 IMPL_LINK( SbaXDataBrowserController, OnClipboardChanged, void*, EMPTYARG )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return OnInvalidateClipboard( NULL );
 }
 

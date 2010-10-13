@@ -363,7 +363,7 @@ sal_Bool SAL_CALL OJoinController::suspend(sal_Bool _bSuspend) throw( RuntimeExc
     if ( getBroadcastHelper().bInDispose || getBroadcastHelper().bDisposed )
         return sal_True;
 
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
     if ( getView() && getView()->IsInModalMode() )
         return sal_False;

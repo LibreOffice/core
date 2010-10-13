@@ -1081,7 +1081,7 @@ void ORptFilter::endDocument( void )
         return;
 
     // this method will modify the document directly -> lock SolarMutex
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     // Clear the shape import to sort the shapes  (and not in the
     // destructor that might be called after the import has finished
     // for Java filters.

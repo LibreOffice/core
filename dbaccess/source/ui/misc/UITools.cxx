@@ -1477,7 +1477,7 @@ TOTypeInfoSP queryTypeInfoByType(sal_Int32 _nDataType,const OTypeInfoMap& _rType
 // -----------------------------------------------------------------------------
 sal_Int32 askForUserAction(Window* _pParent,USHORT _nTitle,USHORT _nText,sal_Bool _bAll,const ::rtl::OUString& _sName)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     String aMsg = String(ModuleRes(_nText));
     aMsg.SearchAndReplace(String::CreateFromAscii("%1"),String(_sName));
     OSQLMessageBox aAsk(_pParent,String(ModuleRes(_nTitle )),aMsg,WB_YES_NO | WB_DEF_YES,OSQLMessageBox::Query);

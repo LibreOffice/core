@@ -137,7 +137,7 @@ namespace dbaui
     //-------------------------------------------------------------------------
     void BasicInteractionHandler::implHandle(const ParametersRequest& _rParamRequest, const Sequence< Reference< XInteractionContinuation > >& _rContinuations)
     {
-        ::vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
             // want to open a dialog ....
 
         sal_Int32 nAbortPos = getContinuation(ABORT, _rContinuations);
@@ -181,7 +181,7 @@ namespace dbaui
     //-------------------------------------------------------------------------
     void BasicInteractionHandler::implHandle(const SQLExceptionInfo& _rSqlInfo, const Sequence< Reference< XInteractionContinuation > >& _rContinuations)
     {
-        ::vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
             // want to open a dialog ....
 
         sal_Int32 nApprovePos = getContinuation(APPROVE, _rContinuations);
@@ -255,7 +255,7 @@ namespace dbaui
     //-------------------------------------------------------------------------
     void BasicInteractionHandler::implHandle(const DocumentSaveRequest& _rDocuRequest, const Sequence< Reference< XInteractionContinuation > >& _rContinuations)
     {
-        ::vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
             // want to open a dialog ....
 
         sal_Int32 nApprovePos = getContinuation(APPROVE, _rContinuations);

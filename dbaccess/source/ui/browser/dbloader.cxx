@@ -303,7 +303,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         }
 
         // init controller
-        ::vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         try
         {
             Reference<XInitialization > xIni(xController,UNO_QUERY);

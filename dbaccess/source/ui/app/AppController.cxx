@@ -553,7 +553,7 @@ sal_Bool SAL_CALL OApplicationController::suspend(sal_Bool bSuspend) throw( Runt
         );
     }
 
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
 
     if ( getView() && getView()->IsInModalMode() )
@@ -1022,7 +1022,7 @@ namespace
 // -----------------------------------------------------------------------------
 void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >& aArgs)
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
 
     if ( isUserDefinedFeature( _nId ) )
@@ -1559,7 +1559,7 @@ OApplicationView*   OApplicationController::getContainer() const
 // ::com::sun::star::container::XContainerListener
 void SAL_CALL OApplicationController::elementInserted( const ContainerEvent& _rEvent ) throw(RuntimeException)
 {
-    ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
 
     Reference< XContainer > xContainer(_rEvent.Source, UNO_QUERY);
@@ -1595,7 +1595,7 @@ void SAL_CALL OApplicationController::elementInserted( const ContainerEvent& _rE
 // -----------------------------------------------------------------------------
 void SAL_CALL OApplicationController::elementRemoved( const ContainerEvent& _rEvent ) throw(RuntimeException)
 {
-    ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
 
     Reference< XContainer > xContainer(_rEvent.Source, UNO_QUERY);
@@ -1629,7 +1629,7 @@ void SAL_CALL OApplicationController::elementRemoved( const ContainerEvent& _rEv
 // -----------------------------------------------------------------------------
 void SAL_CALL OApplicationController::elementReplaced( const ContainerEvent& _rEvent ) throw(RuntimeException)
 {
-    ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
 
     Reference< XContainer > xContainer(_rEvent.Source, UNO_QUERY);
@@ -2074,7 +2074,7 @@ void OApplicationController::addContainerListener(const Reference<XNameAccess>& 
 // -----------------------------------------------------------------------------
 void OApplicationController::renameEntry()
 {
-    ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
 
     OSL_ENSURE(getContainer(),"View is NULL! -> GPF");
@@ -2834,7 +2834,7 @@ void SAL_CALL OApplicationController::removeSelectionChangeListener( const Refer
 // -----------------------------------------------------------------------------
 ::sal_Bool SAL_CALL OApplicationController::select( const Any& _aSelection ) throw (IllegalArgumentException, RuntimeException)
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
     Sequence< ::rtl::OUString> aSelection;
     if ( !_aSelection.hasValue() || !getView() )
@@ -2957,7 +2957,7 @@ void SAL_CALL OApplicationController::removeSelectionChangeListener( const Refer
 // -----------------------------------------------------------------------------
 Any SAL_CALL OApplicationController::getSelection(  ) throw (RuntimeException)
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
 
     Sequence< NamedDatabaseObject > aCurrentSelection;

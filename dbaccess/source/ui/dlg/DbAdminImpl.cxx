@@ -323,7 +323,7 @@ sal_Bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< Propert
             // handle the request
             try
             {
-                ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
+                SolarMutexGuard aSolarGuard;
                 // release the mutex when calling the handler, it may need to lock the SolarMutex
                 xHandler->handle(xRequest);
             }

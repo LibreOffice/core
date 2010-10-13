@@ -592,7 +592,7 @@ sal_Bool SAL_CALL OTableController::suspend(sal_Bool /*_bSuspend*/) throw( Runti
     if ( getBroadcastHelper().bInDispose || getBroadcastHelper().bDisposed )
         return sal_True;
 
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
     if ( getView() && getView()->IsInModalMode() )
         return sal_False;

@@ -219,7 +219,7 @@ void SafeRemovePropertyListener(const Reference< XPropertySet > & xSet, const ::
 //-------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL SbaTableQueryBrowser::Create(const Reference<XMultiServiceFactory >& _rxFactory)
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return *(new SbaTableQueryBrowser(_rxFactory));
 }
 
@@ -316,7 +316,7 @@ Sequence< sal_Int8 > SAL_CALL SbaTableQueryBrowser::getImplementationId(  ) thro
 //------------------------------------------------------------------------------
 void SAL_CALL SbaTableQueryBrowser::disposing()
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
         // doin' a lot of VCL stuff here -> lock the SolarMutex
 
     // kiss our listeners goodbye
@@ -870,7 +870,7 @@ void SbaTableQueryBrowser::propertyChange(const PropertyChangeEvent& evt) throw(
 // -----------------------------------------------------------------------
 sal_Bool SbaTableQueryBrowser::suspend(sal_Bool bSuspend) throw( RuntimeException )
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
     if ( getView() && getView()->IsInModalMode() )
         return sal_False;
@@ -1350,7 +1350,7 @@ void SbaTableQueryBrowser::implRemoveStatusListeners()
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL SbaTableQueryBrowser::select( const Any& _rSelection ) throw (IllegalArgumentException, RuntimeException)
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
         // doin' a lot of VCL stuff here -> lock the SolarMutex
 
     Sequence< PropertyValue > aDescriptorSequence;
@@ -1971,7 +1971,7 @@ void SbaTableQueryBrowser::implAddDatasource(const String& _rDbName, Image& _rDb
         String& _rQueryName, Image& _rQueryImage, String& _rTableName, Image& _rTableImage,
         const SharedConnection& _rxConnection)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     // initialize the names/images if necessary
     if (!_rQueryName.Len())
         _rQueryName = String(ModuleRes(RID_STR_QUERIES_CONTAINER));
@@ -2671,7 +2671,7 @@ SvLBoxEntry* SbaTableQueryBrowser::getEntryFromContainer(const Reference<XNameAc
 // -------------------------------------------------------------------------
 void SAL_CALL SbaTableQueryBrowser::elementInserted( const ContainerEvent& _rEvent ) throw(RuntimeException)
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     Reference< XNameAccess > xNames(_rEvent.Source, UNO_QUERY);
     // first search for a definition container where we can insert this element
@@ -2716,7 +2716,7 @@ sal_Bool SbaTableQueryBrowser::isCurrentlyDisplayedChanged(const String& _sName,
 // -------------------------------------------------------------------------
 void SAL_CALL SbaTableQueryBrowser::elementRemoved( const ContainerEvent& _rEvent ) throw(RuntimeException)
 {
-    ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
 
     Reference< XNameAccess > xNames(_rEvent.Source, UNO_QUERY);
     // get the top-level representing the removed data source
@@ -2769,7 +2769,7 @@ void SAL_CALL SbaTableQueryBrowser::elementRemoved( const ContainerEvent& _rEven
 // -------------------------------------------------------------------------
 void SAL_CALL SbaTableQueryBrowser::elementReplaced( const ContainerEvent& _rEvent ) throw(RuntimeException)
 {
-    ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
 
     Reference< XNameAccess > xNames(_rEvent.Source, UNO_QUERY);
     SvLBoxEntry* pContainer = getEntryFromContainer(xNames);
@@ -3006,7 +3006,7 @@ namespace
 // -------------------------------------------------------------------------
 void SbaTableQueryBrowser::impl_initialize()
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
         // doin' a lot of VCL stuff here -> lock the SolarMutex
 
     // first initialize the parent
@@ -3701,7 +3701,7 @@ void SAL_CALL SbaTableQueryBrowser::releaseContextMenuInterceptor( const Referen
 //------------------------------------------------------------------------------
 void SAL_CALL SbaTableQueryBrowser::registeredDatabaseLocation( const DatabaseRegistrationEvent& _Event ) throw (RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     implAddDatasource( _Event.Name, SharedConnection() );
 }
 
@@ -3758,7 +3758,7 @@ void SbaTableQueryBrowser::impl_cleanupDataSourceEntry( const String& _rDataSour
 //------------------------------------------------------------------------------
 void SAL_CALL SbaTableQueryBrowser::revokedDatabaseLocation( const DatabaseRegistrationEvent& _Event ) throw (RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     impl_cleanupDataSourceEntry( _Event.Name );
 
@@ -3769,7 +3769,7 @@ void SAL_CALL SbaTableQueryBrowser::revokedDatabaseLocation( const DatabaseRegis
 //------------------------------------------------------------------------------
 void SAL_CALL SbaTableQueryBrowser::changedDatabaseLocation( const DatabaseRegistrationEvent& _Event ) throw (RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     // in case the data source was expanded, and connected, we need to clean it up
     // for simplicity, just do as if the data source were completely removed and re-added

@@ -409,7 +409,7 @@ sal_Bool SAL_CALL ODBFilter::filter( const Sequence< PropertyValue >& rDescripto
 {
     uno::Reference< ::com::sun::star::awt::XWindow > xWindow;
     {
-        ::vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         Window*     pFocusWindow = Application::GetFocusWindow();
         xWindow = VCLUnoHelper::GetInterface( pFocusWindow );
         if( pFocusWindow )
@@ -422,7 +422,7 @@ sal_Bool SAL_CALL ODBFilter::filter( const Sequence< PropertyValue >& rDescripto
 
     if ( xWindow.is() )
     {
-        ::vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         Window* pFocusWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pFocusWindow )
             pFocusWindow->LeaveWait();

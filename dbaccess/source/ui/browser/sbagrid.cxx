@@ -329,7 +329,7 @@ void SAL_CALL SbaXGridControl::removeStatusListener(const Reference< ::com::sun:
 //---------------------------------------------------------------------------------------
 void SAL_CALL SbaXGridControl::dispose(void) throw( RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     EventObject aEvt;
     aEvt.Source = *this;
@@ -504,7 +504,7 @@ void SAL_CALL SbaXGridPeer::dispatch(const URL& aURL, const Sequence< PropertyVa
         return;
     }
 
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     sal_Int16 nColId = -1;
     const PropertyValue* pArgs = aArgs.getConstArray();
     for (sal_uInt16 i=0; i<aArgs.getLength(); ++i, ++pArgs)
@@ -660,7 +660,7 @@ SbaGridHeader::SbaGridHeader(BrowseBox* pParent, WinBits nWinBits)
 //---------------------------------------------------------------------------------------
 void SbaGridHeader::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
         // in the new DnD API, the solar mutex is not locked when StartDrag get's called
 
     ImplStartColumnDrag( _nAction, _rPosPixel );
@@ -1172,7 +1172,7 @@ void SbaGridControl::MouseButtonDown( const BrowserMouseEvent& rMEvt)
 //---------------------------------------------------------------------------------------
 void SbaGridControl::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
         // in the new DnD API, the solar mutex is not locked when StartDrag get's called
 
     sal_Bool bHandled = sal_False;
@@ -1652,7 +1652,7 @@ IMPL_LINK(SbaGridControl, AsynchDropEvent, void*, /*EMPTY_ARG*/)
     ::rtl::OUString sRet;
     if ( ::svt::BBTYPE_BROWSEBOX == eObjType )
     {
-        ::vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         sRet = String(ModuleRes(STR_DATASOURCE_GRIDCONTROL_DESC));
     }
     else

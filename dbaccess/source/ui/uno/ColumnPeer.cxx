@@ -59,7 +59,7 @@ OColumnPeer::OColumnPeer(Window* _pParent,const Reference<XMultiServiceFactory>&
 // -----------------------------------------------------------------------------
 void OColumnPeer::setEditWidth(sal_Int32 _nWidth)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     OColumnControlWindow* pFieldControl = static_cast<OColumnControlWindow*>( GetWindow() );
     if ( pFieldControl )
@@ -70,7 +70,7 @@ void OColumnPeer::setEditWidth(sal_Int32 _nWidth)
 // -----------------------------------------------------------------------------
 void OColumnPeer::setColumn(const Reference< XPropertySet>& _xColumn)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     OColumnControlWindow* pFieldControl = static_cast<OColumnControlWindow*>( GetWindow() );
     if ( pFieldControl )
@@ -118,7 +118,7 @@ void OColumnPeer::setColumn(const Reference< XPropertySet>& _xColumn)
 // -----------------------------------------------------------------------------
 void OColumnPeer::setConnection(const Reference< XConnection>& _xCon)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     OColumnControlWindow* pFieldControl = static_cast<OColumnControlWindow*>( GetWindow() );
     if ( pFieldControl )
         pFieldControl->setConnection(_xCon);
@@ -126,7 +126,7 @@ void OColumnPeer::setConnection(const Reference< XConnection>& _xCon)
 //------------------------------------------------------------------------------
 void OColumnPeer::setProperty( const ::rtl::OUString& _rPropertyName, const Any& Value) throw( RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if ( 0 == _rPropertyName.compareToAscii( PROPERTY_COLUMN ) )
     {

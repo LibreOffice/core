@@ -533,7 +533,7 @@ Reference< XComponent > SAL_CALL ODocumentContainer::loadComponentFromURL( const
                                                                        , sal_Int32 /*SearchFlags*/
                                                                        , const Sequence< PropertyValue >& Arguments ) throw (IOException, IllegalArgumentException, RuntimeException)
 {
-    vos::OGuard aSolarGuard(Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
 
     MutexGuard aGuard(m_aMutex);
     Reference< XComponent > xComp;

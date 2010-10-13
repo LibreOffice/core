@@ -702,7 +702,7 @@ void ORptExport::exportReportComponentAutoStyles(const Reference<XSection>& _xPr
         {
             UniReference< XMLShapeExport > xShapeExport = GetShapeExport();
             xShapeExport->seekShapes(_xProp.get());
-            vos::OGuard aGuard(Application::GetSolarMutex());
+            SolarMutexGuard aGuard;
             xShapeExport->collectShapeAutoStyles(xShape.get());
         }
         else

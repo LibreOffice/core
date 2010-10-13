@@ -113,7 +113,7 @@ namespace dbaccess
             // unfortunately, executing a script can trigger all kind of complex stuff, and unfortunately, not
             // every component involved into this properly cares for thread safety. To be on the safe side,
             // we lock the solar mutex here.
-            ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aSolarGuard;
 
             Reference< XDispatch > xDispatch( xDispProv->queryDispatch( aScriptURL, ::rtl::OUString(), 0 ) );
             if ( !xDispatch.is() )

@@ -1016,7 +1016,7 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
         // However, we do /not/ have control over the EmbeddedObject implementation, and from a first look, it seems as
         // making it release the own mutex before calling SolarMutex-code is ... difficult, at least.
         // So, to be on the same side, we lock the SolarMutex here. Yes, it sucks.
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         ::osl::ClearableMutexGuard aGuard(m_aMutex);
         if ( m_bInExecute )
             return aRet;
@@ -1271,7 +1271,7 @@ sal_Bool ODocumentDefinition::save(sal_Bool _bApprove)
     {
 
         {
-            ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
+            SolarMutexGuard aSolarGuard;
 
             // the request
             Reference<XNameAccess> xName(m_xParentContainer,UNO_QUERY);
@@ -1367,7 +1367,7 @@ sal_Bool ODocumentDefinition::saveAs()
     try
     {
         {
-            ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
+            SolarMutexGuard aSolarGuard;
 
             // the request
             Reference<XNameAccess> xName(m_xParentContainer,UNO_QUERY);
