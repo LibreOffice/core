@@ -178,7 +178,7 @@ oslFileError osl_getVolumeInformation( rtl_uString* ustrDirectoryURL, oslVolumeI
 
 #ifdef HAVE_STATFS_H
 
-#if defined(FREEBSD) || defined(NETBSD) || defined(MACOSX)
+#if defined(FREEBSD) || defined(MACOSX)
 #   define __OSL_STATFS_STRUCT                  struct statfs
 #   define __OSL_STATFS(dir, sfs)               statfs((dir), (sfs))
 #   define __OSL_STATFS_BLKSIZ(a)               ((sal_uInt64)((a).f_bsize))
@@ -190,7 +190,33 @@ oslFileError osl_getVolumeInformation( rtl_uString* ustrDirectoryURL, oslVolumeI
    of the target platforms fix it!!!! */
 #   define __OSL_STATFS_IS_CASE_SENSITIVE_FS(a)  (1)
 #   define __OSL_STATFS_IS_CASE_PRESERVING_FS(a) (1)
-#endif /* FREEBSD || NETBSD || MACOSX */
+#endif /* FREEBSD || MACOSX */
+
+#if defined(NETBSD)
+
+#include <sys/param.h>
+
+/* statvfs() replaced statfs() in 2.99.9 */
+# if __NetBSD_Version__ >= 299000900
+       /* 2.0D or later */
+#   define __OSL_STATFS_STRUCT              struct statvfs
+#   define __OSL_STATFS(dir, sfs)           statvfs((dir), (sfs))
+#   define __OSL_STATFS_ISREMOTE(a)         (((a).f_flag & ST_LOCAL) == 0)
+
+# else
+       /* version before 2.0D */
+#   define __OSL_STATFS_STRUCT              struct statfs
+#   define __OSL_STATFS(dir, sfs)           statfs((dir), (sfs))
+#   define __OSL_STATFS_ISREMOTE(a)         (((a).f_type & MNT_LOCAL) == 0)
+
+# endif /* >2.0D */
+
+#   define __OSL_STATFS_BLKSIZ(a)           ((sal_uInt64)((a).f_bsize))
+#   define __OSL_STATFS_TYPENAME(a)         ((a).f_fstypename)
+
+#   define __OSL_STATFS_IS_CASE_SENSITIVE_FS(a) (strcmp((a).f_fstypename, "msdos") != 0 && strcmp((a).f_fstypename, "ntfs") != 0 && strcmp((a).f_fstypename, "smbfs") != 0)
+#   define __OSL_STATFS_IS_CASE_PRESERVING_FS(a)    (strcmp((a).f_fstypename, "msdos") != 0)
+#endif /* NETBSD */
 
 #if defined(LINUX)
 #   define __OSL_NFS_SUPER_MAGIC                 0x6969
