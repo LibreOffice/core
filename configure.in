@@ -6712,6 +6712,7 @@ if test "$test_kde4" = "yes" -a "$ENABLE_KDE4" = "TRUE" ; then
    for lib_dir in $qt_libdirs ; do
       if test -r "$lib_dir/$qt_test_library" ; then
          qt_lib_dir="$lib_dir"
+         PKG_CONFIG_PATH="$qt_lib_dir"/pkgconfig:$PKG_CONFIG_PATH
          break
       fi
    done
