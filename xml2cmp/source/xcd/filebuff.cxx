@@ -25,6 +25,10 @@
  *
  ************************************************************************/
 
+#ifdef AIX
+#    undef _THREAD_SAFE
+#endif
+
 #include "filebuff.hxx"
 
 #include <string.h>
