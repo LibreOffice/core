@@ -376,7 +376,7 @@ void UpdateCheckUI::AddMenuBarIcon( SystemWindow *pSysWin, bool bAddEventHdl )
     if ( ! mbShowMenuIcon )
         return;
 
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     MenuBar *pActiveMBar = pSysWin->GetMenuBar();
     if ( ( pSysWin != mpIconSysWin ) || ( pActiveMBar != mpIconMBar ) )
@@ -428,7 +428,7 @@ void UpdateCheckUI::AddMenuBarIcon( SystemWindow *pSysWin, bool bAddEventHdl )
 void SAL_CALL UpdateCheckUI::notifyEvent(const document::EventObject& rEvent)
     throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if( rEvent.EventName.compareToAscii( RTL_CONSTASCII_STRINGPARAM("OnPrepareViewClosing") ) == 0 )
     {
@@ -455,7 +455,7 @@ void UpdateCheckUI::setPropertyValue(const rtl::OUString& rPropertyName,
     throw( beans::UnknownPropertyException, beans::PropertyVetoException,
            lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     rtl::OUString aString;
 
@@ -519,7 +519,7 @@ void UpdateCheckUI::setPropertyValue(const rtl::OUString& rPropertyName,
 uno::Any UpdateCheckUI::getPropertyValue(const rtl::OUString& rPropertyName)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     uno::Any aRet;
 
@@ -612,7 +612,7 @@ BubbleWindow * UpdateCheckUI::GetBubbleWindow()
 //------------------------------------------------------------------------------
 void UpdateCheckUI::RemoveBubbleWindow( bool bRemoveIcon )
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     maWaitTimer.Stop();
     maTimeoutTimer.Stop();
@@ -645,7 +645,7 @@ void UpdateCheckUI::RemoveBubbleWindow( bool bRemoveIcon )
 // -----------------------------------------------------------------------
 IMPL_LINK( UpdateCheckUI, ClickHdl, USHORT*, EMPTYARG )
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     maWaitTimer.Stop();
     if ( mpBubbleWin )
@@ -679,7 +679,7 @@ IMPL_LINK( UpdateCheckUI, HighlightHdl, MenuBar::MenuBarButtonCallbackArg*, pDat
 // -----------------------------------------------------------------------
 IMPL_LINK( UpdateCheckUI, WaitTimeOutHdl, Timer*, EMPTYARG )
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     mpBubbleWin = GetBubbleWindow();
 
@@ -702,7 +702,7 @@ IMPL_LINK( UpdateCheckUI, TimeOutHdl, Timer*, EMPTYARG )
 // -----------------------------------------------------------------------
 IMPL_LINK( UpdateCheckUI, UserEventHdl, UpdateCheckUI*, EMPTYARG )
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     Window *pTopWin = Application::GetFirstTopLevelWindow();
     Window *pActiveWin = Application::GetActiveTopWindow();
@@ -739,7 +739,7 @@ IMPL_LINK( UpdateCheckUI, WindowEventHdl, VclWindowEvent*, pEvent )
 
     if ( VCLEVENT_OBJECT_DYING == nEventID )
     {
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         if ( mpIconSysWin == pEvent->GetWindow() )
         {
             mpIconSysWin->RemoveEventListener( maWindowEventHdl );
@@ -748,7 +748,7 @@ IMPL_LINK( UpdateCheckUI, WindowEventHdl, VclWindowEvent*, pEvent )
     }
     else if ( VCLEVENT_WINDOW_MENUBARADDED == nEventID )
     {
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         Window *pWindow = pEvent->GetWindow();
         if ( pWindow )
         {
@@ -761,7 +761,7 @@ IMPL_LINK( UpdateCheckUI, WindowEventHdl, VclWindowEvent*, pEvent )
     }
     else if ( VCLEVENT_WINDOW_MENUBARREMOVED == nEventID )
     {
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         MenuBar *pMBar = (MenuBar*) pEvent->GetData();
         if ( pMBar && ( pMBar == mpIconMBar ) )
             RemoveBubbleWindow( true );
@@ -769,7 +769,7 @@ IMPL_LINK( UpdateCheckUI, WindowEventHdl, VclWindowEvent*, pEvent )
     else if ( ( nEventID == VCLEVENT_WINDOW_MOVE ) ||
               ( nEventID == VCLEVENT_WINDOW_RESIZE ) )
     {
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         if ( ( mpIconSysWin == pEvent->GetWindow() ) &&
              ( mpBubbleWin != NULL ) && ( mpIconMBar != NULL ) )
         {
@@ -792,7 +792,7 @@ IMPL_LINK( UpdateCheckUI, ApplicationEventHdl, VclSimpleEvent *, pEvent)
         case VCLEVENT_WINDOW_SHOW:
         case VCLEVENT_WINDOW_ACTIVATE:
         case VCLEVENT_WINDOW_GETFOCUS: {
-            vos::OGuard aGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
 
             Window *pWindow = static_cast< VclWindowEvent * >(pEvent)->GetWindow();
             if ( pWindow && pWindow->IsTopWindow() )
@@ -845,7 +845,7 @@ BubbleWindow::~BubbleWindow()
 //------------------------------------------------------------------------------
 void BubbleWindow::Resize()
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     FloatingWindow::Resize();
 
@@ -888,7 +888,7 @@ void BubbleWindow::SetTitleAndText( const XubString& rTitle,
 //------------------------------------------------------------------------------
 void BubbleWindow::Paint( const Rectangle& )
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     LineInfo aThickLine( LINE_SOLID, 2 );
 
@@ -934,7 +934,7 @@ void BubbleWindow::MouseButtonDown( const MouseEvent& )
 //------------------------------------------------------------------------------
 void BubbleWindow::Show( BOOL bVisible, USHORT nFlags )
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if ( !bVisible )
     {

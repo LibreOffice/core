@@ -1647,7 +1647,7 @@ SvxScriptErrorDialog::SvxScriptErrorDialog(
     Window* , ::com::sun::star::uno::Any aException )
     : m_sMessage()
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     m_sMessage = GetErrorMessage( aException );
 }
 

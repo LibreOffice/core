@@ -74,7 +74,7 @@ void BibToolBarListener::statusChanged(const ::com::sun::star::frame::FeatureSta
 {
     if(rEvt.FeatureURL.Complete == aCommand)
     {
-        vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         pToolBar->EnableItem(nIndex,rEvt.IsEnabled);
 
         ::com::sun::star::uno::Any aState=rEvt.State;
@@ -109,7 +109,7 @@ void BibTBListBoxListener::statusChanged(const ::com::sun::star::frame::FeatureS
 {
     if(rEvt.FeatureURL.Complete == GetCommand())
     {
-        vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         pToolBar->EnableSourceList(rEvt.IsEnabled);
 
         Any aState = rEvt.State;
@@ -149,7 +149,7 @@ void BibTBQueryMenuListener::statusChanged(const frame::FeatureStateEvent& rEvt)
 {
     if(rEvt.FeatureURL.Complete == GetCommand())
     {
-        vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         pToolBar->EnableSourceList(rEvt.IsEnabled);
 
         uno::Any aState=rEvt.State;
@@ -187,7 +187,7 @@ void BibTBEditListener::statusChanged(const frame::FeatureStateEvent& rEvt)throw
 {
     if(rEvt.FeatureURL.Complete == GetCommand())
     {
-        vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         pToolBar->EnableQuery(rEvt.IsEnabled);
 
         uno::Any aState=rEvt.State;

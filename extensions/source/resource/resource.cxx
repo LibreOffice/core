@@ -157,7 +157,7 @@ Sequence< OUString > ResourceService::getSupportedServiceNames_Static(void) thro
 // ResourceService
 Reference< XTypeConverter > ResourceService::getTypeConverter() const
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if( xSMgr.is() )
     {
         Reference< XTypeConverter > xConv( xSMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter" ))), UNO_QUERY );
@@ -169,7 +169,7 @@ Reference< XTypeConverter > ResourceService::getTypeConverter() const
 // ResourceService
 Reference< XInvocation > ResourceService::getDefaultInvocation() const
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     /* f�hrt zur Zeit noch zu einer rekursion
     if( xSMgr.is() )
     {
@@ -256,7 +256,7 @@ Any SAL_CALL ResourceService::invoke
         Reference< XTypeConverter > xC = getTypeConverter();
         bool bGetBranch = FunctionName.equalsAscii( "getString" ) || FunctionName.equalsAscii( "getStrings" );
 
-        OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         for( sal_Int32 n = 0; n < nElements; n++ )
         {
             sal_Int32 nId = 0;
@@ -310,7 +310,7 @@ Any SAL_CALL ResourceService::invoke
         if( Params.getLength() != 1 )
             throw IllegalArgumentException();
         Reference< XTypeConverter > xC = getTypeConverter();
-        OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         sal_Int32 nId = 0;
         if( !(Params.getConstArray()[0] >>= nId) )
@@ -384,7 +384,7 @@ void SAL_CALL ResourceService::setValue(const OUString& PropertyName, const Any&
                 throw CannotConvertException();
         }
 
-        OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         OStringBuffer aBuf( aName.getLength()+8 );
         aBuf.append( OUStringToOString( aName, osl_getThreadTextEncoding() ) );
         ResMgr * pRM = ResMgr::CreateResMgr( aBuf.getStr() );
@@ -409,7 +409,7 @@ void SAL_CALL ResourceService::setValue(const OUString& PropertyName, const Any&
 Any SAL_CALL ResourceService::getValue(const OUString& PropertyName)
     throw(UnknownPropertyException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if( PropertyName.equalsAscii("FileName" ))
         return makeAny( aFileName );
 

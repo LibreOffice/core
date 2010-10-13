@@ -2227,7 +2227,7 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const ::com:
     ::rtl::OUString aTargetName;
     Reference< XModel >  xModel;
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         // starform->Forms
 
         Reference<XChild>  xParent(m_xParent, UNO_QUERY);
@@ -2262,7 +2262,7 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const ::com:
     {
         ::rtl::OUString aData;
         {
-            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
             aData = GetDataURLEncoded( Control, MouseEvt );
         }
 
@@ -2309,7 +2309,7 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const ::com:
             ::rtl::OUString aContentType;
             Sequence<sal_Int8> aData;
             {
-                ::vos::OGuard aGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aGuard;
                 aData = GetDataMultiPartEncoded(Control, MouseEvt, aContentType);
             }
             if (!aData.getLength())
@@ -2334,7 +2334,7 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const ::com:
     {
         ::rtl::OUString aData;
         {
-            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
             aData = GetDataTextEncoded( Reference<XControl> (), MouseEvt );
         }
 

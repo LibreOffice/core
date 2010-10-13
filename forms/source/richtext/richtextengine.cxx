@@ -95,7 +95,7 @@ namespace frm
     {
         RichTextEngine* pClone( NULL );
         {
-            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
             EditTextObject* pMyText = CreateTextObject();
             OSL_ENSURE( pMyText, "RichTextEngine::Clone: CreateTextObject returned nonsense!" );
 

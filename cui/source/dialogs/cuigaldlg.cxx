@@ -137,7 +137,7 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
                                BOOL bRecursive )
 {
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         mpProgress->SetDirectory( rStartURL );
         mpProgress->Sync();
@@ -192,7 +192,7 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
                                          String(aFoundURL.GetExtension().toAsciiLowerCase()) )
                             != rFormats.end() )
                         {
-                            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+                            SolarMutexGuard aGuard;
 
                             mpBrowser->aFoundList.Insert(
                                 new String( aFoundURL.GetMainURL( INetURLObject::NO_DECODE ) ),
@@ -305,7 +305,7 @@ void SAL_CALL TakeThread::run()
     GalleryProgress*    pStatusProgress;
 
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         pStatusProgress = new GalleryProgress;
         nEntries = mpBrowser->bTakeAll ? mpBrowser->aLbxFound.GetEntryCount() : mpBrowser->aLbxFound.GetSelectEntryCount();
         pThm->LockBroadcaster();
@@ -323,7 +323,7 @@ void SAL_CALL TakeThread::run()
         mrTakenList.Insert( (void*) (ULONG)nPos, LIST_APPEND );
 
         {
-            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
 
             mpProgress->SetFile( aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) );
             pStatusProgress->Update( i, nEntries - 1 );
@@ -333,7 +333,7 @@ void SAL_CALL TakeThread::run()
     }
 
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         pThm->UnlockBroadcaster();
         delete pStatusProgress;

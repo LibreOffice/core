@@ -693,7 +693,7 @@ void OFormattedModel::loaded(const EventObject& rEvent) throw ( ::com::sun::star
     // the only "clean" solution for me.
     // FS - 69603 - 02.11.99
 
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     OEditBaseModel::loaded(rEvent);
 }
 

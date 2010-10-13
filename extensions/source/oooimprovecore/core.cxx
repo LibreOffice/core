@@ -133,7 +133,7 @@ namespace oooimprovecore
         else
             help_url = OUString::createFromAscii("http://www.openoffice.org");
         {
-            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
             SfxAllItemSet aSet( SFX_APP()->GetPool() );
             aSet.Put( SfxStringItem( SID_CURRENT_URL, help_url ) );
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();

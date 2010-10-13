@@ -471,7 +471,7 @@ namespace frm
     //--------------------------------------------------------------------
     void SAL_CALL FormOperations::execute( ::sal_Int16 _nFeature ) throw (RuntimeException, IllegalArgumentException, SQLException, WrappedTargetException)
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         MethodGuard aGuard( *this );
 
         if ( ( _nFeature != FormFeature::DeleteRecord ) && ( _nFeature != FormFeature::UndoRecordChanges ) )
@@ -744,7 +744,7 @@ namespace frm
             return;
         }
 
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         MethodGuard aGuard( *this );
 
         // at the moment we have only one feature which supports execution parameters

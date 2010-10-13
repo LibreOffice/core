@@ -244,7 +244,7 @@ namespace pcr
     //--------------------------------------------------------------------
     void SAL_CALL PropertyControlContext_Impl::dispose()
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         if ( impl_isDisposed_nothrow() )
             return;
 
@@ -255,7 +255,7 @@ namespace pcr
     //--------------------------------------------------------------------
     void PropertyControlContext_Impl::setNotificationMode( NotifcationMode _eMode )
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         m_eMode = _eMode;
     }
 
@@ -265,7 +265,7 @@ namespace pcr
         ::comphelper::AnyEventRef pEvent;
 
         {
-            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
             impl_checkAlive_throw();
             pEvent = new ControlEvent( _rxControl, _eType );
 
@@ -315,7 +315,7 @@ namespace pcr
     //--------------------------------------------------------------------
     void PropertyControlContext_Impl::processEvent( const ::comphelper::AnyEvent& _rEvent )
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         if ( impl_isDisposed_nothrow() )
             return;
 

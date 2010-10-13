@@ -70,13 +70,13 @@ uno::Any SAL_CALL SIDEModel::queryInterface( const uno::Type& rType ) throw(uno:
 
 void SAL_CALL SIDEModel::acquire() throw()
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     OWeakObject::acquire();
 }
 
 void SAL_CALL SIDEModel::release() throw()
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     OWeakObject::release();
 }
 
@@ -121,7 +121,7 @@ uno::Sequence< OUString > SIDEModel::getSupportedServiceNames_Static(void)
 uno::Reference< uno::XInterface > SAL_CALL SIDEModel_createInstance(
                 const uno::Reference< lang::XMultiServiceFactory > & ) throw( uno::Exception )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     BasicIDEDLL::Init();
     SfxObjectShell* pShell = new BasicDocShell();
     return uno::Reference< uno::XInterface >( pShell->GetModel() );

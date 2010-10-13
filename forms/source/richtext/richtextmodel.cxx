@@ -507,7 +507,7 @@ namespace frm
     {
         if ( m_pEngine.get() )
         {
-            ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aSolarGuard;
             m_bSettingEngineText = true;
             m_pEngine->SetText( _rText );
             m_bSettingEngineText = false;

@@ -906,7 +906,7 @@ bool OImageControlControl::impl_isEmptyGraphics_nothrow() const
 //------------------------------------------------------------------------------
 void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent& e) throw ( ::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if (e.Buttons != MouseButton::LEFT)
         return;

@@ -518,7 +518,7 @@ void OButtonControl::actionPerformed_Impl( sal_Bool _bNotifyListener, const ::co
             if ( !approveAction() )
                 return;
 
-            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
             dispatch( nFeatureId );
             return;
         }

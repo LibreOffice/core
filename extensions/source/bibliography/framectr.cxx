@@ -186,7 +186,7 @@ void BibFrameCtrl_Impl::frameAction(const FrameActionEvent& aEvent) throw( uno::
 void BibFrameCtrl_Impl::disposing( const lang::EventObject& /*Source*/ )
     throw (::com::sun::star::uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if ( pController )
         pController->getFrame()->removeFrameActionListener( this );
 }
@@ -441,7 +441,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
 {
     if ( !bDisposing )
     {
-        vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         Window* pParent = VCLUnoHelper::GetWindow( xWindow );
         WaitObject aWaitObject( pParent );
 

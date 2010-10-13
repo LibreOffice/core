@@ -213,7 +213,7 @@ namespace frm
         Reference< XInterface > xModelsParent;
         FormButtonType eButtonType = FormButtonType_PUSH;
         {
-            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
 
             // Parent holen
             Reference<XFormComponent>  xComp(getModel(), UNO_QUERY);
@@ -261,7 +261,7 @@ namespace frm
 
             case FormButtonType_URL:
             {
-                ::vos::OGuard aGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aGuard;
 
                 Reference< XModel >  xModel = getXModel(xModelsParent);
                 if (!xModel.is())

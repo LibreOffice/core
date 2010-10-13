@@ -287,7 +287,7 @@ void BibliographyLoader::load(const Reference< XFrame > & rFrame, const rtl::OUS
 {
     //!
 
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     m_pBibMod = OpenBibModul();
 
     String aURLStr( rURL );
@@ -310,7 +310,7 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const rtl:
         const Sequence< PropertyValue >& /*rArgs*/,
         const Reference< XLoadEventListener > & rListener)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     //!
     if(!m_pBibMod)
         m_pBibMod = OpenBibModul();
