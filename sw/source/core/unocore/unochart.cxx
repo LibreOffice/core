@@ -84,8 +84,6 @@ extern int lcl_CompareCellRanges(
         sal_Bool bCmpColsFirst );
 extern void lcl_NormalizeRange( String &rCell1, String &rCell2 );
 
-//////////////////////////////////////////////////////////////////////
-
 //static
 void SwChartHelper::DoUpdateAllCharts( SwDoc* pDoc )
 {
@@ -123,8 +121,6 @@ void SwChartHelper::DoUpdateAllCharts( SwDoc* pDoc )
     }
 }
 
-//////////////////////////////////////////////////////////////////////
-
 SwChartLockController_Helper::SwChartLockController_Helper( SwDoc *pDocument ) :
     pDoc( pDocument )
 {
@@ -132,13 +128,11 @@ SwChartLockController_Helper::SwChartLockController_Helper( SwDoc *pDocument ) :
     aUnlockTimer.SetTimeoutHdl( LINK( this, SwChartLockController_Helper, DoUnlockAllCharts ));
 }
 
-
 SwChartLockController_Helper::~SwChartLockController_Helper()
 {
     if (pDoc)   // still connected?
         Disconnect();
 }
-
 
 void SwChartLockController_Helper::StartOrContinueLocking()
 {
@@ -147,14 +141,12 @@ void SwChartLockController_Helper::StartOrContinueLocking()
     aUnlockTimer.Start();   // start or continue time of locking
 }
 
-
 void SwChartLockController_Helper::Disconnect()
 {
     aUnlockTimer.Stop();
     UnlockAllCharts();
     pDoc = 0;
 }
-
 
 void SwChartLockController_Helper::LockUnlockAllCharts( sal_Bool bLock )
 {
@@ -205,22 +197,17 @@ void SwChartLockController_Helper::LockUnlockAllCharts( sal_Bool bLock )
     bIsLocked = bLock;
 }
 
-
 IMPL_LINK( SwChartLockController_Helper, DoUnlockAllCharts, Timer *, /*pTimer*/ )
 {
     UnlockAllCharts();
     return 0;
 }
 
-
-//////////////////////////////////////////////////////////////////////
-
 static osl::Mutex &    GetChartMutex()
 {
     static osl::Mutex   aMutex;
     return aMutex;
 }
-
 
 static void LaunchModifiedEvent(
         ::cppu::OInterfaceContainerHelper &rICH,
@@ -235,8 +222,6 @@ static void LaunchModifiedEvent(
             xRef->modified( aEvtObj );
     }
 }
-
-//////////////////////////////////////////////////////////////////////
 
 // rCellRangeName needs to be of one of the following formats:
 // - e.g. "A2:E5" or
@@ -265,7 +250,6 @@ sal_Bool FillRangeDescriptor(
             "invalid range descriptor");
     return sal_True;
 }
-
 
 static String GetCellRangeName( SwFrmFmt &rTblFmt, SwUnoCrsr &rTblCrsr )
 {
@@ -315,7 +299,6 @@ static String GetCellRangeName( SwFrmFmt &rTblFmt, SwUnoCrsr &rTblCrsr )
     return aRes;
 }
 
-
 static String GetRangeRepFromTableAndCells( const String &rTableName,
         const String &rStartCell, const String &rEndCell,
         sal_Bool bForceEndCellName )
@@ -339,7 +322,6 @@ static String GetRangeRepFromTableAndCells( const String &rTableName,
 
     return aRes;
 }
-
 
 static sal_Bool GetTableAndCellsFromRangeRep(
         const OUString &rRangeRepresentation,
@@ -391,7 +373,6 @@ static sal_Bool GetTableAndCellsFromRangeRep(
     return bSuccess;
 }
 
-
 static void GetTableByName( const SwDoc &rDoc, const String &rTableName,
         SwFrmFmt **ppTblFmt, SwTable **ppTable)
 {
@@ -413,7 +394,6 @@ static void GetTableByName( const SwDoc &rDoc, const String &rTableName,
     if (ppTable)
         *ppTable = pTblFmt ? SwTable::FindTable( pTblFmt ) : 0;
 }
-
 
 static void GetFormatAndCreateCursorFromRangeRep(
         const SwDoc    *pDoc,
@@ -495,7 +475,6 @@ static void GetFormatAndCreateCursorFromRangeRep(
     }
 }
 
-
 static sal_Bool GetSubranges( const OUString &rRangeRepresentation,
         uno::Sequence< OUString > &rSubRanges, sal_Bool bNormalize )
 {
@@ -543,7 +522,6 @@ static sal_Bool GetSubranges( const OUString &rRangeRepresentation,
     return bRes;
 }
 
-
 static void SortSubranges( uno::Sequence< OUString > &rSubRanges, sal_Bool bCmpByColumn )
 {
     sal_Int32 nLen = rSubRanges.getLength();
@@ -590,15 +568,12 @@ static void SortSubranges( uno::Sequence< OUString > &rSubRanges, sal_Bool bCmpB
     }
 }
 
-//////////////////////////////////////////////////////////////////////
-
 SwChartDataProvider::SwChartDataProvider( const SwDoc* pSwDoc ) :
     aEvtListeners( GetChartMutex() ),
     pDoc( pSwDoc )
 {
     bDisposed = sal_False;
 }
-
 
 SwChartDataProvider::~SwChartDataProvider()
 {
@@ -1508,14 +1483,12 @@ uno::Reference< chart2::data::XDataSequence > SAL_CALL SwChartDataProvider::crea
     return Impl_createDataSequenceByRangeRepresentation( rRangeRepresentation );
 }
 
-
 uno::Reference< sheet::XRangeSelection > SAL_CALL SwChartDataProvider::getRangeSelection(  )
     throw (uno::RuntimeException)
 {
     // note: it is no error to return nothing here
     return uno::Reference< sheet::XRangeSelection >();
 }
-
 
 void SAL_CALL SwChartDataProvider::dispose(  )
     throw (uno::RuntimeException)
@@ -1545,7 +1518,6 @@ void SAL_CALL SwChartDataProvider::dispose(  )
     }
 }
 
-
 void SAL_CALL SwChartDataProvider::addEventListener(
         const uno::Reference< lang::XEventListener >& rxListener )
     throw (uno::RuntimeException)
@@ -1554,7 +1526,6 @@ void SAL_CALL SwChartDataProvider::addEventListener(
     if (!bDisposed && rxListener.is())
         aEvtListeners.addInterface( rxListener );
 }
-
 
 void SAL_CALL SwChartDataProvider::removeEventListener(
         const uno::Reference< lang::XEventListener >& rxListener )
@@ -1565,14 +1536,11 @@ void SAL_CALL SwChartDataProvider::removeEventListener(
         aEvtListeners.removeInterface( rxListener );
 }
 
-
-
 OUString SAL_CALL SwChartDataProvider::getImplementationName(  )
     throw (uno::RuntimeException)
 {
     return C2U("SwChartDataProvider");
 }
-
 
 sal_Bool SAL_CALL SwChartDataProvider::supportsService(
         const OUString& rServiceName )
@@ -1581,7 +1549,6 @@ sal_Bool SAL_CALL SwChartDataProvider::supportsService(
     vos::OGuard aGuard( Application::GetSolarMutex() );
     return rServiceName.equalsAscii( SN_DATA_PROVIDER );
 }
-
 
 uno::Sequence< OUString > SAL_CALL SwChartDataProvider::getSupportedServiceNames(  )
     throw (uno::RuntimeException)
@@ -1592,25 +1559,21 @@ uno::Sequence< OUString > SAL_CALL SwChartDataProvider::getSupportedServiceNames
     return aRes;
 }
 
-
 void SwChartDataProvider::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 {
     // actually this function should be superfluous (need to check later)
     ClientModify(this, pOld, pNew );
 }
 
-
 void SwChartDataProvider::AddDataSequence( const SwTable &rTable, uno::Reference< chart2::data::XDataSequence > &rxDataSequence )
 {
     aDataSequences[ &rTable ].insert( rxDataSequence );
 }
 
-
 void SwChartDataProvider::RemoveDataSequence( const SwTable &rTable, uno::Reference< chart2::data::XDataSequence > &rxDataSequence )
 {
     aDataSequences[ &rTable ].erase( rxDataSequence );
 }
-
 
 void SwChartDataProvider::InvalidateTable( const SwTable *pTable )
 {
@@ -1636,7 +1599,6 @@ void SwChartDataProvider::InvalidateTable( const SwTable *pTable )
         }
     }
 }
-
 
 sal_Bool SwChartDataProvider::DeleteBox( const SwTable *pTable, const SwTableBox &rBox )
 {
@@ -1689,7 +1651,6 @@ sal_Bool SwChartDataProvider::DeleteBox( const SwTable *pTable, const SwTableBox
     return bRes;
 }
 
-
 void SwChartDataProvider::DisposeAllDataSequences( const SwTable *pTable )
 {
     DBG_ASSERT( pTable, "table pointer is NULL" );
@@ -1719,7 +1680,6 @@ void SwChartDataProvider::DisposeAllDataSequences( const SwTable *pTable )
         }
     }
 }
-
 
 ////////////////////////////////////////
 // SwChartDataProvider::AddRowCols tries to notify charts of added columns
@@ -1832,9 +1792,7 @@ void SwChartDataProvider::AddRowCols(
     }
 }
 
-
 // XRangeXMLConversion ---------------------------------------------------
-
 rtl::OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const rtl::OUString& rRangeRepresentation )
     throw ( uno::RuntimeException, lang::IllegalArgumentException )
 {
@@ -1956,21 +1914,16 @@ rtl::OUString SAL_CALL SwChartDataProvider::convertRangeFromXML( const rtl::OUSt
     return aRes;
 }
 
-
-//////////////////////////////////////////////////////////////////////
-
 SwChartDataSource::SwChartDataSource(
         const uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > &rLDS ) :
     aLDS( rLDS )
 {
 }
 
-
 SwChartDataSource::~SwChartDataSource()
 {
 //    delete pTblCrsr;
 }
-
 
 uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > SAL_CALL SwChartDataSource::getDataSequences(  )
     throw (uno::RuntimeException)
@@ -1979,14 +1932,12 @@ uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > SAL_CALL S
     return aLDS;
 }
 
-
 OUString SAL_CALL SwChartDataSource::getImplementationName(  )
     throw (uno::RuntimeException)
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
     return C2U("SwChartDataSource");
 }
-
 
 sal_Bool SAL_CALL SwChartDataSource::supportsService(
         const OUString& rServiceName )
@@ -1996,7 +1947,6 @@ sal_Bool SAL_CALL SwChartDataSource::supportsService(
     return rServiceName.equalsAscii( SN_DATA_SOURCE );
 }
 
-
 uno::Sequence< OUString > SAL_CALL SwChartDataSource::getSupportedServiceNames(  )
     throw (uno::RuntimeException)
 {
@@ -2005,8 +1955,6 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSource::getSupportedServiceNames( 
     aRes.getArray()[0] = C2U( SN_DATA_SOURCE );
     return aRes;
 }
-
-//////////////////////////////////////////////////////////////////////
 
 SwChartDataSequence::SwChartDataSequence(
         SwChartDataProvider &rProvider,
@@ -2059,7 +2007,6 @@ SwChartDataSequence::SwChartDataSequence(
 #endif
 }
 
-
 SwChartDataSequence::SwChartDataSequence( const SwChartDataSequence &rObj ) :
     SwChartDataSequenceBaseClass(),
     SwClient( rObj.GetFrmFmt() ),
@@ -2110,7 +2057,6 @@ SwChartDataSequence::SwChartDataSequence( const SwChartDataSequence &rObj ) :
 #endif
 }
 
-
 SwChartDataSequence::~SwChartDataSequence()
 {
     // since the data-provider holds only weak references to the data-sequence
@@ -2119,13 +2065,11 @@ SwChartDataSequence::~SwChartDataSequence()
     delete pTblCrsr;
 }
 
-
 const uno::Sequence< sal_Int8 > & SwChartDataSequence::getUnoTunnelId()
 {
     static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
     return aSeq;
 }
-
 
 sal_Int64 SAL_CALL SwChartDataSequence::getSomething( const uno::Sequence< sal_Int8 > &rId )
     throw(uno::RuntimeException)
@@ -2138,7 +2082,6 @@ sal_Int64 SAL_CALL SwChartDataSequence::getSomething( const uno::Sequence< sal_I
     }
     return 0;
 }
-
 
 uno::Sequence< uno::Any > SAL_CALL SwChartDataSequence::getData(  )
     throw (uno::RuntimeException)
@@ -2168,7 +2111,6 @@ uno::Sequence< uno::Any > SAL_CALL SwChartDataSequence::getData(  )
     }
     return aRes;
 }
-
 
 OUString SAL_CALL SwChartDataSequence::getSourceRangeRepresentation(  )
     throw (uno::RuntimeException)
@@ -2305,8 +2247,6 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::generateLabel(
     return 0;
 }
 
-
-
 uno::Sequence< OUString > SAL_CALL SwChartDataSequence::getTextualData(  )
     throw (uno::RuntimeException)
 {
@@ -2335,7 +2275,6 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::getTextualData(  )
     }
     return aRes;
 }
-
 
 uno::Sequence< double > SAL_CALL SwChartDataSequence::getNumericalData(  )
     throw (uno::RuntimeException)
@@ -2369,7 +2308,6 @@ uno::Sequence< double > SAL_CALL SwChartDataSequence::getNumericalData(  )
     return aRes;
 }
 
-
 uno::Reference< util::XCloneable > SAL_CALL SwChartDataSequence::createClone(  )
     throw (uno::RuntimeException)
 {
@@ -2378,7 +2316,6 @@ uno::Reference< util::XCloneable > SAL_CALL SwChartDataSequence::createClone(  )
         throw lang::DisposedException();
     return new SwChartDataSequence( *this );
 }
-
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL SwChartDataSequence::getPropertySetInfo(  )
     throw (uno::RuntimeException)
@@ -2390,7 +2327,6 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL SwChartDataSequence::getPrope
     static uno::Reference< beans::XPropertySetInfo > xRes = _pPropSet->getPropertySetInfo();
     return xRes;
 }
-
 
 void SAL_CALL SwChartDataSequence::setPropertyValue(
         const OUString& rPropertyName,
@@ -2410,7 +2346,6 @@ void SAL_CALL SwChartDataSequence::setPropertyValue(
         throw beans::UnknownPropertyException();
 }
 
-
 uno::Any SAL_CALL SwChartDataSequence::getPropertyValue(
         const OUString& rPropertyName )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
@@ -2428,7 +2363,6 @@ uno::Any SAL_CALL SwChartDataSequence::getPropertyValue(
     return aRes;
 }
 
-
 void SAL_CALL SwChartDataSequence::addPropertyChangeListener(
         const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
@@ -2437,7 +2371,6 @@ void SAL_CALL SwChartDataSequence::addPropertyChangeListener(
     //vos::OGuard aGuard( Application::GetSolarMutex() );
     DBG_ERROR( "not implemented" );
 }
-
 
 void SAL_CALL SwChartDataSequence::removePropertyChangeListener(
         const OUString& /*rPropertyName*/,
@@ -2448,7 +2381,6 @@ void SAL_CALL SwChartDataSequence::removePropertyChangeListener(
     DBG_ERROR( "not implemented" );
 }
 
-
 void SAL_CALL SwChartDataSequence::addVetoableChangeListener(
         const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/ )
@@ -2457,7 +2389,6 @@ void SAL_CALL SwChartDataSequence::addVetoableChangeListener(
     //vos::OGuard aGuard( Application::GetSolarMutex() );
     DBG_ERROR( "not implemented" );
 }
-
 
 void SAL_CALL SwChartDataSequence::removeVetoableChangeListener(
         const OUString& /*rPropertyName*/,
@@ -2468,13 +2399,11 @@ void SAL_CALL SwChartDataSequence::removeVetoableChangeListener(
     DBG_ERROR( "not implemented" );
 }
 
-
 OUString SAL_CALL SwChartDataSequence::getImplementationName(  )
     throw (uno::RuntimeException)
 {
     return C2U("SwChartDataSequence");
 }
-
 
 sal_Bool SAL_CALL SwChartDataSequence::supportsService(
         const OUString& rServiceName )
@@ -2482,7 +2411,6 @@ sal_Bool SAL_CALL SwChartDataSequence::supportsService(
 {
     return rServiceName.equalsAscii( SN_DATA_SEQUENCE );
 }
-
 
 uno::Sequence< OUString > SAL_CALL SwChartDataSequence::getSupportedServiceNames(  )
     throw (uno::RuntimeException)
@@ -2492,7 +2420,6 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::getSupportedServiceNames
     aRes.getArray()[0] = C2U( SN_DATA_SEQUENCE );
     return aRes;
 }
-
 
 void SwChartDataSequence::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 {
@@ -2510,7 +2437,6 @@ void SwChartDataSequence::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
     }
 }
 
-
 sal_Bool SAL_CALL SwChartDataSequence::isModified(  )
     throw (uno::RuntimeException)
 {
@@ -2520,7 +2446,6 @@ sal_Bool SAL_CALL SwChartDataSequence::isModified(  )
 
     return sal_True;
 }
-
 
 void SAL_CALL SwChartDataSequence::setModified(
         ::sal_Bool bModified )
@@ -2534,7 +2459,6 @@ void SAL_CALL SwChartDataSequence::setModified(
         LaunchModifiedEvent( aModifyListeners, dynamic_cast< XModifyBroadcaster * >(this) );
 }
 
-
 void SAL_CALL SwChartDataSequence::addModifyListener(
         const uno::Reference< util::XModifyListener >& rxListener )
     throw (uno::RuntimeException)
@@ -2544,7 +2468,6 @@ void SAL_CALL SwChartDataSequence::addModifyListener(
         aModifyListeners.addInterface( rxListener );
 }
 
-
 void SAL_CALL SwChartDataSequence::removeModifyListener(
         const uno::Reference< util::XModifyListener >& rxListener )
     throw (uno::RuntimeException)
@@ -2553,7 +2476,6 @@ void SAL_CALL SwChartDataSequence::removeModifyListener(
     if (!bDisposed && rxListener.is())
         aModifyListeners.removeInterface( rxListener );
 }
-
 
 void SAL_CALL SwChartDataSequence::disposing( const lang::EventObject& rSource )
     throw (uno::RuntimeException)
@@ -2566,7 +2488,6 @@ void SAL_CALL SwChartDataSequence::disposing( const lang::EventObject& rSource )
         xDataProvider.clear();
     }
 }
-
 
 void SAL_CALL SwChartDataSequence::dispose(  )
     throw (uno::RuntimeException)
@@ -2601,7 +2522,6 @@ void SAL_CALL SwChartDataSequence::dispose(  )
     }
 }
 
-
 void SAL_CALL SwChartDataSequence::addEventListener(
         const uno::Reference< lang::XEventListener >& rxListener )
     throw (uno::RuntimeException)
@@ -2611,7 +2531,6 @@ void SAL_CALL SwChartDataSequence::addEventListener(
         aEvtListeners.addInterface( rxListener );
 }
 
-
 void SAL_CALL SwChartDataSequence::removeEventListener(
         const uno::Reference< lang::XEventListener >& rxListener )
     throw (uno::RuntimeException)
@@ -2620,7 +2539,6 @@ void SAL_CALL SwChartDataSequence::removeEventListener(
     if (!bDisposed && rxListener.is())
         aEvtListeners.removeInterface( rxListener );
 }
-
 
 sal_Bool SwChartDataSequence::DeleteBox( const SwTableBox &rBox )
 {
@@ -2695,8 +2613,8 @@ sal_Bool SwChartDataSequence::DeleteBox( const SwTableBox &rBox )
 
         if (pNewBox)    // set new position (cell range) to use
         {
-            // So erhält man den ersten Inhaltsnode in einer gegebenen Zelle:
-            // Zunächst einen SwNodeIndex auf den Node hinter dem SwStartNode der Box...
+            // So erh lt man den ersten Inhaltsnode in einer gegebenen Zelle:
+            // Zun chst einen SwNodeIndex auf den Node hinter dem SwStartNode der Box...
             SwNodeIndex aIdx( *pNewBox->GetSttNd(), +1 );
             // Dies kann ein SwCntntNode sein, kann aber auch ein Tabellen oder Sectionnode sein,
             // deshalb das GoNext;
@@ -2729,7 +2647,6 @@ sal_Bool SwChartDataSequence::DeleteBox( const SwTableBox &rBox )
 
     return bNowEmpty;
 }
-
 
 void SwChartDataSequence::FillRangeDesc( SwRangeDescriptor &rRangeDesc ) const
 {
@@ -2851,8 +2768,6 @@ bool SwChartDataSequence::ExtendTo( bool bExtendCol,
     return bChanged;
 }
 
-//////////////////////////////////////////////////////////////////////
-
 SwChartLabeledDataSequence::SwChartLabeledDataSequence() :
     aEvtListeners( GetChartMutex() ),
     aModifyListeners( GetChartMutex() )
@@ -2860,11 +2775,9 @@ SwChartLabeledDataSequence::SwChartLabeledDataSequence() :
     bDisposed = sal_False;
 }
 
-
 SwChartLabeledDataSequence::~SwChartLabeledDataSequence()
 {
 }
-
 
 uno::Reference< chart2::data::XDataSequence > SAL_CALL SwChartLabeledDataSequence::getValues(  )
     throw (uno::RuntimeException)
@@ -2874,7 +2787,6 @@ uno::Reference< chart2::data::XDataSequence > SAL_CALL SwChartLabeledDataSequenc
         throw lang::DisposedException();
     return xData;
 }
-
 
 void SwChartLabeledDataSequence::SetDataSequence(
         uno::Reference< chart2::data::XDataSequence >& rxDest,
@@ -2902,7 +2814,6 @@ void SwChartLabeledDataSequence::SetDataSequence(
         xMB->addModifyListener( xML );
 }
 
-
 void SAL_CALL SwChartLabeledDataSequence::setValues(
         const uno::Reference< chart2::data::XDataSequence >& rxSequence )
     throw (uno::RuntimeException)
@@ -2919,7 +2830,6 @@ void SAL_CALL SwChartLabeledDataSequence::setValues(
     }
 }
 
-
 uno::Reference< chart2::data::XDataSequence > SAL_CALL SwChartLabeledDataSequence::getLabel(  )
     throw (uno::RuntimeException)
 {
@@ -2928,7 +2838,6 @@ uno::Reference< chart2::data::XDataSequence > SAL_CALL SwChartLabeledDataSequenc
         throw lang::DisposedException();
     return xLabels;
 }
-
 
 void SAL_CALL SwChartLabeledDataSequence::setLabel(
         const uno::Reference< chart2::data::XDataSequence >& rxSequence )
@@ -2945,7 +2854,6 @@ void SAL_CALL SwChartLabeledDataSequence::setLabel(
         LaunchModifiedEvent( aModifyListeners, dynamic_cast< XModifyBroadcaster * >(this) );
     }
 }
-
 
 uno::Reference< util::XCloneable > SAL_CALL SwChartLabeledDataSequence::createClone(  )
     throw (uno::RuntimeException)
@@ -2974,13 +2882,11 @@ uno::Reference< util::XCloneable > SAL_CALL SwChartLabeledDataSequence::createCl
     return xRes;
 }
 
-
 OUString SAL_CALL SwChartLabeledDataSequence::getImplementationName(  )
     throw (uno::RuntimeException)
 {
     return C2U("SwChartLabeledDataSequence");
 }
-
 
 sal_Bool SAL_CALL SwChartLabeledDataSequence::supportsService(
         const OUString& rServiceName )
@@ -2988,7 +2894,6 @@ sal_Bool SAL_CALL SwChartLabeledDataSequence::supportsService(
 {
     return rServiceName.equalsAscii( SN_LABELED_DATA_SEQUENCE );
 }
-
 
 uno::Sequence< OUString > SAL_CALL SwChartLabeledDataSequence::getSupportedServiceNames(  )
     throw (uno::RuntimeException)
@@ -2998,7 +2903,6 @@ uno::Sequence< OUString > SAL_CALL SwChartLabeledDataSequence::getSupportedServi
     aRes.getArray()[0] = C2U( SN_LABELED_DATA_SEQUENCE );
     return aRes;
 }
-
 
 void SAL_CALL SwChartLabeledDataSequence::disposing(
         const lang::EventObject& rSource )
@@ -3014,7 +2918,6 @@ void SAL_CALL SwChartLabeledDataSequence::disposing(
         dispose();
 }
 
-
 void SAL_CALL SwChartLabeledDataSequence::modified(
         const lang::EventObject& rEvent )
     throw (uno::RuntimeException)
@@ -3025,7 +2928,6 @@ void SAL_CALL SwChartLabeledDataSequence::modified(
     }
 }
 
-
 void SAL_CALL SwChartLabeledDataSequence::addModifyListener(
         const uno::Reference< util::XModifyListener >& rxListener )
     throw (uno::RuntimeException)
@@ -3035,7 +2937,6 @@ void SAL_CALL SwChartLabeledDataSequence::addModifyListener(
         aModifyListeners.addInterface( rxListener );
 }
 
-
 void SAL_CALL SwChartLabeledDataSequence::removeModifyListener(
         const uno::Reference< util::XModifyListener >& rxListener )
     throw (uno::RuntimeException)
@@ -3044,7 +2945,6 @@ void SAL_CALL SwChartLabeledDataSequence::removeModifyListener(
     if (!bDisposed && rxListener.is())
         aModifyListeners.removeInterface( rxListener );
 }
-
 
 void SAL_CALL SwChartLabeledDataSequence::dispose(  )
     throw (uno::RuntimeException)
@@ -3067,7 +2967,6 @@ void SAL_CALL SwChartLabeledDataSequence::dispose(  )
     }
 }
 
-
 void SAL_CALL SwChartLabeledDataSequence::addEventListener(
         const uno::Reference< lang::XEventListener >& rxListener )
     throw (uno::RuntimeException)
@@ -3077,7 +2976,6 @@ void SAL_CALL SwChartLabeledDataSequence::addEventListener(
         aEvtListeners.addInterface( rxListener );
 }
 
-
 void SAL_CALL SwChartLabeledDataSequence::removeEventListener(
         const uno::Reference< lang::XEventListener >& rxListener )
     throw (uno::RuntimeException)
@@ -3086,5 +2984,3 @@ void SAL_CALL SwChartLabeledDataSequence::removeEventListener(
     if (!bDisposed && rxListener.is())
         aEvtListeners.removeInterface( rxListener );
 }
-
-//////////////////////////////////////////////////////////////////////
