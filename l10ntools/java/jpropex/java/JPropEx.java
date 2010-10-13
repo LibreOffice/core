@@ -141,9 +141,12 @@ public class JPropEx
 
     private SdfEntity prepareSdfObj( String filename )
     {
-        String path = makeAbs( filename );
-        //String path = makeAbs( inputFileArg );
-        path = path.replace( rootArg + "/" , "" );
+        String path = makeAbs( filename ).trim();
+        String myRootArg = makeAbs( rootArg ).trim();
+        myRootArg = myRootArg.replace( "\\","/");
+        myRootArg += "/";
+        path = path.replace("\\","/");
+        path = path.replace( myRootArg, "" );
         path = path.replace("/","\\");
         // TODO: Make this static
         java.text.SimpleDateFormat dateformat = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -176,7 +179,7 @@ public class JPropEx
         {
             BufferedReader in = new BufferedReader( new FileReader( filename.substring( 1 ) ) );
             while( in.ready() )
-                lines.add( in.readLine() );
+                lines.add( in.readLine().trim() );
         }
         catch( IOException e )
         {
