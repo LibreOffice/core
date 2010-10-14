@@ -1697,44 +1697,48 @@ sub get_switch_options {
 sub cancel_build {
 #    close_server_socket();
     my $broken_modules_number = scalar @broken_modules_names;
-    my $message_part = 'build ';
-    if (scalar keys %incompatibles) {
-        my @incompatible_modules = keys %incompatibles;
-        if ($stop_build_on_error) {
-            $message_part .= "--from @incompatible_modules:@broken_modules_names\n";
-        } else {
-            $message_part .= "--from @broken_modules_names\n";
-        };
-    } else {
-        if ($processes_to_run) {
-            $message_part .= "--from ";
-        } else {
-            $message_part .= "--all:";
-        };
-        $message_part .= "@broken_modules_names\n";
 
-    };
-    if ($broken_modules_number && $build_all_parents) {
-        print "\n";
-        print $broken_modules_number;
-        print " module(s): ";
-        foreach (@broken_modules_names) {
-            print "\n\t$_";
-        };
-        print "\nneed(s) to be rebuilt\n\nReason(s):\n\n";
-        foreach (keys %broken_build) {
-            print "ERROR: error " . $broken_build{$_} . " occurred while making $_\n";
-        };
-        print "\nAttention: if you fix the errors in above module(s) you may continue the build issuing the following command:\n\n\t" . $message_part;
-    } else {
+    print "\n";
+    print "-----------------------------------------------------------------------\n";
+    print "        Oh dear - something failed during the build - sorry !\n";
+    print "  For more help with debugging build errors, please see the section in:\n";
+    print "            http://wiki.documentfoundation.org/Development\n";
+    print "\n";
+
+    if (!$broken_modules_number || !$build_all_parents) {
         while (children_number()) {
             handle_dead_children(1);
         }
+    }
+
+    if (keys %broken_build) {
+        print "  internal build errors:\n\n";
         foreach (keys %broken_build) {
             print "ERROR: error " . $broken_build{$_} . " occurred while making $_\n";
         };
-    };
+        print "\n";
+    }
+
+    my $module = shift @broken_modules_names;
+    if ($broken_modules_names > 1) {
+        print " it seems you are using a threaded build, which means that the\n";
+        print " actual compile error is probably hidden far above, and could be\n";
+        print " inside any of these other modules:\n";
+        print "     @broken_modules_names\n";
+        print " please re-run build inside each one to isolate the problem.\n";
+    } else {
+        print " it seems that the error is inside '$module', please re-run build\n";
+        print " inside this module to isolate the error and/or test your fix:\n";
+    }
+    print "-----------------------------------------------------------------------\n";
     print "\n";
+    print "cd " . $ENV{'SRC_ROOT'} . "\n";
+    print "source ./" . $ENV{'ENV_SCRIPT'} . ".sh\n";
+    print "cd $module\n";
+    print "build\n";
+    print "\n";
+    print "when you have isolated and fixed the problem re-run 'make' from the top-level\n";
+
     do_exit(1);
 };
 
@@ -2392,7 +2396,7 @@ sub prepare_incompatible_build {
         print "WARNING(S):\n";
         print STDERR "$_\n" foreach (@warnings);
         print "\nATTENTION: If you are performing an incompatible build, please break the build with Ctrl+C and prepare the workspace with \"--prepare\" switch!\n\n" if (!$prepare);
-        sleep(10);
+        sleep(5);
     };
     if ($prepare) {
     print "\nPreparation finished";
