@@ -288,8 +288,11 @@ sal_Bool DataSupplier::getResult( sal_uInt32 nIndex )
 
     DWORD dwFlags = ODM_SPECIFIC;
     odm = NODMQueryExecute(ContentProvider::getHandle(), sQuery,dwFlags, lpszDMSList, pQueryId );
-    if(odm != ODM_SUCCESS)
+    if(odm != ODM_SUCCESS) {
+        delete[] pQueryId;
+        delete[] lpszDMSList;
         return sal_False;
+    }
 
     sal_uInt16 nCount       = 10;
     sal_uInt16 nMaxCount    = 10;
