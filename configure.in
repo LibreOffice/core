@@ -2771,7 +2771,7 @@ _ACEOF
          gccvisbroken=yes
       else
          case "$build_cpu" in
-            i?86|x86_64)
+            i?86|x86_64|arm*)
                if $EGREP -q '@PLT' visibility.s; then
                   gccvisbroken=no
                else
