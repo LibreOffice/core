@@ -523,6 +523,44 @@ class VCL_DLLPUBLIC SolarMutexGuard
     }
 };
 
+class VCL_DLLPUBLIC SolarMutexClearableGuard
+{
+    SolarMutexClearableGuard( const SolarMutexClearableGuard& );
+    const SolarMutexClearableGuard& operator = ( const SolarMutexClearableGuard& );
+    bool m_bCleared;
+public:
+    /** Acquires mutex
+        @param pMutex pointer to mutex which is to be acquired  */
+    SolarMutexClearableGuard()
+        : m_bCleared(false)
+        , m_solarMutex( Application::GetSolarMutex() )
+        {
+            m_solarMutex.acquire();
+        }
+
+    /** Releases mutex. */
+    virtual ~SolarMutexClearableGuard()
+        {
+            if( !m_bCleared )
+            {
+                m_solarMutex.release();
+            }
+        }
+
+    /** Releases mutex. */
+    void SAL_CALL clear()
+        {
+            if( !m_bCleared )
+            {
+                m_solarMutex.release();
+                m_bCleared = true;
+            }
+        }
+protected:
+    vos::IMutex& m_solarMutex;
+};
+
+
 /**
  A helper class that calls Application::ReleaseSolarMutex() in its constructor
  and restores the mutex in its destructor.
