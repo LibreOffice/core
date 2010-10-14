@@ -384,7 +384,9 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_ENGLISH_PHILIPPINES,         "en", "PH" },
 //  { LANGUAGE_IBIBIO_NIGERIA,             "nic", "NG" },   // ISO "nic" is only a collective language code
     { LANGUAGE_YI,                          "ii", "CN" },
-//  { LANGUAGE_TAMAZIGHT_LATIN,            "ber", ""   },   // ISO "ber" only collective!
+    { LANGUAGE_TAMAZIGHT_LATIN,            "kab", "DZ" },   // In practice Kabyle is the language used for this
+    { LANGUAGE_TAMAZIGHT_LATIN,            "ber", "DZ" },   // In practice Algeria has standardized on Kabyle as the member of the "ber" collective which gets used there.
+    { LANGUAGE_TAMAZIGHT_TIFINAGH,         "ber", "MA" },   // Morocco is officially using Tifinagh for its Berber languages so store it to distinguish explicitly from LANGUAGE_TAMAZIGHT_LATIN, even though as a collective language its not of much use
 //  { LANGUAGE_TAMAZIGHT_ARABIC,           "ber", ""   },   // ISO "ber" only collective!
     { LANGUAGE_LATIN,                       "la", "VA" },
     { LANGUAGE_OBSOLETE_USER_LATIN,         "la", "VA" },
