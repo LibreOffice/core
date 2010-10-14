@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : oliver.creamer@oracle.com
+'* owner : oliver.craemer@oracle.com
 '*
 '* short description : Export test for the Calc XML 6.0/7/OOo 1.x format
 '*

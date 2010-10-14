@@ -94,6 +94,11 @@ public:
 
     void writeModifications();
 
+    void flushModifications();
+        // must be called with configmgr::lock unaquired; must be called before
+        // shutdown if writeModifications has ever been called (probably
+        // indirectly, via removeExtensionXcuFile)
+
     void insertExtensionXcsFile(bool shared, rtl::OUString const & fileUri);
 
     void insertExtensionXcuFile(
@@ -160,11 +165,14 @@ private:
                 com::sun::star::beans::XPropertySet > >
         ExternalServices;
 
+    class WriteThread;
+
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
         context_;
     Data data_;
     WeakRootSet roots_;
     ExternalServices externalServices_;
+    rtl::Reference< WriteThread > writeThread_;
 };
 
 }
