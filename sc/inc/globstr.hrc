@@ -595,7 +595,7 @@
 #define STR_FORM_SPINNER            455
 #define STR_FORM_SCROLLBAR          456
 
-#define STR_COUNT                       456
+#define STR_COUNT                       457
 
 #endif
 
