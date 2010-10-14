@@ -1719,7 +1719,7 @@ sub cancel_build {
     }
 
     my $module = shift @broken_modules_names;
-    if ($broken_modules_names > 1) {
+    if ($broken_modules_number > 1) {
         print " it seems you are using a threaded build, which means that the\n";
         print " actual compile error is probably hidden far above, and could be\n";
         print " inside any of these other modules:\n";
