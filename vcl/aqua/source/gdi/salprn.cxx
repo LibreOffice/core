@@ -460,6 +460,8 @@ ULONG AquaSalInfoPrinter::GetCapabilities( const ImplJobSetup* i_pSetupData, USH
             return getUseNativeDialog() ? 1 : 0;
         case PRINTER_CAPABILITIES_PDF:
             return 1;
+        case PRINTER_CAPABILITIES_USEPULLMODEL:
+            return 1;
         default: break;
     };
     return 0;
