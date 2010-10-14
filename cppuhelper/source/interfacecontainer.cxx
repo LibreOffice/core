@@ -326,7 +326,7 @@ void OInterfaceContainerHelper::disposeAndClear( const EventObject & rEvt ) SAL_
 {
     ClearableMutexGuard aGuard( rMutex );
     OInterfaceIteratorHelper aIt( *this );
-    // Container freigeben, falls im disposing neue Einträge kommen
+    // Release container, in case new entries come while disposing
     OSL_ENSURE( !bIsList || bInUse, "OInterfaceContainerHelper not in use" );
     if( !bIsList && pData )
         ((XInterface *)pData)->release();
@@ -356,7 +356,7 @@ void OInterfaceContainerHelper::clear() SAL_THROW( () )
 {
     ClearableMutexGuard aGuard( rMutex );
     OInterfaceIteratorHelper aIt( *this );
-    // Container freigeben, falls im disposing neue Einträge kommen
+    // Release container, in case new entries come while disposing
     OSL_ENSURE( !bIsList || bInUse, "OInterfaceContainerHelper not in use" );
     if( !bIsList && pData )
         ((XInterface *)pData)->release();

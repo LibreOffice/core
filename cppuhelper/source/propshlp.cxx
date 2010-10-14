@@ -1168,7 +1168,7 @@ sal_Int32 OPropertyArrayHelper::fillHandles( sal_Int32 * pHandles, const Sequenc
 
     for( sal_Int32 i = 0; i < nReqLen; i++ )
     {
-        // Logarithmus ermitteln
+        // Calculate logarithm
         sal_Int32 n = (sal_Int32)(pEnd - pCur);
         sal_Int32 nLog = 0;
         while( n )
@@ -1177,8 +1177,8 @@ sal_Int32 OPropertyArrayHelper::fillHandles( sal_Int32 * pHandles, const Sequenc
             n = n >> 1;
         }
 
-        // Anzahl der noch zu suchenden Properties * dem Log2 der verbleibenden
-        // zu dursuchenden Properties.
+        // Number of properties to search for * Log2 of the number of remaining
+        // properties to search in.
         if( (nReqLen - i) * nLog >= pEnd - pCur )
         {
             // linear search is better
