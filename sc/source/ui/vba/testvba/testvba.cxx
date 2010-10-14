@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include "cppuhelper/bootstrap.hxx"
 
 #include <com/sun/star/beans/Property.hpp>
@@ -159,15 +160,15 @@ mxCompLoader( _xCompLoader ), msOutDirPath( convertToURL( _outDirPath  ) )
                         Reference< script::provider::XScript > xScript;
                         try
                         {
-                            xScript = xProv->getScript( rtl::OUString::createFromAscii( "vnd.sun.star.script:Standard.TestMacros.Main?language=Basic&location=document" ));
+                            xScript = xProv->getScript( rtl::OUString::createFromAscii( "vnd.sun.star.script:VBAProject.TestMacros.Main?language=Basic&location=document" ));
                         } catch ( uno::Exception& e )
                         {
                             try
                             {
-                                xScript = xProv->getScript( rtl::OUString::createFromAscii( "vnd.sun.star.script:Standard.testMacro.Main?language=Basic&location=document" ));
+                                xScript = xProv->getScript( rtl::OUString::createFromAscii( "vnd.sun.star.script:VBAProject.testMacro.Main?language=Basic&location=document" ));
                             } catch ( uno::Exception& e2 )
                             {
-                                xScript = xProv->getScript( rtl::OUString::createFromAscii( "vnd.sun.star.script:Standard.testMain.Main?language=Basic&location=document" ));
+                                xScript = xProv->getScript( rtl::OUString::createFromAscii( "vnd.sun.star.script:VBAProject.testMain.Main?language=Basic&location=document" ));
                             }
                         }
                         OSL_TRACE("Got script for doc %s", rtl::OUStringToOString( sUrl, RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -307,3 +308,5 @@ int main( int argv, char** argc )
     }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

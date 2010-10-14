@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -455,7 +456,16 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
     else if( rUrl.GetChar( 0 ) == '#' )     // hack for #89066#
     {
         String aTextMark( rUrl.Copy( 1 ) );
-        aTextMark.SearchAndReplace( '.', '!' );
+
+        xub_StrLen nSepPos = aTextMark.SearchAndReplace( '.', '!' );
+        String aSheetName( aTextMark.Copy(0, nSepPos));
+
+        if ( aSheetName.Search(' ') != STRING_NOTFOUND && aSheetName.GetChar(0) != '\'')
+        {
+            aTextMark.Insert('\'', nSepPos);
+            aTextMark.Insert('\'', 0);
+        }
+
         mxTextMark.reset( new XclExpString( aTextMark, EXC_STR_FORCEUNICODE, 255 ) );
     }
 
@@ -516,24 +526,31 @@ void XclExpHyperlink::WriteBody( XclExpStream& rStrm )
 {
     sal_uInt16 nXclCol = static_cast< sal_uInt16 >( maScPos.Col() );
     sal_uInt16 nXclRow = static_cast< sal_uInt16 >( maScPos.Row() );
-    mxVarData->Seek( STREAM_SEEK_TO_BEGIN );
+    rStrm   << nXclRow << nXclRow << nXclCol << nXclCol;
+    WriteEmbeddedData( rStrm );
+}
 
-    rStrm   << nXclRow << nXclRow << nXclCol << nXclCol
-            << XclTools::maGuidStdLink
+void XclExpHyperlink::WriteEmbeddedData( XclExpStream& rStrm )
+{
+    rStrm << XclTools::maGuidStdLink
             << sal_uInt32( 2 )
             << mnFlags;
+
+    mxVarData->Seek( STREAM_SEEK_TO_BEGIN );
     rStrm.CopyFromStream( *mxVarData );
 }
 
 void XclExpHyperlink::SaveXml( XclExpXmlStream& rStrm )
 {
-    OUString sId = rStrm.addRelation( rStrm.GetCurrentStream()->getOutputStream(),
+    OUString sId = msTarget.getLength() ? rStrm.addRelation( rStrm.GetCurrentStream()->getOutputStream(),
             XclXmlUtils::ToOUString( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" ),
             msTarget,
-            XclXmlUtils::ToOUString( "External" ) );
+            XclXmlUtils::ToOUString( "External" ) ) : OUString();
     rStrm.GetCurrentStream()->singleElement( XML_hyperlink,
             XML_ref,                XclXmlUtils::ToOString( maScPos ).getStr(),
-            FSNS( XML_r, XML_id ),  XclXmlUtils::ToOString( sId ).getStr(),
+            FSNS( XML_r, XML_id ),  sId.getLength()
+                                       ? XclXmlUtils::ToOString( sId ).getStr()
+                                       : NULL,
             XML_location,           mxTextMark.get() != NULL
                                         ? XclXmlUtils::ToOString( *mxTextMark ).getStr()
                                         : NULL,
@@ -1156,7 +1173,8 @@ void XclExpDV::SaveXml( XclExpXmlStream& rStrm )
             XML_operator,           lcl_GetOperatorType( mnFlags ),
             XML_prompt,             XESTRING_TO_PSZ( maPromptText ),
             XML_promptTitle,        XESTRING_TO_PSZ( maPromptTitle ),
-            XML_showDropDown,       XclXmlUtils::ToPsz( ! ::get_flag( mnFlags, EXC_DV_SUPPRESSDROPDOWN ) ),
+            // showDropDown should have been showNoDropDown - check oox/xlsx import for details
+            XML_showDropDown,       XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_DV_SUPPRESSDROPDOWN ) ),
             XML_showErrorMessage,   XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_DV_SHOWERROR ) ),
             XML_showInputMessage,   XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_DV_SHOWPROMPT ) ),
             XML_sqref,              XclXmlUtils::ToOString( maScRanges ).getStr(),
@@ -1460,3 +1478,4 @@ XclExpWebQueryBuffer::XclExpWebQueryBuffer( const XclExpRoot& rRoot )
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

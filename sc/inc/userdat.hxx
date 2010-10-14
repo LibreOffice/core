@@ -99,16 +99,12 @@ public:
     void            SetMacro( const rtl::OUString& rMacro ) { maMacro = rMacro; }
     const rtl::OUString& GetMacro() const { return maMacro; }
 
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
     void            SetHlink( const rtl::OUString& rHlink ) { maHlink = rHlink; }
     const rtl::OUString& GetHlink() const { return maHlink; }
-#endif
 
 private:
     rtl::OUString   maMacro;
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
     rtl::OUString   maHlink;
-#endif
 };
 
 //-------------------------------------------------------------------------

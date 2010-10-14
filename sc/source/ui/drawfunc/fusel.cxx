@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -202,7 +203,6 @@ BOOL __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                    }
 
                    ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj, TRUE );
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
                    // For interoperability favour links over macros if both are defined
                    if ( pInfo->GetHlink().getLength() > 0 )
                    {
@@ -210,20 +210,27 @@ BOOL __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                        sURL = pInfo->GetHlink();
                    }
                    else if ( pInfo->GetMacro().getLength() > 0 )
-#else
-                   if ( pInfo->GetMacro().getLength() > 0 )
-#endif
                    {
                        SfxObjectShell* pObjSh = SfxObjectShell::Current();
                        if ( pObjSh && SfxApplication::IsXScriptURL( pInfo->GetMacro() ) )
                        {
+                           uno::Reference< beans::XPropertySet > xProps( pObj->getUnoShape(), uno::UNO_QUERY );
+                           uno::Any aCaller;
+                           if ( xProps.is() )
+                           {
+                               try
+                               {
+                                   aCaller = xProps->getPropertyValue( rtl::OUString::createFromAscii("Name") );
+                               }
+                               catch( uno::Exception& ) {}
+                           }
                            uno::Any aRet;
                            uno::Sequence< sal_Int16 > aOutArgsIndex;
                            uno::Sequence< uno::Any > aOutArgs;
                            uno::Sequence< uno::Any >* pInArgs =
                                new uno::Sequence< uno::Any >(0);
                            pObjSh->CallXScript( pInfo->GetMacro(),
-                               *pInArgs, aRet, aOutArgsIndex, aOutArgs);
+                               *pInArgs, aRet, aOutArgsIndex, aOutArgs, true, &aCaller );
                            pViewShell->FakeButtonUp( pViewShell->GetViewData()->GetActivePart() );
                            return TRUE;        // kein CaptureMouse etc.
                        }
@@ -647,3 +654,4 @@ void FuSelection::Deactivate()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

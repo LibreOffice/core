@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,3 +65,5 @@ ScVbaTextBoxShape::characters( const uno::Any& Start, const uno::Any& Length ) t
     ScVbaPalette aPalette( pDoc->GetDocumentShell() );
     return  new ScVbaCharacters( this, mxContext, aPalette, xSimple, Start, Length, sal_True );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

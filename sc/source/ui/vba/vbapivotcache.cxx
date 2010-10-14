@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,6 +35,17 @@ ScVbaPivotCache::ScVbaPivotCache( const uno::Reference< XHelperInterface >& xPar
 {
 }
 
+sal_Int32
+ScVbaPivotCache::getMissingItemsLimit() throw (css::uno::RuntimeException)
+{
+    return -1;
+}
+
+void
+ScVbaPivotCache::setMissingItemsLimit( sal_Int32 /*aValue*/ ) throw ( css::uno::RuntimeException)
+{
+}
+
 void SAL_CALL
 ScVbaPivotCache::Refresh() throw (css::uno::RuntimeException)
 {
@@ -58,3 +70,4 @@ ScVbaPivotCache::getServiceNames()
     return aServiceNames;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

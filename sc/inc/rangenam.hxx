@@ -142,7 +142,7 @@ public:
 
     SC_DLLPUBLIC BOOL           IsReference( ScRange& rRef ) const;
     BOOL            IsReference( ScRange& rRef, const ScAddress& rPos ) const;
-    BOOL            IsValidReference( ScRange& rRef ) const;
+    SC_DLLPUBLIC BOOL           IsValidReference( ScRange& rRef ) const;
     BOOL            IsRangeAtBlock( const ScRange& ) const;
 
     void            UpdateTabRef(SCTAB nOldTable, USHORT nFlag, SCTAB nNewTable);

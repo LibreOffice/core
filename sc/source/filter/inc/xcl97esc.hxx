@@ -34,6 +34,7 @@
 #include <filter/msfilter/escherex.hxx>
 #include "xlescher.hxx"
 #include "xeroot.hxx"
+#include <vector>
 
 // 0 = Export TBX form controls, 1 = Export OCX form controls.
 #define EXC_EXP_OCX_CTRL 0
@@ -70,6 +71,15 @@ class XclExpOcxControlObj;
 #else
 class XclExpTbxControlObj;
 #endif
+class XclExpShapeObj;
+class EscherExHostAppData;
+class ShapeInteractionHelper
+{
+public:
+   static XclExpShapeObj* CreateShapeObj( XclExpObjectManager& rObjMgr, const ::com::sun::star::uno::Reference<
+                            ::com::sun::star::drawing::XShape >& xShape );
+   static void PopulateShapeInteractionInfo( XclExpObjectManager& rObjMgr, const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape, EscherExHostAppData& rHostAppData );
+};
 
 class XclEscherEx : public EscherEx, protected XclExpRoot
 {

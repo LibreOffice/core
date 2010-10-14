@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -66,7 +67,8 @@ ScDPFieldButton::ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings* pSt
     mbBaseButton(true),
     mbPopupButton(false),
     mbHasHiddenMember(false),
-    mbPopupPressed(false)
+    mbPopupPressed(false),
+    mbPopupLeft(false)
 {
     if (pZoomX)
         maZoomX = *pZoomX;
@@ -88,10 +90,15 @@ void ScDPFieldButton::setText(const OUString& rText)
     maText = rText;
 }
 
-void ScDPFieldButton::setBoundingBox(const Point& rPos, const Size& rSize)
+void ScDPFieldButton::setBoundingBox(const Point& rPos, const Size& rSize, bool bLayoutRTL)
 {
     maPos = rPos;
     maSize = rSize;
+    if (bLayoutRTL)
+    {
+        // rPos is the logical-left position, adjust maPos to visual-left (inside the cell border)
+        maPos.X() -= maSize.Width() - 1;
+    }
 }
 
 void ScDPFieldButton::setDrawBaseButton(bool b)
@@ -112,6 +119,11 @@ void ScDPFieldButton::setHasHiddenMember(bool b)
 void ScDPFieldButton::setPopupPressed(bool b)
 {
     mbPopupPressed = b;
+}
+
+void ScDPFieldButton::setPopupLeft(bool b)
+{
+    mbPopupLeft = b;
 }
 
 void ScDPFieldButton::draw()
@@ -179,7 +191,12 @@ void ScDPFieldButton::getPopupBoundingBox(Point& rPos, Size& rSize) const
     if (nH > 18)
         nH = 18;
 
-    rPos.setX(maPos.getX() + maSize.getWidth() - nW);
+    // #i114944# AutoFilter button is left-aligned in RTL.
+    // DataPilot button is always right-aligned for now, so text output isn't affected.
+    if (mbPopupLeft)
+        rPos.setX(maPos.getX());
+    else
+        rPos.setX(maPos.getX() + maSize.getWidth() - nW);
     rPos.setY(maPos.getY() + maSize.getHeight() - nH);
     rSize.setWidth(nW);
     rSize.setHeight(nH);
@@ -1404,3 +1421,4 @@ void ScDPFieldPopupWindow::setOKAction(Action* p)
     mpOKAction.reset(p);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

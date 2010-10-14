@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -152,6 +153,10 @@ void ExcRecord::SaveCont( XclExpStream& /*rStrm*/ )
 void ExcRecord::WriteBody( XclExpStream& rStrm )
 {
     SaveCont( rStrm );
+}
+
+void ExcRecord::SaveXml( XclExpXmlStream& rStrm )
+{
 }
 
 
@@ -356,6 +361,7 @@ Exc1904::Exc1904( ScDocument& rDoc )
 {
     Date* pDate = rDoc.GetFormatTable()->GetNullDate();
     bVal = pDate ? (*pDate == Date( 1, 1, 1904 )) : FALSE;
+    bDateCompatibility = pDate ? !( *pDate == Date( 30, 12, 1899 )) : FALSE;
 }
 
 
@@ -367,9 +373,21 @@ UINT16 Exc1904::GetNum( void ) const
 
 void Exc1904::SaveXml( XclExpXmlStream& rStrm )
 {
-    rStrm.WriteAttributes(
+    bool bISOIEC = ( rStrm.getVersion() == oox::core::ISOIEC_29500_2008 );
+
+    if( bISOIEC )
+    {
+        rStrm.WriteAttributes(
+            XML_dateCompatibility, XclXmlUtils::ToPsz( bDateCompatibility ),
+            FSEND );
+    }
+
+    if( !bISOIEC || bDateCompatibility )
+    {
+        rStrm.WriteAttributes(
             XML_date1904, XclXmlUtils::ToPsz( bVal ),
             FSEND );
+    }
 }
 
 
@@ -838,6 +856,7 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab ) :
     XclExpRoot( rRoot ),
     pFilterMode( NULL ),
     pFilterInfo( NULL )
+    , mbAutoFilter (false)
 {
     ScDBCollection& rDBColl = GetDatabaseRanges();
     XclExpNameManager& rNameMgr = GetNameManager();
@@ -938,6 +957,9 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab ) :
             if( !maFilterList.IsEmpty() )
                 pFilterMode = new XclExpFiltermode;
             pFilterInfo = new XclExpAutofilterinfo( aRange.aStart, nColCnt );
+
+            if (maFilterList.IsEmpty () && !bConflict)
+                mbAutoFilter = true;
         }
     }
 }
@@ -995,7 +1017,7 @@ void ExcAutoFilterRecs::Save( XclExpStream& rStrm )
 
 void ExcAutoFilterRecs::SaveXml( XclExpXmlStream& rStrm )
 {
-    if( maFilterList.IsEmpty() )
+    if( maFilterList.IsEmpty() && !mbAutoFilter )
         return;
 
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
@@ -1003,7 +1025,8 @@ void ExcAutoFilterRecs::SaveXml( XclExpXmlStream& rStrm )
             XML_ref,    XclXmlUtils::ToOString( maRef ).getStr(),
             FSEND );
     // OOXTODO: XML_extLst, XML_sortState
-    maFilterList.SaveXml( rStrm );
+    if( !maFilterList.IsEmpty() )
+        maFilterList.SaveXml( rStrm );
     rWorksheet->endElement( XML_autoFilter );
 }
 
@@ -1049,3 +1072,4 @@ bool XclExpFilterManager::HasFilterMode( SCTAB nScTab )
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

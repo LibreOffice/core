@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -210,6 +211,7 @@
 #include "drwtrans.hxx"
 #include "docuno.hxx"
 #include "clipparam.hxx"
+#include "undodat.hxx"   // Amelia Wang
 
 using namespace com::sun::star;
 
@@ -501,6 +503,76 @@ BOOL ScViewFunc::CopyToClip( ScDocument* pClipDoc, BOOL bCut, BOOL bApi, BOOL bI
     {
         if (!bApi)
             ErrorMessage(STR_NOMULTISELECT);
+    }
+
+    return bDone;
+}
+
+// Copy the content of the Range into clipboard. Adding this method for VBA API: Range.Copy().
+BOOL ScViewFunc::CopyToClip( ScDocument* pClipDoc, const ScRange& rRange, BOOL bCut, BOOL bApi, BOOL bIncludeObjects, BOOL bStopEdit )
+{
+    BOOL bDone = FALSE;
+    if ( bStopEdit )
+        UpdateInputLine();
+
+    ScRange aRange = rRange;
+    ScDocument* pDoc = GetViewData()->GetDocument();
+    if ( pDoc && !pDoc->HasSelectedBlockMatrixFragment( aRange.aStart.Col(), aRange.aStart.Row(), aRange.aEnd.Col(), aRange.aEnd.Row(), aRange.aStart.Tab() ) )
+    {
+        BOOL bSysClip = FALSE;
+        if ( !pClipDoc )
+        {
+            // Create one (deleted by ScTransferObj).
+            pClipDoc = new ScDocument( SCDOCMODE_CLIP );
+            bSysClip = TRUE;
+        }
+        if ( !bCut )
+        {
+            ScChangeTrack* pChangeTrack = pDoc->GetChangeTrack();
+            if ( pChangeTrack )
+                pChangeTrack->ResetLastCut();
+        }
+
+        if ( bSysClip && bIncludeObjects )
+        {
+            BOOL bAnyOle = pDoc->HasOLEObjectsInArea( aRange );
+            // Update ScGlobal::pDrawClipDocShellRef.
+            ScDrawLayer::SetGlobalDrawPersist( ScTransferObj::SetDrawClipDoc( bAnyOle ) );
+        }
+
+        ScClipParam aClipParam( aRange, bCut );
+        pDoc->CopyToClip4VBA( aClipParam, pClipDoc, false, bIncludeObjects );
+        if ( bSysClip )
+        {
+            ScDrawLayer::SetGlobalDrawPersist(NULL);
+            ScGlobal::SetClipDocName( pDoc->GetDocumentShell()->GetTitle( SFX_TITLE_FULLNAME ) );
+        }
+        pClipDoc->ExtendMerge( aRange, TRUE );
+
+        if ( bSysClip )
+        {
+            ScDocShell* pDocSh = GetViewData()->GetDocShell();
+            TransferableObjectDescriptor aObjDesc;
+            pDocSh->FillTransferableObjectDescriptor( aObjDesc );
+            aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
+
+            ScTransferObj* pTransferObj = new ScTransferObj( pClipDoc, aObjDesc );
+            uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
+            if ( ScGlobal::pDrawClipDocShellRef )
+            {
+                SfxObjectShellRef aPersistRef( &(*ScGlobal::pDrawClipDocShellRef) );
+                pTransferObj->SetDrawPersist( aPersistRef );
+            }
+            pTransferObj->CopyToClipboard( GetActiveWin() );
+            SC_MOD()->SetClipObject( pTransferObj, NULL );
+        }
+
+        bDone = TRUE;
+    }
+    else
+    {
+        if ( !bApi )
+            ErrorMessage(STR_MATRIXFRAGMENTERR);
     }
 
     return bDone;
@@ -1784,6 +1856,86 @@ BOOL ScViewFunc::LinkBlock( const ScRange& rSource, const ScAddress& rDestPos, B
     return TRUE;
 }
 
+void ScViewFunc::DataFormPutData( SCROW nCurrentRow ,
+                                  SCROW nStartRow , SCCOL nStartCol ,
+                                  SCROW nEndRow , SCCOL nEndCol ,
+                                  Edit** pEdits ,
+                                  sal_uInt16 aColLength )
+{
+    ScDocument* pDoc = GetViewData()->GetDocument();
+    ScDocShell* pDocSh = GetViewData()->GetDocShell();
+    ScMarkData& rMark = GetViewData()->GetMarkData();
+    ScDocShellModificator aModificator( *pDocSh );
+    SfxUndoManager* pUndoMgr = pDocSh->GetUndoManager();
+    if ( pDoc )
+    {
+        const BOOL bRecord( pDoc->IsUndoEnabled());
+        ScDocument* pUndoDoc = NULL;
+        ScDocument* pRedoDoc = NULL;
+        ScDocument* pRefUndoDoc = NULL;
+        ScRefUndoData* pUndoData = NULL;
+        SCTAB nTab = GetViewData()->GetTabNo();
+        SCTAB nStartTab = nTab;
+        SCTAB nEndTab = nTab;
+
+        {
+                ScChangeTrack* pChangeTrack = pDoc->GetChangeTrack();
+                if ( pChangeTrack )
+                        pChangeTrack->ResetLastCut();   // kein CutMode mehr
+        }
+        ScRange aUserRange( nStartCol, nCurrentRow, nStartTab, nEndCol, nCurrentRow, nEndTab );
+        BOOL bColInfo = ( nStartRow==0 && nEndRow==MAXROW );
+        BOOL bRowInfo = ( nStartCol==0 && nEndCol==MAXCOL );
+        SCCOL nUndoEndCol = nStartCol+aColLength-1;
+        SCROW nUndoEndRow = nCurrentRow;
+        USHORT nUndoFlags = IDF_NONE;
+
+        if ( bRecord )
+        {
+            pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
+            pUndoDoc->InitUndoSelected( pDoc , rMark , bColInfo , bRowInfo );
+            pDoc->CopyToDocument( aUserRange , 1 , FALSE , pUndoDoc );
+        }
+        USHORT nExtFlags = 0;
+        pDocSh->UpdatePaintExt( nExtFlags, nStartCol, nStartRow, nStartTab , nEndCol, nEndRow, nEndTab ); // content before the change
+        //rMark.SetMarkArea( aUserRange );
+        pDoc->BeginDrawUndo();
+
+        for(sal_uInt16 i = 0; i < aColLength; i++)
+        {
+            if (pEdits[i])
+            {
+                String  aFieldName=pEdits[i]->GetText();
+                pDoc->SetString( nStartCol + i, nCurrentRow, nTab, aFieldName );
+            }
+        }
+        //pDoc->ExtendMergeSel( nStartCol, nStartRow, nEndCol, nEndRow, rMark, TRUE );    // Refresh
+        pDocSh->UpdatePaintExt( nExtFlags, nStartCol, nCurrentRow, nStartTab, nEndCol, nCurrentRow, nEndTab );  // content after the change
+        SfxUndoAction* pUndo = new ScUndoDataForm( pDocSh,
+                                                                nStartCol, nCurrentRow, nStartTab,
+                                                                nUndoEndCol, nUndoEndRow, nEndTab, rMark,
+                                                                pUndoDoc, pRedoDoc, nUndoFlags,
+                                                                pUndoData, NULL, NULL, NULL,
+                                                                FALSE );           // FALSE = Redo data not yet copied
+        pUndoMgr->AddUndoAction( new ScUndoWrapper( pUndo ), TRUE );
+
+        USHORT nPaint = PAINT_GRID;
+        if (bColInfo)
+        {
+                nPaint |= PAINT_TOP;
+                nUndoEndCol = MAXCOL;                           // nur zum Zeichnen !
+        }
+        if (bRowInfo)
+        {
+                nPaint |= PAINT_LEFT;
+                nUndoEndRow = MAXROW;                           // nur zum Zeichnen !
+        }
+
+        pDocSh->PostPaint( nStartCol, nCurrentRow, nStartTab,
+                                                nUndoEndCol, nUndoEndRow, nEndTab, nPaint, nExtFlags );
+        pDocSh->UpdateOle(GetViewData());
+    }
+}
 
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

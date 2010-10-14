@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -93,6 +94,7 @@
 #include "globstr.hrc"
 #include "sc.hrc"
 #include "charthelper.hxx"
+#include "macromgr.hxx"
 #include "dpobject.hxx"
 
 #define GET_SCALEVALUE(set,id)  ((const SfxUInt16Item&)(set.Get( id ))).GetValue()
@@ -410,6 +412,13 @@ BYTE ScDocument::GetEditTextDirection(SCTAB nTab) const
     }
 
     return sal::static_int_cast<BYTE>(eRet);
+}
+
+ScMacroManager* ScDocument::GetMacroManager()
+{
+    if (!mpMacroMgr.get())
+        mpMacroMgr.reset(new ScMacroManager(this));
+    return mpMacroMgr.get();
 }
 
 //------------------------------------------------------------------------
@@ -1625,3 +1634,4 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
     delete pEngine;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

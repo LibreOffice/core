@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -739,6 +740,8 @@ void XclExpPivotCache::Save( XclExpStream& rStrm )
 void XclExpPivotCache::SaveXml( XclExpXmlStream& rStrm )
 {
     DBG_ASSERT( mbValid, "XclExpPivotCache::Save - invalid pivot cache" );
+#ifdef XLSX_PIVOT_CACHE /* <pivotCache> without xl/pivotCaches/ cacheStream
+                           results in a broken .xlsx */
     sax_fastparser::FSHelperPtr& rWorkbook = rStrm.GetCurrentStream();
     OUString sId = OUStringBuffer()
         .appendAscii("rId")
@@ -757,6 +760,7 @@ void XclExpPivotCache::SaveXml( XclExpXmlStream& rStrm )
     // create the pivot cache storage stream
     // OOXTODO: WriteCacheStream();
     rWorkbook->endElement( XML_pivotCache );
+#endif /* XLSX_PIVOT_CACHE */
 }
 
 // private --------------------------------------------------------------------
@@ -1345,6 +1349,149 @@ void XclExpPivotTable::Save( XclExpStream& rStrm )
     }
 }
 
+void XclExpPivotTable::SaveXml( XclExpXmlStream& rStrm )
+{
+    if( !mbValid )
+        return;
+    sax_fastparser::FSHelperPtr aPivotTableDefinition = rStrm.CreateOutputStream(
+            XclXmlUtils::GetStreamName( "xl/", "pivotTables/pivotTable", mnOutScTab+1),
+            XclXmlUtils::GetStreamName( "../", "pivotTables/pivotTable", mnOutScTab+1),
+            rStrm.GetCurrentStream()->getOutputStream(),
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.pivotTable+xml",
+            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/pivotTable");
+    rStrm.PushStream( aPivotTableDefinition );
+
+    aPivotTableDefinition->startElement( XML_pivotTableDefinition,
+            XML_xmlns,                      "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
+            XML_name,                       XclXmlUtils::ToOString( maPTInfo.maTableName ).getStr(),
+            XML_cacheId,                    OString::valueOf( (sal_Int32) maPTInfo.mnCacheIdx ).getStr(),
+            XML_dataOnRows,                 XclXmlUtils::ToPsz( maPTInfo.mnDataAxis == EXC_SXVD_AXIS_COL ),
+            XML_dataPosition,               OString::valueOf( (sal_Int32) maPTInfo.mnDataPos ).getStr(),
+            XML_autoFormatId,               OString::valueOf( (sal_Int32) maPTInfo.mnAutoFmtIdx ).getStr(),
+            // OOXTODO: XML_applyNumberFormats,         [ SXVIEW fAtrNum (maPTInfo.mnFlags) ]
+            // OOXTODO: XML_applyBorderFormats,         [ SXVIEW fAtrBdr (maPTInfo.mnFlags) ]
+            // OOXTODO: XML_applyFontFormats,           [ SXVIEW fAtrFnt (maPTInfo.mnFlags) ]
+            // OOXTODO: XML_applyPatternFormats,        [ SXVIEW fAtrPat (maPTInfo.mnFlags) ]
+            // OOXTODO: XML_applyAlignmentFormats,      [ SXVIEW fAtrAlc (maPTInfo.mnFlags) ]
+            // OOXTODO: XML_applyWidthHeightFormats,    [ SXVIEW fAtrProc (maPTInfo.mnFlags) ]
+            XML_dataCaption,                XclXmlUtils::ToOString( maPTInfo.maDataName ).getStr(),
+            // OOXTODO: XML_grandTotalCaption,          [ SxViewEx9 chGrand ]
+            // OOXTODO: XML_errorCaption,               [ SXEx stError ]
+            // OOXTODO: XML_showError,                  [ SXEx fDisplayErrorString ]
+            // OOXTODO: XML_missingCaption,             [ SXEx stDisplayNull ]
+            // OOXTODO: XML_showMissing,                [ SXEx fDisplayNullString ]
+            // OOXTODO: XML_pageStyle,                  [ SXEx stPageFieldStyle ]
+            // OOXTODO: XML_pivotTableStyle,            [ SXEx stTableStyle ]
+            // OOXTODO: XML_vacatedStyle,               [ SXEx stVacateStyle ]
+            // OOXTODO: XML_tag,                        [ SXEx stTag ]
+            // OOXTODO: XML_updatedVersion,             [ app-dependent ]
+            // OOXTODO: XML_minRefreshableVersion,      [ app-dependent ]
+            // OOXTODO: XML_asteriskTotals,             [ QsiSXTag/SXView9Save fHideTotAnnotation ]
+            // OOXTODO: XML_showItems,                  [ ??? ]
+            // OOXTODO: XML_editData,                   [ ??? ]
+            // OOXTODO: XML_disableFieldList,           [ SXEx fEnableFieldDialog? ]
+            // OOXTODO: XML_showCalcMbrs,               [ ??? ]
+            // OOXTODO: XML_visualTotals,               [ ??? ]
+            // OOXTODO: XML_showMultipleLabel,          [ SXEx fMergeLabels? ]
+            // OOXTODO: XML_showDataDropDown,           [ SXEx fEnableDrillDown? ]
+            // OOXTODO: XML_showDrill,                  [ ??? ]
+            // OOXTODO: XML_printDrill,                 [ ??? ]
+            // OOXTODO: XML_showMemberPropertyTips,
+            // OOXTODO: XML_showDataTips,
+            // OOXTODO: XML_enableWizard,
+            XML_enableDrill,                XclXmlUtils::ToPsz( maPTExtInfo.mnFlags & EXC_SXEX_DRILLDOWN ), // ???
+            // OOXTODO: XML_enableFieldProperties,      [ SXEx fEnableFieldDialog (maPTExtInfo.mnFlags) ]
+            // OOXTODO: XML_preserveFormatting,         [ SXEx fPreserveFormatting (maPTExtInfo.mnFlags) ]
+#if 0
+            // XML_useAutoFormatting, [???],
+#endif
+            // OOXTODO: XML_pageWrap,                   [ SXEx cWrapPage (maPTExtInfo.mnFlags) ]
+            // OOXTODO: XML_pageOverThenDown,           [ SXEx fAcrossPageLay (maPTExtInfo.mnFlags) ]
+            // OOXTODO: XML_subtotalHiddenItems,        [ SXEx fSubtotalHiddenPageItems (maPTExtInfo.mnFlags) ]
+            XML_rowGrandTotals,             XclXmlUtils::ToPsz( maPTInfo.mnFlags & EXC_SXVIEW_ROWGRAND ),
+            XML_colGrandTotals,             XclXmlUtils::ToPsz( maPTInfo.mnFlags & EXC_SXVIEW_COLGRAND ),
+            // OOXTODO: XML_fieldPrintTitles,
+            // OOXTODO: XML_itemPrintTitles,
+            // OOXTODO: XML_mergeItem,
+            // OOXTODO: XML_showDropZones,
+            // OOXTODO: XML_createdVersion,
+            // OOXTODO: XML_indent,
+            // OOXTODO: XML_showEmptyRow,
+            // OOXTODO: XML_showEmptyCol,
+            // OOXTODO: XML_showHeaders,
+            // OOXTODO: XML_compact,
+            // OOXTODO: XML_outline,
+            // OOXTODO: XML_outlineData,
+            // OOXTODO: XML_compactData,
+            // OOXTODO: XML_published,
+            // OOXTODO: XML_gridDropZones,
+            // OOXTODO: XML_immersive,
+            // OOXTODO: XML_multipleFieldFilters,
+            // OOXTODO: XML_chartFormat,
+            // OOXTODO: XML_rowHeaderCaption,
+            // OOXTODO: XML_colHeaderCaption,
+            // OOXTODO: XML_fieldListSortAscending,
+            // OOXTODO: XML_mdxSubqueries,
+            // OOXTODO: XML_customListSort,
+            FSEND );
+
+    aPivotTableDefinition->singleElement( XML_location,
+            XML_ref,            XclXmlUtils::ToOString( maPTInfo.maOutXclRange ).getStr(),
+            XML_firstHeaderRow, OString::valueOf( (sal_Int32) maPTInfo.mnFirstHeadRow ).getStr(),
+            XML_firstDataRow,   OString::valueOf( (sal_Int32) maPTInfo.maDataXclPos.mnRow ).getStr(),
+            XML_firstDataCol,   OString::valueOf( (sal_Int32) maPTInfo.maDataXclPos.mnCol ).getStr(),
+            XML_rowPageCount,   OString::valueOf( (sal_Int32) maPTInfo.mnDataRows ).getStr(),   // OOXTODO?
+            XML_colPageCount,   OString::valueOf( (sal_Int32) maPTInfo.mnDataCols ).getStr(),   // OOXTODO?
+            FSEND );
+
+    // OOXTODO: XML_pivotFields
+
+    // maPTInfo.mnFields?
+    if( maPTInfo.mnRowFields )
+    {
+        aPivotTableDefinition->startElement( XML_rowFields,
+                XML_count,  OString::valueOf( (sal_Int32) maPTInfo.mnRowFields ).getStr(),
+                FSEND );
+        aPivotTableDefinition->endElement( XML_rowFields );
+    }
+
+    // OOXTODO: XML_rowItems
+
+    if( maPTInfo.mnColFields )
+    {
+        aPivotTableDefinition->startElement( XML_colFields,
+                XML_count,  OString::valueOf( (sal_Int32) maPTInfo.mnColFields ).getStr(),
+                FSEND );
+        aPivotTableDefinition->endElement( XML_colFields );
+    }
+
+    // OOXTODO: XML_colItems
+
+    if( maPTInfo.mnPageFields )
+    {
+        aPivotTableDefinition->startElement( XML_pageFields,
+                XML_count,  OString::valueOf( (sal_Int32) maPTInfo.mnPageFields ).getStr(),
+                FSEND );
+        aPivotTableDefinition->endElement( XML_pageFields );
+    }
+
+    if( maPTInfo.mnDataFields )
+    {
+        aPivotTableDefinition->startElement( XML_dataFields,
+                XML_count,  OString::valueOf( (sal_Int32) maPTInfo.mnDataFields ).getStr(),
+                FSEND );
+        aPivotTableDefinition->endElement( XML_dataFields );
+    }
+
+    // OOXTODO: XML_formats, XML_conditionalFormats, XML_chartFormats,
+    //          XML_pivotHierarchies, XML_pivotTableStyleInfo, XML_filters,
+    //          XML_rowHierarchiesUsage, XML_colHierarchiesUsage, XML_ext
+
+    aPivotTableDefinition->endElement( XML_pivotTableDefinition );
+
+    rStrm.PopStream();
+}
+
 // private --------------------------------------------------------------------
 
 XclExpPTField* XclExpPivotTable::GetFieldAcc( const String& rName )
@@ -1727,12 +1874,15 @@ void XclExpPivotTableManager::WritePivotCaches( XclExpStream& rStrm )
 
 void XclExpPivotTableManager::WritePivotCachesXml( XclExpXmlStream& rStrm )
 {
+#ifdef XLSX_PIVOT_CACHE /* <pivotCache> without xl/pivotCaches/ cacheStream
+                           results in a broken .xlsx */
     if( maPCacheList.IsEmpty() )
         return;
     sax_fastparser::FSHelperPtr& rWorkbook = rStrm.GetCurrentStream();
     rWorkbook->startElement( XML_pivotCaches, FSEND );
     maPCacheList.SaveXml( rStrm );
     rWorkbook->endElement( XML_pivotCaches );
+#endif /* XLSX_PIVOT_CACHE */
 }
 
 void XclExpPivotTableManager::WritePivotTables( XclExpStream& rStrm, SCTAB nScTab )
@@ -1798,3 +1948,4 @@ const XclExpPivotCache* XclExpPivotTableManager::CreatePivotCache( const ScDPObj
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

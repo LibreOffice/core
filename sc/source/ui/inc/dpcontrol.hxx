@@ -69,11 +69,12 @@ public:
     ~ScDPFieldButton();
 
     void setText(const ::rtl::OUString& rText);
-    void setBoundingBox(const Point& rPos, const Size& rSize);
+    void setBoundingBox(const Point& rPos, const Size& rSize, bool bLayoutRTL);
     void setDrawBaseButton(bool b);
     void setDrawPopupButton(bool b);
     void setHasHiddenMember(bool b);
     void setPopupPressed(bool b);
+    void setPopupLeft(bool b);
     void draw();
 
     void getPopupBoundingBox(Point& rPos, Size& rSize) const;
@@ -94,6 +95,7 @@ private:
     bool                    mbPopupButton;
     bool                    mbHasHiddenMember;
     bool                    mbPopupPressed;
+    bool                    mbPopupLeft;
 };
 
 // ============================================================================

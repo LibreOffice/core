@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -981,7 +982,7 @@ void XclExpFont::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
     rStyleSheet->startElement( XML_font, FSEND );
-    rStrm.WriteFontData( maData, XML_name );
+    XclXmlUtils::WriteFontData( rStyleSheet, maData, XML_name );
     // OOXTODO: XML_scheme; //scheme/@val values: "major", "minor", "none"
     rStyleSheet->endElement( XML_font );
 }
@@ -2241,7 +2242,10 @@ void XclExpStyle::SaveXml( XclExpXmlStream& rStrm )
     rStrm.GetCurrentStream()->singleElement( XML_cellStyle,
             XML_name,           sName.getStr(),
             XML_xfId,           OString::valueOf( nXFId ).getStr(),
-            XML_builtinId,      OString::valueOf( (sal_Int32) mnStyleId ).getStr(),
+/* mso-excel 2007 complains when it finds builtinId >= 55, it is not
+ * bothered by multiple 54 values. */
+#define CELL_STYLE_MAX_BUILTIN_ID 55
+                                             XML_builtinId, OString::valueOf( std::min( static_cast<sal_Int32>( CELL_STYLE_MAX_BUILTIN_ID - 1 ), static_cast <sal_Int32>( mnStyleId ) ) ).getStr(),
             // OOXTODO: XML_iLevel,
             // OOXTODO: XML_hidden,
             XML_customBuiltin,  XclXmlUtils::ToPsz( ! IsBuiltIn() ),
@@ -2901,3 +2905,4 @@ void XclExpXmlStyleSheet::SaveXml( XclExpXmlStream& rStrm )
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -94,6 +95,7 @@
 #include "tabprotection.hxx"
 #include "formulaparserpool.hxx"
 #include "clipparam.hxx"
+#include "macromgr.hxx"
 
 using namespace com::sun::star;
 
@@ -156,6 +158,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         pCacheFieldEditEngine( NULL ),
         pDocProtection( NULL ),
         mpClipParam( NULL),
+        mpMacroMgr( NULL ),
         pExternalRefMgr( NULL ),
         pViewOptions( NULL ),
         pDocOptions( NULL ),
@@ -1276,3 +1279,5 @@ void ScDocument::ClearLookupCaches()
     if( pLookupCacheMapImpl )
         pLookupCacheMapImpl->clear();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

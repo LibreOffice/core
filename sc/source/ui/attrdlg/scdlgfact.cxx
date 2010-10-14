@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -80,6 +81,7 @@
 #include "tpusrlst.hxx" //add for ScTpUserLists
 #include "tpview.hxx" //add for ScTpContentOptions
 #include "tpformula.hxx"
+#include "datafdlg.hxx" //add for ScDataFormDlg
 #include "tpcompatibility.hxx"
 
 // ause
@@ -94,6 +96,8 @@ IMPL_ABSTDLG_BASE(AbstractScDataPilotDatabaseDlg_Impl); //add for ScDataPilotDat
 IMPL_ABSTDLG_BASE(AbstractScDataPilotSourceTypeDlg_Impl); //add for ScDataPilotSourceTypeDlg
 IMPL_ABSTDLG_BASE(AbstractScDataPilotServiceDlg_Impl); //add for ScDataPilotServiceDlg
 IMPL_ABSTDLG_BASE(AbstractScDeleteCellDlg_Impl); //add for ScDeleteCellDlg
+//for dataform
+IMPL_ABSTDLG_BASE(AbstractScDataFormDlg_Impl); //add for ScDataFormDlg
 IMPL_ABSTDLG_BASE(AbstractScDeleteContentsDlg_Impl); //add for ScDeleteContentsDlg
 IMPL_ABSTDLG_BASE(AbstractScFillSeriesDlg_Impl); //add for ScFillSeriesDlg
 IMPL_ABSTDLG_BASE(AbstractScGroupDlg_Impl); //add for ScGroupDlg
@@ -865,6 +869,26 @@ AbstractScDeleteCellDlg* ScAbstractDialogFactory_Impl::CreateScDeleteCellDlg( Wi
 
 //add for ScDeleteCellDlg  end
 
+//add for ScDataFormDlg begin
+AbstractScDataFormDlg* ScAbstractDialogFactory_Impl::CreateScDataFormDlg( Window* pParent, int nId, ScTabViewShell* pTabViewShell )
+{
+    ScDataFormDlg * pDlg=NULL;
+    switch ( nId )
+    {
+        case RID_SCDLG_DATAFORM :
+            pDlg = new ScDataFormDlg( pParent, pTabViewShell);
+            break;
+        default:
+            break;
+    }
+
+    if ( pDlg )
+        return new AbstractScDataFormDlg_Impl( pDlg );
+    return 0;
+}
+
+//add for ScDataFormDlg  end
+
 //add for ScDeleteContentsDlg begin
 AbstractScDeleteContentsDlg* ScAbstractDialogFactory_Impl::CreateScDeleteContentsDlg(Window* pParent,int nId, //add for ScDeleteContentsDlg
                                                                  USHORT  nCheckDefaults )
@@ -1604,3 +1628,4 @@ void ScDPFunctionDlg_Dummy()
     ScDPListBoxWrapper aWrapper( *pListBox );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

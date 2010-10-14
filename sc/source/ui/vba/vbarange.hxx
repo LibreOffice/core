@@ -35,6 +35,7 @@
 #include <ooo/vba/excel/XFont.hpp>
 #include <ooo/vba/excel/XComment.hpp>
 #include <ooo/vba/XCollection.hpp>
+#include <ooo/vba/excel/XPivotTable.hpp>
 #include <ooo/vba/excel/XlPasteType.hdl>
 #include <ooo/vba/excel/XlPasteSpecialOperation.hdl>
 
@@ -49,6 +50,8 @@
 #include <com/sun/star/sheet/FillDirection.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSheetCellRangeContainer.hpp>
+#include <com/sun/star/table/CellAddress.hpp>
+#include "vbaquerytable.hxx" //09-09-18 add by limingl
 
 #include "vbaformat.hxx"
 #include <formula/grammar.hxx>
@@ -97,6 +100,7 @@ class ScVbaRange : public ScVbaRange_BASE
     sal_Bool mbIsRows;
     sal_Bool mbIsColumns;
     css::uno::Reference< ov::excel::XValidation > m_xValidation;
+    css::uno::Reference<excel::XQueryTable> m_xQueryTable; //09-09-16 add by limingl
     double getCalcColWidth( const css::table::CellRangeAddress& ) throw (css::uno::RuntimeException);
     double getCalcRowHeight( const css::table::CellRangeAddress& ) throw (css::uno::RuntimeException);
     void visitArray( ArrayVisitor& vistor );
@@ -146,8 +150,10 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
         const rtl::OUString& sRangeName, ScDocShell* pDocSh,
         formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_XL_A1  ) throw ( css::uno::RuntimeException );
+    css::table::CellAddress getLeftUpperCellAddress();
 
     // Attributes
+    virtual css::uno::Any SAL_CALL getName() throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getValue() throw (css::uno::RuntimeException);
     virtual void   SAL_CALL setValue( const css::uno::Any& aValue ) throw ( css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getFormula() throw (css::uno::RuntimeException);
@@ -188,6 +194,7 @@ public:
     virtual css::uno::Any SAL_CALL getPrefixCharacter() throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getShowDetail() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setShowDetail(const css::uno::Any& aShowDetail) throw (css::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::ooo::vba::excel::XQueryTable > SAL_CALL getQueryTable() throw (::com::sun::star::uno::RuntimeException); //09-09-16 add by limingl
     // Methods
     sal_Bool IsRows() { return mbIsRows; }
     sal_Bool IsColumns() { return mbIsColumns; }
@@ -238,7 +245,7 @@ public:
     virtual css::uno::Any SAL_CALL BorderAround( const css::uno::Any& LineStyle,
                 const css::uno::Any& Weight, const css::uno::Any& ColorIndex, const css::uno::Any& Color ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL TextToColumns( const css::uno::Any& Destination, const css::uno::Any& DataType, const css::uno::Any& TextQualifier,
-                const css::uno::Any& ConsecutinveDelimiter, const css::uno::Any& Tab, const css::uno::Any& Semicolon, const css::uno::Any& Comma,
+                const css::uno::Any& ConsecutiveDelimiter, const css::uno::Any& Tab, const css::uno::Any& Semicolon, const css::uno::Any& Comma,
                 const css::uno::Any& Space, const css::uno::Any& Other, const css::uno::Any& OtherChar, const css::uno::Any& FieldInfo,
                 const css::uno::Any& DecimalSeparator, const css::uno::Any& ThousandsSeparator, const css::uno::Any& TrailingMinusNumbers ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL Hyperlinks( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
@@ -263,6 +270,11 @@ public:
     virtual void SAL_CALL RemoveSubtotal(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL MergeArea() throw (css::script::BasicErrorException, css::uno::RuntimeException);
     virtual void SAL_CALL Subtotal( ::sal_Int32 GroupBy, ::sal_Int32 Function, const css::uno::Sequence< ::sal_Int32 >& TotalList, const css::uno::Any& Replace, const css::uno::Any& PageBreaks, const css::uno::Any& SummaryBelowData ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL AdvancedFilter( ::sal_Int32 Action, const css::uno::Any& CriteriaRange, const css::uno::Any& CopyToRange, const css::uno::Any& Unique ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
+
+    virtual css::uno::Reference< ov::excel::XPivotTable > SAL_CALL PivotTable(  ) throw (css::uno::RuntimeException);
+
+    virtual ::sal_Int32 SAL_CALL CopyFromRecordset( const ::com::sun::star::uno::Any& Data,  const ::com::sun::star::uno::Any& MaxRows, const ::com::sun::star::uno::Any& MaxColumns ) throw (::com::sun::star::script::BasicErrorException, ::com::sun::star::uno::RuntimeException); //2008-08-25 add by limingl
     // XEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException);
     // XElementAccess
@@ -288,6 +300,8 @@ public:
     static css::uno::Reference< ov::excel::XRange > ApplicationRange( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Any &Cell1, const css::uno::Any &Cell2 ) throw (css::uno::RuntimeException);
     virtual sal_Bool SAL_CALL GoalSeek( const css::uno::Any& Goal, const css::uno::Reference< ov::excel::XRange >& ChangingCell ) throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL SpecialCells( const css::uno::Any& _oType, const css::uno::Any& _oValue) throw ( css::script::BasicErrorException );
+    // XErrorQuery
+    virtual ::sal_Bool SAL_CALL hasError(  ) throw (css::uno::RuntimeException);
     // XHelperInterface
     virtual rtl::OUString& getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();

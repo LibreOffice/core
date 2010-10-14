@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -385,3 +386,4 @@ uno::Any SAL_CALL ScDocDefaultsObj::getPropertyDefault( const rtl::OUString& aPr
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

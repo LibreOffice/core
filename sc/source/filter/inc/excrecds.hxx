@@ -72,6 +72,7 @@ class ExcRecord : public XclExpRecord
 {
 public:
     virtual void            Save( XclExpStream& rStrm );
+    virtual void            SaveXml( XclExpXmlStream& rStrm );
 
     virtual UINT16          GetNum() const = 0;
     virtual sal_Size        GetLen() const = 0;
@@ -285,6 +286,8 @@ public:
     virtual UINT16          GetNum( void ) const;
 
     virtual void            SaveXml( XclExpXmlStream& rStrm );
+private:
+    BOOL                    bDateCompatibility;
 };
 
 
@@ -471,6 +474,7 @@ private:
     XclExpFiltermode*   pFilterMode;
     XclExpAutofilterinfo* pFilterInfo;
     ScRange                 maRef;
+    bool mbAutoFilter;
 };
 
 // ----------------------------------------------------------------------------

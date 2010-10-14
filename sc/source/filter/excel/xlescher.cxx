@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -366,7 +367,7 @@ bool XclControlHelper::FillMacroDescriptor( ScriptEventDescriptor& rDescriptor,
 }
 
 String XclControlHelper::ExtractFromMacroDescriptor(
-        const ScriptEventDescriptor& rDescriptor, XclTbxEventType eEventType )
+        const ScriptEventDescriptor& rDescriptor, XclTbxEventType eEventType, SfxObjectShell* pShell )
 {
     if( (rDescriptor.ScriptCode.getLength() > 0) &&
             rDescriptor.ScriptType.equalsIgnoreAsciiCaseAscii( "Script" ) &&
@@ -377,3 +378,5 @@ String XclControlHelper::ExtractFromMacroDescriptor(
 }
 
 // ============================================================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

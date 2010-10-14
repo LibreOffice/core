@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -56,16 +57,20 @@
 #include <svx/svditer.hxx>
 #include <svx/svdpage.hxx>
 #include <com/sun/star/drawing/XShapeDescriptor.hpp>
+#include <editeng/unoprnms.hxx>
 
 using namespace com::sun::star;
 
 //------------------------------------------------------------------------
 
-//  keine Properties fuer Text in Notizen
 const SvxItemPropertySet* lcl_GetAnnotationPropertySet()
 {
     static SfxItemPropertyMapEntry aAnnotationPropertyMap_Impl[] =
     {
+        SVX_UNOEDIT_CHAR_PROPERTIES,
+        SVX_UNOEDIT_FONT_PROPERTIES,
+        SVX_UNOEDIT_PARA_PROPERTIES,
+        SVX_UNOEDIT_NUMBERING_PROPERTIE,    // for completeness of service ParagraphProperties
         {0,0,0,0,0,0}
     };
     static SvxItemPropertySet aAnnotationPropertySet_Impl( aAnnotationPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
@@ -727,3 +732,4 @@ void SAL_CALL ScAnnotationShapeObj::removeEventListener( const uno::Reference< l
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

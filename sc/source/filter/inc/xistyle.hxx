@@ -70,8 +70,10 @@ public:
     void                ReadPalette( XclImpStream& rStrm );
 
 private:
+    void ExportPalette();
     typedef ::std::vector< ColorData > ColorDataVec;
     ColorDataVec        maColorTable;       /// Colors read from file.
+    const XclImpRoot&             mrRoot;
 };
 
 // FONT record - font information =============================================

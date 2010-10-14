@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -331,6 +332,20 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
         case SID_SBA_BRW_INSERT:
             {
                 DBG_ERROR( "Deprecated Slot" );
+            }
+            break;
+
+        case SID_DATA_FORM:
+            {
+                ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+
+                AbstractScDataFormDlg* pDlg = pFact->CreateScDataFormDlg( pTabViewShell->GetDialogParent(),RID_SCDLG_DATAFORM, pTabViewShell);
+                DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+
+                pDlg->Execute();
+
+                rReq.Done();
             }
             break;
 
@@ -1401,3 +1416,4 @@ void __EXPORT ScCellShell::GetDBState( SfxItemSet& rSet )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

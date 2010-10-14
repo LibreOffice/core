@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -320,6 +321,11 @@ ScMatrixRef ScInterpreter::GetNewMat(SCSIZE nC, SCSIZE nR)
         pMat = NULL;
     }
     return pMat;
+}
+
+ScInterpreter::VolatileType ScInterpreter::GetVolatileType() const
+{
+    return meVolaileType;
 }
 
 ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken,
@@ -2811,3 +2817,5 @@ void ScInterpreter::ScInfo()
             PushIllegalArgument();
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

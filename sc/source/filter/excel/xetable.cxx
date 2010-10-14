@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -882,76 +883,12 @@ void XclExpFormulaCell::Save( XclExpStream& rStrm )
         mxStringRec->Save( rStrm );
 }
 
-static const char* lcl_GetErrorString( USHORT nScErrCode )
-{
-    sal_uInt8 nXclErrCode = XclTools::GetXclErrorCode( nScErrCode );
-    switch( nXclErrCode )
-    {
-        case EXC_ERR_NULL:  return "#NULL!";
-        case EXC_ERR_DIV0:  return "#DIV/0!";
-        case EXC_ERR_VALUE: return "#VALUE!";
-        case EXC_ERR_REF:   return "#REF!";
-        case EXC_ERR_NAME:  return "#NAME?";
-        case EXC_ERR_NUM:   return "#NUM!";
-        case EXC_ERR_NA:
-        default:            return "#N/A";
-    }
-}
-
-static void lcl_GetFormulaInfo( ScFormulaCell& rCell, const char** pType, OUString& rValue)
-{
-    switch( rCell.GetFormatType() )
-    {
-        case NUMBERFORMAT_NUMBER:
-        {
-            // either value or error code
-            USHORT nScErrCode = rCell.GetErrCode();
-            if( nScErrCode )
-            {
-                *pType = "e";
-                rValue = XclXmlUtils::ToOUString( lcl_GetErrorString( nScErrCode ) );
-            }
-            else
-            {
-                *pType = "n";
-                rValue = OUString::valueOf( rCell.GetValue() );
-            }
-        }
-        break;
-
-        case NUMBERFORMAT_TEXT:
-        {
-            *pType = "str";
-            String aResult;
-            rCell.GetString( aResult );
-            rValue = XclXmlUtils::ToOUString( aResult );
-        }
-        break;
-
-        case NUMBERFORMAT_LOGICAL:
-        {
-            *pType = "b";
-            rValue = XclXmlUtils::ToOUString( rCell.GetValue() == 0.0 ? "0" : "1" );
-        }
-        break;
-
-        default:
-        {
-            *pType = "inlineStr";
-            String aResult;
-            rCell.GetString( aResult );
-            rValue = XclXmlUtils::ToOUString( aResult );
-        }
-        break;
-    }
-}
-
 void XclExpFormulaCell::SaveXml( XclExpXmlStream& rStrm )
 {
     const char* sType = NULL;
     OUString    sValue;
 
-    lcl_GetFormulaInfo( mrScFmlaCell, &sType, sValue );
+    XclXmlUtils::GetFormulaTypeAndValue( mrScFmlaCell, sType, sValue );
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElement( XML_c,
             XML_r,      XclXmlUtils::ToOString( GetXclPos() ).getStr(),
@@ -962,7 +899,7 @@ void XclExpFormulaCell::SaveXml( XclExpXmlStream& rStrm )
 
     rWorksheet->startElement( XML_f,
             // OOXTODO: XML_t,      ST_CellFormulaType
-            XML_aca,    XclXmlUtils::ToPsz( mxTokArr->IsVolatile() || (mxAddRec.is() && mxAddRec->IsVolatile()) ),
+            XML_aca,    XclXmlUtils::ToPsz( (mxTokArr.is() && mxTokArr->IsVolatile()) || (mxAddRec.is() && mxAddRec->IsVolatile()) ),
             // OOXTODO: XML_ref,    ST_Ref
             // OOXTODO: XML_dt2D,   bool
             // OOXTODO: XML_dtr,    bool
@@ -2062,9 +1999,7 @@ void XclExpRow::SaveXml( XclExpXmlStream& rStrm )
 XclExpRowBuffer::XclExpRowBuffer( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
     maOutlineBfr( rRoot ),
-    maDimensions( rRoot ),
-    mpLastUsedRow( 0 ),
-    mnLastUsedXclRow( 0 )
+    maDimensions( rRoot )
 {
 }
 
@@ -2082,63 +2017,34 @@ void XclExpRowBuffer::CreateRows( SCROW nFirstFreeScRow )
 
 void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt16Vec& rColXFIndexes )
 {
-    size_t nPos, nSize;
-
     // *** Finalize all rows *** ----------------------------------------------
 
     GetProgressBar().ActivateFinalRowsSegment();
 
-    // unused blank cell records will be removed
-    for( nPos = 0, nSize = maRowList.GetSize(); nPos < nSize; ++nPos )
-        maRowList.GetRecord( nPos )->Finalize( rColXFIndexes );
+    RowMap::iterator itr, itrBeg = maRowMap.begin(), itrEnd = maRowMap.end();
+    for (itr = itrBeg; itr != itrEnd; ++itr)
+        itr->second->Finalize(rColXFIndexes);
 
     // *** Default row format *** ---------------------------------------------
 
     typedef ::std::map< XclExpDefaultRowData, size_t > XclExpDefRowDataMap;
     XclExpDefRowDataMap aDefRowMap;
 
-    // find default row format for rows beyond used area
-    sal_uInt32 nDefaultXclRow = maRowList.IsEmpty() ? 0 : (maRowList.GetLastRecord()->GetXclRow() + 1);
     XclExpDefaultRowData aMaxDefData;
     size_t nMaxDefCount = 0;
-    /*  #i30411# Files saved with SO7/OOo1.x with nonstandard default column
-        formatting cause big Excel files, because all rows from row 1 to row
-        32000 are exported. Now, if the used area goes exactly to row 32000,
-        ignore all rows >32000.
-        #i59220# Tolerance of +-128 rows for inserted/removed rows. */
-    if( (nDefaultXclRow < 31872) || (nDefaultXclRow > 32128) )
-    {
-        sal_uInt16 nLastXclRow = static_cast< sal_uInt16 >( GetMaxPos().Row() );
-        if( nDefaultXclRow <= nLastXclRow )
-        {
-            // create a dummy ROW record and fill aMaxDefData
-            XclExpRowOutlineBuffer aOutlineBfr( GetRoot() );
-            XclExpRow aRow( GetRoot(), nLastXclRow, aOutlineBfr, true );
-            aMaxDefData = XclExpDefaultRowData( aRow );
-            aDefRowMap[ aMaxDefData ] = nMaxDefCount =
-                static_cast< size_t >( nLastXclRow - nDefaultXclRow + 1 );
-        }
-    }
-
     // only look for default format in existing rows, if there are more than unused
-    nSize = maRowList.GetSize();
-    if( nMaxDefCount < nSize )
+    for (itr = itrBeg; itr != itrEnd; ++itr)
     {
-        for( nPos = 0; nPos < nSize; ++nPos )
+        const RowRef& rRow = itr->second;
+        if (rRow->IsDefaultable())
         {
-            XclExpRowRef xRow = maRowList.GetRecord( nPos );
-            /*  Collect formats of unused rows (rows without cells), which are able
-                to be defaulted (i.e. no explicit format or outline level). */
-            if( xRow->IsDefaultable() )
+            XclExpDefaultRowData aDefData( *rRow );
+            size_t& rnDefCount = aDefRowMap[ aDefData ];
+            ++rnDefCount;
+            if( rnDefCount > nMaxDefCount )
             {
-                XclExpDefaultRowData aDefData( *xRow );
-                size_t& rnDefCount = aDefRowMap[ aDefData ];
-                ++rnDefCount;
-                if( rnDefCount > nMaxDefCount )
-                {
-                    nMaxDefCount = rnDefCount;
-                    aMaxDefData = aDefData;
-                }
+                nMaxDefCount = rnDefCount;
+                aMaxDefData = aDefData;
             }
         }
     }
@@ -2153,24 +2059,23 @@ void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt
     sal_uInt32 nFirstUsedXclRow = SAL_MAX_UINT32;
     sal_uInt32 nFirstFreeXclRow = 0;
 
-    for( nPos = 0, nSize = maRowList.GetSize(); nPos < nSize; ++nPos )
+    for (itr = itrBeg; itr != itrEnd; ++itr)
     {
-        XclExpRowRef xRow = maRowList.GetRecord( nPos );
-
+        const RowRef& rRow = itr->second;
         // disable unused rows
-        xRow->DisableIfDefault( aMaxDefData );
+        rRow->DisableIfDefault( aMaxDefData );
 
         // find used column range
-        if( !xRow->IsEmpty() )      // empty rows return (0...0) as used range
+        if( !rRow->IsEmpty() )      // empty rows return (0...0) as used range
         {
-            nFirstUsedXclCol = ::std::min( nFirstUsedXclCol, xRow->GetFirstUsedXclCol() );
-            nFirstFreeXclCol = ::std::max( nFirstFreeXclCol, xRow->GetFirstFreeXclCol() );
+            nFirstUsedXclCol = ::std::min( nFirstUsedXclCol, rRow->GetFirstUsedXclCol() );
+            nFirstFreeXclCol = ::std::max( nFirstFreeXclCol, rRow->GetFirstFreeXclCol() );
         }
 
         // find used row range
-        if( xRow->IsEnabled() )
+        if( rRow->IsEnabled() )
         {
-            sal_uInt16 nXclRow = xRow->GetXclRow();
+            sal_uInt16 nXclRow = rRow->GetXclRow();
             nFirstUsedXclRow = ::std::min< sal_uInt32 >( nFirstUsedXclRow, nXclRow );
             nFirstFreeXclRow = ::std::max< sal_uInt32 >( nFirstFreeXclRow, nXclRow + 1 );
         }
@@ -2191,27 +2096,29 @@ void XclExpRowBuffer::Save( XclExpStream& rStrm )
     maDimensions.Save( rStrm );
 
     // save in blocks of 32 rows, each block contains first all ROWs, then all cells
-    size_t nSize = maRowList.GetSize();
-    size_t nBlockStart = 0;
-    sal_uInt16 nStartXclRow = (nSize == 0) ? 0 : maRowList.GetRecord( 0 )->GetXclRow();
+    size_t nSize = maRowMap.size();
+    RowMap::iterator itr, itrBeg = maRowMap.begin(), itrEnd = maRowMap.end();
+    RowMap::iterator itrBlkStart = maRowMap.begin(), itrBlkEnd = maRowMap.begin();
+    sal_uInt16 nStartXclRow = (nSize == 0) ? 0 : itrBeg->second->GetXclRow();
 
-    while( nBlockStart < nSize )
+
+    for (itr = itrBeg; itr != itrEnd; ++itr)
     {
         // find end of row block
-        size_t nBlockEnd = nBlockStart + 1;
-        while( (nBlockEnd < nSize) && (maRowList.GetRecord( nBlockEnd )->GetXclRow() - nStartXclRow < EXC_ROW_ROWBLOCKSIZE) )
-            ++nBlockEnd;
+        ++itrBlkEnd;
+        while( (itrBlkEnd != itrEnd) && (itrBlkEnd->second->GetXclRow() - nStartXclRow < EXC_ROW_ROWBLOCKSIZE) )
+            ++itrBlkEnd;
 
         // write the ROW records
-        size_t nPos;
-        for( nPos = nBlockStart; nPos < nBlockEnd; ++nPos )
-            maRowList.GetRecord( nPos )->Save( rStrm );
+        RowMap::iterator itRow;
+        for( itRow = itrBlkStart; itRow != itrBlkEnd; ++itRow )
+            itRow->second->Save( rStrm );
 
         // write the cell records
-        for( nPos = nBlockStart; nPos < nBlockEnd; ++nPos )
-            maRowList.GetRecord( nPos )->WriteCellList( rStrm );
+        for( itRow = itrBlkStart; itRow != itrBlkEnd; ++itRow )
+             itRow->second->WriteCellList( rStrm );
 
-        nBlockStart = nBlockEnd;
+        itrBlkStart = itrBlkEnd;
         nStartXclRow += EXC_ROW_ROWBLOCKSIZE;
     }
 }
@@ -2219,23 +2126,22 @@ void XclExpRowBuffer::Save( XclExpStream& rStrm )
 void XclExpRowBuffer::SaveXml( XclExpXmlStream& rStrm )
 {
     sal_Int32 nNonEmpty = 0;
-
-    size_t nRows = maRowList.GetSize();
-    for( size_t i = 0; i < nRows; ++i)
-        if( maRowList.GetRecord( i )->IsEnabled() )
+    RowMap::iterator itr = maRowMap.begin(), itrEnd = maRowMap.end();
+    for (; itr != itrEnd; ++itr)
+        if (itr->second->IsEnabled())
             ++nNonEmpty;
 
-    if( nNonEmpty == 0 )
+    if (nNonEmpty == 0)
     {
         rStrm.GetCurrentStream()->singleElement( XML_sheetData, FSEND );
+        return;
     }
-    else
-    {
-        sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
-        rWorksheet->startElement( XML_sheetData, FSEND );
-        maRowList.SaveXml( rStrm );
-        rWorksheet->endElement( XML_sheetData );
-    }
+
+    sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
+    rWorksheet->startElement( XML_sheetData, FSEND );
+    for (itr = maRowMap.begin(); itr != itrEnd; ++itr)
+        itr->second->SaveXml(rStrm);
+    rWorksheet->endElement( XML_sheetData );
 }
 
 XclExpDimensions* XclExpRowBuffer::GetDimensions()
@@ -2245,18 +2151,14 @@ XclExpDimensions* XclExpRowBuffer::GetDimensions()
 
 XclExpRow& XclExpRowBuffer::GetOrCreateRow( sal_uInt16 nXclRow, bool bRowAlwaysEmpty )
 {
-    if( !mpLastUsedRow || (mnLastUsedXclRow != nXclRow) )
+    RowMap::iterator itr = maRowMap.find(nXclRow);
+    if (itr == maRowMap.end())
     {
-        // fill up missing ROW records
-        // do not use sal_uInt16 for nFirstFreeXclRow, would cause loop in full sheets
-        for( size_t nFirstFreeXclRow = maRowList.GetSize(); nFirstFreeXclRow <= nXclRow; ++nFirstFreeXclRow )
-            maRowList.AppendNewRecord( new XclExpRow(
-                GetRoot(), static_cast< sal_uInt16 >( nFirstFreeXclRow ), maOutlineBfr, bRowAlwaysEmpty ) );
-
-        mpLastUsedRow = maRowList.GetRecord( nXclRow ).get();
-        mnLastUsedXclRow = nXclRow;
+        RowRef p(new XclExpRow(GetRoot(), nXclRow, maOutlineBfr, bRowAlwaysEmpty));
+        ::std::pair<RowMap::iterator, bool> r = maRowMap.insert(RowMap::value_type(nXclRow, p));
+        itr = r.first;
     }
-    return *mpLastUsedRow;
+    return *itr->second;
 }
 
 // ============================================================================
@@ -2323,7 +2225,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
 
     // range for cell iterator
     SCCOL nLastIterScCol = nMaxScCol;
-    SCROW nLastIterScRow = ulimit_cast< SCROW >( nLastUsedScRow + 128, nMaxScRow );
+    SCROW nLastIterScRow = ulimit_cast< SCROW >( nLastUsedScRow, nMaxScRow );
     ScUsedAreaIterator aIt( &rDoc, nScTab, 0, 0, nLastIterScCol, nLastIterScRow );
 
     // activate the correct segment and sub segment at the progress bar
@@ -2539,3 +2441,4 @@ void XclExpCellTable::SaveXml( XclExpXmlStream& rStrm )
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

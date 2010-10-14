@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -562,7 +563,7 @@ sal_uInt16 XclExpNameManagerImpl::CreateName( const ScRangeData& rRangeData )
         xName->SetTokenArray( xTokArr );
 
         String sSymbol;
-        rRangeData.GetSymbol( sSymbol, formula::FormulaGrammar::GRAM_NATIVE_XL_A1 );
+        rRangeData.GetSymbol( sSymbol, formula::FormulaGrammar::GRAM_ENGLISH_XL_A1 );
         xName->SetSymbol( sSymbol );
 
         /*  Try to replace by existing built-in name - complete token array is
@@ -784,3 +785,4 @@ void XclExpNameManager::SaveXml( XclExpXmlStream& rStrm )
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

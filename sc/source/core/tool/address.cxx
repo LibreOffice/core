@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1378,7 +1379,7 @@ lcl_ScRange_Parse_OOo( ScRange &aRange, const String& r, ScDocument* pDoc, ScAdd
     }
     nRes1 = ( ( nRes1 | nRes2 ) & SCA_VALID )
           | nRes1
-          | ( ( nRes2 & 0x070F ) << 4 );
+          | ( ( nRes2 & SCA_BITS ) << 4 );
     return nRes1;
 }
 
@@ -2031,3 +2032,5 @@ bool AlphaToCol( SCCOL& rCol, const String& rStr)
         rCol = nResult;
     return bOk;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

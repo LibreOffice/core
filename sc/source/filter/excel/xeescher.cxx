@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -63,8 +64,12 @@
 #include "xelink.hxx"
 #include "xename.hxx"
 #include "xestyle.hxx"
+#include "userdat.hxx"
+#include "drwlayer.hxx"
+#include "svx/unoapi.hxx"
 
 #include <oox/core/tokens.hxx>
+#include <oox/export/drawingml.hxx>
 
 using ::rtl::OString;
 using ::rtl::OUString;
@@ -86,6 +91,7 @@ using ::com::sun::star::form::binding::XListEntrySource;
 using ::com::sun::star::script::ScriptEventDescriptor;
 using ::com::sun::star::table::CellAddress;
 using ::com::sun::star::table::CellRangeAddress;
+using ::oox::drawingml::DrawingML;
 
 // Escher client anchor =======================================================
 
@@ -294,6 +300,17 @@ void XclExpImgData::Save( XclExpStream& rStrm )
     }
 }
 
+void XclExpImgData::SaveXml( XclExpXmlStream& rStrm )
+{
+    sax_fastparser::FSHelperPtr pWorksheet = rStrm.GetCurrentStream();
+
+    DrawingML aDML( pWorksheet, &rStrm, DrawingML::DOCUMENT_XLSX );
+    OUString rId = aDML.WriteImage( maGraphic );
+    pWorksheet->singleElement( XML_picture,
+            FSNS( XML_r, XML_id ),  XclXmlUtils::ToOString( rId ).getStr(),
+            FSEND );
+}
+
 // ============================================================================
 
 XclExpControlHelper::XclExpControlHelper( const XclExpRoot& rRoot ) :
@@ -484,9 +501,9 @@ void XclExpOcxControlObj::WriteSubRecs( XclExpStream& rStrm )
 
 #else
 
-XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rObjMgr, Reference< XShape > xShape, const Rectangle* pChildAnchor ) :
-    XclObj( rObjMgr, EXC_OBJTYPE_UNKNOWN, true ),
-    XclExpControlHelper( rObjMgr.GetRoot() ),
+XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference< XShape > xShape , const Rectangle* pChildAnchor ) :
+    XclObj( rRoot, EXC_OBJTYPE_UNKNOWN, true ),
+    XclMacroHelper( rRoot ),
     mnHeight( 0 ),
     mnState( 0 ),
     mnLineCount( 0 ),
@@ -735,6 +752,8 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rObjMgr, Referenc
 
 bool XclExpTbxControlObj::SetMacroLink( const ScriptEventDescriptor& rEvent )
 {
+    return XclMacroHelper::SetMacroLink( rEvent, meEventType );
+/*
     String aMacroName = XclControlHelper::ExtractFromMacroDescriptor( rEvent, meEventType );
     if( aMacroName.Len() )
     {
@@ -744,6 +763,7 @@ bool XclExpTbxControlObj::SetMacroLink( const ScriptEventDescriptor& rEvent )
         return true;
     }
     return false;
+*/
 }
 
 void XclExpTbxControlObj::WriteSubRecs( XclExpStream& rStrm )
@@ -841,7 +861,7 @@ void XclExpTbxControlObj::WriteSubRecs( XclExpStream& rStrm )
             }
             else if( mnObjType == EXC_OBJTYPE_DROPDOWN )
             {
-                rStrm << sal_uInt16( 0 ) << mnLineCount;
+                rStrm << sal_uInt16( 0 ) << mnLineCount << sal_uInt16( 0 ) << sal_uInt16( 0 );
             }
 
             rStrm.EndRecord();
@@ -882,12 +902,6 @@ void XclExpTbxControlObj::WriteSubRecs( XclExpStream& rStrm )
     }
 }
 
-void XclExpTbxControlObj::WriteMacroSubRec( XclExpStream& rStrm )
-{
-    if( mxMacroLink.is() )
-        WriteFormulaSubRec( rStrm, EXC_ID_OBJMACRO, *mxMacroLink );
-}
-
 void XclExpTbxControlObj::WriteCellLinkSubRec( XclExpStream& rStrm, sal_uInt16 nSubRecId )
 {
     if( const XclTokenArray* pCellLink = GetCellLinkTokArr() )
@@ -915,6 +929,7 @@ void XclExpTbxControlObj::WriteSbs( XclExpStream& rStrm )
 }
 
 #endif
+
 
 // ----------------------------------------------------------------------------
 
@@ -984,7 +999,12 @@ XclExpNote::XclExpNote( const XclExpRoot& rRoot, const ScAddress& rScPos,
     // get the main note text
     String aNoteText;
     if( pScNote )
+    {
         aNoteText = pScNote->GetText();
+        const EditTextObject *pEditObj = pScNote->GetEditTextObject();
+        if( pEditObj )
+            mpNoteContents = XclExpStringHelper::CreateString( rRoot, *pEditObj );
+    }
     // append additional text
     ScGlobal::AddToken( aNoteText, rAddText, '\n', 2 );
     maOrigNoteText = aNoteText;
@@ -1002,7 +1022,7 @@ XclExpNote::XclExpNote( const XclExpRoot& rRoot, const ScAddress& rScPos,
             if( pScNote )
                 if( SdrCaptionObj* pCaption = pScNote->GetOrCreateCaption( maScPos ) )
                     if( const OutlinerParaObject* pOPO = pCaption->GetOutlinerParaObject() )
-                        mnObjId = rRoot.GetObjectManager().AddObj( new XclObjComment( rRoot.GetObjectManager(), pCaption->GetLogicRect(), pOPO->GetTextObject(), pCaption, mbVisible ) );
+                        mnObjId = rRoot.GetObjectManager().AddObj( new XclObjComment( rRoot.GetObjectManager(), pCaption->GetLogicRect(), pOPO->GetTextObject(), pCaption, mbVisible, maScPos ) );
 
             SetRecSize( 9 + maAuthor.GetSize() );
         }
@@ -1059,6 +1079,7 @@ void XclExpNote::Save( XclExpStream& rStrm )
     }
 }
 
+
 void XclExpNote::WriteBody( XclExpStream& rStrm )
 {
     // BIFF5/BIFF7 is written separately
@@ -1086,11 +1107,82 @@ void XclExpNote::WriteXml( sal_Int32 nAuthorId, XclExpXmlStream& rStrm )
             FSEND );
     rComments->startElement( XML_text, FSEND );
     // OOXTODO: phoneticPr, rPh, r
+#if 0
     rComments->startElement( XML_t, FSEND );
     rComments->writeEscaped( XclXmlUtils::ToOUString( maOrigNoteText ) );
     rComments->endElement ( XML_t );
+#else
+    if( mpNoteContents.is() )
+        mpNoteContents->WriteXml( rStrm );
+#endif
     rComments->endElement( XML_text );
     rComments->endElement( XML_comment );
+}
+
+// ============================================================================
+
+XclMacroHelper::XclMacroHelper( const XclExpRoot& rRoot ) :
+    XclExpControlHelper( rRoot )
+{
+}
+
+XclMacroHelper::~XclMacroHelper()
+{
+}
+
+void XclMacroHelper::WriteMacroSubRec( XclExpStream& rStrm )
+{
+    if( mxMacroLink.is() )
+        WriteFormulaSubRec( rStrm, EXC_ID_OBJMACRO, *mxMacroLink );
+}
+
+bool
+XclMacroHelper::SetMacroLink( const ScriptEventDescriptor& rEvent, const XclTbxEventType& nEventType )
+{
+    String aMacroName = XclControlHelper::ExtractFromMacroDescriptor( rEvent, nEventType, GetDocShell() );
+    if( aMacroName.Len() )
+    {
+        return SetMacroLink( aMacroName );
+    }
+    return false;
+}
+
+bool
+XclMacroHelper::SetMacroLink( const String& rMacroName )
+{
+    OSL_TRACE("SetMacroLink( macroname:=%s )", rtl::OUStringToOString( rMacroName, RTL_TEXTENCODING_UTF8 ).getStr() );
+    if( rMacroName.Len() )
+    {
+        sal_uInt16 nExtSheet = GetLocalLinkManager().FindExtSheet( EXC_EXTSH_OWNDOC );
+        sal_uInt16 nNameIdx = GetNameManager().InsertMacroCall( rMacroName, true, false );
+        mxMacroLink = GetFormulaCompiler().CreateNameXFormula( nExtSheet, nNameIdx );
+        return true;
+    }
+    return false;
+}
+
+XclExpShapeObj::XclExpShapeObj( XclExpObjectManager& rRoot, ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape ) :
+    XclObjAny( rRoot, xShape ),
+    XclMacroHelper( rRoot )
+{
+    if( SdrObject* pSdrObj = ::GetSdrObjectFromXShape( xShape ) )
+    {
+        ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pSdrObj );
+        if ( pInfo && pInfo->GetMacro().getLength() )
+// FIXME ooo330-m2: XclControlHelper::GetXclMacroName was removed in upstream sources; they started to call XclTools::GetXclMacroName instead; is this enough? it has only one parameter
+//            SetMacroLink( XclControlHelper::GetXclMacroName( pInfo->GetMacro(), rRoot.GetDocShell() ) );
+            SetMacroLink( XclTools::GetXclMacroName( pInfo->GetMacro() ) );
+    }
+}
+
+XclExpShapeObj::~XclExpShapeObj()
+{
+}
+
+void XclExpShapeObj::WriteSubRecs( XclExpStream& rStrm )
+{
+    XclObjAny::WriteSubRecs( rStrm );
+    WriteMacroSubRec( rStrm );
 }
 
 // ============================================================================
@@ -1104,7 +1196,7 @@ struct OUStringLess : public std::binary_function<OUString, OUString, bool>
 {
     bool operator()(const OUString& x, const OUString& y) const
     {
-        return x.compareTo( y ) <= 0;
+        return x.compareTo( y ) < 0;
     }
 };
 
@@ -1282,3 +1374,4 @@ XclExpDffAnchorBase* XclExpEmbeddedObjectManager::CreateDffAnchor() const
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

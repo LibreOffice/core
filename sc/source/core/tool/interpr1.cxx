@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -70,6 +71,7 @@
 #include "rangenam.hxx"
 #include "compiler.hxx"
 #include "externalrefmgr.hxx"
+#include <basic/sbstar.hxx>
 #include "doubleref.hxx"
 #include "queryparam.hxx"
 
@@ -4297,7 +4299,17 @@ void ScInterpreter::ScMatch()
                 }
             }
             if ( rEntry.bQueryByString )
-                rParam.bRegExp = MayBeRegExp( *rEntry.pStr, pDok );
+            {
+        BOOL bIsVBAMode = FALSE;
+                if ( pDok )
+                    bIsVBAMode = pDok->IsInVBAMode();
+
+                // #TODO handle MSO wildcards
+                if ( bIsVBAMode )
+                    rParam.bRegExp = FALSE;
+                else
+                    rParam.bRegExp = MayBeRegExp( *rEntry.pStr, pDok );
+            }
 
             if (pMatSrc) // The source data is matrix array.
             {
@@ -7631,3 +7643,5 @@ bool ScInterpreter::LookupQueryWithCache( ScAddress & o_rResultPos,
     }
     return bFound;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

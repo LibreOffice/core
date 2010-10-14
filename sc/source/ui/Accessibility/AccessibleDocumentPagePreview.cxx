@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1886,3 +1887,5 @@ ScShapeChilds* ScAccessibleDocumentPagePreview::GetShapeChilds()
 
     return mpShapeChilds;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

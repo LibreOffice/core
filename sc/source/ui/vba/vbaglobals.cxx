@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -248,6 +249,12 @@ ScVbaGlobals::getDebug() throw (uno::RuntimeException)
     return uno::Any();
 }
 
+uno::Any SAL_CALL
+ScVbaGlobals::MenuBars( const uno::Any& aIndex ) throw (uno::RuntimeException)
+{
+    return uno::Any( getApplication()->MenuBars(aIndex) );
+}
+
 uno::Sequence< ::rtl::OUString > SAL_CALL
 ScVbaGlobals::getAvailableServiceNames(  ) throw (uno::RuntimeException)
 {
@@ -303,3 +310,4 @@ extern sdecl::ServiceDecl const serviceDecl(
     "ooo.vba.excel.Globals" );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

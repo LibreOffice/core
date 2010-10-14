@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -97,6 +98,8 @@
 #include <map>
 #include <limits>
 
+using namespace ::com::sun::star;
+
 namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::sheet::TablePageBreakData;
@@ -184,6 +187,13 @@ BOOL ScDocument::GetCodeName( SCTAB nTab, String& rName ) const
     return FALSE;
 }
 
+NameToNameMap*
+ScDocument::GetLocalNameMap( SCTAB& rTab )
+{
+    if ( !HasTable( rTab ) )
+        return NULL;
+    return &pTab[rTab]->localNameToGlobalName;
+}
 
 BOOL ScDocument::GetTable( const String& rName, SCTAB& rTab ) const
 {
@@ -448,6 +458,7 @@ BOOL ScDocument::DeleteTab( SCTAB nTab, ScDocument* pRefUndoDoc )
                 delete pTab[nTab];
                 for (i=nTab + 1; i < nTabCount; i++)
                     pTab[i - 1] = pTab[i];
+
                 pTab[nTabCount - 1] = NULL;
                 --nMaxTableNumber;
                 // UpdateBroadcastAreas must be called between UpdateDeleteTab,
@@ -1608,6 +1619,40 @@ void ScDocument::CopyToClip(const ScClipParam& rClipParam,
     pClipDoc->ExtendMerge(aClipRange, true);
 }
 
+// Copy the content of the Range into clipboard. Adding this method for VBA API: Range.Copy().
+void ScDocument::CopyToClip4VBA(const ScClipParam& rClipParam, ScDocument* pClipDoc, bool bKeepScenarioFlags, bool bIncludeObjects, bool bCloneNoteCaptions)
+{
+    if ( !bIsClip )
+    {
+        pClipDoc = pClipDoc ? pClipDoc : SC_MOD()->GetClipDoc();
+        if ( !pClipDoc )
+        {
+            return;
+        }
+        ScRange aClipRange = rClipParam.getWholeRange();
+        SCTAB nTab = aClipRange.aStart.Tab();
+        pClipDoc->aDocName = aDocName;
+        pClipDoc->SetClipParam( rClipParam );
+        pClipDoc->ResetClip( this, nTab );
+
+        CopyRangeNamesToClip( pClipDoc, aClipRange, nTab );
+
+        if ( pTab[nTab] && pClipDoc->pTab[nTab] )
+        {
+            pTab[nTab]->CopyToClip( rClipParam.maRanges, pClipDoc->pTab[nTab], bKeepScenarioFlags, bCloneNoteCaptions );
+            if ( pDrawLayer && bIncludeObjects )
+            {
+                // Also copy drawing objects.
+                Rectangle aObjRect = GetMMRect( aClipRange.aStart.Col(), aClipRange.aStart.Row(), aClipRange.aEnd.Col(), aClipRange.aEnd.Row(), nTab );
+                pDrawLayer->CopyToClip( pClipDoc, nTab, aObjRect );
+            }
+        }
+
+        // Make sure to mark overlapped cells.
+        pClipDoc->ExtendMerge( aClipRange, true );
+    }
+}
+
 void ScDocument::CopyTabToClip(SCCOL nCol1, SCROW nRow1,
                                 SCCOL nCol2, SCROW nRow2,
                                 SCTAB nTab, ScDocument* pClipDoc)
@@ -1722,6 +1767,31 @@ void ScDocument::CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClip
         {
             ScRangeData* pData = new ScRangeData(*((*pRangeName)[i]));
             if (!pClipDoc->pRangeName->Insert(pData))
+                delete pData;
+            else
+                pData->SetIndex(nIndex);
+        }
+    }
+}
+
+void ScDocument::CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClipRange, SCTAB nTab)
+{
+    // Indexes of named ranges that are used in the copied cells
+    std::set<USHORT> aUsedNames;
+    if ( pTab[nTab] && pClipDoc->pTab[nTab] )
+    {
+        pTab[nTab]->FindRangeNamesInUse( rClipRange.aStart.Col(), rClipRange.aStart.Row(), rClipRange.aEnd.Col(), rClipRange.aEnd.Row(), aUsedNames );
+    }
+
+    pClipDoc->pRangeName->FreeAll();
+    for ( USHORT i = 0; i < pRangeName->GetCount(); i++ )
+    {
+        USHORT nIndex = ((ScRangeData*)((*pRangeName)[i]))->GetIndex();
+        bool bInUse = ( aUsedNames.find(nIndex) != aUsedNames.end() );
+        if ( bInUse )
+        {
+            ScRangeData* pData = new ScRangeData(*((*pRangeName)[i]));
+            if ( !pClipDoc->pRangeName->Insert(pData) )
                 delete pData;
             else
                 pData->SetIndex(nIndex);
@@ -4502,6 +4572,15 @@ BOOL ScDocument::HasSelectedBlockMatrixFragment( SCCOL nStartCol, SCROW nStartRo
     return !bOk;
 }
 
+BOOL ScDocument::HasSelectedBlockMatrixFragment( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, SCTAB nTab ) const
+{
+    BOOL bOk = TRUE;
+    if ( pTab[nTab] && pTab[nTab]->HasBlockMatrixFragment( nStartCol, nStartRow, nEndCol, nEndRow ) )
+    {
+        bOk = FALSE;
+    }
+    return !bOk;
+}
 
 BOOL ScDocument::GetMatrixFormulaRange( const ScAddress& rCellPos, ScRange& rMatrix )
 {
@@ -5354,3 +5433,5 @@ bool ScDocument::IsInVBAMode() const
     }
     return bResult;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

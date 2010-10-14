@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,6 +53,8 @@
 #include "attrib.hxx"
 #include "hints.hxx"
 #include "sc.hrc"
+#include "chgtrack.hxx"  // Amelia Wang
+#include "refundo.hxx"  // Amelia Wang
 
 // -----------------------------------------------------------------------
 
@@ -71,6 +74,7 @@ TYPEINIT1(ScUndoRepeatDB,           ScSimpleUndo);
 TYPEINIT1(ScUndoDataPilot,          ScSimpleUndo);
 TYPEINIT1(ScUndoConsolidate,        ScSimpleUndo);
 TYPEINIT1(ScUndoChartData,          ScSimpleUndo);
+TYPEINIT1(ScUndoDataForm,           SfxUndoAction);    // amelia
 
 // -----------------------------------------------------------------------
 
@@ -2027,8 +2031,211 @@ BOOL __EXPORT ScUndoChartData::CanRepeat(SfxRepeatTarget& /* rTarget */) const
     return FALSE;
 }
 
+// Amelia Wang
+ScUndoDataForm::ScUndoDataForm( ScDocShell* pNewDocShell,
+                                SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
+                                SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
+                                const ScMarkData& rMark,
+                                ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc,
+                                USHORT nNewFlags,
+                                ScRefUndoData* pRefData,
+                                void* /*pFill1*/, void* /*pFill2*/, void* /*pFill3*/,
+                                BOOL bRedoIsFilled ) :
+        ScBlockUndo( pNewDocShell, ScRange( nStartX, nStartY, nStartZ, nEndX, nEndY, nEndZ ), SC_UNDO_SIMPLE ),
+        aMarkData( rMark ),
+        pUndoDoc( pNewUndoDoc ),
+        pRedoDoc( pNewRedoDoc ),
+        nFlags( nNewFlags ),
+        pRefUndoData( pRefData ),
+        pRefRedoData( NULL ),
+        bRedoFilled( bRedoIsFilled )
+{
+        //      pFill1,pFill2,pFill3 are there so the ctor calls for simple paste (without cutting)
+        //      don't have to be changed and branched for 641.
+        //      They can be removed later.
+
+        if ( !aMarkData.IsMarked() )                            // no cell marked:
+                aMarkData.SetMarkArea( aBlockRange );   //  mark paste block
+
+        if ( pRefUndoData )
+                pRefUndoData->DeleteUnchanged( pDocShell->GetDocument() );
+
+        SetChangeTrack();
+}
+
+ScUndoDataForm::~ScUndoDataForm()
+{
+        delete pUndoDoc;
+        delete pRedoDoc;
+        delete pRefUndoData;
+        delete pRefRedoData;
+}
+
+String ScUndoDataForm::GetComment() const
+{
+        return ScGlobal::GetRscString( STR_UNDO_PASTE );
+}
+
+void ScUndoDataForm::SetChangeTrack()
+{
+        ScChangeTrack* pChangeTrack = pDocShell->GetDocument()->GetChangeTrack();
+        if ( pChangeTrack && (nFlags & IDF_CONTENTS) )
+                pChangeTrack->AppendContentRange( aBlockRange, pUndoDoc,
+                        nStartChangeAction, nEndChangeAction, SC_CACM_PASTE );
+        else
+                nStartChangeAction = nEndChangeAction = 0;
+}
 
 
+void ScUndoDataForm::Undo()
+{
+        BeginUndo();
+        DoChange( TRUE );
+        ShowTable( aBlockRange );
+        EndUndo();
+        SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
+}
 
+void ScUndoDataForm::Redo()
+{
+        BeginRedo();
+        ScDocument* pDoc = pDocShell->GetDocument();
+        EnableDrawAdjust( pDoc, FALSE );                                //! include in ScBlockUndo?
+        DoChange( FALSE );
+        EnableDrawAdjust( pDoc, TRUE );                                 //! include in ScBlockUndo?
+        EndRedo();
+        SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
+}
 
+void ScUndoDataForm::Repeat(SfxRepeatTarget& /*rTarget*/)
+{
+}
 
+BOOL ScUndoDataForm::CanRepeat(SfxRepeatTarget& rTarget) const
+{
+        return (rTarget.ISA(ScTabViewTarget));
+}
+
+void ScUndoDataForm::DoChange( const BOOL bUndo )
+{
+    ScDocument* pDoc = pDocShell->GetDocument();
+
+    //      RefUndoData for redo is created before first undo
+    //      (with DeleteUnchanged after the DoUndo call)
+    BOOL bCreateRedoData = ( bUndo && pRefUndoData && !pRefRedoData );
+    if ( bCreateRedoData )
+            pRefRedoData = new ScRefUndoData( pDoc );
+
+    ScRefUndoData* pWorkRefData = bUndo ? pRefUndoData : pRefRedoData;
+
+    //      fuer Undo immer alle oder keine Inhalte sichern
+    USHORT nUndoFlags = IDF_NONE;
+    if (nFlags & IDF_CONTENTS)
+            nUndoFlags |= IDF_CONTENTS;
+    if (nFlags & IDF_ATTRIB)
+            nUndoFlags |= IDF_ATTRIB;
+
+    BOOL bPaintAll = FALSE;
+
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+
+    // marking is in ScBlockUndo...
+    //ScUndoUtil::MarkSimpleBlock( pDocShell, aBlockRange );
+
+    SCTAB nTabCount = pDoc->GetTableCount();
+    if ( bUndo && !bRedoFilled )
+    {
+        if (!pRedoDoc)
+        {
+            BOOL bColInfo = ( aBlockRange.aStart.Row()==0 && aBlockRange.aEnd.Row()==MAXROW );
+            BOOL bRowInfo = ( aBlockRange.aStart.Col()==0 && aBlockRange.aEnd.Col()==MAXCOL );
+
+            pRedoDoc = new ScDocument( SCDOCMODE_UNDO );
+            pRedoDoc->InitUndoSelected( pDoc, aMarkData, bColInfo, bRowInfo );
+        }
+        //  read "redo" data from the document in the first undo
+            //  all sheets - CopyToDocument skips those that don't exist in pRedoDoc
+        ScRange aCopyRange = aBlockRange;
+        aCopyRange.aStart.SetTab(0);
+        aCopyRange.aEnd.SetTab(nTabCount-1);
+        pDoc->CopyToDocument( aCopyRange, 1, FALSE, pRedoDoc );
+        bRedoFilled = TRUE;
+    }
+
+    USHORT nExtFlags = 0;
+    pDocShell->UpdatePaintExt( nExtFlags, aBlockRange );
+
+    for ( sal_uInt16 i=0; i <= ( aBlockRange.aEnd.Col() - aBlockRange.aStart.Col() ); i++ )
+    {
+        String aOldString;
+        pUndoDoc->GetString( aBlockRange.aStart.Col()+i , aBlockRange.aStart.Row() , aBlockRange.aStart.Tab() , aOldString );
+        pDoc->SetString( aBlockRange.aStart.Col()+i , aBlockRange.aStart.Row() , aBlockRange.aStart.Tab() , aOldString );
+    }
+
+    //ScRange aTabSelectRange = aBlockRange;
+
+    if (pWorkRefData)
+    {
+        pWorkRefData->DoUndo( pDoc, TRUE );             // TRUE = bSetChartRangeLists for SetChartListenerCollection
+        if ( pDoc->RefreshAutoFilter( 0,0, MAXCOL,MAXROW, aBlockRange.aStart.Tab() ) )
+            bPaintAll = TRUE;
+    }
+
+    if ( bCreateRedoData && pRefRedoData )
+            pRefRedoData->DeleteUnchanged( pDoc );
+
+    if ( bUndo )
+    {
+        ScChangeTrack* pChangeTrack = pDoc->GetChangeTrack();
+        if ( pChangeTrack )
+            pChangeTrack->Undo( nStartChangeAction, nEndChangeAction );
+    }
+    else
+        SetChangeTrack();
+
+    ScRange aDrawRange( aBlockRange );
+    pDoc->ExtendMerge( aDrawRange, TRUE );      // only needed for single sheet (text/rtf etc.)
+    USHORT nPaint = PAINT_GRID;
+    if (bPaintAll)
+    {
+        aDrawRange.aStart.SetCol(0);
+        aDrawRange.aStart.SetRow(0);
+        aDrawRange.aEnd.SetCol(MAXCOL);
+        aDrawRange.aEnd.SetRow(MAXROW);
+        nPaint |= PAINT_TOP | PAINT_LEFT;
+/*A*/   if (pViewShell)
+            pViewShell->AdjustBlockHeight(FALSE);
+    }
+    else
+    {
+        if ( aBlockRange.aStart.Row() == 0 && aBlockRange.aEnd.Row() == MAXROW )        // ganze Spalte
+        {
+            nPaint |= PAINT_TOP;
+            aDrawRange.aEnd.SetCol(MAXCOL);
+        }
+        if ( aBlockRange.aStart.Col() == 0 && aBlockRange.aEnd.Col() == MAXCOL )        // ganze Zeile
+        {
+            nPaint |= PAINT_LEFT;
+            aDrawRange.aEnd.SetRow(MAXROW);
+        }
+/*A*/   if ((pViewShell) && pViewShell->AdjustBlockHeight(FALSE))
+        {
+            aDrawRange.aStart.SetCol(0);
+            aDrawRange.aStart.SetRow(0);
+            aDrawRange.aEnd.SetCol(MAXCOL);
+            aDrawRange.aEnd.SetRow(MAXROW);
+            nPaint |= PAINT_LEFT;
+        }
+        pDocShell->UpdatePaintExt( nExtFlags, aDrawRange );
+    }
+
+    if ( !bUndo )                               //      draw redo after updating row heights
+        RedoSdrUndoAction( pDrawUndo );                 //!     include in ScBlockUndo?
+
+    pDocShell->PostPaint( aDrawRange, nPaint, nExtFlags );
+
+    pDocShell->PostDataChanged();
+    if (pViewShell)
+        pViewShell->CellContentChanged();
+}
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

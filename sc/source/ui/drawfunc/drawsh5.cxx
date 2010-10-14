@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -90,14 +91,12 @@ void ScDrawShell::GetHLinkState( SfxItemSet& rSet )             //  Hyperlink
     if ( nMarkCount == 1 )              // URL-Button markiert ?
     {
         SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
         ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj );
         if ( pInfo && (pInfo->GetHlink().getLength() > 0) )
         {
             aHLinkItem.SetURL( pInfo->GetHlink() );
             aHLinkItem.SetInsertMode(HLINK_FIELD);
         }
-#endif
         SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, pObj);
         if (pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor())
         {
@@ -240,13 +239,11 @@ void ScDrawShell::ExecuteHLink( SfxRequest& rReq )
                                     bDone = TRUE;
                                 }
                             }
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
                             else
                             {
                                 SetHlinkForObject( pObj, rURL );
                                 bDone = TRUE;
                             }
-#endif
                         }
                     }
 
@@ -756,3 +753,4 @@ ScDrawView* ScDrawShell::GetDrawView()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

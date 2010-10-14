@@ -36,6 +36,7 @@
 
 class XclObj;
 class XclExpMsoDrawing;
+class SdrCaptionObj;
 
 class XclExpObjList : public List, public ExcEmptyRec, protected XclExpRoot
 {
@@ -56,8 +57,14 @@ public:
     void                EndSheet();
 
     virtual void        Save( XclExpStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
+
+    static void        ResetCounters();
 
 private:
+    static  sal_Int32   mnDrawingMLCount, mnVmlCount;
+    SCTAB               mnScTab;
+
     XclEscherEx&        mrEscherEx;
     XclExpMsoDrawing*   pMsodrawingPerSheet;
     XclExpMsoDrawing*   pSolverContainer;
@@ -79,6 +86,7 @@ protected:
         sal_uInt16          mnObjType;
         UINT16              nObjId;
         UINT16              nGrbit;
+        SCTAB               mnScTab;
         BOOL                bFirstOnSheet;
 
         bool                    mbOwnEscher;    /// true = Escher part created on the fly.
@@ -100,6 +108,10 @@ public:
     inline sal_uInt16           GetObjType() const { return mnObjType; }
 
     inline  void                SetId( UINT16 nId ) { nObjId = nId; }
+    inline  sal_uInt16          GetId() const       { return nObjId; }
+
+    inline  void                SetTab( SCTAB nScTab )  { mnScTab = nScTab; }
+    inline  SCTAB               GetTab() const          { return mnScTab; }
 
     inline  void                SetLocked( BOOL b )
                                     { b ? nGrbit |= 0x0001 : nGrbit &= ~0x0001; }
@@ -136,9 +148,13 @@ public:
 
 class XclObjComment : public XclObj
 {
+    ScAddress                   maScPos;
+    std::auto_ptr< SdrCaptionObj >
+                                mpCaption;
+    bool                        mbVisible;
 public:
                                 XclObjComment( XclExpObjectManager& rObjMgr,
-                                    const Rectangle& rRect, const EditTextObject& rEditObj, SdrObject* pCaption, bool bVisible );
+                                    const Rectangle& rRect, const EditTextObject& rEditObj, SdrCaptionObj* pCaption, bool bVisible, const ScAddress& rAddress );
     virtual                     ~XclObjComment();
 
     /** c'tor process for formatted text objects above .
@@ -148,6 +164,7 @@ public:
 
 
     virtual void                Save( XclExpStream& rStrm );
+    virtual void                SaveXml( XclExpXmlStream& rStrm );
 };
 
 
@@ -220,14 +237,24 @@ public:
 
 class XclObjAny : public XclObj
 {
-private:
+protected:
     virtual void                WriteSubRecs( XclExpStream& rStrm );
 
 public:
-                                XclObjAny( XclExpObjectManager& rObjMgr );
+                                XclObjAny( XclExpObjectManager& rObjMgr,
+                                    const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rShape );
     virtual                     ~XclObjAny();
 
+    com::sun::star::uno::Reference< com::sun::star::drawing::XShape >
+                                GetShape() const { return mxShape; }
+
+
     virtual void                Save( XclExpStream& rStrm );
+    virtual void                SaveXml( XclExpXmlStream& rStrm );
+
+private:
+    com::sun::star::uno::Reference< com::sun::star::drawing::XShape >
+                                mxShape;
 };
 
 

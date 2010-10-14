@@ -110,7 +110,7 @@ public:
 
     void                ReadDoc( void );
     void                Write( SvStream& rSvStrm );
-    void                WriteXml( SvStream& rSvStrm );
+    void                WriteXml( XclExpXmlStream& );
 };
 
 

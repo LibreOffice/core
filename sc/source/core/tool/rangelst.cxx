@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -83,15 +84,18 @@ USHORT ScRangeList::Parse( const String& rStr, ScDocument* pDoc, USHORT nMask,
         for ( USHORT i=0; i<nTCount; i++ )
         {
             aOne = rStr.GetToken( i, cDelimiter );
-            // FIXME : broken for Lotus
-            if ( aOne.Search( ':' ) == STRING_NOTFOUND )
-            {   // Range muss es sein
-                String aStrTmp( aOne );
-                aOne += ':';
-                aOne += aStrTmp;
-            }
             aRange.aStart.SetTab( nTab );   // Default Tab wenn nicht angegeben
-            USHORT nRes = aRange.Parse( aOne, pDoc, eConv );
+            USHORT nRes = aRange.ParseAny( aOne, pDoc, eConv );
+            USHORT nEndRangeBits = SCA_VALID_COL2 | SCA_VALID_ROW2 |
+SCA_VALID_TAB2;
+            USHORT nTmp1 = ( nRes & SCA_BITS );
+            USHORT nTmp2 = ( nRes & nEndRangeBits );
+            // If we have a valid single range with
+            // any of the address bits we are interested in
+            // set - set the equiv end range bits
+            if ( (nRes & SCA_VALID ) && nTmp1 && ( nTmp2 != nEndRangeBits ) )
+                    nRes |= ( nTmp1 << 4 );
+
             if ( (nRes & nMask) == nMask )
                 Append( aRange );
             nResult &= nRes;        // alle gemeinsamen Bits bleiben erhalten
@@ -701,3 +705,4 @@ ScRangePair** ScRangePairList::CreateNameSortedArray( ULONG& nListCount,
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

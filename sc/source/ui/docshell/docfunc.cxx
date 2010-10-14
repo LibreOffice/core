@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -108,6 +109,7 @@
 using namespace com::sun::star;
 using ::com::sun::star::uno::Sequence;
 using ::std::vector;
+
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -4188,6 +4190,13 @@ BOOL ScDocFunc::FillSeries( const ScRange& rRange, const ScMarkData* pTabMark,
 BOOL ScDocFunc::FillAuto( ScRange& rRange, const ScMarkData* pTabMark,
                             FillDir eDir, ULONG nCount, BOOL bRecord, BOOL bApi )
 {
+    double      fStep = 1.0;
+    double      fMax = MAXDOUBLE;
+    return FillAuto( rRange, pTabMark, eDir, FILL_AUTO, FILL_DAY, nCount, fStep, fMax, bRecord, bApi );
+}
+
+BOOL ScDocFunc::FillAuto( ScRange& rRange, const ScMarkData* pTabMark, FillDir eDir, FillCmd eCmd, FillDateCmd  eDateCmd, ULONG nCount, double fStep, double fMax,  BOOL bRecord, BOOL bApi )
+{
     ScDocShellModificator aModificator( rDocShell );
 
     ScDocument* pDoc = rDocShell.GetDocument();
@@ -4213,10 +4222,6 @@ BOOL ScDocFunc::FillAuto( ScRange& rRange, const ScMarkData* pTabMark,
     ScRange aSourceArea = rRange;
     ScRange aDestArea   = rRange;
 
-    FillCmd     eCmd = FILL_AUTO;
-    FillDateCmd eDateCmd = FILL_DAY;
-    double      fStep = 1.0;
-    double      fMax = MAXDOUBLE;
 
     switch (eDir)
     {
@@ -4948,3 +4953,4 @@ BOOL ScDocFunc::InsertAreaLink( const String& rFile, const String& rFilter,
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

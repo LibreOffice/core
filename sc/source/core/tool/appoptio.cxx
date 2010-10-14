@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -82,6 +83,9 @@ ScAppOptions::~ScAppOptions()
 
 void ScAppOptions::SetDefaults()
 {
+    // Set default tab count for new spreadsheet.
+    nTabCountInNewSpreadsheet = 3;
+
     if ( ScOptionsUtil::IsMetricSystem() )
         eMetric     = FUNIT_CM;             // default for countries with metric system
     else
@@ -119,6 +123,7 @@ void ScAppOptions::SetDefaults()
 
 const ScAppOptions& ScAppOptions::operator=( const ScAppOptions& rCpy )
 {
+    nTabCountInNewSpreadsheet = rCpy.nTabCountInNewSpreadsheet;
     eMetric         = rCpy.eMetric;
     eZoomType       = rCpy.eZoomType;
     bSynchronizeZoom = rCpy.bSynchronizeZoom;
@@ -743,3 +748,4 @@ void ScAppCfg::OptionsChanged()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
