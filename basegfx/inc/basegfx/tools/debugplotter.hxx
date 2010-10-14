@@ -37,7 +37,7 @@
 #include <boost/utility.hpp> // for noncopyable
 #include <vector>
 #include <utility>
-#include <iostream>
+#include <iosfwd>
 
 
 namespace basegfx

@@ -34,6 +34,8 @@
 #include <basegfx/tools/debugplotter.hxx>
 #include <boost/bind.hpp>
 
+#include <ostream>
+
 
 namespace basegfx
 {
