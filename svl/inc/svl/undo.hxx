@@ -134,6 +134,23 @@ class SVL_DLLPUBLIC SfxListUndoAction : public SfxUndoAction, public SfxUndoArra
 
 //=========================================================================
 
+/**  is a callback interface for notifications about state changes of an SfxUndoManager
+*/
+class SAL_NO_VTABLE SfxUndoListener
+{
+public:
+    virtual void actionUndone( SfxUndoAction& i_action ) = 0;
+    virtual void actionRedone( SfxUndoAction& i_action ) = 0;
+    virtual void undoActionAdded( SfxUndoAction& i_action ) = 0;
+    virtual void cleared() = 0;
+    virtual void clearedRedo() = 0;
+    virtual void listActionEntered( const String& i_comment ) = 0;
+    virtual void listActionLeft() = 0;
+    virtual void undoManagerDying() = 0;
+};
+
+//=========================================================================
+
 struct SfxUndoManager_Data;
 class SVL_DLLPUBLIC SfxUndoManager
 {
@@ -157,15 +174,13 @@ public:
     /** returns the nNo'th undo action from the top */
     SfxUndoAction*          GetUndoAction( USHORT nNo=0 ) const;
 
-    virtual BOOL            Undo( USHORT nCount=1 );
-    virtual void            Undo( SfxUndoAction &rAction );
+    virtual BOOL            Undo();
 
     virtual USHORT          GetRedoActionCount() const;
     virtual USHORT          GetRedoActionId(USHORT nNo=0) const;
     virtual UniString           GetRedoActionComment( USHORT nNo=0 ) const;
 
-    virtual BOOL            Redo( USHORT nCount=1 );
-    virtual void            Redo( SfxUndoAction &rAction );
+    virtual BOOL            Redo();
     virtual void            ClearRedo();
 
     virtual USHORT          GetRepeatActionCount() const;
@@ -181,6 +196,8 @@ public:
     /// determines whether we're within a ListAction context, i.e. a LeaveListAction call is pending
     bool                    IsInListAction() const;
 
+    USHORT                  GetListActionDepth() const;
+
     /** clears the redo stack and removes the top undo action */
     void                    RemoveLastUndoAction();
 
@@ -193,6 +210,14 @@ public:
     // This returns false if undo was disabled using EnableUndo( false ) and
     // also during the runtime of the Undo() and Redo() methods.
     bool                    IsUndoEnabled() const;
+
+    /// adds a new listener to be notified about changes in the UndoManager's state
+    void                    AddUndoListener( SfxUndoListener& i_listener );
+    void                    RemoveUndoListener( SfxUndoListener& i_listener );
+
+protected:
+    void    ImplUndo( SfxUndoAction &rAction );
+    void    ImplRedo( SfxUndoAction &rAction );
 };
 
 //=========================================================================

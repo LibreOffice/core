@@ -54,7 +54,7 @@ TextUndoManager::~TextUndoManager()
 {
 }
 
-BOOL __EXPORT TextUndoManager::Undo( USHORT nCount )
+BOOL __EXPORT TextUndoManager::Undo()
 {
     if ( GetUndoActionCount() == 0 )
         return FALSE;
@@ -62,7 +62,7 @@ BOOL __EXPORT TextUndoManager::Undo( USHORT nCount )
     UndoRedoStart();
 
     mpTextEngine->SetIsInUndo( TRUE );
-    BOOL bDone = SfxUndoManager::Undo( nCount );
+    BOOL bDone = SfxUndoManager::Undo();
     mpTextEngine->SetIsInUndo( FALSE );
 
     UndoRedoEnd();
@@ -70,7 +70,7 @@ BOOL __EXPORT TextUndoManager::Undo( USHORT nCount )
     return bDone;
 }
 
-BOOL __EXPORT TextUndoManager::Redo( USHORT nCount )
+BOOL __EXPORT TextUndoManager::Redo()
 {
     if ( GetRedoActionCount() == 0 )
         return FALSE;
@@ -79,7 +79,7 @@ BOOL __EXPORT TextUndoManager::Redo( USHORT nCount )
     UndoRedoStart();
 
     mpTextEngine->SetIsInUndo( TRUE );
-    BOOL bDone = SfxUndoManager::Redo( nCount );
+    BOOL bDone = SfxUndoManager::Redo();
     mpTextEngine->SetIsInUndo( FALSE );
 
     UndoRedoEnd();

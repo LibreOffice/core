@@ -1122,13 +1122,13 @@ void TextView::Scroll( long ndX, long ndY )
 void TextView::Undo()
 {
     mpImpl->mpTextEngine->SetActiveView( this );
-    mpImpl->mpTextEngine->GetUndoManager().Undo( 1 );
+    mpImpl->mpTextEngine->GetUndoManager().Undo();
 }
 
 void TextView::Redo()
 {
     mpImpl->mpTextEngine->SetActiveView( this );
-    mpImpl->mpTextEngine->GetUndoManager().Redo( 0 );
+    mpImpl->mpTextEngine->GetUndoManager().Redo();
 }
 
 void TextView::Cut()

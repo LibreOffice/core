@@ -34,6 +34,8 @@
 
 #include <svl/undo.hxx>
 
+#include <vector>
+
 using ::com::sun::star::uno::Exception;
 
 // STATIC DATA -----------------------------------------------------------
@@ -150,6 +152,8 @@ BOOL SfxUndoAction::CanRepeat(SfxRepeatTarget&) const
 
 //========================================================================
 
+typedef ::std::vector< SfxUndoListener* >   UndoListeners;
+
 struct SfxUndoManager_Data
 {
     SfxUndoArray*   pUndoArray;
@@ -157,6 +161,8 @@ struct SfxUndoManager_Data
     SfxUndoArray*   pFatherUndoArray;
 
     bool            mbUndoEnabled;
+
+    UndoListeners   aListeners;
 
     SfxUndoManager_Data( USHORT i_nMaxUndoActionCount )
         :pUndoArray( new SfxUndoArray( i_nMaxUndoActionCount ) )
@@ -185,6 +191,13 @@ SfxUndoManager::SfxUndoManager( USHORT nMaxUndoActionCount )
 
 SfxUndoManager::~SfxUndoManager()
 {
+    for (   UndoListeners::const_iterator listener = m_pData->aListeners.begin();
+            listener != m_pData->aListeners.end();
+            ++listener
+        )
+    {
+        (*listener)->undoManagerDying();
+    }
 }
 
 //------------------------------------------------------------------------
@@ -265,6 +278,14 @@ void SfxUndoManager::Clear()
     }
 
     m_pData->pActUndoArray->nCurUndoAction = 0;
+
+    for (   UndoListeners::const_iterator listener = m_pData->aListeners.begin();
+            listener != m_pData->aListeners.end();
+            ++listener
+        )
+    {
+        (*listener)->cleared();
+    }
 }
 
 //------------------------------------------------------------------------
@@ -277,6 +298,14 @@ void SfxUndoManager::ClearRedo()
             m_pData->pActUndoArray->aUndoActions[m_pData->pActUndoArray->aUndoActions.Count() - 1];
         m_pData->pActUndoArray->aUndoActions.Remove( m_pData->pActUndoArray->aUndoActions.Count() - 1 );
         delete pAction;
+    }
+
+    for (   UndoListeners::const_iterator listener = m_pData->aListeners.begin();
+            listener != m_pData->aListeners.end();
+            ++listener
+        )
+    {
+        (*listener)->clearedRedo();
     }
 }
 
@@ -302,7 +331,7 @@ void SfxUndoManager::AddUndoAction( SfxUndoAction *pAction, BOOL bTryMerge )
 
             if ( !bTryMerge || !(pTmpAction && pTmpAction->Merge(pAction)) )
             {
-                // auf Max-Anzahl anpassen
+                // respect max number
                 if( m_pData->pActUndoArray == m_pData->pUndoArray )
                     while( m_pData->pActUndoArray->aUndoActions.Count() >=
                            m_pData->pActUndoArray->nMaxUndoActions &&
@@ -313,10 +342,21 @@ void SfxUndoManager::AddUndoAction( SfxUndoAction *pAction, BOOL bTryMerge )
                         --m_pData->pActUndoArray->nCurUndoAction;
                     }
 
-                // neue Action anh"angen
+                // append new action
                 const SfxUndoAction* pTemp = pAction;
                 m_pData->pActUndoArray->aUndoActions.Insert(
                     pTemp, m_pData->pActUndoArray->nCurUndoAction++ );
+
+                // notify listeners
+                for (   UndoListeners::const_iterator listener = m_pData->aListeners.begin();
+                        listener != m_pData->aListeners.end();
+                        ++listener
+                    )
+                {
+                    (*listener)->undoActionAdded( *pAction );
+                }
+
+                // outta here
                 return;
             }
         }
@@ -400,7 +440,7 @@ void SfxUndoManager::RemoveLastUndoAction()
 
 //------------------------------------------------------------------------
 
-BOOL SfxUndoManager::Undo( USHORT )
+BOOL SfxUndoManager::Undo()
 {
     bool bUndoWasEnabled =  m_pData->mbUndoEnabled;
     m_pData->mbUndoEnabled = false;
@@ -412,7 +452,7 @@ BOOL SfxUndoManager::Undo( USHORT )
         DBG_ASSERT( m_pData->pActUndoArray == m_pData->pUndoArray, "svl::SfxUndoManager::Undo(), LeaveListAction() not yet called!" );
         if ( m_pData->pActUndoArray->nCurUndoAction )
         {
-            Undo( *m_pData->pActUndoArray->aUndoActions[ --m_pData->pActUndoArray->nCurUndoAction ] );
+            ImplUndo( *m_pData->pActUndoArray->aUndoActions[ --m_pData->pActUndoArray->nCurUndoAction ] );
             bRet = TRUE;
         }
     }
@@ -427,13 +467,20 @@ BOOL SfxUndoManager::Undo( USHORT )
 
 //------------------------------------------------------------------------
 
-void SfxUndoManager::Undo( SfxUndoAction &rAction )
+void SfxUndoManager::ImplUndo( SfxUndoAction &rAction )
 {
     bool bUndoWasEnabled =  m_pData->mbUndoEnabled;
     m_pData->mbUndoEnabled = false;
     try
     {
         rAction.Undo();
+        for (   UndoListeners::const_iterator listener = m_pData->aListeners.begin();
+                listener != m_pData->aListeners.end();
+                ++listener
+            )
+        {
+            (*listener)->actionUndone( rAction );
+        }
     }
     catch( const Exception& )
     {
@@ -467,7 +514,7 @@ USHORT SfxUndoManager::GetRedoActionId( USHORT nNo ) const
 
 //------------------------------------------------------------------------
 
-BOOL SfxUndoManager::Redo( USHORT )
+BOOL SfxUndoManager::Redo()
 {
     bool bUndoWasEnabled =  m_pData->mbUndoEnabled;
     m_pData->mbUndoEnabled = false;
@@ -478,7 +525,7 @@ BOOL SfxUndoManager::Redo( USHORT )
     {
         if ( m_pData->pActUndoArray->aUndoActions.Count() > m_pData->pActUndoArray->nCurUndoAction )
         {
-            Redo( *m_pData->pActUndoArray->aUndoActions[m_pData->pActUndoArray->nCurUndoAction++] );
+            ImplRedo( *m_pData->pActUndoArray->aUndoActions[m_pData->pActUndoArray->nCurUndoAction++] );
             bRet = TRUE;
         }
     }
@@ -494,7 +541,7 @@ BOOL SfxUndoManager::Redo( USHORT )
 
 //------------------------------------------------------------------------
 
-void SfxUndoManager::Redo( SfxUndoAction &rAction )
+void SfxUndoManager::ImplRedo( SfxUndoAction &rAction )
 {
     bool bUndoWasEnabled =  m_pData->mbUndoEnabled;
     m_pData->mbUndoEnabled = false;
@@ -502,6 +549,13 @@ void SfxUndoManager::Redo( SfxUndoAction &rAction )
     try
     {
         rAction.Redo();
+        for (   UndoListeners::const_iterator listener = m_pData->aListeners.begin();
+                listener != m_pData->aListeners.end();
+                ++listener
+            )
+        {
+            (*listener)->actionRedone( rAction );
+        }
     }
     catch( const Exception& )
     {
@@ -570,6 +624,32 @@ BOOL SfxUndoManager::CanRepeat( SfxRepeatTarget &rTarget, USHORT nNo ) const
 
 //------------------------------------------------------------------------
 
+void SfxUndoManager::AddUndoListener( SfxUndoListener& i_listener )
+{
+    DBG_TESTSOLARMUTEX();
+    m_pData->aListeners.push_back( &i_listener );
+}
+
+//------------------------------------------------------------------------
+
+void SfxUndoManager::RemoveUndoListener( SfxUndoListener& i_listener )
+{
+    DBG_TESTSOLARMUTEX();
+    for (   UndoListeners::iterator lookup = m_pData->aListeners.begin();
+            lookup != m_pData->aListeners.end();
+            ++lookup
+        )
+    {
+        if ( (*lookup) == &i_listener )
+        {
+            m_pData->aListeners.erase( lookup );
+            break;
+        }
+    }
+}
+
+//------------------------------------------------------------------------
+
 void SfxUndoManager::EnterListAction(
     const XubString& rComment, const XubString &rRepeatComment, USHORT nId )
 
@@ -590,6 +670,14 @@ void SfxUndoManager::EnterListAction(
         rComment, rRepeatComment, nId, m_pData->pActUndoArray);
     AddUndoAction( pAction );
     m_pData->pActUndoArray=pAction;
+
+    for (   UndoListeners::const_iterator listener = m_pData->aListeners.begin();
+            listener != m_pData->aListeners.end();
+            ++listener
+        )
+    {
+        (*listener)->listActionEntered( rComment );
+    }
 }
 
 //------------------------------------------------------------------------
@@ -597,6 +685,22 @@ void SfxUndoManager::EnterListAction(
 bool SfxUndoManager::IsInListAction() const
 {
     return ( m_pData->pActUndoArray != m_pData->pUndoArray );
+}
+
+//------------------------------------------------------------------------
+
+USHORT SfxUndoManager::GetListActionDepth() const
+{
+    USHORT nDepth(0);
+
+    SfxUndoArray* pLookup( m_pData->pActUndoArray );
+    while ( pLookup != m_pData->pUndoArray )
+    {
+        pLookup = pLookup->pFatherUndoArray;
+        ++nDepth;
+    }
+
+    return nDepth;
 }
 
 //------------------------------------------------------------------------
@@ -648,6 +752,14 @@ void SfxUndoManager::LeaveListAction()
                 }
             }
         }
+    }
+
+    for (   UndoListeners::const_iterator listener = m_pData->aListeners.begin();
+            listener != m_pData->aListeners.end();
+            ++listener
+        )
+    {
+        (*listener)->listActionLeft();
     }
 }
 
@@ -765,7 +877,7 @@ SfxLinkUndoAction::SfxLinkUndoAction(SfxUndoManager *pManager)
 void SfxLinkUndoAction::Undo()
 {
     if ( pAction )
-        pUndoManager->Undo(1);
+        pUndoManager->Undo();
 }
 
 //------------------------------------------------------------------------
@@ -773,7 +885,7 @@ void SfxLinkUndoAction::Undo()
 void SfxLinkUndoAction::Redo()
 {
     if ( pAction )
-        pUndoManager->Redo(1);
+        pUndoManager->Redo();
 }
 
 //------------------------------------------------------------------------
