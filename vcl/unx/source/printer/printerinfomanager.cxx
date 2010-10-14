@@ -35,6 +35,7 @@
 #include "cupsmgr.hxx"
 #include "vcl/fontmanager.hxx"
 #include "vcl/strhelper.hxx"
+#include "saldata.hxx"
 
 #include "tools/urlobj.hxx"
 #include "tools/stream.hxx"
@@ -92,22 +93,28 @@ namespace psp
 
 PrinterInfoManager& PrinterInfoManager::get()
 {
-    static PrinterInfoManager* pManager = NULL;
+    SalData* pSalData = GetSalData();
 
-    if( ! pManager )
+    if( ! pSalData->m_pPIManager )
     {
-        pManager = CUPSManager::tryLoadCUPS();
-        if( ! pManager )
-            pManager = new PrinterInfoManager();
+        pSalData->m_pPIManager = CUPSManager::tryLoadCUPS();
+        if( ! pSalData->m_pPIManager )
+            pSalData->m_pPIManager = new PrinterInfoManager();
 
-        if( pManager )
-            pManager->initialize();
+        pSalData->m_pPIManager->initialize();
         #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "PrinterInfoManager::get create Manager of type %d\n", pManager->getType() );
+        fprintf( stderr, "PrinterInfoManager::get create Manager of type %d\n", pSalData->m_pPIManager->getType() );
         #endif
     }
 
-    return *pManager;
+    return *pSalData->m_pPIManager;
+}
+
+void PrinterInfoManager::release()
+{
+    SalData* pSalData = GetSalData();
+    delete pSalData->m_pPIManager;
+    pSalData->m_pPIManager = NULL;
 }
 
 // -----------------------------------------------------------------
@@ -130,6 +137,9 @@ PrinterInfoManager::PrinterInfoManager( Type eType ) :
 PrinterInfoManager::~PrinterInfoManager()
 {
     delete m_pQueueInfo;
+    #if OSL_DEBUG_LEVEL > 1
+    fprintf( stderr, "PrinterInfoManager: destroyed Manager of type %d\n", getType() );
+    #endif
 }
 
 // -----------------------------------------------------------------
@@ -324,7 +334,7 @@ void PrinterInfoManager::initialize()
                 }
             }
             #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "global settings: fontsubst = %s, %d substitutes\n", m_aGlobalDefaults.m_bPerformFontSubstitution ? "true" : "false", m_aGlobalDefaults.m_aFontSubstitutes.size() );
+            fprintf( stderr, "global settings: fontsubst = %s, %d substitutes\n", m_aGlobalDefaults.m_bPerformFontSubstitution ? "true" : "false", (int)m_aGlobalDefaults.m_aFontSubstitutes.size() );
             #endif
         }
     }
@@ -1166,7 +1176,11 @@ SystemQueueInfo::SystemQueueInfo() :
 
 SystemQueueInfo::~SystemQueueInfo()
 {
-    terminate();
+    static const char* pNoSyncDetection = getenv( "SAL_DISABLE_SYNCHRONOUS_PRINTER_DETECTION" );
+    if( ! pNoSyncDetection || !*pNoSyncDetection )
+        join();
+    else
+        terminate();
 }
 
 bool SystemQueueInfo::hasChanged() const
