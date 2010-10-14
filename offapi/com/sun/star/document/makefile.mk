@@ -114,7 +114,10 @@ IDLFILES=\
     XDocumentRevisionListPersistence.idl\
     DocumentRevisionListPersistence.idl \
     XDocumentLanguages.idl \
-    XCodeNameQuery.idl
+    XCodeNameQuery.idl \
+    XUndoAction.idl \
+    XUndoManager.idl \
+    XUndoManagerSupplier.idl
 
 
 # ------------------------------------------------------------------

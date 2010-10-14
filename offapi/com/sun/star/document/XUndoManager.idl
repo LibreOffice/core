@@ -1,0 +1,161 @@
+/*************************************************************************
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_document_XUndoManager_idl__
+#define __com_sun_star_document_XUndoManager_idl__
+
+#include <com/sun/star/util/InvalidStateException.idl>
+
+//==================================================================================================================
+
+module com { module sun { module star { module document {
+
+interface XUndoAction;
+
+//==================================================================================================================
+
+/** provides access to the undo/redo stacks of the document
+ */
+interface XUndoManager
+{
+    /** enters a new undo context.
+
+        <p>A new undo action will be added to the undo stack, with the title given as <code>i_title</code>. As long
+        as the context is not left, every undo action added to the stack will be treated as sub action. This means
+        it will not be directly accessible at the undo manager, not appear in any user interface, and cannot be
+        separately undone or re-done.</p>
+
+        <p>Each call to <code>enterUndoContext</code> must be paired by a call to <member>leaveUndoContext</member>,
+        otherwise, the document's undo stack is left in an inconsistent state.</p>
+
+        <p>Undo contexts can be nested, i.e. it is legitimate to call <code>enterUndoContext</code> and
+        <member>enterHiddenUndoContext</member> multiple times without calling <member>leaveUndoContext</member> inbetween.</p>
+
+        @see leaveUndoContext
+    */
+    void    enterUndoContext(
+                [in] string i_title
+            );
+
+    /** enters a new undo context, creating a hidden Undo action.
+
+        <p>A hidden Undo action does not, in any visible way, contribute to the Undo stack. This means
+        that
+        <ul><li>Calling <member>undo</member> when the top-element is a hidden Undo action will transparently
+                undo this action, and also undo the new top element of the stack.</li>
+            <li>Calling <member>redo</member> when the top-element is a hidden action will transparently
+                redo this action, and also redo the new top element of the stack.</li>
+            <li>In any user interface presenting the current Undo or Redo actions to the user, a hidden
+                action will not be listed.</p>
+        </ul>
+
+        <p>A new undo action will be added to the undo stack. As long as the context is not left, every undo action
+        added to the stack will be treated as sub action. This means it will not be directly accessible at the undo
+        manager, not appear in any user interface, and cannot be separately undone or re-done.</p>
+
+        <p>Each call to <code>enterHiddenUndoContext</code> must be paired by a call to <member>leaveUndoContext</member>,
+        otherwise, the document's undo stack is left in an inconsistent state.</p>
+
+        <p>Undo contexts can be nested, i.e. it is legitimate to call <member>enterUndoContext</member> and
+        <code>enterHiddenUndoContext</code> multiple times without calling <member>leaveUndoContext</member> inbetween.</p>
+
+        @throws ::com::sun::star::util::InvalidStateException
+            if the Undo stack is currently empty, in which case it is impossible to push a hidden Undo action onto
+            it.
+
+        @see emterUndoContext
+        @see leaveUndoContext
+    */
+    void    enterHiddenUndoContext()
+        raises( ::com::sun::star::util::InvalidStateException );
+
+    /** leaves the undo context previously opened via <member>enterUndoContext</member> respectively
+        <member>enterHiddenUndoContext</member>.
+
+        @throws ::com::sun::star::util::InvalidStateException
+            if no undo context is currently open.
+
+        @see enterUndoContext
+        @see enterHiddenUndoContext
+    */
+    void    leaveUndoContext()
+        raises( ::com::sun::star::util::InvalidStateException );
+
+    /** adds the given undo action to the undo stack.
+
+        <p>The redo stack is cleared when a new action is pushed onto the undo stack.</p>
+
+        <p>The undo manager takes ownership of any actions pushed onto the undo stack. This means that if the
+        action is finally removed from the undo manager's control (e.g. by calling <member>clear</member> resp.
+        <member>clearRedo</member>), it will be disposed, as long as it supports the <member scope="com::sun::star::lang">XComponent</member>
+        interface.</p>
+    */
+    void    addUndoAction(
+                [in] XUndoAction i_action
+            );
+
+    /** reverts the most recent action on the document.
+
+        <p>Effectively, invoking this method will
+        <ul><li>close any undo contexts which are currently open</p>
+            <li>invoke <member>XUndoAction::undo</member> on the top-most action of the undo stack</li>
+            <li>move this undo action from the undo stack to the redo stack</li>
+        </ul></p>
+
+        <p>If one or more undo contexts are currently open, those will be implicit
+
+        @see redo
+    */
+    void    undo();
+
+    /** replays the action on the document which has most recently been undone
+
+        <p>Effectively, invoking this method will
+        <ul><li>close any undo contexts which are currently open</p>
+            <li>invoke <member>XUndoAction::redo</member> on the top-most action of the redo stack</li>
+            <li>move this action from the redo stack to the undo stack</li>
+        </ul></p>
+
+        @see undo
+    */
+    void    redo();
+
+    /** clears the undo and the redo stack.
+    */
+    void    clear();
+
+    /** clears the redo stack.
+    */
+    void    clearRedo();
+};
+
+//==================================================================================================================
+
+}; }; }; };
+
+//==================================================================================================================
+
+#endif
