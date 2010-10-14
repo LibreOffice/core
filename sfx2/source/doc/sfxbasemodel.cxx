@@ -792,7 +792,7 @@ void SAL_CALL SfxBaseModel::dispose() throw(::com::sun::star::uno::RuntimeExcept
 
     if ( m_pData->m_pDocumentUndoManager.is() )
     {
-        m_pData->m_pDocumentUndoManager->dispose();
+        m_pData->m_pDocumentUndoManager->disposing();
         m_pData->m_pDocumentUndoManager = NULL;
     }
 
@@ -4334,3 +4334,13 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
 // =====================================================================================================================
 // = SfxModelSubComponent
 // =====================================================================================================================
+
+SfxModelSubComponent::~SfxModelSubComponent()
+{
+}
+
+void SfxModelSubComponent::disposing()
+{
+    // nothing to do here
+}
+

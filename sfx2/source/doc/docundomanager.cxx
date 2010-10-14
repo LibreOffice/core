@@ -32,6 +32,7 @@
 #include "sfx2/objsh.hxx"
 
 /** === begin UNO includes === **/
+#include <com/sun/star/lang/XComponent.hpp>
 /** === end UNO includes === **/
 
 #include <svl/undo.hxx>
@@ -57,6 +58,8 @@ namespace sfx2
     using ::com::sun::star::util::InvalidStateException;
     using ::com::sun::star::document::XUndoAction;
     using ::com::sun::star::document::XUndoManagerSupplier;
+    using ::com::sun::star::lang::XComponent;
+    using ::com::sun::star::lang::IllegalArgumentException;
     /** === end UNO using === **/
 
     //==================================================================================================================
@@ -89,6 +92,66 @@ namespace sfx2
     }
 
     //==================================================================================================================
+    //= UndoActionWrapper
+    //==================================================================================================================
+    class UndoActionWrapper : public SfxUndoAction
+    {
+    public:
+                        UndoActionWrapper(
+                            Reference< XUndoAction > const& i_undoAction
+                        );
+        virtual         ~UndoActionWrapper();
+
+        virtual void    Undo();
+        virtual void    Redo();
+        virtual BOOL    CanRepeat(SfxRepeatTarget&) const;
+
+    private:
+        const Reference< XUndoAction >  m_xUndoAction;
+    };
+
+    //------------------------------------------------------------------------------------------------------------------
+    UndoActionWrapper::UndoActionWrapper( Reference< XUndoAction > const& i_undoAction )
+        :SfxUndoAction()
+        ,m_xUndoAction( i_undoAction )
+    {
+        ENSURE_OR_THROW( m_xUndoAction.is(), "illegal undo action" );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    UndoActionWrapper::~UndoActionWrapper()
+    {
+        try
+        {
+            Reference< XComponent > xComponent( m_xUndoAction, UNO_QUERY );
+            if ( xComponent.is() )
+                xComponent->dispose();
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void UndoActionWrapper::Undo()
+    {
+        m_xUndoAction->undo();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void UndoActionWrapper::Redo()
+    {
+        m_xUndoAction->redo();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    BOOL UndoActionWrapper::CanRepeat(SfxRepeatTarget&) const
+    {
+        return FALSE;
+    }
+
+    //==================================================================================================================
     //= DocumentUndoManager
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
@@ -104,7 +167,7 @@ namespace sfx2
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void DocumentUndoManager::dispose()
+    void DocumentUndoManager::disposing()
     {
         // TODO?
     }
@@ -126,8 +189,8 @@ namespace sfx2
     {
         SfxModelGuard aGuard( *this );
 
-        (void)i_title;
-        // TODO: place your code here
+        SfxUndoManager& rUndoManager = lcl_getUndoManager_throw( getBaseModel() );
+        rUndoManager.EnterListAction( i_title, ::rtl::OUString() );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -141,43 +204,67 @@ namespace sfx2
     void SAL_CALL DocumentUndoManager::leaveUndoContext(  ) throw (InvalidStateException, RuntimeException)
     {
         SfxModelGuard aGuard( *this );
-        // TODO: place your code here
+
+        SfxUndoManager& rUndoManager = lcl_getUndoManager_throw( getBaseModel() );
+        if ( !rUndoManager.IsInListAction() )
+            throw InvalidStateException(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "no active undo context" ) ),
+                static_cast< XUndoManager* >( this )
+            );
+
+        rUndoManager.LeaveListAction();
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL DocumentUndoManager::addUndoAction( const Reference< XUndoAction >& i_action ) throw (RuntimeException)
+    void SAL_CALL DocumentUndoManager::addUndoAction( const Reference< XUndoAction >& i_action ) throw (RuntimeException, IllegalArgumentException)
     {
         SfxModelGuard aGuard( *this );
-        (void)i_action;
-        // TODO: place your code here
+
+        if ( !i_action.is() )
+            throw IllegalArgumentException(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "illegal undo action object" ) ),
+                static_cast< XUndoManager* >( this ),
+                1
+            );
+
+        SfxUndoManager& rUndoManager = lcl_getUndoManager_throw( getBaseModel() );
+        rUndoManager.AddUndoAction( new UndoActionWrapper( i_action ) );
     }
 
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL DocumentUndoManager::undo(  ) throw (RuntimeException)
     {
         SfxModelGuard aGuard( *this );
-        // TODO: place your code here
+
+        SfxUndoManager& rUndoManager = lcl_getUndoManager_throw( getBaseModel() );
+        rUndoManager.Undo();
     }
 
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL DocumentUndoManager::redo(  ) throw (RuntimeException)
     {
         SfxModelGuard aGuard( *this );
-        // TODO: place your code here
+
+        SfxUndoManager& rUndoManager = lcl_getUndoManager_throw( getBaseModel() );
+        rUndoManager.Redo();
     }
 
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL DocumentUndoManager::clear(  ) throw (RuntimeException)
     {
         SfxModelGuard aGuard( *this );
-        // TODO: place your code here
+
+        SfxUndoManager& rUndoManager = lcl_getUndoManager_throw( getBaseModel() );
+        rUndoManager.Clear();
     }
 
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL DocumentUndoManager::clearRedo(  ) throw (RuntimeException)
     {
         SfxModelGuard aGuard( *this );
-        // TODO: place your code here
+
+        SfxUndoManager& rUndoManager = lcl_getUndoManager_throw( getBaseModel() );
+        rUndoManager.ClearRedo();
     }
 
 

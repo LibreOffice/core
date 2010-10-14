@@ -1577,14 +1577,15 @@ public:
         m_rModel.MethodEntryCheck( true );
     }
 
+    // called when the SfxBaseModel which the component is superordinate of is being disposed
+    virtual void disposing();
+
 protected:
     SfxModelSubComponent( SfxBaseModel& i_model )
         :m_rModel( i_model )
     {
     }
-    ~SfxModelSubComponent()
-    {
-    }
+    virtual ~SfxModelSubComponent();
 
     // helpers for implementing XInterface - delegates ref counting to the SfxBaseModel
     void acquire()  {   m_rModel.acquire(); }

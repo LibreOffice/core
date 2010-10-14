@@ -58,9 +58,8 @@ namespace sfx2
         DocumentUndoManager( SfxBaseModel& i_document );
         virtual ~DocumentUndoManager();
 
-        /** renders the instance non-functional. To be called when the document it belongs to is disposed.
-        */
-        void    dispose();
+        // SfxModelSubComponent overridables
+        virtual void    disposing();
 
         // XInterface
         virtual void SAL_CALL acquire(  ) throw ();
@@ -70,7 +69,7 @@ namespace sfx2
         virtual void SAL_CALL enterUndoContext( const ::rtl::OUString& i_title ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL enterHiddenUndoContext(  ) throw (::com::sun::star::util::InvalidStateException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL leaveUndoContext(  ) throw (::com::sun::star::util::InvalidStateException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL addUndoAction( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoAction >& i_action ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL addUndoAction( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoAction >& i_action ) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException);
         virtual void SAL_CALL undo(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL redo(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL clear(  ) throw (::com::sun::star::uno::RuntimeException);
