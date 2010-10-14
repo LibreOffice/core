@@ -39,15 +39,6 @@ namespace accessibility
 {
 //........................................................................
 
-    // class TLBSolarGuard ---------------------------------------------------------
-
-    /** Aquire the solar mutex. */
-    class TLBSolarGuard : public ::vos::OGuard
-    {
-    public:
-        inline TLBSolarGuard() : ::vos::OGuard( Application::GetSolarMutex() ) {}
-    };
-
     // class AccessibleTabListBox -----------------------------------------------------
 
     using namespace ::com::sun::star::accessibility;
@@ -117,7 +108,7 @@ namespace accessibility
     AccessibleTabListBox::getAccessibleChild( sal_Int32 nChildIndex )
         throw ( IndexOutOfBoundsException, RuntimeException )
     {
-        TLBSolarGuard aSolarGuard;
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( getOslMutex() );
         ensureIsAlive();
 
