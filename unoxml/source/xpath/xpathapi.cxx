@@ -353,7 +353,7 @@ namespace XPath
             throw XPathException();
         }
         xmlXPathFreeContext(xpathCtx);
-        Reference< XXPathObject > aObj(new CXPathObject(xpathObj));
+        Reference< XXPathObject > aObj(new CXPathObject(xpathObj, contextNode));
         return aObj;
     }
 
