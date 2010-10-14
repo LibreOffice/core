@@ -352,7 +352,7 @@ uno::Any SAL_CALL VbaApplicationBase::Run( const ::rtl::OUString& MacroName, con
         // handle the arguments
         const uno::Any* aArgsPtrArray[] = { &varg1, &varg2, &varg3, &varg4, &varg5, &varg6, &varg7, &varg8, &varg9, &varg10, &varg11, &varg12, &varg13, &varg14, &varg15, &varg16, &varg17, &varg18, &varg19, &varg20, &varg21, &varg22, &varg23, &varg24, &varg25, &varg26, &varg27, &varg28, &varg29, &varg30 };
 
-        int nArg = sizeof( aArgsPtrArray ) / sizeof( aArgsPtrArray[0] );
+        int nArg = SAL_N_ELEMENTS( aArgsPtrArray );
         uno::Sequence< uno::Any > aArgs( nArg );
 
         const uno::Any** pArg = aArgsPtrArray;

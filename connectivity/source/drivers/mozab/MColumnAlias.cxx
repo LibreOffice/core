@@ -91,7 +91,7 @@ OColumnAlias::OColumnAlias( const ::com::sun::star::uno::Reference< ::com::sun::
         "Notes",
     };
 
-    for ( size_t i = 0; i < sizeof( s_pProgrammaticNames ) / sizeof( s_pProgrammaticNames[0] ); ++i )
+    for ( size_t i = 0; i < SAL_N_ELEMENTS( s_pProgrammaticNames ); ++i )
         m_aAliasMap[ ::rtl::OUString::createFromAscii( s_pProgrammaticNames[i] ) ] = AliasEntry( s_pProgrammaticNames[i], i );
 
     initialize( _rxORB );

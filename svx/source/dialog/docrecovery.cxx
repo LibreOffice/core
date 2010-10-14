@@ -1863,7 +1863,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
                 }
 
                 // loop through all the other windows and adjust their size
-                for ( ; i < sizeof( pWins ) / sizeof( pWins[ 0 ] ); ++i, ++pCurrent )
+                for ( ; i < SAL_N_ELEMENTS( pWins ); ++i, ++pCurrent )
                 {
                     Size aSize = (*pCurrent)->GetSizePixel();
                     aSize.Width() -= nDelta;
@@ -1934,7 +1934,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
                 &maProxyServerEd, &maProxyPortFT, &maProxyPortEd, &maDescriptionFT
             };
             Window** pCurrent = pWins;
-            for ( sal_uInt32 i = 0; i < sizeof( pWins ) / sizeof( pWins[ 0 ] ); ++i, ++pCurrent )
+            for ( sal_uInt32 i = 0; i < SAL_N_ELEMENTS( pWins ); ++i, ++pCurrent )
             {
                 Point aPos = (*pCurrent)->GetPosPixel();
                 aPos.Y() -= nDelta;

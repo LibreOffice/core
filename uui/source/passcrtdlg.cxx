@@ -115,7 +115,7 @@ PasswordCreateDialog::PasswordCreateDialog( Window* _pParent, ResMgr * pResMgr, 
     aFTWarning.SetPosSizePixel( aFTWarning.GetPosPixel(), aNewWarningSize );
 
     Window* pControls[] = { &aFixedLine1, &aOKBtn, &aCancelBtn, &aHelpBtn };
-    const sal_Int32 nCCount = sizeof( pControls ) / sizeof( pControls[0] );
+    const sal_Int32 nCCount = SAL_N_ELEMENTS( pControls );
     for ( int i = 0; i < nCCount; ++i )
     {
         Point aNewPos =(*pControls[i]).GetPosPixel();

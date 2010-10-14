@@ -163,7 +163,7 @@ void OAdabasUser::getAnyTablePrivileges(const ::rtl::OUString& objName, sal_Int3
                     { "SEL", Privilege::SELECT },
                     { "REF", Privilege::REFERENCE }
                 };
-                for ( size_t i = 0; i < sizeof( privileges ) / sizeof( privileges[0] ); ++i )
+                for ( size_t i = 0; i < SAL_N_ELEMENTS( privileges ); ++i )
                 {
                     sal_Int32 nIndex = sPrivs.indexOf( ::rtl::OUString::createFromAscii( privileges[i].pAsciiName ) );
                     if ( nIndex == -1 )

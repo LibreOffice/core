@@ -103,7 +103,7 @@ PasswordDialog::PasswordDialog(
     aFTPassword.SetPosSizePixel( aFTPassword.GetPosPixel(), aNewLabelSize );
 
     Window* pControls[] = { &aEDPassword, &aFixedLine1, &aOKBtn, &aCancelBtn, &aHelpBtn };
-    const sal_Int32 nCCount = sizeof( pControls ) / sizeof( pControls[0] );
+    const sal_Int32 nCCount = SAL_N_ELEMENTS( pControls );
     for ( int i = 0; i < nCCount; ++i )
     {
         Point aNewPos =(*pControls[i]).GetPosPixel();

@@ -240,7 +240,7 @@ void ControlMenuController::updateImagesPopupMenu( PopupMenu* pPopupMenu )
     if ( pResMgr->IsAvailable( aResId ))
     {
         ImageList aImageList( aResId );
-      for ( sal_uInt32 i=0; i < sizeof(nConvertSlots)/sizeof(nConvertSlots[0]); ++i )
+      for ( sal_uInt32 i=0; i < SAL_N_ELEMENTS(nConvertSlots); ++i )
         {
             // das entsprechende Image dran
             if ( m_bShowMenuImages )
@@ -291,7 +291,7 @@ void SAL_CALL ControlMenuController::statusChanged( const FeatureStateEvent& Eve
     osl::ResettableMutexGuard aLock( m_aMutex );
 
     USHORT nMenuId = 0;
-    for (sal_uInt32 i=0; i < sizeof(aCommands)/sizeof(aCommands[0]); ++i)
+    for (sal_uInt32 i=0; i < SAL_N_ELEMENTS(aCommands); ++i)
     {
         if ( Event.FeatureURL.Complete.equalsAscii( aCommands[i] ))
         {
@@ -417,7 +417,7 @@ void SAL_CALL ControlMenuController::updatePopupMenu() throw (::com::sun::star::
         fillPopupMenu( m_xPopupMenu );
         m_aURLToDispatchMap.free();
 
-        for (sal_uInt32 i=0; i<sizeof(aCommands)/sizeof(aCommands[0]); ++i)
+        for (sal_uInt32 i=0; i < SAL_N_ELEMENTS(aCommands); ++i)
         {
             aTargetURL.Complete = rtl::OUString::createFromAscii( aCommands[i] );
             m_xURLTransformer->parseStrict( aTargetURL );

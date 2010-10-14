@@ -307,7 +307,7 @@ FmPropBrw::~FmPropBrw()
                                              , ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DialogParentWindow" ) )
                                              , ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlContext" ) )
                                              , ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlShapeAccess" ) ) };
-            for ( size_t i = 0; i < sizeof(pProps)/sizeof(pProps[0]); ++i )
+            for ( size_t i = 0; i < SAL_N_ELEMENTS(pProps); ++i )
                 xName->removeByName( pProps[i] );
         }
     }
@@ -594,7 +594,7 @@ void FmPropBrw::impl_createPropertyBrowser_throw( FmFormShell* _pFormShell )
         ::cppu::ContextEntry_Init( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlShapeAccess" ) ), makeAny( xControlMap ) )
     };
     m_xInspectorContext.set(
-        ::cppu::createComponentContext( aHandlerContextInfo, sizeof( aHandlerContextInfo ) / sizeof( aHandlerContextInfo[0] ),
+        ::cppu::createComponentContext( aHandlerContextInfo, SAL_N_ELEMENTS( aHandlerContextInfo ),
         xOwnContext ) );
 
     bool bEnableHelpSection = lcl_shouldEnableHelpSection( m_xORB );

@@ -184,8 +184,7 @@ namespace // private
         stc2,       //  LISTBOX_FILTER_LABEL
         stc3        //  LISTBOX_FILE_NAME_LABEL
     };
-    const int SIZE_WINDOWS_FILEOPEN_CTRL_IDS =
-        sizeof(WindowsFileOpenCtrlIds)/sizeof(WindowsFileOpenCtrlIds[0]);
+    const int SIZE_WINDOWS_FILEOPEN_CTRL_IDS = SAL_N_ELEMENTS(WindowsFileOpenCtrlIds);
 
 }; // end namespace
 

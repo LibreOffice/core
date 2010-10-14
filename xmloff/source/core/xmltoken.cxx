@@ -3157,7 +3157,7 @@ namespace xmloff { namespace token {
 #endif
         DBG_ASSERT( eToken > XML_TOKEN_INVALID, "token value too low!" );
         DBG_ASSERT( eToken < XML_TOKEN_END, "token value too high!" );
-        DBG_ASSERT(sal_uInt16(eToken) < sizeof(aTokenList)/sizeof(aTokenList[0]),"Illegal position!");
+        DBG_ASSERT(sal_uInt16(eToken) < SAL_N_ELEMENTS(aTokenList),"Illegal position!");
 
         XMLTokenEntry* pToken = &aTokenList[(sal_uInt16)eToken];
         if (!pToken->pOUString)

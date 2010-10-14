@@ -140,7 +140,7 @@ MenuStyleItem MenuItemStyles[ ] = {
 };
 
 
-sal_Int32 nMenuStyleItemEntries = sizeof( MenuItemStyles ) / sizeof( MenuItemStyles[ 0 ] );
+sal_Int32 nMenuStyleItemEntries = SAL_N_ELEMENTS( MenuItemStyles );
 
 static void ExtractMenuParameters( const Sequence< PropertyValue > rProp,
                                    ::rtl::OUString&                       rCommandURL,

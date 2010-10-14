@@ -135,7 +135,7 @@ ToolboxStyleItem Styles[ ] = {
     { ::com::sun::star::ui::ItemStyle::TEXT, ATTRIBUTE_ITEMSTYLE_TEXT },
 };
 
-sal_Int32 nStyleItemEntries = sizeof( Styles ) / sizeof( Styles[ 0 ] );
+sal_Int32 nStyleItemEntries = SAL_N_ELEMENTS( Styles );
 
 struct ToolBarEntryProperty
 {

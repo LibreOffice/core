@@ -895,7 +895,7 @@ void SvxSearchDialog::CalculateDelta_Impl()
         if ( nOffset > 0 )
         {
             long nH = LogicToPixel( Size( 0, nOffset ), MAP_APPFONT ).Height();
-            for ( i = 0; i < sizeof( pWins ) / sizeof( pWins[ 0 ] ); ++i, ++pCurrent )
+            for ( i = 0; i < SAL_N_ELEMENTS( pWins ); ++i, ++pCurrent )
             {
                 if ( ( bCalcApp && i < nCalcCtrlCount )
                     || ( i == nCalcCtrlCount && aCJKOptions.IsCJKFontEnabled() )

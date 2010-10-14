@@ -53,7 +53,7 @@ namespace /* private */
         {{PSGUID_SUMMARYINFORMATION, PIDSI_PAGECOUNT},VT_BSTR, LVCFMT_LEFT, 30, SHCOLSTATE_TYPE_STR, L"Pagecount", L"Pagecount"}
     };
 
-    size_t ColumnInfoTableSize = sizeof(ColumnInfoTable)/sizeof(ColumnInfoTable[0]);
+    size_t ColumnInfoTableSize = SAL_N_ELEMENTS(ColumnInfoTable);
 }
 
 //----------------------------

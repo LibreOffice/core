@@ -298,7 +298,7 @@ OUString LinguOptions::GetName( INT32 nWID )
 
     OUString aRes;
 
-    INT32 nLen = sizeof( aWID_Name ) / sizeof( aWID_Name[0] );
+    INT32 nLen = SAL_N_ELEMENTS( aWID_Name );
     if (0 <= nWID  &&  nWID < nLen
         && aWID_Name[ nWID ].nWID == nWID)
     {

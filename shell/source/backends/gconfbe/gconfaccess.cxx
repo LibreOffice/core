@@ -819,8 +819,7 @@ ConfigurationValue const ConfigurationValues[] =
 #endif // ENABLE_LOCKDOWN
 };
 
-std::size_t const nConfigurationValues =
-    sizeof ConfigurationValues / sizeof ConfigurationValues[0];
+std::size_t const nConfigurationValues = SAL_N_ELEMENTS(ConfigurationValues);
 
 css::beans::Optional< css::uno::Any > getValue(ConfigurationValue const & data)
 {

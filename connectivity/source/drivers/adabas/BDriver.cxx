@@ -1299,7 +1299,7 @@ void ODriver::fillEnvironmentVariables()
         { "DBROOT",     &m_sDbRoot,     &m_sDbRootURL }
     };
 
-    for ( size_t i = 0; i < sizeof( EnvData ) / sizeof( EnvData[0] ); ++i )
+    for ( size_t i = 0; i < SAL_N_ELEMENTS( EnvData ); ++i )
     {
         ::rtl::OUString sVarName = ::rtl::OUString::createFromAscii( EnvData[i].pAsciiEnvName );
         ::rtl::OUString sEnvValue;

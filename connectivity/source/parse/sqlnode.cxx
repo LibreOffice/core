@@ -1428,7 +1428,7 @@ OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star:
             { OSQLParseNode::other_like_predicate_part_2, "other_like_predicate_part_2" },
             { OSQLParseNode::between_predicate_part_2, "between_predicate_part_2" }
         };
-        size_t nRuleMapCount = sizeof( aRuleDescriptions ) / sizeof( aRuleDescriptions[0] );
+        size_t nRuleMapCount = SAL_N_ELEMENTS( aRuleDescriptions );
         OSL_ENSURE( nRuleMapCount == size_t( OSQLParseNode::rule_count ), "OSQLParser::OSQLParser: added a new rule? Adjust this map!" );
 
         for ( size_t mapEntry = 0; mapEntry < nRuleMapCount; ++mapEntry )

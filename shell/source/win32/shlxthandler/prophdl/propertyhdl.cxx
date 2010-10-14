@@ -68,7 +68,7 @@ PROPERTYMAP g_rgPROPERTYMAP[] =
     { PKEY_Comment,        L"OpenOffice.org",          L"Comments" },
 };
 
-size_t gPropertyMapTableSize = sizeof(g_rgPROPERTYMAP)/sizeof(g_rgPROPERTYMAP[0]);
+size_t gPropertyMapTableSize = SAL_N_ELEMENTS(g_rgPROPERTYMAP);
 
 //----------------------------
 //

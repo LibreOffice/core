@@ -251,7 +251,7 @@ static HMENU createSystrayMenu( )
     OUString aEmpty;
 
     // insert the menu entries for launching the applications
-    for ( size_t i = 0; i < sizeof( aMenuItems ) / sizeof( aMenuItems[0] ); ++i )
+    for ( size_t i = 0; i < SAL_N_ELEMENTS( aMenuItems ); ++i )
     {
         if ( !aModuleOptions.IsModuleInstalled( aMenuItems[i].eModuleIdentifier ) )
             // the complete application is not even installed

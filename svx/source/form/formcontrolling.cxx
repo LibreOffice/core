@@ -121,7 +121,7 @@ namespace svx
                         { FMURL_FORM_APPLY_FILTER,    SID_FM_FORM_FILTERED,       FormFeature::ToggleApplyFilter },
                         { FMURL_FORM_REMOVE_FILTER,   SID_FM_REMOVE_FILTER_SORT,  FormFeature::RemoveFilterAndSort }
                     };
-                    for ( size_t i=0; i<sizeof(aDescriptions)/sizeof(aDescriptions[0]); ++i )
+                    for ( size_t i=0; i < SAL_N_ELEMENTS(aDescriptions); ++i )
                         s_aFeatureDescriptions.push_back( aDescriptions[i] );
                 }
             };
@@ -534,7 +534,7 @@ namespace svx
             SID_FM_FILTER_START,
             SID_FM_VIEW_AS_GRID
         };
-        sal_Int32 nFeatureCount = sizeof( pSupportedFeatures ) / sizeof( pSupportedFeatures[ 0 ] );
+        sal_Int32 nFeatureCount = SAL_N_ELEMENTS( pSupportedFeatures );
         aSupportedFeatures.resize( nFeatureCount );
         ::std::copy( pSupportedFeatures, pSupportedFeatures + nFeatureCount, aSupportedFeatures.begin() );
 

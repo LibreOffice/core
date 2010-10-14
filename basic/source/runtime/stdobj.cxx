@@ -85,7 +85,7 @@ friend class VBABlackListQuery;
     VBABlacklist()
     {
         const char* list[] = { "Red" };
-        sal_Int32 nSize = sizeof( list ) / sizeof( list[ 0 ] );
+        sal_Int32 nSize = SAL_N_ELEMENTS( list );
         for ( sal_Int32 index = 0; index < nSize; ++index )
         {
             mBlackList[ String::CreateFromAscii( list[ index ] ).ToLowerAscii() ] = true;

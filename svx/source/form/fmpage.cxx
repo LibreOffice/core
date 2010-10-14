@@ -230,7 +230,7 @@ sal_Bool FmFormPage::RequestHelp( Window* pWindow, SdrView* pView,
                     INET_PROT_HTTPS, INET_PROT_JAVASCRIPT, INET_PROT_IMAP, INET_PROT_POP3,
                     INET_PROT_VIM, INET_PROT_LDAP
                 };
-            for (sal_uInt16 i=0; i<sizeof(s_aQuickHelpSupported)/sizeof(s_aQuickHelpSupported[0]); ++i)
+            for (sal_uInt16 i=0; i < SAL_N_ELEMENTS(s_aQuickHelpSupported); ++i)
                 if (s_aQuickHelpSupported[i] == aProtocol)
                 {
                     aHelpText = INetURLObject::decode(aUrl.GetURLNoPass(), '%', INetURLObject::DECODE_UNAMBIGUOUS);

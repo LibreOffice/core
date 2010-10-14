@@ -778,7 +778,7 @@ void DbGridControl::NavigationBar::StateChanged( StateChangedType nType )
         case STATE_CHANGE_MIRRORING:
         {
             BOOL bIsRTLEnabled = IsRTLEnabled();
-            for ( size_t i=0; i < sizeof( pWindows ) / sizeof( pWindows[0] ); ++i )
+            for ( size_t i=0; i < SAL_N_ELEMENTS( pWindows ); ++i )
                 pWindows[i]->EnableRTL( bIsRTLEnabled );
         }
         break;
@@ -792,7 +792,7 @@ void DbGridControl::NavigationBar::StateChanged( StateChangedType nType )
             if ( IsControlFont() )
                 aFont.Merge( GetControlFont() );
 
-            for (size_t i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
+            for (size_t i=0; i < SAL_N_ELEMENTS(pWindows); ++i)
             {
                 pWindows[i]->SetZoom(aZoom);
                 pWindows[i]->SetZoomedPointFont(aFont);

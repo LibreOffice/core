@@ -144,7 +144,7 @@ void SfxAlienWarningDialog::InitSize()
         &m_aSaveODFBtn, &m_aKeepCurrentBtn, &m_aMoreInfoBtn, &m_aOptionLine, &m_aWarningOnBox
     };
     Window** pCurrent = pWins;
-    for ( sal_uInt32 i = 0; i < sizeof( pWins ) / sizeof( pWins[ 0 ] ); ++i, ++pCurrent )
+    for ( sal_uInt32 i = 0; i < SAL_N_ELEMENTS( pWins ); ++i, ++pCurrent )
     {
         Point aNewPos = (*pCurrent)->GetPosPixel();
         aNewPos.Y() -= nDelta;

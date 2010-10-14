@@ -87,7 +87,7 @@ using namespace ::svxform;
         FM_SUN_COMPONENT_IMAGECONTROL
     };
 
-    static const sal_uInt16 nSvxComponentServiceNameListCount = sizeof(aSvxComponentServiceNameList) / sizeof ( aSvxComponentServiceNameList[0] );
+    static const sal_uInt16 nSvxComponentServiceNameListCount = SAL_N_ELEMENTS(aSvxComponentServiceNameList);
 
     ::com::sun::star::uno::Sequence< ::rtl::OUString > aSeq( nSvxComponentServiceNameListCount );
     ::rtl::OUString* pStrings = aSeq.getArray();
