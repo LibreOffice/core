@@ -71,7 +71,6 @@
 using namespace ::com::sun::star;
 using namespace i18n::ScriptType;
 
-//#ifdef BIDI
 #include <unicode/ubidi.h>
 #include <i18nutil/unicode.hxx>  //unicode::getUnicodeScriptType
 

@@ -2032,27 +2032,6 @@ void WW8AttributeOutput::TableHeight( ww8::WW8TableNodeInfoInner::Pointer_t pTab
     const SwTableLine * pTabLine = pTabBox->GetUpper();
     const SwFrmFmt * pLineFmt = pTabLine->GetFrmFmt();
 
-#if 0
-    const SwTable * pTable = pTableTextNodeInfo->getTable();
-    bool bNewTableModel = pTable->IsNewModel();
-    bool bFixRowHeight = false;
-    const SwTableBoxes & rTabBoxes = pTabLine->GetTabBoxes();
-    if (! bNewModel)
-    {
-        sal_uInt32 nBoxes = rTabBoxes.Count();
-
-        for (sal_uInt32 n = 0; n < nBoxes; n++)
-        {
-            SwTableBox * pBox1 = rTabBoxes[n];
-            if (pBox1->getRowspan() != 1)
-            {
-                bFixRowHeight = true;
-                break;
-            }
-        }
-    }
-#endif
-
     // Zeilenhoehe ausgeben   sprmTDyaRowHeight
     long nHeight = 0;
     const SwFmtFrmSize& rLSz = pLineFmt->GetFrmSize();
@@ -2471,37 +2450,11 @@ typedef ::std::deque<SwNode *> SwNodeDeque;
 
 void MSWordExportBase::WriteText()
 {
-// whoever has need of the missing function should go and implement it!
-// This piece of code always breaks builds...
-//#ifdef DEBUG
-//    ::std::clog << "<WriteText>" << ::std::endl;
-//    ::std::clog << dbg_out(pCurPam->GetDoc()->GetNodes()) << ::std::endl;
-//
-//    SwNodeHashSet aNodeSet;
-//    SwNodeDeque aNodeDeque;
-//#endif
-
     while( pCurPam->GetPoint()->nNode < pCurPam->GetMark()->nNode ||
            ( pCurPam->GetPoint()->nNode == pCurPam->GetMark()->nNode &&
              pCurPam->GetPoint()->nContent.GetIndex() <= pCurPam->GetMark()->nContent.GetIndex() ) )
     {
         SwNode * pNd = pCurPam->GetNode();
-
-// whoever has need of the missing function should go and implement it!
-// This piece of code always breaks builds...
-#if 0
-#ifdef DEBUG
-        if (aNodeSet.find(pNd) == aNodeSet.end())
-        {
-            aNodeSet.insert(pNd);
-            aNodeDeque.push_back(pNd);
-        }
-        else
-        {
-            ::std::clog << "<already-done>" << dbg_out(*pNd) << "</already-done>" << ::std::endl;
-        }
-#endif
-#endif
 
         if ( pNd->IsTxtNode() )
             SectionBreaksAndFrames( *pNd->GetTxtNode() );
@@ -3804,11 +3757,6 @@ void WW8AttributeOutput::TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer
 
 void MSWordExportBase::OutputStartNode( const SwStartNode & rNode)
 {
-#if 0
-#ifdef DEBUG
-    ::std::clog << "<OutWW8_SwStartNode>" << dbg_out(&rNode) << ::std::endl;
-#endif
-#endif
 
     ww8::WW8TableNodeInfo::Pointer_t pNodeInfo =
         mpTableInfo->getTableNodeInfo( &rNode );

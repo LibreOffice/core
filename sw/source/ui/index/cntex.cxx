@@ -313,8 +313,6 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_STAR_CALC,   0 != (nsSwTOOElements::TOO_CALC &nOLEOptions           ));
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_STAR_DRAW,   0 != (nsSwTOOElements::TOO_DRAW_IMPRESS&nOLEOptions));
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_OTHER_EMBEDDED_OBJECTS, 0 != (nsSwTOOElements::TOO_OTHER|nOLEOptions       ));
-
-            //lcl_SetBOOLProp(xInfo, xIdxProps, , rDesc.IsLevelFromChapter());
         }
         const SwForm* pForm = GetForm(eCurrentTOXType);
         if(bInitialCreate || !nPage || nPage == TOX_PAGE_ENTRY)
@@ -469,27 +467,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                     pForm->GetTemplate(i + nOffset));
             }
         }
-/*
-    const String&   GetAutoMarkURL() const { return sAutoMarkURL;}
-    const String&   GetMainEntryCharStyle() const {return sMainEntryCharStyle;}
-
-    String          GetAuthBrackets() const {return sAuthBrackets;}
-    sal_Bool            IsAuthSequence() const {return bIsAuthSequence;}
-    sal_Bool            IsSortByDocument()const {return bSortByDocument ;}
-
-    SwTOXSortKey GetSortKey1() const {return eSortKey1;}
-    SwTOXSortKey GetSortKey2() const {return eSortKey2;}
-    SwTOXSortKey GetSortKey3() const {return eSortKey3;}
-*/
-        //
         pxIndexSectionsArr[nTOXIndex]->xDocumentIndex->update();
-
-//#if OSL_DEBUG_LEVEL > 1
-//      uno::Reference< frame::XStorable >  xStor(xModel, uno::UNO_QUERY);
-//      String sURL("file:///e|/temp/sw/idxexample.sdw");
-//   uno::Sequence< beans::PropertyValue > aArgs(0);
-//      xStor->storeToURL(S2U(sURL), aArgs);
-//#endif
 
     }
     catch(Exception&)

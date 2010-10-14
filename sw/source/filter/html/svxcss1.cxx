@@ -1096,12 +1096,10 @@ static void ParseCSS1_font_size( const CSS1Expression *pExpr,
             nHeight = (ULONG)nPHeight;
         }
         break;
-//#ifdef PERCENTAGE_POSSIBLE
     case CSS1_PERCENTAGE:
         // nur fuer Drop-Caps!
         nPropHeight = (USHORT)pExpr->GetNumber();
         break;
-//#endif
     case CSS1_IDENT:
         {
             USHORT nSize;
