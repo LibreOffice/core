@@ -1654,7 +1654,8 @@ bool SwCalc::Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
     if( pDoc )
     {
         LanguageType eLang = GetDocAppScriptLang( *pDoc );
-        if( eLang != SvxLocaleToLanguage( pLclD->getLocale() ) )
+        if (eLang !=
+                SvxLocaleToLanguage(aSysLocale.GetLocaleData().getLocale()))
         {
             pLclD.reset( new LocaleDataWrapper(
                             ::comphelper::getProcessServiceFactory(),
