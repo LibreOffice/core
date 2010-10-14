@@ -539,6 +539,21 @@ private:
     bool m_bBufferSectionHeaders;
     rtl::OStringBuffer m_aSectionHeaders;
 
+    /*
+     * Support for starting multiple tables at the same cell.
+     * If the current table is the last started one.
+     */
+    bool m_bLastTable;
+    /*
+     * List of already started but not yet defined tables (need to be defined
+     * after the nested tables).
+     */
+    std::vector< rtl::OString > m_aTables;
+    /*
+     * If cell info is already output.
+     */
+    bool m_bWroteCellInfo;
+
 public:
     RtfAttributeOutput( RtfExport &rExport );
 

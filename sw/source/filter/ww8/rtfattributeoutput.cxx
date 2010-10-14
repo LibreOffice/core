@@ -299,8 +299,7 @@ void RtfAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pTextN
                 {
                     ww8::WW8TableNodeInfoInner::Pointer_t pInner( pTextNodeInfo->getInnerForDepth( nDepth ) );
 
-                    delete m_pTableWrt, m_pTableWrt = NULL;
-
+                    m_bLastTable = (nDepth == pTextNodeInfo->getDepth());
                     StartTable( pInner );
                     StartTableRow( pInner );
                     StartTableCell( pInner );
@@ -565,6 +564,7 @@ void RtfAttributeOutput::TableInfoCell( ww8::WW8TableNodeInfoInner::Pointer_t /*
         m_aStyles.append(OOO_STRING_SVTOOLS_RTF_ITAP);
         m_aStyles.append((sal_Int32)m_nTableDepth);
     }
+    m_bWroteCellInfo = true;
 }
 
 void RtfAttributeOutput::TableInfoRow( ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfo*/ )
@@ -904,7 +904,8 @@ void RtfAttributeOutput::StartTable( ww8::WW8TableNodeInfoInner::Pointer_t /*pTa
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
 
-    /* noop */
+    // To trigger calling InitTableHelper()
+    delete m_pTableWrt, m_pTableWrt = NULL;
 }
 
 void RtfAttributeOutput::StartTableRow( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
@@ -913,6 +914,9 @@ void RtfAttributeOutput::StartTableRow( ww8::WW8TableNodeInfoInner::Pointer_t pT
     OSL_TRACE("%s, (depth is %d)", OSL_THIS_FUNC, (int)nCurrentDepth);
 
     TableDefinition(pTableTextNodeInfoInner);
+
+    if (!m_bLastTable)
+        m_aTables.push_back(m_aRowDefs.makeStringAndClear());
 
     // We'll write the table definition for nested tables later
     if ( nCurrentDepth > 1 )
@@ -940,6 +944,12 @@ void RtfAttributeOutput::EndTableCell( )
 {
     OSL_TRACE("%s, (depth is %d)", OSL_THIS_FUNC, (int)m_nTableDepth);
 
+    if (!m_bWroteCellInfo)
+    {
+        m_aAfterRuns.append(OOO_STRING_SVTOOLS_RTF_INTBL);
+        m_aAfterRuns.append(OOO_STRING_SVTOOLS_RTF_ITAP);
+        m_aAfterRuns.append((sal_Int32)m_nTableDepth);
+    }
     if ( m_nTableDepth > 1 )
         m_aAfterRuns.append(OOO_STRING_SVTOOLS_RTF_NESTCELL);
     else
@@ -947,6 +957,7 @@ void RtfAttributeOutput::EndTableCell( )
 
     m_bTableCellOpen = false;
     m_bTblAfterCell = true;
+    m_bWroteCellInfo = false;
 }
 
 void RtfAttributeOutput::EndTableRow( )
@@ -956,11 +967,24 @@ void RtfAttributeOutput::EndTableRow( )
     if ( m_nTableDepth > 1 )
     {
         m_aAfterRuns.append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_NESTTABLEPROPRS);
-        m_aAfterRuns.append(m_aRowDefs.makeStringAndClear());
+        if (m_aRowDefs.getLength() > 0)
+            m_aAfterRuns.append(m_aRowDefs.makeStringAndClear());
+        else if (m_aTables.size() > 0)
+        {
+            m_aAfterRuns.append(m_aTables.back());
+            m_aTables.pop_back();
+        }
         m_aAfterRuns.append(OOO_STRING_SVTOOLS_RTF_NESTROW "}" "{" OOO_STRING_SVTOOLS_RTF_NONESTTABLES OOO_STRING_SVTOOLS_RTF_PAR "}");
     }
     else
+    {
+        if (m_aTables.size() > 0)
+        {
+            m_aAfterRuns.append(m_aTables.back());
+            m_aTables.pop_back();
+        }
         m_aAfterRuns.append(OOO_STRING_SVTOOLS_RTF_ROW).append(OOO_STRING_SVTOOLS_RTF_PARD);
+    }
 }
 
 void RtfAttributeOutput::EndTable()
@@ -2964,7 +2988,9 @@ RtfAttributeOutput::RtfAttributeOutput( RtfExport &rExport )
     m_bTblAfterCell( false ),
     m_nColBreakNeeded( false ),
     m_bBufferSectionBreaks( false ),
-    m_bBufferSectionHeaders( false )
+    m_bBufferSectionHeaders( false ),
+    m_bLastTable( true ),
+    m_bWroteCellInfo( false )
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
 }
