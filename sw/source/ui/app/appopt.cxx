@@ -245,22 +245,6 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
         pRet->Put(SvxBrushItem(aViewOpt.GetRetoucheColor(), RES_BACKGROUND));
     }
 
-#if OSL_DEBUG_LEVEL > 1
-        // Test options
-        SwTestItem aTestItem(FN_PARAM_SWTEST);
-        aTestItem.bTest1 = aViewOpt.IsTest1();
-        aTestItem.bTest2 = aViewOpt.IsTest2();
-        aTestItem.bTest3 = aViewOpt.IsTest3();
-        aTestItem.bTest4 =  aViewOpt.IsTest4();
-        aTestItem.bTest5 = aViewOpt.IsTest5();
-        aTestItem.bTest6 = aViewOpt.IsTest6();
-        aTestItem.bTest7 = aViewOpt.IsTest7();
-        aTestItem.bTest8 = aViewOpt.IsTest8();
-        aTestItem.bTest9 = SwViewOption::IsTest9();
-        aTestItem.bTest10 = aViewOpt.IsTest10();
-        pRet->Put(aTestItem);
-#endif
-
     if(!bTextDialog)
         pRet->Put(SfxUInt16Item(SID_HTML_MODE, HTMLMODE_ON));
     return pRet;
@@ -453,27 +437,6 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
     }
 
 
-#if OSL_DEBUG_LEVEL > 1
-    /*--------------------------------------------------------------------------
-                Writer Testseite auswerten
-    ----------------------------------------------------------------------------*/
-
-            if( SFX_ITEM_SET == rSet.GetItemState(
-                        FN_PARAM_SWTEST, FALSE, &pItem ))
-            {
-                const SwTestItem* pTestItem = (const SwTestItem*)pItem;
-                aViewOpt.SetTest1((BOOL)pTestItem->bTest1);
-                aViewOpt.SetTest2((BOOL)pTestItem->bTest2);
-                aViewOpt.SetTest3((BOOL)pTestItem->bTest3);
-                aViewOpt.SetTest4((BOOL)pTestItem->bTest4);
-                aViewOpt.SetTest5((BOOL)pTestItem->bTest5);
-                aViewOpt.SetTest6((BOOL)pTestItem->bTest6);
-                aViewOpt.SetTest7((BOOL)pTestItem->bTest7);
-                aViewOpt.SetTest8((BOOL)pTestItem->bTest8);
-                SwViewOption::SetTest9((BOOL)pTestItem->bTest9);
-                aViewOpt.SetTest10((BOOL)pTestItem->bTest10);
-            }
-#endif
         // dann an der akt. View und Shell die entsp. Elemente setzen
     ApplyUsrPref( aViewOpt, pAppView,
                  bTextDialog? VIEWOPT_DEST_TEXT : VIEWOPT_DEST_WEB);
