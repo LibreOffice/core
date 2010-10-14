@@ -96,6 +96,8 @@
 
 #include <svtools/acceleratorexecute.hxx>
 
+#include <stdio.h>
+
 //_______________________________________________
 // const
 
@@ -1246,12 +1248,12 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::changesOccurred(const css::util:
     if (! xHAccess.is ())
         return;
 
-    const sal_Int32 c = aEvent.Changes.getLength();
+    css::util::ChangesEvent aReceivedEvents( aEvent );
+    const sal_Int32 c = aReceivedEvents.Changes.getLength();
           sal_Int32 i = 0;
-
     for (i=0; i<c; ++i)
     {
-        const css::util::ElementChange& aChange  =   aEvent.Changes[i];
+        const css::util::ElementChange& aChange  =   aReceivedEvents.Changes[i];
 
         // Only path of form "PrimaryKeys/Modules/Module['<module_name>']/Key['<command_url>']/Command[<locale>]" will
         // be interesting for use. Sometimes short path values are given also by the broadcaster ... but they must be ignored :-)
@@ -1264,27 +1266,25 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::changesOccurred(const css::util:
 
         aChange.Accessor >>= sOrgPath;
         sPath              = sOrgPath;
-        ::rtl::OUString sPrimarySecondary = ::utl::extractFirstFromConfigurationPath(sPath);
-        sPath = ::utl::dropPrefixFromConfigurationPath(sPath, sPrimarySecondary);
-
-        ::rtl::OUString sGlobalModules = ::utl::extractFirstFromConfigurationPath(sPath);
-        sPath = ::utl::dropPrefixFromConfigurationPath(sPath, sGlobalModules);
+        ::rtl::OUString sPrimarySecondary = ::utl::extractFirstFromConfigurationPath(sPath, &sPath);
+        ::rtl::OUString sGlobalModules = ::utl::extractFirstFromConfigurationPath(sPath, &sPath);
 
         if ( sGlobalModules.equals(CFG_ENTRY_GLOBAL) )
         {
             ::rtl::OUString sModule;
-            sKey = ::utl::extractFirstFromConfigurationPath(sPath);
-            if ( sKey.getLength() )
+            sKey = ::utl::extractFirstFromConfigurationPath(sPath, &sPath);
+            if (( sKey.getLength() > 0 ) && ( sPath.getLength() > 0 ))
                 reloadChanged(sPrimarySecondary, sGlobalModules, sModule, sKey);
         }
         else if ( sGlobalModules.equals(CFG_ENTRY_MODULES) )
         {
-            ::rtl::OUString sModule = ::utl::extractFirstFromConfigurationPath(sPath);
-            ::rtl::OUString sDropModule = ::rtl::OUString::createFromAscii("Module['") + sModule +  ::rtl::OUString::createFromAscii("']");
-            sPath = ::utl::dropPrefixFromConfigurationPath(sPath, sDropModule);
-            sKey = ::utl::extractFirstFromConfigurationPath(sPath);
-            if ( sKey.getLength() )
+            ::rtl::OUString sModule = ::utl::extractFirstFromConfigurationPath(sPath, &sPath);
+            sKey = ::utl::extractFirstFromConfigurationPath(sPath, &sPath);
+
+            if (( sKey.getLength() > 0 ) && ( sPath.getLength() > 0 ))
+            {
                 reloadChanged(sPrimarySecondary, sGlobalModules, sModule, sKey);
+            }
         }
     }
 }
@@ -1385,8 +1385,8 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( sal_Bool bPreferred, const 
                     aKeyEvent.Modifiers |= css::awt::KeyModifier::MOD1;
                 else if (sToken[k].equalsAscii("MOD2"))
                     aKeyEvent.Modifiers |= css::awt::KeyModifier::MOD2;
-        else if (sToken[k].equalsAscii("MOD3"))
-            aKeyEvent.Modifiers |= css::awt::KeyModifier::MOD3;
+                else if (sToken[k].equalsAscii("MOD3"))
+                    aKeyEvent.Modifiers |= css::awt::KeyModifier::MOD3;
                 else
                 {
                     bValid = sal_False;

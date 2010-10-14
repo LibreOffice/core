@@ -293,6 +293,7 @@ public:
     sal_Bool                    IsReadOnlyUI() const;
     void                        SetNoName();
     sal_Bool                    IsInModalMode() const;
+    sal_Bool                    IsInPrepareClose() const;
     //<!--Added by PengYunQuan for Validity Cell Range Picker
     virtual sal_Bool            AcceptStateUpdate() const;
     //-->Added by PengYunQuan for Validity Cell Range Picker
@@ -345,6 +346,9 @@ public:
     virtual sal_Bool            SwitchPersistance(
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
     virtual void                UpdateLinks();
+
+    // called for a few slots like SID_SAVE[AS]DOC, SID_PRINTDOC[DIRECT], derived classes may abort the action
+    virtual sal_Bool            QuerySlotExecutable( USHORT nSlotId );
 
     sal_Bool                    SaveChildren(BOOL bObjectsOnly=FALSE);
     sal_Bool                    SaveAsChildren( SfxMedium &rMedium );

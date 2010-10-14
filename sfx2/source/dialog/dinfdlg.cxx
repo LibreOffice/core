@@ -1525,19 +1525,6 @@ SfxDocumentInfoDialog::SfxDocumentInfoDialog( Window* pParent,
     {
         // Dateiname
         String aFile( pInfoItem->GetValue() );
-#ifdef WIN
-        if ( aFile.Len() <= 8 )
-        {
-            String sTmp( SfxResId( STR_NONAME ) );
-            USHORT nLen = Min( (USHORT)8, sTmp.Len() );
-
-            if ( sTmp.Copy( 0, nLen ).Lower() ==
-                 aFile.Copy( 0, nLen ).Lower() )
-            {
-                aFile = pInfoItem->GetValue();
-            }
-        }
-#endif
 
         INetURLObject aURL;
         aURL.SetSmartProtocol( INET_PROT_FILE );

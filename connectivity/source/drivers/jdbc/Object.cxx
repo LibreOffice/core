@@ -166,14 +166,6 @@ void java_lang_Object::saveRef( JNIEnv * pXEnv, jobject myObj )
 }
 
 
-java_lang_Class * java_lang_Object::getClass()
-{
-    SDBThreadAttach t;
-    static jmethodID mID(NULL);
-    jobject out = callObjectMethod(t.pEnv,"getClass","()Ljava/lang/Class;", mID);
-    return out ? new java_lang_Class( t.pEnv, out ) : NULL;
-}
-
 ::rtl::OUString java_lang_Object::toString() const
 {
     static jmethodID mID(NULL);

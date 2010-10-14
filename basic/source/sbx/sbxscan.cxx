@@ -71,10 +71,10 @@ void ImpGetIntntlSep( sal_Unicode& rcDecimalSep, sal_Unicode& rcThousandSep )
 // Das ganze gibt auch noch einen Konversionsfehler, wenn der Datentyp
 // Fixed ist und das ganze nicht hineinpasst!
 
-SbxError ImpScan( const XubString& rWSrc, double& nVal, SbxDataType& rType,
+SbxError ImpScan( const ::rtl::OUString& rWSrc, double& nVal, SbxDataType& rType,
                   USHORT* pLen, BOOL bAllowIntntl, BOOL bOnlyIntntl )
 {
-    ByteString aBStr( rWSrc, RTL_TEXTENCODING_ASCII_US );
+    ::rtl::OString aBStr( ::rtl::OUStringToOString( rWSrc, RTL_TEXTENCODING_ASCII_US ) );
 
     // Bei International Komma besorgen
     char cIntntlComma, cIntntl1000;
@@ -100,7 +100,7 @@ SbxError ImpScan( const XubString& rWSrc, double& nVal, SbxDataType& rType,
         cIntntl1000 = (char)cThousandSep;
     }
 
-    const char* pStart = aBStr.GetBuffer();
+    const char* pStart = aBStr.getStr();
     const char* p = pStart;
     char buf[ 80 ], *q = buf;
     BOOL bRes = TRUE;
@@ -391,7 +391,7 @@ static void myftoa( double nNum, char * pBuf, short nPrec, short nExpWidth,
 #pragma warning(disable: 4748) // "... because optimizations are disabled ..."
 #endif
 
-void ImpCvtNum( double nNum, short nPrec, XubString& rRes, BOOL bCoreString )
+void ImpCvtNum( double nNum, short nPrec, ::rtl::OUString& rRes, BOOL bCoreString )
 {
     char *q;
     char cBuf[ 40 ], *p = cBuf;
@@ -415,18 +415,18 @@ void ImpCvtNum( double nNum, short nPrec, XubString& rRes, BOOL bCoreString )
     if( *p == cDecimalSep ) p--;
     while( *q ) *++p = *q++;
     *++p = 0;
-    rRes = String::CreateFromAscii( cBuf );
+    rRes = ::rtl::OUString::createFromAscii( cBuf );
 }
 
 #ifdef _MSC_VER
 #pragma optimize( "", on )
 #endif
 
-BOOL ImpConvStringExt( XubString& rSrc, SbxDataType eTargetType )
+BOOL ImpConvStringExt( ::rtl::OUString& rSrc, SbxDataType eTargetType )
 {
     // Merken, ob ueberhaupt was geaendert wurde
     BOOL bChanged = FALSE;
-    String aNewString;
+    ::rtl::OUString aNewString;
 
     // Nur Spezial-Fälle behandeln, als Default tun wir nichts
     switch( eTargetType )
@@ -436,7 +436,7 @@ BOOL ImpConvStringExt( XubString& rSrc, SbxDataType eTargetType )
         case SbxDOUBLE:
         case SbxCURRENCY:
         {
-            ByteString aBStr( rSrc, RTL_TEXTENCODING_ASCII_US );
+            ::rtl::OString aBStr( ::rtl::OUStringToOString( rSrc, RTL_TEXTENCODING_ASCII_US ) );
 
             // Komma besorgen
             sal_Unicode cDecimalSep, cThousandSep;
@@ -446,10 +446,11 @@ BOOL ImpConvStringExt( XubString& rSrc, SbxDataType eTargetType )
             // Ersetzen, wenn DecimalSep kein '.' (nur den ersten)
             if( cDecimalSep != (sal_Unicode)'.' )
             {
-                USHORT nPos = aNewString.Search( cDecimalSep );
-                if( nPos != STRING_NOTFOUND )
+                sal_Int32 nPos = aNewString.indexOf( cDecimalSep );
+                if( nPos != -1 )
                 {
-                    aNewString.SetChar( nPos, '.' );
+                    sal_Unicode* pStr = (sal_Unicode*)aNewString.getStr();
+                    pStr[nPos] = (sal_Unicode)'.';
                     bChanged = TRUE;
                 }
             }
@@ -459,15 +460,15 @@ BOOL ImpConvStringExt( XubString& rSrc, SbxDataType eTargetType )
         // Bei BOOL TRUE und FALSE als String pruefen
         case SbxBOOL:
         {
-            if( rSrc.EqualsIgnoreCaseAscii( "true" ) )
+            if( rSrc.equalsIgnoreAsciiCaseAscii( "true" ) )
             {
-                aNewString = String::CreateFromInt32(SbxTRUE);
+                aNewString = ::rtl::OUString::valueOf( (sal_Int32)SbxTRUE );
                 bChanged = TRUE;
             }
             else
-            if( rSrc.EqualsIgnoreCaseAscii( "false" ) )
+            if( rSrc.equalsIgnoreAsciiCaseAscii( "false" ) )
             {
-                aNewString = String::CreateFromInt32(SbxFALSE);
+                aNewString = ::rtl::OUString::valueOf( (sal_Int32)SbxFALSE );
                 bChanged = TRUE;
             }
             break;
@@ -935,7 +936,11 @@ void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
                 //old: printfmtnum( GetDouble(), rRes, *pFmt );
             }
             else
-                ImpCvtNum( GetDouble(), nComma, rRes );
+            {
+                ::rtl::OUString aTmpString( rRes );
+                ImpCvtNum( GetDouble(), nComma, aTmpString );
+                rRes = aTmpString;
+            }
             break;
         case SbxSTRING:
             if( pFmt )

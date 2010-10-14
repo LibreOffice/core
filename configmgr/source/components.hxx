@@ -38,7 +38,10 @@
 #include "com/sun/star/uno/Reference.hxx"
 #include "rtl/ref.hxx"
 
+#include "additions.hxx"
 #include "data.hxx"
+#include "modifications.hxx"
+#include "nodemap.hxx"
 #include "path.hxx"
 
 namespace com { namespace sun { namespace star {
@@ -56,7 +59,6 @@ namespace rtl {
 namespace configmgr {
 
 class Broadcaster;
-class Modifications;
 class Node;
 class Partial;
 class RootAccess;
@@ -98,6 +100,9 @@ public:
         bool shared, rtl::OUString const & fileUri,
         Modifications * modifications);
 
+    void removeExtensionXcuFile(
+        rtl::OUString const & fileUri, Modifications * modifications);
+
     void insertModificationXcuFile(
         rtl::OUString const & fileUri,
         std::set< rtl::OUString > const & includedPaths,
@@ -109,7 +114,8 @@ public:
 
 private:
     typedef void FileParser(
-        rtl::OUString const &, int, Data &, Partial const *, Modifications *);
+        rtl::OUString const &, int, Data &, Partial const *, Modifications *,
+        Additions *);
 
     Components(
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
@@ -117,19 +123,25 @@ private:
 
     ~Components();
 
+    void parseFileLeniently(
+        FileParser * parseFile, rtl::OUString const & url, int layer,
+        Data & data, Partial const * partial, Modifications * modifications,
+        Additions * additions);
+
     void parseFiles(
         int layer, rtl::OUString const & extension, FileParser * parseFile,
         rtl::OUString const & url, bool recursive);
 
     void parseFileList(
         int layer, FileParser * parseFile, rtl::OUString const & urls,
-        rtl::Bootstrap const & ini);
+        rtl::Bootstrap const & ini, bool recordAdditions);
 
     void parseXcdFiles(int layer, rtl::OUString const & url);
 
     void parseXcsXcuLayer(int layer, rtl::OUString const & url);
 
-    void parseXcsXcuIniLayer(int layer, rtl::OUString const & url);
+    void parseXcsXcuIniLayer(
+        int layer, rtl::OUString const & url, bool recordAdditions);
 
     void parseModuleLayer(int layer, rtl::OUString const & url);
 

@@ -956,7 +956,9 @@
 #define RID_SVXSTR_OUTLINENUM_DESCRIPTION_6                 (RID_SVXSTR_OUTLINENUM_DESCRIPTIONS + 6)//?
 #define RID_SVXSTR_OUTLINENUM_DESCRIPTION_7                 (RID_SVXSTR_OUTLINENUM_DESCRIPTIONS + 7)//?
 
-#define RID_SVXSTR_NEXTFREE                                 (RID_SVX_START + 1190)
+#define RID_SVXSTR_FINDBAR_FIND                             (RID_SVX_START + 1190)
+
+#define RID_SVXSTR_NEXTFREE                                 (RID_SVX_START + 1191)
 
 // ----------------------------------------------------------------------------
 // if we have _a_lot_ time, we should group the resource ids by type, instead

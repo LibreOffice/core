@@ -1243,26 +1243,24 @@ ULONG SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
                 else if ( bIsNextRun && !IsAutoCorrectChar( cChar ) )
                 {
                     // Remove the NBSP if it wasn't an autocorrection
-                    if ( NeedsHardspaceAutocorr( rTxt.GetChar( nInsPos - 1 ) ) &&
+                    if ( nInsPos != 0 && NeedsHardspaceAutocorr( rTxt.GetChar( nInsPos - 1 ) ) &&
                             cChar != ' ' && cChar != '\t' && cChar != CHAR_HARDBLANK )
                     {
                         // Look for the last HARD_SPACE
                         xub_StrLen nPos = nInsPos - 1;
-                        bool bFound = false;
-                        while ( nPos != STRING_NOTFOUND  && !bFound )
+                        bool bContinue = true;
+                        while ( bContinue )
                         {
-                            sal_Unicode cTmpChar = rTxt.GetChar( nPos );
+                            const sal_Unicode cTmpChar = rTxt.GetChar( nPos );
                             if ( cTmpChar == CHAR_HARDBLANK )
-                                bFound = true;
-                            else if ( !NeedsHardspaceAutocorr( cTmpChar ) )
-                                nPos = STRING_NOTFOUND;
+                            {
+                                rDoc.Delete( nPos, nPos + 1 );
+                                nRet = AddNonBrkSpace;
+                                bContinue = false;
+                            }
+                            else if ( !NeedsHardspaceAutocorr( cTmpChar ) || nPos == 0 )
+                                bContinue = false;
                             nPos--;
-                        }
-
-                        if ( bFound && nPos != STRING_NOTFOUND )
-                        {
-                            rDoc.Delete( nPos + 1, nPos + 2 );
-                            nRet = AddNonBrkSpace;
                         }
                     }
                 }

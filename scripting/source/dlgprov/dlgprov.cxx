@@ -807,6 +807,31 @@ static ::rtl::OUString aResourceResolverPropName = ::rtl::OUString::createFromAs
         return xDialog;
     }
 
+    Reference < XDialog > DialogProviderImpl::createDialogWithArguments(
+        const ::rtl::OUString& URL, const Sequence< NamedValue >& Arguments )
+            throw (IllegalArgumentException, RuntimeException)
+    {
+        ::comphelper::NamedValueCollection aArguments( Arguments );
+
+        Reference< XWindowPeer > xParentPeer;
+        if ( aArguments.has( "ParentWindow" ) )
+        {
+            const Any aParentWindow( aArguments.get( "ParentWindow" ) );
+            if ( !( aParentWindow >>= xParentPeer ) )
+            {
+                const Reference< XControl > xParentControl( aParentWindow, UNO_QUERY );
+                if ( xParentControl.is() )
+                    xParentPeer = xParentControl->getPeer();
+            }
+        }
+
+        const Reference< XInterface > xHandler( aArguments.get( "EventHandler" ), UNO_QUERY );
+
+        Reference < XControl > xControl = DialogProviderImpl::createDialogImpl( URL, xHandler, xParentPeer, true );
+        Reference< XDialog > xDialog( xControl, UNO_QUERY );
+        return xDialog;
+    }
+
     Reference< XWindow > DialogProviderImpl::createContainerWindow(
         const ::rtl::OUString& URL, const ::rtl::OUString& WindowType,
         const Reference< XWindowPeer >& xParent, const Reference< XInterface >& xHandler )
@@ -864,13 +889,6 @@ extern "C"
         (void)ppEnv;
 
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-    }
-
-    sal_Bool SAL_CALL component_writeInfo(
-        lang::XMultiServiceFactory * pServiceManager, registry::XRegistryKey * pRegistryKey )
-    {
-        return ::cppu::component_writeInfoHelper(
-            pServiceManager, pRegistryKey, ::dlgprov::s_component_entries );
     }
 
     void * SAL_CALL component_getFactory(

@@ -85,7 +85,7 @@ public:
     bool setDouble( double val );
     void setInt( int val );
     void setUInt( unsigned int val );
-    bool setString( String* pString );
+    bool setString( ::rtl::OUString* pOUString );
     void setDecimal( SbxDecimal* pDecimal )
     {
 #ifdef WIN32
@@ -106,7 +106,7 @@ public:
     bool getDouble( double& rVal );
     bool getInt( int& rVal );
     bool getUInt( unsigned int& rVal );
-    bool getString( String& rString );
+    bool getString( ::rtl::OUString& rString );
 
     bool operator -= ( const SbxDecimal &r );
     bool operator += ( const SbxDecimal &r );

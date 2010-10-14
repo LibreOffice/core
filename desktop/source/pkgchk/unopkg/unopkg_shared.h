@@ -178,5 +178,11 @@ css::uno::Reference<css::uno::XComponentContext> getUNO(
     DisposeGuard & disposeGuard, bool verbose, bool shared, bool bGui,
     css::uno::Reference<css::uno::XComponentContext> & out_LocalComponentContext);
 
+bool hasNoFolder(::rtl::OUString const & folderUrl);
+
+void removeFolder(::rtl::OUString const & folderUrl);
+
 }
+
+
 

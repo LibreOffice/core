@@ -52,6 +52,7 @@ class SbUnoObject: public SbxObject
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XExactName > mxExactName;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XExactName > mxExactNameInvocation;
     BOOL bNeedIntrospection;
+    BOOL bIgnoreNativeCOMObjectMembers;
     ::com::sun::star::uno::Any maTmpUnoObj; // Only to save obj for doIntrospection!
 
     // Hilfs-Methode zum Anlegen der dbg_-Properties

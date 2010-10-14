@@ -1136,6 +1136,14 @@ sal_Bool ExtensionManager::synchronize(
         bModified |= m_bundledRepository->synchronize(xAbortChannel, xCmdEnv);
         progressBundled.update(OUSTR("\n\n"));
 
+        //Always determine the active extension. This is necessary for the
+        //first-start optimization. The setup creates the registration data for the
+        //bundled extensions (brand_layer/share/prereg/bundled), which is copied to the user
+        //installation (user_installation/extension/bundled) when a user starts OOo
+        //for the first time after running setup. All bundled extensions are registered
+        //at that moment. However, extensions with the same identifier can be in the
+        //shared or user repository, in which case the respective bundled extensions must
+        //be revoked.
         try
         {
             const uno::Sequence<uno::Sequence<Reference<deploy::XPackage> > >

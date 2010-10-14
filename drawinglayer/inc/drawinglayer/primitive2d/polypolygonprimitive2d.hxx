@@ -69,7 +69,7 @@ namespace drawinglayer
             PolyPolygonHairlinePrimitive2D(const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::BColor& rBColor);
 
             /// data read access
-            basegfx::B2DPolyPolygon getB2DPolyPolygon() const { return maPolyPolygon; }
+            const basegfx::B2DPolyPolygon& getB2DPolyPolygon() const { return maPolyPolygon; }
             const basegfx::BColor& getBColor() const { return maBColor; }
 
             /// compare operator
@@ -123,7 +123,7 @@ namespace drawinglayer
                 double fDiscreteDashLength);
 
             // data read access
-            basegfx::B2DPolyPolygon getB2DPolyPolygon() const { return maPolyPolygon; }
+            const basegfx::B2DPolyPolygon& getB2DPolyPolygon() const { return maPolyPolygon; }
             const basegfx::BColor& getRGBColorA() const { return maRGBColorA; }
             const basegfx::BColor& getRGBColorB() const { return maRGBColorB; }
             double getDiscreteDashLength() const { return mfDiscreteDashLength; }
@@ -182,7 +182,7 @@ namespace drawinglayer
                 const attribute::LineAttribute& rLineAttribute);
 
             /// data read access
-            basegfx::B2DPolyPolygon getB2DPolyPolygon() const { return maPolyPolygon; }
+            const basegfx::B2DPolyPolygon& getB2DPolyPolygon() const { return maPolyPolygon; }
             const attribute::LineAttribute& getLineAttribute() const { return maLineAttribute; }
             const attribute::StrokeAttribute& getStrokeAttribute() const { return maStrokeAttribute; }
 

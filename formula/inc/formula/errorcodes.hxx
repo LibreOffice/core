@@ -64,7 +64,8 @@ const USHORT errInterpOverflow       = 527;
 // Not displayed, temporary for TrackFormulas,
 // Cell depends on another cell that has errCircularReference
 const USHORT errTrackFromCircRef     = 528;
-// Interpreter internal: existing cell has no value but value queried
+// ScInterpreter internal:  no numeric value but numeric queried. If this is
+// set as mnStringNoValueError no error is generated but 0 returned.
 const USHORT errCellNoValue          = 529;
 // Interpreter: needed AddIn not found
 const USHORT errNoAddin              = 530;
@@ -74,6 +75,11 @@ const USHORT errNoMacro              = 531;
 const USHORT errDivisionByZero       = 532; // #DIV/0!
 // Compiler: a non-simple (str,err,val) value was put in an array
 const USHORT errNestedArray          = 533;
+// ScInterpreter internal:  no numeric value but numeric queried. If this is
+// temporarily (!) set as mnStringNoValueError, the error is generated and can
+// be used to distinguish that condition from all other (inherited) errors. Do
+// not use for anything else! Never push or inherit the error otherwise!
+const USHORT errNotNumericString     = 534;
 
 // Interpreter: NA() not available condition, not a real error
 const USHORT NOTAVAILABLE            = 0x7fff;

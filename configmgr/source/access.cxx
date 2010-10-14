@@ -798,13 +798,22 @@ void Access::initBroadcasterAndChanges(
                                 css::uno::Any(), css::uno::Any()));
                             //TODO: non-void ReplacedElement
                     }
-                    //TODO: if (allChanges != 0) {
-                    //  allChanges->push_back(
-                    //      css::util::ElementChange(
-                    //          css::uno::makeAny(...),
-                    //          css::uno::Any(), css::uno::Any()));
-                    //      //TODO: non-void ReplacedElement
-                    //}
+                    if (allChanges != 0) {
+                        rtl::OUStringBuffer path(
+                            getRelativePathRepresentation());
+                        if (path.getLength() != 0) {
+                            path.append(sal_Unicode('/'));
+                        }
+                        path.append(
+                            Data::createSegment(
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")),
+                                i->first));
+                        allChanges->push_back(
+                            css::util::ElementChange(
+                                css::uno::makeAny(path.makeStringAndClear()),
+                                css::uno::Any(), css::uno::Any()));
+                            //TODO: non-void ReplacedElement
+                    }
                 }
                 // else: spurious Modifications::Node not representing a change
                 break;

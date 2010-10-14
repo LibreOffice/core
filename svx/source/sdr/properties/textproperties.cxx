@@ -185,18 +185,21 @@ namespace sdr
                 {
                     SdrText* pText = rObj.getText( nCount );
                     OutlinerParaObject* pParaObj = pText->GetOutlinerParaObject();
-                    rOutliner.SetText(*pParaObj);
-                    sal_uInt32 nParaCount(rOutliner.GetParagraphCount());
-
-                    if(nParaCount)
+                    if( pParaObj )
                     {
-                        ESelection aSelection( 0, 0, EE_PARA_ALL, EE_PARA_ALL);
-                        rOutliner.RemoveAttribs(aSelection, sal_True, 0);
+                        rOutliner.SetText(*pParaObj);
+                        sal_uInt32 nParaCount(rOutliner.GetParagraphCount());
 
-                        OutlinerParaObject* pTemp = rOutliner.CreateParaObject(0, (sal_uInt16)nParaCount);
-                        rOutliner.Clear();
+                        if(nParaCount)
+                        {
+                            ESelection aSelection( 0, 0, EE_PARA_ALL, EE_PARA_ALL);
+                            rOutliner.RemoveAttribs(aSelection, sal_True, 0);
 
-                        rObj.NbcSetOutlinerParaObjectForText( pTemp, pText );
+                            OutlinerParaObject* pTemp = rOutliner.CreateParaObject(0, (sal_uInt16)nParaCount);
+                            rOutliner.Clear();
+
+                            rObj.NbcSetOutlinerParaObjectForText( pTemp, pText );
+                        }
                     }
                 }
             }

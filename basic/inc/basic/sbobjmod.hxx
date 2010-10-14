@@ -36,6 +36,7 @@
 #ifndef _SB_OBJMOD_HXX
 #define _SB_OBJMOD_HXX
 
+#include <rtl/ref.hxx>
 #include <basic/sbmod.hxx>
 #include <basic/sbstar.hxx>
 #include <com/sun/star/script/ModuleInfo.hpp>
@@ -60,10 +61,12 @@ public:
     void SetUnoObject( const com::sun::star::uno::Any& aObj )throw ( com::sun::star::uno::RuntimeException ) ;
 };
 
+class FormObjEventListenerImpl;
+
 class SbUserFormModule : public SbObjModule
 {
     com::sun::star::script::ModuleInfo m_mInfo;
-    css::uno::Reference<css::lang::XEventListener> m_DialogListener;
+    ::rtl::Reference< FormObjEventListenerImpl > m_DialogListener;
     css::uno::Reference<css::awt::XDialog> m_xDialog;
     css::uno::Reference<css::frame::XModel> m_xModel;
     String sFormName;
@@ -76,16 +79,19 @@ class SbUserFormModule : public SbObjModule
 public:
     TYPEINFO();
     SbUserFormModule( const String& rName, const com::sun::star::script::ModuleInfo& mInfo, bool bIsVBACompat );
+    virtual ~SbUserFormModule();
     virtual SbxVariable* Find( const XubString& rName, SbxClassType t );
     void ResetApiObj();
     void Unload();
-    void load();
+    void Load();
     void triggerMethod( const String& );
     void triggerMethod( const String&, css::uno::Sequence< css::uno::Any >&  );
     void triggerActivateEvent();
-    void triggerDeActivateEvent();
+    void triggerDeactivateEvent();
     void triggerInitializeEvent();
     void triggerTerminateEvent();
+    void triggerLayoutEvent();
+    void triggerResizeEvent();
 
     class SbUserFormModuleInstance* CreateInstance();
 };

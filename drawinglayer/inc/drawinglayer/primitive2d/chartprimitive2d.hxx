@@ -56,7 +56,7 @@ namespace drawinglayer
                 const basegfx::B2DHomMatrix& rTransformation,
                 const Primitive2DSequence& rChildren);
 
-            // get data
+            /// data read access
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& getChartModel() const { return mxChartModel; }
             const basegfx::B2DHomMatrix& getTransformation() const { return maTransformation; }
 

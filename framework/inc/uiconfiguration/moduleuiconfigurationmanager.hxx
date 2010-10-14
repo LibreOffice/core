@@ -219,6 +219,7 @@ namespace framework
             com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >    m_xServiceManager;
             ::cppu::OMultiTypeInterfaceContainerHelper                                      m_aListenerContainer;   /// container for ALL Listener
             com::sun::star::uno::Reference< com::sun::star::lang::XComponent >              m_xModuleImageManager;
+            com::sun::star::uno::Reference< com::sun::star::uno::XInterface >               m_xModuleAcceleratorManager;
    };
 }
 

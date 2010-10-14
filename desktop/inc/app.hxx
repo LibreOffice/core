@@ -75,7 +75,8 @@ class Desktop : public Application
             BE_USERINSTALL_FAILED,
             BE_LANGUAGE_MISSING,
             BE_USERINSTALL_NOTENOUGHDISKSPACE,
-            BE_USERINSTALL_NOWRITEACCESS
+            BE_USERINSTALL_NOWRITEACCESS,
+            BE_OFFICECONFIG_BROKEN
         };
         enum BootstrapStatus
         {
@@ -132,6 +133,9 @@ class Desktop : public Application
         static sal_Bool         LicenseNeedsAcceptance();
         static sal_Bool         IsFirstStartWizardNeeded();
         static sal_Bool         CheckExtensionDependencies();
+
+        static void             DoRestartActionsIfNecessary( sal_Bool bQuickStart );
+        static void             SetRestartState();
 
         void                    SynchronizeExtensionRepositories();
         void                    SetSplashScreenText( const ::rtl::OUString& rText );

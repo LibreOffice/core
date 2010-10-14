@@ -1954,7 +1954,7 @@ void FileDialogHelper_Impl::addGraphicFilter()
         }
     }
 
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
     if ( aExtensions.Len() > 240 )
         aExtensions = DEFINE_CONST_UNICODE( FILEDIALOG_FILTER_ALL );
 #endif
@@ -2748,7 +2748,7 @@ void FileDialogHelper::SetDisplayDirectory( const String& _rPath )
         if ( sFolder.getLength() == 0 )
         {
             // _rPath is not a valid path -> fallback to home directory
-            NAMESPACE_VOS( OSecurity ) aSecurity;
+            vos:: OSecurity  aSecurity;
             aSecurity.getHomeDir( sFolder );
         }
         mpImp->displayFolder( sFolder );

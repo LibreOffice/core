@@ -589,6 +589,11 @@ void TRACE(::rtl::OString const & sText)
 
 void syncRepositories(Reference<ucb::XCommandEnvironment> const & xCmdEnv)
 {
+    OUString sDisable;
+    ::rtl::Bootstrap::get( OUSTR( "DISABLE_EXTENSION_SYNCHRONIZATION" ), sDisable, OUString() );
+    if (sDisable.getLength() > 0)
+        return;
+
     Reference<deployment::XExtensionManager> xExtensionManager;
     //synchronize shared before bundled otherewise there are
     //more revoke and registration calls.

@@ -692,31 +692,6 @@ uno::Reference< uno::XInterface > SAL_CALL ConvDicList_CreateInstance(
     return StaticConvDicList::get();
 }
 
-
-sal_Bool SAL_CALL ConvDicList_writeInfo(
-    void * /*pServiceManager*/, registry::XRegistryKey * pRegistryKey )
-{
-    try
-    {
-        String aImpl( '/' );
-        aImpl += ConvDicList::getImplementationName_Static().getStr();
-        aImpl.AppendAscii( "/UNO/SERVICES" );
-        uno::Reference< registry::XRegistryKey > xNewKey =
-                pRegistryKey->createKey(aImpl );
-        uno::Sequence< OUString > aServices =
-                ConvDicList::getSupportedServiceNames_Static();
-        for( INT32 i = 0; i < aServices.getLength(); i++ )
-            xNewKey->createKey( aServices.getConstArray()[i]);
-
-        return sal_True;
-    }
-    catch(Exception &)
-    {
-        return sal_False;
-    }
-}
-
-
 void * SAL_CALL ConvDicList_getFactory(
         const sal_Char * pImplName,
         XMultiServiceFactory * pServiceManager, void *  )
