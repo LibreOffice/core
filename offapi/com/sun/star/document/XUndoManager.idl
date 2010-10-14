@@ -28,6 +28,7 @@
 #define __com_sun_star_document_XUndoManager_idl__
 
 #include <com/sun/star/util/InvalidStateException.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
 
 //==================================================================================================================
 
@@ -112,10 +113,14 @@ interface XUndoManager
         action is finally removed from the undo manager's control (e.g. by calling <member>clear</member> resp.
         <member>clearRedo</member>), it will be disposed, as long as it supports the <member scope="com::sun::star::lang">XComponent</member>
         interface.</p>
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if the given undo action is <NULL/>.
     */
     void    addUndoAction(
                 [in] XUndoAction i_action
-            );
+            )
+            raises( ::com::sun::star::lang::IllegalArgumentException );
 
     /** reverts the most recent action on the document.
 
