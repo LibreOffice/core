@@ -150,33 +150,58 @@ BOOL SfxUndoAction::CanRepeat(SfxRepeatTarget&) const
 
 //========================================================================
 
+struct SfxUndoManager_Data
+{
+    SfxUndoArray*   pUndoArray;
+    SfxUndoArray*   pActUndoArray;
+    SfxUndoArray*   pFatherUndoArray;
+
+    bool            mbUndoEnabled;
+
+    SfxUndoManager_Data( USHORT i_nMaxUndoActionCount )
+        :pUndoArray( new SfxUndoArray( i_nMaxUndoActionCount ) )
+        ,pActUndoArray( NULL )
+        ,pFatherUndoArray( NULL )
+        ,mbUndoEnabled( true )
+
+    {
+        pActUndoArray = pUndoArray;
+    }
+
+    ~SfxUndoManager_Data()
+    {
+        delete pUndoArray;
+    }
+};
+
+//========================================================================
 
 SfxUndoManager::SfxUndoManager( USHORT nMaxUndoActionCount )
- : pFatherUndoArray(0)
- , mbUndoEnabled( true )
+    :m_pData( new SfxUndoManager_Data( nMaxUndoActionCount ) )
 {
-    pUndoArray=new SfxUndoArray(nMaxUndoActionCount);
-    pActUndoArray=pUndoArray;
-
 }
 
 //------------------------------------------------------------------------
 
-
 SfxUndoManager::~SfxUndoManager()
 {
-    delete pUndoArray;
 }
 
 //------------------------------------------------------------------------
 
 void SfxUndoManager::EnableUndo( bool bEnable )
 {
-    mbUndoEnabled = bEnable;
+    m_pData->mbUndoEnabled = bEnable;
 }
 
 //------------------------------------------------------------------------
 
+bool SfxUndoManager::IsUndoEnabled() const
+{
+    return m_pData->mbUndoEnabled;
+}
+
+//------------------------------------------------------------------------
 
 void SfxUndoManager::SetMaxUndoActionCount( USHORT nMaxUndoActionCount )
 {
@@ -185,72 +210,72 @@ void SfxUndoManager::SetMaxUndoActionCount( USHORT nMaxUndoActionCount )
     // Both redo and undo action entries will be removed until we reached the
     // new nMaxUndoActionCount.
 
-    long nNumToDelete = pActUndoArray->aUndoActions.Count() - nMaxUndoActionCount;
+    long nNumToDelete = m_pData->pActUndoArray->aUndoActions.Count() - nMaxUndoActionCount;
     if ( nNumToDelete > 0 )
     {
         while ( nNumToDelete > 0 )
         {
-            USHORT nPos = pActUndoArray->aUndoActions.Count();
-            if ( nPos > pActUndoArray->nCurUndoAction )
+            USHORT nPos = m_pData->pActUndoArray->aUndoActions.Count();
+            if ( nPos > m_pData->pActUndoArray->nCurUndoAction )
             {
-                if ( !pActUndoArray->aUndoActions[nPos-1]->IsLinked() )
+                if ( !m_pData->pActUndoArray->aUndoActions[nPos-1]->IsLinked() )
                 {
-                    delete pActUndoArray->aUndoActions[nPos-1];
-                    pActUndoArray->aUndoActions.Remove( nPos-1 );
+                    delete m_pData->pActUndoArray->aUndoActions[nPos-1];
+                    m_pData->pActUndoArray->aUndoActions.Remove( nPos-1 );
                     --nNumToDelete;
                 }
             }
 
-            if ( nNumToDelete > 0 && pActUndoArray->nCurUndoAction > 0 )
+            if ( nNumToDelete > 0 && m_pData->pActUndoArray->nCurUndoAction > 0 )
             {
-                if ( !pActUndoArray->aUndoActions[0]->IsLinked() )
+                if ( !m_pData->pActUndoArray->aUndoActions[0]->IsLinked() )
                 {
-                    delete pActUndoArray->aUndoActions[0];
-                    pActUndoArray->aUndoActions.Remove(0);
-                    --pActUndoArray->nCurUndoAction;
+                    delete m_pData->pActUndoArray->aUndoActions[0];
+                    m_pData->pActUndoArray->aUndoActions.Remove(0);
+                    --m_pData->pActUndoArray->nCurUndoAction;
                     --nNumToDelete;
                 }
             }
 
-            if ( nPos == pActUndoArray->aUndoActions.Count() )
+            if ( nPos == m_pData->pActUndoArray->aUndoActions.Count() )
                 break; // Cannot delete more entries
         }
     }
 
-    pActUndoArray->nMaxUndoActions = nMaxUndoActionCount;
+    m_pData->pActUndoArray->nMaxUndoActions = nMaxUndoActionCount;
 }
 
 //------------------------------------------------------------------------
 
 USHORT SfxUndoManager::GetMaxUndoActionCount() const
 {
-    return pActUndoArray->nMaxUndoActions;
+    return m_pData->pActUndoArray->nMaxUndoActions;
 }
 
 //------------------------------------------------------------------------
 
 void SfxUndoManager::Clear()
 {
-    while ( pActUndoArray->aUndoActions.Count() )
+    while ( m_pData->pActUndoArray->aUndoActions.Count() )
     {
         SfxUndoAction *pAction=
-            pActUndoArray->aUndoActions[pActUndoArray->aUndoActions.Count() - 1];
-        pActUndoArray->aUndoActions.Remove( pActUndoArray->aUndoActions.Count() - 1 );
+            m_pData->pActUndoArray->aUndoActions[m_pData->pActUndoArray->aUndoActions.Count() - 1];
+        m_pData->pActUndoArray->aUndoActions.Remove( m_pData->pActUndoArray->aUndoActions.Count() - 1 );
         delete pAction;
     }
 
-    pActUndoArray->nCurUndoAction = 0;
+    m_pData->pActUndoArray->nCurUndoAction = 0;
 }
 
 //------------------------------------------------------------------------
 
 void SfxUndoManager::ClearRedo()
 {
-    while ( pActUndoArray->aUndoActions.Count() > pActUndoArray->nCurUndoAction )
+    while ( m_pData->pActUndoArray->aUndoActions.Count() > m_pData->pActUndoArray->nCurUndoAction )
     {
         SfxUndoAction *pAction=
-            pActUndoArray->aUndoActions[pActUndoArray->aUndoActions.Count() - 1];
-        pActUndoArray->aUndoActions.Remove( pActUndoArray->aUndoActions.Count() - 1 );
+            m_pData->pActUndoArray->aUndoActions[m_pData->pActUndoArray->aUndoActions.Count() - 1];
+        m_pData->pActUndoArray->aUndoActions.Remove( m_pData->pActUndoArray->aUndoActions.Count() - 1 );
         delete pAction;
     }
 }
@@ -259,39 +284,39 @@ void SfxUndoManager::ClearRedo()
 
 void SfxUndoManager::AddUndoAction( SfxUndoAction *pAction, BOOL bTryMerge )
 {
-    if( mbUndoEnabled )
+    if( m_pData->mbUndoEnabled )
     {
         // Redo-Actions loeschen
-        for ( USHORT nPos = pActUndoArray->aUndoActions.Count();
-              nPos > pActUndoArray->nCurUndoAction; --nPos )
-            delete pActUndoArray->aUndoActions[nPos-1];
+        for ( USHORT nPos = m_pData->pActUndoArray->aUndoActions.Count();
+              nPos > m_pData->pActUndoArray->nCurUndoAction; --nPos )
+            delete m_pData->pActUndoArray->aUndoActions[nPos-1];
 
-        pActUndoArray->aUndoActions.Remove(
-            pActUndoArray->nCurUndoAction,
-            pActUndoArray->aUndoActions.Count() - pActUndoArray->nCurUndoAction );
+        m_pData->pActUndoArray->aUndoActions.Remove(
+            m_pData->pActUndoArray->nCurUndoAction,
+            m_pData->pActUndoArray->aUndoActions.Count() - m_pData->pActUndoArray->nCurUndoAction );
 
-        if ( pActUndoArray->nMaxUndoActions )
+        if ( m_pData->pActUndoArray->nMaxUndoActions )
         {
-            SfxUndoAction *pTmpAction = pActUndoArray->nCurUndoAction ?
-                pActUndoArray->aUndoActions[pActUndoArray->nCurUndoAction-1] : 0;
+            SfxUndoAction *pTmpAction = m_pData->pActUndoArray->nCurUndoAction ?
+                m_pData->pActUndoArray->aUndoActions[m_pData->pActUndoArray->nCurUndoAction-1] : 0;
 
             if ( !bTryMerge || !(pTmpAction && pTmpAction->Merge(pAction)) )
             {
                 // auf Max-Anzahl anpassen
-                if( pActUndoArray == pUndoArray )
-                    while( pActUndoArray->aUndoActions.Count() >=
-                           pActUndoArray->nMaxUndoActions &&
-                           !pActUndoArray->aUndoActions[0]->IsLinked() )
+                if( m_pData->pActUndoArray == m_pData->pUndoArray )
+                    while( m_pData->pActUndoArray->aUndoActions.Count() >=
+                           m_pData->pActUndoArray->nMaxUndoActions &&
+                           !m_pData->pActUndoArray->aUndoActions[0]->IsLinked() )
                     {
-                        delete pActUndoArray->aUndoActions[0];
-                        pActUndoArray->aUndoActions.Remove(0);
-                        --pActUndoArray->nCurUndoAction;
+                        delete m_pData->pActUndoArray->aUndoActions[0];
+                        m_pData->pActUndoArray->aUndoActions.Remove(0);
+                        --m_pData->pActUndoArray->nCurUndoAction;
                     }
 
                 // neue Action anh"angen
                 const SfxUndoAction* pTemp = pAction;
-                pActUndoArray->aUndoActions.Insert(
-                    pTemp, pActUndoArray->nCurUndoAction++ );
+                m_pData->pActUndoArray->aUndoActions.Insert(
+                    pTemp, m_pData->pActUndoArray->nCurUndoAction++ );
                 return;
             }
         }
@@ -303,17 +328,17 @@ void SfxUndoManager::AddUndoAction( SfxUndoAction *pAction, BOOL bTryMerge )
 
 USHORT SfxUndoManager::GetUndoActionCount() const
 {
-    return pActUndoArray->nCurUndoAction;
+    return m_pData->pActUndoArray->nCurUndoAction;
 }
 
 //------------------------------------------------------------------------
 
 XubString SfxUndoManager::GetUndoActionComment( USHORT nNo ) const
 {
-    DBG_ASSERT( nNo < pActUndoArray->nCurUndoAction, "svl::SfxUndoManager::GetUndoActionComment(), illegal id!" );
-    if( nNo < pActUndoArray->nCurUndoAction )
+    DBG_ASSERT( nNo < m_pData->pActUndoArray->nCurUndoAction, "svl::SfxUndoManager::GetUndoActionComment(), illegal id!" );
+    if( nNo < m_pData->pActUndoArray->nCurUndoAction )
     {
-        return pActUndoArray->aUndoActions[pActUndoArray->nCurUndoAction-1-nNo]->GetComment(); //!
+        return m_pData->pActUndoArray->aUndoActions[m_pData->pActUndoArray->nCurUndoAction-1-nNo]->GetComment(); //!
     }
     else
     {
@@ -326,10 +351,10 @@ XubString SfxUndoManager::GetUndoActionComment( USHORT nNo ) const
 
 USHORT SfxUndoManager::GetUndoActionId( USHORT nNo ) const
 {
-    DBG_ASSERT( nNo < pActUndoArray->nCurUndoAction, "svl::SfxUndoManager::GetUndoActionId(), illegal id!" );
-    if( nNo < pActUndoArray->nCurUndoAction )
+    DBG_ASSERT( nNo < m_pData->pActUndoArray->nCurUndoAction, "svl::SfxUndoManager::GetUndoActionId(), illegal id!" );
+    if( nNo < m_pData->pActUndoArray->nCurUndoAction )
     {
-        return pActUndoArray->aUndoActions[pActUndoArray->nCurUndoAction-1-nNo]->GetId(); //!
+        return m_pData->pActUndoArray->aUndoActions[m_pData->pActUndoArray->nCurUndoAction-1-nNo]->GetId(); //!
     }
     else
     {
@@ -341,10 +366,10 @@ USHORT SfxUndoManager::GetUndoActionId( USHORT nNo ) const
 
 SfxUndoAction* SfxUndoManager::GetUndoAction( USHORT nNo ) const
 {
-    DBG_ASSERT( nNo < pActUndoArray->nCurUndoAction, "svl::SfxUndoManager::GetUndoAction(), illegal id!" );
-    if( nNo < pActUndoArray->nCurUndoAction )
+    DBG_ASSERT( nNo < m_pData->pActUndoArray->nCurUndoAction, "svl::SfxUndoManager::GetUndoAction(), illegal id!" );
+    if( nNo < m_pData->pActUndoArray->nCurUndoAction )
     {
-        return pActUndoArray->aUndoActions[pActUndoArray->nCurUndoAction-1-nNo]; //!
+        return m_pData->pActUndoArray->aUndoActions[m_pData->pActUndoArray->nCurUndoAction-1-nNo]; //!
     }
     else
     {
@@ -357,19 +382,19 @@ SfxUndoAction* SfxUndoManager::GetUndoAction( USHORT nNo ) const
 /** clears the redo stack and removes the top undo action */
 void SfxUndoManager::RemoveLastUndoAction()
 {
-    DBG_ASSERT( pActUndoArray->nCurUndoAction, "svl::SfxUndoManager::RemoveLastUndoAction(), no action to remove?!" );
-    if( pActUndoArray->nCurUndoAction )
+    DBG_ASSERT( m_pData->pActUndoArray->nCurUndoAction, "svl::SfxUndoManager::RemoveLastUndoAction(), no action to remove?!" );
+    if( m_pData->pActUndoArray->nCurUndoAction )
     {
-        pActUndoArray->nCurUndoAction--;
+        m_pData->pActUndoArray->nCurUndoAction--;
 
         // delete redo-actions and top action
         USHORT nPos;
-        for ( nPos = pActUndoArray->aUndoActions.Count(); nPos > pActUndoArray->nCurUndoAction; --nPos )
-            delete pActUndoArray->aUndoActions[nPos-1];
+        for ( nPos = m_pData->pActUndoArray->aUndoActions.Count(); nPos > m_pData->pActUndoArray->nCurUndoAction; --nPos )
+            delete m_pData->pActUndoArray->aUndoActions[nPos-1];
 
-        pActUndoArray->aUndoActions.Remove(
-            pActUndoArray->nCurUndoAction,
-            pActUndoArray->aUndoActions.Count() - pActUndoArray->nCurUndoAction );
+        m_pData->pActUndoArray->aUndoActions.Remove(
+            m_pData->pActUndoArray->nCurUndoAction,
+            m_pData->pActUndoArray->aUndoActions.Count() - m_pData->pActUndoArray->nCurUndoAction );
     }
 }
 
@@ -377,26 +402,26 @@ void SfxUndoManager::RemoveLastUndoAction()
 
 BOOL SfxUndoManager::Undo( USHORT )
 {
-    bool bUndoWasEnabled =  mbUndoEnabled;
-    mbUndoEnabled = false;
+    bool bUndoWasEnabled =  m_pData->mbUndoEnabled;
+    m_pData->mbUndoEnabled = false;
 
     BOOL bRet = FALSE;
 
     try
     {
-        DBG_ASSERT( pActUndoArray == pUndoArray, "svl::SfxUndoManager::Undo(), LeaveListAction() not yet called!" );
-        if ( pActUndoArray->nCurUndoAction )
+        DBG_ASSERT( m_pData->pActUndoArray == m_pData->pUndoArray, "svl::SfxUndoManager::Undo(), LeaveListAction() not yet called!" );
+        if ( m_pData->pActUndoArray->nCurUndoAction )
         {
-            Undo( *pActUndoArray->aUndoActions[ --pActUndoArray->nCurUndoAction ] );
+            Undo( *m_pData->pActUndoArray->aUndoActions[ --m_pData->pActUndoArray->nCurUndoAction ] );
             bRet = TRUE;
         }
     }
-    catch( Exception& e )
+    catch( const Exception& )
     {
-        mbUndoEnabled = bUndoWasEnabled;
-        throw e;
+        m_pData->mbUndoEnabled = bUndoWasEnabled;
+        throw;
     }
-    mbUndoEnabled = bUndoWasEnabled;
+    m_pData->mbUndoEnabled = bUndoWasEnabled;
     return bRet;
 }
 
@@ -404,66 +429,66 @@ BOOL SfxUndoManager::Undo( USHORT )
 
 void SfxUndoManager::Undo( SfxUndoAction &rAction )
 {
-    bool bUndoWasEnabled =  mbUndoEnabled;
-    mbUndoEnabled = false;
+    bool bUndoWasEnabled =  m_pData->mbUndoEnabled;
+    m_pData->mbUndoEnabled = false;
     try
     {
         rAction.Undo();
     }
-    catch( Exception& e )
+    catch( const Exception& )
     {
-        mbUndoEnabled = bUndoWasEnabled;
-        throw e;
+        m_pData->mbUndoEnabled = bUndoWasEnabled;
+        throw;
     }
 
-    mbUndoEnabled = bUndoWasEnabled;
+    m_pData->mbUndoEnabled = bUndoWasEnabled;
 }
 
 //------------------------------------------------------------------------
 
 USHORT SfxUndoManager::GetRedoActionCount() const
 {
-    return pActUndoArray->aUndoActions.Count() - pActUndoArray->nCurUndoAction; //!
+    return m_pData->pActUndoArray->aUndoActions.Count() - m_pData->pActUndoArray->nCurUndoAction; //!
 }
 
 //------------------------------------------------------------------------
 
 XubString SfxUndoManager::GetRedoActionComment( USHORT nNo ) const
 {
-    return pActUndoArray->aUndoActions[pActUndoArray->nCurUndoAction+nNo]->GetComment(); //!
+    return m_pData->pActUndoArray->aUndoActions[m_pData->pActUndoArray->nCurUndoAction+nNo]->GetComment(); //!
 }
 
 //------------------------------------------------------------------------
 
 USHORT SfxUndoManager::GetRedoActionId( USHORT nNo ) const
 {
-    return pActUndoArray->aUndoActions[pActUndoArray->nCurUndoAction+nNo]->GetId(); //!
+    return m_pData->pActUndoArray->aUndoActions[m_pData->pActUndoArray->nCurUndoAction+nNo]->GetId(); //!
 }
 
 //------------------------------------------------------------------------
 
 BOOL SfxUndoManager::Redo( USHORT )
 {
-    bool bUndoWasEnabled =  mbUndoEnabled;
-    mbUndoEnabled = false;
+    bool bUndoWasEnabled =  m_pData->mbUndoEnabled;
+    m_pData->mbUndoEnabled = false;
 
     BOOL bRet = FALSE;
 
     try
     {
-        if ( pActUndoArray->aUndoActions.Count() > pActUndoArray->nCurUndoAction )
+        if ( m_pData->pActUndoArray->aUndoActions.Count() > m_pData->pActUndoArray->nCurUndoAction )
         {
-            Redo( *pActUndoArray->aUndoActions[pActUndoArray->nCurUndoAction++] );
+            Redo( *m_pData->pActUndoArray->aUndoActions[m_pData->pActUndoArray->nCurUndoAction++] );
             bRet = TRUE;
         }
     }
-    catch( Exception& e )
+    catch( const Exception& )
     {
-        mbUndoEnabled = bUndoWasEnabled;
-        throw e;
+        m_pData->mbUndoEnabled = bUndoWasEnabled;
+        throw;
     }
 
-    mbUndoEnabled = bUndoWasEnabled;
+    m_pData->mbUndoEnabled = bUndoWasEnabled;
     return bRet;
 }
 
@@ -471,34 +496,34 @@ BOOL SfxUndoManager::Redo( USHORT )
 
 void SfxUndoManager::Redo( SfxUndoAction &rAction )
 {
-    bool bUndoWasEnabled =  mbUndoEnabled;
-    mbUndoEnabled = false;
+    bool bUndoWasEnabled =  m_pData->mbUndoEnabled;
+    m_pData->mbUndoEnabled = false;
 
     try
     {
         rAction.Redo();
     }
-    catch( Exception& e )
+    catch( const Exception& )
     {
-        mbUndoEnabled = bUndoWasEnabled;
-        throw e;
+        m_pData->mbUndoEnabled = bUndoWasEnabled;
+        throw;
     }
 
-    mbUndoEnabled = bUndoWasEnabled;
+    m_pData->mbUndoEnabled = bUndoWasEnabled;
 }
 
 //------------------------------------------------------------------------
 
 USHORT SfxUndoManager::GetRepeatActionCount() const
 {
-    return pActUndoArray->aUndoActions.Count();
+    return m_pData->pActUndoArray->aUndoActions.Count();
 }
 
 //------------------------------------------------------------------------
 
 XubString SfxUndoManager::GetRepeatActionComment( SfxRepeatTarget &rTarget, USHORT nNo ) const
 {
-    return pActUndoArray->aUndoActions[ pActUndoArray->aUndoActions.Count() - 1 - nNo ]
+    return m_pData->pActUndoArray->aUndoActions[ m_pData->pActUndoArray->aUndoActions.Count() - 1 - nNo ]
         ->GetRepeatComment(rTarget);
 }
 
@@ -506,9 +531,9 @@ XubString SfxUndoManager::GetRepeatActionComment( SfxRepeatTarget &rTarget, USHO
 
 BOOL SfxUndoManager::Repeat( SfxRepeatTarget &rTarget, USHORT /*nFrom*/, USHORT /*nCount*/ )
 {
-    if ( pActUndoArray->aUndoActions.Count() )
+    if ( m_pData->pActUndoArray->aUndoActions.Count() )
     {
-        Repeat( rTarget, *pActUndoArray->aUndoActions[ pActUndoArray->aUndoActions.Count() - 1 ] );
+        Repeat( rTarget, *m_pData->pActUndoArray->aUndoActions[ m_pData->pActUndoArray->aUndoActions.Count() - 1 ] );
         return TRUE;
     }
 
@@ -534,10 +559,10 @@ BOOL SfxUndoManager::CanRepeat( SfxRepeatTarget &rTarget, SfxUndoAction &rAction
 
 BOOL SfxUndoManager::CanRepeat( SfxRepeatTarget &rTarget, USHORT nNo ) const
 {
-    if ( pActUndoArray->aUndoActions.Count() > nNo )
+    if ( m_pData->pActUndoArray->aUndoActions.Count() > nNo )
     {
-        USHORT nActionNo = pActUndoArray->aUndoActions.Count() - 1 - nNo;
-        return pActUndoArray->aUndoActions[nActionNo]->CanRepeat(rTarget);
+        USHORT nActionNo = m_pData->pActUndoArray->aUndoActions.Count() - 1 - nNo;
+        return m_pData->pActUndoArray->aUndoActions[nActionNo]->CanRepeat(rTarget);
     }
 
     return FALSE;
@@ -554,24 +579,24 @@ void SfxUndoManager::EnterListAction(
 */
 
 {
-    if( !mbUndoEnabled )
+    if( !m_pData->mbUndoEnabled )
         return;
 
-    if ( !pUndoArray->nMaxUndoActions )
+    if ( !m_pData->pUndoArray->nMaxUndoActions )
         return;
 
-    pFatherUndoArray=pActUndoArray;
+    m_pData->pFatherUndoArray = m_pData->pActUndoArray;
     SfxListUndoAction *pAction=new SfxListUndoAction(
-        rComment, rRepeatComment, nId, pActUndoArray);
+        rComment, rRepeatComment, nId, m_pData->pActUndoArray);
     AddUndoAction( pAction );
-    pActUndoArray=pAction;
+    m_pData->pActUndoArray=pAction;
 }
 
 //------------------------------------------------------------------------
 
 bool SfxUndoManager::IsInListAction() const
 {
-    return ( pActUndoArray != pUndoArray );
+    return ( m_pData->pActUndoArray != m_pData->pUndoArray );
 }
 
 //------------------------------------------------------------------------
@@ -583,10 +608,10 @@ void SfxUndoManager::LeaveListAction()
     Verlaesst die aktuelle ListAction und geht eine Ebene nach oben.
 */
 {
-    if ( !mbUndoEnabled )
+    if ( !m_pData->mbUndoEnabled )
         return;
 
-    if ( !pUndoArray->nMaxUndoActions )
+    if ( !m_pData->pUndoArray->nMaxUndoActions )
         return;
 
     if( !IsInListAction() )
@@ -595,16 +620,16 @@ void SfxUndoManager::LeaveListAction()
         return;
     }
 
-    DBG_ASSERT(pActUndoArray->pFatherUndoArray,"svl::SfxUndoManager::LeaveListAction(), no father undo array!?");
+    DBG_ASSERT(m_pData->pActUndoArray->pFatherUndoArray,"svl::SfxUndoManager::LeaveListAction(), no father undo array!?");
 
-    SfxUndoArray* pTmp=pActUndoArray;
-    pActUndoArray=pActUndoArray->pFatherUndoArray;
+    SfxUndoArray* pTmp = m_pData->pActUndoArray;
+    m_pData->pActUndoArray = m_pData->pActUndoArray->pFatherUndoArray;
 
     // If no undo action where added, delete the undo list action
-    SfxUndoAction *pTmpAction= pActUndoArray->aUndoActions[pActUndoArray->nCurUndoAction-1];
+    SfxUndoAction *pTmpAction= m_pData->pActUndoArray->aUndoActions[m_pData->pActUndoArray->nCurUndoAction-1];
     if(!pTmp->nCurUndoAction)
     {
-        pActUndoArray->aUndoActions.Remove( --pActUndoArray->nCurUndoAction);
+        m_pData->pActUndoArray->aUndoActions.Remove( --m_pData->pActUndoArray->nCurUndoAction);
         delete pTmpAction;
     }
     else
@@ -728,7 +753,7 @@ SfxLinkUndoAction::SfxLinkUndoAction(SfxUndoManager *pManager)
     if ( pManager->GetMaxUndoActionCount() )
     {
         USHORT nPos = pManager->GetUndoActionCount()-1;
-        pAction = pManager->pActUndoArray->aUndoActions[nPos];
+        pAction = pManager->m_pData->pActUndoArray->aUndoActions[nPos];
         pAction->SetLinked();
     }
     else

@@ -32,6 +32,8 @@
 #include <tools/string.hxx>
 #include <svl/svarray.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
 //====================================================================
 
 class SVL_DLLPUBLIC SfxRepeatTarget
@@ -132,15 +134,13 @@ class SVL_DLLPUBLIC SfxListUndoAction : public SfxUndoAction, public SfxUndoArra
 
 //=========================================================================
 
+struct SfxUndoManager_Data;
 class SVL_DLLPUBLIC SfxUndoManager
 {
     friend class SfxLinkUndoAction;
 
-    SfxUndoArray            *pUndoArray;
-    SfxUndoArray            *pActUndoArray;
-    SfxUndoArray            *pFatherUndoArray;
-
-    bool                    mbUndoEnabled;
+    ::boost::scoped_ptr< SfxUndoManager_Data >
+                            m_pData;
 public:
                             SfxUndoManager( USHORT nMaxUndoActionCount = 20 );
     virtual                 ~SfxUndoManager();
@@ -192,7 +192,7 @@ public:
     // returns true if undo is currently enabled
     // This returns false if undo was disabled using EnableUndo( false ) and
     // also during the runtime of the Undo() and Redo() methods.
-    bool                    IsUndoEnabled() const { return mbUndoEnabled; }
+    bool                    IsUndoEnabled() const;
 };
 
 //=========================================================================
