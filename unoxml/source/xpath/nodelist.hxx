@@ -53,10 +53,11 @@ namespace XPath
     {
     private:
         boost::shared_ptr<xmlXPathObject> m_pXPathObj;
+        const Reference< XNode > m_xContextNode;
         xmlNodeSetPtr m_pNodeSet;
 
     public:
-        CNodeList(boost::shared_ptr<xmlXPathObject> &rxpathObj);
+        CNodeList(boost::shared_ptr<xmlXPathObject> &rxpathObj, const Reference< XNode >& contextNode);
         /**
         The number of nodes in the list.
         */

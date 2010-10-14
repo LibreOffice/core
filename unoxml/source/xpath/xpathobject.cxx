@@ -86,7 +86,7 @@ namespace XPath
     */
     Reference< XNodeList > SAL_CALL CXPathObject::getNodeList() throw (RuntimeException)
     {
-        return Reference< XNodeList >(new CNodeList(m_pXPathObj));
+        return Reference< XNodeList >(new CNodeList(m_pXPathObj, m_xContextNode));
     }
 
      /**
