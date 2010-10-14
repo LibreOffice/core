@@ -2854,7 +2854,7 @@ void ScDocShell::ResetKeyBindings( ScOptionsUtil::KeyBindingType eType )
         return;
 
     vector<const awt::KeyEvent*> aKeys;
-    aKeys.reserve(3);
+    aKeys.reserve(4);
 
     // Backsapce key
     awt::KeyEvent aBackspace;
@@ -2874,8 +2874,14 @@ void ScDocShell::ResetKeyBindings( ScOptionsUtil::KeyBindingType eType )
     aCtrlD.Modifiers = awt::KeyModifier::MOD1;
     aKeys.push_back(&aCtrlD);
 
-    // Remove all involved keys first, as swapping of commands don't work well
-    // without this.
+    // Ctrl-Shift-D
+    awt::KeyEvent aCtrlShiftD;
+    aCtrlShiftD.KeyCode = awt::Key::D;
+    aCtrlShiftD.Modifiers = awt::KeyModifier::MOD1 | awt::KeyModifier::SHIFT;
+    aKeys.push_back(&aCtrlShiftD);
+
+    // Remove all involved keys first, because swapping commands don't work
+    // well without doing this.
     removeKeysIfExists(xScAccel, aKeys);
     xScAccel->store();
 
@@ -2885,6 +2891,7 @@ void ScDocShell::ResetKeyBindings( ScOptionsUtil::KeyBindingType eType )
             xScAccel->setKeyEvent(aDelete, OUString::createFromAscii(".uno:ClearContents"));
             xScAccel->setKeyEvent(aBackspace, OUString::createFromAscii(".uno:Delete"));
             xScAccel->setKeyEvent(aCtrlD, OUString::createFromAscii(".uno:FillDown"));
+            xScAccel->setKeyEvent(aCtrlShiftD, OUString::createFromAscii(".uno:DataSelect"));
         break;
         case ScOptionsUtil::KEY_OOO_LEGACY:
             xScAccel->setKeyEvent(aDelete, OUString::createFromAscii(".uno:Delete"));

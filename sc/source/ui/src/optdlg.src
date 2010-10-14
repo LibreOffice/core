@@ -299,7 +299,7 @@ TabPage RID_SCPAGE_COMPATIBILITY
         Pos = MAP_APPFONT ( 12, 16 ) ;
         Size = MAP_APPFONT ( 165, 24 ) ;
         Wordbreak = TRUE;
-        Text [ en-US ] = "Select desired ~key binding type. This may overwrite the existing key bindings if any." ;
+        Text [ en-US ] = "Select desired ~key binding type. Changing the key binding type may overwrite some of the existing key bindings." ;
     };
 
     ListBox LB_KEY_BINDINGS
