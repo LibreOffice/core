@@ -495,6 +495,10 @@ PrinterJob::StartJob (
 sal_Bool
 PrinterJob::EndJob ()
 {
+    // no pages ? that really means no print job
+    if( maPageList.empty() )
+        return sal_False;
+
     // write document setup (done here because it
     // includes the accumulated fonts
     if( mpJobHeader )
