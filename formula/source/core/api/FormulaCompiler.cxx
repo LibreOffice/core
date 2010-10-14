@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 #include "precompiled_formula.hxx"
+#include <sal/macros.h>
 #include "formula/FormulaCompiler.hxx"
 #include "formula/errorcodes.hxx"
 #include "formula/token.hxx"

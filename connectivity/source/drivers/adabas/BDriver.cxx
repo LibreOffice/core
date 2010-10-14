@@ -29,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
 #include <unotools/tempfile.hxx>
+#include <sal/macros.h>
 #include "adabas/BDriver.hxx"
 #include "adabas/BConnection.hxx"
 #include "odbc/OFunctions.hxx"

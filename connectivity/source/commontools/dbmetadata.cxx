@@ -52,6 +52,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
+#include <sal/macros.h>
 
 #include <boost/optional.hpp>
 

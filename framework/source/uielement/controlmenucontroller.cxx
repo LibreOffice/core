@@ -28,6 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
+#include <sal/macros.h>
 #include <uielement/controlmenucontroller.hxx>
 
 //_________________________________________________________________________________________________________________

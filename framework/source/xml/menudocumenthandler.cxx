@@ -30,17 +30,11 @@
 #include "precompiled_framework.hxx"
 
 #include <stdio.h>
+#include <sal/macros.h>
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
 #include <xml/menudocumenthandler.hxx>
 #include <xml/menuconfiguration.hxx>
 #include <classes/addonmenu.hxx>
-
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
@@ -49,16 +43,10 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 #include <comphelper/processfactory.hxx>
 #include <rtl/logfile.hxx>
 #include <comphelper/attributelist.hxx>
 
-//_________________________________________________________________________________________________________________
-//  defines
-//_________________________________________________________________________________________________________________
 
 #define XMLNS_MENU                  "http://openoffice.org/2001/menu"
 #define XMLNS_PREFIX                "menu:"

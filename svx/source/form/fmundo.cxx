@@ -29,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
+#include <sal/macros.h>
 #include "fmundo.hxx"
 #include "fmpgeimp.hxx"
 #include "svx/dbtoolsclient.hxx"

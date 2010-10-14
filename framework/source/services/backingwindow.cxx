@@ -34,6 +34,8 @@
 #include "classes/fwkresid.hxx"
 #include <services.h>
 
+#include <sal/macros.h>
+
 #include "vcl/metric.hxx"
 #include "vcl/mnemonic.hxx"
 #include "vcl/menu.hxx"

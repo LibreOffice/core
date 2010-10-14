@@ -27,6 +27,7 @@
  ************************************************************************/
 
 #include "vbahelper/vbaapplicationbase.hxx"
+#include <sal/macros.h>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

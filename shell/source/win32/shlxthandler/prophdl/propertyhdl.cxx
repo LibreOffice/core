@@ -37,6 +37,7 @@
 
 #include <propkey.h>
 #include <propvarutil.h>
+#include <sal/macros.h>
 
 #include <malloc.h>
 #include <strsafe.h>

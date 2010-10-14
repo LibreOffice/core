@@ -34,6 +34,7 @@
 //------------------------------------------------------------------------
 
 #include <tchar.h>
+#include <sal/macros.h>
 #include <osl/diagnose.h>
 #include "controlaccess.hxx"
 #include "..\misc\WinImplHelper.hxx"

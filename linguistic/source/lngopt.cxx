@@ -29,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_linguistic.hxx"
 
+#include <sal/macros.h>
 #include "lngopt.hxx"
 #include "lngprops.hxx"
 #include "misc.hxx"

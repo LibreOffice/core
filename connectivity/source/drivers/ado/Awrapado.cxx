@@ -28,6 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
+#include <sal/macros.h>
 #include "ado/Awrapado.hxx"
 #include "ado/Awrapadox.hxx"
 #include <comphelper/types.hxx>

@@ -27,6 +27,7 @@
  ************************************************************************/
 #include "precompiled_linguistic.hxx"
 
+#include <sal/macros.h>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>

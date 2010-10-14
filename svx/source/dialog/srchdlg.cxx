@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-// include ---------------------------------------------------------------
+#include <sal/macros.h>
 #include <vcl/wrkwin.hxx>
 #include <vcl/morebtn.hxx>
 #include <vcl/msgbox.hxx>

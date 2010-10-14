@@ -28,6 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
+#include <sal/macros.h>
 #include "adabas/BUser.hxx"
 #include "adabas/BGroups.hxx"
 #include <com/sun/star/sdbc/XRow.hpp>

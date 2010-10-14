@@ -32,6 +32,7 @@
 #include "runtime.hxx"
 #include "stdobj.hxx"
 #include <basic/sbstdobj.hxx>
+#include <sal/macros.h>
 #include "rtlproto.hxx"
 #include "sbintern.hxx"
 #include <hash_map>

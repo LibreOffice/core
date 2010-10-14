@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 #include "vbahelper/vbaglobalbase.hxx"
+#include <sal/macros.h>
 
 #include <cppuhelper/component_context.hxx>
 #include <comphelper/processfactory.hxx>

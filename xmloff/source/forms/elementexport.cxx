@@ -69,6 +69,7 @@
 #include <tools/time.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/extract.hxx>
+#include <sal/macros.h>
 
 #include <stdio.h>
 #include <algorithm>

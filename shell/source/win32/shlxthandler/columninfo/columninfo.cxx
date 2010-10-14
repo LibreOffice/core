@@ -35,6 +35,7 @@
 #include "internal/utilities.hxx"
 #include "internal/config.hxx"
 
+#include <sal/macros.h>
 #include <malloc.h>
 
 //----------------------------

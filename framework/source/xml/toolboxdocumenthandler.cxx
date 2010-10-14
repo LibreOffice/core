@@ -31,28 +31,18 @@
 
 #include <stdio.h>
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
-
 #include <threadhelp/resetableguard.hxx>
 #include <xml/toolboxdocumenthandler.hxx>
 #include <macros/debug.hxx>
 #include <xml/toolboxconfigurationdefines.hxx>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/ui/ItemStyle.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
-
 #include <sal/config.h>
+#include <sal/macros.h>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <rtl/ustrbuf.hxx>

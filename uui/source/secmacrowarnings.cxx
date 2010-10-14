@@ -32,6 +32,7 @@
 #include <comphelper/sequence.hxx>
 #include "comphelper/documentconstants.hxx"
 #include <comphelper/processfactory.hxx>
+#include <sal/macros.h>
 
 #include <vcl/msgbox.hxx>
 #include <com/sun/star/security/NoPasswordException.hpp>

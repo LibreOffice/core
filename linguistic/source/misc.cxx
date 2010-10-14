@@ -28,6 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_linguistic.hxx"
+#include <sal/macros.h>
 #include <tools/string.hxx>
 #include <tools/fsys.hxx>
 #include <tools/debug.hxx>

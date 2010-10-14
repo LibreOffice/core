@@ -28,6 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
+#include <sal/macros.h>
 
 #define ENABLE_BYTESTRING_STREAM_OPERATORS
 #include <svx/fmpage.hxx>

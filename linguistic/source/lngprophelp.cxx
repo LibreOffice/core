@@ -30,6 +30,7 @@
 #include "precompiled_linguistic.hxx"
 
 #include <tools/debug.hxx>
+#include <sal/macros.h>
 
 #include <com/sun/star/linguistic2/LinguServiceEvent.hpp>
 #include <com/sun/star/linguistic2/LinguServiceEventFlags.hpp>

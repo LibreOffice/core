@@ -29,7 +29,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
-
+#include <sal/macros.h>
 #include <osl/time.h>
 
 #include <osl/diagnose.h>

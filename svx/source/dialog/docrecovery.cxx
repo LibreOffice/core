@@ -28,8 +28,10 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include <svx/dialmgr.hxx>
 
+#include <sal/macros.h>
+
+#include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 #include "docrecovery.hxx"
 #include "docrecovery.hrc"

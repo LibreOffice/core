@@ -30,7 +30,7 @@
 #include "precompiled_fpicker.hxx"
 
 // includes --------------------------------------------------------------
-
+#include <sal/macros.h>
 #include "iodlg.hxx"
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>

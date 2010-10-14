@@ -31,6 +31,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_scripting.hxx"
+#include <sal/macros.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/proparrhlp.hxx>
