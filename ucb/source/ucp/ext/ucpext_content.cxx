@@ -62,6 +62,7 @@
 #include <comphelper/componentcontext.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/uri.hxx>
+#include <sal/macros.h>
 
 #include <algorithm>
 

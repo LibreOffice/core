@@ -28,6 +28,7 @@
 
 #include "precompiled_configmgr.hxx"
 #include "sal/config.h"
+#include "sal/macros.h"
 
 #include <cstddef>
 

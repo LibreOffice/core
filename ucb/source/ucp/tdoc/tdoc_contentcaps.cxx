@@ -64,16 +64,16 @@
 
  *************************************************************************/
 
-#include "com/sun/star/beans/Property.hpp"
-#include "com/sun/star/beans/PropertyAttribute.hpp"
-#include "com/sun/star/beans/PropertyValue.hpp"
-#include "com/sun/star/embed/XStorage.hpp"
-#include "com/sun/star/frame/XModel.hpp"
-#include "com/sun/star/ucb/CommandInfo.hpp"
-#include "com/sun/star/ucb/OpenCommandArgument2.hpp"
-#include "com/sun/star/ucb/TransferInfo.hpp"
-
-#include "tdoc_content.hxx"
+#include <com/sun/star/beans/Property.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/ucb/CommandInfo.hpp>
+#include <com/sun/star/ucb/OpenCommandArgument2.hpp>
+#include <com/sun/star/ucb/TransferInfo.hpp>
+#include <sal/macros.h>
+#include <tdoc_content.hxx>
 
 namespace com { namespace sun { namespace star { namespace embed {
     class XStorage;
@@ -89,7 +89,7 @@ using namespace tdoc_ucp;
 //=========================================================================
 
 #define MAKEPROPSEQUENCE( a ) \
-    uno::Sequence< beans::Property >( a, SAL_N_ELEMTS( a ) )
+    uno::Sequence< beans::Property >( a, SAL_N_ELEMENTS( a ) )
 
 #define MAKECMDSEQUENCE( a ) \
     uno::Sequence< ucb::CommandInfo >( a, SAL_N_ELEMENTS( a ) )

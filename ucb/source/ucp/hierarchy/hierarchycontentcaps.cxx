@@ -66,6 +66,7 @@
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <sal/macros.h>
 #include "hierarchycontent.hxx"
 
 using namespace com::sun::star;
