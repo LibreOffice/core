@@ -73,6 +73,7 @@ mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\sdbc
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\sdbcx
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\scanner
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\script
+mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\script\vba
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\sheet
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\smarttags
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\style
@@ -274,6 +275,8 @@ mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\rdf
 ..\%__SRC%\inc\offuh\com\sun\star\scanner\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\scanner\*.hpp
 ..\%__SRC%\inc\offuh\com\sun\star\script\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\script\*.hdl
 ..\%__SRC%\inc\offuh\com\sun\star\script\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\script\*.hpp
+..\%__SRC%\inc\offuh\com\sun\star\script\vba\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\script\vba\*.hdl
+..\%__SRC%\inc\offuh\com\sun\star\script\vba\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\script\vba\*.hpp
 ..\%__SRC%\inc\offuh\com\sun\star\sheet\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\sheet\*.hdl
 ..\%__SRC%\inc\offuh\com\sun\star\sheet\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\sheet\*.hpp
 ..\%__SRC%\inc\offuh\com\sun\star\smarttags\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\smarttags\*.hdl

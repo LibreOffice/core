@@ -70,6 +70,7 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\scanner
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\script
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\script\browse
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\script\provider
+mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\script\vba
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\sdb
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\sdb\application
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\sdb\tools
@@ -187,6 +188,7 @@ mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\form
 ..\com\sun\star\script\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\script
 ..\com\sun\star\script\browse\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\script\browse
 ..\com\sun\star\script\provider\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\script\provider
+..\com\sun\star\script\vba\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\script\vba
 ..\com\sun\star\sdb\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\sdb
 ..\com\sun\star\sdb\application\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\sdb\application
 ..\com\sun\star\sdb\tools\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\sdb\tools

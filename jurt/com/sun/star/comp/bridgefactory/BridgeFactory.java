@@ -94,18 +94,6 @@ public class BridgeFactory implements XBridgeFactory/*, XEventListener*/ {
     }
 
     /**
-     * Writes the service information into the given registry key.
-     * This method is called by the <code>JavaLoader</code>
-     * <p>
-     * @return  returns true if the operation succeeded
-     * @param   regKey       the registryKey
-     * @see                  com.sun.star.comp.loader.JavaLoader
-     */
-    public static boolean __writeRegistryServiceInfo(XRegistryKey regKey) {
-        return FactoryHelper.writeRegistryServiceInfo(BridgeFactory.class.getName(), __serviceName, regKey);
-    }
-
-    /**
      * Creates a remote bridge and memorizes it under <code>sName</code>.
      * <p>
      * @return   the bridge

@@ -3,6 +3,7 @@ oa	offapi									usr1	-	all	oa_mkout NULL
 oa	offapi\com\sun\star\script				nmake	-	all	oa_script oa_embed NULL
 oa	offapi\com\sun\star\script\browse	nmake	-	all	oa_sfbrowse NULL
 oa	offapi\com\sun\star\script\provider	nmake	-	all	oa_sfprovider NULL
+oa	offapi\com\sun\star\script\vba		nmake	-	all	oa_script_vba NULL
 oa	offapi\com\sun\star\auth				nmake	-	all	oa_auth NULL
 oa	offapi\com\sun\star\accessibility       nmake	-	all	oa_accessibility oa_awt NULL
 oa	offapi\com\sun\star\awt					nmake	-	all	oa_awt NULL
@@ -22,10 +23,10 @@ oa	offapi\com\sun\star\datatransfer\dnd	nmake	-	all	oa_datatrans_dnd oa_awt NULL
 oa	offapi\com\sun\star\deployment				nmake	-	all	oa_deployment oa_ucb oa_xml_input NULL
 oa	offapi\com\sun\star\deployment\test			nmake	-	all	oa_deploymenttest oa_ucb  NULL
 oa	offapi\com\sun\star\deployment\ui			nmake	-	all	oa_deployment_ui oa_awt oa_ui_dialogs NULL
-oa	offapi\com\sun\star\embed				nmake	-	all	oa_embed NULL
 oa	offapi\com\sun\star\document			nmake	-	all	oa_docu oa_embed NULL
 oa	offapi\com\sun\star\drawing				nmake	-	all	oa_draw NULL
 oa	offapi\com\sun\star\drawing\framework	nmake	-	all	oa_draw_framework NULL
+oa	offapi\com\sun\star\embed				nmake	-	all	oa_embed NULL
 oa	offapi\com\sun\star\form				nmake	-	all	oa_form oa_inspection NULL
 oa	offapi\com\sun\star\form\component		nmake	-	all	oa_fcomp oa_form oa_form_submission NULL
 oa	offapi\com\sun\star\form\inspection     nmake   -   all	oa_finsp oa_fcomp oa_inspection NULL
