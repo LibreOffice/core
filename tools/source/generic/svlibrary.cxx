@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -96,7 +96,7 @@ static uno::Sequence< rtl::OUString > GetMultiPaths_Impl()
 
 bool SvLibrary::LoadModule( osl::Module& rModule, const rtl::OUString& rLibName, ::oslGenericFunction baseModule, ::sal_Int32 mode )
 {
-    static uno::Sequence < rtl::OUString > aPaths = GetMultiPaths_Impl();   
+    static uno::Sequence < rtl::OUString > aPaths = GetMultiPaths_Impl();
     bool bLoaded = false;
 
     for (sal_Int32 n=0; n<aPaths.getLength(); n++)
@@ -112,7 +112,7 @@ bool SvLibrary::LoadModule( osl::Module& rModule, const rtl::OUString& rLibName,
 
             aMod = aMod.copy( sizeof("vnd.sun.star.expand:") -1 );
             aMod = ::rtl::Uri::decode( aMod, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
-            aMod = xMacroExpander->expandMacros( aMod ); 
+            aMod = xMacroExpander->expandMacros( aMod );
         }
 
         aMod += ::rtl::OUString( sal_Unicode('/') );
@@ -121,7 +121,7 @@ bool SvLibrary::LoadModule( osl::Module& rModule, const rtl::OUString& rLibName,
         if ( bLoaded )
             break;
     }
-    
+
     if (!bLoaded )
         bLoaded = rModule.loadRelative( baseModule, rLibName, mode );
 
