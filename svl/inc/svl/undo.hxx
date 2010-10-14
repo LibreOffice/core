@@ -178,6 +178,9 @@ public:
     virtual void            EnterListAction(const UniString &rComment, const UniString& rRepeatComment, USHORT nId=0);
     virtual void            LeaveListAction();
 
+    /// determines whether we're within a ListAction context, i.e. a LeaveListAction call is pending
+    bool                    IsInListAction() const;
+
     /** clears the redo stack and removes the top undo action */
     void                    RemoveLastUndoAction();
 

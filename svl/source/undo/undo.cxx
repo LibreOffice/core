@@ -569,6 +569,13 @@ void SfxUndoManager::EnterListAction(
 
 //------------------------------------------------------------------------
 
+bool SfxUndoManager::IsInListAction() const
+{
+    return ( pActUndoArray != pUndoArray );
+}
+
+//------------------------------------------------------------------------
+
 void SfxUndoManager::LeaveListAction()
 
 /*  [Beschreibung]
@@ -582,7 +589,7 @@ void SfxUndoManager::LeaveListAction()
     if ( !pUndoArray->nMaxUndoActions )
         return;
 
-    if( pActUndoArray == pUndoArray )
+    if( !IsInListAction() )
     {
         DBG_ERROR( "svl::SfxUndoManager::LeaveListAction(), called without calling EnterListAction()!" );
         return;
