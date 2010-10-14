@@ -245,7 +245,7 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         // #i51348# shape name
         if( aShapeName.Len() > 0 )
             aPropOpt.AddOpt( ESCHER_Prop_wzName, aShapeName );
-        if ( InteractionInfo* pInteraction = mpHostAppData->GetInteractionInfo() )
+        if ( InteractionInfo* pInteraction = mpHostAppData ? mpHostAppData->GetInteractionInfo():NULL )
         {
             const std::auto_ptr< SvMemoryStream >& pMemStrm = pInteraction->getHyperlinkRecord();
             if ( pMemStrm.get() )
