@@ -34,7 +34,7 @@
 
 TabPage RID_SVXPAGE_IMPROVEMENT
 {
-    //!HelpId = HID_OPTIONS_IMPROVEMENT ;
+        HelpId = "cui:TabPage:RID_SVXPAGE_IMPROVEMENT" ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Hide = TRUE ;
