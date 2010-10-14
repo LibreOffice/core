@@ -539,7 +539,6 @@ sub schedule_rebuild {
     };
 };
 
-
 #
 # procedure retrieves build list path
 # (all possibilities are taken into account)
@@ -1732,12 +1731,14 @@ sub cancel_build {
     }
     print "-----------------------------------------------------------------------\n";
     print "\n";
+    print "" . $ENV{'OOO_SHELL'} . "\n";
     print "cd " . $ENV{'SRC_ROOT'} . "\n";
     print "source ./" . $ENV{'ENV_SCRIPT'} . ".sh\n";
     print "cd $module\n";
     print "build\n";
     print "\n";
-    print "when you have isolated and fixed the problem re-run 'make' from the top-level\n";
+    print "when the problem is isolated and fixed exit and re-run 'make' from the top-level\n";
+    print "sometimes (sadly) it is necessary to rm -Rf " . $ENV{INPATH} . " in a module.\n";
 
     do_exit(1);
 };
