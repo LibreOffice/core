@@ -80,7 +80,7 @@
 #include <math.h>
 
 //! Autofilter-Breite mit column.cxx zusammenfassen
-#define DROPDOWN_BITMAP_SIZE        17
+#define DROPDOWN_BITMAP_SIZE        18
 
 #define DRAWTEXT_MAX    32767
 
@@ -1274,7 +1274,8 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY
              ( static_cast<const ScMergeFlagAttr&>(rPattern.GetItem(ATTR_MERGE_FLAG)).GetValue() & SC_MF_AUTO ) &&
              ( !bBreak || pRefDevice == pFmtDevice ) )
         {
-            long nFilter = Min( nMergeSizeY, (long) DROPDOWN_BITMAP_SIZE );
+            // filter drop-down width is now independent from row height
+            const long nFilter = DROPDOWN_BITMAP_SIZE;
             BOOL bFit = ( nNeeded + nFilter <= nMergeSizeX );
             if ( bFit || bCellIsValue )
             {
@@ -3516,20 +3517,11 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
                                             eOrient!=SVX_ORIENTATION_STACKED &&
                                             pInfo && pInfo->bAutoFilter)
                                     {
-                                        if (pRowInfo[nArrY].nHeight < DROPDOWN_BITMAP_SIZE)
-                                        {
-                                            if (bPixelToLogic)
-                                                nAvailWidth -= pRefDevice->PixelToLogic(Size(0,pRowInfo[nArrY].nHeight)).Height();
-                                            else
-                                                nAvailWidth -= pRowInfo[nArrY].nHeight;
-                                        }
+                                        // filter drop-down width is now independent from row height
+                                        if (bPixelToLogic)
+                                            nAvailWidth -= pRefDevice->PixelToLogic(Size(0,DROPDOWN_BITMAP_SIZE)).Height();
                                         else
-                                        {
-                                            if (bPixelToLogic)
-                                                nAvailWidth -= pRefDevice->PixelToLogic(Size(0,DROPDOWN_BITMAP_SIZE)).Height();
-                                            else
-                                                nAvailWidth -= DROPDOWN_BITMAP_SIZE;
-                                        }
+                                            nAvailWidth -= DROPDOWN_BITMAP_SIZE;
                                         long nComp = nEngineWidth;
                                         if (nAvailWidth<nComp) nAvailWidth=nComp;
                                     }
