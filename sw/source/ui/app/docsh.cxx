@@ -960,7 +960,7 @@ sal_uInt16 SwDocShell::GetHiddenInformationState( sal_uInt16 nStates )
     }
     if ( nStates & HIDDENINFORMATION_NOTES )
     {
-        OSL_ENSURE( GetWrtShell(), "No SwWrtShell, no information" )
+        OSL_ENSURE( GetWrtShell(), "No SwWrtShell, no information" );
         if ( GetWrtShell() )
         {
             SwFieldType* pType = GetWrtShell()->GetFldType( RES_POSTITFLD, aEmptyStr );
