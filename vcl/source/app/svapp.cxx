@@ -923,7 +923,7 @@ BOOL Application::HandleKey( ULONG nEvent, Window *pWin, KeyEvent* pKeyEvent )
 
 ULONG Application::PostKeyEvent( ULONG nEvent, Window *pWin, KeyEvent* pKeyEvent )
 {
-    const ::vos::OGuard aGuard( GetSolarMutex() );
+    const SolarMutexGuard aGuard;
     ULONG               nEventId = 0;
 
     if( pWin && pKeyEvent )
@@ -950,7 +950,7 @@ ULONG Application::PostKeyEvent( ULONG nEvent, Window *pWin, KeyEvent* pKeyEvent
 
 ULONG Application::PostMouseEvent( ULONG nEvent, Window *pWin, MouseEvent* pMouseEvent )
 {
-    const ::vos::OGuard aGuard( GetSolarMutex() );
+    const SolarMutexGuard aGuard;
     ULONG               nEventId = 0;
 
     if( pWin && pMouseEvent )
@@ -985,7 +985,7 @@ ULONG Application::PostMouseEvent( ULONG nEvent, Window *pWin, MouseEvent* pMous
 
 IMPL_STATIC_LINK_NOINSTANCE( Application, PostEventHandler, void*, pCallData )
 {
-    const ::vos::OGuard aGuard( GetSolarMutex() );
+    const SolarMutexGuard aGuard;
     ImplPostEventData*  pData = static_cast< ImplPostEventData * >( pCallData );
     const void*         pEventData;
     ULONG               nEvent;
@@ -1048,7 +1048,7 @@ IMPL_STATIC_LINK_NOINSTANCE( Application, PostEventHandler, void*, pCallData )
 
 void Application::RemoveMouseAndKeyEvents( Window* pWin )
 {
-    const ::vos::OGuard aGuard( GetSolarMutex() );
+    const SolarMutexGuard aGuard;
 
     // remove all events for specific window, watch for destruction of internal data
     ::std::list< ImplPostEventPair >::iterator aIter( aPostedEventList.begin() );
@@ -1072,7 +1072,7 @@ void Application::RemoveMouseAndKeyEvents( Window* pWin )
 
 BOOL Application::IsProcessedMouseOrKeyEvent( ULONG nEventId )
 {
-    const ::vos::OGuard aGuard( GetSolarMutex() );
+    const SolarMutexGuard aGuard;
 
     // find event
     ::std::list< ImplPostEventPair >::iterator aIter( aPostedEventList.begin() );

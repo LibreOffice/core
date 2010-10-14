@@ -62,7 +62,7 @@ static USHORT aWndFunc(
 
 
 {
-    NAMESPACE_VOS( OGuard ) aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     // aus den Flags die benoetigten WinBits ermitteln
     WinBits eBits=0;
@@ -375,7 +375,7 @@ BOOL SfxErrorHandler::GetErrorString(
     */
 
 {
-    NAMESPACE_VOS( OGuard ) aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     BOOL bRet = FALSE;
     rStr=String(SvtResId(RID_ERRHDL_CLASS));
@@ -452,7 +452,7 @@ BOOL SfxErrorContext::GetString(ULONG nErrId, String &rStr)
     }
     if( pMgr )
     {
-        NAMESPACE_VOS( OGuard ) aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         ResId aResId( nResId, *pMgr );
 

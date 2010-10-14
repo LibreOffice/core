@@ -139,7 +139,7 @@ void SAL_CALL StateEventHelper::disposing(
     const lang::EventObject& )
 throw ( uno::RuntimeException )
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     m_xDispatchProvider.clear();
     m_xURLTransformer.clear();
     m_aCondition.set();
@@ -149,7 +149,7 @@ void SAL_CALL StateEventHelper::statusChanged(
     const frame::FeatureStateEvent& Event )
 throw ( uno::RuntimeException )
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     m_bCurrentCommandEnabled = Event.IsEnabled;
     m_aCondition.set();
 }
@@ -163,7 +163,7 @@ bool StateEventHelper::isCommandEnabled()
     uno::Reference< frame::XDispatch > xDispatch;
     util::URL                          aTargetURL;
     {
-        vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         if ( m_xDispatchProvider.is() && m_xURLTransformer.is() )
         {
             ::rtl::OUString aSelf( RTL_CONSTASCII_USTRINGPARAM( "_self" ));
@@ -205,7 +205,7 @@ bool StateEventHelper::isCommandEnabled()
         {
         }
 
-        vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         bResult = m_bCurrentCommandEnabled;
     }
 
@@ -277,7 +277,7 @@ ContextMenuHelper::completeAndExecute(
     const Point& aPos,
     PopupMenu& rPopupMenu )
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     associateUIConfigurationManagers();
     completeMenuProperties( &rPopupMenu );
@@ -290,7 +290,7 @@ ContextMenuHelper::completeAndExecute(
     const Point& aPos,
     const uno::Reference< awt::XPopupMenu >& xPopupMenu )
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     VCLXMenu* pXMenu = VCLXMenu::GetImplementation( xPopupMenu );
     if ( pXMenu )

@@ -219,7 +219,7 @@ Reference< XWindowPeer >    UnoControl::ImplGetCompatiblePeer( sal_Bool bAcceptE
 
         WorkWindow* pWW;
         {
-            osl::Guard< vos::IMutex > aGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
             pWW = lcl_GetDefaultWindow();
         }
         try
@@ -652,7 +652,7 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
         // #82300# - 2000-12-21 - fs@openoffice.org
         if (bNeedNewPeer && xParent.is())
         {
-            NAMESPACE_VOS(OGuard) aVclGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aVclGuard;
                 // and now this is the final withdrawal:
                 // With 83561, I have no other idea than locking the SolarMutex here ....
                 // I really hate the fact that VCL is not theadsafe ....

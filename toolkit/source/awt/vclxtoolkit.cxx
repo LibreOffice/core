@@ -441,8 +441,8 @@ static void SAL_CALL ToolkitWorkerFunction( void* pArgs )
     if( bInitedByVCLToolkit )
     {
         {
-        osl::Guard< vos::IMutex > aGuard( Application::GetSolarMutex() );
-        Application::Execute();
+            SolarMutexGuard aGuard;
+            Application::Execute();
         }
         try
         {
@@ -596,7 +596,7 @@ void SAL_CALL VCLXToolkit::disposing()
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice > xRef;
     VCLXVirtualDevice* pVDev = new VCLXVirtualDevice;
 
-    osl::Guard< vos::IMutex > aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     VirtualDevice* pV = new VirtualDevice;
     pV->SetOutputSizePixel( Size( Width, Height ) );
@@ -656,7 +656,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
 
     if ( nType )
     {
-        NAMESPACE_VOS(OGuard) aVclGuard( Application::GetSolarMutex()  );
+        SolarMutexGuard aVclGuard;
         switch ( (WindowType)nType )
         {
             case WINDOW_CANCELBUTTON:
@@ -1011,7 +1011,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    osl::Guard< vos::IMutex > aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > xRef;
 
@@ -1165,7 +1165,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
             #elif defined OS2
             aParentData.hWnd = (HWND)nWindowHandle;
             #endif
-            osl::Guard< vos::IMutex > aGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
             try
             {
                 pChildWindow = new WorkWindow( &aParentData );
@@ -1183,7 +1183,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     }
     else if (nSystemType == com::sun::star::lang::SystemDependent::SYSTEM_JAVA)
     {
-        osl::Guard< vos::IMutex > aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         pChildWindow = new WorkWindow(0, Parent);
     }
 
@@ -1191,7 +1191,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     if ( pChildWindow )
     {
         VCLXTopWindow* pPeer = new VCLXTopWindow(true);
-        osl::Guard< vos::IMutex > aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         pPeer->SetWindow( pChildWindow );
         xPeer = pPeer;
     }
@@ -1258,7 +1258,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
         Window * pWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pWindow )
         {
-            osl::Guard< vos::IMutex > aGuard(Application::GetSolarMutex());
+            SolarMutexGuard aGuard;
             xMsgBox->setCaptionText( aTitle );
             xMsgBox->setMessageText( aMessage );
         }

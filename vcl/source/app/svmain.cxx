@@ -133,7 +133,7 @@ oslSignalAction SAL_CALL VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo
         {
             bIn = true;
 
-            ::vos::OGuard aLock(&Application::GetSolarMutex());
+            SolarMutexGuard aLock;
 
             // Timer nicht mehr anhalten, da ansonsten die UAE-Box
             // auch nicht mehr gepaintet wird
