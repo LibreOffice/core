@@ -754,6 +754,7 @@ void Desktop::DeInit()
         // instead of removing of the configManager just let it commit all the changes
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- store config items" );
         utl::ConfigManager::GetConfigManager()->StoreConfigItems();
+        FlushConfiguration();
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- store config items" );
 
         // close splashscreen if it's still open
@@ -784,6 +785,7 @@ BOOL Desktop::QueryExit()
     {
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- store config items" );
         utl::ConfigManager::GetConfigManager()->StoreConfigItems();
+        FlushConfiguration();
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- store config items" );
     }
     catch ( RuntimeException& )
@@ -1436,18 +1438,7 @@ USHORT Desktop::Exception(USHORT nError)
     if ( bAllowRecoveryAndSessionManagement )
         bRestart = SaveTasks();
 
-    // because there is no method to flush the condiguration data, we must dispose the ConfigManager
-    Reference < XFlushable > xCFGFlush( ::utl::ConfigManager::GetConfigManager()->GetConfigurationProvider(), UNO_QUERY );
-    if (xCFGFlush.is())
-    {
-        xCFGFlush->flush();
-    }
-    else
-    {
-        Reference < XComponent > xCFGDispose( ::utl::ConfigManager::GetConfigManager()->GetConfigurationProvider(), UNO_QUERY );
-        if (xCFGDispose.is())
-            xCFGDispose->dispose();
-    }
+    FlushConfiguration();
 
     switch( nError & EXC_MAJORTYPE )
     {
@@ -1976,6 +1967,7 @@ void Desktop::Main()
 
     // remove temp directory
     RemoveTemporaryDirectory();
+    FlushConfiguration();
     // The acceptors in the AcceptorMap must be released (in DeregisterServices)
     // with the solar mutex unlocked, to avoid deadlock:
     nAcquireCount = Application::ReleaseSolarMutex();
@@ -2071,6 +2063,22 @@ sal_Bool Desktop::InitializeConfiguration()
     }
 
     return bOk;
+}
+
+void Desktop::FlushConfiguration()
+{
+    Reference < XFlushable > xCFGFlush( ::utl::ConfigManager::GetConfigManager()->GetConfigurationProvider(), UNO_QUERY );
+    if (xCFGFlush.is())
+    {
+        xCFGFlush->flush();
+    }
+    else
+    {
+        // because there is no method to flush the condiguration data, we must dispose the ConfigManager
+        Reference < XComponent > xCFGDispose( ::utl::ConfigManager::GetConfigManager()->GetConfigurationProvider(), UNO_QUERY );
+        if (xCFGDispose.is())
+            xCFGDispose->dispose();
+    }
 }
 
 sal_Bool Desktop::InitializeQuickstartMode( Reference< XMultiServiceFactory >& rSMgr )

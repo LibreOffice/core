@@ -29,6 +29,7 @@
 #include "sal/config.h"
 
 #include <algorithm>
+#include <cstddef>
 #include <list>
 
 #include "com/sun/star/beans/Optional.hpp"
@@ -43,8 +44,11 @@
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
+#include "osl/conditn.hxx"
 #include "osl/diagnose.h"
 #include "osl/file.hxx"
+#include "osl/mutex.hxx"
+#include "osl/thread.hxx"
 #include "rtl/bootstrap.hxx"
 #include "rtl/logfile.h"
 #include "rtl/ref.hxx"
@@ -53,10 +57,12 @@
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
+#include "salhelper/simplereferenceobject.hxx"
 
 #include "additions.hxx"
 #include "components.hxx"
 #include "data.hxx"
+#include "lock.hxx"
 #include "modifications.hxx"
 #include "node.hxx"
 #include "nodemap.hxx"
@@ -146,6 +152,66 @@ bool canRemoveFromLayer(int layer, rtl::Reference< Node > const & node) {
 static bool singletonCreated = false;
 static Components * singleton = 0;
 
+}
+
+class Components::WriteThread:
+    public osl::Thread, public salhelper::SimpleReferenceObject
+{
+public:
+    static void * operator new(std::size_t size)
+    { return Thread::operator new(size); }
+
+    static void operator delete(void * pointer)
+    { Thread::operator delete(pointer); }
+
+    WriteThread(
+        rtl::Reference< WriteThread > * reference, Components & components,
+        rtl::OUString const & url, Data const & data);
+
+    void flush() { delay_.set(); }
+
+private:
+    virtual ~WriteThread() {}
+
+    virtual void SAL_CALL run();
+
+    virtual void SAL_CALL onTerminated() { release(); }
+
+    rtl::Reference< WriteThread > * reference_;
+    Components & components_;
+    rtl::OUString url_;
+    Data const & data_;
+    osl::Condition delay_;
+};
+
+Components::WriteThread::WriteThread(
+    rtl::Reference< WriteThread > * reference, Components & components,
+    rtl::OUString const & url, Data const & data):
+    reference_(reference), components_(components), url_(url), data_(data)
+{
+    OSL_ASSERT(reference != 0);
+    acquire();
+}
+
+void Components::WriteThread::run() {
+    TimeValue t = { 1, 0 }; // 1 sec
+    delay_.wait(&t); // must not throw; result_error is harmless and ignored
+    osl::MutexGuard g(lock); // must not throw
+    try {
+        try {
+            writeModFile(components_, url_, data_);
+        } catch (css::uno::RuntimeException & e) {
+            // Silently ignore write errors, instead of aborting:
+            OSL_TRACE(
+                "configmgr error writing modifications: %s",
+                rtl::OUStringToOString(
+                    e.Message, RTL_TEXTENCODING_UTF8).getStr());
+        }
+    } catch (...) {
+        reference_->clear();
+        throw;
+    }
+    reference_->clear();
 }
 
 void Components::initSingleton(
@@ -238,7 +304,23 @@ void Components::addModification(Path const & path) {
 }
 
 void Components::writeModifications() {
-    writeModFile(*this, getModificationFileUrl(), data_);
+    if (!writeThread_.is()) {
+        writeThread_ = new WriteThread(
+            &writeThread_, *this, getModificationFileUrl(), data_);
+        writeThread_->create();
+    }
+}
+
+void Components::flushModifications() {
+    rtl::Reference< WriteThread > thread;
+    {
+        osl::MutexGuard g(lock);
+        thread = writeThread_;
+    }
+    if (thread.is()) {
+        thread->flush();
+        thread->join();
+    }
 }
 
 void Components::insertExtensionXcsFile(
