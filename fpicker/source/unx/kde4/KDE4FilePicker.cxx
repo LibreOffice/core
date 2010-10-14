@@ -63,6 +63,7 @@
 #include <kapplication.h>
 #include <kfilefiltercombo.h>
 
+#include <qclipboard.h>
 #include <QWidget>
 #include <QCheckBox>
 #include <QGridLayout>
@@ -188,14 +189,24 @@ sal_Int16 SAL_CALL KDE4FilePicker::execute()
     _dialog->setFilter(_filter);
     _dialog->filterWidget()->setEditable(false);
 
-    // We are now entering Qt code, so release the Solar Mutex, as the Qt code
-    // should not generally call back into core code (and if yes, it needs to claim
-    // the mutex again). Otherwise this would block core code (e.g. bnc#616047,
-    // KDE file dialog asks for clipboard contents, if it is owned by core code,
-    // it will try to lock the mutex and block there).
-    SolarMutexReleaser releaser;
+    // At this point, SolarMutex is held. Opening the KDE file dialog here
+    // can lead to QClipboard asking for clipboard contents. If LO core
+    // is the owner of the clipboard content, this will block for 5 seconds
+    // and timeout, since the clipboard thread will not be able to acquire
+    // SolarMutex and thus won't be able to respond. If the event loops
+    // are properly integrated and QClipboard can use a nested event loop
+    // (see the KDE VCL plug), then this won't happen, but otherwise
+    // simply release the SolarMutex here. The KDE file dialog does not
+    // call back to the core, so this should be safe (and if it does,
+    // SolarMutex will need to be re-acquired.
+    ULONG mutexrelease = 0;
+    if( !qApp->clipboard()->property( "useEventLoopWhenWaiting" ).toBool())
+        mutexrelease = Application::ReleaseSolarMutex();
     //block and wait for user input
-    if (_dialog->exec() == KFileDialog::Accepted)
+    int result = _dialog->exec();
+    if( !qApp->clipboard()->property( "useEventLoopWhenWaiting" ).toBool())
+        Application::AcquireSolarMutex( mutexrelease );
+    if( result == KFileDialog::Accepted)
         return ExecutableDialogResults::OK;
 
     return ExecutableDialogResults::CANCEL;
