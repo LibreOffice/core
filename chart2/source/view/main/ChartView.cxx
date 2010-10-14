@@ -622,7 +622,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
               const uno::Reference< frame::XModel >& xChartModel )
 {
     //------------ get model series from model
-    sal_Int32 nDiagramIndex = 0;//todo if more than one diagam is supported
+    sal_Int32 nDiagramIndex = 0;//todo if more than one diagram is supported
     uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
     if( !xDiagram.is())
         return;
@@ -700,7 +700,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
             if(pVCooSys)
                 pVCooSys->addMinimumAndMaximumSupplier(pPlotter);
 
-            //------------ add series to plotter and thus prepare him for providing minimum and maximum values
+            //------------ add series to plotter and thus prepare him(it) for providing minimum and maximum values
             uno::Reference< XDataSeriesContainer > xDataSeriesContainer( xChartType, uno::UNO_QUERY );
             OSL_ASSERT( xDataSeriesContainer.is());
             if( !xDataSeriesContainer.is() )
@@ -861,7 +861,7 @@ void SeriesPlotterContainer::setScalesFromCooSysToPlotter()
 
 void SeriesPlotterContainer::setNumberFormatsFromAxes()
 {
-    //set numberfarmats to plotter to enable them to display the data labels in the numberfromat of teh axis
+    //set numberformats to plotter to enable them to display the data labels in the numberformat of the axis
 
     ::std::vector< VSeriesPlotter* >::const_iterator       aPlotterIter = m_aSeriesPlotterList.begin();
     const ::std::vector< VSeriesPlotter* >::const_iterator aPlotterEnd  = m_aSeriesPlotterList.end();
@@ -1852,7 +1852,7 @@ sal_Int32 lcl_getExplicitNumberFormatKeyForAxis(
 
                             if( nDimensionIndex == 1 )
                             {
-                                //only take those series into accoutn that are attached to this axis
+                                //only take those series into account that are attached to this axis
                                 sal_Int32 nAttachedAxisIndex = DataSeriesHelper::getAttachedAxisIndex(xDataSeries);
                                 if( nAttachedAxisIndex != nAxisIndex )
                                     continue;

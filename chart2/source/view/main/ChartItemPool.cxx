@@ -132,11 +132,11 @@ ChartItemPool::ChartItemPool():
     ppPoolDefaults[SCHATTR_STYLE_LINES    - SCHATTR_START] = new SfxBoolItem (SCHATTR_STYLE_LINES, 0);
     ppPoolDefaults[SCHATTR_STYLE_PERCENT  - SCHATTR_START] = new SfxBoolItem (SCHATTR_STYLE_PERCENT, 0);
     ppPoolDefaults[SCHATTR_STYLE_STACKED  - SCHATTR_START] = new SfxBoolItem (SCHATTR_STYLE_STACKED, 0);
-    ppPoolDefaults[SCHATTR_STYLE_SPLINES  - SCHATTR_START] = new SfxInt32Item (SCHATTR_STYLE_SPLINES, 0); //Bug: war Bool! ->Fileformat testen (betrifft nur 5er)
+    ppPoolDefaults[SCHATTR_STYLE_SPLINES    - SCHATTR_START] = new SfxInt32Item (SCHATTR_STYLE_SPLINES, 0); //Bug: was Bool! test ->Fileformat (touches only 5's)
     ppPoolDefaults[SCHATTR_STYLE_SYMBOL   - SCHATTR_START] = new SfxInt32Item (SCHATTR_STYLE_SYMBOL, 0);
     ppPoolDefaults[SCHATTR_STYLE_SHAPE    - SCHATTR_START] = new SfxInt32Item (SCHATTR_STYLE_SHAPE, 0);
 
-    ppPoolDefaults[SCHATTR_AXIS                 - SCHATTR_START] = new SfxInt32Item(SCHATTR_AXIS,2); //2 = Y-Achse!!!
+    ppPoolDefaults[SCHATTR_AXIS             - SCHATTR_START] = new SfxInt32Item(SCHATTR_AXIS,2); //2 = Y-Axis!!!
 
     ppPoolDefaults[SCHATTR_AXIS_AUTO_MIN        - SCHATTR_START] = new SfxBoolItem(SCHATTR_AXIS_AUTO_MIN);
     ppPoolDefaults[SCHATTR_AXIS_MIN             - SCHATTR_START] = new SvxDoubleItem(0.0, SCHATTR_AXIS_MIN);

@@ -176,22 +176,22 @@ uno::Any* PropertyMapper::getValuePointerForLimitedSpace( tAnySequence& rPropVal
 
 /*
 //set some properties from service style::CharacterProperties:
-//-------- tabpage: Zeichen -----------
-//Schriftart z.B. Albany            UNO_NAME_EDIT_CHAR_FONTNAME == UNO_NAME_EDIT_CHAR_FONTSTYLENAME    //UNO_NAME_CHAR_FONT
-//Schriftschnitt z.B. kursiv        UNO_NAME_EDIT_CHAR_POSTURE    UNO_NAME_CHAR_POSTURE awt::FontSlant NONE OBLIQUE ITALIC DONTKNOW REVERSE_OBLIQUE REVERSE_ITALIC
-//Schriftgrad (Punktgrösse z.B. 12) UNO_NAME_EDIT_CHAR_HEIGHT == UNO_NAME_CHAR_HEIGHT
+//-------- tabpage: Characters -----------
+//FontType eg. Albany               UNO_NAME_EDIT_CHAR_FONTNAME == UNO_NAME_EDIT_CHAR_FONTSTYLENAME    //UNO_NAME_CHAR_FONT
+//FontStyle eg. italic              UNO_NAME_EDIT_CHAR_POSTURE    UNO_NAME_CHAR_POSTURE awt::FontSlant NONE OBLIQUE ITALIC DONTKNOW REVERSE_OBLIQUE REVERSE_ITALIC
+//Fontsize (Pointsize eg. 12)       UNO_NAME_EDIT_CHAR_HEIGHT == UNO_NAME_CHAR_HEIGHT
         //? UNO_NAME_EDIT_CHAR_WEIGHT == UNO_NAME_CHAR_WEIGHT
-//Sprache                           UNO_NAME_EDIT_CHAR_LOCALE lang::Locale
+//Language                          UNO_NAME_EDIT_CHAR_LOCALE lang::Locale
 
-//-------- tabpage: Schrifteffekt -----------
-//Unterstreichung                   UNO_NAME_CHAR_UNDERLINE sal_Int16 awt::FontUnderline_NONE _SINGLE _DOUBLE _DOTTED _DONTKNOW _DASH ...
-//Unterstreichung-farbe             ??? 'CharUnderlineColor' + CharUnderlineHasColor
-//Durchstreichung z.B. doppelt      "CharStrikeout" sal_Int16 awt::FontStrikeout_NONE _SINGLE _DOUBLE ...
-//wortweise-Durchstreichung ja/nein "CharWordMode" bool
-//Schriftfarbe                      UNO_NAME_EDIT_CHAR_COLOR sal_Int32      UNO_NAME_CHAR_COLOR
-//ReliefArt ohne/erhaben/tief       "CharRelief" sal_Int16 text::FontRelief_NONE FontRelief_EMBOSSED FontRelief_ENGRAVED
-//Kontur                            "CharContoured" bool
-//Schatten                          UNO_NAME_CHAR_SHADOWED bool
+//-------- tabpage: Font Effect -----------
+//Underline                         UNO_NAME_CHAR_UNDERLINE sal_Int16 awt::FontUnderline_NONE _SINGLE _DOUBLE _DOTTED _DONTKNOW _DASH ...
+//Underline-color                   ??? 'CharUnderlineColor' + CharUnderlineHasColor
+//Strikeout eg. double              "CharStrikeout" sal_Int16 awt::FontStrikeout_NONE _SINGLE _DOUBLE ...
+//Strikeout by word yes/no          "CharWordMode" bool
+//Fontcolor                         UNO_NAME_EDIT_CHAR_COLOR sal_Int32      UNO_NAME_CHAR_COLOR
+//ReliefType without/graved/emboss  "CharRelief" sal_Int16 text::FontRelief_NONE FontRelief_EMBOSSED FontRelief_ENGRAVED
+//Outline                           "CharContoured" bool
+//Shadows                           UNO_NAME_CHAR_SHADOWED bool
 */
 
 //static
