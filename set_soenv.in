@@ -685,6 +685,10 @@ elsif ( $platform =~ m/cygwin/ )
 	      $CVER        = "M1400";
 	  } elsif ( "@COMEX@" eq "12" ) {
 	      $CVER        = "M1500";
+      } elsif ( "@COMEX@" eq "13" ) {
+          $CVER        = "M1600";
+          $ATL_LIB     = $COMPATH.$ds."atlmfc".$ds."lib";
+          $ATL_INCLUDE = $COMPATH.$ds."atlmfc".$ds."include";
 	  } else {                   # Unsupported
 	      die "Unsupported value for COMEX variable.\n";
 	  }
