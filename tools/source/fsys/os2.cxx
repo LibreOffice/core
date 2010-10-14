@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1010,3 +1011,4 @@ void FSysEnableSysErrorBox( BOOL bEnable )
     DosError( bEnable ? 0 : FERR_DISABLEHARDERR );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * (C) 1988, 1989, 1990 by Adobe Systems Incorporated. All rights reserved.
  *
@@ -1575,3 +1576,5 @@ freeFontInfo (FontInfo *fi)
 }
 
 } // namspace
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

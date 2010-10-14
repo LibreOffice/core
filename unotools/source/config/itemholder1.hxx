@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -87,3 +88,5 @@ class ItemHolder1 : private ItemHolderMutexBase
 #undef css
 
 #endif // INCLUDED_unotools_ITEMHOLDER1_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

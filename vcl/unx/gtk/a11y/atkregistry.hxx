@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,3 +39,5 @@ void ooo_wrapper_registry_add(const ::com::sun::star::uno::Reference< ::com::sun
 void ooo_wrapper_registry_remove(::com::sun::star::accessibility::XAccessible *pAccessible);
 
 #endif // __ATK_REGISTRY_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

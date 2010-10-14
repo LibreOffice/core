@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,3 +31,4 @@ class ByteString;
 
 rtlDigestError calc_md5_checksum( const char *filename, ByteString &aChecksum );
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -286,3 +287,5 @@ SvStream* SvtAcceleratorConfiguration::GetDefaultStream( StreamMode nMode )
     aObj.insertName( GetStreamName() );
     return ::utl::UcbStreamHelper::CreateStream( aObj.GetMainURL( INetURLObject::NO_DECODE ), nMode );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

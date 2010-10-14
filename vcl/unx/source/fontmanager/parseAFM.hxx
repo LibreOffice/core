@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * (C) 1988, 1989 by Adobe Systems Incorporated. All rights reserved.
  *
@@ -332,3 +333,5 @@ int parseFile( const char* pFilename, FontInfo **fi, FLAGS flags );
 void freeFontInfo(FontInfo *fi);
 
 } // namespace
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

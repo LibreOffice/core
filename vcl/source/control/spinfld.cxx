@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1089,3 +1090,5 @@ void SpinField::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, 
         pDev->SetSettings( aOldSettings );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

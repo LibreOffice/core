@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -898,3 +899,5 @@ inline void ColorMask::SetColorFor32Bit( const BitmapColor& rColor, HPBYTE pPixe
 }
 
 #endif // _SV_SALBTYPE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

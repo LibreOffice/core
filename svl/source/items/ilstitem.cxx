@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -101,3 +102,5 @@ void SfxIntegerListItem::GetList( SvULongs& rList ) const
     for ( sal_Int32 n=0; n<m_aList.getLength(); n++ )
         rList.Insert( m_aList[n], sal::static_int_cast< USHORT >(n) );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

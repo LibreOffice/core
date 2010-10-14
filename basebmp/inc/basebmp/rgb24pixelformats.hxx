@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -96,3 +97,5 @@ BASEBMP_SPECIALIZE_ACCESSORTRAITS(PixelFormatTraits_BGR24::getter_type,
 } // namespace basebmp
 
 #endif /* INCLUDED_BASEBMP_RGB24PIXELFORMATS_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

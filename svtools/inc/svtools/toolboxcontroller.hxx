@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -173,3 +174,5 @@ class SVT_DLLPUBLIC ToolboxController : public ::com::sun::star::frame::XStatusL
 }
 
 #endif // _SVTOOLS_TOOLBOXCONTROLLER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

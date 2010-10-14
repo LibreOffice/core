@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -2460,3 +2461,4 @@ BOOL                TextView::IsInsertMode() const
 void                TextView::SupportProtectAttribute(sal_Bool bSupport)
 { mpImpl->mbSupportProtectAttribute = bSupport;}
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -492,3 +493,5 @@ long operator -( const Date& rDate1, const Date& rDate2 )
                                     rDate2.GetYear() );
     return nTempDays1 - nTempDays2;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

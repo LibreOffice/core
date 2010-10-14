@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -2113,3 +2114,5 @@ STRCODE* STRING::AllocBuffer( xub_StrLen nLen )
 
     return mpData->maStr;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

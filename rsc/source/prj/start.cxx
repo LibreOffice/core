@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -481,3 +482,5 @@ void RscExit( sal_uInt32 nExit )
         printf( "Program exit is %d\n", (int)nExit );
     exit( nExit );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

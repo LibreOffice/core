@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1245,3 +1246,4 @@ HELPLINKER_DLLPUBLIC bool compileExtensionHelp
 // vnd.sun.star.help://swriter/52821?Language=en-US&System=UNIX
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

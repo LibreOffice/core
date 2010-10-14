@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -224,3 +225,5 @@ void GtkSalObject::SetForwardKey( BOOL bEnable )
     else
         gtk_widget_set_events( GTK_WIDGET( m_pSocket ), ~(GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE) & gtk_widget_get_events( GTK_WIDGET( m_pSocket ) ) );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

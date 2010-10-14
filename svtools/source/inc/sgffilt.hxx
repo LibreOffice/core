@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,3 +45,5 @@ BOOL SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, INetURLObject aIniPath );
 #define SGV_VERSION    3     /* SGV mit anderer Version wird abgewiesen */
                              /* 3 entspricht StarDraw 2.00/2.01 M„rz'93 */
 #endif  //_SGFFILT_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

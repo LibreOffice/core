@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -3252,3 +3253,5 @@ MetaCommentAction* makePluggableRendererAction( const rtl::OUString& rRendererSe
         &aMem[0],
         aMem.size());
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

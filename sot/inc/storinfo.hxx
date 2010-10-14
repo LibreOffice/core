@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -70,3 +71,5 @@ SOT_DLLPUBLIC ULONG ReadClipboardFormat( SvStream & rStm );
 SOT_DLLPUBLIC void WriteClipboardFormat( SvStream & rStm, ULONG nFormat );
 
 #endif // _STORINFO_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

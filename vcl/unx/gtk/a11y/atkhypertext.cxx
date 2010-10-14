@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -289,3 +290,5 @@ hypertextIfaceInit (AtkHypertextIface *iface)
   iface->get_n_links = hypertext_get_n_links;
   iface->get_link_index = hypertext_get_link_index;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

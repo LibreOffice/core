@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -106,3 +107,5 @@ const sal_Char __FAR_DATA szServiceName_GridControlModel[] = "com.sun.star.awt.g
 const sal_Char __FAR_DATA szServiceName_DefaultGridDataModel[] = "com.sun.star.awt.grid.DefaultGridDataModel";
 const sal_Char __FAR_DATA szServiceName_DefaultGridColumnModel[] = "com.sun.star.awt.grid.DefaultGridColumnModel";
 const sal_Char __FAR_DATA szServiceName_GridColumn[] = "com.sun.star.awt.grid.GridColumn";
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

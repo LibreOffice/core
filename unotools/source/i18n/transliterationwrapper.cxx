@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -343,3 +344,5 @@ sal_Bool TransliterationWrapper::isMatch( const String& rStr1, const String& rSt
         rStr2, 0, rStr2.Len(), nMatch2 );
     return (nMatch1 <= nMatch2) && (nMatch1 == rStr1.Len());
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

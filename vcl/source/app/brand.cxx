@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * Version: MPL 1.1 / GPLv3+ / LGPLv3+
  *
@@ -76,3 +77,5 @@ bool Application::LoadBrandBitmap (const char* pName, BitmapEx &rBitmap)
              loadPng ("$BRAND_BASE_DIR/program/edition", aName, rBitmap) ||
              loadPng ("$BRAND_BASE_DIR/program", aName, rBitmap) );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

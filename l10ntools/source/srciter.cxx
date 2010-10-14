@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -136,3 +137,5 @@ void SourceTreeIterator::OnExecuteDirectory( const rtl::OUString &rDirectory )
 {
     fprintf( stdout, "%s\n", rtl::OUStringToOString( rDirectory, RTL_TEXTENCODING_UTF8, rDirectory.getLength() ).getStr() );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

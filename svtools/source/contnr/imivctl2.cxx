@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -846,3 +847,4 @@ void IcnGridMap_Impl::GetGridCoord( GridId nId, USHORT& rGridX, USHORT& rGridY )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

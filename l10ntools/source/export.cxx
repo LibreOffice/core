@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -2643,3 +2644,5 @@ ParserQueue::~ParserQueue(){
     if( aQueueNext )    delete aQueueNext;
     if( aQueueCur )     delete aQueueCur;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

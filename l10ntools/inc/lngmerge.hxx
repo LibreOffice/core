@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,3 +65,5 @@ public:
     BOOL CreateSDF( const ByteString &rSDFFile, const ByteString &rPrj, const ByteString &rRoot );
     BOOL Merge( const ByteString &rSDFFile, const ByteString &rDestinationFile , const ByteString &rPrj );
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

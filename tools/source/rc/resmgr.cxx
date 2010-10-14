@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -2070,3 +2071,5 @@ void SimpleResMgr::FreeBlob( void* pBuffer )
     void* pCompleteBuffer = (void*)(((BYTE*)pBuffer) - sizeof(RSHEADER_TYPE));
     rtl_freeMemory(pCompleteBuffer);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

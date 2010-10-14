@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -76,3 +77,5 @@ BREAKITERATOR_CJK( ko )
 } } } }
 
 #endif // _I18N_BREAKITERATOR_CJK_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

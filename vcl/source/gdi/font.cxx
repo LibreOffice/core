@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1114,3 +1115,5 @@ FontStrikeout Font::GetStrikeout() const { return mpImplFont->meStrikeout; }
 FontEmphasisMark Font::GetEmphasisMark() const { return mpImplFont->meEmphasisMark; }
 BOOL Font::IsWordLineMode() const { return mpImplFont->mbWordLine; }
 BOOL Font::IsSameInstance( const Font& rFont ) const { return (mpImplFont == rFont.mpImplFont); }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

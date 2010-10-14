@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -77,3 +78,5 @@ namespace comphelper { namespace module
 //........................................................................
 
 IMPLEMENT_COMPONENT_LIBRARY_API( ::comphelper::module::ComphelperModule, ::comphelper::module::initializeModule )
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

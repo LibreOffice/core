@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -582,3 +583,5 @@ void ImplQPrinter::AddQueuePage( GDIMetaFile* pPage, USHORT nPage, BOOL bNewJobS
         pQueuePage->mpSetup = new JobSetup( mpParent->GetJobSetup() );
     maQueue.push_back( pQueuePage );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

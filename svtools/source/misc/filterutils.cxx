@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 #include "filterutils.hxx"
@@ -53,3 +54,5 @@ namespace svt
 //........................................................................
 } // namespace svt
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -2268,3 +2269,5 @@ void WinMtfOutput::PassEMFPlus( void* pBuffer, UINT32 nLength )
     EMFP_DEBUG(printf ("\t\t\tadd EMF_PLUS comment length %d\n", nLength));
     mpGDIMetaFile->AddAction( new MetaCommentAction( "EMF_PLUS", 0, static_cast<const BYTE*>(pBuffer), nLength ) );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

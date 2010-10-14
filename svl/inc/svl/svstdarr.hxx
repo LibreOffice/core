@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -269,3 +270,4 @@ SV_DECL_VARARR_SORT_VISIBILITY( SvXub_StrLensSort, xub_StrLen, 1, 1, SVL_DLLPUBL
 #endif
 //#endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -3225,3 +3226,5 @@ void ImplListBoxFloatingWindow::StartFloat( BOOL bStartTracking )
         mpImplLB->GetMainWindow()->ImplClearLayoutData();
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

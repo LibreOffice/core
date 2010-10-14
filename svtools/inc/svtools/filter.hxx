@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -425,3 +426,5 @@ SVT_DLLPUBLIC BOOL WriteWindowMetafile( SvStream& rStream, const GDIMetaFile& rM
 SVT_DLLPUBLIC BOOL WriteWindowMetafileBits( SvStream& rStream, const GDIMetaFile& rMTF );
 
 #endif  //_FILTER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

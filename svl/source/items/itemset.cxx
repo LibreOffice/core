@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -2120,3 +2121,4 @@ SfxItemSet *SfxAllItemSet::Clone(BOOL bItems, SfxItemPool *pToPool ) const
         return bItems ? new SfxAllItemSet(*this) : new SfxAllItemSet(*_pPool);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

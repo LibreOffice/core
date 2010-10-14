@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -3463,3 +3464,5 @@ USHORT TimeBox::GetTimePos( const Time& rTime ) const
         bSec = b100Sec = TRUE;
     return ComboBox::GetEntryPos( ImplGetLocaleDataWrapper().getTime( rTime, bSec, b100Sec ) );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -398,3 +399,5 @@ void SequenceAsHashMap::dbg_dumpToFile(const char* pFileName,
 #endif // OSL_DEBUG_LEVEL > 1
 
 } // namespace comphelper
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

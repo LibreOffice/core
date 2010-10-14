@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -253,3 +254,5 @@ namespace dxcanvas
 // The C shared lib entry points
 COMPHELPER_SERVICEDECL_EXPORTS2(dxcanvas::dxCanvasDecl,
                                 dxcanvas::dxBitmapCanvasDecl);
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1087,3 +1088,5 @@ sal_Bool SAL_CALL PathService::supportsService( const ::rtl::OUString& ServiceNa
     *aRet.getArray() = OUString::createFromAscii("com.sun.star.config.SpecialConfigManager");
     return aRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

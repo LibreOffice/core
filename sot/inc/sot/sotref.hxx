@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -73,3 +74,5 @@ inline ClassName##Ref::ClassName##Ref( SotObject * pObjP, SvCastEnum )    \
     SO2_IMPL_REF(ClassName)
 
 #endif // _SO2REF_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

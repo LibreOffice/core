@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -2511,3 +2512,5 @@ void WMAdaptor::answerPing( X11SalFrame* i_pFrame, XClientMessageEvent* i_pEvent
         XFlush( m_pDisplay );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

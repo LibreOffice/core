@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -396,3 +397,4 @@ Window* TaskPaneList::FindNextFloat( Window *pWindow, BOOL bForward )
 
 // --------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

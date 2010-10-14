@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -409,3 +410,5 @@ GType ooo_fixed_get_type( void );
 } // extern "C"
 
 #endif //_VCL_GTKFRAME_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

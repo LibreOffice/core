@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1560,3 +1561,5 @@ void GraphiteLayout::Simplify( bool isBaseLayout )
   // discard width from trailing dropped glyphs, but not those in the middle
   mnWidth -= deltaX;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

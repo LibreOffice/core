@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef VOSAPP_HXX
 #define VOSAPP_HXX
 
@@ -31,3 +32,5 @@ XubString Application::GetCommandLineParam( USHORT nParam )
 }
 
 #endif /* VOSAPP_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

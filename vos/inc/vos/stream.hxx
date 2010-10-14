@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -283,3 +284,4 @@ inline OStream& operator<< (OStream& rStream, sal_Char value)
 #endif // _VOS_STREAM_HXX_
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

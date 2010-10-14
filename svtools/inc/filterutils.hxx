@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef SVTOOLS_INC_FILTERUTILS_HXX
 #define SVTOOLS_INC_FILTERUTILS_HXX
 
@@ -20,3 +21,5 @@ namespace svt
 //........................................................................
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

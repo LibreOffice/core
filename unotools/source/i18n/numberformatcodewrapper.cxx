@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -166,3 +167,5 @@ NumberFormatCodeWrapper::getAllFormatCodes() const
     }
     return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::NumberFormatCode > (0);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

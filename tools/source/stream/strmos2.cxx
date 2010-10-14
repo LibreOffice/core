@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -860,3 +861,5 @@ void* SvSharedMemoryStream::SetHandle( void* aNewHandle, sal_Size nSize,
 
 
 #endif // 0
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -248,3 +249,4 @@ void DoLog_Impl( const BrowseBox *pThis, const char *pWhat, const char *pWho );
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -276,3 +277,5 @@ actionIfaceInit (AtkActionIface *iface)
   iface->get_localized_name = action_wrapper_get_localized_name;
   iface->set_description = action_wrapper_set_description;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

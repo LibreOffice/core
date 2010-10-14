@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -431,3 +432,5 @@ void X11SalInstance::AddToRecentDocumentList(const rtl::OUString& rFileUrl, cons
     if (add_to_recently_used_file_list)
         add_to_recently_used_file_list(rFileUrl, rMimeType);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

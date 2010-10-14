@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -94,3 +95,5 @@ const EventTypeSpec cTextInputEvents[] = { { kEventClassTextInput, kEventTextInp
 const EventTypeSpec cAppearanceScrollbarVariantChangedEvent = { kEventClassAppearance, kEventAppearanceScrollBarVariantChanged };
 
 #endif // INCLUDED_AQUAVCLEVENTS_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

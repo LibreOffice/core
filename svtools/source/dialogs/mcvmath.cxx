@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -303,3 +304,4 @@ void ImpPolarToCart( const Fix& rR, const USHORT Phi, short& rX, short& rY )
     rY = sal::static_int_cast< short >(long( fc.GetImag() ));
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
