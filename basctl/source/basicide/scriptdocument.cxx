@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -453,14 +454,12 @@ namespace basctl
     bool ScriptDocument_Impl::isInVBAMode() const
     {
         bool bResult = false;
-#ifdef FUTURE_VBA_CWS
         if ( !isApplication() )
         {
             Reference< XVBACompatibility > xVBACompat( getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
             if ( xVBACompat.is() )
                 bResult = xVBACompat->getVBACompatibilityMode();
         }
-#endif
         return bResult;
     }
 
@@ -678,7 +677,7 @@ namespace basctl
                 if ( !_rxExistingDialogModel.is() )
                 {
                     Reference< XInputStream > xInput( xISP->createInputStream(), UNO_QUERY_THROW );
-                    ::xmlscript::importDialogModel( xInput, xDialogModel, aContext.getUNOContext() );
+                    ::xmlscript::importDialogModel( xInput, xDialogModel, aContext.getUNOContext(), isDocument() ? getDocument() : Reference< XModel >() );
                 }
 
                 // set new name as property
@@ -686,12 +685,12 @@ namespace basctl
                 xDlgPSet->setPropertyValue( DLGED_PROP_NAME, makeAny( _rNewName ) );
 
                 // export dialog model
-                xISP = ::xmlscript::exportDialogModel( xDialogModel, aContext.getUNOContext() );
+                xISP = ::xmlscript::exportDialogModel( xDialogModel, aContext.getUNOContext(), isDocument() ? getDocument() : Reference< XModel >() );
                 aElement <<= xISP;
             }
 
             // insert element by new name in container
-            else if ( _eType == E_SCRIPTS )
+            if ( _eType == E_SCRIPTS )
             {
                 Reference< XVBAModuleInfo > xVBAModuleInfo( xLib, UNO_QUERY );
                 if ( xVBAModuleInfo->hasModuleInfo( _rOldName ) )
@@ -798,7 +797,7 @@ namespace basctl
             xDlgPSet->setPropertyValue( DLGED_PROP_NAME, makeAny( _rDialogName ) );
 
             // export dialog model
-            _out_rDialogProvider = ::xmlscript::exportDialogModel( xDialogModel, aContext.getUNOContext() );
+            _out_rDialogProvider = ::xmlscript::exportDialogModel( xDialogModel, aContext.getUNOContext(), isDocument() ? getDocument() : Reference< XModel >() );
 
             // insert dialog into library
             xLib->insertByName( _rDialogName, makeAny( _out_rDialogProvider ) );
@@ -1628,3 +1627,5 @@ namespace basctl
 //........................................................................
 } // namespace basctl
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

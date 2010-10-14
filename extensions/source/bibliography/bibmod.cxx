@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -120,3 +121,5 @@ STATIC_USTRING(FM_PROP_DATASOURCE, C2U("DataSource"));
 #endif // !TF_SDBAPI
 STATIC_USTRING(FM_PROP_VALUE,C2U("Value"));
 STATIC_USTRING(FM_PROP_TEXT,C2U("Text"));
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -330,3 +331,5 @@ void MRCListenerMultiplexerHelper::windowDeactivated( const ::com::sun::star::la
 {
     MULTIPLEX( ::com::sun::star::awt::XTopWindowListener, windowDeactivated, ::com::sun::star::lang::EventObject )
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

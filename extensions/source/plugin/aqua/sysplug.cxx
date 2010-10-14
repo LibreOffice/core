@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -806,3 +807,4 @@ void MacPluginComm::drawView( XPlugin_Impl* i_pImpl )
     this->NPP_HandleEvent( i_pImpl->getNPPInstance(), &aRec );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

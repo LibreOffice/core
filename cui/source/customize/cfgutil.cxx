@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -585,7 +586,7 @@ SfxConfigGroupListBox_Impl::SfxConfigGroupListBox_Impl(
     Any value;
     sal_Bool tmp = false;
 
-    value = ::utl::ConfigManager::GetConfigManager()->GetLocalProperty(
+    value = ::utl::ConfigManager::GetConfigManager().GetLocalProperty(
         ::rtl::OUString::createFromAscii(
             "Office.Scripting/ScriptDisplaySettings/ShowBasic" ) );
 
@@ -598,7 +599,7 @@ SfxConfigGroupListBox_Impl::SfxConfigGroupListBox_Impl(
         bShowBasic = FALSE;
     }
 
-    value = ::utl::ConfigManager::GetConfigManager()->GetLocalProperty(
+    value = ::utl::ConfigManager::GetConfigManager().GetLocalProperty(
         ::rtl::OUString::createFromAscii(
             "Office.Scripting/ScriptDisplaySettings/ShowSF" ) );
 
@@ -1796,3 +1797,5 @@ void SfxConfigGroupListBox_Impl::SelectMacro( const String& rBasic,
         pEntry = NextSibling( pEntry );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -96,7 +97,7 @@ DialogWindow* BasicIDEShell::CreateDlgWin( const ScriptDocument& rDocument, cons
                 Reference< beans::XPropertySet > xProps( xMSF, UNO_QUERY );
                 OSL_ASSERT( xProps.is() );
                 OSL_VERIFY( xProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
-                ::xmlscript::importDialogModel( xInput, xDialogModel, xContext );
+                ::xmlscript::importDialogModel( xInput, xDialogModel, xContext, rDocument.isDocument() ? rDocument.getDocument() : Reference< frame::XModel >() );
                 LocalizationMgr::setStringResourceAtDialog( rDocument, rLibName, aDlgName, xDialogModel );
 
                 // new dialog window
@@ -175,3 +176,4 @@ void __EXPORT BasicIDEShell::ExecuteDialog( SfxRequest& rReq )
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

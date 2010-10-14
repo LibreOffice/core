@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #undef UNICODE
 #undef _UNICODE
 
@@ -164,3 +165,5 @@ extern "C" BOOL __stdcall RebaseLibrariesOnProperties( MSIHANDLE handle )
 
     return TRUE;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

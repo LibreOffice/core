@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -143,7 +144,7 @@ namespace pcr
             { "com.sun.star.form.inspection.EventHandler", false },
 
             // a handler which introduces virtual properties for binding controls to spreadsheet cells
-            { "com.sun.star.form.inspection.CellBindingPropertyHandler", true },
+            { "com.sun.star.form.inspection.CellBindingPropertyHandler", false },
 
             // properties related to binding to an XForms DOM node
             { "com.sun.star.form.inspection.XMLFormsPropertyHandler", true },
@@ -262,3 +263,4 @@ namespace pcr
 } // namespace pcr
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

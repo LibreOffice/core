@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,6 +55,7 @@ OfaMSFilterTabPage::OfaMSFilterTabPage(Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage( pParent, CUI_RES( RID_OFAPAGE_MSFILTEROPT ), rSet ),
     aMSWordGB       ( this, CUI_RES( GB_WORD        ) ),
     aWBasicCodeCB   ( this, CUI_RES( CB_WBAS_CODE ) ),
+    aWBasicWbctblCB ( this, CUI_RES( CB_WBAS_WBCTBL ) ),
     aWBasicStgCB    ( this, CUI_RES( CB_WBAS_STG  ) ),
     aMSExcelGB      ( this, CUI_RES( GB_EXCEL     ) ),
     aEBasicCodeCB   ( this, CUI_RES( CB_EBAS_CODE ) ),
@@ -65,11 +67,18 @@ OfaMSFilterTabPage::OfaMSFilterTabPage(Window* pParent, const SfxItemSet& rSet)
 {
     FreeResource();
 
+    aWBasicCodeCB.SetClickHdl( LINK( this, OfaMSFilterTabPage, LoadWordBasicCheckHdl_Impl ) );
     aEBasicCodeCB.SetClickHdl( LINK( this, OfaMSFilterTabPage, LoadExcelBasicCheckHdl_Impl ) );
 }
 
 OfaMSFilterTabPage::~OfaMSFilterTabPage()
 {
+}
+
+IMPL_LINK( OfaMSFilterTabPage, LoadWordBasicCheckHdl_Impl, CheckBox*, EMPTYARG )
+{
+    aWBasicWbctblCB.Enable( aWBasicCodeCB.IsChecked() );
+    return 0;
 }
 
 IMPL_LINK( OfaMSFilterTabPage, LoadExcelBasicCheckHdl_Impl, CheckBox*, EMPTYARG )
@@ -91,6 +100,8 @@ BOOL OfaMSFilterTabPage::FillItemSet( SfxItemSet& )
     BOOL bFlag;
     if( aWBasicCodeCB.GetSavedValue() != (bFlag = aWBasicCodeCB.IsChecked()))
         pOpt->SetLoadWordBasicCode( bFlag );
+    if( aWBasicWbctblCB.GetSavedValue() != (bFlag = aWBasicWbctblCB.IsChecked()))
+        pOpt->SetLoadWordBasicExecutable( bFlag );
     if( aWBasicStgCB.GetSavedValue() != (bFlag = aWBasicStgCB.IsChecked()))
         pOpt->SetLoadWordBasicStorage( bFlag );
 
@@ -119,8 +130,11 @@ void OfaMSFilterTabPage::Reset( const SfxItemSet& )
 
     aWBasicCodeCB.Check( pOpt->IsLoadWordBasicCode() );
     aWBasicCodeCB.SaveValue();
+    aWBasicWbctblCB.Check( pOpt->IsLoadWordBasicExecutable() );
+    aWBasicWbctblCB.SaveValue();
     aWBasicStgCB.Check( pOpt->IsLoadWordBasicStorage() );
     aWBasicStgCB.SaveValue();
+    LoadWordBasicCheckHdl_Impl( &aWBasicCodeCB );
 
     aEBasicCodeCB.Check( pOpt->IsLoadExcelBasicCode() );
     aEBasicCodeCB.SaveValue();
@@ -434,3 +448,4 @@ void OfaMSFilterTabPage2::MSFltrSimpleTable::KeyInput( const KeyEvent& rKEvt )
         SvxSimpleTable::KeyInput(rKEvt);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -154,9 +155,16 @@ void OInterfaceContainer::impl_addVbEvents_nolck_nothrow(  const sal_Int32 i_nIn
             xProps->getPropertyValue( rtl::OUString::createFromAscii("DefaultControl" ) ) >>= sServiceName;
 
             Reference< ooo::vba::XVBAToOOEventDescGen > xDescSupplier( m_xServiceFactory->createInstance( rtl::OUString::createFromAscii( "ooo.vba.VBAToOOEventDesc" ) ), UNO_QUERY_THROW );
-            Sequence< ScriptEventDescriptor > vbaEvents = xDescSupplier->getEventDescriptions( m_xServiceFactory->createInstance( sServiceName ), sCodeName );
+            Reference< XInterface > xInterface = m_xServiceFactory->createInstance( sServiceName );
+            Sequence< ScriptEventDescriptor > vbaEvents = xDescSupplier->getEventDescriptions( xInterface, sCodeName );
             // register the vba script events
             m_xEventAttacher->registerScriptEvents( i_nIndex, vbaEvents );
+
+            Reference< XComponent > xComponent( xInterface, UNO_QUERY );
+            if ( xComponent.is() )
+            {
+                xComponent->dispose();
+            }
         }
         while ( false );
     }
@@ -1361,3 +1369,4 @@ InterfaceRef OFormComponents::getParent() throw( RuntimeException )
 }   // namespace frm
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

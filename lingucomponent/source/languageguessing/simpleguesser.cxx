@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /***************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -232,3 +233,5 @@ void SimpleGuesser::SetDBPath(const char* path, const char* prefix){
     }
     h = special_textcat_Init(path, prefix);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

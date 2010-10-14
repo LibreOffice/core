@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1055,3 +1056,5 @@ uno::Reference< awt::XBitmap > SAL_CALL ScannerManager::getBitmap( const Scanner
     vos::OGuard aGuard( maProtector );
     return uno::Reference< awt::XBitmap >( this );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

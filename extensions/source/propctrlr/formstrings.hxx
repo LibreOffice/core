@@ -48,6 +48,7 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_WHEEL_BEHAVIOR,         "MouseWheelBehavior");
     PCR_CONSTASCII_STRING( PROPERTY_TAG,                    "Tag");
     PCR_CONSTASCII_STRING( PROPERTY_NAME,                   "Name");
+    PCR_CONSTASCII_STRING( PROPERTY_GROUP_NAME,             "GroupName");
     PCR_CONSTASCII_STRING( PROPERTY_VALUE,                  "Value");
     PCR_CONSTASCII_STRING( PROPERTY_TEXT,                   "Text");
     PCR_CONSTASCII_STRING( PROPERTY_NAVIGATION,             "NavigationBarMode");

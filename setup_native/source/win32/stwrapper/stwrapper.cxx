@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #define WIN32_LEAN_AND_MEAN
 
 #ifdef _MSC_VER
@@ -493,3 +494,5 @@ int WINAPI _tWinMain( HINSTANCE /*hInstance*/, HINSTANCE, LPTSTR, int )
 
     return dwExitCode;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
