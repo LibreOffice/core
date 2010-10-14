@@ -1475,23 +1475,11 @@ public:
     SfxObjectShell* GetObjectShell() const ;
     SAL_DLLPRIVATE SfxObjectShell* impl_getObjectShell() const ;
 
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
-
     SAL_DLLPRIVATE sal_Bool impl_isDisposed() const ;
     sal_Bool IsInitialized() const;
     sal_Bool IsDisposed() const { return impl_isDisposed(); }
     void MethodEntryCheck( const bool i_mustBeInitialized ) const;
+    ::osl::Mutex& getMutex() const { return m_aMutex; }
 
     ::com::sun::star::uno::Reference < ::com::sun::star::container::XIndexAccess > SAL_CALL getViewData() throw (::com::sun::star::uno::RuntimeException);
     void SAL_CALL setViewData( const ::com::sun::star::uno::Reference < ::com::sun::star::container::XIndexAccess >& aData ) throw (::com::sun::star::uno::RuntimeException);
@@ -1596,6 +1584,8 @@ protected:
 protected:
     const SfxBaseModel& getBaseModel() const { return m_rModel; }
           SfxBaseModel& getBaseModel()       { return m_rModel; }
+
+          ::osl::Mutex&  getMutex()          { return m_rModel.getMutex(); }
 
 private:
     SfxBaseModel&   m_rModel;

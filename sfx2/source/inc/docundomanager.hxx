@@ -38,6 +38,7 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/noncopyable.hpp>
 
+class SfxUndoManager;
 
 //......................................................................................................................
 namespace sfx2
@@ -49,11 +50,13 @@ namespace sfx2
     //==================================================================================================================
     typedef ::cppu::ImplHelper1 <   ::com::sun::star::document::XUndoManager
                                 >   DocumentUndoManager_Base;
-    struct DocumentUndoManager_Data;
+    struct DocumentUndoManager_Impl;
     class DocumentUndoManager   :public DocumentUndoManager_Base
                                 ,public SfxModelSubComponent
                                 ,public ::boost::noncopyable
     {
+        friend struct DocumentUndoManager_Impl;
+
     public:
         DocumentUndoManager( SfxBaseModel& i_document );
         virtual ~DocumentUndoManager();
@@ -70,14 +73,41 @@ namespace sfx2
         virtual void SAL_CALL enterHiddenUndoContext(  ) throw (::com::sun::star::util::InvalidStateException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL leaveUndoContext(  ) throw (::com::sun::star::util::InvalidStateException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL addUndoAction( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoAction >& i_action ) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException);
-        virtual void SAL_CALL undo(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL redo(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL undo(  ) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::WrappedTargetException);
+        virtual void SAL_CALL redo(  ) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::WrappedTargetException);
         virtual void SAL_CALL clear(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL clearRedo(  ) throw (::com::sun::star::uno::RuntimeException);
-
+        virtual void SAL_CALL addUndoManagerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManagerListener >& i_listener ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL removeUndoManagerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManagerListener >& i_listener ) throw (::com::sun::star::uno::RuntimeException);
 
     private:
-        ::boost::scoped_ptr< DocumentUndoManager_Data > m_pData;
+        void impl_notify(
+                ::rtl::OUString const& i_title,
+                void ( SAL_CALL ::com::sun::star::document::XUndoManagerListener::*i_notificationMethod )( const ::com::sun::star::document::UndoManagerEvent& ),
+                SfxModelGuard& i_instanceLock
+            );
+
+        void impl_notify(
+                void ( SAL_CALL ::com::sun::star::document::XUndoManagerListener::*i_notificationMethod )( const ::com::sun::star::lang::EventObject& ),
+                SfxModelGuard& i_instanceLock
+            );
+
+        void impl_notify(
+                ::rtl::OUString const& i_title,
+                void ( SAL_CALL ::com::sun::star::document::XUndoManagerListener::*i_notificationMethod )( const ::com::sun::star::document::UndoManagerEvent& )
+            );
+
+        void impl_notify(
+                void ( SAL_CALL ::com::sun::star::document::XUndoManagerListener::*i_notificationMethod )( const ::com::sun::star::lang::EventObject& )
+            );
+
+        void impl_do_nolck(
+                BOOL ( SfxUndoManager::*i_doMethod )(),
+                UniString ( SfxUndoManager::*i_titleRetriever )( USHORT ) const
+            );
+
+    private:
+        ::boost::scoped_ptr< DocumentUndoManager_Impl > m_pImpl;
     };
 
 //......................................................................................................................

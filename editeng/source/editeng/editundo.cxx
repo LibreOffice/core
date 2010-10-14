@@ -74,7 +74,7 @@ EditUndoManager::EditUndoManager( ImpEditEngine* p )
     pImpEE = p;
 }
 
-BOOL __EXPORT EditUndoManager::Undo( USHORT nCount )
+BOOL __EXPORT EditUndoManager::Undo()
 {
     if ( GetUndoActionCount() == 0 )
         return FALSE;
@@ -95,7 +95,7 @@ BOOL __EXPORT EditUndoManager::Undo( USHORT nCount )
     pImpEE->GetActiveView()->GetImpEditView()->DrawSelection(); // alte Selektion entfernen
 
     pImpEE->SetUndoMode( TRUE );
-    BOOL bDone = SfxUndoManager::Undo( nCount );
+    BOOL bDone = SfxUndoManager::Undo();
     pImpEE->SetUndoMode( FALSE );
 
     EditSelection aNewSel( pImpEE->GetActiveView()->GetImpEditView()->GetEditSelection() );
@@ -109,7 +109,7 @@ BOOL __EXPORT EditUndoManager::Undo( USHORT nCount )
     return bDone;
 }
 
-BOOL __EXPORT EditUndoManager::Redo( USHORT nCount )
+BOOL __EXPORT EditUndoManager::Redo()
 {
     if ( GetRedoActionCount() == 0 )
         return FALSE;
@@ -130,7 +130,7 @@ BOOL __EXPORT EditUndoManager::Redo( USHORT nCount )
     pImpEE->GetActiveView()->GetImpEditView()->DrawSelection(); // alte Selektion entfernen
 
     pImpEE->SetUndoMode( TRUE );
-    BOOL bDone = SfxUndoManager::Redo( nCount );
+    BOOL bDone = SfxUndoManager::Redo();
     pImpEE->SetUndoMode( FALSE );
 
     EditSelection aNewSel( pImpEE->GetActiveView()->GetImpEditView()->GetEditSelection() );

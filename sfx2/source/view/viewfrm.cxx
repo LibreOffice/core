@@ -972,13 +972,13 @@ void SfxViewFrame::ExecHistory_Impl( SfxRequest &rReq )
                 break;
 
             case SID_UNDO:
-                pShUndoMgr->Undo(0);
+                pShUndoMgr->Undo();
                 GetBindings().InvalidateAll(sal_False);
                 bOK = sal_True;
                 break;
 
             case SID_REDO:
-                pShUndoMgr->Redo(0);
+                pShUndoMgr->Redo();
                 GetBindings().InvalidateAll(sal_False);
                 bOK = sal_True;
                 break;

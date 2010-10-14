@@ -43,8 +43,8 @@ private:
 public:
                     EditUndoManager( ImpEditEngine* pImpEE );
 
-    virtual BOOL    Undo( USHORT nCount=1 );
-    virtual BOOL    Redo( USHORT nCount=1 );
+    virtual BOOL    Undo();
+    virtual BOOL    Redo();
 };
 
 // -----------------------------------------------------------------------

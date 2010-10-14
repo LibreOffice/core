@@ -310,7 +310,7 @@ BOOL ImpEditEngine::Undo( EditView* pView )
     if ( HasUndoManager() && GetUndoManager().GetUndoActionCount() )
     {
         SetActiveView( pView );
-        GetUndoManager().Undo( 1 );
+        GetUndoManager().Undo();
         return TRUE;
     }
     return FALSE;
@@ -321,7 +321,7 @@ BOOL ImpEditEngine::Redo( EditView* pView )
     if ( HasUndoManager() && GetUndoManager().GetRedoActionCount() )
     {
         SetActiveView( pView );
-        GetUndoManager().Redo( 0 );
+        GetUndoManager().Redo();
         return TRUE;
     }
     return FALSE;
