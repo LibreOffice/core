@@ -47,8 +47,8 @@ public:
     bool                    isInListAction() const { return mnListLevel != 0; }
     bool                    isInUndo() const { return maIsInUndoLock.isLocked(); }
 
-    virtual BOOL            Undo( USHORT nCount=1 );
-    virtual BOOL            Redo( USHORT nCount=1 );
+    virtual BOOL            Undo();
+    virtual BOOL            Redo();
 
     /** Set or reset the undo manager linked with the called undo manager.
     */

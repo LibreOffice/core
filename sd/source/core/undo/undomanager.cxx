@@ -79,16 +79,16 @@ void UndoManager::AddUndoAction( SfxUndoAction *pAction, BOOL bTryMerg /* = FALS
 }
 
 
-BOOL UndoManager::Undo( USHORT nCount )
+BOOL UndoManager::Undo()
 {
     ScopeLockGuard aGuard( maIsInUndoLock );
-    return SfxUndoManager::Undo( nCount );
+    return SfxUndoManager::Undo();
 }
 
-BOOL UndoManager::Redo( USHORT nCount )
+BOOL UndoManager::Redo()
 {
     ScopeLockGuard aGuard( maIsInUndoLock );
-    return SfxUndoManager::Redo( nCount );
+    return SfxUndoManager::Redo();
 }
 
 
