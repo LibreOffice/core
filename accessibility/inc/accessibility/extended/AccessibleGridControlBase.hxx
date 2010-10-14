@@ -65,13 +65,6 @@ namespace accessibility {
 
 // ============================================================================
 
-/** Aquire the solar mutex. */
-class TCSolarGuard : public ::vos::OGuard
-{
-public:
-    inline TCSolarGuard() : ::vos::OGuard( Application::GetSolarMutex() ) {}
-};
-
 // ============================================================================
 
 typedef ::cppu::WeakAggComponentImplHelper4<
@@ -416,12 +409,11 @@ private:
 
 typedef ::osl::MutexGuard OslMutexGuard;
 
-class TC_SolarMethodGuard : public TCSolarGuard, public OslMutexGuard
+class TC_SolarMethodGuard : public SolarMutexGuard, public OslMutexGuard
 {
 public:
     inline TC_SolarMethodGuard( AccessibleGridControlBase& _rOwner, bool _bEnsureAlive = true )
-        :TCSolarGuard( )
-        ,OslMutexGuard( _rOwner.getMutex( AccessibleGridControlBase::TC_AccessControl() ) )
+        : OslMutexGuard( _rOwner.getMutex( AccessibleGridControlBase::TC_AccessControl() ) )
     {
         if ( _bEnsureAlive )
             _rOwner.ensureIsAlive( AccessibleGridControlBase::TC_AccessControl() );
