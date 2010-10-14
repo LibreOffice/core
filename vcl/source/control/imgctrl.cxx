@@ -107,7 +107,7 @@ void ImageControl::ImplDraw( OutputDevice& rDev, ULONG nDrawFlags, const Point& 
     const Image& rImage( GetModeImage( BMP_COLOR_NORMAL ) );
     const Image& rImageHC( GetModeImage( BMP_COLOR_HIGHCONTRAST ) );
 
-    const Image* pImage = &GetImage();
+    const Image* pImage = &rImage;
     if ( !!rImageHC && GetSettings().GetStyleSettings().GetHighContrastMode() )
         pImage = &rImageHC;
 
