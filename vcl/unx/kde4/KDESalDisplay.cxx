@@ -66,7 +66,6 @@ void SalKDEDisplay::Yield()
     XEvent event;
     XNextEvent( pDisp_, &event );
     qApp->x11ProcessEvent( &event );
-    // TODO maybe Qt needs locking and unlocking too?
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

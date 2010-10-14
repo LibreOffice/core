@@ -36,6 +36,7 @@
 #include <kcmdlineargs.h>
 #include <kstartupinfo.h>
 #include <qabstracteventdispatcher.h>
+#include <qclipboard.h>
 #include <qthread.h>
 
 #undef Region
@@ -54,9 +55,24 @@
 #include <stdio.h>
 #endif
 
+#include <stdio.h>
+
+#ifdef KDE_HAVE_GLIB
+#if QT_VERSION >= QT_VERSION_CHECK( 4, 8, 0 )
+#if 0 // wait until fixed in Qt
+#define GLIB_EVENT_LOOP_SUPPORT
+#endif
+#endif
+#endif
+
+#ifdef GLIB_EVENT_LOOP_SUPPORT
+#include <glib-2.0/glib.h>
+#endif
+
 KDEXLib::KDEXLib() :
     SalXLib(),  m_bStartupDone(false), m_pApplication(0),
-    m_pFreeCmdLineArgs(0), m_pAppCmdLineArgs(0), m_nFakeCmdLineArgs( 0 )
+    m_pFreeCmdLineArgs(0), m_pAppCmdLineArgs(0), m_nFakeCmdLineArgs( 0 ),
+    eventLoopType( LibreOfficeEventLoop )
 {
     // the timers created here means they belong to the main thread
     connect( &timeoutTimer, SIGNAL( timeout()), this, SLOT( timeoutActivated()));
@@ -156,6 +172,7 @@ void KDEXLib::Init()
     m_pApplication = new VCLKDEApplication();
     kapp->disableSessionManagement();
     KApplication::setQuitOnLastWindowClosed(false);
+    setupEventLoop();
 
     Display* pDisp = QX11Info::display();
     SalKDEDisplay *pSalDisplay = new SalKDEDisplay(pDisp);
@@ -174,8 +191,52 @@ void KDEXLib::Init()
     pSalDisplay->SetKbdExtension( pKbdExtension );
 }
 
+// When we use Qt event loop, it can actually use its own event loop handling, or wrap
+// the Glib event loop (the latter is the default is Qt is built with Glib support
+// and $QT_NO_GLIB is not set). We mostly do not care which one it is, as QSocketNotifier's
+// and QTimer's can handle it transparently, but it matters for the SolarMutex, which
+// needs to be unlocked shortly before entering the main sleep (e.g. select()) and locked
+// immediatelly after. So we need to know which event loop implementation is used and
+// hook accordingly.
+#ifdef GLIB_EVENT_LOOP_SUPPORT
+static GPollFunc old_gpoll = NULL;
+static gint gpoll_wrapper( GPollFD*, guint, gint );
+#endif
+
+void KDEXLib::setupEventLoop()
+{
+#ifdef GLIB_EVENT_LOOP_SUPPORT
+// Glib is simple, it has g_main_context_set_poll_func() for wrapping the sleep call.
+// The catch is that Qt has a bug that allows triggering timers even when they should
+// not be, leading to crashes caused by QClipboard re-entering the event loop.
+// (http://bugreports.qt.nokia.com/browse/QTBUG-14461), so enable only with Qt>=4.8.0,
+// where it is(?) fixed.
+    if( QAbstractEventDispatcher::instance()->inherits( "QEventDispatcherGlib" ))
+    {
+        eventLoopType = GlibEventLoop;
+        old_gpoll = g_main_context_get_poll_func( NULL );
+        g_main_context_set_poll_func( NULL, gpoll_wrapper );
+        // set QClipboard to use event loop, otherwise the main thread will hold
+        // SolarMutex locked, which will prevent the clipboard thread from answering
+        m_pApplication->clipboard()->setProperty( "useEventLoopWhenWaiting", true );
+        return;
+    }
+#endif
+    // TODO handle also Qt's own event loop (requires fixing Qt too)
+}
+
+#ifdef GLIB_EVENT_LOOP_SUPPORT
+gint gpoll_wrapper( GPollFD* ufds, guint nfds, gint timeout )
+{
+    YieldMutexReleaser release; // release YieldMutex (and re-acquire at block end)
+    return old_gpoll( ufds, nfds, timeout );
+}
+#endif
+
 void KDEXLib::Insert( int fd, void* data, YieldFunc pending, YieldFunc queued, YieldFunc handle )
 {
+    if( eventLoopType == LibreOfficeEventLoop )
+        return SalXLib::Insert( fd, data, pending, queued, handle );
     SocketData sdata;
     sdata.data = data;
     sdata.pending = pending;
@@ -189,21 +250,22 @@ void KDEXLib::Insert( int fd, void* data, YieldFunc pending, YieldFunc queued, Y
 
 void KDEXLib::Remove( int fd )
 {
+    if( eventLoopType == LibreOfficeEventLoop )
+        return SalXLib::Remove( fd );
     SocketData sdata = socketData.take( fd );// according to SalXLib::Remove() this should be safe
     delete sdata.notifier;
 }
 
 void KDEXLib::socketNotifierActivated( int fd )
 {
-    SalData *pSalData = GetSalData();
     const SocketData& sdata = socketData[ fd ];
-    pSalData->m_pInstance->GetYieldMutex()->acquire();
     sdata.handle( fd, sdata.data );
-    pSalData->m_pInstance->GetYieldMutex()->release();
 }
 
 void KDEXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
 {
+    if( eventLoopType == LibreOfficeEventLoop )
+        return SalXLib::Yield( bWait, bHandleAllCurrentEvents );
     // if we are the main thread (which is where the event processing is done),
     // good, just do it
     if( qApp->thread() == QThread::currentThread())
@@ -217,7 +279,6 @@ void KDEXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
 
 void KDEXLib::processYield( bool bWait, bool bHandleAllCurrentEvents )
 {
-    YieldMutexReleaser aReleaser;
     QAbstractEventDispatcher* dispatcher = QAbstractEventDispatcher::instance( qApp->thread());
     bool wasEvent = false;
     for( int cnt = bHandleAllCurrentEvents ? 100 : 1;
@@ -234,6 +295,8 @@ void KDEXLib::processYield( bool bWait, bool bHandleAllCurrentEvents )
 
 void KDEXLib::StartTimer( ULONG nMS )
 {
+    if( eventLoopType == LibreOfficeEventLoop )
+        return SalXLib::StartTimer( nMS );
     timeoutTimer.setInterval( nMS );
     // QTimer's can be started only in their thread (main thread here)
     if( qApp->thread() == QThread::currentThread())
@@ -249,25 +312,28 @@ void KDEXLib::startTimeoutTimer()
 
 void KDEXLib::StopTimer()
 {
+    if( eventLoopType == LibreOfficeEventLoop )
+        return SalXLib::StopTimer();
     timeoutTimer.stop();
 }
 
 void KDEXLib::timeoutActivated()
 {
-    SalData *pSalData = GetSalData();
-    pSalData->m_pInstance->GetYieldMutex()->acquire();
     GetX11SalData()->Timeout();
     // QTimer is not single shot, so will be restarted immediatelly
-    pSalData->m_pInstance->GetYieldMutex()->release();
 }
 
 void KDEXLib::Wakeup()
 {
+    if( eventLoopType == LibreOfficeEventLoop )
+        return SalXLib::Wakeup();
     QAbstractEventDispatcher::instance( qApp->thread())->wakeUp(); // main thread event loop
 }
 
 void KDEXLib::PostUserEvent()
 {
+    if( eventLoopType == LibreOfficeEventLoop )
+        return SalXLib::PostUserEvent();
     if( qApp->thread() == QThread::currentThread())
         startUserEventTimer();
     else
@@ -281,14 +347,11 @@ void KDEXLib::startUserEventTimer()
 
 void KDEXLib::userEventActivated()
 {
-    SalData *pSalData = GetSalData();
-    pSalData->m_pInstance->GetYieldMutex()->acquire();
     SalKDEDisplay::self()->EventGuardAcquire();
     if( SalKDEDisplay::self()->userEventsCount() <= 1 )
         userEventTimer.stop();
     SalKDEDisplay::self()->EventGuardRelease();
     SalKDEDisplay::self()->DispatchInternalEvent();
-    pSalData->m_pInstance->GetYieldMutex()->release();
     // QTimer is not single shot, so will be restarted immediatelly
 }
 
