@@ -138,7 +138,6 @@ static bool lcl_IsItemSet(const SwCntntNode & rNode, USHORT which)
 |*  Letzte Aenderung    JP 08.05.98
 |*
 |*************************************************************************/
-
 SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
 {
     SwFrmFmt *pFmt = 0;
@@ -222,6 +221,7 @@ SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
     }
     return pFmt;
 }
+
 /*************************************************************************
 |*
 |*  SwDoc::DelLayoutFmt()
@@ -232,7 +232,6 @@ SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
 |*  Letzte Aenderung    MA 05. Feb. 93
 |*
 |*************************************************************************/
-
 void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
 {
     //Verkettung von Rahmen muss ggf. zusammengefuehrt werden.
@@ -392,7 +391,6 @@ void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
 |*  Letzte Aenderung    MA 17. Jul. 96
 |*
 |*************************************************************************/
-
 SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
                                 const SwFmtAnchor& rNewAnchor,
                                 bool bSetTxtFlyAtt, bool bMakeFrms )
@@ -922,9 +920,8 @@ if( DoesUndo() )    // werden erstmal alle Undo - Objecte geloescht.
     return pFmt;
 }
 
-
-    //Einfuegen eines DrawObjectes. Das Object muss bereits im DrawModel
-    // angemeldet sein.
+// Einfuegen eines DrawObjectes. Das Object muss bereits im DrawModel
+// angemeldet sein.
 SwDrawFrmFmt* SwDoc::Insert( const SwPaM &rRg,
                              SdrObject& rDrawObj,
                              const SfxItemSet* pFlyAttrSet,
@@ -1034,7 +1031,6 @@ SwDrawFrmFmt* SwDoc::Insert( const SwPaM &rRg,
 |*  Letzte Aenderung    MD 23. Feb. 95
 |*
 |*************************************************************************/
-
 /*sal_Bool TstFlyRange( const SwPaM* pPam, sal_uInt32 nFlyPos )
 {
     sal_Bool bOk = sal_False;
@@ -1046,6 +1042,7 @@ SwDrawFrmFmt* SwDoc::Insert( const SwPaM &rRg,
     return bOk;
 }
 */
+
 /* -----------------------------04.04.00 10:55--------------------------------
     paragraph frames - o.k. if the PaM includes the paragraph from the beginning
                        to the beginning of the next paragraph at least
@@ -1085,7 +1082,6 @@ sal_Bool TstFlyRange( const SwPaM* pPam, const SwPosition* pFlyPos,
     } while( !bOk && pPam != ( pTmp = (const SwPaM*)pTmp->GetNext() ));
     return bOk;
 }
-
 
 void SwDoc::GetAllFlyFmts( SwPosFlyFrms& rPosFlyFmts,
                            const SwPaM* pCmpRange, sal_Bool bDrawAlso ) const
@@ -1194,7 +1190,6 @@ void SwDoc::GetAllFlyFmts( SwPosFlyFrms& rPosFlyFmts,
 
    Otherwise the new set will not be changed.
 */
-
 void lcl_CpyAttr( SfxItemSet &rNewSet, const SfxItemSet &rOldSet, sal_uInt16 nWhich )
 {
     const SfxPoolItem *pOldItem = NULL, *pNewItem = NULL;
@@ -1223,7 +1218,6 @@ void lcl_CpyAttr( SfxItemSet &rNewSet, const SfxItemSet &rOldSet, sal_uInt16 nWh
     }
 
 }
-
 
 SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt, const String& rSeparator,
             const String& rNumberingSeparator,
@@ -1548,7 +1542,6 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt, co
 |*  Letzte Aenderung    MIB 7. Dez. 98
 |*
 |*************************************************************************/
-
 SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
                                      const String& rSeparator,
                                      const String& rNumberSeparator,
@@ -1818,7 +1811,6 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
 |*  IDocumentTimerAccess-methods
 |*
 |*************************************************************************/
-
 void SwDoc::StartIdling()
 {
     mbStartIdleTimer = sal_True;
@@ -1845,7 +1837,6 @@ void SwDoc::UnblockIdling()
         aIdleTimer.Start();
 }
 
-
 /*************************************************************************
 |*
 |*  SwDoc::DoIdleJobs()
@@ -1854,7 +1845,6 @@ void SwDoc::UnblockIdling()
 |*  Letzte Aenderung    MA 09. Jun. 95
 |*
 |*************************************************************************/
-
 IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
 {
 #ifdef TIMELOG

@@ -122,7 +122,6 @@
 #include <sfx2/Metadatable.hxx>
 #include <fmtmeta.hxx> // MetaFieldManager
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::document;
 
@@ -140,7 +139,6 @@ SV_IMPL_PTRARR( SwGrfFmtColls, SwGrfFmtCollPtr)
 /*
  * global functions...
  */
-
  uno::Reference< linguistic2::XProofreadingIterator > SwDoc::GetGCIterator() const
 {
     if (!m_xGCIterator.is() && SvtLinguConfig().HasGrammarChecker())
@@ -199,9 +197,6 @@ void StartGrammarChecking( SwDoc &rDoc )
 /*
  * interne Funktionen
  */
-
-
-
 BOOL lcl_DelFmtIndizes( const SwFrmFmtPtr& rpFmt, void* )
 {
     SwFmtCntnt &rFmtCntnt = (SwFmtCntnt&)rpFmt->GetCntnt();
@@ -216,7 +211,6 @@ BOOL lcl_DelFmtIndizes( const SwFrmFmtPtr& rpFmt, void* )
 /*
  * exportierte Methoden
  */
-
 SwDoc::SwDoc() :
     aNodes( this ),
     aUndoNodes( this ),
@@ -472,8 +466,6 @@ SwDoc::SwDoc() :
  * Dieser darf also keinesfalls durch delete geloescht
  * werden!!!!!!!!!!
  */
-
-
 SwDoc::~SwDoc()
 {
     // --> OD 2007-03-16 #i73788#
@@ -705,8 +697,6 @@ SwDoc::~SwDoc()
     SfxItemPool::Free(mpAttrPool);
 }
 
-//---------------------------------------------------
-
 VirtualDevice& SwDoc::CreateVirtualDevice_() const
 {
     VirtualDevice* pNewVir = new VirtualDevice( 1 );
@@ -726,8 +716,6 @@ VirtualDevice& SwDoc::CreateVirtualDevice_() const
     const_cast<SwDoc*>(this)->setVirtualDevice( pNewVir, true, true );
     return *pVirDev;
 }
-
-//---------------------------------------------------
 
 SfxPrinter& SwDoc::CreatePrinter_() const
 {
@@ -750,7 +738,6 @@ SfxPrinter& SwDoc::CreatePrinter_() const
     const_cast<SwDoc*>(this)->setPrinter( pNewPrt, true, true );
     return *pPrt;
 }
-//---------------------------------------------------
 
 void SwDoc::SetDocShell( SwDocShell* pDSh )
 {
@@ -770,12 +757,8 @@ void SwDoc::SetDocShell( SwDocShell* pDSh )
     }
 }
 
-
 // Convenience-Methode, um uebermaessige Includes von docsh.hxx
 // zu vermeiden
-
-
-
 uno::Reference < embed::XStorage > SwDoc::GetDocStorage()
 {
     if( pDocShell )
@@ -785,13 +768,10 @@ uno::Reference < embed::XStorage > SwDoc::GetDocStorage()
     return NULL;
 }
 
-
-
 SfxObjectShell* SwDoc::GetPersist() const
 {
     return pDocShell ? pDocShell : pLinkMgr->GetPersist();
 }
-
 
 void SwDoc::ClearDoc()
 {
@@ -925,9 +905,7 @@ void SwDoc::SetPreViewPrtData( const SwPagePreViewPrtData* pNew )
         DELETEZ( pPgPViewPrtData );
     SetModified();
 }
-/* -----------------------------06.01.00 14:03--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwModify*   SwDoc::GetUnoCallBack() const
 {
     return pUnoCallBack;
@@ -937,7 +915,6 @@ SwModify*   SwDoc::GetUnoCallBack() const
  * SwDoc:
  *  Reading and writing of the layout cache.
  *--------------------------------------------------*/
-
 void SwDoc::ReadLayoutCache( SvStream& rStream )
 {
     if( !pLayoutCache )
@@ -1083,9 +1060,6 @@ void SwDoc::InitTOXTypes()
    pTOXTypes->Insert( pNew, pTOXTypes->Count() );
 }
 
-/*-- 08.05.2009 10:07:57---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
 {
     SwDoc* pRet = new SwDoc;
@@ -1160,6 +1134,7 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
     pRet->SetRefForDocShell( 0 );
     return xRetShell;
 }
+
 /*-- 08.05.2009 10:52:40---------------------------------------------------
     copy document content - code from SwFEShell::Paste( SwDoc* , BOOL  )
   -----------------------------------------------------------------------*/

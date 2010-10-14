@@ -71,12 +71,8 @@
 
 extern USHORT GetHtmlMode( const SwDocShell* );
 
-
 using namespace ::com::sun::star;
 
-/*-----------------17.02.98 08:35-------------------
-
---------------------------------------------------*/
 USHORT SwDoc::GetFlyCount( FlyCntType eType ) const
 {
     const SwSpzFrmFmts& rFmts = *GetSpzFrmFmts();
@@ -118,9 +114,6 @@ USHORT SwDoc::GetFlyCount( FlyCntType eType ) const
     return nCount;
 }
 
-/*-----------------17.02.98 08:35-------------------
-
---------------------------------------------------*/
 // If you change this, also update SwXFrameEnumeration in unocoll.
 SwFrmFmt* SwDoc::GetFlyNum( USHORT nIdx, FlyCntType eType )
 {
@@ -161,8 +154,6 @@ SwFrmFmt* SwDoc::GetFlyNum( USHORT nIdx, FlyCntType eType )
     return pRetFmt;
 }
 
-/*  */
-
 /***********************************************************************
 #*  Class       :  SwDoc
 #*  Methode     :  SetFlyFrmAnchor
@@ -170,7 +161,6 @@ SwFrmFmt* SwDoc::GetFlyNum( USHORT nIdx, FlyCntType eType )
 #*  Datum       :  MA 01. Feb. 94
 #*  Update      :  JP 09.03.98
 #***********************************************************************/
-
 Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFmtAnchor& rAnch,
                             const SwFrmFmt* pFlyFmt )
 {
@@ -533,7 +523,6 @@ void SwDoc::SetFlyFrmDescription( SwFlyFrmFmt& rFlyFrmFmt,
  *  Erstellt    :   OK 14.04.94 15:40
  *  Aenderung   :   JP 23.04.98
  ***************************************************************************/
-
 BOOL SwDoc::SetFrmFmtToFly( SwFrmFmt& rFmt, SwFrmFmt& rNewFmt,
                             SfxItemSet* pSet, BOOL bKeepOrient )
 {
@@ -646,7 +635,6 @@ void SwDoc::GetGrfNms( const SwFlyFrmFmt& rFmt, String* pGrfName,
 |*  Letzte Aenderung    JP 08.07.98
 |*
 *************************************************************************/
-
 sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                            RndStdIds _eAnchorType,
                            const sal_Bool _bSameOnly,
@@ -897,10 +885,6 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
     return bUnmark;
 }
 
-
-/* -----------------23.07.98 13:56-------------------
- *
- * --------------------------------------------------*/
 int SwDoc::Chainable( const SwFrmFmt &rSource, const SwFrmFmt &rDest )
 {
     //Die Source darf noch keinen Follow haben.
@@ -999,9 +983,7 @@ int SwDoc::Chainable( const SwFrmFmt &rSource, const SwFrmFmt &rDest )
 
     return bAllowed ? SW_CHAIN_OK : SW_CHAIN_WRONG_AREA;
 }
-/* -----------------23.07.98 13:56-------------------
- *
- * --------------------------------------------------*/
+
 int SwDoc::Chain( SwFrmFmt &rSource, const SwFrmFmt &rDest )
 {
     int nErr = Chainable( rSource, rDest );
@@ -1045,9 +1027,7 @@ int SwDoc::Chain( SwFrmFmt &rSource, const SwFrmFmt &rDest )
     }
     return nErr;
 }
-/* -----------------23.07.98 13:56-------------------
- *
- * --------------------------------------------------*/
+
 void SwDoc::Unchain( SwFrmFmt &rFmt )
 {
     SwFmtChain aChain( rFmt.GetChain() );
@@ -1063,6 +1043,3 @@ void SwDoc::Unchain( SwFrmFmt &rFmt )
         EndUndo( UNDO_UNCHAIN, NULL );
     }
 }
-
-
-

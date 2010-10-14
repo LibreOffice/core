@@ -70,12 +70,9 @@ LocaleDataWrapper*  SwSortElement::pLclData = 0;
 
 SV_IMPL_OP_PTRARR_SORT( SwSortElements, SwSortElementPtr );
 
-
 /*--------------------------------------------------------------------
     Beschreibung: Ein Sortierelement fuers Sort konstruieren
  --------------------------------------------------------------------*/
-
-
 void SwSortElement::Init( SwDoc* pD, const SwSortOptions& rOpt,
                             FlatFndBox* pFltBx )
 {
@@ -100,7 +97,6 @@ void SwSortElement::Init( SwDoc* pD, const SwSortOptions& rOpt,
 //                      rOpt.bIgnoreCase ? SW_COLLATOR_IGNORES : 0 );
 }
 
-
 void SwSortElement::Finit()
 {
     delete pOptions, pOptions = 0;
@@ -112,11 +108,9 @@ void SwSortElement::Finit()
     pBox = 0;
 }
 
-
 SwSortElement::~SwSortElement()
 {
 }
-
 
 double SwSortElement::StrToDouble( const String& rStr ) const
 {
@@ -139,8 +133,6 @@ double SwSortElement::StrToDouble( const String& rStr ) const
 /*--------------------------------------------------------------------
     Beschreibung: Operatoren zum Vergleichen
  --------------------------------------------------------------------*/
-
-
 BOOL SwSortElement::operator==(const SwSortElement& )
 {
     return FALSE;
@@ -149,7 +141,6 @@ BOOL SwSortElement::operator==(const SwSortElement& )
 /*--------------------------------------------------------------------
     Beschreibung: Kleiner-Operator fuers sortieren
  --------------------------------------------------------------------*/
-
 BOOL SwSortElement::operator<(const SwSortElement& rCmp)
 {
 
@@ -207,24 +198,18 @@ double SwSortElement::GetValue( USHORT nKey ) const
 /*--------------------------------------------------------------------
     Beschreibung: SortierElemente fuer Text
  --------------------------------------------------------------------*/
-
-
 SwSortTxtElement::SwSortTxtElement(const SwNodeIndex& rPos)
     : nOrg(rPos.GetIndex()), aPos(rPos)
 {
 }
 
-
 SwSortTxtElement::~SwSortTxtElement()
 {
 }
 
-
 /*--------------------------------------------------------------------
     Beschreibung: Key ermitteln
  --------------------------------------------------------------------*/
-
-
 String SwSortTxtElement::GetKey(USHORT nId) const
 {
     SwTxtNode* pTxtNd = aPos.GetNode().GetTxtNode();
@@ -251,16 +236,13 @@ String SwSortTxtElement::GetKey(USHORT nId) const
     return rStr.Copy( nStart, nEnd-nStart );
 }
 
-
 /*--------------------------------------------------------------------
     Beschreibung: Sortier-Elemente fuer Tabellen
  --------------------------------------------------------------------*/
-
 SwSortBoxElement::SwSortBoxElement( USHORT nRC )
     : nRow( nRC )
 {
 }
-
 
 SwSortBoxElement::~SwSortBoxElement()
 {
@@ -269,8 +251,6 @@ SwSortBoxElement::~SwSortBoxElement()
 /*--------------------------------------------------------------------
     Beschreibung: Schluessel zu einer Zelle ermitteln
  --------------------------------------------------------------------*/
-
-
 String SwSortBoxElement::GetKey(USHORT nKey) const
 {
     const _FndBox* pFndBox;
@@ -328,8 +308,6 @@ double SwSortBoxElement::GetValue( USHORT nKey ) const
 /*--------------------------------------------------------------------
     Beschreibung: Text sortieren im Document
  --------------------------------------------------------------------*/
-
-
 BOOL SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
 {
     // pruefen ob Rahmen im Text
@@ -505,7 +483,6 @@ BOOL SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
 /*--------------------------------------------------------------------
     Beschreibung: Tabelle sortieren im Document
  --------------------------------------------------------------------*/
-
 BOOL SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
 {
     // uebers SwDoc fuer Undo !!
@@ -641,8 +618,6 @@ BOOL SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
 /*--------------------------------------------------------------------
     Beschreibung: Zeilenweise verschieben
  --------------------------------------------------------------------*/
-
-
 void MoveRow(SwDoc* pDoc, const FlatFndBox& rBox, USHORT nS, USHORT nT,
              SwMovedBoxes& rMovedList, SwUndoSort* pUD)
 {
@@ -689,8 +664,6 @@ void MoveRow(SwDoc* pDoc, const FlatFndBox& rBox, USHORT nS, USHORT nT,
 /*--------------------------------------------------------------------
     Beschreibung: Spaltenweise verschieben
  --------------------------------------------------------------------*/
-
-
 void MoveCol(SwDoc* pDoc, const FlatFndBox& rBox, USHORT nS, USHORT nT,
              SwMovedBoxes& rMovedList, SwUndoSort* pUD)
 {
@@ -737,8 +710,6 @@ void MoveCol(SwDoc* pDoc, const FlatFndBox& rBox, USHORT nS, USHORT nT,
 /*--------------------------------------------------------------------
     Beschreibung: Eine einzelne Zelle verschieben
  --------------------------------------------------------------------*/
-
-
 void MoveCell(SwDoc* pDoc, const SwTableBox* pSource, const SwTableBox* pTar,
               BOOL bMovedBefore, SwUndoSort* pUD)
 {
@@ -795,8 +766,6 @@ void MoveCell(SwDoc* pDoc, const SwTableBox* pSource, const SwTableBox* pTar,
 /*--------------------------------------------------------------------
     Beschreibung: Zweidimensionales Array aus FndBoxes generieren
  --------------------------------------------------------------------*/
-
-
 FlatFndBox::FlatFndBox(SwDoc* pDocPtr, const _FndBox& rBox) :
     pDoc(pDocPtr),
     rBoxRef(rBox),
@@ -821,7 +790,6 @@ FlatFndBox::FlatFndBox(SwDoc* pDocPtr, const _FndBox& rBox) :
     }
 }
 
-
 FlatFndBox::~FlatFndBox()
 {
     _FndBox** ppTmp = (_FndBox**)pArr;
@@ -834,8 +802,6 @@ FlatFndBox::~FlatFndBox()
 /*--------------------------------------------------------------------
     Beschreibung:   Alle Lines einer Box muessen gleichviel Boxen haben
  --------------------------------------------------------------------*/
-
-
 BOOL FlatFndBox::CheckLineSymmetry(const _FndBox& rBox)
 {
     const _FndLines &rLines = rBox.GetLines();
@@ -862,8 +828,6 @@ BOOL FlatFndBox::CheckLineSymmetry(const _FndBox& rBox)
     Beschreibung:   Box auf Symmetrie pruefen
                     Alle Boxen einer Line muessen gleichviele Lines haben
  --------------------------------------------------------------------*/
-
-
 BOOL FlatFndBox::CheckBoxSymmetry(const _FndLine& rLn)
 {
     const _FndBoxes &rBoxes = rLn.GetBoxes();
@@ -889,8 +853,6 @@ BOOL FlatFndBox::CheckBoxSymmetry(const _FndLine& rLn)
 /*--------------------------------------------------------------------
     Beschreibung: max Anzahl der Spalten (Boxes)
  --------------------------------------------------------------------*/
-
-
 USHORT FlatFndBox::GetColCount(const _FndBox& rBox)
 {
     const _FndLines& rLines = rBox.GetLines();
@@ -918,8 +880,6 @@ USHORT FlatFndBox::GetColCount(const _FndBox& rBox)
 /*--------------------------------------------------------------------
     Beschreibung: max Anzahl der Zeilen (Lines)
  --------------------------------------------------------------------*/
-
-
 USHORT FlatFndBox::GetRowCount(const _FndBox& rBox)
 {
     const _FndLines& rLines = rBox.GetLines();
@@ -944,8 +904,6 @@ USHORT FlatFndBox::GetRowCount(const _FndBox& rBox)
 /*--------------------------------------------------------------------
     Beschreibung: lineares Array aus atomaren FndBoxes erzeugen
  --------------------------------------------------------------------*/
-
-
 void FlatFndBox::FillFlat(const _FndBox& rBox, BOOL bLastBox)
 {
     BOOL bModRow = FALSE;
@@ -1007,8 +965,6 @@ void FlatFndBox::FillFlat(const _FndBox& rBox, BOOL bLastBox)
 /*--------------------------------------------------------------------
     Beschreibung: Zugriff auf eine bestimmte Zelle
  --------------------------------------------------------------------*/
-
-
 const _FndBox* FlatFndBox::GetBox(USHORT n_Col, USHORT n_Row) const
 {
     USHORT nOff = n_Row * nCols + n_Col;
@@ -1024,5 +980,3 @@ const SfxItemSet* FlatFndBox::GetItemSet(USHORT n_Col, USHORT n_Row) const
 
     return ppItemSets ? *(ppItemSets + (n_Row * nCols + n_Col )) : 0;
 }
-
-

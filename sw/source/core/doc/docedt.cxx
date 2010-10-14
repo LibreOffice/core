@@ -184,8 +184,6 @@ void lcl_SkipAttr( const SwTxtNode *pNode, SwIndex &rIdx, xub_StrLen &rStart )
     }
 }
 
-// -----------------------------------------------------------------
-
 void _RestFlyInRange( _SaveFlyArr & rArr, const SwNodeIndex& rSttIdx,
                       const SwNodeIndex* pInsertPos )
 {
@@ -303,11 +301,8 @@ void _SaveFlyInRange( const SwPaM& rPam, const SwNodeIndex& rInsPos,
     }
 }
 
-// -----------------------------------------------------------------
-
 // loesche und verschiebe alle "Fly's am Absatz", die in der SSelection
 // liegen. Steht am SPoint ein Fly, wird dieser auf den Mark verschoben.
-
 void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
                     const SwNodeIndex& rPtNdIdx )
 {
@@ -363,7 +358,6 @@ void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
         }
     }
 }
-
 
 bool lcl_SaveFtn( const SwNodeIndex& rSttNd, const SwNodeIndex& rEndNd,
                  const SwNodeIndex& rInsPos,
@@ -563,7 +557,6 @@ void lcl_RestoreRedlines( SwDoc* pDoc, const SwPosition& rPos, _SaveRedlines& rA
     pDoc->SetRedlineMode_intern( eOld );
 }
 
-
 void lcl_SaveRedlines( const SwNodeRange& rRg, _SaveRedlines& rArr )
 {
     SwDoc* pDoc = rRg.aStart.GetNode().GetDoc();
@@ -668,12 +661,10 @@ void lcl_RestoreRedlines( SwDoc* pDoc, sal_uInt32 nInsPos, _SaveRedlines& rArr )
     pDoc->SetRedlineMode_intern( eOld );
 }
 
-// ------------------------------------------------------------------------
 // #i59534: Redo of insertion of multiple text nodes runs into trouble
 // because of unnecessary expanded redlines
 // From now on this class saves the redline positions of all redlines which ends exact at the
 // insert position (node _and_ content index)
-
 _SaveRedlEndPosForRestore::_SaveRedlEndPosForRestore( const SwNodeIndex& rInsIdx, xub_StrLen nCnt )
     : pSavArr( 0 ), pSavIdx( 0 ), nSavCntnt( nCnt )
 {
@@ -722,9 +713,6 @@ void _SaveRedlEndPosForRestore::_Restore()
     }
 }
 
-
-// ------------------------------------------------------------------------
-
 // Loeschen einer vollstaendigen Section des NodesArray.
 // Der uebergebene Node steht irgendwo in der gewuenschten Section
 void SwDoc::DeleteSection( SwNode *pNode )
@@ -748,7 +736,6 @@ void SwDoc::DeleteSection( SwNode *pNode )
     GetNodes().DelNodes( aSttIdx, aEndIdx.GetIndex() - aSttIdx.GetIndex() + 1 );
 }
 
-
 void SwDoc::SetModified(SwPaM &rPaM)
 {
     SwDataChanged aTmp( rPaM, 0 );
@@ -758,7 +745,6 @@ void SwDoc::SetModified(SwPaM &rPaM)
 /*************************************************************************
  *                SwDoc::Overwrite()
  ************************************************************************/
-
 bool SwDoc::Overwrite( const SwPaM &rRg, const String &rStr )
 {
     SwPosition& rPt = *(SwPosition*)rRg.GetPoint();
@@ -857,7 +843,6 @@ bool SwDoc::Overwrite( const SwPaM &rRg, const String &rStr )
     SetModified();
     return sal_True;
 }
-
 
 bool SwDoc::MoveAndJoin( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
 {
@@ -1547,7 +1532,6 @@ bool lcl_DoWithBreaks(SwDoc & rDoc, SwPaM & rPam,
     return bRet;
 }
 
-
 bool SwDoc::DeleteAndJoinWithRedlineImpl( SwPaM & rPam, const bool )
 {
     ASSERT( IsRedlineOn(), "DeleteAndJoinWithRedline: redline off" );
@@ -1855,7 +1839,6 @@ void lcl_syncGrammarError( SwTxtNode &rTxtNode, linguistic2::ProofreadingResult&
     if( rResult.aErrors.getLength() > j )
         rResult.aErrors.realloc( j );
 }
-
 
 uno::Any SwDoc::Spell( SwPaM& rPaM,
                     uno::Reference< XSpellChecker1 >  &xSpeller,
@@ -2169,7 +2152,6 @@ uno::Reference< XHyphenatedWord >  SwDoc::Hyphenate(
     aHyphArg.SetPam( pPam );
     return aHyphArg.GetHyphWord();  // will be set by lcl_HyphenateNode
 }
-
 
 sal_Bool lcl_GetTokenToParaBreak( String& rStr, String& rRet, sal_Bool bRegExpRplc )
 {
@@ -2513,8 +2495,8 @@ SetRedlineMode( eOld );
     return true;
 }
 
-    // speicher die akt. Werte fuer die automatische Aufnahme von Ausnahmen
-    // in die Autokorrektur
+// speicher die akt. Werte fuer die automatische Aufnahme von Ausnahmen
+// in die Autokorrektur
 void SwDoc::SetAutoCorrExceptWord( SwAutoCorrExceptWord* pNew )
 {
     if( pACEWord && pNew != pACEWord )
@@ -2655,7 +2637,6 @@ bool SwDoc::DelFullPara( SwPaM& rPam )
     return sal_True;
 }
 
-
 void SwDoc::TransliterateText(
     const SwPaM& rPaM,
     utl::TransliterationWrapper& rTrans )
@@ -2731,9 +2712,8 @@ void SwDoc::TransliterateText(
     SetModified();
 }
 
-
 #define MAX_REDLINE_COUNT   250
-// -----------------------------------------------------------------------------
+
 void SwDoc::checkRedlining(RedlineMode_t& _rReadlineMode)
 {
     const SwRedlineTbl& rRedlineTbl = GetRedlineTbl();
@@ -2753,7 +2733,6 @@ void SwDoc::checkRedlining(RedlineMode_t& _rReadlineMode)
         }
     }
 }
-// -----------------------------------------------------------------------------
 
 void SwDoc::CountWords( const SwPaM& rPaM, SwDocStat& rStat ) const
 {

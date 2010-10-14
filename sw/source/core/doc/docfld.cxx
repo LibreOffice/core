@@ -80,7 +80,6 @@ extern BOOL IsFrameBehind( const SwTxtNode& rMyNd, USHORT nMySttPos,
 
 SV_IMPL_OP_PTRARR_SORT( _SetGetExpFlds, _SetGetExpFldPtr )
 
-
 /*--------------------------------------------------------------------
     Beschreibung: Feldtypen einfuegen
  --------------------------------------------------------------------*/
@@ -89,7 +88,6 @@ SV_IMPL_OP_PTRARR_SORT( _SetGetExpFlds, _SetGetExpFldPtr )
  *  Return immer einen gueltigen Pointer auf den Typ. Wenn er also neu
  *  zugefuegt oder schon vorhanden ist.
  */
-
 SwFieldType* SwDoc::InsertFldType(const SwFieldType &rFldTyp)
 {
     USHORT nSize = pFldTypes->Count(),
@@ -226,7 +224,6 @@ void SwDoc::InsDeletedFldType( SwFieldType& rFldTyp )
 /*--------------------------------------------------------------------
     Beschreibung: Feldtypen loeschen
  --------------------------------------------------------------------*/
-
 void SwDoc::RemoveFldType(USHORT nFld)
 {
     ASSERT( INIT_FLDTYPES <= nFld,  "keine InitFields loeschen" );
@@ -279,7 +276,6 @@ const SwFldTypes* SwDoc::GetFldTypes() const
 /*--------------------------------------------------------------------
     Beschreibung: Den ersten Typen mit ResId und Namen finden
  --------------------------------------------------------------------*/
-
 SwFieldType* SwDoc::GetFldType( USHORT nResId, const String& rName,
          bool bDbFieldMatching // used in some UNO calls for RES_DBFLD
                                    // to use different string matching code
@@ -327,7 +323,6 @@ SwFieldType* SwDoc::GetFldType( USHORT nResId, const String& rName,
     return pRet;
 }
 
-
 /*************************************************************************
 |*                SwDoc::UpdateFlds()
 |*    Beschreibung      Felder updaten
@@ -335,7 +330,6 @@ SwFieldType* SwDoc::GetFldType( USHORT nResId, const String& rName,
 /*
  *    Alle sollen neu evaluiert werden.
  */
-
 void SwDoc::UpdateFlds( SfxPoolItem *pNewHt, bool bCloseDB )
 {
     // Modify() fuer jeden Feldtypen rufen,
@@ -396,7 +390,6 @@ void SwDoc::UpdateFlds( SfxPoolItem *pNewHt, bool bCloseDB )
 /******************************************************************************
  *                      void SwDoc::UpdateUsrFlds()
  ******************************************************************************/
-
 void SwDoc::UpdateUsrFlds()
 {
     SwCalc* pCalc = 0;
@@ -419,7 +412,6 @@ void SwDoc::UpdateUsrFlds()
 /*--------------------------------------------------------------------
     Beschreibung: Referenzfelder und TableFelder erneuern
  --------------------------------------------------------------------*/
-
 void SwDoc::UpdateRefFlds( SfxPoolItem* pHt )
 {
     SwFieldType* pFldType;
@@ -707,10 +699,6 @@ void SwDoc::UpdatePageFlds( SfxPoolItem* pMsgHnt )
     SetNewFldLst(true);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 // ---- Loesche alle nicht referenzierten FeldTypen eines Dokumentes --
 void SwDoc::GCFieldTypes()
 {
@@ -750,12 +738,8 @@ void SwDoc::SetNewFldLst(bool bFlag)
     mbNewFldLst = bFlag;
 }
 
-
-//----------------------------------------------------------------------
-
 // der StartIndex kann optional mit angegeben werden (z.B. wenn dieser
 // zuvor schon mal erfragt wurde - ist sonst eine virtuelle Methode !!)
-
 _SetGetExpFld::_SetGetExpFld( const SwNodeIndex& rNdIdx, const SwTxtFld* pFld,
                             const SwIndex* pIdx )
 {
@@ -782,9 +766,9 @@ _SetGetExpFld::_SetGetExpFld( const SwNodeIndex& rNdIdx,
         nCntnt = *rINet.GetStart();
 }
 
-    //Erweiterung fuer Sections:
-    //  diese haben immer als Content-Position 0xffff !!
-    //  Auf dieser steht nie ein Feld, maximal bis STRING_MAXLEN moeglich
+// Erweiterung fuer Sections:
+// diese haben immer als Content-Position 0xffff !!
+// Auf dieser steht nie ein Feld, maximal bis STRING_MAXLEN moeglich
 _SetGetExpFld::_SetGetExpFld( const SwSectionNode& rSectNd,
                                 const SwPosition* pPos )
 {
@@ -1042,10 +1026,6 @@ void LookString( SwHash** ppTbl, USHORT nSize, const String& rName,
         rRet.Erase();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 String lcl_GetDBVarName( SwDoc& rDoc, SwDBNameInfField& rDBFld )
 {
     SwDBData aDBData( rDBFld.GetDBData( &rDoc ));
@@ -1063,10 +1043,6 @@ String lcl_GetDBVarName( SwDoc& rDoc, SwDBNameInfField& rDBFld )
 
     return sDBNumNm;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void lcl_CalcFld( SwDoc& rDoc, SwCalc& rCalc, const _SetGetExpFld& rSGEFld,
                         SwNewDBMgr* pMgr )
@@ -1256,7 +1232,6 @@ void SwDoc::FldsToExpand( SwHash**& ppHashTbl, USHORT& rTblSize,
         }
     }
 }
-
 
 void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
 {
@@ -1564,10 +1539,6 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
     pUpdtFlds->SetFieldsDirty( FALSE );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwDoc::UpdateDBNumFlds( SwDBNameInfField& rDBFld, SwCalc& rCalc )
 {
     SwNewDBMgr* pMgr = GetNewDBMgr();
@@ -1600,10 +1571,6 @@ void SwDoc::UpdateDBNumFlds( SwDBNameInfField& rDBFld, SwCalc& rCalc )
         DBG_ERROR("TODO: what should happen with unnamed DBFields?");
     }
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwDoc::_InitFieldTypes()       // wird vom CTOR gerufen!!
 {
@@ -1727,6 +1694,7 @@ String lcl_DBDataToString(const SwDBData& rData)
     sRet += String::CreateFromInt32(rData.nCommandType);
     return sRet;
 }
+
 void SwDoc::GetAllUsedDB( SvStringsDtor& rDBNameList,
                             const SvStringsDtor* pAllDBNames )
 {
@@ -1804,10 +1772,6 @@ void SwDoc::GetAllUsedDB( SvStringsDtor& rDBNameList,
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwDoc::GetAllDBNames( SvStringsDtor& rAllDBNames )
 {
     SwNewDBMgr* pMgr = GetNewDBMgr();
@@ -1822,10 +1786,6 @@ void SwDoc::GetAllDBNames( SvStringsDtor& rAllDBNames )
         rAllDBNames.Insert( pStr, rAllDBNames.Count() );
     }
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 SvStringsDtor& SwDoc::FindUsedDBs( const SvStringsDtor& rAllDBNames,
                                     const String& rFormel,
@@ -1861,20 +1821,12 @@ SvStringsDtor& SwDoc::FindUsedDBs( const SvStringsDtor& rAllDBNames,
     return rUsedDBNames;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwDoc::AddUsedDBToList( SvStringsDtor& rDBNameList,
                              const SvStringsDtor& rUsedDBNames )
 {
     for (USHORT i = 0; i < rUsedDBNames.Count(); i++)
         AddUsedDBToList( rDBNameList, *rUsedDBNames.GetObject(i) );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwDoc::AddUsedDBToList( SvStringsDtor& rDBNameList, const String& rDBName)
 {
@@ -1900,10 +1852,6 @@ void SwDoc::AddUsedDBToList( SvStringsDtor& rDBNameList, const String& rDBName)
     String* pNew = new String( rDBName );
     rDBNameList.Insert( pNew, rDBNameList.Count() );
 }
-
-/*--------------------------------------------------------------------
-     Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwDoc::ChangeDBFields( const SvStringsDtor& rOldNames,
                             const String& rNewName )
@@ -2008,10 +1956,6 @@ void SwDoc::ChangeDBFields( const SvStringsDtor& rOldNames,
     SetModified();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwDoc::ReplaceUsedDBs( const SvStringsDtor& rUsedDBNames,
                             const String& rNewName, String& rFormel )
 {
@@ -2052,10 +1996,6 @@ void SwDoc::ReplaceUsedDBs( const SvStringsDtor& rUsedDBNames,
         }
     }
 }
-
-/*--------------------------------------------------------------------
-     Beschreibung:
- --------------------------------------------------------------------*/
 
 BOOL SwDoc::IsNameInArray( const SvStringsDtor& rArr, const String& rName )
 {
@@ -2225,9 +2165,7 @@ bool SwDoc::SetFieldsDirty( bool b, const SwNode* pChk, ULONG nLen )
     GetUpdtFlds().SetFieldsDirty( b );
     return bFldsFnd;
 }
-/* -----------------------------21.12.99 12:55--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwDoc::ChangeAuthorityData( const SwAuthEntry* pNewData )
 {
     const USHORT nSize = pFldTypes->Count();
@@ -2244,9 +2182,6 @@ void SwDoc::ChangeAuthorityData( const SwAuthEntry* pNewData )
     }
 
 }
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwDocUpdtFld::InsDelFldInFldLst( BOOL bIns, const SwTxtFld& rFld )
 {
@@ -2519,10 +2454,6 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
 #endif
     // JP_DEBUG
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwDocUpdtFld::GetBodyNode( const SwTxtFld& rTFld, USHORT nFldWhich )
 {

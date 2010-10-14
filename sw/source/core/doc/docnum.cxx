@@ -168,7 +168,7 @@ void SwDoc::PropagateOutlineRule()
     }
 }
 
-    // Hoch-/Runterstufen
+// Hoch-/Runterstufen
 BOOL SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
 {
     if( !GetNodes().GetOutLineNds().Count() || !nOffset )
@@ -424,9 +424,7 @@ BOOL SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
     return TRUE;
 }
 
-
-
-    // Hoch-/Runter - Verschieben !
+// Hoch-/Runter - Verschieben !
 BOOL SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
 {
     // kein Verschiebung in den Sonderbereichen
@@ -577,7 +575,6 @@ BOOL SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
     return MoveParagraph( aPam, nOffs, TRUE );
 }
 
-
 USHORT lcl_FindOutlineName( const SwNodes& rNds, const String& rName,
                             BOOL bExact )
 {
@@ -603,8 +600,6 @@ USHORT lcl_FindOutlineName( const SwNodes& rNds, const String& rName,
 
     return nSavePos;
 }
-
-
 
 USHORT lcl_FindOutlineNum( const SwNodes& rNds, String& rName )
 {
@@ -705,18 +700,16 @@ USHORT lcl_FindOutlineNum( const SwNodes& rNds, String& rName )
     return nPos;
 }
 
-    // zu diesem Gliederungspunkt
+// zu diesem Gliederungspunkt
 
-
-    // JP 13.06.96:
-    // im Namen kann eine Nummer oder/und der Text stehen.
-    // zuerst wird ueber die Nummer versucht den richtigen Eintrag zu finden.
-    // Gibt es diesen, dann wird ueber den Text verglichen, od es der
-    // gewuenschte ist. Ist das nicht der Fall, wird noch mal nur ueber den
-    // Text gesucht. Wird dieser gefunden ist es der Eintrag. Ansonsten der,
-    // der ueber die Nummer gefunden wurde.
-    // Ist keine Nummer angegeben, dann nur den Text suchen.
-
+// JP 13.06.96:
+// im Namen kann eine Nummer oder/und der Text stehen.
+// zuerst wird ueber die Nummer versucht den richtigen Eintrag zu finden.
+// Gibt es diesen, dann wird ueber den Text verglichen, od es der
+// gewuenschte ist. Ist das nicht der Fall, wird noch mal nur ueber den
+// Text gesucht. Wird dieser gefunden ist es der Eintrag. Ansonsten der,
+// der ueber die Nummer gefunden wurde.
+// Ist keine Nummer angegeben, dann nur den Text suchen.
 BOOL SwDoc::GotoOutline( SwPosition& rPos, const String& rName ) const
 {
     if( rName.Len() )
@@ -783,8 +776,6 @@ BOOL SwDoc::GotoOutline( SwPosition& rPos, const String& rName ) const
     }
     return FALSE;
 }
-
-/*  */
 
 // --- Nummerierung -----------------------------------------
 
@@ -863,7 +854,6 @@ BOOL SwDoc::GotoOutline( SwPosition& rPos, const String& rName ) const
 //    // <--
 //}
 // <--
-
 
 void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule )
 {
@@ -1207,7 +1197,7 @@ void SwDoc::SetNodeNumStart( const SwPosition& rPos, USHORT nStt )
     }
 }
 
-    // loeschen geht nur, wenn die Rule niemand benutzt!
+// loeschen geht nur, wenn die Rule niemand benutzt!
 BOOL SwDoc::DelNumRule( const String& rName, BOOL bBroadcast )
 {
     USHORT nPos = FindNumRule( rName );
@@ -1685,8 +1675,7 @@ void SwDoc::InvalidateNumRules()
         (*pNumRuleTbl)[n]->SetInvalidRule(TRUE);
 }
 
-    // zum naechsten/vorhergehenden Punkt auf gleicher Ebene
-
+// zum naechsten/vorhergehenden Punkt auf gleicher Ebene
 BOOL lcl_IsNumOk( BYTE nSrchNum, BYTE& rLower, BYTE& rUpper,
                     BOOL bOverUpper, BYTE nNumber )
 {

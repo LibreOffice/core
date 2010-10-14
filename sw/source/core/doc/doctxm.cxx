@@ -135,8 +135,6 @@ USHORT SwDoc::GetTOIKeys( SwTOIKeyType eTyp, SvStringsSort& rArr ) const
 /*--------------------------------------------------------------------
      Beschreibung: aktuelle Verzeichnismarkierungen ermitteln
  --------------------------------------------------------------------*/
-
-
 USHORT SwDoc::GetCurTOXMark( const SwPosition& rPos,
                                 SwTOXMarks& rArr ) const
 {
@@ -178,7 +176,6 @@ USHORT SwDoc::GetCurTOXMark( const SwPosition& rPos,
 /*--------------------------------------------------------------------
      Beschreibung: Marke loeschen
  --------------------------------------------------------------------*/
-
 void SwDoc::DeleteTOXMark( const SwTOXMark* pTOXMark )
 {
     // hole den TextNode und
@@ -214,7 +211,6 @@ void SwDoc::DeleteTOXMark( const SwTOXMark* pTOXMark )
 /*--------------------------------------------------------------------
      Beschreibung: Traveln zwischen TOXMarks
  --------------------------------------------------------------------*/
-
 class CompareNodeCntnt
 {
     ULONG nNode;
@@ -357,8 +353,6 @@ const SwTOXMark& SwDoc::GotoTOXMark( const SwTOXMark& rCurTOXMark,
     return *pNew;
 }
 
-/*  */
-
 const SwTOXBaseSection* SwDoc::InsertTableOf( const SwPosition& rPos,
                                                 const SwTOXBase& rTOX,
                                                 const SfxItemSet* pSet,
@@ -411,8 +405,6 @@ sNm.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "_Head" ));
     return pNewSection;
 }
 
-
-
 const SwTOXBaseSection* SwDoc::InsertTableOf( ULONG nSttNd, ULONG nEndNd,
                                                 const SwTOXBase& rTOX,
                                                 const SfxItemSet* pSet )
@@ -457,7 +449,6 @@ const SwTOXBaseSection* SwDoc::InsertTableOf( ULONG nSttNd, ULONG nEndNd,
 /*--------------------------------------------------------------------
      Beschreibung: Aktuelles Verzeichnis ermitteln
  --------------------------------------------------------------------*/
-
 const SwTOXBase* SwDoc::GetCurTOX( const SwPosition& rPos ) const
 {
     const SwNode& rNd = rPos.nNode.GetNode();
@@ -477,9 +468,7 @@ const SwTOXBase* SwDoc::GetCurTOX( const SwPosition& rPos ) const
     }
     return 0;
 }
-/* -----------------01.09.99 16:01-------------------
 
- --------------------------------------------------*/
 const SwAttrSet& SwDoc::GetTOXBaseAttrSet(const SwTOXBase& rTOXBase) const
 {
     ASSERT( rTOXBase.ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
@@ -488,9 +477,7 @@ const SwAttrSet& SwDoc::GetTOXBaseAttrSet(const SwTOXBase& rTOXBase) const
     ASSERT( pFmt, "invalid TOXBaseSection!" );
     return pFmt->GetAttrSet();
 }
-/* -----------------02.09.99 07:48-------------------
 
- --------------------------------------------------*/
 const SwTOXBase* SwDoc::GetDefaultTOXBase( TOXTypes eTyp, BOOL bCreate )
 {
     SwTOXBase** prBase = 0;
@@ -512,9 +499,7 @@ const SwTOXBase* SwDoc::GetDefaultTOXBase( TOXTypes eTyp, BOOL bCreate )
     }
     return (*prBase);
 }
-/* -----------------02.09.99 08:06-------------------
 
- --------------------------------------------------*/
 void    SwDoc::SetDefaultTOXBase(const SwTOXBase& rBase)
 {
     SwTOXBase** prBase = 0;
@@ -536,8 +521,6 @@ void    SwDoc::SetDefaultTOXBase(const SwTOXBase& rBase)
 /*--------------------------------------------------------------------
      Beschreibung: Verzeichnis loeschen
  --------------------------------------------------------------------*/
-
-
 BOOL SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, BOOL bDelNodes )
 {
     // its only delete the TOX, not the nodes
@@ -630,7 +613,6 @@ BOOL SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, BOOL bDelNodes )
 /*--------------------------------------------------------------------
      Beschreibung:  Verzeichnistypen verwalten
  --------------------------------------------------------------------*/
-
 USHORT SwDoc::GetTOXTypeCount(TOXTypes eTyp) const
 {
     const SwTOXTypePtr * ppTTypes = pTOXTypes->GetData();
@@ -640,9 +622,7 @@ USHORT SwDoc::GetTOXTypeCount(TOXTypes eTyp) const
             ++nCnt;
     return nCnt;
 }
-/*--------------------------------------------------------------------
 
- --------------------------------------------------------------------*/
 const SwTOXType* SwDoc::GetTOXType( TOXTypes eTyp, USHORT nId ) const
 {
     const SwTOXTypePtr * ppTTypes = pTOXTypes->GetData();
@@ -653,18 +633,13 @@ const SwTOXType* SwDoc::GetTOXType( TOXTypes eTyp, USHORT nId ) const
     return 0;
 }
 
-/*--------------------------------------------------------------------
-
- --------------------------------------------------------------------*/
 const SwTOXType* SwDoc::InsertTOXType( const SwTOXType& rTyp )
 {
     SwTOXType * pNew = new SwTOXType( rTyp );
     pTOXTypes->Insert( pNew, pTOXTypes->Count() );
     return pNew;
 }
-/*--------------------------------------------------------------------
 
- --------------------------------------------------------------------*/
 String SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
                                     const String* pChkStr ) const
 {
@@ -719,9 +694,6 @@ String SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
     return aName += String::CreateFromInt32( ++nNum );
 }
 
-/*--------------------------------------------------------------------
-
- --------------------------------------------------------------------*/
 BOOL SwDoc::SetTOXBaseName(const SwTOXBase& rTOXBase, const String& rName)
 {
     ASSERT( rTOXBase.ISA( SwTOXBaseSection ),
@@ -738,8 +710,6 @@ BOOL SwDoc::SetTOXBaseName(const SwTOXBase& rTOXBase, const String& rName)
     }
     return bRet;
 }
-
-/*  */
 
 const SwTxtNode* lcl_FindChapterNode( const SwNode& rNd, BYTE nLvl = 0 )
 {
@@ -761,11 +731,9 @@ const SwTxtNode* lcl_FindChapterNode( const SwNode& rNd, BYTE nLvl = 0 )
     return pNd ? pNd->FindOutlineNodeOfLevel( nLvl ) : 0;
 }
 
-
 /*--------------------------------------------------------------------
      Beschreibung: Verzeichnis-Klasse
  --------------------------------------------------------------------*/
-
 SwTOXBaseSection::SwTOXBaseSection(SwTOXBase const& rBase, SwSectionFmt & rFmt)
     : SwTOXBase( rBase )
     , SwSection( TOX_CONTENT_SECTION, aEmptyStr, rFmt )
@@ -774,11 +742,9 @@ SwTOXBaseSection::SwTOXBaseSection(SwTOXBase const& rBase, SwSectionFmt & rFmt)
     SetSectionName( GetTOXName() );
 }
 
-
 SwTOXBaseSection::~SwTOXBaseSection()
 {
 }
-
 
 BOOL SwTOXBaseSection::SetPosAtStartEnd( SwPosition& rPos, BOOL bAtStart ) const
 {
@@ -808,7 +774,6 @@ BOOL SwTOXBaseSection::SetPosAtStartEnd( SwPosition& rPos, BOOL bAtStart ) const
 /*--------------------------------------------------------------------
      Beschreibung: Verzeichnisinhalt zusammensammeln
  --------------------------------------------------------------------*/
-
 void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
                               const bool        _bNewTOX )
 {
@@ -1099,8 +1064,6 @@ sNm.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "_Head" ));
 /*--------------------------------------------------------------------
      Beschreibung: AlphaDelimitter einfuegen
  --------------------------------------------------------------------*/
-
-
 void SwTOXBaseSection::InsertAlphaDelimitter( const SwTOXInternational& rIntl )
 {
     SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
@@ -1145,7 +1108,6 @@ void SwTOXBaseSection::InsertAlphaDelimitter( const SwTOXInternational& rIntl )
 /*--------------------------------------------------------------------
      Beschreibung: Template  auswerten
  --------------------------------------------------------------------*/
-
 SwTxtFmtColl* SwTOXBaseSection::GetTxtFmtColl( USHORT nLevel )
 {
     SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
@@ -1193,11 +1155,9 @@ SwTxtFmtColl* SwTOXBaseSection::GetTxtFmtColl( USHORT nLevel )
     return pColl;
 }
 
-
 /*--------------------------------------------------------------------
      Beschreibung: Aus Markierungen erzeugen
  --------------------------------------------------------------------*/
-
 void SwTOXBaseSection::UpdateMarks( const SwTOXInternational& rIntl,
                                     const SwTxtNode* pOwnChapterNode )
 {
@@ -1271,12 +1231,9 @@ void SwTOXBaseSection::UpdateMarks( const SwTOXInternational& rIntl,
     }
 }
 
-
 /*--------------------------------------------------------------------
      Beschreibung:  Verzeichnisinhalt aus Gliederungsebene generieren
  --------------------------------------------------------------------*/
-
-
 void SwTOXBaseSection::UpdateOutline( const SwTxtNode* pOwnChapterNode )
 {
     SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
@@ -1305,7 +1262,6 @@ void SwTOXBaseSection::UpdateOutline( const SwTxtNode* pOwnChapterNode )
 /*--------------------------------------------------------------------
      Beschreibung: Verzeichnisinhalt aus Vorlagenbereichen generieren
  --------------------------------------------------------------------*/
-
 void SwTOXBaseSection::UpdateTemplate( const SwTxtNode* pOwnChapterNode )
 {
     SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
@@ -1385,9 +1341,7 @@ void SwTOXBaseSection::UpdateSequence( const SwTxtNode* pOwnChapterNode )
         }
     }
 }
-/* -----------------15.09.99 14:18-------------------
 
- --------------------------------------------------*/
 void SwTOXBaseSection::UpdateAuthorities( const SwTOXInternational& rIntl )
 {
     SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
@@ -1580,7 +1534,6 @@ void SwTOXBaseSection::UpdateCntnt( SwTOXElement eMyType,
 /*--------------------------------------------------------------------
      Beschreibung:  Tabelleneintraege zusammensuchen
  --------------------------------------------------------------------*/
-
 void SwTOXBaseSection::UpdateTable( const SwTxtNode* pOwnChapterNode )
 {
     SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
@@ -1635,7 +1588,6 @@ void SwTOXBaseSection::UpdateTable( const SwTxtNode* pOwnChapterNode )
      Beschreibung:  String generieren anhand der Form
                     SonderZeichen 0-31 und 255 entfernen
  --------------------------------------------------------------------*/
-
 String lcl_GetNumString( const SwTOXSortTabBase& rBase, sal_Bool bUsePrefix, BYTE nLevel )
 {
     String sRet;
@@ -1957,7 +1909,6 @@ void SwTOXBaseSection::GenerateText( USHORT nArrayIdx,
      Beschreibung: Seitennummer errechnen und nach dem Formatieren
                    eintragen
  --------------------------------------------------------------------*/
-
 void SwTOXBaseSection::UpdatePageNum()
 {
     if( !aSortArr.Count() )
@@ -2069,11 +2020,9 @@ void SwTOXBaseSection::UpdatePageNum()
     aSortArr.DeleteAndDestroy( 0, aSortArr.Count() );
 }
 
-
 /*--------------------------------------------------------------------
      Beschreibung: Austausch der Seitennummer-Platzhalter
  --------------------------------------------------------------------*/
-
 // search for the page no in the array of main entry page numbers
 BOOL lcl_HasMainEntry( const SvUShorts* pMainEntryNums, USHORT nToFind )
 {
@@ -2249,11 +2198,9 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
     delete pCharStyleIdx;
 }
 
-
 /*--------------------------------------------------------------------
      Beschreibung: Sortiert einfuegen in das SortArr
  --------------------------------------------------------------------*/
-
 void SwTOXBaseSection::InsertSorted(SwTOXSortTabBase* pNew)
 {
     Range aRange(0, aSortArr.Count());
@@ -2349,7 +2296,6 @@ void SwTOXBaseSection::InsertSorted(SwTOXSortTabBase* pNew)
 /*--------------------------------------------------------------------
      Beschreibung: Schluessel-Bereich suchen und evtl einfuegen
  --------------------------------------------------------------------*/
-
 Range SwTOXBaseSection::GetKeyRange(const String& rStr, const String& rStrReading,
                                     const SwTOXSortTabBase& rNew,
                                     USHORT nLevel, const Range& rRange )
@@ -2410,7 +2356,6 @@ Range SwTOXBaseSection::GetKeyRange(const String& rStr, const String& rStrReadin
     return Range(nStart, nEnd);
 }
 
-
 BOOL SwTOXBase::IsTOXBaseInReadonly() const
 {
     const SwTOXBaseSection *pSect = PTR_CAST(SwTOXBaseSection, this);
@@ -2428,9 +2373,7 @@ BOOL SwTOXBase::IsTOXBaseInReadonly() const
     }
     return bRet;
 }
-/* -----------------17.08.99 13:29-------------------
 
- --------------------------------------------------*/
 const SfxItemSet* SwTOXBase::GetAttrSet() const
 {
     const SwTOXBaseSection *pSect = PTR_CAST(SwTOXBaseSection, this);
@@ -2460,7 +2403,3 @@ BOOL SwTOXBase::GetInfo( SfxPoolItem& rInfo ) const
     }
     return TRUE;
 }
-
-/*  */
-
-

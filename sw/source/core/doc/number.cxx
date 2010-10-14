@@ -186,25 +186,19 @@ USHORT SwNumRule::GetBullIndent( BYTE nLvl )
     return aDefNumIndents[ nLvl ];
 }
 
-
-
 static void lcl_SetRuleChgd( SwTxtNode& rNd, BYTE nLevel )
 {
     if( rNd.GetActualListLevel() == nLevel )
         rNd.NumRuleChgd();
 }
-/* -----------------------------22.02.01 13:41--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwNumFmt::SwNumFmt() :
     SvxNumberFormat(SVX_NUM_ARABIC),
     SwClient( 0 ),
     pVertOrient(new SwFmtVertOrient( 0, text::VertOrientation::NONE))
 {
 }
-/* -----------------------------22.02.01 13:42--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwNumFmt::SwNumFmt( const SwNumFmt& rFmt) :
     SvxNumberFormat(rFmt),
     SwClient( rFmt.pRegisteredIn ),
@@ -214,9 +208,7 @@ SwNumFmt::SwNumFmt( const SwNumFmt& rFmt) :
     SetGraphicBrush( rFmt.GetBrush(), &rFmt.GetGraphicSize(),
                                                 &eMyVertOrient);
 }
-/* -----------------------------22.02.01 13:58--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwNumFmt::SwNumFmt(const SvxNumberFormat& rNumFmt, SwDoc* pDoc) :
     SvxNumberFormat(rNumFmt),
     pVertOrient(new SwFmtVertOrient( 0, rNumFmt.GetVertOrient()))
@@ -242,16 +234,12 @@ SwNumFmt::SwNumFmt(const SvxNumberFormat& rNumFmt, SwDoc* pDoc) :
         pRegisteredIn->Remove( this );
 
 }
-/* -----------------------------22.02.01 13:42--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwNumFmt::~SwNumFmt()
 {
     delete pVertOrient;
 }
-/* -----------------------------02.07.01 15:37--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwNumFmt::NotifyGraphicArrived()
 {
     if( GetCharFmt() )
@@ -313,10 +301,6 @@ BOOL SwNumFmt::IsItemize() const
 
 }
 
-
-/* -----------------------------23.02.01 09:28--------------------------------
-
- ---------------------------------------------------------------------------*/
 SwNumFmt& SwNumFmt::operator=( const SwNumFmt& rNumFmt)
 {
     SvxNumberFormat::operator=(rNumFmt);
@@ -326,9 +310,7 @@ SwNumFmt& SwNumFmt::operator=( const SwNumFmt& rNumFmt)
         pRegisteredIn->Remove( this );
     return *this;
 }
-/* -----------------------------23.02.01 09:28--------------------------------
 
- ---------------------------------------------------------------------------*/
 BOOL SwNumFmt::operator==( const SwNumFmt& rNumFmt) const
 {
     BOOL bRet = SvxNumberFormat::operator==(rNumFmt) &&
@@ -336,9 +318,6 @@ BOOL SwNumFmt::operator==( const SwNumFmt& rNumFmt) const
     return bRet;
 }
 
-/* -----------------------------22.02.01 13:44--------------------------------
-
- ---------------------------------------------------------------------------*/
 void SwNumFmt::SetCharFmt( SwCharFmt* pChFmt)
 {
     if( pChFmt )
@@ -346,9 +325,7 @@ void SwNumFmt::SetCharFmt( SwCharFmt* pChFmt)
     else if( GetRegisteredIn() )
         pRegisteredIn->Remove( this );
 }
-/* -----------------------------22.02.01 13:45--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwNumFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 {
     // dann suche mal in dem Doc nach dem NumRules-Object, in dem dieses
@@ -367,16 +344,12 @@ void SwNumFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
     else
         SwClient::Modify( pOld, pNew );
 }
-/* -----------------------------23.02.01 11:08--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwNumFmt::SetCharFmtName(const String& rSet)
 {
     SvxNumberFormat::SetCharFmtName(rSet);
 }
-/* -----------------------------22.02.01 13:47--------------------------------
 
- ---------------------------------------------------------------------------*/
 const String&   SwNumFmt::GetCharFmtName() const
 {
     if((SwCharFmt*)pRegisteredIn)
@@ -384,9 +357,7 @@ const String&   SwNumFmt::GetCharFmtName() const
     else
         return aEmptyStr;
 }
-/* -----------------------------22.02.01 16:05--------------------------------
 
- ---------------------------------------------------------------------------*/
 void    SwNumFmt::SetGraphicBrush( const SvxBrushItem* pBrushItem, const Size* pSize,
     const sal_Int16* pOrient)
 {
@@ -394,23 +365,17 @@ void    SwNumFmt::SetGraphicBrush( const SvxBrushItem* pBrushItem, const Size* p
         pVertOrient->SetVertOrient( *pOrient );
     SvxNumberFormat::SetGraphicBrush( pBrushItem, pSize, pOrient);
 }
-/* -----------------------------22.02.01 16:05--------------------------------
 
- ---------------------------------------------------------------------------*/
 void    SwNumFmt::SetVertOrient(sal_Int16 eSet)
 {
     SvxNumberFormat::SetVertOrient(eSet);
 }
-/* -----------------------------22.02.01 16:05--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Int16   SwNumFmt::GetVertOrient() const
 {
     return SvxNumberFormat::GetVertOrient();
 }
-/* -----------------------------22.02.01 13:54--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwNumFmt::UpdateNumNodes( SwDoc* pDoc )
 {
     BOOL bDocIsModified = pDoc->IsModified();
@@ -465,9 +430,7 @@ void SwNumFmt::UpdateNumNodes( SwDoc* pDoc )
     if( bFnd && !bDocIsModified )
         pDoc->ResetModified();
 }
-/* -----------------------------31.05.01 16:08--------------------------------
 
- ---------------------------------------------------------------------------*/
 const SwFmtVertOrient*      SwNumFmt::GetGraphicOrientation() const
 {
     sal_Int16  eOrient = SvxNumberFormat::GetVertOrient();
@@ -718,7 +681,6 @@ SwNumRule& SwNumRule::operator=( const SwNumRule& rNumRule )
     return *this;
 }
 
-
 BOOL SwNumRule::operator==( const SwNumRule& rRule ) const
 {
     BOOL bRet = eRuleType == rRule.eRuleType &&
@@ -740,7 +702,6 @@ BOOL SwNumRule::operator==( const SwNumRule& rRule ) const
     }
     return bRet;
 }
-
 
 void SwNumRule::Set( USHORT i, const SwNumFmt& rNumFmt )
 {
@@ -775,7 +736,6 @@ void SwNumRule::Set( USHORT i, const SwNumFmt* pNumFmt )
     else if( *pOld != *pNumFmt )
         *pOld = *pNumFmt, bInvalidRuleFlag = TRUE;
 }
-
 
 String SwNumRule::MakeNumString( const SwNodeNum& rNum, BOOL bInclStrings,
                                 BOOL bOnlyArabic ) const
@@ -930,7 +890,6 @@ String SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
     // eine Art Copy-Constructor, damit die Num-Formate auch an den
     // richtigen CharFormaten eines Dokumentes haengen !!
     // (Kopiert die NumFormate und returnt sich selbst)
-
 SwNumRule& SwNumRule::CopyNumRule( SwDoc* pDoc, const SwNumRule& rNumRule )
 {
     for( USHORT n = 0; n < MAXLEVEL; ++n )
@@ -953,9 +912,7 @@ SwNumRule& SwNumRule::CopyNumRule( SwDoc* pDoc, const SwNumRule& rNumRule )
     bInvalidRuleFlag = TRUE;
     return *this;
 }
-/* -----------------30.10.98 08:33-------------------
- *
- * --------------------------------------------------*/
+
 void SwNumRule::SetSvxRule(const SvxNumRule& rNumRule, SwDoc* pDoc)
 {
     for( USHORT n = 0; n < MAXLEVEL; ++n )
@@ -968,9 +925,7 @@ void SwNumRule::SetSvxRule(const SvxNumRule& rNumRule, SwDoc* pDoc)
     bInvalidRuleFlag = TRUE;
     bContinusNum = rNumRule.IsContinuousNumbering();
 }
-/* -----------------30.10.98 08:33-------------------
- *
- * --------------------------------------------------*/
+
 SvxNumRule SwNumRule::MakeSvxNumRule() const
 {
     SvxNumRule aRule(NUM_CONTINUOUS|NUM_CHAR_TEXT_DISTANCE|NUM_CHAR_STYLE|
