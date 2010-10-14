@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -279,3 +280,5 @@ sal_Char __FAR_DATA CSS1_CONSTASCII_DEF( sCSS1_P_direction, "direction" );
 sal_Char __FAR_DATA CSS1_CONSTASCII_DEF( sCSS1_PV_ltr, "ltr" );
 sal_Char __FAR_DATA CSS1_CONSTASCII_DEF( sCSS1_PV_rtl, "rtl" );
 sal_Char __FAR_DATA CSS1_CONSTASCII_DEF( sCSS1_PV_inherit, "inherit" );
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

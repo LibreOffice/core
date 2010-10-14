@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef _PREVIEWPAGES_HXX
 #define _PREVIEWPAGES_HXX
 
@@ -34,3 +35,5 @@ inline PrevwPage::PrevwPage()
 {};
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

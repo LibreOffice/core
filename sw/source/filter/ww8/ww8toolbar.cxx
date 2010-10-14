@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include "ww8toolbar.hxx"
 #include <rtl/ustrbuf.hxx>
 #include <stdarg.h>
@@ -1299,3 +1300,5 @@ void MCD::Print( FILE* fp )
     indent_printf( fp, " reserved6 0x%x\n", static_cast< unsigned int >( reserved6 ) );
     indent_printf( fp, " reserved7 0x%x\n", static_cast< unsigned int >( reserved7 ) );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include "vbapalette.hxx"
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -73,3 +74,4 @@ VbaPalette::getPalette() const
     return mxPalette;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

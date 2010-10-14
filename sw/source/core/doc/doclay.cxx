@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -2285,3 +2286,5 @@ void SwDoc::SetRootFrm( SwRootFrm* pNew ) { pLayout = pNew; }
 SwLayouter* SwDoc::GetLayouter() { return pLayouter; }
 const SwLayouter* SwDoc::GetLayouter() const { return pLayouter; }
 void SwDoc::SetLayouter( SwLayouter* pNew ) { pLayouter = pNew; }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

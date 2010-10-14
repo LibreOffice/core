@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -133,3 +134,5 @@ void SwBaseShell::InsertURLButton(const String& rURL, const String& rTarget, con
     rSh.EndUndo( UNDO_UI_INSERT_URLBTN );
     rSh.EndAction();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

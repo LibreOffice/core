@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef _PAGEPREVIEWLAYOUT_HXX
 #define _PAGEPREVIEWLAYOUT_HXX
 
@@ -619,3 +620,5 @@ public:
 };
 
 #endif // _PAGEPREVIEWLAYOUT_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

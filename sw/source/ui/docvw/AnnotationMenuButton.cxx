@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /************************************************************************* *
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -220,3 +221,4 @@ void AnnotationMenuButton::KeyInput( const KeyEvent& rKeyEvt )
 
 } } // end of namespace sw::annotation
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

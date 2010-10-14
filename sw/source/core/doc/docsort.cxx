@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -980,3 +981,5 @@ const SfxItemSet* FlatFndBox::GetItemSet(USHORT n_Col, USHORT n_Row) const
 
     return ppItemSets ? *(ppItemSets + (n_Row * nCols + n_Col )) : 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1383,3 +1384,5 @@ KSHORT SwCombinedPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
         return 0;   // the combined portion doesn't fit.
     return SwFldPortion::GetViewWidth( rInf );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

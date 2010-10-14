@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -135,3 +136,5 @@ SwDBTablePreviewDialog::~SwDBTablePreviewDialog()
     else
         delete m_pBeamerWIN;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

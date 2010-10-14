@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -2047,3 +2048,5 @@ void SwPostItMgr::GetAllSidebarWinForFrm( const SwFrm& rFrm,
 
 void SwNoteProps::Commit() {}
 void SwNoteProps::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

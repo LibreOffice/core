@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -108,3 +109,5 @@ void BigPtrArray::FixElementIndizes(Container_t::const_iterator begin, Container
     for (int i = 0; iter != end; ++iter, i++)
         (*iter)->pos_ = i;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

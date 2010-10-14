@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -366,3 +367,5 @@ Sequence< OUString > SwXPrintPreviewSettings::getSupportedServiceNames(void) thr
     pArray[0] = OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.text.PrintPreviewSettings" ) );
     return aRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

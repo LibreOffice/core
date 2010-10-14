@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include "vbafont.hxx"
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <ooo/vba/word/WdUnderline.hpp>
@@ -214,3 +215,4 @@ SwVbaFont::getServiceNames()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

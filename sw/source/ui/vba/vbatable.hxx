@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef SW_VBA_TABLE_HXX
 #define SW_VBA_TABLE_HXX
 #include <vbahelper/vbahelperinterface.hxx>
@@ -29,3 +30,5 @@ public:
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

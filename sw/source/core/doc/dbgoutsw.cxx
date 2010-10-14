@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1103,3 +1104,4 @@ SW_DLLPUBLIC const char * dbg_out(const SwNodeRange & rRange)
 
 #endif // DEBUG
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

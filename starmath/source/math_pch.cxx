@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -455,3 +456,5 @@
 #include <action.hxx>
 #include <sfx2/filedlg.hxx>
 #include <sfx2/iodlg.hxx>
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

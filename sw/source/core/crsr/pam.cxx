@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1264,3 +1265,5 @@ BOOL SwPaM::LessThan(const SwPaM & a, const SwPaM & b)
 {
     return (*a.Start() < *b.Start()) || (*a.Start() == *b.Start() && *a.End() < *b.End());
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -206,3 +207,5 @@ SwMediaShell::SwMediaShell(SwView &_rView) :
     SetName(String::CreateFromAscii("Media Playback"));
     SetHelpId(SW_MEDIASHELL);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

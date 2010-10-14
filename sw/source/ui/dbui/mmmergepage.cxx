@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -111,3 +112,5 @@ IMPL_LINK( SwMailMergeMergePage, EnteredFindStringHdl_Impl, void*, EMPTYARG )
     m_aFindPB.GetClickHdl().Call( &m_aFindPB );
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

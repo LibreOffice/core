@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -676,3 +677,5 @@ void GetXMLWriter( const String&, const String&, WriterRef& );
 void GetWW8Writer( const String&, const String&, WriterRef& );
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

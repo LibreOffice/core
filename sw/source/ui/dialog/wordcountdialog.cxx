@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -88,3 +89,4 @@ void  SwWordCountDialog::SetValues(const SwDocStat& rCurrent, const SwDocStat& r
     aDocCharacterFI.SetText(    String::CreateFromInt32(rDoc.nChar ));
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

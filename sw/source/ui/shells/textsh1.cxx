@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1792,3 +1793,5 @@ void SwTextShell::ChangeHeaderOrFooter(
     rSh.EndUndo( UNDO_HEADER_FOOTER ); // #i7983#
     rSh.EndAllAction();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

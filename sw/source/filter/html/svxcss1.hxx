@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -433,3 +434,4 @@ inline SvxCSS1MapEntry *SvxCSS1Parser::GetTag( const String& rTag ) const
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

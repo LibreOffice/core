@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,3 +40,5 @@ const sal_Int8 ANCHORLINE_WIDTH = 1;
 } } // end of namespace sw::sidebarwindows
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

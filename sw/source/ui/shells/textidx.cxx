@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -253,3 +254,5 @@ void SwTextShell::GetIdxState(SfxItemSet &rSet)
         rSet.DisableItem(FN_REMOVE_CUR_TOX);
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

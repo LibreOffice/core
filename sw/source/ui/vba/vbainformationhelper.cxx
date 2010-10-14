@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -66,3 +67,5 @@ double SwVbaInformationHelper::handleWdVerticalPositionRelativeToPage( const css
     nCurrentPos = nCurrentPos + nTopMargin - ( DEFAULT_PAGE_DISTANCE + TWIP_TO_MM100( nPageHeight ) ) * (  nCurrentPage - 1  );
     return Millimeter::getInPoints( nCurrentPos );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

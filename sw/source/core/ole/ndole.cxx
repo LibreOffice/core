@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1010,3 +1011,5 @@ void SwOLELRUCache::RemoveObj( SwOLEObj& rObj )
     if( !Count() )
         DELETEZ( pOLELRU_Cache );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

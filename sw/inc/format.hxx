@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -356,3 +357,5 @@ inline SfxItemState SwFmt::GetItemState( USHORT nWhich, BOOL bSrchInParent,
 #undef inline
 
 #endif // _FORMAT_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

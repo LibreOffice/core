@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include "vbatable.hxx"
 #include "vbarange.hxx"
 #include <com/sun/star/frame/XModel.hpp>
@@ -117,3 +118,4 @@ SwVbaTable::getServiceNames()
     return aServiceNames;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

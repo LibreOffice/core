@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -304,3 +305,5 @@ void SwVbaTableHelper::SetColWidth( sal_Int32 _width, sal_Int32 nCol, sal_Int32 
     //pDoc->SetTabCols(*pTable, aCols, aOldCols, pStartBox, bCurRowOnly );
     pTable->SetTabCols(aCols, aOldCols, pStart, bCurRowOnly );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
