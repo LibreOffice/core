@@ -768,9 +768,9 @@ void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
                 for (USHORT i=0; i<nCount; i++)
                 {
                     if ( bIsUndo )
-                        pUndoManager->Undo(0);
+                        pUndoManager->Undo();
                     else
-                        pUndoManager->Redo(0);
+                        pUndoManager->Redo();
                 }
 
                 if ( bLockPaint )
