@@ -159,7 +159,7 @@ OUT2BIN+=src/raptor-config
 .ELIF "$(GUI)"=="OS2"
 # if we use dmake, this is done automagically
 .ELSE
-OUT2LIB+=src$/.libs$/libraptor.so.$(RAPTOR_MAJOR)
+OUT2LIB+=src$/.libs$/libraptor.so.$(RAPTOR_MAJOR) src$/.libs$/libraptor.so
 OUT2BIN+=src/raptor-config
 .ENDIF
 
