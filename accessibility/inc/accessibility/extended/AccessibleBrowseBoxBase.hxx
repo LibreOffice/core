@@ -69,15 +69,6 @@ namespace accessibility {
 
 // ============================================================================
 
-/** Aquire the solar mutex. */
-class BBSolarGuard : public ::vos::OGuard
-{
-public:
-    inline BBSolarGuard() : ::vos::OGuard( Application::GetSolarMutex() ) {}
-};
-
-// ============================================================================
-
 typedef ::cppu::WeakAggComponentImplHelper5<
             ::com::sun::star::accessibility::XAccessibleContext,
             ::com::sun::star::accessibility::XAccessibleComponent,
@@ -476,11 +467,11 @@ private:
 
 typedef ::osl::MutexGuard OslMutexGuard;
 
-class SolarMethodGuard : public BBSolarGuard, public OslMutexGuard
+class SolarMethodGuard : public SolarMutexGuard, public OslMutexGuard
 {
 public:
     inline SolarMethodGuard( AccessibleBrowseBoxBase& _rOwner, bool _bEnsureAlive = true )
-        :BBSolarGuard( )
+        :SolarMutexGuard( )
         ,OslMutexGuard( _rOwner.getMutex( AccessibleBrowseBoxBase::AccessControl() ) )
     {
         if ( _bEnsureAlive )

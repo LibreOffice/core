@@ -71,7 +71,7 @@ AccessibleBrowseBoxHeaderCell::AccessibleBrowseBoxHeaderCell(sal_Int32 _nColumnR
         if( implIsShowing() )
             pStateSetHelper->AddState( AccessibleStateType::SHOWING );
 
-        BBSolarGuard aSolarGuard;
+        SolarMutexGuard aSolarGuard;
         pStateSetHelper->AddState( AccessibleStateType::VISIBLE );
         pStateSetHelper->AddState( AccessibleStateType::FOCUSABLE );
         pStateSetHelper->AddState( AccessibleStateType::TRANSIENT );
@@ -111,7 +111,7 @@ Reference<XAccessible > SAL_CALL AccessibleBrowseBoxHeaderCell::getAccessibleChi
 void SAL_CALL AccessibleBrowseBoxHeaderCell::grabFocus()
     throw ( ::com::sun::star::uno::RuntimeException )
 {
-    BBSolarGuard aSolarGuard;
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
     if ( isRowBarCell() )

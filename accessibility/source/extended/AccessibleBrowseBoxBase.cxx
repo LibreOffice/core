@@ -118,7 +118,7 @@ void SAL_CALL AccessibleBrowseBoxBase::disposing()
     ::osl::MutexGuard aGuard( getOslMutex() );
     if ( m_xFocusWindow.is() )
     {
-        BBSolarGuard aSolarGuard;
+        SolarMutexGuard aSolarGuard;
         m_xFocusWindow->removeFocusListener( this );
     }
 
@@ -208,7 +208,7 @@ Reference< XAccessibleStateSet > SAL_CALL
 AccessibleBrowseBoxBase::getAccessibleStateSet()
     throw ( uno::RuntimeException )
 {
-    BBSolarGuard aSolarGuard;
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     // don't check whether alive -> StateSet may contain DEFUNC
     return implCreateStateSetHelper();
@@ -264,7 +264,7 @@ awt::Size SAL_CALL AccessibleBrowseBoxBase::getSize()
 sal_Bool SAL_CALL AccessibleBrowseBoxBase::isShowing()
     throw ( uno::RuntimeException )
 {
-    BBSolarGuard aSolarGuard;
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
     return implIsShowing();
@@ -463,7 +463,7 @@ void AccessibleBrowseBoxBase::ensureIsAlive() const
 Rectangle AccessibleBrowseBoxBase::getBoundingBox()
     throw ( lang::DisposedException )
 {
-    BBSolarGuard aSolarGuard;
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
     Rectangle aRect = implGetBoundingBox();
@@ -477,7 +477,7 @@ Rectangle AccessibleBrowseBoxBase::getBoundingBox()
 Rectangle AccessibleBrowseBoxBase::getBoundingBoxOnScreen()
     throw ( lang::DisposedException )
 {
-    BBSolarGuard aSolarGuard;
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
     Rectangle aRect = implGetBoundingBoxOnScreen();
@@ -569,7 +569,7 @@ void SAL_CALL AccessibleBrowseBoxBase::disposing( const ::com::sun::star::lang::
 // -----------------------------------------------------------------------------
 sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getForeground(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-    BBSolarGuard aSolarGuard;
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
 
@@ -595,7 +595,7 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getForeground(  ) throw (::com::sun:
 // -----------------------------------------------------------------------------
 sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getBackground(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-    BBSolarGuard aSolarGuard;
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
     sal_Int32 nColor = 0;
