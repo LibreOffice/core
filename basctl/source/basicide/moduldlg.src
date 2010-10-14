@@ -64,7 +64,7 @@ TabDialog RID_TD_ORGANIZE
 };
 TabPage RID_TP_MODULS
 {
-     // HelpId = HID_BASICIDE_MODULS ;
+    HelpId = "basctl:TabPage:RID_TP_MODULS" ;
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 210 , 140 ) ;
@@ -188,7 +188,7 @@ TabPage RID_TP_DLGS
 };
 TabPage RID_TP_LIBS
 {
-     // HelpId = HID_BASICIDE_LIBS_TP ;
+    HelpId = "basctl:TabPage:RID_TP_LIBS" ;
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 210 , 140 ) ;
@@ -284,7 +284,7 @@ TabPage RID_TP_LIBS
 };
 ModalDialog RID_DLG_LIBS
 {
-     // HelpId = HID_BASICIDE_LIBS_DLG ;
+    HelpId = "basctl:ModalDialog:RID_DLG_LIBS" ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 168 , 132 ) ;

@@ -31,7 +31,7 @@
 #include <helpid.hrc>
 ModalDialog RID_MACROCHOOSER
 {
-     // HelpId = SID_BASICCHOOSER ;
+    HelpId = "basctl:ModalDialog:RID_MACROCHOOSER" ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 287 , 165 ) ;

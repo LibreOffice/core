@@ -29,7 +29,7 @@
 #include <brkdlg.hrc>
 ModalDialog RID_BASICIDE_BREAKPOINTDLG
 {
-     // HelpId = HID_BASICIDE_BRKPNTS ;
+    HelpId = "basctl:RID_BASICIDE_BREAKPOINTDLG" ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 178 , 116 ) ;

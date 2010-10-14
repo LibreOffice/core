@@ -29,7 +29,7 @@
 #include <moptions.hrc>
 ModalDialog RID_MACROOPTIONS
 {
-     // HelpId = HID_MACRO_OPTIONS ;
+    HelpId = "basctl:ModalDialog:RID_MACROOPTIONS" ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 224 , 121 ) ;
