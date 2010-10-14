@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -4645,3 +4646,5 @@ void SvxItemPropertySet_setPropertyValue( const SvxItemPropertySet& rPropSet, co
     bool bDontConvertNegativeValues = ( pMap->nWID == XATTR_FILLBMP_SIZEX || pMap->nWID == XATTR_FILLBMP_SIZEY );
     rPropSet.setPropertyValue( pMap, rVal, rSet, bDontConvertNegativeValues );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -57,7 +57,7 @@ cd "$sd_cwd"
 
 # linked build needs additional settings
 if [ -e ooenv ] ; then
-    source ooenv
+    . ./ooenv
 fi
 
 sd_binary=`basename "$0"`.bin
@@ -70,6 +70,26 @@ do
        -env:*) BOOTSTRAPVARS=$BOOTSTRAPVARS" ""$arg";;
   esac
 done
+
+# test for availability of the fast external splash
+for arg in $@; do
+    if [ "$arg" = "-nologo" -o "$arg" = "-no-oosplash" ]; then
+       no_oosplash=y
+    fi
+done
+
+# Setup our app as oosplash, but try to avoid executing pagein,
+# and other expensive environment setup pieces wherever possible
+# for a second started office
+if [ "$sd_binary" = "soffice.bin" -a -x "$sd_prog/oosplash.bin" ] && [ "$no_oosplash" != "y" ] ; then
+    sd_binary="oosplash.bin"
+
+    export QSTART_CHECK_ONLY=1
+    if "$sd_prog/$sd_binary" -qsend-and-report $*; then
+        exit 0
+    fi
+    unset QSTART_CHECK_ONLY
+fi
 
 # pagein
 sd_pagein_args=@pagein-common
@@ -101,8 +121,17 @@ if [ -x "$sd_prog/../basis-link/ure-link/bin/javaldx" ] ; then
     my_path=`"$sd_prog/../basis-link/ure-link/bin/javaldx" $BOOTSTRAPVARS \
         "-env:INIFILENAME=vnd.sun.star.pathname:$sd_prog/redirectrc"`
     if [ -n "$my_path" ] ; then
-        LD_LIBRARY_PATH=$my_path${LD_LIBRARY_PATH+:$LD_LIBRARY_PATH}
-        export LD_LIBRARY_PATH
+        sd_platform=`uname -s`
+        case $sd_platform in
+          AIX)
+            LIBPATH=$my_path${LIBPATH:+:$LIBPATH}
+            export LIBPATH
+            ;;
+          *)
+            LD_LIBRARY_PATH=$my_path${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
+            export LD_LIBRARY_PATH
+            ;;
+        esac
     fi
 fi
 

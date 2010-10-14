@@ -1,15 +1,22 @@
 #!/bin/sh
 URI_ENCODE="`dirname $0`/uri-encode"
 FOPTS=""
+sd_platform=`uname -s`
 
 # linux file utility needs -L option to resolve symlinks
-if [ "`uname -s`" = "Linux" ]
-then
+if [ "$sd_platform" = "Linux" ] ; then
   FOPTS="-L"
 fi
 
 # do not confuse the system mail clients with OOo and Java libraries
-unset LD_LIBRARY_PATH
+case $sd_platform in
+  AIX)
+    unset LIBPATH
+    ;;
+  *)
+    unset LD_LIBRARY_PATH
+    ;;
+esac
 
 # tries to locate the executable specified
 # as first parameter in the user's path.

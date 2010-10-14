@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -139,7 +140,7 @@ SbxVariable* SbiRuntime::FindElement
                     if ( pElem )
                         bSetName = false; // don't overwrite uno name
                     else
-                        pElem = getVBAConstant( aName );
+                        pElem = VBAConstantHelper::instance().getVBAConstant( aName );
                 }
                 // #72382 VORSICHT! Liefert jetzt wegen unbekannten
                 // Modulen IMMER ein Ergebnis!
@@ -455,7 +456,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
 {
     // Falls wir ein Array haben, wollen wir bitte das Array-Element!
     SbxArray* pPar;
-    if( pElem->GetType() & SbxARRAY )
+    if( ( pElem->GetType() & SbxARRAY ) && (SbxVariable*)refRedim != pElem )
     {
         SbxBase* pElemObj = pElem->GetObject();
         SbxDimArray* pDimArray = PTR_CAST(SbxDimArray,pElemObj);
@@ -487,7 +488,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
             pPar->Put( NULL, 0 );
     }
     // Index-Access bei UnoObjekten beruecksichtigen
-    else if( pElem->GetType() == SbxOBJECT && !pElem->ISA(SbxMethod) )
+    else if( pElem->GetType() == SbxOBJECT && !pElem->ISA(SbxMethod) && ( !bVBAEnabled || ( bVBAEnabled && !pElem->ISA(SbxProperty) ) ) )
     {
         pPar = pElem->GetParameters();
         if ( pPar )
@@ -731,6 +732,8 @@ void SbiRuntime::StepPARAM( UINT32 nOp1, UINT32 nOp2 )
         SaveRef( q );
         *q = *p;
         p = q;
+        if ( i )
+            refParams->Put( p, i );
     }
     SetupArgs( p, nOp1 );
     PushVar( CheckArray( p ) );
@@ -1257,3 +1260,4 @@ void SbiRuntime::StepSTATIC( UINT32 nOp1, UINT32 nOp2 )
     StepSTATIC_Impl( aName, t );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

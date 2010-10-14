@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -255,3 +256,4 @@ void SAL_CALL OAdoTable::release() throw()
       return m_aTable.get_Name();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -95,6 +96,8 @@ OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
     m_aAttributeMetaData.addStringProperty(
         OAttributeMetaData::getCommonControlAttributeName(CCA_NAME), PROPERTY_NAME);
     m_aAttributeMetaData.addStringProperty(
+            OAttributeMetaData::getSpecialAttributeName(SCA_GROUP_NAME), PROPERTY_GROUP_NAME);
+        m_aAttributeMetaData.addStringProperty(
         OAttributeMetaData::getCommonControlAttributeName(CCA_IMAGE_DATA), PROPERTY_IMAGEURL);
     m_aAttributeMetaData.addStringProperty(
         OAttributeMetaData::getCommonControlAttributeName(CCA_LABEL), PROPERTY_LABEL);
@@ -655,3 +658,4 @@ void OFormLayerXMLImport_Impl::documentDone( )
 }   // namespace xmloff
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -67,3 +68,5 @@ COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::LoginDialog )
 
 COMPONENTGETFACTORY (   IFFACTORY( ::framework::LoginDialog     )
                     )
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

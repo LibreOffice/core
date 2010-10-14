@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1137,6 +1138,25 @@ void BasicManager::LegacyDeleteBasicManager( BasicManager*& _rpManager )
 {
     delete _rpManager;
     _rpManager = NULL;
+}
+
+
+bool BasicManager::HasExeCode( const String& sLib )
+{
+    StarBASIC* pLib = GetLib(sLib);
+    if ( pLib )
+    {
+        SbxArray* pMods = pLib->GetModules();
+        USHORT nMods = pMods ? pMods->Count() : 0;
+        for( USHORT i = 0; i < nMods; i++ )
+        {
+            SbModule* p = (SbModule*) pMods->Get( i );
+            if ( p )
+                if ( p->HasExeCode() )
+                    return true;
+        }
+    }
+    return false;
 }
 
 void BasicManager::Init()
@@ -2488,3 +2508,4 @@ Reference< XStarBasicAccess > getStarBasicAccess( BasicManager* pMgr )
     return xRet;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

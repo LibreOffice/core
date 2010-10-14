@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,6 +27,9 @@
  ************************************************************************/
 #include "vbacombobox.hxx"
 #include <vector>
+#include <filter/msfilter/msvbahelper.hxx>
+#include <basic/sbstar.hxx>
+#include <basic/sbmod.hxx>
 
 using namespace com::sun::star;
 using namespace ooo::vba;
@@ -63,12 +67,18 @@ ScVbaComboBox::setListIndex( const uno::Any& _value ) throw (uno::RuntimeExcepti
     sal_Int16 nIndex = 0;
     if( _value >>= nIndex )
     {
+        sal_Int32 nOldIndex = -1;
+        getListIndex() >>= nOldIndex;
         uno::Sequence< rtl::OUString > sItems;
         m_xProps->getPropertyValue( ITEMS ) >>= sItems;
         if( ( nIndex >= 0 ) && ( sItems.getLength() > nIndex ) )
         {
             rtl::OUString sText = sItems[ nIndex ];
             m_xProps->setPropertyValue( TEXT, uno::makeAny( sText ) );
+
+            // fire the _Change event
+            if( nOldIndex != nIndex )
+                fireClickEvent();
         }
     }
 }
@@ -103,7 +113,38 @@ ScVbaComboBox::getListIndex() throw (uno::RuntimeException)
 void SAL_CALL
 ScVbaComboBox::setValue( const uno::Any& _value ) throw (uno::RuntimeException)
 {
-    m_xProps->setPropertyValue( sSourceName, _value );
+    rtl::OUString sOldValue, sNewValue;
+    getValue() >>= sOldValue;
+
+    uno::Any aConverted = _value;
+    uno::Reference< script::XTypeConverter > xConverter = getTypeConverter( mxContext );
+    try
+    {
+        aConverted = xConverter.is() ? xConverter->convertTo( _value, getCppuType( static_cast< const rtl::OUString* >(0) ) ) : aConverted;
+    }
+    catch( const uno::Exception& /*ex*/ )
+    {
+        throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Invalid value" ) ), uno::Reference< uno::XInterface >() );
+    }
+
+    m_xProps->setPropertyValue( sSourceName, aConverted );
+
+    aConverted >>= sNewValue;
+    if ( sNewValue != sOldValue )
+    {
+        // If the new value is in current list, we should fire click event, otherwise fire the change event.
+        sal_Int32 nListIndex = -1;
+        getListIndex() >>= nListIndex;
+        sal_Bool bIsInList = ( nListIndex >= 0 );
+        if ( bIsInList )
+        {
+            fireClickEvent();
+        }
+        else
+        {
+            fireChangeEvent();
+        }
+    }
 }
 
 // see Value
@@ -178,3 +219,5 @@ ScVbaComboBox::getServiceNames()
     }
     return aServiceNames;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

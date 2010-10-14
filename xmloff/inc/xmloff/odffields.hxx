@@ -53,4 +53,9 @@
 
 #define ODF_PAGEREF "vnd.oasis.opendocument.field.PAGEREF"
 
+#define ODF_UNHANDLED "vnd.oasis.opendocument.field.UNHANDLED"
+#define ODF_OLE_PARAM "vnd.oasis.opendocument.field.ole"
+#define ODF_ID_PARAM "vnd.oasis.opendocument.field.id"
+#define ODF_CODE_PARAM "vnd.oasis.opendocument.field.code"
+
 #endif /*  _ODFFIELDS_HXX */

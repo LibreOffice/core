@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -223,3 +224,4 @@ void SbxErrObject::setNumberAndDescription( ::sal_Int32 _number, const ::rtl::OU
         m_pErrObject->setData( uno::makeAny( _number ), uno::Any(), uno::makeAny( _description ), uno::Any(), uno::Any() );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

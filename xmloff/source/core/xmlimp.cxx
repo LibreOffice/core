@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -115,6 +116,7 @@ sal_Char __READONLY_DATA sXML_np__script[] = "_script";
 sal_Char __READONLY_DATA sXML_np__config[] = "_config";
 sal_Char __READONLY_DATA sXML_np__db[] = "_db";
 sal_Char __READONLY_DATA sXML_np__xforms[] = "_xforms";
+sal_Char __READONLY_DATA sXML_np__formx[] = "_formx";
 sal_Char __READONLY_DATA sXML_np__xsd[] = "_xsd";
 sal_Char __READONLY_DATA sXML_np__xsi[] = "_xsi";
 sal_Char __READONLY_DATA sXML_np__field[] = "_field";
@@ -310,6 +312,9 @@ void SvXMLImport::_InitCtor()
         mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__xforms) ),
                             GetXMLToken(XML_N_XFORMS_1_0),
                             XML_NAMESPACE_XFORMS );
+        mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__formx) ),
+                            GetXMLToken( XML_N_FORMX ),
+                            XML_NAMESPACE_FORMX );
         mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__xsd) ),
                             GetXMLToken(XML_N_XSD),
                             XML_NAMESPACE_XSD );
@@ -2017,3 +2022,4 @@ SvXMLImport::AddRDFa(uno::Reference<rdf::XMetadatable> i_xObject,
         i_rAbout, i_rProperty, i_rContent, i_rDatatype);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

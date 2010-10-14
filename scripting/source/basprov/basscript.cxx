@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,10 @@
 #include <basic/sbmeth.hxx>
 #include <basic/basmgr.hxx>
 #include <com/sun/star/script/provider/ScriptFrameworkErrorType.hpp>
-
+#include "bcholder.hxx"
+#include <comphelper/proparrhlp.hxx>
+#include <comphelper/propertycontainer.hxx>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <map>
 
 
@@ -45,6 +49,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::document;
+using namespace ::com::sun::star::beans;
 
 extern ::com::sun::star::uno::Any sbxToUnoValue( SbxVariable* pVar );
 extern void unoToSbxValue( SbxVariable* pVar, const ::com::sun::star::uno::Any& aValue );
@@ -54,6 +59,10 @@ extern void unoToSbxValue( SbxVariable* pVar, const ::com::sun::star::uno::Any& 
 namespace basprov
 {
 //.........................................................................
+#define BASSCRIPT_PROPERTY_ID_CALLER         1
+#define BASSCRIPT_PROPERTY_CALLER            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Caller" ) )
+
+#define BASSCRIPT_DEFAULT_ATTRIBS()       PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT
 
     typedef ::std::map< sal_Int16, Any, ::std::less< sal_Int16 > > OutParamMap;
 
@@ -64,27 +73,75 @@ namespace basprov
     // -----------------------------------------------------------------------------
 
     BasicScriptImpl::BasicScriptImpl( const ::rtl::OUString& funcName, SbMethodRef xMethod )
-        :m_xMethod( xMethod )
+        : ::scripting_helper::OBroadcastHelperHolder( m_aMutex )
+        ,OPropertyContainer( GetBroadcastHelper() )
+        ,m_xMethod( xMethod )
         ,m_funcName( funcName )
         ,m_documentBasicManager( NULL )
         ,m_xDocumentScriptContext()
     {
+        registerProperty( BASSCRIPT_PROPERTY_CALLER, BASSCRIPT_PROPERTY_ID_CALLER, BASSCRIPT_DEFAULT_ATTRIBS(), &m_caller, ::getCppuType( &m_caller ) );
     }
 
     // -----------------------------------------------------------------------------
 
     BasicScriptImpl::BasicScriptImpl( const ::rtl::OUString& funcName, SbMethodRef xMethod,
-        BasicManager& documentBasicManager, const Reference< XScriptInvocationContext >& documentScriptContext )
-        :m_xMethod( xMethod )
+        BasicManager& documentBasicManager, const Reference< XScriptInvocationContext >& documentScriptContext ) : ::scripting_helper::OBroadcastHelperHolder( m_aMutex )
+        ,OPropertyContainer( GetBroadcastHelper() )
+        ,m_xMethod( xMethod )
         ,m_funcName( funcName )
         ,m_documentBasicManager( &documentBasicManager )
         ,m_xDocumentScriptContext( documentScriptContext )
     {
+    //
+        registerProperty( BASSCRIPT_PROPERTY_CALLER, BASSCRIPT_PROPERTY_ID_CALLER, BASSCRIPT_DEFAULT_ATTRIBS(), &m_caller, ::getCppuType( &m_caller ) );
     }
 
     // -----------------------------------------------------------------------------
     BasicScriptImpl::~BasicScriptImpl()
     {
+    }
+
+    // -----------------------------------------------------------------------------
+    // XInterface
+    // -----------------------------------------------------------------------------
+
+    IMPLEMENT_FORWARD_XINTERFACE2( BasicScriptImpl, BasicScriptImpl_BASE, OPropertyContainer )
+
+    // -----------------------------------------------------------------------------
+    // XTypeProvider
+    // -----------------------------------------------------------------------------
+
+    IMPLEMENT_FORWARD_XTYPEPROVIDER2( BasicScriptImpl, BasicScriptImpl_BASE, OPropertyContainer )
+
+    // -----------------------------------------------------------------------------
+    // OPropertySetHelper
+    // -----------------------------------------------------------------------------
+
+    ::cppu::IPropertyArrayHelper& BasicScriptImpl::getInfoHelper(  )
+    {
+        return *getArrayHelper();
+    }
+
+    // -----------------------------------------------------------------------------
+    // OPropertyArrayUsageHelper
+    // -----------------------------------------------------------------------------
+
+    ::cppu::IPropertyArrayHelper* BasicScriptImpl::createArrayHelper(  ) const
+    {
+        Sequence< Property > aProps;
+        describeProperties( aProps );
+        return new ::cppu::OPropertyArrayHelper( aProps );
+    }
+
+    // -----------------------------------------------------------------------------
+    // XPropertySet
+    // -----------------------------------------------------------------------------
+
+    Reference< XPropertySetInfo > BasicScriptImpl::getPropertySetInfo(  ) throw (RuntimeException)
+    {
+        Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
+        return xInfo;
     }
 
     // -----------------------------------------------------------------------------
@@ -166,8 +223,14 @@ namespace basprov
                 if ( m_documentBasicManager && m_xDocumentScriptContext.is() )
                     aOldThisComponent = m_documentBasicManager->SetGlobalUNOConstant( "ThisComponent", makeAny( m_xDocumentScriptContext ) );
 
+            if ( m_caller.getLength() && m_caller[ 0 ].hasValue()  )
+            {
+                SbxVariableRef xCallerVar = new SbxVariable( SbxVARIANT );
+                unoToSbxValue( static_cast< SbxVariable* >( xCallerVar ), m_caller[ 0 ] );
+                nErr = m_xMethod->Call( xReturn, xCallerVar );
+            }
+            else
                 nErr = m_xMethod->Call( xReturn );
-
                 if ( m_documentBasicManager && m_xDocumentScriptContext.is() )
                     m_documentBasicManager->SetGlobalUNOConstant( "ThisComponent", aOldThisComponent );
             }
@@ -224,3 +287,5 @@ namespace basprov
 //.........................................................................
 }   // namespace basprov
 //.........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

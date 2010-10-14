@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -702,6 +703,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
         // Filter arguments which shouldn't be part of the sequence property value
         sal_Bool    bTemp = sal_Bool();
         sal_uInt16  nModifier(0);
+        sal_Bool    bVBARequest = sal_False;
         std::vector< ::com::sun::star::beans::PropertyValue > aAddArgs;
         for( sal_Int32 n=0; n<nCount; n++ )
         {
@@ -718,6 +720,10 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
             }
             else if( rProp.Name.equalsAsciiL("KeyModifier",11))
                 rProp.Value >>= nModifier;
+            else if( rProp.Name.equalsAsciiL("VBADialogResultRequest",22) )
+            {
+                rProp.Value >>= bVBARequest;
+            }
             else
                 aAddArgs.push_back( aArgs[n] );
         }
@@ -801,6 +807,14 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
                         pItem = aReq.GetReturnValue();
                         bSuccess = aReq.IsDone() || pItem != NULL;
                         bFailure = aReq.IsCancelled();
+                        if ( bVBARequest )
+                        {
+                            SFX_REQUEST_ARG( aReq, pItem, SfxBoolItem, SID_DIALOG_RETURN, FALSE );
+                            if ( pItem )
+                            {
+                                bSuccess = pItem->GetValue();
+                            }
+                        }
                     }
                 }
 #ifdef DBG_UTIL
@@ -1011,3 +1025,5 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
 {
     StateChanged( nSID, eState, pState, 0 );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

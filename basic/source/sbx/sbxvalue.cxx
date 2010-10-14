@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1146,8 +1147,8 @@ BOOL SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
     {
         SbxValues aL, aR;
         bool bDecimal = false;
-        if( bVBAInterop && ( ( eThisType == SbxSTRING && eOpType != SbxSTRING ) ||
-             ( eThisType != SbxSTRING && eOpType == SbxSTRING ) ) &&
+        if( bVBAInterop && ( ( eThisType == SbxSTRING && eOpType != SbxSTRING && eOpType != SbxEMPTY ) ||
+             ( eThisType != SbxSTRING && eThisType != SbxEMPTY && eOpType == SbxSTRING ) ) &&
              ( eOp == SbxMUL || eOp == SbxDIV || eOp == SbxPLUS || eOp == SbxMINUS ) )
         {
             goto Lbl_OpIsDouble;
@@ -1194,6 +1195,8 @@ BOOL SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
                     aL.eType = aR.eType = GetType();
 //              else if( GetType() == SbxDouble || GetType() == SbxSingle )
 //                  aL.eType = aR.eType = SbxLONG64;
+                else if ( bVBAInterop && eOpType == SbxBOOL )
+                    aL.eType = aR.eType = SbxBOOL;
                 else
                     aL.eType = aR.eType = SbxLONG;
             }
@@ -1280,7 +1283,12 @@ BOOL SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
                         break;
                     case SbxNOT:
                         if( aL.eType != SbxLONG && aL.eType != SbxULONG )
-                            aL.nLong64 = ~aL.nLong64;
+                        {
+                            if ( aL.eType != SbxBOOL )
+                                aL.nLong64 = ~aL.nLong64;
+                            else
+                                aL.nLong = ~aL.nLong;
+                        }
                         else
                             aL.nLong = ~aL.nLong;
                         break;
@@ -1851,3 +1859,4 @@ BOOL SbxValue::StoreData( SvStream& r ) const
     return TRUE;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

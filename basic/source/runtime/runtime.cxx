@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,6 +46,8 @@
 #include "sbunoobj.hxx"
 #include "errobject.hxx"
 #include "sbtrace.hxx"
+
+SbxVariable* getDefaultProp( SbxVariable* pRef );
 
 using namespace ::com::sun::star;
 
@@ -544,7 +547,7 @@ SbxArray* SbiInstance::GetLocals( SbMethod* pMeth )
 
 SbiRuntime::SbiRuntime( SbModule* pm, SbMethod* pe, UINT32 nStart )
          : rBasic( *(StarBASIC*)pm->pParent ), pInst( pINST ),
-           pMod( pm ), pMeth( pe ), pImg( pMod->pImage ), m_nLastTime(0)
+           pMod( pm ), pMeth( pe ), pImg( pMod->pImage ), mpExtCaller(0), m_nLastTime(0)
 {
     nFlags    = pe ? pe->GetDebugFlags() : 0;
     pIosys    = pInst->pIosys;
@@ -601,6 +604,13 @@ SbiRuntime::~SbiRuntime()
 void SbiRuntime::SetVBAEnabled(bool bEnabled )
 {
     bVBAEnabled = bEnabled;
+    if ( bVBAEnabled )
+    {
+        if ( pMeth )
+            mpExtCaller = pMeth->mCaller;
+    }
+    else
+        mpExtCaller = 0;
 }
 
 // Aufbau der Parameterliste. Alle ByRef-Parameter werden direkt
@@ -1029,7 +1039,25 @@ SbxVariable* SbiRuntime::GetTOS( short n )
 void SbiRuntime::TOSMakeTemp()
 {
     SbxVariable* p = refExprStk->Get( nExprLvl - 1 );
-    if( p->GetRefCount() != 1 )
+    if ( p->GetType() == SbxEMPTY )
+        p->Broadcast( SBX_HINT_DATAWANTED );
+
+    SbxVariable* pDflt = NULL;
+    if ( bVBAEnabled &&  ( p->GetType() == SbxOBJECT || p->GetType() == SbxVARIANT  ) && ( pDflt = getDefaultProp( p ) ) )
+    {
+        pDflt->Broadcast( SBX_HINT_DATAWANTED );
+        // replacing new p on stack causes object pointed by
+        // pDft->pParent to be deleted, when p2->Compute() is
+        // called below pParent is accessed ( but its deleted )
+        // so set it to NULL now
+        pDflt->SetParent( NULL );
+        p = new SbxVariable( *pDflt );
+        p->SetFlag( SBX_READWRITE );
+        refExprStk->Put( p, nExprLvl - 1 );
+//      return;
+    }
+
+    else if( p->GetRefCount() != 1 )
     {
         SbxVariable* pNew = new SbxVariable( *p );
         pNew->SetFlag( SBX_READWRITE );
@@ -1038,7 +1066,6 @@ void SbiRuntime::TOSMakeTemp()
 }
 
 // Der GOSUB-Stack nimmt Returnadressen fuer GOSUBs auf
-
 void SbiRuntime::PushGosub( const BYTE* pc )
 {
     if( ++nGosubLvl > MAXRECURSION )
@@ -1266,3 +1293,5 @@ SbiRuntime::GetBase()
 {
     return pImg->GetBase();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

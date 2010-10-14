@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -369,7 +370,33 @@ namespace basprov
             ::rtl::OUString::createFromAscii( "location" ) );
 
         sal_Int32 nIndex = 0;
-        ::rtl::OUString aLibrary = aDescription.getToken( 0, (sal_Unicode)'.', nIndex );
+        // In some strange circumstances the Library name can have an
+        // apparantly illegal '.' in it ( in imported VBA )
+
+        BasicManager* pBasicMgr =  NULL;
+        if ( aLocation.equals( ::rtl::OUString::createFromAscii("document") ) )
+        {
+            pBasicMgr = m_pDocBasicManager;
+        }
+        else if ( aLocation.equals( ::rtl::OUString::createFromAscii("application") ) )
+        {
+            pBasicMgr = m_pAppBasicManager;
+        }
+        rtl::OUString sProjectName;
+        if (  pBasicMgr )
+            sProjectName = pBasicMgr->GetName();
+
+        ::rtl::OUString aLibrary;
+        if ( sProjectName.getLength() && aDescription.match( sProjectName ) )
+        {
+            OSL_TRACE("LibraryName %s is part of the url %s",
+                rtl::OUStringToOString( sProjectName, RTL_TEXTENCODING_UTF8 ).getStr(),
+                rtl::OUStringToOString( aDescription, RTL_TEXTENCODING_UTF8 ).getStr() );
+            aLibrary = sProjectName;
+            nIndex = sProjectName.getLength() + 1;
+        }
+        else
+            aLibrary = aDescription.getToken( 0, (sal_Unicode)'.', nIndex );
         ::rtl::OUString aModule;
         if ( nIndex != -1 )
             aModule = aDescription.getToken( 0, (sal_Unicode)'.', nIndex );
@@ -379,15 +406,6 @@ namespace basprov
 
         if ( aLibrary.getLength() != 0 && aModule.getLength() != 0 && aMethod.getLength() != 0 && aLocation.getLength() != 0 )
         {
-            BasicManager* pBasicMgr =  NULL;
-            if ( aLocation.equals( ::rtl::OUString::createFromAscii("document") ) )
-            {
-                pBasicMgr = m_pDocBasicManager;
-            }
-            else if ( aLocation.equals( ::rtl::OUString::createFromAscii("application") ) )
-            {
-                pBasicMgr = m_pAppBasicManager;
-            }
 
             if ( pBasicMgr )
             {
@@ -602,3 +620,5 @@ extern "C"
             pImplName, pServiceManager, pRegistryKey, ::basprov::s_component_entries );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -112,13 +113,14 @@ ScVbaPictureFormat::IncrementContrast( double increment ) throw (uno::RuntimeExc
 {
     double nContrast = getContrast();
     nContrast += increment;
-    if( increment < 0 )
+    //VBA, minz@cn.ibm.com.
+    if( nContrast < 0 )
     {
-        increment = 0.0;
+        nContrast = 0.0;
     }
-    if( increment > 1 )
+    if( nContrast > 1 )
     {
-        increment = 1.0;
+        nContrast = 1.0;
     }
     setContrast( nContrast );
 }
@@ -142,3 +144,5 @@ ScVbaPictureFormat::getServiceNames()
     }
     return aServiceNames;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

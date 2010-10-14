@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1338,7 +1339,7 @@ UUIInteractionHelper::handleGenericErrorRequest(
             {
                 uno::Any aProductNameAny =
                     ::utl::ConfigManager::GetConfigManager()
-                        ->GetDirectConfigProperty(
+                        .GetDirectConfigProperty(
                            ::utl::ConfigManager::PRODUCTNAME );
                 aProductNameAny >>= aTitle;
             }
@@ -1552,10 +1553,10 @@ UUIInteractionHelper::handleBrokenPackageRequest(
         return;
 
     uno::Any aProductNameAny =
-        ::utl::ConfigManager::GetConfigManager()->GetDirectConfigProperty(
+        ::utl::ConfigManager::GetConfigManager().GetDirectConfigProperty(
             ::utl::ConfigManager::PRODUCTNAME );
     uno::Any aProductVersionAny =
-        ::utl::ConfigManager::GetConfigManager()->GetDirectConfigProperty(
+        ::utl::ConfigManager::GetConfigManager().GetDirectConfigProperty(
             ::utl::ConfigManager::PRODUCTVERSION );
     ::rtl::OUString aProductName, aProductVersion;
     if ( !( aProductNameAny >>= aProductName ) )
@@ -1613,3 +1614,5 @@ ErrorResource::getString(ErrCode nErrorCode, rtl::OUString * pString)
     m_pResMgr->PopContext();
     return true;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -86,7 +87,7 @@ void ScVbaShapes::initBaseCollection()
     m_xNameAccess.set( xShapes, uno::UNO_QUERY );
 }
 
-ScVbaShapes::ScVbaShapes( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess > xShapes, const uno::Reference< frame::XModel>& xModel ): ScVbaShapes_BASE( xParent, xContext, xShapes ), m_nNewShapeCount(0), m_xModel( xModel )
+ScVbaShapes::ScVbaShapes( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess > xShapes, const uno::Reference< frame::XModel>& xModel ): ScVbaShapes_BASE( xParent, xContext, xShapes, sal_True ), m_nNewShapeCount(0), m_xModel( xModel )
 {
     m_xShapes.set( xShapes, uno::UNO_QUERY_THROW );
     m_xDrawPage.set( xShapes, uno::UNO_QUERY_THROW );
@@ -486,3 +487,5 @@ calculateTopLeftMargin( uno::Reference< XHelperInterface > xDocument )
     return awt::Point();
 }
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

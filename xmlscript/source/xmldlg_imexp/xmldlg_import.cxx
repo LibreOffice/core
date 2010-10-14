@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,9 +58,13 @@
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 
 #include <com/sun/star/view/SelectionType.hpp>
+#include <com/sun/star/document/XStorageBasedDocument.hpp>
+#include <com/sun/star/script/DocumentScriptLibraryContainer.hpp>
+#include <com/sun/star/script/vba/XVBACompatibility.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::frame;
 using ::rtl::OUString;
 
 namespace xmlscript
@@ -1888,18 +1893,44 @@ Reference< xml::input::XElement > DialogImport::getStyle(
     }
     return 0;
 }
+//__________________________________________________________________________________________________
+Reference< script::XLibraryContainer > DialogImport::getScriptLibraryContainer()
+{
+    if( !_xScriptLibraryContainer.is() )
+    {
+        try
+        {
+            Reference< beans::XPropertySet > xProps( _xDoc, UNO_QUERY );
+            if( xProps.is() )
+                _xScriptLibraryContainer.set( xProps->getPropertyValue( OUSTR("BasicLibraries") ), UNO_QUERY );
+        }
+        catch( const Exception& )
+        {
+        }
+    }
+
+    return _xScriptLibraryContainer;
+}
 
 //##################################################################################################
 
 //==================================================================================================
 Reference< xml::sax::XDocumentHandler > SAL_CALL importDialogModel(
     Reference< container::XNameContainer > const & xDialogModel,
-    Reference< XComponentContext > const & xContext )
+    Reference< XComponentContext > const & xContext,
+    Reference< XModel > const & xDocument )
     SAL_THROW( (Exception) )
 {
+    DialogImport* pImport = new DialogImport( xContext, xDialogModel, xDocument );
+    uno::Reference< script::vba::XVBACompatibility > xVBAModeSource( pImport->getScriptLibraryContainer(), uno::UNO_QUERY );
+
+    uno::Reference< beans::XPropertySet > xDlgProps( xDialogModel, uno::UNO_QUERY );
+    if ( xVBAModeSource.is() && xDlgProps.is() && xVBAModeSource->getVBACompatibilityMode() )
+        xDlgProps->setPropertyValue( OUSTR("VBAForm"), uno::makeAny( sal_True ) );
     return ::xmlscript::createDocumentHandler(
-        static_cast< xml::input::XRoot * >(
-            new DialogImport( xContext, xDialogModel ) ) );
+        static_cast< xml::input::XRoot * >( pImport ) );
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

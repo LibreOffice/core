@@ -171,15 +171,17 @@ public:
     //
     void readDialogModel( StyleBag * all_styles )
         SAL_THROW( (css::uno::Exception) );
+    void readMultiPageModel( StyleBag * all_styles )
+        SAL_THROW( (css::uno::Exception) );
     void readButtonModel( StyleBag * all_styles )
         SAL_THROW( (css::uno::Exception) );
     void readEditModel( StyleBag * all_styles )
         SAL_THROW( (css::uno::Exception) );
     void readCheckBoxModel( StyleBag * all_styles )
         SAL_THROW( (css::uno::Exception) );
-    void readRadioButtonModel( StyleBag * all_styles )
+    void readRadioButtonModel( StyleBag * all_styles, com::sun::star::uno::Reference< com::sun::star::frame::XModel > const & xDocument )
         SAL_THROW( (css::uno::Exception) );
-    void readComboBoxModel( StyleBag * all_styles )
+    void readComboBoxModel( StyleBag * all_styles, com::sun::star::uno::Reference< com::sun::star::frame::XModel > const & xDocument )
         SAL_THROW( (css::uno::Exception) );
     void readCurrencyFieldModel( StyleBag * all_styles )
         SAL_THROW( (css::uno::Exception) );
@@ -193,9 +195,9 @@ public:
         SAL_THROW( (css::uno::Exception) );
     void readGroupBoxModel( StyleBag * all_styles )
         SAL_THROW( (css::uno::Exception) );
-    void readImageControlModel( StyleBag * all_styles )
+    void readImageControlModel( StyleBag * all_styles, com::sun::star::uno::Reference< com::sun::star::frame::XModel > const & xDocument  )
         SAL_THROW( (css::uno::Exception) );
-    void readListBoxModel( StyleBag * all_styles )
+    void readListBoxModel( StyleBag * all_styles, com::sun::star::uno::Reference< com::sun::star::frame::XModel > const & xDocument )
         SAL_THROW( (css::uno::Exception) );
     void readNumericFieldModel( StyleBag * all_styles )
         SAL_THROW( (css::uno::Exception) );
@@ -209,7 +211,9 @@ public:
         SAL_THROW( (css::uno::Exception) );
     void readProgressBarModel( StyleBag * all_styles )
         SAL_THROW( (css::uno::Exception) );
-    void readScrollBarModel( StyleBag * all_styles )
+    void readScrollBarModel( StyleBag * all_styles, com::sun::star::uno::Reference< com::sun::star::frame::XModel > const & xDocument )
+        SAL_THROW( (css::uno::Exception) );
+    void readSpinButtonModel( StyleBag * all_styles, com::sun::star::uno::Reference< com::sun::star::frame::XModel > const & xDocument )
         SAL_THROW( (css::uno::Exception) );
     void readFixedHyperLinkModel( StyleBag * all_styles )
         SAL_THROW( (css::uno::Exception) );

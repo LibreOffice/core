@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -116,7 +117,7 @@ rtl::OUString HelpLocaleString()
     {
         // detect installed locale
         Any aLocale =
-            ::utl::ConfigManager::GetConfigManager()->GetDirectConfigProperty(
+            ::utl::ConfigManager::GetConfigManager().GetDirectConfigProperty(
                ::utl::ConfigManager::LOCALE );
         aLocale >>= aLocaleStr;
         bool bOk = aLocaleStr.getLength() != 0;
@@ -991,3 +992,4 @@ String SfxHelp::GetDefaultHelpModule()
     return getCurrentModuleIdentifier_Impl();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

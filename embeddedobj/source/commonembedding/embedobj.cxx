@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -699,3 +700,5 @@ void SAL_CALL OCommonEmbeddedObject::setDefaultSize( const ::com::sun::star::awt
     //#i103460# charts do not necessaryly have an own size within ODF files, in this case they need to use the size settings from the surrounding frame, which is made available with this method
     m_aDefaultSizeForChart_In_100TH_MM = rSize_100TH_MM;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

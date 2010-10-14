@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1205,7 +1206,7 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
     // Detect the language type of the current office
     aPreDefPathVariables.m_eLanguageType = LANGUAGE_ENGLISH_US;
     rtl::OUString aLocaleStr;
-    if ( utl::ConfigManager::GetConfigManager()->GetDirectConfigProperty( utl::ConfigManager::LOCALE ) >>= aLocaleStr )
+    if ( utl::ConfigManager::GetConfigManager().GetDirectConfigProperty( utl::ConfigManager::LOCALE ) >>= aLocaleStr )
         aPreDefPathVariables.m_eLanguageType = MsLangId::convertIsoStringToLanguage( aLocaleStr );
     else
     {
@@ -1245,3 +1246,5 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
 }
 
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

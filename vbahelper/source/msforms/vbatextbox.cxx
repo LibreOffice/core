@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -67,13 +68,20 @@ ScVbaTextBox::getText() throw (css::uno::RuntimeException)
 void SAL_CALL
 ScVbaTextBox::setText( const rtl::OUString& _text ) throw (css::uno::RuntimeException)
 {
+    rtl::OUString sOldText = getText();
+
     if ( !mbDialog )
     {
-    uno::Reference< text::XTextRange > xTextRange( m_xProps, uno::UNO_QUERY_THROW );
-    xTextRange->setString( _text );
-}
+        uno::Reference< text::XTextRange > xTextRange( m_xProps, uno::UNO_QUERY_THROW );
+        xTextRange->setString( _text );
+    }
     else
         m_xProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Text") ), uno::makeAny( _text ) );
+
+    if ( _text != sOldText )
+    {
+        fireChangeEvent();
+    }
 }
 
 sal_Int32 SAL_CALL
@@ -90,7 +98,8 @@ ScVbaTextBox::getMaxLength() throw (css::uno::RuntimeException)
 void SAL_CALL
 ScVbaTextBox::setMaxLength( sal_Int32 _maxlength ) throw (css::uno::RuntimeException)
 {
-    uno::Any aValue( _maxlength );
+    sal_Int16 _maxlength16 = static_cast<sal_Int16> (_maxlength); //liuchen 2009-7-24, resolve the problem that MaxLength cannot be set correctly
+    uno::Any aValue( _maxlength16 );                              //liuchen 2009-7-24, resolve the problem that MaxLength cannot be set correctly
     m_xProps->setPropertyValue
             (rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MaxTextLen" ) ), aValue);
 }
@@ -132,3 +141,5 @@ ScVbaTextBox::getServiceNames()
     }
     return aServiceNames;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

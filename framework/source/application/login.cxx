@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -294,3 +295,5 @@ void LoginApplication::impl_parseCommandline()
     // Warn programmer.
     LOG_ASSERT( !(m_nParentHandle==0), "Login.exe\nYou should give me a parent window handle!\n" )
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

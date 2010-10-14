@@ -2,7 +2,7 @@
 <!--***********************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -746,6 +746,17 @@
 		</group>
 	</templates>
 	<component>
+        <group oor:name="GlobalTemplateList">
+            <info>
+               <desc>Contains the most recently opened documents.</desc>
+            </info>
+            <prop oor:name="Paths" oor:type="oor:string-list">
+                <info>
+                    <desc>Lists the file global templates loaded when importing writer documents.</desc>
+                </info>
+                <value oor:separator=";"></value>
+            </prop>
+        </group>
         <group oor:name="MailMergeWizard">
             <info>
                 <desc>Settings of the mail merge wizard.</desc>
@@ -6021,6 +6032,14 @@
 						</info>
 						<value>true</value>
 					</prop>
+                    <prop oor:name="Executable" oor:type="xs:boolean">
+                        <info>
+                            <author>pflin</author>
+                            <desc>Indicates whether VBA macros are imported without comments to be executable.</desc>
+                             <label>Executable code</label>
+                         </info>
+                        <value>true</value>
+                    </prop>
 					<prop oor:name="Save" oor:type="xs:boolean">
 						<!-- OldPath: Filter/MS_Office/Basic/Word -->
 						<!-- OldLocation: soffice.cfg -->

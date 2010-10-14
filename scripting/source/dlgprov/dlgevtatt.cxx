@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -108,13 +109,14 @@ namespace dlgprov
     {
         protected:
         rtl::OUString msDialogCodeName;
+        rtl::OUString msDialogLibName;
         Reference<  script::XScriptListener > mxListener;
         virtual void firing_impl( const script::ScriptEvent& aScriptEvent, uno::Any* pRet );
         public:
-        DialogVBAScriptListenerImpl( const Reference< XComponentContext >& rxContext, const Reference< awt::XControl >& rxControl, const Reference< frame::XModel >& xModel );
+        DialogVBAScriptListenerImpl( const Reference< XComponentContext >& rxContext, const Reference< awt::XControl >& rxControl, const Reference< frame::XModel >& xModel, const rtl::OUString& sDialogLibName );
     };
 
-    DialogVBAScriptListenerImpl::DialogVBAScriptListenerImpl( const Reference< XComponentContext >& rxContext, const Reference< awt::XControl >& rxControl, const Reference< frame::XModel >& xModel ) : DialogScriptListenerImpl( rxContext )
+    DialogVBAScriptListenerImpl::DialogVBAScriptListenerImpl( const Reference< XComponentContext >& rxContext, const Reference< awt::XControl >& rxControl, const Reference< frame::XModel >& xModel, const rtl::OUString& sDialogLibName ) : DialogScriptListenerImpl( rxContext ), msDialogLibName( sDialogLibName )
     {
         Reference< XMultiComponentFactory > xSMgr( m_xContext->getServiceManager() );
         Sequence< Any > args(1);
@@ -145,7 +147,7 @@ namespace dlgprov
         if ( aScriptEvent.ScriptType.equals( rtl::OUString::createFromAscii("VBAInterop") ) && mxListener.is() )
         {
             ScriptEvent aScriptEventCopy( aScriptEvent );
-            aScriptEventCopy.ScriptCode = msDialogCodeName;
+            aScriptEventCopy.ScriptCode = msDialogLibName.concat( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "." ) ) ).concat( msDialogCodeName );
             try
             {
                 mxListener->firing( aScriptEventCopy );
@@ -163,7 +165,7 @@ namespace dlgprov
     // DialogEventsAttacherImpl
     // =============================================================================
 
-    DialogEventsAttacherImpl::DialogEventsAttacherImpl( const Reference< XComponentContext >& rxContext, const Reference< frame::XModel >& rxModel, const Reference< awt::XControl >& rxControl, const Reference< XInterface >& rxHandler, const Reference< beans::XIntrospectionAccess >& rxIntrospect, bool bProviderMode, const Reference< script::XScriptListener >& rxRTLListener   )
+    DialogEventsAttacherImpl::DialogEventsAttacherImpl( const Reference< XComponentContext >& rxContext, const Reference< frame::XModel >& rxModel, const Reference< awt::XControl >& rxControl, const Reference< XInterface >& rxHandler, const Reference< beans::XIntrospectionAccess >& rxIntrospect, bool bProviderMode, const Reference< script::XScriptListener >& rxRTLListener, const rtl::OUString& sDialogLibName )
         :mbUseFakeVBAEvents( false ), m_xContext( rxContext )
     {
         // key listeners by protocol when ScriptType = 'Script'
@@ -186,11 +188,11 @@ namespace dlgprov
             {
                 pFoundShell = reinterpret_cast<SfxObjectShell*>( xObjShellTunnel->getSomething(SfxObjectShell::getUnoTunnelId()));
                 if ( pFoundShell )
-                    mbUseFakeVBAEvents = ooo::vba::isAlienExcelDoc( *pFoundShell );
+                    mbUseFakeVBAEvents = ooo::vba::isAlienExcelDoc( *pFoundShell ) || ooo::vba::isAlienWordDoc( *pFoundShell ) ;
             }
         }
         if ( mbUseFakeVBAEvents )
-            listernersForTypes[ rtl::OUString::createFromAscii("VBAInterop") ] = new DialogVBAScriptListenerImpl( rxContext, rxControl, rxModel );
+            listernersForTypes[ rtl::OUString::createFromAscii("VBAInterop") ] = new DialogVBAScriptListenerImpl( rxContext, rxControl, rxModel, sDialogLibName );
     }
 
     // -----------------------------------------------------------------------------
@@ -217,6 +219,7 @@ namespace dlgprov
             Reference< ooo::vba::XVBAToOOEventDescGen > xVBAToOOEvtDesc( xSMgr->createInstanceWithContext( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAToOOEventDesc" ) ), m_xContext ), UNO_QUERY );
             if ( xVBAToOOEvtDesc.is() )
                 xEventsSupplier.set( xVBAToOOEvtDesc->getEventSupplier( xControl, sControlName ), UNO_QUERY );
+
         }
         return xEventsSupplier;
     }
@@ -409,7 +412,7 @@ namespace dlgprov
 
     void DialogAllListenerImpl::firing( const AllEventObject& Event ) throw ( RuntimeException )
     {
-        ::osl::MutexGuard aGuard( getMutex() );
+        //::osl::MutexGuard aGuard( getMutex() );
 
         firing_impl( Event, NULL );
     }
@@ -419,7 +422,7 @@ namespace dlgprov
     Any DialogAllListenerImpl::approveFiring( const AllEventObject& Event )
         throw ( reflection::InvocationTargetException, RuntimeException )
     {
-        ::osl::MutexGuard aGuard( getMutex() );
+        //::osl::MutexGuard aGuard( getMutex() );
 
         Any aReturn;
         firing_impl( Event, &aReturn );
@@ -655,7 +658,7 @@ namespace dlgprov
 
     void DialogScriptListenerImpl::firing( const ScriptEvent& aScriptEvent ) throw ( RuntimeException )
     {
-        ::osl::MutexGuard aGuard( getMutex() );
+        //::osl::MutexGuard aGuard( getMutex() );
 
         firing_impl( aScriptEvent, NULL );
     }
@@ -665,7 +668,7 @@ namespace dlgprov
     Any DialogScriptListenerImpl::approveFiring( const ScriptEvent& aScriptEvent )
         throw ( reflection::InvocationTargetException, RuntimeException )
     {
-        ::osl::MutexGuard aGuard( getMutex() );
+        //::osl::MutexGuard aGuard( getMutex() );
 
         Any aReturn;
         firing_impl( aScriptEvent, &aReturn );
@@ -677,3 +680,5 @@ namespace dlgprov
 //.........................................................................
 }   // namespace dlgprov
 //.........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

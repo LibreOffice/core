@@ -50,12 +50,12 @@ interface XName
     [attribute] string Name;
     [attribute] string NameLocal;
     [attribute] boolean Visible;
-        [attribute, readonly] string Value;
-        [attribute, readonly] string RefersTo;
-        [attribute, readonly] string RefersToLocal;
-        [attribute, readonly] string RefersToR1C1;
-        [attribute, readonly] string RefersToR1C1Local;
-        [attribute, readonly] XRange RefersToRange;
+    [attribute] string Value;
+    [attribute, readonly] string RefersTo;
+    [attribute, readonly] string RefersToLocal;
+    [attribute, readonly] string RefersToR1C1;
+    [attribute, readonly] string RefersToR1C1Local;
+    [attribute, readonly] XRange RefersToRange;
 
     void Delete( );
 };

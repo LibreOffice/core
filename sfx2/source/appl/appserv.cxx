@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1397,3 +1398,5 @@ void SfxApplication::OfaState_Impl(SfxItemSet &rSet)
     if ( !aModuleOpt.IsImpress() )
         rSet.DisableItem( SID_SD_AUTOPILOT );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

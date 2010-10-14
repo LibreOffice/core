@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -3698,9 +3699,8 @@ void AutoRecovery::impl_flushALLConfigChanges()
 
         // SOLAR SAFE ->
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
-        ::utl::ConfigManager* pCfgMgr = ::utl::ConfigManager::GetConfigManager();
-        if (pCfgMgr)
-            pCfgMgr->StoreConfigItems();
+        ::utl::ConfigManager& rCfgMgr = ::utl::ConfigManager::GetConfigManager();
+        rCfgMgr.StoreConfigItems();
     }
     catch(const css::uno::Exception&)
         {}
@@ -3741,3 +3741,5 @@ void AutoRecovery::st_impl_removeLockFile()
 }
 
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,6 +28,12 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_fpicker.hxx"
+
+#ifdef AIX
+#define _LINUX_SOURCE_COMPAT
+#include <sys/timer.h>
+#undef _LINUX_SOURCE_COMPAT
+#endif
 
 //------------------------------------------------------------------------
 // includes
@@ -251,3 +258,5 @@ void SAL_CALL SalGtkPicker::implsetTitle( const rtl::OUString& aTitle ) throw( u
     GdkThreadLock aLock;
     gtk_window_set_title( GTK_WINDOW( m_pDialog ), aWindowTitle.getStr() );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

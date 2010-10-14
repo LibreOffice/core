@@ -236,7 +236,7 @@ public:
             takes the names of modules whose size exceeds the legacy limit
     */
     bool            LegacyPsswdBinaryLimitExceeded( ::com::sun::star::uno::Sequence< rtl::OUString >& _out_rModuleNames );
-
+    bool HasExeCode( const String& );
 private:
     BOOL            IsReference( USHORT nLib );
 

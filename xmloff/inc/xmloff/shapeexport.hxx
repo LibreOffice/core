@@ -199,11 +199,6 @@ private:
     const rtl::OUString                         msStartShape;
     const rtl::OUString                         msEndShape;
     const rtl::OUString                         msOnClick;
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
-    const rtl::OUString                         msOnAction;
-    const rtl::OUString                         msAction;
-    const rtl::OUString                         msURL;
-#endif
     const rtl::OUString                         msEventType;
     const rtl::OUString                         msPresentation;
     const rtl::OUString                         msMacroName;

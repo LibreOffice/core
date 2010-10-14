@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -127,7 +128,7 @@ void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& a
         xDesktop->removeTerminateListener( this );
 
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    utl::ConfigManager::GetConfigManager()->StoreConfigItems();
+    utl::ConfigManager::GetConfigManager().StoreConfigItems();
     SfxApplication* pApp = SFX_APP();
     pApp->Broadcast( SfxSimpleHint( SFX_HINT_DEINITIALIZING ) );
     pApp->Get_Impl()->pAppDispatch->ReleaseAll();
@@ -310,3 +311,5 @@ bool SfxApplication::Initialize_Impl()
 
     return sal_True;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

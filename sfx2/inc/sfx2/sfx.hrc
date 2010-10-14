@@ -399,8 +399,10 @@
 #define MID_DOCINFO_ENCRYPTED                0x2c
 #define MID_DOCINFO_STATISTIC                0x33
 #define MID_DOCINFO_CHARLOCALE               0x34
-
-#define MID_LAST_USED_PROPID                 MID_DOCINFO_CHARLOCALE
+#define MID_CATEGORY                                     0x35
+#define MID_COMPANY                                      0x36
+#define MID_MANAGER                                      0x37
+#define MID_LAST_USED_PROPID              MID_MANAGER
 
 // Config-Ids -----------------------------------------------------------
 

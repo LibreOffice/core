@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -374,9 +375,15 @@ void SdXMLShapeContext::EndElement()
 
     if( msHyperlink.getLength() != 0 ) try
     {
+        uno::Reference< beans::XPropertySet > xProp( mxShape, uno::UNO_QUERY );
+
+        rtl::OUString sLink( RTL_CONSTASCII_USTRINGPARAM( "Hyperlink" ) );
+        if ( xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName( sLink ) )
+            xProp->setPropertyValue( sLink, uno::Any( msHyperlink ) );
+        Reference< XEventsSupplier > xEventsSupplier( mxShape, UNO_QUERY_THROW );
+        Reference< XNameReplace > xEvents( xEventsSupplier->getEvents(), UNO_QUERY_THROW );
         const OUString sBookmark( RTL_CONSTASCII_USTRINGPARAM( "Bookmark" ) );
 
-        Reference< XEventsSupplier > xEventsSupplier( mxShape, UNO_QUERY );
         if( xEventsSupplier.is() )
         {
             const OUString sEventType( RTL_CONSTASCII_USTRINGPARAM( "EventType" ) );
@@ -3306,8 +3313,15 @@ SvXMLImportContext *SdXMLFrameShapeContext::CreateChildContext( USHORT nPrefix,
 
     if( !mxImplContext.Is() )
     {
-        pContext = GetImport().GetShapeImport()->CreateFrameChildContext(
+
+        SvXMLShapeContext* pShapeContext= GetImport().GetShapeImport()->CreateFrameChildContext(
                         GetImport(), nPrefix, rLocalName, xAttrList, mxShapes, mxAttrList );
+
+        pContext = pShapeContext;
+
+        // propagate the hyperlink to child context
+        if ( msHyperlink.getLength() > 0 )
+            pShapeContext->setHyperlink( msHyperlink );
 
         mxImplContext = pContext;
         mbSupportsReplacement = IsXMLToken( rLocalName, XML_OBJECT ) ||
@@ -3741,3 +3755,4 @@ SvXMLImportContext* SdXMLTableShapeContext::CreateChildContext( USHORT nPrefix, 
         return SdXMLShapeContext::CreateChildContext(nPrefix, rLocalName, xAttrList);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

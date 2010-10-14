@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -741,6 +742,30 @@ OpCode FormulaCompiler::GetEnglishOpCode( const String& rName ) const
     return bFound ? (*iLook).second : OpCode(ocNone);
 }
 
+bool FormulaCompiler::IsOpCodeVolatile( OpCode eOp )
+{
+    switch (eOp)
+    {
+        // no parameters:
+        case ocRandom:
+        case ocGetActDate:
+        case ocGetActTime:
+        // one parameter:
+        case ocFormula:
+        case ocInfo:
+        // more than one parameters:
+            // ocIndirect/ocIndirectXL otherwise would have to do
+            // StopListening and StartListening on a reference for every
+            // interpreted value.
+        case ocIndirect:
+        case ocIndirectXL:
+            // ocOffset results in indirect references.
+        case ocOffset:
+            return true;
+    }
+    return false;
+}
+
 // Remove quotes, escaped quotes are unescaped.
 BOOL FormulaCompiler::DeQuote( String& rStr )
 {
@@ -973,44 +998,32 @@ void FormulaCompiler::Factor()
     {
         if( nNumFmt == NUMBERFORMAT_UNDEFINED )
             nNumFmt = lcl_GetRetFormat( eOp );
-        // Functions that have to be always recalculated
-        switch( eOp )
+
+        if ( IsOpCodeVolatile(eOp) )
+            pArr->SetRecalcModeAlways();
+        else
         {
-            // no parameters:
-            case ocRandom:
-            case ocGetActDate:
-            case ocGetActTime:
-            // one parameter:
-            case ocFormula:
-            case ocInfo:
-            // more than one parameters:
-                // ocIndirect/ocIndirectXL otherwise would have to do
-                // StopListening and StartListening on a reference for every
-                // interpreted value.
-            case ocIndirect:
-            case ocIndirectXL:
-                // ocOffset results in indirect references.
-            case ocOffset:
-                pArr->SetRecalcModeAlways();
-            break;
-                // Functions recalculated on every document load.
-                // Don't use SetRecalcModeOnLoad() which would override
-                // ModeAlways.
-            case ocConvert :
-                pArr->AddRecalcMode( RECALCMODE_ONLOAD );
-            break;
-                // If the referred cell is moved the value changes.
-            case ocColumn :
-            case ocRow :
-                // ocCell needs recalc on move for some possible type values.
-            case ocCell :
-                pArr->SetRecalcModeOnRefMove();
-            break;
-            case ocHyperLink :
-                pArr->SetHyperLink(TRUE);
-            break;
-            default:
-                ;   // nothing
+            switch( eOp )
+            {
+                    // Functions recalculated on every document load.
+                    // Don't use SetRecalcModeOnLoad() which would override
+                    // ModeAlways.
+                case ocConvert :
+                    pArr->AddRecalcMode( RECALCMODE_ONLOAD );
+                break;
+                    // If the referred cell is moved the value changes.
+                case ocColumn :
+                case ocRow :
+                    // ocCell needs recalc on move for some possible type values.
+                case ocCell :
+                    pArr->SetRecalcModeOnRefMove();
+                break;
+                case ocHyperLink :
+                    pArr->SetHyperLink(TRUE);
+                break;
+                default:
+                    ;   // nothing
+            }
         }
         if (SC_OPCODE_START_NO_PAR <= eOp && eOp < SC_OPCODE_STOP_NO_PAR)
         {
@@ -1919,3 +1932,5 @@ void FormulaCompiler::PushTokenArray( FormulaTokenArray* pa, BOOL bTemp )
 // =============================================================================
 } // formula
 // =============================================================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

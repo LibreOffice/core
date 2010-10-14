@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,6 +47,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <tools/wldcrd.hxx>
 #include <i18npool/lang.h>
+#include <rtl/string.hxx>
 
 #include "runtime.hxx"
 #include "sbunoobj.hxx"
@@ -71,13 +73,16 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
-
+#include <com/sun/star/script/XErrorQuery.hpp>
+#include <ooo/vba/XHelperInterface.hpp>
+#include <com/sun/star/bridge/oleautomation/XAutomationObject.hpp>
 using namespace comphelper;
 using namespace osl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::io;
+using namespace com::sun::star::script;
 
 #endif /* _USE_UNO */
 
@@ -99,6 +104,8 @@ using namespace com::sun::star::io;
 #include <stdlib.h>
 #include <ctype.h>
 
+SbxVariable* getDefaultProp( SbxVariable* pRef );
+
 #if defined (WIN) || defined (WNT) || defined (OS2)
 #include <direct.h>   // _getdcwd get current work directory, _chdrive
 #endif
@@ -116,6 +123,9 @@ using namespace com::sun::star::io;
 #ifdef WNT
 #include <io.h>
 #endif
+
+
+#include <basic/sbobjmod.hxx>
 
 #include <basic/sbobjmod.hxx>
 
@@ -702,6 +712,36 @@ RTLFUNC(MkDir) // JSM
             {
                 try
                 {
+                    if ( SbiRuntime::isVBAEnabled() )
+                    {
+                        // If aPath is the folder name, not a path, then create the folder under current directory.
+                        INetURLObject aTryPathURL( aPath );
+                        ::rtl::OUString sPathURL = aTryPathURL.GetMainURL( INetURLObject::NO_DECODE );
+                        if ( !sPathURL.getLength() )
+                        {
+                            File::getFileURLFromSystemPath( aPath, sPathURL );
+                        }
+                        INetURLObject aPathURL( sPathURL );
+                        if ( !aPathURL.GetPath().getLength() )
+                        {
+                            ::rtl::OUString sCurDirURL;
+                            SbxArrayRef pPar = new SbxArray;
+                            SbxVariableRef pVar = new SbxVariable();
+                            pPar->Put( pVar, 0 );
+                            SbRtl_CurDir( pBasic, *pPar, FALSE );
+                            String aCurPath = pPar->Get(0)->GetString();
+
+                            File::getFileURLFromSystemPath( aCurPath, sCurDirURL );
+                            INetURLObject aDirURL( sCurDirURL );
+                            aDirURL.Append( aPath );
+                            ::rtl::OUString aTmpPath = aDirURL.GetMainURL( INetURLObject::NO_DECODE );
+                            if ( aTmpPath.getLength() > 0 )
+                            {
+                                aPath = aTmpPath;
+                            }
+                        }
+                    }
+
                     xSFI->createFolder( getFullPath( aPath ) );
                 }
                 catch( Exception & )
@@ -936,6 +976,26 @@ RTLFUNC(Hex)
     }
 }
 
+RTLFUNC(FuncCaller)
+{
+    (void)pBasic;
+    (void)bWrite;
+    if ( SbiRuntime::isVBAEnabled() &&  pINST && pINST->pRun )
+    {
+        if ( pINST->pRun->GetExternalCaller() )
+            *rPar.Get(0) =  *pINST->pRun->GetExternalCaller();
+        else
+        {
+            SbxVariableRef pVar = new SbxVariable(SbxVARIANT);
+            *rPar.Get(0) = *pVar;
+        }
+    }
+    else
+    {
+        StarBASIC::Error( SbERR_NOT_IMPLEMENTED );
+    }
+
+}
 // InStr( [start],string,string,[compare] )
 
 RTLFUNC(InStr)
@@ -2407,7 +2467,18 @@ RTLFUNC(IsEmpty)
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
-        rPar.Get( 0 )->PutBool( rPar.Get(1)->IsEmpty() );
+    {
+        SbxVariable* pVar = NULL;
+        if( SbiRuntime::isVBAEnabled() )
+            pVar = getDefaultProp( rPar.Get(1) );
+        if ( pVar )
+        {
+            pVar->Broadcast( SBX_HINT_DATAWANTED );
+            rPar.Get( 0 )->PutBool( pVar->IsEmpty() );
+        }
+        else
+            rPar.Get( 0 )->PutBool( rPar.Get(1)->IsEmpty() );
+    }
 }
 
 RTLFUNC(IsError)
@@ -2418,7 +2489,22 @@ RTLFUNC(IsError)
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
-        rPar.Get( 0 )->PutBool( rPar.Get(1)->IsErr() );
+    {
+        SbxVariable* pVar =rPar.Get( 1 );
+        SbUnoObject* pObj = PTR_CAST(SbUnoObject,pVar );
+                if ( !pObj )
+                {
+                    if ( SbxBase* pBaseObj = pVar->GetObject() )
+                        pObj = PTR_CAST(SbUnoObject, pBaseObj );
+                }
+        Reference< XErrorQuery > xError;
+        if ( pObj )
+            xError.set( pObj->getUnoAny(), UNO_QUERY );
+        if ( xError.is() )
+            rPar.Get( 0 )->PutBool( xError->hasError() );
+        else
+            rPar.Get( 0 )->PutBool( rPar.Get(1)->IsErr() );
+    }
 }
 
 RTLFUNC(IsNull)
@@ -3538,6 +3624,13 @@ RTLFUNC(Shell)
             NAMESPACE_VOS(OArgumentList) aArgList( pArgumentList, nParamCount );
             bSucc = pApp->execute( eOptions, aArgList ) == NAMESPACE_VOS(OProcess)::E_None;
         }
+        long nResult = 0;
+        NAMESPACE_VOS(OProcess)::TProcessInfo aInfo;
+        // We should return the identifier of the executing process when is running VBA, because method Shell(...) returns it in Excel.
+        if ( bSucc && SbiRuntime::isVBAEnabled() && pApp->getInfo( NAMESPACE_VOS(OProcess)::TData_Identifier, &aInfo ) == NAMESPACE_VOS(OProcess)::E_None )
+        {
+            nResult = aInfo.Ident;
+        }
 
         /*
         if( nParamCount == 0 )
@@ -3552,7 +3645,7 @@ RTLFUNC(Shell)
         if( !bSucc )
             StarBASIC::Error( SbERR_FILE_NOT_FOUND );
         else
-            rPar.Get(0)->PutLong( 0 );
+            rPar.Get(0)->PutLong( nResult );
     }
 }
 
@@ -3623,6 +3716,65 @@ String getBasicTypeName( SbxDataType eType )
     return aRetStr;
 }
 
+String getObjectTypeName( SbxVariable* pVar )
+{
+    rtl::OUString sRet( RTL_CONSTASCII_USTRINGPARAM("Object") );
+    if ( pVar )
+    {
+        SbxBase* pObj = pVar->GetObject();
+        if( !pObj )
+           sRet = String( RTL_CONSTASCII_USTRINGPARAM("Nothing") );
+        else
+        {
+            SbUnoObject* pUnoObj = PTR_CAST(SbUnoObject,pVar );
+            if ( !pUnoObj )
+            {
+                if ( SbxBase* pBaseObj = pVar->GetObject() )
+                    pUnoObj = PTR_CAST(SbUnoObject, pBaseObj );
+            }
+            if ( pUnoObj )
+            {
+                Any aObj = pUnoObj->getUnoAny();
+                // For upstreaming unless we start to build oovbaapi by default
+                // we need to get detect the vba-ness of the object in some
+                // other way
+                // note: Automation objects do not support XServiceInfo
+                Reference< XServiceInfo > xServInfo( aObj, UNO_QUERY );
+                if ( xServInfo.is() )
+                {
+                    // is this a VBA object ?
+                    Reference< ooo::vba::XHelperInterface > xVBA( aObj, UNO_QUERY );
+                    Sequence< rtl::OUString > sServices = xServInfo->getSupportedServiceNames();
+                    if ( sServices.getLength() )
+                        sRet = sServices[ 0 ];
+                }
+                else
+                {
+                    Reference< com::sun::star::bridge::oleautomation::XAutomationObject > xAutoMation( aObj, UNO_QUERY );
+                    if ( xAutoMation.is() )
+                    {
+                        Reference< XInvocation > xInv( aObj, UNO_QUERY );
+                        if ( xInv.is() )
+                        {
+                            try
+                            {
+                                xInv->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("$GetTypeName") ) ) >>= sRet;
+                            }
+                            catch( Exception& )
+                            {
+                            }
+                        }
+                    }
+                }
+                sal_Int32 nDot = sRet.lastIndexOf( '.' );
+                if ( nDot != -1 && nDot < sRet.getLength() )
+                       sRet = sRet.copy( nDot + 1 );
+            }
+        }
+    }
+    return sRet;
+}
+
 RTLFUNC(TypeName)
 {
     (void)pBasic;
@@ -3634,7 +3786,12 @@ RTLFUNC(TypeName)
     {
         SbxDataType eType = rPar.Get(1)->GetType();
         BOOL bIsArray = ( ( eType & SbxARRAY ) != 0 );
-        String aRetStr = getBasicTypeName( eType );
+
+        String aRetStr;
+        if ( SbiRuntime::isVBAEnabled() && eType == SbxOBJECT )
+            aRetStr = getObjectTypeName( rPar.Get(1) );
+        else
+            aRetStr = getBasicTypeName( eType );
         if( bIsArray )
             aRetStr.AppendAscii( "()" );
         rPar.Get(0)->PutString( aRetStr );
@@ -4577,3 +4734,5 @@ RTLFUNC(Partition)
     aRetStr.append( aUpperValue );
     rPar.Get(0)->PutString( String(aRetStr.makeStringAndClear()) );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

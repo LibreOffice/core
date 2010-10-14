@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -58,6 +59,7 @@ static TokenTable aTokTable_Basic [] = {        // Token-Tabelle:
     { ANY,      "Any" },
     { APPEND,   "Append" },
     { AS,       "As" },
+    { ATTRIBUTE,"Attribute" },
     { BASE,     "Base" },
     { BINARY,   "Binary" },
     { TBOOLEAN, "Boolean" },
@@ -712,3 +714,4 @@ void SbiTokenizer::Hilite( SbTextPortions& rList )
     bUsedForHilite = FALSE;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

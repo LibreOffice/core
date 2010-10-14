@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -741,7 +742,7 @@ IMPL_LINK( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, pStarBasic )
     basicide_handle_basic_error pSymbol = (basicide_handle_basic_error) osl_getFunctionSymbol( handleMod, aSymbol.pData );
 
     // call basicide_handle_basic_error in basctl
-    long nRet = pSymbol( pStarBasic );
+    long nRet = pSymbol ? pSymbol( pStarBasic ) : 0;
 
     return nRet;
 }
@@ -835,3 +836,4 @@ void SfxApplication::MacroOrganizer( INT16 nTabId )
     pSymbol( nTabId );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

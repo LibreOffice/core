@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,6 +65,30 @@ ScVbaFrame::setValue( const uno::Any& _value ) throw (::com::sun::star::uno::Run
     _value >>= sCaption;
     setCaption( sCaption );
 }
+//liuchen 2009-7-6
+::sal_Int32 SAL_CALL ScVbaFrame::getForeColor() throw (::com::sun::star::uno::RuntimeException)
+{
+    return 0;
+}
+
+void SAL_CALL ScVbaFrame::setForeColor( ::sal_Int32 /*_forecolor*/ ) throw (::com::sun::star::uno::RuntimeException)
+{
+    return;
+}
+//liuchen 2009-7-6 end
+
+rtl::OUString SAL_CALL
+ScVbaFrame::getAccelerator() throw (css::uno::RuntimeException)
+{
+    //FIXME: seems not support?
+    return rtl::OUString();
+}
+
+void SAL_CALL
+ScVbaFrame::setAccelerator( const rtl::OUString& /*_accelerator*/ ) throw (::com::sun::star::uno::RuntimeException)
+{
+    //FIXME: seems not support?
+}
 
 rtl::OUString&
 ScVbaFrame::getServiceImplName()
@@ -83,3 +108,5 @@ ScVbaFrame::getServiceNames()
     }
     return aServiceNames;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

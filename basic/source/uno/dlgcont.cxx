@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -322,7 +323,7 @@ Any SAL_CALL SfxDialogLibraryContainer::importLibraryElement
 
     try {
         // start parsing
-        xParser->setDocumentHandler( ::xmlscript::importDialogModel( xDialogModel, xContext ) );
+        xParser->setDocumentHandler( ::xmlscript::importDialogModel( xDialogModel, xContext, mxOwnerDocument ) );
         xParser->parseStream( source );
     }
     catch( Exception& )
@@ -336,7 +337,7 @@ Any SAL_CALL SfxDialogLibraryContainer::importLibraryElement
 
     // Create InputStream, TODO: Implement own InputStreamProvider
     // to avoid creating the DialogModel here!
-    Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xDialogModel, xContext );
+    Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xDialogModel, xContext, mxOwnerDocument );
     aRetAny <<= xISP;
     return aRetAny;
 }
@@ -484,7 +485,11 @@ void SfxDialogLibraryContainer::onNewRootStorage()
     }
 }
 
-
+sal_Bool SAL_CALL
+SfxDialogLibraryContainer:: HasExecutableCode( const ::rtl::OUString& Library ) throw (uno::RuntimeException)
+{
+    return sal_False; // dialog library has no executable code
+}
 //============================================================================
 // Service
 
@@ -656,3 +661,4 @@ bool SAL_CALL SfxDialogLibrary::isLibraryElementValid( ::com::sun::star::uno::An
 }
 //============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

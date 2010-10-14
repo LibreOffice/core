@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -484,3 +485,4 @@ SvXMLImportContext *SvxXMLXTableImport::CreateContext( sal_uInt16 nPrefix, const
     return new SvXMLImportContext( *this, nPrefix, rLocalName );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

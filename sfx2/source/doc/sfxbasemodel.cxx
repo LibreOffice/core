@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -883,7 +884,15 @@ uno::Reference< document::XDocumentInfo > SAL_CALL SfxBaseModel::getDocumentInfo
 
     return m_pData->m_xDocumentInfo;
 }
-
+void
+SfxBaseModel::setDocumentProperties( const uno::Reference< document::XDocumentProperties >& rxNewDocProps )
+{
+    // object already disposed?
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        throw lang::DisposedException();
+    m_pData->m_xDocumentProperties.set(rxNewDocProps, uno::UNO_QUERY_THROW);
+}
 // document::XDocumentPropertiesSupplier:
 uno::Reference< document::XDocumentProperties > SAL_CALL
 SfxBaseModel::getDocumentProperties()
@@ -3552,15 +3561,23 @@ void SAL_CALL SfxBaseModel::switchToStorage( const uno::Reference< XSTORAGE >& x
         throw IOEXCEPTION(); // TODO:
 
     // the persistence should be switched only if the storage is different
-    if ( xStorage != m_pData->m_pObjectShell->GetStorage()
-      && !m_pData->m_pObjectShell->SwitchPersistance( xStorage ) )
+    if ( xStorage != m_pData->m_pObjectShell->GetStorage() )
     {
-        sal_uInt32 nError = m_pData->m_pObjectShell->GetErrorCode();
-        throw task::ErrorCodeIOException( ::rtl::OUString(),
-                                            uno::Reference< uno::XInterface >(),
-                                            nError ? nError : ERRCODE_IO_GENERAL );
+        if ( !m_pData->m_pObjectShell->SwitchPersistance( xStorage ) )
+        {
+            sal_uInt32 nError = m_pData->m_pObjectShell->GetErrorCode();
+            throw task::ErrorCodeIOException( ::rtl::OUString(),
+                                                uno::Reference< uno::XInterface >(),
+                                                nError ? nError : ERRCODE_IO_GENERAL );
+        }
+        else
+        {
+            // UICfgMgr has a reference to the old storage, update it
+            uno::Reference< ui::XUIConfigurationStorage > xUICfgMgrStorage( getUIConfigurationManager(), uno::UNO_QUERY );
+            if ( xUICfgMgrStorage.is() )
+                xUICfgMgrStorage->setStorage( xStorage );
+        }
     }
-
     m_pData->m_pObjectShell->Get_Impl()->bOwnsStorage = FALSE;
 }
 
@@ -4307,3 +4324,4 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     return xDMA->storeMetadataToMedium(i_rMedium);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

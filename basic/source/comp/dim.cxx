@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,6 +30,8 @@
 #include "precompiled_basic.hxx"
 #include <basic/sbx.hxx>
 #include "sbcomp.hxx"
+#include "sbunoobj.hxx"
+
 
 SbxObject* cloneTypeObjectImpl( const SbxObject& rTypeObj );
 
@@ -153,7 +156,7 @@ void SbiParser::TypeDecl( SbiSymDef& rDef, BOOL bAsNewAlreadyParsed )
                             }
                         }
                     }
-                    else if( rEnumArray->Find( aCompleteName, SbxCLASS_OBJECT ) )
+                    else if( rEnumArray->Find( aCompleteName, SbxCLASS_OBJECT ) || ( IsVBASupportOn() && VBAConstantHelper::instance().isVBAConstantType( aCompleteName ) ) )
                     {
                         eType = SbxLONG;
                         break;
@@ -426,7 +429,10 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
                 aExpr.Gen();
                 SbiOpcode eOp_ = pDef->IsNew() ? _CREATE : _TCREATE;
                 aGen.Gen( eOp_, pDef->GetId(), pDef->GetTypeId() );
-                aGen.Gen( _SET );
+                if ( bVBASupportOn )
+                    aGen.Gen( _VBASET );
+                else
+                    aGen.Gen( _SET );
             }
         }
         else
@@ -1043,6 +1049,24 @@ void SbiParser::DefDeclare( BOOL bPrivate )
     }
 }
 
+void SbiParser::Attribute()
+{
+    // TODO: Need to implement the method as an attributed object.
+    while( Next() != EQ )
+    {
+        String aSym( GetSym() );
+        if( Next() != DOT)
+            break;
+    }
+
+    if( eCurTok != EQ )
+        Error( SbERR_SYNTAX );
+    else
+        SbiExpression aValue( this );
+
+    // Don't generate any code - just discard it.
+}
+
 // Aufruf einer SUB oder FUNCTION
 
 void SbiParser::Call()
@@ -1201,3 +1225,4 @@ void SbiParser::DefStatic( BOOL bPrivate )
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

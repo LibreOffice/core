@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,6 +25,10 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
+#ifdef AIX
+#    undef _THREAD_SAFE
+#endif
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_shell.hxx"
@@ -603,3 +608,4 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     return 0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

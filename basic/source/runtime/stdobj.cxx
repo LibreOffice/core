@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,7 @@
 #include <basic/sbstdobj.hxx>
 #include "rtlproto.hxx"
 #include "sbintern.hxx"
-
+#include <hash_map>
 // Das nArgs-Feld eines Tabelleneintrags ist wie folgt verschluesselt:
 // Zur Zeit wird davon ausgegangen, dass Properties keine Parameter
 // benoetigen!
@@ -69,6 +70,45 @@ struct Methods {
     USHORT      nHash;      // Hashcode
 };
 
+struct StringHashCode
+{
+    size_t operator()( const String& rStr ) const
+    {
+        return rtl_ustr_hashCode_WithLength( rStr.GetBuffer(), rStr.Len() );
+    }
+};
+
+class VBABlacklist
+{
+friend class VBABlackListQuery;
+    std::hash_map< String, bool, StringHashCode > mBlackList;
+    VBABlacklist()
+    {
+        const char* list[] = { "Red" };
+        sal_Int32 nSize = sizeof( list ) / sizeof( list[ 0 ] );
+        for ( sal_Int32 index = 0; index < nSize; ++index )
+        {
+            mBlackList[ String::CreateFromAscii( list[ index ] ).ToLowerAscii() ] = true;
+        }
+    }
+public:
+    bool isBlackListed( const String& sName )
+    {
+        String sNameLower( sName );
+        sNameLower.ToLowerAscii();
+        return ( mBlackList.find( sNameLower ) != mBlackList.end() );
+    }
+};
+
+class VBABlackListQuery
+{
+public:
+    static bool isBlackListed( const String& sName )
+    {
+        static VBABlacklist blackList;
+        return blackList.isBlackListed( sName );
+    }
+};
 static Methods aMethods[] = {
 
 { "AboutStarBasic", SbxNULL,      1 | _FUNCTION, RTLNAME(AboutStarBasic),0  },
@@ -171,7 +211,12 @@ static Methods aMethods[] = {
   { "expression",   SbxVARIANT, 0,NULL,0 },
 { "CVErr",          SbxVARIANT,   1 | _FUNCTION, RTLNAME(CVErr),0           },
   { "expression",   SbxVARIANT, 0,NULL,0 },
-
+{ "DDB",      SbxDOUBLE,      5 | _FUNCTION | _COMPTMASK, RTLNAME(DDB),0       },
+  { "Cost",       SbxDOUBLE,  0, NULL,0 },
+  { "Salvage",       SbxDOUBLE,  0, NULL,0 },
+  { "Life",       SbxDOUBLE,  0, NULL,0 },
+  { "Period",       SbxDOUBLE,  0, NULL,0 },
+  { "Factor",     SbxVARIANT,  _OPT, NULL,0 },
 { "Date",           SbxDATE,          _LFUNCTION,RTLNAME(Date),0            },
 { "DateAdd",        SbxDATE,      3 | _FUNCTION, RTLNAME(DateAdd),0         },
   { "Interval",     SbxSTRING, 0,NULL,0 },
@@ -216,7 +261,7 @@ static Methods aMethods[] = {
 { "Dir",            SbxSTRING,    2 | _FUNCTION, RTLNAME(Dir),0             },
   { "FileSpec",     SbxSTRING,        _OPT, NULL,0 },
   { "attrmask",     SbxINTEGER,       _OPT, NULL,0 },
-{ "DoEvents",       SbxEMPTY,     _FUNCTION, RTLNAME(DoEvents),0            },
+{ "DoEvents",       SbxINTEGER,     _FUNCTION, RTLNAME(DoEvents),0          },
 { "DumpAllObjects", SbxEMPTY,     2 | _SUB, RTLNAME(DumpAllObjects),0       },
   { "FileSpec",     SbxSTRING, 0,NULL,0 },
   { "DumpAll",      SbxINTEGER,       _OPT, NULL,0 },
@@ -271,6 +316,12 @@ static Methods aMethods[] = {
 { "FreeLibrary",    SbxNULL,      1 | _FUNCTION, RTLNAME(FreeLibrary),0     },
   { "Modulename",   SbxSTRING, 0,NULL,0 },
 
+{ "FV",      SbxDOUBLE,      5 | _FUNCTION | _COMPTMASK, RTLNAME(FV),0       },
+  { "Rate",       SbxDOUBLE,  0, NULL,0 },
+  { "NPer",       SbxDOUBLE,  0, NULL,0 },
+  { "Pmt",       SbxDOUBLE,  0, NULL,0 },
+  { "PV",     SbxVARIANT,  _OPT, NULL,0 },
+  { "Due",     SbxVARIANT,  _OPT, NULL,0 },
 { "Get",            SbxNULL,   3 | _FUNCTION, RTLNAME(Get),0                },
   { "filenumber",   SbxINTEGER, 0,NULL,0 },
   { "recordnumber", SbxLONG, 0,NULL,0 },
@@ -331,6 +382,16 @@ static Methods aMethods[] = {
   { "Compare",      SbxINTEGER,       _OPT, NULL,0 },
 { "Int",            SbxDOUBLE,    1 | _FUNCTION, RTLNAME(Int),0             },
   { "number",       SbxDOUBLE, 0,NULL,0 },
+{ "IPmt",      SbxDOUBLE,      6 | _FUNCTION | _COMPTMASK, RTLNAME(IPmt),0       },
+  { "Rate",       SbxDOUBLE,  0, NULL,0 },
+  { "Per",       SbxDOUBLE,  0, NULL,0 },
+  { "NPer",       SbxDOUBLE,  0, NULL,0 },
+  { "PV",     SbxDOUBLE,  0, NULL,0 },
+  { "FV",     SbxVARIANT,  _OPT, NULL,0 },
+  { "Due",     SbxVARIANT,  _OPT, NULL,0 },
+{ "IRR",      SbxDOUBLE,      2 | _FUNCTION | _COMPTMASK, RTLNAME(IRR),0       },
+  { "ValueArray",       SbxARRAY,  0, NULL,0 },
+  { "Guess",       SbxVARIANT,  _OPT, NULL,0 },
 { "IsArray",        SbxBOOL,      1 | _FUNCTION, RTLNAME(IsArray),0         },
   { "Variant",      SbxVARIANT, 0,NULL,0 },
 { "IsDate",         SbxBOOL,      1 | _FUNCTION, RTLNAME(IsDate),0          },
@@ -401,6 +462,10 @@ static Methods aMethods[] = {
   { "Length",       SbxLONG,          _OPT, NULL,0 },
 { "Minute",         SbxINTEGER,   1 | _FUNCTION, RTLNAME(Minute),0          },
   { "Date",         SbxDATE, 0,NULL,0 },
+{ "MIRR",      SbxDOUBLE,      2 | _FUNCTION | _COMPTMASK, RTLNAME(MIRR),0       },
+  { "ValueArray",       SbxARRAY,  0, NULL,0 },
+  { "FinanceRate",       SbxDOUBLE,  0, NULL,0 },
+  { "ReinvestRate",       SbxDOUBLE,  0, NULL,0 },
 { "MkDir",          SbxNULL,      1 | _FUNCTION, RTLNAME(MkDir),0           },
   { "pathname",     SbxSTRING, 0,NULL,0 },
 { "Month",          SbxINTEGER,   1 | _FUNCTION, RTLNAME(Month),0           },
@@ -417,6 +482,15 @@ static Methods aMethods[] = {
 
 { "Nothing",        SbxOBJECT,        _CPROP,    RTLNAME(Nothing),0         },
 { "Now",            SbxDATE,          _FUNCTION, RTLNAME(Now),0             },
+{ "NPer",      SbxDOUBLE,      5 | _FUNCTION | _COMPTMASK, RTLNAME(NPer),0       },
+  { "Rate",       SbxDOUBLE,  0, NULL,0 },
+  { "Pmt",       SbxDOUBLE,  0, NULL,0 },
+  { "PV",       SbxDOUBLE,  0, NULL,0 },
+  { "FV",     SbxVARIANT,  _OPT, NULL,0 },
+  { "Due",     SbxVARIANT,  _OPT, NULL,0 },
+{ "NPV",      SbxDOUBLE,      2 | _FUNCTION | _COMPTMASK, RTLNAME(NPV),0       },
+  { "Rate",       SbxDOUBLE,  0, NULL,0 },
+  { "ValueArray",       SbxARRAY,  0, NULL,0 },
 { "Null",           SbxNULL,          _CPROP,    RTLNAME(Null),0            },
 
 { "Oct",            SbxSTRING,    1 | _FUNCTION, RTLNAME(Oct),0             },
@@ -428,16 +502,46 @@ static Methods aMethods[] = {
   { "stop",         SbxLONG,    0,NULL,0 },
   { "interval",     SbxLONG,    0,NULL,0 },
 { "Pi",             SbxDOUBLE,        _CPROP,    RTLNAME(PI),0              },
+
+{ "Pmt",      SbxDOUBLE,      5 | _FUNCTION | _COMPTMASK, RTLNAME(Pmt),0       },
+  { "Rate",       SbxDOUBLE,  0, NULL,0 },
+  { "NPer",       SbxDOUBLE,  0, NULL,0 },
+  { "PV",     SbxDOUBLE,  0, NULL,0 },
+  { "FV",     SbxVARIANT,  _OPT, NULL,0 },
+  { "Due",     SbxVARIANT,  _OPT, NULL,0 },
+
+{ "PPmt",      SbxDOUBLE,      6 | _FUNCTION | _COMPTMASK, RTLNAME(PPmt),0       },
+  { "Rate",       SbxDOUBLE,  0, NULL,0 },
+  { "Per",       SbxDOUBLE,  0, NULL,0 },
+  { "NPer",       SbxDOUBLE,  0, NULL,0 },
+  { "PV",     SbxDOUBLE,  0, NULL,0 },
+  { "FV",     SbxVARIANT,  _OPT, NULL,0 },
+  { "Due",     SbxVARIANT,  _OPT, NULL,0 },
+
 { "Put",            SbxNULL,   3 | _FUNCTION, RTLNAME(Put),0                },
   { "filenumber",   SbxINTEGER, 0,NULL,0 },
   { "recordnumber", SbxLONG, 0,NULL,0 },
   { "variablename", SbxVARIANT, 0,NULL,0 },
+
+{ "PV",      SbxDOUBLE,      5 | _FUNCTION | _COMPTMASK, RTLNAME(PV),0       },
+  { "Rate",       SbxDOUBLE,  0, NULL,0 },
+  { "NPer",       SbxDOUBLE,  0, NULL,0 },
+  { "Pmt",     SbxDOUBLE,  0, NULL,0 },
+  { "FV",     SbxVARIANT,  _OPT, NULL,0 },
+  { "Due",     SbxVARIANT,  _OPT, NULL,0 },
 
 { "QBColor",        SbxLONG,      1 | _FUNCTION, RTLNAME(QBColor),0         },
   { "number",       SbxINTEGER, 0,NULL,0 },
 
 { "Randomize",      SbxNULL,      1 | _FUNCTION, RTLNAME(Randomize),0       },
   { "Number",       SbxDOUBLE,        _OPT, NULL,0 },
+{ "Rate",      SbxDOUBLE,      6 | _FUNCTION | _COMPTMASK, RTLNAME(Rate),0       },
+  { "NPer",       SbxDOUBLE,  0, NULL,0 },
+  { "Pmt",       SbxDOUBLE,  0, NULL,0 },
+  { "PV",       SbxDOUBLE,  0, NULL,0 },
+  { "FV",       SbxVARIANT,  _OPT, NULL,0 },
+  { "Due",     SbxVARIANT,  _OPT, NULL,0 },
+  { "Guess",    SbxVARIANT,  _OPT, NULL,0 },
 { "Red",        SbxINTEGER,   1 | _FUNCTION, RTLNAME(Red),0                 },
   { "RGB-Value",     SbxLONG, 0,NULL,0 },
 { "Reset",          SbxNULL,      0 | _FUNCTION, RTLNAME(Reset),0           },
@@ -491,6 +595,15 @@ static Methods aMethods[] = {
   { "WindowStyle",  SbxINTEGER,       _OPT, NULL,0 },
 { "Sin",            SbxDOUBLE,    1 | _FUNCTION, RTLNAME(Sin),0             },
   { "number",       SbxDOUBLE, 0,NULL,0 },
+{ "SLN",            SbxDOUBLE,    2 |  _FUNCTION | _COMPTMASK, RTLNAME(SLN),0             },
+  { "Cost",       SbxDOUBLE, 0,NULL,0 },
+  { "Double",       SbxDOUBLE, 0,NULL,0 },
+  { "Life",       SbxDOUBLE, 0,NULL,0 },
+{ "SYD",            SbxDOUBLE,    2 |  _FUNCTION | _COMPTMASK, RTLNAME(SYD),0             },
+  { "Cost",       SbxDOUBLE, 0,NULL,0 },
+  { "Salvage",       SbxDOUBLE, 0,NULL,0 },
+  { "Life",       SbxDOUBLE, 0,NULL,0 },
+  { "Period",       SbxDOUBLE, 0,NULL,0 },
 { "Space",          SbxSTRING,      1 | _FUNCTION, RTLNAME(Space),0         },
   { "string",       SbxLONG, 0,NULL,0 },
 { "Spc",            SbxSTRING,      1 | _FUNCTION, RTLNAME(Spc),0           },
@@ -605,6 +718,7 @@ static Methods aMethods[] = {
 
 { "Wait",           SbxNULL,      1 | _FUNCTION, RTLNAME(Wait),0            },
   { "Milliseconds", SbxLONG, 0,NULL,0 },
+{ "FuncCaller",          SbxVARIANT,      _FUNCTION, RTLNAME(FuncCaller),0      },
 //#i64882#
 { "WaitUntil",          SbxNULL,      1 | _FUNCTION, RTLNAME(WaitUntil),0      },
   { "Date", SbxDOUBLE, 0,NULL,0 },
@@ -683,13 +797,15 @@ SbxVariable* SbiStdObject::Find( const String& rName, SbxClassType t )
              && ( p->nHash == nHash_ )
              && ( rName.EqualsIgnoreCaseAscii( p->pName ) ) )
             {
+                SbiInstance* pInst = pINST;
                 bFound = TRUE;
                 if( p->nArgs & _COMPTMASK )
                 {
-                    SbiInstance* pInst = pINST;
                     if( !pInst || !pInst->IsCompatibility() )
                         bFound = FALSE;
                 }
+                if ( pInst && pInst->IsCompatibility() && VBABlackListQuery::isBlackListed( rName ) )
+                            bFound = FALSE;
                 break;
             }
             nIndex += ( p->nArgs & _ARGSMASK ) + 1;
@@ -786,3 +902,4 @@ SbxInfo* SbiStdObject::GetInfo( short nIdx )
     return pInfo_;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

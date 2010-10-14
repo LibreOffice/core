@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -241,3 +242,5 @@ void OTables::addComment(const Reference< XPropertySet >& descriptor,::rtl::OUSt
         _rOut.appendAscii("'");
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

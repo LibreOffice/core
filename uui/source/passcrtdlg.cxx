@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -122,3 +123,5 @@ PasswordCreateDialog::PasswordCreateDialog( Window* _pParent, ResMgr * pResMgr, 
         pControls[i]->SetPosSizePixel( aNewPos, pControls[i]->GetSizePixel() );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

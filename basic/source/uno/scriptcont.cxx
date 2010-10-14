@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,7 +65,8 @@
 #include <xmlscript/xmlmod_imexp.hxx>
 #include <cppuhelper/factory.hxx>
 #include <com/sun/star/util/VetoException.hpp>
-
+#include <com/sun/star/script/XLibraryQueryExecutable.hpp>
+#include <cppuhelper/implbase1.hxx>
 namespace basic
 {
 
@@ -134,7 +136,6 @@ sal_Bool SfxScriptLibraryContainer::hasLibraryPassword( const String& rLibraryNa
     SfxLibrary* pImplLib = getImplLib( rLibraryName );
     return pImplLib->mbPasswordProtected;
 }
-
 
 // Ctor for service
 SfxScriptLibraryContainer::SfxScriptLibraryContainer( void )
@@ -1163,6 +1164,17 @@ void SfxScriptLibraryContainer::onNewRootStorage()
 {
 }
 
+sal_Bool SAL_CALL
+SfxScriptLibraryContainer:: HasExecutableCode( const ::rtl::OUString& Library ) throw (uno::RuntimeException)
+{
+    BasicManager* pBasicMgr = getBasicManager();
+    OSL_ENSURE( pBasicMgr, "we need a basicmanager, really we do" );
+    if ( pBasicMgr )
+        return pBasicMgr->HasExeCode( Library ); // need to change this to take name
+    // default to it has code if we can't decide
+    return sal_True;
+}
+
 //============================================================================
 // Service
 void createRegistryInfo_SfxScriptLibraryContainer()
@@ -1324,3 +1336,5 @@ void SAL_CALL SfxScriptLibrary::removeModuleInfo( const ::rtl::OUString& ModuleN
 //============================================================================
 
 }   // namespace basic
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

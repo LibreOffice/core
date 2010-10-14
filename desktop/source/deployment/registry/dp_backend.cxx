@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -121,6 +122,9 @@ void PackageRegistryBackend::check()
 void PackageRegistryBackend::disposing()
 {
     try {
+        for ( t_string2ref::const_iterator i = m_bound.begin(); i != m_bound.end(); i++)
+            i->second->removeEventListener(this);
+        m_bound.clear();
         m_xComponentContext.clear();
         WeakComponentImplHelperBase::disposing();
     }
@@ -805,3 +809,4 @@ Any Package::TypeInfo::getIcon( sal_Bool highContrast, sal_Bool smallIcon )
 }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
