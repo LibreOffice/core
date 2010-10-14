@@ -117,7 +117,9 @@ IDLFILES=\
     XCodeNameQuery.idl \
     XUndoAction.idl \
     XUndoManager.idl \
-    XUndoManagerSupplier.idl
+    XUndoManagerListener.idl \
+    XUndoManagerSupplier.idl \
+    UndoManagerEvent.idl
 
 
 # ------------------------------------------------------------------
