@@ -152,6 +152,20 @@ void PADialog::Init()
         m_aFontsPB.Enable( FALSE );
         m_aFontsPB.Show( FALSE );
     }
+
+    // at this point no actual changes will be  written
+    // but the write will have checked whether any writeable config exists
+    if( ! m_rPIManager.writePrinterConfig() )
+    {
+        m_aAddPB.Enable( FALSE );
+        m_aRemPB.Enable( FALSE );
+        m_aConfPB.Enable( FALSE );
+        m_aRenamePB.Enable( FALSE );
+        m_aStdPB.Enable( FALSE );
+        m_aCUPSCB.Enable( FALSE );
+        ErrorBox aBox( GetParent(), WB_OK | WB_DEF_OK, String( PaResId( RID_ERR_NOWRITE ) ) );
+        aBox.Execute();
+    }
 }
 
 PADialog::~PADialog()

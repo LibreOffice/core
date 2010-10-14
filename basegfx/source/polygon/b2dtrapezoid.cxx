@@ -1161,7 +1161,8 @@ namespace basegfx
 
             if(aSource.areControlPointsUsed())
             {
-                aSource = aSource.getDefaultAdaptiveSubdivision();
+            const double fPrecisionFactor = 0.25;
+                aSource = adaptiveSubdivideByDistance( aSource, fLineWidth * fPrecisionFactor );
             }
 
             const sal_uInt32 nPointCount(aSource.count());

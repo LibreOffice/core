@@ -218,10 +218,8 @@ extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL
 //extern sal_Bool SAL_CALL UnoControlTabPageModel_component_writeInfo(void * serviceManager, void * registryKey);
 extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL UnoControlTabPageModel_CreateInstance (const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
 
-extern sal_Bool SAL_CALL comp_AsyncCallback_component_writeInfo( void * serviceManager, void * registryKey );
 extern void * SAL_CALL comp_AsyncCallback_component_getFactory( const char * implName, void * serviceManager, void * registryKey );
 
-extern sal_Bool SAL_CALL comp_Layout_component_writeInfo( void * serviceManager, void * registryKey );
 extern void * SAL_CALL comp_Layout_component_getFactory( const char * implName, void * serviceManager, void * registryKey );
 
 extern "C"

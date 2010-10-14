@@ -2268,10 +2268,10 @@ long Menu::ImplGetNativeCheckAndRadioSize( Window* pWin, long& rCheckHeight, lon
     if( ! bIsMenuBar )
     {
         ImplControlValue aVal;
-        Region aNativeBounds;
-        Region aNativeContent;
+        Rectangle aNativeBounds;
+        Rectangle aNativeContent;
         Point tmp( 0, 0 );
-        Region aCtrlRegion( Rectangle( tmp, Size( 100, 15 ) ) );
+        Rectangle aCtrlRegion( Rectangle( tmp, Size( 100, 15 ) ) );
         if( pWin->IsNativeControlSupported( CTRL_MENU_POPUP, PART_MENU_ITEM_CHECK_MARK ) )
         {
             if( pWin->GetNativeControlRegion( ControlType(CTRL_MENU_POPUP),
@@ -2284,8 +2284,8 @@ long Menu::ImplGetNativeCheckAndRadioSize( Window* pWin, long& rCheckHeight, lon
                                               aNativeContent )
             )
             {
-                rCheckHeight = aNativeBounds.GetBoundRect().GetHeight();
-                rMaxWidth = aNativeContent.GetBoundRect().GetWidth();
+                rCheckHeight = aNativeBounds.GetHeight();
+                rMaxWidth = aNativeContent.GetWidth();
             }
         }
         if( pWin->IsNativeControlSupported( CTRL_MENU_POPUP, PART_MENU_ITEM_RADIO_MARK ) )
@@ -2300,8 +2300,8 @@ long Menu::ImplGetNativeCheckAndRadioSize( Window* pWin, long& rCheckHeight, lon
                                               aNativeContent )
             )
             {
-                rRadioHeight = aNativeBounds.GetBoundRect().GetHeight();
-                rMaxWidth = Max (rMaxWidth, aNativeContent.GetBoundRect().GetWidth());
+                rRadioHeight = aNativeBounds.GetHeight();
+                rMaxWidth = Max (rMaxWidth, aNativeContent.GetWidth());
             }
         }
     }
@@ -2516,10 +2516,10 @@ Size Menu::ImplCalcSize( Window* pWin )
         if( pWindow->IsNativeControlSupported( CTRL_MENUBAR, PART_ENTIRE_CONTROL ) )
         {
             ImplControlValue aVal;
-            Region aNativeBounds;
-            Region aNativeContent;
+            Rectangle aNativeBounds;
+            Rectangle aNativeContent;
             Point tmp( 0, 0 );
-            Region aCtrlRegion( Rectangle( tmp, Size( 100, 15 ) ) );
+            Rectangle aCtrlRegion( tmp, Size( 100, 15 ) );
             if( pWindow->GetNativeControlRegion( ControlType(CTRL_MENUBAR),
                                                  ControlPart(PART_ENTIRE_CONTROL),
                                                  aCtrlRegion,
@@ -2530,7 +2530,7 @@ Size Menu::ImplCalcSize( Window* pWin )
                                                  aNativeContent )
             )
             {
-                int nNativeHeight = aNativeBounds.GetBoundRect().GetHeight();
+                int nNativeHeight = aNativeBounds.GetHeight();
                 if( nNativeHeight > aSz.Height() )
                     aSz.Height() = nNativeHeight;
             }
@@ -2555,7 +2555,7 @@ static void ImplPaintCheckBackground( Window* i_pWindow, const Rectangle& i_rRec
     if( i_pWindow->IsNativeControlSupported( CTRL_TOOLBAR, PART_BUTTON ) )
     {
         ImplControlValue    aControlValue;
-        Region              aCtrlRegion( i_rRect );
+        Rectangle           aCtrlRegion( i_rRect );
         ControlState        nState = CTRL_STATE_PRESSED | CTRL_STATE_ENABLED;
 
         aControlValue.setTristateVal( BUTTONVALUE_ON );
@@ -2689,7 +2689,7 @@ void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* 
 
                             Rectangle aCheckRect( aTmpPos, Size( nCtrlHeight, nCtrlHeight ) );
                             pWin->DrawNativeControl( CTRL_MENU_POPUP, nPart,
-                                                     Region( aCheckRect ),
+                                                     aCheckRect,
                                                      nState,
                                                      ImplControlValue(),
                                                      OUString() );
@@ -3722,7 +3722,7 @@ USHORT PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, ULONG nPopupM
     if ( GetItemCount() )
     {
         SalMenu* pMenu = ImplGetSalMenu();
-        if( pMenu && pMenu->ShowNativePopupMenu( pWin, aRect, nPopupModeFlags | FLOATWIN_POPUPMODE_GRABFOCUS ) )
+        if( pMenu && bRealExecute && pMenu->ShowNativePopupMenu( pWin, aRect, nPopupModeFlags | FLOATWIN_POPUPMODE_GRABFOCUS ) )
         {
             pWin->StopExecute(0);
             pWin->doShutdown();
@@ -4679,7 +4679,7 @@ void MenuFloatingWindow::HighlightItem( USHORT nPos, BOOL bHighlight )
                     IntersectClipRegion( Rectangle( Point( nX, nY ), Size( aSz.Width(), pData->aSz.Height() ) ) );
                     Rectangle aCtrlRect( Point( nX, 0 ), Size( aPxSize.Width()-nX, aPxSize.Height() ) );
                     DrawNativeControl( CTRL_MENU_POPUP, PART_ENTIRE_CONTROL,
-                                       Region( aCtrlRect ),
+                                       aCtrlRect,
                                        CTRL_STATE_ENABLED,
                                        ImplControlValue(),
                                        OUString() );
@@ -4688,7 +4688,7 @@ void MenuFloatingWindow::HighlightItem( USHORT nPos, BOOL bHighlight )
                     {
                         bDrawItemRect = false;
                         if( FALSE == DrawNativeControl( CTRL_MENU_POPUP, PART_MENU_ITEM,
-                                                        Region( aItemRect ),
+                                                        aItemRect,
                                                         CTRL_STATE_SELECTED | ( pData->bEnabled? CTRL_STATE_ENABLED: 0 ),
                                                         ImplControlValue(),
                                                         OUString() ) )
@@ -5026,7 +5026,7 @@ void MenuFloatingWindow::Paint( const Rectangle& )
         Size aPxSize( GetOutputSizePixel() );
         aPxSize.Width() -= nX;
         DrawNativeControl( CTRL_MENU_POPUP, PART_ENTIRE_CONTROL,
-                           Region( Rectangle( Point( nX, 0 ), aPxSize ) ),
+                           Rectangle( Point( nX, 0 ), aPxSize ),
                            CTRL_STATE_ENABLED,
                            ImplControlValue(),
                            OUString() );
@@ -5540,23 +5540,21 @@ void MenuBarWindow::HighlightItem( USHORT nPos, BOOL bHighlight )
                         IsNativeControlSupported( CTRL_MENUBAR, PART_ENTIRE_CONTROL ) )
                     {
                         // draw background (transparency)
-                        ImplControlValue aControlValue;
-                        MenubarValue aMenubarValue;
-                        aMenubarValue.maTopDockingAreaHeight = ImplGetTopDockingAreaHeight( this );
-                        aControlValue.setOptionalVal( (void *)(&aMenubarValue) );
+                        MenubarValue aControlValue;
+                        aControlValue.maTopDockingAreaHeight = ImplGetTopDockingAreaHeight( this );
 
                         Point tmp(0,0);
-                        Region aBgRegion( Rectangle( tmp, GetOutputSizePixel() ) );
+                        Rectangle aBgRegion( tmp, GetOutputSizePixel() );
                         DrawNativeControl( CTRL_MENUBAR, PART_ENTIRE_CONTROL,
                                            aBgRegion,
                                            CTRL_STATE_ENABLED,
                                            aControlValue,
                                            OUString() );
-                        ImplAddNWFSeparator( this, aMenubarValue );
+                        ImplAddNWFSeparator( this, aControlValue );
 
                         // draw selected item
                         DrawNativeControl( CTRL_MENUBAR, PART_MENU_ITEM,
-                                           Region( aRect ),
+                                           aRect,
                                            CTRL_STATE_ENABLED | CTRL_STATE_SELECTED,
                                            aControlValue,
                                            OUString() );
@@ -5572,18 +5570,15 @@ void MenuBarWindow::HighlightItem( USHORT nPos, BOOL bHighlight )
                 {
                     if( IsNativeControlSupported( CTRL_MENUBAR, PART_ENTIRE_CONTROL) )
                     {
-                        ImplControlValue aControlValue;
                         MenubarValue aMenubarValue;
                         aMenubarValue.maTopDockingAreaHeight = ImplGetTopDockingAreaHeight( this );
-                        aControlValue.setOptionalVal( (void *)(&aMenubarValue) );
 
                         // use full window size to get proper gradient
                         // but clip accordingly
                         Point aPt;
                         Rectangle aCtrlRect( aPt, GetOutputSizePixel() );
-                        Region aCtrlRegion( aCtrlRect );
 
-                        DrawNativeControl( CTRL_MENUBAR, PART_ENTIRE_CONTROL, aCtrlRegion, CTRL_STATE_ENABLED, aControlValue, rtl::OUString() );
+                        DrawNativeControl( CTRL_MENUBAR, PART_ENTIRE_CONTROL, aCtrlRect, CTRL_STATE_ENABLED, aMenubarValue, rtl::OUString() );
                         ImplAddNWFSeparator( this, aMenubarValue );
                     }
                     else
@@ -5814,14 +5809,12 @@ void MenuBarWindow::Paint( const Rectangle& )
     if( IsNativeControlSupported( CTRL_MENUBAR, PART_ENTIRE_CONTROL) )
     {
         Point aPt;
-        Region              aCtrlRegion( Rectangle( aPt, GetOutputSizePixel() ) );
+        Rectangle aCtrlRegion( aPt, GetOutputSizePixel() );
 
-        ImplControlValue aControlValue;
         MenubarValue aMenubarValue;
         aMenubarValue.maTopDockingAreaHeight = ImplGetTopDockingAreaHeight( this );
-        aControlValue.setOptionalVal( (void *)(&aMenubarValue) );
 
-        DrawNativeControl( CTRL_MENUBAR, PART_ENTIRE_CONTROL, aCtrlRegion, CTRL_STATE_ENABLED, aControlValue, rtl::OUString() );
+        DrawNativeControl( CTRL_MENUBAR, PART_ENTIRE_CONTROL, aCtrlRegion, CTRL_STATE_ENABLED, aMenubarValue, rtl::OUString() );
         ImplAddNWFSeparator( this, aMenubarValue );
     }
     SetFillColor( GetSettings().GetStyleSettings().GetMenuColor() );

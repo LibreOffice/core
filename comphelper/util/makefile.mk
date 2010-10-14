@@ -68,3 +68,11 @@ DEFLIB1NAME=$(TARGET)
 # --- Targets ----------------------------------
 
 .INCLUDE : target.mk
+
+ALLTAR : $(MISC)/comphelp4.component
+
+$(MISC)/comphelp4.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        comphelp4.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt comphelp4.component

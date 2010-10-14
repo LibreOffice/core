@@ -44,6 +44,7 @@ CFLAGSCXX+=$(OBJCXXFLAGS)
 .ENDIF  # "$(GUIBASE)"=="aqua"
 
 SLOFILES=   \
+            $(SLO)$/stylesettings.obj                   \
             $(SLO)$/vclxaccessiblecomponent.obj         \
             $(SLO)$/vclxbitmap.obj 						\
             $(SLO)$/vclxcontainer.obj 					\

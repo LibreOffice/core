@@ -39,11 +39,11 @@
 #include <vcl/dllapi.h>
 #include <vcl/salinst.hxx>
 
-class VCL_DLLPUBLIC SalYieldMutex : public NAMESPACE_VOS(OMutex)
+class VCL_DLLPUBLIC SalYieldMutex : public vos::OMutex
 {
 protected:
     ULONG                                       mnCount;
-    NAMESPACE_VOS(OThread)::TThreadIdentifier   mnThreadId;
+    vos::OThread::TThreadIdentifier mnThreadId;
 
 public:
                                                 SalYieldMutex();
@@ -53,7 +53,7 @@ public:
     virtual sal_Bool                            tryToAcquire();
 
     ULONG                                       GetAcquireCount() const { return mnCount; }
-    NAMESPACE_VOS(OThread)::TThreadIdentifier   GetThreadId() const { return mnThreadId; }
+    vos::OThread::TThreadIdentifier GetThreadId() const { return mnThreadId; }
 };
 
 // -=-= SalInstanceData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

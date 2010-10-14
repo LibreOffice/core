@@ -53,7 +53,6 @@ BOOL bMergeMode;
 BOOL bErrorLog;
 BOOL bUTF8;
 BOOL bULF; // ULF = Unicode Language File
-bool bQuiet;
 ByteString sPrj;
 ByteString sPrjRoot;
 ByteString sOutputFile;
@@ -68,7 +67,6 @@ BOOL ParseCommandLine( int argc, char* argv[])
     bErrorLog = TRUE;
     bUTF8 = TRUE;
     bULF = FALSE;
-    bQuiet = false;
     sPrj = "";
     sPrjRoot = "";
     Export::sLanguages = "";
@@ -91,9 +89,6 @@ BOOL ParseCommandLine( int argc, char* argv[])
         }
         else if ( sSwitch == "-R" ) {
             nState = STATE_ROOT; // next token specifies path to project root
-        }
-        else if ( sSwitch == "-QQ" ) {
-            bQuiet = true;
         }
         else if ( sSwitch == "-M" ) {
             nState = STATE_MERGESRC; // next token specifies the merge database
@@ -170,16 +165,12 @@ BOOL ParseCommandLine( int argc, char* argv[])
 void Help()
 /*****************************************************************************/
 {
-    //fprintf( stdout, "Syntax:ULFEX[-p Prj][-r PrjRoot]-i FileIn -o FileOut[-m DataBase][-e][-b][-u][-NOUTF8][-ULF][-L l1,l2,...]\n" );
     fprintf( stdout, "Syntax:ULFEX[-p Prj][-r PrjRoot]-i FileIn -o FileOut[-m DataBase][-L l1,l2,...]\n" );
     fprintf( stdout, " Prj:      Project\n" );
     fprintf( stdout, " PrjRoot:  Path to project root (..\\.. etc.)\n" );
     fprintf( stdout, " FileIn:   Source file (*.lng)\n" );
     fprintf( stdout, " FileOut:  Destination file (*.*)\n" );
     fprintf( stdout, " DataBase: Mergedata (*.sdf)\n" );
-    fprintf( stdout, " -QQ: quite output\n" );
-    //fprintf( stdout, " -NOUTF8: disable UTF8 as language independent encoding\n" );
-    //fprintf( stdout, " -ULF: enables Unicode Language File format, leads to UTF8 encoded version of lng files" );
     fprintf( stdout, " -L: Restrict the handled languages. l1,l2,... are elements of (de,en-US...)\n" );
     fprintf( stdout, "     A fallback language can be defined like this: l1=f1.\n" );
     fprintf( stdout, "     f1, f2,... are also elements of (de,en-US...)\n" );
@@ -199,25 +190,16 @@ int _cdecl main( int argc, char *argv[] )
         Help();
         return 1;
     }
-    if( !bQuiet ){
-        fprintf( stdout, "\nUlfEx 1 Copyright 2000, 2010 Oracle and/or its affiliates. All Rights Reserved.\n" );
-        fprintf( stdout, "=================================================================================\n" );
-        fprintf( stdout, "\nProcessing File %s ...\n", sInputFile.GetBuffer());
-    }else
-    {
         fprintf(stdout, ".");
         fflush( stdout );
-    }
 
     if ( sOutputFile.Len()) {
-        LngParser aParser( sInputFile, bUTF8, bULF , bQuiet );
+        LngParser aParser( sInputFile, bUTF8, bULF );
         if ( bMergeMode )
             aParser.Merge( sMergeSrc, sOutputFile , sPrj );
         else
             aParser.CreateSDF( sOutputFile, sPrj, sPrjRoot );
     }
-
-    if( !bQuiet ) fprintf( stdout, "\n=================================================\n\n" );
 
     return 0;
 }

@@ -483,9 +483,35 @@ void UnoDialogControl::ImplModelPropertiesChanged( const Sequence< PropertyChang
                 xGraphic = Impl_getGraphicFromURL_nothrow( absoluteUrl );
             }
 
+//<<<<<<< local
             ImplSetPropertyValue(  GetPropertyName( BASEPROPERTY_GRAPHIC), uno::makeAny( xGraphic ), sal_True );
             break;
+//=======
+//  rbase  >>= baseLocation;
+//  rUrl  >>= url;
+//
+//    ::rtl::OUString absoluteURL( url );
+//  if ( url.getLength() > 0 )
+//  {
+//      INetURLObject urlObj(baseLocation);
+//      urlObj.removeSegment();
+//      baseLocation = urlObj.GetMainURL( INetURLObject::NO_DECODE );
+//
+//        const INetURLObject protocolCheck( url );
+//        const INetProtocol protocol = protocolCheck.GetProtocol();
+//        if ( protocol == INET_PROT_NOT_VALID )
+//        {
+//            ::rtl::OUString testAbsoluteURL;
+//            if ( ::osl::FileBase::E_None == ::osl::FileBase::getAbsoluteFileURL( baseLocation, url, testAbsoluteURL ) )
+//                absoluteURL = testAbsoluteURL;
+//>>>>>>> other
         }
+//<<<<<<< local
     }
     ControlContainerBase::ImplModelPropertiesChanged(rEvents);
+//=======
+//  }
+//
+//  return absoluteURL;
+//>>>>>>> other
 }

@@ -154,7 +154,7 @@ sal_Bool splitLastFromConfigurationPath(OUString const& _sInPath,
 }
 
 //----------------------------------------------------------------------------
-OUString extractFirstFromConfigurationPath(OUString const& _sInPath)
+OUString extractFirstFromConfigurationPath(OUString const& _sInPath, OUString* _sOutPath)
 {
     sal_Int32 nSep      = _sInPath.indexOf('/');
     sal_Int32 nBracket  = _sInPath.indexOf('[');
@@ -179,8 +179,7 @@ OUString extractFirstFromConfigurationPath(OUString const& _sInPath)
                 nBracket = nEnd;
             }
             OSL_ENSURE(nEnd > nStart && _sInPath[nBracket] == ']', "Invalid config path: improper mismatch of quote or bracket");
-            OSL_DEBUG_ONLY(nSep = nBracket+1);
-            OSL_ENSURE(nSep == _sInPath.getLength() || _sInPath[nSep] == '/', "Invalid config path: brackets not followed by slash");
+            OSL_ENSURE((nBracket+1 == _sInPath.getLength() && nSep == -1) || (_sInPath[nBracket+1] == '/' && nSep == nBracket+1), "Invalid config path: brackets not followed by slash");
         }
         else // ... but our initial element name is in simple form
             nStart = 0;
@@ -188,6 +187,12 @@ OUString extractFirstFromConfigurationPath(OUString const& _sInPath)
 
     OUString sResult = (nEnd >= 0) ? _sInPath.copy(nStart, nEnd-nStart) : _sInPath;
     lcl_resolveCharEntities(sResult);
+
+    if (_sOutPath != 0)
+    {
+        *_sOutPath = (nSep >= 0) ? _sInPath.copy(nSep + 1) : OUString();
+    }
+
     return sResult;
 }
 

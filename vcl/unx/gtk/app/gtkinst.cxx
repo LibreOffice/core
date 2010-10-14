@@ -76,7 +76,7 @@ void GtkHookedYieldMutex::ThreadsLeave()
 
 #if OSL_DEBUG_LEVEL > 1
     if( mnThreadId &&
-        mnThreadId != NAMESPACE_VOS(OThread)::getCurrentIdentifier())
+        mnThreadId != vos::OThread::getCurrentIdentifier())
         fprintf( stderr, "\n\n--- A different thread owns the mutex ...---\n\n\n");
 #endif
 

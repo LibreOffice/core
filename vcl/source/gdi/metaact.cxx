@@ -4078,7 +4078,7 @@ void MetaCommentAction::Move( long nXMove, long nYMove )
                     aMemStm >> aFill;
                     PolyPolygon aPath;
                     aFill.getPath( aPath );
-                    aPath.Scale( nXMove, nYMove );
+                    aPath.Move( nXMove, nYMove );
                     aFill.setPath( aPath );
                     aDest << aFill;
                 }

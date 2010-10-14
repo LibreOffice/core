@@ -347,7 +347,7 @@ IMPL_LINK( ImpPathDialog, ClickHdl, Button*, pBtn )
     if ( pBtn == pHomeBtn )
     {
         ::rtl::OUString aHomeDir;
-        NAMESPACE_VOS( OSecurity ) aSecurity;
+        vos:: OSecurity  aSecurity;
         if ( aSecurity.getHomeDir( aHomeDir ) )
         {
             DirEntry aFile ( aHomeDir );

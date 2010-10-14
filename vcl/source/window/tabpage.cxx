@@ -149,7 +149,7 @@ void TabPage::Paint( const Rectangle& )
     // draw native tabpage only inside tabcontrols, standalone tabpages look ugly (due to bad dialog design)
     if( IsNativeControlSupported(CTRL_TAB_BODY, PART_ENTIRE_CONTROL) && GetParent() && (GetParent()->GetType() == WINDOW_TABCONTROL) )
     {
-        const ImplControlValue aControlValue( BUTTONVALUE_DONTKNOW, rtl::OUString(), 0 );
+        const ImplControlValue aControlValue;
 
         ControlState nState = CTRL_STATE_ENABLED;
         int part = PART_ENTIRE_CONTROL;
@@ -160,7 +160,7 @@ void TabPage::Paint( const Rectangle& )
         Point aPoint;
         // pass the whole window region to NWF as the tab body might be a gradient or bitmap
         // that has to be scaled properly, clipping makes sure that we do not paint too much
-        Region aCtrlRegion( Rectangle( aPoint, GetOutputSizePixel() ) );
+        Rectangle aCtrlRegion( aPoint, GetOutputSizePixel() );
         DrawNativeControl( CTRL_TAB_BODY, part, aCtrlRegion, nState,
                 aControlValue, rtl::OUString() );
     }

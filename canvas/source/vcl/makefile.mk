@@ -83,3 +83,11 @@ DEF1EXPORTFILE=exports.dxp
 # ==========================================================================
 
 .INCLUDE :	target.mk
+
+ALLTAR : $(MISC)/vclcanvas.component
+
+$(MISC)/vclcanvas.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        vclcanvas.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt vclcanvas.component

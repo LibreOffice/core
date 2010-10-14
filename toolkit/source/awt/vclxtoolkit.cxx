@@ -663,7 +663,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
 
     if ( nType )
     {
-        NAMESPACE_VOS(OGuard) aVclGuard( Application::GetSolarMutex()  );
+        vos::OGuard aVclGuard( Application::GetSolarMutex()  );
         switch ( (WindowType)nType )
         {
             case WINDOW_CANCELBUTTON:

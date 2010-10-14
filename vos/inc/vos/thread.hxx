@@ -53,8 +53,8 @@ ThreadWorkerFunction_impl threadWorkerFunction_impl;
     @version 1.0
 */
 
-class OThread : public NAMESPACE_VOS(IRunnable),
-                public NAMESPACE_VOS(OObject)
+class OThread : public vos::IRunnable,
+                public vos::OObject
 {
 
     VOS_DECLARE_CLASSINFO(VOS_NAMESPACE(OThread, vos));
@@ -203,7 +203,7 @@ protected:
     friend void threadWorkerFunction_impl(void *);
 };
 
-class OThreadData : public NAMESPACE_VOS(OObject)
+class OThreadData : public vos::OObject
 {
     VOS_DECLARE_CLASSINFO(VOS_NAMESPACE(OThreadData, vos));
 
