@@ -398,6 +398,13 @@ sal_Bool MigrationImpl::checkMigrationCompleted()
             getConfigAccess("org.openoffice.Setup/Office"), uno::UNO_QUERY_THROW);
         aPropertySet->getPropertyValue(
             OUString::createFromAscii("MigrationCompleted")) >>= bMigrationCompleted;
+
+        static const char* pEnv = getenv("SAL_DISABLE_USERMIGRATION" );
+        if( !bMigrationCompleted && pEnv != NULL )
+        {
+            // migration prevented - fake it's success
+            setMigrationCompleted();
+        }
     } catch (Exception&) {
         // just return false...
     }
