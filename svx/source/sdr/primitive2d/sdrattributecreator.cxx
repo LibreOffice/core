@@ -527,7 +527,6 @@ namespace drawinglayer
                     }
                 }
 
-                const SdrFitToSizeType eFit(rTextObj.GetFitToSize());
                 const SdrTextAniKind eAniKind(rTextObj.GetTextAniKind());
 
                 // #i107346#

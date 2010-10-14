@@ -662,7 +662,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
             eEvent=SDREVENT_BEGDRAGOBJ;    // Mark+Drag,AddMark+Drag,DeepMark+Drag,Unmark
             BOOL bGlue=pHdl->GetKind()==HDL_GLUE;
             BOOL bPoly=!bGlue && IsPointMarkable(*pHdl);
-            BOOL bMarked=bGlue || bPoly && pHdl->IsSelected();
+            BOOL bMarked=bGlue || (bPoly && pHdl->IsSelected());
             if (bGlue || bPoly)
             {
                 eEvent=bGlue ? SDREVENT_MARKGLUEPOINT : SDREVENT_MARKPOINT;

@@ -394,7 +394,7 @@ void lclLinkLeftEnd_Single(
                 // don't overdraw vertical borders with equal width
                 lclGetBehindEnd( rLFromT ) :
                 // take leftmost start of both secondary lines (#46488#)
-                rResult.mnOffs1 = std::min( lclGetSecnBeg( rLFromT ), lclGetSecnBeg( rLFromB ) );
+                std::min( lclGetSecnBeg( rLFromT ), lclGetSecnBeg( rLFromB ) );
 
         // single border with equal width coming from left
         else if( !rLFromL.Secn() && (rLFromL.Prim() == rBorder.Prim()) )

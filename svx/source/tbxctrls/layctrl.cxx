@@ -111,7 +111,7 @@ private:
 IMPL_LINK( TableWindow, SelectHdl, void *, EMPTYARG )
 {
     CloseAndShowTableDialog();
-    return NULL;
+    return 0;
 }
 
 // -----------------------------------------------------------------------
