@@ -45,7 +45,7 @@ class SAL_NO_VTABLE WeakComponentImplHelperBase
     , public ::com::sun::star::lang::XComponent
 {
 protected:
-    /** boradcast helper for disposing events
+    /** broadcast helper for disposing events
     */
     ::cppu::OBroadcastHelper rBHelper;
 

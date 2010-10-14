@@ -24,8 +24,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _CPPUHELPER_IMPLEMENATIONENTRY_HXX_
-#define _CPPUHELPER_IMPLEMENATIONENTRY_HXX_
+#ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
+#define _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
 
 #include <cppuhelper/factory.hxx>
 
@@ -36,21 +36,21 @@ namespace cppu
  */
 struct ImplementationEntry
 {
-    /** Function, that creates an instance of the implemenation
+    /** Function that creates an instance of the implementation
      */
        ComponentFactoryFunc create;
 
-    /** Function, that returns the implemenation-name of the implemenation
+    /** Function that returns the implementation-name of the implementation
        (same as XServiceInfo.getImplementationName() ).
      */
      rtl::OUString ( SAL_CALL * getImplementationName )();
 
-    /** Function, that returns all supported servicenames of the implemenation
+    /** Function that returns all supported servicenames of the implementation
        ( same as XServiceInfo.getSupportedServiceNames() ).
     */
      com::sun::star::uno::Sequence< rtl::OUString > ( SAL_CALL * getSupportedServiceNames ) ();
 
-    /** Function, that creates a SingleComponentFactory.
+    /** Function that creates a SingleComponentFactory.
     */
      ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory >
      ( SAL_CALL * createFactory )(
@@ -59,7 +59,7 @@ struct ImplementationEntry
          ::com::sun::star::uno::Sequence< ::rtl::OUString > const & rServiceNames,
          rtl_ModuleCount * pModCount );
 
-    /** The shared-library module-counter of the implemenation. Maybe 0. The module-counter
+    /** The shared-library module-counter of the implementation. Maybe 0. The module-counter
         is used during by the createFactory()-function.
     */
      rtl_ModuleCount * moduleCounter;
@@ -78,7 +78,7 @@ struct ImplementationEntry
                            This is a reference to the registry key, into which the implementation
                            data shall be written to.
     @param entries         Each element of the entries-array must contains a function pointer
-                           table for registering an implemenation. The end of the array
+                           table for registering an implementation. The end of the array
                            must be marked with a 0 entry in the create-function.
     @return sal_True, if all implementations could be registered, otherwise sal_False.
  */

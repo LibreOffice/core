@@ -231,8 +231,8 @@ void OPropertySetHelper::disposing() SAL_THROW( () )
     EventObject aEvt;
     aEvt.Source = rSource;
 
-    // inform all listeners to reelease this object
-    // The listener container are automaticly cleared
+    // inform all listeners to release this object
+    // The listener containers are automatically cleared
     aBoundLC.disposeAndClear( aEvt );
     aVetoableLC.disposeAndClear( aEvt );
 }

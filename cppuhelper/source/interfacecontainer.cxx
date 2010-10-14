@@ -330,7 +330,7 @@ void OInterfaceContainerHelper::disposeAndClear( const EventObject & rEvt ) SAL_
     OSL_ENSURE( !bIsList || bInUse, "OInterfaceContainerHelper not in use" );
     if( !bIsList && pData )
         ((XInterface *)pData)->release();
-    // set the member to null, the iterator delete the values
+    // set the member to null, use the iterator to delete the values
     pData = NULL;
     bIsList = sal_False;
     bInUse = sal_False;
@@ -346,7 +346,7 @@ void OInterfaceContainerHelper::disposeAndClear( const EventObject & rEvt ) SAL_
         catch ( RuntimeException & )
         {
             // be robust, if e.g. a remote bridge has disposed already.
-            // there is no way, to delegate the error to the caller :o(.
+            // there is no way to delegate the error to the caller :o(.
         }
     }
 }
@@ -360,7 +360,7 @@ void OInterfaceContainerHelper::clear() SAL_THROW( () )
     OSL_ENSURE( !bIsList || bInUse, "OInterfaceContainerHelper not in use" );
     if( !bIsList && pData )
         ((XInterface *)pData)->release();
-    // set the member to null, the iterator delete the values
+    // set the member to null, use the iterator to delete the values
     pData = 0;
     bIsList = sal_False;
     bInUse = sal_False;

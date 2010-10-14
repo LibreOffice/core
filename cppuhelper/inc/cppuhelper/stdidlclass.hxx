@@ -46,10 +46,10 @@ namespace cppu {
 
 
 /**
-   Standardfunction to create an XIdlClass for a component.
+   Standard function to create an XIdlClass for a component.
    There is a function for each number of supported interfaces up to 10.
 
-   Since the switch to the final component model, there are no use cases anymore, where
+   Since the switch to the final component model, there are no use cases anymore where
    these functions should be used. Instead use the implementation helpers directly
    (see cppuhelper/implbase1.hxx).
 

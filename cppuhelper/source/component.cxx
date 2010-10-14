@@ -211,7 +211,7 @@ void OComponentHelper::dispose()
     }
     else
     {
-        // in a multithreaded environment, it can't be avoided,
+        // in a multithreaded environment, it can't be avoided
         // that dispose is called twice.
         // However this condition is traced, because it MAY indicate an error.
         OSL_TRACE( "OComponentHelper::dispose() - dispose called twice" );

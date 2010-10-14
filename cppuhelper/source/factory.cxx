@@ -864,7 +864,7 @@ Reference< XInterface > ORegistryFactoryHelper::createModuleFactory()
             // one implementation found -> try to activate
             aLocation = xLocationKey->getAsciiValue();
 
-            // search protocol delemitter
+            // search protocol delimiter
             sal_Int32 nPos = aLocation.indexOf(
                 OUString( RTL_CONSTASCII_USTRINGPARAM("://") ) );
             if( nPos != -1 )

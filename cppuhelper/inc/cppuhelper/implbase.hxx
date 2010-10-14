@@ -43,7 +43,7 @@ namespace cppu
 {
 
 /** Struct used for inline template implementation helpers: type entries.
-    Not for plublic use.
+    Not for public use.
     @internal
 */
 struct Type_Offset
@@ -56,7 +56,7 @@ struct Type_Offset
     typelib_InterfaceTypeDescription * pTD;
 };
 /** Struct used for inline template implementation helpers: class data of implementation.
-    Not for plublic use.
+    Not for public use.
     @internal
 */
 struct ClassDataBase
@@ -101,7 +101,7 @@ struct ClassDataBase
     There will be versions of this struct with varying arType2Offset[] array sizes, each of which
     is binary compatible with this one to be casted and used uniform. The size of the varying array
     is set in ClassDataBase::nType2Offset (base class).
-    Not for plublic use.
+    Not for public use.
     @internal
 */
 struct ClassData : public ClassDataBase
@@ -136,7 +136,7 @@ struct ClassData : public ClassDataBase
     */
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
         SAL_THROW( () );
-    /** Gets the class id of implemtation supporting com.sun.star.lang.XTypeProvider
+    /** Gets the class id of implementation supporting com.sun.star.lang.XTypeProvider
 
         @return class identifier (sequence< byte >)
     */
