@@ -127,6 +127,7 @@
 #include "sfx2/docstoragemodifylistener.hxx"
 #include "brokenpackageint.hxx"
 #include "graphhelp.hxx"
+#include "docundomanager.hxx"
 #include <sfx2/msgpool.hxx>
 #include <sfx2/DocumentMetadataAccess.hxx>
 
@@ -153,6 +154,7 @@ using ::com::sun::star::lang::WrappedTargetException;
 using ::com::sun::star::uno::Type;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::document::XDocumentRecovery;
+using ::com::sun::star::document::XUndoManager;
 
 /** This Listener is used to get notified when the XDocumentProperties of the
     XModel change.
@@ -226,10 +228,11 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
     uno::Reference< script::provider::XScriptProvider >     m_xScriptProvider;
     uno::Reference< ui::XUIConfigurationManager >           m_xUIConfigurationManager;
     ::rtl::Reference< ::sfx2::DocumentStorageModifyListener >   m_pStorageModifyListen;
-    ::rtl::OUString                                 m_sModuleIdentifier;
+    ::rtl::OUString                                         m_sModuleIdentifier;
     css::uno::Reference< css::frame::XTitle >               m_xTitleHelper;
     css::uno::Reference< css::frame::XUntitledNumbers >     m_xNumberedControllers;
-    uno::Reference< rdf::XDocumentMetadataAccess>   m_xDocumentMetadata;
+    uno::Reference< rdf::XDocumentMetadataAccess>           m_xDocumentMetadata;
+    ::rtl::Reference< ::sfx2::DocumentUndoManager >         m_pDocumentUndoManager;
 
 
     IMPL_SfxBaseModel_DataContainer( ::osl::Mutex& rMutex, SfxObjectShell* pObjectShell )
@@ -246,6 +249,7 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
             ,   m_xTitleHelper          ()
             ,   m_xNumberedControllers  ()
             ,   m_xDocumentMetadata     () // lazy
+            ,   m_pDocumentUndoManager  ()
     {
         // increase global instance counter.
         ++g_nInstanceCounter;
@@ -784,6 +788,12 @@ void SAL_CALL SfxBaseModel::dispose() throw(::com::sun::star::uno::RuntimeExcept
     {
         m_pData->m_pStorageModifyListen->dispose();
         m_pData->m_pStorageModifyListen = NULL;
+    }
+
+    if ( m_pData->m_pDocumentUndoManager.is() )
+    {
+        m_pData->m_pDocumentUndoManager->dispose();
+        m_pData->m_pDocumentUndoManager = NULL;
     }
 
     lang::EventObject aEvent( (frame::XModel *)this );
@@ -1634,6 +1644,17 @@ void SAL_CALL SfxBaseModel::storeAsURL( const   ::rtl::OUString&                
         TransformItems( SID_OPENDOC, *m_pData->m_pObjectShell->GetMedium()->GetItemSet(), aSequence );
         attachResource( rURL, aSequence );
     }
+}
+
+//________________________________________________________________________________________________________
+//  XUndoManagerSupplier
+//________________________________________________________________________________________________________
+Reference< XUndoManager > SAL_CALL SfxBaseModel::getUndoManager(  ) throw (RuntimeException)
+{
+    SfxModelGuard aGuard( *this );
+    if ( !m_pData->m_pDocumentUndoManager.is() )
+        m_pData->m_pDocumentUndoManager.set( new ::sfx2::DocumentUndoManager( *this ) );
+    return m_pData->m_pDocumentUndoManager.get();
 }
 
 //________________________________________________________________________________________________________
@@ -4310,3 +4331,6 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     return xDMA->storeMetadataToMedium(i_rMedium);
 }
 
+// =====================================================================================================================
+// = SfxModelSubComponent
+// =====================================================================================================================

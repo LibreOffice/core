@@ -85,7 +85,8 @@ SLOFILES =	\
         $(SLO)$/docstoragemodifylistener.obj \
         $(SLO)$/querytemplate.obj \
         $(SLO)$/syspath.obj \
-        $(SLO)$/syspathw32.obj
+        $(SLO)$/syspathw32.obj \
+        $(SLO)$/docundomanager.obj
 
 #                $(SLO)$/applet.obj \
 
