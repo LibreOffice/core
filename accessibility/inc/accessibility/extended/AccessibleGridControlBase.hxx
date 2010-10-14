@@ -413,7 +413,8 @@ class TC_SolarMethodGuard : public SolarMutexGuard, public OslMutexGuard
 {
 public:
     inline TC_SolarMethodGuard( AccessibleGridControlBase& _rOwner, bool _bEnsureAlive = true )
-        : OslMutexGuard( _rOwner.getMutex( AccessibleGridControlBase::TC_AccessControl() ) )
+        : SolarMutexGuard(),
+        OslMutexGuard( _rOwner.getMutex( AccessibleGridControlBase::TC_AccessControl() ) )
     {
         if ( _bEnsureAlive )
             _rOwner.ensureIsAlive( AccessibleGridControlBase::TC_AccessControl() );
