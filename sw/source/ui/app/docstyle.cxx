@@ -897,13 +897,13 @@ BOOL   SwDocStyleSheet::SetParent( const String& rStr)
     switch(nFamily)
     {
         case SFX_STYLE_FAMILY_CHAR :
-            OSL_ENSURE( pCharFmt, "SwCharFormat missing!" )
+            OSL_ENSURE( pCharFmt, "SwCharFormat missing!" );
             if( 0 != ( pFmt = pCharFmt ) && rStr.Len() )
                 pParent = lcl_FindCharFmt(rDoc, rStr);
             break;
 
         case SFX_STYLE_FAMILY_PARA :
-            OSL_ENSURE( pColl, "Collektion missing!")
+            OSL_ENSURE( pColl, "Collektion missing!");
             if( 0 != ( pFmt = pColl ) && rStr.Len() )
                 pParent = lcl_FindParaFmt( rDoc, rStr );
             break;
