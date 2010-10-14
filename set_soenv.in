@@ -8,7 +8,7 @@
 #---------------------------------------------------------------------------
 #---------------------------------------------------------------------------
 # Description:
-# set_soenv generates a file that contains all necessary 
+# set_soenv generates a file that contains all necessary
 # environment variables for the build proces of OpenOffice
 # on Linux, NetBSD, Solaris, Windows NT and Mac OS X/Darwin.
 #
@@ -42,7 +42,7 @@ my ( $outfile, $outfile_sh, $bootfile, $newline, $comment,
      $compiler, $unsetenv, $setenv, $unset, $set, $ds, $ps,
      $wps, $cur_dir, $par_dir, $I, $L, $D, $buildenv, $answer, $tmp, $MINGW,
      $USE_MINGW, $platform,
-     $cygwinver, $empty, $no_ant, $no_stl, $no_gcc_include, 
+     $cygwinver, $empty, $no_ant, $no_stl, $no_gcc_include,
      $no_gxx_include, $warnfile, $Warning, $result, $unsetvars, $unsetvarssh, $unsetvarsbat, $exportvars, $win_format_var, $perl_os, @mingw_lib_include_paths, $mingw_lib_include_path);
 #
 #-------------------------------------------------
@@ -51,11 +51,11 @@ my ( $outfile, $outfile_sh, $bootfile, $newline, $comment,
 #
 # Platform independent constant values.
 my @DICTIONARIES = ("DADK", "DEDE", "ENGB", "ENUS", "HUHU", "ITIT", "RURU", "THTH", "SWTZ" );
-my ( $CALL_CDECL, $COMMON_OUTDIR, $BMP_WRITES_FLAG, 
-     $common_build, $NO_REC_RES, $SO3, $SOLAR_JAVA, 
-     $SOLAR_PLUGIN, $UPDATER, $BUILD_DELIVER, $VCL, 
+my ( $CALL_CDECL, $COMMON_OUTDIR, $BMP_WRITES_FLAG,
+     $common_build, $NO_REC_RES, $SO3, $SOLAR_JAVA,
+     $SOLAR_PLUGIN, $UPDATER, $BUILD_DELIVER, $VCL,
      $CC, $CXX,
-     $BUILD_SOSL, $ENABLEUNICODE, $NEW_JAR_PACK, $NO_BSYMBOLIC, 
+     $BUILD_SOSL, $ENABLEUNICODE, $NEW_JAR_PACK, $NO_BSYMBOLIC,
      $BUILD_SOSL_RELEASE, $RSC_ONCE );
 #
 # Platform dependent constant values.
@@ -80,12 +80,12 @@ my ( $USR, $ETC, $BIN, $LIB, $LIB64, $INC, $INCLUDE, $DEV, $OPT, $LOCAL, $SOLENV
 my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
      $UPD, $WORK_STAMP, $SOURCE_ROOT_DIR ,
      $SOLARSRC, $DEVROOT, $SOLARVER, $SOLARVERSION, $SOLARENV, $SOLARDEFIMG,
-     $STAR_INIROOT, $STAR_INIROOTOLD, $STAR_STANDLST, $STAR_SSCOMMON, $STAR_SSOLARINI, 
+     $STAR_INIROOT, $STAR_INIROOTOLD, $STAR_STANDLST, $STAR_SSCOMMON, $STAR_SSOLARINI,
      $DMAKEROOT, $CLASSPATH, $XCLASSPATH, $COMPATH,
      $MSPDB_PATH, $MIDL_PATH, $CSC_PATH,
-     $PATH, $SOLAREXTRAINC, $SOLAREXTRALIB, $SOLARLIB, 
-     $SOLARINC, $LOCALINI, $FRAMEWORKSHOME, $COMEX, $PERL, 
-     $COMP_ENV, $ILIB, $JAVAHOME, $PSDK_HOME, $DIRECTXSDK_LIB, $USE_NEW_SDK, $FRAME_HOME, 
+     $PATH, $SOLAREXTRAINC, $SOLAREXTRALIB, $SOLARLIB,
+     $SOLARINC, $LOCALINI, $FRAMEWORKSHOME, $COMEX, $PERL,
+     $COMP_ENV, $ILIB, $JAVAHOME, $PSDK_HOME, $DIRECTXSDK_LIB, $USE_NEW_SDK, $FRAME_HOME,
      $USE_DIRECTX5, $ATL_LIB, $ATL_INCLUDE, $MFC_LIB, $MFC_INCLUDE, $NO_HIDS, $TMPDIR,
      $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
      $WIN_GNUCOPY, $WIN_TOUCH, $STLPORT4, $MOZILLA_VERSION, $MOZILLA_TOOLKIT, $PREBUILD_MOZAB, $MOZILLABUILD,
@@ -155,7 +155,7 @@ $EPM_FLAGS	= "";
 # , $Warning.
 AddWarning( "configure", "" );
 #
-print ("Setting up the environment for building OpenOffice.org $newline");
+print ("Setting up the environment for building LibreOffice $newline");
 #
 #--------------------------------------------------
 # V. Setting the environment variables/values.
@@ -178,7 +178,7 @@ chomp( $oldPATH );                  # cut off new line
 #
 # Setting platform independent constant values.
 print "Setting platform independent values... ";
-# NB: Language options now set at 'ToFile' stage. 
+# NB: Language options now set at 'ToFile' stage.
 $BMP_WRITES_FLAG      = "TRUE";
 $BUILD_SOSL_RELEASE   = "TRUE";
 $RSC_ONCE             = "TRUE";
@@ -200,10 +200,10 @@ $comment              = "#";           # UNIX script comment character
 $TARFILE_LOCATION = "@TARFILE_LOCATION@"; # where to find tarballs with external sources
 
 # Setting platform dependent constant values.
-if ( $platform =~ m/solaris/ ) 
+if ( $platform =~ m/solaris/ )
 {     print "Setting Solaris specific values... ";
    if ($platform =~ m/^i[3456]86/)
-   {  
+   {
       if ( $CC =~ "gcc") {
          $outfile        = "SolarisX86GccEnv.Set";
          $OUTPATH        = "unxsogi";
@@ -221,10 +221,10 @@ if ( $platform =~ m/solaris/ )
    else
    {
       if ( $CC =~ "gcc") {
-         $outfile        = "SolarisSparcGccEnv.Set"; 
+         $outfile        = "SolarisSparcGccEnv.Set";
          $OUTPATH        = "unxsogs";
       } else {
-         $outfile        = "SolarisSparcEnv.Set"; 
+         $outfile        = "SolarisSparcEnv.Set";
          $OUTPATH        = "unxsols4";
       }
       $CPU            = "S";
@@ -243,7 +243,7 @@ if ( $platform =~ m/solaris/ )
        $COMEX          = 4;
    }
    $BIG_SVX        = "TRUE";
-   $COMPATH        = '@COMPATH@'; 
+   $COMPATH        = '@COMPATH@';
    $GUI            = "UNX";
    $GUIBASE        = "unx";
    $GVER           = "VCL";
@@ -251,12 +251,12 @@ if ( $platform =~ m/solaris/ )
    $OS             = "SOLARIS";
    $PATH_SEPERATOR = $ps;
 }
-elsif ( $platform =~ m/netbsd/ ) 
+elsif ( $platform =~ m/netbsd/ )
 {
-#Set platform specific values: 
+#Set platform specific values:
    if ($platform =~ m/^i[3456]86/)
    {  print "Setting NetBSD x86 specific values... ";
-      $outfile        = "NetBSDX86Env.Set"; 
+      $outfile        = "NetBSDX86Env.Set";
       $CPU            = "I";
       $CPUNAME        = "INTEL";
       $OUTPATH        = "unxbsdi";
@@ -266,7 +266,7 @@ elsif ( $platform =~ m/netbsd/ )
    }
    elsif ($platform =~ m/^sparc/)
    {  print "Setting NetBSD Sparc specific values... ";
-      $outfile        = "NetBSDSparcEnv.Set"; 
+      $outfile        = "NetBSDSparcEnv.Set";
       $CPU            = "S";
       $CPUNAME        = "SPARC";
       $OUTPATH        = "unxbsds";
@@ -276,7 +276,7 @@ elsif ( $platform =~ m/netbsd/ )
    }
    elsif ($platform =~ m/powerpc/)
    {  print "Setting NetBSD PPC specific values... ";
-      $outfile        = "NetBSDPPCEnv.Set"; 
+      $outfile        = "NetBSDPPCEnv.Set";
       $CPU            = "P";
       $CPUNAME        = "POWERPC";
       $OUTPATH        = "unxbsdppc";
@@ -294,7 +294,7 @@ elsif ( $platform =~ m/netbsd/ )
    # General NetBSD settings:
       $BIG_SVX        = "TRUE";
       $COM            = "GCC";
-      $COMPATH        = '@COMPATH@'; 
+      $COMPATH        = '@COMPATH@';
       $GUI            = "UNX";
       $GUIBASE        = "unx";
       $GVER           = "VCL";
@@ -302,13 +302,13 @@ elsif ( $platform =~ m/netbsd/ )
       $OS             = "NETBSD";
       $PATH_SEPERATOR = $ps;
 }
-elsif ( $platform =~ m/kfreebsd/ ) 
+elsif ( $platform =~ m/kfreebsd/ )
 {
 # General GNU/kFreeBSD settings:
       $CVER           = "C341";
       $BIG_SVX        = "TRUE";
       $COM            = "GCC";
-      $COMPATH        = '@COMPATH@'; 
+      $COMPATH        = '@COMPATH@';
       $GLIBC          = "2REDHAT60";
       $GUI            = "UNX";
       $GUIBASE        = "unx";
@@ -316,14 +316,14 @@ elsif ( $platform =~ m/kfreebsd/ )
       $OS             = "LINUX";
       $PATH_SEPERATOR = $ps;
 
-#Set platform specific values: 
+#Set platform specific values:
    if ($platform =~ m/^i[3456]86/)
    {  print "Setting GNU/kFreeBSD x86 specific values... ";
-      $outfile        = "GNUkFreeBSDX86Env.Set"; 
+      $outfile        = "GNUkFreeBSDX86Env.Set";
       $CPU            = "I";
       $CPUNAME        = "INTEL";
       $OUTPATH        = "unxkfgi6";
-      
+
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386";
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."client";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
@@ -343,10 +343,10 @@ elsif ( $platform =~ m/kfreebsd/ )
 
    $INPATH         = $OUTPATH.$PROEXT;
 }
-elsif ( $platform =~ m/freebsd/ ) 
+elsif ( $platform =~ m/freebsd/ )
 {     $BIG_SVX        = "TRUE";
       $COM            = "GCC";
-      $COMPATH        = '@COMPATH@'; 
+      $COMPATH        = '@COMPATH@';
       $CVER           = "C300";
       $GUI            = "UNX";
       $GUIBASE        = "unx";
@@ -392,14 +392,14 @@ elsif ( $platform =~ m/freebsd/ )
       $CVER        = "C341";
    }
       $INPATH         = $OUTPATH.$PROEXT;
-} 
-elsif ( $platform =~ m/linux/ ) 
+}
+elsif ( $platform =~ m/linux/ )
 {
 # General Linux settings:
       $CVER           = "C341";
       $BIG_SVX        = "TRUE";
       $COM            = "GCC";
-      $COMPATH        = '@COMPATH@'; 
+      $COMPATH        = '@COMPATH@';
       $GLIBC          = "2REDHAT60";
       $GUI            = "UNX";
       $GUIBASE        = "unx";
@@ -407,13 +407,13 @@ elsif ( $platform =~ m/linux/ )
       $OS             = "LINUX";
       $PATH_SEPERATOR = $ps;
 
-#Set platform specific values: 
+#Set platform specific values:
    if ($platform =~ m/^i[3456]86/)
    {  print "Setting Linux x86 specific values... ";
-      $outfile        = "LinuxX86Env.Set"; 
+      $outfile        = "LinuxX86Env.Set";
       $CPU            = "I";
       $CPUNAME        = "INTEL";
-      
+
       if ($JDK =~ m/^[Ii][Bb][Mm]/)
       { $JRELIBDIR     = '$JAVA_HOME'.$ds."jre".$ds."bin";
         $JRETOOLKITDIR = '$JAVA_HOME'.$ds."jre".$ds."bin".$ds."classic";
@@ -424,7 +424,7 @@ elsif ( $platform =~ m/linux/ )
         $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."jrockit";
         $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads"; }
 
-      else {      
+      else {
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386";
       # has both server and client
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."client";
@@ -456,9 +456,9 @@ elsif ( $platform =~ m/linux/ )
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ia64".$ds."native_threads";
    }
    elsif ($platform =~ m/^sparc/)
- 
+
    {  print "Setting Linux Sparc specific values... ";
-      $outfile        = "LinuxSparcEnv.Set"; 
+      $outfile        = "LinuxSparcEnv.Set";
       $CPU            = "S";
       $CPUNAME        = "SPARC";
       $OUTPATH        = "unxlngs";
@@ -470,7 +470,7 @@ elsif ( $platform =~ m/linux/ )
    {
       if (($platform =~ m/^powerpc64/) && ('@SIZEOF_LONG@' eq '8')) {
          print "Setting Linux PPC64 specific values... ";
-         $outfile = "LinuxPPC64Env.Set"; 
+         $outfile = "LinuxPPC64Env.Set";
          $OUTPATH = "unxlngppc64";
          $CPUNAME = "POWERPC64";
 
@@ -482,7 +482,7 @@ elsif ( $platform =~ m/linux/ )
       }
       else {
          print "Setting Linux PPC specific values... ";
-         $outfile = "LinuxPPCEnv.Set"; 
+         $outfile = "LinuxPPCEnv.Set";
          $OUTPATH = "unxlngppc";
          $CPUNAME = "POWERPC";
 
@@ -548,9 +548,9 @@ elsif ( $platform =~ m/linux/ )
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."hppa".$ds."native_threads";
       $EPM_FLAGS      = "-a hppa";
    }
-   elsif ($platform =~ m/^alpha/) 
+   elsif ($platform =~ m/^alpha/)
    {  print "Setting Linux Alpha specific values... ";
-      $outfile        = "LinuxAlphaEnv.Set"; 
+      $outfile        = "LinuxAlphaEnv.Set";
       $CPU            = "L";
       $CPUNAME        = "AXP";
       $OUTPATH        = "unxlngaxp";
@@ -560,7 +560,7 @@ elsif ( $platform =~ m/linux/ )
    }
    elsif ($platform =~ m/^arm.*?l-/)
    {  print "Setting Linux ARM specific values... ";
-      $outfile        = "LinuxARMEnv.Set"; 
+      $outfile        = "LinuxARMEnv.Set";
       $CPU            = "R";
       $CPUNAME        = "ARM";
       $OUTPATH        = "unxlngr";
@@ -571,7 +571,7 @@ elsif ( $platform =~ m/linux/ )
    }
    elsif ($platform =~ m/^mips/)
    {  print "Setting Linux MIPS specific values... ";
-      $outfile        = "LinuxMIPSEnv.Set"; 
+      $outfile        = "LinuxMIPSEnv.Set";
       $CPU            = "M";
       $CPUNAME        = "GODSON";
       $OUTPATH        = "unxlngmips";
@@ -606,19 +606,19 @@ elsif ( $platform =~ m/linux/ )
       	$JRETOOLKITDIR  = '$JAVA_HOME'.$ds."lib".$ds.$ARCH.$ds."client"; # Lemote
       } else {
       	$JRETOOLKITDIR  = '$JAVA_HOME'.$ds."lib".$ds.$ARCH.$ds."server";
-      }  
+      }
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."lib".$ds.$ARCH.$ds."native_threads";
    }
 
 
    $INPATH         = $OUTPATH.$PROEXT;
 }
-elsif ( $platform =~ m/osf1/ ) 
+elsif ( $platform =~ m/osf1/ )
 {     print "Setting Tru64 specific values... ";
-      $outfile        = "Tru64AlphaEnv.Set"; 
+      $outfile        = "Tru64AlphaEnv.Set";
       $BIG_SVX        = "TRUE";
       $COM            = "CXX";
-      $COMPATH        = '@COMPATH@'; 
+      $COMPATH        = '@COMPATH@';
       $CPU            = "A";
       $CPUNAME        = "ALPHA_";
       $CVER           = "C62";
@@ -632,8 +632,8 @@ elsif ( $platform =~ m/osf1/ )
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha";
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha".$ds."client";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha".$ds."native_threads";
-} 
-elsif ( $platform =~ m/cygwin/ ) 
+}
+elsif ( $platform =~ m/cygwin/ )
 {
       $MSPDB_PATH     = PathFormat('@MSPDB_PATH@');
       $MIDL_PATH      = PathFormat('@MIDL_PATH@');
@@ -658,7 +658,7 @@ elsif ( $platform =~ m/cygwin/ )
       print "Setting Windows NT cygwin MinGW specific values... ";
       $FLIPCMD        = "slfl.pl";
       $PATH_SEPERATOR = ';';
-      $outfile        = "winmingw.set"; 
+      $outfile        = "winmingw.set";
       $COMPATH        = PathFormat('@COMPATH@/bin');
       $COMPATH        =~ s/\/bin$//i;
       $COM            = "GCC";
@@ -706,8 +706,8 @@ elsif ( $platform =~ m/cygwin/ )
 	  $PATH_SEPERATOR = ';';
   }
 }
-elsif ( $platform =~ m/os2/ ) 
-{ 
+elsif ( $platform =~ m/os2/ )
+{
       $COMPATH        = PathFormat('@COMPATH@');
       $MSPDB_PATH     = PathFormat('@MSPDB_PATH@');
       $MIDL_PATH      = PathFormat('@MIDL_PATH@');
@@ -743,15 +743,15 @@ elsif ( $platform =~ m/os2/ )
 
   }
 }
-elsif ( $platform =~ m/darwin/ ) 
+elsif ( $platform =~ m/darwin/ )
 {     print "Setting Mac OS X/Darwin specific values... ";
       $BIG_SVX        = "TRUE";
       $COM            = "GCC";
-      $COMPATH        = '@COMPATH@'; 
+      $COMPATH        = '@COMPATH@';
       if ($platform =~ m/^powerpc/)
       {
           print "Setting values for Mac OS X/Darwin on PowerPC... ";
-          $outfile        = "MacOSXPPCEnv.Set"; 
+          $outfile        = "MacOSXPPCEnv.Set";
           $CPU            = "P";
           $CPUNAME        = "POWERPC";
           $OUTPATH        = "unxmacxp";
@@ -759,7 +759,7 @@ elsif ( $platform =~ m/darwin/ )
       else
       {
           print "Setting values for Mac OS X/Darwin on default x86... ";
-          $outfile        = "MacOSXX86Env.Set"; 
+          $outfile        = "MacOSXX86Env.Set";
           $CPU            = "I";
           $CPUNAME        = "INTEL";
           $OUTPATH        = "unxmacxi";
@@ -779,7 +779,7 @@ elsif ( $platform =~ m/darwin/ )
 elsif ( $platform =~ m/aix/ )
 {
    print "Setting AIX PPC specific values... ";
-   $outfile        = "aixPPCEnv.Set"; 
+   $outfile        = "aixPPCEnv.Set";
    $CPU            = "P";
    $CPUNAME        = "POWERPC";
    $OUTPATH        = "unxaigppc";
@@ -789,7 +789,7 @@ elsif ( $platform =~ m/aix/ )
    $BIG_SVX        = "TRUE";
    $COM            = "GCC";
    $CVER           = "C300";
-   $COMPATH        = '@COMPATH@'; 
+   $COMPATH        = '@COMPATH@';
    $GUI            = "UNX";
    $GUIBASE        = "unx";
    $GVER           = "VCL";
@@ -808,7 +808,7 @@ print "done\n";
 # D. Gathering directory information from the user.
 #
 # If the directory does not exist something is strange.
-# 1. OpenOffice.org build home directory.
+# 1. LibreOffice build home directory.
 chomp($SRC_ROOT  = `pwd`);
 $SRC_ROOT =~ s/\/config_office//;
 $SRC_ROOT = PathFormat($SRC_ROOT);
@@ -891,9 +891,9 @@ $LIB                  = $ds."lib";
 $LIB64                = $ds."lib";
 $LIB64               .= "64"
 if ($platform =~ m/x86_64-.*-linux/);
-$LIB64               .= "64" 
+$LIB64               .= "64"
 if (($platform =~ m/powerpc64-.*-linux/) && ('@SIZEOF_LONG@' eq '8'));
-$LIB64               .= "64" 
+$LIB64               .= "64"
 if (($platform =~ m/s390x-.*-linux/) && ('@SIZEOF_LONG@' eq '8'));
 $INC                  = $ds."inc";
 $INCLUDE              = $ds."include";
@@ -930,7 +930,7 @@ if ($STLPORT4 ne $no_stl) {
 
 # Windows NT only variables
 if ($platform =~ m/cygwin/)
-{  
+{
    if ( $JAVA_HOME ne "" )
    {
       $JAVA_LIB             = $JAVA_HOME.$LIB;
@@ -956,7 +956,7 @@ if ( $JAVA_HOME ne "" )
 
 
 $PERL                 = PathFormat('@PERL@'); # Perl program
-$PERL_PATH            = dirname('@PERL@'); # Perl Path 
+$PERL_PATH            = dirname('@PERL@'); # Perl Path
 $XLIB                 = PathFormat('@XLIB@'); # X11 libraries
 $XINC                 = PathFormat('@XINC@'); # X11 includes
 
@@ -987,7 +987,7 @@ if ('@TARFILE_LOCATION@' eq "DEFAULT")
 
 #
 $DEVROOT              = '$SRC_ROOT';
-# Set solenv and solver to given or default values. 
+# Set solenv and solver to given or default values.
 # Location of the solenv tree.
 if ('@LOCAL_SOLENV@' eq "DEFAULT")
 {  $SOLARENV          = PathFormat($SRC_ROOT.$SOLENV);
@@ -1009,19 +1009,19 @@ $SOLARVERSION         = '$SOLARVER';
 $SOLARDEFIMG          = PathFormat($SRC_ROOT.$DEFIMGS);
 
 $SOLARENVINC          = '$SOLARENV'.$INC;
-# Location of 
+# Location of
 $LOCALINI             = '$SOLARENV'.$CONFIG;
-# Location of 
+# Location of
 $STAR_INIROOT         = '$SOLARENV'.$CONFIG;
-# Location of 
+# Location of
 $STAR_INIROOTOLD      = '$SOLARENV'.$CONFIG;
-# Location of 
+# Location of
 $STAR_STANDLST        = '$SOLARENV'.$CONFIG.$ds."stand.lst";
-# Location of 
+# Location of
 $STAR_SSCOMMON        = '$SOLARENV'.$CONFIG.$ds."ssolar.cmn";
-# Location of 
+# Location of
 $STAR_SSOLARINI       = '$SOLARENV'.$CONFIG.$ds."ssolar.ini";
-# Location of dmake resource. 
+# Location of dmake resource.
 $DMAKEROOT            = '$SOLARENVINC'.$ds."startup";
 # Location of JDK classes .zip file.
 # but in jdk 1.2 it is called rt.jar and it lives in jre/lib
@@ -1031,7 +1031,7 @@ $CLASSPATH            = '$JAVA_HOME'.$ds.'jre'.$LIB.$ds."rt.jar".$wps.'.';
 $XCLASSPATH           = '$JAVA_HOME'.$ds.'jre'.$LIB.$ds."rt.jar".$wps.'.';
 
 # Location used by the linker to create libraries.
-if ($platform =~ m/solaris/) 
+if ($platform =~ m/solaris/)
 {  $SOLAREXTRALIB     = $L.$par_dir.$LIB.
                         $L.'$SOLARENV'.$ds.'$OUTPATH'.$ds."lib.solaris.2.6".
                         $L.$LIB.
@@ -1044,7 +1044,7 @@ elsif ($platform =~ m/linux|netbsd|osf1|freebsd|aix/)
 {
    $SOLAREXTRALIB     = $L.$par_dir.$LIB64;
 }
-elsif ($platform =~ m/darwin/) 
+elsif ($platform =~ m/darwin/)
 {  $SOLAREXTRALIB     = $L.$LIB.
                         $L.$USR.$LIB;
 }
@@ -1104,7 +1104,7 @@ if ($platform =~ m/cygwin|os2/)
    $JAVAHOME          = '$JAVA_HOME';
 
 }
-     
+
 # The general environment path.
 if ($platform =~ m/linux|netbsd|odf1|freebsd|aix|solaris/)
 {  $PATH              = $cur_dir.
@@ -1122,7 +1122,7 @@ if ($platform =~ m/linux|netbsd|odf1|freebsd|aix|solaris/)
    if (( $JAVA_HOME ne "" ) && ( $JDK ne "gcj" )) {
       @javaBits = ( '$JAVA_HOME'.$BIN, 'javac' );
    } else {
-      @javaBits = (); 
+      @javaBits = ();
    }
    $PATH              = GetCorrectPath ($PATH,
                                         $COMPATH, $CC,
@@ -1145,10 +1145,10 @@ elsif ($platform =~ m/cygwin/)
    if ( $JAVA_HOME ne "" )
    {
       # hack either "hotspot" or "client" should be used, depending on the jdk version:
-      # 1.2.x   -   no such directory, unsupported 
+      # 1.2.x   -   no such directory, unsupported
       # 1.3.x   -   hotspot, client missing
       # 1.4.x   -   client, hotspot missing
-      
+
       $PATH .= $ps.CygFormat($JAVA_HOME).$BIN;
 	  if ( -d $JAVA_HOME.$ds."jre".$ds."bin".$ds."hotspot" ) {
 		  $PATH .= $ps.CygFormat($JAVA_HOME).$ds."jre".$ds."bin".$ds."hotspot";
@@ -1196,7 +1196,7 @@ elsif ($platform =~ m/cygwin/)
 
    if ( $ASM_PATH ne "ASM_IN_PATH" )
    {   $PATH          .= $ps.CygFormat($ASM_PATH);
-   } 
+   }
    # zip.exe / unzip.exe path for Windows users.
    my $zip_home_path = PathFormat('@ZIP_HOME@');
    $tmppath = CygFormat($zip_home_path);
@@ -1278,10 +1278,10 @@ elsif ($platform =~ m/os2/)
    if ( $JAVA_HOME ne "" )
    {
       # hack either "hotspot" or "client" should be used, depending on the jdk version:
-      # 1.2.x   -   no such directory, unsupported 
+      # 1.2.x   -   no such directory, unsupported
       # 1.3.x   -   hotspot, client missing
       # 1.4.x   -   client, hotspot missing
-      
+
       $PATH .= $ps.$JAVA_HOME.$BIN;
 	  if ( -d $JAVA_HOME.$ds."jre".$ds."bin".$ds."hotspot" ) {
 		  $PATH .= $ps.$JAVA_HOME.$ds."jre".$ds."bin".$ds."hotspot";
@@ -1310,8 +1310,8 @@ else
 {  AddWarning( "set_soenv", "$platform not configured for general environment paths" );
 }
 
-# Linker library search directory paths. 
-if ($platform =~ m/solaris/) 
+# Linker library search directory paths.
+if ($platform =~ m/solaris/)
 {  $SOLARLIB          = $L.$par_dir.$LIB.
                         $L.'$SOLARENV'.$ds.'$OUTPATH'.$LIB.
                         $L.'$SOLARVER'.$ds.'$INPATH'.$LIB.
@@ -1349,8 +1349,8 @@ elsif ($platform =~ m/cygwin|os2/)
                         $L.$par_dir.$LIB.
                         $L_STLPORT_LIB.
                         $L.'$SOLARENV'.$ds.'$OUTPATH'.$LIB;
-} 
-elsif ($platform =~ m/darwin/) 
+}
+elsif ($platform =~ m/darwin/)
 {  $SOLARLIB          = $L.'$SOLARVER'.$ds.'$INPATH'.$LIB.
                         $L_STLPORT_LIB.
                         $L.$USR_LIB;
@@ -1389,7 +1389,7 @@ $SOLARINC            .= '/SC5 ';
 }
 # Platform dependent include path at the top of this list of include paths
 if ($platform =~ m/solaris/)
-{   
+{
     $SOLARINC         .= $I.$COMPATH.$ds."include";
 }
 if ($platform =~ m/linux/)
@@ -1499,7 +1499,7 @@ print "done\n";
 # F. Setting the different aliases.
 #
 print "Setting the aliases... ";
-# 1. alias for a full product make. 
+# 1. alias for a full product make.
 	$mkout           = '"perl $SOLARENV/bin/mkout.pl"';
 	$deliver         = '"perl $SOLARENV/bin/deliver.pl"';
 	$build           = '"perl $SOLARENV/bin/build.pl"';
@@ -1759,7 +1759,7 @@ if ( $GUI eq "UNX" ) {
    ToFile( "AWTLIB",           '@AWTLIB@',          "e" );
 }
 if ( '@JDK@' ne '' )
-{ 
+{
    ToFile( "JDK",             "@JDK@",           "e" );
    ToFile( "JAVAFLAGS",             "@JAVAFLAGS@",           "e" );
    ToFile( "JAVA_SOURCE_VER", "@JAVA_SOURCE_VER@","e" );
@@ -1991,7 +1991,7 @@ if ( $platform =~ m/cygwin/ )
 if ( $platform =~ m/os2/ )
 {
    #ToFile( "ILIB",              $ILIB,              "e" );
-   
+
    ToFile( "GREP",              "grep.exe",         "e" );
    ToFile( "FIND",              "find.exe",         "e" );
    ToFile( "LS",                "ls.exe",           "e" );
@@ -2060,7 +2060,7 @@ ToFile( "SAL_ENABLE_FILE_LOCKING",	"1",	"e");
 ToFile( "DBGSV_INIT", "$SOLARENV/bin/dbgsv.ini", "e");
 #
 # Writing unset variables you might not need to file.
-# 
+#
 print OUT $unsetvars;
 
 print OUT_SH "export $exportvars$newline";
@@ -2108,17 +2108,17 @@ if (rename( $outfile_sh, $tmp ) ne 1)
 print "$newline";
 print "*********************************************************".
       "******************* $newline"."*"."$newline";
-print "* OpenOffice.org $UPD configuration. $newline";
-for ( $tmp = 0; $tmp < 2; $tmp++ ) 
+print "* LibreOffice $UPD configuration. $newline";
+for ( $tmp = 0; $tmp < 2; $tmp++ )
 {  print "* $newline";
 }
-print "* Configuration part of OpenOffice.org $UPD build is finished. $newline* $newline";
-print "* NB! Be aware that you might not be able to build OpenOffice.org if you $newline".
+print "* Configuration part of LibreOffice $UPD build is finished. $newline* $newline";
+print "* NB! Be aware that you might not be able to build LibreOffice if you $newline".
       "* ignore any warning message that were generated during this configuration $newline".
       "* process. $newline* $newline";
 
-if ( $Warning ne "" ) 
-{  print "$Warning*"; 
+if ( $Warning ne "" )
+{  print "$Warning*";
    print "$newline";
 }
 
@@ -2134,8 +2134,8 @@ $bootfile = "bootstrap";
 open( OUT, ">$bootfile" ) ||
 die "Cannot open $bootfile: $!\n";
 print OUT "#!/bin/sh\n";
-print OUT "_ISBOOTSTRAP_=TRUE ; export _ISBOOTSTRAP_ ; . $SRC_ROOT/$outfile.sh\n"; 
-print OUT "unset _ISBOOTSTRAP_; export _ISBOOTSTRAP_\n"; 
+print OUT "_ISBOOTSTRAP_=TRUE ; export _ISBOOTSTRAP_ ; . $SRC_ROOT/$outfile.sh\n";
+print OUT "unset _ISBOOTSTRAP_; export _ISBOOTSTRAP_\n";
 if ( $MINGW eq "yes" )
 {  print OUT 'PATH="/usr/bin:$PATH" : export PATH'."\n"; }
 close( OUT ) || print "Can't close $bootfile: $!";
@@ -2162,7 +2162,7 @@ if ( $Warning ne "" ) {
 #-----------------
 #
 #-------------------------------------------------------------
-# Function name: CheckPathName 
+# Function name: CheckPathName
 # Description:   chops off the '/' character if it's the last
 #                character in a pathname. also adds the '/'
 #                character if it's not the first character
@@ -2170,11 +2170,11 @@ if ( $Warning ne "" ) {
 # Arguments:     1. Path (string)
 # Return value:  Path (string)
 #-------------------------------------------------------------
-sub CheckPathName 
+sub CheckPathName
 {  my $retrn = $_[ 0 ];
    if ($platform =~ m/cygwin/)
    {  # Check if the first character is not a '/'.
-      if ( !( $_[ 0 ] =~ /^\// ) ) 
+      if ( !( $_[ 0 ] =~ /^\// ) )
       {  $retrn = $ds.$_[ 0 ];
       }
    }
@@ -2184,13 +2184,13 @@ sub CheckPathName
    return( $retrn );
 }
 #-------------------------------------------------------------
-# Function name: CheckPathExist 
+# Function name: CheckPathExist
 # Description:   Checks whether the directory that is given
 #                as an argument exists. If not abort.
 # Arguments:     1. Path (string)
 # Return value:  void
 #-------------------------------------------------------------
-sub CheckPathExist 
+sub CheckPathExist
 {  my $dir = $_[ 0 ];
    if ( !( -d $dir ) and $^O ne 'MSWin32' )
    {  print ( "The directory $_[ 0 ] does not exist. Please create first.\n" );
@@ -2203,7 +2203,7 @@ sub CheckPathExist
    }
 }
 #------------------------------------------------------------
-# Function name: CreateFileHeader 
+# Function name: CreateFileHeader
 # Description:   Creates a header for the outfile.
 # Arguments:     1. File to write to
 #                2. UPD (string)
@@ -2212,19 +2212,19 @@ sub CheckPathExist
 #                5. comment to use for this file
 # Return value:  void
 #------------------------------------------------------------
-sub CreateFileHeader 
+sub CreateFileHeader
 {  my $timestamp = `date`;
    chomp( $timestamp );
    my $filehandle = $_[0];
    my $comment = $_[4];
-   print { $filehandle } "$comment #################################################################"; 
+   print { $filehandle } "$comment #################################################################";
    print { $filehandle } $newline;
-   print { $filehandle } "$comment OpenOffice.org $_[ 1 ] build environment file for: $_[ 2 ]. $newline"; 
-   print { $filehandle } "$comment Generated on: $timestamp $newline"; 
-   print { $filehandle } "$comment Source this file to set up the build environment. $newline"; 
-   print { $filehandle } "$comment 1. exec $_[3] $newline"; 
-   print { $filehandle } "$comment 2. source $outfile $newline"; 
-   print { $filehandle } "$comment #################################################################"; 
+   print { $filehandle } "$comment LibreOffice $_[ 1 ] build environment file for: $_[ 2 ]. $newline";
+   print { $filehandle } "$comment Generated on: $timestamp $newline";
+   print { $filehandle } "$comment Source this file to set up the build environment. $newline";
+   print { $filehandle } "$comment 1. exec $_[3] $newline";
+   print { $filehandle } "$comment 2. source $outfile $newline";
+   print { $filehandle } "$comment #################################################################";
    print { $filehandle } $newline;
 }
 #---------------------------------------------------------
@@ -2264,13 +2264,13 @@ sub ToFile {
          $unsetvarssh .= " $_[ 0 ]";                             # for sh file
       }
    }
-   elsif ( $_[ 2 ] eq "a" ) 
+   elsif ( $_[ 2 ] eq "a" )
    {  # Write an alias to file.
       print "The $_[ 0 ] is set to: $_[ 1 ]\n" if ( '@VERBOSE@' eq 'TRUE' );    # to stdout
       print OUT "$_[ 0 ] $_[ 1 ]$newline";         # to tcsh file
       print OUT_SH "$_[ 0 ]=$_[ 1 ]$newline";      # to sh file
    }
-   elsif ( $_[ 2 ] eq "c" ) 
+   elsif ( $_[ 2 ] eq "c" )
    {  # Write a comment to file.
       if ( '@VERBOSE@' eq 'TRUE' )
       {
@@ -2469,7 +2469,7 @@ sub WinPath
 
 #--------------------------------------------------------
 # Function name: GetCorrectPath
-# Description:   Creates the build environment. 
+# Description:   Creates the build environment.
 # Arguments:     1.   existing / original path
 #                2... pairs of <path, executable>
 # Return value:  String - Correct Path
@@ -2495,7 +2495,7 @@ sub GetCorrectPath
 		my $haystack = shift;
 		if ($needle eq $haystack) {
 		    return 1;
-		} 
+		}
 	    }
 	    return 0;
 	}	
@@ -2567,7 +2567,7 @@ sub GetCorrectPath
 }
 
 #------------------------------------------------------------
-# Function name: AddWarning 
+# Function name: AddWarning
 # Description:   Adds any kind of warning for the user.
 #                The warning will be shown at the end
 #                of this script.
@@ -2576,21 +2576,21 @@ sub GetCorrectPath
 #                2. Warning (string).
 # Return value:  void
 #------------------------------------------------------------
-sub AddWarning 
-{  if ( $_[ 0 ] eq "configure" ) 
+sub AddWarning
+{  if ( $_[ 0 ] eq "configure" )
    {  open( IN, $warnfile );
-      while ( <IN> ) 
+      while ( <IN> )
       {  $Warning = $Warning."* - ".$_;
       }
       close( IN );
       # Remove the temporary warning file.
       # unlink ( $warnfile );
    }
-   elsif ( $_[ 0 ] eq "set_soenv" ) 
+   elsif ( $_[ 0 ] eq "set_soenv" )
    {  my ( $arg1 );
       $arg1 = $_[ 1 ];
-      chomp( $arg1 );                            # cut off new line      
-      $Warning = $Warning."* - set_soenv: warning: $arg1 $newline";  # add the warning  
+      chomp( $arg1 );                            # cut off new line
+      $Warning = $Warning."* - set_soenv: warning: $arg1 $newline";  # add the warning
    }
 }
 #-------------------
