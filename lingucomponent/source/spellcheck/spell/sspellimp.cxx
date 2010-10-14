@@ -376,6 +376,9 @@ sal_Bool SAL_CALL SpellChecker::isValid( const OUString& rWord, const Locale& rL
         return TRUE;
 #endif
 
+    // return FALSE to process SPELLML requests (they are longer than the header)
+    if (rWord.match(A2OU(SPELLML_HEADER), 0) && (rWord.getLength() > 10)) return FALSE;
+
     // Get property values to be used.
     // These are be the default values set in the SN_LINGU_PROPERTIES
     // PropertySet which are overridden by the supplied ones from the
