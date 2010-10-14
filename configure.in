@@ -6642,6 +6642,9 @@ dnl ===================================================================
 KDE4_CFLAGS=""
 KDE4_LIBS=""
 MOC4="moc"
+KDE_GLIB_CFLAGS=""
+KDE_GLIB_LIBS=""
+KDE_HAVE_GLIB=""
 if test "$test_kde4" = "yes" -a "$ENABLE_KDE4" = "TRUE" ; then
    qt_incdirs="$QT4INC /usr/include/qt4 /usr/include $x_includes"
    qt_libdirs="$QT4LIB /usr/lib $x_libraries"
@@ -6761,10 +6764,18 @@ the root of your Qt installation by exporting QT4DIR before running "configure".
 
    KDE4_CFLAGS="`pkg-config --cflags QtCore` `pkg-config --cflags QtGui` -I$kde_incdir -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT"
    KDE4_LIBS="-L$kde_libdir -L$qt_lib_dir -lkdeui -lkdecore -lQtCore -lQtGui"
+
+   # Glib is needed for properly handling Qt event loop with Qt's Glib integration enabled
+   PKG_CHECK_MODULES(KDE_GLIB,[glib-2.0 >= 2.4],
+    [KDE_HAVE_GLIB=1],
+    AC_MSG_WARN([[No Glib found, KDE4 support will not integrate with Qt's Glib event loop support]]))
 fi
 AC_SUBST(KDE4_CFLAGS)
 AC_SUBST(KDE4_LIBS)
 AC_SUBST(MOC4)
+AC_SUBST(KDE_GLIB_CFLAGS)
+AC_SUBST(KDE_GLIB_LIBS)
+AC_SUBST(KDE_HAVE_GLIB)
 
 dnl ===================================================================
 dnl Test for the enabling the lockdown pieces
