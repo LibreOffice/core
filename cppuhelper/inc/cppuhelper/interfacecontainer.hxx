@@ -157,7 +157,6 @@ void OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::dispos
         {
             typedef OInterfaceContainerHelper* ppp;
             ppListenerContainers = new ppp[nSize];
-            //ppListenerContainers = new (ListenerContainer*)[nSize];
 
             typename InterfaceMap::iterator iter = m_pMap->begin();
             typename InterfaceMap::iterator end = m_pMap->end();

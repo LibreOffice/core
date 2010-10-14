@@ -1084,8 +1084,6 @@ Reference<XSingleServiceFactory > SAL_CALL createOneInstanceFactory(
 {
     return new OFactoryComponentHelper(
         rServiceManager, rImplementationName, pCreateFunction, 0, &rServiceNames, pModCount, sal_True );
-//  return new OFactoryUnloadableComponentHelper(
-//      rServiceManager, rImplementationName, pCreateFunction, 0, &rServiceNames, pModCount, sal_True );
 }
 
 // global function

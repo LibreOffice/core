@@ -289,16 +289,6 @@ Any OWeakAggObject::queryInterface( const Type & rType ) throw(::com::sun::star:
 {
     Reference< XInterface > x( xDelegator ); // harden ref
     return (x.is() ? x->queryInterface( rType ) : queryAggregation( rType ));
-
-//      // set rOut to zero, if failed
-//      if( !xDelegator.queryHardRef( aUik, rOut ) )
-//      {
-//          XInterfaceRef x;
-//          if( !xDelegator.queryHardRef( ((XInterface*)0)->getSmartUik(), x ) )
-//              // reference is not valid
-//              queryAggregation( aUik, rOut );
-//      }
-//      return rOut.is();
 }
 
 // XAggregation

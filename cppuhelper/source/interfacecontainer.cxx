@@ -686,7 +686,6 @@ void OMultiTypeInterfaceContainerHelperInt32::disposeAndClear( const EventObject
         {
             typedef OInterfaceContainerHelper* ppp;
             ppListenerContainers = new ppp[nSize];
-            //ppListenerContainers = new (ListenerContainer*)[nSize];
 
             t_long2ptr::iterator iter = pMap->begin();
             t_long2ptr::iterator end = pMap->end();
