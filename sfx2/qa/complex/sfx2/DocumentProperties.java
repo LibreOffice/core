@@ -25,9 +25,10 @@
  *
  ************************************************************************/
 
-package complex.framework;
+package complex.sfx2;
 
 
+import complex.sfx2.tools.TestDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.XInitialization;
@@ -53,7 +54,6 @@ import com.sun.star.document.XDocumentProperties;
 
 import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openoffice.test.OfficeConnection;
@@ -66,12 +66,8 @@ import static org.junit.Assert.*;
  *
  * @author mst
  */
-public class DocumentPropertiesTest
+public class DocumentProperties
 {
-//    public String[] getTestMethodNames () {
-//        return new String[] { "check", "cleanup" };
-//    }
-
     @After public void cleanup() {
                 // nothing to do
     }
@@ -80,7 +76,7 @@ public class DocumentPropertiesTest
     class Listener implements XModifyListener {
         private boolean m_Called;
 
-        public Listener() {
+        Listener() {
             m_Called = false;
         }
 
@@ -235,8 +231,7 @@ public class DocumentPropertiesTest
                         new NamedValue("PageCount", new Integer(1))));
 
             XPropertyContainer udpc = xDP.getUserDefinedProperties();
-            XPropertySet udps = (XPropertySet) UnoRuntime.queryInterface(
-                XPropertySet.class, udpc);
+            XPropertySet udps = UnoRuntime.queryInterface( XPropertySet.class, udpc );
             assertTrue("UserDefined 1", "Dies ist ein wichtiger Hinweis"
                     .equals(udps.getPropertyValue("Hinweis")));
             assertTrue("UserDefined 2", ("Kann Spuren von N"
@@ -366,8 +361,7 @@ public class DocumentPropertiesTest
             dur.Seconds = 555;
             dur.MilliSeconds = 444;
 
-            udpc.addProperty("Frobnicate", PropertyAttribute.REMOVEABLE,
-                new Boolean(b));
+            udpc.addProperty("Frobnicate", PropertyAttribute.REMOVEABLE, b);
             udpc.addProperty("FrobDuration", PropertyAttribute.REMOVEABLE, dur);
             udpc.addProperty("FrobDuration2", PropertyAttribute.REMOVEABLE, t);
             udpc.addProperty("FrobEndDate", PropertyAttribute.REMOVEABLE, date);
@@ -433,8 +427,7 @@ public class DocumentPropertiesTest
             System.out.println("Checking user-defined meta-data from stored file...");
 
             udpc = xDP.getUserDefinedProperties();
-            udps = (XPropertySet) UnoRuntime.queryInterface(
-                XPropertySet.class, udpc);
+            udps = UnoRuntime.queryInterface( XPropertySet.class, udpc );
 
             assertTrue("UserDefined bool", new Boolean(b).equals(
                     udps.getPropertyValue("Frobnicate")));
@@ -467,8 +460,7 @@ public class DocumentPropertiesTest
             System.out.println("Checking notification listener interface...");
 
             Listener listener = new Listener();
-            XModifyBroadcaster xMB = (XModifyBroadcaster)
-                UnoRuntime.queryInterface(XModifyBroadcaster.class, xDP);
+            XModifyBroadcaster xMB = UnoRuntime.queryInterface( XModifyBroadcaster.class, xDP );
             xMB.addModifyListener(listener);
             xDP.setAuthor("not me");
             assertTrue("Listener Author", listener.reset());
@@ -542,20 +534,24 @@ public class DocumentPropertiesTest
 
         private XMultiServiceFactory getMSF()
     {
-        final XMultiServiceFactory xMSF1 = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
+        final XMultiServiceFactory xMSF1 = UnoRuntime.queryInterface( XMultiServiceFactory.class, connection.getComponentContext().getServiceManager() );
         return xMSF1;
     }
 
     // setup and close connections
     @BeforeClass public static void setUpConnection() throws Exception {
-        System.out.println("setUpConnection()");
+        System.out.println( "------------------------------------------------------------" );
+        System.out.println( "starting class: " + DocumentProperties.class.getName() );
+        System.out.println( "------------------------------------------------------------" );
         connection.setUp();
     }
 
     @AfterClass public static void tearDownConnection()
         throws InterruptedException, com.sun.star.uno.Exception
     {
-        System.out.println("tearDownConnection() DocumentPropertiesTest");
+        System.out.println( "------------------------------------------------------------" );
+        System.out.println( "finishing class: " + DocumentProperties.class.getName() );
+        System.out.println( "------------------------------------------------------------" );
         connection.tearDown();
     }
 

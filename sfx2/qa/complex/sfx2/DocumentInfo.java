@@ -24,9 +24,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-package complex.docinfo;
+package complex.sfx2;
 
-import com.sun.star.beans.*;
+import com.sun.star.beans.PropertyAttribute;
 import com.sun.star.beans.Property;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertyContainer;
@@ -49,22 +49,17 @@ import util.WriterTools;
 
 import org.junit.After;
 import org.junit.AfterClass;
-// import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openoffice.test.OfficeConnection;
 import static org.junit.Assert.*;
 
-public class DocumentProperties
+public class DocumentInfo
 {
-
     XMultiServiceFactory m_xMSF = null;
     XTextDocument xTextDoc = null;
     XTextDocument xTextDocSecond = null;
 
-//    public String[] getTestMethodNames() {
-//        return new String[] {"checkDocInfo", "cleanup"};
-//    }
     @Test public void checkDocInfo()
     {
         m_xMSF = getMSF();
@@ -349,14 +344,18 @@ public class DocumentProperties
     // setup and close connections
     @BeforeClass public static void setUpConnection() throws Exception
     {
-        System.out.println("setUpConnection()");
+        System.out.println( "------------------------------------------------------------" );
+        System.out.println( "starting class: " + DocumentInfo.class.getName() );
+        System.out.println( "------------------------------------------------------------" );
         connection.setUp();
     }
 
     @AfterClass public static void tearDownConnection()
             throws InterruptedException, com.sun.star.uno.Exception
     {
-        System.out.println("tearDownConnection()");
+        System.out.println( "------------------------------------------------------------" );
+        System.out.println( "finishing class: " + DocumentInfo.class.getName() );
+        System.out.println( "------------------------------------------------------------" );
         connection.tearDown();
     }
     private static final OfficeConnection connection = new OfficeConnection();

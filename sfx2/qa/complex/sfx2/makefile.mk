@@ -25,25 +25,57 @@
 #
 #*************************************************************************
 
-PRJ = ../../../..
-TARGET  = DocHelper
-PRJNAME = $(TARGET)
-PACKAGE = complex/framework/dochelper
+.IF "$(OOO_JUNIT_JAR)" == ""
+nothing .PHONY:
+    @echo -----------------------------------------------------
+    @echo - JUnit not available, not building anything
+    @echo -----------------------------------------------------
+.ELSE   # IF "$(OOO_JUNIT_JAR)" != ""
+
+PRJ = ../../..
+PRJNAME = sfx2
+TARGET = qa_complex
+PACKAGE = complex/sfx2
 
 # --- Settings -----------------------------------------------------
 .INCLUDE: settings.mk
 
-
 #----- compile .java files -----------------------------------------
 
-JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar
-JAVAFILES       = \
-    DialogThread.java \
-    WriterHelper.java
+JARFILES        = OOoRunner.jar ridl.jar test.jar unoil.jar
+EXTRAJARFILES   = $(OOO_JUNIT_JAR)
+JAVAFILES       = $(shell @$(FIND) . -name "*.java") \
 
-JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)/$(PACKAGE)/$(i:b).class)
+#----- create a jar from compiled files ----------------------------
+
+JARTARGET       = $(TARGET).jar
+
+#----- JUnit tests class -------------------------------------------
+
+JAVATESTFILES = \
+    DocumentInfo.java \
+    DocumentProperties.java \
+    StandaloneDocumentInfo.java \
+    DocumentMetadataAccess.java \
+    GlobalEventBroadcaster.java \
 
 # --- Targets ------------------------------------------------------
 
-.INCLUDE :  target.mk
+.INCLUDE: target.mk
 
+ALL :   ALLTAR
+
+# --- subsequent tests ---------------------------------------------
+
+.IF "$(OOO_SUBSEQUENT_TESTS)" != ""
+
+.INCLUDE: installationtest.mk
+
+ALLTAR : javatest
+
+    # Sample how to debug
+    # JAVAIFLAGS=-Xdebug  -Xrunjdwp:transport=dt_socket,server=y,address=9003,suspend=y
+
+.END    # "$(OOO_SUBSEQUENT_TESTS)" == ""
+
+.END    # ELSE "$(OOO_JUNIT_JAR)" != ""
