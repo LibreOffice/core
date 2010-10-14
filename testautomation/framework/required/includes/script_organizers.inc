@@ -78,6 +78,7 @@ testcase tUpdtScripts
     dim iCurrentDialog as integer
 
     dim iDiffCount as integer
+    dim max_diffcount as integer
 
     hInitSingleDoc()
 
@@ -109,25 +110,33 @@ testcase tUpdtScripts
         case DLG_JAVASCRIPT: ToolsMacrosOrganizeMacrosJavaScript
             kontext "ScriptOrganizer"
             hGetAllNodeNames( ScriptTreeList, cScriptNamesList() )
+            max_diffcount = 0
         case DLG_BEANSHELL: ToolsMacrosOrganizeMacrosBeanShell
             kontext "ScriptOrganizer"
             hGetAllNodeNames( ScriptTreeList, cScriptNamesList() )
+            max_diffcount = 0
         case DLG_PYTHON: ToolsMacrosOrganizeMacrosPython
             kontext "ScriptOrganizer"
             hGetAllNodeNames( ScriptTreeList, cScriptNamesList() )
+            max_diffcount = 0
         case DLG_BASIC_ORG: ToolsMacro_uno
             Kontext "Makro"
             hGetScriptNames( MakroAus, MakroListe, cScriptNamesList() )
+            max_diffcount = 6
         case DLG_RUN_MACRO: ToolsMacrosRunMacro
             kontext "ScriptSelector"
             hGetScriptNames( LibraryTreeList, ScriptList, cScriptNamesList() )
+            max_diffcount = 6
         end select
         
         printlog( "Compare to reference list, create new one if differences were found" )
-        iDiffCount = hManageComparisionList( sFileIn, sFileOut, cScriptNamesList() )
+        iDiffCount = abs( hManageComparisionList( sFileIn, sFileOut, cScriptNamesList() ) )
 
-        if ( iDiffCount <> 0 ) then warnlog( "The number of scripts has changed, please review." )
-
+        ' Usually we should have 0 differences in the list. However, as we do not have
+        ' a unique way of installing the office (Root-Installation, archives and
+        ' others) we need a little tolerance here. If a number of bundled extensions
+        ' are installed, we have more scripts.
+        if ( iDiffCount > max_diffcount ) then warnlog( "The number of scripts has changed, please review." )
 
         printlog( "Close <" & sDialog & ">" )
         select case ( sDialog ) 
