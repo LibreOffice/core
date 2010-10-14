@@ -1149,7 +1149,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
                 if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( nId, FALSE, &pItem ))
                     nCnt = ((SfxUInt16Item*)pItem)->GetValue();
 
-                BOOL (SfxUndoManager:: *fnDo)( USHORT );
+                BOOL (SfxUndoManager:: *fnDo)();
 
                 sal_uInt16 nCount;
                 if( SID_UNDO == rReq.GetSlot() )
@@ -1164,7 +1164,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
                 }
 
                 for( ; nCnt && nCount; --nCnt, --nCount )
-                    (pTmpUndoMgr->*fnDo)( 0 );
+                    (pTmpUndoMgr->*fnDo)();
             }
             Repaint();
             SfxViewFrame* pFrm = SfxViewFrame::GetFirst( this );

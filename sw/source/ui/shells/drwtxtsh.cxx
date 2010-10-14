@@ -628,10 +628,10 @@ void SwDrawTextShell::ExecUndo(SfxRequest &rReq)
                     {
                         if( SID_UNDO == nId )
                             while( nCnt-- )
-                                pUndoManager->Undo(0);
+                                pUndoManager->Undo();
                         else
                             while( nCnt-- )
-                                pUndoManager->Redo(0);
+                                pUndoManager->Redo();
                     }
                     bCallBase = FALSE;
                     GetView().GetViewFrame()->GetBindings().InvalidateAll(sal_False);

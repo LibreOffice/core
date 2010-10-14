@@ -1397,7 +1397,7 @@ void SwAnnotationShell::ExecUndo(SfxRequest &rReq)
                     nCnt = 0;
 
                 while( nSteps-- )
-                    pUndoManager->Undo(0);
+                    pUndoManager->Undo();
             }
 
             if ( nCnt )
@@ -1421,7 +1421,7 @@ void SwAnnotationShell::ExecUndo(SfxRequest &rReq)
                     nCnt = 0;
 
                 while( nSteps-- )
-                    pUndoManager->Redo(0);
+                    pUndoManager->Redo();
             }
 
             if ( nCnt )
