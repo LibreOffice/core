@@ -73,6 +73,7 @@ public:
     explicit FlagGuard( bool& i_flagRef, exc_handling i_excHandling = IGNORE_EXCEPTIONS )
         :ScopeGuard( ::boost::bind( ResetFlag, ::boost::ref( i_flagRef ) ), i_excHandling )
     {
+        i_flagRef = true;
     }
 
 private:
