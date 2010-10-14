@@ -1670,14 +1670,15 @@
 // Insert current date and time to cell via command
 #define SID_INSERT_CURRENT_DATE     (SC_OOO_BUILD_START + 4)
 #define SID_INSERT_CURRENT_TIME     (SC_OOO_BUILD_START + 5)
+
 // Data Form
 #define SID_DATAFORM_NEW            (SC_OOO_BUILD_START + 6) // message
 #define SID_DATA_FORM               (SC_OOO_BUILD_START + 7) // menu (in Data menu)
 #define RID_SCDLG_DATAFORM          (SC_OOO_BUILD_START + 8) // dialog
 
 // Compatibility options page
-#define RID_SCPAGE_COMPATIBILITY    (SC_OOO_BUILD_START + 6)
-#define HID_SCPAGE_COMPATIBILITY    (SC_OOO_BUILD_START + 7)
+#define RID_SCPAGE_COMPATIBILITY    (SC_OOO_BUILD_START + 9)
+#define HID_SCPAGE_COMPATIBILITY    (SC_OOO_BUILD_START + 10)
 
 #endif
 
