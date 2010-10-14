@@ -330,8 +330,7 @@ void SAL_CALL SvxDrawPage::add( const uno::Reference< drawing::XShape >& xShape 
     if(pObj == NULL)
         return;
 
-    if(pShape)
-        pShape->Create( pObj, this );
+    pShape->Create( pObj, this );
 
     if( mpModel )
         mpModel->SetChanged();

@@ -249,8 +249,7 @@ void SAL_CALL SvxShapeGroup::add( const uno::Reference< drawing::XShape >& xShap
         // Establish connection between new SdrObject and its wrapper before
         // inserting the new shape into the group.  There a new wrapper
         // would be created when this connection would not already exist.
-        if(pShape)
-            pShape->Create( pSdrShape, mxPage.get() );
+        pShape->Create( pSdrShape, mxPage.get() );
 
         if( mpModel )
             mpModel->SetChanged();
