@@ -251,7 +251,7 @@ int GtkSalDisplay::GetDefaultMonitorNumber() const
     static screen_get_primary_monitor sym_gdk_screen_get_primary_monitor =
         (screen_get_primary_monitor)osl_getAsciiFunctionSymbol( GetSalData()->m_pPlugin, "gdk_screen_get_primary_monitor" );
     if (sym_gdk_screen_get_primary_monitor)
-        n = sym_gdk_screen_get_primary_monitor( pScreen );
+        n = m_aXineramaScreenIndexMap[sym_gdk_screen_get_primary_monitor( pScreen )];
 #endif
     return n;
 }
