@@ -630,7 +630,7 @@ css::uno::Reference< css::frame::XFrame > CloseDispatcher::static_impl_searchRig
             //     Attention ! Checking Window->GetParent() isnt the right approach here.
             //     Because sometimes VCL create "implicit border windows" as parents even we created
             //     a simple XWindow using the toolkit only .-(
-            ::vos::OGuard aSolarLock(&Application::GetSolarMutex());
+            SolarMutexGuard aSolarLock;
             Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
             if (
                 (pWindow                  ) &&

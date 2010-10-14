@@ -255,7 +255,7 @@ Any BasicScriptListener_Impl::approveFiring( const ScriptEvent& aScriptEvent )
 void BasicScriptListener_Impl::disposing(const EventObject& ) throw ( RuntimeException )
 {
     // TODO: ???
-    //NAMESPACE_VOS(OGuard) guard( Application::GetSolarMutex() );
+    //SolarMutexGuard aGuard;
     //xSbxObj.Clear();
 }
 

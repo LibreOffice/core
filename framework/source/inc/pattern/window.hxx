@@ -71,20 +71,20 @@ static ::rtl::OUString getWindowState(const css::uno::Reference< css::awt::XWind
     if (!xWindow.is())
         return ::rtl::OUString();
 
-    // SOLAR SAFE -> ----------------------------
-    ::vos::OClearableGuard aSolarGuard(Application::GetSolarMutex());
-
     ByteString sWindowState;
-    Window*    pWindow     = VCLUnoHelper::GetWindow(xWindow);
-    // check for system window is neccessary to guarantee correct pointer cast!
-    if (pWindow!=NULL && pWindow->IsSystemWindow())
+    // SOLAR SAFE -> ----------------------------
     {
-        ULONG nMask  = WINDOWSTATE_MASK_ALL;
-              nMask &= ~(WINDOWSTATE_MASK_MINIMIZED);
-        sWindowState = ((SystemWindow*)pWindow)->GetWindowState(nMask);
-    }
+        SolarMutexGuard aSolarGuard;
 
-    aSolarGuard.clear();
+        Window*    pWindow     = VCLUnoHelper::GetWindow(xWindow);
+        // check for system window is neccessary to guarantee correct pointer cast!
+        if (pWindow!=NULL && pWindow->IsSystemWindow())
+        {
+            ULONG nMask  = WINDOWSTATE_MASK_ALL;
+            nMask &= ~(WINDOWSTATE_MASK_MINIMIZED);
+            sWindowState = ((SystemWindow*)pWindow)->GetWindowState(nMask);
+        }
+    }
     // <- SOLAR SAFE ----------------------------
 
     return B2U_ENC(sWindowState,RTL_TEXTENCODING_UTF8);
@@ -101,7 +101,7 @@ static void setWindowState(const css::uno::Reference< css::awt::XWindow >& xWind
         return;
 
     // SOLAR SAFE -> ----------------------------
-    ::vos::OClearableGuard aSolarGuard(Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
 
     Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
     // check for system window is neccessary to guarantee correct pointer cast!
@@ -118,7 +118,6 @@ static void setWindowState(const css::uno::Reference< css::awt::XWindow >& xWind
         ((SystemWindow*)pWindow)->SetWindowState(U2B_ENC(sWindowState,RTL_TEXTENCODING_UTF8));
     }
 
-    aSolarGuard.clear();
     // <- SOLAR SAFE ----------------------------
 }
 
@@ -134,7 +133,7 @@ static ::sal_Bool isTopWindow(const css::uno::Reference< css::awt::XWindow >& xW
         // Attention ! Checking Window->GetParent() isnt the right approach here.
         // Because sometimes VCL create "implicit border windows" as parents even we created
         // a simple XWindow using the toolkit only .-(
-        ::vos::OGuard aSolarLock(&Application::GetSolarMutex());
+        SolarMutexGuard aSolarGuard;
         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         if (
             (pWindow                  ) &&

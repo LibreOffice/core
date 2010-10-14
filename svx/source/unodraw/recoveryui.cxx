@@ -110,7 +110,7 @@ css::uno::Any SAL_CALL RecoveryUI::dispatchWithReturnValue(const css::util::URL&
 {
     // Internaly we use VCL ... every call into vcl based code must
     // be guarded by locking the global solar mutex.
-    ::vos::OGuard aSolarLock(&Application::GetSolarMutex());
+    SolarMutexGuard aSolarLock;
 
     css::uno::Any aRet;
     RecoveryUI::EJob eJob = impl_classifyJob(aURL);

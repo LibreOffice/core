@@ -293,7 +293,7 @@ static sal_Bool implts_isFrameOrWindowTop( const css::uno::Reference< css::frame
     if (xWindowCheck.is())
     {
         // --> PB 2007-06-18 #i76867# top and system window is required.
-        ::vos::OGuard aSolarLock(&Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         css::uno::Reference< css::awt::XWindow > xWindow( xWindowCheck, UNO_QUERY );
         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         return ( pWindow && pWindow->IsSystemWindow() );
