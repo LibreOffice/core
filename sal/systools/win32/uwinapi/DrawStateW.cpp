@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -72,3 +73,5 @@ IMPLEMENT_THUNK( user32, WINDOWS, BOOL, WINAPI, DrawStateW,
         return DrawStateA( hdc, hbr, lpOutputFunc, lData, wData, x, y, cx, cy, fuFlags );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

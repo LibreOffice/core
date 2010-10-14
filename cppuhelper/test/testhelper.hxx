@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,3 +30,5 @@ void testPropertyTypeHelper();
 void test_PropertySetHelper();
 void test_ImplHelper( const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > & xSF );
 void test_interfacecontainer();
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

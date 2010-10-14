@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -662,3 +663,5 @@ OUString bootstrap_expandUri(OUString const & uri) {
 }
 
 } // namespace cppu
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -434,3 +435,5 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
     return cppu::component_writeInfoHelper(
         serviceManager, registryKey, entries);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

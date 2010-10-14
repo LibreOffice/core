@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -106,3 +107,5 @@ extern "C" JNIEXPORT jobject JNICALL Java_test_java_1uno_anytest_TestJni_create_
     jni_env->DeleteGlobalRef( jo_global );
     return jo_ret;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

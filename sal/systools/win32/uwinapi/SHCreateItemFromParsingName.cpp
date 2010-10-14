@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,3 +32,4 @@
 #include "macros.h"
 
 DEFINE_DEFAULT_THUNK( shell32, TRYLOAD, HRESULT, WINAPI, SHCreateItemFromParsingName, (PCWSTR pszPath, IBindCtx *pbc, REFIID riid, void **ppv) )
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

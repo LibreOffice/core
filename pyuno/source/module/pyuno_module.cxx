@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -715,3 +716,5 @@ extern "C" PY_DLLEXPORT void initpyuno()
     PyEval_InitThreads();
     Py_InitModule (const_cast< char * >("pyuno"), PyUNOModule_methods);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -339,3 +340,5 @@ AstInterface const * resolveInterfaceTypedefs(AstType const * type) {
     OSL_ASSERT(decl->getNodeType() == NT_interface);
     return static_cast< AstInterface const * >(decl);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

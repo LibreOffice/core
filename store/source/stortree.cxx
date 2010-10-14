@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -580,3 +581,5 @@ storeError OStoreBTreeRootObject::find_insert (
     (void) testInvariant("OStoreBTreeRootObject::find_insert(): leave");
     return store_E_None;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

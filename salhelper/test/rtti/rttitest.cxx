@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include <rtl/ustring>
 #include <stdio.h>
 #include <typeinfo>
@@ -27,3 +28,5 @@ int main( int argc, char *argv[ ], char *envp[ ] )
         pB->funcA();
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

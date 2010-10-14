@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -133,3 +134,5 @@ extern "C"  sal_Bool SAL_CALL uno_bindIdToCurrentThread( sal_Sequence *pThreadId
     }
     return sal_True;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

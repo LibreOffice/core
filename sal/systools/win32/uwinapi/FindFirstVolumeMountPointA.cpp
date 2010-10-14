@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,3 +50,5 @@ extern "C" _declspec( dllexport ) FARPROC kernel32_FindFirstVolumeMountPointA_Pt
 static HANDLE __stdcall FindFirstVolumeMountPointA_Failure (LPSTR lpszRootPathName, LPSTR lpszVolumeMountPoint, DWORD cchBufferLength)
 { SetLastError( 120L ); return (HANDLE)0; }
 */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

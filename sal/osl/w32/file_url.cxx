@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1147,3 +1148,5 @@ oslFileError SAL_CALL osl_getCanonicalName( rtl_uString *strRequested, rtl_uStri
     rtl_uString_newFromString(strValid, strRequested);
     return osl_File_E_None;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

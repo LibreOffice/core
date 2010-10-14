@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -72,3 +73,5 @@ void SimpleReferenceObject::operator delete(void * pPtr, std::nothrow_t const &)
     ::operator delete(pPtr, std::nothrow);
 #endif // WNT
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

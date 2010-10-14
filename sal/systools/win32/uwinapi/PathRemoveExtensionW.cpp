@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,3 +40,5 @@ IMPLEMENT_THUNK( shlwapi, WINDOWS, void, WINAPI, PathRemoveExtensionW,
     PathRemoveExtensionA(lpPathA);
     STR2WSTR(lpPath, wcslen(lpPathW) + 1);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -801,3 +802,5 @@ ffi_closure_UNIX64_inner(ffi_closure *closure, va_list l, void *rp)
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

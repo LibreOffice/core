@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -2705,3 +2706,4 @@ static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *str
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

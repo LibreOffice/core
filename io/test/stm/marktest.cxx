@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -675,3 +676,5 @@ OUString    OMarkableInputStreamTest_getImplementationName() throw ()
 {
     return OUString( RTL_CONSTASCII_USTRINGPARAM("test.com.sun.star.extensions.stm.MarkableInputStream" ));
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

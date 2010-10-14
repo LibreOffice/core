@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include <math.h>
 
 #define PREC_float 1
@@ -131,3 +132,5 @@ bool is_double_equal(double x, double y)
 {
     return is_equal<double>(x, y, PREC_double);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

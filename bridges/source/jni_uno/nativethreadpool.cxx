@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -228,3 +229,5 @@ Java_com_sun_star_lib_uno_environments_remote_NativeThreadPool_destroy(
     uno_threadpool_destroy(p->pool);
     delete p;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

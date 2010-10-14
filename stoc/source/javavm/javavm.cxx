@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1807,3 +1808,5 @@ void JavaVirtualMachine::handleJniException(JNIEnv * environment) {
             RTL_CONSTASCII_USTRINGPARAM("JNI exception occurred")),
         static_cast< cppu::OWeakObject * >(this));
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

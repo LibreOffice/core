@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #   include "pipeimpl.h"
 
 #ifndef _INC_MALLOC
@@ -753,3 +754,5 @@ extern "C" BOOL WINAPI CloseSimplePipe( HANDLE hPipe )
         return FALSE;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

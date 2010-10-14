@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1061,3 +1062,5 @@ Sequence< OUString > filepolicy_getSupportedServiceNames() SAL_THROW( () );
 //--------------------------------------------------------------------------------------------------
 OUString filepolicy_getImplementationName() SAL_THROW( () );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
