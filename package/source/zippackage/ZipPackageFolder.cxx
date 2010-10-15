@@ -56,10 +56,10 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
 using namespace cppu;
-using namespace rtl;
 using namespace std;
 using namespace ::com::sun::star;
-using vos::ORef;
+
+using rtl::OUString;
 
 namespace { struct lcl_CachedImplId : public rtl::Static< Sequence < sal_Int8 >, lcl_CachedImplId > {}; }
 
@@ -335,7 +335,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
 
         try
         {
-            vos::ORef < EncryptionData > aEmptyEncr;
+            rtl::Reference < EncryptionData > aEmptyEncr;
             rZipOut.putNextEntry ( *pTempEntry, aEmptyEncr, sal_False );
             rZipOut.rawCloseEntry();
         }

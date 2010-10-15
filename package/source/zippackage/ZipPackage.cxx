@@ -980,7 +980,7 @@ void ZipPackage::WriteMimetypeMagicFile( ZipOutputStream& aZipOut )
 
     try
     {
-        vos::ORef < EncryptionData > xEmpty;
+        rtl::Reference < EncryptionData > xEmpty;
         aZipOut.putNextEntry( *pEntry, xEmpty );
         aZipOut.write( aType, 0, nBufferLength );
         aZipOut.closeEntry();
@@ -1025,7 +1025,7 @@ void ZipPackage::WriteManifest( ZipOutputStream& aZipOut, const vector< Sequence
         pBuffer->realloc( nBufferLength );
 
         // the manifest.xml is never encrypted - so pass an empty reference
-        vos::ORef < EncryptionData > xEmpty;
+                rtl::Reference < EncryptionData > xEmpty;
         aZipOut.putNextEntry( *pEntry, xEmpty );
         aZipOut.write( pBuffer->getSequence(), 0, nBufferLength );
         aZipOut.closeEntry();
@@ -1088,7 +1088,7 @@ void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const vector< Sequ
     pBuffer->realloc( nBufferLength );
 
     // there is no encryption in this format currently
-    vos::ORef < EncryptionData > xEmpty;
+            rtl::Reference < EncryptionData > xEmpty;
     aZipOut.putNextEntry( *pEntry, xEmpty );
     aZipOut.write( pBuffer->getSequence(), 0, nBufferLength );
     aZipOut.closeEntry();

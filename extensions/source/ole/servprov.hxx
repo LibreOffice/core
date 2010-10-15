@@ -147,7 +147,6 @@ public:
 
 protected:
 
-    //ORefCount         m_refCount;
     oslInterlockedCount m_refCount;
     Reference<XInterface>       m_xInst;
     GUID                m_guid;

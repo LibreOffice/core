@@ -28,7 +28,7 @@
 #define _HASHMAPS_HXX
 
 #include <ZipEntry.hxx>
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 #include <hash_map>
 
 struct eqFunc
@@ -51,7 +51,7 @@ typedef std::hash_map < rtl::OUString,
                         eqFunc > FolderHash;
 
 typedef std::hash_map < rtl::OUString,
-                        vos::ORef < com::sun::star::packages::ContentInfo >,
+                        rtl::Reference < com::sun::star::packages::ContentInfo >,
                         ::rtl::OUStringHash,
                         eqFunc > ContentHash;
 

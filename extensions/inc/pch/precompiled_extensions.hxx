@@ -489,6 +489,7 @@
 #include "rtl/math.hxx"
 #include "rtl/memory.h"
 #include "rtl/process.h"
+#include "rtl/ref.hxx"
 #include "rtl/strbuf.hxx"
 #include "rtl/string.h"
 #include "rtl/string.hxx"
@@ -541,8 +542,6 @@
 #include "vos/macros.hxx"
 #include "vos/module.hxx"
 #include "vos/mutex.hxx"
-#include "vos/ref.hxx"
-#include "vos/refernce.hxx"
 
 #include "xmloff/nmspmap.hxx"
 //---MARKER---

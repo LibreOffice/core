@@ -31,7 +31,7 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/packages/XDataSinkEncrSupport.hpp>
 #include <ZipPackageEntry.hxx>
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 #include <EncryptionData.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <mutexholder.hxx>
@@ -56,7 +56,7 @@ protected:
     const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > m_xFactory;
     ZipPackage          &rZipPackage;
     sal_Bool            bToBeCompressed, bToBeEncrypted, bHaveOwnKey, bIsEncrypted;
-    vos::ORef < EncryptionData > xEncryptionData;
+    rtl::Reference < EncryptionData > xEncryptionData;
 
     sal_uInt8   m_nStreamMode;
     sal_uInt32  m_nMagicalHackPos;
@@ -80,7 +80,7 @@ public:
     sal_Bool IsFromManifest() const { return m_bFromManifest; }
     void SetFromManifest( sal_Bool bValue ) { m_bFromManifest = bValue; }
 
-    vos::ORef < EncryptionData > & getEncryptionData ()
+    rtl::Reference < EncryptionData > & getEncryptionData ()
     { return xEncryptionData;}
     const com::sun::star::uno::Sequence < sal_Int8 >& getKey () const
     { return xEncryptionData->aKey;}
@@ -104,10 +104,10 @@ public:
     void SetToBeEncrypted (sal_Bool bNewValue)
     {
         bToBeEncrypted  = bNewValue;
-        if ( bToBeEncrypted && xEncryptionData.isEmpty())
+        if ( bToBeEncrypted && !xEncryptionData.is())
             xEncryptionData = new EncryptionData;
-        else if ( !bToBeEncrypted && !xEncryptionData.isEmpty() )
-            xEncryptionData.unbind();
+        else if ( !bToBeEncrypted && xEncryptionData.is() )
+            xEncryptionData.clear();
     }
     void SetPackageMember (sal_Bool bNewValue);
     void setKey (const com::sun::star::uno::Sequence < sal_Int8 >& rNewKey )

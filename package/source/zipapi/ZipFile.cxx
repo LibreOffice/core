@@ -52,8 +52,6 @@
 
 #include <comphelper/storagehelper.hxx>
 
-using namespace vos;
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::io;
 using namespace com::sun::star::uno;
@@ -63,6 +61,7 @@ using namespace com::sun::star::packages;
 using namespace com::sun::star::packages::zip;
 using namespace com::sun::star::packages::zip::ZipConstants;
 
+using rtl::OUString;
 
 /** This class is used to read entries from a zip file
  */
@@ -125,10 +124,10 @@ void ZipFile::setInputStream ( Reference < XInputStream > xNewStream )
     aGrabber.setInputStream ( xStream );
 }
 
-sal_Bool ZipFile::StaticGetCipher ( const ORef < EncryptionData > & xEncryptionData, rtlCipher &rCipher, sal_Bool bDecode )
+sal_Bool ZipFile::StaticGetCipher ( const rtl::Reference < EncryptionData > & xEncryptionData, rtlCipher &rCipher, sal_Bool bDecode )
 {
     sal_Bool bResult = sal_False;
-    if ( ! xEncryptionData.isEmpty() )
+    if ( xEncryptionData.is() )
     {
         Sequence < sal_uInt8 > aDerivedKey (16);
         rtlCipherError aResult;
@@ -156,7 +155,7 @@ sal_Bool ZipFile::StaticGetCipher ( const ORef < EncryptionData > & xEncryptionD
     return bResult;
 }
 
-void ZipFile::StaticFillHeader ( const ORef < EncryptionData > & rData,
+void ZipFile::StaticFillHeader ( const rtl::Reference < EncryptionData > & rData,
                                 sal_Int32 nSize,
                                 const ::rtl::OUString& aMediaType,
                                 sal_Int8 * & pHeader )
@@ -223,7 +222,7 @@ void ZipFile::StaticFillHeader ( const ORef < EncryptionData > & rData,
     pHeader += nMediaTypeLength;
 }
 
-sal_Bool ZipFile::StaticFillData ( ORef < EncryptionData > & rData,
+sal_Bool ZipFile::StaticFillData ( rtl::Reference < EncryptionData > & rData,
                                     sal_Int32 &rSize,
                                     ::rtl::OUString& aMediaType,
                                     Reference < XInputStream > &rStream )
@@ -288,10 +287,10 @@ sal_Bool ZipFile::StaticFillData ( ORef < EncryptionData > & rData,
 }
 
 Reference< XInputStream > ZipFile::StaticGetDataFromRawStream(  const Reference< XInputStream >& xStream,
-                                                                const ORef < EncryptionData > &rData )
+                                                                const rtl::Reference < EncryptionData > &rData )
         throw ( packages::WrongPasswordException, ZipIOException, RuntimeException )
 {
-    if ( rData.isEmpty() )
+    if ( !rData.is() )
         throw ZipIOException( OUString::createFromAscii( "Encrypted stream without encryption data!\n" ),
                             Reference< XInterface >() );
 
@@ -328,9 +327,9 @@ Reference< XInputStream > ZipFile::StaticGetDataFromRawStream(  const Reference<
     return new XUnbufferedStream ( xStream, rData );
 }
 
-sal_Bool ZipFile::StaticHasValidPassword( const Sequence< sal_Int8 > &aReadBuffer, const ORef < EncryptionData > &rData )
+sal_Bool ZipFile::StaticHasValidPassword( const Sequence< sal_Int8 > &aReadBuffer, const rtl::Reference < EncryptionData > &rData )
 {
-    if ( !rData.isValid() || !rData->aKey.getLength() )
+    if ( !rData.is() || !rData->aKey.getLength() )
         return sal_False;
 
     sal_Bool bRet = sal_False;
@@ -377,7 +376,7 @@ sal_Bool ZipFile::StaticHasValidPassword( const Sequence< sal_Int8 > &aReadBuffe
     return bRet;
 }
 
-sal_Bool ZipFile::hasValidPassword ( ZipEntry & rEntry, const ORef < EncryptionData > &rData )
+sal_Bool ZipFile::hasValidPassword ( ZipEntry & rEntry, const rtl::Reference < EncryptionData > &rData )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -401,7 +400,7 @@ sal_Bool ZipFile::hasValidPassword ( ZipEntry & rEntry, const ORef < EncryptionD
 #if 0
 Reference < XInputStream > ZipFile::createFileStream(
             ZipEntry & rEntry,
-            const ORef < EncryptionData > &rData,
+            const rtl::Reference < EncryptionData > &rData,
             sal_Bool bRawStream,
             sal_Bool bIsEncrypted )
 {
@@ -411,7 +410,7 @@ Reference < XInputStream > ZipFile::createFileStream(
 }
 Reference < XInputStream > ZipFile::createMemoryStream(
             ZipEntry & rEntry,
-            const ORef < EncryptionData > &rData,
+            const rtl::Reference < EncryptionData > &rData,
             sal_Bool bRawStream,
             sal_Bool bIsEncrypted )
 {
@@ -434,7 +433,7 @@ Reference < XInputStream > ZipFile::createMemoryStream(
     // we have the salt. If we have the salt, then check if we have the encryption key
     // if not, return rawStream instead.
 
-    sal_Bool bHaveEncryptData = ( !rData.isEmpty() && rData->aSalt.getLength() && rData->aInitVector.getLength() && rData->nIterationCount != 0 ) ? sal_True : sal_False;
+    sal_Bool bHaveEncryptData = ( rData.is() && rData->aSalt.getLength() && rData->aInitVector.getLength() && rData->nIterationCount != 0 ) ? sal_True : sal_False;
     sal_Bool bMustDecrypt = ( !bRawStream && bHaveEncryptData && bIsEncrypted ) ? sal_True : sal_False;
 
     if ( bMustDecrypt )
@@ -494,7 +493,7 @@ Reference < XInputStream > ZipFile::createMemoryStream(
 Reference < XInputStream > ZipFile::createUnbufferedStream(
             SotMutexHolderRef aMutexHolder,
             ZipEntry & rEntry,
-            const ORef < EncryptionData > &rData,
+            const rtl::Reference < EncryptionData > &rData,
             sal_Int8 nStreamMode,
             sal_Bool bIsEncrypted,
             ::rtl::OUString aMediaType )
@@ -511,7 +510,7 @@ ZipEnumeration * SAL_CALL ZipFile::entries(  )
 }
 
 Reference< XInputStream > SAL_CALL ZipFile::getInputStream( ZipEntry& rEntry,
-        const vos::ORef < EncryptionData > &rData,
+        const rtl::Reference < EncryptionData > &rData,
         sal_Bool bIsEncrypted,
         SotMutexHolderRef aMutexHolder )
     throw(IOException, ZipException, RuntimeException)
@@ -528,7 +527,7 @@ Reference< XInputStream > SAL_CALL ZipFile::getInputStream( ZipEntry& rEntry,
 
     // if we have a digest, then this file is an encrypted one and we should
     // check if we can decrypt it or not
-    if ( bIsEncrypted && !rData.isEmpty() && rData->aDigest.getLength() )
+    if ( bIsEncrypted && rData.is() && rData->aDigest.getLength() )
         bNeedRawStream = !hasValidPassword ( rEntry, rData );
 
     return createUnbufferedStream ( aMutexHolder,
@@ -539,7 +538,7 @@ Reference< XInputStream > SAL_CALL ZipFile::getInputStream( ZipEntry& rEntry,
 }
 
 Reference< XInputStream > SAL_CALL ZipFile::getDataStream( ZipEntry& rEntry,
-        const vos::ORef < EncryptionData > &rData,
+        const rtl::Reference < EncryptionData > &rData,
         sal_Bool bIsEncrypted,
         SotMutexHolderRef aMutexHolder )
     throw ( packages::WrongPasswordException,
@@ -559,7 +558,7 @@ Reference< XInputStream > SAL_CALL ZipFile::getDataStream( ZipEntry& rEntry,
     {
         // in case no digest is provided there is no way
         // to detect password correctness
-        if ( rData.isEmpty() )
+        if ( !rData.is() )
             throw ZipException( OUString::createFromAscii( "Encrypted stream without encryption data!\n" ),
                                 Reference< XInterface >() );
 
@@ -580,7 +579,7 @@ Reference< XInputStream > SAL_CALL ZipFile::getDataStream( ZipEntry& rEntry,
 }
 
 Reference< XInputStream > SAL_CALL ZipFile::getRawData( ZipEntry& rEntry,
-        const vos::ORef < EncryptionData > &rData,
+        const rtl::Reference < EncryptionData > &rData,
         sal_Bool bIsEncrypted,
         SotMutexHolderRef aMutexHolder )
     throw(IOException, ZipException, RuntimeException)
@@ -595,7 +594,7 @@ Reference< XInputStream > SAL_CALL ZipFile::getRawData( ZipEntry& rEntry,
 
 Reference< XInputStream > SAL_CALL ZipFile::getWrappedRawStream(
         ZipEntry& rEntry,
-        const vos::ORef < EncryptionData > &rData,
+        const rtl::Reference < EncryptionData > &rData,
         const ::rtl::OUString& aMediaType,
         SotMutexHolderRef aMutexHolder )
     throw ( packages::NoEncryptionException,
@@ -605,7 +604,7 @@ Reference< XInputStream > SAL_CALL ZipFile::getWrappedRawStream(
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    if ( rData.isEmpty() )
+    if ( !rData.is() )
         throw packages::NoEncryptionException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     if ( rEntry.nOffset <= 0 )

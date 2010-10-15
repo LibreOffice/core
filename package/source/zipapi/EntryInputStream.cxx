@@ -53,7 +53,7 @@ using namespace com::sun::star::packages::zip::ZipConstants;
 
 EntryInputStream::EntryInputStream( Reference < io::XInputStream > xNewInput,
                                     const ZipEntry & rNewEntry,
-                                    const vos::ORef < EncryptionData > &xEncryptData,
+                                    const rtl::Reference < EncryptionData > &xEncryptData,
                                     sal_Bool bGetRawStream)
 : xStream( xNewInput )
 , xSeek( xNewInput, UNO_QUERY )

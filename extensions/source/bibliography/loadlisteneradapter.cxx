@@ -30,7 +30,7 @@
 #include "precompiled_extensions.hxx"
 #include "loadlisteneradapter.hxx"
 #include <osl/diagnose.h>
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 
 //.........................................................................
 namespace bib
@@ -118,7 +118,7 @@ namespace bib
     {
         if ( m_bListening )
         {
-            ::vos::ORef< OComponentAdapterBase > xPreventDelete(this);
+            ::rtl::Reference< OComponentAdapterBase > xPreventDelete(this);
 
             disposing();
 

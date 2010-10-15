@@ -37,9 +37,9 @@
 
 struct ZipEntry;
 class EncryptionData;
-namespace vos
+namespace rtl
 {
-    template < class T > class ORef;
+    template < class T > class Reference;
 }
 class ZipOutputStream
 {
@@ -74,7 +74,7 @@ public:
     void SAL_CALL setLevel( sal_Int32 nNewLevel )
         throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL putNextEntry( ZipEntry& rEntry,
-            vos::ORef < EncryptionData > &rData,
+            rtl::Reference < EncryptionData > &rData,
             sal_Bool bEncrypt = sal_False )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     void SAL_CALL closeEntry(  )

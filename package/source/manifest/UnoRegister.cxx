@@ -37,13 +37,14 @@
 
 #include <zipfileaccess.hxx>
 
-using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::packages;
 using namespace ::com::sun::star::packages::manifest;
+
+using rtl::OUString;
 
 static sal_Bool writeInfo( void * pRegistryKey,
                            const OUString & rImplementationName,

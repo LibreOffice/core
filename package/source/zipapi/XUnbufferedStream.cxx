@@ -58,7 +58,7 @@ using ::rtl::OUString;
 XUnbufferedStream::XUnbufferedStream( SotMutexHolderRef aMutexHolder,
                           ZipEntry & rEntry,
                            Reference < XInputStream > xNewZipStream,
-                           const vos::ORef < EncryptionData > &rData,
+                          const rtl::Reference < EncryptionData > &rData,
                            sal_Int8 nStreamMode,
                            sal_Bool bIsEncrypted,
                           const ::rtl::OUString& aMediaType,
@@ -91,7 +91,7 @@ XUnbufferedStream::XUnbufferedStream( SotMutexHolderRef aMutexHolder,
         mnZipSize = maEntry.nSize;
         mnZipEnd = maEntry.nMethod == DEFLATED ? maEntry.nOffset + maEntry.nCompressedSize : maEntry.nOffset + maEntry.nSize;
     }
-    sal_Bool bHaveEncryptData = ( !rData.isEmpty() && rData->aSalt.getLength() && rData->aInitVector.getLength() && rData->nIterationCount != 0 ) ? sal_True : sal_False;
+    sal_Bool bHaveEncryptData = ( rData.is() && rData->aSalt.getLength() && rData->aInitVector.getLength() && rData->nIterationCount != 0 ) ? sal_True : sal_False;
     sal_Bool bMustDecrypt = ( nStreamMode == UNBUFF_STREAM_DATA && bHaveEncryptData && bIsEncrypted ) ? sal_True : sal_False;
 
     if ( bMustDecrypt )
@@ -116,7 +116,7 @@ XUnbufferedStream::XUnbufferedStream( SotMutexHolderRef aMutexHolder,
 
 // allows to read package raw stream
 XUnbufferedStream::XUnbufferedStream( const Reference < XInputStream >& xRawStream,
-                    const vos::ORef < EncryptionData > &rData )
+                    const rtl::Reference < EncryptionData > &rData )
 : maMutexHolder( new SotMutexHolder )
 , mxZipStream ( xRawStream )
 , mxZipSeek ( xRawStream, UNO_QUERY )

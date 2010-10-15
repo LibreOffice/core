@@ -57,7 +57,8 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star;
 using namespace cppu;
-using namespace rtl;
+
+using rtl::OUString;
 
 namespace { struct lcl_CachedImplId : public rtl::Static< Sequence < sal_Int8 >, lcl_CachedImplId > {}; }
 
@@ -164,7 +165,7 @@ uno::Reference< io::XInputStream > ZipPackageStream::GetRawEncrStreamNoHeaderCop
     if ( m_nStreamMode != PACKAGE_STREAM_RAW || !GetOwnSeekStream().is() )
         throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
-    if ( xEncryptionData.isEmpty() )
+    if ( !xEncryptionData.is() )
         throw ZipIOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Encrypted stream without encryption data!\n" ) ),
                             Reference< XInterface >() );
 
@@ -204,7 +205,7 @@ Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( sal_B
 
     if ( bToBeEncrypted )
     {
-        aKey = ( xEncryptionData.isEmpty() || !bHaveOwnKey ) ? rZipPackage.getEncryptionKey() :
+        aKey = ( !xEncryptionData.is() || !bHaveOwnKey ) ? rZipPackage.getEncryptionKey() :
                                                                                 xEncryptionData->aKey;
         if ( !aKey.getLength() )
             throw packages::NoEncryptionException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
@@ -317,7 +318,7 @@ sal_Bool ZipPackageStream::ParsePackageRawStream()
 
     sal_Bool bOk = sal_False;
 
-    vos::ORef < EncryptionData > xTempEncrData;
+    rtl::Reference < EncryptionData > xTempEncrData;
     sal_Int32 nMagHackSize = 0;
     Sequence < sal_Int8 > aHeader ( 4 );
 
@@ -403,7 +404,7 @@ Reference< io::XInputStream > SAL_CALL ZipPackageStream::getRawData()
     {
         if (IsPackageMember())
         {
-            if ( !xEncryptionData.isEmpty() && !bHaveOwnKey )
+            if ( xEncryptionData.is() && !bHaveOwnKey )
                 xEncryptionData->aKey = rZipPackage.getEncryptionKey();
             return rZipPackage.getZipFile().getRawData( aEntry, xEncryptionData, bIsEncrypted, rZipPackage.GetSharedMutexRef() );
         }
@@ -434,7 +435,7 @@ Reference< io::XInputStream > SAL_CALL ZipPackageStream::getInputStream(  )
     {
         if (IsPackageMember())
         {
-            if ( !xEncryptionData.isEmpty() && !bHaveOwnKey )
+            if ( xEncryptionData.is() && !bHaveOwnKey )
                 xEncryptionData->aKey = rZipPackage.getEncryptionKey();
             return rZipPackage.getZipFile().getInputStream( aEntry, xEncryptionData, bIsEncrypted, rZipPackage.GetSharedMutexRef() );
         }
@@ -472,12 +473,12 @@ Reference< io::XInputStream > SAL_CALL ZipPackageStream::getDataStream()
     if ( m_nStreamMode == PACKAGE_STREAM_DETECT )
         throw packages::zip::ZipIOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
-    if ( !xEncryptionData.isEmpty() && !bHaveOwnKey )
+    if ( xEncryptionData.is() && !bHaveOwnKey )
         xEncryptionData->aKey = rZipPackage.getEncryptionKey();
 
     if (IsPackageMember())
     {
-        if ( !xEncryptionData.isEmpty() && !bHaveOwnKey )
+        if ( xEncryptionData.is() && !bHaveOwnKey )
             xEncryptionData->aKey = rZipPackage.getEncryptionKey();
 
         return rZipPackage.getZipFile().getDataStream( aEntry, xEncryptionData, bIsEncrypted, rZipPackage.GetSharedMutexRef() );
@@ -508,7 +509,7 @@ Reference< io::XInputStream > SAL_CALL ZipPackageStream::getRawStream()
 
     if (IsPackageMember())
     {
-        if ( !bIsEncrypted || xEncryptionData.isEmpty() )
+        if ( !bIsEncrypted || !xEncryptionData.is() )
             throw packages::NoEncryptionException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
         return rZipPackage.getZipFile().getWrappedRawStream( aEntry, xEncryptionData, sMediaType, rZipPackage.GetSharedMutexRef() );
@@ -660,7 +661,7 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
                                                 2 );
 
             bToBeEncrypted = bEnc;
-            if ( bToBeEncrypted && xEncryptionData.isEmpty())
+            if ( bToBeEncrypted && !xEncryptionData.is())
                 xEncryptionData = new EncryptionData;
         }
         else
@@ -697,7 +698,7 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
 
         if ( aNewKey.getLength() )
         {
-            if ( xEncryptionData.isEmpty())
+            if ( !xEncryptionData.is())
                 xEncryptionData = new EncryptionData;
 
             xEncryptionData->aKey = aNewKey;
@@ -765,7 +766,7 @@ Any SAL_CALL ZipPackageStream::getPropertyValue( const OUString& PropertyName )
     }
     else if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "EncryptionKey" ) ) )
     {
-        aAny <<= xEncryptionData.isEmpty () ? Sequence < sal_Int8 > () : xEncryptionData->aKey;
+        aAny <<= !xEncryptionData.is() ? Sequence < sal_Int8 > () : xEncryptionData->aKey;
         return aAny;
     }
     else

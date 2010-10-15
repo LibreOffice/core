@@ -32,7 +32,7 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <Inflater.hxx>
 #include <com/sun/star/packages/zip/ZipEntry.hpp>
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 #include <EncryptionData.hxx>
 class EntryInputStream : public cppu::WeakImplHelper2< com::sun::star::io::XInputStream,
                                                        com::sun::star::io::XSeekable >
@@ -43,7 +43,7 @@ protected:
     sal_Int64 nEnd, nCurrent, nUncompressedSize;
     sal_Bool bRawStream, bHaveInMemory, bEncrypted;
     com::sun::star::uno::Sequence < sal_Int8 > aBuffer;
-    const vos::ORef < EncryptionData > xEncryptionData;
+    const rtl::Reference < EncryptionData > xEncryptionData;
     const com::sun::star::packages::zip::ZipEntry aEntry;
     Inflater aInflater;
     void readIntoMemory()
@@ -51,7 +51,7 @@ protected:
 public:
              EntryInputStream( com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xInput,
                                 const com::sun::star::packages::zip::ZipEntry &rNewEntry,
-                               const vos::ORef < EncryptionData > &xEncryptData,
+                               const rtl::Reference < EncryptionData > &xEncryptData,
                                sal_Bool bGetRawStream = sal_False);
     virtual ~EntryInputStream();
 

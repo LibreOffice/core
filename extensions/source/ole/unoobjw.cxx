@@ -41,7 +41,7 @@
 
 
 #include <osl/diagnose.h>
-#include <vos/refernce.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include <tools/debug.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/beans/MethodConcept.hpp>

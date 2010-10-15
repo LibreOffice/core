@@ -32,7 +32,7 @@
 #include <com/sun/star/beans/XExactName.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/script/InvocationInfo.hpp>
-#include <vos/refernce.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 #include <tools/presys.h>
 #include "comifaces.hxx"
@@ -220,7 +220,6 @@ protected:
 
     sal_Bool getInvocationInfoForCall(DISPID id, InvocationInfo& info);
 
-//  vos::ORefCount                      m_refCount;
     Reference<XInvocation>                  m_xInvocation;
     Reference<XExactName>                   m_xExactName;
     Reference<XInterface>                   m_xOrigin;

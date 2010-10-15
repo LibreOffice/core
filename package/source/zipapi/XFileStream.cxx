@@ -46,7 +46,7 @@ using ::rtl::OUString;
 XFileStream::XFileStream( ZipEntry & rEntry,
                            com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xNewZipStream,
                            com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xNewTempStream,
-                           const vos::ORef < EncryptionData > &rData,
+                           const rtl::Reference < EncryptionData > &rData,
                            sal_Bool bNewRawStream,
                            sal_Bool bIsEncrypted )
 : maEntry ( rEntry )

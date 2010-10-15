@@ -38,7 +38,6 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <vector>
 
-using namespace ::rtl;
 using namespace ::std;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -48,6 +47,7 @@ using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::packages;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::packages::manifest;
+using ::rtl::OUString;
 
 ManifestReader::ManifestReader( const Reference < XMultiServiceFactory > & xNewFactory )
 : xFactory ( xNewFactory )
