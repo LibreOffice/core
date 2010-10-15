@@ -89,8 +89,9 @@
 #include <com/sun/star/sheet/XCellRangeReferrer.hpp>
 #include <svtools/filterutils.hxx>
 // #TODO remove this when oox is used for control/userform import
-#include <vbahelper/vbahelper.hxx>
 #include <com/sun/star/util/MeasureUnit.hpp>
+#include <com/sun/star/awt/XDevice.hpp>
+#include <com/sun/star/awt/XUnitConversion.hpp>
 
 #ifndef C2S
 #define C2S(cChar)  String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(cChar))
