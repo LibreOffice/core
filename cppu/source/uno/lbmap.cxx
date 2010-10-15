@@ -130,13 +130,13 @@ struct MappingEntry
         {}
 };
 //--------------------------------------------------------------------------------------------------
-struct FctOUStringHash : public unary_function< const OUString &, size_t >
+struct FctOUStringHash : public std::unary_function< const OUString &, size_t >
 {
     size_t operator()( const OUString & rKey ) const SAL_THROW( () )
         { return (size_t)rKey.hashCode(); }
 };
 //--------------------------------------------------------------------------------------------------
-struct FctPtrHash : public unary_function< uno_Mapping *, size_t >
+struct FctPtrHash : public std::unary_function< uno_Mapping *, size_t >
 {
     size_t operator()( uno_Mapping * pKey ) const SAL_THROW( () )
         { return (size_t)pKey; }
