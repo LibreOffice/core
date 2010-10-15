@@ -227,11 +227,10 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createI
 void TaskCreatorService::implts_applyDocStyleToWindow(const css::uno::Reference< css::awt::XWindow >& xWindow) const
 {
     // SYNCHRONIZED ->
-    ::vos::OClearableGuard aSolarGuard(Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     Window* pVCLWindow = VCLUnoHelper::GetWindow(xWindow);
     if (pVCLWindow)
         pVCLWindow->SetExtendedStyle(WB_EXT_DOCUMENT);
-    aSolarGuard.clear();
     // <- SYNCHRONIZED
 }
 

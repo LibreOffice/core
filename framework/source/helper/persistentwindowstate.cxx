@@ -285,7 +285,7 @@ void PersistentWindowState::implst_setWindowStateOnConfig(const css::uno::Refere
     if (xWindow.is())
     {
         // SOLAR SAFE -> ------------------------
-        ::vos::OClearableGuard aSolarLock(Application::GetSolarMutex());
+        SolarMutexGuard aSolarGuard;
 
         Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
         // check for system window is neccessary to guarantee correct pointer cast!
@@ -300,8 +300,6 @@ void PersistentWindowState::implst_setWindowStateOnConfig(const css::uno::Refere
                             ((SystemWindow*)pWindow)->GetWindowState(nMask),
                             RTL_TEXTENCODING_UTF8);
         }
-
-        aSolarLock.clear();
         // <- SOLAR SAFE ------------------------
     }
 
@@ -320,7 +318,7 @@ void PersistentWindowState::implst_setWindowStateOnWindow(const css::uno::Refere
         return;
 
     // SOLAR SAFE -> ------------------------
-    ::vos::OClearableGuard aSolarLock(Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
 
     Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
     if (!pWindow)
@@ -341,8 +339,6 @@ void PersistentWindowState::implst_setWindowStateOnWindow(const css::uno::Refere
         return;
 
     pSystemWindow->SetWindowState(U2B_ENC(sWindowState,RTL_TEXTENCODING_UTF8));
-
-    aSolarLock.clear();
     // <- SOLAR SAFE ------------------------
 }
 

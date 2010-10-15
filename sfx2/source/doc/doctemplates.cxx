@@ -471,7 +471,7 @@ void SfxDocTplService_Impl::init_Impl()
         if ( bNeedsUpdate )
         {
             aGuard.clear();
-            ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+            SolarMutexClearableGuard aSolarGuard;
 
             WaitWindow_Impl* pWin = new WaitWindow_Impl();
 

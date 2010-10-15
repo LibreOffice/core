@@ -492,7 +492,7 @@ namespace svxform
     //--------------------------------------------------------------------
     void FormScriptingEnvironment::doFireScriptEvent( const ScriptEvent& _rEvent, Any* _pSyncronousResult )
     {
-        ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexClearableGuard aSolarGuard;
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
         if ( m_bDisposed )

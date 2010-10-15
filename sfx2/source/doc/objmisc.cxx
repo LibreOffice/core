@@ -1812,7 +1812,7 @@ ErrCode SfxObjectShell::CallStarBasicScript( const String& _rMacroName, const St
     const void* _pArguments, void* _pReturn )
 {
     OSL_TRACE("in CallSBS");
-    ::vos::OClearableGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     // the arguments for the call
     SbxArrayRef xMacroArguments = lcl_translateUno2Basic( _pArguments );
@@ -1848,7 +1848,7 @@ ErrCode SfxObjectShell::CallScript(
     void *pRet
 )
 {
-    ::vos::OClearableGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ErrCode nErr = ERRCODE_NONE;
     if( rScriptType.EqualsAscii( "StarBasic" ) )
     {

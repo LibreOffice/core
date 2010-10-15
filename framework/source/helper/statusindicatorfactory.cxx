@@ -428,7 +428,7 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
     // is visible too.
     impl_showProgress();
 
-    ::vos::OClearableGuard aSolarGuard(Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     Window* pWindow = VCLUnoHelper::GetWindow(xParentWindow);
     if ( pWindow )
     {

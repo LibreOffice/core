@@ -310,7 +310,7 @@ void TitleBarUpdate::impl_updateIcon(const css::uno::Reference< css::frame::XFra
     //    Check window pointer for right WorkWindow class too!!!
 
     // VCL SYNCHRONIZED ->
-    ::vos::OClearableGuard aSolarLock( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     Window* pWindow = (VCLUnoHelper::GetWindow( xWindow ));
     if (
@@ -327,8 +327,6 @@ void TitleBarUpdate::impl_updateIcon(const css::uno::Reference< css::frame::XFra
             aURL = xModel->getURL();
         pWorkWindow->SetRepresentedURL( aURL );
     }
-
-    aSolarLock.clear();
     // <- VCL SYNCHRONIZED
 }
 
@@ -347,7 +345,7 @@ void TitleBarUpdate::impl_updateTitle(const css::uno::Reference< css::frame::XFr
     const ::rtl::OUString sTitle = xTitle->getTitle ();
 
     // VCL SYNCHRONIZED ->
-    ::vos::OClearableGuard aSolarLock( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     Window* pWindow = (VCLUnoHelper::GetWindow( xWindow ));
     if (
@@ -358,8 +356,6 @@ void TitleBarUpdate::impl_updateTitle(const css::uno::Reference< css::frame::XFr
         WorkWindow* pWorkWindow = (WorkWindow*)pWindow;
         pWorkWindow->SetText( sTitle );
     }
-
-    aSolarLock.clear();
     // <- VCL SYNCHRONIZED
 }
 

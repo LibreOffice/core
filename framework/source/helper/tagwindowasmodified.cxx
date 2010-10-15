@@ -141,7 +141,7 @@ void SAL_CALL TagWindowAsModified::modified(const css::lang::EventObject& aEvent
     ::sal_Bool bModified = xModel->isModified ();
 
     // SYNCHRONIZED ->
-    ::vos::OClearableGuard aSolarGuard(Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
 
     Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
     if ( ! pWindow)
@@ -156,8 +156,6 @@ void SAL_CALL TagWindowAsModified::modified(const css::lang::EventObject& aEvent
         pWindow->SetExtendedStyle(WB_EXT_DOCMODIFIED);
     else
         pWindow->SetExtendedStyle( ! WB_EXT_DOCMODIFIED);
-
-    aSolarGuard.clear();
     // <- SYNCHRONIZED
 }
 

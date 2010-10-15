@@ -106,15 +106,15 @@ void WindowCommandDispatch::impl_startListening()
         return;
 
     // SYNCHRONIZED ->
-    ::vos::OClearableGuard aSolarLock(Application::GetSolarMutex());
+    {
+        SolarMutexGuard aSolarLock;
 
-    Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
-    if ( ! pWindow)
-        return;
+        Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
+        if ( ! pWindow)
+            return;
 
-    pWindow->AddEventListener( LINK(this, WindowCommandDispatch, impl_notifyCommand) );
-
-    aSolarLock.clear();
+        pWindow->AddEventListener( LINK(this, WindowCommandDispatch, impl_notifyCommand) );
+    }
     // <- SYNCHRONIZED
 }
 
