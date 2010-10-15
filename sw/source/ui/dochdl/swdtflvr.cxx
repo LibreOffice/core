@@ -2140,7 +2140,7 @@ int SwTransferable::_PasteDDE( TransferableDataHelper& rData,
                 }
 
                 rWrtShell.InsertDDETable(
-                    SwInsertTableOptions( tabopts::HEADLINE_NO_BORDER, 1 ), // TODO MULTIHEADER
+                    SwInsertTableOptions( tabopts::SPLIT_LAYOUT, 1 ), // TODO MULTIHEADER
                     pDDETyp, nRows, nCols );
             }
             else if( 1 < aExpand.GetTokenCount( '\n' ) )
