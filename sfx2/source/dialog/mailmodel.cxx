@@ -845,7 +845,13 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
 
                     Sequence< OUString > aAttachmentSeq(&(maAttachedDocuments[0]),maAttachedDocuments.size());
 
-                    xSimpleMailMessage->setSubject( maSubject );
+                    if ( xSimpleMailMessage->getSubject().getLength() == 0 ) {
+                        OUString baseName( maAttachedDocuments[0].copy( maAttachedDocuments[0].lastIndexOf( '/' ) + 1 ) );
+                        OUString subject( baseName );
+                        if ( maAttachedDocuments.size() > 1 )
+                            subject += OUString::createFromAscii( ", ..." );
+                        xSimpleMailMessage->setSubject( subject );
+                    }
                     xSimpleMailMessage->setAttachement( aAttachmentSeq );
 
                     sal_Bool bSend( sal_False );

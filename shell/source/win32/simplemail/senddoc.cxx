@@ -30,6 +30,10 @@
 #include "precompiled_shell.hxx"
 #include <osl/diagnose.h>
 #include <sal/macros.h>
+#include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
+#include <rtl/uri.hxx>
+#include <osl/thread.hxx>
 
 #include "simplemapi.hxx"
 
@@ -166,7 +170,17 @@ void initMapiMessage(
 {
     ZeroMemory(pMapiMessage, sizeof(MapiMessage));
 
+    try {
+         rtl_uString *subject = NULL;
+         rtl_uString_newFromAscii(&subject, const_cast<char*>(gSubject.c_str()));
+         rtl_uString *decoded_subject = NULL;
+         rtl_uriDecode(subject, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8, &decoded_subject);
+         rtl::OUString ou_subject(decoded_subject);
+         pMapiMessage->lpszSubject = strdup(OUStringToOString(ou_subject, osl_getThreadTextEncoding(), RTL_UNICODETOTEXT_FLAGS_UNDEFINED_QUESTIONMARK).getStr());
+    }
+    catch (...) {
     pMapiMessage->lpszSubject = const_cast<char*>(gSubject.c_str());
+    }
     pMapiMessage->lpszNoteText = (gBody.length() ? const_cast<char*>(gBody.c_str()) : NULL);
     pMapiMessage->lpOriginator = aMapiOriginator;
     pMapiMessage->lpRecips = &aMapiRecipientList[0];
