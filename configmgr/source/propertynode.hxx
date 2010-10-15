@@ -73,9 +73,9 @@ private:
         // as specified in the component-schema (TYPE_ANY, ...,
         // TYPE_HEXBINARY_LIST; not TYPE_ERROR or TYPE_NIL)
     bool nillable_;
-    com::sun::star::uno::Any value_;
-    rtl::OUString externalDescriptor_;
     bool extension_;
+    rtl::OUString externalDescriptor_;
+    com::sun::star::uno::Any value_;
 };
 
 }

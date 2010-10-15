@@ -52,8 +52,8 @@ namespace css = com::sun::star;
 PropertyNode::PropertyNode(
     int layer, Type staticType, bool nillable, css::uno::Any const & value,
     bool extension):
-    Node(layer), staticType_(staticType), nillable_(nillable), value_(value),
-    extension_(extension)
+    Node(layer), staticType_(staticType), nillable_(nillable),
+    extension_(extension), value_(value)
 {}
 
 rtl::Reference< Node > PropertyNode::clone(bool) const {
@@ -98,8 +98,8 @@ bool PropertyNode::isExtension() const {
 
 PropertyNode::PropertyNode(PropertyNode const & other):
     Node(other), staticType_(other.staticType_), nillable_(other.nillable_),
-    value_(other.value_), externalDescriptor_(other.externalDescriptor_),
-    extension_(other.extension_)
+    extension_(other.extension_), externalDescriptor_(other.externalDescriptor_),
+    value_(other.value_)
 {}
 
 PropertyNode::~PropertyNode() {}
