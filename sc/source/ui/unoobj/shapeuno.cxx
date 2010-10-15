@@ -71,6 +71,7 @@ const SfxItemPropertyMapEntry* lcl_GetShapeMap()
         {MAP_CHAR_LEN(SC_UNONAME_HORIPOS), 0, &getCppuType((sal_Int32*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_IMAGEMAP), 0, &getCppuType((uno::Reference<container::XIndexContainer>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_VERTPOS), 0, &getCppuType((sal_Int32*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_MOVEPROTECT), 0, &getCppuType((sal_Bool*)0), 0, 0 },
         // #i66550 HLINK_FOR_SHAPES
         {MAP_CHAR_LEN(SC_UNONAME_HYPERLINK), 0, &getCppuType((rtl::OUString*)0), 0, 0 },
         {0,0,0,0,0,0}
@@ -653,6 +654,15 @@ void SAL_CALL ScShapeObj::setPropertyValue(
         if ( ( aValue >>= sHlink ) && pInfo )
             pInfo->SetHlink( sHlink );
     }
+    else if ( aNameString.EqualsAscii( SC_UNONAME_MOVEPROTECT ) )
+    {
+        if( SdrObject* pObj = this->GetSdrObject() )
+        {
+            sal_Bool aProt = false;
+            if( aValue >>= aProt )
+                pObj->SetMoveProtect( aProt );
+        }
+    }
     else
     {
         GetShapePropertySet();
@@ -840,6 +850,13 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const rtl::OUString& aPropertyNa
         if ( ScMacroInfo* pInfo = lcl_getShapeHyperMacroInfo(this) )
             sHlink = pInfo->GetHlink();
         aAny <<= sHlink;
+    }
+    else if ( aNameString.EqualsAscii( SC_UNONAME_MOVEPROTECT ) )
+    {
+        sal_Bool aProt = false;
+        if ( SdrObject* pObj = this->GetSdrObject() )
+            aProt = pObj->IsMoveProtect();
+        aAny <<= aProt;
     }
     else
     {

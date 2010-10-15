@@ -188,6 +188,8 @@
 #define SC_UNONAME_VERTPOS          "VertOrientPosition"
 //     #i66550 HLINK_FOR_SHAPES
 #define SC_UNONAME_HYPERLINK        "Hyperlink"
+#define SC_UNONAME_MOVEPROTECT      "MoveProtect"
+#define SC_UNONAME_SIZEPROTECT      "SizeProtect"
 
 //  other cell properties
 #define SC_UNONAME_CHCOLHDR         "ChartColumnAsLabel"
