@@ -593,7 +593,7 @@ typedef pair<const OUString*, const Any* > PropertyPair;
 typedef vector<PropertyPair> PropertyPairs;
 
 struct PropertyPairLessFunctor :
-    public binary_function<PropertyPair, PropertyPair, bool>
+    public std::binary_function<PropertyPair, PropertyPair, bool>
 {
     bool operator()( const PropertyPair& a, const PropertyPair& b ) const
     {
