@@ -45,6 +45,14 @@
 
 class ByteString;
 
+#define LOCKFILE_SUFFIX   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/.lock" ) )
+#define LOCKFILE_GROUP    ByteString( "Lockdata" )
+#define LOCKFILE_USERKEY  ByteString( "User" )
+#define LOCKFILE_HOSTKEY  ByteString( "Host" )
+#define LOCKFILE_STAMPKEY ByteString( "Stamp" )
+#define LOCKFILE_TIMEKEY  ByteString( "Time" )
+#define LOCKFILE_IPCKEY   ByteString( "IPCServer" )
+
 namespace desktop {
 
     class Lockfile;
@@ -71,15 +79,6 @@ namespace desktop {
         ~Lockfile(void);
 
     private:
-        // data in lockfile
-        static const ByteString Group();
-        static const ByteString Userkey();
-        static const ByteString Hostkey();
-        static const ByteString Stampkey();
-        static const ByteString Timekey();
-        static const ByteString IPCkey();
-        // lockfilename
-        static const rtl::OUString Suffix();
         bool m_bIPCserver;
         // full qualified name (file://-url) of the lockfile
         rtl::OUString m_aLockname;
