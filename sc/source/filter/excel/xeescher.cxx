@@ -67,6 +67,19 @@
 #include "userdat.hxx"
 #include "drwlayer.hxx"
 #include "svx/unoapi.hxx"
+#include "svx/algitem.hxx"
+#include "scitems.hxx"
+#include <editeng/justifyitem.hxx>
+#include "svx/sdtaitm.hxx"
+#include "attrib.hxx"
+#include "document.hxx"
+#include <svx/svdattr.hxx>
+#include "svx/sdr/properties/properties.hxx"
+#include "detfunc.hxx"
+#include "svx/xflclit.hxx"
+#include "svx/xlnstwit.hxx"
+#include "svx/xlnstit.hxx"
+#include "svx/sxmspitm.hxx"
 
 #include <oox/core/tokens.hxx>
 #include <oox/export/drawingml.hxx>
@@ -92,6 +105,104 @@ using ::com::sun::star::script::ScriptEventDescriptor;
 using ::com::sun::star::table::CellAddress;
 using ::com::sun::star::table::CellRangeAddress;
 using ::oox::drawingml::DrawingML;
+
+#define  HMM2XL(x)        ((x)/26.5)+0.5
+
+// Static Function Helpers
+static const char *ToHorizAlign( SdrTextHorzAdjust eAdjust )
+{
+    switch( eAdjust )
+    {
+        case SDRTEXTHORZADJUST_CENTER:
+            return "center";
+        case SDRTEXTHORZADJUST_RIGHT:
+            return "right";
+        case SDRTEXTHORZADJUST_BLOCK:
+            return "justify";
+        case SDRTEXTHORZADJUST_LEFT:
+        default:
+            return "left";
+    }
+    return "unknown";
+}
+
+static const char *ToVertAlign( SdrTextVertAdjust eAdjust )
+{
+    switch( eAdjust )
+    {
+        case SDRTEXTVERTADJUST_CENTER:
+            return "center";
+        case SDRTEXTVERTADJUST_BOTTOM:
+            return "bottom";
+        case SDRTEXTVERTADJUST_BLOCK:
+            return "justify";
+        case SDRTEXTVERTADJUST_TOP:
+        default:
+            return "top";
+    }
+    return "unknown";
+}
+
+static void lcl_WriteAnchorVertex( sax_fastparser::FSHelperPtr rComments, Rectangle &aRect )
+{
+    rComments->startElement( FSNS( XML_xdr, XML_col ), FSEND );
+    rComments->writeEscaped( OUString::valueOf( aRect.Left() ) );
+    rComments->endElement( FSNS( XML_xdr, XML_col ) );
+    rComments->startElement( FSNS( XML_xdr, XML_colOff ), FSEND );
+    rComments->writeEscaped( OUString::valueOf( aRect.Top() ) );
+    rComments->endElement( FSNS( XML_xdr, XML_colOff ) );
+    rComments->startElement( FSNS( XML_xdr, XML_row ), FSEND );
+    rComments->writeEscaped( OUString::valueOf( aRect.Right() ) );
+    rComments->endElement( FSNS( XML_xdr, XML_row ) );
+    rComments->startElement( FSNS( XML_xdr, XML_rowOff ), FSEND );
+    rComments->writeEscaped( OUString::valueOf( aRect.Bottom() ) );
+    rComments->endElement( FSNS( XML_xdr, XML_rowOff ) );
+}
+
+static void lcl_GetFromTo( const XclExpRoot& rRoot, const Rectangle &aRect, INT32 nTab, Rectangle &aFrom, Rectangle &aTo )
+{
+    bool bTo = false;
+    INT32 nCol = 0, nRow = 0;
+
+    while(1)
+    {
+        Rectangle r = rRoot.GetDocPtr()->GetMMRect( nCol,nRow,nCol,nRow,nTab );
+        INT32 nColOff, nRowOff;
+        if( !bTo )
+        {
+            if( r.Left() <= aRect.Left() )
+            {
+                nCol++;
+                nColOff = aRect.Left() - r.Left();
+            }
+            if( r.Top() <= aRect.Top() )
+            {
+                nRow++;
+                nRowOff = aRect.Top() - r.Top();
+            }
+            if( r.Left() > aRect.Left() && r.Top() > aRect.Top() )
+            {
+                aFrom = Rectangle( nCol-1, HMM2XL( nColOff ),
+                                   nRow-1, HMM2XL( nRowOff ) ));
+                bTo=true;
+            }
+        }
+        if( bTo )
+        {
+            if( r.Right() < aRect.Right() )
+                nCol++;
+            if( r.Bottom() < aRect.Bottom() )
+                nRow++;
+            if( r.Right() >= aRect.Right() && r.Bottom() >= aRect.Bottom() )
+            {
+                aTo = Rectangle( nCol, HMM2XL( aRect.Right() - r.Left() ),
+                                 nRow, HMM2XL( aRect.Bottom() - r.Top() ));
+                break;
+            }
+        }
+    }
+    return;
+}
 
 // Escher client anchor =======================================================
 
@@ -1021,8 +1132,31 @@ XclExpNote::XclExpNote( const XclExpRoot& rRoot, const ScAddress& rScPos,
             // TODO: additional text
             if( pScNote )
                 if( SdrCaptionObj* pCaption = pScNote->GetOrCreateCaption( maScPos ) )
+                {
+                    lcl_GetFromTo( rRoot, pCaption->GetLogicRect(), maScPos.Tab(), maCommentFrom, maCommentTo );
                     if( const OutlinerParaObject* pOPO = pCaption->GetOutlinerParaObject() )
-                        mnObjId = rRoot.GetObjectManager().AddObj( new XclObjComment( rRoot.GetObjectManager(), pCaption->GetLogicRect(), pOPO->GetTextObject(), pCaption, mbVisible, maScPos ) );
+                        mnObjId = rRoot.GetObjectManager().AddObj( new XclObjComment( rRoot.GetObjectManager(), pCaption->GetLogicRect(), pOPO->GetTextObject(), pCaption, mbVisible, maScPos, maCommentFrom, maCommentTo ) );
+
+                    SfxItemSet aItemSet = pCaption->GetMergedItemSet();
+                    meTVA       = pCaption->GetTextVerticalAdjust();
+                    meTHA       = pCaption->GetTextHorizontalAdjust();
+                    mbAutoScale = pCaption->GetFitToSize()?true:false;
+                    mbLocked    = pCaption->IsMoveProtect() | pCaption->IsResizeProtect();
+
+                    // AutoFill style would change if Postit.cxx object creation values are changed
+                    OUString aCol(((XFillColorItem &)GETITEM(aItemSet, XFillColorItem , XATTR_FILLCOLOR)).GetValue());
+                    mbAutoFill  = !aCol.getLength() && (GETITEMVALUE(aItemSet, XFillStyleItem, XATTR_FILLSTYLE, ULONG) == XFILL_SOLID);
+#if 0
+                    // TODO: Get AutoLine bool
+                    aCol = OUString(((XLineStartItem &)GETITEM(aItemSet, XLineStartItem, XATTR_LINESTART)).GetValue());
+                    mbAutoLine = !aCol.getLength() &&
+                                 (GETITEMVALUE(aItemSet, XLineStartWidthItem, XATTR_LINESTARTWIDTH, ULONG) == 200) &&
+                                 (GETITEMBOOL(aItemSet, XATTR_LINESTARTCENTER) == FALSE);
+#endif
+                    mbAutoLine  = true;
+                    mbRowHidden = (rRoot.GetDoc().RowHidden(maScPos.Row(),maScPos.Tab()));
+                    mbColHidden = (rRoot.GetDoc().ColHidden(maScPos.Col(),maScPos.Tab()));
+                }
 
             SetRecSize( 9 + maAuthor.GetSize() );
         }
@@ -1116,6 +1250,33 @@ void XclExpNote::WriteXml( sal_Int32 nAuthorId, XclExpXmlStream& rStrm )
         mpNoteContents->WriteXml( rStrm );
 #endif
     rComments->endElement( XML_text );
+
+    if( rStrm.getVersion() == oox::core::ISOIEC_29500_2008 )
+    {
+        rComments->startElement( XML_commentPr,
+                XML_autoFill,       XclXmlUtils::ToPsz( mbAutoFill ),
+                XML_autoScale,      XclXmlUtils::ToPsz( mbAutoScale ),
+                // XML_autoLine,       XclXmlUtils::ToPsz( mbAutoLine ),
+                XML_colHidden,      XclXmlUtils::ToPsz( mbColHidden ),
+                // XML_defaultSize,    "true",
+                XML_locked,         XclXmlUtils::ToPsz( mbLocked ),
+                XML_rowHidden,      XclXmlUtils::ToPsz( mbRowHidden ),
+                XML_textHAlign,     ToHorizAlign( meTHA ),
+                XML_textVAlign,     ToVertAlign( meTVA ) ,
+                FSEND );
+        rComments->startElement( XML_anchor,
+                XML_moveWithCells, "false",
+                XML_sizeWithCells, "false",
+                FSEND );
+        rComments->startElement( FSNS( XML_xdr, XML_from ), FSEND );
+        lcl_WriteAnchorVertex( rComments, maCommentFrom );
+        rComments->endElement( FSNS( XML_xdr, XML_from ) );
+        rComments->startElement( FSNS( XML_xdr, XML_to ), FSEND );
+        lcl_WriteAnchorVertex( rComments, maCommentTo );
+        rComments->endElement( FSNS( XML_xdr, XML_to ) );
+        rComments->endElement( XML_anchor );
+        rComments->endElement( XML_commentPr );
+    }
     rComments->endElement( XML_comment );
 }
 
@@ -1215,6 +1376,7 @@ void XclExpComments::SaveXml( XclExpXmlStream& rStrm )
 
     rComments->startElement( XML_comments,
             XML_xmlns, "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
+            FSNS( XML_xmlns, XML_xdr ), "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing",
             FSEND );
     rComments->startElement( XML_authors, FSEND );
 

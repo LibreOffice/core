@@ -152,9 +152,12 @@ class XclObjComment : public XclObj
     std::auto_ptr< SdrCaptionObj >
                                 mpCaption;
     bool                        mbVisible;
+    Rectangle                   maFrom;
+    Rectangle                   maTo;
+
 public:
                                 XclObjComment( XclExpObjectManager& rObjMgr,
-                                    const Rectangle& rRect, const EditTextObject& rEditObj, SdrCaptionObj* pCaption, bool bVisible, const ScAddress& rAddress );
+                                    const Rectangle& rRect, const EditTextObject& rEditObj, SdrCaptionObj* pCaption, bool bVisible, const ScAddress& rAddress, Rectangle &rFrom, Rectangle &To );
     virtual                     ~XclObjComment();
 
     /** c'tor process for formatted text objects above .

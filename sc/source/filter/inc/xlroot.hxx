@@ -184,6 +184,9 @@ public:
     /** Calculates the height of the passed number of pixels in 1/100 mm. */
     sal_Int32           GetHmmFromPixelY( double fPixelY ) const;
 
+    double              GetPixelXFromHmm( sal_Int32 nX ) const;
+    double              GetPixelYFromHmm( sal_Int32 nY ) const;
+
     /** Returns the medium to import from. */
     inline SfxMedium&   GetMedium() const { return mrData.mrMedium; }
     /** Returns the document URL of the imported/exported file. */

@@ -424,11 +424,13 @@ void XclObj::SaveTextRecs( XclExpStream& rStrm )
 
   // --- class XclObjComment ------------------------------------------
 
-XclObjComment::XclObjComment( XclExpObjectManager& rObjMgr, const Rectangle& rRect, const EditTextObject& rEditObj, SdrCaptionObj* pCaption, bool bVisible, const ScAddress& rAddress ) :
+XclObjComment::XclObjComment( XclExpObjectManager& rObjMgr, const Rectangle& rRect, const EditTextObject& rEditObj, SdrCaptionObj* pCaption, bool bVisible, const ScAddress& rAddress, Rectangle &rFrom, Rectangle &rTo ) :
     XclObj( rObjMgr, EXC_OBJTYPE_NOTE, true )
             , maScPos( rAddress )
             , mpCaption( static_cast< SdrCaptionObj* >( pCaption->Clone() ) )
             , mbVisible( bVisible )
+            , maFrom ( rFrom )
+            , maTo ( rTo )
 {
     ProcessEscherObj( rObjMgr.GetRoot(), rRect, pCaption, bVisible);
     // TXO
@@ -524,8 +526,11 @@ class VmlCommentExporter : public VMLExport
     ScAddress           maScPos;
     SdrCaptionObj*      mpCaption;
     bool                mbVisible;
+    Rectangle           maFrom;
+    Rectangle           maTo;
+
 public:
-                        VmlCommentExporter ( sax_fastparser::FSHelperPtr p, ScAddress aScPos, SdrCaptionObj* pCaption, bool bVisible );
+                        VmlCommentExporter ( sax_fastparser::FSHelperPtr p, ScAddress aScPos, SdrCaptionObj* pCaption, bool bVisible, Rectangle &aFrom, Rectangle &aTo );
 protected:
     virtual void        Commit( EscherPropertyContainer& rProps, const Rectangle& rRect );
     virtual sal_Int32   StartShape();
@@ -533,11 +538,14 @@ protected:
 };
 
 
-VmlCommentExporter::VmlCommentExporter( sax_fastparser::FSHelperPtr p, ScAddress aScPos, SdrCaptionObj* pCaption, bool bVisible )
+VmlCommentExporter::VmlCommentExporter( sax_fastparser::FSHelperPtr p, ScAddress aScPos, SdrCaptionObj* pCaption,
+                                        bool bVisible, Rectangle &aFrom, Rectangle &aTo )
     : VMLExport( p )
     , maScPos( aScPos )
     , mpCaption( pCaption )
     , mbVisible( bVisible )
+    , maFrom ( aFrom )
+    , maTo ( aTo )
 {
 }
 
@@ -560,7 +568,11 @@ sal_Int32 VmlCommentExporter::StartShape()
 
 void VmlCommentExporter::EndShape( sal_Int32 nShapeElement )
 {
+    char pAnchor[100];
     sax_fastparser::FSHelperPtr pVmlDrawing = GetFS();
+    snprintf( pAnchor, 100, "%ld, %ld, %ld, %ld, %ld, %ld, %ld, %ld",
+                  maFrom.Left(), maFrom.Top(), maFrom.Right(), maFrom.Bottom(),
+                  maTo.Left(), maTo.Top(), maTo.Right(), maTo.Bottom() );
 
     pVmlDrawing->startElement( FSNS( XML_x, XML_ClientData ),
             XML_ObjectType, "Note",
@@ -569,7 +581,7 @@ void VmlCommentExporter::EndShape( sal_Int32 nShapeElement )
             FSEND );
     pVmlDrawing->singleElement( FSNS( XML_x, XML_SizeWithCells ),
             FSEND );
-    XclXmlUtils::WriteElement( pVmlDrawing, FSNS( XML_x, XML_Anchor ), "2, 15, 0, 15, 4, 31, 4, 21" );
+    XclXmlUtils::WriteElement( pVmlDrawing, FSNS( XML_x, XML_Anchor ), pAnchor );
     XclXmlUtils::WriteElement( pVmlDrawing, FSNS( XML_x, XML_AutoFill ), "False" );
     XclXmlUtils::WriteElement( pVmlDrawing, FSNS( XML_x, XML_Row ), maScPos.Row() );
     XclXmlUtils::WriteElement( pVmlDrawing, FSNS( XML_x, XML_Column ), sal_Int32( maScPos.Col() ) );
@@ -580,7 +592,7 @@ void VmlCommentExporter::EndShape( sal_Int32 nShapeElement )
 
 void XclObjComment::SaveXml( XclExpXmlStream& rStrm )
 {
-    VmlCommentExporter aCommentExporter( rStrm.GetCurrentStream(), maScPos, mpCaption.get(), mbVisible );
+    VmlCommentExporter aCommentExporter( rStrm.GetCurrentStream(), maScPos, mpCaption.get(), mbVisible, maFrom, maTo );
     aCommentExporter.AddSdrObject( *mpCaption );
 }
 

@@ -32,6 +32,8 @@
 #include <filter/msfilter/escherex.hxx>
 #include "xcl97rec.hxx"
 #include "xlescher.hxx"
+#include "svx/sdtaitm.hxx"
+
 
 namespace com { namespace sun { namespace star {
     namespace script { struct ScriptEventDescriptor; }
@@ -369,6 +371,16 @@ private:
     ScAddress           maScPos;        /// Calc cell address of the note.
     sal_uInt16          mnObjId;        /// Escher object ID (BIFF8).
     bool                mbVisible;      /// true = permanently visible.
+    SdrTextHorzAdjust   meTHA;          /// text horizontal adjust
+    SdrTextVertAdjust   meTVA;          /// text vertical adjust
+    bool                mbAutoScale;    /// Auto scale text
+    bool                mbLocked;       /// Position & Size locked
+    bool                mbAutoFill;     /// Auto Fill Style
+    bool                mbAutoLine;     /// Auto Line Style
+    bool                mbColHidden;    /// Column containing the comment is hidden
+    bool                mbRowHidden;    /// Row containing the comment is hidden
+    Rectangle           maCommentFrom;  /// From and From Offset
+    Rectangle           maCommentTo;    /// To and To Offsets
 };
 
 // ============================================================================
