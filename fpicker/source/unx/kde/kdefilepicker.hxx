@@ -35,7 +35,7 @@ class QGrid;
 class QHBox;
 class QVBox;
 
-class FileDialog : public KFileDialog
+class KDEFileDialog : public KFileDialog
 {
     Q_OBJECT
 
@@ -67,9 +67,9 @@ protected:
     bool                        m_bCanNotifySelection;
 
 public:
-    FileDialog( const QString &startDir, const QString &filter,
+    KDEFileDialog( const QString &startDir, const QString &filter,
                 QWidget *parent, const char *name );
-    virtual ~FileDialog();
+    virtual ~KDEFileDialog();
 
 protected:
     virtual void                resizeEvent( QResizeEvent *pEvent );
@@ -113,7 +113,7 @@ protected:
     QString                     escapeString( const QString &rString );
 };
 
-class FileFilterComboHack : public KFileFilterCombo
+class KDEFileFilterComboHack : public KFileFilterCombo
 {
 public:
     void setCurrentFilter( const QString& filter );

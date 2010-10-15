@@ -32,7 +32,7 @@
 #include <qmutex.h>
 #include <qthread.h>
 
-class CommandEvent : public QCustomEvent
+class KDECommandEvent : public QCustomEvent
 {
 public:
     enum CommandEventType {
@@ -67,13 +67,13 @@ protected:
     CommandEventType            m_eCommand;
 
 public:
-    CommandEvent( const QString &qCommand, QStringList *pStringList );
+    KDECommandEvent( const QString &qCommand, QStringList *pStringList );
 
     CommandEventType            command() const { return m_eCommand; }
     QStringList*                stringList() { return static_cast< QStringList* >( data() ); }
 };
 
-class CommandThread : public QThread
+class KDECommandThread : public QThread
 {
 protected:
     QObject                    *m_pObject;
@@ -81,8 +81,8 @@ protected:
     QMutex                      m_aMutex;
 
 public:
-    CommandThread( QWidget *pObject );
-    virtual ~CommandThread();
+    KDECommandThread( QWidget *pObject );
+    virtual ~KDECommandThread();
 
     virtual void                run();
 

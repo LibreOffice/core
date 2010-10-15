@@ -30,14 +30,14 @@
 
 #include <qobject.h>
 
-class ModalityFilter : public QObject
+class KDEModalityFilter : public QObject
 {
 private:
     WId m_nWinId;
 
 public:
-    ModalityFilter( WId nWinId );
-    virtual ~ModalityFilter();
+    KDEModalityFilter( WId nWinId );
+    virtual ~KDEModalityFilter();
 
     virtual bool eventFilter( QObject *pObject, QEvent *pEvent );
 };

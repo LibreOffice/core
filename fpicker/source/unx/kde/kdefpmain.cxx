@@ -73,11 +73,11 @@ int main( int argc, char* argv[] )
     long nWinId = atol( pArgs->getOption( "winid" ) );
     pArgs->clear();
 
-    ModalityFilter qModalityFilter( nWinId );
+    KDEModalityFilter qModalityFilter( nWinId );
 
-    FileDialog aFileDialog( NULL, QString(), NULL, "kdefiledialog" );
+    KDEFileDialog aFileDialog( NULL, QString(), NULL, "kdefiledialog" );
 
-    CommandThread qCommandThread( &aFileDialog );
+    KDECommandThread qCommandThread( &aFileDialog );
     qCommandThread.start();
 
     kApplication.exec();

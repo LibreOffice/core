@@ -38,7 +38,7 @@
 // CommandEvent
 //////////////////////////////////////////////////////////////////////////
 
-CommandEvent::CommandEvent( const QString &qCommand, QStringList *pStringList )
+KDECommandEvent::KDECommandEvent( const QString &qCommand, QStringList *pStringList )
     : QCustomEvent( TypeId, pStringList ),
       m_eCommand( Unknown )
 {
@@ -76,16 +76,16 @@ CommandEvent::CommandEvent( const QString &qCommand, QStringList *pStringList )
 // CommandThread
 //////////////////////////////////////////////////////////////////////////
 
-CommandThread::CommandThread( QWidget *pObject )
+KDECommandThread::KDECommandThread( QWidget *pObject )
     : m_pObject( pObject )
 {
 }
 
-CommandThread::~CommandThread()
+KDECommandThread::~KDECommandThread()
 {
 }
 
-void CommandThread::run()
+void KDECommandThread::run()
 {
     QTextIStream qStream( stdin );
     qStream.setEncoding( QTextStream::UnicodeUTF8 );
@@ -99,7 +99,7 @@ void CommandThread::run()
     }
 }
 
-void CommandThread::handleCommand( const QString &rString, bool &bQuit )
+void KDECommandThread::handleCommand( const QString &rString, bool &bQuit )
 {
     QMutexLocker qMutexLocker( &m_aMutex );
 
@@ -128,10 +128,10 @@ void CommandThread::handleCommand( const QString &rString, bool &bQuit )
         kapp->wakeUpGuiThread();
     }
     else
-        kapp->postEvent( m_pObject, new CommandEvent( qCommand, pTokens ) );
+        kapp->postEvent( m_pObject, new KDECommandEvent( qCommand, pTokens ) );
 }
 
-QStringList* CommandThread::tokenize( const QString &rString )
+QStringList* KDECommandThread::tokenize( const QString &rString )
 {
     // Commands look like:
     // command arg1 arg2 arg3 ...

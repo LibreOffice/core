@@ -39,18 +39,18 @@
 // Modality filter
 //////////////////////////////////////////////////////////////////////////
 
-ModalityFilter::ModalityFilter( WId nWinId )
+KDEModalityFilter::KDEModalityFilter( WId nWinId )
     : m_nWinId( nWinId )
 {
     kapp->installEventFilter( this );
 }
 
-ModalityFilter::~ModalityFilter()
+KDEModalityFilter::~KDEModalityFilter()
 {
     kapp->removeEventFilter( this );
 }
 
-bool ModalityFilter::eventFilter( QObject *pObject, QEvent *pEvent )
+bool KDEModalityFilter::eventFilter( QObject *pObject, QEvent *pEvent )
 {
     if ( pObject->isWidgetType() && pEvent->type() == QEvent::Show )
     {

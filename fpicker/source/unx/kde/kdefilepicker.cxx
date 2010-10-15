@@ -57,10 +57,10 @@
 #include <iostream>
 
 //////////////////////////////////////////////////////////////////////////
-// FileDialog
+// KDEFileDialog
 //////////////////////////////////////////////////////////////////////////
 
-FileDialog::FileDialog( const QString &startDir, const QString &filter,
+KDEFileDialog::KDEFileDialog( const QString &startDir, const QString &filter,
         QWidget *parent, const char *name )
     : KFileDialog( startDir, filter, parent, name, true, m_pCustomWidget = new QVBox() ),
       m_pCombosAndButtons( new QHBox( m_pCustomWidget ) ),
@@ -84,25 +84,25 @@ FileDialog::FileDialog( const QString &startDir, const QString &filter,
     updateCustomWidgetLayout();
 }
 
-FileDialog::~FileDialog()
+KDEFileDialog::~KDEFileDialog()
 {
 }
 
-void FileDialog::resizeEvent( QResizeEvent *pEvent )
+void KDEFileDialog::resizeEvent( QResizeEvent *pEvent )
 {
     KFileDialog::resizeEvent( pEvent );
 
     updateCustomWidgetLayout();
 }
 
-void FileDialog::showEvent( QShowEvent *pEvent )
+void KDEFileDialog::showEvent( QShowEvent *pEvent )
 {
     KFileDialog::showEvent( pEvent );
 
     updateCustomWidgetLayout();
 }
 
-void FileDialog::updateCustomWidgetLayout()
+void KDEFileDialog::updateCustomWidgetLayout()
 {
     QPoint qReferencePoint = filterWidget->mapTo( this, QPoint( 0, 0 ) );
     QPoint qCustomPoint = m_pCustomWidget->mapTo( this, QPoint( 0, 0 ) );
@@ -119,11 +119,11 @@ void FileDialog::updateCustomWidgetLayout()
     m_pPushButtons->setFixedWidth( ( nRight > 0 )? nRight: 100 );
 }
 
-void FileDialog::customEvent( QCustomEvent *pEvent )
+void KDEFileDialog::customEvent( QCustomEvent *pEvent )
 {
-    if ( pEvent && pEvent->type() == CommandEvent::TypeId )
+    if ( pEvent && pEvent->type() == KDECommandEvent::TypeId )
     {
-        CommandEvent *pCommandEvent = static_cast< CommandEvent* >( pEvent );
+        KDECommandEvent *pCommandEvent = static_cast< KDECommandEvent* >( pEvent );
         QStringList *pStringList = pCommandEvent->stringList();
 
         int nListSize = -1;
@@ -132,25 +132,25 @@ void FileDialog::customEvent( QCustomEvent *pEvent )
 
         switch ( pCommandEvent->command() )
         {
-            case CommandEvent::AppendControl:
+            case KDECommandEvent::AppendControl:
                 if ( nListSize >= 3 )
                 {
                     appendControl( (*pStringList)[0], (*pStringList)[1], (*pStringList)[2] );
                 }
                 break;
-            case CommandEvent::EnableControl:
+            case KDECommandEvent::EnableControl:
                 if ( nListSize >= 2 )
                 {
                     enableControl( (*pStringList)[0], (*pStringList)[1] );
                 }
                 break;
-            case CommandEvent::GetValue:
+            case KDECommandEvent::GetValue:
                 if ( nListSize >= 2 )
                 {
                     getValue( (*pStringList)[0], (*pStringList)[1] );
                 }
                 break;
-            case CommandEvent::SetValue:
+            case KDECommandEvent::SetValue:
                 if ( nListSize >= 2 )
                 {
                     QStringList qStringList = (*pStringList);
@@ -160,7 +160,7 @@ void FileDialog::customEvent( QCustomEvent *pEvent )
                     setValue( (*pStringList)[0], (*pStringList)[1], qStringList );
                 }
                 break;
-            case CommandEvent::AppendFilter:
+            case KDECommandEvent::AppendFilter:
                 if ( nListSize >= 2 )
                 {
                     appendFilter( (*pStringList)[0], (*pStringList)[1] );
@@ -169,7 +169,7 @@ void FileDialog::customEvent( QCustomEvent *pEvent )
                     setFilter( filters() );
                 }
                 break;
-            case CommandEvent::AppendFilterGroup:
+            case KDECommandEvent::AppendFilterGroup:
                 if ( nListSize >= 1 )
                 {
                     QStringList::const_iterator it = pStringList->begin();
@@ -190,19 +190,19 @@ void FileDialog::customEvent( QCustomEvent *pEvent )
                     setFilter( filters() );
                 }
                 break;
-            case CommandEvent::GetCurrentFilter:
+            case KDECommandEvent::GetCurrentFilter:
                 {
                     QString qCurrentFilter = filterWidget->currentText();
                     sendCommand( "currentFilter " + escapeString( qCurrentFilter ) );
                 }
                 break;
-            case CommandEvent::SetCurrentFilter:
+            case KDECommandEvent::SetCurrentFilter:
                 if ( nListSize >= 1 )
                 {
-                    static_cast< FileFilterComboHack* >( filterWidget )->setCurrentFilter( pStringList->front() );
+                    static_cast< KDEFileFilterComboHack* >( filterWidget )->setCurrentFilter( pStringList->front() );
                 }
                 break;
-            case CommandEvent::GetDirectory:
+            case KDECommandEvent::GetDirectory:
                 {
                     QString qDirectory = baseURL().url();
                     if ( qDirectory.startsWith( "file:/" ) && qDirectory.mid( 6, 1 ) != "/" )
@@ -210,13 +210,13 @@ void FileDialog::customEvent( QCustomEvent *pEvent )
                     sendCommand( "currentDirectory " + escapeString( qDirectory ) );
                 }
                 break;
-            case CommandEvent::SetDirectory:
+            case KDECommandEvent::SetDirectory:
                 if ( nListSize >= 1 )
                 {
                     setURL( pStringList->front() );
                 }
                 break;
-            case CommandEvent::GetFiles:
+            case KDECommandEvent::GetFiles:
                 {
                     QString qString;
                     qString.reserve( 1024 );
@@ -241,13 +241,13 @@ void FileDialog::customEvent( QCustomEvent *pEvent )
                     setCanNotifySelection( true );
                 }
                 break;
-            case CommandEvent::SetTitle:
+            case KDECommandEvent::SetTitle:
                 if ( nListSize >= 1 )
                 {
                     setCaption( pStringList->front() );
                 }
                 break;
-            case CommandEvent::SetType:
+            case KDECommandEvent::SetType:
                 if ( nListSize >= 1 )
                 {
                     QString qType( pStringList->front() );
@@ -263,14 +263,14 @@ void FileDialog::customEvent( QCustomEvent *pEvent )
                     }
                 }
                 break;
-            case CommandEvent::SetDefaultName:
+            case KDECommandEvent::SetDefaultName:
                 if ( nListSize >= 1 )
                 {
                     setKeepLocation( true );
                     setSelection( pStringList->front() );
                 }
                 break;
-            case CommandEvent::SetMultiSelection:
+            case KDECommandEvent::SetMultiSelection:
                 if ( nListSize >= 1 )
                 {
                     if ( pStringList->front() == "true" )
@@ -279,7 +279,7 @@ void FileDialog::customEvent( QCustomEvent *pEvent )
                         setMode( KFile::File );
                 }
                 break;
-            case CommandEvent::Exec:
+            case KDECommandEvent::Exec:
                 {
                     filterWidget->setEditable( false );
                     setIsExecuting( true );
@@ -339,7 +339,7 @@ void FileDialog::customEvent( QCustomEvent *pEvent )
     }
 }
 
-void FileDialog::appendControl( const QString &rId, const QString &rType, const QString &rTitle )
+void KDEFileDialog::appendControl( const QString &rId, const QString &rType, const QString &rTitle )
 {
     QString qLabel( rTitle );
     qLabel.replace( '~', '&' );
@@ -366,7 +366,7 @@ void FileDialog::appendControl( const QString &rId, const QString &rType, const 
     }
 }
 
-QWidget* FileDialog::findControl( const QString &rId ) const
+QWidget* KDEFileDialog::findControl( const QString &rId ) const
 {
     QObjectList *pList = m_pCustomWidget->queryList();
     QCString qName( rId.utf8() );
@@ -384,7 +384,7 @@ QWidget* FileDialog::findControl( const QString &rId ) const
     return pWidget;
 }
 
-void FileDialog::enableControl( const QString &rId, const QString &rValue )
+void KDEFileDialog::enableControl( const QString &rId, const QString &rValue )
 {
     QWidget *pWidget = findControl( rId );
 
@@ -392,7 +392,7 @@ void FileDialog::enableControl( const QString &rId, const QString &rValue )
         pWidget->setEnabled( rValue.lower() == "true" );
 }
 
-void FileDialog::getValue( const QString &rId, const QString &rAction )
+void KDEFileDialog::getValue( const QString &rId, const QString &rAction )
 {
     QWidget *pWidget = findControl( rId );
     QString qString;
@@ -441,7 +441,7 @@ void FileDialog::getValue( const QString &rId, const QString &rAction )
     sendCommand( qString );
 }
 
-void FileDialog::setValue( const QString &rId, const QString &rAction, const QStringList &rValue )
+void KDEFileDialog::setValue( const QString &rId, const QString &rAction, const QStringList &rValue )
 {
     QWidget *pWidget = findControl( rId );
 
@@ -487,7 +487,7 @@ void FileDialog::setValue( const QString &rId, const QString &rAction, const QSt
     }
 }
 
-void FileDialog::appendFilter( const QString &rTitle, const QString &rFilter )
+void KDEFileDialog::appendFilter( const QString &rTitle, const QString &rFilter )
 {
     // Filters are separated by ';'
     QString qFilter( rFilter );
@@ -500,7 +500,7 @@ void FileDialog::appendFilter( const QString &rTitle, const QString &rFilter )
     m_aFilters.push_back( qMakePair( qTitle, qFilter ) );
 }
 
-QString FileDialog::filters() const
+QString KDEFileDialog::filters() const
 {
     QString qString, qTmp;
     bool bFirstFilter = true;
@@ -522,7 +522,7 @@ QString FileDialog::filters() const
     return qString;
 }
 
-QString FileDialog::addExtension( const QString &rFileName ) const
+QString KDEFileDialog::addExtension( const QString &rFileName ) const
 {
     if ( !isSave() )
         return rFileName;
@@ -557,7 +557,7 @@ QString FileDialog::addExtension( const QString &rFileName ) const
         return rFileName + qExtension;
 }
 
-bool FileDialog::isSupportedProtocol( const QString &rProtocol ) const
+bool KDEFileDialog::isSupportedProtocol( const QString &rProtocol ) const
 {
     // TODO Get this information directly from OOo
     const char * pOOoProtocols[] = { "", "smb", "ftp", "http", "file", "mailto",
@@ -580,17 +580,17 @@ bool FileDialog::isSupportedProtocol( const QString &rProtocol ) const
     return false;
 }
 
-KURL FileDialog::mostLocalURL( const KURL &rURL ) const
+KURL KDEFileDialog::mostLocalURL( const KURL &rURL ) const
 {
 #if KDE_IS_VERSION(3,5,0)
-    KURL qMostLocalURL( KIO::NetAccess::mostLocalURL( rURL, const_cast<FileDialog*>( this ) ) );
+    KURL qMostLocalURL( KIO::NetAccess::mostLocalURL( rURL, const_cast<KDEFileDialog*>( this ) ) );
     if ( qMostLocalURL.isLocalFile() )
         return qMostLocalURL;
     else
     {
         // Terrible hack to get even non-existing media:// files right
         qMostLocalURL.cd( ".." );
-        KURL qMostLocalPath( KIO::NetAccess::mostLocalURL( qMostLocalURL, const_cast<FileDialog*>( this ) ) );
+        KURL qMostLocalPath( KIO::NetAccess::mostLocalURL( qMostLocalURL, const_cast<KDEFileDialog*>( this ) ) );
         if ( qMostLocalPath.isLocalFile() )
         {
             qMostLocalPath.addPath( rURL.fileName() );
@@ -602,7 +602,7 @@ KURL FileDialog::mostLocalURL( const KURL &rURL ) const
     return rURL;
 }
 
-QString FileDialog::localCopy( const QString &rFileName ) const
+QString KDEFileDialog::localCopy( const QString &rFileName ) const
 {
     // 106 == MIB enum for UTF-8
     KURL qLocalURL = mostLocalURL( KURL( rFileName, 106 ) );
@@ -628,7 +628,7 @@ QString FileDialog::localCopy( const QString &rFileName ) const
     return qDestURL.url();
 }
 
-void FileDialog::fileHighlightedCommand( const QString & )
+void KDEFileDialog::fileHighlightedCommand( const QString & )
 {
     if ( canNotifySelection() )
     {
@@ -637,7 +637,7 @@ void FileDialog::fileHighlightedCommand( const QString & )
     }
 }
 
-void FileDialog::selectionChangedCommand()
+void KDEFileDialog::selectionChangedCommand()
 {
     if ( canNotifySelection() )
     {
@@ -646,7 +646,7 @@ void FileDialog::selectionChangedCommand()
     }
 }
 
-void FileDialog::sendCommand( const QString &rCommand )
+void KDEFileDialog::sendCommand( const QString &rCommand )
 {
 #if OSL_DEBUG_LEVEL > 0
     ::std::cerr << "kdefilepicker sent: " << rCommand.latin1() << ::std::endl;
@@ -656,7 +656,7 @@ void FileDialog::sendCommand( const QString &rCommand )
     ::std::cout << rCommand.utf8() << ::std::endl;
 }
 
-void FileDialog::appendURL( QString &rBuffer, const KURL &rURL )
+void KDEFileDialog::appendURL( QString &rBuffer, const KURL &rURL )
 {
     // From Martin Kretzschmar:
     // file:///path/to/test%E0.odt is not a valid URL from OOo's point of
@@ -678,7 +678,7 @@ void FileDialog::appendURL( QString &rBuffer, const KURL &rURL )
         appendEscaped( rBuffer, qUrlStr );
 }
 
-void FileDialog::appendEscaped( QString &rBuffer, const QString &rString )
+void KDEFileDialog::appendEscaped( QString &rBuffer, const QString &rString )
 {
     const QChar *pUnicode = rString.unicode();
     const QChar *pEnd     = pUnicode + rString.length();
@@ -698,7 +698,7 @@ void FileDialog::appendEscaped( QString &rBuffer, const QString &rString )
     rBuffer.append( '"' );
 }
 
-QString FileDialog::escapeString( const QString &rString )
+QString KDEFileDialog::escapeString( const QString &rString )
 {
     QString qString;
     qString.reserve( 2*rString.length() + 2 ); // every char escaped + quotes
@@ -709,7 +709,7 @@ QString FileDialog::escapeString( const QString &rString )
 }
 
 
-void FileFilterComboHack::setCurrentFilter( const QString& filter )
+void KDEFileFilterComboHack::setCurrentFilter( const QString& filter )
 {
     setCurrentText( filter );
     filterChanged();
