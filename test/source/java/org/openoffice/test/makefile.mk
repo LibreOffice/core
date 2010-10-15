@@ -25,7 +25,7 @@
 
 PRJ = ../../../../..
 PRJNAME = test
-TARGET = java
+TARGET = test
 
 .IF "$(OOO_JUNIT_JAR)" != ""
 
@@ -39,9 +39,9 @@ JAVAFILES = \
 JARFILES = juh.jar ridl.jar unoil.jar
 EXTRAJARFILES = $(OOO_JUNIT_JAR)
 
-JARTARGET        = test.jar
+JARTARGET        = $(TARGET).jar
 JARCLASSDIRS     = $(PACKAGE)
-JARCLASSEXCLUDES = $(PACKAGE)/tools/* FOOBAR
+JARCLASSEXCLUDES = $(PACKAGE)/tools/*
 JARCLASSPATH     = $(JARFILES)
  # expect $(OOO_JUNIT_JAR) to be on CLASSPATH wherever test.jar is used (also,
  # on Windows, $(OOO_JUNIT_JAR) could be an absolute pathname with drive letter

@@ -25,17 +25,25 @@
 
 PRJ = ../../../../../..
 PRJNAME = test
-TARGET = java
+TARGET = test-tools
 
 PACKAGE = org/openoffice/test/tools
 
-JARFILES = juh.jar ridl.jar unoil.jar
-JAVAFILES = $(shell @$(FIND) . -name "*.java")
+.INCLUDE: settings.mk
 
-JARTARGET = test-tools.jar
+JARFILES = juh.jar ridl.jar unoil.jar
+JAVAFILES = \
+    OfficeDocument.java \
+    OfficeDocumentView.java \
+    DocumentType.java \
+    SpreadsheetDocument.java \
+    SpreadsheetView.java \
+
+JARTARGET = $(TARGET).jar
 JARCLASSDIRS = $(PACKAGE)
 JARCLASSPATH = $(JARFILES)
 
-.INCLUDE: settings.mk
 .INCLUDE: target.mk
 
+test:
+    echo $(JAVACLASSFILES)
