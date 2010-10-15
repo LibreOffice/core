@@ -110,8 +110,12 @@ void XMLGraphicsDefaultStyle::SetDefaults()
     sal_Int32 nBuild( 0 );
     const bool bBuildIdFound = GetImport().getBuildIds( nUPD, nBuild );
     if ( bBuildIdFound && (
-        ( nUPD == 641 ) || ( nUPD == 645 ) || ( nUPD == 680 ) || ( nUPD == 310 )  || ( nUPD == 320 ) || ( nUPD == 330 )
-        || ( ( nUPD == 300 ) && ( nBuild <= 9535 ) ) ) )
+        ((nUPD >= 600) &&  (nUPD < 700))
+        ||
+        ((nUPD == 300) && (nBuild <= 9535))
+        ||
+        ((nUPD > 300) && (nUPD <= 330))
+    )
         bWordWrapDefault = sal_False;
     xDefaults->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TextWordWrap" ) ), Any( bWordWrapDefault ) );
 
