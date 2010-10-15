@@ -1572,7 +1572,7 @@ public:
     };
 
     SfxModelGuard( SfxBaseModel& i_rModel, const AllowedModelState i_eState = E_FULLY_ALIVE )
-        :m_aGuard( Application::GetSolarMutex() )
+        : m_aGuard()
     {
         if ( i_rModel.IsDisposed() )
             throw ::com::sun::star::lang::DisposedException( ::rtl::OUString(), *&i_rModel );
@@ -1589,7 +1589,7 @@ public:
     }
 
 private:
-    ::vos::OClearableGuard  m_aGuard;
+    SolarMutexClearableGuard  m_aGuard;
 };
 
 #undef css
