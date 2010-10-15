@@ -131,7 +131,7 @@ void KDEXLib::Init()
 
     //kAboutData->setProgramIconName("OpenOffice");
 
-    m_nFakeCmdLineArgs = 1;
+    m_nFakeCmdLineArgs = 2;
     USHORT nIdx;
     vos::OExtCommandLine aCommandLine;
     int nParams = aCommandLine.getCommandArgCount();
@@ -146,10 +146,10 @@ void KDEXLib::Init()
             aCommandLine.getCommandArg( nIdx + 1, aParam );
             aDisplay = rtl::OUStringToOString( aParam, osl_getThreadTextEncoding() );
 
-            m_nFakeCmdLineArgs = 3;
-            m_pFreeCmdLineArgs = new char*[ m_nFakeCmdLineArgs ];
-            m_pFreeCmdLineArgs[ 1 ] = strdup( "-display" );
-            m_pFreeCmdLineArgs[ 2 ] = strdup( aDisplay.getStr() );
+            m_pFreeCmdLineArgs = new char*[ m_nFakeCmdLineArgs + 2 ];
+            m_pFreeCmdLineArgs[ m_nFakeCmdLineArgs + 0 ] = strdup( "-display" );
+            m_pFreeCmdLineArgs[ m_nFakeCmdLineArgs + 1 ] = strdup( aDisplay.getStr() );
+            m_nFakeCmdLineArgs += 2;
         }
     }
     if ( !m_pFreeCmdLineArgs )
@@ -159,6 +159,7 @@ void KDEXLib::Init()
     osl_getSystemPathFromFileURL( aParam.pData, &aBin.pData );
     rtl::OString aExec = rtl::OUStringToOString( aBin, osl_getThreadTextEncoding() );
     m_pFreeCmdLineArgs[0] = strdup( aExec.getStr() );
+    m_pFreeCmdLineArgs[1] = strdup( "--nocrashhandler" );
 
     // make a copy of the string list for freeing it since
     // KApplication manipulates the pointers inside the argument vector
