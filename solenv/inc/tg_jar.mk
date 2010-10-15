@@ -57,7 +57,7 @@ $(JARMANIFEST) .PHONY : $(CUSTOMMANIFESTFILEDEP)
     @@-$(RM) $@
     $(COMMAND_ECHO)echo Manifest-Version: 1.0 > $@
 .IF "$(JARCLASSPATH)" != ""
-    echo $(USQ)Class-Path: $(JARCLASSPATH)$(USQ) >> $@
+    $(COMMAND_ECHO)echo $(USQ)Class-Path: $(JARCLASSPATH)$(USQ) >> $@
 .ENDIF
 # $(RSCREVISION) contains chars that must be quoted (for *NIX shells)
     $(COMMAND_ECHO)echo $(USQ)Solar-Version: $(RSCREVISION)$(USQ) >> $@
