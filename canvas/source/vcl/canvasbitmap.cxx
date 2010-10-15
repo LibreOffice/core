@@ -111,7 +111,7 @@ namespace vclcanvas
 
     BitmapEx CanvasBitmap::getBitmap() const
     {
-        tools::LocalGuard aGuard;
+        SolarMutexGuard aGuard;
 
         // TODO(T3): Rework to use shared_ptr all over the place for
         // BmpEx. This is highly un-threadsafe
@@ -125,7 +125,7 @@ namespace vclcanvas
                                 const ::Size&                 rSz,
                                 const GraphicAttr&            rAttr ) const
     {
-        tools::LocalGuard aGuard;
+        SolarMutexGuard aGuard;
 
         mbSurfaceDirty = true;
 

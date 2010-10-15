@@ -64,7 +64,7 @@ namespace vclcanvas
 
     void SpriteCanvas::initialize()
     {
-        tools::LocalGuard aGuard;
+        SolarMutexGuard aGuard;
 
         // #i64742# Only call initialize when not in probe mode
         if( maArguments.getLength() == 0 )
@@ -131,7 +131,7 @@ namespace vclcanvas
 
     void SAL_CALL SpriteCanvas::disposing()
     {
-        tools::LocalGuard aGuard;
+        SolarMutexGuard aGuard;
 
         mxComponentContext.clear();
 
@@ -151,7 +151,7 @@ namespace vclcanvas
 
     sal_Bool SAL_CALL SpriteCanvas::updateScreen( sal_Bool bUpdateAll ) throw (uno::RuntimeException)
     {
-        tools::LocalGuard aGuard;
+        SolarMutexGuard aGuard;
 
         // avoid repaints on hidden window (hidden: not mapped to
         // screen). Return failure, since the screen really has _not_
@@ -172,7 +172,7 @@ namespace vclcanvas
                                 const ::Size&                   rSz,
                                 const GraphicAttr&              rAttr ) const
     {
-        tools::LocalGuard aGuard;
+        SolarMutexGuard aGuard;
 
         return maCanvasHelper.repaint( rGrf, viewState, renderState, rPt, rSz, rAttr );
     }

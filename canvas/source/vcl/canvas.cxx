@@ -98,7 +98,7 @@ namespace vclcanvas
            4: XWindow for creating Window (or empty for VirtualDevice)
            5: SystemGraphicsData as a streamed Any
          */
-        tools::LocalGuard aGuard;
+        SolarMutexGuard aGuard;
 
         VERBOSE_TRACE( "VCLCanvas::initialize called" );
 
@@ -135,7 +135,7 @@ namespace vclcanvas
 
     void SAL_CALL Canvas::disposing()
     {
-        tools::LocalGuard aGuard;
+        SolarMutexGuard aGuard;
 
         mxComponentContext.clear();
 
@@ -155,7 +155,7 @@ namespace vclcanvas
                           const ::Size&                 rSz,
                           const GraphicAttr&            rAttr ) const
     {
-        tools::LocalGuard aGuard;
+        SolarMutexGuard aGuard;
 
         return maCanvasHelper.repaint( rGrf, viewState, renderState, rPt, rSz, rAttr );
     }
