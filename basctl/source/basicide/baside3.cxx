@@ -114,14 +114,6 @@ DialogWindow::DialogWindow( Window* pParent, const ScriptDocument& rDocument, St
 
     pEditor = new DlgEditor( rDocument.isDocument() ? rDocument.getDocument() : Reference< frame::XModel >() );
     pEditor->SetWindow( this );
-    // set vba mode on DialogModel ( allows it to work in 100thmm instead of MAP_APPFONT )
-    if ( rDocument.isDocument() && rDocument.getDocument().is() )
-    {
-        uno::Reference< script::vba::XVBACompatibility > xDocVBAMode( rDocument.getLibraryContainer( E_SCRIPTS ), uno::UNO_QUERY );
-        uno::Reference< script::vba::XVBACompatibility > xDialogModelVBAMode( xDialogModel, uno::UNO_QUERY );
-        if ( xDocVBAMode.is()  &&  xDialogModelVBAMode.is() )
-            xDialogModelVBAMode->setVBACompatibilityMode( xDocVBAMode->getVBACompatibilityMode() );
-    }
     pEditor->SetDialog( xDialogModel );
 
     // Undo einrichten
