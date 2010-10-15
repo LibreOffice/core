@@ -1922,11 +1922,6 @@ Reference< xml::sax::XDocumentHandler > SAL_CALL importDialogModel(
     SAL_THROW( (Exception) )
 {
     DialogImport* pImport = new DialogImport( xContext, xDialogModel, xDocument );
-    uno::Reference< script::vba::XVBACompatibility > xVBAModeSource( pImport->getScriptLibraryContainer(), uno::UNO_QUERY );
-
-    uno::Reference< beans::XPropertySet > xDlgProps( xDialogModel, uno::UNO_QUERY );
-    if ( xVBAModeSource.is() && xDlgProps.is() && xVBAModeSource->getVBACompatibilityMode() )
-        xDlgProps->setPropertyValue( OUSTR("VBAForm"), uno::makeAny( sal_True ) );
     return ::xmlscript::createDocumentHandler(
         static_cast< xml::input::XRoot * >( pImport ) );
 }
