@@ -664,6 +664,7 @@ testcase tFormatAlignment
     '/// Close document
     printlog " Close document"
     Call hCloseDocument
+    hFileDelete ( gLastWorkFile )
 
 endcase
 
@@ -767,6 +768,7 @@ testcase tFormatGroup
     '/// Close document
     printlog " Close document"
     Call hCloseDocument
+    hFileDelete ( gLastWorkFile )
 
 endcase
 

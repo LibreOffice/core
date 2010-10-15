@@ -122,6 +122,7 @@ function fFunctionname ( sFunctionname_en as string ) as string
     end if
     
     call hCloseDocument
+    hFileDelete ( gLastWorkFile )
     
 end function
 
@@ -208,5 +209,6 @@ function fError_l10n ( sError_en as string ) as string
     end if
     
     call hCloseDocument
+    hFileDelete ( gLastWorkFile )
     
 end function

@@ -129,6 +129,7 @@ testcase tFormatGraphicPositionAndSize
     '/// Close document
     printlog " Close document"
     call hCloseDocument
+    hFileDelete ( gLastWorkFile )
 
 endcase
 
@@ -369,6 +370,7 @@ testcase tFormatGraphicLine
     '/// Close document
     printlog " Close document"
     Call hCloseDocument
+    hFileDelete ( gLastWorkFile )
 
 endcase
 
@@ -911,6 +913,7 @@ testcase tFormatGraphicArea
     '/// Close document
     printlog " Close document"
     Call hCloseDocument
+    hFileDelete ( gLastWorkFile )
 
 endcase
 
@@ -1027,6 +1030,7 @@ testcase tFormatGraphicText
     '/// Close document
     printlog " Close document"
     call hCloseDocument
+    hFileDelete ( gLastWorkFile )
 
 endcase
 
@@ -1047,6 +1051,7 @@ testcase tFormatGraphicPoints
     '/// Close document
     printlog " Close document"
     call hCloseDocument
+    hFileDelete ( gLastWorkFile )
 
 endcase
 

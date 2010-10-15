@@ -40,9 +40,9 @@
 testcase tIBIS111099
 
     Dim testdoc as string
-    testdoc = convertpath(gOfficePath & "user/work/111099.xls")
-    Printlog "Copy testdocument locally"
-    app.FileCopy convertpath(gTesttoolpath & "spreadsheet\optional\input\111099.xls"),gOfficePath + ConvertPath("user/work/111099.xls")
+    testdoc = convertpath(gTesttoolpath & "spreadsheet\optional\input\111099.xls")
+'    Printlog "Copy testdocument locally"
+'    app.FileCopy convertpath(gTesttoolpath & "spreadsheet\optional\input\111099.xls"),gOfficePath + ConvertPath("user/work/111099.xls")
     printlog " Open the test document"
     hFileOpenLocally(testdoc)
     '/// Invoke Control Toolbar
@@ -70,10 +70,10 @@ testcase tIBIS111158
 
     Dim testdoc as string 
     Dim testString as string
-    testdoc = convertpath(gOfficePath & "user/work/111158.xls")
+    testdoc = convertpath(gTesttoolpath & "spreadsheet\optional\input\111158.xls")
     
-    Printlog "Copy testdocument locally"
-    app.FileCopy convertpath(gTesttoolpath & "spreadsheet\optional\input\111158.xls"),gOfficePath + ConvertPath("user/work/111158.xls")
+'    Printlog "Copy testdocument locally"
+'    app.FileCopy convertpath(gTesttoolpath & "spreadsheet\optional\input\111158.xls"),gOfficePath + ConvertPath("user/work/111158.xls")
     printlog " Open the test document"
     hFileOpenLocally(testdoc)
     Kontext "Standardbar"
