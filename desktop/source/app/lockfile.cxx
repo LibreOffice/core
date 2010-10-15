@@ -34,6 +34,8 @@
 #include <tools/prewin.h>
 #include <windows.h>
 #include <tools/postwin.h>
+#else
+#include <unistd.h>
 #endif
 #include <sal/types.h>
 #include <osl/file.hxx>
@@ -50,6 +52,37 @@ using namespace ::osl;
 using namespace ::rtl;
 using namespace ::utl;
 
+
+static rtl::OString impl_getHostname()
+{
+    rtl::OString aHost;
+#ifdef WNT
+    /*
+       prevent windows from connecting to the net to get it's own
+       hostname by using the netbios name
+       */
+    sal_Int32 sz = MAX_COMPUTERNAME_LENGTH + 1;
+    char* szHost = new char[sz];
+    if (GetComputerName(szHost, (LPDWORD)&sz))
+        aHost = OString(szHost);
+    else
+        aHost = OString("UNKNOWN");
+    delete[] szHost;
+#else
+    /* Don't do dns lookup on Linux either */
+    sal_Char pHostName[1024];
+
+    if ( gethostname( pHostName, sizeof( pHostName ) - 1 ) == 0 )
+    {
+        pHostName[sizeof( pHostName ) - 1] = '\0';
+        aHost = OString( pHostName );
+    }
+    else
+        aHost = OString("UNKNOWN");
+#endif
+
+    return aHost;
+}
 
 namespace desktop {
 
@@ -156,25 +189,9 @@ namespace desktop {
 
         ByteString aHost  = aConfig.ReadKey( Hostkey() );
         ByteString aUser  = aConfig.ReadKey( Userkey() );
+
         // lockfile from same host?
-        ByteString myHost;
-#ifdef WNT
-        /*
-          prevent windows from connecting to the net to get it's own
-          hostname by using the netbios name
-        */
-        sal_Int32 sz = MAX_COMPUTERNAME_LENGTH + 1;
-        char* szHost = new char[sz];
-        if (GetComputerName(szHost, (LPDWORD)&sz))
-            myHost = OString(szHost);
-        else
-            myHost = OString("UNKNOWN");
-        delete[] szHost;
-#else
-        oslSocketResult sRes;
-        myHost  = OUStringToOString(
-            SocketAddr::getLocalHostname( &sRes ), RTL_TEXTENCODING_ASCII_US );
-#endif
+        ByteString myHost( impl_getHostname() );
         if (aHost == myHost) {
             // lockfile by same UID
             OUString myUserName;
@@ -194,24 +211,7 @@ namespace desktop {
         aConfig.SetGroup(Group());
 
         // get information
-        ByteString aHost;
-#ifdef WNT
-        /*
-          prevent windows from connecting to the net to get it's own
-          hostname by using the netbios name
-        */
-        sal_Int32 sz = MAX_COMPUTERNAME_LENGTH + 1;
-        char* szHost = new char[sz];
-        if (GetComputerName(szHost, (LPDWORD)&sz))
-            aHost = OString(szHost);
-        else
-            aHost = OString("UNKNOWN");
-        delete[] szHost;
-#else
-        oslSocketResult sRes;
-        aHost  = OUStringToOString(
-            SocketAddr::getLocalHostname( &sRes ), RTL_TEXTENCODING_ASCII_US );
-#endif
+        ByteString aHost( impl_getHostname() );
         OUString aUserName;
         Security aSecurity;
         aSecurity.getUserName( aUserName );
