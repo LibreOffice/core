@@ -134,10 +134,10 @@ Do_IndexCommandLine(const CommandLine & i_rCommandLine)
                             i_rCommandLine.IdlRootPath(),
                             i_rCommandLine.IndexedTags() );
 
-    std::cout << "Gather xml-files ..." << std::endl;
+    std::cout << "Gathering xml-files ..." << std::endl;
     GatherFileNames( aFiles, i_rCommandLine.XmlSrcDirectory() );
 
-    std::cout << "Create output ..." << std::endl;
+    std::cout << "Creating output ..." << std::endl;
     aIndex.GatherData(aFiles);
     aIndex.WriteOutput( i_rCommandLine.IndexOutputFile() );
 

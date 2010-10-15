@@ -216,7 +216,7 @@ X2CParser::Parse_SglAttr( Simstr &          o_sAttrValue,
 
     Pass_White();
     if (*text == '>')
-        SyntaxError("no attribute found, where one was expected");
+        SyntaxError("no attribute found where one was expected");
     Simstr sAttrName;
     Get_Attribute(o_sAttrValue, sAttrName);
     if (sAttrName != i_sAttrName)

@@ -51,8 +51,8 @@ class  Simstr
 
       // diverse utility functions
       const char *   str() const                { return sz; }
-      char *         s();   // ATTENTION !!!       // Only to be used, when a function needs a 'char*' but
-                                                   //   nevertheless THAT WILL BE NOT CHANGED!
+      char *         s();   // CAUTION!!!          // Only use when a function needs a 'char*' but
+                                                   //   still will NOT MODIFY THE STRING!
                                                    //   Typecasts to 'const char*' are performed automatically.
       int            l() const;                    // Length of string without '\0' at end.
       Simstr         operator+(
