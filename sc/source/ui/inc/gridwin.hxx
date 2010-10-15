@@ -395,6 +395,8 @@ public:
 
     void            UpdateDPFromFieldPopupMenu();
 
+    void            UpdateVisibleRange();
+
     // #114409#
     void CursorChanged();
     void DrawLayerCreated();
