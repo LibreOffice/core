@@ -41,7 +41,6 @@
 #include <EffectMigration.hxx>
 #include <anminfo.hxx>
 
-using namespace ::vos;
 using namespace ::sd;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::animations;
