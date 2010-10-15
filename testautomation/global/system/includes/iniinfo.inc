@@ -772,8 +772,8 @@ function getSofficeNative() as string
     if ("unx" = gPlatGroup) then
         '/// on Linux/Unix systems we need to check/resolv 2 possible links which point to the directory with the 'soffice' executable ///'
         try
-            '/// created by an installation from the root user: //usr//bin//soffice ///'
-            sCandidates(1) = getLinkDestination("/usr/bin/soffice") ' command fails, if link doesn't exist
+            '/// created by an installation from the root user: //usr//bin//libreoffice ///'
+            sCandidates(1) = getLinkDestination("/usr/bin/libreoffice") ' command fails, if link doesn't exist
             if (left(sCandidates(1),2)="..") then
                 ' If the link is relative, make it absolute
                 sCandidates(1) = "/usr/bin/" + sCandidates(1)
@@ -782,28 +782,28 @@ function getSofficeNative() as string
             end if
             ' DEBUG: If you need more detailed information about the installation environment
             '        enable the next line.
-            ' printlog "getSofficeNative() - : /usr/bin/soffice: '" + sCandidates(1) + "' destination exists?: " +fileExists(sCandidates(1))
+            ' printlog "getSofficeNative() - : /usr/bin/libreoffice: '" + sCandidates(1) + "' destination exists?: " +fileExists(sCandidates(1))
         catch
             ' DEBUG: If you need more detailed information about the installation environment
             '        enable the next line.
-            ' printlog "getSofficeNative() - : /usr/bin/soffice: NOT AVAILABLE"
+            ' printlog "getSofficeNative() - : /usr/bin/libreoffice: NOT AVAILABLE"
             sCandidates(1) = ""
         endcatch
         try
-            '/// HAS TO GET created by installation from NON root user: $HOME/soffice ///'
+            '/// HAS TO GET created by installation from NON root user: $HOME/libreoffice ///'
             sTemp = Environ("HOME")
-            sCandidates(2) = getLinkDestination(sTemp+"/soffice")
+            sCandidates(2) = getLinkDestination(sTemp+"/libreoffice")
             if (left(sCandidates(2),1) <> "/") then
                 ' relative path in $HOME directory!
                 sCandidates(2) = sTemp + "/" + sCandidates(2)
             end if
             ' DEBUG: If you need more detailed information about the installation environment
             '        enable the next line.
-            ' printlog "getSofficeNative() - : $HOME/soffice   : '" + sCandidates(2) + "' destination exists?: " +fileExists(sCandidates(2))
+            ' printlog "getSofficeNative() - : $HOME/libreoffice   : '" + sCandidates(2) + "' destination exists?: " +fileExists(sCandidates(2))
         catch
             ' DEBUG: If you need more detailed information about the installation environment
             '        enable the next line.
-            ' printlog "getSofficeNative() - : $HOME/soffice   : NOT AVAILABLE"
+            ' printlog "getSofficeNative() - : $HOME/libreoffice   : NOT AVAILABLE"
             sCandidates(2) = ""
         endcatch
         for i = 1 to 2
