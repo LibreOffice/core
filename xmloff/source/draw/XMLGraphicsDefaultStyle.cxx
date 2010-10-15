@@ -104,6 +104,16 @@ void XMLGraphicsDefaultStyle::SetDefaults()
     Reference< XPropertySet > xDefaults( xFact->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Defaults") ) ), UNO_QUERY );
     if( !xDefaults.is() )
         return;
+                                            // SJ: #i114750#
+    sal_Bool bWordWrapDefault = sal_True;   // initializing with correct odf fo:wrap-option default
+    sal_Int32 nUPD( 0 );
+    sal_Int32 nBuild( 0 );
+    const bool bBuildIdFound = GetImport().getBuildIds( nUPD, nBuild );
+    if ( bBuildIdFound && (
+        ( nUPD == 641 ) || ( nUPD == 645 ) || ( nUPD == 680 ) || ( nUPD == 310 )  || ( nUPD == 320 ) || ( nUPD == 330 )
+        || ( ( nUPD == 300 ) && ( nBuild <= 9535 ) ) ) )
+        bWordWrapDefault = sal_False;
+    xDefaults->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TextWordWrap" ) ), Any( bWordWrapDefault ) );
 
     FillPropertySet( xDefaults );
 }
