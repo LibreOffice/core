@@ -351,7 +351,12 @@ bool SlideSorterController::Command (
 {
     bool bEventHasBeenHandled = false;
 
+    if (pWindow == NULL)
+        return false;
+
     ViewShell* pViewShell = mrSlideSorter.GetViewShell();
+    if (pViewShell == NULL)
+        return false;
 
     switch (rEvent.GetCommand())
     {
@@ -409,12 +414,9 @@ bool SlideSorterController::Command (
             if (rEvent.IsMouseEvent())
             {
                 mbIsContextMenuOpen = true;
-                if (pViewShell != NULL)
-                {
-                    SfxDispatcher* pDispatcher = pViewShell->GetDispatcher();
-                    if (pDispatcher != NULL)
-                        pDispatcher->ExecutePopup(SdResId(nPopupId));
-                }
+                SfxDispatcher* pDispatcher = pViewShell->GetDispatcher();
+                if (pDispatcher != NULL)
+                    pDispatcher->ExecutePopup(SdResId(nPopupId));
             }
             else
             {
@@ -432,8 +434,9 @@ bool SlideSorterController::Command (
                             view::SlideSorterView::BBT_SHAPE));
                         Point aPosition (aBBox.Center());
                         mbIsContextMenuOpen = true;
-                        if (pViewShell != NULL)
-                            pViewShell->GetViewFrame()->GetDispatcher()->ExecutePopup(
+                        SfxDispatcher* pDispatcher = pViewShell->GetViewFrame()->GetDispatcher();
+                        if (pDispatcher != NULL)
+                            pDispatcher->ExecutePopup(
                                 SdResId(nPopupId),
                                 pWindow,
                                 &aPosition);
