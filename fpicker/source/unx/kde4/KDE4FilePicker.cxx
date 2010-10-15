@@ -248,20 +248,6 @@ uno::Sequence< ::rtl::OUString > SAL_CALL KDE4FilePicker::getFiles()
     QStringList rawFiles = _dialog->selectedFiles();
     QStringList files;
 
-    // check if we need to add an extension
-    QString extension = "";
-    if ( _dialog->operationMode() == KFileDialog::Saving )
-    {
-        QCheckBox *cb = dynamic_cast<QCheckBox*> (
-            _customWidgets[ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION ]);
-
-        if (cb && cb->isChecked())
-        {
-            extension = _dialog->currentFilter(); // assuming filter value is like this *.ext
-            extension.replace("*","");
-        }
-    }
-
     // Workaround for the double click selection KDE4 bug
     // kde file picker returns the file and directories for selectedFiles()
     // when a file is double clicked
@@ -288,12 +274,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL KDE4FilePicker::getFiles()
 
             if (singleFile)
                 filename.prepend(dir + "/");
-
-            //prevent extension append if we already have one
-            if (filename.endsWith(extension))
-                files.append(filename);
-            else
-                files.append(filename + extension);
+            files.append(filename);
         }
     }
 
@@ -381,6 +362,9 @@ void SAL_CALL KDE4FilePicker::setValue( sal_Int16 controlId, sal_Int16, const un
         switch (controlId)
         {
             case ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION:
+            // we actually rely on KFileDialog and ignore CHECKBOX_AUTOEXTENSION completely,
+            // otherwise the checkbox would be duplicated
+                break;
             case ExtendedFilePickerElementIds::CHECKBOX_PASSWORD:
             case ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS:
             case ExtendedFilePickerElementIds::CHECKBOX_READONLY:
@@ -417,6 +401,10 @@ uno::Any SAL_CALL KDE4FilePicker::getValue( sal_Int16 controlId, sal_Int16 )
         switch (controlId)
         {
             case ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION:
+            // we ignore this one and rely on KFileDialog to provide the function,
+            // always return true, here meaning "it's been taken care of"
+                res = uno::Any( true );
+                break;
             case ExtendedFilePickerElementIds::CHECKBOX_PASSWORD:
             case ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS:
             case ExtendedFilePickerElementIds::CHECKBOX_READONLY:
@@ -463,7 +451,7 @@ void SAL_CALL KDE4FilePicker::setLabel( sal_Int16 controlId, const ::rtl::OUStri
     {
         switch (controlId)
         {
-            case ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION:
+            case ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION: // ignored
             case ExtendedFilePickerElementIds::CHECKBOX_PASSWORD:
             case ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS:
             case ExtendedFilePickerElementIds::CHECKBOX_READONLY:
@@ -498,7 +486,7 @@ rtl::OUString SAL_CALL KDE4FilePicker::getLabel(sal_Int16 controlId)
     {
         switch (controlId)
         {
-            case ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION:
+            case ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION: // ignored
             case ExtendedFilePickerElementIds::CHECKBOX_PASSWORD:
             case ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS:
             case ExtendedFilePickerElementIds::CHECKBOX_READONLY:
@@ -591,6 +579,10 @@ void KDE4FilePicker::addCustomControl(sal_Int16 controlId)
             }
 
             widget = new QCheckBox(label, _extraControls);
+            // the checkbox is created even for CHECKBOX_AUTOEXTENSION to simplify
+            // code, but the checkbox is hidden and ignored
+            if( controlId == ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION )
+                widget->hide();
 
             break;
         }
@@ -654,13 +646,12 @@ void SAL_CALL KDE4FilePicker::initialize( const uno::Sequence<uno::Any> &args )
 
         case FILESAVE_AUTOEXTENSION:
             operationMode = KFileDialog::Saving;
-            //addCustomControl( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION );
+            addCustomControl( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION );
             break;
 
         case FILESAVE_AUTOEXTENSION_PASSWORD:
         {
             operationMode = KFileDialog::Saving;
-            //addCustomControl( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION );
             addCustomControl( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD );
             break;
         }
@@ -680,6 +671,7 @@ void SAL_CALL KDE4FilePicker::initialize( const uno::Sequence<uno::Any> &args )
 
         case FILESAVE_AUTOEXTENSION_TEMPLATE:
             operationMode = KFileDialog::Saving;
+            addCustomControl( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION );
             addCustomControl( ExtendedFilePickerElementIds::LISTBOX_TEMPLATE );
             break;
 
