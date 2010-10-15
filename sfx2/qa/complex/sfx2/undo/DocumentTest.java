@@ -1,7 +1,5 @@
 package complex.sfx2.undo;
 
-import com.sun.star.document.XUndoAction;
-import com.sun.star.document.XUndoManager;
 import org.openoffice.test.tools.OfficeDocument;
 
 /**
@@ -32,6 +30,12 @@ public interface DocumentTest
      * verifies the document is in the same state as after {@link #initializeDocument}
      */
     public void verifyInitialDocumentState() throws com.sun.star.uno.Exception;
+
+    /**
+     * verifies the document is in the state as expected after {@link #doSingleModification}
+     * @throws com.sun.star.uno.Exception
+     */
+    public void verifySingleModificationDocumentState() throws com.sun.star.uno.Exception;
 
     /**
      * does multiple modifications do the document, which would normally result in multiple Undo actions.

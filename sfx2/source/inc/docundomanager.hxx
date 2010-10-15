@@ -73,8 +73,8 @@ namespace sfx2
         virtual void SAL_CALL enterHiddenUndoContext(  ) throw (::com::sun::star::util::InvalidStateException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL leaveUndoContext(  ) throw (::com::sun::star::util::InvalidStateException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL addUndoAction( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoAction >& i_action ) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException);
-        virtual void SAL_CALL undo(  ) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::WrappedTargetException);
-        virtual void SAL_CALL redo(  ) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::WrappedTargetException);
+        virtual void SAL_CALL undo(  ) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::util::InvalidStateException, ::com::sun::star::lang::WrappedTargetException);
+        virtual void SAL_CALL redo(  ) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::util::InvalidStateException, ::com::sun::star::lang::WrappedTargetException);
         virtual void SAL_CALL clear(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL clearRedo(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL addUndoManagerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManagerListener >& i_listener ) throw (::com::sun::star::uno::RuntimeException);
@@ -102,8 +102,10 @@ namespace sfx2
             );
 
         void impl_do_nolck(
+                USHORT ( SfxUndoManager::*i_checkMethod )() const,
                 BOOL ( SfxUndoManager::*i_doMethod )(),
-                UniString ( SfxUndoManager::*i_titleRetriever )( USHORT ) const
+                UniString ( SfxUndoManager::*i_titleRetriever )( USHORT ) const,
+                void ( SAL_CALL ::com::sun::star::document::XUndoManagerListener::*i_notificationMethod )( const ::com::sun::star::document::UndoManagerEvent& )
             );
 
     private:

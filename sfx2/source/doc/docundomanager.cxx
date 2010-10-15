@@ -30,6 +30,8 @@
 #include "docundomanager.hxx"
 #include "sfx2/sfxbasemodel.hxx"
 #include "sfx2/objsh.hxx"
+#include "sfx2/viewfrm.hxx"
+#include "sfx2/bindings.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/lang/XComponent.hpp>
@@ -74,14 +76,15 @@ namespace sfx2
     class UndoActionWrapper : public SfxUndoAction
     {
     public:
-                        UndoActionWrapper(
-                            Reference< XUndoAction > const& i_undoAction
-                        );
-        virtual         ~UndoActionWrapper();
+                            UndoActionWrapper(
+                                Reference< XUndoAction > const& i_undoAction
+                            );
+        virtual             ~UndoActionWrapper();
 
-        virtual void    Undo();
-        virtual void    Redo();
-        virtual BOOL    CanRepeat(SfxRepeatTarget&) const;
+        virtual String   GetComment() const;
+        virtual void        Undo();
+        virtual void        Redo();
+        virtual BOOL        CanRepeat(SfxRepeatTarget&) const;
 
     private:
         const Reference< XUndoAction >  m_xUndoAction;
@@ -108,6 +111,21 @@ namespace sfx2
         {
             DBG_UNHANDLED_EXCEPTION();
         }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    String UndoActionWrapper::GetComment() const
+    {
+        String sComment;
+        try
+        {
+            sComment = m_xUndoAction->getTitle();
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        return sComment;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -156,6 +174,9 @@ namespace sfx2
             pUndoManager->AddUndoListener( *this );
         }
 
+        const SfxObjectShell* getObjectShell() const { return rAntiImpl.getBaseModel().GetObjectShell(); }
+              SfxObjectShell* getObjectShell()       { return rAntiImpl.getBaseModel().GetObjectShell(); }
+
         void disposing()
         {
             ENSURE_OR_RETURN_VOID( pUndoManager, "DocumentUndoManager_Impl::disposing: already disposed!" );
@@ -176,10 +197,25 @@ namespace sfx2
      //==================================================================================================================
     namespace
     {
-        SfxUndoManager& lcl_getUndoManager_throw( DocumentUndoManager_Impl& i_data )
+        //..............................................................................................................
+        SfxUndoManager& lcl_getUndoManager_throw( DocumentUndoManager_Impl& i_impl )
         {
-            ENSURE_OR_THROW( i_data.pUndoManager != NULL, "internal error: no access to the doc's UndoManager implementation!" );
-            return *i_data.pUndoManager;
+            ENSURE_OR_THROW( i_impl.pUndoManager != NULL, "internal error: no access to the doc's UndoManager implementation!" );
+            return *i_impl.pUndoManager;
+        }
+
+        //..............................................................................................................
+        void lcl_invalidateXDo( const DocumentUndoManager_Impl& i_impl )
+        {
+            const SfxObjectShell* pDocShell = i_impl.getObjectShell();
+            ENSURE_OR_THROW( pDocShell != NULL, "lcl_invalidateUndo: no access to the doc shell!" );
+            SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst( pDocShell );
+            while ( pViewFrame )
+            {
+                pViewFrame->GetBindings().Invalidate( SID_UNDO );
+                pViewFrame->GetBindings().Invalidate( SID_REDO );
+                pViewFrame = SfxViewFrame::GetNext( *pViewFrame, pDocShell );
+            }
         }
     }
 
@@ -270,6 +306,10 @@ namespace sfx2
     //------------------------------------------------------------------------------------------------------------------
     void DocumentUndoManager::disposing()
     {
+        EventObject aEvent;
+        aEvent.Source = static_cast< XUndoManager* >( this );
+        m_pImpl->aUndoListeners.disposeAndClear( aEvent );
+
         m_pImpl->disposing();
     }
 
@@ -397,15 +437,22 @@ namespace sfx2
             ::comphelper::FlagGuard aNotificationGuard( m_pImpl->bAPIActionRunning );
             rUndoManager.AddUndoAction( new UndoActionWrapper( i_action ) );
         }
+        lcl_invalidateXDo( *m_pImpl );
         impl_notify( i_action->getTitle(), &XUndoManagerListener::undoActionAdded, aGuard );
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void DocumentUndoManager::impl_do_nolck( BOOL ( SfxUndoManager::*i_doMethod )(), UniString ( SfxUndoManager::*i_titleRetriever )( USHORT ) const )
+    void DocumentUndoManager::impl_do_nolck(
+        USHORT ( SfxUndoManager::*i_checkMethod )() const, BOOL ( SfxUndoManager::*i_doMethod )(),
+        String ( SfxUndoManager::*i_titleRetriever )( USHORT ) const,
+        void ( SAL_CALL XUndoManagerListener::*i_notificationMethod )( const UndoManagerEvent& ) )
     {
         SfxModelGuard aGuard( *this );
 
         SfxUndoManager& rUndoManager = lcl_getUndoManager_throw( *m_pImpl );
+        if ( (rUndoManager.*i_checkMethod)() == 0 )
+            throw InvalidStateException( ::rtl::OUString::createFromAscii( "stack is empty" ), static_cast< XUndoManager* >( this ) );
+
         const ::rtl::OUString sUndoActionTitle = (rUndoManager.*i_titleRetriever)(0);
         {
             ::comphelper::FlagGuard aNotificationGuard( m_pImpl->bAPIActionRunning );
@@ -420,19 +467,19 @@ namespace sfx2
             }
         }
 
-        impl_notify( sUndoActionTitle, &XUndoManagerListener::actionUndone, aGuard );
+        impl_notify( sUndoActionTitle, i_notificationMethod, aGuard );
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL DocumentUndoManager::undo(  ) throw (RuntimeException,WrappedTargetException)
+    void SAL_CALL DocumentUndoManager::undo(  ) throw (RuntimeException, InvalidStateException, WrappedTargetException)
     {
-        impl_do_nolck( &SfxUndoManager::Undo, &SfxUndoManager::GetUndoActionComment );
+        impl_do_nolck( &SfxUndoManager::GetUndoActionCount, &SfxUndoManager::Undo, &SfxUndoManager::GetUndoActionComment, &XUndoManagerListener::actionUndone );
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL DocumentUndoManager::redo(  ) throw (RuntimeException,WrappedTargetException)
+    void SAL_CALL DocumentUndoManager::redo(  ) throw (RuntimeException, InvalidStateException, WrappedTargetException)
     {
-        impl_do_nolck( &SfxUndoManager::Redo, &SfxUndoManager::GetRedoActionComment );
+        impl_do_nolck( &SfxUndoManager::GetRedoActionCount, &SfxUndoManager::Redo, &SfxUndoManager::GetRedoActionComment, &XUndoManagerListener::actionRedone );
     }
 
     //------------------------------------------------------------------------------------------------------------------

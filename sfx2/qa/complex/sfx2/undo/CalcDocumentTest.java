@@ -6,13 +6,13 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.table.XCell;
 import com.sun.star.uno.UnoRuntime;
 import org.openoffice.test.tools.DocumentType;
-import org.openoffice.test.tools.OfficeDocument;
 import static org.junit.Assert.*;
 
 /**
+ * implements the {@link DocumentTest} interface on top of a spreadsheet document
  * @author frank.schoenheit@oracle.com
  */
-public class CalcDocumentTest extends DocumentTestBase implements DocumentTest
+public class CalcDocumentTest extends DocumentTestBase
 {
     public CalcDocumentTest( final XMultiServiceFactory i_orb ) throws Exception
     {
@@ -43,15 +43,15 @@ public class CalcDocumentTest extends DocumentTestBase implements DocumentTest
     public void doSingleModification() throws com.sun.star.uno.Exception
     {
         final XCell cellA1 = getCellA1();
-        assertEquals( "initial cell value not as expected", cellA1.getValue(), INIT_VALUE, 0 );
+        assertEquals( "initial cell value not as expected", INIT_VALUE, cellA1.getValue(), 0 );
         cellA1.setValue( MODIFIED_VALUE );
-        assertEquals( "modified cell value not as expected", cellA1.getValue(), MODIFIED_VALUE, 0 );
+        assertEquals( "modified cell value not as expected", MODIFIED_VALUE, cellA1.getValue(), 0 );
     }
 
     public void verifyInitialDocumentState() throws com.sun.star.uno.Exception
     {
         final XCell cellA1 = getCellA1();
-        assertEquals( "cell A1 didn't restore its value", cellA1.getValue(), INIT_VALUE, 0 );
+        assertEquals( "cell A1 didn't restore its value", INIT_VALUE, cellA1.getValue(), 0 );
 
         XCellRange range = UnoRuntime.queryInterface( XCellRange.class,
             ((SpreadsheetDocument)m_document).getSheet(0) );
@@ -60,6 +60,12 @@ public class CalcDocumentTest extends DocumentTestBase implements DocumentTest
             final XCell cell = range.getCellByPosition( 1, i );
             assertEquals( "Cell B" + (i+1) + " not having its initial value (an empty string)", "", cell.getFormula() );
         }
+    }
+
+    public void verifySingleModificationDocumentState() throws com.sun.star.uno.Exception
+    {
+        final XCell cellA1 = getCellA1();
+        assertEquals( "cell A1 doesn't have the value which we gave it", MODIFIED_VALUE, cellA1.getValue(), 0 );
     }
 
     public int doMultipleModifications() throws com.sun.star.uno.Exception
@@ -76,11 +82,6 @@ public class CalcDocumentTest extends DocumentTestBase implements DocumentTest
             cell.setFormula( months[i] );
         }
         return 12;
-    }
-
-    public OfficeDocument getDocument()
-    {
-        return m_document;
     }
 
     private XCell getCellA1() throws com.sun.star.uno.Exception

@@ -120,7 +120,12 @@ public class UndoManager
 
         public void leftUndoContext( UndoManagerEvent i_event )
         {
-            assertEquals( "undo context order is suspicious", m_activeUndoContexts.pop(), i_event.UndoActionTitle );
+            assertEquals( "nested undo context descriptions do not match", m_activeUndoContexts.pop(), i_event.UndoActionTitle );
+        }
+
+        public void disposing( EventObject i_event )
+        {
+            m_isDisposed = true;
         }
 
         int     getUndoActionsAdded() { return m_undoActionsAdded; }
@@ -128,6 +133,7 @@ public class UndoManager
         int     getRedoActionCount() { return m_redoCount; }
         String  getCurrentUndoContextTitle() { return m_activeUndoContexts.peek(); }
         int     getUndoContextDepth() { return m_activeUndoContexts.size(); }
+        boolean isDisposed() { return m_isDisposed; }
 
         void reset()
         {
@@ -138,6 +144,7 @@ public class UndoManager
         private int     m_undoActionsAdded = 0;
         private int     m_undoCount = 0;
         private int     m_redoCount = 0;
+        private boolean m_isDisposed = false;
         private Stack< String >
                         m_activeUndoContexts = new Stack<String>();
     };
@@ -156,12 +163,32 @@ public class UndoManager
         final UndoListener listener = new UndoListener();
         undoManager.addUndoManagerListener( listener );
 
-        // do a single modification, undo it, and check the document state is as expected
+        // do a single modification to the document
         test.doSingleModification();
+        test.verifySingleModificationDocumentState();
+
+        // undo the modification, ensure the listener got the proper notifications
+        assertEquals( "We did not yet do a undo!", 0, listener.getUndoActionCount() );
         undoManager.undo();
-        test.verifyInitialDocumentState();
-        // ensure the listener has been notified of the Undo operation
         assertEquals( "A simple undo does not result in the proper Undo count.", 1, listener.getUndoActionCount() );
+
+        // verify the document is in its initial state, again
+        test.verifyInitialDocumentState();
+
+        // redo the modification, ensure the listener got the proper notifications
+        assertEquals( "did not yet do a redo!", 0, listener.getRedoActionCount() );
+        undoManager.redo();
+        assertEquals( "did a redo, but got no notification of it!", 1, listener.getRedoActionCount() );
+
+        // ensure the document is in the proper state, again
+        test.verifySingleModificationDocumentState();
+
+        // now do an Undo via the UI (aka the dispatch API), and see if this works, and notifies the listener as
+        // expected
+        test.getDocument().getCurrentView().dispatch( ".uno:Undo" );
+        test.verifyInitialDocumentState();
+        assertEquals( "UI-Undo does not notify the listener", 2, listener.getUndoActionCount() );
+
         listener.reset();
 
         // do multiple changes in a row, after entering an Undo context
@@ -184,6 +211,10 @@ public class UndoManager
 
         test.verifyInitialDocumentState();
         listener.reset();
+
+        m_currentDocument.close();
+        assertTrue( "document is closed, but the UndoManagerListener has not been notified of the disposal", listener.isDisposed() );
+        m_currentDocument = null;
     }
 
     private XComponentContext getContext()

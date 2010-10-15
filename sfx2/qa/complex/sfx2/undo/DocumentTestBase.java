@@ -8,11 +8,16 @@ import org.openoffice.test.tools.OfficeDocument;
 /**
  * @author frank.schoenheit@oracle.com
  */
-class DocumentTestBase
+abstract class DocumentTestBase implements DocumentTest
 {
     DocumentTestBase( final XMultiServiceFactory i_orb, final DocumentType i_docType ) throws Exception
     {
         m_document = OfficeDocument.blankDocument( i_orb, i_docType );
+    }
+
+    public OfficeDocument getDocument()
+    {
+        return m_document;
     }
 
     protected final OfficeDocument  m_document;
