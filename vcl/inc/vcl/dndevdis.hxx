@@ -47,6 +47,7 @@ class DNDEventDispatcher: public ::cppu::WeakImplHelper3<
     ::osl::Mutex m_aMutex;
     ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor > m_aDataFlavorList;
 
+    Window* findTopLevelWindow(Point location);
     /*
      * fire the events on the dnd listener container of the specified window
      */
