@@ -194,7 +194,7 @@ ScTransferObj::ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDesc
 
 ScTransferObj::~ScTransferObj()
 {
-    Application::GetSolarMutex().acquire();
+    SolarMutexGuard aSolarGuard;
 
     ScModule* pScMod = SC_MOD();
     if ( pScMod->GetClipData().pCellClipboard == this )
@@ -214,7 +214,6 @@ ScTransferObj::~ScTransferObj()
 
     aDrawPersistRef.Clear();                    // after the model
 
-    Application::GetSolarMutex().release();
 }
 
 // static

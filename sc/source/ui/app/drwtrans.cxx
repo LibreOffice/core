@@ -244,7 +244,7 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
 
 ScDrawTransferObj::~ScDrawTransferObj()
 {
-    Application::GetSolarMutex().acquire();     //! ???
+    SolarMutexGuard aSolarGuard;
 
     ScModule* pScMod = SC_MOD();
     if ( pScMod->GetClipData().pDrawClipboard == this )
@@ -266,8 +266,6 @@ ScDrawTransferObj::~ScDrawTransferObj()
 
     delete pBookmark;
     delete pDragSourceView;
-
-    Application::GetSolarMutex().release();     //! ???
 }
 
 // static
