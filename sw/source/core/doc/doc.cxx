@@ -368,7 +368,7 @@ const i18n::ForbiddenCharacters*
     SwDoc::getForbiddenCharacters(/*[in]*/ USHORT nLang, /*[in]*/ bool bLocaleData ) const
 {
     const i18n::ForbiddenCharacters* pRet = 0;
-    if( xForbiddenCharsTable.isValid() )
+    if( xForbiddenCharsTable.is() )
         pRet = xForbiddenCharsTable->GetForbiddenCharacters( nLang, FALSE );
     if( bLocaleData && !pRet && pBreakIt )
         pRet = &pBreakIt->GetForbidden( (LanguageType)nLang );
@@ -378,7 +378,7 @@ const i18n::ForbiddenCharacters*
 void SwDoc::setForbiddenCharacters(/*[in]*/ USHORT nLang,
                                    /*[in]*/ const i18n::ForbiddenCharacters& rFChars )
 {
-    if( !xForbiddenCharsTable.isValid() )
+    if( !xForbiddenCharsTable.is() )
     {
         uno::Reference<
             lang::XMultiServiceFactory > xMSF =
@@ -402,9 +402,9 @@ void SwDoc::setForbiddenCharacters(/*[in]*/ USHORT nLang,
     SetModified();
 }
 
-vos::ORef<SvxForbiddenCharactersTable>& SwDoc::getForbiddenCharacterTable()
+rtl::Reference<SvxForbiddenCharactersTable>& SwDoc::getForbiddenCharacterTable()
 {
-    if( !xForbiddenCharsTable.isValid() )
+    if( !xForbiddenCharsTable.is() )
     {
         uno::Reference<
             lang::XMultiServiceFactory > xMSF =
@@ -414,7 +414,7 @@ vos::ORef<SvxForbiddenCharactersTable>& SwDoc::getForbiddenCharacterTable()
     return xForbiddenCharsTable;
 }
 
-const vos::ORef<SvxForbiddenCharactersTable>& SwDoc::getForbiddenCharacterTable() const
+const rtl::Reference<SvxForbiddenCharactersTable>& SwDoc::getForbiddenCharacterTable() const
 {
     return xForbiddenCharsTable;
 }

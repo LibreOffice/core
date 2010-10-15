@@ -60,6 +60,8 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::lang;
 using namespace ::xmloff::token;
 
+using rtl::OUString;
+
 void SwXMLExport::ExportFmt( const SwFmt& rFmt, enum XMLTokenEnum eFamily )
 {
     // <style:style ...>

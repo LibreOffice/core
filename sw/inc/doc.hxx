@@ -74,7 +74,7 @@ class SwList;
 #include <chcmprse.hxx>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 #include <svx/svdtypes.hxx>
 #include <svl/style.hxx>
 #include <editeng/numitem.hxx>
@@ -407,7 +407,7 @@ class SW_DLLPUBLIC SwDoc :
     SwChartLockController_Helper  *pChartControllerHelper;
 
     // table of forbidden characters of this document
-    vos::ORef<SvxForbiddenCharactersTable>  xForbiddenCharsTable;
+    rtl::Reference<SvxForbiddenCharactersTable> xForbiddenCharsTable;
     com::sun::star::uno::Reference< com::sun::star::script::vba::XVBAEventProcessor > mxVbaEvents;
     com::sun::star::uno::Reference<com::sun::star::container::XNameContainer> m_xTemplateToProjectCache;
     // --> OD 2007-10-26 #i83479#
@@ -752,8 +752,8 @@ public:
     virtual void set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value);
     virtual const com::sun::star::i18n::ForbiddenCharacters* getForbiddenCharacters(/*[in]*/ USHORT nLang, /*[in]*/ bool bLocaleData ) const;
     virtual void setForbiddenCharacters(/*[in]*/ USHORT nLang, /*[in]*/ const com::sun::star::i18n::ForbiddenCharacters& rForbiddenCharacters );
-    virtual vos::ORef<SvxForbiddenCharactersTable>& getForbiddenCharacterTable();
-    virtual const vos::ORef<SvxForbiddenCharactersTable>& getForbiddenCharacterTable() const;
+    virtual rtl::Reference<SvxForbiddenCharactersTable>& getForbiddenCharacterTable();
+    virtual const rtl::Reference<SvxForbiddenCharactersTable>& getForbiddenCharacterTable() const;
     virtual sal_uInt16 getLinkUpdateMode( /*[in]*/bool bGlobalSettings ) const;
     virtual void setLinkUpdateMode( /*[in]*/ sal_uInt16 nMode );
     virtual SwFldUpdateFlags getFieldUpdateFlags( /*[in]*/bool bGlobalSettings ) const;

@@ -106,11 +106,11 @@ SwAccessibleChildMap::SwAccessibleChildMap( const SwRect& rVisArea,
         }
 
         {
-            ::vos::ORef < SwAccessibleContext > xAccImpl =
+            ::rtl::Reference < SwAccessibleContext > xAccImpl =
                                 rAccMap.GetContextImpl( &rFrm, sal_False );
-            if( xAccImpl.isValid() )
+            if( xAccImpl.is() )
             {
-                SwAccessibleContext* pAccImpl = xAccImpl.getBodyPtr();
+                SwAccessibleContext* pAccImpl = xAccImpl.get();
                 if ( pAccImpl &&
                      pAccImpl->HasAdditionalAccessibleChildren() )
                 {

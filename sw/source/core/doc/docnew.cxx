@@ -874,7 +874,7 @@ void SwDoc::ClearDoc()
     else
         pFrmFmtTbl->DeleteAndDestroy( 1, pFrmFmtTbl->Count()-1 );
 
-    xForbiddenCharsTable.unbind();
+    xForbiddenCharsTable.clear();
 
     pFldTypes->DeleteAndDestroy( INIT_FLDTYPES,
                                 pFldTypes->Count() - INIT_FLDTYPES );

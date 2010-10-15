@@ -97,6 +97,8 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
+using rtl::OUString;
+
 class SwVbaCodeNameProvider : public ::cppu::WeakImplHelper1< document::XCodeNameQuery >
 {
     SwDocShell* mpDocShell;

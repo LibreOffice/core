@@ -53,7 +53,7 @@ SwAccessibleHyperlink::SwAccessibleHyperlink( sal_uInt16 nHPos,
 const SwTxtAttr *SwAccessibleHyperlink::GetTxtAttr() const
 {
     const SwTxtAttr *pTxtAttr = 0;
-    if( xPara.isValid() && xPara->GetMap() )
+    if( xPara.is() && xPara->GetMap() )
     {
         const SwTxtNode *pTxtNd = xPara->GetTxtNode();
         const SwpHints *pHints = pTxtNd->GetpSwpHints();
@@ -180,7 +180,7 @@ sal_Bool SAL_CALL SwAccessibleHyperlink::isValid(  )
         throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return xPara.isValid();
+    return xPara.is();
 }
 
 void SwAccessibleHyperlink::Invalidate()

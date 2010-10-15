@@ -30,7 +30,7 @@
 
 #include <cppuhelper/weakref.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 #include <vos/mutex.hxx>
 #include <svx/IAccessibleViewForwarder.hxx>
 #include <svx/IAccessibleParent.hxx>
@@ -157,7 +157,7 @@ public:
                             const SwPageFrm* _pSelectedPageFrm,
                             const Size&      _rPrevwWinSize );
 
-    ::vos::ORef < SwAccessibleContext > GetContextImpl(
+    ::rtl::Reference < SwAccessibleContext > GetContextImpl(
                                                  const SwFrm *pFrm,
                                                 sal_Bool bCreate = sal_True );
     ::com::sun::star::uno::Reference<
@@ -165,7 +165,7 @@ public:
                                                  const SwFrm *pFrm,
                                                 sal_Bool bCreate = sal_True );
 
-    ::vos::ORef < ::accessibility::AccessibleShape > GetContextImpl(
+    ::rtl::Reference < ::accessibility::AccessibleShape > GetContextImpl(
                                         const SdrObject *pObj,
                                         SwAccessibleContext *pParentImpl,
                                         sal_Bool bCreate = sal_True );
@@ -221,7 +221,7 @@ public:
     void InvalidateFocus();
 
     void SetCursorContext(
-        const ::vos::ORef < SwAccessibleContext >& rCursorContext );
+        const ::rtl::Reference < SwAccessibleContext >& rCursorContext );
 
     // Invalidate state of whole tree. If an action is open, this call
     // is processed when the last action ends.

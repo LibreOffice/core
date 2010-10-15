@@ -86,6 +86,8 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::style;
 
+using rtl::OUString;
+
 struct PropValData
 {
     uno::Any        aVal;

@@ -30,7 +30,7 @@
 #include "precompiled_sw.hxx"
 
 
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <vcl/window.hxx>
 #include <svx/svdmodel.hxx>
@@ -209,7 +209,7 @@ struct SwShapeFunc
     }
 };
 typedef ::std::map < const SdrObject *, uno::WeakReference < XAccessible >, SwShapeFunc > _SwAccessibleShapeMap_Impl;
-typedef ::std::pair < const SdrObject *, ::vos::ORef < ::accessibility::AccessibleShape > > SwAccessibleObjShape_Impl;
+typedef ::std::pair < const SdrObject *, ::rtl::Reference < ::accessibility::AccessibleShape > > SwAccessibleObjShape_Impl;
 
 class SwAccessibleShapeMap_Impl: public _SwAccessibleShapeMap_Impl
 
@@ -395,10 +395,10 @@ public:
         return meType;
     }
 
-    inline ::vos::ORef < SwAccessibleContext > GetContext() const
+    inline ::rtl::Reference < SwAccessibleContext > GetContext() const
     {
         uno::Reference < XAccessible > xTmp( mxAcc );
-        ::vos::ORef < SwAccessibleContext > xAccImpl(
+        ::rtl::Reference < SwAccessibleContext > xAccImpl(
                             static_cast<SwAccessibleContext*>( xTmp.get() ) );
 
         return xAccImpl;
@@ -790,12 +790,12 @@ static sal_Bool AreInSameTable( const uno::Reference< XAccessible >& rAcc,
 
 void SwAccessibleMap::FireEvent( const SwAccessibleEvent_Impl& rEvent )
 {
-    ::vos::ORef < SwAccessibleContext > xAccImpl( rEvent.GetContext() );
+    ::rtl::Reference < SwAccessibleContext > xAccImpl( rEvent.GetContext() );
     if( SwAccessibleEvent_Impl::SHAPE_SELECTION == rEvent.GetType() )
     {
         DoInvalidateShapeSelection();
     }
-    else if( xAccImpl.isValid() && xAccImpl->GetFrm() )
+    else if( xAccImpl.is() && xAccImpl->GetFrm() )
     {
         if ( rEvent.GetType() != SwAccessibleEvent_Impl::DISPOSE &&
              rEvent.IsInvalidateTextAttrs() )
@@ -815,7 +815,7 @@ void SwAccessibleMap::FireEvent( const SwAccessibleEvent_Impl& rEvent )
                                        rEvent.GetOldBox() );
             break;
         case SwAccessibleEvent_Impl::DISPOSE:
-            ASSERT( xAccImpl.isValid(),
+            ASSERT( xAccImpl.is(),
                     "dispose event has been stored" );
             break;
         case SwAccessibleEvent_Impl::INVALID_ATTR:
@@ -1025,7 +1025,7 @@ void SwAccessibleMap::DoInvalidateShapeSelection()
         SwAccessibleObjShape_Impl *pShape = pShapes;
         while( nShapes )
         {
-            if( pShape->second.isValid() )
+            if( pShape->second.is() )
             {
                 sal_Bool bChanged;
                 if( pShape >= pSelShape )
@@ -1061,7 +1061,7 @@ void SwAccessibleMap::DoInvalidateShapeSelection()
             ::std::list< const SwFrm * >::const_iterator aEndIter = aParents.end();
             while( aIter != aEndIter )
             {
-                ::vos::ORef< SwAccessibleContext > xParentAccImpl;
+                ::rtl::Reference< SwAccessibleContext > xParentAccImpl;
                 {
                     vos::OGuard aGuard( maMutex );
                     if(  mpFrmMap )
@@ -1076,7 +1076,7 @@ void SwAccessibleMap::DoInvalidateShapeSelection()
                         }
                     }
                 }
-                if( xParentAccImpl.isValid() )
+                if( xParentAccImpl.is() )
                 {
                     AccessibleEventObject aEvent;
                     aEvent.EventId = AccessibleEventId::SELECTION_CHANGED;
@@ -1119,7 +1119,7 @@ void SwAccessibleMap::DoInvalidateShapeFocus()
         SwAccessibleObjShape_Impl  *pShape = pShapes;
         while( nShapes )
         {
-            if( pShape->second.isValid() )
+            if( pShape->second.is() )
             {
                 if( bFocused && pShape >= pSelShape )
                     pShape->second->SetState( AccessibleStateType::FOCUSED );
@@ -1468,13 +1468,13 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
     return xAcc;
 }
 
-::vos::ORef < SwAccessibleContext > SwAccessibleMap::GetContextImpl(
+::rtl::Reference < SwAccessibleContext > SwAccessibleMap::GetContextImpl(
             const SwFrm *pFrm,
             sal_Bool bCreate )
 {
     uno::Reference < XAccessible > xAcc( GetContext( pFrm, bCreate ) );
 
-    ::vos::ORef < SwAccessibleContext > xAccImpl(
+    ::rtl::Reference < SwAccessibleContext > xAccImpl(
          static_cast< SwAccessibleContext * >( xAcc.get() ) );
 
     return xAccImpl;
@@ -1546,14 +1546,14 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext(
     return xAcc;
 }
 
-::vos::ORef < ::accessibility::AccessibleShape > SwAccessibleMap::GetContextImpl(
+::rtl::Reference < ::accessibility::AccessibleShape > SwAccessibleMap::GetContextImpl(
             const SdrObject *pObj,
             SwAccessibleContext *pParentImpl,
             sal_Bool bCreate )
 {
     uno::Reference < XAccessible > xAcc( GetContext( pObj, pParentImpl, bCreate ) );
 
-    ::vos::ORef < ::accessibility::AccessibleShape > xAccImpl(
+    ::rtl::Reference < ::accessibility::AccessibleShape > xAccImpl(
          static_cast< ::accessibility::AccessibleShape* >( xAcc.get() ) );
 
     return xAccImpl;
@@ -1639,9 +1639,9 @@ void SwAccessibleMap::Dispose( const SwFrm *pFrm,
 
     if( aFrmOrObj.IsAccessible( GetShell()->IsPreView() ) )
     {
-        ::vos::ORef< SwAccessibleContext > xAccImpl;
-        ::vos::ORef< SwAccessibleContext > xParentAccImpl;
-        ::vos::ORef< ::accessibility::AccessibleShape > xShapeAccImpl;
+        ::rtl::Reference< SwAccessibleContext > xAccImpl;
+        ::rtl::Reference< SwAccessibleContext > xParentAccImpl;
+        ::rtl::Reference< ::accessibility::AccessibleShape > xShapeAccImpl;
         // get accessible context for frame
         {
             vos::OGuard aGuard( maMutex );
@@ -1658,7 +1658,7 @@ void SwAccessibleMap::Dispose( const SwFrm *pFrm,
                         static_cast< SwAccessibleContext *>( xAcc.get() );
                 }
             }
-            if( !xAccImpl.isValid() && mpFrmMap )
+            if( !xAccImpl.is() && mpFrmMap )
             {
                 // If there is none, look if the parent is accessible.
                 const SwFrm *pParent =
@@ -1677,7 +1677,7 @@ void SwAccessibleMap::Dispose( const SwFrm *pFrm,
                     }
                 }
             }
-            if( !xParentAccImpl.isValid() && !aFrmOrObj.GetSwFrm() &&
+            if( !xParentAccImpl.is() && !aFrmOrObj.GetSwFrm() &&
                 mpShapeMap )
             {
                 SwAccessibleShapeMap_Impl::iterator aIter =
@@ -1690,7 +1690,7 @@ void SwAccessibleMap::Dispose( const SwFrm *pFrm,
                 }
             }
             if( pObj && GetShell()->ActionPend() &&
-                (xParentAccImpl.isValid() || xShapeAccImpl.isValid()) )
+                (xParentAccImpl.is() || xShapeAccImpl.is()) )
             {
                 // Keep a reference to the XShape to avoid that it
                 // is deleted with a SwFrmFmt::Modify.
@@ -1726,11 +1726,11 @@ void SwAccessibleMap::Dispose( const SwFrm *pFrm,
         // the frame. If the frame is no context for it but disposing should
         // take place recursive, the frame's children have to be disposed
         // anyway, so we have to create the context then.
-        if( xAccImpl.isValid() )
+        if( xAccImpl.is() )
         {
             xAccImpl->Dispose( bRecursive );
         }
-        else if( xParentAccImpl.isValid() )
+        else if( xParentAccImpl.is() )
         {
             // If the frame is a cell frame, the table must be notified.
             // If we are in an action, a table model change event will
@@ -1739,7 +1739,7 @@ void SwAccessibleMap::Dispose( const SwFrm *pFrm,
 
             xParentAccImpl->DisposeChild( aFrmOrObj, bRecursive );
         }
-        else if( xShapeAccImpl.isValid() )
+        else if( xShapeAccImpl.is() )
         {
             RemoveContext( aFrmOrObj.GetDrawObject() );
             xShapeAccImpl->dispose();
@@ -1758,8 +1758,8 @@ void SwAccessibleMap::InvalidatePosOrSize( const SwFrm *pFrm,
     SwAccessibleChild aFrmOrObj( pFrm, pObj, pWindow );
     if( aFrmOrObj.IsAccessible( GetShell()->IsPreView() ) )
     {
-        ::vos::ORef< SwAccessibleContext > xAccImpl;
-        ::vos::ORef< SwAccessibleContext > xParentAccImpl;
+        ::rtl::Reference< SwAccessibleContext > xAccImpl;
+        ::rtl::Reference< SwAccessibleContext > xParentAccImpl;
         {
             vos::OGuard aGuard( maMutex );
 
@@ -1778,7 +1778,7 @@ void SwAccessibleMap::InvalidatePosOrSize( const SwFrm *pFrm,
                             static_cast< SwAccessibleContext *>( xAcc.get() );
                     }
                 }
-                if( !xAccImpl.isValid() )
+                if( !xAccImpl.is() )
                 {
                     // Otherwise we look if the parent is accessible.
                     // If not, there is nothing to do.
@@ -1801,12 +1801,12 @@ void SwAccessibleMap::InvalidatePosOrSize( const SwFrm *pFrm,
             }
         }
 
-        if( xAccImpl.isValid() )
+        if( xAccImpl.is() )
         {
             if( GetShell()->ActionPend() )
             {
                 SwAccessibleEvent_Impl aEvent(
-                    SwAccessibleEvent_Impl::POS_CHANGED, xAccImpl.getBodyPtr(),
+                    SwAccessibleEvent_Impl::POS_CHANGED, xAccImpl.get(),
                     aFrmOrObj, rOldBox );
                 AppendEvent( aEvent );
             }
@@ -1816,13 +1816,13 @@ void SwAccessibleMap::InvalidatePosOrSize( const SwFrm *pFrm,
                 xAccImpl->InvalidatePosOrSize( rOldBox );
             }
         }
-        else if( xParentAccImpl.isValid() )
+        else if( xParentAccImpl.is() )
         {
             if( GetShell()->ActionPend() )
             {
                 SwAccessibleEvent_Impl aEvent(
                     SwAccessibleEvent_Impl::CHILD_POS_CHANGED,
-                    xParentAccImpl.getBodyPtr(), aFrmOrObj, rOldBox );
+                    xParentAccImpl.get(), aFrmOrObj, rOldBox );
                 AppendEvent( aEvent );
             }
             else
@@ -2027,10 +2027,10 @@ void SwAccessibleMap::InvalidateFocus()
 }
 
 void SwAccessibleMap::SetCursorContext(
-        const ::vos::ORef < SwAccessibleContext >& rCursorContext )
+        const ::rtl::Reference < SwAccessibleContext >& rCursorContext )
 {
     vos::OGuard aGuard( maMutex );
-    uno::Reference < XAccessible > xAcc( rCursorContext.getBodyPtr() );
+    uno::Reference < XAccessible > xAcc( rCursorContext.get() );
     mxCursorContext = xAcc;
 }
 
@@ -2219,7 +2219,7 @@ void SwAccessibleMap::UpdatePreview( const std::vector<PrevwPage*>& _rPrevwPages
     // accessibility tree; this will also send appropriate scroll
     // events
     SwAccessibleContext* pDoc =
-        GetContextImpl( GetShell()->GetLayout() ).getBodyPtr();
+        GetContextImpl( GetShell()->GetLayout() ).get();
     static_cast<SwAccessibleDocumentBase*>( pDoc )->SetVisArea();
 
     uno::Reference < XAccessible > xOldAcc;
@@ -2728,9 +2728,9 @@ void SwAccessibleMap::InvalidateTextSelectionOfAllParas()
                 uno::Reference < XAccessible > xAcc( (*aIter).first );
                 if ( xAcc.is() )
                 {
-                    ::vos::ORef < SwAccessibleContext > xAccImpl(
+                    ::rtl::Reference < SwAccessibleContext > xAccImpl(
                                 static_cast<SwAccessibleContext*>( xAcc.get() ) );
-                    if ( xAccImpl.isValid() && xAccImpl->GetFrm() )
+                    if ( xAccImpl.is() && xAccImpl->GetFrm() )
                     {
                         const SwTxtFrm* pTxtFrm(
                             dynamic_cast<const SwTxtFrm*>(xAccImpl->GetFrm()) );
@@ -2756,9 +2756,9 @@ void SwAccessibleMap::InvalidateTextSelectionOfAllParas()
             uno::Reference < XAccessible > xAcc( (*aIter).first );
             if ( xAcc.is() )
             {
-                ::vos::ORef < SwAccessibleContext > xAccImpl(
+                ::rtl::Reference < SwAccessibleContext > xAccImpl(
                             static_cast<SwAccessibleContext*>( xAcc.get() ) );
-                if ( xAccImpl.isValid() && xAccImpl->GetFrm() )
+                if ( xAccImpl.is() && xAccImpl->GetFrm() )
                 {
                     const SwTxtFrm* pTxtFrm(
                             dynamic_cast<const SwTxtFrm*>(xAccImpl->GetFrm()) );

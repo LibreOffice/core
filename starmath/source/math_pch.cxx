@@ -119,7 +119,7 @@
 #include <usr/uno.hxx>
 #include <usr/xiface.hxx>
 #include <usr/ustring.hxx>
-#include <vos/refernce.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include <vos/types.hxx>
 #include <osl/types.h>
 #include <osl/interlck.h>

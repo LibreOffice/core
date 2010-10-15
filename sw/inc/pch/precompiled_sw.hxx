@@ -955,7 +955,7 @@
 #include "vcl/wrkwin.hxx"
 
 #include "vos/mutex.hxx"
-#include "vos/ref.hxx"
+#include "rtl/ref.hxx"
 
 #include "xmloff/DocumentSettingsContext.hxx"
 #include "xmloff/ProgressBarHelper.hxx"

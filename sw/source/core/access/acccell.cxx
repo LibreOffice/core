@@ -101,7 +101,7 @@ void SwAccessibleCell::GetStates( ::utl::AccessibleStateSetHelper& rStateSet )
     {
         rStateSet.AddState( AccessibleStateType::SELECTED );
         ASSERT( bIsSelected, "bSelected out of sync" );
-        ::vos::ORef < SwAccessibleContext > xThis( this );
+        ::rtl::Reference < SwAccessibleContext > xThis( this );
         GetMap()->SetCursorContext( xThis );
     }
 }
@@ -131,7 +131,7 @@ sal_Bool SwAccessibleCell::_InvalidateMyCursorPos()
     {
         // remember that object as the one that has the caret. This is
         // neccessary to notify that object if the cursor leaves it.
-        ::vos::ORef < SwAccessibleContext > xThis( this );
+        ::rtl::Reference < SwAccessibleContext > xThis( this );
         GetMap()->SetCursorContext( xThis );
     }
 
@@ -156,14 +156,14 @@ sal_Bool SwAccessibleCell::_InvalidateChildrenCursorPos( const SwFrm *pFrm )
         {
             if( rLower.IsAccessible( GetMap()->GetShell()->IsPreView() )  )
             {
-                ::vos::ORef< SwAccessibleContext > xAccImpl(
+                ::rtl::Reference< SwAccessibleContext > xAccImpl(
                     GetMap()->GetContextImpl( pLower, sal_False ) );
-                if( xAccImpl.isValid() )
+                if( xAccImpl.is() )
                 {
                     ASSERT( xAccImpl->GetFrm()->IsCellFrm(),
                              "table child is not a cell frame" )
                     bChanged |= static_cast< SwAccessibleCell *>(
-                            xAccImpl.getBodyPtr() )->_InvalidateMyCursorPos();
+                            xAccImpl.get() )->_InvalidateMyCursorPos();
                 }
                 else
                     bChanged = sal_True; // If the context is not know we
@@ -196,9 +196,9 @@ void SwAccessibleCell::_InvalidateCursorPos()
         sal_Bool bChanged = _InvalidateChildrenCursorPos( pTabFrm );
         if( bChanged )
         {
-            ::vos::ORef< SwAccessibleContext > xAccImpl(
+            ::rtl::Reference< SwAccessibleContext > xAccImpl(
                 GetMap()->GetContextImpl( pTabFrm, sal_False ) );
-            if( xAccImpl.isValid() )
+            if( xAccImpl.is() )
             {
                 AccessibleEventObject aEvent;
                 aEvent.EventId = AccessibleEventId::SELECTION_CHANGED;
@@ -255,9 +255,9 @@ uno::Sequence< OUString > SAL_CALL SwAccessibleCell::getSupportedServiceNames()
 void SwAccessibleCell::Dispose( sal_Bool bRecursive )
 {
     const SwFrm *pParent = GetParent( SwAccessibleChild(GetFrm()), IsInPagePreview() );
-    ::vos::ORef< SwAccessibleContext > xAccImpl(
+    ::rtl::Reference< SwAccessibleContext > xAccImpl(
             GetMap()->GetContextImpl( pParent, sal_False ) );
-    if( xAccImpl.isValid() )
+    if( xAccImpl.is() )
         xAccImpl->DisposeChild( SwAccessibleChild(GetFrm()), bRecursive );
     SwAccessibleContext::Dispose( bRecursive );
 }
@@ -265,9 +265,9 @@ void SwAccessibleCell::Dispose( sal_Bool bRecursive )
 void SwAccessibleCell::InvalidatePosOrSize( const SwRect& rOldBox )
 {
     const SwFrm *pParent = GetParent( SwAccessibleChild(GetFrm()), IsInPagePreview() );
-    ::vos::ORef< SwAccessibleContext > xAccImpl(
+    ::rtl::Reference< SwAccessibleContext > xAccImpl(
             GetMap()->GetContextImpl( pParent, sal_False ) );
-    if( xAccImpl.isValid() )
+    if( xAccImpl.is() )
         xAccImpl->InvalidateChildPosOrSize( SwAccessibleChild(GetFrm()), rOldBox );
     SwAccessibleContext::InvalidatePosOrSize( rOldBox );
 }

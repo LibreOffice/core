@@ -302,22 +302,22 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
     Reference< XAccessible > xChild;
     if( aChild.GetSwFrm() )
     {
-        ::vos::ORef < SwAccessibleContext > xChildImpl(
+        ::rtl::Reference < SwAccessibleContext > xChildImpl(
                 rContext.GetMap()->GetContextImpl( aChild.GetSwFrm(),
                 sal_True ) );
-        if( xChildImpl.isValid() )
+        if( xChildImpl.is() )
         {
             xChildImpl->SetParent( &rContext );
-            xChild = xChildImpl.getBodyPtr();
+            xChild = xChildImpl.get();
         }
     }
     else if ( aChild.GetDrawObject() )
     {
-        ::vos::ORef < ::accessibility::AccessibleShape > xChildImpl(
+        ::rtl::Reference < ::accessibility::AccessibleShape > xChildImpl(
                 rContext.GetMap()->GetContextImpl( aChild.GetDrawObject(),
                                           &rContext, sal_True )  );
-        if( xChildImpl.isValid() )
-            xChild = xChildImpl.getBodyPtr();
+        if( xChildImpl.is() )
+            xChild = xChildImpl.get();
     }
     return xChild;
 }

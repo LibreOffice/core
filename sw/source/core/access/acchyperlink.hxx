@@ -28,7 +28,7 @@
 #ifndef _ACCHYPERLINK_HXX
 #define _ACCHYPERLINK_HXX
 #include <com/sun/star/accessibility/XAccessibleHyperlink.hpp>
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <fmtinfmt.hxx>
 
@@ -42,7 +42,7 @@ class SwAccessibleHyperlink :
     friend class SwAccessibleParagraph;
     friend class SwAccessibleHyperTextData;
     sal_uInt16 nHintPos;
-    ::vos::ORef< SwAccessibleParagraph > xPara;
+    ::rtl::Reference< SwAccessibleParagraph > xPara;
     sal_Int32 nStartIdx;
     sal_Int32 nEndIdx;
 

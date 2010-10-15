@@ -73,11 +73,11 @@ SwAccessibleChildSList_const_iterator::SwAccessibleChildSList_const_iterator(
             }
             if ( !aCurr.IsValid() )
             {
-                ::vos::ORef < SwAccessibleContext > xAccImpl =
+                ::rtl::Reference < SwAccessibleContext > xAccImpl =
                                     rAccMap.GetContextImpl( &rFrm, sal_False );
-                if( xAccImpl.isValid() )
+                if( xAccImpl.is() )
                 {
-                    SwAccessibleContext* pAccImpl = xAccImpl.getBodyPtr();
+                    SwAccessibleContext* pAccImpl = xAccImpl.get();
                     aCurr = SwAccessibleChild( pAccImpl->GetAdditionalAccessibleChild( 0 ) );
                     ++nNextObj;
                 }
@@ -139,11 +139,11 @@ SwAccessibleChildSList_const_iterator& SwAccessibleChildSList_const_iterator::ne
             }
             if ( !aCurr.IsValid() )
             {
-                ::vos::ORef < SwAccessibleContext > xAccImpl =
+                ::rtl::Reference < SwAccessibleContext > xAccImpl =
                                     rList.GetAccMap().GetContextImpl( &rFrm, sal_False );
-                if( xAccImpl.isValid() )
+                if( xAccImpl.is() )
                 {
-                    SwAccessibleContext* pAccImpl = xAccImpl.getBodyPtr();
+                    SwAccessibleContext* pAccImpl = xAccImpl.get();
                     aCurr = SwAccessibleChild( pAccImpl->GetAdditionalAccessibleChild( nNextObj - nObjsCount ) );
                     ++nNextObj;
                 }

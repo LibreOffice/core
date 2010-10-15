@@ -3814,7 +3814,7 @@ void SwXDocumentPropertyHelper::Invalidate()
     xMarkerTable = 0;
     xDrawDefaults = 0;
     m_pDoc = 0;
-    SvxUnoForbiddenCharsTable::mxForbiddenChars.unbind();
+    SvxUnoForbiddenCharsTable::mxForbiddenChars.clear();
 }
 
 void SwXDocumentPropertyHelper::onChange()

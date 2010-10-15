@@ -72,6 +72,8 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::io;
 using namespace ::xmloff::token;
+using rtl::OUString;
+using rtl::OUStringBuffer;
 
 enum SvEmbeddedObjectTypes
 {

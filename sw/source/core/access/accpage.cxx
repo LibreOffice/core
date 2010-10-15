@@ -70,7 +70,7 @@ void SwAccessiblePage::GetStates(
     if( IsSelected() )
     {
         ASSERT( bIsSelected, "bSelected out of sync" );
-        ::vos::ORef < SwAccessibleContext > xThis( this );
+        ::rtl::Reference < SwAccessibleContext > xThis( this );
         GetMap()->SetCursorContext( xThis );
 
         Window *pWin = GetWindow();
@@ -94,7 +94,7 @@ void SwAccessiblePage::_InvalidateCursorPos()
     {
         // remember that object as the one that has the caret. This is
         // neccessary to notify that object if the cursor leaves it.
-        ::vos::ORef < SwAccessibleContext > xThis( this );
+        ::rtl::Reference < SwAccessibleContext > xThis( this );
         GetMap()->SetCursorContext( xThis );
     }
 

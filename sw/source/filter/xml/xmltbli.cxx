@@ -79,6 +79,7 @@ using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 using ::std::hash_map;
+using rtl::OUString;
 
 enum SwXMLTableElemTokens
 {
