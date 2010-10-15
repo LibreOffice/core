@@ -140,7 +140,7 @@ SdTransferable::~SdTransferable()
     if( mpSdView )
         EndListening( *const_cast< sd::View *>( mpSdView) );
 
-    Application::GetSolarMutex().acquire();
+    SolarMutexGuard aSolarGuard;
 
     ObjectReleased();
 
@@ -171,7 +171,6 @@ SdTransferable::~SdTransferable()
     delete mpVDev;
     delete mpObjDesc;
 
-    Application::GetSolarMutex().release();
 }
 
 // -----------------------------------------------------------------------------
