@@ -1050,7 +1050,7 @@ ObjectFormatterData::ObjectFormatterData( const XmlFilterBase& rFilter, const Re
 
     try
     {
-        Reference< XNumberFormatsSupplier > xNumFmtsSupp( mrFilter.getModel(), UNO_QUERY_THROW );
+        Reference< XNumberFormatsSupplier > xNumFmtsSupp( rxChartDoc, UNO_QUERY_THROW );
         mxNumFmts = xNumFmtsSupp->getNumberFormats();
         mxNumTypes.set( mxNumFmts, UNO_QUERY );
     }

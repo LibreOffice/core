@@ -100,7 +100,17 @@ void DoubleSequenceContext::onEndElement( const OUString& rChars )
         break;
         case C_TOKEN( v ):
             if( mnPtIndex >= 0 )
-                mrModel.maData[ mnPtIndex ] <<= rChars.toDouble();
+            {
+                /* Import categories as String even though it could
+                 * be values.
+                 * TODO: NumberFormat conversion, remove the check then.
+                 */
+                if( isPreviousElement( C_TOKEN( cat ), 4 ) ||
+                    isPreviousElement( C_TOKEN( xVal ), 4 ) )
+                    mrModel.maData[ mnPtIndex ] <<= rChars;
+                else
+                    mrModel.maData[ mnPtIndex ] <<= rChars.toDouble();
+            }
         break;
     }
 }
