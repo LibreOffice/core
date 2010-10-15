@@ -3684,6 +3684,10 @@ sal_Bool SfxObjectShell::WriteThumbnail( sal_Bool bEncrypted,
             uno::Reference< io::XTruncate > xTruncate( xStream->getOutputStream(), uno::UNO_QUERY_THROW );
             xTruncate->truncate();
 
+            uno::Reference < beans::XPropertySet > xSet( xStream, uno::UNO_QUERY );
+            if ( xSet.is() )
+                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("MediaType"),
+                                        uno::makeAny( ::rtl::OUString::createFromAscii("image/png") ) );
             if ( bEncrypted )
             {
                 sal_uInt16 nResID = GraphicHelper::getThumbnailReplacementIDByFactoryName_Impl(
