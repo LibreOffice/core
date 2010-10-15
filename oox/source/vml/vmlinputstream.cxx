@@ -255,6 +255,10 @@ StreamDataContainer::StreamDataContainer( const Reference< XInputStream >& rxInS
                     }
                 }
             }
+            else
+            {
+                pcCurr = pcEnd;
+            }
         }
 
         // set the final data sequence
