@@ -646,7 +646,7 @@ void SAL_CALL OFieldExpressionControl::elementInserted(const container::Containe
 {
     if ( m_bIgnoreEvent )
         return;
-    ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
     sal_Int32 nGroupPos = 0;
     if ( evt.Accessor >>= nGroupPos )
@@ -695,7 +695,7 @@ void SAL_CALL OFieldExpressionControl::elementReplaced(const container::Containe
 //------------------------------------------------------------------------------
 void SAL_CALL OFieldExpressionControl::elementRemoved(const container::ContainerEvent& evt) throw(uno::RuntimeException)
 {
-    ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
 
     if ( m_bIgnoreEvent )
