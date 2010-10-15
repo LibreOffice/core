@@ -298,6 +298,14 @@ public class OfficeDocument
     }
 
     /* ------------------------------------------------------------------ */
+    /** creates a component at the service factory provided by the document, queried for a given interface type
+    */
+    public <T> T createInstance( String i_serviceSpecifier, Class<T> i_interfaceClass ) throws com.sun.star.uno.Exception
+    {
+        return UnoRuntime.queryInterface( i_interfaceClass, createInstance( i_serviceSpecifier ) );
+    }
+
+    /* ------------------------------------------------------------------ */
     /** creates a component at the service factory provided by the document
     */
     public XInterface createInstanceWithArguments( String serviceSpecifier, Object[] arguments ) throws com.sun.star.uno.Exception
