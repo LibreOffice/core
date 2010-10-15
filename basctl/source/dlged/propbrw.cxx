@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basctl.hxx"
 
-
+#include <sal/macros.h>
 #include "propbrw.hxx"
 #include "dlgedobj.hxx"
 
@@ -204,8 +204,7 @@ void PropBrw::ImplReCreateController()
             ::cppu::ContextEntry_Init( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ContextDocument" ) ), makeAny( m_xContextDocument ) )
         };
         Reference< XComponentContext > xInspectorContext(
-            ::cppu::createComponentContext( aHandlerContextInfo, sizeof( aHandlerContextInfo ) / sizeof( aHandlerContextInfo[0] ),
-            xOwnContext ) );
+            ::cppu::createComponentContext( aHandlerContextInfo, SAL_N_ELEMENTS( aHandlerContextInfo ), xOwnContext ) );
 
         // create a property browser controller
         Reference< XMultiComponentFactory > xFactory( xInspectorContext->getServiceManager(), UNO_QUERY_THROW );

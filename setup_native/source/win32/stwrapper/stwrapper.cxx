@@ -13,8 +13,6 @@
 
 #include <stdio.h>
 
-#define elementsof(buf) (sizeof(buf) / sizeof(buf[0]))
-
 enum PathResult
 {
     PATHRESULT_OK,
@@ -281,7 +279,7 @@ int WINAPI _tWinMain( HINSTANCE /*hInstance*/, HINSTANCE, LPTSTR, int )
                         {
                             if ( i < nArgs )
                                 ++i;
-                            SafeCopy( szInstanceURN, lpArgs[i], elementsof( szInstanceURN ));
+                            SafeCopy( szInstanceURN, lpArgs[i], SAL_N_ELEMENTS( szInstanceURN ));
                             break;
                         }
 
@@ -289,35 +287,35 @@ int WINAPI _tWinMain( HINSTANCE /*hInstance*/, HINSTANCE, LPTSTR, int )
                         {
                             if ( i < nArgs )
                                 ++i;
-                            SafeCopy( szTargetURN, lpArgs[i], elementsof( szTargetURN ));
+                            SafeCopy( szTargetURN, lpArgs[i], SAL_N_ELEMENTS( szTargetURN ));
                             break;
                         }
                         case 'p':
                         {
                             if ( i < nArgs )
                                 ++i;
-                            SafeCopy( szProductName, lpArgs[i], elementsof( szProductName ));
+                            SafeCopy( szProductName, lpArgs[i], SAL_N_ELEMENTS( szProductName ));
                             break;
                         }
                         case 'e':
                         {
                             if ( i < nArgs )
                                 ++i;
-                            SafeCopy( szProductVersion, lpArgs[i], elementsof( szProductVersion ));
+                            SafeCopy( szProductVersion, lpArgs[i], SAL_N_ELEMENTS( szProductVersion ));
                             break;
                         }
                         case 'P':
                         {
                             if ( i < nArgs )
                                 ++i;
-                            SafeCopy( szParentProductName, lpArgs[i], elementsof( szParentProductName ));
+                            SafeCopy( szParentProductName, lpArgs[i], SAL_N_ELEMENTS( szParentProductName ));
                             break;
                         }
                         case 'S':
                         {
                             if ( i < nArgs )
                                 ++i;
-                            SafeCopy( szProductSource, lpArgs[i], elementsof( szProductSource ));
+                            SafeCopy( szProductSource, lpArgs[i], SAL_N_ELEMENTS( szProductSource ));
                             break;
                         }
 

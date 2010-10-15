@@ -59,6 +59,7 @@
 #include <unotools/localfilehelper.hxx>
 #include <unotools/extendedsecurityoptions.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+
 #define _SVX_OPTINET2_CXX
 #include <dialmgr.hxx>
 #include "optinet2.hxx"
@@ -87,6 +88,7 @@
 #include <osl/nlsupport.h>
 #endif
 #include <sal/types.h>
+#include <sal/macros.h>
 #include <rtl/ustring.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>
@@ -911,7 +913,7 @@ void SvxSearchTabPage::InitControls_Impl()
     long nLabelTextWidth = 0;
     Window* pLabels[] = { &aSearchNameFT, &aSearchFT, &aURLFT, &aPostFixFT, &aSeparatorFT, &aCaseFT };
     Window** pLabel = pLabels;
-    const sal_Int32 nLabelCount = sizeof( pLabels ) / sizeof( pLabels[0] );
+    const sal_Int32 nLabelCount = SAL_N_ELEMENTS( pLabels );
     for ( ; i < nLabelCount; ++i, ++pLabel )
     {
         long nTemp = (*pLabel)->GetCtrlTextWidth( (*pLabel)->GetText() );
@@ -935,7 +937,7 @@ void SvxSearchTabPage::InitControls_Impl()
     Window* pEdits[] = { &aSearchNameED, &aAndRB, &aOrRB,
         &aExactRB, &aURLED, &aPostFixED, &aSeparatorED, &aCaseED };
     Window** pEdit = pEdits;
-    const sal_Int32 nCCount = sizeof( pEdits ) / sizeof( pEdits[ 0 ] );
+    const sal_Int32 nCCount = SAL_N_ELEMENTS( pEdits );
     for ( i = 0; i < nCCount; ++i, ++pEdit )
     {
         Point aNewPos = (*pEdit)->GetPosPixel();
@@ -1540,7 +1542,7 @@ void SvxSecurityTabPage::InitControls()
     Window* pButtons[] = { &maSecurityOptionsPB, &maMasterPasswordPB,
                            &maShowConnectionsPB, &maMacroSecPB };
     Window** pButton = pButtons;
-    const sal_Int32 nBCount = sizeof( pButtons ) / sizeof( pButtons[ 0 ] );
+    const sal_Int32 nBCount = SAL_N_ELEMENTS( pButtons );
     for ( ; i < nBCount; ++i, ++pButton )
     {
         long nTemp = (*pButton)->GetCtrlTextWidth( (*pButton)->GetText() );
@@ -1580,7 +1582,7 @@ void SvxSecurityTabPage::InitControls()
         Window* pControls[] = { &maSecurityOptionsFI, &maSavePasswordsCB,
                                 &maMasterPasswordFI, &maMacroSecFI };
         Window** pControl = pControls;
-        const sal_Int32 nCCount = sizeof( pControls ) / sizeof( pControls[ 0 ] );
+        const sal_Int32 nCCount = SAL_N_ELEMENTS( pControls );
         for ( i = 0; i < nCCount; ++i, ++pControl )
         {
             Size aNewSize = (*pControl)->GetSizePixel();

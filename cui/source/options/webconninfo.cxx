@@ -32,6 +32,7 @@
 // include ---------------------------------------------------------------
 #include <dialmgr.hxx>
 #include <cuires.hrc>
+#include <sal/macros.h>
 #include <com/sun/star/task/UrlRecord.hpp>
 #include <com/sun/star/task/XPasswordContainer.hpp>
 #include <com/sun/star/task/XMasterPasswordHandling.hpp>
@@ -128,7 +129,7 @@ WebConnectionInfoDialog::WebConnectionInfoDialog( Window* pParent ) :
     long nBtnTextWidth = 0;
     Window* pButtons[] = { &m_aRemoveBtn, &m_aRemoveAllBtn, &m_aChangeBtn };
     Window** pButton = pButtons;
-    const sal_Int32 nBCount = sizeof( pButtons ) / sizeof( pButtons[ 0 ] );
+    const sal_Int32 nBCount = SAL_N_ELEMENTS( pButtons );
     for ( ; i < nBCount; ++i, ++pButton )
     {
         long nTemp = (*pButton)->GetCtrlTextWidth( (*pButton)->GetText() );

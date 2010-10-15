@@ -38,6 +38,7 @@
 #include <sanedlg.hrc>
 #include <grid.hxx>
 #include <math.h>
+#include <sal/macros.h>
 
 #define USE_SAVE_STATE
 #undef  SAVE_ALL_STATES
@@ -395,7 +396,7 @@ void SaneDlg::InitFields()
         {
             BOOL bIsSpecial = FALSE;
             for( size_t n = 0; !bIsSpecial &&
-                     n < sizeof(ppSpecialOptions)/sizeof(ppSpecialOptions[0]); n++ )
+                     n < SAL_N_ELEMENTS(ppSpecialOptions); n++ )
             {
                 if( aOption.EqualsAscii( ppSpecialOptions[n] ) )
                     bIsSpecial=TRUE;
@@ -1314,9 +1315,7 @@ void SaneDlg::SaveState()
         "br-x",
         "br-y"
     };
-    for( size_t i = 0;
-         i < (sizeof(pSaveOptions)/sizeof(pSaveOptions[0]));
-         i++ )
+    for( size_t i = 0; i < SAL_N_ELEMENTS(pSaveOptions); i++ )
     {
         ByteString aOption = pSaveOptions[i];
         int nOption = mrSane.GetOptionByName( pSaveOptions[i] );

@@ -185,7 +185,7 @@ enum_ui_lang_proc (LPTSTR language, LONG_PTR /* unused_lParam */)
         return TRUE;
     ui_langs[num_ui_langs] = langid_to_string((LANGID) langid, NULL);
     num_ui_langs++;
-    if (num_ui_langs == sizeof(ui_langs) / sizeof(ui_langs[0]))
+    if (num_ui_langs == SAL_N_ELEMENTS(ui_langs) )
         return FALSE;
     return TRUE;
 }

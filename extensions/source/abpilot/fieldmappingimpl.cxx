@@ -42,6 +42,7 @@
 #include "abpresid.hrc"
 #include "componentmodule.hxx"
 #include <unotools/confignode.hxx>
+#include "sal/macros.h"
 
 //.........................................................................
 namespace abp
@@ -207,10 +208,10 @@ namespace abp
                     _rxORB, sDriverAliasesNodeName, -1, OConfigurationTreeRoot::CM_READONLY);
 
                 // loop through all programmatic pairs
-                DBG_ASSERT( 0 == ( sizeof( pMappingProgrammatics ) / sizeof( pMappingProgrammatics[ 0 ] ) ) % 2,
+                DBG_ASSERT( 0 == SAL_N_ELEMENTS( pMappingProgrammatics ) % 2,
                     "fieldmapping::defaultMapping: invalid programmatic map!" );
                 // number of pairs
-                sal_Int32 nIntersectedProgrammatics = sizeof( pMappingProgrammatics ) / sizeof( pMappingProgrammatics[ 0 ] ) / 2;
+                sal_Int32 nIntersectedProgrammatics = SAL_N_ELEMENTS( pMappingProgrammatics ) / 2;
 
                 const sal_Char** pProgrammatic = pMappingProgrammatics;
                 ::rtl::OUString sAddressProgrammatic;

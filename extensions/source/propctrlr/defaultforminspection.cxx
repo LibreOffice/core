@@ -42,6 +42,7 @@
 /** === end UNO includes === **/
 #include <cppuhelper/implbase1.hxx>
 #include <osl/diagnose.h>
+#include <sal/macros.h>
 
 //------------------------------------------------------------------------
 extern "C" void SAL_CALL createRegistryInfo_DefaultFormComponentInspectorModel()
@@ -159,7 +160,7 @@ namespace pcr
             { "com.sun.star.form.inspection.FormGeometryHandler", true }
         };
 
-        sal_Int32 nFactories = sizeof( aFactories ) / sizeof( aFactories[ 0 ] );
+        sal_Int32 nFactories = SAL_N_ELEMENTS( aFactories );
         Sequence< Any > aReturn( nFactories );
         Any* pReturn = aReturn.getArray();
         for ( sal_Int32 i = 0; i < nFactories; ++i )
@@ -189,7 +190,7 @@ namespace pcr
             { "Events",     RID_STR_EVENTS,             HID_FM_PROPDLG_TAB_EVT }
         };
 
-        sal_Int32 nCategories = sizeof( aCategories ) / sizeof( aCategories[0] );
+        sal_Int32 nCategories = SAL_N_ELEMENTS( aCategories );
         Sequence< PropertyCategoryDescriptor > aReturn( nCategories );
         PropertyCategoryDescriptor* pReturn = aReturn.getArray();
         for ( sal_Int32 i=0; i<nCategories; ++i, ++pReturn )

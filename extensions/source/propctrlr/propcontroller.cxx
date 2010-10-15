@@ -62,6 +62,7 @@
 
 #include <algorithm>
 #include <functional>
+#include <sal/macros.h>
 
 //------------------------------------------------------------------------
 // !!! outside the namespace !!!
@@ -1505,7 +1506,7 @@ namespace pcr
                 ::cppu::ContextEntry_Init( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DialogParentWindow" ) ), makeAny( VCLUnoHelper::GetInterface( m_pView ) ) )
             };
             xHandlerContext = ::cppu::createComponentContext(
-                aHandlerContextInfo, sizeof( aHandlerContextInfo ) / sizeof( aHandlerContextInfo[0] ),
+                aHandlerContextInfo, SAL_N_ELEMENTS( aHandlerContextInfo ),
                 m_aContext.getUNOContext() );
         }
 

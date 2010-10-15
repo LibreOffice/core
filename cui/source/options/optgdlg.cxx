@@ -78,6 +78,7 @@
 #include <dialmgr.hxx>
 #include <svtools/helpopt.hxx>
 #include <unotools/saveopt.hxx>
+#include <sal/macros.h>
 
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -246,7 +247,7 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
             &aInterpretFT, &aYearValueField, &aToYearFT
         };
         Window** pCurrent = pWins;
-        const sal_Int32 nCount = sizeof( pWins ) / sizeof( pWins[ 0 ] );
+        const sal_Int32 nCount = SAL_N_ELEMENTS( pWins );
         for ( sal_Int32 i = 0; i < nCount; ++i, ++pCurrent )
         {
             aNewPos = (*pCurrent)->GetPosPixel();
@@ -268,7 +269,7 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
             &aTwoFigureFL, &aInterpretFT, &aYearValueField, &aToYearFT
         };
         Window** pCurrent = pWins;
-        const sal_Int32 nCount = sizeof( pWins ) / sizeof( pWins[ 0 ] );
+        const sal_Int32 nCount = SAL_N_ELEMENTS( pWins );
         for ( sal_Int32 i = 0; i < nCount; ++i, ++pCurrent )
         {
             aNewPos = (*pCurrent)->GetPosPixel();
@@ -294,7 +295,7 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
             &aInterpretFT, &aYearValueField, &aToYearFT
         };
         Window** pCurrent = pWins;
-        const sal_Int32 nCount = sizeof( pWins ) / sizeof( pWins[ 0 ] );
+        const sal_Int32 nCount = SAL_N_ELEMENTS( pWins );
         for ( sal_Int32 i = 0; i < nCount; ++i, ++pCurrent )
         {
             aNewPos = (*pCurrent)->GetPosPixel();
@@ -803,7 +804,7 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
     DELETEZ( pFontAntiAliasing );
 
     Point aPos;
-    for ( sal_Int32 i = 0; i < sizeof( pMiscOptions ) / sizeof( pMiscOptions[0] ); ++i )
+    for ( sal_Int32 i = 0; i < SAL_N_ELEMENTS( pMiscOptions ); ++i )
     {
         aPos = pMiscOptions[i]->GetPosPixel( );
         aPos.Y() -= nMoveUp;

@@ -49,6 +49,8 @@
 #include <unotools/localfilehelper.hxx>
 #include <osl/thread.h>
 
+#include <sal/macros.h>
+
 using namespace ::rtl;
 using namespace ::osl;
 using namespace ::cppu;
@@ -172,7 +174,7 @@ void LangGuess_Impl::EnsureInitialized()
             {"sa", ""}, {"ta", ""}, {"th", ""},
             {"qu", ""}, {"yi", ""}
         };
-        sal_Int32 nNum = sizeof(aDisable) / sizeof(aDisable[0]);
+        sal_Int32 nNum = SAL_N_ELEMENTS(aDisable);
         Sequence< Locale > aDisableSeq( nNum );
         Locale *pDisableSeq = aDisableSeq.getArray();
         for (sal_Int32 i = 0;  i < nNum;  ++i)

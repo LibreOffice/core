@@ -69,6 +69,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <vos/mutex.hxx>
+#include <sal/macros.h>
 
 //--------------------------------------------------------------------------
 extern "C" void SAL_CALL createRegistryInfo_FormOperations()
@@ -1124,7 +1125,7 @@ namespace frm
                 FormFeature::SaveRecordChanges,
                 FormFeature::UndoRecordChanges
             };
-            size_t nFeatureCount = sizeof( pModifyDependentFeatures ) / sizeof( pModifyDependentFeatures[ 0 ] );
+            size_t nFeatureCount = SAL_N_ELEMENTS( pModifyDependentFeatures );
             s_aModifyDependentFeatures = Sequence< sal_Int16 >( pModifyDependentFeatures, nFeatureCount );
         }
 

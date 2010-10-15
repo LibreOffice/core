@@ -215,7 +215,7 @@ static void signal_handler( int nSig )
     fprintf( stderr, "caught signal %d, exiting\n", nSig );
 #ifdef LINUX
     void* pStack[64];
-    int nStackLevels = backtrace( pStack, sizeof(pStack)/sizeof(pStack[0]) );
+    int nStackLevels = backtrace( pStack, SAL_N_ELEMENTS(pStack) );
     backtrace_symbols_fd( pStack, nStackLevels, STDERR_FILENO );
 #endif
 #endif

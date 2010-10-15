@@ -944,7 +944,7 @@ BOOL CALLBACK PreviewDialogProc(
                 {
                     int i;
 
-                    count = fread( buf, sizeof(buf[0]), sizeof(buf)/sizeof(buf[0]), fp );
+                    count = fread( buf, sizeof(buf[0]), SAL_N_ELEMENTS(buf), fp );
 
                     for ( i = 0; i < count; i++ )
                     {

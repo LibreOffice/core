@@ -44,6 +44,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include <vos/mutex.hxx>
+#include <sal/macros.h>
 
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/basemutex.hxx>
@@ -166,7 +167,7 @@ namespace basctl
             { "OnModeChanged",  &DocumentEventListener::onDocumentModeChanged }
         };
 
-        for ( size_t i=0; i < sizeof( aEvents ) / sizeof( aEvents[0] ); ++i )
+        for ( size_t i=0; SAL_N_ELEMENTS( aEvents ); ++i )
         {
             if ( !_rEvent.EventName.equalsAscii( aEvents[i].pEventName ) )
                 continue;

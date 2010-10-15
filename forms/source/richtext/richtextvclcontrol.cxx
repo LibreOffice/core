@@ -262,7 +262,7 @@ namespace frm
 
                     ::sfx2::FileDialogHelper aFP( bLoad ? com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE : com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION, 0, this );
 
-                    for ( size_t i = 0; i < sizeof( aExportFormats ) / sizeof( aExportFormats[ 0 ] ); ++i )
+                    for ( size_t i = 0; i < SAL_N_ELEMENTS( aExportFormats ); ++i )
                     {
                         aFP.AddFilter(
                             String::CreateFromAscii( aExportFormats[i].pDescription ),
@@ -279,7 +279,7 @@ namespace frm
                         {
                             EETextFormat eFormat = EE_FORMAT_XML;
                             String sFilter = aFP.GetCurrentFilter();
-                            for ( size_t i = 0; i < sizeof( aExportFormats ) / sizeof( aExportFormats[ 0 ] ); ++i )
+                            for ( size_t i = 0; i < SAL_N_ELEMENTS( aExportFormats ); ++i )
                             {
                                 if ( sFilter.EqualsAscii( aExportFormats[i].pDescription ) )
                                 {

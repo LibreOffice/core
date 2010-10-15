@@ -407,7 +407,7 @@ static const char * aEidToPropName[] =
 
 static inline String lcl_GetPropertyName( EID_OPTIONS eEntryId )
 {
-    DBG_ASSERT( (unsigned int) eEntryId < sizeof(aEidToPropName) / sizeof(aEidToPropName[0]), "index out of range" );
+    DBG_ASSERT( (unsigned int) eEntryId < SAL_N_ELEMENTS(aEidToPropName), "index out of range" );
     return String::CreateFromAscii( aEidToPropName[ (int) eEntryId ] );
 }
 

@@ -43,6 +43,8 @@
 #include <sfx2/minfitem.hxx>
 #include <svl/stritem.hxx>
 
+#include <sal/macros.h>
+
 #include "cuires.hrc"
 #include "acccfg.hrc"
 
@@ -586,7 +588,7 @@ static USHORT __FAR_DATA KEYCODE_ARRAY[] =
     KEY_DELETE    | KEY_SHIFT | KEY_MOD1 | KEY_MOD2
 };
 
-static USHORT KEYCODE_ARRAY_SIZE = (sizeof(KEYCODE_ARRAY) / sizeof(KEYCODE_ARRAY[0]));
+static USHORT KEYCODE_ARRAY_SIZE = SAL_N_ELEMENTS(KEYCODE_ARRAY);
 
 //-----------------------------------------------
 // seems to be needed to layout the list box, which shows all

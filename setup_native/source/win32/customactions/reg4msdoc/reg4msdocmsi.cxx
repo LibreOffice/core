@@ -43,8 +43,6 @@
 #include <memory>
 #include <string>
 
-#define ELEMENTS_OF_ARRAY(a) (sizeof(a)/sizeof(a[0]))
-
 void DetermineWordPreselectionState(MSIHANDLE handle)
 {
     if (query_preselect_registration_for_ms_application(handle, MSWORD))

@@ -60,7 +60,7 @@
 #include <lingutil.hxx>
 #include <dictmgr.hxx>
 
-
+#include <sal/macros.h>
 
 
 using ::com::sun::star::lang::Locale;
@@ -88,7 +88,7 @@ rtl::OString Win_GetShortPathName( const rtl::OUString &rLongPathName )
     rtl::OString aRes;
 
     sal_Unicode aShortBuffer[1024] = {0};
-    sal_Int32   nShortBufSize = sizeof( aShortBuffer ) / sizeof( aShortBuffer[0] );
+    sal_Int32   nShortBufSize = SAL_N_ELEMENTS( aShortBuffer );
 
     // use the version of 'GetShortPathName' that can deal with Unicode...
     sal_Int32 nShortLen = GetShortPathNameW(

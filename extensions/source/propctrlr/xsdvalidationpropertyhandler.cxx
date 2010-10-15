@@ -53,6 +53,7 @@
 #include <vcl/msgbox.hxx>
 #include <tools/debug.hxx>
 #include <svtools/localresaccess.hxx>
+#include <sal/macros.h>
 
 #include <algorithm>
 #include <functional>
@@ -629,7 +630,7 @@ namespace pcr
             size_t i=0;
             const ::rtl::OUString* pLoop = NULL;
             for ( i = 0, pLoop = aFacets;
-                  i < sizeof( aFacets ) / sizeof( aFacets[0] );
+                  i < SAL_N_ELEMENTS( aFacets );
                   ++i, ++pLoop
                 )
             {

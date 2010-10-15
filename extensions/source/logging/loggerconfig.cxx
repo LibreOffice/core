@@ -51,6 +51,7 @@
 #include <cppuhelper/component_context.hxx>
 
 #include <vector>
+#include <sal/macros.h>
 
 //........................................................................
 namespace logging
@@ -114,7 +115,7 @@ namespace logging
                 Variable( RTL_CONSTASCII_USTRINGPARAM( "$(loggername)" ), sLoggerName )
             };
 
-            for ( size_t i = 0; i < sizeof( aVariables ) / sizeof( aVariables[0] ); ++i )
+            for ( size_t i = 0; i < SAL_N_ELEMENTS( aVariables ); ++i )
             {
                 ::rtl::OUString sPattern( aVariables[i].pVariablePattern, aVariables[i].nPatternLength, aVariables[i].eEncoding );
                 sal_Int32 nVariableIndex = _inout_rFileURL.indexOf( sPattern );

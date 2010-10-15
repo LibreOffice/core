@@ -756,8 +756,7 @@ int SAL_CALL main (int argc, char **argv)
                     S2U("mhu@rabbit")
                 };
 
-                sal_Int32 nRecipients =
-                    sizeof(aRecipients) / sizeof(aRecipients[0]);
+                sal_Int32 nRecipients = SAL_N_ELEMENTS(aRecipients);
 
                 if (nOptions & OPTION_SIGN)
                 {
