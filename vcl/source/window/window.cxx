@@ -9401,7 +9401,7 @@ void Window::DrawSelectionBackground( const Rectangle& rRect,
         if( bDark )
             aSelectionFillCol = COL_BLACK;
         else
-            nPercent = bRoundEdges ? 90 : 80;  // just checked (light)
+            nPercent = 80;  // just checked (light)
     }
     else
     {
@@ -9416,7 +9416,7 @@ void Window::DrawSelectionBackground( const Rectangle& rRect,
                 nPercent = 0;
             }
             else
-                nPercent = bRoundEdges ? 50 : 20;          // selected, pressed or checked ( very dark )
+                nPercent = bRoundEdges ? 40 : 20;          // selected, pressed or checked ( very dark )
         }
         else if( bChecked || highlight == 1 )
         {
@@ -9429,7 +9429,7 @@ void Window::DrawSelectionBackground( const Rectangle& rRect,
                 nPercent = 0;
             }
             else
-                nPercent = bRoundEdges ? 70 : 35;          // selected, pressed or checked ( very dark )
+                nPercent = bRoundEdges ? 60 : 35;          // selected, pressed or checked ( very dark )
         }
         else
         {
@@ -9445,7 +9445,7 @@ void Window::DrawSelectionBackground( const Rectangle& rRect,
                     nPercent = 0;
             }
             else
-                nPercent = bRoundEdges ? 80 : 70;          // selected ( dark )
+                nPercent = 70;          // selected ( dark )
         }
     }
 
