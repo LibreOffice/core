@@ -165,7 +165,7 @@ template <class XX>
 void
 List<XX>::checkSize(unsigned newLength)
 {
-   // neuen Platzbedarf pruefen:
+   // test new size requirement:
    unsigned newSpace = space();
    if (newLength > newSpace)
    {
@@ -184,7 +184,7 @@ List<XX>::checkSize(unsigned newLength)
       }
    }
 
-   // Veraenderung ?:
+   // change?
    if (newSpace != space())
       alloc(newSpace,true);
 }

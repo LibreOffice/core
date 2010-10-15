@@ -241,7 +241,7 @@ Index::WriteHeap( std::ostream &    o_rOut,
 
 
 
-/** Übersicht der Struktur
+/** Structure overview
 
 MODULEDESCRIPTION
 {

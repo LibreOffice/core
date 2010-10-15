@@ -128,7 +128,7 @@ Do_SingleFileCommandLine(const CommandLine & i_rCommandLine)
 int
 Do_IndexCommandLine(const CommandLine & i_rCommandLine)
 {
-    // Parsen files:
+    // Parse files:
     List<Simstr>    aFiles;
     Index           aIndex( i_rCommandLine.OutputDirectory(),
                             i_rCommandLine.IdlRootPath(),
