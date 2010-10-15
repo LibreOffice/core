@@ -55,8 +55,6 @@ using namespace rtl;
 
 #define TB_SEP_SIZE             8
 
-ButtonType determineButtonType( ImplToolItem* pItem, ButtonType defaultType );
-
 // -----------------------------------------------------------------------
 
 ImplToolBoxPrivateData::ImplToolBoxPrivateData() :

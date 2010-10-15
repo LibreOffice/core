@@ -290,8 +290,6 @@ UnoControlDialogModel::UnoControlDialogModel()
     aBool <<= (sal_Bool) sal_True;
     ImplRegisterProperty( BASEPROPERTY_MOVEABLE, aBool );
     ImplRegisterProperty( BASEPROPERTY_CLOSEABLE, aBool );
-    aBool <<= (sal_Bool) sal_False;
-    ImplRegisterProperty( BASEPROPERTY_VBAFORM, aBool );
 }
 
 UnoControlDialogModel::UnoControlDialogModel( const UnoControlDialogModel& rModel )
@@ -1486,32 +1484,17 @@ void UnoDialogControl::ImplSetPosSize( Reference< XControl >& rxCtrl )
     xP->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Width" ) ) ) >>= nWidth;
     xP->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Height" ) ) ) >>= nHeight;
 
-    // Currentley we are simply using MAP_APPFONT ( for normal Dialogs )
-    // and MAP_100TH_MM for imported Userforms
-    MapMode aMode( MAP_APPFONT );
-    sal_Bool bVBAForm = sal_False;
-    Reference< XPropertySet > xDlgModelProps( getModel(), UNO_QUERY );
-    if ( xDlgModelProps.is() )
-    {
-        try
-        {
-            xDlgModelProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VBAForm" ) ) ) >>= bVBAForm;
-        }
-        catch( Exception& )
-        {
-        }
-    }
-    if ( bVBAForm )
-        aMode = MapMode( MAP_100TH_MM );
+    // Currentley we are simply using MAP_APPFONT
     OutputDevice*pOutDev = Application::GetDefaultDevice();
+    DBG_ASSERT( pOutDev, "Missing Default Device!" );
     if ( pOutDev )
     {
         ::Size aTmp( nX, nY );
-        aTmp = pOutDev->LogicToPixel( aTmp, aMode );
+        aTmp = pOutDev->LogicToPixel( aTmp, MAP_APPFONT );
         nX = aTmp.Width();
         nY = aTmp.Height();
         aTmp = ::Size( nWidth, nHeight );
-        aTmp = pOutDev->LogicToPixel( aTmp, aMode );
+        aTmp = pOutDev->LogicToPixel( aTmp, MAP_APPFONT );
         nWidth = aTmp.Width();
         nHeight = aTmp.Height();
     }
