@@ -126,7 +126,7 @@ static char* platformSpecific()
     const int SEPARATOR = '/';
     const char* PATHSEPARATOR = ":";
     const char* PATHVARNAME = "PATH";
-    const char* APPENDIX = "/soffice";
+    const char* APPENDIX = "/libreoffice";
 
     char* path = NULL;
     char* env = NULL;
