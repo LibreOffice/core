@@ -116,6 +116,7 @@ static const sal_Char __FAR_DATA pFilterExcel95[]   = "MS Excel 95";
 static const sal_Char __FAR_DATA pFilterEx95Temp[]  = "MS Excel 95 Vorlage/Template";
 static const sal_Char __FAR_DATA pFilterExcel97[]   = "MS Excel 97";
 static const sal_Char __FAR_DATA pFilterEx97Temp[]  = "MS Excel 97 Vorlage/Template";
+static const sal_Char __FAR_DATA pFilter2003XML[]   = "MS Excel 2003 XML";
 static const sal_Char __FAR_DATA pFilterDBase[]     = "dBase";
 static const sal_Char __FAR_DATA pFilterDif[]       = "DIF";
 static const sal_Char __FAR_DATA pFilterSylk[]      = "SYLK";
@@ -439,7 +440,8 @@ static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                 bool bIsXLS = false;
                 SvStream* pStream = aMedium.GetInStream();
                 const SfxFilter* pPreselectedFilter = pFilter;
-                if ( pPreselectedFilter && pPreselectedFilter->GetName().SearchAscii("Excel") != STRING_NOTFOUND )
+                if ( ( pPreselectedFilter && pPreselectedFilter->GetName().SearchAscii("Excel") != STRING_NOTFOUND ) ||
+                    ( !aPreselectedFilterName.Len() && pPreselectedFilter->GetFilterName().EqualsAscii( pFilterAscii ) ) )
                     bIsXLS = true;
                 pFilter = 0;
                 if ( pStream )
@@ -722,52 +724,51 @@ static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                             // without the preselection other filters (Writer) take precedence
                             // DBase can't be detected reliably, so it also needs preselection
                             bool bMaybeText = lcl_MayBeAscii( rStr );
-                            if ( pPreselectedFilter->GetFilterName().EqualsAscii(pFilterAscii) && bMaybeText )
-                            {
-                                // Text filter is accepted if preselected
-                                pFilter = pPreselectedFilter;
-                            }
-                            else
-                            {
-                                // get file header
-                                rStr.Seek( 0 );
-                                const int nTrySize = 80;
-                                ByteString aHeader;
-                                for ( int j = 0; j < nTrySize && !rStr.IsEof(); j++ )
-                                {
-                                    sal_Char c;
-                                    rStr >> c;
-                                    aHeader += c;
-                                }
-                                aHeader += '\0';
 
-                                if ( HTMLParser::IsHTMLFormat( aHeader.GetBuffer() ) )
-                                {
-                                    // test for HTML
-                                    if ( pPreselectedFilter->GetName().EqualsAscii(pFilterHtml) )
-                                    {
-                                        pFilter = pPreselectedFilter;
-                                    }
-                                    else
-                                    {
-                                        pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterHtmlWeb) );
-                                        if ( bIsXLS )
-                                            bFakeXLS = true;
-                                    }
-                                }
-                                else if ( bIsXLS && bMaybeText )
-                                {
-                                    pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterAscii) );
-                                    bFakeXLS = true;
-                                }
-                                else if ( aHeader.CompareTo( "{\\rtf", 5 ) == COMPARE_EQUAL )
-                                {
-                                    // test for RTF
-                                    pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterRtf) );
-                                }
-                                else if ( pPreselectedFilter->GetName().EqualsAscii(pFilterDBase) && lcl_MayBeDBase( rStr ) )
-                                    pFilter = pPreselectedFilter;
+                            // get file header
+                            rStr.Seek( 0 );
+                            const int nTrySize = 80;
+                            ByteString aHeader;
+                            for ( int j = 0; j < nTrySize && !rStr.IsEof(); j++ )
+                            {
+                                sal_Char c;
+                                rStr >> c;
+                                aHeader += c;
                             }
+                            aHeader += '\0';
+
+                            if ( HTMLParser::IsHTMLFormat( aHeader.GetBuffer() ) )
+                            {
+                                // test for HTML
+                                if ( pPreselectedFilter->GetName().EqualsAscii(pFilterHtml) )
+                                {
+                                    pFilter = pPreselectedFilter;
+                                }
+                                else
+                                {
+                                    pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterHtmlWeb) );
+                                    if ( bIsXLS )
+                                        bFakeXLS = true;
+                                }
+                            }
+                            else if ( aHeader.CompareTo( "{\\rtf", 5 ) == COMPARE_EQUAL )
+                            {
+                                // test for RTF
+                                pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterRtf) );
+                            }
+                            else if ( bIsXLS && bMaybeText )
+                            {
+                                aHeader.EraseLeadingChars();
+                                if( aHeader.CompareTo( "<?xml", 5 ) == COMPARE_EQUAL )
+                                    pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilter2003XML) );
+                                else
+                                    pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterAscii) );
+                                bFakeXLS = true;
+                            }
+                            else if ( pPreselectedFilter->GetName().EqualsAscii(pFilterDBase) && lcl_MayBeDBase( rStr ) )
+                                pFilter = pPreselectedFilter;
+                            else if ( pPreselectedFilter->GetFilterName().EqualsAscii(pFilterAscii) && bMaybeText )
+                                pFilter = pPreselectedFilter;
                         }
                     }
                 }
