@@ -785,13 +785,13 @@ long ToolbarLayoutManager::childWindowEvent( VclSimpleEvent* pEvent )
     {
         if ( pEvent->GetId() == VCLEVENT_TOOLBOX_SELECT )
         {
-        ::rtl::OUString aToolbarName;
-        ::rtl::OUString aCommand;
+            ::rtl::OUString aToolbarName;
+            ::rtl::OUString aCommand;
             ToolBox*        pToolBox = getToolboxPtr( ((VclWindowEvent*)pEvent)->GetWindow() );
 
             if ( pToolBox )
-        {
-            aToolbarName = retrieveToolbarNameFromHelpURL( pToolBox );
+            {
+                aToolbarName = retrieveToolbarNameFromHelpURL( pToolBox );
                 USHORT nId = pToolBox->GetCurItemId();
                 if ( nId > 0 )
                     aCommand = pToolBox->GetItemCommand( nId );
@@ -836,16 +836,16 @@ long ToolbarLayoutManager::childWindowEvent( VclSimpleEvent* pEvent )
             ToolBox* pToolBox = getToolboxPtr( ((VclWindowEvent*)pEvent)->GetWindow() );
 
             if ( pToolBox )
-        {
-            ::rtl::OUString aToolbarName = retrieveToolbarNameFromHelpURL( pToolBox );
+            {
+                ::rtl::OUString aToolbarName = retrieveToolbarNameFromHelpURL( pToolBox );
 
-            if ( aToolbarName.getLength() > 0 )
-        {
+                if ( aToolbarName.getLength() > 0 )
+                {
                     WriteGuard aWriteLock( m_aLock );
-            m_bLayoutDirty = true;
+                    m_bLayoutDirty = true;
                     aWriteLock.unlock();
-            m_pParentLayouter->requestLayout( ILayoutNotifications::HINT_TOOLBARSPACE_HAS_CHANGED );
-        }
+                    m_pParentLayouter->requestLayout( ILayoutNotifications::HINT_TOOLBARSPACE_HAS_CHANGED );
+               }
             }
         }
     }

@@ -142,7 +142,7 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::a
 
         //---------------------------------------------------------------------------------------------------------
         // XLayoutManager forwards
-    //---------------------------------------------------------------------------------------------------------
+        //---------------------------------------------------------------------------------------------------------
         ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > getElement( const ::rtl::OUString& aName );
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > > getElements();
         sal_Bool dockWindow( const ::rtl::OUString& aName, ::com::sun::star::ui::DockingArea DockingArea, const ::com::sun::star::awt::Point& Pos );
@@ -161,32 +161,28 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::a
         ::com::sun::star::awt::Point getElementPos( const ::rtl::OUString& aName );
 
         //---------------------------------------------------------------------------------------------------------
-        // UNO interfaces
+        // XInterface
         //---------------------------------------------------------------------------------------------------------
-
-        //---------------------------------------------------------------------------------------------------------
-        //  XInterface
-    //---------------------------------------------------------------------------------------------------------
-    virtual void SAL_CALL acquire() throw();
-    virtual void SAL_CALL release() throw();
+        virtual void SAL_CALL acquire() throw();
+        virtual void SAL_CALL release() throw();
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw( ::com::sun::star::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
-        //  XEventListener
-    //---------------------------------------------------------------------------------------------------------
+        // XEventListener
+        //---------------------------------------------------------------------------------------------------------
         virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
-    //  XWindowListener
-    //---------------------------------------------------------------------------------------------------------
-    virtual void SAL_CALL windowResized( const css::awt::WindowEvent& aEvent ) throw( css::uno::RuntimeException );
-    virtual void SAL_CALL windowMoved( const css::awt::WindowEvent& aEvent ) throw( css::uno::RuntimeException );
+        // XWindowListener
+        //---------------------------------------------------------------------------------------------------------
+        virtual void SAL_CALL windowResized( const css::awt::WindowEvent& aEvent ) throw( css::uno::RuntimeException );
+        virtual void SAL_CALL windowMoved( const css::awt::WindowEvent& aEvent ) throw( css::uno::RuntimeException );
         virtual void SAL_CALL windowShown( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException );
         virtual void SAL_CALL windowHidden( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
-        //  XDockableWindowListener
-    //---------------------------------------------------------------------------------------------------------
+        // XDockableWindowListener
+        //---------------------------------------------------------------------------------------------------------
         virtual void SAL_CALL startDocking( const ::com::sun::star::awt::DockingEvent& e ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::awt::DockingData SAL_CALL docking( const ::com::sun::star::awt::DockingEvent& e ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL endDocking( const ::com::sun::star::awt::EndDockingEvent& e ) throw (::com::sun::star::uno::RuntimeException);
@@ -195,9 +191,9 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::a
         virtual void SAL_CALL closed( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL endPopupMode( const ::com::sun::star::awt::EndPopupModeEvent& e ) throw (::com::sun::star::uno::RuntimeException);
 
-    //---------------------------------------------------------------------------------------------------------
-        //  XUIConfigurationListener
-    //---------------------------------------------------------------------------------------------------------
+        //---------------------------------------------------------------------------------------------------------
+        // XUIConfigurationListener
+        //---------------------------------------------------------------------------------------------------------
         virtual void SAL_CALL elementInserted( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL elementRemoved( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL elementReplaced( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);

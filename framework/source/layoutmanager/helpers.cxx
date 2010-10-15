@@ -191,13 +191,29 @@ WindowAlign ImplConvertAlignment( sal_Int16 aAlignment )
         return WINDOWALIGN_BOTTOM;
 }
 
-void parseResourceURL( const rtl::OUString aResourceURL, rtl::OUString& aElementType, rtl::OUString& aElementName )
+::rtl::OUString getElementTypeFromResourceURL( const ::rtl::OUString& aResourceURL )
 {
-    sal_Int32 nIndex = 0;
+    ::rtl::OUString aType;
 
     ::rtl::OUString aUIResourceURL( UIRESOURCE_URL );
     if ( aResourceURL.indexOf( aUIResourceURL ) == 0 )
     {
+        sal_Int32       nIndex = 0;
+        ::rtl::OUString aPathPart   = aResourceURL.copy( aUIResourceURL.getLength() );
+        ::rtl::OUString aUIResource = aPathPart.getToken( 0, (sal_Unicode)'/', nIndex );
+
+        return aPathPart.getToken( 0, (sal_Unicode)'/', nIndex );
+    }
+
+    return aType;
+}
+
+void parseResourceURL( const rtl::OUString& aResourceURL, rtl::OUString& aElementType, rtl::OUString& aElementName )
+{
+    ::rtl::OUString aUIResourceURL( UIRESOURCE_URL );
+    if ( aResourceURL.indexOf( aUIResourceURL ) == 0 )
+    {
+        sal_Int32       nIndex = 0;
         ::rtl::OUString aPathPart   = aResourceURL.copy( aUIResourceURL.getLength() );
         ::rtl::OUString aUIResource = aPathPart.getToken( 0, (sal_Unicode)'/', nIndex );
 
