@@ -653,11 +653,13 @@ autoCaptions
 autoCompressPictures
 autoEnd
 autoExp
+autoFill
 autoFilter
 autoFilterDateGrouping
 autoFormatId
 autoFormatOverride
 autoHyphenation
+autoLine
 autoLoad
 autoNoTable
 autoPage
@@ -666,6 +668,7 @@ autoRecover
 autoRedefine
 autoRepublish
 autoRev
+autoScale
 autoShow
 autoSortScope
 autoSpaceDE
@@ -1210,6 +1213,7 @@ colFields
 colFirst
 colGrandTotals
 colHeaderCaption
+colHidden
 colHierarchiesUsage
 colHierarchyUsage
 colId
@@ -1248,6 +1252,7 @@ command
 commandType
 comment
 commentList
+commentPr
 commentRangeEnd
 commentRangeStart
 commentReference
@@ -1650,6 +1655,7 @@ defaultGridColor
 defaultMemberUniqueName
 defaultPivotStyle
 defaultRowHeight
+defaultSize
 defaultSubtotal
 defaultTabStop
 defaultTableStyle
@@ -3348,6 +3354,7 @@ moveTo
 moveToRangeEnd
 moveToRangeStart
 moveWith
+moveWithCells
 movie
 movingAvg
 mp
@@ -4239,6 +4246,7 @@ rowDrillCount
 rowFields
 rowGrandTotals
 rowHeaderCaption
+rowHidden
 rowHierarchiesUsage
 rowHierarchyUsage
 rowItems
@@ -4599,6 +4607,7 @@ singleclick
 size
 sizeAuto
 sizeRepresents
+sizeWithCells
 skew
 skewamt
 skewangle
@@ -5059,6 +5068,7 @@ textField
 textFields
 textFile
 textFit
+textHAlign
 textInflate
 textInflateBottom
 textInflateTop
@@ -5075,6 +5085,7 @@ textSlantUp
 textStop
 textTriangle
 textTriangleInverted
+textVAlign
 textWave1
 textWave2
 textWave4
