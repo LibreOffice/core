@@ -640,8 +640,9 @@ TabPage RID_TP_CUSTOMANIMATION_TEXT
         };
     };
 
-    Checkbox CBX_GROUP_AUTO
+    CheckBox CBX_GROUP_AUTO
     {
+        HelpID = "sd:CheckBox:RID_TP_CUSTOMANIMATION_TEXT:CBX_GROUP_AUTO";
         Pos = MAP_APPFONT ( X0 , 20  ) ;
         Size = MAP_APPFONT ( W0 , 10 ) ;
         TabStop = TRUE ;
@@ -667,16 +668,18 @@ TabPage RID_TP_CUSTOMANIMATION_TEXT
         SpinSize = 5 ;
     };
 
-    Checkbox CBX_ANIMATE_FORM
+    CheckBox CBX_ANIMATE_FORM
     {
+        HelpID = "sd:CheckBox:RID_TP_CUSTOMANIMATION_TEXT:CBX_ANIMATE_FORM";
         Pos = MAP_APPFONT ( X0 , 33  ) ;
         Size = MAP_APPFONT ( W0 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Animate attached shape" ;
     };
 
-    Checkbox CBX_REVERSE
+    CheckBox CBX_REVERSE
     {
+        HelpID = "sd:CheckBox:RID_TP_CUSTOMANIMATION_TEXT:CBX_REVERSE";
         Pos = MAP_APPFONT ( X0 , 46  ) ;
         Size = MAP_APPFONT ( W0 , 10 ) ;
         TabStop = TRUE ;
