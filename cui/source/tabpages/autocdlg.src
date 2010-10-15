@@ -526,8 +526,9 @@ TabPage RID_OFAPAGE_AUTOCORR_QUOTE
         Size = MAP_APPFONT ( 122 , 8 ) ;
         Text [ en-US ] = "Single quotes" ;
     };
-    Checkbox CB_SGL_TYPO
+    CheckBox CB_SGL_TYPO
     {
+            HelpId = "cui:CheckBox:RID_OFAPAGE_AUTOCORR_QUOTE:CB_SGL_TYPO";
         Pos = MAP_APPFONT ( 7 , 101 ) ;
         Size = MAP_APPFONT ( 86 , 10 ) ;
         Text [ en-US ] = "Repla~ce" ;

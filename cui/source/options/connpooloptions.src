@@ -36,7 +36,6 @@
 TabPage RID_OFAPAGE_CONNPOOLOPTIONS
 {
     HelpID = "cui:TabPage:RID_OFAPAGE_CONNPOOLOPTIONS";
-     // HelpId = ;
     OutputSize = TRUE ;
     Size = MAP_APPFONT ( PAGE_SIZE_X, PAGE_SIZE_Y ) ;
     SVLook = TRUE ;

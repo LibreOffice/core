@@ -33,7 +33,6 @@
 TabPage RID_OFAPAGE_HTMLOPT
 {
     HelpID = "cui:TabPage:RID_OFAPAGE_HTMLOPT";
-     // HelpId = ;
     OutputSize = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     SVLook = TRUE ;

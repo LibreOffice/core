@@ -33,7 +33,6 @@
 TabPage RID_OFAPAGE_MSFILTEROPT
 {
     HelpID = "cui:TabPage:RID_OFAPAGE_MSFILTEROPT";
-     // HelpId = ;
     OutputSize = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     SVLook = TRUE ;
@@ -121,7 +120,6 @@ TabPage RID_OFAPAGE_MSFILTEROPT
 TabPage RID_OFAPAGE_MSFILTEROPT2
 {
     HelpID = "cui:TabPage:RID_OFAPAGE_MSFILTEROPT2";
-     // HelpId = ;
     OutputSize = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     SVLook = TRUE ;
