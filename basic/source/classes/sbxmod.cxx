@@ -1131,29 +1131,6 @@ USHORT SbModule::Run( SbMethod* pMeth )
 
         pINST = new SbiInstance( (StarBASIC*) GetParent() );
 
-        // Launcher problem
-        // i80726 The Find below will genarate an error in Testtool so we reset it unless there was one before already
-        BOOL bWasError = SbxBase::GetError() != 0;
-        SbxVariable* pMSOMacroRuntimeLibVar = Find( aMSOMacroRuntimeLibName, SbxCLASS_OBJECT );
-        if ( !bWasError && (SbxBase::GetError() == SbxERR_PROC_UNDEFINED) )
-            SbxBase::ResetError();
-        if( pMSOMacroRuntimeLibVar )
-        {
-            StarBASIC* pMSOMacroRuntimeLib = PTR_CAST(StarBASIC,pMSOMacroRuntimeLibVar);
-            if( pMSOMacroRuntimeLib )
-            {
-                USHORT nGblFlag = pMSOMacroRuntimeLib->GetFlags() & SBX_GBLSEARCH;
-                pMSOMacroRuntimeLib->ResetFlag( SBX_GBLSEARCH );
-                SbxVariable* pAppSymbol = pMSOMacroRuntimeLib->Find( aMSOMacroRuntimeAppSymbol, SbxCLASS_METHOD );
-                pMSOMacroRuntimeLib->SetFlag( nGblFlag );
-                if( pAppSymbol )
-                {
-                    pMSOMacroRuntimeLib->SetFlag( SBX_EXTSEARCH );      // Could have been disabled before
-                    GetSbData()->pMSOMacroRuntimLib = pMSOMacroRuntimeLib;
-                }
-            }
-        }
-
         // Delete the Error-Stack
         SbErrorStack*& rErrStack = GetSbData()->pErrStack;
         delete rErrStack;
