@@ -135,11 +135,14 @@ interface XUndoManager
         <p>If one or more undo contexts are currently open, those will be implicit
 
         @see redo
+        @throws ::com::sun::star::util::InvalidStateException
+            when the Undo stack is currently empty
         @throws ::com::sun::star::lang::WrappedTargetException
             if the invocation of <member>XUndoAction::undo</member> raises an exception other than a <member scope="com::sun::star::uno">RuntimeException</member>
     */
     void    undo()
-            raises( ::com::sun::star::lang::WrappedTargetException );
+            raises( ::com::sun::star::util::InvalidStateException,
+                    ::com::sun::star::lang::WrappedTargetException );
 
     /** replays the action on the document which has most recently been undone
 
@@ -150,11 +153,14 @@ interface XUndoManager
         </ul></p>
 
         @see undo
+        @throws ::com::sun::star::util::InvalidStateException
+            when the Redo stack is currently empty
         @throws ::com::sun::star::lang::WrappedTargetException
             if the invocation of <member>XUndoAction::redo</member> raises an exception other than a <member scope="com::sun::star::uno">RuntimeException</member>
     */
     void    redo()
-            raises( ::com::sun::star::lang::WrappedTargetException );
+            raises( ::com::sun::star::util::InvalidStateException,
+                    ::com::sun::star::lang::WrappedTargetException );
 
     /** clears the undo and the redo stack.
     */

@@ -28,6 +28,7 @@
 #define __com_sun_star_document_XUndoManagerListener_idl__
 
 #include <com/sun/star/document/UndoManagerEvent.idl>
+#include <com/sun/star/lang/XEventListener.idl>
 
 //==================================================================================================================
 
@@ -39,7 +40,7 @@ module com { module sun { module star { module document {
 
     @see XUndoManager
  */
-interface XUndoManagerListener
+interface XUndoManagerListener : ::com::sun::star::lang::XEventListener
 {
     /** is called when an Undo action is added to the Undo stack.
 
