@@ -42,6 +42,15 @@ struct CommentModel
                         maRange;            /// Position of the comment in the worksheet.
     RichStringRef       mxText;             /// Formatted text of the comment.
     sal_Int32           mnAuthorId;         /// Identifier of the comment's author.
+    sal_Bool            mbAutoFill;         /// Auto Selection of comment object's fill style
+    sal_Bool            mbAutoScale;        /// Auto Scale comment text
+    sal_Bool            mbColHidden;        /// Comment cell's Column is Hidden
+    sal_Bool            mbLocked;           /// Comment changes Locked
+    sal_Bool            mbRowHidden;        /// Comment cell's Row is Hidden
+    sal_Int32           mnTHA;              /// Horizontal Alignment
+    sal_Int32           mnTVA;              /// Vertical Alignment
+    ::com::sun::star::awt::Rectangle
+                        maAnchor;           /// Anchor parameters
 
     explicit            CommentModel();
 };
@@ -55,6 +64,10 @@ public:
 
     /** Imports a cell comment from the passed attributes of the comment element. */
     void                importComment( const AttributeList& rAttribs );
+    /** Imports a cell comment Properties from the passed attributes of the comment element. */
+    void                importCommentPr( const AttributeList& rAttribs );
+    /** Imports the anchor points in CommentPr */
+    void                importAnchor( bool bFrom, sal_Int32 nWhich, const ::rtl::OUString &rChars );
     /** Imports a cell comment from the passed stream of a COMMENT record. */
     void                importComment( RecordInputStream& rStrm );
 

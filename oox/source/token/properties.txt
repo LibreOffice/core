@@ -267,6 +267,7 @@ MirroredY
 MissingValueTreatment
 Model
 ModifyPasswordHash
+MoveProtect
 MultiLine
 MultiPageValue
 MultiSelection
@@ -384,6 +385,7 @@ ShowPositiveError
 ShowZeroValues
 ShrinkToFit
 Size
+SizeProtect
 SortInfo
 Sound
 SoundOn
