@@ -51,7 +51,7 @@ OEvoabResultSetMetaData::~OEvoabResultSetMetaData()
 {
 }
 // -------------------------------------------------------------------------
-void OEvoabResultSetMetaData::setEvoabFields(const ::vos::ORef<connectivity::OSQLColumns> &xColumns) throw(SQLException)
+void OEvoabResultSetMetaData::setEvoabFields(const ::rtl::Reference<connectivity::OSQLColumns> &xColumns) throw(SQLException)
 {
         OSQLColumns::Vector::const_iterator aIter;
         static const ::rtl::OUString aName(::rtl::OUString::createFromAscii("Name"));

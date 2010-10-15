@@ -32,7 +32,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 
 class SvXMLImport;
 class SvXMLExport;
@@ -53,7 +53,7 @@ namespace xmloff
     {
     public:
         virtual SvXMLExport&                                getGlobalContext() = 0;
-        virtual ::vos::ORef< SvXMLExportPropertyMapper >    getStylePropertyMapper() = 0;
+        virtual ::rtl::Reference< SvXMLExportPropertyMapper >   getStylePropertyMapper() = 0;
 
         /** steps through a collection and exports all children of this collection
         */

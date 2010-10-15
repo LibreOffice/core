@@ -57,7 +57,7 @@ namespace connectivity
             sal_Int32                       m_nFilePos;                 // aktuelle IResultSetHelper::Movement
             SvStream*                       m_pFileStream;
             OEvoabConnection*               m_pConnection;
-            ::vos::ORef<OSQLColumns>        m_aColumns;
+            ::rtl::Reference<OSQLColumns>       m_aColumns;
             OValueRow                       m_aRow;
             sal_Bool                        m_bIsNull;
 
@@ -73,7 +73,7 @@ namespace connectivity
             OEvoabFolderList( OEvoabConnection* _pConnection);
 
             OEvoabConnection* getConnection() const { return m_pConnection;}
-            ::vos::ORef<OSQLColumns> getTableColumns() const {return m_aColumns;}
+            ::rtl::Reference<OSQLColumns> getTableColumns() const {return m_aColumns;}
             void construct(); // can throw any exception
             static SvStream* createStream_simpleError( const String& _rFileName, StreamMode _eOpenMode);
             void initializeRow(sal_Int32 _nColumnCount);

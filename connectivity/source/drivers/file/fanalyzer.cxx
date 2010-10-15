@@ -93,9 +93,9 @@ void OSQLAnalyzer::start(OSQLParseNode* pSQLParseNode)
                     ||  SQL_ISRULE(pColumnRef,factor)
                     ||  SQL_ISRULE(pColumnRef,set_fct_spec) )
                 {
-                    ::vos::ORef<OPredicateCompiler>     pCompiler = new OPredicateCompiler(this);
+                    ::rtl::Reference<OPredicateCompiler>        pCompiler = new OPredicateCompiler(this);
                     pCompiler->setOrigColumns(m_aCompiler->getOrigColumns());
-                    ::vos::ORef<OPredicateInterpreter>  pInterpreter = new OPredicateInterpreter(pCompiler);
+                    ::rtl::Reference<OPredicateInterpreter> pInterpreter = new OPredicateInterpreter(pCompiler);
                     pCompiler->execute( pColumnRef );
                     m_aSelectionEvaluations.push_back( TPredicates(pCompiler,pInterpreter) );
                 }
@@ -153,7 +153,7 @@ void OSQLAnalyzer::bindSelectRow(const OValueRefRow& _pRow)
     OEvaluateSetList    aEvaluateSetList;
     for ( ::std::vector< TPredicates >::iterator aIter = m_aSelectionEvaluations.begin(); aIter != m_aSelectionEvaluations.end();++aIter)
     {
-        if ( aIter->first.isValid() )
+        if ( aIter->first.is() )
             bindRow( aIter->first->m_aCodeList,_pRow,aEvaluateSetList);
     }
 }
@@ -197,7 +197,7 @@ void OSQLAnalyzer::bindSelectRow(const OValueRefRow& _pRow)
 }
 
 //------------------------------------------------------------------
-void OSQLAnalyzer::describeParam(::vos::ORef<OSQLColumns> rParameterColumns)
+void OSQLAnalyzer::describeParam(::rtl::Reference<OSQLColumns> rParameterColumns)
 {
     OCodeList& rCodeList    = m_aCompiler->m_aCodeList;
     OCodeStack aCodeStack;
@@ -208,7 +208,7 @@ void OSQLAnalyzer::describeParam(::vos::ORef<OSQLColumns> rParameterColumns)
         return; // keine Parameter
 
     // Anlegen von Columns, die eine genauere Beschreibung fuer die enthalten
-    ::vos::ORef<OSQLColumns> aNewParamColumns = new OSQLColumns(*rParameterColumns);
+    ::rtl::Reference<OSQLColumns> aNewParamColumns = new OSQLColumns(*rParameterColumns);
 
 
     // Anlegen einer Testzeile, wird benoetigt um die Parameter zu beschreiben
@@ -278,7 +278,7 @@ BOOL OSQLAnalyzer::hasFunctions() const
         m_bSelectionFirstTime = sal_False;
         for ( ::std::vector< TPredicates >::const_iterator aIter = m_aSelectionEvaluations.begin(); aIter != m_aSelectionEvaluations.end() && !m_bHasSelectionCode ;++aIter)
         {
-            if ( aIter->first.isValid() )
+            if ( aIter->first.is() )
                 m_bHasSelectionCode = aIter->first->hasCode();
         }
     }
@@ -290,7 +290,7 @@ void OSQLAnalyzer::setSelectionEvaluationResult(OValueRefRow& _pRow,const ::std:
     sal_Int32 nPos = 1;
     for ( ::std::vector< TPredicates >::iterator aIter = m_aSelectionEvaluations.begin(); aIter != m_aSelectionEvaluations.end();++aIter,++nPos)
     {
-        if ( aIter->second.isValid() )
+        if ( aIter->second.is() )
         {
             sal_Int32   map = nPos;
             // the first column (index 0) is for convenience only. The first real select column is no 1.
@@ -306,7 +306,7 @@ void OSQLAnalyzer::dispose()
     m_aCompiler->dispose();
     for ( ::std::vector< TPredicates >::iterator aIter = m_aSelectionEvaluations.begin(); aIter != m_aSelectionEvaluations.end();++aIter)
     {
-        if ( aIter->first.isValid() )
+        if ( aIter->first.is() )
             aIter->first->dispose();
     }
 }
@@ -316,7 +316,7 @@ void OSQLAnalyzer::setOrigColumns(const OFileColumns& rCols)
     m_aCompiler->setOrigColumns(rCols);
     for ( ::std::vector< TPredicates >::iterator aIter = m_aSelectionEvaluations.begin(); aIter != m_aSelectionEvaluations.end();++aIter)
     {
-        if ( aIter->first.isValid() )
+        if ( aIter->first.is() )
             aIter->first->setOrigColumns(rCols);
     }
 }

@@ -28,7 +28,7 @@
 #define CONNECTIVITY_ADABAS_RESULTSETMETADATA_HXX
 
 #include "odbc/OResultSetMetaData.hxx"
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 
 namespace connectivity
 {
@@ -41,10 +41,10 @@ namespace connectivity
         typedef odbc::OResultSetMetaData OAdabasResultSetMetaData_BASE;
         class OAdabasResultSetMetaData :    public  OAdabasResultSetMetaData_BASE
         {
-            ::vos::ORef<OSQLColumns>    m_aSelectColumns;
+            ::rtl::Reference<OSQLColumns>   m_aSelectColumns;
         public:
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
-            OAdabasResultSetMetaData(odbc::OConnection* _pConnection, SQLHANDLE _pStmt ,const ::vos::ORef<OSQLColumns>& _rSelectColumns);
+            OAdabasResultSetMetaData(odbc::OConnection* _pConnection, SQLHANDLE _pStmt ,const ::rtl::Reference<OSQLColumns>& _rSelectColumns);
             virtual ~OAdabasResultSetMetaData();
 
             virtual sal_Int32 SAL_CALL getColumnType( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);

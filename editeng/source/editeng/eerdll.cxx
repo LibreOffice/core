@@ -185,9 +185,9 @@ SfxPoolItem** GlobalEditData::GetDefItems()
     return ppDefItems;
 }
 
-vos::ORef<SvxForbiddenCharactersTable> GlobalEditData::GetForbiddenCharsTable()
+rtl::Reference<SvxForbiddenCharactersTable> GlobalEditData::GetForbiddenCharsTable()
 {
-    if ( !xForbiddenCharsTable.isValid() )
+    if ( !xForbiddenCharsTable.is() )
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
         xForbiddenCharsTable = new SvxForbiddenCharactersTable( xMSF );

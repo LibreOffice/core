@@ -98,7 +98,7 @@ namespace connectivity
             CreateKeySet creates the keyset which vaalues could be used to travel in your table/result
             The returned keyset is frozen.
         */
-        ::vos::ORef<OKeySet> CreateKeySet();
+        ::rtl::Reference<OKeySet> CreateKeySet();
 
 
 

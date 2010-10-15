@@ -82,6 +82,7 @@ SHL1STDLIBS=\
     $(CPPUHELPERLIB)			\
     $(VOSLIB)					\
     $(SALLIB)					\
+    $(SALHELPERLIB)					\
     $(DBTOOLSLIB)				\
     $(TOOLSLIB)					\
     $(ODBCBASELIB)				\

@@ -551,7 +551,7 @@ BOOL ODbaseIndex::CreateImpl()
     // Setzen der Headerinfo
     memset(&m_aHeader,0,sizeof(m_aHeader));
     sal_Int32 nType = 0;
-    ::vos::ORef<OSQLColumns> aCols = m_pTable->getTableColumns();
+    ::rtl::Reference<OSQLColumns> aCols = m_pTable->getTableColumns();
     const Reference< XPropertySet > xTableCol(*find(aCols->get().begin(),aCols->get().end(),aName,::comphelper::UStringMixEqual(isCaseSensitive())));
 
     xTableCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)) >>= nType;

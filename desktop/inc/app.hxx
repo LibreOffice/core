@@ -43,7 +43,6 @@
 using namespace com::sun::star::task;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
-using namespace rtl;
 
 #define DESKTOP_SAVETASKS_MOD 0x1
 #define DESKTOP_SAVETASKS_UNMOD 0x2
@@ -57,7 +56,7 @@ namespace desktop
  --------------------------------------------------------------------*/
 class CommandLineArgs;
 class Lockfile;
-class AcceptorMap : public std::map< OUString, Reference<XInitialization> > {};
+class AcceptorMap : public std::map< rtl::OUString, Reference<XInitialization> > {};
 struct ConvertData;
 class Desktop : public Application
 {
@@ -193,9 +192,9 @@ class Desktop : public Application
         static sal_Bool         isUIOnSessionShutdownAllowed();
 
         // on-demand acceptors
-        static void                         createAcceptor(const OUString& aDescription);
+        static void                         createAcceptor(const rtl::OUString& aDescription);
         static void                         enableAcceptors();
-        static void                         destroyAcceptor(const OUString& aDescription);
+        static void                         destroyAcceptor(const rtl::OUString& aDescription);
 
         sal_Bool                        m_bMinimized;
         sal_Bool                        m_bInvisible;

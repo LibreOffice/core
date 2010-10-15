@@ -68,7 +68,7 @@ void OEvoabPreparedStatement::construct( const ::rtl::OUString& _sql )
 
     m_aQueryData = impl_getEBookQuery_throw( m_sSqlStatement );
     ENSURE_OR_THROW( m_aQueryData.getQuery(), "no EBookQuery" );
-    ENSURE_OR_THROW( m_aQueryData.xSelectColumns.isValid(), "no SelectColumn" );
+    ENSURE_OR_THROW( m_aQueryData.xSelectColumns.is(), "no SelectColumn" );
 
     // create our meta data
     OEvoabResultSetMetaData* pMeta = new OEvoabResultSetMetaData( m_aQueryData.sTable );

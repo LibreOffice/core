@@ -59,9 +59,9 @@ using namespace ::com::sun::star::lang          ;
 using namespace ::com::sun::star::uno           ;
 using namespace ::cppu                          ;
 using namespace ::osl                           ;
-using namespace ::rtl                           ;
 using namespace ::std                           ;
-using namespace ::vos                           ;
+
+using rtl::OUString;
 
 //_________________________________________________________________________________________________________________
 //  non exported const

@@ -45,7 +45,6 @@
 #include <comphelper/sequence.hxx>
 
 using namespace connectivity::evoab;
-using namespace vos;
 using namespace dbtools;
 
 //------------------------------------------------------------------------------

@@ -244,7 +244,7 @@ protected:
             ::std::vector< ::rtl::OUString> m_aAttributeStrings;
             sal_Int32                m_nParamIndex;
             sal_Bool                 m_bIsAlwaysFalseQuery;
-            ::vos::ORef<OKeySet>     m_pKeySet;
+            ::rtl::Reference<OKeySet>     m_pKeySet;
             OSortIndex*              m_pSortIndex;
             sal_Int32                 m_nNewRow;        //inserted row
             sal_Int32                     m_nUpdatedRow;    //updated row
@@ -252,8 +252,8 @@ protected:
             sal_Int32                     m_bIsReadOnly;
             inline void resetParameters() { m_nParamIndex = 0; }
 
-            ::vos::ORef<connectivity::OSQLColumns>  m_xColumns; // this are the select columns
-            ::vos::ORef<connectivity::OSQLColumns>  m_xParamColumns;
+            ::rtl::Reference<connectivity::OSQLColumns>  m_xColumns; // this are the select columns
+            ::rtl::Reference<connectivity::OSQLColumns>  m_xParamColumns;
 
             void parseParameter( const OSQLParseNode* pNode, rtl::OUString& rMatchString );
             void fillRowData() throw( ::com::sun::star::sdbc::SQLException );
@@ -301,7 +301,7 @@ public:
             void setParameterRow(const OValueRow& _rParaRow)
                       { m_aParameterRow = _rParaRow; }
 
-            void setParameterColumns(const ::vos::ORef<connectivity::OSQLColumns>& _xParamColumns)
+            void setParameterColumns(const ::rtl::Reference<connectivity::OSQLColumns>& _xParamColumns)
                       { m_xParamColumns = _xParamColumns; }
 
             void setBindingRow(const OValueRow& _aRow)
@@ -319,7 +319,7 @@ public:
 
             static void setBoundedColumns(
                 const OValueRow& _rRow,
-                const ::vos::ORef<connectivity::OSQLColumns>& _rxColumns,
+                const ::rtl::Reference<connectivity::OSQLColumns>& _rxColumns,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xNames,
                 sal_Bool _bSetColumnMapping,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _xMetaData,
@@ -331,7 +331,7 @@ public:
             private:
                 inline void impl_ensureKeySet()
                 {
-                    if ( !m_pKeySet.isValid() )
+                    if ( !m_pKeySet.is() )
                         m_pKeySet = new OKeySet();
                 }
 

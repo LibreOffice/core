@@ -103,6 +103,7 @@ SHL1STDLIBS=\
     $(TOOLSLIB)					\
     $(UCBHELPERLIB)				\
     $(SALLIB)					\
+    $(SALHELPERLIB)					\
     $(DBTOOLSLIB)				\
     $(DBFILELIB)				\
     $(UNOTOOLSLIB)				\

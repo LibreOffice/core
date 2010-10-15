@@ -51,7 +51,7 @@ class OutputDevice;
 #include <vcl/field.hxx>
 #include "svx/svxdllapi.h"
 
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 
 #if defined(UNX) || defined(WIN) || defined(WNT)
 #define DEGREE_CHAR ((sal_Unicode)176)   /* 0xB0 = Ansi */
@@ -693,8 +693,8 @@ public:
     BOOL isLocked() const { return (BOOL)mbModelLocked; }
     void setLock( BOOL bLock );
 
-    void            SetForbiddenCharsTable( vos::ORef<SvxForbiddenCharactersTable> xForbiddenChars );
-    vos::ORef<SvxForbiddenCharactersTable>  GetForbiddenCharsTable() const;
+    void            SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars );
+    rtl::Reference<SvxForbiddenCharactersTable> GetForbiddenCharsTable() const;
 
     void SetCharCompressType( UINT16 nType );
     UINT16 GetCharCompressType() const { return mnCharCompressType; }

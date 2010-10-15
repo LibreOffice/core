@@ -92,7 +92,7 @@ void OEvoabFolderList::fillColumns(const ::com::sun::star::lang::Locale& _aLocal
     // column count
     xub_StrLen nFieldCount = aHeaderLine.GetTokenCount(pConnection->getFieldDelimiter(),pConnection->getStringDelimiter());
 
-    if(!m_aColumns.isValid())
+    if(!m_aColumns.is())
         m_aColumns = new OSQLColumns();
     else
         m_aColumns->get().clear();
@@ -524,7 +524,7 @@ sal_Int32 SAL_CALL OEvoabFolderList::getInt( sal_Int32 _nColumnIndex ) throw(SQL
 // -----------------------------------------------------------------------------
 void OEvoabFolderList::initializeRow(sal_Int32 _nColumnCount)
 {
-    if(!m_aRow.isValid())
+    if(!m_aRow.is())
     {
         m_aRow  = new OValueVector(_nColumnCount);
         (m_aRow->get())[0].setBound(sal_True);
@@ -555,7 +555,7 @@ sal_Bool SAL_CALL OEvoabFolderList::next(  ) throw(SQLException, RuntimeExceptio
 
 sal_Int32 SAL_CALL OEvoabFolderList::getRow(  ) throw(SQLException, RuntimeException)
 {
-    sal_Bool bRet = fetchRow(m_aRow,getTableColumns().getBody());
+    sal_Bool bRet = fetchRow(m_aRow,*(getTableColumns()));
     EVO_TRACE_STRING("OEvoabFolderList::getRow()::fetchRow() = %s\n", ::rtl::OUString::valueOf(bRet) );
 
     return bRet;

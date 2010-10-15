@@ -135,7 +135,7 @@ void OStatement_BASE2::disposing()
     if(m_pSQLAnalyzer)
         m_pSQLAnalyzer->dispose();
 
-    if(m_aRow.isValid())
+    if(m_aRow.is())
     {
         m_aRow->get().clear();
         m_aRow = NULL;
@@ -363,7 +363,7 @@ sal_Int32 SAL_CALL OStatement::executeUpdate( const ::rtl::OUString& sql ) throw
 void SAL_CALL OStatement_Base::disposing(void)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::disposing" );
-    if(m_aEvaluateRow.isValid())
+    if(m_aEvaluateRow.is())
     {
         m_aEvaluateRow->get().clear();
         m_aEvaluateRow = NULL;
@@ -458,7 +458,7 @@ void OStatement_Base::setOrderbyColumn( OSQLParseNode* pColumnRef,
     }
     catch(Exception)
     {
-        ::vos::ORef<OSQLColumns> aSelectColumns = m_aSQLIterator.getSelectColumns();
+        ::rtl::Reference<OSQLColumns> aSelectColumns = m_aSQLIterator.getSelectColumns();
         ::comphelper::UStringMixEqual aCase;
         OSQLColumns::Vector::const_iterator aFind = ::connectivity::find(aSelectColumns->get().begin(),aSelectColumns->get().end(),aColumnName,aCase);
         if ( aFind == aSelectColumns->get().end() )
@@ -554,7 +554,7 @@ void OStatement_Base::createColumnMapping()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::createColumnMapping" );
     // initialize the column index map (mapping select columns to table columns)
-    ::vos::ORef<connectivity::OSQLColumns>  xColumns = m_aSQLIterator.getSelectColumns();
+    ::rtl::Reference<connectivity::OSQLColumns> xColumns = m_aSQLIterator.getSelectColumns();
     m_aColMapping.resize(xColumns->get().size() + 1);
     for (sal_Int32 i=0; i<(sal_Int32)m_aColMapping.size(); ++i)
         m_aColMapping[i] = i;
@@ -598,7 +598,7 @@ void OStatement_Base::GetAssignValues()
     else if (SQL_ISRULE(m_pParseTree,insert_statement))
     {
         // Row fuer die zu setzenden Werte anlegen (Referenz durch new)
-        if(m_aAssignValues.isValid())
+        if(m_aAssignValues.is())
             m_aAssignValues->get().clear();
         sal_Int32 nCount = Reference<XIndexAccess>(m_xColNames,UNO_QUERY)->getCount();
         m_aAssignValues = new OAssignValues(nCount);
@@ -687,7 +687,7 @@ void OStatement_Base::GetAssignValues()
     }
     else if (SQL_ISRULE(m_pParseTree,update_statement_searched))
     {
-        if(m_aAssignValues.isValid())
+        if(m_aAssignValues.is())
             m_aAssignValues->get().clear();
         sal_Int32 nCount = Reference<XIndexAccess>(m_xColNames,UNO_QUERY)->getCount();
         m_aAssignValues = new OAssignValues(nCount);

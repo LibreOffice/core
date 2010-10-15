@@ -102,7 +102,7 @@
 #include <tools/solar.h>
 #include <toolkit/unohlp.hxx>
 #include <osl/security.hxx>
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/configurationhelper.hxx>
@@ -163,7 +163,8 @@
 #define U2S(STRING)                                ::rtl::OUStringToOString(STRING, RTL_TEXTENCODING_UTF8)
 
 using namespace vos;
-using namespace rtl;
+using rtl::OUString;
+using rtl::OUStringBuffer;
 
 //Gives an ICE with MSVC6
 //namespace css = ::com::sun::star;

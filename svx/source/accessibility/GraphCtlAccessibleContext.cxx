@@ -74,6 +74,8 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
 
+using rtl::OUString;
+
 //=====  internal  ============================================================
 
 /** initialize this component and set default values */

@@ -2147,13 +2147,13 @@ void EditEngine::SetHyphenator( Reference< XHyphenator > & xHyph )
     pImpEditEngine->SetHyphenator( xHyph );
 }
 
-void EditEngine::SetForbiddenCharsTable( vos::ORef<SvxForbiddenCharactersTable> xForbiddenChars )
+void EditEngine::SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars )
 {
     DBG_CHKTHIS( EditEngine, 0 );
     pImpEditEngine->SetForbiddenCharsTable( xForbiddenChars );
 }
 
-vos::ORef<SvxForbiddenCharactersTable> EditEngine::GetForbiddenCharsTable() const
+rtl::Reference<SvxForbiddenCharactersTable> EditEngine::GetForbiddenCharsTable() const
 {
     DBG_CHKTHIS( EditEngine, 0 );
     return pImpEditEngine->GetForbiddenCharsTable( FALSE );

@@ -30,7 +30,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <sal/types.h>
-#include <vos/refernce.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include <comphelper/stl_types.hxx>
 
 class SvXMLExport;

@@ -161,6 +161,7 @@
 
 #include "rtl/alloc.h"
 #include "rtl/memory.h"
+#include "rtl/ref.hxx"
 #include "rtl/string.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.h"
@@ -177,8 +178,6 @@
 #include "osl/diagnose.h"
 #include "vos/mutex.hxx"
 #include "vos/process.hxx"
-#include "vos/ref.hxx"
-#include "vos/refernce.hxx"
 //---MARKER---
 
 #endif

@@ -90,7 +90,7 @@ void SAL_CALL OPreparedStatement::disposing()
     OCommonStatement::disposing();
 
     m_xMetaData.clear();
-    if(m_aParameterRow.isValid())
+    if(m_aParameterRow.is())
     {
         m_aParameterRow->get().clear();
         m_aParameterRow = NULL;
@@ -395,7 +395,7 @@ void OPreparedStatement::checkAndResizeParameters(sal_Int32 parameterIndex)
 {
     ::connectivity::checkDisposed(OCommonStatement_IBASE::rBHelper.bDisposed);
 
-    if ( !m_aParameterRow.isValid() ) {
+    if ( !m_aParameterRow.is() ) {
         m_aParameterRow = new OValueVector();
         m_aParameterRow->get().push_back(sal_Int32(0));
     }

@@ -36,7 +36,7 @@ namespace connectivity
     {
         class OAdabasPreparedStatement :    public  ::connectivity::odbc::OPreparedStatement
         {
-            ::vos::ORef<OSQLColumns>    m_aSelectColumns;
+            ::rtl::Reference<OSQLColumns>   m_aSelectColumns;
         protected:
             virtual odbc::OResultSet* createResulSet();
             virtual void setResultSetConcurrency(sal_Int32 _par0)   ;

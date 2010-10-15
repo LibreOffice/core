@@ -33,7 +33,7 @@
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <connectivity/dbexception.hxx>
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 
 namespace connectivity
 {
@@ -62,7 +62,7 @@ namespace connectivity
                 { return this; }
 
             void setMacabFields(
-                const ::vos::ORef<connectivity::OSQLColumns> &xColumns) throw(::com::sun::star::sdbc::SQLException);
+                const ::rtl::Reference<connectivity::OSQLColumns> &xColumns) throw(::com::sun::star::sdbc::SQLException);
             inline sal_uInt32 fieldAtColumn(sal_Int32 columnIndex) const
                 { return m_aMacabFields[columnIndex - 1]; }
 

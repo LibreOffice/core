@@ -35,9 +35,9 @@ namespace connectivity
     {
         class OAdabasResultSet :    public  ::connectivity::odbc::OResultSet
         {
-            ::vos::ORef<OSQLColumns>    m_aSelectColumns;
+            ::rtl::Reference<OSQLColumns>   m_aSelectColumns;
         public:
-            OAdabasResultSet(SQLHANDLE _pStatementHandle,::connectivity::odbc::OStatement_Base* pStmt,const ::vos::ORef<OSQLColumns>& _rSelectColumns)
+            OAdabasResultSet(SQLHANDLE _pStatementHandle,::connectivity::odbc::OStatement_Base* pStmt,const ::rtl::Reference<OSQLColumns>& _rSelectColumns)
              : ::connectivity::odbc::OResultSet( _pStatementHandle,pStmt)
              ,m_aSelectColumns(_rSelectColumns)
             {}

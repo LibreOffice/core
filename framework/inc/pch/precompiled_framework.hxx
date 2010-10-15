@@ -359,6 +359,7 @@
 #include "rtl/instance.hxx"
 #include "rtl/logfile.hxx"
 #include "rtl/random.h"
+#include "rtl.ref.hxx"
 #include "rtl/strbuf.hxx"
 #include "rtl/string.h"
 #include "rtl/string.hxx"
@@ -370,6 +371,7 @@
 #include "sal/alloca.h"
 #include "sal/main.h"
 
+#include "salhelper/simplereferenceobject.hxx"
 #include "salhelper/singletonref.hxx"
 #include "salhelper/timer.hxx"
 
@@ -487,7 +489,6 @@
 
 #include "vos/mutex.hxx"
 #include "vos/process.hxx"
-#include "vos/ref.hxx"
 #include "vos/thread.hxx"
 
 //---MARKER---

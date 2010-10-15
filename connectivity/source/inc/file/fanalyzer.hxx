@@ -39,11 +39,11 @@ namespace connectivity
         class OOO_DLLPUBLIC_FILE OSQLAnalyzer
         {
             typedef ::std::list<OEvaluateSet*>      OEvaluateSetList;
-            typedef ::std::pair< ::vos::ORef<OPredicateCompiler>,::vos::ORef<OPredicateInterpreter> > TPredicates;
+            typedef ::std::pair< ::rtl::Reference<OPredicateCompiler>,::rtl::Reference<OPredicateInterpreter> > TPredicates;
 
             ::std::vector< TPredicates >        m_aSelectionEvaluations;
-            ::vos::ORef<OPredicateCompiler>     m_aCompiler;
-            ::vos::ORef<OPredicateInterpreter>  m_aInterpreter;
+            ::rtl::Reference<OPredicateCompiler>        m_aCompiler;
+            ::rtl::Reference<OPredicateInterpreter> m_aInterpreter;
             OConnection*                        m_pConnection;
 
             mutable sal_Bool                    m_bHasSelectionCode;
@@ -64,7 +64,7 @@ namespace connectivity
                 {  }
 
             OConnection* getConnection() const { return m_pConnection; }
-            void describeParam(::vos::ORef<OSQLColumns> rParameterColumns); // genauere Beschreibung der Parameter
+            void describeParam(::rtl::Reference<OSQLColumns> rParameterColumns); // genauere Beschreibung der Parameter
             ::std::vector<sal_Int32>* bindEvaluationRow(OValueRefRow& _pRow);                   // Anbinden einer Ergebniszeile an die Restrictions
             /** bind the select columns if they contain a function which needs a row value
                 @param  _pRow   the result row

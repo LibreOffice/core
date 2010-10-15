@@ -31,7 +31,7 @@
 #include "sal/config.h"
 #include "xmloff/dllapi.h"
 #include <xmloff/prhdlfac.hxx>
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <xmloff/xmlexppr.hxx>
 #include <xmloff/XMLConstantsPropertyHandler.hxx>

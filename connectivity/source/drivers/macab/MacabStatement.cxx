@@ -313,11 +313,11 @@ MacabOrder *MacabCommonStatement::analyseOrderByClause(const OSQLParseNode *pPar
 //------------------------------------------------------------------------------
 void MacabCommonStatement::setMacabFields(MacabResultSet *pResult) const throw(SQLException)
 {
-    ::vos::ORef<connectivity::OSQLColumns> xColumns;    // selected columns
+    ::rtl::Reference<connectivity::OSQLColumns> xColumns;   // selected columns
     MacabResultSetMetaData *pMeta;              // meta information - holds the list of AddressBook fields
 
     xColumns = m_aSQLIterator.getSelectColumns();
-    if (!xColumns.isValid())
+    if (!xColumns.is())
     {
         ::connectivity::SharedResources aResources;
         const ::rtl::OUString sError( aResources.getResourceString(

@@ -147,14 +147,14 @@ void OCommonStatement::createTable( ) throw ( SQLException, RuntimeException )
 {
     if(m_pParseTree)
     {
-        ::vos::ORef<connectivity::OSQLColumns> xCreateColumn;
+        ::rtl::Reference<connectivity::OSQLColumns> xCreateColumn;
         if (m_pSQLIterator->getStatementType() == SQL_STATEMENT_CREATE_TABLE)
         {
             const OSQLTables& xTabs = m_pSQLIterator->getTables();
             OSL_ENSURE( !xTabs.empty(), "Need a Table");
             ::rtl::OUString ouTableName=xTabs.begin()->first;
             xCreateColumn     = m_pSQLIterator->getCreateColumns();
-            OSL_ENSURE(xCreateColumn.isValid(), "Need the Columns!!");
+            OSL_ENSURE(xCreateColumn.is(), "Need the Columns!!");
 
             const OColumnAlias& aColumnAlias = m_pConnection->getColumnAlias();
 
@@ -491,7 +491,7 @@ void OCommonStatement::createColumnMapping()
     size_t i;
 
     // initialize the column index map (mapping select columns to table columns)
-    ::vos::ORef<connectivity::OSQLColumns>  xColumns = m_pSQLIterator->getSelectColumns();
+    ::rtl::Reference<connectivity::OSQLColumns> xColumns = m_pSQLIterator->getSelectColumns();
     m_aColMapping.resize(xColumns->get().size() + 1);
     for (i=0; i<m_aColMapping.size(); ++i)
         m_aColMapping[i] = i;

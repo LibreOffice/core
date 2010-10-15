@@ -47,7 +47,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
 // -------------------------------------------------------------------------
-OResultSetMetaData::OResultSetMetaData(const ::vos::ORef<connectivity::OSQLColumns>& _rxColumns,const ::rtl::OUString& _aTableName,OFileTable*  _pTable)
+OResultSetMetaData::OResultSetMetaData(const ::rtl::Reference<connectivity::OSQLColumns>& _rxColumns,const ::rtl::OUString& _aTableName,OFileTable* _pTable)
     :m_aTableName(_aTableName)
     ,m_xColumns(_rxColumns)
     ,m_pTable(_pTable)

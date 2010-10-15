@@ -471,8 +471,8 @@
 #include "tools/mapunit.hxx"
 
 #include "vos/mutex.hxx"
-#include "vos/ref.hxx"
-#include "vos/refernce.hxx"
+#include "rtl/ref.hxx"
+#include "salhelper/simplereferenceobject.hxx"
 
 #include "xmloff/dllapi.h"
 //---MARKER---

@@ -28,7 +28,7 @@
 #ifndef _CONNECTIVITY_DBASE_INDEXPAGE_HXX_
 #define _CONNECTIVITY_DBASE_INDEXPAGE_HXX_
 
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 #include <tools/stream.hxx>
 #ifndef _VECTOR_
 #include <vector>

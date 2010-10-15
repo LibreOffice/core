@@ -249,7 +249,7 @@ Reference< XTablesSupplier > SAL_CALL OFileDriver::getDataDefinitionByURL( const
     return getDataDefinitionByConnection(connect(url,info));
 }
 // -----------------------------------------------------------------------------
-void OOperandParam::describe(const Reference< XPropertySet>& rColumn, ::vos::ORef<connectivity::OSQLColumns> rParameterColumns)
+void OOperandParam::describe(const Reference< XPropertySet>& rColumn, ::rtl::Reference<connectivity::OSQLColumns> rParameterColumns)
 {
     // den alten namen beibehalten
 

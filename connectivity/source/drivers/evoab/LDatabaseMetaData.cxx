@@ -65,7 +65,6 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::ucb;
 using namespace osl;
-using namespace vos;
 
 namespace connectivity
 {

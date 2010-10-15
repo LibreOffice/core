@@ -71,6 +71,7 @@ SHL1STDLIBS=\
     $(TOOLSLIB)					\
         $(UNOTOOLSLIB) \
     $(SALLIB)					\
+    $(SALHELPERLIB)					\
     $(DBTOOLSLIB)				\
     $(DBFILELIB)				\
     $(COMPHELPERLIB)

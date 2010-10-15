@@ -197,7 +197,7 @@ void OResultSet::clear()
     m_pFileSet = NULL;
     DELETEZ(m_pSortIndex);
 
-    if(m_aInsertRow.isValid())
+    if(m_aInsertRow.is())
         m_aInsertRow->get().clear();
 
     m_aSkipDeletedSet.clear();
@@ -589,12 +589,12 @@ sal_Bool OResultSet::evaluate()
         {
             if(m_pEvaluationKeySet)
             {
-                bRet = m_pTable->fetchRow(m_aEvaluateRow,m_pTable->getTableColumns().getBody(),sal_True,sal_True);
+                bRet = m_pTable->fetchRow(m_aEvaluateRow,*(m_pTable->getTableColumns()),sal_True,sal_True);
                 evaluate();
 
             }
             else
-                bRet = m_pTable->fetchRow(m_aRow,m_xColumns.getBody(),sal_False,sal_True);
+                bRet = m_pTable->fetchRow(m_aRow,*m_xColumns,sal_False,sal_True);
         }
     }
 
@@ -651,8 +651,8 @@ void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException)
     // we know that we append new rows at the end
     // so we have to know where the end is
     m_aSkipDeletedSet.skipDeleted(IResultSetHelper::LAST,1,sal_False);
-    m_bRowInserted = m_pTable->InsertRow(m_aInsertRow.getBody(), TRUE,m_xColsIdx);
-    if(m_bRowInserted && m_pFileSet.isValid())
+    m_bRowInserted = m_pTable->InsertRow(*m_aInsertRow, TRUE, m_xColsIdx);
+    if(m_bRowInserted && m_pFileSet.is())
     {
         sal_Int32 nPos = (m_aInsertRow->get())[0]->getValue();
         m_pFileSet->get().push_back(nPos);
@@ -672,7 +672,7 @@ void SAL_CALL OResultSet::updateRow(  ) throw(SQLException, RuntimeException)
     if(!m_pTable || m_pTable->isReadOnly())
         lcl_throwError(STR_TABLE_READONLY,*this);
 
-    m_bRowUpdated = m_pTable->UpdateRow(m_aInsertRow.getBody(), m_aRow,m_xColsIdx);
+    m_bRowUpdated = m_pTable->UpdateRow(*m_aInsertRow, m_aRow,m_xColsIdx);
     *(m_aInsertRow->get())[0] = (sal_Int32)(m_aRow->get())[0]->getValue();
 
     clearInsertRow();
@@ -693,8 +693,8 @@ void SAL_CALL OResultSet::deleteRow() throw(SQLException, RuntimeException)
         lcl_throwError(STR_ROW_ALREADY_DELETED,*this);
 
     sal_Int32 nPos = (sal_Int32)(m_aRow->get())[0]->getValue();
-    m_bRowDeleted = m_pTable->DeleteRow(m_xColumns.getBody());
-    if(m_bRowDeleted && m_pFileSet.isValid())
+    m_bRowDeleted = m_pTable->DeleteRow(*m_xColumns);
+    if(m_bRowDeleted && m_pFileSet.is())
     {
         m_aRow->setDeleted(sal_True);
         // don't touch the m_pFileSet member here
@@ -714,7 +714,7 @@ void SAL_CALL OResultSet::cancelRowUpdates(  ) throw(SQLException, RuntimeExcept
     m_bRowInserted  = sal_False;
     m_bRowDeleted   = sal_False;
 
-    if(m_aInsertRow.isValid())
+    if(m_aInsertRow.is())
     {
         OValueRefVector::Vector::iterator aIter = m_aInsertRow->get().begin()+1;
         for(;aIter != m_aInsertRow->get().end();++aIter)
@@ -919,7 +919,7 @@ BOOL OResultSet::ExecuteRow(IResultSetHelper::Movement eFirstCursorPosition,
     IResultSetHelper::Movement eCursorPosition = eFirstCursorPosition;
     INT32  nOffset = nFirstOffset;
 
-    const OSQLColumns & rTableCols = m_pTable->getTableColumns().getBody();
+    const OSQLColumns & rTableCols = *(m_pTable->getTableColumns());
     BOOL bHasRestriction = m_pSQLAnalyzer->hasRestriction();
 again:
 
@@ -958,7 +958,7 @@ again:
                     return sal_False;
                 }
             }
-            else if (m_pFileSet.isValid())
+            else if (m_pFileSet.is())
             {
                 OSL_ENSURE(//!m_pFileSet->IsFrozen() &&
                             eCursorPosition == IResultSetHelper::NEXT, "Falsche CursorPosition!");
@@ -995,14 +995,14 @@ again:
     // Evaluate darf nur gesetzt sein,
     // wenn der Keyset weiter aufgebaut werden soll
     if (m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT && !isCount() &&
-        (m_pFileSet.isValid() || m_pSortIndex) && bEvaluate)
+        (m_pFileSet.is() || m_pSortIndex) && bEvaluate)
     {
         if (m_pSortIndex)
         {
             OKeyValue* pKeyValue = GetOrderbyKeyValue(m_aEvaluateRow);
             m_pSortIndex->AddKeyValue(pKeyValue);
         }
-        else if (m_pFileSet.isValid())
+        else if (m_pFileSet.is())
         {
             //  OSL_ENSURE(!m_pFileSet->IsFrozen() , "Falsche CursorPosition!");
             sal_uInt32 nBookmarkValue = Abs((sal_Int32)(m_aEvaluateRow->get())[0]->getValue());
@@ -1015,13 +1015,13 @@ again:
         if (bEvaluate)
         {
             // jetzt die eigentliche Ergebniszeile Lesen
-            bOK = m_pTable->fetchRow(m_aEvaluateRow, m_pTable->getTableColumns().getBody(), sal_True,TRUE);
+            bOK = m_pTable->fetchRow(m_aEvaluateRow, *(m_pTable->getTableColumns()), sal_True,TRUE);
         }
 
         if (bOK)
         {
             // Nur die zu aendernden Werte uebergeben:
-            if(!m_pTable->UpdateRow(m_aAssignValues.getBody(),m_aEvaluateRow,m_xColsIdx))
+            if(!m_pTable->UpdateRow(*m_aAssignValues,m_aEvaluateRow, m_xColsIdx))
                 return sal_False;
         }
     }
@@ -1030,11 +1030,11 @@ again:
         sal_Bool bOK = sal_True;
         if (bEvaluate)
         {
-            bOK = m_pTable->fetchRow(m_aEvaluateRow, m_pTable->getTableColumns().getBody(), sal_True,TRUE);
+            bOK = m_pTable->fetchRow(m_aEvaluateRow, *(m_pTable->getTableColumns()), sal_True,TRUE);
         }
         if (bOK)
         {
-            if(!m_pTable->DeleteRow(m_xColumns.getBody()))
+            if(!m_pTable->DeleteRow(*m_xColumns))
                 return sal_False;
         }
     }
@@ -1049,13 +1049,11 @@ BOOL OResultSet::Move(IResultSetHelper::Movement eCursorPosition, INT32 nOffset,
 //IgnoreDeletedRows:
 //
     INT32 nTempPos = m_nRowPos;
-    // exclusiver zugriff auf die Tabelle
-    //  NAMESPACE_VOS(OGuard)* pGuard = m_pTable->Lock();
 
     if (m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT &&
         !isCount())
     {
-        if (!m_pFileSet.isValid()) // kein Index verfuegbar
+        if (!m_pFileSet.is()) // kein Index verfuegbar
         {
             // Normales FETCH
             ExecuteRow(eCursorPosition,nOffset,FALSE,bRetrieveData);
@@ -1151,7 +1149,7 @@ BOOL OResultSet::Move(IResultSetHelper::Movement eCursorPosition, INT32 nOffset,
                     if (bOK)
                     {
                         // jetzt nochmal die Ergebnisse lesen
-                        m_pTable->fetchRow(m_aRow, m_pTable->getTableColumns().getBody(), sal_True,bRetrieveData);
+                        m_pTable->fetchRow(m_aRow, *(m_pTable->getTableColumns()), sal_True,bRetrieveData);
 
                         // now set the bookmark for outside
                         *(*m_aRow->get().begin()) = sal_Int32(m_nRowPos + 1);
@@ -1246,7 +1244,7 @@ Error:
             case IResultSetHelper::ABSOLUTE:
             case IResultSetHelper::RELATIVE:
                 if (nOffset > 0)
-                    m_nRowPos = m_pFileSet.isValid() ? (sal_Int32)m_pFileSet->get().size() : -1;
+                    m_nRowPos = m_pFileSet.is() ? (sal_Int32)m_pFileSet->get().size() : -1;
                 else if (nOffset < 0)
                     m_nRowPos = -1;
                 break;
@@ -1409,8 +1407,6 @@ BOOL OResultSet::OpenImpl()
     m_nFilePos  = 0;
     m_nRowCountResult = -1;
 
-    // exclusiver zugriff auf die Tabelle
-    //  NAMESPACE_VOS(OGuard)* pGuard = pTable->Lock();
     m_nLastVisitedPos = m_pTable->getCurrentLastPos();
 
     switch(m_aSQLIterator.getStatementType())
@@ -1488,7 +1484,7 @@ BOOL OResultSet::OpenImpl()
                 if (IsSorted())
                     sortRows();
 
-                if (!m_pFileSet.isValid())
+                if (!m_pFileSet.is())
                 {
                     m_pFileSet = new OKeySet();
 
@@ -1503,9 +1499,9 @@ BOOL OResultSet::OpenImpl()
                             m_pFileSet->get().push_back(i + 1);
                     }
                 }
-                OSL_ENSURE(m_pFileSet.isValid(),"Kein KeySet vorhanden! :-(");
+                OSL_ENSURE(m_pFileSet.is(),"Kein KeySet vorhanden! :-(");
 
-                if(bDistinct && m_pFileSet.isValid())   // sicher ist sicher
+                if(bDistinct && m_pFileSet.is())   // sicher ist sicher
                 {
                     OValueRow aSearchRow = new OValueVector(m_aRow->get().size());
                     OValueRefVector::Vector::iterator aRowIter = m_aRow->get().begin();
@@ -1632,8 +1628,8 @@ BOOL OResultSet::OpenImpl()
         case SQL_STATEMENT_INSERT:
             m_nRowCountResult = 0;
 
-            OSL_ENSURE(m_aAssignValues.isValid(),"No assign values set!");
-            if(!m_pTable->InsertRow(m_aAssignValues.getBody(), TRUE,m_xColsIdx))
+            OSL_ENSURE(m_aAssignValues.is(),"No assign values set!");
+            if(!m_pTable->InsertRow(*m_aAssignValues, TRUE,m_xColsIdx))
             {
                 m_nFilePos  = 0;
                 return sal_False;
@@ -1680,7 +1676,7 @@ sal_Int64 OResultSet::getSomething( const Sequence< sal_Int8 > & rId ) throw (Ru
 // -----------------------------------------------------------------------------
 void OResultSet::setBoundedColumns(const OValueRefRow& _rRow,
                                    const OValueRefRow& _rSelectRow,
-                                   const ::vos::ORef<connectivity::OSQLColumns>& _rxColumns,
+                                   const ::rtl::Reference<connectivity::OSQLColumns>& _rxColumns,
                                    const Reference<XIndexAccess>& _xNames,
                                    sal_Bool _bSetColumnMapping,
                                    const Reference<XDatabaseMetaData>& _xMetaData,
@@ -1847,7 +1843,7 @@ void OResultSet::clearInsertRow()
 void OResultSet::initializeRow(OValueRefRow& _rRow,sal_Int32 _nColumnCount)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OResultSet::initializeRow" );
-    if(!_rRow.isValid())
+    if(!_rRow.is())
     {
         _rRow   = new OValueRefVector(_nColumnCount);
         (_rRow->get())[0]->setBound(sal_True);

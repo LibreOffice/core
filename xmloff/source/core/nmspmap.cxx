@@ -106,7 +106,7 @@ sal_uInt16 SvXMLNamespaceMap::_Add( const OUString& rPrefix, const OUString &rNa
         }
         while ( sal_True );
     }
-    ::vos::ORef<NameSpaceEntry> pEntry(new NameSpaceEntry);
+    ::rtl::Reference<NameSpaceEntry> pEntry(new NameSpaceEntry);
     pEntry->sName   = rName;
     pEntry->nKey    = nKey;
     pEntry->sPrefix = rPrefix;
@@ -308,7 +308,7 @@ sal_uInt16 SvXMLNamespaceMap::_GetKeyByAttrName( const OUString& rAttrName,
         it = aNameCache.end();
     if ( it != aNameCache.end() )
     {
-        const NameSpaceEntry &rEntry = (*it).second.getBody();
+        const NameSpaceEntry &rEntry = *((*it).second);
         if ( pPrefix )
             *pPrefix = rEntry.sPrefix;
         if ( pLocalName )
@@ -322,7 +322,7 @@ sal_uInt16 SvXMLNamespaceMap::_GetKeyByAttrName( const OUString& rAttrName,
     }
     else
     {
-    vos::ORef<NameSpaceEntry> xEntry(new NameSpaceEntry());
+    rtl::Reference<NameSpaceEntry> xEntry(new NameSpaceEntry());
 
         sal_Int32 nColonPos = rAttrName.indexOf( sal_Unicode(':') );
         if( -1L == nColonPos )
@@ -360,7 +360,7 @@ sal_uInt16 SvXMLNamespaceMap::_GetKeyByAttrName( const OUString& rAttrName,
 
         if (bCache)
     {
-        typedef std::pair< const rtl::OUString, vos::ORef<NameSpaceEntry> > value_type;
+        typedef std::pair< const rtl::OUString, rtl::Reference<NameSpaceEntry> > value_type;
         (void) const_cast<NameSpaceHash*>(&aNameCache)->insert (value_type (rAttrName, xEntry));
     }
     }

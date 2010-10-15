@@ -36,7 +36,7 @@
 #ifndef __SGI_STL_MAP
 #include <map>
 #endif
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 #include <cppuhelper/weak.hxx>
 
 #include <limits.h>
@@ -93,8 +93,8 @@ struct QNamePairEq
 };
 
 typedef ::std::hash_map < QNamePair, ::rtl::OUString, QNamePairHash, QNamePairEq > QNameCache;
-typedef ::std::hash_map < ::rtl::OUString, ::vos::ORef <NameSpaceEntry >, rtl::OUStringHash, OUStringEqFunc > NameSpaceHash;
-typedef ::std::map < sal_uInt16, ::vos::ORef < NameSpaceEntry >, uInt32lt > NameSpaceMap;
+typedef ::std::hash_map < ::rtl::OUString, ::rtl::Reference <NameSpaceEntry >, rtl::OUStringHash, OUStringEqFunc > NameSpaceHash;
+typedef ::std::map < sal_uInt16, ::rtl::Reference < NameSpaceEntry >, uInt32lt > NameSpaceMap;
 
 class XMLOFF_DLLPUBLIC SvXMLNamespaceMap
 {

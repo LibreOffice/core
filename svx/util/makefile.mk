@@ -154,6 +154,7 @@ SHL2STDLIBS= \
             $(CPPULIB) \
             $(VOSLIB) \
             $(SALLIB) \
+            $(SALHELPERLIB) \
             $(ICUUCLIB)
 
 .IF "$(GUI)"=="WNT"

@@ -75,7 +75,7 @@ namespace connectivity
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xMetaData;
             sal_Bool                                    m_bPrepared;
             ::rtl::Reference< OResultSet >              m_pResultSet;
-            ::vos::ORef<connectivity::OSQLColumns>      m_xParamColumns;    // the parameter columns
+            ::rtl::Reference<connectivity::OSQLColumns> m_xParamColumns;    // the parameter columns
             OValueRow                                   m_aParameterRow;
 
 

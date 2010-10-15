@@ -30,7 +30,7 @@
 
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/form/XFormsSupplier2.hpp>
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 #include "formattributes.hxx"
 #include "callbacks.hxx"
 #include "eventimport.hxx"
@@ -93,8 +93,8 @@ namespace xmloff
 
     protected:
         // style handling
-        ::vos::ORef< XMLPropertyHandlerFactory >    m_xPropertyHandlerFactory;
-        ::vos::ORef< SvXMLImportPropertyMapper >    m_xImportMapper;
+        ::rtl::Reference< XMLPropertyHandlerFactory >   m_xPropertyHandlerFactory;
+        ::rtl::Reference< SvXMLImportPropertyMapper >   m_xImportMapper;
 
         DECLARE_STL_USTRINGACCESS_MAP( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >, MapString2PropertySet );
         DECLARE_STL_MAP( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >, MapString2PropertySet, ODrawPageCompare, MapDrawPage2Map);
@@ -170,7 +170,7 @@ namespace xmloff
 
         /** retrieves the property mapper form form related auto styles.
         */
-        ::vos::ORef< SvXMLImportPropertyMapper > getStylePropertyMapper() const;
+        ::rtl::Reference< SvXMLImportPropertyMapper > getStylePropertyMapper() const;
 
         /** start importing the forms of the given page
         */

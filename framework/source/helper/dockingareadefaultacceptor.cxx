@@ -60,7 +60,6 @@ using namespace ::com::sun::star::lang          ;
 using namespace ::com::sun::star::uno           ;
 using namespace ::cppu                          ;
 using namespace ::osl                           ;
-using namespace ::rtl                           ;
 
 //_________________________________________________________________________________________________________________
 //  non exported const

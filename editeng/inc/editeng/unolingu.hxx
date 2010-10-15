@@ -30,7 +30,6 @@
 
 #include <i18npool/lang.h>
 #include <tools/string.hxx>
-#include <vos/refernce.hxx>
 #include <com/sun/star/util/Language.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
@@ -73,8 +72,6 @@ public:
 class EDITENG_DLLPUBLIC LinguMgr
 {
     friend class LinguMgrExitLstnr;
-
-    //static ::VOS::ORefCount aRefCount;
 
     static ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XLinguServiceManager > xLngSvcMgr;

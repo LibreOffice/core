@@ -64,7 +64,7 @@ class SvxForbiddenCharactersTable;
 class SvxNumberFormat;
 class FontList;
 
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 #include <vector>
 #include <com/sun/star/uno/Reference.h>
 
@@ -369,8 +369,8 @@ public:
     void            SetHyphenator( ::com::sun::star::uno::Reference<
                             ::com::sun::star::linguistic2::XHyphenator >& xHyph );
 
-    void            SetForbiddenCharsTable( vos::ORef<SvxForbiddenCharactersTable> xForbiddenChars );
-    vos::ORef<SvxForbiddenCharactersTable>  GetForbiddenCharsTable() const;
+    void            SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars );
+    rtl::Reference<SvxForbiddenCharactersTable> GetForbiddenCharsTable() const;
 
     void            SetDefaultLanguage( LanguageType eLang );
     LanguageType    GetDefaultLanguage() const;

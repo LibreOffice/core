@@ -55,7 +55,6 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 #include <cppuhelper/weakref.hxx>
-#include <vos/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <vcl/evntpost.hxx>
 

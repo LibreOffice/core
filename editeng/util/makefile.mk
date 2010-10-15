@@ -77,6 +77,7 @@ SHL1STDLIBS= \
              $(CPPULIB) \
              $(VOSLIB) \
              $(SALLIB) \
+             $(SALHELPERLIB) \
              $(ICUUCLIB)
 
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def

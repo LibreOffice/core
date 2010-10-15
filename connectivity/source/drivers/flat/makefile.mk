@@ -83,6 +83,7 @@ SHL1STDLIBS=\
     $(SVLLIB)				\
     $(UNOTOOLSLIB)				\
     $(SALLIB)					\
+    $(SALHELPERLIB)					\
     $(DBTOOLSLIB)				\
     $(DBFILELIB)				\
     $(COMPHELPERLIB)

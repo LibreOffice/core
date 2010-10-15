@@ -65,6 +65,8 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
+using rtl::OUString;
+
 
 XMLFieldParamImportContext::XMLFieldParamImportContext(
     SvXMLImport& rImport,

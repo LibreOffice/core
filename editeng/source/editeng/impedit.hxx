@@ -54,7 +54,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <i18npool/lang.h>
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 
 DBG_NAMEEX( EditView )
 DBG_NAMEEX( EditEngine )
@@ -519,7 +519,7 @@ private:
     Link                maBeginDropHdl;
     Link                maEndDropHdl;
 
-    vos::ORef<SvxForbiddenCharactersTable>  xForbiddenCharsTable;
+    rtl::Reference<SvxForbiddenCharactersTable> xForbiddenCharsTable;
 
 
     // ================================================================
@@ -1021,8 +1021,8 @@ public:
     void                SetAddExtLeading( BOOL b );
     BOOL                IsAddExtLeading() const { return bAddExtLeading; }
 
-    vos::ORef<SvxForbiddenCharactersTable>  GetForbiddenCharsTable( BOOL bGetInternal = TRUE ) const;
-    void                SetForbiddenCharsTable( vos::ORef<SvxForbiddenCharactersTable> xForbiddenChars );
+    rtl::Reference<SvxForbiddenCharactersTable> GetForbiddenCharsTable( BOOL bGetInternal = TRUE ) const;
+    void                SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars );
 
     BOOL                mbLastTryMerge;
 

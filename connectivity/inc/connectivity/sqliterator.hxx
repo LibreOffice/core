@@ -35,7 +35,7 @@
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include "connectivity/CommonTools.hxx"
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 #include <cppuhelper/weak.hxx>
 
 #include <map>
@@ -69,11 +69,11 @@ namespace connectivity
         const OSQLParseNode*                            m_pParseTree;       // aktueller ParseTree
         const OSQLParser&                               m_rParser;          // if set used for general error messages from the context
         OSQLStatementType                               m_eStatementType;   // Art des Statements
-        ::vos::ORef<OSQLColumns>                        m_aSelectColumns;   // alle Spalten aus dem Select-Clause
-        ::vos::ORef<OSQLColumns>                        m_aParameters;      // all parameters
-        ::vos::ORef<OSQLColumns>                        m_aGroupColumns;    // the group by columns
-        ::vos::ORef<OSQLColumns>                        m_aOrderColumns;    // the order by columns
-        ::vos::ORef<OSQLColumns>                        m_aCreateColumns;   // the columns for Create table clause
+        ::rtl::Reference<OSQLColumns>                       m_aSelectColumns;   // alle Spalten aus dem Select-Clause
+        ::rtl::Reference<OSQLColumns>                       m_aParameters;      // all parameters
+        ::rtl::Reference<OSQLColumns>                       m_aGroupColumns;    // the group by columns
+        ::rtl::Reference<OSQLColumns>                       m_aOrderColumns;    // the order by columns
+        ::rtl::Reference<OSQLColumns>                       m_aCreateColumns;   // the columns for Create table clause
 
         ::std::auto_ptr< OSQLParseTreeIteratorImpl >    m_pImpl;
 
@@ -121,8 +121,8 @@ namespace connectivity
             const ::rtl::OUString & rColumnName, const ::rtl::OUString & rTableRange, bool _bLookInSubTables );
 
       protected:
-        void setSelectColumnName(::vos::ORef<OSQLColumns>& _rColumns,const ::rtl::OUString & rColumnName,const ::rtl::OUString & rColumnAlias, const ::rtl::OUString & rTableRange,sal_Bool bFkt=sal_False,sal_Int32 _nType = com::sun::star::sdbc::DataType::VARCHAR,sal_Bool bAggFkt=sal_False);
-        void appendColumns(::vos::ORef<OSQLColumns>& _rColumns,const ::rtl::OUString& _rTableAlias,const OSQLTable& _rTable);
+        void setSelectColumnName(::rtl::Reference<OSQLColumns>& _rColumns,const ::rtl::OUString & rColumnName,const ::rtl::OUString & rColumnAlias, const ::rtl::OUString & rTableRange,sal_Bool bFkt=sal_False,sal_Int32 _nType = com::sun::star::sdbc::DataType::VARCHAR,sal_Bool bAggFkt=sal_False);
+        void appendColumns(::rtl::Reference<OSQLColumns>& _rColumns,const ::rtl::OUString& _rTableAlias,const OSQLTable& _rTable);
         // Weitere Member-Variable, die in den "set"-Funktionen zur
         // Verfuegung stehen sollen, koennen in der abgeleiteten Klasse
         // definiert werden und z. B. in deren Konstruktor initialisiert
@@ -214,11 +214,11 @@ namespace connectivity
         // Die TableRangeMap enth"alt alle Tabellen unter dem zugeh"origen Rangenamen der zuerst gefunden wird
         const OSQLTables& getTables() const;
 
-        ::vos::ORef<OSQLColumns> getSelectColumns() const { return m_aSelectColumns;}
-        ::vos::ORef<OSQLColumns> getGroupColumns() const { return m_aGroupColumns;}
-        ::vos::ORef<OSQLColumns> getOrderColumns() const { return m_aOrderColumns;}
-        ::vos::ORef<OSQLColumns> getParameters()    const { return m_aParameters; }
-        ::vos::ORef<OSQLColumns> getCreateColumns() const { return m_aCreateColumns;}
+        ::rtl::Reference<OSQLColumns> getSelectColumns() const { return m_aSelectColumns;}
+        ::rtl::Reference<OSQLColumns> getGroupColumns() const { return m_aGroupColumns;}
+        ::rtl::Reference<OSQLColumns> getOrderColumns() const { return m_aOrderColumns;}
+        ::rtl::Reference<OSQLColumns> getParameters()   const { return m_aParameters; }
+        ::rtl::Reference<OSQLColumns> getCreateColumns() const { return m_aCreateColumns;}
 
         /** return the columname and the table range
             @param  _pColumnRef

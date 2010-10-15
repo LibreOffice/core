@@ -72,7 +72,7 @@ OUString Desktop::GetLicensePath()
     // determine the filename of the license to show
     OUString  aLangString;
     ::com::sun::star::lang::Locale aLocale;
-    OString aMgrName = OString("dkt");
+    rtl::OString aMgrName = rtl::OString("dkt");
 
     AllSettings aSettings(Application::GetSettings());
     aLocale = aSettings.GetUILocale();

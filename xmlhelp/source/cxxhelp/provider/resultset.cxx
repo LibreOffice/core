@@ -51,7 +51,7 @@ using namespace chelp;
 
 DynamicResultSet::DynamicResultSet(
     const Reference< XMultiServiceFactory >& rxSMgr,
-    const vos::ORef< Content >& rxContent,
+    const rtl::Reference< Content >& rxContent,
     const OpenCommandArgument2& rCommand,
     const Reference< XCommandEnvironment >& rxEnv,
     ResultSetFactory* pFactory )

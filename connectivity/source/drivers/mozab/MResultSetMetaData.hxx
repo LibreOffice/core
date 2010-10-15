@@ -30,7 +30,7 @@
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <vector>
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 #include "MConnection.hxx"
 #include "MTable.hxx"
 
@@ -46,7 +46,7 @@ namespace connectivity
         class OResultSetMetaData :  public  OResultSetMetaData_BASE
         {
             ::rtl::OUString                         m_aTableName;
-            ::vos::ORef<connectivity::OSQLColumns>  m_xColumns;
+            ::rtl::Reference<connectivity::OSQLColumns>  m_xColumns;
             OTable*                                 m_pTable;
             sal_Bool                                  m_bReadOnly;
 
@@ -55,7 +55,7 @@ namespace connectivity
         public:
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
             // OResultSetMetaData(OConnection*  _pConnection) : m_pConnection(_pConnection){}
-            OResultSetMetaData(const ::vos::ORef<connectivity::OSQLColumns>& _rxColumns,
+            OResultSetMetaData(const ::rtl::Reference<connectivity::OSQLColumns>& _rxColumns,
                                const ::rtl::OUString& _aTableName,OTable* _pTable,sal_Bool aReadOnly
                                )
                  :m_aTableName(_aTableName)

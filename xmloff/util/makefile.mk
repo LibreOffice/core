@@ -66,6 +66,7 @@ SHL1STDLIBS= \
         $(COMPHELPERLIB)\
         $(SVLLIB)		\
         $(SALLIB)		\
+        $(SALHELPERLIB)		\
         $(UNOTOOLSLIB)	\
         $(BASEGFXLIB)
 

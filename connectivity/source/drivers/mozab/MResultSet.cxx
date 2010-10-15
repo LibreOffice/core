@@ -427,7 +427,7 @@ const ORowSetValue& OResultSet::getValue(sal_Int32 cardNumber, sal_Int32 columnI
 {
     ResultSetEntryGuard aGuard( *this );
 
-    OSL_ENSURE(m_xColumns.isValid(), "Need the Columns!!");
+    OSL_ENSURE(m_xColumns.is(), "Need the Columns!!");
     OSL_ENSURE(columnIndex <= (sal_Int32)m_xColumns->get().size(), "Trying to access invalid columns number");
     checkIndex( columnIndex );
 
@@ -722,7 +722,7 @@ void SAL_CALL OResultSet::release() throw()
 // -----------------------------------------------------------------------------
 void OResultSet::initializeRow(OValueRow& _rRow,sal_Int32 _nColumnCount)
 {
-    if(!_rRow.isValid())
+    if(!_rRow.is())
     {
         _rRow   = new OValueVector(_nColumnCount);
         (_rRow->get())[0].setBound(sal_True);
@@ -750,7 +750,7 @@ void OResultSet::parseParameter( const OSQLParseNode* pNode, rtl::OUString& rMat
     m_nParamIndex ++;
     OSL_TRACE("Parameter name [%d]: %s\n", m_nParamIndex,OUtoCStr(aParameterName) );
 
-    if ( m_aParameterRow.isValid() ) {
+    if ( m_aParameterRow.is() ) {
         OSL_ENSURE( m_nParamIndex < (sal_Int32)m_aParameterRow->get().size() + 1, "More parameters than values found" );
         rMatchString = (m_aParameterRow->get())[(sal_uInt16)m_nParamIndex];
 #if OSL_DEBUG_LEVEL > 0
@@ -775,8 +775,8 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
         return;
 
     if ( m_pSQLIterator->getParseTree() != NULL ) {
-        ::vos::ORef<OSQLColumns> xColumns = m_pSQLIterator->getParameters();
-        if(xColumns.isValid())
+        ::rtl::Reference<OSQLColumns> xColumns = m_pSQLIterator->getParameters();
+        if(xColumns.is())
         {
             ::rtl::OUString aTabName,aColName,aParameterName,aParameterValue;
             OSQLColumns::Vector::iterator aIter = xColumns->get().begin();
@@ -785,7 +785,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
             {
                 (*aIter)->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aColName;
                 OSL_TRACE("Prop Column Name : %s\n", OUtoCStr( aColName ) );
-                if ( m_aParameterRow.isValid() ) {
+                if ( m_aParameterRow.is() ) {
                     aParameterValue = (m_aParameterRow->get())[(sal_uInt16)i];
 #if OSL_DEBUG_LEVEL > 0
                     OSL_TRACE("Prop Value       : %s\n", OUtoCStr( aParameterValue ) );
@@ -1065,7 +1065,7 @@ void OResultSet::fillRowData()
     OConnection* xConnection = static_cast<OConnection*>(m_pStatement->getConnection().get());
     m_xColumns = m_pSQLIterator->getSelectColumns();
 
-    OSL_ENSURE(m_xColumns.isValid(), "Need the Columns!!");
+    OSL_ENSURE(m_xColumns.is(), "Need the Columns!!");
 
     OSQLColumns::Vector::const_iterator aIter = m_xColumns->get().begin();
     const ::rtl::OUString sProprtyName = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME);
@@ -1166,7 +1166,7 @@ sal_Int32 OResultSet::getRowForCardNumber(sal_Int32 nCardNum)
 {
     OSL_TRACE("In/Out: OResultSet::getRowForCardNumber, nCardNum = %u", nCardNum );
 
-    if ( m_pKeySet.isValid() )
+    if ( m_pKeySet.is() )
     {
         sal_Int32  nPos;
         for(nPos=0;nPos < (sal_Int32)m_pKeySet->get().size();nPos++)
@@ -1204,7 +1204,7 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
 
     fillRowData();
 
-    OSL_ENSURE(m_xColumns.isValid(), "Need the Columns!!");
+    OSL_ENSURE(m_xColumns.is(), "Need the Columns!!");
 
     // sal_Int32 nColumnCount = m_xColumns->size();
     // initializeRow(m_aRow,nColumnCount);
@@ -1329,7 +1329,7 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
                     m_pKeySet = new OKeySet();
 
                 // Handle the DISTINCT case
-                if ( bDistinct && m_pKeySet.isValid() )
+                if ( bDistinct && m_pKeySet.is() )
                 {
                     OValueRow aSearchRow = new OValueVector( m_aRow->get().size() );
 
@@ -1369,7 +1369,7 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
 // -----------------------------------------------------------------------------
 
 void OResultSet::setBoundedColumns(const OValueRow& _rRow,
-                                   const ::vos::ORef<connectivity::OSQLColumns>& _rxColumns,
+                                   const ::rtl::Reference<connectivity::OSQLColumns>& _rxColumns,
                                    const Reference<XIndexAccess>& _xNames,
                                    sal_Bool _bSetColumnMapping,
                                    const Reference<XDatabaseMetaData>& _xMetaData,
@@ -1516,7 +1516,7 @@ sal_Int32 OResultSet::deletedCount()
 sal_Bool OResultSet::seekRow( eRowPosition pos, sal_Int32 nOffset )
 {
     ResultSetEntryGuard aGuard( *this );
-    if ( !m_pKeySet.isValid() )
+    if ( !m_pKeySet.is() )
         m_pStatement->getOwnConnection()->throwSQLException( STR_ILLEGAL_MOVEMENT, *this );
 
     sal_Int32  nNumberOfRecords = m_aQuery.getRealRowCount();
@@ -1662,7 +1662,7 @@ sal_Int32 OResultSet::hashBookmark( const ::com::sun::star::uno::Any& bookmark )
 
 sal_Int32 OResultSet::getCurrentCardNumber()
 {
-    if ( ( m_nRowPos == 0 ) || !m_pKeySet.isValid() )
+    if ( ( m_nRowPos == 0 ) || !m_pKeySet.is() )
         return 0;
     if (m_pKeySet->get().size() < m_nRowPos)
         return 0;

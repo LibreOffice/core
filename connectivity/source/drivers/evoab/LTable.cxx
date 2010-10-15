@@ -100,7 +100,7 @@ void OEvoabTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
     // column count
     xub_StrLen nFieldCount = aHeaderLine.GetTokenCount(pConnection->getFieldDelimiter(),pConnection->getStringDelimiter());
 
-    if(!m_aColumns.isValid())
+    if(!m_aColumns.is())
         m_aColumns = new OSQLColumns();
     else
         m_aColumns->get().clear();

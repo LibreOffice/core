@@ -70,6 +70,8 @@ using ::com::sun::star::lang::WrappedTargetException;
 using ::com::sun::star::beans::UnknownPropertyException;
 using ::com::sun::star::beans::PropertyVetoException;
 
+using rtl::OUString;
+using rtl::OUStringBuffer;
 
 SvXMLImportPropertyMapper::SvXMLImportPropertyMapper(
         const UniReference< XMLPropertySetMapper >& rMapper,

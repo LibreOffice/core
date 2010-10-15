@@ -80,7 +80,7 @@ class SvKeyValueIterator;
 class SvxForbiddenCharactersTable;
 #include <com/sun/star/uno/Reference.h>
 
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 #include <editeng/svxfont.hxx>
 #include <editeng/eedata.hxx>
 #include <editeng/paragraphdata.hxx>
@@ -979,8 +979,8 @@ public:
     void            SetHyphenator( ::com::sun::star::uno::Reference<
                         ::com::sun::star::linguistic2::XHyphenator >& xHyph );
 
-    void            SetForbiddenCharsTable( vos::ORef<SvxForbiddenCharactersTable> xForbiddenChars );
-    vos::ORef<SvxForbiddenCharactersTable>  GetForbiddenCharsTable() const;
+    void            SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars );
+    rtl::Reference<SvxForbiddenCharactersTable> GetForbiddenCharsTable() const;
 
     // Depricated
     void            SetDefaultLanguage( LanguageType eLang );

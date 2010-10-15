@@ -1972,12 +1972,12 @@ void SdrModel::MigrateItemSet( const SfxItemSet* pSourceSet, SfxItemSet* pDestSe
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrModel::SetForbiddenCharsTable( vos::ORef<SvxForbiddenCharactersTable> xForbiddenChars )
+void SdrModel::SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars )
 {
     if( mpForbiddenCharactersTable )
         mpForbiddenCharactersTable->release();
 
-    mpForbiddenCharactersTable = xForbiddenChars.getBodyPtr();
+    mpForbiddenCharactersTable = xForbiddenChars.get();
 
     if( mpForbiddenCharactersTable )
         mpForbiddenCharactersTable->acquire();
@@ -1986,7 +1986,7 @@ void SdrModel::SetForbiddenCharsTable( vos::ORef<SvxForbiddenCharactersTable> xF
     ImpSetOutlinerDefaults( pHitTestOutliner );
 }
 
-vos::ORef<SvxForbiddenCharactersTable> SdrModel::GetForbiddenCharsTable() const
+rtl::Reference<SvxForbiddenCharactersTable> SdrModel::GetForbiddenCharsTable() const
 {
     return mpForbiddenCharactersTable;
 }

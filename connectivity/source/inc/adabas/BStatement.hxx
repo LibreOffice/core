@@ -30,7 +30,7 @@
 #include "odbc/OStatement.hxx"
 #include "adabas/BConnection.hxx"
 #include "connectivity/CommonTools.hxx"
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 
 namespace connectivity
 {
@@ -39,7 +39,7 @@ namespace connectivity
         class OAdabasStatement :    public  ::connectivity::odbc::OStatement
         {
             OAdabasConnection*          m_pOwnConnection;
-            ::vos::ORef<OSQLColumns>    m_aSelectColumns;
+            ::rtl::Reference<OSQLColumns>   m_aSelectColumns;
         protected:
             virtual odbc::OResultSet* createResulSet();
             virtual void setResultSetConcurrency(sal_Int32 _par0);

@@ -33,7 +33,7 @@
 #include <rtl/ustring.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/stl_types.hxx>
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 #include "connectivity/dbtoolsdllapi.hxx"
 #include "connectivity/CommonTools.hxx"
 #include <com/sun/star/util/DateTime.hpp>
@@ -373,7 +373,7 @@ namespace connectivity
     };
 
     /// ORowSetValueDecorator decorates a ORowSetValue so the value is "refcounted"
-    class OOO_DLLPUBLIC_DBTOOLS ORowSetValueDecorator : public ::vos::OReference
+    class OOO_DLLPUBLIC_DBTOOLS ORowSetValueDecorator : public ::salhelper::SimpleReferenceObject
     {
         ORowSetValue    m_aValue;   // my own value
     public:
@@ -393,7 +393,7 @@ namespace connectivity
         inline void setModified(sal_Bool _bModified)                { m_aValue.setModified(_bModified); }
 
     };
-    typedef ::vos::ORef<ORowSetValueDecorator> ORowSetValueDecoratorRef;
+    typedef ::rtl::Reference<ORowSetValueDecorator> ORowSetValueDecoratorRef;
 
     // -------------------------------------------------------------------------
     /// TSetBound is a unary_function to set the bound value with e.q. for_each call
@@ -454,12 +454,12 @@ namespace connectivity
         sal_Int32 getParameterIndex(sal_Int32 _nId) const { return m_nParameterIndexes[_nId]; }
     };
 
-    typedef ::vos::ORef< OAssignValues > ORefAssignValues;
+    typedef ::rtl::Reference< OAssignValues > ORefAssignValues;
 
 
 
-    typedef ::vos::ORef< OValueVector >                 OValueRow;
-    typedef ::vos::ORef< OValueRefVector >              OValueRefRow;
+    typedef ::rtl::Reference< OValueVector >                    OValueRow;
+    typedef ::rtl::Reference< OValueRefVector >             OValueRefRow;
 }
 
 #endif // #ifndef _CONNECTIVITY_FILE_VALUE_HXX_

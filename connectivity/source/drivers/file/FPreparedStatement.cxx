@@ -97,7 +97,7 @@ void OPreparedStatement::disposing()
 
     m_xParamColumns = NULL;
     m_xMetaData.clear();
-    if(m_aParameterRow.isValid())
+    if(m_aParameterRow.is())
     {
         m_aParameterRow->get().clear();
         m_aParameterRow = NULL;
@@ -299,7 +299,7 @@ void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 /
     ::osl::MutexGuard aGuard( m_aMutex );
     checkAndResizeParameters(parameterIndex);
 
-    if ( m_aAssignValues.isValid() )
+    if ( m_aAssignValues.is() )
         (m_aAssignValues->get())[m_aParameterIndexes[parameterIndex]]->setNull();
     else
         (m_aParameterRow->get())[parameterIndex]->setNull();
@@ -429,8 +429,8 @@ Reference<XResultSet> OPreparedStatement::initResultSet()
     Reference<XResultSet> xRs(m_pResultSet);
 
     // check if we got enough paramters
-    if ( (m_aParameterRow.isValid() && ( m_aParameterRow->get().size() -1 ) < m_xParamColumns->get().size()) ||
-         (m_xParamColumns.isValid() && !m_aParameterRow.isValid() && !m_aParameterRow->get().empty()) )
+    if ( (m_aParameterRow.is() && ( m_aParameterRow->get().size() -1 ) < m_xParamColumns->get().size()) ||
+         (m_xParamColumns.is() && !m_aParameterRow.is() && !m_aParameterRow->get().empty()) )
          m_pConnection->throwGenericSQLException(STR_INVALID_PARA_COUNT,*this);
 
     m_pResultSet->OpenImpl();
@@ -453,7 +453,7 @@ void OPreparedStatement::checkAndResizeParameters(sal_Int32 parameterIndex)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OPreparedStatement::checkAndResizeParameters" );
     ::connectivity::checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-    if ( m_aAssignValues.isValid() && (parameterIndex < 1 || parameterIndex >= static_cast<sal_Int32>(m_aParameterIndexes.size())) )
+    if ( m_aAssignValues.is() && (parameterIndex < 1 || parameterIndex >= static_cast<sal_Int32>(m_aParameterIndexes.size())) )
         throwInvalidIndexException(*this);
     else if ( static_cast<sal_Int32>((m_aParameterRow->get()).size()) <= parameterIndex )
     {
@@ -461,7 +461,7 @@ void OPreparedStatement::checkAndResizeParameters(sal_Int32 parameterIndex)
         (m_aParameterRow->get()).resize(parameterIndex+1);
         for ( ;i <= parameterIndex+1; ++i )
         {
-            if ( !(m_aParameterRow->get())[i].isValid() )
+            if ( !(m_aParameterRow->get())[i].is() )
                 (m_aParameterRow->get())[i] = new ORowSetValueDecorator;
         }
     }
@@ -473,7 +473,7 @@ void OPreparedStatement::setParameter(sal_Int32 parameterIndex, const ORowSetVal
     ::osl::MutexGuard aGuard( m_aMutex );
     checkAndResizeParameters(parameterIndex);
 
-    if(m_aAssignValues.isValid())
+    if(m_aAssignValues.is())
         *(m_aAssignValues->get())[m_aParameterIndexes[parameterIndex]] = x;
     else
         *((m_aParameterRow->get())[parameterIndex]) = x;
@@ -580,7 +580,7 @@ void OPreparedStatement::initializeResultSet(OResultSet* _pResult)
         USHORT nParaCount=0; // gibt die aktuelle Anzahl der bisher gesetzen Parameter an
 
         // Nach zu substituierenden Parametern suchen:
-        size_t nCount = m_aAssignValues.isValid() ? m_aAssignValues->get().size() : 1; // 1 ist wichtig fuer die Kriterien
+        size_t nCount = m_aAssignValues.is() ? m_aAssignValues->get().size() : 1; // 1 ist wichtig fuer die Kriterien
         for (size_t j = 1; j < nCount; j++)
         {
             UINT32 nParameter = (*m_aAssignValues).getParameterIndex(j);
@@ -593,19 +593,19 @@ void OPreparedStatement::initializeResultSet(OResultSet* _pResult)
             //  (*m_aAssignValues)[j] = (*m_aParameterRow)[(UINT16)nParameter];
         }
 
-        if (m_aParameterRow.isValid() &&  (m_xParamColumns->get().size()+1) != m_aParameterRow->get().size() )
+        if (m_aParameterRow.is() &&  (m_xParamColumns->get().size()+1) != m_aParameterRow->get().size() )
         {
             sal_Int32 i = m_aParameterRow->get().size();
             sal_Int32 nParamColumns = m_xParamColumns->get().size()+1;
             m_aParameterRow->get().resize(nParamColumns);
             for ( ;i < nParamColumns; ++i )
             {
-                if ( !(m_aParameterRow->get())[i].isValid() )
+                if ( !(m_aParameterRow->get())[i].is() )
                     (m_aParameterRow->get())[i] = new ORowSetValueDecorator;
             }
             //m_aParameterRow->resize(m_xParamColumns->size()+1);
         }
-        if (m_aParameterRow.isValid() && nParaCount < m_aParameterRow->get().size() )
+        if (m_aParameterRow.is() && nParaCount < m_aParameterRow->get().size() )
         {
 
             m_pSQLAnalyzer->bindParameterRow(m_aParameterRow);
@@ -619,7 +619,7 @@ void OPreparedStatement::parseParamterElem(const String& _sColumnName,OSQLParseN
     Reference<XPropertySet> xCol;
     m_xColNames->getByName(_sColumnName) >>= xCol;
     sal_Int32 nParameter = -1;
-    if(m_xParamColumns.isValid())
+    if(m_xParamColumns.is())
     {
         OSQLColumns::Vector::const_iterator aIter = find(m_xParamColumns->get().begin(),m_xParamColumns->get().end(),_sColumnName,::comphelper::UStringMixEqual(m_pTable->isCaseSensitive()));
         if(aIter != m_xParamColumns->get().end())

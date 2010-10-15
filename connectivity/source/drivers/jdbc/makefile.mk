@@ -89,6 +89,7 @@ SHL1STDLIBS=\
     $(CPPUHELPERLIB)			\
     $(VOSLIB)					\
     $(SALLIB)					\
+    $(SALHELPERLIB)					\
     $(JVMACCESSLIB)				\
     $(DBTOOLSLIB)				\
     $(UNOTOOLSLIB)				\

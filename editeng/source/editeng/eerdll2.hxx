@@ -30,7 +30,7 @@
 
 #include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
 #include <editeng/forbiddencharacterstable.hxx>
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 
 class SfxPoolItem;
 
@@ -42,7 +42,7 @@ private:
     SfxPoolItem**   ppDefItems;
     OutputDevice*   pStdRefDevice;
 
-    vos::ORef<SvxForbiddenCharactersTable>  xForbiddenCharsTable;
+    rtl::Reference<SvxForbiddenCharactersTable> xForbiddenCharsTable;
 
 public:
                     GlobalEditData();
@@ -51,8 +51,8 @@ public:
     SfxPoolItem**   GetDefItems();
     OutputDevice*   GetStdRefDevice();
 
-    vos::ORef<SvxForbiddenCharactersTable>  GetForbiddenCharsTable();
-    void            SetForbiddenCharsTable( vos::ORef<SvxForbiddenCharactersTable> xForbiddenChars ) { xForbiddenCharsTable = xForbiddenChars; }
+    rtl::Reference<SvxForbiddenCharactersTable> GetForbiddenCharsTable();
+    void            SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars ) { xForbiddenCharsTable = xForbiddenChars; }
     ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XLanguageGuessing > GetLanguageGuesser();
 };
 

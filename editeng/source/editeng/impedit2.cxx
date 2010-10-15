@@ -4548,15 +4548,15 @@ void ImpEditEngine::IndentBlock( EditView* pEditView, BOOL bRight )
     }
 }
 
-vos::ORef<SvxForbiddenCharactersTable> ImpEditEngine::GetForbiddenCharsTable( BOOL bGetInternal ) const
+rtl::Reference<SvxForbiddenCharactersTable> ImpEditEngine::GetForbiddenCharsTable( BOOL bGetInternal ) const
 {
-    vos::ORef<SvxForbiddenCharactersTable> xF = xForbiddenCharsTable;
-    if ( !xF.isValid() && bGetInternal )
+    rtl::Reference<SvxForbiddenCharactersTable> xF = xForbiddenCharsTable;
+    if ( !xF.is() && bGetInternal )
         xF = EE_DLL()->GetGlobalData()->GetForbiddenCharsTable();
     return xF;
 }
 
-void ImpEditEngine::SetForbiddenCharsTable( vos::ORef<SvxForbiddenCharactersTable> xForbiddenChars )
+void ImpEditEngine::SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars )
 {
     EE_DLL()->GetGlobalData()->SetForbiddenCharsTable( xForbiddenChars );
 }

@@ -46,7 +46,7 @@ sdbcx::ObjectType OEvoabColumns::createObject(const ::rtl::OUString& _rName)
 {
 
     OEvoabTable* pTable = (OEvoabTable*)m_pTable;
-    ::vos::ORef<OSQLColumns> aCols = pTable->getTableColumns();
+    ::rtl::Reference<OSQLColumns> aCols = pTable->getTableColumns();
     OSQLColumns::Vector::const_iterator aIter = find(aCols->get().begin(),aCols->get().end(),_rName,::comphelper::UStringMixEqual(isCaseSensitive()));
     sdbcx::ObjectType xRet;
     if(aIter != aCols->get().end())

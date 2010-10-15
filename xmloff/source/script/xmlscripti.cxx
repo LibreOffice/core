@@ -49,6 +49,7 @@ using namespace com::sun::star::document;
 using namespace com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
+using rtl::OUString;
 
 // =============================================================================
 // XMLScriptChildContext: context for <office:script> element

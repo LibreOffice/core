@@ -297,7 +297,7 @@ void ODbaseTable::fillColumns()
     m_pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
     m_pFileStream->Seek(32L);
 
-    if(!m_aColumns.isValid())
+    if(!m_aColumns.is())
         m_aColumns = new OSQLColumns();
     else
         m_aColumns->get().clear();
@@ -1729,7 +1729,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
         if (xIndex.is())
         {
             // first check if the value is different to the old one and when if it conform to the index
-            if(pOrgRow.isValid() && (rRow.get()[nPos]->getValue().isNull() || rRow.get()[nPos] == (pOrgRow->get())[nPos]))
+            if(pOrgRow.is() && (rRow.get()[nPos]->getValue().isNull() || rRow.get()[nPos] == (pOrgRow->get())[nPos]))
                 continue;
             else
             {
@@ -1842,7 +1842,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
             ODbaseIndex* pIndex = reinterpret_cast< ODbaseIndex* >( xTunnel->getSomething(ODbaseIndex::getUnoTunnelImplementationId()) );
             OSL_ENSURE(pIndex,"ODbaseTable::UpdateBuffer: No Index returned!");
             // Update !!
-            if (pOrgRow.isValid() && !rRow.get()[nPos]->getValue().isNull() )
+            if (pOrgRow.is() && !rRow.get()[nPos]->getValue().isNull() )
                 pIndex->Update(m_nFilePos,*(pOrgRow->get())[nPos],*rRow.get()[nPos]);
             else
                 pIndex->Insert(m_nFilePos,*rRow.get()[nPos]);
@@ -2549,7 +2549,7 @@ void ODbaseTable::copyData(ODbaseTable* _pNewTable,sal_Int32 _nPos)
         bOk = seekRow( IResultSetHelper::BOOKMARK, nRowPos+1, nCurPos );
         if ( bOk )
         {
-            bOk = fetchRow( aRow, m_aColumns.getBody(), sal_True, sal_True);
+            bOk = fetchRow( aRow, *m_aColumns, sal_True, sal_True);
             if ( bOk && !aRow->isDeleted() ) // copy only not deleted rows
             {
                 // special handling when pos == 0 then we don't have to distinguish between the two rows

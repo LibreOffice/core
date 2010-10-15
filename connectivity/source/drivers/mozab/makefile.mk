@@ -154,6 +154,7 @@ SHL2STDLIBS=\
     $(CPPUHELPERLIB)			\
     $(VOSLIB)					\
     $(SALLIB)					\
+    $(SALHELPERLIB) \
     $(DBTOOLSLIB)				\
     $(COMPHELPERLIB)			\
     $(MOZ_LIB_XPCOM)

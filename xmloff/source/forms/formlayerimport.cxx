@@ -61,7 +61,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    ::vos::ORef< SvXMLImportPropertyMapper > OFormLayerXMLImport::getStylePropertyMapper() const
+    ::rtl::Reference< SvXMLImportPropertyMapper > OFormLayerXMLImport::getStylePropertyMapper() const
     {
         return m_pImpl->getStylePropertyMapper();
     }

@@ -69,7 +69,8 @@ SHL1STDLIBS=\
     $(CPPULIB)                  \
     $(CPPUHELPERLIB)            \
     $(DBTOOLSLIB)               \
-    $(SALLIB)
+    $(SALLIB)                   \
+    $(SALHELPERLIB)
 
 SHL1DEPN=
 SHL1IMPLIB= i$(TARGET)
@@ -112,6 +113,7 @@ SHL2STDLIBS=\
     $(CPPUHELPERLIB)            \
     $(VOSLIB)                   \
     $(SALLIB)                   \
+    $(SALHELPERLIB)                   \
     $(DBTOOLSLIB)               \
     $(COMPHELPERLIB)
 

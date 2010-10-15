@@ -309,6 +309,7 @@
 #include "rtl/ustring.hxx"
 
 #include "salhelper/timer.hxx"
+#include "salhelper/simplereferenceobject.hxx"
 
 #include "sys/types.h"
 
@@ -327,9 +328,7 @@
 
 #include "vos/mutex.hxx"
 #include "vos/process.hxx"
-#include "vos/ref.hxx"
-#include "vos/ref.hxx"
-#include "vos/refernce.hxx"
+
 //---MARKER---
 
 #endif

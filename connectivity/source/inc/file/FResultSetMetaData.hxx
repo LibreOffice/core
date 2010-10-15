@@ -31,7 +31,7 @@
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include "connectivity/CommonTools.hxx"
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 #include "file/filedllapi.hxx"
 
 namespace connectivity
@@ -48,7 +48,7 @@ namespace connectivity
             public  OResultSetMetaData_BASE
         {
             ::rtl::OUString     m_aTableName;
-            ::vos::ORef<connectivity::OSQLColumns>  m_xColumns;
+            ::rtl::Reference<connectivity::OSQLColumns> m_xColumns;
             OFileTable*         m_pTable;
 
             void checkColumnIndex(sal_Int32 column) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -56,7 +56,7 @@ namespace connectivity
             virtual ~OResultSetMetaData();
         public:
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
-            OResultSetMetaData(const ::vos::ORef<connectivity::OSQLColumns>& _rxColumns,const ::rtl::OUString& _aTableName,OFileTable*  _pTable);
+            OResultSetMetaData(const ::rtl::Reference<connectivity::OSQLColumns>& _rxColumns,const ::rtl::OUString& _aTableName,OFileTable* _pTable);
 
             /// Avoid ambigous cast error from the compiler.
             inline operator ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData > () throw()

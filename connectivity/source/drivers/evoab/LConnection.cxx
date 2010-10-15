@@ -49,7 +49,6 @@
 
 using namespace connectivity::evoab;
 using namespace connectivity::file;
-using namespace vos;
 
 typedef connectivity::file::OConnection  OConnection_B;
 

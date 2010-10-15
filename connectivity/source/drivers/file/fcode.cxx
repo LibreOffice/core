@@ -102,23 +102,23 @@ OOperandRow::OOperandRow(sal_uInt16 _nPos, sal_Int32 _rType)
 void OOperandRow::bindValue(const OValueRefRow& _pRow)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OOperandRow::OOperandRow" );
-    OSL_ENSURE(_pRow.isValid(),"NO EMPTY row allowed!");
+    OSL_ENSURE(_pRow.is(),"NO EMPTY row allowed!");
     m_pRow = _pRow;
-    OSL_ENSURE(m_pRow.isValid() && m_nRowPos < m_pRow->get().size(),"Invalid RowPos is >= vector.size()");
+    OSL_ENSURE(m_pRow.is() && m_nRowPos < m_pRow->get().size(),"Invalid RowPos is >= vector.size()");
     (m_pRow->get())[m_nRowPos]->setBound(sal_True);
 }
 // -----------------------------------------------------------------------------
 void OOperandRow::setValue(const ORowSetValue& _rVal)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OOperandRow::setValue" );
-    OSL_ENSURE(m_pRow.isValid() && m_nRowPos < m_pRow->get().size(),"Invalid RowPos is >= vector.size()");
+    OSL_ENSURE(m_pRow.is() && m_nRowPos < m_pRow->get().size(),"Invalid RowPos is >= vector.size()");
     (*(m_pRow->get())[m_nRowPos]) = _rVal;
 }
 //------------------------------------------------------------------
 const ORowSetValue& OOperandRow::getValue() const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OOperandRow::getValue" );
-    OSL_ENSURE(m_pRow.isValid() && m_nRowPos < m_pRow->get().size(),"Invalid RowPos is >= vector.size()");
+    OSL_ENSURE(m_pRow.is() && m_nRowPos < m_pRow->get().size(),"Invalid RowPos is >= vector.size()");
     return (m_pRow->get())[m_nRowPos]->getValue();
 }
 

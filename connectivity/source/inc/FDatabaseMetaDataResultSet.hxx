@@ -46,7 +46,7 @@
 #include "connectivity/FValue.hxx"
 #include "connectivity/dbtoolsdllapi.hxx"
 #include <comphelper/broadcasthelper.hxx>
-#include <vos/refernce.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 namespace connectivity
 {

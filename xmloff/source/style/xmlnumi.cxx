@@ -84,6 +84,9 @@ using namespace ::com::sun::star::frame;
 using namespace ::xmloff::token;
 using namespace ::com::sun::star::io;
 
+using rtl::OUString;
+using rtl::OUStringBuffer;
+
 static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_SYMBOL_TEXT_DISTANCE[] =
         "SymbolTextDistance";
 static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_PARENT_NUMBERING[] =

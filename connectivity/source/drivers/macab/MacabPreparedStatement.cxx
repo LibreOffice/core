@@ -47,7 +47,7 @@ IMPLEMENT_SERVICE_INFO(MacabPreparedStatement, "com.sun.star.sdbc.drivers.MacabP
 // -------------------------------------------------------------------------
 void MacabPreparedStatement::checkAndResizeParameters(sal_Int32 nParams) throw(SQLException)
 {
-    if ( !m_aParameterRow.isValid() )
+    if ( !m_aParameterRow.is() )
         m_aParameterRow = new OValueVector();
 
     if (nParams < 1)
@@ -59,10 +59,10 @@ void MacabPreparedStatement::checkAndResizeParameters(sal_Int32 nParams) throw(S
 // -------------------------------------------------------------------------
 void MacabPreparedStatement::setMacabFields() const throw(SQLException)
 {
-    ::vos::ORef<connectivity::OSQLColumns> xColumns;    // selected columns
+    ::rtl::Reference<connectivity::OSQLColumns> xColumns;   // selected columns
 
     xColumns = m_aSQLIterator.getSelectColumns();
-    if (!xColumns.isValid())
+    if (!xColumns.is())
     {
         ::connectivity::SharedResources aResources;
         const ::rtl::OUString sError( aResources.getResourceString(
@@ -114,7 +114,7 @@ void MacabPreparedStatement::disposing()
 {
     MacabPreparedStatement_BASE::disposing();
 
-    if (m_aParameterRow.isValid())
+    if (m_aParameterRow.is())
     {
         m_aParameterRow->get().clear();
         m_aParameterRow = NULL;

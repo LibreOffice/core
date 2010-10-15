@@ -41,7 +41,7 @@
 #include <osl/process.h>
 #include <osl/diagnose.h>
 #include <osl/security.hxx>
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 #include <vos/process.hxx>
 
 #include <tools/resmgr.hxx>
@@ -64,7 +64,8 @@
 
 #include "app.hxx"
 
-using namespace rtl;
+using rtl::OString;
+using rtl::OUString;
 using namespace osl;
 using namespace utl;
 using namespace com::sun::star::container;

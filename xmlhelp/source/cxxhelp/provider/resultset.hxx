@@ -29,7 +29,7 @@
 #define _RESULTSET_HXX
 
 #include <ucbhelper/resultsethelper.hxx>
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 
 #include "content.hxx"
 
@@ -39,7 +39,7 @@ namespace chelp {
 
     class DynamicResultSet : public ::ucbhelper::ResultSetImplHelper
     {
-        vos::ORef< Content > m_xContent;
+        rtl::Reference< Content > m_xContent;
         com::sun::star::uno::Reference<
         com::sun::star::ucb::XCommandEnvironment > m_xEnv;
         ResultSetFactory*                    m_pFactory;
@@ -52,7 +52,7 @@ namespace chelp {
         DynamicResultSet(
             const com::sun::star::uno::Reference<
             com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
-            const vos::ORef< Content >& rxContent,
+            const rtl::Reference< Content >& rxContent,
             const com::sun::star::ucb::OpenCommandArgument2& rCommand,
             const com::sun::star::uno::Reference<
             com::sun::star::ucb::XCommandEnvironment >& rxEnv,

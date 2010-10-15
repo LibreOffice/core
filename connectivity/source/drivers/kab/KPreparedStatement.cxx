@@ -46,7 +46,7 @@ IMPLEMENT_SERVICE_INFO(KabPreparedStatement, "com.sun.star.sdbc.drivers.KabPrepa
 // -------------------------------------------------------------------------
 void KabPreparedStatement::checkAndResizeParameters(sal_Int32 nParams) throw(SQLException)
 {
-    if ( !m_aParameterRow.isValid() )
+    if ( !m_aParameterRow.is() )
         m_aParameterRow = new OValueVector();
 
     if (nParams < 1)
@@ -58,10 +58,10 @@ void KabPreparedStatement::checkAndResizeParameters(sal_Int32 nParams) throw(SQL
 // -------------------------------------------------------------------------
 void KabPreparedStatement::setKabFields() const throw(SQLException)
 {
-    ::vos::ORef<connectivity::OSQLColumns> xColumns;    // selected columns
+    ::rtl::Reference<connectivity::OSQLColumns> xColumns;   // selected columns
 
     xColumns = m_aSQLIterator.getSelectColumns();
-    if (!xColumns.isValid())
+    if (!xColumns.is())
     {
         ::connectivity::SharedResources aResources;
         const ::rtl::OUString sError( aResources.getResourceString(
@@ -112,7 +112,7 @@ void KabPreparedStatement::disposing()
 {
     KabPreparedStatement_BASE::disposing();
 
-    if (m_aParameterRow.isValid())
+    if (m_aParameterRow.is())
     {
         m_aParameterRow->get().clear();
         m_aParameterRow = NULL;

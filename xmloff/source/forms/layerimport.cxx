@@ -242,8 +242,8 @@ OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
 
     // initialize our style map
     m_xPropertyHandlerFactory = new OControlPropertyHandlerFactory();
-    ::vos::ORef< XMLPropertySetMapper > xStylePropertiesMapper = new XMLPropertySetMapper(getControlStylePropertyMap(), m_xPropertyHandlerFactory.getBodyPtr());
-    m_xImportMapper = new SvXMLImportPropertyMapper(xStylePropertiesMapper.getBodyPtr(), _rImporter);
+        ::rtl::Reference< XMLPropertySetMapper > xStylePropertiesMapper = new XMLPropertySetMapper(getControlStylePropertyMap(), m_xPropertyHandlerFactory.get());
+        m_xImportMapper = new SvXMLImportPropertyMapper(xStylePropertiesMapper.get(), _rImporter);
 
     // 'initialize'
     m_aCurrentPageIds = m_aControlIds.end();
@@ -419,7 +419,7 @@ void OFormLayerXMLImport_Impl::registerControlReferences(const Reference< XPrope
 }
 
 //---------------------------------------------------------------------
-::vos::ORef< SvXMLImportPropertyMapper > OFormLayerXMLImport_Impl::getStylePropertyMapper() const
+::rtl::Reference< SvXMLImportPropertyMapper > OFormLayerXMLImport_Impl::getStylePropertyMapper() const
 {
     return m_xImportMapper;
 }

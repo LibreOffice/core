@@ -50,7 +50,7 @@ sdbcx::ObjectType ODbaseIndexColumns::createObject(const ::rtl::OUString& _rName
 {
     const ODbaseTable* pTable = m_pIndex->getTable();
 
-    ::vos::ORef<OSQLColumns> aCols = pTable->getTableColumns();
+    ::rtl::Reference<OSQLColumns> aCols = pTable->getTableColumns();
     OSQLColumns::Vector::const_iterator aIter = find(aCols->get().begin(),aCols->get().end(),_rName,::comphelper::UStringMixEqual(isCaseSensitive()));
 
     Reference< XPropertySet > xCol;

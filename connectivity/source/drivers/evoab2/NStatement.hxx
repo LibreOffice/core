@@ -87,7 +87,7 @@ namespace connectivity
         public:
             ::rtl::OUString                             sTable;
             QueryFilterType                             eFilterType;
-            ::vos::ORef< ::connectivity::OSQLColumns >  xSelectColumns;
+            ::rtl::Reference< ::connectivity::OSQLColumns >  xSelectColumns;
             SortDescriptor                              aSortOrder;
 
             QueryData()

@@ -104,7 +104,7 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
     // column count
     const xub_StrLen nFieldCount = aHeaderLine.GetTokenCount(m_cFieldDelimiter,m_cStringDelimiter);
 
-    if(!m_aColumns.isValid())
+    if(!m_aColumns.is())
         m_aColumns = new OSQLColumns();
     else
         m_aColumns->get().clear();

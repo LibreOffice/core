@@ -80,6 +80,7 @@ SHL1STDLIBS=\
     $(TOOLSLIB)					\
     $(UCBHELPERLIB)				\
     $(SALLIB)					\
+    $(SALHELPERLIB)					\
     $(DBTOOLSLIB)				\
     $(UNOTOOLSLIB)				\
     $(COMPHELPERLIB)

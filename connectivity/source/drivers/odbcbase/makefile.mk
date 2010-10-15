@@ -67,7 +67,8 @@ SHL1STDLIBS=\
     $(CPPUHELPERLIB)			\
     $(CPPULIB)					\
     $(VOSLIB)					\
-    $(SALLIB)
+    $(SALLIB) \
+    $(SALHELPERLIB)
 
 SHL1DEPN=
 SHL1IMPLIB=	i$(ODBC2_TARGET)

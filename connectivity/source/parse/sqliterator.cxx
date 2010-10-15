@@ -329,7 +329,7 @@ void OSQLParseTreeIterator::impl_getQueryParameterColumns( const OSQLTable& _rQu
         // parameters not to be included in the traversal
         return;
 
-    ::vos::ORef< OSQLColumns > pSubQueryParameterColumns( new OSQLColumns() );
+    ::rtl::Reference< OSQLColumns > pSubQueryParameterColumns( new OSQLColumns() );
 
     // get the command and the EscapeProcessing properties from the sub query
     ::rtl::OUString sSubQueryCommand;
@@ -1689,7 +1689,7 @@ OSQLTable OSQLParseTreeIterator::impl_createTableObject( const ::rtl::OUString& 
     return aReturnTable;
 }
 //-----------------------------------------------------------------------------
-void OSQLParseTreeIterator::appendColumns(::vos::ORef<OSQLColumns>& _rColumns,const ::rtl::OUString& _rTableAlias,const OSQLTable& _rTable)
+void OSQLParseTreeIterator::appendColumns(::rtl::Reference<OSQLColumns>& _rColumns,const ::rtl::OUString& _rTableAlias,const OSQLTable& _rTable)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseTreeIterator::appendColumns" );
 
@@ -1733,7 +1733,7 @@ void OSQLParseTreeIterator::appendColumns(::vos::ORef<OSQLColumns>& _rColumns,co
     }
 }
 //-----------------------------------------------------------------------------
-void OSQLParseTreeIterator::setSelectColumnName(::vos::ORef<OSQLColumns>& _rColumns,const ::rtl::OUString & rColumnName,const ::rtl::OUString & rColumnAlias, const ::rtl::OUString & rTableRange,sal_Bool bFkt,sal_Int32 _nType,sal_Bool bAggFkt)
+void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns>& _rColumns,const ::rtl::OUString & rColumnName,const ::rtl::OUString & rColumnAlias, const ::rtl::OUString & rTableRange,sal_Bool bFkt,sal_Int32 _nType,sal_Bool bAggFkt)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseTreeIterator::setSelectColumnName" );
     if(rColumnName.toChar() == '*' && !rTableRange.getLength())

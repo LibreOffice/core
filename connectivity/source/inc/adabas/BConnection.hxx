@@ -31,7 +31,7 @@
 #include "odbc/OConnection.hxx"
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <cppuhelper/weakref.hxx>
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 
 namespace connectivity
 {
@@ -70,7 +70,7 @@ namespace connectivity
             virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw (::com::sun::star::uno::RuntimeException);
             static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
-            ::vos::ORef<OSQLColumns> createSelectColumns(const ::rtl::OUString& _rSql);
+            ::rtl::Reference<OSQLColumns> createSelectColumns(const ::rtl::OUString& _rSql);
         };
     }
 }

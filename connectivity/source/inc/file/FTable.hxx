@@ -48,7 +48,7 @@ namespace connectivity
         protected:
             OConnection*                                        m_pConnection;
             SvStream*                                           m_pFileStream;
-            ::vos::ORef<OSQLColumns>                            m_aColumns;
+            ::rtl::Reference<OSQLColumns>                           m_aColumns;
             sal_Int32                                           m_nFilePos;                 // aktuelle IResultSetHelper::Movement
             sal_uInt8*                                          m_pBuffer;
             sal_uInt16                                          m_nBufferSize;  // Groesse des ReadBuffer, wenn pBuffer != NULL
@@ -84,7 +84,7 @@ namespace connectivity
             virtual sal_Bool seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos) = 0;
             virtual sal_Bool fetchRow(OValueRefRow& _rRow,const OSQLColumns& _rCols, sal_Bool _bUseTableDefs,sal_Bool bRetrieveData) = 0;
 
-            ::vos::ORef<OSQLColumns> getTableColumns() const {return m_aColumns;}
+            ::rtl::Reference<OSQLColumns> getTableColumns() const {return m_aColumns;}
             virtual BOOL InsertRow(OValueRefVector& rRow, BOOL bFlush,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
             virtual BOOL DeleteRow(const OSQLColumns& _rCols);
             virtual BOOL UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);

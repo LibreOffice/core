@@ -43,7 +43,7 @@ namespace connectivity
         class OSQLAnalyzer;
         typedef::std::vector<OCode*> OCodeList;
 
-        class OPredicateCompiler : public ::vos::OReference
+        class OPredicateCompiler : public ::salhelper::SimpleReferenceObject
         {
             friend class OPredicateInterpreter;
             friend class OSQLAnalyzer;
@@ -90,13 +90,13 @@ namespace connectivity
 
 
         class OPredicateInterpreter :
-            public ::vos::OReference
+            public ::salhelper::SimpleReferenceObject
         {
             OCodeStack          m_aStack;
-            ::vos::ORef<OPredicateCompiler> m_rCompiler;
+            ::rtl::Reference<OPredicateCompiler> m_rCompiler;
 
         public:
-            OPredicateInterpreter(const ::vos::ORef<OPredicateCompiler>& rComp) : m_rCompiler(rComp){}
+            OPredicateInterpreter(const ::rtl::Reference<OPredicateCompiler>& rComp) : m_rCompiler(rComp){}
             virtual ~OPredicateInterpreter();
 
             sal_Bool    evaluate(OCodeList& rCodeList);

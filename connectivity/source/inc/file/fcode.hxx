@@ -130,7 +130,7 @@ namespace connectivity
         {
         public:
             OOperandParam(connectivity::OSQLParseNode* pNode, sal_Int32 _nPos);
-            void describe(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xColumn, ::vos::ORef<connectivity::OSQLColumns> _xParamColumns);
+            void describe(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xColumn, ::rtl::Reference<connectivity::OSQLColumns> _xParamColumns);
 
             TYPEINFO();
         };

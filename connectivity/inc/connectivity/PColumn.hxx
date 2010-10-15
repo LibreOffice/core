@@ -30,7 +30,7 @@
 #include "connectivity/dbtoolsdllapi.hxx"
 #include "connectivity/sdbcx/VColumn.hxx"
 #include "connectivity/CommonTools.hxx"
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -94,7 +94,7 @@ namespace connectivity
         public:
             /** creates a collection of OParseColumn, as described by a result set meta data instance.
             */
-            static ::vos::ORef< OSQLColumns >
+            static ::rtl::Reference< OSQLColumns >
                 createColumnsForResultSet(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >& _rxResMetaData,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxDBMetaData,

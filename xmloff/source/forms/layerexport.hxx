@@ -34,7 +34,7 @@
 #include <com/sun/star/awt/XControlModel.hpp>
 #include "callbacks.hxx"
 #include "ifacecompare.hxx"
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 
 class SvXMLExport;
 class SvXMLNumFmtExport;
@@ -80,8 +80,8 @@ namespace xmloff
         PropertySetBag      m_aIgnoreList;
 
         // style handling
-        ::vos::ORef< XMLPropertyHandlerFactory >    m_xPropertyHandlerFactory;
-        ::vos::ORef< SvXMLExportPropertyMapper >    m_xStyleExportMapper;
+        ::rtl::Reference< XMLPropertyHandlerFactory >   m_xPropertyHandlerFactory;
+        ::rtl::Reference< SvXMLExportPropertyMapper >   m_xStyleExportMapper;
 
         // we need our own number formats supplier:
         // Controls which have a number formats do not work with the formats supplier of the document they reside
@@ -181,7 +181,7 @@ namespace xmloff
         virtual SvXMLExport&                                getGlobalContext();
         virtual ::rtl::OUString                             getObjectStyleName(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject );
-        virtual ::vos::ORef< SvXMLExportPropertyMapper >    getStylePropertyMapper();
+        virtual ::rtl::Reference< SvXMLExportPropertyMapper >   getStylePropertyMapper();
 
         /** clear any structures which have been build in the recent <method>examine</method> calls.
         */

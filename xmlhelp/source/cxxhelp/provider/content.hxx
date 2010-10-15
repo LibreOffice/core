@@ -28,7 +28,6 @@
 #ifndef _CONTENT_HXX
 #define _CONTENT_HXX
 
-#include <vos/ref.hxx>
 #include <ucbhelper/contenthelper.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 

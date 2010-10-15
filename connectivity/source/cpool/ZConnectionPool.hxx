@@ -38,7 +38,7 @@
 #include <comphelper/stl_types.hxx>
 #include <osl/mutex.hxx>
 #include <salhelper/timer.hxx>
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/digest.h>
 
 namespace connectivity
@@ -116,7 +116,7 @@ namespace connectivity
         TActiveConnectionMap    m_aActiveConnections;   // the currently active connections
 
         ::osl::Mutex            m_aMutex;
-        ::vos::ORef<OPoolTimer> m_xInvalidator;         // invalidates the conntection pool when shot
+        ::rtl::Reference<OPoolTimer>    m_xInvalidator;         // invalidates the conntection pool when shot
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >             m_xDriver;      // the one and only driver for this connectionpool
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >           m_xDriverNode;  // config node entry

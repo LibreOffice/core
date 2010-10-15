@@ -30,12 +30,12 @@
 
 #include "sal/config.h"
 #include "xmloff/dllapi.h"
-#include <vos/refernce.hxx>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include <xmloff/xmlexppr.hxx>
 
 namespace com { namespace sun { namespace star { namespace awt {
@@ -57,7 +57,7 @@ namespace xmloff
     /** provides functionallity for exporting a complete form layer.
     */
     class XMLOFF_DLLPUBLIC OFormLayerXMLExport
-                :public ::vos::OReference
+                :public ::salhelper::SimpleReferenceObject
     {
     protected:
         /// our export context
@@ -166,7 +166,7 @@ namespace xmloff
         bool documentContainsXForms() const;
 
         /// retrieves the property mapper for control styles
-        ::vos::ORef< SvXMLExportPropertyMapper > getStylePropertyMapper();
+        ::rtl::Reference< SvXMLExportPropertyMapper > getStylePropertyMapper();
 
         /** exports the controls number styles
         */
