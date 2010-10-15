@@ -108,6 +108,8 @@ using namespace ::xmloff::token;
 using namespace ::formula;
 using ::rtl::OUString;
 
+using rtl::OUString;
+
 OUString SAL_CALL ScXMLImport_getImplementationName() throw()
 {
     return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Calc.XMLOasisImporter" ) );

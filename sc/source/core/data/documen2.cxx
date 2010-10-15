@@ -455,9 +455,9 @@ ScDocument::~ScDocument()
     // delete the EditEngine before destroying the xPoolHelper
     delete pCacheFieldEditEngine;
 
-    if ( xPoolHelper.isValid() && !bIsClip )
+    if ( xPoolHelper.is() && !bIsClip )
         xPoolHelper->SourceDocumentGone();
-    xPoolHelper.unbind();
+    xPoolHelper.clear();
 
     DeleteColorTable();
     delete pScriptTypeData;

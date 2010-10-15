@@ -78,6 +78,9 @@ using namespace xmloff::token;
 //using namespace ::com::sun::star::text;
 using namespace ::formula;
 
+using rtl::OUString;
+using com::sun::star::uno::Reference;
+
 ScXMLCellImportPropertyMapper::ScXMLCellImportPropertyMapper(
         const UniReference< XMLPropertySetMapper >& rMapper,
         SvXMLImport& rImportP) :

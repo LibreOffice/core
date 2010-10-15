@@ -50,6 +50,8 @@ using namespace com::sun::star;
 using namespace xmloff::token;
 using ::rtl::OUString;
 
+using rtl::OUString;
+
 //------------------------------------------------------------------
 
 ScXMLTableScenarioContext::ScXMLTableScenarioContext(

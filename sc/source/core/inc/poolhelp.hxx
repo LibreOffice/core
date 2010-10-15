@@ -29,7 +29,7 @@
 #define SC_POOLHELP_HXX
 
 #include <rtl/ref.hxx>
-#include <vos/refernce.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include <tools/link.hxx>
 #include "docoptio.hxx"
 
@@ -40,7 +40,7 @@ class SvNumberFormatter;
 class SfxItemPool;
 
 
-class ScPoolHelper : public vos::OReference
+class ScPoolHelper : public salhelper::SimpleReferenceObject
 {
 private:
     ScDocOptions        aOpt;

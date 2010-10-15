@@ -40,14 +40,14 @@ using namespace ::com::sun::star;
 
 //------------------------------------------------------------------------
 
-vos::ORef<SvxForbiddenCharactersTable> lcl_GetForbidden( ScDocShell* pDocSh )
+rtl::Reference<SvxForbiddenCharactersTable> lcl_GetForbidden( ScDocShell* pDocSh )
 {
-    vos::ORef<SvxForbiddenCharactersTable> xRet;
+    rtl::Reference<SvxForbiddenCharactersTable> xRet;
     if ( pDocSh )
     {
         ScDocument* pDoc = pDocSh->GetDocument();
         xRet = pDoc->GetForbiddenCharacters();
-        if ( !xRet.isValid() )
+        if ( !xRet.is() )
         {
             //  create an empty SvxForbiddenCharactersTable for SvxUnoForbiddenCharsTable,
             //  so changes can be stored.

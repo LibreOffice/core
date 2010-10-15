@@ -222,7 +222,7 @@
 #include <vcl/svapp.hxx>
 #include <osl/thread.hxx>
 #include <vos/runnable.hxx>
-#include <vos/refernce.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include <vcl/apptypes.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/editeng.hxx>

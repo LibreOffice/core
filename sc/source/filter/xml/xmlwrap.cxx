@@ -88,6 +88,8 @@
 using namespace com::sun::star;
 using ::rtl::OUString;
 
+using rtl::OUString;
+
 // -----------------------------------------------------------------------
 
 ScXMLImportWrapper::ScXMLImportWrapper(ScDocument& rD, SfxMedium* pM, const uno::Reference < embed::XStorage >& xStor ) :

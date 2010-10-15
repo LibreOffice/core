@@ -88,6 +88,7 @@ SHL1STDLIBS=       \
     $(TKLIB)		\
     $(VOSLIB)		\
     $(SALLIB)		\
+    $(SALHELPERLIB)		\
     $(TOOLSLIB)	\
     $(I18NISOLANGLIB) \
     $(UNOTOOLSLIB) \

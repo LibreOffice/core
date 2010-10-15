@@ -209,7 +209,7 @@ void ScSheetSaveData::StoreLoadedNamespaces( const SvXMLNamespaceMap& rNamespace
         // ignore the initial namespaces
         if ( maInitialPrefixes.find( aIter->first ) == maInitialPrefixes.end() )
         {
-            const NameSpaceEntry& rEntry = aIter->second.getBody();
+            const NameSpaceEntry& rEntry = *(aIter->second);
             maLoadedNamespaces.push_back( ScLoadedNamespaceEntry( rEntry.sPrefix, rEntry.sName, rEntry.nKey ) );
         }
         ++aIter;

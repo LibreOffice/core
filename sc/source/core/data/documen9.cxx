@@ -713,12 +713,12 @@ void ScDocument::SetXMLFromWrapper( BOOL bVal )
     bXMLFromWrapper = bVal;
 }
 
-vos::ORef<SvxForbiddenCharactersTable> ScDocument::GetForbiddenCharacters()
+rtl::Reference<SvxForbiddenCharactersTable> ScDocument::GetForbiddenCharacters()
 {
     return xForbiddenCharacters;
 }
 
-void ScDocument::SetForbiddenCharacters( const vos::ORef<SvxForbiddenCharactersTable> xNew )
+void ScDocument::SetForbiddenCharacters( const rtl::Reference<SvxForbiddenCharactersTable> xNew )
 {
     xForbiddenCharacters = xNew;
     if ( pEditEngine )

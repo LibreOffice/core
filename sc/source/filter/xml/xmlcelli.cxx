@@ -97,6 +97,8 @@
 using namespace com::sun::star;
 using namespace xmloff::token;
 
+using rtl::OUString;
+
 //------------------------------------------------------------------
 
 ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,

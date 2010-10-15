@@ -32,7 +32,7 @@
 #include <vcl/prntypes.hxx>
 #include <vcl/timer.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 #include "scdllapi.h"
 #include "table.hxx"        // FastGetRowHeight (inline)
 #include "rangelst.hxx"
@@ -259,7 +259,7 @@ friend class ScDocRowHeightUpdater;
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceManager;
 
-    vos::ORef<ScPoolHelper> xPoolHelper;
+    rtl::Reference<ScPoolHelper> xPoolHelper;
 
     SfxUndoManager*     mpUndoManager;
     ScFieldEditEngine*  pEditEngine;                    // uses pEditPool from xPoolHelper
@@ -302,7 +302,7 @@ private:
     ScChangeViewSettings* pChangeViewSettings;
     ScScriptTypeData*   pScriptTypeData;
     ScRefreshTimerControl* pRefreshTimerControl;
-    vos::ORef<SvxForbiddenCharactersTable> xForbiddenCharacters;
+    rtl::Reference<SvxForbiddenCharactersTable> xForbiddenCharacters;
 
     ScFieldEditEngine*  pCacheFieldEditEngine;
 
@@ -1587,8 +1587,8 @@ public:
     ScChangeViewSettings* GetChangeViewSettings() const     { return pChangeViewSettings; }
     SC_DLLPUBLIC void               SetChangeViewSettings(const ScChangeViewSettings& rNew);
 
-    vos::ORef<SvxForbiddenCharactersTable> GetForbiddenCharacters();
-    void            SetForbiddenCharacters( const vos::ORef<SvxForbiddenCharactersTable> xNew );
+    rtl::Reference<SvxForbiddenCharactersTable> GetForbiddenCharacters();
+    void            SetForbiddenCharacters( const rtl::Reference<SvxForbiddenCharactersTable> xNew );
 
     BYTE            GetAsianCompression() const;        // CharacterCompressionType values
     BOOL            IsValidAsianCompression() const;

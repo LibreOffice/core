@@ -66,6 +66,8 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::xml::sax::XAttributeList;
 using ::rtl::OUString;
 
+using rtl::OUString;
+
 //------------------------------------------------------------------
 
 ScXMLDataPilotTablesContext::ScXMLDataPilotTablesContext( ScXMLImport& rImport,

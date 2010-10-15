@@ -179,19 +179,19 @@ void ScDocShell::InitItems()
         PutItem( SvxColorTableItem( XColorTable::GetStdColorTable(), SID_COLOR_TABLE ) );
     }
 
-    if ( !aDocument.GetForbiddenCharacters().isValid() ||
+    if ( !aDocument.GetForbiddenCharacters().is() ||
             !aDocument.IsValidAsianCompression() || !aDocument.IsValidAsianKerning() )
     {
         //  get settings from SvxAsianConfig
         SvxAsianConfig aAsian( sal_False );
 
-        if ( !aDocument.GetForbiddenCharacters().isValid() )
+        if ( !aDocument.GetForbiddenCharacters().is() )
         {
             // set forbidden characters if necessary
             uno::Sequence<lang::Locale> aLocales = aAsian.GetStartEndCharLocales();
             if (aLocales.getLength())
             {
-                vos::ORef<SvxForbiddenCharactersTable> xForbiddenTable =
+                rtl::Reference<SvxForbiddenCharactersTable> xForbiddenTable =
                         new SvxForbiddenCharactersTable( aDocument.GetServiceManager() );
 
                 const lang::Locale* pLocales = aLocales.getConstArray();

@@ -45,6 +45,7 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;
 using namespace xmloff::token;
 
+using rtl::OUString;
 
 TYPEINIT1( XMLTableHeaderFooterContext, SvXMLImportContext );
 
