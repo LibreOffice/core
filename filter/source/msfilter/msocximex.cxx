@@ -88,6 +88,9 @@
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
 #include <com/sun/star/sheet/XCellRangeReferrer.hpp>
 #include <svtools/filterutils.hxx>
+// #TODO remove this when oox is used for control/userform import
+#include <vbahelper/vbahelper.hxx>
+#include <com/sun/star/util/MeasureUnit.hpp>
 
 #ifndef C2S
 #define C2S(cChar)  String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(cChar))
@@ -103,6 +106,209 @@ using namespace cppu;
 
 #define WW8_ASCII2STR(s) String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(s))
 #define GRAPHOBJ_URLPREFIX "vnd.sun.star.GraphicObject:"
+
+
+// #FIXME remove when oox is used for control import
+// convertion class lifted from oox ( yes, duplication I know but
+// should be very short term )
+class GraphicHelper
+{
+public:
+   GraphicHelper( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
+    ~GraphicHelper();
+
+    /** Returns information about the output device. */
+    const ::com::sun::star::awt::DeviceInfo& getDeviceInfo() const;
+
+    /** Converts the passed value from horizontal screen pixels to 1/100 mm. */
+    sal_Int32           convertScreenPixelXToHmm( double fPixelX ) const;
+    /** Converts the passed value from vertical screen pixels to 1/100 mm. */
+    sal_Int32           convertScreenPixelYToHmm( double fPixelY ) const;
+    /** Converts the passed point from screen pixels to 1/100 mm. */
+    ::com::sun::star::awt::Point convertScreenPixelToHmm( const ::com::sun::star::awt::Point& rPixel ) const;
+    /** Converts the passed size from screen pixels to 1/100 mm. */
+    ::com::sun::star::awt::Size convertScreenPixelToHmm( const ::com::sun::star::awt::Size& rPixel ) const;
+
+    /** Converts the passed value from 1/100 mm to horizontal screen pixels. */
+    double              convertHmmToScreenPixelX( sal_Int32 nHmmX ) const;
+    /** Converts the passed value from 1/100 mm to vertical screen pixels. */
+    double              convertHmmToScreenPixelY( sal_Int32 nHmmY ) const;
+    /** Converts the passed point from 1/100 mm to screen pixels. */
+    ::com::sun::star::awt::Point convertHmmToScreenPixel( const ::com::sun::star::awt::Point& rHmm ) const;
+    /** Converts the passed size from 1/100 mm to screen pixels. */
+    ::com::sun::star::awt::Size convertHmmToScreenPixel( const ::com::sun::star::awt::Size& rHmm ) const;
+
+    /** Converts the passed point from AppFont units to 1/100 mm. */
+    ::com::sun::star::awt::Point convertAppFontToHmm( const ::com::sun::star::awt::Point& rAppFont ) const;
+    /** Converts the passed point from AppFont units to 1/100 mm. */
+    ::com::sun::star::awt::Size convertAppFontToHmm( const ::com::sun::star::awt::Size& rAppFont ) const;
+
+    /** Converts the passed point from 1/100 mm to AppFont units. */
+    ::com::sun::star::awt::Point convertHmmToAppFont( const ::com::sun::star::awt::Point& rHmm ) const;
+    /** Converts the passed size from 1/100 mm to AppFont units. */
+    ::com::sun::star::awt::Size convertHmmToAppFont( const ::com::sun::star::awt::Size& rHmm ) const;
+
+private:
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxGlobalFactory;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxCompContext;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XUnitConversion > mxUnitConversion;
+    ::com::sun::star::awt::DeviceInfo maDeviceInfo; /// Current output device info.
+    double              mfPixelPerHmmX;             /// Number of screen pixels per 1/100 mm in X direction.
+    double              mfPixelPerHmmY;             /// Number of screen pixels per 1/100 mm in Y direction.
+};
+
+inline sal_Int32 lclConvertScreenPixelToHmm( double fPixel, double fPixelPerHmm )
+{
+    return static_cast< sal_Int32 >( (fPixelPerHmm > 0.0) ? (fPixel / fPixelPerHmm + 0.5) : 0.0 );
+}
+
+GraphicHelper::GraphicHelper( const uno::Reference< frame::XModel >& rxModel )
+{
+    mxGlobalFactory = comphelper::getProcessServiceFactory();
+    ::comphelper::ComponentContext aContext( mxGlobalFactory );
+    mxCompContext = aContext.getUNOContext();
+
+    // if no target frame has been passed (e.g. OLE objects), try to fallback to the active frame
+    // TODO: we need some mechanism to keep and pass the parent frame
+    uno::Reference< frame::XFrame > xFrame;
+    if ( rxModel.is() )
+    {
+        uno::Reference< frame::XController > xController = rxModel->getCurrentController();
+        xFrame = xController.is() ? xController->getFrame() : NULL;
+    }
+    if( !xFrame.is() && mxGlobalFactory.is() ) try
+    {
+        uno::Reference< frame::XFramesSupplier > xFramesSupp( mxGlobalFactory->createInstance( WW8_ASCII2STR( "com.sun.star.frame.Desktop" ) ), uno::UNO_QUERY_THROW );
+        xFrame = xFramesSupp->getActiveFrame();
+    }
+    catch( uno::Exception& )
+    {
+    }
+
+    // get the metric of the output device
+    OSL_ENSURE( xFrame.is(), "GraphicHelper::GraphicHelper - cannot get target frame" );
+    maDeviceInfo.PixelPerMeterX = maDeviceInfo.PixelPerMeterY = 3500.0; // some default just in case
+    if( xFrame.is() ) try
+    {
+        uno::Reference< awt::XDevice > xDevice( xFrame->getContainerWindow(), uno::UNO_QUERY_THROW );
+        mxUnitConversion.set( xDevice, uno::UNO_QUERY );
+        OSL_ENSURE( mxUnitConversion.is(), "GraphicHelper::GraphicHelper - cannot get unit converter" );
+        maDeviceInfo = xDevice->getInfo();
+    }
+    catch( uno::Exception& )
+    {
+        OSL_ENSURE( false, "GraphicHelper::GraphicHelper - cannot get output device info" );
+    }
+    mfPixelPerHmmX = maDeviceInfo.PixelPerMeterX / 100000.0;
+    mfPixelPerHmmY = maDeviceInfo.PixelPerMeterY / 100000.0;
+}
+
+GraphicHelper::~GraphicHelper()
+{
+}
+
+// Device info and device dependent unit conversion ---------------------------
+
+const awt::DeviceInfo& GraphicHelper::getDeviceInfo() const
+{
+    return maDeviceInfo;
+}
+
+sal_Int32 GraphicHelper::convertScreenPixelXToHmm( double fPixelX ) const
+{
+    return lclConvertScreenPixelToHmm( fPixelX, mfPixelPerHmmX );
+}
+
+sal_Int32 GraphicHelper::convertScreenPixelYToHmm( double fPixelY ) const
+{
+    return lclConvertScreenPixelToHmm( fPixelY, mfPixelPerHmmY );
+}
+
+awt::Point GraphicHelper::convertScreenPixelToHmm( const awt::Point& rPixel ) const
+{
+    return awt::Point( convertScreenPixelXToHmm( rPixel.X ), convertScreenPixelYToHmm( rPixel.Y ) );
+}
+
+awt::Size GraphicHelper::convertScreenPixelToHmm( const awt::Size& rPixel ) const
+{
+    return awt::Size( convertScreenPixelXToHmm( rPixel.Width ), convertScreenPixelYToHmm( rPixel.Height ) );
+}
+
+double GraphicHelper::convertHmmToScreenPixelX( sal_Int32 nHmmX ) const
+{
+    return nHmmX * mfPixelPerHmmX;
+}
+
+double GraphicHelper::convertHmmToScreenPixelY( sal_Int32 nHmmY ) const
+{
+    return nHmmY * mfPixelPerHmmY;
+}
+
+awt::Point GraphicHelper::convertHmmToScreenPixel( const awt::Point& rHmm ) const
+{
+    return awt::Point(
+        static_cast< sal_Int32 >( convertHmmToScreenPixelX( rHmm.X ) + 0.5 ),
+        static_cast< sal_Int32 >( convertHmmToScreenPixelY( rHmm.Y ) + 0.5 ) );
+}
+
+awt::Size GraphicHelper::convertHmmToScreenPixel( const awt::Size& rHmm ) const
+{
+    return awt::Size(
+        static_cast< sal_Int32 >( convertHmmToScreenPixelX( rHmm.Width ) + 0.5 ),
+        static_cast< sal_Int32 >( convertHmmToScreenPixelY( rHmm.Height ) + 0.5 ) );
+}
+
+awt::Point GraphicHelper::convertAppFontToHmm( const awt::Point& rAppFont ) const
+{
+    if( mxUnitConversion.is() ) try
+    {
+        awt::Point aPixel = mxUnitConversion->convertPointToPixel( rAppFont, ::com::sun::star::util::MeasureUnit::APPFONT );
+        return convertScreenPixelToHmm( aPixel );
+    }
+    catch( uno::Exception& )
+    {
+    }
+    return awt::Point( 0, 0 );
+}
+
+awt::Size GraphicHelper::convertAppFontToHmm( const awt::Size& rAppFont ) const
+{
+    if( mxUnitConversion.is() ) try
+    {
+        awt::Size aPixel = mxUnitConversion->convertSizeToPixel( rAppFont, ::com::sun::star::util::MeasureUnit::APPFONT );
+        return convertScreenPixelToHmm( aPixel );
+    }
+    catch( uno::Exception& )
+    {
+    }
+    return awt::Size( 0, 0 );
+}
+
+awt::Point GraphicHelper::convertHmmToAppFont( const awt::Point& rHmm ) const
+{
+    if( mxUnitConversion.is() ) try
+    {
+        awt::Point aPixel = convertHmmToScreenPixel( rHmm );
+        return mxUnitConversion->convertPointToLogic( aPixel, ::com::sun::star::util::MeasureUnit::APPFONT );
+    }
+    catch( uno::Exception& )
+    {
+    }
+    return awt::Point( 0, 0 );
+}
+
+awt::Size GraphicHelper::convertHmmToAppFont( const awt::Size& rHmm ) const
+{
+    if( mxUnitConversion.is() ) try
+    {
+        awt::Size aPixel = convertHmmToScreenPixel( rHmm );
+        return mxUnitConversion->convertSizeToLogic( aPixel, ::com::sun::star::util::MeasureUnit::APPFONT );
+    }
+    catch( uno::Exception& )
+    {
+    }
+    return awt::Size( 0, 0 );
+}
 
 
 static char sWW8_form[] = "WW-Standard";
@@ -1052,15 +1258,11 @@ sal_Bool OCX_Control::Import(uno::Reference<container::XNameContainer> &rDialog
     if (!xModel.is())
         return sal_False;
 
-    sal_Bool bVBA = sal_False;
     /*  #147900# sometimes insertion of a control fails due to existing name,
         do not break entire form import then... */
     try
     {
         rDialog->insertByName(sName, uno::makeAny(xModel));
-        if ( xDlgProps.is() )
-            xDlgProps->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("VBAForm") ) ) >>= bVBA;
-
     }
     catch( uno::Exception& )
     {
@@ -1079,28 +1281,19 @@ sal_Bool OCX_Control::Import(uno::Reference<container::XNameContainer> &rDialog
 
     uno::Any aTmp;
 
-    if ( !bVBA  )
-    {
-        aTmp <<= sal_Int32((mnLeft * 2) / 100);
-        xPropSet->setPropertyValue(WW8_ASCII2STR("PositionX"), aTmp);
-        aTmp <<= sal_Int32((mnTop * 2) / 100);
-        xPropSet->setPropertyValue(WW8_ASCII2STR("PositionY"), aTmp);
-        aTmp <<= sal_Int32((nWidth * 2) / 100);
-        xPropSet->setPropertyValue(WW8_ASCII2STR("Width"), aTmp);
-        aTmp <<= sal_Int32((nHeight * 2) / 100);
-        xPropSet->setPropertyValue(WW8_ASCII2STR("Height"), aTmp);
-    }
-    else
-    {
-        aTmp <<= sal_Int32(mnLeft); // 100thmm
-        xPropSet->setPropertyValue(WW8_ASCII2STR("PositionX"), aTmp);
-        aTmp <<= sal_Int32(mnTop); //100th mm
-        xPropSet->setPropertyValue(WW8_ASCII2STR("PositionY"), aTmp);
-        aTmp <<= sal_Int32(nWidth); // 100thmm
-        xPropSet->setPropertyValue(WW8_ASCII2STR("Width"), aTmp);
-        aTmp <<= sal_Int32(nHeight); //100th mm
-        xPropSet->setPropertyValue(WW8_ASCII2STR("Height"), aTmp);
-    }
+    GraphicHelper gHelper( pDocSh->GetModel() );
+
+    awt::Point aAppFontPos = gHelper.convertHmmToAppFont( awt::Point( mnLeft, mnTop )  );
+    aTmp <<= sal_Int32( aAppFontPos.X );
+    xPropSet->setPropertyValue(WW8_ASCII2STR("PositionX"), aTmp);
+    aTmp <<= sal_Int32( aAppFontPos.Y );
+    xPropSet->setPropertyValue(WW8_ASCII2STR("PositionY"), aTmp);
+
+    awt::Size aAppFontSize = gHelper.convertHmmToAppFont( awt::Size( nWidth, nHeight ) );
+    aTmp <<= sal_Int32( aAppFontSize.Width ); // 100thmm
+    xPropSet->setPropertyValue(WW8_ASCII2STR("Width"), aTmp);
+    aTmp <<= sal_Int32( aAppFontSize.Height); //100th mm
+    xPropSet->setPropertyValue(WW8_ASCII2STR("Height"), aTmp);
     if ( msToolTip.Len() > 0 )
         xPropSet->setPropertyValue(WW8_ASCII2STR("HelpText"), uno::Any(OUString(msToolTip)));
 
@@ -4361,30 +4554,14 @@ sal_Bool OCX_UserForm::Import(
         OUString(RTL_CONSTASCII_USTRINGPARAM("Title")), aTmp);
     aTmp <<= ImportColor(mnBackColor);
     xDialogPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
-    sal_Bool bVBA = sal_False;
-    // Ok we are importing xls but maybe we aren't in VBA mode
-    // if we are not in VBA mode then we should import sizes etc. ( as before )
-    try
-    {
-        xDialogPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("VBAForm") ) ) >>= bVBA;
-    }
-    catch( uno::Exception& e )
-    {
-    }
-    if ( !bVBA )
-    {
-        aTmp <<= sal_Int32((nWidth * 2) / 100);
-        xDialogPropSet->setPropertyValue(WW8_ASCII2STR("Width"), aTmp);
-        aTmp <<= sal_Int32((nHeight * 2) / 100);
-        xDialogPropSet->setPropertyValue(WW8_ASCII2STR("Height"), aTmp);
-    }
-    else
-    {
-        aTmp <<= sal_Int32( nWidth + 160 ); // 100thmm
-        xDialogPropSet->setPropertyValue(WW8_ASCII2STR("Width"), aTmp);
-        aTmp <<= sal_Int32(nHeight + 662 - 714); //100th mm
-        xDialogPropSet->setPropertyValue(WW8_ASCII2STR("Height"), aTmp);
-    }
+
+    GraphicHelper gHelper( pDocSh->GetModel() );
+
+    awt::Size aAppFontSize = gHelper.convertHmmToAppFont( awt::Size( nWidth, nHeight ) );
+    aTmp <<= sal_Int32( aAppFontSize.Width ); //
+    xDialogPropSet->setPropertyValue(WW8_ASCII2STR("Width"), aTmp);
+    aTmp <<= sal_Int32( aAppFontSize.Height ); //100th mm
+    xDialogPropSet->setPropertyValue(WW8_ASCII2STR("Height"), aTmp);
 
 
     uno::Reference<beans::XPropertySet> xPropSet( mxParent, uno::UNO_QUERY );

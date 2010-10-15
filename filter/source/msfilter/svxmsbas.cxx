@@ -238,17 +238,6 @@ bool SvxImportMSVBasic::ImportForms_Impl( VBA_Impl& rVBA, const String& rStorage
                     xSF->createInstance(
                        OUString(RTL_CONSTASCII_USTRINGPARAM(
                            "com.sun.star.awt.UnoControlDialogModel"))), uno::UNO_QUERY);
-                // #FIXME HACK - mark the Model with the VBA mode
-                // In vba mode the imported userform uses 100th mm as units
-                // or geometry
-                // In non vba mode MAP_APPFONT is used ( same as normal basic
-                // dialogs
-                if ( bVBAMode )
-                {
-                    Reference<XPropertySet> xDlgProps(xDialog, UNO_QUERY);
-                    if ( xDlgProps.is() )
-                        xDlgProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("VBAForm") ), uno::makeAny( sal_True ) );
-                }
                 OCX_UserForm aForm(xVBAStg, *aIter, *aIter, xDialog, xSF );
                 aForm.pDocSh = &rDocSh;
                 sal_Bool bOk = aForm.Read(xTypes);
