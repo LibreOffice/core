@@ -47,12 +47,15 @@ CXXFILES = \
         tpprint.cxx     \
         opredlin.cxx
 
+EXCEPTIONSFILES= \
+        $(SLO)$/tpcompatibility.obj
+
 SLOFILES =  \
         $(SLO)$/tpusrlst.obj \
         $(SLO)$/tpview.obj   \
         $(SLO)$/tpcalc.obj	\
         $(SLO)$/tpformula.obj	\
-        $(SLO)$/tpcompatibility.obj	\
+        $(SLO)$/tpcompatibility.obj \
         $(SLO)$/tpprint.obj	\
         $(SLO)$/opredlin.obj
 
