@@ -488,9 +488,80 @@ void InternalDataProvider::lcl_decreaseMapReferences(
 Reference< chart2::data::XDataSequence > InternalDataProvider::lcl_createDataSequenceAndAddToMap(
     const OUString & rRangeRepresentation )
 {
+    OUString aRangeRepresentation = rRangeRepresentation;
+    if( aRangeRepresentation.indexOf('{') >= 0 )
+    {
+        sal_Int32   i, m, n;
+        ::std::vector< double > aNewData;
+        ::std::vector< OUString > aNewLabels;
+        OUString    aToken;
+        sal_Int32   nCategories     = 0;
+        sal_Int32   nIndex          = 0;
+        bool        bValues         = true;
+        bool        bLabelSet       = false;
+        OUString str = aRangeRepresentation.replace('{',' ').replace('}',' ');
+
+        m_aInternalData.clearDefaultData();
+        n = m_aInternalData.getColumnCount();
+        if( n )
+            n = n - 1;
+
+        do
+        {
+            // TODO: This will be problematic if ';' is used in label names
+            // '"' character also needs to be considered in such cases
+            aToken = str.getToken(0,';',nIndex);
+            if( !aToken.getLength() )
+                break;
+            if( aToken.indexOf('"') < 0 )
+            {
+                aNewData.push_back( aToken.toDouble() );
+            }
+            else
+            {
+                aNewLabels.push_back( aToken.replace('"', ' ').trim() );
+                if( !nCategories &&
+                   ( !m_aInternalData.getComplexColumnLabel(n).size() ||
+                     !m_aInternalData.getComplexColumnLabel(n).front().getLength() ) )
+                {
+                    m_aInternalData.setComplexColumnLabel( n, aNewLabels );
+                    bLabelSet = true;
+                }
+                else
+                {
+                    m_aInternalData.setComplexRowLabel(nCategories, aNewLabels);
+                    if(nCategories==1 && bLabelSet)
+                    {
+                        ::std::vector< OUString > aLabels;
+                        m_aInternalData.setComplexRowLabel( 0, m_aInternalData.getComplexColumnLabel( n ) );
+                        m_aInternalData.setComplexColumnLabel( n, aLabels );
+                    }
+                }
+                aNewLabels.pop_back();
+                nCategories++;
+                bValues = false;
+            }
+        } while( nIndex >= 0 );
+
+        if( bValues )
+        {
+            m_aInternalData.insertColumn( n );
+            m_aInternalData.setColumnValues( n, aNewData );
+            aRangeRepresentation = OUString::valueOf( n );
+        }
+        else if( nCategories > 1 )
+        {
+            aRangeRepresentation = lcl_aCategoriesRangeName;
+        }
+        else
+        {
+            aRangeRepresentation = lcl_aLabelRangePrefix+OUString::valueOf( n );
+        }
+    }
+
     Reference< chart2::data::XDataSequence > xSeq(
-        new UncachedDataSequence( this, rRangeRepresentation ));
-    lcl_addDataSequenceToMap( rRangeRepresentation, xSeq );
+        new UncachedDataSequence( this, aRangeRepresentation ));
+    lcl_addDataSequenceToMap( aRangeRepresentation, xSeq );
     return xSeq;
 }
 
@@ -685,8 +756,7 @@ Reference< chart2::data::XDataSequence > SAL_CALL InternalDataProvider::createDa
     else if( aRangeRepresentation.getLength())
     {
         // data
-        sal_Int32 nIndex = aRangeRepresentation.toInt32();
-        return lcl_createDataSequenceAndAddToMap( OUString::valueOf( nIndex ));
+        return lcl_createDataSequenceAndAddToMap( aRangeRepresentation );
     }
 
     return Reference< chart2::data::XDataSequence >();

@@ -89,6 +89,13 @@ InternalData::InternalData()
     , m_aColumnLabels( 0 )
 {}
 
+static const double fDefaultData[] = {
+    9.10, 3.20, 4.54,
+    2.40, 8.80, 9.65,
+    3.10, 1.50, 3.70,
+    4.30, 9.02, 6.20
+};
+
 void InternalData::createDefaultData()
 {
     const sal_Int32 nRowCount = 4;
@@ -100,12 +107,6 @@ void InternalData::createDefaultData()
     // @todo: localize this!
     const OUString aRowName( ::chart::SchResId::getResString( STR_ROW_LABEL ));
     const OUString aColName( ::chart::SchResId::getResString( STR_COLUMN_LABEL ));
-
-    const double fDefaultData[ nSize ] =
-        { 9.10, 3.20, 4.54,
-          2.40, 8.80, 9.65,
-          3.10, 1.50, 3.70,
-          4.30, 9.02, 6.20 };
 
     m_aData.resize( nSize );
     for( sal_Int32 i=0; i<nSize; ++i )
@@ -120,6 +121,31 @@ void InternalData::createDefaultData()
     m_aColumnLabels.reserve( m_nColumnCount );
     generate_n( back_inserter( m_aColumnLabels ), m_nColumnCount,
                 lcl_NumberedStringGenerator( aColName, C2U("%COLUMNNUMBER") ));
+}
+
+bool InternalData::isDefaultData()
+{
+
+    if( m_nRowCount == 4 && m_nColumnCount == 3 )
+    {
+        for( sal_Int32 i=0; i<(4*3); ++i )
+            if( m_aData[i] != fDefaultData[i] )
+                return false;
+
+        return true;
+    }
+    return false;
+}
+
+void InternalData::clearDefaultData()
+{
+    if( isDefaultData() )
+    {
+        m_nRowCount = m_nColumnCount = 1;
+        m_aData.resize( 1 );
+        m_aRowLabels.clear();
+        m_aColumnLabels.clear();
+    }
 }
 
 void InternalData::setData( const Sequence< Sequence< double > >& rDataInRows )
