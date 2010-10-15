@@ -532,10 +532,14 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
     //is called to attach the controller to a new model.
     //return true if attach was successfully, false otherwise (e.g. if you do not work with a model)
 
-    ::vos::OClearableGuard aGuard( Application::GetSolarMutex());
-    if( impl_isDisposedOrSuspended() ) //@todo? allow attaching a new model while suspended?
-        return sal_False; //behave passive if already disposed or suspended
-    aGuard.clear();
+    {
+        // FIXME: ths is suspicious: why just proctect the call to isDisposedOrSuspened
+        // and not all the way until he new model is attached ?
+        // seems racy to me
+        SolarMutexGuard aGuard;
+        if( impl_isDisposedOrSuspended() ) //@todo? allow attaching a new model while suspended?
+            return sal_False; //behave passive if already disposed or suspended
+    }
 
 
     TheModelRef aNewModelRef( new TheModel( xModel), m_aModelMutex);
