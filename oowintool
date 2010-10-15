@@ -275,7 +275,9 @@ sub print_dotnetsdk_dir()
     my $dir = 
           reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/.NETFramework/sdkInstallRootv1.1") ||
           reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/.NETFramework/sdkInstallRootv2.0");
-    print cygpath ($dir, 'w', $output_format);
+    if ($dir) {
+      print cygpath ($dir, 'w', $output_format);
+    }
 }
 
 sub print_jdk_dir()
