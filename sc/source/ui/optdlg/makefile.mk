@@ -56,6 +56,10 @@ SLOFILES =  \
         $(SLO)$/tpprint.obj	\
         $(SLO)$/opredlin.obj
 
+EXCEPTIONSFILES= \
+        $(SLO)$/tpcompatibility.obj	\
+
+
 # --- Tagets -------------------------------------------------------
 
 .INCLUDE :  target.mk
