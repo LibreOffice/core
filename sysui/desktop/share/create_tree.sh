@@ -94,7 +94,9 @@ mkdir -p ${DESTDIR}/usr/bin
 
 office_root=/opt/${PREFIX}
 
-cp openoffice.sh ${DESTDIR}/usr/bin/${PREFIX}
+#this symlink is needed to have the API boostrap functions running right
+ln -sf ${office_root}/program/soffice ${DESTDIR}/usr/bin/libreoffice
+
 cp printeradmin.sh ${DESTDIR}/usr/bin/${PREFIX}-printeradmin
 chmod 0755 ${DESTDIR}/usr/bin/${PREFIX} ${DESTDIR}/usr/bin/${PREFIX}-printeradmin
 
