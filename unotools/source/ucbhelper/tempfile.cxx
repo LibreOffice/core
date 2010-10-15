@@ -307,7 +307,7 @@ void lcl_createName(TempFile_Impl& _rImpl,const String& rLeadingChars,sal_Bool _
 #ifdef UNX
 umask(old_mode);
 #endif
-            if ( err == FileBase::E_None )
+            if ( err == FileBase::E_None || err == FileBase::E_NOLCK )
             {
                 _rImpl.aName = aTmp;
                 aFile.close();
