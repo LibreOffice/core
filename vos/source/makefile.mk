@@ -43,7 +43,6 @@ SLOFILES=       $(SLO)$/mutex.obj       \
                 $(SLO)$/thread.obj      \
                 $(SLO)$/stream.obj      \
                 $(SLO)$/module.obj      \
-                $(SLO)$/timer.obj       \
                 $(SLO)$/process.obj     \
                 $(SLO)$/xception.obj
 
@@ -55,7 +54,6 @@ OBJFILES=       $(OBJ)$/mutex.obj       \
                 $(OBJ)$/thread.obj      \
                 $(OBJ)$/stream.obj      \
                 $(OBJ)$/module.obj      \
-                $(OBJ)$/timer.obj       \
                 $(OBJ)$/process.obj     \
                 $(OBJ)$/xception.obj
 

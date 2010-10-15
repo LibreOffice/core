@@ -385,6 +385,7 @@
 #include <rtl/logfile.hxx>
 #include <rtl/math.hxx>
 #include <rtl/memory.h>
+#include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
 #include <rtl/tencinfo.h>
@@ -395,6 +396,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/uuid.h>
 
+#include <salhelper/simplereferenceobject.hxx>
 #include <salhelper/timer.hxx>
 
 #include <sot/clsids.hxx>
@@ -421,8 +423,6 @@
 
 #include <vos/mutex.hxx>
 #include <vos/process.hxx>
-#include <vos/ref.hxx>
-#include <vos/refernce.hxx>
 #include <vos/security.hxx>
 #include <vos/thread.hxx>
 
