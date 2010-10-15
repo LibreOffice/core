@@ -64,6 +64,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
+#include <sal/macros.h>
 
 using namespace ::svxform;
 using namespace ::com::sun::star::container;

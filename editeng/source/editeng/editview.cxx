@@ -75,6 +75,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <unotools/lingucfg.hxx>
+#include <sal/macros.h>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
