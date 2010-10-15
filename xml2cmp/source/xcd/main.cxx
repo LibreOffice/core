@@ -213,7 +213,6 @@ Create_TypeInfo( const char *           o_sOutputFile,
             if ( 0 == strcmp(pHeapTop->Key(), pLastHeapTop->Key()) )
                 continue;
             delete pLastHeapTop;
-            // pLastHeapTop = 0;
         }
         pLastHeapTop = pHeapTop;
 

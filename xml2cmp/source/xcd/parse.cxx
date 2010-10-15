@@ -442,10 +442,6 @@ X2CParser::SyntaxError( const char * i_sText )
 void
 X2CParser::TestCurChar()
 {
-//  if (*text == '\0')
-//      SyntaxError("unexpected end of file");
-//  else
-
     if (*text == '\n')
         nFileLine++;
 }

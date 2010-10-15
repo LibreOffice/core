@@ -104,7 +104,6 @@ DependencyFinder::FindNeededServices( StringVector &        o_rLibraries,
     aResult_Libraries.erase( aResult_Libraries.begin(), aResult_Libraries.end() );
     aResult_Services.erase( aResult_Services.begin(), aResult_Services.end() );
 
-//  const ServiceInfo & rSInfo = (*itService).second->FirstImplementation();
     Add2Result( *(*itService).second );
 
     for ( std::set< Simstr >::const_iterator il = aResult_Libraries.begin();
