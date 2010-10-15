@@ -33,6 +33,7 @@
 
 #include "scitems.hxx"
 #include <svl/srchitem.hxx>
+#include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/uuid.h>
 
@@ -41,7 +42,6 @@
 #include "undoblk.hxx"
 #include "hints.hxx"
 #include "markdata.hxx"
-#include "unoguard.hxx"
 #include "miscuno.hxx"
 #include "unonames.hxx"
 
@@ -115,14 +115,14 @@ ScCellSearchObj::~ScCellSearchObj()
 
 rtl::OUString SAL_CALL ScCellSearchObj::getSearchString() throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return pSearchItem->GetSearchString();
 }
 
 void SAL_CALL ScCellSearchObj::setSearchString( const rtl::OUString& aString )
                                                     throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     pSearchItem->SetSearchString( aString );
 }
 
@@ -130,14 +130,14 @@ void SAL_CALL ScCellSearchObj::setSearchString( const rtl::OUString& aString )
 
 rtl::OUString SAL_CALL ScCellSearchObj::getReplaceString() throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return pSearchItem->GetReplaceString();
 }
 
 void SAL_CALL ScCellSearchObj::setReplaceString( const rtl::OUString& aReplaceString )
                                                     throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     pSearchItem->SetReplaceString( aReplaceString );
 }
 
@@ -146,7 +146,7 @@ void SAL_CALL ScCellSearchObj::setReplaceString( const rtl::OUString& aReplaceSt
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScCellSearchObj::getPropertySetInfo()
                                                         throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     static uno::Reference<beans::XPropertySetInfo> aRef(
         new SfxItemPropertySetInfo( aPropSet.getPropertyMap() ));
     return aRef;
@@ -158,7 +158,7 @@ void SAL_CALL ScCellSearchObj::setPropertyValue(
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     String aString(aPropertyName);
 
     if (aString.EqualsAscii( SC_UNO_SRCHBACK ))        pSearchItem->SetBackward( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
@@ -180,7 +180,7 @@ uno::Any SAL_CALL ScCellSearchObj::getPropertyValue( const rtl::OUString& aPrope
                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     String aString(aPropertyName);
     uno::Any aRet;
 

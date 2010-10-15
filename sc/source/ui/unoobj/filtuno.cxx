@@ -34,12 +34,12 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/svapp.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
 #include "editutil.hxx"
 #include "filtuno.hxx"
 #include "miscuno.hxx"
-#include "unoguard.hxx"
 #include "scdll.hxx"
 #include "imoptdlg.hxx"
 #include "asciiopt.hxx"
@@ -84,7 +84,7 @@ ScFilterOptionsObj::~ScFilterOptionsObj()
 uno::Reference<uno::XInterface> SAL_CALL ScFilterOptionsObj_CreateInstance(
                         const uno::Reference<lang::XMultiServiceFactory>& )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ScDLL::Init();
     return (::cppu::OWeakObject*) new ScFilterOptionsObj;
 }

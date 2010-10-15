@@ -33,7 +33,6 @@
 #include "AccessibleTableBase.hxx"
 #include "miscuno.hxx"
 #include "document.hxx"
-#include "unoguard.hxx"
 #include "scresid.hxx"
 #include "sc.hrc"
 
@@ -43,6 +42,7 @@
 #include <rtl/uuid.h>
 #include <tools/debug.hxx>
 #include <comphelper/sequence.hxx>
+#include <vcl/svapp.hxx>
 
 
 using namespace ::com::sun::star;
@@ -67,7 +67,7 @@ ScAccessibleTableBase::~ScAccessibleTableBase()
 
 void SAL_CALL ScAccessibleTableBase::disposing()
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     mpDoc = NULL;
 
     ScAccessibleContextBase::disposing();
@@ -99,7 +99,7 @@ void SAL_CALL ScAccessibleTableBase::release()
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRowCount(  )
                     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     return maRange.aEnd.Row() - maRange.aStart.Row() + 1;
 }
@@ -107,7 +107,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRowCount(  )
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumnCount(  )
                     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     return maRange.aEnd.Col() - maRange.aStart.Col() + 1;
 }
@@ -139,7 +139,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumnCount(  )
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRowExtentAt( sal_Int32 nRow, sal_Int32 nColumn )
     throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
 
     if ((nColumn > (maRange.aEnd.Col() - maRange.aStart.Col())) || (nColumn < 0) ||
@@ -168,7 +168,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRowExtentAt( sal_Int32 nR
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumnExtentAt( sal_Int32 nRow, sal_Int32 nColumn )
     throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
 
     if ((nColumn > (maRange.aEnd.Col() - maRange.aStart.Col())) || (nColumn < 0) ||
@@ -280,7 +280,7 @@ sal_Bool SAL_CALL ScAccessibleTableBase::isAccessibleSelected( sal_Int32 /* nRow
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn )
     throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
 
     if (nRow > (maRange.aEnd.Row() - maRange.aStart.Row()) ||
@@ -297,7 +297,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleIndex( sal_Int32 nRow, sa
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRow( sal_Int32 nChildIndex )
     throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
 
     if (nChildIndex >= getAccessibleChildCount() || nChildIndex < 0)
@@ -309,7 +309,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRow( sal_Int32 nChildInde
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumn( sal_Int32 nChildIndex )
     throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
 
     if (nChildIndex >= getAccessibleChildCount() || nChildIndex < 0)
@@ -324,7 +324,7 @@ sal_Int32 SAL_CALL
     ScAccessibleTableBase::getAccessibleChildCount(void)
                     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     return static_cast<sal_Int32>(maRange.aEnd.Row() - maRange.aStart.Row() + 1) *
             (maRange.aEnd.Col() - maRange.aStart.Col() + 1);
@@ -336,7 +336,7 @@ uno::Reference< XAccessible > SAL_CALL
         throw (uno::RuntimeException,
         lang::IndexOutOfBoundsException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
 
     if (nIndex >= getAccessibleChildCount() || nIndex < 0)
@@ -403,7 +403,7 @@ sal_Bool SAL_CALL
         throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     // I don't need to guard, because the called funtions have a guard
-//    ScUnoGuard aGuard;
+//    SolarMutexGuard aGuard;
     if (nChildIndex < 0 || nChildIndex >= getAccessibleChildCount())
         throw lang::IndexOutOfBoundsException();
     return isAccessibleSelected(getAccessibleRow(nChildIndex), getAccessibleColumn(nChildIndex));
@@ -463,7 +463,7 @@ uno::Sequence<sal_Int8> SAL_CALL
     ScAccessibleTableBase::getImplementationId(void)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     static uno::Sequence<sal_Int8> aId;
     if (aId.getLength() == 0)

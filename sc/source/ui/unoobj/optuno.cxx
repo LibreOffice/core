@@ -39,7 +39,6 @@
 #include "miscuno.hxx"
 #include "unonames.hxx"
 #include "docoptio.hxx"
-#include "unoguard.hxx"
 
 using namespace com::sun::star;
 
@@ -215,7 +214,7 @@ void SAL_CALL ScDocOptionsObj::setPropertyValue(
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     BOOL bDone = ScDocOptionsHelper::setPropertyValue( aOptions, *GetPropertySet().getPropertyMap(), aPropertyName, aValue );
 
@@ -227,7 +226,7 @@ uno::Any SAL_CALL ScDocOptionsObj::getPropertyValue( const rtl::OUString& aPrope
                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     uno::Any aRet(ScDocOptionsHelper::getPropertyValue( aOptions, *GetPropertySet().getPropertyMap(), aPropertyName ));
     if ( !aRet.hasValue() )

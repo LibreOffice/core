@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 #include "AccessibleDataPilotControl.hxx"
-#include "unoguard.hxx"
 #include "fieldwnd.hxx"
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -41,6 +40,7 @@
 #include <tools/gen.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <tools/debug.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -179,7 +179,7 @@ void ScAccessibleDataPilotControl::Init()
 
 void SAL_CALL ScAccessibleDataPilotControl::disposing()
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     mpDPFieldWindow = NULL;
 
     ScAccessibleContextBase::disposing();
@@ -330,7 +330,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDataPilotControl::getAccessib
     uno::Reference<XAccessible> xAcc;
     if (containsPoint(rPoint))
     {
-        ScUnoGuard aGuard;
+        SolarMutexGuard aGuard;
         IsObjectValid();
         if (mpDPFieldWindow)
         {
@@ -354,7 +354,7 @@ sal_Bool SAL_CALL ScAccessibleDataPilotControl::isVisible(  )
 void SAL_CALL ScAccessibleDataPilotControl::grabFocus(  )
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     if (mpDPFieldWindow)
         mpDPFieldWindow->GrabFocus();
@@ -363,7 +363,7 @@ void SAL_CALL ScAccessibleDataPilotControl::grabFocus(  )
 sal_Int32 SAL_CALL ScAccessibleDataPilotControl::getForeground(  )
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     sal_Int32 nColor(0);
     if (mpDPFieldWindow)
@@ -376,7 +376,7 @@ sal_Int32 SAL_CALL ScAccessibleDataPilotControl::getForeground(  )
 sal_Int32 SAL_CALL ScAccessibleDataPilotControl::getBackground(  )
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     sal_Int32 nColor(0);
     if (mpDPFieldWindow)
@@ -398,7 +398,7 @@ sal_Int32 SAL_CALL ScAccessibleDataPilotControl::getBackground(  )
 sal_Int32 SAL_CALL ScAccessibleDataPilotControl::getAccessibleChildCount(void)
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     if (mpDPFieldWindow)
         return mpDPFieldWindow->GetFieldCount();
@@ -409,7 +409,7 @@ sal_Int32 SAL_CALL ScAccessibleDataPilotControl::getAccessibleChildCount(void)
 uno::Reference< XAccessible> SAL_CALL ScAccessibleDataPilotControl::getAccessibleChild(sal_Int32 nIndex)
         throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     uno::Reference<XAccessible> xAcc;
     if (mpDPFieldWindow)
@@ -435,7 +435,7 @@ uno::Reference< XAccessible> SAL_CALL ScAccessibleDataPilotControl::getAccessibl
 uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessibleDataPilotControl::getAccessibleStateSet(void)
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
 
     utl::AccessibleStateSetHelper* pStateSet = new utl::AccessibleStateSetHelper();
@@ -468,7 +468,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessibleDataPilotControl::getAc
 uno::Sequence<sal_Int8> SAL_CALL ScAccessibleDataPilotControl::getImplementationId(void)
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     static uno::Sequence<sal_Int8> aId;
     if (aId.getLength() == 0)
@@ -484,7 +484,7 @@ uno::Sequence<sal_Int8> SAL_CALL ScAccessibleDataPilotControl::getImplementation
 ::rtl::OUString SAL_CALL ScAccessibleDataPilotControl::createAccessibleDescription(void)
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     if (mpDPFieldWindow)
         return mpDPFieldWindow->GetDescription();
@@ -495,7 +495,7 @@ uno::Sequence<sal_Int8> SAL_CALL ScAccessibleDataPilotControl::getImplementation
 ::rtl::OUString SAL_CALL ScAccessibleDataPilotControl::createAccessibleName(void)
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     if (mpDPFieldWindow)
         return mpDPFieldWindow->GetName();
@@ -552,7 +552,7 @@ void ScAccessibleDataPilotButton::Init()
 
 void SAL_CALL ScAccessibleDataPilotButton::disposing()
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     mpDPFieldWindow = NULL;
 
     ScAccessibleContextBase::disposing();
@@ -586,7 +586,7 @@ sal_Bool SAL_CALL ScAccessibleDataPilotButton::isVisible(  )
 void SAL_CALL ScAccessibleDataPilotButton::grabFocus(  )
         throw (::com::sun::star::uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     if (mpDPFieldWindow)
     {
@@ -597,7 +597,7 @@ void SAL_CALL ScAccessibleDataPilotButton::grabFocus(  )
 sal_Int32 SAL_CALL ScAccessibleDataPilotButton::getForeground(  )
 throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     sal_Int32 nColor(0);
     if (mpDPFieldWindow)
@@ -610,7 +610,7 @@ throw (uno::RuntimeException)
 sal_Int32 SAL_CALL ScAccessibleDataPilotButton::getBackground(  )
 throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     sal_Int32 nColor(0);
     if (mpDPFieldWindow)
@@ -638,7 +638,7 @@ uno::Reference< XAccessible> SAL_CALL ScAccessibleDataPilotButton::getAccessible
 sal_Int32 SAL_CALL ScAccessibleDataPilotButton::getAccessibleIndexInParent(void)
         throw (::com::sun::star::uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     return mnIndex;
 }
@@ -646,7 +646,7 @@ sal_Int32 SAL_CALL ScAccessibleDataPilotButton::getAccessibleIndexInParent(void)
 uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessibleDataPilotButton::getAccessibleStateSet(void)
         throw (::com::sun::star::uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
 
     utl::AccessibleStateSetHelper* pStateSet = new utl::AccessibleStateSetHelper();
@@ -682,7 +682,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessibleDataPilotButton::getAcc
 uno::Sequence<sal_Int8> SAL_CALL ScAccessibleDataPilotButton::getImplementationId(void)
         throw (::com::sun::star::uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     static uno::Sequence<sal_Int8> aId;
     if (aId.getLength() == 0)
@@ -702,7 +702,7 @@ uno::Sequence<sal_Int8> SAL_CALL ScAccessibleDataPilotButton::getImplementationI
 ::rtl::OUString SAL_CALL ScAccessibleDataPilotButton::createAccessibleName(void)
         throw (::com::sun::star::uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     if (mpDPFieldWindow)
         return mpDPFieldWindow->GetFieldText(getAccessibleIndexInParent());

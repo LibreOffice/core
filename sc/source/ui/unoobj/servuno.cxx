@@ -40,7 +40,6 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 
 #include "servuno.hxx"
-#include "unoguard.hxx"
 #include "unonames.hxx"
 #include "cellsuno.hxx"
 #include "fielduno.hxx"
@@ -116,7 +115,7 @@ public:
 
     virtual ::sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException )
     {
-        ScUnoGuard aGuard;
+        SolarMutexGuard aGuard;
         maCachedObject = uno::Any(); // clear cached object
         String sName = aName;
 
@@ -158,7 +157,7 @@ public:
     }
     ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
     {
-        ScUnoGuard aGuard;
+        SolarMutexGuard aGuard;
         OSL_TRACE("ScVbaObjectForCodeNameProvider::getByName( %s )",
             rtl::OUStringToOString( aName, RTL_TEXTENCODING_UTF8 ).getStr() );
         if ( !hasByName( aName ) )
@@ -167,7 +166,7 @@ public:
     }
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw (::com::sun::star::uno::RuntimeException)
     {
-        ScUnoGuard aGuard;
+        SolarMutexGuard aGuard;
         ScDocument* pDoc = mpDocShell->GetDocument();
         if ( !pDoc )
             throw uno::RuntimeException();
@@ -197,7 +196,7 @@ public:
     // XCodeNameQuery
     rtl::OUString SAL_CALL getCodeNameForObject( const uno::Reference< uno::XInterface >& xIf ) throw( uno::RuntimeException )
     {
-        ScUnoGuard aGuard;
+        SolarMutexGuard aGuard;
         rtl::OUString sCodeName;
         if ( mpDocShell )
         {

@@ -31,7 +31,6 @@
 
 
 #include "AccessibleContextBase.hxx"
-#include "unoguard.hxx"
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -47,6 +46,7 @@
 #include <vcl/unohelp.hxx>
 #include <tools/color.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -99,7 +99,7 @@ void ScAccessibleContextBase::Init()
 
 void SAL_CALL ScAccessibleContextBase::disposing()
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 //  CommitDefunc(); not necessary and should not be send, because it cost a lot of time
 
     // hold reference to make sure that the destructor is not called
@@ -173,7 +173,7 @@ uno::Reference< XAccessibleContext> SAL_CALL
 sal_Bool SAL_CALL ScAccessibleContextBase::containsPoint(const awt::Point& rPoint )
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     return Rectangle (Point(), GetBoundingBox().GetSize()).IsInside(VCLPoint(rPoint));
 }
@@ -189,7 +189,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleContextBase::getAccessibleAtP
 awt::Rectangle SAL_CALL ScAccessibleContextBase::getBounds(  )
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     return AWTRectangle(GetBoundingBox());
 }
@@ -197,7 +197,7 @@ awt::Rectangle SAL_CALL ScAccessibleContextBase::getBounds(  )
 awt::Point SAL_CALL ScAccessibleContextBase::getLocation(  )
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     return AWTPoint(GetBoundingBox().TopLeft());
 }
@@ -205,7 +205,7 @@ awt::Point SAL_CALL ScAccessibleContextBase::getLocation(  )
 awt::Point SAL_CALL ScAccessibleContextBase::getLocationOnScreen(  )
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     return AWTPoint(GetBoundingBoxOnScreen().TopLeft());
 }
@@ -213,7 +213,7 @@ awt::Point SAL_CALL ScAccessibleContextBase::getLocationOnScreen(  )
 awt::Size SAL_CALL ScAccessibleContextBase::getSize(  )
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     return AWTSize(GetBoundingBox().GetSize());
 }
@@ -221,7 +221,7 @@ awt::Size SAL_CALL ScAccessibleContextBase::getSize(  )
 sal_Bool SAL_CALL ScAccessibleContextBase::isShowing(  )
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     sal_Bool bShowing(sal_False);
     if (mxParent.is())
@@ -290,7 +290,7 @@ sal_Int32 SAL_CALL
        ScAccessibleContextBase::getAccessibleIndexInParent(void)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     //  Use a simple but slow solution for now.  Optimize later.
    //   Return -1 to indicate that this object's parent does not know about the
@@ -331,7 +331,7 @@ sal_Int16 SAL_CALL
        ScAccessibleContextBase::getAccessibleDescription(void)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     if (!msDescription.getLength())
     {
@@ -358,7 +358,7 @@ OUString SAL_CALL
        ScAccessibleContextBase::getAccessibleName(void)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     if (!msName.getLength())
     {
@@ -400,7 +400,7 @@ lang::Locale SAL_CALL
     throw (IllegalAccessibleComponentStateException,
         uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     if (mxParent.is())
     {
@@ -424,7 +424,7 @@ void SAL_CALL
 {
     if (xListener.is())
     {
-        ScUnoGuard aGuard;
+        SolarMutexGuard aGuard;
         IsObjectValid();
         if (!IsDefunc())
         {
@@ -442,7 +442,7 @@ void SAL_CALL
 {
     if (xListener.is())
     {
-        ScUnoGuard aGuard;
+        SolarMutexGuard aGuard;
         if (!IsDefunc() && mnClientId)
         {
             sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( mnClientId, xListener );
@@ -465,7 +465,7 @@ void SAL_CALL ScAccessibleContextBase::disposing(
     const lang::EventObject& rSource )
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     if (rSource.Source == mxParent)
         dispose();
 }
@@ -528,7 +528,7 @@ uno::Sequence<sal_Int8> SAL_CALL
     ScAccessibleContextBase::getImplementationId(void)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     static uno::Sequence<sal_Int8> aId;
     if (aId.getLength() == 0)

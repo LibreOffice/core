@@ -74,7 +74,6 @@
 #include "sc.hrc"           // SID_LINK
 #include "hints.hxx"
 #include "dpobject.hxx"
-#include "unoguard.hxx"
 #include "drwlayer.hxx"
 #include "unoreflist.hxx"
 #include "listenercalls.hxx"

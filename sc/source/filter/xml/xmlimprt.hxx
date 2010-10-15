@@ -609,7 +609,7 @@ class SfxItemSet;
 class SvXMLNumFmtHelper;
 class XMLShapeImportHelper;
 class ScXMLChangeTrackingImportHelper;
-class ScUnoGuard;
+class SolarMutexGuard;
 
 struct tScMyCellRange
 {
@@ -767,7 +767,7 @@ class ScXMLImport: public SvXMLImport
     ScMyLabelRanges*        pMyLabelRanges;
     ScMyImportValidations*  pValidations;
     ScMyImpDetectiveOpArray*    pDetectiveOpArray;
-    ScUnoGuard*             pScUnoGuard;
+    SolarMutexGuard*        pSolarMutexGuard;
 
     std::vector<rtl::OUString>          aTableStyles;
     XMLNumberFormatAttributesExportHelper* pNumberFormatAttributesExportHelper;

@@ -37,7 +37,6 @@
 #include "document.hxx"
 #include "docfunc.hxx"
 #include "cell.hxx"
-#include "unoguard.hxx"
 #include "scresid.hxx"
 #include "sc.hrc"
 #include "unonames.hxx"
@@ -51,6 +50,7 @@
 #include <rtl/uuid.h>
 #include <comphelper/sequence.hxx>
 #include <sfx2/objsh.hxx>
+#include <vcl/svapp.hxx>
 
 #include <float.h>
 
@@ -81,7 +81,7 @@ ScAccessibleCellBase::~ScAccessibleCellBase()
 sal_Bool SAL_CALL ScAccessibleCellBase::isVisible(  )
         throw (uno::RuntimeException)
 {
-     ScUnoGuard aGuard;
+     SolarMutexGuard aGuard;
     IsObjectValid();
     // test whether the cell is hidden (column/row - hidden/filtered)
     sal_Bool bVisible(sal_True);
@@ -101,7 +101,7 @@ sal_Bool SAL_CALL ScAccessibleCellBase::isVisible(  )
 sal_Int32 SAL_CALL ScAccessibleCellBase::getForeground()
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     sal_Int32 nColor(0);
     if (mpDoc)
@@ -141,7 +141,7 @@ sal_Int32 SAL_CALL ScAccessibleCellBase::getForeground()
 sal_Int32 SAL_CALL ScAccessibleCellBase::getBackground()
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     sal_Int32 nColor(0);
 
@@ -207,7 +207,7 @@ sal_Int32
     ScAccessibleCellBase::getAccessibleIndexInParent(void)
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     return mnIndex;
 }
@@ -244,7 +244,7 @@ uno::Any SAL_CALL
     ScAccessibleCellBase::getCurrentValue(  )
     throw (uno::RuntimeException)
 {
-     ScUnoGuard aGuard;
+     SolarMutexGuard aGuard;
     IsObjectValid();
     uno::Any aAny;
     if (mpDoc)
@@ -257,7 +257,7 @@ sal_Bool SAL_CALL
     ScAccessibleCellBase::setCurrentValue( const uno::Any& aNumber )
     throw (uno::RuntimeException)
 {
-     ScUnoGuard aGuard;
+     SolarMutexGuard aGuard;
     IsObjectValid();
     double fValue = 0;
     sal_Bool bResult(sal_False);
@@ -319,7 +319,7 @@ uno::Sequence<sal_Int8> SAL_CALL
     ScAccessibleCellBase::getImplementationId(void)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     static uno::Sequence<sal_Int8> aId;
     if (aId.getLength() == 0)

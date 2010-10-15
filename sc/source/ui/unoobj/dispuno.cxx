@@ -35,13 +35,13 @@
 #include <comphelper/uno3.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <svl/smplhint.hxx>
+#include <vcl/svapp.hxx>
 
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 
 #include "dispuno.hxx"
-#include "unoguard.hxx"
 #include "tabvwsh.hxx"
 #include "dbdocfun.hxx"
 #include "dbcolect.hxx"
@@ -120,7 +120,7 @@ uno::Reference<frame::XDispatch> SAL_CALL ScDispatchProviderInterceptor::queryDi
                         sal_Int32 nSearchFlags )
                         throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     uno::Reference<frame::XDispatch> xResult;
     // create some dispatch ...
@@ -145,7 +145,7 @@ uno::Sequence< uno::Reference<frame::XDispatch> > SAL_CALL
                         const uno::Sequence<frame::DispatchDescriptor>& aDescripts )
                         throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     uno::Sequence< uno::Reference< frame::XDispatch> > aReturn(aDescripts.getLength());
     uno::Reference< frame::XDispatch>* pReturn = aReturn.getArray();
@@ -164,7 +164,7 @@ uno::Reference<frame::XDispatchProvider> SAL_CALL
                         ScDispatchProviderInterceptor::getSlaveDispatchProvider()
                         throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return m_xSlaveDispatcher;
 }
 
@@ -172,7 +172,7 @@ void SAL_CALL ScDispatchProviderInterceptor::setSlaveDispatchProvider(
                         const uno::Reference<frame::XDispatchProvider>& xNewDispatchProvider )
                         throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     m_xSlaveDispatcher.set(xNewDispatchProvider);
 }
 
@@ -180,7 +180,7 @@ uno::Reference<frame::XDispatchProvider> SAL_CALL
                         ScDispatchProviderInterceptor::getMasterDispatchProvider()
                         throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return m_xMasterDispatcher;
 }
 
@@ -188,7 +188,7 @@ void SAL_CALL ScDispatchProviderInterceptor::setMasterDispatchProvider(
                         const uno::Reference<frame::XDispatchProvider>& xNewSupplier )
                         throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     m_xMasterDispatcher.set(xNewSupplier);
 }
 
@@ -197,7 +197,7 @@ void SAL_CALL ScDispatchProviderInterceptor::setMasterDispatchProvider(
 void SAL_CALL ScDispatchProviderInterceptor::disposing( const lang::EventObject& /* Source */ )
                                 throw(::com::sun::star::uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     if (m_xIntercepted.is())
     {
@@ -248,7 +248,7 @@ void SAL_CALL ScDispatch::dispatch( const util::URL& aURL,
                                 const uno::Sequence<beans::PropertyValue>& aArgs )
                                 throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     BOOL bDone = FALSE;
     if ( pViewShell && !aURL.Complete.compareToAscii(cURLInsertColumns) )
@@ -297,7 +297,7 @@ void SAL_CALL ScDispatch::addStatusListener(
                                 const util::URL& aURL )
                                 throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     if (!pViewShell)
         throw uno::RuntimeException();
@@ -337,7 +337,7 @@ void SAL_CALL ScDispatch::removeStatusListener(
                                 const util::URL& aURL )
                                 throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     if ( !aURL.Complete.compareToAscii(cURLDocDataSource) )
     {

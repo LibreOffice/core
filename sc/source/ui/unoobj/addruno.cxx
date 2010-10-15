@@ -35,10 +35,10 @@
 #include <com/sun/star/table/CellRangeAddress.hpp>
 
 #include <svl/itemprop.hxx>
+#include <vcl/svapp.hxx>
 
 #include "docsh.hxx"
 #include "unonames.hxx"
-#include "unoguard.hxx"
 #include "miscuno.hxx"
 #include "convuno.hxx"
 #include "addruno.hxx"
@@ -109,7 +109,7 @@ sal_Bool ScAddressConversionObj::ParseUIString( const String& rUIString, ::formu
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScAddressConversionObj::getPropertySetInfo()
                                                         throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     if ( bIsRange )
     {

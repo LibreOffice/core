@@ -32,9 +32,9 @@
 
 
 #include <tools/debug.hxx>
+#include <vcl/svapp.hxx>
 
 #include "miscuno.hxx"
-#include "unoguard.hxx"
 
 using namespace com::sun::star;
 using ::com::sun::star::uno::Reference;
@@ -228,14 +228,14 @@ ScIndexEnumeration::~ScIndexEnumeration()
 
 sal_Bool SAL_CALL ScIndexEnumeration::hasMoreElements() throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return ( nPos < xIndex->getCount() );
 }
 
 uno::Any SAL_CALL ScIndexEnumeration::nextElement() throw(container::NoSuchElementException,
                                         lang::WrappedTargetException, uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     uno::Any aReturn;
     try
     {

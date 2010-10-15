@@ -58,7 +58,6 @@
 #include "docuno.hxx"
 #include "textuno.hxx"
 #include "chartlis.hxx"
-#include "unoguard.hxx"
 #include "scitems.hxx"
 #include "docpool.hxx"
 #include "userdat.hxx"
@@ -4459,7 +4458,7 @@ sal_uInt32 ScXMLExport::exportDoc( enum XMLTokenEnum eClass )
 void SAL_CALL ScXMLExport::setSourceDocument( const uno::Reference<lang::XComponent>& xComponent )
                             throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     SvXMLExport::setSourceDocument( xComponent );
 
     pDoc = ScXMLConverter::GetScDocument( GetModel() );
@@ -4489,7 +4488,7 @@ void SAL_CALL ScXMLExport::setSourceDocument( const uno::Reference<lang::XCompon
 sal_Bool SAL_CALL ScXMLExport::filter( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     if (pDoc)
         pDoc->DisableIdle(TRUE);
     sal_Bool bReturn(SvXMLExport::filter(aDescriptor));
@@ -4501,7 +4500,7 @@ sal_Bool SAL_CALL ScXMLExport::filter( const ::com::sun::star::uno::Sequence< ::
 void SAL_CALL ScXMLExport::cancel()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     if (pDoc)
         pDoc->DisableIdle(FALSE);
     SvXMLExport::cancel();
@@ -4511,7 +4510,7 @@ void SAL_CALL ScXMLExport::cancel()
 void SAL_CALL ScXMLExport::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
     throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     SvXMLExport::initialize(aArguments);
 }
 
@@ -4519,7 +4518,7 @@ void SAL_CALL ScXMLExport::initialize( const ::com::sun::star::uno::Sequence< ::
 ::rtl::OUString SAL_CALL ScXMLExport::getImplementationName(  )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     sal_uInt16 nFlags = getExportFlags();
     if (nFlags & EXPORT_OASIS)
@@ -4567,14 +4566,14 @@ void SAL_CALL ScXMLExport::initialize( const ::com::sun::star::uno::Sequence< ::
 sal_Bool SAL_CALL ScXMLExport::supportsService( const ::rtl::OUString& ServiceName )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return SvXMLExport::supportsService( ServiceName );
 }
 
 ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL ScXMLExport::getSupportedServiceNames(  )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return SvXMLExport::getSupportedServiceNames();
 }
 
@@ -4582,7 +4581,7 @@ sal_Bool SAL_CALL ScXMLExport::supportsService( const ::rtl::OUString& ServiceNa
 sal_Int64 SAL_CALL ScXMLExport::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return SvXMLExport::getSomething(aIdentifier);
 }
 

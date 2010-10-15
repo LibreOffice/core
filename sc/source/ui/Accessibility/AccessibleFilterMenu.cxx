@@ -32,7 +32,6 @@
 #include "AccessibleGlobal.hxx"
 #include "AccessibleFilterMenu.hxx"
 #include "AccessibleFilterMenuItem.hxx"
-#include "unoguard.hxx"
 #include "global.hxx"
 #include "document.hxx"
 #include "docpool.hxx"

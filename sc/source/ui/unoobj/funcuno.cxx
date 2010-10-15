@@ -39,7 +39,6 @@
 #include "funcuno.hxx"
 #include "miscuno.hxx"
 #include "cellsuno.hxx"
-#include "unoguard.hxx"
 #include "scdll.hxx"
 #include "document.hxx"
 #include "compiler.hxx"
@@ -255,7 +254,7 @@ void ScFunctionAccess::Notify( SfxBroadcaster&, const SfxHint& rHint )
 uno::Reference<uno::XInterface> SAL_CALL ScFunctionAccess_CreateInstance(
                         const uno::Reference<lang::XMultiServiceFactory>& )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ScDLL::Init();
     static uno::Reference< uno::XInterface > xInst((::cppu::OWeakObject*) new ScFunctionAccess);
     return xInst;
@@ -304,7 +303,7 @@ uno::Sequence<rtl::OUString> SAL_CALL ScFunctionAccess::getSupportedServiceNames
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScFunctionAccess::getPropertySetInfo()
                                                         throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     static uno::Reference<beans::XPropertySetInfo> aRef(
         new SfxItemPropertySetInfo( &aPropertyMap ));
     return aRef;
@@ -316,7 +315,7 @@ void SAL_CALL ScFunctionAccess::setPropertyValue(
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     if( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsArrayFunction" ) ) )
     {
@@ -340,7 +339,7 @@ uno::Any SAL_CALL ScFunctionAccess::getPropertyValue( const rtl::OUString& aProp
                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     if( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsArrayFunction" ) ) )
         return uno::Any( mbArray );
@@ -536,7 +535,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
                 throw(container::NoSuchElementException, lang::IllegalArgumentException,
                         uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     if (!mbValid)
         throw uno::RuntimeException();

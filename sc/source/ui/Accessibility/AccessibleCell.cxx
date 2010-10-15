@@ -41,7 +41,6 @@
 #include "document.hxx"
 #include "attrib.hxx"
 #include "miscuno.hxx"
-#include "unoguard.hxx"
 #include "editsrc.hxx"
 #include "dociter.hxx"
 #include "cell.hxx"
@@ -56,6 +55,7 @@
 #include <editeng/brshitem.hxx>
 #include <comphelper/sequence.hxx>
 #include <float.h>
+#include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -100,7 +100,7 @@ void ScAccessibleCell::Init()
 
 void SAL_CALL ScAccessibleCell::disposing()
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     // #100593# dispose in AccessibleStaticTextBase
     Dispose();
 
@@ -134,7 +134,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleCell::getAccessibleAtPoint(
 void SAL_CALL ScAccessibleCell::grabFocus(  )
         throw (uno::RuntimeException)
 {
-     ScUnoGuard aGuard;
+     SolarMutexGuard aGuard;
     IsObjectValid();
     if (getAccessibleParent().is() && mpViewShell)
     {
@@ -227,7 +227,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     ScAccessibleCell::getAccessibleStateSet(void)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     uno::Reference<XAccessibleStateSet> xParentStates;
     if (getAccessibleParent().is())
     {
@@ -265,7 +265,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
        ScAccessibleCell::getAccessibleRelationSet(void)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     utl::AccessibleRelationSetHelper* pRelationSet = NULL;
     if (mpAccDoc)

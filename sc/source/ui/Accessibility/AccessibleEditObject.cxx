@@ -31,7 +31,6 @@
 #include "AccessibleEditObject.hxx"
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
-#include "unoguard.hxx"
 #include "AccessibleText.hxx"
 #include "editsrc.hxx"
 #include "scmod.hxx"
@@ -46,6 +45,7 @@
 #include <editeng/editview.hxx>
 #include <editeng/editeng.hxx>
 #include <svx/svdmodel.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -82,7 +82,7 @@ ScAccessibleEditObject::~ScAccessibleEditObject()
 
 void SAL_CALL ScAccessibleEditObject::disposing()
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     if (mpTextHelper)
         DELETEZ(mpTextHelper);
 
@@ -114,7 +114,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleEditObject::getAccessibleAtPo
     uno::Reference<XAccessible> xRet;
     if (containsPoint(rPoint))
     {
-         ScUnoGuard aGuard;
+         SolarMutexGuard aGuard;
         IsObjectValid();
 
         if(!mpTextHelper)
@@ -193,7 +193,7 @@ sal_Int32 SAL_CALL
     ScAccessibleEditObject::getAccessibleChildCount(void)
                     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     if (!mpTextHelper)
         CreateTextHelper();
@@ -205,7 +205,7 @@ uno::Reference< XAccessible > SAL_CALL
         throw (uno::RuntimeException,
         lang::IndexOutOfBoundsException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     if (!mpTextHelper)
         CreateTextHelper();
@@ -216,7 +216,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     ScAccessibleEditObject::getAccessibleStateSet(void)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     uno::Reference<XAccessibleStateSet> xParentStates;
     if (getAccessibleParent().is())
     {
@@ -296,7 +296,7 @@ uno::Sequence<sal_Int8> SAL_CALL
     ScAccessibleEditObject::getImplementationId(void)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     static uno::Sequence<sal_Int8> aId;
     if (aId.getLength() == 0)

@@ -35,6 +35,7 @@
 #include <editeng/unotext.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/svdobj.hxx>
+#include <vcl/svapp.hxx>
 #include "notesuno.hxx"
 #include "textuno.hxx"
 #include "cellsuno.hxx"     // getParent
@@ -49,7 +50,6 @@
 #include "drwlayer.hxx"
 #include "detfunc.hxx"
 #include "undocell.hxx"
-#include "unoguard.hxx"
 #include "userdat.hxx"
 #include <editeng/outlobj.hxx>
 #include <svx/unoshape.hxx>
@@ -124,7 +124,7 @@ void ScAnnotationObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 uno::Reference<uno::XInterface> SAL_CALL ScAnnotationObj::getParent() throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     //  Parent der Notiz ist die zugehoerige Zelle
     //! existierendes Objekt finden und zurueckgeben ???
@@ -147,7 +147,7 @@ void SAL_CALL ScAnnotationObj::setParent( const uno::Reference<uno::XInterface>&
 uno::Reference<text::XTextCursor> SAL_CALL ScAnnotationObj::createTextCursor()
                                                     throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     //  Notizen brauchen keine Extrawurst
     return GetUnoText().createTextCursor();
 }
@@ -156,20 +156,20 @@ uno::Reference<text::XTextCursor> SAL_CALL ScAnnotationObj::createTextCursorByRa
                                     const uno::Reference<text::XTextRange>& aTextPosition )
                                                     throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     //  Notizen brauchen keine Extrawurst
     return GetUnoText().createTextCursorByRange(aTextPosition);
 }
 
 rtl::OUString SAL_CALL ScAnnotationObj::getString() throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return GetUnoText().getString();
 }
 
 void SAL_CALL ScAnnotationObj::setString( const rtl::OUString& aText ) throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     GetUnoText().setString(aText);
 }
 
@@ -177,7 +177,7 @@ void SAL_CALL ScAnnotationObj::insertString( const uno::Reference<text::XTextRan
                                             const rtl::OUString& aString, sal_Bool bAbsorb )
                                 throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     GetUnoText().insertString( xRange, aString, bAbsorb );
 }
 
@@ -185,25 +185,25 @@ void SAL_CALL ScAnnotationObj::insertControlCharacter( const uno::Reference<text
                                             sal_Int16 nControlCharacter, sal_Bool bAbsorb )
                                 throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     GetUnoText().insertControlCharacter( xRange, nControlCharacter, bAbsorb );
 }
 
 uno::Reference<text::XText> SAL_CALL ScAnnotationObj::getText() throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return GetUnoText().getText();
 }
 
 uno::Reference<text::XTextRange> SAL_CALL ScAnnotationObj::getStart() throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return GetUnoText().getStart();
 }
 
 uno::Reference<text::XTextRange> SAL_CALL ScAnnotationObj::getEnd() throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return GetUnoText().getEnd();
 }
 
@@ -211,7 +211,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScAnnotationObj::getEnd() throw(uno::R
 
 table::CellAddress SAL_CALL ScAnnotationObj::getPosition() throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     table::CellAddress aAdr;
     aAdr.Sheet  = aCellPos.Tab();
     aAdr.Column = aCellPos.Col();
@@ -221,28 +221,28 @@ table::CellAddress SAL_CALL ScAnnotationObj::getPosition() throw(uno::RuntimeExc
 
 rtl::OUString SAL_CALL ScAnnotationObj::getAuthor() throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     const ScPostIt* pNote = ImplGetNote();
     return pNote ? pNote->GetAuthor() : rtl::OUString();
 }
 
 rtl::OUString SAL_CALL ScAnnotationObj::getDate() throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     const ScPostIt* pNote = ImplGetNote();
     return pNote ? pNote->GetDate() : rtl::OUString();
 }
 
 sal_Bool SAL_CALL ScAnnotationObj::getIsVisible() throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     const ScPostIt* pNote = ImplGetNote();
     return pNote && pNote->IsCaptionShown();
 }
 
 void SAL_CALL ScAnnotationObj::setIsVisible( sal_Bool bIsVisible ) throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     // show/hide note with undo action
     if( pDocShell )
         pDocShell->GetDocFunc().ShowNote( aCellPos, bIsVisible );
@@ -252,7 +252,7 @@ void SAL_CALL ScAnnotationObj::setIsVisible( sal_Bool bIsVisible ) throw(uno::Ru
 uno::Reference < drawing::XShape > SAL_CALL ScAnnotationObj::getAnnotationShape()
                                 throw(::com::sun::star::uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return new ScAnnotationShapeObj(pDocShell, aCellPos);
 }
 
@@ -334,7 +334,7 @@ void ScAnnotationShapeObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 uno::Reference<uno::XInterface> SAL_CALL ScAnnotationShapeObj::getParent() throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     //  Parent der Notiz ist die zugehoerige Zelle
     //! existierendes Objekt finden und zurueckgeben ???
@@ -355,14 +355,14 @@ void SAL_CALL ScAnnotationShapeObj::setParent( const uno::Reference<uno::XInterf
 // XElementAccess
 uno::Type SAL_CALL ScAnnotationShapeObj::getElementType(  ) throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     return GetUnoText().getElementType();
 }
 
 sal_Bool SAL_CALL ScAnnotationShapeObj::hasElements(  ) throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     return GetUnoText().hasElements();
 }
@@ -370,7 +370,7 @@ sal_Bool SAL_CALL ScAnnotationShapeObj::hasElements(  ) throw (uno::RuntimeExcep
 // XEnumerationAccess
 uno::Reference< container::XEnumeration > SAL_CALL ScAnnotationShapeObj::createEnumeration(  ) throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     return GetUnoText().createEnumeration();
 }
@@ -379,7 +379,7 @@ uno::Reference< container::XEnumeration > SAL_CALL ScAnnotationShapeObj::createE
 void SAL_CALL ScAnnotationShapeObj::moveTextRange( const uno::Reference< text::XTextRange >& xRange, sal_Int16 nParagraphs )
                                 throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     GetUnoText().moveTextRange( xRange, nParagraphs );
 }
@@ -390,7 +390,7 @@ void SAL_CALL ScAnnotationShapeObj::insertTextContent( const uno::Reference< tex
                                     throw (lang::IllegalArgumentException,
                                         uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     GetUnoText().insertTextContent( xRange, xContent, bAbsorb );
 }
@@ -399,7 +399,7 @@ void SAL_CALL ScAnnotationShapeObj::removeTextContent( const uno::Reference< tex
                                     throw (container::NoSuchElementException,
                                         uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     GetUnoText().removeTextContent( xContent );
 }
@@ -409,7 +409,7 @@ void SAL_CALL ScAnnotationShapeObj::removeTextContent( const uno::Reference< tex
 uno::Reference<text::XTextCursor> SAL_CALL ScAnnotationShapeObj::createTextCursor()
                                                     throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     //  Notizen brauchen keine Extrawurst
     return GetUnoText().createTextCursor();
 }
@@ -418,20 +418,20 @@ uno::Reference<text::XTextCursor> SAL_CALL ScAnnotationShapeObj::createTextCurso
                                     const uno::Reference<text::XTextRange>& aTextPosition )
                                                     throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     //  Notizen brauchen keine Extrawurst
     return GetUnoText().createTextCursorByRange(aTextPosition);
 }
 
 rtl::OUString SAL_CALL ScAnnotationShapeObj::getString() throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return GetUnoText().getString();
 }
 
 void SAL_CALL ScAnnotationShapeObj::setString( const rtl::OUString& aText ) throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     GetUnoText().setString(aText);
 }
 
@@ -439,7 +439,7 @@ void SAL_CALL ScAnnotationShapeObj::insertString( const uno::Reference<text::XTe
                                             const rtl::OUString& aString, sal_Bool bAbsorb )
                                 throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     GetUnoText().insertString( xRange, aString, bAbsorb );
 }
 
@@ -447,25 +447,25 @@ void SAL_CALL ScAnnotationShapeObj::insertControlCharacter( const uno::Reference
                                             sal_Int16 nControlCharacter, sal_Bool bAbsorb )
                                 throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     GetUnoText().insertControlCharacter( xRange, nControlCharacter, bAbsorb );
 }
 
 uno::Reference<text::XText> SAL_CALL ScAnnotationShapeObj::getText() throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return GetUnoText().getText();
 }
 
 uno::Reference<text::XTextRange> SAL_CALL ScAnnotationShapeObj::getStart() throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return GetUnoText().getStart();
 }
 
 uno::Reference<text::XTextRange> SAL_CALL ScAnnotationShapeObj::getEnd() throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return GetUnoText().getEnd();
 }
 
@@ -473,7 +473,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScAnnotationShapeObj::getEnd() throw(u
 ::rtl::OUString SAL_CALL ScAnnotationShapeObj::getShapeType(  )
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     uno::Reference < drawing::XShapeDescriptor > xDesc(GetXShape(), uno::UNO_QUERY);
     if (xDesc.is())
         return xDesc->getShapeType();
@@ -484,7 +484,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScAnnotationShapeObj::getEnd() throw(u
 awt::Point SAL_CALL ScAnnotationShapeObj::getPosition(  )
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     GetXShape();
     return xShape.is() ? xShape->getPosition() : awt::Point();
 }
@@ -492,7 +492,7 @@ awt::Point SAL_CALL ScAnnotationShapeObj::getPosition(  )
 void SAL_CALL ScAnnotationShapeObj::setPosition( const awt::Point& aPosition )
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     GetXShape();
     if( xShape.is() )
         xShape->setPosition(aPosition);
@@ -501,7 +501,7 @@ void SAL_CALL ScAnnotationShapeObj::setPosition( const awt::Point& aPosition )
 awt::Size SAL_CALL ScAnnotationShapeObj::getSize(  )
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     GetXShape();
     return xShape.is() ? xShape->getSize() : awt::Size();
 }
@@ -509,7 +509,7 @@ awt::Size SAL_CALL ScAnnotationShapeObj::getSize(  )
 void SAL_CALL ScAnnotationShapeObj::setSize( const awt::Size& aSize )
     throw (beans::PropertyVetoException, uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     GetXShape();
     if( xShape.is() )
         xShape->setSize(aSize);
@@ -520,7 +520,7 @@ beans::PropertyState SAL_CALL ScAnnotationShapeObj::getPropertyState( const rtl:
                                     throw (beans::UnknownPropertyException,
                                         uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     uno::Reference < beans::XPropertyState > xState (GetXShape(), uno::UNO_QUERY);
     if (xState.is())
         return xState->getPropertyState( PropertyName );
@@ -532,7 +532,7 @@ uno::Sequence< beans::PropertyState > SAL_CALL ScAnnotationShapeObj::getProperty
                                     throw (beans::UnknownPropertyException,
                                         uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     uno::Reference < beans::XPropertyState > xState (GetXShape(), uno::UNO_QUERY);
     if (xState.is())
         return xState->getPropertyStates( aPropertyName );
@@ -543,7 +543,7 @@ void SAL_CALL ScAnnotationShapeObj::setPropertyToDefault( const ::rtl::OUString&
                                     throw (::com::sun::star::beans::UnknownPropertyException,
                                         ::com::sun::star::uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     uno::Reference < beans::XPropertyState > xState (GetXShape(), uno::UNO_QUERY);
     if (xState.is())
         xState->setPropertyToDefault( PropertyName );
@@ -553,7 +553,7 @@ uno::Any SAL_CALL ScAnnotationShapeObj::getPropertyDefault( const rtl::OUString&
                                     throw (beans::UnknownPropertyException,
                                         lang::WrappedTargetException, uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     uno::Reference < beans::XPropertyState > xState (GetXShape(), uno::UNO_QUERY);
     if (xState.is())
         return xState->getPropertyDefault( aPropertyName );
@@ -564,7 +564,7 @@ uno::Any SAL_CALL ScAnnotationShapeObj::getPropertyDefault( const rtl::OUString&
 uno::Reference< beans::XPropertySetInfo > SAL_CALL ScAnnotationShapeObj::getPropertySetInfo(  )
                                     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     uno::Reference < beans::XPropertySet > xProp (GetXShape(), uno::UNO_QUERY);
     if (xProp.is())
         return xProp->getPropertySetInfo();
@@ -578,7 +578,7 @@ void SAL_CALL ScAnnotationShapeObj::setPropertyValue( const rtl::OUString& aProp
                                         lang::WrappedTargetException,
                                         uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     uno::Reference < beans::XPropertySet > xProp (GetXShape(), uno::UNO_QUERY);
     if (xProp.is())
         xProp->setPropertyValue( aPropertyName, aValue );
@@ -589,7 +589,7 @@ uno::Any SAL_CALL ScAnnotationShapeObj::getPropertyValue( const rtl::OUString& P
                                         lang::WrappedTargetException,
                                         uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     uno::Reference < beans::XPropertySet > xProp (GetXShape(), uno::UNO_QUERY);
     if (xProp.is())
         return xProp->getPropertyValue( PropertyName );
@@ -602,7 +602,7 @@ void SAL_CALL ScAnnotationShapeObj::addPropertyChangeListener( const rtl::OUStri
                                         lang::WrappedTargetException,
                                         uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     uno::Reference < beans::XPropertySet > xProp (GetXShape(), uno::UNO_QUERY);
     if (xProp.is())
         return xProp->addPropertyChangeListener( aPropertyName, xListener );
@@ -614,7 +614,7 @@ void SAL_CALL ScAnnotationShapeObj::removePropertyChangeListener( const rtl::OUS
                                         lang::WrappedTargetException,
                                         uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     uno::Reference < beans::XPropertySet > xProp (GetXShape(), uno::UNO_QUERY);
     if (xProp.is())
         return xProp->removePropertyChangeListener( aPropertyName, aListener );
@@ -626,7 +626,7 @@ void SAL_CALL ScAnnotationShapeObj::addVetoableChangeListener( const rtl::OUStri
                                         lang::WrappedTargetException,
                                         uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     uno::Reference < beans::XPropertySet > xProp (GetXShape(), uno::UNO_QUERY);
     if (xProp.is())
         return xProp->addVetoableChangeListener( PropertyName, aListener );
@@ -638,7 +638,7 @@ void SAL_CALL ScAnnotationShapeObj::removeVetoableChangeListener( const rtl::OUS
                                         lang::WrappedTargetException,
                                         uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     uno::Reference < beans::XPropertySet > xProp (GetXShape(), uno::UNO_QUERY);
     if (xProp.is())
         return xProp->removeVetoableChangeListener( PropertyName, aListener );
@@ -652,7 +652,7 @@ void SAL_CALL ScAnnotationShapeObj::setPropertyValues( const uno::Sequence< rtl:
                                         lang::WrappedTargetException,
                                         uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     uno::Reference < beans::XMultiPropertySet > xProp (GetXShape(), uno::UNO_QUERY);
     if (xProp.is())
         xProp->setPropertyValues( aPropertyNames, aValues );
@@ -662,7 +662,7 @@ uno::Sequence< uno::Any > SAL_CALL ScAnnotationShapeObj::getPropertyValues(
                                     const uno::Sequence< rtl::OUString >& aPropertyNames )
                                     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     uno::Reference < beans::XMultiPropertySet > xProp (GetXShape(), uno::UNO_QUERY);
     if (xProp.is())
         return xProp->getPropertyValues( aPropertyNames );
@@ -673,7 +673,7 @@ void SAL_CALL ScAnnotationShapeObj::addPropertiesChangeListener( const uno::Sequ
                                     const uno::Reference< beans::XPropertiesChangeListener >& xListener )
                                     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     uno::Reference < beans::XMultiPropertySet > xProp (GetXShape(), uno::UNO_QUERY);
     if (xProp.is())
         xProp->addPropertiesChangeListener( aPropertyNames, xListener );
@@ -682,7 +682,7 @@ void SAL_CALL ScAnnotationShapeObj::addPropertiesChangeListener( const uno::Sequ
 void SAL_CALL ScAnnotationShapeObj::removePropertiesChangeListener( const uno::Reference< beans::XPropertiesChangeListener >& xListener )
                                     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     uno::Reference < beans::XMultiPropertySet > xProp (GetXShape(), uno::UNO_QUERY);
     if (xProp.is())
         xProp->removePropertiesChangeListener( xListener );
@@ -692,7 +692,7 @@ void SAL_CALL ScAnnotationShapeObj::firePropertiesChangeEvent( const uno::Sequen
                                     const uno::Reference< beans::XPropertiesChangeListener >& xListener )
                                     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     uno::Reference < beans::XMultiPropertySet > xProp (GetXShape(), uno::UNO_QUERY);
     if (xProp.is())
         xProp->firePropertiesChangeEvent( aPropertyNames, xListener );
@@ -701,7 +701,7 @@ void SAL_CALL ScAnnotationShapeObj::firePropertiesChangeEvent( const uno::Sequen
                             // XComponent
 void SAL_CALL ScAnnotationShapeObj::dispose(  ) throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     uno::Reference < lang::XComponent > xComp (GetXShape(), uno::UNO_QUERY);
     if (xComp.is())
         xComp->dispose();
@@ -712,7 +712,7 @@ void SAL_CALL ScAnnotationShapeObj::dispose(  ) throw (uno::RuntimeException)
 void SAL_CALL ScAnnotationShapeObj::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
                                     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     uno::Reference < lang::XComponent > xComp (GetXShape(), uno::UNO_QUERY);
     if (xComp.is())
         xComp->addEventListener( xListener );
@@ -721,7 +721,7 @@ void SAL_CALL ScAnnotationShapeObj::addEventListener( const uno::Reference< lang
 void SAL_CALL ScAnnotationShapeObj::removeEventListener( const uno::Reference< lang::XEventListener >& aListener )
                                     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     uno::Reference < lang::XComponent > xComp (GetXShape(), uno::UNO_QUERY);
     if (xComp.is())
         xComp->removeEventListener( aListener );

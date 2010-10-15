@@ -60,7 +60,6 @@
 #include "nameuno.hxx"
 #include "xmlbodyi.hxx"
 #include "xmlstyli.hxx"
-#include "unoguard.hxx"
 #include "ViewSettingsSequenceDefines.hxx"
 
 #include "patattr.hxx"
@@ -1742,7 +1741,7 @@ ScXMLImport::ScXMLImport(
     pMyLabelRanges(NULL),
     pValidations(NULL),
     pDetectiveOpArray(NULL),
-    pScUnoGuard(NULL),
+    pSolarMutexGuard(NULL),
     pNumberFormatAttributesExportHelper(NULL),
     pStyleNumberFormats(NULL),
     sPrevStyleName(),
@@ -1873,8 +1872,8 @@ ScXMLImport::~ScXMLImport() throw()
     if (pStylesImportHelper)
         delete pStylesImportHelper;
 
-    if (pScUnoGuard)
-        delete pScUnoGuard;
+    if (pSolarMutexGuard)
+        delete pSolarMutexGuard;
 
     if (pMyNamedExpressions)
         delete pMyNamedExpressions;
@@ -2914,7 +2913,7 @@ void ScXMLImport::DisposingModel()
 void ScXMLImport::LockSolarMutex()
 {
     // #i62677# When called from DocShell/Wrapper, the SolarMutex is already locked,
-    // so there's no need to allocate (and later delete) the ScUnoGuard.
+    // so there's no need to allocate (and later delete) the SolarMutexGuard.
     if (bFromWrapper)
     {
         DBG_TESTSOLARMUTEX();
@@ -2923,8 +2922,8 @@ void ScXMLImport::LockSolarMutex()
 
     if (nSolarMutexLocked == 0)
     {
-        DBG_ASSERT(!pScUnoGuard, "Solar Mutex is locked");
-        pScUnoGuard = new ScUnoGuard();
+        DBG_ASSERT(!pSolarMutexGuard, "Solar Mutex is locked");
+        pSolarMutexGuard = new SolarMutexGuard();
     }
     ++nSolarMutexLocked;
 }
@@ -2937,9 +2936,9 @@ void ScXMLImport::UnlockSolarMutex()
         nSolarMutexLocked--;
         if (nSolarMutexLocked == 0)
         {
-            DBG_ASSERT(pScUnoGuard, "Solar Mutex is always unlocked");
-            delete pScUnoGuard;
-            pScUnoGuard = NULL;
+            DBG_ASSERT(pSolarMutexGuard, "Solar Mutex is always unlocked");
+            delete pSolarMutexGuard;
+            pSolarMutexGuard = NULL;
         }
     }
 }

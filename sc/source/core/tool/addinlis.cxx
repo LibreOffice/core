@@ -33,13 +33,13 @@
 
 #include <tools/debug.hxx>
 #include <sfx2/objsh.hxx>
+#include <vcl/svapp.hxx>
 
 
 #include "addinlis.hxx"
 #include "miscuno.hxx"      // SC_IMPL_SERVICE_INFO
 #include "document.hxx"
 #include "brdcst.hxx"
-#include "unoguard.hxx"
 #include "sc.hrc"
 
 using namespace com::sun::star;
@@ -136,7 +136,7 @@ void ScAddInListener::RemoveDocument( ScDocument* pDocumentP )
 void SAL_CALL ScAddInListener::modified( const ::com::sun::star::sheet::ResultEvent& aEvent )
                                 throw(::com::sun::star::uno::RuntimeException)
 {
-    ScUnoGuard aGuard;          //! or generate a UserEvent
+    SolarMutexGuard aGuard;         //! or generate a UserEvent
 
     aResult = aEvent.Value;     // store result
 

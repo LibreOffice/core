@@ -33,7 +33,6 @@
 #include "AccessiblePageHeaderArea.hxx"
 #include "AccessibilityHints.hxx"
 #include "prevwsh.hxx"
-#include "unoguard.hxx"
 #include "miscuno.hxx"
 #include "prevloc.hxx"
 #include "document.hxx"
@@ -49,6 +48,7 @@
 
 #include <vcl/window.hxx>
 #include <svl/smplhint.hxx>
+#include <vcl/svapp.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <svl/style.hxx>
 #include <svl/itempool.hxx>
@@ -120,7 +120,7 @@ ScAccessiblePageHeader::~ScAccessiblePageHeader()
 
 void SAL_CALL ScAccessiblePageHeader::disposing()
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     if (mpViewShell)
     {
         mpViewShell->RemoveAccessibilityObject(*this);
@@ -194,7 +194,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePageHeader::getAccessibleAtPo
 
     if (containsPoint(aPoint))
     {
-        ScUnoGuard aGuard;
+        SolarMutexGuard aGuard;
         IsObjectValid();
 
         sal_Int32 nCount(getAccessibleChildCount()); // fill the areas
@@ -218,7 +218,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePageHeader::getAccessibleAtPo
 
 void SAL_CALL ScAccessiblePageHeader::grabFocus() throw (uno::RuntimeException)
 {
-     ScUnoGuard aGuard;
+     SolarMutexGuard aGuard;
     IsObjectValid();
     if (getAccessibleParent().is())
     {
@@ -232,7 +232,7 @@ void SAL_CALL ScAccessiblePageHeader::grabFocus() throw (uno::RuntimeException)
 
 sal_Int32 SAL_CALL ScAccessiblePageHeader::getAccessibleChildCount() throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
 
     if((mnChildCount < 0) && mpViewShell)
@@ -266,7 +266,7 @@ sal_Int32 SAL_CALL ScAccessiblePageHeader::getAccessibleChildCount() throw (uno:
 uno::Reference< XAccessible > SAL_CALL ScAccessiblePageHeader::getAccessibleChild( sal_Int32 nIndex )
                                 throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
 
     uno::Reference<XAccessible> xRet;
@@ -303,7 +303,7 @@ sal_Int32 SAL_CALL ScAccessiblePageHeader::getAccessibleIndexInParent() throw (u
 uno::Reference< XAccessibleStateSet > SAL_CALL ScAccessiblePageHeader::getAccessibleStateSet()
                                 throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     uno::Reference<XAccessibleStateSet> xParentStates;
     if (getAccessibleParent().is())
     {

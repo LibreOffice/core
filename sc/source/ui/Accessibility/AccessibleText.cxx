@@ -43,7 +43,6 @@
 #include "prevwsh.hxx"
 #include "docsh.hxx"
 #include "prevloc.hxx"
-#include "unoguard.hxx"
 #include "patattr.hxx"
 #include "inputwin.hxx"
 #include <editeng/unofored.hxx>
@@ -55,6 +54,7 @@
 #include <editeng/justifyitem.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/algitem.hxx>
+#include <vcl/svapp.hxx>
 
 
 // ============================================================================
@@ -1522,7 +1522,7 @@ ScAccessibleHeaderTextData::ScAccessibleHeaderTextData(ScPreviewShell* pViewShel
 
 ScAccessibleHeaderTextData::~ScAccessibleHeaderTextData()
 {
-    ScUnoGuard aGuard;      //  needed for EditEngine dtor
+    SolarMutexGuard aGuard;     //  needed for EditEngine dtor
 
     if (mpDocSh)
         mpDocSh->GetDocument()->RemoveUnoObject(*this);
@@ -1636,7 +1636,7 @@ ScAccessibleNoteTextData::ScAccessibleNoteTextData(ScPreviewShell* pViewShell,
 
 ScAccessibleNoteTextData::~ScAccessibleNoteTextData()
 {
-    ScUnoGuard aGuard;      //  needed for EditEngine dtor
+    SolarMutexGuard aGuard;     //  needed for EditEngine dtor
 
     if (mpDocSh)
         mpDocSh->GetDocument()->RemoveUnoObject(*this);

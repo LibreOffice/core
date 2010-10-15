@@ -44,6 +44,7 @@
 #include <rtl/math.hxx>
 #include <svl/itemprop.hxx>
 #include <svl/intitem.hxx>
+#include <vcl/svapp.hxx>
 
 #include "scitems.hxx"
 #include "document.hxx"
@@ -57,7 +58,6 @@
 #include "global.hxx"
 #include "collect.hxx"
 #include "datauno.hxx"      // ScDataUnoConversion
-#include "unoguard.hxx"
 #include "miscuno.hxx"
 #include "unonames.hxx"
 
@@ -1141,7 +1141,7 @@ const uno::Sequence<sheet::MemberResult>* ScDPSource::GetMemberResults( ScDPLeve
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPSource::getPropertySetInfo()
                                                         throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     using beans::PropertyAttribute::READONLY;
 
     static SfxItemPropertyMapEntry aDPSourceMap_Impl[] =
@@ -1554,7 +1554,7 @@ BOOL ScDPDimension::IsVisible( const ScDPItemData& rData )
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPDimension::getPropertySetInfo()
                                                         throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     static SfxItemPropertyMapEntry aDPDimensionMap_Impl[] =
     {
@@ -2289,7 +2289,7 @@ void ScDPLevel::setShowEmpty(BOOL bSet)
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPLevel::getPropertySetInfo()
                                                         throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     static SfxItemPropertyMapEntry aDPLevelMap_Impl[] =
     {
@@ -2794,7 +2794,7 @@ void ScDPMember::setPosition(sal_Int32 nNew)
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPMember::getPropertySetInfo()
                                                         throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     static SfxItemPropertyMapEntry aDPMemberMap_Impl[] =
     {

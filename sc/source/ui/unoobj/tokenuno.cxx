@@ -40,11 +40,11 @@
 #include <com/sun/star/table/CellAddress.hpp>
 
 #include <svl/itemprop.hxx>
+#include <vcl/svapp.hxx>
 
 #include "miscuno.hxx"
 #include "convuno.hxx"
 #include "unonames.hxx"
-#include "unoguard.hxx"
 #include "token.hxx"
 #include "compiler.hxx"
 #include "tokenarray.hxx"
@@ -138,7 +138,7 @@ uno::Sequence<sheet::FormulaToken> SAL_CALL ScFormulaParserObj::parseFormula(
         const rtl::OUString& aFormula, const table::CellAddress& rReferencePos )
                                 throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     uno::Sequence<sheet::FormulaToken> aRet;
 
     if (mpDocShell)
@@ -164,7 +164,7 @@ rtl::OUString SAL_CALL ScFormulaParserObj::printFormula(
         const uno::Sequence<sheet::FormulaToken>& aTokens, const table::CellAddress& rReferencePos )
                                 throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     rtl::OUString aRet;
 
     if (mpDocShell)
@@ -191,7 +191,7 @@ rtl::OUString SAL_CALL ScFormulaParserObj::printFormula(
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScFormulaParserObj::getPropertySetInfo()
                                                         throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     static uno::Reference< beans::XPropertySetInfo > aRef(new SfxItemPropertySetInfo( lcl_GetFormulaParserMap() ));
     return aRef;
 }
@@ -202,7 +202,7 @@ void SAL_CALL ScFormulaParserObj::setPropertyValue(
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     String aString(aPropertyName);
     if ( aString.EqualsAscii( SC_UNO_COMPILEFAP ) )
     {
@@ -260,7 +260,7 @@ uno::Any SAL_CALL ScFormulaParserObj::getPropertyValue( const rtl::OUString& aPr
                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     uno::Any aRet;
     String aString(aPropertyName);
     if ( aString.EqualsAscii( SC_UNO_COMPILEFAP ) )

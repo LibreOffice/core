@@ -36,7 +36,6 @@
 #include "AccessibilityHints.hxx"
 #include "document.hxx"
 #include "drwlayer.hxx"
-#include "unoguard.hxx"
 #include "shapeuno.hxx"
 #include "DrawModelBroadcaster.hxx"
 #include "drawview.hxx"
@@ -66,6 +65,7 @@
 #include <svx/unoshape.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <toolkit/helper/convert.hxx>
+#include <vcl/svapp.hxx>
 
 #include <list>
 #include <algorithm>
@@ -1277,7 +1277,7 @@ ScAccessibleDocument::~ScAccessibleDocument(void)
 
 void SAL_CALL ScAccessibleDocument::disposing()
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     FreeAccessibleSpreadsheet();
     if (mpViewShell)
     {
@@ -1513,7 +1513,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocument::getAccessibleAtPoin
     uno::Reference<XAccessible> xAccessible = NULL;
     if (containsPoint(rPoint))
     {
-        ScUnoGuard aGuard;
+        SolarMutexGuard aGuard;
         IsObjectValid();
         if (mpChildrenShapes)
             xAccessible = mpChildrenShapes->GetAt(rPoint);
@@ -1540,7 +1540,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocument::getAccessibleAtPoin
 void SAL_CALL ScAccessibleDocument::grabFocus(  )
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     if (getAccessibleParent().is())
     {
@@ -1566,7 +1566,7 @@ sal_Int32 SAL_CALL
     ScAccessibleDocument::getAccessibleChildCount(void)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     sal_Int32 nCount(1);
     if (mpChildrenShapes)
@@ -1584,7 +1584,7 @@ uno::Reference<XAccessible> SAL_CALL
     throw (uno::RuntimeException,
         lang::IndexOutOfBoundsException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     uno::Reference<XAccessible> xAccessible;
     if (nIndex >= 0)
@@ -1615,7 +1615,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     ScAccessibleDocument::getAccessibleStateSet(void)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     uno::Reference<XAccessibleStateSet> xParentStates;
     if (getAccessibleParent().is())
     {
@@ -1645,7 +1645,7 @@ void SAL_CALL
     ScAccessibleDocument::selectAccessibleChild( sal_Int32 nChildIndex )
         throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
 
     if (mpChildrenShapes)
@@ -1679,7 +1679,7 @@ sal_Bool SAL_CALL
     ScAccessibleDocument::isAccessibleChildSelected( sal_Int32 nChildIndex )
         throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     sal_Bool bResult(sal_False);
 
@@ -1712,7 +1712,7 @@ void SAL_CALL
     ScAccessibleDocument::clearAccessibleSelection(  )
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
 
     if (mpChildrenShapes)
@@ -1723,7 +1723,7 @@ void SAL_CALL
     ScAccessibleDocument::selectAllAccessibleChildren(  )
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
 
     if (mpChildrenShapes)
@@ -1740,7 +1740,7 @@ sal_Int32 SAL_CALL
     ScAccessibleDocument::getSelectedAccessibleChildCount(  )
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     sal_Int32 nCount(0);
 
@@ -1760,7 +1760,7 @@ uno::Reference<XAccessible > SAL_CALL
     ScAccessibleDocument::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
         throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     uno::Reference<XAccessible> xAccessible;
     if (mpChildrenShapes)
@@ -1788,7 +1788,7 @@ void SAL_CALL
     ScAccessibleDocument::deselectAccessibleChild( sal_Int32 nChildIndex )
         throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
 
     if (mpChildrenShapes)
@@ -1850,7 +1850,7 @@ uno::Sequence<sal_Int8> SAL_CALL
     ScAccessibleDocument::getImplementationId(void)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     static uno::Sequence<sal_Int8> aId;
     if (aId.getLength() == 0)
@@ -1865,7 +1865,7 @@ uno::Sequence<sal_Int8> SAL_CALL
 
 sal_Bool ScAccessibleDocument::IsValid (void) const
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     return (!ScAccessibleContextBase::IsDefunc() && !rBHelper.bInDispose);
 }
@@ -1888,14 +1888,14 @@ Rectangle ScAccessibleDocument::GetVisibleArea_Impl() const
 
 Rectangle ScAccessibleDocument::GetVisibleArea() const
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     return maVisArea;
 }
 
 Point ScAccessibleDocument::LogicToPixel (const Point& rPoint) const
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     Point aPoint;
     ScGridWindow* pWin = static_cast<ScGridWindow*>(mpViewShell->GetWindowByPos(meSplitPos));
@@ -1909,7 +1909,7 @@ Point ScAccessibleDocument::LogicToPixel (const Point& rPoint) const
 
 Size ScAccessibleDocument::LogicToPixel (const Size& rSize) const
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     Size aSize;
     ScGridWindow* pWin = static_cast<ScGridWindow*>(mpViewShell->GetWindowByPos(meSplitPos));
@@ -1920,7 +1920,7 @@ Size ScAccessibleDocument::LogicToPixel (const Size& rSize) const
 
 Point ScAccessibleDocument::PixelToLogic (const Point& rPoint) const
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     Point aPoint;
     ScGridWindow* pWin = static_cast<ScGridWindow*>(mpViewShell->GetWindowByPos(meSplitPos));
@@ -1934,7 +1934,7 @@ Point ScAccessibleDocument::PixelToLogic (const Point& rPoint) const
 
 Size ScAccessibleDocument::PixelToLogic (const Size& rSize) const
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     Size aSize;
     ScGridWindow* pWin = static_cast<ScGridWindow*>(mpViewShell->GetWindowByPos(meSplitPos));
@@ -1965,7 +1965,7 @@ utl::AccessibleRelationSetHelper* ScAccessibleDocument::GetRelationSet(const ScA
     ScAccessibleDocument::createAccessibleName(void)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     rtl::OUString sName = String(ScResId(STR_ACC_DOC_NAME));
     sal_Int32 nNumber(sal_Int32(meSplitPos) + 1);

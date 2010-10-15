@@ -37,7 +37,6 @@
 #include "document.hxx"
 #include "prevwsh.hxx"
 #include "prevloc.hxx"
-#include "unoguard.hxx"
 #include "drwlayer.hxx"
 #include "editsrc.hxx"
 #include "scresid.hxx"
@@ -63,6 +62,7 @@
 #include <toolkit/helper/convert.hxx>
 #include <svx/unoshape.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
+#include <vcl/svapp.hxx>
 
 #include <vector>
 #include <list>
@@ -568,13 +568,13 @@ ScIAccessibleViewForwarder::~ScIAccessibleViewForwarder()
 
 sal_Bool ScIAccessibleViewForwarder::IsValid (void) const
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return mbValid;
 }
 
 Rectangle ScIAccessibleViewForwarder::GetVisibleArea() const
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     Rectangle aVisRect;
     Window* pWin = mpViewShell->GetWindow();
     if (pWin)
@@ -590,7 +590,7 @@ Rectangle ScIAccessibleViewForwarder::GetVisibleArea() const
 
 Point ScIAccessibleViewForwarder::LogicToPixel (const Point& rPoint) const
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     Point aPoint;
     Window* pWin = mpViewShell->GetWindow();
     if (pWin && mpAccDoc)
@@ -604,7 +604,7 @@ Point ScIAccessibleViewForwarder::LogicToPixel (const Point& rPoint) const
 
 Size ScIAccessibleViewForwarder::LogicToPixel (const Size& rSize) const
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     Size aSize;
     Window* pWin = mpViewShell->GetWindow();
     if (pWin)
@@ -614,7 +614,7 @@ Size ScIAccessibleViewForwarder::LogicToPixel (const Size& rSize) const
 
 Point ScIAccessibleViewForwarder::PixelToLogic (const Point& rPoint) const
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     Point aPoint;
     Window* pWin = mpViewShell->GetWindow();
     if (pWin && mpAccDoc)
@@ -627,7 +627,7 @@ Point ScIAccessibleViewForwarder::PixelToLogic (const Point& rPoint) const
 
 Size ScIAccessibleViewForwarder::PixelToLogic (const Size& rSize) const
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     Size aSize;
     Window* pWin = mpViewShell->GetWindow();
     if (pWin)
@@ -1448,7 +1448,7 @@ ScAccessibleDocumentPagePreview::~ScAccessibleDocumentPagePreview(void)
 
 void SAL_CALL ScAccessibleDocumentPagePreview::disposing()
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     if (mpTable)
     {
         mpTable->release();
@@ -1581,7 +1581,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocumentPagePreview::getAcces
     uno::Reference<XAccessible> xAccessible;
     if (containsPoint(rPoint))
     {
-        ScUnoGuard aGuard;
+        SolarMutexGuard aGuard;
         IsObjectValid();
 
         if ( mpViewShell )
@@ -1655,7 +1655,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocumentPagePreview::getAcces
 
 void SAL_CALL ScAccessibleDocumentPagePreview::grabFocus() throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     if (getAccessibleParent().is())
     {
@@ -1672,7 +1672,7 @@ void SAL_CALL ScAccessibleDocumentPagePreview::grabFocus() throw (uno::RuntimeEx
 
 sal_Int32 SAL_CALL ScAccessibleDocumentPagePreview::getAccessibleChildCount(void) throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
 
     long nRet = 0;
@@ -1688,7 +1688,7 @@ sal_Int32 SAL_CALL ScAccessibleDocumentPagePreview::getAccessibleChildCount(void
 uno::Reference<XAccessible> SAL_CALL ScAccessibleDocumentPagePreview::getAccessibleChild(sal_Int32 nIndex)
                 throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     uno::Reference<XAccessible> xAccessible;
 
@@ -1754,7 +1754,7 @@ uno::Reference<XAccessible> SAL_CALL ScAccessibleDocumentPagePreview::getAccessi
 uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessibleDocumentPagePreview::getAccessibleStateSet(void)
                         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     uno::Reference<XAccessibleStateSet> xParentStates;
     if (getAccessibleParent().is())
     {
@@ -1804,7 +1804,7 @@ uno::Sequence<sal_Int8> SAL_CALL
     ScAccessibleDocumentPagePreview::getImplementationId(void)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     static uno::Sequence<sal_Int8> aId;
     if (aId.getLength() == 0)

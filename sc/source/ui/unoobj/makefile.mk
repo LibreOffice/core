@@ -72,7 +72,6 @@ SLO1FILES =  \
         $(SLO)$/targuno.obj \
         $(SLO)$/convuno.obj \
         $(SLO)$/editsrc.obj \
-        $(SLO)$/unoguard.obj \
         $(SLO)$/confuno.obj \
         $(SLO)$/filtuno.obj \
         $(SLO)$/unodoc.obj \
