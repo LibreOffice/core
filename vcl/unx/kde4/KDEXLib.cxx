@@ -266,7 +266,15 @@ void KDEXLib::socketNotifierActivated( int fd )
 void KDEXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
 {
     if( eventLoopType == LibreOfficeEventLoop )
+    {
+        if( qApp->thread() == QThread::currentThread())
+        {
+            // even if we use the LO event loop, still process Qt's events,
+            // otherwise they can remain unhandled for quite a long while
+            processYield( false, bHandleAllCurrentEvents );
+        }
         return SalXLib::Yield( bWait, bHandleAllCurrentEvents );
+    }
     // if we are the main thread (which is where the event processing is done),
     // good, just do it
     if( qApp->thread() == QThread::currentThread())
@@ -278,7 +286,7 @@ void KDEXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
     }
 }
 
-void KDEXLib::processYield( bool bWait, bool bHandleAllCurrentEvents )
+bool KDEXLib::processYield( bool bWait, bool bHandleAllCurrentEvents )
 {
     QAbstractEventDispatcher* dispatcher = QAbstractEventDispatcher::instance( qApp->thread());
     bool wasEvent = false;
@@ -291,7 +299,8 @@ void KDEXLib::processYield( bool bWait, bool bHandleAllCurrentEvents )
         wasEvent = true;
     }
     if( bWait && !wasEvent )
-        dispatcher->processEvents( QEventLoop::WaitForMoreEvents );
+        wasEvent = dispatcher->processEvents( QEventLoop::WaitForMoreEvents );
+    return wasEvent;
 }
 
 void KDEXLib::StartTimer( ULONG nMS )
