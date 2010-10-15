@@ -601,7 +601,7 @@ void ORowSet::freeResources( bool _bComplete )
         m_bModified     = sal_False;
         m_bLastKnownRowCountFinal = sal_False;
         m_nLastKnownRowCount      = 0;
-        if ( m_aOldRow.isValid() )
+        if ( m_aOldRow.is() )
             m_aOldRow->clearRow();
 
         impl_disposeParametersContainer_nothrow();
@@ -889,7 +889,7 @@ void SAL_CALL ORowSet::insertRow(  ) throw(SQLException, RuntimeException)
 
         ORowSetRow aOldValues;
         if ( !m_aCurrentRow.isNull() )
-            aOldValues = new ORowSetValueVector( m_aCurrentRow->getBody() );
+            aOldValues = new ORowSetValueVector( *(*m_aCurrentRow));
         Sequence<Any> aChangedBookmarks;
         RowsChangeEvent aEvt(*this,RowChangeAction::INSERT,1,aChangedBookmarks);
         notifyAllListenersRowBeforeChange(aGuard,aEvt);
@@ -952,7 +952,7 @@ void SAL_CALL ORowSet::updateRow(  ) throw(SQLException, RuntimeException)
     {
         ORowSetRow aOldValues;
         if ( !m_aCurrentRow.isNull() )
-            aOldValues = new ORowSetValueVector( m_aCurrentRow->getBody() );
+            aOldValues = new ORowSetValueVector( *(*m_aCurrentRow) );
 
         Sequence<Any> aChangedBookmarks;
         RowsChangeEvent aEvt(*this,RowChangeAction::UPDATE,1,aChangedBookmarks);
@@ -965,7 +965,7 @@ void SAL_CALL ORowSet::updateRow(  ) throw(SQLException, RuntimeException)
         aEvt.Rows += aBookmarks.size();
         m_aBookmark     = m_pCache->getBookmark();
         m_aCurrentRow   = m_pCache->m_aMatrixIter;
-        if ( m_pCache->m_aMatrixIter != m_pCache->getEnd() && (*m_pCache->m_aMatrixIter).isValid() )
+        if ( m_pCache->m_aMatrixIter != m_pCache->getEnd() && (*m_pCache->m_aMatrixIter).is() )
         {
             if ( m_pCache->isResultSetChanged() )
             {
@@ -973,7 +973,7 @@ void SAL_CALL ORowSet::updateRow(  ) throw(SQLException, RuntimeException)
             }
             else
             {
-                m_aOldRow->setRow(new ORowSetValueVector(m_aCurrentRow->getBody()));
+                m_aOldRow->setRow(new ORowSetValueVector(*(*m_aCurrentRow)));
 
                 // notification order
                 // - column values
@@ -1023,8 +1023,8 @@ void SAL_CALL ORowSet::deleteRow(  ) throw(SQLException, RuntimeException)
     notifyRowSetAndClonesRowDelete( aBookmarkToDelete );
 
     ORowSetRow aOldValues;
-    if ( m_pCache->m_aMatrixIter != m_pCache->getEnd() && m_pCache->m_aMatrixIter->isValid() )
-        aOldValues = new ORowSetValueVector( m_pCache->m_aMatrixIter->getBody() );
+    if ( m_pCache->m_aMatrixIter != m_pCache->getEnd() && m_pCache->m_aMatrixIter->is() )
+        aOldValues = new ORowSetValueVector( *(*(m_pCache->m_aMatrixIter)) );
 
     Sequence<Any> aChangedBookmarks;
     RowsChangeEvent aEvt(*this,RowChangeAction::DELETE,1,aChangedBookmarks);
@@ -1068,7 +1068,7 @@ void ORowSet::implCancelRowUpdates( sal_Bool _bNotifyModified ) SAL_THROW( ( SQL
 
     ORowSetRow aOldValues;
     if ( !m_aCurrentRow.isNull() )
-        aOldValues = new ORowSetValueVector( m_aCurrentRow->getBody() );
+        aOldValues = new ORowSetValueVector( *(*m_aCurrentRow) );
 
     m_pCache->cancelRowUpdates();
 
@@ -1195,9 +1195,9 @@ void SAL_CALL ORowSet::moveToInsertRow(  ) throw(SQLException, RuntimeException)
         if  (   !m_bBeforeFirst
             &&  !m_bAfterLast
             &&  m_pCache->m_aMatrixIter != m_pCache->getEnd()
-            &&  m_pCache->m_aMatrixIter->isValid()
+            &&  m_pCache->m_aMatrixIter->is()
             )
-            aOldValues = new ORowSetValueVector( m_pCache->m_aMatrixIter->getBody() );
+            aOldValues = new ORowSetValueVector( *(*(m_pCache->m_aMatrixIter)) );
 
         const sal_Bool bNewState = m_bNew;
         const sal_Bool bModState = m_bModified;
@@ -1665,7 +1665,7 @@ Reference< XResultSet > ORowSet::impl_prepareAndExecute_throw()
     catch( const SQLException& )
     {
         SQLExceptionInfo aError( ::cppu::getCaughtException() );
-        OSL_ENSURE( aError.isValid(), "ORowSet::impl_prepareAndExecute_throw: caught an SQLException which we cannot analyze!" );
+        OSL_ENSURE( aError.is(), "ORowSet::impl_prepareAndExecute_throw: caught an SQLException which we cannot analyze!" );
 
         // append information about what we were actually going to execute
         try
@@ -1820,7 +1820,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
         if ( xNumberFormat.is() )
             m_xNumberFormatTypes.set(xNumberFormat->getNumberFormats(),UNO_QUERY);
 
-        ::vos::ORef< ::connectivity::OSQLColumns> aColumns = new ::connectivity::OSQLColumns();
+        ::rtl::Reference< ::connectivity::OSQLColumns> aColumns = new ::connectivity::OSQLColumns();
         ::std::vector< ::rtl::OUString> aNames;
         ::rtl::OUString aDescription;
         sal_Int32 nFormatKey = 0;
@@ -2752,7 +2752,7 @@ ORowSetClone::ORowSetClone( const ::comphelper::ComponentContext& _rContext, ORo
 
     m_aOldRow = m_pCache->registerOldRow();
 
-    ::vos::ORef< ::connectivity::OSQLColumns> aColumns = new ::connectivity::OSQLColumns();
+    ::rtl::Reference< ::connectivity::OSQLColumns> aColumns = new ::connectivity::OSQLColumns();
     ::std::vector< ::rtl::OUString> aNames;
 
     ::rtl::OUString aDescription;

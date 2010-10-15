@@ -90,7 +90,6 @@ using namespace ::com::sun::star::reflection;
 using namespace ::com::sun::star::script;
 using namespace ::cppu;
 using namespace ::osl;
-using namespace ::vos;
 using namespace ::dbtools;
 using namespace ::comphelper;
 namespace css = ::com::sun::star;

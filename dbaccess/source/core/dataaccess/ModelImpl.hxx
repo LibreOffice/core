@@ -81,6 +81,7 @@
 #include <tools/string.hxx>
 #include <unotools/sharedunocomponent.hxx>
 #include <vos/mutex.hxx>
+#include <rtl/ref.hxx>
 
 #include <memory>
 

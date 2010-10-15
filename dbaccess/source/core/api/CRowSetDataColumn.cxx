@@ -122,7 +122,7 @@ void SAL_CALL ORowSetDataColumn::getFastPropertyValue( Any& rValue, sal_Int32 nH
 {
     if ( PROPERTY_ID_VALUE == nHandle )
     {
-        if ( !m_aColumnValue.isNull() && m_aColumnValue->isValid() )
+        if ( !m_aColumnValue.isNull() && m_aColumnValue->is() )
         {
             ::osl::Mutex* pMutex = m_aColumnValue.getMutex();
             ::osl::MutexGuard aGuard( *pMutex );
@@ -206,7 +206,7 @@ Sequence< sal_Int8 > ORowSetDataColumn::getImplementationId() throw (RuntimeExce
 
 void ORowSetDataColumn::fireValueChange(const ORowSetValue& _rOldValue)
 {
-    if ( !m_aColumnValue.isNull() && m_aColumnValue->isValid() && (!(((*m_aColumnValue)->get())[m_nPos] == _rOldValue)) )
+    if ( !m_aColumnValue.isNull() && m_aColumnValue->is() && (!(((*m_aColumnValue)->get())[m_nPos] == _rOldValue)) )
     {
         sal_Int32 nHandle = PROPERTY_ID_VALUE;
         m_aOldValue = _rOldValue.makeAny();
@@ -227,7 +227,7 @@ void ORowSetDataColumn::fireValueChange(const ORowSetValue& _rOldValue)
 DBG_NAME(ORowSetDataColumns )
 ORowSetDataColumns::ORowSetDataColumns(
                 sal_Bool _bCase,
-                const ::vos::ORef< ::connectivity::OSQLColumns>& _rColumns,
+                const ::rtl::Reference< ::connectivity::OSQLColumns>& _rColumns,
                 ::cppu::OWeakObject& _rParent,
                 ::osl::Mutex& _rMutex,
                 const ::std::vector< ::rtl::OUString> &_rVector
@@ -262,7 +262,7 @@ void SAL_CALL ORowSetDataColumns::disposing(void)
     //  m_aColumns.clear();
 }
 
-void ORowSetDataColumns::assign(const ::vos::ORef< ::connectivity::OSQLColumns>& _rColumns,const ::std::vector< ::rtl::OUString> &_rVector)
+void ORowSetDataColumns::assign(const ::rtl::Reference< ::connectivity::OSQLColumns>& _rColumns,const ::std::vector< ::rtl::OUString> &_rVector)
 {
     m_aColumns = _rColumns;
     reFill(_rVector);

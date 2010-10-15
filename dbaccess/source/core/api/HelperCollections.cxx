@@ -48,7 +48,7 @@ namespace dbaccess
     using namespace ::cppu;
     using namespace ::osl;
 
-    OPrivateColumns::OPrivateColumns(const ::vos::ORef< ::connectivity::OSQLColumns>& _rColumns,
+    OPrivateColumns::OPrivateColumns(const ::rtl::Reference< ::connectivity::OSQLColumns>& _rColumns,
                         sal_Bool _bCase,
                         ::cppu::OWeakObject& _rParent,
                         ::osl::Mutex& _rMutex,
@@ -59,7 +59,7 @@ namespace dbaccess
     {
     }
 
-    OPrivateColumns* OPrivateColumns::createWithIntrinsicNames( const ::vos::ORef< ::connectivity::OSQLColumns >& _rColumns,
+    OPrivateColumns* OPrivateColumns::createWithIntrinsicNames( const ::rtl::Reference< ::connectivity::OSQLColumns >& _rColumns,
         sal_Bool _bCase, ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex )
     {
         ::std::vector< ::rtl::OUString > aNames; aNames.reserve( _rColumns->get().size() );
@@ -88,7 +88,7 @@ namespace dbaccess
 
     connectivity::sdbcx::ObjectType OPrivateColumns::createObject(const ::rtl::OUString& _rName)
     {
-        if ( m_aColumns.isValid() )
+        if ( m_aColumns.is() )
         {
             ::connectivity::OSQLColumns::Vector::const_iterator aIter = find(m_aColumns->get().begin(),m_aColumns->get().end(),_rName,isCaseSensitive());
             if(aIter == m_aColumns->get().end())

@@ -177,7 +177,7 @@ void OQuery::rebuildColumns()
             }
 
             Reference< XDatabaseMetaData > xDBMeta( m_xConnection->getMetaData(), UNO_QUERY_THROW );
-            ::vos::ORef< OSQLColumns > aParseColumns(
+            ::rtl::Reference< OSQLColumns > aParseColumns(
                 ::connectivity::parse::OParseColumn::createColumnsForResultSet( xResultSetMeta, xDBMeta,xColumnDefinitions ) );
             xColumns = OPrivateColumns::createWithIntrinsicNames(
                 aParseColumns, xDBMeta->storesMixedCaseQuotedIdentifiers(), *this, m_aMutex );

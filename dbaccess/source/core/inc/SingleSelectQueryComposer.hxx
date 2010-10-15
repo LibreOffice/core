@@ -156,7 +156,7 @@ namespace dbaccess
                     getStructuredCondition( TGetParseNode& _aGetFunctor );
 
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >
-                    setCurrentColumns( EColumnType _eType, const ::vos::ORef< ::connectivity::OSQLColumns >& _rCols );
+                    setCurrentColumns( EColumnType _eType, const ::rtl::Reference< ::connectivity::OSQLColumns >& _rCols );
 
         //helper methods for mem_fun_t
         inline bool implSetFilter(::rtl::OUString _sFilter) { setFilter(_sFilter); return true;}

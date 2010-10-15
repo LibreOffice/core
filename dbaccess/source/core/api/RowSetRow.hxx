@@ -27,7 +27,7 @@
 #ifndef DBACCESS_CORE_API_ROWSETROW_HXX
 #define DBACCESS_CORE_API_ROWSETROW_HXX
 
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 #include <connectivity/CommonTools.hxx>
 #include "connectivity/FValue.hxx"
 #include <comphelper/types.hxx>
@@ -35,7 +35,7 @@
 namespace dbaccess
 {
     typedef connectivity::ORowVector< connectivity::ORowSetValue >  ORowSetValueVector;
-    typedef ::vos::ORef< ORowSetValueVector >                       ORowSetRow;
+    typedef ::rtl::Reference< ORowSetValueVector >                      ORowSetRow;
     typedef ::std::vector< ORowSetRow >                             ORowSetMatrix;
 
     class ORowSetOldRowHelper
@@ -66,7 +66,7 @@ namespace dbaccess
         inline void setRow(const ORowSetRow& _rRow) { m_aRow = _rRow; }
     };
 
-    typedef ::vos::ORef< ORowSetOldRowHelper >  TORowSetOldRowHelperRef;
+    typedef ::rtl::Reference< ORowSetOldRowHelper > TORowSetOldRowHelperRef;
 
     class ORowSetValueCompare
     {

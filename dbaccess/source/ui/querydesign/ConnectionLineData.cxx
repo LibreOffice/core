@@ -53,7 +53,7 @@ OConnectionLineData::OConnectionLineData( const ::rtl::OUString& rSourceFieldNam
 
 //------------------------------------------------------------------------
 OConnectionLineData::OConnectionLineData( const OConnectionLineData& rConnLineData )
-    : ::vos::OReference()
+    : ::salhelper::SimpleReferenceObject()
 {
     DBG_CTOR(OConnectionLineData,NULL);
     *this = rConnLineData;

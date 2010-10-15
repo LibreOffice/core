@@ -326,7 +326,7 @@ void OConnectionLine::Draw( OutputDevice* pOutDev )
 // -----------------------------------------------------------------------------
 BOOL OConnectionLine::IsValid() const
 {
-    return m_pData.isValid();
+    return m_pData.is();
 }
 //------------------------------------------------------------------------
 double dist_Euklid(const Point &p1, const Point& p2,const Point& pM, Point& q)

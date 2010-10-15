@@ -45,7 +45,7 @@
 #include <com/sun/star/embed/XTransactionListener.hpp>
 #include "apitools.hxx"
 #include "bookmarkcontainer.hxx"
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 #include <tools/string.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <comphelper/broadcasthelper.hxx>

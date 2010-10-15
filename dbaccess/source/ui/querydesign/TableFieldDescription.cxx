@@ -60,7 +60,7 @@ OTableFieldDesc::OTableFieldDesc()
 }
 //------------------------------------------------------------------------------
 OTableFieldDesc::OTableFieldDesc(const OTableFieldDesc& rRS)
-    : ::vos::OReference()
+    : ::salhelper::SimpleReferenceObject()
 
 {
     DBG_CTOR(OTableFieldDesc,NULL);

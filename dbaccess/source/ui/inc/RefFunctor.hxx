@@ -28,7 +28,7 @@
 #ifndef DBAUI_REFFUNCTOR_HXX
 #define DBAUI_REFFUNCTOR_HXX
 
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 #ifndef INCLUDED_FUNCTIONAL
 #define INCLUDED_FUNCTIONAL
 #include <functional>
@@ -36,19 +36,19 @@
 
 namespace dbaui
 {
-    template <class T> class OUnaryRefFunctor : public ::std::unary_function< ::vos::ORef<T> ,void>
+    template <class T> class OUnaryRefFunctor : public ::std::unary_function< ::rtl::Reference<T> ,void>
     {
         ::std::mem_fun_t<bool,T> m_aFunction;
     public:
         OUnaryRefFunctor(const ::std::mem_fun_t<bool,T>& _aFunc) : m_aFunction(_aFunc)
         {}
-        inline void operator()(const ::vos::ORef<T>& _aType) const
+        inline void operator()(const ::rtl::Reference<T>& _aType) const
         {
-            m_aFunction(_aType.getBodyPtr());
+            m_aFunction(_aType.get());
         }
-//      inline void operator()(const ::vos::ORef<T>& _aType)
+//      inline void operator()(const ::rtl::Reference<T>& _aType)
 //      {
-//          m_aFunction(_aType.getBodyPtr());
+//          m_aFunction(_aType.get());
 //      }
     };
 // -----------------------------------------------------------------------------

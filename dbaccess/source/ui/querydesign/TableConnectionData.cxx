@@ -142,7 +142,7 @@ BOOL OTableConnectionData::AppendConnLine( const ::rtl::OUString& rSourceFieldNa
     if(aIter == aEnd)
     {
         OConnectionLineDataRef pNew = new OConnectionLineData(rSourceFieldName, rDestFieldName);
-        if (!pNew.isValid())
+        if (!pNew.is())
             return FALSE;
 
         m_vConnLineData.push_back(pNew);

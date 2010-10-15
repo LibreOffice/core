@@ -225,7 +225,7 @@ sal_Bool SAL_CALL ORowSetBase::wasNull(  ) throw(SQLException, RuntimeException)
 sal_Bool ORowSetBase::impl_wasNull()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::impl_wasNull" );
-    return ((m_nLastColumnIndex != -1) && !m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd() && m_aCurrentRow->isValid()) ? ((*m_aCurrentRow)->get())[m_nLastColumnIndex].isNull() : sal_True;
+    return ((m_nLastColumnIndex != -1) && !m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd() && m_aCurrentRow->is()) ? ((*m_aCurrentRow)->get())[m_nLastColumnIndex].isNull() : sal_True;
 }
 
 const ORowSetValue& ORowSetBase::getValue(sal_Int32 columnIndex)
@@ -249,7 +249,7 @@ const ORowSetValue& ORowSetBase::impl_getValue(sal_Int32 columnIndex)
         return m_aEmptyValue;
     }
 
-    bool bValidCurrentRow = ( !m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd() && m_aCurrentRow->isValid() );
+    bool bValidCurrentRow = ( !m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd() && m_aCurrentRow->is() );
     if ( !bValidCurrentRow )
     {
         // currentrow is null when the clone moves the window
@@ -257,7 +257,7 @@ const ORowSetValue& ORowSetBase::impl_getValue(sal_Int32 columnIndex)
         m_aCurrentRow   = m_pCache->m_aMatrixIter;
         OSL_ENSURE(!m_aCurrentRow.isNull(),"ORowSetBase::getValue: we don't stand on a valid row! Row is null.");
 
-        bValidCurrentRow = ( !m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd() && m_aCurrentRow->isValid() );
+        bValidCurrentRow = ( !m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd() && m_aCurrentRow->is() );
     }
 
     if ( bValidCurrentRow )
@@ -274,14 +274,14 @@ const ORowSetValue& ORowSetBase::impl_getValue(sal_Int32 columnIndex)
         ORowSetMatrix::iterator k = aHelper.aIterator;
         for (; k != m_pCache->getEnd(); ++k)
         {
-            ORowSetValueVector* pTemp = k->getBodyPtr();
+            ORowSetValueVector* pTemp = k->get;
             OSL_ENSURE( pTemp != (void*)0xfeeefeee,"HALT!" );
         }
 #endif
         OSL_ENSURE(!m_aCurrentRow.isNull() && m_aCurrentRow < m_pCache->getEnd() && aCacheIter != m_pCache->m_aCacheIterators.end(),"Invalid iterator set for currentrow!");
 #if OSL_DEBUG_LEVEL > 0
         ORowSetRow rRow = (*m_aCurrentRow);
-        OSL_ENSURE(rRow.isValid() && static_cast<sal_uInt16>(columnIndex) < (rRow->get()).size(),"Invalid size of vector!");
+        OSL_ENSURE(rRow.is() && static_cast<sal_uInt16>(columnIndex) < (rRow->get()).size(),"Invalid size of vector!");
 #endif
         return ((*m_aCurrentRow)->get())[m_nLastColumnIndex = columnIndex];
     }
@@ -391,14 +391,14 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSetBase::getBinaryS
         return NULL;
     }
 
-    bool bValidCurrentRow = ( !m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd() && m_aCurrentRow->isValid() );
+    bool bValidCurrentRow = ( !m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd() && m_aCurrentRow->is() );
     if ( !bValidCurrentRow )
     {
         positionCache( MOVE_NONE_REFRESH_ONLY );
         m_aCurrentRow   = m_pCache->m_aMatrixIter;
         OSL_ENSURE(!m_aCurrentRow.isNull(),"ORowSetBase::getBinaryStream: we don't stand on a valid row! Row is null.");
 
-        bValidCurrentRow = ( !m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd() && m_aCurrentRow->isValid() );
+        bValidCurrentRow = ( !m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd() && m_aCurrentRow->is() );
     }
 
     if ( bValidCurrentRow )
@@ -1118,7 +1118,7 @@ void ORowSetBase::setCurrentRow( sal_Bool _bMoved, sal_Bool _bDoNotify, const OR
         OSL_ENSURE(!m_aCurrentRow.isNull(),"CurrentRow is null!");
         m_aCurrentRow.setBookmark(m_aBookmark);
         OSL_ENSURE(!m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd(),"Position of matrix iterator isn't valid!");
-        OSL_ENSURE(m_aCurrentRow->isValid(),"Currentrow isn't valid");
+        OSL_ENSURE(m_aCurrentRow->is(),"Currentrow isn't valid");
         OSL_ENSURE(m_aBookmark.hasValue(),"Bookmark has no value!");
 
 #if OSL_DEBUG_LEVEL > 0
@@ -1133,7 +1133,7 @@ void ORowSetBase::setCurrentRow( sal_Bool _bMoved, sal_Bool _bDoNotify, const OR
         OSL_ENSURE(!m_aCurrentRow.isNull(),"CurrentRow is nul after positionCache!");
 #if OSL_DEBUG_LEVEL > 0
         ORowSetRow rRow = (*m_aCurrentRow);
-        OSL_ENSURE(rRow.isValid() ,"Invalid size of vector!");
+        OSL_ENSURE(rRow.is() ,"Invalid size of vector!");
 #endif
         // the cache could repositioned so we need to adjust the cache
         // #104144# OJ
@@ -1158,8 +1158,8 @@ void ORowSetBase::setCurrentRow( sal_Bool _bMoved, sal_Bool _bDoNotify, const OR
         firePropertyChange(_rOldValues);
 
     // TODO: can this be done before the notifications?
-    if(!(m_bBeforeFirst || m_bAfterLast) && !m_aCurrentRow.isNull() && m_aCurrentRow->isValid() && m_aCurrentRow != m_pCache->getEnd())
-        m_aOldRow->setRow(new ORowSetValueVector(m_aCurrentRow->getBody()));
+    if(!(m_bBeforeFirst || m_bAfterLast) && !m_aCurrentRow.isNull() && m_aCurrentRow->is() && m_aCurrentRow != m_pCache->getEnd())
+        m_aOldRow->setRow(new ORowSetValueVector( *(*m_aCurrentRow) ));
 
     if ( _bMoved && _bDoNotify )
         // - cursorMoved
@@ -1283,7 +1283,7 @@ void ORowSetBase::firePropertyChange(const ORowSetRow& _rOldRow)
     {
         TDataColumns::iterator aEnd = m_aDataColumns.end();
         for(TDataColumns::iterator aIter = m_aDataColumns.begin();aIter != aEnd;++aIter,++i) // #104278# OJ ++i inserted
-            (*aIter)->fireValueChange(_rOldRow.isValid() ? (_rOldRow->get())[i+1] : ::connectivity::ORowSetValue());
+            (*aIter)->fireValueChange(_rOldRow.is() ? (_rOldRow->get())[i+1] : ::connectivity::ORowSetValue());
     }
     catch(Exception&)
     {
@@ -1413,10 +1413,10 @@ void ORowSetBase::movementFailed()
 ORowSetRow ORowSetBase::getOldRow(sal_Bool _bWasNew)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::getOldRow" );
-    OSL_ENSURE(m_aOldRow.isValid(),"RowSetRowHElper isn't valid!");
+    OSL_ENSURE(m_aOldRow.is(),"RowSetRowHElper isn't valid!");
     ORowSetRow aOldValues;
-    if ( !_bWasNew && m_aOldRow->getRow().isValid() )
-        aOldValues = new ORowSetValueVector( m_aOldRow->getRow().getBody());     // remember the old values
+    if ( !_bWasNew && m_aOldRow->getRow().is() )
+        aOldValues = new ORowSetValueVector( *(m_aOldRow->getRow()));    // remember the old values
     return aOldValues;
 }
 

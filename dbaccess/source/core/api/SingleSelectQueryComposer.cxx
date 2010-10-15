@@ -764,7 +764,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
         return m_aCurrentColumns[SelectColumns];
 
     ::std::vector< ::rtl::OUString> aNames;
-    ::vos::ORef< OSQLColumns> aSelectColumns;
+    ::rtl::Reference< OSQLColumns> aSelectColumns;
     sal_Bool bCase = sal_True;
     Reference< XNameAccess> xQueryColumns;
     if ( m_nCommandType == CommandType::QUERY )
@@ -1378,7 +1378,7 @@ Reference< XIndexAccess > SAL_CALL OSingleSelectQueryComposer::getParameters(  )
     // now set the Parameters
     if ( !m_aCurrentColumns[ParameterColumns] )
     {
-        ::vos::ORef< OSQLColumns> aCols = m_aSqlIterator.getParameters();
+        ::rtl::Reference< OSQLColumns> aCols = m_aSqlIterator.getParameters();
         ::std::vector< ::rtl::OUString> aNames;
         OSQLColumns::Vector::const_iterator aEnd = aCols->get().end();
         for(OSQLColumns::Vector::const_iterator aIter = aCols->get().begin(); aIter != aEnd;++aIter)
@@ -1425,7 +1425,7 @@ void OSingleSelectQueryComposer::clearCurrentCollections()
 }
 
 Reference< XIndexAccess > OSingleSelectQueryComposer::setCurrentColumns( EColumnType _eType,
-    const ::vos::ORef< OSQLColumns >& _rCols )
+    const ::rtl::Reference< OSQLColumns >& _rCols )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OSingleSelectQueryComposer::setCurrentColumns" );
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);

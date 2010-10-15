@@ -1505,7 +1505,7 @@ namespace
             aDragLeft->SetField(aCondition);
             aDragLeft->SetFunctionType(FKT_CONDITION);
 
-            eErrorCode = _pSelectionBrw->InsertField(aDragLeft,BROWSER_INVALIDID,sal_False,sal_True).isValid() ? eOk : eTooManyColumns;
+            eErrorCode = _pSelectionBrw->InsertField(aDragLeft,BROWSER_INVALIDID,sal_False,sal_True).is() ? eOk : eTooManyColumns;
         }
         else //! TODO not supported yet
             eErrorCode = eStatementTooComplex;
@@ -1951,7 +1951,7 @@ namespace
         OTableFields& rUnUsedFields = rController.getUnUsedFields();
         OTableFields::iterator aEnd = rUnUsedFields.end();
         for(OTableFields::iterator aIter = rUnUsedFields.begin();aIter != aEnd;++aIter)
-            if(_pSelectionBrw->InsertField(*aIter,BROWSER_INVALIDID,sal_False,sal_False).isValid())
+            if(_pSelectionBrw->InsertField(*aIter,BROWSER_INVALIDID,sal_False,sal_False).is())
                 (*aIter) = NULL;
         OTableFields().swap( rUnUsedFields );
     }
@@ -2362,7 +2362,7 @@ namespace
                         for(;aIter != aEnd;++aIter)
                         {
                             OTableFieldDescRef pEntry = *aIter;
-                            if(pEntry.isValid() && pEntry->GetFieldAlias() == aColumnName)
+                            if(pEntry.is() && pEntry->GetFieldAlias() == aColumnName)
                                 pEntry->SetOrderDir( eOrderDir );
                         }
                     }
@@ -2757,7 +2757,7 @@ bool OQueryDesignView::HasFieldByAliasName(const ::rtl::OUString& rFieldName, OT
 // -----------------------------------------------------------------------------
 SqlParseError OQueryDesignView::InsertField( const OTableFieldDescRef& rInfo, sal_Bool bVis, sal_Bool bActivate)
 {
-    return m_pSelectionBox->InsertField( rInfo, BROWSER_INVALIDID,bVis, bActivate ).isValid() ? eOk : eTooManyColumns;
+    return m_pSelectionBox->InsertField( rInfo, BROWSER_INVALIDID,bVis, bActivate ).is() ? eOk : eTooManyColumns;
 }
 // -----------------------------------------------------------------------------
 sal_Int32 OQueryDesignView::getColWidth(sal_uInt16 _nColPos) const
@@ -3040,8 +3040,8 @@ OSQLParseNode* OQueryDesignView::getPredicateTreeFromEntry(OTableFieldDescRef pE
                                                            ::rtl::OUString& _rsErrorMessage,
                                                            Reference<XPropertySet>& _rxColumn) const
 {
-    OSL_ENSURE(pEntry.isValid(),"Entry is null!");
-    if(!pEntry.isValid())
+    OSL_ENSURE(pEntry.is(),"Entry is null!");
+    if(!pEntry.is())
         return NULL;
     Reference< XConnection> xConnection = static_cast<OQueryController&>(getController()).getConnection();
     if(!xConnection.is())
@@ -3160,7 +3160,7 @@ void OQueryDesignView::initByFieldDescriptions( const Sequence< PropertyValue >&
             ++field
         )
     {
-        ::vos::ORef< OTableFieldDesc > pField( new OTableFieldDesc() );
+        ::rtl::Reference< OTableFieldDesc > pField( new OTableFieldDesc() );
         pField->Load( *field, true );
         InsertField( pField, sal_True, sal_False );
     }

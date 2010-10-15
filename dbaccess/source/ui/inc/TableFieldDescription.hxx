@@ -34,7 +34,9 @@
 #include "QEnumTypes.hxx"
 #include <rtl/ustring.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
+
+#include <salhelper/simplereferenceobject.hxx>
 
 namespace comphelper
 {
@@ -44,7 +46,7 @@ namespace comphelper
 class Window;
 namespace dbaui
 {
-    class OTableFieldDesc : public ::vos::OReference
+    class OTableFieldDesc : public ::salhelper::SimpleReferenceObject
     {
     private:
        ::std::vector< ::rtl::OUString >
@@ -152,7 +154,7 @@ namespace dbaui
         return bEmpty;
     }
     //------------------------------------------------------------------
-    typedef ::vos::ORef< OTableFieldDesc>       OTableFieldDescRef;
+    typedef ::rtl::Reference< OTableFieldDesc>      OTableFieldDescRef;
     typedef ::std::vector<OTableFieldDescRef>   OTableFields;
 }
 #endif //

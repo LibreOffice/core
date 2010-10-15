@@ -476,6 +476,8 @@
 #include "editeng/svxenum.hxx"
 #include "svx/svxids.hrc"
 
+#include "rtl/ref.hxx"
+#include "salhelper/simplereferenceobject.hxx"
 
 #include "tools/diagnose_ex.h"
 
@@ -499,8 +501,6 @@
 
 
 #include "vos/mutex.hxx"
-#include "vos/ref.hxx"
-#include "vos/refernce.hxx"
 
 #include "xmloff/ProgressBarHelper.hxx"
 #include "xmloff/XMLConstantsPropertyHandler.hxx"
