@@ -6600,7 +6600,7 @@ your Qt installation by exporting QTDIR before running "configure".])
     fi
 
     dnl Check for Meta Object Compiler
-    AC_PATH_PROG( MOC, moc, no, [$QTDIR/bin:$PATH] )
+    AC_PATH_PROG( MOC, moc, no, [`dirname $qt_libdir`/bin:$QTDIR/bin:$PATH] )
     if test "$MOC" = "no" ; then
         AC_MSG_ERROR([Qt Meta Object Compiler not found.  Please specify
 the root of your Qt installation by exporting QTDIR before running "configure".])
@@ -6736,7 +6736,7 @@ if test "$test_kde4" = "yes" -a "$ENABLE_KDE4" = "TRUE" ; then
    fi
 
    dnl Check for Meta Object Compiler
-   AC_PATH_PROG( MOC4, moc, no, [$PATH:$QT4DIR/bin] )
+   AC_PATH_PROG( MOC4, moc, no, [`dirname $qt_lib_dir`/bin:$PATH:$QT4DIR/bin] )
    if test "$MOC4" = "no" ; then
       AC_MSG_ERROR([Qt Meta Object Compiler not found.  Please specify
 the root of your Qt installation by exporting QT4DIR before running "configure".])
