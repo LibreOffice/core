@@ -917,6 +917,9 @@ void GetMeterOrInch(FieldUnit eFU, short& rnKomma, long& rnMul, long& rnDiv, boo
         // sonstiges
         case FUNIT_CUSTOM   : break;
         case FUNIT_PERCENT  : nKomma=2; break;
+        // TODO: Add code to handle the following (added to remove warning)
+        case FUNIT_CHAR     : break;
+        case FUNIT_LINE     : break;
     } // switch
     rnKomma=nKomma;
     rbMetr=bMetr;

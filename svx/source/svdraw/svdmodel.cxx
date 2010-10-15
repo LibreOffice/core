@@ -1084,6 +1084,9 @@ void SdrModel::ImpSetUIUnit()
         // sonstiges
         case FUNIT_CUSTOM : break;
         case FUNIT_PERCENT: nUIUnitKomma+=2; break;
+        // TODO: Add code to handle the following if needed (added to removed warning)
+        case FUNIT_CHAR   : break;
+        case FUNIT_LINE   : break;
     } // switch
 
     // check if mapping is from metric to inch and adapt
