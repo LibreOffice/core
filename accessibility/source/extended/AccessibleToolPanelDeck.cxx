@@ -129,7 +129,7 @@ namespace accessibility
         {
         public:
             MethodGuard( AccessibleToolPanelDeck_Impl& i_rImpl )
-                :m_aGuard( Application::GetSolarMutex() )
+                :m_aGuard()
             {
                 i_rImpl.checkDisposed();
             }
@@ -137,13 +137,8 @@ namespace accessibility
             {
             }
 
-            void clear()
-            {
-                m_aGuard.clear();
-            }
-
         private:
-            ::vos::OClearableGuard  m_aGuard;
+            SolarMutexGuard  m_aGuard;
         };
     }
 

@@ -177,7 +177,7 @@ namespace basctl
                 // the listener implementations usually require the SolarMutex, so lock it here.
                 // But ensure the proper order of locking the solar and the own mutex
                 aGuard.clear();
-                ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aSolarGuard;
                 ::osl::MutexGuard aGuard2( m_aMutex );
 
                 if ( impl_isDisposed_nothrow() )
