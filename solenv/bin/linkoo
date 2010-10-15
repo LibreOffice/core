@@ -38,7 +38,7 @@
 # ends up in program/ooenv
 ( $moz_lib = `pkg-config --variable=libdir mozilla-nss` ) =~ tr/\n/:/;
 $env_script = '
-java_path=`../basis-link/ure-link/bin/javaldx`
+java_path=`../basis-link/ure-link/bin/javaldx 2>/dev/null`
 export LD_LIBRARY_PATH=".:$java_path:' . $moz_lib . '$LD_LIBRARY_PATH"
 ulimit -c unlimited
 export PATH=".:../basis-link/program:../basis-link/ure-link/bin:$PATH"
