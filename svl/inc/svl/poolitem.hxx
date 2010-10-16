@@ -50,8 +50,8 @@ class IntlWrapper;
 
 namespace com { namespace sun { namespace star { namespace uno { class Any; } } } }
 
-#define SFX_ITEMS_DIRECT                    0xffff
-#define SFX_ITEMS_NULL                      0xfff0  // anstelle StoreSurrogate
+static const sal_uInt32 SFX_ITEMS_DIRECT=   0xffffffff;
+static const sal_uInt32 SFX_ITEMS_NULL=     0xfffffff0;  // instead StoreSurrogate
 
 #define SFX_ITEMS_POOLDEFAULT               0xffff
 #define SFX_ITEMS_STATICDEFAULT             0xfffe

@@ -1004,14 +1004,14 @@ void SfxItemPool::FillItemIdRanges_Impl( USHORT*& pWhichRanges ) const
 
 // -----------------------------------------------------------------------
 
-const SfxPoolItem *SfxItemPool::GetItem(USHORT nWhich, USHORT nOfst) const
+const SfxPoolItem *SfxItemPool::GetItem2(USHORT nWhich, sal_uInt32 nOfst) const
 {
     DBG_CHKTHIS(SfxItemPool, 0);
 
     if ( !IsInRange(nWhich) )
     {
         if ( pSecondary )
-            return pSecondary->GetItem( nWhich, nOfst );
+            return pSecondary->GetItem2( nWhich, nOfst );
         SFX_ASSERT( 0, nWhich, "unknown Which-Id - cannot resolve surrogate" );
         return 0;
     }
@@ -1029,14 +1029,14 @@ const SfxPoolItem *SfxItemPool::GetItem(USHORT nWhich, USHORT nOfst) const
 
 // -----------------------------------------------------------------------
 
-size_t SfxItemPool::GetItemCount(USHORT nWhich) const
+sal_uInt32 SfxItemPool::GetItemCount2(USHORT nWhich) const
 {
     DBG_CHKTHIS(SfxItemPool, 0);
 
     if ( !IsInRange(nWhich) )
     {
         if ( pSecondary )
-            return pSecondary->GetItemCount( nWhich );
+            return pSecondary->GetItemCount2( nWhich );
         SFX_ASSERT( 0, nWhich, "unknown Which-Id - cannot resolve surrogate" );
         return 0;
     }

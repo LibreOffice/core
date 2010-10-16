@@ -104,7 +104,7 @@ class SVL_DLLPUBLIC SfxItemPool
 */
 
 {
-    SVL_DLLPRIVATE void readTheItems(SvStream & rStream, USHORT nCount, USHORT nVersion,
+    SVL_DLLPRIVATE void readTheItems(SvStream & rStream, sal_uInt32 nCount, USHORT nVersion,
                                      SfxPoolItem * pDefItem, SfxPoolItemArray_Impl ** pArr);
 
     UniString                       aName;
@@ -208,9 +208,9 @@ public:
                                                const SfxPoolItem &rItem,
                                                FASTBOOL bDirect = FALSE ) const;
 
-    USHORT                          GetSurrogate(const SfxPoolItem *) const;
-    const SfxPoolItem *             GetItem(USHORT nWhich, USHORT nSurrogate) const;
-    size_t                          GetItemCount(USHORT nWhich) const;
+    sal_uInt32                      GetSurrogate(const SfxPoolItem *) const;
+    const SfxPoolItem *             GetItem2(USHORT nWhich, sal_uInt32 nSurrogate) const; //this name will be changed to GetItem
+    sal_uInt32                      GetItemCount2(USHORT nWhich) const; //this name will be changed to GetItemCount
     const SfxPoolItem*              LoadSurrogate(SvStream& rStream,
                                             USHORT &rWhich, USHORT nSlotId,
                                             const SfxItemPool* pRefPool = 0 );
