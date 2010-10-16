@@ -33,6 +33,7 @@
 #include "filter/msfilter/countryid.hxx"
 
 #include <algorithm>
+#include <sal/macros.h>
 
 // ----------------------------------------------------------------------------
 
@@ -258,7 +259,7 @@ static const CountryEntry pTable[] =
     { COUNTRY_UZBEKISTAN,           LANGUAGE_UZBEK_LATIN,                   false   }
 };
 
-const CountryEntry * const pEnd = pTable + sizeof( pTable ) / sizeof( pTable[ 0 ] );
+const CountryEntry * const pEnd = pTable + SAL_N_ELEMENTS( pTable );
 
 // ----------------------------------------------------------------------------
 

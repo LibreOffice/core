@@ -30,6 +30,7 @@
 #include <doctok/resourceids.hxx>
 #include <ConversionHelper.hxx>
 #include <ooxml/resourceids.hxx>
+#include <sal/macros.h>
 
 #define OOXML_COLOR_AUTO 0x0a //todo: AutoColor needs symbol
 
@@ -203,7 +204,7 @@ TablePropertyMapPtr  CellColorHandler::getProperties()
          // und zu guter Letzt:
          970
     };// 62
-    if( m_nShadowType >= (sal_Int32)(sizeof( eMSGrayScale ) / sizeof ( eMSGrayScale[ 0 ] )) )
+    if( m_nShadowType >= (sal_Int32)SAL_N_ELEMENTS( eMSGrayScale ) )
         m_nShadowType = 0;
 
     sal_Int32 nWW8BrushStyle = eMSGrayScale[m_nShadowType];

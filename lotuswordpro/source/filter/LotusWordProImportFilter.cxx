@@ -1,5 +1,6 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include <osl/diagnose.h>
+#include <sal/macros.h>
 #include <rtl/tencinfo.h>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -318,7 +319,7 @@ OUString SAL_CALL LotusWordProImportFilter::detect( com::sun::star::uno::Sequenc
     }
 
     Sequence< ::sal_Int8 > aData;
-    sal_Int32 nLen = sizeof( header ) / sizeof( header[0] );
+    sal_Int32 nLen = SAL_N_ELEMENTS( header );
     if ( ( nLen == xInputStream->readBytes(  aData, nLen ) ) )
         if ( memcmp( ( void* )header, (void*) aData.getConstArray(), nLen ) == 0 )
             sTypeName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "writer_LotusWordPro_Document" ) );

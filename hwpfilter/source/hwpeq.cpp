@@ -38,6 +38,7 @@ using namespace std;
 #include "mzstring.h"
 #include "hwpeq.h"
 #include <sal/types.h>
+#include <sal/macros.h>
 //#define TEST
 //#define DEBUG
 
@@ -392,7 +393,7 @@ static hwpeq eq_tbl[] = {
 
 static hwpeq *lookup_eqn(char *str)
 {
-  static int    eqCount = sizeof(eq_tbl) / sizeof(eq_tbl[0]);
+  static int    eqCount = SAL_N_ELEMENTS(eq_tbl);
   int       m, k, l = 0, r = eqCount;
   hwpeq     *result = 0;
 

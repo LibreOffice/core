@@ -31,6 +31,7 @@
 
 
 #include <osl/file.h>
+#include <sal/macros.h>
 
 #if defined( UNX) || defined(OS2)
 
@@ -88,20 +89,18 @@ oslFileError SAL_CALL my_getTempDirURL( rtl_uString** pustrTempDir )
 #pragma warning(pop)
 #endif
 
-#define elementsof(arr) (sizeof(arr)/sizeof(arr[0]))
-
 oslFileError SAL_CALL my_getTempDirURL( rtl_uString** pustrTempDir )
 {
     WCHAR   szBuffer[MAX_PATH];
     LPWSTR  lpBuffer = szBuffer;
-    DWORD   nBufferLength = elementsof(szBuffer) - 1;
+    DWORD   nBufferLength = SAL_N_ELEMENTS(szBuffer) - 1;
 
     DWORD           nLength;
     oslFileError    error;
 
     do
     {
-        nLength = GetTempPathW( elementsof(szBuffer), lpBuffer );
+        nLength = GetTempPathW( SAL_N_ELEMENTS(szBuffer), lpBuffer );
         if ( nLength > nBufferLength )
         {
             nLength++;

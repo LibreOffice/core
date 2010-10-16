@@ -34,6 +34,7 @@
  */
 #include "precompile.h"
 #include <sal/types.h>
+#include <sal/macros.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -596,7 +597,7 @@ static int is_jaso(hchar hh)
 {
     unsigned int i;
 
-    for (i = 0; i < sizeof(jaso_hh_code) / sizeof(jaso_hh_code[0]); i++)
+    for (i = 0; i < SAL_N_ELEMENTS(jaso_hh_code); i++)
         if (hh == jaso_hh_code[i])
             return 1;
     return 0;
@@ -607,7 +608,7 @@ static hchar jaso2ks(hchar hh)
 {
     unsigned int i;
 
-    for (i = 0; i < sizeof(jaso_hh_code) / sizeof(jaso_hh_code[0]); i++)
+    for (i = 0; i < SAL_N_ELEMENTS(jaso_hh_code); i++)
         if (hh == jaso_hh_code[i])
     {
         return sal::static_int_cast<hchar>(0xa4a1 + i);
@@ -1117,7 +1118,7 @@ int kssm_hangul_to_ucs2(hchar ch, hchar *dest)
          }
          else{ /* 고어포함 자모조합 : 테이블 미완성 */
              unsigned int index = choseong * 32 + jongseong - 308;
-             if( index < sizeof(jamocomp1_to_unicode)/sizeof(jamocomp1_to_unicode[0])){
+             if( index < SAL_N_ELEMENTS(jamocomp1_to_unicode) ){
                  dest[0] = jamocomp1_to_unicode[index].v1;
                  dest[1] = jamocomp1_to_unicode[index].v2;
                  dest[2] = jamocomp1_to_unicode[index].v3;
