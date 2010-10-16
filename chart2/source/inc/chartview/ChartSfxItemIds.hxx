@@ -29,15 +29,11 @@
 
 #include <sfx2/sfxdefs.hxx>
 
-/*
-// header for SID_OBJ1_START
-#include <sfx2/sfxsids.hrc>
-*/
-
 // ============================================================
 // SCHATTR
 // ============================================================
 
+// can't this be changed to 0?
 #define SCHATTR_START                       1
 
 #define SCHATTR_DATADESCR_START             SCHATTR_START
@@ -56,8 +52,7 @@
 #define SCHATTR_LEGEND_END                  SCHATTR_LEGEND_POS
 
 #define SCHATTR_TEXT_START                  (SCHATTR_LEGEND_END + 1)
-// #define SCHATTR_TEXT_ORIENT                  SCHATTR_TEXT_START
-// name changed:
+// name changed, was SCHATTR_TEXT_ORIENT:
 #define SCHATTR_TEXT_STACKED                SCHATTR_TEXT_START
 #define SCHATTR_TEXT_ORDER                  (SCHATTR_TEXT_START + 1)
 #define SCHATTR_TEXT_END                    SCHATTR_TEXT_ORDER
@@ -124,7 +119,7 @@
 
 #define SCHATTR_TEXT2_START                 ( SCHATTR_STAT_END + 1)
 #define SCHATTR_TEXT_DEGREES                ( SCHATTR_TEXT2_START   )
-#define SCHATTR_TEXT_OVERLAP                (SCHATTR_TEXT2_START +1)
+#define SCHATTR_TEXT_OVERLAP                ( SCHATTR_TEXT2_START +1 )
 #define SCHATTR_TEXT2_END                   ( SCHATTR_TEXT_OVERLAP )
 
 // --------------------------------------------------------
@@ -153,7 +148,7 @@
 // --------------------------------------------------------------------------
 
 #define SCHATTR_AXIS                    (SCHATTR_STYLE_END + 1)// see chtmodel.hxx defines CHART_AXIS_PRIMARY_X, etc.
-//Ummappen:
+//Re-mapped:
 #define SCHATTR_AXIS_START              (SCHATTR_AXIS + 1)
 #define SCHATTR_AXIS_AUTO_MIN            SCHATTR_AXIS_START
 #define SCHATTR_AXIS_MIN                (SCHATTR_AXIS_START + 1)
@@ -167,7 +162,7 @@
 #define SCHATTR_AXIS_LOGARITHM          (SCHATTR_AXIS_START + 8)
 #define SCHATTR_AXIS_AUTO_ORIGIN        (SCHATTR_AXIS_START + 9)
 #define SCHATTR_AXIS_ORIGIN             (SCHATTR_AXIS_START + 10)
-//Neu:
+//New:
 #define SCHATTR_AXIS_TICKS              (SCHATTR_AXIS_START + 11)
 #define SCHATTR_AXIS_NUMFMT             (SCHATTR_AXIS_START + 12)
 #define SCHATTR_AXIS_NUMFMTPERCENT      (SCHATTR_AXIS_START + 13)
@@ -241,8 +236,8 @@
 #define CHART_AXIS_Z    2
 
 // values for SCHATTR_STYLE_SHAPE items
-#define CHART_SHAPE3D_IGNORE  -2 //intern! (GetChartShapeStyle()!)
-#define CHART_SHAPE3D_ANY     -1 //undefinierter Typ (GetChartShapeStyle()!)
+#define CHART_SHAPE3D_IGNORE  -2 //internal! (GetChartShapeStyle()!)
+#define CHART_SHAPE3D_ANY     -1 //undefined type (GetChartShapeStyle()!)
 #define CHART_SHAPE3D_SQUARE   0
 #define CHART_SHAPE3D_CYLINDER 1
 #define CHART_SHAPE3D_CONE     2

@@ -31,7 +31,6 @@
 
 #include "ChartItemPool.hxx"
 #include "macros.hxx"
-
 #include "chartview/ChartSfxItemIds.hxx"
 #include <svx/chrtitem.hxx>
 #include <svl/intitem.hxx>
@@ -51,7 +50,6 @@ namespace chart
 ChartItemPool::ChartItemPool():
         SfxItemPool( String( RTL_CONSTASCII_USTRINGPARAM( "ChartItemPool" )), SCHATTR_START, SCHATTR_END, NULL, NULL )
 {
-//     OSL_TRACE( "SCH: CTOR: ChartItemPool" );
     /**************************************************************************
     * PoolDefaults
     **************************************************************************/
@@ -68,7 +66,6 @@ ChartItemPool::ChartItemPool():
     ppPoolDefaults[SCHATTR_DATADESCR_NO_PERCENTVALUE    - SCHATTR_START] = new SfxBoolItem(SCHATTR_DATADESCR_NO_PERCENTVALUE);
 
     ppPoolDefaults[SCHATTR_LEGEND_POS               - SCHATTR_START] = new SvxChartLegendPosItem( CHLEGEND_RIGHT, SCHATTR_LEGEND_POS );
-//  ppPoolDefaults[SCHATTR_TEXT_ORIENT              - SCHATTR_START] = new SvxChartTextOrientItem;
     ppPoolDefaults[SCHATTR_TEXT_STACKED             - SCHATTR_START] = new SfxBoolItem(SCHATTR_TEXT_STACKED,FALSE);
     ppPoolDefaults[SCHATTR_TEXT_ORDER               - SCHATTR_START] = new SvxChartTextOrderItem(CHTXTORDER_SIDEBYSIDE, SCHATTR_TEXT_ORDER);
 
@@ -145,7 +142,6 @@ ChartItemPool::ChartItemPool():
     ppPoolDefaults[SCHATTR_AXIS_AUTO_STEP_MAIN  - SCHATTR_START] = new SfxBoolItem(SCHATTR_AXIS_AUTO_STEP_MAIN);
     ppPoolDefaults[SCHATTR_AXIS_STEP_MAIN       - SCHATTR_START] = new SvxDoubleItem(0.0, SCHATTR_AXIS_STEP_MAIN);
     ppPoolDefaults[SCHATTR_AXIS_AUTO_STEP_HELP  - SCHATTR_START] = new SfxBoolItem(SCHATTR_AXIS_AUTO_STEP_HELP);
-//  ppPoolDefaults[SCHATTR_AXIS_STEP_HELP       - SCHATTR_START] = new SvxDoubleItem(0.0, SCHATTR_AXIS_STEP_HELP);
     // type changed from double to sal_Int32
     ppPoolDefaults[SCHATTR_AXIS_STEP_HELP       - SCHATTR_START] = new SfxInt32Item(SCHATTR_AXIS_STEP_HELP,0);
     ppPoolDefaults[SCHATTR_AXIS_LOGARITHM       - SCHATTR_START] = new SfxBoolItem(SCHATTR_AXIS_LOGARITHM);
@@ -201,11 +197,11 @@ ChartItemPool::ChartItemPool():
     **************************************************************************/
     pItemInfos = new SfxItemInfo[SCHATTR_END - SCHATTR_START + 1];
 
-    USHORT i;
-    for( i = SCHATTR_START; i <= SCHATTR_END; i++ )
+    const USHORT nMax = SCHATTR_END - SCHATTR_START + 1;
+    for( USHORT i = 0; i < nMax; i++ )
     {
-        pItemInfos[i - SCHATTR_START]._nSID = 0;
-        pItemInfos[i - SCHATTR_START]._nFlags = SFX_ITEM_POOLABLE;
+        pItemInfos[i]._nSID = 0;
+        pItemInfos[i]._nFlags = SFX_ITEM_POOLABLE;
     }
 
     // slot ids differing from which ids
@@ -220,18 +216,16 @@ ChartItemPool::ChartItemPool():
 ChartItemPool::ChartItemPool(const ChartItemPool& rPool):
     SfxItemPool(rPool)
 {
-//     OSL_TRACE( "SCH: CTOR: ChartItemPool" );
 }
 
 ChartItemPool::~ChartItemPool()
 {
-//     OSL_TRACE( "SCH: DTOR: ChartItemPool" );
     Delete();
 
     delete[] pItemInfos;
 
     const USHORT nMax = SCHATTR_END - SCHATTR_START + 1;
-    for( USHORT i=0; i<nMax; ++i )
+    for( USHORT i = 0; i < nMax; i++ )
     {
         SetRefCount(*ppPoolDefaults[i], 0);
         delete ppPoolDefaults[i];
