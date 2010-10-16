@@ -38,7 +38,7 @@
 
 #include <osl/thread.h>
 #include <osl/file.hxx>
-#include <vos/module.hxx>
+#include <osl/module.hxx>
 #include <comphelper/classids.hxx>
 
 #include "platform.h"
@@ -179,7 +179,7 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
     io.dwFlags = IOF_SELECTCREATENEW | IOF_DISABLELINK;
 
 
-    ::vos::OModule aOleDlgLib;
+    ::osl::Module aOleDlgLib;
     if( !aOleDlgLib.load( ::rtl::OUString::createFromAscii( "oledlg" ) ) )
         throw uno::RuntimeException();
 

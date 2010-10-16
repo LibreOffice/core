@@ -658,7 +658,7 @@
 #include "vcl/unohelp.hxx"
 #include "vcl/wintypes.hxx"
 #include "osl/diagnose.h"
-#include "vos/module.hxx"
+#include "osl/module.hxx"
 #include "osl/mutex.hxx"
 #include "vos/process.hxx"
 #include "vos/xception.hxx"

@@ -34,7 +34,7 @@
 #include <tools/rtti.hxx>
 
 // SFX_IMPL_MODULE_LIB
-#include <vos/module.hxx>
+#include <osl/module.hxx>
 #include <rtl/ustring.hxx>
 
 #include <sfx2/objsh.hxx>
