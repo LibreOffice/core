@@ -71,7 +71,7 @@ class SwAccessibleContext :
 protected:
 
     mutable ::osl::Mutex aListenerMutex;
-    mutable ::vos::OMutex aMutex;
+    mutable ::osl::Mutex aMutex;
 
 private:
 

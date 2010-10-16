@@ -44,7 +44,6 @@
 
 using namespace ::com::sun::star;
 using namespace rtl;
-using namespace vos;
 
 const char* cURLStart           = ".uno:DataSourceBrowser/";
 const char* cURLFormLetter      = ".uno:DataSourceBrowser/FormLetter";

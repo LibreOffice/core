@@ -43,7 +43,7 @@
 #include <docsh.hxx>
 #include <wrtsh.hxx>
 #include <viewopt.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/text/NotePrintMode.hpp>
 #include <doc.hxx>

@@ -66,7 +66,7 @@
 
 // for locking SolarMutex: svapp + mutex
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 // --> OD 2007-03-30 #i73788#
 #include <pausethreadstarting.hxx>

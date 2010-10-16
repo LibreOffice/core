@@ -48,7 +48,7 @@
 #include <txtftn.hxx>
 #include <fmtpdsc.hxx>
 #include <pagedesc.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <com/sun/star/text/XTextTableCursor.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/TableColumnSeparator.hpp>

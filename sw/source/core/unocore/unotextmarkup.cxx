@@ -30,7 +30,7 @@
 #include "precompiled_sw.hxx"
 #include <unotextmarkup.hxx>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <SwSmartTagMgr.hxx>
 #include <com/sun/star/text/TextMarkupType.hpp>

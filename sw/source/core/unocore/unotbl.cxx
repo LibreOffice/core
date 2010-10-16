@@ -94,7 +94,7 @@
 #include <editeng/keepitem.hxx>
 #include <fmtlsplt.hxx>
 #include <swundo.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <frmatr.hxx>
 #include <crsskip.hxx>

@@ -67,7 +67,7 @@
 #include <com/sun/star/sdb/XColumn.hpp>
 #include <dbmgr.hxx>
 #include <swunohelper.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <shellio.hxx>
 #include <svtools/htmlcfg.hxx>
 #include <sfx2/event.hxx>

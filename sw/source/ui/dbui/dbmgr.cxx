@@ -124,7 +124,7 @@
 #include <sfx2/event.hxx>
 #include <vcl/msgbox.hxx>
 #include <svx/dataaccessdescriptor.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <rtl/textenc.h>
 #include <ndindex.hxx>
 #include <pam.hxx>
@@ -2944,7 +2944,7 @@ SwConnectionDisposedListener_Impl::~SwConnectionDisposedListener_Impl()
 void SwConnectionDisposedListener_Impl::disposing( const EventObject& rSource )
         throw (RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::SolarMutexGuard aGuard;
     uno::Reference<XConnection> xSource(rSource.Source, UNO_QUERY);
     for(USHORT nPos = rDBMgr.aDataSourceParams.Count(); nPos; nPos--)
     {

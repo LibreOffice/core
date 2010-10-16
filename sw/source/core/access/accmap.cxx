@@ -856,7 +856,7 @@ void SwAccessibleMap::FireEvent( const SwAccessibleEvent_Impl& rEvent )
 
 void SwAccessibleMap::AppendEvent( const SwAccessibleEvent_Impl& rEvent )
 {
-    vos::OGuard aGuard( maEventMutex );
+    osl::MutexGuard aGuard( maEventMutex );
 
     if( !mpEvents )
         mpEvents = new SwAccessibleEventList_Impl;
@@ -1012,7 +1012,7 @@ void SwAccessibleMap::DoInvalidateShapeSelection()
     sal_uInt16 nSelShapes = pFESh ? pFESh->IsObjSelected() : 0;
 
     {
-        vos::OGuard aGuard( maMutex );
+        osl::MutexGuard aGuard( maMutex );
         if( mpShapeMap )
             pShapes = mpShapeMap->Copy( nShapes, pFESh, &pSelShape );
     }
@@ -1063,7 +1063,7 @@ void SwAccessibleMap::DoInvalidateShapeSelection()
             {
                 ::rtl::Reference< SwAccessibleContext > xParentAccImpl;
                 {
-                    vos::OGuard aGuard( maMutex );
+                    osl::MutexGuard aGuard( maMutex );
                     if(  mpFrmMap )
                     {
                         SwAccessibleContextMap_Impl::const_iterator aMapIter =
@@ -1107,7 +1107,7 @@ void SwAccessibleMap::DoInvalidateShapeFocus()
 
 
     {
-        vos::OGuard aGuard( maMutex );
+        osl::MutexGuard aGuard( maMutex );
         if( mpShapeMap )
             pShapes = mpShapeMap->Copy( nShapes, pFESh, &pSelShape );
     }
@@ -1157,7 +1157,7 @@ SwAccessibleMap::~SwAccessibleMap()
 {
     uno::Reference < XAccessible > xAcc;
     {
-        vos::OGuard aGuard( maMutex );
+        osl::MutexGuard aGuard( maMutex );
         if( mpFrmMap )
         {
             const SwRootFrm *pRootFrm = GetShell()->GetLayout();
@@ -1174,7 +1174,7 @@ SwAccessibleMap::~SwAccessibleMap()
     pAcc->Dispose( sal_True );
 
     {
-        vos::OGuard aGuard( maMutex );
+        osl::MutexGuard aGuard( maMutex );
 #ifdef DBG_UTIL
         ASSERT( !mpFrmMap || mpFrmMap->empty(),
                 "Frame map should be empty after disposing the root frame" );
@@ -1225,7 +1225,7 @@ SwAccessibleMap::~SwAccessibleMap()
     mpPreview = NULL;
 
     {
-        vos::OGuard aGuard( maEventMutex );
+        osl::MutexGuard aGuard( maEventMutex );
 #ifdef DBG_UTIL
         ASSERT( !(mpEvents || mpEventMap), "pending events" );
         if( mpEvents )
@@ -1260,7 +1260,7 @@ uno::Reference< XAccessible > SwAccessibleMap::_GetDocumentView(
     sal_Bool bSetVisArea = sal_False;
 
     {
-        vos::OGuard aGuard( maMutex );
+        osl::MutexGuard aGuard( maMutex );
 
         if( !mpFrmMap )
         {
@@ -1345,7 +1345,7 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
     sal_Bool bOldShapeSelected = sal_False;
 
     {
-        vos::OGuard aGuard( maMutex );
+        osl::MutexGuard aGuard( maMutex );
 
         if( !mpFrmMap && bCreate )
             mpFrmMap = new SwAccessibleContextMap_Impl;
@@ -1489,7 +1489,7 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext(
     uno::Reference < XAccessible > xOldCursorAcc;
 
     {
-        vos::OGuard aGuard( maMutex );
+        osl::MutexGuard aGuard( maMutex );
 
         if( !mpShapeMap && bCreate )
             mpShapeMap = new SwAccessibleShapeMap_Impl( this );
@@ -1562,7 +1562,7 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext(
 
 void SwAccessibleMap::RemoveContext( const SwFrm *pFrm )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::MutexGuard aGuard( maMutex );
 
     if( mpFrmMap )
     {
@@ -1599,7 +1599,7 @@ void SwAccessibleMap::RemoveContext( const SwFrm *pFrm )
 
 void SwAccessibleMap::RemoveContext( const SdrObject *pObj )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::MutexGuard aGuard( maMutex );
 
     if( mpShapeMap )
     {
@@ -1644,7 +1644,7 @@ void SwAccessibleMap::Dispose( const SwFrm *pFrm,
         ::rtl::Reference< ::accessibility::AccessibleShape > xShapeAccImpl;
         // get accessible context for frame
         {
-            vos::OGuard aGuard( maMutex );
+            osl::MutexGuard aGuard( maMutex );
 
             // First of all look for an accessible context for a frame
             if( aFrmOrObj.GetSwFrm() && mpFrmMap )
@@ -1708,7 +1708,7 @@ void SwAccessibleMap::Dispose( const SwFrm *pFrm,
 
         // remove events stored for the frame
         {
-            vos::OGuard aGuard( maEventMutex );
+            osl::MutexGuard aGuard( maEventMutex );
             if( mpEvents )
             {
                 SwAccessibleEventMap_Impl::iterator aIter =
@@ -1761,7 +1761,7 @@ void SwAccessibleMap::InvalidatePosOrSize( const SwFrm *pFrm,
         ::rtl::Reference< SwAccessibleContext > xAccImpl;
         ::rtl::Reference< SwAccessibleContext > xParentAccImpl;
         {
-            vos::OGuard aGuard( maMutex );
+            osl::MutexGuard aGuard( maMutex );
 
             if( mpFrmMap )
             {
@@ -1842,7 +1842,7 @@ void SwAccessibleMap::InvalidateContent( const SwFrm *pFrm )
     {
         uno::Reference < XAccessible > xAcc;
         {
-            vos::OGuard aGuard( maMutex );
+            osl::MutexGuard aGuard( maMutex );
 
             if( mpFrmMap )
             {
@@ -1880,7 +1880,7 @@ void SwAccessibleMap::InvalidateAttr( const SwTxtFrm& rTxtFrm )
     {
         uno::Reference < XAccessible > xAcc;
         {
-            vos::OGuard aGuard( maMutex );
+            osl::MutexGuard aGuard( maMutex );
 
             if( mpFrmMap )
             {
@@ -1951,7 +1951,7 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
     sal_Bool bOldShapeSelected = sal_False;
 
     {
-        vos::OGuard aGuard( maMutex );
+        osl::MutexGuard aGuard( maMutex );
 
         xOldAcc = mxCursorContext;
         mxCursorContext = xAcc; // clear reference
@@ -2008,7 +2008,7 @@ void SwAccessibleMap::InvalidateFocus()
     uno::Reference < XAccessible > xAcc;
     sal_Bool bShapeSelected;
     {
-        vos::OGuard aGuard( maMutex );
+        osl::MutexGuard aGuard( maMutex );
 
         xAcc = mxCursorContext;
         bShapeSelected = mbShapeSelected;
@@ -2029,7 +2029,7 @@ void SwAccessibleMap::InvalidateFocus()
 void SwAccessibleMap::SetCursorContext(
         const ::rtl::Reference < SwAccessibleContext >& rCursorContext )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::MutexGuard aGuard( maMutex );
     uno::Reference < XAccessible > xAcc( rCursorContext.get() );
     mxCursorContext = xAcc;
 }
@@ -2072,7 +2072,7 @@ void SwAccessibleMap::_InvalidateRelationSet( const SwFrm* pFrm,
     {
         uno::Reference < XAccessible > xAcc;
         {
-            vos::OGuard aGuard( maMutex );
+            osl::MutexGuard aGuard( maMutex );
 
             if( mpFrmMap )
             {
@@ -2133,7 +2133,7 @@ void SwAccessibleMap::InvalidateParaTextSelection( const SwTxtFrm& _rTxtFrm )
     {
         uno::Reference < XAccessible > xAcc;
         {
-            vos::OGuard aGuard( maMutex );
+            osl::MutexGuard aGuard( maMutex );
 
             if( mpFrmMap )
             {
@@ -2179,7 +2179,7 @@ sal_Int32 SwAccessibleMap::GetChildIndex( const SwFrm& rParentFrm,
     {
         uno::Reference < XAccessible > xAcc;
         {
-            vos::OGuard aGuard( maMutex );
+            osl::MutexGuard aGuard( maMutex );
 
             if( mpFrmMap )
             {
@@ -2225,7 +2225,7 @@ void SwAccessibleMap::UpdatePreview( const std::vector<PrevwPage*>& _rPrevwPages
     uno::Reference < XAccessible > xOldAcc;
     uno::Reference < XAccessible > xAcc;
     {
-        vos::OGuard aGuard( maMutex );
+        osl::MutexGuard aGuard( maMutex );
 
         xOldAcc = mxCursorContext;
 
@@ -2255,7 +2255,7 @@ void SwAccessibleMap::InvalidatePreViewSelection( sal_uInt16 nSelPage )
     uno::Reference < XAccessible > xOldAcc;
     uno::Reference < XAccessible > xAcc;
     {
-        vos::OGuard aGuard( maMutex );
+        osl::MutexGuard aGuard( maMutex );
 
         xOldAcc = mxCursorContext;
 
@@ -2285,7 +2285,7 @@ sal_Bool SwAccessibleMap::IsPageSelected( const SwPageFrm *pPageFrm ) const
 void SwAccessibleMap::FireEvents()
 {
     {
-        vos::OGuard aGuard( maEventMutex );
+        osl::MutexGuard aGuard( maEventMutex );
         if( mpEvents )
         {
             mpEvents->SetFiring();
@@ -2304,7 +2304,7 @@ void SwAccessibleMap::FireEvents()
         }
     }
     {
-        vos::OGuard aGuard( maMutex );
+        osl::MutexGuard aGuard( maMutex );
         if( mpShapes )
         {
             delete mpShapes;
@@ -2406,7 +2406,7 @@ sal_Bool SwAccessibleMap::ReplaceChild (
 {
     const SdrObject *pObj = 0;
     {
-        vos::OGuard aGuard( maMutex );
+        osl::MutexGuard aGuard( maMutex );
         if( mpShapeMap )
         {
             SwAccessibleShapeMap_Impl::const_iterator aIter = mpShapeMap->begin();
@@ -2436,7 +2436,7 @@ sal_Bool SwAccessibleMap::ReplaceChild (
     Dispose( 0, pObj, 0 );
 
     {
-        vos::OGuard aGuard( maMutex );
+        osl::MutexGuard aGuard( maMutex );
 
         if( !mpShapeMap )
             mpShapeMap = new SwAccessibleShapeMap_Impl( this );
@@ -2675,7 +2675,7 @@ SwAccessibleSelectedParas_Impl* SwAccessibleMap::_BuildSelectedParas()
 
 void SwAccessibleMap::InvalidateTextSelectionOfAllParas()
 {
-    vos::OGuard aGuard( maMutex );
+    osl::MutexGuard aGuard( maMutex );
 
     // keep previously known selected paragraphs
     SwAccessibleSelectedParas_Impl* pPrevSelectedParas( mpSelectedParas );

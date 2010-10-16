@@ -30,7 +30,7 @@
 #include "precompiled_sw.hxx"
 
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
@@ -123,7 +123,7 @@ sal_Bool SwAccessibleCell::_InvalidateMyCursorPos()
     sal_Bool bNew = IsSelected();
     sal_Bool bOld;
     {
-        vos::OGuard aGuard( aMutex );
+        osl::MutexGuard aGuard( aMutex );
         bOld = bIsSelected;
         bIsSelected = bNew;
     }
@@ -212,7 +212,7 @@ void SwAccessibleCell::_InvalidateCursorPos()
 
 sal_Bool SwAccessibleCell::HasCursor()
 {
-    vos::OGuard aGuard( aMutex );
+    osl::MutexGuard aGuard( aMutex );
     return bIsSelected;
 }
 

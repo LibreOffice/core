@@ -58,7 +58,7 @@
 #include <unoidx.hxx>
 #include <redline.hxx>
 #include <crsskip.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <set>
 

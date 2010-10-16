@@ -69,7 +69,7 @@
 
 // for locking SolarMutex: svapp + mutex
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <unotxdoc.hxx>    // for initXForms()
 
 #include <xmloff/xmlmetai.hxx>

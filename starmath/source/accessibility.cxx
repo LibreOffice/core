@@ -48,7 +48,7 @@
 #include <vcl/window.hxx>
 #include <vcl/unohelp2.hxx>
 #include <tools/gen.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <svl/itemset.hxx>
 
 #include <editeng/editobj.hxx>

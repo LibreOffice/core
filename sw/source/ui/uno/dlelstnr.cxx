@@ -40,7 +40,7 @@
 
 #include <com/sun/star/uno/Reference.h>
 #include <comphelper/processfactory.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/shl.hxx>
 #include "dlelstnr.hxx"

@@ -39,7 +39,7 @@
 #include <accmap.hxx>
 #include <fesh.hxx>
 #include <viewopt.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -405,7 +405,7 @@ void SwAccessibleParagraph::_InvalidateContent( sal_Bool bVisibleDataFired )
     sal_Bool bNewIsHeading = IsHeading();
     sal_Bool bOldIsHeading;
     {
-        vos::OGuard aGuard( aMutex );
+        osl::MutexGuard aGuard( aMutex );
         bOldIsHeading = bIsHeading;
         if( bIsHeading != bNewIsHeading )
             bIsHeading = bNewIsHeading;
@@ -417,7 +417,7 @@ void SwAccessibleParagraph::_InvalidateContent( sal_Bool bVisibleDataFired )
         ::rtl::OUString sNewDesc( GetDescription() );
         ::rtl::OUString sOldDesc;
         {
-            vos::OGuard aGuard( aMutex );
+            osl::MutexGuard aGuard( aMutex );
             sOldDesc = sDesc;
             if( sDesc != sNewDesc )
                 sDesc = sNewDesc;
@@ -442,7 +442,7 @@ void SwAccessibleParagraph::_InvalidateCursorPos()
     sal_Int32 nNew = GetCaretPos();
     sal_Int32 nOld;
     {
-        vos::OGuard aGuard( aMutex );
+        osl::MutexGuard aGuard( aMutex );
         nOld = nOldCaretPos;
         nOldCaretPos = nNew;
     }
@@ -481,7 +481,7 @@ void SwAccessibleParagraph::_InvalidateFocus()
     {
         sal_Int32 nPos;
         {
-            vos::OGuard aGuard( aMutex );
+            osl::MutexGuard aGuard( aMutex );
             nPos = nOldCaretPos;
         }
         ASSERT( nPos != -1, "focus object should be selected" );
@@ -532,7 +532,7 @@ SwAccessibleParagraph::~SwAccessibleParagraph()
 
 sal_Bool SwAccessibleParagraph::HasCursor()
 {
-    vos::OGuard aGuard( aMutex );
+    osl::MutexGuard aGuard( aMutex );
     return nOldCaretPos != -1;
 }
 
@@ -838,7 +838,7 @@ sal_Bool SwAccessibleParagraph::GetTextBoundary(
 
     CHECK_FOR_DEFUNC( XAccessibleContext );
 
-    vos::OGuard aGuard2( aMutex );
+    osl::MutexGuard aGuard2( aMutex );
     if( !sDesc.getLength() )
         sDesc = GetDescription();
 
@@ -1146,7 +1146,7 @@ sal_Int32 SwAccessibleParagraph::getCaretPosition()
 
     sal_Int32 nRet = GetCaretPos();
     {
-        vos::OGuard aOldCaretPosGuard( aMutex );
+        osl::MutexGuard aOldCaretPosGuard( aMutex );
         ASSERT( nRet == nOldCaretPos, "caret pos out of sync" );
         nOldCaretPos = nRet;
     }

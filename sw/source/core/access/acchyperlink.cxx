@@ -30,7 +30,7 @@
 #include "precompiled_sw.hxx"
 #include <comphelper/accessiblekeybindinghelper.hxx>
 #include <swurl.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <ndtxt.hxx>
 #include <txtinet.hxx>

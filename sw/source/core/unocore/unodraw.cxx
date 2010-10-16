@@ -68,7 +68,7 @@
 #include <editeng/ulspitem.hxx>
 #include <svx/shapepropertynotifier.hxx>
 #include <crstate.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/stl_types.hxx>
 #include <comphelper/makesequence.hxx>

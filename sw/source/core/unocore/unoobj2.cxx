@@ -105,7 +105,7 @@
 #include <unoidx.hxx>
 #include <unoframe.hxx>
 #include <fmthdft.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <fmtflcnt.hxx>
 #define _SVSTDARR_USHORTS

@@ -135,7 +135,7 @@
 #include <SwRewriter.hxx>
 #include <undobj.hxx>
 #include <globals.hrc>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <swserv.hxx>
 

@@ -28,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <rtl/uuid.h>
 #include <rtl/ustrbuf.hxx>
 

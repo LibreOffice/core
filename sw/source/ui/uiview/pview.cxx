@@ -92,7 +92,7 @@
 
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 using namespace ::com::sun::star;
 

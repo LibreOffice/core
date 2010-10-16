@@ -61,7 +61,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
 #include <frmatr.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <IMark.hxx>
 #include <unotxdoc.hxx>
 #include <unodraw.hxx>

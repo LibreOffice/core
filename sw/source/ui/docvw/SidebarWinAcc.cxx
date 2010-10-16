@@ -67,7 +67,7 @@ class SidebarWinAccessibleContext : public VCLXAccessibleComponent
 
         void ChangeAnchor( const SwFrm* pAnchorFrm )
         {
-            vos::OGuard aGuard(maMutex);
+            osl::MutexGuard aGuard(maMutex);
 
             mpAnchorFrm = pAnchorFrm;
         }
@@ -75,7 +75,7 @@ class SidebarWinAccessibleContext : public VCLXAccessibleComponent
         virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
             getAccessibleParent() throw (css::uno::RuntimeException)
         {
-            vos::OGuard aGuard(maMutex);
+            osl::MutexGuard aGuard(maMutex);
 
             css::uno::Reference< css::accessibility::XAccessible > xAccParent;
 
@@ -90,7 +90,7 @@ class SidebarWinAccessibleContext : public VCLXAccessibleComponent
 
         virtual sal_Int32 SAL_CALL getAccessibleIndexInParent() throw (css::uno::RuntimeException)
         {
-            vos::OGuard aGuard(maMutex);
+            osl::MutexGuard aGuard(maMutex);
 
             sal_Int32 nIndex( -1 );
 
@@ -108,7 +108,7 @@ class SidebarWinAccessibleContext : public VCLXAccessibleComponent
         ViewShell& mrViewShell;
         const SwFrm* mpAnchorFrm;
 
-        ::vos::OMutex maMutex;
+        ::osl::Mutex maMutex;
 };
 
 // =============================================================================

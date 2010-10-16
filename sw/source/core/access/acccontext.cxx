@@ -46,7 +46,7 @@
 #include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
@@ -106,7 +106,7 @@ void SwAccessibleContext::InitStates()
 
 void SwAccessibleContext::SetParent( SwAccessibleContext *pParent )
 {
-    vos::OGuard aGuard( aMutex );
+    osl::MutexGuard aGuard( aMutex );
 
     uno::Reference < XAccessible > xParent( pParent );
     xWeakParent = xParent;
@@ -114,7 +114,7 @@ void SwAccessibleContext::SetParent( SwAccessibleContext *pParent )
 
 uno::Reference< XAccessible > SwAccessibleContext::GetWeakParent() const
 {
-    vos::OGuard aGuard( aMutex );
+    osl::MutexGuard aGuard( aMutex );
 
     uno::Reference< XAccessible > xParent( xWeakParent );
     return xParent;
@@ -323,7 +323,7 @@ void SwAccessibleContext::Scrolled( const SwRect& rOldVisArea )
     sal_Bool bIsOldShowingState;
     sal_Bool bIsNewShowingState = IsShowing( *(GetMap()) );
     {
-        vos::OGuard aGuard( aMutex );
+        osl::MutexGuard aGuard( aMutex );
         bIsOldShowingState = bIsShowingState;
         bIsShowingState = bIsNewShowingState;
     }
@@ -552,7 +552,7 @@ sal_Bool SwAccessibleContext::IsEditableState()
 {
     sal_Bool bRet;
     {
-        vos::OGuard aGuard( aMutex );
+        osl::MutexGuard aGuard( aMutex );
         bRet = bIsEditableState;
     }
 
@@ -663,7 +663,7 @@ uno::Reference< XAccessible> SAL_CALL SwAccessibleContext::getAccessibleParent (
 
     // Remember the parent as weak ref.
     {
-        vos::OGuard aWeakParentGuard( aMutex );
+        osl::MutexGuard aWeakParentGuard( aMutex );
         xWeakParent = xAcc;
     }
 
@@ -1110,7 +1110,7 @@ void SwAccessibleContext::Dispose( sal_Bool bRecursive )
     // set defunc state (its not required to broadcast a state changed
     // event if the object is diposed afterwards)
     {
-        vos::OGuard aDefuncStateGuard( aMutex );
+        osl::MutexGuard aDefuncStateGuard( aMutex );
         bIsDefuncState = sal_True;
     }
 
@@ -1179,7 +1179,7 @@ void SwAccessibleContext::InvalidatePosOrSize( const SwRect& )
     sal_Bool bIsOldShowingState;
     sal_Bool bIsNewShowingState = IsShowing( *(GetMap()) );
     {
-        vos::OGuard aShowingStateGuard( aMutex );
+        osl::MutexGuard aShowingStateGuard( aMutex );
         bIsOldShowingState = bIsShowingState;
         bIsShowingState = bIsNewShowingState;
     }
@@ -1336,7 +1336,7 @@ void SwAccessibleContext::InvalidateStates( tAccessibleStates _nStates )
                 sal_Bool bIsOldEditableState;
                 sal_Bool bIsNewEditableState = IsEditable( pVSh );
                 {
-                    vos::OGuard aGuard( aMutex );
+                    osl::MutexGuard aGuard( aMutex );
                     bIsOldEditableState = bIsEditableState;
                     bIsEditableState = bIsNewEditableState;
                 }
@@ -1350,7 +1350,7 @@ void SwAccessibleContext::InvalidateStates( tAccessibleStates _nStates )
                 sal_Bool bIsOldOpaqueState;
                 sal_Bool bIsNewOpaqueState = IsOpaque( pVSh );
                 {
-                    vos::OGuard aGuard( aMutex );
+                    osl::MutexGuard aGuard( aMutex );
                     bIsOldOpaqueState = bIsOpaqueState;
                     bIsOpaqueState = bIsNewOpaqueState;
                 }

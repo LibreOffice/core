@@ -32,7 +32,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <tools/debug.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 #include <unoredlines.hxx>

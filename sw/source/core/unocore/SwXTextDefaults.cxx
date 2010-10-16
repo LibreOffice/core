@@ -31,7 +31,7 @@
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 #include <SwXTextDefaults.hxx>

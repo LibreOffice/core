@@ -53,7 +53,7 @@
 #include <swtblfmt.hxx>
 #include <tblsel.hxx>
 #include <cellatr.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 #include <unochart.hxx>

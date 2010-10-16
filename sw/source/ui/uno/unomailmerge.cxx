@@ -31,7 +31,7 @@
 
 
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <osl/mutex.hxx>
 #include <svl/itemprop.hxx>
 #include <svl/urihelper.hxx>

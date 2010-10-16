@@ -31,7 +31,7 @@
 #include <cppuhelper/weakref.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <rtl/ref.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <svx/IAccessibleViewForwarder.hxx>
 #include <svx/IAccessibleParent.hxx>
 #include <tools/debug.hxx>
@@ -88,8 +88,8 @@ typedef sal_uInt16 tAccessibleStates;
 class SwAccessibleMap : public accessibility::IAccessibleViewForwarder,
                         public accessibility::IAccessibleParent
 {
-    mutable ::vos::OMutex maMutex;
-    ::vos::OMutex maEventMutex;
+    mutable ::osl::Mutex maMutex;
+    ::osl::Mutex maEventMutex;
     SwAccessibleContextMap_Impl *mpFrmMap;
     SwAccessibleShapeMap_Impl *mpShapeMap;
     SwShapeList_Impl *mpShapes;

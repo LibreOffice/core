@@ -33,7 +33,7 @@
 #define _SVSTDARR_STRINGS
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
 #include <svl/svstdarr.hxx>

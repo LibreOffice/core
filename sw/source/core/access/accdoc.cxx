@@ -39,7 +39,7 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #include <tools/link.hxx>
 #include <sfx2/viewsh.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <viewsh.hxx>
 #include <doc.hxx>

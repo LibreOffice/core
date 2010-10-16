@@ -36,7 +36,7 @@
 #include <unobaseclass.hxx>
 #include <unomid.h>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include "editeng/unolingu.hxx"
 #include <com/sun/star/util/SearchOptions.hpp>

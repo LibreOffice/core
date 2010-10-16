@@ -88,7 +88,7 @@
 #include <svx/dataaccessdescriptor.hxx>
 #define _SVSTDARR_STRINGS
 #include <svl/svstdarr.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <textapi.hxx>
 #include <editeng/outliner.hxx>

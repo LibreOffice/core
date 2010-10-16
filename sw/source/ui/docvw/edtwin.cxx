@@ -131,7 +131,7 @@
 #include <pagedesc.hxx>
 #include <svtools/ruler.hxx> // #i23726#
 #include "formatclipboard.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 #include <IMark.hxx>

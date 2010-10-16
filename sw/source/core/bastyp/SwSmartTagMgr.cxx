@@ -30,7 +30,7 @@
 #include "precompiled_sw.hxx"
 #include "SwSmartTagMgr.hxx"
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <swmodule.hxx>
 

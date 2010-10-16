@@ -31,7 +31,7 @@
 
 #include <svx/svxids.hrc>
 #include <hintids.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/smplhint.hxx>
 #include <svtools/ctrltool.hxx>

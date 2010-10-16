@@ -66,7 +66,7 @@
 
 // for locking SolarMutex: svapp + mutex
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include "ndtxt.hxx"
 
 using ::rtl::OUString;

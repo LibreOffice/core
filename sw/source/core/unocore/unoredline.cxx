@@ -33,7 +33,7 @@
 #include <com/sun/star/text/XTextTable.hpp>
 
 #include <rtl/ustrbuf.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 #include <pagedesc.hxx>
