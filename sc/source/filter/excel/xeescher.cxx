@@ -163,11 +163,11 @@ static void lcl_GetFromTo( const XclExpRoot& rRoot, const Rectangle &aRect, INT3
 {
     bool bTo = false;
     INT32 nCol = 0, nRow = 0;
+    INT32 nColOff = 0, nRowOff= 0;
 
     while(1)
     {
         Rectangle r = rRoot.GetDocPtr()->GetMMRect( nCol,nRow,nCol,nRow,nTab );
-        INT32 nColOff, nRowOff;
         if( !bTo )
         {
             if( r.Left() <= aRect.Left() )
@@ -183,7 +183,7 @@ static void lcl_GetFromTo( const XclExpRoot& rRoot, const Rectangle &aRect, INT3
             if( r.Left() > aRect.Left() && r.Top() > aRect.Top() )
             {
                 aFrom = Rectangle( nCol-1, HMM2XL( nColOff ),
-                                   nRow-1, HMM2XL( nRowOff ) ));
+                                   nRow-1, HMM2XL( nRowOff ) );
                 bTo=true;
             }
         }
