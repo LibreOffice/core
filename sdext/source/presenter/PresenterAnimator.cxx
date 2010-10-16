@@ -162,7 +162,7 @@ void PresenterAnimator::ScheduleNextRun (const sal_uInt64 nStartTime)
     if (mnNextTime==0 || nStartTime<mnNextTime)
     {
         mnNextTime = nStartTime;
-        ::vos::TTimeValue aTimeValue (GetSeconds(mnNextTime), GetNanoSeconds(mnNextTime));
+        ::salhelper::TTimeValue aTimeValue (GetSeconds(mnNextTime), GetNanoSeconds(mnNextTime));
         PresenterTimer::ScheduleSingleTaskAbsolute (
             ::boost::bind(&PresenterAnimator::Process, this),
             aTimeValue);
