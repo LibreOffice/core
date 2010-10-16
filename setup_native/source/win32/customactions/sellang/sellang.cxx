@@ -51,6 +51,7 @@
 #include <stdio.h>
 #pragma warning(pop)
 
+#include <sal/macros.h>
 #include <systools/win32/uwinapi.h>
 
 /* #define VERBOSE_DEBUG_OUTPUT 1 */
