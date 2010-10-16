@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_filter.hxx"
 #include <osl/mutex.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 
 #include <osl/thread.h>
@@ -296,7 +296,7 @@ sal_Bool SAL_CALL XMLFilterDialogComponent::supportsService(const ::rtl::OUStrin
 */
 void SAL_CALL XMLFilterDialogComponent::disposing()
 {
-    SolarMutexGuard aGuard;
+    ::SolarMutexGuard aGuard;
 
     if( mpDialog )
     {
@@ -316,7 +316,7 @@ void SAL_CALL XMLFilterDialogComponent::disposing()
 // XTerminateListener
 void SAL_CALL XMLFilterDialogComponent::queryTermination( const EventObject& /* Event */ ) throw (TerminationVetoException, RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::SolarMutexGuard aGuard;
 
     // we will never give a veto here
     if( mpDialog && !mpDialog->isClosable() )
@@ -346,7 +346,7 @@ void SAL_CALL XMLFilterDialogComponent::setTitle( const ::rtl::OUString& /* _rTi
 //-------------------------------------------------------------------------
 sal_Int16 SAL_CALL XMLFilterDialogComponent::execute(  ) throw(RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::SolarMutexGuard aGuard;
 
     if( NULL == mpResMgr )
     {

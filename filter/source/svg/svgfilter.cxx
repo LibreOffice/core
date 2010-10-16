@@ -37,7 +37,7 @@
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/frame/XDesktop.hdl>
 #include <com/sun/star/frame/XController.hdl>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include "svgfilter.hxx"
 

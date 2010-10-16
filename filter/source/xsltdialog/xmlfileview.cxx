@@ -37,7 +37,7 @@
 
 #include <rtl/tencinfo.h>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <svtools/textview.hxx>
 #include <vcl/scrbar.hxx>
 #include <tools/stream.hxx>
@@ -103,7 +103,7 @@ XMLErrorHandler::XMLErrorHandler( XMLSourceFileDialog* pParent, ListBox& rListBo
 // XMLErrorHandler
 void SAL_CALL XMLErrorHandler::error( const Any& aSAXParseException ) throw (SAXException, RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::SolarMutexGuard aGuard;
 
     SAXParseException e;
     if( aSAXParseException >>= e )
@@ -118,7 +118,7 @@ void SAL_CALL XMLErrorHandler::error( const Any& aSAXParseException ) throw (SAX
 
 void SAL_CALL XMLErrorHandler::fatalError( const Any& aSAXParseException ) throw (SAXException, RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::SolarMutexGuard aGuard;
 
     SAXParseException e;
     if( aSAXParseException >>= e )
