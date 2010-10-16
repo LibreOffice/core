@@ -41,6 +41,7 @@
 #include <i18npool/paper.hxx>
 #include <editeng/paperinf.hxx>
 #include <ooo/vba/excel/XlPaperSize.hpp>
+#include <sal/macros.h>
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
@@ -665,7 +666,7 @@ static PaperSizeMap paperSizeMappings[] =
     { PAPER_ENV_12, ooo::vba::excel::XlPaperSize::xlPaperEnvelope12 }
 };
 
-static const int nMapSize = sizeof(paperSizeMappings) / sizeof(paperSizeMappings[0]);
+static const int nMapSize = SAL_N_ELEMENTS(paperSizeMappings);
 
 sal_Int32 PaperSizeOOoToExcel(Paper ePaper)
 {
