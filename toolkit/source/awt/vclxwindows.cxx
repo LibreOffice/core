@@ -2430,10 +2430,10 @@ throw(::com::sun::star::uno::RuntimeException)
 {
     if (rtl::OUString::createFromAscii( "Cancel" ) == PropertyName)
     {
-        ::vos::OGuard aGuard( GetMutex() );
+        ::osl::SolarMutexGuard aGuard( GetMutex() );
         if ( GetWindow() )
         {
-            sal_Int8 nCancel(0);
+            sal_Int8 nCancel = 0;
             Value >>= nCancel;
 
             Dialog* pDlg = (Dialog*) GetWindow();
@@ -2446,7 +2446,7 @@ throw(::com::sun::star::uno::RuntimeException)
     const ::rtl::OUString& /*PropertyName*/ )
 throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     ::com::sun::star::uno::Any aRet;
     return aRet;
