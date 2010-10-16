@@ -42,7 +42,7 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <tools/diagnose_ex.h>
 
 

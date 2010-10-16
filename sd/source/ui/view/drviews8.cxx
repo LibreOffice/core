@@ -77,7 +77,7 @@
 #include "Window.hxx"
 #include "drawview.hxx"
 #include "zoomlist.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/salbtype.hxx>     // FRound
 #include <vcl/svapp.hxx>
 

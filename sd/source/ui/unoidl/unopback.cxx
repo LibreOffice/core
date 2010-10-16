@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 #include <com/sun/star/drawing/BitmapMode.hpp>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/itemset.hxx>
 #include <svx/svdpool.hxx>
@@ -49,7 +49,6 @@
 #include "unokywds.hxx"
 
 using namespace ::rtl;
-using namespace ::vos;
 using namespace ::com::sun::star;
 
 const SvxItemPropertySet* ImplGetPageBackgroundPropertySet()

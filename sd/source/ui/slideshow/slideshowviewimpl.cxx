@@ -30,7 +30,7 @@
 #include "precompiled_sd.hxx"
 #include <slideshowviewimpl.hxx>
 #include <slideshowimpl.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 

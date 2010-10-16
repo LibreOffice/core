@@ -40,7 +40,7 @@
 #include <memory>
 #include <boost/scoped_ptr.hpp>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>

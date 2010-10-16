@@ -37,7 +37,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <unotools/accessiblestatesethelper.hxx>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 using ::rtl::OUString;

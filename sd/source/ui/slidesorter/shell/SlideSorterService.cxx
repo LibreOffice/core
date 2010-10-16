@@ -39,7 +39,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <cppuhelper/proptypehlp.hxx>
 

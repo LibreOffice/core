@@ -32,7 +32,7 @@
 
 #include "unolayer.hxx"
 #include <osl/mutex.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <svx/svdpagv.hxx>
 #include <svx/unoshape.hxx>
@@ -65,7 +65,6 @@
 #include <vcl/svapp.hxx>
 
 using namespace ::rtl;
-using namespace ::vos;
 using namespace ::com::sun::star;
 
 //=============================================================================

@@ -43,7 +43,7 @@
 #include "glob.hrc"
 
 #include <svx/svdpagv.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 namespace sd {

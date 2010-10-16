@@ -34,7 +34,7 @@
 #include <com/sun/star/style/XStyle.hpp>
 
 #include <osl/mutex.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/serviceinfohelper.hxx>
 #include <boost/bind.hpp>
@@ -70,7 +70,6 @@ using ::rtl::OUString;
 using ::osl::MutexGuard;
 using ::osl::ClearableMutexGuard;
 using ::cppu::OInterfaceContainerHelper;
-using namespace ::vos;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;

@@ -32,7 +32,7 @@
 #include "TextLogger.hxx"
 
 #include "EditWindow.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 namespace sd { namespace notes {

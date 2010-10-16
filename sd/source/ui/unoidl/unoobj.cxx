@@ -37,7 +37,7 @@
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/stl_types.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <svl/itemprop.hxx>
 #include <svl/style.hxx>
 #include <svx/svdpool.hxx>
@@ -92,7 +92,6 @@
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
-using namespace ::vos;
 using namespace ::sd;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::presentation;

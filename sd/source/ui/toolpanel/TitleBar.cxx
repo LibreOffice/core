@@ -37,7 +37,7 @@
 #include <vcl/decoview.hxx>
 #include <vcl/window.hxx>
 #include <vcl/virdev.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include "sdresid.hxx"
 #include <vcl/bitmap.hxx>

@@ -48,13 +48,12 @@
 #include <tools/debug.hxx>
 #include <rtl/uri.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <CustomAnimationPreset.hxx>
 
 #include <algorithm>
 
-using namespace ::vos;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::presentation;

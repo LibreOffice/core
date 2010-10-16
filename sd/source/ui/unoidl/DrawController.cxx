@@ -54,14 +54,13 @@
 #include "slideshow.hxx"
 
 #include <svx/fmshell.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <boost/shared_ptr.hpp>
 
 using namespace ::std;
 using ::rtl::OUString;
 using namespace ::cppu;
-using namespace ::vos;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;

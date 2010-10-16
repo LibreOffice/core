@@ -34,7 +34,7 @@
 #endif
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>

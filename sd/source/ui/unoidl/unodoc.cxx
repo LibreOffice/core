@@ -39,7 +39,7 @@
 #include "sdmod.hxx"
 #include "DrawDocShell.hxx"
 #include "GraphicDocShell.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;

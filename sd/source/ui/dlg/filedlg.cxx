@@ -45,7 +45,7 @@
 #include <sal/types.h>
 #include <tools/urlobj.hxx>
 #include <osl/thread.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <avmedia/mediawindow.hxx>

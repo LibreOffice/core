@@ -61,7 +61,7 @@
 
 #include "accessibility.hrc"
 #include "sdresid.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;

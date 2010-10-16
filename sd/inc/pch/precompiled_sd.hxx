@@ -907,7 +907,7 @@
 
 #include "osl/diagnose.h"
 #include "vos/module.hxx"
-#include "vos/mutex.hxx"
+#include "osl/mutex.hxx"
 #include "vos/process.hxx"
 #include "vos/xception.hxx"
 //---MARKER---

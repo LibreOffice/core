@@ -44,7 +44,7 @@
 
 #include <sfx2/frame.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <comphelper/namedvaluecollection.hxx>

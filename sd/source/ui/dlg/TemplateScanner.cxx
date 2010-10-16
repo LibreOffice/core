@@ -35,7 +35,7 @@
 #include <comphelper/documentconstants.hxx>
 
 #include <tools/debug.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/frame/XDocumentTemplates.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

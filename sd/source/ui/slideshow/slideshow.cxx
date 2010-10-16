@@ -39,7 +39,7 @@
 #include <cppuhelper/bootstrap.hxx>
 
 #include <comphelper/processfactory.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
@@ -70,7 +70,6 @@ using ::rtl::OUString;
 using ::com::sun::star::awt::XWindow;
 using namespace ::sd;
 using namespace ::cppu;
-using namespace ::vos;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::presentation;

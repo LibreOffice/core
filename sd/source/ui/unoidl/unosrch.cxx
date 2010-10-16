@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <svx/unoshape.hxx>
 #include <svx/svdpool.hxx>
@@ -44,7 +44,6 @@
 #include "unoprnms.hxx"
 #include "unosrch.hxx"
 
-using namespace ::vos;
 using namespace ::rtl;
 using namespace ::com::sun::star;
 

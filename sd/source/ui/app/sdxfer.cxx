@@ -32,7 +32,7 @@
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/tempfile.hxx>
 #include <editeng/eeitem.hxx>

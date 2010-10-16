@@ -37,7 +37,7 @@
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/animations/AnimationNodeType.hpp>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/streamwrap.hxx>
 #include <comphelper/processfactory.hxx>
@@ -54,7 +54,6 @@
 
 #include "sdpage.hxx"
 
-using namespace ::vos;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::animations;
 

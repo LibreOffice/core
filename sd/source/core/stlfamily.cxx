@@ -33,7 +33,7 @@
 #include <com/sun/star/lang/IllegalAccessException.hpp>
 #include <comphelper/serviceinfohelper.hxx>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 #include <svl/style.hxx>
@@ -51,7 +51,6 @@
 #include <map>
 
 using ::rtl::OUString;
-using namespace ::vos;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;

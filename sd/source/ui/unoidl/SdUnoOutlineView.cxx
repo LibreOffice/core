@@ -40,11 +40,10 @@
 
 #include <cppuhelper/proptypehlp.hxx>
 #include <svx/unopage.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 using ::rtl::OUString;
-using namespace ::vos;
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

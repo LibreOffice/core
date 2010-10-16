@@ -60,7 +60,7 @@
 
 #include "accessibility.hrc"
 #include "sdresid.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;

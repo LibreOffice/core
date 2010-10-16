@@ -41,7 +41,7 @@
 #include "sdresid.hxx"
 #include <svl/itempool.hxx>
 #include <editeng/fhgtitem.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/linguprops.hxx>
 #include <unotools/lingucfg.hxx>

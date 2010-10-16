@@ -30,7 +30,7 @@
 #include "precompiled_sd.hxx"
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <osl/mutex.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/svdpage.hxx>
 #include <comphelper/extract.hxx>
@@ -44,7 +44,6 @@
 #include "unopage.hxx"
 
 using namespace ::rtl;
-using namespace ::vos;
 using namespace ::com::sun::star;
 
 
