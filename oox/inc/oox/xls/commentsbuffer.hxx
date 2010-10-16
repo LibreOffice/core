@@ -30,6 +30,7 @@
 
 #include "oox/xls/richstring.hxx"
 #include "oox/xls/worksheethelper.hxx"
+#include <com/sun/star/awt/Rectangle.hpp>
 
 namespace oox {
 namespace xls {
