@@ -41,6 +41,7 @@
 #include "vcl/window.hxx"
 #include "vcl/timer.hxx"
 #include "vcl/impbmp.hxx"
+#include "vcl/solarmutex.hxx"
 
 #include "saldata.hxx"
 #include "salinst.h"
@@ -371,7 +372,7 @@ SalYieldMutex::SalYieldMutex()
 
 void SalYieldMutex::acquire()
 {
-    OMutex::acquire();
+    SolarMutexObject::acquire();
     mnThreadId = osl::Thread::getCurrentIdentifier();
     mnCount++;
 }
@@ -384,12 +385,12 @@ void SalYieldMutex::release()
             mnThreadId = 0;
         mnCount--;
     }
-    OMutex::release();
+    SolarMutexObject::release();
 }
 
 sal_Bool SalYieldMutex::tryToAcquire()
 {
-    if ( OMutex::tryToAcquire() )
+    if ( SolarMutexObject::tryToAcquire() )
     {
         mnThreadId = osl::Thread::getCurrentIdentifier();
         mnCount++;
@@ -526,7 +527,7 @@ void AquaSalInstance::PostUserEvent( AquaSalFrame* pFrame, USHORT nType, void* p
 
 // -----------------------------------------------------------------------
 
-vos::IMutex* AquaSalInstance::GetYieldMutex()
+osl::SolarMutex* AquaSalInstance::GetYieldMutex()
 {
     return mpSalYieldMutex;
 }

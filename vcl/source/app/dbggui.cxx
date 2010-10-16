@@ -63,7 +63,7 @@
 
 #include <vcl/unohelp.hxx>
 #include <vcl/unohelp2.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <map>
 #include <algorithm>

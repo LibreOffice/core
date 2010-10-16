@@ -37,7 +37,7 @@
 #include <osl/thread.h>
 #include <tools/debug.hxx>
 #include <tools/solarmutex.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 // static DWORD        hDdeInst  = NULL;
 // static short        nInstance = 0;

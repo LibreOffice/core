@@ -32,10 +32,6 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase3.hxx>
-namespace vos
-{
-    class IMutex;
-}
 
 namespace comphelper
 {
@@ -56,7 +52,7 @@ namespace comphelper
         public ComphelperBase
     {
     public:
-        SettingsHelperNoState ( ComphelperBaseInfo *pInfo, ::vos::IMutex *pMutex = NULL)
+        SettingsHelperNoState ( ComphelperBaseInfo *pInfo, ::osl::SolarMutex* pMutex = NULL)
         : ComphelperBase ( pInfo, pMutex )
         {}
         virtual ~SettingsHelperNoState () throw( ) {}

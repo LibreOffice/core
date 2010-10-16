@@ -30,7 +30,7 @@
 #define _VOS_PROCESS_HXX_
 
 #   include <rtl/ustring.hxx>
-#   include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <osl/security.hxx>
 #   include <vos/object.hxx>
 #include <osl/process.h>

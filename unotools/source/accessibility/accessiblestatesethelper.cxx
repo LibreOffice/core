@@ -207,7 +207,7 @@ AccessibleStateSetHelper::~AccessibleStateSetHelper(void)
 sal_Bool SAL_CALL AccessibleStateSetHelper::isEmpty ()
     throw (uno::RuntimeException)
 {
-    ::vos::OGuard aGuard (maMutex);
+    osl::MutexGuard aGuard (maMutex);
     return mpHelperImpl->IsEmpty();
 }
 
@@ -225,7 +225,7 @@ sal_Bool SAL_CALL AccessibleStateSetHelper::isEmpty ()
 sal_Bool SAL_CALL AccessibleStateSetHelper::contains (sal_Int16 aState)
     throw (uno::RuntimeException)
 {
-    ::vos::OGuard aGuard (maMutex);
+    osl::MutexGuard aGuard (maMutex);
     return mpHelperImpl->Contains(aState);
 }
 
@@ -248,7 +248,7 @@ sal_Bool SAL_CALL AccessibleStateSetHelper::containsAll
     (const uno::Sequence<sal_Int16>& rStateSet)
     throw (uno::RuntimeException)
 {
-    ::vos::OGuard aGuard (maMutex);
+    osl::MutexGuard aGuard (maMutex);
     sal_Int32 nCount(rStateSet.getLength());
     const sal_Int16* pStates = rStateSet.getConstArray();
     sal_Int32 i = 0;
@@ -264,21 +264,21 @@ sal_Bool SAL_CALL AccessibleStateSetHelper::containsAll
 uno::Sequence<sal_Int16> SAL_CALL AccessibleStateSetHelper::getStates()
     throw (uno::RuntimeException)
 {
-    ::vos::OGuard aGuard(maMutex);
+    osl::MutexGuard aGuard(maMutex);
     return mpHelperImpl->GetStates();
 }
 
 void AccessibleStateSetHelper::AddState(sal_Int16 aState)
     throw (uno::RuntimeException)
 {
-    ::vos::OGuard aGuard (maMutex);
+    osl::MutexGuard aGuard (maMutex);
     mpHelperImpl->AddState(aState);
 }
 
 void AccessibleStateSetHelper::RemoveState(sal_Int16 aState)
     throw (uno::RuntimeException)
 {
-    ::vos::OGuard aGuard (maMutex);
+    osl::MutexGuard aGuard (maMutex);
     mpHelperImpl->RemoveState(aState);
 }
 
@@ -288,7 +288,7 @@ sal_Bool AccessibleStateSetHelper::Compare(
         AccessibleStateSetHelper& rNewStates)
     throw (uno::RuntimeException)
 {
-    ::vos::OGuard aGuard (maMutex);
+    osl::MutexGuard aGuard (maMutex);
     return mpHelperImpl->Compare(rComparativeValue.mpHelperImpl,
         rOldStates.mpHelperImpl, rNewStates.mpHelperImpl);
 }
@@ -314,7 +314,7 @@ uno::Sequence<sal_Int8> SAL_CALL
     AccessibleStateSetHelper::getImplementationId (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard (maMutex);
+    osl::MutexGuard aGuard (maMutex);
     static uno::Sequence<sal_Int8> aId;
     if (aId.getLength() == 0)
     {

@@ -31,7 +31,7 @@
 
 #include <vcl/sv.h>
 #ifndef _VOS_MUTEX_HXX
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #endif
 #ifndef _THREAD_HXX_
 #include <osl/thread.hxx>

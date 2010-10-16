@@ -66,7 +66,7 @@
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 
 using namespace ::com::sun::star;

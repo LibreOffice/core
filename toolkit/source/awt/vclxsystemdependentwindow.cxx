@@ -80,7 +80,7 @@ IMPL_XTYPEPROVIDER_END
 
 ::com::sun::star::uno::Any VCLXSystemDependentWindow::getWindowHandle( const ::com::sun::star::uno::Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 SystemType ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     // TODO, check the process id
     ::com::sun::star::uno::Any aRet;

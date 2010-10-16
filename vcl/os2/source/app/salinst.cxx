@@ -36,7 +36,7 @@
 
 #define _SV_SALINST_CXX
 
-#include <vos/mutex.hxx>
+#include <vcl/solarmutex.hxx>
 #include <tools/debug.hxx>
 
 #include <salids.hrc>
@@ -82,7 +82,7 @@ MRESULT EXPENTRY SalComWndProc( HWND hWnd, ULONG nMsg, MPARAM nMP1, MPARAM nMP2 
 
 // =======================================================================
 
-class SalYieldMutex : public vos::OMutex
+class SalYieldMutex : public vcl::SolarMutexObject
 {
 public:
     Os2SalInstance*         mpInstData;
@@ -112,7 +112,7 @@ SalYieldMutex::SalYieldMutex( Os2SalInstance* pInstData )
 
 void SalYieldMutex::acquire()
 {
-    OMutex::acquire();
+    SolarMutexObject::acquire();
     mnCount++;
     mnThreadId = GetCurrentThreadId();
 }
@@ -123,7 +123,7 @@ void SalYieldMutex::release()
 {
     ULONG nThreadId = GetCurrentThreadId();
     if ( mnThreadId != nThreadId )
-        OMutex::release();
+        SolarMutexObject::release();
     else
     {
         SalData* pSalData = GetSalData();
@@ -136,13 +136,13 @@ void SalYieldMutex::release()
                     WinPostMsg( mpInstData->mhComWnd, SAL_MSG_RELEASEWAITYIELD, 0, 0 );
                 mnThreadId = 0;
                 mnCount--;
-                OMutex::release();
+                SolarMutexObject::release();
                 mpInstData->mpSalWaitMutex->release();
             }
             else
             {
                 mnCount--;
-                OMutex::release();
+                SolarMutexObject::release();
             }
         }
         else
@@ -150,7 +150,7 @@ void SalYieldMutex::release()
             if ( mnCount == 1 )
                 mnThreadId = 0;
             mnCount--;
-            OMutex::release();
+            SolarMutexObject::release();
         }
     }
 }
@@ -159,7 +159,7 @@ void SalYieldMutex::release()
 
 sal_Bool SalYieldMutex::tryToAcquire()
 {
-    if ( OMutex::tryToAcquire() )
+    if ( SolarMutexObject::tryToAcquire() )
     {
         mnCount++;
         mnThreadId = GetCurrentThreadId();
@@ -493,7 +493,7 @@ Os2SalInstance::Os2SalInstance()
 {
     mhComWnd                = 0;
     mpSalYieldMutex         = new SalYieldMutex( this );
-    mpSalWaitMutex          = new vos::OMutex;
+    mpSalWaitMutex          = new osl::Mutex;
     mnYieldWaitCount         = 0;
     mpSalYieldMutex->acquire();
     ::tools::SolarMutex::SetSolarMutex( mpSalYieldMutex );
@@ -512,7 +512,7 @@ Os2SalInstance::~Os2SalInstance()
 
 // -----------------------------------------------------------------------
 
-vos::IMutex* Os2SalInstance::GetYieldMutex()
+osl::SolarMutex* Os2SalInstance::GetYieldMutex()
 {
     return mpSalYieldMutex;
 }

@@ -74,7 +74,7 @@
 #include <osl/process.h>
 
 #include <comphelper/processfactory.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #define DRAG_EVENT_MASK ButtonPressMask         |\
                               ButtonReleaseMask     |\
@@ -89,7 +89,6 @@ using namespace com::sun::star::awt;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::frame;
 using namespace cppu;
-using namespace osl;
 using namespace rtl;
 
 using namespace x11;
@@ -326,7 +325,7 @@ XLIB_Cursor SelectionManager::createCursor( const char* pPointerData, const char
 
 void SelectionManager::initialize( const Sequence< Any >& arguments ) throw (::com::sun::star::uno::Exception)
 {
-    MutexGuard aGuard(m_aMutex);
+    osl::MutexGuard aGuard(m_aMutex);
 
     if( ! m_xDisplayConnection.is() )
     {
@@ -478,7 +477,7 @@ SelectionManager::~SelectionManager()
     fprintf( stderr, "SelectionManager::~SelectionManager (%s)\n", m_pDisplay ? DisplayString(m_pDisplay) : "no display" );
 #endif
     {
-        MutexGuard aGuard( *Mutex::getGlobalMutex() );
+        osl::MutexGuard aGuard( *osl::Mutex::getGlobalMutex() );
 
         ::std::hash_map< OUString, SelectionManager*, OUStringHash >::iterator it;
         for( it = getInstances().begin(); it != getInstances().end(); ++it )
@@ -504,7 +503,7 @@ SelectionManager::~SelectionManager()
         // thread handle is freed in dragDoDispatch()
     }
 
-    MutexGuard aGuard(m_aMutex);
+    osl::MutexGuard aGuard(m_aMutex);
 
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "shutting down SelectionManager\n" );
@@ -554,7 +553,7 @@ SelectionAdaptor* SelectionManager::getAdaptor( Atom selection )
 
 OUString SelectionManager::convertFromCompound( const char* pText, int nLen )
 {
-    MutexGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
     OUString aRet;
     if( nLen < 0 )
         nLen = strlen( pText );
@@ -585,7 +584,7 @@ OUString SelectionManager::convertFromCompound( const char* pText, int nLen )
 
 OString SelectionManager::convertToCompound( const OUString& rText )
 {
-    MutexGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
     XTextProperty aProp;
     aProp.value = NULL;
     aProp.encoding = XA_STRING;
@@ -705,7 +704,7 @@ bool SelectionManager::convertData(
 
 SelectionManager& SelectionManager::get( const OUString& rDisplayName )
 {
-    MutexGuard aGuard( *Mutex::getGlobalMutex() );
+    osl::MutexGuard aGuard( *osl::Mutex::getGlobalMutex() );
 
     OUString aDisplayName( rDisplayName );
     if( ! aDisplayName.getLength() )
@@ -724,7 +723,7 @@ SelectionManager& SelectionManager::get( const OUString& rDisplayName )
 
 const OUString& SelectionManager::getString( Atom aAtom )
 {
-    MutexGuard aGuard(m_aMutex);
+    osl::MutexGuard aGuard(m_aMutex);
 
     ::std::hash_map< Atom, OUString >::const_iterator it;
     if( ( it = m_aAtomToString.find( aAtom ) ) == m_aAtomToString.end() )
@@ -745,7 +744,7 @@ const OUString& SelectionManager::getString( Atom aAtom )
 
 Atom SelectionManager::getAtom( const OUString& rString )
 {
-    MutexGuard aGuard(m_aMutex);
+    osl::MutexGuard aGuard(m_aMutex);
 
     ::std::hash_map< OUString, Atom, OUStringHash >::const_iterator it;
     if( ( it = m_aStringToAtom.find( rString ) ) == m_aStringToAtom.end() )
@@ -765,7 +764,7 @@ bool SelectionManager::requestOwnership( Atom selection )
     bool bSuccess = false;
     if( m_pDisplay && m_aWindow )
     {
-        MutexGuard aGuard(m_aMutex);
+        osl::MutexGuard aGuard(m_aMutex);
 
         SelectionAdaptor* pAdaptor = getAdaptor( selection );
         if( pAdaptor )
@@ -901,7 +900,7 @@ OUString SelectionManager::convertTypeFromNative( Atom nType, Atom selection, in
 
 bool SelectionManager::getPasteData( Atom selection, Atom type, Sequence< sal_Int8 >& rData )
 {
-    ResettableMutexGuard aGuard(m_aMutex);
+    osl::ResettableMutexGuard aGuard(m_aMutex);
     ::std::hash_map< Atom, Selection* >::iterator it;
     bool bSuccess = false;
 
@@ -1045,7 +1044,7 @@ bool SelectionManager::getPasteData( Atom selection, const ::rtl::OUString& rTyp
 
     ::std::hash_map< Atom, Selection* >::iterator it;
     {
-        MutexGuard aGuard(m_aMutex);
+        osl::MutexGuard aGuard(m_aMutex);
 
         it = m_aSelections.find( selection );
         if( it == m_aSelections.end() )
@@ -1141,7 +1140,7 @@ bool SelectionManager::getPasteData( Atom selection, const ::rtl::OUString& rTyp
             Atom pTypes[4] = { XA_PIXMAP, XA_PIXMAP,
             XA_COLORMAP, XA_COLORMAP };
             {
-                MutexGuard aGuard(m_aMutex);
+                osl::MutexGuard aGuard(m_aMutex);
 
                 XChangeProperty( m_pDisplay,
                     m_aWindow,
@@ -1159,7 +1158,7 @@ bool SelectionManager::getPasteData( Atom selection, const ::rtl::OUString& rTyp
                 Atom* pReturnedTypes = (Atom*)aData.getArray();
                 if( pReturnedTypes[0] == XA_PIXMAP && pReturnedTypes[1] == XA_PIXMAP )
                 {
-                    MutexGuard aGuard(m_aMutex);
+                    osl::MutexGuard aGuard(m_aMutex);
 
                     Atom type = None;
                     int format = 0;
@@ -1207,7 +1206,7 @@ bool SelectionManager::getPasteData( Atom selection, const ::rtl::OUString& rTyp
             // convert data if possible
             if( aPixmap != None )
             {
-                MutexGuard aGuard(m_aMutex);
+                osl::MutexGuard aGuard(m_aMutex);
 
                 sal_Int32 nOutSize = 0;
                 sal_uInt8* pBytes = X11_getBmpFromPixmap( m_pDisplay, aPixmap, aColormap, nOutSize );
@@ -1254,7 +1253,7 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
 {
     ::std::hash_map< Atom, Selection* >::iterator it;
     {
-        MutexGuard aGuard(m_aMutex);
+        osl::MutexGuard aGuard(m_aMutex);
 
         it = m_aSelections.find( selection );
         if( it != m_aSelections.end()                           &&
@@ -1285,7 +1284,7 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
             {
                 const unsigned int atomcount = 256;
                 // more than three types; look in property
-                MutexGuard aGuard(m_aMutex);
+                osl::MutexGuard aGuard(m_aMutex);
 
                 Atom nType;
                 int nFormat;
@@ -1416,7 +1415,7 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
     }
 
     {
-        MutexGuard aGuard(m_aMutex);
+        osl::MutexGuard aGuard(m_aMutex);
 
         it = m_aSelections.find( selection );
         if( it != m_aSelections.end() )
@@ -1478,7 +1477,7 @@ bool SelectionManager::sendData( SelectionAdaptor* pAdaptor,
                                  Atom property,
                                  Atom selection )
 {
-    ResettableMutexGuard aGuard( m_aMutex );
+    osl::ResettableMutexGuard aGuard( m_aMutex );
 
     // handle targets related to image/bmp
     if( target == XA_COLORMAP || target == XA_PIXMAP || target == XA_BITMAP || target == XA_VISUALID )
@@ -1638,7 +1637,7 @@ bool SelectionManager::sendData( SelectionAdaptor* pAdaptor,
 
 bool SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest )
 {
-    ResettableMutexGuard aGuard( m_aMutex );
+    osl::ResettableMutexGuard aGuard( m_aMutex );
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "handleSelectionRequest for selection %s and target %s\n",
              OUStringToOString( getString( rRequest.selection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
@@ -1846,7 +1845,7 @@ bool SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
 
 bool SelectionManager::handleReceivePropertyNotify( XPropertyEvent& rNotify )
 {
-    MutexGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
     // data we requested arrived
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "handleReceivePropertyNotify for property %s\n",
@@ -1965,7 +1964,7 @@ bool SelectionManager::handleReceivePropertyNotify( XPropertyEvent& rNotify )
 
 bool SelectionManager::handleSendPropertyNotify( XPropertyEvent& rNotify )
 {
-    MutexGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
 
     // ready for next part of a IncrementalTransfer
 #if OSL_DEBUG_LEVEL > 1
@@ -2065,7 +2064,7 @@ bool SelectionManager::handleSendPropertyNotify( XPropertyEvent& rNotify )
 
 bool SelectionManager::handleSelectionNotify( XSelectionEvent& rNotify )
 {
-    MutexGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
 
     bool bHandled = false;
 
@@ -2158,7 +2157,7 @@ bool SelectionManager::handleSelectionNotify( XSelectionEvent& rNotify )
 
 bool SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
 {
-    ResettableMutexGuard aGuard(m_aMutex);
+    osl::ResettableMutexGuard aGuard(m_aMutex);
 
     // handle drop related events
     XLIB_Window aSource = rMessage.data.l[0];
@@ -2340,7 +2339,7 @@ bool SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
 
 void SelectionManager::dropComplete( sal_Bool bSuccess, XLIB_Window aDropWindow, XLIB_Time )
 {
-    ClearableMutexGuard aGuard(m_aMutex);
+    osl::ClearableMutexGuard aGuard(m_aMutex);
 
     if( aDropWindow == m_aCurrentDropWindow )
     {
@@ -2408,7 +2407,7 @@ void SelectionManager::dropComplete( sal_Bool bSuccess, XLIB_Window aDropWindow,
 
 void SelectionManager::sendDragStatus( Atom nDropAction )
 {
-    ClearableMutexGuard aGuard(m_aMutex);
+    osl::ClearableMutexGuard aGuard(m_aMutex);
 
     if( m_xDragSourceListener.is() )
     {
@@ -2537,7 +2536,7 @@ bool SelectionManager::updateDragAction( int modifierState )
 
 void SelectionManager::sendDropPosition( bool bForce, XLIB_Time eventTime )
 {
-    ClearableMutexGuard aGuard(m_aMutex);
+    osl::ClearableMutexGuard aGuard(m_aMutex);
 
     if( m_bDropSent )
         return;
@@ -2600,7 +2599,7 @@ bool SelectionManager::handleDragEvent( XEvent& rMessage )
     if( ! m_xDragSourceListener.is() )
         return false;
 
-    ResettableMutexGuard aGuard(m_aMutex);
+    osl::ResettableMutexGuard aGuard(m_aMutex);
 
     bool bHandled = false;
 
@@ -3057,7 +3056,7 @@ int SelectionManager::getXdndVersion( XLIB_Window aWindow, XLIB_Window& rProxy )
 
 void SelectionManager::updateDragWindow( int nX, int nY, XLIB_Window aRoot )
 {
-    ResettableMutexGuard aGuard( m_aMutex );
+    osl::ResettableMutexGuard aGuard( m_aMutex );
 
     Reference< XDragSourceListener > xListener( m_xDragSourceListener );
 
@@ -3252,7 +3251,7 @@ void SelectionManager::startDrag(
     SalFrame* pCaptureFrame = NULL;
 
     {
-        ClearableMutexGuard aGuard(m_aMutex);
+        osl::ClearableMutexGuard aGuard(m_aMutex);
 
         // first get the current pointer position and the window that
         // the pointer is located in. since said window should be one
@@ -3328,7 +3327,7 @@ void SelectionManager::startDrag(
         */
         if( nPointerGrabSuccess != GrabSuccess )
         {
-            vos::IMutex& rSolarMutex( Application::GetSolarMutex() );
+            osl::SolarMutex& rSolarMutex( Application::GetSolarMutex() );
             if( rSolarMutex.tryToAcquire() )
             {
                 pCaptureFrame = GetX11SalData()->GetDisplay()->GetCaptureFrame();
@@ -3369,7 +3368,7 @@ void SelectionManager::startDrag(
                 listener->dragDropEnd( aDragFailedEvent );
             if( pCaptureFrame )
             {
-                vos::IMutex& rSolarMutex( Application::GetSolarMutex() );
+                osl::SolarMutex& rSolarMutex( Application::GetSolarMutex() );
                 if( rSolarMutex.tryToAcquire() )
                     GetX11SalData()->GetDisplay()->CaptureMouse( pCaptureFrame );
 #if OSL_DEBUG_LEVEL > 0
@@ -3458,7 +3457,7 @@ void SelectionManager::startDrag(
 
         if( pCaptureFrame )
         {
-            vos::IMutex& rSolarMutex( Application::GetSolarMutex() );
+            osl::SolarMutex& rSolarMutex( Application::GetSolarMutex() );
             if( rSolarMutex.tryToAcquire() )
                 GetX11SalData()->GetDisplay()->CaptureMouse( pCaptureFrame );
 #if OSL_DEBUG_LEVEL > 0
@@ -3502,7 +3501,7 @@ void SelectionManager::dragDoDispatch()
     fprintf( stderr, "end executeDrag dispatching\n" );
 #endif
     {
-        ClearableMutexGuard aGuard(m_aMutex);
+        osl::ClearableMutexGuard aGuard(m_aMutex);
 
         Reference< XDragSourceListener > xListener( m_xDragSourceListener );
         Reference< XTransferable > xTransferable( m_xDragSourceTransferable );
@@ -3562,7 +3561,7 @@ sal_Int32 SelectionManager::getCurrentCursor()
 
 void SelectionManager::setCursor( sal_Int32 cursor, XLIB_Window aDropWindow, XLIB_Time )
 {
-    MutexGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
     if( aDropWindow == m_aDropWindow && XLIB_Cursor(cursor) != m_aCurrentCursor )
     {
         if( m_xDragSourceListener.is() && ! m_bDropSent )
@@ -3584,7 +3583,7 @@ void SelectionManager::setImage( sal_Int32, XLIB_Window, XLIB_Time )
 
 void SelectionManager::transferablesFlavorsChanged()
 {
-    MutexGuard aGuard(m_aMutex);
+    osl::MutexGuard aGuard(m_aMutex);
 
     m_aDragFlavors = m_xDragSourceTransferable->getTransferDataFlavors();
     int i;
@@ -3660,7 +3659,7 @@ bool SelectionManager::handleXEvent( XEvent& rEvent )
     {
         case SelectionClear:
         {
-            ClearableMutexGuard aGuard(m_aMutex);
+            osl::ClearableMutexGuard aGuard(m_aMutex);
 #if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "SelectionClear for selection %s\n",
                      OUStringToOString( getString( rEvent.xselectionclear.selection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr()
@@ -3736,7 +3735,7 @@ void SelectionManager::dispatchEvent( int millisec )
     {
         // now acquire the mutex to prevent other threads
         // from using the same X connection
-        ResettableMutexGuard aGuard(m_aMutex);
+        osl::ResettableMutexGuard aGuard(m_aMutex);
 
         // prevent that another thread already ate the input
         // this can happen if e.g. another thread does
@@ -3792,7 +3791,7 @@ void SelectionManager::run( void* pThis )
 
         if( (aNow.tv_sec - aLast.tv_sec) > 0 )
         {
-            ClearableMutexGuard aGuard(This->m_aMutex);
+            osl::ClearableMutexGuard aGuard(This->m_aMutex);
             std::list< std::pair< SelectionAdaptor*, Reference< XInterface > > > aChangeList;
 
             for( std::hash_map< Atom, Selection* >::iterator it = This->m_aSelections.begin(); it != This->m_aSelections.end(); ++it )
@@ -3825,7 +3824,7 @@ void SelectionManager::run( void* pThis )
 
 void SelectionManager::shutdown() throw()
 {
-    ResettableMutexGuard aGuard(m_aMutex);
+    osl::ResettableMutexGuard aGuard(m_aMutex);
     // stop dispatching
     if( m_aThread )
     {
@@ -3880,7 +3879,7 @@ sal_Bool SelectionManager::handleEvent( const Any& event ) throw()
 
         if( nTimestamp != CurrentTime )
         {
-            MutexGuard aGuard(m_aMutex);
+            osl::MutexGuard aGuard(m_aMutex);
 
             m_nSelectionTimestamp = nTimestamp;
         }
@@ -3928,7 +3927,7 @@ void SAL_CALL SelectionManager::notifyTermination( const ::com::sun::star::lang:
 
 void SelectionManager::registerHandler( Atom selection, SelectionAdaptor& rAdaptor )
 {
-    MutexGuard aGuard(m_aMutex);
+    osl::MutexGuard aGuard(m_aMutex);
 
     Selection* pNewSelection    = new Selection();
     pNewSelection->m_pAdaptor   = &rAdaptor;
@@ -3940,7 +3939,7 @@ void SelectionManager::registerHandler( Atom selection, SelectionAdaptor& rAdapt
 
 void SelectionManager::deregisterHandler( Atom selection )
 {
-    MutexGuard aGuard(m_aMutex);
+    osl::MutexGuard aGuard(m_aMutex);
 
     ::std::hash_map< Atom, Selection* >::iterator it =
           m_aSelections.find( selection );
@@ -3968,7 +3967,7 @@ extern "C"
 
 void SelectionManager::registerDropTarget( XLIB_Window aWindow, DropTarget* pTarget )
 {
-    MutexGuard aGuard(m_aMutex);
+    osl::MutexGuard aGuard(m_aMutex);
 
     // sanity check
     ::std::hash_map< XLIB_Window, DropTargetEntry >::const_iterator it =
@@ -4012,7 +4011,7 @@ void SelectionManager::registerDropTarget( XLIB_Window aWindow, DropTarget* pTar
 
 void SelectionManager::deregisterDropTarget( XLIB_Window aWindow )
 {
-    ClearableMutexGuard aGuard(m_aMutex);
+    osl::ClearableMutexGuard aGuard(m_aMutex);
 
     m_aDropTargets.erase( aWindow );
     if( aWindow == m_aDragSourceWindow && m_aDragRunning.check() )

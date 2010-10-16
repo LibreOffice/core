@@ -58,7 +58,7 @@
 #include <unistd.h>
 #endif
 #include <vos/process.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include "Xproto.h"
 #include <saldisp.hxx>

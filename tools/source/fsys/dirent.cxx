@@ -58,7 +58,7 @@
 #endif
 #include <tools/stream.hxx>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <osl/file.hxx>
 #include <rtl/instance.hxx>
@@ -135,13 +135,13 @@ BOOL bInRedirection = TRUE;
 #else
 BOOL bInRedirection = FALSE;
 #endif
-static NAMESPACE_VOS( OMutex )* pRedirectMutex = 0;
+static osl::Mutex* pRedirectMutex = 0;
 
 //------------------------------------------------------------------------
 void FSysRedirector::Register( FSysRedirector *pRedirector )
 {
         if ( pRedirector )
-                pRedirectMutex = new NAMESPACE_VOS( OMutex );
+            pRedirectMutex = new osl::Mutex;
         else
                 DELETEZ( pRedirectMutex );
         _pRedirector = pRedirector;
@@ -164,7 +164,7 @@ void FSysRedirector::DoRedirect( String &rPath )
         // Redirection is acessible only by one thread per time
         // dont move the guard behind the bInRedirection check!!!
         // think of nested calls (when called from callback)
-        NAMESPACE_VOS( OGuard ) aGuard( pRedirectMutex );
+        osl::MutexGuard aGuard( pRedirectMutex );
 
         // if already in redirection, dont redirect
         if ( bInRedirection )
@@ -1039,8 +1039,8 @@ DirEntry* DirEntry::ImpChangeParent( DirEntry* pNewParent, BOOL bNormalize )
 BOOL DirEntry::Exists( FSysAccess nAccess ) const
 {
 #ifndef BOOTSTRAP
-    static NAMESPACE_VOS(OMutex) aLocalMutex;
-    NAMESPACE_VOS(OGuard) aGuard( aLocalMutex );
+    static osl::Mutex aLocalMutex;
+    osl::MutexGuard aGuard( aLocalMutex );
 #endif
         if ( !IsValid() )
                 return FALSE;

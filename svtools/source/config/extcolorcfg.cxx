@@ -40,7 +40,7 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <svl/poolitem.hxx> //Any2Bool
 #include <svl/smplhint.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
  /* #100822# ----
 #include <vcl/wrkwin.hxx>

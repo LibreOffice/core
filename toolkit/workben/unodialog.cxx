@@ -57,7 +57,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::connection;
-using namespace ::vos;
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::registry;
@@ -217,7 +216,8 @@ void Main( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMult
     xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "PositionX" ) ), aValue );
 
     MyWin * pWindow;
-    ::osl::Guard< vos::IMutex > aVclGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aVclGuard;
+
     pWindow = new MyWin();
     pWindow->Show();
 

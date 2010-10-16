@@ -54,7 +54,7 @@
 #include <svtools/svtools.hrc>
 #include "imagemgr.hrc"
 #include <svtools/svtdata.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 // globals *******************************************************************
 

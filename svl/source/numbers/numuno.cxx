@@ -33,7 +33,7 @@
 
 #include <tools/color.hxx>
 #include <tools/debug.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/uuid.h>
 

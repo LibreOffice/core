@@ -124,7 +124,7 @@ void SAL_CALL SVTXGridControl::removeSelectionListener(const ::com::sun::star::u
 
 void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const Any& aValue) throw(RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     TableControl* pTable = (TableControl*)GetWindow();
     switch( GetPropertyId( PropertyName ) )
@@ -363,7 +363,7 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
 
 Any SVTXGridControl::getProperty( const ::rtl::OUString& PropertyName ) throw(RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     const sal_uInt16 nPropId = GetPropertyId( PropertyName );
     TableControl* pTable = (TableControl*)GetWindow();
@@ -422,7 +422,7 @@ void SVTXGridControl::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 }
 void SAL_CALL SVTXGridControl::setVisible( sal_Bool bVisible ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
     TableControl* pTable = (TableControl*)GetWindow();
     if ( pTable )
     {
@@ -432,13 +432,13 @@ void SAL_CALL SVTXGridControl::setVisible( sal_Bool bVisible ) throw(::com::sun:
 }
 void SAL_CALL SVTXGridControl::setFocus() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
     if ( GetWindow())
         GetWindow()->GrabFocus();
 }
 void SAL_CALL SVTXGridControl::rowAdded(const ::com::sun::star::awt::grid::GridDataEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     std::vector< Any > newRow;
     Sequence< Any > rawRowData = Event.rowData;
@@ -486,7 +486,7 @@ void SAL_CALL SVTXGridControl::rowAdded(const ::com::sun::star::awt::grid::GridD
 
 void SAL_CALL SVTXGridControl::rowRemoved(const ::com::sun::star::awt::grid::GridDataEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     TableControl* pTable = (TableControl*)GetWindow();
     if(Event.index == -1)
@@ -529,7 +529,7 @@ void SAL_CALL SVTXGridControl::rowRemoved(const ::com::sun::star::awt::grid::Gri
 
 void SAL_CALL  SVTXGridControl::columnChanged(const ::com::sun::star::awt::grid::GridColumnEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     TableControl* pTable = (TableControl*)GetWindow();
     if(Event.valueName == rtl::OUString::createFromAscii("ColumnResize"))
@@ -578,7 +578,7 @@ void SAL_CALL  SVTXGridControl::columnChanged(const ::com::sun::star::awt::grid:
 }
 void SAL_CALL  SVTXGridControl::dataChanged(const ::com::sun::star::awt::grid::GridDataEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     TableControl* pTable = (TableControl*)GetWindow();
     if(Event.valueName == rtl::OUString::createFromAscii("RowHeight"))
@@ -819,7 +819,7 @@ void SAL_CALL SVTXGridControl::selectColumn(::sal_Int32 x) throw (::com::sun::st
 }
 void SVTXGridControl::dispose() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     ::com::sun::star::lang::EventObject aObj;
     aObj.Source = (::cppu::OWeakObject*)this;

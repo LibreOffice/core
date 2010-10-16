@@ -613,10 +613,12 @@ fd
   if( ! pDisplay->IsDisplay() )
       return 0;
 
-  vos::IMutex* pSalInstYieldMutex   =
-      GetSalData()->m_pInstance->GetYieldMutex();
-  ::vos::OGuard aGuard( *pSalInstYieldMutex );
-  return pDisplay->IsEvent();
+  int result;
+
+  GetSalData()->m_pInstance->GetYieldMutex()->acquire();
+  result = pDisplay->IsEvent();
+  GetSalData()->m_pInstance->GetYieldMutex()->release();
+  return result;
 }
 static int DisplayQueue( int
 #ifdef DBG_UTIL
@@ -626,11 +628,14 @@ fd
 {
   DBG_ASSERT( ConnectionNumber( pDisplay->GetDisplay() ) == fd,
               "wrong fd in DisplayHasEvent" );
-  vos::IMutex* pSalInstYieldMutex   =
-      GetSalData()->m_pInstance->GetYieldMutex();
-  ::vos::OGuard aGuard( *pSalInstYieldMutex );
-  return XEventsQueued( pDisplay->GetDisplay(),
+  int result;
+
+  GetSalData()->m_pInstance->GetYieldMutex()->acquire();
+  result =  XEventsQueued( pDisplay->GetDisplay(),
                         QueuedAfterReading );
+  GetSalData()->m_pInstance->GetYieldMutex()->release();
+
+  return result;
 }
 static int DisplayYield( int
 #ifdef DBG_UTIL
@@ -640,10 +645,10 @@ fd
 {
   DBG_ASSERT( ConnectionNumber( pDisplay->GetDisplay() ) == fd,
               "wrong fd in DisplayHasEvent" );
-  vos::IMutex* pSalInstYieldMutex   =
-      GetSalData()->m_pInstance->GetYieldMutex();
-  ::vos::OGuard aGuard( *pSalInstYieldMutex );
+
+  GetSalData()->m_pInstance->GetYieldMutex()->acquire();
   pDisplay->Yield();
+  GetSalData()->m_pInstance->GetYieldMutex()->release();
   return TRUE;
 }
 

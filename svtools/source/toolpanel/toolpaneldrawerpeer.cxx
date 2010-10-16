@@ -134,7 +134,7 @@ namespace svt
     //------------------------------------------------------------------------------------------------------------------
     Reference< XAccessibleContext > ToolPanelDrawerPeer::CreateAccessibleContext()
     {
-        ::vos::OGuard aSolarGuard( GetMutex() );
+        ::osl::SolarMutexGuard aSolarGuard( GetMutex() );
         return new ToolPanelDrawerContext( *this );
     }
 

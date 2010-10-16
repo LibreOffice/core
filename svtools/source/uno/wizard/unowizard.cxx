@@ -41,7 +41,7 @@
 
 #include <tools/diagnose_ex.h>
 #include <rtl/strbuf.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 //......................................................................................................................

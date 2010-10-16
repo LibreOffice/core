@@ -425,7 +425,7 @@
 #include <vcl/mapunit.hxx>
 #include <vcl/unohelp.hxx>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vos/process.hxx>
 
 //---MARKER---

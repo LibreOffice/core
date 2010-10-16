@@ -32,7 +32,7 @@
 #if defined UNX && defined ALPHA
 #include <fstream.hxx>
 #endif
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <comphelper/processfactory.hxx>
 #include <ucbhelper/content.hxx>
 #include <cppuhelper/implbase1.hxx>

@@ -33,11 +33,9 @@
 #include <vcl/dndlcon.hxx>
 #include <vcl/window.h>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/svdata.hxx>
-using namespace ::osl;
-using namespace ::vos;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -91,7 +89,7 @@ Window* DNDEventDispatcher::findTopLevelWindow(Point location)
 void SAL_CALL DNDEventDispatcher::drop( const DropTargetDropEvent& dtde )
     throw(RuntimeException)
 {
-    MutexGuard aImplGuard( m_aMutex );
+    osl::MutexGuard aImplGuard( m_aMutex );
 
     Point location( dtde.LocationX, dtde.LocationY );
 
@@ -131,7 +129,7 @@ void SAL_CALL DNDEventDispatcher::drop( const DropTargetDropEvent& dtde )
 void SAL_CALL DNDEventDispatcher::dragEnter( const DropTargetDragEnterEvent& dtdee )
     throw(RuntimeException)
 {
-    MutexGuard aImplGuard( m_aMutex );
+    osl::MutexGuard aImplGuard( m_aMutex );
     Point location( dtdee.LocationX, dtdee.LocationY );
 
     Window * pChildWindow = findTopLevelWindow(location);
@@ -159,7 +157,7 @@ void SAL_CALL DNDEventDispatcher::dragEnter( const DropTargetDragEnterEvent& dtd
 void SAL_CALL DNDEventDispatcher::dragExit( const DropTargetEvent& /*dte*/ )
     throw(RuntimeException)
 {
-    MutexGuard aImplGuard( m_aMutex );
+    osl::MutexGuard aImplGuard( m_aMutex );
 
     fireDragExitEvent( m_pCurrentWindow );
 
@@ -175,7 +173,7 @@ void SAL_CALL DNDEventDispatcher::dragExit( const DropTargetEvent& /*dte*/ )
 void SAL_CALL DNDEventDispatcher::dragOver( const DropTargetDragEvent& dtde )
     throw(RuntimeException)
 {
-    MutexGuard aImplGuard( m_aMutex );
+    osl::MutexGuard aImplGuard( m_aMutex );
 
     Point location( dtde.LocationX, dtde.LocationY );
     sal_Int32 nListeners;
@@ -216,7 +214,7 @@ void SAL_CALL DNDEventDispatcher::dragOver( const DropTargetDragEvent& dtde )
 void SAL_CALL DNDEventDispatcher::dropActionChanged( const DropTargetDragEvent& dtde )
     throw(RuntimeException)
 {
-    MutexGuard aImplGuard( m_aMutex );
+    osl::MutexGuard aImplGuard( m_aMutex );
 
     Point location( dtde.LocationX, dtde.LocationY );
     sal_Int32 nListeners;
@@ -257,7 +255,8 @@ void SAL_CALL DNDEventDispatcher::dropActionChanged( const DropTargetDragEvent& 
 
 void SAL_CALL DNDEventDispatcher::dragGestureRecognized( const DragGestureEvent& dge )
     throw(RuntimeException)
-{   MutexGuard aImplGuard( m_aMutex );
+{
+    osl::MutexGuard aImplGuard( m_aMutex );
 
     Point origin( dge.DragOriginX, dge.DragOriginY );
 
@@ -370,7 +369,7 @@ sal_Int32 DNDEventDispatcher::fireDragExitEvent( Window *pWindow ) throw(Runtime
 
     if( pWindow && pWindow->IsInputEnabled() && ! pWindow->IsInModalMode() )
     {
-        OClearableGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexClearableGuard aGuard;
 
         // query DropTarget from window
         Reference< XDropTarget > xDropTarget = pWindow->GetDropTarget();
@@ -401,7 +400,7 @@ sal_Int32 DNDEventDispatcher::fireDropActionChangedEvent( Window *pWindow,
 
     if( pWindow && pWindow->IsInputEnabled() && ! pWindow->IsInModalMode() )
     {
-        OClearableGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexClearableGuard aGuard;
 
         // query DropTarget from window
         Reference< XDropTarget > xDropTarget = pWindow->GetDropTarget();
@@ -434,7 +433,7 @@ sal_Int32 DNDEventDispatcher::fireDropEvent( Window *pWindow,
 
     if( pWindow && pWindow->IsInputEnabled() && ! pWindow->IsInModalMode() )
     {
-        OClearableGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexClearableGuard aGuard;
 
         // query DropTarget from window
         Reference< XDropTarget > xDropTarget = pWindow->GetDropTarget();
@@ -479,7 +478,7 @@ sal_Int32 DNDEventDispatcher::fireDragGestureEvent( Window *pWindow,
 
     if( pWindow && pWindow->IsInputEnabled() && ! pWindow->IsInModalMode() )
     {
-        OClearableGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexClearableGuard aGuard;
 
         // query DropTarget from window
         Reference< XDragGestureRecognizer > xDragGestureRecognizer = pWindow->GetDragGestureRecognizer();

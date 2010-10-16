@@ -32,7 +32,9 @@
 #include <vcl/salinst.hxx>
 #include <vcl/salwtype.hxx>
 #include <vcl/saltimer.hxx>
-#include <vos/mutex.hxx>
+#include <vcl/solarmutex.hxx>
+
+#include <osl/mutex.hxx>
 #include <osl/thread.hxx>
 
 #include <list>
@@ -47,7 +49,7 @@
 // SalYieldMutex
 // -------------------------------------------------------------------------
 
-class SvpSalYieldMutex : public NAMESPACE_VOS(OMutex)
+class SvpSalYieldMutex : public ::vcl::SolarMutexObject
 {
 protected:
     ULONG                                       mnCount;
@@ -174,7 +176,7 @@ public:
     virtual SalBitmap*      CreateSalBitmap();
 
     // YieldMutex
-    virtual vos::IMutex*    GetYieldMutex();
+    virtual osl::SolarMutex* GetYieldMutex();
     virtual ULONG           ReleaseYieldMutex();
     virtual void            AcquireYieldMutex( ULONG nCount );
 

@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <tools/list.hxx>
 #include <tools/color.hxx>
 #include <tools/string.hxx>
@@ -204,7 +204,6 @@ public:
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( ::com::sun::star::uno::RuntimeException );
 
 private:
-    //    ::vos::OMutex                                                                                                           maMutex;
     ::std::vector< ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleEventListener > >   mxEventListeners;
     ValueSet*                                                           mpParent;
@@ -273,7 +272,7 @@ private:
 
     ::std::vector< ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleEventListener > >   mxEventListeners;
-    ::vos::OMutex                                                       maMutex;
+    ::osl::Mutex                                                        maMutex;
     ValueSetItem*                                                       mpParent;
     bool                                                                mbIsTransientChildrenDisabled;
 

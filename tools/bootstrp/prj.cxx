@@ -31,7 +31,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "bootstrp/sstring.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <tools/stream.hxx>
 #include <tools/geninfo.hxx>

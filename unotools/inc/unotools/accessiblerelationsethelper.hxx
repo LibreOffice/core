@@ -37,7 +37,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/servicehelper.hxx>
 
@@ -147,7 +147,7 @@ public:
 
 protected:
     /// Mutex guarding this object.
-    ::vos::OMutex maMutex;
+    ::osl::Mutex maMutex;
 
 private:
     /// The implementation of this helper interface.

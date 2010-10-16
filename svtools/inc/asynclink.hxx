@@ -32,13 +32,9 @@
 #include "svtools/svtdllapi.h"
 #include <tools/solar.h>
 #include <tools/link.hxx>
+#include <osl/mutex.hxx>
 
 class Timer;
-
-namespace vos
-{
-    class OMutex;
-}
 
 namespace svtools {
 
@@ -50,7 +46,7 @@ class SVT_DLLPUBLIC AsynchronLink
     BOOL   _bInCall;
     BOOL*  _pDeleted;
     void*  _pArg;
-    vos::OMutex* _pMutex;
+    ::osl::Mutex* _pMutex;
 
     DECL_DLLPRIVATE_STATIC_LINK( AsynchronLink, HandleCall, void* );
     SVT_DLLPRIVATE void Call_Impl( void* pArg );

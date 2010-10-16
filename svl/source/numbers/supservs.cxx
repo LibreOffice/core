@@ -33,7 +33,7 @@
 #include <comphelper/sharedmutex.hxx>
 #include <i18npool/mslangid.hxx>
 #include <tools/debug.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <tools/stream.hxx>
 #include <strmadpt.hxx>
 #include "instrm.hxx"
@@ -43,7 +43,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
-using namespace ::vos;
 using namespace ::utl;
 
 #define PERSISTENT_SERVICE_NAME     ::rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatsSupplier");

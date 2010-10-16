@@ -128,7 +128,7 @@ private:
 
 private:
     VCLXWindow&                         mrAntiImpl;
-    ::vos::IMutex&                      mrMutex;
+    ::osl::SolarMutex&                  mrMutex;
     ::toolkit::AccessibilityClient      maAccFactory;
     bool                                mbDisposed;
     bool                                mbDrawingOntoParent;    // no bit mask, is passed around  by reference
@@ -181,7 +181,7 @@ public:
         the <type>VCLXWindow</type> instance which the object belongs to. Must
         live longer then the object just being constructed.
     */
-    VCLXWindowImpl( VCLXWindow& _rAntiImpl, ::vos::IMutex& _rMutex, bool _bWithDefaultProps );
+    VCLXWindowImpl( VCLXWindow& _rAntiImpl, ::osl::SolarMutex& _rMutex, bool _bWithDefaultProps );
 
     /** synchronously mbEnableVisible
     */
@@ -237,7 +237,7 @@ private:
 };
 
 //--------------------------------------------------------------------
-VCLXWindowImpl::VCLXWindowImpl( VCLXWindow& _rAntiImpl, ::vos::IMutex& _rMutex, bool _bWithDefaultProps )
+VCLXWindowImpl::VCLXWindowImpl( VCLXWindow& _rAntiImpl, ::osl::SolarMutex& _rMutex, bool _bWithDefaultProps )
     :mrAntiImpl( _rAntiImpl )
     ,mrMutex( _rMutex )
     ,mbDisposed( false )
@@ -276,7 +276,7 @@ VCLXWindowImpl::~VCLXWindowImpl()
 //--------------------------------------------------------------------
 void VCLXWindowImpl::disposing()
 {
-    ::vos::OGuard aGuard( mrMutex );
+    ::osl::SolarMutexGuard aGuard( mrMutex );
     if ( mnCallbackEventId )
         Application::RemoveUserEvent( mnCallbackEventId );
     mnCallbackEventId = 0;
@@ -323,7 +323,7 @@ IMPL_LINK( VCLXWindowImpl, OnProcessCallbacks, void*, EMPTYARG )
     // work on a copy of the callback array
     CallbackArray aCallbacksCopy;
     {
-        ::vos::OGuard aGuard( mrMutex );
+        ::osl::SolarMutexGuard aGuard( mrMutex );
         aCallbacksCopy = maCallbackEvents;
         maCallbackEvents.clear();
 
@@ -366,7 +366,7 @@ void SAL_CALL VCLXWindowImpl::release()
 //--------------------------------------------------------------------
 Reference< XStyleSettings > VCLXWindowImpl::getStyleSettings()
 {
-    ::vos::OGuard  aGuard( mrMutex );
+    ::osl::SolarMutexGuard  aGuard( mrMutex );
     if ( mbDisposed )
         throw DisposedException( ::rtl::OUString(), mrAntiImpl );
     if ( !mxWindowStyleSettings.is() )
@@ -943,7 +943,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 
 uno::Reference< accessibility::XAccessibleContext > VCLXWindow::CreateAccessibleContext()
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
     return getAccessibleFactory().createAccessibleContext( this );
 }
 
@@ -979,7 +979,7 @@ IMPL_XUNOTUNNEL2( VCLXWindow, VCLXDevice )
 // ::com::sun::star::lang::Component
 void VCLXWindow::dispose(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     mpImpl->mxViewGraphics = NULL;
 
@@ -1018,14 +1018,14 @@ void VCLXWindow::dispose(  ) throw(::com::sun::star::uno::RuntimeException)
 
 void VCLXWindow::addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     mpImpl->getEventListeners().addInterface( rxListener );
 }
 
 void VCLXWindow::removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     mpImpl->getEventListeners().removeInterface( rxListener );
 }
@@ -1034,7 +1034,7 @@ void VCLXWindow::removeEventListener( const ::com::sun::star::uno::Reference< ::
 // ::com::sun::star::awt::XWindow
 void VCLXWindow::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     if ( GetWindow() )
     {
@@ -1047,7 +1047,7 @@ void VCLXWindow::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int3
 
 ::com::sun::star::awt::Rectangle VCLXWindow::getPosSize(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     ::com::sun::star::awt::Rectangle aBounds;
     if ( GetWindow() )
@@ -1063,7 +1063,7 @@ void VCLXWindow::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int3
 
 void VCLXWindow::setVisible( sal_Bool bVisible ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     Window* pWindow = GetWindow();
     if ( pWindow )
@@ -1088,7 +1088,7 @@ void VCLXWindow::setVisible( sal_Bool bVisible ) throw(::com::sun::star::uno::Ru
 
 void VCLXWindow::setEnable( sal_Bool bEnable ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     Window* pWindow = GetWindow();
     if ( pWindow )
@@ -1100,7 +1100,7 @@ void VCLXWindow::setEnable( sal_Bool bEnable ) throw(::com::sun::star::uno::Runt
 
 void VCLXWindow::setFocus(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     if ( GetWindow() )
         GetWindow()->GrabFocus();
@@ -1108,7 +1108,7 @@ void VCLXWindow::setFocus(  ) throw(::com::sun::star::uno::RuntimeException)
 
 void VCLXWindow::addWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     mpImpl->getWindowListeners().addInterface( rxListener );
 
@@ -1123,7 +1123,7 @@ void VCLXWindow::addWindowListener( const ::com::sun::star::uno::Reference< ::co
 
 void VCLXWindow::removeWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     Reference< XWindowListener2 > xListener2( rxListener, UNO_QUERY );
     if ( xListener2.is() )
@@ -1134,61 +1134,61 @@ void VCLXWindow::removeWindowListener( const ::com::sun::star::uno::Reference< :
 
 void VCLXWindow::addFocusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
     mpImpl->getFocusListeners().addInterface( rxListener );
 }
 
 void VCLXWindow::removeFocusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
     mpImpl->getFocusListeners().removeInterface( rxListener );
 }
 
 void VCLXWindow::addKeyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XKeyListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
     mpImpl->getKeyListeners().addInterface( rxListener );
 }
 
 void VCLXWindow::removeKeyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XKeyListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
     mpImpl->getKeyListeners().removeInterface( rxListener );
 }
 
 void VCLXWindow::addMouseListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
     mpImpl->getMouseListeners().addInterface( rxListener );
 }
 
 void VCLXWindow::removeMouseListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
     mpImpl->getMouseListeners().removeInterface( rxListener );
 }
 
 void VCLXWindow::addMouseMotionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseMotionListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
     mpImpl->getMouseMotionListeners().addInterface( rxListener );
 }
 
 void VCLXWindow::removeMouseMotionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseMotionListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
     mpImpl->getMouseMotionListeners().removeInterface( rxListener );
 }
 
 void VCLXWindow::addPaintListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPaintListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
     mpImpl->getPaintListeners().addInterface( rxListener );
 }
 
 void VCLXWindow::removePaintListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPaintListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
     mpImpl->getPaintListeners().removeInterface( rxListener );
 }
 
@@ -1202,7 +1202,7 @@ void VCLXWindow::removePaintListener( const ::com::sun::star::uno::Reference< ::
 
 void VCLXWindow::setPointer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPointer >& rxPointer ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     VCLXPointer* pPointer = VCLXPointer::GetImplementation( rxPointer );
     if ( pPointer )
@@ -1215,7 +1215,7 @@ void VCLXWindow::setPointer( const ::com::sun::star::uno::Reference< ::com::sun:
 
 void VCLXWindow::setBackground( sal_Int32 nColor ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     if ( GetWindow() )
     {
@@ -1235,7 +1235,7 @@ void VCLXWindow::setBackground( sal_Int32 nColor ) throw(::com::sun::star::uno::
 
 void VCLXWindow::invalidate( sal_Int16 nInvalidateFlags ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     if ( GetWindow() )
         GetWindow()->Invalidate( (sal_uInt16) nInvalidateFlags );
@@ -1243,7 +1243,7 @@ void VCLXWindow::invalidate( sal_Int16 nInvalidateFlags ) throw(::com::sun::star
 
 void VCLXWindow::invalidateRect( const ::com::sun::star::awt::Rectangle& rRect, sal_Int16 nInvalidateFlags ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     if ( GetWindow() )
         GetWindow()->Invalidate( VCLRectangle(rRect), (sal_uInt16) nInvalidateFlags );
@@ -1253,7 +1253,7 @@ void VCLXWindow::invalidateRect( const ::com::sun::star::awt::Rectangle& rRect, 
 // ::com::sun::star::awt::XVclWindowPeer
 sal_Bool VCLXWindow::isChild( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& rxPeer ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     sal_Bool bIsChild = sal_False;
     Window* pWindow = GetWindow();
@@ -1268,20 +1268,20 @@ sal_Bool VCLXWindow::isChild( const ::com::sun::star::uno::Reference< ::com::sun
 
 void VCLXWindow::setDesignMode( sal_Bool bOn ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     mpImpl->mbDesignMode = bOn;
 }
 
 sal_Bool VCLXWindow::isDesignMode(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
     return mpImpl->mbDesignMode;
 }
 
 void VCLXWindow::enableClipSiblings( sal_Bool bClip ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     if ( GetWindow() )
         GetWindow()->EnableClipSiblings( bClip );
@@ -1289,7 +1289,7 @@ void VCLXWindow::enableClipSiblings( sal_Bool bClip ) throw(::com::sun::star::un
 
 void VCLXWindow::setForeground( sal_Int32 nColor ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     if ( GetWindow() )
     {
@@ -1300,7 +1300,7 @@ void VCLXWindow::setForeground( sal_Int32 nColor ) throw(::com::sun::star::uno::
 
 void VCLXWindow::setControlFont( const ::com::sun::star::awt::FontDescriptor& rFont ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     if ( GetWindow() )
         GetWindow()->SetControlFont( VCLUnoHelper::CreateFont( rFont, GetWindow()->GetControlFont() ) );
@@ -1308,7 +1308,7 @@ void VCLXWindow::setControlFont( const ::com::sun::star::awt::FontDescriptor& rF
 
 void VCLXWindow::getStyles( sal_Int16 nType, ::com::sun::star::awt::FontDescriptor& Font, sal_Int32& ForegroundColor, sal_Int32& BackgroundColor ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     if ( GetWindow() )
     {
@@ -1462,7 +1462,7 @@ namespace
 
 void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     Window* pWindow = GetWindow();
     if ( !pWindow )
@@ -1995,7 +1995,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
 
 ::com::sun::star::uno::Any VCLXWindow::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     ::com::sun::star::uno::Any aProp;
     if ( GetWindow() )
@@ -2235,7 +2235,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
 // ::com::sun::star::awt::XLayoutConstrains
 ::com::sun::star::awt::Size VCLXWindow::getMinimumSize(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     // Diese Methode sollte nur fuer Componenten gerufen werden, die zwar
     // ueber das ::com::sun::star::awt::Toolkit erzeugt werden koennen, aber fuer die es
@@ -2279,7 +2279,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
 
 ::com::sun::star::awt::Size VCLXWindow::calcAdjustedSize( const ::com::sun::star::awt::Size& rNewSize ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     ::com::sun::star::awt::Size aNewSize( rNewSize );
     ::com::sun::star::awt::Size aMinSize = getMinimumSize();
@@ -2296,7 +2296,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
 // ::com::sun::star::awt::XView
 sal_Bool VCLXWindow::setGraphics( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >& rxDevice ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     if ( VCLUnoHelper::GetOutputDevice( rxDevice ) )
         mpImpl->mxViewGraphics = rxDevice;
@@ -2308,14 +2308,14 @@ sal_Bool VCLXWindow::setGraphics( const ::com::sun::star::uno::Reference< ::com:
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics > VCLXWindow::getGraphics(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     return mpImpl->mxViewGraphics;
 }
 
 ::com::sun::star::awt::Size VCLXWindow::getSize(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     Size aSz;
     if ( GetWindow() )
@@ -2325,7 +2325,7 @@ sal_Bool VCLXWindow::setGraphics( const ::com::sun::star::uno::Reference< ::com:
 
 void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     Window* pWindow = GetWindow();
     if ( !pWindow )
@@ -2421,7 +2421,7 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno:
 
 void VCLXWindow::setZoom( float fZoomX, float /*fZoomY*/ ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     if ( GetWindow() )
     {
@@ -2437,7 +2437,7 @@ void VCLXWindow::setZoom( float fZoomX, float /*fZoomY*/ ) throw(::com::sun::sta
 // ::com::sun::star::lang::XEventListener
 void SAL_CALL VCLXWindow::disposing( const ::com::sun::star::lang::EventObject& _rSource ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     // check if it comes from our AccessibleContext
     uno::Reference< uno::XInterface > aAC( mpImpl->mxAccessibleContext, uno::UNO_QUERY );
@@ -2454,7 +2454,7 @@ void SAL_CALL VCLXWindow::disposing( const ::com::sun::star::lang::EventObject& 
 {
     using namespace ::com::sun::star;
 
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     // already disposed
     if( ! mpImpl )
@@ -2478,7 +2478,7 @@ void SAL_CALL VCLXWindow::disposing( const ::com::sun::star::lang::EventObject& 
 // ::com::sun::star::awt::XDockable
 void SAL_CALL VCLXWindow::addDockableWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDockableWindowListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     if ( xListener.is() )
         mpImpl->getDockableWindowListeners().addInterface( xListener );
@@ -2487,14 +2487,14 @@ void SAL_CALL VCLXWindow::addDockableWindowListener( const ::com::sun::star::uno
 
 void SAL_CALL VCLXWindow::removeDockableWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDockableWindowListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     mpImpl->getDockableWindowListeners().removeInterface( xListener );
 }
 
 void SAL_CALL VCLXWindow::enableDocking( sal_Bool bEnable ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     Window* pWindow = GetWindow();
     if ( pWindow )
@@ -2503,7 +2503,7 @@ void SAL_CALL VCLXWindow::enableDocking( sal_Bool bEnable ) throw (::com::sun::s
 
 sal_Bool SAL_CALL VCLXWindow::isFloating(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     Window* pWindow = GetWindow();
     if( pWindow )
@@ -2514,7 +2514,7 @@ sal_Bool SAL_CALL VCLXWindow::isFloating(  ) throw (::com::sun::star::uno::Runti
 
 void SAL_CALL VCLXWindow::setFloatingMode( sal_Bool bFloating ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     Window* pWindow = GetWindow();
     if( pWindow )
@@ -2523,7 +2523,7 @@ void SAL_CALL VCLXWindow::setFloatingMode( sal_Bool bFloating ) throw (::com::su
 
 sal_Bool SAL_CALL VCLXWindow::isLocked(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     Window* pWindow = GetWindow();
     if( pWindow )
@@ -2534,7 +2534,7 @@ sal_Bool SAL_CALL VCLXWindow::isLocked(  ) throw (::com::sun::star::uno::Runtime
 
 void SAL_CALL VCLXWindow::lock(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     Window* pWindow = GetWindow();
     if( pWindow && !Window::GetDockingManager()->IsFloating( pWindow ) )
@@ -2543,7 +2543,7 @@ void SAL_CALL VCLXWindow::lock(  ) throw (::com::sun::star::uno::RuntimeExceptio
 
 void SAL_CALL VCLXWindow::unlock(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     Window* pWindow = GetWindow();
     if( pWindow && !Window::GetDockingManager()->IsFloating( pWindow ) )
@@ -2552,14 +2552,14 @@ void SAL_CALL VCLXWindow::unlock(  ) throw (::com::sun::star::uno::RuntimeExcept
 void SAL_CALL VCLXWindow::startPopupMode( const ::com::sun::star::awt::Rectangle& ) throw (::com::sun::star::uno::RuntimeException)
 {
     // TODO: remove interface in the next incompatible build
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
 }
 
 sal_Bool SAL_CALL VCLXWindow::isInPopupMode(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     // TODO: remove interface in the next incompatible build
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
     return FALSE;
 }
 
@@ -2568,7 +2568,7 @@ sal_Bool SAL_CALL VCLXWindow::isInPopupMode(  ) throw (::com::sun::star::uno::Ru
 
 void SAL_CALL VCLXWindow::setOutputSize( const ::com::sun::star::awt::Size& aSize ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
     Window *pWindow;
     if( (pWindow = GetWindow()) != NULL )
     {
@@ -2582,7 +2582,7 @@ void SAL_CALL VCLXWindow::setOutputSize( const ::com::sun::star::awt::Size& aSiz
 
 ::com::sun::star::awt::Size SAL_CALL VCLXWindow::getOutputSize(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
     Window *pWindow;
     if( (pWindow = GetWindow()) != NULL )
     {
@@ -2598,7 +2598,7 @@ void SAL_CALL VCLXWindow::setOutputSize( const ::com::sun::star::awt::Size& aSiz
 
 sal_Bool SAL_CALL VCLXWindow::isVisible(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
     if( GetWindow() )
         return GetWindow()->IsVisible();
     else
@@ -2607,7 +2607,7 @@ sal_Bool SAL_CALL VCLXWindow::isVisible(  ) throw (::com::sun::star::uno::Runtim
 
 sal_Bool SAL_CALL VCLXWindow::isActive(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
     if( GetWindow() )
         return GetWindow()->IsActive();
     else
@@ -2617,7 +2617,7 @@ sal_Bool SAL_CALL VCLXWindow::isActive(  ) throw (::com::sun::star::uno::Runtime
 
 sal_Bool SAL_CALL VCLXWindow::isEnabled(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
     if( GetWindow() )
         return GetWindow()->IsEnabled();
     else
@@ -2626,7 +2626,7 @@ sal_Bool SAL_CALL VCLXWindow::isEnabled(  ) throw (::com::sun::star::uno::Runtim
 
 sal_Bool SAL_CALL VCLXWindow::hasFocus(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
     if( GetWindow() )
         return GetWindow()->HasFocus();
     else
@@ -2638,7 +2638,7 @@ sal_Bool SAL_CALL VCLXWindow::hasFocus(  ) throw (::com::sun::star::uno::Runtime
 UnoPropertyArrayHelper *
 VCLXWindow::GetPropHelper()
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
     if ( mpImpl->mpPropHelper == NULL )
     {
         std::list< sal_uInt16 > aIDs;

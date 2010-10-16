@@ -33,7 +33,7 @@
 #include <tools/diagnose_ex.h>
 #include <canvas/verbosetrace.hxx>
 #include <osl/mutex.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/logfile.hxx>
 #include <comphelper/sequence.hxx>

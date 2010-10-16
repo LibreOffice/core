@@ -1,4 +1,3 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,59 +24,53 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+#ifndef _VCL_SOLARMUTEX_HXX_
+#define _VCL_SOLARMUTEX_HXX_
 
-#include "vclxplugin.hxx"
+#include <osl/mutex.hxx>
+#include <vcl/dllapi.h>
 
-#include <com/sun/star/awt/PosSize.hpp>
-#include <toolkit/helper/convert.hxx>
-#include <toolkit/helper/property.hxx>
-#include <vcl/ctrl.hxx>
-
-#include "forward.hxx"
-
-namespace layoutimpl
+namespace vcl
 {
 
-using namespace ::com::sun::star;
-
-VCLXPlugin::VCLXPlugin( Window *p, WinBits b )
-    : VCLXWindow()
-    , mpWindow( p )
-    , mpPlugin( 0 )
-    , mStyle( b )
+/** Implementation of the SolarMutex interface.
+ */
+class VCL_DLLPUBLIC SolarMutexObject : public osl::SolarMutex
 {
+public:
+    //static SolarMutex& SAL_CALL getGlobalMutex();
+
+    /** Creates mutex
+     */
+    SolarMutexObject();
+
+    /** Implicitly destroys mutex
+     */
+    virtual ~SolarMutexObject();
+
+    /** Blocks if Mutex is already in use
+     */
+    virtual void SAL_CALL acquire();
+
+    /** Tries to get the mutex without blocking.
+        @return True if mutex could be obtained, otherwise False
+     */
+    virtual sal_Bool SAL_CALL tryToAcquire();
+
+    /** Releases the mutex.
+     */
+    virtual void SAL_CALL release();
+
+protected:
+    oslMutex    m_solarMutex;
+
+private:
+    /* Disable copy/assignment
+     */
+    SolarMutexObject( const SolarMutexObject& );
+    SolarMutexObject& SAL_CALL operator=( const SolarMutexObject& );
+};
+
 }
 
-VCLXPlugin::~VCLXPlugin()
-{
-}
-
-void SAL_CALL VCLXPlugin::dispose() throw(uno::RuntimeException)
-{
-    {
-        ::osl::SolarMutexGuard aGuard( GetMutex() );
-
-        lang::EventObject aDisposeEvent;
-        aDisposeEvent.Source = W3K_EXPLICIT_CAST (*this);
-    }
-
-    VCLXWindow::dispose();
-}
-
-void VCLXPlugin::SetPlugin( ::Control *p )
-{
-    mpPlugin = p;
-}
-
-awt::Size SAL_CALL VCLXPlugin::getMinimumSize()
-    throw(::com::sun::star::uno::RuntimeException)
-{
-    ::osl::ClearableSolarMutexGuard aGuard( GetMutex() );
-    if ( mpPlugin )
-        return AWTSize( mpPlugin->GetSizePixel() );
-    return awt::Size();
-}
-
-} // namespace layoutimpl
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+#endif // _VCL_SOLARMUTEX_HXX_

@@ -34,7 +34,6 @@
 #include "vcl/salframe.hxx"
 #include "vcl/salsys.hxx"
 #include "vos/process.hxx"
-#include "vos/mutex.hxx"
 #include "tools/tools.h"
 #include "tools/debug.hxx"
 #include "tools/time.hxx"
@@ -67,7 +66,7 @@
 
 #include "osl/module.h"
 #include "osl/file.hxx"
-
+#include "osl/mutex.hxx"
 #include "osl/thread.h"
 #include "rtl/tencinfo.h"
 #include "rtl/instance.hxx"
@@ -527,7 +526,7 @@ void Application::Quit()
 
 // -----------------------------------------------------------------------
 
-vos::IMutex& Application::GetSolarMutex()
+osl::SolarMutex& Application::GetSolarMutex()
 {
     ImplSVData* pSVData = ImplGetSVData();
     return *(pSVData->mpDefInst->GetYieldMutex());

@@ -60,7 +60,7 @@ namespace toolkit
     //--------------------------------------------------------------------
     void Throbber_Impl::start() throw ( uno::RuntimeException )
     {
-        ::vos::OGuard aGuard( GetMutex() );
+        ::osl::SolarMutexGuard aGuard( GetMutex() );
 
         mnCurStep = 0;
         maWaitTimer.Start();
@@ -69,7 +69,7 @@ namespace toolkit
     //--------------------------------------------------------------------
     void Throbber_Impl::stop() throw ( uno::RuntimeException )
     {
-        ::vos::OGuard aGuard( GetMutex() );
+        ::osl::SolarMutexGuard aGuard( GetMutex() );
 
         maWaitTimer.Stop();
     }
@@ -78,7 +78,7 @@ namespace toolkit
     void Throbber_Impl::setImageList( const uno::Sequence< uno::Reference< graphic::XGraphic > >& rImageList )
         throw ( uno::RuntimeException )
     {
-        ::vos::OGuard aGuard( GetMutex() );
+        ::osl::SolarMutexGuard aGuard( GetMutex() );
 
         maImageList = rImageList;
 
@@ -116,7 +116,7 @@ namespace toolkit
     // -----------------------------------------------------------------------
     IMPL_LINK( Throbber_Impl, TimeOutHdl, Throbber_Impl*, EMPTYARG )
     {
-        ::vos::OGuard aGuard( GetMutex() );
+        ::osl::SolarMutexGuard aGuard( GetMutex() );
 
         FixedImage* pImage = static_cast< FixedImage* >( mxParent->GetWindow() );
 

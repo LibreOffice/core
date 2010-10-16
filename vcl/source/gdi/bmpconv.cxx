@@ -32,7 +32,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/impbmpconv.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <tools/stream.hxx>
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>

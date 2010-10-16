@@ -40,7 +40,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <rtl/memory.h>
 #include <rtl/uuid.h>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <tools/string.hxx>
 #include <tools/table.hxx>
 #include <tools/date.hxx>
@@ -56,7 +56,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <toolkit/controls/accessiblecontrolcontext.hxx>
 #include <comphelper/container.hxx>
 

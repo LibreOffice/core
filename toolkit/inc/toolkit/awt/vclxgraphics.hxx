@@ -34,7 +34,7 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/weak.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <vcl/font.hxx>
 #include <tools/color.hxx>
@@ -61,7 +61,7 @@ class VCLXGraphics :    public ::com::sun::star::awt::XGraphics,
                         public ::cppu::OWeakObject
 {
 private:
-    NAMESPACE_VOS(IMutex)&  mrMutex;    // Reference to SolarMutex
+    osl::SolarMutex&    mrMutex;    // Reference to SolarMutex
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice> mxDevice; // nur um bei getDevice() immer das gleiche zurueckzugeben
 
     OutputDevice*   mpOutputDevice;
@@ -74,7 +74,7 @@ private:
     Region*         mpClipRegion;
 
 protected:
-    NAMESPACE_VOS(IMutex)&  GetMutex() { return mrMutex; }
+    osl::SolarMutex&    GetMutex() { return mrMutex; }
 
 public:
                     VCLXGraphics();

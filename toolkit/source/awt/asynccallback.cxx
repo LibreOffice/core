@@ -30,7 +30,7 @@
 #include "precompiled_toolkit.hxx"
 
 #include "vcl/svapp.hxx"
-#include "vos/mutex.hxx"
+#include "osl/mutex.hxx"
 #include "sal/config.h"
 #include "cppuhelper/factory.hxx"
 #include "cppuhelper/implementationentry.hxx"
@@ -125,7 +125,8 @@ void SAL_CALL AsyncCallback::addCallback(const css::uno::Reference< css::awt::XC
 {
     if ( Application::IsInMain() )
     {
-        osl::Guard< vos::IMutex > aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
+
         CallbackData* pCallbackData = new CallbackData( xCallback, aData );
         Application::PostUserEvent( STATIC_LINK( this, AsyncCallback, Notify_Impl ), pCallbackData );
     }

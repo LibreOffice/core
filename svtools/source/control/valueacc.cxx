@@ -846,7 +846,7 @@ void ValueItemAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValu
 
 void ValueItemAcc::ParentDestroyed()
 {
-    const ::vos::OGuard aGuard( maMutex );
+    const ::osl::MutexGuard aGuard( maMutex );
     mpParent = NULL;
 }
 
@@ -1068,7 +1068,7 @@ lang::Locale SAL_CALL ValueItemAcc::getLocale()
 void SAL_CALL ValueItemAcc::addEventListener( const uno::Reference< accessibility::XAccessibleEventListener >& rxListener )
     throw (uno::RuntimeException)
 {
-    const ::vos::OGuard aGuard( maMutex );
+    const ::osl::MutexGuard aGuard( maMutex );
 
     if( rxListener.is() )
     {
@@ -1093,7 +1093,7 @@ void SAL_CALL ValueItemAcc::addEventListener( const uno::Reference< accessibilit
 void SAL_CALL ValueItemAcc::removeEventListener( const uno::Reference< accessibility::XAccessibleEventListener >& rxListener )
     throw (uno::RuntimeException)
 {
-    const ::vos::OGuard aGuard( maMutex );
+    const ::osl::MutexGuard aGuard( maMutex );
 
     if( rxListener.is() )
     {

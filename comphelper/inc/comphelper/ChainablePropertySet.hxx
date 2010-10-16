@@ -39,10 +39,7 @@ namespace comphelper
 {
     class ChainablePropertySetInfo;
 }
-namespace vos
-{
-    class IMutex;
-}
+
 /*
  * A ChainablePropertySet has the following features:
  *
@@ -77,7 +74,7 @@ namespace comphelper
         friend class MasterPropertySet;
     protected:
         ChainablePropertySetInfo *mpInfo;
-        vos::IMutex *mpMutex;
+        osl::SolarMutex* mpMutex;
         ::com::sun::star::uno::Reference < com::sun::star::beans::XPropertySetInfo > mxInfo;
         void lockMutex();
         void unlockMutex();
@@ -109,7 +106,7 @@ namespace comphelper
             throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException );
 
     public:
-        ChainablePropertySet( comphelper::ChainablePropertySetInfo* pInfo, vos::IMutex *pMutex = NULL )
+        ChainablePropertySet( comphelper::ChainablePropertySetInfo* pInfo, osl::SolarMutex* pMutex = NULL )
             throw();
         virtual ~ChainablePropertySet()
             throw();

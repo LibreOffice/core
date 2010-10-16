@@ -486,7 +486,7 @@ void OExtCommandLineImpl::init()
 
 namespace
 {
-    struct lclMutex : public rtl::Static< NAMESPACE_VOS(OMutex), lclMutex > {};
+    struct lclMutex : public rtl::Static< ::osl::Mutex, lclMutex > {};
 }
 
 OExtCommandLineImpl* OExtCommandLine::pExtImpl=0;
@@ -499,7 +499,7 @@ VOS_IMPLEMENT_CLASSINFO(
 
 OExtCommandLine::OExtCommandLine()
 {
-    OGuard Guard(lclMutex::get());
+    ::osl::MutexGuard Guard(lclMutex::get());
 
     if ( pExtImpl == NULL )
     {

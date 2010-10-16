@@ -38,7 +38,7 @@
 #include <excpt.h>
 #endif
 #include <osl/file.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <tools/debug.hxx>
 #include <wincomp.hxx>
 #include <salids.hrc>
@@ -660,7 +660,7 @@ WinSalInstance::WinSalInstance()
 {
     mhComWnd                 = 0;
     mpSalYieldMutex          = new SalYieldMutex( this );
-    mpSalWaitMutex           = new vos::OMutex;
+    mpSalWaitMutex           = new osl::Mutex;
     mnYieldWaitCount         = 0;
     mpSalYieldMutex->acquire();
     ::tools::SolarMutex::SetSolarMutex( mpSalYieldMutex );
@@ -679,7 +679,7 @@ WinSalInstance::~WinSalInstance()
 
 // -----------------------------------------------------------------------
 
-vos::IMutex* WinSalInstance::GetYieldMutex()
+osl::SolarMutex* WinSalInstance::GetYieldMutex()
 {
     return mpSalYieldMutex;
 }

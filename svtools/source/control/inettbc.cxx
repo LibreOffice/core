@@ -54,7 +54,7 @@
 
 #include <vcl/toolbox.hxx>
 #include <osl/thread.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/historyoptions.hxx>
 #include <svl/eitem.hxx>
@@ -113,7 +113,7 @@ public:
 // -----------------------------------------------------------------------
 class SvtMatchContext_Impl : public ::osl::Thread
 {
-    static ::vos::OMutex*           pDirMutex;
+    static ::osl::Mutex*            pDirMutex;
 
     SvStringsDtor                   aPickList;
     SvStringsDtor*                  pCompletions;
@@ -136,20 +136,20 @@ class SvtMatchContext_Impl : public ::osl::Thread
     void                            FillPicklist( SvStringsDtor& rPickList );
 
 public:
-    static ::vos::OMutex*           GetMutex();
+    static ::osl::Mutex*           GetMutex();
 
                                     SvtMatchContext_Impl( SvtURLBox* pBoxP, const String& rText );
                                     ~SvtMatchContext_Impl();
     void                            Stop();
 };
 
-::vos::OMutex* SvtMatchContext_Impl::pDirMutex = 0;
+::osl::Mutex* SvtMatchContext_Impl::pDirMutex = 0;
 
-::vos::OMutex* SvtMatchContext_Impl::GetMutex()
+::osl::Mutex* SvtMatchContext_Impl::GetMutex()
 {
-    ::vos::OGuard aGuard( ::vos::OMutex::getGlobalMutex() );
+    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if( !pDirMutex )
-        pDirMutex = new ::vos::OMutex;
+        pDirMutex = new ::osl::Mutex;
     return pDirMutex;
 }
 
@@ -601,7 +601,7 @@ String SvtURLBox::ParseSmart( String aText, String aBaseURL, String aWorkDir )
 //-------------------------------------------------------------------------
 void SvtMatchContext_Impl::run()
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetMutex() );
     if( bStop )
         // have we been stopped while we were waiting for the mutex?
         return;
@@ -977,7 +977,7 @@ BOOL SvtURLBox::ProcessKey( const KeyCode& rKey )
     if ( aCode == KEY_RETURN && GetText().Len() )
     {
         // wait for completion of matching thread
-        ::vos::OGuard aGuard( SvtMatchContext_Impl::GetMutex() );
+        ::osl::MutexGuard aGuard( SvtMatchContext_Impl::GetMutex() );
 
         if ( bAutoCompleteMode )
         {
@@ -1143,7 +1143,7 @@ void SvtURLBox::SetNoURLSelection( BOOL bSet )
 String SvtURLBox::GetURL()
 {
     // wait for end of autocompletion
-    ::vos::OGuard aGuard( SvtMatchContext_Impl::GetMutex() );
+    ::osl::MutexGuard aGuard( SvtMatchContext_Impl::GetMutex() );
 
     String aText( GetText() );
     if ( MatchesPlaceHolder( aText ) )
@@ -1239,7 +1239,7 @@ void SvtURLBox::DisableHistory()
 //-------------------------------------------------------------------------
 void SvtURLBox::SetBaseURL( const String& rURL )
 {
-    ::vos::OGuard aGuard( SvtMatchContext_Impl::GetMutex() );
+    ::osl::MutexGuard aGuard( SvtMatchContext_Impl::GetMutex() );
 
     // Reset match lists
     if ( pImp->pCompletions )

@@ -45,7 +45,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/window.h>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 
 #include <com/sun/star/i18n/XBreakIterator.hpp>

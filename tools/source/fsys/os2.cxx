@@ -42,7 +42,7 @@
 #include "comdep.hxx"
 
 #ifdef OS2
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #endif
 
 int Sys2SolarError_Impl( int nSysErr );

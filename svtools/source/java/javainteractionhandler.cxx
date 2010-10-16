@@ -43,7 +43,7 @@
 #include <com/sun/star/java/RestartRequiredException.hpp>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <tools/string.hxx>
 #include <tools/rcid.h>
 #include <jvmfwk/framework.h>

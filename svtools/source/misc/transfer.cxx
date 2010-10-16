@@ -40,7 +40,7 @@
 #endif
 #include <tools/postwin.h>
 #endif
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <rtl/memory.h>
 #include <rtl/uuid.h>
 #include <rtl/uri.hxx>

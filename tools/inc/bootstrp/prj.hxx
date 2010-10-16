@@ -32,7 +32,7 @@
 #include <tools/fsys.hxx>
 #include <tools/stream.hxx>
 #include "bootstrp/listmacr.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #define OS_NONE             0x0000
 #define OS_WIN16            0x0001
@@ -265,7 +265,7 @@ private:
 
     static Link aDBNotFoundHdl;
 protected:
-    NAMESPACE_VOS( OMutex ) aMutex;
+    osl::Mutex      aMutex;
 
     USHORT          nStarMode;
     SolarFileList   aFileList;

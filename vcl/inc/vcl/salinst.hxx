@@ -62,8 +62,6 @@ class SalSession;
 struct SystemGraphicsData;
 struct SystemWindowData;
 
-namespace vos { class IMutex; }
-
 // ---------------
 // - SalInstance -
 // ---------------
@@ -131,7 +129,7 @@ public:
     virtual SalBitmap*          CreateSalBitmap() = 0;
 
     // YieldMutex
-    virtual vos::IMutex*        GetYieldMutex() = 0;
+    virtual osl::SolarMutex*    GetYieldMutex() = 0;
     virtual ULONG               ReleaseYieldMutex() = 0;
     virtual void                AcquireYieldMutex( ULONG nCount ) = 0;
 

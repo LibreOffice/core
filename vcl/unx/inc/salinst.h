@@ -30,16 +30,12 @@
 #define _SV_SALINST_H
 
 #include <vcl/sv.h>
-#ifndef _VOS_MUTEX_HXX
-#include <vos/mutex.hxx>
-#endif
-#ifndef _THREAD_HXX_
 #include <osl/thread.hxx>
-#endif
 #include <vcl/dllapi.h>
 #include <vcl/salinst.hxx>
+#include <vcl/solarmutex.hxx>
 
-class VCL_DLLPUBLIC SalYieldMutex : public NAMESPACE_VOS(OMutex)
+class VCL_DLLPUBLIC SalYieldMutex : public vcl::SolarMutexObject
 {
 protected:
     ULONG                                       mnCount;
@@ -99,7 +95,7 @@ public:
     virtual SalBitmap*          CreateSalBitmap();
     virtual SalSession*         CreateSalSession();
 
-    virtual vos::IMutex*        GetYieldMutex();
+    virtual osl::SolarMutex*    GetYieldMutex();
     virtual ULONG               ReleaseYieldMutex();
     virtual void                AcquireYieldMutex( ULONG nCount );
 

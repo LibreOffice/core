@@ -32,14 +32,14 @@
 
 namespace tools
 {
-    static ::vos::IMutex* pSolarMutex = 0;
+    static ::osl::SolarMutex* pSolarMutex = 0;
 
-    ::vos::IMutex* SolarMutex::GetSolarMutex()
+    ::osl::SolarMutex* SolarMutex::GetSolarMutex()
     {
         return pSolarMutex;
     }
 
-    void SolarMutex::SetSolarMutex( ::vos::IMutex* pMutex )
+    void SolarMutex::SetSolarMutex( ::osl::SolarMutex* pMutex )
     {
         pSolarMutex = pMutex;
     }

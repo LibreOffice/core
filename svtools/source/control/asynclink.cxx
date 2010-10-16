@@ -30,7 +30,7 @@
 #include "precompiled_svtools.hxx"
 
 #include <asynclink.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <tools/debug.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/svapp.hxx>
@@ -40,7 +40,7 @@ namespace svtools {
 
 void AsynchronLink::CreateMutex()
 {
-    if( !_pMutex ) _pMutex = new vos::OMutex;
+    if( !_pMutex ) _pMutex = new osl::Mutex;
 }
 
 void AsynchronLink::Call( void* pObj, BOOL

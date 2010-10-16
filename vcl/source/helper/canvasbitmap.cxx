@@ -35,7 +35,7 @@
 #include <com/sun/star/rendering/RenderingIntent.hpp>
 
 #include <rtl/instance.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <tools/diagnose_ex.h>
 #include <vcl/canvasbitmap.hxx>

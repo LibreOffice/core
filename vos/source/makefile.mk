@@ -37,7 +37,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-SLOFILES=       $(SLO)$/mutex.obj       \
+SLOFILES=  \
                 $(SLO)$/object.obj      \
                 $(SLO)$/refernce.obj    \
                 $(SLO)$/thread.obj      \
@@ -48,7 +48,7 @@ SLOFILES=       $(SLO)$/mutex.obj       \
 
 
 .IF "$(UPDATER)"=="YES"
-OBJFILES=       $(OBJ)$/mutex.obj       \
+OBJFILES=       \
                 $(OBJ)$/object.obj      \
                 $(OBJ)$/refernce.obj    \
                 $(OBJ)$/thread.obj      \

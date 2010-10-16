@@ -38,7 +38,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <rtl/memory.h>
 #include <rtl/uuid.h>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <vcl/menu.hxx>
 #include <vcl/keycod.hxx>

@@ -340,7 +340,7 @@
 #include "vcl/vclenum.hxx"
 #include "vcl/virdev.hxx"
 
-#include "vos/mutex.hxx"
+#include "osl/mutex.hxx"
 //---MARKER---
 #endif
 

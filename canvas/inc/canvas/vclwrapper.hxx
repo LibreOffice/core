@@ -30,7 +30,7 @@
 #define INCLUDED_CANVAS_VCLWRAPPER_HXX
 
 #include <osl/mutex.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 

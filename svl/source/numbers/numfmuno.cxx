@@ -32,7 +32,7 @@
 #include <tools/color.hxx>
 #include <tools/debug.hxx>
 #include <i18npool/mslangid.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 
 #include <com/sun/star/util/Date.hpp>

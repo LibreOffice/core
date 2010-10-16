@@ -36,7 +36,6 @@
 /** === end UNO includes === **/
 
 #include <cppuhelper/interfacecontainer.hxx>
-#include <vos/mutex.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>
@@ -70,11 +69,11 @@ namespace toolkit
     //==================================================================================================================
     struct WindowStyleSettings_Data
     {
-        ::vos::IMutex&                      rMutex;
+        ::osl::SolarMutex&                      rMutex;
         VCLXWindow*                         pOwningWindow;
         ::cppu::OInterfaceContainerHelper   aStyleChangeListeners;
 
-        WindowStyleSettings_Data( ::vos::IMutex& i_rWindowMutex, ::osl::Mutex& i_rListenerMutex, VCLXWindow& i_rOwningWindow )
+        WindowStyleSettings_Data( ::osl::SolarMutex& i_rWindowMutex, ::osl::Mutex& i_rListenerMutex, VCLXWindow& i_rOwningWindow )
             :rMutex( i_rWindowMutex )
             ,pOwningWindow( &i_rOwningWindow )
             ,aStyleChangeListeners( i_rListenerMutex )
@@ -118,14 +117,14 @@ namespace toolkit
         }
 
     private:
-        ::vos::OGuard   m_aGuard;
+        ::osl::SolarMutexGuard   m_aGuard;
     };
 
     //==================================================================================================================
     //= WindowStyleSettings
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
-    WindowStyleSettings::WindowStyleSettings( ::vos::IMutex& i_rWindowMutex, ::osl::Mutex& i_rListenerMutex, VCLXWindow& i_rOwningWindow )
+    WindowStyleSettings::WindowStyleSettings( ::osl::SolarMutex& i_rWindowMutex, ::osl::Mutex& i_rListenerMutex, VCLXWindow& i_rOwningWindow )
         :m_pData( new WindowStyleSettings_Data( i_rWindowMutex, i_rListenerMutex, i_rOwningWindow ) )
     {
         Window* pWindow = i_rOwningWindow.GetWindow();

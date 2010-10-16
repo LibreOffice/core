@@ -54,7 +54,7 @@
 #include <cppuhelper/implbase4.hxx>
 #include "vcl/svapp.hxx"
 #include <rtl/logfile.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 using namespace com::sun::star;
 

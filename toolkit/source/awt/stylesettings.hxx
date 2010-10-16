@@ -36,10 +36,6 @@
 
 #include <boost/scoped_ptr.hpp>
 
-namespace vos
-{
-    class IMutex;
-}
 namespace osl
 {
     class Mutex;
@@ -61,7 +57,7 @@ namespace toolkit
     class WindowStyleSettings : public WindowStyleSettings_Base
     {
     public:
-        WindowStyleSettings( ::vos::IMutex& i_rWindowMutex, ::osl::Mutex& i_rListenerMutex, VCLXWindow& i_rOwningWindow );
+        WindowStyleSettings( ::osl::SolarMutex& i_rWindowMutex, ::osl::Mutex& i_rListenerMutex, VCLXWindow& i_rOwningWindow );
         ~WindowStyleSettings();
 
         void dispose();

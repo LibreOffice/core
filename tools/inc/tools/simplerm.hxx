@@ -36,7 +36,7 @@
 #ifndef _TOOLS_SIMPLERESMGR_HXX_
 #define _TOOLS_SIMPLERESMGR_HXX_
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <tools/resid.hxx>
 #include <i18npool/lang.h>
 #include <tools/string.hxx>
@@ -47,7 +47,7 @@ class InternalResMgr;
 class TOOLS_DLLPUBLIC SimpleResMgr
 {
 protected:
-    NAMESPACE_VOS(OMutex)   m_aAccessSafety;
+    osl::Mutex              m_aAccessSafety;
     InternalResMgr*         m_pResImpl;
 
 public:

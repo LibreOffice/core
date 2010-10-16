@@ -29,7 +29,7 @@
 #define _SV_SALINST_H
 
 #include "vcl/sv.h"
-#include "vos/mutex.hxx"
+#include "osl/mutex.hxx"
 #include "osl/thread.hxx"
 #include "vcl/salinst.hxx"
 #include "osl/conditn.h"
@@ -46,7 +46,7 @@ class Image;
 // - SalYieldMutex -
 // -----------------
 
-class SalYieldMutex : public vos::OMutex
+class SalYieldMutex : public vcl::SolarMutexObject
 {
     ULONG                                       mnCount;
     oslThreadIdentifier                         mnThreadId;
@@ -60,7 +60,7 @@ public:
     oslThreadIdentifier                         GetThreadId() const { return mnThreadId; }
 };
 
-#define YIELD_GUARD vos::OGuard aGuard( GetSalData()->mpFirstInstance->GetYieldMutex() )
+//#define YIELD_GUARD vos::OGuard aGuard( GetSalData()->mpFirstInstance->GetYieldMutex() )
 
 
 // -------------------
@@ -131,7 +131,7 @@ public:
     virtual SalI18NImeStatus*   CreateI18NImeStatus();
     virtual SalSystem*          CreateSalSystem();
     virtual SalBitmap*          CreateSalBitmap();
-    virtual vos::IMutex*        GetYieldMutex();
+    virtual osl::SolarMutex*    GetYieldMutex();
     virtual ULONG               ReleaseYieldMutex();
     virtual void                AcquireYieldMutex( ULONG nCount );
     virtual void                Yield( bool bWait, bool bHandleAllCurrentEvents );

@@ -100,7 +100,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXTabControl, VCLXWindow, VCLXTabControl_Bas
 void SAL_CALL VCLXTabControl::dispose( ) throw(uno::RuntimeException)
 {
     {
-        ::vos::OGuard aGuard( GetMutex() );
+        ::osl::SolarMutexGuard aGuard( GetMutex() );
 
         EventObject aDisposeEvent;
         aDisposeEvent.Source = W3K_EXPLICIT_CAST (*this);
@@ -220,7 +220,7 @@ uno::Sequence< NamedValue > SAL_CALL VCLXTabControl::getTabProps( sal_Int32 ID )
 // TODO: draw tab border here
 void SAL_CALL VCLXTabControl::draw( sal_Int32 nX, sal_Int32 nY ) throw(uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     TabControl *pTabControl = getTabControl();
     TabPage *pTabPage = pTabControl->GetTabPage( sal::static_int_cast< USHORT >(  getActiveTabID() ) );
@@ -447,7 +447,7 @@ awt::Size SAL_CALL VCLXTabControl::getMinimumSize()
 
 void VCLXTabControl::ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent )
 {
-    ::vos::OClearableGuard aGuard( GetMutex() );
+    ::osl::ClearableSolarMutexGuard aGuard( GetMutex() );
     TabControl* pTabControl = static_cast< TabControl* >( GetWindow() );
     if ( !pTabControl )
         return;

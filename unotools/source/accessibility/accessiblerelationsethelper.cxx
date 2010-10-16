@@ -168,7 +168,7 @@ sal_Int32 SAL_CALL
     AccessibleRelationSetHelper::getRelationCount(  )
         throw (uno::RuntimeException)
 {
-    ::vos::OGuard aGuard (maMutex);
+    osl::MutexGuard aGuard (maMutex);
     return mpHelperImpl->getRelationCount();
 }
 
@@ -190,7 +190,7 @@ sal_Int32 SAL_CALL
             throw (lang::IndexOutOfBoundsException,
                     uno::RuntimeException)
 {
-    ::vos::OGuard aGuard (maMutex);
+    osl::MutexGuard aGuard (maMutex);
     return mpHelperImpl->getRelation(nIndex);
 }
 
@@ -210,7 +210,7 @@ sal_Bool SAL_CALL
     AccessibleRelationSetHelper::containsRelation( sal_Int16 aRelationType )
         throw (uno::RuntimeException)
 {
-    ::vos::OGuard aGuard (maMutex);
+    osl::MutexGuard aGuard (maMutex);
     return mpHelperImpl->containsRelation(aRelationType);
 }
 
@@ -229,14 +229,14 @@ AccessibleRelation SAL_CALL
         AccessibleRelationSetHelper::getRelationByType( sal_Int16 aRelationType )
             throw (uno::RuntimeException)
 {
-    ::vos::OGuard aGuard (maMutex);
+    osl::MutexGuard aGuard (maMutex);
     return mpHelperImpl->getRelationByType(aRelationType);
 }
 
 void AccessibleRelationSetHelper::AddRelation(const AccessibleRelation& rRelation)
             throw (uno::RuntimeException)
 {
-    ::vos::OGuard aGuard (maMutex);
+    osl::MutexGuard aGuard (maMutex);
     mpHelperImpl->AddRelation(rRelation);
 }
 
@@ -246,7 +246,7 @@ uno::Sequence< ::com::sun::star::uno::Type>
     AccessibleRelationSetHelper::getTypes (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard (maMutex);
+    osl::MutexGuard aGuard (maMutex);
     const ::com::sun::star::uno::Type aTypeList[] = {
         ::getCppuType((const uno::Reference<
             XAccessibleRelationSet>*)0),
@@ -262,7 +262,7 @@ uno::Sequence<sal_Int8> SAL_CALL
     AccessibleRelationSetHelper::getImplementationId (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard (maMutex);
+    osl::MutexGuard aGuard (maMutex);
     static uno::Sequence<sal_Int8> aId;
     if (aId.getLength() == 0)
     {

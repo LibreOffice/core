@@ -33,7 +33,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include "cliplistener.hxx"
 #include <svtools/transfer.hxx>

@@ -45,7 +45,7 @@
 #include "vcl/svapp.hxx"
 #include "vcl/svdata.hxx"
 #include "vcl/salinst.hxx"
-#include "vos/mutex.hxx"
+#include "osl/mutex.hxx"
 #include "osl/mutex.hxx"
 
 #include "cppuhelper/compbase1.hxx"

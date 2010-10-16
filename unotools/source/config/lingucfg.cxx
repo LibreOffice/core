@@ -39,7 +39,7 @@
 #include "com/sun/star/util/XMacroExpander.hpp"
 #include "com/sun/star/beans/XPropertySet.hpp"
 #include <rtl/uri.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <i18npool/mslangid.hxx>
 #include <tools/debug.hxx>
 #include <tools/string.hxx>

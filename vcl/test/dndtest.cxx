@@ -50,7 +50,6 @@
 #include <stdio.h>
 
 using namespace ::rtl;
-using namespace ::vos;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

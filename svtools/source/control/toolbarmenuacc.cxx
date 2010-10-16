@@ -847,7 +847,7 @@ Locale SAL_CALL ToolbarMenuEntryAcc::getLocale() throw (IllegalAccessibleCompone
 
 void SAL_CALL ToolbarMenuEntryAcc::addEventListener( const Reference< XAccessibleEventListener >& rxListener ) throw (RuntimeException)
 {
-    const ::vos::OGuard aGuard( maMutex );
+    const ::osl::MutexGuard aGuard( maMutex );
 
     if( rxListener.is() )
     {
@@ -871,7 +871,7 @@ void SAL_CALL ToolbarMenuEntryAcc::addEventListener( const Reference< XAccessibl
 
 void SAL_CALL ToolbarMenuEntryAcc::removeEventListener( const Reference< XAccessibleEventListener >& rxListener ) throw (RuntimeException)
 {
-    const ::vos::OGuard aGuard( maMutex );
+    const ::osl::MutexGuard aGuard( maMutex );
 
     if( rxListener.is() )
     {

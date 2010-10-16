@@ -41,6 +41,7 @@
 #include <vcl/svdata.hxx>
 #include <vcl/salatype.hxx>
 #include <vcl/saldatabasic.hxx>
+#include <vcl/solarmutex.hxx>
 #include <sal/types.h>
 
 // plugin factory function
@@ -295,7 +296,7 @@ SalBitmap* SvpSalInstance::CreateSalBitmap()
     return new SvpSalBitmap();
 }
 
-vos::IMutex* SvpSalInstance::GetYieldMutex()
+osl::SolarMutex* SvpSalInstance::GetYieldMutex()
 {
     return &m_aYieldMutex;
 }
@@ -464,7 +465,7 @@ SvpSalYieldMutex::SvpSalYieldMutex()
 
 void SvpSalYieldMutex::acquire()
 {
-    OMutex::acquire();
+    SolarMutexObject::acquire();
     mnThreadId = osl::Thread::getCurrentIdentifier();
     mnCount++;
 }
@@ -477,12 +478,12 @@ void SvpSalYieldMutex::release()
             mnThreadId = 0;
         mnCount--;
     }
-    OMutex::release();
+    SolarMutexObject::release();
 }
 
 sal_Bool SvpSalYieldMutex::tryToAcquire()
 {
-    if ( OMutex::tryToAcquire() )
+    if ( SolarMutexObject::tryToAcquire() )
     {
         mnThreadId = osl::Thread::getCurrentIdentifier();
         mnCount++;

@@ -30,7 +30,7 @@
 #include "precompiled_comphelper.hxx"
 #include <comphelper/ChainablePropertySet.hxx>
 #include <comphelper/ChainablePropertySetInfo.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <memory>       // STL auto_ptr
 
@@ -41,9 +41,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
-using ::vos::IMutex;
 
-ChainablePropertySet::ChainablePropertySet( comphelper::ChainablePropertySetInfo* pInfo, vos::IMutex *pMutex )
+ChainablePropertySet::ChainablePropertySet( comphelper::ChainablePropertySetInfo* pInfo, osl::SolarMutex* pMutex )
     throw()
 : mpInfo ( pInfo )
 , mpMutex ( pMutex )
@@ -79,9 +78,9 @@ void SAL_CALL ChainablePropertySet::setPropertyValue( const ::rtl::OUString& rPr
     throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
-    std::auto_ptr< vos::OGuard > pMutexGuard;
+    std::auto_ptr< osl::SolarMutexGuard > pMutexGuard;
     if (mpMutex)
-        pMutexGuard.reset( new vos::OGuard(mpMutex) );
+        pMutexGuard.reset( new osl::SolarMutexGuard(mpMutex) );
 
     PropertyInfoHash::const_iterator aIter = mpInfo->maMap.find ( rPropertyName );
 
@@ -97,9 +96,9 @@ Any SAL_CALL ChainablePropertySet::getPropertyValue( const ::rtl::OUString& rPro
     throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
-    std::auto_ptr< vos::OGuard > pMutexGuard;
+    std::auto_ptr< osl::SolarMutexGuard > pMutexGuard;
     if (mpMutex)
-        pMutexGuard.reset( new vos::OGuard(mpMutex) );
+        pMutexGuard.reset( new osl::SolarMutexGuard(mpMutex) );
 
     PropertyInfoHash::const_iterator aIter = mpInfo->maMap.find ( rPropertyName );
 
@@ -143,9 +142,9 @@ void SAL_CALL ChainablePropertySet::setPropertyValues( const Sequence< ::rtl::OU
     throw(PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
-    std::auto_ptr< vos::OGuard > pMutexGuard;
+    std::auto_ptr< osl::SolarMutexGuard > pMutexGuard;
     if (mpMutex)
-        pMutexGuard.reset( new vos::OGuard(mpMutex) );
+        pMutexGuard.reset( new osl::SolarMutexGuard(mpMutex) );
 
     const sal_Int32 nCount = aPropertyNames.getLength();
 
@@ -177,9 +176,9 @@ Sequence< Any > SAL_CALL ChainablePropertySet::getPropertyValues( const Sequence
     throw(RuntimeException)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
-    std::auto_ptr< vos::OGuard > pMutexGuard;
+    std::auto_ptr< osl::SolarMutexGuard > pMutexGuard;
     if (mpMutex)
-        pMutexGuard.reset( new vos::OGuard(mpMutex) );
+        pMutexGuard.reset( new osl::SolarMutexGuard(mpMutex) );
 
     const sal_Int32 nCount = aPropertyNames.getLength();
 

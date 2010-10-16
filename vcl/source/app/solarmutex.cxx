@@ -26,49 +26,32 @@
  *
  ************************************************************************/
 
-#include <osl/diagnose.h>
-#include <vos/object.hxx>
-#include <vos/mutex.hxx>
+#include <vcl/solarmutex.hxx>
 
-using namespace vos;
+using namespace vcl;
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  class Mutex
-//
-
-VOS_IMPLEMENT_CLASSINFO(VOS_CLASSNAME(OMutex, vos), VOS_NAMESPACE(OMutex, vos), VOS_NAMESPACE(OObject, vos), 0);
-
-IMutex& OMutex::getGlobalMutex()
+SolarMutexObject::SolarMutexObject() : m_solarMutex( osl_createMutex() )
 {
-    static OMutex theGlobalMutex;
-
-    return theGlobalMutex;
 }
 
-OMutex::OMutex()
+SolarMutexObject::~SolarMutexObject()
 {
-    m_Impl= osl_createMutex();
+    osl_destroyMutex( m_solarMutex );
 }
 
-OMutex::~OMutex()
+void SolarMutexObject::acquire()
 {
-    osl_destroyMutex(m_Impl);
+    osl_acquireMutex( m_solarMutex );
 }
 
-void OMutex::acquire()
+sal_Bool SolarMutexObject::tryToAcquire()
 {
-    osl_acquireMutex(m_Impl);
+    return osl_tryToAcquireMutex( m_solarMutex );
 }
 
-sal_Bool OMutex::tryToAcquire()
+void SolarMutexObject::release()
 {
-    return osl_tryToAcquireMutex(m_Impl);
-}
-
-void OMutex::release()
-{
-    osl_releaseMutex(m_Impl);
+    osl_releaseMutex( m_solarMutex );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

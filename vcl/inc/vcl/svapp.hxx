@@ -30,7 +30,7 @@
 #define _SV_SVAPP_HXX
 
 #include <osl/thread.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <tools/string.hxx>
 #include <tools/link.hxx>
 #include <tools/unqid.hxx>
@@ -279,7 +279,7 @@ public:
     static void                 Reschedule( bool bAllEvents = false );
     static void                 Yield( bool bAllEvents = false );
     static void                 EndYield();
-    static vos::IMutex&                     GetSolarMutex();
+    static osl::SolarMutex&     GetSolarMutex();
     static oslThreadIdentifier  GetMainThreadIdentifier();
     static ULONG                ReleaseSolarMutex();
     static void                 AcquireSolarMutex( ULONG nCount );
@@ -504,7 +504,7 @@ class VCL_DLLPUBLIC SolarMutexGuard
     private:
         SolarMutexGuard( const SolarMutexGuard& );
         const SolarMutexGuard& operator = ( const SolarMutexGuard& );
-        ::vos::IMutex& m_solarMutex;
+        ::osl::SolarMutex& m_solarMutex;
 
     public:
 
@@ -557,7 +557,7 @@ public:
             }
         }
 protected:
-    vos::IMutex& m_solarMutex;
+    osl::SolarMutex& m_solarMutex;
 };
 
 

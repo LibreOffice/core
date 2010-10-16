@@ -34,7 +34,7 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/weak.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <com/sun/star/awt/XUnitConversion.hpp>
 
@@ -58,7 +58,7 @@ class TOOLKIT_DLLPUBLIC VCLXDevice :    public ::com::sun::star::awt::XDevice,
     friend class VCLXGraphics;
 
 private:
-    NAMESPACE_VOS(IMutex)&  mrMutex;    // Reference to SolarMutex
+    ::osl::SolarMutex&      mrMutex;  // Reference to SolarMutex
     OutputDevice*           mpOutputDevice;
 
 public:
@@ -66,7 +66,7 @@ public:
     sal_uInt32              nFlags;
 
 protected:
-    NAMESPACE_VOS(IMutex)&  GetMutex() { return mrMutex; }
+    ::osl::SolarMutex&       GetMutex() { return mrMutex; }
     void                    DestroyOutputDevice();
 
 public:

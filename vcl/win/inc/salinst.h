@@ -31,8 +31,6 @@
 #include <vcl/sv.h>
 #include <vcl/salinst.hxx>
 
-namespace vos { class OMutex; }
-
 // -------------------
 // - SalInstanceData -
 // -------------------
@@ -45,7 +43,7 @@ public:
     HINSTANCE           mhInst;                 // Instance Handle
     HWND                mhComWnd;               // window, for communication (between threads and the main thread)
     SalYieldMutex*      mpSalYieldMutex;        // Sal-Yield-Mutex
-    vos::OMutex*        mpSalWaitMutex;         // Sal-Wait-Mutex
+    osl::Mutex*         mpSalWaitMutex;         // Sal-Wait-Mutex
     USHORT              mnYieldWaitCount;       // Wait-Count
 public:
     WinSalInstance();
@@ -74,7 +72,7 @@ public:
     virtual SalI18NImeStatus*   CreateI18NImeStatus();
     virtual SalSystem*          CreateSalSystem();
     virtual SalBitmap*          CreateSalBitmap();
-    virtual vos::IMutex*        GetYieldMutex();
+    virtual osl::SolarMutex*    GetYieldMutex();
     virtual ULONG               ReleaseYieldMutex();
     virtual void                AcquireYieldMutex( ULONG nCount );
     virtual void                Yield( bool bWait, bool bHandleAllCurrentEvents );

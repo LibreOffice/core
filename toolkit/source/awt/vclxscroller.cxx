@@ -69,7 +69,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER1( VCLXScroller, VCLXWindow );
 void SAL_CALL VCLXScroller::dispose() throw(RuntimeException)
 {
     {
-        ::vos::OGuard aGuard( GetMutex() );
+        ::osl::SolarMutexGuard aGuard( GetMutex() );
 
         EventObject aDisposeEvent;
         aDisposeEvent.Source = W3K_EXPLICIT_CAST (*this);
@@ -149,24 +149,12 @@ void SAL_CALL VCLXScroller::allocateArea(
 
 void VCLXScroller::ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent )
 {
-/*
-    ::vos::OClearableGuard aGuard( GetMutex() );
-
-    switch ( _rVclWindowEvent.GetId() )
-    {
-        default:
-            aGuard.clear();
-*/
-            VCLXWindow::ProcessWindowEvent( _rVclWindowEvent );
-/*
-        break;
-    }
-*/
+    VCLXWindow::ProcessWindowEvent( _rVclWindowEvent );
 }
 
 void SAL_CALL VCLXScroller::setProperty( const ::rtl::OUString& PropertyName, const Any &Value ) throw(RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     if ( GetWindow() )
     {
@@ -185,7 +173,7 @@ void SAL_CALL VCLXScroller::setProperty( const ::rtl::OUString& PropertyName, co
 
 Any SAL_CALL VCLXScroller::getProperty( const ::rtl::OUString& PropertyName ) throw(RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    ::osl::SolarMutexGuard aGuard( GetMutex() );
 
     Any aReturn;
     if ( GetWindow() )

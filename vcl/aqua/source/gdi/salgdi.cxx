@@ -46,7 +46,7 @@
 #include "osl/file.hxx"
 #include "osl/process.h"
 
-#include "vos/mutex.hxx"
+#include "osl/mutex.hxx"
 
 #include "rtl/bootstrap.h"
 #include "rtl/strbuf.hxx"

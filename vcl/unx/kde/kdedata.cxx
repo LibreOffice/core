@@ -55,7 +55,7 @@
 #include "i18n_im.hxx"
 #include "i18n_xkb.hxx"
 #include <vos/process.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 /* #i59042# override KApplications method for session management
  * since it will interfere badly with our own.

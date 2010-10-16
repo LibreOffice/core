@@ -60,6 +60,7 @@ SLOFILES=	$(SLO)$/dbggui.obj		\
             $(SLO)$/vclevent.obj	\
             $(SLO)$/i18nhelp.obj	\
             $(SLO)$/salvtables.obj	\
+            $(SLO)$/solarmutex.obj      \
             $(SLO)$/session.obj
 
 # --- Targets ------------------------------------------------------

@@ -34,7 +34,7 @@
 #include <vcl/salinst.hxx>
 #include <vcl/salframe.hxx>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <osl/process.h>
 #include <osl/file.hxx>

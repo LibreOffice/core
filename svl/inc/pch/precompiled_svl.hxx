@@ -421,7 +421,7 @@
 #include <unotools/processfactory.hxx>
 
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vos/process.hxx>
 #include <vos/security.hxx>
 #include <vos/thread.hxx>

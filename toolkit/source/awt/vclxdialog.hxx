@@ -54,7 +54,7 @@ private:
     VCLXDialog& operator=( const VCLXDialog& ); // never implemented
 
 protected:
-    vos::IMutex& GetMutexImpl();
+    osl::SolarMutex& GetMutexImpl();
     Window* GetWindowImpl();
     ::cppu::OInterfaceContainerHelper& GetTopWindowListenersImpl();
 

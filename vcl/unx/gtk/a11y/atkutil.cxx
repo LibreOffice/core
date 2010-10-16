@@ -44,7 +44,7 @@
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 // <--
 #include <cppuhelper/implbase1.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
 
 #include <vcl/svapp.hxx>

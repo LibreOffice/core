@@ -32,7 +32,7 @@
 #include "descriptor.hxx"
 
 #include <rtl/uuid.h>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <svtools/filter.hxx>
 #include <svl/itemprop.hxx>

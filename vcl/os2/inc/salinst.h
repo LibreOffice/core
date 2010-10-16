@@ -30,6 +30,7 @@
 
 #include <vcl/sv.h>
 #include <vcl/salinst.hxx>
+#include <vcl/solarmutex.hxx>
 
 namespace vos { class OMutex; }
 
@@ -52,7 +53,7 @@ public:
     char**                  mpArgv;                 // commandline
     HWND                    mhComWnd;               // window, for communication (between threads and the main thread)
     SalYieldMutex*          mpSalYieldMutex;        // Sal-Yield-Mutex
-    vos::OMutex*            mpSalWaitMutex;         // Sal-Wait-Mutex
+    osl::Mutex*             mpSalWaitMutex;         // Sal-Wait-Mutex
     USHORT              mnYieldWaitCount;       // Wait-Count
 
 public:
@@ -82,7 +83,7 @@ public:
     virtual SalI18NImeStatus*   CreateI18NImeStatus();
     virtual SalSystem*          CreateSalSystem();
     virtual SalBitmap*          CreateSalBitmap();
-    virtual vos::IMutex*        GetYieldMutex();
+    virtual osl::SolarMutex*    GetYieldMutex();
     virtual ULONG               ReleaseYieldMutex();
     virtual void                AcquireYieldMutex( ULONG nCount );
     virtual void                Yield( bool, bool );

@@ -49,7 +49,7 @@
 #include "vcl/salatype.hxx"
 #include "vcl/helper.hxx"
 #include <tools/solarmutex.hxx>
-#include "vos/mutex.hxx"
+#include "osl/mutex.hxx"
 #include <sal/macros.h>
 
 // -------------------------------------------------------------------------
@@ -67,7 +67,7 @@ SalYieldMutex::SalYieldMutex()
 
 void SalYieldMutex::acquire()
 {
-    OMutex::acquire();
+    SolarMutexObject::acquire();
     mnThreadId = osl::Thread::getCurrentIdentifier();
     mnCount++;
 }
@@ -80,12 +80,12 @@ void SalYieldMutex::release()
             mnThreadId = 0;
         mnCount--;
     }
-    OMutex::release();
+    SolarMutexObject::release();
 }
 
 sal_Bool SalYieldMutex::tryToAcquire()
 {
-    if ( OMutex::tryToAcquire() )
+    if ( SolarMutexObject::tryToAcquire() )
     {
         mnThreadId = osl::Thread::getCurrentIdentifier();
         mnCount++;
@@ -222,7 +222,7 @@ bool X11SalInstance::AnyInput(USHORT nType)
     return bRet;
 }
 
-vos::IMutex* X11SalInstance::GetYieldMutex()
+osl::SolarMutex* X11SalInstance::GetYieldMutex()
 {
     return mpSalYieldMutex;
 }

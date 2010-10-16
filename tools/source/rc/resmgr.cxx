@@ -1919,7 +1919,7 @@ SimpleResMgr* SimpleResMgr::Create( const sal_Char* pPrefixName, com::sun::star:
 // -----------------------------------------------------------------------
 bool SimpleResMgr::IsAvailable( RESOURCE_TYPE _resourceType, sal_uInt32 _resourceId )
 {
-    NAMESPACE_VOS(OGuard) aGuard(m_aAccessSafety);
+    osl::MutexGuard aGuard(m_aAccessSafety);
 
     if ( ( RSC_STRING != _resourceType ) && ( RSC_RESOURCE != _resourceType ) )
         return false;
@@ -1931,7 +1931,7 @@ bool SimpleResMgr::IsAvailable( RESOURCE_TYPE _resourceType, sal_uInt32 _resourc
 // -----------------------------------------------------------------------
 UniString SimpleResMgr::ReadString( sal_uInt32 nId )
 {
-    NAMESPACE_VOS(OGuard) aGuard(m_aAccessSafety);
+    osl::MutexGuard aGuard(m_aAccessSafety);
 
     DBG_ASSERT( m_pResImpl, "SimpleResMgr::ReadString : have no impl class !" );
     // perhaps constructed with an invalid filename ?
@@ -2002,7 +2002,7 @@ const ::com::sun::star::lang::Locale& SimpleResMgr::GetLocale() const
 
 sal_uInt32 SimpleResMgr::ReadBlob( sal_uInt32 nId, void** pBuffer )
 {
-    NAMESPACE_VOS(OGuard) aGuard(m_aAccessSafety);
+    osl::MutexGuard aGuard(m_aAccessSafety);
 
     DBG_ASSERT( m_pResImpl, "SimpleResMgr::ReadBlob : have no impl class !" );
 
