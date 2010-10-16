@@ -90,7 +90,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <ctype.h>
 #include <hash_map>

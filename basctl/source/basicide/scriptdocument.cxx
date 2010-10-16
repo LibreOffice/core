@@ -81,7 +81,7 @@
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/componentcontext.hxx>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <cppuhelper/implbase1.hxx>
 

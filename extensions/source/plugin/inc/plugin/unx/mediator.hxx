@@ -32,7 +32,7 @@
 #include <tools/string.hxx>
 #include <tools/link.hxx>
 #include <osl/pipe.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
 #include <osl/thread.hxx>
 #if OSL_DEBUG_LEVEL > 1
@@ -90,8 +90,8 @@ protected:
     int                                 m_nSocket;
 
     std::vector<MediatorMessage*>       m_aMessageQueue;
-    NAMESPACE_VOS(OMutex)               m_aQueueMutex;
-    NAMESPACE_VOS(OMutex)               m_aSendMutex;
+    osl::Mutex m_aQueueMutex;
+    osl::Mutex m_aSendMutex;
     // only one thread can send a message at any given time
     osl::Condition                      m_aNewMessageCdtn;
     MediatorListener*                   m_pListener;
@@ -155,7 +155,7 @@ class MediatorListener : public osl::Thread
     friend class Mediator;
   private:
     Mediator*       m_pMediator;
-    ::vos::OMutex   m_aMutex;
+    ::osl::Mutex    m_aMutex;
 
     MediatorListener( Mediator* );
     ~MediatorListener();

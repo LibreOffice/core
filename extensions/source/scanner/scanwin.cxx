@@ -42,7 +42,7 @@
 #include <math.h>
 #include <tools/svwin.h>
 #include <tools/stream.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vos/module.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
@@ -110,7 +110,7 @@ class ImpTwain : public ::cppu::WeakImplHelper1< util::XCloseListener >
     TW_IDENTITY                                 aSrcIdent;
     Link                                        aNotifyLink;
     DSMENTRYPROC                                pDSM;
-    NAMESPACE_VOS( OModule )*                   pMod;
+    NAMESPACE_VOS(OModule )*                    pMod;
     ULONG                                       nCurState;
     HWND                                        hTwainWnd;
     HHOOK                                       hTwainHook;
@@ -994,7 +994,7 @@ SEQ( sal_Int8 ) ScannerManager::getDIB() throw()
 
 SEQ( ScannerContext ) SAL_CALL ScannerManager::getAvailableScanners() throw()
 {
-    vos::OGuard             aGuard( maProtector );
+    osl::MutexGuard aGuard( maProtector );
     SEQ( ScannerContext )   aRet( 1 );
 
     aRet.getArray()[0].ScannerName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TWAIN" ) );
@@ -1008,7 +1008,7 @@ SEQ( ScannerContext ) SAL_CALL ScannerManager::getAvailableScanners() throw()
 BOOL SAL_CALL ScannerManager::configureScanner( ScannerContext& rContext )
     throw( ScannerException )
 {
-    vos::OGuard                         aGuard( maProtector );
+    osl::MutexGuard aGuard( maProtector );
     uno::Reference< XScannerManager >   xThis( this );
 
     if( rContext.InternalData != 0 || rContext.ScannerName != ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TWAIN" ) ) )
@@ -1024,7 +1024,7 @@ BOOL SAL_CALL ScannerManager::configureScanner( ScannerContext& rContext )
 void SAL_CALL ScannerManager::startScan( const ScannerContext& rContext, const uno::Reference< lang::XEventListener >& rxListener )
     throw( ScannerException )
 {
-    vos::OGuard                         aGuard( maProtector );
+    osl::MutexGuard aGuard( maProtector );
     uno::Reference< XScannerManager >   xThis( this );
 
     if( rContext.InternalData != 0 || rContext.ScannerName != ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TWAIN" ) ) )
@@ -1039,7 +1039,7 @@ void SAL_CALL ScannerManager::startScan( const ScannerContext& rContext, const u
 ScanError SAL_CALL ScannerManager::getError( const ScannerContext& rContext )
     throw( ScannerException )
 {
-    vos::OGuard                         aGuard( maProtector );
+    osl::MutexGuard aGuard( maProtector );
     uno::Reference< XScannerManager >   xThis( this );
 
     if( rContext.InternalData != 0 || rContext.ScannerName != ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TWAIN" ) ) )
@@ -1053,7 +1053,7 @@ ScanError SAL_CALL ScannerManager::getError( const ScannerContext& rContext )
 uno::Reference< awt::XBitmap > SAL_CALL ScannerManager::getBitmap( const ScannerContext& /*rContext*/ )
     throw( ScannerException )
 {
-    vos::OGuard aGuard( maProtector );
+    osl::MutexGuard aGuard( maProtector );
     return uno::Reference< awt::XBitmap >( this );
 }
 

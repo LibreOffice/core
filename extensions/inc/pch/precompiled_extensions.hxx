@@ -541,7 +541,7 @@
 
 #include "vos/macros.hxx"
 #include "vos/module.hxx"
-#include "vos/mutex.hxx"
+#include "osl/mutex.hxx"
 
 #include "xmloff/nmspmap.hxx"
 //---MARKER---

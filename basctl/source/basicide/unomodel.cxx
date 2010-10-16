@@ -30,7 +30,7 @@
 #include "precompiled_basctl.hxx"
 
 #include "unomodel.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 #include <sfx2/docfac.hxx>

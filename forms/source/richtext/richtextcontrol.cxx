@@ -375,7 +375,7 @@ namespace frm
     void ORichTextPeer::dispose( ) throw(RuntimeException)
     {
         {
-            ::vos::OGuard aGuard( GetMutex() );
+            ::osl::SolarMutexGuard aGuard( GetMutex() );
             RichTextControl* pRichTextControl = static_cast< RichTextControl* >( GetWindow() );
 
             if ( pRichTextControl )

@@ -32,7 +32,7 @@
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <comphelper/basicio.hxx>
 #include <com/sun/star/awt/MouseButton.hpp>
 

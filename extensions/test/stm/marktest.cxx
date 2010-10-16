@@ -43,7 +43,7 @@
 #include <usr/weak.hxx>      // OWeakObject
 
 #include <osl/conditn.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <osl/thread.hxx>
 
 #include <string.h>

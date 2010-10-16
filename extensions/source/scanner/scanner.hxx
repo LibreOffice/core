@@ -29,7 +29,7 @@
 #define _EXT_SCANNER_HXX
 
 #include <tools/stream.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weak.hxx>
@@ -64,7 +64,7 @@ class ScannerManager : public OWeakObject, XScannerManager, AWT::XBitmap
 {
 protected:
 
-    vos::OMutex                             maProtector;
+    osl::Mutex                              maProtector;
     void*                                   mpData;
 
     void                                    AcquireData();

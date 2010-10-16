@@ -51,7 +51,7 @@ Mediator::~Mediator()
     if( m_pListener )
     {
         {
-            ::vos::OGuard aGuard( m_pListener->m_aMutex );
+            ::osl::MutexGuard aGuard( m_pListener->m_aMutex );
             m_pListener->m_pMediator = NULL;
         }
         m_pListener = NULL;
@@ -81,7 +81,7 @@ ULONG Mediator::SendMessage( ULONG nBytes, const char* pBytes, ULONG nMessageID 
     if( ! m_pListener )
         return 0;
 
-    NAMESPACE_VOS(OGuard) aGuard( m_aSendMutex );
+    osl::MutexGuard aGuard( m_aSendMutex );
     if( ! nMessageID )
         nMessageID = m_nCurrentID;
 
@@ -133,7 +133,7 @@ MediatorMessage* Mediator::WaitForAnswer( ULONG nMessageID )
     while( m_pListener )
     {
         {
-            NAMESPACE_VOS(OGuard) aGuard( m_aQueueMutex );
+            osl::MutexGuard aGuard( m_aQueueMutex );
             for( size_t i = 0; i < m_aMessageQueue.size(); i++ )
             {
                 MediatorMessage* pMessage = m_aMessageQueue[ i ];
@@ -158,7 +158,7 @@ MediatorMessage* Mediator::GetNextMessage( BOOL bWait )
         {
             // guard must be after WaitForMessage, else the listener
             // cannot insert a new one -> deadlock
-            NAMESPACE_VOS(OGuard) aGuard( m_aQueueMutex );
+            osl::MutexGuard aGuard( m_aQueueMutex );
             for( size_t i = 0; i < m_aMessageQueue.size(); i++ )
             {
                 MediatorMessage* pMessage = m_aMessageQueue[ i ];
@@ -206,9 +206,9 @@ void MediatorListener::run()
             char* pBuffer = new char[ nHeader[ 1 ] ];
             if( m_pMediator && (ULONG)read( m_pMediator->m_nSocket, pBuffer, nHeader[ 1 ] ) == nHeader[ 1 ] )
             {
-                ::vos::OGuard aMyGuard( m_aMutex );
+                ::osl::MutexGuard aMyGuard( m_aMutex );
                 {
-                    NAMESPACE_VOS(OGuard)
+                    osl::MutexGuard
                         aGuard( m_pMediator->m_aQueueMutex );
                     MediatorMessage* pMessage =
                         new MediatorMessage( nHeader[ 0 ], nHeader[ 1 ], pBuffer );

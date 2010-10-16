@@ -394,7 +394,7 @@
 #include "vcl/timer.hxx"
 #include "vcl/wintypes.hxx"
 
-#include "vos/mutex.hxx"
+#include "osl/mutex.hxx"
 #include "osl/thread.hxx"
 //---MARKER---
 #endif

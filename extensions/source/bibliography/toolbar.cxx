@@ -47,7 +47,7 @@
 #include "bibresid.hxx"
 
 #include "bibtools.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;

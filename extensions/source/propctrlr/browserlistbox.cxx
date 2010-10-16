@@ -45,7 +45,7 @@
 #include <comphelper/asyncnotification.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 //............................................................................
 namespace pcr

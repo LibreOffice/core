@@ -68,7 +68,7 @@
 #include <comphelper/property.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <sal/macros.h>
 
 //--------------------------------------------------------------------------

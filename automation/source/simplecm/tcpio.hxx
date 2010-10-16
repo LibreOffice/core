@@ -29,7 +29,7 @@
 #define TCPIO_HXX
 
 #include <osl/socket.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include "communiio.hxx"
 
@@ -37,8 +37,8 @@ class TCPIO : public ITransmiter, public IReceiver
 {
 private:
     osl::StreamSocket* pStreamSocket;
-    vos::OMutex aMSocketReadAccess;
-    vos::OMutex aMSocketWriteAccess;
+    osl::Mutex aMSocketReadAccess;
+    osl::Mutex aMSocketWriteAccess;
 
 public:
 

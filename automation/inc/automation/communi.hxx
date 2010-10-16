@@ -30,7 +30,7 @@
 
 #include <svl/svarray.hxx>
 #include <osl/thread.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/timer.hxx>
 #include <automation/simplecm.hxx>
 
@@ -101,8 +101,8 @@ protected:
     virtual BOOL ShutdownCommunication();
     ULONG nConnectionClosedEventId;
     ULONG nDataReceivedEventId;
-    NAMESPACE_VOS(OMutex) aMConnectionClosed;   // Notwendig, da Event verarbeitet werden kann bevor Variable gesetzt ist
-    NAMESPACE_VOS(OMutex) aMDataReceived;       // Notwendig, da Event verarbeitet werden kann bevor Variable gesetzt ist
+    osl::Mutex aMConnectionClosed;  // Notwendig, da Event verarbeitet werden kann bevor Variable gesetzt ist
+    osl::Mutex aMDataReceived;      // Notwendig, da Event verarbeitet werden kann bevor Variable gesetzt ist
     virtual void WaitForShutdown();
 
     DECL_LINK( ShutdownLink, void* );
@@ -149,7 +149,7 @@ private:
     ULONG nPortToListen;
     USHORT nMaxConnections;
     ULONG nAddConnectionEventId;
-    NAMESPACE_VOS(OMutex) aMAddConnection;  // Notwendig, da Event verarbeitet werden kann bevor Variable gesetzt ist
+    osl::Mutex aMAddConnection; // Notwendig, da Event verarbeitet werden kann bevor Variable gesetzt ist
     void CallInfoMsg( InfoString aMsg ){ pMyServer->CallInfoMsg( aMsg ); }
     CM_InfoType GetInfoType(){ return pMyServer->GetInfoType(); }
 

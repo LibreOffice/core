@@ -30,7 +30,7 @@
 #include "precompiled_extensions.hxx"
 #include "res_services.hxx"
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
 #include <cppuhelper/factory.hxx>   // helper for factories
 #include <cppuhelper/implbase3.hxx> // helper for implementations
@@ -51,7 +51,6 @@
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
 
-using namespace vos;
 using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;

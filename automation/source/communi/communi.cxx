@@ -67,7 +67,7 @@ _SV_SEEK_PTR( nm, AE )
 
 SV_IMPL_PTRARR_SORT( CommunicationLinkList, CommunicationLink* );
 
-NAMESPACE_VOS(OMutex) *pMPostUserEvent=NULL;        // Notwendig, da nicht threadfest
+osl::Mutex *pMPostUserEvent=NULL;       // Notwendig, da nicht threadfest
 
 CommunicationLinkViaSocket::CommunicationLinkViaSocket( CommunicationManager *pMan, osl::StreamSocket* pSocket )
 : SimpleCommunicationLinkViaSocket( pMan, pSocket )
@@ -78,7 +78,7 @@ CommunicationLinkViaSocket::CommunicationLinkViaSocket( CommunicationManager *pM
 {
     SetPutDataReceivedHdl(LINK( this, CommunicationLinkViaSocket, PutDataReceivedHdl ));
     if ( !pMPostUserEvent )
-        pMPostUserEvent = new NAMESPACE_VOS(OMutex);
+        pMPostUserEvent = new osl::Mutex;
     // this is necassary to prevent the running thread from sending the close event
     // before the open event has been sent.
        StartCallback();
@@ -93,7 +93,7 @@ CommunicationLinkViaSocket::~CommunicationLinkViaSocket()
     while ( nConnectionClosedEventId || nDataReceivedEventId )
         GetpApp()->Yield();
     {
-        NAMESPACE_VOS(OGuard) aGuard( aMConnectionClosed );
+        osl::MutexGuard aGuard( aMConnectionClosed );
         if ( nConnectionClosedEventId )
         {
             GetpApp()->RemoveUserEvent( nConnectionClosedEventId );
@@ -104,7 +104,7 @@ CommunicationLinkViaSocket::~CommunicationLinkViaSocket()
         }
     }
     {
-        NAMESPACE_VOS(OGuard) aGuard( aMDataReceived );
+        osl::MutexGuard aGuard( aMDataReceived );
         if ( nDataReceivedEventId )
         {
             GetpApp()->RemoveUserEvent( nDataReceivedEventId );
@@ -210,8 +210,8 @@ void CommunicationLinkViaSocket::run()
         SetNewPacketAsCurrent();
         StartCallback();
         {
-            NAMESPACE_VOS(OGuard) aGuard( aMDataReceived );
-            NAMESPACE_VOS(OGuard) aGuard2( *pMPostUserEvent );
+            osl::MutexGuard aGuard( aMDataReceived );
+            osl::MutexGuard aGuard2( *pMPostUserEvent );
             mlPutDataReceived.Call(this);
         }
     }
@@ -221,8 +221,8 @@ void CommunicationLinkViaSocket::run()
 
     StartCallback();
     {
-        NAMESPACE_VOS(OGuard) aGuard( aMConnectionClosed );
-        NAMESPACE_VOS(OGuard) aGuard2( *pMPostUserEvent );
+        osl::MutexGuard aGuard( aMConnectionClosed );
+        osl::MutexGuard aGuard2( *pMPostUserEvent );
         nConnectionClosedEventId = GetpApp()->PostUserEvent( LINK( this, CommunicationLinkViaSocket, ConnectionClosed ) );
     }
 }
@@ -239,7 +239,7 @@ BOOL CommunicationLinkViaSocket::DoTransferDataStream( SvStream *pDataStream, CM
 long CommunicationLinkViaSocket::ConnectionClosed( void* EMPTYARG )
 {
     {
-        NAMESPACE_VOS(OGuard) aGuard( aMConnectionClosed );
+        osl::MutexGuard aGuard( aMConnectionClosed );
         nConnectionClosedEventId = 0;   // Achtung!! alles andere muß oben gemacht werden.
     }
     ShutdownCommunication();
@@ -250,7 +250,7 @@ long CommunicationLinkViaSocket::ConnectionClosed( void* EMPTYARG )
 long CommunicationLinkViaSocket::DataReceived( void* EMPTYARG )
 {
     {
-        NAMESPACE_VOS(OGuard) aGuard( aMDataReceived );
+        osl::MutexGuard aGuard( aMDataReceived );
         nDataReceivedEventId = 0;   // Achtung!! alles andere muß oben gemacht werden.
     }
     return CommunicationLink::DataReceived( );
@@ -454,7 +454,7 @@ CommunicationManagerServerAcceptThread::CommunicationManagerServerAcceptThread( 
 , xmNewConnection( NULL )
 {
     if ( !pMPostUserEvent )
-        pMPostUserEvent = new NAMESPACE_VOS(OMutex);
+        pMPostUserEvent = new osl::Mutex;
     create();
 }
 
@@ -481,7 +481,7 @@ CommunicationManagerServerAcceptThread::~CommunicationManagerServerAcceptThread(
     DEBUGPRINTF ("Destructor CommunicationManagerServerAcceptThread Übersprungen!!!! (wegen Solaris BUG)\n");
 #endif
     {
-        NAMESPACE_VOS(OGuard) aGuard( aMAddConnection );
+        osl::MutexGuard aGuard( aMAddConnection );
         if ( nAddConnectionEventId )
         {
             GetpApp()->RemoveUserEvent( nAddConnectionEventId );
@@ -532,8 +532,8 @@ void CommunicationManagerServerAcceptThread::run()
                 xmNewConnection = new CommunicationLinkViaSocket( pMyServer, pStreamSocket );
                 xmNewConnection->StartCallback();
                 {
-                    NAMESPACE_VOS(OGuard) aGuard( aMAddConnection );
-                    NAMESPACE_VOS(OGuard) aGuard2( *pMPostUserEvent );
+                    osl::MutexGuard aGuard( aMAddConnection );
+                    osl::MutexGuard aGuard2( *pMPostUserEvent );
                     nAddConnectionEventId = GetpApp()->PostUserEvent( LINK( this, CommunicationManagerServerAcceptThread, AddConnection ) );
                 }
             }
@@ -559,7 +559,7 @@ void CommunicationManagerServerAcceptThread::run()
 IMPL_LINK( CommunicationManagerServerAcceptThread, AddConnection, void*, EMPTYARG )
 {
     {
-        NAMESPACE_VOS(OGuard) aGuard( aMAddConnection );
+        osl::MutexGuard aGuard( aMAddConnection );
         nAddConnectionEventId = 0;
     }
     pMyServer->AddConnection( xmNewConnection );

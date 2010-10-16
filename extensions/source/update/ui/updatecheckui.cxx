@@ -43,7 +43,7 @@
 
 #include <comphelper/processfactory.hxx>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <osl/mutex.hxx>
 
 #include <vcl/window.hxx>

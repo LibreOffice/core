@@ -180,7 +180,7 @@ MediatorMessage* PluginConnector::WaitForAnswer( ULONG nMessageID )
     while( m_pListener )
     {
         {
-            NAMESPACE_VOS(OGuard) aGuard( m_aQueueMutex );
+            osl::MutexGuard aGuard( m_aQueueMutex );
             for( size_t i = 0; i < m_aMessageQueue.size(); i++ )
             {
                 MediatorMessage* pMessage = m_aMessageQueue[ i ];

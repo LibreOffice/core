@@ -41,7 +41,7 @@
 class BitmapTransporter : public OWeakObject, AWT::XBitmap
 {
     SvMemoryStream                      m_aStream;
-    vos::OMutex                         m_aProtector;
+    osl::Mutex                          m_aProtector;
 
 public:
 

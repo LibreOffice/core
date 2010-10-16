@@ -44,7 +44,7 @@
 #include <vcl/outdev.hxx>
 #include <unotools/lingucfg.hxx>
 #include <svl/undo.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <algorithm>
 #include <functional>

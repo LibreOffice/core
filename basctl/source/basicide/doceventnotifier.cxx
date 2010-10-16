@@ -43,7 +43,7 @@
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <sal/macros.h>
 
 #include <cppuhelper/compbase1.hxx>

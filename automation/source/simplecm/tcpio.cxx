@@ -34,7 +34,7 @@
 /// implement ITransmiter
 comm_USHORT TCPIO::TransferBytes( const void* pBuffer, comm_UINT32 nLen )
 {
-    vos::OGuard aGuard( aMSocketWriteAccess );
+    osl::MutexGuard aGuard( aMSocketWriteAccess );
     if ( !pStreamSocket )
     {
         nLastSent = 0;
@@ -50,7 +50,7 @@ comm_USHORT TCPIO::TransferBytes( const void* pBuffer, comm_UINT32 nLen )
 /// implement IReceiver
 comm_USHORT TCPIO::ReceiveBytes( void* pBuffer, comm_UINT32 nLen )
 {
-    vos::OGuard aGuard( aMSocketReadAccess );
+    osl::MutexGuard aGuard( aMSocketReadAccess );
     if ( !pStreamSocket )
     {
         nLastReceived = 0;
@@ -66,8 +66,8 @@ comm_USHORT TCPIO::ReceiveBytes( void* pBuffer, comm_UINT32 nLen )
 // helper
 void TCPIO::SetStreamSocket( osl::StreamSocket* pSocket )
 {
-    vos::OGuard aRGuard( aMSocketReadAccess );
-    vos::OGuard aWGuard( aMSocketWriteAccess );
+    osl::MutexGuard aRGuard( aMSocketReadAccess );
+    osl::MutexGuard aWGuard( aMSocketWriteAccess );
     pStreamSocket = pSocket;
 }
 

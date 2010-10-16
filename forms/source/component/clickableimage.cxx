@@ -47,7 +47,7 @@
 #include <vcl/svapp.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include "services.hxx"
 #include <comphelper/container.hxx>
 #include <comphelper/listenernotification.hxx>
