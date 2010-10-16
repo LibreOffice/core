@@ -33,7 +33,7 @@
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
@@ -46,7 +46,6 @@
 #include <comphelper/serviceinfohelper.hxx>
 
 using namespace ::rtl;
-using namespace ::vos;
 using namespace ::cppu;
 using namespace ::com::sun::star;
 

@@ -30,7 +30,7 @@
 #include "precompiled_sfx2.hxx"
 
 #include "sfx2/docstoragemodifylistener.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 /** === begin UNO includes === **/
 /** === end UNO includes === **/
@@ -57,7 +57,7 @@ namespace sfx2
     //=
     //====================================================================
     //--------------------------------------------------------------------
-    DocumentStorageModifyListener::DocumentStorageModifyListener( IModifiableDocument& _rDocument, ::vos::IMutex& _rMutex )
+    DocumentStorageModifyListener::DocumentStorageModifyListener( IModifiableDocument& _rDocument, ::osl::SolarMutex& _rMutex )
         :m_pDocument( &_rDocument )
         ,m_rMutex( _rMutex )
     {
@@ -71,14 +71,14 @@ namespace sfx2
     //--------------------------------------------------------------------
     void DocumentStorageModifyListener::dispose()
     {
-        ::vos::OGuard aGuard( m_rMutex );
+        ::osl::SolarMutexGuard aGuard( m_rMutex );
         m_pDocument = NULL;
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL DocumentStorageModifyListener::modified( const EventObject& /*aEvent*/ ) throw (RuntimeException)
     {
-        ::vos::OGuard aGuard( m_rMutex );
+        ::osl::SolarMutexGuard aGuard( m_rMutex );
         // storageIsModified must not contain any locking!
         if ( m_pDocument )
             m_pDocument->storageIsModified();

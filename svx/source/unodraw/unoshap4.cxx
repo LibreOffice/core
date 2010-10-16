@@ -44,7 +44,7 @@
 #include <sfx2/frmdescr.hxx>
 #endif
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sfx2/objsh.hxx>
@@ -72,7 +72,6 @@ extern sal_Bool ConvertGDIMetaFileToWMF( const GDIMetaFile & rMTF, SvStream & rT
 ///////////////////////////////////////////////////////////////////////
 
 using namespace ::osl;
-using namespace ::vos;
 using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::com::sun::star;

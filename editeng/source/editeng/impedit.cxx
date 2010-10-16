@@ -47,7 +47,7 @@
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <editeng/flditem.hxx>
 #include <svl/intitem.hxx>
 #include <svtools/transfer.hxx>

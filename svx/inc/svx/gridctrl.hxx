@@ -42,7 +42,7 @@
 #include <tools/date.hxx>
 #include <tools/ref.hxx>
 #include <svtools/editbrowsebox.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <comphelper/propmultiplex.hxx>
 #include <svtools/transfer.hxx>
 #include "svx/svxdllapi.h"

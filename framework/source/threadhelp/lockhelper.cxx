@@ -37,6 +37,7 @@
 #include <macros/debug.hxx>
 
 #include <macros/generic.hxx>
+#include "vcl/solarmutex.hxx"
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -77,7 +78,7 @@ namespace framework{
 
     @onerror    -
 *//*-*************************************************************************************************************/
-LockHelper::LockHelper( ::vos::IMutex* pSolarMutex )
+LockHelper::LockHelper( ::osl::SolarMutex* pSolarMutex )
     :   m_pFairRWLock       ( NULL )
     ,   m_pOwnMutex         ( NULL )
     ,   m_pSolarMutex       ( NULL )
@@ -93,17 +94,17 @@ LockHelper::LockHelper( ::vos::IMutex* pSolarMutex )
                                 }
                                 break;
         case E_SOLARMUTEX   :   {
-                                    if( pSolarMutex == NULL )
-                                    {
-                                        m_pSolarMutex      = new ::vos::OMutex;
-                                        m_bDummySolarMutex = sal_True;
-                                    }
-                                    else
-                                    {
-                                        m_pSolarMutex = pSolarMutex;
-                                    }
-                                }
-                                break;
+            if( pSolarMutex == NULL )
+            {
+                m_pSolarMutex      = new ::vcl::SolarMutexObject;
+                m_bDummySolarMutex = sal_True;
+            }
+            else
+            {
+                m_pSolarMutex = pSolarMutex;
+            }
+        }
+            break;
         case E_FAIRRWLOCK   :   {
                                     m_pFairRWLock = new FairRWLock;
                                 }
@@ -148,7 +149,7 @@ LockHelper::~LockHelper()
     {
         if (m_bDummySolarMutex)
         {
-            delete static_cast<vos::OMutex*>(m_pSolarMutex);
+            delete static_cast<vcl::SolarMutexObject*>(m_pSolarMutex);
             m_bDummySolarMutex = sal_False;
         }
         m_pSolarMutex = NULL;
@@ -433,7 +434,7 @@ void LockHelper::downgradeWriteAccess()
 
     @onerror    No error should occure.
 *//*-*************************************************************************************************************/
-LockHelper& LockHelper::getGlobalLock( ::vos::IMutex* pSolarMutex )
+LockHelper& LockHelper::getGlobalLock( ::osl::SolarMutex* pSolarMutex )
 {
     // Initialize static "member" only for one time!
     // Algorithm:

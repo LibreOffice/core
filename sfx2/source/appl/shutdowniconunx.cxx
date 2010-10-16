@@ -9,7 +9,7 @@
 #include <gtk/gtk.h>
 #include <glib.h>
 #include <eggtray/eggtrayicon.h>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/bmpacc.hxx>
 #include <sfx2/app.hxx>

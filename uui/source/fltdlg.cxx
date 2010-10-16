@@ -46,7 +46,7 @@
 #include <tools/urlobj.hxx>
 
 #include <vcl/button.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 namespace uui

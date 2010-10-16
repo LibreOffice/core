@@ -30,7 +30,7 @@
 #include "precompiled_svx.hxx"
 
 #include <vector>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -85,7 +85,6 @@
 
 using namespace ::comphelper;
 using namespace ::osl;
-using namespace ::vos;
 using ::rtl::OUString;
 using namespace ::cppu;
 using namespace ::com::sun::star;
@@ -1000,7 +999,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
 sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDescriptor )
     throw(RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::SolarMutexGuard aGuard;
 
     if( NULL == mpUnoPage )
         return sal_False;
@@ -1091,7 +1090,7 @@ void SAL_CALL GraphicExporter::cancel()
 void SAL_CALL GraphicExporter::setSourceDocument( const Reference< lang::XComponent >& xComponent )
     throw(IllegalArgumentException, RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::SolarMutexGuard aGuard;
 
     mxShapes = NULL;
     mpUnoPage = NULL;

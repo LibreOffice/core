@@ -34,7 +34,7 @@
 #include "tools/urlobj.hxx"
 #include "osl/file.h"
 #include "comphelper/sequenceashashmap.hxx"
-#include "vos/mutex.hxx"
+#include "osl/mutex.hxx"
 #include "sfx2/app.hxx"
 #include <sal/macros.h>
 #include "app.hrc"

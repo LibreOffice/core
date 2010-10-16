@@ -41,7 +41,7 @@
 //_________________________________________________________________________________________________________________
 
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 using namespace cppu;
 using namespace com::sun::star::uno;

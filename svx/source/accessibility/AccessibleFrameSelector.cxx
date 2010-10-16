@@ -39,7 +39,7 @@
 #include <com/sun/star/awt/FocusChangeReason.hpp>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/frmsel.hxx>
 #include <svx/dialmgr.hxx>

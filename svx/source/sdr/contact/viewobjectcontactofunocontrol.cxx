@@ -61,7 +61,7 @@
 #include <toolkit/helper/formpdfexport.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <cppuhelper/implbase4.hxx>

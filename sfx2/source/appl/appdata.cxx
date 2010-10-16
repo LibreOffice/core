@@ -35,7 +35,7 @@
 
 #define _SVSTDARR_STRINGS
 #include <svl/svstdarr.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <vcl/menu.hxx>
 #include <vcl/msgbox.hxx>

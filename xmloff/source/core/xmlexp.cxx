@@ -79,7 +79,7 @@
 #include "XMLFilterServiceNames.h"
 #include "XMLEmbeddedObjectExportFilter.hxx"
 #include "XMLBasicExportFilter.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <rtl/logfile.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/extract.hxx>
@@ -2429,8 +2429,8 @@ void SvXMLExport::SetError(
     const Reference<XLocator>& rLocator )
 {
     // allow multi-threaded access to the cancel() method
-    static ::vos::OMutex aMutex;
-    ::vos::OGuard aGuard(aMutex);
+    static osl::Mutex aMutex;
+    osl::MutexGuard aGuard(aMutex);
 
     // maintain error flags
     if ( ( nId & XMLERROR_FLAG_ERROR ) != 0 )

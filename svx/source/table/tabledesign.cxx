@@ -41,7 +41,7 @@
 #include <comphelper/serviceinfohelper.hxx>
 
 #include <osl/mutex.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 #include <cppuhelper/basemutex.hxx>
@@ -71,7 +71,6 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::container;
 
 using ::rtl::OUString;
-using ::vos::OGuard;
 using ::osl::MutexGuard;
 using ::osl::ClearableMutexGuard;
 using ::cppu::OInterfaceContainerHelper;

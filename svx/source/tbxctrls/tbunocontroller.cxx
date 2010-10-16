@@ -40,7 +40,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/ctrlbox.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <memory>
 

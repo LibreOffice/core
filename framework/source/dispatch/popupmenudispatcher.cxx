@@ -58,7 +58,7 @@
 //_________________________________________________________________________________________________________________
 
 #include <ucbhelper/content.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 
@@ -79,7 +79,6 @@ using namespace ::com::sun::star::util          ;
 using namespace ::cppu                          ;
 using namespace ::osl                           ;
 using namespace ::rtl                           ;
-using namespace ::vos                           ;
 
 //_________________________________________________________________________________________________________________
 //  non exported const

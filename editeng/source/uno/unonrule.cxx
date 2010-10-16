@@ -35,7 +35,7 @@
 #include <com/sun/star/awt/XBitmap.hpp>
 
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/graph.hxx>
 #include <svtools/grfmgr.hxx>
 #include <toolkit/unohlp.hxx>
@@ -57,7 +57,6 @@ using ::com::sun::star::util::XCloneable;
 using ::com::sun::star::ucb::XAnyCompare;
 
 
-using namespace ::vos;
 using namespace ::std;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

@@ -53,7 +53,7 @@
 #include "filefmt.hxx"
 #include "sb.hrc"
 #include <basrid.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include "errobject.hxx"
 #include <hash_map>

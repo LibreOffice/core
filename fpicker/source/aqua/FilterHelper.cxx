@@ -28,7 +28,7 @@
 
 #include <functional>
 #include <algorithm>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 #include "CFStringUtilities.hxx"

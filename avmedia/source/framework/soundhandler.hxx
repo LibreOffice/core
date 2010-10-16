@@ -53,7 +53,7 @@
 #include <vcl/timer.hxx>
 #include <tools/link.hxx>
 #include <avmedia/mediawindow.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 namespace css = ::com::sun::star;
 
@@ -74,7 +74,7 @@ namespace avmedia{
 struct ThreadHelpBase
 {
     public:
-        mutable ::vos::OMutex m_aLock;
+        mutable ::osl::Mutex m_aLock;
 };
 
 /*-************************************************************************************************************//**

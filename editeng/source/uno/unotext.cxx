@@ -33,7 +33,7 @@
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/text/XTextField.hdl>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>
 #include <svl/intitem.hxx>
@@ -57,7 +57,6 @@
 #include <comphelper/serviceinfohelper.hxx>
 
 using namespace ::rtl;
-using namespace ::vos;
 using namespace ::cppu;
 using namespace ::com::sun::star;
 

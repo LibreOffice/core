@@ -30,7 +30,7 @@
 #include "com/sun/star/ucb/XInteractionCookieHandling.hpp"
 #include "com/sun/star/task/XInteractionRequest.hpp"
 
-#include "vos/mutex.hxx"
+#include "osl/mutex.hxx"
 #include "tools/list.hxx"
 #include "svl/httpcook.hxx"
 #include "vcl/svapp.hxx"

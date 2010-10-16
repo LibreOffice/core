@@ -330,7 +330,7 @@ void SAL_CALL SoundHandler::dispatchWithNotification(const css::util::URL&      
                                                      const css::uno::Reference< css::frame::XDispatchResultListener >& xListener ) throw(css::uno::RuntimeException)
 {
     // SAFE {
-    const ::vos::OGuard aLock( m_aLock );
+    const ::osl::MutexGuard aLock( m_aLock );
 
     {
     //close streams otherwise on windows we can't reopen the file in the
@@ -449,7 +449,7 @@ void SAL_CALL SoundHandler::dispatch( const css::util::URL&                     
 IMPL_LINK( SoundHandler, implts_PlayerNotify, void*, EMPTYARG )
 {
     // SAFE {
-    ::vos::OClearableGuard aLock( m_aLock );
+    ::osl::ClearableMutexGuard aLock( m_aLock );
 
     if (m_xPlayer.is() && m_xPlayer->isPlaying() && m_xPlayer->getMediaTime() < m_xPlayer->getDuration())
     {

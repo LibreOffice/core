@@ -39,7 +39,7 @@
 #define _SVSTDARR_USHORTS
 #include <svl/svstdarr.hxx>     // SvUShorts
 #include <rtl/ustring.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <sfx2/sfx.hrc>
 #include <sfx2/childwin.hxx>

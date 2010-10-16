@@ -31,7 +31,7 @@
 
 #include <tools/string.hxx>
 #include <osl/thread.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <comphelper/stl_types.hxx>
 
 
@@ -42,7 +42,7 @@ class Tracer
     DECLARE_STL_STDKEY_MAP( ::oslThreadIdentifier, sal_Int32, MapThreadId2Int );
     static MapThreadId2Int s_aThreadIndents;
 
-    static ::vos::OMutex    s_aMapSafety;
+    static ::osl::Mutex s_aMapSafety;
 
 public:
     Tracer(const char* _pBlockDescription);

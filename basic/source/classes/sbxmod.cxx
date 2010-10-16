@@ -51,7 +51,7 @@
 #include <svtools/syntaxhighlight.hxx>
 
 #include <basic/basrdll.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <basic/sbobjmod.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>

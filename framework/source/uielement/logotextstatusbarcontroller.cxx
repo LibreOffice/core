@@ -32,7 +32,7 @@
 #include <classes/fwlresid.hxx>
 #include <services.h>
 #include <classes/resource.hrc>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/status.hxx>

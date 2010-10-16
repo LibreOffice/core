@@ -28,7 +28,7 @@
 
 #include "asyncrequests.hxx"
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 //-----------------------------------------------------------------------------
 // namespace

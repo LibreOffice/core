@@ -81,7 +81,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/tempfile.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/salctype.hxx>
 #include <sot/clsids.hxx>
 #include <sot/storinfo.hxx>

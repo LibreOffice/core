@@ -35,7 +35,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #ifndef DELETEZ
 #define DELETEZ(pPtr) ( delete pPtr, pPtr = 0 )

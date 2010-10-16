@@ -176,7 +176,7 @@
 #include "ucbhelper/proxydecider.hxx"
 
 #include "osl/diagnose.h"
-#include "vos/mutex.hxx"
+#include "osl/mutex.hxx"
 #include "vos/process.hxx"
 //---MARKER---
 

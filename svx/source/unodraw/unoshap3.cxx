@@ -36,7 +36,7 @@
 #include <com/sun/star/drawing/DoubleSequence.hpp>
 #include <com/sun/star/drawing/CameraGeometry.hpp>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <comphelper/serviceinfohelper.hxx>
 
 #include <rtl/uuid.h>
@@ -60,7 +60,6 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 
 using ::rtl::OUString;
-using namespace ::vos;
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

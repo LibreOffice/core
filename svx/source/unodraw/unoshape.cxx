@@ -38,7 +38,7 @@
 #include <vcl/svapp.hxx>
 #include <svl/itemprop.hxx>
 #include <svtools/fltcall.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <editeng/unotext.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdoole2.hxx>
@@ -110,7 +110,6 @@
 
 using ::rtl::OUString;
 using namespace ::osl;
-using namespace ::vos;
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -253,7 +252,7 @@ SvxShape::SvxShape() throw()
 //----------------------------------------------------------------------
 SvxShape::~SvxShape() throw()
 {
-    SolarMutexGuard aGuard;
+    ::SolarMutexGuard aGuard;
 
     DBG_ASSERT( mnLockCount == 0, "Locked shape was disposed!" );
 
@@ -1242,7 +1241,7 @@ static void svx_setLogicRectHack( SdrObject* pObj, const Rectangle& rRect )
 
 awt::Point SAL_CALL SvxShape::getPosition() throw(uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::SolarMutexGuard aGuard;
 
     if( mpObj.is() && mpModel)
     {
@@ -1265,7 +1264,7 @@ awt::Point SAL_CALL SvxShape::getPosition() throw(uno::RuntimeException)
 //----------------------------------------------------------------------
 void SAL_CALL SvxShape::setPosition( const awt::Point& Position ) throw(uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::SolarMutexGuard aGuard;
 
     if( mpObj.is() && mpModel )
     {
@@ -1295,7 +1294,7 @@ void SAL_CALL SvxShape::setPosition( const awt::Point& Position ) throw(uno::Run
 //----------------------------------------------------------------------
 awt::Size SAL_CALL SvxShape::getSize() throw(uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::SolarMutexGuard aGuard;
 
     if( mpObj.is() && mpModel)
     {
@@ -1312,7 +1311,7 @@ awt::Size SAL_CALL SvxShape::getSize() throw(uno::RuntimeException)
 void SAL_CALL SvxShape::setSize( const awt::Size& rSize )
     throw(beans::PropertyVetoException, uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::SolarMutexGuard aGuard;
 
     if( mpObj.is() && mpModel)
     {
@@ -1356,7 +1355,7 @@ void SAL_CALL SvxShape::setSize( const awt::Size& rSize )
 // XNamed
 OUString SAL_CALL SvxShape::getName(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::SolarMutexGuard aGuard;
     if( mpObj.is() )
     {
         return mpObj->GetName();
@@ -1371,7 +1370,7 @@ OUString SAL_CALL SvxShape::getName(  ) throw(::com::sun::star::uno::RuntimeExce
 
 void SAL_CALL SvxShape::setName( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::SolarMutexGuard aGuard;
     if( mpObj.is() )
     {
         mpObj->SetName( aName );
@@ -1398,7 +1397,7 @@ OUString SAL_CALL SvxShape::getShapeType() throw(uno::RuntimeException)
 //----------------------------------------------------------------------
 void SAL_CALL SvxShape::dispose() throw(uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::SolarMutexGuard aGuard;
 
     if( mpImpl->mbDisposing )
         return; // caught a recursion
@@ -1931,7 +1930,7 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
 void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const uno::Any& rVal )
     throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::SolarMutexGuard aGuard;
 
     const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(rPropertyName);
 
@@ -2056,7 +2055,7 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
 uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::SolarMutexGuard aGuard;
 
     const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(PropertyName);
 
@@ -2115,7 +2114,7 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
 // XMultiPropertySet
 void SAL_CALL SvxShape::setPropertyValues( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues ) throw (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
-    SolarMutexGuard aSolarGuard;
+    ::SolarMutexGuard aSolarGuard;
 
     const sal_Int32 nCount = aPropertyNames.getLength();
     const OUString* pNames = aPropertyNames.getConstArray();
@@ -2341,7 +2340,7 @@ beans::PropertyState SAL_CALL SvxShape::getPropertyState( const OUString& Proper
 beans::PropertyState SAL_CALL SvxShape::_getPropertyState( const OUString& PropertyName )
     throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::SolarMutexGuard aGuard;
 
     const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(PropertyName);
 
@@ -3338,7 +3337,7 @@ void SAL_CALL SvxShape::setPropertyToDefault( const OUString& PropertyName )
 void SAL_CALL SvxShape::_setPropertyToDefault( const OUString& PropertyName )
     throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::SolarMutexGuard aGuard;
 
     const SfxItemPropertySimpleEntry* pProperty = mpPropSet->getPropertyMapEntry(PropertyName);
 
@@ -3371,7 +3370,7 @@ uno::Any SAL_CALL SvxShape::getPropertyDefault( const OUString& aPropertyName )
 uno::Any SAL_CALL SvxShape::_getPropertyDefault( const OUString& aPropertyName )
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::SolarMutexGuard aGuard;
 
     const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(aPropertyName);
 
@@ -3397,7 +3396,7 @@ uno::Any SAL_CALL SvxShape::_getPropertyDefault( const OUString& aPropertyName )
 // XMultiPropertyStates
 void SvxShape::setAllPropertiesToDefault() throw (uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::SolarMutexGuard aGuard;
 
     if( !mpObj.is() )
         throw lang::DisposedException();
@@ -3517,7 +3516,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::getSupportedServiceNames()
 uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
     throw(uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::SolarMutexGuard aGuard;
 
     if( mpObj.is() && mpObj->GetObjInventor() == SdrInventor)
     {
@@ -3530,7 +3529,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 static uno::Sequence< OUString > *pSeq = 0;
                 if( 0 == pSeq )
                 {
-//                  SolarMutexGuard aGuard;
+//                  ::SolarMutexGuard aGuard;
 //                  if( 0 == pSeq )
                     {
                         static uno::Sequence< OUString > SvxShape_GroupServices;
@@ -3550,7 +3549,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 static uno::Sequence< OUString > *pSeq = 0;
                 if( 0 == pSeq )
                 {
-//                  SolarMutexGuard aGuard;
+//                  ::SolarMutexGuard aGuard;
 //                  if( 0 == pSeq )
                     {
                         static uno::Sequence< OUString > SvxShape_CustomShapeServices;
@@ -3581,7 +3580,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 static uno::Sequence< OUString > *pSeq = 0;
                 if( 0 == pSeq )
                 {
-//                  SolarMutexGuard aGuard;
+//                  ::SolarMutexGuard aGuard;
 //                  if( 0 == pSeq )
                     {
                         static uno::Sequence< OUString > SvxShape_LineServices;
@@ -3616,7 +3615,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 static uno::Sequence< OUString > *pSeq = 0;
                 if( 0 == pSeq )
                 {
-//                  SolarMutexGuard aGuard;
+//                  ::SolarMutexGuard aGuard;
 //                  if( 0 == pSeq )
                     {
                         static uno::Sequence< OUString > SvxShape_RectServices;
@@ -3653,7 +3652,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 static uno::Sequence< OUString > *pSeq = 0;
                 if( 0 == pSeq )
                 {
-//                  SolarMutexGuard aGuard;
+//                  ::SolarMutexGuard aGuard;
 //                  if( 0 == pSeq )
                     {
                         static uno::Sequence< OUString > SvxShape_CircServices;
@@ -3690,7 +3689,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 static uno::Sequence< OUString > *pSeq = 0;
                 if( 0 == pSeq )
                 {
-//                  SolarMutexGuard aGuard;
+//                  ::SolarMutexGuard aGuard;
 //                  if( 0 == pSeq )
                     {
                         static uno::Sequence< OUString > SvxShape_PathServices;
@@ -3725,7 +3724,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 static uno::Sequence< OUString > *pSeq = 0;
                 if( 0 == pSeq )
                 {
-//                  SolarMutexGuard aGuard;
+//                  ::SolarMutexGuard aGuard;
 //                  if( 0 == pSeq )
                     {
                         static uno::Sequence< OUString > SvxShape_PolyServices;
@@ -3762,7 +3761,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 static uno::Sequence< OUString > *pSeq = 0;
                 if( 0 == pSeq )
                 {
-//                  SolarMutexGuard aGuard;
+//                  ::SolarMutexGuard aGuard;
 //                  if( 0 == pSeq )
                     {
                         static uno::Sequence< OUString > SvxShape_FreeLineServices;
@@ -3801,7 +3800,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 static uno::Sequence< OUString > *pSeq = 0;
                 if( 0 == pSeq )
                 {
-//                  SolarMutexGuard aGuard;
+//                  ::SolarMutexGuard aGuard;
 //                  if( 0 == pSeq )
                     {
                         static uno::Sequence< OUString > SvxShape_FreeFillServices;
@@ -3839,7 +3838,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 static uno::Sequence< OUString > *pSeq = 0;
                 if( 0 == pSeq )
                 {
-//                  SolarMutexGuard aGuard;
+//                  ::SolarMutexGuard aGuard;
 //                  if( 0 == pSeq )
                     {
                         static uno::Sequence< OUString > SvxShape_TextServices;
@@ -3873,7 +3872,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 static uno::Sequence< OUString > *pSeq = 0;
                 if( 0 == pSeq )
                 {
-//                  SolarMutexGuard aGuard;
+//                  ::SolarMutexGuard aGuard;
 //                  if( 0 == pSeq )
                     {
                         static uno::Sequence< OUString > SvxShape_GrafServices;
@@ -3905,7 +3904,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 static uno::Sequence< OUString > *pSeq = 0;
                 if( 0 == pSeq )
                 {
-//                  SolarMutexGuard aGuard;
+//                  ::SolarMutexGuard aGuard;
 //                  if( 0 == pSeq )
                     {
                         static uno::Sequence< OUString > SvxShape_Ole2Services;
@@ -3925,7 +3924,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 static uno::Sequence< OUString > *pSeq = 0;
                 if( 0 == pSeq )
                 {
-//                  SolarMutexGuard aGuard;
+//                  ::SolarMutexGuard aGuard;
 //                  if( 0 == pSeq )
                     {
                         static uno::Sequence< OUString > SvxShape_CaptionServices;
@@ -3961,7 +3960,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 static uno::Sequence< OUString > *pSeq = 0;
                 if( 0 == pSeq )
                 {
-//                  SolarMutexGuard aGuard;
+//                  ::SolarMutexGuard aGuard;
 //                  if( 0 == pSeq )
                     {
                         static uno::Sequence< OUString > SvxShape_PageServices;
@@ -3982,7 +3981,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 static uno::Sequence< OUString > *pSeq = 0;
                 if( 0 == pSeq )
                 {
-//                  SolarMutexGuard aGuard;
+//                  ::SolarMutexGuard aGuard;
 //                  if( 0 == pSeq )
                     {
                         static uno::Sequence< OUString > SvxShape_MeasureServices;
@@ -4019,7 +4018,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 static uno::Sequence< OUString > *pSeq = 0;
                 if( 0 == pSeq )
                 {
-//                  SolarMutexGuard aGuard;
+//                  ::SolarMutexGuard aGuard;
 //                  if( 0 == pSeq )
                     {
                         static uno::Sequence< OUString > SvxShape_FrameServices;
@@ -4040,7 +4039,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 static uno::Sequence< OUString > *pSeq = 0;
                 if( 0 == pSeq )
                 {
-//                  SolarMutexGuard _aGuard;
+//                  ::SolarMutexGuard _aGuard;
 //                  if( 0 == pSeq )
                     {
                         static uno::Sequence< OUString > SvxShape_UnoServices;
@@ -4059,7 +4058,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 static uno::Sequence< OUString > *pSeq = 0;
                 if( 0 == pSeq )
                 {
-//                  SolarMutexGuard aGuard;
+//                  ::SolarMutexGuard aGuard;
 //                  if( 0 == pSeq )
                     {
                         static uno::Sequence< OUString > SvxShape_EdgeServices;
@@ -4094,7 +4093,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 static uno::Sequence< OUString > *pSeq = 0;
                 if( 0 == pSeq )
                 {
-//                  SolarMutexGuard aGuard;
+//                  ::SolarMutexGuard aGuard;
 //                  if( 0 == pSeq )
                     {
                         static uno::Sequence< OUString > SvxShape_MediaServices;
@@ -4119,7 +4118,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
         static uno::Sequence< OUString > *pSeq = 0;
         if( 0 == pSeq )
         {
-//                  SolarMutexGuard aGuard;
+//                  ::SolarMutexGuard aGuard;
 //                  if( 0 == pSeq )
             {
                 static uno::Sequence< OUString > SvxShape_UnoServices;
@@ -4156,7 +4155,7 @@ sal_Bool SAL_CALL SvxShape::supportsService( const OUString& ServiceName ) throw
 uno::Reference< container::XIndexContainer > SAL_CALL SvxShape::getGluePoints()
     throw(uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::SolarMutexGuard aGuard;
     uno::Reference< container::XIndexContainer > xGluePoints( mxGluePoints );
 
     if( mpObj.is() && !xGluePoints.is() )
@@ -4174,7 +4173,7 @@ uno::Reference< container::XIndexContainer > SAL_CALL SvxShape::getGluePoints()
 uno::Reference< uno::XInterface > SAL_CALL SvxShape::getParent(  )
     throw(uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::SolarMutexGuard aGuard;
 
     if( mpObj.is() && mpObj->GetObjList() )
     {
@@ -4228,7 +4227,7 @@ void SvxShape::unlock()
 // XActionLockable
 sal_Bool SAL_CALL SvxShape::isActionLocked(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::SolarMutexGuard aGuard;
 
     return mnLockCount != 0;
 }
@@ -4237,7 +4236,7 @@ sal_Bool SAL_CALL SvxShape::isActionLocked(  ) throw (::com::sun::star::uno::Run
 
 void SAL_CALL SvxShape::addActionLock(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::SolarMutexGuard aGuard;
 
     DBG_ASSERT( mnLockCount < 0xffff, "lock overflow in SvxShape!" );
     mnLockCount++;
@@ -4250,7 +4249,7 @@ void SAL_CALL SvxShape::addActionLock(  ) throw (::com::sun::star::uno::RuntimeE
 
 void SAL_CALL SvxShape::removeActionLock(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::SolarMutexGuard aGuard;
 
     DBG_ASSERT( mnLockCount > 0, "lock underflow in SvxShape!" );
     mnLockCount--;
@@ -4263,7 +4262,7 @@ void SAL_CALL SvxShape::removeActionLock(  ) throw (::com::sun::star::uno::Runti
 
 void SAL_CALL SvxShape::setActionLocks( sal_Int16 nLock ) throw (::com::sun::star::uno::RuntimeException )
 {
-    SolarMutexGuard aGuard;
+    ::SolarMutexGuard aGuard;
 
     if( (mnLockCount == 0) && (nLock != 0) )
         unlock();
@@ -4278,7 +4277,7 @@ void SAL_CALL SvxShape::setActionLocks( sal_Int16 nLock ) throw (::com::sun::sta
 
 sal_Int16 SAL_CALL SvxShape::resetActionLocks(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::SolarMutexGuard aGuard;
 
     if( mnLockCount != 0 )
         unlock();
@@ -4479,7 +4478,7 @@ void SvxShapeText::unlock()
 // ::com::sun::star::text::XTextRange
 uno::Reference< text::XTextRange > SAL_CALL SvxShapeText::getStart() throw(uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::SolarMutexGuard aGuard;
     SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : NULL;
     if( pForwarder )
         ::GetSelection( maSelection, pForwarder );
@@ -4489,7 +4488,7 @@ uno::Reference< text::XTextRange > SAL_CALL SvxShapeText::getStart() throw(uno::
 
 uno::Reference< text::XTextRange > SAL_CALL SvxShapeText::getEnd() throw(uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::SolarMutexGuard aGuard;
     SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : NULL;
     if( pForwarder )
         ::GetSelection( maSelection, pForwarder );
@@ -4498,7 +4497,7 @@ uno::Reference< text::XTextRange > SAL_CALL SvxShapeText::getEnd() throw(uno::Ru
 
 OUString SAL_CALL SvxShapeText::getString() throw(uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::SolarMutexGuard aGuard;
     SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : NULL;
     if( pForwarder )
         ::GetSelection( maSelection, pForwarder );
@@ -4508,7 +4507,7 @@ OUString SAL_CALL SvxShapeText::getString() throw(uno::RuntimeException)
 
 void SAL_CALL SvxShapeText::setString( const OUString& aString ) throw(uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::SolarMutexGuard aGuard;
     SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : NULL;
     if( pForwarder )
         ::GetSelection( maSelection, pForwarder );

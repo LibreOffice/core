@@ -55,11 +55,10 @@
 #include <editeng/unotext.hxx>
 #include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
 #include <comphelper/processfactory.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <sdrpaintwindow.hxx>
 
 using namespace ::osl;
-using namespace ::vos;
 using namespace ::rtl;
 
 using ::com::sun::star::uno::XInterface;
@@ -1054,7 +1053,7 @@ SvxTextEditSource::SvxTextEditSource( SvxTextEditSourceImpl* pImpl )
 //------------------------------------------------------------------------
 SvxTextEditSource::~SvxTextEditSource()
 {
-    SolarMutexGuard aGuard;
+    ::SolarMutexGuard aGuard;
 
     mpImpl->release();
 }

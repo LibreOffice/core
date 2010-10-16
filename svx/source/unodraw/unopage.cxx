@@ -32,7 +32,7 @@
 #define _SVX_USE_UNOGLOBALS_
 #include <com/sun/star/document/EventObject.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <osl/mutex.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sot/clsids.hxx>
@@ -61,7 +61,6 @@
 #include <vcl/svapp.hxx>
 
 using ::rtl::OUString;
-using namespace ::vos;
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

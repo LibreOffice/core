@@ -33,7 +33,7 @@
 #include "unogaltheme.hxx"
 #include "svx/gallery1.hxx"
 #include <rtl/uuid.h>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/pathoptions.hxx>
 #include <com/sun/star/gallery/XGalleryTheme.hpp>

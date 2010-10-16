@@ -34,7 +34,7 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #ifndef __RSC //autogen
 #include <tools/errinf.hxx>
 #endif

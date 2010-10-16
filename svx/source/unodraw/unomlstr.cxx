@@ -30,7 +30,7 @@
 #include "precompiled_svx.hxx"
 #include <svx/svdobj.hxx>
 // header for class OGuard
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 // header for class Application
 #include <vcl/svapp.hxx>
 

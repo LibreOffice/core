@@ -32,7 +32,7 @@
 #include "com/sun/star/task/XInteractionRequest.hpp"
 #include "com/sun/star/ucb/CertificateValidationRequest.hpp"
 
-#include "vos/mutex.hxx"
+#include "osl/mutex.hxx"
 #include "tools/datetime.hxx"
 #include "svl/zforlist.hxx"
 #include "vcl/svapp.hxx"

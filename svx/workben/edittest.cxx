@@ -157,7 +157,6 @@ USHORT nZoom = 100;
 BOOL bURLClicked = FALSE;
 
 using namespace ::com::sun::star::connection;
-using namespace ::vos;
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::registry;

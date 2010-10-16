@@ -42,7 +42,7 @@
 #include "vcl/dialog.hxx"
 #include "vcl/msgbox.hxx"
 #include "vcl/svapp.hxx"
-#include "vos/mutex.hxx"
+#include "osl/mutex.hxx"
 #include "vcl/dialog.hxx"
 #include "cppuhelper/implbase3.hxx"
 
@@ -80,7 +80,7 @@
 #include "dp_gui_extensioncmdqueue.hxx"
 #include "ucbhelper/content.hxx"
 #include "osl/mutex.hxx"
-#include "vos/mutex.hxx"
+#include "osl/mutex.hxx"
 #include "rtl/ref.hxx"
 #include "com/sun/star/uno/Sequence.h"
 #include "comphelper/anytostring.hxx"

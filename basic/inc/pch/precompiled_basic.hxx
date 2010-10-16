@@ -277,7 +277,7 @@
 
 #include "osl/diagnose.h"
 #include "vos/macros.hxx"
-#include "vos/mutex.hxx"
+#include "osl/mutex.hxx"
 #include "vos/process.hxx"
 
 #include "xmlscript/xmldlg_imexp.hxx"

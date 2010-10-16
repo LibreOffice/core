@@ -85,7 +85,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/script/XStarBasicAccess.hpp>
 #include <osl/mutex.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 #include <tools/link.hxx>

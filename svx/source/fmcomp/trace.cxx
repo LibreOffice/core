@@ -36,7 +36,7 @@
 //==============================================================================
 
 //------------------------------------------------------------------------------
-::vos::OMutex Tracer::s_aMapSafety;
+::osl::Mutex Tracer::s_aMapSafety;
 ::std::map< ::oslThreadIdentifier, INT32, ::std::less< ::osl::ThreadIdentifier > >
         Tracer::s_aThreadIndents;
 
@@ -44,7 +44,7 @@
 Tracer::Tracer(const char* _pBlockDescription)
     :m_sBlockDescription(_pBlockDescription)
 {
-    ::vos::OGuard aGuard(s_aMapSafety);
+    ::osl::MutexGuard aGuard(s_aMapSafety);
     INT32 nIndent = s_aThreadIndents[ ::osl::Thread::getCurrentIdentifier() ]++;
 
     ByteString sIndent;
@@ -64,7 +64,7 @@ Tracer::Tracer(const char* _pBlockDescription)
 //------------------------------------------------------------------------------
 Tracer::~Tracer()
 {
-    ::vos::OGuard aGuard(s_aMapSafety);
+    ::osl::MutexGuard aGuard(s_aMapSafety);
     INT32 nIndent = --s_aThreadIndents[ ::osl::Thread::getCurrentIdentifier() ];
 
     ByteString sIndent;
@@ -84,7 +84,7 @@ Tracer::~Tracer()
 //------------------------------------------------------------------------------
 void Tracer::TraceString(const char* _pMessage)
 {
-    ::vos::OGuard aGuard(s_aMapSafety);
+    ::osl::MutexGuard aGuard(s_aMapSafety);
     INT32 nIndent = s_aThreadIndents[ ::osl::Thread::getCurrentIdentifier() ];
 
     ByteString sIndent;
@@ -105,7 +105,7 @@ void Tracer::TraceString(const char* _pMessage)
 //------------------------------------------------------------------------------
 void Tracer::TraceString1StringParam(const char* _pMessage, const char* _pParam)
 {
-    ::vos::OGuard aGuard(s_aMapSafety);
+    ::osl::MutexGuard aGuard(s_aMapSafety);
     INT32 nIndent = s_aThreadIndents[ ::osl::Thread::getCurrentIdentifier() ];
 
     ByteString sIndent;

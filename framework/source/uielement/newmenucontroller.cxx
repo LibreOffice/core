@@ -66,7 +66,7 @@
 #include <svtools/acceleratorexecute.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <dispatch/uieventloghelper.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines

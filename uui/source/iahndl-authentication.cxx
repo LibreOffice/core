@@ -40,7 +40,7 @@
 
 #include "osl/diagnose.h"
 #include "rtl/digest.h"
-#include "vos/mutex.hxx"
+#include "osl/mutex.hxx"
 #include "tools/errcode.hxx"
 #include "vcl/msgbox.hxx"
 #include "vcl/abstdlg.hxx"

@@ -41,7 +41,7 @@
 #include <vcl/toolbox.hxx>
 #include <toolkit/unohlp.hxx>
 #include <osl/thread.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 
 #include <svl/itemset.hxx>

@@ -36,7 +36,6 @@
 #define WRONG_TYPE_EXCEPTION    "Only XPropertSet allowed!"
 
 using namespace rtl;
-using namespace vos;
 using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::container;

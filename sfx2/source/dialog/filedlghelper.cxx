@@ -64,7 +64,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <unotools/localfilehelper.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <osl/security.hxx>
 #include <osl/thread.hxx>
 #include <vcl/cvtgrf.hxx>
@@ -1160,7 +1160,7 @@ FileDialogHelper_Impl::~FileDialogHelper_Impl()
 class PickerThread_Impl : public ::osl::Thread
 {
     uno::Reference < XFilePicker > mxPicker;
-    ::vos::OMutex           maMutex;
+    ::osl::Mutex            maMutex;
     virtual void SAL_CALL   run();
     sal_Int16               mnRet;
 public:
@@ -1168,10 +1168,10 @@ public:
                             : mxPicker( rPicker ), mnRet(nMagic) {}
 
     sal_Int16               GetReturnValue()
-                            { ::vos::OGuard aGuard( maMutex ); return mnRet; }
+                            { ::osl::MutexGuard aGuard( maMutex ); return mnRet; }
 
     void                    SetReturnValue( sal_Int16 aRetValue )
-                            { ::vos::OGuard aGuard( maMutex ); mnRet = aRetValue; }
+                            { ::osl::MutexGuard aGuard( maMutex ); mnRet = aRetValue; }
 };
 
 void SAL_CALL PickerThread_Impl::run()

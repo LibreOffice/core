@@ -53,7 +53,7 @@
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <svtools/printdlg.hxx>
 #include <cppuhelper/implbase1.hxx>
 

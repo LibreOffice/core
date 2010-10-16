@@ -76,7 +76,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <ucbhelper/simpleinteractionrequest.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 /** === begin UNO using === **/
 using ::com::sun::star::beans::PropertyValue;

@@ -57,7 +57,7 @@
 #include <vcl/print.hxx>
 #include <svtools/ctrltool.hxx>
 #include <dispatch/uieventloghelper.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines

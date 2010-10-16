@@ -30,7 +30,7 @@
 #include "precompiled_sfx2.hxx"
 
 #include "doctemplates.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/ustring.hxx>

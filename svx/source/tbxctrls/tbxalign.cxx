@@ -39,7 +39,7 @@
 #include <tools/shl.hxx>
 #include <sfx2/imagemgr.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <sfx2/app.hxx>
 #include <vcl/toolbox.hxx>

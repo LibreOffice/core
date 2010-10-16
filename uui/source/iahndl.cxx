@@ -71,7 +71,7 @@
 #include "osl/conditn.hxx"
 #include "tools/rcid.h" // RSC_STRING
 #include "tools/errinf.hxx" // ErrorHandler, ErrorContext, ...
-#include "vos/mutex.hxx"
+#include "osl/mutex.hxx"
 #include "tools/diagnose_ex.h"
 #include "comphelper/documentconstants.hxx" // ODFVER_012_TEXT
 #include "svtools/sfxecode.hxx" // ERRCODE_SFX_*

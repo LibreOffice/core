@@ -47,7 +47,7 @@
 #include <svx/xflhtit.hxx>
 
 #include <vector>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 
@@ -58,7 +58,6 @@
 using namespace ::com::sun::star;
 using namespace ::rtl;
 using namespace ::cppu;
-using namespace ::vos;
 
 typedef std::vector< SfxItemSet* > ItemPoolVector;
 

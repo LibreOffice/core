@@ -39,7 +39,7 @@
 #include <unotools/syslocale.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/debug.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 using namespace svxform;
 using namespace ::connectivity;

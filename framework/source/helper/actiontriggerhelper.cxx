@@ -37,7 +37,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <tools/stream.hxx>
 #include <cppuhelper/weak.hxx>
 #include <comphelper/processfactory.hxx>
@@ -46,7 +46,6 @@
 const USHORT START_ITEMID = 1000;
 
 using namespace rtl;
-using namespace vos;
 using namespace com::sun::star::awt;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;

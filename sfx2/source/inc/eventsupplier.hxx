@@ -52,7 +52,7 @@
 #include <comphelper/sequenceasvector.hxx>
 #include <sfx2/sfxuno.hxx>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <svl/lstner.hxx>
 #include <unotools/eventcfg.hxx>

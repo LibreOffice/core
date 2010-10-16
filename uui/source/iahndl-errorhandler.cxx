@@ -28,7 +28,7 @@
 
 #include <memory>
 
-#include "vos/mutex.hxx"
+#include "osl/mutex.hxx"
 #include "vcl/svapp.hxx"
 #include "vcl/msgbox.hxx"
 

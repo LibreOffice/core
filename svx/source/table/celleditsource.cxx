@@ -33,7 +33,7 @@
 
 #include <rtl/ref.hxx>
 #include <osl/mutex.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/processfactory.hxx>
 #include <svl/lstner.hxx>
@@ -62,7 +62,6 @@
 
 using ::rtl::OUString;
 using namespace ::osl;
-using namespace ::vos;
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;
@@ -939,7 +938,7 @@ CellEditSource::CellEditSource( CellEditSourceImpl* pImpl )
 //------------------------------------------------------------------------
 CellEditSource::~CellEditSource()
 {
-    SolarMutexGuard aGuard;
+    ::SolarMutexGuard aGuard;
     mpImpl->release();
 }
 

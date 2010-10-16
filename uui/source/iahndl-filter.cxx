@@ -40,7 +40,7 @@
 #include "com/sun/star/task/XInteractionRequest.hpp"
 #include "com/sun/star/ui/dialogs/XExecutableDialog.hpp"
 
-#include "vos/mutex.hxx"
+#include "osl/mutex.hxx"
 #include "comphelper/sequenceashashmap.hxx"
 #include "vcl/svapp.hxx"
 

@@ -33,7 +33,7 @@
 
 #include <comphelper/propertysetinfo.hxx>
 #include <rtl/uuid.h>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include "unopool.hxx"
 #include <svx/svdmodel.hxx>

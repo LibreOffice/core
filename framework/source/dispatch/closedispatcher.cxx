@@ -55,7 +55,7 @@
 
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <unotools/moduleoptions.hxx>
 
 //_______________________________________________

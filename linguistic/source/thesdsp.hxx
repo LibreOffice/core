@@ -45,7 +45,7 @@
 #include <cppuhelper/implbase5.hxx> // helper for implementations
 #include <cppuhelper/interfacecontainer.h>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <boost/shared_ptr.hpp>
 #include <map>

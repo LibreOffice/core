@@ -81,7 +81,7 @@
 #include <workwin.hxx>
 #include <sfx2/objface.hxx>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <osl/mutex.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/sequence.hxx>

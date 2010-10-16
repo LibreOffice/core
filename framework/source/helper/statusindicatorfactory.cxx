@@ -63,7 +63,7 @@
 #include <comphelper/mediadescriptor.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 //-----------------------------------------------
 // namespace

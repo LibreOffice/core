@@ -46,7 +46,7 @@
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <sfx2/objsh.hxx>
 
 #include <boost/shared_ptr.hpp>

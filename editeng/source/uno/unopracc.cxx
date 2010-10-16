@@ -34,7 +34,7 @@
 // Global header
 //
 //------------------------------------------------------------------------
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cppuhelper/weakref.hxx>

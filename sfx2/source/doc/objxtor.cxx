@@ -40,7 +40,7 @@
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XTitle.hpp>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <tools/resary.hxx>
 #include <vcl/msgbox.hxx>

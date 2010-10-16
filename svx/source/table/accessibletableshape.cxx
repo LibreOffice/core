@@ -34,7 +34,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 
 #include <comphelper/accessiblewrapper.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 

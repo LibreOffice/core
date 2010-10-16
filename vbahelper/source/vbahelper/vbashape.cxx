@@ -41,7 +41,7 @@
 #include <ooo/vba/word/WdRelativeVerticalPosition.hpp>
 
 #include <comphelper/processfactory.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/unopage.hxx>
 #include <svx/unoshape.hxx>
@@ -55,7 +55,6 @@
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
-using namespace ::vos;
 
 ScVbaShape::ScVbaShape( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< drawing::XShape >& xShape, const uno::Reference< drawing::XShapes >& xShapes, const uno::Reference< frame::XModel >& xModel, sal_Int32 nType ) throw( lang::IllegalArgumentException ) : ScVbaShape_BASE( xParent, xContext ), m_xShape( xShape ), m_xShapes( xShapes ), m_nType( nType ), m_xModel( xModel )
 {

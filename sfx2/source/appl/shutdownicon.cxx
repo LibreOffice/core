@@ -32,7 +32,7 @@
 #include <shutdownicon.hxx>
 #include <app.hrc>
 #include <sfx2/app.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <svtools/imagemgr.hxx>
 #include <svtools/miscopt.hxx>
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -77,7 +77,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::ui::dialogs;
-using namespace ::vos;
 using namespace ::rtl;
 using namespace ::sfx2;
 

@@ -39,7 +39,7 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include "uielement/popupmenucontroller.hxx"
 #include "services.h"

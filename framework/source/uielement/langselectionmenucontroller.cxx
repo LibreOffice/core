@@ -72,7 +72,7 @@
 #include <dispatch/uieventloghelper.hxx>
 
 #include "helper/mischelper.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <map>
 #include <set>

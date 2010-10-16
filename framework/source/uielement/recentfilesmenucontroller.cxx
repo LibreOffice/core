@@ -64,7 +64,7 @@
 #include <odma_lib.hxx>
 #endif
 #include <dispatch/uieventloghelper.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines

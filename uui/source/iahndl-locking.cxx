@@ -38,7 +38,7 @@
 #include "com/sun/star/task/XInteractionAbort.hpp"
 #include "com/sun/star/task/XInteractionRequest.hpp"
 
-#include "vos/mutex.hxx"
+#include "osl/mutex.hxx"
 #include "vcl/svapp.hxx"
 #include "vcl/msgbox.hxx"
 

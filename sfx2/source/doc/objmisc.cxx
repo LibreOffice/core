@@ -35,7 +35,7 @@
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
 #include <svtools/svparser.hxx> // SvKeyValue
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>

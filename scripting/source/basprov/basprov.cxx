@@ -40,7 +40,7 @@
 #include <rtl/uri.hxx>
 #include <osl/process.h>
 #include <osl/file.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <basic/sbx.hxx>
 #include <basic/basmgr.hxx>

@@ -38,7 +38,7 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/toolbox.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <sfx2/imagemgr.hxx>
 #include <vcl/svapp.hxx>

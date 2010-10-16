@@ -59,7 +59,7 @@
 #include <vcl/svapp.hxx>
 #include <tools/resmgr.hxx>
 #include <tools/rcid.h>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <rtl/logfile.hxx>
 
@@ -84,10 +84,7 @@ using namespace ::com::sun::star::lang          ;
 using namespace ::com::sun::star::uno           ;
 using namespace ::com::sun::star::util          ;
 using namespace ::cppu                          ;
-using namespace ::osl                           ;
-using namespace ::rtl                           ;
-using namespace ::vos                           ;
-
+    using ::rtl::OUString;
 //_________________________________________________________________________________________________________________
 //  non exported const
 //_________________________________________________________________________________________________________________

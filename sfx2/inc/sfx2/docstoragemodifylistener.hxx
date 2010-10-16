@@ -36,10 +36,6 @@
 
 #include <cppuhelper/implbase1.hxx>
 
-namespace vos
-{
-    class IMutex;
-}
 
 //........................................................................
 namespace sfx2
@@ -66,10 +62,10 @@ namespace sfx2
     class SFX2_DLLPUBLIC DocumentStorageModifyListener : public DocumentStorageModifyListener_Base
     {
         IModifiableDocument*    m_pDocument;
-        ::vos::IMutex&          m_rMutex;
+        ::osl::SolarMutex&      m_rMutex;
 
     public:
-        DocumentStorageModifyListener( IModifiableDocument& _rDocument, ::vos::IMutex& _rMutex );
+        DocumentStorageModifyListener( IModifiableDocument& _rDocument, ::osl::SolarMutex& _rMutex );
 
         void dispose();
 

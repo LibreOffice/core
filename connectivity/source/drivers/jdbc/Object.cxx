@@ -36,7 +36,7 @@
 #include "java/tools.hxx"
 #include "java/sql/SQLException.hxx"
 #include <vos/process.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <osl/thread.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include "java/LocalRef.hxx"

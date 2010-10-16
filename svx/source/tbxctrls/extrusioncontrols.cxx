@@ -36,7 +36,7 @@
 #include <com/sun/star/awt/XPopupMenuExtended.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <vcl/toolbox.hxx>
 #include <sfx2/app.hxx>

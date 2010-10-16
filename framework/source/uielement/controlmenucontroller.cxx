@@ -63,7 +63,7 @@
 #include <vcl/image.hxx>
 #include <svtools/menuoptions.hxx>
 #include <dispatch/uieventloghelper.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 // Copied from svx
 // Function-Id's

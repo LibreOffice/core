@@ -47,7 +47,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <tools/config.hxx>
 #include <tools/rcid.h>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <unotools/configmgr.hxx>
 #include <com/sun/star/frame/XDesktop.hpp>
 
@@ -87,7 +87,6 @@
 #include <sfx2/objface.hxx>
 #include "helper.hxx"   // SfxContentHelper::Kill()
 
-using namespace ::vos;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
@@ -165,7 +164,7 @@ void SfxApplication::InitializeDisplayName_Impl()
     String aTitle = Application::GetDisplayName();
     if ( !aTitle.Len() )
     {
-        OClearableGuard aGuard( OMutex::getGlobalMutex() );
+        osl::ClearableMutexGuard aGuard( osl::Mutex::getGlobalMutex() );
 
         // create version string
 /*!!! (pb) don't show a version number at the moment

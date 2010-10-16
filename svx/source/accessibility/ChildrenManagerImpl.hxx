@@ -32,7 +32,7 @@
 #include <svx/AccessibleShapeTreeInfo.hxx>
 #include <editeng/AccessibleContextBase.hxx>
 #include <cppuhelper/compbase2.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vector>
 #include <memory>
 #include <com/sun/star/drawing/XShape.hpp>

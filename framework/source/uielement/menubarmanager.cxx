@@ -87,7 +87,7 @@
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/file.hxx>
 #include <cppuhelper/implbase1.hxx>
@@ -113,7 +113,6 @@ struct SystemMenuData
 //_________________________________________________________________________________________________________________
 
 using namespace ::cppu;
-using namespace ::vos;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;

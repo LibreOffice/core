@@ -60,7 +60,7 @@
 #include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <dispatch/uieventloghelper.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines

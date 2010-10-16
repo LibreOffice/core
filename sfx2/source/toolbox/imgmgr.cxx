@@ -45,7 +45,7 @@
 #include <tools/rcid.h>
 #include <tools/link.hxx>
 #include <svtools/miscopt.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <comphelper/processfactory.hxx>
 

@@ -31,7 +31,7 @@
 
 #include <limits.h>
 #include <com/sun/star/uno/Any.h>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <osl/thread.hxx>
 
 #include <tools/resary.hxx>

@@ -38,7 +38,7 @@
 #include <limits.h>
 #include <vector>
 #include <algorithm>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/uno/Any.hxx>

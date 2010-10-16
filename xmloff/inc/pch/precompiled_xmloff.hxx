@@ -470,7 +470,7 @@
 #include "unotools/fontcvt.hxx"
 #include "tools/mapunit.hxx"
 
-#include "vos/mutex.hxx"
+#include "osl/mutex.hxx"
 #include "rtl/ref.hxx"
 #include "salhelper/simplereferenceobject.hxx"
 

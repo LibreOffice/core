@@ -71,7 +71,6 @@
 #include <galtheme.hxx>
 #include <svx/gallery1.hxx>
 
-using namespace ::vos;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::lang;

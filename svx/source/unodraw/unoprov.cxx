@@ -45,7 +45,7 @@
 #include <hash_map>
 #include <vcl/fldunit.hxx>
 #include <tools/shl.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <svx/dialmgr.hxx>

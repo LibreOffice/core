@@ -51,7 +51,7 @@
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 #include "vcl/svapp.hxx"
-#include "vos/mutex.hxx"
+#include "osl/mutex.hxx"
 
 namespace css = com::sun::star;
 

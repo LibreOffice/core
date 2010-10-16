@@ -31,7 +31,7 @@
 
 #include <stack>
 #include <rtl/ustrbuf.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vos/process.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/bootstrap.hxx>

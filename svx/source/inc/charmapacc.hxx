@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <tools/list.hxx>
 #include <tools/color.hxx>
 #include <tools/string.hxx>

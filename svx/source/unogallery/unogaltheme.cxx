@@ -41,7 +41,7 @@
 #include <svx/unopage.hxx>
 #include <svl/itempool.hxx>
 #include <rtl/uuid.h>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/pathoptions.hxx>
 
