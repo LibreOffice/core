@@ -1721,12 +1721,12 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rN
     const SfxItemPool* pPool = rSet.GetPool();
 
     const String aSearchName( aName );
-    const USHORT nCount = pPool->GetItemCount((USHORT)nWID);
-    const NameOrIndex *pItem;
+    const sal_uInt32 nCount = pPool->GetItemCount2((USHORT)nWID);
+    const NameOrIndex* pItem;
 
-    for( USHORT nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
+    for( sal_uInt32 nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
     {
-        pItem = (NameOrIndex*)pPool->GetItem((USHORT)nWID, nSurrogate);
+        pItem = (NameOrIndex*)pPool->GetItem2((USHORT)nWID, nSurrogate);
         if( pItem && ( pItem->GetName() == aSearchName ) )
         {
             rSet.Put( *pItem );
@@ -1755,11 +1755,11 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rN
     const SfxItemPool& rPool = pModel->GetItemPool();
 
     const String aSearchName( rName );
-    const USHORT nCount = rPool.GetItemCount((USHORT)nWhich);
-    const NameOrIndex *pItem = 0;
+    const sal_uInt32 nCount = rPool.GetItemCount((USHORT)nWhich);
+    const NameOrIndex* pItem = 0;
     bool bFound = false;
 
-    for( USHORT nSurrogate = 0; ! bFound && nSurrogate < nCount; nSurrogate++ )
+    for( sal_uInt32 nSurrogate = 0; ! bFound && nSurrogate < nCount; nSurrogate++ )
     {
         pItem = (NameOrIndex*)rPool.GetItem((USHORT)nWhich, nSurrogate);
         if( pItem && ( pItem->GetName() == aSearchName ) )

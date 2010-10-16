@@ -392,8 +392,8 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
         else if ( nScriptType == 2 )
             nWhich = EE_CHAR_FONTINFO_CTL;
 
-        sal_uInt16 i = 0;
-        SvxFontItem* pFontItem = (SvxFontItem*)aEditDoc.GetItemPool().GetItem( nWhich, i );
+        sal_uInt32 i = 0;
+        SvxFontItem* pFontItem = (SvxFontItem*)aEditDoc.GetItemPool().GetItem2( nWhich, i );
         while ( pFontItem )
         {
             bool bAlreadyExist = false;
@@ -406,7 +406,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
             if ( !bAlreadyExist )
                 aFontTable.Insert( aFontTable.Count(), new SvxFontItem( *pFontItem ) );
 
-            pFontItem = (SvxFontItem*)aEditDoc.GetItemPool().GetItem( nWhich, ++i );
+            pFontItem = (SvxFontItem*)aEditDoc.GetItemPool().GetItem2( nWhich, ++i );
         }
     }
 
@@ -462,17 +462,17 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
 
     // ColorList rausschreiben...
     SvxColorList aColorList;
-    sal_uInt16 i = 0;
-    SvxColorItem* pColorItem = (SvxColorItem*)aEditDoc.GetItemPool().GetItem( EE_CHAR_COLOR, i );
+    sal_uInt32 i = 0;
+    SvxColorItem* pColorItem = (SvxColorItem*)aEditDoc.GetItemPool().GetItem2( EE_CHAR_COLOR, i );
     while ( pColorItem )
     {
-        USHORT nPos = i;
+        sal_uInt32 nPos = i;
         if ( pColorItem->GetValue() == COL_AUTO )
             nPos = 0;
         aColorList.Insert( new SvxColorItem( *pColorItem ), nPos );
-        pColorItem = (SvxColorItem*)aEditDoc.GetItemPool().GetItem( EE_CHAR_COLOR, ++i );
+        pColorItem = (SvxColorItem*)aEditDoc.GetItemPool().GetItem2( EE_CHAR_COLOR, ++i );
     }
-    aColorList.Insert( new SvxColorItem( (const SvxColorItem&)aEditDoc.GetItemPool().GetDefaultItem( EE_CHAR_COLOR) ), (sal_uInt32)i );
+    aColorList.Insert( new SvxColorItem( (const SvxColorItem&)aEditDoc.GetItemPool().GetDefaultItem( EE_CHAR_COLOR) ), static_cast<sal_uInt32> (i) );
 
     rOutput << '{' << OOO_STRING_SVTOOLS_RTF_COLORTBL;
     for ( j = 0; j < aColorList.Count(); j++ )
