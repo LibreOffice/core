@@ -39,6 +39,7 @@
 #include <sys/time.h>
 #include <sys/types.h>
 #include <sal/config.h>
+#include <sal/macros.h>
 
 #if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
 #include <stdarg.h>
@@ -989,7 +990,7 @@ String Sane::GetOptionUnitName( int n )
     String aText;
     SANE_Unit nUnit = mppOptions[n]->unit;
     size_t nUnitAsSize = (size_t)nUnit;
-    if( nUnitAsSize > sizeof( ppUnits )/sizeof( ppUnits[0] ) )
+    if( nUnitAsSize > SAL_N_ELEMENTS( ppUnits ) )
         aText = String::CreateFromAscii( "[unknown units]" );
     else
         aText = String( ppUnits[ nUnit ], gsl_getSystemTextEncoding() );
