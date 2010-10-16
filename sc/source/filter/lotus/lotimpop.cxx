@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 #include "lotimpop.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include "attrib.hxx"
 #include "document.hxx"
@@ -49,7 +49,7 @@
 #include "lotattr.hxx"
 
 
-static NAMESPACE_VOS( OMutex )      aLotImpSemaphore;
+static osl::Mutex aLotImpSemaphore;
 
 
 ImportLotus::ImportLotus( SvStream& aStream, ScDocument* pDoc, CharSet eQ ) :

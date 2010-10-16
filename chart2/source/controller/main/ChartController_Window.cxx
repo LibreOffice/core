@@ -81,7 +81,7 @@
 // header for class SdrDragMethod
 #include <svx/svddrgmt.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 // for InfoBox
 #include <vcl/msgbox.hxx>

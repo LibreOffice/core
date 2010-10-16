@@ -270,6 +270,6 @@
 
 #include "vcl/fldunit.hxx"
 
-#include "vos/mutex.hxx"
+#include "osl/mutex.hxx"
 //---MARKER---
 #endif

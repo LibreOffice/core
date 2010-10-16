@@ -36,7 +36,7 @@
 #include "chartview/DrawModelWrapper.hxx"
 #include "macros.hxx"
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/itempool.hxx>
 #include <editeng/adjitem.hxx>

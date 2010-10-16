@@ -33,7 +33,7 @@
 #include <usr/factoryhlp.hxx>
 #include <usr/macros.hxx>
 #include <usr/reflserv.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/debug.hxx>
 #include <tools/date.hxx>

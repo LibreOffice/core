@@ -78,7 +78,7 @@
 #include <unotools/streamwrap.hxx>
 // for SolarMutex
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 // for OutlinerView

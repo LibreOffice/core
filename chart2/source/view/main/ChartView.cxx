@@ -71,7 +71,7 @@
 #include <svx/unoshape.hxx>
 // header for class Application
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <svx/unofill.hxx>
 
 #include <time.h>

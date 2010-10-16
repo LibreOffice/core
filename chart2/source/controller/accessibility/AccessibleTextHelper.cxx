@@ -33,7 +33,7 @@
 #include "DrawViewWrapper.hxx"
 
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <svx/AccessibleTextHelper.hxx>
 #include <svx/unoshtxt.hxx>

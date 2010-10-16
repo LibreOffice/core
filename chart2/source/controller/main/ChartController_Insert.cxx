@@ -76,7 +76,7 @@
 // header for class Application
 #include <vcl/svapp.hxx>
 // header for class ::vos::OGuard
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 
 using namespace ::com::sun::star;

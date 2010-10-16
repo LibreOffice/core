@@ -35,7 +35,7 @@
 #include <com/sun/star/chart2/XUndoSupplier.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 // for ressource strings STR_UNDO and STR_REDO

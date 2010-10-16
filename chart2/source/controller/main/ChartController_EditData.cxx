@@ -42,7 +42,7 @@
 // for RET_OK
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 
 using namespace ::com::sun::star;

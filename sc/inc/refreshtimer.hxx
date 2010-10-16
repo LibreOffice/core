@@ -30,7 +30,7 @@
 
 #include <tools/list.hxx>
 #include <vcl/timer.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <scdllapi.h>
 
 #define SC_REFRESHTIMER_CONTROL_LIST 0
@@ -42,8 +42,8 @@ DECLARE_LIST( ScRefreshTimerList, ScRefreshTimer* )
 class ScRefreshTimerControl
 {
 private:
-            ::vos::OMutex       aMutex;
-            USHORT              nBlockRefresh;
+    ::osl::Mutex   aMutex;
+    USHORT         nBlockRefresh;
 
 public:
 #if SC_REFRESHTIMER_CONTROL_LIST
@@ -60,7 +60,7 @@ public:
                                             ++nBlockRefresh;
                                     }
             BOOL                IsRefreshAllowed() const    { return !nBlockRefresh; }
-            ::vos::OMutex&      GetMutex()                  { return aMutex; }
+            ::osl::Mutex&       GetMutex()                  { return aMutex; }
 };
 
 

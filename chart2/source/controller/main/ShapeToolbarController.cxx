@@ -31,7 +31,7 @@
 
 #include "ShapeToolbarController.hxx"
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <comphelper/sequence.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>

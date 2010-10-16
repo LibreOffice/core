@@ -70,7 +70,7 @@
 #include <vcl/msgbox.hxx>
 // for SolarMutex
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <svx/ActionDescriptionProvider.hxx>
 
 //.............................................................................
