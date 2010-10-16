@@ -263,17 +263,13 @@ private:
 class SmSetSelectionVisitor : public SmDefaultingVisitor
 {
 public:
-    SmSetSelectionVisitor( SmCaretPos startPos,
-                        SmCaretPos endPos ){
-        StartPos    = startPos;
-        EndPos      = endPos;
-        IsSelecting = false;
-    }
+    SmSetSelectionVisitor( SmCaretPos startPos, SmCaretPos endPos, SmNode* pNode);
     void Visit( SmBinHorNode* pNode );
     void Visit( SmUnHorNode* pNode );
     void Visit( SmFontNode* pNode );
     void Visit( SmTextNode* pNode );
     void Visit( SmExpressionNode* pNode );
+    void Visit( SmLineNode* pNode );
     void Visit( SmAlignNode* pNode );
     /** Set IsSelected on all pNodes of pSubTree */
     static void SetSelectedOnAll( SmNode* pSubTree, bool IsSelected = true );

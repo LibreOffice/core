@@ -35,13 +35,13 @@ void SmCursor::Move(OutputDevice* pDev, SmMovementDirection direction, bool bMov
     switch(direction){
         case MoveLeft:
         {
-            //If position->Left is NULL, we want NewPos = NULL anyway...
             NewPos = position->Left;
+            j_assert(NewPos, "NewPos shouldn't be NULL here!");
         }break;
         case MoveRight:
         {
-            //If position->Right is NULL, we want NewPos = NULL anyway...
             NewPos = position->Right;
+            j_assert(NewPos, "NewPos shouldn't be NULL here!");
         }break;
         case MoveUp:
             //Implementation is practically identical to MoveDown, except for a single if statement
@@ -177,8 +177,7 @@ bool SmCursor::SetCaretPosition(SmCaretPos pos, bool moveAnchor){
 
 void SmCursor::AnnotateSelection(){
     //TODO: Manage a state, reset it upon modification and optimize this call
-    SmSetSelectionVisitor SSV(anchor->CaretPos, position->CaretPos);
-    pTree->Accept(&SSV);
+    SmSetSelectionVisitor(anchor->CaretPos, position->CaretPos, pTree);
 }
 
 void SmCursor::Draw(OutputDevice& pDev, Point Offset){
@@ -202,6 +201,7 @@ void SmCursor::Delete(){
 
     //Find the topmost node of the line that holds the selection
     SmNode* pLine = FindTopMostNodeInLine(pSNode, true);
+    j_assert(pLine != pTree, "Shouldn't be able to select the entire tree");
 
     //Get the parent of the line
     SmStructureNode* pLineParent = pLine->GetParent();
@@ -1226,19 +1226,18 @@ SmNode* SmCursor::FindTopMostNodeInLine(SmNode* pSNode, bool MoveUpIfSelected){
         return NULL;
 
     //Move up parent untill we find a node who's
-    //parent isn't selected and not a type of:
+    //parent is NULL or isn't selected and not a type of:
     //      SmExpressionNode
+    //      SmLineNode
     //      SmBinHorNode
     //      SmUnHorNode
     //      SmAlignNode
     //      SmFontNode
-    while((MoveUpIfSelected && pSNode->GetParent()->IsSelected()) ||
-          IsLineCompositionNode(pSNode->GetParent())){
+    while(pSNode->GetParent() &&
+          ((MoveUpIfSelected &&
+            pSNode->GetParent()->IsSelected()) ||
+           IsLineCompositionNode(pSNode->GetParent())))
         pSNode = pSNode->GetParent();
-        j_assert(pSNode, "pSNode shouldn't be NULL, have we hit root node if so, this is bad!");
-        if(!pSNode) //I've got to do something, nothing is probably the best solution :)
-            return NULL;
-    }
     //Now we have the selection line node
     return pSNode;
 }
@@ -1259,6 +1258,7 @@ SmNodeList* SmCursor::LineToList(SmStructureNode* pLine, SmNodeList* list){
     SmNodeIterator it(pLine);
     while(it.Next()){
         switch(it->GetType()){
+            case NLINE:
             case NUNHOR:
             case NEXPRESSION:
             case NBINHOR:
@@ -1304,6 +1304,7 @@ SmNodeList* SmCursor::CloneLineToList(SmStructureNode* pLine, bool bOnlyIfSelect
 
 bool SmCursor::IsLineCompositionNode(SmNode* pNode){
     switch(pNode->GetType()){
+        case NLINE:
         case NUNHOR:
         case NEXPRESSION:
         case NBINHOR:

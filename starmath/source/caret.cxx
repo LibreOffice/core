@@ -47,6 +47,10 @@ SmCaretPosGraphEntry* SmCaretPosGraph::Add(SmCaretPosGraphEntry entry){
             pNext = new SmCaretPosGraph();
         return pNext->Add(entry);
     }else{
+        //Set Left and Right to point to the entry itself if they are NULL
+        entry.Left = entry.Left ? entry.Left : Graph + nOffset;
+        entry.Right = entry.Right ? entry.Right : Graph + nOffset;
+        //Save the entry
         Graph[nOffset] = entry;
         return Graph + nOffset++;
     }

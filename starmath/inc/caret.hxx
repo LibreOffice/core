@@ -177,7 +177,13 @@ public:
         nOffset = 0;
     }
     ~SmCaretPosGraph();
+    /** Add a caret position
+     *  @remarks If Left and/or Right are set NULL, they will point back to the entry.
+     */
     SmCaretPosGraphEntry* Add(SmCaretPosGraphEntry entry);
+    /** Add a caret position
+     *  @remarks If left and/or right are set NULL, they will point back to the entry.
+     */
     SmCaretPosGraphEntry* Add(SmCaretPos pos,
                             SmCaretPosGraphEntry* left = NULL,
                             SmCaretPosGraphEntry* right = NULL){

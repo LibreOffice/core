@@ -335,7 +335,6 @@ void SmDefaultingVisitor::Visit( SmVerticalBraceNode* pNode )
     DefaultVisit( pNode );
 }
 
-
 /////////////////////////////// SmCaretDrawingVisitor ////////////////////////////////
 
 SmCaretDrawingVisitor::SmCaretDrawingVisitor( OutputDevice& rDevice,
@@ -435,7 +434,6 @@ void SmCaretPos2LineVisitor::DefaultVisit( SmNode* pNode )
 
 /////////////////////////////// Nasty temporary device!!! ////////////////////////////////
 
-
 #include <tools/gen.hxx>
 #include <tools/fract.hxx>
 #include <rtl/math.hxx>
@@ -470,7 +468,6 @@ public:
     operator OutputDevice & ( ) { return rOutDev; }
 };
 
-
 SmTmpDevice2::SmTmpDevice2( OutputDevice &rTheDev, BOOL bUseMap100th_mm ) :
     rOutDev( rTheDev )
 {
@@ -482,7 +479,6 @@ SmTmpDevice2::SmTmpDevice2( OutputDevice &rTheDev, BOOL bUseMap100th_mm ) :
         rOutDev.SetMapMode( MAP_100TH_MM );     //Immer fuer 100% fomatieren
     }
 }
-
 
 Color SmTmpDevice2::Impl_GetColor( const Color& rColor )
 {
@@ -508,7 +504,6 @@ Color SmTmpDevice2::Impl_GetColor( const Color& rColor )
     }
     return Color( nNewCol );
 }
-
 
 void SmTmpDevice2::SetFont( const Font &rNewFont )
 {
@@ -645,7 +640,6 @@ void SmDrawingVisitor::Visit( SmRootSymbolNode* pNode )
 
     // draw root-sign itself
     DrawSpecialNode( pNode );
-
 
     SmTmpDevice2  aTmpDev( ( OutputDevice & ) rDev, TRUE );
     aTmpDev.SetFillColor( pNode->GetFont( ).GetColor( ) );
@@ -809,8 +803,46 @@ void SmDrawingVisitor::DrawChildren( SmNode* pNode )
 
 /////////////////////////////// SmSetSelectionVisitor ////////////////////////////////
 
-void SmSetSelectionVisitor::SetSelectedOnAll( SmNode* pSubTree, bool IsSelected )
-{
+SmSetSelectionVisitor::SmSetSelectionVisitor( SmCaretPos startPos, SmCaretPos endPos, SmNode* pTree) {
+    StartPos    = startPos;
+    EndPos      = endPos;
+    IsSelecting = false;
+
+    //Assume that pTree is a SmTableNode
+    j_assert(pTree->GetType() == NTABLE, "pTree should be a SmTableNode!");
+    //Visit root node, this is special as this node cannot be selected, but it's children can!
+    if(pTree->GetType() == NTABLE){
+        //Change state if StartPos is infront of this node
+        if( StartPos.pSelectedNode == pTree && StartPos.Index == 0 )
+            IsSelecting = !IsSelecting;
+        //Change state if EndPos is infront of this node
+        if( EndPos.pSelectedNode == pTree && EndPos.Index == 0 )
+            IsSelecting = !IsSelecting;
+        j_assert(!IsSelecting, "Caret positions needed to set IsSelecting about, shouldn't be possible!");
+
+        //Visit lines
+        SmNodeIterator it( pTree );
+        while( it.Next( ) ) {
+            it->Accept( this );
+            //If we started a selection in this line and it haven't ended, we do that now!
+            if(IsSelecting) {
+                IsSelecting = false;
+                SetSelectedOnAll(it.Current(), true);
+                //Set StartPos and EndPos to invalid positions, this ensures that an unused
+                //start or end (because we forced end above), doesn't start a new selection.
+                StartPos = EndPos = SmCaretPos();
+            }
+        }
+        //Check if pTree isn't selected
+        j_assert(!pTree->IsSelected(), "pTree should never be selected!");
+        //Discard the selection if there's a bug (it's better than crashing)
+        if(pTree->IsSelected())
+            SetSelectedOnAll(pTree, false);
+    }else //This shouldn't happen, but I don't see any reason to die if it does
+        pTree->Accept(this);
+}
+
+void SmSetSelectionVisitor::SetSelectedOnAll( SmNode* pSubTree, bool IsSelected ) {
     pSubTree->SetSelected( IsSelected );
 
     //Quick BFS to set all selections
@@ -819,8 +851,7 @@ void SmSetSelectionVisitor::SetSelectedOnAll( SmNode* pSubTree, bool IsSelected 
         SetSelectedOnAll( it.Current( ), IsSelected );
 }
 
-void SmSetSelectionVisitor::DefaultVisit( SmNode* pNode )
-{
+void SmSetSelectionVisitor::DefaultVisit( SmNode* pNode ) {
     //Change state if StartPos is infront of this node
     if( StartPos.pSelectedNode == pNode && StartPos.Index == 0 )
         IsSelecting = !IsSelecting;
@@ -875,8 +906,7 @@ void SmSetSelectionVisitor::DefaultVisit( SmNode* pNode )
     }
 }
 
-void SmSetSelectionVisitor::VisitCompositionNode( SmNode* pNode )
-{
+void SmSetSelectionVisitor::VisitCompositionNode( SmNode* pNode ) {
     //Change state if StartPos is infront of this node
     if( StartPos.pSelectedNode == pNode && StartPos.Index == 0 )
         IsSelecting = !IsSelecting;
@@ -903,8 +933,7 @@ void SmSetSelectionVisitor::VisitCompositionNode( SmNode* pNode )
         IsSelecting = !IsSelecting;
 }
 
-void SmSetSelectionVisitor::Visit( SmTextNode* pNode )
-{
+void SmSetSelectionVisitor::Visit( SmTextNode* pNode ) {
     long    i1 = -1,
             i2 = -1;
     if( StartPos.pSelectedNode == pNode )
@@ -946,36 +975,33 @@ void SmSetSelectionVisitor::Visit( SmTextNode* pNode )
     pNode->SetSelectionEnd( end );
 }
 
-void SmSetSelectionVisitor::Visit( SmExpressionNode* pNode )
-{
+void SmSetSelectionVisitor::Visit( SmExpressionNode* pNode ) {
     VisitCompositionNode( pNode );
 }
 
-void SmSetSelectionVisitor::Visit( SmAlignNode* pNode )
-{
+void SmSetSelectionVisitor::Visit( SmLineNode* pNode ) {
     VisitCompositionNode( pNode );
 }
 
-void SmSetSelectionVisitor::Visit( SmBinHorNode* pNode )
-{
+void SmSetSelectionVisitor::Visit( SmAlignNode* pNode ) {
     VisitCompositionNode( pNode );
 }
 
-void SmSetSelectionVisitor::Visit( SmUnHorNode* pNode )
-{
+void SmSetSelectionVisitor::Visit( SmBinHorNode* pNode ) {
     VisitCompositionNode( pNode );
 }
 
-void SmSetSelectionVisitor::Visit( SmFontNode* pNode )
-{
+void SmSetSelectionVisitor::Visit( SmUnHorNode* pNode ) {
     VisitCompositionNode( pNode );
 }
 
-
+void SmSetSelectionVisitor::Visit( SmFontNode* pNode ) {
+    VisitCompositionNode( pNode );
+}
 
 /////////////////////////////// SmCaretPosGraphBuildingVisitor ////////////////////////////////
 
-SmCaretPosGraphBuildingVisitor::SmCaretPosGraphBuildingVisitor( SmNode* pRootNode ){
+SmCaretPosGraphBuildingVisitor::SmCaretPosGraphBuildingVisitor( SmNode* pRootNode ) {
     pRightMost  = NULL;
     pGraph = new SmCaretPosGraph( );
     //pRootNode should always be a table
@@ -995,7 +1021,7 @@ SmCaretPosGraphBuildingVisitor::SmCaretPosGraphBuildingVisitor( SmNode* pRootNod
             //The argument for doing this is that we now don't have to worry about SmLineNode
             //being a visual line composition node. Thus, no need for yet another special case
             //in SmCursor::IsLineCompositionNode and everywhere this method is used.
-            if( it->GetType( ) != NLINE )
+            //if( it->GetType( ) != NLINE )
                 pRightMost = pGraph->Add( SmCaretPos( it.Current( ), 0 ) );
             it->Accept( this );
         }
@@ -1004,11 +1030,11 @@ SmCaretPosGraphBuildingVisitor::SmCaretPosGraphBuildingVisitor( SmNode* pRootNod
 }
 
 void SmCaretPosGraphBuildingVisitor::Visit( SmLineNode* pNode ){
-    pRightMost = NULL;
+    //pRightMost = NULL;
     SmNodeIterator it( pNode );
     while( it.Next( ) ){
-        if( !pRightMost )
-            pRightMost = pGraph->Add( SmCaretPos( it.Current( ), 0 ) );
+        //if( !pRightMost )
+        //    pRightMost = pGraph->Add( SmCaretPos( it.Current( ), 0 ) );
         it->Accept( this );
     }
 }
@@ -1489,7 +1515,6 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmBinDiagonalNode* pNode )
     pRightMost = right;
 }
 
-
 //Straigt forward ( I think )
 void SmCaretPosGraphBuildingVisitor::Visit( SmBinHorNode* pNode )
 {
@@ -1853,7 +1878,6 @@ void SmCloningVisitor::Visit( SmBraceNode* pNode )
     pResult = pClone;
 }
 
-
 void SmCloningVisitor::Visit( SmBracebodyNode* pNode )
 {
     SmBracebodyNode* pClone = new SmBracebodyNode( pNode->GetToken( ) );
@@ -2113,7 +2137,6 @@ void SmSelectionDrawingVisitor::Visit( SmTextNode* pNode )
         rDev.Pop( );
     }
 }
-
 
 /////////////////////////////// SmNodeToTextVisitor ///////////////////////////////
 
