@@ -31,7 +31,7 @@
 #include <tools/fsys.hxx>
 #include <tools/stream.hxx>
 #include <bootstrp/listmacr.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <tools/string.hxx>
 
 #define XML_EXT "xlist"

@@ -28,7 +28,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <bootstrp/sstring.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #define ENABLE_BYTESTRING_STREAM_OPERATORS
 #include <tools/stream.hxx>
