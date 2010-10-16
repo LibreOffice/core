@@ -70,7 +70,7 @@ class SbxVariableImpl
 };
 
 
-///////////////////////////// Konstruktoren //////////////////////////////
+///////////////////////////// Constructors //////////////////////////////
 
 SbxVariable::SbxVariable() : SbxValue()
 {
@@ -150,31 +150,31 @@ SfxBroadcaster& SbxVariable::GetBroadcaster()
     return *pCst;
 }
 
-// Eines Tages kann man vielleicht den Parameter 0 schleifen,
-// dann entfaellt die Kopiererei...
+// Perhaps some day one could cut the parameter 0.
+// then the copying will be dropped ...
 
 void SbxVariable::Broadcast( ULONG nHintId )
 {
     if( pCst && !IsSet( SBX_NO_BROADCAST ) && StaticIsEnabledBroadcasting() )
     {
-        // Da die Methode von aussen aufrufbar ist, hier noch einmal
-        // die Berechtigung testen
+        // Because the method could be called from outside, check the Da die Methode von aussen aufrufbar ist, hier noch einmal
+        // rights here again
         if( nHintId & SBX_HINT_DATAWANTED )
             if( !CanRead() )
                 return;
         if( nHintId & SBX_HINT_DATACHANGED )
             if( !CanWrite() )
                 return;
-        // Weitere Broadcasts verhindern
+        // Avoid further broadcasting
         SfxBroadcaster* pSave = pCst;
         pCst = NULL;
         USHORT nSaveFlags = GetFlags();
         SetFlag( SBX_READWRITE );
         if( mpPar.Is() )
-            // this, als Element 0 eintragen, aber den Parent nicht umsetzen!
+            // Register this as element 0, but don't change over the parent!
             mpPar->GetRef( 0 ) = this;
         pSave->Broadcast( SbxHint( nHintId, this ) );
-        delete pCst; // wer weiss schon, auf welche Gedanken mancher kommt?
+        delete pCst; // who knows already, onto which thoughts someone comes?
         pCst = pSave;
         SetFlags( nSaveFlags );
     }
@@ -202,7 +202,7 @@ void SbxVariable::SetParameters( SbxArray* p )
 }
 
 
-/////////////////////////// Name der Variablen ///////////////////////////
+/////////////////////////// Name of the variables ///////////////////////////
 
 void SbxVariable::SetName( const XubString& rName )
 {
@@ -215,15 +215,15 @@ const XubString& SbxVariable::GetName( SbxNameType t ) const
     static char cSuffixes[] = "  %&!#@ $";
     if( t == SbxNAME_NONE )
         return maName;
-    // Parameter-Infos anfordern (nicht fuer Objekte)
+    // Request parameter-information (not for objects)
     ((SbxVariable*)this)->GetInfo();
-    // Nix anfuegen, wenn einfache Property (keine leeren Klammern)
+    // Append nothing, if it is a simple property (no empty brackets)
     if( !pInfo
      || ( !pInfo->aParams.Count() && GetClass() == SbxCLASS_PROPERTY ) )
         return maName;
     xub_Unicode cType = ' ';
     XubString aTmp( maName );
-    // Kurzer Typ? Dann holen, evtl. ist dieser 0.
+    // short type? Then fetch it, posible this is 0.
     SbxDataType et = GetType();
     if( t == SbxNAME_SHORT_TYPES )
     {
@@ -245,7 +245,7 @@ const XubString& SbxVariable::GetName( SbxNameType t ) const
             aTmp += String( SbxRes( STRING_BYREF ) );
         aTmp += q->aName;
         cType = ' ';
-        // Kurzer Typ? Dann holen, evtl. ist dieser 0.
+        // short type? Then fetch it, posible this is 0.
         if( t == SbxNAME_SHORT_TYPES )
         {
             if( nt <= SbxSTRING )
@@ -261,7 +261,7 @@ const XubString& SbxVariable::GetName( SbxNameType t ) const
         {
             if( q->eType & SbxARRAY )
                 aTmp.AppendAscii( "()" );
-            // langer Typ?
+            // long type?
             if( t != SbxNAME_SHORT )
             {
                 aTmp += String( SbxRes( STRING_AS ) );
@@ -274,7 +274,7 @@ const XubString& SbxVariable::GetName( SbxNameType t ) const
         }
     }
     aTmp += ')';
-    // Langer Typ? Dann holen
+    // Long type? Then fetch it
     if( t == SbxNAME_LONG_TYPES && et != SbxEMPTY )
     {
         aTmp += String( SbxRes( STRING_AS ) );
@@ -288,7 +288,7 @@ const XubString& SbxVariable::GetName( SbxNameType t ) const
     return aToolString;
 }
 
-// Einen simplen Hashcode erzeugen: Es werden die ersten 6 Zeichen gewertet.
+// Create a simple hashcode: the first six characters were evaluated.
 
 USHORT SbxVariable::MakeHashCode( const XubString& rName )
 {
@@ -301,7 +301,7 @@ USHORT SbxVariable::MakeHashCode( const XubString& rName )
     {
         BYTE c = (BYTE)*p;
         p++;
-        // Falls wir ein Schweinezeichen haben, abbrechen!!
+        // If we have a commen sigen break!!
         if( c >= 0x80 )
             return 0;
         n = sal::static_int_cast< USHORT >( ( n << 3 ) + toupper( c ) );
@@ -309,7 +309,7 @@ USHORT SbxVariable::MakeHashCode( const XubString& rName )
     return n;
 }
 
-////////////////////////////// Operatoren ////////////////////////////////
+////////////////////////////// Operators ////////////////////////////////
 
 SbxVariable& SbxVariable::operator=( const SbxVariable& r )
 {
@@ -322,7 +322,7 @@ SbxVariable& SbxVariable::operator=( const SbxVariable& r )
     return *this;
 }
 
-//////////////////////////////// Konversion ////////////////////////////////
+//////////////////////////////// Conversion ////////////////////////////////
 
 SbxDataType SbxVariable::GetType() const
 {
@@ -344,17 +344,17 @@ void SbxVariable::SetModified( BOOL b )
     if( IsSet( SBX_NO_MODIFY ) )
         return;
     SbxBase::SetModified( b );
-    if( pParent && pParent != this ) //??? HotFix: Rekursion raus MM
+    if( pParent && pParent != this ) //??? HotFix: Recursion out here MM
         pParent->SetModified( b );
 }
 
 void SbxVariable::SetParent( SbxObject* p )
 {
 #ifdef DBG_UTIL
-    // wird der Parent eines SbxObjects gesetzt?
+    // Will the parent of a SbxObject be set?
     if ( p && ISA(SbxObject) )
     {
-        // dann mu\s dieses auch Child vom neuen Parent sein
+        // then this had to be a child of the new parent
         BOOL bFound = FALSE;
         SbxArray *pChilds = p->GetObjects();
         if ( pChilds )
@@ -404,7 +404,7 @@ void SbxVariable::SetComListener( ::com::sun::star::uno::Reference< ::com::sun::
 }
 
 
-////////////////////////////// Laden/Speichern /////////////////////////////
+////////////////////////////// Loading/Saving /////////////////////////////
 
 BOOL SbxVariable::LoadData( SvStream& rStrm, USHORT nVer )
 {
@@ -428,7 +428,7 @@ BOOL SbxVariable::LoadData( SvStream& rStrm, USHORT nVer )
         UINT32 nTemp;
         rStrm >> nTemp;
         nUserData = nTemp;
-        // Korrektur: Alte Methoden haben statt SbxNULL jetzt SbxEMPTY
+        // correction: old methods have instead of SbxNULL now SbxEMPTY
         if( nType == SbxNULL && GetClass() == SbxCLASS_METHOD )
             nType = SbxEMPTY;
         SbxValues aTmp;
@@ -446,7 +446,7 @@ BOOL SbxVariable::LoadData( SvStream& rStrm, USHORT nVer )
                 rStrm >> aTmp.nLong; break;
             case SbxSINGLE:
             {
-                // Floats als ASCII
+                // Floats as ASCII
                 rStrm.ReadByteString( aTmpString, RTL_TEXTENCODING_ASCII_US );
                 double d;
                 SbxDataType t;
@@ -461,7 +461,7 @@ BOOL SbxVariable::LoadData( SvStream& rStrm, USHORT nVer )
             case SbxDATE:
             case SbxDOUBLE:
             {
-                // Floats als ASCII
+                // Floats as ASCII
                 rStrm.ReadByteString( aTmpString, RTL_TEXTENCODING_ASCII_US );
                 SbxDataType t;
                 if( ImpScan( aTmpString, aTmp.nDouble, t, NULL ) != SbxERR_OK )
@@ -483,14 +483,14 @@ BOOL SbxVariable::LoadData( SvStream& rStrm, USHORT nVer )
                 DBG_ASSERT( !this, "Nicht unterstuetzer Datentyp geladen" );
                 return FALSE;
         }
-        // Wert putten
+        // putt value
         if( nType != SbxNULL && nType != SbxEMPTY && !Put( aTmp ) )
             return FALSE;
     }
     rStrm >> cMark;
-    // cMark ist auch eine Versionsnummer!
+    // cMark is also a version number!
     // 1: initial version
-    // 2: mit nUserData
+    // 2: with nUserData
     if( cMark )
     {
         if( cMark > 2 )
@@ -498,7 +498,7 @@ BOOL SbxVariable::LoadData( SvStream& rStrm, USHORT nVer )
         pInfo = new SbxInfo;
         pInfo->LoadData( rStrm, (USHORT) cMark );
     }
-    // Privatdaten nur laden, wenn es eine SbxVariable ist
+    // Load private data only, if it is a SbxVariable
     if( GetClass() == SbxCLASS_VARIABLE && !LoadPrivateData( rStrm, nVer ) )
         return FALSE;
     ((SbxVariable*) this)->Broadcast( SBX_HINT_DATACHANGED );
@@ -513,16 +513,16 @@ BOOL SbxVariable::StoreData( SvStream& rStrm ) const
     BOOL bValStore;
     if( this->IsA( TYPE(SbxMethod) ) )
     {
-        // #50200 Verhindern, dass Objekte, die zur Laufzeit als Return-Wert
-        // in der Methode als Value gespeichert sind, mit gespeichert werden
+        // #50200 Avoid that objects , which during the runtime
+        // as return-value are saved in the method as a value were saved
         SbxVariable* pThis = (SbxVariable*)this;
         USHORT nSaveFlags = GetFlags();
         pThis->SetFlag( SBX_WRITE );
         pThis->SbxValue::Clear();
         pThis->SetFlags( nSaveFlags );
 
-        // Damit die Methode in keinem Fall ausgefuehrt wird!
-        // CAST, um const zu umgehen!
+        // So that the method will not be executed in any case!
+        // CAST, to avoid const!
         pThis->SetFlag( SBX_NO_BROADCAST );
         bValStore = SbxValue::StoreData( rStrm );
         pThis->ResetFlag( SBX_NO_BROADCAST );
@@ -537,12 +537,12 @@ BOOL SbxVariable::StoreData( SvStream& rStrm ) const
     rStrm << (UINT32)nUserData;
     if( pInfo.Is() )
     {
-        rStrm << (BYTE) 2;      // Version 2: mit UserData!
+        rStrm << (BYTE) 2;      // Version 2: with UserData!
         pInfo->StoreData( rStrm );
     }
     else
         rStrm << (BYTE) 0;
-    // Privatdaten nur speichern, wenn es eine SbxVariable ist
+    // Save private data only, if it is a SbxVariable
     if( GetClass() == SbxCLASS_VARIABLE )
         return StorePrivateData( rStrm );
     else
@@ -611,7 +611,7 @@ void SbxAlias::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
     if( p && p->GetId() == SBX_HINT_DYING )
     {
         xAlias.Clear();
-        // Alias loeschen?
+        // delete the alias?
         if( pParent )
             pParent->Remove( this );
     }
@@ -630,7 +630,7 @@ void SbxVariable::Dump( SvStream& rStrm, BOOL bFill )
         rStrm << " no parent";
     rStrm << " ) ";
 
-    // bei Object-Vars auch das Object ausgeben
+    // output also the object at object-vars
     if ( GetValues_Impl().eType == SbxOBJECT &&
             GetValues_Impl().pObj &&
             GetValues_Impl().pObj != this &&
