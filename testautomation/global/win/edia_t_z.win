@@ -275,7 +275,7 @@ SubmitBindingExpressionBtn sym:svx:PushButton:RID_SVXDLG_ADD_SUBMISSION:PB_SUBMI
 SubmitBinding sym:svx:ListBox:RID_SVXDLG_ADD_SUBMISSION:LB_SUBMIT_BIND
 SubmitReplace sym:svx:ListBox:RID_SVXDLG_ADD_SUBMISSION:LB_SUBMIT_REPLACE
 
-*XFormsDataNavigator sym:SVX_HID_DATA_NAVIGATOR_WIN
+*XFormsDataNavigator sym:SFXDOCKINGWINDOW_ShowDataNavigator
 XFormsDataNavigatorTabControl sym:SVX_HID_XFORMS_TAB_CONTROL
 'Instance sym:svx:TabPage:RID_SVX_TP_XFORMS_INSTANCE
 Models sym:SVX_HID_XFORMS_MODELS_LIST
