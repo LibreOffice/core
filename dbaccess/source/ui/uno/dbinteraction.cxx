@@ -46,7 +46,7 @@
 #include "dbu_uno.hrc"
 #include "paramdialog.hxx"
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include "CollectionView.hxx"
 #include "UITools.hxx"
 

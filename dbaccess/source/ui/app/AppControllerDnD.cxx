@@ -92,7 +92,7 @@
 #include <svtools/fileview.hxx>
 #include <tools/diagnose_ex.h>
 #include "defaultobjectnamecheck.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include "subcomponentmanager.hxx"
 
 //........................................................................

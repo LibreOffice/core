@@ -54,7 +54,7 @@
 #include <vcl/msgbox.hxx>
 #include "dbaccess_helpid.hrc"
 #include "UITools.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <svtools/imgdef.hxx>
 #include "TablesSingleDlg.hxx"
 #include <tools/diagnose_ex.h>

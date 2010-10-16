@@ -1227,7 +1227,7 @@ namespace
 {
     void lcl_modifyListening( ::sfx2::IModifiableDocument& _rDocument,
         const Reference< XStorage >& _rxStorage, ::rtl::Reference< ::sfx2::DocumentStorageModifyListener >& _inout_rListener,
-        ::vos::IMutex& _rMutex, bool _bListen )
+        ::osl::SolarMutex& _rMutex, bool _bListen )
     {
         Reference< XModifiable > xModify( _rxStorage, UNO_QUERY );
         OSL_ENSURE( xModify.is() || !_rxStorage.is(), "lcl_modifyListening: storage can't notify us!" );

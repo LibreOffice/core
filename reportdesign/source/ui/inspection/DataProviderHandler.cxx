@@ -55,7 +55,7 @@
 #include <vcl/fldunit.hxx>
 #include "metadata.hxx"
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include "helpids.hrc"
 #include "uistrings.hrc"
 #include "RptResId.hrc"

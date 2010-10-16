@@ -43,7 +43,7 @@
 #include <vcl/msgbox.hxx>
 
 // --- needed because of the solar mutex
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 // ---
 

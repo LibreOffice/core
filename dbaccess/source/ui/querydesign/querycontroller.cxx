@@ -92,7 +92,7 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 extern "C" void SAL_CALL createRegistryInfo_OQueryControl()
 {

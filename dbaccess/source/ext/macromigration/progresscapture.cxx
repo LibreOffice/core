@@ -36,7 +36,7 @@
 /** === end UNO includes === **/
 
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 //........................................................................
 namespace dbmm

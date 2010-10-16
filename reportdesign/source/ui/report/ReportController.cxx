@@ -143,7 +143,7 @@
 #include <unotools/syslocale.hxx>
 #include <unotools/viewoptions.hxx>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include "PropertyForward.hxx"
 #include "SectionWindow.hxx"
 

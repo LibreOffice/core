@@ -54,7 +54,7 @@
 #include <vcl/svapp.hxx>
 #include <dbaccess/singledoccontroller.hxx>
 #include <svx/unoshape.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 namespace rptui
 {

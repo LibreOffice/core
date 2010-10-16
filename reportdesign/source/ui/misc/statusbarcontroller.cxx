@@ -38,7 +38,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/status.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 namespace rptui

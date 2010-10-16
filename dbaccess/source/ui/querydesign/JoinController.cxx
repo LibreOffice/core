@@ -64,7 +64,7 @@
 #include "adtabdlg.hxx"
 #include <vcl/waitobj.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include "UITools.hxx"
 
 #include <boost/optional.hpp>

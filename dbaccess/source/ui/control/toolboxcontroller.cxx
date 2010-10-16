@@ -45,7 +45,7 @@
 #include <unotools/moduleoptions.hxx>
 #include <tools/diagnose_ex.h>
 #include <svtools/menuoptions.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include "dbu_reghelper.hxx"
 #include "UITools.hxx"
 

@@ -64,7 +64,7 @@
 #include "RptDef.hxx"
 // for locking SolarMutex: svapp + mutex
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <sal/macros.h>
 
 #include <boost/bind.hpp>

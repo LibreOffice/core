@@ -42,7 +42,7 @@
 #include <cppuhelper/weakref.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 namespace dbaccess
 {

@@ -52,7 +52,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 
 using namespace ::com::sun::star::uno;
@@ -533,7 +533,7 @@ Reference< XComponent > SAL_CALL ODocumentContainer::loadComponentFromURL( const
                                                                        , sal_Int32 /*SearchFlags*/
                                                                        , const Sequence< PropertyValue >& Arguments ) throw (IOException, IllegalArgumentException, RuntimeException)
 {
-    SolarMutexGuard aSolarGuard;
+    ::SolarMutexGuard aSolarGuard;
 
     MutexGuard aGuard(m_aMutex);
     Reference< XComponent > xComp;

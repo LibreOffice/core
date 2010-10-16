@@ -43,7 +43,7 @@
 #include <svtools/miscopt.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <svtools/menuoptions.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <svx/svxids.hrc>
 #define ITEMID_COLOR        1
 #define ITEMID_BRUSH        2

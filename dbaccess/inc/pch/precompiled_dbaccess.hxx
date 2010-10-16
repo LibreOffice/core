@@ -500,7 +500,7 @@
 #include "unotools/processfactory.hxx"
 
 
-#include "vos/mutex.hxx"
+#include "osl/mutex.hxx"
 
 #include "xmloff/ProgressBarHelper.hxx"
 #include "xmloff/XMLConstantsPropertyHandler.hxx"

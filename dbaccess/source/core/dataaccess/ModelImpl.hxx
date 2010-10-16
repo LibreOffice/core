@@ -80,7 +80,7 @@
 #include <sfx2/docstoragemodifylistener.hxx>
 #include <tools/string.hxx>
 #include <unotools/sharedunocomponent.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
 
 #include <memory>
@@ -140,7 +140,7 @@ class OSharedConnectionManager;
 //============================================================
 /** a class which provides an IMutex interface to an OSL-based mutex
 */
-class VosMutexFacade : public ::vos::IMutex
+class VosMutexFacade : public ::osl::SolarMutex
 {
 public:
     /** beware of life time: the mutex you pass here must live as least as long

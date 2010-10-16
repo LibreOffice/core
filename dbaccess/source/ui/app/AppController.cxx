@@ -124,7 +124,7 @@
 #include <svx/dbaobjectex.hxx>
 #include <svx/svxdlg.hxx>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include "AppView.hxx"
 #include "browserids.hxx"
 #include "dbu_reghelper.hxx"

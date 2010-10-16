@@ -56,7 +56,7 @@
 #include <com/sun/star/chart2/data/DatabaseDataProvider.hpp>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <com/sun/star/document/EventObject.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
