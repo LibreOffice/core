@@ -42,7 +42,6 @@ SLOFILES=  \
                 $(SLO)$/refernce.obj    \
                 $(SLO)$/thread.obj      \
                 $(SLO)$/stream.obj      \
-                $(SLO)$/module.obj      \
                 $(SLO)$/process.obj     \
                 $(SLO)$/xception.obj
 
@@ -53,7 +52,6 @@ OBJFILES=       \
                 $(OBJ)$/refernce.obj    \
                 $(OBJ)$/thread.obj      \
                 $(OBJ)$/stream.obj      \
-                $(OBJ)$/module.obj      \
                 $(OBJ)$/process.obj     \
                 $(OBJ)$/xception.obj
 
