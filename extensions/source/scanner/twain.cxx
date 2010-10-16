@@ -38,7 +38,7 @@
 #ifdef OS2
 #include <svpm.h>
 #endif // OS2
-#include <vos/module.hxx>
+#include <osl/module.hxx>
 #include <tools/stream.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
@@ -243,7 +243,7 @@ void ImpTwain::ImplOpenSourceManager()
 {
     if( 1 == nCurState )
     {
-        pMod = new NAMESPACE_VOS( OModule )();
+        pMod = new osl::Module();
 
         if( pMod->load( TWAIN_LIBNAME ) )
         {

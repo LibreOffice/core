@@ -540,7 +540,7 @@
 #include "vcl/fldunit.hxx"
 
 #include "vos/macros.hxx"
-#include "vos/module.hxx"
+#include "osl/module.hxx"
 #include "osl/mutex.hxx"
 
 #include "xmloff/nmspmap.hxx"

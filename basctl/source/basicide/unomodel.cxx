@@ -39,7 +39,6 @@
 #include <iderdll.hxx>
 #include <basdoc.hxx>
 
-using namespace ::vos;
 using ::rtl::OUString;
 using namespace ::cppu;
 using namespace ::std;

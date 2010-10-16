@@ -28,7 +28,7 @@
 #ifndef _TWAIN_HXX
 #define _TWAIN_HXX
 
-#include <vos/module.hxx>
+#include <osl/module.hxx>
 #include <vcl/bitmap.hxx>
 #include "twain/twain.h"
 
@@ -57,7 +57,7 @@ class ImpTwain
     Link                        aNotifyLink;
     Bitmap                      aBitmap;
     DSMENTRYPROC                pDSM;
-    NAMESPACE_VOS( OModule )*   pMod;
+    osl::Module                 pMod;
     ULONG                       nCurState;
 
     void                        ImplCreate();

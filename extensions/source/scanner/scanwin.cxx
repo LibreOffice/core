@@ -43,7 +43,7 @@
 #include <tools/svwin.h>
 #include <tools/stream.hxx>
 #include <osl/mutex.hxx>
-#include <vos/module.hxx>
+#include <osl/module.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/sysdata.hxx>
@@ -110,7 +110,7 @@ class ImpTwain : public ::cppu::WeakImplHelper1< util::XCloseListener >
     TW_IDENTITY                                 aSrcIdent;
     Link                                        aNotifyLink;
     DSMENTRYPROC                                pDSM;
-    NAMESPACE_VOS(OModule )*                    pMod;
+    osl::Module*                                pMod;
     ULONG                                       nCurState;
     HWND                                        hTwainWnd;
     HHOOK                                       hTwainHook;
@@ -293,7 +293,7 @@ void ImpTwain::ImplOpenSourceManager()
 {
     if( 1 == nCurState )
     {
-        pMod = new ::vos::OModule( ::rtl::OUString() );
+        pMod = new ::osl::Module( ::rtl::OUString() );
 
         if( pMod->load( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( TWAIN_LIBNAME ) ) ) )
         {
