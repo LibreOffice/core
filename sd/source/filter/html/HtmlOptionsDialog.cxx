@@ -30,7 +30,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 #include <osl/file.hxx>
-#include <vos/module.hxx>
+#include <osl/module.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
