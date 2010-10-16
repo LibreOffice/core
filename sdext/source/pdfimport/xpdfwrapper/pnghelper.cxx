@@ -30,6 +30,7 @@
  ************************************************************************/
 
 #include "pnghelper.hxx"
+#include <sal/macros.h>
 
 #ifdef SYSTEM_ZLIB
 #include "zlib.h"
@@ -132,7 +133,7 @@ void PngHelper::appendFileHeader( OutputBuffer& o_rOutputBuf )
 {
     static const Output_t aHeader[] = { 0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a };
 
-    o_rOutputBuf.insert( o_rOutputBuf.end(), aHeader, aHeader + sizeof(aHeader)/sizeof(aHeader[0]) );
+    o_rOutputBuf.insert( o_rOutputBuf.end(), aHeader, aHeader + SAL_N_ELEMENTS(aHeader) );
 }
 
 size_t PngHelper::startChunk( const char* pChunkName, OutputBuffer& o_rOutputBuf )
