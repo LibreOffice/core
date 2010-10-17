@@ -32,6 +32,7 @@
 #include "systools/win32/uwinapi.h"
 
 #include "file_url.h"
+#include <sal/macros.h>
 #include "file_error.h"
 
 #include "rtl/alloc.h"
@@ -49,8 +50,6 @@
 #else
 #define OSL_ENSURE_FILE( cond, msg, file ) ((void)0)
 #endif
-
-#define ELEMENTS_OF_ARRAY(arr) (sizeof(arr)/(sizeof((arr)[0])))
 
 #define WSTR_SYSTEM_ROOT_PATH               L"\\\\.\\"
 #define WSTR_LONG_PATH_PREFIX               L"\\\\?\\"
@@ -259,16 +258,16 @@ DWORD IsValidFilePath(rtl_uString *path, LPCTSTR *lppError, DWORD dwFlags, rtl_u
 
         DWORD   dwCandidatPathType = PATHTYPE_ERROR;
 
-        if ( 0 == rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( path->buffer, nLength, reinterpret_cast<const sal_Unicode *>(WSTR_LONG_PATH_PREFIX_UNC), ELEMENTS_OF_ARRAY(WSTR_LONG_PATH_PREFIX_UNC) - 1, ELEMENTS_OF_ARRAY(WSTR_LONG_PATH_PREFIX_UNC) - 1 ) )
+        if ( 0 == rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( path->buffer, nLength, reinterpret_cast<const sal_Unicode *>(WSTR_LONG_PATH_PREFIX_UNC), SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX_UNC) - 1, SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX_UNC) - 1 ) )
         {
             /* This is long path in UNC notation */
-            lpComponent = lpszPath + ELEMENTS_OF_ARRAY(WSTR_LONG_PATH_PREFIX_UNC) - 1;
+            lpComponent = lpszPath + SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX_UNC) - 1;
             dwCandidatPathType = PATHTYPE_ABSOLUTE_UNC | PATHTYPE_IS_LONGPATH;
         }
-        else if ( 0 == rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( path->buffer, nLength, reinterpret_cast<const sal_Unicode *>(WSTR_LONG_PATH_PREFIX), ELEMENTS_OF_ARRAY(WSTR_LONG_PATH_PREFIX) - 1, ELEMENTS_OF_ARRAY(WSTR_LONG_PATH_PREFIX) - 1 ) )
+        else if ( 0 == rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( path->buffer, nLength, reinterpret_cast<const sal_Unicode *>(WSTR_LONG_PATH_PREFIX), SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX) - 1, SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX) - 1 ) )
         {
             /* This is long path */
-            lpComponent = lpszPath + ELEMENTS_OF_ARRAY(WSTR_LONG_PATH_PREFIX) - 1;
+            lpComponent = lpszPath + SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX) - 1;
 
             if ( _istalpha( lpComponent[0] ) && ':' == lpComponent[1] )
             {
@@ -562,14 +561,14 @@ DWORD GetCaseCorrectPathName(
     /* Special handling for "\\.\" as system root */
     if ( lpszShortPath && 0 == wcscmp( lpszShortPath, WSTR_SYSTEM_ROOT_PATH ) )
     {
-        if ( cchBuffer >= ELEMENTS_OF_ARRAY(WSTR_SYSTEM_ROOT_PATH) )
+        if ( cchBuffer >= SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) )
         {
             wcscpy( lpszLongPath, WSTR_SYSTEM_ROOT_PATH );
-            return ELEMENTS_OF_ARRAY(WSTR_SYSTEM_ROOT_PATH) - 1;
+            return SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) - 1;
         }
         else
         {
-            return ELEMENTS_OF_ARRAY(WSTR_SYSTEM_ROOT_PATH) - 1;
+            return SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) - 1;
         }
     }
     else if ( lpszShortPath )
@@ -773,7 +772,7 @@ oslFileError _osl_getSystemPathFromFileURL( rtl_uString *strURL, rtl_uString **p
 
             /* Indicates local root */
             if ( nDecodedLen == nSkip )
-                rtl_uString_newFromStr_WithLength( &strTempPath, reinterpret_cast<const sal_Unicode*>(WSTR_SYSTEM_ROOT_PATH), ELEMENTS_OF_ARRAY(WSTR_SYSTEM_ROOT_PATH) - 1 );
+                rtl_uString_newFromStr_WithLength( &strTempPath, reinterpret_cast<const sal_Unicode*>(WSTR_SYSTEM_ROOT_PATH), SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) - 1 );
             else
             {
                 /* do not separate the directory and file case, so the maximal path lengs without prefix is MAX_PATH-12 */
@@ -790,8 +789,8 @@ oslFileError _osl_getSystemPathFromFileURL( rtl_uString *strURL, rtl_uString **p
                                                                  sal_False );
 
                     if ( nNewLen <= MAX_PATH - 12
-                      || 0 == rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( pDecodedURL + nSkip, nDecodedLen - nSkip, reinterpret_cast<const sal_Unicode*>(WSTR_SYSTEM_ROOT_PATH), ELEMENTS_OF_ARRAY(WSTR_SYSTEM_ROOT_PATH) - 1, ELEMENTS_OF_ARRAY(WSTR_SYSTEM_ROOT_PATH) - 1 )
-                      || 0 == rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( pDecodedURL + nSkip, nDecodedLen - nSkip, reinterpret_cast<const sal_Unicode*>(WSTR_LONG_PATH_PREFIX), ELEMENTS_OF_ARRAY(WSTR_LONG_PATH_PREFIX) - 1, ELEMENTS_OF_ARRAY(WSTR_LONG_PATH_PREFIX) - 1 ) )
+                      || 0 == rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( pDecodedURL + nSkip, nDecodedLen - nSkip, reinterpret_cast<const sal_Unicode*>(WSTR_SYSTEM_ROOT_PATH), SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) - 1, SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) - 1 )
+                      || 0 == rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( pDecodedURL + nSkip, nDecodedLen - nSkip, reinterpret_cast<const sal_Unicode*>(WSTR_LONG_PATH_PREFIX), SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX) - 1, SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX) - 1 ) )
                     {
                         rtl_uString_newFromStr_WithLength( &strTempPath, aBuf, nNewLen );
                     }
@@ -800,7 +799,7 @@ oslFileError _osl_getSystemPathFromFileURL( rtl_uString *strURL, rtl_uString **p
                         /* it should be an UNC path, use the according prefix */
                         rtl_uString *strSuffix = NULL;
                         rtl_uString *strPrefix = NULL;
-                        rtl_uString_newFromStr_WithLength( &strPrefix, reinterpret_cast<const sal_Unicode*>(WSTR_LONG_PATH_PREFIX_UNC), ELEMENTS_OF_ARRAY( WSTR_LONG_PATH_PREFIX_UNC ) - 1 );
+                        rtl_uString_newFromStr_WithLength( &strPrefix, reinterpret_cast<const sal_Unicode*>(WSTR_LONG_PATH_PREFIX_UNC), SAL_N_ELEMENTS( WSTR_LONG_PATH_PREFIX_UNC ) - 1 );
                         rtl_uString_newFromStr_WithLength( &strSuffix, aBuf + 2, nNewLen - 2 );
 
                         rtl_uString_newConcat( &strTempPath, strPrefix, strSuffix );
@@ -812,7 +811,7 @@ oslFileError _osl_getSystemPathFromFileURL( rtl_uString *strURL, rtl_uString **p
                     {
                         rtl_uString *strSuffix = NULL;
                         rtl_uString *strPrefix = NULL;
-                        rtl_uString_newFromStr_WithLength( &strPrefix, reinterpret_cast<const sal_Unicode*>(WSTR_LONG_PATH_PREFIX), ELEMENTS_OF_ARRAY( WSTR_LONG_PATH_PREFIX ) - 1 );
+                        rtl_uString_newFromStr_WithLength( &strPrefix, reinterpret_cast<const sal_Unicode*>(WSTR_LONG_PATH_PREFIX), SAL_N_ELEMENTS( WSTR_LONG_PATH_PREFIX ) - 1 );
                         rtl_uString_newFromStr_WithLength( &strSuffix, aBuf, nNewLen );
 
                         rtl_uString_newConcat( &strTempPath, strPrefix, strSuffix );
@@ -881,7 +880,7 @@ oslFileError _osl_getFileURLFromSystemPath( rtl_uString* strPath, rtl_uString** 
             switch ( dwPathType & PATHTYPE_MASK_TYPE )
             {
                 case PATHTYPE_ABSOLUTE_UNC:
-                    nIgnore = ELEMENTS_OF_ARRAY( WSTR_LONG_PATH_PREFIX_UNC ) - 1;
+                    nIgnore = SAL_N_ELEMENTS( WSTR_LONG_PATH_PREFIX_UNC ) - 1;
                     OSL_ENSURE( nIgnore == 8, "Unexpected long path UNC prefix!" );
 
                     /* generate the normal UNC path */
@@ -894,7 +893,7 @@ oslFileError _osl_getFileURLFromSystemPath( rtl_uString* strPath, rtl_uString** 
                     break;
 
                 case PATHTYPE_ABSOLUTE_LOCAL:
-                    nIgnore = ELEMENTS_OF_ARRAY( WSTR_LONG_PATH_PREFIX ) - 1;
+                    nIgnore = SAL_N_ELEMENTS( WSTR_LONG_PATH_PREFIX ) - 1;
                     OSL_ENSURE( nIgnore == 4, "Unexpected long path prefix!" );
 
                     /* generate the normal path */

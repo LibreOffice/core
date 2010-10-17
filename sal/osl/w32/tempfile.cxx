@@ -43,8 +43,6 @@
 #include <tchar.h>
 
 //#####################################################
-#define ELEMENTS_OF_ARRAY(arr) (sizeof(arr)/(sizeof((arr)[0])))
-
 // Allocate n number of t's on the stack return a pointer to it in p
 #ifdef __MINGW32__
 #define STACK_ALLOC(p, t, n) (p) = reinterpret_cast<t*>(_alloca((n)*sizeof(t)));

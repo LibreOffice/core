@@ -52,6 +52,7 @@
 #include "file_error_transl.h"
 
 #include "file_url.h"
+#include <sal/macros.h>
 #include "file_path_helper.hxx"
 
 #include "uunxapi.hxx"
@@ -824,7 +825,7 @@ oslFileError SAL_CALL _osl_getSystemPathFromFileURL( rtl_uString *strURL, rtl_uS
 
             /* Indicates local root */
             if ( nDecodedLen == nSkip )
-                rtl_uString_newFromStr_WithLength( &strTempPath, (const sal_Unicode*)WSTR_SYSTEM_ROOT_PATH, ELEMENTS_OF_ARRAY(WSTR_SYSTEM_ROOT_PATH) - 1 );
+                rtl_uString_newFromStr_WithLength( &strTempPath, (const sal_Unicode*)WSTR_SYSTEM_ROOT_PATH, SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) - 1 );
             else
                 rtl_uString_newFromStr_WithLength( &strTempPath, pDecodedURL + nSkip, nDecodedLen - nSkip );
 

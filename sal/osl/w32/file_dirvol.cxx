@@ -34,6 +34,7 @@
 #include "osl/file.h"
 
 #include "file_url.h"
+#include <sal/macros.h>
 #include "file_error.h"
 
 #include "path_helper.hxx"
@@ -146,7 +147,7 @@ namespace /* private */
 
     //#####################################################
     inline bool is_UNC_path(const sal_Unicode* path)
-    { return (0 == wcsncmp(UNC_PREFIX, reinterpret_cast<LPCWSTR>(path), ELEMENTS_OF_ARRAY(UNC_PREFIX) - 1)); }
+    { return (0 == wcsncmp(UNC_PREFIX, reinterpret_cast<LPCWSTR>(path), SAL_N_ELEMENTS(UNC_PREFIX) - 1)); }
 
     //#####################################################
     inline bool is_UNC_path(const rtl::OUString& path)
@@ -1250,16 +1251,16 @@ bool is_floppy_volume_mount_point(const rtl::OUString& path)
     osl::systemPathEnsureSeparator(p);
 
     TCHAR vn[51];
-    if (GetVolumeNameForVolumeMountPoint(reinterpret_cast<LPCTSTR>(p.getStr()), vn, ELEMENTS_OF_ARRAY(vn)))
+    if (GetVolumeNameForVolumeMountPoint(reinterpret_cast<LPCTSTR>(p.getStr()), vn, SAL_N_ELEMENTS(vn)))
     {
         TCHAR vnfloppy[51];
         if (is_floppy_A_present() &&
-            GetVolumeNameForVolumeMountPoint(FLOPPY_A, vnfloppy, ELEMENTS_OF_ARRAY(vnfloppy)) &&
+            GetVolumeNameForVolumeMountPoint(FLOPPY_A, vnfloppy, SAL_N_ELEMENTS(vnfloppy)) &&
             (0 == wcscmp(vn, vnfloppy)))
             return true;
 
         if (is_floppy_B_present() &&
-            GetVolumeNameForVolumeMountPoint(FLOPPY_B, vnfloppy, ELEMENTS_OF_ARRAY(vnfloppy)) &&
+            GetVolumeNameForVolumeMountPoint(FLOPPY_B, vnfloppy, SAL_N_ELEMENTS(vnfloppy)) &&
             (0 == wcscmp(vn, vnfloppy)))
             return true;
     }
@@ -1322,7 +1323,7 @@ static UINT get_volume_mount_point_drive_type(const rtl::OUString& path)
     osl::systemPathEnsureSeparator(p);
 
     TCHAR vn[51];
-    if (GetVolumeNameForVolumeMountPoint(reinterpret_cast<LPCTSTR>(p.getStr()), vn, ELEMENTS_OF_ARRAY(vn)))
+    if (GetVolumeNameForVolumeMountPoint(reinterpret_cast<LPCTSTR>(p.getStr()), vn, SAL_N_ELEMENTS(vn)))
         return GetDriveType(vn);
 
     return DRIVE_NO_ROOT_DIR;
@@ -1573,7 +1574,7 @@ static oslFileError SAL_CALL osl_getDriveInfo(
             case DRIVE_REMOTE:
             {
                 TCHAR szBuffer[1024];
-                DWORD const dwBufsizeConst = ELEMENTS_OF_ARRAY(szBuffer);
+                DWORD const dwBufsizeConst = SAL_N_ELEMENTS(szBuffer);
                 DWORD dwBufsize = dwBufsizeConst;
 
                 DWORD dwResult = WNetGetConnection( cDrive, szBuffer, &dwBufsize );
@@ -1592,7 +1593,7 @@ static oslFileError SAL_CALL osl_getDriveInfo(
             case DRIVE_FIXED:
             {
                 TCHAR szVolumeNameBuffer[1024];
-                DWORD const dwBufsizeConst = ELEMENTS_OF_ARRAY(szVolumeNameBuffer);
+                DWORD const dwBufsizeConst = SAL_N_ELEMENTS(szVolumeNameBuffer);
 
                 if ( GetVolumeInformation( cRoot, szVolumeNameBuffer, dwBufsizeConst, NULL, NULL, NULL, NULL, 0 ) )
                 {

@@ -51,8 +51,6 @@ const sal_Unicode UNICHAR_SLASH = ((sal_Unicode)'/');
 const sal_Unicode UNICHAR_COLON = ((sal_Unicode)':');
 const sal_Unicode UNICHAR_DOT   = ((sal_Unicode)'.');
 
-#define ELEMENTS_OF_ARRAY(arr) (sizeof(arr)/(sizeof((arr)[0])))
-
 #if OSL_DEBUG_LEVEL > 0
 #define OSL_ENSURE_FILE( cond, msg, file ) ( (cond) ?  (void)0 : _osl_warnFile( msg, file ) )
 #else
