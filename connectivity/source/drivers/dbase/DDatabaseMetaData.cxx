@@ -324,7 +324,6 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getIndexInfo(
         Reference< XPropertySet> xColumn;
         for(sal_Int32 j=1;pColBegin != pColEnd;++pColBegin,++j)
         {
-            //  xColumns->getByName(*pColBegin) >>= xColumn;
             aRow[8] = new ORowSetValueDecorator(j);
             aRow[9] = new ORowSetValueDecorator(*pColBegin);
             aRows.push_back(aRow);

@@ -120,7 +120,6 @@ Error:
         case IResultSetHelper::BOOKMARK:
             m_nFilePos = nTempPos;   // vorherige Position
     }
-    //  aStatus.Set(SDB_STAT_NO_DATA_FOUND);
     return sal_False;
 
 End:
@@ -132,7 +131,6 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::ReadMemo" );
     BOOL bIsText = TRUE;
-    //  SdbConnection* pConnection = GetConnection();
 
     m_pMemoStream->Seek(nBlockNo * m_aMemoHeader.db_size);
     switch (m_aMemoHeader.db_typ)
@@ -173,13 +171,6 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
             {
                 if (((BYTE)sHeader[0]) != 0 || ((BYTE)sHeader[1]) != 0 || ((BYTE)sHeader[2]) != 0)
                 {
-//                  String aText = String(SdbResId(STR_STAT_IResultSetHelper::INVALID));
-//                  aText.SearchAndReplace(String::CreateFromAscii("%%d"),m_pMemoStream->GetFileName());
-//                  aText.SearchAndReplace(String::CreateFromAscii("%%t"),aStatus.TypeToString(MEMO));
-//                  aStatus.Set(SDB_STAT_ERROR,
-//                          String::CreateFromAscii("01000"),
-//                          aStatus.CreateErrorMessage(aText),
-//                          0, String() );
                     return sal_False;
                 }
 
@@ -187,13 +178,6 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
             }
             else if (((BYTE)sHeader[0]) != 0xFF || ((BYTE)sHeader[1]) != 0xFF || ((BYTE)sHeader[2]) != 0x08)
             {
-//              String aText = String(SdbResId(STR_STAT_IResultSetHelper::INVALID));
-//              aText.SearchAndReplace(String::CreateFromAscii("%%d"),m_pMemoStream->GetFileName());
-//              aText.SearchAndReplace(String::CreateFromAscii("%%t"),aStatus.TypeToString(MEMO));
-//              aStatus.Set(SDB_STAT_ERROR,
-//                      String::CreateFromAscii("01000"),
-//                      aStatus.CreateErrorMessage(aText),
-//                      0, String() );
                 return sal_False;
             }
 
@@ -203,7 +187,6 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
             if (m_aMemoHeader.db_typ == MemodBaseIV)
                 nLength -= 8;
 
-            //  char cChar;
             ::rtl::OUString aStr;
             while ( nLength > STRING_MAXLEN )
             {
@@ -218,7 +201,6 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
                 ByteString aBStr;
                 aBStr.Expand(static_cast<xub_StrLen>(nLength));
                 m_pMemoStream->Read(aBStr.AllocBuffer(static_cast<xub_StrLen>(nLength)),nLength);
-                //  aBStr.ReleaseBufferAccess();
 
                 aStr += ::rtl::OUString(aBStr.GetBuffer(),aBStr.Len(), getConnection()->getTextEncoding());
 
@@ -294,7 +276,6 @@ void ONDXNode::Read(SvStream &rStream, ODbaseIndex& rIndex)
         aBuf.ReleaseBufferAccess();
         aBuf.EraseTrailingChars();
 
-        //  aKey = ONDXKey((aBuf,rIndex.GetDBFConnection()->GetCharacterSet()) ,aKey.nRecord);
         aKey = ONDXKey(::rtl::OUString(aBuf.GetBuffer(),aBuf.Len(),rIndex.m_pTable->getConnection()->getTextEncoding()) ,aKey.nRecord);
     }
     rStream >> aChild;
@@ -365,7 +346,6 @@ BOOL ONDXKey::IsText(sal_Int32 eType)
 StringCompare ONDXKey::Compare(const ONDXKey& rKey) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ONDXKey::Compare" );
-    //  DBG_ASSERT(is(), "Falscher Indexzugriff");
     StringCompare eResult;
 
     if (getValue().isNull())
@@ -469,7 +449,6 @@ SvStream& connectivity::dbase::operator >> (SvStream &rStream, ONDXPage& rPage)
     rStream >> nValue >> rPage.aChild;
     rPage.nCount = USHORT(nValue);
 
-//  DBG_ASSERT(rPage.nCount && rPage.nCount < rPage.GetIndex().GetMaxNodes(), "Falscher Count");
     for (USHORT i = 0; i < rPage.nCount; i++)
         rPage[i].Read(rStream, rPage.GetIndex());
     return rStream;
@@ -638,15 +617,5 @@ void ONDXPage::Remove(USHORT nPos)
     bModified = TRUE;
 }
 // -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

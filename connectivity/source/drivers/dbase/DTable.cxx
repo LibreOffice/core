@@ -191,7 +191,7 @@ void lcl_CalDate(sal_Int32 _nJulianDate,sal_Int32 _nJulianTime,com::sun::star::u
         double d_m = d_s / 60;
         double d_h  = d_m / 60;
         _rDateTime.Hours = (sal_uInt16) (d_h);
-        _rDateTime.Minutes = (sal_uInt16) d_m;          // integer _aDateTime.Minutes
+        _rDateTime.Minutes = (sal_uInt16) d_m;
         _rDateTime.Seconds = static_cast<sal_uInt16>(( d_m - (double) _rDateTime.Minutes ) * 60.0);
     }
 }
@@ -331,8 +331,6 @@ void ODbaseTable::fillColumns()
             break;
 
         sal_Bool bIsRowVersion = bFoxPro && ( aDBFColumn.db_frei2[0] & 0x01 ) == 0x01;
-        //if ( bFoxPro && ( aDBFColumn.db_frei2[0] & 0x01 ) == 0x01 ) // system column not visible to user
-        //    continue;
         const String aColumnName((const char *)aDBFColumn.db_fnm,m_eEncoding);
 
         m_aRealFieldLengths.push_back(aDBFColumn.db_flng);
@@ -528,7 +526,6 @@ void ODbaseTable::construct()
             if (m_pMemoStream)
                 ReadMemoHeader();
         }
-        //  if(!m_pColumns && (!m_aColumns.isValid() || !m_aColumns->size()))
         fillColumns();
 
         UINT32 nFileSize = lcl_getFileSize(*m_pFileStream);
@@ -704,7 +701,7 @@ void ODbaseTable::refreshIndexes()
                         aVector.push_back(aURL.getBase());
                     }
                 }
-                catch(Exception&) // a execption is thrown when no file exists
+                catch(Exception&) // an exception is thrown when no file exists
                 {
                 }
             }
@@ -737,7 +734,6 @@ Sequence< Type > SAL_CALL ODbaseTable::getTypes(  ) throw(RuntimeException)
     for(;pBegin != pEnd;++pBegin)
     {
         if(!(*pBegin == ::getCppuType((const Reference<XKeysSupplier>*)0)   ||
-            //  *pBegin == ::getCppuType((const Reference<XAlterTable>*)0)  ||
             *pBegin == ::getCppuType((const Reference<XDataDescriptorFactory>*)0)))
         {
             aOwnTypes.push_back(*pBegin);
@@ -796,7 +792,6 @@ sal_Bool ODbaseTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols, s
     // only read the bookmark
 
     // Satz als geloescht markieren
-    //  rRow.setState(bIsCurRecordDeleted ? ROW_DELETED : ROW_CLEAN );
     _rRow->setDeleted(bIsCurRecordDeleted);
     *(_rRow->get())[0] = m_nFilePos;
 
@@ -859,8 +854,6 @@ sal_Bool ODbaseTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols, s
             break; // length doesn't match buffer size.
 
         char *pData = (char *) (m_pBuffer + nByteOffset);
-
-        //  (*_rRow)[i].setType(nType);
 
         if (nType == DataType::CHAR || nType == DataType::VARCHAR)
         {
@@ -973,7 +966,6 @@ sal_Bool ODbaseTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols, s
                 break;
                 case DataType::DECIMAL:
                     *(_rRow->get())[i] = ORowSetValue(aStr);
-                    //  pVal->setDouble(SdbTools::ToDouble(aStr));
                 break;
                 case DataType::BIT:
                 {
@@ -986,7 +978,6 @@ sal_Bool ODbaseTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols, s
                         default:    b = FALSE; break;
                     }
                     *(_rRow->get())[i] = b;
-                    //  pVal->setDouble(b);
                 }
                 break;
                 case DataType::LONGVARBINARY:
@@ -1069,13 +1060,12 @@ BOOL ODbaseTable::CreateImpl()
 
             if (pFileStream && pFileStream->Seek(STREAM_SEEK_TO_END))
             {
-                //  aStatus.SetError(ERRCODE_IO_ALREADYEXISTS,TABLE,aFile.GetFull());
                 return sal_False;
             }
             delete pFileStream;
         }
     }
-    catch(Exception&) // a execption is thrown when no file exists
+    catch(Exception&) // an exception is thrown when no file exists
     {
     }
 
@@ -1092,7 +1082,7 @@ BOOL ODbaseTable::CreateImpl()
             Content aContent(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>());
             aContent.executeCommand( rtl::OUString::createFromAscii( "delete" ),bool2any( sal_True ) );
         }
-        catch(Exception&) // a execption is thrown when no file exists
+        catch(Exception&) // an exception is thrown when no file exists
         {
         }
         return sal_False;
@@ -1109,12 +1099,11 @@ BOOL ODbaseTable::CreateImpl()
         {
             bMemoAlreadyExists = aMemo1Content.isDocument();
         }
-        catch(Exception&) // a execption is thrown when no file exists
+        catch(Exception&) // an exception is thrown when no file exists
         {
         }
         if (bMemoAlreadyExists)
         {
-            //  aStatus.SetError(ERRCODE_IO_ALREADYEXISTS,MEMO,aFile.GetFull());
             aURL.setExtension(aExt);      // kill dbf file
             try
             {
@@ -1479,7 +1468,6 @@ BOOL ODbaseTable::Drop_Static(const ::rtl::OUString& _sUrl,sal_Bool _bHasMemoFie
                 {
                 }
             }
-            //  aFile.SetBase(m_Name);
             aURL.setExtension(String::CreateFromAscii("inf"));
 
             // as the inf file does not necessarily exist, we aren't allowed to use UCBContentHelper::Kill
@@ -1745,7 +1733,6 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
                 continue;
             else
             {
-                //  ODbVariantRef xVar = (pVal == NULL) ? new ODbVariant() : pVal;
                 Reference<XUnoTunnel> xTunnel(xIndex,UNO_QUERY);
                 OSL_ENSURE(xTunnel.is(),"No TunnelImplementation!");
                 ODbaseIndex* pIndex = reinterpret_cast< ODbaseIndex* >( xTunnel->getSomething(ODbaseIndex::getUnoTunnelImplementationId()) );
@@ -1855,7 +1842,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
             ODbaseIndex* pIndex = reinterpret_cast< ODbaseIndex* >( xTunnel->getSomething(ODbaseIndex::getUnoTunnelImplementationId()) );
             OSL_ENSURE(pIndex,"ODbaseTable::UpdateBuffer: No Index returned!");
             // Update !!
-            if (pOrgRow.isValid() && !rRow.get()[nPos]->getValue().isNull() )//&& pVal->isModified())
+            if (pOrgRow.isValid() && !rRow.get()[nPos]->getValue().isNull() )
                 pIndex->Update(m_nFilePos,*(pOrgRow->get())[nPos],*rRow.get()[nPos]);
             else
                 pIndex->Insert(m_nFilePos,*rRow.get()[nPos]);
@@ -2689,7 +2676,6 @@ Error:
         case IResultSetHelper::BOOKMARK:
             m_nFilePos = nTempPos;   // vorherige Position
     }
-    //  aStatus.Set(SDB_STAT_NO_DATA_FOUND);
     return sal_False;
 
 End:
@@ -2701,7 +2687,6 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::ReadMemo" );
     BOOL bIsText = TRUE;
-    //  SdbConnection* pConnection = GetConnection();
 
     m_pMemoStream->Seek(nBlockNo * m_aMemoHeader.db_size);
     switch (m_aMemoHeader.db_typ)
@@ -2740,29 +2725,10 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
             // Foxpro stores text and binary data
             if (m_aMemoHeader.db_typ == MemoFoxPro)
             {
-//              if (((BYTE)sHeader[0]) != 0 || ((BYTE)sHeader[1]) != 0 || ((BYTE)sHeader[2]) != 0)
-//              {
-////                    String aText = String(SdbResId(STR_STAT_IResultSetHelper::INVALID));
-////                    aText.SearchAndReplace(String::CreateFromAscii("%%d"),m_pMemoStream->GetFileName());
-////                    aText.SearchAndReplace(String::CreateFromAscii("%%t"),aStatus.TypeToString(MEMO));
-////                    aStatus.Set(SDB_STAT_ERROR,
-////                            String::CreateFromAscii("01000"),
-////                            aStatus.CreateErrorMessage(aText),
-////                            0, String() );
-//                  return sal_False;
-//              }
-//
                 bIsText = sHeader[3] != 0;
             }
             else if (((BYTE)sHeader[0]) != 0xFF || ((BYTE)sHeader[1]) != 0xFF || ((BYTE)sHeader[2]) != 0x08)
             {
-//              String aText = String(SdbResId(STR_STAT_IResultSetHelper::INVALID));
-//              aText.SearchAndReplace(String::CreateFromAscii("%%d"),m_pMemoStream->GetFileName());
-//              aText.SearchAndReplace(String::CreateFromAscii("%%t"),aStatus.TypeToString(MEMO));
-//              aStatus.Set(SDB_STAT_ERROR,
-//                      String::CreateFromAscii("01000"),
-//                      aStatus.CreateErrorMessage(aText),
-//                      0, String() );
                 return sal_False;
             }
 
@@ -2776,7 +2742,6 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
             {
                 if ( bIsText )
                 {
-                    //  char cChar;
                     ::rtl::OUStringBuffer aStr;
                     while ( nLength > STRING_MAXLEN )
                     {
@@ -2791,7 +2756,6 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
                         ByteString aBStr;
                         aBStr.Expand(static_cast<xub_StrLen>(nLength));
                         m_pMemoStream->Read(aBStr.AllocBuffer(static_cast<xub_StrLen>(nLength)),nLength);
-                        //  aBStr.ReleaseBufferAccess();
                         aStr.append(::rtl::OUString(aBStr.GetBuffer(),aBStr.Len(), m_eEncoding));
                     }
                     if ( aStr.getLength() )

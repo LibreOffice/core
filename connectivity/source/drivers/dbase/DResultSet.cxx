@@ -49,8 +49,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
-//  using namespace com::sun::star::container;
-//  using namespace com::sun::star::util;
 //------------------------------------------------------------------------------
 ODbaseResultSet::ODbaseResultSet( OStatement_Base* pStmt,connectivity::OSQLParseTreeIterator&   _aSQLIterator)
                 : file::OResultSet(pStmt,_aSQLIterator)
@@ -198,8 +196,6 @@ sal_Bool ODbaseResultSet::fillIndexValues(const Reference< XColumnsSupplier> &_x
                     nRec = pIter->Next();
                 }
                 m_pFileSet->setFrozen();
-                //  if(!bDistinct)
-                    //  SetRowCount(pFileSet->count());
                 delete pIter;
                 return sal_True;
             }

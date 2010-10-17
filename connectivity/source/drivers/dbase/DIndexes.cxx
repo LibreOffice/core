@@ -52,9 +52,6 @@ namespace starutil      = ::com::sun::star::util;
 
 sdbcx::ObjectType ODbaseIndexes::createObject(const ::rtl::OUString& _rName)
 {
-    //  Dir* pDir = m_pTable->getConnection()->getDir();
-    //  String aPath = pDir->GetName();
-    //  aPath += _rName.getStr();
     ::rtl::OUString sFile = m_pTable->getConnection()->getURL();
     sFile += OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELIMITER);
     sFile += _rName;
