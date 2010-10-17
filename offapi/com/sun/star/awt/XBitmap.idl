@@ -60,7 +60,7 @@ published interface XBitmap: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    /** returns the transparence mask of the device independent bitmap.
+    /** returns the transparency mask of the device independent bitmap.
      */
     sequence<byte> getMaskDIB();
 

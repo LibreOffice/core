@@ -54,7 +54,7 @@ interface XLayoutContainer: com::sun::star::container::XChild
     com::sun::star::beans::XPropertySet getChildProperties(
         [in] com::sun::star::awt::XLayoutConstrains Child );
 
-    /** Set at initilization, this object should be notified when a containers state
+    /** Set at initialization, this object should be notified when a containers state
        changes, that may affect its size, to queue a layout re-calculation. */
     void setLayoutUnit( [in] com::sun::star::awt::XLayoutUnit Unit );
 

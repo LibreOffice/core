@@ -46,7 +46,7 @@
 
 //=============================================================================
 
-/** decribes a font on a specific device.
+/** describes a font on a specific device.
 
     <p>All values are in pixels within this device.</p>
  */

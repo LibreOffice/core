@@ -53,7 +53,7 @@ published interface XSystemChildFactory : com::sun::star::uno::XInterface
         the created window.
 
         @param Parent
-        a sytem-specific handle to a window.
+        a system-specific handle to a window.
 
         <p>You must check the machine ID and the process ID.<BR>
         WIN32: HWND.<BR>

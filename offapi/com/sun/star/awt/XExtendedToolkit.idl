@@ -104,7 +104,7 @@ published interface XExtendedToolkit : ::com::sun::star::uno::XInterface
         <member>getTopWindowCount()</member> and successive calls to this
         function.
         @param nIndex
-            The index should be in the intervall from 0 up to but not
+            The index should be in the interval from 0 up to but not
             including the number of top-level windows as returned by
             <member>getTopWindowCount()</member>.
         @return
@@ -127,7 +127,7 @@ published interface XExtendedToolkit : ::com::sun::star::uno::XInterface
 
     /** Add a new listener that is called for events that involve <type
         scope="::com::sun::star::awt">XTopWindow</type>s.  After having
-        obtained the current list of exisiting top-level windows you can
+        obtained the current list of existing top-level windows you can
         keep this list up-to-date by listening to opened or closed top-level
         windows.  Wait for activations or deactivations of top-level windows
         to keep track of the currently active frame.
@@ -145,7 +145,7 @@ published interface XExtendedToolkit : ::com::sun::star::uno::XInterface
     /** Remove the specified listener from the list of listeners.
         @param xListener
             If the reference is empty then nothing will be changed.  If the
-            listener has been registered twice (or more) then all refrences
+            listener has been registered twice (or more) then all references
             will be removed.
     */
     [oneway] void removeTopWindowListener (
@@ -171,7 +171,7 @@ published interface XExtendedToolkit : ::com::sun::star::uno::XInterface
     /** Remove the specified listener from the list of listeners.
         @param xHandler
             If the reference is empty then nothing will be changed.  If the
-            handler has been registered twice (or more) then all refrences
+            handler has been registered twice (or more) then all references
             will be removed.
     */
     [oneway] void removeKeyHandler (
@@ -197,7 +197,7 @@ published interface XExtendedToolkit : ::com::sun::star::uno::XInterface
     /** Remove the specified listener from the list of listeners.
         @param xListener
             If the reference is empty then nothing will be changed.  If the
-            listener has been registered twice (or more) then all refrences
+            listener has been registered twice (or more) then all references
             will be removed.
     */
     [oneway] void removeFocusListener (

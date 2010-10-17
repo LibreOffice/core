@@ -180,7 +180,7 @@ interface XItemList
             )
             raises  ( ::com::sun::star::lang::IndexOutOfBoundsException );
 
-    /** associates an implementation dependend value with the given list item.
+    /** associates an implementation dependent value with the given list item.
 
         <p>You can use this to store data for an item which does not interfere with the displayed
         text and image, but can be used by the client of the list box for an arbitrary purpose.</p>
@@ -246,7 +246,7 @@ interface XItemList
             )
             raises  ( ::com::sun::star::lang::IndexOutOfBoundsException );
 
-    /** retrieves the implementation dependend value associated with the given list item.
+    /** retrieves the implementation dependent value associated with the given list item.
         @see setItemData
 
         @param Position

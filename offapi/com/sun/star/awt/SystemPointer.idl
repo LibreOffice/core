@@ -52,7 +52,7 @@ published constants SystemPointer
 
     //-------------------------------------------------------------------------
 
-    /** specifies a waiting symbol as a mouse pointer (for example hourglas).
+    /** specifies a waiting symbol as a mouse pointer (for example hourglass).
      */
     const long WAIT = 2;
 
@@ -191,7 +191,7 @@ published constants SystemPointer
 
     //-------------------------------------------------------------------------
 
-    /** specifies a mouse pointer which symbolizes horzizontal splitting.
+    /** specifies a mouse pointer which symbolizes horizontal splitting.
      */
     const long HSPLIT = 23;
 

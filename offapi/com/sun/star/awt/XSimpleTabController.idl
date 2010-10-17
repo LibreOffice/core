@@ -56,7 +56,7 @@ interface XSimpleTabController : com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** create a new tab and return an unique ID,
-        which can be used further to adress this tab by using other methods
+        which can be used further to address this tab by using other methods
         of this interface.
 
         @return [long
@@ -71,7 +71,7 @@ interface XSimpleTabController : com::sun::star::uno::XInterface
                 the ID of the tab, which should be removed.
 
         @throws  ::com::sun::star::lang::IndexOutOfBoundsException
-                if the specified ID isnt used inside this tab controller.
+                if the specified ID isn't used inside this tab controller.
      */
     void removeTab( [in] long ID )
         raises( com::sun::star::lang::IndexOutOfBoundsException );
@@ -106,7 +106,7 @@ interface XSimpleTabController : com::sun::star::uno::XInterface
                 the ID of the tab, which should be changed.
 
         @throws  ::com::sun::star::lang::IndexOutOfBoundsException
-                if the specified ID isnt used inside this tab controller.
+                if the specified ID isn't used inside this tab controller.
      */
     void setTabProps( [in] long                                          ID         ,
                       [in] sequence< com::sun::star::beans::NamedValue > Properties )
@@ -119,7 +119,7 @@ interface XSimpleTabController : com::sun::star::uno::XInterface
                 the ID of the tab.
 
         @throws  ::com::sun::star::lang::IndexOutOfBoundsException
-                if the specified ID isnt used inside this tab controller.
+                if the specified ID isn't used inside this tab controller.
      */
     sequence< com::sun::star::beans::NamedValue > getTabProps( [in] long ID )
         raises( com::sun::star::lang::IndexOutOfBoundsException );
@@ -128,14 +128,14 @@ interface XSimpleTabController : com::sun::star::uno::XInterface
     /** activate the specified tab.
 
         @descr  The new tab will be activated and all listener will get an event describing this.
-                Of course there will be an event too, which notify's listener about the deactivation
+                Of course there will be an event too, which notifies listener about the deactivation
                 of the last active tab.
 
         @param  ID
                 the ID of the new active tab.
 
         @throws  ::com::sun::star::lang::IndexOutOfBoundsException
-                if the specified ID isnt used inside this tab controller.
+                if the specified ID isn't used inside this tab controller.
      */
     void activateTab( [in] long ID )
         raises( com::sun::star::lang::IndexOutOfBoundsException );
@@ -149,18 +149,18 @@ interface XSimpleTabController : com::sun::star::uno::XInterface
     long getActiveTabID();
 
     //-------------------------------------------------------------------------
-    /** register listener for inserting/removing tab's and changing her properties.
+    /** register listener for inserting/removing tabs and changing their properties.
 
         @param  Listener
-                the listener for registration.
+                the listener to register.
      */
     void addTabListener( [in] XTabListener Listener );
 
     //-------------------------------------------------------------------------
-    /** deregister listener for inserting/removing tab's and changing her properties.
+    /** unregister listener for inserting/removing tabs and changing their properties.
 
         @param  Listener
-                the listener for deregistration.
+                the listener to unregister.
      */
     void removeTabListener( [in] XTabListener Listener );
 };

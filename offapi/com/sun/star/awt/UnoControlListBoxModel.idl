@@ -56,7 +56,7 @@ published service UnoControlListBoxModel
 
     //-------------------------------------------------------------------------
 
-    /** specifies the horiztontal alignment of the text in the control.
+    /** specifies the horizontal alignment of the text in the control.
 
         <pre>
         0: left
@@ -165,7 +165,7 @@ published service UnoControlListBoxModel
 
     //-------------------------------------------------------------------------
 
-    /** specifies the sequence of selected items, identfied by the position.
+    /** specifies the sequence of selected items, identified by the position.
      */
     [property] sequence<short> SelectedItems;
 
@@ -205,13 +205,13 @@ published service UnoControlListBoxModel
 
     /** defines how the mouse wheel can be used to scroll through the control's content.
 
-        <p>Usually, the mouse wheel scrool through the control's entry list. Using this property,
+        <p>Usually, the mouse wheel scroll through the control's entry list. Using this property,
         and one of the <type>MouseWheelBehavior</type> constants, you can control under which circumstances
         this is possible.</p>
     */
     [optional, property] short MouseWheelBehavior;
 
-    /** allows mmanipulating the list of items in the list box more fine-grained than the
+    /** allows manipulating the list of items in the list box more fine-grained than the
         <member>StringItemList</member> property.
 
         @since OOo 3.3

@@ -60,7 +60,7 @@ published constants FontFamily
 
     //-------------------------------------------------------------------------
 
-    /** specifies the family roman fonts (with serifes).
+    /** specifies the family roman fonts (with serifs).
      */
     const short ROMAN = 3;
 
@@ -72,7 +72,7 @@ published constants FontFamily
 
     //-------------------------------------------------------------------------
 
-    /** specifies the family roman fonts (without serifes).
+    /** specifies the family roman fonts (without serifs).
      */
     const short SWISS = 5;
 

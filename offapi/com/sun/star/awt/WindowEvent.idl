@@ -80,7 +80,7 @@ published struct WindowEvent: com::sun::star::lang::EventObject
     /** specifies the inset from the top.
 
         <p>The inset is the distance between the outer and the inner window,
-        that means the top inset is the heigt of the top border.</p>
+        that means the top inset is the height of the top border.</p>
      */
     long TopInset;
 
@@ -98,7 +98,7 @@ published struct WindowEvent: com::sun::star::lang::EventObject
     /** specifies the inset from the bottom.
 
         <p>The inset is the distance between the outer and the inner window,
-        that means the bottom inset is the heigt of the bottom border.</p>
+        that means the bottom inset is the height of the bottom border.</p>
      */
     long BottomInset;
 

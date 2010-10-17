@@ -39,7 +39,7 @@
  */
 enum MenuItemType
 {
-    /** specifies that the menu item type is unkown.
+    /** specifies that the menu item type is unknown.
     */
     DONTKNOW,
 

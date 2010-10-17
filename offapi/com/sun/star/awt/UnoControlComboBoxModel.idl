@@ -227,7 +227,7 @@ published service UnoControlComboBoxModel
     */
     [optional, property] short MouseWheelBehavior;
 
-    /** allows mmanipulating the list of items in the combo box more fine-grained than the
+    /** allows manipulating the list of items in the combo box more fine-grained than the
         <member>StringItemList</member> property.
     */
     [optional] interface XItemList;

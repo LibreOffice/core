@@ -107,7 +107,7 @@ interface XDockableWindowListener: com::sun::star::lang::XEventListener
 
     //-------------------------------------------------------------------------
 
-    /** is invoked when the window currently is in popupmode and wants to be undocked
+    /** is invoked when the window currently is in pop-up mode and wants to be undocked
         or closed
      */
     void endPopupMode( [in] com::sun::star::awt::EndPopupModeEvent e );

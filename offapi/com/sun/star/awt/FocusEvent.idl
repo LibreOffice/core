@@ -62,7 +62,7 @@ published struct FocusEvent: com::sun::star::lang::EventObject
 {
     //-------------------------------------------------------------------------
 
-    /** specifies the reason for the focus change as an arithmentic-or
+    /** specifies the reason for the focus change as an arithmetic-or
         combination of <type>FocusChangeReason</type>.
 
         @see FocusChangeReason

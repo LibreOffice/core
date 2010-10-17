@@ -46,7 +46,7 @@
 
 //=============================================================================
 
-/** makes it possible to attach an oputput device to the object.
+/** makes it possible to attach an output device to the object.
 
     <p>This kind of object is called view-object.</p>
  */

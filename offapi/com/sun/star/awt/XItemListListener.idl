@@ -65,7 +65,7 @@ interface XItemListListener : ::com::sun::star::lang::XEventListener
                 [in] ::com::sun::star::lang::EventObject Event
             );
 
-    /** is called when the changes to the item list which occured are too complex to be notified
+    /** is called when the changes to the item list which occurred are too complex to be notified
         in single events.
 
         <p>Consumers of this event should discard their cached information about the current item list,
