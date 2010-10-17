@@ -35,6 +35,7 @@
 #include <osl/diagnose.h>
 #include "SysShExec.hxx"
 #include <osl/file.hxx>
+#include <sal/macros.h>
 
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 
@@ -145,7 +146,7 @@ namespace // private
     };
 
     /* size of the table */
-    #define ERRTABLESIZE (sizeof(errtable)/sizeof(errtable[0]))
+    #define ERRTABLESIZE (SAL_N_ELEMENTS(errtable))
 
     /* The following two constants must be the minimum and maximum
     values in the (contiguous) range of osl_File_E_xec Failure errors. */

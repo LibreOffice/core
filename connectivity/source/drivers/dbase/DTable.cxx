@@ -183,7 +183,7 @@ void lcl_CalDate(sal_Int32 _nJulianDate,sal_Int32 _nJulianTime,com::sun::star::u
             _rDateTime.Year = static_cast<sal_uInt16>(kc - 4716);
         else
             _rDateTime.Year = static_cast<sal_uInt16>(kc - 4715);
-    } // if ( _nJulianDate )
+    }
 
     if ( _nJulianTime )
     {
@@ -192,26 +192,6 @@ void lcl_CalDate(sal_Int32 _nJulianDate,sal_Int32 _nJulianTime,com::sun::star::u
         double d_h  = d_m / 60;
         _rDateTime.Hours = (sal_uInt16) (d_h);
         _rDateTime.Minutes = (sal_uInt16) d_m;          // integer _aDateTime.Minutes
-        //// weird: time fix
-     //   int test = (_rDateTime.Hours % 3) * 100 + _rDateTime.Minutes;
-        //int test_tbl[] = {0, 1, 2, 11, 12, 13, 22, 23, 24, 25, 34, 35, 36,
-        //  45, 46, 47, 56, 57, 58, 107, 108, 109, 110, 119, 120, 121,
-        //  130, 131, 132, 141, 142, 143, 152, 153, 154, 155, 204, 205,
-        //  206, 215, 216, 217, 226, 227, 228, 237, 238, 239, 240, 249,
-        //  250, 251};
-     //   for (int i = 0; i < sizeof(test_tbl)/sizeof(test_tbl[0]); i++)
-        //{
-        //    if (test == test_tbl[i])
-        //    {
-        //  // frac += 0.000012;
-        //      //d_hour = frac * 24.0;
-        //      _rDateTime.Hours = (sal_uInt16)d_hour;
-        //      d_minute = (d_hour - (double)_rDateTime.Hours) * 60.0;
-        //      _rDateTime.Minutes = (sal_uInt16)d_minute;
-        //      break;
-        //    }
-     //   }
-
         _rDateTime.Seconds = static_cast<sal_uInt16>(( d_m - (double) _rDateTime.Minutes ) * 60.0);
     }
 }

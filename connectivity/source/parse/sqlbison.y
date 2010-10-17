@@ -87,6 +87,7 @@
 #include "connectivity/dbconversion.hxx"
 #endif
 #include <rtl/ustrbuf.hxx>
+#include <sal/macros.h>
 
 #if defined __GNUC__
     #pragma GCC system_header
@@ -4007,7 +4008,7 @@ IParseContext::InternationalKeyCode OParseContext::getIntlKeyCode(const ::rtl::O
         KEY_VAR_POP,KEY_COLLECT,KEY_FUSION,KEY_INTERSECTION
 	};
 
-	sal_uInt32 nCount = sizeof Intl_TokenID / sizeof Intl_TokenID[0];
+	sal_uInt32 nCount = SAL_N_ELEMENTS( Intl_TokenID );
 	for (sal_uInt32 i = 0; i < nCount; i++)
 	{
 		::rtl::OString aKey = getIntlKeywordAscii(Intl_TokenID[i]);
@@ -4221,7 +4222,7 @@ OSQLParseNode* OSQLParser::parseTree(::rtl::OUString& rErrorMessage,
 //-----------------------------------------------------------------------------
 ::rtl::OUString OSQLParser::RuleIDToStr(sal_uInt32 nRuleID)
 {
-	OSL_ENSURE(nRuleID < (sizeof yytname/sizeof yytname[0]), "OSQLParser::RuleIDToStr: Invalid nRuleId!");
+	OSL_ENSURE(nRuleID < SAL_N_ELEMENTS(yytname), "OSQLParser::RuleIDToStr: Invalid nRuleId!");
 	return ::rtl::OUString::createFromAscii(yytname[nRuleID]);
 }
 
@@ -4230,7 +4231,7 @@ sal_uInt32 OSQLParser::StrToRuleID(const ::rtl::OString & rValue)
 {
 	// In yysvar nach dem angegebenen Namen suchen, den Index zurueckliefern
 	// (oder 0, wenn nicht gefunden)
-	static sal_uInt32 nLen = sizeof(yytname)/sizeof(yytname[0]);
+	static sal_uInt32 nLen = SAL_N_ELEMENTS(yytname);
 	for (sal_uInt32 i = YYTRANSLATE(SQL_TOKEN_INVALIDSYMBOL); i < (nLen-1); i++)
 	{
 		if (yytname && rValue == yytname[i])

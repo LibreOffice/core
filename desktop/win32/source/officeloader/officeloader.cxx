@@ -51,6 +51,7 @@
 #include <systools/win32/uwinapi.h>
 
 #include "rtl/string.h"
+#include <sal/macros.h>
 
 #include "../../../source/inc/exithelper.hxx"
 #include "../extendloaderenvironment.hxx"
@@ -201,7 +202,7 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
     {
         size_t len = lpLastSlash - szModuleFileName + 1;
         _tcsncpy( szPerfTuneIniFile, szModuleFileName, len );
-        _tcsncpy( szPerfTuneIniFile + len, _T("perftune.ini"), sizeof(szPerfTuneIniFile)/sizeof(szPerfTuneIniFile[0]) - len );
+        _tcsncpy( szPerfTuneIniFile + len, _T("perftune.ini"), SAL_N_ELEMENTS(szPerfTuneIniFile) - len );
     }
 
     // Create process with same command line, environment and stdio handles which

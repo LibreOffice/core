@@ -36,6 +36,7 @@
 #include "comphelper/sequenceashashmap.hxx"
 #include "vos/mutex.hxx"
 #include "sfx2/app.hxx"
+#include <sal/macros.h>
 #include "app.hrc"
 #define USE_APP_SHORTCUTS
 #include "shutdownicon.hxx"
@@ -454,7 +455,7 @@ void aqua_init_systray()
             }
             
             // insert the menu entries for launching the applications
-            for ( size_t i = 0; i < sizeof( aMenuItems ) / sizeof( aMenuItems[0] ); ++i )
+            for ( size_t i = 0; i < SAL_N_ELEMENTS( aMenuItems ); ++i )
             {
                 if ( !aModuleOptions.IsModuleInstalled( aMenuItems[i].eModuleIdentifier ) )
                     // the complete application is not even installed

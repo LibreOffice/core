@@ -43,6 +43,7 @@
 #include <systools/win32/uwinapi.h>
 
 #include <stdio.h>
+#include <sal/macros.h>
 
 #ifdef UNOPKG
 
@@ -358,7 +359,7 @@ int _tmain( int, _TCHAR ** )
 	{
 		size_t len = lpLastDot - szModuleFileName;
 		_tcsncpy( szTargetFileName, szModuleFileName, len );
-		_tcsncpy( szTargetFileName + len, _T(".EXE"), sizeof(szTargetFileName)/sizeof(szTargetFileName[0]) - len );
+		_tcsncpy( szTargetFileName + len, _T(".EXE"), SAL_N_ELEMENTS(szTargetFileName) - len );
 	}
 
 	// Create process with same command line, environment and stdio handles which
