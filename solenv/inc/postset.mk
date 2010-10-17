@@ -32,15 +32,13 @@ defaultlangiso=en-US
 # Complete list of all supported ISO codes
 completelangiso=af \
 ar \
-as-IN \
+as \
 be-BY \
 bo \
 bg \
 br \
 brx \
 bn \
-bn-BD \
-bn-IN \
 bs \
 ca \
 cs \
@@ -64,7 +62,6 @@ ga \
 gd \
 gl \
 gu \
-gu-IN \
 he \
 hi \
 hr \
@@ -90,8 +87,8 @@ mk \
 mn \
 mni \
 ms \
-ml-IN \
-mr-IN \
+ml \
+mr \
 my \
 ne \
 nb \
@@ -101,7 +98,7 @@ nr \
 ns \
 om \
 oc \
-or-IN \
+or \
 pap \
 pa-IN \
 pl \
@@ -124,19 +121,17 @@ sr \
 ss \
 st \
 sv \
-sw \
 sw-TZ \
-te-IN \
-ti-ER \
+te \
+ti \
 ta \
-ta-IN \
 th \
 tn \
 tr \
 ts \
 tg \
 ug \
-ur-IN \
+ur \
 uk \
 uz \
 ve \
