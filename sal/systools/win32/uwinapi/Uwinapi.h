@@ -47,11 +47,6 @@ EXTERN_C WINBASEAPI LPWSTR WINAPI lstrrchrW( LPCWSTR lpString, WCHAR c );
 #define lstrchr     lstrchrA
 #endif
 
-// macro that calculates the count of elements of a static array
-
-#define bufsizeof(buf)  (sizeof(buf) / sizeof((buf)[0]))
-
-
 #define IsValidHandle(Handle)   ((DWORD)(Handle) + 1 > 1)
 
 #ifdef __cplusplus
