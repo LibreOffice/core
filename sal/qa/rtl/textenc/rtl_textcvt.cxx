@@ -40,6 +40,7 @@
 #include "rtl/textcvt.h"
 #include "rtl/textenc.h"
 #include "sal/types.h"
+#include <sal/macros.h>
 
 namespace {
 
@@ -1278,7 +1279,7 @@ void Test::testSingleByte() {
                 0x0438,0x0439,0x043A,0x043B,0x043C,0x043D,0x043E,0x043F,
                 0x0440,0x0441,0x0442,0x0443,0x0444,0x0445,0x0446,0x0447,
                 0x0448,0x0449,0x044A,0x044B,0x044C,0x044D,0x044E,0x044F } } };
-    for (std::size_t i = 0; i < sizeof data / sizeof data[0]; ++i) {
+    for (std::size_t i = 0; i < SAL_N_ELEMENTS(data); ++i) {
         testSingleByteCharSet(data[i]);
     }
 }
@@ -2506,7 +2507,7 @@ void Test::testComplex() {
               false,
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR }
         };
-    for (std::size_t i = 0; i < sizeof data / sizeof data[0]; ++i) {
+    for (std::size_t i = 0; i < SAL_N_ELEMENTS(data); ++i) {
         doComplexCharSetTest(data[i]);
     }
 }
@@ -2594,7 +2595,7 @@ void Test::testComplexCut() {
               false,
               false,
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR } */ };
-    for (std::size_t i = 0; i < sizeof data / sizeof data[0]; ++i) {
+    for (std::size_t i = 0; i < SAL_N_ELEMENTS(data); ++i) {
         doComplexCharSetCutTest(data[i]);
     }
 }
@@ -2721,7 +2722,7 @@ void Test::testMime() {
         { "CP154", RTL_TEXTENCODING_PT154, false },
         { "Cyrillic-Asian", RTL_TEXTENCODING_PT154, false }
     };
-    for (std::size_t i = 0; i < sizeof data / sizeof data[0]; ++i) {
+    for (std::size_t i = 0; i < SAL_N_ELEMENTS(data); ++i) {
         if (data[i].mime == 0) {
             OSL_ASSERT(data[i].reverse);
             CPPUNIT_ASSERT_EQUAL(
@@ -2821,7 +2822,7 @@ void Test::testWindows() {
         { 0, RTL_TEXTENCODING_UCS2, true },
         { 0, RTL_TEXTENCODING_ISCII_DEVANAGARI, true }
     };
-    for (std::size_t i = 0; i < sizeof data / sizeof data[0]; ++i) {
+    for (std::size_t i = 0; i < SAL_N_ELEMENTS(data); ++i) {
         OSL_ASSERT(data[i].codePage != 0 || data[i].reverse);
         if (data[i].codePage != 0) {
             CPPUNIT_ASSERT_EQUAL(
@@ -2887,7 +2888,7 @@ void Test::testInfo() {
         { RTL_TEXTENCODING_PT154, RTL_TEXTENCODING_INFO_ASCII, true },
         { RTL_TEXTENCODING_PT154, RTL_TEXTENCODING_INFO_MIME, true }
     };
-    for (std::size_t i = 0; i < sizeof data / sizeof data[0]; ++i) {
+    for (std::size_t i = 0; i < SAL_N_ELEMENTS(data); ++i) {
         rtl_TextEncodingInfo info;
         info.StructSize = sizeof info;
         CPPUNIT_ASSERT(rtl_getTextEncodingInfo(data[i].encoding, &info));

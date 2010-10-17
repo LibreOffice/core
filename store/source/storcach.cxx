@@ -32,6 +32,7 @@
 #include "storcach.hxx"
 
 #include "sal/types.h"
+#include "sal/macros.h"
 #include "rtl/alloc.h"
 #include "osl/diagnose.h"
 
@@ -342,7 +343,7 @@ PageCache_Impl::PageCache_Impl (sal_uInt16 nPageSize)
       m_nHit         (0),
       m_nMissed      (0)
 {
-    static size_t const theSize = sizeof(m_hash_table_0) / sizeof(m_hash_table_0[0]);
+    static size_t const theSize = SAL_N_ELEMENTS(m_hash_table_0);
     STORE_STATIC_ASSERT(theSize == theTableSize);
     memset(m_hash_table_0, 0, sizeof(m_hash_table_0));
 }

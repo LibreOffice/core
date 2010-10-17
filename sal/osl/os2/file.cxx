@@ -54,6 +54,7 @@
 #include <osl/diagnose.h>
 #include "file_error_transl.h"
 #include <osl/time.h>
+#include <sal/macros.h>
 
 #include "file_url.h"
 
@@ -130,12 +131,10 @@ extern "C" oslFileHandle osl_createFileHandleFromFD( int fd );
         //{  ERROR_NOT_ENOUGH_QUOTA,       osl_File_E_NOMEM    }    /* 1816 */
     };
 
-    #define ELEMENTS_OF_ARRAY(arr) (sizeof(arr)/(sizeof((arr)[0])))
-
     //#####################################################
     oslFileError MapError(APIRET dwError)
     {
-        for (int i = 0; i < ELEMENTS_OF_ARRAY(errtable); ++i )
+        for (int i = 0; i < SAL_N_ELEMENTS(errtable); ++i )
         {
             if (dwError == errtable[i].oscode)
                 return static_cast<oslFileError>(errtable[i].errnocode);

@@ -68,6 +68,7 @@
 #include <osl/signal.h>
 #include <osl/process.h>
 #include <osl/thread.h>
+#include <sal/macros.h>
 #include <rtl/bootstrap.h>
 #include <rtl/digest.h>
 
@@ -572,7 +573,7 @@ static int ReportCrash( int Signal )
 
                 void *stackframes[MAX_STACK_FRAMES];
                 int  iFrame;
-                int  nFrames = backtrace( stackframes, sizeof(stackframes)/sizeof(stackframes[0]));
+                int  nFrames = backtrace( stackframes, SAL_N_ELEMENTS(stackframes);
 
                 FILE *xmlout = NULL, *stackout = NULL, *checksumout = NULL;
                 int fdxml, fdstk, fdchksum;
@@ -755,7 +756,7 @@ static int ReportCrash( int Signal )
                     rtl_uString_release(crashrep_url);
                     rtl_uString_release(crashrep_path);
 #if defined INCLUDE_BACKTRACE && (defined LINUX || defined MACOSX)
-                    snprintf( szShellCmd, sizeof(szShellCmd)/sizeof(szShellCmd[0]),
+                    snprintf( szShellCmd, SAL_N_ELEMENTS(szShellCmd),
                         "%s -p %d -s %d -xml %s -chksum %s -stack %s -noui%s",
                         rtl_string_getStr(crashrep_path_system),
                         getpid(),
@@ -765,7 +766,7 @@ static int ReportCrash( int Signal )
                         pStackTempName,
                         bAutoCrashReport ? " -send" : "" );
 #elif defined INCLUDE_BACKTRACE && defined SOLARIS
-                    snprintf( szShellCmd, sizeof(szShellCmd)/sizeof(szShellCmd[0]),
+                    snprintf( szShellCmd, SAL_N_ELEMENTS(szShellCmd),
                         "%s -p %d -s %d -xml %s -chksum %s -noui%s",
                         rtl_string_getStr(crashrep_path_system),
                         getpid(),
@@ -774,7 +775,7 @@ static int ReportCrash( int Signal )
                         pChecksumTempName,
                         bAutoCrashReport ? " -send" : "" );
 #else
-                    snprintf( szShellCmd, sizeof(szShellCmd)/sizeof(szShellCmd[0]),
+                    snprintf( szShellCmd, SAL_N_ELEMENTS(szShellCmd),
                         "%s -p %d -s %d -noui%s",
                         rtl_string_getStr(crashrep_path_system),
                         getpid(), Signal, bAutoCrashReport ? " -send" : "" );
@@ -820,7 +821,7 @@ static void PrintStack( int sig )
 {
 #if ! defined(MACOSX) || defined(INCLUDE_BACKTRACE)
     void *buffer[MAX_STACK_FRAMES];
-    int size = backtrace( buffer, sizeof(buffer) / sizeof(buffer[0]) );
+    int size = backtrace( buffer, SAL_N_ELEMENTS(buffer) );
 #endif
 
     fprintf( stderr, "\n\nFatal exception: Signal %d\n", sig );

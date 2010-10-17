@@ -43,6 +43,7 @@
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
+#include "sal/macros.h"
 
 #include <cstddef>
 
@@ -198,7 +199,7 @@ sal_uInt32 readUcs4(sal_Unicode const ** pBegin, sal_Unicode const * pEnd,
                 sal_Size nConverted;
                 sal_Size nDstSize = rtl_convertTextToUnicode(
                     aConverter, 0, aBuf.getStr(), aBuf.getLength(), aDst,
-                    sizeof aDst / sizeof aDst[0],
+                    SAL_N_ELEMENTS( aDst ),
                     (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
                      | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
                      | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR),
@@ -592,7 +593,7 @@ sal_Bool const * SAL_CALL rtl_getUriCharClass(rtl_UriCharClass eCharClass)
     OSL_ENSURE(
         (eCharClass >= 0
          && (sal::static_int_cast< std::size_t >(eCharClass)
-             < sizeof aCharClass / sizeof aCharClass[0])),
+             < SAL_N_ELEMENTS(aCharClass))),
         "bad eCharClass");
     return aCharClass[eCharClass];
 }
