@@ -33,9 +33,7 @@ TARGET=core
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  scpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sc.mk
 
 # --- Files --------------------------------------------------------
 
