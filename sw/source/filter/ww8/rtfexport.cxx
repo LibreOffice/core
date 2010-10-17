@@ -1124,11 +1124,6 @@ USHORT RtfExport::GetRedline( const String& rAuthor )
     }
 }
 
-void RtfExport::OutContent( const SwNode& rNode )
-{
-        OutputContentNode(*rNode.GetCntntNode());
-}
-
 void RtfExport::OutPageDescription( const SwPageDesc& rPgDsc, BOOL bWriteReset, BOOL bCheckForFirstPage )
 {
     OSL_TRACE("%s start", OSL_THIS_FUNC);

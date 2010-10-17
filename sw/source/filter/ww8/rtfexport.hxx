@@ -174,7 +174,6 @@ public:
     static rtl::OString OutString(const String &rStr, rtl_TextEncoding eDestEnc);
     static rtl::OString OutHex(ULONG nHex, BYTE nLen);
     void OutPageDescription( const SwPageDesc& rPgDsc, BOOL bWriteReset, BOOL bCheckForFirstPage );
-    void OutContent( const SwNode& rNode );
 
     USHORT GetColor( const Color& rColor ) const;
     void InsColor( const Color& rCol );
