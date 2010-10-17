@@ -91,6 +91,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <sal/macros.h>
 
 #include <map>
 
@@ -179,7 +180,7 @@ LanguageType lcl_CheckLanguage(
         lang::Locale a3( SvxCreateLocale( aLangList[3] ) );
 #endif
 
-        INT32   nCount = sizeof(aLangList) / sizeof(aLangList[0]);
+        INT32   nCount = SAL_N_ELEMENTS(aLangList);
         for (INT32 i = 0;  i < nCount;  i++)
         {
             INT16 nTmpLang = aLangList[i];

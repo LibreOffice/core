@@ -3,6 +3,7 @@
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <ooo/vba/word/WdUnderline.hpp>
 #include <hash_map>
+#include <sal/macros.h>
 #include <ooo/vba/word/WdColorIndex.hpp>
 
 using namespace ::ooo::vba;
@@ -46,7 +47,7 @@ class UnderLineMapper
 private:
     UnderLineMapper()
     {
-        sal_Int32 nLen = sizeof( UnderLineTable )/ sizeof( UnderLineTable[0] );
+        sal_Int32 nLen = SAL_N_ELEMENTS( UnderLineTable );
 
         for ( sal_Int32 index=0; index<nLen; ++index )
         {

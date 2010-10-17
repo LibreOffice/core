@@ -27,7 +27,7 @@
  ************************************************************************/
 #include <vbahelper/helperdecl.hxx>
 #include "vbaglobals.hxx"
-
+#include <sal/macros.h>
 #include <comphelper/unwrapargs.hxx>
 
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
@@ -178,7 +178,7 @@ SwVbaGlobals::getAvailableServiceNames(  ) throw (uno::RuntimeException)
 //            #FIXME #TODO make Application a proper service
 //            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "ooo.vba.word.Application" ) ),
         };
-        sal_Int32 nWordServices = ( sizeof( names )/ sizeof( names[0] ) );
+        sal_Int32 nWordServices = SAL_N_ELEMENTS( names );
         sal_Int32 startIndex = serviceNames.getLength();
         serviceNames.realloc( serviceNames.getLength() + nWordServices );
         for ( sal_Int32 index = 0; index < nWordServices; ++index )

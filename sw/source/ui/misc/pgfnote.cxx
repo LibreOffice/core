@@ -39,6 +39,7 @@
 #include <hintids.hxx>
 #include <tools/ref.hxx>
 #include <svx/dialogs.hrc>
+#include <sal/macros.h>
 #include <vcl/field.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/localedatawrapper.hxx>
@@ -70,7 +71,7 @@ static const USHORT __FAR_DATA nLines[] = {
     500
 };
 
-static const USHORT nLineCount = sizeof(nLines) / sizeof(nLines[0]);
+static const USHORT nLineCount = SAL_N_ELEMENTS(nLines);
 
 static USHORT __FAR_DATA aPageRg[] = {
     FN_PARAM_FTN_INFO, FN_PARAM_FTN_INFO,

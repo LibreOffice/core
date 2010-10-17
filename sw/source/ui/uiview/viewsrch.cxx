@@ -43,6 +43,7 @@
 #include <svl/itempool.hxx>
 #include <svl/eitem.hxx>
 #include <svl/srchitem.hxx>
+#include <sal/macros.h>
 #include <sfx2/request.hxx>
 #include <svx/srchdlg.hxx>
 #include <vcl/msgbox.hxx>
@@ -380,16 +381,16 @@ void SwView::ExecSearch(SfxRequest& rReq, BOOL bNoMessage)
 
             SvUShorts aArr( 0, 16 );
             aArr.Insert(    aNormalAttr,
-                            sizeof( aNormalAttr ) / sizeof( aNormalAttr[0] ),
+                            SAL_N_ELEMENTS( aNormalAttr ),
                             0 );
             if( SW_MOD()->GetCTLOptions().IsCTLFontEnabled() )
                 aArr.Insert(    aCTLAttr,
-                                sizeof( aCTLAttr ) / sizeof( aCTLAttr[0] ),
+                                SAL_N_ELEMENTS( aCTLAttr ),
                                 14 );
             SvtCJKOptions aCJKOpt;
             if( aCJKOpt.IsAnyEnabled() )
                 aArr.Insert(    aCJKAttr,
-                                sizeof( aCJKAttr ) / sizeof( aCJKAttr[0] ),
+                                SAL_N_ELEMENTS( aCJKAttr ),
                                 14 );
 
             SfxItemSet aSet( pWrtShell->GetAttrPool(), aArr.GetData() );
