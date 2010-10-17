@@ -888,7 +888,7 @@ void
 SfxBaseModel::setDocumentProperties( const uno::Reference< document::XDocumentProperties >& rxNewDocProps )
 {
     // object already disposed?
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
     if ( impl_isDisposed() )
         throw lang::DisposedException();
     m_pData->m_xDocumentProperties.set(rxNewDocProps, uno::UNO_QUERY_THROW);
