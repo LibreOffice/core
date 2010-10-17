@@ -126,13 +126,8 @@ static GstBusSyncReply gst_pipeline_bus_sync_handler( GstBus *, GstMessage * mes
 
 void Player::processMessage( GstMessage *message )
 {
-    //DBG ( "gst message received: src name: %s structure type: %s",
-    //            gst_object_get_name (message->src),
-    //            message->structure ? gst_structure_get_name (message->structure) : "<none>");
-
     switch( GST_MESSAGE_TYPE( message ) ) {
     case GST_MESSAGE_EOS:
-        //DBG( "EOS, reset state to NULL" );
         gst_element_set_state( mpPlaybin, GST_STATE_READY );
         mbPlayPending = false;
         if (mbLooping)
@@ -160,9 +155,6 @@ void Player::processMessage( GstMessage *message )
 GstBusSyncReply Player::processSyncMessage( GstMessage *message )
 {
     DBG( "%p processSyncMessage", this );
-    //DBG ( "gst message received: src name: %s structure type: %s",
-    //            gst_object_get_name (message->src),
-    //            message->structure ? gst_structure_get_name (message->structure) : "<none>");
 
     if (message->structure) {
         if( !strcmp( gst_structure_get_name( message->structure ), "prepare-xwindow-id" ) && mnWindowID != 0 ) {
@@ -245,9 +237,6 @@ void Player::preparePlaybin( const ::rtl::OUString& rURL, bool bFakeVideo )
 {
         GstBus *pBus;
 
-        //sal_Bool aSuccess = osl_setCondition( maSizeCondition );
-        //DBG( "%p set condition result: %d", this, aSuccess );
-
         if( mpPlaybin != NULL ) {
             gst_element_set_state( mpPlaybin, GST_STATE_NULL );
             mbPlayPending = false;
@@ -301,8 +290,6 @@ bool Player::create( const ::rtl::OUString& rURL )
 void SAL_CALL Player::start(  )
     throw (uno::RuntimeException)
 {
-    //DBG ("Player::start");
-
     // set the pipeline state to READY and run the loop
     if( mbInitialized && NULL != mpPlaybin )
     {
@@ -352,8 +339,6 @@ double SAL_CALL Player::getDuration(  )
 
     if( mpPlaybin && mnDuration > 0 ) {
         duration = mnDuration / 1E9;
-
-        //DBG( "gst duration: %lld ns duration: %lf s", gst_duration, duration );
     }
 
     return duration;
@@ -516,8 +501,6 @@ sal_Int16 SAL_CALL Player::getVolumeDB(  )
         g_object_get( G_OBJECT( mpPlaybin ), "volume", &nGstVolume, NULL );
 
         nVolumeDB = (sal_Int16) ( 20.0*log10 ( nGstVolume ) );
-
-        //DBG( "get volume: %d gst volume: %lf", nVolumeDB, nGstVolume );
     }
 
     return nVolumeDB;
@@ -573,9 +556,6 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
             rArguments[ 2 ] >>= mnWindowID;
             DBG( "window ID: %ld", mnWindowID );
         }
-
-        //if( !pWindow->create( aArguments ) )
-        //xRet = uno::Reference< ::media::XPlayerWindow >();
     }
 
     return xRet;
@@ -587,16 +567,6 @@ uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber(  )
     throw (uno::RuntimeException)
 {
     uno::Reference< media::XFrameGrabber > xRet;
-
-    /*if( maURL.getLength() > 0 )
-    {
-        FrameGrabber* pGrabber = new FrameGrabber( mxMgr );
-
-        xRet = pGrabber;
-
-        if( !pGrabber->create( maURL ) )
-            xRet.clear();
-            }*/
 
     return xRet;
 }

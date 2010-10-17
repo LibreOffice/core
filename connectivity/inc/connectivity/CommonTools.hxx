@@ -72,8 +72,6 @@ namespace connectivity
     {
         std::vector< VectorVal > m_vector;
         oslInterlockedCount         m_refCount;
-        //  ORefVector(const ORefVector&);
-        //  ORefVector& operator=(const ORefVector&);
 
     protected:
         virtual ~ORefVector(){}
