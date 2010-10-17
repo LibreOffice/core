@@ -4,6 +4,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <ooo/vba/word/WdColor.hpp>
 #include <ooo/vba/word/WdColorIndex.hpp>
+#include <sal/macros.h>
 
 using namespace ::ooo::vba;
 using namespace ::ooo::vba::word;
