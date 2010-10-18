@@ -2571,7 +2571,7 @@ sub create_packages_without_epm
 
         my $target = "";
         if ( $installer::globals::compiler =~ /unxlngi/) { $target = "i586"; }
-        if ( $installer::globals::compiler =~ /unxaigppc/) { $target = "ppc"; }
+        elsif ( $installer::globals::compiler =~ /unxaigppc/) { $target = "ppc"; }
         elsif ( $installer::globals::compiler =~ /unxlng/) {$target = (POSIX::uname())[4]; }
 
         # rpm 4.6 ignores buildroot tag in spec file
