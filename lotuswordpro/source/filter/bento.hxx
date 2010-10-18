@@ -237,18 +237,6 @@ public:
     ~LtcUtBenValueStream();
 
 public: // Overridden methods
-#if 0 // Deleted by  2004-06-16
-    UtError Open(UtBool /* OpenNew */, UtStrmOpenFlags /* Flags */);
-    UtError Close();
-    UtError Seek(long Offset, UtSeekMode Mode);
-    UtError GetPosition(unsigned long * pPosition);
-    UtError GetSize(unsigned long * pSize);
-    UtError Read(UtStrmDataPtr pBuffer, unsigned long MaxSize,
-      unsigned long * pAmtRead);
-    UtError Write(UtConstStrmDataPtr pBuffer, unsigned long Size,
-      unsigned long * pAmtWritten);
-    UtError Flush();
-#endif
 
     /* added by  */
     CBenValue * GetValue(){ return cpValue; };
@@ -261,9 +249,6 @@ protected: // Overridden methods
     virtual void    SetSize( ULONG nSize );
     virtual void    FlushData();
 
-#if 0// Deleted by  2004-06-16
-    UtError TruncateSize(unsigned long Size);
-#endif
 private: // Data
     pCBenValue cpValue;
     unsigned long cCurrentPosition;
@@ -428,12 +413,6 @@ public:
     pLtcBenContainer GetContainer() { return GetBenObject()->GetContainer(); }
 
 public: // Internal methods
-#if 0
-    CBenProperty(pCBenObject pObject, BenObjectID PropertyID,
-      BenObjectID TypeID, pCBenIDListElmt pPrevProperty) :
-      CBenIDListElmt(PropertyID, pPrevProperty), cValue(this, TypeID)
-      { cpObject = pObject; }
-#endif
     // changed by  to remove WARNING here 2004-06-24
     CBenProperty(pCBenObject pObject, BenObjectID PropertyID,
       BenObjectID TypeID, pCBenIDListElmt pPrevProperty) :

@@ -98,42 +98,6 @@ void Lwp9Reader::Read()
  */
 void Lwp9Reader::ReadOleObjects()
 {
-#if 0
-#ifdef WIN32
-    if(m_pObjMgr)
-    {
-        // Get the buffer of the whole file
-        LwpSvStream* pRawStream = m_pDocStream;
-        sal_Int64 nCurPos = pRawStream->Tell();
-        sal_uInt32 nSize = static_cast<sal_uInt32>(pRawStream->Seek(STREAM_SEEK_TO_END));
-        BYTE* pBuf = new BYTE[nSize];
-
-        if(pBuf == NULL)                // this buffer may be too big
-        {
-            assert(sal_False);
-            return;
-        }
-        pRawStream->Seek(STREAM_SEEK_TO_BEGIN);
-        pRawStream->Read(pBuf,nSize);
-        pRawStream->Seek(nCurPos);
-
-        // Break the buffer into separate objects by ASWAN lib
-        BYTE* pOut = NULL;
-        sal_uInt32 nWritten;
-        CBenStorageConverter benConverter;
-        benConverter.Convert(pBuf, nSize, (void**)&pOut, &nWritten);
-        delete[] pBuf;
-
-        if (NULL != pOut)
-        {
-            SvStream* pMemStream = new SvMemoryStream(pOut, nWritten, STREAM_READ|STREAM_WRITE);
-            SvStorageRef objStor = new SvStorage(pMemStream, true); //  set true to let SvStorage free the memstream.
-            m_pObjMgr->SetOleObjInfo(objStor);
-        }
-
-    }
-#endif
-#endif
 }
 /**
  * @descr   Read the LWP7 object.

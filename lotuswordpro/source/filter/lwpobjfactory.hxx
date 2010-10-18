@@ -69,18 +69,7 @@
 #include "lwpobj.hxx"
 #include "lwpobjhdr.hxx"
 #include "lwpidxmgr.hxx"
-#if 0
-#ifdef WIN32
-#include <so3/svstor.hxx>
-#include <so3/outplace.hxx>
-#include <so3/ipobj.hxx>
-#include <so3/factory.hxx>
-#include <svx/svdoole2.hxx>
-#include <svx/svdpage.hxx>
-#include <sfx2/objsh.hxx>
-#include <sot/storinfo.hxx>
-#endif //WIN32
-#endif
+
 /**
  * @brief   object factory used for lwp object creation and maintenance
 */
@@ -124,17 +113,7 @@ public:
     void ReleaseObject(const LwpObjectID &objID);
     void ReadIndex(LwpSvStream* pStrm);
     LwpIndexManager* GetIndexManager(){return &m_IndexMgr;}
-#if 0
-// for OLE objects in current wordpro file
-#ifdef WIN32
-private:
-    SvStorageRef m_objStor;
-    SvStorageInfoList m_infoList;
-public:
-    void SetOleObjInfo(SvStorageRef & objStor);
-    void GetOleObjInfo(SvStorageRef & objStor, SvStorageInfoList ** ppInfoList);
-#endif
-#endif
+
 };
 
 #endif

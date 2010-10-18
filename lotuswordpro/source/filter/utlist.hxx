@@ -110,9 +110,6 @@ public: // Methods
     CUtComparableListElmt(pCUtList pList) : CUtListElmt(pList) { ; }
 
 public: // Pure virtual methods
-#if 0            // Deleted by  2004-06-16
-    virtual int Compare(pCUtComparableListElmt pOther, LCID LangID = 0) = 0;
-#endif
 };
 
 
@@ -133,9 +130,7 @@ public: // Methods
     pCUtListElmt GetPrevOrNULL(pCUtListElmt pCurr);
     UtBool IsEmpty() { return GetFirst() == GetTerminating(); };
     UtBool ContainsAtLeastTwoItems() { return GetFirst() != GetLast(); };
-#if 0             // Deleted by  2004-06-16
-void Sort(LCID LangID = 0); // Assumes elements are of type CUtComparableListElmt
-#endif
+
     int GetCount(void);
     void Destroy(void);
     pCUtListElmt GetIndex(int Index);

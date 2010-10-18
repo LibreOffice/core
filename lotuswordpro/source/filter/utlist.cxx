@@ -187,48 +187,7 @@ CUtList::GetPrevOrNULL(pCUtListElmt pCurr)
         pPrev = NULL;
     return pPrev;
 }
-#if 0                 // Deleted by  2004-06-16
 
-// Does an insertion sort on list.  If list is already sorted, takes O(n)
-// time.  Assumes elements are of type CUtComparableListElmt
-void
-CUtList::Sort(LCID LangID)
-{
-    pCUtListElmt pSortedTo = GetFirst();
-
-    // Before each iteration, list is sorted up to, but not including,
-    // pSortedTo.  On each iteration, we look backwards through sorted portion
-    // of list searching for spot that pSortedTo should go and move it to that
-    // location
-    while (pSortedTo != GetTerminating())
-    {
-        pCUtListElmt pNextSortedTo = pSortedTo->GetNext();
-
-        UtBool FoundSpot = UT_FALSE;
-        for (pCUtListElmt pCurr = pSortedTo->GetPrev();
-          pCurr != GetTerminating();
-          pCurr = pCurr->GetPrev())
-        {
-            if (((pCUtComparableListElmt) pSortedTo)->
-              Compare((pCUtComparableListElmt) pCurr, LangID) >= 0)
-            {
-                pSortedTo->Remove();
-                pSortedTo->InsertAfter(pCurr);
-                FoundSpot = UT_TRUE;
-                break;
-            }
-        }
-
-        if (! FoundSpot)
-        {
-            pSortedTo->Remove();
-            pSortedTo->InsertAfter(GetTerminating());   // Add at beginning
-        }
-
-        pSortedTo = pNextSortedTo;
-    }
-}
-#endif
 void
 CUtList::Destroy()
 {

@@ -326,65 +326,6 @@ Sequence< OUString> LWPFilterImportFilter::getSupportedServiceNames( void ) thro
     }
     return ret;
 }
-#if 0
-EXTERN_C void SAL_CALL
-component_getImplementationEnvironment(const sal_Char** ppEnvTypeName, uno_Environment** ppEnv)
-{
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
-EXTERN_C sal_Bool SAL_CALL
-component_writeInfo(void* pServiceManager, void* pRegistryKey)
-{
-    if (pRegistryKey)
-    {
-        try
-        {
-            uno::Reference< XRegistryKey > xKey( reinterpret_cast<XRegistryKey*>(pRegistryKey) );
-
-            uno::Reference< XRegistryKey > xNewKey = xKey->createKey( OUString::createFromAscii( IMPLEMENTATION_NAME ) );
-            xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
-
-            xNewKey->createKey( OUString::createFromAscii( STR_SERVICE_NAME ) );
-
-            return sal_True;
-        }
-        catch (InvalidRegistryException &)
-        {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-        }
-    }
-    return sal_False;
-}
-
-EXTERN_C void* SAL_CALL
-component_getFactory(const sal_Char* pImplName, void* pServiceManager, void* pRegistryKey)
-{
-    void * pRet = 0;
-
-    if(pServiceManager )
-    {
-        uno::Reference< XSingleServiceFactory > xRet;
-        uno::Reference< XMultiServiceFactory > xSMgr = reinterpret_cast< XMultiServiceFactory * > ( pServiceManager );
-
-        OUString aImplementationName = OUString::createFromAscii( pImplName );
-
-        if(aImplementationName == OUString::createFromAscii( STR_IMPLEMENTATION_NAME ) )
-        {
-            xRet = createSingleFactory( xSMgr, aImplementationName,
-                LWPFilterImportFilter_CreateInstance,
-                LWPFilterImportFilter::getSupportedServiceNames_Static() );
-        }
-        if (xRet.is())
-        {
-            xRet->acquire();
-            pRet = xRet.get();
-        }
-    }
-
-    return pRet;
-}
-#endif
 
  /**
  * @descr   decompressed small file
@@ -533,11 +474,6 @@ sal_Bool IsWordProStr(const sal_Int8 *pBuf)
     {
         0x57, 0x6F, 0x72, 0x64,
         0x50, 0x72, 0x6F
-#if 0
-        , 0,
-        0, 0, 0, 0,
-        0, 0, 0, 0
-#endif
     };
     for(size_t i=0; i<sizeof(pLotusLwp); ++i)
     {

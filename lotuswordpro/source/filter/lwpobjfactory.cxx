@@ -740,21 +740,6 @@ LwpObject* LwpObjectFactory::QueryObject(const LwpObjectID &objID)
     }
     return obj;
 }
-#if 0
-#ifdef WIN32
-void LwpObjectFactory::SetOleObjInfo(SvStorageRef& objStor)
-{
-    m_objStor = objStor;
-    m_objStor->FillInfoList(&m_infoList);   //Fill all objects into a list from then storage.
-}
-
-void LwpObjectFactory::GetOleObjInfo(SvStorageRef & objStor, SvStorageInfoList ** ppInfoList)
-{
-    objStor = m_objStor;
-    *ppInfoList = &m_infoList;
-}
-#endif
-#endif
 
 /**
  * @descr       find object in the factory per the object id

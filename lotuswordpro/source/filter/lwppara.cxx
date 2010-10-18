@@ -958,39 +958,6 @@ XFContentContainer* LwpPara::AddBulletList(XFContentContainer* pCont)
     /*LwpStory* pMyStory =*/ GetStory();
 
     pBulletStyleMgr->SetContinueFlag(m_bBullContinue);
-#if 0
-    if (m_pSilverBullet->IsBulletOrdered())
-    {
-        LwpObjectID aSilverBulletID = pBulletStyleMgr->GetCurrentSilverBullet();
-        if (aSilverBulletID.IsNull())
-        {
-            pBulletStyleMgr->SetContinueFlag(sal_False);
-        }
-        else if (pMyStory && pMyStory->IsBullStyleUsedBefore(m_aBulletStyleName, this->m_aParaNumbering.GetPosition()))
-        {
-            pBulletStyleMgr->SetContinueFlag(sal_True);
-        }
-/*      else if (aSilverBulletID == *(m_pSilverBullet->GetObjectID()))
-        {
-            LwpNumberingOverride* pNumOver = pBulletStyleMgr->GetCurrentNumOver();
-            if (!pNumOver)
-            {
-                pBulletStyleMgr->SetContinueFlag(sal_False);
-            }
-            else if (m_aParaNumbering.GetPosition() == pNumOver->GetPosition())
-            {
-                pBulletStyleMgr->SetContinueFlag(sal_True);
-            }
-        }
-        else
-        {
-            pBulletStyleMgr->SetContinueFlag(sal_False);
-        }
-*/
-        pBulletStyleMgr->SetCurrentNumOver(m_aParaNumbering);
-        pBulletStyleMgr->SetCurrentSilverBullet(*(m_pSilverBullet->GetObjectID()));
-    }
-#endif
 
     if (m_pSilverBullet->IsBulletOrdered())
     {
@@ -1011,29 +978,6 @@ XFContentContainer* LwpPara::AddBulletList(XFContentContainer* pCont)
 LwpNumberingOverride* LwpPara::GetParaNumbering()
 {
     return &m_aParaNumbering;
-#if 0
-    LwpNumberingOverride* pNumbering = NULL;
-    LwpParaStyle* pStyle = this->GetParaStyle();
-    if (pStyle)
-    {
-        pNumbering = pStyle->GetNumberingOverride();
-    }
-
-    if (pNumbering)
-    {
-/*      if (m_pParaNumbering)
-        {
-            m_pParaNumbering->Override(pNumbering);
-        }*/
-        m_aParaNumbering.Override(pNumbering);
-        return pNumbering;
-    }
-    else
-    {
-//      return m_pParaNumbering;
-        return &m_aParaNumbering;
-    }
-#endif
 }
 
 void LwpForked3NotifyList::Read(LwpObjectStream* pObjStrm)

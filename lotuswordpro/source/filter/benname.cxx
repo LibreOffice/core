@@ -56,15 +56,6 @@
 #include "first.hxx"
 namespace OpenStormBento
 {
-#if 0
-CBenNamedObject::CBenNamedObject(pLtcBenContainer pContainer,
-  BenObjectID ObjectID, pCBenObject pPrevObject, const char * sName,
-  pCBenNamedObjectListElmt pPrevNamedObjectListElmt) :
-  CBenObject(pContainer, ObjectID, pPrevObject), csName(sName),
-  cNameListElmt(this, pPrevNamedObjectListElmt)
-{
-}
-#endif
     // changed by  to remove warning 2004-06-24
 CBenNamedObject::CBenNamedObject(pLtcBenContainer pContainer,
   BenObjectID ObjectID, pCBenObject pPrevObject, const char * sName,
