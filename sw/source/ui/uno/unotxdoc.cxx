@@ -108,7 +108,6 @@
 #include <swcont.hxx>
 #include <unodefaults.hxx>
 #include <SwXDocumentSettings.hxx>
-#include <SwXPrintPreviewSettings.hxx>
 #include <doc.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <svl/zforlist.hxx>
@@ -1810,9 +1809,7 @@ Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServic
             }
             else if (sCategory == C2U ("text") )
             {
-                if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.PrintPreviewSettings") ) )
-                    xRet = Reference < XInterface > ( *new SwXPrintPreviewSettings ( pDocShell->GetDoc() ) );
-                else if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.DocumentSettings") ) )
+                if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.DocumentSettings") ) )
                     xRet = Reference < XInterface > ( *new SwXDocumentSettings ( this ) );
             }
             else if (sCategory == C2U ("chart2") )

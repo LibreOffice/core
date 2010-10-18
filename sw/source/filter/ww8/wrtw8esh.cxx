@@ -343,7 +343,8 @@ void WW8Export::DoFormText(const SwInputField * pFld)
 
     OutputField(0, ww::eFORMTEXT, aEmptyStr, WRITEFIELD_CMD_END);
 
-    SwWW8Writer::WriteString16(Strm(), pFld->Expand(), false);
+    String const fieldStr( pFld->ExpandField(pDoc->IsClipBoard()) );
+    SwWW8Writer::WriteString16(Strm(), fieldStr, false);
 
     static BYTE aArr2[] = {
         0x03, 0x6a, 0x00, 0x00, 0x00, 0x00, // sprmCPicLocation

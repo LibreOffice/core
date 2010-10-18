@@ -1185,7 +1185,7 @@ static void lcl_FormatPostIt(
 
     pIDCO->SplitNode( *aPam.GetPoint(), false );
     aStr = pField->GetPar2();
-#if defined( WIN ) || defined( WNT ) || defined( PM2 )
+#if defined( WNT ) || defined( PM2 )
     // Bei Windows und Co alle CR rausschmeissen
     aStr.EraseAllChars( '\r' );
 #endif
@@ -2451,7 +2451,7 @@ BOOL SwDoc::ConvertFieldsToText()
                         nWhich != RES_REFPAGEGETFLD&&
                         nWhich != RES_REFPAGESETFLD))
                 {
-                    String sText = pField->GetCntnt();
+                    String sText = pField->ExpandField( this->IsClipBoard() );
                     //database fields should not convert their command into text
                     if( RES_DBFLD == pCurType->Which() && !static_cast<const SwDBField*>(pField)->IsInitialized())
                         sText.Erase();

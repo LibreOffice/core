@@ -1425,7 +1425,7 @@ void ExportPICT(const Size &rOrig, const Size &rRendered, const Size &rMapped,
     const SwCropGrf &rCr, const char *pBLIPType, const sal_uInt8 *pGraphicAry,
     unsigned long nSize, SwRTFWriter &rWrt)
 {
-    bool bIsWMF = (const char *)pBLIPType == (const char *)OOO_STRING_SVTOOLS_RTF_WMETAFILE ? true : false;
+    bool bIsWMF = (pBLIPType && !strcmp(pBLIPType, OOO_STRING_SVTOOLS_RTF_WMETAFILE)) ? true : false;
     if (pBLIPType && nSize && pGraphicAry)
     {
         rWrt.Strm() << '{' << OOO_STRING_SVTOOLS_RTF_PICT;
@@ -1570,7 +1570,7 @@ static Writer& OutRTF_SwGrfNode(Writer& rWrt, SwCntntNode & rNode)
      the wmf format wrapped in nonshppict, so as to keep wordpad happy. If its
      a wmf already then we don't need any such wrapping
     */
-    bool bIsWMF = (const sal_Char*)pBLIPType == (const sal_Char*)OOO_STRING_SVTOOLS_RTF_WMETAFILE ? true : false;
+    bool bIsWMF = (pBLIPType && !strcmp(pBLIPType, OOO_STRING_SVTOOLS_RTF_WMETAFILE)) ? true : false;
     if (!bIsWMF)
         OutComment(rRTFWrt, OOO_STRING_SVTOOLS_RTF_SHPPICT);
 

@@ -99,6 +99,10 @@
 #include <list.hxx>
 // <--
 
+
+using namespace ::com::sun::star;
+
+
 SV_DECL_PTRARR( TmpHints, SwTxtAttr*, 0, 4 )
 
 TYPEINIT1( SwTxtNode, SwCntntNode )
@@ -2834,13 +2838,19 @@ XubString SwTxtNode::GetNumString( const bool _bInclPrefixAndSuffixStrings, cons
     }
     const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
     if ( pRule &&
-         IsCountedInList() &&
-         pRule->Get( static_cast<USHORT>(GetActualListLevel()) ).IsTxtFmt() )
+         IsCountedInList() )
     {
-        return pRule->MakeNumString( GetNum()->GetNumberVector(),
+        SvxNumberType const& rNumberType(
+                pRule->Get( static_cast<USHORT>(GetActualListLevel()) ) );
+        if (rNumberType.IsTxtFmt() ||
+        // #b6432095#
+            (style::NumberingType::NUMBER_NONE == rNumberType.GetNumberingType()))
+        {
+            return pRule->MakeNumString( GetNum()->GetNumberVector(),
                                      _bInclPrefixAndSuffixStrings ? TRUE : FALSE,
                                      FALSE,
                                      _nRestrictToThisLevel );
+        }
     }
 
     return aEmptyStr;
@@ -5079,8 +5089,6 @@ bool SwTxtNode::IsInContent() const
 }
 
 #include <unoparagraph.hxx>
-
-using namespace ::com::sun::star;
 
 uno::Reference< rdf::XMetadatable >
 SwTxtNode::MakeUnoObject()

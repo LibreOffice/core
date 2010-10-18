@@ -77,11 +77,11 @@
 #include <txtfrm.hxx>       // SwTxtFrm
 #include <scriptinfo.hxx>
 
-#if defined(WIN) || defined(WNT) || defined(PM2)
+#if defined(WNT) || defined(PM2)
 #define FNT_LEADING_HACK
 #endif
 
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
 #define FNT_ATM_HACK
 #endif
 

@@ -2776,7 +2776,7 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
 
                         if (pDocInfoField != NULL)
                         {
-                            String sFieldname = pDocInfoField->GetCntnt(TRUE);
+                            String sFieldname = pDocInfoField->GetFieldName();
                             xub_StrLen nIndex = sFieldname.Search(':');
 
                             if (nIndex != sFieldname.Len())

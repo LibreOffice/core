@@ -490,7 +490,7 @@ void SmMathConfig::ReadSymbol( SmSym &rSymbol,
     {
         const Any * pValue = aValues.getConstArray();
         Font        aFont;
-        sal_Unicode cChar = '\0';
+        sal_UCS4    cChar = '\0';
         String      aSet;
         BOOL        bPredefined = FALSE;
 
@@ -500,7 +500,7 @@ void SmMathConfig::ReadSymbol( SmSym &rSymbol,
 
         BOOL bOK = TRUE;
         if (pValue->hasValue()  &&  (*pValue >>= nTmp32))
-            cChar = (sal_Unicode) nTmp32;
+            cChar = static_cast< sal_UCS4 >( nTmp32 );
         else
             bOK = FALSE;
         ++pValue;
@@ -624,7 +624,7 @@ void SmMathConfig::SetSymbols( const std::vector< SmSym > &rNewSymbols )
         // Char
         pVal->Name  = aNodeNameDelim;
         pVal->Name += *pName++;
-        pVal->Value <<= (INT32) rSymbol.GetCharacter();
+        pVal->Value <<= static_cast< sal_UCS4 >( rSymbol.GetCharacter() );
         pVal++;
         // Set
         pVal->Name  = aNodeNameDelim;

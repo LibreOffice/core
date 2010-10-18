@@ -28,16 +28,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-// #include <math.h>
 #include <float.h>
 #include <rtl/math.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <editeng/unolingu.hxx>
-#ifndef _UNOFLDMID_H
 #include <unofldmid.h>
-#endif
 #include <doc.hxx>
 #include <editsh.hxx>
 #include <frame.hxx>
@@ -53,14 +49,9 @@
 #include <expfld.hxx>
 #include <shellres.hxx>
 #include <calc.hxx>
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 
 #include <math.h>
-#ifdef MAC
-#include <stdlib.h>
-#endif
 #include <float.h>
 
 using namespace ::com::sun::star;
@@ -272,21 +263,20 @@ USHORT SwField::GetTypeId() const
     Beschreibung: liefert den Namen oder den Inhalt
  --------------------------------------------------------------------*/
 
-String SwField::GetCntnt( BOOL bName ) const
+String SwField::GetFieldName() const
 {
-    String sRet;
-    if( bName )
+    USHORT nTypeId = GetTypeId();
+    if (RES_DATETIMEFLD == GetTyp()->Which())
     {
-        USHORT nTypeId = GetTypeId();
-        if( RES_DATETIMEFLD == GetTyp()->Which() )
-            nTypeId = static_cast<USHORT>(GetSubType() & DATEFLD ? TYP_DATEFLD : TYP_TIMEFLD);
-
-        sRet = SwFieldType::GetTypeStr( nTypeId );
-        if( IsFixed() )
-            ( sRet += ' ' ) += ViewShell::GetShellRes()->aFixedStr;
+        nTypeId = static_cast<USHORT>(
+            ((GetSubType() & DATEFLD) != 0) ? TYP_DATEFLD : TYP_TIMEFLD);
     }
-    else
-        sRet = Expand();
+    String sRet = SwFieldType::GetTypeStr( nTypeId );
+    if (IsFixed())
+    {
+        sRet += ' ';
+        sRet += ViewShell::GetShellRes()->aFixedStr;
+    }
     return sRet;
 }
 

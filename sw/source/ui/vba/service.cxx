@@ -66,16 +66,6 @@ extern "C"
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
     }
 
-    sal_Bool SAL_CALL component_writeInfo(
-        lang::XMultiServiceFactory * pServiceManager, registry::XRegistryKey * pRegistryKey )
-    {
-        OSL_TRACE("In component_writeInfo");
-
-    // Component registration
-        return component_writeInfoHelper( pServiceManager, pRegistryKey,
-        globals::serviceDecl, document::serviceDecl, wrapformat::serviceDecl, vbaeventshelper::serviceDecl );
-    }
-
     void * SAL_CALL component_getFactory(
         const sal_Char * pImplName, lang::XMultiServiceFactory * pServiceManager,
         registry::XRegistryKey * pRegistryKey )

@@ -779,7 +779,9 @@ void SwTxtNode::GetMinMaxSize( ULONG nIndex, ULONG& rMin, ULONG &rMax,
                     case RES_TXTATR_FIELD :
                     {
                         SwField *pFld = (SwField*)pHint->GetFld().GetFld();
-                        const String aTxt = pFld->GetCntnt( FALSE );
+                        SwDoc const*const pDoc(GetDoc());
+                        const String aTxt =
+                            pFld->ExpandField(pDoc->IsClipBoard());
                         if( lcl_MinMaxString( aArg, aIter.GetFnt(), aTxt, 0,
                             aTxt.Len() ) )
                             nAdd = 20;
@@ -916,12 +918,20 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
         while( nStop < nEnd && nStop < nNextChg )
         {
             cChar = m_Text.GetChar( nStop );
-            if( CH_TAB == cChar || CH_BREAK == cChar ||
-                CHAR_HARDBLANK == cChar || CHAR_HARDHYPHEN == cChar ||
+            if (
+                CH_TAB == cChar ||
+                CH_BREAK == cChar ||
+                CHAR_HARDBLANK == cChar ||
+                CHAR_HARDHYPHEN == cChar ||
                 CHAR_SOFTHYPHEN == cChar ||
-               ( CH_TXTATR_BREAKWORD == cChar ||  CH_TXTATR_INWORD == cChar ) &&
-               ( 0 == ( pHint = aIter.GetAttr( nStop ) ) ) )
+                (
+                  (CH_TXTATR_BREAKWORD == cChar || CH_TXTATR_INWORD == cChar) &&
+                  (0 == (pHint = aIter.GetAttr(nStop)))
+                )
+               )
+            {
                 break;
+            }
             else
                 ++nStop;
         }
@@ -974,7 +984,8 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
                 case RES_TXTATR_FIELD :
                 {
                     SwField *pFld = (SwField*)pHint->GetFld().GetFld();
-                    const String aTxt = pFld->GetCntnt( FALSE );
+                    SwDoc const*const pDoc( GetDoc() );
+                    String const aTxt = pFld->ExpandField(pDoc->IsClipBoard());
                     SwDrawTextInfo aDrawInf( pSh, *pOut, 0, aTxt, 0, aTxt.Len() );
 
                     nProWidth += aIter.GetFnt()->_GetTxtSize( aDrawInf ).Width();

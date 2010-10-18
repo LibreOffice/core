@@ -24,8 +24,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _DDEFLD_HXX
-#define _DDEFLD_HXX
+#ifndef SW_DDEFLD_HXX
+#define SW_DDEFLD_HXX
 
 #include <sfx2/lnkbase.hxx>
 #include "swdllapi.h"
@@ -97,12 +97,13 @@ public:
 
 class SwDDEField : public SwField
 {
+private:
+    virtual String   Expand() const;
+    virtual SwField* Copy() const;
+
 public:
     SwDDEField(SwDDEFieldType*);
     ~SwDDEField();
-
-    virtual String   Expand() const;
-    virtual SwField* Copy() const;
 
     // ueber Typen Parameter ermitteln
     // Name kann nicht geaendert werden
@@ -114,4 +115,4 @@ public:
 };
 
 
-#endif // _DDEFLD_HXX
+#endif // SW_DDEFLD_HXX

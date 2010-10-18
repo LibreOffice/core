@@ -1241,11 +1241,20 @@ BOOL    SwGlobalTree::Update(BOOL bHard)
                     GlobalDocContentType eType = pLeft->GetType();
                     SvLBoxEntry* pEntry = GetEntry(i);
                     String sTemp = GetEntryText(pEntry);
-                    if(eType != pRight->GetType() ||
-                        eType == GLBLDOC_SECTION &&
-                            (pLeft->GetSection()->GetSectionName() != sTemp) ||
-                        eType == GLBLDOC_TOXBASE && pLeft->GetTOX()->GetTitle() != sTemp)
-                            bCopy = bRet = TRUE;
+                    if (
+                         eType != pRight->GetType() ||
+                         (
+                           eType == GLBLDOC_SECTION &&
+                           pLeft->GetSection()->GetSectionName() != sTemp
+                         ) ||
+                         (
+                           eType == GLBLDOC_TOXBASE &&
+                           pLeft->GetTOX()->GetTitle() != sTemp
+                         )
+                       )
+                    {
+                        bCopy = bRet = TRUE;
+                    }
                 }
             }
             if(bCopy || bHard)
