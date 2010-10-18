@@ -678,14 +678,6 @@ void ODesignView::alignMarkedObjects(sal_Int32 _nControlModification,bool _bAlig
 {
     m_aScrollWindow.alignMarkedObjects(_nControlModification, _bAlignAtSection,bBoundRects);
 }
-#if 0
-// -----------------------------------------------------------------------------
-sal_Bool ODesignView::isAlignPossible() const
-{
-    ::boost::shared_ptr<OSectionWindow> pMarkedSection = getMarkedSection();
-    return pMarkedSection.get() && pMarkedSection->getReportSection().getSectionView().IsAlignPossible();
-}
-#endif
 //------------------------------------------------------------------------------
 sal_Bool ODesignView::handleKeyEvent(const KeyEvent& _rEvent)
 {

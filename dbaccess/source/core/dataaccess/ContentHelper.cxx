@@ -421,13 +421,6 @@ Sequence< Any > OContentHelper::setPropertyValues(const Sequence< PropertyValue 
             }
         }
 
-        // @@@ Process other properties supported directly.
-#if 0
-        else if ( rValue.Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "xxxxxx" ) ) )
-        {
-        }
-#endif
         else
         {
             aRet[ n ] <<= Exception(
@@ -487,14 +480,6 @@ Reference< XRow > OContentHelper::getPropertyValues( const Sequence< Property >&
             }
             else
                 xRow->appendVoid(rProp);
-
-            // @@@ Process other properties supported directly.
-#if 0
-            else if ( rProp.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "xxxxxx" ) ) )
-            {
-            }
-#endif
         }
     }
     else
