@@ -1512,9 +1512,18 @@ BOOL OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
     pLangConfig->aLanguageOptions.BlockBroadcasts( TRUE );
     pLangConfig->aLinguConfig.BlockBroadcasts( TRUE );
 
-    if(aCTLSupportCB.IsChecked() &&
-            (aCTLSupportCB.GetSavedValue() != aCTLSupportCB.IsChecked()) ||
-            (aComplexLanguageLB.GetSavedValue() != aComplexLanguageLB.GetSelectEntryPos()))
+    /*
+     * Sequence checking only matters when CTL support is enabled.
+     *
+     * So we only need to check for sequence checking if
+     * a) previously it was unchecked and is now checked or
+     * b) it was already checked but the CTL language has changed
+     */
+    if (
+         aCTLSupportCB.IsChecked() &&
+         (aCTLSupportCB.GetSavedValue() != STATE_CHECK ||
+         aComplexLanguageLB.GetSavedValue() != aComplexLanguageLB.GetSelectEntryPos())
+       )
     {
         //sequence checking has to be switched on depending on the selected CTL language
         LanguageType eCTLLang = aComplexLanguageLB.GetSelectLanguage();
