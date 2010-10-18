@@ -40,6 +40,7 @@
 #include "osl/process.h"
 #include "osl/time.h"
 #include "sal/types.h"
+#include <sal/macros.h>
 #include "test/getargument.hxx"
 #include "test/officeconnection.hxx"
 #include "test/toabsolutefileurl.hxx"
@@ -109,7 +110,7 @@ void OfficeConnection::setUp() {
             osl_executeProcess(
                 toAbsoluteFileUrl(
                     argSoffice.copy(RTL_CONSTASCII_LENGTH("path:"))).pData,
-                args, sizeof args / sizeof args[0], 0, 0, 0, envs,
+                args, SAL_N_ELEMENTS( args ), 0, 0, 0, envs,
                 envs == 0 ? 0 : 1, &process_));
     } else if (argSoffice.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("connect:"))) {
         desc = argSoffice.copy(RTL_CONSTASCII_LENGTH("connect:"));
