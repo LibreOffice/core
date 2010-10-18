@@ -33,6 +33,7 @@
 #include "rtl/strbuf.hxx"
 #include "rtl/string.hxx"
 #include "rtl/ustring.hxx"
+#include <sal/macros.h>
 
 namespace test { namespace oustring {
 
@@ -180,7 +181,7 @@ void test::oustring::Convert::convertToString()
               OUSTRING_TO_OSTRING_CVTFLAGS,
               "A?B",
               "A?B" } };
-    for (unsigned int i = 0; i < sizeof aTests / sizeof aTests[0]; ++i)
+    for (unsigned int i = 0; i < SAL_N_ELEMENTS(aTests); ++i)
         testConvertToString(aTests[i]);
 }
 

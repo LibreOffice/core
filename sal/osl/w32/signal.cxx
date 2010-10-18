@@ -41,6 +41,7 @@
 #endif
 #include <ErrorRep.h>
 #include <systools/win32/uwinapi.h>
+#include <sal/macros.h>
 
 typedef struct _oslSignalHandlerImpl
 {
@@ -187,7 +188,7 @@ static BOOL ReportCrash( LPEXCEPTION_POINTERS lpEP )
         StartupInfo.cb = sizeof(StartupInfo.cb);
 
 
-        sntprintf( szBuffer, elementsof(szBuffer),
+        sntprintf( szBuffer, SAL_N_ELEMENTS(szBuffer),
             _T("%s -p %u -excp 0x%p -t %u%s"),
             static_cast<sal_Char*>( aPath ),
             GetCurrentProcessId(),

@@ -37,6 +37,7 @@
 #include <osl/file.h>
 #include <osl/util.h>
 #include <rtl/alloc.h>
+#include <sal/macros.h>
 #include <algorithm>
 using std::min;
 static inline void copy_ustr_n( void *dest, const void *source, size_t length ) { rtl_copyMemory(dest, source, length*sizeof(sal_Unicode)); }
@@ -2556,7 +2557,7 @@ static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *str
                 int i = 0;
                 pStr = aTmpPath + nPos;
 
-                for (i = 0; i < (sizeof(SubDirs) / sizeof(SubDirs[0])); i++)
+                for (i = 0; i < SAL_N_ELEMENTS(SubDirs); i++)
                     if (strnicmp(pStr + 1, SubDirs[i], strlen(SubDirs[i])) == 0)
                     {
                         if ( *strPath == 0)

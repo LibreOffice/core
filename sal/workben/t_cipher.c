@@ -25,6 +25,7 @@
  *
  ************************************************************************/
 #include <sal/types.h>
+#include <sal/macros.h>
 #include <osl/diagnose.h>
 #include <rtl/cipher.h>
 
@@ -327,7 +328,7 @@ int SAL_CALL main (int argc, char *argv)
         sal_Size       length;
         int            i, n;
 
-        n = sizeof(arcfour_data_len) / sizeof(arcfour_data_len[0]);
+        n = SAL_N_ELEMENTS(arcfour_data_len);
         for (i = 0; i < n; i++)
         {
             length = arcfour_data_len[i];

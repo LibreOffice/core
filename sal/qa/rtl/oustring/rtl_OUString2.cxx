@@ -986,7 +986,7 @@ void convertToString::test() {
     static sal_Unicode const utf16[] = { 0x0041, 0x00E4, 0x0061 };
     rtl::OString s;
     CPPUNIT_ASSERT(
-        rtl::OUString(utf16, sizeof utf16 / sizeof utf16[0]).convertToString(
+        rtl::OUString(utf16, SAL_N_ELEMENTS(utf16)).convertToString(
             &s, RTL_TEXTENCODING_UTF7,
             (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
              RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)));

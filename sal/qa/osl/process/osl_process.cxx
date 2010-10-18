@@ -40,6 +40,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <osl/module.hxx>
+#include <sal/macros.h>
 
 #if ( defined WNT )                     // Windows
 #include <tools/prewin.h>
@@ -569,7 +570,7 @@ public:
             NULL,
             suCWD.pData,
             child_env,
-            sizeof(child_env)/sizeof(child_env[0]),
+            SAL_N_ELEMENTS(child_env),
             &process);
 
         CPPUNIT_ASSERT_MESSAGE

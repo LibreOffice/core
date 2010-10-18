@@ -27,6 +27,7 @@
  ************************************************************************/
 
 #include "macros.h"
+#include <sal/macros.h>
 
 #define WININIT_FILENAME    "wininit.ini"
 #define RENAME_SECTION      "rename"
@@ -50,7 +51,7 @@ IMPLEMENT_THUNK( kernel32, WINDOWS, BOOL, WINAPI, MoveFileExA, ( LPCSTR lpExisti
             )
         {
             CHAR    szBuffer[32767];    // The buffer size must not exceed 32K
-            DWORD   dwBufLen = GetPrivateProfileSectionA( RENAME_SECTION, szBuffer, elementsof(szBuffer), WININIT_FILENAME );
+            DWORD   dwBufLen = GetPrivateProfileSectionA( RENAME_SECTION, szBuffer, SAL_N_ELEMENTS(szBuffer), WININIT_FILENAME );
 
             CHAR    szRename[MAX_PATH]; // This is enough for at most to times 67 chracters
             strcpy( szRename, szNewFileNameA );
@@ -58,7 +59,7 @@ IMPLEMENT_THUNK( kernel32, WINDOWS, BOOL, WINAPI, MoveFileExA, ( LPCSTR lpExisti
             strcat( szRename, szExistingFileNameA );
             size_t  lnRename = strlen(szRename);
 
-            if ( dwBufLen + lnRename + 2 <= elementsof(szBuffer) )
+            if ( dwBufLen + lnRename + 2 <= SAL_N_ELEMENTS(szBuffer) )
             {
                 CopyMemory( &szBuffer[dwBufLen], szRename, lnRename );
                 szBuffer[dwBufLen + lnRename ] = 0;

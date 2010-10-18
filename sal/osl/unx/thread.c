@@ -30,9 +30,8 @@
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <osl/nlsupport.h>
-#ifndef _RTL_TEXTENC_H_
 #include <rtl/textenc.h>
-#endif
+#include <sal/macros.h>
 
 /****************************************************************************
  * @@@ TODO @@@
@@ -580,7 +579,7 @@ typedef struct _HashEntry
 } HashEntry;
 
 static HashEntry* HashTable[31];
-static int HashSize = sizeof(HashTable) / sizeof(HashTable[0]);
+static int HashSize = SAL_N_ELEMENTS(HashTable);
 
 static pthread_mutex_t HashLock = PTHREAD_MUTEX_INITIALIZER;
 

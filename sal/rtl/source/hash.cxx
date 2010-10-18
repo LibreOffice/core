@@ -32,6 +32,7 @@
 #include "hash.h"
 #include "strimp.h"
 #include <osl/diagnose.h>
+#include <sal/macros.h>
 
 struct StringHashTableImpl {
     sal_uInt32    nEntries;
@@ -68,8 +69,8 @@ getNextSize (sal_uInt32 nSize)
                                           65521, 131071,262139, 524287, 1048573,
                                           2097143, 4194301, 8388593, 16777213,
                                           33554393, 67108859, 134217689 };
-    #define NUM_PRIMES (sizeof (nPrimes)/ sizeof (nPrimes[0]))
-    for (sal_uInt32 i = 0; i < NUM_PRIMES; i++)
+
+    for (sal_uInt32 i = 0; i < SAL_N_ELEMENTS(nPrimes); i++)
     {
         if (nPrimes[i] > nSize)
             return nPrimes[i];

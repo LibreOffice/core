@@ -42,6 +42,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <sal/macros.h>
 
 #ifdef HAVE_STATFS_H
 #undef HAVE_STATFS_H
@@ -596,7 +597,7 @@ osl_isAFloppyDevice (const char* pDeviceName)
     };
 
     int i;
-    for (i = 0; i < (sizeof(pFloppyDevice)/sizeof(pFloppyDevice[0])); i++)
+    for (i = 0; i < SAL_N_ELEMENTS(pFloppyDevice); i++)
     {
         if (strncmp(pDeviceName, pFloppyDevice[i], strlen(pFloppyDevice[i])) == 0)
             return sal_True;

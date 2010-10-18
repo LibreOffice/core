@@ -46,8 +46,6 @@
 #include <excpt.h>
 #endif
 
-#define elementsof(a) (sizeof(a)/sizeof((a)[0]))
-
 // #i71984
 extern "C" sal_Bool SAL_CALL hasInternetConnection()
 {
@@ -66,7 +64,7 @@ extern "C" sal_Bool SAL_CALL hasInternetConnection()
     BOOL fIsConnected = InternetGetConnectedStateEx(
         &dwFlags,
         szConnectionName,
-        elementsof(szConnectionName),
+        SAL_N_ELEMENTS(szConnectionName),
         0 );
 
     return fIsConnected ? sal_True : sal_False;

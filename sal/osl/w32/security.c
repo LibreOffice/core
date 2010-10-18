@@ -33,6 +33,7 @@
 #include <osl/thread.h>
 #include <osl/file.h>
 #include <systools/win32/uwinapi.h>
+#include <sal/macros.h>
 #include "secimpl.h"
 
 /*****************************************************************************/
@@ -756,7 +757,7 @@ static sal_Bool GetSpecialFolder(rtl_uString **strPath, int nFolder)
                                    &hRegKey) == ERROR_SUCCESS)
                     {
                         LONG lRet;
-                        DWORD lSize = elementsof(PathA);
+                        DWORD lSize = SAL_N_ELEMENTS(PathA);
                         DWORD Type = REG_SZ;
 
                         switch (nFolder)

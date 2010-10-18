@@ -35,6 +35,7 @@
 #include "gettextencodingdata.h"
 #include "tenchelp.h"
 #include "rtl/textenc.h"
+#include <sal/macros.h>
 
 #ifndef INCLUDED_STDDEF_H
 #include <stddef.h>
@@ -223,7 +224,7 @@ Impl_getTextEncodingData(rtl_TextEncoding nEncoding) SAL_THROW_EXTERN_C()
             &aImplPT154TextEncodingData, /* PT154 */
             &adobeDingbatsEncodingData }; /* ADOBE_DINGBATS */
     return
-        nEncoding < sizeof aData / sizeof aData[0] ? aData[nEncoding] : NULL;
+        nEncoding < SAL_N_ELEMENTS(aData) ? aData[nEncoding] : NULL;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -38,6 +38,7 @@
 #include <testshl/tresstatewrapper.hxx>
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
+#include <sal/macros.h>
 
 #include <stdlib.h>
 
@@ -533,7 +534,7 @@ extern "C" sal_Bool SAL_CALL test_rtl_math(hTestResult pTestResult)
                 { 1.0000000000000002220446049250313080847263336181640625,
                   rtl_math_StringFormat_F, 53, '.', false,
                   "1.00000000000000000000000000000000000000000000000000000" } };
-        size_t const nCount = sizeof aTest / sizeof aTest[0];
+        size_t const nCount = SAL_N_ELEMENTS(aTest);
 
 //LLA: the float tests are wrong here, due to the fact that
 //     we calculate with too less digits after the point
@@ -645,7 +646,7 @@ extern "C" sal_Bool SAL_CALL test_rtl_math(hTestResult pTestResult)
                 { "3.14E2000", rtl_math_StringFormat_E, 4, '.', false,
                   "1.#INF" },
             };
-        size_t const nCount = sizeof aTest / sizeof aTest[0];
+        size_t const nCount = SAL_N_ELEMENTS(aTest);
         bReturn &= testStringToNumberToString< StringTraits >(
             pTestResult, aTest, nCount);
         bReturn &= testStringToNumberToString< UStringTraits >(

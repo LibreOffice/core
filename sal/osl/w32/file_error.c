@@ -34,6 +34,7 @@
 
 #include "osl/diagnose.h"
 #include "osl/thread.h"
+#include <sal/macros.h>
 
 /* OS error to oslFileError values mapping table */
 struct osl_file_error_entry
@@ -108,7 +109,7 @@ static const struct osl_file_error_entry errtable[] = {
 
 oslFileError oslTranslateFileError (/*DWORD*/ unsigned long dwError)
 {
-    static const int n = sizeof(errtable)/sizeof(errtable[0]);
+    static const int n = SAL_N_ELEMENTS(errtable);
 
     int i;
     for (i = 0; i < n; ++i )

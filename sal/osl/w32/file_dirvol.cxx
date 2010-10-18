@@ -50,8 +50,6 @@
 #endif
 
 //#####################################################
-#define ELEMENTS_OF_ARRAY(arr) (sizeof(arr)/(sizeof((arr)[0])))
-
 static const wchar_t UNC_PREFIX[] = L"\\\\";
 static const wchar_t BACKSLASH = '\\';
 static const wchar_t SLASH = '/';

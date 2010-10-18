@@ -102,10 +102,6 @@ EXTERN_C WINBASEAPI DWORD WINAPI GetUserDomainW( LPWSTR lpBuffer, DWORD nBuffser
 
 EXTERN_C WINBASEAPI DWORD WINAPI GetProcessId( HANDLE hProcess );
 
-/* macro that calculates the count of elements of a static array */
-
-#define elementsof(buf) (sizeof(buf) / sizeof((buf)[0]))
-
 #ifdef __cplusplus
 
 inline bool IsValidHandle(HANDLE handle)
