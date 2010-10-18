@@ -4164,10 +4164,10 @@ bool ScDocument::HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
         ScDocumentPool* pPool = xPoolHelper->GetDocPool();
 
         BOOL bAnyItem = FALSE;
-        USHORT nRotCount = pPool->GetItemCount( ATTR_ROTATE_VALUE );
-        for (USHORT nItem=0; nItem<nRotCount; nItem++)
+        sal_uInt32 nRotCount = pPool->GetItemCount2( ATTR_ROTATE_VALUE );
+        for (sal_uInt32 nItem=0; nItem<nRotCount; nItem++)
         {
-            const SfxPoolItem* pItem = pPool->GetItem( ATTR_ROTATE_VALUE, nItem );
+            const SfxPoolItem* pItem = pPool->GetItem2( ATTR_ROTATE_VALUE, nItem );
             if ( pItem )
             {
                 // 90 or 270 degrees is former SvxOrientationItem - only look for other values
@@ -4192,10 +4192,10 @@ bool ScDocument::HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
         ScDocumentPool* pPool = xPoolHelper->GetDocPool();
 
         BOOL bHasRtl = FALSE;
-        USHORT nDirCount = pPool->GetItemCount( ATTR_WRITINGDIR );
-        for (USHORT nItem=0; nItem<nDirCount; nItem++)
+        sal_uInt32 nDirCount = pPool->GetItemCount2( ATTR_WRITINGDIR );
+        for (sal_uInt32 nItem=0; nItem<nDirCount; nItem++)
         {
-            const SfxPoolItem* pItem = pPool->GetItem( ATTR_WRITINGDIR, nItem );
+            const SfxPoolItem* pItem = pPool->GetItem2( ATTR_WRITINGDIR, nItem );
             if ( pItem && ((const SvxFrameDirectionItem*)pItem)->GetValue() == FRMDIR_HORI_RIGHT_TOP )
             {
                 bHasRtl = TRUE;
@@ -4906,11 +4906,11 @@ void ScDocument::UpdStlShtPtrsFrmNms()
 
     ScDocumentPool* pPool = xPoolHelper->GetDocPool();
 
-    USHORT nCount = pPool->GetItemCount(ATTR_PATTERN);
+    sal_uInt32 nCount = pPool->GetItemCount2(ATTR_PATTERN);
     ScPatternAttr* pPattern;
-    for (USHORT i=0; i<nCount; i++)
+    for (sal_uInt32 i=0; i<nCount; i++)
     {
-        pPattern = (ScPatternAttr*)pPool->GetItem(ATTR_PATTERN, i);
+        pPattern = (ScPatternAttr*)pPool->GetItem2(ATTR_PATTERN, i);
         if (pPattern)
             pPattern->UpdateStyleSheet();
     }
@@ -4924,11 +4924,11 @@ void ScDocument::StylesToNames()
 
     ScDocumentPool* pPool = xPoolHelper->GetDocPool();
 
-    USHORT nCount = pPool->GetItemCount(ATTR_PATTERN);
+    sal_uInt32 nCount = pPool->GetItemCount2(ATTR_PATTERN);
     ScPatternAttr* pPattern;
-    for (USHORT i=0; i<nCount; i++)
+    for (sal_uInt32 i=0; i<nCount; i++)
     {
-        pPattern = (ScPatternAttr*)pPool->GetItem(ATTR_PATTERN, i);
+        pPattern = (ScPatternAttr*)pPool->GetItem2(ATTR_PATTERN, i);
         if (pPattern)
             pPattern->StyleToName();
     }

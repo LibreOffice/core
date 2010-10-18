@@ -642,10 +642,10 @@ void ScDocumentPool::CheckRef( const SfxPoolItem& rItem )   // static
 
 void ScDocumentPool::StyleDeleted( ScStyleSheet* pStyle )
 {
-    USHORT nCount = GetItemCount(ATTR_PATTERN);
-    for (USHORT i=0; i<nCount; i++)
+    sal_uInt32 nCount = GetItemCount2(ATTR_PATTERN);
+    for (sal_uInt32 i=0; i<nCount; i++)
     {
-        ScPatternAttr* pPattern = (ScPatternAttr*)GetItem(ATTR_PATTERN, i);
+        ScPatternAttr* pPattern = (ScPatternAttr*)GetItem2(ATTR_PATTERN, i);
         if ( pPattern && pPattern->GetStyleSheet() == pStyle )
             pPattern->StyleToName();
     }
