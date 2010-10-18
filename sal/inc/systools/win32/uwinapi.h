@@ -26,7 +26,7 @@
  ************************************************************************/
 
 #pragma once
-
+#include <sal/macros.h>
 #ifdef _UWINAPI_
 #   define _KERNEL32_
 #   define _USER32_
