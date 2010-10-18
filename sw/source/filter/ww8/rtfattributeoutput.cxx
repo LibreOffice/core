@@ -1490,7 +1490,16 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
                  */
                 OString aSave = m_aRun.makeStringAndClear();
                 m_rExport.bRTFFlySyntax = true;
-                m_rExport.OutContent(*rFrame.GetContent());
+
+                const SwFrmFmt& rFrmFmt = rFrame.GetFrmFmt( );
+                const SwNodeIndex* pNodeIndex = rFrmFmt.GetCntnt().GetCntntIdx();
+                ULONG nStt = pNodeIndex ? pNodeIndex->GetIndex()+1                  : 0;
+                ULONG nEnd = pNodeIndex ? pNodeIndex->GetNode().EndOfSectionIndex() : 0;
+                m_rExport.SaveData( nStt, nEnd );
+                m_rExport.mpParentFrame = &rFrame;
+                m_rExport.WriteText( );
+                m_rExport.RestoreData();
+
                 m_rExport.Strm() << OOO_STRING_SVTOOLS_RTF_PARD;
                 m_rExport.bRTFFlySyntax = false;
                 m_aRun.append(aSave);
