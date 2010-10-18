@@ -436,7 +436,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
             "Was ist das fuer ein MessageItem?" );
 
     SwFieldType* pFldType(0);
-    USHORT i;
+    sal_uInt32 i;
 
     for( i = 0; i < pFldTypes->Count(); ++i )
     {
@@ -507,9 +507,9 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
 
     // und dann noch alle Tabellen Box Formeln abklappern
     const SfxPoolItem* pItem;
-    USHORT nMaxItems = GetAttrPool().GetItemCount( RES_BOXATR_FORMULA );
+    sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2( RES_BOXATR_FORMULA );
     for( i = 0; i < nMaxItems; ++i )
-        if( 0 != (pItem = GetAttrPool().GetItem( RES_BOXATR_FORMULA, i ) ) &&
+        if( 0 != (pItem = GetAttrPool().GetItem2( RES_BOXATR_FORMULA, i ) ) &&
             ((SwTblBoxFormula*)pItem)->GetDefinedIn() )
         {
             ((SwTblBoxFormula*)pItem)->ChangeState( pHt );
@@ -609,7 +609,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
 
     // dann berechene noch die Formeln an den Boxen
     for( i = 0; i < nMaxItems; ++i )
-        if( 0 != (pItem = GetAttrPool().GetItem( RES_BOXATR_FORMULA, i ) ) &&
+        if( 0 != (pItem = GetAttrPool().GetItem2( RES_BOXATR_FORMULA, i ) ) &&
             ((SwTblBoxFormula*)pItem)->GetDefinedIn() &&
             !((SwTblBoxFormula*)pItem)->IsValid() )
         {
@@ -1732,7 +1732,7 @@ String lcl_DBDataToString(const SwDBData& rData)
 void SwDoc::GetAllUsedDB( SvStringsDtor& rDBNameList,
                             const SvStringsDtor* pAllDBNames )
 {
-    USHORT n;
+    sal_uInt32 n;
     SvStringsDtor aUsedDBNames;
     SvStringsDtor aAllDBNames;
 
@@ -1757,10 +1757,10 @@ void SwDoc::GetAllUsedDB( SvStringsDtor& rDBNameList,
     }
 
     const SfxPoolItem* pItem;
-    USHORT nMaxItems = GetAttrPool().GetItemCount( RES_TXTATR_FIELD );
+    sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_FIELD );
     for( n = 0; n < nMaxItems; ++n )
     {
-        if( 0 == (pItem = GetAttrPool().GetItem( RES_TXTATR_FIELD, n ) ))
+        if( 0 == (pItem = GetAttrPool().GetItem2( RES_TXTATR_FIELD, n ) ))
             continue;
 
         const SwFmtFld* pFmtFld = (SwFmtFld*)pItem;
@@ -1916,7 +1916,7 @@ void SwDoc::ChangeDBFields( const SvStringsDtor& rOldNames,
     aNewDBData.nCommandType = (short)rNewName.GetToken(2, DB_DELIM).ToInt32();
 
     String sFormel;
-    USHORT n;
+    sal_uInt32 n;
 
     SwSectionFmts& rArr = GetSections();
     for( n = rArr.Count(); n; )
@@ -1932,11 +1932,11 @@ void SwDoc::ChangeDBFields( const SvStringsDtor& rOldNames,
     }
 
     const SfxPoolItem* pItem;
-    USHORT nMaxItems = GetAttrPool().GetItemCount( RES_TXTATR_FIELD );
+    sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_FIELD );
 
     for( n = 0; n < nMaxItems; ++n )
     {
-        if( 0 == (pItem = GetAttrPool().GetItem( RES_TXTATR_FIELD, n ) ))
+        if( 0 == (pItem = GetAttrPool().GetItem2( RES_TXTATR_FIELD, n ) ))
             continue;
 
         SwFmtFld* pFmtFld = (SwFmtFld*)pItem;
@@ -2329,7 +2329,7 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
         SwSectionNode* pSectNd;
         USHORT nArrStt = 0;
         ULONG nSttCntnt = rDoc.GetNodes().GetEndOfExtras().GetIndex();
-        USHORT n;
+        sal_uInt32 n;
 
         for( n = rArr.Count(); n; )
         {
@@ -2378,10 +2378,10 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
     USHORT nWhich, n;
     const String* pFormel = 0;
     const SfxPoolItem* pItem;
-    USHORT nMaxItems = rDoc.GetAttrPool().GetItemCount( RES_TXTATR_FIELD );
+    sal_uInt32 nMaxItems = rDoc.GetAttrPool().GetItemCount2( RES_TXTATR_FIELD );
     for( n = 0; n < nMaxItems; ++n )
     {
-        if( 0 == (pItem = rDoc.GetAttrPool().GetItem( RES_TXTATR_FIELD, n )) )
+        if( 0 == (pItem = rDoc.GetAttrPool().GetItem2( RES_TXTATR_FIELD, n )) )
             continue;
 
         const SwFmtFld* pFmtFld = (SwFmtFld*)pItem;

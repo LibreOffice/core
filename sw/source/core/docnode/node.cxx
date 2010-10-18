@@ -740,9 +740,9 @@ const SwPageDesc* SwNode::FindPageDesc( BOOL bCalcLay,
             SwFindNearestNode aInfo( *pNd );
             // dann ueber alle Nodes aller PageDesc
             const SfxPoolItem* pItem;
-            USHORT i, nMaxItems = pDoc->GetAttrPool().GetItemCount( RES_PAGEDESC );
+            sal_uInt32 i, nMaxItems = pDoc->GetAttrPool().GetItemCount2( RES_PAGEDESC );
             for( i = 0; i < nMaxItems; ++i )
-                if( 0 != (pItem = pDoc->GetAttrPool().GetItem( RES_PAGEDESC, i ) ) &&
+                if( 0 != (pItem = pDoc->GetAttrPool().GetItem2( RES_PAGEDESC, i ) ) &&
                     ((SwFmtPageDesc*)pItem)->GetDefinedIn() )
                 {
                     const SwModify* pMod = ((SwFmtPageDesc*)pItem)->GetDefinedIn();

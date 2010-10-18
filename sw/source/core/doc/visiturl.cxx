@@ -71,9 +71,9 @@ void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
         const SwFmtINetFmt* pItem;
         const SwTxtINetFmt* pTxtAttr;
         const SwTxtNode* pTxtNd;
-        USHORT n, nMaxItems = pDoc->GetAttrPool().GetItemCount( RES_TXTATR_INETFMT );
+        sal_uInt32 n, nMaxItems = pDoc->GetAttrPool().GetItemCount2( RES_TXTATR_INETFMT );
         for( n = 0; n < nMaxItems; ++n )
-            if( 0 != (pItem = (SwFmtINetFmt*)pDoc->GetAttrPool().GetItem(
+            if( 0 != (pItem = (SwFmtINetFmt*)pDoc->GetAttrPool().GetItem2(
                 RES_TXTATR_INETFMT, n ) ) &&
                 ( pItem->GetValue() == sURL ||
                     ( sBkmk.Len() && pItem->GetValue() == sBkmk )) &&

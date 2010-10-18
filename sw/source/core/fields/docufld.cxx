@@ -171,9 +171,9 @@ void SwPageNumberFieldType::ChangeExpansion( SwDoc* pDoc, sal_uInt16 nPage,
         // es NIE zurueck
         const SfxItemPool &rPool = pDoc->GetAttrPool();
         const SwFmtPageDesc *pDesc;
-        sal_uInt16 nMaxItems = rPool.GetItemCount( RES_PAGEDESC );
-        for( sal_uInt16 n = 0; n < nMaxItems; ++n )
-            if( 0 != (pDesc = (SwFmtPageDesc*)rPool.GetItem( RES_PAGEDESC, n ) )
+        sal_uInt32 nMaxItems = rPool.GetItemCount2( RES_PAGEDESC );
+        for( sal_uInt32 n = 0; n < nMaxItems; ++n )
+            if( 0 != (pDesc = (SwFmtPageDesc*)rPool.GetItem2( RES_PAGEDESC, n ) )
                 && pDesc->GetNumOffset() && pDesc->GetDefinedIn() )
             {
                 if( pDesc->GetDefinedIn()->ISA( SwCntntNode ))

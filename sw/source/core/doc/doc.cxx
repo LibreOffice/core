@@ -1834,10 +1834,10 @@ void SwDoc::DocInfoChgd( )
 const SwFmtRefMark* SwDoc::GetRefMark( const String& rName ) const
 {
     const SfxPoolItem* pItem;
-    USHORT nMaxItems = GetAttrPool().GetItemCount( RES_TXTATR_REFMARK );
-    for( USHORT n = 0; n < nMaxItems; ++n )
+    sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_REFMARK );
+    for( sal_uInt32 n = 0; n < nMaxItems; ++n )
     {
-        if( 0 == (pItem = GetAttrPool().GetItem( RES_TXTATR_REFMARK, n ) ))
+        if( 0 == (pItem = GetAttrPool().GetItem2( RES_TXTATR_REFMARK, n ) ))
             continue;
 
         const SwFmtRefMark* pFmtRef = (SwFmtRefMark*)pItem;
@@ -1856,10 +1856,10 @@ const SwFmtRefMark* SwDoc::GetRefMark( USHORT nIndex ) const
     const SwTxtRefMark* pTxtRef;
     const SwFmtRefMark* pRet = 0;
 
-    USHORT nMaxItems = GetAttrPool().GetItemCount( RES_TXTATR_REFMARK );
-    USHORT nCount = 0;
-    for( USHORT n = 0; n < nMaxItems; ++n )
-        if( 0 != (pItem = GetAttrPool().GetItem( RES_TXTATR_REFMARK, n )) &&
+    sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_REFMARK );
+    sal_uInt32 nCount = 0;
+    for( sal_uInt32 n = 0; n < nMaxItems; ++n )
+        if( 0 != (pItem = GetAttrPool().GetItem2( RES_TXTATR_REFMARK, n )) &&
             0 != (pTxtRef = ((SwFmtRefMark*)pItem)->GetTxtRefMark()) &&
             &pTxtRef->GetTxtNode().GetNodes() == &GetNodes() )
         {
@@ -1882,10 +1882,10 @@ USHORT SwDoc::GetRefMarks( SvStringsDtor* pNames ) const
     const SfxPoolItem* pItem;
     const SwTxtRefMark* pTxtRef;
 
-    USHORT nMaxItems = GetAttrPool().GetItemCount( RES_TXTATR_REFMARK );
-    USHORT nCount = 0;
-    for( USHORT n = 0; n < nMaxItems; ++n )
-        if( 0 != (pItem = GetAttrPool().GetItem( RES_TXTATR_REFMARK, n )) &&
+    sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_REFMARK );
+    sal_uInt32 nCount = 0;
+    for( sal_uInt32 n = 0; n < nMaxItems; ++n )
+        if( 0 != (pItem = GetAttrPool().GetItem2( RES_TXTATR_REFMARK, n )) &&
             0 != (pTxtRef = ((SwFmtRefMark*)pItem)->GetTxtRefMark()) &&
             &pTxtRef->GetTxtNode().GetNodes() == &GetNodes() )
         {
@@ -2126,9 +2126,9 @@ const SwFmtINetFmt* SwDoc::FindINetAttr( const String& rName ) const
     const SwFmtINetFmt* pItem;
     const SwTxtINetFmt* pTxtAttr;
     const SwTxtNode* pTxtNd;
-    USHORT n, nMaxItems = GetAttrPool().GetItemCount( RES_TXTATR_INETFMT );
+    sal_uInt32 n, nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_INETFMT );
     for( n = 0; n < nMaxItems; ++n )
-        if( 0 != (pItem = (SwFmtINetFmt*)GetAttrPool().GetItem(
+        if( 0 != (pItem = (SwFmtINetFmt*)GetAttrPool().GetItem2(
             RES_TXTATR_INETFMT, n ) ) &&
             pItem->GetName().Equals( rName ) &&
             0 != ( pTxtAttr = pItem->GetTxtINetFmt()) &&
