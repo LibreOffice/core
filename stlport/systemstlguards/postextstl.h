@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,11 +25,12 @@
  *
  ************************************************************************/
 
-#include "macros.inc"
-
-File gid_File_Pymailmerge
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Name = "mailmerge.py";
-    Styles = (PACKED);
-End
+#ifdef std_was_redefined_as_stlport
+//  put things back the way they were
+#   define std std_was_redefined_as_stlport
+#   undef _STLP_OUTERMOST_HEADER_ID
+//  force config to be re-read
+#   undef _STLP_NOTHROW_INHERENTLY
+#   undef _STLP_CONFIG_H
+#   include <stddef.h>
+#endif
