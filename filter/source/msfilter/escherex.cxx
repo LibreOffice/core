@@ -94,9 +94,7 @@
 #include <vcl/virdev.hxx>
 #include <rtl/crc.h>
 #include <vos/xception.hxx>
-#ifndef _VOS_NO_NAMESPACE
 using namespace vos;
-#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star;

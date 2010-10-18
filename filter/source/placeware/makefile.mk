@@ -65,3 +65,11 @@ DEF1NAME=	$(SHL1TARGET)
 # --- Targets ----------------------------------
 
 .INCLUDE : target.mk
+
+ALLTAR : $(MISC)/placeware.component
+
+$(MISC)/placeware.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        placeware.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt placeware.component

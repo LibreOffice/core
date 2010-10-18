@@ -69,11 +69,6 @@
 			 match="text:h"
 			 use="generate-id(preceding::text:h[@text:level &lt; current()/@text:level][1])"/>
 
-	<!-- All those headings have not the lowest outline level (mapped to section1), but come before the first heading mapped to section1  -->
-	<xsl:key name="preludingHeadings"
-			 match="text:h"
-			 use="generate-id(following::text:h[@text:level = $section1_OutlineLevel][1])"/>
-
 	<!-- The key function "getHeadingsByOutline" returns all headings of a certain outline level -->
 	<xsl:key name="getHeadingsByOutline"
 			 match="text:h"
@@ -171,7 +166,7 @@
 				<xsl:text disable-output-escaping="yes">&lt;sect1&gt;</xsl:text>
 				<title></title>
 				<!-- create sections for all the first section1 preluding headings -->
-				<xsl:for-each select="key('preludingHeadings', generate-id())">
+                <xsl:for-each select="key('getHeadingsByOutline', $section1_OutlineLevel)[1]/preceding::text:h">
 					<xsl:call-template name="make-section">
 						<xsl:with-param name="previousSectionLevel" select="$section1_OutlineLevel"/>
 						<xsl:with-param name="currentSectionLevel">
