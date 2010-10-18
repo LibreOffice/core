@@ -77,10 +77,8 @@
 #define RetryButton layout::RetryButton
 #define SfxTabDialog layout::SfxTabDialog
 #define SfxTabPage layout::SfxTabPage
-#if ENABLE_LAYOUT
 #define SvxFontListBox layout::SvxFontListBox
 #define SvxLanguageBox layout::SvxLanguageBox
-#endif
 #define SpinField layout::SpinField
 #define TabControl layout::TabControl
 #define TabPage layout::TabPage
