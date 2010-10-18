@@ -212,7 +212,7 @@ void remove_dotdot(path)
 int isdot(p)
     register char   *p;
 {
-    if(p && *p++ == '.' && *p++ == '\0')
+    if(p && p[0] == '.' && p[1] == '\0')
         return(TRUE);
     return(FALSE);
 }
@@ -220,7 +220,7 @@ int isdot(p)
 int isdotdot(p)
     register char   *p;
 {
-    if(p && *p++ == '.' && *p++ == '.' && *p++ == '\0')
+    if(p && p[0] == '.' && p[1] == '.' && p[2] == '\0')
         return(TRUE);
     return(FALSE);
 }
