@@ -1623,17 +1623,6 @@ struct StdMasks
     static const bool alphamask_polarity = true;
 };
 
-#if 0
-/** Clip and alpha masks for the generic renderer (of course, those
-    need to be generic, too)
- */
-struct MaskTraitsGeneric
-{
-    typedef PixelFormatTraits_GenericInteger   clipmask_format_traits;
-    typedef PixelFormatTraits_GenericInteger   alphamask_format_traits;
-};
-#endif
-
 //----------------------------------------------------------------------------------
 
 // Some compilers don't like the nested template wrap_accessor
@@ -2032,33 +2021,6 @@ BitmapDeviceSharedPtr cloneBitmapDevice( const basegfx::B2IVector&        rSize,
 /// Clone our device, with GenericImageAccessor to handle all formats
 BitmapDeviceSharedPtr BitmapDevice::getGenericRenderer() const
 {
-#if 0
-    // xxx TODO
-    typedef BitmapRenderer< PixelFormatTraits_GenericInteger::iterator_type,
-                            PixelFormatTraits_GenericInteger::raw_accessor_type,
-                            PixelFormatTraits_GenericInteger::accessor_selector,
-                            MaskTraitsGeneric >
-            Renderer;
-
-    if( !mpImpl->mpGenericRenderer )
-    {
-        mpImpl->mpGenericRenderer.reset(
-            new Renderer(
-                mpImpl->maBounds,
-                isTopDown(),
-                getScanlineFormat(),
-                getScanlineStride(),
-                mpImpl->mpFirstScanline,
-                PixelFormatTraits_GenericInteger::iterator_type(),
-                GenericIntegerImageRawAccessor<Color>(
-                    const_cast<BitmapDevice*>(this)->shared_from_this()),
-                GenericIntegerImageAccessor<Color>(
-                    const_cast<BitmapDevice*>(this)->shared_from_this()),
-                getBuffer(),
-                getPalette() ));
-    }
-#endif
-
     return mpImpl->mpGenericRenderer;
 }
 

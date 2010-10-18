@@ -58,6 +58,7 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/range/b2irange.hxx>
 #include <basegfx/vector/b2isize.hxx>
+#include <basegfx/vector/b2enums.hxx>
 #include <basegfx/point/b2ipoint.hxx>
 
 #include <basebmp/color.hxx>
@@ -1090,7 +1091,6 @@ void TestWindow::Paint( const Rectangle& /*rRect*/ )
             basebmp::DrawMode_PAINT );
     }
 
-#if 0
     {
         basebmp::BitmapDeviceSharedPtr pMask( basebmp::createBitmapDevice( aTestSize,
                                                                            false,
@@ -1135,7 +1135,6 @@ void TestWindow::Paint( const Rectangle& /*rRect*/ )
         const basegfx::B2IPoint aPt3(0,1001);
         pDevice->drawLine( aPt1, aPt3, aCol, basebmp::DrawMode_PAINT );
     }
-#endif
 
     {
         pDevice->clear(basebmp::Color(0));
@@ -1172,12 +1171,12 @@ void TestWindow::Paint( const Rectangle& /*rRect*/ )
             aPoly.append( basegfx::B2DPoint(project( aP1 ) + aCenter) );
             aPoly.append( basegfx::B2DPoint(project( aP2 ) + aCenter) );
             pDevice->fillPolyPolygon(
-                basegfx::tools::createAreaGeometryForPolygon(
+                basegfx::tools::createAreaGeometry(
                     aPoly,
 //                    std::max(1,n/30),
 //                    std::max(1,n/60),
                     std::max(1,n/30),
-                    basegfx::tools::B2DLINEJOIN_NONE),
+                    basegfx::B2DLINEJOIN_NONE),
                 aLineColor,
                 basebmp::DrawMode_PAINT);
 
@@ -1245,13 +1244,13 @@ void TestApp::Main()
     uno::Sequence< uno::Any > aArgs( 2 );
     aArgs[ 0 ] <<= rtl::OUString::createFromAscii( UCB_CONFIGURATION_KEY1_LOCAL );
     aArgs[ 1 ] <<= rtl::OUString::createFromAscii( UCB_CONFIGURATION_KEY2_OFFICE );
-    ::ucb::ContentBroker::initialize( xFactory, aArgs );
+    ::ucbhelper::ContentBroker::initialize( xFactory, aArgs );
 
     TestWindow pWindow;
     pWindow.Execute();
 
     // clean up UCB
-    ::ucb::ContentBroker::deinitialize();
+    ::ucbhelper::ContentBroker::deinitialize();
 }
 
 TestApp aDemoApp;
