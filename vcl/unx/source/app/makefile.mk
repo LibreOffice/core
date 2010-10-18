@@ -49,30 +49,31 @@ SLOFILES=\
             $(SLO)$/i18n_cb.obj			\
             $(SLO)$/i18n_ic.obj			\
             $(SLO)$/i18n_im.obj			\
-            $(SLO)$/i18n_xkb.obj		\
-            $(SLO)$/i18n_wrp.obj		\
-            $(SLO)$/i18n_status.obj		\
             $(SLO)$/i18n_keysym.obj		\
-            $(SLO)$/saldata.obj			\
-            $(SLO)$/saltimer.obj		\
-            $(SLO)$/saldisp.obj			\
+            $(SLO)$/i18n_status.obj		\
+            $(SLO)$/i18n_wrp.obj		\
+            $(SLO)$/i18n_xkb.obj		\
+            $(SLO)$/keysymnames.obj		\
             $(SLO)$/randrwrapper.obj	\
+            $(SLO)$/saldata.obj			\
+            $(SLO)$/saldisp.obj			\
             $(SLO)$/salinst.obj			\
             $(SLO)$/salsys.obj			\
+            $(SLO)$/saltimer.obj		\
+            $(SLO)$/sm.obj			\
             $(SLO)$/soicon.obj			\
-            $(SLO)$/keysymnames.obj		\
             $(SLO)$/wmadaptor.obj
 
 EXCEPTIONSFILES=\
-            $(SLO)$/wmadaptor.obj		\
-            $(SLO)$/saldata.obj			\
-            $(SLO)$/salinst.obj			\
-            $(SLO)$/saldisp.obj			\
+            $(SLO)$/i18n_cb.obj			\
+            $(SLO)$/i18n_ic.obj			\
             $(SLO)$/i18n_status.obj		\
-            $(SLO)$/i18n_cb.obj				\
-            $(SLO)$/i18n_ic.obj				\
-            $(SLO)$/salsys.obj				\
-            $(SLO)$/sm.obj
+            $(SLO)$/saldata.obj			\
+            $(SLO)$/saldisp.obj			\
+            $(SLO)$/salinst.obj			\
+            $(SLO)$/salsys.obj			\
+            $(SLO)$/sm.obj			\
+            $(SLO)$/wmadaptor.obj
 
 
 .IF "$(ENABLE_RANDR)" != ""
