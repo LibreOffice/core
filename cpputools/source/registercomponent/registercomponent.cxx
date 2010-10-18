@@ -67,10 +67,6 @@ using com::sun::star::container::XSet;
 using com::sun::star::container::XContentEnumerationAccess;
 using com::sun::star::container::XEnumeration;
 
-#ifdef SAL_W32
-#define putenv _putenv
-#endif
-
 namespace {
 
 OUString replacePrefix(OUString const & url, OUString const & prefix) {
@@ -314,14 +310,9 @@ sal_Bool parseOptions(int ac, char* av[], Options& rOptions, sal_Bool bCmdFile)
                         i++;
                         if( i < ac )
                         {
-                            // leak this string as some platforms assume to own
-                            // the pointer
-                            sal_Char * p = (sal_Char *) rtl_allocateMemory( 13+ strlen( av[i] ) );
-                            p[0] = 0;
-                            strcat( p, "CLASSPATH=" ); // #100211# - checked
-                            strcat( p, av[i] );        // #100211# - checked
-
-                            putenv( p );
+                            rtl::OUString envVar(RTL_CONSTASCII_USTRINGPARAM("CLASSPATH"));
+                            rtl::OUString envValue(av[i], strlen(av[i]), osl_getThreadTextEncoding());
+                            osl_setEnvironment(envVar.pData, envValue.pData);
                         }
                         break;
                     }

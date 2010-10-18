@@ -279,6 +279,98 @@ oslProcessError SAL_CALL osl_getEnvironment(rtl_uString* pustrEnvVar, rtl_uStrin
 }
 
 /***************************************
+ osl_setEnvironment().
+ **************************************/
+oslProcessError SAL_CALL osl_setEnvironment(rtl_uString* pustrEnvVar, rtl_uString* pustrValue)
+{
+    oslProcessError  result   = osl_Process_E_Unknown;
+    rtl_TextEncoding encoding = osl_getThreadTextEncoding();
+    rtl_String* pstr_env_var  = 0;
+    rtl_String* pstr_val  = 0;
+
+    OSL_PRECOND(pustrEnvVar, "osl_setEnvironment(): Invalid parameter");
+    OSL_PRECOND(pustrValue, "osl_setEnvironment(): Invalid parameter");
+
+    rtl_uString2String(
+        &pstr_env_var,
+        rtl_uString_getStr(pustrEnvVar), rtl_uString_getLength(pustrEnvVar), encoding,
+        OUSTRING_TO_OSTRING_CVTFLAGS);
+
+    rtl_uString2String(
+        &pstr_val,
+        rtl_uString_getStr(pustrValue), rtl_uString_getLength(pustrValue), encoding,
+        OUSTRING_TO_OSTRING_CVTFLAGS);
+
+    if (pstr_env_var != 0 && pstr_val != 0)
+    {
+        //Can't determine if OS/2 EMX has a working setenv or not, so use putenv,
+        //feel free to use setenv here if its available and works
+        rtl_String * pBuffer = NULL;
+
+        sal_Int32 nCapacity = rtl_stringbuffer_newFromStringBuffer( &pBuffer,
+            rtl_string_getLength(pstr_env_var) + rtl_string_getLength(pstr_val) + 1,
+            pstr_env_var );
+        rtl_stringbuffer_insert( &pBuffer, &nCapacity, pBuffer->length, "=", 1);
+        rtl_stringbuffer_insert( &pBuffer, &nCapacity, pBuffer->length,
+            rtl_string_getStr(pstr_val), rtl_string_getLength(pstr_val) );
+
+        rtl_string_acquire(pBuffer); // argument to putenv must leak on success
+
+        if (putenv(rtl_string_getStr(pBuffer)) == 0)
+            result = osl_Process_E_None;
+        else
+            rtl_string_release(pBuffer);
+    }
+
+    if (pstr_val)
+        rtl_string_release(pstr_val);
+
+    if (pstr_env_var != 0)
+        rtl_string_release(pstr_env_var);
+
+    return (result);
+}
+
+/***************************************
+ osl_clearEnvironment().
+ **************************************/
+oslProcessError SAL_CALL osl_clearEnvironment(rtl_uString* pustrEnvVar)
+{
+    oslProcessError  result   = osl_Process_E_Unknown;
+    rtl_TextEncoding encoding = osl_getThreadTextEncoding();
+    rtl_String* pstr_env_var  = 0;
+
+    OSL_PRECOND(pustrEnvVar, "osl_setEnvironment(): Invalid parameter");
+
+    rtl_uString2String(
+        &pstr_env_var,
+        rtl_uString_getStr(pustrEnvVar), rtl_uString_getLength(pustrEnvVar), encoding,
+        OUSTRING_TO_OSTRING_CVTFLAGS);
+
+    if (pstr_env_var)
+    {
+        //Can't determine if OS/2 EMX has a working unsetenv or not, so use putenv,
+        //feel free to use unsetenv here if its available and works
+        rtl_String * pBuffer = NULL;
+
+        sal_Int32 nCapacity = rtl_stringbuffer_newFromStringBuffer( &pBuffer,
+            rtl_string_getLength(pstr_env_var) + 1, pstr_env_var );
+        rtl_stringbuffer_insert( &pBuffer, &nCapacity, pBuffer->length, "=", 1);
+
+        rtl_string_acquire(pBuffer); // argument to putenv must leak on success
+
+        if (putenv(rtl_string_getStr(pBuffer)) == 0)
+            result = osl_Process_E_None;
+        else
+            rtl_string_release(pBuffer);
+
+        rtl_string_release(pstr_env_var);
+    }
+
+    return (result);
+}
+
+/***************************************
  osl_getProcessWorkingDir().
  **************************************/
 oslProcessError SAL_CALL osl_getProcessWorkingDir(rtl_uString **ppustrWorkingDir)
