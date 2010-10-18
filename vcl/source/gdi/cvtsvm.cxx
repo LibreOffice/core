@@ -2364,11 +2364,6 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 
-#if 0
-            case( META_OVERLINECOLOR_ACTION ):
-            break;
-#endif
-
             case( META_TEXTLINE_ACTION ):
             {
                 const MetaTextLineAction*   pA = (MetaTextLineAction*) pAction;

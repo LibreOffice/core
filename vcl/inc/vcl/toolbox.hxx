@@ -252,9 +252,7 @@ private:
     using Window::ImplInit;
     private:
     SAL_DLLPRIVATE void            ImplInit( Window* pParent, WinBits nStyle );
-//    #if 0 // _SOLAR__PRIVATE
     using DockingWindow::ImplInitSettings;
-//    #endif
     SAL_DLLPRIVATE void            ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
     SAL_DLLPRIVATE void            ImplLoadRes( const ResId& rResId );
     SAL_DLLPRIVATE ImplToolItem*   ImplGetItem( USHORT nId ) const;
@@ -300,7 +298,6 @@ private:
     DECL_DLLPRIVATE_LINK(          ImplCustomMenuListener, VclMenuEvent* );
     DECL_DLLPRIVATE_LINK(          ImplDropdownLongClickHdl, ToolBox* );
 
-//#if 0 // _SOLAR__PRIVATE
     // Copy assignment is forbidden and not implemented.
     SAL_DLLPRIVATE                 ToolBox (const ToolBox &);
     SAL_DLLPRIVATE        ToolBox& operator= (const ToolBox &);
@@ -342,7 +339,6 @@ public:
     static SAL_DLLPRIVATE void ImplDrawMenubutton( ToolBox *pThis, BOOL bHighlight );
     static SAL_DLLPRIVATE USHORT ImplCountLineBreaks( const ToolBox *pThis );
     SAL_DLLPRIVATE ImplToolBoxPrivateData* ImplGetToolBoxPrivateData() const { return mpData; }
-//#endif
 
 protected:
     void                SetCurItemId(USHORT nSet) { mnCurItemId = nSet; }

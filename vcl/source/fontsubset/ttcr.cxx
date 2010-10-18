@@ -1544,19 +1544,6 @@ static void ProcessTables(TrueTypeCreator *tt)
     PutUInt16(maxCompositePoints, pMaxpData, 10, 1);
     PutUInt16(maxCompositeContours, pMaxpData, 12, 1);
 
-#if 0
-    /* XXX do not overwrite the existing data. Fix: re-calculate these numbers here */
-    PutUInt16(2, maxp->data, 14, 1);                        /* maxZones is always 2       */
-    PutUInt16(0, maxp->data, 16, 1);                        /* maxTwilightPoints          */
-    PutUInt16(0, maxp->data, 18, 1);                        /* maxStorage                 */
-    PutUInt16(0, maxp->data, 20, 1);                        /* maxFunctionDefs            */
-    PutUint16(0, maxp->data, 22, 1);                        /* maxInstructionDefs         */
-    PutUint16(0, maxp->data, 24, 1);                        /* maxStackElements           */
-    PutUint16(0, maxp->data, 26, 1);                        /* maxSizeOfInstructions      */
-    PutUint16(0, maxp->data, 28, 1);                        /* maxComponentElements       */
-    PutUint16(0, maxp->data, 30, 1);                        /* maxComponentDepth          */
-#endif
-
     /*
      * Generate an htmx table and update hhea table
      */

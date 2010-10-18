@@ -274,11 +274,7 @@ bool ATSLayout::LayoutText( ImplLayoutArgs& rArgs )
         aTagSizes[0] = sizeof( nLineDirTag );
         aTagValues[0] = &nLineDirTag;
         // set run-specific layout controls
-#if 0 // why don't line-controls work as reliably as layout-controls???
-        ATSUSetLineControls( maATSULayout, rArgs.mnMinCharPos, 1, aTagAttrs, aTagSizes, aTagValues );
-#else
         ATSUSetLayoutControls( maATSULayout, 1, aTagAttrs, aTagSizes, aTagValues );
-#endif
     }
 
     return true;
@@ -1092,113 +1088,6 @@ void ATSLayout::InvalidateMeasurements()
     DELETEAZ( mpDeltaY );
 }
 
-// =======================================================================
-
-#if 0
-// helper class to convert ATSUI outlines to VCL PolyPolygons
-class PolyArgs
-{
-public:
-                PolyArgs();
-                ~PolyArgs();
-
-    void        Init( PolyPolygon* pPolyPoly, long nXOffset, long nYOffset );
-    void        AddPoint( const Float32Point&, PolyFlags );
-    void        ClosePolygon();
-
-private:
-    PolyPolygon* mpPolyPoly;
-    long        mnXOffset, mnYOffset;
-
-    Point*      mpPointAry;
-    BYTE*       mpFlagAry;
-    USHORT      mnMaxPoints;
-
-    USHORT      mnPointCount;
-    USHORT      mnPolyCount;
-    bool        mbHasOffline;
-};
-
-// -----------------------------------------------------------------------
-
-PolyArgs::PolyArgs()
-:   mpPolyPoly(NULL),
-    mnPointCount(0),
-    mnPolyCount(0),
-    mbHasOffline(false)
-{
-    mnMaxPoints = 256;
-    mpPointAry  = new Point[ mnMaxPoints ];
-    mpFlagAry   = new BYTE [ mnMaxPoints ];
-}
-
-// -----------------------------------------------------------------------
-
-PolyArgs::~PolyArgs()
-{
-    delete[] mpFlagAry;
-    delete[] mpPointAry;
-}
-
-// -----------------------------------------------------------------------
-
-void PolyArgs::Init( PolyPolygon* pPolyPoly, long nXOffset, long nYOffset )
-{
-    mnXOffset = nXOffset;
-    mnYOffset = nYOffset;
-    mpPolyPoly = pPolyPoly;
-
-    mpPolyPoly->Clear();
-    mnPointCount = 0;
-    mnPolyCount  = 0;
-}
-
-// -----------------------------------------------------------------------
-
-void PolyArgs::AddPoint( const Float32Point& rPoint, PolyFlags eFlags )
-{
-    if( mnPointCount >= mnMaxPoints )
-    {
-        // resize if needed (TODO: use STL?)
-        mnMaxPoints *= 4;
-        Point* mpNewPoints = new Point[ mnMaxPoints ];
-        BYTE* mpNewFlags = new BYTE[ mnMaxPoints ];
-        for( int i = 0; i < mnPointCount; ++i )
-        {
-            mpNewPoints[ i ] = mpPointAry[ i ];
-            mpNewFlags[ i ] = mpFlagAry[ i ];
-        }
-        delete[] mpFlagAry;
-        delete[] mpPointAry;
-        mpPointAry = mpNewPoints;
-        mpFlagAry = mpNewFlags;
-    }
-
-    // convert to pixels and add startpoint offset
-    int nXPos = Float32ToInt( rPoint.x );
-    int nYPos = Float32ToInt( rPoint.y );
-    mpPointAry[ mnPointCount ] = Point( nXPos + mnXOffset, nYPos + mnYOffset );
-    // set point flags
-    mpFlagAry[ mnPointCount++ ]= eFlags;
-    mbHasOffline |= (eFlags != POLY_NORMAL);
-}
-
-// -----------------------------------------------------------------------
-
-void PolyArgs::ClosePolygon()
-{
-    if( !mnPolyCount++ )
-         return;
-
-    // append finished polygon
-    Polygon aPoly( mnPointCount, mpPointAry, (mbHasOffline ? mpFlagAry : NULL) );
-    mpPolyPoly->Insert( aPoly );
-
-    // prepare for new polygon
-    mnPointCount = 0;
-    mbHasOffline = false;
-}
-#endif
 // =======================================================================
 
 // glyph fallback is supported directly by Aqua

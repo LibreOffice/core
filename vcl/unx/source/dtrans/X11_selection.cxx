@@ -346,16 +346,6 @@ void SelectionManager::initialize( const Sequence< Any >& arguments ) throw (::c
             arguments.getConstArray()[0] >>= m_xDisplayConnection;
         if( ! m_xDisplayConnection.is() )
         {
-#if 0
-            // for the time being try to live without XDisplayConnection
-            // for the sake of clipboard service
-            // clipboard service should be initialized with a XDisplayConnection
-            // in the future
-            Exception aExc;
-            aExc.Message = OUString::createFromAscii( "initialize me with a valid XDisplayConnection" );
-            aExc.Context = static_cast< OWeakObject* >(this);
-            throw aExc;
-#endif
         }
         else
             m_xDisplayConnection->addEventHandler( Any(), this, ~0 );

@@ -59,7 +59,6 @@ private:
     Link                        maSelectHdl;
     Link                        maDoubleClickHdl;
 
-//#if 0 // _SOLAR__PRIVATE
 private:
     SAL_DLLPRIVATE void     ImplInitComboBoxData();
     SAL_DLLPRIVATE void     ImplUpdateFloatSelection();
@@ -79,7 +78,6 @@ protected:
     SAL_DLLPRIVATE WinBits  ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
     SAL_DLLPRIVATE void     ImplCalcEditHeight();
-//#endif
 
 protected:
                     ComboBox( WindowType nType );

@@ -28,8 +28,7 @@
 #ifndef _CNTRSRT_HXX
 #define _CNTRSRT_HXX
 
-#if 0
-***********************************************************************
+/***********************************************************************
 *
 *   Hier folgt die Beschreibung fuer die exportierten Makros:
 *
@@ -53,8 +52,7 @@
 *
 *       Wie DECLARE_CONTAINER_SORT, nur dass beim Aufruf des Destruktors
 *       alle im Conatiner vorhandenen Objekte geloescht werden.
-*
-#endif
+*/
 
 #include <tools/contnr.hxx>
 

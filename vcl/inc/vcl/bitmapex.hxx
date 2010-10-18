@@ -64,12 +64,9 @@ private:
 
 public:
 
-//#if 0 // _SOLAR__PRIVATE
 
     SAL_DLLPRIVATE  ImpBitmap*  ImplGetBitmapImpBitmap() const { return aBitmap.ImplGetImpBitmap(); }
     SAL_DLLPRIVATE  ImpBitmap*  ImplGetMaskImpBitmap() const { return aMask.ImplGetImpBitmap(); }
-
-//#endif // PRIVATE
 
 public:
 

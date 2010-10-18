@@ -267,19 +267,6 @@ Any SAL_CALL StringTransferable::getTransferData( const DataFlavor& aFlavor )
     {
         anyData = makeAny( m_Data );
     } */
-#if 0
-    else if ( aFlavor == m_seqDFlv[0] )
-    {
-        OString aStr( m_Data.getStr( ), m_Data.getLength( ), 1252 );
-        Sequence< sal_Int8 > sOfChars( aStr.getLength( ) );
-        sal_Int32 lenStr = aStr.getLength( );
-
-        for ( sal_Int32 i = 0; i < lenStr; ++i )
-            sOfChars[i] = aStr[i];
-
-        anyData = makeAny( sOfChars );
-    }
-#endif
 
     return anyData;
 }

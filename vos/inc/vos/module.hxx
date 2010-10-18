@@ -59,12 +59,6 @@ public:
     /// returns sal_True, if a module is loaded, sal_False otherwise
     sal_Bool SAL_CALL isLoaded();
 
-#if 0
-    // not implemented yet
-    // returns the name of the currently loaded module or an empty string if none.
-    ::rtl::OUString SAL_CALL getModuleName();
-#endif
-
     /// returns a pointer to the specified Symbol if found, NULL otherwise
     void* SAL_CALL getSymbol(const ::rtl::OUString& strSymbolName);
 

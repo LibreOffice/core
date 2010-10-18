@@ -1596,11 +1596,6 @@ String LocaleDataWrapper::getTime( const Time& rTime, BOOL bSec, BOOL b100Sec ) 
         else
             aStr += getTimeAM();
     }
-#if 0
-//!TODO: do we need a time string? like "o'clock" or "Uhr" or similar
-    else
-        aStr += getTimeStr();
-#endif
 
     return aStr;
 }

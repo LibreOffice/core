@@ -288,7 +288,6 @@ private:
                     mbDockBtn:1,
                     mbHideBtn:1;
 
-//#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE void    ImplInitDockingWindowData();
 
     // Copy assignment is forbidden and not implemented.
@@ -303,7 +302,6 @@ protected:
 
 public:
     SAL_DLLPRIVATE BOOL    ImplStartDocking( const Point& rPos );
-//#endif
 
 protected:
                     DockingWindow( WindowType nType );

@@ -74,9 +74,7 @@ private:
     ResMgr          *pMgr;
     ResMgr          *pFreeMgr;
 
-//#if 0 // _SOLAR__PRIVATE
     SVT_DLLPRIVATE BOOL             GetClassString(ULONG lErrId, String &) const;
-//#endif
     virtual BOOL     CreateString(
                          const ErrorInfo *, String &, USHORT &) const;
 };

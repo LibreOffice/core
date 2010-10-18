@@ -611,12 +611,6 @@ BOOL AquaSalFrame::GetWindowState( SalFrameState* pState )
                      SAL_FRAMESTATE_MASK_Y                 |
                      SAL_FRAMESTATE_MASK_WIDTH             |
                      SAL_FRAMESTATE_MASK_HEIGHT            |
-                     #if 0
-                     SAL_FRAMESTATE_MASK_MAXIMIZED_X       |
-                     SAL_FRAMESTATE_MASK_MAXIMIZED_Y       |
-                     SAL_FRAMESTATE_MASK_MAXIMIZED_WIDTH   |
-                     SAL_FRAMESTATE_MASK_MAXIMIZED_HEIGHT  |
-                     #endif
                      SAL_FRAMESTATE_MASK_STATE;
 
     NSRect aStateRect = [mpWindow frame];

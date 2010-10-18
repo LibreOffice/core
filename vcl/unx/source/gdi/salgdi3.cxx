@@ -1499,10 +1499,6 @@ ImplFontCharMap* X11SalGraphics::GetImplFontCharMap() const
 {
     // TODO: get ImplFontCharMap directly from fonts
     if( !mpServerFont[0] )
-#if 0 // RIP XLFD fonts
-    if( mXFont[0] )
-        // TODO?: nPairCount = mXFont[0]->GetFontCodeRanges( NULL );
-#endif
         return NULL;
 
     CmapResult aCmapResult;

@@ -665,15 +665,8 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
             sal_uInt32 cMaxChar = GetUInt( pGroup + 4 );
             int nGlyphId = GetUInt( pGroup + 8 );
             pGroup += 12;
-#if 0       // TODO: remove unicode baseplane clipping for UCS-4 support
-            if( cMinChar > 0xFFFF )
-                continue;
-            if( cMaxChar > 0xFFFF )
-                cMaxChar = 0xFFFF;
-#else
             if( cMinChar > cMaxChar )   // no sane font should trigger this
                 break;
-#endif
             *(pCP++) = cMinChar;
             *(pCP++) = cMaxChar + 1;
             pStartGlyphs[i] = nGlyphId;

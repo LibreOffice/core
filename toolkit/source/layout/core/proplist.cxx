@@ -349,31 +349,6 @@ static const AttributesMap attribsMap[] =
 };
 static const int attribsMapLen = sizeof( attribsMap ) / sizeof( AttributesMap );
 
-#if 0
-long getAttribute( const OUString &rName, bool bTopWindow )
-{
-
-    int min = 0, max = attribsMapLen - 1, mid, cmp;
-    do
-    {
-        mid = min +( max - min )/2;
-        cmp = rName.compareToAscii( attribsMap[ mid ].name );
-        if ( cmp > 0 )
-            min = mid+1;
-        else if ( cmp < 0 )
-            max = mid-1;
-        else
-        {
-            if ( bTopWindow || attribsMap[ mid ].value )
-                return attribsMap[ mid ].windowAttr;
-            return 0;
-        }
-    }
-    while ( min <= max );
-    return 0;
-}
-#endif
-
 void propsFromAttributes( const uno::Reference<xml::input::XAttributes> & xAttributes,
                           PropList &rProps, sal_Int32 nNamespace )
 {

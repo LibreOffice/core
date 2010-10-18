@@ -93,10 +93,9 @@ private:
     SAL_DLLPRIVATE void           ImplMakeUnique( BOOL bReleaseCache = TRUE );
     SAL_DLLPRIVATE Gradient       ImplGetApplicationGradient() const;
 
-//#if 0 // _SOLAR__PRIVATE
 public:
     SAL_DLLPRIVATE ImplWallpaper* ImplGetImpWallpaper() const { return mpImplWallpaper; }
-//#endif
+
 
 public:
                     Wallpaper();

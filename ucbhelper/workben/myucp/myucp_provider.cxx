@@ -131,21 +131,7 @@ uno::Reference< ucb::XContent > SAL_CALL ContentProvider::queryContent(
     if ( !Identifier->getContentProviderScheme().equalsIgnoreAsciiCase( aScheme ) )
         throw ucb::IllegalIdentifierException();
 
-    // @@@ Further id checks may go here...
-#if 0
-    if ( id-check-failes )
-        throw ucb::IllegalIdentifierException();
-#endif
-
-    // @@@ Id normalization may go here...
-#if 0
-    // Normalize URL and create new Id.
-    rtl::OUString aCanonicURL = xxxxx( Identifier->getContentIdentifier() );
-    uno::Reference< ucb::XContentIdentifier > xCanonicId
-        = new ::ucbhelper::ContentIdentifier( m_xSMgr, aCanonicURL );
-#else
     uno::Reference< ucb::XContentIdentifier > xCanonicId = Identifier;
-#endif
 
     osl::MutexGuard aGuard( m_aMutex );
 

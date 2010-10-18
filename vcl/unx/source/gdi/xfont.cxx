@@ -385,22 +385,6 @@ QueryCharWidth16( Display* pDisplay, XLIB_Font nFontID, sal_MultiByte nChar,
     return CharExists( &aBoundingBox ) ? aBoundingBox.width : nDefaultWidth;
 }
 
-#if 0
-// currently not used
-static sal_Size
-QueryCharWidth8( XFontStruct* pXFontStruct, sal_Char nChar,
-    sal_Size nDefaultWidth )
-{
-    int nDirection, nFontAscent, nFontDescent;
-    XCharStruct aBoundingBox;
-
-    XTextExtents( pXFontStruct, &nChar, 1,
-        &nDirection, &nFontAscent, &nFontDescent, &aBoundingBox );
-
-    return CharExists( &aBoundingBox ) ? aBoundingBox.width : nDefaultWidth;
-}
-#endif
-
 sal_Size
 ExtendedFontStruct::GetDefaultWidth()
 {

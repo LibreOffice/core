@@ -2499,22 +2499,6 @@ BOOL DirEntry::MakeShortName( const String& rLongName, DirEntryKind eKind,
 
         // Auf Novell-Servern (wegen der rottigen Clients) nur 7bit ASCII
 
-        // HRO: #69627# Weg mit dem Scheiss. Wenn es Client gibt, die so einen
-        // BUG haben, dann muss halt der Client ersetzt werden, aber doch nicht das
-        // Office kastrieren !!!
-
-#if 0
-        if ( FSYS_STYLE_NWFS == GetPathStyle( ImpGetTopPtr()->GetName() ) )
-        {
-                for ( USHORT n = aLongName.Len(); n; --n )
-                {
-                        short nChar = aLongName(n-1);
-                        if ( nChar < 32 || nChar >= 127 )
-                                aLongName.Erase( n-1, 1 );
-                }
-        }
-#endif
-
         // bei FSYS_KIND_ALL den alten Namen merken und abh"angen (rename)
         ByteString aOldName;
         if ( FSYS_KIND_ALL == eKind )

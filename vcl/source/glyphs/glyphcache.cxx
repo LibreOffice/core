@@ -79,12 +79,6 @@ GlyphCache::~GlyphCache()
 
 void GlyphCache::InvalidateAllGlyphs()
 {
-#if 0 // TODO: implement uncaching of all glyph shapes and metrics
-    for( FontList::iterator it = maFontList.begin(); it != maFontList.end(); ++it )
-        delete const_cast<ServerFont*>( it->second );
-    maFontList.clear();
-    mpCurrentGCFont = NULL;
-#endif
 }
 
 // -----------------------------------------------------------------------

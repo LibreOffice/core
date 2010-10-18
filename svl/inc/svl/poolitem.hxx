@@ -196,12 +196,6 @@ private:
     inline ULONG             ReleaseRef( ULONG n = 1 ) const;
     SVL_DLLPRIVATE long      Delete_Impl(void*);
 
-#if 0
-    // @@@ virtual, but private, and dummy impl. @@@
-    virtual void             Store( SvStream & ) const;
-    virtual void             GetVersion() const;
-#endif
-
 protected:
                              SfxPoolItem( USHORT nWhich = 0 );
                              SfxPoolItem( const SfxPoolItem& );
@@ -413,38 +407,6 @@ public:
 };
 
 // -----------------------------------------------------------------------
-
-#if 0  /* @@@ NOT USED @@@ */
-class SfxInvalidItem: public SfxPoolItem
-{
-friend class SfxItemSet;
-
-    const SfxPoolItem*      pDefaultItem;
-
-private:
-                            TYPEINFO();
-                            SfxInvalidItem( USHORT nWhich, const SfxPoolItem &rDefault );
-                            SfxInvalidItem( const SfxInvalidItem& );
-    virtual                 ~SfxInvalidItem();
-
-public:
-    virtual int             operator==( const SfxPoolItem& ) const;
-
-    virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
-                                    SfxMapUnit eCoreMetric,
-                                    SfxMapUnit ePresMetric,
-                                    XubString &rText,
-                                    const IntlWrapper * = 0 ) const;
-    const SfxPoolItem*      GetDefaultItem() const { return pDefaultItem; }
-
-    // von sich selbst eine Kopie erzeugen
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create(SvStream &, USHORT nVersion) const;
-    virtual SvStream&       Store(SvStream &, USHORT nVer ) const;
-};
-#endif /* @@@ NOT USED @@@ */
-
-// -----------------------------------------------------------------------
 // Handle Klasse fuer PoolItems
 
 class SVL_DLLPUBLIC SfxItemHandle
@@ -465,26 +427,6 @@ public:
 DECL_PTRHINT(SVL_DLLPUBLIC, SfxPoolItemHint, SfxPoolItem);
 
 // -----------------------------------------------------------------------
-
-#if 0  /* @@@ NOT USED @@@ */
-class SfxItemChangedHint: public SfxHint
-{
-    const SfxPoolItem&  _rOld;
-    const SfxPoolItem&  _rNew;
-
-public:
-                        TYPEINFO(); \
-                        SfxItemChangedHint( const SfxPoolItem &rOld,
-                                            const SfxPoolItem &rNew )
-                        :   _rOld( rOld ),
-                            _rNew( rNew )
-                        {}
-
-    const SfxPoolItem&  GetOldItem() const { return _rOld; }
-    const SfxPoolItem&  GetNewItem() const { return _rNew; }
-};
-
-#endif /* @@@ NOT USED @@@ */
 
 #endif // #ifndef _SFXPOOLITEM_HXX
 

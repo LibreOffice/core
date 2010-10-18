@@ -161,19 +161,6 @@ public:
         mxContainer = uno::Reference< awt::XLayoutContainer >( mxWidget, uno::UNO_QUERY );
 
         mrLabel = rtl::OUString( label, strlen( label ), RTL_TEXTENCODING_UTF8  );
-
-#if 0  /* obsolete */
-        // FIXME: this code is meant to import a XML file. Just use the importer,
-        // then pass the root widget. But information like the ID string is lost.
-        // So, this needs to be more closely tight to the importer.
-        uno::Sequence< uno::Reference< awt::XLayoutConstrains > > aChildren;
-        for ( int i = 0; i < aChildren.getLength(); i++ )
-        {
-            Widget *pChild = new Widget( aChildren[ i ], "---" );
-            maChildren.push_back( pChild );
-            pChild->mpParent = this;
-        }
-#endif
     }
 
     Widget( rtl::OUString id, uno::Reference< awt::XToolkit > xToolkit,
@@ -205,17 +192,7 @@ public:
 
         // set default Text property
         // TODO: disable editing of text fields, check boxes selected, etc...
-#if 0
-        uno::Reference< awt::XVclWindowPeer> xVclPeer( mxWidget, uno::UNO_QUERY )
-            if ( xVclPeer.is() ) // XVclWindowPeer ignores missing / incorrect properties
 
-//FIXME: it looks odd on widgets like NumericField seeing text which is deleted
-// when you interact with it... We can avoid it for those widgets, by doing a getProp
-// of "Text" and check if it is empty or not.
-
-                xVclPeer->setProperty( rtl::OUString::createFromAscii( "Text" ),
-                                       uno::makeAny( rtl::OUString::createFromAscii( "new widget" ) ) );
-#endif
 
         // store original properties
         {
@@ -685,11 +662,6 @@ bool moveWidget( Widget *pWidget, bool up /*or down*/ )
         }
         else
         {
-// TODO: this is a nice feature, but we probably want to do it explicitely...
-#if 0
-            if ( pWidget->down() && pWidget->swapWithChild( pWidget->down() ) )
-                return true;
-#endif
         }
     }
 
@@ -893,66 +865,14 @@ class PropertiesList : public layout::Table
                 mbMultiLine = bMultiLine;
             }
 
-#if 0
-            // TODO: make this global... We'll likely need it for export...
-            struct Translate {
-                const char *ori, *dest;
-            };
-            static rtl::OUString stringReplace( rtl::OUString _str,
-                                                Translate *trans )
-            {
-                const sal_Unicode *str = _str.getStr();
-                rtl::OUStringBuffer buf;
-                int i, j, k;
-                for ( i = 0; i < _str.getLength(); i++ )
-                {
-                    for ( j = 0; trans[ j ].ori; j++ )
-                    {
-                        const char *ori = trans[ j ].ori;
-                        for ( k = 0; ori[ k ] && i+k < _str.getLength(); k++ )
-                            if ( ori[ k ] != str[ i+k ] )
-                                break;
-                        if ( !ori[ k ] )
-                        {
-                            // found substring
-                            buf.appendAscii( trans[ j ].dest );
-                            i += k;
-                            continue;
-                        }
-                    }
-                    buf.append( str[ i ] );
-                }
-                return buf.makeStringAndClear();
-            }
-#endif
-
             virtual void load()
             {
-#if 0
-                // replace end of lines by "\\n" strings
-                Translate trans[] = {
-                    { "\\", "\\\\" }, { "\n", "\\n" }, { 0, 0 }
-                };
-                rtl::OUString str = anyToString( getValue() );
-                str = stringReplace( str, trans );
-                SetText( str );
-#endif
                 mpEdit->SetText( getValue() );
                 checkProperty();
             }
 
             virtual void store()
             {
-#if 0
-                // replace "\\n" strings by actual end of lines
-                Translate trans[] = {
-                    { "\\\\", "\\"  }, { "\\n", "\n" },
-                    { "\\", "" }, { 0, 0 }
-                };
-                rtl::OUString str = GetText();
-                str = stringReplace( str, trans );
-                save( uno::makeAny( str ) );
-#endif
                 save( uno::makeAny( (rtl::OUString) mpEdit->GetText() ) );
             }
         };
@@ -1209,20 +1129,6 @@ class PropertiesList : public layout::Table
             "FontType", "FontWordLineMode", "HelpText", "HelpURL", "MultiLine",
             "Printable", "Repeat", "RepeatDelay", "Tabstop"
         };
-
-#if 0
-        // checks list sanity -- enable this when you add some entries...
-        for ( unsigned int i = 1; i < sizeof( toIgnoreList )/sizeof( char * ); i++ )
-        {
-            if ( strcmp(toIgnoreList[i-1], toIgnoreList[i]) >= 0 )
-            {
-                printf("ignore list not ordered properly: "
-                       "'%s' should come before '%s'\n",
-                       toIgnoreList[i], toIgnoreList[i-1]);
-                exit(-1);
-            }
-        }
-#endif
 
         int min = 0, max = sizeof( toIgnoreList )/sizeof( char * ) - 1, mid, cmp;
         do {

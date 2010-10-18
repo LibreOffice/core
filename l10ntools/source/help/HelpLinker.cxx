@@ -292,18 +292,6 @@ private:
     void addBookmark( DB* dbBase, FILE* pFile_DBHelp, std::string thishid,
         const std::string& fileB, const std::string& anchorB,
         const std::string& jarfileB, const std::string& titleB );
-#if 0
-    /**
-     * @param outputFile
-     * @param module
-     * @param lang
-     * @param hid
-     * @param helpFiles
-     * @param additionalFiles
-     */
-
-    private HelpURLStreamHandlerFactory urlHandler = null;
-#endif
 };
 
 namespace URLEncoder
@@ -574,13 +562,6 @@ void HelpLinker::link() throw( HelpProcessingException )
         std::string documentTitle = streamTable.document_title;
         if (documentTitle.empty())
             documentTitle = "<notitle>";
-
-#if 0
-        std::cout << "for " << xhpFileName << " documentBaseId is " << documentBaseId << "\n";
-        std::cout << "for " << xhpFileName << " documentPath is " << documentPath << "\n";
-        std::cout << "for " << xhpFileName << " documentJarfile is " << documentJarfile << "\n";
-        std::cout << "for " << xhpFileName << " documentPath is " << documentTitle << "\n";
-#endif
 
         const std::string& fileB = documentPath;
         const std::string& jarfileB = documentJarfile;

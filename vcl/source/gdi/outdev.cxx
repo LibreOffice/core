@@ -1485,9 +1485,6 @@ void OutputDevice::ImplSetTriangleClipRegion( const PolyPolygon &rPolyPolygon )
 
     if( mpGraphics->supportsOperation( OutDevSupport_B2DClip ) )
     {
-#if 0
-        ::basegfx::B2DPolyPolygon aB2DPolyPolygon = rPolyPolygon.getB2DPolyPolygon();
-#else
          // getB2DPolyPolygon() "optimizes away" some points
          // which prevents reliable undoing of the "triangle thingy" parameter
          // so the toolspoly -> b2dpoly conversion has to be done manually
@@ -1504,7 +1501,6 @@ void OutputDevice::ImplSetTriangleClipRegion( const PolyPolygon &rPolyPolygon )
               }
               aB2DPolyPolygon.append( aB2DPoly );
         }
-#endif
 
         const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
         aB2DPolyPolygon.transform( aTransform );
@@ -2931,17 +2927,9 @@ void OutputDevice::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rB2DPolyPoly 
     DBG_TRACE( "OutputDevice::DrawPolyPolygon(B2D&)" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
-#if 0
-    // MetaB2DPolyPolygonAction is not implemented yet:
-    // according to AW adding it is very dangerous since there is a lot
-    // of code that uses the metafile actions directly and unless every
-    // place that does this knows about the new action we need to fallback
-    if( mpMetaFile )
-        mpMetaFile->AddAction( new MetaB2DPolyPolygonAction( rB2DPolyPoly ) );
-#else
+
     if( mpMetaFile )
         mpMetaFile->AddAction( new MetaPolyPolygonAction( PolyPolygon( rB2DPolyPoly ) ) );
-#endif
 
     // call helper
     ImpDrawPolyPolygonWithB2DPolyPolygon(rB2DPolyPoly);
@@ -3056,13 +3044,6 @@ void OutputDevice::DrawPolyLine(
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
     (void)eLineJoin; // ATM used in UNX, but not in WNT, access it for warning-free
 
-#if 0 // MetaB2DPolyLineAction is not implemented yet:
-      // according to AW adding it is very dangerous since there is a lot
-      // of code that uses the metafile actions directly and unless every
-      // place that does this knows about the new action we need to fallback
-    if( mpMetaFile )
-        mpMetaFile->AddAction( new MetaB2DPolyLineAction( rB2DPolygon ) );
-#else
     if( mpMetaFile )
     {
         LineInfo aLineInfo;
@@ -3071,7 +3052,7 @@ void OutputDevice::DrawPolyLine(
         const Polygon aToolsPolygon( rB2DPolygon );
         mpMetaFile->AddAction( new MetaPolyLineAction( aToolsPolygon, aLineInfo ) );
     }
-#endif
+
 
     // AW: Do NOT paint empty PolyPolygons
     if(!rB2DPolygon.count())

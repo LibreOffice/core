@@ -1156,23 +1156,6 @@ void AquaSalGraphics::copyArea( long nDstX, long nDstY,long nSrcX, long nSrcY, l
 {
     ApplyXorContext();
 
-#if 0 // TODO: make AquaSalBitmap as fast as the alternative implementation below
-    SalBitmap* pBitmap = getBitmap( nSrcX, nSrcY, nSrcWidth, nSrcHeight );
-    if( pBitmap )
-    {
-        SalTwoRect aPosAry;
-        aPosAry.mnSrcX = 0;
-        aPosAry.mnSrcY = 0;
-        aPosAry.mnSrcWidth = nSrcWidth;
-        aPosAry.mnSrcHeight = nSrcHeight;
-        aPosAry.mnDestX = nDstX;
-        aPosAry.mnDestY = nDstY;
-        aPosAry.mnDestWidth = nSrcWidth;
-        aPosAry.mnDestHeight = nSrcHeight;
-        drawBitmap( &aPosAry, *pBitmap );
-        delete pBitmap;
-    }
-#else
     DBG_ASSERT( mxLayer!=NULL, "AquaSalGraphics::copyArea() for non-layered graphics" );
 
     // in XOR mode the drawing context is redirected to the XOR mask
@@ -1211,7 +1194,7 @@ void AquaSalGraphics::copyArea( long nDstX, long nDstY,long nSrcX, long nSrcY, l
 
     // mark the destination rectangle as updated
     RefreshRect( nDstX, nDstY, nSrcWidth, nSrcHeight );
-#endif
+
 }
 
 // -----------------------------------------------------------------------
@@ -2375,20 +2358,7 @@ void AquaSalGraphics::GetGlyphWidths( const ImplFontData* pFontData, bool bVerti
     else if( pFontData->IsEmbeddable() )
     {
         // get individual character widths
-#if 0 // FIXME
-        rWidths.reserve( 224 );
-        for( sal_Unicode i = 32; i < 256; ++i )
-        {
-            int nCharWidth = 0;
-            if( ::GetCharWidth32W( mhDC, i, i, &nCharWidth ) )
-            {
-                rUnicodeEnc[ i ] = rWidths.size();
-                rWidths.push_back( nCharWidth );
-            }
-        }
-#else
         DBG_ERROR("not implemented for non-subsettable fonts!\n");
-#endif
     }
 }
 

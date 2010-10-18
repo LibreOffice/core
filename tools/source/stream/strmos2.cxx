@@ -484,48 +484,10 @@ sal_Bool SvFileStream::UnlockFile()
 |*
 *************************************************************************/
 
-#if 0
-BOOL createLongNameEA   ( const PCSZ pszPath, ULONG ulAttributes, const String& aLongName );
-#endif
-
 void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
 {
         String aParsedFilename;
 
-#if 0
-        if      ( Folder::IsAvailable() && (rFilename.Search('{') < 9) )
-        {
-                String          aVirtualPart;
-                String          aRealPart;
-                String          aVirtualPath;
-                ItemIDPath      aVirtualURL;
-                ULONG           nDivider = 0;
-
-                String          aVirtualString(rFilename);
-
-                for (int x=aVirtualString.Len(); x>0; x--)
-                {
-                        if (aVirtualString.Copy(x,1).Compare("}")==COMPARE_EQUAL)
-                        {
-                                nDivider = x;
-                                break;
-                        }
-                }
-
-                aVirtualPart = aVirtualString.Copy(0,nDivider+1);
-                aRealPart = aVirtualString.Copy(nDivider+2);
-
-                aVirtualURL  = aVirtualPart;
-                aVirtualPath = aVirtualURL.GetHostNotationPath();
-
-                DirEntry aTempDirEntry(aVirtualPath);
-
-                aTempDirEntry += aRealPart;
-
-                aParsedFilename = aTempDirEntry.GetFull();
-        }
-        else
-#endif // 0
         {
                 aParsedFilename = rFilename;
         }
@@ -587,24 +549,6 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
             nOpenAction |= OPEN_ACTION_OPEN_IF_EXISTS;
     }
 
-#if 0 // YD
-    //
-    // resolves long FAT names used by OS2
-    //
-    BOOL bIsLongOS2=FALSE;
-    if (Folder::IsAvailable())
-    {
-        DirEntry aDirEntry(rFilename);
-        if  (aDirEntry.IsLongNameOnFAT())
-        {
-            // in kurzen Pfad wandeln
-            ItemIDPath      aItemIDPath(rFilename);
-            aParsedFilename = aItemIDPath.GetHostNotationPath();
-            bIsLongOS2 = TRUE;
-        }
-    }
-#endif
-
     aFilename = aParsedFilename;
     ByteString aFileNameA( aFilename, gsl_getSystemTextEncoding());
     FSysRedirector::DoRedirect( aFilename );
@@ -650,22 +594,6 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
         if( nReadWriteBits != OPEN_ACCESS_READONLY )
             bIsWritable = TRUE;
     }
-
-#if 0
-    if (bIsOpen && bIsLongOS2)
-    {
-        //file schließen, da sonst createLongName u.U. nicht möglich
-        Close();
-
-        // erzeugtem File langen Namen geben
-        DirEntry aDirEntry(rFilename);
-        createLongNameEA(aFileNameA.GetBuffer(),  FILE_NORMAL, aDirEntry.GetName());
-
-        // und wieder oeffnen
-        ReOpen();
-    }
-#endif
-
 }
 
 /*************************************************************************
@@ -755,111 +683,5 @@ void SvFileStream::SetSize( ULONG nSize )
             SetError( ::GetSvError( nRet ) );
     }
 }
-
-#if 0
-/*************************************************************************
-|*
-|*    SvSharedMemoryStream::AllocateMemory()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    CL 05.05.95
-|*    Letzte Aenderung  CL 05.05.95
-|*
-*************************************************************************/
-
-sal_Bool SvSharedMemoryStream::AllocateMemory( ULONG nNewSize )
-{
-        DBG_ASSERT(aHandle==0,"Keine Handles unter OS/2");
-        DBG_ASSERT(nNewSize,"Cannot allocate zero Bytes");
-        APIRET nRet = DosAllocSharedMem( (void**)&pBuf, (PSZ)NULL, nNewSize,
-                                     PAG_READ | PAG_WRITE | PAG_COMMIT |
-                                     OBJ_GIVEABLE | OBJ_GETTABLE | OBJ_ANY);
-    return( nRet == 0 );
-}
-
-/*************************************************************************
-|*
-|*    SvSharedMemoryStream::ReAllocateMemory()   (Bozo-Algorithmus)
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    CL 05.05.95
-|*    Letzte Aenderung  CL 05.05.95
-|*
-*************************************************************************/
-
-sal_Bool SvSharedMemoryStream::ReAllocateMemory( long nDiff )
-{
-    DBG_ASSERT(aHandle==0,"Keine Handles unter OS/2");
-    sal_Bool bRetVal    = FALSE;
-    ULONG nNewSize  = nSize + nDiff;
-        if( nNewSize )
-        {
-                // neuen Speicher nicht ueber AllocateMemory holen, da wir den
-                // alten Speicher behalten wollen, falls nicht genuegend Platz
-                // fuer den neuen Block da ist
-                char* pNewBuf;
-            APIRET nRet = DosAllocSharedMem( (void**)&pNewBuf,(PSZ)NULL,nNewSize,
-                                PAG_READ | PAG_WRITE | PAG_COMMIT |
-                                OBJ_GIVEABLE | OBJ_GETTABLE | OBJ_ANY);
-            DBG_ASSERT(!nRet,"DosAllocSharedMem failed");
-
-            if( !nRet )
-            {
-                bRetVal = TRUE; // Success!
-                if( nNewSize < nSize )      // Verkleinern ?
-                {
-                    memcpy( pNewBuf, pBuf, (size_t)nNewSize );
-                    if( nPos > nNewSize )
-                        nPos = 0L;
-                    if( nEndOfData >= nNewSize )
-                        nEndOfData = nNewSize-1L;
-                }
-                else
-                    memcpy( pNewBuf, pBuf, (size_t)nSize );
-
-                FreeMemory(); // den alten Block loeschen ...
-
-                // und den neuen Block in Dienst stellen
-                pBuf  = (sal_uInt8*)pNewBuf;
-                nSize = nNewSize;
-            }
-        }
-        else
-        {
-                bRetVal = TRUE;
-                FreeMemory();
-                pBuf = 0;
-                nSize = 0;
-                nEndOfData = 0;
-        }
-    return bRetVal;
-}
-
-void SvSharedMemoryStream::FreeMemory()
-{
-    DBG_ASSERT(aHandle==0,"Keine Handles unter OS/2");
-    DosFreeMem( pBuf );
-}
-
-/*************************************************************************
-|*
-|*    SvSharedMemoryStream::SetHandle()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 05.10.95
-|*    Letzte Aenderung  OV 05.10.95
-|*
-*************************************************************************/
-
-void* SvSharedMemoryStream::SetHandle( void* aNewHandle, sal_Size nSize,
-                                       sal_Bool bOwnsData, sal_Size nEOF )
-{
-    DBG_ERROR("OS/2 does not support memory handles");
-    // return SetBuffer(aNewHandle, nSize, bOwnsData, nEOF );
-    return 0;
-}
-
-
-#endif // 0
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

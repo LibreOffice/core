@@ -42,9 +42,7 @@ class TOOLS_DLLPUBLIC Table : private Container
 {
 private:
     ULONG   nCount;
-//#if 0 // _SOLAR__PRIVATE
     TOOLS_DLLPRIVATE ULONG  ImplGetIndex( ULONG nKey, ULONG* pIndex = NULL ) const;
-//#endif
 public:
             Table( USHORT nInitSize = 16, USHORT nReSize = 16 );
             Table( const Table& rTable ) : Container( rTable )

@@ -1146,12 +1146,6 @@ void MyApp::Main()
     MenuBar aMBMain( ResId( MENU_MAIN, *xManager.get() ) );
 
     // Check for command line params
-#if 0
-    for ( int i = 0; i < GetCommandLineParamCount(); ++i )
-    {
-        String aPara = GetCommandLineParam( i );
-    }
-#endif
 
      String aRootURL = GetCommandLineParam( 0 );
      if ( aRootURL.Len() == 0 )

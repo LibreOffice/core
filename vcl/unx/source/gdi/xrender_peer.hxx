@@ -278,16 +278,6 @@ inline void XRenderPeer::FreeGlyph( GlyphSet aGS, Glyph nGlyphId ) const
     // #108209# disabled because of crash potential,
     // the glyph leak is not too bad because they will
     // be cleaned up when the glyphset is released
-#if 0 // TODO: reenable when it works without problems
-    if( mnRenderVersion >= 0x05 )
-    {
-#ifdef XRENDER_LINK
-        XRenderFreeGlyphs( mpDisplay, aGS, &nGlyphId, 1 );
-#else
-        (*mpXRenderFreeGlyphs)( mpDisplay, aGS, &nGlyphId, 1 );
-#endif
-    }
-#endif
 }
 
 inline void XRenderPeer::CompositeString32( Picture aSrc, Picture aDst,

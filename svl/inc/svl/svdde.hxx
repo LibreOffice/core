@@ -65,13 +65,9 @@ typedef List DdeTopics;
 typedef List DdeItems;
 #endif
 
-//#if 0 // _SOLAR__PRIVATE
 DECLARE_LIST( DdeTransactions, DdeTransaction* )
 DECLARE_LIST( DdeFormats, long )
-//#else
-//typedef List DdeTransactions;
-//typedef List DdeFormats;
-//#endif
+
 
 #ifndef STRING_LIST
 #define STRING_LIST
@@ -90,9 +86,8 @@ class SVL_DLLPUBLIC DdeData
     friend class    DdeTransaction;
     DdeDataImp*     pImp;
 
-//#if 0 // _SOLAR__PRIVATE
     SVL_DLLPRIVATE void            Lock();
-//#endif
+
     void            SetFormat( ULONG nFmt );
 
 public:
@@ -139,9 +134,7 @@ class DdeTopicList
 {
     StringList      aTopics;
 
-//#if 0 // _SOLAR__PRIVATE
                     DECL_LINK( Data, DdeData* );
-//#endif
 public:
                     DdeTopicList( const String& );
                     ~DdeTopicList();

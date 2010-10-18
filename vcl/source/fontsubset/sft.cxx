@@ -3172,54 +3172,6 @@ int main(int ac, char **av)
         encoding[i] = i;
     }
 
-#if 0
-    i=0;
-    glyphs[i++] = 2001;
-    glyphs[i++] = 2002;
-    glyphs[i++] = 2003;
-    glyphs[i++] = 2004;
-    glyphs[i++] = 2005;
-    glyphs[i++] = 2006;
-    glyphs[i++] = 2007;
-    glyphs[i++] = 2008;
-    glyphs[i++] = 2009;
-    glyphs[i++] = 2010;
-    glyphs[i++] = 2011;
-    glyphs[i++] = 2012;
-    glyphs[i++] = 2013;
-    glyphs[i++] = 2014;
-    glyphs[i++] = 2015;
-    glyphs[i++] = 2016;
-    glyphs[i++] = 2017;
-    glyphs[i++] = 2018;
-    glyphs[i++] = 2019;
-    glyphs[i++] = 2020;
-
-
-    r = 97;
-    i = 0;
-    encoding[i++] = r++;
-    encoding[i++] = r++;
-    encoding[i++] = r++;
-    encoding[i++] = r++;
-    encoding[i++] = r++;
-    encoding[i++] = r++;
-    encoding[i++] = r++;
-    encoding[i++] = r++;
-    encoding[i++] = r++;
-    encoding[i++] = r++;
-    encoding[i++] = r++;
-    encoding[i++] = r++;
-    encoding[i++] = r++;
-    encoding[i++] = r++;
-    encoding[i++] = r++;
-    encoding[i++] = r++;
-    encoding[i++] = r++;
-    encoding[i++] = r++;
-    encoding[i++] = r++;
-    encoding[i++] = r++;
-#endif
-
     if (ac < 2) return 0;
 
     if ((r = OpenTTFont(av[1], 0, &fnt)) != SF_OK) {

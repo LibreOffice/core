@@ -477,11 +477,6 @@ BitmapEx PNGReaderImpl::GetBitmapEx( const Size& rPreviewSizeHint )
             aRet.SetPrefSize( maPhysSize );
         }
 
-#if 0
-        // TODO: make sure nobody depends on the stream being after the IEND chunks
-        // => let them do ReadChunks before
-        ReadRemainingChunks();
-#endif
     }
 
     return aRet;

@@ -95,32 +95,6 @@ struct AttacherIndex_Impl
     bool    operator==( const AttacherIndex_Impl & ) const;
 };
 
-#if 0
-bool AttachedObject_Impl::operator<( const AttachedObject_Impl & r ) const
-{
-    OSL_ENSURE( FALSE, "not implemented" );
-    return FALSE;
-    return this < &r;
-}
-
-bool AttachedObject_Impl::operator==( const AttachedObject_Impl & r ) const
-{
-    OSL_ENSURE( FALSE, "not implemented" );
-    return this == &r;
-}
-
-bool AttacherIndex_Impl::operator<( const AttacherIndex_Impl & r ) const
-{
-    OSL_ENSURE( FALSE, "not implemented" );
-    return this < &r;
-}
-bool AttacherIndex_Impl::operator==( const AttacherIndex_Impl & r ) const
-{
-    OSL_ENSURE( FALSE, "not implemented" );
-    return this == &r;
-}
-#endif
-
 //-----------------------------------------------------------------------------
 class ImplEventAttacherManager
     : public WeakImplHelper2< XEventAttacherManager, XPersistObject >

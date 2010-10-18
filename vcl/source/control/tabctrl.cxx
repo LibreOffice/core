@@ -90,27 +90,6 @@ struct ImplTabCtrlData
 
 // -----------------------------------------------------------------------
 
-#if 0
-// not used
-#define TABCOLORCOUNT   10
-
-static ColorData aImplTabColorAry[TABCOLORCOUNT] =
-{
-    RGB_COLORDATA(  80, 216, 248 ),
-    RGB_COLORDATA( 128, 216, 168 ),
-    RGB_COLORDATA( 128, 144, 248 ),
-    RGB_COLORDATA( 208, 180, 168 ),
-    RGB_COLORDATA( 248, 252, 168 ),
-    RGB_COLORDATA( 168, 144, 168 ),
-    RGB_COLORDATA( 248, 144,  80 ),
-    RGB_COLORDATA( 248, 216,  80 ),
-    RGB_COLORDATA( 248, 180, 168 ),
-    RGB_COLORDATA( 248, 216, 168 )
-};
-#endif
-
-// -----------------------------------------------------------------------
-
 #define TAB_OFFSET          3
 #define TAB_TABOFFSET_X     3
 #define TAB_TABOFFSET_Y     3

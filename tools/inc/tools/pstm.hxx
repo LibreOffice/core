@@ -158,11 +158,7 @@ public:\
 SV_DECL_PERSIST_LIST(ClassName,EntryName)\
 SV_IMPL_PERSIST_LIST(ClassName,EntryName)
 
-//#if 0 // _SOLAR__PRIVATE
 DECLARE_UNIQUEINDEX( SvPersistUIdx,SvPersistBase *)
-//#else
-//typedef UniqueIndex SvPersistUIdx;
-//#endif
 
 //=========================================================================
 class SvStream;

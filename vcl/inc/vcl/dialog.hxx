@@ -59,7 +59,6 @@ private:
     SAL_DLLPRIVATE void    ImplInitDialogData();
     SAL_DLLPRIVATE void    ImplInitSettings();
 
-//#if 0 // _SOLAR__PRIVATE
     // Copy assignment is forbidden and not implemented.
     SAL_DLLPRIVATE         Dialog (const Dialog &);
     SAL_DLLPRIVATE         Dialog & operator= (const Dialog &);
@@ -73,7 +72,6 @@ protected:
 
 public:
     SAL_DLLPRIVATE BOOL    IsInClose() const { return mbInClose; }
-//#endif
 
 protected:
                     Dialog( WindowType nType );
@@ -130,11 +128,9 @@ public:
 
 class VCL_DLLPUBLIC ModelessDialog : public Dialog
 {
-//#if 0 // _SOLAR__PRIVATE
     // Copy assignment is forbidden and not implemented.
     SAL_DLLPRIVATE         ModelessDialog (const ModelessDialog &);
     SAL_DLLPRIVATE         ModelessDialog & operator= (const ModelessDialog &);
-//#endif
 
 public:
                     ModelessDialog( Window* pParent, WinBits nStyle = WB_STDMODELESS );
@@ -157,11 +153,9 @@ private:
     using Window::Hide;
     void            Hide();
 
-//#if 0 // _SOLAR__PRIVATE
     // Copy assignment is forbidden and not implemented.
     SAL_DLLPRIVATE         ModalDialog (const ModalDialog &);
     SAL_DLLPRIVATE         ModalDialog & operator= (const ModalDialog &);
-//#endif
 };
 
 #endif  // _SV_DIALOG_HXX

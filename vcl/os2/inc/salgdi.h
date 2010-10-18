@@ -194,21 +194,6 @@ protected:
 
     virtual BOOL        drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, ULONG nSize );
 
-#if 0
-    // native widget rendering methods that require mirroring
-    virtual BOOL        hitTestNativeControl( ControlType nType, ControlPart nPart, const Region& rControlRegion,
-                                              const Point& aPos, BOOL& rIsInside );
-    virtual BOOL        drawNativeControl( ControlType nType, ControlPart nPart, const Region& rControlRegion,
-                                           ControlState nState, const ImplControlValue& aValue,
-                                           rtl::OUString aCaption );
-    virtual BOOL        drawNativeControlText( ControlType nType, ControlPart nPart, const Region& rControlRegion,
-                                               ControlState nState, const ImplControlValue& aValue,
-                                               rtl::OUString aCaption );
-    virtual BOOL        getNativeControlRegion( ControlType nType, ControlPart nPart, const Region& rControlRegion, ControlState nState,
-                                                const ImplControlValue& aValue, rtl::OUString aCaption,
-                                                Region &rNativeBoundingRegion, Region &rNativeContentRegion );
-#endif
-
     virtual bool        drawAlphaBitmap( const SalTwoRect&,
                                          const SalBitmap& rSourceBitmap,
                                          const SalBitmap& rAlphaBitmap );

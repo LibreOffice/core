@@ -211,9 +211,7 @@ enum NfEvalDateFormat
 };
 
 
-//#if 0 // _SOLAR__PRIVATE
 #define _ZFORLIST_DECLARE_TABLE
-//#endif
 #ifdef _ZFORLIST_DECLARE_TABLE
 DECLARE_TABLE (SvNumberFormatTable, SvNumberformat*)
 DECLARE_TABLE (SvNumberFormatterIndexTable, sal_uInt32*)
@@ -244,12 +242,10 @@ class SVL_DLLPUBLIC NfCurrencyEntry
 
 private:
 
-//#if 0 // _SOLAR__PRIVATE
                         // nDecimalFormat := 0, 1, 2
                         // #,##0 or #,##0.00 or #,##0.-- are assigned
     SVL_DLLPRIVATE void             Impl_BuildFormatStringNumChars( String&,
                             const LocaleDataWrapper&, USHORT nDecimalFormat ) const;
-//#endif    // __PRIVATE
 
 public:
 

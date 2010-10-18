@@ -57,7 +57,6 @@ private:
     Link                        maDoubleClickHdl;
     USHORT mnLineCount;
 
-//#if 0 // _SOLAR__PRIVATE
 private:
     SAL_DLLPRIVATE void    ImplInitListBoxData();
 
@@ -75,7 +74,6 @@ protected:
     SAL_DLLPRIVATE void    ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE WinBits ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void    ImplLoadRes( const ResId& rResId );
-//#endif
     BOOL                IsDropDownBox() const { return mpFloatWin ? TRUE : FALSE; }
 
 protected:

@@ -406,43 +406,6 @@ void SvtInternalOptions_Impl::SetCurrentTempURL( const OUString& aNewCurrentTemp
     Commit();
 }
 
-#if 0
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-void SvtInternalOptions_Impl::PushRecoveryItem( const   OUString&   sURL        ,
-                                                const   OUString&   sFilter     ,
-                                                const   OUString&   sTempName   )
-{
-    tIMPL_RecoveryEntry aEntry( sURL, sFilter, sTempName );
-    m_aRecoveryList.push_front( aEntry );
-    SetModified();
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-void SvtInternalOptions_Impl::PopRecoveryItem(  OUString&   sURL        ,
-                                                OUString&   sFilter     ,
-                                                OUString&   sTempName   )
-{
-    tIMPL_RecoveryEntry aEntry = m_aRecoveryList.front();
-    m_aRecoveryList.pop_front();
-    SetModified();  // Don't forget it - we delete an entry here!
-    sURL        = aEntry.sURL       ;
-    sFilter     = aEntry.sFilter    ;
-    sTempName   = aEntry.sTempName  ;
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-sal_Bool SvtInternalOptions_Impl::IsRecoveryListEmpty() const
-{
-    return ( m_aRecoveryList.empty() );
-}
-#endif
-
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************

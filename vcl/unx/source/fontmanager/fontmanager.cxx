@@ -1198,15 +1198,6 @@ PrintFontManager::PrintFontManager() :
             m_aUnicodeToAdobecode.insert( ::std::hash_multimap< sal_Unicode, sal_uInt8 >::value_type( aAdobeCodes[i].aUnicode, aAdobeCodes[i].aAdobeStandardCode ) );
             m_aAdobecodeToUnicode.insert( ::std::hash_multimap< sal_uInt8, sal_Unicode >::value_type( aAdobeCodes[i].aAdobeStandardCode, aAdobeCodes[i].aUnicode ) );
         }
-#if 0
-        m_aUnicodeToAdobename[ aAdobeCodes[i].aUnicode ] = aAdobeCodes[i].pAdobename;
-        m_aAdobenameToUnicode[ aAdobeCodes[i].pAdobename ] = aAdobeCodes[i].aUnicode;
-        if( aAdobeCodes[i].aAdobeStandardCode )
-        {
-            m_aUnicodeToAdobecode[ aAdobeCodes[i].aUnicode ] = aAdobeCodes[i].aAdobeStandardCode;
-            m_aAdobecodeToUnicode[ aAdobeCodes[i].aAdobeStandardCode ] = aAdobeCodes[i].aUnicode;
-        }
-#endif
     }
 }
 

@@ -29,8 +29,7 @@
 #ifndef _SVARRAY_HXX
 #define _SVARRAY_HXX
 
-#if 0
-***********************************************************************
+/***********************************************************************
 *
 *   Hier folgt die Beschreibung fuer die exportierten Makros:
 *
@@ -96,8 +95,7 @@
 *   PtrArr:     SvStrings, SvStringsDtor
 *   SortArr:    SvStringsSort, SvStringsSortDtor,
 *               SvStringsISort, SvStringsISortDtor
-***********************************************************************
-#endif
+***********************************************************************/
 
 #include "svl/svldllapi.h"
 

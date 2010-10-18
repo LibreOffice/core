@@ -555,16 +555,4 @@ const SystemChildData* Os2SalObject::GetSystemData() const
     return &maSysData;
 }
 
-// -----------------------------------------------------------------------
-#if 0
-void Os2SalObject::SetCallback( void* pInst, SALOBJECTPROC pProc )
-{
-    mpInst = pInst;
-    if ( pProc )
-        mpProc = pProc;
-    else
-        mpProc = ImplSalObjCallbackDummy;
-}
-#endif
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

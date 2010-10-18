@@ -64,50 +64,6 @@ SVT_DLLPUBLIC long      GetCoreValue( const MetricField& rField, SfxMapUnit eUni
 
 SVT_DLLPUBLIC long  PointToTwips( long nIn );
 
-#if 0
-// to Twips
-SVT_DLLPUBLIC long  CMToTwips( long nIn );
-SVT_DLLPUBLIC long  MMToTwips( long nIn );
-SVT_DLLPUBLIC long  InchToTwips( long nIn );
-SVT_DLLPUBLIC long  PicaToTwips( long nIn );
-
-// to CM
-SVT_DLLPUBLIC long  TwipsToCM( long nIn );
-SVT_DLLPUBLIC long  InchToCM( long nIn );
-SVT_DLLPUBLIC long  MMToCM( long nIn );
-SVT_DLLPUBLIC long  PointToCM( long nIn );
-SVT_DLLPUBLIC long  PicaToCM( long nIn );
-
-// to MM
-SVT_DLLPUBLIC long  TwipsToMM( long nIn );
-SVT_DLLPUBLIC long  CMToMM( long nIn );
-SVT_DLLPUBLIC long  InchToMM( long nIn );
-SVT_DLLPUBLIC long  PointToMM( long nIn );
-SVT_DLLPUBLIC long  PicaToMM( long nIn );
-
-// to Inch
-SVT_DLLPUBLIC long  TwipsToInch(long nIn );
-SVT_DLLPUBLIC long  CMToInch(long nIn );
-SVT_DLLPUBLIC long  MMToInch(long nIn );
-SVT_DLLPUBLIC long  PointToInch(long nIn );
-SVT_DLLPUBLIC long  PicaToInch(long nIn );
-
-// to Point
-SVT_DLLPUBLIC long  TwipsToPoint(long nIn );
-SVT_DLLPUBLIC long  InchToPoint(long nIn );
-SVT_DLLPUBLIC long  CMToPoint(long nIn );
-SVT_DLLPUBLIC long  MMToPoint(long nIn );
-SVT_DLLPUBLIC long  PicaToPoint(long nIn );
-
-// To Pica
-long    TwipsToPica(long nIn );
-long    InchToPica(long nIn );
-long    PointToPica(long nIn );
-long    CMToPica(long nIn );
-long    MMToPica(long nIn );
-
-#endif
-
 SVT_DLLPUBLIC long  TransformMetric( long nVal, FieldUnit aOld, FieldUnit aNew );
 
 #endif

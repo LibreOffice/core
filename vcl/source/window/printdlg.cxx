@@ -703,15 +703,6 @@ void PrintDialog::JobTabPage::readFromSettings()
     SettingsConfigItem* pItem = SettingsConfigItem::get();
     rtl::OUString aValue;
 
-    #if 0
-    // do not actually make copy count persistent
-    // the assumption is that this would lead to a lot of unwanted copies
-    aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
-                              rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CopyCount" ) ) );
-    sal_Int32 nVal = aValue.toInt32();
-    maCopyCountField.SetValue( sal_Int64(nVal > 1 ? nVal : 1) );
-    #endif
-
     aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
                               rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CollateBox" ) ) );
     if( aValue.equalsIgnoreAsciiCaseAscii( "alwaysoff" ) )
@@ -787,14 +778,6 @@ void PrintDialog::OutputOptPage::setupLayout()
 
 void PrintDialog::OutputOptPage::readFromSettings()
 {
-    #if 0
-    SettingsConfigItem* pItem = SettingsConfigItem::get();
-    rtl::OUString aValue;
-
-    aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
-                              rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ToFile" ) ) );
-    maToFileBox.Check( aValue.equalsIgnoreAsciiCaseAscii( "true" ) );
-    #endif
 }
 
 void PrintDialog::OutputOptPage::storeToSettings()
@@ -1155,10 +1138,6 @@ static void setHelpText( Window* /*i_pWindow*/, const Sequence< rtl::OUString >&
 
     // passed help texts for optional UI is used only for native dialogs which currently
     // cannot access the same (rather implicit) mechanism
-    #if 0
-    if( i_nIndex >= 0 && i_nIndex < i_rHelpTexts.getLength() )
-        i_pWindow->SetHelpText( i_rHelpTexts.getConstArray()[i_nIndex] );
-    #endif
 }
 
 void updateMaxSize( const Size& i_rCheckSize, Size& o_rMaxSize )

@@ -162,7 +162,6 @@ class VCL_DLLPUBLIC Animation
     BOOL                    mbLoopTerminated;
     BOOL                    mbIsWaiting;
 
-//#if 0 // _SOLAR__PRIVATE
 
     SAL_DLLPRIVATE void     ImplRestartTimer( ULONG nTimeout );
     DECL_DLLPRIVATE_LINK(   ImplTimeoutHdl, Timer* );
@@ -173,7 +172,6 @@ public:
     SAL_DLLPRIVATE static void  ImplDecAnimCount() { mnAnimCount--; }
     SAL_DLLPRIVATE ULONG        ImplGetCurPos() const { return mnPos; }
 
-//#endif
 
 public:
                             Animation();

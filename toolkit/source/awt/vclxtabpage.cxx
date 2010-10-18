@@ -109,20 +109,6 @@ void SAL_CALL VCLXTabPage::allocateArea( awt::Rectangle const& area )
     OSL_TRACE ("%s: window: %d, %d", __FUNCTION__, windowSize.Width(), windowSize.Height() );
 #endif
 
-#if 0
-    if (requestedSize.Width > parentSize.Width ()
-        || requestedSize.Height > parentSize.Height ())
-    {
-#ifndef __SUNPRO_CC
-        OSL_TRACE ("%s: ***setting parent: %d, %d", __FUNCTION__, requestedSize.Width, requestedSize.Height );
-#endif
-        parent->SetSizePixel ( Size (requestedSize.Width, requestedSize.Height) );
-
-        if (Window *grand_parent = parent->GetParent ())
-            grand_parent->SetSizePixel ( Size (requestedSize.Width, requestedSize.Height) );
-    }
-#endif
-
     if ( !bRealized )
     {
         setPosSize( area.X, area.Y, requestedSize.Width, requestedSize.Height, awt::PosSize::SIZE );

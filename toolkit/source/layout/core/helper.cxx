@@ -70,26 +70,6 @@ getParent( uno::Reference< uno::XInterface > xRef )
     return uno::Reference< awt::XWindowPeer >();
 }
 
-#if 0
-static uno::Reference< awt::XWindowPeer >
-getToplevel( uno::Reference< uno::XInterface > xRef )
-{
-    uno::Reference< awt::XWindowPeer > xTop, i;
-    while ( ( i = uno::Reference< awt::XWindowPeer >( xRef, uno::UNO_QUERY ) ).is() )
-    {
-        xTop = i;
-
-        uno::Reference< awt::XLayoutContainer > xCont( xRef, uno::UNO_QUERY );
-        if ( xCont.is() )
-            xRef = xCont->getParent();
-        else
-            xRef = uno::Reference< awt::XWindowPeer >();
-    }
-
-    return xTop;
-}
-#endif
-
 }
 
 #include "bin.hxx"
@@ -142,13 +122,7 @@ uno::Reference <awt::XLayoutConstrains> WidgetFactory::toolkitCreateWidget (uno:
     {
         desc.Type = awt::WindowClass_SIMPLE;
 
-#if 0
-        // top container -- a wrapper for framewindow -- is de-coupled
-        // from awt::XWindowPeer. So, getParent() fails at it.
-        uno::Reference< awt::XWindowPeer > xWinParent = getParent( xParent );
-#else
         uno::Reference< awt::XWindowPeer > xWinParent( xParent, uno::UNO_QUERY );
-#endif
         assert( xParent.is() );
         assert( xWinParent.is() );
         /*
@@ -196,18 +170,6 @@ uno::Reference <awt::XLayoutConstrains> WidgetFactory::toolkitCreateWidget (uno:
         DBG_ERROR1( "Warning: %s is not a recognized type\n", OUSTRING_CSTR( name ) );
         return uno::Reference< awt::XLayoutConstrains >();
     }
-
-#if 0 // This shadows the show="false" property and seems otherwise
-      // unnecessary
-
-    // default to visible, let then people change it on properties
-    if ( ! bToplevel )
-    {
-        uno::Reference< awt::XWindow> xWindow( xPeer, uno::UNO_QUERY );
-        if ( xWindow.is() )
-            xWindow->setVisible( true );
-    }
-#endif
 
     return xPeer;
 }
@@ -325,25 +287,6 @@ PropHelper::getFastPropertyValue( uno::Any& rValue,
 {
     OSL_ASSERT( nHandle >= 0 && nHandle < (sal_Int32) maDetails.size() );
     const PropDetails &rInfo = maDetails[ nHandle ];
-#if 0
-    switch ( rInfo.aType.getTypeClass() )
-    {
-#define MAP(classtype,ctype)                        \
-        case uno::TypeClass_##classtype:       \
-            rValue <<= *(ctype *)(rInfo.pValue);    \
-        break
-        MAP( DOUBLE, double );
-        MAP( SHORT, sal_Int16 );
-        MAP( LONG,  sal_Int32 );
-        MAP( UNSIGNED_SHORT, sal_uInt16 );
-        MAP( UNSIGNED_LONG, sal_uInt32 );
-        MAP( STRING, ::rtl::OUString );
-        default:
-            DBG_ERROR( "ERROR: unknown type to map!" );
-            break;
-    }
-#undef MAP
-#endif
     rValue.setValue( rInfo.pValue, rInfo.aType );
 }
 
@@ -598,14 +541,9 @@ Window* WidgetFactory::layoutCreateWindow (VCLXWindow** component, Window *paren
     }
     else if ( name.equalsAscii( "tabpage" ) )
     {
-#if 0
-        if ( !parent )
-            parent = layout::TabPage::global_parent;
-#else
         if (layout::TabPage::global_parent)
             parent = layout::TabPage::global_parent;
         layout::TabPage::global_parent = 0;
-#endif
         //window = new TabPage( parent, ImplGetWinBits( attributes, 0 ) );
         attributes ^= awt::WindowAttribute::SHOW;
         WinBits nStyle = ImplGetWinBits( attributes, 0 );
@@ -629,13 +567,6 @@ Window* WidgetFactory::layoutCreateWindow (VCLXWindow** component, Window *paren
         window = new Window( parent, ImplGetWinBits( attributes, 0 ) );
         *component = new layoutimpl::LocalizedString();
     }
-#if 0 // parent paranoia
-    else if ( name.equalsAscii( "listbox" ) )
-    {
-        window = new ListBox (parent, ImplGetWinBits (attributes, 0));
-        *component = new VCLXListBox ();
-    }
-#endif
     else if (name.equalsAscii ("svxfontlistbox")
              || name.equalsAscii ("svxlanguagebox"))
     {

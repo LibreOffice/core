@@ -108,9 +108,7 @@ private:
     SAL_DLLPRIVATE void      ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
     SAL_DLLPRIVATE void      ImplFormat();
     SAL_DLLPRIVATE BOOL      ImplIsItemUpdate();
-//    #if 0 // _SOLAR__PRIVATE
     using OutputDevice::ImplDrawText;
-//    #endif
     SAL_DLLPRIVATE void      ImplDrawText( BOOL bOffScreen, long nOldTextWidth );
     SAL_DLLPRIVATE void      ImplDrawItem( BOOL bOffScreen, USHORT nPos, BOOL bDrawText, BOOL bDrawFrame );
     SAL_DLLPRIVATE void      ImplDrawProgress( BOOL bPaint,

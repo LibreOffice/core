@@ -189,9 +189,7 @@ class SVT_DLLPUBLIC SvLBoxEntry : public SvListEntry
     SvPtrarr    aItems;
     void*       pUserData;
     USHORT      nEntryFlags;
-//#if 0 // _SOLAR__PRIVATE
     SVT_DLLPRIVATE void         DeleteItems_Impl();
-//#endif
 public:
 
                 SvLBoxEntry();
@@ -265,7 +263,6 @@ class SVT_DLLPUBLIC SvLBox
 {
     friend class SvLBoxEntry;
 
-//#if 0 // _SOLAR__PRIVATE
     DECL_DLLPRIVATE_LINK( TextEditEndedHdl_Impl, SvInplaceEdit2 * );
     // Handler, der von TreeList zum Clonen eines Entries aufgerufen wird
     DECL_DLLPRIVATE_LINK( CloneHdl_Impl, SvListEntry* );
@@ -279,7 +276,6 @@ class SVT_DLLPUBLIC SvLBox
     SVT_DLLPRIVATE static void AddBoxToDDList_Impl( const SvLBox& rB );
     SVT_DLLPRIVATE static void RemoveBoxFromDDList_Impl( const SvLBox& rB );
     DECL_DLLPRIVATE_STATIC_LINK( SvLBox, DragFinishHdl_Impl, sal_Int8* );
-//#endif
 
     DragDropMode nOldDragMode;
 
@@ -593,12 +589,10 @@ class SvInplaceEdit : public Edit
     BOOL        bCanceled;
     BOOL        bAlreadyInCallBack;
 
-//#if 0 // _SOLAR__PRIVATE
     void        CallCallBackHdl_Impl();
     DECL_LINK( Timeout_Impl, Timer * );
     DECL_LINK( ReturnHdl_Impl, Accelerator * );
     DECL_LINK( EscapeHdl_Impl, Accelerator * );
-//#endif
 
 public:
     SvInplaceEdit( Window* pParent, const Point& rPos, const Size& rSize,
@@ -624,12 +618,10 @@ class SvInplaceEdit2
     BOOL        bAlreadyInCallBack;
     BOOL        bMultiLine;
 
-//#if 0 // _SOLAR__PRIVATE
     void        CallCallBackHdl_Impl();
     DECL_LINK( Timeout_Impl, Timer * );
     DECL_LINK( ReturnHdl_Impl, Accelerator * );
     DECL_LINK( EscapeHdl_Impl, Accelerator * );
-//#endif
 
 public:
                 SvInplaceEdit2( Window* pParent, const Point& rPos, const Size& rSize,

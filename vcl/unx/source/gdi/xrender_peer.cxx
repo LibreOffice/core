@@ -166,16 +166,10 @@ void XRenderPeer::InitRenderLib()
         int,int,unsigned int,unsigned int))pFunc;
 
     pFunc = osl_getAsciiFunctionSymbol( mpRenderLib, "XRenderCompositeTrapezoids" );
-#if 0 // not having trapezoid support is supported
-    if( !pFunc ) return;
-#endif
     mpXRenderCompositeTrapezoids = (void(*)(Display*,int,Picture,Picture,
         const XRenderPictFormat*,int,int,const XTrapezoid*,int))pFunc;
 
     pFunc = osl_getAsciiFunctionSymbol( mpRenderLib, "XRenderAddTraps" );
-#if 0 // not having trapezoid support is supported
-    if( !pFunc ) return;
-#endif
     mpXRenderAddTraps = (void(*)(Display*,Picture,int,int,const _XTrap*,int))pFunc;
 
 #endif // XRENDER_LINK

@@ -267,16 +267,10 @@ void MyWin::Paint( const Rectangle& rRect )
     const int nFontSamples = (nFontCount<15) ? nFontCount : 15;
     for( int i = 0; i < nFontSamples; ++i )
     {
-#if 0
-        Font aFont( GetFont() );
-        aFont.SetName( String( RTL_CONSTASCII_USTRINGPARAM( "Courier" ) ) );
-        aFont.SetWeight( WEIGHT_NORMAL );
-        aFont.SetItalic( ITALIC_NONE );
-#else
+
         FontInfo aFont = GetDevFont( (i*nFontCount) / nFontSamples );
         aFont.SetHeight( 400 + (i%7) * 100 );
         aFont.SetOrientation( i * (3600 / nFontSamples) );
-#endif
         SetFont( aFont );
 
         sal_uInt8 nRed   = (i << 6) & 0xC0;

@@ -171,17 +171,6 @@ Calendar_gregorian::init(Era *_eraArray)
         UErrorCode status;
         body = icu::Calendar::createInstance( aIcuLocale, status = U_ZERO_ERROR);
         if (!body || !U_SUCCESS(status)) throw ERROR;
-
-#if 0
-        {
-            icu::Locale loc;
-            loc = body->getLocale( ULOC_ACTUAL_LOCALE, status = U_ZERO_ERROR);
-            fprintf( stderr, "\nICU calendar actual locale: %s\n", loc.getName());
-            loc = body->getLocale( ULOC_VALID_LOCALE, status = U_ZERO_ERROR);
-            fprintf( stderr,   "ICU calendar valid  locale: %s\n", loc.getName());
-        }
-#endif
-
         eraArray=_eraArray;
 }
 

@@ -41,10 +41,8 @@ class VCL_DLLPUBLIC TaskPaneList
     Window *FindNextFloat( Window *pWindow, BOOL bForward = TRUE );
     Window *FindNextSplitter( Window *pWindow, BOOL bForward = TRUE );
 
-//#if 0 // _SOLAR__PRIVATE
 public:
     BOOL IsInList( Window *pWindow );
-//#endif
 
 public:
     TaskPaneList();

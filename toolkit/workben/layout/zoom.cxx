@@ -92,16 +92,6 @@ struct SvxViewLayoutItem : public LAYOUT_SfxPoolItem
     void SetBookMode( bool )
     {
     }
-#if 0 // needed for real SfxPoolItem
-    int operator==( const SfxPoolItem& ) const
-    {
-        return 0;
-    }
-    SfxPoolItem* Clone( SfxItemPool* ) const
-    {
-        return 0;
-    }
-#endif
 };
 #else /* !TEST_LAYOUT */
 #include <svx/zoomitem.hxx>

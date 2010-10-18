@@ -89,54 +89,6 @@ private:
     RadioGroupsMap mxRadioGroups;
 };
 
-#if 0
-// generator
-class Widget
-{
-public:
-    Widget( css::uno::Reference< css::awt::XToolkit > xToolkit,
-            css::uno::Reference< css::awt::XWindow > xToplevel,
-            rtl::OUString unoName, long attrbs );
-    virtual ~Widget();
-
-    virtual void setProperties( const PropList &rProps );
-
-    virtual bool addChild( Widget *pChild );
-    virtual void setChildProperties( Widget *pChild, const PropList &rProps );
-
-    inline css::uno::Reference< css::awt::XLayoutConstrains > getPeer()
-    { return mxWidget; }
-
-    inline css::uno::Reference< css::awt::XLayoutConstrains > getContainer()
-    { return mxContainer; }
-
-protected:
-    css::uno::Reference< css::awt::XLayoutConstrains > mxWidget;
-    css::uno::Reference< css::awt::XLayoutContainer > mxContainer;
-};
-
-class Root
-{
-public:
-    Root( css::uno::Reference< css::awt::XToolkit > xToolkit )
-        : mxToolkit( xToolkit ) {}
-    ~Root();
-
-    virtual Widget *create( rtl::OUString id, const rtl::OUString unoName, long attrbs );
-
-    css::uno::Reference< css::awt::XLayoutConstrains > getById( rtl::OUString id );
-    inline css::uno::Reference< css::awt::XLayoutConstrains > getToplevel();
-
-protected:
-    css::uno::Reference< css::awt::XToolkit > mxToolkit;
-    Widget *mpToplevel;
-
-    typedef std::hash_map< rtl::OUString, css::uno::Reference< css::awt::XLayoutConstrains >,
-                           rtl::OUStringHash > ItemHash;
-    ItemHash maItems;
-};
-#endif
-
 // parser
 class ImportContext : public ::cppu::WeakImplHelper1< css::xml::input::XRoot >
 {

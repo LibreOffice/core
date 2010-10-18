@@ -110,26 +110,6 @@ Os2Clipboard::Os2Clipboard() :
     hText = 0;
     hBitmap = 0;
 
-#if 0
-    // register object class
-    if ( WinRegisterClass( hAB, (PSZ)DTRANS_OBJ_CLASSNAME,
-                            (PFNWP)DtransObjWndProc, 0, sizeof(ULONG) ))
-    {
-        APIRET  rc;
-        // create object window to get clip viewer messages
-        hObjWnd = WinCreateWindow( HWND_OBJECT, (PCSZ)DTRANS_OBJ_CLASSNAME,
-                                        (PCSZ)"", 0, 0, 0, 0, 0,
-                                        HWND_OBJECT, HWND_TOP,
-                                        222, NULL, NULL);
-        // store pointer
-        SetWindowPtr( hObjWnd, this);
-        // register the viewer window
-        rc = WinOpenClipbrd(hAB);
-        rc = WinSetClipbrdViewer(hAB, hObjWnd);
-        rc = WinCloseClipbrd(hAB);
-    }
-#endif
-
 }
 
 Os2Clipboard::~Os2Clipboard()

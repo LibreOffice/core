@@ -330,24 +330,6 @@ LayoutWidget *LayoutRoot::create( OUString id, const OUString unoName, long attr
     return pWidget;
 }
 
-#if 0
-uno::Reference< awt::XLayoutConstrains > LayoutRoot::getToplevel()
-{
-    if ( mpToplevel )
-        return mpToplevel->getPeer();
-    return uno::Reference< awt::XLayoutConstrains > ();
-}
-
-uno::Reference< awt::XLayoutConstrains > LayoutRoot::getById( OUString id )
-{
-    uno::Reference< awt::XLayoutConstrains > rRef = 0;
-    ItemHash::iterator it = maItems.find( id );
-    if ( it != maItems.end() )
-        rRef = it->second;
-    return rRef;
-}
-#endif
-
 LayoutWidget::LayoutWidget( uno::Reference< awt::XToolkit > xToolkit,
                             uno::Reference< awt::XLayoutContainer > xParent,
                             OUString unoName, long attrbs )

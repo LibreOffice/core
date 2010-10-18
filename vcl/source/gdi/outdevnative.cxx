@@ -208,43 +208,6 @@ static boost::shared_ptr< ImplControlValue > lcl_transformControlValue( const Im
     return aResult;
 }
 
-#if 0
-static void lcl_moveControlValue( ControlType nType, const ImplControlValue& aValue, const Point& rDelta )
-{
-    switch( aValue.getType() )
-    {
-        case CTRL_SLIDER:
-        {
-            SliderValue* pSlVal = static_cast<SliderValue*>(const_cast<ImplControlValue*>(&aValue));
-            pSlVal->maThumbRect.Move( rDelta.X(), rDelta.Y() );
-        }
-        break;
-        case CTRL_SCROLLBAR:
-        {
-            ScrollbarValue* pScVal = static_cast<ScrollbarValue*>(const_cast<ImplControlValue*>(&aValue));
-            pScVal->maThumbRect.Move( rDelta.X(), rDelta.Y() );
-            pScVal->maButton1Rect.Move( rDelta.X(), rDelta.Y() );
-            pScVal->maButton2Rect.Move( rDelta.X(), rDelta.Y() );
-        }
-        break;
-        case CTRL_SPINBOX:
-        case CTRL_SPINBUTTONS:
-        {
-            SpinbuttonValue* pSpVal = static_cast<SpinbuttonValue*>(const_cast<ImplControlValue*>(&aValue));
-            pSpVal->maUpperRect.Move( rDelta.X(), rDelta.Y() );
-            pSpVal->maLowerRect.Move( rDelta.X(), rDelta.Y() );
-        }
-        break;
-        case CTRL_TOOLBAR:
-        {
-            ToolbarValue* pTVal = static_cast<ToolbarValue*>(const_cast<ImplControlValue*>(&aValue));
-            pTVal->maGripRect.Move( rDelta.X(), rDelta.Y() );
-        }
-        break;
-    }
-}
-#endif
-
 BOOL OutputDevice::DrawNativeControl( ControlType nType,
                             ControlPart nPart,
                             const Rectangle& rControlRegion,

@@ -786,46 +786,6 @@ static BOOL ImplGetBoundingBox( double* nNumb, BYTE* pSource, ULONG nSize )
     return bRetValue;
 }
 
-#if 0
-static void ImplWriteDouble( BYTE** pBuf, double nNumber )
-{
-//  *pBuf += sprintf( (char*)*pBuf, "%f", nNumber );
-
-    if ( nNumber < 0 )
-    {
-        *(*pBuf)++ = (BYTE)'-';
-        nNumber = -nNumber;
-    }
-    ULONG nTemp = (ULONG)nNumber;
-    const String aNumber1( nTemp );
-    ULONG nLen = aNumber1.Len();
-
-    for ( USHORT n = 0; n < nLen; n++ )
-        *(*pBuf)++ = aNumber1[ n ];
-
-    nTemp = (ULONG)( ( nNumber - nTemp ) * 100000 );
-    if ( nTemp )
-    {
-        *(*pBuf)++ = (BYTE)'.';
-        const String aNumber2( nTemp );
-
-        ULONG nLen = aNumber2.Len();
-        if ( nLen < 8 )
-        {
-            for ( n = 0; n < ( 5 - nLen ); n++ )
-            {
-                *(*pBuf)++ = (BYTE)'0';
-            }
-        }
-        for ( USHORT n = 0; n < nLen; n++ )
-        {
-            *(*pBuf)++ = aNumber2[ n ];
-        }
-    }
-    *(*pBuf)++ = ' ';
-}
-#endif
-
 inline void ImplWriteString( BYTE** pBuf, const char* sString )
 {
     strcpy( (char*)*pBuf, sString );
@@ -892,50 +852,6 @@ BOOL Os2SalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void*
                              "  } if\n"
                              "} if\n\n" );
 
-#if 0
-                // #i10737# Apply clipping manually
-                // ----------------------------------------------------------------------------------
-
-                // Windows seems to ignore any clipping at the HDC,
-                // when followed by a POSTSCRIPT_PASSTHROUGH
-
-                // Check whether we've got a clipping, consisting of
-                // exactly one rect (other cases should be, but aren't
-                // handled currently)
-
-                // TODO: Handle more than one rectangle here (take
-                // care, the buffer can handle only POSTSCRIPT_BUFSIZE
-                // characters!)
-                if ( mhRegion != 0 &&
-                     mpStdClipRgnData != NULL &&
-                     mpClipRgnData == mpStdClipRgnData &&
-                     mpClipRgnData->rdh.nCount == 1 )
-                {
-                    RECT* pRect = &(mpClipRgnData->rdh.rcBound);
-
-                    aBuf.append( "\nnewpath\n" );
-                    aBuf.append( pRect->left );
-                    aBuf.append( " " );
-                    aBuf.append( pRect->top );
-                    aBuf.append( " moveto\n" );
-                    aBuf.append( pRect->right );
-                    aBuf.append( " " );
-                    aBuf.append( pRect->top );
-                    aBuf.append( " lineto\n" );
-                    aBuf.append( pRect->right );
-                    aBuf.append( " " );
-                    aBuf.append( pRect->bottom );
-                    aBuf.append( " lineto\n" );
-                    aBuf.append( pRect->left );
-                    aBuf.append( " " );
-                    aBuf.append( pRect->bottom );
-                    aBuf.append( " lineto\n"
-                                 "closepath\n"
-                                 "clip\n"
-                                 "newpath\n" );
-                }
-#endif
-
                 // #107797# Write out buffer
                 // ----------------------------------------------------------------------------------
                 *((USHORT*)aBuf.getStr()) = (USHORT)( aBuf.getLength() - 2 );
@@ -961,20 +877,6 @@ BOOL Os2SalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void*
                 *((USHORT*)aBuf.getStr()) = (USHORT)( aBuf.getLength() - 2 );
                 DevEscape( mhDC, DEVESC_RAWDATA, aBuf.getLength(),
                         (PBYTE)aBuf.getStr(), 0, NULL );
-#if 0
-        BYTE* pTemp = pBuf;
-        ImplWriteString( &pTemp, "save\n[ " );
-        ImplWriteDouble( &pTemp, dM11 );
-        ImplWriteDouble( &pTemp, 0 );
-        ImplWriteDouble( &pTemp, 0 );
-        ImplWriteDouble( &pTemp, dM22 );
-        ImplWriteDouble( &pTemp, nX - ( dM11 * nBoundingBox[0] ) );
-        ImplWriteDouble( &pTemp, mnHeight - nY - ( dM22 * nBoundingBox[3] ) );
-        ImplWriteString( &pTemp, "] concat /showpage {} def\n" );
-
-        if ( DevEscape( mhDC, DEVESC_RAWDATA, pTemp - pBuf,
-            (PBYTE)pBuf, 0, NULL ) == DEV_OK )
-#endif //
         {
             UINT32 nToDo = nSize;
             UINT32 nDoNow;
@@ -1034,9 +936,6 @@ SystemGraphicsData Os2SalGraphics::GetGraphicsData() const
 {
     SystemGraphicsData aRes;
     aRes.nSize = sizeof(aRes);
-#if 0
-    aRes.hDC = mhDC;
-#endif
     return aRes;
 }
 

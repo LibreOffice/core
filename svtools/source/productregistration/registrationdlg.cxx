@@ -30,11 +30,6 @@
 #include "precompiled_svtools.hxx"
 #include "registrationdlg.hxx"
 
-#if 0 /* @@@ */
-#include <svtools/svtdata.hxx>
-#include <svtools/svtools.hrc>
-#endif /* @@@ */
-
 #include "registrationdlg.hrc"
 #include <vcl/msgbox.hxx>
 #include <tools/debug.hxx>

@@ -192,15 +192,6 @@ void SAL_CALL EmbedEventListener_Impl::notifyEvent( const document::EventObject&
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-#if 0
-    if ( pObject && aEvent.EventName.equalsAscii("OnSaveDone") || aEvent.EventName.equalsAscii("OnSaveAsDone") )
-    {
-        // TODO/LATER: container must be set before!
-        // When is this event created? Who sets the new container when it changed?
-        pObject->UpdateReplacement();
-    }
-    else
-#endif
     if ( pObject && aEvent.EventName.equalsAscii("OnVisAreaChanged") && pObject->GetViewAspect() != embed::Aspects::MSOLE_ICON && !pObject->IsChart() )
     {
         pObject->UpdateReplacement();

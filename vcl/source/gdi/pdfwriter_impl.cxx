@@ -1225,11 +1225,6 @@ bool PDFWriterImpl::PDFPage::emit(sal_Int32 nParentObject )
         }
         aLine.append( "]\n" );
     }
-    #if 0
-    // FIXME: implement tab order as Structure Tree
-    if( m_bHasWidgets && m_pWriter->getVersion() >= PDFWriter::PDF_1_5 )
-        aLine.append( "   /Tabs /S\n" );
-    #endif
     if( m_aMCIDParents.size() > 0 )
     {
         OStringBuffer aStructParents( 1024 );
@@ -4980,22 +4975,6 @@ void PDFWriterImpl::createDefaultListBoxAppearance( PDFWidget& rBox, const PDFWr
     beginRedirect( pListBoxStream, rBox.m_aRect );
     OStringBuffer aAppearance( 64 );
 
-#if 0
-    if( ! rWidget.DropDown )
-    {
-        // prepare linewidth for DA string hack, see below
-        Size aFontSize = lcl_convert( m_aGraphicsStack.front().m_aMapMode,
-                                      m_aMapMode,
-                                      getReferenceDevice(),
-                                      Size( 0, aFont.GetHeight() ) );
-        sal_Int32 nLW = aFontSize.Height() / 40;
-        appendFixedInt( nLW > 0 ? nLW : 1, aAppearance );
-        aAppearance.append( " w\n" );
-        writeBuffer( aAppearance.getStr(), aAppearance.getLength() );
-        aAppearance.setLength( 0 );
-    }
-#endif
-
     setLineColor( Color( COL_TRANSPARENT ) );
     setFillColor( replaceColor( rWidget.BackgroundColor, rSettings.GetFieldColor() ) );
     drawRectangle( rBox.m_aRect );
@@ -5011,18 +4990,6 @@ void PDFWriterImpl::createDefaultListBoxAppearance( PDFWidget& rBox, const PDFWr
 
     // prepare DA string
     OStringBuffer aDA( 256 );
-#if 0
-    if( !rWidget.DropDown )
-    {
-        /* another of AR5's peculiarities: the selected item of a choice
-           field is highlighted using the non stroking color - same as the
-           text color. so workaround that by using text rendering mode 2
-           (fill, then stroke) and set the stroking color
-         */
-        appendStrokingColor( replaceColor( rWidget.BackgroundColor, rSettings.GetFieldColor() ), aDA );
-        aDA.append( " 2 Tr " );
-    }
-#endif
     // prepare DA string
     appendNonStrokingColor( replaceColor( rWidget.TextColor, rSettings.GetFieldTextColor() ), aDA );
     aDA.append( ' ' );
@@ -9245,11 +9212,6 @@ bool PDFWriterImpl::writeTransparentObject( TransparencyEmit& rObject )
     *  resource dict anyway, let's use the one from the page by NOT
     *  emitting a Resources entry.
     */
-    #if 0
-    aLine.append( "   /Resources " );
-    aLine.append( getResourceDictObj() );
-    aLine.append( " 0 R\n" );
-    #endif
 
     aLine.append( "/Length " );
     aLine.append( (sal_Int32)(nSize) );
@@ -9324,12 +9286,6 @@ bool PDFWriterImpl::writeTransparentObject( TransparencyEmit& rObject )
             aMask.append( "]\n" );
 
             /* #i42884# see above */
-#if 0
-            aLine.append( "/Resources " );
-            aMask.append( getResourceDictObj() );
-            aMask.append( " 0 R\n" );
-#endif
-
             aMask.append( "/Group<</S/Transparency/CS/DeviceRGB>>\n" );
             aMask.append( "/Length " );
             aMask.append( nMaskSize );

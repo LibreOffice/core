@@ -258,7 +258,6 @@ private:
     MapMode                 maPrefMapMode;
     Size                    maPrefSize;
 
-//#if 0 // _SOLAR__PRIVATE
 
 public:
 
@@ -308,8 +307,6 @@ public:
     SAL_DLLPRIVATE BOOL                 ImplSepia( const BmpFilterParam* pFilterParam, const Link* pProgress );
     SAL_DLLPRIVATE BOOL                 ImplMosaic( const BmpFilterParam* pFilterParam, const Link* pProgress );
     SAL_DLLPRIVATE BOOL                 ImplPopArt( const BmpFilterParam* pFilterParam, const Link* pProgress );
-
-//#endif // PRIVATE
 
 public:
 

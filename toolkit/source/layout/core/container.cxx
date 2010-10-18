@@ -104,10 +104,6 @@ Container::setChildParent( const uno::Reference< awt::XLayoutConstrains >& xChil
     if ( xContChild.is() )
     {
         xContChild->setParent( uno::Reference< awt::XLayoutContainer >( this ) );
-#if 0
-        assert( !mxLayoutUnit.is() );
-        xContChild->setLayoutUnit( mxLayoutUnit );
-#endif
     }
 }
 
@@ -118,45 +114,8 @@ Container::unsetChildParent( const uno::Reference< awt::XLayoutConstrains >& xCh
     if ( xContChild.is() )
     {
         xContChild->setParent( uno::Reference< awt::XLayoutContainer >() );
-#if 0
-        xContChild->setLayoutUnit( uno::Reference< awt::XLayoutUnit >() );
-#endif
     }
 }
-
-#if 0
-std::string
-Container::getLabel()  // debug label
-{
-    std::string depth;
-    uno::Reference< awt::XLayoutContainer > xContainer( this );
-    while ( xContainer.is() )
-    {
-        int node = 0;  // child nb
-        uno::Reference< awt::XLayoutContainer > xParent = xContainer->getContainerParent();
-        if ( xParent.is() )
-        {
-
-            uno::Sequence< uno::Reference< awt::XLayoutConstrains > > aChildren;
-            aChildren = xParent->getChildren();
-            for ( node = 0; node < aChildren.getLength(); node++ )
-                if ( aChildren[ node ] == xContainer )
-                    break;
-        }
-
-        char str[ 8 ];
-        snprintf( str, 8, "%d", node );
-        if ( depth.empty() )
-            depth = std::string( str );
-        else
-            depth = std::string( str ) + ":" + depth;
-
-        xContainer = xParent;
-    }
-
-    return std::string( getName() ) + " (" + depth + ")";
-}
-#endif
 
 void Container::propertiesChanged()
 {

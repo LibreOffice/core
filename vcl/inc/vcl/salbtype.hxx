@@ -182,13 +182,11 @@ private:
     BitmapColor*                mpBitmapColor;
     USHORT                      mnCount;
 
-//#if 0 // _SOLAR__PRIVATE
 
 public:
 
     SAL_DLLPRIVATE inline BitmapColor* ImplGetColorBuffer() const;
 
-//#endif // __PRIVATE
 
 public:
 
@@ -685,13 +683,11 @@ inline BitmapColor& BitmapPalette::operator[]( USHORT nIndex )
 
 // ------------------------------------------------------------------
 
-//#if 0 // _SOLAR__PRIVATE
 inline BitmapColor* BitmapPalette::ImplGetColorBuffer() const
 {
     DBG_ASSERT( mpBitmapColor, "No color buffer available!" );
     return mpBitmapColor;
 }
-//#endif
 // ------------------------------------------------------------------
 
 inline USHORT BitmapPalette::GetBestIndex( const BitmapColor& rCol ) const

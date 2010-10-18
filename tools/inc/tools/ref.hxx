@@ -367,11 +367,9 @@ public:
     UINT32          GetRefCount() const { return nRefCount; }
 };
 
-//#if 0 // _SOLAR__PRIVATE
 #ifndef EMPTYARG
 #define EMPTYARG
 #endif
-//#endif
 
 SV_DECL_IMPL_REF(SvRefBase)
 

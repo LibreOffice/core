@@ -174,9 +174,7 @@ namespace svt { class PopupWindowControllerImpl; }
 #define TOTOP_RESTOREWHENMIN            ((USHORT)0x0001)
 #define TOTOP_FOREGROUNDTASK            ((USHORT)0x0002)
 #define TOTOP_NOGRABFOCUS               ((USHORT)0x0004)
-//#if 0 // _SOLAR__PRIVATE // vcl internal only
 #define TOTOP_GRABFOCUSONLY             ((USHORT)0x0008)
-//#endif
 
 // Flags for Invalidate
 #define INVALIDATE_CHILDREN             ((USHORT)0x0001)
@@ -301,7 +299,6 @@ typedef USHORT StateChangedType;
 #define EXTTEXTINPUT_END_COMPLETE       ((USHORT)0x0001)
 #define EXTTEXTINPUT_END_CANCEL         ((USHORT)0x0002)
 
-//#if 0 // _SOLAR__PRIVATE
 #define IMPL_MINSIZE_BUTTON_WIDTH       70
 #define IMPL_MINSIZE_BUTTON_HEIGHT      22
 #define IMPL_EXTRA_BUTTON_WIDTH         18
@@ -319,7 +316,6 @@ typedef USHORT StateChangedType;
 #define DLGWINDOW_PREV                  0
 #define DLGWINDOW_NEXT                  1
 #define DLGWINDOW_FIRST                 2
-//#endif
 
 enum WindowSizeType {
     WINDOWSIZE_MINIMUM,

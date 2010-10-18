@@ -260,35 +260,6 @@ OUString toRoman( sal_Int32 n )
 }
 
 // not used:
-#if 0
-
-static
-const char* expected_name( int i, int last )
-{
-     if(0);
-     else if( i==0    ) return "Prefix";
-     else if( i==1    ) return "NumberingType";
-     else if( i==2    ) return "Suffix";
-     else if( i==last ) return "Value";
-     else { OSL_ASSERT(0); return ""; }
-}
-static
-const char* expected_type( int i, int last )
-{
-     if(0);
-     else if( i==0    ) return "OUString";
-     else if( i==1    ) return "sal_Int16";
-     else if( i==2    ) return "OUString";
-     else if( i==last ) return "sal_Int32";
-     else { OSL_ASSERT(0); return ""; }
-}
-static
-void failedToConvert( int i, int last )
-{
-     throw IllegalArgumentException();
-}
-
-#endif
 
 static
 void lcl_formatChars( sal_Unicode table[], int tableSize, int n, OUString& s )

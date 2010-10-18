@@ -34,7 +34,6 @@
 #include <vcl/salbtype.hxx>
 #include <vcl/bitmap.hxx>
 
-//#if 0 // _SOLAR__PRIVATE
 
 // --------------------
 // - Access defines -
@@ -70,7 +69,6 @@ case( BMP_FORMAT##Format ):            \
 }                                       \
 break;
 
-//#endif // __PRIVATE
 
 // --------------------
 // - Access functions -
@@ -102,7 +100,6 @@ protected:
     FncSetPixel                 mFncSetPixel;
     BOOL                        mbModify;
 
-//#if 0 // _SOLAR__PRIVATE
 
 SAL_DLLPRIVATE  void            ImplCreate( Bitmap& rBitmap );
 SAL_DLLPRIVATE  void            ImplDestroy();
@@ -129,8 +126,6 @@ SAL_DLLPRIVATE  BitmapBuffer*   ImplGetBitmapBuffer() const { return mpBuffer; }
                                 DECL_FORMAT( _32BIT_TC_BGRA )
                                 DECL_FORMAT( _32BIT_TC_RGBA )
                                 DECL_FORMAT( _32BIT_TC_MASK )
-//#endif // __PRIVATE
-
 protected:
                                 BitmapReadAccess( Bitmap& rBitmap, BOOL bModify );
 

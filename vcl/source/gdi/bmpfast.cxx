@@ -252,63 +252,6 @@ class TrueColorPixelPtr<BMP_FORMAT_8BIT_PAL>
 : public TrueColorPixelPtr<BMP_FORMAT_8BIT_TC_MASK>
 {};
 
-#if 0
-template <>
-class TrueColorPixelPtr<BMP_FORMAT_24BIT_TC_MASK> : public BasePixelPtr
-{
-public:
-    void operator++()   { mpPixel += 3; }
-
-    unsigned GetAlpha() const
-    {
-        unsigned nAlpha = mpPixel[0];
-        nAlpha |= mpPixel[1] << 8U;
-        nAlpha |= mpPixel[2] << 16U;
-        return nAlpha;
-    }
-
-    void SetAlpha( unsigned nAlpha ) const
-    {
-        mpPixel[0] = nAlpha;
-        mpPixel[1] = nAlpha >> 8U;
-        mpPixel[2] = nAlpha >> 16U;
-    }
-};
-
-template <>
-class TrueColorPixelPtr<BMP_FORMAT_32BIT_TC_MASK> : public BasePixelPtr
-{
-public:
-    void operator++()   { mpPixel += 4; }
-
-    unsigned GetAlpha() const
-    {
-#ifdef OSL_BIGENDIAN
-        unsigned nAlpha = *reinterpret_cast<unsigned*>( mpPixel );
-#else
-        unsigned nAlpha = mpPixel[0];
-        nAlpha |= mpPixel[1] << 8U;
-        nAlpha |= mpPixel[2] << 16U;
-        nAlpha |= mpPixel[3] << 24U;
-#endif
-        return nAlpha;
-    }
-
-    void SetAlpha( unsigned nAlpha ) const
-    {
-#ifdef OSL_BIGENDIAN
-        *reinterpret_cast<unsigned*>( mpPixel ) = nAlpha;
-#else
-        mpPixel[0] = nAlpha;
-        mpPixel[1] = nAlpha >> 8U;
-        mpPixel[2] = nAlpha >> 16U;
-        mpPixel[3] = nAlpha >> 24U;
-#endif
-    }
-};
-
-#endif
-
 // =======================================================================
 // converting truecolor formats
 

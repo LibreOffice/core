@@ -63,50 +63,6 @@ const sal_Unicode** ImplGetLangTab( LanguageType eLang )
     //switch ( International::GetNeutralLanguage( eLang ) )
     switch ( eLang )
     {
-#if 0
-        case LANGUAGE_DANISH:
-            pLangTab = aImplLangDanishTab;
-            break;
-
-        case LANGUAGE_DUTCH:
-        case LANGUAGE_DUTCH_BELGIAN:
-            pLangTab = aImplLangDutchTab;
-            break;
-
-        case LANGUAGE_FINNISH:
-            pLangTab = aImplLangFinnishTab;
-            break;
-
-        case LANGUAGE_FRENCH:
-            pLangTab = aImplLangFrenchTab;
-            break;
-
-        case LANGUAGE_GERMAN:
-            pLangTab = aImplLangGermanTab;
-            break;
-
-        case LANGUAGE_ITALIAN:
-            pLangTab = aImplLangItalianTab;
-            break;
-
-        case LANGUAGE_NORWEGIAN:
-        case LANGUAGE_NORWEGIAN_BOKMAL:
-            pLangTab = aImplLangNorwegianTab;
-            break;
-
-        case LANGUAGE_PORTUGUESE:
-        case LANGUAGE_PORTUGUESE_BRAZILIAN:
-            pLangTab = aImplLangPortugueseTab;
-            break;
-
-        case LANGUAGE_SPANISH:
-            pLangTab = aImplLangSpanishTab;
-            break;
-
-        case LANGUAGE_SWEDISH:
-            pLangTab = aImplLangSwedishTab;
-            break;
-#endif
         default:
             pLangTab = aImplLangEnglishTab;
             break;

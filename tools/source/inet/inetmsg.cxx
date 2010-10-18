@@ -688,13 +688,6 @@ ULONG INetRFC822Message::SetHeaderField (
                         nIdx = INETMSG_RFC822_X_MAILER;
                         break;
 
-#if 0  /* NYI */
-                    case 'p':
-                        check = "riority";
-                        eOkState = INETMSG_RFC822_X_PRIORITY;
-                        break;
-#endif /* NYI */
-
                     default:
                         eState = INETMSG_RFC822_JUNK;
                         break;

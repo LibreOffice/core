@@ -792,11 +792,7 @@ get_from_file:
         if ((file = infile) == NULL)
             return (EOF_CHAR);
 newline:
-#if 0
-        fprintf( pCppOut, "get(%s), recursion %d, line %d, bptr = %d, buffer \"%s\"\n",
-            file->filename, recursion, line,
-            file->bptr - file->buffer, file->buffer);
-#endif
+
         /*
          * Read a character from the current input line or macro.
          * At EOS, either finish the current macro (freeing temp.

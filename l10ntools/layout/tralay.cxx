@@ -204,11 +204,7 @@ translateElement( XMLElement* element, ByteString const& lang,
                 entry->GetText( translation, STRING_TYP_TEXT, lang, true );
     //            ByteString original = removeContent( element );
                 if ( !translation.Len() )
-#if 0
-                    translation = original;
-#else
                     translation = BSTRING( ( *i )->GetValue() );
-#endif
                 delete translateAttribute( attributes, **i , STRING( translation ) );
             }
         }

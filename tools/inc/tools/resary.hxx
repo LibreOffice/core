@@ -41,12 +41,10 @@ struct ImplResStringItem
     XubString   maStr;
     long        mnValue;
 
-//#if 0 // _SOLAR__PRIVATE
 #ifdef _TOOLS_RESARY_CXX
                 ImplResStringItem( const XubString& rStr ) :
                     maStr( rStr ) {}
 #endif
-//#endif
 };
 
 // ------------------

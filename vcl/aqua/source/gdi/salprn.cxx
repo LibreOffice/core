@@ -105,12 +105,6 @@ AquaSalInfoPrinter::~AquaSalInfoPrinter()
     delete mpGraphics;
     if( mpPrintInfo )
         [mpPrintInfo release];
-    #if 0
-    // FIXME: verify that NSPrintInfo releases the printer
-    // else we have a leak here
-    if( mpPrinter )
-        [mpPrinter release];
-    #endif
     if( mrContext )
         CFRelease( mrContext );
 }

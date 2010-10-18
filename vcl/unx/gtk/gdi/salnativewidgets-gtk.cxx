@@ -1547,12 +1547,6 @@ BOOL GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
         // Make sure the thumb is at least the default width (so we don't get tiny thumbs),
         // but if the VCL gives us a size smaller than the theme's default thumb size,
         // honor the VCL size
-#if 0
-        if ( (thumbRect.GetWidth() < min_slider_length)
-            && ((scrollbarRect.GetWidth()-button1BoundRect.GetWidth()-button2BoundRect.GetWidth()) > min_slider_length) )
-            thumbRect.SetSize( Size( min_slider_length, thumbRect.GetHeight() ) );
-#endif
-
         thumbRect.Right() += magic;
         // Center vertically in the track
         thumbRect.Move( 0, (scrollbarRect.GetHeight() - slider_width) / 2 );
@@ -1594,14 +1588,6 @@ BOOL GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
         button22BoundRect.SetSize( Size( slider_width, stepper_size ) );
 
         thumbRect.Right() = thumbRect.Left() + slider_width - 1;
-#if 0
-        // Make sure the thumb is at least the default width (so we don't get tiny thumbs),
-        // but if the VCL gives us a size smaller than the theme's default thumb size,
-        // honor the VCL size
-        if ( (thumbRect.GetHeight() < min_slider_length)
-            && ((scrollbarRect.GetHeight()-button1BoundRect.GetHeight()-button2BoundRect.GetHeight()) > min_slider_length) )
-            thumbRect.SetSize( Size( thumbRect.GetWidth(), min_slider_length ) );
-#endif
 
         thumbRect.Bottom() += magic;
         // Center horizontally in the track
@@ -3121,43 +3107,7 @@ BOOL GtkSalGraphics::NWPaintGTKSlider(
                           slider_width, slider_length,
                           eOri );
     }
-    #if 0
-    // paint background
-    gtk_paint_flat_box( gWidgetData[m_nScreen].gProgressBar->style,
-                        pixDrawable,
-                        GTK_STATE_NORMAL,
-                        GTK_SHADOW_NONE,
-                        NULL,
-                        gWidgetData[m_nScreen].gProgressBar,
-                        "trough",
-                        0, 0, w, h );
-    if( nProgressWidth > 0 )
-    {
-        // paint progress
-        if( Application::GetSettings().GetLayoutRTL() )
-        {
-            gtk_paint_box( gWidgetData[m_nScreen].gProgressBar->style,
-                           pixDrawable,
-                           GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
-                           NULL,
-                           gWidgetData[m_nScreen].gProgressBar,
-                           "bar",
-                           w-nProgressWidth, 0, nProgressWidth, h
-                           );
-        }
-        else
-        {
-            gtk_paint_box( gWidgetData[m_nScreen].gProgressBar->style,
-                           pixDrawable,
-                           GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
-                           NULL,
-                           gWidgetData[m_nScreen].gProgressBar,
-                           "bar",
-                           0, 0, nProgressWidth, h
-                           );
-        }
-    }
-    #endif
+
 
     BOOL bRet = NWRenderPixmapToScreen( pixmap, rControlRectangle );
     g_object_unref( pixmap );

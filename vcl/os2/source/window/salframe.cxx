@@ -249,26 +249,6 @@ static void dumpWindowInfo( char* fnc, HWND hwnd)
     SWP aSWP;
     HWND    hwnd2;
     char    szTitle[256];
-
-#if 0
-    _WinQueryWindowPos( hwnd, &aSWP );
-    strcpy(szTitle,"");
-    WinQueryWindowText(hwnd, sizeof(szTitle), szTitle);
-    debug_printf( "%s: window %08x at %d,%d (size %dx%d) '%s'\n", fnc, hwnd,
-                aSWP.x, aSWP.y, aSWP.cx, aSWP.cy, szTitle);
-    hwnd2 = WinQueryWindow(hwnd, QW_PARENT);
-    _WinQueryWindowPos( hwnd2, &aSWP );
-    strcpy(szTitle,"");
-    WinQueryWindowText(hwnd2, sizeof(szTitle), szTitle);
-    debug_printf( "%s: parent %08x at %d,%d (size %dx%d) '%s'\n", fnc, hwnd2,
-                aSWP.x, aSWP.y, aSWP.cx, aSWP.cy, szTitle);
-    hwnd2 = WinQueryWindow(hwnd, QW_OWNER);
-    _WinQueryWindowPos( hwnd2, &aSWP );
-    strcpy(szTitle,"");
-    WinQueryWindowText(hwnd2, sizeof(szTitle), szTitle);
-    debug_printf( "%s: owner %08x at %d,%d (size %dx%d) '%s'\n", fnc, hwnd2,
-                aSWP.x, aSWP.y, aSWP.cx, aSWP.cy, szTitle);
-#endif
 }
 #endif
 
@@ -1384,34 +1364,6 @@ BOOL Os2SalFrame::GetWindowState( SalFrameState* pState )
 
 void Os2SalFrame::SetScreenNumber( unsigned int nNewScreen )
 {
-#if 0
-    WinSalSystem* pSys = static_cast<WinSalSystem*>(ImplGetSalSystem());
-    if( pSys )
-    {
-        const std::vector<WinSalSystem::DisplayMonitor>& rMonitors =
-            pSys->getMonitors();
-        size_t nMon = rMonitors.size();
-        if( nNewScreen < nMon )
-        {
-            Point aOldMonPos, aNewMonPos( rMonitors[nNewScreen].m_aArea.TopLeft() );
-            Point aCurPos( maGeometry.nX, maGeometry.nY );
-            for( size_t i = 0; i < nMon; i++ )
-            {
-                if( rMonitors[i].m_aArea.IsInside( aCurPos ) )
-                {
-                    aOldMonPos = rMonitors[i].m_aArea.TopLeft();
-                    break;
-                }
-            }
-            mnDisplay = nNewScreen;
-            maGeometry.nScreenNumber = nNewScreen;
-            SetPosSize( aNewMonPos.X() + (maGeometry.nX - aOldMonPos.X()),
-                        aNewMonPos.Y() + (maGeometry.nY - aOldMonPos.Y()),
-                        0, 0,
-                        SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y );
-        }
-    }
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -1464,14 +1416,6 @@ void Os2SalFrame::StartPresentation( BOOL bStart )
 void Os2SalFrame::SetAlwaysOnTop( BOOL bOnTop )
 {
     mbAllwayOnTop = bOnTop;
-#if 0
-    HWND hWnd;
-    if ( bOnTop )
-        hWnd = HWND_TOPMOST;
-    else
-        hWnd = HWND_NOTOPMOST;
-    SetWindowPos( mhWnd, hWnd, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE );
-#endif
 }
 
 
@@ -1737,13 +1681,6 @@ void Os2SalFrame::SetInputContext( SalInputContext* pContext )
 }
 
 // -----------------------------------------------------------------------
-#if 0
-void Os2SalFrame::UpdateExtTextInputArea()
-{
-#ifdef ENABLE_IME
-#endif
-}
-#endif
 
 // -----------------------------------------------------------------------
 
@@ -2206,16 +2143,6 @@ void Os2SalFrame::UpdateSettings( AllSettings& rSettings )
     if ( PrfQueryProfileString( HINI_PROFILE, (PSZ)aSystemFonts, (PSZ)"Menus", aDummyStr, aFontNameBuf, sizeof( aFontNameBuf ) ) > 5 )
     {
         if ( ImplOS2NameFontToVCLFont( aFontNameBuf, aFont ) ) {
-#if 0
-            // Add Workplace Sans if not already listed
-            if ( aFont.GetName().Search( (sal_Unicode*)L"WorkPlace Sans" ) == STRING_NOTFOUND )
-            {
-                XubString aFontName = aFont.GetName();
-                aFontName.Insert( (sal_Unicode*)L"WorkPlace Sans;", 0 );
-                aFont.SetName( aFontName );
-                aFont.SetSize( Size( 0, 9 ) );
-            }
-#endif
             aStyleSettings.SetMenuFont( aFont );
         }
     }
@@ -2305,12 +2232,6 @@ void Os2SalFrame::Beep( SoundType eSoundType )
         WA_ERROR,                       // SOUND_ERROR
         WA_NOTE                         // SOUND_QUERY
     };
-
-#if 0
-#if SOUND_COUNT != 5
-#error New Sound must be defined!
-#endif
-#endif
 
     debug_printf("Os2SalFrame::Beep %d\n", eSoundType);
     WinAlarm( HWND_DESKTOP, aImplSoundTab[eSoundType] );
@@ -3113,26 +3034,6 @@ static int SalImplHandleProcessMenu( Os2SalFrame* pFrame, ULONG nMsg, MPARAM nMP
 {
     long nRet = 0;
 debug_printf("SalImplHandleProcessMenu\n");
-#if 0
-    DWORD err=0;
-    if( !HIWORD(wParam) )
-    {
-        // Menu command
-        WORD nId = LOWORD(wParam);
-        if( nId )   // zero for separators
-        {
-            SalMenuEvent aMenuEvt;
-            aMenuEvt.mnId   = nId;
-            WinSalMenuItem *pSalMenuItem = ImplGetSalMenuItem( pFrame->mSelectedhMenu, nId, FALSE );
-            if( pSalMenuItem )
-                aMenuEvt.mpMenu = pSalMenuItem->mpMenu;
-            else
-                aMenuEvt.mpMenu = NULL;
-
-            nRet = pFrame->CallCallback( SALEVENT_MENUCOMMAND, &aMenuEvt );
-        }
-    }
-#endif
     //return (nRet != 0);
     return (nRet == 0);
 }
@@ -3145,18 +3046,6 @@ static void ImplHandleInputLangChange( HWND hWnd )
 
     // Feststellen, ob wir IME unterstuetzen
     Os2SalFrame* pFrame = GetWindowPtr( hWnd );
-#if 0
-    if ( pFrame && pFrame->mbIME && pFrame->mhDefIMEContext )
-    {
-        HWND    hWnd = pFrame->mhWnd;
-        HKL     hKL = (HKL)lParam;
-        UINT    nImeProps = ImmGetProperty( hKL, IGP_PROPERTY );
-
-        pFrame->mbSpezIME = (nImeProps & IME_PROP_SPECIAL_UI) != 0;
-        pFrame->mbAtCursorIME = (nImeProps & IME_PROP_AT_CARET) != 0;
-        pFrame->mbHandleIME = !pFrame->mbSpezIME;
-    }
-#endif
 
     // trigger input language and codepage update
     UINT nLang = pFrame->mnInputLang;

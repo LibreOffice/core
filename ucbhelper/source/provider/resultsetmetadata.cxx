@@ -417,27 +417,7 @@ sal_Int32 SAL_CALL ResultSetMetaData::getColumnType( sal_Int32 column )
                             UNO_QUERY );
                 if ( xInfo.is() )
                 {
-#if 0
-    // Convenient...
 
-                    sal_Int32 nCount = m_pImpl->m_aProps.getLength();
-                    Property* pProps = m_pImpl->m_aProps.getArray();
-                    for ( sal_Int32 n = 0; n < nCount; ++n )
-                    {
-                        Property& rProp = pProps[ n ];
-
-                        try
-                        {
-                            Property aProp
-                                = xInfo->getPropertyByName( rProp.Name );
-                            rProp.Type = aProp.Type;
-                        }
-                        catch ( UnknownPropertyException& )
-                        {
-                            // getPropertyByName
-                        }
-                    }
-#else
     // Less (remote) calls...
 
                     Sequence< Property > aProps = xInfo->getProperties();
@@ -461,7 +441,6 @@ sal_Int32 SAL_CALL ResultSetMetaData::getColumnType( sal_Int32 column )
                             }
                         }
                     }
-#endif
                 }
             }
             catch ( RuntimeException& )

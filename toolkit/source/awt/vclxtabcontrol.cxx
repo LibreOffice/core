@@ -110,19 +110,6 @@ void SAL_CALL VCLXTabControl::dispose( ) throw(uno::RuntimeException)
     VCLXWindow::dispose();
 }
 
-#if 0
-void SAL_CALL VCLXTabControl::addTabListener( const Reference< XTabListener >& listener ) throw (uno::RuntimeException)
-{
-    if ( listener.is() )
-        maTabListeners.addInterface( listener );
-}
-
-void SAL_CALL VCLXTabControl::removeTabListener( const Reference< XTabListener >& listener ) throw (uno::RuntimeException)
-{
-    if ( listener.is() )
-        maTabListeners.removeInterface( listener );
-}
-#endif
 
 TabControl *VCLXTabControl::getTabControl() const throw (uno::RuntimeException)
 {
@@ -318,9 +305,6 @@ void SAL_CALL VCLXTabControl::allocateArea (awt::Rectangle const &area)
 // LATER: Nah, the proper fix is to get the XWindow hierarchy
 // straight.
 
-#if 0
-    setPosSize( area.X, area.Y, area.Width, area.Height, awt::PosSize::POSSIZE );
-#else
     awt::Size currentSize = getSize();
     awt::Size requestedSize (area.Width, area.Height);
 //    requestedSize.Height = getHeightForWidth( area.Width );
@@ -377,7 +361,6 @@ void SAL_CALL VCLXTabControl::allocateArea (awt::Rectangle const &area)
         if ( requestedSize.Height > currentSize.Height + 10)
             setPosSize( 0, 0, 0, requestedSize.Height, awt::PosSize::HEIGHT );
     }
-#endif
 
     if (pageBasedSize.Width > parentSize.Width ()
         || pageBasedSize.Height > parentSize.Height ())
@@ -401,12 +384,7 @@ void SAL_CALL VCLXTabControl::allocateArea (awt::Rectangle const &area)
 
             // HACK: since our layout:: container don't implement XWindow, we have no easy
             // way to set them invisible; lets just set all their children as such :P
-#if 0
-            if ( xWin.is() )
-                xWin->setVisible( active );
-#else
             setChildrenVisible( xChild, active );
-#endif
 
             if ( active )
             {

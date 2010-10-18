@@ -48,12 +48,10 @@ class VCL_DLLPUBLIC JobSetup
 private:
     ImplJobSetup*       mpData;
 
-//#if 0 // _SOLAR__PRIVATE
 public:
     SAL_DLLPRIVATE ImplJobSetup*        ImplGetData();
     SAL_DLLPRIVATE ImplJobSetup*        ImplGetConstData();
     SAL_DLLPRIVATE const ImplJobSetup*  ImplGetConstData() const;
-//#endif
 
 public:
                         JobSetup();

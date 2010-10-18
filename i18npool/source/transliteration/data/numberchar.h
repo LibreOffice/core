@@ -63,46 +63,6 @@ static const sal_Unicode NumberChar[][10] = {
     { 0x0E50, 0x0E51, 0x0E52, 0x0E53, 0x0E54, 0x0E55, 0x0E56, 0x0E57, 0x0E58, 0x0E59 }  // Thai
 };
 
-// not used
-#if 0
-static sal_Unicode DecimalChar[] = {
-    0x002E, // Half Width (Ascii)
-    0xFF0E, // Full Width
-    0xFF0E, // Chinese Lower
-    0x70B9, // S. Chinese Upper
-    0x9EDE, // T. Chinese Upper
-    0x30FB, // Japanese Modern
-    0x30FB, // Japanese Trad.
-    0xFF0E, // Korean Lower
-    0x9EDE, // Korean Upper
-    0xC810, // Korean Hangul
-    0x066B, // Arabic Indic
-    0x002E, // Est. Arabic Indic
-    0x002E, // Indic
-    0x002E  // Thai
-};
-#endif
-
-// not used
-#if 0
-static sal_Unicode MinusChar[] = {
-    0x002D, // Half Width (Ascii)
-    0xFF0D, // Full Width
-    0xFF0D, // Chinese Lower
-    0x8D1F, // S. Chinese Upper
-    0x5069, // T. Chinese Upper
-    0x2212, // Japanese Modern
-    0x2212, // Japanese Trad.
-    0xFF0D, // Korean Lower
-    0x5069, // Korean Upper
-    0xFF0D, // Korean Hangul ???
-    0x002D, // Arabic Indic
-    0x002D, // Est. Arabic Indic
-    0x002D, // Indic
-    0x002D, // Thai
-};
-#endif
-
 #define NUMBER_ZERO     NumberChar[NumberChar_HalfWidth][0] // 0x0030
 #define NUMBER_ONE      NumberChar[NumberChar_HalfWidth][1]     // 0x0031
 #define NUMBER_NINE     NumberChar[NumberChar_HalfWidth][9]     // 0x0039
@@ -123,40 +83,9 @@ const sal_Int16 Multiplier_Count    = 7;
 
 const sal_Int16 ExponentCount_CJK   = 6;
 
-// not used
-#if 0
-static sal_Int16 MultiplierExponent_CJK[ExponentCount_CJK] = {
-        12,     8,  4,  3,  2,  1
-};
-static sal_Unicode MultiplierChar_CJK[][ExponentCount_CJK] = {
-    0x5146, 0x4EBF, 0x4E07, 0x5343, 0x767E, 0x5341, // S. Chinese Lower
-    0x5146, 0x4EBF, 0x4E07, 0x4EDF, 0x4F70, 0x62FE, // S. Chinese Upper
-    0x5146, 0x5104, 0x842C, 0x5343, 0x767E, 0x5341, // T. Chinese & Korean Lower
-    0x5146, 0x5104, 0x842C, 0x4EDF, 0x4F70, 0x62FE, // T. Chinese & Korean Upper
-    0xC870, 0xC5B5, 0xB9CC, 0xCC9C, 0xBC31, 0xC2ED, // Korean Hangul
-    0x5146, 0x5104, 0x4E07, 0x5343, 0x767E, 0x5341, // Japanese Modern
-    0x5146, 0x5104, 0x842C, 0x9621, 0x767E, 0x62FE, // Japanese Traditional
-};
-#endif
 
 const sal_Int16 ExponentCount_short_CJK     = 2;
 
-// not used
-#if 0
-static sal_Int16 MultiplierExponent_short_CJK[ExponentCount_short_CJK] = {
-        8,  4,
-};
-
-static sal_Unicode MultiplierChar_short_CJK[][ExponentCount_short_CJK] = {
-    0x4EBF, 0x4E07, // S. Chinese Lower
-    0x4EBF, 0x4E07, // S. Chinese Upper
-    0x5104, 0x842C, // T. Chinese & Korean Lower
-    0x5104, 0x842C, // T. Chinese & Korean Upper
-    0xC5B5, 0xB9CC, // Korean Hangul
-    0x5104, 0x4E07, // Japanese Modern
-    0x5104, 0x842C, // Japanese Traditional
-};
-#endif
 
 } } } }
 

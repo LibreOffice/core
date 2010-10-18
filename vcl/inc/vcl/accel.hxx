@@ -60,7 +60,6 @@ private:
     BOOL            mbIsCancel;
     BOOL*           mpDel;
 
-//#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE  void        ImplInit();
     SAL_DLLPRIVATE  void        ImplCopyData( ImplAccelData& rAccelData );
     SAL_DLLPRIVATE  void        ImplDeleteData();
@@ -68,7 +67,6 @@ private:
                                      BOOL bEnable, Accelerator* pAutoAccel );
 
     SAL_DLLPRIVATE  ImplAccelEntry* ImplGetAccelData( const KeyCode& rKeyCode ) const;
-//#endif
 
 protected:
     SAL_DLLPRIVATE  void        ImplLoadRes( const ResId& rResId );

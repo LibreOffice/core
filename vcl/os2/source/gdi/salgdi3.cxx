@@ -518,29 +518,6 @@ void ImplOs2FontData::ReadGsubTable( HPS hPS ) const
                 maGsubTable.insert( cChar ); // insert GSUBbed unicodes
 
     CloseTTFont( pTTFont );
-
-#if 0
-    TrueTypeFont* pTTFont = NULL;
-    ::OpenTTFont( &aRawFont[0], nFontSize, nFaceNum, &pTTFont );
-    if( !pTTFont )
-        return;
-
-    // add vertically substituted characters to list
-    static const sal_Unicode aGSUBCandidates[] = {
-        0x0020, 0x0080, // ASCII
-        0x2000, 0x2600, // misc
-        0x3000, 0x3100, // CJK punctutation
-        0x3300, 0x3400, // squared words
-        0xFF00, 0xFFF0, // halfwidth|fullwidth forms
-    0 };
-
-    for( const sal_Unicode* pPair = aGSUBCandidates; *pPair; pPair += 2 )
-        for( sal_Unicode cChar = pPair[0]; cChar < pPair[1]; ++cChar )
-            if( ::MapChar( pTTFont, cChar, 0 ) != ::MapChar( pTTFont, cChar, 1 ) )
-                maGsubTable.insert( cChar ); // insert GSUBbed unicodes
-
-    CloseTTFont( pTTFont );
-#endif
 }
 #endif // GNG_VERT_HACK
 
@@ -772,18 +749,6 @@ USHORT Os2SalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
     // return early if there is no new font
     if( !pFont )
     {
-#if 0
-        // deselect still active font
-        if( mhDefFont )
-            Ft2SetCharSet( mhPS, mhDefFont );
-        // release no longer referenced font handles
-        for( int i = nFallbackLevel; i < MAX_FALLBACK; ++i )
-        {
-            if( mhFonts[i] )
-                Ft2DeleteSetId( mhPS, mhFonts[i] );
-            mhFonts[ i ] = 0;
-        }
-#endif
         mhDefFont = 0;
         return 0;
     }
@@ -810,9 +775,6 @@ USHORT Os2SalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
         {
             if( mhFonts[i] )
             {
-#if 0
-                Ft2DeleteSetId( mhPS, mhFonts[i] );
-#endif
                 mhFonts[i] = 0;
             }
         }
@@ -1388,24 +1350,10 @@ private:
 
 ScopedFont::ScopedFont(Os2SalGraphics & rData): m_rData(rData)
 {
-#if 0
-    m_hOrigFont = m_rData.mhFonts[0];
-    m_rData.mhFonts[0] = 0; // avoid deletion of current font
-#endif
 }
 
 ScopedFont::~ScopedFont()
 {
-#if 0
-    if( m_hOrigFont )
-    {
-        // restore original font, destroy temporary font
-        HFONT hTempFont = m_rData.mhFonts[0];
-        m_rData.mhFonts[0] = m_hOrigFont;
-        SelectObject( m_rData.mhDC, m_hOrigFont );
-        DeleteObject( hTempFont );
-    }
-#endif
 }
 
 class ScopedTrueTypeFont
@@ -1624,19 +1572,11 @@ const Ucs2SIntMap* Os2SalGraphics::GetFontEncodingVector( const ImplFontData* pF
 
     // fill the encoding vector
     Ucs2SIntMap& rMap = *new Ucs2SIntMap;
-#if 0
-    // TODO: get correct encoding vector
-    ImplWinFontData* pWinFontData = reinterpret_cast<ImplWinFontData*>(pFont);
 
-    GLYPHSET aGlyphSet;
-    aGlyphSet.cbThis = sizeof(aGlyphSet);
-    DWORD aW = ::GetFontUnicodeRanges( mhDC, &aGlyphSet);
-#else
     for( sal_Unicode i = 32; i < 256; ++i )
         rMap[i] = i;
     if( pNonEncoded )
         *pNonEncoded = NULL;
-#endif
 
     return &rMap;
 }

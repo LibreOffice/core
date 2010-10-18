@@ -1210,11 +1210,6 @@ int FreetypeServerFont::GetRawGlyphIndex( sal_UCS4 aChar ) const
             // check if symbol aliasing helps
             if( (aChar <= 0x00FF) && mpFontInfo->IsSymbolFont() )
                 nGlyphIndex = FT_Get_Char_Index( maFaceFT, aChar | 0xF000 );
-#if 0 // disabled for now because it introduced ae bad side-effect (#i88376#)
-            // Finally try the postscript name table
-            if (!nGlyphIndex)
-                nGlyphIndex = psp::PrintFontManager::get().FreeTypeCharIndex( maFaceFT, aChar );
-#endif
         }
         mpFontInfo->CacheGlyphIndex( aChar, nGlyphIndex );
     }
@@ -1251,17 +1246,6 @@ int FreetypeServerFont::FixupGlyphIndex( int nGlyphIndex, sal_UCS4 aChar ) const
             nGlyphFlags |= GF_GSUB | GF_ROTL;
         }
     }
-
-#if 0
-    // #95556# autohinting not yet optimized for non-western glyph styles
-    if( !(mnLoadFlags & (FT_LOAD_NO_HINTING | FT_LOAD_FORCE_AUTOHINT) )
-    &&  ( (aChar >= 0x0600 && aChar < 0x1E00)   // south-east asian + arabic
-        ||(aChar >= 0x2900 && aChar < 0xD800)   // CJKV
-        ||(aChar >= 0xF800) ) )                 // presentation + symbols
-    {
-        nGlyphFlags |= GF_UNHINTED;
-    }
-#endif
 
     if( nGlyphIndex != 0 )
         nGlyphIndex |= nGlyphFlags;

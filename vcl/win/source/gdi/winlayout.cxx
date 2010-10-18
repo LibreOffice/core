@@ -1546,11 +1546,6 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
             if( nRC != 0 )
                 continue;
 
-#if 0       // keep the glyphs for now because they are better than nothing
-            // mark as NotDef glyphs
-            for( i = 0; i < nGlyphCount; ++i )
-                mpOutGlyphs[ i + rVisualItem.mnMinGlyphPos ] = 0;
-#endif
         }
         else if( nRC != 0 )
             // something undefined happened => give up for this visual item

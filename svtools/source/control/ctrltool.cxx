@@ -893,30 +893,6 @@ static ImplFSNameItem aImplSimplifiedChinese[] =
     { 420, "\xe5\x88\x9d\xe5\x8f\xb7" }
 };
 
-// -----------------------------------------------------------------------
-
-#if 0 // #i89077# disabled by popular request
-static ImplFSNameItem aImplTraditionalChinese[] =
-{
-    {  50, "\xe5\x85\xab\xe8\x99\x9f" },
-    {  55, "\xe4\xb8\x83\xe8\x99\x9f" },
-    {  65, "\xe5\xb0\x8f\xe5\x85\xad" },
-    {  75, "\xe5\x85\xad\xe8\x99\x9f" },
-    {  90, "\xe5\xb0\x8f\xe4\xba\x94" },
-    { 105, "\xe4\xba\x94\xe8\x99\x9f" },
-    { 120, "\xe5\xb0\x8f\xe5\x9b\x9b" },
-    { 140, "\xe5\x9b\x9b\xe8\x99\x9f" },
-    { 150, "\xe5\xb0\x8f\xe4\xb8\x89" },
-    { 160, "\xe4\xb8\x89\xe8\x99\x9f" },
-    { 180, "\xe5\xb0\x8f\xe4\xba\x8c" },
-    { 220, "\xe4\xba\x8c\xe8\x99\x9f" },
-    { 240, "\xe5\xb0\x8f\xe4\xb8\x80" },
-    { 260, "\xe4\xb8\x80\xe8\x99\x9f" },
-    { 360, "\xe5\xb0\x8f\xe5\x88\x9d" },
-    { 420, "\xe5\x88\x9d\xe8\x99\x9f" }
-};
-#endif
-
 //------------------------------------------------------------------------
 
 FontSizeNames::FontSizeNames( LanguageType eLanguage )

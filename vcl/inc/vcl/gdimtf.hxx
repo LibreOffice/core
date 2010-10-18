@@ -85,12 +85,9 @@ enum MtfConversion
 // - Color conversion routines -
 // -----------------------------
 
-//#if 0 // _SOLAR__PRIVATE
-
 typedef Color (*ColorExchangeFnc)( const Color& rColor, const void* pColParam );
 typedef BitmapEx (*BmpExchangeFnc)( const BitmapEx& rBmpEx, const void* pBmpParam );
 
-//#endif // __PRIVATE
 
 // ---------------
 // - GDIMetaFile -
@@ -111,7 +108,6 @@ private:
     BOOL            bRecord;
     BOOL            bUseCanvas;
 
-//#if 0 // _SOLAR__PRIVATE
 
     SAL_DLLPRIVATE static Color    ImplColAdjustFnc( const Color& rColor, const void* pColParam );
     SAL_DLLPRIVATE static BitmapEx ImplBmpAdjustFnc( const BitmapEx& rBmpEx, const void* pBmpParam );
@@ -141,7 +137,6 @@ private:
     SAL_DLLPRIVATE bool            ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, Size rDestSize );
     SAL_DLLPRIVATE void          ImplDelegate2PluggableRenderer( const MetaCommentAction* pAct, OutputDevice* pOut );
 
-//#endif // __PRIVATE
 
 protected:
 

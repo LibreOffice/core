@@ -786,14 +786,6 @@ int PrintFontManager::countFontconfigFonts( std::hash_map<rtl::OString, int, rtl
                 // set family name
                 if( pUpdate->m_nFamilyName != nFamilyName )
                 {
-#if 0 // fontconfig prefers nameid=16 for the family name which is all fine
-      // but Writer suffers from #i79878#
-      // the only reasonable workaround for now is to use the classic nameid=1
-                    pUpdate->m_aAliases.remove( pUpdate->m_nFamilyName );
-                    pUpdate->m_aAliases.push_back( pUpdate->m_nFamilyName );
-                    pUpdate->m_aAliases.remove( nFamilyName );
-                    pUpdate->m_nFamilyName = nFamilyName;
-#endif
                 }
                 if( eWeightRes == FcResultMatch )
                     pUpdate->m_eWeight = convertWeight(weight);

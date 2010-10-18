@@ -98,9 +98,7 @@ public:
 
 class VCL_DLLPUBLIC LongCurrencyField : public SpinField, public LongCurrencyFormatter
 {
-//#if 0 // _SOLAR__PRIVATE
     friend void ImplNewLongCurrencyFieldValue( LongCurrencyField*, BigInt );
-//#endif
 
 private:
     BigInt          mnSpinSize;

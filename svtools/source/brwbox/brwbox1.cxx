@@ -716,14 +716,6 @@ void BrowseBox::SetColumnWidth( USHORT nItemId, ULONG nWidth )
 
         // Breite setzen
         pCols->GetObject(nItemPos)->SetWidth(nWidth, GetZoom());
-#if 0
-        if ( nItemPos != pCols->Count() - 1 )
-        {
-            long nLastColMaxWidth = pDataWin->GetSizePixel().Width() -
-                        GetFieldRect(GetColumnId(pCols->Count()-1)).Left();
-            pCols->GetObject(pCols->Count()-1)->Width() = nLastColMaxWidth;
-        }
-#endif
 
         // scroll and invalidate
         if ( bUpdate )
@@ -1313,16 +1305,6 @@ void BrowseBox::RowInserted( long nRow, long nNumRows, BOOL bDoPaint, BOOL bKeep
 
     if ( nNumRows <= 0 )
         return;
-
-#if 0
-    // Zerlegung in einzelne RowInserted-Aufrufe:
-    if (nNumRows > 1)
-    {
-        for (long i = 0; i < nNumRows; i++)
-            RowInserted(nRow + i,1,bDoPaint);
-        return;
-    }
-#endif
 
     // adjust total row count
     BOOL bLastRow = nRow >= nRowCount;

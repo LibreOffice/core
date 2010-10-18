@@ -128,12 +128,7 @@ static AtkRelationType mapRelationType( sal_Int16 nRelation )
         default:
             break;
     }
-#if 0
-  ATK_RELATION_NODE_CHILD_OF,
-  ATK_RELATION_EMBEDS,
-  ATK_RELATION_EMBEDDED_BY,
-  ATK_RELATION_POPUP_FOR,
-#endif
+
     return type;
 }
 

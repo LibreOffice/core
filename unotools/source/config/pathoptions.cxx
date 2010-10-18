@@ -259,20 +259,6 @@ static VarNameAttribute aVarNameAttribute[] =
     { SUBSTITUTE_PATH,      VAR_NEEDS_SYSTEM_PATH },    // $(path)
 };
 
-#if 0
-// currently unused
-static Sequence< OUString > GetPathPropertyNames()
-{
-    const int nCount = sizeof( aPropNames ) / sizeof( PropertyStruct );
-    Sequence< OUString > aNames( nCount );
-    OUString* pNames = aNames.getArray();
-    for ( int i = 0; i < nCount; i++ )
-        pNames[i] = OUString::createFromAscii( aPropNames[i].pPropName );
-
-    return aNames;
-}
-#endif
-
 // class SvtPathOptions_Impl ---------------------------------------------
 
 const String& SvtPathOptions_Impl::GetPath( SvtPathOptions::Pathes ePath )

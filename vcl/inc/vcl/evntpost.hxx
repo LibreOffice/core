@@ -46,9 +46,7 @@ namespace vcl
         ULONG           m_nId;
         Link            m_aLink;
 
-//#if 0 // _SOLAR__PRIVATE
         DECL_DLLPRIVATE_LINK( DoEvent_Impl, UserEvent* );
-//#endif
 
     public:
                         EventPoster( const Link& rLink );

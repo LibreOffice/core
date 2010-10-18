@@ -87,14 +87,10 @@ private:
 
     ImpGraphic*         mpImpGraphic;
 
-//#if 0 // _SOLAR__PRIVATE
-
 public:
 
     SAL_DLLPRIVATE void         ImplTestRefCount();
     SAL_DLLPRIVATE ImpGraphic*  ImplGetImpGraphic() const { return mpImpGraphic; }
-
-//#endif
 
 public:
 

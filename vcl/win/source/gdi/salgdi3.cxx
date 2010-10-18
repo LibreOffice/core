@@ -1181,12 +1181,6 @@ void ImplWinFontData::UpdateFromHDC( HDC hDC ) const
         ||   (aTextMetric.tmPitchAndFamily & TMPF_DEVICE) )
             mbDisableGlyphApi = true;
 
-#if 0
-    // #110548# more important than #107885# => TODO: better solution
-    DWORD nFLI = GetFontLanguageInfo( hDC );
-    if( 0 == (nFLI & GCP_GLYPHSHAPE) )
-        mbDisableGlyphApi = true;
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -1238,10 +1232,6 @@ void ImplWinFontData::ReadOs2Table( HDC hDC ) const
         // to have access to the needed struct members.
         sal_uInt32 ulUnicodeRange1 = GetUInt( pOS2map + 42 );
         sal_uInt32 ulUnicodeRange2 = GetUInt( pOS2map + 46 );
-#if 0
-        sal_uInt32 ulUnicodeRange3 = GetUInt( pOS2map + 50 );
-        sal_uInt32 ulUnicodeRange4 = GetUInt( pOS2map + 54 );
-#endif
 
         // Check for CJK capabilities of the current font
         mbHasCJKSupport = (ulUnicodeRange2 & 0x2DF00000);
@@ -3098,15 +3088,8 @@ const Ucs2SIntMap* WinSalGraphics::GetFontEncodingVector( const ImplFontData* pF
     if( pEncoding == NULL )
     {
         Ucs2SIntMap* pNewEncoding = new Ucs2SIntMap;
-        #if 0
-        // TODO: get correct encoding vector
-        GLYPHSET aGlyphSet;
-        aGlyphSet.cbThis = sizeof(aGlyphSet);
-        DWORD aW = ::GetFontUnicodeRanges( mhDC, &aGlyphSet);
-        #else
         for( sal_Unicode i = 32; i < 256; ++i )
             (*pNewEncoding)[i] = i;
-        #endif
         pWinFontData->SetEncodingVector( pNewEncoding );
     pEncoding = pNewEncoding;
     }

@@ -49,21 +49,6 @@
 
 // -=-= debugging =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#if 0
-
-static void sal_PrintImage( char *s, XImage*p )
-{
-    fprintf( stderr, "%s %d %d %d\n", s, p->depth, p->width, p->height );
-    int nW = Min( 64, p->width*p->bits_per_pixel >> 3 );
-    for( int i = 0; i < Min( 16, p->height ); i++ )
-    {
-        for( int j = 0; j < nW; j++ )
-            fprintf( stderr, "%02X", (UINT8)p->data[i*p->bytes_per_line+j] );
-        fprintf( stderr, "\n" );
-    }
-}
-
-#endif // DBG_UTIL
 
 // -----------------------------------------------------------------------------
 

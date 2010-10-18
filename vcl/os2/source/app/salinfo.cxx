@@ -74,23 +74,6 @@ Os2SalSystem::~Os2SalSystem()
 }
 
 // -----------------------------------------------------------------------
-#if 0
-bool Os2SalSystem::GetSalSystemDisplayInfo( DisplayInfo& rInfo )
-{
-    HDC hDC;
-    if( hDC = WinQueryWindowDC(HWND_DESKTOP) )
-    {
-        LONG bitCount;
-        DevQueryCaps(hDC, CAPS_COLOR_BITCOUNT, CAPS_COLOR_BITCOUNT, &bitCount);
-        rInfo.nWidth    = WinQuerySysValue( HWND_DESKTOP, SV_CXSCREEN );
-        rInfo.nHeight   = WinQuerySysValue( HWND_DESKTOP, SV_CYSCREEN );
-        rInfo.nDepth    = bitCount;
-        return true;
-    }
-    else
-        return false;
-}
-#endif
 
 unsigned int Os2SalSystem::GetDisplayScreenCount()
 {

@@ -136,11 +136,8 @@ private:
     BYTE*               pMap;
     const ULONG         nBits;
 
-//#if 0 // _SOLAR__PRIVATE
 
     SAL_DLLPRIVATE void ImplCreateBuffers( const ULONG nMax );
-
-//#endif // __PRIVATE
 
 public:
 

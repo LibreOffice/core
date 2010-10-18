@@ -244,66 +244,6 @@ BOOL DirEntry::SetCWD( BOOL bSloppy ) const
 |*
 *************************************************************************/
 
-#if 0 // YD see dirent.cxx
-BOOL createLongNameEA( const PCSZ pszPath, ULONG ulAttributes, const String& aLongName );
-
-FSysError DirEntry::MoveTo( const DirEntry& rDest ) const
-{
-    DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
-
-    DirEntry aTmpDest(rDest);
-    FileStat aTmpStat(aTmpDest);
-    if ( aTmpStat.IsKind(FSYS_KIND_DIR) )
-        aTmpDest += DirEntry( GetName() );
-
-    String aSource( GetFull() );
-    String aDest( aTmpDest.GetFull() );
-    String aShortSource("");
-    String aShortDest("");
-
-    if (Folder::IsAvailable())
-    {
-        if  (IsLongNameOnFAT())
-        {
-            // in kurzen Pfad wandeln
-            ItemIDPath      aItemIDPath(aSource);
-            aShortSource = aItemIDPath.GetHostNotationPath();
-        }
-        if  (rDest.IsLongNameOnFAT())
-        {
-            // in kurzen Pfad wandeln
-            ItemIDPath      aItemIDPath(aDest);
-            aShortDest = aItemIDPath.GetHostNotationPath();
-        }
-    }
-
-    APIRET nRet = DosMove( aShortSource.Len()>0?(PSZ)aShortSource.GetStr():(PSZ)aSource.GetStr(),
-                           aShortDest.Len()>0?(PSZ)aShortDest.GetStr():(PSZ)aDest.GetStr());
-
-    if ( nRet == ERROR_DIRECTORY_IN_CDS ||
-         nRet == ERROR_CURRENT_DIRECTORY )
-    {
-        // 2nd chance with modified CWD
-        DosSetCurrentDir( (PSZ) "\\" );
-        nRet = DosMove( aShortSource.Len()>0?(PSZ)aShortSource.GetStr():(PSZ)aSource.GetStr(),
-                        aShortDest.Len()>0?(PSZ)aShortDest.GetStr():(PSZ)aDest.GetStr());
-    }
-    else if ( nRet == ERROR_NOT_SAME_DEVICE )
-    {
-        // other volume => copy+delete
-        FileCopier aMover( *this, rDest );
-        nRet = aMover.Execute( FSYS_ACTION_MOVE|FSYS_ACTION_RECURSIVE );
-        return nRet;
-    }
-
-    if ( (nRet==NO_ERROR) && aShortDest.Len()>0)
-    {
-    createLongNameEA((const char*)aShortDest,  FILE_NORMAL, rDest.GetName());
-    }
-
-    return ApiRet2ToSolarError_Impl( nRet );
-}
-#endif // 0
 
 //-------------------------------------------------------------------------
 
@@ -535,15 +475,6 @@ BOOL FileStat::Update( const DirEntry& rDirEntry, BOOL bAccessRemovableDevice )
     aTempDirEntry.ToAbs();
     ByteString aFullName( aTempDirEntry.GetFull(), osl_getThreadTextEncoding() );
 
-#if 0 // YD
-    if (Folder::IsAvailable() && aTempDirEntry.IsLongNameOnFAT())
-    {
-        // in String mit kurzem Pfad wandeln
-        ItemIDPath aItemIDPath(aTempDirEntry.GetFull());
-        aFullName = ByteString( aItemIDPath.GetHostNotationPath(), osl_getThreadTextEncoding() );
-    }
-#endif
-
     p = (char *) aFullName.GetBuffer();
 
     FILESTATUS3 filestat;
@@ -618,18 +549,6 @@ BOOL IsRedirectable_Impl( const ByteString &rPath )
     return FALSE;
 }
 
-#if 0
-BOOL IsRedirectable_Impl( const String &rPath )
-{
-    if ( rPath.Len() >= 3 && ':' == rPath.GetStr()[1] )
-    {
-        DriveMapItem &rItem = aDriveMap[toupper(rPath[0]) - 'A'];
-        return FSYS_KIND_FIXED != rItem.nKind;
-    }
-    return FALSE;
-}
-#endif
-
 
 /*************************************************************************
 |*
@@ -703,54 +622,6 @@ const char* TempDirImpl( char *pBuf )
 
 #define CURRENT_COUNTRY 0
 #define NLS_CODEPAGE 850
-
-/*====================================================================
- * CreateCaseMapImpl()
- * creates a map of each character to convert to lower
- *--------------------------------------------------------------------*/
-
-#if 0
-void CreateCaseMapImpl()
-{
-    // build a string starting with code 0 as first character upto 255
-    char sTemp[256];
-    USHORT n;
-
-    for ( n = 0; n < 256; ++n )
-        sTemp[n] = (char) n;
-
-    // convert string to upper case
-    COUNTRYCODE aCountry;
-    aCountry.country = CURRENT_COUNTRY;   /* Country code */
-    aCountry.codepage = NLS_CODEPAGE;     /* Code page */
-    DosMapCase( 255, &aCountry, sTemp+1 );
-
-    // fill a global buffer starting with code 0 as first character upto 255
-    for ( n = 0; n < 256; ++n )
-        sCaseMap[n] = (char) n;
-
-    // reorder by upper-code and store in a global buffer
-    for ( n = 255; n > 0; --n )
-        // was this character converted?
-        if ( sTemp[n] != (char) n )
-            // we found a convertion from upper to lower
-            sCaseMap[ (unsigned char) sTemp[n] ] = (char) n;
-
-    bCaseMap = TRUE;
-}
-
-String ToLowerImpl( const String& rSource )
-{
-    if ( !bCaseMap )
-        CreateCaseMapImpl();
-
-    // TH sagt: International ist zu langsam, also mit einer eigenen Map
-    ByteString aLower( rSource );
-    for ( USHORT n = 0; n < aLower.Len(); ++n )
-        aLower[n] = sCaseMap[ (unsigned char) aLower[n] ];
-    return aLower;
-}
-#endif // 0
 
 /*====================================================================
  * CreateDriveMapImpl()

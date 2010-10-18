@@ -113,64 +113,7 @@ Transliteration_body::transliterate(
     Sequence< sal_Int32 >& offset)
     throw(RuntimeException)
 {
-#if 0
-/* Performance optimization:
- * The two realloc() consume 48% (32% grow, 16% shrink) runtime of this method!
- * getValue() needs about 15%, so there is equal balance if we trade the second
- * (shrinking) realloc() for a getValue(). But if the caller initializes the
- * sequence to nCount elements there isn't any change in size necessary in most
- * cases (one-to-one mapping) and we gain 33%.
- *
- * Of that constellation the getValue() method takes 20% upon each call, so 40%
- * for both. By remembering the first calls' results we could gain some extra
- * percentage again, but unfortunately getValue() may return a reference to a
- * static buffer, so we can't store the pointer directly but would have to
- * copy-construct an array, which doesn't give us any advantage.
- *
- * Much more is accomplished by working directly on the sequence buffer
- * returned by getArray() instead of using operator[] for each and every
- * access.
- *
- * And while we're at it: now that we know the size in advance we don't need to
- * copy the buffer anymore, just create the real string buffer and let the
- * return value take ownership.
- *
- * All together these changes result in the new implementation needing only 62%
- * of the time of the old implementation (in other words: that one was 1.61
- * times slower ...)
- */
 
-    // Allocate the max possible buffer. Try to use stack instead of heap which
-    // would have to be reallocated most times anyway.
-    const sal_Int32 nLocalBuf = 512 * NMAPPINGMAX;
-    sal_Unicode aLocalBuf[nLocalBuf], *out = aLocalBuf, *aHeapBuf = NULL;
-
-    const sal_Unicode *in = inStr.getStr() + startPos;
-
-    if (nCount > 512)
-        out = aHeapBuf =  (sal_Unicode*) malloc((nCount * NMAPPINGMAX) * sizeof(sal_Unicode));
-
-        if (useOffset)
-            offset.realloc(nCount * NMAPPINGMAX);
-    sal_Int32 j = 0;
-    for (sal_Int32 i = 0; i < nCount; i++) {
-        Mapping &map = casefolding::getValue(in, i, nCount, aLocale, nMappingType);
-        for (sal_Int32 k = 0; k < map.nmap; k++) {
-                if (useOffset)
-                    offset[j] = i + startPos;
-        out[j++] = map.map[k];
-        }
-    }
-        if (useOffset)
-            offset.realloc(j);
-
-    OUString r(out, j);
-
-    if (aHeapBuf)
-        free(aHeapBuf);
-
-    return r;
-#else
     const sal_Unicode *in = inStr.getStr() + startPos;
 
     // Two different blocks to eliminate the if(useOffset) condition inside the
@@ -252,7 +195,6 @@ Transliteration_body::transliterate(
             delete [] pHeapBuf;
         return aRet;
     }
-#endif
 }
 
 OUString SAL_CALL
@@ -331,61 +273,6 @@ Transliteration_titlecase::Transliteration_titlecase()
     transliterationName = "title(generic)";
     implementationName = "com.sun.star.i18n.Transliteration.Transliteration_titlecase";
 }
-
-#if 0
-struct LigatureData
-{
-    sal_uInt32  cChar;
-    sal_Char *  pUtf8Text;
-};
-
-// available Unicode ligatures:
-// http://www.unicode.org/charts
-// http://www.unicode.org/charts/PDF/UFB00.pdf
-static LigatureData aLigatures[] =
-{
-    { 0x0FB00,     "ff" },
-    { 0x0FB01,     "fi" },
-    { 0x0FB02,     "fl" },
-    { 0x0FB03,     "ffi" },
-    { 0x0FB04,     "ffl" },
-    { 0x0FB05,     "ft" },
-    { 0x0FB06,     "st" },
-
-    { 0x0FB13,     "\xD5\xB4\xD5\xB6" },     // Armenian small men now
-    { 0x0FB14,     "\xD5\xB4\xD5\xA5" },     // Armenian small men ech
-    { 0x0FB15,     "\xD5\xB4\xD5\xAB" },     // Armenian small men ini
-    { 0x0FB16,     "\xD5\xBE\xD5\xB6" },     // Armenian small vew now
-    { 0x0FB17,     "\xD5\xB4\xD5\xAD" },     // Armenian small men xeh
-    { 0x00000,     "" }
-};
-
-static inline bool lcl_IsLigature( sal_uInt32 cChar )
-{
-    return (0x0FB00 <= cChar && cChar <= 0x0FB06) || (0x0FB13 <= cChar && cChar <= 0x0FB17);
-}
-
-static rtl::OUString lcl_ResolveLigature( sal_uInt32 cChar )
-{
-    rtl::OUString aRes;
-    if (lcl_IsLigature( cChar ))
-    {
-        LigatureData *pFound = NULL;
-        LigatureData *pData = aLigatures;
-        while (!pFound && pData->cChar != 0)
-        {
-            if (pData->cChar == cChar)
-                pFound = pData;
-            ++pData;
-        }
-        if (pFound)
-            aRes = rtl::OUString( pFound->pUtf8Text, strlen( pFound->pUtf8Text ), RTL_TEXTENCODING_UTF8 );
-    }
-    else
-        aRes = rtl::OUString( &cChar, 1 );
-    return aRes;
-}
-#endif // if 0
 
 static rtl::OUString transliterate_titlecase_Impl(
     const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,

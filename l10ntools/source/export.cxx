@@ -621,13 +621,6 @@ int Export::Execute( int nToken, const char * pToken )
                 // cur. line has macro line end
                 ByteString sTmpLine( sToken );
                 sTmpLine.EraseAllChars( '\t' ); sTmpLine.EraseAllChars( ' ' );
-                #if 0
-                // impossible, unsigned is never negative
-                if( sTmpLine.Len() < 0 ){
-                    if ( sTmpLine.GetChar(( USHORT )( sTmpLine.Len() - 1 )) != '\\' )
-                        bNextMustBeDefineEOL = TRUE;
-                }
-                #endif
             }
         }
     }
@@ -1791,11 +1784,6 @@ void Export::WriteToMerged( const ByteString &rText , bool bSDFContent )
     static ByteString SLASH  ('\\');
     static ByteString RETURN ('\n');
     //printf("%s\n",rText.GetBuffer() );
-
-    #if 0
-    // statement has no effect
-    if( pParseQueue->bMflag && !bSDFContent ) pParseQueue->bMflag;
-    #endif
 
     if ( !bDontWriteOutput || !bUnmerge ) {
         ByteString sText( rText );

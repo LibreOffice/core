@@ -343,12 +343,6 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
                 case '\'':
                     {
 
-#if 0
-                        // #i35653 patch from cmc
-                        ByteString aByteString(static_cast<char>(GetHexValue()));
-                        if (aByteString.Len())
-                            aStrBuffer.Append(String(aByteString, GetSrcEncoding()));
-#else
                         ByteString aByteString;
                         while (1)
                         {
@@ -399,7 +393,6 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
 
                         if (aByteString.Len())
                             aStrBuffer.Append(String(aByteString, GetSrcEncoding()));
-#endif
                     }
                     break;
                 case '\\':

@@ -310,7 +310,6 @@ class SVT_DLLPUBLIC BrowseBox
     BrowserMode     m_nCurrentMode;     // last argument of SetMode (redundant, as our other members represent the current settings, too)
 
 private:
-//#if 0 // _SOLAR__PRIVATE
     SVT_DLLPRIVATE void            ConstructImpl(BrowserMode nMode);
     SVT_DLLPRIVATE void            ExpandRowSelection( const BrowserMouseEvent& rEvt );
     SVT_DLLPRIVATE void            ToggleSelection( BOOL bForce = FALSE );

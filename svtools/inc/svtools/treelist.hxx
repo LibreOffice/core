@@ -209,7 +209,6 @@ class SVT_DLLPUBLIC SvTreeList
     void            Expand( SvListView*,SvListEntry* pParent );
     void            Collapse( SvListView*,SvListEntry* pParent );
 
-//#if 0 // _SOLAR__PRIVATE
     SVT_DLLPRIVATE void             SetAbsolutePositions();
     SVT_DLLPRIVATE SvTreeEntryList*CloneChilds( SvTreeEntryList* pChilds,
                                  SvListEntry* pNewParent,
@@ -220,7 +219,6 @@ class SVT_DLLPUBLIC SvTreeList
     SVT_DLLPRIVATE void         GetInsertionPos( SvListEntry* pEntry, SvListEntry* pParent,
                         ULONG& rPos );
     SVT_DLLPRIVATE void         ResortChilds( SvListEntry* pParent );
-//#endif /* _SOLAR__PRIVATE */
 
 protected:
 
@@ -318,11 +316,9 @@ class SVT_DLLPUBLIC SvListView
     ULONG           nSelectionCount;
     BOOL            bVisPositionsValid;
 
-//#if 0 // _SOLAR__PRIVATE
     SVT_DLLPRIVATE void         InitTable();
     SVT_DLLPRIVATE void         ClearTable();
     SVT_DLLPRIVATE void         RemoveViewData( SvListEntry* pParent );
-//#endif
 
 protected:
     Table           aDataTable;  // Mapping SvListEntry -> ViewData

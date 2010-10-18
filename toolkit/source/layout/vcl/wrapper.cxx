@@ -1126,25 +1126,6 @@ void TabControl::InsertPage (sal_uInt16 id, OUString const& title, sal_uInt16 po
 #else
     GetTabPage (id)->SetText (title);
 #endif
-
-#if 0
-    /// This so seems the right solution, but it makes the buttons of the
-    /// tabdialog move up
-
-    ::TabPage *page = GetTabPage (id);
-    if (Window *w = dynamic_cast <Window*> (page))
-    {
-        w->SetParent (this);
-        //GetVCLXTabControl ()->Box_Base::addChild (uno::Reference <awt::XLayoutConstrains> (w->GetPeer (), uno::UNO_QUERY));
-        //GetVCLXTabControl ()->Box_Base::AddChild (uno::Reference <awt::XLayoutConstrains> (w->GetPeer (), uno::UNO_QUERY));
-        //GetVCLXTabControl ()->AddChild (w);
-        //GetVCLXTabControl ()->AddChild (uno::Reference <awt::XLayoutConstrains> (w->GetPeer (), uno::UNO_QUERY));
-        //uno::Reference <uno::XInterface> x (page->GetWindowPeer());
-        //GetVCLXTabControl ()->AddChild (uno::Reference <awt::XLayoutConstrains> (page->::Window::GetWindowPeer (), uno::UNO_QUERY));
-        //GetVCLXTabControl ()->AddChild (uno::Reference <awt::XLayoutConstrains> (page->GetComponentInterface (), uno::UNO_QUERY));
-    }
-    getImpl ().redraw ();
-#endif
 }
 void TabControl::RemovePage (sal_uInt16 id)
 {
@@ -1175,21 +1156,6 @@ sal_uInt16 TabControl::GetCurPageId () const
 void TabControl::SetTabPage (sal_uInt16 id, ::TabPage* page)
 {
     GetTabControl ()->SetTabPage (id, page);
-
-#if 0
-    /// This so seems the right solution, but it makes the buttons of the
-    /// tabdialog move up
-    if (Window *w = dynamic_cast <Window*> (page))
-    {
-        w->SetParent (this);
-        //GetVCLXTabControl ()->Box_Base::addChild (uno::Reference <awt::XLayoutConstrains> (w->GetPeer (), uno::UNO_QUERY));
-        //GetVCLXTabControl ()->Box_Base::AddChild (uno::Reference <awt::XLayoutConstrains> (w->GetPeer (), uno::UNO_QUERY));
-        //GetVCLXTabControl ()->AddChild (w);
-        //GetVCLXTabControl ()->AddChild (uno::Reference <awt::XLayoutConstrains> (w->GetPeer (), uno::UNO_QUERY));
-        //GetVCLXTabControl ()->AddChild (uno::Reference <awt::XLayoutConstrains> (page->GetWindowPeer (), uno::UNO_QUERY));
-        //GetVCLXTabControl ()->AddChild (uno::Reference <awt::XLayoutConstrains> (page->GetComponentInterface (), uno::UNO_QUERY));
-    }
-#endif
     getImpl ().redraw ();
 }
 ::TabPage* TabControl::GetTabPage (sal_uInt16 id) const
@@ -1223,17 +1189,6 @@ void TabControl::SetTabPageSizePixel (Size const& size)
 }
 Size TabControl::GetTabPageSizePixel () const
 {
-#if 0
-    //return GetTabControl ()->GetTabPageSizePixel ();
-    static size_t const tab_page_first_index = 1;
-    for (size_t i = 0; i < GetPageCount (); i++)
-    {
-        ::TabPage *p = GetTabPage (i + tab_page_first_index);
-        //if (dynamic_cast<Windowt*> (p))
-        if (i) // URG
-            return p->GetOptimalSize (WINDOWSIZE_MINIMUM);
-    }
-#endif
     return GetTabControl ()->GetTabPageSizePixel ();
 }
 
@@ -1391,10 +1346,6 @@ public:
         {
             DBG_ERROR( "ERROR: failed to load image: `%s'" /*, pName*/ );
         }
-#if 0
-        else
-            getImpl().mxGraphic->...();
-#endif
     }
 };
 
@@ -1409,20 +1360,6 @@ void FixedImage::setImage( ::Image const& i )
     //FIXME: hack moved to proplist
     //getImpl().mxGraphic =
 }
-
-#if 0
-
-FixedImage::FixedImage( const char *pName )
-    : pImpl( new FixedImageImpl( pName ) )
-{
-}
-
-FixedImage::~FixedImage()
-{
-    delete pImpl;
-}
-
-#endif
 
 
 IMPL_CONSTRUCTORS( ProgressBar, Control, "ProgressBar" );

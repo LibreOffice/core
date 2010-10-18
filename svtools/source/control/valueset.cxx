@@ -1565,16 +1565,6 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
                             nCalcPos + ( nLineCount * mnCols ));
                     else
                     {
-#if 0
-                        if( (KEY_DOWN == rKEvt.GetKeyCode().GetCode() ) && (GetStyle() & WB_MENUSTYLEVALUESET) )
-                        {
-                            Window* pParent = GetParent();
-                            pParent->GrabFocus();
-                            pParent->KeyInput( rKEvt );
-                            break;
-                        }
-                        else
-#endif
                         {
                             if ( mpNoneItem )
                             {

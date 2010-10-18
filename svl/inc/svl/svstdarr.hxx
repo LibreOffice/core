@@ -26,8 +26,7 @@
  *
  ************************************************************************/
 
-#if 0
-***********************************************************************
+/***********************************************************************
 *
 *   Die vordefinierte Arrays werden ueber POSITIV-Defines aktiviert:
 *   (die defines setzen sich aus "_SVSTDARR_" und dem Namen des Array
@@ -38,8 +37,7 @@
 *   SortArr:    SvStringsSort, SvStringsSortDtor,
 *               SvStringsISort, SvStringsISortDtor,
 *               SvUShortsSort
-***********************************************************************
-#endif
+***********************************************************************/
 
 #include "svl/svldllapi.h"
 #include <svl/svarray.hxx>

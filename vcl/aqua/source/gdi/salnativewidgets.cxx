@@ -342,10 +342,6 @@ BOOL AquaSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart n
             break;
 
         case CTRL_TOOLTIP: // ** TO DO
-            #if 0
-            if( nPart == PART_ENTIRE_CONTROL ) // we don't currently support the tooltip
-                return true;
-            #endif
             break;
 
         case CTRL_MENU_POPUP:

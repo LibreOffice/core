@@ -97,11 +97,6 @@ bool IsDiacritic( sal_UCS4 nChar )
         {0x0590, 0x05BE}, {0x05BF, 0x05C0}, {0x05C1, 0x05C3}, {0x05C4, 0x05C6}, {0x05C7, 0x05C8},
         {0x0610, 0x061B}, {0x064B, 0x0660}, {0x0670, 0x0671}, {0x06D6, 0x06DD}, {0x06DF, 0x06E5}, {0x06E7, 0x06E9}, {0x06EA,0x06EF},
         {0x0730, 0x074D}, {0x07A6, 0x07B1}, {0x07EB, 0x07F4},
-#if 0 // all known fonts have zero-width diacritics already, so no need to query it
-        {0x0900, 0x0904}, {0x093C, 0x093D}, {0x0941, 0x0948}, {0x094D, 0x0950}, {0x0951, 0x0958},
-        {0x0980, 0x0985}, {0x09BC, 0x09BD}, {0x09C1, 0x09C7}, {0x09CD, 0x09CE}, {0x09E2, 0x09E6},
-        {0x0A00, 0x0A05}, {0x0A3C, 0x0A59}, //...
-#endif
         {0x1DC0, 0x1E00},
         {0x205F, 0x2070}, {0x20D0, 0x2100},
         {0xFB1E, 0xFB1F}
@@ -152,48 +147,6 @@ int GetVerticalFlags( sal_UCS4 nChar )
 sal_UCS4 GetVerticalChar( sal_UCS4 )
 {
     return 0; // #i14788# input method is responsible vertical char changes
-
-#if 0
-    int nVert = 0;
-    switch( nChar )
-    {
-        // #104627# special treatment for some unicodes
-        case 0x002C: nVert = 0x3001; break;
-        case 0x002E: nVert = 0x3002; break;
-        /*
-        // to few fonts have the compatibility forms, using
-        // them will then cause more trouble than good
-        // TODO: decide on a font specific basis
-        case 0x2018: nVert = 0xFE41; break;
-        case 0x2019: nVert = 0xFE42; break;
-        case 0x201C: nVert = 0xFE43; break;
-        case 0x201D: nVert = 0xFE44; break;
-        // CJK compatibility forms
-        case 0x2025: nVert = 0xFE30; break;
-        case 0x2014: nVert = 0xFE31; break;
-        case 0x2013: nVert = 0xFE32; break;
-        case 0x005F: nVert = 0xFE33; break;
-        case 0x0028: nVert = 0xFE35; break;
-        case 0x0029: nVert = 0xFE36; break;
-        case 0x007B: nVert = 0xFE37; break;
-        case 0x007D: nVert = 0xFE38; break;
-        case 0x3014: nVert = 0xFE39; break;
-        case 0x3015: nVert = 0xFE3A; break;
-        case 0x3010: nVert = 0xFE3B; break;
-        case 0x3011: nVert = 0xFE3C; break;
-        case 0x300A: nVert = 0xFE3D; break;
-        case 0x300B: nVert = 0xFE3E; break;
-        case 0x3008: nVert = 0xFE3F; break;
-        case 0x3009: nVert = 0xFE40; break;
-        case 0x300C: nVert = 0xFE41; break;
-        case 0x300D: nVert = 0xFE42; break;
-        case 0x300E: nVert = 0xFE43; break;
-        case 0x300F: nVert = 0xFE44; break;
-        */
-    }
-
-    return nVert;
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -370,17 +323,6 @@ sal_UCS4 GetLocalizedChar( sal_UCS4 nChar, LanguageType eLang )
         case LANGUAGE_TIBETAN       & LANGUAGE_MASK_PRIMARY:
             nOffset = 0x0F20 - '0';  // tibetan
             break;
-#if 0 // TODO: use language type for these digit substitutions?
-        // TODO case:
-            nOffset = 0x2776 - '0';  // dingbat circled
-            break;
-        // TODO case:
-            nOffset = 0x2070 - '0';  // superscript
-            break;
-        // TODO case:
-            nOffset = 0x2080 - '0';  // subscript
-            break;
-#endif
     }
 
     nChar += nOffset;
@@ -839,12 +781,6 @@ int SalLayout::CalcAsianKerning( sal_UCS4 c, bool bLeft, bool /*TODO:? bVertical
         nResult = nTable[ c - 0x3000 ];
     else switch( c )
     {
-#if 0 // TODO: enable it for real-fixed-width fonts?
-        case ':': case ';': case '!':
-            if( !bVertical )
-                nResult = bLeft ? -1 : +1;  // 25% left and right
-            break;
-#endif
         case 0x30FB:
             nResult = bLeft ? -1 : +1;      // 25% left/right/top/bottom
             break;
@@ -950,10 +886,6 @@ bool SalLayout::IsSpacingGlyph( sal_GlyphId nGlyph ) const
 
 const ImplFontData* SalLayout::GetFallbackFontData( sal_GlyphId /*nGlyphId*/ ) const
 {
-#if 0
-    int nFallbackLevel = (nGlyphId & GF_FONTMASK) >> GF_FONTSHIFT
-    assert( nFallbackLevel == 0 );
-#endif
     return NULL;
 }
 

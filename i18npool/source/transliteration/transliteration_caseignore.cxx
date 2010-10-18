@@ -50,20 +50,6 @@ Transliteration_caseignore::Transliteration_caseignore()
     implementationName = "com.sun.star.i18n.Transliteration.Transliteration_caseignore";
 }
 
-#if 0
-/* NOTE: We had this, derived from Transliteration_caseignore, but it was
- * unused code. Deactivated with #i89580# but left for reference in case
- * MappingTypeSimpleFolding would be needed at some time.
- */
-Transliteration_simplecaseignore::Transliteration_simplecaseignore()
-{
-    nMappingType = MappingTypeSimpleFolding;
-    moduleLoaded = (TransliterationModules)0;
-    transliterationName = "simple case ignore (generic)";
-    implementationName = "com.sun.star.i18n.Transliteration.Transliteration_simplecaseignore";
-}
-#endif
-
 void SAL_CALL
 Transliteration_caseignore::loadModule( TransliterationModules modName, const Locale& rLocale )
     throw(RuntimeException)

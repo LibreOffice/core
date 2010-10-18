@@ -124,12 +124,6 @@ uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
 {
     uno::Any aRet;
 
-    // @@@ Add support for additional interfaces.
-#if 0
-      aRet = cppu::queryInterface( rType,
-                                 static_cast< yyy::Xxxxxxxxx * >( this ) );
-#endif
-
      return aRet.hasValue() ? aRet : ContentImplHelper::queryInterface( rType );
 }
 
@@ -534,14 +528,6 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             {
                 xRow->appendBoolean( rProp, rData.bIsFolder );
             }
-
-            // @@@ Process other properties supported directly.
-#if 0
-            else if ( rProp.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "xxxxxx" ) ) )
-            {
-            }
-#endif
             else
             {
                 // @@@ Note: If your data source supports adding/removing
@@ -734,13 +720,6 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             }
         }
 
-        // @@@ Process other properties supported directly.
-#if 0
-        else if ( rValue.Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "xxxxxx" ) ) )
-        {
-        }
-#endif
         else
         {
             // @@@ Note: If your data source supports adding/removing
@@ -884,24 +863,6 @@ void Content::insert(
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
     // Check, if all required properties were set.
-
-#if 0
-    // @@@ add checks for property presence
-    if ( m_aProps.xxxx == yyyyy )
-    {
-        OSL_ENSURE( sal_False, "Content::insert - property value missing!" );
-
-        uno::Sequence< rtl::OUString > aProps( 1 );
-        aProps[ 0 ] = rtl::OUString::createFromAscii( "zzzz" );
-        ::ucbhelper::cancelCommandExecution(
-            uno::makeAny( ucb::MissingPropertiesException(
-                                rtl::OUString(),
-                                static_cast< cppu::OWeakObject * >( this ),
-                                aProps ) ),
-            Environment );
-        // Unreachable
-    }
-#endif
 
     bool bNeedInputStream = true; // @@@ adjust to real requirements
     if ( bNeedInputStream && !xInputStream.is() )

@@ -157,16 +157,6 @@ void VCLXTopWindow_Base::toFront(  ) throw(::com::sun::star::uno::RuntimeExcepti
 
 void VCLXTopWindow_Base::toBack(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-#if 0 // Not possible in VCL...
-
-    ::vos::OGuard aGuard( GetMutexImpl() );
-
-    Window* pWindow = GetWindowImpl();
-    if ( pWindow )
-    {
-        ((WorkWindow*)pWindow)->ToBack();
-    }
-#endif
 }
 
 void VCLXTopWindow_Base::setMenuBar( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuBar >& rxMenu ) throw(::com::sun::star::uno::RuntimeException)

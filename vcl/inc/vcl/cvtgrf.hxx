@@ -47,11 +47,9 @@ private:
     Link                maFilterHdl;
     ConvertData*        mpConvertData;
 
-//#if 0 // _SOLAR__PRIVATE
 public:
     SAL_DLLPRIVATE ULONG    ImplConvert( ULONG nInFormat, void* pInBuffer, ULONG nInBufSize,
                                      void** ppOutBuffer, ULONG nOutFormat );
-//#endif // __PRIVATE
 
 public:
 
