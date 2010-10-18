@@ -472,7 +472,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
         aColorList.Insert( new SvxColorItem( *pColorItem ), nPos );
         pColorItem = (SvxColorItem*)aEditDoc.GetItemPool().GetItem2( EE_CHAR_COLOR, ++i );
     }
-    aColorList.Insert( new SvxColorItem( (const SvxColorItem&)aEditDoc.GetItemPool().GetDefaultItem( EE_CHAR_COLOR) ), static_cast<sal_uInt32> (i) );
+    aColorList.Insert( new SvxColorItem( (const SvxColorItem&)aEditDoc.GetItemPool().GetDefaultItem( EE_CHAR_COLOR) ), i );
 
     rOutput << '{' << OOO_STRING_SVTOOLS_RTF_COLORTBL;
     for ( j = 0; j < aColorList.Count(); j++ )
