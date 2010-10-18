@@ -60,7 +60,6 @@ SLOFILES=\
             $(SLO)$/salinst.obj			\
             $(SLO)$/salsys.obj			\
             $(SLO)$/soicon.obj			\
-            $(SLO)$/sm.obj				\
             $(SLO)$/keysymnames.obj		\
             $(SLO)$/wmadaptor.obj
 
@@ -72,7 +71,8 @@ EXCEPTIONSFILES=\
             $(SLO)$/i18n_status.obj		\
             $(SLO)$/i18n_cb.obj				\
             $(SLO)$/i18n_ic.obj				\
-            $(SLO)$/salsys.obj
+            $(SLO)$/salsys.obj				\
+            $(SLO)$/sm.obj
 
 
 .IF "$(ENABLE_RANDR)" != ""

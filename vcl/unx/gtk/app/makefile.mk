@@ -55,12 +55,12 @@ PKGCONFIG_MODULES=gtk+-2.0
 
 SLOFILES=\
             $(SLO)$/gtkdata.obj	\
-            $(SLO)$/gtkinst.obj	\
-            $(SLO)$/gtksys.obj
+            $(SLO)$/gtkinst.obj
 
 EXCEPTIONSFILES=\
             $(SLO)$/gtkdata.obj\
-            $(SLO)$/gtkinst.obj
+            $(SLO)$/gtkinst.obj \
+            $(SLO)$/gtksys.obj
 
 .ELSE # "$(ENABLE_GTK)" != ""
 

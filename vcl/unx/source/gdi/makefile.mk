@@ -47,27 +47,27 @@ dummy:
 .ELSE		# "$(GUIBASE)"!="unx"
 
 SLOFILES=	\
-        $(SLO)$/salgdi2.obj		\
         $(SLO)$/salbmp.obj		\
         $(SLO)$/salgdi.obj		\
-        $(SLO)$/salvd.obj		\
-        $(SLO)$/dtint.obj		\
         $(SLO)$/salcvt.obj		\
-        $(SLO)$/xfont.obj		\
         $(SLO)$/xlfd_attr.obj		\
         $(SLO)$/xlfd_extd.obj		\
         $(SLO)$/xlfd_smpl.obj		\
         $(SLO)$/salgdi3.obj		\
-        $(SLO)$/gcach_xpeer.obj		\
-        $(SLO)$/xrender_peer.obj	\
-        $(SLO)$/pspgraphics.obj
+        $(SLO)$/xrender_peer.obj
         
 EXCEPTIONSFILES=\
         $(SLO)$/xlfd_extd.obj	\
+        $(SLO)$/dtint.obj		\
+        $(SLO)$/gcach_xpeer.obj		\
+        $(SLO)$/pspgraphics.obj		\
         $(SLO)$/salgdi.obj		\
         $(SLO)$/salbmp.obj		\
+        $(SLO)$/salgdi2.obj		\
         $(SLO)$/salgdi3.obj		\
-        $(SLO)$/salcvt.obj
+        $(SLO)$/salcvt.obj		\
+        $(SLO)$/salvd.obj		\
+        $(SLO)$/xfont.obj
 
 .IF "$(USE_XPRINT)" == "TRUE"
 CFLAGS+=-D_USE_PRINT_EXTENSION_=1

@@ -49,7 +49,11 @@ CDEFS+=-DENABLE_GRAPHITE
 
 EXCEPTIONSFILES=	$(SLO)$/salmisc.obj 	\
                     $(SLO)$/outdev.obj		\
+                    $(SLO)$/outdev2.obj 	\
                     $(SLO)$/outdev3.obj 	\
+                    $(SLO)$/outdev4.obj 	\
+                    $(SLO)$/outdev5.obj 	\
+                    $(SLO)$/outdev6.obj 	\
                     $(SLO)$/outdevnative.obj 	\
                     $(SLO)$/gfxlink.obj		\
                     $(SLO)$/print.obj		\
@@ -62,58 +66,54 @@ EXCEPTIONSFILES=	$(SLO)$/salmisc.obj 	\
                     $(SLO)$/impimage.obj		\
                     $(SLO)$/impgraph.obj	\
                     $(SLO)$/metric.obj		\
+                    $(SLO)$/pdfwriter.obj	\
                     $(SLO)$/pdfwriter_impl.obj	\
                     $(SLO)$/pdffontcache.obj\
                     $(SLO)$/bmpconv.obj		\
                     $(SLO)$/pdfextoutdevdata.obj	\
                     $(SLO)$/jobset.obj		\
+                    $(SLO)$/impanmvw.obj	\
                     $(SLO)$/impimagetree.obj		\
+                    $(SLO)$/impvect.obj 	\
                     $(SLO)$/pngread.obj		\
                     $(SLO)$/pngwrite.obj    \
                     $(SLO)$/virdev.obj \
+                    $(SLO)$/wall.obj		\
                     $(SLO)$/gdimtf.obj		\
+                    $(SLO)$/graph.obj		\
                     $(SLO)$/graphictools.obj \
+                    $(SLO)$/imagerepository.obj   \
+                    $(SLO)$/salgdilayout.obj	\
+                    $(SLO)$/salnativewidgets-none.obj	\
                     $(SLO)$/textlayout.obj   \
+                    $(SLO)$/metaact.obj 	\
+                    $(SLO)$/outmap.obj		\
+                    $(SLO)$/animate.obj 	\
+                    $(SLO)$/base14.obj		\
+                    $(SLO)$/bitmap.obj		\
+                    $(SLO)$/bitmap2.obj 	\
+                    $(SLO)$/cvtgrf.obj		\
+                    $(SLO)$/cvtsvm.obj		\
+                    $(SLO)$/bitmapex.obj	\
                     $(SLO)$/lineinfo.obj
 
 SLOFILES=	$(EXCEPTIONSFILES)      \
-            $(SLO)$/animate.obj 	\
-            $(SLO)$/impanmvw.obj	\
-            $(SLO)$/bitmap.obj		\
-            $(SLO)$/bitmap2.obj 	\
             $(SLO)$/bitmap3.obj 	\
             $(SLO)$/bitmap4.obj 	\
             $(SLO)$/alpha.obj		\
-            $(SLO)$/bitmapex.obj	\
             $(SLO)$/bmpacc.obj		\
             $(SLO)$/bmpacc2.obj 	\
             $(SLO)$/bmpacc3.obj 	\
             $(SLO)$/bmpfast.obj	\
-            $(SLO)$/cvtsvm.obj		\
-            $(SLO)$/cvtgrf.obj		\
             $(SLO)$/font.obj		\
             $(SLO)$/gradient.obj	\
             $(SLO)$/hatch.obj		\
-            $(SLO)$/graph.obj		\
             $(SLO)$/impbmp.obj		\
-            $(SLO)$/imagerepository.obj   \
-            $(SLO)$/impvect.obj 	\
             $(SLO)$/mapmod.obj		\
-            $(SLO)$/metaact.obj 	\
             $(SLO)$/octree.obj		\
-            $(SLO)$/outmap.obj		\
-            $(SLO)$/outdev2.obj 	\
-            $(SLO)$/outdev4.obj 	\
-            $(SLO)$/outdev5.obj 	\
-            $(SLO)$/outdev6.obj 	\
             $(SLO)$/regband.obj 	\
             $(SLO)$/region.obj		\
-            $(SLO)$/wall.obj		\
-            $(SLO)$/base14.obj		\
-            $(SLO)$/pdfwriter.obj	\
-            $(SLO)$/salgdilayout.obj	\
-            $(SLO)$/extoutdevdata.obj	\
-            $(SLO)$/salnativewidgets-none.obj
+            $(SLO)$/extoutdevdata.obj
 
 
 # --- Targets ------------------------------------------------------
