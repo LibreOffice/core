@@ -928,15 +928,7 @@ PrintDialog* SfxViewShell::CreatePrintDialog( Window* /*pParent*/ )
 */
 
 {
-    #if 0
-    PrintDialog *pDlg = new PrintDialog( pParent, false );
-    pDlg->SetFirstPage( 1 );
-    pDlg->SetLastPage( 9999 );
-    pDlg->EnableCollate();
-    return pDlg;
-    #else
     return NULL;
-    #endif
 }
 
 //--------------------------------------------------------------------
@@ -952,42 +944,8 @@ ErrCode SfxViewShell::DoPrint( SfxPrinter* /*pPrinter*/,
                                PrintDialog* /*pPrintDlg*/,
                                BOOL /*bSilent*/, BOOL /*bIsAPI*/ )
 {
-    #if 0
-    // Printer-Dialogbox waehrend des Ausdrucks mu\s schon vor
-    // StartJob erzeugt werden, da SV bei einem Quit-Event h"angt
-    SfxPrintProgress *pProgress = new SfxPrintProgress( this, !bSilent );
-    SfxPrinter *pDocPrinter = GetPrinter(TRUE);
-    if ( !pPrinter )
-        pPrinter = pDocPrinter;
-    else if ( pDocPrinter != pPrinter )
-    {
-        pProgress->RestoreOnEndPrint( pDocPrinter->Clone() );
-        SetPrinter( pPrinter, SFX_PRINTER_PRINTER );
-    }
-    pProgress->SetWaitMode(FALSE);
-
-    // Drucker starten
-    PreparePrint( pPrintDlg );
-    SfxObjectShell *pObjShell = GetViewFrame()->GetObjectShell();
-    if ( pPrinter->StartJob(pObjShell->GetTitle(0)) )
-    {
-        // Drucken
-        Print( *pProgress, bIsAPI, pPrintDlg );
-        pProgress->Stop();
-        pProgress->DeleteOnEndPrint();
-        pPrinter->EndJob();
-    }
-    else
-    {
-        // Printer konnte nicht gestartet werden
-        delete pProgress;
-    }
-
-    return pPrinter->GetError();
-    #else
     DBG_ERROR( "DoPrint called, dead code !" );
     return ERRCODE_IO_NOTSUPPORTED;
-    #endif
 }
 
 //--------------------------------------------------------------------

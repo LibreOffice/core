@@ -119,78 +119,6 @@ using namespace ::ooo::vba;
 const static rtl::OUString DELIM = rtl::OUString::createFromAscii( "::" );
 const static sal_Int32 DELIMLEN = DELIM.getLength();
 
-#if 0
-void dumpListeners( const Reference< beans::XIntrospection >& xIntrospection, const Reference<XInterface>& xIfc)
-{
-    Reference< beans::XIntrospectionAccess > xIntrospectionAccess;
-    if ( xIntrospection.is() )
-    {
-        xIntrospectionAccess = xIntrospection->inspect(
-            makeAny( xIfc ) );
-        Sequence< Type > aControlListeners =
-            xIntrospectionAccess->getSupportedListeners();
-        sal_Int32 nLength = aControlListeners.getLength();
-
-        for ( sal_Int32 i = 0; i< nLength; ++i )
-        {
-            Type& listType = aControlListeners[ i ];
-            rtl::OUString sFullTypeName = listType.getTypeName();
-            rtl::OUString sTypeName = listType.getTypeName();
-            sal_Int32 lastDotIndex = -1;
-            if ( ( lastDotIndex = sFullTypeName.lastIndexOf( '.' ) ) > -1 )
-            {
-                sTypeName = sFullTypeName.copy( lastDotIndex + 1 );
-            }
-            Sequence< ::rtl::OUString > sMeths = comphelper::getEventMethodsForType( listType );
-            sal_Int32 sMethLen = sMeths.getLength();
-            for ( sal_Int32 j=0 ; j < sMethLen; ++j )
-            {
-                OSL_TRACE("**Listener [%d] Type[%s] Method[%s]",j,
-                    rtl::OUStringToOString( sTypeName,
-                        RTL_TEXTENCODING_UTF8 ).getStr(),
-                    rtl::OUStringToOString( sMeths[ j ],
-                        RTL_TEXTENCODING_UTF8 ).getStr() );
-            }
-        }
-
-    }
-}
-
-void dumpEvent( const ScriptEvent& evt )
-{
-    OSL_TRACE("dumpEvent: Source %s",
-        rtl::OUStringToOString( comphelper::anyToString( makeAny(evt.Source)),
-            RTL_TEXTENCODING_UTF8 ).getStr() );
-
-    OSL_TRACE("dumpEvent: ScriptType %s",
-        rtl::OUStringToOString( evt.ScriptType,
-            RTL_TEXTENCODING_UTF8 ).getStr() );
-
-    OSL_TRACE("dumpEvent: ScriptCode %s",
-        rtl::OUStringToOString( evt.ScriptCode,
-            RTL_TEXTENCODING_UTF8 ).getStr() );
-
-    OSL_TRACE("dumpEvent: ListenerType %s",
-        rtl::OUStringToOString( evt.ListenerType.getTypeName(),
-            RTL_TEXTENCODING_UTF8 ).getStr() );
-
-    OSL_TRACE("dumpEvent: Listener methodname %s",
-        rtl::OUStringToOString( evt.MethodName,
-            RTL_TEXTENCODING_UTF8 ).getStr() );
-
-    OSL_TRACE("dumpEvent: arguments;");
-    sal_Int32 nLen = evt.Arguments.getLength();
-    for ( sal_Int32 index=0; index < nLen; ++index )
-    {
-        OSL_TRACE("\t [%d] %s", index,
-        rtl::OUStringToOString( comphelper::anyToString( evt.Arguments[ index ] ),
-            RTL_TEXTENCODING_UTF8 ).getStr() );
-
-    }
-}
-
-#endif
-
 bool isKeyEventOk( awt::KeyEvent& evt, const Sequence< Any >& params )
 {
     if ( !( params.getLength() > 0 ) ||
@@ -514,10 +442,7 @@ ScriptEventHelper::getEventListeners()
         Reference< beans::XIntrospection > xIntrospection(
             xMFac->createInstanceWithContext( rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.beans.Introspection"  ) ), m_xCtx ), UNO_QUERY );
-#if 0
-        dumpListeners( xIntrospection, m_xControl );
-        dumpListeners( xIntrospection, m_xControl->getModel() );
-#endif
+
         Reference< beans::XIntrospectionAccess > xIntrospectionAccess;
     if  ( xIntrospection.is() )
     {

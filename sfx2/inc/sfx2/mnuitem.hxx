@@ -153,7 +153,6 @@ inline SfxVirtualMenu* SfxMenuControl::GetPopupMenu() const
                { SfxMenuControl::RegisterMenuControl( pMod, new SfxMenuCtrlFactory( \
                     Class::CreateImpl, TYPE(nItemClass), nSlotId ) ); }
 
-//#if 0 // _SOLAR__PRIVATE
 
 class SfxAppMenuControl_Impl : public SfxMenuControl
 {
@@ -170,7 +169,5 @@ public:
     SfxAppMenuControl_Impl( USHORT nPos, Menu& rMenu, SfxBindings& rBindings );
     ~SfxAppMenuControl_Impl();
 };
-
-//#endif
 
 #endif

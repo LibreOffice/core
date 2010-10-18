@@ -893,19 +893,6 @@ BOOL FormulaTokenArray::HasMatrixDoubleRefOps()
 
 // --- POF (plain old formula) rewrite of a token array ---------------------
 
-#if 0
-// static function can't be compiled if not used (warning)
-//#if OSL_DEBUG_LEVEL > 0
-static void DumpTokArr( FormulaTokenArray *pCode )
-{
-    fprintf (stderr, "TokenArr: ");
-    for ( FormulaToken *pCur = pCode->First(); pCur; pCur = pCode->Next() )
-        fprintf( stderr, "t%d,o%d ",
-                pCur->GetType(), pCur->GetOpCode() );
-    fprintf (stderr, "\n");
-}
-#endif
-
 inline bool MissingConvention::isRewriteNeeded( OpCode eOp ) const
 {
     switch (eOp)

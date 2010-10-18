@@ -103,35 +103,6 @@ namespace connectivity
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getTableEditor( const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >& DocumentUI, const ::rtl::OUString& TableName ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
         private:
-#if 0
-        // TODO: resource
-            /** creates the dialog used for editing a linked table
-
-                @param _rTableName
-                    the name of the table to create the editor for.
-
-                @param _rxDocumentUI
-                    the UI of the database document, for which the editor is to be created.
-                    Must not be <NULL/>.
-
-                @return
-                    the table editor dialog instance.
-
-                @throws ::com::sun::star::lang::WrappedTargetException
-                    if creating the dialog instance fails
-
-                @throws ::com::sun::star::uno::RuntimeException
-                    if a serious error occures
-
-                @precond
-                    Our mutex is locked.
-            */
-            ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XExecutableDialog >
-                    impl_createLinkedTableEditor_throw(
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >& _rxDocumentUI,
-                        const ::rtl::OUString& _rTableName
-                    );
-#endif
 
             /** retrieves our table container
                 @return

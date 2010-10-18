@@ -76,9 +76,7 @@ protected:
     virtual BOOL        Close();
     virtual void        Move();
 
-//#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE SfxChildWindow* GetChildWindow_Impl()    { return pMgr; }
-//#endif
 
 public:
                         SfxDockingWindow( SfxBindings *pBindings,
@@ -113,7 +111,6 @@ public:
     void                AutoShow( BOOL bShow = TRUE );
     DECL_LINK( TimerHdl, Timer* );
 
-//#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE void Initialize_Impl();
     SAL_DLLPRIVATE USHORT GetWinBits_Impl() const;
     SAL_DLLPRIVATE void SetItemSize_Impl( const Size& rSize );
@@ -125,7 +122,6 @@ public:
     SAL_DLLPRIVATE void Pin_Impl( BOOL bPinned );
     SAL_DLLPRIVATE SfxSplitWindow* GetSplitWindow_Impl() const;
     SAL_DLLPRIVATE void ReleaseChildWindow_Impl();
-//#endif
 };
 
 class SfxDockingWrapper : public SfxChildWindow

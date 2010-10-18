@@ -74,11 +74,7 @@ public:
     void            SetImage( const Image& _rImg ) { aImage = _rImg; }
 };
 
-//#if 0 // _SOLAR__PRIVATE
 DECLARE_LIST(SfxStyleFamilyList, SfxStyleFamilyItem*)
-//#else
-//typedef List SfxStyleFamilyList;
-//#endif
 
 class SFX2_DLLPUBLIC SfxStyleFamilies: public Resource
 {

@@ -82,13 +82,11 @@ class SfxManageStyleSheetPage : public SfxTabPage
 private:
 friend class SfxStyleDialog;
 
-//#if 0 // _SOLAR__PRIVATE
     DECL_LINK( GetFocusHdl, Edit * );
     DECL_LINK( LoseFocusHdl, Edit * );
 
     void    UpdateName_Impl(ListBox *, const String &rNew);
     void    SetDescriptionText_Impl();
-//#endif
 
     SfxManageStyleSheetPage(Window *pParent, const SfxItemSet &rAttrSet );
     ~SfxManageStyleSheetPage();

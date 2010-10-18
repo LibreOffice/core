@@ -108,11 +108,9 @@ public:
 
     SfxModule*      GetModule() const;
 
-//#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE void SetModule_Impl( SfxModule* );
     SAL_DLLPRIVATE static void UpdateFilterContainers_Impl();
     SAL_DLLPRIVATE sal_uInt16 GetViewNo_Impl( const sal_uInt16 i_nViewId, const sal_uInt16 i_nFallback ) const;
-//#endif
 
 private:
     // Kopieren verboten

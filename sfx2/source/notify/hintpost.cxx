@@ -98,13 +98,5 @@ void SfxHintPoster::SetEventHdl( const GenLink& rLink )
 
 
 #define LOG( x )
-#if 0
-#define LOG( x )                                                \
-{                                                               \
-    SvFileStream aStrm( "f:\\temp\\log", STREAM_READWRITE );    \
-    aStrm.Seek( STREAM_SEEK_TO_END );                           \
-    aStrm << x.GetStr() << '\n';                                \
-}
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

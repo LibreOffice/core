@@ -312,34 +312,6 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
 
                     pAkt->nStyleNo = USHORT( nStyleNo );
 
-#if 0
-// JP 05.09.95: zuruecksetzen der Style-Attribute fuehrt nur zu Problemen.
-//              Es muss reichen, wenn das ueber pard/plain erfolgt
-//  ansonsten Bugdoc 15304.rtf - nach nur "\pard" falscher Font !!
-
-                    SvxRTFStyleType* pStyle = aStyleTbl.Get( pAkt->nStyleNo );
-                    if( pStyle && pStyle->aAttrSet.Count() )
-                    {
-                        //JP 07.07.95:
-                        // alle Attribute, die in der Vorlage gesetzt werden
-                        // auf defaults setzen. In RTF werden die Attribute
-                        // der Vorlage danach ja wiederholt.
-                        // WICHTIG: Attribute die in der Vorlage definiert
-                        //          sind, werden zurueckgesetzt !!!!
-                        // pAkt->aAttrSet.Put( pStyle->aAttrSet );
-
-                        SfxItemIter aIter( pStyle->aAttrSet );
-                        SfxItemPool* pPool = pStyle->aAttrSet.GetPool();
-                        USHORT nWh = aIter.GetCurItem()->Which();
-                        while( TRUE )
-                        {
-                            pAkt->aAttrSet.Put( pPool->GetDefaultItem( nWh ));
-                            if( aIter.IsAtEnd() )
-                                break;
-                            nWh = aIter.NextItem()->Which();
-                        }
-                    }
-#endif
                 }
                 break;
 
@@ -991,17 +963,9 @@ ATTR_SETOVERLINE:
                                 PLAINID->nColor ));
                 }
                 break;
-#if 0
             //#i12501# While cb is clearly documented in the rtf spec, word
             //doesn't accept it at all
-            case RTF_CB:
-                if( PLAINID->nBgColor )
-                {
-                    pSet->Put( SvxBrushItem( GetColor( USHORT(nTokenValue) ),
-                                PLAINID->nBgColor ));
-                }
-                break;
-#endif
+
             case RTF_LANG:
                 if( PLAINID->nLanguage )
                 {

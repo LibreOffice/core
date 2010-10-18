@@ -117,7 +117,6 @@ friend class SfxBindings_Impl;
     SfxDispatcher*   pDispatcher;   // zu verwendender Dispatcher
     sal_uInt16       nRegLevel;      // Lock-Level waehrend Reconfig
 
-//#if 0 // _SOLAR__PRIVATE
 private:
     SAL_DLLPRIVATE const SfxPoolItem*  Execute_Impl( sal_uInt16 nSlot, const SfxPoolItem **pArgs, sal_uInt16 nModi,
                                     SfxCallMode nCall, const SfxPoolItem **pInternalArgs, BOOL bGlobalOnly=FALSE);
@@ -135,7 +134,6 @@ private:
                             const SfxPoolItem *pItem,
                             SfxItemState eItemState );
     DECL_DLLPRIVATE_LINK( NextJob_Impl, Timer * );
-//#endif
 
 public:
                      SfxBindings();
@@ -193,7 +191,6 @@ public:
     com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > GetRecorder() const;
     com::sun::star::uno::Reference < com::sun::star::frame::XDispatch >
                     GetDispatch( const SfxSlot*, const com::sun::star::util::URL& aURL, sal_Bool bMasterCommand );
-//#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE void ContextChanged_Impl();
     SAL_DLLPRIVATE void Execute_Impl( SfxRequest& rReq, const SfxSlot* pSlot, SfxShell* pShell );
     SAL_DLLPRIVATE void DeleteControllers_Impl();
@@ -214,7 +211,6 @@ public:
     SAL_DLLPRIVATE void ExecuteGlobal_Impl( USHORT nId );
     SAL_DLLPRIVATE void InvalidateSlotsInMap_Impl();
     SAL_DLLPRIVATE void AddSlotToInvalidateSlotsMap_Impl( USHORT nId );
-//#endif
 };
 
 #ifdef DBG_UTIL

@@ -372,43 +372,6 @@ sal_uInt16 SfxChildWindow::GetPosition()
     return pImp->pFact->nPos;
 }
 
-#if 0
-static void ImplWindowStateFromStr( Point rPos, Size rSize, const ByteString& rStr )
-{
-    ULONG       nValidMask  = 0;
-    xub_StrLen  nIndex      = 0;
-    ByteString  aTokenStr;
-
-    aTokenStr = rStr.GetToken( 0, ',', nIndex );
-    if ( aTokenStr.Len() )
-    {
-        rPos.X() = aTokenStr.ToInt32();
-        nValidMask |= WINDOWSTATE_MASK_X;
-    }
-
-    aTokenStr = rStr.GetToken( 0, ',', nIndex );
-    if ( aTokenStr.Len() )
-    {
-        rPos.Y() = aTokenStr.ToInt32();
-        nValidMask |= WINDOWSTATE_MASK_Y;
-    }
-
-    aTokenStr = rStr.GetToken( 0, ',', nIndex );
-    if ( aTokenStr.Len() )
-    {
-        rSize.Width() = aTokenStr.ToInt32();
-        nValidMask |= WINDOWSTATE_MASK_WIDTH;
-    }
-
-    aTokenStr = rStr.GetToken( 0, ';', nIndex );
-    if ( aTokenStr.Len() )
-    {
-        rSize.Height() = aTokenStr.ToInt32();
-        nValidMask |= WINDOWSTATE_MASK_HEIGHT;
-    }
-}
-#endif
-
 //-------------------------------------------------------------------------
 void SfxChildWindow::InitializeChildWinFactory_Impl( sal_uInt16 nId, SfxChildWinInfo& rInfo )
 {

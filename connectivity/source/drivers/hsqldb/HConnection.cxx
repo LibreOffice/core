@@ -281,44 +281,6 @@ namespace connectivity { namespace hsqldb
     }
 
     //TODO: resource
-#if 0
-    // -------------------------------------------------------------------
-    Reference< XExecutableDialog > OHsqlConnection::impl_createLinkedTableEditor_throw( const Reference< XDatabaseDocumentUI >& _rxDocumentUI, const ::rtl::OUString& _rTableName )
-    {
-        OSL_PRECOND( _rxDocumentUI.is(), "OHsqlConnection::impl_createLinkedTableEditor_throw: illegal document UI!" );
-        Reference< XExecutableDialog > xDialog;
-        try
-        {
-            ::comphelper::ComponentContext aContext( m_xORB );
-            Sequence< Any > aArguments(3);
-            aArguments[0] <<= NamedValue(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TableContainer" ) ),
-                makeAny( impl_getTableContainer_throw() )
-            );
-            aArguments[1] <<= NamedValue(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TableName" ) ),
-                makeAny( _rTableName )
-            );
-            aArguments[2] <<= NamedValue(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ) ),
-                makeAny( _rxDocumentUI->getApplicationMainWindow() )
-            );
-
-            aContext.createComponentWithArguments( "com.sun.star.sdb.hsql.LinkedTableEditor", aArguments, xDialog );
-            if ( !xDialog.is() )
-                throw ServiceNotRegisteredException( ::rtl::OUString::createFromAscii( "com.sun.star.sdb.hsql.LinkedTableEditor" ), *this );
-        }
-        catch( const RuntimeException& ) { throw; }
-        catch( const Exception& )
-        {
-            ::connectivity::SharedResources aResources;
-            const ::rtl::OUString sError( aResources.getResourceString(STR_NO_TABLE_EDITOR_DIALOG));
-            throw WrappedTargetException( sError ,*this, ::cppu::getCaughtException() );
-        }
-        return xDialog;
-    }
-#endif
-
     // -------------------------------------------------------------------
     void OHsqlConnection::impl_checkExistingTable_throw( const ::rtl::OUString& _rTableName )
     {

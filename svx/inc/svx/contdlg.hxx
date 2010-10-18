@@ -90,13 +90,10 @@ class SVX_DLLPUBLIC SvxContourDlg : public SfxFloatingWindow
 
     SvxSuperContourDlg* pSuperClass;
 
-//#if 0 // _SOLAR__PRIVATE
 
 protected:
 
     void                SetSuperClass( SvxSuperContourDlg& rSuperClass ) { pSuperClass = &rSuperClass; }
-
-//#endif // __PRIVATE
 
 public:
 

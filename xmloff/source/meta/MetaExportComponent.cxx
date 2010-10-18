@@ -141,17 +141,7 @@ sal_uInt32 XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
 
     xDocHandler->startDocument();
     {
-#if 0
-        GetAttrList().AddAttribute(
-                GetNamespaceMap().GetAttrNameByKey( XML_NAMESPACE_DC ),
-                GetNamespaceMap().GetNameByKey( XML_NAMESPACE_DC ) );
-        GetAttrList().AddAttribute(
-                GetNamespaceMap().GetAttrNameByKey( XML_NAMESPACE_META ),
-                GetNamespaceMap().GetNameByKey( XML_NAMESPACE_META ) );
-        GetAttrList().AddAttribute(
-                GetNamespaceMap().GetAttrNameByKey( XML_NAMESPACE_OFFICE ),
-                GetNamespaceMap().GetNameByKey( XML_NAMESPACE_OFFICE ) );
-#else
+
         const SvXMLNamespaceMap& rMap = GetNamespaceMap();
         sal_uInt16 nPos = rMap.GetFirstKey();
         while( USHRT_MAX != nPos )
@@ -159,7 +149,6 @@ sal_uInt32 XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
             GetAttrList().AddAttribute( rMap.GetAttrNameByKey( nPos ), rMap.GetNameByKey( nPos ) );
             nPos = GetNamespaceMap().GetNextKey( nPos );
         }
-#endif
 
         const sal_Char* pVersion = 0;
         switch( getDefaultVersion() )

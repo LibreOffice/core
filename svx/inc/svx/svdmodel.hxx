@@ -311,7 +311,6 @@ private:
     SVX_DLLPRIVATE SdrModel(const SdrModel& rSrcModel);
     SVX_DLLPRIVATE void operator=(const SdrModel& rSrcModel);
     SVX_DLLPRIVATE bool operator==(const SdrModel& rCmpModel) const;
-//#if 0 // _SOLAR__PRIVATE
     SVX_DLLPRIVATE void ImpPostUndoAction(SdrUndoAction* pUndo);
     SVX_DLLPRIVATE void ImpSetUIUnit();
     SVX_DLLPRIVATE void ImpSetOutlinerDefaults( SdrOutliner* pOutliner, BOOL bInit = FALSE );
@@ -321,16 +320,13 @@ private:
     SVX_DLLPRIVATE void ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable,
         bool bLoadRefCounts = true);
 
-//#endif // __PRIVATE
 
     // this is a weak reference to a possible living api wrapper for this model
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxUnoModel;
 
 public:
-//#if 0 // _SOLAR__PRIVATE
     bool     IsPasteResize() const        { return bPasteResize; }
     void     SetPasteResize(bool bOn) { bPasteResize=bOn; }
-//#endif // __PRIVATE
     TYPEINFO();
     // Steckt man hier seinen eigenen Pool rein, so wird die Klasse auch
     // Aktionen an ihm vornehmen (Put(),Remove()). Bei Zerstoerung von

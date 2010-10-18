@@ -158,9 +158,6 @@ private:
         rtl::OUString const & name, dp_gui::UpdateData const & data);
 
     void addDisabledUpdate(UpdateDialog::DisabledUpdate const & data);
-#if 0
-    void addGeneralError(rtl::OUString const & message);
-#endif
     void addSpecificError(UpdateDialog::SpecificError const & data);
 
     void checkingDone();

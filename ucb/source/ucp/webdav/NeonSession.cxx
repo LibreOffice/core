@@ -263,15 +263,6 @@ extern "C" int NeonSession_NeonAuth( void *       inUserData,
  * cancel the request. (if non-zero, username and password are
  * ignored.)  */
 
-#if 0
-    // Give'em only a limited mumber of retries..
-    if ( attempt > 9 )
-    {
-        // abort
-        return -1;
-    }
-#endif
-
     NeonSession * theSession = static_cast< NeonSession * >( inUserData );
     DAVAuthListener * pListener
         = theSession->getRequestEnvironment().m_xAuthListener.get();

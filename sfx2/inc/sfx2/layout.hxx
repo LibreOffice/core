@@ -49,18 +49,6 @@ public:
     SfxDialog (::Window* parent, char const* xml_file, char const* id, SfxBindings* bindings=0, SfxChildWindow* child=0);
 };
 
-#if 0
-class SFX2_DLLPUBLIC SfxTabDialog
-    : public ::SfxTabDialog
-    , public InPlug
-{
-public:
-    SfxTabDialog (::Window *parent, char const* xml_file, char const* id, ResId const& res_id, SfxItemSet const* set=0);
-    ::Window* GetParent () const;
-    void FreeResource ();
-};
-#endif
-
 class SFX2_DLLPUBLIC SfxTabPage
     : public ::SfxTabPage
     , public InPlug

@@ -46,9 +46,7 @@ private:
     Menu&           rParent;
     SfxStatusForwarder  aFontNameForwarder;
 
-//#if 0 // _SOLAR__PRIVATE
     DECL_LINK( MenuSelect, FontSizeMenu * );
-//#endif
 
 protected:
     virtual void    StateChanged( USHORT nSID, SfxItemState eState,

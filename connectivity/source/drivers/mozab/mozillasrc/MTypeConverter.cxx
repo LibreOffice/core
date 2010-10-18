@@ -129,13 +129,6 @@ char *MTypeConverter::nsStringToCCharStringAscii(nsString const &nss)
     ::rtl::OString os(ous,ous.getLength(),RTL_TEXTENCODING_ASCII_US);
     return( ::std::string(os.getStr()));
 }
-#if 0
-// -------------------------------------------------------------------------
-::std::string MTypeConverter::nsStringToStlString(nsString const &nss)
-{
-    return( ::std::string(nss.GetBuffer()));
-}
-#endif
 // -------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

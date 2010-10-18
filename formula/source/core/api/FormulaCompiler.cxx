@@ -644,23 +644,6 @@ const String& FormulaCompiler::GetNativeSymbol( OpCode eOp )
 // -----------------------------------------------------------------------------
 void FormulaCompiler::InitSymbolsNative() const
 {
-#if 0 // No point in keeping this since you can now do this from the UI.
-    if (mxSymbolsNative.get())
-        return;
-    //! Experimental!
-    //  Use English function names and separators instead of native in UI.
-    static const sal_Char aEnvVarName[] = "OOO_CALC_USE_ENGLISH_FORMULAS";
-    const char* pEnv = getenv( aEnvVarName);
-    if (pEnv && (*pEnv == 'Y' || *pEnv == 'y' || *pEnv == '1') )
-    {
-        fprintf( stderr, "%s=%s => UI uses English function names and separators in formulas.\n",
-                aEnvVarName, pEnv);
-        InitSymbolsEnglish();
-        mxSymbolsNative = mxSymbolsEnglish;
-        return;
-    }
-#endif
-
     lcl_fillNativeSymbols(mxSymbolsNative);
 }
 // -----------------------------------------------------------------------------

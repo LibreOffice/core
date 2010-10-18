@@ -3393,20 +3393,6 @@ awt::Size SAL_CALL SfxBaseModel::getVisualAreaSize( sal_Int64 /*nAspect*/ )
 
     Rectangle aTmpRect = m_pData->m_pObjectShell->GetVisArea( ASPECT_CONTENT );
 
-#if 0
-    Window* pWindow = NULL;
-    SfxViewFrame* pViewFrm = m_pData->m_pObjectShell.Is() ?
-                                SfxViewFrame::GetFirst( m_pData->m_pObjectShell, 0, sal_False ) : 0;
-
-    if ( pWindow )
-    {
-        MapMode aInternalMapMode( pViewFrm->GetWindow().GetMapMode() );
-        MapMode aExternalMapMode( m_pData->m_pObjectShell->GetMapUnit() );
-
-        aTmpRect = OutputDevice::LogicToLogic( aTmpRect, aInternalMapMode, aExternalMapMode );
-    }
-#endif
-
     return awt::Size( aTmpRect.GetWidth(), aTmpRect.GetHeight() );
 }
 

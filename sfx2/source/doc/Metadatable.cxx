@@ -1472,19 +1472,6 @@ Metadatable::RegisterAsCopyOf(Metadatable const & i_rSource,
             {
                 OSL_ENSURE(false, "neither RegDoc nor RegClp cannot happen");
             }
-#if 0
-                {
-                    //FIXME: do we need this at all???
-                    XmlIdRegistryDocument & rRegDoc(
-                        dynamic_cast<XmlIdRegistryDocument&>( rReg ) );
-                    {
-                        if (rRegDoc.TryRegisterMetadatable(*this, SourceRef))
-                        {
-                            this->m_pReg = &rRegDoc;
-                        }
-                    }
-                }
-#endif
         }
     }
     catch (uno::Exception &)

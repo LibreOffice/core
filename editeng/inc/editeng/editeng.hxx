@@ -121,10 +121,7 @@ private:
 
                     EDITENG_DLLPRIVATE EditEngine( const EditEngine& );
     EDITENG_DLLPRIVATE EditEngine&      operator=( const EditEngine& );
-
-//#if 0 // _SOLAR__PRIVATE
     EDITENG_DLLPRIVATE BOOL             PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pView, Window* pFrameWin = NULL );
-//#endif
 
 protected:
 

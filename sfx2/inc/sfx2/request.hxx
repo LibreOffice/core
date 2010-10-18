@@ -61,7 +61,6 @@ friend struct SfxRequest_Impl;
     SfxRequest_Impl*    pImp;
 
     //---------------------------------------------------------------------
-//#if 0 // _SOLAR__PRIVATE
 public:
     SAL_DLLPRIVATE void Record_Impl( SfxShell &rSh, const SfxSlot &rSlot,
                                      com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder,
@@ -69,7 +68,6 @@ public:
 private:
     SAL_DLLPRIVATE void Done_Impl( const SfxItemSet *pSet );
 
-//#endif
     //---------------------------------------------------------------------
 
 public:

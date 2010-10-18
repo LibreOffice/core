@@ -147,13 +147,6 @@ Content* Content::create(
         return 0;
     }
 
-#if 0
-    // Fail, if content does exist.
-    if ( Content::hasData( pProvider,
-                           Uri( Identifier->getContentIdentifier() ) ) )
-        return 0;
-#endif
-
     return new Content( rxSMgr, pProvider, Identifier, Info );
 }
 

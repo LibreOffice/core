@@ -49,11 +49,7 @@ class SvStream;
 class SvxMacro;
 
 typedef SfxMacroInfo* SfxMacroInfoPtr;
-//#if 0 // _SOLAR__PRIVATE
 SV_DECL_PTRARR(SfxMacroInfoArr_Impl, SfxMacroInfoPtr, 5, 5)
-//#else
-//class SfxMacroInfoArr_Impl;
-//#endif
 
 class SFX2_DLLPUBLIC SfxMacroInfo
 {
@@ -144,12 +140,10 @@ public:
     sal_Bool                    CheckMacro(sal_uInt16 nId) const;
     sal_Bool                    CheckMacro( SfxObjectShell*, const SvxMacro* ) const;
 
-//#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE static void Release_Impl();
     SAL_DLLPRIVATE const SfxMacroInfo* GetMacroInfo_Impl( const SvxMacro *pMacro ) const;
     DECL_DLLPRIVATE_LINK( CallbackHdl_Impl, SfxMacroConfig*);
     DECL_DLLPRIVATE_LINK( EventHdl_Impl, SfxMacroInfo*);
-//#endif
 };
 
 #endif

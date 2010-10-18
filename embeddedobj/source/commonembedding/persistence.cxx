@@ -1795,14 +1795,11 @@ void SAL_CALL OCommonEmbeddedObject::breakLink( const uno::Reference< embed::XSt
                     ::rtl::OUString::createFromAscii( "The object is not a valid linked object!\n" ),
                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
-#if 0
     else
     {
         // the current implementation of OOo links does not implement this method since it does not implement
         // all the set of interfaces required for OOo embedded object ( XEmbedPersist is not supported ).
-        throw io::IOException(); // TODO:
     }
-#endif
 
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( ::rtl::OUString::createFromAscii( "No parent storage is provided!\n" ),

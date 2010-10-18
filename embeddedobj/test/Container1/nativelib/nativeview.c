@@ -79,10 +79,6 @@ JNIEXPORT jlong JNICALL Java_embeddedobj_test_NativeView_getNativeWindow
     JAWT_Win32DrawingSurfaceInfo* dsi_win ;
     jlong                         drawable;
 
-#if 0
-    LONG                          hFuncPtr;
-#endif
-
     /* Get the AWT */
     awt.version = JAWT_VERSION_1_3;
     result      = JAWT_GetAWT(env, &awt);
@@ -115,72 +111,6 @@ JNIEXPORT jlong JNICALL Java_embeddedobj_test_NativeView_getNativeWindow
     /* Free the drawing surface */
     awt.FreeDrawingSurface(ds);
 
-#if 0
-    /* Register own window procedure
-       Do it one times only! Otherwhise
-       multiple instances will be registered
-       and calls on such construct produce
-       a stack overflow.
-     */
-
-    if (GetProp( (HWND)drawable, OLD_PROC_KEY )==0)
-    {
-        hFuncPtr = SetWindowLong( (HWND)drawable, GWL_WNDPROC, (DWORD)NativeViewWndProc );
-        SetProp( (HWND)drawable, OLD_PROC_KEY, (HANDLE)hFuncPtr );
-    }
-#endif
-
     return drawable;
 }
-
-#if 0
-/*****************************************************************************
- *
- * Class      : -
- * Method     : NativeViewWndProc
- * Signature  : -
- * Description: registered window handler to intercept window messages between
- *              java and office process
- */
-static LRESULT APIENTRY NativeViewWndProc(
-    HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
-    HANDLE hFuncPtr;
-
-    /* resize new created child window to fill out the java window complete */
-    if (uMsg==WM_PARENTNOTIFY)
-    {
-        if (wParam == WM_CREATE)
-        {
-            RECT rect;
-            HWND hChild = (HWND) lParam;
-
-            GetClientRect(hWnd, &rect);
-
-            SetWindowPos(hChild,
-                        NULL,
-                        rect.left,
-                        rect.top,
-                        rect.right - rect.left,
-                        rect.bottom - rect.top,
-                        SWP_NOZORDER);
-        }
-    }
-    /* handle normal resize events */
-    else if(uMsg==WM_SIZE)
-    {
-        WORD newHeight = HIWORD(lParam);
-        WORD newWidth  = LOWORD(lParam);
-        HWND hChild    = GetWindow(hWnd, GW_CHILD);
-
-        if (hChild != NULL)
-            SetWindowPos(hChild, NULL, 0, 0, newWidth, newHeight, SWP_NOZORDER);
-    }
-
-    /* forward request to original handler which is intercepted by this window procedure */
-    hFuncPtr = GetProp(hWnd, OLD_PROC_KEY);
-    MY_ASSERT(hFuncPtr,"lost original window proc handler");
-    return CallWindowProc( hFuncPtr, hWnd, uMsg, wParam, lParam);
-}
-#endif
 

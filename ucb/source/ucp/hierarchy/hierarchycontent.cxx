@@ -122,12 +122,6 @@ HierarchyContent* HierarchyContent::create(
             RTL_CONSTASCII_STRINGPARAM( HIERARCHY_LINK_CONTENT_TYPE ) ) )
         return 0;
 
-#if 0
-    // Fail, if content does exist.
-    if ( hasData( rxSMgr, pProvider, Identifier ) )
-        return 0;
-#endif
-
     return new HierarchyContent( rxSMgr, pProvider, Identifier, Info );
 }
 

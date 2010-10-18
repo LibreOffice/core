@@ -852,27 +852,6 @@ void SAL_CALL Content::removeProperty( const rtl::OUString& Name )
     //     XCommandProcessor commands!
     uno::Reference< ucb::XCommandEnvironment > xEnv;
 
-#if 0
-    // @@@ REMOVEABLE z.Z. nicht richtig an der PropSetInfo gesetzt!!!
-    try
-    {
-        beans::Property aProp
-            = getPropertySetInfo( xEnv, sal_False /* don't cache data */ )
-                ->getPropertyByName( Name );
-
-        if ( !( aProp.Attributes & beans::PropertyAttribute::REMOVEABLE ) )
-        {
-            // Not removeable!
-            throw beans::NotRemoveableException();
-        }
-    }
-    catch ( beans::UnknownPropertyException const & )
-    {
-        //OSL_ENSURE( sal_False, "removeProperty - Unknown property!" );
-        throw;
-    }
-#endif
-
     //////////////////////////////////////////////////////////////////////
     // Try to remove property from server.
     //////////////////////////////////////////////////////////////////////

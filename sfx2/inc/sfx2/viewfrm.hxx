@@ -205,7 +205,6 @@ public:
     void                        ChildWindowExecute(SfxRequest&);
     void                        ChildWindowState(SfxItemSet&);
 
-//#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE void SetDowning_Impl();
     SAL_DLLPRIVATE void GetDocNumber_Impl();
     SAL_DLLPRIVATE BOOL IsDowning_Impl() const;
@@ -249,7 +248,6 @@ public:
     SAL_DLLPRIVATE void SetCurViewId_Impl( const USHORT i_nID );
     SAL_DLLPRIVATE void ActivateToolPanel_Impl( const ::rtl::OUString& i_rPanelURL );
 
-//#endif
 private:
     SAL_DLLPRIVATE BOOL SwitchToViewShell_Impl( USHORT nNo, BOOL bIsIndex = FALSE );
     SAL_DLLPRIVATE void PopShellAndSubShells_Impl( SfxViewShell& i_rViewShell );

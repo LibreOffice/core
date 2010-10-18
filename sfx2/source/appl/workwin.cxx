@@ -1650,11 +1650,6 @@ void SfxWorkWindow::CreateChildWin_Impl( SfxChildWin_Impl *pCW, BOOL bSetFocus )
         if ( bSetFocus )
             bSetFocus = pChildWin->WantsFocus();
         pChildWin->SetWorkWindow_Impl( this );
-#if 0
-        // Enable-Status richtig setzen
-        pChildWin->GetWindow()->EnableInput( pCW->bEnable &&
-            ( pWorkWin->IsInputEnabled() /* || pChildWin->GetAlignment() == SFX_ALIGN_NOALIGNMENT */ ) );
-#endif
         // Zumindest der ExtraString wird beim Auswerten ver"andert, also neu holen
         SfxChildWinInfo aInfo = pChildWin->GetInfo();
         pCW->aInfo.aExtraString = aInfo.aExtraString;
@@ -2216,11 +2211,6 @@ void SfxWorkWindow::SetChildWindowVisible_Impl( sal_uInt32 lId, BOOL bEnabled, U
         pCW->nInterfaceId = nInter;
     pCW->nVisibility = nMode;
     pCW->bEnable = bEnabled;
-#if 0
-    if ( pCW->pWin )
-        pCW->pWin->GetWindow()->EnableInput( bEnabled &&
-            ( pWorkWin->IsInputEnabled() /* || pCW->pWin->GetAlignment() == SFX_ALIGN_NOALIGNMENT */ ) );
-#endif
     pCW->nVisibility = nMode;
 }
 

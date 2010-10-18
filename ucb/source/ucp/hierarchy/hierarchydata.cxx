@@ -525,15 +525,6 @@ sal_Bool HierarchyEntry::move(
     if ( aNewPath == m_aPath )
         return sal_True;
 
-#if 0
-       // In the "near future"... ( not yet implemented in config db )
-
-       - get update access for m_aPath
-       - update access -> XNamed
-       - xNamed::setName( newName )
-       - updateaccess commit
-#else
-
     sal_Bool bOldRoot = sal_True;
     uno::Reference< util::XChangesBatch > xOldParentBatch;
 
@@ -825,30 +816,6 @@ sal_Bool HierarchyEntry::move(
         return sal_False;
     }
 
-#if 0
-    //////////////////////////////////////////////////////////////////////
-    // (4) Commit changes...
-    //////////////////////////////////////////////////////////////////////
-
-    try
-    {
-        xNewParentBatch->commitChanges();
-
-        if ( bDifferentParents )
-            xOldParentBatch->commitChanges();
-    }
-    catch ( lang::WrappedTargetException const & )
-    {
-        // commitChanges
-
-        OSL_ENSURE( sal_False,
-                    "HierarchyEntry::move - caught WrappedTargetException!" );
-        return sal_False;
-    }
-#endif
-
-    return sal_True;
-#endif
 }
 
 //=========================================================================

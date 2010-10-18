@@ -519,10 +519,8 @@ public:
     void TRG_SetMasterPageVisibleLayers(const SetOfByte& rNew);
     sdr::contact::ViewContact& TRG_GetMasterPageDescriptorViewContact() const;
 
-//#if 0 // _SOLAR__PRIVATE
 protected:
     void TRG_ImpMasterPageRemoved(const SdrPage& rRemovedPage);
-//#endif // __PRIVATE
 public:
 
     // Aenderungen an den Layern setzen nicht das Modified-Flag !

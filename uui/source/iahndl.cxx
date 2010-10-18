@@ -868,16 +868,6 @@ UUIInteractionHelper::handleRequest_impl(
             if ( handleCertificateValidationRequest( rRequest ) )
                 return true;
 
-// @@@ Todo #i29340#: activate!
-#if 0
-            ucb::NameClashResolveRequest aNameClashResolveRequest;
-            if (aAnyRequest >>= aNameClashResolveRequest)
-            {
-                handleNameClashResolveRequest(aNameClashResolveRequest,
-                                              rRequest->getContinuations());
-                return true;
-            }
-#endif
             if ( handleMasterPasswordRequest( rRequest ) )
                 return true;
 
@@ -1189,108 +1179,7 @@ executeMessageBox(
     return aResult;
 }
 
-// @@@ Todo #i29340#: activate!
-#if 0
-enum NameClashResolveDialogResult { ABORT, RENAME, OVERWRITE };
-
-NameClashResolveDialogResult
-executeNameClashResolveDialog(
-    Window * /*pParent*/,
-    rtl::OUString const & /*rTargetFolderURL*/,
-    rtl::OUString const & /*rClashingName*/,
-    rtl::OUString & /*rProposedNewName*/)
-{
-    // @@@ Todo DV: execute overwrite-rename dialog, deliver result
-    OSL_ENSURE( false,
-                "executeNameClashResolveDialog not yet implemented!" );
-    return ABORT;
-}
-
-NameClashResolveDialogResult
-executeSimpleNameClashResolveDialog(
-    Window * /*pParent*/,
-    rtl::OUString const & /*rTargetFolderURL*/,
-    rtl::OUString const & /*rClashingName*/,
-    rtl::OUString & /*rProposedNewName*/)
-{
-    // @@@ Todo DV: execute rename-only dialog, deliver result
-    OSL_ENSURE( false,
-                "executeSimpleNameClashResolveDialog not yet implemented!" );
-    return ABORT;
-}
-#endif
 } // namespace
-
-// @@@ Todo #i29340#: activate!
-#if 0
-void
-UUIInteractionHelper::handleNameClashResolveRequest(
-    ucb::NameClashResolveRequest const & rRequest,
-    uno::Sequence< uno::Reference<
-        task::XInteractionContinuation > > const & rContinuations)
-  SAL_THROW((uno::RuntimeException))
-{
-    OSL_ENSURE(
-        rRequest.TargetFolderURL.getLength() > 0,
-        "NameClashResolveRequest must not contain empty TargetFolderURL" );
-
-    OSL_ENSURE(
-        rRequest.ClashingName.getLength() > 0,
-        "NameClashResolveRequest must not contain empty ClashingName" );
-
-    uno::Reference< task::XInteractionAbort > xAbort;
-    uno::Reference< ucb::XInteractionSupplyName > xSupplyName;
-    uno::Reference< ucb::XInteractionReplaceExistingData > xReplaceExistingData;
-    getContinuations(
-        rContinuations, &xAbort, &xSupplyName, &xReplaceExistingData);
-
-    OSL_ENSURE( xAbort.is(),
-        "NameClashResolveRequest must contain Abort continuation" );
-
-    OSL_ENSURE( xSupplyName.is(),
-        "NameClashResolveRequest must contain SupplyName continuation" );
-
-    NameClashResolveDialogResult eResult = ABORT;
-    rtl::OUString aProposedNewName( rRequest.ProposedNewName );
-    if ( xReplaceExistingData.is() )
-        eResult = executeNameClashResolveDialog(
-            getParentProperty(),
-            rRequest.TargetFolderURL,
-            rRequest.ClashingName,
-            aProposedNewName);
-    else
-        eResult = executeSimpleNameClashResolveDialog(
-            getParentProperty(),
-            rRequest.TargetFolderURL,
-            rRequest.ClashingName,
-            aProposedNewName);
-
-    switch ( eResult )
-    {
-    case ABORT:
-        xAbort->select();
-        break;
-
-    case RENAME:
-        xSupplyName->setName( aProposedNewName );
-        xSupplyName->select();
-        break;
-
-    case OVERWRITE:
-        OSL_ENSURE(
-            xReplaceExistingData.is(),
-            "Invalid NameClashResolveDialogResult: OVERWRITE - "
-            "No ReplaceExistingData continuation available!" );
-        xReplaceExistingData->select();
-        break;
-
-    default:
-        OSL_ENSURE( false, "Unknown NameClashResolveDialogResult value. "
-                           "Interaction Request not handled!" );
-        break;
-    }
-}
-#endif
 
 void
 UUIInteractionHelper::handleGenericErrorRequest(

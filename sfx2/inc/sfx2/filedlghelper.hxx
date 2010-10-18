@@ -133,11 +133,8 @@ private:
     ::com::sun::star::uno::Reference < ::com::sun::star::ui::dialogs::XFilePickerListener > mxImp;
     FileDialogHelper_Impl   *mpImp;
 
-//#if 0 // _SOLAR__PRIVATE
 
     SAL_DLLPRIVATE sal_Int16 getDialogType( sal_Int64 nFlags ) const;
-
-//#endif
 
 public:
                             FileDialogHelper( sal_Int64 nFlags,
@@ -291,21 +288,18 @@ public:
 
    DECL_LINK( ExecuteSystemFilePicker, void* );
 
-//#if 0 // _SOLAR__PRIVATE
     ErrCode                  Execute( SvStringsDtor*& rpURLList,
                                       SfxItemSet *&   rpSet,
                                       String&         rFilter,
                                       const String&   rDirPath );
     ErrCode                  Execute( SfxItemSet *&   rpSet,
                                       String&         rFilter );
-//#endif
 };
 
 #define SFX2_IMPL_DIALOG_CONFIG 0
 #define SFX2_IMPL_DIALOG_SYSTEM 1
 #define SFX2_IMPL_DIALOG_OOO 2
 
-//#if 0 // _SOLAR__PRIVATE
 ErrCode FileOpenDialog_Impl( sal_Int64 nFlags,
                              const String& rFact,
                              SvStringsDtor *& rpURLList,
@@ -315,7 +309,6 @@ ErrCode FileOpenDialog_Impl( sal_Int64 nFlags,
                              sal_Int16 nDialog = SFX2_IMPL_DIALOG_CONFIG,
                              const String& rStandardDir = String::CreateFromAscii( "" ),
                              const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList = ::com::sun::star::uno::Sequence< ::rtl::OUString >());
-//#endif
 }
 
 //-----------------------------------------------------------------------------

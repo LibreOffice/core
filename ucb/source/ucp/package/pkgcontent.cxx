@@ -234,13 +234,7 @@ Content* Content::create(
 
     uno::Reference< container::XHierarchicalNameAccess > xPackage;
 
-#if 0
-    // Fail, if content does exist.
-    if ( hasData( pProvider, aURI, xPackage ) )
-        return 0;
-#else
     xPackage = pProvider->createPackage( aURI.getPackage(), aURI.getParam() );
-#endif
 
     uno::Reference< ucb::XContentIdentifier > xId
         = new ::ucbhelper::ContentIdentifier( rxSMgr, aURI.getUri() );

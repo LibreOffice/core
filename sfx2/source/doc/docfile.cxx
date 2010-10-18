@@ -2774,18 +2774,6 @@ void SfxMedium::CloseStreams_Impl()
 
 void SfxMedium::RefreshName_Impl()
 {
-#if 0   //(dv)
-    if ( pImp->aContent.get().is() )
-    {
-        String aNameP = pImp->xAnchor->GetViewURL();
-        pImp->aOrigURL = aNameP;
-        aLogicName = aNameP;
-        DELETEZ( pURLObj );
-        if (aLogicName.Len())
-            aLogicName = GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
-        SetIsRemote_Impl();
-    }
-#endif  //(dv)
 }
 
 void SfxMedium::SetIsRemote_Impl()

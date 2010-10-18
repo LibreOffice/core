@@ -109,7 +109,6 @@ private:
     Size                aColorSize;
     Size                aItemSize;
 
-//#if 0 // _SOLAR__PRIVATE
     void                FillValueSet();
     void                SetSize();
                         DECL_LINK( SelectHdl, void * );
@@ -119,7 +118,6 @@ private:
         the keyboard.
     */
     virtual void GetFocus (void);
-//#endif
 
 protected:
     virtual BOOL    Close();

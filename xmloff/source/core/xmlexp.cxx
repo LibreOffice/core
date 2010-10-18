@@ -1248,19 +1248,6 @@ void SvXMLExport::ImplExportAutoStyles( sal_Bool )
         SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE,
                                   XML_AUTOMATIC_STYLES, sal_True, sal_True );
 
-#if 0
-        AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
-        AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, XML_STYLES_HREF );
-        AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
-        AddAttribute( XML_NAMESPACE_XLINK, XML_ROLE,
-                         pNamespaceMap->GetQNameByKey( XML_NAMESPACE_OFFICE,
-                                               GetXMLToken(XML_STYLESHEET)) );
-        {
-            // <style:use-styles>
-            SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE,
-                                      XML_USE_STYLES, sal_True, sal_True );
-        }
-#endif
         _ExportAutoStyles();
     }
 }
@@ -1275,19 +1262,6 @@ void SvXMLExport::ImplExportMasterStyles( sal_Bool )
         _ExportMasterStyles();
     }
 
-#if 0
-    AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
-    AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, XML_AUTO_STYLES_HREF );
-    AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
-    AddAttribute( XML_NAMESPACE_XLINK, XML_ROLE,
-                  pNamespaceMap->GetQNameByKey( XML_NAMESPACE_OFFICE,
-                                                GetXMLToken(XML_STYLESHEET) ) );
-    {
-        // <style:use-styles>
-        SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE,
-                                  XML_USE_STYLES, sal_True, sal_True );
-    }
-#endif
 }
 
 void SvXMLExport::ImplExportContent()

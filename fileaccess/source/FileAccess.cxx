@@ -282,42 +282,7 @@ void OFileAccess::transferImpl( const rtl::OUString& rSource,
 
         // #i29648#
         //
-#if 0
-        // Note: A hierachical UCB content implements interface XChild, which
-        // has a method getParent(). Unfortunately this does not always help
-        // here, because it is not guaranteed that a content object for a
-        // non-existing resource can be created. Thus, it will happen that an
-        // exception is thrown when trying to create a UCB content for the
-        // destination URL.
 
-        try
-        {
-            ucbhelper::Content aFullDest(
-                aDestObj.GetMainURL(
-                    INetURLObject::NO_DECODE ), mxEnvironment );
-
-            Reference< XChild > xChild( aFullDest.get(), UNO_QUERY_THROW );
-            Reference< com::sun::star::ucb::XContent >
-                xParent( xChild->getParent(), UNO_QUERY_THROW );
-            ucbhelper::Content aParent( xParent, mxEnvironment );
-
-            aDestURL = aParent.getURL();
-
-            rtl::OUString aNameTmp;
-            aFullDest.getPropertyValue(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ) )
-                    >>= aNameTmp;
-            aName = aNameTmp;
-        }
-        catch ( Exception const & )
-        {
-            throw RuntimeException(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                   "OFileAccess::transferrImpl - Unable to "
-                                   "obtain destination folder URL!" ) ),
-                static_cast< cppu::OWeakObject * >( this ) );
-        }
-#else
         if ( aDestObj.GetProtocol() == INET_PROT_VND_SUN_STAR_EXPAND )
         {
             // Hack: Expand destination URL using Macro Expander and try again
@@ -368,7 +333,7 @@ void OFileAccess::transferImpl( const rtl::OUString& rSource,
                     "OFileAccess::transferrImpl - Unable to obtain "
                     "destination folder URL!" ) ),
                 static_cast< cppu::OWeakObject * >( this ) );
-#endif
+
     }
 
     ucbhelper::Content aDestPath( aDestURL,   mxEnvironment );

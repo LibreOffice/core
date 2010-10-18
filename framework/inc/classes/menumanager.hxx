@@ -82,14 +82,6 @@ class MenuManager : public ThreadHelpBase           ,
             Menu* pMenu,
             sal_Bool bDelete,
             sal_Bool bDeleteChildren );
-#if 0
-        MenuManager(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
-            REFERENCE< XFRAME >& rFrame,
-            AddonMenu*          pAddonMenu,
-            sal_Bool            bDelete,
-            sal_Bool            bDeleteChildren );
-#endif
 
         virtual ~MenuManager();
 

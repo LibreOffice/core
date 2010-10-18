@@ -140,7 +140,6 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 };
 
-//#if 0 // _SOLAR__PRIVATE
 
 /*************************************************************************
 |*
@@ -186,8 +185,6 @@ public:
 
     virtual         ~GraphCtrlView() {};
 };
-
-//#endif // __PRIVATE
 
 #endif // _GRAPHCTL_HXX
 

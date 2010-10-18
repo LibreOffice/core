@@ -1605,9 +1605,6 @@ void SvxNumberFormatShell::GetCurrencySymbols( SvStringsDtor& rList, sal_Bool bF
         aStr += ApplyLreOrRleEmbedding( pLanguageTable->GetString( rCurrencyTable[i]->GetLanguage()));
 
         pStr = new XubString(aStr);
-#if 0
-        fprintf( stderr, "currency entry: %s\n", ByteString( *pStr, RTL_TEXTENCODING_UTF8).GetBuffer());
-#endif
         for(j=nStart;j<rList.Count();j++)
         {
             const StringPtr pTestStr=rList[j];

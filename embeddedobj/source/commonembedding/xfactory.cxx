@@ -130,18 +130,6 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
         }
         xSubStorage = uno::Reference< embed::XStorage >();
 
-#if 0
-        ::rtl::OUString aDocServiceName = m_aConfigHelper.GetDocumentServiceFromMediaType( aMediaType );
-        if ( !aDocServiceName.getLength() )
-        {
-            // only own document can be based on storage
-            // in case it is not possible to find related
-            // document service name the storage entry is invalid
-
-            throw io::IOException(); // unexpected mimetype of the storage
-        }
-#endif
-
         uno::Sequence< beans::NamedValue > aObject = m_aConfigHelper.GetObjectPropsByMediaType( aMediaType );
         if ( !aObject.getLength() )
             throw io::IOException(); // unexpected mimetype of the storage
@@ -150,11 +138,6 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
                     static_cast< ::cppu::OWeakObject* > ( new OCommonEmbeddedObject(
                                                 m_xFactory,
                                                 aObject ) ),
-#if 0
-                                                GetClassIDFromServName( aDocServiceName ),
-                                                GetClassNameFromServName( aDocServiceName ),
-                                                aDocServiceName ) ),
-#endif
                     uno::UNO_QUERY );
     }
     else

@@ -57,9 +57,7 @@ class SfxHintPoster: public SvRefBase
 
 private:
     void            RegisterEvent();
-//#if 0 // _SOLAR__PRIVATE
                     DECL_LINK( DoEvent_Impl, SfxHint * );
-//#endif
 
 protected:
     virtual         ~SfxHintPoster();

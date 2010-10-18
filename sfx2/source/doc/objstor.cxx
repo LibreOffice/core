@@ -807,62 +807,6 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
 
         if (bReconnectDde)
             ReconnectDdeLinks(*this);
-
-#if 0
-        if ( pMedium->HasStorage_Impl() )
-        {
-            uno::Reference< XInteractionHandler > xHandler( pMedium->GetInteractionHandler() );
-            if ( xHandler.is() && !SFX_APP()->Get_Impl()->bODFVersionWarningLater )
-            {
-                uno::Reference<beans::XPropertySet> xStorageProps( pMedium->GetStorage(), uno::UNO_QUERY_THROW );
-                ::rtl::OUString sVersion;
-                try
-                {
-                    xStorageProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Version" ) ) ) >>= sVersion;
-                }
-                catch( const uno::Exception& )
-                {
-                    // Custom Property "ODFVersion" does not exist
-                }
-
-                if ( sVersion.getLength() )
-                {
-                    double nVersion = sVersion.toDouble();
-                    if ( nVersion > 1.20001  && SfxObjectShell_Impl::NeedsOfficeUpdateDialog() )
-                        // ODF version greater than 1.2 - added some decimal places to be safe against floating point conversion errors (hack)
-                    {
-                        ::rtl::OUString sDocumentURL( pMedium->GetOrigURL() );
-                        ::rtl::OUString aSystemFileURL;
-                        if ( osl::FileBase::getSystemPathFromFileURL( sDocumentURL, aSystemFileURL ) == osl::FileBase::E_None )
-                            sDocumentURL = aSystemFileURL;
-
-                        FutureDocumentVersionProductUpdateRequest aUpdateRequest;
-                        aUpdateRequest.Classification = InteractionClassification_QUERY;
-                        aUpdateRequest.DocumentURL = sDocumentURL;
-
-                        ::rtl::Reference< ::comphelper::OInteractionRequest > pRequest = new ::comphelper::OInteractionRequest( makeAny( aUpdateRequest ) );
-                        pRequest->addContinuation( new ::comphelper::OInteractionApprove );
-                        pRequest->addContinuation( new ::comphelper::OInteractionAbort );
-
-                        typedef ::comphelper::OInteraction< XInteractionAskLater > OInteractionAskLater;
-                        OInteractionAskLater* pLater = new OInteractionAskLater;
-                        pRequest->addContinuation( pLater );
-
-                        try
-                        {
-                            xHandler->handle( pRequest.get() );
-                        }
-                        catch( const Exception& )
-                        {
-                            DBG_UNHANDLED_EXCEPTION();
-                        }
-                        if ( pLater->wasSelected() )
-                            SFX_APP()->Get_Impl()->bODFVersionWarningLater = true;
-                    }
-                }
-            }
-        }
-#endif
     }
     else
         GetpApp()->HideStatusText();

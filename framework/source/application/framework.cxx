@@ -219,28 +219,6 @@ void FrameWork::Main()
         // c) Initialize connection to possible PlugIn dll.
 
 // OPipeConnection removed, connection to plugin now uses acceptor service
-#if 0
-        if ( m_bUsePlugIn == sal_True )
-        {
-            Reference< XConnection >    xConnection         = new OPipeConnection( xGlobalServiceManager );
-            Reference< XBridgeFactory > xBridgeFactory      ( xGlobalServiceManager->createInstance( SERVICENAME_BRIDGEFACTORY  ), UNO_QUERY );
-            if  (
-                    ( xConnection.is()          == sal_True )   &&
-                    ( xBridgeFactory.is()       == sal_True )
-                )
-            {
-                Reference< XBridge > xBridge = xBridgeFactory->createBridge(    NAME_PLUGINBRIDGE                               ,
-                                                                                PROTOCOL_PLUGINBRIDGE                           ,
-                                                                                xConnection                                     ,
-                                                                                new OInstanceProvider( xGlobalServiceManager )  );
-            }
-            else
-            {
-                // Error handling ... !?
-                LOG_ASSERT( sal_False, "FrameWork::Main()\nNo connection to plugin. Initialization of bridge failed.\n" )
-            }
-        }
-#endif
         //---------------------------------------------------------------------------------------------------------
         // d) Initialize new task with a HTML-URL in it.
 

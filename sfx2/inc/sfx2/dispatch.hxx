@@ -234,7 +234,6 @@ public:
     void                SetDisableFlags( sal_uInt32 nFlags );
     sal_uInt32              GetDisableFlags() const;
 
-//#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE BOOL HasSlot_Impl( USHORT );
     SAL_DLLPRIVATE void SetMenu_Impl();
     SAL_DLLPRIVATE long Update_Impl( BOOL bForce = FALSE ); // ObjectBars etc.
@@ -258,7 +257,6 @@ public:
     SAL_DLLPRIVATE void DoDeactivate_Impl( BOOL bMDI, SfxViewFrame* pNew );
     SAL_DLLPRIVATE void InvalidateBindings_Impl(BOOL);
     SAL_DLLPRIVATE USHORT GetNextToolBox_Impl( USHORT nPos, USHORT nType, String *pStr );
-//#endif
 };
 
 //--------------------------------------------------------------------

@@ -261,9 +261,7 @@ private:
     virtual ~Thread();
 
     virtual void execute();
-#if 0
-    void handleGeneralError(css::uno::Any const & exception) const;
-#endif
+
     void handleSpecificError(
         css::uno::Reference< css::deployment::XPackage > const & package,
         css::uno::Any const & exception) const;
@@ -452,21 +450,7 @@ void UpdateDialog::Thread::execute()
         m_dialog.checkingDone();
     }
 }
-#if 0
-void UpdateDialog::Thread::handleGeneralError(css::uno::Any const & exception)
-    const
-{
-    rtl::OUString message;
-    css::uno::Exception e;
-    if (exception >>= e) {
-        message = e.Message;
-    }
-    vos::OGuard g(Application::GetSolarMutex());
-    if (!m_stop) {
-        m_dialog.addGeneralError(message);
-    }
-}
-#endif
+
 //Parameter package can be null
 void UpdateDialog::Thread::handleSpecificError(
     css::uno::Reference< css::deployment::XPackage > const & package,
@@ -772,18 +756,7 @@ void UpdateDialog::addDisabledUpdate(UpdateDialog::DisabledUpdate const & data)
         SvLBoxButtonKind_disabledCheckbox);
         // position overflow is rather harmless
 }
-#if 0
-void UpdateDialog::addGeneralError(rtl::OUString const & message) {
-    std::vector< rtl::OUString >::size_type n = m_generalErrors.size();
-    m_generalErrors.push_back(message);
-    addAdditional(
-        m_error,
-        sal::static_int_cast< USHORT >(
-            m_enabledUpdates.size() + m_disabledUpdates.size() + n),
-        UpdateDialog::Index::newGeneralError(n), SvLBoxButtonKind_staticImage);
-        // position overflow is rather harmless
-}
-#endif
+
 void UpdateDialog::addSpecificError(UpdateDialog::SpecificError const & data) {
     std::vector< UpdateDialog::SpecificError >::size_type n =
         m_specificErrors.size();
@@ -1245,15 +1218,6 @@ IMPL_LINK(UpdateDialog, okHandler, void *, EMPTYARG)
         //If the user has no write access to the shared folder then the update
         //for a shared extension is disable, that is it cannot be in m_enabledUpdates
 //        OSL_ASSERT(isReadOnly(i->aInstalledPackage) == sal_False);
-#if 0
-        // TODO: check!
-        OSL_ASSERT(m_extensionManagerDialog.get());
-        if (RET_CANCEL == m_extensionManagerDialog->continueUpdateForSharedExtension(
-            this, i->aPackageManager))
-        {
-            EndDialog(RET_CANCEL);
-        }
-#endif
     }
 
 

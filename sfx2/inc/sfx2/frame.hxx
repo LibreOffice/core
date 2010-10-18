@@ -183,7 +183,6 @@ public:
 
     sal_Bool            IsInPlace() const;
 
-//#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE sal_Bool DoClose_Impl();
     SAL_DLLPRIVATE void SetFrameInterface_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
     SAL_DLLPRIVATE void ReleasingComponent_Impl( sal_Bool bSet );
@@ -225,7 +224,6 @@ public:
     SAL_DLLPRIVATE SystemWindow* GetTopWindow_Impl() const;
     SAL_DLLPRIVATE void PositionWindow_Impl( const Rectangle& rWinArea ) const;
     SAL_DLLPRIVATE bool IsMarkedHidden_Impl() const;
-//#endif
 private:
     SAL_DLLPRIVATE void Construct_Impl();
 };
@@ -237,9 +235,7 @@ class SfxFrameIterator
     const SfxFrame*         pFrame;
     sal_Bool                bRecursive;
 
-//#if 0 // _SOLAR__PRIVATE
     SfxFrame*               NextSibling_Impl( SfxFrame& rPrev );
-//#endif
 
 public:
                             SfxFrameIterator( const SfxFrame& rFrame, sal_Bool bRecursive=sal_True );

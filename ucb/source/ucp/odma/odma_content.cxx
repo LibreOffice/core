@@ -124,10 +124,6 @@ uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
     uno::Any aRet;
 
     // @@@ Add support for additional interfaces.
-#if 0
-      aRet = cppu::queryInterface( rType,
-                                 static_cast< yyy::Xxxxxxxxx * >( this ) );
-#endif
 
      return aRet.hasValue() ? aRet : ContentImplHelper::queryInterface( rType );
 }
@@ -944,59 +940,6 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
     return aRet;
 }
-
-#if 0
-//=========================================================================
-void Content::queryChildren( ContentRefList& rChildren )
-{
-    // @@@ Adapt method to your URL scheme...
-
-    // Obtain a list with a snapshot of all currently instanciated contents
-    // from provider and extract the contents which are direct children
-    // of this content.
-
-    ::ucbhelper::ContentRefList aAllContents;
-    m_xProvider->queryExistingContents( aAllContents );
-
-    OUString aURL = m_xIdentifier->getContentIdentifier();
-    sal_Int32 nPos = aURL.lastIndexOf( '/' );
-
-    if ( nPos != ( aURL.getLength() - 1 ) )
-    {
-        // No trailing slash found. Append.
-        aURL += OUString::createFromAscii( "/" );
-    }
-
-    sal_Int32 nLen = aURL.getLength();
-
-    ::ucbhelper::ContentRefList::const_iterator it  = aAllContents.begin();
-    ::ucbhelper::ContentRefList::const_iterator end = aAllContents.end();
-
-    while ( it != end )
-    {
-        ::ucbhelper::ContentImplHelperRef xChild = (*it);
-        OUString aChildURL = xChild->getIdentifier()->getContentIdentifier();
-
-        // Is aURL a prefix of aChildURL?
-        if ( ( aChildURL.getLength() > nLen ) &&
-             ( aChildURL.compareTo( aURL, nLen ) == 0 ) )
-        {
-            sal_Int32 nPos = nLen;
-            nPos = aChildURL.indexOf( '/', nPos );
-
-            if ( ( nPos == -1 ) ||
-                 ( nPos == ( aChildURL.getLength() - 1 ) ) )
-            {
-                // No further slashes / only a final slash. It's a child!
-                rChildren.push_back(
-                    ContentRef(
-                        static_cast< Content * >( xChild.get() ) ) );
-            }
-        }
-        ++it;
-    }
-}
-#endif
 //=========================================================================
 void Content::insert(
         const uno::Reference< io::XInputStream > & xInputStream,
@@ -1062,34 +1005,6 @@ void Content::insert(
     aGuard.clear();
     inserted();
 }
-#if 0
-//=========================================================================
-void Content::destroy( sal_Bool bDeletePhysical )
-    throw( uno::Exception )
-{
-    // @@@ take care about bDeletePhysical -> trashcan support
-
-    uno::Reference< ucb::XContent > xThis = this;
-
-    deleted();
-
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
-
-    // Process instanciated children...
-
-    ContentRefList aChildren;
-    queryChildren( aChildren );
-
-    ContentRefList::const_iterator it  = aChildren.begin();
-    ContentRefList::const_iterator end = aChildren.end();
-
-    while ( it != end )
-    {
-        (*it)->destroy( bDeletePhysical );
-        ++it;
-    }
-}
-#endif
 
 // -----------------------------------------------------------------------------
 ::rtl::OUString Content::openDoc()

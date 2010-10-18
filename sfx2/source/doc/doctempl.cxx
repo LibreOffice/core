@@ -932,21 +932,6 @@ sal_Bool SfxDocumentTemplates::CopyOrMove
     {
         DBG_ERRORFILE( "Don't know, what to do!" );
         return sal_False;
-#if 0
-    // Verschieben einer Vorlage innerhalb eines Bereiches
-    // --> nur Verwaltungsdaten aktualisieren
-    if ( bMove && nTargetRegion == nSourceRegion )
-    {
-        if(nTargetIdx == USHRT_MAX)
-            nTargetIdx = 0;
-        const SfxTemplateDirEntryPtr pEntry = rTargetDir[nSourceIdx];
-        rTargetDir.Insert(pEntry, nTargetIdx);
-        if(nTargetIdx < nSourceIdx)
-            ++nSourceIdx;
-        rTargetDir.Remove(nSourceIdx);
-        return SaveDir(rTargetDir);
-    }
-#endif
     }
 
     RegionData_Impl *pSourceRgn = pImp->GetRegion( nSourceRegion );

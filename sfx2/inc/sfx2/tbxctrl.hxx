@@ -127,10 +127,7 @@ private:
 
     SAL_DLLPRIVATE SfxPopupWindow(SfxPopupWindow &); // not defined
     SAL_DLLPRIVATE void operator =(SfxPopupWindow &); // not defined
-
-//#if 0 // _SOLAR__PRIVATE
     DECL_DLLPRIVATE_LINK( Delete, void * );
-//#endif
 
 protected:
     virtual void            PopupModeEnd();
@@ -316,7 +313,6 @@ public:
 
 //=========================================================================
 
-//#if 0 // _SOLAR__PRIVATE
 
 class SfxDragButton_Impl : public FixedImage
 {
@@ -440,7 +436,5 @@ public:
 
                             void RefreshMenuImages( Menu* pMenu );
 };
-
-//#endif
 
 #endif

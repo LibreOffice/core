@@ -149,26 +149,6 @@ void SfxSlotPool::RegisterInterface( SfxInterface& rInterface )
             else
                 _pGroups->Append(pDef->GetGroupId());
         }
-#if 0
-        const TypeId &rTypeId = pDef->GetType()->Type();
-        if ( /*rTypeId != TYPE(SfxVoidItem) &&*/ rTypeId != 0 )
-        {
-            USHORT nPos;
-            for ( nPos = 0; nPos < _pTypes->Count(); ++nPos )
-            {
-                if ( _pTypes->GetObject(nPos)->nId == pDef->GetSlotId() )
-                {
-                    DBG_ASSERT( rTypeId == _pTypes->GetObject(nPos)->nType,
-                                "same slot id with unequal item types" );
-                }
-                else if ( _pTypes->GetObject(nPos)->nId > pDef->GetSlotId() )
-                    break;
-            }
-            if ( nPos >= _pTypes->Count() ||
-                 _pTypes->GetObject(nPos)->nId > pDef->GetSlotId() )
-                _pTypes->Append( new SfxSlotType_Impl( pDef->GetSlotId(), rTypeId ) );
-        }
-#endif
     }
 }
 

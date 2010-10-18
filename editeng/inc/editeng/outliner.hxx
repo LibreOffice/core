@@ -395,11 +395,7 @@ bool EDITENG_DLLPUBLIC  GetStatusValueForThesaurusFromContext( String &rStatusVa
 void EDITENG_DLLPUBLIC  ReplaceTextWithSynonym( EditView &rEditView, const String &rSynonmText );
 
 
-//#if 0 // _SOLAR__PRIVATE
 DECLARE_LIST(ViewList,OutlinerView*)
-//#else
-//typedef List ViewList;
-//#endif
 
 class EDITENG_DLLPUBLIC DrawPortionInfo
 {

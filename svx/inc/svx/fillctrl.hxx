@@ -91,11 +91,9 @@ private:
     Size            aLogicalAttrSize;
     Timer           aDelayTimer;
 
-//#if 0 // _SOLAR__PRIVATE
     DECL_LINK( DelayHdl, Timer * );
     DECL_LINK( SelectFillTypeHdl, ListBox * );
     DECL_LINK( SelectFillAttrHdl, ListBox * );
-//#endif
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 public:
     FillControl( Window* pParent, WinBits nStyle = 0 );

@@ -85,11 +85,9 @@ public:
 
     static SfxItemState GetItemState( const SfxPoolItem* pState );
 
-//#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE BOOL IsBindable_Impl() const
                         { return pBindings != NULL; }
     SAL_DLLPRIVATE void BindInternal_Impl( USHORT nNewId, SfxBindings* );
-//#endif
 };
 
 //====================================================================

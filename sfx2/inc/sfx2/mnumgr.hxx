@@ -87,9 +87,7 @@ public:
     ResMgr*                 GetResMgr() const { return pResMgr; }
     void                    SetPopupMenu( USHORT nId, PopupMenu *pMenu );
 
-//#if 0 // _SOLAR__PRIVATE
     void            Construct_Impl( Menu* pMenu, BOOL bWithHelp );
-//#endif
 };
 
 //--------------------------------------------------------------------

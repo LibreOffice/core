@@ -165,21 +165,9 @@ void SAL_CALL HierarchyContentProvider::initialize(
                                 const uno::Sequence< uno::Any >& aArguments )
     throw( uno::Exception, uno::RuntimeException )
 {
-#if 0
-    if ( aArguments.getLength() > 0 )
-    {
-         // Extract config provider from service init args.
-         aArguments[ 0 ] >>= m_xConfigProvider;
-
-        OSL_ENSURE( m_xConfigProvider.is(),
-                    "HierarchyContentProvider::initialize - "
-                    "No config provider!" );
-    }
-#else
     if ( aArguments.getLength() > 0 )
         OSL_ENSURE( false,
                     "HierarchyContentProvider::initialize : not supported!" );
-#endif
 }
 
 //=========================================================================

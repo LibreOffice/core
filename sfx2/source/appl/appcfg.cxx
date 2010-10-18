@@ -826,17 +826,6 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     // INet Session neu aufsetzen
     if ( bResetSession )
     {
-        // no more sj2
-        #if 0
-        try
-        {
-            SjApplet2::settingsChanged();
-        }
-        catch ( ... )
-        {
-            DBG_ERRORFILE( "SjApplet2::settingsChanged() throws an exception" );
-        }
-        #endif
     }
 
     // geaenderte Daten speichern

@@ -36,29 +36,6 @@ namespace layout
 
 using namespace ::com::sun::star;
 
-#if 0
-SfxTabDialog::SfxTabDialog (::Window *parent, char const* xml_file, char const* id, ResId const& res_id, SfxItemSet const* set)
-    : ::SfxTabDialog (parent, res_id, set)
-    , InPlug (parent, xml_file, id)
-{
-}
-
-::Window* SfxTabDialog::GetParent () const
-{
-    return Window::GetParent ();
-}
-
-::Window* SfxTabDialog::GetWindow () const
-{
-    return Window::GetParent ();
-}
-
-void SfxTabDialog::FreeResource ()
-{
-    //::Window::FreeResource ();
-}
-#endif
-
 SfxTabPage::SfxTabPage (::Window *parent, char const* xml_file, char const* id, SfxItemSet const* set)
     : ::SfxTabPage (parent, 0, *set)
     , InPlug (parent, xml_file, id)

@@ -99,7 +99,6 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
     BOOL bValid;
     BOOL bListening;
     BOOL bActive;
-//#if 0 // _SOLAR__PRIVATE
     void StartListening_Impl();
     long GetCorrectedDragPos( BOOL bLeft = TRUE, BOOL bRight = TRUE );
     void DrawLine_Impl(long &lTabPos, int, BOOL Hori=TRUE);
@@ -194,7 +193,6 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
 
     USHORT GetNextVisible(USHORT nColumn);
     USHORT GetPrevVisible(USHORT nColumn);
-//#endif
 
     void Update();
 

@@ -119,11 +119,6 @@ class SalGtkFolderPicker :
     private:
         // to instanciate own services
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceMgr;
-
-#if 0
-    public:
-         virtual ~SalGtkFolderPicker();
-#endif
 };
 
 #endif // _SALGTKFOLDERPICKER_HXX_

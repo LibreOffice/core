@@ -67,11 +67,7 @@ int main( int argc, char* argv[])
     DosSetExtLIBPATH( (PCSZ)szLibpath, BEGIN_LIBPATH);
     // make sure we load DLL from our path only, so multiple instances/versions
     // can be loaded.
-#if 0
-    // YD this feature is not compatible with innowin b20,
-    // java cannot load with this flag enabled
-    DosSetExtLIBPATH( (PCSZ)"T", LIBPATHSTRICT);
-#endif
+
 
     // adjust exe name
     _splitpath( szApplicationName, szDrive, szDir, szFileName, szExt );

@@ -55,7 +55,6 @@ class _SfxMacroTabPage_Impl;
 class SFX2_DLLPUBLIC _SfxMacroTabPage : public SfxTabPage
 {
     SvxMacroTableDtor           aTbl;
-//#if 0 // _SOLAR__PRIVATE
     DECL_DLLPRIVATE_STATIC_LINK( _SfxMacroTabPage, SelectEvent_Impl, SvTabListBox * );
     DECL_DLLPRIVATE_STATIC_LINK( _SfxMacroTabPage, SelectGroup_Impl, ListBox * );
     DECL_DLLPRIVATE_STATIC_LINK( _SfxMacroTabPage, SelectMacro_Impl, ListBox * );
@@ -66,7 +65,6 @@ class SFX2_DLLPUBLIC _SfxMacroTabPage : public SfxTabPage
     DECL_DLLPRIVATE_STATIC_LINK( _SfxMacroTabPage, ChangeScriptHdl_Impl, RadioButton * );
     DECL_DLLPRIVATE_STATIC_LINK( _SfxMacroTabPage, GetFocus_Impl, Edit* );
     DECL_DLLPRIVATE_STATIC_LINK( _SfxMacroTabPage, TimeOut_Impl, Timer* );
-//#endif
 protected:
     _SfxMacroTabPage_Impl*      mpImpl;
 

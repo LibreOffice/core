@@ -52,9 +52,7 @@
 //  include something else
 //________________________________________________________________________________________________________________
 
-//#if 0 // _SOLAR__PRIVATE
 #include <vcl/timer.hxx>
-//#endif
 #include <svl/poolitem.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/bitmap.hxx>
@@ -223,15 +221,10 @@ private:
                                 bIsTmp :1;          // temp. Storage
 
 private:
-//#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE void UpdateTime_Impl(const ::com::sun::star::uno::Reference<
         ::com::sun::star::document::XDocumentProperties> & i_xDocProps);
 
     SAL_DLLPRIVATE sal_Bool SaveTo_Impl(SfxMedium &rMedium, const SfxItemSet* pSet );
-
-//REMOVE        sal_Bool                    SaveInfoAndConfig_Impl( SvStorageRef pNewStg );
-
-//#endif
 
 protected:
                                 SfxObjectShell(SfxObjectCreateMode);
@@ -314,10 +307,8 @@ public:
     void                        SetSharedXMLFlag( sal_Bool bFlag ) const;
     sal_Bool                    HasSharedXMLFlagSet() const;
 
-//#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE void SetModalMode_Impl(sal_Bool bModal=sal_True);
     SAL_DLLPRIVATE void SetMacroMode_Impl(sal_Bool bModal=sal_True);
-//#endif
 
     void                        ResetError();
     sal_uInt32                  GetError() const;
@@ -725,8 +716,6 @@ public:
 
     // =================================
 
-//#if 0 // _SOLAR__PRIVATE
-
     SAL_DLLPRIVATE ::boost::shared_ptr<GDIMetaFile> CreatePreviewMetaFile_Impl( sal_Bool bFullContent, sal_Bool bHighContrast ) const;
 
     SAL_DLLPRIVATE sal_Bool IsOwnStorageFormat_Impl(const SfxMedium &) const;
@@ -827,8 +816,6 @@ public:
     0x9eaba5c3, 0xb232, 0x4309, \
     0x84, 0x5f, 0x5f, 0x15, 0xea, 0x50, 0xd0, 0x74
 
-//#if 0 // _SOLAR__PRIVATE
-
     struct ModifyBlocker_Impl
     {
         SfxObjectShell* pPersist;
@@ -845,7 +832,7 @@ public:
                 pPersist->EnableSetModified( bWasEnabled );
         }
     };
-//#endif
+
 
 //--------------------------------------------------------------------
 
@@ -858,8 +845,6 @@ SV_IMPL_LOCK(SfxObjectShell)
 SV_IMPL_REF(SfxObjectShell)
 
 SfxObjectShellRef MakeObjectShellForOrganizer_Impl( const String& rName, BOOL bWriting );
-
-//#if 0 // _SOLAR__PRIVATE
 //--------------------------------------------------------------------
 class AutoReloadTimer_Impl : public Timer
 {
@@ -872,7 +857,6 @@ public:
                           SfxObjectShell* pSh );
     virtual void Timeout();
 };
-//#endif
 
 //-------------------------------------------------------------------------
 

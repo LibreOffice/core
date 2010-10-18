@@ -49,10 +49,8 @@ private:
     QueryBox                aQueryOverwriteBox;
     SfxStyleSheetBasePool&  rPool;
 
-//#if 0 // _SOLAR__PRIVATE
     DECL_DLLPRIVATE_LINK( OKHdl, Control * );
     DECL_DLLPRIVATE_LINK( ModifyHdl, ComboBox * );
-//#endif
 
 public:
     SfxNewStyleDlg( Window* pParent, SfxStyleSheetBasePool& );

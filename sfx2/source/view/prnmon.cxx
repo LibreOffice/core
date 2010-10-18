@@ -269,13 +269,6 @@ SfxPrintProgress::SfxPrintProgress( SfxViewShell* pViewSh, bool bShow )
                  String(SfxResId(STR_PRINTING)), 1, FALSE ),
     pImp( new SfxPrintProgress_Impl( pViewSh, pViewSh->GetPrinter() ) )
 {
-    #if 0
-    pImp->pPrinter->SetEndPrintHdl( LINK( this, SfxPrintProgress, EndPrintNotify ) );
-    pImp->pPrinter->SetErrorHdl( LINK( this, SfxPrintProgress, PrintErrorNotify ) );
-    pImp->pPrinter->SetStartPrintHdl( LINK( this, SfxPrintProgress, StartPrintNotify ) );
-    pImp->bCallbacks = TRUE;
-    #endif
-
     SfxObjectShell* pDoc = pViewSh->GetObjectShell();
     SFX_ITEMSET_ARG( pDoc->GetMedium()->GetItemSet(), pItem, SfxBoolItem, SID_HIDDEN, FALSE );
     if ( pItem && pItem->GetValue() )

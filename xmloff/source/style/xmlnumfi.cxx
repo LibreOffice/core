@@ -1123,25 +1123,16 @@ void SvXMLNumFmtElementContext::EndElement()
 
         case XML_TOK_STYLE_DAY:
             rParent.UpdateCalendar( sCalendar );
-#if 0
 //! I18N doesn't provide SYSTEM or extended date information yet
-            if ( rParent.IsFromSystem() )
-                bEffLong = SvXMLNumFmtDefaults::IsSystemLongDay( rParent.GetInternational(), bLong );
-#endif
+
             rParent.AddNfKeyword(
                 sal::static_int_cast< sal_uInt16 >(
                     bEffLong ? NF_KEY_DD : NF_KEY_D ) );
             break;
         case XML_TOK_STYLE_MONTH:
             rParent.UpdateCalendar( sCalendar );
-#if 0
 //! I18N doesn't provide SYSTEM or extended date information yet
-            if ( rParent.IsFromSystem() )
-            {
-                bEffLong = SvXMLNumFmtDefaults::IsSystemLongMonth( rParent.GetInternational(), bLong );
-                bTextual = SvXMLNumFmtDefaults::IsSystemTextualMonth( rParent.GetInternational(), bLong );
-            }
-#endif
+
             rParent.AddNfKeyword(
                 sal::static_int_cast< sal_uInt16 >(
                     bTextual
@@ -1150,11 +1141,7 @@ void SvXMLNumFmtElementContext::EndElement()
             break;
         case XML_TOK_STYLE_YEAR:
             rParent.UpdateCalendar( sCalendar );
-#if 0
 //! I18N doesn't provide SYSTEM or extended date information yet
-            if ( rParent.IsFromSystem() )
-                bEffLong = SvXMLNumFmtDefaults::IsSystemLongYear( rParent.GetInternational(), bLong );
-#endif
             // Y after G (era) is replaced by E
             if ( rParent.HasEra() )
                 rParent.AddNfKeyword(
@@ -1167,11 +1154,7 @@ void SvXMLNumFmtElementContext::EndElement()
             break;
         case XML_TOK_STYLE_ERA:
             rParent.UpdateCalendar( sCalendar );
-#if 0
 //! I18N doesn't provide SYSTEM or extended date information yet
-            if ( rParent.IsFromSystem() )
-                bEffLong = SvXMLNumFmtDefaults::IsSystemLongEra( rParent.GetInternational(), bLong );
-#endif
             rParent.AddNfKeyword(
                 sal::static_int_cast< sal_uInt16 >(
                     bEffLong ? NF_KEY_GGG : NF_KEY_G ) );
@@ -1179,11 +1162,7 @@ void SvXMLNumFmtElementContext::EndElement()
             break;
         case XML_TOK_STYLE_DAY_OF_WEEK:
             rParent.UpdateCalendar( sCalendar );
-#if 0
 //! I18N doesn't provide SYSTEM or extended date information yet
-            if ( rParent.IsFromSystem() )
-                bEffLong = SvXMLNumFmtDefaults::IsSystemLongDayOfWeek( rParent.GetInternational(), bLong );
-#endif
             rParent.AddNfKeyword(
                 sal::static_int_cast< sal_uInt16 >(
                     bEffLong ? NF_KEY_NNNN : NF_KEY_NN ) );
@@ -1740,58 +1719,7 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
         }
     }
 
-#if 0
 //! I18N doesn't provide SYSTEM or extended date information yet
-    if ( nIndex != NUMBERFORMAT_ENTRY_NOT_FOUND && !bFromSystem )
-    {
-        //  instead of automatic date format, use fixed formats if bFromSystem is not set
-        //! prevent use of automatic formats in other cases, force user-defined format?
-
-        sal_uInt32 nNewIndex = nIndex;
-
-        NfIndexTableOffset eOffset = pFormatter->GetIndexTableOffset( nIndex );
-        if ( eOffset == NF_DATE_SYSTEM_SHORT )
-        {
-            const International& rInt = pData->GetInternational( nFormatLang );
-            if ( rInt.IsDateDayLeadingZero() && rInt.IsDateMonthLeadingZero() )
-            {
-                if ( rInt.IsDateCentury() )
-                    nNewIndex = pFormatter->GetFormatIndex( NF_DATE_SYS_DDMMYYYY, nFormatLang );
-                else
-                    nNewIndex = pFormatter->GetFormatIndex( NF_DATE_SYS_DDMMYY, nFormatLang );
-            }
-        }
-        else if ( eOffset == NF_DATE_SYSTEM_LONG )
-        {
-            const International& rInt = pData->GetInternational( nFormatLang );
-            if ( !rInt.IsLongDateDayLeadingZero() )
-            {
-                sal_Bool bCentury = rInt.IsLongDateCentury();
-                MonthFormat eMonth = rInt.GetLongDateMonthFormat();
-                if ( eMonth == MONTH_LONG && bCentury )
-                {
-                    if ( rInt.GetLongDateDayOfWeekFormat() == DAYOFWEEK_LONG )
-                        nNewIndex = pFormatter->GetFormatIndex( NF_DATE_SYS_NNNNDMMMMYYYY, nFormatLang );
-                    else
-                        nNewIndex = pFormatter->GetFormatIndex( NF_DATE_SYS_NNDMMMMYYYY, nFormatLang );
-                }
-                else if ( eMonth == MONTH_SHORT && !bCentury )
-                    nNewIndex = pFormatter->GetFormatIndex( NF_DATE_SYS_NNDMMMYY, nFormatLang );
-            }
-        }
-
-        if ( nNewIndex != nIndex )
-        {
-            //  verify the fixed format really matches the format string
-            //  (not the case with some formats from locale data)
-
-            const SvNumberformat* pFixedFormat = pFormatter->GetEntry( nNewIndex );
-            if ( pFixedFormat && pFixedFormat->GetFormatstring() == String(sFormat) )
-                nIndex = nNewIndex;
-        }
-    }
-#endif
-
     if ( nIndex != NUMBERFORMAT_ENTRY_NOT_FOUND && !bAutoOrder )
     {
         //  use fixed-order formats instead of SYS... if bAutoOrder is false
@@ -1842,17 +1770,6 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
 
     if (!bRemoveAfterUse)
         GetImport().AddNumberStyle( nKey, GetName() );
-
-#if 0
-    ByteString aByte( String(sFormatName), gsl_getSystemTextEncoding() );
-    aByte.Append( " | " );
-    aByte.Append(ByteString( String(sFormat), gsl_getSystemTextEncoding() ));
-    aByte.Append( " | " );
-    aByte.Append(ByteString::CreateFromInt32( nIndex ));
-
-//  DBG_ERROR(aByte.GetBuffer());
-    int xxx=42;
-#endif
 
     return nKey;
 }

@@ -840,22 +840,6 @@ void SfxObjectShell::InitBasicManager_Impl()
 }
 
 //--------------------------------------------------------------------
-#if 0 //(mba)
-SotObjectRef SfxObjectShell::CreateAggObj( const SotFactory* pFact )
-{
-    // SvDispatch?
-    SotFactory* pDispFact = SvDispatch::ClassFactory();
-    if( pFact == pDispFact )
-        return( (SfxShellObject*)GetSbxObject() );
-
-    // sonst unbekannte Aggregation
-    DBG_ERROR("unkekannte Factory");
-    SotObjectRef aSvObjectRef;
-    return aSvObjectRef;
-}
-#endif
-
-//--------------------------------------------------------------------
 
 sal_uInt16 SfxObjectShell::Count()
 {

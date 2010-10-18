@@ -183,13 +183,8 @@ void SvxRTFParser::Continue( int nToken )
     if( SVPAR_PENDING != GetStatus() )
     {
         SetAllAttrOfStk();
-#if 0
     //Regardless of what "color 0" is, word defaults to auto as the default colour.
     //e.g. see #i7713#
-        if( bNewDoc && ((RTFPlainAttrMapIds*)aPlainMap.GetData())->nColor )
-            pAttrPool->SetPoolDefaultItem( SvxColorItem( GetColor( 0 ),
-                        ((RTFPlainAttrMapIds*)aPlainMap.GetData())->nColor ));
-#endif
      }
 }
 
@@ -296,10 +291,7 @@ INSINGLECHAR:
     case RTF_TC:
     case RTF_NEXTFILE:
     case RTF_TEMPLATE:
-#if 0
-    //disabled for #i19718#
-    case RTF_SHPRSLT:   // RTF_SHP fehlt noch !!
-#endif
+    // RTF_SHPRSLT disabled for #i19718#
                             SkipGroup();
                             break;
     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -443,9 +435,6 @@ void SvxRTFParser::ReadStyleTable()
                     if( '{' == GetStackPtr( -1 )->nTokenId )
                     {
                         nToken = SkipToken( -1 );
-#if 0
-                        --_nOpenBrakets;        // korrigieren!!
-#endif
                     }
                 }
                 ReadAttr( nToken, &pStyle->aAttrSet );
@@ -988,12 +977,6 @@ void SvxRTFParser::AttrGroupEnd()   // den akt. Bearbeiten, vom Stack loeschen
             if( ( pOld->pSttNd->GetIdx() < pInsPos->GetNodeIdx() ||
                 ( pOld->pSttNd->GetIdx() == pInsPos->GetNodeIdx() &&
                 pOld->nSttCnt <= pInsPos->GetCntIdx() ))
-#if 0
-//BUG 68555 - dont test for empty paragraph or any range
-                && ( nOldSttNdIdx != pInsPos->GetNodeIdx() ||
-                pOld->nSttCnt != pInsPos->GetCntIdx() ||
-                !pOld->nSttCnt )
-#endif
                 )
             {
                 if( !bCrsrBack )
@@ -1002,25 +985,6 @@ void SvxRTFParser::AttrGroupEnd()   // den akt. Bearbeiten, vom Stack loeschen
                     // Absatz !!
                     if( nOldSttNdIdx == pInsPos->GetNodeIdx() )
                     {
-#if 0
-//BUG 68555 - dont reset pard attrs, if the group not begins not at start of
-//              paragraph
-                        // Bereich innerhalb eines Absatzes:
-                        // alle Absatz-Attribute und StyleNo loeschen
-                        // aber nur wenn mitten drin angefangen wurde
-                        if( pOld->nSttCnt )
-                        {
-                            pOld->nStyleNo = 0;
-                            for( USHORT n = 0; n < aPardMap.Count() &&
-                                                pOld->aAttrSet.Count(); ++n )
-                                if( aPardMap[n] )
-                                    pOld->aAttrSet.ClearItem( aPardMap[n] );
-
-                            if( !pOld->aAttrSet.Count() && !pOld->pChildList &&
-                                !pOld->nStyleNo  )
-                                break;  // auch dieser verlaesst uns jetzt
-                        }
-#endif
                     }
                     else
                     {
@@ -1079,10 +1043,6 @@ void SvxRTFParser::AttrGroupEnd()   // den akt. Bearbeiten, vom Stack loeschen
                 pOld->pEndNd = pInsPos->MakeNodeIdx();
                 pOld->nEndCnt = pInsPos->GetCntIdx();
 
-#if 0
-                if( IsChkStyleAttr() )
-                    _ClearStyleAttr( *pOld );
-#else
                 /*
                 #i21422#
                 If the parent (pAkt) sets something e.g. , and the child (pOld)
@@ -1095,7 +1055,6 @@ void SvxRTFParser::AttrGroupEnd()   // den akt. Bearbeiten, vom Stack loeschen
                 */
                 if (IsChkStyleAttr() && !pAkt)
                     _ClearStyleAttr( *pOld );
-#endif
 
                 if( pAkt )
                 {
@@ -1291,18 +1250,6 @@ void SvxRTFItemStackType::Add( SvxRTFItemStackType* pIns )
     pChildList->Insert( pIns, pChildList->Count() );
 }
 
-#if 0
-//cmc: This is the original. nEndCnt is redundantly assigned to itself, and
-//pEndNd can leak if not equal to pSttNd.
-void SvxRTFItemStackType::SetStartPos( const SvxPosition& rPos )
-{
-    delete pSttNd;
-    pSttNd = rPos.MakeNodeIdx();
-    nSttCnt = rPos.GetCntIdx();
-    pEndNd = pSttNd;
-    nEndCnt = nEndCnt;
-}
-#else
 void SvxRTFItemStackType::SetStartPos( const SvxPosition& rPos )
 {
     if (pSttNd != pEndNd)
@@ -1312,7 +1259,6 @@ void SvxRTFItemStackType::SetStartPos( const SvxPosition& rPos )
     pEndNd = pSttNd;
     nSttCnt = rPos.GetCntIdx();
 }
-#endif
 
 void SvxRTFItemStackType::MoveFullNode(const SvxNodeIdx &rOldNode,
     const SvxNodeIdx &rNewNode)

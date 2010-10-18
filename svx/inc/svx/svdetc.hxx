@@ -144,9 +144,7 @@ class ContainerSorter {
 protected:
     Container& rCont;
 private:
-//#if 0 // _SOLAR__PRIVATE
     void ImpSubSort(long nL, long nR) const;
-//#endif // __PRIVATE
 public:
     ContainerSorter(Container& rNewCont): rCont(rNewCont) {}
     void DoSort(ULONG a=0, ULONG b=0xFFFFFFFF) const;
@@ -166,7 +164,6 @@ virtual
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//#if 0 // _SOLAR__PRIVATE
 #define SDRHDC_SAVEPEN                1 /* Save Linecolor                     */
 #define SDRHDC_SAVEBRUSH              2 /* Save Fillcolorn                    */
 #define SDRHDC_SAVEFONT               4 /* Save Font                          */
@@ -190,7 +187,6 @@ public:
     bool IsSaved() const                 { return pFarbMerk!=NULL || pClipMerk!=NULL || pLineColorMerk!=NULL; }
     void Restore(OutputDevice& rOut, USHORT nMask=SDRHDC_SAVEALL) const;
 };
-//#endif // __PRIVATE
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 

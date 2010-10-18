@@ -77,13 +77,11 @@ struct SfxChildWinInfo
                             bVisible = sal_False;
                             nFlags = 0;
                         }
-//#if 0 // _SOLAR__PRIVATE
     sal_Bool                GetExtraData_Impl( SfxChildAlignment    *pAlign,
                                            SfxChildAlignment    *pLastAlign = 0,
                                            Size                 *pSize = 0,
                                            sal_uInt16               *pLine = 0,
                                            sal_uInt16               *pPos = 0 ) const;
-//#endif
 };
 
 // Factory-Methode eines ChildWindows
@@ -126,16 +124,11 @@ struct SfxChildWinFactory
         , pArr( NULL )
     {}
 
-//#if 0 // _SOLAR__PRIVATE
     ~SfxChildWinFactory()
     {
         delete pArr;
     }
-//#else
-    // Der WIN16-Compiler versucht dort zu "ubersetzen, wo dieser Header
-    // included wird, und kann dann nat"urlich nicht linken, wenn inline ...
-//  ~SfxChildWinFactory();
-//#endif
+
 };
 
 class FloatingWindow;
@@ -240,7 +233,6 @@ public:
     virtual com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >           GetFrame();
     void                SetFrame( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > & );
 
-//#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE static void InitializeChildWinFactory_Impl(sal_uInt16, SfxChildWinInfo&);
     SAL_DLLPRIVATE void SetVisible_Impl( sal_Bool bVis );
     SAL_DLLPRIVATE void SetWorkWindow_Impl( SfxWorkWindow* );
@@ -252,7 +244,6 @@ public:
                         GetContext_Impl() const
                         { return pContext; }
     SAL_DLLPRIVATE void SetFactory_Impl( SfxChildWinFactory* );
-//#endif
 };
 
 //------------------------------------------------------------------

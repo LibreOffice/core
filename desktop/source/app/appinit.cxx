@@ -151,28 +151,7 @@ static bool configureUcb(bool bServer, rtl::OUString const & rPortalConnect)
                 {
                     Reference<XContentProviderManager> xCPM =
                         cb->getContentProviderManagerInterface();
-#if 0
-                    try
-                    {
 
-                        Reference<XContentProviderFactory> xCPF(
-                            xServiceFactory->createInstance(
-                                rtl::OUString::createFromAscii(
-                                    "com.sun.star.ucb.ContentProviderProxyFactory")),
-                            UNO_QUERY);
-                        if(xCPF.is())
-                            xCPM->registerContentProvider(
-                                xCPF->createContentProvider(
-                                    rtl::OUString::createFromAscii(
-                                        "com.sun.star.ucb.GnomeVFSContentProvider"
-                                    )
-                                ),
-                                rtl::OUString::createFromAscii(".*"),
-                                false);
-                    } catch (...)
-                    {
-                    }
-#else
 
             // Workaround for P1 #124597#.  Instanciate GNOME-VFS-UCP in the thread that initialized
              // GNOME in order to avoid a deadlock that may occure in case UCP gets initialized from
@@ -195,7 +174,6 @@ static bool configureUcb(bool bServer, rtl::OUString const & rPortalConnect)
                     {
                     }
                 }
-#endif
             }
         } catch (RuntimeException e) {
         }

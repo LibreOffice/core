@@ -157,9 +157,7 @@ MenuManager::MenuManager(
     m_bShowMenuImages   = rSettings.GetUseImagesInMenus();
 
     sal_Int32 nAddonsURLPrefixLength = ADDONSPOPUPMENU_URL_PREFIX.getLength();
-#if 0
-    ::std::vector< USHORT > aQueryLabelItemIdVector;
-#endif
+
 
     USHORT nItemCount = pMenu->GetItemCount();
     m_aMenuItemHandlerVector.reserve(nItemCount);
@@ -185,10 +183,6 @@ MenuManager::MenuManager(
             {
                 // #110897#
                 // MenuManager* pSubMenuManager = new MenuManager( rFrame, pPopupMenu, bDeleteChildren, bDeleteChildren );
-#if 0
-                if ( pMenu->GetItemText( nItemId ).Len() == 0 )
-                    aQueryLabelItemIdVector.push_back( nItemId );
-#endif
 
                 // Create addon popup menu if there exist elements and this is the tools popup menu
                 if (( nItemId == SID_ADDONLIST ||
@@ -216,10 +210,6 @@ MenuManager::MenuManager(
                         // #110897#
                         // MenuManager* pSubMenuManager = new MenuManager( rFrame, pSubMenu, sal_True, sal_False );
                         AddMenu(pSubMenu,::rtl::OUString(),nItemId,sal_True,sal_False);
-#if 0
-                        if ( pMenu->GetItemText( nItemId ).Len() == 0 )
-                            aQueryLabelItemIdVector.push_back( nItemId );
-#endif
                         // Set image for the addon popup menu item
                         if ( bShowMenuImages && !pPopupMenu->GetItemImage( ITEMID_ADDONLIST ))
                         {
@@ -248,11 +238,6 @@ MenuManager::MenuManager(
                 // #110897#
                 // MenuManager* pSubMenuManager = new MenuManager( rFrame, pSubMenu, sal_True, sal_False );
                 AddMenu(pSubMenu,::rtl::OUString(),nItemId,sal_True,sal_False);
-#if 0
-                if ( pMenu->GetItemText( nItemId ).Len() == 0 )
-                    aQueryLabelItemIdVector.push_back( nItemId );
-#endif
-
                 if ( bShowMenuImages && !pMenu->GetItemImage( nItemId ))
                 {
                     Image aImage = GetImageFromURL( rFrame, aItemCommand, FALSE, m_bWasHiContrast );
@@ -273,10 +258,7 @@ MenuManager::MenuManager(
                 // #110897#
                 // MenuManager* pSubMenuManager = new MenuManager( rFrame, pSubMenu, sal_True, sal_False );
                 AddMenu(pSubMenu,::rtl::OUString(),nItemId,sal_True,sal_False);
-#if 0
-                if ( pMenu->GetItemText( nItemId ).Len() == 0 )
-                    aQueryLabelItemIdVector.push_back( nItemId );
-#endif
+
 
                 if ( bShowMenuImages && !pMenu->GetItemImage( nItemId ))
                 {
@@ -324,98 +306,17 @@ MenuManager::MenuManager(
 
                 REFERENCE< XDISPATCH > aXDispatchRef;
                 m_aMenuItemHandlerVector.push_back( new MenuItemHandler( nItemId, NULL, aXDispatchRef ));
-#if 0
-                if ( pMenu->GetItemText( nItemId ).Len() == 0 )
-                    aQueryLabelItemIdVector.push_back( nItemId );
-#endif
+
             }
         }
     }
 
 
     // retrieve label information for all menu items without item text
-#if 0
-    if ( aQueryLabelItemIdVector.size() > 0 )
-    {
-        Sequence< ::rtl::OUString > aURLSequence( aQueryLabelItemIdVector.size() );
-        Sequence< ::rtl::OUString > aLabelSequence( aQueryLabelItemIdVector.size() );
-
-        sal_uInt32 nPos = 0;
-        ::std::vector< USHORT >::iterator p;
-        for ( p = aQueryLabelItemIdVector.begin(); p != aQueryLabelItemIdVector.end(); p++ )
-            aURLSequence[nPos++] = pMenu->GetItemCommand( *p );
-
-        Reference< XDispatchInformationProvider > xDIP( xFrame, UNO_QUERY );
-        if ( xDIP.is() )
-        {
-            nPos = 0;
-            xDIP->queryDispatchInformations( aURLSequence, aLabelSequence );
-            for ( p = aQueryLabelItemIdVector.begin(); p != aQueryLabelItemIdVector.end(); p++ )
-                pMenu->SetItemText( *p, aLabelSequence( nPos++ ));
-        }
-    }
-#endif
-    SetHdl();
-}
-
-#if 0
-// #110897#
-MenuManager::MenuManager(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
-    REFERENCE< XFRAME >& rFrame, AddonMenu* pAddonMenu, sal_Bool bDelete, sal_Bool bDeleteChildren )
-:   // #110897#
-    ThreadHelpBase( &Application::GetSolarMutex() ),
-    mxServiceFactory(xServiceFactory)
-{
-    m_bActive           = sal_False;
-    m_bDeleteMenu       = bDelete;
-    m_bDeleteChildren   = bDeleteChildren;
-    m_pVCLMenu          = pAddonMenu;
-    m_xFrame            = rFrame;
-    m_bInitialized      = sal_False;
-    m_bIsBookmarkMenu   = sal_True;
-
-    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    m_bWasHiContrast    = rSettings.GetHighContrastMode();
-
-    SAL_STATIC_CAST( ::com::sun::star::uno::XInterface*, (OWeakObject*)this )->acquire();
-
-    USHORT nItemCount = pAddonMenu->GetItemCount();
-    m_aMenuItemHandlerVector.reserve(nItemCount);
-    ::rtl::OUString aItemCommand;
-    for ( USHORT i = 0; i < nItemCount; i++ )
-    {
-        USHORT nItemId = FillItemCommand(aItemCommand,pAddonMenu, i );
-
-        PopupMenu* pPopupMenu = pAddonMenu->GetPopupMenu( nItemId );
-        if ( pPopupMenu )
-        {
-            // #110897#
-            // MenuManager* pSubMenuManager = new MenuManager( rFrame, pPopupMenu, bDeleteChildren, bDeleteChildren );
-            AddMenu(pPopupMenu,aItemCommand,nItemId,bDeleteChildren,bDeleteChildren);
-        }
-        else
-        {
-            if ( pAddonMenu->GetItemType( i ) != MENUITEM_SEPARATOR )
-            {
-                MenuConfiguration::Attributes* pAddonAttributes = (MenuConfiguration::Attributes *)(pAddonMenu->GetUserValue( nItemId ));
-                REFERENCE< XDISPATCH > aXDispatchRef;
-                MenuItemHandler* pMenuItemHandler = new MenuItemHandler( nItemId, NULL, aXDispatchRef );
-
-                if ( pAddonAttributes )
-                {
-                    // read additional attributes from attributes struct and AddonMenu implementation will delete all attributes itself!!
-                    pMenuItemHandler->aTargetFrame = pAddonAttributes->aTargetFrame;
-                }
-
-                m_aMenuItemHandlerVector.push_back( pMenuItemHandler );
-            }
-        }
-    }
 
     SetHdl();
 }
-#endif
+
 
 void MenuManager::SetHdl()
 {

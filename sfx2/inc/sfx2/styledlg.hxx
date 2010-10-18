@@ -38,9 +38,7 @@ class SFX2_DLLPUBLIC SfxStyleDialog: public SfxTabDialog
 {
 private:
     SfxStyleSheetBase*          pStyle;
-//#if 0 // _SOLAR__PRIVATE
     DECL_DLLPRIVATE_LINK( CancelHdl, Button * );
-//#endif
 protected:
     virtual const SfxItemSet*   GetRefreshedSet();
 

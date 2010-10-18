@@ -820,17 +820,6 @@ void SfxObjectShell::SetTitle
         return;
 
     SfxApplication *pSfxApp = SFX_APP();
-#if 0
-    // wird 'unbenannt#' als Titel gesetzt
-    String aNoName(SfxResId(STR_NONAME));
-    if ( rTitle.Match(aNoName) <= aNoName.Len() )
-    {
-        // er ist es selbst => ignorieren
-        pSfxApp->ReleaseIndex(pImp->nVisualDocumentNumber);
-        pImp->bIsNamedVisible=0;
-    }
-#endif
-
     // ggf. die unbenannt-Nummer freigeben
     if ( pImp->bIsNamedVisible && USHRT_MAX != pImp->nVisualDocumentNumber )
     {
