@@ -256,6 +256,7 @@ LIB3OBJFILES = \
     $(SLO)$/instable.obj \
     $(SLO)$/insrule.obj \
     $(SLO)$/javaedit.obj \
+    $(SLO)$/titlepage.obj \
     $(SLO)$/linenum.obj \
     $(SLO)$/mailmrge.obj \
     $(SLO)$/multmrk.obj \

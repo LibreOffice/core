@@ -533,6 +533,8 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 
 #define FN_SET_PAGE_STYLE           (FN_FORMAT + 93)  /* Anwenden Seitenv. */
 
+#define FN_FORMAT_TITLEPAGE_DLG     (FN_FORMAT + 98)  /* Title Page */
+
 
 #define FN_TABLE_REP                (FN_FORMAT + 99)  /* TableRepresentation */
 #define FN_CONVERT_TEXT_TABLE       (FN_FORMAT + 100)  /* Konvertierung Text <-> Tabelle */

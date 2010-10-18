@@ -2394,6 +2394,14 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
 
     switch ( nSlot )
     {
+        case FN_FORMAT_TITLEPAGE_DLG:
+        {
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            VclAbstractDialog* pDlg = pFact->CreateTitlePageDlg( pMDI );
+            pDlg->Execute();
+            delete pDlg;
+        }
+        break;
         case FN_FORMAT_PAGE_COLUMN_DLG:
         case FN_FORMAT_PAGE_DLG:
         {

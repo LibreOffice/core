@@ -93,6 +93,7 @@
 #include <instable.hxx> //add for SwInsTableDlg
 #include <javaedit.hxx> //add for SwJavaEditDialog
 #include <linenum.hxx> //add for SwLineNumberingDlg
+#include <titlepage.hxx> //add for SwTitlePageDlg
 #include <mailmrge.hxx> //add for SwMailMergeDlg, SwMailMergeCreateFromDlg, SwMailMergeFieldConnectionsDlg
 #include <mergetbl.hxx> //add for SwMergeTblDlg
 #include <multmrk.hxx> //add for SwMultiTOXMarkDlg
@@ -1264,6 +1265,14 @@ AbstractInsFootNoteDlg* SwAbstractDialogFactory_Impl::CreateInsFootNoteDlg( int 
     }
     if ( pDlg )
         return new AbstractInsFootNoteDlg_Impl( pDlg );
+    return 0;
+}
+
+VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateTitlePageDlg ( Window *pParent )
+{
+    Dialog* pDlg = new SwTitlePageDlg( pParent );
+    if ( pDlg )
+        return new VclAbstractDialog_Impl( pDlg );
     return 0;
 }
 

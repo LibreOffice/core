@@ -52,7 +52,8 @@ SRC1FILES=\
     pgfnote.src \
     pggrid.src \
     redlndlg.src \
-    srtdlg.src
+    srtdlg.src \
+    titlepage.src
 
 EXCEPTIONSFILES = \
         $(SLO)$/glossary.obj \
@@ -73,6 +74,7 @@ SLOFILES =	\
         $(SLO)$/insfnote.obj \
         $(SLO)$/insrule.obj \
         $(SLO)$/linenum.obj \
+        $(SLO)$/titlepage.obj \
         $(SLO)$/num.obj \
         $(SLO)$/numberingtypelistbox.obj \
         $(SLO)$/outline.obj \

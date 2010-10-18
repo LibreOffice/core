@@ -434,6 +434,7 @@ public:
                                                 SwField* pField, BOOL bNextButton = FALSE ) = 0; //add for SwFldInputDlg
     virtual AbstractInsFootNoteDlg*     CreateInsFootNoteDlg( int nResId,
                                                 Window * pParent, SwWrtShell &rSh, BOOL bEd = FALSE) = 0; //add for SwInsFootNoteDlg
+    virtual VclAbstractDialog*          CreateTitlePageDlg ( Window * pParent ) = 0;
     virtual VclAbstractDialog *         CreateVclSwViewDialog( int nResId,
                                                 SwView& rView, BOOL bCol = FALSE ) = 0; //add for SwInsRowColDlg, SwLineNumberingDlg
     virtual AbstractInsertGrfRulerDlg*      CreateInsertGrfRulerDlg( int nResId,

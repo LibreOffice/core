@@ -217,6 +217,7 @@
       <menu:menuitem menu:id=".uno:ParagraphDialog"/>
       <menu:menuitem menu:id=".uno:BulletsAndNumberingDialog"/>
       <menu:menuitem menu:id=".uno:PageDialog"/>
+      <menu:menuitem menu:id=".uno:TitlePageDialog"/>
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:TransliterateMenu">
         <menu:menupopup>

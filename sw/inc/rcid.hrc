@@ -130,7 +130,7 @@
 
 // globale Ressourcen
 #define RC_GLOBALS_BEGIN            RC_GLOBALS
-#define RC_GLOBALS_END              (RC_GLOBALS_BEGIN + 119)
+#define RC_GLOBALS_END              (RC_GLOBALS_BEGIN + 120)
 
 // Format-Vorlagen
 #define RC_FMTUI_BEGIN              RC_FMTUI

@@ -981,3 +981,4 @@
 #define HID_MM_HEADER_12                            (HID_BASE + 2279)
 #define HID_MM_HEADER_13                            (HID_BASE + 2280)
 
+#define HID_TITLEPAGE                               (HID_BASE + 2281)

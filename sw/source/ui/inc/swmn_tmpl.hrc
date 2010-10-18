@@ -58,8 +58,13 @@
         Identifier = FN_FORMAT_PAGE_DLG ; \
         HelpID = FN_FORMAT_PAGE_DLG ; \
         Text [ en-US ] = "Pa~ge..." ; \
+    };\
+    MenuItem\
+    {\
+        Identifier = FN_FORMAT_TITLEPAGE_DLG ; \
+        HelpID = FN_FORMAT_TITLEPAGE_DLG ; \
+        Text [ en-US ] = "~Title Page..." ; \
     };
-
 
 #define MN_TEXT_ATTR\
     MenuItem\
