@@ -45,13 +45,13 @@ EXCEPTIONSFILES= \
         $(SLO)$/numuno.obj \
         $(SLO)$/numfmuno.obj \
         $(SLO)$/supservs.obj \
-        $(SLO)$/zforlist.obj
+        $(SLO)$/zforlist.obj \
+        $(SLO)$/zforfind.obj	\
+        $(SLO)$/zformat.obj 	\
+        $(SLO)$/zforscan.obj
 
 SLOFILES =  \
         $(EXCEPTIONSFILES) \
-        $(SLO)$/zforfind.obj	\
-        $(SLO)$/zformat.obj 	\
-        $(SLO)$/zforscan.obj \
         $(SLO)$/numhead.obj
 
 LIB1TARGET=	$(SLB)$/$(TARGET).uno.lib
