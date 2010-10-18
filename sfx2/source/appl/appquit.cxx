@@ -30,9 +30,6 @@
 #include <basic/basmgr.hxx>
 #include <basic/sbstar.hxx>
 
-#ifdef WIN
-#define _TL_LANG_SPECIAL
-#endif
 #include <svl/svdde.hxx>
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>

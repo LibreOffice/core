@@ -75,12 +75,7 @@ using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::container;
 
 // Maximale Anzahl von Rows, die mit ORDER BY sortiert durchlaufen werden koennen:
-#if defined (WIN)
-#define MAX_KEYSET_SIZE 0x3ff0  // Etwas weniger als ein Segment, damit
-                                    // noch Platz fuer Memory Debug-Informationen
-#else
 #define MAX_KEYSET_SIZE 0x40000 // 256K
-#endif
 
 namespace
 {
@@ -1049,7 +1044,7 @@ BOOL OResultSet::Move(IResultSetHelper::Movement eCursorPosition, INT32 nOffset,
 //
     INT32 nTempPos = m_nRowPos;
     // exclusiver zugriff auf die Tabelle
-    //  NAMESPACE_VOS(OGuard)* pGuard = m_pTable->Lock();
+    //  vos::OGuard* pGuard = m_pTable->Lock();
 
     if (m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT &&
         !isCount())
@@ -1409,7 +1404,7 @@ BOOL OResultSet::OpenImpl()
     m_nRowCountResult = -1;
 
     // exclusiver zugriff auf die Tabelle
-    //  NAMESPACE_VOS(OGuard)* pGuard = pTable->Lock();
+    //  vos::OGuard* pGuard = pTable->Lock();
     m_nLastVisitedPos = m_pTable->getCurrentLastPos();
 
     switch(m_aSQLIterator.getStatementType())
