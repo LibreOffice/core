@@ -33,6 +33,7 @@
 #endif
 
 #include <sal/types.h>
+#include <sal/macros.h>
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>

@@ -46,6 +46,7 @@
 #include <stdarg.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <sal/macros.h>
 
 #ifndef SIGNULL
 #define SIGNULL 0
