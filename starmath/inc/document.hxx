@@ -25,6 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef DOCUMENT_HXX
 #define DOCUMENT_HXX
 
@@ -221,7 +222,6 @@ public:
     virtual void SetVisArea (const Rectangle & rVisArea);
     virtual void SetModified(BOOL bModified);
 };
-
 
 #endif
 

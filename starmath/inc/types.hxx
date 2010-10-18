@@ -25,6 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef TYPES_HXX
 #define TYPES_HXX
 
@@ -199,7 +200,6 @@ enum MathSymbol
     MS_SETR         = (sal_Unicode) 0x211D,
     MS_SETC         = (sal_Unicode) 0x2102
 };
-
 
 #endif
 

@@ -31,7 +31,6 @@
 
 #include <new>
 
-
 #include <tools/gen.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/metric.hxx>
@@ -255,8 +254,6 @@ inline Rectangle SmRect::AsRectangle() const
 {
     return Rectangle(Point(GetItalicLeft(), GetTop()), GetItalicSize());
 }
-
-
 
 #endif
 

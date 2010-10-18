@@ -188,7 +188,7 @@ String SmFontPickList::GetStringItem(void *pItem)
         aString.AppendAscii( pDelim );
         aString += String(SmResId(RID_FONTITALIC));
     }
-    if (IsBold( *pFont ))    // bold?
+    if (IsBold( *pFont ))
     {
         aString.AppendAscii( pDelim );
         aString += String(SmResId(RID_FONTBOLD));

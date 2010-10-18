@@ -25,13 +25,12 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef _VISITURL_HXX
 #define _VISITURL_HXX
 
-
-
-
 #include <svl/lstner.hxx>
+
 class SwDoc;
 
 class SwURLStateChanged : public SfxListener
@@ -43,8 +42,6 @@ public:
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 };
-
-
 
 #endif
 

@@ -101,21 +101,18 @@
 #include <PostItMgr.hxx>
 #include <comcore.hrc>      // STR-ResId's
 
-// #i11176#
 #include <unoframe.hxx>
-// OD 2004-05-24 #i28701#
+
 #include <sortedobjs.hxx>
 
-// --> OD 2004-07-26 #i32089#
 #include <vector>
-// <--
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
 #define DEF_FLY_WIDTH    2268   //Defaultbreite fuer FlyFrms    (2268 == 4cm)
 
-/* #109161# */
+
 static bool lcl_IsItemSet(const SwCntntNode & rNode, USHORT which)
 {
     bool bResult = false;
@@ -135,9 +132,6 @@ static bool lcl_IsItemSet(const SwCntntNode & rNode, USHORT which)
 |*      entsprechende Formate-Array gestellt.
 |*      Wenn bereits ein passendes Format existiert, so wird dies
 |*      zurueckgeliefert.
-|*  Ersterstellung      MA 22. Sep. 92
-|*  Letzte Aenderung    JP 08.05.98
-|*
 |*************************************************************************/
 SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
 {

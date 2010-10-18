@@ -82,7 +82,7 @@
 #include <ndtxt.hxx>
 #include <swundo.hxx>           // fuer die UndoIds
 #include <undobj.hxx>
-#include <pagedesc.hxx> //DTor
+#include <pagedesc.hxx>         //DTor
 #include <breakit.hxx>
 #include <ndole.hxx>
 #include <ndgrf.hxx>
@@ -253,7 +253,6 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
                     pOutlineRule->Validate();
                     // --> OD 2005-10-21 - counting of phantoms depends on <IsOldNumbering()>
                     pOutlineRule->SetCountPhantoms( !mbOldNumbering );
-                    // <--
                 }
             }
             break;
@@ -299,57 +298,67 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
         case CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAME:
             mbClipAsCharacterAnchoredWriterFlyFrames = value;
             break;
-        // <--
+
         case UNIX_FORCE_ZERO_EXT_LEADING:
             mbUnixForceZeroExtLeading = value;
             break;
-    case PROTECT_FORM:
-        mbProtectForm = value;
-        break;
+
+        case PROTECT_FORM:
+            mbProtectForm = value;
+            break;
 
         case USE_OLD_PRINTER_METRICS:
             mbOldPrinterMetrics = value;
             break;
         case TABS_RELATIVE_TO_INDENT:
             mbTabRelativeToIndent = value;
-        break;
+            break;
         // --> OD 2008-06-05 #i89181#
         case TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST:
             mbTabAtLeftIndentForParagraphsInList = value;
-        break;
-        // <--
-    case INVERT_BORDER_SPACING:
-        mbInvertBorderSpacing = value;
-    break;
+            break;
+
+        case INVERT_BORDER_SPACING:
+            mbInvertBorderSpacing = value;
+            break;
+
         case COLLAPSE_EMPTY_CELL_PARA:
             mbCollapseEmptyCellPara = value;
-         break;
+            break;
          // COMPATIBILITY FLAGS END
 
         case BROWSE_MODE:
             mbBrowseMode = value;
             break;
+
         case HTML_MODE:
             mbHTMLMode = value;
             break;
+
         case GLOBAL_DOCUMENT:
             mbIsGlobalDoc = value;
             break;
+
         case GLOBAL_DOCUMENT_SAVE_LINKS:
             mbGlblDocSaveLinks = value;
             break;
+
         case LABEL_DOCUMENT:
             mbIsLabelDoc = value;
             break;
+
         case PURGE_OLE:
             mbPurgeOLE = value;
             break;
+
         case KERN_ASIAN_PUNCTUATION:
             mbKernAsianPunctuation = value;
             break;
+
         case DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT:
             mbDoNotResetParaAttrsForNumFont = value;
             break;
+
         default:
             ASSERT(false, "Invalid setting id");
     }
@@ -667,7 +676,7 @@ bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
         return false;
 
     {
-        // Bug 26675:   DataChanged vorm loeschen verschicken, dann bekommt
+        // BUG 26675:   DataChanged vorm loeschen verschicken, dann bekommt
         //          man noch mit, welche Objecte sich im Bereich befinden.
         //          Danach koennen sie vor/hinter der Position befinden.
         SwDataChanged aTmp( this, rPos, 0 );

@@ -191,13 +191,12 @@ Resource RID_LOCALIZED_NAMES
     };
     StringArray RID_UI_SYMBOLSET_NAMES
     {
-    ItemList [ en-US ] =
-    {
-             < "Greek" ; > ;
-        < "Special" ; > ;
+        ItemList [ en-US ] =
+        {
+            < "Greek" ; > ;
+            < "Special" ; > ;
+        };
     };
-    };
-
     StringArray RID_EXPORT_SYMBOL_NAMES
     {
         ItemList =

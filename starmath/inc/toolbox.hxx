@@ -25,6 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef TOOLBOX_HXX
 #define TOOLBOX_HXX
 

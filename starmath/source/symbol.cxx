@@ -88,7 +88,7 @@ SmSym::SmSym(const String& rName, const Font& rFont, sal_Unicode cChar,
     m_aFace.SetTransparent(TRUE);
     m_aFace.SetAlign(ALIGN_BASELINE);
 
-    m_cChar   = cChar;
+    m_cChar         = cChar;
     m_aSetName      = rSet;
     m_bPredefined   = bIsPredefined;
     m_bDocSymbol    = FALSE;

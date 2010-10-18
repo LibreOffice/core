@@ -25,6 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef SYMBOL_HXX
 #define SYMBOL_HXX
 
@@ -47,7 +48,7 @@
 #include "smmod.hxx"
 
 
-#define SYMBOLSET_NONE  0xFFFF
+#define SYMBOLSET_NONE      0xFFFF
 #define SYMBOL_NONE     0xFFFF
 
 
@@ -79,6 +80,7 @@ inline const String GetUiSymbolSetName( const String &rExportSymbolSetName )
 
 class SmSym
 {
+private:
     SmFace              m_aFace;
     String              m_aName;
     String              m_aExportName;
@@ -148,6 +150,7 @@ struct lt_SmSymPtr : public std::binary_function< const SmSym *, const SmSym *, 
 
 class SmSymbolManager : public SfxListener
 {
+private:
     SymbolMap_t         m_aSymbols;
     bool                m_bModified;
 

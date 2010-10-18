@@ -80,10 +80,10 @@
 #define MINWIDTH        200
 #define MINHEIGHT       200
 #define MINSPLIT        40
-#define SPLITTERWIDTH   2
+#define SPLITTERWIDTH       2
 
-#define MINZOOM 25
-#define MAXZOOM 800
+#define MINZOOM         25
+#define MAXZOOM         800
 
 #define SmViewShell
 #include "smslots.hxx"

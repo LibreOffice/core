@@ -26,10 +26,8 @@
  *
  ************************************************************************/
 
-
 #ifndef NODE_HXX
 #define NODE_HXX
-
 
 #include <vector>
 
@@ -88,16 +86,14 @@ enum SmNodeType
 
 class SmNode : public SmRect
 {
-    SmFace          aFace;
+    SmFace      aFace;
 
-    SmToken         aNodeToken;
+    SmToken     aNodeToken;
     SmNodeType      eType;
     SmScaleMode     eScaleMode;
     RectHorAlign    eRectHorAlign;
-    USHORT          nFlags,
-                    nAttributes;
-    BOOL            bIsPhantom,
-                    bIsDebug;
+    USHORT      nFlags, nAttributes;
+    BOOL        bIsPhantom, bIsDebug;
 protected:
     SmNode(SmNodeType eNodeType, const SmToken &rNodeToken);
 
