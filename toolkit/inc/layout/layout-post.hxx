@@ -77,6 +77,9 @@
 #undef RetryButton
 #undef SfxTabPage
 #undef SfxTabDialog
+#undef SfxTabPage
+#undef SvxFontListBox
+#undef SvxLanguageBox
 #undef SpinField
 #undef TabDialog
 #undef TabControl
