@@ -35,6 +35,7 @@
 #include <string.h>
 #include <stdio.h>
 #include "rtl/instance.hxx"
+#include <sal/macros.h>
 
 using namespace com::sun::star::i18n;
 using namespace com::sun::star::uno;
@@ -256,7 +257,7 @@ static const struct {
 
 static const sal_Unicode under = sal_Unicode('_');
 
-static const sal_Int16 nbOfLocales = sizeof(aLibTable) / sizeof(aLibTable[0]);
+static const sal_Int16 nbOfLocales = SAL_N_ELEMENTS(aLibTable);
 
 struct LocaleDataLookupTableItem
 {

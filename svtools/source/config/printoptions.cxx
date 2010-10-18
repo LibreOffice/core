@@ -57,14 +57,14 @@
 
 #include <itemholder2.hxx>
 
-
+#include <sal/macros.h>
 // -----------
 // - statics -
 // -----------
 
 static USHORT aDPIArray[] = { 72, 96, 150, 200, 300, 600 };
 
-#define DPI_COUNT (sizeof(aDPIArray)/sizeof(aDPIArray[0 ]))
+#define DPI_COUNT (SAL_N_ELEMENTS(aDPIArray))
 
 // -----------
 // - Defines -

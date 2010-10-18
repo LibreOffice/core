@@ -73,6 +73,7 @@
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <rtl/memory.h>
+#include <sal/macros.h>
 
 #include <vcl/unohelp.hxx>
 #include <vcl/unohelp2.hxx>
@@ -508,7 +509,7 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
 
     if( aText.Len() )
     {
-        if( 2*aText.Len() > xub_StrLen(sizeof(nDXBuffer)/sizeof(nDXBuffer[0])) )
+        if( 2*aText.Len() > xub_StrLen(SAL_N_ELEMENTS(nDXBuffer)) )
         {
             pDXBuffer = new sal_Int32[2*(aText.Len()+1)];
             pDX = pDXBuffer;
@@ -1172,7 +1173,7 @@ void Edit::ImplShowCursor( BOOL bOnlyIfVisible )
 
     if( aText.Len() )
     {
-        if( 2*aText.Len() > xub_StrLen(sizeof(nDXBuffer)/sizeof(nDXBuffer[0])) )
+        if( 2*aText.Len() > xub_StrLen(SAL_N_ELEMENTS(nDXBuffer)) )
         {
             pDXBuffer = new sal_Int32[2*(aText.Len()+1)];
             pDX = pDXBuffer;
@@ -1296,7 +1297,7 @@ xub_StrLen Edit::ImplGetCharPos( const Point& rWindowPos ) const
     sal_Int32   nDXBuffer[256];
     sal_Int32*  pDXBuffer = NULL;
     sal_Int32*  pDX = nDXBuffer;
-    if( 2*aText.Len() > xub_StrLen(sizeof(nDXBuffer)/sizeof(nDXBuffer[0])) )
+    if( 2*aText.Len() > xub_StrLen(SAL_N_ELEMENTS(nDXBuffer)) )
     {
         pDXBuffer = new sal_Int32[2*(aText.Len()+1)];
         pDX = pDXBuffer;

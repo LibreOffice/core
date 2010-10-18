@@ -38,6 +38,7 @@
 #include "vcl/salptype.hxx"
 #include "vcl/print.hxx"
 #include "vcl/unohelp.hxx"
+#include <sal/macros.h>
 
 #include <boost/bind.hpp>
 
@@ -203,7 +204,7 @@ static struct PaperSizeEntry
 
 static bool getPaperSize( double& o_fWidth, double& o_fHeight, const Paper i_ePaper )
 {
-    for(unsigned int i = 0; i < sizeof(aPaperSizes)/sizeof(aPaperSizes[0]); i++ )
+    for(unsigned int i = 0; i < SAL_N_ELEMENTS(aPaperSizes); i++ )
     {
         if( aPaperSizes[i].nPaper == i_ePaper )
         {
@@ -237,7 +238,7 @@ static Paper recognizePaper( double i_fWidth, double i_fHeight )
     if( aPaper == PAPER_USER )
     {
         // search with fuzz factor
-        for( unsigned int i = 0; i < sizeof(aPaperSizes)/sizeof(aPaperSizes[0]); i++ )
+        for( unsigned int i = 0; i < SAL_N_ELEMENTS(aPaperSizes); i++ )
         {
             double w = (i_fWidth > aPaperSizes[i].fWidth) ? i_fWidth - aPaperSizes[i].fWidth : aPaperSizes[i].fWidth - i_fWidth;
             double h = (i_fHeight > aPaperSizes[i].fHeight) ? i_fHeight - aPaperSizes[i].fHeight : aPaperSizes[i].fHeight - i_fHeight;

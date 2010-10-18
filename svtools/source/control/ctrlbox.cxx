@@ -33,6 +33,7 @@
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/field.hxx>
+#include <sal/macros.h>
 #include <comphelper/processfactory.hxx>
 #include <unotools/charclass.hxx>
 
@@ -873,8 +874,8 @@ void FontNameBox::ImplCalcUserItemSize()
         aSz.Width() /= 10;
         if ( bSymbolFont )
         {
-            int nLength = sizeof(aImplSymbolFontText)/sizeof(aImplSymbolFontText[0]) - 1;
-            int nLength2 = sizeof(aImplStarSymbolText)/sizeof(aImplStarSymbolText[0]) - 1;
+            int nLength = SAL_N_ELEMENTS(aImplSymbolFontText) - 1;
+            int nLength2 = SAL_N_ELEMENTS(aImplStarSymbolText) - 1;
             if( bStarSymbol && (nLength < nLength2) )
                 nLength = nLength2;
             aSz.Width() += aOneCharSz.Width() * nLength;

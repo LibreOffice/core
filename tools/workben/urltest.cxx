@@ -39,6 +39,7 @@
 #include "rtl/textenc.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
+#include <sal/macros.h>
 
 #include <cstddef>
 #include <cstdlib>
@@ -497,7 +498,7 @@ main()
                 { "vnd.sun.star.help://swriter?foo",
                   "vnd.sun.star.help://swriter/?foo" },
                 { "vnd.sun.star.help://swriter/?foo", 0 } };
-        for (std::size_t i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
+        for (std::size_t i = 0; i < SAL_N_ELEMENTS( aTest ); ++i)
         {
             INetURLObject aUrl(aTest[i].in);
             if (aUrl.HasError())
@@ -531,7 +532,7 @@ main()
                 /*TODO "wfs:///c|/xyz/",*/
                 /*TODO "wfs://xxx/yyy?zzz",*/
                 /*TODO "wfs:///x/y/z"*/ };
-        for (std::size_t i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
+        for (std::size_t i = 0; i < SAL_N_ELEMENTS(aTest); ++i)
         {
             INetURLObject aUrl(aTest[i]);
             if (aUrl.HasError())
@@ -566,7 +567,7 @@ main()
                 "vnd.sun.star.pkg://file:%2F%2F%2Fa:%2Fb%20c/xx",
                 /*TODO "vnd.sun.star.pkg://file:%2F%2F%2Fa:%2Fb%20c/xx;yy",*/
                 "vnd.sun.star.pkg://file:%2F%2F%2Fa:%2Fb%20c/xx//yy" };
-        for (std::size_t i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
+        for (std::size_t i = 0; i < SAL_N_ELEMENTS(aTest); ++i)
         {
             INetURLObject aUrl(aTest[i]);
             if (aUrl.HasError())
@@ -591,7 +592,7 @@ main()
                 "vnd.sun.star.cmd:log/out",
                 /*TODO "vnd.sun.star.cmd:[logout]",*/
                 "vnd.sun.star.cmd:log[out]" };
-        for (std::size_t i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
+        for (std::size_t i = 0; i < SAL_N_ELEMENTS( aTest ); ++i)
         {
             INetURLObject aUrl(aTest[i]);
             if (aUrl.HasError())
@@ -1220,7 +1221,7 @@ main()
                 { "smb://foo", "smb://foo/" },
                 { "smb://x;foo:bar@baz.xyz:12345/ab?cd",
                   "smb://x;foo:bar@baz.xyz:12345/ab?cd" } };
-        for (std::size_t i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
+        for (std::size_t i = 0; i < SAL_N_ELEMENTS( aTest ); ++i)
         {
             INetURLObject aUrl(aTest[i].m_pInput);
             if (aTest[i].m_pOutput == 0
@@ -1250,7 +1251,7 @@ main()
         static Test const aTest[]
             = { { "file://d:\\dir1\\file1", "file:///d:/dir1/file1" },
                 { "http://as@alaska:8000/test/test.sxw", 0 } };
-        for (std::size_t i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
+        for (std::size_t i = 0; i < SAL_N_ELEMENTS( aTest ); ++i)
         {
             INetURLObject aUrl = INetURLObject(
                 String(aTest[i].m_pInput, RTL_TEXTENCODING_UTF8),
@@ -1379,7 +1380,7 @@ main()
                 { INET_PROT_NEWS, "abc@def.ghi@", 0 },
                 { INET_PROT_NEWS, "!\"#@def", "news:!%22%23@def" },
                 { INET_PROT_NEWS, " @def", "news:%20@def" } };
-        for (std::size_t i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
+        for (std::size_t i = 0; i < SAL_N_ELEMENTS( aTest ); ++i)
         {
             INetURLObject aUri;
             bool bOk = aUri.ConcatData(aTest[i].eScheme, String(), String(),

@@ -37,6 +37,7 @@
 
 #include <saldisp.hxx>
 #include <X11/keysym.h>
+#include <sal/macros.h>
 
 #if !defined (SunXK_Undo)
 #define SunXK_Undo      0x0000FF65  // XK_Undo
@@ -360,70 +361,70 @@ namespace vcl_sal {
     static const struct KeyboardReplacements aKeyboards[] =
     {
 #ifdef SOLARIS
-        { "Germany5", aImplReplacements_German, sizeof(aImplReplacements_German)/sizeof(aImplReplacements_German[0]) },
-        { "Germany4", aImplReplacements_German, sizeof(aImplReplacements_German)/sizeof(aImplReplacements_German[0]) },
-        { "France5", aImplReplacements_French, sizeof(aImplReplacements_French)/sizeof(aImplReplacements_French[0]) },
-        { "France6", aImplReplacements_French, sizeof(aImplReplacements_French)/sizeof(aImplReplacements_French[0]) },
-        { "France_x86", aImplReplacements_French, sizeof(aImplReplacements_French)/sizeof(aImplReplacements_French[0]) },
-        { "Italy5", aImplReplacements_Italian, sizeof(aImplReplacements_Italian)/sizeof(aImplReplacements_Italian[0]) },
-        { "Italy5-Hobo", aImplReplacements_Italian, sizeof(aImplReplacements_Italian)/sizeof(aImplReplacements_Italian[0]) },
-        { "Italy4", aImplReplacements_Italian, sizeof(aImplReplacements_Italian)/sizeof(aImplReplacements_Italian[0]) },
-        { "Italy6", aImplReplacements_Italian, sizeof(aImplReplacements_Italian)/sizeof(aImplReplacements_Italian[0]) },
-        { "Italy_x86", aImplReplacements_Italian, sizeof(aImplReplacements_Italian)/sizeof(aImplReplacements_Italian[0]) },
-        { "Netherland4", aImplReplacements_Dutch, sizeof(aImplReplacements_Dutch)/sizeof(aImplReplacements_Dutch[0]) },
-        { "Netherland5", aImplReplacements_Dutch, sizeof(aImplReplacements_Dutch)/sizeof(aImplReplacements_Dutch[0]) },
-        { "Netherland5-Hobo", aImplReplacements_Dutch, sizeof(aImplReplacements_Dutch)/sizeof(aImplReplacements_Dutch[0]) },
-        { "Netherland6", aImplReplacements_Dutch, sizeof(aImplReplacements_Dutch)/sizeof(aImplReplacements_Dutch[0]) },
-        { "Netherland_x86", aImplReplacements_Dutch, sizeof(aImplReplacements_Dutch)/sizeof(aImplReplacements_Dutch[0]) },
-        { "Norway5", aImplReplacements_Norwegian, sizeof(aImplReplacements_Norwegian)/sizeof(aImplReplacements_Norwegian[0]) },
-        { "Norway5-Hobo", aImplReplacements_Norwegian, sizeof(aImplReplacements_Norwegian)/sizeof(aImplReplacements_Norwegian[0]) },
-        { "Norway4", aImplReplacements_Norwegian, sizeof(aImplReplacements_Norwegian)/sizeof(aImplReplacements_Norwegian[0]) },
-        { "Norway6", aImplReplacements_Norwegian, sizeof(aImplReplacements_Norwegian)/sizeof(aImplReplacements_Norwegian[0]) },
-        { "Norway_x86", aImplReplacements_Norwegian, sizeof(aImplReplacements_Norwegian)/sizeof(aImplReplacements_Norwegian[0]) },
-        { "Portugal5", aImplReplacements_Portuguese, sizeof(aImplReplacements_Portuguese)/sizeof(aImplReplacements_Portuguese[0]) },
-        { "Portugal5-Hobo", aImplReplacements_Portuguese, sizeof(aImplReplacements_Portuguese)/sizeof(aImplReplacements_Portuguese[0]) },
-        { "Portugal4", aImplReplacements_Portuguese, sizeof(aImplReplacements_Portuguese)/sizeof(aImplReplacements_Portuguese[0]) },
-        { "Portugal6", aImplReplacements_Portuguese, sizeof(aImplReplacements_Portuguese)/sizeof(aImplReplacements_Portuguese[0]) },
-        { "Portugal_x86", aImplReplacements_Portuguese, sizeof(aImplReplacements_Portuguese)/sizeof(aImplReplacements_Portuguese[0]) },
-        { "Spain5", aImplReplacements_Spanish, sizeof(aImplReplacements_Spanish)/sizeof(aImplReplacements_Spanish[0]) },
-        { "Spain5-Hobo", aImplReplacements_Spanish, sizeof(aImplReplacements_Spanish)/sizeof(aImplReplacements_Spanish[0]) },
-        { "Spain4", aImplReplacements_Spanish, sizeof(aImplReplacements_Spanish)/sizeof(aImplReplacements_Spanish[0]) },
-        { "Spain6", aImplReplacements_Spanish, sizeof(aImplReplacements_Spanish)/sizeof(aImplReplacements_Spanish[0]) },
-        { "Spain_x86", aImplReplacements_Spanish, sizeof(aImplReplacements_Spanish)/sizeof(aImplReplacements_Spanish[0]) },
-        { "Sweden5", aImplReplacements_Swedish, sizeof(aImplReplacements_Swedish)/sizeof(aImplReplacements_Swedish[0]) },
-        { "Sweden5-Hobo", aImplReplacements_Swedish, sizeof(aImplReplacements_Swedish)/sizeof(aImplReplacements_Swedish[0]) },
-        { "Sweden4", aImplReplacements_Swedish, sizeof(aImplReplacements_Swedish)/sizeof(aImplReplacements_Swedish[0]) },
-        { "Sweden6", aImplReplacements_Swedish, sizeof(aImplReplacements_Swedish)/sizeof(aImplReplacements_Swedish[0]) },
-        { "Sweden_x86", aImplReplacements_Swedish, sizeof(aImplReplacements_Swedish)/sizeof(aImplReplacements_Swedish[0]) },
+        { "Germany5", aImplReplacements_German, SAL_N_ELEMENTS(aImplReplacements_German) },
+        { "Germany4", aImplReplacements_German, SAL_N_ELEMENTS(aImplReplacements_German) },
+        { "France5",  aImplReplacements_French, SAL_N_ELEMENTS(aImplReplacements_French) },
+        { "France6",  aImplReplacements_French, SAL_N_ELEMENTS(aImplReplacements_French) },
+        { "France_x86", aImplReplacements_French, SAL_N_ELEMENTS(aImplReplacements_French) },
+        { "Italy5", aImplReplacements_Italian, SAL_N_ELEMENTS(aImplReplacements_Italian) },
+        { "Italy5-Hobo", aImplReplacements_Italian, SAL_N_ELEMENTS(aImplReplacements_Italian) },
+        { "Italy4", aImplReplacements_Italian, SAL_N_ELEMENTS(aImplReplacements_Italian) },
+        { "Italy6", aImplReplacements_Italian, SAL_N_ELEMENTS(aImplReplacements_Italian) },
+        { "Italy_x86", aImplReplacements_Italian, SAL_N_ELEMENTS(aImplReplacements_Italian) },
+        { "Netherland4", aImplReplacements_Dutch, SAL_N_ELEMENTS(aImplReplacements_Dutch) },
+        { "Netherland5", aImplReplacements_Dutch, SAL_N_ELEMENTS(aImplReplacements_Dutch) },
+        { "Netherland5-Hobo", aImplReplacements_Dutch, SAL_N_ELEMENTS(aImplReplacements_Dutch) },
+        { "Netherland6", aImplReplacements_Dutch, SAL_N_ELEMENTS(aImplReplacements_Dutch) },
+        { "Netherland_x86", aImplReplacements_Dutch, SAL_N_ELEMENTS(aImplReplacements_Dutch) },
+        { "Norway5", aImplReplacements_Norwegian, SAL_N_ELEMENTS(aImplReplacements_Norwegian) },
+        { "Norway5-Hobo", aImplReplacements_Norwegian, SAL_N_ELEMENTS(aImplReplacements_Norwegian) },
+        { "Norway4", aImplReplacements_Norwegian, SAL_N_ELEMENTS(aImplReplacements_Norwegian) },
+        { "Norway6", aImplReplacements_Norwegian, SAL_N_ELEMENTS(aImplReplacements_Norwegian) },
+        { "Norway_x86", aImplReplacements_Norwegian, SAL_N_ELEMENTS(aImplReplacements_Norwegian) },
+        { "Portugal5", aImplReplacements_Portuguese, SAL_N_ELEMENTS(aImplReplacements_Portuguese) },
+        { "Portugal5-Hobo", aImplReplacements_Portuguese, SAL_N_ELEMENTS(aImplReplacements_Portuguese) },
+        { "Portugal4", aImplReplacements_Portuguese, SAL_N_ELEMENTS(aImplReplacements_Portuguese) },
+        { "Portugal6", aImplReplacements_Portuguese, SAL_N_ELEMENTS(aImplReplacements_Portuguese) },
+        { "Portugal_x86", aImplReplacements_Portuguese, SAL_N_ELEMENTS(aImplReplacements_Portuguese) },
+        { "Spain5", aImplReplacements_Spanish, SAL_N_ELEMENTS(aImplReplacements_Spanish) },
+        { "Spain5-Hobo", aImplReplacements_Spanish, SAL_N_ELEMENTS(aImplReplacements_Spanish) },
+        { "Spain4", aImplReplacements_Spanish, SAL_N_ELEMENTS(aImplReplacements_Spanish) },
+        { "Spain6", aImplReplacements_Spanish, SAL_N_ELEMENTS(aImplReplacements_Spanish) },
+        { "Spain_x86", aImplReplacements_Spanish, SAL_N_ELEMENTS(aImplReplacements_Spanish) },
+        { "Sweden5", aImplReplacements_Swedish, SAL_N_ELEMENTS(aImplReplacements_Swedish) },
+        { "Sweden5-Hobo", aImplReplacements_Swedish, SAL_N_ELEMENTS(aImplReplacements_Swedish) },
+        { "Sweden4", aImplReplacements_Swedish, SAL_N_ELEMENTS(aImplReplacements_Swedish) },
+        { "Sweden6", aImplReplacements_Swedish, SAL_N_ELEMENTS(aImplReplacements_Swedish) },
+        { "Sweden_x86", aImplReplacements_Swedish, SAL_N_ELEMENTS(aImplReplacements_Swedish) },
 #endif
-        { "U.S. English", aImplReplacements_English, sizeof(aImplReplacements_English)/sizeof(aImplReplacements_English[0]) },
-        { "United Kingdom", aImplReplacements_English, sizeof(aImplReplacements_English)/sizeof(aImplReplacements_English[0]) },
+        { "U.S. English", aImplReplacements_English, SAL_N_ELEMENTS(aImplReplacements_English) },
+        { "United Kingdom", aImplReplacements_English, SAL_N_ELEMENTS(aImplReplacements_English) },
         // Germany, German
-        { "German", aImplReplacements_German, sizeof(aImplReplacements_German)/sizeof(aImplReplacements_German[0]) },
-        { "France", aImplReplacements_French, sizeof(aImplReplacements_French)/sizeof(aImplReplacements_French[0]) },
-        { "French", aImplReplacements_French, sizeof(aImplReplacements_French)/sizeof(aImplReplacements_French[0]) },
+        { "German", aImplReplacements_German, SAL_N_ELEMENTS(aImplReplacements_German) },
+        { "France", aImplReplacements_French, SAL_N_ELEMENTS(aImplReplacements_French) },
+        { "French", aImplReplacements_French, SAL_N_ELEMENTS(aImplReplacements_French) },
         // Italy, Italian
-        { "Ital", aImplReplacements_Italian, sizeof(aImplReplacements_Italian)/sizeof(aImplReplacements_Italian[0]) },
+        { "Ital", aImplReplacements_Italian, SAL_N_ELEMENTS(aImplReplacements_Italian) },
         // Norway, Norwegian
-        { "Norw", aImplReplacements_Norwegian, sizeof(aImplReplacements_Norwegian)/sizeof(aImplReplacements_Norwegian[0]) },
+        { "Norw", aImplReplacements_Norwegian, SAL_N_ELEMENTS(aImplReplacements_Norwegian) },
         // Portugal, Portuguese
-        { "Portu", aImplReplacements_Portuguese, sizeof(aImplReplacements_Portuguese)/sizeof(aImplReplacements_Portuguese[0]) },
-        { "Spain", aImplReplacements_Spanish, sizeof(aImplReplacements_Spanish)/sizeof(aImplReplacements_Spanish[0]) },
-        { "Spanish", aImplReplacements_Spanish, sizeof(aImplReplacements_Spanish)/sizeof(aImplReplacements_Spanish[0]) },
+        { "Portu", aImplReplacements_Portuguese, SAL_N_ELEMENTS(aImplReplacements_Portuguese) },
+        { "Spain", aImplReplacements_Spanish, SAL_N_ELEMENTS(aImplReplacements_Spanish) },
+        { "Spanish", aImplReplacements_Spanish, SAL_N_ELEMENTS(aImplReplacements_Spanish) },
         // Sweden, Swedish
-        { "Swed", aImplReplacements_Swedish, sizeof(aImplReplacements_Swedish)/sizeof(aImplReplacements_Swedish[0]) },
-        { "Netherland", aImplReplacements_Dutch, sizeof(aImplReplacements_Dutch)/sizeof(aImplReplacements_Dutch[0]) },
-        { "Dutch", aImplReplacements_Dutch, sizeof(aImplReplacements_Dutch)/sizeof(aImplReplacements_Dutch[0]) },
+        { "Swed", aImplReplacements_Swedish, SAL_N_ELEMENTS(aImplReplacements_Swedish) },
+        { "Netherland", aImplReplacements_Dutch, SAL_N_ELEMENTS(aImplReplacements_Dutch) },
+        { "Dutch", aImplReplacements_Dutch, SAL_N_ELEMENTS(aImplReplacements_Dutch) },
         // Turkish, Turkey
-        { "Turk", aImplReplacements_Turkish, sizeof(aImplReplacements_Turkish)/sizeof(aImplReplacements_Turkish[0]) },
+        { "Turk", aImplReplacements_Turkish, SAL_N_ELEMENTS(aImplReplacements_Turkish) },
         // Russian, Russia
-        { "Russia", aImplReplacements_Russian, sizeof(aImplReplacements_Russian)/sizeof(aImplReplacements_Russian[0]) },
-        { "English", aImplReplacements_English, sizeof(aImplReplacements_English)/sizeof(aImplReplacements_English[0]) }
+        { "Russia", aImplReplacements_Russian, SAL_N_ELEMENTS(aImplReplacements_Russian) },
+        { "English", aImplReplacements_English, SAL_N_ELEMENTS(aImplReplacements_English) }
     };
 
     String getKeysymReplacementName( const char* pKeyboard, KeySym nSymbol )
     {
-        for( unsigned int n = 0; n < sizeof(aKeyboards)/sizeof(aKeyboards[0]); n++ )
+        for( unsigned int n = 0; n < SAL_N_ELEMENTS(aKeyboards); n++ )
         {
             if( ! strncasecmp( pKeyboard, aKeyboards[n].pKeyboardName, strlen( aKeyboards[n].pKeyboardName ) ) )
             {
@@ -437,7 +438,7 @@ namespace vcl_sal {
         }
         // try english fallbacks
         const struct KeysymNameReplacement* pRepl = aImplReplacements_English;
-        for( int m = sizeof(aImplReplacements_English)/sizeof(aImplReplacements_English[0]) ; m ; )
+        for( int m = SAL_N_ELEMENTS(aImplReplacements_English); m ; )
         {
             if( nSymbol == pRepl[--m].aSymbol )
                 return String( pRepl[m].pName, RTL_TEXTENCODING_UTF8 );

@@ -54,6 +54,7 @@
 #include <vcl/canvastools.hxx>
 
 #include <rtl/bootstrap.hxx>
+#include <sal/macros.h>
 
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/FillRule.hpp>
@@ -251,7 +252,7 @@ class DemoRenderer
         {
             const double SCALE=7.0;
             const char hilbert[] = "urdrrulurulldluuruluurdrurddldrrruluurdrurddldrddlulldrdldrrurd";
-            int nLength = sizeof( hilbert ) / sizeof (hilbert [0]);
+            int nLength = SAL_N_ELEMENTS( hilbert );
 
             uno::Sequence< geometry::RealPoint2D > aPoints( nLength );
             uno::Reference< rendering::XLinePolyPolygon2D > xPoly;

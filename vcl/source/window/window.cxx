@@ -90,7 +90,7 @@
 #include "vcl/impbmpconv.hxx"
 #include "unotools/confignode.hxx"
 #include "vcl/gdimtf.hxx"
-
+#include <sal/macros.h>
 #include "vcl/pdfextoutdevdata.hxx"
 #include "vcl/lazydelete.hxx"
 
@@ -393,8 +393,7 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
     };
     static std::set< LanguageType > aBrokenSystemFontSizeLanguagesSet(
         eBrokenSystemFontSizeLanguages,
-        eBrokenSystemFontSizeLanguages +
-        (sizeof(eBrokenSystemFontSizeLanguages)/sizeof(eBrokenSystemFontSizeLanguages[0]))
+        eBrokenSystemFontSizeLanguages + SAL_N_ELEMENTS(eBrokenSystemFontSizeLanguages)
         );
     LanguageType aLang = Application::GetSettings().GetUILanguage();
     if( aBrokenSystemFontSizeLanguagesSet.find( aLang ) != aBrokenSystemFontSizeLanguagesSet.end() )

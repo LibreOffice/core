@@ -49,6 +49,7 @@
 #include "osl/thread.h"
 #include "rtl/strbuf.hxx"
 #include "rtl/ustrbuf.hxx"
+#include <sal/macros.h>
 
 #include "com/sun/star/lang/Locale.hpp"
 
@@ -403,7 +404,7 @@ void PPDParser::scanPPDDir( const String& rDir )
     } const pSuffixes[] =
     { { ".PS", 3 },  { ".PPD", 4 }, { ".PS.GZ", 6 }, { ".PPD.GZ", 7 } };
 
-    const int nSuffixes = sizeof(pSuffixes)/sizeof(pSuffixes[0]);
+    const int nSuffixes = SAL_N_ELEMENTS(pSuffixes);
 
     osl::Directory aDir( rDir );
     aDir.open();

@@ -32,6 +32,7 @@
 // include ---------------------------------------------------------------
 
 #include <svl/srchitem.hxx>
+#include <sal/macros.h>
 
 #include <unotools/searchopt.hxx>
 #include <com/sun/star/util/XReplaceable.hpp>
@@ -98,7 +99,7 @@ static Sequence< ::rtl::OUString > lcl_GetNotifyNames()
         "Japanese/IsIgnoreMiddleDot"            // 18
     };
 
-    const int nCount = sizeof( aTranslitNames ) / sizeof( aTranslitNames[0] );
+    const int nCount = SAL_N_ELEMENTS( aTranslitNames );
     Sequence< ::rtl::OUString > aNames( nCount );
     ::rtl::OUString* pNames = aNames.getArray();
     for (INT32 i = 0;  i < nCount;  ++i)

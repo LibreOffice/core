@@ -35,6 +35,7 @@
 #include <set>
 
 #include <rtl/ustrbuf.hxx>
+#include <sal/macros.h>
 
 #include "LocaleNode.hxx"
 #include <com/sun/star/i18n/NumberFormatIndex.hpp>
@@ -1487,7 +1488,7 @@ void LCMiscNode::generateCode (const OFileWriter &of) const
     ::rtl::OUString str;
     sal_Int16 i;
 
-    for ( i = 0; i < sal_Int16(sizeof(ReserveWord)/sizeof(ReserveWord[0])); i++,nbOfWords++) {
+    for ( i = 0; i < sal_Int16(SAL_N_ELEMENTS(ReserveWord)); i++,nbOfWords++) {
         const LocaleNode * curNode = (reserveNode ? reserveNode->findNode(
                     ReserveWord[i].name) : 0);
         if (!curNode)

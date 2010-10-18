@@ -48,6 +48,7 @@
 #include <poll.h>
 #endif
 #include <sal/alloca.h>
+#include <sal/macros.h>
 
 #include <X11_selection.hxx>
 #include <X11_clipboard.hxx>
@@ -816,9 +817,7 @@ bool SelectionManager::requestOwnership( Atom selection )
 void SelectionManager::convertTypeToNative( const OUString& rType, Atom selection, int& rFormat, ::std::list< Atom >& rConversions, bool bPushFront )
 {
     NativeTypeEntry* pTab = selection == m_nXdndSelection ? aXdndConversionTab : aNativeConversionTab;
-    int nTabEntries = selection == m_nXdndSelection
-        ? sizeof(aXdndConversionTab)/sizeof(aXdndConversionTab[0]) :
-        sizeof(aNativeConversionTab)/sizeof(aNativeConversionTab[0]);
+    int nTabEntries = selection == m_nXdndSelection ? SAL_N_ELEMENTS(aXdndConversionTab) : SAL_N_ELEMENTS(aNativeConversionTab);
 
     OString aType( OUStringToOString( rType, RTL_TEXTENCODING_ISO_8859_1 ) );
     rFormat = 0;
@@ -891,10 +890,8 @@ void SelectionManager::getNativeTypeList( const Sequence< DataFlavor >& rTypes, 
 
 OUString SelectionManager::convertTypeFromNative( Atom nType, Atom selection, int& rFormat )
 {
-    NativeTypeEntry* pTab = selection == m_nXdndSelection ? aXdndConversionTab : aNativeConversionTab;
-    int nTabEntries = selection == m_nXdndSelection
-        ? sizeof(aXdndConversionTab)/sizeof(aXdndConversionTab[0]) :
-        sizeof(aNativeConversionTab)/sizeof(aNativeConversionTab[0]);
+    NativeTypeEntry* pTab = (selection == m_nXdndSelection) ? aXdndConversionTab : aNativeConversionTab;
+    int nTabEntries = (selection == m_nXdndSelection) ? SAL_N_ELEMENTS(aXdndConversionTab) : SAL_N_ELEMENTS(aNativeConversionTab);
 
     for( int i = 0; i < nTabEntries; i++ )
     {

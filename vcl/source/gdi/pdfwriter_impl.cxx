@@ -2210,7 +2210,7 @@ ImplDevFontList* PDFWriterImpl::filterDevFontList( ImplDevFontList* pFontList )
 
     // append the PDF builtin fonts
     if( !m_bIsPDF_A1 && !m_bEmbedStandardFonts)
-        for( unsigned int i = 0; i < sizeof(m_aBuiltinFonts)/sizeof(m_aBuiltinFonts[0]); i++ )
+        for( unsigned int i = 0; i < SAL_N_ELEMENTS(m_aBuiltinFonts); i++ )
         {
             ImplFontData* pNewData = new ImplPdfBuiltinFontData( m_aBuiltinFonts[i] );
             pFiltered->Add( pNewData );
@@ -3610,7 +3610,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const ImplFont
         if( nFontDescriptor )
         {
             if( pEncoding )
-                nToUnicodeStream = createToUnicodeCMap( nEncoding, &aUnicodes[0], pUnicodesPerGlyph, pEncToUnicodeIndex, sizeof(nEncoding)/sizeof(nEncoding[0]) );
+                nToUnicodeStream = createToUnicodeCMap( nEncoding, &aUnicodes[0], pUnicodesPerGlyph, pEncToUnicodeIndex, SAL_N_ELEMENTS(nEncoding) );
 
             // write font object
             sal_Int32 nObject = createObject();

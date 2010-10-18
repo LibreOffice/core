@@ -51,6 +51,7 @@
 
 #include <com/sun/star/i18n/NumberFormatIndex.hdl>
 #include <rtl/instance.hxx>
+#include <sal/macros.h>
 
 #define LOCALEDATA_LIBRARYNAME "i18npool"
 #define LOCALEDATA_SERVICENAME "com.sun.star.i18n.LocaleData"
@@ -1741,7 +1742,7 @@ String LocaleDataWrapper::getCurr( sal_Int64 nNumber, USHORT nDecimals,
         new sal_Unicode[nGuess + 16]);
 
     sal_Unicode* const pBuffer =
-        ((size_t(rCurrencySymbol.Len()) + nGuess + 20) < sizeof(aBuf)/sizeof(aBuf[0]) ? aBuf :
+        ((size_t(rCurrencySymbol.Len()) + nGuess + 20) < SAL_N_ELEMENTS(aBuf) ? aBuf :
         new sal_Unicode[ rCurrencySymbol.Len() + nGuess + 20 ]);
     sal_Unicode* pBuf = pBuffer;
 

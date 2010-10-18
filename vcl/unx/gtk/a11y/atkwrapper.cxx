@@ -516,6 +516,8 @@ wrapper_ref_relation_set( AtkObject *atk_obj )
 /*****************************************************************************/
 
 #if 0
+
+#include <sal/macros.h>
 struct {
     sal_Int16       value;
     const sal_Char* name;
@@ -556,7 +558,7 @@ struct {
 static void printStates(const uno::Sequence<sal_Int16>& rStates)
 {
     sal_Int32 n = rStates.getLength();
-    size_t nTypes = sizeof(aStateTypeTable)/sizeof(aStateTypeTable[0]);
+    size_t nTypes = SAL_N_ELEMENTS(aStateTypeTable);
     for (sal_Int32 i = 0; i < n; ++i)
     {
         for (size_t j = 0; j < nTypes; ++j)

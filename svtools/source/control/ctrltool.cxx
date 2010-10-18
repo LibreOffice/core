@@ -38,6 +38,7 @@
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
+#include <sal/macros.h>
 
 #include <svtools/svtools.hrc>
 #include <svtools/svtdata.hxx>
@@ -930,7 +931,7 @@ FontSizeNames::FontSizeNames( LanguageType eLanguage )
         case LANGUAGE_CHINESE:
         case LANGUAGE_CHINESE_SIMPLIFIED:
             mpArray = aImplSimplifiedChinese;
-            mnElem = sizeof(aImplSimplifiedChinese) / sizeof(aImplSimplifiedChinese[0]);
+            mnElem = SAL_N_ELEMENTS(aImplSimplifiedChinese);
             break;
 
 #if 0 // #i89077# disabled by popular request
@@ -939,7 +940,7 @@ FontSizeNames::FontSizeNames( LanguageType eLanguage )
         case LANGUAGE_CHINESE_MACAU:
         case LANGUAGE_CHINESE_TRADITIONAL:
             mpArray = aImplTraditionalChinese;
-            mnElem = sizeof(aImplTraditionalChinese) / sizeof(aImplTraditionalChinese[0]);
+            mnElem = SAL_N_ELEMENTS(aImplTraditionalChinese);
             break;
 #endif
 

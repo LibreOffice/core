@@ -51,6 +51,7 @@
 
 #include "osl/thread.h"
 #include "sal/alloca.h"
+#include <sal/macros.h>
 
 #include <algorithm>
 #include <vector>
@@ -428,7 +429,7 @@ PrinterJob::StartJob (
     sal_Char pCreationDate [256];
     WritePS (mpJobHeader, "%%CreationDate: (");
     getLocalTime(pCreationDate);
-    for( unsigned int i = 0; i < sizeof(pCreationDate)/sizeof(pCreationDate[0]); i++ )
+    for( unsigned int i = 0; i < SAL_N_ELEMENTS(pCreationDate); i++ )
     {
         if( pCreationDate[i] == '\n' )
         {

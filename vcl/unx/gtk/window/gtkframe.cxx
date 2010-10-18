@@ -52,6 +52,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/impbmp.hxx>
 #include <vcl/svids.hrc>
+#include <sal/macros.h>
 
 #include <algorithm>
 
@@ -418,7 +419,7 @@ GtkSalFrame::GtkSalFrame( SystemParentData* pSysData )
 
 GtkSalFrame::~GtkSalFrame()
 {
-    for( unsigned int i = 0; i < sizeof(m_aGraphics)/sizeof(m_aGraphics[0]); ++i )
+    for( unsigned int i = 0; i < SAL_N_ELEMENTS(m_aGraphics); ++i )
     {
         if( !m_aGraphics[i].pGraphics )
             continue;
@@ -1739,7 +1740,7 @@ void GtkSalFrame::moveToScreen( int nScreen )
         m_aSystemData.pAppContext   = NULL;
         m_aSystemData.aShellWindow  = m_aSystemData.aWindow;
         // update graphics if necessary
-        for( unsigned int i = 0; i < sizeof(m_aGraphics)/sizeof(m_aGraphics[0]); i++ )
+        for( unsigned int i = 0; i < SAL_N_ELEMENTS(m_aGraphics); i++ )
         {
             if( m_aGraphics[i].bInUse )
                 m_aGraphics[i].pGraphics->SetDrawable( GDK_WINDOW_XWINDOW(m_pWindow->window), m_nScreen );
@@ -2400,7 +2401,7 @@ void GtkSalFrame::createNewWindow( XLIB_Window aNewParent, bool bXEmbed, int nSc
     }
 
     // free xrender resources
-    for( unsigned int i = 0; i < sizeof(m_aGraphics)/sizeof(m_aGraphics[0]); i++ )
+    for( unsigned int i = 0; i < SAL_N_ELEMENTS(m_aGraphics); i++ )
         if( m_aGraphics[i].bInUse )
             m_aGraphics[i].pGraphics->SetDrawable( None, m_nScreen );
 
@@ -2435,7 +2436,7 @@ void GtkSalFrame::createNewWindow( XLIB_Window aNewParent, bool bXEmbed, int nSc
     }
 
     // update graphics
-    for( unsigned int i = 0; i < sizeof(m_aGraphics)/sizeof(m_aGraphics[0]); i++ )
+    for( unsigned int i = 0; i < SAL_N_ELEMENTS(m_aGraphics); i++ )
     {
         if( m_aGraphics[i].bInUse )
         {

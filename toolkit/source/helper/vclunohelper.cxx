@@ -33,6 +33,7 @@
 #include <tools/stream.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/window.hxx>
+#include <sal/macros.h>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
@@ -517,7 +518,7 @@ namespace
             { FUNIT_FOOT,       MeasureUnit::FOOT,          1 },
             { FUNIT_MILE,       MeasureUnit::MILE,          1 },
         };
-        for ( size_t i = 0; i < sizeof( aUnits ) / sizeof( aUnits[0] ); ++i )
+        for ( size_t i = 0; i < SAL_N_ELEMENTS( aUnits ); ++i )
         {
             if ( eDirection == FieldUnitToMeasurementUnit )
             {

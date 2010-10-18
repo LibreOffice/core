@@ -37,6 +37,7 @@
 #include <unotools/configpathes.hxx>
 #include <unotools/syslocale.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/macros.h>
 #include <tools/debug.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
@@ -1002,7 +1003,7 @@ FontWeight FontSubstConfiguration::getSubstWeight( const com::sun::star::uno::Re
             const OUString* pLine = (const OUString*)aAny.getValue();
             if( pLine->getLength() )
             {
-                for( weight=sizeof(pWeightNames)/sizeof(pWeightNames[0])-1; weight >= 0; weight-- )
+                for( weight=SAL_N_ELEMENTS(pWeightNames)-1; weight >= 0; weight-- )
                     if( pLine->equalsIgnoreAsciiCaseAscii( pWeightNames[weight].pName ) )
                         break;
             }
@@ -1034,7 +1035,7 @@ FontWidth FontSubstConfiguration::getSubstWidth( const com::sun::star::uno::Refe
             const OUString* pLine = (const OUString*)aAny.getValue();
             if( pLine->getLength() )
             {
-                for( width=sizeof(pWidthNames)/sizeof(pWidthNames[0])-1; width >= 0; width-- )
+                for( width=SAL_N_ELEMENTS(pWidthNames)-1; width >= 0; width-- )
                     if( pLine->equalsIgnoreAsciiCaseAscii( pWidthNames[width].pName ) )
                         break;
             }

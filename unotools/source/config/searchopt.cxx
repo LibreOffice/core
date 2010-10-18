@@ -37,6 +37,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Any.h>
 #include <rtl/logfile.hxx>
+#include <sal/macros.h>
 
 
 using namespace rtl;
@@ -172,7 +173,7 @@ Sequence< OUString > SvtSearchOptions_Impl::GetPropertyNames() const
         "IsNotes"                   // 25
     };
 
-    const int nCount = sizeof( aPropNames ) / sizeof( aPropNames[0] );
+    const int nCount = SAL_N_ELEMENTS( aPropNames );
     Sequence< OUString > aNames( nCount );
     OUString* pNames = aNames.getArray();
     for (INT32 i = 0;  i < nCount;  ++i)

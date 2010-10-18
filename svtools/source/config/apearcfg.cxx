@@ -36,6 +36,7 @@
 #include "vcl/settings.hxx"
 #include "vcl/svapp.hxx"
 #include <rtl/logfile.hxx>
+#include <sal/macros.h>
 
 #define DEFAULT_LOOKNFEEL   0
 #define DEFAULT_DRAGMODE    2
@@ -129,7 +130,7 @@ const Sequence<OUString>& SvtTabAppearanceCfg::GetPropertyNames()
             ,"FontAntiAliasing/MinPixelHeight"  //  9
 #endif
         };
-        const int nCount = sizeof( aPropNames ) / sizeof( aPropNames[0] );
+        const int nCount = SAL_N_ELEMENTS( aPropNames );
         aNames.realloc(nCount);
 
         const sal_Char** pAsciiNames = aPropNames;

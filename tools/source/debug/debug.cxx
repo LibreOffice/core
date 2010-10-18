@@ -63,6 +63,7 @@
 
 #include <tools/debug.hxx>
 #include <rtl/string.h>
+#include <sal/macros.h>
 
 #include <vector>
 
@@ -486,7 +487,7 @@ namespace
         size_t nValueLen = lcl_tryReadConfigString( _pLine, _nLineLen, _pKeyName, aBuf, sizeof( aBuf ) );
         if ( nValueLen )
         {
-            for ( ULONG name = 0; name < sizeof( names ) / sizeof( names[0] ); ++name )
+            for ( ULONG name = 0; name < SAL_N_ELEMENTS( names ); ++name )
             {
                 if ( strcmp( aBuf, names[ name ] ) == 0 )
                 {

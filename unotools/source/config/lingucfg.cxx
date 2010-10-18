@@ -45,6 +45,7 @@
 #include <tools/string.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/linguprops.hxx>
+#include <sal/macros.h>
 
 #include <comphelper/processfactory.hxx>
 
@@ -293,7 +294,7 @@ const uno::Sequence< OUString > & SvtLinguConfigItem::GetPropertyNames()
 
     if (!bInitialized)
     {
-        INT32 nMax = sizeof(aNamesToHdl) / sizeof(aNamesToHdl[0]);
+        INT32 nMax = SAL_N_ELEMENTS(aNamesToHdl);
 
         aNames.realloc( nMax );
         OUString *pNames = aNames.getArray();

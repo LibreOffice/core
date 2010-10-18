@@ -70,6 +70,7 @@
 #include "tools/debug.hxx"
 
 #include "sal/alloca.h"
+#include <sal/macros.h>
 #include <com/sun/star/uno/Exception.hpp>
 
 #include <algorithm>
@@ -180,7 +181,7 @@ void X11SalFrame::setXEmbedInfo()
                          32,
                          PropModeReplace,
                          reinterpret_cast<unsigned char*>(aInfo),
-                         sizeof(aInfo)/sizeof(aInfo[0]) );
+                         SAL_N_ELEMENTS(aInfo) );
     }
 }
 

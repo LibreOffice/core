@@ -39,6 +39,7 @@
 #include <tools/rc.h>
 #include <tools/isofallback.hxx>
 #include <rtl/strbuf.hxx>
+#include <sal/macros.h>
 
 // Programmabhaengige Includes.
 #include <rsctree.hxx>
@@ -836,7 +837,7 @@ void RscTypCont :: WriteSrc( FILE * fOutput, ULONG nFileKey,
     RscEnumerateRef aEnumRef( this, pRoot, fOutput );
 
     unsigned char aUTF8BOM[3] = { 0xef, 0xbb, 0xbf };
-    fwrite( aUTF8BOM, sizeof(unsigned char), sizeof(aUTF8BOM)/sizeof(aUTF8BOM[0]), fOutput );
+    fwrite( aUTF8BOM, sizeof(unsigned char), SAL_N_ELEMENTS(aUTF8BOM), fOutput );
     if( bName )
     {
         WriteInc( fOutput, nFileKey );

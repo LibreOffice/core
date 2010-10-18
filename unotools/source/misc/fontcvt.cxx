@@ -30,6 +30,7 @@
 #include "precompiled_unotools.hxx"
 #include <unotools/fontcvt.hxx>
 #include <unotools/fontdefs.hxx>
+#include <sal/macros.h>
 
 #ifndef _STLP_MAP
 #include <map>
@@ -1188,7 +1189,7 @@ StarSymbolToMSMultiFontImpl::StarSymbolToMSMultiFontImpl(bool bPerfectOnly)
 
     //Reverse map from a given starsymbol char to exact matches in ms symbol
     //fonts.
-    int nEntries = sizeof(aConservativeTable) / sizeof(aConservativeTable[0]);
+    int nEntries = SAL_N_ELEMENTS(aConservativeTable);
     int i;
     for (i = 0; i < nEntries; ++i)
     {
@@ -1219,7 +1220,7 @@ StarSymbolToMSMultiFontImpl::StarSymbolToMSMultiFontImpl(bool bPerfectOnly)
 
      //Allow extra conversions that are not perfect, but "good enough"
     if (!bPerfectOnly)
-        nEntries = sizeof(aAgressiveTable) / sizeof(aAgressiveTable[0]);
+        nEntries = SAL_N_ELEMENTS(aAgressiveTable);
     else
         nEntries = 1;
 
@@ -1439,7 +1440,7 @@ const ConvertChar* ConvertChar::GetRecodeData( const String& rOrgFontName, const
     if( aMapName.EqualsAscii( "starsymbol" )
      || aMapName.EqualsAscii( "opensymbol" ) )
     {
-        int nEntries = sizeof(aRecodeTable) / sizeof(aRecodeTable[0]);
+        int nEntries = SAL_N_ELEMENTS(aRecodeTable);
         for( int i = 0; i < nEntries; ++i)
         {
             RecodeTable& r = aRecodeTable[i];
@@ -1470,7 +1471,7 @@ FontToSubsFontConverter CreateFontToSubsFontConverter(
 
     if ( nFlags & FONTTOSUBSFONT_IMPORT )
     {
-        int nEntries = sizeof(aRecodeTable) / sizeof(aRecodeTable[0]);
+        int nEntries = SAL_N_ELEMENTS(aRecodeTable);
         if ( nFlags & FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS ) // only StarMath+StarBats
             nEntries = 2;
         for( int i = 0; i < nEntries; ++i )

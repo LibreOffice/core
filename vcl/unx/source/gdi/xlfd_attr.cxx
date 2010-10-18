@@ -32,6 +32,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sal/alloca.h>
+#include <sal/macros.h>
 #include "xlfd_attr.hxx"
 #include <rtl/tencinfo.h>
 #include <vcl/vclenum.hxx>
@@ -235,7 +236,6 @@ Attribute::TagFeature( unsigned short nFeature )
 // order, since they are treated by binary search algorithm
 
 #define InitializeAttributeWith( p, a ) p, sizeof(p) - 1, a, 0, NULL, NULL
-#define MembersOf( p ) (sizeof(p) / sizeof(p[0]) )
 
 const Attribute pFamilyAttribute[] = {
     { InitializeAttributeWith( "arial",                 FAMILY_SWISS )  },
@@ -388,7 +388,7 @@ AnnotateSlant( const Attribute& rAttribute )
             { "ot", "Other" }
     };
 
-    for ( unsigned int i = 0; i < MembersOf(pTranslation); i++ )
+    for ( unsigned int i = 0; i < SAL_N_ELEMENTS(pTranslation); i++ )
         if ( strcmp(pStr, pTranslation[i].pFrom) == 0 )
         {
             return new String( pTranslation[i].pTo,
@@ -638,16 +638,16 @@ AttributeProvider::AddClassification()
     /* mpField[ eXLFDFoundry ] doesn't need classification */
     mpField[ eXLFDFamilyName   ]->AddClassification(
                                     (Attribute*)pFamilyAttribute,
-                                    MembersOf(pFamilyAttribute) );
+                                    SAL_N_ELEMENTS(pFamilyAttribute) );
     mpField[ eXLFDWeightName   ]->AddClassification(
                                     (Attribute*)pWeightAttribute,
-                                    MembersOf(pWeightAttribute) );
+                                    SAL_N_ELEMENTS(pWeightAttribute) );
     mpField[ eXLFDSlant        ]->AddClassification(
                                     (Attribute*)pSlantAttribute,
-                                    MembersOf(pSlantAttribute) );
+                                    SAL_N_ELEMENTS(pSlantAttribute) );
     mpField[ eXLFDSetwidthName ]->AddClassification(
                                     (Attribute*)pSetwidthAttribute,
-                                    MembersOf(pSetwidthAttribute) );
+                                    SAL_N_ELEMENTS(pSetwidthAttribute) );
     mpField[ eXLFDAddstyleName ]->AddClassification(
                                     GetTextEncodingFromAddStylename );
     mpField[ eXLFDCharset      ]->AddClassification(

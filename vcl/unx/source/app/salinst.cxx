@@ -50,6 +50,7 @@
 #include "vcl/helper.hxx"
 #include <tools/solarmutex.hxx>
 #include "vos/mutex.hxx"
+#include <sal/macros.h>
 
 // -------------------------------------------------------------------------
 //
@@ -301,7 +302,7 @@ static void getServerDirectories( std::list< rtl::OString >& o_rFontPaths )
     };
     ::std::list< ByteString > aLines;
 
-    for( unsigned int i = 0; i < sizeof(pCommands)/sizeof(pCommands[0]); i++ )
+    for( unsigned int i = 0; i < SAL_N_ELEMENTS(pCommands); i++ )
     {
         FILE* pPipe = popen( pCommands[i], "r" );
         aLines.clear();

@@ -48,6 +48,7 @@
 #include <vcl/tabctrl.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/wrkwin.hxx>
+#include <sal/macros.h>
 
 namespace svt { namespace toolpanel
 {
@@ -93,7 +94,7 @@ public:
         {
             "This", "is a", "Tab", "Control", "intended", "for", "comparison"
         };
-        for ( size_t i=0; i < sizeof( pTabTitles ) / sizeof( pTabTitles[0] ); ++i )
+        for ( size_t i=0; i < SAL_N_ELEMENTS( pTabTitles ); ++i )
         {
             String sText( String::CreateFromAscii( pTabTitles[i] ) );
             m_aTabControl.InsertPage( i + 1, sText );
@@ -415,7 +416,7 @@ OptionsWindow::OptionsWindow( PanelDemoMainWindow& i_rParent )
         "Tab Bar Alignment", "Left", "Right", "Top", "Bottom", "Tab Items", "Images and Text", "Images only",
         "Text only", "Automatic", "Panels", "", "Remove Panel", "", "", "Insert Panel"
     };
-    for ( size_t i=0; i < sizeof( pControls ) / sizeof( pControls[0] ); ++i )
+    for ( size_t i=0; i < SAL_N_ELEMENTS( pControls ); ++i )
     {
         const WindowType eWindowType = pControls[i]->GetType();
 
@@ -505,7 +506,7 @@ void OptionsWindow::GetFocus()
     {
         &m_aAlignLeft, &m_aAlignRight, &m_aAlignTop, &m_aAlignBottom
     };
-    for ( size_t i=0; i < sizeof( pRadios ) / sizeof( pRadios[0] ); ++i )
+    for ( size_t i=0; i < SAL_N_ELEMENTS( pRadios ); ++i )
     {
         if ( pRadios[i]->IsChecked() )
         {
@@ -569,7 +570,7 @@ void OptionsWindow::Resize()
         ControlRow( m_aInsertPanel,         true )
     };
     bool bPreviousWasSubordinate = false;
-    for ( size_t i=0; i < sizeof( aControlRows ) / sizeof( aControlRows[0] ); ++i )
+    for ( size_t i=0; i < SAL_N_ELEMENTS( aControlRows ); ++i )
     {
         aItemPos.X() = ( aControlRows[i].bSubordinate ) ? nSubordinateX : nSuperordinateX;
 
