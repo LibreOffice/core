@@ -1914,6 +1914,7 @@ ToFile( "BUILD_UNOWINREG",   "@BUILD_UNOWINREG@",  "e" );
 ToFile( "USE_XINERAMA",      "@USE_XINERAMA@",     "e" );
 ToFile( "XINERAMA_LINK",     "@XINERAMA_LINK@",    "e" );
 ToFile( "SYSTEM_REDLAND",    "@SYSTEM_REDLAND@",   "e" );
+ToFile( "REDLAND_CFLAGS",    "@REDLAND_CFLAGS@",   "e" );
 ToFile( "REDLAND_LIBS",      "@REDLAND_LIBS@",     "e" );
 ToFile( "SYSTEM_HUNSPELL",   "@SYSTEM_HUNSPELL@",  "e" );
 ToFile( "HUNSPELL_CFLAGS",   "@HUNSPELL_CFLAGS@",  "e" );
