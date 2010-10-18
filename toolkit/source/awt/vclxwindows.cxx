@@ -2434,7 +2434,7 @@ throw(::com::sun::star::uno::RuntimeException)
         ::vos::OGuard aGuard( GetMutex() );
         if ( GetWindow() )
         {
-            sal_Int8 nCancel;
+            sal_Int8 nCancel(0);
             Value >>= nCancel;
 
             Dialog* pDlg = (Dialog*) GetWindow();
