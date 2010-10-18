@@ -69,12 +69,9 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <cppuhelper/implbase1.hxx>
-// OD 15.01.2003 #103492#
 #include <pagepreviewlayout.hxx>
-// --> OD 2005-12-13 #i27301#
 #include <pam.hxx>
 #include <ndtxt.hxx>
-// <--
 #include <dflyobj.hxx>
 #include <prevwpage.hxx>
 
@@ -158,10 +155,6 @@ void SwDrawModellListener_Impl::Notify( SfxBroadcaster& /*rBC*/,
 {
     // do not broadcast notifications for writer fly frames, because there
     // are no shapes that need to know about them.
-    // OD 01.07.2003 #110554# - correct condition in order not to broadcast
-    // notifications for writer fly frames.
-    // OD 01.07.2003 #110554# - do not broadcast notifications for plane
-    // <SdrObject>objects
     const SdrHint *pSdrHint = PTR_CAST( SdrHint, &rHint );
     if ( !pSdrHint ||
          ( pSdrHint->GetObject() &&
@@ -236,11 +229,9 @@ public:
         maInfo.SetSdrView( pMap->GetShell()->GetDrawView() );
         maInfo.SetWindow( pMap->GetShell()->GetWin() );
         maInfo.SetViewForwarder( pMap );
-        // --> OD 2005-08-08 #i52858# - method name changed
         uno::Reference < document::XEventBroadcaster > xModelBroadcaster =
             new SwDrawModellListener_Impl(
                     pMap->GetShell()->getIDocumentDrawModelAccess()->GetOrCreateDrawModel() );
-        // <--
         maInfo.SetControllerBroadcaster( xModelBroadcaster );
     }
 
@@ -334,9 +325,7 @@ private:
                                         // the same as xAcc for any other
                                         // event type
     EventType   meType;                 // The event type
-    // --> OD 2005-12-12 #i27301# - use new type definition for <mnStates>
     tAccessibleStates mnStates;         // check states or update caret pos
-    // <--
 
     SwAccessibleEvent_Impl& operator==( const SwAccessibleEvent_Impl& );
 
@@ -383,7 +372,6 @@ public:
                 "wrong event constructor, (CHILD_)POS_CHANGED only" );
     }
 
-    // --> OD 2005-12-12 #i27301# - use new type definition for parameter <_nStates>
     SwAccessibleEvent_Impl( EventType eT,
                             SwAccessibleContext *pA,
                             const SwAccessibleChild& rFrmOrObj,
@@ -432,12 +420,10 @@ public:
     }
 
     // <SetStates(..)> only used in method <SwAccessibleMap::AppendEvent(..)>
-    // --> OD 2005-12-12 #i27301# - use new type definition for parameter <_nStates>
     inline void SetStates( tAccessibleStates _nStates )
     {
         mnStates |= _nStates;
     }
-    // <--
 
     inline sal_Bool IsUpdateCursorPos() const
     {
@@ -451,32 +437,26 @@ public:
     {
         return (mnStates & ACC_STATE_RELATION_MASK) != 0;
     }
-    // --> OD 2005-12-12 #i27301# - new event TEXT_SELECTION_CHANGED
     inline sal_Bool IsInvalidateTextSelection() const
     {
         return ( mnStates & ACC_STATE_TEXT_SELECTION_CHANGED ) != 0;
     }
-    // <--
-    // --> OD 2009-01-07 #i88069# - new event TEXT_ATTRIBUTE_CHANGED
+
     inline sal_Bool IsInvalidateTextAttrs() const
     {
         return ( mnStates & ACC_STATE_TEXT_ATTRIBUTE_CHANGED ) != 0;
     }
-    // <--
-    // --> OD 2005-12-12 #i27301# - use new type definition <tAccessibleStates>
-    // for return value
+
     inline tAccessibleStates GetStates() const
     {
         return mnStates & ACC_STATE_MASK;
     }
-    // <--
-    // --> OD 2005-12-12 #i27301# - use new type definition <tAccessibleStates>
-    // for return value
+
     inline tAccessibleStates GetAllStates() const
     {
         return mnStates;
     }
-    // <--
+
 };
 
 //------------------------------------------------------------------------------
@@ -551,9 +531,7 @@ class SwAccessibleEventMap_Impl: public _SwAccessibleEventMap_Impl
 };
 
 //------------------------------------------------------------------------------
-// --> OD 2005-12-13 #i27301# - map containing the accessible paragraph, which
-// have a selection. Needed to keep this information to submit corresponding
-// TEXT_SELECTION_CHANGED events.
+
 struct SwAccessibleParaSelection
 {
     xub_StrLen nStartOfSelection;
@@ -581,7 +559,6 @@ typedef ::std::map< uno::WeakReference < XAccessible >,
 
 class SwAccessibleSelectedParas_Impl: public _SwAccessibleSelectedParas_Impl
 {};
-// <--
 
 // helper class that stores preview data
 class SwAccPreviewData
@@ -596,10 +573,6 @@ class SwAccPreviewData
     const SwPageFrm *mpSelPage;
 
     /** adjust logic page retangle to its visible part
-
-        OD 17.01.2003 #103492#
-
-        @author OD
 
         @param _iorLogicPgSwRect
         input/output parameter - reference to the logic page rectangle, which
@@ -621,16 +594,12 @@ public:
     SwAccPreviewData();
     ~SwAccPreviewData();
 
-    // OD 14.01.2003 #103492# - complete re-factoring of method due to new
-    // page/print preview functionality.
     void Update( const SwAccessibleMap& rAccMap,
                  const std::vector<PrevwPage*>& _rPrevwPages,
                  const Fraction&  _rScale,
                  const SwPageFrm* _pSelectedPageFrm,
                  const Size&      _rPrevwWinSize );
 
-    // OD 14.01.2003 #103492# - complete re-factoring of method due to new
-    // page/print preview functionality.
     void InvalidateSelection( const SwPageFrm* _pSelectedPageFrm );
 
     const SwRect& GetVisArea() const;
@@ -641,7 +610,6 @@ public:
      * proper position. rPoint identifies the page for which the
      * MapMode should be adjusted. If bFromPreview is true, rPoint is
      * a preview coordinate; else it's a document coordinate. */
-    // OD 17.01.2003 #103492# - delete unused 3rd parameter.
     void AdjustMapMode( MapMode& rMapMode,
                         const Point& rPoint ) const;
 
@@ -659,8 +627,6 @@ SwAccPreviewData::~SwAccPreviewData()
 {
 }
 
-// OD 13.01.2003 #103492# - complete re-factoring of method due to new page/print
-// preview functionality.
 void SwAccPreviewData::Update( const SwAccessibleMap& rAccMap,
                                const std::vector<PrevwPage*>& _rPrevwPages,
                                const Fraction&  _rScale,
@@ -710,8 +676,6 @@ void SwAccPreviewData::Update( const SwAccessibleMap& rAccMap,
     }
 }
 
-// OD 16.01.2003 #103492# - complete re-factoring of method due to new page/print
-// preview functionality.
 void SwAccPreviewData::InvalidateSelection( const SwPageFrm* _pSelectedPageFrm )
 {
     mpSelPage = _pSelectedPageFrm;
@@ -762,12 +726,7 @@ void SwAccPreviewData::DisposePage(const SwPageFrm *pPageFrm )
         mpSelPage = 0;
 }
 
-/** adjust logic page retangle to its visible part
-
-    OD 17.01.2003 #103492#
-
-    @author OD
-*/
+// adjust logic page retangle to its visible part
 void SwAccPreviewData::AdjustLogicPgRectToVisibleArea(
                             SwRect&         _iorLogicPgSwRect,
                             const SwRect&   _rPrevwPgSwRect,
@@ -838,13 +797,11 @@ void SwAccessibleMap::FireEvent( const SwAccessibleEvent_Impl& rEvent )
     }
     else if( xAccImpl.isValid() && xAccImpl->GetFrm() )
     {
-        // --> OD 2009-01-07 #i88069#
         if ( rEvent.GetType() != SwAccessibleEvent_Impl::DISPOSE &&
              rEvent.IsInvalidateTextAttrs() )
         {
             xAccImpl->InvalidateAttr();
         }
-        // <--
         switch( rEvent.GetType() )
         {
         case SwAccessibleEvent_Impl::INVALID_CONTENT:
@@ -861,11 +818,9 @@ void SwAccessibleMap::FireEvent( const SwAccessibleEvent_Impl& rEvent )
             ASSERT( xAccImpl.isValid(),
                     "dispose event has been stored" );
             break;
-        // --> OD 2009-01-06 #i88069#
         case SwAccessibleEvent_Impl::INVALID_ATTR:
             // nothing to do here - handled above
             break;
-        // <--
         default:
             break;
         }
@@ -877,7 +832,6 @@ void SwAccessibleMap::FireEvent( const SwAccessibleEvent_Impl& rEvent )
                 xAccImpl->InvalidateStates( rEvent.GetStates() );
             if( rEvent.IsInvalidateRelation() )
             {
-                // --> OD 2005-12-01 #i27138#
                 // both events CONTENT_FLOWS_FROM_RELATION_CHANGED and
                 // CONTENT_FLOWS_TO_RELATION_CHANGED are possible
                 if ( rEvent.GetAllStates() & ACC_STATE_RELATION_FROM )
@@ -890,14 +844,12 @@ void SwAccessibleMap::FireEvent( const SwAccessibleEvent_Impl& rEvent )
                     xAccImpl->InvalidateRelation(
                         AccessibleEventId::CONTENT_FLOWS_TO_RELATION_CHANGED );
                 }
-                // <--
             }
-            // --> OD 2005-12-12 #i27301# - submit event TEXT_SELECTION_CHANGED
+
             if ( rEvent.IsInvalidateTextSelection() )
             {
                 xAccImpl->InvalidateTextSelection();
             }
-            // <--
         }
     }
 }
@@ -981,12 +933,10 @@ void SwAccessibleMap::AppendEvent( const SwAccessibleEvent_Impl& rEvent )
                 // remove all events for the frame in question.
                 bAppendEvent = sal_False;
                 break;
-            // --> OD 2009-01-06 #i88069#
             case SwAccessibleEvent_Impl::INVALID_ATTR:
                 ASSERT( aEvent.GetType() == SwAccessibleEvent_Impl::INVALID_ATTR,
                         "invalid event combination" );
                 break;
-            // <--
             }
             if( bAppendEvent )
             {
@@ -1192,9 +1142,7 @@ SwAccessibleMap::SwAccessibleMap( ViewShell *pSh ) :
     mpShapes( 0  ),
     mpEvents( 0  ),
     mpEventMap( 0  ),
-    // --> OD 2005-12-13 #i27301#
     mpSelectedParas( 0 ),
-    // <--
     mpVSh( pSh ),
         mpPreview( 0 ),
     mnPara( 1 ),
@@ -1269,10 +1217,8 @@ SwAccessibleMap::~SwAccessibleMap()
         mpShapeMap = 0;
         delete mpShapes;
         mpShapes = 0;
-        // --> OD 2005-12-13 #i27301#
         delete mpSelectedParas;
         mpSelectedParas = 0;
-        // <--
     }
 
     delete mpPreview;
@@ -1376,8 +1322,6 @@ uno::Reference< XAccessible > SwAccessibleMap::GetDocumentView( )
     return _GetDocumentView( sal_False );
 }
 
-// OD 14.01.2003 #103492# - complete re-factoring of method due to new page/print
-// preview functionality.
 uno::Reference<XAccessible> SwAccessibleMap::GetDocumentPreview(
                                     const std::vector<PrevwPage*>& _rPrevwPages,
                                     const Fraction&  _rScale,
@@ -1929,7 +1873,6 @@ void SwAccessibleMap::InvalidateContent( const SwFrm *pFrm )
     }
 }
 
-// --> OD 2009-01-06 #i88069#
 void SwAccessibleMap::InvalidateAttr( const SwTxtFrm& rTxtFrm )
 {
     SwAccessibleChild aFrmOrObj( &rTxtFrm );
@@ -1967,7 +1910,6 @@ void SwAccessibleMap::InvalidateAttr( const SwTxtFrm& rTxtFrm )
         }
     }
 }
-// <--
 
 void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
 {
@@ -2092,7 +2034,6 @@ void SwAccessibleMap::SetCursorContext(
     mxCursorContext = xAcc;
 }
 
-// --> OD 2005-12-12 #i27301# - use new type definition for <_nStates>
 void SwAccessibleMap::InvalidateStates( tAccessibleStates _nStates,
                                         const SwFrm* _pFrm )
 {
@@ -2121,7 +2062,6 @@ void SwAccessibleMap::InvalidateStates( tAccessibleStates _nStates,
         pAccImpl->InvalidateStates( _nStates );
     }
 }
-// <--
 
 void SwAccessibleMap::_InvalidateRelationSet( const SwFrm* pFrm,
                                               sal_Bool bFrom )
@@ -2177,24 +2117,14 @@ void SwAccessibleMap::InvalidateRelationSet( const SwFrm* pMaster,
     _InvalidateRelationSet( pFollow, sal_True );
 }
 
-/** invalidation CONTENT_FLOW_FROM/_TO relation of a paragraph
-
-    OD 2005-12-01 #i27138#
-
-    @author OD
-*/
+// invalidation of CONTENT_FLOW_FROM/_TO relation of a paragraph
 void SwAccessibleMap::InvalidateParaFlowRelation( const SwTxtFrm& _rTxtFrm,
                                                   const bool _bFrom )
 {
     _InvalidateRelationSet( &_rTxtFrm, _bFrom );
 }
 
-/** invalidation of text selection of a paragraph
-
-    OD 2005-12-12 #i27301#
-
-    @author OD
-*/
+// invalidation of text selection of a paragraph
 void SwAccessibleMap::InvalidateParaTextSelection( const SwTxtFrm& _rTxtFrm )
 {
     // first, see if this frame is accessible, and if so, get the respective
@@ -2275,9 +2205,6 @@ sal_Int32 SwAccessibleMap::GetChildIndex( const SwFrm& rParentFrm,
     return nIndex;
 }
 
-
-// OD 15.01.2003 #103492# - complete re-factoring of method due to new page/print
-// preview functionality.
 void SwAccessibleMap::UpdatePreview( const std::vector<PrevwPage*>& _rPrevwPages,
                                      const Fraction&  _rScale,
                                      const SwPageFrm* _pSelectedPageFrm,
@@ -2286,7 +2213,6 @@ void SwAccessibleMap::UpdatePreview( const std::vector<PrevwPage*>& _rPrevwPages
     DBG_ASSERT( GetShell()->IsPreView(), "no preview?" );
     DBG_ASSERT( mpPreview != NULL, "no preview data?" );
 
-    // OD 15.01.2003 #103492# - adjustments for changed method signature
     mpPreview->Update( *this, _rPrevwPages, _rScale, _pSelectedPageFrm, _rPrevwWinSize );
 
     // propagate change of VisArea through the document's
@@ -2324,7 +2250,6 @@ void SwAccessibleMap::InvalidatePreViewSelection( sal_uInt16 nSelPage )
     DBG_ASSERT( GetShell()->IsPreView(), "no preview?" );
     DBG_ASSERT( mpPreview != NULL, "no preview data?" );
 
-    // OD 16.01.2003 #103492# - changed metthod call due to method signature change.
     mpPreview->InvalidateSelection( GetShell()->GetLayout()->GetPageByPageNum( nSelPage ) );
 
     uno::Reference < XAccessible > xOldAcc;
@@ -2414,7 +2339,6 @@ Point SwAccessibleMap::LogicToPixel( const Point& rPoint ) const
     Window *pWin = GetShell()->GetWin();
     if( pWin )
     {
-        // OD 16.01.2003 #103492# - get mapping mode for LogicToPixel conversion
         MapMode aMapMode;
         GetMapMode( aPoint, aMapMode );
         aPoint = pWin->LogicToPixel( aPoint, aMapMode );
@@ -2431,7 +2355,6 @@ Size SwAccessibleMap::LogicToPixel( const Size& rSize ) const
     Size aSize( OutputDevice::LogicToLogic( rSize, aSrc, aDest ) );
     if( GetShell()->GetWin() )
     {
-        // OD 16.01.2003 #103492# - get mapping mode for LogicToPixel conversion
         MapMode aMapMode;
         GetMapMode( Point(0,0), aMapMode );
         aSize = GetShell()->GetWin()->LogicToPixel( aSize, aMapMode );
@@ -2447,7 +2370,6 @@ Point SwAccessibleMap::PixelToLogic( const Point& rPoint ) const
     if( pWin )
     {
         aPoint = pWin->ScreenToOutputPixel( rPoint );
-        // OD 16.01.2003 #103492# - get mapping mode for PixelToLogic conversion
         MapMode aMapMode;
         GetMapMode( aPoint, aMapMode );
         aPoint = pWin->PixelToLogic( aPoint, aMapMode );
@@ -2464,7 +2386,6 @@ Size SwAccessibleMap::PixelToLogic( const Size& rSize ) const
     Size aSize;
     if( GetShell()->GetWin() )
     {
-        // OD 16.01.2003 #103492# - get mapping mode for PixelToLogic conversion
         MapMode aMapMode;
         GetMapMode( Point(0,0), aMapMode );
         aSize = GetShell()->GetWin()->PixelToLogic( rSize, aMapMode );
@@ -2559,7 +2480,6 @@ Point SwAccessibleMap::PixelToCore( const Point& rPoint ) const
     Point aPoint;
     if( GetShell()->GetWin() )
     {
-        // OD 15.01.2003 #103492# - replace <PreviewAdjust(..)> by <GetMapMode(..)>
         MapMode aMapMode;
         GetMapMode( rPoint, aMapMode );
         aPoint = GetShell()->GetWin()->PixelToLogic( rPoint, aMapMode );
@@ -2605,7 +2525,6 @@ Rectangle SwAccessibleMap::CoreToPixel( const Rectangle& rRect ) const
     Rectangle aRect;
     if( GetShell()->GetWin() )
     {
-        // OD 15.01.2003 #103492# - replace <PreviewAdjust(..)> by <GetMapMode(..)>
         MapMode aMapMode;
         GetMapMode( rRect.TopLeft(), aMapMode );
         aRect = GetShell()->GetWin()->LogicToPixel( rRect, aMapMode );
@@ -2619,15 +2538,11 @@ Rectangle SwAccessibleMap::CoreToPixel( const Rectangle& rRect ) const
 
 /** get mapping mode for LogicToPixel and PixelToLogic conversions
 
-    OD 15.01.2003 #103492#
-    Replacement method <PreviewAdjust(..)> by new method <GetMapMode>.
     Method returns mapping mode of current output device and adjusts it,
     if the shell is in page/print preview.
     Necessary, because <PreviewAdjust(..)> changes mapping mode at current
     output device for mapping logic document positions to page preview window
     positions and vice versa and doesn't take care to recover its changes.
-
-    @author OD
 */
 void SwAccessibleMap::GetMapMode( const Point& _rPoint,
                                   MapMode&     _orMapMode ) const
@@ -2642,12 +2557,6 @@ void SwAccessibleMap::GetMapMode( const Point& _rPoint,
     _orMapMode = aMapMode;
 }
 
-/** get size of a dedicated preview page
-
-    OD 15.01.2003 #103492#
-
-    @author OD
-*/
 Size SwAccessibleMap::GetPreViewPageSize( sal_uInt16 _nPrevwPageNum ) const
 {
     DBG_ASSERT( mpVSh->IsPreView(), "no page preview accessible." );
@@ -2665,11 +2574,7 @@ Size SwAccessibleMap::GetPreViewPageSize( sal_uInt16 _nPrevwPageNum ) const
 
 /** method to build up a new data structure of the accessible pararaphs,
     which have a selection
-
-    OD 2005-12-13 #i27301#
     Important note: method has to used inside a mutual exclusive section
-
-    @author OD
 */
 SwAccessibleSelectedParas_Impl* SwAccessibleMap::_BuildSelectedParas()
 {
@@ -2768,12 +2673,6 @@ SwAccessibleSelectedParas_Impl* SwAccessibleMap::_BuildSelectedParas()
     return pRetSelectedParas;
 }
 
-/** invalidation of text selection of all paragraphs
-
-    OD 2005-12-13 #i27301#
-
-    @author OD
-*/
 void SwAccessibleMap::InvalidateTextSelectionOfAllParas()
 {
     vos::OGuard aGuard( maMutex );
