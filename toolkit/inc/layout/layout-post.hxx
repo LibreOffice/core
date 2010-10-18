@@ -75,7 +75,6 @@
 #undef RadioButton
 #undef ResetButton
 #undef RetryButton
-#undef SfxTabPage
 #undef SfxTabDialog
 #undef SfxTabPage
 #undef SvxFontListBox
