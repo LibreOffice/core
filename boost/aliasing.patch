@@ -1,5 +1,5 @@
---- misc/boost_1_43_0/boost/function/function_base.hpp
-+++ misc/build/boost_1_43_0/boost/function/function_base.hpp
+--- misc/boost_1_39_0/boost/function/function_base.hpp
++++ misc/build/boost_1_39_0/boost/function/function_base.hpp
 @@ -2,6 +2,7 @@
  
  //  Copyright Douglas Gregor 2001-2006
@@ -41,17 +41,3 @@
            } else if (op == check_functor_type_tag) {
              const detail::sp_typeinfo& check_type 
                = *out_buffer.type.type;
-@@ -714,8 +722,11 @@
- 
- public: // should be protected, but GCC 2.95.3 will fail to allow access
-   detail::function::vtable_base* get_vtable() const {
--    return reinterpret_cast<detail::function::vtable_base*>(
--             reinterpret_cast<std::size_t>(vtable) & ~(std::size_t)0x01);
-+    return static_cast<detail::function::vtable_base*>(
-+            (void*)(
-+             (std::size_t(static_cast<void*>(vtable)) & ~(std::size_t(0x01)))
-+             )
-+            );
-   }
- 
-   bool has_trivial_copy_and_destroy() const {
