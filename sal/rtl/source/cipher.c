@@ -905,7 +905,6 @@ static void __rtl_cipherBF_updateCFB (
         sal_uInt8 c = iv[k];
         iv[k] = *pData;
         *pBuffer = *pData ^ c;
-        c = 0;
     }
 
     ctx->m_offset = ((k + 1) & 0x07);
