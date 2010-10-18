@@ -706,7 +706,7 @@ static void __rtl_digest_endMD5 (DigestContextMD5 *ctx)
         case 0: X[i]  = ((sal_uInt32)(*(p++))) <<  0L;
         case 1: X[i] |= ((sal_uInt32)(*(p++))) <<  8L;
         case 2: X[i] |= ((sal_uInt32)(*(p++))) << 16L;
-        case 3: X[i] |= ((sal_uInt32)(*(p++))) << 24L;
+        case 3: X[i] |= ((sal_uInt32)(*p)) << 24L;
     }
 
     i += 1;
