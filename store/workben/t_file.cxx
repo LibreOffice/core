@@ -63,28 +63,6 @@ int SAL_CALL main (int argc, char **argv)
             argv[1], rtl_str_getLength(argv[1]),
             osl_getThreadTextEncoding());
 
-#if 0   /* EXP */
-        oslFileError result;
-        rtl::OUString aPath;
-
-        result = osl_getFileURLFromSystemPath(aFilename.pData, &(aPath.pData));
-        if (result != osl_File_E_None)
-        {
-            // not SystemPath, assume FileUrl.
-            aPath = aFilename;
-        }
-        if (rtl_ustr_ascii_shortenedCompare_WithLength(aPath.pData->buffer, aPath.pData->length, "file://", 7) != 0)
-        {
-            // not FileUrl, assume relative path.
-            rtl::OUString aBase;
-            (void) osl_getProcessWorkingDir (&(aBase.pData));
-
-            // absolute FileUrl.
-            (void) osl_getAbsoluteFileURL(aBase.pData, aPath.pData, &(aPath.pData));
-        }
-        aFilename = aPath;
-#endif  /* EXP */
-
         eErrCode = FileLockBytes_createInstance (
             xLockBytes, aFilename.pData, store_AccessReadWrite);
         if (eErrCode != store_E_None)

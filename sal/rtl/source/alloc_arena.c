@@ -353,21 +353,6 @@ rtl_arena_hash_rescale (
             old_size, new_size
         );
 
-#if 0  /* DBG */
-        int i;
-        for (i = 0; i < arena->m_hash_size; i++)
-        {
-            sal_Size k = 0; rtl_arena_segment_type ** segpp = &(arena->m_hash_table[i]);
-            while (*segpp)
-            {
-                k += 1;
-                segpp = &((*segpp)->m_fnext);
-            }
-            fprintf(stdout, "%d, ", k);
-        }
-        fprintf(stdout, "\n");
-#endif /* DBG */
-
         arena->m_hash_table = new_table;
         arena->m_hash_size  = new_size;
         arena->m_hash_shift = highbit(arena->m_hash_size) - 1;

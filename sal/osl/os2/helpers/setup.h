@@ -58,14 +58,6 @@
         typedef unsigned short APIRET16;
         typedef unsigned long  APIRET32;
 
-#if 0
-//YD do not use with gcc 3.3.5
-        #define _System
-        #define APIENTRY
-            // with VAC++, this defines _System linkage, which
-            // EMX doesn't have, or does it?!?
-#endif // 0
-
     #endif
 
     // the following is a VAC++-specific macro, which doesn't exist

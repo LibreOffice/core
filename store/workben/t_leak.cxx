@@ -12,10 +12,6 @@
 {
     rtl_Locale * pLocale = 0;
     osl_getProcessLocale (&pLocale);
-#if 0
-    rtl_TextEncoding te = osl_getThreadTextEncoding();
-    (void) te;
-#endif
     return 0;
 }
 

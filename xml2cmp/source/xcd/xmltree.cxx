@@ -248,41 +248,5 @@ Create_CompDescrOptional_Element( MultipleTextElement * & o_rTypes,
 }
 
 
-#if 0
-
-const TextElement *
-ModuleDescription::ServiceDependencies() const
-{
-    const unsigned nEarliestPossibleServiceDependenciesIndexInModules = 1;
-
-    for ( unsigned i = nEarliestPossibleServiceDependenciesIndexInModules;
-          i < Children().size();
-          ++i )
-    {
-        if ( strcmp(Children()[i]->Name(), C_sServiceDependency) == 0 )
-            return Children()[i];
-    }
-    return 0;
-}
-
-const TextElement &
-ComponentDescription::SupportedServices() const
-{
-    return *Children()[C_nSupportedServicesIndex];
-}
-
-const TextElement *
-ComponentDescription::ServiceDependencies() const
-{
-    for ( unsigned i = C_nEarliestPossibleServiceDependenciesIndex; i < Children().size(); ++i )
-    {
-        if ( strcmp(Children()[i]->Name(),C_sServiceDependency) == 0)
-            return Children()[i];
-    }
-    return 0;
-}
-
-#endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

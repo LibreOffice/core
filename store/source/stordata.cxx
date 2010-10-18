@@ -724,31 +724,6 @@ OStoreDirectoryPageObject::scope (
     return page::SCOPE_UNREACHABLE;
 }
 
-#if 0  /* NYI */
-/*
- * chunk (external data page).
- */
-inode::ChunkDescriptor OStoreDirectoryPageObject::chunk (sal_uInt32 nOffset)
-{
-    // @@@ INSUFFICIENT: NEED SCOPE AS WELL @@@
-    sal_uInt32 nCapacity = m_rPage.capacity();
-    if (nOffset < nCapacity)
-        // Internal scope (inode page).
-        return inode::ChunkDescriptor (nOffset, nCapacity);
-    else
-        // External scope (data page).
-        return inode::ChunkDescriptor (nOffset - nCapacity, data::capacity(m_rPage.m_aDescr));
-
-    inode::ChunkScope eScope = m_rPage.scope(nOffset);
-    if (eScope == inode::SCOPE_INTERNAL)
-        // Inode page (internal scope).
-        return inode::ChunkDescriptor (nOffset, m_rPage.capacity());
-    else
-        // Data page (external scope).
-        return inode::ChunkDescriptor (nOffset - m_rPage.capacity(), data::capacity(m_rPage.m_aDescr));
-}
-#endif /* NYI */
-
 /*
  * read (external data page).
  */

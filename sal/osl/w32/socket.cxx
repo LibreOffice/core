@@ -290,25 +290,6 @@ static oslSocketError osl_SocketErrorFromNative(int nativeType)
 /*****************************************************************************/
 static oslSocketDialupImpl *pDialupImpl = NULL;
 
-#if 0  /* INTERNAL DEBUG ONLY */
-BOOL WINAPI __osl_autodial_Impl (DWORD dwFlags, DWORD dwReserved)
-{
-    return 0;
-}
-
-BOOL WINAPI __osl_autodialHangup_Impl (DWORD dwReserved)
-{
-    return 1;
-}
-
-BOOL WINAPI __osl_getConnectedState_Impl (LPDWORD lpdwFlags, DWORD dwReserved)
-{
-    if (lpdwFlags)
-        *lpdwFlags = 0;
-    return 0;
-}
-#endif /* INTERNAL DEBUG ONLY */
-
 /*
  * __osl_createSocketDialupImpl.
  */

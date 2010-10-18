@@ -513,15 +513,6 @@ namespace osl_Mutex
         // how about release twice?
         void release_002()
         {
-// LLA: is this a real test?
-#if 0
-            Mutex aMutex;
-            sal_Bool bRes1 = aMutex.release( );
-            sal_Bool bRes2 = aMutex.release( );
-
-            CPPUNIT_ASSERT_MESSAGE( "release Mutex: mutex should not be released without aquire, should not release twice. although the behaviour is still under discussion, this test is passed on (LINUX), not passed on (SOLARIS)&(WINDOWS)",
-                bRes1 == sal_False && bRes2 == sal_False );
-#endif
         }
 
         CPPUNIT_TEST_SUITE( release );

@@ -40,11 +40,6 @@ int main (int argc, char ** argv)
         result = osl_readLine (hFile, &pBuffer);
         if (result != osl_File_E_None)
           break;
-#if 0
-        if (pBuffer->elements[0] == 0)
-          /* @@@ cannot distinguish empty line from EOF @@@ */
-          break;
-#endif
         for (i = 0, n = pBuffer->nElements; i < n; i++)
           printf ("%c", (char)(pBuffer->elements[i]));
         printf("\n");

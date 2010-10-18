@@ -1275,11 +1275,6 @@ static osl_TFile* openFileImpl(rtl_uString * strFileName, oslProfileOption Profi
 
     if (! bWriteable)
     {
-#if 0
-//#ifdef DEBUG_OSL_PROFILE
-        OSL_TRACE("opening '%s' read only\n",pszFilename);
-#endif
-
         pFile->m_Handle = CreateFileW( reinterpret_cast<LPCWSTR>(rtl_uString_getStr( strFileName )), GENERIC_READ,
                                           FILE_SHARE_READ | FILE_SHARE_WRITE, NULL,
                                           OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);

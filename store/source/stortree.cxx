@@ -125,22 +125,6 @@ void OStoreBTreeNodeData::remove (sal_uInt16 i)
     }
 }
 
-#if 0  /* NYI */
-/*
- * merge (with right page).
- */
-void OStoreBTreeNodeData::merge (const self& rPageR)
-{
-    sal_uInt16 const n = usageCount();
-    sal_uInt16 const m = rPageR.usageCount();
-    if ((n + m) <= capacityCount())
-    {
-        memcpy (&(m_pData[n]), &(rPageR.m_pData[0]), m * sizeof(T));
-        usageCount (n + m);
-    }
-}
-#endif
-
 /*
  * split (left half copied from right half of left page).
  */
@@ -281,25 +265,6 @@ storeError OStoreBTreeNodeObject::remove (
         }
         else
         {
-#if 0   /* NYI */
-            // Check for right sibling.
-            sal_uInt16 const nIndexR = nIndexL + 1;
-            if (nIndexR < rPage.usageCount())
-            {
-                // Load right link node.
-                self aNodeR;
-                eErrCode = rBIOS.loadObjectAt (aNodeR, rPage.m_pData[nIndexR].m_aLink.location());
-                if (eErrCode == store_E_None)
-                {
-                    if (rPageL.queryMerge (rPageR))
-                    {
-                        rPageL.merge (rPageR);
-
-                        eErrCode = rBIOS.free (rPageR.location());
-                    }
-                }
-            }
-#endif  /* NYI */
 
             // Relink.
             rPage.m_pData[nIndexL].m_aKey = xPageL->m_pData[0].m_aKey;

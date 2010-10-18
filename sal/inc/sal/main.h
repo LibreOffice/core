@@ -71,14 +71,6 @@ int SAL_CALL main(int argc, char ** argv) \
 
 /* Sorry but this is neccessary cause HINSTANCE is a typedef that differs (C++ causes an error) */
 
-#if 0
-
-#ifndef _WINDOWS_
-#include <windows.h>
-#endif
-
-#else /* Simulated what windows.h does */
-
 #ifndef WINAPI
 #   define WINAPI   __stdcall
 #endif
@@ -95,7 +87,7 @@ int SAL_CALL main(int argc, char ** argv) \
 DECLARE_HANDLE(HINSTANCE);
 #endif
 
-#endif
+
 
 #define SAL_WIN_WinMain \
 int WINAPI WinMain( HINSTANCE _hinst, HINSTANCE _dummy, char* _cmdline, int _nshow ) \

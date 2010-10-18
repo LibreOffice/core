@@ -141,27 +141,6 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
     char szImagePath[PATH_MAX] = "";
     char szWorkDir[PATH_MAX] = "";
 
-#if 0
-    if (Options & osl_Process_SEARCHPATH)
-    {
-        const rtl::OUString PATH1;
-        OUString PATH (RTL_CONSTASCII_USTRINGPARAM("PATH"));
-
-        rtl_uString * pSearchPath = 0;
-        osl_getEnvironment (PATH.pData, &pSearchPath);
-        if (pSearchPath)
-        {
-            rtl_uString * pSearchResult = 0;
-            osl_searchPath (ustrImageName, pSearchPath, &pSearchResult);
-            if (pSearchResult)
-            {
-                rtl_uString_assign (ustrImageName, pSearchResult);
-                rtl_uString_release (pSearchResult);
-            }
-            rtl_uString_release (pSearchPath);
-        }
-    }
-#endif
 
     if ( ustrImageName && ustrImageName->length )
     {

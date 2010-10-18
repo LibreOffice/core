@@ -127,12 +127,6 @@ SharedCount::Allocator::~Allocator()
 
 /*======================================================================*/
 
-#if 0  /* OLD */
-
-typedef store::OStorePageData PageData;
-
-#else  /* NEW */
-
 #if defined(OSL_BIGENDIAN)
 #define STORE_DWORD(dword) OSL_SWAPDWORD((dword))
 #else
@@ -209,8 +203,6 @@ struct PageData
         return store_E_None;
     }
 };
-
-#endif /* NEW */
 
 class IPageAllocator
 {
@@ -708,75 +700,6 @@ public:
 };
 
 /*======================================================================*/
-#if 0  /* NYI */
-BIOS::load (PageObject & rPage, sal_uInt32 nOffset)
-{
-    result = m_xCache->readPageAt (rPage.get(), nOffset);
-    if (result == NotExists)
-    {
-        result = m_xLockBytes->readPageAt (rPage.get(), nOffset);
-        if (result != None)
-            return result;
-
-        result = rPage.verify();
-        if (result != None)
-            return result;
-
-        result = m_xCache->writePageAt (rPage.get(), nOffset);
-    }
-    return result;
-}
-BIOS::save (PageObject & rPage, sal_uInt32 nOffset)
-{
-    rPage.guard();
-    result = m_xLockBytes->writePageAt (rPage.get(), nOffset);
-    if (result != None)
-        return result;
-
-    return m_xCache->writePageAt (rPage.get(), nOffset);
-}
-BIOS::init (rxLockBytes, eAccessMode, nPageSize)
-{
-    SuperPage super;
-    if (eAccessMode == store_AccessCreate)
-    {
-        sal_uInt16 pagesize = nPageSize;
-        if ((STORE_MINIMUM_PAGESIZE > pagesize) || (pagesize > STORE_MAXIMUM_PAGESIZE))
-            return store_E_InvalidParameter;
-
-        pagesize = ((pagesize + STORE_MINIMUM_PAGESIZE - 1) & ~(STORE_MINIMUM_PAGESIZE - 1));
-        rxLockBytes->init (pagesize);
-
-        super = allocator->construct<SuperPage>();
-        super->guard();
-
-        rxLockBytes->writeAt (0, super, super->size());
-
-    }
-    if (eAccessMode != store_AccessCreate)
-    {
-        rxLockBytes->readAt (0, &super, super::theSize);
-
-        super.verify();
-    }
-    if (eErrCode != store_E_NotExists)
-
-
-}
-#endif /* NYI */
-/*======================================================================*/
-
-#if 0  /* NYI */
-class PageCache
-{
-  std::set<const sal_uInt32, PageObject> m_pages;
-public:
-  storeError readPageAt (PageObject & rPage, sal_uInt32 nOffset);
-  storeError writePageAt (PageObject const & rPage, sal_uInt32 nOffset);
-};
-#endif /* NYI */
-
-/*======================================================================*/
 
 class IPageAllocator;
 class IPageAccess
@@ -1226,15 +1149,6 @@ storeError MemoryPageAccess::writePageAt_Impl (PageHolder const & rPage, sal_uIn
     if (!(pagedata != 0))
         return store_E_InvalidParameter;
 
-#if 0  /* NYI */
-    sal_uInt16 const bytes = pagedata->size(); // Descr.m_nSize;
-    OSL_ASSERT(bytes >= PageData::thePageSize);
-
-    offset = rPage.location(); // Descr.m_nAddr;
-    OSL_ASSERT(nOffset == offset);
-
-    OSL_PRECOND(offset % bytes == 0, "Unaligned page write.");
-#endif /* NYI */
     return pokeAt (nOffset, pagedata, pagedata->size());
 }
 storeError MemoryPageAccess::peekAt_Impl (sal_uInt32 nOffset, void * pBuffer, sal_uInt32 nBytes)
@@ -1375,106 +1289,6 @@ void MappedPageAccess::unmapFile (sal_uInt8 * pData, sal_uInt32 nSize)
   (void) osl_unmapFile (pData, nSize);
 }
 
-#if 0  /* NYI */
-storeError MemoryPageAccess_createInstance (
-  rtl::Reference< IPageAccess > & rxPageAccess,
-  storeAccessMode                 eAccessMode,
-  sal_uInt16                      nPageSize
-)
-{
-  rxPageAccess = new MemoryPageAccess();
-  if (!rxPageAccess.is())
-    return store_E_OutOfMemory;
-
-  return rxPageAccess->initialize (eAccessMode, nPageSize);
-}
-
-storeError FilePageAccess_createInstance (
-  rtl::Reference< IPageAccess > & rxPageAccess,
-  rtl_uString *                   pFilename,
-  storeAccessMode                 eAccessMode,
-  sal_uInt16                      nPageSize
-)
-{
-  // Acquire file handle.
-  ResourceHolder<FileHandle> xFile;
-  result = xFile.get().initialize (pFilename, MODE_TO_NATIVE(eAccessMode));
-  if (result != osl_File_E_None)
-    return ERROR_FROM_NATIVE(result);
-
-  if (eAccessMode == store_AccessReadOnly)
-  {
-    ResourceHolder<FileMapping> xMapping;
-    result = xMapping.get().initialize (xFile.get());
-    if (result == osl_File_E_None)
-    {
-      const sal_uInt32 nSize = sal::static_int_cast<sal_uInt32>(xMapping.get().m_uSize);
-      rxPageAccess = new MappedPageAccess (xMapping.get().m_pAddr, nSize);
-      if (!rxPageAccess.is())
-    return store_E_OutOfMemory;
-      (void) xMapping.release();
-    }
-  }
-  if (!rxPageAccess.is())
-  {
-    rxPageAccess = new FilePageAccess (xFile.get());
-    if (!rxPageAccess.is())
-      return store_E_OutOfMemory;
-    (void) xFile.release();
-  }
-  return rxPageAccess->initialize (eAccessMode, nPageSize);
-}
-#endif /* NYI */
-
-/*========================================================================
- *
- * test...
- *
- *======================================================================*/
-#if 0  /* NYI */
-
-struct IDataBlock
-{
-  virtual sal_uInt16 singleCount() const = 0;
-  virtual sal_uInt32 singleLink (sal_uInt16 nIndex) const = 0;
-  virtual void singleLink (sal_uInt16 nIndex, sal_uInt32 nAddr) = 0;
-
-  virtual storeError get() = 0;
-  virtual storeError put() = 0;
-  virtual storeError truncate() = 0;
-};
-
-struct InodePageData : public PageData
-{
-  virtual INameBlock & getNameBlock() = 0;
-  virtual IDataBlock & getDataBlock() = 0;
-};
-
-template< class page_data_type >
-page_data_type * query (PageData *, page_data_type *);
-
-template<> InodePageDataV2*
-query (PageData & rData, InodePageDataV2 *)
-{
-  if (rData.isKindOf(InodePageDataV2::m_nTypeId))
-    return static_cast<InodePageDataV2*>(&rData);
-  return 0;
-}
-
-class InodePageObject : public PageObject
-{
-public:
-  static InodePageObject createInstance (PageData & rData)
-  {
-    if (query(&rData, static_cast<InodePageDataV2*>(0)))
-      return InodePageObjectV2 (static_cast<InodePageDataV2&>(rData));
-    else if (query(&rData, static_cast<InodePageDataV1*>(0)))
-      return InodePageObjectV1 (static_cast<InodePageDataV1&>(rData));
-  }
-};
-
-#endif /* NYI */
-
 /*========================================================================
  *
  * main.
@@ -1482,33 +1296,6 @@ public:
  *======================================================================*/
 
 #include <stdio.h>
-
-#if 0  /* EXP */
-class Interface
-{
-public:
-  virtual void deallocate(void *) /* = 0 */;
-};
-
-class Implementation : public Interface
-{
-  SharedCount m_count;
-
-public:
-  Implementation() : Interface() { printf("Ctor(%p)\n", this); }
-  ~Implementation() { printf("Dtor(%p)\n", this); }
-
-  Implementation (Implementation const & rhs) : Interface(), m_count (rhs.m_count) { printf("CopyCtor(%p)\n", this); }
-
-  virtual void deallocate(void *) {}
-};
-
-Interface Interface_createInstance()
-{
-  Implementation aInst;
-  return aInst;
-}
-#endif /* EXP */
 
 int SAL_CALL main (int argc, char ** argv)
 {
@@ -1534,12 +1321,6 @@ int SAL_CALL main (int argc, char ** argv)
       TestClient aClient;
       aClient.dwim (aBIOS);
   }
-#if 0  /* EXP */
-  {
-    Interface aIfc1 (Interface_createInstance());
-    Interface aIfc2 (aIfc1);
-  }
-#endif /* EXP */
 
   if (argc > 1)
   {

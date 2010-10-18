@@ -500,23 +500,6 @@ int SAL_CALL main (int argc, char **argv)
             "t_store::main(): store_createDirectory() failed");
         if (eErrCode == store_E_None)
         {
-#if 0  /* NYI */
-            // Rename directory.
-            eErrCode = aFile.rename (
-                aPath, "demostor-1.dir/",
-                aPath, "Renamed demostor-1.dir");
-            OSL_POSTCOND(
-                ((eErrCode == store_E_None         ) ||
-                 (eErrCode == store_E_AlreadyExists)    ),
-                "t_store::main(): store_rename() failed");
-
-            eErrCode = aFile.rename (
-                aPath, "Renamed demostor-1.dir/",
-                aPath, "demostor-1.dir");
-            OSL_POSTCOND(
-                (eErrCode == store_E_None),
-                "t_store::main(): store_rename() failed");
-#endif  /* NYI */
         }
     }
 

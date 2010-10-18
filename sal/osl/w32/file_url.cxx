@@ -303,14 +303,7 @@ DWORD IsValidFilePath(rtl_uString *path, LPCTSTR *lppError, DWORD dwFlags, rtl_u
 
                 if ( !lpComponent )
                 {
-    #if 0
-                    /* We only have a Server specification what is invalid */
-
-                    lpComponent = lpszPath;
-                    fValid = FALSE;
-    #else
                     dwPathType |= PATHTYPE_IS_SERVER;
-    #endif
                 }
                 else
                 {

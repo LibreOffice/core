@@ -71,16 +71,6 @@ typedef struct
     DIR*         pDirStruct;
 } oslDirectoryImpl;
 
-#if 0
-/* FIXME: reintroducing this may save some extra bytes per Item */
-typedef struct
-{
-    rtl_uString* ustrFileName;       /* holds native file name */
-    rtl_uString* ustrDirPath;        /* holds native dir path */
-    sal_uInt32   RefCount;
-} oslDirectoryItemImpl;
-#endif
-
 DirectoryItem_Impl::DirectoryItem_Impl(
     rtl_uString * ustrFilePath, unsigned char DType)
     : m_RefCount     (1),

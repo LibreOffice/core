@@ -183,15 +183,6 @@ static void __store_string_newFromUnicode_WithLength (
         OUSTRING_TO_OSTRING_CVTFLAGS);
 }
 
-#if 0  /* UNSUSED */
-static void __store_string_newFromUnicode (
-    rtl_String **newString, const rtl_uString *value)
-{
-    __store_string_newFromUnicode_WithLength (
-        newString, value->buffer, value->length);
-}
-#endif /* UNUSED */
-
 static void __store_string_newFromUnicode (
     rtl_String **newString, const sal_Unicode *value)
 {

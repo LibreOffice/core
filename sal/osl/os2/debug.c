@@ -2090,14 +2090,12 @@ VOID dbgPrintStack(FILE *LogFile,           // in: text log file to write to
         if (!fExceptionAddress)
         {
             LastEbp = Ebp;
-#if 0
-            Ebp = (PUSHORT) MAKEULONG(Bp, Sp);
-#else // Inserted by Kim Rasmussen 26/06 1996 to allow big stacks
+
             if (f32bit)
                 Ebp = (PUSHORT) *(PULONG) LastEbp;
             else
                 Ebp = (PUSHORT) MAKEULONG((*Ebp), Sp);
-#endif
+
             if (f32bit)
             {
                 dbgPrintVariables(LogFile, (ULONG) Ebp);
