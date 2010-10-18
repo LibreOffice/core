@@ -40,13 +40,13 @@
 //------------------------------------------------------------------------
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <cppuhelper/interfacecontainer.h>
 #include <osl/diagnose.h>
+#include <osl/process.h>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
 #include <com/sun/star/uno/Any.hxx>
@@ -132,41 +132,8 @@ void SalGtkFilePicker::InitialMapping()
     gtk_widget_set_size_request (m_pPreview, -1, -1);
 }
 
-static void lcl_setGTKLanguage(const uno::Reference<lang::XMultiServiceFactory>& xServiceMgr)
-{
-    static bool bSet = false;
-    if (bSet)
-        return;
-
-    OUString sUILocale;
-    try
-    {
-        uno::Reference<lang::XMultiServiceFactory> xConfigMgr =
-          uno::Reference<lang::XMultiServiceFactory>(xServiceMgr->createInstance(
-            OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider")),
-              UNO_QUERY_THROW );
-
-        Sequence< Any > theArgs(1);
-        theArgs[ 0 ] <<= OUString::createFromAscii("org.openoffice.Office.Linguistic/General");
-
-        uno::Reference< container::XNameAccess > xNameAccess =
-          uno::Reference< container::XNameAccess >(xConfigMgr->createInstanceWithArguments(
-            OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess"), theArgs ),
-              UNO_QUERY_THROW );
-
-        if (xNameAccess.is())
-            xNameAccess->getByName(OUString::createFromAscii("UILocale")) >>= sUILocale;
-    } catch (...) {}
-
-    if (sUILocale.getLength())
-    {
-        sUILocale = rtl::OUString::createFromAscii("LANGUAGE=") + sUILocale.replace('-', '_');
-        putenv(strdup(rtl::OUStringToOString(sUILocale, osl_getThreadTextEncoding()).getStr()));
-    }
-    bSet = true;
-}
-
 SalGtkFilePicker::SalGtkFilePicker( const uno::Reference<lang::XMultiServiceFactory>& xServiceMgr ) :
+    SalGtkPicker(xServiceMgr),
     cppu::WeakComponentImplHelper10<
         XFilterManager,
             XFilterGroupManager,
@@ -191,8 +158,6 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference<lang::XMultiServiceFact
     m_PreviewImageWidth( 256 ),
     m_PreviewImageHeight( 256 )
 {
-    lcl_setGTKLanguage(xServiceMgr);
-
     int i;
 
     for( i = 0; i < TOGGLE_LAST; i++ )

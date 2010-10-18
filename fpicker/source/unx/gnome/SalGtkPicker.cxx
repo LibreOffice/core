@@ -45,6 +45,7 @@
 #include <com/sun/star/awt/XSystemDependentWindowPeer.hpp>
 #include <com/sun/star/awt/SystemDependentXWindow.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <rtl/process.h>
@@ -207,6 +208,46 @@ gint RunDialog::run()
         gtk_widget_hide( mpDialog );
 
     return nStatus;
+}
+
+static void lcl_setGTKLanguage(const uno::Reference<lang::XMultiServiceFactory>& xServiceMgr)
+{
+    static bool bSet = false;
+    if (bSet)
+        return;
+
+    OUString sUILocale;
+    try
+    {
+        uno::Reference<lang::XMultiServiceFactory> xConfigMgr =
+          uno::Reference<lang::XMultiServiceFactory>(xServiceMgr->createInstance(
+            OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider")),
+              UNO_QUERY_THROW );
+
+        Sequence< Any > theArgs(1);
+        theArgs[ 0 ] <<= OUString::createFromAscii("org.openoffice.Office.Linguistic/General");
+
+        uno::Reference< container::XNameAccess > xNameAccess =
+          uno::Reference< container::XNameAccess >(xConfigMgr->createInstanceWithArguments(
+            OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess"), theArgs ),
+              UNO_QUERY_THROW );
+
+        if (xNameAccess.is())
+            xNameAccess->getByName(OUString::createFromAscii("UILocale")) >>= sUILocale;
+    } catch (...) {}
+
+    if (sUILocale.getLength())
+    {
+        sUILocale = sUILocale.replace('-', '_');
+        rtl::OUString envVar(RTL_CONSTASCII_USTRINGPARAM("LANGUAGE"));
+        osl_setEnvironment(envVar.pData, sUILocale.pData);
+    }
+    bSet = true;
+}
+
+SalGtkPicker::SalGtkPicker(const uno::Reference<lang::XMultiServiceFactory>& xServiceMgr) : m_pDialog(0)
+{
+    lcl_setGTKLanguage(xServiceMgr);
 }
 
 SalGtkPicker::~SalGtkPicker()

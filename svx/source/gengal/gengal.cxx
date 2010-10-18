@@ -242,8 +242,9 @@ void GalApp::Init()
 #endif
         rtl::OUString baseBinDir = fileName.copy( 0, lastSlash );
         rtl::OUString installPrefix = baseBinDir + rtl::OUString::createFromAscii( "/../.." );
-        rtl::OUString assignment = rtl::OUString::createFromAscii( "OOO_INSTALL_PREFIX=" ) + installPrefix;
-        putenv( strdup( OUSTRING_CSTR( assignment )));
+
+        rtl::OUString envVar(RTL_CONSTASCII_USTRINGPARAM("OOO_INSTALL_PREFIX"));
+        osl_setEnvironment(envVar.pData, installPrefix.pData);
     }
     OSL_TRACE( "OOO_INSTALL_PREFIX=%s", getenv( "OOO_INSTALL_PREFIX" ) );
 

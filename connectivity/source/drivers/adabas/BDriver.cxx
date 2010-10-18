@@ -466,8 +466,10 @@ void SAL_CALL ODriver::createCatalog( const Sequence< PropertyValue >& info ) th
     {
         TDatabaseStruct aDBInfo;
         fillInfo(info,aDBInfo);
-        static char envName[] = "DBSERVICE=0";
-        putenv( envName );
+
+        ::rtl::OUString envVar(RTL_CONSTASCII_USTRINGPARAM("DBSERVICE"));
+        ::rtl::OUString envData(RTL_CONSTASCII_USTRINGPARAM("0"));
+        osl_setEnvironment(envVar.pData, envData.pData);
 
         m_sDbRunDir = m_sDbWorkURL + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/wrk/")) + aDBInfo.sDBName;
         String sTemp;
