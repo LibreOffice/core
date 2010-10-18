@@ -34,9 +34,6 @@
 
 // Resource-Id's ------------------------------------------------------------
 
-// Bitte FIRSTFREE pflegen!!! (gilt nicht f"ur Strings)
-#define RID_SVX_FIRSTFREE                   305
-
 // Gallery
 #define RID_CUI_GALLERY_START               (RID_SVX_START + 360)
 #define RID_CUI_GALLERY_END                 (RID_SVX_START + 410)
