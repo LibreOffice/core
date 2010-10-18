@@ -230,7 +230,7 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
             TEXT("FastPipeCommunication"),
             TEXT("0"),
             szKey,
-            elementsof(szKey),
+            SAL_N_ELEMENTS(szKey),
             szPerfTuneIniFile
             );
 
@@ -258,10 +258,10 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
 
                 fSuccess = ConvertSidToStringSid( pSid, &szUserIdent );
 
-                _tcsncpy( szPipeName, PIPE_PREFIX, elementsof(szPipeName) );
-                _tcsncat( szPipeName, szUserIdent, elementsof(szPipeName) - _tcslen(szPipeName) - 1 );
-                _tcsncat( szPipeName, PIPE_POSTFIX, elementsof(szPipeName) - _tcslen(szPipeName) - 1 );
-                _tcsncat( szPipeName, _ultot( SUPD, szSUPD, 10), elementsof(szPipeName) - _tcslen(szPipeName) - 1 );
+                _tcsncpy( szPipeName, PIPE_PREFIX, SAL_N_ELEMENTS(szPipeName) );
+                _tcsncat( szPipeName, szUserIdent, SAL_N_ELEMENTS(szPipeName) - _tcslen(szPipeName) - 1 );
+                _tcsncat( szPipeName, PIPE_POSTFIX, SAL_N_ELEMENTS(szPipeName) - _tcslen(szPipeName) - 1 );
+                _tcsncat( szPipeName, _ultot( SUPD, szSUPD, 10), SAL_N_ELEMENTS(szPipeName) - _tcslen(szPipeName) - 1 );
 
                 LocalFree( szUserIdent );
 

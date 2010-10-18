@@ -102,11 +102,11 @@ void NotifyListener( HWND hWnd )
     nid.cbSize = sizeof(NOTIFYICONDATA);
     nid.hWnd   = hWnd;
     nid.uID    = IDM_QUICKSTART;
-    nid.szTip[elementsof(nid.szTip) - 1] = 0;
+    nid.szTip[SAL_N_ELEMENTS(nid.szTip) - 1] = 0;
 //    nid.hIcon = bTerminateVeto ? hIconActive : hIconInActive;
-//    strncpy(nid.szTip, bTerminateVeto ? STRING_QUICKSTARTACTIVE : STRING_QUICKSTARTINACTIVE, elementsof(nid.szTip) - 1 );
+//    strncpy(nid.szTip, bTerminateVeto ? STRING_QUICKSTARTACTIVE : STRING_QUICKSTARTINACTIVE, SAL_N_ELEMENTS(nid.szTip) - 1 );
     nid.hIcon = hIconActive;
-    strncpy(nid.szTip, szTooltipString, elementsof(nid.szTip) - 1);
+    strncpy(nid.szTip, szTooltipString, SAL_N_ELEMENTS(nid.szTip) - 1);
     nid.uFlags = NIF_TIP|NIF_ICON;
 
     // update systray

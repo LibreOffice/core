@@ -411,13 +411,13 @@ int _tmain( int, _TCHAR ** )
 			};
 
  #ifdef UNOPKG       
-        dwWaitResult = WaitForMultipleObjects( elementsof(hObjects), hObjects, TRUE, INFINITE );
+        dwWaitResult = WaitForMultipleObjects( SAL_N_ELEMENTS(hObjects), hObjects, TRUE, INFINITE );
  #else        
 		bool	bDetach = false;
 		int		nOpenPipes = 2;
 		do
 		{
-			dwWaitResult = WaitForMultipleObjects( elementsof(hObjects), hObjects, FALSE, INFINITE );
+			dwWaitResult = WaitForMultipleObjects( SAL_N_ELEMENTS(hObjects), hObjects, FALSE, INFINITE );
 
 			switch ( dwWaitResult )
 			{
