@@ -241,18 +241,6 @@ sal_Bool SAL_CALL OResultSet::getBoolean(sal_Int32 column)
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
     return sal_False;
-#if 0
-    OUString str = getString(column);
-    switch (str[0]) {
-        case '1':
-        case 't':
-        case 'T':
-        case 'y':
-        case 'Y':
-            return sal_True;
-    }
-    return sal_False;
-#endif
 }
 /* }}} */
 

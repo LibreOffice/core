@@ -180,32 +180,6 @@ namespace {
             return aMethods;
         }
     };
-#if 0 // code currently unused (see below)
-    sal_Int32 queryDocumentTypeDialog( const uno::Reference<uno::XComponentContext>& xContext,
-                                       const rtl::OUString&                          rFilename )
-    {
-        uno::Reference<awt::XDialogProvider2> xDialogProvider(
-            xContext->getServiceManager()->createInstanceWithContext(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.DialogProvider2" ) ),
-                xContext ),
-                uno::UNO_QUERY_THROW );
-        rtl::Reference<ChooserDialogHandler> xHandler(new ChooserDialogHandler);
-        uno::Reference<awt::XDialog> xDialog = xDialogProvider->createDialogWithHandler(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.script:PDFImport.TargetChooser?location=application") ),
-            uno::Reference<awt::XDialogEventHandler>(
-            static_cast<cppu::OWeakObject*>(xHandler.get()), uno::UNO_QUERY_THROW));
-        xHandler->initControls(
-            uno::Reference<awt::XControlContainer>(
-                xDialog,
-                uno::UNO_QUERY_THROW ),
-            rFilename );
-
-        if( !xDialog->execute() )
-            return -1;
-        else
-            return xHandler->getSelectedItem();
-    }
-#endif
 }
 
 class FileEmitContext : public pdfparse::EmitContext

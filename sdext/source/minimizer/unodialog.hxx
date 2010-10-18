@@ -114,9 +114,7 @@ public :
 
     void setControlProperty( const rtl::OUString& rControlName, const rtl::OUString& rPropertyName, const com::sun::star::uno::Any& rPropertyValue );
     com::sun::star::uno::Any getControlProperty( const rtl::OUString& rControlName, const rtl::OUString& rPropertyName );
-#if 0
-    void showMessageBox( const rtl::OUString& rTitle, const rtl::OUString& rMessage, sal_Bool bErrorBox ) const;
-#endif
+
     void enableControl( const rtl::OUString& rControlName );
     void disableControl( const rtl::OUString& rControlName );
 

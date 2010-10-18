@@ -129,22 +129,6 @@ void DrawXmlEmitter::visit( TextElement& elem, const std::list< Element* >::cons
         isComplex = true;
     }
 
-    #if 0
-    // FIXME: need to have a service to do this mirroring
-    if (isComplex)  // If so, reverse string
-    {
-        rtl::OUString flippedStr(RTL_CONSTASCII_USTRINGPARAM( "" ));
-        for(int i = str.getLength() - 1; i >= 0; i--)
-        {
-             sal_Unicode cChar = str[ i ];
-             cChar = static_cast<sal_Unicode>(GetMirroredChar( cChar ));
-             rtl::OUString uC(cChar);
-             flippedStr += uC;
-        }
-        str = flippedStr;
-    }
-    #endif
-
     m_rEmitContext.rEmitter.beginTag( "text:span", aProps );
 
     for(int i=0; i< elem.Text.getLength(); i++)

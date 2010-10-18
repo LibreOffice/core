@@ -344,55 +344,6 @@ void UnoDialog::setControlProperty( const OUString& rControlName, const OUString
 }
 
 // -----------------------------------------------------------------------------
-#if 0
-void UnoDialog::showMessageBox( const OUString& rTitle, const OUString& rMessage, sal_Bool bErrorBox ) const
-{
-    try
-    {
-        Reference< XMessageBoxFactory > xMessageBoxFactory( mxMSF->getServiceManager()->createInstanceWithContext( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.Toolkit" ) ), mxMSF ), UNO_QUERY_THROW  );
-        if ( xMessageBoxFactory.is() )
-        {
-            Rectangle aRectangle( 0, 0, 0, 0 );
-            Reference< XMessageBox > xMessageBox( xMessageBoxFactory->createMessageBox( mxWindowPeer, aRectangle,
-                bErrorBox ? OUString( RTL_CONSTASCII_USTRINGPARAM( "errorbox" ) ) : OUString( RTL_CONSTASCII_USTRINGPARAM( "querybox" ) ), MessageBoxButtons::BUTTONS_OK, rTitle, rMessage ) );
-            Reference< XComponent > xComponent( xMessageBox, UNO_QUERY_THROW );
-            /* sal_Int16 nResult = */ xMessageBox->execute();
-            xComponent->dispose();
-        }
-    }
-    catch ( Exception& )
-    {
-    }
-
-/*
-public void showErrorMessageBox(XWindowPeer _xParentWindowPeer, String _sTitle, String _sMessage){
-XComponent xComponent = null;
-try {
-    Object oToolkit = m_xMCF.createInstanceWithContext("com.sun.star.awt.Toolkit", m_xContext);
-    XMessageBoxFactory xMessageBoxFactory = (XMessageBoxFactory) UnoRuntime.queryInterface(XMessageBoxFactory.class, oToolkit);
-    // rectangle may be empty if position is in the center of the parent peer
-
-    Rectangle aRectangle = new Rectangle();
-    XMessageBox xMessageBox = xMessageBoxFactory.createMessageBox(_xParentWindowPeer, aRectangle, "errorbox", com.sun.star.awt.MessageBoxButtons.BUTTONS_OK, _sTitle, _sMessage);
-    xComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, xMessageBox);
-    if (xMessageBox != null){
-        short nResult = xMessageBox.execute();
-    }
-} catch (com.sun.star.uno.Exception ex) {
-    ex.printStackTrace(System.out);
-}
-finally{
-    //make sure always to dispose the component and free the memory!
-    if (xComponent != null){
-        xComponent.dispose();
-    }
-}}
-*/
-}
-
-#endif
-
-// -----------------------------------------------------------------------------
 
 sal_Int32 UnoDialog::getMapsFromPixels( sal_Int32 nPixels ) const
 {
