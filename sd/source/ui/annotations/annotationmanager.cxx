@@ -973,30 +973,6 @@ IMPL_LINK(AnnotationManagerImpl,EventMultiplexerListener,
     }
     return 0;
 }
-#if 0
-OUString AnnotationManagerImpl::GetHelpText( ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation >& xAnnotation )
-{
-    OUString sRet;
-    if( xAnnotation.is() )
-    {
-        OUString sAuthor( xAnnotation->getAuthor() );
-        if( sAuthor.getLength() != 0 )
-        {
-            sRet += sAuthor;
-        }
-        sRet += OUString( RTL_CONSTASCII_USTRINGPARAM( " [" ) );
-
-        sRet += getAnnotationDateTimeString( xAnnotation );
-        sRet += OUString( RTL_CONSTASCII_USTRINGPARAM( "]\n" ) );
-
-        Reference< XText > xText( xAnnotation->getTextRange() );
-        if( xText.is() )
-            sRet += xText->getString();
-    }
-
-    return sRet;
-}
-#endif
 
 void AnnotationManagerImpl::ExecuteAnnotationContextMenu( Reference< XAnnotation > xAnnotation, ::Window* pParent, const Rectangle& rContextRect, bool bButtonMenu /* = false */ )
 {

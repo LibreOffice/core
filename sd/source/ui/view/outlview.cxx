@@ -2041,31 +2041,6 @@ IMPL_LINK(OutlineView, PaintingFirstLineHdl, PaintFirstLineInfo*, pInfo)
     return 0;
 }
 
-#if 0
-sal_Int32 OutlineView::GetPageNumberWidthPixel()
-{
-    Window* pActWin = mpOutlineViewShell->GetActiveWindow();
-    if( pActWin )
-    {
-        Font aOldFont( pActWin->GetFont() );
-        pActWin->SetFont( maPageNumberFont );
-        Size aSize( pActWin->GetTextWidth( String( RTL_CONSTASCII_USTRINGPARAM("X" ) ) ), 0 );
-        sal_Int32 nWidth = pActWin->LogicToPixel( aSize ).Width() * 5;
-
-        const String aBulletStr( sal_Unicode( 0xE011 ) );
-        pActWin->SetFont( maBulletFont);
-
-        aSize.Width() = pActWin->GetTextWidth(aBulletStr);
-        nWidth += pActWin->LogicToPixel( aSize ).Width();
-
-        pActWin->SetFont( aOldFont );
-
-        mnPageNumberWidthPixel = nWidth;
-    }
-    return mnPageNumberWidthPixel;
-}
-#endif
-
 // --------------------------------------------------------------------
 
 void OutlineView::UpdateParagraph( USHORT nPara )

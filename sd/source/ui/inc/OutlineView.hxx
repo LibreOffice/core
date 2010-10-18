@@ -161,11 +161,6 @@ public:
         cursor position.
     */
     void IgnoreCurrentPageChanges (bool bIgnore);
-
-#if 0
-    sal_Int32 GetPageNumberWidthPixel();
-#endif
-
     void InvalidateSlideNumberArea();
 
     /** creates and inserts an empty slide for the given paragraph. */
