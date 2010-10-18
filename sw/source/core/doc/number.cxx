@@ -47,24 +47,21 @@
 #include <docary.hxx>
 #include <docsh.hxx>
 #include <SwStyleNameMapper.hxx>
-// --> OD 2006-06-28 #b6440955#
+
 // Needed to load default bullet list configuration
 #include <unotools/configitem.hxx>
-// <--
+
 #include <numrule.hxx>
 #include <SwNodeNum.hxx>
 
 #include <hash_map>
-// --> OD 2008-02-19 #refactorlists#
+
 #include <list.hxx>
 #include <algorithm>
-// <--
-// --> OD 2008-06-06 #i89178#
+
 #include <unotools/saveopt.hxx>
-// <--
-// --> OD 2008-07-08 #i91400#
+
 #include <IDocumentListsAccess.hxx>
-// <--
 
 using namespace ::com::sun::star;
 
@@ -72,14 +69,13 @@ using namespace ::com::sun::star;
 USHORT SwNumRule::nRefCount = 0;
 SwNumFmt* SwNumRule::aBaseFmts[ RULE_END ][ MAXLEVEL ] = {
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
-// --> OD 2008-02-11 #newlistlevelattrs#
+
 SwNumFmt* SwNumRule::aLabelAlignmentBaseFmts[ RULE_END ][ MAXLEVEL ] = {
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
 
 char sOutline[] = "Outline";
 char* SwNumRule::pDefOutlineName = sOutline;
 
-// #i30312#
 USHORT SwNumRule::aDefNumIndents[ MAXLEVEL ] = {
 //inch:   0,5  1,0  1,5  2,0   2,5   3,0   3,5   4,0   4,5   5,0
         1440/4, 1440/2, 1440*3/4, 1440, 1440*5/4, 1440*3/2, 1440*7/4, 1440*2,
@@ -123,28 +119,28 @@ void SwNumRule::SetName( const String & rName,
             pNumRuleMap->erase(sName);
             (*pNumRuleMap)[rName] = this;
 
-            // --> OD 2008-07-08 #i91400#
             if ( GetDefaultListId().Len() > 0 )
             {
                 rDocListAccess.trackChangeOfListStyleName( sName, rName );
             }
-            // <--
         }
 
         sName = rName;
     }
 }
 
-// --> OD 2008-02-19 #refactorlists#
+
 void SwNumRule::GetTxtNodeList( SwNumRule::tTxtNodeList& rTxtNodeList ) const
 {
     rTxtNodeList = maTxtNodeList;
 }
 
+
 SwNumRule::tTxtNodeList::size_type SwNumRule::GetTxtNodeListSize() const
 {
     return maTxtNodeList.size();
 }
+
 
 void SwNumRule::AddTxtNode( SwTxtNode& rTxtNode )
 {
@@ -157,6 +153,7 @@ void SwNumRule::AddTxtNode( SwTxtNode& rTxtNode )
     }
 }
 
+
 void SwNumRule::RemoveTxtNode( SwTxtNode& rTxtNode )
 {
     tTxtNodeList::iterator aIter =
@@ -167,7 +164,7 @@ void SwNumRule::RemoveTxtNode( SwTxtNode& rTxtNode )
         maTxtNodeList.erase( aIter );
     }
 }
-// <--
+
 
 void SwNumRule::SetNumRuleMap(std::hash_map<String, SwNumRule *, StringHash> *
                               _pNumRuleMap)
@@ -175,11 +172,13 @@ void SwNumRule::SetNumRuleMap(std::hash_map<String, SwNumRule *, StringHash> *
     pNumRuleMap = _pNumRuleMap;
 }
 
+
 USHORT SwNumRule::GetNumIndent( BYTE nLvl )
 {
     ASSERT( MAXLEVEL > nLvl, "NumLevel is out of range" );
     return aDefNumIndents[ nLvl ];
 }
+
 
 USHORT SwNumRule::GetBullIndent( BYTE nLvl )
 {
@@ -281,7 +280,7 @@ BOOL SwNumFmt::IsEnumeration() const
      */
 }
 
-// #i29560#
+
 BOOL SwNumFmt::IsItemize() const
 {
     BOOL bResult;
@@ -448,16 +447,13 @@ const SwFmtVertOrient*      SwNumFmt::GetGraphicOrientation() const
 long int SwNumRule::nInstances = 0;
 #endif
 
-// --> OD 2008-02-11 #newlistlevelattrs#
 // handle new parameter <eDefaultNumberFormatPositionAndSpaceMode>
 SwNumRule::SwNumRule( const String& rNm,
                       const SvxNumberFormat::SvxNumPositionAndSpaceMode eDefaultNumberFormatPositionAndSpaceMode,
                       SwNumRuleType eType,
                       BOOL bAutoFlg )
     : maTxtNodeList(),
-      // --> OD 2008-03-03 #refactorlists#
       maParagraphStyleList(),
-      // <--
     pNumRuleMap(0),
     sName( rNm ),
     eRuleType( eType ),
@@ -468,15 +464,9 @@ SwNumRule::SwNumRule( const String& rNm,
     bInvalidRuleFlag( TRUE ),
     bContinusNum( FALSE ),
     bAbsSpaces( FALSE ),
-    // --> OD 2005-10-21 - initialize member <mbCountPhantoms>
     mbCountPhantoms( true ),
-    // <--
-    // --> OD 2008-02-11 #newlistlevelattrs#
     meDefaultNumberFormatPositionAndSpaceMode( eDefaultNumberFormatPositionAndSpaceMode ),
-    // <--
-    // --> OD 2008-04-03 #refactorlists#
     msDefaultListId()
-    // <--
 {
 #ifdef DBG_UTIL
     nSerial = nInstances++;
@@ -498,12 +488,9 @@ SwNumRule::SwNumRule( const String& rNm,
             pFmt->SetAbsLSpace( lNumIndent + SwNumRule::GetNumIndent( n ) );
             pFmt->SetFirstLineOffset( lNumFirstLineOffset );
             pFmt->SetSuffix( aDotStr );
-            // --> OD 2006-06-29 #b6440955#
             pFmt->SetBulletChar( numfunc::GetBulletChar(n));
-            // <--
             SwNumRule::aBaseFmts[ NUM_RULE ][ n ] = pFmt;
         }
-        // --> OD 2008-02-11 #newlistlevelattrs#
         // position-and-space mode LABEL_ALIGNMENT
         // first line indent of general numbering in inch: -0,25 inch
         const long cFirstLineIndent = -1440/4;
@@ -518,18 +505,15 @@ SwNumRule::SwNumRule( const String& rNm,
             pFmt = new SwNumFmt;
             pFmt->SetIncludeUpperLevels( 1 );
             pFmt->SetStart( 1 );
-            // --> OD 2008-01-15 #newlistlevelattrs#
             pFmt->SetPositionAndSpaceMode( SvxNumberFormat::LABEL_ALIGNMENT );
             pFmt->SetLabelFollowedBy( SvxNumberFormat::LISTTAB );
             pFmt->SetListtabPos( cIndentAt[ n ] );
             pFmt->SetFirstLineIndent( cFirstLineIndent );
             pFmt->SetIndentAt( cIndentAt[ n ] );
-            // <--
             pFmt->SetSuffix( aDotStr );
             pFmt->SetBulletChar( numfunc::GetBulletChar(n));
             SwNumRule::aLabelAlignmentBaseFmts[ NUM_RULE ][ n ] = pFmt;
         }
-        // <--
 
         // outline:
         // position-and-space mode LABEL_WIDTH_AND_POSITION:
@@ -540,12 +524,9 @@ SwNumRule::SwNumRule( const String& rNm,
             pFmt->SetIncludeUpperLevels( MAXLEVEL );
             pFmt->SetStart( 1 );
             pFmt->SetCharTextDistance( lOutlineMinTextDistance );
-            // --> OD 2006-06-29 #b6440955#
             pFmt->SetBulletChar( numfunc::GetBulletChar(n));
-            // <--
             SwNumRule::aBaseFmts[ OUTLINE_RULE ][ n ] = pFmt;
         }
-        // --> OD 2008-02-11 #newlistlevelattrs#
         // position-and-space mode LABEL_ALIGNMENT:
         // indent values of default outline numbering in inch:
         //  0,3         0,4         0,5         0,6         0,7
@@ -567,7 +548,6 @@ SwNumRule::SwNumRule( const String& rNm,
             pFmt->SetBulletChar( numfunc::GetBulletChar(n));
             SwNumRule::aLabelAlignmentBaseFmts[ OUTLINE_RULE ][ n ] = pFmt;
         }
-        // <--
     }
     memset( aFmts, 0, sizeof( aFmts ));
     ASSERT( sName.Len(), "NumRule ohne Namen!" );
@@ -575,9 +555,7 @@ SwNumRule::SwNumRule( const String& rNm,
 
 SwNumRule::SwNumRule( const SwNumRule& rNumRule )
     : maTxtNodeList(),
-      // --> OD 2008-03-03 #refactorlists#
       maParagraphStyleList(),
-      // <--
       pNumRuleMap(0),
       sName( rNumRule.sName ),
       eRuleType( rNumRule.eRuleType ),
@@ -588,15 +566,9 @@ SwNumRule::SwNumRule( const SwNumRule& rNumRule )
       bInvalidRuleFlag( TRUE ),
       bContinusNum( rNumRule.bContinusNum ),
       bAbsSpaces( rNumRule.bAbsSpaces ),
-      // --> OD 2005-10-21 - initialize member <mbCountPhantoms>
       mbCountPhantoms( true ),
-      // <--
-      // --> OD 2008-02-11 #newlistlevelattrs#
       meDefaultNumberFormatPositionAndSpaceMode( rNumRule.meDefaultNumberFormatPositionAndSpaceMode ),
-      // <--
-      // --> OD 2008-04-03 #refactorlists#
       msDefaultListId( rNumRule.msDefaultListId )
-      // <--
 {
 #ifdef DBG_UTIL
     nSerial = nInstances++;
@@ -641,10 +613,8 @@ SwNumRule::~SwNumRule()
             // <--
     }
 
-    // --> OD 2008-02-19 #refactorlists#
     maTxtNodeList.clear();
     maParagraphStyleList.clear();
-    // <--
 }
 
 void SwNumRule::CheckCharFmts( SwDoc* pDoc )
@@ -758,28 +728,23 @@ String SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVector,
     String aStr;
 
     unsigned int nLevel = rNumVector.size() - 1;
-    // --> OD 2005-10-17 #126238#
+
     if ( nLevel > _nRestrictToThisLevel )
     {
         nLevel = _nRestrictToThisLevel;
     }
-    // <--
 
     if (nLevel < MAXLEVEL)
     {
         const SwNumFmt& rMyNFmt = Get( static_cast<USHORT>(nLevel) );
-        // --> OD 2006-06-02 #b6432095#
         // - levels with numbering none has to provide prefix and suffix string
 //        if( SVX_NUM_NUMBER_NONE != rMyNFmt.GetNumberingType() )
-        // <--
         {
             BYTE i = static_cast<BYTE>(nLevel);
 
             if( !IsContinusNum() &&
-                // --> OD 2006-09-19 #i69672#
                 // - do not include upper levels, if level isn't numbered.
                 rMyNFmt.GetNumberingType() != SVX_NUM_NUMBER_NONE &&
-                // <--
                 rMyNFmt.GetIncludeUpperLevels() )  // nur der eigene Level ?
             {
                 BYTE n = rMyNFmt.GetIncludeUpperLevels();
@@ -831,7 +796,7 @@ String SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVector,
     return aStr;
 }
 
-// --> OD 2007-09-07 #i81002#
+
 String SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
                                     const bool bInclSuperiorNumLabels,
                                     const sal_uInt8 nRestrictInclToThisLevel ) const
@@ -946,11 +911,11 @@ SvxNumRule SwNumRule::MakeSvxNumRule() const
     return aRule;
 }
 
+
 void SwNumRule::SetInvalidRule(BOOL bFlag)
 {
     if (bFlag)
     {
-        // --> OD 2008-03-13 #refactorlists#
 //        tPamAndNums::iterator aIt;
 //        for (aIt = aNumberRanges.begin(); aIt != aNumberRanges.end(); aIt++)
 //            (*aIt).second->InvalidateTree();
@@ -1064,14 +1029,13 @@ void SwNumRule::ChangeIndent( const short nDiff )
         }
         else if ( ePosAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
         {
-            // --> OD 2009-01-20 #i93399#
             // adjust also the list tab position, if a list tab stop is applied
             if ( aTmpNumFmt.GetLabelFollowedBy() == SvxNumberFormat::LISTTAB )
             {
                 const long nNewListTab = aTmpNumFmt.GetListtabPos() +  nDiff;
                 aTmpNumFmt.SetListtabPos( nNewListTab );
             }
-            // <--
+
             const long nNewIndent = nDiff +
                               aTmpNumFmt.GetIndentAt();
             aTmpNumFmt.SetIndentAt( nNewIndent );
@@ -1097,7 +1061,6 @@ void SwNumRule::SetIndent( const short nNewIndent,
     }
     else if ( ePosAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
     {
-        // --> OD 2009-01-20 #i93399#
         // adjust also the list tab position, if a list tab stop is applied
         if ( aTmpNumFmt.GetLabelFollowedBy() == SvxNumberFormat::LISTTAB )
         {
@@ -1105,7 +1068,7 @@ void SwNumRule::SetIndent( const short nNewIndent,
                                      ( nNewIndent - aTmpNumFmt.GetIndentAt() );
             aTmpNumFmt.SetListtabPos( nNewListTab );
         }
-        // <--
+
         aTmpNumFmt.SetIndentAt( nNewIndent );
     }
 
@@ -1137,11 +1100,10 @@ void SwNumRule::SetIndentOfFirstListLevelAndChangeOthers( const short nNewIndent
         ChangeIndent( nDiff );
     }
 }
-// <--
+
 
 void SwNumRule::Validate()
 {
-    // --> OD 2008-03-13 #refactorlists#
 //    tPamAndNums::iterator aIt;
 //    for (aIt = aNumberRanges.begin(); aIt != aNumberRanges.end(); aIt++)
 //        (*aIt).second->NotifyInvalidChildren();
@@ -1154,26 +1116,29 @@ void SwNumRule::Validate()
     }
     std::for_each( aLists.begin(), aLists.end(),
                    std::mem_fun( &SwList::ValidateListTree ) );
-    // <--
+
 
     SetInvalidRule(FALSE);
 }
+
 
 bool SwNumRule::IsCountPhantoms() const
 {
     return mbCountPhantoms;
 }
 
+
 void SwNumRule::SetCountPhantoms(bool bCountPhantoms)
 {
     mbCountPhantoms = bCountPhantoms;
 }
 
-// --> OD 2008-03-03 #refactorlists#
+
 SwNumRule::tParagraphStyleList::size_type SwNumRule::GetParagraphStyleListSize() const
 {
     return maParagraphStyleList.size();
 }
+
 
 void SwNumRule::AddParagraphStyle( SwTxtFmtColl& rTxtFmtColl )
 {
@@ -1186,6 +1151,7 @@ void SwNumRule::AddParagraphStyle( SwTxtFmtColl& rTxtFmtColl )
     }
 }
 
+
 void SwNumRule::RemoveParagraphStyle( SwTxtFmtColl& rTxtFmtColl )
 {
     tParagraphStyleList::iterator aIter =
@@ -1196,9 +1162,8 @@ void SwNumRule::RemoveParagraphStyle( SwTxtFmtColl& rTxtFmtColl )
         maParagraphStyleList.erase( aIter );
     }
 }
-// <--
 
-// --> OD 2006-06-27 #b6440955#
+
 namespace numfunc
 {
     /** class containing default bullet list configuration data
@@ -1222,24 +1187,27 @@ namespace numfunc
             {
                 return msFontname;
             }
-            // --> OD 2008-06-02 #i63395#
+
             inline bool IsFontnameUserDefined() const
             {
                 return mbUserDefinedFontname;
             }
-            // <--
+
             inline const Font& GetFont() const
             {
                 return *mpFont;
             }
+
             inline short GetFontWeight() const
             {
                 return static_cast<short>(meFontWeight);
             }
+
             inline short GetFontItalic() const
             {
                 return static_cast<short>(meFontItalic);
             }
+
             inline sal_Unicode GetChar( BYTE p_nListLevel ) const
             {
                 if ( p_nListLevel > MAXLEVEL )
@@ -1289,9 +1257,7 @@ namespace numfunc
 
             // default bullet list configuration data
             String msFontname;
-            // --> OD 2008-06-02 #i63395#
             bool mbUserDefinedFontname;
-            // <--
             FontWeight meFontWeight;
             FontItalic meFontItalic;
             sal_Unicode mnLevelChars[MAXLEVEL];
@@ -1304,11 +1270,9 @@ namespace numfunc
 
     SwDefBulletConfig::SwDefBulletConfig()
         : ConfigItem( rtl::OUString::createFromAscii("Office.Writer/Numbering/DefaultBulletList") ),
-          // --> OD 2008-06-02 #i63395#
           // default bullet font is now OpenSymbol
           msFontname( String::CreateFromAscii("OpenSymbol") ),
           mbUserDefinedFontname( false ),
-          // <--
           meFontWeight( WEIGHT_DONTKNOW ),
           meFontItalic( ITALIC_NONE ),
           mpFont( 0 )
@@ -1323,7 +1287,6 @@ namespace numfunc
 
     void SwDefBulletConfig::SetToDefault()
     {
-        // --> OD 2008-06-02 #i63395#
         // default bullet font name is now OpenSymbol
 //        msFontname = String::CreateFromAscii("StarSymbol");
         msFontname = String::CreateFromAscii("OpenSymbol");
@@ -1332,7 +1295,6 @@ namespace numfunc
         meFontWeight = WEIGHT_DONTKNOW;
         meFontItalic = ITALIC_NONE;
 
-        // --> OD 2008-06-03 #i63395#
         // new bullet characters
 //        mnLevelChars[0] = 0x25cf;
 //        mnLevelChars[1] = 0x25cb;
@@ -1354,7 +1316,6 @@ namespace numfunc
         mnLevelChars[7] = 0x25e6;
         mnLevelChars[8] = 0x25aa;
         mnLevelChars[9] = 0x2022;
-        // <--
     }
 
     uno::Sequence<rtl::OUString> SwDefBulletConfig::GetPropNames() const
@@ -1399,9 +1360,7 @@ namespace numfunc
                             rtl::OUString aStr;
                             pValues[nProp] >>= aStr;
                             msFontname = aStr;
-                            // --> OD 2008-06-02 #i63395#
                             mbUserDefinedFontname = true;
-                            // <--
                         }
                         break;
                         case 1:
@@ -1463,12 +1422,10 @@ namespace numfunc
         return SwDefBulletConfig::getInstance()->GetFontname();
     }
 
-    // --> OD 2008-06-02 #i63395#
     bool IsDefBulletFontUserDefined()
     {
         return SwDefBulletConfig::getInstance()->IsFontnameUserDefined();
     }
-    // <--
 
     const Font& GetDefBulletFont()
     {
@@ -1614,7 +1571,6 @@ namespace numfunc
         return SwNumberingUIBehaviorConfig::getInstance()->ChangeIndentOnTabAtFirstPosOfFirstListItem();
     }
 
-    // --> OD 2008-06-06 #i89178#
     SvxNumberFormat::SvxNumPositionAndSpaceMode GetDefaultPositionAndSpaceMode()
     {
         SvxNumberFormat::SvxNumPositionAndSpaceMode ePosAndSpaceMode;
