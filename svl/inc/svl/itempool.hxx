@@ -209,8 +209,8 @@ public:
                                                FASTBOOL bDirect = FALSE ) const;
 
     sal_uInt32                      GetSurrogate(const SfxPoolItem *) const;
-    const SfxPoolItem *             GetItem2(USHORT nWhich, sal_uInt32 nSurrogate) const; //this name will be changed to GetItem
-    sal_uInt32                      GetItemCount2(USHORT nWhich) const; //this name will be changed to GetItemCount
+    const SfxPoolItem *             GetItem2(USHORT nWhich, sal_uInt32 nSurrogate) const;
+    sal_uInt32                      GetItemCount2(USHORT nWhich) const;
     const SfxPoolItem*              LoadSurrogate(SvStream& rStream,
                                             USHORT &rWhich, USHORT nSlotId,
                                             const SfxItemPool* pRefPool = 0 );

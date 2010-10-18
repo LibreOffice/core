@@ -54,7 +54,7 @@ static const sal_uInt32 SFX_ITEMS_DIRECT=   0xffffffff;
 static const sal_uInt32 SFX_ITEMS_NULL=     0xfffffff0;  // instead StoreSurrogate
 
 #define SFX_ITEMS_POOLDEFAULT               0xffff
-#define SFX_ITEMS_STATICDEFAULT             0xfffe
+#define SFX_ITEMS_STATICDEFAULT             0xfffe  //FIXME It is used in sc/source/ui/unoobj/defltuno.cxx (Should be changed to sal_uInt32 ?)
 #define SFX_ITEMS_DELETEONIDLE              0xfffd
 
 #define SFX_ITEMS_OLD_MAXREF                0xffef

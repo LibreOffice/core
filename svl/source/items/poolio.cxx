@@ -430,7 +430,7 @@ void SfxItemPool::readTheItems (
     *ppArr = pNewArr;
 
     // die Items merken, die schon im Pool sind
-    FASTBOOL bEmpty = TRUE;
+    bool bEmpty = true;
     if ( 0 != pOldArr )
         for ( n = 0; bEmpty && n < pOldArr->size(); ++n )
             bEmpty = pOldArr->operator[](n) == 0;
@@ -444,7 +444,7 @@ void SfxItemPool::readTheItems (
             if ( pOldItem )
             {
                 sal_uInt32 nFree = SAL_MAX_UINT32;
-                FASTBOOL bFound = FALSE;
+                bool bFound = false;
                 for ( size_t nNew = (*ppArr)->size(); nNew--; )
                 {
                     // geladenes Item
@@ -463,7 +463,7 @@ void SfxItemPool::readTheItems (
                         SetRefCount( *rpNewItem, 0 );
                         delete rpNewItem;
                         rpNewItem = pOldItem;
-                        bFound = TRUE;
+                        bFound = true;
                         break;
                     }
                 }
@@ -936,7 +936,7 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
                     SfxPoolItem *pOldItem = (*pOldArr)[nOld];
                     if ( pOldItem )
                     {
-                        FASTBOOL bFound = FALSE;
+                        bool bFound = false;
                         for ( size_t nNew = 0;
                               nNew < (*ppArr)->size();  ++nNew )
                         {
@@ -949,7 +949,7 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
                                 SetRefCount( *rpNewItem, 0 );
                                 delete rpNewItem;
                                 rpNewItem = pOldItem;
-                                bFound = TRUE;
+                                bFound = true;
                                 SFX_TRACE( "reusing item", pOldItem );
                                 break;
                             }
