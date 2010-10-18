@@ -63,17 +63,3 @@ const struct VersionInfo *GetVersionInfo(void)
     return &g_aVersionInfo;
 }
 
-#if 0
-#include <stdio.h>
-
-int main( int argc, char **argv )
-{
-    const VersionInfo *pInfo = GetVersionInfo();
-    fprintf( stderr, "Date : %s\n", pInfo->pDate);
-    fprintf( stderr, "Time : %s\n", pInfo->pTime);
-    fprintf( stderr, "UPD : %s\n", pInfo->pUpd);
-    delete pInfo;
-    return 0;
-}
-#endif
-

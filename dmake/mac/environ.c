@@ -70,67 +70,6 @@ make_env()
 {
     char **ppCurEnv;
     char *pCurPos;
-#if 0
-    char **ppMacEnv;
-    char *pMacPos;
-
-    if (!gMECalled) {
-        gMECalled = TRUE;
-
-environ = MALLOC (1, char *);
-*environ = NULL;
-#endif
-#if 0
-{
-    int numenv;
-    int len;
-    int firstnil;
-
-    numenv = 1;
-    ppMacEnv = environ;
-    while (*(ppMacEnv++) != NULL) {
-        ++numenv;
-    } /* while */
-
-    ppMacEnv = environ;
-    if ((environ = MALLOC (numenv, char *)) == NULL) {
-        No_ram ();
-    } /* if */
-
-numenv = 80;
-    for (ppCurEnv = environ; (numenv-- > 0) && (*ppMacEnv != NULL); ++ppCurEnv, ++ppMacEnv) {
-        pMacPos = *ppMacEnv;
-        len = strlen (pMacPos) + 1;
-        len += strlen (pMacPos + len) + 1;
-#define MAXLEN 4098
-if (len > MAXLEN) len = MAXLEN;
-        if ((*ppCurEnv = MALLOC (len, char)) == NULL) {
-            No_ram ();
-        } /* if */
-
-        firstnil = TRUE;
-        for (pCurPos = *ppCurEnv; ((pCurPos - *ppCurEnv) < MAXLEN - 1); ++pCurPos, ++pMacPos) {
-            if (*pMacPos == '=') {
-                *pCurPos = gEqualReplace;
-
-            } else if (*pMacPos == '\0') {
-                if (firstnil) {
-                    *pCurPos = '=';
-                    firstnil = FALSE;
-                } else {
-                    *pCurPos = *pMacPos;
-                    break;
-                } /* if ... else */
-
-            } else {
-                *pCurPos = *pMacPos;
-            } /* if ... elses */
-        } /* for */
-firstnil = FALSE;
-    } /* for */
-    *ppCurEnv = NULL;
-}
-#endif
 {
         int firstnil;
 
@@ -165,9 +104,7 @@ firstnil = FALSE;
             } /* if */
         } /* for */
 }
-#if 0
-    } /* if */
-#endif
+
 } /* PUBLIC void make_env () */
 
 
@@ -208,24 +145,4 @@ free_env()
         FREE (pReplaceChar);
     } /* while */
 
-#if 0
-    char **ppCurEnv;
-    char *pCurPos;
-
-    if (!gFECalled) {
-        gFECalled = TRUE;
-
-//FREE (environ);
-environ = NULL;
-#endif
-#if 0
-        /* Restore the environment list to what it was before we
-           read it in. */
-        for (ppCurEnv = environ; *ppCurEnv != NULL; ++ppCurEnv) {
-            for (pCurPos = *ppCurEnv; *pCurPos != '='; ++pCurPos)
-                ;
-            *pCurPos = '\0';
-        } /* for */
-    } /* if */
-#endif
 } /* PUBLIC void free_env () */
