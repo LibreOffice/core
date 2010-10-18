@@ -30,8 +30,6 @@
 #include "sal/config.h"
 
 #include <stdlib.h>
-    // not <cstdlib> as putenv is POSIX-only; setenv instead of putenv would be
-    // better but is not supported by Solaris 9 and earlier
 
 #if defined UNX
 #include <sys/resource.h>
@@ -64,10 +62,9 @@ void extendApplicationEnvironment() {
 
     // Make sure URE_BOOTSTRAP environment variable is set (failure is fatal):
     rtl::OUStringBuffer env;
-    env.appendAscii(RTL_CONSTASCII_STRINGPARAM("URE_BOOTSTRAP="));
+    rtl::OUString envVar(RTL_CONSTASCII_USTRINGPARAM("URE_BOOTSTRAP"));
     rtl::OUString uri;
-    if (rtl::Bootstrap::get(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URE_BOOTSTRAP")), uri))
+    if (rtl::Bootstrap::get(envVar, uri))
     {
         if (!uri.matchIgnoreAsciiCaseAsciiL(
                 RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.pathname:")))
@@ -87,16 +84,8 @@ void extendApplicationEnvironment() {
         env.appendAscii(
             RTL_CONSTASCII_STRINGPARAM(SAL_CONFIGFILE("fundamental")));
     }
-    rtl::OString s;
-    if (!env.makeStringAndClear().convertToString(
-            &s, osl_getThreadTextEncoding(),
-            RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
-            | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR))
-    {
-        abort();
-    }
-    rtl_string_acquire(s.pData); // argument to putenv must leak
-    if (putenv(const_cast< char * >(s.getStr())) != 0) {
+    rtl::OUString envValue(env.makeStringAndClear());
+    if (osl_setEnvironment(envVar.pData, envValue.pData) != osl_Process_E_None) {
         abort();
     }
 }

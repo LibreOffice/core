@@ -37,10 +37,6 @@
 #  endif
 #endif
 #include <poll.h>
-#ifdef SOLARIS
-// for SetSystemEnvironment()
-#include <sal/alloca.h>
-#endif
 
 #include <tools/prex.h>
 #include <X11/Xlocale.h>
@@ -54,6 +50,7 @@
 #include <i18n_status.hxx>
 
 #include <osl/thread.h>
+#include <osl/process.h>
 
 using namespace vcl;
 #include "i18n_cb.hxx"
@@ -180,21 +177,13 @@ SetSystemLocale( const char* p_inlocale )
 
 #ifdef SOLARIS
 static void
-SetSystemEnvironment( const char* p_locale )
+SetSystemEnvironment( const rtl::OUString& rLocale )
 {
-    const char *lc_all = "LC_ALL=%s";
-    const char *lang   = "LANG=%s";
+    rtl::OUString LC_ALL_Var(RTL_CONSTASCII_USTRINGPARAM("LC_ALL"));
+    osl_setEnvironment(LC_ALL_Var.pData, rLocale.pData);
 
-    char *p_buffer;
-
-    if (p_locale != NULL)
-    {
-        p_buffer = (char*)alloca(10 + strlen(p_locale));
-        sprintf(p_buffer, lc_all, p_locale);
-        putenv(strdup(p_buffer));
-        sprintf(p_buffer, lang, p_locale);
-        putenv(strdup(p_buffer));
-    }
+    rtl::OUString LANG_Var(RTL_CONSTASCII_USTRINGPARAM("LANG"));
+    osl_setEnvironment(LANG_Var.pData, rLocale.pData);
 }
 #endif
 
@@ -250,13 +239,13 @@ SalI18N_InputMethod::SetLocale( const char* pLocale )
             osl_setThreadTextEncoding (RTL_TEXTENCODING_ISO_8859_1);
             locale = SetSystemLocale( "en_US" );
             #ifdef SOLARIS
-            SetSystemEnvironment( "en_US" );
+            SetSystemEnvironment( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en_US")) );
             #endif
             if (! IsXWindowCompatibleLocale(locale))
             {
                 locale = SetSystemLocale( "C" );
                 #ifdef SOLARIS
-                SetSystemEnvironment( "C" );
+                SetSystemEnvironment( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("C")) );
                 #endif
                 if (! IsXWindowCompatibleLocale(locale))
                     mbUseable = False;
@@ -441,7 +430,8 @@ SalI18N_InputMethod::CreateMethod ( Display *pDisplay )
 
         if ((maMethod == (XIM)NULL) && (getenv("XMODIFIERS") != NULL))
         {
-                putenv (strdup("XMODIFIERS"));
+                rtl::OUString envVar(RTL_CONSTASCII_USTRINGPARAM("XMODIFIERS"));
+                osl_clearEnvironment(envVar.pData);
                 XSetLocaleModifiers("");
                 maMethod = XOpenIM(pDisplay, NULL, NULL, NULL);
                 mbMultiLingual = False;

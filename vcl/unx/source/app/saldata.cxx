@@ -422,10 +422,8 @@ void SalXLib::Init()
                  * the clipboard build another connection
                  * to the xserver using $DISPLAY
                  */
-                const char envpre[] = "DISPLAY=";
-                char *envstr = new char[sizeof(envpre)+aDisplay.getLength()];
-                snprintf(envstr, sizeof(envpre)+aDisplay.getLength(), "DISPLAY=%s", aDisplay.getStr());
-                putenv(envstr);
+                 rtl::OUString envVar(RTL_CONSTASCII_USTRINGPARAM("DISPLAY"));
+                 osl_setEnvironment(envVar.pData, aParam.pData);
             }
             break;
         }
