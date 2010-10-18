@@ -67,6 +67,7 @@
 #include "cppuhelper/implbase1.hxx"
 #include <icc/sRGB-IEC61966-2.1.hxx>
 #include <vcl/lineinfo.hxx>
+#include "vcl/strhelper.hxx"
 
 using namespace vcl;
 using namespace rtl;
@@ -10843,7 +10844,7 @@ sal_Int32 PDFWriterImpl::setOutlineItemText( sal_Int32 nItem, const OUString& rT
     if( nItem < 1 || nItem >= (sal_Int32)m_aOutline.size() )
         return -1;
 
-    m_aOutline[ nItem ].m_aTitle = rText;
+    m_aOutline[ nItem ].m_aTitle = psp::WhitespaceToSpace( rText );
     return 0;
 }
 

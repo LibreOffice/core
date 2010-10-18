@@ -102,9 +102,9 @@ public:
 
     virtual void            SetTextColor( SalColor nSalColor );
     virtual USHORT          SetFont( ImplFontSelectData*, int nFallbackLevel );
-    virtual void            GetFontMetric( ImplFontMetricData* );
+    virtual void            GetFontMetric( ImplFontMetricData*, int nFallbackLevel );
     virtual ULONG           GetKernPairs( ULONG nMaxPairs, ImplKernPairData* );
-    virtual ImplFontCharMap* GetImplFontCharMap() const;
+    virtual const ImplFontCharMap* GetImplFontCharMap() const;
     virtual void            GetDevFontList( ImplDevFontList* );
     virtual void            GetDevFontSubstList( OutputDevice* );
     virtual bool            AddTempDevFont( ImplDevFontList*, const String& rFileURL, const String& rFontName );

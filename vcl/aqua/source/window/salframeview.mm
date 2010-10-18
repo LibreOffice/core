@@ -162,6 +162,20 @@ static AquaSalFrame* getMouseContainerFrame()
     return mpFrame;
 }
 
+-(void)displayIfNeeded
+{
+    if( GetSalData() && GetSalData()->mpFirstInstance )
+    {
+        vos::IMutex* pMutex = GetSalData()->mpFirstInstance->GetYieldMutex();
+        if( pMutex )
+        {
+            pMutex->acquire();
+            [super displayIfNeeded];
+            pMutex->release();
+        }
+    }
+}
+
 -(MacOSBOOL)containsMouse
 {
     // is this event actually inside that NSWindow ?
@@ -572,8 +586,11 @@ private:
 -(void)mouseEntered: (NSEvent*)pEvent
 {
     s_pMouseFrame = mpFrame;
-    
-    [self sendMouseEventToFrame:pEvent button:s_nLastButton eventtype:SALEVENT_MOUSEMOVE];
+ 
+    // #i107215# the only mouse events we get when inactive are enter/exit
+    // actually we would like to have all of them, but better none than some
+    if( [NSApp isActive] )
+        [self sendMouseEventToFrame:pEvent button:s_nLastButton eventtype:SALEVENT_MOUSEMOVE];
 }
 
 -(void)mouseExited: (NSEvent*)pEvent
@@ -581,7 +598,10 @@ private:
     if( s_pMouseFrame == mpFrame )
         s_pMouseFrame = NULL;
 
-    [self sendMouseEventToFrame:pEvent button:s_nLastButton eventtype:SALEVENT_MOUSELEAVE];
+    // #i107215# the only mouse events we get when inactive are enter/exit
+    // actually we would like to have all of them, but better none than some
+    if( [NSApp isActive] )
+        [self sendMouseEventToFrame:pEvent button:s_nLastButton eventtype:SALEVENT_MOUSELEAVE];
 }
 
 -(void)rightMouseDown: (NSEvent*)pEvent

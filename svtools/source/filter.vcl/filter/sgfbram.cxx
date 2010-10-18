@@ -37,10 +37,6 @@
 #include "sgffilt.hxx"
 #include "sgfbram.hxx"
 
-#if defined( WIN ) && defined( MSC )
-#pragma code_seg( "SVTOOLS_FILTER4", "SVTOOLS_CODE" )
-#endif
-
 /*************************************************************************
 |*
 |*    operator>>( SvStream&, SgfHeader& )

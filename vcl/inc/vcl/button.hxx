@@ -132,7 +132,7 @@ protected:
     SAL_DLLPRIVATE WinBits         ImplInitStyle( const Window* pPrevWindow, WinBits nStyle );
     SAL_DLLPRIVATE void            ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
     SAL_DLLPRIVATE void            ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags,
-                                               const Rectangle& rRect, bool bLayout );
+                                               const Rectangle& rRect, bool bLayout, bool bMenuBtnSep );
     SAL_DLLPRIVATE void            ImplDrawPushButton( bool bLayout = false );
     using Button::ImplGetTextStyle;
     SAL_DLLPRIVATE USHORT          ImplGetTextStyle( ULONG nDrawFlags ) const;

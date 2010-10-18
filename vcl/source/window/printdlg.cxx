@@ -1194,6 +1194,7 @@ void PrintDialog::setupOptionalUI()
         rtl::OUString aText;
         rtl::OUString aPropertyName;
         Sequence< rtl::OUString > aChoices;
+        Sequence< sal_Bool > aChoicesDisabled;
         Sequence< rtl::OUString > aHelpTexts;
         sal_Int64 nMinValue = 0, nMaxValue = 0;
         sal_Int32 nCurHelpText = 0;
@@ -1216,6 +1217,10 @@ void PrintDialog::setupOptionalUI()
             else if( rEntry.Name.equalsAscii( "Choices" ) )
             {
                 rEntry.Value >>= aChoices;
+            }
+            else if( rEntry.Name.equalsAscii( "ChoicesDisabled" ) )
+            {
+                rEntry.Value >>= aChoicesDisabled;
             }
             else if( rEntry.Name.equalsAscii( "Property" ) )
             {
@@ -1499,6 +1504,8 @@ void PrintDialog::setupOptionalUI()
                     pBtn->SetText( aChoices[m] );
                     pBtn->Check( m == nSelectVal );
                     pBtn->SetToggleHdl( LINK( this, PrintDialog, UIOption_RadioHdl ) );
+                    if( aChoicesDisabled.getLength() > m && aChoicesDisabled[m] == sal_True )
+                        pBtn->Enable( FALSE );
                     pBtn->Show();
                     maPropertyToWindowMap[ aPropertyName ].push_back( pBtn );
                     maControlToPropertyMap[pBtn] = aPropertyName;
@@ -1822,6 +1829,16 @@ void PrintDialog::checkOptionalControlDependencies()
                     bShouldbeEnabled = true;
             }
         }
+
+        if( bShouldbeEnabled && dynamic_cast<RadioButton*>(it->first) )
+        {
+            std::map< Window*, sal_Int32 >::const_iterator r_it = maControlToNumValMap.find( it->first );
+            if( r_it != maControlToNumValMap.end() )
+            {
+                bShouldbeEnabled = maPController->isUIChoiceEnabled( it->second, r_it->second );
+            }
+        }
+
 
         bool bIsEnabled = it->first->IsEnabled();
         // Enable does not do a change check first, so can be less cheap than expected
