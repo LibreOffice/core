@@ -55,33 +55,6 @@ void
 PE_Expression::Call_Handler( const cpp::Token & i_rTok )
 {
     pStati->Cur().Call_Handler(i_rTok.TypeId(), i_rTok.Text());
-
-#if 0
-    switch (i_rTok.TypeId())
-    {
-        case Tid_SwBracket_Left:    SetTokenResult(done, stay);
-                                    nBracketCounter++;
-                                    bBlockOpened = true;
-                                    break;
-        case Tid_SwBracket_Right:   SetTokenResult(done, stay);
-                                    nBracketCounter--;
-                                    break;
-        case Tid_Semicolon:         if (nBracketCounter == 0)
-                                        SetTokenResult(done, pop_success);
-                                    else
-                                        SetTokenResult(done, stay);
-                                    break;
-        default:
-                                    if  ( bBlockOpened AND nBracketCounter == 0 )
-                                    {
-                                        SetTokenResult(not_done, pop_success);
-                                    }
-                                    else
-                                    {
-                                        SetTokenResult(done, stay);
-                                    }
-    }   // end switch
-#endif // 0
 }
 
 void

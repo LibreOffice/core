@@ -93,31 +93,6 @@ class PE_Singleton : public UnoIDL_PE,
         e_STATES_MAX
     };
 
-
-#if 0
-    enum E_TokenType    /// @ATTENTION  Do not change existing values (except of tt_MAX) !!! Else array-indices will break.
-    {
-        tt_metatype = 0,
-        tt_identifier = 1,
-        tt_punctuation = 2,
-        tt_startoftype = 3,
-        tt_MAX
-    };
-    typedef void (PE_Singleton::*F_TOK)(const char *);
-
-
-    void                On_need_singleton_MetaType(const char * i_sText);
-    void                On_need_name_Identifer(const char * i_sText);
-    void                On_need_curlbr_open_Punctuation(const char * i_sText);
-    void                On_std_GotoService(const char * i_sText);
-    void                On_std_Punctuation(const char * i_sText);
-    void                On_need_finish_Punctuation(const char * i_sText);
-
-    void                CallHandler(
-                            const char *        i_sTokenText,
-                            E_TokenType         i_eTokenType );
-#endif // 0
-
     void                On_Default();
 
     virtual void        InitData();

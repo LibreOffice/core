@@ -48,12 +48,6 @@ class TkpContext;
     The algorithms for parsing tokens from the text are an issue of
     the derived classes.
 */
-#if 0
-/**
-    Parsing can be interrupted for a different source by PushSource().
-    The parsing before interruption is continued after PopSource().
-*/
-#endif // 0
 
 class TokenParser
 {

@@ -80,102 +80,6 @@ HF_IdlMethod::Produce_byData( const String &      i_sName,
     leave_ContentCell();
 }
 
-#if 0 // old
-void
-HF_IdlMethod::write_Declaration( const String &      i_sName,
-                                 type_id             i_nReturnType,
-                                 param_list &        i_rParams,
-                                 type_list &         i_rExceptions,
-                                 bool                i_bOneway,
-                                 bool                i_bEllipse ) const
-{
-    HF_FunctionDeclaration
-        aDecl(CurOut()) ;
-    Xml::Element &
-        front = aDecl.Add_ReturnLine();
-
-    // Front:
-    if (i_bOneway)
-        front << "[oneway] ";
-    if (i_nReturnType.IsValid())
-    {   // Normal function, but not constructors:
-        HF_IdlTypeText
-            aReturn(Env(), front, true);
-        aReturn.Produce_byData(i_nReturnType);
-        front
-            << new Html::LineBreak;
-
-    }
-    front
-        >> *new Html::Bold
-            << i_sName;
-
-    //  Main line:
-    Xml::Element &
-        types = aDecl.Types();
-    Xml::Element &
-        names = aDecl.Names();
-    bool bParams = i_rParams.operator bool();
-    if (bParams)
-    {
-        front
-            << "(";
-        HF_IdlTypeText
-            aType( Env(), types, true );
-
-        write_Param( aType, names, (*i_rParams) );
-
-        for (++i_rParams; i_rParams; ++i_rParams)
-        {
-            types
-                << new Html::LineBreak;
-            names
-                << ","
-                << new Html::LineBreak;
-            write_Param( aType, names, (*i_rParams) );
-        }   // end for
-
-        if (i_bEllipse)
-        {
-            names
-                << " ...";
-        }
-        names
-            << " )";
-    }
-    else
-        front
-            << "()";
-
-
-    if ( i_rExceptions.operator bool() )
-    {
-        Xml::Element &
-            rExcOut = aDecl.Add_RaisesLine("raises", NOT bParams);
-        HF_IdlTypeText
-            aExc(Env(), rExcOut, true);
-        aExc.Produce_byData(*i_rExceptions);
-
-        for (++i_rExceptions; i_rExceptions; ++i_rExceptions)
-        {
-            rExcOut
-                << ","
-                << new Html::LineBreak;
-            aExc.Produce_byData(*i_rExceptions);
-        }   // end for
-
-        rExcOut << " );";
-    }
-    else
-    {
-        if (bParams)
-            aDecl.Names() << ";";
-        else
-            aDecl.Front() << ";";
-    }
-}
-#endif   // 0  old
-
 void
 HF_IdlMethod::write_Declaration( const String &      i_sName,
                                  type_id             i_nReturnType,
@@ -266,31 +170,6 @@ HF_IdlMethod::write_Declaration( const String &      i_sName,
         rNameCell << ";";
     }
 }
-
-#if 0   // old
-void
-HF_IdlMethod::write_Param( HF_IdlTypeText &             o_type,
-                           Xml::Element &               o_names,
-                           const ary::idl::Parameter &  i_param ) const
-{
-    switch ( i_param.Direction() )
-    {
-        case ary::idl::param_in:
-                    o_type.CurOut() << "[in] ";
-                    break;
-        case ary::idl::param_out:
-                    o_type.CurOut() << "[out] ";
-                    break;
-        case ary::idl::param_inout:
-                    o_type.CurOut() << "[inout] ";
-                    break;
-    }   // end switch
-
-    o_type.Produce_byData( i_param.Type() );
-    o_names
-        << i_param.Name();
-}
-#endif  // 0   old
 
 Xml::Element *
 HF_IdlMethod::write_Param( HF_FunctionDeclaration &     o_decl,

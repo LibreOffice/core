@@ -219,7 +219,7 @@ PE_Class::Result_FirstNameSegment() const
 }   // namespace cpp
 
 
-#if 0   // Branches
+/* // Branches
 
 class struct union
     -> Class
@@ -247,10 +247,7 @@ virtual
 
 using
     -> Using Declaration
-
-
-#endif // 0
-
+*/
 
 #endif
 

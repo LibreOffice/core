@@ -213,15 +213,6 @@ PE_Class::Setup_StatusFunctions()
     SEMPARSE_CREATE_STATUS(PE_Class, inProtection, Hdl_SyntaxError);
     SEMPARSE_CREATE_STATUS(PE_Class, afterDecl, On_afterDecl_Return2Type);
 
-#if 0
-    static F_Tok stateF_inFriend[] =        { On_inFriend_class,
-                                              On_inFriend_struct,
-                                              On_inFriend_union };
-                                              // Default: On_inFriend_Function
-    static INT16 stateT_inFriend[] =        { Tid_class,
-                                              Tid_struct,
-                                              Tid_union };
-#endif // 0
 }
 
 void

@@ -86,18 +86,6 @@ struct xref : public ifc_ce::xref
     static void         Get_AsDataTypes(
                             Dyn_CeIterator &    o_result,
                             const CodeEntity &  i_ce );
-
-#if 0
-    static void         Get_UsingTypedefs(      /// like: typedef sequence<i_ce.LocalName()> newNameSeq;
-                            Dyn_CeIterator &    o_result,
-                            const CodeEntity &  i_ce );
-    static void         Get_AsIndirectReturns(
-                            Dyn_CeIterator &    o_result,
-                            const CodeEntity &  i_ce );
-    static void         Get_AsIndirectParameters(
-                            Dyn_CeIterator &    o_result,
-                            const CodeEntity &  i_ce );
-#endif // 0
 };
 
 struct doc : public ifc_ce::doc

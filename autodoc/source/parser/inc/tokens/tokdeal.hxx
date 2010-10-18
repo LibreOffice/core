@@ -53,25 +53,5 @@ class TokenDealer
                         AsDistributor() = 0;
 };
 
-
-#if 0
-class TokenDealer
-
-{
-  public:
-    virtual void        Deal_IdlCode(
-                            idl::Token &        let_drToken );
-    virtual void        Deal_UdkDocu(
-                            udoc::Token &       let_drToken );
-    virtual void        Deal_JavaCode(
-                            java::Token &       let_drToken );
-    virtual void        Deal_SBasicCode(
-                            sbasic::Token &     let_drToken );
-};
-
-#endif // 0
-
-
-
 #endif
 

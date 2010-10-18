@@ -51,12 +51,6 @@ namespace cpp {
     class PE_Defines;
     class PE_Ignore;
 
-#if 0
-class PE_Template;
-class PE_Extern;
-#endif
-
-
 class PE_File : public Cpp_PE
 {
   public:
@@ -83,9 +77,6 @@ class PE_File : public Cpp_PE
     typedef SubPe< PE_File, PE_TemplateTop> SP_Template;
     typedef SubPe< PE_File, PE_Defines>     SP_Defines;
     typedef SubPe< PE_File, PE_Ignore >     SP_Ignore;
-#if 0
-    typedef SubPe< PE_File, PE_Using>       SP_Using;
-#endif // 0
 
     typedef SubPeUse< PE_File, PE_Namespace>    SPU_Namespace;
     typedef SubPeUse< PE_File, PE_Typedef>      SPU_Typedef;
@@ -136,9 +127,6 @@ class PE_File : public Cpp_PE
     Dyn<SP_Defines>     pSpDefs;
 
     Dyn<SP_Ignore>      pSpIgnore;
-#if 0
-    SP_Using            aSpUsing;
-#endif // 0
 
     Dyn<SPU_Namespace>  pSpuNamespace;
     Dyn<SPU_Typedef>    pSpuTypedef;
@@ -159,7 +147,7 @@ class PE_File : public Cpp_PE
 
 
 
-#if 0   // Branches
+/* // Branches
 
 namespace
     -> Named Namespace declaration
@@ -202,8 +190,7 @@ using
     -> Using-Declaration
     -> Using-Directive
 
-#endif // 0
-
+*/
 
 #endif
 

@@ -49,31 +49,6 @@ namespace uidl
 {
 
 
-
-#if 0
-#ifdef DF
-#undef DF
-#endif
-#define DF  &PE_Singleton::On_Default
-
-
-PE_Singleton::F_TOK
-PE_Singleton::aDispatcher[PE_Singleton::e_STATES_MAX][PE_Singleton::tt_MAX] =
-        {   { DF, DF, DF },  // e_none
-            { DF, &PE_Singleton::On_need_name_Identifer,
-                      DF },  // need_name
-            { DF, DF, &PE_Singleton::On_need_curlbr_open_Punctuation,
-                         },  // need_curlbr_open
-            { &PE_Singleton::On_std_GotoService,
-                  DF, &PE_Singleton::On_std_Punctuation,
-                         },  // e_std
-            { DF, DF, DF },  // in_service
-            { DF, DF, &PE_Interface::On_need_finish_Punctuation,
-                         }   // need_finish
-        };
-#endif // 0
-
-
 PE_Singleton::PE_Singleton()
     :   eState(e_none),
         sData_Name(),

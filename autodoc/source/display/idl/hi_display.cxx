@@ -162,16 +162,6 @@ HtmlDisplay_Idl::Create_FilesInProjectTree()
 void
 HtmlDisplay_Idl::Create_PackageList()
 {
-#if 0
-    Cout() << "\nCreate package list ..." << std::flush;
-
-    pCurPageEnv->CurPosition() = pCurPageEnv->OutputTree().Root();
-
-    // KORR
-    // ...
-
-    Cout() << " done." << Endl();
-#endif // 0
 }
 
 void

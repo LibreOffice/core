@@ -184,7 +184,7 @@ class Tok_UnblockMacro : public ::TextToken
 
 
 
-#if 0 // just for viewing:
+/* just for viewing:
 class Tok_TypeKey : public cpp::Token                  // file-><type-PE>
 class Tok_Template : public cpp::Token                 // file
 class Tok_Namespace : public cpp::Token                // file
@@ -211,8 +211,7 @@ class Tok_Operator : public cpp::Token                 // expression
 
 class Tok_Ignore : public cpp::Token
 class Tok_ContextChanger : public cpp::Token
-#endif // 0
-
+*/
 
 }   // namespace cpp
 

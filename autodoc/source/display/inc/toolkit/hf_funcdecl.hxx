@@ -35,39 +35,6 @@
     // COMPONENTS
     // PARAMETERS
 
-
-#if 0   // old
-/** @resp
-    Provides three cells to put in a function declaration.
-*/
-class HF_FunctionDeclaration : public HtmlMaker
-{
-  public:
-                        HF_FunctionDeclaration(
-                            Xml::Element &      o_rParent );
-    virtual             ~HF_FunctionDeclaration();
-
-    /// Inserts empty line in 2nd and 3rd cell and returns first.
-    Xml::Element &      Add_ReturnLine();
-
-    /** Inserts empty line in 1st cell, "raises (" in 2nd
-        and returns 3rd.
-    */
-    Xml::Element &      Add_RaisesLine(
-                            const char *        i_sRaisesText,
-                            bool                i_bSuppressExtraLine = false );
-
-    Xml::Element &      Front()                 { return *pFront; }
-    Xml::Element &      Types()                 { return *pTypes; }
-    Xml::Element &      Names()                 { return *pNames; }
-
-  private:
-    Xml::Element *      pFront;
-    Xml::Element *      pTypes;
-    Xml::Element *      pNames;
-};
-#endif // 0  old
-
 class HF_FunctionDeclaration : public HtmlMaker
 {
   public:

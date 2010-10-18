@@ -177,19 +177,6 @@ AryAccess::Search_Ce( StringVector &            o_module,
     if (strchr(o_memberEntity,':') != 0)
         return false;   // This must not happen in IDL
 
-#if 0
-// The following code avoids false links, but is rather expensive
-//   in runtime time consumation.
-
-    const ary::idl::CodeEntity *
-        pCe = Find_Ce(nCe);
-    if (pCe == 0)
-        return false;
-
-    if ( NOT ary::idl::ifc_ce::attr::Search_Member(*pCe,o_memberEntity) )
-        return false;
-#endif
-
     return true;
 }
 

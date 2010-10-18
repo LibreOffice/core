@@ -37,33 +37,6 @@
 
 namespace adoc {
 
-#if 0
-#define  EV_AtTagId( val, tex ) ENUM_VALUE(E_AtTagId, eATTAGID_##val, val, tex )
-
-EV_AtTagId(atid_ATT, "ATTENTION" );
-EV_AtTagId(atid_author, "Author" );
-EV_AtTagId(atid_change, "Change" );
-EV_AtTagId(atid_collab, "Collaborators" );
-EV_AtTagId(atid_contact, "Contact" );
-EV_AtTagId(atid_copyright, "Copyright (c)" );
-EV_AtTagId(atid_descr, "Description" );
-EV_AtTagId(atid_devstat, "Development State" );
-EV_AtTagId(atid_docdate, "Date of Documentation" );
-EV_AtTagId(atid_derive, "How to Derive from this class" );
-EV_AtTagId(atid_instance, "Instances" );
-EV_AtTagId(atid_life, "Lifecycle" );
-EV_AtTagId(atid_multi, "Multiplicity" );
-EV_AtTagId(atid_onerror, "On Error" );
-EV_AtTagId(atid_persist, "Persistence" );
-EV_AtTagId(atid_postcond, "Postcondition" );
-EV_AtTagId(atid_precond, "Precondition" );
-EV_AtTagId(atid_return, "Return" );
-EV_AtTagId(atid_short, "Summary" );
-EV_AtTagId(atid_since, "Valid Since" );
-EV_AtTagId(atid_todo, "Todo" );
-EV_AtTagId(atid_version, "Version" );
-#endif // 0
-
 void
 Tok_at_std::Trigger( TokenInterpreter & io_rInterpreter ) const
 {
