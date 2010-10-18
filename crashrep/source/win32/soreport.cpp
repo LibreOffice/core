@@ -155,7 +155,7 @@ static FILE *_tmpfile(void)
 
     TCHAR   szTempPath[MAX_PATH];
 
-    if ( GetTempPath( elementsof(szTempPath), szTempPath ) )
+    if ( GetTempPath( SAL_N_ELEMENTS(szTempPath), szTempPath ) )
     {
         TCHAR   szFileName[MAX_PATH];
 
@@ -397,27 +397,27 @@ void CrashReportParams::ReadFromEnvironment()
 {
     TCHAR   szBuffer[2048];
 
-    DWORD dwResult = GetEnvironmentVariable( TEXT("ERRORREPORT_HTTPPROXYSERVER"), szBuffer, elementsof(szBuffer) );
+    DWORD dwResult = GetEnvironmentVariable( TEXT("ERRORREPORT_HTTPPROXYSERVER"), szBuffer, SAL_N_ELEMENTS(szBuffer) );
 
-    if ( dwResult && dwResult < elementsof(szBuffer) )
+    if ( dwResult && dwResult < SAL_N_ELEMENTS(szBuffer) )
         sProxyServer = szBuffer;
 
-    dwResult = GetEnvironmentVariable( TEXT("ERRORREPORT_HTTPPROXYPORT"), szBuffer, elementsof(szBuffer) );
+    dwResult = GetEnvironmentVariable( TEXT("ERRORREPORT_HTTPPROXYPORT"), szBuffer, SAL_N_ELEMENTS(szBuffer) );
 
-    if ( dwResult && dwResult < elementsof(szBuffer) )
+    if ( dwResult && dwResult < SAL_N_ELEMENTS(szBuffer) )
         sProxyPort = szBuffer;
 
-    dwResult = GetEnvironmentVariable( TEXT("ERRORREPORT_RETURNADDRESS"), szBuffer, elementsof(szBuffer) );
+    dwResult = GetEnvironmentVariable( TEXT("ERRORREPORT_RETURNADDRESS"), szBuffer, SAL_N_ELEMENTS(szBuffer) );
 
-    if ( dwResult && dwResult < elementsof(szBuffer) )
+    if ( dwResult && dwResult < SAL_N_ELEMENTS(szBuffer) )
     {
         sEmail = szBuffer;
         // fAllowContact = TRUE;
     }
 
-    dwResult = GetEnvironmentVariable( TEXT("ERRORREPORT_HTTPCONNECTIONTYPE"), szBuffer, elementsof(szBuffer) );
+    dwResult = GetEnvironmentVariable( TEXT("ERRORREPORT_HTTPCONNECTIONTYPE"), szBuffer, SAL_N_ELEMENTS(szBuffer) );
 
-    if ( dwResult && dwResult < elementsof(szBuffer) )
+    if ( dwResult && dwResult < SAL_N_ELEMENTS(szBuffer) )
     {
         if ( 0 == _tcsicmp( szBuffer, _T("DIRECT") ) )
             uInternetConnection = 1;
@@ -427,15 +427,15 @@ void CrashReportParams::ReadFromEnvironment()
             uInternetConnection = 0;
     }
 
-    dwResult = GetEnvironmentVariable( TEXT("ERRORREPORT_SUBJECT"), szBuffer, elementsof(szBuffer) );
+    dwResult = GetEnvironmentVariable( TEXT("ERRORREPORT_SUBJECT"), szBuffer, SAL_N_ELEMENTS(szBuffer) );
 
-    if ( dwResult && dwResult < elementsof(szBuffer) )
+    if ( dwResult && dwResult < SAL_N_ELEMENTS(szBuffer) )
         sTitle = szBuffer;
 
 
-    dwResult = GetEnvironmentVariable( TEXT("ERRORREPORT_BODYFILE"), szBuffer, elementsof(szBuffer) );
+    dwResult = GetEnvironmentVariable( TEXT("ERRORREPORT_BODYFILE"), szBuffer, SAL_N_ELEMENTS(szBuffer) );
 
-    if ( dwResult && dwResult < elementsof(szBuffer) )
+    if ( dwResult && dwResult < SAL_N_ELEMENTS(szBuffer) )
     {
         FILE *fp = _xfopen( szBuffer, _T("rb") );
 
@@ -446,11 +446,11 @@ void CrashReportParams::ReadFromEnvironment()
 
             sComment = TEXT("");
 
-            while ( 0 != (nBytesRead = fread( aUTF8Buffer, sizeof(aUTF8Buffer[0]), elementsof(aUTF8Buffer), fp )) )
+            while ( 0 != (nBytesRead = fread( aUTF8Buffer, sizeof(aUTF8Buffer[0]), SAL_N_ELEMENTS(aUTF8Buffer), fp )) )
             {
                 TCHAR   aBuffer[256+1];
 
-                DWORD   dwCharacters = MultiByteToWideChar( CP_UTF8, 0, aUTF8Buffer, nBytesRead, aBuffer, elementsof(aBuffer) - 1 );
+                DWORD   dwCharacters = MultiByteToWideChar( CP_UTF8, 0, aUTF8Buffer, nBytesRead, aBuffer, SAL_N_ELEMENTS(aBuffer) - 1 );
                 aBuffer[dwCharacters] = 0;
                 sComment += aBuffer;
             }
@@ -513,7 +513,7 @@ static int LoadAndFormatString( HINSTANCE hInstance, UINT uID, LPTSTR lpBuffer, 
     TCHAR   szBuffer[FORMATBUFSIZE];
     TCHAR   szBuffer2[FORMATBUFSIZE];
 
-    LoadString( hInstance, uID, szBuffer, elementsof(szBuffer) );
+    LoadString( hInstance, uID, szBuffer, SAL_N_ELEMENTS(szBuffer) );
 
     LPCTSTR src;
     LPTSTR  dest;
@@ -622,7 +622,7 @@ static string GetModuleDirectory( HMODULE hModule )
 
     CHAR    szModuleNameUTF8[MAX_PATH] = "";
 
-    WideCharToMultiByte( CP_UTF8, 0, szModuleName, -1, szModuleNameUTF8, elementsof(szModuleNameUTF8), NULL, NULL );
+    WideCharToMultiByte( CP_UTF8, 0, szModuleName, -1, szModuleNameUTF8, SAL_N_ELEMENTS(szModuleNameUTF8), NULL, NULL );
     return string( szModuleNameUTF8 );
 }
 
@@ -661,7 +661,7 @@ BOOL WriteReportFile( CrashReportParams *pParams )
     BOOL    fSuccess = FALSE;
     TCHAR   szTempPath[MAX_PATH];
 
-    if ( GetTempPath( elementsof(szTempPath), szTempPath ) )
+    if ( GetTempPath( SAL_N_ELEMENTS(szTempPath), szTempPath ) )
     {
         TCHAR   szFileName[MAX_PATH];
 
@@ -900,10 +900,10 @@ BOOL CALLBACK PreviewDialogProc(
             HINSTANCE   hInstance = (HINSTANCE)GetWindowLong( hwndDlg, GWL_HINSTANCE );
             HWND    hwndParent = (HWND)GetWindowLong( hwndDlg, GWL_HWNDPARENT );
 
-            GetWindowText( hwndParent, szBuffer, elementsof(szBuffer) );
+            GetWindowText( hwndParent, szBuffer, SAL_N_ELEMENTS(szBuffer) );
             SetWindowText( hwndDlg, szBuffer );
 
-            LoadAndFormatString( hInstance, IDS_OK_BUTTON, szBuffer, elementsof(szBuffer) );
+            LoadAndFormatString( hInstance, IDS_OK_BUTTON, szBuffer, SAL_N_ELEMENTS(szBuffer) );
             Button_SetText( GetDlgItem(hwndDlg, IDOK), szBuffer );
 
             basic_string<TCHAR> aString;
@@ -919,11 +919,11 @@ BOOL CALLBACK PreviewDialogProc(
             {
                 char    buf[1024];
 
-                while ( fgets( buf, elementsof(buf), fp ) != NULL )
+                while ( fgets( buf, SAL_N_ELEMENTS(buf), fp ) != NULL )
                 {
                     WCHAR   bufW[1024];
 
-                    MultiByteToWideChar( CP_UTF8, 0, buf, -1, bufW, elementsof(bufW) );
+                    MultiByteToWideChar( CP_UTF8, 0, buf, -1, bufW, SAL_N_ELEMENTS(bufW) );
 
                     aString.append( bufW );
                 }
@@ -950,10 +950,10 @@ BOOL CALLBACK PreviewDialogProc(
                     {
                         TCHAR   output[16];
 
-                        _sntprintf( output, elementsof(output), _T("%02X\x20"), buf[i] );
+                        _sntprintf( output, SAL_N_ELEMENTS(output), _T("%02X\x20"), buf[i] );
                         aString.append( output );
                     }
-                    for ( ; i < elementsof(buf); i++ )
+                    for ( ; i < SAL_N_ELEMENTS(buf); i++ )
                     {
                         aString.append( _T("\x20\x20\x20") );
                     }
@@ -1052,31 +1052,31 @@ BOOL CALLBACK OptionsDialogProc(
 
             pParams = (CrashReportParams *)lParam;
 
-            LoadAndFormatString( hInstance, IDS_OPTIONS_CAPTION, szBuffer, elementsof(szBuffer) );
+            LoadAndFormatString( hInstance, IDS_OPTIONS_CAPTION, szBuffer, SAL_N_ELEMENTS(szBuffer) );
             SetWindowText( hwndDlg, szBuffer );
 
-            LoadAndFormatString( hInstance, IDS_PROXY_SETTINGS_HEADER, szBuffer, elementsof(szBuffer) );
+            LoadAndFormatString( hInstance, IDS_PROXY_SETTINGS_HEADER, szBuffer, SAL_N_ELEMENTS(szBuffer) );
             Static_SetText( GetDlgItem(hwndDlg, IDC_PROXY_SETTINGS), szBuffer );
 
-            LoadAndFormatString( hInstance, IDS_PROXY_SYSTEM, szBuffer, elementsof(szBuffer) );
+            LoadAndFormatString( hInstance, IDS_PROXY_SYSTEM, szBuffer, SAL_N_ELEMENTS(szBuffer) );
             Button_SetText( GetDlgItem(hwndDlg, IDC_RADIO_SYSTEM), szBuffer );
 
-            LoadAndFormatString( hInstance, IDS_PROXY_DIRECT, szBuffer, elementsof(szBuffer) );
+            LoadAndFormatString( hInstance, IDS_PROXY_DIRECT, szBuffer, SAL_N_ELEMENTS(szBuffer) );
             Button_SetText( GetDlgItem(hwndDlg, IDC_RADIO_DIRECT), szBuffer );
 
-            LoadAndFormatString( hInstance, IDS_PROXY_MANUAL, szBuffer, elementsof(szBuffer) );
+            LoadAndFormatString( hInstance, IDS_PROXY_MANUAL, szBuffer, SAL_N_ELEMENTS(szBuffer) );
             Button_SetText( GetDlgItem(hwndDlg, IDC_RADIO_MANUAL), szBuffer );
 
-            LoadAndFormatString( hInstance, IDS_LABEL_PROXYSERVER, szBuffer, elementsof(szBuffer) );
+            LoadAndFormatString( hInstance, IDS_LABEL_PROXYSERVER, szBuffer, SAL_N_ELEMENTS(szBuffer) );
             Static_SetText( GetDlgItem(hwndDlg, IDC_LABEL_PROXYSERVER), szBuffer );
 
-            LoadAndFormatString( hInstance, IDS_LABEL_PROXYPORT, szBuffer, elementsof(szBuffer) );
+            LoadAndFormatString( hInstance, IDS_LABEL_PROXYPORT, szBuffer, SAL_N_ELEMENTS(szBuffer) );
             Static_SetText( GetDlgItem(hwndDlg, IDC_LABEL_PROXYPORT), szBuffer );
 
-            LoadAndFormatString( hInstance, IDS_OK_BUTTON, szBuffer, elementsof(szBuffer) );
+            LoadAndFormatString( hInstance, IDS_OK_BUTTON, szBuffer, SAL_N_ELEMENTS(szBuffer) );
             Button_SetText( GetDlgItem(hwndDlg, IDOK), szBuffer );
 
-            LoadAndFormatString( hInstance, IDS_CANCEL_BUTTON, szBuffer, elementsof(szBuffer) );
+            LoadAndFormatString( hInstance, IDS_CANCEL_BUTTON, szBuffer, SAL_N_ELEMENTS(szBuffer) );
             Button_SetText( GetDlgItem(hwndDlg, IDCANCEL), szBuffer );
 
             Edit_SetText( GetDlgItem(hwndDlg, IDC_EDIT_PROXYSERVER), pParams->sProxyServer.c_str() );
@@ -1089,7 +1089,7 @@ BOOL CALLBACK OptionsDialogProc(
                 EM_SETBKGNDCOLOR,
                 (WPARAM)FALSE,
                 GetSysColor( COLOR_3DFACE ) );
-            LoadAndFormatString( hInstance, IDS_PROXY_DESCRIPTION, szBuffer, elementsof(szBuffer) );
+            LoadAndFormatString( hInstance, IDS_PROXY_DESCRIPTION, szBuffer, SAL_N_ELEMENTS(szBuffer) );
             Edit_SetText( GetDlgItem(hwndDlg, IDC_PROXY_DESCRIPTION), szBuffer );
 
             UpdateOptionsDialogControls( hwndDlg );
@@ -1108,10 +1108,10 @@ BOOL CALLBACK OptionsDialogProc(
             {
             TCHAR szBuffer[1024];
 
-            Edit_GetText( GetDlgItem(hwndDlg, IDC_EDIT_PROXYSERVER), szBuffer, elementsof(szBuffer) );
+            Edit_GetText( GetDlgItem(hwndDlg, IDC_EDIT_PROXYSERVER), szBuffer, SAL_N_ELEMENTS(szBuffer) );
             pParams->sProxyServer = szBuffer;
 
-            Edit_GetText( GetDlgItem(hwndDlg, IDC_EDIT_PROXYPORT), szBuffer, elementsof(szBuffer) );
+            Edit_GetText( GetDlgItem(hwndDlg, IDC_EDIT_PROXYPORT), szBuffer, SAL_N_ELEMENTS(szBuffer) );
             pParams->sProxyPort = szBuffer;
 
             if ( Button_GetCheck( GetDlgItem(hwndDlg, IDC_RADIO_DIRECT) ) & BST_CHECKED )
@@ -1178,21 +1178,21 @@ BOOL CALLBACK ReportDialogProc(
             HINSTANCE   hInstance = (HINSTANCE)GetWindowLong(hwndDlg, GWL_HINSTANCE );
             TCHAR       szBuffer[FORMATBUFSIZE];
 
-            LoadAndFormatString( hInstance, IDS_REPORT_INTRO, szBuffer, elementsof(szBuffer) );
+            LoadAndFormatString( hInstance, IDS_REPORT_INTRO, szBuffer, SAL_N_ELEMENTS(szBuffer) );
             Static_SetText( GetDlgItem(hwndDlg, IDC_REPORT_INTRO), szBuffer );
 
             Edit_SetText( GetDlgItem(hwndDlg, IDC_EDIT3), szBuffer );
 
-            LoadAndFormatString( hInstance, IDS_ENTER_TITLE, szBuffer, elementsof(szBuffer) );
+            LoadAndFormatString( hInstance, IDS_ENTER_TITLE, szBuffer, SAL_N_ELEMENTS(szBuffer) );
             Static_SetText( GetDlgItem(hwndDlg, IDC_ENTER_TITLE), szBuffer );
 
-            LoadAndFormatString( hInstance, IDS_ENTER_DESCRIPTION, szBuffer, elementsof(szBuffer) );
+            LoadAndFormatString( hInstance, IDS_ENTER_DESCRIPTION, szBuffer, SAL_N_ELEMENTS(szBuffer) );
             Static_SetText( GetDlgItem(hwndDlg, IDC_ENTER_DESCRIPTION), szBuffer );
 
-            LoadAndFormatString( hInstance, IDS_SHOW_REPORT_BUTTON, szBuffer, elementsof(szBuffer) );
+            LoadAndFormatString( hInstance, IDS_SHOW_REPORT_BUTTON, szBuffer, SAL_N_ELEMENTS(szBuffer) );
             Button_SetText( GetDlgItem(hwndDlg, IDC_SHOW_REPORT), szBuffer );
 
-            LoadAndFormatString( hInstance, IDS_SAVE_REPORT_BUTTON, szBuffer, elementsof(szBuffer) );
+            LoadAndFormatString( hInstance, IDS_SAVE_REPORT_BUTTON, szBuffer, SAL_N_ELEMENTS(szBuffer) );
             Button_SetText( GetDlgItem(hwndDlg, IDC_SAVE_REPORT), szBuffer );
 
             const char *pszUserType = getenv( "STAROFFICE_USERTYPE" );
@@ -1201,14 +1201,14 @@ BOOL CALLBACK ReportDialogProc(
             else
                 ShowWindow( GetDlgItem(hwndDlg, IDC_SAVE_REPORT), SW_HIDE );
 
-            LoadAndFormatString( hInstance, IDS_OPTIONS_BUTTON, szBuffer, elementsof(szBuffer) );
+            LoadAndFormatString( hInstance, IDS_OPTIONS_BUTTON, szBuffer, SAL_N_ELEMENTS(szBuffer) );
             Button_SetText( GetDlgItem(hwndDlg, IDC_OPTIONS), szBuffer );
 
-            LoadAndFormatString( hInstance, IDS_ALLOW_CONTACT, szBuffer, elementsof(szBuffer) );
+            LoadAndFormatString( hInstance, IDS_ALLOW_CONTACT, szBuffer, SAL_N_ELEMENTS(szBuffer) );
             Button_SetText( GetDlgItem(hwndDlg, IDC_ALLOW_CONTACT), szBuffer );
             Button_SetCheck( GetDlgItem(hwndDlg, IDC_ALLOW_CONTACT), pParams->fAllowContact ? BST_CHECKED : BST_UNCHECKED );
 
-            LoadAndFormatString( hInstance, IDS_LABEL_EMAIL, szBuffer, elementsof(szBuffer) );
+            LoadAndFormatString( hInstance, IDS_LABEL_EMAIL, szBuffer, SAL_N_ELEMENTS(szBuffer) );
             Button_SetText( GetDlgItem(hwndDlg, IDC_LABEL_EMAIL), szBuffer );
 
             Edit_SetText( GetDlgItem(hwndDlg, IDC_EDIT_EMAIL), pParams->sEmail.c_str() );
@@ -1223,13 +1223,13 @@ BOOL CALLBACK ReportDialogProc(
             CrashReportParams   *pParams = (CrashReportParams*)GetWindowLong( GetParent(hwndDlg), GWL_USERDATA );
             TCHAR       szBuffer[FORMATBUFSIZE];
 
-            LoadAndFormatString( hInstance, IDS_REPORT_CAPTION, szBuffer, elementsof(szBuffer) );
+            LoadAndFormatString( hInstance, IDS_REPORT_CAPTION, szBuffer, SAL_N_ELEMENTS(szBuffer) );
             SetWindowText( GetParent(hwndDlg), szBuffer );
 
-            LoadAndFormatString( hInstance, IDS_REPORT_HEADER, szBuffer, elementsof(szBuffer) );
+            LoadAndFormatString( hInstance, IDS_REPORT_HEADER, szBuffer, SAL_N_ELEMENTS(szBuffer) );
             SetWindowText( GetDlgItem(GetParent(hwndDlg), IDC_HEADER), szBuffer );
 
-            LoadAndFormatString( hInstance, IDS_DONOT_SEND_BUTTON, szBuffer, elementsof(szBuffer) );
+            LoadAndFormatString( hInstance, IDS_DONOT_SEND_BUTTON, szBuffer, SAL_N_ELEMENTS(szBuffer) );
             Button_SetText( GetDlgItem(GetParent(hwndDlg), IDCANCEL), szBuffer );
 
 
@@ -1260,13 +1260,13 @@ BOOL CALLBACK ReportDialogProc(
 
                 pParams->fAllowContact = Button_GetCheck( GetDlgItem(hwndDlg, IDC_ALLOW_CONTACT) ) ? TRUE : FALSE;
 
-                Edit_GetText( GetDlgItem(hwndDlg, IDC_EDIT_TITLE), szBuffer, elementsof(szBuffer) );
+                Edit_GetText( GetDlgItem(hwndDlg, IDC_EDIT_TITLE), szBuffer, SAL_N_ELEMENTS(szBuffer) );
                 pParams->sTitle = szBuffer;
 
-                Edit_GetText( GetDlgItem(hwndDlg, IDC_EDIT_DESCRIPTION), szBuffer, elementsof(szBuffer) );
+                Edit_GetText( GetDlgItem(hwndDlg, IDC_EDIT_DESCRIPTION), szBuffer, SAL_N_ELEMENTS(szBuffer) );
                 pParams->sComment = szBuffer;
 
-                Edit_GetText( GetDlgItem(hwndDlg, IDC_EDIT_EMAIL), szBuffer, elementsof(szBuffer) );
+                Edit_GetText( GetDlgItem(hwndDlg, IDC_EDIT_EMAIL), szBuffer, SAL_N_ELEMENTS(szBuffer) );
                 pParams->sEmail = szBuffer;
 
                 PreviewReport( GetParent(hwndDlg), pParams );
@@ -1317,16 +1317,16 @@ BOOL CALLBACK WelcomeDialogProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
             SendMessage( hwndRichEdit, EM_SETEVENTMASK, 0, ENM_LINK );
             SendMessage( hwndRichEdit, EM_AUTOURLDETECT, TRUE, 0 );
 
-            LoadAndFormatString( hInstance, IDS_WELCOME_BODY1, szBuffer, elementsof(szBuffer) );
-            LoadAndFormatString( hInstance, IDS_WELCOME_BODY2, szBuffer2, elementsof(szBuffer2) );
-            _tcsncat( szBuffer, szBuffer2, elementsof(szBuffer) );
-            LoadAndFormatString( hInstance, IDS_WELCOME_BODY3, szBuffer2, elementsof(szBuffer2) );
-            _tcsncat( szBuffer, szBuffer2, elementsof(szBuffer) );
-            LoadString( hInstance, IDS_PRIVACY_URL, szURL, elementsof(szURL) );
-            _tcsncat( szBuffer, szURL, elementsof(szBuffer) );
+            LoadAndFormatString( hInstance, IDS_WELCOME_BODY1, szBuffer, SAL_N_ELEMENTS(szBuffer) );
+            LoadAndFormatString( hInstance, IDS_WELCOME_BODY2, szBuffer2, SAL_N_ELEMENTS(szBuffer2) );
+            _tcsncat( szBuffer, szBuffer2, SAL_N_ELEMENTS(szBuffer) );
+            LoadAndFormatString( hInstance, IDS_WELCOME_BODY3, szBuffer2, SAL_N_ELEMENTS(szBuffer2) );
+            _tcsncat( szBuffer, szBuffer2, SAL_N_ELEMENTS(szBuffer) );
+            LoadString( hInstance, IDS_PRIVACY_URL, szURL, SAL_N_ELEMENTS(szURL) );
+            _tcsncat( szBuffer, szURL, SAL_N_ELEMENTS(szBuffer) );
             SetWindowText( hwndRichEdit, szBuffer );
 
-            LoadAndFormatString( hInstance, IDS_WELCOME_CAPTION, szCaption, elementsof(szCaption) );
+            LoadAndFormatString( hInstance, IDS_WELCOME_CAPTION, szCaption, SAL_N_ELEMENTS(szCaption) );
             SetWindowText( GetParent(hwndDlg), szCaption );
 
         }
@@ -1337,13 +1337,13 @@ BOOL CALLBACK WelcomeDialogProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
             HINSTANCE   hInstance = (HINSTANCE)GetWindowLong(hwndDlg, GWL_HINSTANCE );
             TCHAR       szBuffer[FORMATBUFSIZE];
 
-            LoadAndFormatString( hInstance, IDS_WELCOME_CAPTION, szBuffer, elementsof(szBuffer) );
+            LoadAndFormatString( hInstance, IDS_WELCOME_CAPTION, szBuffer, SAL_N_ELEMENTS(szBuffer) );
             SetWindowText( GetParent(hwndDlg), szBuffer );
 
-            LoadAndFormatString( hInstance, IDS_WELCOME_HEADER, szBuffer, elementsof(szBuffer) );
+            LoadAndFormatString( hInstance, IDS_WELCOME_HEADER, szBuffer, SAL_N_ELEMENTS(szBuffer) );
             SetWindowText( GetDlgItem(GetParent(hwndDlg), IDC_HEADER), szBuffer );
 
-            LoadAndFormatString( hInstance, IDS_CANCEL_BUTTON, szBuffer, elementsof(szBuffer) );
+            LoadAndFormatString( hInstance, IDS_CANCEL_BUTTON, szBuffer, SAL_N_ELEMENTS(szBuffer) );
             Button_SetText( GetDlgItem(GetParent(hwndDlg), IDCANCEL), szBuffer );
 
             ShowWindow( GetDlgItem(GetParent(hwndDlg),IDBACK), FALSE );
@@ -1422,16 +1422,16 @@ BOOL CALLBACK DialogProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam 
                 SCF_ALL,
                 (LPARAM)&chfmt );
 
-            LoadAndFormatString( hInstance, IDS_CANCEL_BUTTON, szBuffer, elementsof(szBuffer) );
+            LoadAndFormatString( hInstance, IDS_CANCEL_BUTTON, szBuffer, SAL_N_ELEMENTS(szBuffer) );
             Button_SetText( GetDlgItem(hwndDlg, IDCANCEL), szBuffer );
 
-            LoadAndFormatString( hInstance, IDS_NEXT_BUTTON, szBuffer, elementsof(szBuffer) );
+            LoadAndFormatString( hInstance, IDS_NEXT_BUTTON, szBuffer, SAL_N_ELEMENTS(szBuffer) );
             Button_SetText( GetDlgItem(hwndDlg, IDNEXT), szBuffer );
 
-            LoadAndFormatString( hInstance, IDS_SEND_BUTTON, szBuffer, elementsof(szBuffer) );
+            LoadAndFormatString( hInstance, IDS_SEND_BUTTON, szBuffer, SAL_N_ELEMENTS(szBuffer) );
             Button_SetText( GetDlgItem(hwndDlg, IDFINISH), szBuffer );
 
-            LoadAndFormatString( hInstance, IDS_BACK_BUTTON, szBuffer, elementsof(szBuffer) );
+            LoadAndFormatString( hInstance, IDS_BACK_BUTTON, szBuffer, SAL_N_ELEMENTS(szBuffer) );
             Button_SetText( GetDlgItem(hwndDlg, IDBACK), szBuffer );
 
             ShowWindow( hwndPages[1], SW_HIDE );
@@ -1454,7 +1454,7 @@ BOOL CALLBACK DialogProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam 
             }
             return TRUE;
         case IDNEXT:
-            if ( iActualPage < elementsof(hwndPages) - 1 )
+            if ( iActualPage < SAL_N_ELEMENTS(hwndPages) - 1 )
             {
                 ShowWindow( hwndPages[iActualPage], SW_HIDE );
                 ShowWindow( hwndPages[++iActualPage], SW_SHOW );
@@ -1467,20 +1467,20 @@ BOOL CALLBACK DialogProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam 
 
                 pParams->fAllowContact = Button_GetCheck( GetDlgItem(hwndPages[1], IDC_ALLOW_CONTACT) ) ? TRUE : FALSE;
 
-                Edit_GetText( GetDlgItem(hwndPages[1], IDC_EDIT_TITLE), szBuffer, elementsof(szBuffer) );
+                Edit_GetText( GetDlgItem(hwndPages[1], IDC_EDIT_TITLE), szBuffer, SAL_N_ELEMENTS(szBuffer) );
                 pParams->sTitle = szBuffer;
 
-                Edit_GetText( GetDlgItem(hwndPages[1], IDC_EDIT_DESCRIPTION), szBuffer, elementsof(szBuffer) );
+                Edit_GetText( GetDlgItem(hwndPages[1], IDC_EDIT_DESCRIPTION), szBuffer, SAL_N_ELEMENTS(szBuffer) );
                 pParams->sComment = szBuffer;
 
-                Edit_GetText( GetDlgItem(hwndPages[1], IDC_EDIT_EMAIL), szBuffer, elementsof(szBuffer) );
+                Edit_GetText( GetDlgItem(hwndPages[1], IDC_EDIT_EMAIL), szBuffer, SAL_N_ELEMENTS(szBuffer) );
                 pParams->sEmail = szBuffer;
 
                 if ( pParams->fAllowContact && !pParams->sEmail.length() )
                 {
                     TCHAR   szMessage[MAX_TEXT_BUFFER];
 
-                    LoadAndFormatString( GetModuleHandle(NULL), IDS_ERROR_MSG_NOEMAILADDRESS, szMessage, elementsof(szMessage) );
+                    LoadAndFormatString( GetModuleHandle(NULL), IDS_ERROR_MSG_NOEMAILADDRESS, szMessage, SAL_N_ELEMENTS(szMessage) );
 
                     MessageBox( hwndDlg, szMessage, NULL, MB_ICONERROR | MB_OK );
                     break;  // Don't end the dialog
@@ -1523,7 +1523,7 @@ static void repatch_soffice_exe( void *pBuffer, size_t nBufSize )
     wchar_t DescriptionBuffer[MAGIC_DESCRIPTION_COUNT];
 
     memset( DescriptionBuffer, 0, sizeof(DescriptionBuffer) );
-    wcsncpy( DescriptionBuffer, g_wstrProductKey.c_str(), elementsof(DescriptionBuffer) - 1 );
+    wcsncpy( DescriptionBuffer, g_wstrProductKey.c_str(), SAL_N_ELEMENTS(DescriptionBuffer) - 1 );
 
     bool bPatched = false;
 
@@ -1920,7 +1920,7 @@ BOOL WriteDumpFile( DWORD dwProcessId, PEXCEPTION_POINTERS pExceptionPointers, D
     {
         TCHAR   szTempPath[MAX_PATH];
 
-//      if ( GetTempPath( elementsof(szTempPath), szTempPath ) )
+//      if ( GetTempPath( SAL_N_ELEMENTS(szTempPath), szTempPath ) )
         if ( GetCrashDataPath( szTempPath ) )
         {
             TCHAR   szFileName[MAX_PATH];
@@ -1998,7 +1998,7 @@ static DWORD FindProcessForImage( LPCTSTR lpImagePath )
     DWORD   dwSize = 0;
     TCHAR   szShortImagePath[MAX_PATH];
 
-    if ( GetShortPathName( lpImagePath, szShortImagePath, elementsof(szShortImagePath) ) &&
+    if ( GetShortPathName( lpImagePath, szShortImagePath, SAL_N_ELEMENTS(szShortImagePath) ) &&
         EnumProcesses( aProcesses, sizeof(aProcesses), &dwSize ) )
     {
         unsigned nProcesses = dwSize / sizeof(aProcesses[0]);
@@ -2015,7 +2015,7 @@ static DWORD FindProcessForImage( LPCTSTR lpImagePath )
                 {
                     TCHAR   szShortModulePath[MAX_PATH];
 
-                    if ( GetShortPathName( szModulePath, szShortModulePath, elementsof(szShortModulePath) ) )
+                    if ( GetShortPathName( szModulePath, szShortModulePath, SAL_N_ELEMENTS(szShortModulePath) ) )
                     {
                         if ( 0 == _tcsicmp( szShortModulePath, szShortImagePath ) )
                             dwProcessId = aProcesses[i];
@@ -2088,10 +2088,10 @@ static bool ParseCommandArgs( LPDWORD pdwProcessId, PEXCEPTION_POINTERS* ppExcep
             TCHAR   szProcessDescription[FORMATBUFSIZE];
             TCHAR   szHelpDescription[FORMATBUFSIZE];
 
-            LoadAndFormatString( hInstance, IDS_MSG_CMDLINE_USAGE, szUsage, elementsof(szUsage) );
-            LoadAndFormatString( hInstance, IDS_MSG_PARAM_PROCESSID, szProcess, elementsof(szProcess) );
-            LoadAndFormatString( hInstance, IDS_MSG_PARAM_PROCESSID_DESCRIPTION, szProcessDescription, elementsof(szProcessDescription) );
-            LoadAndFormatString( hInstance, IDS_MSG_PARAM_HELP_DESCRIPTION, szHelpDescription, elementsof(szHelpDescription) );
+            LoadAndFormatString( hInstance, IDS_MSG_CMDLINE_USAGE, szUsage, SAL_N_ELEMENTS(szUsage) );
+            LoadAndFormatString( hInstance, IDS_MSG_PARAM_PROCESSID, szProcess, SAL_N_ELEMENTS(szProcess) );
+            LoadAndFormatString( hInstance, IDS_MSG_PARAM_PROCESSID_DESCRIPTION, szProcessDescription, SAL_N_ELEMENTS(szProcessDescription) );
+            LoadAndFormatString( hInstance, IDS_MSG_PARAM_HELP_DESCRIPTION, szHelpDescription, SAL_N_ELEMENTS(szHelpDescription) );
 
             _tprintf(
                 TEXT("\n%s: crashrep %s\n\n")
@@ -2184,7 +2184,7 @@ BOOL WriteCommentFile( LPCTSTR lpComment )
     BOOL    fSuccess = FALSE;
     TCHAR   szTempPath[MAX_PATH];
 
-    if ( GetTempPath( elementsof(szTempPath), szTempPath ) )
+    if ( GetTempPath( SAL_N_ELEMENTS(szTempPath), szTempPath ) )
     {
         TCHAR   szFileName[MAX_PATH];
 
@@ -2336,7 +2336,7 @@ static bool ReadBootstrapParams( CrashReportParams &rParams )
         TEXT("ProductKey"),
         TEXT("OpenOffice.org"),
         szBuffer,
-        elementsof(szBuffer),
+        SAL_N_ELEMENTS(szBuffer),
         szModuleName )
         )
     {
@@ -2364,7 +2364,7 @@ static bool ReadBootstrapParams( CrashReportParams &rParams )
         TEXT("Version"),
         TEXT("buildid"),
         TEXT("unknown"),
-        g_szBuildId, elementsof(g_szBuildId),
+        g_szBuildId, SAL_N_ELEMENTS(g_szBuildId),
         szModuleVersionName );
 
     g_strDefaultLanguage = get_script_string( "instdb.inf", "DefaultLanguage" );
@@ -2373,7 +2373,7 @@ static bool ReadBootstrapParams( CrashReportParams &rParams )
         TEXT("ErrorReport"),
         TEXT("ErrorReportPort"),
         TEXT("80"),
-        szReportPort, elementsof(szReportPort),
+        szReportPort, SAL_N_ELEMENTS(szReportPort),
         szModuleName
         ) )
     {
@@ -2388,11 +2388,11 @@ static bool ReadBootstrapParams( CrashReportParams &rParams )
         TEXT("ErrorReport"),
         TEXT("ErrorReportServer"),
         TEXT(""),
-        szReportServer, elementsof(szReportServer),
+        szReportServer, SAL_N_ELEMENTS(szReportServer),
         szModuleName
         ) )
     {
-        bSuccess = 0 != WideCharToMultiByte( CP_ACP, 0, szReportServer, -1, g_szReportServerA, elementsof(g_szReportServerA), NULL, NULL );
+        bSuccess = 0 != WideCharToMultiByte( CP_ACP, 0, szReportServer, -1, g_szReportServerA, SAL_N_ELEMENTS(g_szReportServerA), NULL, NULL );
     }
 
     LPCTSTR lpEnvString;
@@ -2625,13 +2625,13 @@ BOOL CALLBACK SendingStatusDialogProc(
 
             pRequest = (RequestParams *)lParam;
 
-            LoadAndFormatString( hInstance, IDS_SENDING_REPORT_HEADER, szBuffer, elementsof(szBuffer) );
+            LoadAndFormatString( hInstance, IDS_SENDING_REPORT_HEADER, szBuffer, SAL_N_ELEMENTS(szBuffer) );
             SetWindowText( hwndDlg, szBuffer );
 
-            LoadAndFormatString( hInstance, IDS_SENDING_REPORT_STATUS, szBuffer, elementsof(szBuffer) );
+            LoadAndFormatString( hInstance, IDS_SENDING_REPORT_STATUS, szBuffer, SAL_N_ELEMENTS(szBuffer) );
             Static_SetText( GetDlgItem(hwndDlg, IDC_SENDING_REPORT_STATUS), szBuffer );
 
-            LoadAndFormatString( hInstance, IDS_CANCEL_BUTTON, szBuffer, elementsof(szBuffer) );
+            LoadAndFormatString( hInstance, IDS_CANCEL_BUTTON, szBuffer, SAL_N_ELEMENTS(szBuffer) );
             Button_SetText( GetDlgItem(hwndDlg, IDCANCEL), szBuffer );
 
             pRequest->hwndStatus = hwndDlg;
@@ -2768,7 +2768,7 @@ bool SendCrashReport( HWND hwndParent, const CrashReportParams &rParams )
                 {
                     TCHAR   szMessage[1024];
 
-                    LoadAndFormatString( GetModuleHandle(NULL), IDS_ERROR_MSG_PROXY, szMessage, elementsof(szMessage) );
+                    LoadAndFormatString( GetModuleHandle(NULL), IDS_ERROR_MSG_PROXY, szMessage, SAL_N_ELEMENTS(szMessage) );
 
                     MessageBox( hwndParent, szMessage, NULL, MB_ICONERROR | MB_OK );
                 }
@@ -2777,8 +2777,8 @@ bool SendCrashReport( HWND hwndParent, const CrashReportParams &rParams )
                     TCHAR   szMessage[1024];
                     TCHAR   szTitle[1024];
 
-                    LoadAndFormatString( GetModuleHandle(NULL), IDS_SENDING_REPORT_STATUS_FINISHED, szMessage, elementsof(szMessage) );
-                    LoadAndFormatString( GetModuleHandle(NULL), IDS_SENDING_REPORT_HEADER, szTitle, elementsof(szTitle) );
+                    LoadAndFormatString( GetModuleHandle(NULL), IDS_SENDING_REPORT_STATUS_FINISHED, szMessage, SAL_N_ELEMENTS(szMessage) );
+                    LoadAndFormatString( GetModuleHandle(NULL), IDS_SENDING_REPORT_HEADER, szTitle, SAL_N_ELEMENTS(szTitle) );
 
                     MessageBox( hwndParent, szMessage, szTitle, MB_ICONINFORMATION | MB_OK );
                 }
@@ -2796,14 +2796,14 @@ bool SendCrashReport( HWND hwndParent, const CrashReportParams &rParams )
             {
                 TCHAR   szMessage[1024];
 
-                LoadAndFormatString( GetModuleHandle(NULL), IDS_ERROR_MSG_PROXY, szMessage, elementsof(szMessage) );
+                LoadAndFormatString( GetModuleHandle(NULL), IDS_ERROR_MSG_PROXY, szMessage, SAL_N_ELEMENTS(szMessage) );
                 _ftprintf( stderr, _T("ERROR: %s\n"), szMessage );
             }
             else
             {
                 TCHAR   szMessage[1024];
 
-                LoadAndFormatString( GetModuleHandle(NULL), IDS_SENDING_REPORT_STATUS_FINISHED, szMessage, elementsof(szMessage) );
+                LoadAndFormatString( GetModuleHandle(NULL), IDS_SENDING_REPORT_STATUS_FINISHED, szMessage, SAL_N_ELEMENTS(szMessage) );
 
                 _ftprintf( stderr, _T("SUCCESS: %s\n"), szMessage );
             }
@@ -2814,7 +2814,7 @@ bool SendCrashReport( HWND hwndParent, const CrashReportParams &rParams )
     {
         TCHAR   szMessage[1024];
 
-        LoadAndFormatString( GetModuleHandle(NULL), IDS_ERROR_MSG_DISK_FULL, szMessage, elementsof(szMessage) );
+        LoadAndFormatString( GetModuleHandle(NULL), IDS_ERROR_MSG_DISK_FULL, szMessage, SAL_N_ELEMENTS(szMessage) );
 
         if ( hwndParent )
             MessageBox( hwndParent, szMessage, NULL, MB_ICONERROR | MB_OK );

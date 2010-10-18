@@ -51,6 +51,7 @@
 #include <string>
 #include <queue>
 #include <stdio.h>
+#include <sal/macros.h>
 
 #include <systools/win32/uwinapi.h>
 #include <../tools/seterror.hxx>
@@ -65,7 +66,7 @@ inline void OutputDebugStringFormat( LPCTSTR pFormat, ... )
     va_list args;
 
     va_start( args, pFormat );
-    _vsntprintf( buffer, elementsof(buffer), pFormat, args );
+    _vsntprintf( buffer, SAL_N_ELEMENTS(buffer), pFormat, args );
     OutputDebugString( buffer );
 }
 #else
@@ -196,7 +197,7 @@ static BOOL MoveFileEx9x( LPCSTR lpExistingFileNameA, LPCSTR lpNewFileNameA, DWO
             )
         {
             CHAR    szBuffer[32767];    // The buffer size must not exceed 32K
-            DWORD   dwBufLen = GetPrivateProfileSectionA( RENAME_SECTION, szBuffer, elementsof(szBuffer), WININIT_FILENAME );
+            DWORD   dwBufLen = GetPrivateProfileSectionA( RENAME_SECTION, szBuffer, SAL_N_ELEMENTS(szBuffer), WININIT_FILENAME );
 
             CHAR    szRename[MAX_PATH]; // This is enough for at most to times 67 chracters
             strcpy( szRename, szNewFileNameA );
@@ -204,7 +205,7 @@ static BOOL MoveFileEx9x( LPCSTR lpExistingFileNameA, LPCSTR lpNewFileNameA, DWO
             strcat( szRename, szExistingFileNameA );
             size_t  lnRename = strlen(szRename);
 
-            if ( dwBufLen + lnRename + 2 <= elementsof(szBuffer) )
+            if ( dwBufLen + lnRename + 2 <= SAL_N_ELEMENTS(szBuffer) )
             {
                 CopyMemory( &szBuffer[dwBufLen], szRename, lnRename );
                 szBuffer[dwBufLen + lnRename ] = 0;
@@ -735,7 +736,7 @@ extern "C" UINT __stdcall SetFeatureState( MSIHANDLE handle )
         TEXT("ProductCode"),
         TEXT("NOTFOUND"),
         szProductCode,
-        elementsof(szProductCode),
+        SAL_N_ELEMENTS(szProductCode),
         sSetupiniPath.c_str()
         );
 
