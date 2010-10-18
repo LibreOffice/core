@@ -54,7 +54,6 @@ class SubsetMap;
 
 /**************************************************************************/
 
-const XubString GetFontStyleName(const Font &rFont);
 void            SetFontStyle(const XubString &rStyleName, Font &rFont);
 
 /**************************************************************************/
