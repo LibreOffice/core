@@ -466,7 +466,7 @@ register void    (*outfun)() /* BP */
 done:   if (dotflag || expseen) {               /* Floating point?      */
             if (c == 'l' || c == 'L') {
                 (*outfun)(c);
-                c = get();                      /* Ungotten later       */
+                get();                          /* Ungotten later       */
             }
         }
         else {                                  /* Else it's an integer */
