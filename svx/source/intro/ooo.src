@@ -93,13 +93,25 @@ ModalDialog RID_DEFAULTABOUT
         ReadOnly = TRUE ;
         AutoVScroll = TRUE ;
     };
+    FixedText ABOUT_FTXT_LINK
+    {
+        NoLabel = TRUE;
+        TabStop = TRUE;
+        Text [ en-US ] = "Contributor credits";
+        Pos = MAP_APPFONT ( 54 , 80 ) ;
+        Size = MAP_APPFONT ( 168 , 10 ) ;
+    };
     String ABOUT_STR_VERSION
     {
         Text[ en-US ] = "%PRODUCTNAME %ABOUTBOXPRODUCTVERSION %PRODUCTEXTENSION";
     };
     String ABOUT_STR_COPYRIGHT
     {
-        Text[ en-US ] = "Copyright © 2000, 2010 Oracle and/or its affiliates. All rights reserved.\nThis product was created by %OOOVENDOR, based on OpenOffice.org.\nOpenOffice.org acknowledges all community members, especially those mentioned at\n http://www.openoffice.org/welcome/credits.html.";
+        Text[ en-US ] = "Copyright © 2000, 2010 Oracle and/or its affiliates. All rights reserved.\nThis product was created by %OOOVENDOR, based on OpenOffice.org.\nOpenOffice.org acknowledges all community members, please find more info at the link below.";
+    };
+    String ABOUT_STR_LINK
+    {
+        Text[ en-US ] = "http://www.openoffice.org/welcome/credits.html";
     };
     StringArray ABOUT_STR_DEVELOPER_ARY
     {

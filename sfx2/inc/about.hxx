@@ -35,6 +35,7 @@
 #include <svtools/svmedit.hxx>
 #include <tools/list.hxx>
 #include <svtools/stdctrl.hxx>
+#include "svtools/fixedhyper.hxx"
 #include <sfx2/basedlgs.hxx>        // SfxModalDialog
 
 DECLARE_LIST( AccelList, Accelerator* )
@@ -48,8 +49,8 @@ private:
     Image           aAppLogo;
 
     MultiLineEdit       aVersionText;
-    MultiLineEdit   aCopyrightText;
-    FixedInfo       aBuildData;
+    MultiLineEdit       aCopyrightText;
+    svt::FixedHyperlink aInfoLink;
 
     ResStringArray  aDeveloperAry;
     String          aDevVersionStr;
@@ -57,6 +58,7 @@ private:
     String          aVersionData;
     String          aVersionTextStr;
     String          aCopyrightTextStr;
+    String          aLinkStr;
 
     AccelList       aAccelList;
 
@@ -77,6 +79,7 @@ public:
 
     DECL_LINK( TimerHdl, Timer * );
     DECL_LINK( AccelSelectHdl, Accelerator * );
+    DECL_LINK( HandleHyperlink, svt::FixedHyperlink * );
 };
 
 #endif // #ifndef _ABOUT_HXX

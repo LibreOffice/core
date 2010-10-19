@@ -37,6 +37,7 @@ TARGET=dialog
 # --- Files --------------------------------------------------------------
 
 EXCEPTIONSFILES=\
+        $(SLO)$/about.obj           \
         $(SLO)$/filedlghelper.obj	\
         $(SLO)$/filtergrouping.obj	\
         $(SLO)$/itemconnect.obj     \
@@ -50,7 +51,6 @@ EXCEPTIONSFILES=\
 
 SLOFILES =\
         $(EXCEPTIONSFILES)			\
-        $(SLO)$/about.obj           \
         $(SLO)$/alienwarn.obj       \
         $(SLO)$/basedlgs.obj		\
         $(SLO)$/dinfedt.obj			\
