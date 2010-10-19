@@ -47,8 +47,8 @@ TYPEINIT0(SwIndexReg);  // rtti
 
 #ifdef CHK
 
-#define IDX_CHK_ARRAY       pArray->ChhkArr();
-#define ARR_CHK_ARRAY       ChhkArr();
+#define IDX_CHK_ARRAY       pArray->ChkArr();
+#define ARR_CHK_ARRAY       ChkArr();
 
 
 void SwIndexReg::ChkArr()
@@ -94,7 +94,7 @@ SwIndex::SwIndex(SwIndexReg *const pArr, xub_StrLen const nIdx)
         nIndex = 0;     // steht immer auf 0 !!!
     }
 
-    if( !pArray->pFirst )         // 1. Index ??
+    if( !pArray->pFirst || !pArray->pLast )         // 1. Index ??
         pArray->pFirst = pArray->pLast = this;
     else if( nIdx > ((pArray->pLast->nIndex - pArray->pFirst->nIndex) / 2) )
         ChgValue( *pArray->pLast, nIdx );
