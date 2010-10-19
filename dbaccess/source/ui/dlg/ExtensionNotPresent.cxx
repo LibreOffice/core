@@ -200,7 +200,7 @@ IMPL_LINK( OExtensionNotPresentDialog, Download_Click, PushButton*, EMPTYARG )
         if (suDownloadURL.getLength() == 0)
         {
             // fallback
-            suDownloadURL = UNISTRING("http://extensions.documentfoundation.org");
+            suDownloadURL = UNISTRING("http://extensions.libreoffice.org");
         }
 
         // open such URL in a browser
