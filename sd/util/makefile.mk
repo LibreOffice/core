@@ -283,6 +283,7 @@ SHL6STDLIBS = $(ISDLIB) \
               $(SOTLIB)           \
               $(GOODIESLIB)       \
               $(VCLLIB)           \
+              $(MSFILTERLIB)      \
               $(SVLLIB)           \
               $(SOTLIB)           \
               $(UNOTOOLSLIB)      \

@@ -1,4 +1,4 @@
-PPTX_1_0 {
+UDK_3_0_0 {
         global:
                 component_getImplementationEnvironment;
                 component_writeInfo;

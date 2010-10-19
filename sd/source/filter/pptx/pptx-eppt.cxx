@@ -121,7 +121,7 @@ void PPTWriter::exportPPTPre()
     if ( !mpPicStrm )
         mpPicStrm = mrStg->OpenSotStream( String( RTL_CONSTASCII_USTRINGPARAM( "Pictures" ) ) );
 
-    mpPptEscherEx = new PptEscherEx( *mpStrm, mnDrawings );
+    mpPptEscherEx = new PptEscherEx( *mpStrm );
 };
 
 void PPTWriter::exportPPTPost()
