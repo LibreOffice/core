@@ -53,6 +53,7 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
+#include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextField.hpp>
@@ -73,6 +74,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing;
+using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::i18n;
 using ::com::sun::star::beans::PropertyState;
 using ::com::sun::star::beans::PropertyValue;
@@ -1182,11 +1184,24 @@ void DrawingML::WriteText( Reference< XShape > rXShape  )
             ;
     }
 
+    const char* sWritingMode = NULL;
+    sal_Bool bVertical = sal_False;
+    if( GETA( TextWritingMode ) ) {
+    WritingMode eMode;
+
+    if( ( mAny >>= eMode ) && eMode == WritingMode_TB_RL ) {
+        sWritingMode = "vert";
+        bVertical = sal_True;
+    }
+    }
+
     TextHorizontalAdjust eHorizontalAlignment( TextHorizontalAdjust_CENTER );
     bool bHorizontalCenter = false;
     GET( eHorizontalAlignment, TextHorizontalAdjust );
     if( eHorizontalAlignment == TextHorizontalAdjust_CENTER )
         bHorizontalCenter = true;
+    else if( bVertical && eHorizontalAlignment == TextHorizontalAdjust_LEFT )
+    sVerticalAlignment = "b";
 
     sal_Bool bHasWrap = FALSE;
     sal_Bool bWrap = FALSE;
@@ -1204,6 +1219,7 @@ void DrawingML::WriteText( Reference< XShape > rXShape  )
                            XML_bIns, (nBottom != DEFTBINS) ? IS( MM100toEMU( nBottom ) ) : NULL,
                            XML_anchor, sVerticalAlignment,
                            XML_anchorCtr, bHorizontalCenter ? "1" : NULL,
+               XML_vert, sWritingMode,
                            FSEND );
 
     Reference< XEnumerationAccess > access( xXText, UNO_QUERY );
