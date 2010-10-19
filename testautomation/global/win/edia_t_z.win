@@ -130,7 +130,7 @@ RecentFile sym:FILTER_HID_XML_FILTER_TEST_IMPORT_RECENT
 FixedRecentFile sym:FILTER_HID_XML_FILTER_TEST_IMPORT_RECENT_FILE
 CloseBtn sym:FILTER_HID_XML_FILTER_TEST_CLOSE
 
-*Thesaurus .uno:Thesaurus
+*Thesaurus .uno:ThesaurusDialog
 CurrentWord sym:cui:ComboBox:RID_SVXDLG_THESAURUS:CB_WORD
 RecallCurrentWord sym:cui:ImageButton:RID_SVXDLG_THESAURUS:BTN_LEFT
 Alternatives sym:CUI_HID_CT_THES_ALTERNATIVES
