@@ -90,6 +90,7 @@ testcase tGridcontrolLoad
 
     printlog( "Test exit, cleanup" )
     hFileCloseAll()
+    hDeleteFile( gLastWorkFile )
 
 endcase
 
