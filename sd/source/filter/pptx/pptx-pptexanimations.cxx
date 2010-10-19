@@ -74,8 +74,8 @@
 
 #include <vcl/vclenum.hxx>
 #include <svx/svdotext.hxx>
-#include <svx/outlobj.hxx>
-#include <svx/editobj.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/editobj.hxx>
 #include <pptexanimations.hxx>
 #include <osl/endian.h>
 

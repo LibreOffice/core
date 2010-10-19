@@ -18,10 +18,10 @@
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/style/TabStop.hpp>
 
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 #include <sfx2/app.hxx>
 #include <editeng/svxenum.hxx>
-#include <svx/frmdir.hxx>
+#include <editeng/frmdir.hxx>
 #include <unotools/fontcvt.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>

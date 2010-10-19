@@ -53,11 +53,11 @@
 #include <tools/zcodec.hxx>
 #include <editeng/svxenum.hxx>
 #include <sot/storinfo.hxx>
-#include <svx/msoleexp.hxx>
+#include <filter/msfilter/msoleexp.hxx>
 #include <vcl/virdev.hxx>
 #include <svtools/wmf.hxx>
-#include <svx/msdffimp.hxx>
-#include <svx/flditem.hxx>
+#include <filter/msfilter/msdffimp.hxx>
+#include <editeng/flditem.hxx>
 #include <sfx2/docinf.hxx>
 #include <oox/export/utils.hxx>
 
@@ -1271,7 +1271,7 @@ void PPTWriter::ImplWriteBackground( ::com::sun::star::uno::Reference< ::com::su
     mpPptEscherEx->AddShape( ESCHER_ShpInst_Rectangle, 0xc00 );                     // Flags: Connector | Background | HasSpt
     Point aEmptyPoint = Point();
     Rectangle aRect( aEmptyPoint, Size( 28000, 21000 ) );
-    EscherPropertyContainer aPropOpt( (EscherGraphicProvider&)*mpPptEscherEx, mpPicStrm, aRect );
+    EscherPropertyContainer aPropOpt( mpPptEscherEx->GetGraphicProvider(), mpPicStrm, aRect );
     aPropOpt.AddOpt( ESCHER_Prop_fillType, ESCHER_FillSolid );
     ::com::sun::star::drawing::FillStyle aFS( ::com::sun::star::drawing::FillStyle_NONE );
     if ( ImplGetPropertyValue( rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillStyle" ) ) ) )
