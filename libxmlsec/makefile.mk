@@ -55,7 +55,8 @@ TARFILE_MD5=1f24ab1d39f4a51faf22244c94a6203f
 #xmlsec1-nssmangleciphers.patch: Dubious, do we still need this ?
 #xmlsec1-noverify.patch: As per readme.txt. 
 #xmlsec1-mingw32.patch: Mingw32 support. 
-#xmlsec1-mingw-customkeymanage-addmscrypto.patch builds the custom keymanager on mingw
+#xmlsec1-mingw-customkeymanage-addmscrypto.patch: builds the custom keymanager on mingw
+#xmlsec1-vc.path: support for Visual C++ 10
 PATCH_FILES=\
    xmlsec1-configure.patch \
    xmlsec1-configure-libxml-libxslt.patch \
@@ -65,8 +66,8 @@ PATCH_FILES=\
    xmlsec1-nssmangleciphers.patch \
    xmlsec1-noverify.patch \
    xmlsec1-mingw32.patch \
-   xmlsec1-mingw-keymgr-mscrypto.patch
-
+   xmlsec1-mingw-keymgr-mscrypto.patch \
+   xmlsec1-vc10.patch
 
 ADDITIONAL_FILES= \
     include$/xmlsec$/mscrypto$/akmngr.h \
