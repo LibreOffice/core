@@ -263,9 +263,12 @@ static VarNameAttribute aVarNameAttribute[] =
 
 const String& SvtPathOptions_Impl::GetPath( SvtPathOptions::Pathes ePath )
 {
+    if ( ePath >= SvtPathOptions::PATH_COUNT )
+        return m_aEmptyString;
+
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    if ( ePath < SvtPathOptions::PATH_COUNT )
+    try
     {
         OUString    aPathValue;
         String      aResult;
@@ -289,6 +292,9 @@ const String& SvtPathOptions_Impl::GetPath( SvtPathOptions::Pathes ePath )
 
         m_aPathArray[ ePath ] = aPathValue;
         return m_aPathArray[ ePath ];
+    }
+    catch (UnknownPropertyException &)
+    {
     }
 
     return m_aEmptyString;
