@@ -167,7 +167,7 @@ namespace basctl
             { "OnModeChanged",  &DocumentEventListener::onDocumentModeChanged }
         };
 
-        for ( size_t i=0; SAL_N_ELEMENTS( aEvents ); ++i )
+        for ( size_t i=0; i < SAL_N_ELEMENTS( aEvents ); ++i )
         {
             if ( !_rEvent.EventName.equalsAscii( aEvents[i].pEventName ) )
                 continue;
