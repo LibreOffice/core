@@ -1741,7 +1741,7 @@ void SvtDocumentTemplateDialog::InitImpl( )
     if ( !bHideLink )
          {
     aMoreTemplatesLink.SetURL( String(
-        RTL_CONSTASCII_STRINGPARAM( "http://templates.documentfoundation.org/" ) ) );
+        RTL_CONSTASCII_STRINGPARAM( "http://templates.libreoffice.org/" ) ) );
     aMoreTemplatesLink.SetClickHdl( LINK( this, SvtDocumentTemplateDialog, OpenLinkHdl_Impl ) );
     }
     else
