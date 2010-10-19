@@ -1114,7 +1114,17 @@ void PowerPointExport::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNu
     mpSlidesFSArray.resize( mnPages );
     mpSlidesFSArray[ nPageNum ] = pFS;
 
-    pFS->startElementNS( XML_p, XML_sld, PNMSS, FSEND );
+    const char* pShow = NULL;
+
+    if( GETA( Visible ) ) {
+    sal_Bool bShow;
+    if( ( mAny >>= bShow ) && !bShow )
+        pShow = "0";
+    }
+
+    pFS->startElementNS( XML_p, XML_sld, PNMSS,
+             XML_show, pShow,
+             FSEND );
 
     pFS->startElementNS( XML_p, XML_cSld, FSEND );
 
