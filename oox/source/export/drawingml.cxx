@@ -615,7 +615,7 @@ void DrawingML::WriteShapeTransformation( Reference< XShape > rXShape, sal_Bool 
     WriteTransformation( Rectangle( Point( aPos.X, aPos.Y ), Size( aSize.Width, aSize.Height ) ), bFlipH, bFlipV, nRotation );
 }
 
-void DrawingML::WriteRunProperties( Reference< XTextRange > rRun )
+void DrawingML::WriteRunProperties( Reference< XTextRange > rRun, sal_Bool bIsField )
 {
     Reference< XPropertySet > rXPropSet( rRun, UNO_QUERY );
     Reference< XPropertyState > rXPropState( rRun, UNO_QUERY );
@@ -780,10 +780,33 @@ void DrawingML::WriteRunProperties( Reference< XTextRange > rRun )
                                FSEND );
     }
 
+    if( bIsField ) {
+        Reference< XTextField > rXTextField;
+        GET( rXTextField, TextField );
+        if( rXTextField.is() )
+            rXPropSet.set( rXTextField, UNO_QUERY );
+    }
+
+    // field properties starts here
+    if( GETA( URL ) ) {
+    OUString sURL;
+
+    mAny >>= sURL;
+    if( sURL.getLength() ) {
+        OUString sRelId = mpFB->addRelation( mpFS->getOutputStream(),
+                              US( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" ),
+                              sURL, US( "External" ) );
+
+        mpFS->singleElementNS( XML_a, XML_hlinkClick,
+                   FSNS( XML_r,XML_id ), USS( sRelId ),
+                   FSEND );
+    }
+    }
+
     mpFS->endElementNS( XML_a, XML_rPr );
 }
 
-const char* DrawingML::GetFieldType( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > rRun )
+const char* DrawingML::GetFieldType( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > rRun, sal_Bool& bIsField )
 {
     const char* sType = NULL;
     Reference< XPropertySet > rXPropSet( rRun, UNO_QUERY );
@@ -798,6 +821,7 @@ const char* DrawingML::GetFieldType( ::com::sun::star::uno::Reference< ::com::su
         Reference< XTextField > rXTextField;
         GET( rXTextField, TextField );
         if( rXTextField.is() ) {
+        bIsField = sal_True;
             rXPropSet.set( rXTextField, UNO_QUERY );
             if( rXPropSet.is() ) {
                 String aFieldKind( rXTextField->getPresentation( TRUE ) );
@@ -805,6 +829,10 @@ const char* DrawingML::GetFieldType( ::com::sun::star::uno::Reference< ::com::su
                 if( aFieldKind == S( "Page" ) ) {
                     return "slidenum";
                 }
+        // else if( aFieldKind == S( "URL" ) ) {
+        // do not return here
+        // and make URL field text run with hyperlink property later
+        // }
             }
         }
     }
@@ -850,13 +878,13 @@ void DrawingML::GetUUID( OStringBuffer& rBuffer )
 void DrawingML::WriteRun( Reference< XTextRange > rRun )
 {
     const char* sFieldType;
-    bool bIsField = false;
+    sal_Bool bIsField = sal_False;
     OUString sText = rRun->getString();
 
     if( sText.getLength() < 1)
         return;
 
-    if( ( sFieldType = GetFieldType( rRun ) ) ) {
+    if( ( sFieldType = GetFieldType( rRun, bIsField ) ) ) {
         OStringBuffer sUUID(39);
 
         GetUUID( sUUID );
@@ -864,17 +892,16 @@ void DrawingML::WriteRun( Reference< XTextRange > rRun )
                               XML_id, sUUID.getStr(),
                               XML_type, sFieldType,
                               FSEND );
-        bIsField = true;
     } else
         mpFS->startElementNS( XML_a, XML_r, FSEND );
 
-    WriteRunProperties( rRun );
+    WriteRunProperties( rRun, bIsField );
 
     mpFS->startElementNS( XML_a, XML_t, FSEND );
     mpFS->writeEscaped( sText );
     mpFS->endElementNS( XML_a, XML_t );
 
-    if( bIsField )
+    if( sFieldType )
         mpFS->endElementNS( XML_a, XML_fld );
     else
         mpFS->endElementNS( XML_a, XML_r );

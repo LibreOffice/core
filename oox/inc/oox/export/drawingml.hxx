@@ -52,7 +52,7 @@ protected:
     bool GetPropertyAndState( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet,
                   ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState > rXPropState,
                   String aName, ::com::sun::star::beans::PropertyState& eState );
-    const char* GetFieldType( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > rRun );
+    const char* GetFieldType( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > rRun, sal_Bool& bIsField );
 
     rtl::OUString WriteImage( const rtl::OUString& rURL );
 
@@ -91,7 +91,7 @@ public:
     void WriteParagraphNumbering( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet,
                                   sal_Int16 nLevel );
     void WriteRun( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > rRun );
-    void WriteRunProperties( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > rRun );
+    void WriteRunProperties( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > rRun, sal_Bool bIsField );
 
     void WritePresetShape( const char* pShape );
     void WritePresetShape( const char* pShape, MSO_SPT eShapeType, sal_Bool bPredefinedHandlesUsed, sal_Int32 nAdjustmentsWhichNeedsToBeConverted, const ::com::sun::star::beans::PropertyValue& rProp );
