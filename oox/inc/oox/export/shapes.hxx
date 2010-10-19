@@ -49,16 +49,7 @@ namespace oox { namespace drawingml {
 
 class OOX_DLLPUBLIC ShapeExport : public DrawingML {
 
-protected:
-    sal_Int32           mnShapeIdMax, mnPictureIdMax;
-
 private:
-    sal_Int32           mnXmlNamespace;
-    Fraction            maFraction;
-    MapMode             maMapModeSrc, maMapModeDest;
-
-    ::com::sun::star::awt::Size MapSize( const ::com::sun::star::awt::Size& ) const;
-
     struct ShapeCheck
     {
         bool operator()( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape> s1, const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape> s2 ) const
@@ -74,11 +65,25 @@ private:
         size_t operator()( const ::com::sun::star::uno::Reference < ::com::sun::star::drawing::XShape > ) const;
     };
 
+public:
     typedef std::hash_map< const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape>, sal_Int32, ShapeHash, ShapeCheck> ShapeHashMap;
-    static ShapeHashMap saShapeMap;
+
+protected:
+    sal_Int32           mnShapeIdMax, mnPictureIdMax;
+
+private:
+    sal_Int32           mnXmlNamespace;
+    Fraction            maFraction;
+    MapMode             maMapModeSrc, maMapModeDest;
+
+    ::com::sun::star::awt::Size MapSize( const ::com::sun::star::awt::Size& ) const;
+
+    ShapeHashMap maShapeMap;
+    ShapeHashMap* mpShapeMap;
 
 public:
-    ShapeExport( sal_Int32 nXmlNamespace, ::sax_fastparser::FSHelperPtr pFS, ::oox::core::XmlFilterBase* pFB = NULL, DocumentType eDocumentType = DOCUMENT_PPTX );
+
+    ShapeExport( sal_Int32 nXmlNamespace, ::sax_fastparser::FSHelperPtr pFS, ShapeHashMap* pShapeMap = NULL, ::oox::core::XmlFilterBase* pFB = NULL, DocumentType eDocumentType = DOCUMENT_PPTX );
     virtual ~ShapeExport() {}
 
     sal_Int32           GetXmlNamespace() const;
@@ -157,8 +162,9 @@ public:
                         WriteUnknownShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
 
     sal_Int32 GetNewShapeID( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > rShape );
-    static sal_Int32 GetNewShapeID( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > rShape, ::oox::core::XmlFilterBase* pFB );
-    static sal_Int32 GetShapeID( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > rShape );
+    sal_Int32 GetNewShapeID( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > rShape, ::oox::core::XmlFilterBase* pFB );
+    sal_Int32 GetShapeID( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > rShape );
+    static sal_Int32 GetShapeID( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > rShape, ShapeHashMap* pShapeMap );
 };
 
 }}
