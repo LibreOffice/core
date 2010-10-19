@@ -1027,7 +1027,7 @@ testcase tFileReload
     Wait (500)
 
     PrintLog "Open previous saved document"
-    hFileOpenLocally(  gOfficePath + "user\work\" + sFile$ )
+    hFileOpen(  gOfficePath + "user\work\" + sFile$ )
     PrintLog "Insert a table in document"
     Call hTabelleEinfuegen
     PrintLog "File / Reload"
