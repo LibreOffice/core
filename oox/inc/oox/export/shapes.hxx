@@ -48,9 +48,12 @@ namespace drawing {
 namespace oox { namespace drawingml {
 
 class OOX_DLLPUBLIC ShapeExport : public DrawingML {
+
+protected:
+    sal_Int32           mnShapeIdMax, mnPictureIdMax;
+
 private:
     sal_Int32           mnXmlNamespace;
-    sal_Int32           mnShapeIdMax, mnPictureIdMax;
     Fraction            maFraction;
     MapMode             maMapModeSrc, maMapModeDest;
 
@@ -72,7 +75,7 @@ private:
     };
 
     typedef std::hash_map< const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape>, sal_Int32, ShapeHash, ShapeCheck> ShapeHashMap;
-    ShapeHashMap maShapeMap;
+    static ShapeHashMap saShapeMap;
 
 public:
     ShapeExport( sal_Int32 nXmlNamespace, ::sax_fastparser::FSHelperPtr pFS, ::oox::core::XmlFilterBase* pFB = NULL, DocumentType eDocumentType = DOCUMENT_PPTX );
@@ -154,7 +157,8 @@ public:
                         WriteUnknownShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
 
     sal_Int32 GetNewShapeID( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > rShape );
-    sal_Int32 GetShapeID( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > rShape );
+    static sal_Int32 GetNewShapeID( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > rShape, ::oox::core::XmlFilterBase* pFB );
+    static sal_Int32 GetShapeID( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > rShape );
 };
 
 }}

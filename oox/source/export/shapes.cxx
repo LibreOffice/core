@@ -90,6 +90,7 @@ using ::com::sun::star::text::XText;
 using ::com::sun::star::text::XTextContent;
 using ::com::sun::star::text::XTextField;
 using ::com::sun::star::text::XTextRange;
+using ::oox::core::XmlFilterBase;
 using ::rtl::OString;
 using ::rtl::OStringBuffer;
 using ::rtl::OUString;
@@ -358,11 +359,11 @@ namespace oox { namespace drawingml {
     if ( GETA(propName) ) \
         mAny >>= variable;
 
-ShapeExport::ShapeExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, ::oox::core::XmlFilterBase* pFB, DocumentType eDocumentType )
+ShapeExport::ShapeExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, XmlFilterBase* pFB, DocumentType eDocumentType )
     : DrawingML( pFS, pFB, eDocumentType )
-    , mnXmlNamespace( nXmlNamespace )
     , mnShapeIdMax( 1 )
     , mnPictureIdMax( 1 )
+    , mnXmlNamespace( nXmlNamespace )
     , maFraction( 1, 576 )
     , maMapModeSrc( MAP_100TH_MM )
     , maMapModeDest( MAP_INCH, Point(), maFraction, maFraction )
@@ -976,22 +977,29 @@ size_t ShapeExport::ShapeHash::operator()( const ::com::sun::star::uno::Referenc
 
 sal_Int32 ShapeExport::GetNewShapeID( const Reference< XShape > rXShape )
 {
-    sal_Int32 nID = GetFB()->GetUniqueId();
+    return GetNewShapeID( rXShape, GetFB() );
+}
 
-    maShapeMap[ rXShape ] = nID;
+sal_Int32 ShapeExport::GetNewShapeID( const Reference< XShape > rXShape, XmlFilterBase* pFB )
+{
+    sal_Int32 nID = pFB->GetUniqueId();
+
+    saShapeMap[ rXShape ] = nID;
 
     return nID;
 }
 
 sal_Int32 ShapeExport::GetShapeID( const Reference< XShape > rXShape )
 {
-    ShapeHashMap::const_iterator aIter = maShapeMap.find( rXShape );
+    ShapeHashMap::const_iterator aIter = saShapeMap.find( rXShape );
 
-    if( aIter == maShapeMap.end() )
+    if( aIter == saShapeMap.end() )
         return -1;
 
     return aIter->second;
 }
+
+ShapeExport::ShapeHashMap ShapeExport::saShapeMap;
 
 } }
 
