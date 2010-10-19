@@ -1114,7 +1114,7 @@ const SfxPoolItem* SfxItemPool::LoadSurrogate
             if ( pTarget->IsInRange(rWhich) )
             {
                 // dflt-Attribut?
-                if ( SFX_ITEMS_STATICDEFAULT == nSurrogat )
+                if ( SFX_ITEMS_DEFAULT == nSurrogat )
                     return *(pTarget->ppStaticDefaults +
                             pTarget->GetIndex_Impl(rWhich));
 
@@ -1210,7 +1210,7 @@ sal_uInt32 SfxItemPool::GetSurrogate(const SfxPoolItem *pItem) const
 
     // Pointer auf static- oder pool-dflt-Attribut?
     if( IsStaticDefaultItem(pItem) || IsPoolDefaultItem(pItem) )
-        return SFX_ITEMS_STATICDEFAULT;
+        return SFX_ITEMS_DEFAULT;
 
     SfxPoolItemArray_Impl* pItemArr = *(pImp->ppPoolItems + GetIndex_Impl(pItem->Which()));
     DBG_ASSERT(pItemArr, "ItemArr is not available");

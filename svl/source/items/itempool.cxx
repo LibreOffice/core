@@ -1017,7 +1017,7 @@ const SfxPoolItem *SfxItemPool::GetItem2(USHORT nWhich, sal_uInt32 nOfst) const
     }
 
     // dflt-Attribut?
-    if ( nOfst == SFX_ITEMS_STATICDEFAULT )
+    if ( nOfst == SFX_ITEMS_DEFAULT )
         return *(ppStaticDefaults + GetIndex_Impl(nWhich));
 
     SfxPoolItemArray_Impl* pItemArr = *(pImp->ppPoolItems + GetIndex_Impl(nWhich));
