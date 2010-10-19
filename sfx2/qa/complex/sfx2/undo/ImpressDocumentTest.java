@@ -32,15 +32,15 @@ import org.openoffice.test.tools.DocumentType;
 /**
  * @author frank.schoenheit@oracle.com
  */
-public class DrawDocumentTest extends DrawingOrPresentationDocumentTest
+public class ImpressDocumentTest extends DrawingOrPresentationDocumentTest
 {
-    public DrawDocumentTest( XMultiServiceFactory i_orb ) throws com.sun.star.uno.Exception
+    public ImpressDocumentTest( XMultiServiceFactory i_orb ) throws com.sun.star.uno.Exception
     {
-        super( i_orb, DocumentType.DRAWING );
+        super( i_orb, DocumentType.PRESENTATION );
     }
 
     public String getDocumentDescription()
     {
-        return "drawing document";
+        return "presentation document";
     }
 }

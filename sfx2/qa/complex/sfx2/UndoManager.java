@@ -40,6 +40,7 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import complex.sfx2.undo.DocumentTest;
 import complex.sfx2.undo.DrawDocumentTest;
+import complex.sfx2.undo.ImpressDocumentTest;
 import java.util.Stack;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -72,6 +73,12 @@ public class UndoManager
     public void checkDrawUndo() throws Exception
     {
         impl_checkUndo( DrawDocumentTest.class );
+    }
+
+    @Test
+    public void checkImpressUndo() throws Exception
+    {
+        impl_checkUndo( ImpressDocumentTest.class );
     }
 
     @After
