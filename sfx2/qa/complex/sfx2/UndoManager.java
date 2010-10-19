@@ -38,6 +38,7 @@ import com.sun.star.document.XUndoManagerListener;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
+import com.sun.star.util.InvalidStateException;
 import complex.sfx2.undo.DocumentTest;
 import complex.sfx2.undo.DrawDocumentTest;
 import complex.sfx2.undo.ImpressDocumentTest;
@@ -174,6 +175,15 @@ public class UndoManager
 
         final XUndoManager undoManager = getUndoManager( test.getDocument() );
         undoManager.clear();
+        assertFalse( "clearing the Undo manager should result in the impossibility to undo anything", undoManager.isUndoPossible() );
+        assertFalse( "clearing the Undo manager should result in the impossibility to redo anything", undoManager.isRedoPossible() );
+
+        // try retrieving the comments for the current Undo/Redo - this should fail
+        boolean caughtExpected = false;
+        try { undoManager.getCurrentUndoActionTitle(); undoManager.getCurrentRedoActionTitle(); }
+        catch( final InvalidStateException e ) { caughtExpected = true; }
+        assertTrue( "trying the title of the current Undo/Redo action is expected to fail for an empty stack", caughtExpected );
+
         final UndoListener listener = new UndoListener();
         undoManager.addUndoManagerListener( listener );
 
@@ -226,6 +236,9 @@ public class UndoManager
         test.verifyInitialDocumentState();
         listener.reset();
 
+        // test various comment-related functions
+
+        // close the document, ensure the Undo manager listener gets notified
         m_currentDocument.close();
         assertTrue( "document is closed, but the UndoManagerListener has not been notified of the disposal", listener.isDisposed() );
         m_currentDocument = null;

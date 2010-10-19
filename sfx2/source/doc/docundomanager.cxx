@@ -68,6 +68,7 @@ namespace sfx2
     using ::com::sun::star::document::UndoManagerEvent;
     using ::com::sun::star::document::XUndoManagerListener;
     using ::com::sun::star::lang::WrappedTargetException;
+    using ::com::sun::star::document::XUndoManager;
     /** === end UNO using === **/
 
     //==================================================================================================================
@@ -480,6 +481,83 @@ namespace sfx2
     void SAL_CALL DocumentUndoManager::redo(  ) throw (RuntimeException, InvalidStateException, WrappedTargetException)
     {
         impl_do_nolck( &SfxUndoManager::GetRedoActionCount, &SfxUndoManager::Redo, &SfxUndoManager::GetRedoActionComment, &XUndoManagerListener::actionRedone );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    ::sal_Bool SAL_CALL DocumentUndoManager::isUndoPossible(  ) throw (RuntimeException)
+    {
+        SfxModelGuard aGuard( *this );
+
+        SfxUndoManager& rUndoManager = lcl_getUndoManager_throw( *m_pImpl );
+        return rUndoManager.GetUndoActionCount() > 0;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    ::sal_Bool SAL_CALL DocumentUndoManager::isRedoPossible(  ) throw (RuntimeException)
+    {
+        SfxModelGuard aGuard( *this );
+
+        SfxUndoManager& rUndoManager = lcl_getUndoManager_throw( *m_pImpl );
+        return rUndoManager.GetRedoActionCount() > 0;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    namespace
+    {
+        //..............................................................................................................
+        ::rtl::OUString lcl_getCurrentActionTitle( DocumentUndoManager_Impl& i_impl, const bool i_undo )
+        {
+            SfxModelGuard aGuard( i_impl.rAntiImpl );
+
+            const SfxUndoManager& rUndoManager = lcl_getUndoManager_throw( i_impl );
+            if ( ( i_undo ? rUndoManager.GetUndoActionCount() : rUndoManager.GetRedoActionCount() )== 0 )
+                throw InvalidStateException(
+                    i_undo ? ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "no action on the Undo stack" ) )
+                           : ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "no action on the Redo stack" ) ),
+                    static_cast< XUndoManager* >( &i_impl.rAntiImpl )
+                );
+            return i_undo ? rUndoManager.GetUndoActionComment(0) : rUndoManager.GetRedoActionComment(0);
+        }
+
+        //..............................................................................................................
+        Sequence< ::rtl::OUString > lcl_getAllActionTitles( DocumentUndoManager_Impl& i_impl, const bool i_undo )
+        {
+            SfxModelGuard aGuard( i_impl.rAntiImpl );
+
+            const SfxUndoManager& rUndoManager = lcl_getUndoManager_throw( i_impl );
+            const sal_Int32 nCount = i_undo ? rUndoManager.GetUndoActionCount() : rUndoManager.GetRedoActionCount();
+
+            Sequence< ::rtl::OUString > aTitles( nCount );
+            for ( sal_Int32 i=0; i<nCount; ++i )
+            {
+                aTitles[i] = i_undo ? rUndoManager.GetUndoActionComment(i) : rUndoManager.GetRedoActionComment(i);
+            }
+            return aTitles;
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    ::rtl::OUString SAL_CALL DocumentUndoManager::getCurrentUndoActionTitle(  ) throw (InvalidStateException, RuntimeException)
+    {
+        return lcl_getCurrentActionTitle( *m_pImpl, true );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    ::rtl::OUString SAL_CALL DocumentUndoManager::getCurrentRedoActionTitle(  ) throw (InvalidStateException, RuntimeException)
+    {
+        return lcl_getCurrentActionTitle( *m_pImpl, false );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    Sequence< ::rtl::OUString > SAL_CALL DocumentUndoManager::getAllUndoActionTitles(  ) throw (RuntimeException)
+    {
+        return lcl_getAllActionTitles( *m_pImpl, true );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    Sequence< ::rtl::OUString > SAL_CALL DocumentUndoManager::getAllRedoActionTitles(  ) throw (RuntimeException)
+    {
+        return lcl_getAllActionTitles( *m_pImpl, false );
     }
 
     //------------------------------------------------------------------------------------------------------------------
