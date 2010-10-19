@@ -189,8 +189,12 @@ SvtHistoryOptions_Impl::~SvtHistoryOptions_Impl()
 //*****************************************************************************************************************
 sal_uInt32 SvtHistoryOptions_Impl::GetSize( EHistoryType eHistory )
 {
-    sal_uInt32                                       nSize = 0  ;
     css::uno::Reference< css::beans::XPropertySet >  xListAccess(m_xCommonXCU, css::uno::UNO_QUERY);
+
+    if (!xListAccess.is())
+        return 0;
+
+    sal_uInt32 nSize = 0  ;
 
     try
     {
