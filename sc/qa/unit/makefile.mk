@@ -109,7 +109,7 @@ test .PHONY: $(SHL1TARGETN) $(MISC)/$(TARGET)/services.rdb
     @echo ----------------------------------------------------------
     @echo - start unit test \#1 on library $(SHL1TARGETN)
     @echo ----------------------------------------------------------
-    $(CPPUNITTESTER) $(SHL1TARGETN) \
+    $(CPPUNITTESTER) $(SHL1TARGETN) -headless -invisible \
         -env:UNO_SERVICES=$(my_file)$(PWD)/$(MISC)/$(TARGET)/services.rdb \
         -env:UNO_TYPES="$(my_file)$(SOLARBINDIR)/types.rdb $(my_file)$(SOLARBINDIR)/udkapi.rdb" \
         -env:OOO_BASE_DIR="$(my_file)$(PWD)/$(MISC)/$(TARGET)" \
