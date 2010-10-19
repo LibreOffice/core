@@ -1330,14 +1330,16 @@ void DrawingML::WritePolyPolygon( const PolyPolygon& rPolyPolygon )
 
 void DrawingML::WriteConnectorConnections( EscherConnectorListEntry& rConnectorEntry, sal_Int32 nStartID, sal_Int32 nEndID )
 {
-    mpFS->singleElementNS( XML_a, XML_stCxn,
-                           XML_id, I32S( nStartID ),
-                           XML_idx, I64S( rConnectorEntry.GetConnectorRule( TRUE ) ),
-                           FSEND );
-    mpFS->singleElementNS( XML_a, XML_endCxn,
-                           XML_id, I32S( nEndID ),
-                           XML_idx, I64S( rConnectorEntry.GetConnectorRule( FALSE ) ),
-                           FSEND );
+    if( nStartID != -1 )
+        mpFS->singleElementNS( XML_a, XML_stCxn,
+                               XML_id, I32S( nStartID ),
+                               XML_idx, I64S( rConnectorEntry.GetConnectorRule( TRUE ) ),
+                               FSEND );
+    if( nEndID != -1 )
+        mpFS->singleElementNS( XML_a, XML_endCxn,
+                               XML_id, I32S( nEndID ),
+                               XML_idx, I64S( rConnectorEntry.GetConnectorRule( FALSE ) ),
+                               FSEND );
 }
 
 // from sw/source/filter/ww8/wrtw8num.cxx for default bullets to export to MS intact
