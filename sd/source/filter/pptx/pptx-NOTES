@@ -1,0 +1,2 @@
+* ParaAdjust of empty text paragraph in shapes is by default set to left, but
+should be set to center. Same problem exist for ppt as well as pptx export
