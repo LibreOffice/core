@@ -172,16 +172,12 @@ ShapeExport& PowerPointShapeExport::WriteUnknownShape( Reference< XShape > xShap
 
     DBG(printf( "shape(unknown): %s\n", USS(sShapeType) ));
 
-    if( sShapeType.equalsAscii( "com.sun.star.drawing.Group" ) )
+    if( sShapeType.equalsAscii( "com.sun.star.drawing.GroupShape" ) )
     {
         Reference< XIndexAccess > rXIndexAccess( xShape, UNO_QUERY );
 
         mrExport.EnterGroup( rXIndexAccess );
         DBG(printf( "enter group\n" ));
-    }
-    else if( sShapeType.equalsAscii( "com.sun.star.drawing.Group" ) )
-    {
-        WritePageShape( xShape, mePageType, mrExport.GetPresObj() );
     }
     else if( sShapeType.equalsAscii( "com.sun.star.drawing.PageShape" ) )
     {
@@ -1059,18 +1055,26 @@ void PowerPointExport::WriteAnimationNode( FSHelperPtr pFS, const Reference< XAn
 
 void PowerPointExport::WriteAnimations( FSHelperPtr pFS )
 {
-    pFS->startElementNS( XML_p, XML_timing, FSEND );
-    pFS->startElementNS( XML_p, XML_tnLst, FSEND );
-
     Reference< XAnimationNodeSupplier > xNodeSupplier( mXDrawPage, UNO_QUERY );
     if( xNodeSupplier.is() ) {
     const Reference< XAnimationNode > xNode( xNodeSupplier->getAnimationNode() );
-    if( xNode.is() )
-        WriteAnimationNode( pFS, xNode, FALSE );
-    }
+    if( xNode.is() ) {
+        Reference< XEnumerationAccess > xEnumerationAccess( xNode, UNO_QUERY );
+        if( xEnumerationAccess.is() ) {
+        Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY );
+        if( xEnumeration.is() && xEnumeration->hasMoreElements() ) {
 
-    pFS->endElementNS( XML_p, XML_tnLst );
-    pFS->endElementNS( XML_p, XML_timing );
+            pFS->startElementNS( XML_p, XML_timing, FSEND );
+            pFS->startElementNS( XML_p, XML_tnLst, FSEND );
+
+            WriteAnimationNode( pFS, xNode, FALSE );
+
+            pFS->endElementNS( XML_p, XML_tnLst );
+            pFS->endElementNS( XML_p, XML_timing );
+        }
+        }
+    }
+    }
 }
 
 void PowerPointExport::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_uInt16 /* nMode */,
