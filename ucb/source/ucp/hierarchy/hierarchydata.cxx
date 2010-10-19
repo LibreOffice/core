@@ -813,9 +813,8 @@ sal_Bool HierarchyEntry::move(
 
         OSL_ENSURE( sal_False,
                     "HierarchyEntry::move - caught WrappedTargetException!" );
-        return sal_False;
     }
-
+    return sal_False;
 }
 
 //=========================================================================
