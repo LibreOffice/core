@@ -20,6 +20,9 @@ namespace beans {
 namespace drawing {
     class XShape;
 }
+namespace style {
+    struct LineSpacing;
+}
 namespace text {
     class XTextContent;
     class XTextRange;
@@ -76,6 +79,7 @@ public:
     void WriteBlipFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet, String sURLPropName );
     void WriteOutline( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );
     void WriteStretch();
+    void WriteLinespacing( ::com::sun::star::style::LineSpacing& rLineSpacing );
 
     ::rtl::OUString WriteBlip( ::rtl::OUString& rURL );
     void WriteBlipMode( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );
