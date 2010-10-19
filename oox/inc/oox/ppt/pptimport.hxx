@@ -66,6 +66,9 @@ public:
 
     sal_Int32 getSchemeColor( sal_Int32 nToken ) const;
 
+    virtual sal_Bool SAL_CALL filter( const ::com::sun::star::uno::Sequence<   ::com::sun::star::beans::PropertyValue >& rDescriptor )
+        throw( ::com::sun::star::uno::RuntimeException );
+
 private:
     virtual GraphicHelper* implCreateGraphicHelper() const;
     virtual ::rtl::OUString implGetImplementationName() const;
