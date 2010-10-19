@@ -633,13 +633,24 @@ void PowerPointExport::WriteAnimationAttributeName( FSHelperPtr pFS, const OUStr
 
 void PowerPointExport::WriteAnimationTarget( FSHelperPtr pFS, Any aTarget )
 {
-    Reference< XShape > rXShape( aTarget, UNO_QUERY );
+    sal_Int32 nBegin = -1, nEnd = -1;
+    sal_Bool bParagraphTarget;
+    Reference< XShape > rXShape = AnimationExporter::getTargetElementShape( aTarget, nBegin, nEnd, bParagraphTarget );
 
     if( rXShape.is() ) {
     pFS->startElementNS( XML_p, XML_tgtEl, FSEND );
-    pFS->singleElementNS( XML_p, XML_spTgt,
-                  XML_spid, I32S( ShapeExport::GetShapeID( rXShape, &maShapeMap ) ),
+    pFS->startElementNS( XML_p, XML_spTgt,
+                 XML_spid, I32S( ShapeExport::GetShapeID( rXShape, &maShapeMap ) ),
+                 FSEND );
+    if( bParagraphTarget ) {
+        pFS->startElementNS( XML_p, XML_txEl, FSEND );
+        pFS->singleElementNS( XML_p, XML_pRg,
+                  XML_st, I32S( nBegin ),
+                  XML_end, I32S( nEnd ),
                   FSEND );
+        pFS->endElementNS( XML_p, XML_txEl );
+    }
+    pFS->endElementNS( XML_p, XML_spTgt );
     pFS->endElementNS( XML_p, XML_tgtEl );
     }
 }
