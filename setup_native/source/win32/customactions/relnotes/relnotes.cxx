@@ -175,7 +175,7 @@ extern "C" UINT __stdcall ShowSurveyAfter( MSIHANDLE handle )
     aExecInf.cbSize = sizeof( aExecInf );
     aExecInf.fMask  = SEE_MASK_FLAG_DDEWAIT | SEE_MASK_FLAG_NO_UI;
     aExecInf.lpVerb = TEXT("open");
-    aExecInf.lpFile = TEXT("http://surveys.services.openoffice.org/deinstall");
+    aExecInf.lpFile = TEXT("http://surveys.libreoffice.org/deinstall");
     aExecInf.lpDirectory = NULL;
     aExecInf.nShow = SW_SHOWNORMAL;
 
