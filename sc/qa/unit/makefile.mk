@@ -102,7 +102,7 @@ $(MISC)/$(TARGET)/services.rdb:
         -c $(DLLPRE)fwk$(DLLPOSTFIX)$(DLLPOST)
 
 #Tweak things to that we use the .res files in the solver
-STAR_RESOURCEPATH:=$(SOLARBINDIR)
+STAR_RESOURCEPATH:=$(PWD)/$(BIN):$(SOLARBINDIR)
 .EXPORT : STAR_RESOURCEPATH
 
 test .PHONY: $(SHL1TARGETN) $(MISC)/$(TARGET)/services.rdb
