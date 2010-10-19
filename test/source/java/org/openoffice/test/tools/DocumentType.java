@@ -44,6 +44,8 @@ public class DocumentType extends com.sun.star.uno.Enum
     public static final DocumentType CALC = new DocumentType(1);
     public static final DocumentType DRAWING = new DocumentType(2);
     public static final DocumentType XMLFORM = new DocumentType(3);
+    public static final DocumentType PRESENTATION = new DocumentType(4);
+    public static final DocumentType FORMULA = new DocumentType(5);
     public static final DocumentType UNKNOWN = new DocumentType(-1);
 
     public static DocumentType fromInt(int value)
@@ -54,6 +56,8 @@ public class DocumentType extends com.sun.star.uno.Enum
             case 1: return CALC;
             case 2: return DRAWING;
             case 3: return XMLFORM;
+            case 4: return PRESENTATION;
+            case 5: return FORMULA;
             default: return UNKNOWN;
         }
     }

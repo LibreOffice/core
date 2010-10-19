@@ -226,6 +226,10 @@ public class OfficeDocument
             return "private:factory/sdraw";
         if ( eType == DocumentType.XMLFORM )
             return "private:factory/swriter?slot=21053";
+        if ( eType == DocumentType.PRESENTATION )
+            return "private:factory/simpress";
+        if ( eType == DocumentType.FORMULA )
+            return "private:factory/smath";
         return "private:factory/swriter";
     }
 
@@ -242,6 +246,10 @@ public class OfficeDocument
             return DocumentType.CALC;
         else if ( xSI.supportsService( "com.sun.star.drawing.DrawingDocument" ) )
             return DocumentType.DRAWING;
+        else if ( xSI.supportsService( "com.sun.star.presentation.PresentationDocument" ) )
+            return DocumentType.PRESENTATION;
+        else if ( xSI.supportsService( "com.sun.star.formula.FormulaProperties" ) )
+            return DocumentType.FORMULA;
 
         return DocumentType.UNKNOWN;
     }
