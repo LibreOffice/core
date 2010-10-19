@@ -314,7 +314,7 @@ void DocumentHelper::AssignMasterPageToPageList (
 {
     do
     {
-        if (pMasterPage == NULL && pMasterPage->IsMasterPage())
+        if (pMasterPage == NULL || !pMasterPage->IsMasterPage())
             break;
 
         // Make the layout name by stripping ouf the layout postfix from the
