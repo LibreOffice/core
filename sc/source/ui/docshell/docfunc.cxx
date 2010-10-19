@@ -4861,9 +4861,11 @@ BOOL ScDocFunc::InsertAreaLink( const String& rFile, const String& rFilter,
     }
 
     //  Update hat sein eigenes Undo
-
-    pLink->SetDoInsert(bFitBlock);  // beim ersten Update ggf. nichts einfuegen
-    pLink->Update();                // kein SetInCreate -> Update ausfuehren
+    if (pDoc->IsExecuteLinkEnabled())
+    {
+        pLink->SetDoInsert(bFitBlock);  // beim ersten Update ggf. nichts einfuegen
+        pLink->Update();                // kein SetInCreate -> Update ausfuehren
+    }
     pLink->SetDoInsert(TRUE);       // Default = TRUE
 
     SfxBindings* pBindings = rDocShell.GetViewBindings();

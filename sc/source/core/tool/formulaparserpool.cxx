@@ -33,7 +33,6 @@
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sheet/XFilterFormulaParser.hpp>
 #include <rtl/instance.hxx>
 #include <comphelper/processfactory.hxx>
@@ -62,27 +61,19 @@ public:
                             const OUString& rNamespace );
 
 private:
-    typedef ::std::hash_map<
-        OUString,
-        Reference< XSingleComponentFactory >,
-        OUStringHash,
-        ::std::equal_to< OUString > > FactoryMap;
+    typedef ::std::hash_map< OUString, Reference< XSingleComponentFactory >, OUStringHash > FactoryMap;
 
-    Reference< XComponentContext > mxContext;   /// Default context of global process factory.
+    Reference< XComponentContext > mxContext;   /// Global component context.
     FactoryMap          maFactories;            /// All parser factories, mapped by formula namespace.
 };
 
-ScParserFactoryMap::ScParserFactoryMap()
+ScParserFactoryMap::ScParserFactoryMap() :
+    mxContext( ::comphelper::getProcessComponentContext() )
 {
-    try
+    if( mxContext.is() ) try
     {
-        // get process factory and default component context
-        Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory(), UNO_SET_THROW );
-        Reference< XPropertySet > xPropSet( xFactory, UNO_QUERY_THROW );
-        mxContext.set( xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) ), UNO_QUERY_THROW );
-
         // enumerate all implementations of the FormulaParser service
-        Reference< XContentEnumerationAccess > xFactoryEA( xFactory, UNO_QUERY_THROW );
+        Reference< XContentEnumerationAccess > xFactoryEA( mxContext->getServiceManager(), UNO_QUERY_THROW );
         Reference< XEnumeration > xEnum( xFactoryEA->createContentEnumeration( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.FilterFormulaParser" ) ) ), UNO_SET_THROW );
         while( xEnum->hasMoreElements() ) try // single try/catch for every element
         {
