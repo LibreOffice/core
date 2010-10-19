@@ -196,7 +196,6 @@ ShapeExport& PowerPointShapeExport::WriteUnknownShape( Reference< XShape > xShap
 PowerPointExport::PowerPointExport( const Reference< XMultiServiceFactory > & rSMgr  )
     : XmlFilterBase( rSMgr ),
       PPTWriterBase(),
-      mxChartConv( new ::oox::drawingml::chart::ChartConverter ),
       mnLayoutFileIdMax( 1 ),
       mnSlideIdMax( 1 << 8 ),
       mnSlideMasterIdMax( 1 << 31 ),
@@ -223,8 +222,8 @@ bool PowerPointExport::exportDocument() throw()
 
     addRelation( US( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" ), S( "ppt/presentation.xml" ) );
 
-    mPresentationFS = openOutputStreamWithSerializer( US( "ppt/presentation.xml" ),
-                                                      US( "application/vnd.openxmlformats-officedocument.presentationml.presentation.main+xml" ) );
+    mPresentationFS = openFragmentStreamWithSerializer( US( "ppt/presentation.xml" ),
+                            US( "application/vnd.openxmlformats-officedocument.presentationml.presentation.main+xml" ) );
 
     addRelation( mPresentationFS->getOutputStream(),
                  US( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme" ),
@@ -250,7 +249,7 @@ bool PowerPointExport::exportDocument() throw()
     mPresentationFS->endElementNS( XML_p, XML_presentation );
     mPresentationFS.reset();
 
-    commit();
+    commitStorage();
 
     maShapeMap.clear ();
 
@@ -920,7 +919,7 @@ void PowerPointExport::WriteAnimationNodeCommonPropsStart( FSHelperPtr pFS, cons
     }
     }
 
-    sal_uInt32 nPresetId;
+    sal_uInt32 nPresetId = 0;
     sal_Bool bPresetId = FALSE;
     if ( pAny[ DFF_ANIM_PRESET_ID ] ) {
     rtl::OUString sPreset;
@@ -1154,12 +1153,12 @@ void PowerPointExport::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNu
     if( nPageNum == mnPages - 1 )
         mPresentationFS->endElementNS( XML_p, XML_sldIdLst );
 
-    FSHelperPtr pFS = openOutputStreamWithSerializer( OUStringBuffer()
-                                                      .appendAscii( "ppt/slides/slide" )
-                                                      .append( (sal_Int32) nPageNum + 1 )
-                                                      .appendAscii( ".xml" )
-                                                      .makeStringAndClear(),
-                                                      US( "application/vnd.openxmlformats-officedocument.presentationml.slide+xml" ) );
+    FSHelperPtr pFS = openFragmentStreamWithSerializer( OUStringBuffer()
+                            .appendAscii( "ppt/slides/slide" )
+                            .append( (sal_Int32) nPageNum + 1 )
+                            .appendAscii( ".xml" )
+                            .makeStringAndClear(),
+                            US( "application/vnd.openxmlformats-officedocument.presentationml.slide+xml" ) );
 
     if( mpSlidesFSArray.size() < mnPages )
     mpSlidesFSArray.resize( mnPages );
@@ -1212,12 +1211,12 @@ void PowerPointExport::ImplWriteNotes( sal_uInt32 nPageNum )
 
     DBG(printf("write Notes %d\n----------------\n", nPageNum));
 
-    FSHelperPtr pFS = openOutputStreamWithSerializer( OUStringBuffer()
-                                                      .appendAscii( "ppt/notesSlides/notesSlide" )
-                                                      .append( (sal_Int32) nPageNum + 1 )
-                                                      .appendAscii( ".xml" )
-                                                      .makeStringAndClear(),
-                                                      US( "application/vnd.openxmlformats-officedocument.presentationml.notesSlide+xml" ) );
+    FSHelperPtr pFS = openFragmentStreamWithSerializer( OUStringBuffer()
+                            .appendAscii( "ppt/notesSlides/notesSlide" )
+                            .append( (sal_Int32) nPageNum + 1 )
+                            .appendAscii( ".xml" )
+                            .makeStringAndClear(),
+                            US( "application/vnd.openxmlformats-officedocument.presentationml.notesSlide+xml" ) );
 
     pFS->startElementNS( XML_p, XML_notes, PNMSS, FSEND );
 
@@ -1352,12 +1351,12 @@ void PowerPointExport::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPr
         mPresentationFS->endElementNS( XML_p, XML_sldMasterIdLst );
 
     FSHelperPtr pFS =
-    openOutputStreamWithSerializer( OUStringBuffer()
-                    .appendAscii( "ppt/slideMasters/slideMaster" )
-                    .append( (sal_Int32) nPageNum + 1 )
-                    .appendAscii( ".xml" )
-                    .makeStringAndClear(),
-                    US( "application/vnd.openxmlformats-officedocument.presentationml.slideMaster+xml" ) );
+    openFragmentStreamWithSerializer( OUStringBuffer()
+                      .appendAscii( "ppt/slideMasters/slideMaster" )
+                      .append( (sal_Int32) nPageNum + 1 )
+                      .appendAscii( ".xml" )
+                      .makeStringAndClear(),
+                      US( "application/vnd.openxmlformats-officedocument.presentationml.slideMaster+xml" ) );
     if( mpMasterFSArray.size() < mnMasterPages )
     mpMasterFSArray.resize( mnMasterPages );
     mpMasterFSArray[ nPageNum ] = pFS;
@@ -1450,12 +1449,12 @@ void PowerPointExport::ImplWriteLayout( sal_Int32 nOffset, sal_uInt32 nMasterNum
     return;
 
     FSHelperPtr pFS
-        = openOutputStreamWithSerializer( OUStringBuffer()
-                                          .appendAscii( "ppt/slideLayouts/slideLayout" )
-                                          .append( (sal_Int32) mnLayoutFileIdMax )
-                                          .appendAscii( ".xml" )
-                                          .makeStringAndClear(),
-                                          US( "application/vnd.openxmlformats-officedocument.presentationml.slideLayout+xml" ) );
+        = openFragmentStreamWithSerializer( OUStringBuffer()
+                        .appendAscii( "ppt/slideLayouts/slideLayout" )
+                        .append( (sal_Int32) mnLayoutFileIdMax )
+                        .appendAscii( ".xml" )
+                        .makeStringAndClear(),
+                        US( "application/vnd.openxmlformats-officedocument.presentationml.slideLayout+xml" ) );
 
 //     LayoutInfo& rLayoutInfo = GetLayoutInfo( mXPagePropSet );
 
@@ -1826,12 +1825,12 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape( Reference< XShape > x
 
 void PowerPointExport::WriteTheme( sal_Int32 nThemeNum )
 {
-    FSHelperPtr pFS = openOutputStreamWithSerializer( OUStringBuffer()
-                              .appendAscii( "ppt/theme/theme" )
-                              .append( (sal_Int32) nThemeNum + 1 )
-                              .appendAscii( ".xml" )
-                              .makeStringAndClear(),
-                                                      US( "application/vnd.openxmlformats-officedocument.theme+xml" ) );
+    FSHelperPtr pFS = openFragmentStreamWithSerializer( OUStringBuffer()
+                            .appendAscii( "ppt/theme/theme" )
+                            .append( (sal_Int32) nThemeNum + 1 )
+                            .appendAscii( ".xml" )
+                            .makeStringAndClear(),
+                            US( "application/vnd.openxmlformats-officedocument.theme+xml" ) );
 
     pFS->startElementNS( XML_a, XML_theme,
                          FSNS( XML_xmlns, XML_a), "http://schemas.openxmlformats.org/drawingml/2006/main",
@@ -1881,8 +1880,8 @@ sal_Bool PowerPointExport::WriteNotesMaster()
     mPresentationFS->endElementNS( XML_p, XML_notesMasterIdLst );
 
     FSHelperPtr pFS =
-    openOutputStreamWithSerializer( US( "ppt/notesMasters/notesMaster1.xml" ),
-                    US( "application/vnd.openxmlformats-officedocument.presentationml.notesMaster+xml" ) );
+    openFragmentStreamWithSerializer( US( "ppt/notesMasters/notesMaster1.xml" ),
+                      US( "application/vnd.openxmlformats-officedocument.presentationml.notesMaster+xml" ) );
     // write theme per master
     WriteTheme( mnMasterPages );
 
@@ -1942,11 +1941,6 @@ sal_Bool PowerPointExport::ImplCreateMainNotes()
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-drawingml::chart::ChartConverter& PowerPointExport::getChartConverter()
-{
-    return *mxChartConv;
-}
 
 #define IMPL_NAME "com.sun.star.comp.Impress.oox.PowerPointExport"
 

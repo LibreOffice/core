@@ -54,10 +54,10 @@ public:
 
     // only needed for import, leave them empty, refactor later XmlFilterBase to export and import base?
     virtual sal_Int32 getSchemeClr( sal_Int32 /* nColorSchemeToken */ ) const { return 0; }
-    virtual const oox::vml::DrawingPtr getDrawings() { return oox::vml::DrawingPtr(); }
+    virtual oox::vml::Drawing* getVmlDrawing() { return NULL; }
     virtual const oox::drawingml::Theme* getCurrentTheme() const { return NULL; }
     virtual const oox::drawingml::table::TableStyleListPtr getTableStyles() { return oox::drawingml::table::TableStyleListPtr(); }
-    virtual oox::drawingml::chart::ChartConverter& getChartConverter();
+    virtual oox::drawingml::chart::ChartConverter* getChartConverter() { return NULL; }
 
     static const char* GetSideDirection( sal_uInt8 nDirection );
     static const char* GetCornerDirection( sal_uInt8 nDirection );

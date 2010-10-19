@@ -1035,7 +1035,7 @@ sal_Int16 AnimationExporter::exportAnimPropertySet( SvStream& rStrm, const Refer
             exportAnimPropertyuInt32( rStrm, DFF_ANIM_NODE_TYPE, nPPTNodeType, TRANSLATE_NONE );
         }
     }
-    sal_uInt32 nPresetId;
+    sal_uInt32 nPresetId = 0;
     sal_uInt32 nPresetSubType = 0;
     sal_uInt32 nAPIPresetClass = EffectPresetClass::CUSTOM;
     sal_uInt32 nPresetClass = DFF_ANIM_PRESS_CLASS_USER_DEFINED;
