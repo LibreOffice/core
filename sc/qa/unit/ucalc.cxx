@@ -1,48 +1,42 @@
 /*
  * Known problems:
- *
- * + We need to work out why cppuint can't run this
- *    + can it run even the most trivial of tests ?
- *    + what symbol is it prodding around for ? and do we export it ?
- *      + cf. objdump -T on the generated .so
- *      + build verbose=1 to find it ...
- * + We are chancing our arm here; this is unlikely to work without
- * UNO bootstrapping - which is quite 'exciting' ;-)
- * + We need to resurrect the ubootstrap.[ch]xx files from old versions
- * of patches/test/build-in-unit-testing-sc.diff
  * + We need to re-enable the exports.map with the right symbol
  */
-
 
 // TODO ...
 //    officecfg: can we move this into our skeleton ?
 //          Solve the Setup.xcu problem pleasantly [ custom version ? ]
-//    Remove: Foo killed exception ! ...
 //    deliver.pl
 //          don't call regcomp if we don't have it.
-//    find & kill signalfile stuff (?)
-//    Consider - where to dump this code ?
-//             - surely there is some Uno module we can use... ?
-//             - 'unohelper' ?
+//              In an ideal world
+//              a) scp2 goes away and logic moved into the deliver d.lst
+//              b) install set gets built incrementally as the build progresses
+//              c) the new .xml component registration stuff then removes
+//                 the need for manually calling regcomp and knowing what
+//                 services we need, and in what .so they are implemented
 
 #include "sal/config.h"
-// #include "ubootstrap.hxx"
-#include "vcl/svapp.hxx"
+
+#include <cppuhelper/bootstrap.hxx>
+#include <comphelper/processfactory.hxx>
+
+#include <vcl/svapp.hxx>
 #include <scdll.hxx>
 #include <document.hxx>
+
+#include "preextstl.h"
 #include <cppunit/TestSuite.h>
+#include <cppunit/TestFixture.h>
 #include <cppunit/TestCase.h>
+#include <cppunit/plugin/TestPlugIn.h>
 #include <cppunit/extensions/HelperMacros.h>
+#include "postextstl.h"
 
-#define CATCH_FAIL(msg) \
-    catch (const css::uno::Exception &e) { \
-        t_print ("msg '%s'\n", rtl::OUStringToOString (e.Message, RTL_TEXTENCODING_UTF8).getStr()); \
-        CPPUNIT_FAIL( msg ); \
-        throw; \
-    }
+using namespace ::com::sun::star;
 
-class Test: public CppUnit::TestFixture {
-  //    UnitBootstrap *mpUnitBootstrap;
+namespace {
+
+class Test : public CppUnit::TestFixture {
 public:
     // init
     virtual void setUp();
@@ -56,22 +50,29 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
+    uno::Reference< uno::XComponentContext > m_context;
 };
 
 void Test::setUp()
 {
-// FIXME: we badly need to bootstrap UNO [!]
-//    mpUnitBootstrap = new UnitBootstrap();
-//    InitVCL (mpUnitBootstrap->getMSF());
+    m_context = cppu::defaultBootstrap_InitialComponentContext();
+
+    uno::Reference<lang::XMultiComponentFactory> xFactory(m_context->getServiceManager());
+    uno::Reference<lang::XMultiServiceFactory> xSM(xFactory, uno::UNO_QUERY_THROW);
+
+    //Without this we're crashing because callees are using
+    //getProcessServiceFactory.  In general those should be removed in favour
+    //of retaining references to the root ServiceFactory as its passed around
+    comphelper::setProcessServiceFactory(xSM);
+
+    InitVCL(xSM);
 
     ScDLL::Init();
 }
 
 void Test::tearDown()
 {
-    DeInitVCL ();
-
-    //    delete mpUnitBootstrap;
+    uno::Reference< lang::XComponent >(m_context, uno::UNO_QUERY_THROW)->dispose();
 }
 
 void Test::createDocument()
@@ -88,10 +89,13 @@ void Test::createDocument()
     doc->CalcAll();
     double result;
     doc->GetValue (0, 2, 0, result);
-    fprintf (stderr, "one plus one = %g\n", result);
     CPPUNIT_ASSERT_MESSAGE ("calculation failed", result == 2.0);
 
     delete doc;
 }
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Test, "alltests");
+CPPUNIT_TEST_SUITE_REGISTRATION(Test);
+
+}
+
+CPPUNIT_PLUGIN_IMPLEMENT();

@@ -33,15 +33,22 @@
 #
 #*************************************************************************
 
-PRJ := ..$/..
-PRJNAME := configmgr
-TARGET := qa_unit
+PRJ=..$/..
+PRJNAME=sc
+TARGET=qa_unit
 
-ENABLE_EXCEPTIONS := TRUE
+ENABLE_EXCEPTIONS=TRUE
 
-.INCLUDE: settings.mk
+.INCLUDE : settings.mk
 
-DLLPRE = # no leading "lib" on .so files
+#building with stlport, but cppunit was not built with stlport
+.IF "$(USE_SYSTEM_STL)"!="YES"
+.IF "$(SYSTEM_CPPUNIT)"=="YES"
+CFLAGSCXX+=-DADAPT_EXT_STL
+.ENDIF
+.ENDIF
+
+CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
 SHL1TARGET = $(TARGET)
 SHL1OBJS = $(SLO)$/ucalc.obj
@@ -74,12 +81,37 @@ SHL1STDLIBS=       \
     $(CPPUNITLIB)
 SHL1IMPLIB = i$(SHL1TARGET)
 SHL1LIBS=$(SLB)$/scalc3.lib $(SLB)$/scalc3c.lib 
-# SHL1VERSIONMAP = export.map
 DEF1NAME = $(SHL1TARGET)
 
 .INCLUDE: target.mk
 
+.IF "$(OS)" == "WNT"
+my_file = file:///
+.ELSE
+my_file = file://
+.END
+
 ALLTAR: test
 
-test .PHONY: $(SHL1TARGETN)
-    LD_LIBRARY_PATH=$(SOLARVER)$/$(INPATH)$/lib $(SOLARVER)$/$(INPATH)$/bin$/cppunittester $(PRJ)$/$(INPATH)$/lib$/$(TARGET)$(DLLPOST)
+#Make a services.rdb with the services we know we need to get up and running
+$(MISC)/$(TARGET)/services.rdb:
+    $(MKDIRHIER) $(@:d)
+    $(RM) $@
+    $(REGCOMP) -register -r $@ -wop \
+        -c configmgr.uno$(DLLPOST) \
+        -c $(DLLPRE)fwk$(DLLPOSTFIX)$(DLLPOST)
+
+#Tweak things to that we use the .res files in the solver
+STAR_RESOURCEPATH:=$(SOLARBINDIR)
+.EXPORT : STAR_RESOURCEPATH
+
+test .PHONY: $(SHL1TARGETN) $(MISC)/$(TARGET)/services.rdb
+    @echo ----------------------------------------------------------
+    @echo - start unit test \#1 on library $(SHL1TARGETN)
+    @echo ----------------------------------------------------------
+    $(CPPUNITTESTER) $(SHL1TARGETN) \
+        -env:UNO_SERVICES=$(my_file)$(PWD)/$(MISC)/$(TARGET)/services.rdb \
+        -env:UNO_TYPES="$(my_file)$(SOLARBINDIR)/types.rdb $(my_file)$(SOLARBINDIR)/udkapi.rdb" \
+        -env:OOO_BASE_DIR="$(my_file)$(PWD)/$(MISC)/$(TARGET)" \
+        -env:BRAND_BASE_DIR="$(my_file)$(PWD)/$(MISC)/$(TARGET)" \
+        -env:UNO_USER_PACKAGES_CACHE="$(my_file)$(PWD)/$(MISC)/$(TARGET)"
