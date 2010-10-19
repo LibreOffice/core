@@ -5155,15 +5155,16 @@ WW8_CP WW8Fib::GetBaseCp(ManTypes nType) const
         case MAN_HDFT:
             nOffset = ccpText + ccpFtn;
             break;
-/*
- * A subdocument of this kind probably exists in some defunct version
- * of MSWord, but now ccpMcr is always 0
- */
-#if 0
+        /*
+         A subdocument of this kind (MAN_MACRO) probably exists in some defunct
+         version of MSWord, but now ccpMcr is always 0. If some example that
+         uses this comes to light, this is the likely calculation required
+
         case MAN_MACRO:
             nOffset = ccpText + ccpFtn + ccpHdr;
             break;
-#endif
+
+        */
         case MAN_AND:
             nOffset = ccpText + ccpFtn + ccpHdr + ccpMcr;
             break;

@@ -139,20 +139,6 @@ SwXReferenceMark::GetReferenceMark(
     // #i105557#: do not iterate over the registered clients: race condition
     // to do this properly requires the SwXReferenceMark to register at the
     // SwFmtRefMark directly, not at the unocallback
-#if 0
-    SwClientIter aIter( rUnoCB );
-    SwXReferenceMark::Impl * pXMark =
-        static_cast<SwXReferenceMark::Impl*>(
-            aIter.First( TYPE( SwXReferenceMark::Impl ) ));
-    while (pXMark)
-    {
-        if (pXMark->m_pMarkFmt == &rMarkFmt)
-        {
-            return &pXMark->m_rThis;
-        }
-        pXMark = static_cast<SwXReferenceMark::Impl*>(aIter.Next());
-    }
-#endif
     return 0;
 }
 

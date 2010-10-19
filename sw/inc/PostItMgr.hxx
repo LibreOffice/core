@@ -235,9 +235,6 @@ class SwPostItMgr: public SfxListener
             void Delete(String aAuthor);
             void Delete();
 
-#if 0
-            void Hide( SwPostItField* pPostItField );
-#endif
             void Hide( const String& rAuthor );
             void Hide();
             void Show();

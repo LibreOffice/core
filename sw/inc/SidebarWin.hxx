@@ -147,9 +147,6 @@ class SwSidebarWin : public Window
         void            SetFollow( bool bIsFollow) { mbIsFollow = bIsFollow; };
         virtual bool    CalcFollow() = 0;
 
-#if 0
-#endif
-
         sal_Int32       GetMetaHeight();
         sal_Int32       GetMinimumSizeWithMeta();
         sal_Int32       GetMinimumSizeWithoutMeta();

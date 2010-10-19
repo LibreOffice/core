@@ -1827,11 +1827,6 @@ void WW8Export::OutputField( const SwField* pFld, ww::eField eFldType,
                   eFldType == ww::eNOTEREF || eFldType == ww::eFOOTREF ))
                 bHandleBookmark = true;
 
-#if 0
-            if (pFld->GetTyp()->Which() == RES_INPUTFLD &&
-                eFldType == ww::eFORMTEXT)
-                bHandleBookmark = true;
-#endif
         }
 
         if ( bHandleBookmark )
@@ -4390,25 +4385,6 @@ void WW8AttributeOutput::FormatColumns_Impl( USHORT nCols, const SwFmtCol & rCol
     else
         m_rWW8Export.pO->Insert( 138, m_rWW8Export.pO->Count(  ) );
     m_rWW8Export.pO->Insert( bEven ? 1 : 0, m_rWW8Export.pO->Count(  ) );
-
-#if 0
-    // FIXME what's the use of this code
-    if ( bEven )
-    {
-        USHORT nSpace = rColumns[0]->GetRight() + rColumns[1]->GetLeft();
-        for ( n = 2; n < nCols; n++ )
-        {
-            short nDiff = nSpace - ( rColumns[n - 1]->GetRight()
-                                         + rColumns[n]->GetLeft() );
-            if (nDiff > 10 || nDiff < -10)
-            {
-                // Toleranz: 10 tw
-                bEven = false;
-                break;
-            }
-        }
-    }
-#endif
 
     if ( !bEven )
     {

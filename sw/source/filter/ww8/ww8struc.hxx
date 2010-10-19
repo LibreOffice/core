@@ -613,55 +613,6 @@ struct WW8_OLST
 };
 // cbOLST is 212(decimal), D4(hex).
 
-#if 0
-struct ANLV
-{
-    ALNV();
-    void ReadFromMem(const sal_uInt8 *&pData);
-    sal_uInt8 nfc;
-    sal_uInt8 cbTextBefore;
-    sal_uInt8 cbTextAfter;
-    sal_uInt8 jc : 2;
-    sal_uInt8 fPrev : 1;
-    sal_uInt8 fHang : 1;
-    sal_uInt8 fSetBold : 1;
-    sal_uInt8 fSetItalic : 1;
-    sal_uInt8 fSetSmallCaps : 1;
-    sal_uInt8 fSetCaps : 1;
-    sal_uInt8 fSetStrike : 1;
-    sal_uInt8 fSetKul : 1;
-    sal_uInt8 fPrevSpace : 1;
-    sal_uInt8 fBold : 1;
-    sal_uInt8 fItalic : 1;
-    sal_uInt8 fSmallCaps : 1;
-    sal_uInt8 fCaps : 1;
-    sal_uInt8 fStrike : 1;
-    sal_uInt8 kul : 3;
-    sal_uInt8 ico : 5;
-    sal_uInt16 ftc;
-    sal_uInt16 hps;
-    sal_uInt16 iStartAt;
-    sal_uInt16 dxaIndent;
-    sal_uInt16 dxaSpace;
-};
-
-struct OLST
-{
-    OLST();
-    void ReadFromMem(const sal_uInt8 *&pData, bool bVer67)
-    ANLV rganlv[9];         // 0 an array of 9 ANLV structures (heading levels)
-    sal_uInt8 fRestartHdr;  // when ==1, restart heading on section break
-    sal_uInt8 fSpareOlst2;  // reserved
-    sal_uInt8 fSpareOlst3;  // reserved
-    sal_uInt8 fSpareOlst4;  // reserved
-    sal_uInt16 rgxch[64];   // array of 64 chars text before/after number
-#if 0
-    sal_uInt16 rgxch[32];   // array of 32 chars text before/after number
-    sal_uInt8 rgch[64];     // array of 64 chars text before/after number
-#endif
-};
-#endif
-
 struct WW8_FDOA
 {
     SVBT32 fc;          // 0  FC pointing to drawing object data
@@ -998,7 +949,7 @@ struct SEPr
     sal_uInt16 dmBinFirst;
     sal_uInt16 dmBinOther;
     sal_uInt16 dmPaperReq;
-#if 0
+/*
     28  1C  brcTop                    BRC                   top page border
 
     32  20  brcLeft                   BRC                   left page border
@@ -1006,7 +957,7 @@ struct SEPr
     36  24  brcBottom                 BRC                   bottom page border
 
     40  28  brcRight                  BRC                   right page border
-#endif
+*/
     sal_Int16 fPropRMark;
     sal_Int16 ibstPropRMark;
     sal_Int32 dttmPropRMark;        //DTTM
@@ -1048,9 +999,6 @@ struct SEPr
     sal_uInt8 dmOrientFirst;
     sal_uInt8 fLayout;
     sal_Int16 reserved4;
-#if 0
-    OLST olstAnm;       //currently unused
-#endif
 };
 
 namespace wwUtility

@@ -685,57 +685,6 @@ public:
 // Klassendefinitionen fuer Tabellen-Fastsave-Attribute
 // Da wir kein Fastsave unterstuetzen, brauchen wir's nicht
 
-#if 0
-
-class Ww1SingleSprmTInsert : public Ww1SingleSprm {
-public:
-    Ww1SingleSprmTInsert(sal_Char* sName) :
-        Ww1SingleSprm(4, sName) {
-        }
-    void Start(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
-};
-
-class Ww1SingleSprmTDelete : public Ww1SingleSprmWord {
-public:
-    Ww1SingleSprmTDelete(sal_Char* sName) :
-        Ww1SingleSprmWord(sName) {
-        }
-    void Start(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
-};
-
-class Ww1SingleSprmTDxaCol : public Ww1SingleSprm {
-public:
-    Ww1SingleSprmTDxaCol(sal_Char* sName) :
-        Ww1SingleSprm(4, sName) {
-        }
-    void Start(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
-};
-
-class Ww1SingleSprmTMerge : public Ww1SingleSprmWord {
-public:
-    Ww1SingleSprmTMerge(sal_Char* sName) :
-        Ww1SingleSprmWord(sName) {
-        }
-    void Start(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
-};
-
-class Ww1SingleSprmTSplit : public Ww1SingleSprmWord {
-public:
-    Ww1SingleSprmTSplit(sal_Char* sName) :
-        Ww1SingleSprmWord(sName) {
-        }
-    void Start(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
-};
-
-class Ww1SingleSprmTSetBrc10 : public Ww1SingleSprm {
-public:
-    Ww1SingleSprmTSetBrc10(sal_Char* sName) :
-        Ww1SingleSprm(5, sName) {
-        }
-    void Start(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
-};
-#endif // 0
-
 // Klassendefinitionen fuer Apos ( == Flys )
 
 class Ww1SingleSprmPpc : public Ww1SingleSprmByte {

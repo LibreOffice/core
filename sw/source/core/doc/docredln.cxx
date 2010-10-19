@@ -305,10 +305,6 @@ Verhalten von Delete-Redline:
 
 bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
 {
-#if 0
-// #i93179# disabled: ASSERT in ~SwIndexReg     #ifdef DBG_UTIL
-    SwRedline aCopy( *pNewRedl );
-#endif
     bool bError = true;
     _CHECK_REDLINE( this )
 

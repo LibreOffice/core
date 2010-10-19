@@ -37,10 +37,6 @@
 #include "vbapane.hxx"
 #include "wordvbahelper.hxx"
 #include <view.hxx>
-// #FIXME where has SfxTopViewFrame gone
-#if 0
-#include <sfx2/topfrm.hxx>
-#endif
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;

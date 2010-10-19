@@ -1305,26 +1305,6 @@ void SwPostItMgr::Delete()
     CalcRects();
     LayoutPostIts();
 }
-#if 0
-void SwPostItMgr::Hide(SwPostItField* pPostItField )
-{
-    for(std::list<SwSidebarItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
-    {
-        if ((*i)->GetFmtFld())
-        {
-            SwPostItField* pField = static_cast<SwPostItField*>((*i)->GetFmtFld()->GetFld());
-            if (pPostItField==pField)
-            {
-                (*i)->bShow = false;
-                (*i)->pPostIt->HideNote();
-                break;
-            }
-        }
-    }
-
-    LayoutPostIts();
-}
-#endif
 void SwPostItMgr::Hide( const String& rAuthor )
 {
     for(SwSidebarItem_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)

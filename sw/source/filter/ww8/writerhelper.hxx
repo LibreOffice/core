@@ -664,30 +664,6 @@ namespace sw
         */
         Frames GetFramesInNode(const Frames &rFrames, const SwNode &rNode);
 
-#if 0
-        /** Get the Frames anchored for all nodes between two points
-
-            Given a container of frames, find the ones anchored to the nodes
-            from start to end. Half open sequence, i.e. those anchored to
-            start, but not those anchored to end
-
-            @param rFrames
-            The container of frames to search in
-
-            @param rStart
-            The SwNode to start check for anchors from
-
-            @param rEnd
-            The SwNode to end check for anchors from
-
-            @return the Frames in rFrames anchored to rNode
-
-            @author
-            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
-        */
-        Frames GetFramesBetweenNodes(const Frames &rFrames,
-                const SwNode &rStart, const SwNode &rEnd);
-#endif
         /** Get the Numbering Format used on a paragraph
 
             There are two differing types of numbering formats that may be on a

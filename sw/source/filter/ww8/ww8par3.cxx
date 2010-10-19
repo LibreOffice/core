@@ -143,13 +143,6 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, String& rStr )
     if (!bUseEnhFields) {
     aFormula.sDefault = GetFieldResult(pF);
 
-#if 0 // why not? (flr)
-    //substituting Unicode spacing 0x2002 with double space for layout
-    aFormula.sDefault.SearchAndReplaceAll(
-        String(static_cast< sal_Unicode >(0x2002)),
-        CREATE_CONST_ASC("  "));
-#endif
-
     SwInputField aFld((SwInputFieldType*)rDoc.GetSysFldType( RES_INPUTFLD ),
               aFormula.sDefault , aFormula.sTitle , INP_TXT, 0 );
     aFld.SetHelp(aFormula.sHelp);

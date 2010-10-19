@@ -568,21 +568,6 @@ namespace sw
             return aRet;
         }
 
-#if 0
-        Frames GetFramesBetweenNodes(const Frames &rFrames,
-            const SwNode &rStart, const SwNode &rEnd)
-        {
-            Frames aRet;
-            ULONG nEnd = rEnd.GetIndex();
-            for (ULONG nI = rStart.GetIndex(); nI < nEnd; ++nI)
-            {
-                my_copy_if(rFrames.begin(), rFrames.end(),
-                    std::back_inserter(aRet), anchoredto(nI));
-            }
-            return aRet;
-
-        }
-#endif
         Frames GetFramesInNode(const Frames &rFrames, const SwNode &rNode)
         {
             Frames aRet;

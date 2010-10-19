@@ -917,24 +917,6 @@ void SwSpellPopup::Execute( USHORT nId )
             lcl_CharDialog( *pSh, true, nId, 0, 0 );
             pSh->Pop( FALSE );  // restore cursor
         }
-#if 0
-        else if (nId == MN_SET_LANGUAGE_ALL_TEXT_START + nNumLanguageDocEntries - 1)
-        {
-            //Set Language_None as the default language
-            SwLangHelper::SetLanguage_None( *pSh, false, aCoreSet );
-        }
-        else if (nId == MN_SET_LANGUAGE_ALL_TEXT_START + nNumLanguageDocEntries)
-        {
-            // open the dialog "Tools/Options/Language Settings - Language"
-            SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-            if (pFact)
-            {
-                VclAbstractDialog* pDlg = pFact->CreateVclDialog( pSh->GetView().GetWindow(), SID_LANGUAGE_OPTIONS );
-                pDlg->Execute();
-                delete pDlg;
-            }
-        }
-#endif
     }
 
     pSh->EnterStdMode();

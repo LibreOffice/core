@@ -538,15 +538,6 @@ private:
     WW8FormulaEditBox& operator=(const WW8FormulaEditBox&);
 public:
     WW8FormulaEditBox(SwWW8ImplReader &rR);
-#if 0
-    //#i3029# we are no longer importing editboxes as uno textboxes, using
-    //input fields instead for superior layout.
-    virtual sal_Bool Import(const com::sun::star::uno::Reference <
-        com::sun::star::lang::XMultiServiceFactory> &rServiceFactory,
-        com::sun::star::uno::Reference <
-        com::sun::star::form::XFormComponent> &rFComp,
-        com::sun::star::awt::Size &rSz);
-#endif
 };
 
 class SwMSConvertControls: public SvxMSConvertOCXControls
@@ -1183,12 +1174,9 @@ private:
     //border which has been previously set to a value and for which becoming
     //empty is valid. Set bCheBtwn to work with paragraphs that have a special
     //between paragraphs border
-#if 0
-    // #i20672# we can't properly support between lines so best to ignore
+
+    // Note #i20672# we can't properly support between lines so best to ignore
     // them for now
-    bool SetBorder(SvxBoxItem& rBox, const WW8_BRC* pbrc, short *pSizeArray=0,
-        BYTE nSetBorders=0xFF, bool bChkBtwn = false) const;
-#endif
     bool SetBorder(SvxBoxItem& rBox, const WW8_BRC* pbrc, short *pSizeArray=0,
         BYTE nSetBorders=0xFF) const;
     void GetBorderDistance(const WW8_BRC* pbrc, Rectangle& rInnerDist) const;

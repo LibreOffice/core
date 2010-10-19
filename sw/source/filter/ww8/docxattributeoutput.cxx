@@ -1066,23 +1066,6 @@ void DocxAttributeOutput::ParagraphStyle( USHORT nStyle )
     m_pSerializer->singleElementNS( XML_w, XML_pStyle, FSNS( XML_w, XML_val ), aStyleId.getStr(), FSEND );
 }
 
-#if 0
-void DocxAttributeOutput::InTable()
-{
-#if OSL_DEBUG_LEVEL > 0
-    OSL_TRACE( "TODO DocxAttributeOutput::InTable()\n" );
-#endif
-}
-
-
-void DocxAttributeOutput::TableRowProperties( bool /*bHeader*/, long /*nCellHeight*/, bool /*bCannotSplit*/, bool /*bRightToLeft*/ )
-{
-#if OSL_DEBUG_LEVEL > 0
-    OSL_TRACE( "TODO DocxAttributeOutput::TableRowProperties()\n" );
-#endif
-}
-#endif
-
 static OString impl_ConvertColor( const Color &rColor )
 {
     OString color( "auto" );
