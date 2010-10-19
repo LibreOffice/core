@@ -48,7 +48,7 @@ published constants MenuItemStyle
 
     //-------------------------------------------------------------------------
 
-    /** specifies an item which can be checked dependent on the neighbouring
+    /** specifies an item which can be checked dependent on the neighboring
         items.
      */
     const short RADIOCHECK = 2;

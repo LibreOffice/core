@@ -287,7 +287,7 @@ published constants SystemPointer
 
     //-------------------------------------------------------------------------
 
-    /** specifies a mouse pointer which symbolizes moving a bezier weight.
+    /** specifies a mouse pointer which symbolizes moving a Bezier weight.
      */
     const long MOVEBEZIERWEIGHT = 39;
 
@@ -389,7 +389,7 @@ published constants SystemPointer
 
     //-------------------------------------------------------------------------
 
-    /** specifies a mouse pointer which symbolizes drawing a bezier.
+    /** specifies a mouse pointer which symbolizes drawing a Bezier.
      */
     const long DRAW_BEZIER = 56;
 

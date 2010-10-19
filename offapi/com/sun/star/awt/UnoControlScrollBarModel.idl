@@ -111,7 +111,7 @@ published service UnoControlScrollBarModel
 
     //-------------------------------------------------------------------------
 
-    /** specifies the scrolling behaviour of the control.
+    /** specifies the scrolling behavior of the control.
 
         <p><TRUE/> means, that when the user moves the slider in the scroll bar,
         the content of the window is updated immediately.
