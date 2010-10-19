@@ -408,7 +408,7 @@ oslProcessError SAL_CALL osl_clearEnvironment(rtl_uString* pustrEnvVar)
             result = osl_Process_E_None;
         else
             rtl_string_release(pBuffer);
-#elif (defined(MACOSX) || defined(FREEBSD))
+#elif defined(MACOSX)
         //MacOSX baseline is 10.4, which has an old-school void return
         //for unsetenv.
         //See: http://developer.apple.com/mac/library/documentation/Darwin/Reference/ManPages/10.4/man3/unsetenv.3.html?useVersion=10.4
