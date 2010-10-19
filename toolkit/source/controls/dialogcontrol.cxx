@@ -119,32 +119,6 @@ namespace
         return s_aLanguageDependentProperties;
     }
 
-    static uno::Reference< graphic::XGraphic > lcl_getGraphicFromURL_nothrow( const ::rtl::OUString& _rURL )
-    {
-        uno::Reference< graphic::XGraphic > xGraphic;
-        if ( !_rURL.getLength() )
-            return xGraphic;
-
-        try
-        {
-            ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-            uno::Reference< graphic::XGraphicProvider > xProvider;
-            if ( aContext.createComponent( "com.sun.star.graphic.GraphicProvider", xProvider ) )
-            {
-                uno::Sequence< beans::PropertyValue > aMediaProperties(1);
-                aMediaProperties[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
-                aMediaProperties[0].Value <<= _rURL;
-                xGraphic = xProvider->queryGraphic( aMediaProperties );
-            }
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
-
-        return xGraphic;
-    }
-
     static ::rtl::OUString lcl_GetStringProperty( const ::rtl::OUString& sProperty, const Reference< XPropertySet >& xSet )
     {
         ::rtl::OUString sValue;
