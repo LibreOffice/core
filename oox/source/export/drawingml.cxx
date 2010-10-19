@@ -568,13 +568,25 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic )
     return sRelId;
 }
 
-OUString DrawingML::WriteBlip( OUString& rURL )
+OUString DrawingML::WriteBlip( Reference< XPropertySet > rXPropSet, OUString& rURL )
 {
         OUString sRelId = WriteImage( rURL );
+    sal_Int16 nBright = 0;
+    sal_Int32 nContrast = 0;
 
-        mpFS->singleElementNS( XML_a, XML_blip,
-                               FSNS( XML_r, XML_embed), OUStringToOString( sRelId, RTL_TEXTENCODING_UTF8 ).getStr(),
-                               FSEND );
+    GET( nBright, AdjustLuminance );
+    GET( nContrast, AdjustContrast );
+
+        mpFS->startElementNS( XML_a, XML_blip,
+                  FSNS( XML_r, XML_embed), OUStringToOString( sRelId, RTL_TEXTENCODING_UTF8 ).getStr(),
+                  FSEND );
+    if( nBright || nContrast )
+        mpFS->singleElementNS( XML_a, XML_lum,
+                   XML_bright, nBright ? I32S( nBright*1000 ) : NULL,
+                   XML_contrast, nContrast ? I32S( nContrast*1000 ) : NULL,
+                   FSEND );
+
+        mpFS->endElementNS( XML_a, XML_blip );
 
         return sRelId;
 }
@@ -614,7 +626,7 @@ void DrawingML::WriteBlipFill( Reference< XPropertySet > rXPropSet, String sURLP
 
         mpFS->startElementNS( nXmlNamespace , XML_blipFill, FSEND );
 
-        WriteBlip( aURL );
+        WriteBlip( rXPropSet, aURL );
 
         if( sURLPropName == S( "FillBitmapURL" ) )
             WriteBlipMode( rXPropSet );
