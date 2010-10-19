@@ -235,7 +235,7 @@ inline sal_Bool SAL_CALL operator >>= ( const ::com::sun::star::uno::Any & rAny,
 {
     if (typelib_TypeClass_BOOLEAN == rAny.pType->eTypeClass)
     {
-        value = (* reinterpret_cast< const sal_Bool * >( &rAny.pReserved ) != sal_False);
+        value = (* reinterpret_cast< const sal_Bool * >( rAny.pData ) != sal_False);
         return sal_True;
     }
     return sal_False;
@@ -244,7 +244,7 @@ inline sal_Bool SAL_CALL operator >>= ( const ::com::sun::star::uno::Any & rAny,
 inline sal_Bool SAL_CALL operator == ( const Any & rAny, const sal_Bool & value ) SAL_THROW( () )
 {
     return (typelib_TypeClass_BOOLEAN == rAny.pType->eTypeClass &&
-            (value != sal_False) == (* reinterpret_cast< const sal_Bool * >( &rAny.pReserved ) != sal_False));
+            (value != sal_False) == (* reinterpret_cast< const sal_Bool * >( rAny.pData ) != sal_False));
 }
 
 //______________________________________________________________________________
@@ -255,7 +255,7 @@ inline sal_Bool SAL_CALL operator >>= ( Any const & rAny, bool & value )
     if (rAny.pType->eTypeClass == typelib_TypeClass_BOOLEAN)
     {
         value = *reinterpret_cast< sal_Bool const * >(
-            &rAny.pReserved ) != sal_False;
+            rAny.pData ) != sal_False;
         return true;
     }
     return false;
@@ -268,7 +268,7 @@ inline sal_Bool SAL_CALL operator == ( Any const & rAny, bool const & value )
 {
     return (rAny.pType->eTypeClass == typelib_TypeClass_BOOLEAN &&
             (value ==
-             (*reinterpret_cast< sal_Bool const * >( &rAny.pReserved )
+             (*reinterpret_cast< sal_Bool const * >( rAny.pData )
               != sal_False)));
 }
 
@@ -278,7 +278,7 @@ inline sal_Bool SAL_CALL operator >>= ( const ::com::sun::star::uno::Any & rAny,
 {
     if (typelib_TypeClass_BYTE == rAny.pType->eTypeClass)
     {
-        value = * reinterpret_cast< const sal_Int8 * >( &rAny.pReserved );
+        value = * reinterpret_cast< const sal_Int8 * >( rAny.pData );
         return sal_True;
     }
     return sal_False;
@@ -290,11 +290,11 @@ inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_Int16 & value ) SA
     switch (rAny.pType->eTypeClass)
     {
     case typelib_TypeClass_BYTE:
-        value = * reinterpret_cast< const sal_Int8 * >( &rAny.pReserved );
+        value = * reinterpret_cast< const sal_Int8 * >( rAny.pData );
         return sal_True;
     case typelib_TypeClass_SHORT:
     case typelib_TypeClass_UNSIGNED_SHORT:
-        value = * reinterpret_cast< const sal_Int16 * >( &rAny.pReserved );
+        value = * reinterpret_cast< const sal_Int16 * >( rAny.pData );
         return sal_True;
     default:
         return sal_False;
@@ -306,11 +306,11 @@ inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt16 & value ) S
     switch (rAny.pType->eTypeClass)
     {
     case typelib_TypeClass_BYTE:
-        value = * reinterpret_cast< const sal_Int8 * >( &rAny.pReserved );
+        value = * reinterpret_cast< const sal_Int8 * >( rAny.pData );
         return sal_True;
     case typelib_TypeClass_SHORT:
     case typelib_TypeClass_UNSIGNED_SHORT:
-        value = * reinterpret_cast< const sal_uInt16 * >( &rAny.pReserved );
+        value = * reinterpret_cast< const sal_uInt16 * >( rAny.pData );
         return sal_True;
     default:
         return sal_False;
@@ -323,17 +323,17 @@ inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_Int32 & value ) SA
     switch (rAny.pType->eTypeClass)
     {
     case typelib_TypeClass_BYTE:
-        value = * reinterpret_cast< const sal_Int8 * >( &rAny.pReserved );
+        value = * reinterpret_cast< const sal_Int8 * >( rAny.pData );
         return sal_True;
     case typelib_TypeClass_SHORT:
-        value = * reinterpret_cast< const sal_Int16 * >( &rAny.pReserved );
+        value = * reinterpret_cast< const sal_Int16 * >( rAny.pData );
         return sal_True;
     case typelib_TypeClass_UNSIGNED_SHORT:
-        value = * reinterpret_cast< const sal_uInt16 * >( &rAny.pReserved );
+        value = * reinterpret_cast< const sal_uInt16 * >( rAny.pData );
         return sal_True;
     case typelib_TypeClass_LONG:
     case typelib_TypeClass_UNSIGNED_LONG:
-        value = * reinterpret_cast< const sal_Int32 * >( &rAny.pReserved );
+        value = * reinterpret_cast< const sal_Int32 * >( rAny.pData );
         return sal_True;
     default:
         return sal_False;
@@ -345,17 +345,17 @@ inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt32 & value ) S
     switch (rAny.pType->eTypeClass)
     {
     case typelib_TypeClass_BYTE:
-        value = * reinterpret_cast< const sal_Int8 * >( &rAny.pReserved );
+        value = * reinterpret_cast< const sal_Int8 * >( rAny.pData );
         return sal_True;
     case typelib_TypeClass_SHORT:
-        value = * reinterpret_cast< const sal_Int16 * >( &rAny.pReserved );
+        value = * reinterpret_cast< const sal_Int16 * >( rAny.pData );
         return sal_True;
     case typelib_TypeClass_UNSIGNED_SHORT:
-        value = * reinterpret_cast< const sal_uInt16 * >( &rAny.pReserved );
+        value = * reinterpret_cast< const sal_uInt16 * >( rAny.pData );
         return sal_True;
     case typelib_TypeClass_LONG:
     case typelib_TypeClass_UNSIGNED_LONG:
-        value = * reinterpret_cast< const sal_uInt32 * >( &rAny.pReserved );
+        value = * reinterpret_cast< const sal_uInt32 * >( rAny.pData );
         return sal_True;
     default:
         return sal_False;
@@ -368,26 +368,24 @@ inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_Int64 & value ) SA
     switch (rAny.pType->eTypeClass)
     {
     case typelib_TypeClass_BYTE:
-        value = * reinterpret_cast< const sal_Int8 * >( &rAny.pReserved );
+        value = * reinterpret_cast< const sal_Int8 * >( rAny.pData );
         return sal_True;
     case typelib_TypeClass_SHORT:
-        value = * reinterpret_cast< const sal_Int16 * >( &rAny.pReserved );
+        value = * reinterpret_cast< const sal_Int16 * >( rAny.pData );
         return sal_True;
     case typelib_TypeClass_UNSIGNED_SHORT:
-        value = * reinterpret_cast< const sal_uInt16 * >( &rAny.pReserved );
+        value = * reinterpret_cast< const sal_uInt16 * >( rAny.pData );
         return sal_True;
     case typelib_TypeClass_LONG:
-        value = * reinterpret_cast< const sal_Int32 * >( &rAny.pReserved );
+        value = * reinterpret_cast< const sal_Int32 * >( rAny.pData );
         return sal_True;
     case typelib_TypeClass_UNSIGNED_LONG:
-        value = * reinterpret_cast< const sal_uInt32 * >( &rAny.pReserved );
+        value = * reinterpret_cast< const sal_uInt32 * >( rAny.pData );
         return sal_True;
     case typelib_TypeClass_HYPER:
     case typelib_TypeClass_UNSIGNED_HYPER:
-        value = * reinterpret_cast< const sal_Int64 * >(
-            (sizeof(void *) >= sizeof(sal_Int64)) ? (void *)&rAny.pReserved : rAny.pData );
+        value = * reinterpret_cast< const sal_Int64 * >( rAny.pData );
         return sal_True;
-
     default:
         return sal_False;
     }
@@ -398,26 +396,24 @@ inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt64 & value ) S
     switch (rAny.pType->eTypeClass)
     {
     case typelib_TypeClass_BYTE:
-        value = * reinterpret_cast< const sal_Int8 * >( &rAny.pReserved );
+        value = * reinterpret_cast< const sal_Int8 * >( rAny.pData );
         return sal_True;
     case typelib_TypeClass_SHORT:
-        value = * reinterpret_cast< const sal_Int16 * >( &rAny.pReserved );
+        value = * reinterpret_cast< const sal_Int16 * >( rAny.pData );
         return sal_True;
     case typelib_TypeClass_UNSIGNED_SHORT:
-        value = * reinterpret_cast< const sal_uInt16 * >( &rAny.pReserved );
+        value = * reinterpret_cast< const sal_uInt16 * >( rAny.pData );
         return sal_True;
     case typelib_TypeClass_LONG:
-        value = * reinterpret_cast< const sal_Int32 * >( &rAny.pReserved );
+        value = * reinterpret_cast< const sal_Int32 * >( rAny.pData );
         return sal_True;
     case typelib_TypeClass_UNSIGNED_LONG:
-        value = * reinterpret_cast< const sal_uInt32 * >( &rAny.pReserved );
+        value = * reinterpret_cast< const sal_uInt32 * >( rAny.pData );
         return sal_True;
     case typelib_TypeClass_HYPER:
     case typelib_TypeClass_UNSIGNED_HYPER:
-        value = * reinterpret_cast< const sal_uInt64 * >(
-            (sizeof(void *) >= sizeof(sal_uInt64)) ? (void *)&rAny.pReserved : rAny.pData );
+        value = * reinterpret_cast< const sal_uInt64 * >( rAny.pData );
         return sal_True;
-
     default:
         return sal_False;
     }
@@ -429,19 +425,17 @@ inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, float & value ) SAL_TH
     switch (rAny.pType->eTypeClass)
     {
     case typelib_TypeClass_BYTE:
-        value = * reinterpret_cast< const sal_Int8 * >( &rAny.pReserved );
+        value = * reinterpret_cast< const sal_Int8 * >( rAny.pData );
         return sal_True;
     case typelib_TypeClass_SHORT:
-        value = * reinterpret_cast< const sal_Int16 * >( &rAny.pReserved );
+        value = * reinterpret_cast< const sal_Int16 * >( rAny.pData );
         return sal_True;
     case typelib_TypeClass_UNSIGNED_SHORT:
-        value = * reinterpret_cast< const sal_uInt16 * >( &rAny.pReserved );
+        value = * reinterpret_cast< const sal_uInt16 * >( rAny.pData );
         return sal_True;
     case typelib_TypeClass_FLOAT:
-        value = * reinterpret_cast< const float * >(
-            (sizeof(void *) >= sizeof(float)) ? (void *)&rAny.pReserved : rAny.pData );
+        value = * reinterpret_cast< const float * >( rAny.pData );
         return sal_True;
-
     default:
         return sal_False;
     }
@@ -453,29 +447,26 @@ inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, double & value ) SAL_T
     switch (rAny.pType->eTypeClass)
     {
     case typelib_TypeClass_BYTE:
-        value = * reinterpret_cast< const sal_Int8 * >( &rAny.pReserved );
+        value = * reinterpret_cast< const sal_Int8 * >( rAny.pData );
         return sal_True;
     case typelib_TypeClass_SHORT:
-        value = * reinterpret_cast< const sal_Int16 * >( &rAny.pReserved );
+        value = * reinterpret_cast< const sal_Int16 * >( rAny.pData );
         return sal_True;
     case typelib_TypeClass_UNSIGNED_SHORT:
-        value = * reinterpret_cast< const sal_uInt16 * >( &rAny.pReserved );
+        value = * reinterpret_cast< const sal_uInt16 * >( rAny.pData );
         return sal_True;
     case typelib_TypeClass_LONG:
-        value = * reinterpret_cast< const sal_Int32 * >( &rAny.pReserved );
+        value = * reinterpret_cast< const sal_Int32 * >( rAny.pData );
         return sal_True;
     case typelib_TypeClass_UNSIGNED_LONG:
-        value = * reinterpret_cast< const sal_uInt32 * >( &rAny.pReserved );
+        value = * reinterpret_cast< const sal_uInt32 * >( rAny.pData );
         return sal_True;
     case typelib_TypeClass_FLOAT:
-        value = * reinterpret_cast< const float * >(
-            (sizeof(void *) >= sizeof(float)) ? (void *)&rAny.pReserved : rAny.pData );
+        value = * reinterpret_cast< const float * >( rAny.pData );
         return sal_True;
     case typelib_TypeClass_DOUBLE:
-        value = * reinterpret_cast< const double * >(
-            (sizeof(void *) >= sizeof(double)) ? (void *)&rAny.pReserved : rAny.pData );
+        value = * reinterpret_cast< const double * >( rAny.pData );
         return sal_True;
-
     default:
         return sal_False;
     }
@@ -486,7 +477,7 @@ inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, ::rtl::OUString & valu
 {
     if (typelib_TypeClass_STRING == rAny.pType->eTypeClass)
     {
-        value = * reinterpret_cast< const ::rtl::OUString * >( &rAny.pReserved );
+        value = * reinterpret_cast< const ::rtl::OUString * >( rAny.pData );
         return sal_True;
     }
     return sal_False;
@@ -495,7 +486,7 @@ inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, ::rtl::OUString & valu
 inline sal_Bool SAL_CALL operator == ( const Any & rAny, const ::rtl::OUString & value ) SAL_THROW( () )
 {
     return (typelib_TypeClass_STRING == rAny.pType->eTypeClass &&
-            value.equals( * reinterpret_cast< const ::rtl::OUString * >( &rAny.pReserved ) ));
+            value.equals( * reinterpret_cast< const ::rtl::OUString * >( rAny.pData ) ));
 }
 // type
 //__________________________________________________________________________________________________
@@ -503,7 +494,7 @@ inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, Type & value ) SAL_THR
 {
     if (typelib_TypeClass_TYPE == rAny.pType->eTypeClass)
     {
-        value = * reinterpret_cast< const Type * >( &rAny.pReserved );
+        value = * reinterpret_cast< const Type * >( rAny.pData );
         return sal_True;
     }
     return sal_False;
@@ -512,7 +503,7 @@ inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, Type & value ) SAL_THR
 inline sal_Bool SAL_CALL operator == ( const Any & rAny, const Type & value ) SAL_THROW( () )
 {
     return (typelib_TypeClass_TYPE == rAny.pType->eTypeClass &&
-            value.equals( * reinterpret_cast< const Type * >( &rAny.pReserved ) ));
+            value.equals( * reinterpret_cast< const Type * >( rAny.pData ) ));
 }
 // any
 //__________________________________________________________________________________________________
@@ -532,7 +523,7 @@ inline sal_Bool SAL_CALL operator == ( const Any & rAny, const BaseReference & v
 {
     if (typelib_TypeClass_INTERFACE == rAny.pType->eTypeClass)
     {
-        return reinterpret_cast< const BaseReference * >( &rAny.pReserved )->operator == ( value );
+        return reinterpret_cast< const BaseReference * >( rAny.pData )->operator == ( value );
     }
     return sal_False;
 }

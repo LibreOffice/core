@@ -455,7 +455,7 @@ void SAL_CALL PropertyObject::implGetProperties( uno_Sequence **ppReturnValue )
     ProtocolProperty *pElements = (ProtocolProperty * ) ( *ppReturnValue )->elements;
     Properties *pP = m_pLocalSetting;
 
-    assignToIdl( &(pElements[PROPERTY_BRIDGEID]),PROPERTY_BRIDGEID, *(Sequence< sal_Int8 > *)&(pP->seqBridgeID) );
+    assignToIdl( &(pElements[PROPERTY_BRIDGEID]),PROPERTY_BRIDGEID, toUnoSequence(pP->seqBridgeID) );
     assignToIdl( &(pElements[PROPERTY_TYPECACHESIZE]),PROPERTY_TYPECACHESIZE,pP->nTypeCacheSize );
     assignToIdl( &(pElements[PROPERTY_OIDCACHESIZE]),PROPERTY_OIDCACHESIZE, pP->nOidCacheSize );
     assignToIdl( &(pElements[PROPERTY_TIDCACHESIZE]),PROPERTY_TIDCACHESIZE, pP->nTidCacheSize );
