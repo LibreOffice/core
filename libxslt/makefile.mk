@@ -56,7 +56,8 @@ PATCH_FILES=libxslt-configure.patch \
             libxslt-win_manifest.patch \
             libxslt-mingw.patch \
             libxslt-internal-symbols.patch \
-            libxslt-aix.patch
+            libxslt-aix.patch \
+            libxslt-vc10.patch
 
 # This is only for UNX environment now
 .IF "$(OS)"=="WNT"

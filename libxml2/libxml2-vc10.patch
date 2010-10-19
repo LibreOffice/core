@@ -1,0 +1,15 @@
+--- misc/build/libxml2-2.7.6/win32/Makefile.msvc.old	2010-09-20 20:22:41.500000000 +0200
++++ misc/build/libxml2-2.7.6/win32/Makefile.msvc	2010-09-20 20:23:00.250000000 +0200
+@@ -91,8 +91,12 @@
+ LDFLAGS = $(LDFLAGS) /DEBUG
+ !else
+ CFLAGS = $(CFLAGS) /D "NDEBUG" /O2 
++!if "$(_NMAKE_VER)" >= "10.00.30319.01"
++LDFLAGS = $(LDFLAGS)
++!else
+ LDFLAGS = $(LDFLAGS) /OPT:NOWIN98
+ !endif
++!endif
+ 
+ # Libxml object files.
+ XML_OBJS = $(XML_INTDIR)\c14n.obj\

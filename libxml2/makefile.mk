@@ -52,7 +52,8 @@ PATCH_FILES=libxml2-configure.patch \
             libxml2-mingw.patch \
             libxml2-gnome599717.patch \
             libxml2-global-symbols.patch \
-            libxml2-aix.patch
+            libxml2-aix.patch \
+            libxml2-vc10.patch
 
 # This is only for UNX environment now
 
