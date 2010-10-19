@@ -206,7 +206,7 @@ RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Uninstall_Sta
     ModuleID = gid_Module_Root;
     Subkey = "Software\Microsoft\Windows\CurrentVersion\Uninstall\%PRODUCTNAME %PRODUCTVERSION";
     Name = "HelpLink";
-    Value = "http://www.documentfoundation.org";
+    Value = "http://www.libreoffice.org";
 End
 
 RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Uninstall_Staroffice_Modifypath
@@ -238,7 +238,7 @@ RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Uninstall_Sta
     ModuleID = gid_Module_Root;
     Subkey = "Software\Microsoft\Windows\CurrentVersion\Uninstall\%PRODUCTNAME %PRODUCTVERSION";
     Name = "URLInfoAbout";
-    Value = "http://www.documentfoundation.org/";
+    Value = "http://www.libreoffice.org/";
 End
 
 RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Uninstall_Staroffice_Urlupdateinfo

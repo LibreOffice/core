@@ -1230,7 +1230,7 @@ ProfileItem gid_Brand_Profileitem_Version_Extensionupdateurl
     Section = "Version";
     Order = 18;
     Key = "ExtensionUpdateURL";
-    Value = "http://updateexte.services.openoffice.org/ExtensionUpdateService/check.Update";
+    Value = "http://updateexte.libreoffice.org/ExtensionUpdateService/check.Update";
 End
 
 ProfileItem gid_Brand_Profileitem_Fundamental_Brand_Base_Dir

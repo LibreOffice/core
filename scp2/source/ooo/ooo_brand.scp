@@ -46,7 +46,7 @@ ProfileItem gid_Brand_Profileitem_Bootstrap_Errorreport_Server
     Order = 8;
     Key = "ErrorReportServer";
   #if defined(BUILD_SPECIAL)
-    Value = "report.services.openoffice.org";
+    Value = "report.libreoffice.org";
   #else
     Value = "";
   #endif
