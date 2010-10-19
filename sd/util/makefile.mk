@@ -266,6 +266,36 @@ SHL5STDLIBS = $(ISDLIB) \
               $(COMPHELPERLIB)    \
               $(I18NISOLANGLIB)
 
+# pptx export library
+SHL6TARGET    = pptx$(DLLPOSTFIX)
+SHL6IMPLIB    = pptxi
+SHL6VERSIONMAP= pptx.map
+SHL6DEF       = $(MISC)$/$(SHL6TARGET).def
+SHL6LIBS      = $(SLB)$/pptx.lib
+SHL6DEPN      = $(SHL1TARGETN)
+DEF6NAME      = $(SHL6TARGET)
+
+SHL6STDLIBS = $(ISDLIB) \
+              $(SVXCORELIB)       \
+              $(SVXMSFILTERLIB)   \
+              $(SFX2LIB)          \
+              $(SVTOOLLIB)        \
+              $(SOTLIB)           \
+              $(GOODIESLIB)       \
+              $(VCLLIB)           \
+              $(SVLLIB)           \
+              $(SOTLIB)           \
+              $(UNOTOOLSLIB)      \
+              $(TOOLSLIB)         \
+              $(UCBHELPERLIB)     \
+              $(CPPUHELPERLIB)    \
+              $(CPPULIB)          \
+              $(SALLIB)           \
+              $(COMPHELPERLIB)    \
+              $(I18NISOLANGLIB)   \
+              $(OOXLIB)           \
+              $(SAXLIB)
+
 # --- Targets -------------------------------------------------------------
 
 .INCLUDE :  target.mk
