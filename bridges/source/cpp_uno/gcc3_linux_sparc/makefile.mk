@@ -43,6 +43,10 @@ ENABLE_EXCEPTIONS=TRUE
 CFLAGS += -DLEAK_STATIC_DATA
 .ENDIF
 
+# In case someone enabled the non-standard -fomit-frame-pointer which does not
+# # work with the .cxx sources in this directory:
+CFLAGSCXX += -fno-omit-frame-pointer -fno-strict-aliasing
+
 CFLAGSNOOPT=-O0
 
 NOOPTFILES = \

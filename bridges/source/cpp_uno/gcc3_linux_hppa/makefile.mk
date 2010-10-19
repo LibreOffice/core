@@ -45,7 +45,7 @@ NO_BSYMBOLIC=TRUE
 CFLAGS += -DLEAK_STATIC_DATA
 .ENDIF
 
-CFLAGSCXX += -fno-omit-frame-pointer 
+CFLAGSCXX += -fno-omit-frame-pointer -fno-strict-aliasing
 
 NOOPTFILES= \
     $(SLO)$/cpp2uno.obj \
