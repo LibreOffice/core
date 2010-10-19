@@ -2303,7 +2303,7 @@ VCLXDialog::~VCLXDialog()
 ::com::sun::star::uno::Any VCLXDialog::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( ::com::sun::star::document::XVbaMethodParameter*, this ), //liuchen 2009-6-23
+                                        SAL_STATIC_CAST( ::com::sun::star::document::XVbaMethodParameter*, this ),
                                         SAL_STATIC_CAST( ::com::sun::star::awt::XDialog2*, this ),
                                         SAL_STATIC_CAST( ::com::sun::star::awt::XDialog*, this ) );
     return (aRet.hasValue() ? aRet : VCLXTopWindow::queryInterface( rType ));
@@ -2311,7 +2311,7 @@ VCLXDialog::~VCLXDialog()
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXDialog )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::document::XVbaMethodParameter>* ) NULL ), //liuchen 2009-6-23
+    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::document::XVbaMethodParameter>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDialog2>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDialog>* ) NULL ),
     VCLXTopWindow::getTypes()
@@ -2422,7 +2422,6 @@ void SAL_CALL VCLXDialog::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::s
     return aInfo;
 }
 
-//liuchen 2009-7-22
 // ::com::sun::star::document::XVbaMethodParameter
 void SAL_CALL VCLXDialog::setVbaMethodParameter(
     const ::rtl::OUString& PropertyName,
@@ -2444,7 +2443,7 @@ throw(::com::sun::star::uno::RuntimeException)
 }
 
 ::com::sun::star::uno::Any SAL_CALL VCLXDialog::getVbaMethodParameter(
-    const ::rtl::OUString& PropertyName )
+    const ::rtl::OUString& /*PropertyName*/ )
 throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
@@ -2452,10 +2451,6 @@ throw(::com::sun::star::uno::RuntimeException)
     ::com::sun::star::uno::Any aRet;
     return aRet;
 }
-//liuchen 2009-7-22
-
-
-
 
 void SAL_CALL VCLXDialog::setProperty(
     const ::rtl::OUString& PropertyName,
