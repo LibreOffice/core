@@ -1330,7 +1330,10 @@ void DrawingML::WritePresetShape( const char* pShape, MSO_SPT eShapeType, sal_Bo
     mpFS->startElementNS( XML_a, XML_avLst, FSEND );
 
     Sequence< drawing::EnhancedCustomShapeAdjustmentValue > aAdjustmentSeq;
-    if ( rProp.Value >>= aAdjustmentSeq ) {
+    if ( ( rProp.Value >>= aAdjustmentSeq )
+     && eShapeType != mso_sptActionButtonForwardNext  // we have adjustments values for these type of shape, but MSO doesn't like them
+     && eShapeType != mso_sptActionButtonBackPrevious // so they are now disabled
+    ) {
         DBG(printf("adj seq len: %d\n", int( aAdjustmentSeq.getLength() )));
         if ( bPredefinedHandlesUsed )
             EscherPropertyContainer::LookForPolarHandles( eShapeType, nAdjustmentsWhichNeedsToBeConverted );
