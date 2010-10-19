@@ -111,7 +111,10 @@ CFLAGSDEBUG=-g
 CFLAGSDBGUTIL=
 # Compiler flags for enabling optimizations
 .IF "$(PRODUCT)"!=""
-CFLAGSOPT=$(CDEFAULTOPT) -fno-strict-aliasing		# optimizing for products
+CFLAGSOPT=$(CDEFAULTOPT) # optimizing for products
+.IF "$(USE_SYSTEM_STL)"!="YES"
+CFLAGSOPT+=-fno-strict-aliasing #STLPort headers are full of aliasing warnings
+.ENDIF
 .ELSE 	# "$(PRODUCT)"!=""
 CFLAGSOPT=   							# no optimizing for non products
 .ENDIF	# "$(PRODUCT)"!=""
