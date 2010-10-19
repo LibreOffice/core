@@ -25,6 +25,7 @@
 #include <com/sun/star/animations/XAnimateSet.hpp>
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
+#include <com/sun/star/animations/XTransitionFilter.hpp>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -607,6 +608,9 @@ void PowerPointExport::WriteAnimateTo( FSHelperPtr pFS, Any aValue, const OUStri
 
 void PowerPointExport::WriteAnimationAttributeName( FSHelperPtr pFS, const OUString& rAttributeName )
 {
+    if( ! rAttributeName.getLength() )
+    return;
+
     pFS->startElementNS( XML_p, XML_attrNameLst, FSEND );
 
     DBG(printf("write attribute name: %s\n", USS( rAttributeName )));
@@ -648,9 +652,9 @@ void PowerPointExport::WriteAnimationNodeAnimate( FSHelperPtr pFS, const Referen
 
     const char* pCalcMode = NULL;
     const char* pValueType = NULL;
-    const char* pAdditive = NULL;
+    sal_Bool bSimple = ( nXmlNodeType != XML_anim );
 
-    if( nXmlNodeType == XML_anim ) {
+    if( !bSimple ) {
     switch( rXAnimate->getCalcMode() ) {
         case AnimationCalcMode::DISCRETE:
         pCalcMode = "discrete";
@@ -671,7 +675,25 @@ void PowerPointExport::WriteAnimationNodeAnimate( FSHelperPtr pFS, const Referen
         pValueType = "clr";
         break;
     }
+    }
 
+    pFS->startElementNS( XML_p, nXmlNodeType,
+             XML_calcmode, pCalcMode,
+             XML_valueType, pValueType,
+             FSEND );
+    WriteAnimationNodeAnimateInside( pFS, rXNode, bMainSeqChild, bSimple );
+    pFS->endElementNS( XML_p, nXmlNodeType );
+}
+
+void PowerPointExport::WriteAnimationNodeAnimateInside( FSHelperPtr pFS, const Reference< XAnimationNode >& rXNode, sal_Bool bMainSeqChild, sal_Bool bSimple )
+{
+    Reference< XAnimate > rXAnimate( rXNode, UNO_QUERY );
+    if( !rXAnimate.is() )
+    return;
+
+    const char* pAdditive = NULL;
+
+    if( !bSimple ) {
     switch( rXAnimate->getAdditive() ) {
         case AnimationAdditiveMode::BASE:
         pAdditive = "base";
@@ -691,10 +713,6 @@ void PowerPointExport::WriteAnimationNodeAnimate( FSHelperPtr pFS, const Referen
     }
     }
 
-    pFS->startElementNS( XML_p, nXmlNodeType,
-             XML_calcmode, pCalcMode,
-             XML_valueType, pValueType,
-             FSEND );
     pFS->startElementNS( XML_p, XML_cBhvr,
              XML_additive, pAdditive,
              FSEND );
@@ -704,7 +722,6 @@ void PowerPointExport::WriteAnimationNodeAnimate( FSHelperPtr pFS, const Referen
     pFS->endElementNS( XML_p, XML_cBhvr );
     WriteAnimateValues( pFS, rXAnimate );
     WriteAnimateTo( pFS, rXAnimate->getTo(), rXAnimate->getAttributeName() );
-    pFS->endElementNS( XML_p, nXmlNodeType );
 }
 
 void PowerPointExport::WriteAnimationCondition( FSHelperPtr pFS, const char* pDelay, const char* pEvent, double fDelay, sal_Bool bHasFDelay )
@@ -1014,6 +1031,25 @@ void PowerPointExport::WriteAnimationNodeSeq( FSHelperPtr pFS, const Reference< 
     pFS->endElementNS( XML_p, XML_seq );
 }
 
+void PowerPointExport::WriteAnimationNodeEffect( FSHelperPtr pFS, const Reference< XAnimationNode >& rXNode, sal_Int32, sal_Bool bMainSeqChild )
+{
+    DBG(printf ("write animation node FILTER\n"));
+
+    Reference< XTransitionFilter > xFilter( rXNode, UNO_QUERY );
+    if ( xFilter.is() ) {
+    const char* pFilter = ppt::AnimationExporter::FindTransitionName( xFilter->getTransition(), xFilter->getSubtype(), xFilter->getDirection() );
+    const char* pDirection = xFilter->getDirection() ? "in" : "out";
+    pFS->startElementNS( XML_p, XML_animEffect,
+                 XML_filter, pFilter,
+                 XML_transition, pDirection,
+                 FSEND );
+
+    WriteAnimationNodeAnimateInside( pFS, rXNode, bMainSeqChild, FALSE );
+
+    pFS->endElementNS( XML_p, XML_animEffect );
+    }
+}
+
 void PowerPointExport::WriteAnimationNode( FSHelperPtr pFS, const Reference< XAnimationNode >& rXNode, sal_Bool bMainSeqChild )
 {
     DBG(printf ("export node type: %d\n", rXNode->getType()));
@@ -1036,8 +1072,9 @@ void PowerPointExport::WriteAnimationNode( FSHelperPtr pFS, const Reference< XAn
         xmlNodeType = XML_set;
         pMethod = &PowerPointExport::WriteAnimationNodeAnimate;
         break;
-//  case AnimationNodeType::TRANSITIONFILTER:
-//      xmlNodeType = XML_xfrm;
+    case AnimationNodeType::TRANSITIONFILTER:
+        xmlNodeType = XML_animEffect;
+        pMethod = &PowerPointExport::WriteAnimationNodeEffect;
         break;
     }
 

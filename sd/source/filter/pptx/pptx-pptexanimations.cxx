@@ -243,7 +243,7 @@ sal_uInt32 AnimationExporter::TranslatePresetSubType( const sal_uInt32 nPresetCl
     return nPresetSubType;
 }
 
-const sal_Char* transition::find( const sal_Int16 nType, const sal_Int16 nSubType, const sal_Bool bDirection )
+const sal_Char* AnimationExporter::FindTransitionName( const sal_Int16 nType, const sal_Int16 nSubType, const sal_Bool bDirection )
 {
     const sal_Char* pRet = NULL;
     int                nFit = 0;
@@ -1943,7 +1943,7 @@ void AnimationExporter::exportTransitionFilter( SvStream& rStrm, const Reference
             rStrm << nBits
                   << nTransition;
         }
-        const sal_Char* pFilter = transition::find( xFilter->getTransition(), xFilter->getSubtype(), xFilter->getDirection() );
+        const sal_Char* pFilter = FindTransitionName( xFilter->getTransition(), xFilter->getSubtype(), xFilter->getDirection() );
         if ( pFilter )
         {
             const OUString aStr( OUString::createFromAscii( pFilter ) );

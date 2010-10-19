@@ -142,6 +142,8 @@ public:
         static sal_uInt32 TranslatePresetSubType( const sal_uInt32 nPresetClass, const sal_uInt32 nPresetId, const rtl::OUString& rPresetSubType );
         static sal_uInt32 GetPresetID( const rtl::OUString& rPreset, sal_uInt32 nAPIPresetClass, sal_Bool& bPresetId );
         static sal_uInt32 GetValueTypeForAttributeName( const rtl::OUString& rAttributeName );
+
+    static const sal_Char* FindTransitionName( const sal_Int16 nType, const sal_Int16 nSubType, const sal_Bool bDirection );
 };
 } // namespace ppt
 
