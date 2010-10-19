@@ -245,3 +245,16 @@
      T_FileStream_writeLine(makefile, tmp);
  
      if(o->hadStdin == FALSE) { /* shortcut */
+--- misc/build/icu/source/test/intltest/dtifmtts.cpp.old	2010-09-20 20:49:33.953125000 +0200
++++ misc/build/icu/source/test/intltest/dtifmtts.cpp	2010-09-20 20:51:37.875000000 +0200
+@@ -13,8 +13,9 @@
+ //FIXME: define it in compiler flag
+ //#define DTIFMTTS_DEBUG 1
+ 
+-
++#if defined (_MSC_VER) && (_MSC_VER < 1600)
+ #include <iostream>
++#endif
+ #ifdef DTIFMTTS_DEBUG 
+ #endif
+
