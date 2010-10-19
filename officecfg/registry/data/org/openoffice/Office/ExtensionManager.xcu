@@ -29,7 +29,7 @@
 <oor:component-data xmlns:oor="http://openoffice.org/2001/registry" oor:name="ExtensionManager" oor:package="org.openoffice.Office">
   <node oor:name="ExtensionRepositories">
     <prop oor:name="WebsiteLink">
-      <value>http://extensions.documentfoundation.org/</value>
+      <value>http://extensions.libreoffice.org/</value>
     </prop>
   </node>
 </oor:component-data>

@@ -40,7 +40,7 @@
         <info>
           <desc>the url where additional infomation can be found.</desc>
         </info>
-        <value>http://wiki.services.openoffice.org/wiki/User_Experience/OpenOffice.org_User_Feedback_Program</value>
+        <value>http://wiki.documentfoundation.org/UX/LibreOffice_User_Feedback_Program</value>
       </prop>
     </group>
     <group oor:name="Counters">
@@ -74,7 +74,7 @@
         <info>
           <desc>the url where reports get send to.</desc>
         </info>
-        <value>http://report.services.openoffice.org:80/soap/servlet/rpcrouter</value>
+        <value>http://report.libreoffice.org:80/soap/servlet/rpcrouter</value>
       </prop>
       <prop oor:name="SoapIdAdditions" oor:type="xs:string">
         <info>
