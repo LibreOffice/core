@@ -33,6 +33,8 @@
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
+#include <com/sun/star/xml/dom/XDocument.hpp>
+#include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/presentation/XPresentationPage.hpp>
@@ -231,8 +233,17 @@ void PresentationFragmentHandler::endDocument() throw (SAXException, RuntimeExce
                                 {
                                     oox::drawingml::ThemePtr pThemePtr( new oox::drawingml::Theme() );
                                     pMasterPersistPtr->setTheme( pThemePtr );
-                                    rFilter.importFragment( new ThemeFragmentHandler( rFilter, aThemeFragmentPath, *pThemePtr ) );
+                                    Reference<xml::dom::XDocument> xDoc=
+                                        rFilter.importFragment(aThemeFragmentPath);
+
+                                    rFilter.importFragment(
+                                        new ThemeFragmentHandler(
+                                            rFilter, aThemeFragmentPath, *pThemePtr ),
+                                        Reference<xml::sax::XFastSAXSerializable>(
+                                            xDoc,
+                                            UNO_QUERY_THROW));
                                     rThemes[ aThemeFragmentPath ] = pThemePtr;
+                                    pThemePtr->setFragment(xDoc);
                                 }
                                 else
                                 {

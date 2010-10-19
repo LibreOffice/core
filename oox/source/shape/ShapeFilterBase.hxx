@@ -58,7 +58,7 @@ public:
     /** Has to be implemented by each filter to return TableStyles. */
     virtual const ::oox::drawingml::table::TableStyleListPtr getTableStyles();
 
-    virtual ::oox::drawingml::chart::ChartConverter& getChartConverter();
+    virtual ::oox::drawingml::chart::ChartConverter* getChartConverter();
 
     virtual rtl::OUString implGetImplementationName() const;
 

@@ -58,6 +58,8 @@ extern uno::Reference< uno::XInterface > SAL_CALL className##_createInstance(   
 namespace oox {
     namespace core { SERVICE( FilterDetect ); }
     namespace ppt { SERVICE( PowerPointImport ); }
+    namespace ppt { SERVICE( QuickDiagrammingImport ); }
+    namespace ppt { SERVICE( QuickDiagrammingLayout ); }
     namespace xls { SERVICE( BiffDetector ); }
     namespace xls { SERVICE( ExcelFilter ); }
     namespace xls { SERVICE( ExcelBiffFilter ); }
@@ -101,6 +103,8 @@ OOX_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo( void * , void * pRegistryKe
 
             WRITEINFO( ::oox::core::FilterDetect );
             WRITEINFO( ::oox::ppt::PowerPointImport );
+            WRITEINFO( ::oox::ppt::QuickDiagrammingImport );
+            WRITEINFO( ::oox::ppt::QuickDiagrammingLayout );
             WRITEINFO( ::oox::xls::BiffDetector );
             WRITEINFO( ::oox::xls::ExcelFilter );
             WRITEINFO( ::oox::xls::ExcelBiffFilter );
@@ -149,6 +153,8 @@ OOX_DLLPUBLIC void * SAL_CALL component_getFactory( const sal_Char * pImplName, 
 
         SINGLEFACTORY( ::oox::core::FilterDetect )
         else SINGLEFACTORY( oox::ppt::PowerPointImport )
+        else SINGLEFACTORY( oox::ppt::QuickDiagrammingImport )
+        else SINGLEFACTORY( oox::ppt::QuickDiagrammingLayout )
         else SINGLEFACTORY( ::oox::xls::BiffDetector )
         else SINGLEFACTORY( ::oox::xls::ExcelFilter )
         else SINGLEFACTORY( ::oox::xls::ExcelBiffFilter )

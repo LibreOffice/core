@@ -32,7 +32,9 @@
 #include "oox/core/namespaces.hxx"
 #include "oox/drawingml/diagram/diagram.hxx"
 #include "oox/drawingml/shapecontext.hxx"
+#include "oox/drawingml/customshapeproperties.hxx"
 #include "diagramdefinitioncontext.hxx"
+#include "constraintlistcontext.hxx"
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
@@ -47,15 +49,9 @@ class IfContext
 public:
     IfContext( ContextHandler& rParent,
                const Reference< XFastAttributeList >& xAttribs,
-               const LayoutAtomPtr & pNode )
-        : LayoutNodeContext( rParent, xAttribs, pNode )
-        {
-            ConditionAtomPtr pAtom( boost::dynamic_pointer_cast< ConditionAtom >(pNode) );
-            OSL_ENSURE( pAtom, "Must pass a ConditionAtom" );
-
-            pAtom->iterator().loadFromXAttr( xAttribs );
-            pAtom->cond().loadFromXAttr( xAttribs );
-        }
+               const ConditionAtomPtr& pAtom )
+        : LayoutNodeContext( rParent, xAttribs, pAtom )
+    {}
 };
 
 
@@ -64,21 +60,47 @@ class AlgorithmContext
     : public ContextHandler
 {
 public:
-    AlgorithmContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs, const LayoutAtomPtr & pNode )
+    AlgorithmContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs, const AlgAtomPtr & pNode )
         : ContextHandler( rParent )
         , mnRevision( 0 )
-        , mnType( 0 )
         , mpNode( pNode )
         {
             AttributeList aAttribs( xAttribs );
             mnRevision = aAttribs.getInteger( XML_rev, 0 );
-            mnType = xAttribs->getOptionalValueToken( XML_type, 0 );
+            pNode->setType(xAttribs->getOptionalValueToken(XML_type, 0));
+        }
+
+    virtual Reference< XFastContextHandler > SAL_CALL
+    createFastChildContext( ::sal_Int32 aElement,
+                            const Reference< XFastAttributeList >& xAttribs )
+        throw (SAXException, RuntimeException)
+        {
+            Reference< XFastContextHandler > xRet;
+
+            switch( getToken(aElement) )
+            {
+                case XML_param:
+                {
+                    AttributeList aAttribs( xAttribs );
+                    const sal_Int32 nValTok=aAttribs.getToken( XML_val, 0 );
+                    mpNode->addParam(
+                        aAttribs.getToken( XML_type, 0 ),
+                        nValTok>0 ? nValTok : aAttribs.getInteger( XML_val, 0 ) );
+                    break;
+                }
+                default:
+                    break;
+            }
+
+            if( !xRet.is() )
+                xRet.set(this);
+
+            return xRet;
         }
 
 private:
-    sal_Int32     mnRevision;
-    sal_Int32     mnType;
-    LayoutAtomPtr mpNode;
+    sal_Int32  mnRevision;
+    AlgAtomPtr mpNode;
 };
 
 
@@ -88,7 +110,6 @@ class ChooseContext
 public:
     ChooseContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs, const LayoutAtomPtr & pNode )
         : ContextHandler( rParent )
-        , mbHasElse( false )
         , mpNode( pNode )
         {
             msName = xAttribs->getOptionalValue( XML_name );
@@ -101,24 +122,23 @@ public:
         {
             Reference< XFastContextHandler > xRet;
 
-            switch( aElement )
+            switch( getToken(aElement) )
             {
             case XML_if:
             {
                 // CT_When
-                LayoutAtomPtr pAtom( new ConditionAtom( false ) );
-                mpNode->addChild( pAtom );
-                xRet.set( new IfContext( *this, xAttribs, pAtom ) );
+                mpConditionNode.reset( new ConditionAtom(xAttribs) );
+                mpNode->addChild( mpConditionNode );
+                xRet.set( new IfContext( *this, xAttribs, mpConditionNode ) );
                 break;
             }
             case XML_else:
                 // CT_Otherwise
-                if( !mbHasElse )
+                if( mpConditionNode )
                 {
-                    LayoutAtomPtr pAtom( new ConditionAtom( true ) );
-                    mpNode->addChild( pAtom );
-                    xRet.set( new IfContext( *this, xAttribs, pAtom ) );
-                    mbHasElse = true;
+                    mpConditionNode->readElseBranch();
+                    xRet.set( new IfContext( *this, xAttribs, mpConditionNode ) );
+                    mpConditionNode.reset();
                 }
                 else
                 {
@@ -135,9 +155,9 @@ public:
             return xRet;
         }
 private:
-    bool     mbHasElse;
     OUString msName;
     LayoutAtomPtr mpNode;
+    ConditionAtomPtr mpConditionNode;
 };
 
 
@@ -147,13 +167,10 @@ class ForEachContext
     : public LayoutNodeContext
 {
 public:
-    ForEachContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs, const LayoutAtomPtr & pNode )
-        : LayoutNodeContext( rParent, xAttribs, pNode )
+    ForEachContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs, const ForEachAtomPtr& pAtom )
+        : LayoutNodeContext( rParent, xAttribs, pAtom )
         {
-            ForEachAtomPtr pAtom( boost::dynamic_pointer_cast< ForEachAtom >(pNode) );
-            OSL_ENSURE( pAtom, "Must pass a ForEachAtom" );
             xAttribs->getOptionalValue( XML_ref );
-
             pAtom->iterator().loadFromXAttr( xAttribs );
         }
 };
@@ -197,17 +214,12 @@ private:
 // CT_LayoutNode
 LayoutNodeContext::LayoutNodeContext( ContextHandler& rParent,
                                       const Reference< XFastAttributeList >& xAttribs,
-                                      const LayoutAtomPtr &pNode )
+                                      const LayoutAtomPtr& pAtom )
     : ContextHandler( rParent )
-    , mpNode( pNode )
+    , mpNode( pAtom )
 {
-    OSL_ENSURE( pNode, "Node must NOT be NULL" );
+    OSL_ENSURE( pAtom, "Node must NOT be NULL" );
     mpNode->setName( xAttribs->getOptionalValue( XML_name ) );
-    // TODO shall we even bother?
-    // b or t
-//  sal_Int32 nChOrder = xAttributes->getOptionalValueToken( XML_chOrder, XML_b );
-//  OUString sMoveWith = xAttributes->getOptionalValue( XML_moveWith );
-//  OUString sStyleLbl = xAttributes->getOptionalValue( XML_styleLbl );
 }
 
 
@@ -228,33 +240,33 @@ void SAL_CALL LayoutNodeContext::endFastElement( ::sal_Int32 )
 sal_Int32 LayoutNodeContext::tagToVarIdx( sal_Int32 aTag )
 {
     sal_Int32 nIdx = -1;
-    switch( aTag )
+    switch( aTag & ~NMSP_DIAGRAM )
     {
-    case NMSP_DIAGRAM|XML_animLvl:
+    case XML_animLvl:
         nIdx = LayoutNode::VAR_animLvl;
         break;
-    case NMSP_DIAGRAM|XML_animOne:
+    case XML_animOne:
         nIdx = LayoutNode::VAR_animOne;
         break;
-    case NMSP_DIAGRAM|XML_bulletEnabled:
+    case XML_bulletEnabled:
         nIdx = LayoutNode::VAR_bulletEnabled;
         break;
-    case NMSP_DIAGRAM|XML_chMax:
+    case XML_chMax:
         nIdx = LayoutNode::VAR_chMax;
         break;
-    case NMSP_DIAGRAM|XML_chPref:
+    case XML_chPref:
         nIdx = LayoutNode::VAR_chPref;
         break;
-    case NMSP_DIAGRAM|XML_dir:
+    case XML_dir:
         nIdx = LayoutNode::VAR_dir;
         break;
-    case NMSP_DIAGRAM|XML_hierBranch:
+    case XML_hierBranch:
         nIdx = LayoutNode::VAR_hierBranch;
         break;
-    case NMSP_DIAGRAM|XML_orgChart:
+    case XML_orgChart:
         nIdx = LayoutNode::VAR_orgChart;
         break;
-    case NMSP_DIAGRAM|XML_resizeHandles:
+    case XML_resizeHandles:
         nIdx = LayoutNode::VAR_resizeHandles;
         break;
     default:
@@ -277,13 +289,39 @@ LayoutNodeContext::createFastChildContext( ::sal_Int32 aElement,
     {
         LayoutNodePtr pNode( new LayoutNode() );
         mpNode->addChild( pNode );
+        pNode->setChildOrder( xAttribs->getOptionalValueToken( XML_chOrder, XML_b ) );
+        pNode->setMoveWith( xAttribs->getOptionalValue( XML_moveWith ) );
+        pNode->setStyleLabel( xAttribs->getOptionalValue( XML_styleLbl ) );
         xRet.set( new LayoutNodeContext( *this, xAttribs, pNode ) );
         break;
     }
     case NMSP_DIAGRAM|XML_shape:
     {
-        ShapePtr pShape( new Shape() );
-        xRet.set( new ShapeContext( *this, ShapePtr(), pShape ) );
+        LayoutNodePtr pNode( boost::dynamic_pointer_cast< LayoutNode >( mpNode ) );
+        if( pNode )
+        {
+            ShapePtr pShape;
+
+            if( xAttribs->hasAttribute( XML_type ) )
+            {
+                pShape.reset( new Shape("com.sun.star.drawing.CustomShape") );
+                const sal_Int32 nType(xAttribs->getOptionalValueToken( XML_type, XML_obj ));
+                pShape->setSubType( nType );
+                pShape->getCustomShapeProperties()->setShapePresetType(
+                    GetShapePresetType( nType ) );
+            }
+            else
+            {
+                pShape.reset( new Shape("com.sun.star.drawing.GroupShape") );
+            }
+
+            pNode->setShape( pShape );
+            xRet.set( new ShapeContext( *this, ShapePtr(), pShape ) );
+        }
+        else
+        {
+            OSL_TRACE( "OOX: encountered a shape in a non layoutNode context" );
+        }
         break;
     }
     case NMSP_DIAGRAM|XML_extLst:
@@ -291,7 +329,7 @@ LayoutNodeContext::createFastChildContext( ::sal_Int32 aElement,
     case NMSP_DIAGRAM|XML_alg:
     {
         // CT_Algorithm
-        LayoutAtomPtr pAtom( new AlgAtom );
+        AlgAtomPtr pAtom( new AlgAtom );
         mpNode->addChild( pAtom );
         xRet.set( new AlgorithmContext( *this, xAttribs, pAtom ) );
         break;
@@ -307,14 +345,14 @@ LayoutNodeContext::createFastChildContext( ::sal_Int32 aElement,
     case NMSP_DIAGRAM|XML_forEach:
     {
         // CT_ForEach
-        LayoutAtomPtr pAtom( new ForEachAtom );
+        ForEachAtomPtr pAtom( new ForEachAtom(xAttribs) );
         mpNode->addChild( pAtom );
         xRet.set( new ForEachContext( *this, xAttribs, pAtom ) );
         break;
     }
     case NMSP_DIAGRAM|XML_constrLst:
         // CT_Constraints
-        // TODO
+        xRet.set( new ConstraintListContext( *this, xAttribs, mpNode ) );
         break;
     case NMSP_DIAGRAM|XML_presOf:
     {

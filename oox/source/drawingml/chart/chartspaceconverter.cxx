@@ -71,9 +71,12 @@ ChartSpaceConverter::~ChartSpaceConverter()
 
 void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExternalPage, const Point& rChartPos )
 {
+    if( !getChartConverter() )
+        return;
+
     /*  create data provider (virtual function in the ChartConverter class,
         derived converters may create an external data provider) */
-    getChartConverter().createDataProvider( getChartDocument() );
+    getChartConverter()->createDataProvider( getChartDocument() );
 
     // attach number formatter of container document to data receiver
     try

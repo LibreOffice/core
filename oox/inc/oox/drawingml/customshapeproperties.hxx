@@ -124,6 +124,7 @@ public:
             const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > & xPropSet,
                         const ::com::sun::star::uno::Reference < ::com::sun::star::drawing::XShape > & xShape) const;
 
+    const rtl::OUString& getShapePresetType() const { return maShapePresetType; }
     void setShapePresetType( const rtl::OUString& rShapePresetType ){ maShapePresetType = rShapePresetType; };
 
     std::vector< CustomShapeGuide >&    getAdjustmentGuideList(){ return maAdjustmentGuideList; };

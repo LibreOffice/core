@@ -114,6 +114,7 @@ void BulletList::setSuffixMinusRight()
 
 void BulletList::setType( sal_Int32 nType )
 {
+    OSL_ASSERT((nType & sal_Int32(0xFFFF0000))==0);
 //  OSL_TRACE( "OOX: set list numbering type %d", nType);
     switch( nType )
     {

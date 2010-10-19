@@ -68,7 +68,7 @@ public:
     virtual const ::oox::drawingml::Theme* getCurrentTheme() const;
     virtual ::oox::vml::Drawing* getVmlDrawing();
     virtual const ::oox::drawingml::table::TableStyleListPtr getTableStyles();
-    virtual ::oox::drawingml::chart::ChartConverter& getChartConverter();
+    virtual ::oox::drawingml::chart::ChartConverter* getChartConverter();
 
     virtual sal_Bool SAL_CALL filter( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rDescriptor ) throw( ::com::sun::star::uno::RuntimeException );
 

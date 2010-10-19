@@ -56,7 +56,7 @@ public:
     virtual const ::oox::drawingml::Theme* getCurrentTheme() const;
     virtual ::oox::vml::Drawing* getVmlDrawing();
     virtual const oox::drawingml::table::TableStyleListPtr getTableStyles();
-    virtual ::oox::drawingml::chart::ChartConverter& getChartConverter();
+    virtual ::oox::drawingml::chart::ChartConverter* getChartConverter();
 
     void                                                    setActualSlidePersist( SlidePersistPtr pActualSlidePersist ){ mpActualSlidePersist = pActualSlidePersist; };
     std::map< rtl::OUString, oox::drawingml::ThemePtr >&    getThemes(){ return maThemes; };

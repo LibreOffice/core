@@ -29,7 +29,7 @@
 #define OOX_DRAWINGML_DIAGRAMDEFINITIONCONTEXT_HXX
 
 #include "oox/core/contexthandler.hxx"
-#include "oox/drawingml/diagram/diagram.hxx"
+#include "diagram.hxx"
 
 namespace oox { namespace drawingml {
 

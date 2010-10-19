@@ -61,9 +61,9 @@ const ::oox::drawingml::table::TableStyleListPtr ShapeFilterBase::getTableStyles
     return ::oox::drawingml::table::TableStyleListPtr();
 }
 
-::oox::drawingml::chart::ChartConverter& ShapeFilterBase::getChartConverter()
+::oox::drawingml::chart::ChartConverter* ShapeFilterBase::getChartConverter()
 {
-    return *mxChartConv;
+    return mxChartConv.get();
 }
 
 ::rtl::OUString ShapeFilterBase::implGetImplementationName() const

@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#include "oox/drawingml/diagram/datamodelcontext.hxx"
+#include "datamodelcontext.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/core/namespaces.hxx"
 #include "oox/drawingml/fillpropertiesgroupcontext.hxx"
@@ -42,60 +42,15 @@ namespace oox { namespace drawingml {
 
 
 
-// CL_Cxn
-class CxnContext
-    : public ContextHandler
-{
-public:
-    CxnContext( ContextHandler& rParent,
-                const Reference< XFastAttributeList >& xAttribs,
-                const dgm::ConnectionPtr & pConnection )
-        : ContextHandler( rParent )
-        , mpConnection( pConnection )
-        {
-            sal_Int32 nType = xAttribs->getOptionalValueToken( XML_type, XML_parOf );
-            pConnection->mnType = nType;
-            pConnection->msModelId = xAttribs->getOptionalValue( XML_modelId );
-            pConnection->msSourceId = xAttribs->getOptionalValue( XML_srcId );
-            pConnection->msDestId  = xAttribs->getOptionalValue( XML_destId );
-            pConnection->msPresId  = xAttribs->getOptionalValue( XML_presId );
-            pConnection->msSibTransId  = xAttribs->getOptionalValue( XML_sibTransId );
-            AttributeList attribs( xAttribs );
-            pConnection->mnSourceOrder = attribs.getInteger( XML_srcOrd, 0 );
-            pConnection->mnDestOrder = attribs.getInteger( XML_destOrd, 0 );
-        }
-
-    virtual Reference< XFastContextHandler > SAL_CALL
-    createFastChildContext( sal_Int32 aElementToken,
-                            const Reference< XFastAttributeList >& /*xAttribs*/ )
-        throw (SAXException, RuntimeException)
-        {
-            Reference< XFastContextHandler > xRet;
-
-            switch( aElementToken )
-            {
-            case NMSP_DIAGRAM|XML_extLst:
-                return xRet;
-            default:
-                break;
-            }
-            if( !xRet.is() )
-                xRet.set( this );
-            return xRet;
-        }
-private:
-    dgm::ConnectionPtr mpConnection;
-};
-
-
 // CT_CxnList
 class CxnListContext
     : public ContextHandler
 {
 public:
-    CxnListContext( ContextHandler& rParent,  dgm::Connections & aConnections )
+    CxnListContext( ContextHandler& rParent,
+                    dgm::Connections & aConnections )
         : ContextHandler( rParent )
-        , maConnections( aConnections )
+        , mrConnections( aConnections )
         {
         }
     virtual Reference< XFastContextHandler > SAL_CALL
@@ -109,10 +64,23 @@ public:
             {
             case NMSP_DIAGRAM|XML_cxn:
             {
-                dgm::ConnectionPtr pConnection( new dgm::Connection() );
-                maConnections.push_back( pConnection );
-                xRet.set( new CxnContext( *this, xAttribs, pConnection ) );
-                break;
+                mrConnections.push_back( dgm::Connection() );
+                dgm::Connection& rConnection=mrConnections.back();
+
+                const sal_Int32 nType = xAttribs->getOptionalValueToken( XML_type, XML_parOf );
+                rConnection.mnType = nType;
+                rConnection.msModelId = xAttribs->getOptionalValue( XML_modelId );
+                rConnection.msSourceId = xAttribs->getOptionalValue( XML_srcId );
+                rConnection.msDestId  = xAttribs->getOptionalValue( XML_destId );
+                rConnection.msPresId  = xAttribs->getOptionalValue( XML_presId );
+                rConnection.msSibTransId  = xAttribs->getOptionalValue( XML_sibTransId );
+                rConnection.msParTransId  = xAttribs->getOptionalValue( XML_parTransId );
+                const AttributeList attribs( xAttribs );
+                rConnection.mnSourceOrder = attribs.getInteger( XML_srcOrd, 0 );
+                rConnection.mnDestOrder = attribs.getInteger( XML_destOrd, 0 );
+
+                // skip CT_extLst
+                return xRet;
             }
             default:
                 break;
@@ -123,9 +91,145 @@ public:
         }
 
 private:
-    dgm::Connections  & maConnections;
+    dgm::Connections& mrConnections;
 };
 
+
+// CT_presLayoutVars
+class PresLayoutVarsContext
+    : public ContextHandler
+{
+public:
+    PresLayoutVarsContext( ContextHandler& rParent,
+                           dgm::Point & rPoint ) :
+        ContextHandler( rParent ),
+        mrPoint( rPoint )
+    {
+    }
+    virtual Reference< XFastContextHandler > SAL_CALL
+    createFastChildContext( sal_Int32 aElementToken,
+                            const Reference< XFastAttributeList >& xAttribs )
+        throw (SAXException, RuntimeException)
+        {
+            Reference< XFastContextHandler > xRet;
+            AttributeList aAttribs( xAttribs );
+
+            switch( aElementToken )
+            {
+                // TODO
+            case NMSP_DIAGRAM|XML_animLvl:
+            case NMSP_DIAGRAM|XML_animOne:
+                break;
+            case NMSP_DIAGRAM|XML_bulletEnabled:
+                mrPoint.mbBulletEnabled = aAttribs.getBool( XML_val, false );
+                break;
+            case NMSP_DIAGRAM|XML_chMax:
+                mrPoint.mnMaxChildren = aAttribs.getInteger( XML_val, -1 );
+                break;
+            case NMSP_DIAGRAM|XML_chPref:
+                mrPoint.mnPreferredChildren = aAttribs.getInteger( XML_val, -1 );
+                break;
+            case NMSP_DIAGRAM|XML_dir:
+                mrPoint.mnDirection = aAttribs.getToken( XML_val, XML_norm );
+                break;
+            case NMSP_DIAGRAM|XML_hierBranch:
+                mrPoint.mnHierarchyBranch = aAttribs.getToken( XML_val, XML_std );
+                break;
+            case NMSP_DIAGRAM|XML_orgChart:
+                mrPoint.mbOrgChartEnabled = aAttribs.getBool( XML_val, false );
+                break;
+            case NMSP_DIAGRAM|XML_resizeHandles:
+                mrPoint.mnResizeHandles = aAttribs.getToken( XML_val, XML_rel );
+                break;
+            default:
+                break;
+            }
+            if( !xRet.is() )
+                xRet.set( this );
+            return xRet;
+        }
+
+private:
+    dgm::Point& mrPoint;
+};
+
+
+// CT_prSet
+class PropertiesContext
+    : public ContextHandler
+{
+public:
+    PropertiesContext( ContextHandler& rParent,
+                       dgm::Point & rPoint,
+                       const Reference< XFastAttributeList >& xAttribs ) :
+        ContextHandler( rParent ),
+        mrPoint( rPoint )
+    {
+        OUString aEmptyStr;
+        AttributeList aAttribs( xAttribs );
+
+        mrPoint.msColorTransformCategoryId = aAttribs.getString( XML_csCatId, aEmptyStr );
+        mrPoint.msColorTransformTypeId = aAttribs.getString( XML_csTypeId, aEmptyStr );
+        mrPoint.msLayoutCategoryId = aAttribs.getString( XML_loCatId, aEmptyStr );
+        mrPoint.msLayoutTypeId = aAttribs.getString( XML_loTypeId, aEmptyStr );
+        mrPoint.msPlaceholderText = aAttribs.getString( XML_phldrT, aEmptyStr );
+        mrPoint.msPresentationAssociationId = aAttribs.getString( XML_presAssocID, aEmptyStr );
+        mrPoint.msPresentationLayoutName = aAttribs.getString( XML_presName, aEmptyStr );
+        mrPoint.msPresentationLayoutStyleLabel = aAttribs.getString( XML_presStyleLbl, aEmptyStr );
+        mrPoint.msQuickStyleCategoryId = aAttribs.getString( XML_qsCatId, aEmptyStr );
+        mrPoint.msQuickStyleTypeId = aAttribs.getString( XML_qsTypeId, aEmptyStr );
+
+        mrPoint.mnCustomAngle = aAttribs.getInteger( XML_custAng, -1 );
+        mrPoint.mnPercentageNeighbourWidth = aAttribs.getInteger( XML_custLinFactNeighborX, -1 );
+        mrPoint.mnPercentageNeighbourHeight = aAttribs.getInteger( XML_custLinFactNeighborY, -1 );
+        mrPoint.mnPercentageOwnWidth = aAttribs.getInteger( XML_custLinFactX, -1 );
+        mrPoint.mnPercentageOwnHeight = aAttribs.getInteger( XML_custLinFactY, -1 );
+        mrPoint.mnIncludeAngleScale = aAttribs.getInteger( XML_custRadScaleInc, -1 );
+        mrPoint.mnRadiusScale = aAttribs.getInteger( XML_custRadScaleRad, -1 );
+        mrPoint.mnWidthScale = aAttribs.getInteger( XML_custScaleX, -1 );
+        mrPoint.mnHeightScale = aAttribs.getInteger( XML_custScaleY, -1 );
+        mrPoint.mnWidthOverride = aAttribs.getInteger( XML_custSzX, -1 );
+        mrPoint.mnHeightOverride = aAttribs.getInteger( XML_custSzY, -1 );
+        mrPoint.mnLayoutStyleCount = aAttribs.getInteger( XML_presStyleCnt, -1 );
+        mrPoint.mnLayoutStyleIndex = aAttribs.getInteger( XML_presStyleIdx, -1 );
+
+        mrPoint.mbCoherent3DOffset = aAttribs.getBool( XML_coherent3DOff, false );
+        mrPoint.mbCustomHorizontalFlip = aAttribs.getBool( XML_custFlipHor, false );
+        mrPoint.mbCustomVerticalFlip = aAttribs.getBool( XML_custFlipVert, false );
+        mrPoint.mbCustomText = aAttribs.getBool( XML_custT, false );
+        mrPoint.mbIsPlaceholder = aAttribs.getBool( XML_phldr, false );
+    }
+    virtual Reference< XFastContextHandler > SAL_CALL
+    createFastChildContext( sal_Int32 aElementToken,
+                            const Reference< XFastAttributeList >& )
+        throw (SAXException, RuntimeException)
+        {
+            Reference< XFastContextHandler > xRet;
+
+            switch( aElementToken )
+            {
+            case NMSP_DIAGRAM|XML_presLayoutVars:
+            {
+                xRet.set( new PresLayoutVarsContext( *this, mrPoint ) );
+                break;
+            }
+            case NMSP_DIAGRAM|XML_style:
+            {
+                // TODO
+                // skip CT_shapeStyle
+                return xRet;
+            }
+            default:
+                break;
+            }
+            if( !xRet.is() )
+                xRet.set( this );
+            return xRet;
+        }
+
+private:
+    dgm::Point& mrPoint;
+};
 
 
 // CL_Pt
@@ -135,27 +239,25 @@ class PtContext
 public:
     PtContext( ContextHandler& rParent,
                const Reference< XFastAttributeList >& xAttribs,
-               const dgm::PointPtr & pPoint)
-        : ContextHandler( rParent )
-        , mpPoint( pPoint )
-        {
-            mpPoint->setModelId( xAttribs->getOptionalValue( XML_modelId ) );
-            //
-            // the default type is XML_node
-            sal_Int32 nType  = xAttribs->getOptionalValueToken( XML_type, XML_node );
-            mpPoint->setType( nType );
+               dgm::Point & rPoint):
+        ContextHandler( rParent ),
+        mrPoint( rPoint )
+    {
+        mrPoint.msModelId = xAttribs->getOptionalValue( XML_modelId );
 
-            // ignore the cxnId unless it is this type. See 5.15.3.1.3 in Primer
-            if( ( nType == XML_parTrans ) || ( nType == XML_sibTrans ) )
-            {
-                mpPoint->setCnxId( xAttribs->getOptionalValue( XML_cxnId ) );
-            }
-        }
+        // the default type is XML_node
+        const sal_Int32 nType  = xAttribs->getOptionalValueToken( XML_type, XML_node );
+        mrPoint.mnType = nType;
+
+        // ignore the cxnId unless it is this type. See 5.15.3.1.3 in Primer
+        if( ( nType == XML_parTrans ) || ( nType == XML_sibTrans ) )
+            mrPoint.msCnxId = xAttribs->getOptionalValue( XML_cxnId );
+    }
 
 
     virtual Reference< XFastContextHandler > SAL_CALL
     createFastChildContext( sal_Int32 aElementToken,
-                            const Reference< XFastAttributeList >& /*xAttribs*/ )
+                            const Reference< XFastAttributeList >& xAttribs )
         throw (SAXException, RuntimeException)
         {
             Reference< XFastContextHandler > xRet;
@@ -165,18 +267,22 @@ public:
             case NMSP_DIAGRAM|XML_extLst:
                 return xRet;
             case NMSP_DIAGRAM|XML_prSet:
-                // TODO
-                // CT_ElemPropSet
+                OSL_TRACE( "diagram property set for point");
+                xRet = new PropertiesContext( *this, mrPoint, xAttribs );
                 break;
             case NMSP_DIAGRAM|XML_spPr:
                 OSL_TRACE( "shape props for point");
-                xRet = new ShapePropertiesContext( *this, *mpPoint->getShape() );
+                if( !mrPoint.mpShape )
+                    mrPoint.mpShape.reset( new Shape() );
+                xRet = new ShapePropertiesContext( *this, *(mrPoint.mpShape) );
                 break;
             case NMSP_DIAGRAM|XML_t:
             {
                 OSL_TRACE( "shape text body for point");
                 TextBodyPtr xTextBody( new TextBody );
-                mpPoint->getShape()->setTextBody( xTextBody );
+                if( !mrPoint.mpShape )
+                    mrPoint.mpShape.reset( new Shape() );
+                mrPoint.mpShape->setTextBody( xTextBody );
                 xRet = new TextBodyContext( *this, *xTextBody );
                 break;
             }
@@ -189,7 +295,7 @@ public:
         }
 
 private:
-    dgm::PointPtr mpPoint;
+    dgm::Point& mrPoint;
 };
 
 
@@ -199,11 +305,10 @@ class PtListContext
     : public ContextHandler
 {
 public:
-    PtListContext( ContextHandler& rParent,  dgm::Points & aPoints)
-        : ContextHandler( rParent )
-        , maPoints( aPoints )
-        {
-        }
+    PtListContext( ContextHandler& rParent,  dgm::Points& rPoints) :
+        ContextHandler( rParent ),
+        mrPoints( rPoints )
+    {}
     virtual Reference< XFastContextHandler > SAL_CALL
     createFastChildContext( sal_Int32 aElementToken,
                             const Reference< XFastAttributeList >& xAttribs )
@@ -216,9 +321,8 @@ public:
             case NMSP_DIAGRAM|XML_pt:
             {
                 // CT_Pt
-                dgm::PointPtr pPoint( new dgm::Point() );
-                maPoints.push_back( pPoint );
-                xRet.set( new PtContext( *this, xAttribs, pPoint ) );
+                mrPoints.push_back( dgm::Point() );
+                xRet.set( new PtContext( *this, xAttribs, mrPoints.back() ) );
                 break;
             }
             default:
@@ -230,7 +334,7 @@ public:
         }
 
 private:
-    dgm::Points  & maPoints;
+    dgm::Points& mrPoints;
 };
 
 // CT_BackgroundFormatting

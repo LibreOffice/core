@@ -203,7 +203,7 @@ public:
     /** Returns the converter for string to cell address/range conversion. */
     inline AddressConverter& getAddressConverter() const { return *mxAddrConverter; }
     /** Returns the chart object converter. */
-    inline ExcelChartConverter& getChartConverter() const { return *mxChartConverter; }
+    inline ExcelChartConverter* getChartConverter() const { return mxChartConverter.get(); }
     /** Returns the page/print settings converter. */
     inline PageSettingsConverter& getPageSettingsConverter() const { return *mxPageSettConverter; }
 
@@ -894,7 +894,7 @@ AddressConverter& WorkbookHelper::getAddressConverter() const
     return mrBookData.getAddressConverter();
 }
 
-ExcelChartConverter& WorkbookHelper::getChartConverter() const
+ExcelChartConverter* WorkbookHelper::getChartConverter() const
 {
     return mrBookData.getChartConverter();
 }

@@ -29,7 +29,8 @@
 #define OOX_DRAWINGML_LAYOUTNODECONTEXT_HXX
 
 #include "oox/core/contexthandler.hxx"
-#include "oox/drawingml/diagram/diagram.hxx"
+#include "diagramlayoutatoms.hxx"
+#include "diagram.hxx"
 
 namespace oox { namespace drawingml {
 
