@@ -154,9 +154,9 @@ void Components::initSingleton(
 {
     OSL_ASSERT(context.is());
     if (!singletonCreated) {
-        singletonCreated = true;
         static Components theSingleton(context);
         singleton = &theSingleton;
+        singletonCreated = true;
     }
 }
 
