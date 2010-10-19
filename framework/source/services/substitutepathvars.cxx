@@ -718,12 +718,24 @@ rtl::OUString SubstitutePathVariables::GetWorkPath() const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::GetWorkPath" );
     rtl::OUString aWorkPath;
-    ::comphelper::ConfigurationHelper::readDirectKey(
+
+    try
+    {
+        ::comphelper::ConfigurationHelper::readDirectKey(
                             m_xServiceManager,
                             ::rtl::OUString::createFromAscii("org.openoffice.Office.Paths"),
                             ::rtl::OUString::createFromAscii("Paths/Work"),
                             ::rtl::OUString::createFromAscii("WritePath"),
                             ::comphelper::ConfigurationHelper::E_READONLY) >>= aWorkPath;
+    }
+    catch(RuntimeException &)
+    {
+    }
+
+    // fallback in case config layer does not return an useable work dir value.
+    if (aWorkPath.getLength() < 1)
+        aWorkPath = GetWorkVariableValue();
+
     return aWorkPath;
 }
 
@@ -731,12 +743,19 @@ rtl::OUString SubstitutePathVariables::GetWorkVariableValue() const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::GetWorkVariableValue" );
     ::rtl::OUString aWorkPath;
-    ::comphelper::ConfigurationHelper::readDirectKey(
+
+    try
+    {
+        ::comphelper::ConfigurationHelper::readDirectKey(
                             m_xServiceManager,
                             ::rtl::OUString::createFromAscii("org.openoffice.Office.Paths"),
                             ::rtl::OUString::createFromAscii("Variables"),
                             ::rtl::OUString::createFromAscii("Work"),
                             ::comphelper::ConfigurationHelper::E_READONLY) >>= aWorkPath;
+    }
+    catch(RuntimeException &)
+    {
+    }
 
     // fallback to $HOME in  case platform dependend config layer does not return
     // an usuable work dir value.

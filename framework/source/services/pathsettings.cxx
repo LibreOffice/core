@@ -223,17 +223,21 @@ void PathSettings::impl_readAll()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "PathSettings::impl_readAll" );
     RTL_LOGFILE_CONTEXT(aLog, "framework (as96863) ::PathSettings::load config (all)");
 
-    // TODO think about me
-    css::uno::Reference< css::container::XNameAccess > xCfg    = fa_getCfgNew();
-    css::uno::Sequence< ::rtl::OUString >              lPaths = xCfg->getElementNames();
-
-    sal_Int32 c = lPaths.getLength();
-    sal_Int32 i = 0;
-
-    for (i=0; i<c; ++i)
+    try
     {
-        const ::rtl::OUString& sPath = lPaths[i];
-        impl_updatePath(sPath, sal_False);
+        // TODO think about me
+        css::uno::Reference< css::container::XNameAccess > xCfg    = fa_getCfgNew();
+        css::uno::Sequence< ::rtl::OUString >              lPaths = xCfg->getElementNames();
+
+        sal_Int32 c = lPaths.getLength();
+        for (sal_Int32 i = 0; i < c; ++i)
+        {
+            const ::rtl::OUString& sPath = lPaths[i];
+            impl_updatePath(sPath, sal_False);
+        }
+    }
+    catch(const css::uno::RuntimeException& )
+    {
     }
 
     impl_rebuildPropertyDescriptor();
