@@ -44,21 +44,21 @@ PROJECTPCHSOURCE=cont_pch
 EXCEPTIONSFILES=\
             $(SLO)$/contentenumeration.obj	\
             $(SLO)$/fileview.obj	\
-            $(SLO)$/svlbox.obj		\
-            $(SLO)$/svtabbx.obj		\
-            $(SLO)$/svimpbox.obj	\
-            $(SLO)$/templwin.obj
-
-SLOFILES=   $(EXCEPTIONSFILES) \
-            $(SLO)$/svicnvw.obj		\
-            $(SLO)$/svimpicn.obj	\
-            $(SLO)$/treelist.obj	\
-            $(SLO)$/svlbitm.obj		\
-            $(SLO)$/svtreebx.obj	\
             $(SLO)$/imivctl1.obj	\
             $(SLO)$/imivctl2.obj	\
             $(SLO)$/ivctrl.obj		\
+            $(SLO)$/svicnvw.obj		\
+            $(SLO)$/svimpbox.obj	\
+            $(SLO)$/svimpicn.obj	\
+            $(SLO)$/svlbitm.obj		\
+            $(SLO)$/svlbox.obj		\
+            $(SLO)$/svtabbx.obj		\
+            $(SLO)$/svtreebx.obj	\
+            $(SLO)$/templwin.obj	\
             $(SLO)$/tooltiplbox.obj
+
+SLOFILES=   $(EXCEPTIONSFILES) \
+            $(SLO)$/treelist.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES =\

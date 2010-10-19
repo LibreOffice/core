@@ -49,26 +49,32 @@ SRC1FILES=		filedlg2.src	\
 
 
 EXCEPTIONSFILES=	$(SLO)$/addresstemplate.obj	\
-                    $(SLO)$/insdlg.obj       \
-                    $(SLO)$/roadmapwizard.obj 	\
-                    $(SLO)$/printdlg.obj \
-                    $(SLO)$/wizardmachine.obj
-
-
-SLOFILES=	\
-                    $(SLO)$/insdlg.obj       \
-                    $(SLO)$/roadmapwizard.obj 	\
-                    $(SLO)$/wizardmachine.obj 	\
-                    $(SLO)$/addresstemplate.obj 	\
-                    $(SLO)$/filedlg.obj 	\
-                    $(SLO)$/filedlg2.obj	\
-                    $(SLO)$/prnsetup.obj	\
-                    $(SLO)$/printdlg.obj	\
                     $(SLO)$/colctrl.obj 	\
                     $(SLO)$/colrdlg.obj 	\
+                    $(SLO)$/filedlg.obj 	\
+                    $(SLO)$/filedlg2.obj	\
+                    $(SLO)$/insdlg.obj		\
+                    $(SLO)$/printdlg.obj	\
+                    $(SLO)$/prnsetup.obj	\
                     $(SLO)$/property.obj	\
-                    $(SLO)$/wizdlg.obj		\
-                    $(SLO)$/mcvmath.obj
+                    $(SLO)$/roadmapwizard.obj 	\
+                    $(SLO)$/wizardmachine.obj 	\
+                    $(SLO)$/wizdlg.obj
+
+SLOFILES=	\
+                    $(SLO)$/addresstemplate.obj \
+                    $(SLO)$/colctrl.obj 	\
+                    $(SLO)$/colrdlg.obj 	\
+                    $(SLO)$/filedlg.obj 	\
+                    $(SLO)$/filedlg2.obj	\
+                    $(SLO)$/insdlg.obj		\
+                    $(SLO)$/mcvmath.obj		\
+                    $(SLO)$/printdlg.obj	\
+                    $(SLO)$/prnsetup.obj	\
+                    $(SLO)$/property.obj	\
+                    $(SLO)$/roadmapwizard.obj 	\
+                    $(SLO)$/wizardmachine.obj 	\
+                    $(SLO)$/wizdlg.obj
 
 # --- Targets ------------------------------------------------------
 

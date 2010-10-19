@@ -41,17 +41,17 @@ SRS1NAME=$(TARGET)
 SRC1FILES=		editbrowsebox.src
 
 EXCEPTIONSFILES =\
-            $(SLO)$/editbrowsebox2.obj		\
-            $(SLO)$/brwbox1.obj				\
-            $(SLO)$/brwbox3.obj
+            $(SLO)$/brwbox1.obj			\
+            $(SLO)$/brwbox2.obj			\
+            $(SLO)$/brwbox3.obj			\
+            $(SLO)$/brwhead.obj			\
+            $(SLO)$/datwin.obj			\
+            $(SLO)$/ebbcontrols.obj		\
+            $(SLO)$/editbrowsebox.obj		\
+            $(SLO)$/editbrowsebox2.obj
 
 SLOFILES=   \
-            $(EXCEPTIONSFILES)			\
-            $(SLO)$/ebbcontrols.obj		\
-            $(SLO)$/editbrowsebox.obj	\
-            $(SLO)$/brwbox2.obj			\
-            $(SLO)$/brwhead.obj			\
-            $(SLO)$/datwin.obj
+            $(EXCEPTIONSFILES)
 
 
 # --- Targets -------------------------------------------------------

@@ -46,23 +46,32 @@ SRC1FILES= strings.src			\
           dlgepng.src			\
           dlgejpg.src
 
-SLOFILES= $(SLO)$/filter.obj				\
-          $(SLO)$/filter2.obj				\
-          $(SLO)$/dlgexpor.obj				\
+SLOFILES= \
+          $(SLO)$/FilterConfigCache.obj			\
+          $(SLO)$/FilterConfigItem.obj			\
+          $(SLO)$/SvFilterOptionsDialog.obj		\
           $(SLO)$/dlgejpg.obj				\
           $(SLO)$/dlgepng.obj				\
+          $(SLO)$/dlgexpor.obj				\
+          $(SLO)$/filter.obj				\
+          $(SLO)$/filter2.obj				\
           $(SLO)$/sgfbram.obj				\
           $(SLO)$/sgvmain.obj				\
-          $(SLO)$/sgvtext.obj				\
           $(SLO)$/sgvspln.obj				\
-          $(SLO)$/FilterConfigItem.obj		\
-          $(SLO)$/FilterConfigCache.obj		\
-          $(SLO)$/SvFilterOptionsDialog.obj
+          $(SLO)$/sgvtext.obj
 
-EXCEPTIONSNOOPTFILES=	$(SLO)$/filter.obj				\
-                        $(SLO)$/FilterConfigItem.obj	\
-                        $(SLO)$/FilterConfigCache.obj	\
-                        $(SLO)$/SvFilterOptionsDialog.obj
+EXCEPTIONSNOOPTFILES=	\
+          $(SLO)$/FilterConfigCache.obj			\
+          $(SLO)$/FilterConfigItem.obj			\
+          $(SLO)$/SvFilterOptionsDialog.obj		\
+          $(SLO)$/dlgejpg.obj				\
+          $(SLO)$/dlgepng.obj				\
+          $(SLO)$/dlgexpor.obj				\
+          $(SLO)$/filter.obj				\
+          $(SLO)$/filter2.obj				\
+          $(SLO)$/sgfbram.obj				\
+          $(SLO)$/sgvmain.obj				\
+          $(SLO)$/sgvtext.obj
 
 LIB1TARGET=		$(SLB)$/$(TARGET).uno.lib
 LIB1OBJFILES=	\
