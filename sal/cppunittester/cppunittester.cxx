@@ -48,7 +48,7 @@
 #include "sal/main.h"
 
 SAL_IMPLEMENT_MAIN() {
-    if (rtl_getAppCommandArgCount() != 1) {
+    if (rtl_getAppCommandArgCount() < 1) {
         std::cerr << "Usage: cppunittester <shared-library-path>" << std::endl;
         return EXIT_FAILURE;
     }
