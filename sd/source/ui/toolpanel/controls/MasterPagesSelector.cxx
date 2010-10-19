@@ -344,34 +344,30 @@ SdPage* MasterPagesSelector::GetSelectedMasterPage (void)
 */
 void MasterPagesSelector::AssignMasterPageToAllSlides (SdPage* pMasterPage)
 {
-    do
+    if (pMasterPage == NULL)
+        return;
+
+    USHORT nPageCount = mrDocument.GetSdPageCount(PK_STANDARD);
+    if (nPageCount == 0)
+        return;
+
+    // Get a list of all pages.  As a little optimization we only
+    // include pages that do not already have the given master page
+    // assigned.
+    String sFullLayoutName (pMasterPage->GetLayoutName());
+    ::sd::slidesorter::SharedPageSelection pPageList (
+        new ::sd::slidesorter::SlideSorterViewShell::PageSelection());
+    for (USHORT nPageIndex=0; nPageIndex<nPageCount; nPageIndex++)
     {
-        if (pMasterPage == NULL)
-            break;
-
-        USHORT nPageCount = mrDocument.GetSdPageCount(PK_STANDARD);
-        if (nPageCount == 0)
-            break;
-
-        // Get a list of all pages.  As a little optimization we only
-        // include pages that do not already have the given master page
-        // assigned.
-        String sFullLayoutName (pMasterPage->GetLayoutName());
-        ::sd::slidesorter::SharedPageSelection pPageList (
-            new ::sd::slidesorter::SlideSorterViewShell::PageSelection());
-        for (USHORT nPageIndex=0; nPageIndex<nPageCount; nPageIndex++)
+        SdPage* pPage = mrDocument.GetSdPage (nPageIndex, PK_STANDARD);
+        if (pPage != NULL
+            && pPage->GetLayoutName().CompareTo(sFullLayoutName)!=0)
         {
-            SdPage* pPage = mrDocument.GetSdPage (nPageIndex, PK_STANDARD);
-            if (pPage != NULL
-                && pPage->GetLayoutName().CompareTo(sFullLayoutName)!=0)
-            {
-                pPageList->push_back (pPage);
-            }
+            pPageList->push_back (pPage);
         }
-
-        AssignMasterPageToPageList(pMasterPage, pPageList);
     }
-    while (false);
+
+    AssignMasterPageToPageList(pMasterPage, pPageList);
 }
 
 
@@ -383,31 +379,26 @@ void MasterPagesSelector::AssignMasterPageToAllSlides (SdPage* pMasterPage)
 void MasterPagesSelector::AssignMasterPageToSelectedSlides (
     SdPage* pMasterPage)
 {
-    do
-    {
-        using namespace ::std;
-        using namespace ::sd::slidesorter;
-        using namespace ::sd::slidesorter::controller;
+    using namespace ::sd::slidesorter;
+    using namespace ::sd::slidesorter::controller;
 
-        if (pMasterPage == NULL)
-            break;
+    if (pMasterPage == NULL)
+        return;
 
-        // Find a visible slide sorter.
-        SlideSorterViewShell* pSlideSorter = SlideSorterViewShell::GetSlideSorter(mrBase);
-        if (pSlideSorter == NULL)
-            break;
+    // Find a visible slide sorter.
+    SlideSorterViewShell* pSlideSorter = SlideSorterViewShell::GetSlideSorter(mrBase);
+    if (pSlideSorter == NULL)
+        return;
 
-        // Get a list of selected pages.
-        ::sd::slidesorter::SharedPageSelection pPageSelection = pSlideSorter->GetPageSelection();
-        if (pPageSelection->empty())
-            break;
+    // Get a list of selected pages.
+    SharedPageSelection pPageSelection = pSlideSorter->GetPageSelection();
+    if (pPageSelection->empty())
+        return;
 
-        AssignMasterPageToPageList(pMasterPage, pPageSelection);
+    AssignMasterPageToPageList(pMasterPage, pPageSelection);
 
-        // Restore the previous selection.
-        pSlideSorter->SetPageSelection(pPageSelection);
-    }
-    while (false);
+    // Restore the previous selection.
+    pSlideSorter->SetPageSelection(pPageSelection);
 }
 
 

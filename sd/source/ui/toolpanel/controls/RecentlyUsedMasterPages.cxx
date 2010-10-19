@@ -188,64 +188,60 @@ void RecentlyUsedMasterPages::LoadPersistentValues (void)
 {
     try
     {
-        do
+        tools::ConfigurationAccess aConfiguration (
+            GetPathToImpressConfigurationRoot(),
+            tools::ConfigurationAccess::READ_ONLY);
+        Reference<container::XNameAccess> xSet (
+            aConfiguration.GetConfigurationNode(GetPathToSetNode()),
+            UNO_QUERY);
+        if ( ! xSet.is())
+            return;
+
+        const String sURLMemberName (OUString::createFromAscii("URL"));
+        const String sNameMemberName (OUString::createFromAscii("Name"));
+        OUString sURL;
+        OUString sName;
+
+        // Read the names and URLs of the master pages.
+        Sequence<OUString> aKeys (xSet->getElementNames());
+        mpMasterPages->clear();
+        mpMasterPages->reserve(aKeys.getLength());
+        for (int i=0; i<aKeys.getLength(); i++)
         {
-            tools::ConfigurationAccess aConfiguration (
-                GetPathToImpressConfigurationRoot(),
-                tools::ConfigurationAccess::READ_ONLY);
-            Reference<container::XNameAccess> xSet (
-                aConfiguration.GetConfigurationNode(GetPathToSetNode()),
-                UNO_QUERY);
-            if ( ! xSet.is())
-                break;
-
-            const String sURLMemberName (OUString::createFromAscii("URL"));
-            const String sNameMemberName (OUString::createFromAscii("Name"));
-            OUString sURL;
-            OUString sName;
-
-            // Read the names and URLs of the master pages.
-            Sequence<OUString> aKeys (xSet->getElementNames());
-            mpMasterPages->clear();
-            mpMasterPages->reserve(aKeys.getLength());
-            for (int i=0; i<aKeys.getLength(); i++)
+            Reference<container::XNameAccess> xSetItem (
+                xSet->getByName(aKeys[i]), UNO_QUERY);
+            if (xSetItem.is())
             {
-                Reference<container::XNameAccess> xSetItem (
-                    xSet->getByName(aKeys[i]), UNO_QUERY);
-                if (xSetItem.is())
-                {
-                    Any aURL (xSetItem->getByName(sURLMemberName));
-                    Any aName (xSetItem->getByName(sNameMemberName));
-                    aURL >>= sURL;
-                    aName >>= sName;
-                    SharedMasterPageDescriptor pDescriptor (new MasterPageDescriptor(
-                        MasterPageContainer::TEMPLATE,
-                        -1,
-                        sURL,
-                        String(),
-                        sName,
-                        false,
-                        ::boost::shared_ptr<PageObjectProvider>(
-                            new TemplatePageObjectProvider(sURL)),
-                        ::boost::shared_ptr<PreviewProvider>(
-                            new TemplatePreviewProvider(sURL))));
-                    // For user supplied templates we use a different
-                    // preview provider: The preview in the document shows
-                    // not only shapes on the master page but also shapes on
-                    // the foreground.  This is misleading and therefore
-                    // these previews are discarded and created directly
-                    // from the page objects.
-                    if (pDescriptor->GetURLClassification() == MasterPageDescriptor::URLCLASS_USER)
-                        pDescriptor->mpPreviewProvider = ::boost::shared_ptr<PreviewProvider>(
-                            new PagePreviewProvider());
-                    MasterPageContainer::Token aToken (mpContainer->PutMasterPage(pDescriptor));
-                    mpMasterPages->push_back(Descriptor(aToken,sURL,sName));
-                }
+                Any aURL (xSetItem->getByName(sURLMemberName));
+                Any aName (xSetItem->getByName(sNameMemberName));
+                aURL >>= sURL;
+                aName >>= sName;
+                SharedMasterPageDescriptor pDescriptor (new MasterPageDescriptor(
+                    MasterPageContainer::TEMPLATE,
+                    -1,
+                    sURL,
+                    String(),
+                    sName,
+                    false,
+                    ::boost::shared_ptr<PageObjectProvider>(
+                        new TemplatePageObjectProvider(sURL)),
+                    ::boost::shared_ptr<PreviewProvider>(
+                        new TemplatePreviewProvider(sURL))));
+                // For user supplied templates we use a different
+                // preview provider: The preview in the document shows
+                // not only shapes on the master page but also shapes on
+                // the foreground.  This is misleading and therefore
+                // these previews are discarded and created directly
+                // from the page objects.
+                if (pDescriptor->GetURLClassification() == MasterPageDescriptor::URLCLASS_USER)
+                    pDescriptor->mpPreviewProvider = ::boost::shared_ptr<PreviewProvider>(
+                        new PagePreviewProvider());
+                MasterPageContainer::Token aToken (mpContainer->PutMasterPage(pDescriptor));
+                mpMasterPages->push_back(Descriptor(aToken,sURL,sName));
             }
-
-            ResolveList();
         }
-        while (false);
+
+        ResolveList();
     }
     catch (Exception&)
     {
@@ -260,58 +256,54 @@ void RecentlyUsedMasterPages::SavePersistentValues (void)
 {
     try
     {
-        do
+        tools::ConfigurationAccess aConfiguration (
+            GetPathToImpressConfigurationRoot(),
+            tools::ConfigurationAccess::READ_WRITE);
+        Reference<container::XNameContainer> xSet (
+            aConfiguration.GetConfigurationNode(GetPathToSetNode()),
+            UNO_QUERY);
+        if ( ! xSet.is())
+            return;
+
+        // Clear the set.
+        Sequence<OUString> aKeys (xSet->getElementNames());
+        sal_Int32 i;
+        for (i=0; i<aKeys.getLength(); i++)
+            xSet->removeByName (aKeys[i]);
+
+        // Fill it with the URLs of this object.
+        const String sURLMemberName (OUString::createFromAscii("URL"));
+        const String sNameMemberName (OUString::createFromAscii("Name"));
+        Any aValue;
+        Reference<lang::XSingleServiceFactory> xChildFactory (
+            xSet, UNO_QUERY);
+        if ( ! xChildFactory.is())
+            return;
+        MasterPageList::const_iterator iDescriptor;
+        sal_Int32 nIndex(0);
+        for (iDescriptor=mpMasterPages->begin();
+                iDescriptor!=mpMasterPages->end();
+                ++iDescriptor,++nIndex)
         {
-            tools::ConfigurationAccess aConfiguration (
-                GetPathToImpressConfigurationRoot(),
-                tools::ConfigurationAccess::READ_WRITE);
-            Reference<container::XNameContainer> xSet (
-                aConfiguration.GetConfigurationNode(GetPathToSetNode()),
-                UNO_QUERY);
-            if ( ! xSet.is())
-                break;
-
-            // Clear the set.
-            Sequence<OUString> aKeys (xSet->getElementNames());
-            sal_Int32 i;
-            for (i=0; i<aKeys.getLength(); i++)
-                xSet->removeByName (aKeys[i]);
-
-            // Fill it with the URLs of this object.
-            const String sURLMemberName (OUString::createFromAscii("URL"));
-            const String sNameMemberName (OUString::createFromAscii("Name"));
-            Any aValue;
-            Reference<lang::XSingleServiceFactory> xChildFactory (
-                xSet, UNO_QUERY);
-            if ( ! xChildFactory.is())
-                break;
-            MasterPageList::const_iterator iDescriptor;
-            sal_Int32 nIndex(0);
-            for (iDescriptor=mpMasterPages->begin();
-                 iDescriptor!=mpMasterPages->end();
-                 ++iDescriptor,++nIndex)
+            // Create new child.
+            OUString sKey (OUString::createFromAscii("index_"));
+            sKey += OUString::valueOf(nIndex);
+            Reference<container::XNameReplace> xChild(
+                xChildFactory->createInstance(), UNO_QUERY);
+            if (xChild.is())
             {
-                // Create new child.
-                OUString sKey (OUString::createFromAscii("index_"));
-                sKey += OUString::valueOf(nIndex);
-                Reference<container::XNameReplace> xChild(
-                    xChildFactory->createInstance(), UNO_QUERY);
-                if (xChild.is())
-                {
-                    xSet->insertByName (sKey, makeAny(xChild));
+                xSet->insertByName (sKey, makeAny(xChild));
 
-                    aValue <<= OUString(iDescriptor->msURL);
-                    xChild->replaceByName (sURLMemberName, aValue);
+                aValue <<= OUString(iDescriptor->msURL);
+                xChild->replaceByName (sURLMemberName, aValue);
 
-                    aValue <<= OUString(iDescriptor->msName);
-                    xChild->replaceByName (sNameMemberName, aValue);
-                }
+                aValue <<= OUString(iDescriptor->msName);
+                xChild->replaceByName (sNameMemberName, aValue);
             }
-
-            // Write the data back to disk.
-            aConfiguration.CommitChanges();
         }
-        while (false);
+
+        // Write the data back to disk.
+        aConfiguration.CommitChanges();
     }
     catch (Exception&)
     {
