@@ -99,7 +99,7 @@ void lclExportBindableAndListSourceBits( Reference< frame::XModel > const & xDoc
                 xConvertor->getPropertyValue( OUSTR("PersistentRepresentation") ) >>= sAddress;
                 OSL_TRACE("**** cell range source list %s",
                     rtl::OUStringToOString( sAddress, RTL_TEXTENCODING_UTF8 ).getStr() );
-                if ( sAddress.getLength() > 0 );
+                if ( sAddress.getLength() > 0 )
                     rModel.addAttribute( OUSTR(XMLNS_DIALOGS_PREFIX ":source-cell-range"), sAddress );
             }
             catch( uno::Exception& )
