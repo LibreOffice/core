@@ -89,50 +89,46 @@ CacheConfiguration::CacheConfiguration (void)
 
     try
     {
-        do
-        {
-            // Obtain access to the configuration.
-            Reference<lang::XMultiServiceFactory> xProvider (
-                ::comphelper::getProcessServiceFactory()->createInstance(
-                    sConfigurationProviderServiceName),
-                UNO_QUERY);
-            if ( ! xProvider.is())
-                break;
+        // Obtain access to the configuration.
+        Reference<lang::XMultiServiceFactory> xProvider (
+            ::comphelper::getProcessServiceFactory()->createInstance(
+                sConfigurationProviderServiceName),
+            UNO_QUERY);
+        if ( ! xProvider.is())
+            return;
 
-            // Obtain access to Impress configuration.
-            Sequence<Any> aCreationArguments(3);
-            aCreationArguments[0] = makeAny(beans::PropertyValue(
-                ::rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("nodepath")),
-                0,
-                makeAny(sPathToImpressConfigurationRoot),
-                beans::PropertyState_DIRECT_VALUE));
-            aCreationArguments[1] = makeAny(beans::PropertyValue(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("depth")),
-                0,
-                makeAny((sal_Int32)-1),
-                beans::PropertyState_DIRECT_VALUE));
-            aCreationArguments[2] = makeAny(beans::PropertyValue(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("lazywrite")),
-                0,
-                makeAny(true),
-                beans::PropertyState_DIRECT_VALUE));
-            ::rtl::OUString sAccessService (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.ConfigurationAccess")));
-            Reference<XInterface> xRoot (xProvider->createInstanceWithArguments(
-                sAccessService, aCreationArguments));
-            if ( ! xRoot.is())
-                break;
-            Reference<container::XHierarchicalNameAccess> xHierarchy (xRoot, UNO_QUERY);
-            if ( ! xHierarchy.is())
-                break;
+        // Obtain access to Impress configuration.
+        Sequence<Any> aCreationArguments(3);
+        aCreationArguments[0] = makeAny(beans::PropertyValue(
+            ::rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM("nodepath")),
+            0,
+            makeAny(sPathToImpressConfigurationRoot),
+            beans::PropertyState_DIRECT_VALUE));
+        aCreationArguments[1] = makeAny(beans::PropertyValue(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("depth")),
+            0,
+            makeAny((sal_Int32)-1),
+            beans::PropertyState_DIRECT_VALUE));
+        aCreationArguments[2] = makeAny(beans::PropertyValue(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("lazywrite")),
+            0,
+            makeAny(true),
+            beans::PropertyState_DIRECT_VALUE));
+        ::rtl::OUString sAccessService (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "com.sun.star.configuration.ConfigurationAccess")));
+        Reference<XInterface> xRoot (xProvider->createInstanceWithArguments(
+            sAccessService, aCreationArguments));
+        if ( ! xRoot.is())
+            return;
+        Reference<container::XHierarchicalNameAccess> xHierarchy (xRoot, UNO_QUERY);
+        if ( ! xHierarchy.is())
+            return;
 
-            // Get the node for the slide sorter preview cache.
-            mxCacheNode = Reference<container::XNameAccess>(
-                xHierarchy->getByHierarchicalName(sPathToNode),
-                UNO_QUERY);
-        }
-        while (false);
+        // Get the node for the slide sorter preview cache.
+        mxCacheNode = Reference<container::XNameAccess>(
+            xHierarchy->getByHierarchicalName(sPathToNode),
+            UNO_QUERY);
     }
     catch (RuntimeException aException)
     {

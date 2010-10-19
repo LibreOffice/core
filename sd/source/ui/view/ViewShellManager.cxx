@@ -651,34 +651,30 @@ void ViewShellManager::Implementation::ActivateSubShell (
 {
     ::osl::MutexGuard aGuard (maMutex);
 
-    do
-    {
-        // Check that the given view shell is active.
-        ActiveShellList::iterator iShell (::std::find_if (
-            maActiveViewShells.begin(),
-            maActiveViewShells.end(),
-            IsShell(&rParentShell)));
-        if (iShell == maActiveViewShells.end())
-            break;
+    // Check that the given view shell is active.
+    ActiveShellList::iterator iShell (::std::find_if (
+        maActiveViewShells.begin(),
+        maActiveViewShells.end(),
+        IsShell(&rParentShell)));
+    if (iShell == maActiveViewShells.end())
+        return;
 
-        // Create the sub shell list if it does not yet exist.
-        SubShellList::iterator iList (maActiveSubShells.find(&rParentShell));
-        if (iList == maActiveSubShells.end())
-            iList = maActiveSubShells.insert(
-                SubShellList::value_type(&rParentShell,SubShellSubList())).first;
+    // Create the sub shell list if it does not yet exist.
+    SubShellList::iterator iList (maActiveSubShells.find(&rParentShell));
+    if (iList == maActiveSubShells.end())
+        iList = maActiveSubShells.insert(
+            SubShellList::value_type(&rParentShell,SubShellSubList())).first;
 
-        // Do not activate an object bar that is already active.  Requesting
-        // this is not exactly an error but may be an indication of one.
-        SubShellSubList& rList (iList->second);
-        if (::std::find_if(rList.begin(),rList.end(), IsId(nId)) != rList.end())
-            break;
+    // Do not activate an object bar that is already active.  Requesting
+    // this is not exactly an error but may be an indication of one.
+    SubShellSubList& rList (iList->second);
+    if (::std::find_if(rList.begin(),rList.end(), IsId(nId)) != rList.end())
+        return;
 
-        // Add just the id of the sub shell. The actual shell is created
-        // later in CreateShells().
-        UpdateLock aLock (*this);
-        rList.push_back(ShellDescriptor(NULL, nId));
-    }
-    while (false);
+    // Add just the id of the sub shell. The actual shell is created
+    // later in CreateShells().
+    UpdateLock aLock (*this);
+    rList.push_back(ShellDescriptor(NULL, nId));
 }
 
 
@@ -690,34 +686,30 @@ void ViewShellManager::Implementation::DeactivateSubShell (
 {
     ::osl::MutexGuard aGuard (maMutex);
 
-    do
-    {
-        // Check that the given view shell is active.
-        SubShellList::iterator iList (maActiveSubShells.find(&rParentShell));
-        if (iList == maActiveSubShells.end())
-            break;
+    // Check that the given view shell is active.
+    SubShellList::iterator iList (maActiveSubShells.find(&rParentShell));
+    if (iList == maActiveSubShells.end())
+        return;
 
-        // Look up the sub shell.
-        SubShellSubList& rList (iList->second);
-        SubShellSubList::iterator iShell (
-            ::std::find_if(rList.begin(),rList.end(), IsId(nId)));
-        if (iShell == rList.end())
-            break;
-        SfxShell* pShell = iShell->mpShell;
-        if (pShell == NULL)
-            break;
+    // Look up the sub shell.
+    SubShellSubList& rList (iList->second);
+    SubShellSubList::iterator iShell (
+        ::std::find_if(rList.begin(),rList.end(), IsId(nId)));
+    if (iShell == rList.end())
+        return;
+    SfxShell* pShell = iShell->mpShell;
+    if (pShell == NULL)
+        return;
 
-        UpdateLock aLock (*this);
+    UpdateLock aLock (*this);
 
-        ShellDescriptor aDescriptor(*iShell);
-        // Remove the sub shell from both the internal structure as well as the
-        // SFX shell stack above and including the sub shell.
-        rList.erase(iShell);
-        TakeShellsFromStack(pShell);
+    ShellDescriptor aDescriptor(*iShell);
+    // Remove the sub shell from both the internal structure as well as the
+    // SFX shell stack above and including the sub shell.
+    rList.erase(iShell);
+    TakeShellsFromStack(pShell);
 
-        DestroySubShell(rParentShell, aDescriptor);
-    }
-    while (false);
+    DestroySubShell(rParentShell, aDescriptor);
 }
 
 

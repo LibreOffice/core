@@ -165,25 +165,21 @@ Reference<drawing::XLayer> SdUnoDrawView::getActiveLayer (void) throw ()
 
 void SdUnoDrawView::setActiveLayer (const Reference<drawing::XLayer>& rxLayer) throw ()
 {
-    do
-    {
-        // Get the SdrLayer object corresponding to the given reference.
-        if ( ! rxLayer.is())
-            break;
+    // Get the SdrLayer object corresponding to the given reference.
+    if ( ! rxLayer.is())
+        return;
 
-        SdLayer* pLayer = SdLayer::getImplementation (rxLayer);
-        if (pLayer == NULL)
-            break;
+    SdLayer* pLayer = SdLayer::getImplementation (rxLayer);
+    if (pLayer == NULL)
+        return;
 
-        SdrLayer* pSdrLayer = pLayer->GetSdrLayer();
-        if (pSdrLayer == NULL)
-            break;
+    SdrLayer* pSdrLayer = pLayer->GetSdrLayer();
+    if (pSdrLayer == NULL)
+        return;
 
-        // Set the new active layer and make the change visible.
-        mrView.SetActiveLayer (pSdrLayer->GetName());
-        mrDrawViewShell.ResetActualLayer ();
-    }
-    while (false);
+    // Set the new active layer and make the change visible.
+    mrView.SetActiveLayer (pSdrLayer->GetName());
+    mrDrawViewShell.ResetActualLayer ();
 }
 
 

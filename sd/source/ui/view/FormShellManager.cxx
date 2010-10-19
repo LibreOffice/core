@@ -158,36 +158,32 @@ FmFormShell* FormShellManager::GetFormShell (void)
 
 void FormShellManager::RegisterAtCenterPane (void)
 {
-    do
-    {
-        ViewShell* pShell = mrBase.GetMainViewShell().get();
-        if (pShell == NULL)
-            break;
+    ViewShell* pShell = mrBase.GetMainViewShell().get();
+    if (pShell == NULL)
+        return;
 
-        // No form shell for the slide sorter.  Besides that it is not
-        // necessary, using both together results in crashes.
-        if (pShell->GetShellType() == ViewShell::ST_SLIDE_SORTER)
-            break;
+    // No form shell for the slide sorter.  Besides that it is not
+    // necessary, using both together results in crashes.
+    if (pShell->GetShellType() == ViewShell::ST_SLIDE_SORTER)
+        return;
 
-        mpMainViewShellWindow = pShell->GetActiveWindow();
-        if (mpMainViewShellWindow == NULL)
-            break;
+    mpMainViewShellWindow = pShell->GetActiveWindow();
+    if (mpMainViewShellWindow == NULL)
+        return;
 
-        // Register at the window to get informed when to move the form
-        // shell to the bottom of the shell stack.
-        mpMainViewShellWindow->AddEventListener(
-            LINK(
-                this,
-                FormShellManager,
-                WindowEventHandler));
+    // Register at the window to get informed when to move the form
+    // shell to the bottom of the shell stack.
+    mpMainViewShellWindow->AddEventListener(
+        LINK(
+            this,
+            FormShellManager,
+            WindowEventHandler));
 
-        // Create a shell factory and with it activate the form shell.
-        OSL_ASSERT(mpSubShellFactory.get()==NULL);
-        mpSubShellFactory.reset(new FormShellManagerFactory(*pShell, *this));
-        mrBase.GetViewShellManager()->AddSubShellFactory(pShell,mpSubShellFactory);
-        mrBase.GetViewShellManager()->ActivateSubShell(*pShell, RID_FORMLAYER_TOOLBOX);
-    }
-    while (false);
+    // Create a shell factory and with it activate the form shell.
+    OSL_ASSERT(mpSubShellFactory.get()==NULL);
+    mpSubShellFactory.reset(new FormShellManagerFactory(*pShell, *this));
+    mrBase.GetViewShellManager()->AddSubShellFactory(pShell,mpSubShellFactory);
+    mrBase.GetViewShellManager()->ActivateSubShell(*pShell, RID_FORMLAYER_TOOLBOX);
 }
 
 
@@ -195,33 +191,29 @@ void FormShellManager::RegisterAtCenterPane (void)
 
 void FormShellManager::UnregisterAtCenterPane (void)
 {
-    do
+    if (mpMainViewShellWindow != NULL)
     {
-        if (mpMainViewShellWindow != NULL)
-        {
-            // Unregister from the window.
-            mpMainViewShellWindow->RemoveEventListener(
-                LINK(
-                    this,
-                    FormShellManager,
-                    WindowEventHandler));
-            mpMainViewShellWindow = NULL;
-        }
-
-        // Unregister form at the form shell.
-        SetFormShell(NULL);
-
-        // Deactivate the form shell and destroy the shell factory.
-        ViewShell* pShell = mrBase.GetMainViewShell().get();
-        if (pShell != NULL)
-        {
-            mrBase.GetViewShellManager()->DeactivateSubShell(*pShell,  RID_FORMLAYER_TOOLBOX);
-            mrBase.GetViewShellManager()->RemoveSubShellFactory(pShell, mpSubShellFactory);
-        }
-
-        mpSubShellFactory.reset();
+        // Unregister from the window.
+        mpMainViewShellWindow->RemoveEventListener(
+            LINK(
+                this,
+                FormShellManager,
+                WindowEventHandler));
+        mpMainViewShellWindow = NULL;
     }
-    while (false);
+
+    // Unregister form at the form shell.
+    SetFormShell(NULL);
+
+    // Deactivate the form shell and destroy the shell factory.
+    ViewShell* pShell = mrBase.GetMainViewShell().get();
+    if (pShell != NULL)
+    {
+        mrBase.GetViewShellManager()->DeactivateSubShell(*pShell,  RID_FORMLAYER_TOOLBOX);
+        mrBase.GetViewShellManager()->RemoveSubShellFactory(pShell, mpSubShellFactory);
+    }
+
+    mpSubShellFactory.reset();
 }
 
 
